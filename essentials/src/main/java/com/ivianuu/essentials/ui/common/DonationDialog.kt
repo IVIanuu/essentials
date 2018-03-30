@@ -159,6 +159,7 @@ class DonationViewModel @Inject constructor(
         skusSet = true
 
         val params = SkuDetailsParams.newBuilder()
+            .setType(BillingClient.SkuType.INAPP)
             .setSkusList(skus)
             .build()
 
@@ -168,12 +169,16 @@ class DonationViewModel @Inject constructor(
                 onSuccess = {
                     val skus = it.skuDetailsList()
                     if (skus != null) {
+                        skus.sortBy(SkuDetails::getPriceAmountMicros)
                         _skus.onNext(skus)
                     } else {
                         dismissWithMessage(R.string.msg_error_donate)
                     }
                 },
-                onError = { dismissWithMessage(R.string.msg_error_donate) }
+                onError = {
+                    it.printStackTrace()
+                    dismissWithMessage(R.string.msg_error_donate)
+                }
             )
     }
 
@@ -194,7 +199,10 @@ class DonationViewModel @Inject constructor(
                 onSuccess = {
                     dismissWithMessage(if (it) R.string.msg_success_donate else R.string.msg_error_donate)
                 },
-                onError = { dismissWithMessage(R.string.msg_error_donate) }
+                onError = {
+                    it.printStackTrace()
+                    dismissWithMessage(R.string.msg_error_donate)
+                }
             )
             .addTo(disposables)
     }
