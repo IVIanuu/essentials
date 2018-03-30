@@ -14,19 +14,19 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.epoxy
+package com.ivianuu.essentials.util.ext
 
+import com.airbnb.epoxy.EpoxyController
 import com.airbnb.epoxy.TypedEpoxyController
 
-/**
- * Simple list epoxy controller
- */
-class ListEpoxyController<T>(
-    private val buildModel: ListEpoxyController<T>.(item: T) -> Unit
-) : TypedEpoxyController<List<T>>() {
-
-    override fun buildModels(data: List<T>) {
-        data.forEach { item -> buildModel.invoke(this, item) }
+fun <T> typedEpoxyController(buildModels: TypedEpoxyController<T>.(data: T) -> Unit): TypedEpoxyController<T> {
+    return object : TypedEpoxyController<T>() {
+        override fun buildModels(data: T) {
+            buildModels.invoke(this, data)
+        }
     }
+}
 
+fun <T> listEpoxyController(buildModel: EpoxyController.(item: T) -> Unit): EpoxyController {
+    return typedEpoxyController<List<T>> { it.forEach { buildModel.invoke(this, it) } }
 }
