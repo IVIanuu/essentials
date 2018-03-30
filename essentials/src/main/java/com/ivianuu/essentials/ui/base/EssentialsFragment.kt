@@ -41,9 +41,23 @@ abstract class EssentialsFragment : Fragment(), HasSupportFragmentInjector {
 
     protected val disposables = CompositeDisposable()
 
+    protected open val layoutRes = -1
+
     override fun onAttach(context: Context?) {
         AndroidSupportInjection.inject(this)
         super.onAttach(context)
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        return if (layoutRes != -1) {
+            inflater.inflate(layoutRes, container, false)
+        } else {
+            super.onCreateView(inflater, container, savedInstanceState)
+        }
     }
 
     override fun onDestroyView() {

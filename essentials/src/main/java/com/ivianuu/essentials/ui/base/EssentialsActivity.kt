@@ -44,6 +44,8 @@ abstract class EssentialsActivity : AppCompatActivity(), HasSupportFragmentInjec
 
     protected open val fragmentContainer = android.R.id.content
 
+    protected open val layoutRes = -1
+
     private val navigator by unsafeLazy {
         KeyNavigator(this, supportFragmentManager, fragmentContainer)
     }
@@ -51,6 +53,7 @@ abstract class EssentialsActivity : AppCompatActivity(), HasSupportFragmentInjec
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
+        if (layoutRes != -1) setContentView(layoutRes)
     }
 
     override fun onResumeFragments() {
