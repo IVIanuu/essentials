@@ -23,6 +23,7 @@ import kotlinx.android.extensions.LayoutContainer
 /**
  * Base [EpoxyHolder] which is also a [LayoutContainer]
  */
+
 open class KtEpoxyHolder : EpoxyHolder(), LayoutContainer {
     override lateinit var containerView: View
     override fun bindView(itemView: View) {
