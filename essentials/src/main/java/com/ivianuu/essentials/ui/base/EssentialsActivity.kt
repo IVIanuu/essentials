@@ -73,7 +73,7 @@ abstract class EssentialsActivity : AppCompatActivity(), HasSupportFragmentInjec
 
         if (postponed && !startedTransition) {
             // If we're postponed and haven't started a transition yet, we'll delay for a max of [sharedElementDelay]ms
-            contentView?.postDelayed(sharedElementMaxDelay, this::scheduleStartPostponedTransitions)
+            contentView.postDelayed(sharedElementMaxDelay, this::scheduleStartPostponedTransitions)
         }
     }
 

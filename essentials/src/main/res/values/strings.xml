@@ -22,4 +22,9 @@
     <string name="action_close">Close</string>
     <string name="action_ok">OK</string>
 
+    <!-- Donation -->
+    <string name="dialog_title_donation">Donate</string>
+    <string name="msg_success_donate">Thanks! You\'re awesome.</string>
+    <string name="msg_error_donate">Oh no that didn\'t work.</string>
+
 </resources>

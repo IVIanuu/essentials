@@ -19,6 +19,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'com.github.dcendents.android-maven'
+apply plugin: 'com.jakewharton.butterknife'
 
 group='com.github.ivianuu'
 
@@ -87,6 +88,9 @@ dependencies {
 
     // RxPermissions
     api 'com.github.IVIanuu:RxPermissions:1.0.0'
+
+    // RxPlayBilling
+    api "com.github.IVIanuu:RxPlayBilling:1.0.1"
 
     // RxPreferences
     api "com.f2prateek.rx.preferences2:rx-preferences:2.0.0-RC3"
