@@ -29,8 +29,8 @@ abstract class EssentialsViewModelFragment<VM : ViewModel> : EssentialsFragment(
 
     @Inject lateinit var viewModelFactory: DaggerViewModelFactory<VM>
 
-    protected val viewModel by unsafeLazy {
-        ViewModelProviders.of(this, viewModelFactory)[ViewModel::class.java]
+    protected val viewModel: VM by unsafeLazy {
+        ViewModelProviders.of(this, viewModelFactory)[ViewModel::class.java] as VM
     }
 
 }
