@@ -14,18 +14,20 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.common
+package com.ivianuu.essentials.ui.epoxy
 
-import android.view.View
-import com.airbnb.epoxy.EpoxyHolder
-import kotlinx.android.extensions.LayoutContainer
+import com.airbnb.epoxy.EpoxyModel
+import com.airbnb.epoxy.TypedEpoxyController
 
 /**
- * Base [EpoxyHolder] which is also a [LayoutContainer]
+ * Simple list epoxy controller
  */
-open class KtEpoxyHolder : EpoxyHolder(), LayoutContainer {
-    override lateinit var containerView: View
-    override fun bindView(itemView: View) {
-        containerView = itemView
+class ListEpoxyController<T>(
+    private val buildModel: ListEpoxyController<T>.(item: T) -> Unit
+) : TypedEpoxyController<List<T>>() {
+
+    override fun buildModels(data: List<T>) {
+        data.forEach { item -> buildModel.invoke(this, item) }
     }
+
 }
