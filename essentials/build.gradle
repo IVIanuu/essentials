@@ -39,8 +39,8 @@ android {
 
 dependencies {
     // Adaptable Navigation
-    api 'com.github.IVIanuu.AdaptableNavigation:adaptablenavigation-supportdesign:3a2435e138'
-    api 'com.github.IVIanuu.AdaptableNavigation:adaptablenavigation-supportfragments:3a2435e138'
+    api 'com.github.IVIanuu.AdaptableNavigation:adaptablenavigation-supportdesign:eaf087eefd'
+    api 'com.github.IVIanuu.AdaptableNavigation:adaptablenavigation-supportfragments:eaf087eefd'
 
     // Android Support
     api "com.android.support:appcompat-v7:27.1.0"
