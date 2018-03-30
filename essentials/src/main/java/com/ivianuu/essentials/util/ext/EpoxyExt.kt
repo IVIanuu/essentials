@@ -16,8 +16,7 @@
 
 package com.ivianuu.essentials.util.ext
 
-import com.airbnb.epoxy.EpoxyController
-import com.airbnb.epoxy.TypedEpoxyController
+import com.airbnb.epoxy.*
 
 fun <T> typedEpoxyController(buildModels: TypedEpoxyController<T>.(data: T) -> Unit): TypedEpoxyController<T> {
     return object : TypedEpoxyController<T>() {
@@ -27,6 +26,30 @@ fun <T> typedEpoxyController(buildModels: TypedEpoxyController<T>.(data: T) -> U
     }
 }
 
-fun <T> listEpoxyController(buildModel: EpoxyController.(item: T) -> Unit): EpoxyController {
+fun <T, U> typed2EpoxyController(buildModels: Typed2EpoxyController<T, U>.(data1: T, data2: U) -> Unit): Typed2EpoxyController<T, U> {
+    return object : Typed2EpoxyController<T, U>() {
+        override fun buildModels(data1: T, data2: U) {
+            buildModels.invoke(this, data1, data2)
+        }
+    }
+}
+
+fun <T, U, V> typed3EpoxyController(buildModels: Typed3EpoxyController<T, U, V>.(data1: T, data2: U, data3: V) -> Unit): Typed3EpoxyController<T, U, V> {
+    return object : Typed3EpoxyController<T, U, V>() {
+        override fun buildModels(data1: T, data2: U, data3: V) {
+            buildModels.invoke(this, data1, data2, data3)
+        }
+    }
+}
+
+fun <T, U, V, W> typed4EpoxyController(buildModels: Typed4EpoxyController<T, U, V, W>.(data1: T, data2: U, data3: V, data4: W) -> Unit): Typed4EpoxyController<T, U, V, W> {
+    return object : Typed4EpoxyController<T, U, V, W>() {
+        override fun buildModels(data1: T, data2: U, data3: V, data4: W) {
+            buildModels.invoke(this, data1, data2, data3, data4)
+        }
+    }
+}
+
+fun <T> listEpoxyController(buildModel: EpoxyController.(item: T) -> Unit): TypedEpoxyController<List<T>> {
     return typedEpoxyController<List<T>> { it.forEach { buildModel.invoke(this, it) } }
 }
