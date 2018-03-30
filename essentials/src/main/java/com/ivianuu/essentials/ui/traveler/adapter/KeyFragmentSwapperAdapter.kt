@@ -16,9 +16,7 @@
 
 package com.ivianuu.essentials.ui.traveler.adapter
 
-import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
-import com.github.ajalt.timberkt.d
 import com.ivianuu.adaptablenavigation.supportfragments.FragmentSwapperAdapter
 import com.ivianuu.essentials.ui.traveler.key.FragmentKey
 

@@ -18,7 +18,6 @@ package com.ivianuu.essentials.ui.traveler.key
 
 import android.content.Context
 import android.content.Intent
-import com.ivianuu.essentials.ui.traveler.key.ActivityKey
 
 /**
  * Key for a simple intent

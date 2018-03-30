@@ -16,7 +16,6 @@
 
 package com.ivianuu.essentials.ui.epoxy
 
-import com.airbnb.epoxy.EpoxyModel
 import com.airbnb.epoxy.TypedEpoxyController
 
 /**

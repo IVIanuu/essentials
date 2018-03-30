@@ -17,11 +17,7 @@
 package com.ivianuu.essentials.ui.base
 
 import android.content.Context
-import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import com.ivianuu.traveler.Router
 import dagger.android.support.AndroidSupportInjection
 import io.reactivex.disposables.CompositeDisposable
