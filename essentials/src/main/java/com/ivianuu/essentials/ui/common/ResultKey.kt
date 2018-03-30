@@ -20,5 +20,5 @@ package com.ivianuu.essentials.ui.common
  * Marks a key as screen that returns a result
  */
 interface ResultKey {
-    var resultCode: Int
+    val resultCode: Int
 }
