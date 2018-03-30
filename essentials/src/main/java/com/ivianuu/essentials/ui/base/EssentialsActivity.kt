@@ -42,8 +42,10 @@ abstract class EssentialsActivity : AppCompatActivity(), HasSupportFragmentInjec
 
     protected val disposables = CompositeDisposable()
 
+    protected open val fragmentContainer = android.R.id.content
+
     private val navigator by unsafeLazy {
-        KeyNavigator(this, supportFragmentManager, android.R.id.content)
+        KeyNavigator(this, supportFragmentManager, fragmentContainer)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
