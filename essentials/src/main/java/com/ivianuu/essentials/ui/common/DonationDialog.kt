@@ -167,10 +167,12 @@ class DonationViewModel @Inject constructor(
             .main()
             .subscribeBy(
                 onSuccess = {
-                    val skus = it.skuDetailsList()
-                    if (skus != null) {
-                        skus.sortBy(SkuDetails::getPriceAmountMicros)
-                        _skus.onNext(skus)
+                    if (it.success()) {
+                        _skus.onNext(
+                            it.skuDetailsList()!!
+                                .distinctBy(SkuDetails::getSku)
+                                .sortedBy(SkuDetails::getPriceAmountMicros)
+                        )
                     } else {
                         dismissWithMessage(R.string.msg_error_donate)
                     }
