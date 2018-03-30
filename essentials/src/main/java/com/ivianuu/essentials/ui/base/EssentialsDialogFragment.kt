@@ -17,7 +17,7 @@
 package com.ivianuu.essentials.ui.base
 
 import android.content.Context
-import android.support.v4.app.Fragment
+import android.support.v4.app.DialogFragment
 import com.ivianuu.traveler.Router
 import dagger.android.support.AndroidSupportInjection
 import io.reactivex.disposables.CompositeDisposable
@@ -26,7 +26,7 @@ import javax.inject.Inject
 /**
  * Base dialog fragment
  */
-abstract class EssentialsDialogFragment : Fragment() {
+abstract class EssentialsDialogFragment : DialogFragment() {
 
     @Inject lateinit var router: Router
 
