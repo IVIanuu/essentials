@@ -112,6 +112,10 @@ abstract class EssentialsFragment : Fragment(), BackListener, HasSupportFragment
         super.onDetach()
     }
 
+    override fun handleBack(): Boolean {
+        return false
+    }
+
     override fun supportFragmentInjector(): AndroidInjector<Fragment> = supportFragmentInjector
 
     protected fun scheduleStartPostponedTransitions() {
