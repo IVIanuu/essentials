@@ -93,6 +93,16 @@ abstract class EssentialsFragment : Fragment(), BackListener, HasSupportFragment
         super.onDestroyView()
     }
 
+    override fun onDestroy() {
+        val activity = activity
+        if (activity != null
+            && activity.isFinishing
+            && !activity.isChangingConfigurations) {
+            viewModelStore.clear()
+        }
+        super.onDestroy()
+    }
+
     override fun onDetach() {
         activity.let {
             if (it is EssentialsActivity) {

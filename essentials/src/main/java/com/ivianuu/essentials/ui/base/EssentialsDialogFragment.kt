@@ -41,4 +41,14 @@ abstract class EssentialsDialogFragment : DialogFragment() {
         disposables.clear()
         super.onDestroyView()
     }
+
+    override fun onDestroy() {
+        val activity = activity
+        if (activity != null
+            && activity.isFinishing
+            && !activity.isChangingConfigurations) {
+            viewModelStore.clear()
+        }
+        super.onDestroy()
+    }
 }
