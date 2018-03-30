@@ -19,9 +19,13 @@ package com.ivianuu.essentials.ui.base
 import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.transition.TransitionInflater
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.view.doOnPreDraw
+import androidx.view.postDelayed
+import com.ivianuu.essentials.ui.common.BackListener
 import com.ivianuu.traveler.Router
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
@@ -33,7 +37,7 @@ import javax.inject.Inject
 /**
  * Base fragment
  */
-abstract class EssentialsFragment : Fragment(), HasSupportFragmentInjector {
+abstract class EssentialsFragment : Fragment(), BackListener, HasSupportFragmentInjector {
 
     @Inject lateinit var supportFragmentInjector: DispatchingAndroidInjector<Fragment>
 
@@ -43,9 +47,19 @@ abstract class EssentialsFragment : Fragment(), HasSupportFragmentInjector {
 
     protected open val layoutRes = -1
 
+    protected open val sharedElementMaxDelay = 500L
+
+    private var startedTransition = false
+    private var postponed = false
+
     override fun onAttach(context: Context?) {
         AndroidSupportInjection.inject(this)
         super.onAttach(context)
+        activity.let {
+            if (it is EssentialsActivity) {
+                it.addBackListener(this)
+            }
+        }
     }
 
     override fun onCreateView(
@@ -60,10 +74,45 @@ abstract class EssentialsFragment : Fragment(), HasSupportFragmentInjector {
         }
     }
 
+    override fun onStart() {
+        super.onStart()
+
+        if (postponed && !startedTransition) {
+            // If we're postponed and haven't started a transition yet, we'll delay for a max of [sharedElementDelay]ms
+            view?.postDelayed(sharedElementMaxDelay, this::scheduleStartPostponedTransitions)
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        startedTransition = false
+    }
+
     override fun onDestroyView() {
         disposables.clear()
         super.onDestroyView()
     }
 
+    override fun onDetach() {
+        activity.let {
+            if (it is EssentialsActivity) {
+                it.removeBackListener(this)
+            }
+        }
+        super.onDetach()
+    }
+
     override fun supportFragmentInjector(): AndroidInjector<Fragment> = supportFragmentInjector
+
+    protected fun scheduleStartPostponedTransitions() {
+        if (!startedTransition) {
+            (view?.parent as? ViewGroup)?.doOnPreDraw {
+                startPostponedEnterTransition()
+            }
+            startedTransition = true
+        }
+    }
+
+    protected open fun setupTransitions(inflater: TransitionInflater) {
+    }
 }

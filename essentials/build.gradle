@@ -44,6 +44,8 @@ dependencies {
 
     // Android Support
     api "com.android.support:appcompat-v7:27.1.0"
+    api "com.android.support.constraint:constraint-layout:1.1.0-beta6"
+    api "com.android.support:design:27.1.0"
     api "com.android.support:preference-v14:27.1.0"
 
     // Arch Components
@@ -70,8 +72,11 @@ dependencies {
     api 'androidx.core:core-ktx:0.2'
 
     // Material Dialogs
-    implementation "com.afollestad.material-dialogs:core:0.9.6.0"
-    implementation "com.afollestad.material-dialogs:commons:0.9.6.0"
+    api "com.afollestad.material-dialogs:core:0.9.6.0"
+    api "com.afollestad.material-dialogs:commons:0.9.6.0"
+
+    // RxBroadcastReceiver
+    api "com.github.IVIanuu:RxBroadcastReceiver:1.0.2"
 
     // RxJava
     api "io.reactivex.rxjava2:rxjava:2.1.12"
@@ -79,6 +84,12 @@ dependencies {
 
     // RxKotlin
     api "io.reactivex.rxjava2:rxkotlin:2.2.0"
+
+    // RxPermissions
+    api 'com.github.IVIanuu:RxPermissions:1.0.0'
+
+    // RxPreferences
+    api "com.f2prateek.rx.preferences2:rx-preferences:2.0.0-RC3"
 
     // Timber
     api "com.jakewharton.timber:timber:4.6.0"

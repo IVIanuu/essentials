@@ -17,6 +17,7 @@
 
 <resources>
 
+    <!-- Dialogs -->
     <string name="action_cancel">Cancel</string>
     <string name="action_close">Close</string>
     <string name="action_ok">OK</string>
