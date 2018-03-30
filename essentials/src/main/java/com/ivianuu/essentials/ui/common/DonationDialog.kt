@@ -83,6 +83,7 @@ class DonationDialog : EssentialsViewModelDialogFragment<DonationViewModel>() {
         return MaterialDialog.Builder(requireContext())
             .title(R.string.dialog_title_donation)
             .adapter(controller.adapter, LinearLayoutManager(requireContext()))
+            .negativeText(R.string.action_cancel)
             .build()
     }
 
