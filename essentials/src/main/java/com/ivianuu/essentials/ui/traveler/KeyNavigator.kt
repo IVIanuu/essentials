@@ -22,6 +22,10 @@ import android.os.Handler
 import android.support.v4.app.FragmentActivity
 import android.support.v4.app.FragmentManager
 import android.widget.Toast
+import com.ivianuu.essentials.ui.traveler.key.ActivityKey
+import com.ivianuu.essentials.ui.traveler.key.DialogFragmentKey
+import com.ivianuu.essentials.ui.traveler.key.DialogKey
+import com.ivianuu.essentials.ui.traveler.key.FragmentKey
 import com.ivianuu.traveler.Navigator
 import com.ivianuu.traveler.commands.*
 import java.util.*
@@ -74,27 +78,31 @@ open class KeyNavigator(
     }
 
     protected open fun forwardActivity(command: Forward,
-                                       key: ActivityKey) {
+                                       key: ActivityKey
+    ) {
         val activityIntent = key.newIntent(activity)
         val options = key.createStartActivityOptions(command, activityIntent)
         checkAndStartActivity(command.key, activityIntent, options)
     }
 
     protected open fun forwardDialog(command: Forward,
-                                     key: DialogKey) {
+                                     key: DialogKey
+    ) {
         val dialog = key.createDialog(activity)
         dialog.show()
     }
 
     protected open fun forwardDialogFragment(command: Forward,
-                                             key: DialogFragmentKey) {
+                                             key: DialogFragmentKey
+    ) {
         val dialogFragment = key.newInstance()
         val tag = key.fragmentTag
         dialogFragment.show(fragmentManager, tag)
     }
 
     protected open fun forwardFragment(command: Forward,
-                                       key: FragmentKey) {
+                                       key: FragmentKey
+    ) {
         val fragment = key.newInstance()
         val tag = key.fragmentTag
 
@@ -133,7 +141,8 @@ open class KeyNavigator(
     }
 
     protected open fun replaceActivity(command: Replace,
-                                       key: ActivityKey) {
+                                       key: ActivityKey
+    ) {
         val activityIntent = key.newIntent(activity)
 
         val options = key.createStartActivityOptions(command, activityIntent)
@@ -142,7 +151,8 @@ open class KeyNavigator(
     }
 
     protected open fun replaceFragment(command: Replace,
-                                       key: FragmentKey) {
+                                       key: FragmentKey
+    ) {
         val fragment = key.newInstance()
         val tag = key.fragmentTag
 

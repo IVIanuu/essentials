@@ -14,16 +14,21 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.traveler
+package com.ivianuu.essentials.ui.traveler.adapter
 
-import android.app.Dialog
-import android.content.Context
+import android.support.v4.app.FragmentManager
+import android.support.v4.app.FragmentPagerAdapter
+import com.ivianuu.essentials.ui.traveler.key.FragmentKey
 
 /**
- * Key for [Dialog]'s
+ * Key fragment pager adapter
  */
-abstract class DialogKey {
+open class KeyFragmentPagerAdapter(
+    fm: FragmentManager,
+    private val keys: List<FragmentKey>
+) : FragmentPagerAdapter(fm) {
 
-    abstract fun createDialog(context: Context): Dialog
+    override fun getItem(position: Int) = keys[position].newInstance()
 
+    override fun getCount() = keys.size
 }
