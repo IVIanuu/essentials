@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.injection
+package com.ivianuu.essentials.ui.injection
 
 import com.ivianuu.traveler.Router
 import com.ivianuu.traveler.Traveler

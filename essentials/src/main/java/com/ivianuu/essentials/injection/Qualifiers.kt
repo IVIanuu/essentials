@@ -32,3 +32,9 @@ annotation class ForChildFragment
 
 @Qualifier
 annotation class ForService
+
+@Qualifier
+annotation class ForView
+
+@Qualifier
+annotation class ForChildView

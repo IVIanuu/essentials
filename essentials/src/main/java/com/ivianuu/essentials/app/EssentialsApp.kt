@@ -20,21 +20,30 @@ import android.app.Activity
 import android.app.Application
 import android.app.Service
 import android.content.BroadcastReceiver
+import android.content.ContentProvider
+import android.support.v4.app.Fragment
 import dagger.android.*
+import dagger.android.support.HasSupportFragmentInjector
 import javax.inject.Inject
 
 /**
  * App
  */
-abstract class EssentialsApp : Application(), HasActivityInjector, HasBroadcastReceiverInjector, HasServiceInjector {
+abstract class EssentialsApp : Application(), HasActivityInjector, HasBroadcastReceiverInjector, HasContentProviderInjector, HasServiceInjector, HasSupportFragmentInjector {
 
     @Inject lateinit var activityInjector: DispatchingAndroidInjector<Activity>
     @Inject lateinit var broadcastReceiverInjector: DispatchingAndroidInjector<BroadcastReceiver>
+    @Inject lateinit var contentProviderInjector: DispatchingAndroidInjector<ContentProvider>
     @Inject lateinit var serviceInjector: DispatchingAndroidInjector<Service>
+    @Inject lateinit var supportFragmentInjector: DispatchingAndroidInjector<Fragment>
 
     override fun activityInjector(): AndroidInjector<Activity> = activityInjector
 
     override fun broadcastReceiverInjector(): AndroidInjector<BroadcastReceiver> = broadcastReceiverInjector
 
+    override fun contentProviderInjector(): AndroidInjector<ContentProvider> = contentProviderInjector
+
     override fun serviceInjector(): AndroidInjector<Service> = serviceInjector
+
+    override fun supportFragmentInjector(): AndroidInjector<Fragment> = supportFragmentInjector
 }

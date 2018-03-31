@@ -32,3 +32,9 @@ annotation class PerChildFragment
 
 @Scope
 annotation class PerService
+
+@Scope
+annotation class PerView
+
+@Scope
+annotation class PerChildView
