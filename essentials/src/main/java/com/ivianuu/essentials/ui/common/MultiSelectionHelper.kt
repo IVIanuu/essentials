@@ -49,4 +49,6 @@ class MultiSelectionHelper<T>(private val onChanged: () -> Unit) {
     }
 
     fun isSelected(item: T) = selectedItems.contains(item)
+
+    fun hasSelections() = selectedItems.isNotEmpty()
 }

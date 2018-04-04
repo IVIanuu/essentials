@@ -21,7 +21,9 @@ package com.ivianuu.essentials.ui.common
  */
 class UndoHelper<T>(private val callback: Callback<T>) {
 
-    private val pendingDeletions = mutableSetOf<T>()
+    val pendingDeletions = mutableSetOf<T>()
+
+    fun hasPendingDeletions() = pendingDeletions.isNotEmpty()
 
     fun isPendingDeletion(item: T) =
         pendingDeletions.contains(item)
