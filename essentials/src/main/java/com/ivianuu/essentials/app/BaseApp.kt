@@ -29,7 +29,7 @@ import javax.inject.Inject
 /**
  * App
  */
-abstract class EssentialsApp : Application(), HasActivityInjector, HasBroadcastReceiverInjector, HasContentProviderInjector, HasServiceInjector, HasSupportFragmentInjector {
+abstract class BaseApp : Application(), HasActivityInjector, HasBroadcastReceiverInjector, HasContentProviderInjector, HasServiceInjector, HasSupportFragmentInjector {
 
     @Inject lateinit var activityInjector: DispatchingAndroidInjector<Activity>
     @Inject lateinit var broadcastReceiverInjector: DispatchingAndroidInjector<BroadcastReceiver>
