@@ -60,6 +60,8 @@ abstract class BaseFragment : Fragment(), BackListener, HasSupportFragmentInject
                 it.addBackListener(this)
             }
         }
+
+        setupTransitions(TransitionInflater.from(requireContext()))
     }
 
     override fun onCreateView(
@@ -110,6 +112,11 @@ abstract class BaseFragment : Fragment(), BackListener, HasSupportFragmentInject
             }
         }
         super.onDetach()
+    }
+
+    override fun postponeEnterTransition() {
+        super.postponeEnterTransition()
+        postponed = true
     }
 
     override fun handleBack(): Boolean {
