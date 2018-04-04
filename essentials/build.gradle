@@ -89,9 +89,6 @@ dependencies {
     // RxPermissions
     api 'com.github.IVIanuu:RxPermissions:1.0.0'
 
-    // RxPlayBilling
-    api "com.github.IVIanuu:RxPlayBilling:1.0.1"
-
     // RxPreferences
     api "com.f2prateek.rx.preferences2:rx-preferences:2.0.0-RC3"
 
