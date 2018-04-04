@@ -34,15 +34,15 @@ import com.android.billingclient.api.SkuDetailsParams
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.R2
 import com.ivianuu.essentials.injection.ForApp
-import com.ivianuu.essentials.ui.base.EssentialsViewModelDialogFragment
+import com.ivianuu.essentials.ui.base.BaseViewModelDialogFragment
 import com.ivianuu.essentials.ui.epoxy.KtEpoxyHolder
-import com.ivianuu.essentials.ui.traveler.key.DialogFragmentKey
-import com.ivianuu.essentials.ui.traveler.key.requireKey
 import com.ivianuu.essentials.util.ext.listEpoxyController
 import com.ivianuu.essentials.util.ext.main
 import com.ivianuu.kommonextensions.toast
 import com.ivianuu.rxplaybilling.RxPlayBilling
 import com.ivianuu.rxplaybilling.model.Response
+import com.ivianuu.traveler.keys.DialogFragmentKey
+import com.ivianuu.traveler.keys.requireKey
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.subscribeBy
@@ -54,7 +54,7 @@ import javax.inject.Inject
 /**
  * Dialog for donations
  */
-class DonationDialog : EssentialsViewModelDialogFragment<DonationViewModel>() {
+class DonationDialog : BaseViewModelDialogFragment<DonationViewModel>() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val key = requireKey<DonationKey>()
@@ -136,7 +136,7 @@ abstract class SkuModel : EpoxyModelWithHolder<KtEpoxyHolder>() {
 @SuppressLint("StaticFieldLeak")
 class DonationViewModel @Inject constructor(
     @ForApp private val context: Context
-) : EssentialsViewModel() {
+) : RxViewModel() {
 
     val dismiss: Observable<Unit>
         get() = _dismiss

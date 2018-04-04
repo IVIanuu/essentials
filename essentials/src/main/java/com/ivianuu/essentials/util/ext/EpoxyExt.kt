@@ -51,5 +51,5 @@ fun <T, U, V, W> typed4EpoxyController(buildModels: Typed4EpoxyController<T, U, 
 }
 
 fun <T> listEpoxyController(buildModel: EpoxyController.(item: T) -> Unit): TypedEpoxyController<List<T>> {
-    return typedEpoxyController<List<T>> { it.forEach { buildModel.invoke(this, it) } }
+    return typedEpoxyController { it.forEach { buildModel.invoke(this, it) } }
 }

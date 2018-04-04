@@ -27,7 +27,7 @@ import android.support.v7.preference.PreferenceViewHolder
  * Based on its preference state
  */
 @SuppressLint("RestrictedApi")
-open class EssentialsPreferenceAdapter(
+open class EnabledAwarePreferenceAdapter(
     preferenceGroup: PreferenceGroup?
 ) : PreferenceGroupAdapter(preferenceGroup) {
 

@@ -32,7 +32,7 @@ import javax.inject.Inject
 /**
  * Base preference fragment
  */
-abstract class EssentialsPreferenceFragment : PreferenceFragmentCompat(), HasSupportFragmentInjector {
+abstract class BasePreferenceFragment : PreferenceFragmentCompat(), HasSupportFragmentInjector {
 
     @Inject lateinit var supportFragmentInjector: DispatchingAndroidInjector<Fragment>
 
@@ -46,7 +46,7 @@ abstract class EssentialsPreferenceFragment : PreferenceFragmentCompat(), HasSup
     }
 
     override fun onCreateAdapter(preferenceScreen: PreferenceScreen?): RecyclerView.Adapter<*> {
-        return EssentialsPreferenceAdapter(preferenceScreen)
+        return EnabledAwarePreferenceAdapter(preferenceScreen)
     }
 
     override fun onDestroyView() {

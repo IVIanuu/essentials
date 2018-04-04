@@ -25,7 +25,7 @@ import javax.inject.Inject
 /**
  * Essentials view model dialog fragment
  */
-abstract class EssentialsViewModelPreferenceFragment<VM : ViewModel> : EssentialsPreferenceFragment() {
+abstract class BaseViewModelPreferenceFragment<VM : ViewModel> : BasePreferenceFragment() {
 
     @Inject lateinit var viewModelFactory: DaggerViewModelFactory<VM>
 

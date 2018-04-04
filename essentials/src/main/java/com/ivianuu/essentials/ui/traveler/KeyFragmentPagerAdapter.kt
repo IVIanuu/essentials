@@ -14,20 +14,21 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.common
+package com.ivianuu.essentials.ui.traveler
 
-import android.arch.lifecycle.ViewModel
-import io.reactivex.disposables.CompositeDisposable
+import android.support.v4.app.FragmentManager
+import android.support.v4.app.FragmentPagerAdapter
+import com.ivianuu.traveler.keys.FragmentKey
 
 /**
- * A [ViewModel] which auto disposes itself
+ * Key fragment pager adapter
  */
-abstract class EssentialsViewModel : ViewModel() {
+open class KeyFragmentPagerAdapter(
+    fm: FragmentManager,
+    private val keys: List<FragmentKey>
+) : FragmentPagerAdapter(fm) {
 
-    protected val disposables = CompositeDisposable()
+    override fun getItem(position: Int) = keys[position].newInstance()
 
-    public override fun onCleared() {
-        disposables.clear()
-        super.onCleared()
-    }
+    override fun getCount() = keys.size
 }

@@ -14,14 +14,21 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.traveler.key
+package com.ivianuu.essentials.ui.traveler
 
-import android.content.Context
-import android.content.Intent
+import android.support.v4.app.FragmentManager
+import com.ivianuu.adaptablenavigation.supportfragments.FragmentSwapperAdapter
+import com.ivianuu.traveler.keys.FragmentKey
 
 /**
- * Key for a simple intent
+ * Key fragment swapper adapter
  */
-class IntentKey(val intent: Intent): ActivityKey() {
-    override fun createIntent(context: Context): Intent = intent
+open class KeyFragmentSwapperAdapter(
+    fm: FragmentManager,
+    private val keys: List<FragmentKey>
+) : FragmentSwapperAdapter(fm) {
+
+    override fun getItem(position: Int) = keys[position].newInstance()
+
+    override fun getCount() = keys.size
 }

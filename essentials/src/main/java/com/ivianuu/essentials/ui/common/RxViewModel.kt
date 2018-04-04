@@ -14,23 +14,20 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.base
+package com.ivianuu.essentials.ui.common
 
 import android.arch.lifecycle.ViewModel
-import android.arch.lifecycle.ViewModelProviders
-import com.ivianuu.essentials.util.DaggerViewModelFactory
-import com.ivianuu.kommonextensions.unsafeLazy
-import javax.inject.Inject
+import io.reactivex.disposables.CompositeDisposable
 
 /**
- * Essentials view model activity
+ * A [ViewModel] which auto disposes itself
  */
-abstract class EssentialsViewModelActivity<VM : ViewModel> : EssentialsActivity() {
+abstract class RxViewModel : ViewModel() {
 
-    @Inject lateinit var viewModelFactory: DaggerViewModelFactory<VM>
+    protected val disposables = CompositeDisposable()
 
-    protected val viewModel: VM by unsafeLazy {
-        ViewModelProviders.of(this, viewModelFactory)[ViewModel::class.java] as VM
+    public override fun onCleared() {
+        disposables.clear()
+        super.onCleared()
     }
-
 }

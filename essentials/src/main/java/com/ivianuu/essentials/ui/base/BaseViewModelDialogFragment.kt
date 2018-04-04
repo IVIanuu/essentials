@@ -14,16 +14,23 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.traveler.key
+package com.ivianuu.essentials.ui.base
 
-import android.app.Dialog
-import android.content.Context
+import android.arch.lifecycle.ViewModel
+import android.arch.lifecycle.ViewModelProviders
+import com.ivianuu.essentials.util.DaggerViewModelFactory
+import com.ivianuu.kommonextensions.unsafeLazy
+import javax.inject.Inject
 
 /**
- * Key for [Dialog]'s
+ * Essentials view model dialog fragment
  */
-abstract class DialogKey {
+abstract class BaseViewModelDialogFragment<VM : ViewModel> : BaseDialogFragment() {
 
-    abstract fun createDialog(context: Context): Dialog
+    @Inject lateinit var viewModelFactory: DaggerViewModelFactory<VM>
+
+    protected val viewModel: VM by unsafeLazy {
+        ViewModelProviders.of(this, viewModelFactory)[ViewModel::class.java] as VM
+    }
 
 }

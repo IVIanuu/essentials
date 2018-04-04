@@ -20,7 +20,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.support.v4.app.ShareCompat
-import com.ivianuu.essentials.ui.traveler.key.ActivityKey
+import com.ivianuu.traveler.keys.ActivityKey
 
 /**
  * Shares the [text]

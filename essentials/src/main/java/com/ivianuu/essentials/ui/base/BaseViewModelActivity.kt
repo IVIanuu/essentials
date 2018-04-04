@@ -23,9 +23,9 @@ import com.ivianuu.kommonextensions.unsafeLazy
 import javax.inject.Inject
 
 /**
- * Essentials view model fragment
+ * Essentials view model activity
  */
-abstract class EssentialsViewModelFragment<VM : ViewModel> : EssentialsFragment() {
+abstract class BaseViewModelActivity<VM : ViewModel> : BaseActivity() {
 
     @Inject lateinit var viewModelFactory: DaggerViewModelFactory<VM>
 

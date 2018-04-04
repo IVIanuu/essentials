@@ -16,38 +16,34 @@
 
 package com.ivianuu.essentials.ui.base
 
+import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v7.app.AppCompatActivity
 import android.transition.TransitionInflater
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.view.doOnPreDraw
 import androidx.view.postDelayed
 import com.ivianuu.essentials.ui.common.BackListener
-import com.ivianuu.essentials.ui.traveler.KeyNavigator
-import com.ivianuu.kommonextensions.contentView
-import com.ivianuu.kommonextensions.unsafeLazy
-import com.ivianuu.traveler.NavigatorHolder
 import com.ivianuu.traveler.Router
-import dagger.android.AndroidInjection
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
+import dagger.android.support.AndroidSupportInjection
 import dagger.android.support.HasSupportFragmentInjector
 import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
 
 /**
- * Base activity
+ * Base fragment
  */
-abstract class EssentialsActivity : AppCompatActivity(), HasSupportFragmentInjector {
+abstract class BaseFragment : Fragment(), BackListener, HasSupportFragmentInjector {
 
     @Inject lateinit var supportFragmentInjector: DispatchingAndroidInjector<Fragment>
 
-    @Inject lateinit var navigatorHolder: NavigatorHolder
     @Inject lateinit var router: Router
 
     protected val disposables = CompositeDisposable()
-
-    protected open val fragmentContainer = android.R.id.content
 
     protected open val layoutRes = -1
 
@@ -56,16 +52,26 @@ abstract class EssentialsActivity : AppCompatActivity(), HasSupportFragmentInjec
     private var startedTransition = false
     private var postponed = false
 
-    private val backListeners = mutableSetOf<BackListener>()
-
-    private val navigator by unsafeLazy {
-        KeyNavigator(this, supportFragmentManager, fragmentContainer)
+    override fun onAttach(context: Context?) {
+        AndroidSupportInjection.inject(this)
+        super.onAttach(context)
+        activity.let {
+            if (it is BaseActivity) {
+                it.addBackListener(this)
+            }
+        }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        AndroidInjection.inject(this)
-        super.onCreate(savedInstanceState)
-        if (layoutRes != -1) setContentView(layoutRes)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        return if (layoutRes != -1) {
+            inflater.inflate(layoutRes, container, false)
+        } else {
+            super.onCreateView(inflater, container, savedInstanceState)
+        }
     }
 
     override fun onStart() {
@@ -73,18 +79,8 @@ abstract class EssentialsActivity : AppCompatActivity(), HasSupportFragmentInjec
 
         if (postponed && !startedTransition) {
             // If we're postponed and haven't started a transition yet, we'll delay for a max of [sharedElementDelay]ms
-            contentView.postDelayed(sharedElementMaxDelay, this::scheduleStartPostponedTransitions)
+            view?.postDelayed(sharedElementMaxDelay, this::scheduleStartPostponedTransitions)
         }
-    }
-
-    override fun onResumeFragments() {
-        super.onResumeFragments()
-        navigatorHolder.setNavigator(navigator)
-    }
-
-    override fun onPause() {
-        navigatorHolder.removeNavigator()
-        super.onPause()
     }
 
     override fun onStop() {
@@ -92,30 +88,41 @@ abstract class EssentialsActivity : AppCompatActivity(), HasSupportFragmentInjec
         startedTransition = false
     }
 
-    override fun onDestroy() {
+    override fun onDestroyView() {
         disposables.clear()
+        super.onDestroyView()
+    }
+
+    override fun onDestroy() {
+        val activity = activity
+        if (activity != null
+            && activity.isFinishing
+            && !activity.isChangingConfigurations) {
+            viewModelStore.clear()
+        }
         super.onDestroy()
     }
 
-    override fun onBackPressed() {
-        if (backListeners.none(BackListener::handleBack)) {
-            super.onBackPressed()
+    override fun onDetach() {
+        activity.let {
+            if (it is BaseActivity) {
+                it.removeBackListener(this)
+            }
         }
+        super.onDetach()
+    }
+
+    override fun handleBack(): Boolean {
+        return false
     }
 
     override fun supportFragmentInjector(): AndroidInjector<Fragment> = supportFragmentInjector
 
-    fun addBackListener(listener: BackListener) {
-        backListeners.add(listener)
-    }
-
-    fun removeBackListener(listener: BackListener) {
-        backListeners.remove(listener)
-    }
-
     protected fun scheduleStartPostponedTransitions() {
         if (!startedTransition) {
-            contentView.doOnPreDraw { startPostponedEnterTransition() }
+            (view?.parent as? ViewGroup)?.doOnPreDraw {
+                startPostponedEnterTransition()
+            }
             startedTransition = true
         }
     }

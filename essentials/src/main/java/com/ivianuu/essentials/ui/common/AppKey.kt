@@ -18,7 +18,7 @@ package com.ivianuu.essentials.ui.common
 
 import android.content.Context
 import android.content.Intent
-import com.ivianuu.essentials.ui.traveler.key.ActivityKey
+import com.ivianuu.traveler.keys.ActivityKey
 
 /**
  * Launches the app

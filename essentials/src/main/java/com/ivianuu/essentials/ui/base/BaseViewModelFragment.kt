@@ -14,21 +14,23 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.traveler.adapter
+package com.ivianuu.essentials.ui.base
 
-import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentPagerAdapter
-import com.ivianuu.essentials.ui.traveler.key.FragmentKey
+import android.arch.lifecycle.ViewModel
+import android.arch.lifecycle.ViewModelProviders
+import com.ivianuu.essentials.util.DaggerViewModelFactory
+import com.ivianuu.kommonextensions.unsafeLazy
+import javax.inject.Inject
 
 /**
- * Key fragment pager adapter
+ * Essentials view model fragment
  */
-open class KeyFragmentPagerAdapter(
-    fm: FragmentManager,
-    private val keys: List<FragmentKey>
-) : FragmentPagerAdapter(fm) {
+abstract class BaseViewModelFragment<VM : ViewModel> : BaseFragment() {
 
-    override fun getItem(position: Int) = keys[position].newInstance()
+    @Inject lateinit var viewModelFactory: DaggerViewModelFactory<VM>
 
-    override fun getCount() = keys.size
+    protected val viewModel: VM by unsafeLazy {
+        ViewModelProviders.of(this, viewModelFactory)[ViewModel::class.java] as VM
+    }
+
 }

@@ -20,7 +20,7 @@ import android.content.Context
 import android.content.Intent
 import android.provider.Settings
 import androidx.net.toUri
-import com.ivianuu.essentials.ui.traveler.key.ActivityKey
+import com.ivianuu.traveler.keys.ActivityKey
 
 /**
  * Open s the app info of the app

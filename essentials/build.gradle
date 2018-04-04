@@ -100,7 +100,8 @@ dependencies {
     api "com.github.ajalt:timberkt:1.3.0"
 
     // Traveler
-    api 'com.github.IVIanuu.Traveler:traveler:06fb18b9d3'
+    api 'com.github.IVIanuu.Traveler:traveler:fe5078dd8a'
+    api 'com.github.IVIanuu.Traveler:traveler-keys:fe5078dd8a'
 }
 
 // build a jar with source files

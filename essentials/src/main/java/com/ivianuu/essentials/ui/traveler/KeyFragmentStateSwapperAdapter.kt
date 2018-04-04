@@ -14,19 +14,19 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.traveler.adapter
+package com.ivianuu.essentials.ui.traveler
 
 import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentStatePagerAdapter
-import com.ivianuu.essentials.ui.traveler.key.FragmentKey
+import com.ivianuu.adaptablenavigation.supportfragments.FragmentStateSwapperAdapter
+import com.ivianuu.traveler.keys.FragmentKey
 
 /**
- * Key fragment swapper adapter
+ * Key fragment state swapper adapter
  */
-open class KeyFragmentStatePagerAdapter(
+open class KeyFragmentStateSwapperAdapter(
     fm: FragmentManager,
     private val keys: List<FragmentKey>
-) : FragmentStatePagerAdapter(fm) {
+) : FragmentStateSwapperAdapter(fm) {
 
     override fun getItem(position: Int) = keys[position].newInstance()
 

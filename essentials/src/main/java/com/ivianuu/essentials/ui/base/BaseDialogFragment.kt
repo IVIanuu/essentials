@@ -26,7 +26,7 @@ import javax.inject.Inject
 /**
  * Base dialog fragment
  */
-abstract class EssentialsDialogFragment : DialogFragment() {
+abstract class BaseDialogFragment : DialogFragment() {
 
     @Inject lateinit var router: Router
 
