@@ -44,10 +44,12 @@ dependencies {
     api 'com.github.IVIanuu.AdaptableNavigation:adaptablenavigation-supportfragments:379001dec1'
 
     // Android Support
-    api "com.android.support:appcompat-v7:27.1.0"
+    api "com.android.support:appcompat-v7:27.1.1"
+    api "com.android.support:cardview-v7:27.1.1"
     api "com.android.support.constraint:constraint-layout:1.1.0-beta6"
-    api "com.android.support:design:27.1.0"
-    api "com.android.support:preference-v14:27.1.0"
+    api "com.android.support:design:27.1.1"
+    api "com.android.support:palette-v7:27.1.1"
+    api "com.android.support:preference-v14:27.1.1"
 
     // Arch Components
     api "android.arch.lifecycle:extensions:1.1.1"
@@ -67,14 +69,17 @@ dependencies {
     api "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
 
     // Kommon extensions
-    api 'com.github.IVIanuu:KommonExtensions:119532c9af'
+    api 'com.github.IVIanuu:KommonExtensions:f5d4e0da9f'
 
     // Kt android
-    api 'androidx.core:core-ktx:0.2'
+    api 'androidx.core:core-ktx:0.3'
 
     // Material Dialogs
     api "com.afollestad.material-dialogs:core:0.9.6.0"
     api "com.afollestad.material-dialogs:commons:0.9.6.0"
+
+    // Rx Activity Result
+    api 'com.github.IVIanuu:RxActivityResult:3c77a491dd'
 
     // RxBroadcastReceiver
     api "com.github.IVIanuu:RxBroadcastReceiver:1.0.2"
@@ -87,7 +92,7 @@ dependencies {
     api "io.reactivex.rxjava2:rxkotlin:2.2.0"
 
     // RxPermissions
-    api 'com.github.IVIanuu:RxPermissions:1.0.0'
+    api 'com.github.IVIanuu:RxPermissions:c77e7bb378'
 
     // RxPreferences
     api "com.f2prateek.rx.preferences2:rx-preferences:2.0.0-RC3"

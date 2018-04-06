@@ -19,7 +19,7 @@ package com.ivianuu.essentials.ui.common
 import android.content.Context
 import android.content.Intent
 import android.provider.Settings
-import androidx.net.toUri
+import androidx.core.net.toUri
 import com.ivianuu.traveler.keys.ActivityKey
 
 /**

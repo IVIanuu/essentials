@@ -23,8 +23,8 @@ import android.transition.TransitionInflater
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.view.doOnPreDraw
-import androidx.view.postDelayed
+import androidx.core.view.doOnPreDraw
+import androidx.core.view.postDelayed
 import com.ivianuu.essentials.ui.common.BackListener
 import com.ivianuu.traveler.Router
 import dagger.android.AndroidInjector
