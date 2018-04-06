@@ -20,7 +20,6 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.transition.TransitionInflater
-import android.view.View
 import androidx.core.view.doOnPreDraw
 import androidx.core.view.postDelayed
 import com.ivianuu.essentials.ui.common.BackListener
@@ -42,7 +41,6 @@ import javax.inject.Inject
 abstract class BaseActivity : AppCompatActivity(), HasSupportFragmentInjector {
 
     @Inject lateinit var supportFragmentInjector: DispatchingAndroidInjector<Fragment>
-    @Inject lateinit var viewInjector: DispatchingAndroidInjector<View>
 
     @Inject lateinit var navigatorHolder: NavigatorHolder
     @Inject lateinit var router: Router
