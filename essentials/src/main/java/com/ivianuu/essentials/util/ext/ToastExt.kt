@@ -14,23 +14,14 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.base
+package com.ivianuu.essentials.util.ext
 
-import android.arch.lifecycle.ViewModel
-import android.arch.lifecycle.ViewModelProviders
-import com.ivianuu.essentials.util.DaggerViewModelFactory
-import com.ivianuu.essentials.util.ext.unsafeLazy
-import javax.inject.Inject
+import android.app.Dialog
+import android.support.v4.app.Fragment
+import androidx.core.widget.toast
 
-/**
- * Essentials view model fragment
- */
-abstract class BaseViewModelFragment<VM : ViewModel> : BaseFragment() {
+fun Fragment.toast(message: CharSequence) = requireActivity().toast(message)
+fun Dialog.toast(message: CharSequence) = context.toast(message)
 
-    @Inject lateinit var viewModelFactory: DaggerViewModelFactory<VM>
-
-    protected val viewModel: VM by unsafeLazy {
-        ViewModelProviders.of(this, viewModelFactory)[ViewModel::class.java] as VM
-    }
-
-}
+fun Fragment.toast(message: Int) = requireActivity().toast(message)
+fun Dialog.toast(message: Int) = context.toast(message)

@@ -14,23 +14,23 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.base
+package com.ivianuu.essentials.util.ext
 
-import android.arch.lifecycle.ViewModel
-import android.arch.lifecycle.ViewModelProviders
-import com.ivianuu.essentials.util.DaggerViewModelFactory
-import com.ivianuu.essentials.util.ext.unsafeLazy
-import javax.inject.Inject
+import android.support.v4.app.Fragment
+import android.support.v7.app.AppCompatActivity
+import android.view.View
 
-/**
- * Essentials view model fragment
- */
-abstract class BaseViewModelFragment<VM : ViewModel> : BaseFragment() {
+val Fragment.appCompatActivity: AppCompatActivity?
+    get() = activity as AppCompatActivity?
 
-    @Inject lateinit var viewModelFactory: DaggerViewModelFactory<VM>
+fun Fragment.hideInputMethod() {
+    requireActivity().hideInputMethod()
+}
 
-    protected val viewModel: VM by unsafeLazy {
-        ViewModelProviders.of(this, viewModelFactory)[ViewModel::class.java] as VM
-    }
+fun Fragment.showInputMethod(view: View) {
+    requireActivity().showInputMethod(view)
+}
 
+fun Fragment.requireAppCompatActivity(): AppCompatActivity {
+    return requireActivity() as AppCompatActivity
 }

@@ -14,23 +14,8 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.base
+package com.ivianuu.essentials.util.ext
 
-import android.arch.lifecycle.ViewModel
-import android.arch.lifecycle.ViewModelProviders
-import com.ivianuu.essentials.util.DaggerViewModelFactory
-import com.ivianuu.essentials.util.ext.unsafeLazy
-import javax.inject.Inject
+fun <T> semiSafeLazy(initializer: () -> T) = lazy(LazyThreadSafetyMode.PUBLICATION, initializer)
 
-/**
- * Essentials view model fragment
- */
-abstract class BaseViewModelFragment<VM : ViewModel> : BaseFragment() {
-
-    @Inject lateinit var viewModelFactory: DaggerViewModelFactory<VM>
-
-    protected val viewModel: VM by unsafeLazy {
-        ViewModelProviders.of(this, viewModelFactory)[ViewModel::class.java] as VM
-    }
-
-}
+fun <T> unsafeLazy(initializer: () -> T) = lazy(LazyThreadSafetyMode.NONE, initializer)

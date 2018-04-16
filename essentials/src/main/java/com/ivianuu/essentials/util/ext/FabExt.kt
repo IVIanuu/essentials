@@ -14,23 +14,27 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.base
+package com.ivianuu.essentials.util.ext
 
-import android.arch.lifecycle.ViewModel
-import android.arch.lifecycle.ViewModelProviders
-import com.ivianuu.essentials.util.DaggerViewModelFactory
-import com.ivianuu.essentials.util.ext.unsafeLazy
-import javax.inject.Inject
+import android.support.design.widget.FloatingActionButton
+import android.view.View
 
-/**
- * Essentials view model fragment
- */
-abstract class BaseViewModelFragment<VM : ViewModel> : BaseFragment() {
-
-    @Inject lateinit var viewModelFactory: DaggerViewModelFactory<VM>
-
-    protected val viewModel: VM by unsafeLazy {
-        ViewModelProviders.of(this, viewModelFactory)[ViewModel::class.java] as VM
+var FloatingActionButton.isShow: Boolean
+    get() = visibility == View.VISIBLE
+    set(value) {
+        if (value) {
+            show()
+        } else {
+            hide()
+        }
     }
 
-}
+var FloatingActionButton.isHide: Boolean
+    get() = visibility == View.INVISIBLE || visibility == View.GONE
+    set(value) {
+        if (value) {
+            hide()
+        } else {
+            show()
+        }
+    }

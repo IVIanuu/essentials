@@ -64,9 +64,6 @@ dependencies {
     // Kotlin
     api "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
 
-    // Kommon extensions
-    api 'com.github.IVIanuu:KommonExtensions:838e6ac71f'
-
     // Kt android
     api 'androidx.core:core-ktx:0.3'
 
@@ -76,9 +73,6 @@ dependencies {
 
     // Rx Activity Result
     api 'com.github.IVIanuu:RxActivityResult:3c77a491dd'
-
-    // RxBroadcastReceiver
-    api "com.github.IVIanuu:RxBroadcastReceiver:1.0.2"
 
     // RxJava
     api "io.reactivex.rxjava2:rxjava:2.1.12"

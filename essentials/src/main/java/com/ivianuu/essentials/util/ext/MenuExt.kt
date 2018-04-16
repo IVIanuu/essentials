@@ -14,23 +14,13 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.base
+package com.ivianuu.essentials.util.ext
 
-import android.arch.lifecycle.ViewModel
-import android.arch.lifecycle.ViewModelProviders
-import com.ivianuu.essentials.util.DaggerViewModelFactory
-import com.ivianuu.essentials.util.ext.unsafeLazy
-import javax.inject.Inject
+import android.view.Menu
+import android.view.MenuItem
+import androidx.core.view.iterator
 
-/**
- * Essentials view model fragment
- */
-abstract class BaseViewModelFragment<VM : ViewModel> : BaseFragment() {
-
-    @Inject lateinit var viewModelFactory: DaggerViewModelFactory<VM>
-
-    protected val viewModel: VM by unsafeLazy {
-        ViewModelProviders.of(this, viewModelFactory)[ViewModel::class.java] as VM
+val Menu.items: Sequence<MenuItem>
+    get() = object : Sequence<MenuItem> {
+        override fun iterator(): Iterator<MenuItem> = this@items.iterator()
     }
-
-}

@@ -14,23 +14,18 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.base
+package com.ivianuu.essentials.util.ext
 
-import android.arch.lifecycle.ViewModel
-import android.arch.lifecycle.ViewModelProviders
-import com.ivianuu.essentials.util.DaggerViewModelFactory
-import com.ivianuu.essentials.util.ext.unsafeLazy
-import javax.inject.Inject
+import android.graphics.PorterDuff
+import android.graphics.drawable.Drawable
 
-/**
- * Essentials view model fragment
- */
-abstract class BaseViewModelFragment<VM : ViewModel> : BaseFragment() {
-
-    @Inject lateinit var viewModelFactory: DaggerViewModelFactory<VM>
-
-    protected val viewModel: VM by unsafeLazy {
-        ViewModelProviders.of(this, viewModelFactory)[ViewModel::class.java] as VM
+fun Drawable.tint(color: Int,
+                  mode: PorterDuff.Mode = PorterDuff.Mode.SRC_IN,
+                  mutate: Boolean = true): Drawable {
+    return if (mutate) {
+        mutate().apply { setColorFilter(color, mode) }
+    } else {
+        setColorFilter(color, mode)
+        this
     }
-
 }

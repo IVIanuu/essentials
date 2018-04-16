@@ -23,8 +23,8 @@ import android.transition.TransitionInflater
 import androidx.core.view.doOnPreDraw
 import androidx.core.view.postDelayed
 import com.ivianuu.essentials.ui.common.BackListener
-import com.ivianuu.kommonextensions.contentView
-import com.ivianuu.kommonextensions.unsafeLazy
+import com.ivianuu.essentials.util.ext.contentView
+import com.ivianuu.essentials.util.ext.unsafeLazy
 import com.ivianuu.traveler.NavigatorHolder
 import com.ivianuu.traveler.Router
 import com.ivianuu.traveler.keys.KeyNavigator
