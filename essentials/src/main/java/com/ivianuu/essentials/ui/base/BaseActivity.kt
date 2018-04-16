@@ -56,7 +56,7 @@ abstract class BaseActivity : AppCompatActivity(), HasSupportFragmentInjector {
     private var startedTransition = false
     private var postponed = false
 
-    private val backListeners = mutableSetOf<BackListener>()
+    private val backListeners = mutableListOf<BackListener>()
 
     private val navigator by unsafeLazy {
         KeyNavigator(this, supportFragmentManager, fragmentContainer)
@@ -106,11 +106,15 @@ abstract class BaseActivity : AppCompatActivity(), HasSupportFragmentInjector {
     override fun supportFragmentInjector(): AndroidInjector<Fragment> = supportFragmentInjector
 
     fun addBackListener(listener: BackListener) {
-        backListeners.add(listener)
+        if (!backListeners.contains(listener)) {
+            backListeners.add(0, listener)
+        }
     }
 
     fun removeBackListener(listener: BackListener) {
-        backListeners.remove(listener)
+        if (backListeners.contains(listener)) {
+            backListeners.remove(listener)
+        }
     }
 
     protected fun scheduleStartPostponedTransitions() {
