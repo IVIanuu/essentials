@@ -21,6 +21,12 @@ import android.support.v4.app.Fragment
 import android.support.v7.preference.PreferenceFragmentCompat
 import android.support.v7.preference.PreferenceScreen
 import android.support.v7.widget.RecyclerView
+import android.transition.TransitionInflater
+import android.view.ViewGroup
+import androidx.core.view.doOnPreDraw
+import androidx.core.view.postDelayed
+import com.ivianuu.essentials.ui.base.BaseActivity
+import com.ivianuu.essentials.ui.common.BackListener
 import com.ivianuu.traveler.Router
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
@@ -32,7 +38,7 @@ import javax.inject.Inject
 /**
  * Base preference fragment
  */
-abstract class BasePreferenceFragment : PreferenceFragmentCompat(), HasSupportFragmentInjector {
+abstract class BasePreferenceFragment : PreferenceFragmentCompat(), BackListener, HasSupportFragmentInjector {
 
     @Inject lateinit var supportFragmentInjector: DispatchingAndroidInjector<Fragment>
 
@@ -40,13 +46,40 @@ abstract class BasePreferenceFragment : PreferenceFragmentCompat(), HasSupportFr
 
     protected val disposables = CompositeDisposable()
 
+    protected open val sharedElementMaxDelay = 500L
+
+    private var startedTransition = false
+    private var postponed = false
+
     override fun onAttach(context: Context?) {
         AndroidSupportInjection.inject(this)
         super.onAttach(context)
+
+        activity.let {
+            if (it is BaseActivity) {
+                it.addBackListener(this)
+            }
+        }
+
+        setupTransitions(TransitionInflater.from(requireContext()))
     }
 
     override fun onCreateAdapter(preferenceScreen: PreferenceScreen?): RecyclerView.Adapter<*> {
         return EnabledAwarePreferenceAdapter(preferenceScreen)
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        if (postponed && !startedTransition) {
+            // If we're postponed and haven't started a transition yet, we'll delay for a max of [sharedElementDelay]ms
+            view?.postDelayed(sharedElementMaxDelay, this::scheduleStartPostponedTransitions)
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        startedTransition = false
     }
 
     override fun onDestroyView() {
@@ -54,5 +87,45 @@ abstract class BasePreferenceFragment : PreferenceFragmentCompat(), HasSupportFr
         super.onDestroyView()
     }
 
+    override fun onDestroy() {
+        val activity = activity
+        if (activity != null
+            && activity.isFinishing
+            && !activity.isChangingConfigurations) {
+            viewModelStore.clear()
+        }
+        super.onDestroy()
+    }
+
+    override fun onDetach() {
+        activity.let {
+            if (it is BaseActivity) {
+                it.removeBackListener(this)
+            }
+        }
+        super.onDetach()
+    }
+
+    override fun postponeEnterTransition() {
+        super.postponeEnterTransition()
+        postponed = true
+    }
+
+    override fun handleBack(): Boolean {
+        return false
+    }
+
     override fun supportFragmentInjector(): AndroidInjector<Fragment> = supportFragmentInjector
+
+    protected fun scheduleStartPostponedTransitions() {
+        if (!startedTransition) {
+            (view?.parent as? ViewGroup)?.doOnPreDraw {
+                startPostponedEnterTransition()
+            }
+            startedTransition = true
+        }
+    }
+
+    protected open fun setupTransitions(inflater: TransitionInflater) {
+    }
 }
