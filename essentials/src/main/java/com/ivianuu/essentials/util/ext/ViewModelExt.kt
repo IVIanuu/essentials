@@ -19,6 +19,7 @@ package com.ivianuu.essentials.util.ext
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelStoreOwner
+import com.ivianuu.kommonextensions.unsafeLazy
 
 inline fun <reified T : ViewModel> ViewModelStoreOwner.getViewModel(): T =
     ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())[T::class.java]
