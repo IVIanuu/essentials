@@ -65,7 +65,7 @@ dependencies {
     api 'com.github.IVIanuu:KommonExtensions:838e6ac71f'
 
     // Kotlin
-    api "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+    api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     // Kt android
     api 'androidx.core:core-ktx:0.3'
@@ -75,7 +75,7 @@ dependencies {
     api "com.afollestad.material-dialogs:commons:0.9.6.0"
 
     // Rx Activity Result
-    api 'com.github.IVIanuu:RxActivityResult:3c77a491dd'
+    api 'com.github.IVIanuu:RxActivityResult:3a17011d75'
 
     // RxJava
     api "io.reactivex.rxjava2:rxjava:2.1.12"
@@ -85,7 +85,7 @@ dependencies {
     api "io.reactivex.rxjava2:rxkotlin:2.2.0"
 
     // RxPermissions
-    api 'com.github.IVIanuu:RxPermissions:c77e7bb378'
+    api 'com.github.IVIanuu:RxPermissions:dc2b269921'
 
     // RxPreferences
     api "com.f2prateek.rx.preferences2:rx-preferences:2.0.0-RC3"
@@ -95,8 +95,8 @@ dependencies {
     api "com.github.ajalt:timberkt:1.3.0"
 
     // Traveler
-    api 'com.github.IVIanuu.Traveler:traveler:ac6b2aa698'
-    api 'com.github.IVIanuu.Traveler:traveler-keys:ac6b2aa698'
+    api 'com.github.IVIanuu.Traveler:traveler:b93a67bde1'
+    api 'com.github.IVIanuu.Traveler:traveler-keys:b93a67bde1'
 }
 
 // build a jar with source files
