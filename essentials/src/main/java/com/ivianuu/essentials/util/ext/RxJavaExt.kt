@@ -18,9 +18,29 @@ package com.ivianuu.essentials.util.ext
 
 import io.reactivex.*
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.rxkotlin.subscribeBy
+
+private val onCompleteStub: () -> Unit = {}
+private val onNextStub: (Any) -> Unit = {}
+private val onErrorPrint: (Throwable) -> Unit = Throwable::printStackTrace
 
 fun Completable.main(): Completable = observeOn(AndroidSchedulers.mainThread())
-fun <T> Flowable<T>.main(): Flowable<T> = observeOn(AndroidSchedulers.mainThread())
-fun <T> Maybe<T>.main(): Maybe<T> = observeOn(AndroidSchedulers.mainThread())
-fun <T> Observable<T>.main(): Observable<T> = observeOn(AndroidSchedulers.mainThread())
-fun <T> Single<T>.main(): Single<T> = observeOn(AndroidSchedulers.mainThread())
+fun <T : Any> Flowable<T>.main(): Flowable<T> = observeOn(AndroidSchedulers.mainThread())
+fun <T : Any> Maybe<T>.main(): Maybe<T> = observeOn(AndroidSchedulers.mainThread())
+fun <T : Any> Observable<T>.main(): Observable<T> = observeOn(AndroidSchedulers.mainThread())
+fun <T : Any> Single<T>.main(): Single<T> = observeOn(AndroidSchedulers.mainThread())
+
+fun Completable.subscribeAndPrint(onComplete: () -> Unit = onCompleteStub) =
+        subscribeBy(onComplete = onComplete, onError = onErrorPrint)
+
+fun <T : Any> Flowable<T>.subscribeAndPrint(onNext: (T) -> Unit = onNextStub) =
+    subscribeBy(onNext = onNext, onError = onErrorPrint)
+
+fun <T : Any> Maybe<T>.subscribeAndPrint(onSuccess: (T) -> Unit = onNextStub) =
+    subscribeBy(onSuccess = onSuccess, onError = onErrorPrint)
+
+fun <T : Any> Observable<T>.subscribeAndPrint(onNext: (T) -> Unit = onNextStub) =
+    subscribeBy(onNext = onNext, onError = onErrorPrint)
+
+fun <T : Any> Single<T>.subscribeAndPrint(onSuccess: (T) -> Unit = onNextStub) =
+    subscribeBy(onSuccess = onSuccess, onError = onErrorPrint)
