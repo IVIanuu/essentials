@@ -16,9 +16,11 @@
 
 package com.ivianuu.essentials.ui.common
 
+import android.os.Parcelable
+
 /**
  * Marks a key as screen that returns a result
  */
-interface ResultKey {
+interface ResultKey : Parcelable {
     val resultCode: Int
 }

@@ -28,6 +28,7 @@ fun Completable.main(): Completable = observeOn(AndroidSchedulers.mainThread())
 fun <T : Any> Flowable<T>.main(): Flowable<T> = observeOn(AndroidSchedulers.mainThread())
 fun <T : Any> Maybe<T>.main(): Maybe<T> = observeOn(AndroidSchedulers.mainThread())
 fun <T : Any> Observable<T>.main(): Observable<T> = observeOn(AndroidSchedulers.mainThread())
+
 fun <T : Any> Single<T>.main(): Single<T> = observeOn(AndroidSchedulers.mainThread())
 
 fun Completable.subscribeAndPrint(onComplete: () -> Unit = onCompleteStub) =
