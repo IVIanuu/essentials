@@ -14,23 +14,9 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.base
+package com.ivianuu.essentials.util.ext
 
-import android.arch.lifecycle.ViewModel
-import android.arch.lifecycle.ViewModelProviders
-import com.ivianuu.essentials.util.DaggerViewModelFactory
-import com.ivianuu.essentials.util.ext.unsafeLazy
-import javax.inject.Inject
-
-/**
- * Essentials view model fragment
- */
-abstract class BaseViewModelFragment<VM : ViewModel> : BaseFragment() {
-
-    @Inject lateinit var viewModelFactory: DaggerViewModelFactory<VM>
-
-    protected val viewModel: VM by unsafeLazy {
-        ViewModelProviders.of(this, viewModelFactory)[ViewModel::class.java] as VM
-    }
-
-}
+fun Int.addFlag(flag: Int): Int = this or flag
+fun Int.removeFlag(flag: Int): Int = this and flag.inv()
+fun Int.containsFlag(flag: Int) = this and flag == flag
+fun Int.notContainsFlag(flag: Int) = !containsFlag(flag)

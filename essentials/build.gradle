@@ -61,9 +61,6 @@ dependencies {
     api "com.airbnb.android:epoxy:2.10.0"
     kapt "com.airbnb.android:epoxy-processor:2.10.0"
 
-    // Kommon Extensions
-    api 'com.github.IVIanuu:KommonExtensions:838e6ac71f'
-
     // Kotlin
     api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
