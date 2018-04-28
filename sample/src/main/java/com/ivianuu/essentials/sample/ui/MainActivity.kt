@@ -16,7 +16,6 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import android.app.Activity
 import android.app.Application
 import android.content.Intent
 import android.os.Bundle
@@ -28,7 +27,6 @@ import com.ivianuu.essentials.ui.base.BaseActivity
 import com.ivianuu.essentials.ui.base.BaseActivityModule
 import com.ivianuu.rxactivityresult.ActivityResultStarter
 import dagger.Module
-import dagger.Provides
 import io.reactivex.rxkotlin.addTo
 import javax.inject.Inject
 
@@ -54,15 +52,4 @@ class MainActivity : BaseActivity() {
 object Something
 
 @Module
-abstract class MainActivityModule : BaseActivityModule<MainActivity>()  {
-
-    @Module
-    companion object {
-
-        @JvmStatic
-        @Provides
-        fun provideSomething(activity: Activity) = Something
-
-    }
-
-}
+abstract class MainActivityModule : BaseActivityModule<MainActivity>()

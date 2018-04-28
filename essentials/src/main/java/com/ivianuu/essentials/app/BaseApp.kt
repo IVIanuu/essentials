@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.app
 
 import com.ivianuu.essentials.BuildConfig
-import dagger.android.AndroidInjector
 import dagger.android.support.DaggerApplication
 import timber.log.Timber
 
@@ -35,10 +34,4 @@ abstract class BaseApp : DaggerApplication() {
             if (plantTimber) Timber.plant(Timber.DebugTree())
         }
     }
-
-    final override fun applicationInjector(): AndroidInjector<out DaggerApplication> {
-        return buildAppComponent()
-    }
-
-    protected abstract fun buildAppComponent(): BaseAppComponent<out BaseApp>
 }

@@ -17,11 +17,11 @@
 package com.ivianuu.essentials.sample.app
 
 import android.app.Application
-import com.ivianuu.essentials.app.BaseAppComponent
 import com.ivianuu.essentials.injection.EssentialsModule
 import com.ivianuu.essentials.sample.injection.ActivityBindingModule
 import dagger.BindsInstance
 import dagger.Component
+import dagger.android.AndroidInjector
 import javax.inject.Singleton
 
 /**
@@ -31,11 +31,10 @@ import javax.inject.Singleton
 @Component(
     modules = [
         ActivityBindingModule::class,
-        AppModule::class,
         EssentialsModule::class
     ]
 )
-interface AppComponent : BaseAppComponent<App> {
+interface AppComponent : AndroidInjector<App> {
 
     @Component.Builder
     interface Builder {

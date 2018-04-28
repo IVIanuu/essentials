@@ -25,7 +25,6 @@ import android.support.v7.app.AppCompatActivity
 import android.transition.TransitionInflater
 import androidx.core.view.doOnPreDraw
 import androidx.core.view.postDelayed
-import com.ivianuu.essentials.injection.EssentialsFragmentBindingModule
 import com.ivianuu.essentials.injection.ForActivity
 import com.ivianuu.essentials.ui.common.BackListener
 import com.ivianuu.essentials.util.ext.contentView
@@ -138,14 +137,17 @@ abstract class BaseActivity : AppCompatActivity(), HasSupportFragmentInjector {
     }
 }
 
-@Module(includes = [EssentialsFragmentBindingModule::class])
+@Module
 abstract class BaseActivityModule<T : BaseActivity> {
 
     @Binds
-    abstract fun bindActivity(activity: T): Activity
+    abstract fun bindBaseActivity(activity: T): BaseActivity
 
     @Binds
-    abstract fun bindAppCompatActivity(activity: T): AppCompatActivity
+    abstract fun bindActivity(activity: BaseActivity): Activity
+
+    @Binds
+    abstract fun bindAppCompatActivity(activity: BaseActivity): AppCompatActivity
 
     @Binds
     abstract fun bindFragmentActivity(activity: AppCompatActivity): FragmentActivity
@@ -167,4 +169,5 @@ abstract class BaseActivityModule<T : BaseActivity> {
         fun providePermissionRequester(activity: Activity) = RxPermissions.get(activity)
 
     }
+
 }
