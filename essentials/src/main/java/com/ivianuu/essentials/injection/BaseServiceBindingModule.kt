@@ -16,27 +16,10 @@
 
 package com.ivianuu.essentials.injection
 
-import javax.inject.Qualifier
+import dagger.Module
 
-@Qualifier
-annotation class ForApp
-
-@Qualifier
-annotation class ForActivity
-
-@Qualifier
-annotation class ForFragment
-
-@Qualifier
-annotation class ForChildFragment
-
-@Qualifier
-annotation class ForService
-
-@Qualifier
-annotation class ForView
-
-@Qualifier
-annotation class ForChildView
-
-@Qualifier annotation class DefaultSharedPrefs
+/**
+ * Base binding module for [android.app.Service]'s
+ */
+@Module
+abstract class BaseServiceBindingModule

@@ -16,18 +16,27 @@
 
 package com.ivianuu.essentials.ui.base
 
+import android.app.Activity
+import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.app.FragmentActivity
 import android.support.v7.app.AppCompatActivity
 import android.transition.TransitionInflater
 import androidx.core.view.doOnPreDraw
 import androidx.core.view.postDelayed
+import com.ivianuu.essentials.injection.ForActivity
 import com.ivianuu.essentials.ui.common.BackListener
 import com.ivianuu.essentials.util.ext.contentView
 import com.ivianuu.essentials.util.ext.unsafeLazy
+import com.ivianuu.rxactivityresult.RxActivityResult
+import com.ivianuu.rxpermissions.RxPermissions
 import com.ivianuu.traveler.NavigatorHolder
 import com.ivianuu.traveler.Router
 import com.ivianuu.traveler.keys.KeyNavigator
+import dagger.Binds
+import dagger.Module
+import dagger.Provides
 import dagger.android.AndroidInjection
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
@@ -125,5 +134,36 @@ abstract class BaseActivity : AppCompatActivity(), HasSupportFragmentInjector {
     }
 
     protected open fun setupTransitions(inflater: TransitionInflater) {
+    }
+}
+
+@Module
+abstract class BaseActivityModule<T : BaseActivity> {
+
+    @Binds
+    abstract fun bindActivity(activity: T): Activity
+
+    @Binds
+    abstract fun bindAppCompatActivity(activity: T): AppCompatActivity
+
+    @Binds
+    abstract fun bindFragmentActivity(activity: AppCompatActivity): FragmentActivity
+
+    @ForActivity
+    @Binds
+    abstract fun bindContext(activity: Activity): Context
+
+    @Module
+    companion object {
+
+        @JvmStatic
+        @Provides
+        fun provideActivityResultStarter(activity: Activity) =
+            RxActivityResult.get(activity)
+
+        @JvmStatic
+        @Provides
+        fun providePermissionRequester(activity: Activity) = RxPermissions.get(activity)
+
     }
 }

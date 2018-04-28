@@ -14,29 +14,20 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.injection
+package com.ivianuu.essentials.sample.app
 
-import javax.inject.Qualifier
+import com.ivianuu.essentials.app.BaseApp
+import com.ivianuu.essentials.app.BaseAppComponent
 
-@Qualifier
-annotation class ForApp
+/**
+ * @author Manuel Wrage (IVIanuu)
+ */
+class App : BaseApp() {
 
-@Qualifier
-annotation class ForActivity
+    override fun buildAppComponent(): BaseAppComponent<out BaseApp> {
+        return DaggerAppComponent.builder()
+            .app(this)
+            .build()
+    }
 
-@Qualifier
-annotation class ForFragment
-
-@Qualifier
-annotation class ForChildFragment
-
-@Qualifier
-annotation class ForService
-
-@Qualifier
-annotation class ForView
-
-@Qualifier
-annotation class ForChildView
-
-@Qualifier annotation class DefaultSharedPrefs
+}

@@ -14,31 +14,18 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.injection
+package com.ivianuu.essentials.injection
 
-import com.ivianuu.traveler.Router
-import com.ivianuu.traveler.Traveler
 import dagger.Module
-import dagger.Provides
-import javax.inject.Singleton
+import dagger.android.AndroidInjectionModule
+import dagger.android.support.AndroidSupportInjectionModule
 
 /**
- * [Traveler] module
+ * Wraps essential modules
  */
-@Module
-object TravelerModule {
-
-    @JvmStatic
-    @Singleton
-    @Provides
-    fun provideTraveler() = Traveler.create()
-
-    @JvmStatic
-    @Provides
-    fun provideNavigatorHolder(traveler: Traveler<Router>) = traveler.navigatorHolder
-
-    @JvmStatic
-    @Provides
-    fun provideRouter(traveler: Traveler<Router>) = traveler.router
-
-}
+@Module(includes = [
+    AndroidInjectionModule::class,
+    AndroidSupportInjectionModule::class,
+    TravelerModule::class
+])
+object EssentialsModule

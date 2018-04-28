@@ -16,27 +16,18 @@
 
 package com.ivianuu.essentials.injection
 
-import javax.inject.Qualifier
+import com.ivianuu.essentials.ui.common.TextInputDialog
+import dagger.Module
+import dagger.android.ContributesAndroidInjector
 
-@Qualifier
-annotation class ForApp
+/**
+ * Base binding module for [android.support.v4.app.Fragment]'s
+ */
+@Module
+abstract class BaseFragmentBindingModule {
 
-@Qualifier
-annotation class ForActivity
+    @PerFragment
+    @ContributesAndroidInjector
+    abstract fun bindTextInputDialog(): TextInputDialog
 
-@Qualifier
-annotation class ForFragment
-
-@Qualifier
-annotation class ForChildFragment
-
-@Qualifier
-annotation class ForService
-
-@Qualifier
-annotation class ForView
-
-@Qualifier
-annotation class ForChildView
-
-@Qualifier annotation class DefaultSharedPrefs
+}

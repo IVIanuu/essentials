@@ -16,34 +16,29 @@
 
 package com.ivianuu.essentials.app
 
-import android.app.Activity
-import android.app.Application
-import android.app.Service
-import android.content.BroadcastReceiver
-import android.content.ContentProvider
-import android.support.v4.app.Fragment
-import dagger.android.*
-import dagger.android.support.HasSupportFragmentInjector
-import javax.inject.Inject
+import com.ivianuu.essentials.BuildConfig
+import dagger.android.AndroidInjector
+import dagger.android.support.DaggerApplication
+import timber.log.Timber
 
 /**
  * App
  */
-abstract class BaseApp : Application(), HasActivityInjector, HasBroadcastReceiverInjector, HasContentProviderInjector, HasServiceInjector, HasSupportFragmentInjector {
+abstract class BaseApp : DaggerApplication() {
 
-    @Inject lateinit var activityInjector: DispatchingAndroidInjector<Activity>
-    @Inject lateinit var broadcastReceiverInjector: DispatchingAndroidInjector<BroadcastReceiver>
-    @Inject lateinit var contentProviderInjector: DispatchingAndroidInjector<ContentProvider>
-    @Inject lateinit var serviceInjector: DispatchingAndroidInjector<Service>
-    @Inject lateinit var supportFragmentInjector: DispatchingAndroidInjector<Fragment>
+    protected open val plantTimber = true
 
-    override fun activityInjector(): AndroidInjector<Activity> = activityInjector
+    override fun onCreate() {
+        super.onCreate()
 
-    override fun broadcastReceiverInjector(): AndroidInjector<BroadcastReceiver> = broadcastReceiverInjector
+        if (BuildConfig.DEBUG) {
+            if (plantTimber) Timber.plant(Timber.DebugTree())
+        }
+    }
 
-    override fun contentProviderInjector(): AndroidInjector<ContentProvider> = contentProviderInjector
+    final override fun applicationInjector(): AndroidInjector<out DaggerApplication> {
+        return buildAppComponent()
+    }
 
-    override fun serviceInjector(): AndroidInjector<Service> = serviceInjector
-
-    override fun supportFragmentInjector(): AndroidInjector<Fragment> = supportFragmentInjector
+    protected abstract fun buildAppComponent(): BaseAppComponent<out BaseApp>
 }

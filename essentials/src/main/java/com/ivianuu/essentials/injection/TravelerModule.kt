@@ -16,27 +16,29 @@
 
 package com.ivianuu.essentials.injection
 
-import javax.inject.Qualifier
+import com.ivianuu.traveler.Router
+import com.ivianuu.traveler.Traveler
+import dagger.Module
+import dagger.Provides
+import javax.inject.Singleton
 
-@Qualifier
-annotation class ForApp
+/**
+ * [Traveler] module
+ */
+@Module
+object TravelerModule {
 
-@Qualifier
-annotation class ForActivity
+    @JvmStatic
+    @Singleton
+    @Provides
+    fun provideTraveler() = Traveler.create()
 
-@Qualifier
-annotation class ForFragment
+    @JvmStatic
+    @Provides
+    fun provideNavigatorHolder(traveler: Traveler<Router>) = traveler.navigatorHolder
 
-@Qualifier
-annotation class ForChildFragment
+    @JvmStatic
+    @Provides
+    fun provideRouter(traveler: Traveler<Router>) = traveler.router
 
-@Qualifier
-annotation class ForService
-
-@Qualifier
-annotation class ForView
-
-@Qualifier
-annotation class ForChildView
-
-@Qualifier annotation class DefaultSharedPrefs
+}

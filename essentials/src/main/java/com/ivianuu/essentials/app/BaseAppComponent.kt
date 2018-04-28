@@ -14,29 +14,15 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.injection
+package com.ivianuu.essentials.app
 
-import javax.inject.Qualifier
+import dagger.android.AndroidInjector
 
-@Qualifier
-annotation class ForApp
+/**
+ * Base app component
+ */
+interface BaseAppComponent<T : BaseApp> : AndroidInjector<T> {
 
-@Qualifier
-annotation class ForActivity
+    override fun inject(app: T)
 
-@Qualifier
-annotation class ForFragment
-
-@Qualifier
-annotation class ForChildFragment
-
-@Qualifier
-annotation class ForService
-
-@Qualifier
-annotation class ForView
-
-@Qualifier
-annotation class ForChildView
-
-@Qualifier annotation class DefaultSharedPrefs
+}
