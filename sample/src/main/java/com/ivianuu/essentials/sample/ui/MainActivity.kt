@@ -21,10 +21,10 @@ import android.content.Intent
 import android.os.Bundle
 import android.provider.Settings
 import com.f2prateek.rx.preferences2.RxSharedPreferences
-import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.injection.DefaultSharedPrefs
 import com.ivianuu.essentials.ui.base.BaseActivity
 import com.ivianuu.essentials.ui.base.BaseActivityModule
+import com.ivianuu.essentials.util.ext.d
 import com.ivianuu.rxactivityresult.ActivityResultStarter
 import dagger.Module
 import io.reactivex.rxkotlin.addTo

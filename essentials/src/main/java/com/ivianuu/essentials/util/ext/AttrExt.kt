@@ -23,135 +23,104 @@ import android.content.res.TypedArray
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
 import android.os.Build
+import android.support.v4.app.Fragment
+import android.view.View
 
-fun Context.resolveBooleanAttr(attr: Int): Boolean = resolveBooleanAttr(attr, false)
-
-fun Context.resolveBooleanAttr(attr: Int, defaultValue: Boolean): Boolean {
+fun Context.resolveBooleanAttr(attr: Int, defaultValue: Boolean = false): Boolean {
     val array = getTypedArrayWithAttributes(attr)
     val bool = array.getBoolean(0, defaultValue)
     array.recycle()
     return bool
 }
 
-fun Context.resolveColorAttr(attr: Int): Int = resolveColorAttr(attr, -1)
-
-fun Context.resolveColorAttr(attr: Int, defaultValue: Int): Int {
+fun Context.resolveColorAttr(attr: Int, defaultValue: Int = 0): Int {
     val array = getTypedArrayWithAttributes(attr)
     val color = array.getColor(0, defaultValue)
     array.recycle()
     return color
 }
 
-fun Context.resolveColorStateListAttr(attr: Int): ColorStateList? =
-    resolveColorStateListAttr(attr, null)
-
 fun Context.resolveColorStateListAttr(attr: Int,
-                                      defaultValue: ColorStateList?): ColorStateList? {
+                                      defaultValue: ColorStateList? = null): ColorStateList? {
     val array = getTypedArrayWithAttributes(attr)
     val colorStateList = array.getColorStateList(0)
     array.recycle()
     return colorStateList ?: defaultValue
 }
 
-
-fun Context.resolveDimenAttr(attr: Int): Float = resolveDimenAttr(attr, -1f)
-
-fun Context.resolveDimenAttr(attr: Int, defaultValue: Float): Float {
+fun Context.resolveDimenAttr(attr: Int, defaultValue: Float = 0f): Float {
     val array = getTypedArrayWithAttributes(attr)
     val dimension = array.getDimension(0, defaultValue)
     array.recycle()
     return dimension
 }
 
-fun Context.resolveDimenPxOffsetAttr(attr: Int): Int =
-    resolveDimenPxOffsetAttr(attr, -1)
-
-fun Context.resolveDimenPxOffsetAttr(attr: Int, defaultValue: Int): Int {
+fun Context.resolveDimenPxOffsetAttr(attr: Int, defaultValue: Int = 0): Int {
     val array = getTypedArrayWithAttributes(attr)
     val dimension = array.getDimensionPixelOffset(0, defaultValue)
     array.recycle()
     return dimension
 }
 
-fun Context.resolveDimenPxAttr(attr: Int): Int =
-    resolveDimenPxAttr(attr, -1)
-
-fun Context.resolveDimenPxAttr(attr: Int, defaultValue: Int): Int {
+fun Context.resolveDimenPxAttr(attr: Int, defaultValue: Int = 0): Int {
     val array = getTypedArrayWithAttributes(attr)
     val dimension = array.getDimensionPixelSize(0, defaultValue)
     array.recycle()
     return dimension
 }
 
-fun Context.resolveDrawableAttr(attr: Int): Drawable? = resolveDrawableAttr(attr, null)
-
-fun Context.resolveDrawableAttr(attr: Int, defaultValue: Drawable?): Drawable? {
+fun Context.resolveDrawableAttr(attr: Int, defaultValue: Drawable? = null): Drawable? {
     val array = getTypedArrayWithAttributes(attr)
     val drawable = array.getDrawable(0)
     array.recycle()
     return drawable ?: defaultValue
 }
 
-fun Context.resolveFloatAttr(attr: Int): Float = resolveFloatAttr(attr, -1f)
-
-fun Context.resolveFloatAttr(attr: Int, defaultValue: Float): Float {
+fun Context.resolveFloatAttr(attr: Int, defaultValue: Float = 0f): Float {
     val array = getTypedArrayWithAttributes(attr)
     val floatValue = array.getFloat(0, defaultValue)
     array.recycle()
     return floatValue
 }
 
-fun Context.resolveFontAttr(attr: Int): Typeface? = resolveFontAttr(attr, null)
-
 @TargetApi(Build.VERSION_CODES.O)
-fun Context.resolveFontAttr(attr: Int, defaultValue: Typeface?): Typeface? {
+fun Context.resolveFontAttr(attr: Int, defaultValue: Typeface? = null): Typeface? {
     val array = getTypedArrayWithAttributes(attr)
     val font = array.getFont(0)
     array.recycle()
     return font ?: defaultValue
 }
 
-fun Context.resolveIntAttr(attr: Int): Int = resolveIntAttr(attr, -1)
-
-fun Context.resolveIntAttr(attr: Int, defaultValue: Int): Int {
+fun Context.resolveIntAttr(attr: Int, defaultValue: Int = 0): Int {
     val array = getTypedArrayWithAttributes(attr)
     val intValue = array.getInt(0, defaultValue)
     array.recycle()
     return intValue
 }
 
-fun Context.resolveIntegerAttr(attr: Int): Int = resolveIntegerAttr(attr, -1)
-
-fun Context.resolveIntegerAttr(attr: Int, defaultValue: Int?): Int {
+fun Context.resolveIntegerAttr(attr: Int, defaultValue: Int? = 0): Int {
     val array = getTypedArrayWithAttributes(attr)
     val integer = array.getInteger(0, defaultValue!!)
     array.recycle()
     return integer
 }
 
-fun Context.resolveStringAttr(attr: Int): String? = resolveStringAttr(attr, null)
-
-fun Context.resolveStringAttr(attr: Int, defaultValue: String?): String? {
+fun Context.resolveStringAttr(attr: Int, defaultValue: String? = null): String? {
     val array = getTypedArrayWithAttributes(attr)
     val string = array.getString(0)
     array.recycle()
     return string ?: defaultValue
 }
 
-fun Context.resolveTextAttr(attr: Int): CharSequence? = resolveStringAttr(attr, null)
-
-fun Context.resolveTextAttr(attr: Int, defaultValue: CharSequence?): CharSequence? {
+fun Context.resolveTextAttr(attr: Int, defaultValue: CharSequence? = null): CharSequence? {
     val array = getTypedArrayWithAttributes(attr)
     val charSequence = array.getText(0)
     array.recycle()
     return charSequence ?: defaultValue
 }
 
-fun Context.resolveTextArrayAttr(attr: Int): Array<CharSequence>? =
-    resolveTextArrayAttr(attr, null)
-
 fun Context.resolveTextArrayAttr(attr: Int,
-                                 defaultValue: Array<CharSequence>?): Array<CharSequence>? {
+                                 defaultValue: Array<CharSequence>? = null): Array<CharSequence>? {
     val array = getTypedArrayWithAttributes(attr)
     val charSequence = array.getTextArray(0)
     array.recycle()
@@ -160,3 +129,93 @@ fun Context.resolveTextArrayAttr(attr: Int,
 
 fun Context.getTypedArrayWithAttributes(vararg attr: Int): TypedArray =
     theme.obtainStyledAttributes(attr)
+
+fun Fragment.resolveBooleanAttr(attr: Int, defaultValue: Boolean = false) =
+    requireActivity().resolveBooleanAttr(attr, defaultValue)
+
+fun Fragment.resolveColorAttr(attr: Int, defaultValue: Int = 0) =
+    requireActivity().resolveColorAttr(attr, defaultValue)
+
+fun Fragment.resolveColorStateListAttr(attr: Int,
+                                      defaultValue: ColorStateList? = null) =
+    requireActivity().resolveColorStateListAttr(attr, defaultValue)
+
+fun Fragment.resolveDimenAttr(attr: Int, defaultValue: Float = 0f) =
+    requireActivity().resolveDimenAttr(attr, defaultValue)
+
+fun Fragment.resolveDimenPxOffsetAttr(attr: Int, defaultValue: Int = 0) =
+    requireActivity().resolveDimenPxOffsetAttr(attr, defaultValue)
+
+fun Fragment.resolveDimenPxAttr(attr: Int, defaultValue: Int = 0) =
+    requireActivity().resolveDimenPxAttr(attr, defaultValue)
+
+fun Fragment.resolveDrawableAttr(attr: Int, defaultValue: Drawable? = null) =
+    requireActivity().resolveDrawableAttr(attr, defaultValue)
+
+fun Fragment.resolveFloatAttr(attr: Int, defaultValue: Float = 0f) =
+    requireActivity().resolveFloatAttr(attr, defaultValue)
+
+@TargetApi(Build.VERSION_CODES.O)
+fun Fragment.resolveFontAttr(attr: Int, defaultValue: Typeface? = null) =
+    requireActivity().resolveFontAttr(attr, defaultValue)
+
+fun Fragment.resolveIntAttr(attr: Int, defaultValue: Int = 0) =
+    requireActivity().resolveIntAttr(attr, defaultValue)
+
+fun Fragment.resolveIntegerAttr(attr: Int, defaultValue: Int? = 0) =
+    requireActivity().resolveIntegerAttr(attr, defaultValue)
+
+fun Fragment.resolveStringAttr(attr: Int, defaultValue: String? = null) =
+    requireActivity().resolveStringAttr(attr, defaultValue)
+
+fun Fragment.resolveTextAttr(attr: Int, defaultValue: CharSequence? = null) =
+    requireActivity().resolveTextAttr(attr, defaultValue)
+
+fun Fragment.resolveTextArrayAttr(attr: Int,
+                                 defaultValue: Array<CharSequence>? = null) =
+    requireActivity().resolveTextArrayAttr(attr, defaultValue)
+
+fun View.resolveBooleanAttr(attr: Int, defaultValue: Boolean = false) =
+    context.resolveBooleanAttr(attr, defaultValue)
+
+fun View.resolveColorAttr(attr: Int, defaultValue: Int = 0) =
+    context.resolveColorAttr(attr, defaultValue)
+
+fun View.resolveColorStateListAttr(attr: Int,
+                                       defaultValue: ColorStateList? = null) =
+    context.resolveColorStateListAttr(attr, defaultValue)
+
+fun View.resolveDimenAttr(attr: Int, defaultValue: Float = 0f) =
+    context.resolveDimenAttr(attr, defaultValue)
+
+fun View.resolveDimenPxOffsetAttr(attr: Int, defaultValue: Int = 0) =
+    context.resolveDimenPxOffsetAttr(attr, defaultValue)
+
+fun View.resolveDimenPxAttr(attr: Int, defaultValue: Int = 0) =
+    context.resolveDimenPxAttr(attr, defaultValue)
+
+fun View.resolveDrawableAttr(attr: Int, defaultValue: Drawable? = null) =
+    context.resolveDrawableAttr(attr, defaultValue)
+
+fun View.resolveFloatAttr(attr: Int, defaultValue: Float = 0f) =
+    context.resolveFloatAttr(attr, defaultValue)
+
+@TargetApi(Build.VERSION_CODES.O)
+fun View.resolveFontAttr(attr: Int, defaultValue: Typeface? = null) =
+    context.resolveFontAttr(attr, defaultValue)
+
+fun View.resolveIntAttr(attr: Int, defaultValue: Int = 0) =
+    context.resolveIntAttr(attr, defaultValue)
+
+fun View.resolveIntegerAttr(attr: Int, defaultValue: Int? = 0) =
+    context.resolveIntegerAttr(attr, defaultValue)
+
+fun View.resolveStringAttr(attr: Int, defaultValue: String? = null) =
+    context.resolveStringAttr(attr, defaultValue)
+
+fun View.resolveTextAttr(attr: Int, defaultValue: CharSequence? = null) =
+    context.resolveTextAttr(attr, defaultValue)
+
+fun View.resolveTextArrayAttr(attr: Int,
+                                  defaultValue: Array<CharSequence>? = null) =
+    context.resolveTextArrayAttr(attr, defaultValue)

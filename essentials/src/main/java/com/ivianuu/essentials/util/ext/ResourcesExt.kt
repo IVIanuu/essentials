@@ -27,6 +27,7 @@ import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.support.v4.content.res.ResourcesCompat
 import android.util.TypedValue
+import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 
@@ -101,6 +102,38 @@ fun Fragment.getResColorStateList(resId: Int)= requireActivity().getResColorStat
 fun Fragment.getResDrawable(resId : Int)= requireActivity().getResDrawable(resId)
 
 fun Fragment.getResFont(resId: Int) = requireActivity().getResFont(resId)
+
+fun View.getResAnim(resId: Int) = context.getResAnim(resId)
+
+fun View.getResIntArray(resId: Int)  = context.getResIntArray(resId)
+
+fun View.getResStringArray(resId: Int) = context.getResStringArray(resId)
+
+fun View.getResTextArray(resId: Int)= context.getResTextArray(resId)
+
+fun View.getResTypedArray(resId: Int) = context.getResTypedArray(resId)
+
+fun View.getResBool(resId: Int) = context.getResBool(resId)
+
+fun View.getResDimen(resId : Int) = context.getResDimen(resId)
+
+fun View.getResDimenPx(resId : Int) = context.getResDimenPx(resId)
+
+fun View.getResDimenPxOffset(resId : Int) = context.getResDimenPxOffset(resId)
+
+fun View.getResFloat(resId: Int) = context.getResFloat(resId)
+
+fun View.getResInt(resId: Int) : Int = resources.getInteger(resId)
+
+fun View.getResBitmap(resId: Int) = context.getResBitmap(resId)
+
+fun View.getResColor(resId: Int) = context.getResColor(resId)
+
+fun View.getResColorStateList(resId: Int)= context.getResColorStateList(resId)
+
+fun View.getResDrawable(resId : Int)= context.getResDrawable(resId)
+
+fun View.getResFont(resId: Int) = context.getResFont(resId)
 
 private object ValueHolder {
     val VALUE = TypedValue()
