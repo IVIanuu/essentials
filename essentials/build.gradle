@@ -93,7 +93,7 @@ dependencies {
     api "com.f2prateek.rx.preferences2:rx-preferences:2.0.0-RC3"
 
     // SeekBarPreference
-    api 'com.github.IVIanuu:SeekBarPreference:5352338625'
+    api 'com.github.IVIanuu:SeekBarPreference:f45ad8334d'
 
     // Timber
     api "com.jakewharton.timber:timber:4.6.0"
