@@ -16,9 +16,9 @@
 
 package com.ivianuu.essentials.util.ext
 
-import android.app.Dialog
 import android.content.Context
 import android.support.v4.app.Fragment
+import android.view.View
 import android.widget.Toast
 
 fun Context.toast(message: CharSequence, duration: Int = Toast.LENGTH_SHORT): Toast =
@@ -26,7 +26,7 @@ fun Context.toast(message: CharSequence, duration: Int = Toast.LENGTH_SHORT): To
 fun Context.toast(message: Int, duration: Int = Toast.LENGTH_SHORT) = toast(getString(message), duration)
 
 fun Fragment.toast(message: CharSequence) = requireActivity().toast(message)
-fun Dialog.toast(message: CharSequence) = context.toast(message)
-
 fun Fragment.toast(message: Int) = requireActivity().toast(message)
-fun Dialog.toast(message: Int) = context.toast(message)
+
+fun View.toast(message: CharSequence) = context.toast(message)
+fun View.toast(message: Int) = context.toast(message)

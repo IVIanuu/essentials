@@ -45,11 +45,11 @@ fun Context.getResTypedArray(resId: Int) : TypedArray = resources.obtainTypedArr
 
 fun Context.getResBool(resId: Int) : Boolean = resources.getBoolean(resId)
 
-fun Context.getResDimen(resId : Int) : Float = this.resources.getDimension(resId)
+fun Context.getResDimen(resId : Int) : Float = resources.getDimension(resId)
 
-fun Context.getResDimenPx(resId : Int) : Int = this.resources.getDimensionPixelSize(resId)
+fun Context.getResDimenPx(resId : Int) : Int = resources.getDimensionPixelSize(resId)
 
-fun Context.getResDimenPxOffset(resId : Int) : Int = this.resources.getDimensionPixelOffset(resId)
+fun Context.getResDimenPxOffset(resId : Int) : Int = resources.getDimensionPixelOffset(resId)
 
 fun Context.getResFloat(resId: Int) : Float {
     val value = ValueHolder.VALUE
@@ -91,7 +91,7 @@ fun Fragment.getResDimenPxOffset(resId : Int) = requireActivity().getResDimenPxO
 
 fun Fragment.getResFloat(resId: Int) = requireActivity().getResFloat(resId)
 
-fun Fragment.getResInt(resId: Int) : Int = resources.getInteger(resId)
+fun Fragment.getResInt(resId: Int) : Int = requireActivity().getResInt(resId)
 
 fun Fragment.getResBitmap(resId: Int) = requireActivity().getResBitmap(resId)
 
@@ -123,7 +123,7 @@ fun View.getResDimenPxOffset(resId : Int) = context.getResDimenPxOffset(resId)
 
 fun View.getResFloat(resId: Int) = context.getResFloat(resId)
 
-fun View.getResInt(resId: Int) : Int = resources.getInteger(resId)
+fun View.getResInt(resId: Int) : Int = context.getResInt(resId)
 
 fun View.getResBitmap(resId: Int) = context.getResBitmap(resId)
 
