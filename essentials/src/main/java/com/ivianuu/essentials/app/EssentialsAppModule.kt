@@ -28,32 +28,27 @@ import dagger.Provides
 import javax.inject.Singleton
 
 /**
- * Base app module
+ * Essentials app module
  */
 @Module
-abstract class BaseAppModule<T : BaseApp> {
+object EssentialsAppModule {
 
-    @Module
-    companion object {
+    @JvmStatic
+    @ForApp
+    @Provides
+    fun provideContext(app: Application): Context = app
 
-        @JvmStatic
-        @ForApp
-        @Provides
-        fun provideContext(app: Application): Context = app
+    @JvmStatic
+    @DefaultSharedPrefs
+    @Provides
+    fun provideSharedPrefs(@ForApp context: Context): SharedPreferences =
+        PreferenceManager.getDefaultSharedPreferences(context)
 
-        @JvmStatic
-        @DefaultSharedPrefs
-        @Provides
-        fun provideSharedPrefs(@ForApp context: Context): SharedPreferences =
-            PreferenceManager.getDefaultSharedPreferences(context)
-
-        @JvmStatic
-        @DefaultSharedPrefs
-        @Singleton
-        @Provides
-        fun provideRxSharedPrefs(@DefaultSharedPrefs prefs: SharedPreferences): RxSharedPreferences =
-            RxSharedPreferences.create(prefs)
-
-    }
+    @JvmStatic
+    @DefaultSharedPrefs
+    @Singleton
+    @Provides
+    fun provideRxSharedPrefs(@DefaultSharedPrefs prefs: SharedPreferences): RxSharedPreferences =
+        RxSharedPreferences.create(prefs)
 
 }

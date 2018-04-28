@@ -16,11 +16,11 @@
 
 package com.ivianuu.essentials.sample.app
 
-import com.ivianuu.essentials.app.BaseAppModule
+import com.ivianuu.essentials.app.EssentialsAppModule
 import dagger.Module
 
 /**
  * @author Manuel Wrage (IVIanuu)
  */
 @Module
-object AppModule : BaseAppModule<App>()
+object AppModule : EssentialsAppModule<App>()
