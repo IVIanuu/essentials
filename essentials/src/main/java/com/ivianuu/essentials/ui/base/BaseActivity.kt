@@ -25,6 +25,7 @@ import android.support.v7.app.AppCompatActivity
 import android.transition.TransitionInflater
 import androidx.core.view.doOnPreDraw
 import androidx.core.view.postDelayed
+import com.ivianuu.essentials.injection.EssentialsFragmentBindingModule
 import com.ivianuu.essentials.injection.ForActivity
 import com.ivianuu.essentials.ui.common.BackListener
 import com.ivianuu.essentials.util.ext.contentView
@@ -137,7 +138,7 @@ abstract class BaseActivity : AppCompatActivity(), HasSupportFragmentInjector {
     }
 }
 
-@Module
+@Module(includes = [EssentialsFragmentBindingModule::class])
 abstract class BaseActivityModule<T : BaseActivity> {
 
     @Binds
