@@ -61,6 +61,11 @@ dependencies {
     api "com.airbnb.android:epoxy:2.10.0"
     kapt "com.airbnb.android:epoxy-processor:2.10.0"
 
+    // Fabric
+    implementation("com.crashlytics.sdk.android:crashlytics:2.7.1@aar") {
+        transitive = true
+    }
+
     // Kotlin
     api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 

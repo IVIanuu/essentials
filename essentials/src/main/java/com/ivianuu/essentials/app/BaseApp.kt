@@ -16,22 +16,9 @@
 
 package com.ivianuu.essentials.app
 
-import com.ivianuu.essentials.BuildConfig
 import dagger.android.support.DaggerApplication
-import timber.log.Timber
 
 /**
  * App
  */
-abstract class BaseApp : DaggerApplication() {
-
-    protected open val plantTimber = true
-
-    override fun onCreate() {
-        super.onCreate()
-
-        if (BuildConfig.DEBUG) {
-            if (plantTimber) Timber.plant(Timber.DebugTree())
-        }
-    }
-}
+abstract class BaseApp : DaggerApplication()
