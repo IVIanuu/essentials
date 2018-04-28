@@ -16,10 +16,18 @@
 
 package com.ivianuu.essentials.injection
 
+import com.ivianuu.essentials.ui.common.TextInputDialog
 import dagger.Module
+import dagger.android.ContributesAndroidInjector
 
 /**
- * Base binding module for [android.app.Activity]'s
+ * Base binding module for [android.support.v4.app.Fragment]'s
  */
 @Module
-abstract class BaseActivityBindingModule
+abstract class EssentialsFragmentBindingModule {
+
+    @PerFragment
+    @ContributesAndroidInjector
+    abstract fun bindTextInputDialog(): TextInputDialog
+
+}
