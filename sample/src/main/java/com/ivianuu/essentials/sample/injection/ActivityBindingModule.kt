@@ -19,7 +19,6 @@ package com.ivianuu.essentials.sample.injection
 import com.ivianuu.essentials.injection.BaseActivityBindingModule
 import com.ivianuu.essentials.injection.PerActivity
 import com.ivianuu.essentials.sample.ui.MainActivity
-import com.ivianuu.essentials.sample.ui.MainActivityModule
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
@@ -30,7 +29,7 @@ import dagger.android.ContributesAndroidInjector
 abstract class ActivityBindingModule : BaseActivityBindingModule() {
 
     @PerActivity
-    @ContributesAndroidInjector(modules = [MainActivityModule::class])
+    @ContributesAndroidInjector(modules = [ActivityModule::class])
     abstract fun bindMainActivity(): MainActivity
 
 }

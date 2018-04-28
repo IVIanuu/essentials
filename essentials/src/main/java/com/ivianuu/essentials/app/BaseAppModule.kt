@@ -51,7 +51,7 @@ abstract class BaseAppModule<T : BaseApp> {
         @DefaultSharedPrefs
         @Singleton
         @Provides
-        fun provideRxSharedPrefs(prefs: SharedPreferences): RxSharedPreferences =
+        fun provideRxSharedPrefs(@DefaultSharedPrefs prefs: SharedPreferences): RxSharedPreferences =
             RxSharedPreferences.create(prefs)
 
     }

@@ -35,9 +35,9 @@ import javax.inject.Inject
 class MainActivity : BaseActivity() {
 
     @Inject lateinit var myApplication: Application
-    @DefaultSharedPrefs lateinit var rxPrefs: RxSharedPreferences
+    @field:DefaultSharedPrefs @Inject lateinit var rxPrefs: RxSharedPreferences
     @Inject lateinit var activityResultStarter: ActivityResultStarter
-    @Inject lateinit var something: Something
+  //  @Inject lateinit var something: Something
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
