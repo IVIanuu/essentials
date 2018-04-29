@@ -14,11 +14,15 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.util.ext.tint
+package com.ivianuu.essentials.util.ext
 
-import android.widget.ScrollView
-import com.ivianuu.essentials.util.EdgeGlowUtil
+import android.content.BroadcastReceiver
+import android.content.Context
 
-fun ScrollView.tint(color: Int) {
-    EdgeGlowUtil.setEdgeGlowColor(this, color)
+fun Context.unregisterReceiverSafe(receiver: BroadcastReceiver) {
+    try {
+        unregisterReceiver(receiver)
+    } catch (e: IllegalArgumentException) {
+        // ignore
+    }
 }

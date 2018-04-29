@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.util.ext
 
 import android.content.Context
-import android.content.res.ColorStateList
 import com.ivianuu.essentials.R
 
 val Context.isWindowBackgroundDark
@@ -29,72 +28,12 @@ fun Context.getPrimaryColorDark() = resolveColorAttr(android.R.attr.colorPrimary
 
 fun Context.getAccentColor() = resolveColorAttr(android.R.attr.colorAccent)
 
-fun Context.getButtonDisabledColor(isDark: Boolean = isWindowBackgroundDark): Int {
-    return getResColor(
-        if (isDark) {
-            R.color.md_button_disabled_dark
-        } else {
-            R.color.md_button_disabled_light
-        }
-    )
-}
-
-fun Context.getButtonTextDisabledColor(isDark: Boolean = isWindowBackgroundDark): Int {
-    return getResColor(
-        if (isDark) {
-            R.color.md_button_text_disabled_dark
-        } else {
-            R.color.md_button_text_disabled_light
-        }
-    )
-}
-
 fun Context.getCardColor(isDark: Boolean = isWindowBackgroundDark): Int {
     return getResColor(
         if (isDark) {
-            R.color.md_cardview_bg_dark
+            R.color.cardview_dark_background
         } else {
-            R.color.md_cardview_bg_light
-        }
-    )
-}
-
-fun Context.getControlDisabledColor(isDark: Boolean = isWindowBackgroundDark): Int {
-    return getResColor(
-        if (isDark) {
-            R.color.md_control_disabled_dark
-        } else {
-            R.color.md_control_disabled_light
-        }
-    )
-}
-
-fun Context.getControlNormalColor(isDark: Boolean = isWindowBackgroundDark): Int {
-    return getResColor(
-        if (isDark) {
-            R.color.md_control_normal_dark
-        } else {
-            R.color.md_control_normal_light
-        }
-    )
-}
-
-fun Context.getTextDisabledColor(isDark: Boolean = isWindowBackgroundDark): Int {
-    return getResColor(
-        if (isDark) {
-            R.color.md_text_disabled_dark
-        } else {
-            R.color.md_text_disabled_light
-        }
-    )
-}
-
-fun Context.getNavigationDrawerSelectedColor(isDark: Boolean = isWindowBackgroundDark): Int {
-    return getResColor(
-        if (isDark) {
-            R.color.md_navigation_drawer_selected_dark
-        } else {
-            R.color.md_navigation_drawer_selected_light
+            R.color.cardview_light_background
         }
     )
 }
@@ -148,78 +87,3 @@ fun Context.getSecondaryDisabledTextColor(isDark: Boolean = isWindowBackgroundDa
         }
     )
 }
-
-fun Context.getIconColor(isDark: Boolean = isWindowBackgroundDark): Int {
-    return getResColor(
-        if (isDark) {
-            R.color.md_icon_dark
-        } else {
-            R.color.md_icon_light
-        }
-    )
-}
-
-fun Context.getInactiveIconColor(isDark: Boolean = isWindowBackgroundDark): Int {
-    return getResColor(
-        if (isDark) {
-            R.color.md_icon_dark_inactive
-        } else {
-            R.color.md_icon_light_inactive
-        }
-    )
-}
-
-fun Context.getBottomNavBgColor(isDark: Boolean = isWindowBackgroundDark): Int {
-    return getResColor(
-        if (isDark) {
-            R.color.md_bottom_nav_default_dark_bg
-        } else {
-            R.color.md_bottom_nav_default_light_bg
-        }
-    )
-}
-
-fun Context.getSwitchThumbDisabledColor(isDark: Boolean = isWindowBackgroundDark): Int {
-    return getResColor(
-        if (isDark) {
-            R.color.switch_thumb_disabled_material_dark
-        } else {
-            R.color.switch_thumb_disabled_material_light
-        }
-    )
-}
-
-fun Context.getSwitchThumbNormalColor(isDark: Boolean = isWindowBackgroundDark): Int {
-    return getResColor(
-        if (isDark) {
-            R.color.switch_thumb_normal_material_dark
-        } else {
-            R.color.switch_thumb_normal_material_light
-        }
-    )
-}
-
-fun Context.getSwitchTrackDisabledColor(isDark: Boolean = isWindowBackgroundDark): Int {
-    return getResColor(
-        if (isDark) {
-            R.color.md_switch_track_disabled_dark
-        } else {
-            R.color.md_switch_track_disabled_light
-        }
-    )
-}
-
-fun Context.getSwitchTrackNormalColor(isDark: Boolean = isWindowBackgroundDark): Int {
-    return getResColor(
-        if (isDark) {
-            R.color.md_switch_track_normal_dark
-        } else {
-            R.color.md_switch_track_normal_light
-        }
-    )
-}
-
-fun Context.getTintedDrawable(resId: Int, color: Int) = getResDrawable(resId).tinted(color)
-
-fun Context.getTintedDrawable(resId: Int, colorStateList: ColorStateList) =
-    getResDrawable(resId).tinted(colorStateList)
