@@ -18,6 +18,16 @@ package com.ivianuu.essentials.util.ext
 
 import android.content.BroadcastReceiver
 import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
+
+fun Context.registerReceiver(intentFilter: IntentFilter, onReceive: (intent: Intent) -> Unit): BroadcastReceiver {
+    return object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            onReceive(intent)
+        }
+    }.also { registerReceiver(it, intentFilter) }
+}
 
 fun Context.unregisterReceiverSafe(receiver: BroadcastReceiver) {
     try {
