@@ -16,5 +16,5 @@
 
 package com.ivianuu.essentials.util.ext
 
-inline val now: Long
+inline val currentTimeMillis: Long
     get() = System.currentTimeMillis()
