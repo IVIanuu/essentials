@@ -16,8 +16,10 @@
 
 package com.ivianuu.essentials.util.ext
 
+import android.content.res.ColorStateList
 import android.graphics.PorterDuff
 import android.graphics.drawable.Drawable
+import android.support.v4.graphics.drawable.DrawableCompat
 
 fun Drawable.tint(color: Int,
                   mode: PorterDuff.Mode = PorterDuff.Mode.SRC_IN,
@@ -28,4 +30,25 @@ fun Drawable.tint(color: Int,
         setColorFilter(color, mode)
         this
     }
+}
+
+fun Drawable.tinted(color: Int): Drawable {
+    val drawable = mutate()
+    DrawableCompat.setTintMode(drawable, PorterDuff.Mode.SRC_IN)
+    DrawableCompat.setTint(drawable, color)
+    return drawable
+}
+
+fun Drawable.tinted(colorStateList: ColorStateList): Drawable {
+    val drawable = mutate()
+    DrawableCompat.setTintList(drawable, colorStateList)
+    return drawable
+}
+
+fun Drawable?.tintedNullable(color: Int): Drawable? {
+    return this?.tinted(color)
+}
+
+fun Drawable?.tintedNullable(colorStateList: ColorStateList): Drawable? {
+    return this?.tinted(colorStateList)
 }

@@ -14,19 +14,11 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.epoxy
+package com.ivianuu.essentials.util.ext.tint
 
-import android.view.View
-import com.airbnb.epoxy.EpoxyHolder
-import kotlinx.android.extensions.LayoutContainer
+import android.support.v7.widget.RecyclerView
+import com.ivianuu.essentials.util.EdgeGlowUtil
 
-/**
- * Base [EpoxyHolder] which is also a [LayoutContainer]
- */
-open class KtEpoxyHolder : EpoxyHolder(), LayoutContainer {
-    override lateinit var containerView: View
-
-    override fun bindView(itemView: View) {
-        containerView = itemView
-    }
+fun RecyclerView.tint(color: Int) {
+    EdgeGlowUtil.setEdgeGlowColor(this, color)
 }

@@ -14,19 +14,13 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.epoxy
+package com.ivianuu.essentials.util.ext
 
-import android.view.View
-import com.airbnb.epoxy.EpoxyHolder
-import kotlinx.android.extensions.LayoutContainer
+import java.lang.reflect.Field
+import kotlin.reflect.KClass
 
-/**
- * Base [EpoxyHolder] which is also a [LayoutContainer]
- */
-open class KtEpoxyHolder : EpoxyHolder(), LayoutContainer {
-    override lateinit var containerView: View
-
-    override fun bindView(itemView: View) {
-        containerView = itemView
-    }
+fun KClass<*>.getField(fieldName: String): Field {
+    val field = java.getDeclaredField(fieldName)
+    field.isAccessible = true
+    return field
 }

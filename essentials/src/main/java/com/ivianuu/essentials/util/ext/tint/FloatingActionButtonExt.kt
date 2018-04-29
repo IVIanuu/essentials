@@ -14,19 +14,16 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.epoxy
+package com.ivianuu.essentials.util.ext.tint
 
-import android.view.View
-import com.airbnb.epoxy.EpoxyHolder
-import kotlinx.android.extensions.LayoutContainer
+import android.graphics.Color
+import android.support.design.widget.FloatingActionButton
+import com.ivianuu.essentials.util.ext.isLight
+import com.ivianuu.essentials.util.ext.isWindowBackgroundDark
+import com.ivianuu.essentials.util.ext.tintedNullable
 
-/**
- * Base [EpoxyHolder] which is also a [LayoutContainer]
- */
-open class KtEpoxyHolder : EpoxyHolder(), LayoutContainer {
-    override lateinit var containerView: View
-
-    override fun bindView(itemView: View) {
-        containerView = itemView
-    }
+fun FloatingActionButton.tint(color: Int, isDark: Boolean = context.isWindowBackgroundDark) {
+    tintBackground(color, isDark)
+    val iconColor = if (color.isLight) Color.BLACK else Color.WHITE
+    setImageDrawable(drawable?.tintedNullable(iconColor))
 }
