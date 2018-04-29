@@ -15,4 +15,8 @@
  */
 
 package com.ivianuu.essentials.util.ext
-// todo
+
+val Double.abs get() = Math.abs(this)
+val Float.abs get() = Math.abs(this)
+val Int.abs get() = Math.abs(this)
+val Long.abs get() = Math.abs(this)
