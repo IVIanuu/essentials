@@ -19,8 +19,8 @@ package com.ivianuu.essentials.util.ext.tint
 import android.support.design.widget.TabLayout
 import android.view.View
 import com.ivianuu.essentials.util.ColorStateListUtil.getDisabledColorStateList
+import com.ivianuu.essentials.util.RippleDrawableUtil.getRippleDrawable
 import com.ivianuu.essentials.util.ext.*
-import com.ivianuu.essentials.util.getRippleDrawable
 
 fun TabLayout.tint(bgColor: Int,
                    activeColor: Int = context.getIconColor(bgColor.isDark),

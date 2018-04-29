@@ -27,77 +27,81 @@ import android.os.Build
 import com.ivianuu.essentials.util.ext.getRippleColor
 import com.ivianuu.essentials.util.ext.isDark
 
-fun getRippleDrawable(context: Context, color: Int): Drawable {
-    return getRippleDrawable(
-        context,
-        color.isDark
-    )
-}
+object RippleDrawableUtil {
 
-fun getRippleDrawable(context: Context, dark: Boolean): Drawable {
-    return getRippleDrawable(
-        context.getRippleColor(
-            dark
+    fun getRippleDrawable(context: Context, color: Int): Drawable {
+        return getRippleDrawable(
+            context,
+            color.isDark
         )
-    )
-}
-
-fun getRippleDrawable(color: Int): Drawable {
-    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-        RippleDrawable(
-            ColorStateList.valueOf(color),
-            null,
-            ColorDrawable(Color.WHITE)
-        )
-    } else {
-        getStateListDrawable(color)
     }
-}
 
-fun getBorderlessRippleDrawable(context: Context, color: Int): Drawable {
-    return getBorderlessRippleDrawable(
-        context,
-        color.isDark
-    )
-}
-
-fun getBorderlessRippleDrawable(context: Context, dark: Boolean): Drawable {
-    return getBorderlessRippleDrawable(
-        context.getRippleColor(dark)
-    )
-}
-
-fun getBorderlessRippleDrawable(color: Int): Drawable {
-    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-        RippleDrawable(
-            ColorStateList.valueOf(color),
-            null,
-            null
+    fun getRippleDrawable(context: Context, dark: Boolean): Drawable {
+        return getRippleDrawable(
+            context.getRippleColor(
+                dark
+            )
         )
-    } else {
-        getStateListDrawable(color)
     }
-}
 
-private fun getStateListDrawable(
-    color: Int
-): StateListDrawable {
-    val states = StateListDrawable()
-    states.addState(
-        intArrayOf(android.R.attr.state_pressed),
-        ColorDrawable(color)
-    )
-    states.addState(
-        intArrayOf(android.R.attr.state_focused),
-        ColorDrawable(color)
-    )
-    states.addState(
-        intArrayOf(android.R.attr.state_activated),
-        ColorDrawable(color)
-    )
-    states.addState(
-        intArrayOf(),
-        ColorDrawable(Color.TRANSPARENT)
-    )
-    return states
+    fun getRippleDrawable(color: Int): Drawable {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            RippleDrawable(
+                ColorStateList.valueOf(color),
+                null,
+                ColorDrawable(Color.WHITE)
+            )
+        } else {
+            getStateListDrawable(color)
+        }
+    }
+
+    fun getBorderlessRippleDrawable(context: Context, color: Int): Drawable {
+        return getBorderlessRippleDrawable(
+            context,
+            color.isDark
+        )
+    }
+
+    fun getBorderlessRippleDrawable(context: Context, dark: Boolean): Drawable {
+        return getBorderlessRippleDrawable(
+            context.getRippleColor(dark)
+        )
+    }
+
+    fun getBorderlessRippleDrawable(color: Int): Drawable {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            RippleDrawable(
+                ColorStateList.valueOf(color),
+                null,
+                null
+            )
+        } else {
+            getStateListDrawable(color)
+        }
+    }
+
+    private fun getStateListDrawable(
+        color: Int
+    ): StateListDrawable {
+        val states = StateListDrawable()
+        states.addState(
+            intArrayOf(android.R.attr.state_pressed),
+            ColorDrawable(color)
+        )
+        states.addState(
+            intArrayOf(android.R.attr.state_focused),
+            ColorDrawable(color)
+        )
+        states.addState(
+            intArrayOf(android.R.attr.state_activated),
+            ColorDrawable(color)
+        )
+        states.addState(
+            intArrayOf(),
+            ColorDrawable(Color.TRANSPARENT)
+        )
+        return states
+    }
+
 }

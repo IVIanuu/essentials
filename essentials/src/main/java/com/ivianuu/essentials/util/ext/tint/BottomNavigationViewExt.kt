@@ -20,8 +20,8 @@ import android.R
 import android.content.res.ColorStateList
 import android.support.design.internal.BottomNavigationItemView
 import android.support.design.widget.BottomNavigationView
+import com.ivianuu.essentials.util.RippleDrawableUtil.getBorderlessRippleDrawable
 import com.ivianuu.essentials.util.ext.*
-import com.ivianuu.essentials.util.getBorderlessRippleDrawable
 
 fun BottomNavigationView.tint(bgColor: Int,
                               selectedColor: Int = context.getIconColor(bgColor.isDark),
