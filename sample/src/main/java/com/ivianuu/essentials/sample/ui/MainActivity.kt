@@ -16,40 +16,21 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import android.app.Application
-import android.content.Intent
 import android.os.Bundle
-import android.provider.Settings
-import com.f2prateek.rx.preferences2.RxSharedPreferences
-import com.ivianuu.essentials.injection.DefaultSharedPrefs
 import com.ivianuu.essentials.ui.base.BaseActivity
 import com.ivianuu.essentials.ui.base.BaseActivityModule
-import com.ivianuu.essentials.util.ext.d
-import com.ivianuu.rxactivityresult.ActivityResultStarter
 import dagger.Module
-import io.reactivex.rxkotlin.addTo
-import javax.inject.Inject
 
 class MainActivity : BaseActivity() {
-
-    @Inject lateinit var myApplication: Application
-    @field:DefaultSharedPrefs @Inject lateinit var rxPrefs: RxSharedPreferences
-    @Inject lateinit var activityResultStarter: ActivityResultStarter
-  //  @Inject lateinit var something: Something
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        activityResultStarter.start(
-            Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
-        ).subscribe {
-            d { "on result" }
+        if (savedInstanceState == null) {
+            router.newRootScreen(MultipleCountersKey)
         }
-            .addTo(disposables)
     }
 }
-
-object Something
 
 @Module
 abstract class MainActivityModule : BaseActivityModule<MainActivity>()

@@ -14,31 +14,26 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.sample.app
+package com.ivianuu.essentials.sample.injection
 
-import com.ivianuu.essentials.app.BaseApp
-import com.ivianuu.essentials.sample.BuildConfig
-import dagger.android.AndroidInjector
-import dagger.android.support.DaggerApplication
-import timber.log.Timber
+import com.ivianuu.essentials.injection.PerFragment
+import com.ivianuu.essentials.sample.ui.CounterFragment
+import com.ivianuu.essentials.sample.ui.MultipleCountersFragment
+import dagger.Module
+import dagger.android.ContributesAndroidInjector
 
 /**
  * @author Manuel Wrage (IVIanuu)
  */
-class App : BaseApp() {
+@Module
+abstract class FragmentBindingModule {
 
-    override fun onCreate() {
-        super.onCreate()
+    @PerFragment
+    @ContributesAndroidInjector
+    abstract fun bindCounterFragment(): CounterFragment
 
-        if (BuildConfig.DEBUG) {
-            Timber.plant(Timber.DebugTree())
-        }
-    }
-
-    override fun applicationInjector(): AndroidInjector<out DaggerApplication> {
-        return DaggerAppComponent.builder()
-            .app(this)
-            .build()
-    }
+    @PerFragment
+    @ContributesAndroidInjector
+    abstract fun bindMultipleCountersFragment(): MultipleCountersFragment
 
 }

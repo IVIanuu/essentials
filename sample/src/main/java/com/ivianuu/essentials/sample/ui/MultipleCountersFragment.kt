@@ -14,31 +14,29 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.sample.app
+package com.ivianuu.essentials.sample.ui
 
-import com.ivianuu.essentials.app.BaseApp
-import com.ivianuu.essentials.sample.BuildConfig
-import dagger.android.AndroidInjector
-import dagger.android.support.DaggerApplication
-import timber.log.Timber
+import android.os.Bundle
+import android.view.View
+import com.ivianuu.essentials.sample.R
+import com.ivianuu.essentials.ui.base.BaseFragment
+import com.ivianuu.traveler.keys.FragmentClassKey
 
 /**
  * @author Manuel Wrage (IVIanuu)
  */
-class App : BaseApp() {
+class MultipleCountersFragment : BaseFragment() {
 
-    override fun onCreate() {
-        super.onCreate()
+    override val layoutRes = R.layout.fragment_multiple_counters
 
-        if (BuildConfig.DEBUG) {
-            Timber.plant(Timber.DebugTree())
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        if (savedInstanceState == null) {
+
         }
     }
 
-    override fun applicationInjector(): AndroidInjector<out DaggerApplication> {
-        return DaggerAppComponent.builder()
-            .app(this)
-            .build()
-    }
-
 }
+
+object MultipleCountersKey : FragmentClassKey(MultipleCountersFragment::class)

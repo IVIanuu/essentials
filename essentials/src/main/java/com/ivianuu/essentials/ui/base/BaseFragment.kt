@@ -19,12 +19,9 @@ package com.ivianuu.essentials.ui.base
 import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.transition.TransitionInflater
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.doOnPreDraw
-import androidx.core.view.postDelayed
 import com.ivianuu.essentials.ui.common.BackListener
 import com.ivianuu.traveler.Router
 import dagger.android.AndroidInjector
@@ -47,15 +44,9 @@ abstract class BaseFragment : Fragment(), BackListener, HasSupportFragmentInject
 
     protected open val layoutRes = -1
 
-    protected open val sharedElementMaxDelay = 500L
-
-    private var startedTransition = false
-    private var postponed = false
-
     override fun onAttach(context: Context?) {
         AndroidSupportInjection.inject(this)
         super.onAttach(context)
-        setupTransitions(TransitionInflater.from(requireContext()))
     }
 
     override fun onCreateView(
@@ -70,38 +61,9 @@ abstract class BaseFragment : Fragment(), BackListener, HasSupportFragmentInject
         }
     }
 
-    override fun onStart() {
-        super.onStart()
-
-        if (postponed && !startedTransition) {
-            // If we're postponed and haven't started a transition yet, we'll delay for a max of [sharedElementDelay]ms
-            view?.postDelayed(sharedElementMaxDelay, this::scheduleStartPostponedTransitions)
-        }
-    }
-
-    override fun onStop() {
-        super.onStop()
-        startedTransition = false
-    }
-
     override fun onDestroyView() {
         disposables.clear()
         super.onDestroyView()
-    }
-
-    override fun onDestroy() {
-        val activity = activity
-        if (activity != null
-            && activity.isFinishing
-            && !activity.isChangingConfigurations) {
-            viewModelStore.clear()
-        }
-        super.onDestroy()
-    }
-
-    override fun postponeEnterTransition() {
-        super.postponeEnterTransition()
-        postponed = true
     }
 
     override fun handleBack(): Boolean {
@@ -109,16 +71,4 @@ abstract class BaseFragment : Fragment(), BackListener, HasSupportFragmentInject
     }
 
     override fun supportFragmentInjector(): AndroidInjector<Fragment> = supportFragmentInjector
-
-    protected fun scheduleStartPostponedTransitions() {
-        if (!startedTransition) {
-            (view?.parent as? ViewGroup)?.doOnPreDraw {
-                startPostponedEnterTransition()
-            }
-            startedTransition = true
-        }
-    }
-
-    protected open fun setupTransitions(inflater: TransitionInflater) {
-    }
 }

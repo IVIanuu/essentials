@@ -99,8 +99,8 @@ dependencies {
     api "com.jakewharton.timber:timber:4.6.0"
 
     // Traveler
-    api 'com.github.IVIanuu.Traveler:traveler:bf25ef42ae'
-    api 'com.github.IVIanuu.Traveler:traveler-keys:bf25ef42ae'
+    api 'com.github.IVIanuu.Traveler:traveler:033022aa67'
+    api 'com.github.IVIanuu.Traveler:traveler-keys:033022aa67'
 }
 
 // build a jar with source files
