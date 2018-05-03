@@ -22,12 +22,8 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
 import android.support.v7.app.AppCompatActivity
-import android.transition.TransitionInflater
-import androidx.core.view.doOnPreDraw
-import androidx.core.view.postDelayed
 import com.ivianuu.essentials.injection.ForActivity
 import com.ivianuu.essentials.ui.common.BackListener
-import com.ivianuu.essentials.util.ext.contentView
 import com.ivianuu.essentials.util.ext.unsafeLazy
 import com.ivianuu.rxactivityresult.RxActivityResult
 import com.ivianuu.rxpermissions.RxPermissions
@@ -60,13 +56,6 @@ abstract class BaseActivity : AppCompatActivity(), HasSupportFragmentInjector {
 
     protected open val layoutRes = -1
 
-    protected open val sharedElementMaxDelay = 500L
-
-    private var startedTransition = false
-    private var postponed = false
-
-    private val backListeners = mutableListOf<BackListener>()
-
     private val navigator by unsafeLazy {
         KeyNavigator(this, supportFragmentManager, fragmentContainer)
     }
@@ -75,15 +64,6 @@ abstract class BaseActivity : AppCompatActivity(), HasSupportFragmentInjector {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
         if (layoutRes != -1) setContentView(layoutRes)
-    }
-
-    override fun onStart() {
-        super.onStart()
-
-        if (postponed && !startedTransition) {
-            // If we're postponed and haven't started a transition yet, we'll delay for a max of [sharedElementDelay]ms
-            contentView.postDelayed(sharedElementMaxDelay, this::scheduleStartPostponedTransitions)
-        }
     }
 
     override fun onResumeFragments() {
@@ -96,45 +76,21 @@ abstract class BaseActivity : AppCompatActivity(), HasSupportFragmentInjector {
         super.onPause()
     }
 
-    override fun onStop() {
-        super.onStop()
-        startedTransition = false
-    }
-
     override fun onDestroy() {
         disposables.clear()
         super.onDestroy()
     }
 
     override fun onBackPressed() {
-        if (backListeners.none(BackListener::handleBack)) {
+        val currentFragment = supportFragmentManager.findFragmentById(fragmentContainer)
+        if (currentFragment == null
+            || currentFragment !is BackListener
+            || !currentFragment.handleBack()) {
             super.onBackPressed()
         }
     }
 
     override fun supportFragmentInjector(): AndroidInjector<Fragment> = supportFragmentInjector
-
-    fun addBackListener(listener: BackListener) {
-        if (!backListeners.contains(listener)) {
-            backListeners.add(0, listener)
-        }
-    }
-
-    fun removeBackListener(listener: BackListener) {
-        if (backListeners.contains(listener)) {
-            backListeners.remove(listener)
-        }
-    }
-
-    protected fun scheduleStartPostponedTransitions() {
-        if (!startedTransition) {
-            contentView.doOnPreDraw { startPostponedEnterTransition() }
-            startedTransition = true
-        }
-    }
-
-    protected open fun setupTransitions(inflater: TransitionInflater) {
-    }
 }
 
 @Module

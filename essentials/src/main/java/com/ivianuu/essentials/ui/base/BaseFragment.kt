@@ -55,12 +55,6 @@ abstract class BaseFragment : Fragment(), BackListener, HasSupportFragmentInject
     override fun onAttach(context: Context?) {
         AndroidSupportInjection.inject(this)
         super.onAttach(context)
-        activity.let {
-            if (it is BaseActivity) {
-                it.addBackListener(this)
-            }
-        }
-
         setupTransitions(TransitionInflater.from(requireContext()))
     }
 
@@ -103,15 +97,6 @@ abstract class BaseFragment : Fragment(), BackListener, HasSupportFragmentInject
             viewModelStore.clear()
         }
         super.onDestroy()
-    }
-
-    override fun onDetach() {
-        activity.let {
-            if (it is BaseActivity) {
-                it.removeBackListener(this)
-            }
-        }
-        super.onDetach()
     }
 
     override fun postponeEnterTransition() {
