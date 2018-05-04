@@ -19,7 +19,11 @@ package com.ivianuu.essentials.sample.ui
 import android.os.Bundle
 import com.ivianuu.essentials.ui.base.BaseActivity
 import com.ivianuu.essentials.ui.base.BaseActivityModule
+import com.ivianuu.essentials.util.ext.d
+import com.ivianuu.essentials.util.ext.disposedWith
 import dagger.Module
+import io.reactivex.Observable
+import java.util.concurrent.TimeUnit
 
 class MainActivity : BaseActivity() {
 
@@ -29,6 +33,12 @@ class MainActivity : BaseActivity() {
         if (savedInstanceState == null) {
             router.newRootScreen(MultipleCountersKey)
         }
+
+        Observable.interval(1, TimeUnit.SECONDS)
+            .doOnDispose { d { "on dispose" } }
+            .doOnSubscribe { d { "on sub" } }
+            .subscribe { d { "on next $it" } }
+            .disposedWith(this)
     }
 }
 

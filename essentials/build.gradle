@@ -41,6 +41,10 @@ android {
             coroutines "enable"
         }
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {
@@ -55,6 +59,7 @@ dependencies {
     // Arch Components
     api "android.arch.lifecycle:extensions:1.1.1"
     api "android.arch.lifecycle:reactivestreams:1.1.1"
+    api "android.arch.lifecycle:common-java8:1.1.1"
 
     // Dagger
     api "com.google.dagger:dagger:2.15"
