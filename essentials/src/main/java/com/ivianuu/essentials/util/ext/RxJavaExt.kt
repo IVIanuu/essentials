@@ -52,6 +52,8 @@ fun <T : Any> Observable<T>.subscribeAndPrint(onNext: (T) -> Unit = onNextStub) 
 fun <T : Any> Single<T>.subscribeAndPrint(onSuccess: (T) -> Unit = onNextStub) =
     subscribeBy(onSuccess = onSuccess, onError = onErrorPrint)
 
+fun <T : Any> BehaviorSubject<T>.requireValue() = value ?: throw IllegalStateException("value is null")
+
 fun <T : Any> behaviorSubject(defaultValue: T? = null): BehaviorSubject<T> = if (defaultValue != null) {
     BehaviorSubject.createDefault(defaultValue)
 } else {
