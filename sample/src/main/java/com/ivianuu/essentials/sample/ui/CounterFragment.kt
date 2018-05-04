@@ -26,6 +26,7 @@ import com.ivianuu.essentials.ui.base.BaseFragment
 import com.ivianuu.traveler.keys.FragmentKey
 import com.ivianuu.traveler.keys.requireKey
 import kotlinx.android.parcel.Parcelize
+import kotlinx.android.synthetic.main.fragment_counter.*
 
 /**
  * @author Manuel Wrage (IVIanuu)
