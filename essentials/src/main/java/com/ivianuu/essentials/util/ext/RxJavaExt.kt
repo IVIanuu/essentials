@@ -19,6 +19,8 @@ package com.ivianuu.essentials.util.ext
 import io.reactivex.*
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.subscribeBy
+import io.reactivex.subjects.BehaviorSubject
+import io.reactivex.subjects.PublishSubject
 
 private val onCompleteStub: () -> Unit = {}
 private val onNextStub: (Any) -> Unit = {}
@@ -45,3 +47,10 @@ fun <T : Any> Observable<T>.subscribeAndPrint(onNext: (T) -> Unit = onNextStub) 
 
 fun <T : Any> Single<T>.subscribeAndPrint(onSuccess: (T) -> Unit = onNextStub) =
     subscribeBy(onSuccess = onSuccess, onError = onErrorPrint)
+
+fun <T : Any> BehaviorSubject(defaultValue: T? = null): BehaviorSubject<T> = if (defaultValue != null) {
+    io.reactivex.subjects.BehaviorSubject.createDefault(defaultValue)
+} else {
+    io.reactivex.subjects.BehaviorSubject.create()
+}
+fun <T : Any> PublishSubject(): PublishSubject<T> = io.reactivex.subjects.PublishSubject.create<T>()
