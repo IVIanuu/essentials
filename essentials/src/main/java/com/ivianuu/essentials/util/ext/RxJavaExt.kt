@@ -16,12 +16,8 @@
 
 package com.ivianuu.essentials.util.ext
 
-import android.arch.lifecycle.DefaultLifecycleObserver
-import android.arch.lifecycle.Lifecycle
-import android.arch.lifecycle.LifecycleOwner
 import io.reactivex.*
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
@@ -60,56 +56,3 @@ fun <T : Any> behaviorSubject(defaultValue: T? = null): BehaviorSubject<T> = if 
     BehaviorSubject.create()
 }
 fun <T : Any> publishSubject(): PublishSubject<T> = PublishSubject.create<T>()
-
-object RxJavaDisposePlugins {
-    var DEFAULT_DISPOSE_EVENT = Lifecycle.Event.ON_DESTROY
-}
-
-fun Disposable.disposedWith(
-    owner: LifecycleOwner,
-    event: Lifecycle.Event = RxJavaDisposePlugins.DEFAULT_DISPOSE_EVENT) {
-
-    owner.lifecycle.addObserver(object : DefaultLifecycleObserver {
-
-        override fun onCreate(owner: LifecycleOwner) {
-            if (event == Lifecycle.Event.ON_CREATE) {
-                removeObserverAndDispose(owner)
-            }
-        }
-
-        override fun onStart(owner: LifecycleOwner) {
-            if (event == Lifecycle.Event.ON_START) {
-                removeObserverAndDispose(owner)
-            }
-        }
-
-        override fun onResume(owner: LifecycleOwner) {
-            if (event == Lifecycle.Event.ON_RESUME) {
-                removeObserverAndDispose(owner)
-            }
-        }
-
-        override fun onPause(owner: LifecycleOwner) {
-            if (event == Lifecycle.Event.ON_PAUSE) {
-                removeObserverAndDispose(owner)
-            }
-        }
-
-        override fun onStop(owner: LifecycleOwner) {
-            if (event == Lifecycle.Event.ON_STOP) {
-                removeObserverAndDispose(owner)
-            }
-        }
-
-        override fun onDestroy(owner: LifecycleOwner) {
-            if (event == Lifecycle.Event.ON_DESTROY) {
-                removeObserverAndDispose(owner)
-            }
-        }
-
-        fun removeObserverAndDispose(owner: LifecycleOwner) {
-            owner.lifecycle.removeObserver(this)
-            dispose()
-        }
-    })
-}
