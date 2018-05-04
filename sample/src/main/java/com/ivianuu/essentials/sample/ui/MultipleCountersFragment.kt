@@ -19,46 +19,22 @@ package com.ivianuu.essentials.sample.ui
 import android.os.Bundle
 import android.view.View
 import com.ivianuu.essentials.sample.R
-import com.ivianuu.essentials.ui.base.BaseViewModelFragment
-import com.ivianuu.essentials.ui.common.BaseViewModel
-import com.ivianuu.essentials.util.ext.d
-import com.ivianuu.essentials.util.ext.main
-import com.ivianuu.essentials.util.ext.observeK
-import com.ivianuu.essentials.util.ext.toLiveData
+import com.ivianuu.essentials.ui.base.BaseFragment
 import com.ivianuu.traveler.keys.FragmentClassKey
-import io.reactivex.Observable
-import java.util.concurrent.TimeUnit
-import javax.inject.Inject
 
 /**
  * @author Manuel Wrage (IVIanuu)
  */
-class MultipleCountersFragment : BaseViewModelFragment<DummyViewModel>() {
+class MultipleCountersFragment : BaseFragment() {
 
     override val layoutRes = R.layout.fragment_multiple_counters
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.lifecycle
-
         if (savedInstanceState == null) {
 
         }
-    }
-
-}
-
-class DummyViewModel @Inject constructor() : BaseViewModel() {
-
-    init {
-        Observable.interval(1, TimeUnit.SECONDS)
-            .doOnSubscribe { d { "on sub" } }
-            .doOnNext { d { "on next" } }
-            .doOnDispose { d { "on dispose" } }
-            .main()
-            .toLiveData()
-            .observeK(this) { d { "changed $it" } }
     }
 
 }

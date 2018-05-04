@@ -58,7 +58,6 @@ dependencies {
 
     // Arch Components
     api "android.arch.lifecycle:extensions:1.1.1"
-    api "android.arch.lifecycle:reactivestreams:1.1.1"
     api "android.arch.lifecycle:common-java8:1.1.1"
 
     // Dagger

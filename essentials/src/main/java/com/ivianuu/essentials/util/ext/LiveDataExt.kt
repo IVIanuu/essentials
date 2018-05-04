@@ -18,10 +18,12 @@ package com.ivianuu.essentials.util.ext
 
 import android.arch.lifecycle.LifecycleOwner
 import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.LiveDataReactiveStreams
 import android.arch.lifecycle.Observer
 import com.snakydesign.livedataextensions.filter
 import io.reactivex.*
+import io.reactivex.disposables.Disposable
+import io.reactivex.rxkotlin.subscribeBy
+import java.util.concurrent.atomic.AtomicReference
 
 fun <T : Any> MutableLiveData(initialValue: T) =
     android.arch.lifecycle.MutableLiveData<T>().apply { value = initialValue }
@@ -32,26 +34,58 @@ fun <T : Any> LiveData<T>.observeK(owner: LifecycleOwner, onChanged: (T) -> Unit
 
 fun <T : Any> LiveData<T>.filter(predicate: (T) -> Boolean) = filter { predicate(it!!) }
 
-fun <T : Any> LiveData<T>.toFlowable(lifecycle: LifecycleOwner) =
-    Flowable.fromPublisher(LiveDataReactiveStreams.toPublisher(lifecycle, this))
+fun <T : Any> LiveData<T>.toFlowable(strategy: BackpressureStrategy = BackpressureStrategy.LATEST) =
+        toObservable().toFlowable(strategy)
 
 fun <T : Any> Flowable<T>.toLiveData() =
-        LiveDataReactiveStreams.fromPublisher(this)
+        toObservable().toLiveData()
 
-fun <T : Any> LiveData<T>.toObservable(lifecycle: LifecycleOwner) =
-        toFlowable(lifecycle).toObservable()
+fun <T : Any> LiveData<T>.toObservable(): Observable<T> {
+    return Observable.create { e ->
+        val observer = Observer<T> { t ->
+            if (!e.isDisposed) {
+                e.onNext(t!!)
+            }
+        }
 
-fun <T : Any> Observable<T>.toLiveData(strategy: BackpressureStrategy = BackpressureStrategy.LATEST) =
-        toFlowable(strategy).toLiveData()
+        e.setCancellable { removeObserver(observer) }
 
-fun <T : Any> LiveData<T>.toMaybe(lifecycle: LifecycleOwner) =
-        toFlowable(lifecycle).singleElement()
+        observeForever(observer)
+    }
+}
+
+fun <T : Any> Observable<T>.toLiveData(): LiveData<T> {
+    return object : LiveData<T>() {
+
+        private val disposable = AtomicReference<Disposable?>()
+
+        override fun onActive() {
+            super.onActive()
+            disposable.set(
+                subscribeBy(
+                    onNext = { postValue(it) },
+                    onError = {
+                        throw RuntimeException(it)
+                    }
+                )
+            )
+        }
+
+        override fun onInactive() {
+            super.onInactive()
+            disposable.getAndSet(null)?.dispose()
+        }
+    }
+}
+
+fun <T : Any> LiveData<T>.toMaybe(): Maybe<T> =
+        toObservable().singleElement()
 
 fun <T : Any> Maybe<T>.toLiveData() =
-        toFlowable().toLiveData()
+        toObservable().toLiveData()
 
-fun <T : Any> LiveData<T>.toSingle(lifecycle: LifecycleOwner) =
-        toFlowable(lifecycle).singleOrError()
+fun <T : Any> LiveData<T>.toSingle(): Single<T> =
+        toObservable().singleOrError()
 
 fun <T : Any> Single<T>.toLiveData() =
-        toFlowable().toLiveData()
+        toObservable().toLiveData()

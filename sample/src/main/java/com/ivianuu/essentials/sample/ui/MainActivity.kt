@@ -20,9 +20,11 @@ import android.os.Bundle
 import com.ivianuu.essentials.ui.base.BaseActivity
 import com.ivianuu.essentials.ui.base.BaseActivityModule
 import com.ivianuu.essentials.util.ext.d
-import com.ivianuu.essentials.util.ext.disposedWith
+import com.ivianuu.essentials.util.ext.toLiveData
+import com.ivianuu.essentials.util.ext.toObservable
 import dagger.Module
 import io.reactivex.Observable
+import io.reactivex.rxkotlin.addTo
 import java.util.concurrent.TimeUnit
 
 class MainActivity : BaseActivity() {
@@ -37,8 +39,16 @@ class MainActivity : BaseActivity() {
         Observable.interval(1, TimeUnit.SECONDS)
             .doOnDispose { d { "on dispose" } }
             .doOnSubscribe { d { "on sub" } }
+            .toLiveData()
+            .toObservable()
+            .toLiveData()
+            .toObservable()
             .subscribe { d { "on next $it" } }
-            .disposedWith(this)
+            .addTo(disposables)
+
+            /*.observeK(this) {
+                d { "on changed $it" }
+            }*/
     }
 }
 

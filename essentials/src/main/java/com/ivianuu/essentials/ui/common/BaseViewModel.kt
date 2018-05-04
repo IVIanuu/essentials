@@ -16,9 +16,6 @@
 
 package com.ivianuu.essentials.ui.common
 
-import android.arch.lifecycle.Lifecycle
-import android.arch.lifecycle.LifecycleOwner
-import android.arch.lifecycle.LifecycleRegistry
 import android.arch.lifecycle.ViewModel
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.experimental.CoroutineScope
@@ -30,23 +27,14 @@ import kotlin.coroutines.experimental.CoroutineContext
 /**
  * A [ViewModel] which auto disposes itself
  */
-abstract class BaseViewModel : ViewModel(), LifecycleOwner {
+abstract class BaseViewModel : ViewModel() {
 
     protected val disposables = CompositeDisposable()
     protected val viewModelJob = Job()
 
-    private val lifecycleRegistry = LifecycleRegistry(this)
-
-    init {
-        lifecycleRegistry.handleLifecycleEvent(Lifecycle.Event.ON_RESUME)
-    }
-
-    override fun getLifecycle() = lifecycleRegistry
-
     override fun onCleared() {
         disposables.clear()
         viewModelJob.cancel()
-        lifecycleRegistry.handleLifecycleEvent(Lifecycle.Event.ON_DESTROY)
         super.onCleared()
     }
 
