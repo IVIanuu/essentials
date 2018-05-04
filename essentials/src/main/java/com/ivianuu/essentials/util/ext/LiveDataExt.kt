@@ -23,8 +23,12 @@ import android.arch.lifecycle.Observer
 import com.snakydesign.livedataextensions.filter
 import io.reactivex.*
 
-fun <T : Any> MutableLiveData(initialValue: T) =
-    android.arch.lifecycle.MutableLiveData<T>().apply { value = initialValue }
+fun <T : Any> MutableLiveData(initialValue: T? = null) =
+    android.arch.lifecycle.MutableLiveData<T>().apply {
+        if (initialValue != null) {
+            value = initialValue
+        }
+    }
 
 fun <T : Any> LiveData<T>.observeK(owner: LifecycleOwner, onChanged: (T) -> Unit) {
     observe(owner, Observer<T> { it?.let(onChanged) })
