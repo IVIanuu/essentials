@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.ui.preference
 
 import android.content.Context
+import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.preference.PreferenceFragmentCompat
 import android.support.v7.preference.PreferenceScreen
@@ -39,11 +40,19 @@ abstract class BasePreferenceFragment : PreferenceFragmentCompat(), BackListener
 
     @Inject lateinit var router: Router
 
+    open var prefsRes = -1
+
     protected val disposables = CompositeDisposable()
 
     override fun onAttach(context: Context?) {
         AndroidSupportInjection.inject(this)
         super.onAttach(context)
+    }
+
+    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+        if (prefsRes != -1) {
+            addPreferencesFromResource(prefsRes)
+        }
     }
 
     override fun onCreateAdapter(preferenceScreen: PreferenceScreen?): RecyclerView.Adapter<*> {

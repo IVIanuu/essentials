@@ -52,7 +52,6 @@ class CounterFragment : BaseFragment() {
         val key = requireKey<CounterKey>()
 
         title.text = "Count: ${key.count}"
-
     }
 
 }
