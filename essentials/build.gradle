@@ -36,6 +36,11 @@ android {
     kapt {
         correctErrorTypes = true
     }
+    kotlin {
+        experimental {
+            coroutines "enable"
+        }
+    }
 }
 
 dependencies {
@@ -68,6 +73,11 @@ dependencies {
 
     // Kotlin
     api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
+    // Coroutines
+    api "org.jetbrains.kotlinx:kotlinx-coroutines-android:0.22.5"
+    api "org.jetbrains.kotlinx:kotlinx-coroutines-core:0.22.5"
+    api "org.jetbrains.kotlinx:kotlinx-coroutines-rx2:0.22.5"
 
     // Kt android
     api 'androidx.core:core-ktx:0.3'
