@@ -40,7 +40,7 @@ abstract class BasePreferenceFragment : PreferenceFragmentCompat(), BackListener
 
     @Inject lateinit var router: Router
 
-    open var prefsRes = -1
+    open val prefsRes = -1
 
     protected val disposables = CompositeDisposable()
 
