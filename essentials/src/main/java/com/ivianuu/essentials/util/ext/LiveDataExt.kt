@@ -26,7 +26,7 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.subscribeBy
 import java.util.concurrent.atomic.AtomicReference
 
-fun <T : Any> mutableLiveData(initialValue: T?) =
+fun <T : Any> mutableLiveData(initialValue: T? = null) =
     MutableLiveData<T>().apply {
         if (initialValue != null) {
             value = initialValue
