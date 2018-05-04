@@ -52,12 +52,12 @@ fun <T : Any> Observable<T>.subscribeAndPrint(onNext: (T) -> Unit = onNextStub) 
 fun <T : Any> Single<T>.subscribeAndPrint(onSuccess: (T) -> Unit = onNextStub) =
     subscribeBy(onSuccess = onSuccess, onError = onErrorPrint)
 
-fun <T : Any> BehaviorSubject(defaultValue: T? = null): BehaviorSubject<T> = if (defaultValue != null) {
-    io.reactivex.subjects.BehaviorSubject.createDefault(defaultValue)
+fun <T : Any> behaviorSubject(defaultValue: T? = null): BehaviorSubject<T> = if (defaultValue != null) {
+    BehaviorSubject.createDefault(defaultValue)
 } else {
-    io.reactivex.subjects.BehaviorSubject.create()
+    BehaviorSubject.create()
 }
-fun <T : Any> PublishSubject(): PublishSubject<T> = io.reactivex.subjects.PublishSubject.create<T>()
+fun <T : Any> publishSubject(): PublishSubject<T> = PublishSubject.create<T>()
 
 object RxJavaDisposePlugins {
     var DEFAULT_DISPOSE_EVENT = Lifecycle.Event.ON_DESTROY

@@ -18,6 +18,7 @@ package com.ivianuu.essentials.util.ext
 
 import android.arch.lifecycle.LifecycleOwner
 import android.arch.lifecycle.LiveData
+import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Observer
 import com.snakydesign.livedataextensions.filter
 import io.reactivex.*
@@ -25,8 +26,12 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.subscribeBy
 import java.util.concurrent.atomic.AtomicReference
 
-fun <T : Any> MutableLiveData(initialValue: T) =
-    android.arch.lifecycle.MutableLiveData<T>().apply { value = initialValue }
+fun <T : Any> mutableLiveData(initialValue: T?) =
+    MutableLiveData<T>().apply {
+        if (initialValue != null) {
+            value = initialValue
+        }
+    }
 
 fun <T : Any> LiveData<T>.observeK(owner: LifecycleOwner, onChanged: (T) -> Unit) {
     observe(owner, Observer<T> { it?.let(onChanged) })
