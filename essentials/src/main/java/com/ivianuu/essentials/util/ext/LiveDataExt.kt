@@ -18,7 +18,10 @@ package com.ivianuu.essentials.util.ext
 
 import android.arch.lifecycle.LifecycleOwner
 import android.arch.lifecycle.LiveData
+import android.arch.lifecycle.LiveDataReactiveStreams
 import android.arch.lifecycle.Observer
+import com.snakydesign.livedataextensions.filter
+import io.reactivex.*
 
 fun <T : Any> MutableLiveData(initialValue: T) =
     android.arch.lifecycle.MutableLiveData<T>().apply { value = initialValue }
@@ -26,3 +29,29 @@ fun <T : Any> MutableLiveData(initialValue: T) =
 fun <T : Any> LiveData<T>.observeK(owner: LifecycleOwner, onChanged: (T) -> Unit) {
     observe(owner, Observer<T> { it?.let(onChanged) })
 }
+
+fun <T : Any> LiveData<T>.filter(predicate: (T) -> Boolean) = filter { predicate(it!!) }
+
+fun <T : Any> LiveData<T>.toFlowable(lifecycle: LifecycleOwner) =
+    Flowable.fromPublisher(LiveDataReactiveStreams.toPublisher(lifecycle, this))
+
+fun <T : Any> Flowable<T>.toLiveData() =
+        LiveDataReactiveStreams.fromPublisher(this)
+
+fun <T : Any> LiveData<T>.toObservable(lifecycle: LifecycleOwner) =
+        toFlowable(lifecycle).toObservable()
+
+fun <T : Any> Observable<T>.toLiveData(strategy: BackpressureStrategy = BackpressureStrategy.LATEST) =
+        toFlowable(strategy).toLiveData()
+
+fun <T : Any> LiveData<T>.toMaybe(lifecycle: LifecycleOwner) =
+        toFlowable(lifecycle).singleElement()
+
+fun <T : Any> Maybe<T>.toLiveData() =
+        toFlowable().toLiveData()
+
+fun <T : Any> LiveData<T>.toSingle(lifecycle: LifecycleOwner) =
+        toFlowable(lifecycle).singleOrError()
+
+fun <T : Any> Single<T>.toLiveData() =
+        toFlowable().toLiveData()
