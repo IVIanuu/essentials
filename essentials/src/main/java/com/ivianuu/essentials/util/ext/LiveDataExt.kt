@@ -27,20 +27,22 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.subscribeBy
 import java.util.concurrent.atomic.AtomicReference
 
-fun <T : Any> mutableLiveData(initialValue: T? = null) =
+fun <T> mutableLiveData(initialValue: T? = null) =
     MutableLiveData<T>().apply {
         if (initialValue != null) {
             value = initialValue
         }
     }
 
-fun <T : Any> LiveData<T>.observeK(owner: LifecycleOwner, onChanged: (T) -> Unit) {
+fun <T> singleLiveEvent() = SingleLiveEvent<T>()
+
+fun <T> LiveData<T>.observeK(owner: LifecycleOwner, onChanged: (T) -> Unit) {
     observe(owner, Observer<T> { it?.let(onChanged) })
 }
 
-fun <T : Any> LiveData<T>.filter(predicate: (T) -> Boolean) = filter { predicate(it!!) }
+fun <T> LiveData<T>.filter(predicate: (T) -> Boolean) = filter { predicate(it!!) }
 
-fun <T : Any> LiveData<T>.requireValue() = value ?: throw IllegalStateException("value is null")
+fun <T> LiveData<T>.requireValue() = value ?: throw IllegalStateException("value is null")
 
 fun <T : Any> LiveData<T>.toFlowable(strategy: BackpressureStrategy = BackpressureStrategy.LATEST) =
         toObservable().toFlowable(strategy)
@@ -97,5 +99,3 @@ fun <T : Any> LiveData<T>.toSingle(): Single<T> =
 
 fun <T : Any> Single<T>.toLiveData() =
         toObservable().toLiveData()
-
-fun <T> singleLiveEvent() = SingleLiveEvent<T>()
