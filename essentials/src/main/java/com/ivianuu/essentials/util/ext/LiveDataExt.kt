@@ -20,6 +20,7 @@ import android.arch.lifecycle.LifecycleOwner
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Observer
+import com.ivianuu.essentials.util.SingleLiveEvent
 import com.snakydesign.livedataextensions.filter
 import io.reactivex.*
 import io.reactivex.disposables.Disposable
@@ -96,3 +97,5 @@ fun <T : Any> LiveData<T>.toSingle(): Single<T> =
 
 fun <T : Any> Single<T>.toLiveData() =
         toObservable().toLiveData()
+
+fun <T> singleLiveEvent() = SingleLiveEvent<T>()
