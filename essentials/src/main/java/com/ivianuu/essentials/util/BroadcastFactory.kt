@@ -16,11 +16,13 @@
 
 package com.ivianuu.essentials.util
 
+import android.arch.lifecycle.LiveData
 import android.content.Context
 import android.content.Intent
 import com.ivianuu.essentials.injection.ForApp
 import com.ivianuu.essentials.util.ext.intentFilterOf
 import com.ivianuu.essentials.util.ext.registerReceiver
+import com.ivianuu.essentials.util.ext.toLiveData
 import com.ivianuu.essentials.util.ext.unregisterReceiverSafe
 import io.reactivex.Observable
 import javax.inject.Inject
@@ -30,7 +32,7 @@ import javax.inject.Inject
  */
 class BroadcastFactory @Inject constructor(@ForApp private val context: Context) {
 
-    fun create(vararg actions: String): Observable<Intent> {
+    fun createRx(vararg actions: String): Observable<Intent> {
         return Observable.create { e ->
             val receiver = context.registerReceiver(intentFilterOf(*actions)) {
                 e.onNext(it)
@@ -38,5 +40,9 @@ class BroadcastFactory @Inject constructor(@ForApp private val context: Context)
 
             e.setCancellable { context.unregisterReceiverSafe(receiver) }
         }
+    }
+
+    fun createLiveData(vararg actions: String): LiveData<Intent> {
+        return createRx(*actions).toLiveData()
     }
 }

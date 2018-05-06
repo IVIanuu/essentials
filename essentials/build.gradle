@@ -56,15 +56,15 @@ dependencies {
     api "android.arch.lifecycle:extensions:1.1.1"
 
     // Dagger
-    api "com.google.dagger:dagger:2.15"
-    api "com.google.dagger:dagger-android:2.15"
-    api "com.google.dagger:dagger-android-support:2.15"
-    kapt "com.google.dagger:dagger-compiler:2.15"
-    kapt "com.google.dagger:dagger-android-processor:2.15"
+    api "com.google.dagger:dagger:2.16"
+    api "com.google.dagger:dagger-android:2.16"
+    api "com.google.dagger:dagger-android-support:2.16"
+    kapt "com.google.dagger:dagger-compiler:2.16"
+    kapt "com.google.dagger:dagger-android-processor:2.16"
 
     // Epoxy
-    api "com.airbnb.android:epoxy:2.10.0"
-    kapt "com.airbnb.android:epoxy-processor:2.10.0"
+    api "com.airbnb.android:epoxy:2.12.0"
+    kapt "com.airbnb.android:epoxy-processor:2.12.0"
 
     // Fabric
     implementation("com.crashlytics.sdk.android:crashlytics:2.7.1@aar") {
@@ -93,7 +93,7 @@ dependencies {
     api 'com.github.IVIanuu:RxActivityResult:3a17011d75'
 
     // RxJava
-    api "io.reactivex.rxjava2:rxjava:2.1.12"
+    api "io.reactivex.rxjava2:rxjava:2.1.13"
     api "io.reactivex.rxjava2:rxandroid:2.0.2"
 
     // RxKotlin
@@ -103,17 +103,17 @@ dependencies {
     api 'com.github.IVIanuu:RxPermissions:dc2b269921'
 
     // RxPreferences
-    api "com.f2prateek.rx.preferences2:rx-preferences:2.0.0-RC3"
+    api "com.f2prateek.rx.preferences2:rx-preferences:2.0.0"
 
     // SeekBarPreference
     api 'com.github.IVIanuu:SeekBarPreference:f45ad8334d'
 
     // Timber
-    api "com.jakewharton.timber:timber:4.6.0"
+    api "com.jakewharton.timber:timber:4.7.0"
 
     // Traveler
-    api 'com.github.IVIanuu.Traveler:traveler:033022aa67'
-    api 'com.github.IVIanuu.Traveler:traveler-keys:033022aa67'
+    api 'com.github.IVIanuu.Traveler:traveler:dcce6022f9'
+    api 'com.github.IVIanuu.Traveler:traveler-keys:dcce6022f9'
 }
 
 // build a jar with source files
