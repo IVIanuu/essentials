@@ -16,9 +16,11 @@
 
 package com.ivianuu.essentials.util.ext
 
+import android.view.View
 import com.ivianuu.autodispose.LifecycleScopeProvider
 import com.ivianuu.autodispose.ScopeProvider
 import com.ivianuu.autodispose.autoDispose
+import com.ivianuu.autodispose.view.ViewScopeProvider
 import io.reactivex.*
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.exceptions.OnErrorNotImplementedException
@@ -108,10 +110,26 @@ fun <T : Any> behaviorSubject(defaultValue: T? = null): BehaviorSubject<T> = if 
 fun <T : Any> publishSubject(): PublishSubject<T> = PublishSubject.create<T>()
 
 fun Completable.subscribeForUi(
+    view: View,
+    onComplete: () -> Unit
+) {
+    subscribeForUi(scopeProvider = ViewScopeProvider.from(view),
+        onError = onErrorStub, onComplete = onComplete)
+}
+
+fun Completable.subscribeForUi(
     scopeProvider: ScopeProvider,
     onComplete: () -> Unit
 ) {
     subscribeForUi(scopeProvider = scopeProvider, onError = onErrorStub, onComplete = onComplete)
+}
+
+fun Completable.subscribeForUi(
+    view: View,
+    onError: (Throwable) -> Unit = onErrorStub,
+    onComplete: () -> Unit = onCompleteStub
+) {
+    subscribeForUi(scopeProvider = ViewScopeProvider.from(view), onError = onError, onComplete = onComplete)
 }
 
 fun Completable.subscribeForUi(
@@ -162,11 +180,29 @@ fun <E> Completable.subscribeForUi(
 }
 
 fun <T : Any> Flowable<T>.subscribeForUi(
+    view: View,
+    onNext: (T) -> Unit
+) {
+    subscribeForUi(scopeProvider = ViewScopeProvider.from(view), onError = onErrorStub,
+        onComplete = onCompleteStub, onNext = onNext)
+}
+
+fun <T : Any> Flowable<T>.subscribeForUi(
     scopeProvider: ScopeProvider,
     onNext: (T) -> Unit
 ) {
     subscribeForUi(scopeProvider = scopeProvider, onError = onErrorStub,
         onComplete = onCompleteStub, onNext = onNext)
+}
+
+fun <T : Any> Flowable<T>.subscribeForUi(
+    view: View,
+    onError: (Throwable) -> Unit = onErrorStub,
+    onComplete: () -> Unit = onCompleteStub,
+    onNext: (T) -> Unit = onNextStub
+) {
+    subscribeForUi(scopeProvider = ViewScopeProvider.from(view), onError = onError,
+        onComplete = onComplete, onNext = onNext)
 }
 
 fun <T : Any> Flowable<T>.subscribeForUi(
@@ -221,11 +257,29 @@ fun <T : Any, E> Flowable<T>.subscribeForUi(
 }
 
 fun <T : Any> Maybe<T>.subscribeForUi(
+    view: View,
+    onSuccess: (T) -> Unit
+) {
+    subscribeForUi(scopeProvider = ViewScopeProvider.from(view), onError = onErrorStub,
+        onComplete = onCompleteStub, onSuccess = onSuccess)
+}
+
+fun <T : Any> Maybe<T>.subscribeForUi(
     scopeProvider: ScopeProvider,
     onSuccess: (T) -> Unit
 ) {
     subscribeForUi(scopeProvider = scopeProvider, onError = onErrorStub,
         onComplete = onCompleteStub, onSuccess = onSuccess)
+}
+
+fun <T : Any> Maybe<T>.subscribeForUi(
+    view: View,
+    onError: (Throwable) -> Unit = onErrorStub,
+    onComplete: () -> Unit = onCompleteStub,
+    onSuccess: (T) -> Unit = onNextStub
+) {
+    subscribeForUi(scopeProvider = ViewScopeProvider.from(view), onError = onError,
+        onComplete = onComplete, onSuccess = onSuccess)
 }
 
 fun <T : Any> Maybe<T>.subscribeForUi(
@@ -280,11 +334,29 @@ fun <T : Any, E> Maybe<T>.subscribeForUi(
 }
 
 fun <T : Any> Observable<T>.subscribeForUi(
+    view: View,
+    onNext: (T) -> Unit
+) {
+    subscribeForUi(scopeProvider = ViewScopeProvider.from(view), onError = onErrorStub,
+        onComplete = onCompleteStub, onNext = onNext)
+}
+
+fun <T : Any> Observable<T>.subscribeForUi(
     scopeProvider: ScopeProvider,
     onNext: (T) -> Unit
 ) {
     subscribeForUi(scopeProvider = scopeProvider, onError = onErrorStub,
         onComplete = onCompleteStub, onNext = onNext)
+}
+
+fun <T : Any> Observable<T>.subscribeForUi(
+    view: View,
+    onError: (Throwable) -> Unit = onErrorStub,
+    onComplete: () -> Unit = onCompleteStub,
+    onNext: (T) -> Unit = onNextStub
+) {
+    subscribeForUi(scopeProvider = ViewScopeProvider.from(view), onError = onError,
+        onComplete = onComplete, onNext = onNext)
 }
 
 fun <T : Any> Observable<T>.subscribeForUi(
@@ -343,6 +415,21 @@ fun <T : Any> Single<T>.subscribeForUi(
     onSuccess: (T) -> Unit
 ) {
     subscribeForUi(scopeProvider = scopeProvider, onError = onErrorStub, onSuccess = onSuccess)
+}
+
+fun <T : Any> Single<T>.subscribeForUi(
+    view: View,
+    onSuccess: (T) -> Unit
+) {
+    subscribeForUi(scopeProvider = ViewScopeProvider.from(view), onError = onErrorStub, onSuccess = onSuccess)
+}
+
+fun <T : Any> Single<T>.subscribeForUi(
+    view: View,
+    onError: (Throwable) -> Unit = onErrorStub,
+    onSuccess: (T) -> Unit = onNextStub
+) {
+    subscribeForUi(scopeProvider = ViewScopeProvider.from(view), onError = onError, onSuccess = onSuccess)
 }
 
 fun <T : Any> Single<T>.subscribeForUi(
