@@ -34,41 +34,41 @@ private val onErrorPrint: (Throwable) -> Unit = Throwable::printStackTrace
 
 fun Completable.main(): Completable {
     return if (!isMainThread) {
-        this
-    } else {
         observeOn(AndroidSchedulers.mainThread())
+    } else {
+        this
     }
 }
 
 fun <T : Any> Flowable<T>.main(): Flowable<T> {
     return if (!isMainThread) {
-        this
-    } else {
         observeOn(AndroidSchedulers.mainThread())
+    } else {
+        this
     }
 }
 
 fun <T : Any> Maybe<T>.main(): Maybe<T> {
     return if (!isMainThread) {
-        this
-    } else {
         observeOn(AndroidSchedulers.mainThread())
+    } else {
+        this
     }
 }
 
 fun <T : Any> Observable<T>.main(): Observable<T> {
     return if (!isMainThread) {
-        this
-    } else {
         observeOn(AndroidSchedulers.mainThread())
+    } else {
+        this
     }
 }
 
 fun <T : Any> Single<T>.main(): Single<T> {
     return if (!isMainThread) {
-        this
-    } else {
         observeOn(AndroidSchedulers.mainThread())
+    } else {
+        this
     }
 }
 
