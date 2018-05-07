@@ -52,7 +52,6 @@ dependencies {
 
     // Auto Dispose
     api 'com.github.IVIanuu.AutoDispose:autodispose:46a3d4d768'
-    api 'com.github.IVIanuu.AutoDispose:autodispose-archcomponents:46a3d4d768'
     api 'com.github.IVIanuu.AutoDispose:autodispose-view:46a3d4d768'
 
     // Dagger
