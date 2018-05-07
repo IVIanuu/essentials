@@ -24,6 +24,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.exceptions.OnErrorNotImplementedException
 import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.rxkotlin.subscribeBy
+import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 
@@ -33,42 +34,52 @@ private val onErrorStub: (Throwable) -> Unit = { RxJavaPlugins.onError(OnErrorNo
 private val onErrorPrint: (Throwable) -> Unit = Throwable::printStackTrace
 
 fun Completable.main(): Completable {
-    return if (!isMainThread) {
-        observeOn(AndroidSchedulers.mainThread())
-    } else {
-        this
+    return andThen {
+        if (!isMainThread) {
+            Completable.complete().observeOn(AndroidSchedulers.mainThread())
+        } else {
+            Completable.complete().observeOn(Schedulers.trampoline())
+        }
     }
 }
 
 fun <T : Any> Flowable<T>.main(): Flowable<T> {
-    return if (!isMainThread) {
-        observeOn(AndroidSchedulers.mainThread())
-    } else {
-        this
+    return flatMap {
+        if (!isMainThread) {
+            Flowable.just(it).observeOn(AndroidSchedulers.mainThread())
+        } else {
+            Flowable.just(it).observeOn(Schedulers.trampoline())
+        }
     }
 }
 
 fun <T : Any> Maybe<T>.main(): Maybe<T> {
-    return if (!isMainThread) {
-        observeOn(AndroidSchedulers.mainThread())
-    } else {
-        this
+    return flatMap {
+        if (!isMainThread) {
+            Maybe.just(it).observeOn(AndroidSchedulers.mainThread())
+        } else {
+            Maybe.just(it).observeOn(Schedulers.trampoline())
+        }
     }
 }
 
 fun <T : Any> Observable<T>.main(): Observable<T> {
-    return if (!isMainThread) {
-        observeOn(AndroidSchedulers.mainThread())
-    } else {
-        this
+    return flatMap {
+        if (!isMainThread) {
+            Observable.just(it).observeOn(AndroidSchedulers.mainThread())
+        } else {
+            Observable.just(it).observeOn(Schedulers.trampoline())
+        }
     }
 }
 
 fun <T : Any> Single<T>.main(): Single<T> {
-    return if (!isMainThread) {
-        observeOn(AndroidSchedulers.mainThread())
-    } else {
-        this
+    return flatMap {
+        if (!isMainThread) {
+            Single.just(it).observeOn(AndroidSchedulers.mainThread())
+        } else {
+            Single.just(it).observeOn(Schedulers.trampoline())
+        }
     }
 }
 
