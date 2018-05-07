@@ -37,9 +37,11 @@ class MainActivity : BaseActivity() {
         Observable.interval(1, TimeUnit.SECONDS)
             .doOnDispose { d { "on dispose" } }
             .doOnSubscribe { d { "on sub" } }
-            .subscribeForUi(this) {
-                d { "on next $it" }
-            }
+            .subscribeForUi(this, this::handleResult)
+    }
+
+    private fun handleResult(long: Long) {
+        d { "on next $long" }
     }
 }
 
