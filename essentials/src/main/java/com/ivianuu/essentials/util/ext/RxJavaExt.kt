@@ -66,6 +66,156 @@ fun <T : Any> behaviorSubject(defaultValue: T? = null): BehaviorSubject<T> = if 
 }
 fun <T : Any> publishSubject(): PublishSubject<T> = PublishSubject.create<T>()
 
+fun Completable.subscribeAndDispose(
+    scopeProvider: ScopeProvider,
+    onError: (Throwable) -> Unit = onErrorStub,
+    onComplete: () -> Unit = onCompleteStub
+) {
+    subscribeBy(onComplete = onComplete, onError = onError)
+        .autoDispose(scopeProvider)
+}
+
+fun <E> Completable.subscribeAndDispose(
+    lifecycleScopeProvider: LifecycleScopeProvider<E>,
+    onError: (Throwable) -> Unit = onErrorStub,
+    onComplete: () -> Unit = onCompleteStub
+) {
+    subscribeBy(onComplete = onComplete, onError = onError)
+        .autoDispose(lifecycleScopeProvider)
+}
+
+fun <E> Completable.subscribeAndDispose(
+    lifecycleScopeProvider: LifecycleScopeProvider<E>,
+    untilEvent: E,
+    onError: (Throwable) -> Unit = onErrorStub,
+    onComplete: () -> Unit = onCompleteStub
+) {
+    subscribeBy(onError = onError, onComplete = onComplete)
+        .autoDispose(lifecycleScopeProvider, untilEvent)
+}
+
+fun <T : Any> Flowable<T>.subscribeAndDispose(
+    scopeProvider: ScopeProvider,
+    onError: (Throwable) -> Unit = onErrorStub,
+    onComplete: () -> Unit = onCompleteStub,
+    onNext: (T) -> Unit = onNextStub
+) {
+    subscribeBy(onNext = onNext, onError = onError, onComplete = onComplete)
+        .autoDispose(scopeProvider)
+}
+
+fun <T : Any, E> Flowable<T>.subscribeAndDispose(
+    lifecycleScopeProvider: LifecycleScopeProvider<E>,
+    onError: (Throwable) -> Unit = onErrorStub,
+    onComplete: () -> Unit = onCompleteStub,
+    onNext: (T) -> Unit = onNextStub
+) {
+    subscribeBy(onNext = onNext, onError = onError, onComplete = onComplete)
+        .autoDispose(lifecycleScopeProvider)
+}
+
+fun <T : Any, E> Flowable<T>.subscribeAndDispose(
+    lifecycleScopeProvider: LifecycleScopeProvider<E>,
+    untilEvent: E,
+    onError: (Throwable) -> Unit = onErrorStub,
+    onComplete: () -> Unit = onCompleteStub,
+    onNext: (T) -> Unit = onNextStub
+) {
+    subscribeBy(onNext = onNext, onError = onError, onComplete = onComplete)
+        .autoDispose(lifecycleScopeProvider, untilEvent)
+}
+
+fun <T : Any> Maybe<T>.subscribeAndDispose(
+    scopeProvider: ScopeProvider,
+    onError: (Throwable) -> Unit = onErrorStub,
+    onComplete: () -> Unit = onCompleteStub,
+    onSuccess: (T) -> Unit = onNextStub
+) {
+    subscribeBy(onSuccess = onSuccess, onError = onError, onComplete = onComplete)
+        .autoDispose(scopeProvider)
+}
+
+fun <T : Any, E> Maybe<T>.subscribeAndDispose(
+    lifecycleScopeProvider: LifecycleScopeProvider<E>,
+    onError: (Throwable) -> Unit = onErrorStub,
+    onComplete: () -> Unit = onCompleteStub,
+    onSuccess: (T) -> Unit = onNextStub
+) {
+    subscribeBy(onSuccess = onSuccess, onError = onError, onComplete = onComplete)
+        .autoDispose(lifecycleScopeProvider)
+}
+
+fun <T : Any, E> Maybe<T>.subscribeAndDispose(
+    lifecycleScopeProvider: LifecycleScopeProvider<E>,
+    untilEvent: E,
+    onError: (Throwable) -> Unit = onErrorStub,
+    onComplete: () -> Unit = onCompleteStub,
+    onSuccess: (T) -> Unit = onNextStub
+) {
+    subscribeBy(onSuccess = onSuccess, onError = onError, onComplete = onComplete)
+        .autoDispose(lifecycleScopeProvider, untilEvent)
+}
+
+fun <T : Any> Observable<T>.subscribeAndDispose(
+    scopeProvider: ScopeProvider,
+    onError: (Throwable) -> Unit = onErrorStub,
+    onComplete: () -> Unit = onCompleteStub,
+    onNext: (T) -> Unit = onNextStub
+) {
+    subscribeBy(onNext = onNext, onError = onError, onComplete = onComplete)
+        .autoDispose(scopeProvider)
+}
+
+fun <T : Any, E> Observable<T>.subscribeAndDispose(
+    lifecycleScopeProvider: LifecycleScopeProvider<E>,
+    onError: (Throwable) -> Unit = onErrorStub,
+    onComplete: () -> Unit = onCompleteStub,
+    onNext: (T) -> Unit = onNextStub
+) {
+    subscribeBy(onNext = onNext, onError = onError, onComplete = onComplete)
+        .autoDispose(lifecycleScopeProvider)
+}
+
+fun <T : Any, E> Observable<T>.subscribeAndDispose(
+    lifecycleScopeProvider: LifecycleScopeProvider<E>,
+    untilEvent: E,
+    onError: (Throwable) -> Unit = onErrorStub,
+    onComplete: () -> Unit = onCompleteStub,
+    onNext: (T) -> Unit = onNextStub
+) {
+    subscribeBy(onNext = onNext, onError = onError, onComplete = onComplete)
+        .autoDispose(lifecycleScopeProvider, untilEvent)
+}
+
+fun <T : Any> Single<T>.subscribeAndDispose(
+    scopeProvider: ScopeProvider,
+    onError: (Throwable) -> Unit = onErrorStub,
+    onSuccess: (T) -> Unit = onNextStub
+) {
+    subscribeBy(onSuccess = onSuccess, onError = onError)
+        .autoDispose(scopeProvider)
+}
+
+fun <T : Any, E> Single<T>.subscribeAndDispose(
+    lifecycleScopeProvider: LifecycleScopeProvider<E>,
+    onError: (Throwable) -> Unit = onErrorStub,
+    onSuccess: (T) -> Unit = onNextStub
+) {
+    subscribeBy(onSuccess = onSuccess, onError = onError)
+        .autoDispose(lifecycleScopeProvider)
+}
+
+fun <T : Any, E> Single<T>.subscribeAndDispose(
+    lifecycleScopeProvider: LifecycleScopeProvider<E>,
+    untilEvent: E,
+    onError: (Throwable) -> Unit = onErrorStub,
+    onSuccess: (T) -> Unit = onNextStub
+) {
+    main()
+        .subscribeBy(onSuccess = onSuccess, onError = onError)
+        .autoDispose(lifecycleScopeProvider, untilEvent)
+}
+
 fun Completable.subscribeForUi(
     scopeProvider: ScopeProvider,
     onError: (Throwable) -> Unit = onErrorStub,
@@ -219,7 +369,7 @@ fun <T : Any, E> Single<T>.subscribeForUi(
         .autoDispose(lifecycleScopeProvider)
 }
 
-fun <T : Any, E> Maybe<T>.subscribeForUi(
+fun <T : Any, E> Single<T>.subscribeForUi(
     lifecycleScopeProvider: LifecycleScopeProvider<E>,
     untilEvent: E,
     onError: (Throwable) -> Unit = onErrorStub,
