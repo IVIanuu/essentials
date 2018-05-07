@@ -18,12 +18,10 @@ package com.ivianuu.essentials.sample.ui
 
 import android.os.Bundle
 import android.view.View
-import com.ivianuu.autodispose.autoDispose
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.base.BaseFragment
 import com.ivianuu.essentials.util.ext.d
-import com.ivianuu.essentials.util.ext.toLiveData
-import com.ivianuu.essentials.util.ext.toObservable
+import com.ivianuu.essentials.util.ext.subscribeForUi
 import com.ivianuu.traveler.keys.FragmentClassKey
 import io.reactivex.Observable
 import java.util.concurrent.TimeUnit
@@ -45,12 +43,9 @@ class MultipleCountersFragment : BaseFragment() {
         Observable.interval(1, TimeUnit.SECONDS)
             .doOnDispose { d { "on dispose" } }
             .doOnSubscribe { d { "on sub" } }
-            .toLiveData()
-            .toObservable()
-            .toLiveData()
-            .toObservable()
-            .subscribe { d { "on next $it" } }
-            .autoDispose(this)
+            .subscribeForUi(this) {
+                d { "on next" }
+            }
     }
 
 }
