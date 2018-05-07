@@ -25,6 +25,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.View
 import com.ivianuu.autodispose.LifecycleScopeProvider
 import com.ivianuu.essentials.ui.common.BackListener
+import com.ivianuu.essentials.ui.common.CORRESPONDING_FRAGMENT_EVENTS
 import com.ivianuu.essentials.ui.common.FragmentEvent
 import com.ivianuu.essentials.ui.common.FragmentEvent.*
 import com.ivianuu.traveler.Router
@@ -32,7 +33,9 @@ import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.AndroidSupportInjection
 import dagger.android.support.HasSupportFragmentInjector
+import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.functions.Function
 import io.reactivex.subjects.BehaviorSubject
 import javax.inject.Inject
 
@@ -119,4 +122,10 @@ abstract class BasePreferenceFragment : PreferenceFragmentCompat(), BackListener
     }
 
     override fun supportFragmentInjector(): AndroidInjector<Fragment> = supportFragmentInjector
+
+    override fun lifecycle() = lifecycleSubject
+
+    override fun correspondingEvents() = CORRESPONDING_FRAGMENT_EVENTS
+
+    override fun peekLifecycle() = lifecycleSubject.value
 }
