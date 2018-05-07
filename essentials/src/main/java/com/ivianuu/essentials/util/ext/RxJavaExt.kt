@@ -32,15 +32,45 @@ private val onNextStub: (Any) -> Unit = {}
 private val onErrorStub: (Throwable) -> Unit = { RxJavaPlugins.onError(OnErrorNotImplementedException(it)) }
 private val onErrorPrint: (Throwable) -> Unit = Throwable::printStackTrace
 
-fun Completable.main(): Completable = observeOn(AndroidSchedulers.mainThread())
+fun Completable.main(): Completable {
+    return if (!isMainThread) {
+        this
+    } else {
+        observeOn(AndroidSchedulers.mainThread())
+    }
+}
 
-fun <T : Any> Flowable<T>.main(): Flowable<T> = observeOn(AndroidSchedulers.mainThread())
+fun <T : Any> Flowable<T>.main(): Flowable<T> {
+    return if (!isMainThread) {
+        this
+    } else {
+        observeOn(AndroidSchedulers.mainThread())
+    }
+}
 
-fun <T : Any> Maybe<T>.main(): Maybe<T> = observeOn(AndroidSchedulers.mainThread())
+fun <T : Any> Maybe<T>.main(): Maybe<T> {
+    return if (!isMainThread) {
+        this
+    } else {
+        observeOn(AndroidSchedulers.mainThread())
+    }
+}
 
-fun <T : Any> Observable<T>.main(): Observable<T> = observeOn(AndroidSchedulers.mainThread())
+fun <T : Any> Observable<T>.main(): Observable<T> {
+    return if (!isMainThread) {
+        this
+    } else {
+        observeOn(AndroidSchedulers.mainThread())
+    }
+}
 
-fun <T : Any> Single<T>.main(): Single<T> = observeOn(AndroidSchedulers.mainThread())
+fun <T : Any> Single<T>.main(): Single<T> {
+    return if (!isMainThread) {
+        this
+    } else {
+        observeOn(AndroidSchedulers.mainThread())
+    }
+}
 
 fun Completable.subscribeAndPrint(onComplete: () -> Unit = onCompleteStub) =
         subscribeBy(onComplete = onComplete, onError = onErrorPrint)
