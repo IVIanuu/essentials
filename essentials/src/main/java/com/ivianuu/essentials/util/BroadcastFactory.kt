@@ -32,7 +32,7 @@ import javax.inject.Inject
  */
 class BroadcastFactory @Inject constructor(@ForApp private val context: Context) {
 
-    fun createRx(vararg actions: String): Observable<Intent> {
+    fun create(vararg actions: String): Observable<Intent> {
         return Observable.create { e ->
             val receiver = context.registerReceiver(intentFilterOf(*actions)) {
                 e.onNext(it)
@@ -42,7 +42,4 @@ class BroadcastFactory @Inject constructor(@ForApp private val context: Context)
         }
     }
 
-    fun createLiveData(vararg actions: String): LiveData<Intent> {
-        return createRx(*actions).toLiveData()
-    }
 }
