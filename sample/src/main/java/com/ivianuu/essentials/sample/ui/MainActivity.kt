@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.sample.ui
 
 import android.os.Bundle
+import com.ivianuu.autodispose.autoDispose
 import com.ivianuu.essentials.ui.base.BaseActivity
 import com.ivianuu.essentials.ui.base.BaseActivityModule
 import com.ivianuu.essentials.util.ext.d
@@ -24,7 +25,6 @@ import com.ivianuu.essentials.util.ext.toLiveData
 import com.ivianuu.essentials.util.ext.toObservable
 import dagger.Module
 import io.reactivex.Observable
-import io.reactivex.rxkotlin.addTo
 import java.util.concurrent.TimeUnit
 
 class MainActivity : BaseActivity() {
@@ -44,11 +44,7 @@ class MainActivity : BaseActivity() {
             .toLiveData()
             .toObservable()
             .subscribe { d { "on next $it" } }
-            .addTo(disposables)
-
-            /*.observeK(this) {
-                d { "on changed $it" }
-            }*/
+            .autoDispose(this)
     }
 }
 

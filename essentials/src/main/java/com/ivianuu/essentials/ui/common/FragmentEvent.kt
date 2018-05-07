@@ -16,26 +16,23 @@
 
 package com.ivianuu.essentials.ui.common
 
-import android.arch.lifecycle.ViewModel
-import com.ivianuu.autodispose.ScopeProvider
-import com.ivianuu.autodispose.SimpleScopeProvider
-import io.reactivex.disposables.CompositeDisposable
+import com.ivianuu.essentials.ui.common.FragmentEvent.*
+import io.reactivex.functions.Function
 
-/**
- * A [ViewModel] which auto disposes itself
- */
-abstract class BaseViewModel : ViewModel(), ScopeProvider {
+enum class FragmentEvent {
+    ATTACH, CREATE, CREATE_VIEW, START, RESUME, PAUSE, STOP, DESTROY_VIEW, DESTROY, DETACH
+}
 
-    @Deprecated("")
-    protected val disposables = CompositeDisposable()
-
-    private val scopeProvider = SimpleScopeProvider()
-
-    override fun requestScope() = scopeProvider.requestScope()
-
-    override fun onCleared() {
-        disposables.clear()
-        scopeProvider.dispose()
-        super.onCleared()
+val CORRESPONDING_FRAGMENT_EVENTS = Function<FragmentEvent, FragmentEvent> {
+    when(it) {
+        ATTACH -> DETACH
+        CREATE -> DESTROY
+        CREATE_VIEW -> DESTROY_VIEW
+        START -> STOP
+        RESUME -> PAUSE
+        PAUSE -> STOP
+        STOP -> DESTROY_VIEW
+        DESTROY -> DETACH
+        else -> throw IllegalStateException("out of lifecycle ${it::class.java.simpleName}")
     }
 }

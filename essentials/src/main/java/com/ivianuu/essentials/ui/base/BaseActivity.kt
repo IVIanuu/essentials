@@ -21,9 +21,15 @@ import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
+import android.support.v4.app.FragmentManager
+import android.support.v4.app.isInBackstack
 import android.support.v7.app.AppCompatActivity
+import com.ivianuu.autodispose.LifecycleScopeProvider
 import com.ivianuu.essentials.injection.ForActivity
+import com.ivianuu.essentials.ui.common.ActivityEvent
+import com.ivianuu.essentials.ui.common.ActivityEvent.*
 import com.ivianuu.essentials.ui.common.BackListener
+import com.ivianuu.essentials.ui.common.CORRESPONDING_ACTIVITY_EVENTS
 import com.ivianuu.essentials.util.ext.unsafeLazy
 import com.ivianuu.rxactivityresult.RxActivityResult
 import com.ivianuu.rxpermissions.RxPermissions
@@ -38,19 +44,18 @@ import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.subjects.BehaviorSubject
 import javax.inject.Inject
 
 /**
  * Base activity
  */
-abstract class BaseActivity : AppCompatActivity(), HasSupportFragmentInjector {
+abstract class BaseActivity : AppCompatActivity(), HasSupportFragmentInjector, LifecycleScopeProvider<ActivityEvent> {
 
     @Inject lateinit var supportFragmentInjector: DispatchingAndroidInjector<Fragment>
 
     @Inject lateinit var navigatorHolder: NavigatorHolder
     @Inject lateinit var router: Router
-
-    protected val disposables = CompositeDisposable()
 
     protected open val fragmentContainer = android.R.id.content
 
@@ -60,10 +65,28 @@ abstract class BaseActivity : AppCompatActivity(), HasSupportFragmentInjector {
         KeyNavigator(this, supportFragmentManager, fragmentContainer)
     }
 
+    @Deprecated("")
+    protected val disposables = CompositeDisposable()
+
+    private val lifecycleSubject = BehaviorSubject.create<ActivityEvent>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
+
+        lifecycleSubject.onNext(CREATE)
+
         if (layoutRes != -1) setContentView(layoutRes)
+    }
+
+    override fun onStart() {
+        super.onStart()
+        lifecycleSubject.onNext(START)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        lifecycleSubject.onNext(RESUME)
     }
 
     override fun onResumeFragments() {
@@ -73,24 +96,60 @@ abstract class BaseActivity : AppCompatActivity(), HasSupportFragmentInjector {
 
     override fun onPause() {
         navigatorHolder.removeNavigator()
+        lifecycleSubject.onNext(PAUSE)
         super.onPause()
+    }
+
+    override fun onStop() {
+        lifecycleSubject.onNext(STOP)
+        super.onStop()
     }
 
     override fun onDestroy() {
         disposables.clear()
+        lifecycleSubject.onNext(DESTROY)
         super.onDestroy()
     }
 
     override fun onBackPressed() {
-        val currentFragment = supportFragmentManager.findFragmentById(fragmentContainer)
-        if (currentFragment == null
-            || currentFragment !is BackListener
-            || !currentFragment.handleBack()) {
+        if (!recursivelyDispatchOnBackPressed(supportFragmentManager)) {
             super.onBackPressed()
         }
     }
 
     override fun supportFragmentInjector(): AndroidInjector<Fragment> = supportFragmentInjector
+
+    override fun lifecycle() = lifecycleSubject
+    
+    override fun correspondingEvents() = CORRESPONDING_ACTIVITY_EVENTS
+
+    override fun peekLifecycle() = lifecycleSubject.value
+
+    private fun recursivelyDispatchOnBackPressed(fm: FragmentManager): Boolean {
+        if (fm.backStackEntryCount == 0)
+            return false
+
+        val reverseOrder = fm.fragments
+            .filter {
+                it is BackListener
+                        && it.isInBackstack
+                        && it.isVisible
+            }
+            .reversed()
+
+        for (f in reverseOrder) {
+            val handledByChildFragments = recursivelyDispatchOnBackPressed(f.childFragmentManager)
+            if (handledByChildFragments) {
+                return true
+            }
+
+            val backpressable = f as BackListener
+            if (backpressable.handleBack()) {
+                return true
+            }
+        }
+        return false
+    }
 }
 
 @Module

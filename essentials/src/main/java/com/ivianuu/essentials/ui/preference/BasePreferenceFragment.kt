@@ -22,19 +22,24 @@ import android.support.v4.app.Fragment
 import android.support.v7.preference.PreferenceFragmentCompat
 import android.support.v7.preference.PreferenceScreen
 import android.support.v7.widget.RecyclerView
+import android.view.View
+import com.ivianuu.autodispose.LifecycleScopeProvider
 import com.ivianuu.essentials.ui.common.BackListener
+import com.ivianuu.essentials.ui.common.FragmentEvent
+import com.ivianuu.essentials.ui.common.FragmentEvent.*
 import com.ivianuu.traveler.Router
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.AndroidSupportInjection
 import dagger.android.support.HasSupportFragmentInjector
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.subjects.BehaviorSubject
 import javax.inject.Inject
 
 /**
  * Base preference fragment
  */
-abstract class BasePreferenceFragment : PreferenceFragmentCompat(), BackListener, HasSupportFragmentInjector {
+abstract class BasePreferenceFragment : PreferenceFragmentCompat(), BackListener, HasSupportFragmentInjector, LifecycleScopeProvider<FragmentEvent> {
 
     @Inject lateinit var supportFragmentInjector: DispatchingAndroidInjector<Fragment>
 
@@ -42,11 +47,20 @@ abstract class BasePreferenceFragment : PreferenceFragmentCompat(), BackListener
 
     open val prefsRes = -1
 
+    @Deprecated("")
     protected val disposables = CompositeDisposable()
+
+    private val lifecycleSubject = BehaviorSubject.create<FragmentEvent>()
 
     override fun onAttach(context: Context?) {
         AndroidSupportInjection.inject(this)
         super.onAttach(context)
+        lifecycleSubject.onNext(ATTACH)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        lifecycleSubject.onNext(CREATE)
     }
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
@@ -59,9 +73,45 @@ abstract class BasePreferenceFragment : PreferenceFragmentCompat(), BackListener
         return EnabledAwarePreferenceAdapter(preferenceScreen)
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        lifecycleSubject.onNext(CREATE_VIEW)
+    }
+
+    override fun onStart() {
+        super.onStart()
+        lifecycleSubject.onNext(START)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        lifecycleSubject.onNext(RESUME)
+    }
+
+    override fun onPause() {
+        lifecycleSubject.onNext(PAUSE)
+        super.onPause()
+    }
+
+    override fun onStop() {
+        lifecycleSubject.onNext(STOP)
+        super.onStop()
+    }
+
     override fun onDestroyView() {
         disposables.clear()
+        lifecycleSubject.onNext(DESTROY_VIEW)
         super.onDestroyView()
+    }
+
+    override fun onDestroy() {
+        lifecycleSubject.onNext(DESTROY)
+        super.onDestroy()
+    }
+
+    override fun onDetach() {
+        lifecycleSubject.onNext(DETACH)
+        super.onDetach()
     }
 
     override fun handleBack(): Boolean {
