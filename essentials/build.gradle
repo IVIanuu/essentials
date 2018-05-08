@@ -39,75 +39,52 @@ android {
 }
 
 dependencies {
-    // Android Support
-    api Deps.supportAppCompat
-    api Deps.supportCardView
-    api Deps.supportDesign
-    api Deps.supportPalette
-    api Deps.supportPreference
-
-    // Arch Components
     api Deps.archComponentsLifecycleExtensions
 
-    // Auto Dispose
     api Deps.autoDispose
     api Deps.autoDisposeView
 
-    // Constraint layout
     api Deps.constraintLayout
 
-    // Dagger
     api Deps.dagger
     api Deps.daggerAndroid
     api Deps.daggerAndroidSupport
     kapt Deps.daggerCompiler
     kapt Deps.daggerAndroidProcessor
 
-    // Epoxy
     api Deps.epoxy
     kapt Deps.epoxyProcessor
 
-    // Fabric
     implementation(Deps.fabric) {
         transitive = true
     }
 
-    // Kotlin
     api Deps.kotlinStdLib
 
-    // Kt android
     api Deps.ktx
 
-    // Live data extensions
     api Deps.liveDataExtensions
 
-    // Material Dialogs
     api Deps.materialDialogsCore
     api Deps.materialDialogsCommons
 
-    // Rx Activity Result
     api Deps.rxActivityResult
-
-    // RxJava
-    api Deps.rxJava
     api Deps.rxAndroid
-
-    // RxKotlin
+    api Deps.rxJava
     api Deps.rxKotlin
-
-    // RxPermissions
     api Deps.rxPermissions
-
-    // RxPreferences
     api Deps.rxPreferences
 
-    // SeekBarPreference
     api Deps.seekBarPreference
 
-    // Timber
+    api Deps.supportAppCompat
+    api Deps.supportCardView
+    api Deps.supportDesign
+    api Deps.supportPalette
+    api Deps.supportPreference
+
     api Deps.timber
 
-    // Traveler
     api Deps.traveler
     api Deps.travelerAndroid
     api Deps.travelerKeys
