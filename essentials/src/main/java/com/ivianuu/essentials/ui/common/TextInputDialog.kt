@@ -25,7 +25,7 @@ import android.support.v4.app.DialogFragment
 import com.afollestad.materialdialogs.MaterialDialog
 import com.ivianuu.essentials.R
 import com.ivianuu.traveler.Router
-import com.ivianuu.traveler.keys.DialogFragmentKey
+import com.ivianuu.traveler.keys.FragmentKey
 import com.ivianuu.traveler.keys.requireKey
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.parcel.Parcelize
@@ -57,7 +57,6 @@ class TextInputDialog : DialogFragment() {
             .build()
     }
 
-
 }
 
 /**
@@ -72,6 +71,6 @@ data class TextInputKey(
     val inputType: Int = 0,
     val prefill: String = "",
     val allowEmptyInput: Boolean = false
-) : DialogFragmentKey(), ResultKey, Parcelable {
-    override fun createDialogFragment() = TextInputDialog()
+) : FragmentKey(), ResultKey, Parcelable {
+    override fun createFragment(data: Any?) = TextInputDialog()
 }

@@ -24,7 +24,7 @@ import com.ivianuu.traveler.keys.ActivityKey
  * Launches the app
  */
 data class AppKey(private val packageName: String) : ActivityKey() {
-    override fun createIntent(context: Context): Intent {
+    override fun createIntent(context: Context, data: Any?): Intent {
         return context.packageManager.getLaunchIntentForPackage(packageName)
     }
 }

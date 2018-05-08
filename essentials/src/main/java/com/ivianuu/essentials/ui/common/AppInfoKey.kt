@@ -26,9 +26,9 @@ import com.ivianuu.traveler.keys.ActivityKey
  * Open s the app info of the app
  */
 data class AppInfoKey(private val packageName: String): ActivityKey() {
-    override fun createIntent(context: Context): Intent {
+    override fun createIntent(context: Context, data: Any?): Intent {
         return Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-            data = "package:$packageName".toUri()
+            this.data = "package:$packageName".toUri()
         }
     }
 }

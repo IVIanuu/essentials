@@ -58,5 +58,5 @@ class CounterFragment : BaseFragment() {
 
 @Parcelize
 data class CounterKey(val count: Int) : FragmentKey(), Parcelable {
-    override fun createFragment() = CounterFragment()
+    override fun createFragment(data: Any?) = CounterFragment()
 }

@@ -61,7 +61,7 @@ abstract class BaseActivity : AppCompatActivity(), HasSupportFragmentInjector, L
 
     protected open val layoutRes = -1
 
-    private val navigator by unsafeLazy {
+    protected open val navigator by unsafeLazy {
         KeyNavigator(this, supportFragmentManager, fragmentContainer)
     }
 

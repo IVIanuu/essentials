@@ -14,21 +14,27 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.traveler
+package com.ivianuu.essentials.util
 
-import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentStatePagerAdapter
-import com.ivianuu.traveler.keys.FragmentKey
+import android.content.Context
+import android.os.Handler
+import com.ivianuu.essentials.injection.ForApp
+import com.ivianuu.essentials.util.ext.toast
+import javax.inject.Inject
 
 /**
- * Key fragment state pager adapter
+ * Toasts system messages
  */
-open class KeyFragmentStatePagerAdapter(
-    fm: FragmentManager,
-    private val keys: List<FragmentKey>
-) : FragmentStatePagerAdapter(fm) {
+class Toaster @Inject constructor(@ForApp private val context: Context) {
 
-    override fun getItem(position: Int) = keys[position].newInstance()
+    private val handler = Handler()
 
-    override fun getCount() = keys.size
+    fun toast(messageRes: Int, vararg args: Any) {
+        toast(context.getString(messageRes, *args))
+    }
+
+    fun toast(message: String) {
+        handler.post { context.toast(message) }
+    }
+
 }

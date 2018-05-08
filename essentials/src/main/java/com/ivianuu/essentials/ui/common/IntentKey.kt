@@ -14,21 +14,15 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.traveler
+package com.ivianuu.essentials.ui.common
 
-import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentStatePagerAdapter
-import com.ivianuu.traveler.keys.FragmentKey
+import android.content.Context
+import android.content.Intent
+import com.ivianuu.traveler.keys.ActivityKey
 
 /**
- * Key fragment state pager adapter
+ * Key for a simple intent
  */
-open class KeyFragmentStatePagerAdapter(
-    fm: FragmentManager,
-    private val keys: List<FragmentKey>
-) : FragmentStatePagerAdapter(fm) {
-
-    override fun getItem(position: Int) = keys[position].newInstance()
-
-    override fun getCount() = keys.size
+open class IntentKey(val intent: Intent): ActivityKey() {
+    override fun createIntent(context: Context, data: Any?) = intent
 }

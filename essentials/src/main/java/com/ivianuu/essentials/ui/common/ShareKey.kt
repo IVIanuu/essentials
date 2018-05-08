@@ -26,7 +26,7 @@ import com.ivianuu.traveler.keys.ActivityKey
  * Shares the [text]
  */
 data class ShareKey(val text: String) : ActivityKey() {
-    override fun createIntent(context: Context): Intent {
+    override fun createIntent(context: Context, data: Any?): Intent {
         return ShareCompat.IntentBuilder
             .from(context as Activity)
             .setType("text/plain")
