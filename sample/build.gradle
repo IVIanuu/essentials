@@ -4,13 +4,13 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
 android {
-    compileSdkVersion 27
+    compileSdkVersion Versions.compileSdk
     defaultConfig {
         applicationId "com.ivianuu.essentials.sample"
-        minSdkVersion 21
-        targetSdkVersion 27
-        versionCode 1
-        versionName "1"
+        minSdkVersion Versions.minSdk
+        targetSdkVersion Versions.targetSdk
+        versionCode Versions.versionCode
+        versionName Versions.versionName
     }
     androidExtensions {
         experimental = true
@@ -26,11 +26,11 @@ android {
 
 dependencies {
     // Dagger
-    kapt "com.google.dagger:dagger-compiler:2.15"
-    kapt "com.google.dagger:dagger-android-processor:2.15"
+    kapt Deps.daggerCompiler
+    kapt Deps.daggerAndroidProcessor
 
     // Epoxy
-    kapt "com.airbnb.android:epoxy-processor:2.10.0"
+    kapt Deps.epoxyProcessor
 
     // Essentials
     implementation project(':essentials')

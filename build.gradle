@@ -1,5 +1,4 @@
 buildscript {
-    ext.kotlin_version = '1.2.41'
     repositories {
         google()
         jcenter()
@@ -8,10 +7,10 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.1.2'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath 'com.github.dcendents:android-maven-gradle-plugin:2.0'
-        classpath 'com.jakewharton:butterknife-gradle-plugin:9.0.0-SNAPSHOT'
+        classpath Deps.androidGradlePlugin
+        classpath Deps.butterknifeGradlePlugin
+        classpath Deps.kotlinGradlePlugin
+        classpath Deps.mavenGradlePlugin
     }
 }
 

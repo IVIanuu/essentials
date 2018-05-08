@@ -24,11 +24,11 @@ apply plugin: 'com.jakewharton.butterknife'
 group='com.github.ivianuu'
 
 android {
-    compileSdkVersion 27
+    compileSdkVersion Versions.compileSdk
 
     defaultConfig {
-        minSdkVersion 21
-        targetSdkVersion 27
+        minSdkVersion Versions.minSdk
+        targetSdkVersion Versions.targetSdk
     }
     androidExtensions {
         experimental = true
@@ -40,74 +40,77 @@ android {
 
 dependencies {
     // Android Support
-    api "com.android.support:appcompat-v7:27.1.1"
-    api "com.android.support:cardview-v7:27.1.1"
-    api "com.android.support.constraint:constraint-layout:1.1.0"
-    api "com.android.support:design:27.1.1"
-    api "com.android.support:palette-v7:27.1.1"
-    api "com.android.support:preference-v14:27.1.1"
+    api Deps.supportAppCompat
+    api Deps.supportCardView
+    api Deps.supportDesign
+    api Deps.supportPalette
+    api Deps.supportPreference
 
     // Arch Components
-    api "android.arch.lifecycle:extensions:1.1.1"
+    api Deps.archComponentsLifecycleExtensions
 
     // Auto Dispose
-    api 'com.github.IVIanuu.AutoDispose:autodispose:46a3d4d768'
-    api 'com.github.IVIanuu.AutoDispose:autodispose-view:46a3d4d768'
+    api Deps.autoDispose
+    api Deps.autoDisposeView
+
+    // Constraint layout
+    api Deps.constraintLayout
 
     // Dagger
-    api "com.google.dagger:dagger:2.16"
-    api "com.google.dagger:dagger-android:2.16"
-    api "com.google.dagger:dagger-android-support:2.16"
-    kapt "com.google.dagger:dagger-compiler:2.16"
-    kapt "com.google.dagger:dagger-android-processor:2.16"
+    api Deps.dagger
+    api Deps.daggerAndroid
+    api Deps.daggerAndroidSupport
+    kapt Deps.daggerCompiler
+    kapt Deps.daggerAndroidProcessor
 
     // Epoxy
-    api "com.airbnb.android:epoxy:2.12.0"
-    kapt "com.airbnb.android:epoxy-processor:2.12.0"
+    api Deps.epoxy
+    kapt Deps.epoxyProcessor
 
     // Fabric
-    implementation("com.crashlytics.sdk.android:crashlytics:2.7.1@aar") {
+    implementation(Deps.fabric) {
         transitive = true
     }
 
     // Kotlin
-    api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    api Deps.kotlinStdLib
 
     // Kt android
-    api 'androidx.core:core-ktx:0.3'
+    api Deps.ktx
 
     // Live data extensions
-    api 'com.snakydesign.livedataextensions:lives:1.0.1'
+    api Deps.liveDataExtensions
 
     // Material Dialogs
-    api "com.afollestad.material-dialogs:core:0.9.6.0"
-    api "com.afollestad.material-dialogs:commons:0.9.6.0"
+    api Deps.materialDialogsCore
+    api Deps.materialDialogsCommons
 
     // Rx Activity Result
-    api 'com.github.IVIanuu:RxActivityResult:3a17011d75'
+    api Deps.rxActivityResult
 
     // RxJava
-    api "io.reactivex.rxjava2:rxjava:2.1.13"
-    api "io.reactivex.rxjava2:rxandroid:2.0.2"
+    api Deps.rxJava
+    api Deps.rxAndroid
 
     // RxKotlin
-    api "io.reactivex.rxjava2:rxkotlin:2.2.0"
+    api Deps.rxKotlin
 
     // RxPermissions
-    api 'com.github.IVIanuu:RxPermissions:dc2b269921'
+    api Deps.rxPermissions
 
     // RxPreferences
-    api "com.f2prateek.rx.preferences2:rx-preferences:2.0.0"
+    api Deps.rxPreferences
 
     // SeekBarPreference
-    api 'com.github.IVIanuu:SeekBarPreference:f45ad8334d'
+    api Deps.seekBarPreference
 
     // Timber
-    api "com.jakewharton.timber:timber:4.7.0"
+    api Deps.timber
 
     // Traveler
-    api 'com.github.IVIanuu.Traveler:traveler:9b11ceebfb'
-    api 'com.github.IVIanuu.Traveler:traveler-keys:9b11ceebfb'
+    api Deps.traveler
+    api Deps.travelerAndroid
+    api Deps.travelerKeys
 }
 
 // build a jar with source files
