@@ -21,7 +21,7 @@ package com.ivianuu.essentials.util
  */
 class UndoHelper<T>(private val callback: Callback<T>) {
 
-    val pendingActionItems = mutableSetOf<T>()
+    val pendingActionItems = mutableListOf<T>()
     var pendingAction = ACTION_NONE
 
     fun hasPendingActions() = pendingAction != ACTION_NONE
@@ -37,7 +37,7 @@ class UndoHelper<T>(private val callback: Callback<T>) {
 
     fun commitPendingAction(): Boolean {
         return if (pendingAction != ACTION_NONE) {
-            callback.commitAction(pendingAction, pendingActionItems.toSet())
+            callback.commitAction(pendingAction, pendingActionItems)
             pendingActionItems.clear()
             pendingAction = ACTION_NONE
             true
@@ -57,7 +57,7 @@ class UndoHelper<T>(private val callback: Callback<T>) {
     }
 
     interface Callback<T> {
-        fun commitAction(action: Int, items: Set<T>)
+        fun commitAction(action: Int, items: List<T>)
     }
 
     companion object {
