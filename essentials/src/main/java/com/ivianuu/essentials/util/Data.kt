@@ -23,10 +23,11 @@ import android.os.Parcelable
 import android.util.Size
 import android.util.SizeF
 import androidx.core.os.bundleOf
-import com.ivianuu.essentials.util.ext.toData
+import kotlinx.android.parcel.Parcelize
 import java.io.Serializable
 
-class Data(val bundle: Bundle = Bundle()) {
+@Parcelize
+data class Data(val bundle: Bundle = Bundle()) : Parcelable {
 
     // VALS
 
@@ -86,7 +87,7 @@ class Data(val bundle: Bundle = Bundle()) {
     }
 
     fun putData(key: String, value: Data): Data {
-        bundle.putBundle(key, value.toBundle())
+        bundle.putParcelable(key, value)
         return this
     }
 
@@ -290,11 +291,11 @@ class Data(val bundle: Bundle = Bundle()) {
     }
 
     fun getData(key: String): Data? {
-        return bundle.getBundle(key).toData()
+        return bundle.getParcelable(key)
     }
 
     fun getData(key: String, data: Data): Data {
-        return bundle.getBundle(key)?.toData() ?: data
+        return bundle.getParcelable(key) ?: data
     }
 
     fun getBundle(key: String): Bundle? {
@@ -302,7 +303,7 @@ class Data(val bundle: Bundle = Bundle()) {
     }
 
     fun getBundle(key: String, defaultValue: Bundle): Bundle {
-        return bundle.getBundle(key) ?: defaultValue
+        return getBundle(key) ?: defaultValue
     }
 
     fun getCharSequence(key: String): CharSequence? {
@@ -310,7 +311,7 @@ class Data(val bundle: Bundle = Bundle()) {
     }
 
     fun getCharSequence(key: String, defaultValue: CharSequence): CharSequence {
-        return bundle.getCharSequence(key, defaultValue)
+        return getCharSequence(key, defaultValue)
     }
 
     fun <T : Parcelable> getParcelable(key: String): T? {
@@ -318,7 +319,7 @@ class Data(val bundle: Bundle = Bundle()) {
     }
 
     fun <T : Parcelable> getParcelable(key: String, defaultValue: T): T {
-        return bundle.getParcelable(key) ?: defaultValue
+        return getParcelable(key) ?: defaultValue
     }
 
     fun getString(key: String): String? {
@@ -326,7 +327,7 @@ class Data(val bundle: Bundle = Bundle()) {
     }
 
     fun getString(key: String, defaultValue: String): String {
-        return bundle.getString(key, defaultValue)
+        return getString(key, defaultValue)
     }
 
     fun getBooleanArray(key: String): BooleanArray? {
@@ -334,7 +335,7 @@ class Data(val bundle: Bundle = Bundle()) {
     }
 
     fun getBooleanArray(key: String, defaultValue: BooleanArray): BooleanArray {
-        return bundle.getBooleanArray(key) ?: defaultValue
+        return getBooleanArray(key) ?: defaultValue
     }
 
     fun getByteArray(key: String): ByteArray? {
@@ -342,7 +343,7 @@ class Data(val bundle: Bundle = Bundle()) {
     }
 
     fun getByteArray(key: String, defaultValue: ByteArray): ByteArray {
-        return bundle.getByteArray(key) ?: defaultValue
+        return getByteArray(key) ?: defaultValue
     }
 
     fun getCharArray(key: String): CharArray? {
@@ -350,7 +351,7 @@ class Data(val bundle: Bundle = Bundle()) {
     }
 
     fun getCharArray(key: String, defaultValue: CharArray): CharArray {
-        return bundle.getCharArray(key) ?: defaultValue
+        return getCharArray(key) ?: defaultValue
     }
 
     fun getFloatArray(key: String): FloatArray? {
@@ -358,7 +359,7 @@ class Data(val bundle: Bundle = Bundle()) {
     }
 
     fun getFloatArray(key: String, defaultValue: FloatArray): FloatArray {
-        return bundle.getFloatArray(key) ?: defaultValue
+        return getFloatArray(key) ?: defaultValue
     }
 
     fun getIntArray(key: String): IntArray? {
@@ -366,7 +367,7 @@ class Data(val bundle: Bundle = Bundle()) {
     }
 
     fun getIntArray(key: String, defaultValue: IntArray): IntArray {
-        return bundle.getIntArray(key) ?: defaultValue
+        return getIntArray(key) ?: defaultValue
     }
 
     fun getLongArray(key: String): LongArray? {
@@ -374,7 +375,7 @@ class Data(val bundle: Bundle = Bundle()) {
     }
 
     fun getLongArray(key: String, defaultValue: LongArray): LongArray {
-        return bundle.getLongArray(key) ?: defaultValue
+        return getLongArray(key) ?: defaultValue
     }
 
     fun getShortArray(key: String): ShortArray? {
@@ -382,7 +383,7 @@ class Data(val bundle: Bundle = Bundle()) {
     }
 
     fun getShortArray(key: String, defaultValue: ShortArray): ShortArray {
-        return bundle.getShortArray(key) ?: defaultValue
+        return getShortArray(key) ?: defaultValue
     }
 
     fun getParcelableArray(key: String): Array<Parcelable>? {
@@ -390,15 +391,15 @@ class Data(val bundle: Bundle = Bundle()) {
     }
 
     fun getParcelableArray(key: String, defaultValue: Array<Parcelable>): Array<Parcelable> {
-        return bundle.getParcelableArray(key) as Array<Parcelable>? ?: defaultValue
+        return getParcelableArray(key) as Array<Parcelable>? ?: defaultValue
     }
 
-    fun <T : Parcelable> getParcelableArraylist(key: String): ArrayList<T>? {
+    fun <T : Parcelable> getParcelableArrayList(key: String): ArrayList<T>? {
         return bundle.getParcelableArrayList<T>(key)
     }
 
-    fun <T : Parcelable> getParcelableArraylist(key: String, defaultValue: ArrayList<T>): ArrayList<T> {
-        return bundle.getParcelableArrayList(key) ?: defaultValue
+    fun <T : Parcelable> getParcelableArrayList(key: String, defaultValue: ArrayList<T>): ArrayList<T> {
+        return getParcelableArrayList(key) ?: defaultValue
     }
 
     fun getStringArray(key: String): Array<String>? {
@@ -406,7 +407,7 @@ class Data(val bundle: Bundle = Bundle()) {
     }
 
     fun getStringArray(key: String, defaultValue: Array<String>): Array<String> {
-        return bundle.getStringArray(key) ?: defaultValue
+        return getStringArray(key) ?: defaultValue
     }
 
     fun getCharSequenceArray(key: String): Array<CharSequence>? {
@@ -414,7 +415,7 @@ class Data(val bundle: Bundle = Bundle()) {
     }
 
     fun getCharSequenceArray(key: String, defaultValue: Array<CharSequence>): Array<CharSequence> {
-        return bundle.getCharSequenceArray(key) ?: defaultValue
+        return getCharSequenceArray(key) ?: defaultValue
     }
 
     fun getSerializable(key: String): Serializable? {
@@ -422,7 +423,7 @@ class Data(val bundle: Bundle = Bundle()) {
     }
 
     fun getSerializable(key: String, defaultValue: Serializable): Serializable {
-        return bundle.getSerializable(key) ?: defaultValue
+        return getSerializable(key) ?: defaultValue
     }
 
     fun getBinder(key: String): IBinder? {
@@ -430,7 +431,7 @@ class Data(val bundle: Bundle = Bundle()) {
     }
 
     fun getBinder(key: String, defaultValue: IBinder): IBinder {
-        return bundle.getBinder(key) ?: defaultValue
+        return getBinder(key) ?: defaultValue
     }
 
     fun getSize(key: String): Size? {
@@ -438,7 +439,7 @@ class Data(val bundle: Bundle = Bundle()) {
     }
 
     fun getSize(key: String, defaultValue: Size): Size {
-        return bundle.getSize(key) ?: defaultValue
+        return getSize(key) ?: defaultValue
     }
 
     fun getSizeF(key: String): SizeF? {
@@ -446,7 +447,7 @@ class Data(val bundle: Bundle = Bundle()) {
     }
 
     fun getSizeF(key: String, defaultValue: SizeF): SizeF {
-        return bundle.getSizeF(key) ?: defaultValue
+        return getSizeF(key) ?: defaultValue
     }
 
     fun get(key: String): Any? {
@@ -454,7 +455,7 @@ class Data(val bundle: Bundle = Bundle()) {
     }
 
     fun get(key: String, defaultValue: Any): Any {
-        return bundle.get(key) ?: defaultValue
+        return get(key) ?: defaultValue
     }
 
     // REQUIRE
@@ -543,8 +544,8 @@ class Data(val bundle: Bundle = Bundle()) {
         return getParcelableArray(key) ?: throwMissingKey(key)
     }
 
-    fun <T : Parcelable> requireParcelableArraylist(key: String): ArrayList<T> {
-        return getParcelableArraylist(key) ?: throwMissingKey(key)
+    fun <T : Parcelable> requireParcelableArrayList(key: String): ArrayList<T> {
+        return getParcelableArrayList(key) ?: throwMissingKey(key)
     }
 
     fun requireStringArray(key: String): Array<String> {

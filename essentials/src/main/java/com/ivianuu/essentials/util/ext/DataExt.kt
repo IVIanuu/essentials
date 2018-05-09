@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.util.ext
 
 import android.os.Bundle
+import android.support.v4.app.Fragment
 import androidx.core.os.bundleOf
 import com.ivianuu.essentials.util.Data
 
@@ -39,3 +40,9 @@ fun dataOf(vararg pairs: Pair<String, Any?>): Data {
 
     return bundleOf(*mappedPairs).toData()
 }
+
+var Fragment.args: Data
+    get() = arguments?.toData() ?: emptyData()
+    set(value) {
+        arguments = value.toBundle()
+    }
