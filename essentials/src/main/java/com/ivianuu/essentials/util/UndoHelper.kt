@@ -21,24 +21,28 @@ package com.ivianuu.essentials.util
  */
 class UndoHelper<T>(private val callback: Callback<T>) {
 
-    val pendingActionItems = mutableListOf<T>()
+    val pendingActionItems
+        get() = _pendingActionItems.toList()
+    private val _pendingActionItems = mutableListOf<T>()
+
     var pendingAction = ACTION_NONE
+        private set
 
     fun hasPendingActions() = pendingAction != ACTION_NONE
 
     fun isPendingAction(item: T) =
-        pendingActionItems.contains(item)
+        _pendingActionItems.contains(item)
 
     fun enqueueAction(action: Int, items: List<T> = emptyList()) {
         commitPendingAction()
         pendingAction = action
-        pendingActionItems.addAll(items)
+        _pendingActionItems.addAll(items)
     }
 
     fun commitPendingAction(): Boolean {
         return if (pendingAction != ACTION_NONE) {
-            callback.commitAction(pendingAction, pendingActionItems)
-            pendingActionItems.clear()
+            callback.commitAction(pendingAction, _pendingActionItems)
+            _pendingActionItems.clear()
             pendingAction = ACTION_NONE
             true
         } else {
@@ -48,7 +52,7 @@ class UndoHelper<T>(private val callback: Callback<T>) {
 
     fun undoPendingAction(): Boolean {
         return if (pendingAction != ACTION_NONE) {
-            pendingActionItems.clear()
+            _pendingActionItems.clear()
             pendingAction = ACTION_NONE
             true
         } else {
@@ -62,5 +66,6 @@ class UndoHelper<T>(private val callback: Callback<T>) {
 
     companion object {
         const val ACTION_NONE = -1
+        const val ACTION_DELETE = 0
     }
 }
