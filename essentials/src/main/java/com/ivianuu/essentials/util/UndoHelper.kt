@@ -29,21 +29,31 @@ class UndoHelper<T>(private val callback: Callback<T>) {
     fun isPendingAction(item: T) =
         pendingActionItems.contains(item)
 
-    fun enqueueAction(action: Int, items: List<T>) {
+    fun enqueueAction(action: Int, items: List<T> = emptyList()) {
         commitPendingAction()
         pendingAction = action
         pendingActionItems.addAll(items)
     }
 
-    fun commitPendingAction() {
-        callback.commitAction(pendingAction, pendingActionItems.toSet())
-        pendingActionItems.clear()
-        pendingAction = ACTION_NONE
+    fun commitPendingAction(): Boolean {
+        return if (pendingAction != ACTION_NONE) {
+            callback.commitAction(pendingAction, pendingActionItems.toSet())
+            pendingActionItems.clear()
+            pendingAction = ACTION_NONE
+            true
+        } else {
+            false
+        }
     }
 
-    fun undoPendingAction() {
-        pendingActionItems.clear()
-        pendingAction = ACTION_NONE
+    fun undoPendingAction(): Boolean {
+        return if (pendingAction != ACTION_NONE) {
+            pendingActionItems.clear()
+            pendingAction = ACTION_NONE
+            true
+        } else {
+            false
+        }
     }
 
     interface Callback<T> {
