@@ -176,12 +176,12 @@ abstract class BaseActivityModule<T : BaseActivity> {
 
         @JvmStatic
         @Provides
-        fun provideActivityResultStarter(activity: Activity) =
+        fun provideActivityResultStarter(activity: FragmentActivity) =
             RxActivityResult.get(activity)
 
         @JvmStatic
         @Provides
-        fun providePermissionRequester(activity: Activity) = RxPermissions.get(activity)
+        fun providePermissionRequester(activity: FragmentActivity) = RxPermissions.get(activity)
 
     }
 
