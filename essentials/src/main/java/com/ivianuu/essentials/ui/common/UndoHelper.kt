@@ -21,34 +21,36 @@ package com.ivianuu.essentials.ui.common
  */
 class UndoHelper<T>(private val callback: Callback<T>) {
 
-    val pendingDeletions = mutableSetOf<T>()
+    val pendingActionItems = mutableSetOf<T>()
+    var pendingAction = ACTION_NONE
 
-    fun hasPendingDeletions() = pendingDeletions.isNotEmpty()
+    fun hasPendingActions() = pendingAction != ACTION_NONE
 
-    fun isPendingDeletion(item: T) =
-        pendingDeletions.contains(item)
+    fun isPendingAction(item: T) =
+        pendingActionItems.contains(item)
 
-    fun enqueueDeletion(items: List<T>) {
-        commitPendingDeletions()
-        pendingDeletions.addAll(items)
-        callback.update(pendingDeletions.toList())
+    fun enqueueAction(action: Int, items: List<T>) {
+        commitPendingAction()
+        pendingAction = action
+        pendingActionItems.addAll(items)
     }
 
-    fun commitPendingDeletions() {
-        if (pendingDeletions.isNotEmpty()) {
-            val deletions = pendingDeletions.toList()
-            callback.commitPendingDeletions(deletions)
-            pendingDeletions.clear()
-        }
+    fun commitPendingAction() {
+        callback.commitAction(pendingAction, pendingActionItems.toSet())
+        pendingActionItems.clear()
+        pendingAction = ACTION_NONE
     }
 
-    fun undoPendingDeletions() {
-        pendingDeletions.clear()
-        callback.update(pendingDeletions.toList())
+    fun undoPendingAction() {
+        pendingActionItems.clear()
+        pendingAction = ACTION_NONE
     }
 
     interface Callback<T> {
-        fun commitPendingDeletions(items: List<T>)
-        fun update(pendingDeletions: List<T>)
+        fun commitAction(action: Int, items: Set<T>)
+    }
+
+    companion object {
+        const val ACTION_NONE = -1
     }
 }
