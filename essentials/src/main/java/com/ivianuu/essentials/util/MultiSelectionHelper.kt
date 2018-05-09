@@ -19,7 +19,7 @@ package com.ivianuu.essentials.util
 /**
  * Simple helper class for multi selection screens
  */
-class MultiSelectionHelper<T>(private val onChanged: () -> Unit) {
+class MultiSelectionHelper<T>(private val onChanged: (selectedItems: List<T>) -> Unit) {
 
     val selectedItems: List<T>
         get() = _selectedItems
@@ -31,7 +31,7 @@ class MultiSelectionHelper<T>(private val onChanged: () -> Unit) {
         } else {
             _selectedItems.remove(item)
         }
-        onChanged.invoke()
+        onChanged.invoke(selectedItems)
     }
 
     fun setItemsSelected(items: List<T>, selected: Boolean) {
@@ -40,12 +40,12 @@ class MultiSelectionHelper<T>(private val onChanged: () -> Unit) {
         } else {
             _selectedItems.removeAll(items)
         }
-        onChanged.invoke()
+        onChanged.invoke(selectedItems)
     }
 
     fun deselectAll() {
         _selectedItems.clear()
-        onChanged.invoke()
+        onChanged.invoke(selectedItems)
     }
 
     fun isSelected(item: T) = selectedItems.contains(item)
