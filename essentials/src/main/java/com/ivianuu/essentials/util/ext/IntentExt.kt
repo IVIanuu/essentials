@@ -16,9 +16,9 @@
 
 package com.ivianuu.essentials.util.ext
 
-import android.os.Bundle
+import android.content.Intent
 import com.ivianuu.essentials.util.Data
 
-fun Bundle.getData(key: String): Data {
-    return getBundle(key).toData()
+fun Intent.getDataExtra(name: String): Data {
+    return getBundleExtra(name).toData()
 }

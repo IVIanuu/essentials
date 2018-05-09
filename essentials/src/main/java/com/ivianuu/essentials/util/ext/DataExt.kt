@@ -17,8 +17,25 @@
 package com.ivianuu.essentials.util.ext
 
 import android.os.Bundle
+import androidx.core.os.bundleOf
 import com.ivianuu.essentials.util.Data
 
-fun Bundle.getData(key: String): Data {
-    return getBundle(key).toData()
+fun Bundle.toData() = Data(this)
+
+private val EMPTY_DATA = dataOf()
+
+fun emptyData() = EMPTY_DATA
+
+fun dataOf(vararg pairs: Pair<String, Any?>): Data {
+    // map data to bundles
+    val mappedPairs = pairs
+        .map {
+            if (it.second is Data) {
+                it.first to (it.second as Data).toBundle()
+            } else {
+                it
+            }
+        }.toTypedArray()
+
+    return bundleOf(*mappedPairs).toData()
 }
