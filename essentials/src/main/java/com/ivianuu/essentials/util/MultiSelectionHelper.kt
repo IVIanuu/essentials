@@ -21,9 +21,9 @@ package com.ivianuu.essentials.util
  */
 class MultiSelectionHelper<T>(private val onChanged: () -> Unit) {
 
-    val selectedItems: Set<T>
+    val selectedItems: List<T>
         get() = _selectedItems
-    private val _selectedItems = mutableSetOf<T>()
+    private val _selectedItems = mutableListOf<T>()
 
     fun setItemSelected(item: T, selected: Boolean) {
         if (selected) {
