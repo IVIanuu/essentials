@@ -14,13 +14,17 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.util.ext
+package com.ivianuu.essentials.util
 
-import com.f2prateek.rx.preferences2.Preference
-
-var <T> Preference<T>.value: T
-    get() = get()
-    set(value) = set(value)
-
-fun <T : Any> Preference<T>.asLiveData() =
-    asObservable().toLiveData()
+/**
+ * Optional
+ */
+sealed class Option<T : Any> {
+    data class Some<T : Any>(val value: T) : Option<T>()
+    class None<T : Any> : Option<Nothing>() {
+        override fun toString() = "None"
+        companion object {
+            val INSTANCE = None<Any>()
+        }
+    }
+}
