@@ -31,6 +31,4 @@ fun Fragment.showInputMethod(view: View) {
     requireActivity().showInputMethod(view)
 }
 
-fun Fragment.requireAppCompatActivity(): AppCompatActivity {
-    return requireActivity() as AppCompatActivity
-}
+fun Fragment.requireAppCompatActivity() = requireActivity() as AppCompatActivity
