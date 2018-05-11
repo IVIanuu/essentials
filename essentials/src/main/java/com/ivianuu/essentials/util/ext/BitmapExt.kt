@@ -20,6 +20,7 @@ import android.graphics.Bitmap
 import android.util.Base64
 import java.io.ByteArrayOutputStream
 
+
 fun Bitmap.resize(width: Int, height: Int) : Bitmap {
     val srcWidth = getWidth()
 
