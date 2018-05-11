@@ -86,7 +86,6 @@ dependencies {
     api Deps.timber
 
     api Deps.traveler
-    api Deps.travelerAndroid
     api Deps.travelerKeys
 }
 
