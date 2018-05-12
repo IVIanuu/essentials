@@ -30,7 +30,6 @@ import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.AndroidSupportInjection
 import dagger.android.support.HasSupportFragmentInjector
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.BehaviorSubject
 import javax.inject.Inject
 
@@ -43,9 +42,6 @@ abstract class BaseDialogFragment : DialogFragment(), HasSupportFragmentInjector
     @Inject lateinit var supportFragmentInjector: DispatchingAndroidInjector<Fragment>
 
     @Inject lateinit var router: Router
-
-    @Deprecated("")
-    protected val disposables = CompositeDisposable()
 
     private val lifecycleSubject = BehaviorSubject.create<FragmentEvent>()
 
@@ -86,7 +82,6 @@ abstract class BaseDialogFragment : DialogFragment(), HasSupportFragmentInjector
     }
 
     override fun onDestroyView() {
-        disposables.clear()
         lifecycleSubject.onNext(DESTROY_VIEW)
         super.onDestroyView()
     }

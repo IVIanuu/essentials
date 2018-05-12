@@ -43,7 +43,6 @@ import dagger.android.AndroidInjection
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.BehaviorSubject
 import javax.inject.Inject
 
@@ -65,9 +64,6 @@ abstract class BaseActivity : AppCompatActivity(), HasSupportFragmentInjector,
     protected open val navigator by unsafeLazy {
         KeyNavigator(this, supportFragmentManager, fragmentContainer)
     }
-
-    @Deprecated("")
-    protected val disposables = CompositeDisposable()
 
     private val lifecycleSubject = BehaviorSubject.create<ActivityEvent>()
 
@@ -107,7 +103,6 @@ abstract class BaseActivity : AppCompatActivity(), HasSupportFragmentInjector,
     }
 
     override fun onDestroy() {
-        disposables.clear()
         lifecycleSubject.onNext(DESTROY)
         super.onDestroy()
     }

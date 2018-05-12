@@ -32,7 +32,6 @@ import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.AndroidSupportInjection
 import dagger.android.support.HasSupportFragmentInjector
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.BehaviorSubject
 import javax.inject.Inject
 
@@ -47,9 +46,6 @@ abstract class BaseFragment : Fragment(), BackListener, HasSupportFragmentInject
     @Inject lateinit var router: Router
 
     protected open val layoutRes = -1
-
-    @Deprecated("")
-    protected val disposables = CompositeDisposable()
 
     private val lifecycleSubject = BehaviorSubject.create<FragmentEvent>()
 
@@ -102,7 +98,6 @@ abstract class BaseFragment : Fragment(), BackListener, HasSupportFragmentInject
     }
 
     override fun onDestroyView() {
-        disposables.clear()
         lifecycleSubject.onNext(DESTROY_VIEW)
         super.onDestroyView()
     }

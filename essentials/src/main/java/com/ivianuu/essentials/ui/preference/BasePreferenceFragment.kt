@@ -33,7 +33,6 @@ import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.AndroidSupportInjection
 import dagger.android.support.HasSupportFragmentInjector
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.BehaviorSubject
 import javax.inject.Inject
 
@@ -48,9 +47,6 @@ abstract class BasePreferenceFragment : PreferenceFragmentCompat(), BackListener
     @Inject lateinit var router: Router
 
     open val prefsRes = -1
-
-    @Deprecated("")
-    protected val disposables = CompositeDisposable()
 
     private val lifecycleSubject = BehaviorSubject.create<FragmentEvent>()
 
@@ -101,7 +97,6 @@ abstract class BasePreferenceFragment : PreferenceFragmentCompat(), BackListener
     }
 
     override fun onDestroyView() {
-        disposables.clear()
         lifecycleSubject.onNext(DESTROY_VIEW)
         super.onDestroyView()
     }
