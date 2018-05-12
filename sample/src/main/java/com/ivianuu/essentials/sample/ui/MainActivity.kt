@@ -27,7 +27,7 @@ class MainActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
 
         if (savedInstanceState == null) {
-            router.newRootScreen(MultipleCountersKey)
+            router.newRootScreen(CounterKey(1))
         }
     }
 }

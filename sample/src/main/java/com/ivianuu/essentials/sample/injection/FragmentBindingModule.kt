@@ -18,7 +18,6 @@ package com.ivianuu.essentials.sample.injection
 
 import com.ivianuu.essentials.injection.PerFragment
 import com.ivianuu.essentials.sample.ui.CounterFragment
-import com.ivianuu.essentials.sample.ui.MultipleCountersFragment
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
@@ -31,9 +30,5 @@ abstract class FragmentBindingModule {
     @PerFragment
     @ContributesAndroidInjector
     abstract fun bindCounterFragment(): CounterFragment
-
-    @PerFragment
-    @ContributesAndroidInjector
-    abstract fun bindMultipleCountersFragment(): MultipleCountersFragment
 
 }

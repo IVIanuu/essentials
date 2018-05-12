@@ -30,7 +30,7 @@ object Versions {
     const val seekBarPreference = "7bd4049da0"
     const val support = "27.1.1"
     const val timber = "4.7.0"
-    const val traveler = "61d3b1df1b"
+    const val traveler = "d94acfd773"
 }
 //
 object Deps {
@@ -87,5 +87,5 @@ object Deps {
     const val timber = "com.jakewharton.timber:timber:${Versions.timber}"
 
     const val traveler = "com.github.IVIanuu.Traveler:traveler:${Versions.traveler}"
-    const val travelerKeys = "com.github.IVIanuu.Traveler:traveler-keys:${Versions.traveler}"
+    const val travelerFragments = "com.github.IVIanuu.Traveler:traveler-fragments:${Versions.traveler}"
 }

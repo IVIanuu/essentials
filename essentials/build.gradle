@@ -88,7 +88,7 @@ dependencies {
     api Deps.timber
 
     api Deps.traveler
-    api Deps.travelerKeys
+    api Deps.travelerFragments
 }
 
 // build a jar with source files

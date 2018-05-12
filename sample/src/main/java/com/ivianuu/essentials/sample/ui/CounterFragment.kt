@@ -18,13 +18,16 @@ package com.ivianuu.essentials.sample.ui
 
 import android.os.Bundle
 import android.os.Parcelable
+import android.support.v4.app.Fragment
+import android.support.v4.app.FragmentTransaction
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.base.BaseFragment
-import com.ivianuu.traveler.keys.FragmentKey
-import com.ivianuu.traveler.keys.requireKey
+import com.ivianuu.essentials.ui.traveler.FragmentKey
+import com.ivianuu.essentials.ui.traveler.requireKey
+import com.ivianuu.traveler.commands.Command
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_counter.*
 
@@ -52,6 +55,9 @@ class CounterFragment : BaseFragment() {
         val key = requireKey<CounterKey>()
 
         title.text = "Count: ${key.count}"
+
+        go_up.setOnClickListener { router.navigateTo(CounterKey(key.count + 1)) }
+        do_sub.setOnClickListener { router.exit() }
     }
 
 }
@@ -59,4 +65,13 @@ class CounterFragment : BaseFragment() {
 @Parcelize
 data class CounterKey(val count: Int) : FragmentKey(), Parcelable {
     override fun createFragment(data: Any?) = CounterFragment()
+
+    override fun setupFragmentTransaction(
+        command: Command,
+        currentFragment: Fragment?,
+        nextFragment: Fragment,
+        fragmentTransaction: FragmentTransaction
+    ) {
+        super.setupFragmentTransaction(command, currentFragment, nextFragment, fragmentTransaction)
+    }
 }

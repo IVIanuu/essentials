@@ -18,7 +18,6 @@ package com.ivianuu.essentials.ui.traveler
 
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
-import com.ivianuu.traveler.keys.FragmentKey
 
 /**
  * Key fragment pager adapter
