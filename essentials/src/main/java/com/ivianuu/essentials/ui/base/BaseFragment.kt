@@ -22,12 +22,12 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.ivianuu.autodispose.LifecycleScopeProvider
 import com.ivianuu.essentials.ui.common.BackListener
 import com.ivianuu.essentials.ui.common.CORRESPONDING_FRAGMENT_EVENTS
 import com.ivianuu.essentials.ui.common.FragmentEvent
 import com.ivianuu.essentials.ui.common.FragmentEvent.*
 import com.ivianuu.traveler.Router
+import com.uber.autodispose.LifecycleScopeProvider
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.AndroidSupportInjection
@@ -39,7 +39,8 @@ import javax.inject.Inject
 /**
  * Base fragment
  */
-abstract class BaseFragment : Fragment(), BackListener, HasSupportFragmentInjector, LifecycleScopeProvider<FragmentEvent> {
+abstract class BaseFragment : Fragment(), BackListener, HasSupportFragmentInjector,
+    LifecycleScopeProvider<FragmentEvent> {
 
     @Inject lateinit var supportFragmentInjector: DispatchingAndroidInjector<Fragment>
 

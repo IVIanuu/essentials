@@ -42,7 +42,9 @@ dependencies {
     api Deps.archComponentsLifecycleExtensions
 
     api Deps.autoDispose
-    api Deps.autoDisposeView
+    api Deps.autoDisposeKotlin
+    api Deps.autoDisposeAndroid
+    api Deps.autoDisposeAndroidKotlin
 
     api Deps.constraintLayout
 

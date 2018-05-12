@@ -24,7 +24,6 @@ import android.support.v4.app.FragmentActivity
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.isInBackstack
 import android.support.v7.app.AppCompatActivity
-import com.ivianuu.autodispose.LifecycleScopeProvider
 import com.ivianuu.essentials.injection.ForActivity
 import com.ivianuu.essentials.ui.common.ActivityEvent
 import com.ivianuu.essentials.ui.common.ActivityEvent.*
@@ -36,6 +35,7 @@ import com.ivianuu.rxpermissions.RxPermissions
 import com.ivianuu.traveler.NavigatorHolder
 import com.ivianuu.traveler.Router
 import com.ivianuu.traveler.keys.KeyNavigator
+import com.uber.autodispose.LifecycleScopeProvider
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -50,7 +50,8 @@ import javax.inject.Inject
 /**
  * Base activity
  */
-abstract class BaseActivity : AppCompatActivity(), HasSupportFragmentInjector, LifecycleScopeProvider<ActivityEvent> {
+abstract class BaseActivity : AppCompatActivity(), HasSupportFragmentInjector,
+    LifecycleScopeProvider<ActivityEvent> {
 
     @Inject lateinit var supportFragmentInjector: DispatchingAndroidInjector<Fragment>
 

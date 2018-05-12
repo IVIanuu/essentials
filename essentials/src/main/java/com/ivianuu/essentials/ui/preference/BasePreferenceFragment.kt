@@ -23,12 +23,12 @@ import android.support.v7.preference.PreferenceFragmentCompat
 import android.support.v7.preference.PreferenceScreen
 import android.support.v7.widget.RecyclerView
 import android.view.View
-import com.ivianuu.autodispose.LifecycleScopeProvider
 import com.ivianuu.essentials.ui.common.BackListener
 import com.ivianuu.essentials.ui.common.CORRESPONDING_FRAGMENT_EVENTS
 import com.ivianuu.essentials.ui.common.FragmentEvent
 import com.ivianuu.essentials.ui.common.FragmentEvent.*
 import com.ivianuu.traveler.Router
+import com.uber.autodispose.LifecycleScopeProvider
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.AndroidSupportInjection
@@ -40,7 +40,8 @@ import javax.inject.Inject
 /**
  * Base preference fragment
  */
-abstract class BasePreferenceFragment : PreferenceFragmentCompat(), BackListener, HasSupportFragmentInjector, LifecycleScopeProvider<FragmentEvent> {
+abstract class BasePreferenceFragment : PreferenceFragmentCompat(), BackListener, HasSupportFragmentInjector,
+    LifecycleScopeProvider<FragmentEvent> {
 
     @Inject lateinit var supportFragmentInjector: DispatchingAndroidInjector<Fragment>
 
