@@ -23,22 +23,22 @@ import com.ivianuu.essentials.util.ext.unsafeLazy
 /**
  * Base preference fragment
  */
-abstract class BasePreferenceFragment : BaseFragment() {
+abstract class BasePreferenceFragment : BaseFragment(), PreferenceFragmentDelegateHolder {
 
     abstract val preferenceContainerId: Int
     open val preferenceTag = "prefs"
     open val preferenceRes = -1
 
-    protected val delegate by unsafeLazy {
+    override val preferenceFragmentDelegate by unsafeLazy {
         PreferenceFragmentDelegate(childFragmentManager, preferenceContainerId, preferenceTag)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        delegate.onCreate()
+        preferenceFragmentDelegate.onCreate()
         if (preferenceRes != -1) {
-            delegate.addPreferencesFromResource(preferenceRes)
+            preferenceFragmentDelegate.addPreferencesFromResource(preferenceRes)
         }
     }
 
