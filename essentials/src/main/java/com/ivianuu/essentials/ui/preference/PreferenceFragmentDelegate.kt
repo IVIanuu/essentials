@@ -73,7 +73,9 @@ class PreferenceFragmentDelegate(
         fragment.setPreferencesFromResource(res, key.toString())
     }
 
-    fun findPreference(key: CharSequence): Preference = fragment.findPreference(key)
+    @Suppress("UNCHECKED_CAST")
+    fun <T : Preference> findPreference(key: CharSequence) =
+        fragment.findPreference(key) as T
 
     fun scrollToPreference(preference: Preference) {
         fragment.scrollToPreference(preference)
