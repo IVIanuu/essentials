@@ -41,7 +41,7 @@ class CounterFragment : BaseFragment() {
         title.text = "Count: ${key.count}"
 
         go_up.setOnClickListener { travelerRouter.navigateTo(CounterFragmentKey(key.count + 1)) }
-        do_sub.setOnClickListener { travelerRouter.exit() }
+        go_down.setOnClickListener { travelerRouter.exit() }
     }
 
 }

@@ -38,8 +38,8 @@ import javax.inject.Inject
 /**
  * Base controller
  */
-abstract class BaseController : Controller(), HasControllerInjector, LayoutContainer,
-    LifecycleScopeProvider<ControllerEvent>, ViewModelStoreOwner {
+abstract class BaseController @JvmOverloads constructor(args: Bundle = Bundle()) : Controller(args),
+    HasControllerInjector, LayoutContainer, LifecycleScopeProvider<ControllerEvent>, ViewModelStoreOwner {
 
     @Inject lateinit var controllerInjector: DispatchingAndroidInjector<Controller>
 

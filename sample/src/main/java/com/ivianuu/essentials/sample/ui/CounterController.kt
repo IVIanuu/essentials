@@ -39,7 +39,8 @@ class CounterController : BaseController() {
         title.text = "Count: ${key.count}"
 
         go_up.setOnClickListener { travelerRouter.navigateTo(CounterControllerKey(key.count + 1)) }
-        do_sub.setOnClickListener { travelerRouter.exit() }
+        go_down.setOnClickListener { travelerRouter.exit() }
+        dialog.setOnClickListener { travelerRouter.navigateTo(SomeDialogKey) }
     }
 
 

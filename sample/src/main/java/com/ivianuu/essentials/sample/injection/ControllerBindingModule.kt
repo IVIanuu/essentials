@@ -18,6 +18,7 @@ package com.ivianuu.essentials.sample.injection
 
 import com.ivianuu.essentials.injection.PerController
 import com.ivianuu.essentials.sample.ui.CounterController
+import com.ivianuu.essentials.sample.ui.SomeDialogController
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
@@ -29,6 +30,10 @@ abstract class ControllerBindingModule {
 
     @PerController
     @ContributesAndroidInjector
-    abstract fun bincCounterController(): CounterController
+    abstract fun bindCounterController(): CounterController
+
+    @PerController
+    @ContributesAndroidInjector
+    abstract fun bindSomeDialogController(): SomeDialogController
 
 }

@@ -15,43 +15,33 @@
   ~ limitations under the License.
   -->
 
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+<LinearLayout android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:gravity="center">
+    android:gravity="center"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:orientation="vertical">
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
-        <TextView
-            android:id="@+id/title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+    <Button
+        android:id="@+id/go_up"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Go Up"/>
 
-        <Button
-            android:id="@+id/go_up"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Go Up"/>
+    <Button
+        android:id="@+id/go_down"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Go down"/>
 
-        <Button
-            android:id="@+id/do_sub"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Do Sub"/>
-
-    </LinearLayout>
-
-    <FrameLayout
-        android:id="@+id/sub_container"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"/>
+    <Button
+        android:id="@+id/dialog"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Dialog"/>
 
 </LinearLayout>
