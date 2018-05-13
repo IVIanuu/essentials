@@ -46,7 +46,7 @@ abstract class FragmentKey {
         command: Command,
         currentFragment: Fragment?,
         nextFragment: Fragment,
-        fragmentTransaction: FragmentTransaction
+        transaction: FragmentTransaction
     ) {
     }
 

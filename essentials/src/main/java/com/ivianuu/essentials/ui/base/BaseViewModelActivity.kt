@@ -17,7 +17,7 @@
 package com.ivianuu.essentials.ui.base
 
 import android.arch.lifecycle.ViewModel
-import android.arch.lifecycle.ViewModelProviders
+import android.arch.lifecycle.ViewModelProvider
 import com.ivianuu.essentials.util.DaggerViewModelFactory
 import com.ivianuu.essentials.util.ext.unsafeLazy
 import javax.inject.Inject
@@ -30,7 +30,7 @@ abstract class BaseViewModelActivity<VM : ViewModel> : BaseActivity() {
     @Inject lateinit var viewModelFactory: DaggerViewModelFactory<VM>
 
     protected val viewModel: VM by unsafeLazy {
-        ViewModelProviders.of(this, viewModelFactory)[ViewModel::class.java] as VM
+        ViewModelProvider(this, viewModelFactory)[ViewModel::class.java] as VM
     }
 
 }

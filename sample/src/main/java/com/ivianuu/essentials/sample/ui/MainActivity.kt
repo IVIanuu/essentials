@@ -17,17 +17,17 @@
 package com.ivianuu.essentials.sample.ui
 
 import android.os.Bundle
-import com.ivianuu.essentials.ui.base.BaseActivity
 import com.ivianuu.essentials.ui.base.BaseActivityModule
+import com.ivianuu.essentials.ui.base.BaseControllerActivity
 import dagger.Module
 
-class MainActivity : BaseActivity() {
+class MainActivity : BaseControllerActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         if (savedInstanceState == null) {
-            router.newRootScreen(CounterKey(1))
+            travelerRouter.newRootScreen(CounterControllerKey(1))
         }
     }
 }

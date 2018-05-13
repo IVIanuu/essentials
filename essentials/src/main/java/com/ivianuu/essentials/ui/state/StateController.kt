@@ -14,35 +14,22 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.injection
+package com.ivianuu.essentials.ui.state
 
-import javax.inject.Qualifier
+import android.view.View
+import com.ivianuu.essentials.ui.base.BaseViewModelController
+import com.ivianuu.essentials.util.ext.subscribeForUi
 
-@Qualifier
-annotation class ForApp
+/**
+ * Controller with a single state
+ */
+abstract class StateController<T : Any, VM : StateViewModel<T>> : BaseViewModelController<VM>() {
 
-@Qualifier
-annotation class ForActivity
+    override fun onAttach(view: View) {
+        super.onAttach(view)
 
-@Qualifier
-annotation class ForController
+        viewModel.state.subscribeForUi(this, this::render)
+    }
 
-@Qualifier
-annotation class ForChildController
-
-@Qualifier
-annotation class ForFragment
-
-@Qualifier
-annotation class ForChildFragment
-
-@Qualifier
-annotation class ForService
-
-@Qualifier
-annotation class ForView
-
-@Qualifier
-annotation class ForChildView
-
-@Qualifier annotation class DefaultSharedPrefs
+    protected abstract fun render(state: T)
+}

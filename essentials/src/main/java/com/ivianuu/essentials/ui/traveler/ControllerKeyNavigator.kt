@@ -19,23 +19,22 @@ package com.ivianuu.essentials.ui.traveler
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
-import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentTransaction
+import com.ivianuu.conductor.Controller
+import com.ivianuu.conductor.Router
+import com.ivianuu.conductor.RouterTransaction
 import com.ivianuu.traveler.commands.Command
 import com.ivianuu.traveler.commands.Forward
 import com.ivianuu.traveler.commands.Replace
-import com.ivianuu.traveler.fragments.FragmentAppNavigator
+import com.ivianuu.traveler.conductorfork.ControllerAppNavigator
 
 /**
  * Navigator for key based navigation
  */
-open class KeyNavigator(
+open class ControllerKeyNavigator(
     activity: FragmentActivity,
-    fragmentManager: FragmentManager,
-    containerId: Int
-): FragmentAppNavigator(activity, fragmentManager, containerId) {
+    router: Router
+): ControllerAppNavigator(activity, router) {
 
     override fun createActivityIntent(context: Context, key: Any, data: Any?): Intent? {
         return if (key is ActivityKey) {
@@ -55,29 +54,21 @@ open class KeyNavigator(
         return key?.createStartActivityOptions(command, activityIntent)
     }
 
-    override fun createFragment(key: Any, data: Any?): Fragment? {
-        return if (key is FragmentKey) {
+    override fun createController(key: Any, data: Any?): Controller? {
+        return if (key is ControllerKey) {
             key.newInstance(data)
         } else {
             null
         }
     }
 
-    override fun setupFragmentTransaction(
-        command: Command,
-        currentFragment: Fragment?,
-        nextFragment: Fragment,
-        transaction: FragmentTransaction
-    ) {
-        transaction.setReorderingAllowed(true)
-
+    override fun setupRouterTransaction(command: Command, transaction: RouterTransaction) {
         val key = when(command) {
-            is Forward -> command.key as FragmentKey
-            is Replace -> command.key as FragmentKey
+            is Forward -> command.key as ControllerKey
+            is Replace -> command.key as ControllerKey
             else -> null
         }
 
-        key?.setupFragmentTransaction(command, currentFragment,
-            nextFragment, transaction)
+        key?.setupTransaction(command, transaction)
     }
 }

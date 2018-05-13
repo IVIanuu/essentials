@@ -23,9 +23,9 @@ import com.ivianuu.essentials.util.ext.unsafeLazy
 import javax.inject.Inject
 
 /**
- * Essentials view model fragment
+ * Essentials view model fragment activity
  */
-abstract class BaseViewModelFragment<VM : ViewModel> : BaseFragment() {
+abstract class BaseViewModelFragmentActivity<VM : ViewModel> : BaseFragmentActivity() {
 
     @Inject lateinit var viewModelFactory: DaggerViewModelFactory<VM>
 

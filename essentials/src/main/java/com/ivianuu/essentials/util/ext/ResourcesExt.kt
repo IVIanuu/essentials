@@ -30,6 +30,7 @@ import android.util.TypedValue
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import com.ivianuu.conductor.Controller
 
 fun Context.getResAnim(resId: Int) : Animation = AnimationUtils.loadAnimation(this, resId)
 
@@ -70,6 +71,38 @@ fun Context.getResDrawable(resId : Int) : Drawable =
     ContextCompat.getDrawable(this, resId)!!
 
 fun Context.getResFont(resId: Int) : Typeface = ResourcesCompat.getFont(this, resId)!!
+
+fun Controller.getResAnim(resId: Int) = requireActivity().getResAnim(resId)
+
+fun Controller.getResIntArray(resId: Int)  = requireActivity().getResIntArray(resId)
+
+fun Controller.getResStringArray(resId: Int) = requireActivity().getResStringArray(resId)
+
+fun Controller.getResTextArray(resId: Int)= requireActivity().getResTextArray(resId)
+
+fun Controller.getResTypedArray(resId: Int) = requireActivity().getResTypedArray(resId)
+
+fun Controller.getResBool(resId: Int) = requireActivity().getResBool(resId)
+
+fun Controller.getResDimen(resId : Int) = requireActivity().getResDimen(resId)
+
+fun Controller.getResDimenPx(resId : Int) = requireActivity().getResDimenPx(resId)
+
+fun Controller.getResDimenPxOffset(resId : Int) = requireActivity().getResDimenPxOffset(resId)
+
+fun Controller.getResFloat(resId: Int) = requireActivity().getResFloat(resId)
+
+fun Controller.getResInt(resId: Int) : Int = requireActivity().getResInt(resId)
+
+fun Controller.getResBitmap(resId: Int) = requireActivity().getResBitmap(resId)
+
+fun Controller.getResColor(resId: Int) = requireActivity().getResColor(resId)
+
+fun Controller.getResColorStateList(resId: Int)= requireActivity().getResColorStateList(resId)
+
+fun Controller.getResDrawable(resId : Int)= requireActivity().getResDrawable(resId)
+
+fun Controller.getResFont(resId: Int) = requireActivity().getResFont(resId)
 
 fun Fragment.getResAnim(resId: Int) = requireActivity().getResAnim(resId)
 

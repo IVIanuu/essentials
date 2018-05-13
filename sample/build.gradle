@@ -25,13 +25,8 @@ android {
 }
 
 dependencies {
-    // Dagger
+    kapt Deps.contributerProcessor
     kapt Deps.daggerCompiler
-    kapt Deps.daggerAndroidProcessor
-
-    // Epoxy
     kapt Deps.epoxyProcessor
-
-    // Essentials
     implementation project(':essentials')
 }

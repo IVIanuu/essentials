@@ -16,12 +16,11 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import android.os.Bundle
 import android.os.Parcelable
 import android.view.View
 import com.ivianuu.essentials.sample.R
-import com.ivianuu.essentials.ui.base.BaseFragment
-import com.ivianuu.essentials.ui.traveler.FragmentKey
+import com.ivianuu.essentials.ui.base.BaseController
+import com.ivianuu.essentials.ui.traveler.ControllerKey
 import com.ivianuu.essentials.ui.traveler.requireKey
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_counter.*
@@ -29,24 +28,24 @@ import kotlinx.android.synthetic.main.fragment_counter.*
 /**
  * @author Manuel Wrage (IVIanuu)
  */
-class CounterFragment : BaseFragment() {
+class CounterController : BaseController() {
 
     override val layoutRes = R.layout.fragment_counter
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onViewCreated(view: View) {
+        super.onViewCreated(view)
 
-        val key = requireKey<CounterFragmentKey>()
-
+        val key = requireKey<CounterControllerKey>()
         title.text = "Count: ${key.count}"
 
-        go_up.setOnClickListener { travelerRouter.navigateTo(CounterFragmentKey(key.count + 1)) }
+        go_up.setOnClickListener { travelerRouter.navigateTo(CounterControllerKey(key.count + 1)) }
         do_sub.setOnClickListener { travelerRouter.exit() }
     }
+
 
 }
 
 @Parcelize
-data class CounterFragmentKey(val count: Int) : FragmentKey(), Parcelable {
-    override fun createFragment(data: Any?) = CounterFragment()
+data class CounterControllerKey(val count: Int) : ControllerKey(), Parcelable {
+    override fun createController(data: Any?) = CounterController()
 }

@@ -14,35 +14,23 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.injection
+package com.ivianuu.essentials.ui.base
 
-import javax.inject.Qualifier
+import android.arch.lifecycle.ViewModel
+import android.arch.lifecycle.ViewModelProvider
+import com.ivianuu.essentials.util.DaggerViewModelFactory
+import com.ivianuu.essentials.util.ext.unsafeLazy
+import javax.inject.Inject
 
-@Qualifier
-annotation class ForApp
+/**
+ * Essentials view model controller
+ */
+abstract class BaseViewModelController<VM : ViewModel> : BaseController() {
 
-@Qualifier
-annotation class ForActivity
+    @Inject lateinit var viewModelFactory: DaggerViewModelFactory<VM>
 
-@Qualifier
-annotation class ForController
+    protected val viewModel: VM by unsafeLazy {
+        ViewModelProvider(this, viewModelFactory)[ViewModel::class.java] as VM
+    }
 
-@Qualifier
-annotation class ForChildController
-
-@Qualifier
-annotation class ForFragment
-
-@Qualifier
-annotation class ForChildFragment
-
-@Qualifier
-annotation class ForService
-
-@Qualifier
-annotation class ForView
-
-@Qualifier
-annotation class ForChildView
-
-@Qualifier annotation class DefaultSharedPrefs
+}

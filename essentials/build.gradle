@@ -42,17 +42,21 @@ dependencies {
     api Deps.archComponentsLifecycleExtensions
 
     api Deps.autoDispose
-    api Deps.autoDisposeKotlin
-    api Deps.autoDisposeAndroid
-    api Deps.autoDisposeAndroidKotlin
+    api Deps.autoDisposeConductor
+    api Deps.autoDisposeView
+
+    api Deps.conductor
 
     api Deps.constraintLayout
+
+    api Deps.contributerAnnotations
+    api Deps.contributerView
+    kapt Deps.contributerProcessor
 
     api Deps.dagger
     api Deps.daggerAndroid
     api Deps.daggerAndroidSupport
     kapt Deps.daggerCompiler
-    kapt Deps.daggerAndroidProcessor
 
     api Deps.epoxy
     kapt Deps.epoxyProcessor
@@ -88,6 +92,7 @@ dependencies {
     api Deps.timber
 
     api Deps.traveler
+    api Deps.travelerConductor
     api Deps.travelerFragments
 }
 

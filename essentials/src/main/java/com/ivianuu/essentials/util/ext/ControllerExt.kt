@@ -14,35 +14,21 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.injection
+package com.ivianuu.essentials.util.ext
 
-import javax.inject.Qualifier
+import android.support.v7.app.AppCompatActivity
+import android.view.View
+import com.ivianuu.conductor.Controller
 
-@Qualifier
-annotation class ForApp
+val Controller.appCompatActivity: AppCompatActivity?
+    get() = activity as AppCompatActivity?
 
-@Qualifier
-annotation class ForActivity
+fun Controller.hideInputMethod() {
+    requireActivity().hideInputMethod()
+}
 
-@Qualifier
-annotation class ForController
+fun Controller.showInputMethod(view: View) {
+    requireActivity().showInputMethod(view)
+}
 
-@Qualifier
-annotation class ForChildController
-
-@Qualifier
-annotation class ForFragment
-
-@Qualifier
-annotation class ForChildFragment
-
-@Qualifier
-annotation class ForService
-
-@Qualifier
-annotation class ForView
-
-@Qualifier
-annotation class ForChildView
-
-@Qualifier annotation class DefaultSharedPrefs
+fun Controller.requireAppCompatActivity() = requireActivity() as AppCompatActivity

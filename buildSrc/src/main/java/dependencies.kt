@@ -10,9 +10,11 @@ object Versions {
 
     const val androidGradlePlugin = "3.1.2"
     const val archComponents = "1.1.1"
-    const val autoDispose = "0.8.0"
+    const val autoDispose = "0f577ee6c4"
     const val butterknife = "9.0.0-SNAPSHOT"
+    const val conductor = "47093e8fe2"
     const val constraintLayout = "1.1.0"
+    const val contributer = "3c13348e4b"
     const val dagger = "2.16"
     const val epoxy = "2.12.0"
     const val fabric = "2.7.1"
@@ -30,7 +32,7 @@ object Versions {
     const val seekBarPreference = "7bd4049da0"
     const val support = "27.1.1"
     const val timber = "4.7.0"
-    const val traveler = "d94acfd773"
+    const val traveler = "88665c093b"
 }
 //
 object Deps {
@@ -38,20 +40,24 @@ object Deps {
 
     const val archComponentsLifecycleExtensions = "android.arch.lifecycle:extensions:${Versions.archComponents}"
 
-    const val autoDispose = "com.uber.autodispose:autodispose:${Versions.autoDispose}"
-    const val autoDisposeKotlin = "com.uber.autodispose:autodispose-kotlin:${Versions.autoDispose}"
-    const val autoDisposeAndroid = "com.uber.autodispose:autodispose-android:${Versions.autoDispose}"
-    const val autoDisposeAndroidKotlin = "com.uber.autodispose:autodispose-android-kotlin:${Versions.autoDispose}"
+    const val autoDispose = "com.github.IVIanuu.AutoDispose:autodispose:${Versions.autoDispose}"
+    const val autoDisposeConductor = "com.github.IVIanuu.AutoDispose:autodispose-conductorfork:${Versions.autoDispose}"
+    const val autoDisposeView = "com.github.IVIanuu.AutoDispose:autodispose-view:${Versions.autoDispose}"
 
     const val butterknifeGradlePlugin = "com.jakewharton:butterknife-gradle-plugin:${Versions.butterknife}"
 
+    const val conductor = "com.github.IVIanuu:Conductor:${Versions.conductor}"
+
     const val constraintLayout = "com.android.support.constraint:constraint-layout:${Versions.constraintLayout}"
+
+    const val contributerAnnotations = "com.github.IVIanuu.Contributer:contributer-annotations:${Versions.contributer}"
+    const val contributerProcessor = "com.github.IVIanuu.Contributer:contributer-processor:${Versions.contributer}"
+    const val contributerView = "com.github.IVIanuu.Contributer:contributer-view:${Versions.contributer}"
 
     const val dagger = "com.google.dagger:dagger:${Versions.dagger}"
     const val daggerAndroid = "com.google.dagger:dagger-android:${Versions.dagger}"
     const val daggerAndroidSupport = "com.google.dagger:dagger-android-support:${Versions.dagger}"
     const val daggerCompiler = "com.google.dagger:dagger-compiler:${Versions.dagger}"
-    const val daggerAndroidProcessor = "com.google.dagger:dagger-android-processor:${Versions.dagger}"
 
     const val epoxy = "com.airbnb.android:epoxy:${Versions.epoxy}"
     const val epoxyProcessor = "com.airbnb.android:epoxy-processor:${Versions.epoxy}"
@@ -87,5 +93,6 @@ object Deps {
     const val timber = "com.jakewharton.timber:timber:${Versions.timber}"
 
     const val traveler = "com.github.IVIanuu.Traveler:traveler:${Versions.traveler}"
+    const val travelerConductor = "com.github.IVIanuu.Traveler:traveler-conductorfork:${Versions.traveler}"
     const val travelerFragments = "com.github.IVIanuu.Traveler:traveler-fragments:${Versions.traveler}"
 }

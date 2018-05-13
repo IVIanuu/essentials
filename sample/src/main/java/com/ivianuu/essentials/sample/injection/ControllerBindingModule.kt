@@ -14,35 +14,21 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.injection
+package com.ivianuu.essentials.sample.injection
 
-import javax.inject.Qualifier
+import com.ivianuu.essentials.injection.PerController
+import com.ivianuu.essentials.sample.ui.CounterController
+import dagger.Module
+import dagger.android.ContributesAndroidInjector
 
-@Qualifier
-annotation class ForApp
+/**
+ * @author Manuel Wrage (IVIanuu)
+ */
+@Module
+abstract class ControllerBindingModule {
 
-@Qualifier
-annotation class ForActivity
+    @PerController
+    @ContributesAndroidInjector
+    abstract fun bincCounterController(): CounterController
 
-@Qualifier
-annotation class ForController
-
-@Qualifier
-annotation class ForChildController
-
-@Qualifier
-annotation class ForFragment
-
-@Qualifier
-annotation class ForChildFragment
-
-@Qualifier
-annotation class ForService
-
-@Qualifier
-annotation class ForView
-
-@Qualifier
-annotation class ForChildView
-
-@Qualifier annotation class DefaultSharedPrefs
+}

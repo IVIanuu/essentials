@@ -17,7 +17,9 @@
 package com.ivianuu.essentials.sample.app
 
 import android.app.Application
+import com.ivianuu.contributer.annotations.AndroidInjectorKeyRegistry
 import com.ivianuu.essentials.injection.EssentialsModule
+import com.ivianuu.essentials.injection.conductor.ControllerKey
 import com.ivianuu.essentials.sample.injection.ActivityBindingModule
 import dagger.BindsInstance
 import dagger.Component
@@ -27,6 +29,7 @@ import javax.inject.Singleton
 /**
  * App component
  */
+@AndroidInjectorKeyRegistry(keys = [ControllerKey::class])
 @Singleton
 @Component(
     modules = [

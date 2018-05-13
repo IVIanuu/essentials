@@ -21,21 +21,19 @@ import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
-import android.support.v4.app.FragmentManager
-import android.support.v4.app.isInBackstack
 import android.support.v7.app.AppCompatActivity
+import com.ivianuu.autodispose.LifecycleScopeProvider
+import com.ivianuu.conductor.Controller
 import com.ivianuu.essentials.injection.ForActivity
+import com.ivianuu.essentials.injection.conductor.HasControllerInjector
 import com.ivianuu.essentials.ui.common.ActivityEvent
 import com.ivianuu.essentials.ui.common.ActivityEvent.*
-import com.ivianuu.essentials.ui.common.BackListener
 import com.ivianuu.essentials.ui.common.CORRESPONDING_ACTIVITY_EVENTS
-import com.ivianuu.essentials.ui.traveler.KeyNavigator
-import com.ivianuu.essentials.util.ext.unsafeLazy
 import com.ivianuu.rxactivityresult.RxActivityResult
 import com.ivianuu.rxpermissions.RxPermissions
+import com.ivianuu.traveler.Navigator
 import com.ivianuu.traveler.NavigatorHolder
 import com.ivianuu.traveler.Router
-import com.uber.autodispose.LifecycleScopeProvider
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -49,21 +47,18 @@ import javax.inject.Inject
 /**
  * Base activity
  */
-abstract class BaseActivity : AppCompatActivity(), HasSupportFragmentInjector,
+abstract class BaseActivity : AppCompatActivity(), HasControllerInjector, HasSupportFragmentInjector,
     LifecycleScopeProvider<ActivityEvent> {
 
+    @Inject lateinit var controllerInjector: DispatchingAndroidInjector<Controller>
     @Inject lateinit var supportFragmentInjector: DispatchingAndroidInjector<Fragment>
 
     @Inject lateinit var navigatorHolder: NavigatorHolder
-    @Inject lateinit var router: Router
-
-    protected open val fragmentContainer = android.R.id.content
+    @Inject lateinit var travelerRouter: Router
 
     protected open val layoutRes = -1
 
-    protected open val navigator by unsafeLazy {
-        KeyNavigator(this, supportFragmentManager, fragmentContainer)
-    }
+    abstract val navigator: Navigator
 
     private val lifecycleSubject = BehaviorSubject.create<ActivityEvent>()
 
@@ -107,11 +102,7 @@ abstract class BaseActivity : AppCompatActivity(), HasSupportFragmentInjector,
         super.onDestroy()
     }
 
-    override fun onBackPressed() {
-        if (!recursivelyDispatchOnBackPressed(supportFragmentManager)) {
-            super.onBackPressed()
-        }
-    }
+    override fun controllerInjector(): AndroidInjector<Controller> = controllerInjector
 
     override fun supportFragmentInjector(): AndroidInjector<Fragment> = supportFragmentInjector
 
@@ -120,32 +111,6 @@ abstract class BaseActivity : AppCompatActivity(), HasSupportFragmentInjector,
     override fun correspondingEvents() = CORRESPONDING_ACTIVITY_EVENTS
 
     override fun peekLifecycle() = lifecycleSubject.value
-
-    private fun recursivelyDispatchOnBackPressed(fm: FragmentManager): Boolean {
-        if (fm.backStackEntryCount == 0)
-            return false
-
-        val reverseOrder = fm.fragments
-            .filter {
-                it is BackListener
-                        && it.isInBackstack
-                        && it.isVisible
-            }
-            .reversed()
-
-        for (f in reverseOrder) {
-            val handledByChildFragments = recursivelyDispatchOnBackPressed(f.childFragmentManager)
-            if (handledByChildFragments) {
-                return true
-            }
-
-            val backpressable = f as BackListener
-            if (backpressable.handleBack()) {
-                return true
-            }
-        }
-        return false
-    }
 }
 
 @Module
