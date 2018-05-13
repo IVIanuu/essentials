@@ -30,13 +30,13 @@ abstract class BasePreferenceFragment : BaseFragment(), PreferenceFragmentDelega
     open val preferenceRes = -1
 
     override val preferenceFragmentDelegate by unsafeLazy {
-        PreferenceFragmentDelegate(preferenceContainerId, preferenceTag)
+        PreferenceFragmentDelegate(childFragmentManager, preferenceContainerId, preferenceTag)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        preferenceFragmentDelegate.attach(requireActivity().supportFragmentManager)
+        preferenceFragmentDelegate.onCreate()
         if (preferenceRes != -1) {
             preferenceFragmentDelegate.addPreferencesFromResource(preferenceRes)
         }
