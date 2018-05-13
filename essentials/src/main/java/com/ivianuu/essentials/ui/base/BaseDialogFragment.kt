@@ -41,7 +41,7 @@ abstract class BaseDialogFragment : DialogFragment(), HasSupportFragmentInjector
 
     @Inject lateinit var supportFragmentInjector: DispatchingAndroidInjector<Fragment>
 
-    @Inject lateinit var travelerRouter: Router
+    @Inject lateinit var router: Router
 
     private val lifecycleSubject = BehaviorSubject.create<FragmentEvent>()
 

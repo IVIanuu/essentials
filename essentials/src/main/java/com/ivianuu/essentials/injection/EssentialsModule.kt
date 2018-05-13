@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.injection
 
 import com.ivianuu.essentials.app.EssentialsAppModule
-import com.ivianuu.essentials.injection.conductor.ConductorInjectionModule
 import dagger.Module
 import dagger.android.AndroidInjectionModule
 import dagger.android.support.AndroidSupportInjectionModule
@@ -28,7 +27,6 @@ import dagger.android.support.AndroidSupportInjectionModule
 @Module(includes = [
     AndroidInjectionModule::class,
     AndroidSupportInjectionModule::class,
-    ConductorInjectionModule::class,
     EssentialsAppModule::class,
     TravelerModule::class
 ])

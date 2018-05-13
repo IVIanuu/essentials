@@ -33,7 +33,7 @@ interface PreferenceFragmentDelegateHolder {
             preferenceFragmentDelegate.adapterFactory = value
         }
 
-    val preferenceManager: PreferenceManager
+    val preferenceManager: PreferenceManager?
         get() = preferenceFragmentDelegate.preferenceManager
 
     var preferenceScreen: PreferenceScreen?

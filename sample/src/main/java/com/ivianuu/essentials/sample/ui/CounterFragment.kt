@@ -36,17 +36,17 @@ class CounterFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val key = requireKey<CounterFragmentKey>()
+        val key = requireKey<CounterKey>()
 
         title.text = "Count: ${key.count}"
 
-        go_up.setOnClickListener { travelerRouter.navigateTo(CounterFragmentKey(key.count + 1)) }
-        go_down.setOnClickListener { travelerRouter.exit() }
+        go_up.setOnClickListener { router.navigateTo(CounterKey(key.count + 1)) }
+        go_down.setOnClickListener { router.exit() }
     }
 
 }
 
 @Parcelize
-data class CounterFragmentKey(val count: Int) : FragmentKey(), Parcelable {
+data class CounterKey(val count: Int) : FragmentKey(), Parcelable {
     override fun createFragment(data: Any?) = CounterFragment()
 }

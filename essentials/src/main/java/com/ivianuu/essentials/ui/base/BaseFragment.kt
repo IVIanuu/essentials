@@ -43,7 +43,7 @@ abstract class BaseFragment : Fragment(), BackListener, HasSupportFragmentInject
 
     @Inject lateinit var supportFragmentInjector: DispatchingAndroidInjector<Fragment>
 
-    @Inject lateinit var travelerRouter: Router
+    @Inject lateinit var router: Router
 
     protected open val layoutRes = -1
 

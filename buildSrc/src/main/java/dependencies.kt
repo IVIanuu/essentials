@@ -12,15 +12,12 @@ object Versions {
     const val archComponents = "1.1.1"
     const val autoDispose = "0f577ee6c4"
     const val butterknife = "9.0.0-SNAPSHOT"
-    const val conductor = "47093e8fe2"
     const val constraintLayout = "1.1.0"
-    const val contributer = "3c13348e4b"
     const val dagger = "2.16"
     const val epoxy = "2.12.0"
     const val fabric = "2.7.1"
     const val kotlin = "1.2.41"
     const val ktx = "0.3"
-    const val liveDataExtensions = "1.0.1"
     const val mavenGradle = "2.1"
     const val materialDialogs = "0.9.6.0"
     const val rxActivityResult = "6da49c1fcf"
@@ -41,23 +38,17 @@ object Deps {
     const val archComponentsLifecycleExtensions = "android.arch.lifecycle:extensions:${Versions.archComponents}"
 
     const val autoDispose = "com.github.IVIanuu.AutoDispose:autodispose:${Versions.autoDispose}"
-    const val autoDisposeConductor = "com.github.IVIanuu.AutoDispose:autodispose-conductorfork:${Versions.autoDispose}"
     const val autoDisposeView = "com.github.IVIanuu.AutoDispose:autodispose-view:${Versions.autoDispose}"
 
     const val butterknifeGradlePlugin = "com.jakewharton:butterknife-gradle-plugin:${Versions.butterknife}"
 
-    const val conductor = "com.github.IVIanuu:Conductor:${Versions.conductor}"
-
     const val constraintLayout = "com.android.support.constraint:constraint-layout:${Versions.constraintLayout}"
-
-    const val contributerAnnotations = "com.github.IVIanuu.Contributer:contributer-annotations:${Versions.contributer}"
-    const val contributerProcessor = "com.github.IVIanuu.Contributer:contributer-processor:${Versions.contributer}"
-    const val contributerView = "com.github.IVIanuu.Contributer:contributer-view:${Versions.contributer}"
 
     const val dagger = "com.google.dagger:dagger:${Versions.dagger}"
     const val daggerAndroid = "com.google.dagger:dagger-android:${Versions.dagger}"
     const val daggerAndroidSupport = "com.google.dagger:dagger-android-support:${Versions.dagger}"
     const val daggerCompiler = "com.google.dagger:dagger-compiler:${Versions.dagger}"
+    const val daggerAndroidProcessor = "com.google.dagger:dagger-android-processor:${Versions.dagger}"
 
     const val epoxy = "com.airbnb.android:epoxy:${Versions.epoxy}"
     const val epoxyProcessor = "com.airbnb.android:epoxy-processor:${Versions.epoxy}"
@@ -67,8 +58,6 @@ object Deps {
     const val ktx = "androidx.core:core-ktx:${Versions.ktx}"
     const val kotlinGradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.kotlin}"
     const val kotlinStdLib = "org.jetbrains.kotlin:kotlin-stdlib-jre7:${Versions.kotlin}"
-
-    const val liveDataExtensions = "com.snakydesign.livedataextensions:lives:${Versions.liveDataExtensions}"
 
     const val materialDialogsCore = "com.afollestad.material-dialogs:core:${Versions.materialDialogs}"
     const val materialDialogsCommons = "com.afollestad.material-dialogs:commons:${Versions.materialDialogs}"
@@ -93,6 +82,5 @@ object Deps {
     const val timber = "com.jakewharton.timber:timber:${Versions.timber}"
 
     const val traveler = "com.github.IVIanuu.Traveler:traveler:${Versions.traveler}"
-    const val travelerConductor = "com.github.IVIanuu.Traveler:traveler-conductorfork:${Versions.traveler}"
     const val travelerFragments = "com.github.IVIanuu.Traveler:traveler-fragments:${Versions.traveler}"
 }

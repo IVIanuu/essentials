@@ -21,7 +21,6 @@ import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Observer
 import com.ivianuu.essentials.util.SingleLiveEvent
-import com.snakydesign.livedataextensions.filter
 import io.reactivex.*
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.subscribeBy
@@ -39,8 +38,6 @@ fun <T> singleLiveEvent() = SingleLiveEvent<T>()
 fun <T> LiveData<T>.observeK(owner: LifecycleOwner, onChanged: (T) -> Unit) {
     observe(owner, Observer<T> { it?.let(onChanged) })
 }
-
-fun <T> LiveData<T>.filter(predicate: (T) -> Boolean) = filter { predicate(it!!) }
 
 fun <T> LiveData<T>.requireValue() = value ?: throw IllegalStateException("value is null")
 

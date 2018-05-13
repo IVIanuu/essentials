@@ -16,19 +16,9 @@
 
 package com.ivianuu.essentials.app
 
-import com.ivianuu.conductor.Controller
-import com.ivianuu.essentials.injection.conductor.HasControllerInjector
-import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.DaggerApplication
-import javax.inject.Inject
 
 /**
  * App
  */
-abstract class BaseApp : DaggerApplication(), HasControllerInjector {
-
-    @Inject lateinit var controllerInjector: DispatchingAndroidInjector<Controller>
-
-    override fun controllerInjector() = controllerInjector
-
-}
+abstract class BaseApp : DaggerApplication()

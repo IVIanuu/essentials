@@ -16,19 +16,12 @@
 
 package com.ivianuu.essentials.util.ext
 
-import android.support.v7.app.AppCompatActivity
-import android.view.View
-import com.ivianuu.conductor.Controller
+import android.support.v7.preference.Preference
+import com.ivianuu.essentials.ui.base.BaseActivity
 
-val Controller.appCompatActivity: AppCompatActivity?
-    get() = activity as AppCompatActivity?
-
-fun Controller.hideInputMethod() {
-    requireActivity().hideInputMethod()
+fun Preference.navigateOnClick(key: Any, data: Any? = null) {
+    setOnPreferenceClickListener {
+        (it.context as BaseActivity).router.navigateTo(key, data)
+        true
+    }
 }
-
-fun Controller.showInputMethod(view: View) {
-    requireActivity().showInputMethod(view)
-}
-
-fun Controller.requireAppCompatActivity() = requireActivity() as AppCompatActivity
