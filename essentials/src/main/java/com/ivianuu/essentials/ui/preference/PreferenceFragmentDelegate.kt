@@ -29,29 +29,29 @@ import android.support.v7.widget.RecyclerView
  * Preference fragment delegate
  */
 class PreferenceFragmentDelegate(
+    private val fragmentManager: FragmentManager,
     private val containerId: Int,
     private val tag: String = "prefs"
 ) {
 
-    var fragment: PrefDelegateFragment? = null
-        private set
+    lateinit var fragment: PrefDelegateFragment
 
     var adapterFactory: AdapterFactory?
-        get() = fragment?.adapterFactory
+        get() = fragment.adapterFactory
         set(value) {
-            fragment?.adapterFactory = value
+            fragment.adapterFactory = value
         }
 
-    val preferenceManager: PreferenceManager?
-        get() = fragment?.preferenceManager
+    val preferenceManager: PreferenceManager
+        get() = fragment.preferenceManager
 
     var preferenceScreen: PreferenceScreen?
-        get() = fragment?.preferenceScreen
+        get() = fragment.preferenceScreen
         set(value) {
-            fragment?.preferenceScreen = value
+            fragment.preferenceScreen = value
         }
 
-    fun attach(fragmentManager: FragmentManager) {
+    fun onCreate() {
         var fragment = fragmentManager
             .findFragmentByTag(tag) as PrefDelegateFragment?
 
@@ -65,42 +65,35 @@ class PreferenceFragmentDelegate(
         this.fragment = fragment
     }
 
-    fun detach(fragmentManager: FragmentManager) {
-        fragmentManager.beginTransaction()
-            .remove(fragment)
-            .commitNow()
-        fragment = null
-    }
-
     fun addPreferencesFromResource(res: Int) {
-        fragment?.addPreferencesFromResource(res)
+        fragment.addPreferencesFromResource(res)
     }
 
     fun setPreferencesFromResource(res: Int, key: CharSequence? = null) {
-        fragment?.setPreferencesFromResource(res, key.toString())
+        fragment.setPreferencesFromResource(res, key.toString())
     }
 
     @Suppress("UNCHECKED_CAST")
     fun <T : Preference> findPreference(key: CharSequence): T? =
-        fragment?.findPreference(key) as T
+        fragment.findPreference(key) as T
 
     fun <T : Preference> requirePreference(key: CharSequence): T =
-            findPreference(key) ?: throw IllegalStateException("no preference found for $key")
+        findPreference(key) ?: throw IllegalStateException("no preference found for $key")
 
     fun scrollToPreference(preference: Preference) {
-        fragment?.scrollToPreference(preference)
+        fragment.scrollToPreference(preference)
     }
 
     fun scrollToPreference(key: CharSequence) {
-        fragment?.scrollToPreference(key.toString())
+        fragment.scrollToPreference(key.toString())
     }
 
     fun setDivider(divider: Drawable?) {
-        fragment?.setDivider(divider)
+        fragment.setDivider(divider)
     }
 
     fun setDividerHeight(height: Int) {
-        fragment?.setDividerHeight(height)
+        fragment.setDividerHeight(height)
     }
 
     interface AdapterFactory {
