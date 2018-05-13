@@ -18,9 +18,11 @@ package com.ivianuu.essentials.sample.ui
 
 import android.app.Dialog
 import android.os.Bundle
+import android.view.View
 import com.afollestad.materialdialogs.MaterialDialog
 import com.ivianuu.essentials.ui.base.BaseDialogController
 import com.ivianuu.essentials.ui.traveler.DialogControllerClassKey
+import com.ivianuu.essentials.util.ext.d
 
 /**
  * @author Manuel Wrage (IVIanuu)
@@ -35,6 +37,10 @@ class SomeDialogController : BaseDialogController() {
             .build()
     }
 
+    override fun onDestroyView(view: View) {
+        d { "on destroy view" }
+        super.onDestroyView(view)
+    }
 }
 
 object SomeDialogKey : DialogControllerClassKey(SomeDialogController::class)

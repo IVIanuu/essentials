@@ -21,17 +21,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.ivianuu.conductor.Router
-import com.ivianuu.conductor.RouterTransaction
-import com.ivianuu.conductor.changehandler.SimpleSwapChangeHandler
 
 /**
  * Base dialog controller
  */
-abstract class BaseDialogController(args: Bundle = Bundle()) : BaseController(args) {
+abstract class BaseDialogController @JvmOverloads constructor(args: Bundle = Bundle()) : BaseController(args) {
 
-    private var dialog: Dialog? = null
-    private var dismissed = false
+    var dialog: Dialog? = null
+        private set
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,16 +37,20 @@ abstract class BaseDialogController(args: Bundle = Bundle()) : BaseController(ar
     ): View {
         dialog = onCreateDialog(savedViewState).apply {
             ownerActivity = requireActivity()
-            setOnDismissListener { dismiss() }
-            if (savedViewState != null) {
-                val dialogState = savedViewState.getBundle(KEY_DIALOG_SAVED_STATE)
-                if (dialogState != null) {
-                    onRestoreInstanceState(dialogState)
-                }
+            setOnDismissListener {
+                requireRouter().popController(this@BaseDialogController)
             }
         }
         //stub view
         return View(activity)
+    }
+
+    override fun onRestoreViewState(view: View, savedViewState: Bundle) {
+        super.onRestoreViewState(view, savedViewState)
+        val dialogState = savedViewState.getBundle(KEY_DIALOG_SAVED_STATE)
+        if (dialogState != null) {
+            onRestoreInstanceState(dialogState)
+        }
     }
 
     override fun onSaveViewState(view: View, outState: Bundle) {
@@ -70,29 +71,12 @@ abstract class BaseDialogController(args: Bundle = Bundle()) : BaseController(ar
     }
 
     override fun onDestroyView(view: View) {
-        super.onDestroyView(view)
         dialog?.let {
             it.setOnDismissListener(null)
             it.dismiss()
         }
         dialog = null
-    }
-
-    fun showDialog(router: Router, tag: String? = null) {
-        dismissed = false
-        router.pushController(
-            RouterTransaction.with(this)
-                .pushChangeHandler(SimpleSwapChangeHandler(false))
-                .tag(tag)
-        )
-    }
-
-    fun dismiss() {
-        if (dismissed) {
-            return
-        }
-        requireRouter().popController(this)
-        dismissed = true
+        super.onDestroyView(view)
     }
 
     protected abstract fun onCreateDialog(savedViewState: Bundle?): Dialog

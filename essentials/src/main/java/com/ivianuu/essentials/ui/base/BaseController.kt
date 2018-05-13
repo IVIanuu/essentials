@@ -69,7 +69,7 @@ abstract class BaseController @JvmOverloads constructor(args: Bundle = Bundle())
         savedViewState: Bundle?
     ): View {
         val view = if (layoutRes != -1) {
-            inflater.inflate(layoutRes, container, false)
+            requireActivity().layoutInflater.inflate(layoutRes, container, false)
         } else {
             throw IllegalStateException("no layout res set")
         }
