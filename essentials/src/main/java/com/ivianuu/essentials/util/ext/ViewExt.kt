@@ -17,26 +17,17 @@
 package com.ivianuu.essentials.util.ext
 
 import android.app.Activity
-import android.content.ContextWrapper
 import android.view.View
 import com.ivianuu.essentials.ui.base.BaseActivity
 
-val View.activity: Activity
-    get() {
-        var context = context
-        while (context is ContextWrapper) {
-            if (context is Activity) {
-                return context
-            }
-            context = context.baseContext
-        }
+val View.activity: Activity?
+    get() = context.findActivity()
 
-        throw IllegalStateException("view not attached to a activity")
-    }
+fun View.requireActivity() = context.findActivityOrThrow()
 
 fun View.navigateOnClick(key: Any, data: Any? = null) {
     setOnClickListener {
-        (activity as BaseActivity).router.navigateTo(key, data)
+        (requireActivity() as BaseActivity).router.navigateTo(key, data)
     }
 }
 

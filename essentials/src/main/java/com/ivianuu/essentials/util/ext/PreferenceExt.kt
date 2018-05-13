@@ -21,7 +21,8 @@ import com.ivianuu.essentials.ui.base.BaseActivity
 
 fun Preference.navigateOnClick(key: Any, data: Any? = null) {
     setOnPreferenceClickListener {
-        (it.context as BaseActivity).router.navigateTo(key, data)
+        val activity = context.findActivityOrThrow()
+        (activity as BaseActivity).router.navigateTo(key, data)
         true
     }
 }

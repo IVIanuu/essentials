@@ -16,10 +16,8 @@
 
 package com.ivianuu.essentials.util.ext
 
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
+import android.app.Activity
+import android.content.*
 
 fun Context.registerReceiver(intentFilter: IntentFilter, onReceive: (intent: Intent) -> Unit): BroadcastReceiver {
     return object : BroadcastReceiver() {
@@ -36,3 +34,22 @@ fun Context.unregisterReceiverSafe(receiver: BroadcastReceiver) {
         // ignore
     }
 }
+
+fun Context.findActivity(): Activity? {
+    var context = this
+    while (context is ContextWrapper) {
+        if (context is Activity) {
+            return context
+        }
+        context = context.baseContext
+    }
+
+    return if (context is Activity) {
+        context
+    } else {
+        null
+    }
+}
+
+fun Context.findActivityOrThrow() =
+    findActivity() ?: throw IllegalStateException("base context is no activity")
