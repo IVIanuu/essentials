@@ -49,6 +49,7 @@ dependencies {
     api Deps.dagger
     api Deps.daggerAndroid
     api Deps.daggerAndroidSupport
+    kapt Deps.daggerCompiler
     kapt Deps.daggerAndroidProcessor
 
     api Deps.epoxy
