@@ -74,8 +74,11 @@ class PreferenceFragmentDelegate(
     }
 
     @Suppress("UNCHECKED_CAST")
-    fun <T : Preference> findPreference(key: CharSequence) =
+    fun <T : Preference> findPreference(key: CharSequence): T? =
         fragment.findPreference(key) as T
+
+    fun <T : Preference> requirePreference(key: CharSequence): T =
+            findPreference(key) ?: throw IllegalStateException("no preference found for $key")
 
     fun scrollToPreference(preference: Preference) {
         fragment.scrollToPreference(preference)
