@@ -80,6 +80,7 @@ class PreferenceFragmentDelegate(
     fun <T : Preference> requirePreference(key: CharSequence): T =
         findPreference(key) ?: throw IllegalStateException("no preference found for $key")
 
+
     fun scrollToPreference(preference: Preference) {
         fragment.scrollToPreference(preference)
     }
