@@ -25,6 +25,7 @@ import android.support.v4.app.FragmentManager
 import android.support.v4.app.isInBackstack
 import android.support.v7.app.AppCompatActivity
 import com.ivianuu.autodispose.LifecycleScopeProvider
+import com.ivianuu.essentials.injection.EssentialsBindingModule
 import com.ivianuu.essentials.injection.ForActivity
 import com.ivianuu.essentials.ui.common.ActivityEvent
 import com.ivianuu.essentials.ui.common.ActivityEvent.*
@@ -148,7 +149,7 @@ abstract class BaseActivity : AppCompatActivity(), HasSupportFragmentInjector,
     }
 }
 
-@Module
+@Module(includes = [EssentialsBindingModule::class])
 abstract class BaseActivityModule<T : BaseActivity> {
 
     @Binds

@@ -18,18 +18,11 @@ package com.ivianuu.essentials.util.ext
 
 import android.app.Activity
 import android.view.View
-import com.ivianuu.essentials.ui.base.BaseActivity
 
 val View.activity: Activity?
     get() = context.findActivity()
 
 fun View.requireActivity() = context.findActivityOrThrow()
-
-fun View.navigateOnClick(key: Any, data: Any? = null) {
-    setOnClickListener {
-        (requireActivity() as BaseActivity).router.navigateTo(key, data)
-    }
-}
 
 fun View.doOnViewAttachedToWindow(action: ((v: View) -> Unit)?) =
         addOnAttachStateChangeListener(onViewAttachedToWindow = action)
