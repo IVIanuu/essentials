@@ -16,7 +16,7 @@
 
 package com.ivianuu.essentials.util.ext
 
-import com.ivianuu.essentials.ui.common.ResultKey
+import com.ivianuu.essentials.ui.traveler.ResultKey
 import com.ivianuu.traveler.Router
 import com.ivianuu.traveler.result.ResultListener
 import io.reactivex.Observable

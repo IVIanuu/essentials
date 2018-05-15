@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.common
+package com.ivianuu.essentials.ui.traveler
 
 import android.content.Context
 import android.content.Intent
-import com.ivianuu.essentials.ui.traveler.ActivityKey
 
 /**
  * Launches the app

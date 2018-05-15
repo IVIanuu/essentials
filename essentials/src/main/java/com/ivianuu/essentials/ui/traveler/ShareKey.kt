@@ -14,15 +14,22 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.common
+package com.ivianuu.essentials.ui.traveler
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import com.ivianuu.essentials.ui.traveler.ActivityKey
+import android.support.v4.app.ShareCompat
 
 /**
- * Key for a simple intent
+ * Shares the [text]
  */
-open class IntentKey(val intent: Intent): ActivityKey() {
-    override fun createIntent(context: Context, data: Any?) = intent
+data class ShareKey(val text: String) : ActivityKey() {
+    override fun createIntent(context: Context, data: Any?): Intent {
+        return ShareCompat.IntentBuilder
+            .from(context as Activity)
+            .setType("text/plain")
+            .setText(text)
+            .createChooserIntent()
+    }
 }

@@ -25,6 +25,9 @@ import java.lang.ref.WeakReference
  */
 class SharedElements {
 
+    val isEmpty
+        get() = sharedElementViews.isEmpty()
+
     private val sharedElementViews = mutableMapOf<WeakReference<View>, String?>()
 
     fun addSharedElement(view: View, name: String = view.transitionName) {
@@ -38,6 +41,4 @@ class SharedElements {
             }
         }
     }
-
-    fun isEmpty(): Boolean = sharedElementViews.isEmpty()
 }

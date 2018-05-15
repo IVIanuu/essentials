@@ -14,23 +14,20 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.common
+package com.ivianuu.essentials.ui.traveler
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.support.v4.app.ShareCompat
-import com.ivianuu.essentials.ui.traveler.ActivityKey
+import android.provider.Settings
+import androidx.core.net.toUri
 
 /**
- * Shares the [text]
+ * Open s the app info of the app
  */
-data class ShareKey(val text: String) : ActivityKey() {
+data class AppInfoKey(private val packageName: String): ActivityKey() {
     override fun createIntent(context: Context, data: Any?): Intent {
-        return ShareCompat.IntentBuilder
-            .from(context as Activity)
-            .setType("text/plain")
-            .setText(text)
-            .createChooserIntent()
+        return Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+            this.data = "package:$packageName".toUri()
+        }
     }
 }

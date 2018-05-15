@@ -14,13 +14,14 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.common
+package com.ivianuu.essentials.ui.traveler
 
-import android.os.Parcelable
+import android.content.Context
+import android.content.Intent
 
 /**
- * Marks a key as screen that returns a result
+ * Key for a simple intent
  */
-interface ResultKey : Parcelable {
-    val resultCode: Int
+open class IntentKey(val intent: Intent): ActivityKey() {
+    override fun createIntent(context: Context, data: Any?) = intent
 }
