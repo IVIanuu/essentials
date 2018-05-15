@@ -50,7 +50,7 @@ abstract class BasePreferenceFragment : PreferenceFragmentCompat(), BackListener
     @Inject lateinit var router: Router
 
     open val layoutRes = -1
-    open val prefsContainer = -1
+    open val prefsContainerId = -1
     open val prefsRes = -1
 
     private val lifecycleSubject = BehaviorSubject.create<FragmentEvent>()
@@ -71,11 +71,11 @@ abstract class BasePreferenceFragment : PreferenceFragmentCompat(), BackListener
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return if (layoutRes != -1 && prefsContainer != -1) {
+        return if (layoutRes != -1 && prefsContainerId != -1) {
             // inflate the layout
             val view = inflater.inflate(layoutRes, container, false)
             // add the prefs to the prefs container
-            super.onCreateView(inflater, view.findViewById(prefsContainer), savedInstanceState)
+            super.onCreateView(inflater, view.findViewById(prefsContainerId), savedInstanceState)
             view
         } else {
             return super.onCreateView(inflater, container, savedInstanceState)
