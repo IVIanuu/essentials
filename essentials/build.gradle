@@ -40,6 +40,7 @@ android {
 
 dependencies {
     api Deps.archComponentsLifecycleExtensions
+    kapt Deps.archComponentsLifecycleCompiler
 
     api Deps.autoDispose
     api Deps.autoDisposeView

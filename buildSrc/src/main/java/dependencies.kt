@@ -36,6 +36,7 @@ object Deps {
     const val androidGradlePlugin = "com.android.tools.build:gradle:${Versions.androidGradlePlugin}"
 
     const val archComponentsLifecycleExtensions = "android.arch.lifecycle:extensions:${Versions.archComponents}"
+    const val archComponentsLifecycleCompiler = "android.arch.lifecycle:compiler:${Versions.archComponents}"
 
     const val autoDispose = "com.github.IVIanuu.AutoDispose:autodispose:${Versions.autoDispose}"
     const val autoDisposeView = "com.github.IVIanuu.AutoDispose:autodispose-view:${Versions.autoDispose}"

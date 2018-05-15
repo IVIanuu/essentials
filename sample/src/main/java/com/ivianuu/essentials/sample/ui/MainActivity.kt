@@ -30,6 +30,7 @@ class MainActivity : BaseActivity() {
             router.newRootScreen(CounterKey(1))
         }
     }
+
 }
 
 @Module
