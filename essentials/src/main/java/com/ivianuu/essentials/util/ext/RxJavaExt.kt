@@ -21,8 +21,8 @@ import com.ivianuu.autodispose.LifecycleScopeProvider
 import com.ivianuu.autodispose.ScopeProvider
 import com.ivianuu.autodispose.autoDispose
 import com.ivianuu.autodispose.view.ViewScopeProvider
+import com.ivianuu.essentials.util.EnsureMainThreadScheduler
 import io.reactivex.*
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.exceptions.OnErrorNotImplementedException
 import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.rxkotlin.subscribeBy
@@ -34,55 +34,20 @@ private val onNextStub: (Any) -> Unit = {}
 private val onErrorStub: (Throwable) -> Unit = { RxJavaPlugins.onError(OnErrorNotImplementedException(it)) }
 private val onErrorPrint: (Throwable) -> Unit = Throwable::printStackTrace
 
-fun Completable.main(): Completable {
-    return andThen {
-        if (isMainThread) {
-            Completable.complete()
-        } else {
-            Completable.complete().observeOn(AndroidSchedulers.mainThread())
-        }
-    }
-}
+fun Completable.main(): Completable =
+        observeOn(EnsureMainThreadScheduler.INSTANCE)
 
-fun <T : Any> Flowable<T>.main(): Flowable<T> {
-    return flatMap {
-        if (isMainThread) {
-            Flowable.just(it)
-        } else {
-            Flowable.just(it).observeOn(AndroidSchedulers.mainThread())
-        }
-    }
-}
+fun <T : Any> Flowable<T>.main(): Flowable<T> =
+        observeOn(EnsureMainThreadScheduler.INSTANCE)
 
-fun <T : Any> Maybe<T>.main(): Maybe<T> {
-    return flatMap {
-        if (isMainThread) {
-            Maybe.just(it)
-        } else {
-            Maybe.just(it).observeOn(AndroidSchedulers.mainThread())
-        }
-    }
-}
+fun <T : Any> Maybe<T>.main(): Maybe<T> =
+        observeOn(EnsureMainThreadScheduler.INSTANCE)
 
-fun <T : Any> Observable<T>.main(): Observable<T> {
-    return flatMap {
-        if (isMainThread) {
-            Observable.just(it)
-        } else {
-            Observable.just(it).observeOn(AndroidSchedulers.mainThread())
-        }
-    }
-}
+fun <T : Any> Observable<T>.main(): Observable<T> =
+    observeOn(EnsureMainThreadScheduler.INSTANCE)
 
-fun <T : Any> Single<T>.main(): Single<T> {
-    return flatMap {
-        if (isMainThread) {
-            Single.just(it)
-        } else {
-            Single.just(it).observeOn(AndroidSchedulers.mainThread())
-        }
-    }
-}
+fun <T : Any> Single<T>.main(): Single<T> =
+        observeOn(EnsureMainThreadScheduler.INSTANCE)
 
 fun Completable.subscribeAndPrint(onComplete: () -> Unit = onCompleteStub) =
         subscribeBy(onComplete = onComplete, onError = onErrorPrint)

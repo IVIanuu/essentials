@@ -18,7 +18,9 @@ package com.ivianuu.essentials.sample.ui
 
 import android.os.Bundle
 import android.os.Parcelable
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.base.BaseFragment
 import com.ivianuu.essentials.ui.traveler.FragmentKey
@@ -32,6 +34,22 @@ import kotlinx.android.synthetic.main.fragment_counter.*
 class CounterFragment : BaseFragment() {
 
     override val layoutRes = R.layout.fragment_counter
+
+    private var cachedView: View? = null
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        var cachedView = cachedView
+        if (cachedView == null) {
+            cachedView = super.onCreateView(inflater, container, savedInstanceState)
+            this.cachedView = cachedView
+        }
+
+        return cachedView
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
