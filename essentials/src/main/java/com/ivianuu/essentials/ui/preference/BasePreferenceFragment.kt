@@ -72,10 +72,10 @@ abstract class BasePreferenceFragment : PreferenceFragmentCompat(), BackListener
         savedInstanceState: Bundle?
     ): View? {
         return if (layoutRes != -1 && prefsContainerId != -1) {
-            // inflate the layout
             val view = inflater.inflate(layoutRes, container, false)
-            // add the prefs to the prefs container
-            super.onCreateView(inflater, view.findViewById(prefsContainerId), savedInstanceState)
+            val prefsContainer = view.findViewById<ViewGroup>(prefsContainerId)
+            val prefsView = super.onCreateView(inflater, prefsContainer, savedInstanceState)
+            prefsContainer.addView(prefsView)
             view
         } else {
             return super.onCreateView(inflater, container, savedInstanceState)
