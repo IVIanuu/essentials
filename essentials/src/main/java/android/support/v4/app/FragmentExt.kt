@@ -16,4 +16,10 @@
 
 package android.support.v4.app
 
-val Fragment.isInBackstack get() = isInBackStack()
+import android.view.ViewGroup
+
+val Fragment.container: ViewGroup? get() = mContainer
+
+val Fragment.containerId get() = mContainerId
+
+val Fragment.isInBackstack get() = isInBackStack

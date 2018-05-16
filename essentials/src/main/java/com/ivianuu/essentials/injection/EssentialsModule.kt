@@ -27,7 +27,6 @@ import dagger.android.support.AndroidSupportInjectionModule
 @Module(includes = [
     AndroidInjectionModule::class,
     AndroidSupportInjectionModule::class,
-    EssentialsAppModule::class,
-    TravelerModule::class
+    EssentialsAppModule::class
 ])
 object EssentialsModule

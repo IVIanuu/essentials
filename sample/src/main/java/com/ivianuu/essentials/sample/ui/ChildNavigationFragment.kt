@@ -16,55 +16,46 @@
 
 package com.ivianuu.essentials.sample.ui
 
+import android.graphics.Color
 import android.os.Bundle
 import android.os.Parcelable
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.base.BaseFragment
-import com.ivianuu.essentials.ui.traveler.FragmentKey
+import com.ivianuu.essentials.ui.traveler.FragmentClassKey
 import com.ivianuu.essentials.ui.traveler.requireKey
+import com.ivianuu.essentials.ui.traveler.router
 import kotlinx.android.parcel.Parcelize
-import kotlinx.android.synthetic.main.fragment_counter.*
+import kotlinx.android.synthetic.main.fragment_child_navigation.*
 
 /**
  * @author Manuel Wrage (IVIanuu)
  */
-class CounterFragment : BaseFragment() {
+class ChildNavigationFragment : BaseFragment() {
 
-    override val layoutRes = R.layout.fragment_counter
-
-    private var cachedView: View? = null
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        var cachedView = cachedView
-        if (cachedView == null) {
-            cachedView = super.onCreateView(inflater, container, savedInstanceState)
-            this.cachedView = cachedView
-        }
-
-        return cachedView
-    }
+    override val layoutRes = R.layout.fragment_child_navigation
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val key = requireKey<CounterKey>()
+        val key = requireKey<ChildNavigationKey>()
 
-        title.text = "Count: ${key.count}"
+        title.text = "Container: ${key.index}, Count: ${key.count}"
+        view.setBackgroundColor(COLORS[key.index])
 
-        go_up.setOnClickListener { router.navigateTo(CounterKey(key.count + 1)) }
-        go_down.setOnClickListener { router.exit() }
+        pop_to_root.setOnClickListener { router.backToRoot() }
+        prev.setOnClickListener { router.exit() }
+        next.setOnClickListener {
+            router.navigateTo(ChildNavigationKey(key.index, key.count + 1))
+        }
     }
 
+    private companion object {
+        private val COLORS =
+                arrayOf(Color.RED, Color.BLUE, Color.MAGENTA)
+    }
 }
 
 @Parcelize
-data class CounterKey(val count: Int) : FragmentKey(), Parcelable {
-    override fun createFragment(data: Any?) = CounterFragment()
-}
+data class ChildNavigationKey(val index: Int, val count: Int)
+    : FragmentClassKey(ChildNavigationFragment::class), Parcelable

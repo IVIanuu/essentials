@@ -27,17 +27,14 @@ import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.traveler.FragmentKey
 import com.ivianuu.essentials.ui.traveler.ResultKey
 import com.ivianuu.essentials.ui.traveler.requireKey
-import com.ivianuu.traveler.Router
+import com.ivianuu.essentials.ui.traveler.router
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.parcel.Parcelize
-import javax.inject.Inject
 
 /**
  * Text input dialog
  */
 class TextInputDialog : DialogFragment() {
-
-    @Inject lateinit var router: Router
 
     override fun onAttach(context: Context?) {
         AndroidSupportInjection.inject(this)

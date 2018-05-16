@@ -17,12 +17,8 @@
 package com.ivianuu.essentials.sample.ui
 
 import android.os.Bundle
-import com.ivianuu.essentials.sample.AppStore
 import com.ivianuu.essentials.ui.base.BaseActivity
 import com.ivianuu.essentials.ui.base.BaseActivityModule
-import com.ivianuu.essentials.util.ext.d
-import com.ivianuu.essentials.util.ext.isMainThread
-import com.ivianuu.essentials.util.ext.subscribeForUi
 import dagger.Module
 
 class MainActivity : BaseActivity() {
@@ -31,15 +27,8 @@ class MainActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
 
         if (savedInstanceState == null) {
-            router.newRootScreen(CounterKey(1))
+            router.newRootScreen(MultipleChildsKey)
         }
-
-        val appStore = AppStore(packageManager)
-
-        appStore.launchableApps()
-            .subscribeForUi(this) {
-                d { "got ${it.size} apps thread is main thread$isMainThread" }
-            }
     }
 
 }

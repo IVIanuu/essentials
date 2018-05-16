@@ -22,7 +22,6 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
 import android.support.v4.app.FragmentManager
-import android.support.v4.app.isInBackstack
 import android.support.v7.app.AppCompatActivity
 import com.ivianuu.autodispose.LifecycleScopeProvider
 import com.ivianuu.essentials.injection.EssentialsBindingModule
@@ -31,7 +30,10 @@ import com.ivianuu.essentials.ui.common.ActivityEvent
 import com.ivianuu.essentials.ui.common.ActivityEvent.*
 import com.ivianuu.essentials.ui.common.BackListener
 import com.ivianuu.essentials.ui.common.CORRESPONDING_ACTIVITY_EVENTS
-import com.ivianuu.essentials.ui.traveler.FragmentKeyNavigator
+import com.ivianuu.essentials.ui.traveler.KeyFragmentAppNavigator
+import com.ivianuu.essentials.ui.traveler.getNavigatorHolder
+import com.ivianuu.essentials.ui.traveler.getRouter
+import com.ivianuu.essentials.ui.traveler.getTraveler
 import com.ivianuu.essentials.util.ext.unsafeLazy
 import com.ivianuu.rxactivityresult.RxActivityResult
 import com.ivianuu.rxpermissions.RxPermissions
@@ -55,22 +57,25 @@ abstract class BaseActivity : AppCompatActivity(), HasSupportFragmentInjector,
 
     @Inject lateinit var supportFragmentInjector: DispatchingAndroidInjector<Fragment>
 
-    @Inject lateinit var navigatorHolder: NavigatorHolder
-    @Inject lateinit var router: Router
-
     protected open val layoutRes = -1
 
-    protected open val fragmentContainer = android.R.id.content
+    open val fragmentContainer = android.R.id.content
 
     private val navigator by unsafeLazy {
-        FragmentKeyNavigator(this, supportFragmentManager, fragmentContainer)
+        KeyFragmentAppNavigator(this, supportFragmentManager, fragmentContainer)
     }
 
     private val lifecycleSubject = BehaviorSubject.create<ActivityEvent>()
 
+    lateinit var router: Router
+    lateinit var navigatorHolder: NavigatorHolder
+
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
+
+        navigatorHolder = getNavigatorHolder(fragmentContainer)
+        router = getRouter(fragmentContainer)
 
         lifecycleSubject.onNext(CREATE)
 
@@ -123,14 +128,9 @@ abstract class BaseActivity : AppCompatActivity(), HasSupportFragmentInjector,
     override fun peekLifecycle() = lifecycleSubject.value
 
     private fun recursivelyDispatchOnBackPressed(fm: FragmentManager): Boolean {
-        if (fm.backStackEntryCount == 0)
-            return false
-
         val reverseOrder = fm.fragments
             .filter {
-                it is BackListener
-                        && it.isInBackstack
-                        && it.isVisible
+                it is BackListener && it.isVisible
             }
             .reversed()
 
@@ -144,7 +144,12 @@ abstract class BaseActivity : AppCompatActivity(), HasSupportFragmentInjector,
             if (backpressable.handleBack()) {
                 return true
             }
+
+            if (fm.backStackEntryCount > 0) {
+                return fm.popBackStackImmediate()
+            }
         }
+
         return false
     }
 }
@@ -179,6 +184,21 @@ abstract class BaseActivityModule<T : BaseActivity> {
         @JvmStatic
         @Provides
         fun providePermissionRequester(activity: FragmentActivity) = RxPermissions.get(activity)
+
+        @JvmStatic
+        @Provides
+        fun provideTraveler(activity: BaseActivity) =
+            activity.getTraveler(activity.fragmentContainer)
+
+        @JvmStatic
+        @Provides
+        fun provideNavigatorHolder(activity: BaseActivity) =
+            activity.getNavigatorHolder(activity.fragmentContainer)
+
+        @JvmStatic
+        @Provides
+        fun provideRouter(activity: BaseActivity) =
+                activity.getRouter(activity.fragmentContainer)
 
     }
 
