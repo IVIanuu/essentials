@@ -34,9 +34,7 @@ import com.ivianuu.essentials.ui.traveler.KeyFragmentAppNavigator
 import com.ivianuu.essentials.ui.traveler.getNavigatorHolder
 import com.ivianuu.essentials.ui.traveler.getRouter
 import com.ivianuu.essentials.ui.traveler.getTraveler
-import com.ivianuu.essentials.util.ext.d
 import com.ivianuu.essentials.util.ext.unsafeLazy
-import com.ivianuu.essentials.util.ext.viewModels
 import com.ivianuu.rxactivityresult.RxActivityResult
 import com.ivianuu.rxpermissions.RxPermissions
 import com.ivianuu.traveler.NavigatorHolder
@@ -97,8 +95,6 @@ abstract class BaseActivity : AppCompatActivity(), HasSupportFragmentInjector,
     override fun onResumeFragments() {
         super.onResumeFragments()
         navigatorHolder.setNavigator(navigator)
-
-        d { "view models ${viewModelStore.viewModels}" }
     }
 
     override fun onPause() {
