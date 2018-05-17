@@ -61,7 +61,7 @@ abstract class BaseActivity : AppCompatActivity(), HasSupportFragmentInjector,
 
     open val fragmentContainer = android.R.id.content
 
-    private val navigator by unsafeLazy {
+    open val navigator by unsafeLazy {
         KeyFragmentAppNavigator(
             this,
             supportFragmentManager,
