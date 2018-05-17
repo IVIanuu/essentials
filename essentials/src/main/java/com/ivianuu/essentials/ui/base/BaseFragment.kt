@@ -27,6 +27,8 @@ import com.ivianuu.essentials.ui.common.BackListener
 import com.ivianuu.essentials.ui.common.CORRESPONDING_FRAGMENT_EVENTS
 import com.ivianuu.essentials.ui.common.FragmentEvent
 import com.ivianuu.essentials.ui.common.FragmentEvent.*
+import com.ivianuu.essentials.util.ext.d
+import com.ivianuu.essentials.util.ext.viewModels
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.AndroidSupportInjection
@@ -82,6 +84,7 @@ abstract class BaseFragment : Fragment(), BackListener, HasSupportFragmentInject
     override fun onResume() {
         super.onResume()
         lifecycleSubject.onNext(RESUME)
+        d { "view models ${viewModelStore.viewModels}" }
     }
 
     override fun onPause() {

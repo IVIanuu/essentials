@@ -29,6 +29,7 @@ android {
     defaultConfig {
         minSdkVersion Versions.minSdk
         targetSdkVersion Versions.targetSdk
+        consumerProguardFiles 'proguard-rules.txt'
     }
     androidExtensions {
         experimental = true
