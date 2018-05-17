@@ -71,9 +71,11 @@ fun <T> T.removeRouter(containerId: Int) where T: ViewModelStoreOwner, T : Lifec
 val Fragment.router: Router
     get() {
         val parent = parentFragment
-        return if (parent != null) {
-            parent.getRouter(containerId)
-        } else {
-            requireActivity().getRouter(containerId)
-        }
+        return parent?.getRouter(containerId) ?: requireActivity().getRouter(containerId)
+    }
+
+val Fragment.rootRouter: Router
+    get() {
+        val parent = parentFragment
+        return parent?.rootRouter ?: requireActivity().getRouter(containerId)
     }

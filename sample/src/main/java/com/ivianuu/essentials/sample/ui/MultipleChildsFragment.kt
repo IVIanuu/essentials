@@ -20,9 +20,8 @@ import android.os.Bundle
 import android.view.View
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.base.BaseFragment
-import com.ivianuu.essentials.ui.traveler.FragmentClassKey
-import com.ivianuu.essentials.ui.traveler.KeyFragmentNavigator
-import com.ivianuu.essentials.ui.traveler.setupRouter
+import com.ivianuu.essentials.ui.traveler.*
+import com.ivianuu.essentials.util.ext.d
 
 /**
  * @author Manuel Wrage (IVIanuu)
@@ -42,6 +41,9 @@ class MultipleChildsFragment : BaseFragment() {
                     router.newRootScreen(ChildNavigationKey(index, 1))
                 }
             }
+
+        d { "router $router" }
+        d { "root router $rootRouter" }
     }
 
     private companion object {

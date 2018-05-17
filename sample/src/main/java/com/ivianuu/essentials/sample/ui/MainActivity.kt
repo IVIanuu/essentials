@@ -19,6 +19,7 @@ package com.ivianuu.essentials.sample.ui
 import android.os.Bundle
 import com.ivianuu.essentials.ui.base.BaseActivity
 import com.ivianuu.essentials.ui.base.BaseActivityModule
+import com.ivianuu.essentials.util.ext.d
 import dagger.Module
 
 class MainActivity : BaseActivity() {
@@ -29,6 +30,8 @@ class MainActivity : BaseActivity() {
         if (savedInstanceState == null) {
             router.newRootScreen(MultipleChildsKey)
         }
+
+        d { "router $router" }
     }
 
 }

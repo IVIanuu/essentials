@@ -24,7 +24,9 @@ import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.base.BaseFragment
 import com.ivianuu.essentials.ui.traveler.FragmentClassKey
 import com.ivianuu.essentials.ui.traveler.requireKey
+import com.ivianuu.essentials.ui.traveler.rootRouter
 import com.ivianuu.essentials.ui.traveler.router
+import com.ivianuu.essentials.util.ext.d
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_child_navigation.*
 
@@ -48,6 +50,9 @@ class ChildNavigationFragment : BaseFragment() {
         next.setOnClickListener {
             router.navigateTo(ChildNavigationKey(key.index, key.count + 1))
         }
+
+        d { "router $router" }
+        d { "root router $rootRouter" }
     }
 
     private companion object {
