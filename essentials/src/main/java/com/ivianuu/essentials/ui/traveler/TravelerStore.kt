@@ -33,6 +33,11 @@ class TravelerStore : ViewModel() {
 
     private val travelers = mutableMapOf<Int, Traveler<Router>>()
 
+    override fun onCleared() {
+        super.onCleared()
+        travelers.values.forEach { it.navigatorHolder.removeNavigator() }
+    }
+
     fun getTraveler(containerId: Int) =
         travelers.getOrPut(containerId) { Traveler.create() }
 
