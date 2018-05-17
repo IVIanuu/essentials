@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.traveler
+package com.ivianuu.essentials.ui.traveler.navigator
 
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager

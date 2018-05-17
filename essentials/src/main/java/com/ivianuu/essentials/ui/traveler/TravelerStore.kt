@@ -20,7 +20,10 @@ import android.arch.lifecycle.LifecycleOwner
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelStoreOwner
 import android.support.v4.app.Fragment
+import android.support.v4.app.FragmentActivity
+import android.support.v4.app.FragmentManager
 import android.support.v4.app.containerId
+import com.ivianuu.essentials.ui.traveler.navigator.KeyFragmentNavigator
 import com.ivianuu.essentials.util.ext.getViewModel
 import com.ivianuu.traveler.Navigator
 import com.ivianuu.traveler.Router
@@ -79,3 +82,17 @@ val Fragment.rootRouter: Router
         val parent = parentFragment
         return parent?.rootRouter ?: requireActivity().getRouter(containerId)
     }
+
+fun FragmentActivity.setupKeyFragmentRouter(containerId: Int) =
+        setupKeyFragmentRouter(supportFragmentManager, containerId)
+
+fun Fragment.setupKeyFragmentRouter(containerId: Int) =
+        setupKeyFragmentRouter(childFragmentManager, containerId)
+
+fun <T> T.setupKeyFragmentRouter(fm: FragmentManager, containerId: Int): Router where T : ViewModelStoreOwner, T : LifecycleOwner {
+    val traveler = getTraveler(containerId)
+    val navigator =
+        KeyFragmentNavigator(fm, containerId)
+    NavigatorLifecycleObserver(this, navigator, traveler.navigatorHolder)
+    return traveler.router
+}

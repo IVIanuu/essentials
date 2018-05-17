@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.traveler
+package com.ivianuu.essentials.ui.traveler.key
 
 import android.os.Bundle
 import android.os.Parcelable

@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.traveler
+package com.ivianuu.essentials.ui.traveler.navigator
 
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentTransaction
+import com.ivianuu.essentials.ui.traveler.key.FragmentKey
 import com.ivianuu.traveler.commands.Command
 import com.ivianuu.traveler.commands.Forward
 import com.ivianuu.traveler.commands.Replace

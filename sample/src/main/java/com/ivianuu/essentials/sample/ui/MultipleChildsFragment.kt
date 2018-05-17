@@ -20,8 +20,9 @@ import android.os.Bundle
 import android.view.View
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.base.BaseFragment
-import com.ivianuu.essentials.ui.traveler.*
-import com.ivianuu.essentials.util.ext.d
+import com.ivianuu.essentials.ui.traveler.key.FragmentClassKey
+import com.ivianuu.essentials.ui.traveler.navigator.FragStackKeyNavigator
+import com.ivianuu.essentials.ui.traveler.setupRouter
 
 /**
  * @author Manuel Wrage (IVIanuu)
@@ -33,17 +34,13 @@ class MultipleChildsFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        CONTAINER_IDS
-            .forEachIndexed { index, containerId ->
-                val navigator = KeyFragmentNavigator(childFragmentManager, containerId)
-                val router = setupRouter(navigator, containerId)
-                if (savedInstanceState == null) {
-                    router.newRootScreen(ChildNavigationKey(index, 1))
-                }
+        CONTAINER_IDS.forEachIndexed { index, containerId ->
+            val stack = getChildStack(containerId, index.toString())
+            val router = setupRouter(FragStackKeyNavigator(stack), containerId)
+            if (!stack.hasRoot()) {
+                router.newRootScreen(ChildNavigationKey(index, 1))
             }
-
-        d { "router $router" }
-        d { "root router $rootRouter" }
+        }
     }
 
     private companion object {

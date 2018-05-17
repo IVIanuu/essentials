@@ -14,20 +14,17 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.traveler
+package com.ivianuu.essentials.ui.fragstack
 
-import android.content.Context
-import android.content.Intent
-import android.provider.Settings
-import androidx.core.net.toUri
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
 
 /**
- * Open s the app info of the app
+ * @author Manuel Wrage (IVIanuu)
  */
-data class AppInfoKey(private val packageName: String): ActivityKey() {
-    override fun createIntent(context: Context, data: Any?): Intent {
-        return Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-            this.data = "package:$packageName".toUri()
-        }
-    }
-}
+@Parcelize
+data class BackstackEntry(
+    val who: String,
+    val transactionIndex: Int,
+    val tag: String?
+) : Parcelable

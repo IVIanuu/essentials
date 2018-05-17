@@ -14,22 +14,21 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.traveler
+package com.ivianuu.essentials.ui.traveler.adapter
 
-import android.app.Activity
-import android.content.Context
-import android.content.Intent
-import android.support.v4.app.ShareCompat
+import android.support.v4.app.FragmentManager
+import android.support.v4.app.FragmentStatePagerAdapter
+import com.ivianuu.essentials.ui.traveler.key.FragmentKey
 
 /**
- * Shares the [text]
+ * Key fragment state pager adapter
  */
-data class ShareKey(val text: String) : ActivityKey() {
-    override fun createIntent(context: Context, data: Any?): Intent {
-        return ShareCompat.IntentBuilder
-            .from(context as Activity)
-            .setType("text/plain")
-            .setText(text)
-            .createChooserIntent()
-    }
+open class KeyFragmentStatePagerAdapter(
+    fm: FragmentManager,
+    private val keys: List<FragmentKey>
+) : FragmentStatePagerAdapter(fm) {
+
+    override fun getItem(position: Int) = keys[position].newInstance()
+
+    override fun getCount() = keys.size
 }

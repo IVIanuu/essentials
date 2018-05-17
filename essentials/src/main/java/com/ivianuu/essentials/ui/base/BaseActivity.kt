@@ -30,10 +30,10 @@ import com.ivianuu.essentials.ui.common.ActivityEvent
 import com.ivianuu.essentials.ui.common.ActivityEvent.*
 import com.ivianuu.essentials.ui.common.BackListener
 import com.ivianuu.essentials.ui.common.CORRESPONDING_ACTIVITY_EVENTS
-import com.ivianuu.essentials.ui.traveler.KeyFragmentAppNavigator
 import com.ivianuu.essentials.ui.traveler.getNavigatorHolder
 import com.ivianuu.essentials.ui.traveler.getRouter
 import com.ivianuu.essentials.ui.traveler.getTraveler
+import com.ivianuu.essentials.ui.traveler.navigator.KeyFragmentAppNavigator
 import com.ivianuu.essentials.util.ext.unsafeLazy
 import com.ivianuu.rxactivityresult.RxActivityResult
 import com.ivianuu.rxpermissions.RxPermissions
@@ -62,7 +62,11 @@ abstract class BaseActivity : AppCompatActivity(), HasSupportFragmentInjector,
     open val fragmentContainer = android.R.id.content
 
     private val navigator by unsafeLazy {
-        KeyFragmentAppNavigator(this, supportFragmentManager, fragmentContainer)
+        KeyFragmentAppNavigator(
+            this,
+            supportFragmentManager,
+            fragmentContainer
+        )
     }
 
     private val lifecycleSubject = BehaviorSubject.create<ActivityEvent>()

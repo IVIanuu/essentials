@@ -24,9 +24,9 @@ import android.os.Parcelable
 import android.support.v4.app.DialogFragment
 import com.afollestad.materialdialogs.MaterialDialog
 import com.ivianuu.essentials.R
-import com.ivianuu.essentials.ui.traveler.FragmentKey
-import com.ivianuu.essentials.ui.traveler.ResultKey
-import com.ivianuu.essentials.ui.traveler.requireKey
+import com.ivianuu.essentials.ui.traveler.key.FragmentKey
+import com.ivianuu.essentials.ui.traveler.key.ResultKey
+import com.ivianuu.essentials.ui.traveler.key.requireKey
 import com.ivianuu.essentials.ui.traveler.router
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.parcel.Parcelize

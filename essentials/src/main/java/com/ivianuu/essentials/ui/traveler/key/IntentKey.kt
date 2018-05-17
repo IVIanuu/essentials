@@ -14,16 +14,14 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.traveler
+package com.ivianuu.essentials.ui.traveler.key
 
 import android.content.Context
 import android.content.Intent
 
 /**
- * Launches the app
+ * Key for a simple intent
  */
-data class AppKey(private val packageName: String) : ActivityKey() {
-    override fun createIntent(context: Context, data: Any?): Intent {
-        return context.packageManager.getLaunchIntentForPackage(packageName)
-    }
+open class IntentKey(val intent: Intent): ActivityKey() {
+    override fun createIntent(context: Context, data: Any?) = intent
 }

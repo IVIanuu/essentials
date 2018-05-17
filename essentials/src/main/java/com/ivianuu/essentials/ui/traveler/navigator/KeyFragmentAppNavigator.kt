@@ -14,24 +14,48 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.traveler
+package com.ivianuu.essentials.ui.traveler.navigator
 
+import android.content.Context
+import android.content.Intent
+import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.app.FragmentActivity
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentTransaction
+import com.ivianuu.essentials.ui.traveler.key.ActivityKey
+import com.ivianuu.essentials.ui.traveler.key.FragmentKey
 import com.ivianuu.traveler.commands.Command
 import com.ivianuu.traveler.commands.Forward
 import com.ivianuu.traveler.commands.Replace
+import com.ivianuu.traveler.fragments.FragmentAppNavigator
 
 /**
- * Fragment swapper navigator which uses keys
+ * Navigator for key based navigation
  */
-class KeyFragmentSwapperNavigator(
-    fm: FragmentManager,
-    containerId: Int,
-    hideStrategy: HideStrategy = HideStrategy.DETACH,
-    swapOnReselection: Boolean = true
-) : FragmentSwapperNavigator(fm, containerId, hideStrategy, swapOnReselection) {
+open class KeyFragmentAppNavigator(
+    activity: FragmentActivity,
+    fragmentManager: FragmentManager,
+    containerId: Int
+): FragmentAppNavigator(activity, fragmentManager, containerId) {
+
+    override fun createActivityIntent(context: Context, key: Any, data: Any?): Intent? {
+        return if (key is ActivityKey) {
+            key.newIntent(context, data)
+        } else {
+            null
+        }
+    }
+
+    override fun createStartActivityOptions(command: Command, activityIntent: Intent): Bundle? {
+        val key = when(command) {
+            is Forward -> command.key as ActivityKey
+            is Replace -> command.key as ActivityKey
+            else -> null
+        }
+
+        return key?.createStartActivityOptions(command, activityIntent)
+    }
 
     override fun createFragment(key: Any, data: Any?): Fragment? {
         return if (key is FragmentKey) {
@@ -56,5 +80,4 @@ class KeyFragmentSwapperNavigator(
         key?.setupFragmentTransaction(command, currentFragment,
             nextFragment, transaction)
     }
-
 }

@@ -14,24 +14,31 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.sample.ui
+package com.ivianuu.essentials.ui.fragstack
 
 import android.os.Bundle
-import com.ivianuu.essentials.ui.base.BaseActivity
-import com.ivianuu.essentials.ui.base.BaseActivityModule
-import dagger.Module
 
-class MainActivity : BaseActivity() {
+/**
+ * @author Manuel Wrage (IVIanuu)
+ */
+class TransactionIndexer {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    private var currentIndex = 0
 
-        if (savedInstanceState == null) {
-            router.newRootScreen(MultipleChildsKey)
-        }
+    fun nextIndex(): Int {
+        return ++currentIndex
+    }
+
+    fun saveInstanceState(outState: Bundle) {
+        outState.putInt(KEY_INDEX, currentIndex)
+    }
+
+    fun restoreInstanceState(savedInstanceState: Bundle) {
+        currentIndex = savedInstanceState.getInt(KEY_INDEX)
+    }
+
+    companion object {
+        private const val KEY_INDEX = "TransactionIndexer.currentIndex"
     }
 
 }
-
-@Module
-abstract class MainActivityModule : BaseActivityModule<MainActivity>()

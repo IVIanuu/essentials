@@ -14,13 +14,20 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.traveler
+package com.ivianuu.essentials.ui.traveler.key
 
-import android.os.Parcelable
+import android.content.Context
+import android.content.Intent
+import android.provider.Settings
+import androidx.core.net.toUri
 
 /**
- * Marks a key as screen that returns a result
+ * Open s the app info of the app
  */
-interface ResultKey : Parcelable {
-    val resultCode: Int
+data class AppInfoKey(private val packageName: String): ActivityKey() {
+    override fun createIntent(context: Context, data: Any?): Intent {
+        return Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+            this.data = "package:$packageName".toUri()
+        }
+    }
 }
