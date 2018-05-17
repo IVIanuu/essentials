@@ -18,7 +18,6 @@ package com.ivianuu.essentials.ui.base
 
 import android.content.Context
 import android.os.Bundle
-import android.os.Parcelable
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -28,13 +27,11 @@ import com.ivianuu.essentials.ui.common.BackListener
 import com.ivianuu.essentials.ui.common.CORRESPONDING_FRAGMENT_EVENTS
 import com.ivianuu.essentials.ui.common.FragmentEvent
 import com.ivianuu.essentials.ui.common.FragmentEvent.*
-import com.ivianuu.essentials.ui.fragstack.FragStack
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.AndroidSupportInjection
 import dagger.android.support.HasSupportFragmentInjector
 import io.reactivex.subjects.BehaviorSubject
-import kotlinx.android.parcel.Parcelize
 import javax.inject.Inject
 
 /**
@@ -49,8 +46,6 @@ abstract class BaseFragment : Fragment(), BackListener, HasSupportFragmentInject
 
     private val lifecycleSubject = BehaviorSubject.create<FragmentEvent>()
 
-    private val stacks = mutableMapOf<Int, FragStack>()
-
     override fun onAttach(context: Context?) {
         AndroidSupportInjection.inject(this)
         super.onAttach(context)
@@ -59,16 +54,6 @@ abstract class BaseFragment : Fragment(), BackListener, HasSupportFragmentInject
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        if (savedInstanceState != null) {
-            val savedStackStates =
-                savedInstanceState.getParcelableArrayList<SavedStackState>(KEY_STACKS)
-
-            savedStackStates.forEach {
-                val stack = FragStack(childFragmentManager, it.containerId, it.tag, it.savedState)
-                stacks[it.containerId] = stack
-            }
-        }
 
         lifecycleSubject.onNext(CREATE)
     }
@@ -105,22 +90,6 @@ abstract class BaseFragment : Fragment(), BackListener, HasSupportFragmentInject
         super.onPause()
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-
-        val stackStates = stacks.values.map { stack ->
-            val bundle = Bundle()
-            stack.saveInstanceState(bundle)
-            SavedStackState(
-                stack.containerId,
-                stack.tag,
-                bundle
-            )
-        }
-
-        outState.putParcelableArrayList(KEY_STACKS, ArrayList(stackStates))
-    }
-
     override fun onStop() {
         lifecycleSubject.onNext(STOP)
         super.onStop()
@@ -142,11 +111,7 @@ abstract class BaseFragment : Fragment(), BackListener, HasSupportFragmentInject
     }
 
     override fun handleBack(): Boolean {
-        return stacks.values
-            .flatMap { stack -> stack.getBackstack().map { stack to it } }
-            .sortedByDescending { it.second.transactionIndex }
-            .map { it.first }
-            .any { it.handleBack() }
+        return false
     }
 
     override fun lifecycle() = lifecycleSubject
@@ -156,19 +121,4 @@ abstract class BaseFragment : Fragment(), BackListener, HasSupportFragmentInject
     override fun peekLifecycle() = lifecycleSubject.value
 
     override fun supportFragmentInjector(): AndroidInjector<Fragment> = supportFragmentInjector
-
-    fun getChildStack(containerId: Int, tag: String = ""): FragStack {
-        return stacks.getOrPut(containerId) { FragStack(childFragmentManager, containerId, tag) }
-    }
-
-    private companion object {
-        private const val KEY_STACKS = "BaseFragment.stacks"
-    }
-
-    @Parcelize
-    data class SavedStackState(
-        val containerId: Int,
-        val tag: String,
-        val savedState: Bundle
-    ) : Parcelable
 }

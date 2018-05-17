@@ -21,8 +21,6 @@ import android.view.View
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.base.BaseFragment
 import com.ivianuu.essentials.ui.traveler.key.FragmentClassKey
-import com.ivianuu.essentials.ui.traveler.navigator.FragStackKeyNavigator
-import com.ivianuu.essentials.ui.traveler.setupRouter
 
 /**
  * @author Manuel Wrage (IVIanuu)
@@ -35,11 +33,11 @@ class MultipleChildsFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         CONTAINER_IDS.forEachIndexed { index, containerId ->
-            val stack = getChildStack(containerId, index.toString())
+         /*   val stack = getChildStack(containerId, index.toString())
             val router = setupRouter(FragStackKeyNavigator(stack), containerId)
             if (!stack.hasRoot()) {
                 router.newRootScreen(ChildNavigationKey(index, 1))
-            }
+            } */
         }
     }
 
