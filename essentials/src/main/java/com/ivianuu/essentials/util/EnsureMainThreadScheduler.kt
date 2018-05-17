@@ -19,7 +19,6 @@ package com.ivianuu.essentials.util
 import android.os.Handler
 import android.os.Looper
 import android.os.Message
-import com.ivianuu.essentials.util.ext.d
 import com.ivianuu.essentials.util.ext.isMainThread
 import io.reactivex.Scheduler
 import io.reactivex.disposables.Disposable
@@ -38,19 +37,13 @@ class EnsureMainThreadScheduler : Scheduler() {
         val run = RxJavaPlugins.onSchedule(run)
         val scheduled = ScheduledRunnable(handler, run)
 
-        d { "schedule direct" }
-
         if (delay == 0L) {
-            d { "no delay" }
             if (isMainThread) {
-                d { "is main -> run" }
                 scheduled.run()
             } else {
-                d { "is not main -> post" }
                 handler.post(scheduled)
             }
         } else {
-            d { "has delay -> post delayed" }
             handler.postDelayed(scheduled, unit.toMillis(delay))
         }
 
@@ -75,18 +68,14 @@ class EnsureMainThreadScheduler : Scheduler() {
             val scheduled = ScheduledRunnable(handler, run)
 
             if (delay == 0L) {
-                d { "no delay" }
                 if (isMainThread) {
-                    d { "is main thread -> run" }
                     scheduled.run()
                 } else {
-                    d { "is not main thread -> post" }
                     val message = Message.obtain(handler, scheduled)
                     message.obj = this
                     handler.sendMessage(message)
                 }
             } else {
-                d { "has delay -> post delayed" }
                 val message = Message.obtain(handler, scheduled)
                 message.obj = this
                 handler.sendMessageDelayed(message, unit.toMillis(delay))
