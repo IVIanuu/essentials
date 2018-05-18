@@ -29,7 +29,7 @@ object Versions {
     const val seekBarPreference = "7bd4049da0"
     const val support = "27.1.1"
     const val timber = "4.7.0"
-    const val traveler = "88665c093b"
+    const val traveler = "28e7067341"
 }
 //
 object Deps {
