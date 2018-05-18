@@ -35,6 +35,7 @@ import com.ivianuu.essentials.ui.traveler.getNavigatorHolder
 import com.ivianuu.essentials.ui.traveler.getRouter
 import com.ivianuu.essentials.ui.traveler.getTraveler
 import com.ivianuu.essentials.ui.traveler.navigator.KeyFragmentAppNavigator
+import com.ivianuu.essentials.util.NamedScreen
 import com.ivianuu.essentials.util.ext.behaviorSubject
 import com.ivianuu.essentials.util.ext.unsafeLazy
 import com.ivianuu.rxactivityresult.RxActivityResult
@@ -54,7 +55,7 @@ import javax.inject.Inject
  * Base activity
  */
 abstract class BaseActivity : AppCompatActivity(), HasSupportFragmentInjector, Injectable,
-    LifecycleScopeProvider<ActivityEvent> {
+    NamedScreen, LifecycleScopeProvider<ActivityEvent> {
 
     @Inject lateinit var supportFragmentInjector: DispatchingAndroidInjector<Fragment>
 
@@ -62,18 +63,18 @@ abstract class BaseActivity : AppCompatActivity(), HasSupportFragmentInjector, I
 
     open val fragmentContainer = android.R.id.content
 
-    open val navigator: Navigator by unsafeLazy {
+    lateinit var router: Router
+
+    protected open val navigator: Navigator by unsafeLazy {
         KeyFragmentAppNavigator(
             this,
             supportFragmentManager,
             fragmentContainer
         )
     }
+    protected lateinit var navigatorHolder: NavigatorHolder
 
     private val lifecycleSubject = behaviorSubject<ActivityEvent>()
-
-    lateinit var router: Router
-    lateinit var navigatorHolder: NavigatorHolder
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

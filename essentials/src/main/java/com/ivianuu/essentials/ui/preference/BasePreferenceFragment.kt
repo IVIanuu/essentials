@@ -31,6 +31,7 @@ import com.ivianuu.essentials.ui.common.BackListener
 import com.ivianuu.essentials.ui.common.CORRESPONDING_FRAGMENT_EVENTS
 import com.ivianuu.essentials.ui.common.FragmentEvent
 import com.ivianuu.essentials.ui.common.FragmentEvent.*
+import com.ivianuu.essentials.util.NamedScreen
 import com.ivianuu.essentials.util.ext.behaviorSubject
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
@@ -41,7 +42,7 @@ import javax.inject.Inject
  * Base preference fragment
  */
 abstract class BasePreferenceFragment : PreferenceFragmentCompat(), BackListener,
-    HasSupportFragmentInjector, Injectable,
+    HasSupportFragmentInjector, Injectable, NamedScreen,
     LifecycleScopeProvider<FragmentEvent> {
 
     @Inject lateinit var supportFragmentInjector: DispatchingAndroidInjector<Fragment>

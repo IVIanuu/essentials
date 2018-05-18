@@ -18,14 +18,19 @@ package com.ivianuu.essentials.sample.app
 
 import com.ivianuu.essentials.app.BaseApp
 import com.ivianuu.essentials.sample.BuildConfig
+import com.ivianuu.essentials.util.ScreenLogger
+import com.ivianuu.essentials.util.ext.d
 import dagger.android.AndroidInjector
 import dagger.android.support.DaggerApplication
 import timber.log.Timber
+import javax.inject.Inject
 
 /**
  * @author Manuel Wrage (IVIanuu)
  */
 class App : BaseApp() {
+
+    @Inject lateinit var screenLogger: ScreenLogger
 
     override fun onCreate() {
         super.onCreate()
@@ -33,6 +38,8 @@ class App : BaseApp() {
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
         }
+
+        screenLogger.setLogger { d { "screen launched $it" } }
     }
 
     override fun applicationInjector(): AndroidInjector<out DaggerApplication> {

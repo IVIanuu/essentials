@@ -23,6 +23,9 @@ import dagger.Module
 
 class MainActivity : BaseActivity() {
 
+    override val screenName: String
+        get() = "main"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 

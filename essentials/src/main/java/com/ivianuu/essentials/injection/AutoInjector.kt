@@ -19,7 +19,6 @@ package com.ivianuu.essentials.injection
 import android.app.Activity
 import android.app.Application
 import android.content.Context
-import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
 import android.support.v4.app.FragmentManager
@@ -36,35 +35,6 @@ import dagger.android.support.HasSupportFragmentInjector
 object AutoInjector {
 
     fun start(application: Application) {
-        application.registerActivityLifecycleCallbacks(object : Application.ActivityLifecycleCallbacks {
-            override fun onActivityCreated(activity: Activity?, savedInstanceState: Bundle?) {
-                d { "created $activity" }
-            }
-
-            override fun onActivityStarted(activity: Activity?) {
-                d { "started $activity" }
-            }
-
-            override fun onActivityResumed(activity: Activity?) {
-                d { "resumed $activity" }
-            }
-
-            override fun onActivityPaused(activity: Activity?) {
-                d { "paused $activity" }
-            }
-
-            override fun onActivitySaveInstanceState(activity: Activity?, outState: Bundle?) {
-
-            }
-
-            override fun onActivityStopped(activity: Activity?) {
-                d { "stopped $activity" }
-            }
-
-            override fun onActivityDestroyed(activity: Activity?) {
-                d { "destroyed $activity" }
-            }
-        })
         application.doOnActivityCreated { activity, _ ->
             d { "inject $activity" }
             handleActivity(activity)
