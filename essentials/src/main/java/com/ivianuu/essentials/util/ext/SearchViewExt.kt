@@ -27,7 +27,7 @@ fun SearchView.doOnQueryTextSubmit(action: (query: String) -> Boolean) =
 fun SearchView.setOnQueryTextListener(
     onQueryTextChange: ((newText: String) -> Boolean)? = null,
     onQueryTextSubmit: ((query: String) -> Boolean)? = null
-) : SearchView.OnQueryTextListener {
+): SearchView.OnQueryTextListener {
     val listener = object : SearchView.OnQueryTextListener {
         override fun onQueryTextChange(newText: String): Boolean {
             return onQueryTextChange?.invoke(newText) ?: false

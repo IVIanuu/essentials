@@ -31,7 +31,7 @@ fun ViewPager.addOnPageChangeListener(
     onPageScrolled: ((position: Int, positionOffset: Float, positionOffsetPixels: Int) -> Unit)? = null,
     onPageSelected: ((position: Int) -> Unit)? = null,
     onPageScrollStateChanged: ((state: Int) -> Unit)? = null
-) : ViewPager.OnPageChangeListener {
+): ViewPager.OnPageChangeListener {
     val listener = object : ViewPager.OnPageChangeListener {
         override fun onPageScrolled(
             position: Int,

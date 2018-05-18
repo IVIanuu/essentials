@@ -23,6 +23,7 @@ sealed class Option<T : Any> {
     data class Some<T : Any>(val value: T) : Option<T>()
     class None<T : Any> : Option<Nothing>() {
         override fun toString() = "None"
+
         companion object {
             val INSTANCE = None<Any>()
         }

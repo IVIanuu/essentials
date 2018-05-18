@@ -38,7 +38,7 @@ abstract class FragmentSwapperNavigator(
 
     override fun applyCommands(commands: Array<Command>) {
         commands.forEach { command ->
-            when(command) {
+            when (command) {
                 is Replace -> swapTo(command)
                 else -> throw IllegalStateException("unsupported command $command")
             }
@@ -59,7 +59,11 @@ abstract class FragmentSwapperNavigator(
             d { "do swap on reselection" }
             val transaction = fm.beginTransaction()
             transaction.remove(oldFragment)
-            transaction.add(containerId, createFragment(newKey, command.data), getFragmentTag(newKey))
+            transaction.add(
+                containerId,
+                createFragment(newKey, command.data),
+                getFragmentTag(newKey)
+            )
             transaction.commitNow()
             return
         }
@@ -78,7 +82,7 @@ abstract class FragmentSwapperNavigator(
 
         // handle the old fragment
         if (oldFragment != null && oldFragment.isAdded) {
-            when(hideStrategy) {
+            when (hideStrategy) {
                 HideStrategy.HIDE -> {
                     if (!oldFragment.isHidden) {
                         d { "hide old fragment" }
@@ -99,7 +103,7 @@ abstract class FragmentSwapperNavigator(
         }
 
         // handle the new fragment
-        val needToAdd = when(hideStrategy) {
+        val needToAdd = when (hideStrategy) {
             HideStrategy.HIDE -> {
                 if (newFragment.isAdded && newFragment.isHidden) {
                     d { "show hidden new fragment" }

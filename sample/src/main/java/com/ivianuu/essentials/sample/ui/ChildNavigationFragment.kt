@@ -56,10 +56,10 @@ class ChildNavigationFragment : BaseFragment(), NotInjectable {
 
     private companion object {
         private val COLORS =
-                arrayOf(Color.RED, Color.BLUE, Color.MAGENTA)
+            arrayOf(Color.RED, Color.BLUE, Color.MAGENTA)
     }
 }
 
 @Parcelize
-data class ChildNavigationKey(val index: Int, val count: Int)
-    : FragmentClassKey(ChildNavigationFragment::class), Parcelable
+data class ChildNavigationKey(val index: Int, val count: Int) :
+    FragmentClassKey(ChildNavigationFragment::class), Parcelable

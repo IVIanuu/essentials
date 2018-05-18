@@ -47,8 +47,7 @@ object AutoInjector {
         }
 
         if (activity is FragmentActivity && activity is HasSupportFragmentInjector) {
-            activity.supportFragmentManager.doOnFragmentAttached(true) {
-                    _: FragmentManager, fragment: Fragment, _: Context ->
+            activity.supportFragmentManager.doOnFragmentAttached(true) { _: FragmentManager, fragment: Fragment, _: Context ->
                 if (fragment is Injectable && fragment !is NotInjectable) {
                     d { "inject $fragment" }
                     AndroidSupportInjection.inject(fragment)

@@ -40,8 +40,10 @@ fun Context.resolveColorAttr(attr: Int, defaultValue: Int = 0): Int {
     return color
 }
 
-fun Context.resolveColorStateListAttr(attr: Int,
-                                      defaultValue: ColorStateList? = null): ColorStateList? {
+fun Context.resolveColorStateListAttr(
+    attr: Int,
+    defaultValue: ColorStateList? = null
+): ColorStateList? {
     val array = getTypedArrayWithAttributes(attr)
     val colorStateList = array.getColorStateList(0)
     array.recycle()
@@ -119,8 +121,10 @@ fun Context.resolveTextAttr(attr: Int, defaultValue: CharSequence? = null): Char
     return charSequence ?: defaultValue
 }
 
-fun Context.resolveTextArrayAttr(attr: Int,
-                                 defaultValue: Array<CharSequence>? = null): Array<CharSequence>? {
+fun Context.resolveTextArrayAttr(
+    attr: Int,
+    defaultValue: Array<CharSequence>? = null
+): Array<CharSequence>? {
     val array = getTypedArrayWithAttributes(attr)
     val charSequence = array.getTextArray(0)
     array.recycle()
@@ -136,8 +140,10 @@ fun Fragment.resolveBooleanAttr(attr: Int, defaultValue: Boolean = false) =
 fun Fragment.resolveColorAttr(attr: Int, defaultValue: Int = 0) =
     requireActivity().resolveColorAttr(attr, defaultValue)
 
-fun Fragment.resolveColorStateListAttr(attr: Int,
-                                      defaultValue: ColorStateList? = null) =
+fun Fragment.resolveColorStateListAttr(
+    attr: Int,
+    defaultValue: ColorStateList? = null
+) =
     requireActivity().resolveColorStateListAttr(attr, defaultValue)
 
 fun Fragment.resolveDimenAttr(attr: Int, defaultValue: Float = 0f) =
@@ -171,8 +177,10 @@ fun Fragment.resolveStringAttr(attr: Int, defaultValue: String? = null) =
 fun Fragment.resolveTextAttr(attr: Int, defaultValue: CharSequence? = null) =
     requireActivity().resolveTextAttr(attr, defaultValue)
 
-fun Fragment.resolveTextArrayAttr(attr: Int,
-                                 defaultValue: Array<CharSequence>? = null) =
+fun Fragment.resolveTextArrayAttr(
+    attr: Int,
+    defaultValue: Array<CharSequence>? = null
+) =
     requireActivity().resolveTextArrayAttr(attr, defaultValue)
 
 fun View.resolveBooleanAttr(attr: Int, defaultValue: Boolean = false) =
@@ -181,8 +189,10 @@ fun View.resolveBooleanAttr(attr: Int, defaultValue: Boolean = false) =
 fun View.resolveColorAttr(attr: Int, defaultValue: Int = 0) =
     context.resolveColorAttr(attr, defaultValue)
 
-fun View.resolveColorStateListAttr(attr: Int,
-                                       defaultValue: ColorStateList? = null) =
+fun View.resolveColorStateListAttr(
+    attr: Int,
+    defaultValue: ColorStateList? = null
+) =
     context.resolveColorStateListAttr(attr, defaultValue)
 
 fun View.resolveDimenAttr(attr: Int, defaultValue: Float = 0f) =
@@ -216,6 +226,8 @@ fun View.resolveStringAttr(attr: Int, defaultValue: String? = null) =
 fun View.resolveTextAttr(attr: Int, defaultValue: CharSequence? = null) =
     context.resolveTextAttr(attr, defaultValue)
 
-fun View.resolveTextArrayAttr(attr: Int,
-                                  defaultValue: Array<CharSequence>? = null) =
+fun View.resolveTextArrayAttr(
+    attr: Int,
+    defaultValue: Array<CharSequence>? = null
+) =
     context.resolveTextArrayAttr(attr, defaultValue)

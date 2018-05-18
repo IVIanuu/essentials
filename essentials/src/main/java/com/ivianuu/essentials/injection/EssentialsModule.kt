@@ -24,9 +24,11 @@ import dagger.android.support.AndroidSupportInjectionModule
 /**
  * Wraps essential modules
  */
-@Module(includes = [
-    AndroidInjectionModule::class,
-    AndroidSupportInjectionModule::class,
-    EssentialsAppModule::class
-])
+@Module(
+    includes = [
+        AndroidInjectionModule::class,
+        AndroidSupportInjectionModule::class,
+        EssentialsAppModule::class
+    ]
+)
 object EssentialsModule

@@ -29,7 +29,7 @@ fun RecyclerView.doOnScrolled(action: ((recyclerView: RecyclerView, dx: Int, dy:
 fun RecyclerView.addOnScrollListener(
     onScrollStateChanged: ((recyclerView: RecyclerView, newState: Int) -> Unit)? = null,
     onScrolled: ((recyclerView: RecyclerView, dx: Int, dy: Int) -> Unit)? = null
-) : RecyclerView.OnScrollListener {
+): RecyclerView.OnScrollListener {
     val listener = object : RecyclerView.OnScrollListener() {
         override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
             onScrollStateChanged?.invoke(recyclerView, newState)
@@ -56,7 +56,7 @@ fun RecyclerView.addOnItemTouchListener(
     onInterceptTouchEvent: ((rv: RecyclerView, e: MotionEvent) -> Boolean)? = null,
     onTouchEvent: ((rv: RecyclerView, e: MotionEvent) -> Unit)? = null,
     onRequestDisallowInterceptTouchEvent: ((disallowIntercept: Boolean) -> Unit)? = null
-) : RecyclerView.OnItemTouchListener {
+): RecyclerView.OnItemTouchListener {
     val listener = object : RecyclerView.OnItemTouchListener {
         override fun onInterceptTouchEvent(rv: RecyclerView, e: MotionEvent): Boolean {
             return onInterceptTouchEvent?.invoke(rv, e) ?: false
@@ -83,7 +83,7 @@ fun RecyclerView.doOnChildViewDetachedFromWindow(action: (view: View) -> Unit) =
 fun RecyclerView.addOnChildAttachStateChangeListener(
     onChildViewAttachedToWindow: ((view: View) -> Unit)? = null,
     onChildViewDetachedFromWindow: ((view: View) -> Unit)? = null
-) : RecyclerView.OnChildAttachStateChangeListener {
+): RecyclerView.OnChildAttachStateChangeListener {
     val listener = object : RecyclerView.OnChildAttachStateChangeListener {
         override fun onChildViewAttachedToWindow(view: View) {
             onChildViewAttachedToWindow?.invoke(view)
@@ -118,7 +118,7 @@ fun RecyclerView.Adapter<*>.registerAdapterDataObserver(
     onItemRangeInserted: ((positionStart: Int, itemCount: Int) -> Unit)? = null,
     onItemRangeRemoved: ((positionStart: Int, itemCount: Int) -> Unit)? = null,
     onItemRangeMoved: ((fromPosition: Int, toPosition: Int, itemCount: Int) -> Unit)? = null
-) : RecyclerView.AdapterDataObserver {
+): RecyclerView.AdapterDataObserver {
     val observer = object : RecyclerView.AdapterDataObserver() {
         override fun onChanged() {
             onChanged?.invoke()

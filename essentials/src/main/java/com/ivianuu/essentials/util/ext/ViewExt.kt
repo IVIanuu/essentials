@@ -25,7 +25,7 @@ val View.activity: Activity?
 fun View.requireActivity() = context.findActivityOrThrow()
 
 fun View.doOnViewAttachedToWindow(action: ((v: View) -> Unit)?) =
-        addOnAttachStateChangeListener(onViewAttachedToWindow = action)
+    addOnAttachStateChangeListener(onViewAttachedToWindow = action)
 
 fun View.doOnViewDetachedFromWindow(action: ((v: View) -> Unit)?) =
     addOnAttachStateChangeListener(onViewDetachedFromWindow = action)
@@ -33,7 +33,7 @@ fun View.doOnViewDetachedFromWindow(action: ((v: View) -> Unit)?) =
 fun View.addOnAttachStateChangeListener(
     onViewAttachedToWindow: ((v: View) -> Unit)? = null,
     onViewDetachedFromWindow: ((v: View) -> Unit)? = null
-) : View.OnAttachStateChangeListener {
+): View.OnAttachStateChangeListener {
     val listener = object : View.OnAttachStateChangeListener {
         override fun onViewAttachedToWindow(v: View) {
             onViewAttachedToWindow?.invoke(v)

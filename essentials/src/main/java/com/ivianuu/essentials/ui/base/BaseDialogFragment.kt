@@ -37,7 +37,8 @@ import javax.inject.Inject
 /**
  * Base dialog fragment
  */
-abstract class BaseDialogFragment : DialogFragment(), BackListener, HasSupportFragmentInjector, Injectable,
+abstract class BaseDialogFragment : DialogFragment(), BackListener, HasSupportFragmentInjector,
+    Injectable,
     NamedScreen, LifecycleScopeProvider<FragmentEvent> {
 
     @Inject lateinit var supportFragmentInjector: DispatchingAndroidInjector<Fragment>

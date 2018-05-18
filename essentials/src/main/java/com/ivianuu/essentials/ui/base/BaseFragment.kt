@@ -116,7 +116,7 @@ abstract class BaseFragment : Fragment(), BackListener, HasSupportFragmentInject
 
     override fun lifecycle() = lifecycleSubject
 
-    override fun correspondingEvents()= CORRESPONDING_FRAGMENT_EVENTS
+    override fun correspondingEvents() = CORRESPONDING_FRAGMENT_EVENTS
 
     override fun peekLifecycle() = lifecycleSubject.value
 

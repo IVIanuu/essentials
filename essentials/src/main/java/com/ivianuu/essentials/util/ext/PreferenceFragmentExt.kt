@@ -21,7 +21,7 @@ import android.support.v7.preference.PreferenceFragmentCompat
 
 @Suppress("UNCHECKED_CAST")
 fun <T : Preference> PreferenceFragmentCompat.findPref(key: CharSequence): T? =
-        findPreference(key) as T?
+    findPreference(key) as T?
 
 fun <T : Preference> PreferenceFragmentCompat.requirePref(key: CharSequence): T =
-        findPref(key) ?: throw IllegalStateException("pref not found $key")
+    findPref(key) ?: throw IllegalStateException("pref not found $key")

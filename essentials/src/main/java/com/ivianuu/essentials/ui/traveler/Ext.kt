@@ -58,13 +58,16 @@ fun ViewModelStoreOwner.getNavigatorHolder(containerId: Int) =
 fun ViewModelStoreOwner.getRouter(containerId: Int) =
     getTraveler(containerId).router
 
-fun <T> T.setupRouter(navigator: Navigator, containerId: Int): Router where T : ViewModelStoreOwner, T : LifecycleOwner {
+fun <T> T.setupRouter(
+    navigator: Navigator,
+    containerId: Int
+): Router where T : ViewModelStoreOwner, T : LifecycleOwner {
     val traveler = getTraveler(containerId)
     NavigatorLifecycleObserver(this, navigator, traveler.navigatorHolder)
     return traveler.router
 }
 
-fun <T> T.removeRouter(containerId: Int) where T: ViewModelStoreOwner, T : LifecycleOwner {
+fun <T> T.removeRouter(containerId: Int) where T : ViewModelStoreOwner, T : LifecycleOwner {
     getTravelerStore().removeTraveler(containerId)
 }
 
@@ -74,7 +77,10 @@ fun FragmentActivity.setupKeyFragmentRouter(containerId: Int) =
 fun Fragment.setupKeyFragmentRouter(containerId: Int) =
     setupKeyFragmentRouter(childFragmentManager, containerId)
 
-fun <T> T.setupKeyFragmentRouter(fm: FragmentManager, containerId: Int): Router where T : ViewModelStoreOwner, T : LifecycleOwner {
+fun <T> T.setupKeyFragmentRouter(
+    fm: FragmentManager,
+    containerId: Int
+): Router where T : ViewModelStoreOwner, T : LifecycleOwner {
     val navigator = KeyFragmentNavigator(fm, containerId)
     return setupRouter(navigator, containerId)
 }
@@ -96,15 +102,19 @@ fun FragmentActivity.setupKeyFragmentSwapperRouter(
     containerId: Int,
     hideStrategy: HideStrategy = HideStrategy.DETACH,
     swapOnReselection: Boolean = true
-) = setupKeyFragmentSwapperRouter(supportFragmentManager, containerId,
-    hideStrategy, swapOnReselection)
+) = setupKeyFragmentSwapperRouter(
+    supportFragmentManager, containerId,
+    hideStrategy, swapOnReselection
+)
 
 fun Fragment.setupKeyFragmentSwapperRouter(
     containerId: Int,
     hideStrategy: HideStrategy = HideStrategy.DETACH,
     swapOnReselection: Boolean = true
-) = setupKeyFragmentSwapperRouter(childFragmentManager, containerId,
-    hideStrategy, swapOnReselection)
+) = setupKeyFragmentSwapperRouter(
+    childFragmentManager, containerId,
+    hideStrategy, swapOnReselection
+)
 
 fun <T> T.setupKeyFragmentSwapperRouter(
     fm: FragmentManager,
@@ -112,7 +122,9 @@ fun <T> T.setupKeyFragmentSwapperRouter(
     hideStrategy: HideStrategy = HideStrategy.DETACH,
     swapOnReselection: Boolean = true
 ): Router where T : ViewModelStoreOwner, T : LifecycleOwner {
-    val navigator = KeyFragmentSwapperNavigator(fm,
-        containerId, hideStrategy, swapOnReselection)
+    val navigator = KeyFragmentSwapperNavigator(
+        fm,
+        containerId, hideStrategy, swapOnReselection
+    )
     return setupRouter(navigator, containerId)
 }

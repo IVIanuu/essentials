@@ -37,7 +37,7 @@ open class KeyFragmentAppNavigator(
     activity: FragmentActivity,
     fragmentManager: FragmentManager,
     containerId: Int
-): FragmentAppNavigator(activity, fragmentManager, containerId) {
+) : FragmentAppNavigator(activity, fragmentManager, containerId) {
 
     override fun createActivityIntent(context: Context, key: Any, data: Any?): Intent? {
         return if (key is ActivityKey) {
@@ -48,7 +48,7 @@ open class KeyFragmentAppNavigator(
     }
 
     override fun createStartActivityOptions(command: Command, activityIntent: Intent): Bundle? {
-        val key = when(command) {
+        val key = when (command) {
             is Forward -> command.key as ActivityKey
             is Replace -> command.key as ActivityKey
             else -> null
@@ -71,13 +71,15 @@ open class KeyFragmentAppNavigator(
         nextFragment: Fragment,
         transaction: FragmentTransaction
     ) {
-        val key = when(command) {
+        val key = when (command) {
             is Forward -> command.key as FragmentKey
             is Replace -> command.key as FragmentKey
             else -> null
         }
 
-        key?.setupFragmentTransaction(command, currentFragment,
-            nextFragment, transaction)
+        key?.setupFragmentTransaction(
+            command, currentFragment,
+            nextFragment, transaction
+        )
     }
 }

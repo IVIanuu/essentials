@@ -44,7 +44,7 @@ abstract class ActivityKey {
     companion object {
         private const val KEY_KEY = "key"
 
-        fun <T> get(activity: Activity) :T? where T : ActivityKey, T : Parcelable =
+        fun <T> get(activity: Activity): T? where T : ActivityKey, T : Parcelable =
             activity.intent.getParcelableExtra(KEY_KEY)
     }
 }

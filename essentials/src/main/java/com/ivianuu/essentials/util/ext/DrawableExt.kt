@@ -19,9 +19,11 @@ package com.ivianuu.essentials.util.ext
 import android.graphics.PorterDuff
 import android.graphics.drawable.Drawable
 
-fun Drawable.tint(color: Int,
-                  mode: PorterDuff.Mode = PorterDuff.Mode.SRC_IN,
-                  mutate: Boolean = true): Drawable {
+fun Drawable.tint(
+    color: Int,
+    mode: PorterDuff.Mode = PorterDuff.Mode.SRC_IN,
+    mutate: Boolean = true
+): Drawable {
     return if (mutate) {
         mutate().apply { setColorFilter(color, mode) }
     } else {

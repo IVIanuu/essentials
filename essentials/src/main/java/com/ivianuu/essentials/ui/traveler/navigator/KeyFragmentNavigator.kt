@@ -32,7 +32,7 @@ open class KeyFragmentNavigator(
     fragmentManager: FragmentManager,
     containerId: Int,
     private val exit: () -> Unit = {}
-): FragmentNavigator(fragmentManager, containerId) {
+) : FragmentNavigator(fragmentManager, containerId) {
 
     override fun createFragment(key: Any, data: Any?): Fragment? {
         return if (key is FragmentKey) {
@@ -48,14 +48,16 @@ open class KeyFragmentNavigator(
         nextFragment: Fragment,
         transaction: FragmentTransaction
     ) {
-        val key = when(command) {
+        val key = when (command) {
             is Forward -> command.key as FragmentKey
             is Replace -> command.key as FragmentKey
             else -> null
         }
 
-        key?.setupFragmentTransaction(command, currentFragment,
-            nextFragment, transaction)
+        key?.setupFragmentTransaction(
+            command, currentFragment,
+            nextFragment, transaction
+        )
     }
 
     override fun exit() {

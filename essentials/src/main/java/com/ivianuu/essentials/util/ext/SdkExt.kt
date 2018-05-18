@@ -25,7 +25,7 @@ inline val isMarshmallow
     get() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
 
 inline val isNougat
-get() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
+    get() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
 
 inline val isNougatMr1
     get() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1

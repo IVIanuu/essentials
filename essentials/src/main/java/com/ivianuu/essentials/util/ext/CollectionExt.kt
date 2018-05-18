@@ -33,7 +33,7 @@ inline fun <T> Array<T>.forEachWithIndex(action: (Int, T) -> Unit) {
 }
 
 inline fun <T> Array<T>.forEachReversedByIndex(action: (T) -> Unit) {
-    var  i = size - 1
+    var i = size - 1
     while (i >= 0) {
         action(get(i))
         i--
@@ -41,7 +41,7 @@ inline fun <T> Array<T>.forEachReversedByIndex(action: (T) -> Unit) {
 }
 
 inline fun <T> Array<T>.forEachReversedWithIndex(action: (Int, T) -> Unit) {
-    var  i = size - 1
+    var i = size - 1
     while (i >= 0) {
         action(i, get(i))
         i--
@@ -63,7 +63,7 @@ inline fun <T> List<T>.forEachWithIndex(action: (Int, T) -> Unit) {
 }
 
 inline fun <T> List<T>.forEachReversedByIndex(action: (T) -> Unit) {
-    var  i = size - 1
+    var i = size - 1
     while (i >= 0) {
         action(get(i))
         i--
@@ -71,7 +71,7 @@ inline fun <T> List<T>.forEachReversedByIndex(action: (T) -> Unit) {
 }
 
 inline fun <T> List<T>.forEachReversedWithIndex(action: (Int, T) -> Unit) {
-    var  i = size - 1
+    var i = size - 1
     while (i >= 0) {
         action(i, get(i))
         i--

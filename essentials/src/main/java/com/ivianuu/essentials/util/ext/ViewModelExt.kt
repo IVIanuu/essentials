@@ -36,13 +36,13 @@ inline fun <reified T : ViewModel> ViewModelStoreOwner.getViewModel(
     factory: ViewModelProvider.Factory
 ): T = ViewModelProvider(this, factory).get(key, T::class.java)
 
-inline fun <reified T: ViewModel> ViewModelStoreOwner.bindViewModel(): Lazy<T> =
+inline fun <reified T : ViewModel> ViewModelStoreOwner.bindViewModel(): Lazy<T> =
     unsafeLazy { getViewModel<T>() }
 
-inline fun <reified T: ViewModel> ViewModelStoreOwner.bindViewModel(
+inline fun <reified T : ViewModel> ViewModelStoreOwner.bindViewModel(
     crossinline factory: () -> ViewModelProvider.Factory
 ): Lazy<T> = unsafeLazy { getViewModel<T>(factory()) }
 
-inline fun <reified T: ViewModel> ViewModelStoreOwner.bindViewModel(
+inline fun <reified T : ViewModel> ViewModelStoreOwner.bindViewModel(
     key: String
 ): Lazy<T> = unsafeLazy { getViewModel<T>(key) }

@@ -42,10 +42,10 @@ fun <T> LiveData<T>.observeK(owner: LifecycleOwner, onChanged: (T) -> Unit) {
 fun <T> LiveData<T>.requireValue() = value ?: throw IllegalStateException("value is null")
 
 fun <T : Any> LiveData<T>.toFlowable(strategy: BackpressureStrategy = BackpressureStrategy.LATEST) =
-        toObservable().toFlowable(strategy)
+    toObservable().toFlowable(strategy)
 
 fun <T : Any> Flowable<T>.toLiveData() =
-        toObservable().toLiveData()
+    toObservable().toLiveData()
 
 fun <T : Any> LiveData<T>.toObservable(): Observable<T> {
     return Observable.create { e ->
@@ -86,13 +86,13 @@ fun <T : Any> Observable<T>.toLiveData(): LiveData<T> {
 }
 
 fun <T : Any> LiveData<T>.toMaybe(): Maybe<T> =
-        toObservable().singleElement()
+    toObservable().singleElement()
 
 fun <T : Any> Maybe<T>.toLiveData() =
-        toObservable().toLiveData()
+    toObservable().toLiveData()
 
 fun <T : Any> LiveData<T>.toSingle(): Single<T> =
-        toObservable().singleOrError()
+    toObservable().singleOrError()
 
 fun <T : Any> Single<T>.toLiveData() =
-        toObservable().toLiveData()
+    toObservable().toLiveData()

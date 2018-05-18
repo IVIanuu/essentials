@@ -39,4 +39,5 @@ annotation class ForView
 @Qualifier
 annotation class ForChildView
 
-@Qualifier annotation class DefaultSharedPrefs
+@Qualifier
+annotation class DefaultSharedPrefs

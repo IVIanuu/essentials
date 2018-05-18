@@ -33,7 +33,7 @@ fun ViewGroup.doOnChildViewRemoved(action: (parent: View, child: View) -> Unit) 
 fun ViewGroup.setOnHierarchyChangeListener(
     onChildViewAdded: ((parent: View, child: View) -> Unit)? = null,
     onChildViewRemoved: ((parent: View, child: View) -> Unit)? = null
-) : ViewGroup.OnHierarchyChangeListener {
+): ViewGroup.OnHierarchyChangeListener {
     val listener = object : ViewGroup.OnHierarchyChangeListener {
         override fun onChildViewAdded(parent: View, child: View) {
             onChildViewAdded?.invoke(parent, child)

@@ -28,7 +28,7 @@ fun Snackbar.doOnDismissed(action: (transientBottomBar: Snackbar, event: Int) ->
 fun Snackbar.addCallback(
     onShown: ((transientBottomBar: Snackbar) -> Unit)? = null,
     onDismissed: ((transientBottomBar: Snackbar, event: Int) -> Unit)? = null
-) : BaseTransientBottomBar.BaseCallback<Snackbar> {
+): BaseTransientBottomBar.BaseCallback<Snackbar> {
     val callback = object : BaseTransientBottomBar.BaseCallback<Snackbar>() {
         override fun onShown(transientBottomBar: Snackbar) {
             onShown?.invoke(transientBottomBar)

@@ -31,7 +31,7 @@ fun SeekBar.setOnSeekBarChangeListener(
     onProgressChanged: ((seekBar: SeekBar, progress: Int, fromUser: Boolean) -> Unit)? = null,
     onStartTrackingTouch: ((seekBar: SeekBar) -> Unit)? = null,
     onStopTrackingTouch: ((seekBar: SeekBar) -> Unit)? = null
-) : SeekBar.OnSeekBarChangeListener {
+): SeekBar.OnSeekBarChangeListener {
     val listener = object : SeekBar.OnSeekBarChangeListener {
         override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
             onProgressChanged?.invoke(seekBar, progress, fromUser)

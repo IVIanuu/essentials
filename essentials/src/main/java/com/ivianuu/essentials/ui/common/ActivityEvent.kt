@@ -24,7 +24,7 @@ enum class ActivityEvent {
 }
 
 val CORRESPONDING_ACTIVITY_EVENTS = Function<ActivityEvent, ActivityEvent> {
-    when(it) {
+    when (it) {
         CREATE -> DESTROY
         START -> STOP
         RESUME -> PAUSE

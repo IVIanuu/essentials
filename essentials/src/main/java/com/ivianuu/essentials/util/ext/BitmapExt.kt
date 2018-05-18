@@ -21,7 +21,7 @@ import android.util.Base64
 import java.io.ByteArrayOutputStream
 
 
-fun Bitmap.resize(width: Int, height: Int) : Bitmap {
+fun Bitmap.resize(width: Int, height: Int): Bitmap {
     val srcWidth = getWidth()
 
     val srcHeight = getHeight()
@@ -30,20 +30,28 @@ fun Bitmap.resize(width: Int, height: Int) : Bitmap {
     val heightRatio = srcHeight.toFloat() / height.toFloat()
 
     return if (widthRatio < heightRatio) {
-        val scaleBitmap = Bitmap.createScaledBitmap(this, width,
-            Math.round(srcHeight / widthRatio), true)
-        Bitmap.createBitmap(scaleBitmap, 0, Math.round((scaleBitmap.height - height) / 2.0f),
-            width, height)
+        val scaleBitmap = Bitmap.createScaledBitmap(
+            this, width,
+            Math.round(srcHeight / widthRatio), true
+        )
+        Bitmap.createBitmap(
+            scaleBitmap, 0, Math.round((scaleBitmap.height - height) / 2.0f),
+            width, height
+        )
     } else {
-        val scaleBitmap = Bitmap.createScaledBitmap(this, Math.round(srcWidth / heightRatio),
-            height, true)
+        val scaleBitmap = Bitmap.createScaledBitmap(
+            this, Math.round(srcWidth / heightRatio),
+            height, true
+        )
 
-        Bitmap.createBitmap(scaleBitmap, Math.round((scaleBitmap.width - width) / 2.0f), 0,
-            width, height)
+        Bitmap.createBitmap(
+            scaleBitmap, Math.round((scaleBitmap.width - width) / 2.0f), 0,
+            width, height
+        )
     }
 }
 
-fun Bitmap.toBase64() : String {
+fun Bitmap.toBase64(): String {
     val byteArrayOutputStream = ByteArrayOutputStream()
     compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
     val b = byteArrayOutputStream.toByteArray()

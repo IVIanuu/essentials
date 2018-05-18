@@ -31,7 +31,7 @@ fun TabLayout.addOnTabSelectedListener(
     onTabSelected: ((tab: TabLayout.Tab) -> Unit)? = null,
     onTabUnselected: ((tab: TabLayout.Tab) -> Unit)? = null,
     onTabReselected: ((tab: TabLayout.Tab) -> Unit)? = null
-) : TabLayout.OnTabSelectedListener {
+): TabLayout.OnTabSelectedListener {
     val listener = object : TabLayout.OnTabSelectedListener {
         override fun onTabSelected(tab: TabLayout.Tab) {
             onTabSelected?.invoke(tab)

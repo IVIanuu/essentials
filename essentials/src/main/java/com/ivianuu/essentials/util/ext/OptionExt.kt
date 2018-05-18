@@ -43,9 +43,11 @@ inline fun <T : Any> Option<T>.getOrDefault(other: () -> T) = get() ?: other.inv
 
 inline fun <T : Any, X : Throwable> Option<T>.getOrThrow(throwable: X) = get() ?: throw throwable
 
-inline fun <T : Any, X : Throwable> Option<T>.getOrThrow(throwable: () -> X) = get() ?: throw throwable.invoke()
+inline fun <T : Any, X : Throwable> Option<T>.getOrThrow(throwable: () -> X) =
+    get() ?: throw throwable.invoke()
 
-inline fun <T : Any> Option<T>.require() = get() ?: IllegalStateException("called require but is none")
+inline fun <T : Any> Option<T>.require() =
+    get() ?: IllegalStateException("called require but is none")
 
 inline fun <T : Any, U : Any> Option<T>.map(mapper: (T) -> U) = if (this is Option.Some) {
     optionOf(mapper.invoke(value))
@@ -53,11 +55,12 @@ inline fun <T : Any, U : Any> Option<T>.map(mapper: (T) -> U) = if (this is Opti
     absent<U>()
 }
 
-inline fun <T : Any, U : Any> Option<T>.flatMap(mapper: (T) -> Option<U>) = if (this is Option.Some) {
-    mapper.invoke(value)
-} else {
-    absent<U>()
-}
+inline fun <T : Any, U : Any> Option<T>.flatMap(mapper: (T) -> Option<U>) =
+    if (this is Option.Some) {
+        mapper.invoke(value)
+    } else {
+        absent<U>()
+    }
 
 inline fun <T : Any> Option<T>.filter(predicate: (T) -> Boolean) =
     if (this is Option.Some && predicate.invoke(value)) {

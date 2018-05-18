@@ -51,5 +51,5 @@ class ChildNavigationContainerFragment : BaseFragment(), NotInjectable {
 }
 
 @Parcelize
-data class ChildNavigationContainerKey(val index: Int)
-    : FragmentClassKey(ChildNavigationContainerFragment::class), Parcelable
+data class ChildNavigationContainerKey(val index: Int) :
+    FragmentClassKey(ChildNavigationContainerFragment::class), Parcelable

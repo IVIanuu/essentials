@@ -23,7 +23,9 @@ import android.widget.Toast
 
 fun Context.toast(message: CharSequence, duration: Int = Toast.LENGTH_SHORT): Toast =
     Toast.makeText(this, message, duration).apply { show() }
-fun Context.toast(message: Int, duration: Int = Toast.LENGTH_SHORT) = toast(getString(message), duration)
+
+fun Context.toast(message: Int, duration: Int = Toast.LENGTH_SHORT) =
+    toast(getString(message), duration)
 
 fun Fragment.toast(message: CharSequence) = requireActivity().toast(message)
 fun Fragment.toast(message: Int) = requireActivity().toast(message)

@@ -48,14 +48,16 @@ class KeyFragmentSwapperNavigator(
         nextFragment: Fragment,
         transaction: FragmentTransaction
     ) {
-        val key = when(command) {
+        val key = when (command) {
             is Forward -> command.key as FragmentKey
             is Replace -> command.key as FragmentKey
             else -> null
         }
 
-        key?.setupFragmentTransaction(command, currentFragment,
-            nextFragment, transaction)
+        key?.setupFragmentTransaction(
+            command, currentFragment,
+            nextFragment, transaction
+        )
     }
 
 }

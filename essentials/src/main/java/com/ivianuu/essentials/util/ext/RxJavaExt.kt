@@ -31,26 +31,27 @@ import io.reactivex.subjects.PublishSubject
 
 private val onCompleteStub: () -> Unit = {}
 private val onNextStub: (Any) -> Unit = {}
-private val onErrorStub: (Throwable) -> Unit = { RxJavaPlugins.onError(OnErrorNotImplementedException(it)) }
+private val onErrorStub: (Throwable) -> Unit =
+    { RxJavaPlugins.onError(OnErrorNotImplementedException(it)) }
 private val onErrorPrint: (Throwable) -> Unit = Throwable::printStackTrace
 
 fun Completable.main(): Completable =
-        observeOn(EnsureMainThreadScheduler.INSTANCE)
+    observeOn(EnsureMainThreadScheduler.INSTANCE)
 
 fun <T : Any> Flowable<T>.main(): Flowable<T> =
-        observeOn(EnsureMainThreadScheduler.INSTANCE)
+    observeOn(EnsureMainThreadScheduler.INSTANCE)
 
 fun <T : Any> Maybe<T>.main(): Maybe<T> =
-        observeOn(EnsureMainThreadScheduler.INSTANCE)
+    observeOn(EnsureMainThreadScheduler.INSTANCE)
 
 fun <T : Any> Observable<T>.main(): Observable<T> =
     observeOn(EnsureMainThreadScheduler.INSTANCE)
 
 fun <T : Any> Single<T>.main(): Single<T> =
-        observeOn(EnsureMainThreadScheduler.INSTANCE)
+    observeOn(EnsureMainThreadScheduler.INSTANCE)
 
 fun Completable.subscribeAndPrint(onComplete: () -> Unit = onCompleteStub) =
-        subscribeBy(onComplete = onComplete, onError = onErrorPrint)
+    subscribeBy(onComplete = onComplete, onError = onErrorPrint)
 
 fun <T : Any> Flowable<T>.subscribeAndPrint(onNext: (T) -> Unit = onNextStub) =
     subscribeBy(onNext = onNext, onError = onErrorPrint)
@@ -64,21 +65,26 @@ fun <T : Any> Observable<T>.subscribeAndPrint(onNext: (T) -> Unit = onNextStub) 
 fun <T : Any> Single<T>.subscribeAndPrint(onSuccess: (T) -> Unit = onNextStub) =
     subscribeBy(onSuccess = onSuccess, onError = onErrorPrint)
 
-fun <T : Any> BehaviorSubject<T>.requireValue() = value ?: throw IllegalStateException("value is null")
+fun <T : Any> BehaviorSubject<T>.requireValue() =
+    value ?: throw IllegalStateException("value is null")
 
-fun <T : Any> behaviorSubject(defaultValue: T? = null): BehaviorSubject<T> = if (defaultValue != null) {
-    BehaviorSubject.createDefault(defaultValue)
-} else {
-    BehaviorSubject.create()
-}
+fun <T : Any> behaviorSubject(defaultValue: T? = null): BehaviorSubject<T> =
+    if (defaultValue != null) {
+        BehaviorSubject.createDefault(defaultValue)
+    } else {
+        BehaviorSubject.create()
+    }
+
 fun <T : Any> publishSubject(): PublishSubject<T> = PublishSubject.create<T>()
 
 fun Completable.subscribeForUi(
     view: View,
     onComplete: () -> Unit
 ) {
-    subscribeForUi(scopeProvider = ViewScopeProvider.from(view),
-        onError = onErrorStub, onComplete = onComplete)
+    subscribeForUi(
+        scopeProvider = ViewScopeProvider.from(view),
+        onError = onErrorStub, onComplete = onComplete
+    )
 }
 
 fun Completable.subscribeForUi(
@@ -93,7 +99,11 @@ fun Completable.subscribeForUi(
     onError: (Throwable) -> Unit = onErrorStub,
     onComplete: () -> Unit = onCompleteStub
 ) {
-    subscribeForUi(scopeProvider = ViewScopeProvider.from(view), onError = onError, onComplete = onComplete)
+    subscribeForUi(
+        scopeProvider = ViewScopeProvider.from(view),
+        onError = onError,
+        onComplete = onComplete
+    )
 }
 
 fun Completable.subscribeForUi(
@@ -110,7 +120,11 @@ fun <E> Completable.subscribeForUi(
     lifecycleScopeProvider: LifecycleScopeProvider<E>,
     onComplete: () -> Unit
 ) {
-    subscribeForUi(lifecycleScopeProvider = lifecycleScopeProvider, onError = onErrorStub, onComplete = onComplete)
+    subscribeForUi(
+        lifecycleScopeProvider = lifecycleScopeProvider,
+        onError = onErrorStub,
+        onComplete = onComplete
+    )
 }
 
 fun <E> Completable.subscribeForUi(
@@ -128,8 +142,10 @@ fun <E> Completable.subscribeForUi(
     untilEvent: E,
     onComplete: () -> Unit
 ) {
-    subscribeForUi(lifecycleScopeProvider = lifecycleScopeProvider, untilEvent = untilEvent,
-        onError = onErrorStub, onComplete = onComplete)
+    subscribeForUi(
+        lifecycleScopeProvider = lifecycleScopeProvider, untilEvent = untilEvent,
+        onError = onErrorStub, onComplete = onComplete
+    )
 }
 
 fun <E> Completable.subscribeForUi(
@@ -147,16 +163,20 @@ fun <T : Any> Flowable<T>.subscribeForUi(
     view: View,
     onNext: (T) -> Unit
 ) {
-    subscribeForUi(scopeProvider = ViewScopeProvider.from(view), onError = onErrorStub,
-        onComplete = onCompleteStub, onNext = onNext)
+    subscribeForUi(
+        scopeProvider = ViewScopeProvider.from(view), onError = onErrorStub,
+        onComplete = onCompleteStub, onNext = onNext
+    )
 }
 
 fun <T : Any> Flowable<T>.subscribeForUi(
     scopeProvider: ScopeProvider,
     onNext: (T) -> Unit
 ) {
-    subscribeForUi(scopeProvider = scopeProvider, onError = onErrorStub,
-        onComplete = onCompleteStub, onNext = onNext)
+    subscribeForUi(
+        scopeProvider = scopeProvider, onError = onErrorStub,
+        onComplete = onCompleteStub, onNext = onNext
+    )
 }
 
 fun <T : Any> Flowable<T>.subscribeForUi(
@@ -165,8 +185,10 @@ fun <T : Any> Flowable<T>.subscribeForUi(
     onComplete: () -> Unit = onCompleteStub,
     onNext: (T) -> Unit = onNextStub
 ) {
-    subscribeForUi(scopeProvider = ViewScopeProvider.from(view), onError = onError,
-        onComplete = onComplete, onNext = onNext)
+    subscribeForUi(
+        scopeProvider = ViewScopeProvider.from(view), onError = onError,
+        onComplete = onComplete, onNext = onNext
+    )
 }
 
 fun <T : Any> Flowable<T>.subscribeForUi(
@@ -184,8 +206,10 @@ fun <T : Any, E> Flowable<T>.subscribeForUi(
     lifecycleScopeProvider: LifecycleScopeProvider<E>,
     onNext: (T) -> Unit
 ) {
-    subscribeForUi(lifecycleScopeProvider = lifecycleScopeProvider, onError = onErrorStub,
-        onComplete = onCompleteStub, onNext = onNext)
+    subscribeForUi(
+        lifecycleScopeProvider = lifecycleScopeProvider, onError = onErrorStub,
+        onComplete = onCompleteStub, onNext = onNext
+    )
 }
 
 fun <T : Any, E> Flowable<T>.subscribeForUi(
@@ -204,8 +228,10 @@ fun <T : Any, E> Flowable<T>.subscribeForUi(
     untilEvent: E,
     onNext: (T) -> Unit
 ) {
-    subscribeForUi(lifecycleScopeProvider = lifecycleScopeProvider, untilEvent = untilEvent,
-        onError = onErrorStub, onComplete = onCompleteStub, onNext = onNext)
+    subscribeForUi(
+        lifecycleScopeProvider = lifecycleScopeProvider, untilEvent = untilEvent,
+        onError = onErrorStub, onComplete = onCompleteStub, onNext = onNext
+    )
 }
 
 fun <T : Any, E> Flowable<T>.subscribeForUi(
@@ -224,16 +250,20 @@ fun <T : Any> Maybe<T>.subscribeForUi(
     view: View,
     onSuccess: (T) -> Unit
 ) {
-    subscribeForUi(scopeProvider = ViewScopeProvider.from(view), onError = onErrorStub,
-        onComplete = onCompleteStub, onSuccess = onSuccess)
+    subscribeForUi(
+        scopeProvider = ViewScopeProvider.from(view), onError = onErrorStub,
+        onComplete = onCompleteStub, onSuccess = onSuccess
+    )
 }
 
 fun <T : Any> Maybe<T>.subscribeForUi(
     scopeProvider: ScopeProvider,
     onSuccess: (T) -> Unit
 ) {
-    subscribeForUi(scopeProvider = scopeProvider, onError = onErrorStub,
-        onComplete = onCompleteStub, onSuccess = onSuccess)
+    subscribeForUi(
+        scopeProvider = scopeProvider, onError = onErrorStub,
+        onComplete = onCompleteStub, onSuccess = onSuccess
+    )
 }
 
 fun <T : Any> Maybe<T>.subscribeForUi(
@@ -242,8 +272,10 @@ fun <T : Any> Maybe<T>.subscribeForUi(
     onComplete: () -> Unit = onCompleteStub,
     onSuccess: (T) -> Unit = onNextStub
 ) {
-    subscribeForUi(scopeProvider = ViewScopeProvider.from(view), onError = onError,
-        onComplete = onComplete, onSuccess = onSuccess)
+    subscribeForUi(
+        scopeProvider = ViewScopeProvider.from(view), onError = onError,
+        onComplete = onComplete, onSuccess = onSuccess
+    )
 }
 
 fun <T : Any> Maybe<T>.subscribeForUi(
@@ -261,8 +293,10 @@ fun <T : Any, E> Maybe<T>.subscribeForUi(
     lifecycleScopeProvider: LifecycleScopeProvider<E>,
     onSuccess: (T) -> Unit
 ) {
-    subscribeForUi(lifecycleScopeProvider = lifecycleScopeProvider, onError = onErrorStub,
-        onComplete = onCompleteStub, onSuccess = onSuccess)
+    subscribeForUi(
+        lifecycleScopeProvider = lifecycleScopeProvider, onError = onErrorStub,
+        onComplete = onCompleteStub, onSuccess = onSuccess
+    )
 }
 
 fun <T : Any, E> Maybe<T>.subscribeForUi(
@@ -281,8 +315,10 @@ fun <T : Any, E> Maybe<T>.subscribeForUi(
     untilEvent: E,
     onSuccess: (T) -> Unit
 ) {
-    subscribeForUi(lifecycleScopeProvider = lifecycleScopeProvider, untilEvent = untilEvent,
-        onError = onErrorStub, onComplete = onCompleteStub, onSuccess = onSuccess)
+    subscribeForUi(
+        lifecycleScopeProvider = lifecycleScopeProvider, untilEvent = untilEvent,
+        onError = onErrorStub, onComplete = onCompleteStub, onSuccess = onSuccess
+    )
 }
 
 fun <T : Any, E> Maybe<T>.subscribeForUi(
@@ -301,16 +337,20 @@ fun <T : Any> Observable<T>.subscribeForUi(
     view: View,
     onNext: (T) -> Unit
 ) {
-    subscribeForUi(scopeProvider = ViewScopeProvider.from(view), onError = onErrorStub,
-        onComplete = onCompleteStub, onNext = onNext)
+    subscribeForUi(
+        scopeProvider = ViewScopeProvider.from(view), onError = onErrorStub,
+        onComplete = onCompleteStub, onNext = onNext
+    )
 }
 
 fun <T : Any> Observable<T>.subscribeForUi(
     scopeProvider: ScopeProvider,
     onNext: (T) -> Unit
 ) {
-    subscribeForUi(scopeProvider = scopeProvider, onError = onErrorStub,
-        onComplete = onCompleteStub, onNext = onNext)
+    subscribeForUi(
+        scopeProvider = scopeProvider, onError = onErrorStub,
+        onComplete = onCompleteStub, onNext = onNext
+    )
 }
 
 fun <T : Any> Observable<T>.subscribeForUi(
@@ -319,8 +359,10 @@ fun <T : Any> Observable<T>.subscribeForUi(
     onComplete: () -> Unit = onCompleteStub,
     onNext: (T) -> Unit = onNextStub
 ) {
-    subscribeForUi(scopeProvider = ViewScopeProvider.from(view), onError = onError,
-        onComplete = onComplete, onNext = onNext)
+    subscribeForUi(
+        scopeProvider = ViewScopeProvider.from(view), onError = onError,
+        onComplete = onComplete, onNext = onNext
+    )
 }
 
 fun <T : Any> Observable<T>.subscribeForUi(
@@ -338,8 +380,10 @@ fun <T : Any, E> Observable<T>.subscribeForUi(
     lifecycleScopeProvider: LifecycleScopeProvider<E>,
     onNext: (T) -> Unit
 ) {
-    subscribeForUi(lifecycleScopeProvider = lifecycleScopeProvider, onError = onErrorStub,
-        onComplete = onCompleteStub, onNext = onNext)
+    subscribeForUi(
+        lifecycleScopeProvider = lifecycleScopeProvider, onError = onErrorStub,
+        onComplete = onCompleteStub, onNext = onNext
+    )
 }
 
 fun <T : Any, E> Observable<T>.subscribeForUi(
@@ -358,8 +402,10 @@ fun <T : Any, E> Observable<T>.subscribeForUi(
     untilEvent: E,
     onNext: (T) -> Unit
 ) {
-    subscribeForUi(lifecycleScopeProvider = lifecycleScopeProvider, untilEvent = untilEvent,
-        onError = onErrorStub, onComplete = onCompleteStub, onNext = onNext)
+    subscribeForUi(
+        lifecycleScopeProvider = lifecycleScopeProvider, untilEvent = untilEvent,
+        onError = onErrorStub, onComplete = onCompleteStub, onNext = onNext
+    )
 }
 
 fun <T : Any, E> Observable<T>.subscribeForUi(
@@ -385,7 +431,11 @@ fun <T : Any> Single<T>.subscribeForUi(
     view: View,
     onSuccess: (T) -> Unit
 ) {
-    subscribeForUi(scopeProvider = ViewScopeProvider.from(view), onError = onErrorStub, onSuccess = onSuccess)
+    subscribeForUi(
+        scopeProvider = ViewScopeProvider.from(view),
+        onError = onErrorStub,
+        onSuccess = onSuccess
+    )
 }
 
 fun <T : Any> Single<T>.subscribeForUi(
@@ -393,7 +443,11 @@ fun <T : Any> Single<T>.subscribeForUi(
     onError: (Throwable) -> Unit = onErrorStub,
     onSuccess: (T) -> Unit = onNextStub
 ) {
-    subscribeForUi(scopeProvider = ViewScopeProvider.from(view), onError = onError, onSuccess = onSuccess)
+    subscribeForUi(
+        scopeProvider = ViewScopeProvider.from(view),
+        onError = onError,
+        onSuccess = onSuccess
+    )
 }
 
 fun <T : Any> Single<T>.subscribeForUi(
@@ -410,8 +464,10 @@ fun <T : Any, E> Single<T>.subscribeForUi(
     lifecycleScopeProvider: LifecycleScopeProvider<E>,
     onSuccess: (T) -> Unit
 ) {
-    subscribeForUi(lifecycleScopeProvider = lifecycleScopeProvider, onError = onErrorStub,
-        onSuccess = onSuccess)
+    subscribeForUi(
+        lifecycleScopeProvider = lifecycleScopeProvider, onError = onErrorStub,
+        onSuccess = onSuccess
+    )
 }
 
 fun <T : Any, E> Single<T>.subscribeForUi(
@@ -429,8 +485,10 @@ fun <T : Any, E> Single<T>.subscribeForUi(
     untilEvent: E,
     onSuccess: (T) -> Unit
 ) {
-    subscribeForUi(lifecycleScopeProvider = lifecycleScopeProvider, untilEvent = untilEvent,
-        onError = onErrorStub, onSuccess = onSuccess)
+    subscribeForUi(
+        lifecycleScopeProvider = lifecycleScopeProvider, untilEvent = untilEvent,
+        onError = onErrorStub, onSuccess = onSuccess
+    )
 }
 
 fun <T : Any, E> Single<T>.subscribeForUi(

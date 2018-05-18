@@ -191,7 +191,7 @@ abstract class BaseActivityModule<T : BaseActivity> {
         @JvmStatic
         @Provides
         fun provideRouter(activity: BaseActivity) =
-                activity.router
+            activity.router
 
     }
 

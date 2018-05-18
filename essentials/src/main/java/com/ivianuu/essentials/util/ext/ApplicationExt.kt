@@ -51,7 +51,7 @@ fun Application.registerActivityLifecycleCallbacks(
     onActivityStopped: ((activity: Activity) -> Unit)? = null,
     onActivitySaveInstanceState: ((activity: Activity, outState: Bundle) -> Unit)? = null,
     onActivityDestroyed: ((activity: Activity) -> Unit)? = null
-) : Application.ActivityLifecycleCallbacks {
+): Application.ActivityLifecycleCallbacks {
     val callbacks = object : Application.ActivityLifecycleCallbacks {
         override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
             onActivityCreated?.invoke(activity, savedInstanceState)
@@ -98,7 +98,7 @@ fun Application.registerComponentCallbacks(
     onConfigurationChanged: ((newConfig: Configuration) -> Unit)? = null,
     onLowMemory: (() -> Unit)? = null,
     onTrimMemory: ((level: Int) -> Unit)? = null
-) : ComponentCallbacks2 {
+): ComponentCallbacks2 {
     val callbacks = object : ComponentCallbacks2 {
         override fun onConfigurationChanged(newConfig: Configuration) {
             onConfigurationChanged?.invoke(newConfig)

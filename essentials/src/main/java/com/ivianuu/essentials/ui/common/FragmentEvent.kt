@@ -24,7 +24,7 @@ enum class FragmentEvent {
 }
 
 val CORRESPONDING_FRAGMENT_EVENTS = Function<FragmentEvent, FragmentEvent> {
-    when(it) {
+    when (it) {
         ATTACH -> DETACH
         CREATE -> DESTROY
         CREATE_VIEW -> DESTROY_VIEW

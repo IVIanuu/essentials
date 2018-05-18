@@ -24,7 +24,7 @@ import androidx.core.net.toUri
 /**
  * Open s the app info of the app
  */
-data class AppInfoKey(private val packageName: String): ActivityKey() {
+data class AppInfoKey(private val packageName: String) : ActivityKey() {
     override fun createIntent(context: Context, data: Any?): Intent {
         return Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
             this.data = "package:$packageName".toUri()
