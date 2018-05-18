@@ -26,7 +26,6 @@ abstract class BaseApp : DaggerApplication() {
 
     override fun onCreate() {
         super.onCreate()
-
         AutoInjector.start(this)
     }
 

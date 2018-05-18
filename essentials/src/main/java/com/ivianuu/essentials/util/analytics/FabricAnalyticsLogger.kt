@@ -14,31 +14,22 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.sample.app
+package com.ivianuu.essentials.util.analytics
 
-import com.ivianuu.essentials.app.BaseApp
-import com.ivianuu.essentials.sample.BuildConfig
-import dagger.android.AndroidInjector
-import dagger.android.support.DaggerApplication
-import timber.log.Timber
+import com.crashlytics.android.answers.Answers
+import com.crashlytics.android.answers.CustomEvent
+import com.ivianuu.essentials.util.ext.d
+import io.fabric.sdk.android.Fabric
 
 /**
- * @author Manuel Wrage (IVIanuu)
+ * Logs events via fabric
  */
-class App : BaseApp() {
-
-    override fun onCreate() {
-        super.onCreate()
-
-        if (BuildConfig.DEBUG) {
-            Timber.plant(Timber.DebugTree())
+class FabricAnalyticsLogger : AnalyticsLogger {
+    override fun log(event: String) {
+        if (Fabric.isInitialized()) {
+            Answers.getInstance().logCustom(CustomEvent(event))
+        } else {
+            d { event }
         }
     }
-
-    override fun applicationInjector(): AndroidInjector<out DaggerApplication> {
-        return DaggerAppComponent.builder()
-            .app(this)
-            .build()
-    }
-
 }

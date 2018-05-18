@@ -14,31 +14,25 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.sample.app
-
-import com.ivianuu.essentials.app.BaseApp
-import com.ivianuu.essentials.sample.BuildConfig
-import dagger.android.AndroidInjector
-import dagger.android.support.DaggerApplication
-import timber.log.Timber
+package com.ivianuu.essentials.util.analytics
 
 /**
- * @author Manuel Wrage (IVIanuu)
+ * Basic analytics logger
  */
-class App : BaseApp() {
+abstract class BaseAnalytics : ScreenLogger.Listener {
 
-    override fun onCreate() {
-        super.onCreate()
+    var logger = FabricAnalyticsLogger()
 
-        if (BuildConfig.DEBUG) {
-            Timber.plant(Timber.DebugTree())
-        }
+    open fun appStarted() {
+        log("app started")
     }
 
-    override fun applicationInjector(): AndroidInjector<out DaggerApplication> {
-        return DaggerAppComponent.builder()
-            .app(this)
-            .build()
+    override fun screenLaunched(name: String) {
+        log("Screen launched $name")
+    }
+
+    protected open fun log(event: String) {
+        logger.log(event)
     }
 
 }
