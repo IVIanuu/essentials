@@ -22,6 +22,7 @@ import android.support.v4.app.DialogFragment
 import android.support.v4.app.Fragment
 import android.view.View
 import com.ivianuu.autodispose.LifecycleScopeProvider
+import com.ivianuu.essentials.injection.Injectable
 import com.ivianuu.essentials.ui.common.CORRESPONDING_FRAGMENT_EVENTS
 import com.ivianuu.essentials.ui.common.FragmentEvent
 import com.ivianuu.essentials.ui.common.FragmentEvent.*
@@ -34,7 +35,7 @@ import javax.inject.Inject
 /**
  * Base dialog fragment
  */
-abstract class BaseDialogFragment : DialogFragment(), HasSupportFragmentInjector,
+abstract class BaseDialogFragment : DialogFragment(), HasSupportFragmentInjector, Injectable,
     LifecycleScopeProvider<FragmentEvent> {
 
     @Inject lateinit var supportFragmentInjector: DispatchingAndroidInjector<Fragment>
