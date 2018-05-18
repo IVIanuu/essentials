@@ -18,7 +18,7 @@ package com.ivianuu.essentials.sample.app
 
 import com.ivianuu.essentials.app.BaseApp
 import com.ivianuu.essentials.sample.BuildConfig
-import com.ivianuu.essentials.util.ScreenLogger
+import com.ivianuu.essentials.util.analytics.ScreenLogger
 import com.ivianuu.essentials.util.ext.d
 import dagger.android.AndroidInjector
 import dagger.android.support.DaggerApplication

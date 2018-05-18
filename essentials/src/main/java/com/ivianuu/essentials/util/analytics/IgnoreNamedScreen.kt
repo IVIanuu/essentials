@@ -14,12 +14,9 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.util
+package com.ivianuu.essentials.util.analytics
 
 /**
- * Tells the [ScreenLogger] that it should log this screen
+ * The opposite of [NamedScreen]
  */
-interface NamedScreen {
-    val screenName
-        get() = ""
-}
+interface IgnoreNamedScreen

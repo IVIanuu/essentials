@@ -14,9 +14,28 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.util
+package com.ivianuu.essentials.util.analytics
+
+import com.crashlytics.android.answers.Answers
+import com.crashlytics.android.answers.CustomEvent
+import com.ivianuu.essentials.util.ext.d
+import io.fabric.sdk.android.Fabric
 
 /**
- * The opposite of [NamedScreen]
+ * Basic analytics logger
  */
-interface IgnoreNamedScreen
+abstract class AnalyticsLogger {
+
+    open fun screenLaunched(name: String) {
+        log("Screen launched $name")
+    }
+
+    protected open fun log(event: String) {
+        if (Fabric.isInitialized()) {
+            Answers.getInstance().logCustom(CustomEvent(event))
+        } else {
+            d { event }
+        }
+    }
+
+}
