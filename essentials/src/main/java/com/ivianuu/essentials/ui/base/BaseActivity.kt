@@ -37,6 +37,7 @@ import com.ivianuu.essentials.ui.traveler.navigator.KeyFragmentAppNavigator
 import com.ivianuu.essentials.util.ext.unsafeLazy
 import com.ivianuu.rxactivityresult.RxActivityResult
 import com.ivianuu.rxpermissions.RxPermissions
+import com.ivianuu.traveler.Navigator
 import com.ivianuu.traveler.NavigatorHolder
 import com.ivianuu.traveler.Router
 import dagger.Binds
@@ -61,7 +62,7 @@ abstract class BaseActivity : AppCompatActivity(), HasSupportFragmentInjector,
 
     open val fragmentContainer = android.R.id.content
 
-    open val navigator by unsafeLazy {
+    open val navigator: Navigator by unsafeLazy {
         KeyFragmentAppNavigator(
             this,
             supportFragmentManager,
