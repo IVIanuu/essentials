@@ -20,7 +20,6 @@ import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.LifecycleObserver
 import android.arch.lifecycle.LifecycleOwner
 import android.arch.lifecycle.OnLifecycleEvent
-import com.ivianuu.essentials.util.ext.d
 import com.ivianuu.traveler.Navigator
 import com.ivianuu.traveler.NavigatorHolder
 
@@ -43,18 +42,15 @@ class NavigatorLifecycleObserver(
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     fun onResume() {
-        d { "on resume" }
         updateState(true)
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
     fun onPause() {
-        d { "on pause" }
         updateState(false)
     }
 
     private fun updateState(shouldAttach: Boolean) {
-        d { "update state $shouldAttach" }
         if (shouldAttach) {
             navigatorHolder.setNavigator(navigator)
         } else {
