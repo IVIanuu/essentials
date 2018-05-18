@@ -32,6 +32,7 @@ import com.ivianuu.essentials.ui.common.ActivityEvent.*
 import com.ivianuu.essentials.ui.common.BackListener
 import com.ivianuu.essentials.ui.common.CORRESPONDING_ACTIVITY_EVENTS
 import com.ivianuu.essentials.ui.traveler.getNavigatorHolder
+import com.ivianuu.essentials.ui.traveler.getRouter
 import com.ivianuu.essentials.ui.traveler.getTraveler
 import com.ivianuu.essentials.ui.traveler.navigator.KeyFragmentAppNavigator
 import com.ivianuu.essentials.ui.traveler.setupRouter
@@ -193,7 +194,7 @@ abstract class BaseActivityModule<T : BaseActivity> {
         @JvmStatic
         @Provides
         fun provideRouter(activity: BaseActivity) =
-            activity.router
+            activity.getRouter(activity.fragmentContainer)
 
     }
 
