@@ -19,6 +19,7 @@ package com.ivianuu.essentials.sample.ui
 import android.os.Bundle
 import com.ivianuu.essentials.ui.base.BaseActivity
 import com.ivianuu.essentials.ui.base.BaseActivityModule
+import com.ivianuu.essentials.util.ext.d
 import dagger.Module
 
 class MainActivity : BaseActivity() {
@@ -26,11 +27,37 @@ class MainActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        d { "created" }
+
         if (savedInstanceState == null) {
-            router.newRootScreen(MultipleChildsKey)
+            router.newRootScreen(ChildNavigationKey(0, 1))
         }
     }
 
+    override fun onStart() {
+        super.onStart()
+        d { "started" }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        d { "resumed" }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        d { "paused" }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        d { "stopped" }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        d { "destroyed" }
+    }
 }
 
 @Module

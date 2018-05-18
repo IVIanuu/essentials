@@ -14,22 +14,9 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.common
+package com.ivianuu.essentials.injection
 
-import com.ivianuu.essentials.ui.common.ActivityEvent.*
-import io.reactivex.functions.Function
-
-enum class ActivityEvent {
-    CREATE, START, RESUME, PAUSE, STOP, DESTROY
-}
-
-val CORRESPONDING_ACTIVITY_EVENTS = Function<ActivityEvent, ActivityEvent> {
-    when(it) {
-        CREATE -> DESTROY
-        START -> STOP
-        RESUME -> PAUSE
-        PAUSE -> STOP
-        STOP -> DESTROY
-        else -> throw IllegalStateException("out of lifecycle ${it::class.java.simpleName}")
-    }
-}
+/**
+ * Marks a component as injectable
+ */
+interface Injectable

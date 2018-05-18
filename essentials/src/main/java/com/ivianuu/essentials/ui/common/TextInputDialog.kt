@@ -18,28 +18,21 @@ package com.ivianuu.essentials.ui.common
 
 import android.annotation.SuppressLint
 import android.app.Dialog
-import android.content.Context
 import android.os.Bundle
 import android.os.Parcelable
-import android.support.v4.app.DialogFragment
 import com.afollestad.materialdialogs.MaterialDialog
 import com.ivianuu.essentials.R
-import com.ivianuu.essentials.ui.traveler.key.FragmentKey
+import com.ivianuu.essentials.ui.base.BaseDialogFragment
+import com.ivianuu.essentials.ui.traveler.key.FragmentClassKey
 import com.ivianuu.essentials.ui.traveler.key.ResultKey
 import com.ivianuu.essentials.ui.traveler.key.requireKey
 import com.ivianuu.essentials.ui.traveler.router
-import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.parcel.Parcelize
 
 /**
  * Text input dialog
  */
-class TextInputDialog : DialogFragment() {
-
-    override fun onAttach(context: Context?) {
-        AndroidSupportInjection.inject(this)
-        super.onAttach(context)
-    }
+class TextInputDialog : BaseDialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val key = requireKey<TextInputKey>()
@@ -69,6 +62,4 @@ data class TextInputKey(
     val inputType: Int = 0,
     val prefill: String = "",
     val allowEmptyInput: Boolean = false
-) : FragmentKey(), ResultKey, Parcelable {
-    override fun createFragment(data: Any?) = TextInputDialog()
-}
+) : FragmentClassKey(TextInputDialog::class), ResultKey, Parcelable

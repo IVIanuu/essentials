@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.ui.base
 
 import android.app.Activity
+import android.arch.lifecycle.Lifecycle.Event
 import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -24,12 +25,11 @@ import android.support.v4.app.FragmentActivity
 import android.support.v4.app.FragmentManager
 import android.support.v7.app.AppCompatActivity
 import com.ivianuu.autodispose.LifecycleScopeProvider
+import com.ivianuu.autodispose.archcomponents.AndroidLifecycleScopeProvider
 import com.ivianuu.essentials.injection.EssentialsBindingModule
 import com.ivianuu.essentials.injection.ForActivity
-import com.ivianuu.essentials.ui.common.ActivityEvent
-import com.ivianuu.essentials.ui.common.ActivityEvent.*
+import com.ivianuu.essentials.injection.Injectable
 import com.ivianuu.essentials.ui.common.BackListener
-import com.ivianuu.essentials.ui.common.CORRESPONDING_ACTIVITY_EVENTS
 import com.ivianuu.essentials.ui.traveler.getNavigatorHolder
 import com.ivianuu.essentials.ui.traveler.getRouter
 import com.ivianuu.essentials.ui.traveler.getTraveler
@@ -43,18 +43,15 @@ import com.ivianuu.traveler.Router
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
-import dagger.android.AndroidInjection
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
-import io.reactivex.subjects.BehaviorSubject
 import javax.inject.Inject
 
 /**
  * Base activity
  */
-abstract class BaseActivity : AppCompatActivity(), HasSupportFragmentInjector,
-    LifecycleScopeProvider<ActivityEvent> {
+abstract class BaseActivity : AppCompatActivity(), HasSupportFragmentInjector, Injectable {
 
     @Inject lateinit var supportFragmentInjector: DispatchingAndroidInjector<Fragment>
 
@@ -70,52 +67,24 @@ abstract class BaseActivity : AppCompatActivity(), HasSupportFragmentInjector,
         )
     }
 
-    private val lifecycleSubject = BehaviorSubject.create<ActivityEvent>()
-
     lateinit var router: Router
     lateinit var navigatorHolder: NavigatorHolder
 
+    val lifecycleScopeProvider: LifecycleScopeProvider<Event> =
+        AndroidLifecycleScopeProvider.from(this)
+
     override fun onCreate(savedInstanceState: Bundle?) {
-        AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
 
         navigatorHolder = getNavigatorHolder(fragmentContainer)
         router = getRouter(fragmentContainer)
 
-        lifecycleSubject.onNext(CREATE)
-
         if (layoutRes != -1) setContentView(layoutRes)
-    }
-
-    override fun onStart() {
-        super.onStart()
-        lifecycleSubject.onNext(START)
-    }
-
-    override fun onResume() {
-        super.onResume()
-        lifecycleSubject.onNext(RESUME)
     }
 
     override fun onResumeFragments() {
         super.onResumeFragments()
         navigatorHolder.setNavigator(navigator)
-    }
-
-    override fun onPause() {
-        navigatorHolder.removeNavigator()
-        lifecycleSubject.onNext(PAUSE)
-        super.onPause()
-    }
-
-    override fun onStop() {
-        lifecycleSubject.onNext(STOP)
-        super.onStop()
-    }
-
-    override fun onDestroy() {
-        lifecycleSubject.onNext(DESTROY)
-        super.onDestroy()
     }
 
     override fun onBackPressed() {
@@ -125,12 +94,6 @@ abstract class BaseActivity : AppCompatActivity(), HasSupportFragmentInjector,
     }
 
     override fun supportFragmentInjector(): AndroidInjector<Fragment> = supportFragmentInjector
-
-    override fun lifecycle() = lifecycleSubject
-    
-    override fun correspondingEvents() = CORRESPONDING_ACTIVITY_EVENTS
-
-    override fun peekLifecycle() = lifecycleSubject.value
 
     private fun recursivelyDispatchOnBackPressed(fm: FragmentManager): Boolean {
         val reverseOrder = fm.fragments

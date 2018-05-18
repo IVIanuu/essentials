@@ -39,6 +39,7 @@ object Deps {
     const val archComponentsLifecycleCompiler = "android.arch.lifecycle:compiler:${Versions.archComponents}"
 
     const val autoDispose = "com.github.IVIanuu.AutoDispose:autodispose:${Versions.autoDispose}"
+    const val autoDisposeArchComponents = "com.github.IVIanuu.AutoDispose:autodispose-archcomponents:${Versions.autoDispose}"
     const val autoDisposeView = "com.github.IVIanuu.AutoDispose:autodispose-view:${Versions.autoDispose}"
 
     const val butterknifeGradlePlugin = "com.jakewharton:butterknife-gradle-plugin:${Versions.butterknife}"

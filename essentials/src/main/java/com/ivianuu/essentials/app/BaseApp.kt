@@ -16,9 +16,18 @@
 
 package com.ivianuu.essentials.app
 
+import com.ivianuu.essentials.injection.AutoInjector
 import dagger.android.support.DaggerApplication
 
 /**
  * App
  */
-abstract class BaseApp : DaggerApplication()
+abstract class BaseApp : DaggerApplication() {
+
+    override fun onCreate() {
+        super.onCreate()
+
+        AutoInjector.start(this)
+    }
+
+}

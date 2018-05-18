@@ -16,33 +16,29 @@
 
 package com.ivianuu.essentials.ui.preference
 
-import android.content.Context
+import android.arch.lifecycle.Lifecycle
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v7.preference.PreferenceFragmentCompat
 import android.support.v7.preference.PreferenceScreen
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.ivianuu.autodispose.LifecycleScopeProvider
+import com.ivianuu.autodispose.archcomponents.AndroidLifecycleScopeProvider
+import com.ivianuu.essentials.injection.Injectable
 import com.ivianuu.essentials.ui.common.BackListener
-import com.ivianuu.essentials.ui.common.CORRESPONDING_FRAGMENT_EVENTS
-import com.ivianuu.essentials.ui.common.FragmentEvent
-import com.ivianuu.essentials.ui.common.FragmentEvent.*
+import com.ivianuu.essentials.ui.common.ViewLifecyclePreferenceFragment
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
-import dagger.android.support.AndroidSupportInjection
 import dagger.android.support.HasSupportFragmentInjector
-import io.reactivex.subjects.BehaviorSubject
 import javax.inject.Inject
 
 /**
  * Base preference fragment
  */
-abstract class BasePreferenceFragment : PreferenceFragmentCompat(), BackListener,
-    HasSupportFragmentInjector,
-    LifecycleScopeProvider<FragmentEvent> {
+abstract class BasePreferenceFragment : ViewLifecyclePreferenceFragment(), Injectable, BackListener,
+    HasSupportFragmentInjector {
 
     @Inject lateinit var supportFragmentInjector: DispatchingAndroidInjector<Fragment>
 
@@ -50,18 +46,11 @@ abstract class BasePreferenceFragment : PreferenceFragmentCompat(), BackListener
     open val prefsContainerId = -1
     open val prefsRes = -1
 
-    private val lifecycleSubject = BehaviorSubject.create<FragmentEvent>()
+    val lifecycleScopeProvider: LifecycleScopeProvider<Lifecycle.Event> =
+        AndroidLifecycleScopeProvider.from(this)
 
-    override fun onAttach(context: Context?) {
-        AndroidSupportInjection.inject(this)
-        super.onAttach(context)
-        lifecycleSubject.onNext(ATTACH)
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        lifecycleSubject.onNext(CREATE)
-    }
+    val viewLifecycleScopeProvider: LifecycleScopeProvider<Lifecycle.Event> =
+        AndroidLifecycleScopeProvider.from(viewLifecycleOwner)
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -89,55 +78,10 @@ abstract class BasePreferenceFragment : PreferenceFragmentCompat(), BackListener
         return EnabledAwarePreferenceAdapter(preferenceScreen)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        lifecycleSubject.onNext(CREATE_VIEW)
-    }
-
-    override fun onStart() {
-        super.onStart()
-        lifecycleSubject.onNext(START)
-    }
-
-    override fun onResume() {
-        super.onResume()
-        lifecycleSubject.onNext(RESUME)
-    }
-
-    override fun onPause() {
-        lifecycleSubject.onNext(PAUSE)
-        super.onPause()
-    }
-
-    override fun onStop() {
-        lifecycleSubject.onNext(STOP)
-        super.onStop()
-    }
-
-    override fun onDestroyView() {
-        lifecycleSubject.onNext(DESTROY_VIEW)
-        super.onDestroyView()
-    }
-
-    override fun onDestroy() {
-        lifecycleSubject.onNext(DESTROY)
-        super.onDestroy()
-    }
-
-    override fun onDetach() {
-        lifecycleSubject.onNext(DETACH)
-        super.onDetach()
-    }
-
     override fun handleBack(): Boolean {
         return false
     }
 
     override fun supportFragmentInjector(): AndroidInjector<Fragment> = supportFragmentInjector
 
-    override fun lifecycle() = lifecycleSubject
-
-    override fun correspondingEvents() = CORRESPONDING_FRAGMENT_EVENTS
-
-    override fun peekLifecycle() = lifecycleSubject.value
 }
