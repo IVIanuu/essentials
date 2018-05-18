@@ -55,23 +55,53 @@ class ScreenLogger @Inject constructor(private val application: Application) {
 
     private fun handleActivity(activity: Activity, savedInstanceState: Bundle?) {
         if (activity is NamedScreen
-            && activity.screenName.isNotEmpty()
+            && activity !is IgnoreNamedScreen
             && savedInstanceState == null) {
-            logger?.logScreenName(activity.screenName)
+            logger?.logScreenName(getName(activity))
         }
 
         if (activity is FragmentActivity) {
             activity.supportFragmentManager.doOnFragmentCreated(true) { _: FragmentManager, fragment: Fragment, bundle: Bundle? ->
                 if (fragment is NamedScreen
-                    && fragment.screenName.isNotEmpty()
+                    && activity !is IgnoreNamedScreen
                     && bundle == null) {
-                    logger?.logScreenName(fragment.screenName)
+                    logger?.logScreenName(getName(fragment))
                 }
             }
         }
     }
 
+    private fun getName(screen: NamedScreen): String {
+        return if (screen.screenName.isNotEmpty()) {
+            screen.screenName
+        } else {
+            parseName(screen.javaClass.simpleName)
+        }
+    }
+
+    private fun parseName(className: String): String {
+        val withoutSuffix = when {
+            className.endsWith(SUFFIX_ACTIVITY) -> className.replace(SUFFIX_ACTIVITY, "")
+            className.endsWith(SUFFIX_DIALOG) -> className.replace(SUFFIX_DIALOG, "")
+            className.endsWith(SUFFIX_FRAGMENT) -> className.replace(SUFFIX_FRAGMENT, "")
+            else -> className
+        }
+
+        // there's probably a util function but i can't find it:D
+        val regex = "([a-z])([A-Z]+)"
+        val replacement = "$1_$2"
+        return withoutSuffix
+            .replace(regex.toRegex(), replacement)
+            .toLowerCase()
+    }
+
     interface Logger {
         fun logScreenName(screenName: String)
+    }
+
+    private companion object {
+        private const val SUFFIX_ACTIVITY = "Activity"
+        private const val SUFFIX_DIALOG = "Dialog"
+        private const val SUFFIX_FRAGMENT = "Fragment"
     }
 }

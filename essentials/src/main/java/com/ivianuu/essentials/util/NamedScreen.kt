@@ -17,7 +17,7 @@
 package com.ivianuu.essentials.util
 
 /**
- * Tells the a screen has a name
+ * Tells the [ScreenLogger] that it should log this screen
  */
 interface NamedScreen {
     val screenName

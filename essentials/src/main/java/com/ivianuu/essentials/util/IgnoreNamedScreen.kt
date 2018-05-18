@@ -14,24 +14,9 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.sample.ui
+package com.ivianuu.essentials.util
 
-import android.os.Bundle
-import com.ivianuu.essentials.ui.base.BaseActivity
-import com.ivianuu.essentials.ui.base.BaseActivityModule
-import com.ivianuu.essentials.ui.traveler.router
-import dagger.Module
-
-class MainActivity : BaseActivity() {
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        if (savedInstanceState == null) {
-            router.newRootScreen(MultipleChildsKey)
-        }
-    }
-}
-
-@Module
-abstract class MainActivityModule : BaseActivityModule<MainActivity>()
+/**
+ * The opposite of [NamedScreen]
+ */
+interface IgnoreNamedScreen

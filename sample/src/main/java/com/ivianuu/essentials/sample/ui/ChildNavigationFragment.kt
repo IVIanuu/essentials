@@ -34,9 +34,6 @@ import kotlinx.android.synthetic.main.fragment_child_navigation.*
  */
 class ChildNavigationFragment : BaseFragment(), NotInjectable {
 
-    override val screenName: String
-        get() = "child navigation"
-
     override val layoutRes = R.layout.fragment_child_navigation
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

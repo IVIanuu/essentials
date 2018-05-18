@@ -29,9 +29,6 @@ import com.ivianuu.essentials.ui.traveler.setupKeyFragmentSwapperRouter
  */
 class MultipleChildsFragment : BaseFragment(), NotInjectable {
 
-    override val screenName: String
-        get() = "multiple childs"
-
     override val layoutRes = R.layout.fragment_multiple_childs
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

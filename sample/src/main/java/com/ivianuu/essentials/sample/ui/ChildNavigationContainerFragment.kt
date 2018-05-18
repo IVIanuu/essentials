@@ -25,15 +25,13 @@ import com.ivianuu.essentials.ui.base.BaseFragment
 import com.ivianuu.essentials.ui.traveler.key.FragmentClassKey
 import com.ivianuu.essentials.ui.traveler.key.requireKey
 import com.ivianuu.essentials.ui.traveler.setupKeyFragmentRouter
+import com.ivianuu.essentials.util.IgnoreNamedScreen
 import kotlinx.android.parcel.Parcelize
 
 /**
  * @author Manuel Wrage (IVIanuu)
  */
-class ChildNavigationContainerFragment : BaseFragment(), NotInjectable {
-
-    override val screenName: String
-        get() = "child navigation container"
+class ChildNavigationContainerFragment : BaseFragment(), NotInjectable, IgnoreNamedScreen {
 
     override val layoutRes = R.layout.fragment_child_navigation_container
 
