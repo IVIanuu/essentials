@@ -20,6 +20,7 @@ import com.crashlytics.android.answers.Answers
 import com.crashlytics.android.answers.CustomEvent
 import com.ivianuu.essentials.util.ext.d
 import io.fabric.sdk.android.Fabric
+import timber.log.Timber
 
 /**
  * Logs events via fabric
@@ -29,6 +30,7 @@ class FabricAnalyticsLogger : AnalyticsLogger {
         if (Fabric.isInitialized()) {
             Answers.getInstance().logCustom(CustomEvent(event))
         } else {
+            Timber.tag("Analytics")
             d { event }
         }
     }
