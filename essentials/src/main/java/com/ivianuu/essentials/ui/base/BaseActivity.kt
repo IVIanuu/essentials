@@ -32,17 +32,16 @@ import com.ivianuu.essentials.ui.common.ActivityEvent.*
 import com.ivianuu.essentials.ui.common.BackListener
 import com.ivianuu.essentials.ui.common.CORRESPONDING_ACTIVITY_EVENTS
 import com.ivianuu.essentials.ui.traveler.getNavigatorHolder
-import com.ivianuu.essentials.ui.traveler.getRouter
 import com.ivianuu.essentials.ui.traveler.getTraveler
 import com.ivianuu.essentials.ui.traveler.navigator.KeyFragmentAppNavigator
+import com.ivianuu.essentials.ui.traveler.router
+import com.ivianuu.essentials.ui.traveler.setupRouter
 import com.ivianuu.essentials.util.NamedScreen
 import com.ivianuu.essentials.util.ext.behaviorSubject
 import com.ivianuu.essentials.util.ext.unsafeLazy
 import com.ivianuu.rxactivityresult.RxActivityResult
 import com.ivianuu.rxpermissions.RxPermissions
 import com.ivianuu.traveler.Navigator
-import com.ivianuu.traveler.NavigatorHolder
-import com.ivianuu.traveler.Router
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -63,8 +62,6 @@ abstract class BaseActivity : AppCompatActivity(), HasSupportFragmentInjector, I
 
     open val fragmentContainer = android.R.id.content
 
-    lateinit var router: Router
-
     protected open val navigator: Navigator by unsafeLazy {
         KeyFragmentAppNavigator(
             this,
@@ -72,7 +69,6 @@ abstract class BaseActivity : AppCompatActivity(), HasSupportFragmentInjector, I
             fragmentContainer
         )
     }
-    protected lateinit var navigatorHolder: NavigatorHolder
 
     private val lifecycleSubject = behaviorSubject<ActivityEvent>()
 
@@ -80,8 +76,7 @@ abstract class BaseActivity : AppCompatActivity(), HasSupportFragmentInjector, I
         super.onCreate(savedInstanceState)
         lifecycleSubject.onNext(CREATE)
 
-        navigatorHolder = getNavigatorHolder(fragmentContainer)
-        router = getRouter(fragmentContainer)
+        setupRouter(navigator, fragmentContainer)
 
         if (layoutRes != -1) setContentView(layoutRes)
     }
@@ -96,13 +91,7 @@ abstract class BaseActivity : AppCompatActivity(), HasSupportFragmentInjector, I
         lifecycleSubject.onNext(RESUME)
     }
 
-    override fun onResumeFragments() {
-        super.onResumeFragments()
-        navigatorHolder.setNavigator(navigator)
-    }
-
     override fun onPause() {
-        navigatorHolder.removeNavigator()
         lifecycleSubject.onNext(PAUSE)
         super.onPause()
     }
@@ -202,7 +191,7 @@ abstract class BaseActivityModule<T : BaseActivity> {
         @JvmStatic
         @Provides
         fun provideRouter(activity: BaseActivity) =
-                activity.getRouter(activity.fragmentContainer)
+                activity.router
 
     }
 

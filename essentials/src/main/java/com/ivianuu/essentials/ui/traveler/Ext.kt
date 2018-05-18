@@ -22,11 +22,17 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.containerId
+import com.ivianuu.essentials.ui.base.BaseActivity
+import com.ivianuu.essentials.ui.traveler.navigator.FragmentSwapperNavigator.HideStrategy
 import com.ivianuu.essentials.ui.traveler.navigator.KeyFragmentAppNavigator
 import com.ivianuu.essentials.ui.traveler.navigator.KeyFragmentNavigator
+import com.ivianuu.essentials.ui.traveler.navigator.KeyFragmentSwapperNavigator
 import com.ivianuu.essentials.util.ext.getViewModel
 import com.ivianuu.traveler.Navigator
 import com.ivianuu.traveler.Router
+
+val BaseActivity.router: Router
+    get() = getRouter(fragmentContainer)
 
 val Fragment.router: Router
     get() {
@@ -83,5 +89,30 @@ fun <T> T.setupKeyFragmentAppRouter(
     activity: FragmentActivity, fm: FragmentManager, containerId: Int
 ): Router where T : ViewModelStoreOwner, T : LifecycleOwner {
     val navigator = KeyFragmentAppNavigator(activity, fm, containerId)
+    return setupRouter(navigator, containerId)
+}
+
+fun FragmentActivity.setupKeyFragmentSwapperRouter(
+    containerId: Int,
+    hideStrategy: HideStrategy = HideStrategy.DETACH,
+    swapOnReselection: Boolean = true
+) = setupKeyFragmentSwapperRouter(supportFragmentManager, containerId,
+    hideStrategy, swapOnReselection)
+
+fun Fragment.setupKeyFragmentSwapperRouter(
+    containerId: Int,
+    hideStrategy: HideStrategy = HideStrategy.DETACH,
+    swapOnReselection: Boolean = true
+) = setupKeyFragmentSwapperRouter(childFragmentManager, containerId,
+    hideStrategy, swapOnReselection)
+
+fun <T> T.setupKeyFragmentSwapperRouter(
+    fm: FragmentManager,
+    containerId: Int,
+    hideStrategy: HideStrategy = HideStrategy.DETACH,
+    swapOnReselection: Boolean = true
+): Router where T : ViewModelStoreOwner, T : LifecycleOwner {
+    val navigator = KeyFragmentSwapperNavigator(fm,
+        containerId, hideStrategy, swapOnReselection)
     return setupRouter(navigator, containerId)
 }

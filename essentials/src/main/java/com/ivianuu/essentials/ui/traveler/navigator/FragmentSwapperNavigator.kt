@@ -27,6 +27,7 @@ import com.ivianuu.traveler.commands.Replace
 
 /**
  * A navigator which swaps and reuses fragments
+ * This navigator does not provide any backstack functionality
  */
 abstract class FragmentSwapperNavigator(
     private val fm: FragmentManager,

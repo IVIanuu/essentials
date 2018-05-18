@@ -20,6 +20,9 @@ import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.LifecycleObserver
 import android.arch.lifecycle.LifecycleOwner
 import android.arch.lifecycle.OnLifecycleEvent
+import android.support.v4.app.Fragment
+import android.support.v4.app.FragmentActivity
+import com.ivianuu.essentials.util.ext.d
 import com.ivianuu.traveler.Navigator
 import com.ivianuu.traveler.NavigatorHolder
 
@@ -33,8 +36,17 @@ class NavigatorLifecycleObserver(
 ) : LifecycleObserver {
 
     init {
-        lifecycleOwner.lifecycle
-            .addObserver(this)
+        // if its a activity we must add a dummy fragment to make sure
+        // that we do NOT set the navigator before onResumeFragments was called
+        // otherwise this would lead to crashes
+        val lifecycle = if (lifecycleOwner is FragmentActivity) {
+            LifecycleProviderFragment.get(lifecycleOwner).lifecycle
+        } else {
+            lifecycleOwner.lifecycle
+        }
+
+        // observe
+        lifecycle.addObserver(this)
 
         // update navigator state based on the current lifecycle state
         updateState(lifecycleOwner.lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED))
@@ -42,19 +54,50 @@ class NavigatorLifecycleObserver(
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     fun onResume() {
+        d { "on resume" }
         updateState(true)
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
     fun onPause() {
+        d { "on pause" }
         updateState(false)
     }
 
     private fun updateState(shouldAttach: Boolean) {
+        d { "update state $shouldAttach" }
+
         if (shouldAttach) {
             navigatorHolder.setNavigator(navigator)
         } else {
             navigatorHolder.removeNavigator()
         }
+    }
+
+    /**
+     * Used for activities because their on resume is called to early
+     */
+    class LifecycleProviderFragment : Fragment() {
+
+        companion object {
+            private const val FRAGMENT_TAG = "LifecycleProviderFragment"
+
+            fun get(activity: FragmentActivity): LifecycleProviderFragment {
+                var fragment =
+                    activity.supportFragmentManager.findFragmentByTag(FRAGMENT_TAG)
+                            as LifecycleProviderFragment?
+
+                if (fragment == null) {
+                    fragment = LifecycleProviderFragment()
+
+                    activity.supportFragmentManager.beginTransaction()
+                        .add(fragment, FRAGMENT_TAG)
+                        .commitNow()
+                }
+
+                return fragment
+            }
+        }
+
     }
 }
