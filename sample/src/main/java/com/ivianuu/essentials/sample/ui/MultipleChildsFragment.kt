@@ -18,14 +18,19 @@ package com.ivianuu.essentials.sample.ui
 
 import android.os.Bundle
 import android.view.View
+import com.ivianuu.essentials.injection.NotInjectable
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.base.BaseFragment
 import com.ivianuu.essentials.ui.traveler.key.FragmentClassKey
+import com.ivianuu.essentials.ui.traveler.setupKeyFragmentSwapperRouter
 
 /**
  * @author Manuel Wrage (IVIanuu)
  */
-class MultipleChildsFragment : BaseFragment() {
+class MultipleChildsFragment : BaseFragment(), NotInjectable {
+
+    override val screenName: String
+        get() = "multiple childs"
 
     override val layoutRes = R.layout.fragment_multiple_childs
 
@@ -33,11 +38,11 @@ class MultipleChildsFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         CONTAINER_IDS.forEachIndexed { index, containerId ->
-         /*   val stack = getChildStack(containerId, index.toString())
-            val router = setupRouter(FragStackKeyNavigator(stack), containerId)
-            if (!stack.hasRoot()) {
-                router.newRootScreen(ChildNavigationKey(index, 1))
-            } */
+            val router = setupKeyFragmentSwapperRouter(containerId)
+
+            if (savedInstanceState == null) {
+                router.replaceScreen(ChildNavigationContainerKey(index))
+            }
         }
     }
 

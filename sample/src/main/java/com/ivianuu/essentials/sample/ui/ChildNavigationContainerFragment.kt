@@ -16,7 +16,6 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import android.graphics.Color
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.View
@@ -25,41 +24,32 @@ import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.base.BaseFragment
 import com.ivianuu.essentials.ui.traveler.key.FragmentClassKey
 import com.ivianuu.essentials.ui.traveler.key.requireKey
-import com.ivianuu.essentials.ui.traveler.router
+import com.ivianuu.essentials.ui.traveler.setupKeyFragmentRouter
 import kotlinx.android.parcel.Parcelize
-import kotlinx.android.synthetic.main.fragment_child_navigation.*
 
 /**
  * @author Manuel Wrage (IVIanuu)
  */
-class ChildNavigationFragment : BaseFragment(), NotInjectable {
+class ChildNavigationContainerFragment : BaseFragment(), NotInjectable {
 
     override val screenName: String
-        get() = "child navigation"
+        get() = "child navigation container"
 
-    override val layoutRes = R.layout.fragment_child_navigation
+    override val layoutRes = R.layout.fragment_child_navigation_container
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val key = requireKey<ChildNavigationKey>()
+        val key = requireKey<ChildNavigationContainerKey>()
 
-        title.text = "Container: ${key.index}, Count: ${key.count}"
-        view.setBackgroundColor(COLORS[key.index])
+        val router = setupKeyFragmentRouter(R.id.child_navigation_container)
 
-        pop_to_root.setOnClickListener { router.backToRoot() }
-        prev.setOnClickListener { router.exit() }
-        next.setOnClickListener {
-            router.navigateTo(ChildNavigationKey(key.index, key.count + 1))
+        if (savedInstanceState == null) {
+            router.replaceScreen(ChildNavigationKey(key.index, 1))
         }
-    }
-
-    private companion object {
-        private val COLORS =
-                arrayOf(Color.RED, Color.BLUE, Color.MAGENTA)
     }
 }
 
 @Parcelize
-data class ChildNavigationKey(val index: Int, val count: Int)
-    : FragmentClassKey(ChildNavigationFragment::class), Parcelable
+data class ChildNavigationContainerKey(val index: Int)
+    : FragmentClassKey(ChildNavigationContainerFragment::class), Parcelable

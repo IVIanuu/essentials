@@ -19,18 +19,18 @@ package com.ivianuu.essentials.sample.ui
 import android.os.Bundle
 import com.ivianuu.essentials.ui.base.BaseActivity
 import com.ivianuu.essentials.ui.base.BaseActivityModule
+import com.ivianuu.essentials.ui.traveler.router
 import dagger.Module
 
 class MainActivity : BaseActivity() {
 
-    override val screenName: String
-        get() = "main"
+    override val screenName: String get() = "main"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         if (savedInstanceState == null) {
-            router.newRootScreen(ChildNavigationKey(0, 1))
+            router.newRootScreen(MultipleChildsKey)
         }
     }
 }

@@ -14,22 +14,9 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.sample.injection
-
-import com.ivianuu.essentials.injection.PerActivity
-import com.ivianuu.essentials.sample.ui.MainActivity
-import com.ivianuu.essentials.sample.ui.MainActivityModule
-import dagger.Module
-import dagger.android.ContributesAndroidInjector
+package com.ivianuu.essentials.injection
 
 /**
- * @author Manuel Wrage (IVIanuu)
+ * Marks a component as not injectable
  */
-@Module
-abstract class ActivityBindingModule {
-
-    @PerActivity
-    @ContributesAndroidInjector(modules = [MainActivityModule::class])
-    abstract fun bindMainActivity(): MainActivity
-
-}
+interface NotInjectable
