@@ -27,7 +27,7 @@ import io.reactivex.plugins.RxJavaPlugins
 import java.util.concurrent.TimeUnit
 
 /**
- * Main thread scheduler which only posts if were not on the main thread
+ * Main thread scheduler which only use handler.post if were not on the main thread
  */
 class EnsureMainThreadScheduler : Scheduler() {
 
