@@ -26,7 +26,7 @@ import com.ivianuu.essentials.ui.base.BaseDialogFragment
 import com.ivianuu.essentials.ui.traveler.key.FragmentClassKey
 import com.ivianuu.essentials.ui.traveler.key.ResultKey
 import com.ivianuu.essentials.ui.traveler.key.requireKey
-import com.ivianuu.essentials.ui.traveler.router
+import com.ivianuu.essentials.ui.traveler.localRouter
 import kotlinx.android.parcel.Parcelize
 
 /**
@@ -40,7 +40,7 @@ class TextInputDialog : BaseDialogFragment() {
         return MaterialDialog.Builder(requireContext())
             .title(key.title)
             .input(key.inputHint, key.prefill, key.allowEmptyInput,
-                { _, input -> router.sendResult(key.resultCode, input.toString()) }
+                { _, input -> localRouter.sendResult(key.resultCode, input.toString()) }
             )
             .inputType(key.inputType)
             .positiveText(R.string.action_ok)

@@ -18,7 +18,6 @@ package com.ivianuu.essentials.sample.ui
 
 import android.os.Bundle
 import android.view.View
-import com.ivianuu.essentials.injection.NotInjectable
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.base.BaseFragment
 import com.ivianuu.essentials.ui.traveler.key.FragmentClassKey
@@ -27,7 +26,7 @@ import com.ivianuu.essentials.ui.traveler.setupKeyFragmentSwapperRouter
 /**
  * @author Manuel Wrage (IVIanuu)
  */
-class MultipleChildsFragment : BaseFragment(), NotInjectable {
+class MultipleChildsFragment : BaseFragment() {
 
     override val layoutRes = R.layout.fragment_multiple_childs
 

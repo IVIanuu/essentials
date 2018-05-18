@@ -20,19 +20,18 @@ import android.graphics.Color
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.View
-import com.ivianuu.essentials.injection.NotInjectable
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.base.BaseFragment
 import com.ivianuu.essentials.ui.traveler.key.FragmentClassKey
 import com.ivianuu.essentials.ui.traveler.key.requireKey
-import com.ivianuu.essentials.ui.traveler.router
+import com.ivianuu.essentials.ui.traveler.localRouter
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_child_navigation.*
 
 /**
  * @author Manuel Wrage (IVIanuu)
  */
-class ChildNavigationFragment : BaseFragment(), NotInjectable {
+class ChildNavigationFragment : BaseFragment() {
 
     override val layoutRes = R.layout.fragment_child_navigation
 
@@ -44,10 +43,10 @@ class ChildNavigationFragment : BaseFragment(), NotInjectable {
         title.text = "Container: ${key.index}, Count: ${key.count}"
         view.setBackgroundColor(COLORS[key.index])
 
-        pop_to_root.setOnClickListener { router.backToRoot() }
-        prev.setOnClickListener { router.exit() }
+        pop_to_root.setOnClickListener { localRouter.backToRoot() }
+        prev.setOnClickListener { localRouter.exit() }
         next.setOnClickListener {
-            router.navigateTo(ChildNavigationKey(key.index, key.count + 1))
+            localRouter.navigateTo(ChildNavigationKey(key.index, key.count + 1))
         }
     }
 

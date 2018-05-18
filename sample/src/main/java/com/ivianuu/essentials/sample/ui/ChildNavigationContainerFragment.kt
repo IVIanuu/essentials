@@ -19,7 +19,6 @@ package com.ivianuu.essentials.sample.ui
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.View
-import com.ivianuu.essentials.injection.NotInjectable
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.base.BaseFragment
 import com.ivianuu.essentials.ui.traveler.key.FragmentClassKey
@@ -31,8 +30,7 @@ import kotlinx.android.parcel.Parcelize
 /**
  * @author Manuel Wrage (IVIanuu)
  */
-class ChildNavigationContainerFragment : BaseFragment(), NotInjectable,
-    IgnoreNamedScreen {
+class ChildNavigationContainerFragment : BaseFragment(), IgnoreNamedScreen {
 
     override val layoutRes = R.layout.fragment_child_navigation_container
 

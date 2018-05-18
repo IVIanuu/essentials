@@ -22,7 +22,6 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.containerId
-import com.ivianuu.essentials.ui.base.BaseActivity
 import com.ivianuu.essentials.ui.traveler.navigator.FragmentSwapperNavigator.HideStrategy
 import com.ivianuu.essentials.ui.traveler.navigator.KeyFragmentAppNavigator
 import com.ivianuu.essentials.ui.traveler.navigator.KeyFragmentNavigator
@@ -31,10 +30,7 @@ import com.ivianuu.essentials.util.ext.getViewModel
 import com.ivianuu.traveler.Navigator
 import com.ivianuu.traveler.Router
 
-val BaseActivity.router: Router
-    get() = getRouter(fragmentContainer)
-
-val Fragment.router: Router
+val Fragment.localRouter: Router
     get() {
         val parent = parentFragment
         return parent?.getRouter(containerId) ?: requireActivity().getRouter(containerId)

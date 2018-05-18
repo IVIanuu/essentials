@@ -30,13 +30,13 @@ import dagger.android.support.AndroidSupportInjection
 import dagger.android.support.HasSupportFragmentInjector
 
 /**
- * Automatically injects into childs
+ * Automatically injects into [Injectable] [Activity]'s and [Fragment]'s
  */
 object AutoInjector {
 
     fun start(application: Application) {
         application.doOnActivityCreated { activity, _ ->
-            d { "inject $activity" }
+            d { "inject ${activity.javaClass.simpleName}" }
             handleActivity(activity)
         }
     }
@@ -47,12 +47,13 @@ object AutoInjector {
         }
 
         if (activity is FragmentActivity && activity is HasSupportFragmentInjector) {
-            activity.supportFragmentManager.doOnFragmentAttached(true) { _: FragmentManager, fragment: Fragment, _: Context ->
-                if (fragment is Injectable && fragment !is NotInjectable) {
-                    d { "inject $fragment" }
-                    AndroidSupportInjection.inject(fragment)
+            activity.supportFragmentManager
+                .doOnFragmentAttached(true) { _: FragmentManager, fragment: Fragment, _: Context ->
+                    if (fragment is Injectable && fragment !is NotInjectable) {
+                        d { "inject ${fragment.javaClass.simpleName}" }
+                        AndroidSupportInjection.inject(fragment)
+                    }
                 }
-            }
         }
     }
 }

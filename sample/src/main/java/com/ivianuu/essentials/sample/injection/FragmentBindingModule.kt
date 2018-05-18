@@ -16,9 +16,10 @@
 
 package com.ivianuu.essentials.sample.injection
 
-import com.ivianuu.essentials.injection.PerActivity
-import com.ivianuu.essentials.sample.ui.MainActivity
-import com.ivianuu.essentials.sample.ui.MainActivityModule
+import com.ivianuu.essentials.injection.PerFragment
+import com.ivianuu.essentials.sample.ui.ChildNavigationContainerFragment
+import com.ivianuu.essentials.sample.ui.ChildNavigationFragment
+import com.ivianuu.essentials.sample.ui.MultipleChildsFragment
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
@@ -26,10 +27,18 @@ import dagger.android.ContributesAndroidInjector
  * @author Manuel Wrage (IVIanuu)
  */
 @Module
-abstract class ActivityBindingModule {
+abstract class FragmentBindingModule {
 
-    @PerActivity
-    @ContributesAndroidInjector(modules = [MainActivityModule::class, FragmentBindingModule::class])
-    abstract fun bindMainActivity(): MainActivity
+    @PerFragment
+    @ContributesAndroidInjector
+    abstract fun bindChildNavigationFragment(): ChildNavigationFragment
+
+    @PerFragment
+    @ContributesAndroidInjector
+    abstract fun bindChildNavigationContainerFragment(): ChildNavigationContainerFragment
+
+    @PerFragment
+    @ContributesAndroidInjector
+    abstract fun bindMultipleChildsFragment(): MultipleChildsFragment
 
 }

@@ -34,7 +34,6 @@ import com.ivianuu.essentials.ui.common.CORRESPONDING_ACTIVITY_EVENTS
 import com.ivianuu.essentials.ui.traveler.getNavigatorHolder
 import com.ivianuu.essentials.ui.traveler.getTraveler
 import com.ivianuu.essentials.ui.traveler.navigator.KeyFragmentAppNavigator
-import com.ivianuu.essentials.ui.traveler.router
 import com.ivianuu.essentials.ui.traveler.setupRouter
 import com.ivianuu.essentials.util.analytics.NamedScreen
 import com.ivianuu.essentials.util.ext.behaviorSubject
@@ -42,6 +41,7 @@ import com.ivianuu.essentials.util.ext.unsafeLazy
 import com.ivianuu.rxactivityresult.RxActivityResult
 import com.ivianuu.rxpermissions.RxPermissions
 import com.ivianuu.traveler.Navigator
+import com.ivianuu.traveler.Router
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -70,13 +70,15 @@ abstract class BaseActivity : AppCompatActivity(), HasSupportFragmentInjector, I
         )
     }
 
+    lateinit var router: Router
+
     private val lifecycleSubject = behaviorSubject<ActivityEvent>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         lifecycleSubject.onNext(CREATE)
 
-        setupRouter(navigator, fragmentContainer)
+        router = setupRouter(navigator, fragmentContainer)
 
         if (layoutRes != -1) setContentView(layoutRes)
     }

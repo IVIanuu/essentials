@@ -30,6 +30,7 @@ import com.ivianuu.essentials.ui.common.FragmentEvent
 import com.ivianuu.essentials.ui.common.FragmentEvent.*
 import com.ivianuu.essentials.util.analytics.NamedScreen
 import com.ivianuu.essentials.util.ext.behaviorSubject
+import com.ivianuu.traveler.Router
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
@@ -40,6 +41,8 @@ import javax.inject.Inject
  */
 abstract class BaseFragment : Fragment(), BackListener, HasSupportFragmentInjector, Injectable,
     NamedScreen, LifecycleScopeProvider<FragmentEvent> {
+
+    @Inject lateinit var router: Router
 
     @Inject lateinit var supportFragmentInjector: DispatchingAndroidInjector<Fragment>
 
