@@ -29,7 +29,7 @@ abstract class StateFragment<T : Any, VM : StateViewModel<T>> : BaseViewModelFra
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.state.subscribeForUi(viewLifecycleScopeProvider, this::render)
+        viewModel.state.subscribeForUi(this, this::render)
     }
 
     protected abstract fun render(state: T)

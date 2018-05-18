@@ -14,23 +14,22 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.sample.ui
+package com.ivianuu.essentials.ui.common
 
-import android.os.Bundle
-import com.ivianuu.essentials.ui.base.BaseActivity
-import com.ivianuu.essentials.ui.base.BaseActivityModule
-import dagger.Module
+import com.ivianuu.essentials.ui.common.ActivityEvent.*
+import io.reactivex.functions.Function
 
-class MainActivity : BaseActivity() {
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        if (savedInstanceState == null) {
-            router.newRootScreen(ChildNavigationKey(0, 1))
-        }
-    }
+enum class ActivityEvent {
+    CREATE, START, RESUME, PAUSE, STOP, DESTROY
 }
 
-@Module
-abstract class MainActivityModule : BaseActivityModule<MainActivity>()
+val CORRESPONDING_ACTIVITY_EVENTS = Function<ActivityEvent, ActivityEvent> {
+    when(it) {
+        CREATE -> DESTROY
+        START -> STOP
+        RESUME -> PAUSE
+        PAUSE -> STOP
+        STOP -> DESTROY
+        else -> throw IllegalStateException("out of lifecycle ${it::class.java.simpleName}")
+    }
+}
