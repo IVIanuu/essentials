@@ -33,7 +33,7 @@ import javax.inject.Singleton
 @Singleton
 class ScreenLogger @Inject constructor(application: Application) {
 
-    private var listener: Listener? = null
+    private var listener: Listener? = DefaultListener()
 
     init {
         application.doOnActivityCreated { activity, savedInstanceState ->
