@@ -21,7 +21,6 @@ import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
-import android.support.v4.app.FragmentManager
 import android.support.v7.app.AppCompatActivity
 import com.ivianuu.autodispose.LifecycleScopeProvider
 import com.ivianuu.essentials.injection.EssentialsBindingModule
@@ -29,7 +28,7 @@ import com.ivianuu.essentials.injection.ForActivity
 import com.ivianuu.essentials.injection.Injectable
 import com.ivianuu.essentials.ui.common.ActivityEvent
 import com.ivianuu.essentials.ui.common.ActivityEvent.*
-import com.ivianuu.essentials.ui.common.BackListener
+import com.ivianuu.essentials.ui.common.BackHandler
 import com.ivianuu.essentials.ui.common.CORRESPONDING_ACTIVITY_EVENTS
 import com.ivianuu.essentials.ui.traveler.getNavigatorHolder
 import com.ivianuu.essentials.ui.traveler.getRouter
@@ -57,6 +56,7 @@ import javax.inject.Inject
 abstract class BaseActivity : AppCompatActivity(), HasSupportFragmentInjector, Injectable,
     NamedScreen, LifecycleScopeProvider<ActivityEvent> {
 
+    @Inject lateinit var backHandler: BackHandler
     @Inject lateinit var supportFragmentInjector: DispatchingAndroidInjector<Fragment>
 
     protected open val layoutRes = -1
@@ -110,7 +110,7 @@ abstract class BaseActivity : AppCompatActivity(), HasSupportFragmentInjector, I
     }
 
     override fun onBackPressed() {
-        if (!recursivelyDispatchOnBackPressed(supportFragmentManager)) {
+        if (!backHandler.handleBack(this)) {
             super.onBackPressed()
         }
     }
@@ -122,32 +122,6 @@ abstract class BaseActivity : AppCompatActivity(), HasSupportFragmentInjector, I
     override fun correspondingEvents() = CORRESPONDING_ACTIVITY_EVENTS
 
     override fun peekLifecycle() = lifecycleSubject.value
-
-    private fun recursivelyDispatchOnBackPressed(fm: FragmentManager): Boolean {
-        val reverseOrder = fm.fragments
-            .filter {
-                it is BackListener && it.isVisible
-            }
-            .reversed()
-
-        for (f in reverseOrder) {
-            val handledByChildFragments = recursivelyDispatchOnBackPressed(f.childFragmentManager)
-            if (handledByChildFragments) {
-                return true
-            }
-
-            val backpressable = f as BackListener
-            if (backpressable.handleBack()) {
-                return true
-            }
-
-            if (fm.backStackEntryCount > 0) {
-                return fm.popBackStackImmediate()
-            }
-        }
-
-        return false
-    }
 }
 
 @Module(includes = [EssentialsBindingModule::class])

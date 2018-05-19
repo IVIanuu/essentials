@@ -17,12 +17,16 @@
 package com.ivianuu.essentials.app
 
 import com.ivianuu.essentials.injection.AutoInjector
+import com.ivianuu.essentials.ui.common.BackHandler
 import dagger.android.support.DaggerApplication
+import javax.inject.Inject
 
 /**
  * App
  */
 abstract class BaseApp : DaggerApplication() {
+
+    @Inject lateinit var backHandler: BackHandler
 
     override fun onCreate() {
         super.onCreate()
