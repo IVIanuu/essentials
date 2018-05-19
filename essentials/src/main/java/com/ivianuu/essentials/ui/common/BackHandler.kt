@@ -27,15 +27,7 @@ import com.ivianuu.essentials.util.ext.doOnFragmentCreated
 import com.ivianuu.essentials.util.ext.registerActivityLifecycleCallbacks
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlin.collections.MutableList
-import kotlin.collections.contains
-import kotlin.collections.filter
-import kotlin.collections.firstOrNull
-import kotlin.collections.forEach
-import kotlin.collections.mutableListOf
-import kotlin.collections.mutableMapOf
 import kotlin.collections.set
-import kotlin.collections.sortedByDescending
 
 /**
  * Handles back presses in an activity for all fragment managers
@@ -171,6 +163,7 @@ class BackHandler @Inject constructor(application: Application) {
         private const val KEY_TRANSACTION_INDEX = "BackHandler.transactionIndex"
     }
 }
+
 
 private class TransactionIndexer {
 
