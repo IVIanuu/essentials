@@ -169,7 +169,7 @@ private class TransactionIndexer {
 
     private var index = 0
 
-    fun getAndIncrement(): Int {
+    @Synchronized fun getAndIncrement(): Int {
         index++
         return index
     }
