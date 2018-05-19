@@ -30,13 +30,8 @@ abstract class FragmentKey {
 
     fun newInstance(data: Any? = null) = createFragment(data).apply {
         if (this@FragmentKey is Parcelable) {
-            if (arguments != null) {
-                arguments!!.putParcelable(KEY_KEY, this@FragmentKey)
-            } else {
-                arguments = Bundle().apply {
-                    putParcelable(KEY_KEY, this@FragmentKey)
-                }
-            }
+            val args = arguments ?: Bundle().also { arguments = it }
+            args.putParcelable(KEY_KEY, this@FragmentKey)
         }
     }
 
