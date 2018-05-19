@@ -33,23 +33,11 @@ import javax.inject.Singleton
 @Singleton
 class ScreenLogger @Inject constructor(application: Application) {
 
-    private var listener: Listener? = DefaultListener()
+    var listener: Listener? = DefaultListener()
 
     init {
         application.doOnActivityCreated { activity, savedInstanceState ->
             handleActivity(activity, savedInstanceState)
-        }
-    }
-
-    fun setListener(listener: Listener) {
-        this.listener = listener
-    }
-
-    fun setListener(listener: (String) -> Unit) {
-        this.listener = object : Listener {
-            override fun screenLaunched(name: String) {
-                listener.invoke(name)
-            }
         }
     }
 
@@ -63,7 +51,7 @@ class ScreenLogger @Inject constructor(application: Application) {
         if (activity is FragmentActivity) {
             activity.supportFragmentManager.doOnFragmentCreated(true) { _: FragmentManager, fragment: Fragment, bundle: Bundle? ->
                 if (fragment is NamedScreen
-                    && activity !is IgnoreNamedScreen
+                    && fragment !is IgnoreNamedScreen
                     && bundle == null) {
                     listener?.screenLaunched(getName(fragment))
                 }
