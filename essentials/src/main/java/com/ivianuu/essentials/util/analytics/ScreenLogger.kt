@@ -102,6 +102,12 @@ class ScreenLogger @Inject constructor(application: Application) {
         fun screenLaunched(name: String)
     }
 
+    class DefaultListener : Listener {
+        override fun screenLaunched(name: String) {
+            Analytics.log("screen launched: $name")
+        }
+    }
+
     private companion object {
         private const val SUFFIX_ACTIVITY = "Activity"
         private const val SUFFIX_DIALOG = "Dialog"

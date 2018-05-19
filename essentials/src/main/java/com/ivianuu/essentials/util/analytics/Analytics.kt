@@ -16,23 +16,38 @@
 
 package com.ivianuu.essentials.util.analytics
 
+import com.crashlytics.android.answers.Answers
+import com.crashlytics.android.answers.CustomEvent
+import com.ivianuu.essentials.util.ext.d
+import io.fabric.sdk.android.Fabric
+import timber.log.Timber
+
 /**
  * Basic analytics logger
  */
-abstract class BaseAnalytics : ScreenLogger.Listener {
+object Analytics {
 
     var logger = FabricAnalyticsLogger()
 
-    open fun appStarted() {
-        log("app started")
-    }
-
-    override fun screenLaunched(name: String) {
-        log("Screen launched $name")
-    }
-
-    protected open fun log(event: String) {
+    fun log(event: String) {
         logger.log(event)
     }
 
+    interface Logger {
+        fun log(event: String)
+    }
+}
+
+/**
+ * Logs events via fabric
+ */
+class FabricAnalyticsLogger : Analytics.Logger {
+    override fun log(event: String) {
+        if (Fabric.isInitialized()) {
+            Answers.getInstance().logCustom(CustomEvent(event))
+        } else {
+            Timber.tag("Analytics")
+            d { event }
+        }
+    }
 }
