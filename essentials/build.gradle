@@ -87,6 +87,7 @@ dependencies {
 
     api Deps.traveler
     api Deps.travelerFragments
+    api Deps.travelerLifecycleObserver
 }
 
 // build a jar with source files

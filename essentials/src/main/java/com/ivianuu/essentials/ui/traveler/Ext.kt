@@ -29,6 +29,7 @@ import com.ivianuu.essentials.ui.traveler.navigator.KeyFragmentSwapperNavigator
 import com.ivianuu.essentials.util.ext.getViewModel
 import com.ivianuu.traveler.Navigator
 import com.ivianuu.traveler.Router
+import com.ivianuu.traveler.lifecycleobserver.NavigatorLifecycleObserver
 
 val Fragment.localRouter: Router
     get() {
@@ -59,7 +60,7 @@ fun <T> T.setupRouter(
     containerId: Int
 ): Router where T : ViewModelStoreOwner, T : LifecycleOwner {
     val traveler = getTraveler(containerId)
-    NavigatorLifecycleObserver(this, navigator, traveler.navigatorHolder)
+    NavigatorLifecycleObserver.start(this, navigator, traveler.navigatorHolder)
     return traveler.router
 }
 
@@ -82,10 +83,10 @@ fun <T> T.setupKeyFragmentRouter(
 }
 
 fun FragmentActivity.setupKeyFragmentAppRouter(containerId: Int) =
-    setupKeyFragmentRouter(supportFragmentManager, containerId)
+    setupKeyFragmentAppRouter(this, supportFragmentManager, containerId)
 
 fun Fragment.setupKeyFragmentAppRouter(containerId: Int) =
-    setupKeyFragmentRouter(childFragmentManager, containerId)
+    setupKeyFragmentAppRouter(requireActivity(), childFragmentManager, containerId)
 
 fun <T> T.setupKeyFragmentAppRouter(
     activity: FragmentActivity, fm: FragmentManager, containerId: Int

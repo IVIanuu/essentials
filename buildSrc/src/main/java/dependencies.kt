@@ -29,7 +29,7 @@ object Versions {
     const val seekBarPreference = "7bd4049da0"
     const val support = "27.1.1"
     const val timber = "4.7.0"
-    const val traveler = "28e7067341"
+    const val traveler = "5c2a742bbe"
 }
 //
 object Deps {
@@ -83,5 +83,8 @@ object Deps {
     const val timber = "com.jakewharton.timber:timber:${Versions.timber}"
 
     const val traveler = "com.github.IVIanuu.Traveler:traveler:${Versions.traveler}"
+    const val travelerCompass = "com.github.IVIanuu.Traveler:traveler-compass:${Versions.traveler}"
+    const val travelerCompassCompiler = "com.github.IVIanuu.Traveler:traveler-compass-compiler:${Versions.traveler}"
     const val travelerFragments = "com.github.IVIanuu.Traveler:traveler-fragments:${Versions.traveler}"
+    const val travelerLifecycleObserver = "com.github.IVIanuu.Traveler:traveler-lifecycleobserver:${Versions.traveler}"
 }
