@@ -20,7 +20,6 @@ import android.content.pm.ApplicationInfo
 import com.crashlytics.android.Crashlytics
 import com.ivianuu.essentials.injection.AutoInjector
 import com.ivianuu.essentials.ui.common.back.BackHandler
-import com.ivianuu.essentials.ui.common.changehandler.FragmentTransitionManager
 import com.ivianuu.essentials.util.analytics.Analytics
 import com.ivianuu.essentials.util.analytics.ScreenLogger
 import com.ivianuu.essentials.util.ext.containsFlag
@@ -49,8 +48,6 @@ abstract class BaseApp : DaggerApplication() {
             initializeFabric()
         }
 
-        FragmentTransitionManager.init(this)
-
         Analytics.log("app started")
     }
 
@@ -62,6 +59,6 @@ abstract class BaseApp : DaggerApplication() {
         Fabric.with(this, Crashlytics())
     }
 
-    private fun isDebug() =
+    protected open fun isDebug() =
         applicationInfo.flags.containsFlag(ApplicationInfo.FLAG_DEBUGGABLE)
 }
