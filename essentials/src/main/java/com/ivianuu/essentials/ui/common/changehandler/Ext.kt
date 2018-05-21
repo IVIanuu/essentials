@@ -14,11 +14,17 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.common
+package com.ivianuu.essentials.ui.common.changehandler
 
-/**
- * Handles back clicks
- */
-interface BackListener {
-    fun handleBack(): Boolean
-}
+import android.support.v4.app.Fragment
+
+var Fragment.changeHandler
+    get() = FragmentTransitionManager.getChangeHandler(
+        this
+    )
+    set(value) {
+        FragmentTransitionManager.setChangeHandler(
+            this,
+            value
+        )
+    }

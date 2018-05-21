@@ -19,12 +19,17 @@ package com.ivianuu.essentials.sample.ui
 import android.graphics.Color
 import android.os.Bundle
 import android.os.Parcelable
+import android.support.v4.app.Fragment
+import android.support.v4.app.FragmentTransaction
 import android.view.View
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.base.BaseFragment
+import com.ivianuu.essentials.ui.common.changehandler.HorizontalChangeHandler
+import com.ivianuu.essentials.ui.common.changehandler.changeHandler
 import com.ivianuu.essentials.ui.traveler.key.FragmentClassKey
 import com.ivianuu.essentials.ui.traveler.key.requireKey
 import com.ivianuu.essentials.ui.traveler.localRouter
+import com.ivianuu.traveler.commands.Command
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_child_navigation.*
 
@@ -58,4 +63,17 @@ class ChildNavigationFragment : BaseFragment() {
 
 @Parcelize
 data class ChildNavigationKey(val index: Int, val count: Int) :
-    FragmentClassKey(ChildNavigationFragment::class), Parcelable
+    FragmentClassKey(ChildNavigationFragment::class), Parcelable {
+
+    override fun setupFragmentTransaction(
+        command: Command,
+        currentFragment: Fragment?,
+        nextFragment: Fragment,
+        transaction: FragmentTransaction
+    ) {
+        super.setupFragmentTransaction(command, currentFragment, nextFragment, transaction)
+        currentFragment?.changeHandler = HorizontalChangeHandler(200)
+        nextFragment.changeHandler = HorizontalChangeHandler(200)
+    }
+
+}

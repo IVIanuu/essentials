@@ -24,10 +24,10 @@ import android.view.View
 import android.view.ViewGroup
 import com.ivianuu.autodispose.LifecycleScopeProvider
 import com.ivianuu.essentials.injection.Injectable
-import com.ivianuu.essentials.ui.common.BackListener
 import com.ivianuu.essentials.ui.common.CORRESPONDING_FRAGMENT_EVENTS
 import com.ivianuu.essentials.ui.common.FragmentEvent
 import com.ivianuu.essentials.ui.common.FragmentEvent.*
+import com.ivianuu.essentials.ui.common.back.BackListener
 import com.ivianuu.essentials.util.analytics.NamedScreen
 import com.ivianuu.essentials.util.ext.behaviorSubject
 import com.ivianuu.traveler.Router

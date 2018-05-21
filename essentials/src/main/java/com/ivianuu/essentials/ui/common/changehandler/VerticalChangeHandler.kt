@@ -14,23 +14,21 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.util.ext
+package com.ivianuu.essentials.ui.common.changehandler
 
 import android.support.v4.app.Fragment
-import android.support.v7.app.AppCompatActivity
-import android.view.View
+import android.transition.Slide
+import android.view.Gravity
 
-val Fragment.appCompatActivity: AppCompatActivity?
-    get() = activity as AppCompatActivity?
+/**
+ * @author Manuel Wrage (IVIanuu)
+ */
+class VerticalChangeHandler @JvmOverloads constructor(duration: Long = -1) : BaseChangeHandler(duration) {
 
-fun Fragment.hideInputMethod() {
-    requireActivity().hideInputMethod()
+    override fun apply(fragment: Fragment) {
+        fragment.enterTransition = Slide(Gravity.BOTTOM).apply {
+            duration = this@VerticalChangeHandler.duration
+        }
+    }
+
 }
-
-fun Fragment.showInputMethod(view: View) {
-    requireActivity().showInputMethod(view)
-}
-
-fun Fragment.requireAppCompatActivity() = requireActivity() as AppCompatActivity
-
-fun Fragment.requireArgs() = arguments ?: throw IllegalStateException("no arguments provided")

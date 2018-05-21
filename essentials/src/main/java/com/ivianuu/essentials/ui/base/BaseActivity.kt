@@ -28,8 +28,8 @@ import com.ivianuu.essentials.injection.ForActivity
 import com.ivianuu.essentials.injection.Injectable
 import com.ivianuu.essentials.ui.common.ActivityEvent
 import com.ivianuu.essentials.ui.common.ActivityEvent.*
-import com.ivianuu.essentials.ui.common.BackHandler
 import com.ivianuu.essentials.ui.common.CORRESPONDING_ACTIVITY_EVENTS
+import com.ivianuu.essentials.ui.common.back.BackHandler
 import com.ivianuu.essentials.ui.traveler.getNavigatorHolder
 import com.ivianuu.essentials.ui.traveler.getRouter
 import com.ivianuu.essentials.ui.traveler.getTraveler
