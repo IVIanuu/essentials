@@ -22,7 +22,6 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
 import android.support.v4.app.FragmentManager
-import com.ivianuu.essentials.util.ext.d
 import com.ivianuu.essentials.util.ext.doOnFragmentCreated
 import com.ivianuu.essentials.util.ext.registerActivityLifecycleCallbacks
 import javax.inject.Inject
@@ -50,8 +49,6 @@ class BackHandler @Inject constructor(application: Application) {
         if (activity !is FragmentActivity) return false
         if (!transactionIndexers.contains(activity)) return false
 
-        d { "handle back ${activity.javaClass.simpleName}" }
-
         // collect fragments
         val fragments = mutableListOf<Pair<Fragment, FragmentManager>>()
         getAllFragmentsRecursively(activity.supportFragmentManager, fragments)
@@ -71,17 +68,13 @@ class BackHandler @Inject constructor(application: Application) {
         if (topFragment != null
             && topFragment is BackListener
             && topFragment.handleBack()) {
-            d { "top fragment handled back ${topFragment.javaClass.simpleName}" }
             return true
         }
 
         // try to pop the backstack
         if (topFm != null && topFm.popBackStackImmediate()) {
-            d { "fm popped backstack $topFm" }
             return true
         }
-
-        d { "not handled back" }
 
         // give up
         return false
@@ -90,15 +83,12 @@ class BackHandler @Inject constructor(application: Application) {
     private fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
         if (activity !is FragmentActivity) return
 
-        d { "on activity created ${activity.javaClass.simpleName}" }
-
         val indexer = TransactionIndexer()
 
         if (savedInstanceState != null) {
             val bundle = savedInstanceState.getBundle(KEY_TRANSACTION_INDEXER)
             if (bundle != null) {
                 indexer.restoreInstance(bundle)
-                d { "restore indexer state $bundle" }
             }
         }
 
@@ -110,36 +100,28 @@ class BackHandler @Inject constructor(application: Application) {
     private fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {
         if (activity !is FragmentActivity) return
 
-        d { "on activity save instance state ${activity.javaClass.simpleName}" }
-
         val indexer = transactionIndexers[activity]
 
         if (indexer != null) {
             val indexerBundle = Bundle()
             indexer.saveInstanceState(indexerBundle)
             outState.putBundle(KEY_TRANSACTION_INDEXER, indexerBundle)
-            d { "persisted indexer state $indexerBundle" }
         }
     }
 
     private fun onActivityDestroyed(activity: Activity) {
         if (activity !is FragmentActivity) return
-        d { "on activity destroyed ${activity.javaClass.simpleName}" }
         transactionIndexers.remove(activity)
     }
 
     private fun attachIndexer(fm: FragmentManager) {
-        d { "attach indexer" }
-
         fm.doOnFragmentCreated(true) { _: FragmentManager, f: Fragment, savedInstanceState: Bundle? ->
-            d { "fragment created ${f.javaClass.simpleName}" }
             if (savedInstanceState == null) {
                 val args = f.arguments ?: Bundle().also { f.arguments = it }
                 if (!args.containsKey(KEY_TRANSACTION_INDEX)) {
                     val indexer = transactionIndexers[f.requireActivity()]
                     if (indexer != null) {
                         args.putInt(KEY_TRANSACTION_INDEX, indexer.getAndIncrement())
-                        d { "indexed ${args.getInt(KEY_TRANSACTION_INDEX)}" }
                     }
                 }
             }

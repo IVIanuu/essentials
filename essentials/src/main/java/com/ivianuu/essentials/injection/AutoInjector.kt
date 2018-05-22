@@ -22,7 +22,6 @@ import android.content.Context
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
 import android.support.v4.app.FragmentManager
-import com.ivianuu.essentials.util.ext.d
 import com.ivianuu.essentials.util.ext.doOnActivityCreated
 import com.ivianuu.essentials.util.ext.doOnFragmentAttached
 import dagger.android.AndroidInjection
@@ -36,7 +35,6 @@ object AutoInjector {
 
     fun start(application: Application) {
         application.doOnActivityCreated { activity, _ ->
-            d { "inject ${activity.javaClass.simpleName}" }
             handleActivity(activity)
         }
     }
@@ -50,7 +48,6 @@ object AutoInjector {
             activity.supportFragmentManager
                 .doOnFragmentAttached(true) { _: FragmentManager, fragment: Fragment, _: Context ->
                     if (fragment is Injectable && fragment !is NotInjectable) {
-                        d { "inject ${fragment.javaClass.simpleName}" }
                         AndroidSupportInjection.inject(fragment)
                     }
                 }

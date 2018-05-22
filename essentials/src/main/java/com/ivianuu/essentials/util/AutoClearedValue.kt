@@ -18,7 +18,6 @@ package com.ivianuu.essentials.util
 
 import com.ivianuu.autodispose.LifecycleScopeProvider
 import com.ivianuu.autodispose.ScopeProvider
-import com.ivianuu.essentials.util.ext.d
 import com.ivianuu.essentials.util.ext.toScopeProvider
 import io.reactivex.Maybe
 import kotlin.properties.ReadWriteProperty
@@ -37,11 +36,7 @@ class AutoClearedValue<T>(
     init {
         _value = initialValue
 
-        scope
-            .subscribe {
-                d { "on event $it clear value $_value" }
-                _value = null
-            }
+        scope.subscribe { _value = null }
     }
 
     override fun getValue(thisRef: Any, property: KProperty<*>): T {
