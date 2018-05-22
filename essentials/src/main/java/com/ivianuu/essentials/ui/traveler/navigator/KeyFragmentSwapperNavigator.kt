@@ -19,10 +19,7 @@ package com.ivianuu.essentials.ui.traveler.navigator
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentTransaction
-import com.ivianuu.essentials.ui.traveler.key.FragmentKey
 import com.ivianuu.traveler.commands.Command
-import com.ivianuu.traveler.commands.Forward
-import com.ivianuu.traveler.commands.Replace
 
 /**
  * Fragment swapper navigator which uses keys
@@ -34,13 +31,10 @@ class KeyFragmentSwapperNavigator(
     swapOnReselection: Boolean = true
 ) : FragmentSwapperNavigator(fm, containerId, hideStrategy, swapOnReselection) {
 
-    override fun createFragment(key: Any, data: Any?): Fragment? {
-        return if (key is FragmentKey) {
-            key.newInstance(data)
-        } else {
-            null
-        }
-    }
+    private val helper = KeyFragmentNavigatorHelper()
+
+    override fun createFragment(key: Any, data: Any?)
+            = helper.createFragment(key, data)
 
     override fun setupFragmentTransaction(
         command: Command,
@@ -48,16 +42,7 @@ class KeyFragmentSwapperNavigator(
         nextFragment: Fragment,
         transaction: FragmentTransaction
     ) {
-        val key = when (command) {
-            is Forward -> command.key as FragmentKey
-            is Replace -> command.key as FragmentKey
-            else -> null
-        }
-
-        key?.setupFragmentTransaction(
-            command, currentFragment,
-            nextFragment, transaction
-        )
+        helper.setupFragmentTransaction(command, currentFragment, nextFragment, transaction)
     }
 
 }

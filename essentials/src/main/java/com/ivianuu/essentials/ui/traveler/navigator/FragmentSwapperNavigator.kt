@@ -20,7 +20,6 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentTransaction
 import android.support.v4.app.containerId
-import com.ivianuu.essentials.util.ext.d
 import com.ivianuu.traveler.Navigator
 import com.ivianuu.traveler.commands.Command
 import com.ivianuu.traveler.commands.Replace
@@ -48,15 +47,10 @@ abstract class FragmentSwapperNavigator(
     protected open fun swapTo(command: Replace) {
         val newKey = command.key
 
-        d { "swap to $newKey" }
-
         val oldFragment = getCurrentFragment()
-
-        d { "old fragment $oldFragment" }
 
         // re attach a new instance of that fragment
         if (swapOnReselection && getFragmentTag(newKey) == oldFragment?.tag) {
-            d { "do swap on reselection" }
             val transaction = fm.beginTransaction()
             transaction.remove(oldFragment)
             transaction.add(
@@ -70,10 +64,7 @@ abstract class FragmentSwapperNavigator(
 
         val newFragment = getOrCreateFragmentForKey(newKey, command.data)
 
-        d { "new fragment $newFragment" }
-
         if (newFragment == null) {
-            d { "unknown $newKey" }
             unknownScreen(command)
             return
         }
@@ -85,18 +76,15 @@ abstract class FragmentSwapperNavigator(
             when (hideStrategy) {
                 HideStrategy.HIDE -> {
                     if (!oldFragment.isHidden) {
-                        d { "hide old fragment" }
                         transaction.hide(oldFragment)
                     }
                 }
                 HideStrategy.DETACH -> {
                     if (!oldFragment.isDetached) {
-                        d { "detach old fragment" }
                         transaction.detach(oldFragment)
                     }
                 }
                 HideStrategy.REMOVE -> {
-                    d { "remove old fragment" }
                     transaction.remove(oldFragment)
                 }
             }
@@ -106,33 +94,25 @@ abstract class FragmentSwapperNavigator(
         val needToAdd = when (hideStrategy) {
             HideStrategy.HIDE -> {
                 if (newFragment.isAdded && newFragment.isHidden) {
-                    d { "show hidden new fragment" }
                     transaction.show(newFragment)
                     false
                 } else {
-                    d { "new fragment is not hidden" }
                     true
                 }
             }
             HideStrategy.DETACH -> {
                 if (newFragment.isDetached && newFragment.isDetached) {
                     transaction.attach(newFragment)
-                    d { "attach detached new fragment" }
                     false
                 } else {
-                    d { "new fragment is not detached" }
                     true
                 }
             }
-            HideStrategy.REMOVE -> {
-                d { "force re add due to remove strategy" }
-                true
-            }
+            HideStrategy.REMOVE -> true
         }
 
         // if we need to add the new fragment -> do it
         if (needToAdd) {
-            d { "add new fragment" }
             transaction.add(containerId, newFragment, getFragmentTag(newKey))
         }
 
@@ -146,8 +126,6 @@ abstract class FragmentSwapperNavigator(
 
         // commit
         transaction.commitNow()
-
-        d { "commited" }
     }
 
     protected abstract fun createFragment(key: Any, data: Any?): Fragment?

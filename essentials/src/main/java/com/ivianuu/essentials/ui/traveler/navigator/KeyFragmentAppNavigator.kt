@@ -23,11 +23,7 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentTransaction
-import com.ivianuu.essentials.ui.traveler.key.ActivityKey
-import com.ivianuu.essentials.ui.traveler.key.FragmentKey
 import com.ivianuu.traveler.commands.Command
-import com.ivianuu.traveler.commands.Forward
-import com.ivianuu.traveler.commands.Replace
 import com.ivianuu.traveler.fragments.FragmentAppNavigator
 
 /**
@@ -39,30 +35,18 @@ open class KeyFragmentAppNavigator(
     containerId: Int
 ) : FragmentAppNavigator(activity, fragmentManager, containerId) {
 
+    private val helper = KeyFragmentAppNavigatorHelper()
+
     override fun createActivityIntent(context: Context, key: Any, data: Any?): Intent? {
-        return if (key is ActivityKey) {
-            key.newIntent(context, data)
-        } else {
-            null
-        }
+        return helper.createActivityIntent(context, key, data)
     }
 
     override fun createStartActivityOptions(command: Command, activityIntent: Intent): Bundle? {
-        val key = when (command) {
-            is Forward -> command.key as ActivityKey
-            is Replace -> command.key as ActivityKey
-            else -> null
-        }
-
-        return key?.createStartActivityOptions(command, activityIntent)
+        return helper.createStartActivityOptions(command, activityIntent)
     }
 
     override fun createFragment(key: Any, data: Any?): Fragment? {
-        return if (key is FragmentKey) {
-            key.newInstance(data)
-        } else {
-            null
-        }
+        return helper.createFragment(key, data)
     }
 
     override fun setupFragmentTransaction(
@@ -71,15 +55,6 @@ open class KeyFragmentAppNavigator(
         nextFragment: Fragment,
         transaction: FragmentTransaction
     ) {
-        val key = when (command) {
-            is Forward -> command.key as FragmentKey
-            is Replace -> command.key as FragmentKey
-            else -> null
-        }
-
-        key?.setupFragmentTransaction(
-            command, currentFragment,
-            nextFragment, transaction
-        )
+        helper.setupFragmentTransaction(command, currentFragment, nextFragment, transaction)
     }
 }
