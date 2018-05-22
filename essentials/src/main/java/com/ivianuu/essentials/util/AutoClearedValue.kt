@@ -40,7 +40,8 @@ class AutoClearedValue<T>(
         scope
             .subscribe {
                 d { "on event $it clear value $_value" }
-                _value = null }
+                _value = null
+            }
     }
 
     override fun getValue(thisRef: Any, property: KProperty<*>): T {
@@ -57,11 +58,11 @@ class AutoClearedValue<T>(
 fun <T> ScopeProvider.autoCleared(scope: Maybe<*>, initialValue: T? = null) =
     AutoClearedValue(scope, initialValue)
 
-fun <T> ScopeProvider.autoCleared(initialValue: T? = null)
-        = autoCleared(requestScope(), initialValue)
+fun <T> ScopeProvider.autoCleared(initialValue: T? = null) =
+    autoCleared(requestScope(), initialValue)
 
-fun <T, E> LifecycleScopeProvider<E>.autoCleared(initialValue: T? = null)
-        = AutoClearedValue(toScopeProvider().requestScope(), initialValue)
+fun <T, E> LifecycleScopeProvider<E>.autoCleared(initialValue: T? = null) =
+    AutoClearedValue(toScopeProvider().requestScope(), initialValue)
 
-fun <T, E> LifecycleScopeProvider<E>.autoCleared(event: E, initialValue: T? = null)
-        = AutoClearedValue(toScopeProvider(event).requestScope(), initialValue)
+fun <T, E> LifecycleScopeProvider<E>.autoCleared(event: E, initialValue: T? = null) =
+    AutoClearedValue(toScopeProvider(event).requestScope(), initialValue)

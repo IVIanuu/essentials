@@ -70,11 +70,14 @@ class ScreenLogger @Inject constructor(application: Application) {
     private fun parseName(className: String): String {
         val withoutSuffix = when {
             className.endsWith(SUFFIX_ACTIVITY) -> className.replace(
-                SUFFIX_ACTIVITY, "")
+                SUFFIX_ACTIVITY, ""
+            )
             className.endsWith(SUFFIX_DIALOG) -> className.replace(
-                SUFFIX_DIALOG, "")
+                SUFFIX_DIALOG, ""
+            )
             className.endsWith(SUFFIX_FRAGMENT) -> className.replace(
-                SUFFIX_FRAGMENT, "")
+                SUFFIX_FRAGMENT, ""
+            )
             else -> className
         }
 

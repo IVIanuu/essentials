@@ -13,12 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+@file:SuppressLint("PrivateResource")
 
 package com.ivianuu.essentials.util.ext
 
+import android.annotation.SuppressLint
 import android.content.Context
 import com.ivianuu.essentials.R
-
 val Context.isWindowBackgroundDark
     get() = resolveColorAttr(android.R.attr.windowBackground).isDark
 

@@ -33,8 +33,7 @@ class KeyFragmentSwapperNavigator(
 
     private val helper = KeyFragmentNavigatorHelper()
 
-    override fun createFragment(key: Any, data: Any?)
-            = helper.createFragment(key, data)
+    override fun createFragment(key: Any, data: Any?) = helper.createFragment(key, data)
 
     override fun setupFragmentTransaction(
         command: Command,

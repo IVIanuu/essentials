@@ -36,8 +36,7 @@ import kotlin.collections.set
 @Singleton
 class BackHandler @Inject constructor(application: Application) {
 
-    private val transactionIndexers
-            = mutableMapOf<Activity, TransactionIndexer>()
+    private val transactionIndexers = mutableMapOf<Activity, TransactionIndexer>()
 
     init {
         application.registerActivityLifecycleCallbacks(
@@ -132,8 +131,7 @@ class BackHandler @Inject constructor(application: Application) {
     private fun attachIndexer(fm: FragmentManager) {
         d { "attach indexer" }
 
-        fm.doOnFragmentCreated(true) {
-                _: FragmentManager, f: Fragment, savedInstanceState: Bundle? ->
+        fm.doOnFragmentCreated(true) { _: FragmentManager, f: Fragment, savedInstanceState: Bundle? ->
             d { "fragment created ${f.javaClass.simpleName}" }
             if (savedInstanceState == null) {
                 val args = f.arguments ?: Bundle().also { f.arguments = it }

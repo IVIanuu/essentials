@@ -43,8 +43,10 @@ class KeyFragmentAppNavigatorHelper {
         nextFragment: Fragment,
         transaction: FragmentTransaction
     ) {
-        keyFragmentNavigatorHelper.setupFragmentTransaction(command,
-            currentFragment, nextFragment, transaction)
+        keyFragmentNavigatorHelper.setupFragmentTransaction(
+            command,
+            currentFragment, nextFragment, transaction
+        )
     }
 
     fun createActivityIntent(context: Context, key: Any, data: Any?): Intent? {

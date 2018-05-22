@@ -43,7 +43,7 @@ open class KeyFragmentNavigator(
         nextFragment: Fragment,
         transaction: FragmentTransaction
     ) {
-       helper.setupFragmentTransaction(command, currentFragment, nextFragment, transaction)
+        helper.setupFragmentTransaction(command, currentFragment, nextFragment, transaction)
     }
 
     override fun exit() {

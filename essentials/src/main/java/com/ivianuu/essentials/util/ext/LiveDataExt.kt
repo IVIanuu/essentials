@@ -41,7 +41,7 @@ fun <T> LiveData<T>.observeK(owner: LifecycleOwner, onChanged: (T) -> Unit) {
 
 fun <T> LiveData<T>.requireValue() = value ?: throw IllegalStateException("value is null")
 
-fun <T : Any> LiveData<T>.toFlowable(strategy: BackpressureStrategy = BackpressureStrategy.LATEST) =
+fun <T : Any> LiveData<T>.toFlowable(strategy: BackpressureStrategy = BackpressureStrategy.LATEST): Flowable<T> =
     toObservable().toFlowable(strategy)
 
 fun <T : Any> Flowable<T>.toLiveData() =

@@ -57,7 +57,7 @@ abstract class FragmentKey {
  * Auto creates the fragment by using its clazz new instance
  */
 open class FragmentClassKey(val clazz: KClass<out Fragment>) : FragmentKey() {
-    override fun createFragment(data: Any?) = clazz.java.newInstance()
+    override fun createFragment(data: Any?): Fragment = clazz.java.newInstance()
 }
 
 fun <T> Fragment.key() where T : FragmentKey, T : Parcelable =
