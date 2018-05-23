@@ -19,35 +19,15 @@ package com.ivianuu.essentials.ui.traveler.navigator
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentTransaction
 import com.ivianuu.essentials.ui.traveler.key.ActivityKey
 import com.ivianuu.traveler.commands.Command
 import com.ivianuu.traveler.commands.Forward
 import com.ivianuu.traveler.commands.Replace
 
 /**
- * Helper for key fragment app navigators
+ * Helper for key app navigators
  */
-class KeyFragmentAppNavigatorHelper {
-
-    private val keyFragmentNavigatorHelper = KeyFragmentNavigatorHelper()
-
-    fun createFragment(key: Any, data: Any?): Fragment? {
-        return keyFragmentNavigatorHelper.createFragment(key, data)
-    }
-
-    fun setupFragmentTransaction(
-        command: Command,
-        currentFragment: Fragment?,
-        nextFragment: Fragment,
-        transaction: FragmentTransaction
-    ) {
-        keyFragmentNavigatorHelper.setupFragmentTransaction(
-            command,
-            currentFragment, nextFragment, transaction
-        )
-    }
+class KeyAppNavigatorHelper {
 
     fun createActivityIntent(context: Context, key: Any, data: Any?): Intent? {
         return if (key is ActivityKey) {

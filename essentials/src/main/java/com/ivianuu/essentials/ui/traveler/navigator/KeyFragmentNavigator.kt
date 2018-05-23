@@ -31,10 +31,10 @@ open class KeyFragmentNavigator(
     private val exit: () -> Unit = {}
 ) : FragmentNavigator(fragmentManager, containerId) {
 
-    private val helper = KeyFragmentNavigatorHelper()
+    private val fragmentNavigatorHelper = KeyFragmentNavigatorHelper()
 
     override fun createFragment(key: Any, data: Any?): Fragment? {
-        return helper.createFragment(key, data)
+        return fragmentNavigatorHelper.createFragment(key, data)
     }
 
     override fun setupFragmentTransaction(
@@ -43,7 +43,7 @@ open class KeyFragmentNavigator(
         nextFragment: Fragment,
         transaction: FragmentTransaction
     ) {
-        helper.setupFragmentTransaction(command, currentFragment, nextFragment, transaction)
+        fragmentNavigatorHelper.setupFragmentTransaction(command, currentFragment, nextFragment, transaction)
     }
 
     override fun exit() {
