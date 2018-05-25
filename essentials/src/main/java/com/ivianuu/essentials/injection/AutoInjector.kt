@@ -34,6 +34,7 @@ import javax.inject.Inject
 /**
  * Automatically injects [Injectable] [Activity]'s and [Fragment]'s
  */
+@EssentialsServiceModule
 @AutoBindsIntoSet(EssentialsService::class)
 class AutoInjector @Inject constructor(application: Application) : EssentialsService {
 

@@ -18,9 +18,14 @@ package com.ivianuu.essentials.injection
 
 import com.ivianuu.daggerextensions.BindingModule
 
-
 @BindingModule
 annotation class ActivityBindingModule
+
+@BindingModule
+annotation class BroadcastReceiverBindingModule
+
+@BindingModule
+annotation class ContentProviderBindingModule
 
 @BindingModule
 annotation class FragmentBindingModule
@@ -30,3 +35,6 @@ annotation class ServiceBindingModule
 
 @BindingModule
 annotation class EssentialsFragmentBindingModule
+
+@BindingModule
+annotation class EssentialsServiceModule

@@ -14,7 +14,7 @@ object Versions {
     const val butterknife = "9.0.0-SNAPSHOT"
     const val constraintLayout = "1.1.0"
     const val dagger = "2.16"
-    const val daggerExtensions = "6ae7f085dd"
+    const val daggerExtensions = "39bacb8b80"
     const val epoxy = "2.12.0"
     const val fabric = "2.7.1"
     const val kotlin = "1.2.41"
