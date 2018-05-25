@@ -18,10 +18,8 @@ package com.ivianuu.essentials.app
 
 import android.content.pm.ApplicationInfo
 import com.crashlytics.android.Crashlytics
-import com.ivianuu.essentials.injection.AutoInjector
-import com.ivianuu.essentials.ui.common.back.BackHandler
+import com.ivianuu.essentials.internal.EssentialsService
 import com.ivianuu.essentials.util.analytics.Analytics
-import com.ivianuu.essentials.util.analytics.ScreenLogger
 import com.ivianuu.essentials.util.ext.containsFlag
 import dagger.android.support.DaggerApplication
 import io.fabric.sdk.android.Fabric
@@ -34,13 +32,10 @@ import javax.inject.Inject
  */
 abstract class BaseApp : DaggerApplication() {
 
-    // must be initialized asap
-    @Inject lateinit var backHandler: BackHandler
-    @Inject lateinit var screenLogger: ScreenLogger
+    @Inject internal lateinit var essentialsServices: Set<@JvmSuppressWildcards EssentialsService>
 
     override fun onCreate() {
         super.onCreate()
-        AutoInjector.start(this)
 
         if (isDebug()) {
             plantTimber()

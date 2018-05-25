@@ -22,6 +22,8 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
 import android.support.v4.app.FragmentManager
+import com.ivianuu.daggerextensions.AutoBindsIntoSet
+import com.ivianuu.essentials.internal.EssentialsService
 import com.ivianuu.essentials.util.ext.doOnFragmentCreated
 import com.ivianuu.essentials.util.ext.registerActivityLifecycleCallbacks
 import javax.inject.Inject
@@ -33,7 +35,8 @@ import kotlin.collections.set
  * It respects back listeners and always pops the last fragment added
  */
 @Singleton
-class BackHandler @Inject constructor(application: Application) {
+@AutoBindsIntoSet(EssentialsService::class)
+class BackHandler @Inject constructor(application: Application) : EssentialsService {
 
     private val transactionIndexers = mutableMapOf<Activity, TransactionIndexer>()
 

@@ -14,6 +14,7 @@ object Versions {
     const val butterknife = "9.0.0-SNAPSHOT"
     const val constraintLayout = "1.1.0"
     const val dagger = "2.16"
+    const val daggerExtensions = "6ae7f085dd"
     const val epoxy = "2.12.0"
     const val fabric = "2.7.1"
     const val kotlin = "1.2.41"
@@ -50,6 +51,9 @@ object Deps {
     const val daggerAndroidSupport = "com.google.dagger:dagger-android-support:${Versions.dagger}"
     const val daggerCompiler = "com.google.dagger:dagger-compiler:${Versions.dagger}"
     const val daggerAndroidProcessor = "com.google.dagger:dagger-android-processor:${Versions.dagger}"
+
+    const val daggerExtensions = "com.github.IVIanuu.DaggerExtensions:daggerextensions:${Versions.daggerExtensions}"
+    const val daggerExtensionsCompiler = "com.github.IVIanuu.DaggerExtensions:daggerextensions-compiler:${Versions.daggerExtensions}"
 
     const val epoxy = "com.airbnb.android:epoxy:${Versions.epoxy}"
     const val epoxyProcessor = "com.airbnb.android:epoxy-processor:${Versions.epoxy}"

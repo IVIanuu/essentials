@@ -18,6 +18,14 @@ package com.ivianuu.essentials.util.ext
 
 import com.airbnb.epoxy.*
 
+fun epoxyController(buildModels: EpoxyController.() -> Unit): EpoxyController {
+    return object : EpoxyController() {
+        override fun buildModels() {
+            buildModels.invoke(this)
+        }
+    }
+}
+
 fun <T> typedEpoxyController(buildModels: TypedEpoxyController<T>.(data: T) -> Unit): TypedEpoxyController<T> {
     return object : TypedEpoxyController<T>() {
         override fun buildModels(data: T) {

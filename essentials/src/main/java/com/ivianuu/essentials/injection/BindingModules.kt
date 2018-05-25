@@ -14,22 +14,19 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.sample.injection
+package com.ivianuu.essentials.injection
 
-import com.ivianuu.essentials.injection.PerActivity
-import com.ivianuu.essentials.sample.ui.MainActivity
-import com.ivianuu.essentials.sample.ui.MainActivityModule
-import dagger.Module
-import dagger.android.ContributesAndroidInjector
+import com.ivianuu.daggerextensions.BindingModule
 
-/**
- * @author Manuel Wrage (IVIanuu)
- */
-@Module
-abstract class ActivityBindingModule {
 
-    @PerActivity
-    @ContributesAndroidInjector(modules = [MainActivityModule::class, FragmentBindingModule::class])
-    abstract fun bindMainActivity(): MainActivity
+@BindingModule
+annotation class ActivityBindingModule
 
-}
+@BindingModule
+annotation class FragmentBindingModule
+
+@BindingModule
+annotation class ServiceBindingModule
+
+@BindingModule
+annotation class EssentialsFragmentBindingModule

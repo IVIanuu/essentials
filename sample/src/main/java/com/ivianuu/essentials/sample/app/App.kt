@@ -16,13 +16,27 @@
 
 package com.ivianuu.essentials.sample.app
 
+import android.app.Application
+import com.ivianuu.daggerextensions.AutoComponent
+import com.ivianuu.daggerextensions.BindsTypes
 import com.ivianuu.essentials.app.BaseApp
+import com.ivianuu.essentials.injection.ActivityBindingModule_
+import com.ivianuu.essentials.injection.EssentialsModule
 import dagger.android.AndroidInjector
 import dagger.android.support.DaggerApplication
+import javax.inject.Singleton
 
 /**
  * @author Manuel Wrage (IVIanuu)
  */
+@BindsTypes(types = [Application::class])
+@Singleton
+@AutoComponent(
+    modules = [
+        ActivityBindingModule_::class,
+        EssentialsModule::class
+    ]
+)
 class App : BaseApp() {
 
     override fun applicationInjector(): AndroidInjector<out DaggerApplication> {

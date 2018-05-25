@@ -21,7 +21,10 @@ import android.app.Dialog
 import android.os.Bundle
 import android.os.Parcelable
 import com.afollestad.materialdialogs.MaterialDialog
+import com.ivianuu.daggerextensions.AutoContribute
 import com.ivianuu.essentials.R
+import com.ivianuu.essentials.injection.EssentialsFragmentBindingModule
+import com.ivianuu.essentials.injection.PerFragment
 import com.ivianuu.essentials.ui.base.BaseDialogFragment
 import com.ivianuu.essentials.ui.traveler.key.FragmentClassKey
 import com.ivianuu.essentials.ui.traveler.key.ResultKey
@@ -31,6 +34,9 @@ import kotlinx.android.parcel.Parcelize
 /**
  * Text input dialog
  */
+@EssentialsFragmentBindingModule
+@PerFragment
+@AutoContribute
 class TextInputDialog : BaseDialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {

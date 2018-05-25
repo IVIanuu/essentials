@@ -16,15 +16,12 @@
 
 package com.ivianuu.essentials.ui.base
 
-import android.app.Activity
-import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
 import android.support.v7.app.AppCompatActivity
 import com.ivianuu.autodispose.LifecycleScopeProvider
-import com.ivianuu.essentials.injection.EssentialsBindingModule
-import com.ivianuu.essentials.injection.ForActivity
+import com.ivianuu.essentials.injection.EssentialsFragmentBindingModule_
 import com.ivianuu.essentials.injection.Injectable
 import com.ivianuu.essentials.ui.common.ActivityEvent
 import com.ivianuu.essentials.ui.common.ActivityEvent.*
@@ -42,7 +39,6 @@ import com.ivianuu.rxactivityresult.RxActivityResult
 import com.ivianuu.rxpermissions.RxPermissions
 import com.ivianuu.traveler.Navigator
 import com.ivianuu.traveler.Router
-import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.android.AndroidInjector
@@ -124,52 +120,31 @@ abstract class BaseActivity : AppCompatActivity(), HasSupportFragmentInjector, I
     override fun peekLifecycle() = lifecycleSubject.value
 }
 
-@Module(includes = [EssentialsBindingModule::class])
-abstract class BaseActivityModule<T : BaseActivity> {
+@Module(includes = [EssentialsFragmentBindingModule_::class])
+object EssentialsActivityModule {
 
-    @Binds
-    abstract fun bindBaseActivity(activity: T): BaseActivity
+    @JvmStatic
+    @Provides
+    fun provideActivityResultStarter(activity: FragmentActivity) =
+        RxActivityResult.get(activity)
 
-    @Binds
-    abstract fun bindActivity(activity: BaseActivity): Activity
+    @JvmStatic
+    @Provides
+    fun providePermissionRequester(activity: FragmentActivity) = RxPermissions.get(activity)
 
-    @Binds
-    abstract fun bindAppCompatActivity(activity: BaseActivity): AppCompatActivity
+    @JvmStatic
+    @Provides
+    fun provideTraveler(activity: BaseActivity) =
+        activity.getTraveler(activity.fragmentContainer)
 
-    @Binds
-    abstract fun bindFragmentActivity(activity: AppCompatActivity): FragmentActivity
+    @JvmStatic
+    @Provides
+    fun provideNavigatorHolder(activity: BaseActivity) =
+        activity.getNavigatorHolder(activity.fragmentContainer)
 
-    @ForActivity
-    @Binds
-    abstract fun bindContext(activity: Activity): Context
-
-    @Module
-    companion object {
-
-        @JvmStatic
-        @Provides
-        fun provideActivityResultStarter(activity: FragmentActivity) =
-            RxActivityResult.get(activity)
-
-        @JvmStatic
-        @Provides
-        fun providePermissionRequester(activity: FragmentActivity) = RxPermissions.get(activity)
-
-        @JvmStatic
-        @Provides
-        fun provideTraveler(activity: BaseActivity) =
-            activity.getTraveler(activity.fragmentContainer)
-
-        @JvmStatic
-        @Provides
-        fun provideNavigatorHolder(activity: BaseActivity) =
-            activity.getNavigatorHolder(activity.fragmentContainer)
-
-        @JvmStatic
-        @Provides
-        fun provideRouter(activity: BaseActivity) =
-            activity.getRouter(activity.fragmentContainer)
-
-    }
+    @JvmStatic
+    @Provides
+    fun provideRouter(activity: BaseActivity) =
+        activity.getRouter(activity.fragmentContainer)
 
 }

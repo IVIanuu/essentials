@@ -14,20 +14,9 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.injection
-
-import com.ivianuu.essentials.ui.common.TextInputDialog
-import dagger.Module
-import dagger.android.ContributesAndroidInjector
+package com.ivianuu.essentials.internal
 
 /**
- * Base binding module for [android.support.v4.app.Fragment]'s
+ * @author Manuel Wrage (IVIanuu)
  */
-@Module
-abstract class EssentialsBindingModule {
-
-    @PerFragment
-    @ContributesAndroidInjector
-    abstract fun bindTextInputDialog(): TextInputDialog
-
-}
+internal interface EssentialsService

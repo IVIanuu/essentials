@@ -16,11 +16,22 @@
 
 package com.ivianuu.essentials.sample.ui
 
+import android.app.Activity
 import android.os.Bundle
+import android.support.v4.app.FragmentActivity
+import android.support.v7.app.AppCompatActivity
+import com.ivianuu.daggerextensions.AutoContribute
+import com.ivianuu.daggerextensions.BindsTypes
+import com.ivianuu.essentials.injection.ActivityBindingModule
+import com.ivianuu.essentials.injection.FragmentBindingModule_
+import com.ivianuu.essentials.injection.PerActivity
 import com.ivianuu.essentials.ui.base.BaseActivity
-import com.ivianuu.essentials.ui.base.BaseActivityModule
-import dagger.Module
+import com.ivianuu.essentials.ui.base.EssentialsActivityModule
 
+@BindsTypes(types = [Activity::class, FragmentActivity::class, AppCompatActivity::class, BaseActivity::class])
+@ActivityBindingModule
+@PerActivity
+@AutoContribute(modules = [EssentialsActivityModule::class, FragmentBindingModule_::class])
 class MainActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,6 +42,3 @@ class MainActivity : BaseActivity() {
         }
     }
 }
-
-@Module
-abstract class MainActivityModule : BaseActivityModule<MainActivity>()

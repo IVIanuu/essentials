@@ -22,18 +22,22 @@ import android.content.Context
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
 import android.support.v4.app.FragmentManager
+import com.ivianuu.daggerextensions.AutoBindsIntoSet
+import com.ivianuu.essentials.internal.EssentialsService
 import com.ivianuu.essentials.util.ext.doOnActivityCreated
 import com.ivianuu.essentials.util.ext.doOnFragmentAttached
 import dagger.android.AndroidInjection
 import dagger.android.support.AndroidSupportInjection
 import dagger.android.support.HasSupportFragmentInjector
+import javax.inject.Inject
 
 /**
- * Automatically injects into [Injectable] [Activity]'s and [Fragment]'s
+ * Automatically injects [Injectable] [Activity]'s and [Fragment]'s
  */
-object AutoInjector {
+@AutoBindsIntoSet(EssentialsService::class)
+class AutoInjector @Inject constructor(application: Application) : EssentialsService {
 
-    fun start(application: Application) {
+    init {
         application.doOnActivityCreated { activity, _ ->
             handleActivity(activity)
         }

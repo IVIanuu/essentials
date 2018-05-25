@@ -19,6 +19,9 @@ package com.ivianuu.essentials.sample.ui
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.View
+import com.ivianuu.daggerextensions.AutoContribute
+import com.ivianuu.essentials.injection.FragmentBindingModule
+import com.ivianuu.essentials.injection.PerFragment
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.base.BaseFragment
 import com.ivianuu.essentials.ui.traveler.key.FragmentClassKey
@@ -30,6 +33,9 @@ import kotlinx.android.parcel.Parcelize
 /**
  * @author Manuel Wrage (IVIanuu)
  */
+@FragmentBindingModule
+@PerFragment
+@AutoContribute
 class ChildNavigationContainerFragment : BaseFragment(), IgnoreNamedScreen {
 
     override val layoutRes = R.layout.fragment_child_navigation_container
