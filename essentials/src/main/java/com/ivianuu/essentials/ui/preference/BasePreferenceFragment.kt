@@ -26,11 +26,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.ivianuu.autodispose.LifecycleScopeProvider
+import com.ivianuu.daggerextensions.view.HasViewInjector
 import com.ivianuu.essentials.injection.Injectable
 import com.ivianuu.essentials.ui.common.CORRESPONDING_FRAGMENT_EVENTS
 import com.ivianuu.essentials.ui.common.FragmentEvent
 import com.ivianuu.essentials.ui.common.FragmentEvent.*
 import com.ivianuu.essentials.ui.common.back.BackListener
+import com.ivianuu.essentials.util.ViewInjectionContextWrapper
 import com.ivianuu.essentials.util.analytics.NamedScreen
 import com.ivianuu.essentials.util.ext.behaviorSubject
 import com.ivianuu.traveler.Router
@@ -43,13 +45,14 @@ import javax.inject.Inject
  * Base preference fragment
  */
 abstract class BasePreferenceFragment : PreferenceFragmentCompat(),
-    BackListener,
-    HasSupportFragmentInjector, Injectable, NamedScreen,
+    BackListener, HasSupportFragmentInjector,
+    HasViewInjector, Injectable, NamedScreen,
     LifecycleScopeProvider<FragmentEvent> {
 
     @Inject lateinit var router: Router
 
     @Inject lateinit var supportFragmentInjector: DispatchingAndroidInjector<Fragment>
+    @Inject lateinit var viewInjector: DispatchingAndroidInjector<View>
 
     open val layoutRes = -1
     open val prefsContainerId = -1
@@ -73,7 +76,11 @@ abstract class BasePreferenceFragment : PreferenceFragmentCompat(),
         savedInstanceState: Bundle?
     ): View? {
         return if (layoutRes != -1 && prefsContainerId != -1) {
-            val view = inflater.inflate(layoutRes, container, false)
+            val viewInjectionContext =
+                ViewInjectionContextWrapper(requireContext(), this)
+            val viewInjectionInflater = inflater.cloneInContext(viewInjectionContext)
+            viewInjectionInflater.inflate(layoutRes, container, false)
+            val view = viewInjectionInflater.inflate(layoutRes, container, false)
             val prefsContainer = view.findViewById<ViewGroup>(prefsContainerId)
             val prefsView = super.onCreateView(inflater, prefsContainer, savedInstanceState)
             prefsContainer.addView(prefsView)
@@ -138,6 +145,8 @@ abstract class BasePreferenceFragment : PreferenceFragmentCompat(),
     }
 
     override fun supportFragmentInjector(): AndroidInjector<Fragment> = supportFragmentInjector
+
+    override fun viewInjector(): AndroidInjector<View> = viewInjector
 
     override fun lifecycle() = lifecycleSubject
 

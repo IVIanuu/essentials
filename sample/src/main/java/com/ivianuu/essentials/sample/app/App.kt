@@ -17,6 +17,8 @@
 package com.ivianuu.essentials.sample.app
 
 import com.ivianuu.daggerextensions.AutoComponent
+import com.ivianuu.daggerextensions.InjectorKeyRegistry
+import com.ivianuu.daggerextensions.view.ViewKey
 import com.ivianuu.essentials.app.BaseApp
 import com.ivianuu.essentials.injection.ActivityBindingModule_
 import com.ivianuu.essentials.injection.AppBindingSet
@@ -45,3 +47,6 @@ class App : BaseApp() {
     }
 
 }
+
+@InjectorKeyRegistry([ViewKey::class])
+interface InjectorKeyRegistry

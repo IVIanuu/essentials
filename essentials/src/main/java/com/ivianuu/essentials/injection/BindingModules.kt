@@ -34,6 +34,9 @@ annotation class FragmentBindingModule
 annotation class ServiceBindingModule
 
 @BindingModule
+annotation class ViewBindingModule
+
+@BindingModule
 annotation class EssentialsFragmentBindingModule
 
 @BindingModule

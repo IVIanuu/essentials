@@ -23,11 +23,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.ivianuu.autodispose.LifecycleScopeProvider
+import com.ivianuu.daggerextensions.view.HasViewInjector
 import com.ivianuu.essentials.injection.Injectable
 import com.ivianuu.essentials.ui.common.CORRESPONDING_FRAGMENT_EVENTS
 import com.ivianuu.essentials.ui.common.FragmentEvent
 import com.ivianuu.essentials.ui.common.FragmentEvent.*
 import com.ivianuu.essentials.ui.common.back.BackListener
+import com.ivianuu.essentials.util.ViewInjectionContextWrapper
 import com.ivianuu.essentials.util.analytics.NamedScreen
 import com.ivianuu.essentials.util.ext.behaviorSubject
 import com.ivianuu.traveler.Router
@@ -39,12 +41,13 @@ import javax.inject.Inject
 /**
  * Base fragment
  */
-abstract class BaseFragment : Fragment(), BackListener, HasSupportFragmentInjector, Injectable,
-    NamedScreen, LifecycleScopeProvider<FragmentEvent> {
+abstract class BaseFragment : Fragment(), BackListener, HasSupportFragmentInjector,
+    HasViewInjector, Injectable, NamedScreen, LifecycleScopeProvider<FragmentEvent> {
 
     @Inject lateinit var router: Router
 
     @Inject lateinit var supportFragmentInjector: DispatchingAndroidInjector<Fragment>
+    @Inject lateinit var viewInjector: DispatchingAndroidInjector<View>
 
     protected open val layoutRes = -1
 
@@ -67,7 +70,10 @@ abstract class BaseFragment : Fragment(), BackListener, HasSupportFragmentInject
         savedInstanceState: Bundle?
     ): View? {
         return if (layoutRes != -1) {
-            inflater.inflate(layoutRes, container, false)
+            val viewInjectionContext =
+                ViewInjectionContextWrapper(requireContext(), this)
+            val viewInjectionInflater = inflater.cloneInContext(viewInjectionContext)
+            viewInjectionInflater.inflate(layoutRes, container, false)
         } else {
             super.onCreateView(inflater, container, savedInstanceState)
         }
@@ -124,4 +130,6 @@ abstract class BaseFragment : Fragment(), BackListener, HasSupportFragmentInject
     override fun peekLifecycle() = lifecycleSubject.value
 
     override fun supportFragmentInjector(): AndroidInjector<Fragment> = supportFragmentInjector
+
+    override fun viewInjector() = viewInjector
 }

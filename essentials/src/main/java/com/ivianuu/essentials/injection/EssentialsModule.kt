@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.injection
 
+import com.ivianuu.daggerextensions.view.ViewInjectionModule
 import com.ivianuu.essentials.app.EssentialsAppModule
 import dagger.Module
 import dagger.android.AndroidInjectionModule
@@ -29,7 +30,8 @@ import dagger.android.support.AndroidSupportInjectionModule
         AndroidInjectionModule::class,
         AndroidSupportInjectionModule::class,
         EssentialsAppModule::class,
-        EssentialsServiceModule_::class
+        EssentialsServiceModule_::class,
+        ViewInjectionModule::class
     ]
 )
 object EssentialsModule

@@ -16,52 +16,48 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import android.graphics.Color
-import android.os.Bundle
 import android.os.Parcelable
-import android.view.View
 import com.ivianuu.daggerextensions.AutoContribute
 import com.ivianuu.essentials.injection.FragmentBindingModule
 import com.ivianuu.essentials.injection.PerFragment
+import com.ivianuu.essentials.injection.ViewBindingModule_
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.base.BaseFragment
 import com.ivianuu.essentials.ui.traveler.key.FragmentClassKey
 import com.ivianuu.essentials.ui.traveler.key.requireKey
 import com.ivianuu.essentials.ui.traveler.localRouter
+import dagger.Module
+import dagger.Provides
 import kotlinx.android.parcel.Parcelize
-import kotlinx.android.synthetic.main.fragment_child_navigation.*
+import javax.inject.Qualifier
 
 /**
  * @author Manuel Wrage (IVIanuu)
  */
 @FragmentBindingModule
 @PerFragment
-@AutoContribute
+@AutoContribute(modules = [ChildNavigationModule::class, ViewBindingModule_::class])
 class ChildNavigationFragment : BaseFragment() {
-
-    override val layoutRes = R.layout.fragment_child_navigation
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        val key = requireKey<ChildNavigationKey>()
-
-        title.text = "Container: ${key.index}, Count: ${key.count}"
-        view.setBackgroundColor(COLORS[key.index])
-
-        pop_to_root.setOnClickListener { localRouter.backToRoot() }
-        prev.setOnClickListener { localRouter.exit() }
-        next.setOnClickListener {
-            localRouter.navigateTo(ChildNavigationKey(key.index, key.count + 1))
-        }
-    }
-
-    private companion object {
-        private val COLORS =
-            arrayOf(Color.RED, Color.BLUE, Color.MAGENTA)
-    }
+    override val layoutRes = R.layout.view_child_navigation
 }
 
 @Parcelize
 data class ChildNavigationKey(val index: Int, val count: Int) :
     FragmentClassKey(ChildNavigationFragment::class), Parcelable
+
+@Qualifier
+annotation class LocalRouter
+
+@Module
+object ChildNavigationModule {
+
+    @JvmStatic
+    @LocalRouter
+    @Provides
+    fun provideLocalRouter(fragment: ChildNavigationFragment) = fragment.localRouter
+
+    @JvmStatic
+    @Provides
+    fun provideKey(fragment: ChildNavigationFragment) = fragment.requireKey<ChildNavigationKey>()
+
+}

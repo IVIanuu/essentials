@@ -20,7 +20,9 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
 import android.support.v7.app.AppCompatActivity
+import android.view.View
 import com.ivianuu.autodispose.LifecycleScopeProvider
+import com.ivianuu.daggerextensions.view.HasViewInjector
 import com.ivianuu.essentials.injection.EssentialsFragmentBindingModule_
 import com.ivianuu.essentials.injection.Injectable
 import com.ivianuu.essentials.ui.common.ActivityEvent
@@ -49,11 +51,13 @@ import javax.inject.Inject
 /**
  * Base activity
  */
-abstract class BaseActivity : AppCompatActivity(), HasSupportFragmentInjector, Injectable,
-    NamedScreen, LifecycleScopeProvider<ActivityEvent> {
+abstract class BaseActivity : AppCompatActivity(), HasSupportFragmentInjector,
+    HasViewInjector, Injectable, NamedScreen, LifecycleScopeProvider<ActivityEvent> {
 
     @Inject lateinit var backHandler: BackHandler
+
     @Inject lateinit var supportFragmentInjector: DispatchingAndroidInjector<Fragment>
+    @Inject lateinit var viewInjector: DispatchingAndroidInjector<View>
 
     protected open val layoutRes = -1
 
@@ -112,6 +116,8 @@ abstract class BaseActivity : AppCompatActivity(), HasSupportFragmentInjector, I
     }
 
     override fun supportFragmentInjector(): AndroidInjector<Fragment> = supportFragmentInjector
+
+    override fun viewInjector() = viewInjector
 
     override fun lifecycle() = lifecycleSubject
 

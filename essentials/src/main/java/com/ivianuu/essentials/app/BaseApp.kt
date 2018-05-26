@@ -17,10 +17,13 @@
 package com.ivianuu.essentials.app
 
 import android.content.pm.ApplicationInfo
+import android.view.View
 import com.crashlytics.android.Crashlytics
+import com.ivianuu.daggerextensions.view.HasViewInjector
 import com.ivianuu.essentials.internal.EssentialsService
 import com.ivianuu.essentials.util.analytics.Analytics
 import com.ivianuu.essentials.util.ext.containsFlag
+import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.DaggerApplication
 import io.fabric.sdk.android.Fabric
 import timber.log.Timber
@@ -29,9 +32,11 @@ import javax.inject.Inject
 /**
  * App
  */
-abstract class BaseApp : DaggerApplication() {
+abstract class BaseApp : DaggerApplication(), HasViewInjector {
 
     @Inject internal lateinit var essentialsServices: Set<@JvmSuppressWildcards EssentialsService>
+
+    @Inject lateinit var viewInjector: DispatchingAndroidInjector<View>
 
     override fun onCreate() {
         super.onCreate()
@@ -44,6 +49,8 @@ abstract class BaseApp : DaggerApplication() {
 
         Analytics.log("app started")
     }
+
+    override fun viewInjector() = viewInjector
 
     protected open fun plantTimber() {
         Timber.plant(Timber.DebugTree())

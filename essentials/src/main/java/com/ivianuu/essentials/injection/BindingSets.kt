@@ -25,6 +25,7 @@ import android.support.v4.app.DialogFragment
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
 import android.support.v7.app.AppCompatActivity
+import android.view.View
 import com.ivianuu.daggerextensions.BindingSet
 import com.ivianuu.essentials.ui.base.BaseActivity
 import com.ivianuu.essentials.ui.base.BaseFragment
@@ -49,3 +50,6 @@ annotation class DialogFragmentBindingSet
 
 @BindingSet([Service::class])
 annotation class ServiceBindingSet
+
+@BindingSet([View::class])
+annotation class ViewBindingSet

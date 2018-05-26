@@ -54,6 +54,7 @@ dependencies {
     kapt Deps.daggerCompiler
     kapt Deps.daggerAndroidProcessor
 
+    api Deps.daggerExtensionsView
     api Deps.daggerExtensions
     kapt Deps.daggerExtensionsCompiler
 
