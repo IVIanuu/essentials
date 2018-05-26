@@ -1,2 +1,6 @@
 # View models
 -keepclassmembernames class android.arch.lifecycle.ViewModelStore { *; }
+
+# Screen logger
+-keepnames public class * extends android.support.v4.app.Fragment
+-keepnames public class * extends android.app.Activity
