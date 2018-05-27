@@ -24,6 +24,10 @@ import com.ivianuu.essentials.injection.FragmentBindingModule_
 import com.ivianuu.essentials.injection.PerActivity
 import com.ivianuu.essentials.ui.base.BaseActivity
 import com.ivianuu.essentials.ui.base.EssentialsActivityModule
+import com.ivianuu.essentials.util.ext.d
+import com.ivianuu.essentials.util.ext.filterIsInstance
+import com.ivianuu.essentials.util.ext.subscribeForUi
+import io.reactivex.Observable
 
 @ActivityBindingSet
 @ActivityBindingModule
@@ -37,5 +41,9 @@ class MainActivity : BaseActivity() {
         if (savedInstanceState == null) {
             router.newRootScreen(MultipleChildsKey)
         }
+
+        Observable.just(1, true, "hello", 1L, 1F)
+            .filterIsInstance<String>()
+            .subscribeForUi(this) { d { "emitted $it" } }
     }
 }
