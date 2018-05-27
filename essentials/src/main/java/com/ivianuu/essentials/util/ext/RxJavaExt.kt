@@ -501,23 +501,3 @@ fun <T : Any, E> Single<T>.subscribeForUi(
         .subscribeBy(onSuccess = onSuccess, onError = onError)
         .autoDispose(lifecycleScopeProvider, untilEvent)
 }
-
-inline fun <reified T> Flowable<*>.filterIsInstance(): Flowable<T> {
-    return filter { it is T }
-        .map { it as T }
-}
-
-inline fun <reified T> Maybe<*>.filterIsInstance(): Maybe<T> {
-    return filter { it is T }
-        .map { it as T }
-}
-
-inline fun <reified T> Observable<*>.filterIsInstance(): Observable<T> {
-    return filter { it is T }
-        .map { it as T }
-}
-
-inline fun <reified T> Single<*>.filterIsInstance(): Maybe<T> {
-    return filter { it is T }
-        .map { it as T }
-}
