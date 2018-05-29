@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.util.analytics
+package com.ivianuu.essentials.util.screenlogger
 
 import android.app.Activity
 import android.app.Application
@@ -25,6 +25,7 @@ import android.support.v4.app.FragmentManager
 import com.ivianuu.daggerextensions.AutoBindsIntoSet
 import com.ivianuu.essentials.injection.EssentialsServiceModule
 import com.ivianuu.essentials.internal.EssentialsService
+import com.ivianuu.essentials.util.analytics.Analytics
 import com.ivianuu.essentials.util.ext.doOnActivityCreated
 import com.ivianuu.essentials.util.ext.doOnFragmentCreated
 import javax.inject.Inject
@@ -38,7 +39,8 @@ import javax.inject.Singleton
 @AutoBindsIntoSet(EssentialsService::class)
 class ScreenLogger @Inject constructor(application: Application) : EssentialsService {
 
-    var listener: Listener? = DefaultListener()
+    var listener: Listener? =
+        DefaultListener()
 
     init {
         application.doOnActivityCreated { activity, savedInstanceState ->

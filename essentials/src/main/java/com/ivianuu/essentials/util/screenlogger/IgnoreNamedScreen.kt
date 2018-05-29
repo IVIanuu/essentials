@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.util.analytics
+package com.ivianuu.essentials.util.screenlogger
 
 /**
  * The opposite of [NamedScreen]
