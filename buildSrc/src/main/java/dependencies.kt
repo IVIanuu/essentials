@@ -13,6 +13,7 @@ object Versions {
     const val autoDispose = "5e1bd5146e"
     const val butterknife = "9.0.0-SNAPSHOT"
     const val constraintLayout = "1.1.0"
+    const val coroutines = "0.22.5"
     const val dagger = "2.16"
     const val daggerExtensions = "85d4c7e4ee"
     const val epoxy = "2.12.0"
@@ -45,6 +46,10 @@ object Deps {
     const val butterknifeGradlePlugin = "com.jakewharton:butterknife-gradle-plugin:${Versions.butterknife}"
 
     const val constraintLayout = "com.android.support.constraint:constraint-layout:${Versions.constraintLayout}"
+
+    const val coroutinesCore = "org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.coroutines}"
+    const val coroutinesAndroid = "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.coroutines}"
+    const val coroutinesRx2 = "org.jetbrains.kotlinx:kotlinx-coroutines-rx2:${Versions.coroutines}"
 
     const val dagger = "com.google.dagger:dagger:${Versions.dagger}"
     const val daggerAndroid = "com.google.dagger:dagger-android:${Versions.dagger}"

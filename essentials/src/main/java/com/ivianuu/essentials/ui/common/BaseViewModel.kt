@@ -18,6 +18,11 @@ package com.ivianuu.essentials.ui.common
 
 import android.arch.lifecycle.ViewModel
 import io.reactivex.disposables.CompositeDisposable
+import kotlinx.coroutines.experimental.CoroutineScope
+import kotlinx.coroutines.experimental.DefaultDispatcher
+import kotlinx.coroutines.experimental.Job
+import kotlinx.coroutines.experimental.launch
+import kotlin.coroutines.experimental.CoroutineContext
 
 /**
  * A [ViewModel] which auto disposes itself
@@ -25,9 +30,17 @@ import io.reactivex.disposables.CompositeDisposable
 abstract class BaseViewModel : ViewModel() {
 
     protected val disposables = CompositeDisposable()
+    private val viewModelJob = Job()
 
     override fun onCleared() {
         disposables.clear()
+        viewModelJob.cancel()
         super.onCleared()
     }
+
+    fun launchWithParent(
+        context: CoroutineContext = DefaultDispatcher,
+        block: suspend CoroutineScope.() -> Unit
+    ) = launch(context = context, parent = viewModelJob, block = block)
+
 }
