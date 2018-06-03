@@ -22,7 +22,6 @@ import com.crashlytics.android.Crashlytics
 import com.ivianuu.daggerextensions.view.HasViewInjector
 import com.ivianuu.essentials.internal.EssentialsService
 import com.ivianuu.essentials.util.EnsureMainThreadScheduler
-import com.ivianuu.essentials.util.analytics.Analytics
 import com.ivianuu.essentials.util.ext.containsFlag
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.DaggerApplication
@@ -49,9 +48,7 @@ abstract class BaseApp : DaggerApplication(), HasViewInjector {
             initializeFabric()
         }
 
-        RxAndroidPlugins.onMainThreadScheduler(EnsureMainThreadScheduler.INSTANCE)
-
-        Analytics.log("app started")
+        RxAndroidPlugins.setInitMainThreadSchedulerHandler { EnsureMainThreadScheduler.INSTANCE }
     }
 
     override fun viewInjector() = viewInjector
