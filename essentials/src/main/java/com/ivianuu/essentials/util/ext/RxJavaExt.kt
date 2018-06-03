@@ -21,8 +21,8 @@ import com.ivianuu.autodispose.LifecycleScopeProvider
 import com.ivianuu.autodispose.ScopeProvider
 import com.ivianuu.autodispose.autoDispose
 import com.ivianuu.autodispose.view.ViewScopeProvider
-import com.ivianuu.essentials.util.EnsureMainThreadScheduler
 import io.reactivex.*
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.exceptions.OnErrorNotImplementedException
 import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.rxkotlin.subscribeBy
@@ -34,21 +34,6 @@ private val onNextStub: (Any) -> Unit = {}
 private val onErrorStub: (Throwable) -> Unit =
     { RxJavaPlugins.onError(OnErrorNotImplementedException(it)) }
 private val onErrorPrint: (Throwable) -> Unit = Throwable::printStackTrace
-
-fun Completable.main(): Completable =
-    observeOn(EnsureMainThreadScheduler.INSTANCE)
-
-fun <T : Any> Flowable<T>.main(): Flowable<T> =
-    observeOn(EnsureMainThreadScheduler.INSTANCE)
-
-fun <T : Any> Maybe<T>.main(): Maybe<T> =
-    observeOn(EnsureMainThreadScheduler.INSTANCE)
-
-fun <T : Any> Observable<T>.main(): Observable<T> =
-    observeOn(EnsureMainThreadScheduler.INSTANCE)
-
-fun <T : Any> Single<T>.main(): Single<T> =
-    observeOn(EnsureMainThreadScheduler.INSTANCE)
 
 fun Completable.subscribeAndPrint(onComplete: () -> Unit = onCompleteStub) =
     subscribeBy(onComplete = onComplete, onError = onErrorPrint)
@@ -111,7 +96,7 @@ fun Completable.subscribeForUi(
     onError: (Throwable) -> Unit = onErrorStub,
     onComplete: () -> Unit = onCompleteStub
 ) {
-    main()
+    observeOn(AndroidSchedulers.mainThread())
         .subscribeBy(onComplete = onComplete, onError = onError)
         .autoDispose(scopeProvider)
 }
@@ -132,7 +117,7 @@ fun <E> Completable.subscribeForUi(
     onError: (Throwable) -> Unit = onErrorStub,
     onComplete: () -> Unit = onCompleteStub
 ) {
-    main()
+    observeOn(AndroidSchedulers.mainThread())
         .subscribeBy(onComplete = onComplete, onError = onError)
         .autoDispose(lifecycleScopeProvider)
 }
@@ -154,7 +139,7 @@ fun <E> Completable.subscribeForUi(
     onError: (Throwable) -> Unit = onErrorStub,
     onComplete: () -> Unit = onCompleteStub
 ) {
-    main()
+    observeOn(AndroidSchedulers.mainThread())
         .subscribeBy(onError = onError, onComplete = onComplete)
         .autoDispose(lifecycleScopeProvider, untilEvent)
 }
@@ -197,7 +182,7 @@ fun <T : Any> Flowable<T>.subscribeForUi(
     onComplete: () -> Unit = onCompleteStub,
     onNext: (T) -> Unit = onNextStub
 ) {
-    main()
+    observeOn(AndroidSchedulers.mainThread())
         .subscribeBy(onNext = onNext, onError = onError, onComplete = onComplete)
         .autoDispose(scopeProvider)
 }
@@ -218,7 +203,7 @@ fun <T : Any, E> Flowable<T>.subscribeForUi(
     onComplete: () -> Unit = onCompleteStub,
     onNext: (T) -> Unit = onNextStub
 ) {
-    main()
+    observeOn(AndroidSchedulers.mainThread())
         .subscribeBy(onNext = onNext, onError = onError, onComplete = onComplete)
         .autoDispose(lifecycleScopeProvider)
 }
@@ -241,7 +226,7 @@ fun <T : Any, E> Flowable<T>.subscribeForUi(
     onComplete: () -> Unit = onCompleteStub,
     onNext: (T) -> Unit = onNextStub
 ) {
-    main()
+    observeOn(AndroidSchedulers.mainThread())
         .subscribeBy(onNext = onNext, onError = onError, onComplete = onComplete)
         .autoDispose(lifecycleScopeProvider, untilEvent)
 }
@@ -284,7 +269,7 @@ fun <T : Any> Maybe<T>.subscribeForUi(
     onComplete: () -> Unit = onCompleteStub,
     onSuccess: (T) -> Unit = onNextStub
 ) {
-    main()
+    observeOn(AndroidSchedulers.mainThread())
         .subscribeBy(onSuccess = onSuccess, onError = onError, onComplete = onComplete)
         .autoDispose(scopeProvider)
 }
@@ -305,7 +290,7 @@ fun <T : Any, E> Maybe<T>.subscribeForUi(
     onComplete: () -> Unit = onCompleteStub,
     onSuccess: (T) -> Unit = onNextStub
 ) {
-    main()
+    observeOn(AndroidSchedulers.mainThread())
         .subscribeBy(onSuccess = onSuccess, onError = onError, onComplete = onComplete)
         .autoDispose(lifecycleScopeProvider)
 }
@@ -328,7 +313,7 @@ fun <T : Any, E> Maybe<T>.subscribeForUi(
     onComplete: () -> Unit = onCompleteStub,
     onSuccess: (T) -> Unit = onNextStub
 ) {
-    main()
+    observeOn(AndroidSchedulers.mainThread())
         .subscribeBy(onSuccess = onSuccess, onError = onError, onComplete = onComplete)
         .autoDispose(lifecycleScopeProvider, untilEvent)
 }
@@ -371,7 +356,7 @@ fun <T : Any> Observable<T>.subscribeForUi(
     onComplete: () -> Unit = onCompleteStub,
     onNext: (T) -> Unit = onNextStub
 ) {
-    main()
+    observeOn(AndroidSchedulers.mainThread())
         .subscribeBy(onNext = onNext, onError = onError, onComplete = onComplete)
         .autoDispose(scopeProvider)
 }
@@ -392,7 +377,7 @@ fun <T : Any, E> Observable<T>.subscribeForUi(
     onComplete: () -> Unit = onCompleteStub,
     onNext: (T) -> Unit = onNextStub
 ) {
-    main()
+    observeOn(AndroidSchedulers.mainThread())
         .subscribeBy(onNext = onNext, onError = onError, onComplete = onComplete)
         .autoDispose(lifecycleScopeProvider)
 }
@@ -415,7 +400,7 @@ fun <T : Any, E> Observable<T>.subscribeForUi(
     onComplete: () -> Unit = onCompleteStub,
     onNext: (T) -> Unit = onNextStub
 ) {
-    main()
+    observeOn(AndroidSchedulers.mainThread())
         .subscribeBy(onNext = onNext, onError = onError, onComplete = onComplete)
         .autoDispose(lifecycleScopeProvider, untilEvent)
 }
@@ -455,7 +440,7 @@ fun <T : Any> Single<T>.subscribeForUi(
     onError: (Throwable) -> Unit = onErrorStub,
     onSuccess: (T) -> Unit = onNextStub
 ) {
-    main()
+    observeOn(AndroidSchedulers.mainThread())
         .subscribeBy(onSuccess = onSuccess, onError = onError)
         .autoDispose(scopeProvider)
 }
@@ -475,7 +460,7 @@ fun <T : Any, E> Single<T>.subscribeForUi(
     onError: (Throwable) -> Unit = onErrorStub,
     onSuccess: (T) -> Unit = onNextStub
 ) {
-    main()
+    observeOn(AndroidSchedulers.mainThread())
         .subscribeBy(onSuccess = onSuccess, onError = onError)
         .autoDispose(lifecycleScopeProvider)
 }
@@ -497,7 +482,7 @@ fun <T : Any, E> Single<T>.subscribeForUi(
     onError: (Throwable) -> Unit = onErrorStub,
     onSuccess: (T) -> Unit = onNextStub
 ) {
-    main()
+    observeOn(AndroidSchedulers.mainThread())
         .subscribeBy(onSuccess = onSuccess, onError = onError)
         .autoDispose(lifecycleScopeProvider, untilEvent)
 }

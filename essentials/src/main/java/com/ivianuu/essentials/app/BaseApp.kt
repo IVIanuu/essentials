@@ -21,11 +21,13 @@ import android.view.View
 import com.crashlytics.android.Crashlytics
 import com.ivianuu.daggerextensions.view.HasViewInjector
 import com.ivianuu.essentials.internal.EssentialsService
+import com.ivianuu.essentials.util.EnsureMainThreadScheduler
 import com.ivianuu.essentials.util.analytics.Analytics
 import com.ivianuu.essentials.util.ext.containsFlag
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.DaggerApplication
 import io.fabric.sdk.android.Fabric
+import io.reactivex.android.plugins.RxAndroidPlugins
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -46,6 +48,8 @@ abstract class BaseApp : DaggerApplication(), HasViewInjector {
         } else {
             initializeFabric()
         }
+
+        RxAndroidPlugins.onMainThreadScheduler(EnsureMainThreadScheduler.INSTANCE)
 
         Analytics.log("app started")
     }
