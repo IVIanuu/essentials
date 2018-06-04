@@ -24,6 +24,7 @@ object Versions {
     const val materialDialogs = "0.9.6.0"
     const val rxActivityResult = "6da49c1fcf"
     const val rxAndroid = "2.0.2"
+    const val rxBinding = "2.1.1"
     const val rxJava = "2.1.13"
     const val rxKotlin = "2.2.0"
     const val rxPermissions = "981f695508"
@@ -77,6 +78,13 @@ object Deps {
 
     const val rxActivityResult = "com.github.IVIanuu:RxActivityResult:${Versions.rxActivityResult}"
     const val rxAndroid = "io.reactivex.rxjava2:rxandroid:${Versions.rxAndroid}"
+
+    const val rxBinding = "com.jakewharton.rxbinding2:rxbinding-kotlin:${Versions.rxBinding}"
+    const val rxBindingDesign = "com.jakewharton.rxbinding2:rxbinding-design-kotlin:${Versions.rxBinding}"
+    const val rxBindingRecyclerView = "com.jakewharton.rxbinding2:rxbinding-recyclerview-v7-kotlin:${Versions.rxBinding}"
+    const val rxBindingSupportAppCompatV7 = "com.jakewharton.rxbinding2:rxbinding-appcompat-v7-kotlin:${Versions.rxBinding}"
+    const val rxBindingSupportV4 = "com.jakewharton.rxbinding2:rxbinding-support-v4-kotlin:${Versions.rxBinding}"
+
     const val rxJava = "io.reactivex.rxjava2:rxjava:${Versions.rxJava}"
     const val rxKotlin = "io.reactivex.rxjava2:rxkotlin:${Versions.rxKotlin}"
     const val rxPermissions = "com.github.IVIanuu:RxPermissions:${Versions.rxPermissions}"

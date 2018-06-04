@@ -26,29 +26,12 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.exceptions.OnErrorNotImplementedException
 import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.rxkotlin.subscribeBy
-import io.reactivex.subjects.BehaviorSubject
-import io.reactivex.subjects.PublishSubject
+import io.reactivex.subjects.*
 
 private val onCompleteStub: () -> Unit = {}
 private val onNextStub: (Any) -> Unit = {}
 private val onErrorStub: (Throwable) -> Unit =
     { RxJavaPlugins.onError(OnErrorNotImplementedException(it)) }
-private val onErrorPrint: (Throwable) -> Unit = Throwable::printStackTrace
-
-fun Completable.subscribeAndPrint(onComplete: () -> Unit = onCompleteStub) =
-    subscribeBy(onComplete = onComplete, onError = onErrorPrint)
-
-fun <T : Any> Flowable<T>.subscribeAndPrint(onNext: (T) -> Unit = onNextStub) =
-    subscribeBy(onNext = onNext, onError = onErrorPrint)
-
-fun <T : Any> Maybe<T>.subscribeAndPrint(onSuccess: (T) -> Unit = onNextStub) =
-    subscribeBy(onSuccess = onSuccess, onError = onErrorPrint)
-
-fun <T : Any> Observable<T>.subscribeAndPrint(onNext: (T) -> Unit = onNextStub) =
-    subscribeBy(onNext = onNext, onError = onErrorPrint)
-
-fun <T : Any> Single<T>.subscribeAndPrint(onSuccess: (T) -> Unit = onNextStub) =
-    subscribeBy(onSuccess = onSuccess, onError = onErrorPrint)
 
 fun <T : Any> BehaviorSubject<T>.requireValue() =
     value ?: throw IllegalStateException("value is null")
@@ -60,7 +43,13 @@ fun <T : Any> behaviorSubject(defaultValue: T? = null): BehaviorSubject<T> =
         BehaviorSubject.create()
     }
 
-fun <T : Any> publishSubject(): PublishSubject<T> = PublishSubject.create<T>()
+fun completableSubject(): CompletableSubject = CompletableSubject.create()
+
+fun <T : Any> maybeSubject(): MaybeSubject<T> = MaybeSubject.create()
+
+fun <T : Any> publishSubject(): PublishSubject<T> = PublishSubject.create()
+
+fun <T : Any> singleSubject(): SingleSubject<T> = SingleSubject.create()
 
 fun Completable.subscribeForUi(
     view: View,

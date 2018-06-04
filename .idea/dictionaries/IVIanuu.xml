@@ -2,7 +2,11 @@
   <dictionary name="IVIanuu">
     <words>
       <w>conductorfork</w>
+      <w>jakewharton</w>
+      <w>reactivex</w>
       <w>resetable</w>
+      <w>rxjava</w>
+      <w>rxkotlin</w>
     </words>
   </dictionary>
 </component>

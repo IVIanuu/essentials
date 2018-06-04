@@ -78,6 +78,11 @@ dependencies {
 
     api Deps.rxActivityResult
     api Deps.rxAndroid
+    api Deps.rxBinding
+    api Deps.rxBindingDesign
+    api Deps.rxBindingRecyclerView
+    api Deps.rxBindingSupportAppCompatV7
+    api Deps.rxBindingSupportV4
     api Deps.rxJava
     api Deps.rxKotlin
     api Deps.rxPermissions
