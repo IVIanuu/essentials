@@ -16,8 +16,10 @@
 
 package com.ivianuu.essentials.ui.state
 
+import com.ivianuu.autodispose.autoDispose
 import com.ivianuu.essentials.ui.common.BaseViewModel
 import com.ivianuu.essentials.util.ext.behaviorSubject
+import io.reactivex.Observable
 
 /**
  * View model which produces a single state
@@ -36,7 +38,7 @@ abstract class StateViewModel<T : Any> : BaseViewModel() {
         _state
             .take(1)
             .subscribe(action)
-            .addTo(disposables)
+            .autoDispose(this)
     }
 
     protected fun updateState(newState: T) {

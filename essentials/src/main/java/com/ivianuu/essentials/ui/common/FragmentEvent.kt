@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.ui.common
 
 import com.ivianuu.essentials.ui.common.FragmentEvent.*
+import io.reactivex.functions.Function
 
 enum class FragmentEvent {
     ATTACH, CREATE, CREATE_VIEW, START, RESUME, PAUSE, STOP, DESTROY_VIEW, DESTROY, DETACH

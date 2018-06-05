@@ -21,6 +21,10 @@ import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Observer
 import com.ivianuu.essentials.util.SingleLiveEvent
+import io.reactivex.*
+import io.reactivex.disposables.Disposable
+import io.reactivex.rxkotlin.subscribeBy
+import java.util.concurrent.atomic.AtomicReference
 
 fun <T> mutableLiveData(initialValue: T? = null) =
     MutableLiveData<T>().apply {

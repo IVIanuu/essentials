@@ -22,6 +22,7 @@ import com.crashlytics.android.Crashlytics
 import com.ivianuu.daggerextensions.view.HasViewInjector
 import com.ivianuu.essentials.internal.EssentialsService
 import com.ivianuu.essentials.util.EnsureMainThreadScheduler
+import com.ivianuu.essentials.util.ext.containsFlag
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.DaggerApplication
 import io.fabric.sdk.android.Fabric

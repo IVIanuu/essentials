@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.ui.common
 
 import com.ivianuu.essentials.ui.common.ActivityEvent.*
+import io.reactivex.functions.Function
 
 enum class ActivityEvent {
     CREATE, START, RESUME, PAUSE, STOP, DESTROY

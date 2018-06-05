@@ -17,29 +17,17 @@
 package com.ivianuu.essentials.ui.common
 
 import android.arch.lifecycle.ViewModel
-import kotlinx.coroutines.experimental.CoroutineScope
-import kotlinx.coroutines.experimental.DefaultDispatcher
-import kotlinx.coroutines.experimental.Job
-import kotlinx.coroutines.experimental.launch
-import kotlin.coroutines.experimental.CoroutineContext
+import com.ivianuu.essentials.util.SimpleScopeProvider
+import com.ivianuu.essentials.util.SimpleScopeProviderHelper
 
 /**
  * A [ViewModel] which auto disposes itself
  */
-abstract class BaseViewModel : ViewModel() {
-
-    protected val disposables = CompositeDisposable()
-    private val viewModelJob = Job()
+abstract class BaseViewModel : ViewModel(), SimpleScopeProvider by SimpleScopeProviderHelper() {
 
     override fun onCleared() {
-        disposables.clear()
-        viewModelJob.cancel()
+        dispose()
         super.onCleared()
     }
-
-    fun launchWithParent(
-        context: CoroutineContext = DefaultDispatcher,
-        block: suspend CoroutineScope.() -> Unit
-    ) = launch(context = context, parent = viewModelJob, block = block)
 
 }

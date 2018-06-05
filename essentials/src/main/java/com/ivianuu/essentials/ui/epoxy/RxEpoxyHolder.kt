@@ -16,6 +16,8 @@
 
 package com.ivianuu.essentials.ui.epoxy
 
+import com.ivianuu.autodispose.ScopeProvider
+
 /**
  * Epoxy holder which can be used with a [RxEpoxyModelWithHolder]
  */

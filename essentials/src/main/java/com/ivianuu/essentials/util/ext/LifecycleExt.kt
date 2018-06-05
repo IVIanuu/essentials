@@ -20,6 +20,7 @@ import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.LifecycleObserver
 import android.arch.lifecycle.LifecycleOwner
 import com.ivianuu.essentials.util.SimpleLifecycleObserver
+import io.reactivex.Observable
 
 fun Lifecycle.doOnCreate(action: (owner: LifecycleOwner) -> Unit)
         = addObserver(onCreate = action)

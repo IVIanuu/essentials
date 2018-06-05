@@ -14,15 +14,26 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.compat
+package com.ivianuu.essentials.util
 
-import android.arch.lifecycle.LifecycleOwner
-import android.arch.lifecycle.LifecycleRegistry
+import com.ivianuu.autodispose.ScopeProvider
+import com.ivianuu.essentials.util.ext.maybeSubject
+
+interface SimpleScopeProvider : ScopeProvider {
+    fun dispose()
+}
 
 /**
- * View lifecycle owner
+ * A helper class to implement [ScopeProvider] without boilerplate
  */
-class ViewLifecycleOwner : LifecycleOwner {
-    var lifecycleRegistry = LifecycleRegistry(this)
-    override fun getLifecycle() = lifecycleRegistry
+class SimpleScopeProviderHelper : SimpleScopeProvider {
+
+    private val scope = maybeSubject<Unit>()
+
+    override fun dispose() {
+        scope.onSuccess(Unit)
+    }
+
+    override fun requestScope() = scope
+
 }

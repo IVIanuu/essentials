@@ -24,6 +24,8 @@ import com.ivianuu.daggerextensions.AutoContribute
 import com.ivianuu.daggerextensions.view.ViewInjection
 import com.ivianuu.essentials.injection.PerView
 import com.ivianuu.essentials.injection.ViewBindingModule
+import com.ivianuu.essentials.util.SimpleScopeProvider
+import com.ivianuu.essentials.util.SimpleScopeProviderHelper
 import com.ivianuu.traveler.Router
 import kotlinx.android.synthetic.main.view_child_navigation.view.*
 import javax.inject.Inject
@@ -37,7 +39,7 @@ import javax.inject.Inject
 class ChildNavigationView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null, defStyleAttr: Int = 0
-) : LinearLayout(context, attrs, defStyleAttr) {
+) : LinearLayout(context, attrs, defStyleAttr), SimpleScopeProvider by SimpleScopeProviderHelper() {
 
     @Inject lateinit var key: ChildNavigationKey
     @field:LocalRouter @Inject lateinit var router: Router

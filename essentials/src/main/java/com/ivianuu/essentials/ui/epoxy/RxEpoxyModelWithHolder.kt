@@ -19,6 +19,9 @@ package com.ivianuu.essentials.ui.epoxy
 import android.support.annotation.CallSuper
 import com.airbnb.epoxy.EpoxyHolder
 import com.airbnb.epoxy.EpoxyModelWithHolder
+import com.ivianuu.autodispose.ScopeProvider
+import com.ivianuu.essentials.util.ext.maybeSubject
+import io.reactivex.subjects.MaybeSubject
 
 /**
  * A [EpoxyModelWithHolder] which is also a [ScopeProvider]
@@ -64,7 +67,7 @@ abstract class RxEpoxyModelWithHolder<T : EpoxyHolder> : EpoxyModelWithHolder<T>
             synchronized(this) {
                 var n = unbindNotifier
                 return if (n == null) {
-                    n = MaybeSubject.create()
+                    n = maybeSubject()
                     unbindNotifier = n
                     n
                 } else {

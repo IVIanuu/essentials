@@ -21,6 +21,7 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
 import android.support.v7.app.AppCompatActivity
 import android.view.View
+import com.ivianuu.autodispose.LifecycleScopeProvider
 import com.ivianuu.daggerextensions.view.HasViewInjector
 import com.ivianuu.essentials.injection.EssentialsFragmentBindingModule_
 import com.ivianuu.essentials.injection.Injectable
@@ -28,7 +29,11 @@ import com.ivianuu.essentials.ui.common.ActivityEvent
 import com.ivianuu.essentials.ui.common.ActivityEvent.*
 import com.ivianuu.essentials.ui.common.CORRESPONDING_ACTIVITY_EVENTS
 import com.ivianuu.essentials.ui.common.back.BackHandler
+import com.ivianuu.essentials.ui.traveler.getNavigatorHolder
+import com.ivianuu.essentials.ui.traveler.getRouter
+import com.ivianuu.essentials.ui.traveler.getTraveler
 import com.ivianuu.essentials.ui.traveler.navigator.KeyFragmentAppNavigator
+import com.ivianuu.essentials.ui.traveler.setupRouter
 import com.ivianuu.essentials.util.ext.behaviorSubject
 import com.ivianuu.essentials.util.ext.unsafeLazy
 import com.ivianuu.essentials.util.screenlogger.NamedScreen
