@@ -16,12 +16,10 @@
 
 package com.ivianuu.essentials.ui.epoxy
 
-import com.airbnb.epoxy.EpoxyModelWithHolder
-
 /**
  * Base epoxy model with holder
  */
-abstract class BaseEpoxyModel : EpoxyModelWithHolder<RxEpoxyHolder> {
+abstract class BaseEpoxyModel : RxEpoxyModelWithHolder<BaseEpoxyHolder> {
 
     constructor() : super()
 
