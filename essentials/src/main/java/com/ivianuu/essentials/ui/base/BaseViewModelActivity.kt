@@ -18,7 +18,6 @@ package com.ivianuu.essentials.ui.base
 
 import android.arch.lifecycle.ViewModel
 import com.ivianuu.essentials.util.DaggerViewModelFactory
-import com.ivianuu.essentials.util.ext.getViewModel
 import com.ivianuu.essentials.util.ext.unsafeLazy
 import javax.inject.Inject
 

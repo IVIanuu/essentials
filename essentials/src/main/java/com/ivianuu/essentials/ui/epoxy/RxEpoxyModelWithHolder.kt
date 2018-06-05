@@ -19,8 +19,6 @@ package com.ivianuu.essentials.ui.epoxy
 import android.support.annotation.CallSuper
 import com.airbnb.epoxy.EpoxyHolder
 import com.airbnb.epoxy.EpoxyModelWithHolder
-import com.ivianuu.autodispose.ScopeProvider
-import io.reactivex.subjects.MaybeSubject
 
 /**
  * A [EpoxyModelWithHolder] which is also a [ScopeProvider]

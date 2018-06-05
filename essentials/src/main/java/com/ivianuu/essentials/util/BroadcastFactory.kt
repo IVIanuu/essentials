@@ -22,7 +22,6 @@ import com.ivianuu.essentials.injection.ForApp
 import com.ivianuu.essentials.util.ext.intentFilterOf
 import com.ivianuu.essentials.util.ext.registerReceiver
 import com.ivianuu.essentials.util.ext.unregisterReceiverSafe
-import io.reactivex.Observable
 import javax.inject.Inject
 
 /**

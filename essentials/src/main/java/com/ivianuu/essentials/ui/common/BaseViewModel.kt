@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.ui.common
 
 import android.arch.lifecycle.ViewModel
-import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.experimental.CoroutineScope
 import kotlinx.coroutines.experimental.DefaultDispatcher
 import kotlinx.coroutines.experimental.Job

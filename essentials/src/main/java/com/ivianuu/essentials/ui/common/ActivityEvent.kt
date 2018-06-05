@@ -14,13 +14,21 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.epoxy
+package com.ivianuu.essentials.ui.common
 
-/**
- * Epoxy holder which can be used with a [RxEpoxyModelWithHolder]
- */
-open class RxEpoxyHolder : KtEpoxyHolder(), ScopeProvider {
-    var boundModel: RxEpoxyModelWithHolder<*>? = null
-    override fun requestScope() =
-        boundModel?.requestScope() ?: throw IllegalStateException("no bound model")
+import com.ivianuu.essentials.ui.common.ActivityEvent.*
+
+enum class ActivityEvent {
+    CREATE, START, RESUME, PAUSE, STOP, DESTROY
+}
+
+val CORRESPONDING_ACTIVITY_EVENTS = Function<ActivityEvent, ActivityEvent> {
+    when (it) {
+        CREATE -> DESTROY
+        START -> STOP
+        RESUME -> PAUSE
+        PAUSE -> STOP
+        STOP -> DESTROY
+        else -> throw IllegalStateException("out of lifecycle ${it::class.java.simpleName}")
+    }
 }

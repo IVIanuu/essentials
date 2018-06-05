@@ -20,10 +20,6 @@ import android.os.Handler
 import android.os.Looper
 import android.os.Message
 import com.ivianuu.essentials.util.ext.isMainThread
-import io.reactivex.Scheduler
-import io.reactivex.disposables.Disposable
-import io.reactivex.disposables.Disposables
-import io.reactivex.plugins.RxJavaPlugins
 import java.util.concurrent.TimeUnit
 
 /**

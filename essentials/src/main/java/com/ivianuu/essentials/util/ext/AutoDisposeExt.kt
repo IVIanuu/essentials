@@ -16,11 +16,6 @@
 
 package com.ivianuu.essentials.util.ext
 
-import com.ivianuu.autodispose.LifecycleScopeProvider
-import com.ivianuu.autodispose.OutsideLifecycleException
-import com.ivianuu.autodispose.ScopeProvider
-import io.reactivex.Maybe
-
 fun <E> LifecycleScopeProvider<E>.toScopeProvider(): ScopeProvider {
     val currentEvent = peekLifecycle()
             ?: throw OutsideLifecycleException("lifecycle has not started yet")

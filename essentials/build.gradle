@@ -44,7 +44,6 @@ dependencies {
     kapt Deps.archLifecycleCompiler
 
     api Deps.autoDispose
-    api Deps.autoDisposeArch
     api Deps.autoDisposeView
 
     api Deps.constraintLayout

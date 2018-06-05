@@ -20,7 +20,6 @@ import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.LifecycleObserver
 import android.arch.lifecycle.LifecycleOwner
 import com.ivianuu.essentials.util.SimpleLifecycleObserver
-import io.reactivex.Observable
 
 fun Lifecycle.doOnCreate(action: (owner: LifecycleOwner) -> Unit)
         = addObserver(onCreate = action)
@@ -92,6 +91,10 @@ fun Lifecycle.events(): Observable<Lifecycle.Event> {
                 super.onAny(owner, event)
                 if (!e.isDisposed) {
                     e.onNext(event)
+                }
+
+                if (event == Lifecycle.Event.ON_DESTROY) {
+                    e.onComplete()
                 }
             }
         }

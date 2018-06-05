@@ -18,8 +18,6 @@ package com.ivianuu.essentials.ui.state
 
 import com.ivianuu.essentials.ui.common.BaseViewModel
 import com.ivianuu.essentials.util.ext.behaviorSubject
-import io.reactivex.Observable
-import io.reactivex.rxkotlin.addTo
 
 /**
  * View model which produces a single state

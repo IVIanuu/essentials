@@ -16,10 +16,6 @@
 
 package com.ivianuu.essentials.util
 
-import com.ivianuu.autodispose.LifecycleScopeProvider
-import com.ivianuu.autodispose.ScopeProvider
-import com.ivianuu.essentials.util.ext.toScopeProvider
-import io.reactivex.Maybe
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 

@@ -10,7 +10,7 @@ object Versions {
 
     const val androidGradlePlugin = "3.1.2"
     const val archLifecycle = "1.1.1"
-    const val autoDispose = "15514540da"
+    const val autoDispose = "5e1bd5146e"
     const val butterknife = "9.0.0-SNAPSHOT"
     const val constraintLayout = "1.1.0"
     const val coroutines = "0.22.5"
@@ -42,7 +42,6 @@ object Deps {
     const val archLifecycleCompiler = "android.arch.lifecycle:compiler:${Versions.archLifecycle}"
 
     const val autoDispose = "com.github.IVIanuu.AutoDispose:autodispose:${Versions.autoDispose}"
-    const val autoDisposeArch = "com.github.IVIanuu.AutoDispose:autodispose-arch:${Versions.autoDispose}"
     const val autoDisposeView = "com.github.IVIanuu.AutoDispose:autodispose-view:${Versions.autoDispose}"
 
     const val butterknifeGradlePlugin = "com.jakewharton:butterknife-gradle-plugin:${Versions.butterknife}"
