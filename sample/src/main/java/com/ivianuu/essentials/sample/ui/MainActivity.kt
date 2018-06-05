@@ -37,6 +37,6 @@ class MainActivity : BaseActivity() {
         if (savedInstanceState == null) {
             router.newRootScreen(MultipleChildsKey)
         }
-    }
 
+    }
 }
