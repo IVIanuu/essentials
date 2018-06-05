@@ -16,7 +16,6 @@
 
 package com.ivianuu.essentials.sample.app
 
-import android.arch.lifecycle.ProcessLifecycleOwner
 import com.ivianuu.daggerextensions.AutoComponent
 import com.ivianuu.daggerextensions.InjectorKeyRegistry
 import com.ivianuu.daggerextensions.view.ViewKey
@@ -24,9 +23,6 @@ import com.ivianuu.essentials.app.BaseApp
 import com.ivianuu.essentials.injection.ActivityBindingModule_
 import com.ivianuu.essentials.injection.AppBindingSet
 import com.ivianuu.essentials.injection.EssentialsModule
-import com.ivianuu.essentials.util.ext.d
-import com.ivianuu.essentials.util.ext.events
-import com.ivianuu.essentials.util.ext.state
 import dagger.android.AndroidInjector
 import dagger.android.support.DaggerApplication
 import javax.inject.Singleton
@@ -43,18 +39,6 @@ import javax.inject.Singleton
     ]
 )
 class App : BaseApp() {
-
-    override fun onCreate() {
-        super.onCreate()
-
-        ProcessLifecycleOwner.get().lifecycle
-            .events()
-            .subscribe { d { "on event $it" } }
-
-        ProcessLifecycleOwner.get().lifecycle
-            .state()
-            .subscribe { d { "state $it" } }
-    }
 
     override fun applicationInjector(): AndroidInjector<out DaggerApplication> {
         return DaggerAppComponent.builder()
