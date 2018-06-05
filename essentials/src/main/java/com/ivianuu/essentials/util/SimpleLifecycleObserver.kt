@@ -18,6 +18,7 @@ package com.ivianuu.essentials.util
 
 import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.LifecycleObserver
+import android.arch.lifecycle.LifecycleOwner
 import android.arch.lifecycle.OnLifecycleEvent
 
 /**
@@ -25,27 +26,34 @@ import android.arch.lifecycle.OnLifecycleEvent
  */
 open class SimpleLifecycleObserver : LifecycleObserver {
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
-    open fun onCreate() {
+    @OnLifecycleEvent(Lifecycle.Event.ON_ANY)
+    open fun onAny(owner: LifecycleOwner, event: Lifecycle.Event) {
+        when(event) {
+            Lifecycle.Event.ON_CREATE -> onCreate(owner)
+            Lifecycle.Event.ON_START -> onStart(owner)
+            Lifecycle.Event.ON_RESUME -> onResume(owner)
+            Lifecycle.Event.ON_PAUSE -> onPause(owner)
+            Lifecycle.Event.ON_STOP -> onStop(owner)
+            Lifecycle.Event.ON_DESTROY -> onDestroy(owner)
+            Lifecycle.Event.ON_ANY -> {} // ignore
+        }
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_START)
-    open fun onStart() {
+    open fun onCreate(owner: LifecycleOwner) {
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
-    open fun onResume() {
+    open fun onStart(owner: LifecycleOwner) {
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
-    open fun onPause() {
+    open fun onResume(owner: LifecycleOwner) {
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
-    open fun onStop() {
+    open fun onPause(owner: LifecycleOwner) {
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
-    open fun onDestroy() {
+    open fun onStop(owner: LifecycleOwner) {
+    }
+
+    open fun onDestroy(owner: LifecycleOwner) {
     }
 }
