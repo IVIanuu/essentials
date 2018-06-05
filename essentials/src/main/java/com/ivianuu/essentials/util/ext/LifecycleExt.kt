@@ -93,25 +93,13 @@ fun Lifecycle.events(): Observable<Lifecycle.Event> {
                 if (!e.isDisposed) {
                     e.onNext(event)
                 }
-
-                if (event == Lifecycle.Event.ON_DESTROY) {
-                    e.onComplete()
-                }
             }
         }
 
-        val currentState = currentState
+        e.setCancellable { removeObserver(observer) }
 
-        if (currentState != Lifecycle.State.DESTROYED) {
-            e.setCancellable { removeObserver(observer) }
-
-            if (!e.isDisposed) {
-                addObserver(observer)
-            }
-        } else {
-            if (!e.isDisposed) {
-                e.onComplete()
-            }
+        if (!e.isDisposed) {
+            addObserver(observer)
         }
     }
 }

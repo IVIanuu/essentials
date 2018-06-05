@@ -20,12 +20,14 @@ import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.LifecycleObserver
 import android.arch.lifecycle.LifecycleOwner
 import android.arch.lifecycle.OnLifecycleEvent
+import android.support.annotation.CallSuper
 
 /**
  * A simple lifecycle observer
  */
 open class SimpleLifecycleObserver : LifecycleObserver {
 
+    @CallSuper
     @OnLifecycleEvent(Lifecycle.Event.ON_ANY)
     open fun onAny(owner: LifecycleOwner, event: Lifecycle.Event) {
         when(event) {
