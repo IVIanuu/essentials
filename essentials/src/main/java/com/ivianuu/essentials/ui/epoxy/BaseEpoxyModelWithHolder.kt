@@ -21,7 +21,7 @@ import com.airbnb.epoxy.EpoxyModelWithHolder
 /**
  * Base epoxy model with holder
  */
-abstract class BaseEpoxyModelWithHolder : EpoxyModelWithHolder<RxEpoxyHolder> {
+abstract class BaseEpoxyModel : EpoxyModelWithHolder<RxEpoxyHolder> {
 
     constructor() : super()
 
