@@ -39,8 +39,7 @@ import javax.inject.Singleton
 @AutoBindsIntoSet(EssentialsService::class)
 class ScreenLogger @Inject constructor(application: Application) : EssentialsService {
 
-    var listener: Listener? =
-        DefaultListener()
+    var listener: Listener? = DefaultListener()
 
     init {
         application.doOnActivityCreated { activity, savedInstanceState ->
