@@ -40,7 +40,7 @@ abstract class BaseApp : DaggerApplication(), HasViewInjector {
     @Inject lateinit var viewInjector: DispatchingAndroidInjector<View>
 
     override fun onCreate() {
-        super.onCreate()
+        RxAndroidPlugins.setInitMainThreadSchedulerHandler { EnsureMainThreadScheduler.INSTANCE }
 
         if (isDebug()) {
             plantTimber()
@@ -48,7 +48,7 @@ abstract class BaseApp : DaggerApplication(), HasViewInjector {
             initializeFabric()
         }
 
-        RxAndroidPlugins.setInitMainThreadSchedulerHandler { EnsureMainThreadScheduler.INSTANCE }
+        super.onCreate()
     }
 
     override fun viewInjector() = viewInjector
