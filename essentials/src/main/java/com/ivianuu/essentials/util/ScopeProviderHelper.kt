@@ -17,7 +17,8 @@
 package com.ivianuu.essentials.util
 
 import com.ivianuu.autodispose.ScopeProvider
-import com.ivianuu.essentials.util.ext.maybeSubject
+import com.ivianuu.essentials.util.ext.publishSubject
+import io.reactivex.Maybe
 
 interface SimpleScopeProvider : ScopeProvider {
     fun dispose()
@@ -28,12 +29,13 @@ interface SimpleScopeProvider : ScopeProvider {
  */
 class SimpleScopeProviderHelper : SimpleScopeProvider {
 
-    private val scope = maybeSubject<Unit>()
+    private val scope = publishSubject<Unit>()
 
     override fun dispose() {
-        scope.onSuccess(Unit)
+        scope.onNext(Unit)
     }
 
-    override fun requestScope() = scope
+    override fun requestScope(): Maybe<*> =
+        scope.take(1).singleElement()
 
 }
