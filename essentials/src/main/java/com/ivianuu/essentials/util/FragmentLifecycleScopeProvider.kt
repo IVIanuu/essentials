@@ -32,7 +32,10 @@ class FragmentLifecycleScopeProvider private constructor(
 
     override fun lifecycle() = FragmentLifecycleHandler.getLifecycle(fragment)
 
-    override fun peekLifecycle() = FragmentLifecycleHandler.peekLifecycle(fragment)
+    override fun peekLifecycle(): FragmentEvent? {
+        FragmentLifecycleHandler.backfillEvents(fragment)
+        return FragmentLifecycleHandler.peekLifecycle(fragment)
+    }
 
     companion object {
 

@@ -18,6 +18,7 @@ package com.ivianuu.essentials.util
 
 import android.app.Activity
 import android.app.Application
+import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.LifecycleOwner
 import android.content.Context
 import android.os.Bundle
@@ -39,6 +40,7 @@ import javax.inject.Inject
 /**
  * Handles the lifecycle of all fragments
  */
+// todo this can never wokr
 @EssentialsServiceModule
 @AutoBindsIntoSet(EssentialsService::class)
 class FragmentLifecycleHandler @Inject constructor(
@@ -110,10 +112,14 @@ class FragmentLifecycleHandler @Inject constructor(
     }
 
     private val fragmentLifecycleObserver = object : SimpleLifecycleObserver() {
+
         override fun onCreate(owner: LifecycleOwner) {
             val fragment = owner as? Fragment
-            if (fragment != null) {
-                lifecycles[fragment]?.onNext(FragmentEvent.CREATE)
+            val lifecycle = lifecycles[fragment]
+            if (fragment != null
+                && lifecycle != null
+                && lifecycle.value != FragmentEvent.CREATE) {
+                lifecycle.onNext(FragmentEvent.CREATE)
             }
         }
 
@@ -219,11 +225,70 @@ class FragmentLifecycleHandler @Inject constructor(
                 mutableMapOf<Fragment, FragmentViewLifecycleObserver>()
 
         fun getLifecycle(fragment: Fragment): Observable<FragmentEvent> {
-            return lifecycles[fragment] ?: Observable.never()
+            return lifecycles[fragment]?.distinctUntilChanged() ?: Observable.never()
         }
 
         fun peekLifecycle(fragment: Fragment): FragmentEvent? {
             return lifecycles[fragment]?.value
+        }
+
+        fun backfillEvents(fragment: Fragment) {
+            val lifecycleSubject = lifecycles[fragment] ?: return
+
+            val viewLifecycle = when (fragment) {
+                is ViewLifecycleDialogFragment -> fragment.viewLifecycleOwner
+                is ViewLifecycleFragment -> fragment.viewLifecycleOwner
+                is ViewLifecyclePreferenceFragment -> fragment.viewLifecycleOwner
+                else -> null
+            }?.lifecycle
+
+            val viewLifecycleState = viewLifecycle?.currentState
+
+            val lifecycle = fragment.lifecycle
+            val lifecycleState = lifecycle.currentState
+
+            val event = if (viewLifecycleState != null) {
+                when (viewLifecycleState) {
+                    Lifecycle.State.INITIALIZED -> {
+                        if (lifecycleState == Lifecycle.State.INITIALIZED) {
+                            FragmentEvent.CREATE
+                        } else {
+                            null
+                        }
+                    }
+                    Lifecycle.State.CREATED -> FragmentEvent.CREATE_VIEW
+                    Lifecycle.State.STARTED -> FragmentEvent.START
+                    Lifecycle.State.RESUMED -> FragmentEvent.RESUME
+                    Lifecycle.State.DESTROYED -> {
+                        if (lifecycleState == Lifecycle.State.DESTROYED) {
+                            FragmentEvent.DESTROY
+                        } else {
+                            FragmentEvent.DESTROY_VIEW
+                        }
+                    }
+                    else -> {
+                        when (lifecycleState) {
+                            Lifecycle.State.INITIALIZED -> FragmentEvent.CREATE
+                            Lifecycle.State.CREATED -> FragmentEvent.START
+                            Lifecycle.State.STARTED, Lifecycle.State.RESUMED -> FragmentEvent.RESUME
+                            Lifecycle.State.DESTROYED -> {
+                                if (fragment.isAdded) {
+                                    FragmentEvent.DESTROY
+                                } else {
+                                    FragmentEvent.DETACH
+                                }
+                            }
+                            else -> FragmentEvent.DETACH
+                        }
+                    }
+                }
+            } else {
+                null
+            }
+
+            if (event != null) {
+                lifecycleSubject.onNext(event)
+            }
         }
     }
 }

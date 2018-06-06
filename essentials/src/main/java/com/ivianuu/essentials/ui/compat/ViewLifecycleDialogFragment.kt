@@ -19,14 +19,14 @@ package com.ivianuu.essentials.ui.compat
 import android.arch.lifecycle.Lifecycle.Event.*
 import android.arch.lifecycle.LifecycleOwner
 import android.os.Bundle
-import android.support.v4.app.DialogFragment
+import android.support.v7.app.AppCompatDialogFragment
 import android.view.View
 
 /**
  * A dialog fragment with a additional lifecycle for views
  * This can be removed on android support library version 28.0.0
  */
-open class ViewLifecycleDialogFragment : DialogFragment() {
+open class ViewLifecycleDialogFragment : AppCompatDialogFragment() {
 
     val viewLifecycleOwner: LifecycleOwner
         get() = _viewLifecycleOwner
