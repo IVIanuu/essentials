@@ -26,15 +26,13 @@ import com.ivianuu.daggerextensions.view.HasViewInjector
 import com.ivianuu.essentials.injection.EssentialsFragmentBindingModule_
 import com.ivianuu.essentials.injection.Injectable
 import com.ivianuu.essentials.ui.common.ActivityEvent
-import com.ivianuu.essentials.ui.common.ActivityEvent.*
-import com.ivianuu.essentials.ui.common.CORRESPONDING_ACTIVITY_EVENTS
 import com.ivianuu.essentials.ui.common.back.BackHandler
 import com.ivianuu.essentials.ui.traveler.getNavigatorHolder
 import com.ivianuu.essentials.ui.traveler.getRouter
 import com.ivianuu.essentials.ui.traveler.getTraveler
 import com.ivianuu.essentials.ui.traveler.navigator.KeyFragmentAppNavigator
 import com.ivianuu.essentials.ui.traveler.setupRouter
-import com.ivianuu.essentials.util.ext.behaviorSubject
+import com.ivianuu.essentials.util.ActivityLifecycleScopeProvider
 import com.ivianuu.essentials.util.ext.unsafeLazy
 import com.ivianuu.essentials.util.screenlogger.NamedScreen
 import com.ivianuu.rxactivityresult.RxActivityResult
@@ -73,40 +71,16 @@ abstract class BaseActivity : AppCompatActivity(), HasSupportFragmentInjector,
 
     lateinit var router: Router
 
-    private val lifecycleSubject = behaviorSubject<ActivityEvent>()
+    private val lifecycleScopeProvider by unsafeLazy {
+        ActivityLifecycleScopeProvider.from(this)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        lifecycleSubject.onNext(CREATE)
 
         router = setupRouter(navigator, fragmentContainer)
 
         if (layoutRes != -1) setContentView(layoutRes)
-    }
-
-    override fun onStart() {
-        super.onStart()
-        lifecycleSubject.onNext(START)
-    }
-
-    override fun onResume() {
-        super.onResume()
-        lifecycleSubject.onNext(RESUME)
-    }
-
-    override fun onPause() {
-        lifecycleSubject.onNext(PAUSE)
-        super.onPause()
-    }
-
-    override fun onStop() {
-        lifecycleSubject.onNext(STOP)
-        super.onStop()
-    }
-
-    override fun onDestroy() {
-        lifecycleSubject.onNext(DESTROY)
-        super.onDestroy()
     }
 
     override fun onBackPressed() {
@@ -119,11 +93,11 @@ abstract class BaseActivity : AppCompatActivity(), HasSupportFragmentInjector,
 
     override fun viewInjector() = viewInjector
 
-    override fun lifecycle() = lifecycleSubject
+    override fun lifecycle() = lifecycleScopeProvider.lifecycle()
 
-    override fun correspondingEvents() = CORRESPONDING_ACTIVITY_EVENTS
+    override fun correspondingEvents() = lifecycleScopeProvider.correspondingEvents()
 
-    override fun peekLifecycle() = lifecycleSubject.value
+    override fun peekLifecycle() = lifecycleScopeProvider.peekLifecycle()
 }
 
 @Module(includes = [EssentialsFragmentBindingModule_::class])
