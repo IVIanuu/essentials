@@ -16,7 +16,6 @@
 
 package com.ivianuu.essentials.ui.base
 
-import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
@@ -25,12 +24,12 @@ import android.view.ViewGroup
 import com.ivianuu.autodispose.LifecycleScopeProvider
 import com.ivianuu.daggerextensions.view.HasViewInjector
 import com.ivianuu.essentials.injection.Injectable
-import com.ivianuu.essentials.ui.common.CORRESPONDING_FRAGMENT_EVENTS
 import com.ivianuu.essentials.ui.common.FragmentEvent
-import com.ivianuu.essentials.ui.common.FragmentEvent.*
 import com.ivianuu.essentials.ui.common.back.BackListener
+import com.ivianuu.essentials.ui.compat.ViewLifecycleFragment
+import com.ivianuu.essentials.util.FragmentLifecycleScopeProvider
 import com.ivianuu.essentials.util.ViewInjectionContextWrapper
-import com.ivianuu.essentials.util.ext.behaviorSubject
+import com.ivianuu.essentials.util.ext.unsafeLazy
 import com.ivianuu.essentials.util.screenlogger.NamedScreen
 import com.ivianuu.traveler.Router
 import dagger.android.AndroidInjector
@@ -41,7 +40,7 @@ import javax.inject.Inject
 /**
  * Base fragment
  */
-abstract class BaseFragment : Fragment(), BackListener, HasSupportFragmentInjector,
+abstract class BaseFragment : ViewLifecycleFragment(), BackListener, HasSupportFragmentInjector,
     HasViewInjector, Injectable, NamedScreen, LifecycleScopeProvider<FragmentEvent> {
 
     @Inject lateinit var router: Router
@@ -51,17 +50,8 @@ abstract class BaseFragment : Fragment(), BackListener, HasSupportFragmentInject
 
     protected open val layoutRes = -1
 
-    private val lifecycleSubject = behaviorSubject<FragmentEvent>()
-
-    override fun onAttach(context: Context?) {
-        super.onAttach(context)
-        lifecycleSubject.onNext(ATTACH)
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        lifecycleSubject.onNext(CREATE)
+    private val lifecycleScopeProvider by unsafeLazy {
+        FragmentLifecycleScopeProvider.from(this)
     }
 
     override fun onCreateView(
@@ -79,55 +69,15 @@ abstract class BaseFragment : Fragment(), BackListener, HasSupportFragmentInject
         }
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        lifecycleSubject.onNext(CREATE_VIEW)
-    }
-
-    override fun onStart() {
-        super.onStart()
-        lifecycleSubject.onNext(START)
-    }
-
-    override fun onResume() {
-        super.onResume()
-        lifecycleSubject.onNext(RESUME)
-    }
-
-    override fun onPause() {
-        lifecycleSubject.onNext(PAUSE)
-        super.onPause()
-    }
-
-    override fun onStop() {
-        lifecycleSubject.onNext(STOP)
-        super.onStop()
-    }
-
-    override fun onDestroyView() {
-        lifecycleSubject.onNext(DESTROY_VIEW)
-        super.onDestroyView()
-    }
-
-    override fun onDestroy() {
-        lifecycleSubject.onNext(DESTROY)
-        super.onDestroy()
-    }
-
-    override fun onDetach() {
-        lifecycleSubject.onNext(DETACH)
-        super.onDetach()
-    }
-
     override fun handleBack(): Boolean {
         return false
     }
 
-    override fun lifecycle() = lifecycleSubject
+    override fun lifecycle() = lifecycleScopeProvider.lifecycle()
 
-    override fun correspondingEvents() = CORRESPONDING_FRAGMENT_EVENTS
+    override fun correspondingEvents() = lifecycleScopeProvider.correspondingEvents()
 
-    override fun peekLifecycle() = lifecycleSubject.value
+    override fun peekLifecycle() = lifecycleScopeProvider.peekLifecycle()
 
     override fun supportFragmentInjector(): AndroidInjector<Fragment> = supportFragmentInjector
 
