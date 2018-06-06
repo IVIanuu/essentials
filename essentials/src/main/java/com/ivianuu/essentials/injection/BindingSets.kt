@@ -24,6 +24,7 @@ import android.content.ContentProvider
 import android.support.v4.app.DialogFragment
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
+import android.support.v4.app.SupportActivity
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import com.ivianuu.daggerextensions.BindingSet
@@ -33,7 +34,13 @@ import com.ivianuu.essentials.ui.base.BaseFragment
 @BindingSet([Application::class])
 annotation class AppBindingSet
 
-@BindingSet([Activity::class, FragmentActivity::class, AppCompatActivity::class, BaseActivity::class])
+@BindingSet([
+    Activity::class,
+    SupportActivity::class,
+    FragmentActivity::class,
+    AppCompatActivity::class,
+    BaseActivity::class
+])
 annotation class ActivityBindingSet
 
 @BindingSet([BroadcastReceiver::class])
