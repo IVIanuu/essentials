@@ -29,11 +29,13 @@ import io.reactivex.subjects.BehaviorSubject
 import javax.inject.Inject
 
 /**
- * @author Manuel Wrage (IVIanuu)
+ * Handles the lifecycles off all activities
  */
 @EssentialsServiceModule
 @AutoBindsIntoSet(EssentialsService::class)
-class ActivityLifecycleHandler @Inject constructor(application: Application) : EssentialsService, Application.ActivityLifecycleCallbacks {
+class ActivityLifecycleHandler @Inject constructor(
+    application: Application
+) : EssentialsService, Application.ActivityLifecycleCallbacks {
 
     init {
         application.registerActivityLifecycleCallbacks(this)
