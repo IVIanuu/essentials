@@ -16,7 +16,23 @@
 
 package com.ivianuu.essentials.ui.epoxy
 
+import android.view.View
+import com.airbnb.epoxy.EpoxyHolder
+import com.ivianuu.autodispose.ScopeProvider
+import kotlinx.android.extensions.LayoutContainer
+
 /**
  * Base epoxy holder
  */
-open class BaseEpoxyHolder : RxEpoxyHolder()
+open class BaseEpoxyHolder : EpoxyHolder(), LayoutContainer, ScopeProvider {
+    override lateinit var containerView: View
+
+    var boundModel: BaseEpoxyModel? = null
+
+    override fun bindView(itemView: View) {
+        containerView = itemView
+    }
+
+    override fun requestScope() =
+        boundModel?.requestScope() ?: throw IllegalStateException("no bound model")
+}
