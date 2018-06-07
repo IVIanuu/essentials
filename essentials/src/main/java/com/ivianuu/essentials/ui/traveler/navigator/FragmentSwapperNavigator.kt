@@ -55,7 +55,7 @@ abstract class FragmentSwapperNavigator(
             transaction.remove(oldFragment)
             transaction.add(
                 containerId,
-                createFragment(newKey, command.data),
+                createFragment(newKey, command.data)!!,
                 getFragmentTag(newKey)
             )
             transaction.commitNow()

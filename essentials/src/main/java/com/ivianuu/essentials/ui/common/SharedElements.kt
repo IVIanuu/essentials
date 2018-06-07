@@ -37,7 +37,9 @@ class SharedElements {
     fun applyToTransaction(transaction: FragmentTransaction) {
         for ((viewRef, customTransitionName) in sharedElementViews) {
             viewRef.get()?.apply {
-                transaction.addSharedElement(this, customTransitionName)
+                if (customTransitionName != null) {
+                    transaction.addSharedElement(this, customTransitionName)
+                }
             }
         }
     }

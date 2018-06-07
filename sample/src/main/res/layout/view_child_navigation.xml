@@ -19,32 +19,29 @@
         android:layout_gravity="bottom"
         android:background="#ffffff">
 
-        <Button
+        <android.support.design.button.MaterialButton
             android:id="@+id/pop_to_root"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="Pop to root"
-            android:background="?selectableItemBackgroundBorderless"
-            style="@style/Widget.AppCompat.Button.Borderless.Colored"/>
+            style="@style/Widget.MaterialComponents.Button.TextButton"/>
 
-        <Button
+        <android.support.design.button.MaterialButton
             android:id="@+id/prev"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="Previous"
-            android:background="?selectableItemBackgroundBorderless"
-            style="@style/Widget.AppCompat.Button.Borderless.Colored"/>
+            style="@style/Widget.MaterialComponents.Button.TextButton"/>
 
-        <Button
+        <android.support.design.button.MaterialButton
             android:id="@+id/next"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="Next"
-            android:background="?selectableItemBackgroundBorderless"
-            style="@style/Widget.AppCompat.Button.Borderless.Colored"/>
+            style="@style/Widget.MaterialComponents.Button.TextButton"/>
 
     </LinearLayout>
 
