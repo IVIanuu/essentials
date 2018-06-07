@@ -14,24 +14,25 @@ object Versions {
     const val butterknife = "9.0.0-SNAPSHOT"
     const val constraintLayout = "1.1.0"
     const val dagger = "2.16"
-    const val daggerExtensions = "85d4c7e4ee"
+    const val daggerExtensions = "8ffa8b656b"
     const val epoxy = "2.12.0"
     const val fabric = "2.7.1"
     const val kotlin = "1.2.41"
     const val ktx = "0.3"
     const val mavenGradle = "2.1"
     const val materialDialogs = "0.9.6.0"
-    const val rxActivityResult = "6da49c1fcf"
+    const val rxActivityResult = "b16b2d4cf9"
     const val rxAndroid = "2.0.2"
     const val rxBinding = "2.1.1"
     const val rxJava = "2.1.13"
     const val rxKotlin = "2.2.0"
-    const val rxPermissions = "981f695508"
+    const val rxPermissions = "aa7de40f71"
     const val rxPreferences = "2.0.0"
-    const val seekBarPreference = "7bd4049da0"
+    const val rxPopupMenu = "cc0f585ec0"
+    const val seekBarPreference = "e4f09c6636"
     const val support = "28.0.0-alpha3"
     const val timber = "4.7.0"
-    const val traveler = "5c2a742bbe"
+    const val traveler = "b1d040c5c5"
 }
 //
 object Deps {
@@ -84,6 +85,8 @@ object Deps {
     const val rxKotlin = "io.reactivex.rxjava2:rxkotlin:${Versions.rxKotlin}"
     const val rxPermissions = "com.github.IVIanuu:RxPermissions:${Versions.rxPermissions}"
     const val rxPreferences = "com.f2prateek.rx.preferences2:rx-preferences:${Versions.rxPreferences}"
+
+    const val rxPopupMenu = "com.github.IVIanuu:RxPopupmenu:${Versions.rxPopupMenu}"
 
     const val seekBarPreference = "com.github.IVIanuu:SeekBarPreference:${Versions.seekBarPreference}"
 
