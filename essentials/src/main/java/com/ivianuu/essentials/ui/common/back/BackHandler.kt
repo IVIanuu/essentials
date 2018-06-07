@@ -150,25 +150,3 @@ class BackHandler @Inject constructor(application: Application) : EssentialsServ
 }
 
 
-private class TransactionIndexer {
-
-    private var index = 0
-
-    @Synchronized fun getAndIncrement(): Int {
-        index++
-        return index
-    }
-
-    fun saveInstanceState(outState: Bundle) {
-        outState.putInt(KEY_INDEX, index)
-    }
-
-    fun restoreInstance(savedInstanceState: Bundle) {
-        index = savedInstanceState.getInt(KEY_INDEX)
-    }
-
-    private companion object {
-        private const val KEY_INDEX = "TransactionIndexer.index"
-    }
-
-}
