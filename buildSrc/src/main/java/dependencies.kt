@@ -94,7 +94,7 @@ object Deps {
     const val supportCardView = "com.android.support:cardview-v7:${Versions.support}"
     const val supportDesign = "com.android.support:design:${Versions.support}"
     const val supportPalette = "com.android.support:palette-v7:${Versions.support}"
-    const val supportPreference = "com.android.support:preference-v7:${Versions.support}"
+    const val supportPreference = "com.android.support:preference-v7:27.1.1"
 
     const val timber = "com.jakewharton.timber:timber:${Versions.timber}"
 
