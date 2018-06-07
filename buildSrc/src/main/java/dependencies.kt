@@ -2,9 +2,9 @@
 
 object Versions {
     // android
-    const val compileSdk = 27
+    const val compileSdk = 28
     const val minSdk = 21
-    const val targetSdk = 27
+    const val targetSdk = 28
     const val versionCode = 1
     const val versionName = "1.0"
 
@@ -29,7 +29,7 @@ object Versions {
     const val rxPermissions = "981f695508"
     const val rxPreferences = "2.0.0"
     const val seekBarPreference = "7bd4049da0"
-    const val support = "27.1.1"
+    const val support = "28.0.0-alpha3"
     const val timber = "4.7.0"
     const val traveler = "5c2a742bbe"
 }

@@ -18,7 +18,6 @@ package com.ivianuu.essentials.util
 
 import com.ivianuu.autodispose.ScopeProvider
 import com.ivianuu.essentials.util.ext.publishSubject
-import io.reactivex.Maybe
 
 /**
  * A scope provider which is disposable
@@ -38,7 +37,7 @@ class SimpleScopeProviderHelper : SimpleScopeProvider {
         scope.onNext(Unit)
     }
 
-    override fun requestScope(): Maybe<*> =
+    override fun requestScope() =
         scope.take(1).singleElement()
 
 }
