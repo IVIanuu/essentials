@@ -25,7 +25,7 @@ import android.support.v4.app.FragmentManager
 import com.ivianuu.daggerextensions.AutoBindsIntoSet
 import com.ivianuu.essentials.internal.EssentialsService
 import com.ivianuu.essentials.util.ext.doOnActivityCreated
-import com.ivianuu.essentials.util.ext.doOnFragmentAttached
+import com.ivianuu.essentials.util.ext.doOnFragmentPreAttached
 import dagger.android.AndroidInjection
 import dagger.android.support.AndroidSupportInjection
 import dagger.android.support.HasSupportFragmentInjector
@@ -51,7 +51,7 @@ class AutoInjector @Inject constructor(application: Application) : EssentialsSer
 
         if (activity is FragmentActivity && activity is HasSupportFragmentInjector) {
             activity.supportFragmentManager
-                .doOnFragmentAttached(true) { _: FragmentManager, fragment: Fragment, _: Context ->
+                .doOnFragmentPreAttached(true) { _: FragmentManager, fragment: Fragment, _: Context ->
                     if (fragment is Injectable && fragment !is NotInjectable) {
                         AndroidSupportInjection.inject(fragment)
                     }

@@ -20,6 +20,9 @@ import com.ivianuu.autodispose.ScopeProvider
 import com.ivianuu.essentials.util.ext.publishSubject
 import io.reactivex.Maybe
 
+/**
+ * A scope provider which is disposable
+ */
 interface SimpleScopeProvider : ScopeProvider {
     fun dispose()
 }
