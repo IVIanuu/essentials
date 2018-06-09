@@ -40,8 +40,7 @@ import javax.inject.Inject
  * Base dialog fragment
  */
 abstract class BaseDialogFragment : NaviAppCompatDialogFragment(),
-    BackListener, KtHasViewInjector, KtHasSupportFragmentInjector,
-    Injectable, NamedScreen,
+    BackListener, KtHasViewInjector, KtHasSupportFragmentInjector, Injectable, NamedScreen,
     LazyLifecycleScopeProvider<FragmentEvent> by LazyLifecycleScopeProviderImpl() {
 
     @Inject lateinit var router: Router

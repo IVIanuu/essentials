@@ -34,13 +34,15 @@ import com.ivianuu.essentials.ui.base.BaseFragment
 @BindingSet([Application::class])
 annotation class AppBindingSet
 
-@BindingSet([
-    Activity::class,
-    SupportActivity::class,
-    FragmentActivity::class,
-    AppCompatActivity::class,
-    BaseActivity::class
-])
+@BindingSet(
+    [
+        Activity::class,
+        SupportActivity::class,
+        FragmentActivity::class,
+        AppCompatActivity::class,
+        BaseActivity::class
+    ]
+)
 annotation class ActivityBindingSet
 
 @BindingSet([BroadcastReceiver::class])

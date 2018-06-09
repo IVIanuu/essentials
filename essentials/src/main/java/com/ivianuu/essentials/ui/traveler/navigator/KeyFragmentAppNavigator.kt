@@ -37,7 +37,7 @@ open class KeyFragmentAppNavigator(
 
     private val appNavigatorHelper = KeyAppNavigatorHelper()
     private val fragmentNavigatorHelper = KeyFragmentNavigatorHelper()
-    
+
     override fun createActivityIntent(context: Context, key: Any, data: Any?): Intent? {
         return appNavigatorHelper.createActivityIntent(context, key, data)
     }
@@ -56,6 +56,11 @@ open class KeyFragmentAppNavigator(
         nextFragment: Fragment,
         transaction: FragmentTransaction
     ) {
-        fragmentNavigatorHelper.setupFragmentTransaction(command, currentFragment, nextFragment, transaction)
+        fragmentNavigatorHelper.setupFragmentTransaction(
+            command,
+            currentFragment,
+            nextFragment,
+            transaction
+        )
     }
 }

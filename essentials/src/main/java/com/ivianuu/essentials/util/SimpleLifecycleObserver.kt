@@ -28,14 +28,15 @@ open class SimpleLifecycleObserver : LifecycleObserver {
 
     @OnLifecycleEvent(Lifecycle.Event.ON_ANY)
     open fun onAny(owner: LifecycleOwner, event: Lifecycle.Event) {
-        when(event) {
+        when (event) {
             Lifecycle.Event.ON_CREATE -> onCreate(owner)
             Lifecycle.Event.ON_START -> onStart(owner)
             Lifecycle.Event.ON_RESUME -> onResume(owner)
             Lifecycle.Event.ON_PAUSE -> onPause(owner)
             Lifecycle.Event.ON_STOP -> onStop(owner)
             Lifecycle.Event.ON_DESTROY -> onDestroy(owner)
-            Lifecycle.Event.ON_ANY -> {} // ignore
+            Lifecycle.Event.ON_ANY -> {
+            } // ignore
         }
     }
 

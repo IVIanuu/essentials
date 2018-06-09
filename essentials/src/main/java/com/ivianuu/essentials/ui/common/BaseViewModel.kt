@@ -23,7 +23,8 @@ import com.ivianuu.essentials.util.rx.DisposableScopeProviderImpl
 /**
  * A [ViewModel] which auto disposes itself
  */
-abstract class BaseViewModel : ViewModel(), DisposableScopeProvider by DisposableScopeProviderImpl() {
+abstract class BaseViewModel : ViewModel(),
+    DisposableScopeProvider by DisposableScopeProviderImpl() {
 
     override fun onCleared() {
         dispose()

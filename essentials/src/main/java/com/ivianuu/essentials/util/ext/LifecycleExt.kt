@@ -22,23 +22,17 @@ import android.arch.lifecycle.LifecycleOwner
 import com.ivianuu.essentials.util.SimpleLifecycleObserver
 import io.reactivex.Observable
 
-fun Lifecycle.doOnCreate(action: (owner: LifecycleOwner) -> Unit)
-        = addObserver(onCreate = action)
+fun Lifecycle.doOnCreate(action: (owner: LifecycleOwner) -> Unit) = addObserver(onCreate = action)
 
-fun Lifecycle.doOnStart(action: (owner: LifecycleOwner) -> Unit)
-        = addObserver(onStart = action)
+fun Lifecycle.doOnStart(action: (owner: LifecycleOwner) -> Unit) = addObserver(onStart = action)
 
-fun Lifecycle.doOnResume(action: (owner: LifecycleOwner) -> Unit)
-        = addObserver(onResume = action)
+fun Lifecycle.doOnResume(action: (owner: LifecycleOwner) -> Unit) = addObserver(onResume = action)
 
-fun Lifecycle.doOnPause(action: (owner: LifecycleOwner) -> Unit)
-        = addObserver(onPause = action)
+fun Lifecycle.doOnPause(action: (owner: LifecycleOwner) -> Unit) = addObserver(onPause = action)
 
-fun Lifecycle.doOnStop(action: (owner: LifecycleOwner) -> Unit)
-        = addObserver(onStop = action)
+fun Lifecycle.doOnStop(action: (owner: LifecycleOwner) -> Unit) = addObserver(onStop = action)
 
-fun Lifecycle.doOnDestroy(action: (owner: LifecycleOwner) -> Unit)
-        = addObserver(onDestroy = action)
+fun Lifecycle.doOnDestroy(action: (owner: LifecycleOwner) -> Unit) = addObserver(onDestroy = action)
 
 fun Lifecycle.addObserver(
     onCreate: ((owner: LifecycleOwner) -> Unit)? = null,
@@ -47,7 +41,7 @@ fun Lifecycle.addObserver(
     onPause: ((owner: LifecycleOwner) -> Unit)? = null,
     onStop: ((owner: LifecycleOwner) -> Unit)? = null,
     onDestroy: ((owner: LifecycleOwner) -> Unit)? = null
-) : LifecycleObserver {
+): LifecycleObserver {
     val observer = object : SimpleLifecycleObserver() {
         override fun onCreate(owner: LifecycleOwner) {
             super.onCreate(owner)

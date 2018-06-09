@@ -45,5 +45,5 @@ open class SimpleActivityLifecycleCallbacks : Application.ActivityLifecycleCallb
 
     override fun onActivityDestroyed(activity: Activity) {
     }
-    
+
 }

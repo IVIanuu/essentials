@@ -55,8 +55,7 @@ class ScreenLogger @Inject constructor(private val application: Application) : A
         }
 
         if (activity is FragmentActivity) {
-            activity.supportFragmentManager.doOnFragmentCreated(true) {
-                    _: FragmentManager, fragment: Fragment, bundle: Bundle? ->
+            activity.supportFragmentManager.doOnFragmentCreated(true) { _: FragmentManager, fragment: Fragment, bundle: Bundle? ->
                 if (fragment is NamedScreen
                     && fragment !is IgnoreNamedScreen
                     && bundle == null) {
