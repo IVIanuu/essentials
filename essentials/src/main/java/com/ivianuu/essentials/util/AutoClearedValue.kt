@@ -18,7 +18,6 @@ package com.ivianuu.essentials.util
 
 import com.ivianuu.autodispose.LifecycleScopeProvider
 import com.ivianuu.autodispose.ScopeProvider
-import com.ivianuu.essentials.util.ext.toScopeProvider
 import io.reactivex.Maybe
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
@@ -56,8 +55,5 @@ fun <T> ScopeProvider.autoCleared(scope: Maybe<*>, initialValue: T? = null) =
 fun <T> ScopeProvider.autoCleared(initialValue: T? = null) =
     autoCleared(requestScope(), initialValue)
 
-fun <T, E> LifecycleScopeProvider<E>.autoCleared(initialValue: T? = null) =
-    AutoClearedValue(toScopeProvider().requestScope(), initialValue)
-
 fun <T, E> LifecycleScopeProvider<E>.autoCleared(event: E, initialValue: T? = null) =
-    AutoClearedValue(toScopeProvider(event).requestScope(), initialValue)
+    AutoClearedValue(requestScope(event), initialValue)
