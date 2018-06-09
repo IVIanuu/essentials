@@ -19,6 +19,12 @@ package com.ivianuu.essentials.injection
 import com.ivianuu.daggerextensions.BindingModule
 
 @BindingModule
+annotation class AppInitializerModule
+
+@BindingModule
+annotation class AppServiceModule
+
+@BindingModule
 annotation class ActivityBindingModule
 
 @BindingModule
@@ -36,8 +42,12 @@ annotation class ServiceBindingModule
 @BindingModule
 annotation class ViewBindingModule
 
-@BindingModule
-annotation class EssentialsFragmentBindingModule
 
 @BindingModule
-annotation class EssentialsServiceModule
+annotation class EssentialsAppInitializerModule
+
+@BindingModule
+annotation class EssentialsAppServiceModule
+
+@BindingModule
+annotation class EssentialsFragmentBindingModule

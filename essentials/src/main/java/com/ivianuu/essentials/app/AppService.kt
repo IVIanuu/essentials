@@ -14,9 +14,13 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.internal
+package com.ivianuu.essentials.app
 
 /**
- * @author Manuel Wrage (IVIanuu)
+ * A component which lives as long as the app
  */
-internal interface EssentialsService
+interface AppService {
+
+    fun start()
+
+}

@@ -23,7 +23,7 @@ import android.support.v7.preference.PreferenceGroupAdapter
 import android.support.v7.preference.PreferenceViewHolder
 
 /**
- * A [PreferenceGroupAdapter] which manipulates the alpha  of the view
+ * A [PreferenceGroupAdapter] which manipulates the alpha of the view
  * Based on its preference state
  */
 @SuppressLint("RestrictedApi")

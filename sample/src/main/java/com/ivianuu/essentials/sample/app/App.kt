@@ -20,9 +20,7 @@ import com.ivianuu.daggerextensions.AutoComponent
 import com.ivianuu.daggerextensions.InjectorKeyRegistry
 import com.ivianuu.daggerextensions.view.ViewKey
 import com.ivianuu.essentials.app.BaseApp
-import com.ivianuu.essentials.injection.ActivityBindingModule_
-import com.ivianuu.essentials.injection.AppBindingSet
-import com.ivianuu.essentials.injection.EssentialsModule
+import com.ivianuu.essentials.injection.*
 import dagger.android.AndroidInjector
 import dagger.android.support.DaggerApplication
 import javax.inject.Singleton
@@ -35,6 +33,8 @@ import javax.inject.Singleton
 @AutoComponent(
     modules = [
         ActivityBindingModule_::class,
+        AppInitializerModule_::class,
+        AppServiceModule_::class,
         EssentialsModule::class
     ]
 )

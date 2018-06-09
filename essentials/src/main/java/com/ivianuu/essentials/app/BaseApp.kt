@@ -16,51 +16,33 @@
 
 package com.ivianuu.essentials.app
 
-import android.content.pm.ApplicationInfo
 import android.view.View
-import com.crashlytics.android.Crashlytics
-import com.ivianuu.daggerextensions.view.HasViewInjector
-import com.ivianuu.essentials.internal.EssentialsService
-import com.ivianuu.essentials.util.EnsureMainThreadScheduler
-import com.ivianuu.essentials.util.ext.containsFlag
+import com.ivianuu.essentials.injection.KtHasViewInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.DaggerApplication
-import io.fabric.sdk.android.Fabric
-import io.reactivex.android.plugins.RxAndroidPlugins
-import timber.log.Timber
 import javax.inject.Inject
 
 /**
  * App
  */
-abstract class BaseApp : DaggerApplication(), HasViewInjector {
+abstract class BaseApp : DaggerApplication(), KtHasViewInjector {
 
-    @Inject internal lateinit var essentialsServices: Set<@JvmSuppressWildcards EssentialsService>
+    @Inject internal lateinit var appInitializers: Set<@JvmSuppressWildcards AppInitializer>
+    @Inject internal lateinit var appServices: Set<@JvmSuppressWildcards AppService>
 
-    @Inject lateinit var viewInjector: DispatchingAndroidInjector<View>
+    @Inject override lateinit var viewInjector: DispatchingAndroidInjector<View>
 
     override fun onCreate() {
-        RxAndroidPlugins.setInitMainThreadSchedulerHandler { EnsureMainThreadScheduler.INSTANCE }
-
-        if (isDebug()) {
-            plantTimber()
-        } else {
-            initializeFabric()
-        }
-
         super.onCreate()
+        appInitializers.forEach(this::initializeAppInitializer)
+        appServices.forEach(this::startAppService)
     }
 
-    override fun viewInjector() = viewInjector
-
-    protected open fun plantTimber() {
-        Timber.plant(Timber.DebugTree())
+    protected open fun initializeAppInitializer(appInitializer: AppInitializer) {
+        appInitializer.init(this)
     }
 
-    protected open fun initializeFabric() {
-        Fabric.with(this, Crashlytics())
+    protected open fun startAppService(appService: AppService) {
+        appService.start()
     }
-
-    protected open fun isDebug() =
-        applicationInfo.flags.containsFlag(ApplicationInfo.FLAG_DEBUGGABLE)
 }

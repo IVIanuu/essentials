@@ -24,28 +24,28 @@ import android.view.ViewGroup
 import com.ivianuu.autodispose.LifecycleScopeProvider
 import com.ivianuu.autodispose.navi.android.FragmentEvent
 import com.ivianuu.autodispose.navi.android.FragmentLifecycleScopeProvider
-import com.ivianuu.daggerextensions.view.HasViewInjector
 import com.ivianuu.essentials.injection.Injectable
+import com.ivianuu.essentials.injection.KtHasSupportFragmentInjector
+import com.ivianuu.essentials.injection.KtHasViewInjector
 import com.ivianuu.essentials.ui.common.back.BackListener
 import com.ivianuu.essentials.util.ViewInjectionContextWrapper
 import com.ivianuu.essentials.util.screenlogger.NamedScreen
 import com.ivianuu.navi.android.NaviAppCompatDialogFragment
 import com.ivianuu.traveler.Router
 import dagger.android.DispatchingAndroidInjector
-import dagger.android.support.HasSupportFragmentInjector
 import javax.inject.Inject
 
 /**
  * Base dialog fragment
  */
 abstract class BaseDialogFragment : NaviAppCompatDialogFragment(),
-    BackListener, HasViewInjector, HasSupportFragmentInjector,
+    BackListener, KtHasViewInjector, KtHasSupportFragmentInjector,
     Injectable, NamedScreen, LifecycleScopeProvider<FragmentEvent> {
 
     @Inject lateinit var router: Router
 
-    @Inject lateinit var supportFragmentInjector: DispatchingAndroidInjector<Fragment>
-    @Inject lateinit var viewInjector: DispatchingAndroidInjector<View>
+    @Inject override lateinit var supportFragmentInjector: DispatchingAndroidInjector<Fragment>
+    @Inject override lateinit var viewInjector: DispatchingAndroidInjector<View>
 
     protected open val layoutRes = -1
 
@@ -66,14 +66,6 @@ abstract class BaseDialogFragment : NaviAppCompatDialogFragment(),
             super.onCreateView(inflater, container, savedInstanceState)
         }
     }
-
-    override fun handleBack(): Boolean {
-        return false
-    }
-
-    override fun supportFragmentInjector() = supportFragmentInjector
-
-    override fun viewInjector() = viewInjector
 
     override fun lifecycle() = lifecycleScopeProvider.lifecycle()
 

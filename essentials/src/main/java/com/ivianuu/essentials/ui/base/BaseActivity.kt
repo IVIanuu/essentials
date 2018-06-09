@@ -23,9 +23,10 @@ import android.view.View
 import com.ivianuu.autodispose.LifecycleScopeProvider
 import com.ivianuu.autodispose.navi.android.ActivityEvent
 import com.ivianuu.autodispose.navi.android.ActivityLifecycleScopeProvider
-import com.ivianuu.daggerextensions.view.HasViewInjector
 import com.ivianuu.essentials.injection.EssentialsFragmentBindingModule_
 import com.ivianuu.essentials.injection.Injectable
+import com.ivianuu.essentials.injection.KtHasSupportFragmentInjector
+import com.ivianuu.essentials.injection.KtHasViewInjector
 import com.ivianuu.essentials.ui.common.back.BackHandler
 import com.ivianuu.essentials.ui.traveler.getNavigatorHolder
 import com.ivianuu.essentials.ui.traveler.getRouter
@@ -41,21 +42,19 @@ import com.ivianuu.traveler.Navigator
 import com.ivianuu.traveler.Router
 import dagger.Module
 import dagger.Provides
-import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
-import dagger.android.support.HasSupportFragmentInjector
 import javax.inject.Inject
 
 /**
  * Base activity
  */
-abstract class BaseActivity : NaviAppCompatActivity(), HasSupportFragmentInjector,
-    HasViewInjector, Injectable, NamedScreen, LifecycleScopeProvider<ActivityEvent> {
+abstract class BaseActivity : NaviAppCompatActivity(), KtHasSupportFragmentInjector,
+    KtHasViewInjector, Injectable, NamedScreen, LifecycleScopeProvider<ActivityEvent> {
 
     @Inject lateinit var backHandler: BackHandler
 
-    @Inject lateinit var supportFragmentInjector: DispatchingAndroidInjector<Fragment>
-    @Inject lateinit var viewInjector: DispatchingAndroidInjector<View>
+    @Inject override lateinit var supportFragmentInjector: DispatchingAndroidInjector<Fragment>
+    @Inject override lateinit var viewInjector: DispatchingAndroidInjector<View>
 
     protected open val layoutRes = -1
 
@@ -86,10 +85,6 @@ abstract class BaseActivity : NaviAppCompatActivity(), HasSupportFragmentInjecto
             super.onBackPressed()
         }
     }
-
-    override fun supportFragmentInjector(): AndroidInjector<Fragment> = supportFragmentInjector
-
-    override fun viewInjector() = viewInjector
 
     override fun lifecycle() = lifecycleScopeProvider.lifecycle()
 

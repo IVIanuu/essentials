@@ -30,7 +30,8 @@ import dagger.android.support.AndroidSupportInjectionModule
         AndroidInjectionModule::class,
         AndroidSupportInjectionModule::class,
         EssentialsAppModule::class,
-        EssentialsServiceModule_::class,
+        EssentialsAppInitializerModule_::class,
+        EssentialsAppServiceModule_::class,
         ViewInjectionModule::class
     ]
 )

@@ -26,30 +26,29 @@ import android.view.ViewGroup
 import com.ivianuu.autodispose.LifecycleScopeProvider
 import com.ivianuu.autodispose.navi.android.FragmentEvent
 import com.ivianuu.autodispose.navi.android.FragmentLifecycleScopeProvider
-import com.ivianuu.daggerextensions.view.HasViewInjector
 import com.ivianuu.essentials.injection.Injectable
+import com.ivianuu.essentials.injection.KtHasSupportFragmentInjector
+import com.ivianuu.essentials.injection.KtHasViewInjector
 import com.ivianuu.essentials.ui.common.back.BackListener
 import com.ivianuu.essentials.util.ViewInjectionContextWrapper
 import com.ivianuu.essentials.util.screenlogger.NamedScreen
 import com.ivianuu.navi.android.NaviPreferenceFragmentCompat
 import com.ivianuu.traveler.Router
-import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
-import dagger.android.support.HasSupportFragmentInjector
 import javax.inject.Inject
 
 /**
  * Base preference fragment
  */
 abstract class BasePreferenceFragment : NaviPreferenceFragmentCompat(),
-    BackListener, HasSupportFragmentInjector,
-    HasViewInjector, Injectable, NamedScreen,
+    BackListener, KtHasSupportFragmentInjector,
+    KtHasViewInjector, Injectable, NamedScreen,
     LifecycleScopeProvider<FragmentEvent> {
 
     @Inject lateinit var router: Router
 
-    @Inject lateinit var supportFragmentInjector: DispatchingAndroidInjector<Fragment>
-    @Inject lateinit var viewInjector: DispatchingAndroidInjector<View>
+    @Inject override lateinit var supportFragmentInjector: DispatchingAndroidInjector<Fragment>
+    @Inject override lateinit var viewInjector: DispatchingAndroidInjector<View>
 
     open val layoutRes = -1
     open val prefsContainerId = -1
@@ -83,17 +82,8 @@ abstract class BasePreferenceFragment : NaviPreferenceFragmentCompat(),
         }
     }
 
-    override fun onCreateAdapter(preferenceScreen: PreferenceScreen?): RecyclerView.Adapter<*> {
-        return EnabledAwarePreferenceAdapter(preferenceScreen)
-    }
-
-    override fun handleBack(): Boolean {
-        return false
-    }
-
-    override fun supportFragmentInjector(): AndroidInjector<Fragment> = supportFragmentInjector
-
-    override fun viewInjector(): AndroidInjector<View> = viewInjector
+    override fun onCreateAdapter(preferenceScreen: PreferenceScreen?): RecyclerView.Adapter<*> =
+        EnabledAwarePreferenceAdapter(preferenceScreen)
 
     override fun lifecycle() = lifecycleScopeProvider.lifecycle()
 

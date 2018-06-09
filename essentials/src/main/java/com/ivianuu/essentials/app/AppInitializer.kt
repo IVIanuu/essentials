@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.common.back
+package com.ivianuu.essentials.app
+
+import android.app.Application
 
 /**
- * Handles back clicks
+ * Will be called on app initialization
  */
-interface BackListener {
-    fun handleBack(): Boolean {
-        return false
-    }
+interface AppInitializer {
+    fun init(app: Application)
 }

@@ -20,7 +20,6 @@ import android.content.Context
 import android.content.ContextWrapper
 import android.view.View
 import com.ivianuu.daggerextensions.view.HasViewInjector
-import dagger.android.AndroidInjector
 
 /**
  * Wraps a [Context] and is a [HasViewInjector]
@@ -29,9 +28,5 @@ import dagger.android.AndroidInjector
  */
 class ViewInjectionContextWrapper(
     context: Context,
-    private val viewInjector: HasViewInjector
-) : ContextWrapper(context), HasViewInjector {
-
-    override fun viewInjector(): AndroidInjector<View> = viewInjector.viewInjector()
-
-}
+    private val hasViewInjector: HasViewInjector
+) : ContextWrapper(context), HasViewInjector by hasViewInjector

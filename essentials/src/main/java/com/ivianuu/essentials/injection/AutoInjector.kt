@@ -23,7 +23,7 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
 import android.support.v4.app.FragmentManager
 import com.ivianuu.daggerextensions.AutoBindsIntoSet
-import com.ivianuu.essentials.internal.EssentialsService
+import com.ivianuu.essentials.app.AppService
 import com.ivianuu.essentials.util.ext.doOnActivityCreated
 import com.ivianuu.essentials.util.ext.doOnFragmentPreAttached
 import dagger.android.AndroidInjection
@@ -34,11 +34,11 @@ import javax.inject.Inject
 /**
  * Automatically injects [Injectable] [Activity]'s and [Fragment]'s
  */
-@EssentialsServiceModule
-@AutoBindsIntoSet(EssentialsService::class)
-class AutoInjector @Inject constructor(application: Application) : EssentialsService {
+@EssentialsAppServiceModule
+@AutoBindsIntoSet(AppService::class)
+class AutoInjector @Inject constructor(private val application: Application) : AppService {
 
-    init {
+    override fun start() {
         application.doOnActivityCreated { activity, _ ->
             handleActivity(activity)
         }

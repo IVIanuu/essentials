@@ -23,8 +23,8 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
 import android.support.v4.app.FragmentManager
 import com.ivianuu.daggerextensions.AutoBindsIntoSet
-import com.ivianuu.essentials.injection.EssentialsServiceModule
-import com.ivianuu.essentials.internal.EssentialsService
+import com.ivianuu.essentials.app.AppService
+import com.ivianuu.essentials.injection.EssentialsAppServiceModule
 import com.ivianuu.essentials.util.analytics.Analytics
 import com.ivianuu.essentials.util.ext.doOnActivityCreated
 import com.ivianuu.essentials.util.ext.doOnFragmentCreated
@@ -35,13 +35,13 @@ import javax.inject.Singleton
  * Utility class to help with screen logging
  */
 @Singleton
-@EssentialsServiceModule
-@AutoBindsIntoSet(EssentialsService::class)
-class ScreenLogger @Inject constructor(application: Application) : EssentialsService {
+@EssentialsAppServiceModule
+@AutoBindsIntoSet(AppService::class)
+class ScreenLogger @Inject constructor(private val application: Application) : AppService {
 
     var listener: Listener? = DefaultListener()
 
-    init {
+    override fun start() {
         application.doOnActivityCreated { activity, savedInstanceState ->
             handleActivity(activity, savedInstanceState)
         }
