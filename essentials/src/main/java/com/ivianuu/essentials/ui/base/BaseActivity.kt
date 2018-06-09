@@ -40,6 +40,7 @@ import com.ivianuu.navi.android.NaviAppCompatActivity
 import com.ivianuu.rxactivityresult.RxActivityResult
 import com.ivianuu.rxpermissions.RxPermissions
 import com.ivianuu.traveler.Navigator
+import com.ivianuu.traveler.Router
 import dagger.Module
 import dagger.Provides
 import dagger.android.DispatchingAndroidInjector
@@ -68,13 +69,16 @@ abstract class BaseActivity : NaviAppCompatActivity(), KtHasSupportFragmentInjec
         )
     }
 
-    protected val router by unsafeLazy { setupRouter(navigator, fragmentContainer) }
+    lateinit var router: Router
 
     override val lifecycleScopeProvider =
         ActivityLifecycleScopeProvider.from(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        router = setupRouter(navigator, fragmentContainer)
+
         if (layoutRes != -1) setContentView(layoutRes)
     }
 
