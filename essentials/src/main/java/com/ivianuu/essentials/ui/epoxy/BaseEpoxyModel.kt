@@ -18,21 +18,17 @@ package com.ivianuu.essentials.ui.epoxy
 
 import android.support.annotation.CallSuper
 import com.airbnb.epoxy.EpoxyModelWithHolder
-import com.ivianuu.autodispose.ScopeProvider
-import com.ivianuu.essentials.util.ext.maybeSubject
-import io.reactivex.subjects.MaybeSubject
+import com.ivianuu.essentials.util.rx.DisposableScopeProvider
+import com.ivianuu.essentials.util.rx.DisposableScopeProviderImpl
 
 /**
  * Base epoxy model with holder
  */
-abstract class BaseEpoxyModel : EpoxyModelWithHolder<BaseEpoxyHolder>, ScopeProvider {
+abstract class BaseEpoxyModel : EpoxyModelWithHolder<BaseEpoxyHolder>(),
+    DisposableScopeProvider by DisposableScopeProviderImpl() {
 
     private var bound = false
     private var currentHolder: BaseEpoxyHolder? = null
-
-    constructor() : super()
-
-    constructor(id: Long) : super(id)
 
     @CallSuper
     override fun bind(holder: BaseEpoxyHolder) {
@@ -57,36 +53,10 @@ abstract class BaseEpoxyModel : EpoxyModelWithHolder<BaseEpoxyHolder>, ScopeProv
         bound = false
     }
 
-    private var unbindNotifier: MaybeSubject<Unit>? = null
-
-    private val notifier: MaybeSubject<Unit>
-        get() {
-            synchronized(this) {
-                var n = unbindNotifier
-                return if (n == null) {
-                    n = maybeSubject()
-                    unbindNotifier = n
-                    n
-                } else {
-                    n
-                }
-            }
-        }
-
     private fun unbindInternal() {
-        currentHolder?.let {
-            it.boundModel = null
-        }
+        currentHolder?.let { it.boundModel = null }
         currentHolder = null
-
-        unbindNotifier?.let {
-            if (!it.hasComplete()) {
-                it.onSuccess(Unit)
-            }
-        }
-        unbindNotifier = null
+        dispose()
     }
-
-    override fun requestScope() = notifier
 
 }
