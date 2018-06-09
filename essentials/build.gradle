@@ -44,6 +44,7 @@ dependencies {
     kapt Deps.archLifecycleCompiler
 
     api Deps.autoDispose
+    api Deps.autoDisposeNaviAndroid
     api Deps.autoDisposeView
 
     api Deps.constraintLayout
@@ -71,6 +72,10 @@ dependencies {
 
     api Deps.materialDialogsCore
     api Deps.materialDialogsCommons
+
+    api Deps.navi
+    api Deps.naviAndroid
+    api Deps.naviRx
 
     api Deps.rxActivityResult
     api Deps.rxAndroid

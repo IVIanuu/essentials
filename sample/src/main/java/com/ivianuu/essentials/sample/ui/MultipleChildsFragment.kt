@@ -25,6 +25,7 @@ import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.base.BaseFragment
 import com.ivianuu.essentials.ui.traveler.key.FragmentClassKey
 import com.ivianuu.essentials.ui.traveler.setupKeyFragmentSwapperRouter
+import com.ivianuu.essentials.util.ext.d
 
 /**
  * @author Manuel Wrage (IVIanuu)
@@ -35,6 +36,11 @@ import com.ivianuu.essentials.ui.traveler.setupKeyFragmentSwapperRouter
 class MultipleChildsFragment : BaseFragment() {
 
     override val layoutRes = R.layout.fragment_multiple_childs
+
+    init {
+        lifecycle()
+            .subscribe { d { "on event $it" } }
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

@@ -8,9 +8,9 @@ object Versions {
     const val versionCode = 1
     const val versionName = "1.0"
 
-    const val androidGradlePlugin = "3.1.2"
+    const val androidGradlePlugin = "3.1.3"
     const val archLifecycle = "1.1.1"
-    const val autoDispose = "5e1bd5146e"
+    const val autoDispose = "0d104fc563"
     const val butterknife = "9.0.0-SNAPSHOT"
     const val constraintLayout = "1.1.0"
     const val dagger = "2.16"
@@ -21,6 +21,7 @@ object Versions {
     const val ktx = "0.3"
     const val mavenGradle = "2.1"
     const val materialDialogs = "0.9.6.0"
+    const val navi = "c521dab5e1"
     const val rxActivityResult = "b16b2d4cf9"
     const val rxAndroid = "2.0.2"
     const val rxBinding = "2.1.1"
@@ -34,7 +35,7 @@ object Versions {
     const val timber = "4.7.0"
     const val traveler = "b1d040c5c5"
 }
-//
+
 object Deps {
     const val androidGradlePlugin = "com.android.tools.build:gradle:${Versions.androidGradlePlugin}"
 
@@ -42,6 +43,7 @@ object Deps {
     const val archLifecycleCompiler = "android.arch.lifecycle:compiler:${Versions.archLifecycle}"
 
     const val autoDispose = "com.github.IVIanuu.AutoDispose:autodispose:${Versions.autoDispose}"
+    const val autoDisposeNaviAndroid = "com.github.IVIanuu.AutoDispose:autodispose-navi-android:${Versions.autoDispose}"
     const val autoDisposeView = "com.github.IVIanuu.AutoDispose:autodispose-view:${Versions.autoDispose}"
 
     const val butterknifeGradlePlugin = "com.jakewharton:butterknife-gradle-plugin:${Versions.butterknife}"
@@ -72,6 +74,10 @@ object Deps {
 
     const val mavenGradlePlugin = "com.github.dcendents:android-maven-gradle-plugin:${Versions.mavenGradle}"
 
+    const val navi = "com.github.IVIanuu.Navi:navi:${Versions.navi}"
+    const val naviAndroid = "com.github.IVIanuu.Navi:navi-android:${Versions.navi}"
+    const val naviRx = "com.github.IVIanuu.Navi:navi-rx:${Versions.navi}"
+
     const val rxActivityResult = "com.github.IVIanuu:RxActivityResult:${Versions.rxActivityResult}"
     const val rxAndroid = "io.reactivex.rxjava2:rxandroid:${Versions.rxAndroid}"
 
@@ -94,7 +100,7 @@ object Deps {
     const val supportCardView = "com.android.support:cardview-v7:${Versions.support}"
     const val supportDesign = "com.android.support:design:${Versions.support}"
     const val supportPalette = "com.android.support:palette-v7:${Versions.support}"
-    const val supportPreference = "com.android.support:preference-v7:27.1.1"
+    const val supportPreference = "com.android.support:preference-v7:${Versions.support}"
 
     const val timber = "com.jakewharton.timber:timber:${Versions.timber}"
 

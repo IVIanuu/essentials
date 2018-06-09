@@ -19,22 +19,22 @@ package com.ivianuu.essentials.ui.base
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
-import android.support.v7.app.AppCompatActivity
 import android.view.View
 import com.ivianuu.autodispose.LifecycleScopeProvider
+import com.ivianuu.autodispose.navi.android.ActivityEvent
+import com.ivianuu.autodispose.navi.android.ActivityLifecycleScopeProvider
 import com.ivianuu.daggerextensions.view.HasViewInjector
 import com.ivianuu.essentials.injection.EssentialsFragmentBindingModule_
 import com.ivianuu.essentials.injection.Injectable
-import com.ivianuu.essentials.ui.common.ActivityEvent
 import com.ivianuu.essentials.ui.common.back.BackHandler
 import com.ivianuu.essentials.ui.traveler.getNavigatorHolder
 import com.ivianuu.essentials.ui.traveler.getRouter
 import com.ivianuu.essentials.ui.traveler.getTraveler
 import com.ivianuu.essentials.ui.traveler.navigator.KeyFragmentAppNavigator
 import com.ivianuu.essentials.ui.traveler.setupRouter
-import com.ivianuu.essentials.util.ActivityLifecycleScopeProvider
 import com.ivianuu.essentials.util.ext.unsafeLazy
 import com.ivianuu.essentials.util.screenlogger.NamedScreen
+import com.ivianuu.navi.android.NaviAppCompatActivity
 import com.ivianuu.rxactivityresult.RxActivityResult
 import com.ivianuu.rxpermissions.RxPermissions
 import com.ivianuu.traveler.Navigator
@@ -49,7 +49,7 @@ import javax.inject.Inject
 /**
  * Base activity
  */
-abstract class BaseActivity : AppCompatActivity(), HasSupportFragmentInjector,
+abstract class BaseActivity : NaviAppCompatActivity(), HasSupportFragmentInjector,
     HasViewInjector, Injectable, NamedScreen, LifecycleScopeProvider<ActivityEvent> {
 
     @Inject lateinit var backHandler: BackHandler
@@ -71,9 +71,7 @@ abstract class BaseActivity : AppCompatActivity(), HasSupportFragmentInjector,
 
     lateinit var router: Router
 
-    private val lifecycleScopeProvider by unsafeLazy {
-        ActivityLifecycleScopeProvider.from(this)
-    }
+    private val lifecycleScopeProvider = ActivityLifecycleScopeProvider.from(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
