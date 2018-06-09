@@ -25,6 +25,7 @@ object Versions {
     const val rxActivityResult = "b16b2d4cf9"
     const val rxAndroid = "2.0.2"
     const val rxBinding = "2.1.1"
+    const val rxBroadcastReceiver = "13d01a5167"
     const val rxJava = "2.1.13"
     const val rxKotlin = "2.2.0"
     const val rxPermissions = "aa7de40f71"
@@ -87,6 +88,7 @@ object Deps {
     const val rxBindingSupportAppCompatV7 = "com.jakewharton.rxbinding2:rxbinding-appcompat-v7-kotlin:${Versions.rxBinding}"
     const val rxBindingSupportV4 = "com.jakewharton.rxbinding2:rxbinding-support-v4-kotlin:${Versions.rxBinding}"
 
+    const val rxBroadcastReceiver = "com.github.IVIanuu:RxBroadcastReceiver:${Versions.rxBroadcastReceiver}"
     const val rxJava = "io.reactivex.rxjava2:rxjava:${Versions.rxJava}"
     const val rxKotlin = "io.reactivex.rxjava2:rxkotlin:${Versions.rxKotlin}"
     const val rxPermissions = "com.github.IVIanuu:RxPermissions:${Versions.rxPermissions}"

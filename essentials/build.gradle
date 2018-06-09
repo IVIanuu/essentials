@@ -84,10 +84,12 @@ dependencies {
     api Deps.rxBindingRecyclerView
     api Deps.rxBindingSupportAppCompatV7
     api Deps.rxBindingSupportV4
+    api Deps.rxBroadcastReceiver
     api Deps.rxJava
     api Deps.rxKotlin
     api Deps.rxPermissions
     api Deps.rxPreferences
+    api Deps.rxPopupMenu
 
     api Deps.seekBarPreference
 
