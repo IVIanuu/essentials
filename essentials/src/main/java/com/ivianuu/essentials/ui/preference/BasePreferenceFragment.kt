@@ -23,7 +23,6 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.ivianuu.autodispose.LifecycleScopeProvider
 import com.ivianuu.autodispose.navi.android.FragmentEvent
 import com.ivianuu.autodispose.navi.android.FragmentLifecycleScopeProvider
 import com.ivianuu.essentials.injection.Injectable
@@ -31,6 +30,8 @@ import com.ivianuu.essentials.injection.KtHasSupportFragmentInjector
 import com.ivianuu.essentials.injection.KtHasViewInjector
 import com.ivianuu.essentials.ui.common.back.BackListener
 import com.ivianuu.essentials.util.ViewInjectionContextWrapper
+import com.ivianuu.essentials.util.rx.LazyLifecycleScopeProvider
+import com.ivianuu.essentials.util.rx.LazyLifecycleScopeProviderImpl
 import com.ivianuu.essentials.util.screenlogger.NamedScreen
 import com.ivianuu.navi.android.NaviPreferenceFragmentCompat
 import com.ivianuu.traveler.Router
@@ -43,7 +44,7 @@ import javax.inject.Inject
 abstract class BasePreferenceFragment : NaviPreferenceFragmentCompat(),
     BackListener, KtHasSupportFragmentInjector,
     KtHasViewInjector, Injectable, NamedScreen,
-    LifecycleScopeProvider<FragmentEvent> {
+    LazyLifecycleScopeProvider<FragmentEvent> by LazyLifecycleScopeProviderImpl() {
 
     @Inject lateinit var router: Router
 
@@ -54,7 +55,8 @@ abstract class BasePreferenceFragment : NaviPreferenceFragmentCompat(),
     open val prefsContainerId = -1
     open val prefsRes = -1
 
-    private val lifecycleScopeProvider = FragmentLifecycleScopeProvider.from(this)
+    override val lifecycleScopeProvider =
+        FragmentLifecycleScopeProvider.from(this)
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -84,10 +86,4 @@ abstract class BasePreferenceFragment : NaviPreferenceFragmentCompat(),
 
     override fun onCreateAdapter(preferenceScreen: PreferenceScreen?): RecyclerView.Adapter<*> =
         EnabledAwarePreferenceAdapter(preferenceScreen)
-
-    override fun lifecycle() = lifecycleScopeProvider.lifecycle()
-
-    override fun correspondingEvents() = lifecycleScopeProvider.correspondingEvents()
-
-    override fun peekLifecycle() = lifecycleScopeProvider.peekLifecycle()
 }

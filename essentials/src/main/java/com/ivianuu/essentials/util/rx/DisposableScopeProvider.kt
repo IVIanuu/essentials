@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.util
+package com.ivianuu.essentials.util.rx
 
 import com.ivianuu.autodispose.ScopeProvider
 import com.ivianuu.essentials.util.ext.publishSubject
@@ -23,14 +23,14 @@ import io.reactivex.Maybe
 /**
  * A scope provider which is disposable
  */
-interface SimpleScopeProvider : ScopeProvider {
+interface DisposableScopeProvider : ScopeProvider {
     fun dispose()
 }
 
 /**
  * A helper class to implement [ScopeProvider] without boilerplate
  */
-class SimpleScopeProviderHelper : SimpleScopeProvider {
+class DisposableScopeProviderImpl : DisposableScopeProvider {
 
     private val scope = publishSubject<Unit>()
 

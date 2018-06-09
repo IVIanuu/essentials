@@ -21,7 +21,6 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.ivianuu.autodispose.LifecycleScopeProvider
 import com.ivianuu.autodispose.navi.android.FragmentEvent
 import com.ivianuu.autodispose.navi.android.FragmentLifecycleScopeProvider
 import com.ivianuu.essentials.injection.Injectable
@@ -29,6 +28,8 @@ import com.ivianuu.essentials.injection.KtHasSupportFragmentInjector
 import com.ivianuu.essentials.injection.KtHasViewInjector
 import com.ivianuu.essentials.ui.common.back.BackListener
 import com.ivianuu.essentials.util.ViewInjectionContextWrapper
+import com.ivianuu.essentials.util.rx.LazyLifecycleScopeProvider
+import com.ivianuu.essentials.util.rx.LazyLifecycleScopeProviderImpl
 import com.ivianuu.essentials.util.screenlogger.NamedScreen
 import com.ivianuu.navi.android.NaviAppCompatDialogFragment
 import com.ivianuu.traveler.Router
@@ -40,7 +41,8 @@ import javax.inject.Inject
  */
 abstract class BaseDialogFragment : NaviAppCompatDialogFragment(),
     BackListener, KtHasViewInjector, KtHasSupportFragmentInjector,
-    Injectable, NamedScreen, LifecycleScopeProvider<FragmentEvent> {
+    Injectable, NamedScreen,
+    LazyLifecycleScopeProvider<FragmentEvent> by LazyLifecycleScopeProviderImpl() {
 
     @Inject lateinit var router: Router
 
@@ -49,7 +51,7 @@ abstract class BaseDialogFragment : NaviAppCompatDialogFragment(),
 
     protected open val layoutRes = -1
 
-    private val lifecycleScopeProvider =
+    override val lifecycleScopeProvider =
         FragmentLifecycleScopeProvider.from(this)
 
     override fun onCreateView(
@@ -66,11 +68,4 @@ abstract class BaseDialogFragment : NaviAppCompatDialogFragment(),
             super.onCreateView(inflater, container, savedInstanceState)
         }
     }
-
-    override fun lifecycle() = lifecycleScopeProvider.lifecycle()
-
-    override fun correspondingEvents() = lifecycleScopeProvider.correspondingEvents()
-
-    override fun peekLifecycle() = lifecycleScopeProvider.peekLifecycle()
-
 }

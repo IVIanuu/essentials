@@ -20,7 +20,5 @@ package com.ivianuu.essentials.app
  * A component which lives as long as the app
  */
 interface AppService {
-
     fun start()
-
 }

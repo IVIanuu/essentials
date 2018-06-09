@@ -20,7 +20,6 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
 import android.view.View
-import com.ivianuu.autodispose.LifecycleScopeProvider
 import com.ivianuu.autodispose.navi.android.ActivityEvent
 import com.ivianuu.autodispose.navi.android.ActivityLifecycleScopeProvider
 import com.ivianuu.essentials.injection.EssentialsFragmentBindingModule_
@@ -34,12 +33,13 @@ import com.ivianuu.essentials.ui.traveler.getTraveler
 import com.ivianuu.essentials.ui.traveler.navigator.KeyFragmentAppNavigator
 import com.ivianuu.essentials.ui.traveler.setupRouter
 import com.ivianuu.essentials.util.ext.unsafeLazy
+import com.ivianuu.essentials.util.rx.LazyLifecycleScopeProvider
+import com.ivianuu.essentials.util.rx.LazyLifecycleScopeProviderImpl
 import com.ivianuu.essentials.util.screenlogger.NamedScreen
 import com.ivianuu.navi.android.NaviAppCompatActivity
 import com.ivianuu.rxactivityresult.RxActivityResult
 import com.ivianuu.rxpermissions.RxPermissions
 import com.ivianuu.traveler.Navigator
-import com.ivianuu.traveler.Router
 import dagger.Module
 import dagger.Provides
 import dagger.android.DispatchingAndroidInjector
@@ -49,7 +49,8 @@ import javax.inject.Inject
  * Base activity
  */
 abstract class BaseActivity : NaviAppCompatActivity(), KtHasSupportFragmentInjector,
-    KtHasViewInjector, Injectable, NamedScreen, LifecycleScopeProvider<ActivityEvent> {
+    KtHasViewInjector, Injectable, NamedScreen,
+    LazyLifecycleScopeProvider<ActivityEvent> by LazyLifecycleScopeProviderImpl() {
 
     @Inject lateinit var backHandler: BackHandler
 
@@ -68,15 +69,13 @@ abstract class BaseActivity : NaviAppCompatActivity(), KtHasSupportFragmentInjec
         )
     }
 
-    lateinit var router: Router
+    protected val router by unsafeLazy { setupRouter(navigator, fragmentContainer) }
 
-    private val lifecycleScopeProvider = ActivityLifecycleScopeProvider.from(this)
+    override val lifecycleScopeProvider =
+        ActivityLifecycleScopeProvider.from(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        router = setupRouter(navigator, fragmentContainer)
-
         if (layoutRes != -1) setContentView(layoutRes)
     }
 
@@ -85,12 +84,6 @@ abstract class BaseActivity : NaviAppCompatActivity(), KtHasSupportFragmentInjec
             super.onBackPressed()
         }
     }
-
-    override fun lifecycle() = lifecycleScopeProvider.lifecycle()
-
-    override fun correspondingEvents() = lifecycleScopeProvider.correspondingEvents()
-
-    override fun peekLifecycle() = lifecycleScopeProvider.peekLifecycle()
 }
 
 @Module(includes = [EssentialsFragmentBindingModule_::class])
