@@ -33,8 +33,8 @@ import com.ivianuu.essentials.ui.traveler.getTraveler
 import com.ivianuu.essentials.ui.traveler.navigator.KeyFragmentAppNavigator
 import com.ivianuu.essentials.ui.traveler.setupRouter
 import com.ivianuu.essentials.util.ext.unsafeLazy
-import com.ivianuu.essentials.util.rx.LazyLifecycleScopeProvider
-import com.ivianuu.essentials.util.rx.LazyLifecycleScopeProviderImpl
+import com.ivianuu.essentials.util.rx.DelegateLifecycleScopeProvider
+
 import com.ivianuu.essentials.util.screenlogger.NamedScreen
 import com.ivianuu.navi.android.NaviAppCompatActivity
 import com.ivianuu.rxactivityresult.RxActivityResult
@@ -49,8 +49,7 @@ import javax.inject.Inject
  * Base activity
  */
 abstract class BaseActivity : NaviAppCompatActivity(), KtHasSupportFragmentInjector,
-    KtHasViewInjector, Injectable, NamedScreen,
-    LazyLifecycleScopeProvider<ActivityEvent> by LazyLifecycleScopeProviderImpl() {
+    KtHasViewInjector, Injectable, NamedScreen, DelegateLifecycleScopeProvider<ActivityEvent> {
 
     @Inject lateinit var backHandler: BackHandler
 

@@ -24,6 +24,10 @@ import com.ivianuu.essentials.injection.FragmentBindingModule_
 import com.ivianuu.essentials.injection.PerActivity
 import com.ivianuu.essentials.ui.base.BaseActivity
 import com.ivianuu.essentials.ui.base.EssentialsActivityModule
+import com.ivianuu.essentials.util.ext.d
+import com.ivianuu.essentials.util.ext.subscribeForUi
+import io.reactivex.Observable
+import java.util.concurrent.TimeUnit
 
 @ActivityBindingSet
 @ActivityBindingModule
@@ -33,6 +37,12 @@ class MainActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        Observable.interval(1, TimeUnit.SECONDS)
+            .doOnDispose { d { "on dispose" } }
+            .doOnSubscribe { d { "on sub" } }
+            .doOnNext { d { "do on next $it" } }
+            .subscribeForUi(this)
 
         if (savedInstanceState == null) {
             router.newRootScreen(MultipleChildsKey)

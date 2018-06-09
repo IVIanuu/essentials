@@ -37,7 +37,7 @@ import javax.inject.Inject
 class ChildNavigationView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null, defStyleAttr: Int = 0
-) : LinearLayout(context, attrs, defStyleAttr), SimpleScopeProvider by SimpleScopeProviderHelper() {
+) : LinearLayout(context, attrs, defStyleAttr) {
 
     @Inject lateinit var key: ChildNavigationKey
     @field:LocalRouter @Inject lateinit var router: Router

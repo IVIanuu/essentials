@@ -28,8 +28,8 @@ import com.ivianuu.essentials.injection.KtHasSupportFragmentInjector
 import com.ivianuu.essentials.injection.KtHasViewInjector
 import com.ivianuu.essentials.ui.common.back.BackListener
 import com.ivianuu.essentials.util.ViewInjectionContextWrapper
-import com.ivianuu.essentials.util.rx.LazyLifecycleScopeProvider
-import com.ivianuu.essentials.util.rx.LazyLifecycleScopeProviderImpl
+import com.ivianuu.essentials.util.rx.DelegateLifecycleScopeProvider
+
 import com.ivianuu.essentials.util.screenlogger.NamedScreen
 import com.ivianuu.navi.android.NaviFragment
 import com.ivianuu.traveler.Router
@@ -41,7 +41,7 @@ import javax.inject.Inject
  */
 abstract class BaseFragment : NaviFragment(), BackListener, KtHasSupportFragmentInjector,
     KtHasViewInjector, Injectable, NamedScreen,
-    LazyLifecycleScopeProvider<FragmentEvent> by LazyLifecycleScopeProviderImpl() {
+    DelegateLifecycleScopeProvider<FragmentEvent> {
 
     @Inject lateinit var router: Router
 

@@ -21,17 +21,9 @@ import com.ivianuu.autodispose.LifecycleScopeProvider
 /**
  * A [LifecycleScopeProvider] which wraps another [lifecycleScopeProvider]
  */
-interface LazyLifecycleScopeProvider<T> : LifecycleScopeProvider<T> {
+interface DelegateLifecycleScopeProvider<T> : LifecycleScopeProvider<T> {
     val lifecycleScopeProvider: LifecycleScopeProvider<T>
     override fun correspondingEvents() = lifecycleScopeProvider.correspondingEvents()
     override fun lifecycle() = lifecycleScopeProvider.lifecycle()
     override fun peekLifecycle() = lifecycleScopeProvider.peekLifecycle()
-}
-
-/**
- * A helper class to implement [LifecycleScopeProvider] by a provided [LifecycleScopeProvider]
- * without boilerplate
- */
-class LazyLifecycleScopeProviderImpl<T> : LazyLifecycleScopeProvider<T> {
-    override lateinit var lifecycleScopeProvider: LifecycleScopeProvider<T>
 }
