@@ -17,17 +17,16 @@
 package com.ivianuu.essentials.ui.common
 
 import android.arch.lifecycle.ViewModel
-import io.reactivex.disposables.CompositeDisposable
+import com.ivianuu.essentials.util.rx.DisposableScopeProvider
+import com.ivianuu.essentials.util.rx.DisposableScopeProviderImpl
 
 /**
  * A [ViewModel] which auto disposes itself
  */
-abstract class BaseViewModel : ViewModel() {
-
-    protected val disposables = CompositeDisposable()
+abstract class BaseViewModel : ViewModel(), DisposableScopeProvider by DisposableScopeProviderImpl() {
 
     override fun onCleared() {
-        disposables.clear()
+        dispose()
         super.onCleared()
     }
 
