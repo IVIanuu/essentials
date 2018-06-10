@@ -31,7 +31,6 @@ import com.ivianuu.essentials.ui.common.back.BackListener
 import com.ivianuu.essentials.util.ContextAware
 import com.ivianuu.essentials.util.ViewInjectionContextWrapper
 import com.ivianuu.essentials.util.rx.DelegateLifecycleScopeProvider
-
 import com.ivianuu.essentials.util.screenlogger.NamedScreen
 import com.ivianuu.traveler.Router
 import dagger.android.DispatchingAndroidInjector
