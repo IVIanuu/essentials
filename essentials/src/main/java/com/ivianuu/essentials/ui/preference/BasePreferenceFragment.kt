@@ -16,16 +16,17 @@
 
 package com.ivianuu.essentials.ui.preference
 
+import android.arch.lifecycle.Lifecycle
 import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.preference.PreferenceFragmentCompat
 import android.support.v7.preference.PreferenceScreen
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.ivianuu.autodispose.navi.android.FragmentEvent
-import com.ivianuu.autodispose.navi.android.scope
+import com.ivianuu.autodispose.arch.scope
 import com.ivianuu.essentials.injection.Injectable
 import com.ivianuu.essentials.injection.KtHasSupportFragmentInjector
 import com.ivianuu.essentials.injection.KtHasViewInjector
@@ -35,7 +36,6 @@ import com.ivianuu.essentials.util.ViewInjectionContextWrapper
 import com.ivianuu.essentials.util.rx.DelegateLifecycleScopeProvider
 
 import com.ivianuu.essentials.util.screenlogger.NamedScreen
-import com.ivianuu.navi.android.NaviPreferenceFragmentCompat
 import com.ivianuu.traveler.Router
 import dagger.android.DispatchingAndroidInjector
 import javax.inject.Inject
@@ -43,10 +43,10 @@ import javax.inject.Inject
 /**
  * Base preference fragment
  */
-abstract class BasePreferenceFragment : NaviPreferenceFragmentCompat(),
+abstract class BasePreferenceFragment : PreferenceFragmentCompat(),
     BackListener, KtHasSupportFragmentInjector,
     KtHasViewInjector, Injectable, NamedScreen,
-    ContextAware, DelegateLifecycleScopeProvider<FragmentEvent> {
+    ContextAware, DelegateLifecycleScopeProvider<Lifecycle.Event> {
 
     @Inject lateinit var router: Router
 

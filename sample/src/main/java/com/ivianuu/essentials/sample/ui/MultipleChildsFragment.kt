@@ -39,7 +39,7 @@ class MultipleChildsFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        CONTAINER_IDS.forEachIndexed { index, containerId ->
+        CONTAINER_IDS.take(1).forEachIndexed { index, containerId ->
             val router = setupKeyFragmentSwapperRouter(containerId)
 
             if (savedInstanceState == null) {

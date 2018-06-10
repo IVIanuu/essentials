@@ -16,11 +16,12 @@
 
 package com.ivianuu.essentials.ui.base
 
+import android.arch.lifecycle.Lifecycle
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.app.AppCompatActivity
 import android.view.View
-import com.ivianuu.autodispose.navi.android.ActivityEvent
-import com.ivianuu.autodispose.navi.android.scope
+import com.ivianuu.autodispose.arch.scope
 import com.ivianuu.essentials.injection.Injectable
 import com.ivianuu.essentials.injection.KtHasSupportFragmentInjector
 import com.ivianuu.essentials.injection.KtHasViewInjector
@@ -30,7 +31,6 @@ import com.ivianuu.essentials.ui.traveler.setupRouter
 import com.ivianuu.essentials.util.ext.unsafeLazy
 import com.ivianuu.essentials.util.rx.DelegateLifecycleScopeProvider
 import com.ivianuu.essentials.util.screenlogger.NamedScreen
-import com.ivianuu.navi.android.NaviAppCompatActivity
 import com.ivianuu.traveler.Navigator
 import com.ivianuu.traveler.Router
 import dagger.android.DispatchingAndroidInjector
@@ -39,8 +39,8 @@ import javax.inject.Inject
 /**
  * Base activity
  */
-abstract class BaseActivity : NaviAppCompatActivity(), KtHasSupportFragmentInjector,
-    KtHasViewInjector, Injectable, NamedScreen, DelegateLifecycleScopeProvider<ActivityEvent> {
+abstract class BaseActivity : AppCompatActivity(), KtHasSupportFragmentInjector,
+    KtHasViewInjector, Injectable, NamedScreen, DelegateLifecycleScopeProvider<Lifecycle.Event> {
 
     @Inject lateinit var backHandler: BackHandler
 

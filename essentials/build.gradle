@@ -45,7 +45,7 @@ dependencies {
 
     api Deps.autoDispose
     api Deps.autoDisposeAndroid
-    api Deps.autoDisposeNaviAndroid
+    api Deps.autoDisposeArch
 
     api Deps.constraintLayout
 
@@ -72,10 +72,6 @@ dependencies {
 
     api Deps.materialDialogsCore
     api Deps.materialDialogsCommons
-
-    api Deps.navi
-    api Deps.naviAndroid
-    api Deps.naviRx
 
     api Deps.rxActivityResult
     api Deps.rxAndroid

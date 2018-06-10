@@ -19,6 +19,7 @@ package com.ivianuu.essentials.util.ext
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.view.View
+import com.ivianuu.autodispose.arch.scope
 
 val Fragment.appCompatActivity: AppCompatActivity?
     get() = activity as AppCompatActivity?
@@ -34,3 +35,5 @@ fun Fragment.showInputMethod(view: View) {
 fun Fragment.requireAppCompatActivity() = requireActivity() as AppCompatActivity
 
 fun Fragment.requireArgs() = arguments ?: throw IllegalStateException("no arguments provided")
+
+fun Fragment.viewScope() = viewLifecycleOwner.scope()

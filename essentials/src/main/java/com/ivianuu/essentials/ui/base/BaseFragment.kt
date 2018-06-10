@@ -16,14 +16,14 @@
 
 package com.ivianuu.essentials.ui.base
 
+import android.arch.lifecycle.Lifecycle
 import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.ivianuu.autodispose.navi.android.FragmentEvent
-import com.ivianuu.autodispose.navi.android.scope
+import com.ivianuu.autodispose.arch.scope
 import com.ivianuu.essentials.injection.Injectable
 import com.ivianuu.essentials.injection.KtHasSupportFragmentInjector
 import com.ivianuu.essentials.injection.KtHasViewInjector
@@ -33,7 +33,6 @@ import com.ivianuu.essentials.util.ViewInjectionContextWrapper
 import com.ivianuu.essentials.util.rx.DelegateLifecycleScopeProvider
 
 import com.ivianuu.essentials.util.screenlogger.NamedScreen
-import com.ivianuu.navi.android.NaviFragment
 import com.ivianuu.traveler.Router
 import dagger.android.DispatchingAndroidInjector
 import javax.inject.Inject
@@ -41,9 +40,9 @@ import javax.inject.Inject
 /**
  * Base fragment
  */
-abstract class BaseFragment : NaviFragment(), BackListener, KtHasSupportFragmentInjector,
+abstract class BaseFragment : Fragment(), BackListener, KtHasSupportFragmentInjector,
     KtHasViewInjector, Injectable, NamedScreen, ContextAware,
-    DelegateLifecycleScopeProvider<FragmentEvent> {
+    DelegateLifecycleScopeProvider<Lifecycle.Event> {
 
     @Inject lateinit var router: Router
 

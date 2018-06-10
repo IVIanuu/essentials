@@ -10,7 +10,7 @@ object Versions {
 
     const val androidGradlePlugin = "3.1.3"
     const val archLifecycle = "1.1.1"
-    const val autoDispose = "5725eef260"
+    const val autoDispose = "bf482f736e"
     const val butterknife = "9.0.0-SNAPSHOT"
     const val constraintLayout = "1.1.0"
     const val dagger = "2.16"
@@ -45,7 +45,7 @@ object Deps {
 
     const val autoDispose = "com.github.IVIanuu.AutoDispose:autodispose:${Versions.autoDispose}"
     const val autoDisposeAndroid = "com.github.IVIanuu.AutoDispose:autodispose-android:${Versions.autoDispose}"
-    const val autoDisposeNaviAndroid = "com.github.IVIanuu.AutoDispose:autodispose-navi-android:${Versions.autoDispose}"
+    const val autoDisposeArch = "com.github.IVIanuu.AutoDispose:autodispose-arch:${Versions.autoDispose}"
 
     const val butterknifeGradlePlugin = "com.jakewharton:butterknife-gradle-plugin:${Versions.butterknife}"
 
@@ -74,10 +74,6 @@ object Deps {
     const val materialDialogsCommons = "com.afollestad.material-dialogs:commons:${Versions.materialDialogs}"
 
     const val mavenGradlePlugin = "com.github.dcendents:android-maven-gradle-plugin:${Versions.mavenGradle}"
-
-    const val navi = "com.github.IVIanuu.Navi:navi:${Versions.navi}"
-    const val naviAndroid = "com.github.IVIanuu.Navi:navi-android:${Versions.navi}"
-    const val naviRx = "com.github.IVIanuu.Navi:navi-rx:${Versions.navi}"
 
     const val rxActivityResult = "com.github.IVIanuu:RxActivityResult:${Versions.rxActivityResult}"
     const val rxAndroid = "io.reactivex.rxjava2:rxandroid:${Versions.rxAndroid}"
