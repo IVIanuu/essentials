@@ -16,7 +16,6 @@
 
 package com.ivianuu.essentials.ui.base
 
-import android.arch.lifecycle.Lifecycle
 import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -24,15 +23,12 @@ import android.support.v7.app.AppCompatDialogFragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.ivianuu.autodispose.arch.scope
 import com.ivianuu.essentials.injection.Injectable
 import com.ivianuu.essentials.injection.KtHasSupportFragmentInjector
 import com.ivianuu.essentials.injection.KtHasViewInjector
 import com.ivianuu.essentials.ui.common.back.BackListener
 import com.ivianuu.essentials.util.ContextAware
 import com.ivianuu.essentials.util.ViewInjectionContextWrapper
-import com.ivianuu.essentials.util.rx.DelegateLifecycleScopeProvider
-
 import com.ivianuu.essentials.util.screenlogger.NamedScreen
 import com.ivianuu.traveler.Router
 import dagger.android.DispatchingAndroidInjector
@@ -43,7 +39,7 @@ import javax.inject.Inject
  */
 abstract class BaseDialogFragment : AppCompatDialogFragment(),
     BackListener, KtHasViewInjector, KtHasSupportFragmentInjector, Injectable, NamedScreen,
-    ContextAware, DelegateLifecycleScopeProvider<Lifecycle.Event> {
+    ContextAware {
 
     @Inject lateinit var router: Router
 
@@ -51,8 +47,6 @@ abstract class BaseDialogFragment : AppCompatDialogFragment(),
     @Inject override lateinit var viewInjector: DispatchingAndroidInjector<View>
 
     protected open val layoutRes = -1
-
-    override val lifecycleScopeProvider = scope()
 
     override val providedContext: Context
         get() = requireActivity()

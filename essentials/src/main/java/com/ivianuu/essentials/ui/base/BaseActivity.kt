@@ -16,12 +16,10 @@
 
 package com.ivianuu.essentials.ui.base
 
-import android.arch.lifecycle.Lifecycle
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.view.View
-import com.ivianuu.autodispose.arch.scope
 import com.ivianuu.essentials.injection.Injectable
 import com.ivianuu.essentials.injection.KtHasSupportFragmentInjector
 import com.ivianuu.essentials.injection.KtHasViewInjector
@@ -29,7 +27,6 @@ import com.ivianuu.essentials.ui.common.back.BackHandler
 import com.ivianuu.essentials.ui.traveler.navigator.KeyFragmentAppNavigator
 import com.ivianuu.essentials.ui.traveler.setupRouter
 import com.ivianuu.essentials.util.ext.unsafeLazy
-import com.ivianuu.essentials.util.rx.DelegateLifecycleScopeProvider
 import com.ivianuu.essentials.util.screenlogger.NamedScreen
 import com.ivianuu.traveler.Navigator
 import com.ivianuu.traveler.Router
@@ -40,7 +37,7 @@ import javax.inject.Inject
  * Base activity
  */
 abstract class BaseActivity : AppCompatActivity(), KtHasSupportFragmentInjector,
-    KtHasViewInjector, Injectable, NamedScreen, DelegateLifecycleScopeProvider<Lifecycle.Event> {
+    KtHasViewInjector, Injectable, NamedScreen {
 
     @Inject lateinit var backHandler: BackHandler
 
@@ -60,8 +57,6 @@ abstract class BaseActivity : AppCompatActivity(), KtHasSupportFragmentInjector,
     }
 
     lateinit var router: Router
-
-    override val lifecycleScopeProvider = scope()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

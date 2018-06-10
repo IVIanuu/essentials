@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.sample.ui
 
 import android.os.Bundle
+import com.ivianuu.autodispose.arch.autoDispose
 import com.ivianuu.daggerextensions.AutoContribute
 import com.ivianuu.essentials.injection.ActivityBindingModule
 import com.ivianuu.essentials.injection.ActivityBindingSet
@@ -25,7 +26,6 @@ import com.ivianuu.essentials.injection.PerActivity
 import com.ivianuu.essentials.ui.base.BaseActivity
 import com.ivianuu.essentials.ui.base.EssentialsActivityModule
 import com.ivianuu.essentials.util.ext.d
-import com.ivianuu.essentials.util.ext.subscribeForUi
 import io.reactivex.Observable
 import java.util.concurrent.TimeUnit
 
@@ -42,7 +42,8 @@ class MainActivity : BaseActivity() {
             .doOnDispose { d { "on dispose" } }
             .doOnSubscribe { d { "on sub" } }
             .doOnNext { d { "do on next $it" } }
-            .subscribeForUi(this)
+            .subscribe()
+            .autoDispose(this)
 
         if (savedInstanceState == null) {
             router.newRootScreen(MultipleChildsKey)
