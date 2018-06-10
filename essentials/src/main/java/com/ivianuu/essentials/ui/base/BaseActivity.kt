@@ -20,7 +20,7 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.View
 import com.ivianuu.autodispose.navi.android.ActivityEvent
-import com.ivianuu.autodispose.navi.android.ActivityLifecycleScopeProvider
+import com.ivianuu.autodispose.navi.android.scope
 import com.ivianuu.essentials.injection.Injectable
 import com.ivianuu.essentials.injection.KtHasSupportFragmentInjector
 import com.ivianuu.essentials.injection.KtHasViewInjector
@@ -61,8 +61,7 @@ abstract class BaseActivity : NaviAppCompatActivity(), KtHasSupportFragmentInjec
 
     lateinit var router: Router
 
-    override val lifecycleScopeProvider =
-        ActivityLifecycleScopeProvider.from(this)
+    override val lifecycleScopeProvider = scope()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

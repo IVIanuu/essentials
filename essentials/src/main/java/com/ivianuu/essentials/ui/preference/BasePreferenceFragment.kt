@@ -25,7 +25,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.ivianuu.autodispose.navi.android.FragmentEvent
-import com.ivianuu.autodispose.navi.android.FragmentLifecycleScopeProvider
+import com.ivianuu.autodispose.navi.android.scope
 import com.ivianuu.essentials.injection.Injectable
 import com.ivianuu.essentials.injection.KtHasSupportFragmentInjector
 import com.ivianuu.essentials.injection.KtHasViewInjector
@@ -57,8 +57,7 @@ abstract class BasePreferenceFragment : NaviPreferenceFragmentCompat(),
     open val prefsContainerId = -1
     open val prefsRes = -1
 
-    override val lifecycleScopeProvider =
-        FragmentLifecycleScopeProvider.from(this)
+    override val lifecycleScopeProvider = scope()
 
     override val providedContext: Context
         get() = requireActivity()
