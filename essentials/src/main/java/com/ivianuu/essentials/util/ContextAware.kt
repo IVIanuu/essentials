@@ -14,17 +14,13 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.util.ext
+package com.ivianuu.essentials.util
 
 import android.content.Context
-import android.widget.Toast
-import com.ivianuu.essentials.util.ContextAware
 
-fun Context.toast(message: CharSequence, duration: Int = Toast.LENGTH_SHORT): Toast =
-    Toast.makeText(this, message, duration).apply { show() }
-
-fun Context.toast(message: Int, duration: Int = Toast.LENGTH_SHORT) =
-    toast(getString(message), duration)
-
-fun ContextAware.toast(message: CharSequence) = providedContext.toast(message)
-fun ContextAware.toast(message: Int) = providedContext.toast(message)
+/**
+ * Marks a component as context aware
+ */
+interface ContextAware {
+    val providedContext: Context
+}

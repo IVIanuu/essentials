@@ -23,13 +23,12 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
-import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.support.v4.content.res.ResourcesCompat
 import android.util.TypedValue
-import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import com.ivianuu.essentials.util.ContextAware
 
 fun Context.getResAnim(resId: Int): Animation = AnimationUtils.loadAnimation(this, resId)
 
@@ -71,69 +70,37 @@ fun Context.getResDrawable(resId: Int): Drawable =
 
 fun Context.getResFont(resId: Int): Typeface = ResourcesCompat.getFont(this, resId)!!
 
-fun Fragment.getResAnim(resId: Int) = requireActivity().getResAnim(resId)
+fun ContextAware.getResAnim(resId: Int) = providedContext.getResAnim(resId)
 
-fun Fragment.getResIntArray(resId: Int) = requireActivity().getResIntArray(resId)
+fun ContextAware.getResIntArray(resId: Int) = providedContext.getResIntArray(resId)
 
-fun Fragment.getResStringArray(resId: Int) = requireActivity().getResStringArray(resId)
+fun ContextAware.getResStringArray(resId: Int) = providedContext.getResStringArray(resId)
 
-fun Fragment.getResTextArray(resId: Int) = requireActivity().getResTextArray(resId)
+fun ContextAware.getResTextArray(resId: Int) = providedContext.getResTextArray(resId)
 
-fun Fragment.getResTypedArray(resId: Int) = requireActivity().getResTypedArray(resId)
+fun ContextAware.getResTypedArray(resId: Int) = providedContext.getResTypedArray(resId)
 
-fun Fragment.getResBool(resId: Int) = requireActivity().getResBool(resId)
+fun ContextAware.getResBool(resId: Int) = providedContext.getResBool(resId)
 
-fun Fragment.getResDimen(resId: Int) = requireActivity().getResDimen(resId)
+fun ContextAware.getResDimen(resId: Int) = providedContext.getResDimen(resId)
 
-fun Fragment.getResDimenPx(resId: Int) = requireActivity().getResDimenPx(resId)
+fun ContextAware.getResDimenPx(resId: Int) = providedContext.getResDimenPx(resId)
 
-fun Fragment.getResDimenPxOffset(resId: Int) = requireActivity().getResDimenPxOffset(resId)
+fun ContextAware.getResDimenPxOffset(resId: Int) = providedContext.getResDimenPxOffset(resId)
 
-fun Fragment.getResFloat(resId: Int) = requireActivity().getResFloat(resId)
+fun ContextAware.getResFloat(resId: Int) = providedContext.getResFloat(resId)
 
-fun Fragment.getResInt(resId: Int): Int = requireActivity().getResInt(resId)
+fun ContextAware.getResInt(resId: Int): Int = providedContext.getResInt(resId)
 
-fun Fragment.getResBitmap(resId: Int) = requireActivity().getResBitmap(resId)
+fun ContextAware.getResBitmap(resId: Int) = providedContext.getResBitmap(resId)
 
-fun Fragment.getResColor(resId: Int) = requireActivity().getResColor(resId)
+fun ContextAware.getResColor(resId: Int) = providedContext.getResColor(resId)
 
-fun Fragment.getResColorStateList(resId: Int) = requireActivity().getResColorStateList(resId)
+fun ContextAware.getResColorStateList(resId: Int) = providedContext.getResColorStateList(resId)
 
-fun Fragment.getResDrawable(resId: Int) = requireActivity().getResDrawable(resId)
+fun ContextAware.getResDrawable(resId: Int) = providedContext.getResDrawable(resId)
 
-fun Fragment.getResFont(resId: Int) = requireActivity().getResFont(resId)
-
-fun View.getResAnim(resId: Int) = context.getResAnim(resId)
-
-fun View.getResIntArray(resId: Int) = context.getResIntArray(resId)
-
-fun View.getResStringArray(resId: Int) = context.getResStringArray(resId)
-
-fun View.getResTextArray(resId: Int) = context.getResTextArray(resId)
-
-fun View.getResTypedArray(resId: Int) = context.getResTypedArray(resId)
-
-fun View.getResBool(resId: Int) = context.getResBool(resId)
-
-fun View.getResDimen(resId: Int) = context.getResDimen(resId)
-
-fun View.getResDimenPx(resId: Int) = context.getResDimenPx(resId)
-
-fun View.getResDimenPxOffset(resId: Int) = context.getResDimenPxOffset(resId)
-
-fun View.getResFloat(resId: Int) = context.getResFloat(resId)
-
-fun View.getResInt(resId: Int): Int = context.getResInt(resId)
-
-fun View.getResBitmap(resId: Int) = context.getResBitmap(resId)
-
-fun View.getResColor(resId: Int) = context.getResColor(resId)
-
-fun View.getResColorStateList(resId: Int) = context.getResColorStateList(resId)
-
-fun View.getResDrawable(resId: Int) = context.getResDrawable(resId)
-
-fun View.getResFont(resId: Int) = context.getResFont(resId)
+fun ContextAware.getResFont(resId: Int) = providedContext.getResFont(resId)
 
 private object ValueHolder {
     val VALUE = TypedValue()

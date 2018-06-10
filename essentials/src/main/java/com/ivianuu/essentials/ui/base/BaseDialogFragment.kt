@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.ui.base
 
+import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
@@ -27,6 +28,7 @@ import com.ivianuu.essentials.injection.Injectable
 import com.ivianuu.essentials.injection.KtHasSupportFragmentInjector
 import com.ivianuu.essentials.injection.KtHasViewInjector
 import com.ivianuu.essentials.ui.common.back.BackListener
+import com.ivianuu.essentials.util.ContextAware
 import com.ivianuu.essentials.util.ViewInjectionContextWrapper
 import com.ivianuu.essentials.util.rx.DelegateLifecycleScopeProvider
 
@@ -41,7 +43,7 @@ import javax.inject.Inject
  */
 abstract class BaseDialogFragment : NaviAppCompatDialogFragment(),
     BackListener, KtHasViewInjector, KtHasSupportFragmentInjector, Injectable, NamedScreen,
-    DelegateLifecycleScopeProvider<FragmentEvent> {
+    ContextAware, DelegateLifecycleScopeProvider<FragmentEvent> {
 
     @Inject lateinit var router: Router
 
@@ -52,6 +54,9 @@ abstract class BaseDialogFragment : NaviAppCompatDialogFragment(),
 
     override val lifecycleScopeProvider =
         FragmentLifecycleScopeProvider.from(this)
+
+    override val providedContext: Context
+        get() = requireActivity()
 
     override fun onCreateView(
         inflater: LayoutInflater,

@@ -32,7 +32,9 @@ fun <T : Any> Router.results(resultCode: Int): Observable<T> = Observable.create
 
     e.setCancellable { removeResultListener(resultCode) }
 
-    setResultListener(resultCode, listener)
+    if (!e.isDisposed) {
+        setResultListener(resultCode, listener)
+    }
 }
 
 fun <T : Any> Router.navigateToForResult(key: ResultKey): Observable<T> {

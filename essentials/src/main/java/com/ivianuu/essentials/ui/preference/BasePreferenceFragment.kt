@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.ui.preference
 
+import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.preference.PreferenceScreen
@@ -29,6 +30,7 @@ import com.ivianuu.essentials.injection.Injectable
 import com.ivianuu.essentials.injection.KtHasSupportFragmentInjector
 import com.ivianuu.essentials.injection.KtHasViewInjector
 import com.ivianuu.essentials.ui.common.back.BackListener
+import com.ivianuu.essentials.util.ContextAware
 import com.ivianuu.essentials.util.ViewInjectionContextWrapper
 import com.ivianuu.essentials.util.rx.DelegateLifecycleScopeProvider
 
@@ -44,7 +46,7 @@ import javax.inject.Inject
 abstract class BasePreferenceFragment : NaviPreferenceFragmentCompat(),
     BackListener, KtHasSupportFragmentInjector,
     KtHasViewInjector, Injectable, NamedScreen,
-    DelegateLifecycleScopeProvider<FragmentEvent> {
+    ContextAware, DelegateLifecycleScopeProvider<FragmentEvent> {
 
     @Inject lateinit var router: Router
 
@@ -57,6 +59,9 @@ abstract class BasePreferenceFragment : NaviPreferenceFragmentCompat(),
 
     override val lifecycleScopeProvider =
         FragmentLifecycleScopeProvider.from(this)
+
+    override val providedContext: Context
+        get() = requireActivity()
 
     override fun onCreateView(
         inflater: LayoutInflater,
