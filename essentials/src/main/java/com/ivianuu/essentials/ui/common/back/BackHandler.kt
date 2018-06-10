@@ -121,13 +121,17 @@ class BackHandler @Inject constructor(private val application: Application) : Ap
 
     private fun attachIndexer(fm: FragmentManager) {
         fm.doOnFragmentCreated(true) { _: FragmentManager, f: Fragment, savedInstanceState: Bundle? ->
-            if (savedInstanceState == null) {
-                val args = f.arguments ?: Bundle().also { f.arguments = it }
-                if (!args.containsKey(KEY_TRANSACTION_INDEX)) {
-                    val indexer = transactionIndexers[f.requireActivity()]
-                    if (indexer != null) {
-                        args.putInt(KEY_TRANSACTION_INDEX, indexer.getAndIncrement())
-                    }
+            onFragmentCreated(f, savedInstanceState)
+        }
+    }
+
+    private fun onFragmentCreated(fragment: Fragment, savedInstanceState: Bundle?) {
+        if (savedInstanceState == null) {
+            val args = fragment.arguments ?: Bundle().also { fragment.arguments = it }
+            if (!args.containsKey(KEY_TRANSACTION_INDEX)) {
+                val indexer = transactionIndexers[fragment.requireActivity()]
+                if (indexer != null) {
+                    args.putInt(KEY_TRANSACTION_INDEX, indexer.getAndIncrement())
                 }
             }
         }

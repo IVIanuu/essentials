@@ -34,13 +34,17 @@ import com.ivianuu.traveler.lifecycleobserver.NavigatorLifecycleObserver
 val Fragment.localRouter: Router
     get() {
         val parent = parentFragment
-        return parent?.getRouter(containerId) ?: requireActivity().getRouter(containerId)
+        return parent?.getRouter(containerId, false)
+                ?: requireActivity().getRouter(containerId, false)
+                ?: throw IllegalStateException("not attached")
     }
 
 val Fragment.rootRouter: Router
     get() {
         val parent = parentFragment
-        return parent?.rootRouter ?: requireActivity().getRouter(containerId)
+        return parent?.rootRouter
+                ?: requireActivity().getRouter(containerId, false)
+                ?: throw IllegalStateException("not attached")
     }
 
 fun ViewModelStoreOwner.getTravelerStore() =
@@ -49,11 +53,20 @@ fun ViewModelStoreOwner.getTravelerStore() =
 fun ViewModelStoreOwner.getTraveler(containerId: Int) =
     getTravelerStore().getTraveler(containerId)
 
+fun ViewModelStoreOwner.getTraveler(containerId: Int, createIfNeeded: Boolean) =
+        getTravelerStore().getTraveler(containerId, createIfNeeded)
+
 fun ViewModelStoreOwner.getNavigatorHolder(containerId: Int) =
     getTraveler(containerId).navigatorHolder
 
+fun ViewModelStoreOwner.getNavigatorHolder(containerId: Int, createIfNeeded: Boolean) =
+        getTraveler(containerId, createIfNeeded)?.navigatorHolder
+
 fun ViewModelStoreOwner.getRouter(containerId: Int) =
     getTraveler(containerId).router
+
+fun ViewModelStoreOwner.getRouter(containerId: Int, createIfNeeded: Boolean) =
+        getTraveler(containerId, createIfNeeded)?.router
 
 fun <T> T.setupRouter(
     navigator: Navigator,

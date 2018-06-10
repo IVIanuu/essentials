@@ -32,8 +32,17 @@ class TravelerStore : ViewModel() {
         travelers.values.forEach { it.navigatorHolder.removeNavigator() }
     }
 
-    fun getTraveler(containerId: Int) =
-        travelers.getOrPut(containerId) { Traveler.create() }
+    fun getTraveler(containerId: Int) = getTraveler(containerId, true)!!
+
+    fun getTraveler(containerId: Int, createIfNeeded: Boolean): Traveler<Router>? {
+        var traveler = travelers[containerId]
+        if (traveler == null && createIfNeeded) {
+            traveler = Traveler.create()
+                .also { travelers[containerId] = it }
+        }
+
+        return traveler
+    }
 
     fun removeTraveler(containerId: Int) {
         travelers.remove(containerId)?.navigatorHolder?.removeNavigator()

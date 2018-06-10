@@ -18,31 +18,21 @@ package com.ivianuu.essentials.ui.base
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentActivity
 import android.view.View
 import com.ivianuu.autodispose.navi.android.ActivityEvent
 import com.ivianuu.autodispose.navi.android.ActivityLifecycleScopeProvider
-import com.ivianuu.essentials.injection.EssentialsFragmentBindingModule_
 import com.ivianuu.essentials.injection.Injectable
 import com.ivianuu.essentials.injection.KtHasSupportFragmentInjector
 import com.ivianuu.essentials.injection.KtHasViewInjector
 import com.ivianuu.essentials.ui.common.back.BackHandler
-import com.ivianuu.essentials.ui.traveler.getNavigatorHolder
-import com.ivianuu.essentials.ui.traveler.getRouter
-import com.ivianuu.essentials.ui.traveler.getTraveler
 import com.ivianuu.essentials.ui.traveler.navigator.KeyFragmentAppNavigator
 import com.ivianuu.essentials.ui.traveler.setupRouter
 import com.ivianuu.essentials.util.ext.unsafeLazy
 import com.ivianuu.essentials.util.rx.DelegateLifecycleScopeProvider
-
 import com.ivianuu.essentials.util.screenlogger.NamedScreen
 import com.ivianuu.navi.android.NaviAppCompatActivity
-import com.ivianuu.rxactivityresult.RxActivityResult
-import com.ivianuu.rxpermissions.RxPermissions
 import com.ivianuu.traveler.Navigator
 import com.ivianuu.traveler.Router
-import dagger.Module
-import dagger.Provides
 import dagger.android.DispatchingAndroidInjector
 import javax.inject.Inject
 
@@ -87,33 +77,4 @@ abstract class BaseActivity : NaviAppCompatActivity(), KtHasSupportFragmentInjec
             super.onBackPressed()
         }
     }
-}
-
-@Module(includes = [EssentialsFragmentBindingModule_::class])
-object EssentialsActivityModule {
-
-    @JvmStatic
-    @Provides
-    fun provideActivityResultStarter(activity: FragmentActivity) =
-        RxActivityResult.get(activity)
-
-    @JvmStatic
-    @Provides
-    fun providePermissionRequester(activity: FragmentActivity) = RxPermissions.get(activity)
-
-    @JvmStatic
-    @Provides
-    fun provideTraveler(activity: BaseActivity) =
-        activity.getTraveler(activity.fragmentContainer)
-
-    @JvmStatic
-    @Provides
-    fun provideNavigatorHolder(activity: BaseActivity) =
-        activity.getNavigatorHolder(activity.fragmentContainer)
-
-    @JvmStatic
-    @Provides
-    fun provideRouter(activity: BaseActivity) =
-        activity.getRouter(activity.fragmentContainer)
-
 }
