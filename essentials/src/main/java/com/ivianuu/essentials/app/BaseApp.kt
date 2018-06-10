@@ -21,15 +21,14 @@ import com.ivianuu.essentials.injection.KtHasViewInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.DaggerApplication
 import javax.inject.Inject
-import javax.inject.Provider
 
 /**
  * App
  */
 abstract class BaseApp : DaggerApplication(), KtHasViewInjector {
 
-    @Inject internal lateinit var appInitializers: Set<@JvmSuppressWildcards Provider<AppInitializer>>
-    @Inject internal lateinit var appServices: Set<@JvmSuppressWildcards Provider<AppService>>
+    @Inject internal lateinit var appInitializers: Set<@JvmSuppressWildcards AppInitializer>
+    @Inject internal lateinit var appServices: Set<@JvmSuppressWildcards AppService>
 
     @Inject override lateinit var viewInjector: DispatchingAndroidInjector<View>
 
@@ -39,11 +38,11 @@ abstract class BaseApp : DaggerApplication(), KtHasViewInjector {
         appServices.forEach(this::startAppService)
     }
 
-    protected open fun initializeAppInitializer(appInitializer: Provider<AppInitializer>) {
-        appInitializer.get().init(this)
+    protected open fun initializeAppInitializer(appInitializer: AppInitializer) {
+        appInitializer.init(this)
     }
 
-    protected open fun startAppService(appService: Provider<AppService>) {
-        appService.get().start()
+    protected open fun startAppService(appService: AppService) {
+        appService.start()
     }
 }
