@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.sample.ui
 
+import android.arch.lifecycle.Lifecycle
 import android.os.Bundle
 import com.ivianuu.daggerextensions.AutoContribute
 import com.ivianuu.essentials.injection.ActivityBindingModule
@@ -42,7 +43,7 @@ class MainActivity : BaseActivity() {
             .doOnDispose { d { "on dispose" } }
             .doOnSubscribe { d { "on sub" } }
             .doOnNext { d { "do on next $it" } }
-            .autoDisposable(this)
+            .autoDisposable(this, Lifecycle.Event.ON_PAUSE)
             .subscribe()
 
         if (savedInstanceState == null) {

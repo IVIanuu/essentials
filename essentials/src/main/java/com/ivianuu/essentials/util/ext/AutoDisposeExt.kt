@@ -18,9 +18,11 @@ package com.ivianuu.essentials.util.ext
 
 import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.LifecycleOwner
+import android.view.View
 import com.uber.autodispose.*
 import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider
 import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.android.scope
 import com.uber.autodispose.kotlin.autoDisposable
 import io.reactivex.*
 import io.reactivex.disposables.Disposable
@@ -56,6 +58,21 @@ fun <T> Observable<T>.autoDisposable(owner: LifecycleOwner, untilEvent: Lifecycl
 
 fun <T> Single<T>.autoDisposable(owner: LifecycleOwner, untilEvent: Lifecycle.Event) =
     autoDisposable(AndroidLifecycleScopeProvider.from(owner).toScopeProvider(untilEvent))
+
+fun Completable.autoDisposable(view: View) =
+    autoDisposable(view.scope())
+
+fun <T> Flowable<T>.autoDisposable(view: View) =
+    autoDisposable(view.scope())
+
+fun <T> Maybe<T>.autoDisposable(view: View) =
+    autoDisposable(view.scope())
+
+fun <T> Observable<T>.autoDisposable(view: View) =
+    autoDisposable(view.scope())
+
+fun <T> Single<T>.autoDisposable(view: View) =
+    autoDisposable(view.scope())
 
 fun <E> LifecycleScopeProvider<E>.toScopeProvider() = ScopeProvider {
     val currentState = peekLifecycle() ?: throw LifecycleNotStartedException()
