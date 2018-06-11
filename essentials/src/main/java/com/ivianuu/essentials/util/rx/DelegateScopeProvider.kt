@@ -16,7 +16,7 @@
 
 package com.ivianuu.essentials.util.rx
 
-import com.ivianuu.autodispose.ScopeProvider
+import com.uber.autodispose.ScopeProvider
 
 /**
  * A [ScopeProvider] which wraps another [ScopeProvider]

@@ -19,7 +19,7 @@ package com.ivianuu.essentials.util.ext
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.view.View
-import com.ivianuu.autodispose.arch.scope
+import com.uber.autodispose.android.lifecycle.scope
 
 val Fragment.appCompatActivity: AppCompatActivity?
     get() = activity as AppCompatActivity?

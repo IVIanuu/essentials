@@ -16,7 +16,7 @@
 
 package com.ivianuu.essentials.util.rx
 
-import com.ivianuu.autodispose.lifecycle.LifecycleScopeProvider
+import com.uber.autodispose.LifecycleScopeProvider
 
 /**
  * A [LifecycleScopeProvider] which wraps another [lifecycleScopeProvider]
