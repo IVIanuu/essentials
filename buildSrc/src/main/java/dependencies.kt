@@ -10,7 +10,7 @@ object Versions {
 
     const val androidGradlePlugin = "3.1.3"
     const val archLifecycle = "1.1.1"
-    const val autoDispose = "77e949af95"
+    const val autoDispose = "c83ab3e78d"
     const val butterknife = "9.0.0-SNAPSHOT"
     const val constraintLayout = "1.1.0"
     const val dagger = "2.16"

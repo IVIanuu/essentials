@@ -16,13 +16,7 @@
 
 package com.ivianuu.essentials.util.ext
 
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.*
-
-val COMPUTATION get() = Schedulers.computation()
-val MAIN_THREAD get() = AndroidSchedulers.mainThread()
-val IO get() = Schedulers.io()
 
 fun <T : Any> BehaviorSubject<T>.requireValue() =
     value ?: throw IllegalStateException("value is null")
