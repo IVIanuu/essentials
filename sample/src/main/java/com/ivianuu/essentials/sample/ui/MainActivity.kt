@@ -17,7 +17,7 @@
 package com.ivianuu.essentials.sample.ui
 
 import android.os.Bundle
-import com.ivianuu.autodispose.arch.autoDispose
+import com.ivianuu.autodispose.arch.autoDisposable
 import com.ivianuu.daggerextensions.AutoContribute
 import com.ivianuu.essentials.injection.ActivityBindingModule
 import com.ivianuu.essentials.injection.ActivityBindingSet
@@ -42,8 +42,8 @@ class MainActivity : BaseActivity() {
             .doOnDispose { d { "on dispose" } }
             .doOnSubscribe { d { "on sub" } }
             .doOnNext { d { "do on next $it" } }
+            .autoDisposable(this)
             .subscribe()
-            .autoDispose(this)
 
         if (savedInstanceState == null) {
             router.newRootScreen(MultipleChildsKey)
