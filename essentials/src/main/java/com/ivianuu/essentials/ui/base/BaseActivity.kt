@@ -24,6 +24,7 @@ import com.ivianuu.essentials.injection.Injectable
 import com.ivianuu.essentials.injection.KtHasSupportFragmentInjector
 import com.ivianuu.essentials.injection.KtHasViewInjector
 import com.ivianuu.essentials.ui.common.back.BackHandler
+import com.ivianuu.essentials.ui.traveler.RouterHolder
 import com.ivianuu.essentials.ui.traveler.navigator.KeyFragmentAppNavigator
 import com.ivianuu.essentials.util.ext.setupRouter
 import com.ivianuu.essentials.util.ext.unsafeLazy
@@ -37,7 +38,7 @@ import javax.inject.Inject
  * Base activity
  */
 abstract class BaseActivity : AppCompatActivity(), KtHasSupportFragmentInjector,
-    KtHasViewInjector, Injectable, NamedScreen {
+    KtHasViewInjector, Injectable, NamedScreen, RouterHolder {
 
     @Inject lateinit var backHandler: BackHandler
 
@@ -56,7 +57,7 @@ abstract class BaseActivity : AppCompatActivity(), KtHasSupportFragmentInjector,
         )
     }
 
-    lateinit var router: Router
+    override lateinit var router: Router
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

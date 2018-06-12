@@ -24,6 +24,7 @@ import com.ivianuu.daggerextensions.AutoContribute
 import com.ivianuu.daggerextensions.view.ViewInjection
 import com.ivianuu.essentials.injection.PerView
 import com.ivianuu.essentials.injection.ViewBindingModule
+import com.ivianuu.essentials.ui.traveler.RouterHolder
 import com.ivianuu.traveler.Router
 import kotlinx.android.synthetic.main.view_child_navigation.view.*
 import javax.inject.Inject
@@ -37,10 +38,10 @@ import javax.inject.Inject
 class ChildNavigationView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null, defStyleAttr: Int = 0
-) : LinearLayout(context, attrs, defStyleAttr) {
+) : LinearLayout(context, attrs, defStyleAttr), RouterHolder {
 
     @Inject lateinit var key: ChildNavigationKey
-    @field:LocalRouter @Inject lateinit var router: Router
+    @field:LocalRouter @Inject override lateinit var router: Router
 
     override fun onFinishInflate() {
         super.onFinishInflate()
@@ -55,6 +56,9 @@ class ChildNavigationView @JvmOverloads constructor(
 
         pop_to_root.setOnClickListener { router.backToRoot() }
         prev.setOnClickListener { router.exit() }
+
+        next.navigateOnClick { ChildNavigationKey(key.index, key.count + 1) }
+
         next.setOnClickListener {
             router.navigateTo(ChildNavigationKey(key.index, key.count + 1))
         }

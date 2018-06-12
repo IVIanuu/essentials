@@ -26,6 +26,7 @@ import com.ivianuu.essentials.injection.Injectable
 import com.ivianuu.essentials.injection.KtHasSupportFragmentInjector
 import com.ivianuu.essentials.injection.KtHasViewInjector
 import com.ivianuu.essentials.ui.common.back.BackListener
+import com.ivianuu.essentials.ui.traveler.RouterHolder
 import com.ivianuu.essentials.util.ContextAware
 import com.ivianuu.essentials.util.ViewInjectionContextWrapper
 import com.ivianuu.essentials.util.screenlogger.NamedScreen
@@ -37,9 +38,9 @@ import javax.inject.Inject
  * Base fragment
  */
 abstract class BaseFragment : Fragment(), BackListener, KtHasSupportFragmentInjector,
-    KtHasViewInjector, Injectable, NamedScreen, ContextAware {
+    KtHasViewInjector, Injectable, NamedScreen, ContextAware, RouterHolder {
 
-    @Inject lateinit var router: Router
+    @Inject override lateinit var router: Router
 
     @Inject override lateinit var supportFragmentInjector: DispatchingAndroidInjector<Fragment>
     @Inject override lateinit var viewInjector: DispatchingAndroidInjector<View>
