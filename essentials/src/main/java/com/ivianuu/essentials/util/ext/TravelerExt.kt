@@ -33,7 +33,7 @@ import com.ivianuu.traveler.Navigator
 import com.ivianuu.traveler.Router
 import com.ivianuu.traveler.lifecycleobserver.NavigatorLifecycleObserver
 
-inline val Fragment.localRouter: Router
+val Fragment.localRouter: Router
     get() {
         val parent = parentFragment
         return parent?.getRouter(containerId, false)
@@ -41,7 +41,7 @@ inline val Fragment.localRouter: Router
                 ?: throw IllegalStateException("not attached")
     }
 
-inline val Fragment.rootRouter: Router
+val Fragment.rootRouter: Router
     get() {
         val parent = parentFragment
         return parent?.rootRouter
