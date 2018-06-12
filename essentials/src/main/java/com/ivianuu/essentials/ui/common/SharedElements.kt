@@ -26,21 +26,26 @@ import java.lang.ref.WeakReference
 class SharedElements {
 
     val isEmpty
-        get() = sharedElementViews.isEmpty()
+        get() = sharedElements.isEmpty()
 
-    private val sharedElementViews = mutableMapOf<WeakReference<View>, String?>()
+    private val sharedElements =
+        mutableMapOf<WeakReference<View>, String>()
 
-    fun addSharedElement(view: View, name: String = view.transitionName) {
-        sharedElementViews[WeakReference(view)] = name
+    fun addSharedElement(view: View) {
+        sharedElements[WeakReference(view)] = view.transitionName
     }
 
     fun applyToTransaction(transaction: FragmentTransaction) {
-        for ((viewRef, customTransitionName) in sharedElementViews) {
-            viewRef.get()?.apply {
-                if (customTransitionName != null) {
-                    transaction.addSharedElement(this, customTransitionName)
-                }
-            }
-        }
+        sharedElements
+            .map { it.key.get() to it.value }
+            .filter { it.first != null }
+            .forEach { transaction.addSharedElement(it.first!!, it.second) }
     }
+}
+
+fun sharedElementsOf(vararg views: View) =
+    sharedElementsOf(views.toList())
+
+fun sharedElementsOf(views: Collection<View>) = SharedElements().apply {
+    views.forEach { addSharedElement(it) }
 }
