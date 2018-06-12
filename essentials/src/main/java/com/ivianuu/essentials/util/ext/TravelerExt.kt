@@ -24,6 +24,9 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.containerId
+import android.support.v7.preference.Preference
+import android.support.v7.widget.Toolbar
+import android.view.View
 import com.ivianuu.essentials.ui.traveler.TravelerStore
 import com.ivianuu.essentials.ui.traveler.navigator.FragmentSwapperNavigator.HideStrategy
 import com.ivianuu.essentials.ui.traveler.navigator.KeyFragmentAppNavigator
@@ -139,4 +142,30 @@ inline fun <T> T.setupKeyFragmentSwapperRouter(
         containerId, hideStrategy, swapOnReselection
     )
     return setupRouter(navigator, containerId)
+}
+
+inline fun Toolbar.exitOnNavigationClick(router: Router) {
+    setNavigationOnClickListener { router.exit() }
+}
+
+inline fun View.navigateOnClick(router: Router, crossinline key: () -> Any) {
+    setOnClickListener { router.navigateTo(key()) }
+}
+
+inline fun View.navigateOnClick(router: Router, key: Any) {
+    setOnClickListener { router.navigateTo(key) }
+}
+
+inline fun Preference.navigateOnClick(router: Router, crossinline key: () -> Any) {
+    setOnPreferenceClickListener {
+        router.navigateTo(key())
+        true
+    }
+}
+
+inline fun Preference.navigateOnClick(router: Router, key: Any) {
+    setOnPreferenceClickListener {
+        router.navigateTo(key)
+        true
+    }
 }

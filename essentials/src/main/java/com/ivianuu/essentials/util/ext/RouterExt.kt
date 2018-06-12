@@ -17,11 +17,14 @@
 package com.ivianuu.essentials.util.ext
 
 import com.ivianuu.essentials.ui.traveler.key.ResultKey
+import com.ivianuu.traveler.ResultListener
 import com.ivianuu.traveler.Router
-import com.ivianuu.traveler.result.ResultListener
+import com.ivianuu.traveler.commands.Command
+import com.ivianuu.traveler.onCommandApplied
+import com.ivianuu.traveler.onCommandsApplied
 import io.reactivex.Observable
 
-fun <T : Any> Router.results(resultCode: Int): Observable<T> = Observable.create<T> { e ->
+fun <T : Any> Router.results(resultCode: Int): Observable<T> = Observable.create { e ->
     val listener = object : ResultListener {
         override fun onResult(result: Any) {
             if (!e.isDisposed) {
@@ -30,11 +33,31 @@ fun <T : Any> Router.results(resultCode: Int): Observable<T> = Observable.create
         }
     }
 
-    e.setCancellable { removeResultListener(resultCode) }
+    e.setCancellable { removeResultListener(resultCode, listener) }
 
     if (!e.isDisposed) {
-        setResultListener(resultCode, listener)
+        addResultListener(resultCode, listener)
     }
+}
+
+fun Router.commandsApplied(): Observable<Array<out Command>> = Observable.create { e ->
+    val listener = onCommandsApplied {
+        if (!e.isDisposed) {
+            e.onNext(it)
+        }
+    }
+
+    e.setCancellable { removeNavigationListener(listener) }
+}
+
+fun Router.commandApplied(): Observable<Command> = Observable.create { e ->
+    val listener = onCommandApplied {
+        if (!e.isDisposed) {
+            e.onNext(it)
+        }
+    }
+
+    e.setCancellable { removeNavigationListener(listener) }
 }
 
 fun <T : Any> Router.navigateToForResult(key: ResultKey): Observable<T> {
