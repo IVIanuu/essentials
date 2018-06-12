@@ -16,22 +16,7 @@
 
 package com.ivianuu.essentials.ui.common.back
 
-import android.content.Context
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-
-interface ViewFactory {
-    fun createView(layoutRes: Int): View
-}
-
-class RealViewFactory : ViewFactory {
-    lateinit var context: Context
-    override fun createView(layoutRes: Int): View {
-        return LayoutInflater.from(context)
-            .inflate(layoutRes, null, false)
-    }
-}
 
 internal class TransactionIndexer {
 
