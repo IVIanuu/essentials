@@ -27,30 +27,21 @@ import com.ivianuu.essentials.util.rx.DisposableScopeProviderImpl
 abstract class BaseEpoxyModel : EpoxyModelWithHolder<BaseEpoxyHolder>(),
     DisposableScopeProvider by DisposableScopeProviderImpl() {
 
-    private var bound = false
     private var currentHolder: BaseEpoxyHolder? = null
 
     @CallSuper
     override fun bind(holder: BaseEpoxyHolder) {
         super.bind(holder)
-        if (bound) {
-            unbindInternal()
-        }
+        unbindInternal()
 
         holder.boundModel = this
         currentHolder = holder
-
-        bound = true
     }
 
     @CallSuper
     override fun unbind(holder: BaseEpoxyHolder) {
         super.unbind(holder)
-        if (bound) {
-            unbindInternal()
-        }
-
-        bound = false
+        unbindInternal()
     }
 
     private fun unbindInternal() {

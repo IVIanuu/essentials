@@ -18,9 +18,9 @@ package com.ivianuu.essentials.ui.base
 
 import android.support.v4.app.FragmentActivity
 import com.ivianuu.essentials.injection.EssentialsFragmentBindingModule_
-import com.ivianuu.essentials.ui.traveler.getNavigatorHolder
-import com.ivianuu.essentials.ui.traveler.getRouter
-import com.ivianuu.essentials.ui.traveler.getTraveler
+import com.ivianuu.essentials.util.ext.getNavigatorHolder
+import com.ivianuu.essentials.util.ext.getRouter
+import com.ivianuu.essentials.util.ext.getTraveler
 import com.ivianuu.rxactivityresult.RxActivityResult
 import com.ivianuu.rxpermissions.RxPermissions
 import dagger.Module

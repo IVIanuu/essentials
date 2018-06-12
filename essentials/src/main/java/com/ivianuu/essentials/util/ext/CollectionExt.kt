@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+@file:Suppress("NOTHING_TO_INLINE") // Aliases to other public API.
+
 package com.ivianuu.essentials.util.ext
 
 import java.util.*
@@ -78,11 +80,11 @@ inline fun <T> List<T>.forEachReversedWithIndex(action: (Int, T) -> Unit) {
     }
 }
 
-fun MutableList<*>.swap(from: Int, to: Int) {
+inline fun MutableList<*>.swap(from: Int, to: Int) {
     Collections.swap(this, from, to)
 }
 
-fun <T> List<T>.swapped(from: Int, to: Int): List<T> {
+inline fun <T> List<T>.swapped(from: Int, to: Int): List<T> {
     val copy = toMutableList()
     copy.swap(from, to)
     return copy

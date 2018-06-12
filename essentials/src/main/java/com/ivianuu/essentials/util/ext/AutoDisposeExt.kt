@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+@file:Suppress("NOTHING_TO_INLINE") // Aliases to other public API.
+
 package com.ivianuu.essentials.util.ext
 
 import android.arch.lifecycle.Lifecycle
@@ -29,49 +31,49 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.exceptions.OnErrorNotImplementedException
 import io.reactivex.plugins.RxJavaPlugins
 
-fun Completable.autoDisposable(owner: LifecycleOwner) =
+inline fun Completable.autoDisposable(owner: LifecycleOwner) =
         autoDisposable(owner.scope())
 
-fun <T> Flowable<T>.autoDisposable(owner: LifecycleOwner) =
+inline fun <T> Flowable<T>.autoDisposable(owner: LifecycleOwner) =
     autoDisposable(owner.scope())
 
-fun <T> Maybe<T>.autoDisposable(owner: LifecycleOwner) =
+inline fun <T> Maybe<T>.autoDisposable(owner: LifecycleOwner) =
     autoDisposable(owner.scope())
 
-fun <T> Observable<T>.autoDisposable(owner: LifecycleOwner) =
+inline fun <T> Observable<T>.autoDisposable(owner: LifecycleOwner) =
         autoDisposable(owner.scope())
 
-fun <T> Single<T>.autoDisposable(owner: LifecycleOwner) =
+inline fun <T> Single<T>.autoDisposable(owner: LifecycleOwner) =
     autoDisposable(owner.scope())
 
-fun Completable.autoDisposable(owner: LifecycleOwner, untilEvent: Lifecycle.Event) =
+inline fun Completable.autoDisposable(owner: LifecycleOwner, untilEvent: Lifecycle.Event) =
     autoDisposable(AndroidLifecycleScopeProvider.from(owner).toScopeProvider(untilEvent))
 
-fun <T> Flowable<T>.autoDisposable(owner: LifecycleOwner, untilEvent: Lifecycle.Event) =
+inline fun <T> Flowable<T>.autoDisposable(owner: LifecycleOwner, untilEvent: Lifecycle.Event) =
     autoDisposable(AndroidLifecycleScopeProvider.from(owner).toScopeProvider(untilEvent))
 
-fun <T> Maybe<T>.autoDisposable(owner: LifecycleOwner, untilEvent: Lifecycle.Event) =
+inline fun <T> Maybe<T>.autoDisposable(owner: LifecycleOwner, untilEvent: Lifecycle.Event) =
     autoDisposable(AndroidLifecycleScopeProvider.from(owner).toScopeProvider(untilEvent))
 
-fun <T> Observable<T>.autoDisposable(owner: LifecycleOwner, untilEvent: Lifecycle.Event) =
+inline fun <T> Observable<T>.autoDisposable(owner: LifecycleOwner, untilEvent: Lifecycle.Event) =
     autoDisposable(AndroidLifecycleScopeProvider.from(owner).toScopeProvider(untilEvent))
 
-fun <T> Single<T>.autoDisposable(owner: LifecycleOwner, untilEvent: Lifecycle.Event) =
+inline fun <T> Single<T>.autoDisposable(owner: LifecycleOwner, untilEvent: Lifecycle.Event) =
     autoDisposable(AndroidLifecycleScopeProvider.from(owner).toScopeProvider(untilEvent))
 
-fun Completable.autoDisposable(view: View) =
+inline fun Completable.autoDisposable(view: View) =
     autoDisposable(view.scope())
 
-fun <T> Flowable<T>.autoDisposable(view: View) =
+inline fun <T> Flowable<T>.autoDisposable(view: View) =
     autoDisposable(view.scope())
 
-fun <T> Maybe<T>.autoDisposable(view: View) =
+inline fun <T> Maybe<T>.autoDisposable(view: View) =
     autoDisposable(view.scope())
 
-fun <T> Observable<T>.autoDisposable(view: View) =
+inline fun <T> Observable<T>.autoDisposable(view: View) =
     autoDisposable(view.scope())
 
-fun <T> Single<T>.autoDisposable(view: View) =
+inline fun <T> Single<T>.autoDisposable(view: View) =
     autoDisposable(view.scope())
 
 fun <E> LifecycleScopeProvider<E>.toScopeProvider() = ScopeProvider {
@@ -106,7 +108,7 @@ fun <T : Any> ObservableSubscribeProxy<T>.subscribeBy(
     onComplete: () -> Unit = onCompleteStub,
     onNext: (T) -> Unit = onNextStub
 ): Disposable {
-    return if (onError === onErrorStub && onComplete === onCompleteStub) {
+    return if (onError == onErrorStub && onComplete == onCompleteStub) {
         subscribe(onNext)
     } else {
         subscribe(onNext, onError, onComplete)
@@ -118,7 +120,7 @@ fun <T : Any> FlowableSubscribeProxy<T>.subscribeBy(
     onComplete: () -> Unit = onCompleteStub,
     onNext: (T) -> Unit = onNextStub
 ): Disposable {
-    return if (onError === onErrorStub && onComplete === onCompleteStub) {
+    return if (onError == onErrorStub && onComplete == onCompleteStub) {
         subscribe(onNext)
     } else {
         subscribe(onNext, onError, onComplete)
@@ -129,7 +131,7 @@ fun <T : Any> SingleSubscribeProxy<T>.subscribeBy(
     onError: (Throwable) -> Unit = onErrorStub,
     onSuccess: (T) -> Unit = onNextStub
 ): Disposable {
-    return if (onError === onErrorStub) {
+    return if (onError == onErrorStub) {
         subscribe(onSuccess)
     } else {
         subscribe(onSuccess, onError)
@@ -141,7 +143,7 @@ fun <T : Any> MaybeSubscribeProxy<T>.subscribeBy(
     onComplete: () -> Unit = onCompleteStub,
     onSuccess: (T) -> Unit = onNextStub
 ): Disposable {
-    return if (onError === onErrorStub && onComplete === onCompleteStub) {
+    return if (onError == onErrorStub && onComplete == onCompleteStub) {
         subscribe(onSuccess)
     } else {
         subscribe(onSuccess, onError, onComplete)
@@ -152,7 +154,7 @@ fun CompletableSubscribeProxy.subscribeBy(
     onError: (Throwable) -> Unit = onErrorStub,
     onComplete: () -> Unit = onCompleteStub
 ): Disposable {
-    return if (onError === onErrorStub) {
+    return if (onError == onErrorStub) {
         subscribe(onComplete)
     } else {
         subscribe(onComplete, onError)

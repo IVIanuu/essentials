@@ -16,7 +16,7 @@
 
 package com.ivianuu.essentials.util.ext
 
-val Double.abs get() = Math.abs(this)
-val Float.abs get() = Math.abs(this)
-val Int.abs get() = Math.abs(this)
-val Long.abs get() = Math.abs(this)
+inline val Double.abs get() = Math.abs(this)
+inline val Float.abs get() = Math.abs(this)
+inline val Int.abs get() = Math.abs(this)
+inline val Long.abs get() = Math.abs(this)

@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 @file:SuppressLint("PrivateResource")
+@file:Suppress("NOTHING_TO_INLINE") // Aliases to other public API.
 
 package com.ivianuu.essentials.util.ext
 
@@ -21,16 +22,16 @@ import android.annotation.SuppressLint
 import android.content.Context
 import com.ivianuu.essentials.R
 
-val Context.isWindowBackgroundDark
+inline val Context.isWindowBackgroundDark
     get() = resolveColorAttr(android.R.attr.windowBackground).isDark
 
-fun Context.getPrimaryColor() = resolveColorAttr(android.R.attr.colorPrimary)
+inline fun Context.getPrimaryColor() = resolveColorAttr(android.R.attr.colorPrimary)
 
-fun Context.getPrimaryColorDark() = resolveColorAttr(android.R.attr.colorPrimaryDark)
+inline fun Context.getPrimaryColorDark() = resolveColorAttr(android.R.attr.colorPrimaryDark)
 
-fun Context.getAccentColor() = resolveColorAttr(android.R.attr.colorAccent)
+inline fun Context.getAccentColor() = resolveColorAttr(android.R.attr.colorAccent)
 
-fun Context.getCardColor(isDark: Boolean = isWindowBackgroundDark): Int {
+inline fun Context.getCardColor(isDark: Boolean = isWindowBackgroundDark): Int {
     return getResColor(
         if (isDark) {
             R.color.cardview_dark_background
@@ -40,7 +41,7 @@ fun Context.getCardColor(isDark: Boolean = isWindowBackgroundDark): Int {
     )
 }
 
-fun Context.getRippleColor(isDark: Boolean = isWindowBackgroundDark): Int {
+inline fun Context.getRippleColor(isDark: Boolean = isWindowBackgroundDark): Int {
     return getResColor(
         if (isDark) {
             R.color.ripple_material_dark
@@ -50,7 +51,7 @@ fun Context.getRippleColor(isDark: Boolean = isWindowBackgroundDark): Int {
     )
 }
 
-fun Context.getPrimaryTextColor(isDark: Boolean = isWindowBackgroundDark): Int {
+inline fun Context.getPrimaryTextColor(isDark: Boolean = isWindowBackgroundDark): Int {
     return getResColor(
         if (isDark) {
             R.color.primary_text_default_material_dark
@@ -60,7 +61,7 @@ fun Context.getPrimaryTextColor(isDark: Boolean = isWindowBackgroundDark): Int {
     )
 }
 
-fun Context.getPrimaryDisabledTextColor(isDark: Boolean = isWindowBackgroundDark): Int {
+inline fun Context.getPrimaryDisabledTextColor(isDark: Boolean = isWindowBackgroundDark): Int {
     return getResColor(
         if (isDark) {
             R.color.primary_text_disabled_material_dark
@@ -70,7 +71,7 @@ fun Context.getPrimaryDisabledTextColor(isDark: Boolean = isWindowBackgroundDark
     )
 }
 
-fun Context.getSecondaryTextColor(isDark: Boolean = isWindowBackgroundDark): Int {
+inline fun Context.getSecondaryTextColor(isDark: Boolean = isWindowBackgroundDark): Int {
     return getResColor(
         if (isDark) {
             R.color.secondary_text_default_material_dark
@@ -80,7 +81,7 @@ fun Context.getSecondaryTextColor(isDark: Boolean = isWindowBackgroundDark): Int
     )
 }
 
-fun Context.getSecondaryDisabledTextColor(isDark: Boolean = isWindowBackgroundDark): Int {
+inline fun Context.getSecondaryDisabledTextColor(isDark: Boolean = isWindowBackgroundDark): Int {
     return getResColor(
         if (isDark) {
             R.color.secondary_text_disabled_material_dark

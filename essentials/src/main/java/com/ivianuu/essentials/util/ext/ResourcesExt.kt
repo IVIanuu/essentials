@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+@file:Suppress("NOTHING_TO_INLINE") // Aliases to other public API.
+
 package com.ivianuu.essentials.util.ext
 
 import android.content.Context
@@ -30,78 +32,77 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import com.ivianuu.essentials.util.ContextAware
 
-fun Context.getResAnim(resId: Int): Animation = AnimationUtils.loadAnimation(this, resId)
+inline fun Context.getResAnim(resId: Int): Animation = AnimationUtils.loadAnimation(this, resId)
 
-fun Context.getResIntArray(resId: Int): IntArray = resources.getIntArray(resId)
+inline fun Context.getResIntArray(resId: Int): IntArray = resources.getIntArray(resId)
 
-fun Context.getResStringArray(resId: Int): Array<String> =
+inline fun Context.getResStringArray(resId: Int): Array<String> =
     resources.getStringArray(resId)
 
-fun Context.getResTextArray(resId: Int): Array<CharSequence> =
+inline fun Context.getResTextArray(resId: Int): Array<CharSequence> =
     resources.getTextArray(resId)
 
-fun Context.getResTypedArray(resId: Int): TypedArray = resources.obtainTypedArray(resId)
+inline fun Context.getResTypedArray(resId: Int): TypedArray = resources.obtainTypedArray(resId)
 
-fun Context.getResBool(resId: Int): Boolean = resources.getBoolean(resId)
+inline fun Context.getResBool(resId: Int): Boolean = resources.getBoolean(resId)
 
-fun Context.getResDimen(resId: Int): Float = resources.getDimension(resId)
+inline fun Context.getResDimen(resId: Int): Float = resources.getDimension(resId)
 
-fun Context.getResDimenPx(resId: Int): Int = resources.getDimensionPixelSize(resId)
+inline fun Context.getResDimenPx(resId: Int): Int = resources.getDimensionPixelSize(resId)
 
-fun Context.getResDimenPxOffset(resId: Int): Int = resources.getDimensionPixelOffset(resId)
+inline fun Context.getResDimenPxOffset(resId: Int): Int = resources.getDimensionPixelOffset(resId)
 
-fun Context.getResFloat(resId: Int): Float {
-    val value = ValueHolder.VALUE
+inline fun Context.getResFloat(resId: Int): Float {
+    val value = VALUE
     resources.getValue(resId, value, true)
     return value.float
 }
 
-fun Context.getResInt(resId: Int): Int = resources.getInteger(resId)
+inline fun Context.getResInt(resId: Int): Int = resources.getInteger(resId)
 
-fun Context.getResBitmap(resId: Int): Bitmap = BitmapFactory.decodeResource(resources, resId)
+inline fun Context.getResBitmap(resId: Int): Bitmap = BitmapFactory.decodeResource(resources, resId)
 
-fun Context.getResColor(resId: Int): Int = ContextCompat.getColor(this, resId)
+inline fun Context.getResColor(resId: Int): Int = ContextCompat.getColor(this, resId)
 
-fun Context.getResColorStateList(resId: Int): ColorStateList =
+inline fun Context.getResColorStateList(resId: Int): ColorStateList =
     ContextCompat.getColorStateList(this, resId)!!
 
-fun Context.getResDrawable(resId: Int): Drawable =
+inline fun Context.getResDrawable(resId: Int): Drawable =
     ContextCompat.getDrawable(this, resId)!!
 
-fun Context.getResFont(resId: Int): Typeface = ResourcesCompat.getFont(this, resId)!!
+inline fun Context.getResFont(resId: Int): Typeface = ResourcesCompat.getFont(this, resId)!!
 
-fun ContextAware.getResAnim(resId: Int) = providedContext.getResAnim(resId)
+inline fun ContextAware.getResAnim(resId: Int) = providedContext.getResAnim(resId)
 
-fun ContextAware.getResIntArray(resId: Int) = providedContext.getResIntArray(resId)
+inline fun ContextAware.getResIntArray(resId: Int) = providedContext.getResIntArray(resId)
 
-fun ContextAware.getResStringArray(resId: Int) = providedContext.getResStringArray(resId)
+inline fun ContextAware.getResStringArray(resId: Int) = providedContext.getResStringArray(resId)
 
-fun ContextAware.getResTextArray(resId: Int) = providedContext.getResTextArray(resId)
+inline fun ContextAware.getResTextArray(resId: Int) = providedContext.getResTextArray(resId)
 
-fun ContextAware.getResTypedArray(resId: Int) = providedContext.getResTypedArray(resId)
+inline fun ContextAware.getResTypedArray(resId: Int) = providedContext.getResTypedArray(resId)
 
-fun ContextAware.getResBool(resId: Int) = providedContext.getResBool(resId)
+inline fun ContextAware.getResBool(resId: Int) = providedContext.getResBool(resId)
 
-fun ContextAware.getResDimen(resId: Int) = providedContext.getResDimen(resId)
+inline fun ContextAware.getResDimen(resId: Int) = providedContext.getResDimen(resId)
 
-fun ContextAware.getResDimenPx(resId: Int) = providedContext.getResDimenPx(resId)
+inline fun ContextAware.getResDimenPx(resId: Int) = providedContext.getResDimenPx(resId)
 
-fun ContextAware.getResDimenPxOffset(resId: Int) = providedContext.getResDimenPxOffset(resId)
+inline fun ContextAware.getResDimenPxOffset(resId: Int) = providedContext.getResDimenPxOffset(resId)
 
-fun ContextAware.getResFloat(resId: Int) = providedContext.getResFloat(resId)
+inline fun ContextAware.getResFloat(resId: Int) = providedContext.getResFloat(resId)
 
-fun ContextAware.getResInt(resId: Int): Int = providedContext.getResInt(resId)
+inline fun ContextAware.getResInt(resId: Int): Int = providedContext.getResInt(resId)
 
-fun ContextAware.getResBitmap(resId: Int) = providedContext.getResBitmap(resId)
+inline fun ContextAware.getResBitmap(resId: Int) = providedContext.getResBitmap(resId)
 
-fun ContextAware.getResColor(resId: Int) = providedContext.getResColor(resId)
+inline fun ContextAware.getResColor(resId: Int) = providedContext.getResColor(resId)
 
-fun ContextAware.getResColorStateList(resId: Int) = providedContext.getResColorStateList(resId)
+inline fun ContextAware.getResColorStateList(resId: Int) = providedContext.getResColorStateList(resId)
 
-fun ContextAware.getResDrawable(resId: Int) = providedContext.getResDrawable(resId)
+inline fun ContextAware.getResDrawable(resId: Int) = providedContext.getResDrawable(resId)
 
-fun ContextAware.getResFont(resId: Int) = providedContext.getResFont(resId)
+inline fun ContextAware.getResFont(resId: Int) = providedContext.getResFont(resId)
 
-private object ValueHolder {
-    val VALUE = TypedValue()
-}
+@PublishedApi
+internal val VALUE = TypedValue()

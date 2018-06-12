@@ -24,7 +24,7 @@ import com.ivianuu.essentials.injection.PerFragment
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.base.BaseFragment
 import com.ivianuu.essentials.ui.traveler.key.FragmentClassKey
-import com.ivianuu.essentials.ui.traveler.setupKeyFragmentSwapperRouter
+import com.ivianuu.essentials.util.ext.setupKeyFragmentSwapperRouter
 
 /**
  * @author Manuel Wrage (IVIanuu)

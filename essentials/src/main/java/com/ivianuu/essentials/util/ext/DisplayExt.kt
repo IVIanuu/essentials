@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+@file:Suppress("NOTHING_TO_INLINE") // Aliases to other public API.
+
 package com.ivianuu.essentials.util.ext
 
 import android.annotation.TargetApi
@@ -24,45 +26,48 @@ import android.util.DisplayMetrics
 import android.view.Surface
 import android.view.WindowManager
 
-private val systemMetrics: DisplayMetrics get() = Resources.getSystem().displayMetrics
-private val displayMetrics = DisplayMetrics()
+@PublishedApi
+internal val systemMetrics: DisplayMetrics get() = Resources.getSystem().displayMetrics
 
-val Int.dp: Float get() = (this * systemMetrics.density)
+@PublishedApi
+internal val displayMetrics = DisplayMetrics()
 
-val Int.sp: Float get() = (this * systemMetrics.scaledDensity)
+inline val Int.dp: Float get() = (this * systemMetrics.density)
 
-val Context.isPortrait: Boolean
+inline val Int.sp: Float get() = (this * systemMetrics.scaledDensity)
+
+inline val Context.isPortrait: Boolean
     get() = !isLandscape
 
-val Context.isLandscape: Boolean
+inline val Context.isLandscape: Boolean
     get() {
         val rotation = rotation
         return rotation == Surface.ROTATION_90 || rotation == Surface.ROTATION_270
     }
 
-val Context.rotation: Int
+inline val Context.rotation: Int
     get() = systemService<WindowManager>().defaultDisplay.rotation
 
-val Context.screenHeight: Int
+inline val Context.screenHeight: Int
     get() {
         systemService<WindowManager>().defaultDisplay.getMetrics(displayMetrics)
         return displayMetrics.heightPixels
     }
 
-val Context.screenWidth: Int
+inline val Context.screenWidth: Int
     get() {
         systemService<WindowManager>().defaultDisplay.getMetrics(displayMetrics)
         return displayMetrics.widthPixels
     }
 
-val Context.realScreenHeight: Int
+inline val Context.realScreenHeight: Int
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     get() {
         systemService<WindowManager>().defaultDisplay.getRealMetrics(displayMetrics)
         return displayMetrics.heightPixels
     }
 
-val Context.realScreenWidth: Int
+inline val Context.realScreenWidth: Int
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     get() {
         systemService<WindowManager>().defaultDisplay.getRealMetrics(displayMetrics)

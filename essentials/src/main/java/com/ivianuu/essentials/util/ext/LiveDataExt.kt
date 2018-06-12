@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+@file:Suppress("NOTHING_TO_INLINE") // Aliases to other public API.
+
 package com.ivianuu.essentials.util.ext
 
 import android.arch.lifecycle.LifecycleOwner
@@ -26,25 +28,25 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.subscribeBy
 import java.util.concurrent.atomic.AtomicReference
 
-fun <T> mutableLiveData(initialValue: T? = null) =
+inline fun <T> mutableLiveData(initialValue: T? = null) =
     MutableLiveData<T>().apply {
         if (initialValue != null) {
             value = initialValue
         }
     }
 
-fun <T> singleLiveEvent() = SingleLiveEvent<T>()
+inline fun <T> singleLiveEvent() = SingleLiveEvent<T>()
 
 fun <T> LiveData<T>.observeK(owner: LifecycleOwner, onChanged: (T) -> Unit) {
     observe(owner, Observer<T> { it?.let(onChanged) })
 }
 
-fun <T> LiveData<T>.requireValue() = value ?: throw IllegalStateException("value is null")
+inline fun <T> LiveData<T>.requireValue() = value ?: throw IllegalStateException("value is null")
 
-fun <T : Any> LiveData<T>.toFlowable(strategy: BackpressureStrategy = BackpressureStrategy.LATEST): Flowable<T> =
+inline fun <T : Any> LiveData<T>.toFlowable(strategy: BackpressureStrategy = BackpressureStrategy.LATEST): Flowable<T> =
     toObservable().toFlowable(strategy)
 
-fun <T : Any> Flowable<T>.toLiveData() =
+inline fun <T : Any> Flowable<T>.toLiveData() =
     toObservable().toLiveData()
 
 fun <T : Any> LiveData<T>.toObservable(): Observable<T> {
@@ -85,14 +87,14 @@ fun <T : Any> Observable<T>.toLiveData(): LiveData<T> {
     }
 }
 
-fun <T : Any> LiveData<T>.toMaybe(): Maybe<T> =
+inline fun <T : Any> LiveData<T>.toMaybe(): Maybe<T> =
     toObservable().singleElement()
 
-fun <T : Any> Maybe<T>.toLiveData() =
+inline fun <T : Any> Maybe<T>.toLiveData() =
     toObservable().toLiveData()
 
-fun <T : Any> LiveData<T>.toSingle(): Single<T> =
+inline fun <T : Any> LiveData<T>.toSingle(): Single<T> =
     toObservable().singleOrError()
 
-fun <T : Any> Single<T>.toLiveData() =
+inline fun <T : Any> Single<T>.toLiveData() =
     toObservable().toLiveData()

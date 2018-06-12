@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+@file:Suppress("NOTHING_TO_INLINE") // Aliases to other public API.
+
 package com.ivianuu.essentials.util.ext
 
 import android.support.v4.app.Fragment
@@ -21,19 +23,21 @@ import android.support.v7.app.AppCompatActivity
 import android.view.View
 import com.uber.autodispose.android.lifecycle.scope
 
-val Fragment.appCompatActivity: AppCompatActivity?
+inline val Fragment.appCompatActivity: AppCompatActivity?
     get() = activity as AppCompatActivity?
 
-fun Fragment.hideInputMethod() {
+inline fun Fragment.hideInputMethod() {
     requireActivity().hideInputMethod()
 }
 
-fun Fragment.showInputMethod(view: View) {
+inline fun Fragment.showInputMethod(view: View) {
     requireActivity().showInputMethod(view)
 }
 
-fun Fragment.requireAppCompatActivity() = requireActivity() as AppCompatActivity
+inline fun Fragment.requireAppCompatActivity() = requireActivity() as AppCompatActivity
 
-fun Fragment.requireArgs() = arguments ?: throw IllegalStateException("no arguments provided")
+inline fun Fragment.requireArgs() = arguments ?: throw IllegalStateException("no arguments provided")
 
-fun Fragment.viewScope() = viewLifecycleOwner.scope()
+inline fun Fragment.requireView() = view ?: throw IllegalStateException("view is null")
+
+inline fun Fragment.viewScope() = viewLifecycleOwner.scope()

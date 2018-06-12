@@ -14,30 +14,32 @@
  * limitations under the License.
  */
 
+@file:Suppress("NOTHING_TO_INLINE") // Aliases to other public API.
+
 package com.ivianuu.essentials.util.ext
 
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.*
 
-val COMPUTATION get() = Schedulers.computation()
-val IO get() = Schedulers.io()
-val MAIN get() = AndroidSchedulers.mainThread()
+inline val COMPUTATION get() = Schedulers.computation()
+inline val IO get() = Schedulers.io()
+inline val MAIN get() = AndroidSchedulers.mainThread()
 
-fun <T : Any> BehaviorSubject<T>.requireValue() =
+inline fun <T : Any> BehaviorSubject<T>.requireValue() =
     value ?: throw IllegalStateException("value is null")
 
-fun <T : Any> behaviorSubject(defaultValue: T? = null): BehaviorSubject<T> =
+inline fun <T : Any> behaviorSubject(defaultValue: T? = null): BehaviorSubject<T> =
     if (defaultValue != null) {
         BehaviorSubject.createDefault(defaultValue)
     } else {
         BehaviorSubject.create()
     }
 
-fun completableSubject(): CompletableSubject = CompletableSubject.create()
+inline fun completableSubject(): CompletableSubject = CompletableSubject.create()
 
-fun <T : Any> maybeSubject(): MaybeSubject<T> = MaybeSubject.create()
+inline fun <T : Any> maybeSubject(): MaybeSubject<T> = MaybeSubject.create()
 
-fun <T : Any> publishSubject(): PublishSubject<T> = PublishSubject.create()
+inline fun <T : Any> publishSubject(): PublishSubject<T> = PublishSubject.create()
 
-fun <T : Any> singleSubject(): SingleSubject<T> = SingleSubject.create()
+inline fun <T : Any> singleSubject(): SingleSubject<T> = SingleSubject.create()

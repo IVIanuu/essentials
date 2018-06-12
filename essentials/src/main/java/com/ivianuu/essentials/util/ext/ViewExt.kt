@@ -14,15 +14,17 @@
  * limitations under the License.
  */
 
+@file:Suppress("NOTHING_TO_INLINE") // Aliases to other public API.
+
 package com.ivianuu.essentials.util.ext
 
 import android.app.Activity
 import android.view.View
 
-val View.activity: Activity?
+inline val View.activity: Activity?
     get() = context.findActivity()
 
-fun View.requireActivity() = context.findActivityOrThrow()
+inline fun View.requireActivity() = context.findActivityOrThrow()
 
 fun View.doOnViewAttachedToWindow(action: ((v: View) -> Unit)?) =
     addOnAttachStateChangeListener(onViewAttachedToWindow = action)

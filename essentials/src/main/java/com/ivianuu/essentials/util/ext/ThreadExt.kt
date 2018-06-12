@@ -18,4 +18,4 @@ package com.ivianuu.essentials.util.ext
 
 import android.os.Looper
 
-val isMainThread get() = Looper.myLooper() == Looper.getMainLooper()
+inline val isMainThread get() = Looper.myLooper() == Looper.getMainLooper()

@@ -14,7 +14,9 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.traveler
+@file:Suppress("NOTHING_TO_INLINE") // Aliases to other public API.
+
+package com.ivianuu.essentials.util.ext
 
 import android.arch.lifecycle.LifecycleOwner
 import android.arch.lifecycle.ViewModelStoreOwner
@@ -22,16 +24,16 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.containerId
+import com.ivianuu.essentials.ui.traveler.TravelerStore
 import com.ivianuu.essentials.ui.traveler.navigator.FragmentSwapperNavigator.HideStrategy
 import com.ivianuu.essentials.ui.traveler.navigator.KeyFragmentAppNavigator
 import com.ivianuu.essentials.ui.traveler.navigator.KeyFragmentNavigator
 import com.ivianuu.essentials.ui.traveler.navigator.KeyFragmentSwapperNavigator
-import com.ivianuu.essentials.util.ext.getViewModel
 import com.ivianuu.traveler.Navigator
 import com.ivianuu.traveler.Router
 import com.ivianuu.traveler.lifecycleobserver.NavigatorLifecycleObserver
 
-val Fragment.localRouter: Router
+inline val Fragment.localRouter: Router
     get() {
         val parent = parentFragment
         return parent?.getRouter(containerId, false)
@@ -39,7 +41,7 @@ val Fragment.localRouter: Router
                 ?: throw IllegalStateException("not attached")
     }
 
-val Fragment.rootRouter: Router
+inline val Fragment.rootRouter: Router
     get() {
         val parent = parentFragment
         return parent?.rootRouter
@@ -47,28 +49,28 @@ val Fragment.rootRouter: Router
                 ?: throw IllegalStateException("not attached")
     }
 
-fun ViewModelStoreOwner.getTravelerStore() =
+inline fun ViewModelStoreOwner.getTravelerStore() =
     getViewModel<TravelerStore>()
 
-fun ViewModelStoreOwner.getTraveler(containerId: Int) =
+inline fun ViewModelStoreOwner.getTraveler(containerId: Int) =
     getTravelerStore().getTraveler(containerId)
 
-fun ViewModelStoreOwner.getTraveler(containerId: Int, createIfNeeded: Boolean) =
+inline fun ViewModelStoreOwner.getTraveler(containerId: Int, createIfNeeded: Boolean) =
         getTravelerStore().getTraveler(containerId, createIfNeeded)
 
-fun ViewModelStoreOwner.getNavigatorHolder(containerId: Int) =
+inline fun ViewModelStoreOwner.getNavigatorHolder(containerId: Int) =
     getTraveler(containerId).navigatorHolder
 
-fun ViewModelStoreOwner.getNavigatorHolder(containerId: Int, createIfNeeded: Boolean) =
+inline fun ViewModelStoreOwner.getNavigatorHolder(containerId: Int, createIfNeeded: Boolean) =
         getTraveler(containerId, createIfNeeded)?.navigatorHolder
 
-fun ViewModelStoreOwner.getRouter(containerId: Int) =
+inline fun ViewModelStoreOwner.getRouter(containerId: Int) =
     getTraveler(containerId).router
 
-fun ViewModelStoreOwner.getRouter(containerId: Int, createIfNeeded: Boolean) =
+inline fun ViewModelStoreOwner.getRouter(containerId: Int, createIfNeeded: Boolean) =
         getTraveler(containerId, createIfNeeded)?.router
 
-fun <T> T.setupRouter(
+inline fun <T> T.setupRouter(
     navigator: Navigator,
     containerId: Int
 ): Router where T : ViewModelStoreOwner, T : LifecycleOwner {
@@ -77,17 +79,17 @@ fun <T> T.setupRouter(
     return traveler.router
 }
 
-fun <T> T.removeRouter(containerId: Int) where T : ViewModelStoreOwner, T : LifecycleOwner {
+inline fun <T> T.removeRouter(containerId: Int) where T : ViewModelStoreOwner, T : LifecycleOwner {
     getTravelerStore().removeTraveler(containerId)
 }
 
-fun FragmentActivity.setupKeyFragmentRouter(containerId: Int) =
+inline fun FragmentActivity.setupKeyFragmentRouter(containerId: Int) =
     setupKeyFragmentRouter(supportFragmentManager, containerId)
 
-fun Fragment.setupKeyFragmentRouter(containerId: Int) =
+inline fun Fragment.setupKeyFragmentRouter(containerId: Int) =
     setupKeyFragmentRouter(childFragmentManager, containerId)
 
-fun <T> T.setupKeyFragmentRouter(
+inline fun <T> T.setupKeyFragmentRouter(
     fm: FragmentManager,
     containerId: Int
 ): Router where T : ViewModelStoreOwner, T : LifecycleOwner {
@@ -95,20 +97,20 @@ fun <T> T.setupKeyFragmentRouter(
     return setupRouter(navigator, containerId)
 }
 
-fun FragmentActivity.setupKeyFragmentAppRouter(containerId: Int) =
+inline fun FragmentActivity.setupKeyFragmentAppRouter(containerId: Int) =
     setupKeyFragmentAppRouter(this, supportFragmentManager, containerId)
 
-fun Fragment.setupKeyFragmentAppRouter(containerId: Int) =
+inline fun Fragment.setupKeyFragmentAppRouter(containerId: Int) =
     setupKeyFragmentAppRouter(requireActivity(), childFragmentManager, containerId)
 
-fun <T> T.setupKeyFragmentAppRouter(
+inline fun <T> T.setupKeyFragmentAppRouter(
     activity: FragmentActivity, fm: FragmentManager, containerId: Int
 ): Router where T : ViewModelStoreOwner, T : LifecycleOwner {
     val navigator = KeyFragmentAppNavigator(activity, fm, containerId)
     return setupRouter(navigator, containerId)
 }
 
-fun FragmentActivity.setupKeyFragmentSwapperRouter(
+inline fun FragmentActivity.setupKeyFragmentSwapperRouter(
     containerId: Int,
     hideStrategy: HideStrategy = HideStrategy.DETACH,
     swapOnReselection: Boolean = true
@@ -117,7 +119,7 @@ fun FragmentActivity.setupKeyFragmentSwapperRouter(
     hideStrategy, swapOnReselection
 )
 
-fun Fragment.setupKeyFragmentSwapperRouter(
+inline fun Fragment.setupKeyFragmentSwapperRouter(
     containerId: Int,
     hideStrategy: HideStrategy = HideStrategy.DETACH,
     swapOnReselection: Boolean = true
@@ -126,7 +128,7 @@ fun Fragment.setupKeyFragmentSwapperRouter(
     hideStrategy, swapOnReselection
 )
 
-fun <T> T.setupKeyFragmentSwapperRouter(
+inline fun <T> T.setupKeyFragmentSwapperRouter(
     fm: FragmentManager,
     containerId: Int,
     hideStrategy: HideStrategy = HideStrategy.DETACH,

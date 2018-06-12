@@ -14,13 +14,15 @@
  * limitations under the License.
  */
 
+@file:Suppress("NOTHING_TO_INLINE") // Aliases to other public API.
+
 package com.ivianuu.essentials.util.ext
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 
-fun ViewGroup.inflate(resId: Int, attachToRoot: Boolean = false): View {
+inline fun ViewGroup.inflate(resId: Int, attachToRoot: Boolean = false): View {
     return LayoutInflater.from(context).inflate(resId, this, attachToRoot)
 }
 

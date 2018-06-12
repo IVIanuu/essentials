@@ -14,14 +14,16 @@
  * limitations under the License.
  */
 
+@file:Suppress("NOTHING_TO_INLINE") // Aliases to other public API.
+
 package com.ivianuu.essentials.util.ext
 
 import android.support.v7.preference.Preference
 import android.support.v7.preference.PreferenceFragmentCompat
 
 @Suppress("UNCHECKED_CAST")
-fun <T : Preference> PreferenceFragmentCompat.findPref(key: CharSequence): T? =
+inline fun <T : Preference> PreferenceFragmentCompat.findPref(key: CharSequence): T? =
     findPreference(key) as T?
 
-fun <T : Preference> PreferenceFragmentCompat.requirePref(key: CharSequence): T =
+inline fun <T : Preference> PreferenceFragmentCompat.requirePref(key: CharSequence): T =
     findPref(key) ?: throw IllegalStateException("pref not found $key")

@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+@file:Suppress("NOTHING_TO_INLINE") // Aliases to other public API.
+
 package com.ivianuu.essentials.util.ext
 
 import com.ivianuu.essentials.util.Option
@@ -27,9 +29,9 @@ fun <T : Any> T?.toOption() = if (this != null) {
     Option.None.INSTANCE
 }
 
-fun <T : Any> optionOf(value: T?) = value.toOption()
+inline fun <T : Any> optionOf(value: T?) = value.toOption()
 
-fun <T : Any> absent() = Option.None.INSTANCE
+inline fun <T : Any> absent() = Option.None.INSTANCE as Option<T>
 
 inline fun <T : Any> Option<T>.get() = if (this is Option.Some) {
     this.value

@@ -25,7 +25,7 @@ import com.ivianuu.essentials.injection.KtHasSupportFragmentInjector
 import com.ivianuu.essentials.injection.KtHasViewInjector
 import com.ivianuu.essentials.ui.common.back.BackHandler
 import com.ivianuu.essentials.ui.traveler.navigator.KeyFragmentAppNavigator
-import com.ivianuu.essentials.ui.traveler.setupRouter
+import com.ivianuu.essentials.util.ext.setupRouter
 import com.ivianuu.essentials.util.ext.unsafeLazy
 import com.ivianuu.essentials.util.screenlogger.NamedScreen
 import com.ivianuu.traveler.Navigator

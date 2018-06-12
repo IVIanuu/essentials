@@ -14,14 +14,16 @@
  * limitations under the License.
  */
 
+@file:Suppress("NOTHING_TO_INLINE") // Aliases to other public API.
+
 package com.ivianuu.essentials.util.ext
 
 import android.app.Activity
 import android.content.*
 
-fun Context.registerReceiver(
+inline fun Context.registerReceiver(
     intentFilter: IntentFilter,
-    onReceive: (intent: Intent) -> Unit
+    crossinline onReceive: (intent: Intent) -> Unit
 ): BroadcastReceiver {
     return object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
@@ -30,7 +32,7 @@ fun Context.registerReceiver(
     }.also { registerReceiver(it, intentFilter) }
 }
 
-fun Context.unregisterReceiverSafe(receiver: BroadcastReceiver) {
+inline fun Context.unregisterReceiverSafe(receiver: BroadcastReceiver) {
     try {
         unregisterReceiver(receiver)
     } catch (e: IllegalArgumentException) {
@@ -54,5 +56,5 @@ fun Context.findActivity(): Activity? {
     }
 }
 
-fun Context.findActivityOrThrow() =
+inline fun Context.findActivityOrThrow() =
     findActivity() ?: throw IllegalStateException("base context is no activity")

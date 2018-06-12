@@ -26,7 +26,7 @@ import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.base.BaseFragment
 import com.ivianuu.essentials.ui.traveler.key.FragmentClassKey
 import com.ivianuu.essentials.ui.traveler.key.requireKey
-import com.ivianuu.essentials.ui.traveler.setupKeyFragmentRouter
+import com.ivianuu.essentials.util.ext.setupKeyFragmentRouter
 import com.ivianuu.essentials.util.screenlogger.IgnoreNamedScreen
 import kotlinx.android.parcel.Parcelize
 

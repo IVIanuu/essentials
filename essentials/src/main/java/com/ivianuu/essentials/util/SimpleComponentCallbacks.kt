@@ -14,12 +14,21 @@
  * limitations under the License.
  */
 
-@file:Suppress("NOTHING_TO_INLINE") // Aliases to other public API.
+package com.ivianuu.essentials.util
 
-package com.ivianuu.essentials.util.ext
+import android.content.ComponentCallbacks2
+import android.content.res.Configuration
 
-import android.content.IntentFilter
+/**
+ * Simple component callbacks
+ */
+open class SimpleComponentCallbacks : ComponentCallbacks2 {
+    override fun onConfigurationChanged(newConfig: Configuration) {
+    }
 
-inline fun intentFilterOf(vararg actions: String) = IntentFilter().apply {
-    actions.forEach { addAction(it) }
+    override fun onLowMemory() {
+    }
+
+    override fun onTrimMemory(level: Int) {
+    }
 }

@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+@file:Suppress("NOTHING_TO_INLINE") // Aliases to other public API.
+
 package com.ivianuu.essentials.util.ext
 
 import android.support.v7.preference.Preference
@@ -21,7 +23,7 @@ import android.support.v7.preference.PreferenceGroup
 
 inline operator fun PreferenceGroup.get(key: CharSequence): Preference = findPreference(key)
 
-operator fun PreferenceGroup.get(index: Int): Preference = getPreference(index)
+inline operator fun PreferenceGroup.get(index: Int): Preference = getPreference(index)
         ?: throw IndexOutOfBoundsException("Index: $index, Size: $preferenceCount")
 
 operator fun PreferenceGroup.contains(preference: Preference): Boolean {
