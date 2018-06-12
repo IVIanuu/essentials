@@ -23,6 +23,9 @@ import com.ivianuu.essentials.util.ext.exitOnNavigationClick
 import com.ivianuu.essentials.util.ext.navigateOnClick
 import com.ivianuu.traveler.Router
 
+/**
+ * Router aware component
+ */
 interface RouterHolder {
     val router: Router
 
