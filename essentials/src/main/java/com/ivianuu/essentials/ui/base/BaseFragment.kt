@@ -32,6 +32,7 @@ import com.ivianuu.essentials.util.ViewInjectionContextWrapper
 import com.ivianuu.essentials.util.ext.viewScope
 import com.ivianuu.essentials.util.screenlogger.NamedScreen
 import com.ivianuu.traveler.Router
+import com.uber.autodispose.LifecycleScopeProvider
 import com.uber.autodispose.android.lifecycle.scope
 import dagger.android.DispatchingAndroidInjector
 import javax.inject.Inject
@@ -48,7 +49,7 @@ abstract class BaseFragment : Fragment(), BackListener, KtHasSupportFragmentInje
     @Inject override lateinit var viewInjector: DispatchingAndroidInjector<View>
 
     val scopeProvider = scope()
-    var viewScopeProvider = viewScope()
+    lateinit var viewScopeProvider: LifecycleScopeProvider<*>
 
     protected open val layoutRes = -1
 
