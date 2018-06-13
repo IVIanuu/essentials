@@ -32,8 +32,10 @@ import com.ivianuu.essentials.ui.common.back.BackListener
 import com.ivianuu.essentials.ui.traveler.RouterHolder
 import com.ivianuu.essentials.util.ContextAware
 import com.ivianuu.essentials.util.ViewInjectionContextWrapper
+import com.ivianuu.essentials.util.ext.viewScope
 import com.ivianuu.essentials.util.screenlogger.NamedScreen
 import com.ivianuu.traveler.Router
+import com.uber.autodispose.android.lifecycle.scope
 import dagger.android.DispatchingAndroidInjector
 import javax.inject.Inject
 
@@ -49,6 +51,9 @@ abstract class BasePreferenceFragment : PreferenceFragmentCompat(),
 
     @Inject override lateinit var supportFragmentInjector: DispatchingAndroidInjector<Fragment>
     @Inject override lateinit var viewInjector: DispatchingAndroidInjector<View>
+
+    val scopeProvider = scope()
+    var viewScopeProvider = viewScope()
 
     open val layoutRes = -1
     open val prefsContainerId = -1
