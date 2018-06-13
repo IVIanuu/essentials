@@ -21,6 +21,8 @@ import android.content.pm.ApplicationInfo
 import com.crashlytics.android.Crashlytics
 import com.ivianuu.daggerextensions.AutoBindsIntoSet
 import com.ivianuu.essentials.injection.EssentialsAppInitializerModule
+import com.ivianuu.essentials.util.analytics.Analytics
+import com.ivianuu.essentials.util.analytics.FabricAnalyticsLogger
 import com.ivianuu.essentials.util.ext.containsFlag
 import io.fabric.sdk.android.Fabric
 import javax.inject.Inject
@@ -30,11 +32,14 @@ import javax.inject.Inject
  */
 @EssentialsAppInitializerModule
 @AutoBindsIntoSet(FabricAppInitializer::class)
-class FabricAppInitializer @Inject constructor() : AppInitializer {
+class FabricAppInitializer @Inject constructor(
+    private val analyticsLogger: FabricAnalyticsLogger
+) : AppInitializer {
 
     override fun init(app: Application) {
         if (!app.applicationInfo.flags.containsFlag(ApplicationInfo.FLAG_DEBUGGABLE)) {
             Fabric.with(app, Crashlytics())
+            Analytics.addLogger(analyticsLogger)
         }
     }
 

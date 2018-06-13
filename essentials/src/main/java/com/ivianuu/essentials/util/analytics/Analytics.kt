@@ -19,18 +19,26 @@ package com.ivianuu.essentials.util.analytics
 import com.crashlytics.android.answers.Answers
 import com.crashlytics.android.answers.CustomEvent
 import com.ivianuu.essentials.util.ext.d
-import io.fabric.sdk.android.Fabric
 import timber.log.Timber
+import javax.inject.Inject
 
 /**
  * Basic analytics logger
  */
 object Analytics {
 
-    var logger = FabricAnalyticsLogger()
+    private var loggers = mutableSetOf<Logger>()
 
     fun log(event: String) {
-        logger.log(event)
+        loggers.toList().forEach { it.log(event) }
+    }
+
+    fun addLogger(logger: Logger) {
+        loggers.add(logger)
+    }
+
+    fun removeLogger(logger: Logger) {
+        loggers.remove(logger)
     }
 
     interface Logger {
@@ -41,13 +49,19 @@ object Analytics {
 /**
  * Logs events via fabric
  */
-class FabricAnalyticsLogger : Analytics.Logger {
+class FabricAnalyticsLogger @Inject constructor() : Analytics.Logger {
     override fun log(event: String) {
-        if (Fabric.isInitialized()) {
-            Answers.getInstance().logCustom(CustomEvent(event))
-        } else {
-            Timber.tag("Analytics")
-            d { event }
-        }
+        Answers.getInstance()
+            .logCustom(CustomEvent(event))
+    }
+}
+
+/**
+ * Logs events via debugger
+ */
+class DebugAnalyticsLogger @Inject constructor() : Analytics.Logger {
+    override fun log(event: String) {
+        Timber.tag("Analytics")
+        d { event }
     }
 }

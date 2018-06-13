@@ -20,6 +20,8 @@ import android.app.Application
 import android.content.pm.ApplicationInfo
 import com.ivianuu.daggerextensions.AutoBindsIntoSet
 import com.ivianuu.essentials.injection.EssentialsAppInitializerModule
+import com.ivianuu.essentials.util.analytics.Analytics
+import com.ivianuu.essentials.util.analytics.DebugAnalyticsLogger
 import com.ivianuu.essentials.util.ext.containsFlag
 import timber.log.Timber
 import javax.inject.Inject
@@ -29,11 +31,14 @@ import javax.inject.Inject
  */
 @EssentialsAppInitializerModule
 @AutoBindsIntoSet(AppInitializer::class)
-class TimberAppInitializer @Inject constructor() : AppInitializer {
+class TimberAppInitializer @Inject constructor(
+    private val analyticsLogger: DebugAnalyticsLogger
+) : AppInitializer {
 
     override fun init(app: Application) {
         if (app.applicationInfo.flags.containsFlag(ApplicationInfo.FLAG_DEBUGGABLE)) {
             Timber.plant(Timber.DebugTree())
+            Analytics.addLogger(analyticsLogger)
         }
     }
 

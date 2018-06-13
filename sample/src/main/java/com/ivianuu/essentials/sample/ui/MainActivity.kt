@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.sample.ui
 
+import android.annotation.SuppressLint
 import android.arch.lifecycle.Lifecycle
 import android.os.Bundle
 import com.ivianuu.daggerextensions.AutoContribute
@@ -36,6 +37,7 @@ import java.util.concurrent.TimeUnit
 @AutoContribute(modules = [EssentialsActivityModule::class, FragmentBindingModule_::class])
 class MainActivity : BaseActivity() {
 
+    @SuppressLint("PrivateResource")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 

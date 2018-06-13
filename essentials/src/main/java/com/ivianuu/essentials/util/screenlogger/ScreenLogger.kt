@@ -39,7 +39,11 @@ import javax.inject.Singleton
 @AutoBindsIntoSet(AppService::class)
 class ScreenLogger @Inject constructor(private val application: Application) : AppService {
 
-    var listener: Listener? = DefaultListener()
+    private val listeners = mutableListOf<Listener>()
+
+    init {
+        listeners.add(AnalyticsListener())
+    }
 
     override fun start() {
         application.doOnActivityCreated { activity, savedInstanceState ->
@@ -47,11 +51,21 @@ class ScreenLogger @Inject constructor(private val application: Application) : A
         }
     }
 
+    fun addListener(listener: Listener) {
+        listeners.add(listener)
+    }
+
+    fun removeListener(listener: Listener) {
+        listeners.remove(listener)
+    }
+
     private fun handleActivity(activity: Activity, savedInstanceState: Bundle?) {
         if (activity is NamedScreen
             && activity !is IgnoreNamedScreen
             && savedInstanceState == null) {
-            listener?.screenLaunched(getName(activity))
+            val name = getName(activity)
+            listeners.toList()
+                .forEach { it.screenLaunched(name) }
         }
 
         if (activity is FragmentActivity) {
@@ -59,17 +73,19 @@ class ScreenLogger @Inject constructor(private val application: Application) : A
                 if (fragment is NamedScreen
                     && fragment !is IgnoreNamedScreen
                     && bundle == null) {
-                    listener?.screenLaunched(getName(fragment))
+                    val name = getName(fragment)
+                    listeners.toList()
+                        .forEach { it.screenLaunched(name) }
                 }
             }
         }
     }
 
     private fun getName(screen: NamedScreen): String {
-        return if (screen.screenName.isNotEmpty()) {
-            screen.screenName
-        } else {
-            parseName(screen.javaClass.simpleName)
+        return when {
+            screen.screenName.isNotEmpty() -> screen.screenName
+            screen.screenNameRes != 0 -> application.getString(screen.screenNameRes)
+            else -> parseName(screen.javaClass.simpleName)
         }
     }
 
@@ -99,7 +115,7 @@ class ScreenLogger @Inject constructor(private val application: Application) : A
         fun screenLaunched(name: String)
     }
 
-    class DefaultListener : Listener {
+    class AnalyticsListener : Listener {
         override fun screenLaunched(name: String) {
             Analytics.log("screen launched: $name")
         }
