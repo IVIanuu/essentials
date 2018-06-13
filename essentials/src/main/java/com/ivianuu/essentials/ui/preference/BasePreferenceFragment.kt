@@ -82,6 +82,11 @@ abstract class BasePreferenceFragment : PreferenceFragmentCompat(),
         }
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        viewScopeProvider = viewScope()
+    }
+
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         if (prefsRes != -1) {
             addPreferencesFromResource(prefsRes)
