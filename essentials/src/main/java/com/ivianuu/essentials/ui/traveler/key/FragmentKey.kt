@@ -20,6 +20,7 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentTransaction
+import com.ivianuu.essentials.util.ext.unsafeLazy
 import com.ivianuu.traveler.commands.Command
 import kotlin.reflect.KClass
 
@@ -65,3 +66,6 @@ fun <T> Fragment.key() where T : FragmentKey, T : Parcelable =
 
 fun <T> Fragment.requireKey() where T : FragmentKey, T : Parcelable =
     key<T>() ?: throw IllegalStateException("missing key")
+
+fun <T> Fragment.bindKey() where T : FragmentKey, T : Parcelable =
+    unsafeLazy { requireKey<T>() }

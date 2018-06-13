@@ -21,6 +21,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
+import com.ivianuu.essentials.util.ext.unsafeLazy
 import com.ivianuu.traveler.commands.Command
 import kotlin.reflect.KClass
 
@@ -61,3 +62,6 @@ fun <T> Activity.key() where T : ActivityKey, T : Parcelable =
 
 fun <T> Activity.requireKey() where T : ActivityKey, T : Parcelable =
     key<T>() ?: throw IllegalStateException("missing key")
+
+fun <T> Activity.bindKey() where T : ActivityKey, T : Parcelable =
+        unsafeLazy { requireKey<T>() }
