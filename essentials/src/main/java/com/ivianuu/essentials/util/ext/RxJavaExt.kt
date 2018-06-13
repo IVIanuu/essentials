@@ -20,6 +20,7 @@ package com.ivianuu.essentials.util.ext
 
 import com.ivianuu.essentials.util.tuples.*
 import io.reactivex.Observable
+import io.reactivex.Scheduler
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.*
 import io.reactivex.rxkotlin.Observables
@@ -28,7 +29,7 @@ import io.reactivex.subjects.*
 
 inline val COMPUTATION get() = Schedulers.computation()
 inline val IO get() = Schedulers.io()
-inline val MAIN get() = AndroidSchedulers.mainThread()
+inline val MAIN: Scheduler get() = AndroidSchedulers.mainThread()
 
 inline fun <T : Any> BehaviorSubject<T>.requireValue() =
     value ?: throw IllegalStateException("value is null")

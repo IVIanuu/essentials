@@ -54,14 +54,14 @@ inline fun <T : Any> Option<T>.require() =
 inline fun <T : Any, U : Any> Option<T>.map(mapper: (T) -> U) = if (this is Option.Some) {
     optionOf(mapper.invoke(value))
 } else {
-    absent<U>()
+    absent()
 }
 
 inline fun <T : Any, U : Any> Option<T>.flatMap(mapper: (T) -> Option<U>) =
     if (this is Option.Some) {
         mapper.invoke(value)
     } else {
-        absent<U>()
+        absent()
     }
 
 inline fun <T : Any> Option<T>.filter(predicate: (T) -> Boolean) =

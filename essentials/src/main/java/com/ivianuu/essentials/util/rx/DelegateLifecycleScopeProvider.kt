@@ -17,13 +17,15 @@
 package com.ivianuu.essentials.util.rx
 
 import com.uber.autodispose.LifecycleScopeProvider
+import io.reactivex.Observable
+import io.reactivex.functions.Function
 
 /**
  * A [LifecycleScopeProvider] which wraps another [lifecycleScopeProvider]
  */
 interface DelegateLifecycleScopeProvider<T> : LifecycleScopeProvider<T> {
     val lifecycleScopeProvider: LifecycleScopeProvider<T>
-    override fun correspondingEvents() = lifecycleScopeProvider.correspondingEvents()
-    override fun lifecycle() = lifecycleScopeProvider.lifecycle()
+    override fun correspondingEvents(): Function<T, T> = lifecycleScopeProvider.correspondingEvents()
+    override fun lifecycle(): Observable<T> = lifecycleScopeProvider.lifecycle()
     override fun peekLifecycle() = lifecycleScopeProvider.peekLifecycle()
 }

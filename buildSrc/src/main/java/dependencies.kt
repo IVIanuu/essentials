@@ -17,7 +17,7 @@ object Versions {
     const val daggerExtensions = "8ffa8b656b"
     const val epoxy = "2.12.0"
     const val fabric = "2.7.1"
-    const val kotlin = "1.2.41"
+    const val kotlin = "1.2.50"
     const val ktx = "0.3"
     const val mavenGradle = "2.1"
     const val materialDialogs = "0.9.6.0"

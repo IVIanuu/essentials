@@ -17,11 +17,12 @@
 package com.ivianuu.essentials.util.rx
 
 import com.uber.autodispose.ScopeProvider
+import io.reactivex.Maybe
 
 /**
  * A [ScopeProvider] which wraps another [ScopeProvider]
  */
 interface DelegateScopeProvider : ScopeProvider {
     val scopeProvider: ScopeProvider
-    override fun requestScope() = scopeProvider.requestScope()
+    override fun requestScope(): Maybe<*> = scopeProvider.requestScope()
 }

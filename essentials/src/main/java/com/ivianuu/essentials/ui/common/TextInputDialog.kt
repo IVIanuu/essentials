@@ -44,9 +44,9 @@ class TextInputDialog : BaseDialogFragment() {
 
         return MaterialDialog.Builder(requireContext())
             .title(key.title)
-            .input(key.inputHint, key.prefill, key.allowEmptyInput,
-                { _, input -> router.sendResult(key.resultCode, input.toString()) }
-            )
+            .input(key.inputHint, key.prefill, key.allowEmptyInput) { _, input ->
+                router.sendResult(key.resultCode, input.toString())
+            }
             .inputType(key.inputType)
             .positiveText(R.string.action_ok)
             .negativeText(R.string.action_cancel)

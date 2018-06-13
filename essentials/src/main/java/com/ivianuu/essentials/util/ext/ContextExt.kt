@@ -49,11 +49,7 @@ fun Context.findActivity(): Activity? {
         context = context.baseContext
     }
 
-    return if (context is Activity) {
-        context
-    } else {
-        null
-    }
+    return context as? Activity
 }
 
 inline fun Context.findActivityOrThrow() =
