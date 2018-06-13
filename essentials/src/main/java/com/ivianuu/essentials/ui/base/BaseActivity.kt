@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.ui.base
 
+import android.arch.lifecycle.Lifecycle
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
@@ -31,6 +32,7 @@ import com.ivianuu.essentials.util.ext.unsafeLazy
 import com.ivianuu.essentials.util.screenlogger.NamedScreen
 import com.ivianuu.traveler.Navigator
 import com.ivianuu.traveler.Router
+import com.uber.autodispose.LifecycleScopeProvider
 import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider
 import dagger.android.DispatchingAndroidInjector
 import javax.inject.Inject
@@ -58,7 +60,7 @@ abstract class BaseActivity : AppCompatActivity(), KtHasSupportFragmentInjector,
         )
     }
 
-    val scopeProvider = AndroidLifecycleScopeProvider.from(this)
+    val scopeProvider: LifecycleScopeProvider<Lifecycle.Event> = AndroidLifecycleScopeProvider.from(this)
 
     override lateinit var router: Router
 
