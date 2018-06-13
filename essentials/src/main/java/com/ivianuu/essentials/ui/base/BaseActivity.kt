@@ -31,7 +31,7 @@ import com.ivianuu.essentials.util.ext.unsafeLazy
 import com.ivianuu.essentials.util.screenlogger.NamedScreen
 import com.ivianuu.traveler.Navigator
 import com.ivianuu.traveler.Router
-import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider
 import dagger.android.DispatchingAndroidInjector
 import javax.inject.Inject
 
@@ -58,7 +58,7 @@ abstract class BaseActivity : AppCompatActivity(), KtHasSupportFragmentInjector,
         )
     }
 
-    val scopeProvider = scope()
+    val scopeProvider = AndroidLifecycleScopeProvider.from(this)
 
     override lateinit var router: Router
 

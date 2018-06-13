@@ -76,6 +76,21 @@ inline fun <T> Observable<T>.autoDisposable(view: View) =
 inline fun <T> Single<T>.autoDisposable(view: View) =
     autoDisposable(view.scope())
 
+inline fun <E> Completable.autoDisposable(scopeProvider: LifecycleScopeProvider<E>, untilEvent: E) =
+        autoDisposable(scopeProvider.toScopeProvider(untilEvent))
+
+inline fun <T, E> Flowable<T>.autoDisposable(scopeProvider: LifecycleScopeProvider<E>, untilEvent: E) =
+    autoDisposable(scopeProvider.toScopeProvider(untilEvent))
+
+inline fun <T, E> Maybe<T>.autoDisposable(scopeProvider: LifecycleScopeProvider<E>, untilEvent: E) =
+    autoDisposable(scopeProvider.toScopeProvider(untilEvent))
+
+inline fun <T, E> Observable<T>.autoDisposable(scopeProvider: LifecycleScopeProvider<E>, untilEvent: E) =
+    autoDisposable(scopeProvider.toScopeProvider(untilEvent))
+
+inline fun <T, E> Single<T>.autoDisposable(scopeProvider: LifecycleScopeProvider<E>, untilEvent: E) =
+    autoDisposable(scopeProvider.toScopeProvider(untilEvent))
+
 fun <E> LifecycleScopeProvider<E>.toScopeProvider() = ScopeProvider {
     val currentState = peekLifecycle() ?: throw LifecycleNotStartedException()
     val correspondingEvent = correspondingEvents().apply(currentState)
@@ -91,11 +106,6 @@ fun <E> LifecycleScopeProvider<E>.toScopeProvider(untilEvent: E) = ScopeProvider
         .take(1)
         .singleElement()
 }
-
-fun <T, E> Observable<T>.autoDisposable(
-    provider: LifecycleScopeProvider<E>,
-    untilEvent: E
-) = autoDisposable(provider.toScopeProvider(untilEvent))
 
 private val onNextStub: (Any) -> Unit = {}
 private val onErrorStub: (Throwable) -> Unit = { RxJavaPlugins.onError(

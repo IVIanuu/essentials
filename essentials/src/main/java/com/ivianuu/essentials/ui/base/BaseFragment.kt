@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.ui.base
 
+import android.arch.lifecycle.Lifecycle
 import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -29,11 +30,10 @@ import com.ivianuu.essentials.ui.common.back.BackListener
 import com.ivianuu.essentials.ui.traveler.RouterHolder
 import com.ivianuu.essentials.util.ContextAware
 import com.ivianuu.essentials.util.ViewInjectionContextWrapper
-import com.ivianuu.essentials.util.ext.viewScope
 import com.ivianuu.essentials.util.screenlogger.NamedScreen
 import com.ivianuu.traveler.Router
 import com.uber.autodispose.LifecycleScopeProvider
-import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider
 import dagger.android.DispatchingAndroidInjector
 import javax.inject.Inject
 
@@ -48,8 +48,8 @@ abstract class BaseFragment : Fragment(), BackListener, KtHasSupportFragmentInje
     @Inject override lateinit var supportFragmentInjector: DispatchingAndroidInjector<Fragment>
     @Inject override lateinit var viewInjector: DispatchingAndroidInjector<View>
 
-    val scopeProvider = scope()
-    lateinit var viewScopeProvider: LifecycleScopeProvider<*>
+    val scopeProvider: LifecycleScopeProvider<Lifecycle.Event> = AndroidLifecycleScopeProvider.from(this)
+    lateinit var viewScopeProvider: LifecycleScopeProvider<Lifecycle.Event>
 
     protected open val layoutRes = -1
 
@@ -73,6 +73,6 @@ abstract class BaseFragment : Fragment(), BackListener, KtHasSupportFragmentInje
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewScopeProvider = viewScope()
+        viewScopeProvider = AndroidLifecycleScopeProvider.from(viewLifecycleOwner)
     }
 }
