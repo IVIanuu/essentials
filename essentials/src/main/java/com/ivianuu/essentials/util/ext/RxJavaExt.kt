@@ -18,7 +18,11 @@
 
 package com.ivianuu.essentials.util.ext
 
+import com.ivianuu.essentials.util.tuples.*
+import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.functions.*
+import io.reactivex.rxkotlin.Observables
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.*
 
@@ -43,3 +47,84 @@ inline fun <T : Any> maybeSubject(): MaybeSubject<T> = MaybeSubject.create()
 inline fun <T : Any> publishSubject(): PublishSubject<T> = PublishSubject.create()
 
 inline fun <T : Any> singleSubject(): SingleSubject<T> = SingleSubject.create()
+
+inline fun <T1, T2, T3, T4> Observables.combineLatest(
+    source1: Observable<T1>,
+    source2: Observable<T2>,
+    source3: Observable<T3>,
+    source4: Observable<T4>
+) =
+    Observable.combineLatest(source1, source2, source3, source4, Function4 {
+            t1: T1, t2: T2, t3: T3, t4: T4 ->
+        Quartet(t1, t2, t3, t4)
+    })!!
+
+inline fun <T1, T2, T3, T4, T5> Observables.combineLatest(
+    source1: Observable<T1>,
+    source2: Observable<T2>,
+    source3: Observable<T3>,
+    source4: Observable<T4>,
+    source5: Observable<T5>
+) =
+    Observable.combineLatest(source1, source2, source3, source4, source5, Function5 {
+            t1: T1, t2: T2, t3: T3, t4: T4, t5: T5 ->
+        Quintet(t1, t2, t3, t4, t5)
+    })!!
+
+inline fun <T1, T2, T3, T4, T5, T6> Observables.combineLatest(
+    source1: Observable<T1>,
+    source2: Observable<T2>,
+    source3: Observable<T3>,
+    source4: Observable<T4>,
+    source5: Observable<T5>,
+    source6: Observable<T6>
+) =
+    Observable.combineLatest(source1, source2, source3, source4, source5, source6, Function6 {
+            t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6 ->
+        Sextet(t1, t2, t3, t4, t5, t6)
+    })!!
+
+inline fun <T1, T2, T3, T4, T5, T6, T7> Observables.combineLatest(
+    source1: Observable<T1>,
+    source2: Observable<T2>,
+    source3: Observable<T3>,
+    source4: Observable<T4>,
+    source5: Observable<T5>,
+    source6: Observable<T6>,
+    source7: Observable<T7>
+) =
+    Observable.combineLatest(source1, source2, source3, source4, source5, source6, source7, Function7 {
+            t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6, t7: T7 ->
+        Septet(t1, t2, t3, t4, t5, t6, t7)
+    })!!
+
+inline fun <T1, T2, T3, T4, T5, T6, T7, T8> Observables.combineLatest(
+    source1: Observable<T1>,
+    source2: Observable<T2>,
+    source3: Observable<T3>,
+    source4: Observable<T4>,
+    source5: Observable<T5>,
+    source6: Observable<T6>,
+    source7: Observable<T7>,
+    source8: Observable<T8>
+) =
+    Observable.combineLatest(source1, source2, source3, source4, source5, source6, source7, source8, Function8 {
+            t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6, t7: T7, t8: T8 ->
+        Octet(t1, t2, t3, t4, t5, t6, t7, t8)
+    })!!
+
+inline fun <T1, T2, T3, T4, T5, T6, T7, T8, T9> Observables.combineLatest(
+    source1: Observable<T1>,
+    source2: Observable<T2>,
+    source3: Observable<T3>,
+    source4: Observable<T4>,
+    source5: Observable<T5>,
+    source6: Observable<T6>,
+    source7: Observable<T7>,
+    source8: Observable<T8>,
+    source9: Observable<T9>
+) =
+    Observable.combineLatest(source1, source2, source3, source4, source5, source6, source7, source8, source9, Function9 {
+            t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6, t7: T7, t8: T8, t9: T9 ->
+        Ennead(t1, t2, t3, t4, t5, t6, t7, t8, t9)
+    })!!
