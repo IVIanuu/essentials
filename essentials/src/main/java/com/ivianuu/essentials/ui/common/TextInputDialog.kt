@@ -16,20 +16,26 @@
 
 package com.ivianuu.essentials.ui.common
 
-import android.annotation.SuppressLint
 import android.app.Dialog
 import android.os.Bundle
-import android.os.Parcelable
 import com.afollestad.materialdialogs.MaterialDialog
+import com.ivianuu.compass.Destination
 import com.ivianuu.daggerextensions.AutoContribute
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.injection.EssentialsFragmentBindingModule
 import com.ivianuu.essentials.injection.PerFragment
 import com.ivianuu.essentials.ui.base.BaseDialogFragment
-import com.ivianuu.essentials.ui.traveler.key.FragmentClassKey
-import com.ivianuu.essentials.ui.traveler.key.ResultKey
-import com.ivianuu.essentials.ui.traveler.key.requireKey
-import kotlinx.android.parcel.Parcelize
+import com.ivianuu.essentials.ui.traveler.key.ResultDestination
+
+@Destination(TextInputDialog::class)
+data class TextInputDestination(
+    override var resultCode: Int,
+    val title: String,
+    val inputHint: String = "",
+    val inputType: Int = 0,
+    val prefill: String = "",
+    val allowEmptyInput: Boolean = false
+) : ResultDestination
 
 /**
  * Text input dialog
@@ -40,31 +46,17 @@ import kotlinx.android.parcel.Parcelize
 class TextInputDialog : BaseDialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val key = requireKey<TextInputKey>()
+        val destination = textInputDestination()
 
         return MaterialDialog.Builder(requireContext())
-            .title(key.title)
-            .input(key.inputHint, key.prefill, key.allowEmptyInput) { _, input ->
-                router.sendResult(key.resultCode, input.toString())
+            .title(destination.title)
+            .input(destination.inputHint, destination.prefill, destination.allowEmptyInput) { _, input ->
+                router.sendResult(destination.resultCode, input.toString())
             }
-            .inputType(key.inputType)
+            .inputType(destination.inputType)
             .positiveText(R.string.action_ok)
             .negativeText(R.string.action_cancel)
             .build()
     }
 
 }
-
-/**
- * Key for the [TextInputDialog]
- */
-@SuppressLint("ParcelCreator")
-@Parcelize
-data class TextInputKey(
-    override var resultCode: Int,
-    val title: String,
-    val inputHint: String = "",
-    val inputType: Int = 0,
-    val prefill: String = "",
-    val allowEmptyInput: Boolean = false
-) : FragmentClassKey(TextInputDialog::class), ResultKey, Parcelable

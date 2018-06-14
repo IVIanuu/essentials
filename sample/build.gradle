@@ -25,6 +25,7 @@ android {
 }
 
 dependencies {
+    kapt Deps.compassCompiler
     kapt Deps.daggerCompiler
     kapt Deps.daggerAndroidProcessor
     kapt Deps.daggerExtensionsCompiler

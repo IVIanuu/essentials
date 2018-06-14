@@ -47,6 +47,9 @@ dependencies {
     api Deps.autoDisposeAndroid
     api Deps.autoDisposeArch
 
+    api Deps.compass
+    kapt Deps.compassCompiler
+
     api Deps.constraintLayout
 
     api Deps.dagger
@@ -98,7 +101,6 @@ dependencies {
     api Deps.timber
 
     api Deps.traveler
-    api Deps.travelerFragments
     api Deps.travelerLifecycleObserver
 }
 

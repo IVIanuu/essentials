@@ -18,13 +18,16 @@ package com.ivianuu.essentials.sample.ui
 
 import android.os.Bundle
 import android.view.View
+import com.ivianuu.compass.Destination
 import com.ivianuu.daggerextensions.AutoContribute
 import com.ivianuu.essentials.injection.FragmentBindingModule
 import com.ivianuu.essentials.injection.PerFragment
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.base.BaseFragment
-import com.ivianuu.essentials.ui.traveler.key.FragmentClassKey
 import com.ivianuu.essentials.util.ext.setupKeyFragmentSwapperRouter
+
+@Destination(MultipleChildsFragment::class)
+object MultipleChildsDestination
 
 /**
  * @author Manuel Wrage (IVIanuu)
@@ -39,11 +42,11 @@ class MultipleChildsFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        CONTAINER_IDS.take(1).forEachIndexed { index, containerId ->
+        CONTAINER_IDS.forEachIndexed { index, containerId ->
             val router = setupKeyFragmentSwapperRouter(containerId)
 
             if (savedInstanceState == null) {
-                router.replaceScreen(ChildNavigationContainerKey(index))
+                router.replaceScreen(ChildNavigationContainerDestination(index))
             }
         }
     }
@@ -53,5 +56,3 @@ class MultipleChildsFragment : BaseFragment() {
             arrayOf(R.id.container_0, R.id.container_1, R.id.container_2)
     }
 }
-
-object MultipleChildsKey : FragmentClassKey(MultipleChildsFragment::class)

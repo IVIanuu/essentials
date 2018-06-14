@@ -17,18 +17,18 @@
 package com.ivianuu.essentials.sample.ui
 
 import android.os.Bundle
-import android.os.Parcelable
 import android.view.View
+import com.ivianuu.compass.Destination
 import com.ivianuu.daggerextensions.AutoContribute
 import com.ivianuu.essentials.injection.FragmentBindingModule
 import com.ivianuu.essentials.injection.PerFragment
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.base.BaseFragment
-import com.ivianuu.essentials.ui.traveler.key.FragmentClassKey
-import com.ivianuu.essentials.ui.traveler.key.requireKey
-import com.ivianuu.essentials.util.ext.setupKeyFragmentRouter
+import com.ivianuu.essentials.util.ext.setupCompassFragmentRouter
 import com.ivianuu.essentials.util.screenlogger.IgnoreNamedScreen
-import kotlinx.android.parcel.Parcelize
+
+@Destination(ChildNavigationContainerFragment::class)
+data class ChildNavigationContainerDestination(val index: Int)
 
 /**
  * @author Manuel Wrage (IVIanuu)
@@ -44,16 +44,12 @@ class ChildNavigationContainerFragment : BaseFragment(),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val key = requireKey<ChildNavigationContainerKey>()
+        val destination = childNavigationContainerDestination()
 
-        val router = setupKeyFragmentRouter(R.id.child_navigation_container)
+        val router = setupCompassFragmentRouter(R.id.child_navigation_container)
 
         if (savedInstanceState == null) {
-            router.replaceScreen(ChildNavigationKey(key.index, 1))
+            router.replaceScreen(ChildNavigationDestination(destination.index, 1))
         }
     }
 }
-
-@Parcelize
-data class ChildNavigationContainerKey(val index: Int) :
-    FragmentClassKey(ChildNavigationContainerFragment::class), Parcelable

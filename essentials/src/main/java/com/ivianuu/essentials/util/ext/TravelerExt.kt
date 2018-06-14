@@ -27,11 +27,11 @@ import android.support.v4.app.containerId
 import android.support.v7.preference.Preference
 import android.support.v7.widget.Toolbar
 import android.view.View
+import com.ivianuu.compass.CompassFragmentAppNavigator
+import com.ivianuu.compass.CompassFragmentNavigator
 import com.ivianuu.essentials.ui.traveler.TravelerStore
+import com.ivianuu.essentials.ui.traveler.navigator.CompassFragmentSwapperNavigator
 import com.ivianuu.essentials.ui.traveler.navigator.FragmentSwapperNavigator.HideStrategy
-import com.ivianuu.essentials.ui.traveler.navigator.KeyFragmentAppNavigator
-import com.ivianuu.essentials.ui.traveler.navigator.KeyFragmentNavigator
-import com.ivianuu.essentials.ui.traveler.navigator.KeyFragmentSwapperNavigator
 import com.ivianuu.traveler.Navigator
 import com.ivianuu.traveler.Router
 import com.ivianuu.traveler.lifecycleobserver.NavigatorLifecycleObserver
@@ -86,17 +86,23 @@ inline fun <T> T.removeRouter(containerId: Int) where T : ViewModelStoreOwner, T
     getTravelerStore().removeTraveler(containerId)
 }
 
-inline fun FragmentActivity.setupKeyFragmentRouter(containerId: Int) =
-    setupKeyFragmentRouter(supportFragmentManager, containerId)
+inline fun FragmentActivity.setupCompassFragmentRouter(containerId: Int, crossinline exit: () -> Unit = {}) =
+    setupCompassFragmentRouter(supportFragmentManager, containerId, exit)
 
-inline fun Fragment.setupKeyFragmentRouter(containerId: Int) =
-    setupKeyFragmentRouter(childFragmentManager, containerId)
+inline fun Fragment.setupCompassFragmentRouter(containerId: Int, crossinline exit: () -> Unit = {}) =
+    setupCompassFragmentRouter(childFragmentManager, containerId, exit)
 
-inline fun <T> T.setupKeyFragmentRouter(
+inline fun <T> T.setupCompassFragmentRouter(
     fm: FragmentManager,
-    containerId: Int
+    containerId: Int,
+    crossinline exit: () -> Unit = {}
 ): Router where T : ViewModelStoreOwner, T : LifecycleOwner {
-    val navigator = KeyFragmentNavigator(fm, containerId)
+    val navigator = object : CompassFragmentNavigator(fm, containerId) {
+        override fun exit() {
+            exit.invoke()
+        }
+    }
+
     return setupRouter(navigator, containerId)
 }
 
@@ -109,7 +115,7 @@ inline fun Fragment.setupKeyFragmentAppRouter(containerId: Int) =
 inline fun <T> T.setupKeyFragmentAppRouter(
     activity: FragmentActivity, fm: FragmentManager, containerId: Int
 ): Router where T : ViewModelStoreOwner, T : LifecycleOwner {
-    val navigator = KeyFragmentAppNavigator(activity, fm, containerId)
+    val navigator = CompassFragmentAppNavigator(activity, fm, containerId)
     return setupRouter(navigator, containerId)
 }
 
@@ -137,7 +143,7 @@ inline fun <T> T.setupKeyFragmentSwapperRouter(
     hideStrategy: HideStrategy = HideStrategy.DETACH,
     swapOnReselection: Boolean = true
 ): Router where T : ViewModelStoreOwner, T : LifecycleOwner {
-    val navigator = KeyFragmentSwapperNavigator(
+    val navigator = CompassFragmentSwapperNavigator(
         fm,
         containerId, hideStrategy, swapOnReselection
     )

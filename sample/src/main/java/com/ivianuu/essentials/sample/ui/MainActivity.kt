@@ -49,7 +49,7 @@ class MainActivity : BaseActivity() {
             .subscribe()
 
         if (savedInstanceState == null) {
-            router.newRootScreen(MultipleChildsKey)
+            router.newRootScreen(MultipleChildsDestination)
         }
     }
 

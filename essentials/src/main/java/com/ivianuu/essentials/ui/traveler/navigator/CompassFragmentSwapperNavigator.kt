@@ -19,23 +19,23 @@ package com.ivianuu.essentials.ui.traveler.navigator
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentTransaction
+import com.ivianuu.compass.CompassFragmentNavigatorHelper
 import com.ivianuu.traveler.commands.Command
-import com.ivianuu.traveler.fragments.FragmentNavigator
 
 /**
- * Navigator for key based navigation
+ * Fragment swapper navigator which uses keys
  */
-open class KeyFragmentNavigator(
-    fragmentManager: FragmentManager,
+class CompassFragmentSwapperNavigator(
+    fm: FragmentManager,
     containerId: Int,
-    private val exit: () -> Unit = {}
-) : FragmentNavigator(fragmentManager, containerId) {
+    hideStrategy: HideStrategy = HideStrategy.DETACH,
+    swapOnReselection: Boolean = true
+) : FragmentSwapperNavigator(fm, containerId, hideStrategy, swapOnReselection) {
 
-    private val fragmentNavigatorHelper = KeyFragmentNavigatorHelper()
+    private val helper = CompassFragmentNavigatorHelper()
 
-    override fun createFragment(key: Any, data: Any?): Fragment? {
-        return fragmentNavigatorHelper.createFragment(key, data)
-    }
+    override fun createFragment(key: Any, data: Any?) =
+        helper.createFragment(key, data)
 
     override fun setupFragmentTransaction(
         command: Command,
@@ -43,15 +43,7 @@ open class KeyFragmentNavigator(
         nextFragment: Fragment,
         transaction: FragmentTransaction
     ) {
-        fragmentNavigatorHelper.setupFragmentTransaction(
-            command,
-            currentFragment,
-            nextFragment,
-            transaction
-        )
+        helper.setupFragmentTransaction(command, currentFragment, nextFragment, transaction)
     }
 
-    override fun exit() {
-        exit.invoke()
-    }
 }

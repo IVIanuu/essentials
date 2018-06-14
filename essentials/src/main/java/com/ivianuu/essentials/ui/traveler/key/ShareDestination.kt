@@ -20,16 +20,23 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.support.v4.app.ShareCompat
+import com.ivianuu.compass.ActivityRouteFactory
+import com.ivianuu.compass.Destination
+import com.ivianuu.compass.RouteFactory
 
 /**
  * Shares the [text]
  */
-data class ShareKey(val text: String) : ActivityKey() {
-    override fun createIntent(context: Context, data: Any?): Intent {
+@RouteFactory(ShareDestinationRouteFactory::class)
+@Destination
+data class ShareDestination(val text: String)
+
+object ShareDestinationRouteFactory : ActivityRouteFactory<ShareDestination> {
+    override fun createIntent(context: Context, destination: ShareDestination): Intent {
         return ShareCompat.IntentBuilder
             .from(context as Activity)
             .setType("text/plain")
-            .setText(text)
+            .setText(destination.text)
             .createChooserIntent()
     }
 }

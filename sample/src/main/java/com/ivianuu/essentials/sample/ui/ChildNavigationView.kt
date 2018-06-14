@@ -40,7 +40,7 @@ class ChildNavigationView @JvmOverloads constructor(
     attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : LinearLayout(context, attrs, defStyleAttr), RouterHolder {
 
-    @Inject lateinit var key: ChildNavigationKey
+    @Inject lateinit var destination: ChildNavigationDestination
     @field:LocalRouter @Inject override lateinit var router: Router
 
     override fun onFinishInflate() {
@@ -51,16 +51,18 @@ class ChildNavigationView @JvmOverloads constructor(
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
 
-        title.text = "Container: ${key.index}, Count: ${key.count}"
-        setBackgroundColor(COLORS[key.index])
+        title.text = "Container: ${destination.index}, Count: ${destination.count}"
+        setBackgroundColor(COLORS[destination.index])
 
         pop_to_root.setOnClickListener { router.backToRoot() }
         prev.setOnClickListener { router.exit() }
 
-        next.navigateOnClick { ChildNavigationKey(key.index, key.count + 1) }
+        next.navigateOnClick {
+            ChildNavigationDestination(destination.index, destination.count + 1)
+        }
 
         next.setOnClickListener {
-            router.navigateTo(ChildNavigationKey(key.index, key.count + 1))
+            router.navigateTo(ChildNavigationDestination(destination.index, destination.count + 1))
         }
     }
 

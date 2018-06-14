@@ -16,7 +16,7 @@
 
 package com.ivianuu.essentials.util.ext
 
-import com.ivianuu.essentials.ui.traveler.key.ResultKey
+import com.ivianuu.essentials.ui.traveler.key.ResultDestination
 import com.ivianuu.traveler.ResultListener
 import com.ivianuu.traveler.Router
 import com.ivianuu.traveler.commands.Command
@@ -60,7 +60,7 @@ fun Router.commandApplied(): Observable<Command> = Observable.create { e ->
     e.setCancellable { removeNavigationListener(listener) }
 }
 
-fun <T : Any> Router.navigateToForResult(key: ResultKey): Observable<T> {
-    return results<T>(key.resultCode)
-        .doOnSubscribe { navigateTo(key) }
+fun <T : Any> Router.navigateToForResult(destination: ResultDestination): Observable<T> {
+    return results<T>(destination.resultCode)
+        .doOnSubscribe { navigateTo(destination) }
 }

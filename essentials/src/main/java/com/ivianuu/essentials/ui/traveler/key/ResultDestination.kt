@@ -16,12 +16,9 @@
 
 package com.ivianuu.essentials.ui.traveler.key
 
-import android.content.Context
-import android.content.Intent
-
 /**
- * Key for a simple intent
+ * Marks a key as screen that returns a result
  */
-open class IntentKey(val intent: Intent) : ActivityKey() {
-    override fun createIntent(context: Context, data: Any?) = intent
+interface ResultDestination {
+    val resultCode: Int
 }

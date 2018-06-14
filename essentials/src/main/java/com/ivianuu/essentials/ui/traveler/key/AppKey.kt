@@ -18,12 +18,19 @@ package com.ivianuu.essentials.ui.traveler.key
 
 import android.content.Context
 import android.content.Intent
+import com.ivianuu.compass.ActivityRouteFactory
+import com.ivianuu.compass.Destination
+import com.ivianuu.compass.RouteFactory
 
 /**
  * Launches the app
  */
-data class AppKey(private val packageName: String) : ActivityKey() {
-    override fun createIntent(context: Context, data: Any?): Intent {
-        return context.packageManager.getLaunchIntentForPackage(packageName)
+@RouteFactory(AppDestinationRouteFactory::class)
+@Destination
+data class AppDestination(val packageName: String)
+
+object AppDestinationRouteFactory : ActivityRouteFactory<AppDestination> {
+    override fun createIntent(context: Context, destination: AppDestination): Intent {
+        return context.packageManager.getLaunchIntentForPackage(destination.packageName)
     }
 }

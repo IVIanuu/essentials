@@ -16,19 +16,28 @@
 
 package com.ivianuu.essentials.ui.traveler.adapter
 
+import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentStatePagerAdapter
-import com.ivianuu.essentials.ui.traveler.key.FragmentKey
+import android.support.v4.app.FragmentPagerAdapter
+import com.ivianuu.compass.Compass
+import com.ivianuu.compass.FragmentRouteFactory
 
 /**
- * Key fragment state pager adapter
+ * Key fragment pager adapter
  */
-open class KeyFragmentStatePagerAdapter(
+open class CompassFragmentPagerAdapter(
     fm: FragmentManager,
-    private val keys: List<FragmentKey>
-) : FragmentStatePagerAdapter(fm) {
+    private val destinations: List<Any>
+) : FragmentPagerAdapter(fm) {
 
-    override fun getItem(position: Int) = keys[position].newInstance()
+    override fun getItem(position: Int): Fragment {
+        val destination = destinations[position]
+        val factory = Compass.getRouteFactory(destination)
+                as? FragmentRouteFactory<Any>
+                ?: throw IllegalArgumentException("no route factory found for $destination")
 
-    override fun getCount() = keys.size
+        return factory.createFragment(destination)
+    }
+
+    override fun getCount() = destinations.size
 }

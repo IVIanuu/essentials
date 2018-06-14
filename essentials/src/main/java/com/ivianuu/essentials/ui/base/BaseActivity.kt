@@ -21,12 +21,12 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.view.View
+import com.ivianuu.compass.CompassFragmentAppNavigator
 import com.ivianuu.essentials.injection.Injectable
 import com.ivianuu.essentials.injection.KtHasSupportFragmentInjector
 import com.ivianuu.essentials.injection.KtHasViewInjector
 import com.ivianuu.essentials.ui.common.back.BackHandler
 import com.ivianuu.essentials.ui.traveler.RouterHolder
-import com.ivianuu.essentials.ui.traveler.navigator.KeyFragmentAppNavigator
 import com.ivianuu.essentials.util.ext.setupRouter
 import com.ivianuu.essentials.util.ext.unsafeLazy
 import com.ivianuu.essentials.util.screenlogger.NamedScreen
@@ -53,7 +53,7 @@ abstract class BaseActivity : AppCompatActivity(), KtHasSupportFragmentInjector,
     open val fragmentContainer = android.R.id.content
 
     protected open val navigator: Navigator by unsafeLazy {
-        KeyFragmentAppNavigator(
+        CompassFragmentAppNavigator(
             this,
             supportFragmentManager,
             fragmentContainer

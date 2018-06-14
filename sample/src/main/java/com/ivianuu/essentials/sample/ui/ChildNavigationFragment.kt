@@ -16,20 +16,20 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import android.os.Parcelable
+import com.ivianuu.compass.Destination
 import com.ivianuu.daggerextensions.AutoContribute
 import com.ivianuu.essentials.injection.FragmentBindingModule
 import com.ivianuu.essentials.injection.PerFragment
 import com.ivianuu.essentials.injection.ViewBindingModule_
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.base.BaseFragment
-import com.ivianuu.essentials.ui.traveler.key.FragmentClassKey
-import com.ivianuu.essentials.ui.traveler.key.requireKey
 import com.ivianuu.essentials.util.ext.localRouter
 import dagger.Module
 import dagger.Provides
-import kotlinx.android.parcel.Parcelize
 import javax.inject.Qualifier
+
+@Destination(ChildNavigationFragment::class)
+data class ChildNavigationDestination(val index: Int, val count: Int)
 
 /**
  * @author Manuel Wrage (IVIanuu)
@@ -40,10 +40,6 @@ import javax.inject.Qualifier
 class ChildNavigationFragment : BaseFragment() {
     override val layoutRes = R.layout.view_child_navigation
 }
-
-@Parcelize
-data class ChildNavigationKey(val index: Int, val count: Int) :
-    FragmentClassKey(ChildNavigationFragment::class), Parcelable
 
 @Qualifier
 annotation class LocalRouter
@@ -58,6 +54,7 @@ object ChildNavigationModule {
 
     @JvmStatic
     @Provides
-    fun provideKey(fragment: ChildNavigationFragment) = fragment.requireKey<ChildNavigationKey>()
+    fun provideDestination(fragment: ChildNavigationFragment) =
+        fragment.childNavigationDestination()
 
 }

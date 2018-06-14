@@ -12,6 +12,7 @@ object Versions {
     const val archLifecycle = "1.1.1"
     const val autoDispose = "0.8.0"
     const val butterknife = "9.0.0-SNAPSHOT"
+    const val compass = "fc093d0ca1"
     const val constraintLayout = "1.1.2"
     const val dagger = "2.16"
     const val daggerExtensions = "8ffa8b656b"
@@ -48,6 +49,9 @@ object Deps {
     const val autoDisposeArch = "com.uber.autodispose:autodispose-android-archcomponents-kotlin:${Versions.autoDispose}"
 
     const val butterknifeGradlePlugin = "com.jakewharton:butterknife-gradle-plugin:${Versions.butterknife}"
+
+    const val compass = "com.github.IVIanuu.Compass:compass:${Versions.compass}"
+    const val compassCompiler = "com.github.IVIanuu.Compass:compass-compiler:${Versions.compass}"
 
     const val constraintLayout = "com.android.support.constraint:constraint-layout:${Versions.constraintLayout}"
 
@@ -103,8 +107,5 @@ object Deps {
     const val timber = "com.jakewharton.timber:timber:${Versions.timber}"
 
     const val traveler = "com.github.IVIanuu.Traveler:traveler:${Versions.traveler}"
-    const val travelerCompass = "com.github.IVIanuu.Traveler:traveler-compass:${Versions.traveler}"
-    const val travelerCompassCompiler = "com.github.IVIanuu.Traveler:traveler-compass-compiler:${Versions.traveler}"
-    const val travelerFragments = "com.github.IVIanuu.Traveler:traveler-fragments:${Versions.traveler}"
     const val travelerLifecycleObserver = "com.github.IVIanuu.Traveler:traveler-lifecycleobserver:${Versions.traveler}"
 }
