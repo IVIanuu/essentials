@@ -14,23 +14,27 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.traveler.key
+package com.ivianuu.essentials.ui.traveler.destination
 
 import android.content.Context
 import android.content.Intent
+import android.provider.Settings
+import androidx.core.net.toUri
 import com.ivianuu.compass.ActivityRouteFactory
 import com.ivianuu.compass.Destination
 import com.ivianuu.compass.RouteFactory
 
 /**
- * Key for a simple intent
+ * Open s the app info of the app
  */
-@RouteFactory(IntentDestinationRouteFactory::class)
+@RouteFactory(AppInfoDestinationRouteFactory::class)
 @Destination
-open class IntentDestination(val intent: Intent)
+data class AppInfoDestination(val packageName: String)
 
-object IntentDestinationRouteFactory : ActivityRouteFactory<IntentDestination> {
-    override fun createIntent(context: Context, destination: IntentDestination): Intent {
-        return destination.intent
+object AppInfoDestinationRouteFactory : ActivityRouteFactory<AppInfoDestination> {
+    override fun createIntent(context: Context, destination: AppInfoDestination): Intent {
+        return Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+            this.data = "package:${destination.packageName}".toUri()
+        }
     }
 }

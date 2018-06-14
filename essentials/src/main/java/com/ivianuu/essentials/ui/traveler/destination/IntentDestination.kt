@@ -14,29 +14,23 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.traveler.key
+package com.ivianuu.essentials.ui.traveler.destination
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.support.v4.app.ShareCompat
 import com.ivianuu.compass.ActivityRouteFactory
 import com.ivianuu.compass.Destination
 import com.ivianuu.compass.RouteFactory
 
 /**
- * Shares the [text]
+ * Key for a simple intent
  */
-@RouteFactory(ShareDestinationRouteFactory::class)
+@RouteFactory(IntentDestinationRouteFactory::class)
 @Destination
-data class ShareDestination(val text: String)
+open class IntentDestination(val intent: Intent)
 
-object ShareDestinationRouteFactory : ActivityRouteFactory<ShareDestination> {
-    override fun createIntent(context: Context, destination: ShareDestination): Intent {
-        return ShareCompat.IntentBuilder
-            .from(context as Activity)
-            .setType("text/plain")
-            .setText(destination.text)
-            .createChooserIntent()
+object IntentDestinationRouteFactory : ActivityRouteFactory<IntentDestination> {
+    override fun createIntent(context: Context, destination: IntentDestination): Intent {
+        return Intent(destination.intent)
     }
 }

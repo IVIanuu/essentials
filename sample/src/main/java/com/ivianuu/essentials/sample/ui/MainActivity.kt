@@ -18,6 +18,8 @@ package com.ivianuu.essentials.sample.ui
 
 import android.annotation.SuppressLint
 import android.arch.lifecycle.Lifecycle
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import com.ivianuu.daggerextensions.AutoContribute
 import com.ivianuu.essentials.injection.ActivityBindingModule
@@ -26,6 +28,7 @@ import com.ivianuu.essentials.injection.FragmentBindingModule_
 import com.ivianuu.essentials.injection.PerActivity
 import com.ivianuu.essentials.ui.base.BaseActivity
 import com.ivianuu.essentials.ui.base.EssentialsActivityModule
+import com.ivianuu.essentials.ui.traveler.destination.IntentDestination
 import com.ivianuu.essentials.util.ext.autoDisposable
 import com.ivianuu.essentials.util.ext.d
 import io.reactivex.Observable
@@ -40,6 +43,12 @@ class MainActivity : BaseActivity() {
     @SuppressLint("PrivateResource")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        router.navigateTo(IntentDestination(
+            Intent(Intent.ACTION_VIEW).apply {
+                data = Uri.parse("https://www.google.com")
+            }
+        ))
 
         Observable.interval(1, TimeUnit.SECONDS)
             .doOnDispose { d { "on dispose" } }

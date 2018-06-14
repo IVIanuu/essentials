@@ -25,7 +25,7 @@ import com.ivianuu.essentials.R
 import com.ivianuu.essentials.injection.EssentialsFragmentBindingModule
 import com.ivianuu.essentials.injection.PerFragment
 import com.ivianuu.essentials.ui.base.BaseDialogFragment
-import com.ivianuu.essentials.ui.traveler.key.ResultDestination
+import com.ivianuu.essentials.ui.traveler.destination.ResultDestination
 
 @Destination(TextInputDialog::class)
 data class TextInputDestination(
