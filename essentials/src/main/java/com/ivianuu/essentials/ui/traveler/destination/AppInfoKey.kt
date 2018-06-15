@@ -27,14 +27,15 @@ import com.ivianuu.compass.RouteFactory
 /**
  * Open s the app info of the app
  */
-@RouteFactory(AppInfoDestinationRouteFactory::class)
+@RouteFactory(AppInfoDestination.RouteFactory::class)
 @Destination
-data class AppInfoDestination(val packageName: String)
+data class AppInfoDestination(val packageName: String) {
 
-object AppInfoDestinationRouteFactory : ActivityRouteFactory<AppInfoDestination> {
-    override fun createIntent(context: Context, destination: AppInfoDestination): Intent {
-        return Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-            this.data = "package:${destination.packageName}".toUri()
+    object RouteFactory : ActivityRouteFactory<AppInfoDestination> {
+        override fun createIntent(context: Context, destination: AppInfoDestination): Intent {
+            return Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                this.data = "package:${destination.packageName}".toUri()
+            }
         }
     }
 }

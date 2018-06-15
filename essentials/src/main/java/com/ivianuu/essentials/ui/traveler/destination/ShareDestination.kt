@@ -27,16 +27,16 @@ import com.ivianuu.compass.RouteFactory
 /**
  * Shares the [text]
  */
-@RouteFactory(ShareDestinationRouteFactory::class)
+@RouteFactory(ShareDestination.RouteFactory::class)
 @Destination
-data class ShareDestination(val text: String)
-
-object ShareDestinationRouteFactory : ActivityRouteFactory<ShareDestination> {
-    override fun createIntent(context: Context, destination: ShareDestination): Intent {
-        return ShareCompat.IntentBuilder
-            .from(context as Activity)
-            .setType("text/plain")
-            .setText(destination.text)
-            .createChooserIntent()
+data class ShareDestination(val text: String) {
+    object RouteFactory : ActivityRouteFactory<ShareDestination> {
+        override fun createIntent(context: Context, destination: ShareDestination): Intent {
+            return ShareCompat.IntentBuilder
+                .from(context as Activity)
+                .setType("text/plain")
+                .setText(destination.text)
+                .createChooserIntent()
+        }
     }
 }

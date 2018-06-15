@@ -25,12 +25,12 @@ import com.ivianuu.compass.RouteFactory
 /**
  * Key for a simple intent
  */
-@RouteFactory(IntentDestinationRouteFactory::class)
+@RouteFactory(IntentDestination.RouteFactory::class)
 @Destination
-open class IntentDestination(val intent: Intent)
-
-object IntentDestinationRouteFactory : ActivityRouteFactory<IntentDestination> {
-    override fun createIntent(context: Context, destination: IntentDestination): Intent {
-        return Intent(destination.intent)
+open class IntentDestination(val intent: Intent) {
+    object RouteFactory : ActivityRouteFactory<IntentDestination> {
+        override fun createIntent(context: Context, destination: IntentDestination): Intent {
+            return Intent(destination.intent)
+        }
     }
 }
