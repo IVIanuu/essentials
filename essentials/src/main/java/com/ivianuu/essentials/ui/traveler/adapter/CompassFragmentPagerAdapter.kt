@@ -20,7 +20,6 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
 import com.ivianuu.compass.Compass
-import com.ivianuu.compass.FragmentRouteFactory
 
 /**
  * Key fragment pager adapter
@@ -30,14 +29,7 @@ open class CompassFragmentPagerAdapter(
     private val destinations: List<Any>
 ) : FragmentPagerAdapter(fm) {
 
-    override fun getItem(position: Int): Fragment {
-        val destination = destinations[position]
-        val factory = Compass.getRouteFactory(destination)
-                as? FragmentRouteFactory<Any>
-                ?: throw IllegalArgumentException("no route factory found for $destination")
-
-        return factory.createFragment(destination)
-    }
+    override fun getItem(position: Int): Fragment = Compass.requireFragment(destinations[position])
 
     override fun getCount() = destinations.size
 }
