@@ -20,11 +20,13 @@ import android.content.Context
 import android.content.Intent
 import com.ivianuu.compass.ActivityRouteFactory
 import com.ivianuu.compass.Destination
+import com.ivianuu.compass.DoNotSerialize
 import com.ivianuu.compass.RouteFactory
 
 /**
  * Launches the app
  */
+@DoNotSerialize
 @RouteFactory(AppDestination.RouteFactory::class)
 @Destination
 data class AppDestination(val packageName: String) {

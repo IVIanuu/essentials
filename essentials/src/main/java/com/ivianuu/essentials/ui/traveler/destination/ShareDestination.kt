@@ -22,11 +22,13 @@ import android.content.Intent
 import android.support.v4.app.ShareCompat
 import com.ivianuu.compass.ActivityRouteFactory
 import com.ivianuu.compass.Destination
+import com.ivianuu.compass.DoNotSerialize
 import com.ivianuu.compass.RouteFactory
 
 /**
  * Shares the [text]
  */
+@DoNotSerialize
 @RouteFactory(ShareDestination.RouteFactory::class)
 @Destination
 data class ShareDestination(val text: String) {

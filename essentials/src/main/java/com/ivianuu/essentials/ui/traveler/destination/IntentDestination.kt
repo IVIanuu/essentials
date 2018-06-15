@@ -20,11 +20,13 @@ import android.content.Context
 import android.content.Intent
 import com.ivianuu.compass.ActivityRouteFactory
 import com.ivianuu.compass.Destination
+import com.ivianuu.compass.DoNotSerialize
 import com.ivianuu.compass.RouteFactory
 
 /**
  * Key for a simple intent
  */
+@DoNotSerialize
 @RouteFactory(IntentDestination.RouteFactory::class)
 @Destination
 open class IntentDestination(val intent: Intent) {
