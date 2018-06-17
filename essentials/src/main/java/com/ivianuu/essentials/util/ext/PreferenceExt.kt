@@ -18,22 +18,14 @@ package com.ivianuu.essentials.util.ext
 
 import android.support.v7.preference.Preference
 
-inline fun <reified T> Preference.setOnPreferenceChangeListener(crossinline onPreferenceChange: (Preference, T) -> Boolean) {
+inline fun <reified T> Preference.setOnPreferenceChangeListener(
+    crossinline onPreferenceChange: (Preference, T) -> Boolean
+) {
     setOnPreferenceChangeListener { preference: Preference, newValue: Any ->
         if (newValue is T) {
             onPreferenceChange.invoke(preference, newValue)
         } else {
             true
         }
-    }
-}
-
-inline fun Preference.setOnPreferenceClickListener(
-    handled: Boolean = true,
-    crossinline onPreferenceClick: (Preference) -> Unit
-) {
-    setOnPreferenceClickListener {
-        onPreferenceClick.invoke(it)
-        handled
     }
 }
