@@ -36,8 +36,7 @@ data class ChildNavigationContainerDestination(val index: Int)
 @FragmentBindingModule
 @PerFragment
 @AutoContribute
-class ChildNavigationContainerFragment : BaseFragment(),
-    IgnoreNamedScreen {
+class ChildNavigationContainerFragment : BaseFragment(), IgnoreNamedScreen {
 
     override val layoutRes = R.layout.fragment_child_navigation_container
 

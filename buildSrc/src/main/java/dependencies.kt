@@ -12,7 +12,7 @@ object Versions {
     const val archLifecycle = "1.1.1"
     const val autoDispose = "0.8.0"
     const val butterknife = "9.0.0-SNAPSHOT"
-    const val compass = "bb9d4010da"
+    const val compass = "ccc7f56c32"
     const val constraintLayout = "1.1.2"
     const val dagger = "2.16"
     const val daggerExtensions = "8ffa8b656b"
@@ -22,7 +22,6 @@ object Versions {
     const val ktx = "0.3"
     const val mavenGradle = "2.1"
     const val materialDialogs = "0.9.6.0"
-    const val navi = "c521dab5e1"
     const val rxActivityResult = "b16b2d4cf9"
     const val rxAndroid = "2.0.2"
     const val rxBinding = "2.1.1"
@@ -35,7 +34,7 @@ object Versions {
     const val seekBarPreference = "e4f09c6636"
     const val support = "28.0.0-alpha3"
     const val timber = "4.7.0"
-    const val traveler = "891ec4518d"
+    const val traveler = "a6e80f1b38"
 }
 
 object Deps {
