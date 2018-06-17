@@ -12,7 +12,7 @@ object Versions {
     const val archLifecycle = "1.1.1"
     const val autoDispose = "0.8.0"
     const val butterknife = "9.0.0-SNAPSHOT"
-    const val compass = "ccc7f56c32"
+    const val compass = "f17b89685b"
     const val constraintLayout = "1.1.2"
     const val dagger = "2.16"
     const val daggerExtensions = "8ffa8b656b"
