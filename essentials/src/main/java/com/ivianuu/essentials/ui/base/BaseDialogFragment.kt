@@ -27,11 +27,12 @@ import android.view.ViewGroup
 import com.ivianuu.essentials.injection.Injectable
 import com.ivianuu.essentials.injection.KtHasSupportFragmentInjector
 import com.ivianuu.essentials.injection.KtHasViewInjector
+import com.ivianuu.essentials.ui.common.LabeledScreen
 import com.ivianuu.essentials.ui.common.back.BackListener
 import com.ivianuu.essentials.ui.traveler.RouterHolder
 import com.ivianuu.essentials.util.ContextAware
 import com.ivianuu.essentials.util.ViewInjectionContextWrapper
-import com.ivianuu.essentials.util.screenlogger.NamedScreen
+import com.ivianuu.essentials.util.screenlogger.IdentifiableScreen
 import com.ivianuu.traveler.Router
 import com.uber.autodispose.LifecycleScopeProvider
 import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider
@@ -42,8 +43,8 @@ import javax.inject.Inject
  * Base dialog fragment
  */
 abstract class BaseDialogFragment : AppCompatDialogFragment(),
-    BackListener, KtHasViewInjector, KtHasSupportFragmentInjector, Injectable, NamedScreen,
-    ContextAware, RouterHolder {
+    BackListener, KtHasViewInjector, KtHasSupportFragmentInjector, Injectable, IdentifiableScreen,
+    ContextAware, RouterHolder, LabeledScreen {
 
     @Inject override lateinit var router: Router
 

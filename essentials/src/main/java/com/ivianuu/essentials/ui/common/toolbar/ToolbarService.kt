@@ -14,50 +14,38 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.injection
+package com.ivianuu.essentials.ui.common.toolbar
 
-import android.app.Activity
 import android.app.Application
-import android.content.Context
+import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
 import android.support.v4.app.FragmentManager
+import android.view.View
 import com.ivianuu.daggerextensions.AutoBindsIntoSet
 import com.ivianuu.essentials.app.AppService
+import com.ivianuu.essentials.injection.EssentialsAppServiceModule
 import com.ivianuu.essentials.util.ext.doOnActivityCreated
-import com.ivianuu.essentials.util.ext.doOnFragmentPreAttached
-import dagger.android.AndroidInjection
-import dagger.android.support.AndroidSupportInjection
-import dagger.android.support.HasSupportFragmentInjector
+import com.ivianuu.essentials.util.ext.doOnFragmentViewCreated
 import javax.inject.Inject
+import javax.inject.Singleton
 
 /**
- * Automatically injects [Injectable] [Activity]'s and [Fragment]'s
+ * Manages toolbar fragments
  */
 @EssentialsAppServiceModule
+@Singleton
 @AutoBindsIntoSet(AppService::class)
-class AutoInjector @Inject constructor(private val application: Application) : AppService {
-
+class ToolbarService @Inject constructor(private val application: Application) : AppService {
     override fun start() {
         application.doOnActivityCreated { activity, _ ->
-            handleActivity(activity)
-        }
-    }
-
-    private fun handleActivity(activity: Activity) {
-        if (activity is Injectable && activity !is Ignore) {
-            AndroidInjection.inject(activity)
-        }
-
-        if (activity is FragmentActivity && activity is HasSupportFragmentInjector) {
-            activity.supportFragmentManager
-                .doOnFragmentPreAttached(true) { _: FragmentManager, fragment: Fragment, _: Context ->
-                    if (fragment is Injectable && fragment !is Ignore) {
-                        AndroidSupportInjection.inject(fragment)
+            if (activity is FragmentActivity) {
+                activity.supportFragmentManager.doOnFragmentViewCreated(true) { _: FragmentManager, fragment: Fragment, _: View, _: Bundle? ->
+                    if (fragment is ToolbarContainer) {
+                        fragment.setupToolbar()
                     }
                 }
+            }
         }
     }
-
-    interface Ignore
 }

@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.util.screenlogger
+package com.ivianuu.essentials.ui.common
 
 /**
- * Tells the [ScreenLogger] that it should log this screen
+ * @author Manuel Wrage (IVIanuu)
  */
-interface NamedScreen {
-    val screenName get() = ""
-    val screenNameRes get() = 0
+interface LabeledScreen {
+    val screenLabel: String? get() = null
+    val screenLabelRes: Int get() = 0
 }

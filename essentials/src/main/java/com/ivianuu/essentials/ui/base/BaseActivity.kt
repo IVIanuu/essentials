@@ -29,7 +29,7 @@ import com.ivianuu.essentials.ui.common.back.BackHandler
 import com.ivianuu.essentials.ui.traveler.RouterHolder
 import com.ivianuu.essentials.util.ext.setupRouter
 import com.ivianuu.essentials.util.ext.unsafeLazy
-import com.ivianuu.essentials.util.screenlogger.NamedScreen
+import com.ivianuu.essentials.util.screenlogger.IdentifiableScreen
 import com.ivianuu.traveler.Navigator
 import com.ivianuu.traveler.Router
 import com.uber.autodispose.LifecycleScopeProvider
@@ -41,7 +41,7 @@ import javax.inject.Inject
  * Base activity
  */
 abstract class BaseActivity : AppCompatActivity(), KtHasSupportFragmentInjector,
-    KtHasViewInjector, Injectable, NamedScreen, RouterHolder {
+    KtHasViewInjector, Injectable, IdentifiableScreen, RouterHolder {
 
     @Inject lateinit var backHandler: BackHandler
 

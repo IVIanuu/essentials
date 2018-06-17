@@ -60,8 +60,8 @@ class ScreenLogger @Inject constructor(private val application: Application) : A
     }
 
     private fun handleActivity(activity: Activity, savedInstanceState: Bundle?) {
-        if (activity is NamedScreen
-            && activity !is IgnoreNamedScreen
+        if (activity is IdentifiableScreen
+            && activity !is Ignore
             && savedInstanceState == null) {
             val name = getName(activity)
             listeners.toList()
@@ -70,8 +70,8 @@ class ScreenLogger @Inject constructor(private val application: Application) : A
 
         if (activity is FragmentActivity) {
             activity.supportFragmentManager.doOnFragmentCreated(true) { _: FragmentManager, fragment: Fragment, bundle: Bundle? ->
-                if (fragment is NamedScreen
-                    && fragment !is IgnoreNamedScreen
+                if (fragment is IdentifiableScreen
+                    && fragment !is Ignore
                     && bundle == null) {
                     val name = getName(fragment)
                     listeners.toList()
@@ -81,7 +81,7 @@ class ScreenLogger @Inject constructor(private val application: Application) : A
         }
     }
 
-    private fun getName(screen: NamedScreen): String {
+    private fun getName(screen: IdentifiableScreen): String {
         return when {
             screen.screenName.isNotEmpty() -> screen.screenName
             screen.screenNameRes != 0 -> application.getString(screen.screenNameRes)
@@ -120,6 +120,8 @@ class ScreenLogger @Inject constructor(private val application: Application) : A
             Analytics.log("screen launched: $name")
         }
     }
+
+    interface Ignore
 
     private companion object {
         private const val SUFFIX_ACTIVITY = "Activity"

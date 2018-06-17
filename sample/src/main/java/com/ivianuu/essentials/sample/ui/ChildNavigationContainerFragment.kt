@@ -25,7 +25,7 @@ import com.ivianuu.essentials.injection.PerFragment
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.base.BaseFragment
 import com.ivianuu.essentials.util.ext.setupCompassFragmentRouter
-import com.ivianuu.essentials.util.screenlogger.IgnoreNamedScreen
+import com.ivianuu.essentials.util.screenlogger.ScreenLogger
 
 @Destination(ChildNavigationContainerFragment::class)
 data class ChildNavigationContainerDestination(val index: Int)
@@ -36,7 +36,7 @@ data class ChildNavigationContainerDestination(val index: Int)
 @FragmentBindingModule
 @PerFragment
 @AutoContribute
-class ChildNavigationContainerFragment : BaseFragment(), IgnoreNamedScreen {
+class ChildNavigationContainerFragment : BaseFragment(), ScreenLogger.Ignore {
 
     override val layoutRes = R.layout.fragment_child_navigation_container
 
