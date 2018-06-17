@@ -57,7 +57,6 @@ class ChildNavigationView @JvmOverloads constructor(
         pop_to_root.setOnClickListener { router.backToRoot() }
         prev.setOnClickListener { router.exit() }
 
-
         next.navigateOnClick {
             ChildNavigationDestination(destination.index, destination.count + 1)
         }
