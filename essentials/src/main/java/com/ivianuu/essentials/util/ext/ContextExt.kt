@@ -20,6 +20,9 @@ package com.ivianuu.essentials.util.ext
 
 import android.app.Activity
 import android.content.*
+import android.content.pm.PackageManager
+import android.support.v4.content.ContextCompat
+import com.ivianuu.essentials.util.ContextAware
 
 inline fun Context.registerReceiver(
     intentFilter: IntentFilter,
@@ -54,3 +57,12 @@ fun Context.findActivity(): Activity? {
 
 inline fun Context.findActivityOrThrow() =
     findActivity() ?: throw IllegalStateException("base context is no activity")
+
+fun Context.hasPermissions(vararg permissions: String): Boolean {
+    return permissions.all {
+        ContextCompat.checkSelfPermission(this, it) == PackageManager.PERMISSION_GRANTED
+    }
+}
+
+fun ContextAware.hasPermissions(vararg permissions: String) =
+    providedContext.hasPermissions(*permissions)
