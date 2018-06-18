@@ -19,7 +19,7 @@ package com.ivianuu.essentials.util
 import android.content.Context
 import android.os.Handler
 import com.ivianuu.essentials.injection.ForApp
-import com.ivianuu.essentials.util.ext.toast
+import com.ivianuu.essentials.util.ext.*
 import javax.inject.Inject
 
 /**
@@ -29,12 +29,43 @@ class Toaster @Inject constructor(@ForApp private val context: Context) {
 
     private val handler = Handler()
 
-    fun toast(messageRes: Int, vararg args: Any) {
-        toast(context.getString(messageRes, *args))
+    fun errorToast(messageRes: Int, vararg args: Any) {
+        handler.post { context.errorToast(messageRes, *args) }
     }
 
-    fun toast(message: String) {
-        handler.post { context.toast(message) }
+    fun errorToast(message: String) {
+        handler.post { context.errorToast(message) }
     }
 
+    fun infoToast(messageRes: Int, vararg args: Any) {
+        handler.post { context.infoToast(messageRes, *args) }
+    }
+
+    fun infoToast(message: String) {
+        handler.post { context.infoToast(message) }
+    }
+
+    fun normalToast(messageRes: Int, vararg args: Any) {
+        handler.post { context.normalToast(messageRes, *args) }
+    }
+
+    fun normalToast(message: String) {
+        handler.post { context.normalToast(message) }
+    }
+
+    fun successToast(messageRes: Int, vararg args: Any) {
+        handler.post { context.successToast(messageRes, *args) }
+    }
+
+    fun successToast(message: String) {
+        handler.post { context.successToast(message) }
+    }
+
+    fun warningToast(messageRes: Int, vararg args: Any) {
+        handler.post { context.warningToast(messageRes, *args) }
+    }
+
+    fun warningToast(message: String) {
+        handler.post { context.warningToast(message) }
+    }
 }

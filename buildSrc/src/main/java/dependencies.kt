@@ -34,6 +34,7 @@ object Versions {
     const val seekBarPreference = "e4f09c6636"
     const val support = "28.0.0-alpha3"
     const val timber = "4.7.0"
+    const val toasty = "1.3.0"
     const val traveler = "a6e80f1b38"
 }
 
@@ -104,6 +105,8 @@ object Deps {
     const val supportPreference = "com.android.support:preference-v7:${Versions.support}"
 
     const val timber = "com.jakewharton.timber:timber:${Versions.timber}"
+
+    const val toasty = "com.github.GrenderG:Toasty:${Versions.toasty}"
 
     const val traveler = "com.github.IVIanuu.Traveler:traveler:${Versions.traveler}"
     const val travelerLifecycleObserver = "com.github.IVIanuu.Traveler:traveler-lifecycleobserver:${Versions.traveler}"
