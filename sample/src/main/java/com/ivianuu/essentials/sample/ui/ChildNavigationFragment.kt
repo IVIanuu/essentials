@@ -17,17 +17,20 @@
 package com.ivianuu.essentials.sample.ui
 
 import com.ivianuu.compass.Destination
+import com.ivianuu.compass.Detour
 import com.ivianuu.daggerextensions.AutoContribute
 import com.ivianuu.essentials.injection.FragmentBindingModule
 import com.ivianuu.essentials.injection.PerFragment
 import com.ivianuu.essentials.injection.ViewBindingModule_
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.base.BaseFragment
+import com.ivianuu.essentials.ui.traveler.detour.HorizontalDetour
 import com.ivianuu.essentials.util.ext.localRouter
 import dagger.Module
 import dagger.Provides
 import javax.inject.Qualifier
 
+@Detour(HorizontalDetour::class)
 @Destination(ChildNavigationFragment::class)
 data class ChildNavigationDestination(val index: Int, val count: Int)
 
