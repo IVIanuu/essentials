@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.util
 
+import android.app.Application
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
@@ -28,13 +29,13 @@ import javax.inject.Inject
 /**
  * A factory for broadcast receiver observables
  */
-class BroadcastFactory @Inject constructor(@ForApp private val context: Context) {
+class BroadcastFactory @Inject constructor(private val app: Application) {
 
     fun create(vararg actions: String): Observable<Intent> {
         return create(intentFilterOf(*actions))
     }
 
     fun create(intentFilter: IntentFilter): Observable<Intent> {
-        return RxBroadcastReceiver.create(context, intentFilter)
+        return RxBroadcastReceiver.create(app, intentFilter)
     }
 }

@@ -16,7 +16,7 @@
 
 package com.ivianuu.essentials.util
 
-import android.content.Context
+import android.app.Application
 import android.os.Handler
 import com.ivianuu.essentials.injection.ForApp
 import com.ivianuu.essentials.util.ext.*
@@ -25,47 +25,47 @@ import javax.inject.Inject
 /**
  * Toasts system messages
  */
-class Toaster @Inject constructor(@ForApp private val context: Context) {
+class Toaster @Inject constructor(private val app: Application) {
 
     private val handler = Handler()
 
     fun errorToast(messageRes: Int, vararg args: Any) {
-        handler.post { context.errorToast(messageRes, *args) }
+        handler.post { app.errorToast(messageRes, *args) }
     }
 
     fun errorToast(message: String) {
-        handler.post { context.errorToast(message) }
+        handler.post { app.errorToast(message) }
     }
 
     fun infoToast(messageRes: Int, vararg args: Any) {
-        handler.post { context.infoToast(messageRes, *args) }
+        handler.post { app.infoToast(messageRes, *args) }
     }
 
     fun infoToast(message: String) {
-        handler.post { context.infoToast(message) }
+        handler.post { app.infoToast(message) }
     }
 
     fun normalToast(messageRes: Int, vararg args: Any) {
-        handler.post { context.normalToast(messageRes, *args) }
+        handler.post { app.normalToast(messageRes, *args) }
     }
 
     fun normalToast(message: String) {
-        handler.post { context.normalToast(message) }
+        handler.post { app.normalToast(message) }
     }
 
     fun successToast(messageRes: Int, vararg args: Any) {
-        handler.post { context.successToast(messageRes, *args) }
+        handler.post { app.successToast(messageRes, *args) }
     }
 
     fun successToast(message: String) {
-        handler.post { context.successToast(message) }
+        handler.post { app.successToast(message) }
     }
 
     fun warningToast(messageRes: Int, vararg args: Any) {
-        handler.post { context.warningToast(messageRes, *args) }
+        handler.post { app.warningToast(messageRes, *args) }
     }
 
     fun warningToast(message: String) {
-        handler.post { context.warningToast(message) }
+        handler.post { app.warningToast(message) }
     }
 }
