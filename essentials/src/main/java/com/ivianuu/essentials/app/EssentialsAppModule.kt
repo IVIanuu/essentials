@@ -34,15 +34,10 @@ import javax.inject.Singleton
 object EssentialsAppModule {
 
     @JvmStatic
-    @ForApp
-    @Provides
-    fun provideContext(app: Application): Context = app
-
-    @JvmStatic
     @DefaultSharedPrefs
     @Provides
-    fun provideSharedPrefs(@ForApp context: Context): SharedPreferences =
-        PreferenceManager.getDefaultSharedPreferences(context)
+    fun provideSharedPrefs(application: Application): SharedPreferences =
+        PreferenceManager.getDefaultSharedPreferences(application)
 
     @JvmStatic
     @DefaultSharedPrefs

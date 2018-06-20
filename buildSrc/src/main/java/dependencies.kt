@@ -50,8 +50,8 @@ object Deps {
 
     const val butterknifeGradlePlugin = "com.jakewharton:butterknife-gradle-plugin:${Versions.butterknife}"
 
-    const val compass = "com.github.IVIanuu.Compass:compass:${Versions.compass}"
-    const val compassCompiler = "com.github.IVIanuu.Compass:compass-compiler:${Versions.compass}"
+    const val compass = "com.github.IVIanuu.compass:compass:${Versions.compass}"
+    const val compassCompiler = "com.github.IVIanuu.compass:compass-compiler:${Versions.compass}"
 
     const val constraintLayout = "com.android.support.constraint:constraint-layout:${Versions.constraintLayout}"
 
@@ -61,9 +61,9 @@ object Deps {
     const val daggerCompiler = "com.google.dagger:dagger-compiler:${Versions.dagger}"
     const val daggerAndroidProcessor = "com.google.dagger:dagger-android-processor:${Versions.dagger}"
 
-    const val daggerExtensions = "com.github.IVIanuu.DaggerExtensions:daggerextensions:${Versions.daggerExtensions}"
-    const val daggerExtensionsView = "com.github.IVIanuu.DaggerExtensions:daggerextensions-view:${Versions.daggerExtensions}"
-    const val daggerExtensionsCompiler = "com.github.IVIanuu.DaggerExtensions:daggerextensions-compiler:${Versions.daggerExtensions}"
+    const val daggerExtensions = "com.github.IVIanuu.dagger-extensions:daggerextensions:${Versions.daggerExtensions}"
+    const val daggerExtensionsView = "com.github.IVIanuu.dagger-extensions:daggerextensions-view:${Versions.daggerExtensions}"
+    const val daggerExtensionsCompiler = "com.github.IVIanuu.dagger-extensions:daggerextensions-compiler:${Versions.daggerExtensions}"
 
     const val epoxy = "com.airbnb.android:epoxy:${Versions.epoxy}"
     const val epoxyProcessor = "com.airbnb.android:epoxy-processor:${Versions.epoxy}"
@@ -79,7 +79,7 @@ object Deps {
 
     const val mavenGradlePlugin = "com.github.dcendents:android-maven-gradle-plugin:${Versions.mavenGradle}"
 
-    const val rxActivityResult = "com.github.IVIanuu:RxActivityResult:${Versions.rxActivityResult}"
+    const val rxActivityResult = "com.github.IVIanuu:rx-activity-result:${Versions.rxActivityResult}"
     const val rxAndroid = "io.reactivex.rxjava2:rxandroid:${Versions.rxAndroid}"
 
     const val rxBinding = "com.jakewharton.rxbinding2:rxbinding-kotlin:${Versions.rxBinding}"
@@ -88,15 +88,15 @@ object Deps {
     const val rxBindingSupportAppCompatV7 = "com.jakewharton.rxbinding2:rxbinding-appcompat-v7-kotlin:${Versions.rxBinding}"
     const val rxBindingSupportV4 = "com.jakewharton.rxbinding2:rxbinding-support-v4-kotlin:${Versions.rxBinding}"
 
-    const val rxBroadcastReceiver = "com.github.IVIanuu:RxBroadcastReceiver:${Versions.rxBroadcastReceiver}"
+    const val rxBroadcastReceiver = "com.github.IVIanuu:rx-broadcast-receiver:${Versions.rxBroadcastReceiver}"
     const val rxJava = "io.reactivex.rxjava2:rxjava:${Versions.rxJava}"
     const val rxKotlin = "io.reactivex.rxjava2:rxkotlin:${Versions.rxKotlin}"
-    const val rxPermissions = "com.github.IVIanuu:RxPermissions:${Versions.rxPermissions}"
+    const val rxPermissions = "com.github.IVIanuu:rx-permissions:${Versions.rxPermissions}"
     const val rxPreferences = "com.f2prateek.rx.preferences2:rx-preferences:${Versions.rxPreferences}"
 
-    const val rxPopupMenu = "com.github.IVIanuu:RxPopupmenu:${Versions.rxPopupMenu}"
+    const val rxPopupMenu = "com.github.IVIanuu:rx-popup-menu:${Versions.rxPopupMenu}"
 
-    const val seekBarPreference = "com.github.IVIanuu:SeekBarPreference:${Versions.seekBarPreference}"
+    const val seekBarPreference = "com.github.IVIanuu:seekbar-preference:${Versions.seekBarPreference}"
 
     const val supportAppCompat = "com.android.support:appcompat-v7:${Versions.support}"
     const val supportCardView = "com.android.support:cardview-v7:${Versions.support}"
@@ -108,6 +108,6 @@ object Deps {
 
     const val toasty = "com.github.GrenderG:Toasty:${Versions.toasty}"
 
-    const val traveler = "com.github.IVIanuu.Traveler:traveler:${Versions.traveler}"
-    const val travelerLifecycleObserver = "com.github.IVIanuu.Traveler:traveler-lifecycleobserver:${Versions.traveler}"
+    const val traveler = "com.github.IVIanuu.traveler:traveler:${Versions.traveler}"
+    const val travelerLifecycleObserver = "com.github.IVIanuu.traveler:traveler-lifecycleobserver:${Versions.traveler}"
 }
