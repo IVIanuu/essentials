@@ -31,7 +31,7 @@ import javax.inject.Inject
  * Initializes fabric in release builds
  */
 @EssentialsAppInitializerModule
-@AutoBindsIntoSet(FabricAppInitializer::class)
+@AutoBindsIntoSet(AppInitializer::class)
 class FabricAppInitializer @Inject constructor(
     private val analyticsLogger: FabricAnalyticsLogger
 ) : AppInitializer {
