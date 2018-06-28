@@ -52,23 +52,9 @@ inline fun Activity.finishWithResult(resultCode: Int, data: Intent? = null) {
 }
 
 inline var Activity.statusBarColor: Int
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     get() = window.statusBarColor
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     set(value) {
         window.statusBarColor = value
-    }
-
-inline var Activity.statusBarColorCompat: Int
-    get() = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-        statusBarColor
-    } else {
-        -1
-    }
-    set(value) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            statusBarColor = value
-        }
     }
 
 inline var Activity.isStatusBarLight: Boolean
@@ -102,18 +88,6 @@ inline var Activity.isDrawUnderStatusBar: Boolean
         )
     }
 
-inline var Activity.isDrawUnderStatusBarCompat: Boolean
-    get() = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-        isDrawUnderStatusBar
-    } else {
-        false
-    }
-    set(value) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            isDrawUnderStatusBar = value
-        }
-    }
-
 inline var Activity.isStatusBarTranslucent: Boolean
     @TargetApi(Build.VERSION_CODES.KITKAT)
     get() = hasWindowAttribute(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
@@ -122,40 +96,14 @@ inline var Activity.isStatusBarTranslucent: Boolean
         setWindowAttribute(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, value)
     }
 
-inline var Activity.isStatusBarTranslucentCompat: Boolean
-    get() = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-        isStatusBarTranslucent
-    } else {
-        false
-    }
-    set(value) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            isStatusBarTranslucent = value
-        }
-    }
-
 inline var Activity.isStatusBarTransparent: Boolean
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     get() = isDrawUnderStatusBar &&
             hasWindowAttribute(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
             && statusBarColor == Color.TRANSPARENT
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     set(value) {
         setWindowAttribute(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS, value)
         isDrawUnderStatusBar = value
         if (value) statusBarColor = Color.TRANSPARENT
-    }
-
-inline var Activity.isStatusBarTransparentCompat: Boolean
-    get() = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-        isStatusBarTransparent
-    } else {
-        false
-    }
-    set(value) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            isStatusBarTransparent = value
-        }
     }
 
 inline var Activity.isStatusBarHidden: Boolean
@@ -165,23 +113,9 @@ inline var Activity.isStatusBarHidden: Boolean
     }
 
 inline var Activity.navigationBarColor: Int
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     get() = window.navigationBarColor
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     set(value) {
         window.navigationBarColor = value
-    }
-
-inline var Activity.navigationBarColorCompat: Int
-    get() = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-        navigationBarColor
-    } else {
-        -1
-    }
-    set(value) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            navigationBarColor = value
-        }
     }
 
 inline var Activity.isNavigationBarTranslucent: Boolean
@@ -192,42 +126,16 @@ inline var Activity.isNavigationBarTranslucent: Boolean
         setWindowAttribute(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION, value)
     }
 
-inline var Activity.isNavigationBarTranslucentCompat: Boolean
-    get() = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-        isNavigationBarTranslucent
-    } else {
-        false
-    }
-    set(value) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            isNavigationBarTranslucent = value
-        }
-    }
-
 inline var Activity.isNavigationBarTransparent: Boolean
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     get() = hasWindowAttribute(
         WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS
                 or WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
     )
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     set(value) {
         setWindowAttribute(
             WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS
                     or WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, value
         )
-    }
-
-inline var Activity.isNavigationBarTransparentCompat: Boolean
-    get() = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-        isNavigationBarTransparent
-    } else {
-        false
-    }
-    set(value) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            isNavigationBarTransparent = value
-        }
     }
 
 inline var Activity.isNavigationBarHidden: Boolean
@@ -245,19 +153,6 @@ inline var Activity.isNavigationBarHidden: Boolean
                     View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY, value
         )
     }
-
-inline var Activity.isNavigationBarHiddenCompat: Boolean
-    get() = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-        isNavigationBarHidden
-    } else {
-        false
-    }
-    set(value) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            isNavigationBarHidden = value
-        }
-    }
-
 
 inline var Activity.isNavigationBarLight: Boolean
     @TargetApi(Build.VERSION_CODES.O)
