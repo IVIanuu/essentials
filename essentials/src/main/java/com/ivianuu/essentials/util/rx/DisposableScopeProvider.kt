@@ -42,3 +42,5 @@ class DisposableScopeProviderImpl : DisposableScopeProvider {
         scope.take(1).singleElement()
 
 }
+
+fun DisposableScopeProvider() = DisposableScopeProviderImpl()

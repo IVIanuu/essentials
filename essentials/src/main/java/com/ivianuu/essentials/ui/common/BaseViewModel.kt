@@ -18,12 +18,11 @@ package com.ivianuu.essentials.ui.common
 
 import android.arch.lifecycle.ViewModel
 import com.ivianuu.essentials.util.rx.DisposableScopeProvider
-import com.ivianuu.essentials.util.rx.DisposableScopeProviderImpl
 
 /**
  * A [ViewModel] which auto disposes itself
  */
-abstract class BaseViewModel : ViewModel(), DisposableScopeProvider by DisposableScopeProviderImpl() {
+abstract class BaseViewModel : ViewModel(), DisposableScopeProvider by DisposableScopeProvider() {
 
     override fun onCleared() {
         dispose()

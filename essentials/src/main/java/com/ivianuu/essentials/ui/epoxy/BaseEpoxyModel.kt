@@ -19,13 +19,12 @@ package com.ivianuu.essentials.ui.epoxy
 import android.support.annotation.CallSuper
 import com.airbnb.epoxy.EpoxyModelWithHolder
 import com.ivianuu.essentials.util.rx.DisposableScopeProvider
-import com.ivianuu.essentials.util.rx.DisposableScopeProviderImpl
 
 /**
  * Base epoxy model with holder
  */
 abstract class BaseEpoxyModel : EpoxyModelWithHolder<BaseEpoxyHolder>(),
-    DisposableScopeProvider by DisposableScopeProviderImpl() {
+    DisposableScopeProvider by DisposableScopeProvider() {
 
     private var currentHolder: BaseEpoxyHolder? = null
 
