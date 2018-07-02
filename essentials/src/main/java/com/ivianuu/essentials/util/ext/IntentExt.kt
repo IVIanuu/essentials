@@ -5,6 +5,7 @@ import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import android.os.Bundle
 import android.support.annotation.RequiresApi
 import com.ivianuu.essentials.util.ContextAware
 
@@ -38,6 +39,21 @@ inline fun <reified T : Activity> Context.startActivity(init: Intent.() -> Unit)
 
 inline fun <reified T : Activity> ContextAware.startActivity(init: Intent.() -> Unit) {
     providedContext.startActivity<T>(init)
+}
+
+inline fun <reified T : Activity> Activity.startActivityForResult(
+    requestCode: Int,
+    options: Bundle? = null
+) {
+    startActivityForResult(intentFor<T>(), requestCode, options)
+}
+
+inline fun <reified T : Activity> Activity.startActivityForResult(
+    requestCode: Int,
+    options: Bundle? = null,
+    init: Intent.() -> Unit
+) {
+    startActivityForResult(intentFor<T>(init), requestCode, options)
 }
 
 inline fun <reified T : Service> Context.startService() {
