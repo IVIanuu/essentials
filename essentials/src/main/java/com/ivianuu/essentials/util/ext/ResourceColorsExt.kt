@@ -21,15 +21,28 @@ package com.ivianuu.essentials.util.ext
 import android.annotation.SuppressLint
 import android.content.Context
 import com.ivianuu.essentials.R
+import com.ivianuu.essentials.util.ContextAware
 
 inline val Context.isWindowBackgroundDark
     get() = resolveColorAttr(android.R.attr.windowBackground).isDark
 
+inline val ContextAware.isWindowBackgroundDark
+    get() = providedContext.isWindowBackgroundDark
+
 inline fun Context.getPrimaryColor() = resolveColorAttr(android.R.attr.colorPrimary)
+
+inline fun ContextAware.getPrimaryColor() =
+    providedContext.resolveColorAttr(android.R.attr.colorPrimary)
 
 inline fun Context.getPrimaryColorDark() = resolveColorAttr(android.R.attr.colorPrimaryDark)
 
+inline fun ContextAware.getPrimaryColorDark() =
+    providedContext.getPrimaryColorDark()
+
 inline fun Context.getAccentColor() = resolveColorAttr(android.R.attr.colorAccent)
+
+inline fun ContextAware.getAccentColor() =
+    providedContext.getAccentColor()
 
 inline fun Context.getCardColor(isDark: Boolean = isWindowBackgroundDark): Int {
     return getResColor(
@@ -41,6 +54,9 @@ inline fun Context.getCardColor(isDark: Boolean = isWindowBackgroundDark): Int {
     )
 }
 
+inline fun ContextAware.getCardColor(isDark: Boolean = isWindowBackgroundDark) =
+    providedContext.getCardColor(isDark)
+
 inline fun Context.getRippleColor(isDark: Boolean = isWindowBackgroundDark): Int {
     return getResColor(
         if (isDark) {
@@ -50,6 +66,9 @@ inline fun Context.getRippleColor(isDark: Boolean = isWindowBackgroundDark): Int
         }
     )
 }
+
+inline fun ContextAware.getRippleColor(isDark: Boolean = isWindowBackgroundDark) =
+    providedContext.getRippleColor(isDark)
 
 inline fun Context.getPrimaryTextColor(isDark: Boolean = isWindowBackgroundDark): Int {
     return getResColor(
@@ -61,6 +80,9 @@ inline fun Context.getPrimaryTextColor(isDark: Boolean = isWindowBackgroundDark)
     )
 }
 
+inline fun ContextAware.getPrimaryTextColor(isDark: Boolean = isWindowBackgroundDark) =
+    providedContext.getPrimaryTextColor(isDark)
+
 inline fun Context.getPrimaryDisabledTextColor(isDark: Boolean = isWindowBackgroundDark): Int {
     return getResColor(
         if (isDark) {
@@ -70,6 +92,9 @@ inline fun Context.getPrimaryDisabledTextColor(isDark: Boolean = isWindowBackgro
         }
     )
 }
+
+inline fun ContextAware.getPrimaryDisabledTextColor(isDark: Boolean = isWindowBackgroundDark) =
+    providedContext.getPrimaryDisabledTextColor(isDark)
 
 inline fun Context.getSecondaryTextColor(isDark: Boolean = isWindowBackgroundDark): Int {
     return getResColor(
@@ -81,6 +106,9 @@ inline fun Context.getSecondaryTextColor(isDark: Boolean = isWindowBackgroundDar
     )
 }
 
+inline fun ContextAware.getSecondaryTextColor(isDark: Boolean = isWindowBackgroundDark) =
+    providedContext.getSecondaryTextColor(isDark)
+
 inline fun Context.getSecondaryDisabledTextColor(isDark: Boolean = isWindowBackgroundDark): Int {
     return getResColor(
         if (isDark) {
@@ -90,3 +118,6 @@ inline fun Context.getSecondaryDisabledTextColor(isDark: Boolean = isWindowBackg
         }
     )
 }
+
+inline fun ContextAware.getSecondaryDisabledTextColor(isDark: Boolean = isWindowBackgroundDark) =
+    providedContext.getSecondaryDisabledTextColor(isDark)

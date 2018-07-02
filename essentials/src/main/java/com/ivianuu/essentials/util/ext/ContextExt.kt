@@ -25,12 +25,21 @@ import android.os.Build
 import android.support.v4.content.ContextCompat
 import com.ivianuu.essentials.util.ContextAware
 
+inline fun <reified T> Context.componentFor() = ComponentName(this, T::class.java)
+
+inline fun <reified T> ContextAware.componentFor() =
+    providedContext.componentFor<T>()
+
 inline fun Context.startForegroundServiceCompat(intent: Intent) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
         startForegroundService(intent)
     } else {
         startService(intent)
     }
+}
+
+inline fun ContextAware.startForegroundServiceCompat(intent: Intent) {
+    providedContext.startForegroundServiceCompat(intent)
 }
 
 inline fun Context.registerReceiver(
@@ -44,12 +53,21 @@ inline fun Context.registerReceiver(
     }.also { registerReceiver(it, intentFilter) }
 }
 
+inline fun ContextAware.registerReceiver(
+    intentFilter: IntentFilter,
+    crossinline onReceive: (intent: Intent) -> Unit
+) = providedContext.registerReceiver(intentFilter, onReceive)
+
 inline fun Context.unregisterReceiverSafe(receiver: BroadcastReceiver) {
     try {
         unregisterReceiver(receiver)
     } catch (e: IllegalArgumentException) {
         // ignore
     }
+}
+
+inline fun ContextAware.unregisterReceiverSafe(receiver: BroadcastReceiver) {
+    providedContext.unregisterReceiverSafe(receiver)
 }
 
 fun Context.findActivity(): Activity? {
@@ -64,8 +82,13 @@ fun Context.findActivity(): Activity? {
     return context as? Activity
 }
 
+inline fun ContextAware.findActivity() = providedContext.findActivity()
+
 inline fun Context.findActivityOrThrow() =
     findActivity() ?: throw IllegalStateException("base context is no activity")
+
+inline fun ContextAware.findActivityOrThrow() =
+    providedContext.findActivityOrThrow()
 
 fun Context.hasPermissions(vararg permissions: String): Boolean {
     return permissions.all {
