@@ -21,8 +21,17 @@ package com.ivianuu.essentials.util.ext
 import android.app.Activity
 import android.content.*
 import android.content.pm.PackageManager
+import android.os.Build
 import android.support.v4.content.ContextCompat
 import com.ivianuu.essentials.util.ContextAware
+
+inline fun Context.startForegroundServiceCompat(intent: Intent) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        startForegroundService(intent)
+    } else {
+        startService(intent)
+    }
+}
 
 inline fun Context.registerReceiver(
     intentFilter: IntentFilter,
