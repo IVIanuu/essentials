@@ -6,13 +6,13 @@ inline fun <T, R> T.runIf(condition: Boolean, block: T.() -> R): R? = run {
     } else null
 }
 
-inline fun <T> T.applyIf(condition: Boolean, block: T.() -> T): T = apply {
+inline fun <T> T.applyIf(condition: Boolean, block: T.() -> Unit): T = apply {
     if (condition) {
         block()
     }
 }
 
-inline fun <T> T.alsoIf(condition: Boolean, block: (T) -> T): T = also {
+inline fun <T> T.alsoIf(condition: Boolean, block: (T) -> Unit): T = also {
     if (condition) {
         block(it)
     }

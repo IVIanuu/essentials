@@ -29,10 +29,8 @@ import io.reactivex.rxkotlin.subscribeBy
 import java.util.concurrent.atomic.AtomicReference
 
 inline fun <T> mutableLiveData(initialValue: T? = null) =
-    MutableLiveData<T>().apply {
-        if (initialValue != null) {
-            value = initialValue
-        }
+    MutableLiveData<T>().applyIf(initialValue != null) {
+        value = initialValue
     }
 
 inline fun <T> singleLiveEvent() = SingleLiveEvent<T>()
