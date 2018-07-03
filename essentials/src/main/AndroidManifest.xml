@@ -14,4 +14,7 @@
   ~ limitations under the License.
   -->
 
-<manifest package="com.ivianuu.essentials" />
+<manifest package="com.ivianuu.essentials">
+
+    <uses-permission name="android.permission.ACCESS_NETWORK_STATE" />
+</manifest>

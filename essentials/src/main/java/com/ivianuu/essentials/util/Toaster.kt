@@ -18,7 +18,6 @@ package com.ivianuu.essentials.util
 
 import android.app.Application
 import android.os.Handler
-import com.ivianuu.essentials.injection.ForApp
 import com.ivianuu.essentials.util.ext.*
 import javax.inject.Inject
 

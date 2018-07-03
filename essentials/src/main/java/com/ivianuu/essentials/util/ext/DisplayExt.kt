@@ -24,6 +24,7 @@ import android.content.res.Resources
 import android.os.Build
 import android.util.DisplayMetrics
 import android.view.Surface
+import android.view.View
 import android.view.WindowManager
 import com.ivianuu.essentials.util.ContextAware
 
@@ -95,3 +96,13 @@ inline val Context.realScreenHeight: Int
 
 inline val ContextAware.realScreenHeight
     get() = providedContext.realScreenHeight
+
+inline val Context.isRtl: Boolean
+    get() = resources.configuration.layoutDirection == View.LAYOUT_DIRECTION_RTL
+
+inline val ContextAware.isRtl get() = providedContext.isRtl
+
+inline val Context.isLtr: Boolean
+    get() = resources.configuration.layoutDirection == View.LAYOUT_DIRECTION_LTR
+
+inline val ContextAware.isLtr get() = providedContext.isLtr
