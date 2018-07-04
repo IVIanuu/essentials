@@ -37,7 +37,6 @@ import com.ivianuu.traveler.Navigator
 import com.ivianuu.traveler.Router
 import com.ivianuu.traveler.lifecycleobserver.NavigatorLifecycleObserver
 
-
 val Fragment.localRouter: Router
     get() {
         val parent = parentFragment
