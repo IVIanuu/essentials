@@ -70,6 +70,18 @@ fun <T : EpoxyController> RecyclerView.setEpoxyController(epoxyController: T): T
     return epoxyController
 }
 
+fun <T : EpoxyController> RecyclerView.setEpoxyControllerAndBuild(epoxyController: T): T {
+    adapter = epoxyController.adapter
+    epoxyController.requestModelBuild()
+    return epoxyController
+}
+
+fun RecyclerView.setEpoxyControllerAndBuild(buildModels: EpoxyController.() -> Unit) =
+    setEpoxyControllerAndBuild(epoxyController(buildModels))
+
+fun RecyclerView.setPreferenceEpoxyControllerAndBuild(buildModels: PreferenceEpoxyController.() -> Unit) =
+    setEpoxyController(preferenceEpoxyController(context, buildModels))
+
 fun RecyclerView.setEpoxyController(buildModels: EpoxyController.() -> Unit) =
     setEpoxyController(epoxyController(buildModels))
 
