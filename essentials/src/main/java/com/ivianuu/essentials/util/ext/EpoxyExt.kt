@@ -80,7 +80,7 @@ fun RecyclerView.setEpoxyControllerAndBuild(buildModels: EpoxyController.() -> U
     setEpoxyControllerAndBuild(epoxyController(buildModels))
 
 fun RecyclerView.setPreferenceEpoxyControllerAndBuild(buildModels: PreferenceEpoxyController.() -> Unit) =
-    setEpoxyController(preferenceEpoxyController(context, buildModels))
+    setEpoxyControllerAndBuild(preferenceEpoxyController(context, buildModels))
 
 fun RecyclerView.setEpoxyController(buildModels: EpoxyController.() -> Unit) =
     setEpoxyController(epoxyController(buildModels))
