@@ -16,7 +16,10 @@
 
 package com.ivianuu.essentials.util.ext
 
+import android.support.v7.widget.RecyclerView
 import com.airbnb.epoxy.*
+import com.ivianuu.epoxyprefs.PreferenceEpoxyController
+import com.ivianuu.epoxyprefs.preferenceEpoxyController
 
 fun epoxyController(buildModels: EpoxyController.() -> Unit): EpoxyController {
     return object : EpoxyController() {
@@ -60,4 +63,25 @@ fun <T, U, V, W> typed4EpoxyController(buildModels: Typed4EpoxyController<T, U, 
 
 fun <T> listEpoxyController(buildModel: EpoxyController.(item: T) -> Unit): TypedEpoxyController<List<T>> {
     return typedEpoxyController { it.forEach { buildModel.invoke(this, it) } }
+}
+
+fun RecyclerView.setEpoxyController(epoxyController: EpoxyController) {
+    adapter = epoxyController.adapter
+}
+
+fun RecyclerView.setEpoxyControllerAndBuild(epoxyController: EpoxyController) {
+    adapter = epoxyController.adapter
+    epoxyController.requestModelBuild()
+}
+
+fun RecyclerView.buildModelsWith(buildModels: EpoxyController.() -> Unit): EpoxyController {
+    val epoxyController = epoxyController(buildModels)
+    setEpoxyControllerAndBuild(epoxyController)
+    return epoxyController
+}
+
+fun RecyclerView.buildPreferencesWith(buildModels: PreferenceEpoxyController.() -> Unit): EpoxyController {
+    val epoxyController = preferenceEpoxyController(context, buildModels)
+    setEpoxyControllerAndBuild(epoxyController)
+    return epoxyController
 }

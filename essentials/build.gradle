@@ -64,6 +64,7 @@ dependencies {
 
     api Deps.epoxy
     kapt Deps.epoxyProcessor
+    api Deps.epoxyPrefs
 
     implementation(Deps.fabric) {
         transitive = true
