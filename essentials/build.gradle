@@ -91,13 +91,10 @@ dependencies {
     api Deps.rxPreferences
     api Deps.rxPopupMenu
 
-    api Deps.seekBarPreference
-
     api Deps.supportAppCompat
     api Deps.supportCardView
     api Deps.supportDesign
     api Deps.supportPalette
-    api Deps.supportPreference
 
     api Deps.timber
 

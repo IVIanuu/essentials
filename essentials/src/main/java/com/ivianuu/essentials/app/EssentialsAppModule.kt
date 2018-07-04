@@ -18,7 +18,7 @@ package com.ivianuu.essentials.app
 
 import android.app.Application
 import android.content.SharedPreferences
-import android.support.v7.preference.PreferenceManager
+import android.preference.PreferenceManager
 import com.f2prateek.rx.preferences2.RxSharedPreferences
 import com.ivianuu.essentials.injection.DefaultSharedPrefs
 import dagger.Module

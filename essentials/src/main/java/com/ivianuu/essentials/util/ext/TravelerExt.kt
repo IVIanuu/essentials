@@ -24,7 +24,6 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.containerId
-import android.support.v7.preference.Preference
 import android.support.v7.widget.Toolbar
 import android.view.View
 import com.ivianuu.compass.CompassFragmentAppNavigator
@@ -162,20 +161,6 @@ inline fun View.navigateOnClick(router: Router, crossinline key: () -> Any) {
 
 inline fun View.navigateOnClick(router: Router, key: Any) {
     setOnClickListener { router.navigateTo(key) }
-}
-
-inline fun Preference.navigateOnClick(router: Router, crossinline key: () -> Any) {
-    setOnPreferenceClickListener {
-        router.navigateTo(key())
-        true
-    }
-}
-
-inline fun Preference.navigateOnClick(router: Router, key: Any) {
-    setOnPreferenceClickListener {
-        router.navigateTo(key)
-        true
-    }
 }
 
 inline fun PreferenceModel.Builder.navigateOnClick(router: Router, crossinline key: () -> Any) {

@@ -32,7 +32,6 @@ object Versions {
     const val rxPermissions = "aa7de40f71"
     const val rxPreferences = "2.0.0"
     const val rxPopupMenu = "cc0f585ec0"
-    const val seekBarPreference = "e4f09c6636"
     const val support = "28.0.0-alpha3"
     const val timber = "4.7.0"
     const val toasty = "1.3.0"
@@ -98,13 +97,10 @@ object Deps {
 
     const val rxPopupMenu = "com.github.IVIanuu:rx-popup-menu:${Versions.rxPopupMenu}"
 
-    const val seekBarPreference = "com.github.IVIanuu:seekbar-preference:${Versions.seekBarPreference}"
-
     const val supportAppCompat = "com.android.support:appcompat-v7:${Versions.support}"
     const val supportCardView = "com.android.support:cardview-v7:${Versions.support}"
     const val supportDesign = "com.android.support:design:${Versions.support}"
     const val supportPalette = "com.android.support:palette-v7:${Versions.support}"
-    const val supportPreference = "com.android.support:preference-v7:${Versions.support}"
 
     const val timber = "com.jakewharton.timber:timber:${Versions.timber}"
 
