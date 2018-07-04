@@ -19,6 +19,7 @@ package com.ivianuu.essentials.ui.traveler
 import android.support.v7.preference.Preference
 import android.support.v7.widget.Toolbar
 import android.view.View
+import com.ivianuu.epoxyprefs.PreferenceModel
 import com.ivianuu.essentials.util.ext.exitOnNavigationClick
 import com.ivianuu.essentials.util.ext.navigateOnClick
 import com.ivianuu.traveler.Router
@@ -46,6 +47,14 @@ interface RouterHolder {
     }
 
     fun Preference.navigateOnClick(key: Any) {
+        navigateOnClick(router, key)
+    }
+
+    fun PreferenceModel.Builder.navigateOnClick(key: () -> Any) {
+        navigateOnClick(router, key)
+    }
+
+    fun PreferenceModel.Builder.navigateOnClick(key: Any) {
         navigateOnClick(router, key)
     }
 }

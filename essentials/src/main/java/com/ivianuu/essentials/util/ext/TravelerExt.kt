@@ -29,6 +29,8 @@ import android.support.v7.widget.Toolbar
 import android.view.View
 import com.ivianuu.compass.CompassFragmentAppNavigator
 import com.ivianuu.compass.CompassFragmentNavigator
+import com.ivianuu.epoxyprefs.PreferenceModel
+import com.ivianuu.epoxyprefs.clickListener
 import com.ivianuu.essentials.ui.traveler.TravelerStore
 import com.ivianuu.essentials.ui.traveler.navigator.CompassFragmentSwapperNavigator
 import com.ivianuu.essentials.ui.traveler.navigator.FragmentSwapperNavigator.HideStrategy
@@ -171,6 +173,20 @@ inline fun Preference.navigateOnClick(router: Router, crossinline key: () -> Any
 
 inline fun Preference.navigateOnClick(router: Router, key: Any) {
     setOnPreferenceClickListener {
+        router.navigateTo(key)
+        true
+    }
+}
+
+inline fun PreferenceModel.Builder.navigateOnClick(router: Router, crossinline key: () -> Any) {
+    clickListener {
+        router.navigateTo(key())
+        true
+    }
+}
+
+inline fun PreferenceModel.Builder.navigateOnClick(router: Router, key: Any) {
+    clickListener {
         router.navigateTo(key)
         true
     }

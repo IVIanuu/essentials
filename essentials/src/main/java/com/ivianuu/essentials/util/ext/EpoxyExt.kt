@@ -65,23 +65,25 @@ fun <T> listEpoxyController(buildModel: EpoxyController.(item: T) -> Unit): Type
     return typedEpoxyController { it.forEach { buildModel.invoke(this, it) } }
 }
 
-fun RecyclerView.setEpoxyController(epoxyController: EpoxyController) {
+fun <T : EpoxyController> RecyclerView.setEpoxyController(epoxyController: T): T {
     adapter = epoxyController.adapter
-}
-
-fun RecyclerView.setEpoxyControllerAndBuild(epoxyController: EpoxyController) {
-    adapter = epoxyController.adapter
-    epoxyController.requestModelBuild()
-}
-
-fun RecyclerView.buildModelsWith(buildModels: EpoxyController.() -> Unit): EpoxyController {
-    val epoxyController = epoxyController(buildModels)
-    setEpoxyControllerAndBuild(epoxyController)
     return epoxyController
 }
 
-fun RecyclerView.buildPreferencesWith(buildModels: PreferenceEpoxyController.() -> Unit): EpoxyController {
-    val epoxyController = preferenceEpoxyController(context, buildModels)
-    setEpoxyControllerAndBuild(epoxyController)
-    return epoxyController
-}
+fun RecyclerView.setEpoxyController(buildModels: EpoxyController.() -> Unit) =
+    setEpoxyController(epoxyController(buildModels))
+
+fun <T> RecyclerView.setTypedEpoxyController(buildModels: TypedEpoxyController<T>.(data: T) -> Unit) =
+    setEpoxyController(typedEpoxyController(buildModels))
+
+fun <T, U> RecyclerView.setTyped2EpoxyController(buildModels: Typed2EpoxyController<T, U>.(data1: T, data2: U) -> Unit) =
+    setEpoxyController(typed2EpoxyController(buildModels))
+
+fun <T, U, V> RecyclerView.setTyped3EpoxyController(buildModels: Typed3EpoxyController<T, U, V>.(data1: T, data2: U, data3: V) -> Unit) =
+    setEpoxyController(typed3EpoxyController(buildModels))
+
+fun <T, U, V, W> RecyclerView.setTyped3EpoxyController(buildModels: Typed4EpoxyController<T, U, V, W>.(data1: T, data2: U, data3: V, data4: W) -> Unit) =
+    setEpoxyController(typed4EpoxyController(buildModels))
+
+fun RecyclerView.setPreferenceController(buildsModels: PreferenceEpoxyController.() -> Unit) =
+    setEpoxyController(preferenceEpoxyController(context, buildsModels))
