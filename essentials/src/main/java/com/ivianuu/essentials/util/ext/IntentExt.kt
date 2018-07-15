@@ -1,3 +1,7 @@
+@file:Suppress("NOTHING_TO_INLINE")
+
+// Aliases to other public API.
+
 package com.ivianuu.essentials.util.ext
 
 import android.app.Activity
@@ -8,6 +12,43 @@ import android.os.Build
 import android.os.Bundle
 import android.support.annotation.RequiresApi
 import com.ivianuu.essentials.util.ContextAware
+
+inline fun Intent.clearTask() = addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+
+inline fun Intent.clearTop() = addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+
+inline fun Intent.clearWhenTaskReset() = addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET)
+
+inline fun Intent.excludeFromRecents() = addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
+
+inline fun Intent.forwardResult() = addFlags(Intent.FLAG_ACTIVITY_FORWARD_RESULT)
+
+@RequiresApi(Build.VERSION_CODES.N)
+inline fun Intent.launchAdjacent() = addFlags(Intent.FLAG_ACTIVITY_LAUNCH_ADJACENT)
+
+inline fun Intent.multipleTask() = addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK)
+
+inline fun Intent.newDocument() = addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT)
+
+inline fun Intent.newTask() = addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+
+inline fun Intent.noAnimation() = addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+
+inline fun Intent.noHistory() = addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
+
+inline fun Intent.noUserAction() = addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION)
+
+inline fun Intent.previousIsTop() = addFlags(Intent.FLAG_ACTIVITY_PREVIOUS_IS_TOP)
+
+inline fun Intent.reorderToFront() = addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
+
+inline fun Intent.resetTaskIfNeeded() = addFlags(Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED)
+
+inline fun Intent.retainInRecents() = addFlags(Intent.FLAG_ACTIVITY_RETAIN_IN_RECENTS)
+
+inline fun Intent.singleTop() = addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+
+inline fun Intent.taskOnHome() = addFlags(Intent.FLAG_ACTIVITY_TASK_ON_HOME)
 
 @PublishedApi
 internal val initStub: Intent.() -> Unit = {}
