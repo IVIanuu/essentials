@@ -20,29 +20,29 @@ import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelStoreOwner
 
-inline fun <reified T : ViewModel> ViewModelStoreOwner.getViewModel(): T =
+inline fun <reified T : ViewModel> ViewModelStoreOwner.viewModel(): T =
     ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())[T::class.java]
 
-inline fun <reified T : ViewModel> ViewModelStoreOwner.getViewModel(
+inline fun <reified T : ViewModel> ViewModelStoreOwner.viewModel(
     factory: ViewModelProvider.Factory
 ): T = ViewModelProvider(this, factory)[T::class.java]
 
-inline fun <reified T : ViewModel> ViewModelStoreOwner.getViewModel(
+inline fun <reified T : ViewModel> ViewModelStoreOwner.viewModel(
     key: String
 ): T = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())[key, T::class.java]
 
-inline fun <reified T : ViewModel> ViewModelStoreOwner.getViewModel(
+inline fun <reified T : ViewModel> ViewModelStoreOwner.viewModel(
     key: String,
     factory: ViewModelProvider.Factory
 ): T = ViewModelProvider(this, factory).get(key, T::class.java)
 
 inline fun <reified T : ViewModel> ViewModelStoreOwner.bindViewModel(): Lazy<T> =
-    unsafeLazy { getViewModel<T>() }
+    unsafeLazy { viewModel<T>() }
 
 inline fun <reified T : ViewModel> ViewModelStoreOwner.bindViewModel(
     crossinline factory: () -> ViewModelProvider.Factory
-): Lazy<T> = unsafeLazy { getViewModel<T>(factory()) }
+): Lazy<T> = unsafeLazy { viewModel<T>(factory()) }
 
 inline fun <reified T : ViewModel> ViewModelStoreOwner.bindViewModel(
     key: String
-): Lazy<T> = unsafeLazy { getViewModel<T>(key) }
+): Lazy<T> = unsafeLazy { viewModel<T>(key) }

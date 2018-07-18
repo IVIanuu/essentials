@@ -18,8 +18,8 @@ package com.ivianuu.essentials.ui.base
 
 import android.arch.lifecycle.ViewModel
 import com.ivianuu.essentials.util.DaggerViewModelFactory
-import com.ivianuu.essentials.util.ext.getViewModel
 import com.ivianuu.essentials.util.ext.unsafeLazy
+import com.ivianuu.essentials.util.ext.viewModel
 import javax.inject.Inject
 
 /**
@@ -27,5 +27,5 @@ import javax.inject.Inject
  */
 abstract class BaseViewModelDialogFragment<VM : ViewModel> : BaseDialogFragment() {
     @Inject lateinit var viewModelFactory: DaggerViewModelFactory<VM>
-    protected val viewModel: VM by unsafeLazy { getViewModel<ViewModel>(viewModelFactory) as VM }
+    protected val viewModel: VM by unsafeLazy { viewModel<ViewModel>(viewModelFactory) as VM }
 }

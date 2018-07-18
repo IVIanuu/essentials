@@ -63,6 +63,7 @@ abstract class BaseDialogFragment : AppCompatDialogFragment(),
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        Context.ACCESSIBILITY_SERVICE
         return if (layoutRes != -1) {
             val viewInjectionContext =
                 ViewInjectionContextWrapper(requireContext(), this)

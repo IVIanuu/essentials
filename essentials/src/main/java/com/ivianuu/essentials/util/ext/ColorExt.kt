@@ -32,7 +32,7 @@ val Int.isLight: Boolean
 
 fun Int.stripAlpha(): Int = 0xff000000.toInt() or this
 
-fun Int.shift(by: Float): Int {
+fun Int.shifted(by: Float): Int {
     if (by == 1f) return this
     val alpha = Color.alpha(this)
     val hsv = FloatArray(3)
@@ -41,11 +41,11 @@ fun Int.shift(by: Float): Int {
     return (alpha shl 24) + (0x00ffffff and Color.HSVToColor(hsv))
 }
 
-fun Int.darken(): Int = shift(0.9f)
+fun Int.darken(): Int = shifted(0.9f)
 
-fun Int.lighten(): Int = shift(1.1f)
+fun Int.lighten(): Int = shifted(1.1f)
 
-fun Int.invert(): Int {
+fun Int.inverted(): Int {
     val r = 255 - Color.red(this)
     val g = 255 - Color.green(this)
     val b = 255 - Color.blue(this)

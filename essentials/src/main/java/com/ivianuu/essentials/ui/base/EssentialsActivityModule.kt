@@ -18,9 +18,9 @@ package com.ivianuu.essentials.ui.base
 
 import android.support.v4.app.FragmentActivity
 import com.ivianuu.essentials.injection.EssentialsFragmentBindingModule_
-import com.ivianuu.essentials.util.ext.getNavigatorHolder
-import com.ivianuu.essentials.util.ext.getRouter
-import com.ivianuu.essentials.util.ext.getTraveler
+import com.ivianuu.essentials.util.ext.navigationHolder
+import com.ivianuu.essentials.util.ext.router
+import com.ivianuu.essentials.util.ext.traveler
 import com.ivianuu.rxactivityresult.RxActivityResult
 import com.ivianuu.rxpermissions.RxPermissions
 import dagger.Module
@@ -45,16 +45,16 @@ object EssentialsActivityModule {
     @JvmStatic
     @Provides
     fun provideTraveler(activity: BaseActivity) =
-        activity.getTraveler(activity.fragmentContainer)
+        activity.traveler(activity.fragmentContainer)
 
     @JvmStatic
     @Provides
     fun provideNavigatorHolder(activity: BaseActivity) =
-        activity.getNavigatorHolder(activity.fragmentContainer)
+        activity.navigationHolder(activity.fragmentContainer)
 
     @JvmStatic
     @Provides
     fun provideRouter(activity: BaseActivity) =
-        activity.getRouter(activity.fragmentContainer)
+        activity.router(activity.fragmentContainer)
 
 }
