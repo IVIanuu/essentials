@@ -18,63 +18,12 @@
 
 package com.ivianuu.essentials.util.ext
 
-import android.arch.lifecycle.Lifecycle
-import android.arch.lifecycle.LifecycleOwner
-import android.view.View
 import com.uber.autodispose.*
-import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider
-import com.uber.autodispose.android.lifecycle.scope
-import com.uber.autodispose.android.scope
 import com.uber.autodispose.kotlin.autoDisposable
 import io.reactivex.*
 import io.reactivex.disposables.Disposable
 import io.reactivex.exceptions.OnErrorNotImplementedException
 import io.reactivex.plugins.RxJavaPlugins
-
-inline fun Completable.autoDisposable(owner: LifecycleOwner) =
-        autoDisposable(owner.scope())
-
-inline fun <T> Flowable<T>.autoDisposable(owner: LifecycleOwner) =
-    autoDisposable(owner.scope())
-
-inline fun <T> Maybe<T>.autoDisposable(owner: LifecycleOwner) =
-    autoDisposable(owner.scope())
-
-inline fun <T> Observable<T>.autoDisposable(owner: LifecycleOwner) =
-        autoDisposable(owner.scope())
-
-inline fun <T> Single<T>.autoDisposable(owner: LifecycleOwner) =
-    autoDisposable(owner.scope())
-
-inline fun Completable.autoDisposable(owner: LifecycleOwner, untilEvent: Lifecycle.Event) =
-    autoDisposable(AndroidLifecycleScopeProvider.from(owner).toScopeProvider(untilEvent))
-
-inline fun <T> Flowable<T>.autoDisposable(owner: LifecycleOwner, untilEvent: Lifecycle.Event) =
-    autoDisposable(AndroidLifecycleScopeProvider.from(owner).toScopeProvider(untilEvent))
-
-inline fun <T> Maybe<T>.autoDisposable(owner: LifecycleOwner, untilEvent: Lifecycle.Event) =
-    autoDisposable(AndroidLifecycleScopeProvider.from(owner).toScopeProvider(untilEvent))
-
-inline fun <T> Observable<T>.autoDisposable(owner: LifecycleOwner, untilEvent: Lifecycle.Event) =
-    autoDisposable(AndroidLifecycleScopeProvider.from(owner).toScopeProvider(untilEvent))
-
-inline fun <T> Single<T>.autoDisposable(owner: LifecycleOwner, untilEvent: Lifecycle.Event) =
-    autoDisposable(AndroidLifecycleScopeProvider.from(owner).toScopeProvider(untilEvent))
-
-inline fun Completable.autoDisposable(view: View) =
-    autoDisposable(view.scope())
-
-inline fun <T> Flowable<T>.autoDisposable(view: View) =
-    autoDisposable(view.scope())
-
-inline fun <T> Maybe<T>.autoDisposable(view: View) =
-    autoDisposable(view.scope())
-
-inline fun <T> Observable<T>.autoDisposable(view: View) =
-    autoDisposable(view.scope())
-
-inline fun <T> Single<T>.autoDisposable(view: View) =
-    autoDisposable(view.scope())
 
 inline fun <E> Completable.autoDisposable(scopeProvider: LifecycleScopeProvider<E>, untilEvent: E) =
         autoDisposable(scopeProvider.toScopeProvider(untilEvent))

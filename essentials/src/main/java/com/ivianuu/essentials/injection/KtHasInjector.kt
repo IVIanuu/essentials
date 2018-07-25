@@ -22,7 +22,9 @@ import android.content.BroadcastReceiver
 import android.content.ContentProvider
 import android.support.v4.app.Fragment
 import android.view.View
+import androidx.work.Worker
 import com.ivianuu.daggerextensions.view.HasViewInjector
+import com.ivianuu.daggerextensions.work.HasWorkerInjector
 import dagger.android.*
 import dagger.android.support.HasSupportFragmentInjector
 
@@ -54,4 +56,9 @@ interface KtHasSupportFragmentInjector : HasSupportFragmentInjector {
 interface KtHasViewInjector : HasViewInjector {
     val viewInjector: AndroidInjector<View>
     override fun viewInjector() = viewInjector
+}
+
+interface KtHasWorkerInjector : HasWorkerInjector {
+    val workerInjector: AndroidInjector<Worker>
+    override fun workerInjector() = workerInjector
 }

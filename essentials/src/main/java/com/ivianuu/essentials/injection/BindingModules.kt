@@ -42,6 +42,8 @@ annotation class ServiceBindingModule
 @BindingModule
 annotation class ViewBindingModule
 
+@BindingModule
+annotation class WorkerBindingModule
 
 @BindingModule
 annotation class EssentialsAppInitializerModule

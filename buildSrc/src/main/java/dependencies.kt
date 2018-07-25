@@ -10,6 +10,7 @@ object Versions {
 
     const val androidGradlePlugin = "3.1.3"
     const val archLifecycle = "1.1.1"
+    const val archWork = "1.0.0-alpha05"
     const val autoDispose = "0.8.0"
     const val butterknife = "9.0.0-SNAPSHOT"
     const val compass = "738292d98d"
@@ -44,6 +45,8 @@ object Deps {
     const val archLifecycleExtensions = "android.arch.lifecycle:extensions:${Versions.archLifecycle}"
     const val archLifecycleCompiler = "android.arch.lifecycle:compiler:${Versions.archLifecycle}"
 
+    const val archWorkRuntime = "android.arch.work:work-runtime-ktx:${Versions.archWork}"
+
     const val autoDispose = "com.uber.autodispose:autodispose-kotlin:${Versions.autoDispose}"
     const val autoDisposeAndroid = "com.uber.autodispose:autodispose-android-kotlin:${Versions.autoDispose}"
     const val autoDisposeArch = "com.uber.autodispose:autodispose-android-archcomponents-kotlin:${Versions.autoDispose}"
@@ -62,8 +65,11 @@ object Deps {
     const val daggerAndroidProcessor = "com.google.dagger:dagger-android-processor:${Versions.dagger}"
 
     const val daggerExtensions = "com.github.IVIanuu.dagger-extensions:daggerextensions:${Versions.daggerExtensions}"
+    const val daggerExtensionsCompiler =
+        "com.github.IVIanuu.dagger-extensions:daggerextensions-compiler:${Versions.daggerExtensions}"
     const val daggerExtensionsView = "com.github.IVIanuu.dagger-extensions:daggerextensions-view:${Versions.daggerExtensions}"
-    const val daggerExtensionsCompiler = "com.github.IVIanuu.dagger-extensions:daggerextensions-compiler:${Versions.daggerExtensions}"
+    const val daggerExtensionsWork =
+        "com.github.IVIanuu.dagger-extensions:daggerextensions-work:${Versions.daggerExtensions}"
 
     const val epoxy = "com.airbnb.android:epoxy:${Versions.epoxy}"
     const val epoxyProcessor = "com.airbnb.android:epoxy-processor:${Versions.epoxy}"
