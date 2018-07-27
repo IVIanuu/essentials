@@ -71,6 +71,8 @@ dependencies {
         transitive = true
     }
 
+    api Deps.fastScroll
+
     api Deps.kotlinStdLib
 
     api Deps.ktx
@@ -86,16 +88,20 @@ dependencies {
     api Deps.rxBindingSupportAppCompatV7
     api Deps.rxBindingSupportV4
     api Deps.rxBroadcastReceiver
+    api Deps.rxContentObserver
     api Deps.rxJava
     api Deps.rxKotlin
     api Deps.rxPermissions
     api Deps.rxPreferences
     api Deps.rxPopupMenu
+    api Deps.rxSystemSettings
 
     api Deps.supportAppCompat
     api Deps.supportCardView
     api Deps.supportDesign
     api Deps.supportPalette
+
+    api Deps.stickyHeaders
 
     api Deps.timber
 

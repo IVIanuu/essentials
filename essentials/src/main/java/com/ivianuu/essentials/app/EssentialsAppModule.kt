@@ -23,6 +23,7 @@ import android.preference.PreferenceManager
 import androidx.work.WorkManager
 import com.f2prateek.rx.preferences2.RxSharedPreferences
 import com.ivianuu.essentials.injection.DefaultSharedPrefs
+import com.ivianuu.rxsystemsettings.RxSystemSettings
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -49,6 +50,11 @@ object EssentialsAppModule {
     @JvmStatic
     @Provides
     fun providePackageManager(app: Application): PackageManager = app.packageManager
+
+    @JvmStatic
+    @Singleton
+    @Provides
+    fun provideRxSystemSettings(app: Application) = RxSystemSettings.create(app)
 
     @JvmStatic
     @Provides
