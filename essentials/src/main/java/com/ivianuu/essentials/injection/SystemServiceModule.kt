@@ -11,7 +11,6 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.RestrictionsManager
 import android.content.pm.LauncherApps
-import android.content.pm.PackageManager
 import android.hardware.ConsumerIrManager
 import android.hardware.SensorManager
 import android.hardware.camera2.CameraManager
@@ -50,10 +49,6 @@ import dagger.Provides
  */
 @Module
 object SystemServiceModule {
-
-    @JvmStatic
-    @Provides
-    fun providePackageManager(app: Application): PackageManager = app.packageManager
 
     @JvmStatic
     @Provides

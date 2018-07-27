@@ -18,7 +18,9 @@ package com.ivianuu.essentials.app
 
 import android.app.Application
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
 import android.preference.PreferenceManager
+import androidx.work.WorkManager
 import com.f2prateek.rx.preferences2.RxSharedPreferences
 import com.ivianuu.essentials.injection.DefaultSharedPrefs
 import dagger.Module
@@ -43,5 +45,13 @@ object EssentialsAppModule {
     @Provides
     fun provideRxSharedPrefs(@DefaultSharedPrefs prefs: SharedPreferences): RxSharedPreferences =
         RxSharedPreferences.create(prefs)
+
+    @JvmStatic
+    @Provides
+    fun providePackageManager(app: Application): PackageManager = app.packageManager
+
+    @JvmStatic
+    @Provides
+    fun provideWorkManager(): WorkManager = WorkManager.getInstance()
 
 }
