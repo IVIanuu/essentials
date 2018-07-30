@@ -1,3 +1,6 @@
+# Fast scroll
+-dontwarn android.graphics.Canvas
+
 # View models
 -keepclassmembernames class android.arch.lifecycle.ViewModelStore { *; }
 
