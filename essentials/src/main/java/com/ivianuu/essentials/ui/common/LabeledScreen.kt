@@ -20,6 +20,6 @@ package com.ivianuu.essentials.ui.common
  * @author Manuel Wrage (IVIanuu)
  */
 interface LabeledScreen {
-    val screenLabel: String? get() = null
+    val screenLabel: CharSequence? get() = null
     val screenLabelRes: Int get() = 0
 }
