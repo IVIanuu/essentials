@@ -10,7 +10,7 @@ object Versions {
 
     const val androidGradlePlugin = "3.1.3"
     const val archLifecycle = "1.1.1"
-    const val archWork = "1.0.0-alpha05"
+    const val archWork = "1.0.0-alpha06"
     const val autoDispose = "0.8.0"
     const val butterknife = "9.0.0-SNAPSHOT"
     const val compass = "738292d98d"
