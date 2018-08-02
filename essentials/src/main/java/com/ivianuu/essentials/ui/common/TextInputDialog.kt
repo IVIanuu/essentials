@@ -49,9 +49,10 @@ class TextInputDialog : BaseDialogFragment() {
         val destination = textInputDestination()
 
         return MaterialDialog.Builder(requireContext())
+            .autoDismiss(false)
             .title(destination.title)
             .input(destination.inputHint, destination.prefill, destination.allowEmptyInput) { _, input ->
-                router.sendResult(destination.resultCode, input.toString())
+                router.exitWithResult(destination.resultCode, input.toString())
             }
             .inputType(destination.inputType)
             .positiveText(R.string.action_ok)
