@@ -7,3 +7,6 @@
 # Screen logger
 -keepnames public class * extends android.support.v4.app.Fragment
 -keepnames public class * extends android.app.Activity
+
+# Support design
+-keep class android.support.design.widget.AppBarLayout$ScrollingViewBehavior { *; }
