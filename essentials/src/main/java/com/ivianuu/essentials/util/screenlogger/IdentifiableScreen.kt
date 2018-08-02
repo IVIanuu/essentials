@@ -20,6 +20,6 @@ package com.ivianuu.essentials.util.screenlogger
  * Tells the [ScreenLogger] that it should log this screen
  */
 interface IdentifiableScreen {
-    val screenName: CharSequence get() = ""
+    val screenName get() = ""
     val screenNameRes get() = 0
 }
