@@ -51,7 +51,11 @@ class TextInputDialog : BaseDialogFragment() {
         return MaterialDialog.Builder(requireContext())
             .autoDismiss(false)
             .title(destination.title)
-            .input(destination.inputHint, destination.prefill, destination.allowEmptyInput) { _, input ->
+            .input(
+                destination.inputHint,
+                destination.prefill,
+                destination.allowEmptyInput
+            ) { _, input ->
                 router.exitWithResult(destination.resultCode, input.toString())
             }
             .inputType(destination.inputType)

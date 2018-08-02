@@ -14,7 +14,9 @@
  * limitations under the License.
  */
 
-@file:Suppress("NOTHING_TO_INLINE") // Aliases to other public API.
+@file:Suppress("NOTHING_TO_INLINE")
+
+// Aliases to other public API.
 
 package com.ivianuu.essentials.util.ext
 
@@ -36,7 +38,8 @@ inline fun Fragment.showInputMethod(view: View) {
 
 inline fun Fragment.requireAppCompatActivity() = requireActivity() as AppCompatActivity
 
-inline fun Fragment.requireArgs() = arguments ?: throw IllegalStateException("no arguments provided")
+inline fun Fragment.requireArgs() =
+    arguments ?: throw IllegalStateException("no arguments provided")
 
 inline fun Fragment.requireView() = view ?: throw IllegalStateException("view is null")
 

@@ -14,7 +14,9 @@
  * limitations under the License.
  */
 
-@file:Suppress("NOTHING_TO_INLINE") // Aliases to other public API.
+@file:Suppress("NOTHING_TO_INLINE")
+
+// Aliases to other public API.
 
 package com.ivianuu.essentials.util.ext
 
@@ -25,19 +27,34 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.exceptions.OnErrorNotImplementedException
 import io.reactivex.plugins.RxJavaPlugins
 
-inline fun <E> Completable.autoDisposable(scopeProvider: LifecycleScopeProvider<E>, untilEvent: E) =
-        autoDisposable(scopeProvider.toScopeProvider(untilEvent))
-
-inline fun <T, E> Flowable<T>.autoDisposable(scopeProvider: LifecycleScopeProvider<E>, untilEvent: E) =
+inline fun <E> Completable.autoDisposable(
+    scopeProvider: LifecycleScopeProvider<E>,
+    untilEvent: E
+) =
     autoDisposable(scopeProvider.toScopeProvider(untilEvent))
 
-inline fun <T, E> Maybe<T>.autoDisposable(scopeProvider: LifecycleScopeProvider<E>, untilEvent: E) =
+inline fun <T, E> Flowable<T>.autoDisposable(
+    scopeProvider: LifecycleScopeProvider<E>,
+    untilEvent: E
+) =
     autoDisposable(scopeProvider.toScopeProvider(untilEvent))
 
-inline fun <T, E> Observable<T>.autoDisposable(scopeProvider: LifecycleScopeProvider<E>, untilEvent: E) =
+inline fun <T, E> Maybe<T>.autoDisposable(
+    scopeProvider: LifecycleScopeProvider<E>,
+    untilEvent: E
+) =
     autoDisposable(scopeProvider.toScopeProvider(untilEvent))
 
-inline fun <T, E> Single<T>.autoDisposable(scopeProvider: LifecycleScopeProvider<E>, untilEvent: E) =
+inline fun <T, E> Observable<T>.autoDisposable(
+    scopeProvider: LifecycleScopeProvider<E>,
+    untilEvent: E
+) =
+    autoDisposable(scopeProvider.toScopeProvider(untilEvent))
+
+inline fun <T, E> Single<T>.autoDisposable(
+    scopeProvider: LifecycleScopeProvider<E>,
+    untilEvent: E
+) =
     autoDisposable(scopeProvider.toScopeProvider(untilEvent))
 
 fun <E> LifecycleScopeProvider<E>.toScopeProvider() = ScopeProvider {
@@ -57,9 +74,11 @@ fun <E> LifecycleScopeProvider<E>.toScopeProvider(untilEvent: E) = ScopeProvider
 }
 
 private val onNextStub: (Any) -> Unit = {}
-private val onErrorStub: (Throwable) -> Unit = { RxJavaPlugins.onError(
-    OnErrorNotImplementedException(it)
-) }
+private val onErrorStub: (Throwable) -> Unit = {
+    RxJavaPlugins.onError(
+        OnErrorNotImplementedException(it)
+    )
+}
 private val onCompleteStub: () -> Unit = {}
 
 fun <T : Any> ObservableSubscribeProxy<T>.subscribeBy(

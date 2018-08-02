@@ -32,7 +32,7 @@ interface RouterHolder {
     fun Toolbar.exitOnNavigationClick() {
         exitOnNavigationClick(router)
     }
-    
+
     fun View.navigateOnClick(key: () -> Any) {
         navigateOnClick(router, key)
     }

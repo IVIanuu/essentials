@@ -70,7 +70,8 @@ data class Octet<out A, out B, out C, out D, out E, out F, out G, out H>(
     val seventh: G,
     val eighth: H
 ) : Serializable {
-    override fun toString(): String = "($first, $second, $third, $fourth, $fifth, $sixth, $seventh, $eighth)"
+    override fun toString(): String =
+        "($first, $second, $third, $fourth, $fifth, $sixth, $seventh, $eighth)"
 }
 
 data class Ennead<out A, out B, out C, out D, out E, out F, out G, out H, out I>(
@@ -84,5 +85,6 @@ data class Ennead<out A, out B, out C, out D, out E, out F, out G, out H, out I>
     val eighth: H,
     val ninth: I
 ) : Serializable {
-    override fun toString(): String = "($first, $second, $third, $fourth, $fifth, $sixth, $seventh, $eighth, $ninth)"
+    override fun toString(): String =
+        "($first, $second, $third, $fourth, $fifth, $sixth, $seventh, $eighth, $ninth)"
 }

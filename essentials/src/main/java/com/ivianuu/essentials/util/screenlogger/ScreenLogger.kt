@@ -63,7 +63,7 @@ class ScreenLogger @Inject constructor(private val application: Application) : A
         if (activity is IdentifiableScreen
             && activity !is Ignore
             && savedInstanceState == null) {
-            val name = getName(activity)
+            val name = getId(activity)
             listeners.toList()
                 .forEach { it.screenLaunched(name) }
         }
@@ -73,7 +73,7 @@ class ScreenLogger @Inject constructor(private val application: Application) : A
                 if (fragment is IdentifiableScreen
                     && fragment !is Ignore
                     && bundle == null) {
-                    val name = getName(fragment)
+                    val name = getId(fragment)
                     listeners.toList()
                         .forEach { it.screenLaunched(name) }
                 }
@@ -81,10 +81,10 @@ class ScreenLogger @Inject constructor(private val application: Application) : A
         }
     }
 
-    private fun getName(screen: IdentifiableScreen): String {
+    private fun getId(screen: IdentifiableScreen): String {
         return when {
-            screen.screenName.isNotEmpty() -> screen.screenName
-            screen.screenNameRes != 0 -> application.getString(screen.screenNameRes)
+            screen.screenId.isNotEmpty() -> screen.screenId
+            screen.screenIdRes != 0 -> application.getString(screen.screenIdRes)
             else -> parseName(screen.javaClass.simpleName)
         }
     }

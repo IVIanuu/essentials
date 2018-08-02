@@ -14,7 +14,9 @@
  * limitations under the License.
  */
 
-@file:Suppress("NOTHING_TO_INLINE") // Aliases to other public API.
+@file:Suppress("NOTHING_TO_INLINE")
+
+// Aliases to other public API.
 
 package com.ivianuu.essentials.util.ext
 
@@ -87,10 +89,16 @@ inline fun <T> T.removeRouter(containerId: Int) where T : ViewModelStoreOwner, T
     travelerStore().removeTraveler(containerId)
 }
 
-inline fun FragmentActivity.setupCompassFragmentRouter(containerId: Int, crossinline exit: () -> Unit = {}) =
+inline fun FragmentActivity.setupCompassFragmentRouter(
+    containerId: Int,
+    crossinline exit: () -> Unit = {}
+) =
     setupCompassFragmentRouter(supportFragmentManager, containerId, exit)
 
-inline fun Fragment.setupCompassFragmentRouter(containerId: Int, crossinline exit: () -> Unit = {}) =
+inline fun Fragment.setupCompassFragmentRouter(
+    containerId: Int,
+    crossinline exit: () -> Unit = {}
+) =
     setupCompassFragmentRouter(childFragmentManager, containerId, exit)
 
 inline fun <T> T.setupCompassFragmentRouter(

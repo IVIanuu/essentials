@@ -14,7 +14,9 @@
  * limitations under the License.
  */
 
-@file:Suppress("NOTHING_TO_INLINE") // Aliases to other public API.
+@file:Suppress("NOTHING_TO_INLINE")
+
+// Aliases to other public API.
 
 package com.ivianuu.essentials.util.ext
 
@@ -98,7 +100,8 @@ inline fun ContextAware.getResBitmap(resId: Int) = providedContext.getResBitmap(
 
 inline fun ContextAware.getResColor(resId: Int) = providedContext.getResColor(resId)
 
-inline fun ContextAware.getResColorStateList(resId: Int) = providedContext.getResColorStateList(resId)
+inline fun ContextAware.getResColorStateList(resId: Int) =
+    providedContext.getResColorStateList(resId)
 
 inline fun ContextAware.getResDrawable(resId: Int) = providedContext.getResDrawable(resId)
 

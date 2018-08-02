@@ -25,7 +25,9 @@ import io.reactivex.functions.Function
  */
 interface DelegateLifecycleScopeProvider<T> : LifecycleScopeProvider<T> {
     val lifecycleScopeProvider: LifecycleScopeProvider<T>
-    override fun correspondingEvents(): Function<T, T> = lifecycleScopeProvider.correspondingEvents()
+    override fun correspondingEvents(): Function<T, T> =
+        lifecycleScopeProvider.correspondingEvents()
+
     override fun lifecycle(): Observable<T> = lifecycleScopeProvider.lifecycle()
     override fun peekLifecycle() = lifecycleScopeProvider.peekLifecycle()
 }

@@ -60,7 +60,8 @@ abstract class BaseActivity : AppCompatActivity(), KtHasSupportFragmentInjector,
         )
     }
 
-    val scopeProvider: LifecycleScopeProvider<Lifecycle.Event> = AndroidLifecycleScopeProvider.from(this)
+    val scopeProvider: LifecycleScopeProvider<Lifecycle.Event> =
+        AndroidLifecycleScopeProvider.from(this)
 
     override lateinit var router: Router
 

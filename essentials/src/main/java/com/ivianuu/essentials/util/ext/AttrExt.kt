@@ -14,7 +14,9 @@
  * limitations under the License.
  */
 
-@file:Suppress("NOTHING_TO_INLINE") // Aliases to other public API.
+@file:Suppress("NOTHING_TO_INLINE")
+
+// Aliases to other public API.
 
 package com.ivianuu.essentials.util.ext
 
@@ -141,8 +143,10 @@ inline fun ContextAware.resolveTextArrayAttr(
     providedContext.resolveTextArrayAttr(attr, defaultValue)
 
 @PublishedApi
-internal inline fun <T> Context.withTypedArray(vararg attr: Int,
-                                               action: (TypedArray) -> T): T =
+internal inline fun <T> Context.withTypedArray(
+    vararg attr: Int,
+    action: (TypedArray) -> T
+): T =
     theme.obtainStyledAttributes(attr).use(action)
 
 @PublishedApi

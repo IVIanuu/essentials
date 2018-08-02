@@ -14,7 +14,9 @@
  * limitations under the License.
  */
 
-@file:Suppress("NOTHING_TO_INLINE") // Aliases to other public API.
+@file:Suppress("NOTHING_TO_INLINE")
+
+// Aliases to other public API.
 
 package com.ivianuu.essentials.util.ext
 
@@ -29,7 +31,8 @@ import android.view.WindowManager
 import com.ivianuu.essentials.util.ContextAware
 
 @PublishedApi
-internal val systemMetrics: DisplayMetrics get() = Resources.getSystem().displayMetrics
+internal inline val systemMetrics: DisplayMetrics
+    get() = Resources.getSystem().displayMetrics
 
 @PublishedApi
 internal val displayMetrics = DisplayMetrics()
