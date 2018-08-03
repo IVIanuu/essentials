@@ -56,7 +56,7 @@ class TextInputDialog : BaseDialogFragment() {
                 destination.prefill,
                 destination.allowEmptyInput
             ) { _, input ->
-                router.exitWithResult(destination.resultCode, input.toString())
+                router.exitWithResult(destination.resultCode, input)
             }
             .inputType(destination.inputType)
             .positiveText(R.string.action_ok)
