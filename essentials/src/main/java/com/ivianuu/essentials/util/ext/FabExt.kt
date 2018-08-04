@@ -19,7 +19,7 @@ package com.ivianuu.essentials.util.ext
 import android.support.design.widget.FloatingActionButton
 import android.view.View
 
-var FloatingActionButton.isShow: Boolean
+var FloatingActionButton.shouldShow: Boolean
     get() = visibility == View.VISIBLE
     set(value) {
         if (value) {
@@ -29,7 +29,7 @@ var FloatingActionButton.isShow: Boolean
         }
     }
 
-var FloatingActionButton.isHide: Boolean
+var FloatingActionButton.shouldHide: Boolean
     get() = visibility == View.INVISIBLE || visibility == View.GONE
     set(value) {
         if (value) {
