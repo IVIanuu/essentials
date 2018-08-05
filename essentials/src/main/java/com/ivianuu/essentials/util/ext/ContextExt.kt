@@ -175,11 +175,11 @@ fun Context.hasPermissions(vararg permissions: String): Boolean {
 fun ContextAware.hasPermissions(vararg permissions: String) =
     providedContext.hasPermissions(*permissions)
 
-inline fun Context.toThemedContext(themeResId: Int): Context =
-    ContextThemeWrapper(this, themeResId)
+inline fun Context.toThemedContext(resId: Int): Context =
+    ContextThemeWrapper(this, resId)
 
-inline fun ContextAware.toThemedContext(themeResId: Int) =
-    providedContext.toThemedContext(themeResId)
+inline fun ContextAware.toThemedContext(resId: Int) =
+    providedContext.toThemedContext(resId)
 
 inline fun Context.toThemedContext(theme: Resources.Theme): Context =
     ContextThemeWrapper(this, theme)

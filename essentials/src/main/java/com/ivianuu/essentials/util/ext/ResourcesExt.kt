@@ -76,6 +76,8 @@ inline fun Context.font(resId: Int): Typeface = ResourcesCompat.getFont(this, re
 
 inline fun Context.string(resId: Int): String = getString(resId)
 
+inline fun Context.string(resId: Int, vararg args: Any): String = getString(resId, *args)
+
 inline fun ContextAware.anim(resId: Int) = providedContext.anim(resId)
 
 inline fun ContextAware.intArray(resId: Int) = providedContext.intArray(resId)
@@ -110,6 +112,9 @@ inline fun ContextAware.drawable(resId: Int) = providedContext.drawable(resId)
 inline fun ContextAware.font(resId: Int) = providedContext.font(resId)
 
 inline fun ContextAware.string(resId: Int) = providedContext.string(resId)
+
+inline fun ContextAware.string(resId: Int, vararg args: Any) =
+    providedContext.string(resId, *args)
 
 @PublishedApi
 internal val VALUE = TypedValue()
