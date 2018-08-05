@@ -67,11 +67,11 @@ inline fun ContextAware.cardColor(color: Int) =
 inline fun ContextAware.cardColor(dark: Boolean) =
     providedContext.cardColor(dark)
 
-inline fun Context.iconColorColor() = iconColorColor(isWindowBackgroundDark())
+inline fun Context.iconColor() = iconColor(isWindowBackgroundDark())
 
-inline fun Context.iconColorColor(color: Int) = iconColorColor(color.isDark)
+inline fun Context.iconColor(color: Int) = iconColor(color.isDark)
 
-inline fun Context.iconColorColor(dark: Boolean) = color(
+inline fun Context.iconColor(dark: Boolean) = color(
     if (dark) {
         R.color.secondary_text_default_material_dark
     } else {
@@ -79,14 +79,14 @@ inline fun Context.iconColorColor(dark: Boolean) = color(
     }
 )
 
-inline fun ContextAware.iconColorColor() =
-    providedContext.iconColorColor()
+inline fun ContextAware.iconColor() =
+    providedContext.iconColor()
 
-inline fun ContextAware.iconColorColor(color: Int) =
-    providedContext.iconColorColor(color)
+inline fun ContextAware.iconColor(color: Int) =
+    providedContext.iconColor(color)
 
-inline fun ContextAware.iconColorColor(dark: Boolean) =
-    providedContext.iconColorColor(dark)
+inline fun ContextAware.iconColor(dark: Boolean) =
+    providedContext.iconColor(dark)
 
 inline fun Context.rippleColor() = rippleColor(isWindowBackgroundDark())
 
