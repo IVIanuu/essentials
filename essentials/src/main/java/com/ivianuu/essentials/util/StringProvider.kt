@@ -24,8 +24,8 @@ import javax.inject.Inject
  */
 class StringProvider @Inject constructor(private val app: Application) {
 
-    fun getString(resId: Int): String = app.getString(resId)
+    fun string(resId: Int): String = app.getString(resId)
 
-    fun getString(resId: Int, vararg args: Any): String = app.getString(resId, *args)
+    fun string(resId: Int, vararg args: Any): String = app.getString(resId, *args)
 
 }

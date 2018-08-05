@@ -74,6 +74,8 @@ inline fun Context.drawable(resId: Int): Drawable =
 
 inline fun Context.font(resId: Int): Typeface = ResourcesCompat.getFont(this, resId)!!
 
+inline fun Context.string(resId: Int): String = getString(resId)
+
 inline fun ContextAware.anim(resId: Int) = providedContext.anim(resId)
 
 inline fun ContextAware.intArray(resId: Int) = providedContext.intArray(resId)
@@ -106,6 +108,8 @@ inline fun ContextAware.colorStateList(resId: Int) =
 inline fun ContextAware.drawable(resId: Int) = providedContext.drawable(resId)
 
 inline fun ContextAware.font(resId: Int) = providedContext.font(resId)
+
+inline fun ContextAware.string(resId: Int) = providedContext.string(resId)
 
 @PublishedApi
 internal val VALUE = TypedValue()
