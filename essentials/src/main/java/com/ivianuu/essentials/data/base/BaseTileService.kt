@@ -15,6 +15,7 @@ import dagger.android.AndroidInjection
 abstract class BaseTileService : TileService() {
 
     val scopeProvider = DisposableScopeProvider()
+    val listeningScopeProvider = DisposableScopeProvider()
 
     override fun onCreate() {
         if (this !is AutoInjector.Ignore) {
@@ -26,6 +27,11 @@ abstract class BaseTileService : TileService() {
     override fun onDestroy() {
         scopeProvider.dispose()
         super.onDestroy()
+    }
+
+    override fun onStopListening() {
+        listeningScopeProvider.dispose()
+        super.onStopListening()
     }
 
     override fun onBind(intent: Intent) = null

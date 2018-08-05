@@ -12,6 +12,7 @@ import dagger.android.AndroidInjection
 abstract class BaseNotificationListenerService : NotificationListenerService() {
 
     val scopeProvider = DisposableScopeProvider()
+    val connectedScopeProvider = DisposableScopeProvider()
 
     override fun onCreate() {
         if (this !is AutoInjector.Ignore) {
@@ -23,6 +24,11 @@ abstract class BaseNotificationListenerService : NotificationListenerService() {
     override fun onDestroy() {
         scopeProvider.dispose()
         super.onDestroy()
+    }
+
+    override fun onListenerDisconnected() {
+        connectedScopeProvider.dispose()
+        super.onListenerDisconnected()
     }
 
     override fun onBind(intent: Intent) = null
