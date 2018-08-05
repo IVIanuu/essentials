@@ -34,78 +34,78 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import com.ivianuu.essentials.util.ContextAware
 
-inline fun Context.getResAnim(resId: Int): Animation = AnimationUtils.loadAnimation(this, resId)
+inline fun Context.anim(resId: Int): Animation = AnimationUtils.loadAnimation(this, resId)
 
-inline fun Context.getResIntArray(resId: Int): IntArray = resources.getIntArray(resId)
+inline fun Context.intArray(resId: Int): IntArray = resources.getIntArray(resId)
 
-inline fun Context.getResStringArray(resId: Int): Array<String> =
+inline fun Context.stringArray(resId: Int): Array<String> =
     resources.getStringArray(resId)
 
-inline fun Context.getResTextArray(resId: Int): Array<CharSequence> =
+inline fun Context.textArray(resId: Int): Array<CharSequence> =
     resources.getTextArray(resId)
 
 inline fun Context.getResTypedArray(resId: Int): TypedArray = resources.obtainTypedArray(resId)
 
-inline fun Context.getResBool(resId: Int): Boolean = resources.getBoolean(resId)
+inline fun Context.bool(resId: Int): Boolean = resources.getBoolean(resId)
 
-inline fun Context.getResDimen(resId: Int): Float = resources.getDimension(resId)
+inline fun Context.dimen(resId: Int): Float = resources.getDimension(resId)
 
-inline fun Context.getResDimenPx(resId: Int): Int = resources.getDimensionPixelSize(resId)
+inline fun Context.dimenPx(resId: Int): Int = resources.getDimensionPixelSize(resId)
 
-inline fun Context.getResDimenPxOffset(resId: Int): Int = resources.getDimensionPixelOffset(resId)
+inline fun Context.dimenPxOffset(resId: Int): Int = resources.getDimensionPixelOffset(resId)
 
-inline fun Context.getResFloat(resId: Int): Float {
+inline fun Context.float(resId: Int): Float {
     val value = VALUE
     resources.getValue(resId, value, true)
     return value.float
 }
 
-inline fun Context.getResInt(resId: Int): Int = resources.getInteger(resId)
+inline fun Context.int(resId: Int): Int = resources.getInteger(resId)
 
-inline fun Context.getResBitmap(resId: Int): Bitmap = BitmapFactory.decodeResource(resources, resId)
+inline fun Context.bitmap(resId: Int): Bitmap = BitmapFactory.decodeResource(resources, resId)
 
-inline fun Context.getResColor(resId: Int): Int = ContextCompat.getColor(this, resId)
+inline fun Context.color(resId: Int): Int = ContextCompat.getColor(this, resId)
 
-inline fun Context.getResColorStateList(resId: Int): ColorStateList =
+inline fun Context.colorStateList(resId: Int): ColorStateList =
     ContextCompat.getColorStateList(this, resId)!!
 
-inline fun Context.getResDrawable(resId: Int): Drawable =
+inline fun Context.drawable(resId: Int): Drawable =
     ContextCompat.getDrawable(this, resId)!!
 
-inline fun Context.getResFont(resId: Int): Typeface = ResourcesCompat.getFont(this, resId)!!
+inline fun Context.font(resId: Int): Typeface = ResourcesCompat.getFont(this, resId)!!
 
-inline fun ContextAware.getResAnim(resId: Int) = providedContext.getResAnim(resId)
+inline fun ContextAware.anim(resId: Int) = providedContext.anim(resId)
 
-inline fun ContextAware.getResIntArray(resId: Int) = providedContext.getResIntArray(resId)
+inline fun ContextAware.intArray(resId: Int) = providedContext.intArray(resId)
 
-inline fun ContextAware.getResStringArray(resId: Int) = providedContext.getResStringArray(resId)
+inline fun ContextAware.stringArray(resId: Int) = providedContext.stringArray(resId)
 
-inline fun ContextAware.getResTextArray(resId: Int) = providedContext.getResTextArray(resId)
+inline fun ContextAware.textArray(resId: Int) = providedContext.textArray(resId)
 
 inline fun ContextAware.getResTypedArray(resId: Int) = providedContext.getResTypedArray(resId)
 
-inline fun ContextAware.getResBool(resId: Int) = providedContext.getResBool(resId)
+inline fun ContextAware.bool(resId: Int) = providedContext.bool(resId)
 
-inline fun ContextAware.getResDimen(resId: Int) = providedContext.getResDimen(resId)
+inline fun ContextAware.dimen(resId: Int) = providedContext.dimen(resId)
 
-inline fun ContextAware.getResDimenPx(resId: Int) = providedContext.getResDimenPx(resId)
+inline fun ContextAware.dimenPx(resId: Int) = providedContext.dimenPx(resId)
 
-inline fun ContextAware.getResDimenPxOffset(resId: Int) = providedContext.getResDimenPxOffset(resId)
+inline fun ContextAware.dimenPxOffset(resId: Int) = providedContext.dimenPxOffset(resId)
 
-inline fun ContextAware.getResFloat(resId: Int) = providedContext.getResFloat(resId)
+inline fun ContextAware.float(resId: Int) = providedContext.float(resId)
 
-inline fun ContextAware.getResInt(resId: Int): Int = providedContext.getResInt(resId)
+inline fun ContextAware.int(resId: Int): Int = providedContext.int(resId)
 
-inline fun ContextAware.getResBitmap(resId: Int) = providedContext.getResBitmap(resId)
+inline fun ContextAware.bitmap(resId: Int) = providedContext.bitmap(resId)
 
-inline fun ContextAware.getResColor(resId: Int) = providedContext.getResColor(resId)
+inline fun ContextAware.color(resId: Int) = providedContext.color(resId)
 
-inline fun ContextAware.getResColorStateList(resId: Int) =
-    providedContext.getResColorStateList(resId)
+inline fun ContextAware.colorStateList(resId: Int) =
+    providedContext.colorStateList(resId)
 
-inline fun ContextAware.getResDrawable(resId: Int) = providedContext.getResDrawable(resId)
+inline fun ContextAware.drawable(resId: Int) = providedContext.drawable(resId)
 
-inline fun ContextAware.getResFont(resId: Int) = providedContext.getResFont(resId)
+inline fun ContextAware.font(resId: Int) = providedContext.font(resId)
 
 @PublishedApi
 internal val VALUE = TypedValue()

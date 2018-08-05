@@ -54,21 +54,21 @@ inline fun Intent.taskOnHome(): Intent = addFlags(Intent.FLAG_ACTIVITY_TASK_ON_H
 @PublishedApi
 internal val initStub: Intent.() -> Unit = {}
 
-inline fun <reified T> Context.intentFor(): Intent = intentFor<T>(initStub)
+inline fun <reified T> Context.intent(): Intent = intent<T>(initStub)
 
-inline fun <reified T> ContextAware.intentFor(): Intent = providedContext.intentFor<T>()
+inline fun <reified T> ContextAware.intent(): Intent = providedContext.intent<T>()
 
-inline fun <reified T> Context.intentFor(init: Intent.() -> Unit): Intent {
+inline fun <reified T> Context.intent(init: Intent.() -> Unit): Intent {
     val intent = Intent(this, T::class.java)
     init.invoke(intent)
     return intent
 }
 
-inline fun <reified T> ContextAware.intentFor(init: Intent.() -> Unit) =
-    providedContext.intentFor<T>()
+inline fun <reified T> ContextAware.intent(init: Intent.() -> Unit) =
+    providedContext.intent<T>(init)
 
 inline fun <reified T : Activity> Context.startActivity() {
-    startActivity(intentFor<T>())
+    startActivity(intent<T>())
 }
 
 inline fun <reified T : Activity> ContextAware.startActivity() {
@@ -76,7 +76,7 @@ inline fun <reified T : Activity> ContextAware.startActivity() {
 }
 
 inline fun <reified T : Activity> Context.startActivity(init: Intent.() -> Unit) {
-    startActivity(intentFor<T>(init))
+    startActivity(intent<T>(init))
 }
 
 inline fun <reified T : Activity> ContextAware.startActivity(init: Intent.() -> Unit) {
@@ -87,7 +87,7 @@ inline fun <reified T : Activity> Activity.startActivityForResult(
     requestCode: Int,
     options: Bundle? = null
 ) {
-    startActivityForResult(intentFor<T>(), requestCode, options)
+    startActivityForResult(intent<T>(), requestCode, options)
 }
 
 inline fun <reified T : Activity> Activity.startActivityForResult(
@@ -95,11 +95,11 @@ inline fun <reified T : Activity> Activity.startActivityForResult(
     options: Bundle? = null,
     init: Intent.() -> Unit
 ) {
-    startActivityForResult(intentFor<T>(init), requestCode, options)
+    startActivityForResult(intent<T>(init), requestCode, options)
 }
 
 inline fun <reified T : Service> Context.startService() {
-    startService(intentFor<T>())
+    startService(intent<T>())
 }
 
 inline fun <reified T : Service> ContextAware.startService() {
@@ -107,7 +107,7 @@ inline fun <reified T : Service> ContextAware.startService() {
 }
 
 inline fun <reified T : Service> Context.startService(init: Intent.() -> Unit) {
-    startService(intentFor<T>(init))
+    startService(intent<T>(init))
 }
 
 inline fun <reified T : Service> ContextAware.startService(init: Intent.() -> Unit) {
@@ -116,7 +116,7 @@ inline fun <reified T : Service> ContextAware.startService(init: Intent.() -> Un
 
 @RequiresApi(Build.VERSION_CODES.O)
 inline fun <reified T : Service> Context.startForegroundService() {
-    startForegroundService(intentFor<T>())
+    startForegroundService(intent<T>())
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -126,7 +126,7 @@ inline fun <reified T : Service> ContextAware.startForegroundService() {
 
 @RequiresApi(Build.VERSION_CODES.O)
 inline fun <reified T : Service> Context.startForegroundService(init: Intent.() -> Unit) {
-    startForegroundService(intentFor<T>(init))
+    startForegroundService(intent<T>(init))
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -135,7 +135,7 @@ inline fun <reified T : Service> ContextAware.startForegroundService(init: Inten
 }
 
 inline fun <reified T : Service> Context.startForegroundServiceCompat() {
-    startForegroundServiceCompat(intentFor<T>())
+    startForegroundServiceCompat(intent<T>())
 }
 
 inline fun <reified T : Service> ContextAware.startForegroundServiceCompat() {
@@ -143,7 +143,7 @@ inline fun <reified T : Service> ContextAware.startForegroundServiceCompat() {
 }
 
 inline fun <reified T : Service> Context.startForegroundServiceCompat(init: Intent.() -> Unit) {
-    startForegroundServiceCompat(intentFor<T>(init))
+    startForegroundServiceCompat(intent<T>(init))
 }
 
 inline fun <reified T : Service> ContextAware.startForegroundServiceCompat(init: Intent.() -> Unit) {

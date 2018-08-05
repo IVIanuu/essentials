@@ -25,101 +25,150 @@ import android.content.Context
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.util.ContextAware
 
-inline val Context.isWindowBackgroundDark
-    get() = resolveColorAttr(android.R.attr.windowBackground).isDark
+inline fun Context.isWindowBackgroundDark() =
+    colorAttr(android.R.attr.windowBackground).isDark
 
-inline val ContextAware.isWindowBackgroundDark
-    get() = providedContext.isWindowBackgroundDark
+inline fun ContextAware.isWindowBackgroundDark() =
+    providedContext.isWindowBackgroundDark()
 
-inline fun Context.getPrimaryColor() = resolveColorAttr(android.R.attr.colorPrimary)
+inline fun Context.primaryColor() = colorAttr(android.R.attr.colorPrimary)
 
-inline fun ContextAware.getPrimaryColor() =
-    providedContext.resolveColorAttr(android.R.attr.colorPrimary)
+inline fun ContextAware.primaryColor() =
+    providedContext.colorAttr(android.R.attr.colorPrimary)
 
-inline fun Context.getPrimaryColorDark() = resolveColorAttr(android.R.attr.colorPrimaryDark)
+inline fun Context.primaryColorDark() = colorAttr(android.R.attr.colorPrimaryDark)
 
-inline fun ContextAware.getPrimaryColorDark() =
-    providedContext.getPrimaryColorDark()
+inline fun ContextAware.primaryColorDark() =
+    providedContext.primaryColorDark()
 
-inline fun Context.getAccentColor() = resolveColorAttr(android.R.attr.colorAccent)
+inline fun Context.accentColor() = colorAttr(android.R.attr.colorAccent)
 
-inline fun ContextAware.getAccentColor() =
-    providedContext.getAccentColor()
+inline fun ContextAware.accentColor() =
+    providedContext.accentColor()
 
-inline fun Context.getCardColor(isDark: Boolean = isWindowBackgroundDark): Int {
-    return getResColor(
-        if (isDark) {
-            R.color.cardview_dark_background
-        } else {
-            R.color.cardview_light_background
-        }
-    )
-}
+inline fun Context.cardColor() = cardColor(isWindowBackgroundDark())
 
-inline fun ContextAware.getCardColor(isDark: Boolean = isWindowBackgroundDark) =
-    providedContext.getCardColor(isDark)
+inline fun Context.cardColor(color: Int) = cardColor(color.isDark)
 
-inline fun Context.getRippleColor(isDark: Boolean = isWindowBackgroundDark): Int {
-    return getResColor(
-        if (isDark) {
-            R.color.ripple_material_dark
-        } else {
-            R.color.ripple_material_light
-        }
-    )
-}
+inline fun Context.cardColor(dark: Boolean) = color(
+    if (dark) {
+        R.color.cardview_dark_background
+    } else {
+        R.color.cardview_light_background
+    }
+)
 
-inline fun ContextAware.getRippleColor(isDark: Boolean = isWindowBackgroundDark) =
-    providedContext.getRippleColor(isDark)
+inline fun ContextAware.cardColor() =
+    providedContext.cardColor()
 
-inline fun Context.getPrimaryTextColor(isDark: Boolean = isWindowBackgroundDark): Int {
-    return getResColor(
-        if (isDark) {
-            R.color.primary_text_default_material_dark
-        } else {
-            R.color.primary_text_default_material_light
-        }
-    )
-}
+inline fun ContextAware.cardColor(color: Int) =
+    providedContext.cardColor(color)
 
-inline fun ContextAware.getPrimaryTextColor(isDark: Boolean = isWindowBackgroundDark) =
-    providedContext.getPrimaryTextColor(isDark)
+inline fun ContextAware.cardColor(dark: Boolean) =
+    providedContext.cardColor(dark)
 
-inline fun Context.getPrimaryDisabledTextColor(isDark: Boolean = isWindowBackgroundDark): Int {
-    return getResColor(
-        if (isDark) {
-            R.color.primary_text_disabled_material_dark
-        } else {
-            R.color.primary_text_disabled_material_light
-        }
-    )
-}
+inline fun Context.rippleColor() = rippleColor(isWindowBackgroundDark())
 
-inline fun ContextAware.getPrimaryDisabledTextColor(isDark: Boolean = isWindowBackgroundDark) =
-    providedContext.getPrimaryDisabledTextColor(isDark)
+inline fun Context.rippleColor(color: Int) = rippleColor(color.isDark)
 
-inline fun Context.getSecondaryTextColor(isDark: Boolean = isWindowBackgroundDark): Int {
-    return getResColor(
-        if (isDark) {
-            R.color.secondary_text_default_material_dark
-        } else {
-            R.color.secondary_text_default_material_light
-        }
-    )
-}
+inline fun Context.rippleColor(dark: Boolean) = color(
+    if (dark) {
+        R.color.ripple_material_dark
+    } else {
+        R.color.ripple_material_light
+    }
+)
 
-inline fun ContextAware.getSecondaryTextColor(isDark: Boolean = isWindowBackgroundDark) =
-    providedContext.getSecondaryTextColor(isDark)
+inline fun ContextAware.rippleColor() =
+    providedContext.rippleColor()
 
-inline fun Context.getSecondaryDisabledTextColor(isDark: Boolean = isWindowBackgroundDark): Int {
-    return getResColor(
-        if (isDark) {
-            R.color.secondary_text_disabled_material_dark
-        } else {
-            R.color.secondary_text_disabled_material_light
-        }
-    )
-}
+inline fun ContextAware.rippleColor(color: Int) =
+    providedContext.rippleColor(color)
 
-inline fun ContextAware.getSecondaryDisabledTextColor(isDark: Boolean = isWindowBackgroundDark) =
-    providedContext.getSecondaryDisabledTextColor(isDark)
+inline fun ContextAware.rippleColor(dark: Boolean) =
+    providedContext.rippleColor(dark)
+
+inline fun Context.primaryTextColor() = primaryTextColor(isWindowBackgroundDark())
+
+inline fun Context.primaryTextColor(color: Int) = primaryTextColor(color.isDark)
+
+inline fun Context.primaryTextColor(dark: Boolean) = color(
+    if (dark) {
+        R.color.primary_text_default_material_dark
+    } else {
+        R.color.primary_text_default_material_light
+    }
+)
+
+inline fun ContextAware.primaryTextColor() =
+    providedContext.primaryTextColor()
+
+inline fun ContextAware.primaryTextColor(color: Int) =
+    providedContext.primaryTextColor(color)
+
+inline fun ContextAware.primaryTextColor(dark: Boolean) =
+    providedContext.primaryTextColor(dark)
+
+inline fun Context.primaryDisabledTextColor() = primaryDisabledTextColor(isWindowBackgroundDark())
+
+inline fun Context.primaryDisabledTextColor(color: Int) = primaryDisabledTextColor(color.isDark)
+
+inline fun Context.primaryDisabledTextColor(dark: Boolean) = color(
+    if (dark) {
+        R.color.primary_text_disabled_material_dark
+    } else {
+        R.color.primary_text_disabled_material_light
+    }
+)
+
+inline fun ContextAware.primaryDisabledTextColor() =
+    providedContext.primaryDisabledTextColor()
+
+inline fun ContextAware.primaryDisabledTextColor(color: Int) =
+    providedContext.primaryDisabledTextColor(color)
+
+inline fun ContextAware.primaryDisabledTextColor(dark: Boolean) =
+    providedContext.primaryDisabledTextColor(dark)
+
+inline fun Context.secondaryTextColor() = secondaryTextColor(isWindowBackgroundDark())
+
+inline fun Context.secondaryTextColor(color: Int) = secondaryTextColor(color.isDark)
+
+inline fun Context.secondaryTextColor(dark: Boolean) = color(
+    if (dark) {
+        R.color.secondary_text_default_material_dark
+    } else {
+        R.color.secondary_text_default_material_light
+    }
+)
+
+inline fun ContextAware.secondaryTextColor() =
+    providedContext.secondaryTextColor()
+
+inline fun ContextAware.secondaryTextColor(color: Int) =
+    providedContext.secondaryTextColor(color)
+
+inline fun ContextAware.secondaryTextColor(dark: Boolean) =
+    providedContext.secondaryTextColor(dark)
+
+inline fun Context.secondaryDisabledTextColor() =
+    secondaryDisabledTextColor(isWindowBackgroundDark())
+
+inline fun Context.secondaryDisabledTextColor(color: Int) = secondaryDisabledTextColor(color.isDark)
+
+inline fun Context.secondaryDisabledTextColor(dark: Boolean) = color(
+    if (dark) {
+        R.color.secondary_text_disabled_material_dark
+    } else {
+        R.color.secondary_text_disabled_material_light
+    }
+)
+
+inline fun ContextAware.secondaryDisabledTextColor() =
+    providedContext.secondaryDisabledTextColor()
+
+inline fun ContextAware.secondaryDisabledTextColor(color: Int) =
+    providedContext.secondaryDisabledTextColor(color)
+
+inline fun ContextAware.secondaryDisabledTextColor(dark: Boolean) =
+    providedContext.secondaryDisabledTextColor(dark)

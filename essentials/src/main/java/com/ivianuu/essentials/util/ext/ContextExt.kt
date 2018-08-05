@@ -81,10 +81,16 @@ inline val Context.batteryLevel: Int
 
 inline val ContextAware.batteryLevel get() = providedContext.batteryLevel
 
-inline fun <reified T> Context.componentFor() = ComponentName(this, T::class.java)
+inline fun <reified T> Context.componentName() = ComponentName(this, T::class.java)
 
-inline fun <reified T> ContextAware.componentFor() =
-    providedContext.componentFor<T>()
+inline fun <reified T> ContextAware.componentName() =
+    providedContext.componentName<T>()
+
+inline fun Context.componentName(className: String) =
+    ComponentName(this, className)
+
+inline fun ContextAware.componentName(className: String) =
+    providedContext.componentName(className)
 
 inline fun Context.isAppInstalled(packageName: String): Boolean {
     return try {

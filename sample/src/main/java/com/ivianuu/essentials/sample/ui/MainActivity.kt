@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.sample.ui
 
 import android.annotation.SuppressLint
+import android.app.Application
 import android.arch.lifecycle.Lifecycle
 import android.os.Bundle
 import com.ivianuu.daggerextensions.AutoContribute
@@ -31,12 +32,16 @@ import com.ivianuu.essentials.util.ext.autoDisposable
 import com.ivianuu.essentials.util.ext.d
 import io.reactivex.Observable
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
 @ActivityBindingSet
 @ActivityBindingModule
 @PerActivity
 @AutoContribute(modules = [EssentialsActivityModule::class, FragmentBindingModule_::class])
 class MainActivity : BaseActivity() {
+
+    @Inject lateinit var app: Application
+    @Inject lateinit var app2: Application
 
     @SuppressLint("PrivateResource")
     override fun onCreate(savedInstanceState: Bundle?) {
