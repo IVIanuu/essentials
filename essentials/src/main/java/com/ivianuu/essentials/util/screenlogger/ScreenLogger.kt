@@ -81,12 +81,10 @@ class ScreenLogger @Inject constructor(private val application: Application) : A
         }
     }
 
-    private fun getId(screen: IdentifiableScreen): String {
-        return when {
-            screen.screenId.isNotEmpty() -> screen.screenId
-            screen.screenIdRes != 0 -> application.getString(screen.screenIdRes)
-            else -> parseName(screen.javaClass.simpleName)
-        }
+    private fun getId(screen: IdentifiableScreen): String = when {
+        screen.screenId.isNotEmpty() -> screen.screenId
+        screen.screenIdRes != 0 -> application.getString(screen.screenIdRes)
+        else -> parseName(screen.javaClass.simpleName)
     }
 
     private fun parseName(className: String): String {

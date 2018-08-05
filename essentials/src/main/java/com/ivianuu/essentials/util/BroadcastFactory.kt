@@ -29,11 +29,8 @@ import javax.inject.Inject
  */
 class BroadcastFactory @Inject constructor(private val app: Application) {
 
-    fun create(vararg actions: String): Observable<Intent> {
-        return create(intentFilterOf(*actions))
-    }
+    fun create(vararg actions: String): Observable<Intent> = create(intentFilterOf(*actions))
 
-    fun create(intentFilter: IntentFilter): Observable<Intent> {
-        return RxBroadcastReceiver.create(app, intentFilter)
-    }
+    fun create(intentFilter: IntentFilter): Observable<Intent> =
+        RxBroadcastReceiver.create(app, intentFilter)
 }

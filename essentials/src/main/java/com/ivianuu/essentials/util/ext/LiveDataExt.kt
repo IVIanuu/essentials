@@ -49,41 +49,37 @@ inline fun <T : Any> LiveData<T>.toFlowable(strategy: BackpressureStrategy = Bac
 inline fun <T : Any> Flowable<T>.toLiveData() =
     toObservable().toLiveData()
 
-fun <T : Any> LiveData<T>.toObservable(): Observable<T> {
-    return Observable.create { e ->
-        val observer = Observer<T> { t ->
-            if (!e.isDisposed) {
-                e.onNext(t!!)
-            }
+fun <T : Any> LiveData<T>.toObservable(): Observable<T> = Observable.create { e ->
+    val observer = Observer<T> { t ->
+        if (!e.isDisposed) {
+            e.onNext(t!!)
         }
-
-        e.setCancellable { removeObserver(observer) }
-
-        observeForever(observer)
     }
+
+    e.setCancellable { removeObserver(observer) }
+
+    observeForever(observer)
 }
 
-fun <T : Any> Observable<T>.toLiveData(): LiveData<T> {
-    return object : LiveData<T>() {
+fun <T : Any> Observable<T>.toLiveData(): LiveData<T> = object : LiveData<T>() {
 
-        private val disposable = AtomicReference<Disposable?>()
+    private val disposable = AtomicReference<Disposable?>()
 
-        override fun onActive() {
-            super.onActive()
-            disposable.set(
-                subscribeBy(
-                    onNext = { postValue(it) },
-                    onError = {
-                        throw RuntimeException(it)
-                    }
-                )
+    override fun onActive() {
+        super.onActive()
+        disposable.set(
+            subscribeBy(
+                onNext = { postValue(it) },
+                onError = {
+                    throw RuntimeException(it)
+                }
             )
-        }
+        )
+    }
 
-        override fun onInactive() {
-            super.onInactive()
-            disposable.getAndSet(null)?.dispose()
-        }
+    override fun onInactive() {
+        super.onInactive()
+        disposable.getAndSet(null)?.dispose()
     }
 }
 

@@ -58,9 +58,8 @@ fun RecyclerView.addOnItemTouchListener(
     onRequestDisallowInterceptTouchEvent: ((disallowIntercept: Boolean) -> Unit)? = null
 ): RecyclerView.OnItemTouchListener {
     val listener = object : RecyclerView.OnItemTouchListener {
-        override fun onInterceptTouchEvent(rv: RecyclerView, e: MotionEvent): Boolean {
-            return onInterceptTouchEvent?.invoke(rv, e) ?: false
-        }
+        override fun onInterceptTouchEvent(rv: RecyclerView, e: MotionEvent): Boolean =
+            onInterceptTouchEvent?.invoke(rv, e) ?: false
 
         override fun onTouchEvent(rv: RecyclerView, e: MotionEvent) {
             onTouchEvent?.invoke(rv, e)

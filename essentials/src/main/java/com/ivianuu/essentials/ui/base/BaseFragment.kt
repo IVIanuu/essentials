@@ -62,15 +62,13 @@ abstract class BaseFragment : Fragment(), BackListener, KtHasSupportFragmentInje
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return if (layoutRes != -1) {
-            val viewInjectionContext =
-                ViewInjectionContextWrapper(requireContext(), this)
-            val viewInjectionInflater = inflater.cloneInContext(viewInjectionContext)
-            viewInjectionInflater.inflate(layoutRes, container, false)
-        } else {
-            super.onCreateView(inflater, container, savedInstanceState)
-        }
+    ): View? = if (layoutRes != -1) {
+        val viewInjectionContext =
+            ViewInjectionContextWrapper(requireContext(), this)
+        val viewInjectionInflater = inflater.cloneInContext(viewInjectionContext)
+        viewInjectionInflater.inflate(layoutRes, container, false)
+    } else {
+        super.onCreateView(inflater, container, savedInstanceState)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

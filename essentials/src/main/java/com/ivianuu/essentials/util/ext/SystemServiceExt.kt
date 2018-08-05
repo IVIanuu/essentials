@@ -20,9 +20,8 @@ import android.content.Context
 import android.support.v4.content.ContextCompat
 import com.ivianuu.essentials.util.ContextAware
 
-inline fun <reified T> Context.systemService(): T {
-    return ContextCompat.getSystemService<T>(this, T::class.java)!!
-}
+inline fun <reified T> Context.systemService() =
+    ContextCompat.getSystemService<T>(this, T::class.java)!!
 
 inline fun <reified T> ContextAware.systemService() =
     providedContext.systemService<T>()

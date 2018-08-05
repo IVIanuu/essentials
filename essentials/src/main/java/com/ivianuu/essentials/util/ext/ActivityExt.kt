@@ -188,9 +188,8 @@ internal fun Activity.setSystemUiVisibilityFlag(flag: Int, enabled: Boolean) {
 }
 
 @PublishedApi
-internal fun Activity.isSystemUiVisibilityFlagEnabled(flag: Int): Boolean {
-    return window.decorView.systemUiVisibility and flag == flag
-}
+internal fun Activity.isSystemUiVisibilityFlagEnabled(flag: Int) =
+    window.decorView.systemUiVisibility and flag == flag
 
 @PublishedApi
 internal fun Activity.setWindowAttribute(flag: Int, enabled: Boolean) {
@@ -202,6 +201,5 @@ internal fun Activity.setWindowAttribute(flag: Int, enabled: Boolean) {
 }
 
 @PublishedApi
-internal fun Activity.hasWindowAttribute(flag: Int): Boolean {
-    return window.attributes.flags and flag == flag
-}
+internal fun Activity.hasWindowAttribute(flag: Int) =
+    window.attributes.flags and flag == flag

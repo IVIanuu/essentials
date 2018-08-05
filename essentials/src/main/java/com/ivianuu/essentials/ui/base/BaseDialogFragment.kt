@@ -63,15 +63,12 @@ abstract class BaseDialogFragment : AppCompatDialogFragment(),
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        Context.ACCESSIBILITY_SERVICE
-        return if (layoutRes != -1) {
-            val viewInjectionContext =
-                ViewInjectionContextWrapper(requireContext(), this)
-            val viewInjectionInflater = inflater.cloneInContext(viewInjectionContext)
-            viewInjectionInflater.inflate(layoutRes, container, false)
-        } else {
-            super.onCreateView(inflater, container, savedInstanceState)
-        }
+    ): View? = if (layoutRes != -1) {
+        val viewInjectionContext =
+            ViewInjectionContextWrapper(requireContext(), this)
+        val viewInjectionInflater = inflater.cloneInContext(viewInjectionContext)
+        viewInjectionInflater.inflate(layoutRes, container, false)
+    } else {
+        super.onCreateView(inflater, container, savedInstanceState)
     }
 }

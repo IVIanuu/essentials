@@ -79,32 +79,28 @@ fun Lifecycle.addObserver(
     return observer
 }
 
-fun Lifecycle.events(): Observable<Lifecycle.Event> {
-    return Observable.create { e ->
-        val observer = object : SimpleLifecycleObserver() {
-            override fun onAny(owner: LifecycleOwner, event: Lifecycle.Event) {
-                super.onAny(owner, event)
-                if (!e.isDisposed) {
-                    e.onNext(event)
-                }
+fun Lifecycle.events(): Observable<Lifecycle.Event> = Observable.create { e ->
+    val observer = object : SimpleLifecycleObserver() {
+        override fun onAny(owner: LifecycleOwner, event: Lifecycle.Event) {
+            super.onAny(owner, event)
+            if (!e.isDisposed) {
+                e.onNext(event)
+            }
 
-                if (event == Lifecycle.Event.ON_DESTROY) {
-                    e.onComplete()
-                }
+            if (event == Lifecycle.Event.ON_DESTROY) {
+                e.onComplete()
             }
         }
+    }
 
-        e.setCancellable { removeObserver(observer) }
+    e.setCancellable { removeObserver(observer) }
 
-        if (!e.isDisposed) {
-            addObserver(observer)
-        }
+    if (!e.isDisposed) {
+        addObserver(observer)
     }
 }
 
-fun Lifecycle.state(): Observable<Lifecycle.State> {
-    return events()
-        .map { currentState }
-        .startWith(currentState)
-        .distinctUntilChanged()
-}
+fun Lifecycle.state(): Observable<Lifecycle.State> = events()
+    .map { currentState }
+    .startWith(currentState)
+    .distinctUntilChanged()

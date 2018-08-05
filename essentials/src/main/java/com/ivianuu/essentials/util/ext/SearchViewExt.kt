@@ -19,8 +19,8 @@ package com.ivianuu.essentials.util.ext
 import android.support.v7.widget.SearchView
 import io.reactivex.Observable
 
-fun SearchView.closes(predicate: (() -> Boolean)? = null): Observable<Unit> {
-    return Observable.create { e ->
+fun SearchView.closes(predicate: (() -> Boolean)? = null): Observable<Unit> =
+    Observable.create { e ->
         setOnCloseListener {
             if (!e.isDisposed) {
                 e.onNext(Unit)
@@ -30,7 +30,6 @@ fun SearchView.closes(predicate: (() -> Boolean)? = null): Observable<Unit> {
 
         e.setCancellable { setOnCloseListener(null) }
     }
-}
 
 fun SearchView.doOnQueryTextChange(action: (newText: String) -> Boolean) =
     setOnQueryTextListener(onQueryTextChange = action)
@@ -43,13 +42,11 @@ fun SearchView.setOnQueryTextListener(
     onQueryTextSubmit: ((query: String) -> Boolean)? = null
 ): SearchView.OnQueryTextListener {
     val listener = object : SearchView.OnQueryTextListener {
-        override fun onQueryTextChange(newText: String): Boolean {
-            return onQueryTextChange?.invoke(newText) ?: false
-        }
+        override fun onQueryTextChange(newText: String) =
+            onQueryTextChange?.invoke(newText) ?: false
 
-        override fun onQueryTextSubmit(query: String): Boolean {
-            return onQueryTextSubmit?.invoke(query) ?: false
-        }
+        override fun onQueryTextSubmit(query: String) =
+            onQueryTextSubmit?.invoke(query) ?: false
     }
     setOnQueryTextListener(listener)
     return listener

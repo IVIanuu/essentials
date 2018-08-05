@@ -39,11 +39,10 @@ class AutoClearedValue<T>(
         scope.subscribe { _value = null }
     }
 
-    override fun getValue(thisRef: Any, property: KProperty<*>): T {
-        return _value ?: throw IllegalStateException(
+    override fun getValue(thisRef: Any, property: KProperty<*>): T =
+        _value ?: throw IllegalStateException(
             "should never call auto-cleared-value get when it might not be available"
         )
-    }
 
     override fun setValue(thisRef: Any, property: KProperty<*>, value: T) {
         _value = value

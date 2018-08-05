@@ -60,7 +60,6 @@ fun Router.commandApplied(): Observable<Command> = Observable.create { e ->
     e.setCancellable { removeNavigationListener(listener) }
 }
 
-fun <T : Any> Router.navigateToForResult(destination: ResultDestination): Observable<T> {
-    return results<T>(destination.resultCode)
+fun <T : Any> Router.navigateToForResult(destination: ResultDestination): Observable<T> =
+    results<T>(destination.resultCode)
         .doOnSubscribe { navigateTo(destination) }
-}

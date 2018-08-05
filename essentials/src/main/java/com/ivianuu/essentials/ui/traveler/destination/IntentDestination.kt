@@ -30,12 +30,10 @@ import com.ivianuu.compass.RouteFactory
 @RouteFactory(IntentDestination.RouteFactory::class)
 @Destination
 open class IntentDestination(val intent: Intent) {
-    object RouteFactory : ActivityRouteFactory<IntentDestination> {
+    open class RouteFactory : ActivityRouteFactory<IntentDestination> {
         override fun createActivityIntent(
             context: Context,
             destination: IntentDestination
-        ): Intent {
-            return Intent(destination.intent)
-        }
+        ): Intent = Intent(destination.intent)
     }
 }

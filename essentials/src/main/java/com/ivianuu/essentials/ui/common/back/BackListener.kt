@@ -20,7 +20,5 @@ package com.ivianuu.essentials.ui.common.back
  * Handles back clicks
  */
 interface BackListener {
-    fun handleBack(): Boolean {
-        return false
-    }
+    fun handleBack() = false
 }

@@ -50,9 +50,7 @@ class EnsureMainThreadScheduler : Scheduler() {
         return scheduled
     }
 
-    override fun createWorker(): Scheduler.Worker {
-        return MainThreadWorker(handler)
-    }
+    override fun createWorker(): Scheduler.Worker = MainThreadWorker(handler)
 
     private class MainThreadWorker(private val handler: Handler) : Scheduler.Worker() {
 
@@ -95,9 +93,7 @@ class EnsureMainThreadScheduler : Scheduler() {
             handler.removeCallbacksAndMessages(this /* token */)
         }
 
-        override fun isDisposed(): Boolean {
-            return disposed
-        }
+        override fun isDisposed(): Boolean = disposed
     }
 
     private class ScheduledRunnable internal constructor(
@@ -120,9 +116,7 @@ class EnsureMainThreadScheduler : Scheduler() {
             handler.removeCallbacks(this)
         }
 
-        override fun isDisposed(): Boolean {
-            return disposed
-        }
+        override fun isDisposed(): Boolean = disposed
     }
 
     companion object {

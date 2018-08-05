@@ -140,12 +140,10 @@ abstract class FragmentSwapperNavigator(
     ) {
     }
 
-    private fun getCurrentFragment(): Fragment? {
-        return fm.fragments
-            .filter { it.isVisible && it.isAdded && it.containerId == containerId }
-            .reversed()
-            .firstOrNull()
-    }
+    private fun getCurrentFragment(): Fragment? = fm.fragments
+        .filter { it.isVisible && it.isAdded && it.containerId == containerId }
+        .reversed()
+        .firstOrNull()
 
     private fun getOrCreateFragmentForKey(key: Any, data: Any?): Fragment? {
         var fragment = findFragmentByKey(key)
@@ -155,12 +153,10 @@ abstract class FragmentSwapperNavigator(
         return fragment
     }
 
-    private fun findFragmentByKey(key: Any?): Fragment? {
-        return if (key != null) {
-            fm.findFragmentByTag(getFragmentTag(key))
-        } else {
-            null
-        }
+    private fun findFragmentByKey(key: Any?): Fragment? = if (key != null) {
+        fm.findFragmentByTag(getFragmentTag(key))
+    } else {
+        null
     }
 
     protected open fun unknownScreen(command: Command) {
