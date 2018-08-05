@@ -8,7 +8,7 @@ import com.ivianuu.daggerextensions.AutoContribute
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.data.app.AppInfo
 import com.ivianuu.essentials.data.app.AppStore
-import com.ivianuu.essentials.injection.FragmentBindingModule
+import com.ivianuu.essentials.injection.EssentialsFragmentBindingModule
 import com.ivianuu.essentials.injection.PerFragment
 import com.ivianuu.essentials.ui.base.BaseDialogFragment
 import com.ivianuu.essentials.ui.traveler.destination.ResultDestination
@@ -27,7 +27,7 @@ data class AppPickerDestination(
 /**
  * App picker
  */
-@FragmentBindingModule
+@EssentialsFragmentBindingModule
 @PerFragment
 @AutoContribute
 class AppPickerDialog : BaseDialogFragment() {
