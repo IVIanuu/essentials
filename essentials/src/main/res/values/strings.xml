@@ -17,6 +17,9 @@
 
 <resources>
 
+    <!-- App picker -->
+    <string name="dialog_title_app_picker">App Picker</string>
+
     <!-- Dialogs -->
     <string name="action_cancel">Cancel</string>
     <string name="action_close">Close</string>
