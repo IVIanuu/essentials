@@ -52,3 +52,6 @@ fun View.addOnAttachStateChangeListener(
 
     return listener
 }
+
+@Suppress("UNCHECKED_CAST")
+inline fun <T> View.tag() = tag as T
