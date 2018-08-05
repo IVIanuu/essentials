@@ -44,7 +44,7 @@ inline fun Context.stringArray(resId: Int): Array<String> =
 inline fun Context.textArray(resId: Int): Array<CharSequence> =
     resources.getTextArray(resId)
 
-inline fun Context.getResTypedArray(resId: Int): TypedArray = resources.obtainTypedArray(resId)
+inline fun Context.typedArray(resId: Int): TypedArray = resources.obtainTypedArray(resId)
 
 inline fun Context.bool(resId: Int): Boolean = resources.getBoolean(resId)
 
@@ -86,7 +86,7 @@ inline fun ContextAware.stringArray(resId: Int) = providedContext.stringArray(re
 
 inline fun ContextAware.textArray(resId: Int) = providedContext.textArray(resId)
 
-inline fun ContextAware.getResTypedArray(resId: Int) = providedContext.getResTypedArray(resId)
+inline fun ContextAware.typedArray(resId: Int) = providedContext.typedArray(resId)
 
 inline fun ContextAware.bool(resId: Int) = providedContext.bool(resId)
 
