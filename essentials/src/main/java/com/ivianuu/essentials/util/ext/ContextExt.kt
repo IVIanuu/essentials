@@ -24,10 +24,12 @@ import android.app.Activity
 import android.content.*
 import android.content.pm.PackageManager
 import android.content.res.Configuration
+import android.content.res.Resources
 import android.os.BatteryManager
 import android.os.Build
 import android.os.PowerManager
 import android.support.v4.content.ContextCompat
+import android.support.v7.view.ContextThemeWrapper
 import com.ivianuu.essentials.util.ContextAware
 
 inline val Context.isTablet: Boolean
@@ -172,3 +174,15 @@ fun Context.hasPermissions(vararg permissions: String): Boolean {
 
 fun ContextAware.hasPermissions(vararg permissions: String) =
     providedContext.hasPermissions(*permissions)
+
+inline fun Context.toThemedContext(themeResId: Int): Context =
+    ContextThemeWrapper(this, themeResId)
+
+inline fun ContextAware.toThemedContext(themeResId: Int) =
+    providedContext.toThemedContext(themeResId)
+
+inline fun Context.toThemedContext(theme: Resources.Theme): Context =
+    ContextThemeWrapper(this, theme)
+
+inline fun ContextAware.toThemedContext(theme: Resources.Theme) =
+    providedContext.toThemedContext(theme)
