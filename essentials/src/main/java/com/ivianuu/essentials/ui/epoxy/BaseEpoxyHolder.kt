@@ -18,8 +18,8 @@ package com.ivianuu.essentials.ui.epoxy
 
 import android.view.View
 import com.airbnb.epoxy.EpoxyHolder
-import com.uber.autodispose.OutsideLifecycleException
-import com.uber.autodispose.ScopeProvider
+import com.ivianuu.autodispose.OutsideLifecycleException
+import com.ivianuu.autodispose.ScopeProvider
 import kotlinx.android.extensions.LayoutContainer
 
 /**

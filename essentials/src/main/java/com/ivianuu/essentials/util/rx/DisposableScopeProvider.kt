@@ -16,9 +16,9 @@
 
 package com.ivianuu.essentials.util.rx
 
+import com.ivianuu.autodispose.ScopeProvider
 import com.ivianuu.essentials.util.ext.publishSubject
-import com.uber.autodispose.ScopeProvider
-import io.reactivex.Maybe
+import io.reactivex.Completable
 
 /**
  * A scope provider which is disposable
@@ -38,8 +38,8 @@ class DisposableScopeProviderImpl : DisposableScopeProvider {
         scope.onNext(Unit)
     }
 
-    override fun requestScope(): Maybe<*> =
-        scope.take(1).singleElement()
+    override fun requestScope(): Completable =
+        scope.take(1).ignoreElements()
 
 }
 

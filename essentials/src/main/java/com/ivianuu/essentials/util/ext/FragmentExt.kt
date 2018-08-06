@@ -23,7 +23,6 @@ package com.ivianuu.essentials.util.ext
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.view.View
-import com.uber.autodispose.android.lifecycle.scope
 
 inline val Fragment.appCompatActivity: AppCompatActivity?
     get() = activity as AppCompatActivity?
@@ -42,5 +41,3 @@ inline fun Fragment.requireArgs() =
     arguments ?: throw IllegalStateException("no arguments provided")
 
 inline fun Fragment.requireView() = view ?: throw IllegalStateException("view is null")
-
-inline fun Fragment.viewScope() = viewLifecycleOwner.scope()

@@ -20,6 +20,7 @@ import android.annotation.SuppressLint
 import android.app.Application
 import android.arch.lifecycle.Lifecycle
 import android.os.Bundle
+import com.ivianuu.autodispose.lifecycle.autoDispose
 import com.ivianuu.daggerextensions.AutoContribute
 import com.ivianuu.essentials.injection.ActivityBindingModule
 import com.ivianuu.essentials.injection.ActivityBindingSet
@@ -28,7 +29,6 @@ import com.ivianuu.essentials.injection.PerActivity
 import com.ivianuu.essentials.ui.base.BaseActivity
 import com.ivianuu.essentials.ui.base.EssentialsActivityModule
 import com.ivianuu.essentials.ui.common.TextInputDestination
-import com.ivianuu.essentials.util.ext.autoDisposable
 import com.ivianuu.essentials.util.ext.d
 import io.reactivex.Observable
 import java.util.concurrent.TimeUnit
@@ -51,8 +51,8 @@ class MainActivity : BaseActivity() {
             .doOnDispose { d { "on dispose" } }
             .doOnSubscribe { d { "on sub" } }
             .doOnNext { d { "do on next $it" } }
-            .autoDisposable(scopeProvider, Lifecycle.Event.ON_PAUSE)
             .subscribe()
+            .autoDispose(scopeProvider, Lifecycle.Event.ON_DESTROY)
 
         if (savedInstanceState == null) {
             router.newRootScreen(MultipleChildsDestination)

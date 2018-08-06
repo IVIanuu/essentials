@@ -11,7 +11,7 @@ object Versions {
     const val androidGradlePlugin = "3.1.3"
     const val archLifecycle = "1.1.1"
     const val archWork = "1.0.0-alpha06"
-    const val autoDispose = "0.8.0"
+    const val autoDispose = "1384be3d8c"
     const val butterknife = "9.0.0-SNAPSHOT"
     const val compass = "738292d98d"
     const val constraintLayout = "1.1.2"
@@ -52,9 +52,11 @@ object Deps {
 
     const val archWorkRuntime = "android.arch.work:work-runtime-ktx:${Versions.archWork}"
 
-    const val autoDispose = "com.uber.autodispose:autodispose-kotlin:${Versions.autoDispose}"
-    const val autoDisposeAndroid = "com.uber.autodispose:autodispose-android-kotlin:${Versions.autoDispose}"
-    const val autoDisposeArch = "com.uber.autodispose:autodispose-android-archcomponents-kotlin:${Versions.autoDispose}"
+    const val autoDispose = "com.github.IVIanuu.auto-dispose:autodispose:${Versions.autoDispose}"
+    const val autoDisposeAndroid =
+        "com.github.IVIanuu.auto-dispose:autodispose-android:${Versions.autoDispose}"
+    const val autoDisposeArch =
+        "com.github.IVIanuu.auto-dispose:autodispose-arch:${Versions.autoDispose}"
 
     const val butterknifeGradlePlugin = "com.jakewharton:butterknife-gradle-plugin:${Versions.butterknife}"
 

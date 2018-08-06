@@ -16,7 +16,7 @@
 
 package com.ivianuu.essentials.util.rx
 
-import com.uber.autodispose.LifecycleScopeProvider
+import com.ivianuu.autodispose.lifecycle.LifecycleScopeProvider
 import io.reactivex.Observable
 import io.reactivex.functions.Function
 
