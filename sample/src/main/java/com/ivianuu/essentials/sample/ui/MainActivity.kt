@@ -20,7 +20,7 @@ import android.annotation.SuppressLint
 import android.app.Application
 import android.arch.lifecycle.Lifecycle
 import android.os.Bundle
-import com.ivianuu.autodispose.lifecycle.autoDispose
+import com.ivianuu.autodispose.autoDispose
 import com.ivianuu.daggerextensions.AutoContribute
 import com.ivianuu.essentials.injection.ActivityBindingModule
 import com.ivianuu.essentials.injection.ActivityBindingSet

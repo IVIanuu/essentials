@@ -23,9 +23,9 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.ivianuu.autodispose.LifecycleScopeProvider
 import com.ivianuu.autodispose.arch.scope
 import com.ivianuu.autodispose.arch.viewScope
-import com.ivianuu.autodispose.lifecycle.LifecycleScopeProvider
 import com.ivianuu.essentials.injection.Injectable
 import com.ivianuu.essentials.injection.KtHasSupportFragmentInjector
 import com.ivianuu.essentials.injection.KtHasViewInjector
