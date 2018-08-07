@@ -21,21 +21,19 @@ object Versions {
     const val epoxyPrefs = "d8b597dedc"
     const val fabric = "2.7.1"
     const val fastScroll = "1.0.17"
+    const val glide = "4.7.1"
     const val kotlin = "1.2.51"
     const val ktx = "0.3"
     const val mavenGradle = "2.1"
     const val materialDialogs = "0.9.6.0"
     const val rxActivityResult = "7aa338925c"
     const val rxAndroid = "2.0.2"
+    const val rxAndroid2 = "6a27d8ca6d"
     const val rxBinding = "2.1.1"
-    const val rxBroadcastReceiver = "13d01a5167"
-    const val rxContentObserver = "ffec76b019"
     const val rxJava = "2.1.16"
     const val rxKotlin = "2.2.0"
     const val rxPermissions = "de32df8112"
     const val rxPreferences = "2.0.0"
-    const val rxPopupMenu = "fc03116f7e"
-    const val rxServiceConnection = "0130e7905a"
     const val rxSystemSettings = "aec2722332"
     const val support = "28.0.0-alpha3"
     const val stickyHeaders = "0f48d56a25"
@@ -86,6 +84,8 @@ object Deps {
 
     const val fastScroll = "com.simplecityapps:recyclerview-fastscroll:${Versions.fastScroll}"
 
+    const val glide = "com.github.bumptech.glide:glide:${Versions.glide}"
+
     const val ktx = "androidx.core:core-ktx:${Versions.ktx}"
     const val kotlinGradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.kotlin}"
     const val kotlinStdLib = "org.jetbrains.kotlin:kotlin-stdlib-jre7:${Versions.kotlin}"
@@ -97,6 +97,7 @@ object Deps {
 
     const val rxActivityResult = "com.github.IVIanuu:rx-activity-result:${Versions.rxActivityResult}"
     const val rxAndroid = "io.reactivex.rxjava2:rxandroid:${Versions.rxAndroid}"
+    const val rxAndroid2 = "com.github.IVIanuu:rx-android:${Versions.rxAndroid2}"
 
     const val rxBinding = "com.jakewharton.rxbinding2:rxbinding-kotlin:${Versions.rxBinding}"
     const val rxBindingDesign = "com.jakewharton.rxbinding2:rxbinding-design-kotlin:${Versions.rxBinding}"
@@ -104,16 +105,10 @@ object Deps {
     const val rxBindingSupportAppCompatV7 = "com.jakewharton.rxbinding2:rxbinding-appcompat-v7-kotlin:${Versions.rxBinding}"
     const val rxBindingSupportV4 = "com.jakewharton.rxbinding2:rxbinding-support-v4-kotlin:${Versions.rxBinding}"
 
-    const val rxBroadcastReceiver = "com.github.IVIanuu:rx-broadcast-receiver:${Versions.rxBroadcastReceiver}"
-    const val rxContentObserver =
-        "com.github.IVIanuu:rx-content-observer:${Versions.rxContentObserver}"
     const val rxJava = "io.reactivex.rxjava2:rxjava:${Versions.rxJava}"
     const val rxKotlin = "io.reactivex.rxjava2:rxkotlin:${Versions.rxKotlin}"
     const val rxPermissions = "com.github.IVIanuu:rx-permissions:${Versions.rxPermissions}"
     const val rxPreferences = "com.f2prateek.rx.preferences2:rx-preferences:${Versions.rxPreferences}"
-    const val rxPopupMenu = "com.github.IVIanuu:rx-popup-menu:${Versions.rxPopupMenu}"
-    const val rxServiceConnection =
-        "com.github.IVIanuu:rx-service-connection:${Versions.rxServiceConnection}"
     const val rxSystemSettings =
         "com.github.IVIanuu:rx-system-settings:${Versions.rxSystemSettings}"
 

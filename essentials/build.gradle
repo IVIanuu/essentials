@@ -73,6 +73,8 @@ dependencies {
 
     api Deps.fastScroll
 
+    api Deps.glide
+
     api Deps.kotlinStdLib
 
     api Deps.ktx
@@ -82,18 +84,16 @@ dependencies {
 
     api Deps.rxActivityResult
     api Deps.rxAndroid
+    api Deps.rxAndroid2
     api Deps.rxBinding
     api Deps.rxBindingDesign
     api Deps.rxBindingRecyclerView
     api Deps.rxBindingSupportAppCompatV7
     api Deps.rxBindingSupportV4
-    api Deps.rxBroadcastReceiver
-    api Deps.rxContentObserver
     api Deps.rxJava
     api Deps.rxKotlin
     api Deps.rxPermissions
     api Deps.rxPreferences
-    api Deps.rxPopupMenu
     api Deps.rxSystemSettings
 
     api Deps.supportAppCompat
