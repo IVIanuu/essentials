@@ -18,7 +18,7 @@ object Versions {
     const val dagger = "2.16"
     const val daggerExtensions = "4b3be761d2"
     const val epoxy = "2.14.0"
-    const val epoxyPrefs = "16ab985ec6"
+    const val epoxyPrefs = "d8b597dedc"
     const val fabric = "2.7.1"
     const val fastScroll = "1.0.17"
     const val kotlin = "1.2.51"
