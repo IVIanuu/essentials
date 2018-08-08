@@ -2,6 +2,7 @@ package com.ivianuu.essentials.data.base
 
 import android.app.Service
 import android.content.Intent
+import android.os.IBinder
 import com.ivianuu.essentials.injection.AutoInjector
 import com.ivianuu.essentials.injection.Injectable
 import com.ivianuu.essentials.util.rx.DisposableScopeProvider
@@ -26,6 +27,6 @@ abstract class BaseService : Service(), Injectable {
         super.onDestroy()
     }
 
-    override fun onBind(intent: Intent) = null
+    override fun onBind(intent: Intent): IBinder? = null
 
 }

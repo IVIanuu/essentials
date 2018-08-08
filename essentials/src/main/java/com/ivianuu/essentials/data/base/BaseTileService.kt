@@ -1,7 +1,6 @@
 package com.ivianuu.essentials.data.base
 
 import android.annotation.TargetApi
-import android.content.Intent
 import android.os.Build
 import android.service.quicksettings.TileService
 import com.ivianuu.essentials.injection.AutoInjector
@@ -33,7 +32,5 @@ abstract class BaseTileService : TileService() {
         listeningScopeProvider.dispose()
         super.onStopListening()
     }
-
-    override fun onBind(intent: Intent) = null
 
 }

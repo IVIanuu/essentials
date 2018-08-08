@@ -1,6 +1,5 @@
 package com.ivianuu.essentials.data.base
 
-import android.content.Intent
 import android.service.notification.NotificationListenerService
 import com.ivianuu.essentials.injection.AutoInjector
 import com.ivianuu.essentials.util.rx.DisposableScopeProvider
@@ -30,7 +29,5 @@ abstract class BaseNotificationListenerService : NotificationListenerService() {
         connectedScopeProvider.dispose()
         super.onListenerDisconnected()
     }
-
-    override fun onBind(intent: Intent) = null
 
 }
