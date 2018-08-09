@@ -37,8 +37,8 @@ abstract class BaseApp : DaggerApplication(), KtHasViewInjector, KtHasWorkerInje
 
     override fun onCreate() {
         super.onCreate()
-        appInitializers.forEach(this::initializeAppInitializer)
-        appServices.forEach(this::startAppService)
+        appInitializers.forEach { initializeAppInitializer(it) }
+        appServices.forEach { startAppService(it) }
     }
 
     protected open fun initializeAppInitializer(appInitializer: AppInitializer) {

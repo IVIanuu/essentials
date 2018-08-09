@@ -44,9 +44,19 @@ class BackHandler @Inject constructor(private val application: Application) : Ap
 
     override fun start() {
         application.registerActivityLifecycleCallbacks(
-            onActivityCreated = this::onActivityCreated,
-            onActivitySaveInstanceState = this::onActivitySaveInstanceState,
-            onActivityDestroyed = this::onActivityDestroyed
+            onActivityCreated = { act, savedInstanceState ->
+                onActivityCreated(
+                    act,
+                    savedInstanceState
+                )
+            },
+            onActivitySaveInstanceState = { act, outState ->
+                onActivitySaveInstanceState(
+                    act,
+                    outState
+                )
+            },
+            onActivityDestroyed = { onActivityDestroyed(it) }
         )
     }
 

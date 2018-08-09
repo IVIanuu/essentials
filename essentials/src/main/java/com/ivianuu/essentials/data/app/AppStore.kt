@@ -21,7 +21,7 @@ class AppStore @Inject constructor(
                     packageName = it.packageName
                 )
             }
-            .distinctBy(AppInfo::packageName)
+            .distinctBy { it.packageName }
             .sortedBy { it.appName.toLowerCase() }
     }.subscribeOn(IO)
 
@@ -36,7 +36,7 @@ class AppStore @Inject constructor(
                     packageName = it.activityInfo.packageName
                 )
             }
-            .distinctBy(AppInfo::packageName)
+            .distinctBy { it.packageName }
             .sortedBy { it.appName.toLowerCase() }
     }.subscribeOn(IO)
 }
