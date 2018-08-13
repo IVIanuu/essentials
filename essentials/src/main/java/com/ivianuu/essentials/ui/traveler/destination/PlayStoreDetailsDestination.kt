@@ -16,7 +16,7 @@ data class PlayStoreDetailsDestination(val packageName: String) {
                 context: Context,
                 destination: PlayStoreDetailsDestination
         ) = Intent(Intent.ACTION_VIEW,
-                "https://play.google.com/store/apps/details?id=com.ivianuu.hidenavbar".toUri()
+            "https://play.google.com/store/apps/details?id=${destination.packageName}".toUri()
         )
     }
 
