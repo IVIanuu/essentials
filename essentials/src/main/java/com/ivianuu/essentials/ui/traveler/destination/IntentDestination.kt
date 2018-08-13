@@ -29,8 +29,8 @@ import com.ivianuu.compass.RouteFactory
 @DoNotSerialize
 @RouteFactory(IntentDestination.RouteFactory::class)
 @Destination
-open class IntentDestination(val intent: Intent) {
-    open class RouteFactory : ActivityRouteFactory<IntentDestination> {
+class IntentDestination(val intent: Intent) {
+    class RouteFactory : ActivityRouteFactory<IntentDestination> {
         override fun createActivityIntent(
             context: Context,
             destination: IntentDestination

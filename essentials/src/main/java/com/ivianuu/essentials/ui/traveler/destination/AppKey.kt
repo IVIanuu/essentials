@@ -30,7 +30,7 @@ import com.ivianuu.compass.RouteFactory
 @RouteFactory(AppDestination.RouteFactory::class)
 @Destination
 data class AppDestination(val packageName: String) {
-    open class RouteFactory : ActivityRouteFactory<AppDestination> {
+    class RouteFactory : ActivityRouteFactory<AppDestination> {
         override fun createActivityIntent(context: Context, destination: AppDestination): Intent =
             context.packageManager.getLaunchIntentForPackage(destination.packageName)
     }

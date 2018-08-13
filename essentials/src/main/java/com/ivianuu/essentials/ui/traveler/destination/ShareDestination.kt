@@ -32,7 +32,7 @@ import com.ivianuu.compass.RouteFactory
 @RouteFactory(ShareDestination.RouteFactory::class)
 @Destination
 data class ShareDestination(val text: String) {
-    open class RouteFactory : ActivityRouteFactory<ShareDestination> {
+    class RouteFactory : ActivityRouteFactory<ShareDestination> {
         override fun createActivityIntent(context: Context, destination: ShareDestination): Intent =
             ShareCompat.IntentBuilder
                 .from(context as Activity)
