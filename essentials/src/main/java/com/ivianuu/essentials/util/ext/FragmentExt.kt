@@ -41,3 +41,9 @@ inline fun Fragment.requireArgs() =
     arguments ?: throw IllegalStateException("no arguments provided")
 
 inline fun Fragment.requireView() = view ?: throw IllegalStateException("view is null")
+
+inline fun Fragment.requireParentFragment() =
+    parentFragment ?: throw IllegalStateException("parent fragment is null")
+
+inline fun Fragment.requireTargetFragment() =
+    targetFragment ?: throw IllegalStateException("target fragment is null")

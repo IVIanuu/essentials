@@ -39,21 +39,15 @@ import com.ivianuu.traveler.Navigator
 import com.ivianuu.traveler.Router
 import com.ivianuu.traveler.lifecycleobserver.NavigatorLifecycleObserver
 
-val Fragment.localRouter: Router
-    get() {
-        val parent = parentFragment
-        return parent?.router(containerId, false)
-                ?: requireActivity().router(containerId, false)
-                ?: throw IllegalStateException("not attached")
-    }
+fun Fragment.localRouter() =
+    parentFragment?.router(containerId, false)
+        ?: requireActivity().router(containerId, false)
+        ?: throw IllegalStateException("not attached")
 
-val Fragment.rootRouter: Router
-    get() {
-        val parent = parentFragment
-        return parent?.rootRouter
-                ?: requireActivity().router(containerId, false)
-                ?: throw IllegalStateException("not attached")
-    }
+fun Fragment.rootRouter(): Router =
+    parentFragment?.rootRouter()
+        ?: requireActivity().router(containerId, false)
+        ?: throw IllegalStateException("not attached")
 
 inline fun ViewModelStoreOwner.travelerStore() =
     viewModel<TravelerStore>()

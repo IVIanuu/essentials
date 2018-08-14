@@ -22,6 +22,8 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.view.View
 
+// todo findFragmentBy**<SomeFragment>, requireFragmentBy**<SomeFragment>
+
 fun FragmentManager.doOnFragmentPreAttached(
     recursive: Boolean,
     action: (fm: FragmentManager, f: Fragment, context: Context) -> Unit
