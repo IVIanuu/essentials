@@ -16,19 +16,16 @@
 
 package com.ivianuu.essentials.sample.ui
 
+import android.graphics.Color
+import android.os.Bundle
+import android.view.View
 import com.ivianuu.compass.Destination
 import com.ivianuu.compass.Detour
-import com.ivianuu.daggerextensions.AutoContribute
-import com.ivianuu.essentials.injection.FragmentBindingModule
-import com.ivianuu.essentials.injection.PerFragment
-import com.ivianuu.essentials.injection.ViewBindingModule_
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.base.BaseFragment
 import com.ivianuu.essentials.ui.traveler.detour.HorizontalDetour
 import com.ivianuu.essentials.util.ext.localRouter
-import dagger.Module
-import dagger.Provides
-import javax.inject.Qualifier
+import kotlinx.android.synthetic.main.fragment_child_navigation.*
 
 @Detour(HorizontalDetour::class)
 @Destination(ChildNavigationFragment::class)
@@ -37,27 +34,32 @@ data class ChildNavigationDestination(val index: Int, val count: Int)
 /**
  * @author Manuel Wrage (IVIanuu)
  */
-@FragmentBindingModule
-@PerFragment
-@AutoContribute(modules = [ChildNavigationModule::class, ViewBindingModule_::class])
 class ChildNavigationFragment : BaseFragment() {
-    override val layoutRes = R.layout.view_child_navigation
-}
 
-@Qualifier
-annotation class LocalRouter
+    override val layoutRes = R.layout.fragment_child_navigation
 
-@Module
-object ChildNavigationModule {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-    @JvmStatic
-    @LocalRouter
-    @Provides
-    fun provideLocalRouter(fragment: ChildNavigationFragment) = fragment.localRouter
+        val destination = childNavigationDestination()
 
-    @JvmStatic
-    @Provides
-    fun provideDestination(fragment: ChildNavigationFragment) =
-        fragment.childNavigationDestination()
+        title.text = "Container: ${destination.index}, Count: ${destination.count}"
+        view.setBackgroundColor(COLORS[destination.index])
 
+        pop_to_root.setOnClickListener { localRouter().backToRoot() }
+        prev.setOnClickListener { localRouter().exit() }
+
+        next.setOnClickListener {
+            localRouter().navigateTo(
+                ChildNavigationDestination(
+                    destination.index, destination.count + 1
+                )
+            )
+        }
+    }
+
+    private companion object {
+        private val COLORS =
+            arrayOf(Color.RED, Color.BLUE, Color.MAGENTA)
+    }
 }

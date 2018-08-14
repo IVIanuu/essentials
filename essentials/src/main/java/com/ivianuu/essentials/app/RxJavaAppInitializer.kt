@@ -14,19 +14,20 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.util
+package com.ivianuu.essentials.app
 
-import android.content.Context
-import android.content.ContextWrapper
-import android.view.View
-import com.ivianuu.daggerextensions.view.HasViewInjector
+import android.app.Application
+import com.ivianuu.essentials.util.EnsureMainThreadScheduler
+import io.reactivex.android.plugins.RxAndroidPlugins
+import javax.inject.Inject
 
 /**
- * Wraps a [Context] and is a [HasViewInjector]
- * to make it possible to inject stuff from a [android.support.v4.app.Fragment]
- * into [View]'s
+ * Sets our own rxjava main thread scheduler
  */
-class ViewInjectionContextWrapper(
-    context: Context,
-    private val hasViewInjector: HasViewInjector
-) : ContextWrapper(context), HasViewInjector by hasViewInjector
+class RxJavaAppInitializer @Inject constructor() : AppInitializer {
+
+    override fun init(app: Application) {
+        RxAndroidPlugins.setInitMainThreadSchedulerHandler { EnsureMainThreadScheduler.INSTANCE }
+    }
+
+}

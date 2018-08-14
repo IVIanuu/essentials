@@ -19,8 +19,6 @@ package com.ivianuu.essentials.app
 import android.app.Application
 import android.content.pm.ApplicationInfo
 import com.crashlytics.android.Crashlytics
-import com.ivianuu.daggerextensions.AutoBindsIntoSet
-import com.ivianuu.essentials.injection.EssentialsAppInitializerModule
 import com.ivianuu.essentials.util.analytics.Analytics
 import com.ivianuu.essentials.util.analytics.FabricAnalyticsLogger
 import com.ivianuu.essentials.util.ext.containsFlag
@@ -30,8 +28,6 @@ import javax.inject.Inject
 /**
  * Initializes fabric in release builds
  */
-@EssentialsAppInitializerModule
-@AutoBindsIntoSet(AppInitializer::class)
 class FabricAppInitializer @Inject constructor(
     private val analyticsLogger: FabricAnalyticsLogger
 ) : AppInitializer {
