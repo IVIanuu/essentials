@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+@file:Suppress("NOTHING_TO_INLINE")
+
 package com.ivianuu.essentials.util.ext
 
 import android.content.Context
@@ -22,7 +24,17 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.view.View
 
-// todo findFragmentBy**<SomeFragment>, requireFragmentBy**<SomeFragment>
+inline fun <reified T : Fragment> FragmentManager.findFragById(id: Int) =
+    findFragmentById(id) as? T
+
+inline fun <reified T : Fragment> FragmentManager.requireFragById(id: Int) =
+    findFragById<T>(id) ?: throw IllegalStateException("fragment not found")
+
+inline fun <reified T : Fragment> FragmentManager.findFragByTag(tag: String) =
+    findFragmentByTag(tag) as? T
+
+inline fun <reified T : Fragment> FragmentManager.requireFragByTag(tag: String) =
+    findFragByTag<T>(tag) ?: throw IllegalStateException("fragment not found")
 
 fun FragmentManager.doOnFragmentPreAttached(
     recursive: Boolean,
