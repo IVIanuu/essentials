@@ -16,14 +16,37 @@
 
 package com.ivianuu.essentials.sample.app
 
+import com.ivianuu.daggerextensions.AutoComponent
+import com.ivianuu.daggerextensions.InjectorKeyRegistry
+import com.ivianuu.daggerextensions.view.ViewKey
 import com.ivianuu.essentials.app.BaseApp
+import com.ivianuu.essentials.injection.*
 import dagger.android.AndroidInjector
 import dagger.android.support.DaggerApplication
+import javax.inject.Singleton
 
 /**
- * App
+ * @author Manuel Wrage (IVIanuu)
  */
+@AppBindingSet
+@Singleton
+@AutoComponent(
+    modules = [
+        ActivityBindingModule_::class,
+        AppInitializerModule_::class,
+        AppServiceModule_::class,
+        EssentialsModule::class
+    ]
+)
 class App : BaseApp() {
-    override fun applicationInjector(): AndroidInjector<out DaggerApplication> =
-        DaggerAppComponent.builder().create(this)
+
+    override fun applicationInjector(): AndroidInjector<out DaggerApplication> {
+        return DaggerAppComponent.builder()
+            .app(this)
+            .build()
+    }
+
 }
+
+@InjectorKeyRegistry([ViewKey::class])
+interface InjectorKeyRegistry

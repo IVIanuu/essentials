@@ -42,7 +42,6 @@ android {
 dependencies {
     api Deps.archLifecycleExtensions
     kapt Deps.archLifecycleCompiler
-    api Deps.archWorkRuntime
 
     api Deps.autoDispose
     api Deps.autoDisposeAndroid
@@ -58,6 +57,11 @@ dependencies {
     api Deps.daggerAndroidSupport
     kapt Deps.daggerCompiler
     kapt Deps.daggerAndroidProcessor
+
+    api Deps.daggerExtensions
+    api Deps.daggerExtensionsView
+    api Deps.daggerExtensionsWork
+    kapt Deps.daggerExtensionsCompiler
 
     api Deps.epoxy
     kapt Deps.epoxyProcessor

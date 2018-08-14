@@ -28,10 +28,12 @@ import com.ivianuu.autodispose.arch.scope
 import com.ivianuu.autodispose.arch.viewScope
 import com.ivianuu.essentials.injection.Injectable
 import com.ivianuu.essentials.injection.KtHasSupportFragmentInjector
+import com.ivianuu.essentials.injection.KtHasViewInjector
 import com.ivianuu.essentials.ui.common.LabeledScreen
 import com.ivianuu.essentials.ui.common.back.BackListener
 import com.ivianuu.essentials.ui.traveler.RouterHolder
 import com.ivianuu.essentials.util.ContextAware
+import com.ivianuu.essentials.util.ViewInjectionContextWrapper
 import com.ivianuu.essentials.util.screenlogger.IdentifiableScreen
 import com.ivianuu.traveler.Router
 import dagger.android.DispatchingAndroidInjector
@@ -41,11 +43,12 @@ import javax.inject.Inject
  * Base fragment
  */
 abstract class BaseFragment : Fragment(), BackListener, KtHasSupportFragmentInjector,
-    Injectable, IdentifiableScreen, ContextAware, RouterHolder, LabeledScreen {
+    KtHasViewInjector, Injectable, IdentifiableScreen, ContextAware, RouterHolder, LabeledScreen {
 
     @Inject override lateinit var router: Router
 
     @Inject override lateinit var supportFragmentInjector: DispatchingAndroidInjector<Fragment>
+    @Inject override lateinit var viewInjector: DispatchingAndroidInjector<View>
 
     val scopeProvider = scope()
     lateinit var viewScopeProvider: LifecycleScopeProvider<Lifecycle.Event>
@@ -60,7 +63,10 @@ abstract class BaseFragment : Fragment(), BackListener, KtHasSupportFragmentInje
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? = if (layoutRes != -1) {
-        inflater.inflate(layoutRes, container, false)
+        val viewInjectionContext =
+            ViewInjectionContextWrapper(requireContext(), this)
+        val viewInjectionInflater = inflater.cloneInContext(viewInjectionContext)
+        viewInjectionInflater.inflate(layoutRes, container, false)
     } else {
         super.onCreateView(inflater, container, savedInstanceState)
     }

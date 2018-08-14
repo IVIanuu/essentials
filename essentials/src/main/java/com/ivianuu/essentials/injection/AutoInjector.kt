@@ -22,6 +22,7 @@ import android.content.Context
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
 import android.support.v4.app.FragmentManager
+import com.ivianuu.daggerextensions.AutoBindsIntoSet
 import com.ivianuu.essentials.app.AppService
 import com.ivianuu.essentials.util.ext.doOnActivityCreated
 import com.ivianuu.essentials.util.ext.doOnFragmentPreAttached
@@ -33,6 +34,8 @@ import javax.inject.Inject
 /**
  * Automatically injects [Injectable] [Activity]'s and [Fragment]'s
  */
+@EssentialsAppServiceModule
+@AutoBindsIntoSet(AppService::class)
 class AutoInjector @Inject constructor(private val application: Application) : AppService {
 
     override fun start() {

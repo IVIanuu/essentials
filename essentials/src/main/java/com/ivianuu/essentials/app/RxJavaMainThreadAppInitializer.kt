@@ -17,30 +17,21 @@
 package com.ivianuu.essentials.app
 
 import android.app.Application
-import android.content.pm.ApplicationInfo
-import com.crashlytics.android.Crashlytics
 import com.ivianuu.daggerextensions.AutoBindsIntoSet
 import com.ivianuu.essentials.injection.EssentialsAppInitializerModule
-import com.ivianuu.essentials.util.analytics.Analytics
-import com.ivianuu.essentials.util.analytics.FabricAnalyticsLogger
-import com.ivianuu.essentials.util.ext.containsFlag
-import io.fabric.sdk.android.Fabric
+import com.ivianuu.essentials.util.EnsureMainThreadScheduler
+import io.reactivex.android.plugins.RxAndroidPlugins
 import javax.inject.Inject
 
 /**
- * Initializes fabric in release builds
+ * Sets our own rxjava main thread scheduler
  */
 @EssentialsAppInitializerModule
 @AutoBindsIntoSet(AppInitializer::class)
-class FabricAppInitializer @Inject constructor(
-    private val analyticsLogger: FabricAnalyticsLogger
-) : AppInitializer {
+class RxJavaMainThreadAppInitializer @Inject constructor() : AppInitializer {
 
     override fun init(app: Application) {
-        if (!app.applicationInfo.flags.containsFlag(ApplicationInfo.FLAG_DEBUGGABLE)) {
-            Fabric.with(app, Crashlytics())
-            Analytics.addLogger(analyticsLogger)
-        }
+        RxAndroidPlugins.setInitMainThreadSchedulerHandler { EnsureMainThreadScheduler.INSTANCE }
     }
 
 }

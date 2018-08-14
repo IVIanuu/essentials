@@ -19,10 +19,12 @@ package com.ivianuu.essentials.ui.base
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
+import android.view.View
 import com.ivianuu.autodispose.arch.scope
 import com.ivianuu.compass.CompassFragmentAppNavigator
 import com.ivianuu.essentials.injection.Injectable
 import com.ivianuu.essentials.injection.KtHasSupportFragmentInjector
+import com.ivianuu.essentials.injection.KtHasViewInjector
 import com.ivianuu.essentials.ui.common.back.BackHandler
 import com.ivianuu.essentials.ui.traveler.RouterHolder
 import com.ivianuu.essentials.util.ext.setupRouter
@@ -36,12 +38,13 @@ import javax.inject.Inject
 /**
  * Base activity
  */
-abstract class BaseActivity : AppCompatActivity(), KtHasSupportFragmentInjector, Injectable,
-    IdentifiableScreen, RouterHolder {
+abstract class BaseActivity : AppCompatActivity(), KtHasSupportFragmentInjector,
+    KtHasViewInjector, Injectable, IdentifiableScreen, RouterHolder {
 
     @Inject lateinit var backHandler: BackHandler
 
     @Inject override lateinit var supportFragmentInjector: DispatchingAndroidInjector<Fragment>
+    @Inject override lateinit var viewInjector: DispatchingAndroidInjector<View>
 
     protected open val layoutRes = -1
 

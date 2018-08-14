@@ -18,42 +18,28 @@ package com.ivianuu.essentials.sample.app
 
 import android.app.Application
 import android.util.Log
+import com.ivianuu.daggerextensions.AutoBindsIntoSet
 import com.ivianuu.essentials.app.AppInitializer
 import com.ivianuu.essentials.app.AppService
-import dagger.Binds
-import dagger.Module
-import dagger.multibindings.IntoSet
+import com.ivianuu.essentials.injection.AppInitializerModule
+import com.ivianuu.essentials.injection.AppServiceModule
 import javax.inject.Inject
 
 /**
  * @author Manuel Wrage (IVIanuu)
  */
+@AppInitializerModule
+@AutoBindsIntoSet(AppInitializer::class)
 class MyAppInitializer @Inject constructor() : AppInitializer {
     override fun init(app: Application) {
         Log.d("testt", "on init")
     }
 }
 
-@Module
-abstract class AppInitializerModule {
-
-    @IntoSet
-    @Binds
-    abstract fun bindMyAppInitializer(myAppInitializer: MyAppInitializer): AppInitializer
-
-}
-
+@AppServiceModule
+@AutoBindsIntoSet(AppService::class)
 class MyAppService @Inject constructor() : AppService {
     override fun start() {
         Log.d("testtt", "start")
     }
-}
-
-@Module
-abstract class AppServiceModule {
-
-    @IntoSet
-    @Binds
-    abstract fun bindMyAppService(myAppService: MyAppService): AppService
-
 }
