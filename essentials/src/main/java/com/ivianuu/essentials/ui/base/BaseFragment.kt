@@ -23,9 +23,6 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.ivianuu.autodispose.LifecycleScopeProvider
-import com.ivianuu.autodispose.arch.scope
-import com.ivianuu.autodispose.arch.viewScope
 import com.ivianuu.essentials.injection.Injectable
 import com.ivianuu.essentials.injection.KtHasSupportFragmentInjector
 import com.ivianuu.essentials.ui.common.LabeledScreen
@@ -34,6 +31,8 @@ import com.ivianuu.essentials.ui.traveler.RouterHolder
 import com.ivianuu.essentials.util.ContextAware
 import com.ivianuu.essentials.util.screenlogger.IdentifiableScreen
 import com.ivianuu.traveler.Router
+import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider
+import com.uber.autodispose.lifecycle.LifecycleScopeProvider
 import dagger.android.DispatchingAndroidInjector
 import javax.inject.Inject
 
@@ -47,7 +46,7 @@ abstract class BaseFragment : Fragment(), BackListener, KtHasSupportFragmentInje
 
     @Inject override lateinit var supportFragmentInjector: DispatchingAndroidInjector<Fragment>
 
-    val scopeProvider = scope()
+    val scopeProvider = AndroidLifecycleScopeProvider.from(this)
     lateinit var viewScopeProvider: LifecycleScopeProvider<Lifecycle.Event>
 
     protected open val layoutRes = -1
@@ -67,6 +66,6 @@ abstract class BaseFragment : Fragment(), BackListener, KtHasSupportFragmentInje
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewScopeProvider = viewScope()
+        viewScopeProvider = AndroidLifecycleScopeProvider.from(viewLifecycleOwner)
     }
 }

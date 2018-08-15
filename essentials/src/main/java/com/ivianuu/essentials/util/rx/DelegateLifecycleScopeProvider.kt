@@ -16,16 +16,16 @@
 
 package com.ivianuu.essentials.util.rx
 
-import com.ivianuu.autodispose.LifecycleScopeProvider
+import com.uber.autodispose.lifecycle.CorrespondingEventsFunction
+import com.uber.autodispose.lifecycle.LifecycleScopeProvider
 import io.reactivex.Observable
-import io.reactivex.functions.Function
 
 /**
  * A [LifecycleScopeProvider] which wraps another [lifecycleScopeProvider]
  */
 interface DelegateLifecycleScopeProvider<T> : LifecycleScopeProvider<T> {
     val lifecycleScopeProvider: LifecycleScopeProvider<T>
-    override fun correspondingEvents(): Function<T, T> =
+    override fun correspondingEvents(): CorrespondingEventsFunction<T> =
         lifecycleScopeProvider.correspondingEvents()
 
     override fun lifecycle(): Observable<T> = lifecycleScopeProvider.lifecycle()

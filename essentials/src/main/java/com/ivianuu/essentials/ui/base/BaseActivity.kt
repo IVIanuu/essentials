@@ -19,7 +19,6 @@ package com.ivianuu.essentials.ui.base
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
-import com.ivianuu.autodispose.arch.scope
 import com.ivianuu.compass.CompassFragmentAppNavigator
 import com.ivianuu.essentials.injection.Injectable
 import com.ivianuu.essentials.injection.KtHasSupportFragmentInjector
@@ -30,6 +29,7 @@ import com.ivianuu.essentials.util.ext.unsafeLazy
 import com.ivianuu.essentials.util.screenlogger.IdentifiableScreen
 import com.ivianuu.traveler.Navigator
 import com.ivianuu.traveler.Router
+import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider
 import dagger.android.DispatchingAndroidInjector
 import javax.inject.Inject
 
@@ -55,7 +55,7 @@ abstract class BaseActivity : AppCompatActivity(), KtHasSupportFragmentInjector,
         )
     }
 
-    val scopeProvider = scope()
+    val scopeProvider = AndroidLifecycleScopeProvider.from(this)
 
     override lateinit var router: Router
 

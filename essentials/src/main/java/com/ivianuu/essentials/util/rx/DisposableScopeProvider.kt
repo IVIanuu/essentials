@@ -16,8 +16,8 @@
 
 package com.ivianuu.essentials.util.rx
 
-import com.ivianuu.autodispose.ScopeProvider
 import com.ivianuu.essentials.util.ext.publishSubject
+import com.uber.autodispose.ScopeProvider
 import io.reactivex.Completable
 
 /**

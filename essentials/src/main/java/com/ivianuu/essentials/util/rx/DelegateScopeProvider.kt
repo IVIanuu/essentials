@@ -16,12 +16,13 @@
 
 package com.ivianuu.essentials.util.rx
 
-import com.ivianuu.autodispose.ScopeProvider
+import com.uber.autodispose.ScopeProvider
+import io.reactivex.CompletableSource
 
 /**
  * A [ScopeProvider] which wraps another [ScopeProvider]
  */
 interface DelegateScopeProvider : ScopeProvider {
     val scopeProvider: ScopeProvider
-    override fun requestScope() = scopeProvider.requestScope()
+    override fun requestScope(): CompletableSource = scopeProvider.requestScope()
 }

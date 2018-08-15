@@ -23,7 +23,6 @@ import android.support.v7.app.AppCompatDialogFragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.ivianuu.autodispose.arch.scope
 import com.ivianuu.essentials.injection.Injectable
 import com.ivianuu.essentials.injection.KtHasSupportFragmentInjector
 import com.ivianuu.essentials.ui.common.LabeledScreen
@@ -32,6 +31,7 @@ import com.ivianuu.essentials.ui.traveler.RouterHolder
 import com.ivianuu.essentials.util.ContextAware
 import com.ivianuu.essentials.util.screenlogger.IdentifiableScreen
 import com.ivianuu.traveler.Router
+import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider
 import dagger.android.DispatchingAndroidInjector
 import javax.inject.Inject
 
@@ -46,7 +46,7 @@ abstract class BaseDialogFragment : AppCompatDialogFragment(),
 
     @Inject override lateinit var supportFragmentInjector: DispatchingAndroidInjector<Fragment>
 
-    val scopeProvider = scope()
+    val scopeProvider = AndroidLifecycleScopeProvider.from(this)
 
     protected open val layoutRes = -1
 

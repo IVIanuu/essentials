@@ -19,14 +19,13 @@ package com.ivianuu.essentials.sample.ui
 
 import android.annotation.SuppressLint
 import android.app.Application
-import android.arch.lifecycle.Lifecycle
 import android.os.Bundle
-import com.ivianuu.autodispose.autoDispose
 import com.ivianuu.essentials.ui.base.BaseActivity
 import com.ivianuu.essentials.ui.base.BaseViewModelActivity
 import com.ivianuu.essentials.ui.common.BaseViewModel
 import com.ivianuu.essentials.ui.common.TextInputDestination
 import com.ivianuu.essentials.util.ext.d
+import com.uber.autodispose.autoDisposable
 import dagger.Binds
 import dagger.Module
 import io.reactivex.Observable
@@ -48,8 +47,8 @@ class MainActivity : BaseViewModelActivity<MainViewModel>() {
             .doOnDispose { d { "on dispose" } }
             .doOnSubscribe { d { "on sub" } }
             .doOnNext { d { "do on next $it" } }
+            .autoDisposable(scopeProvider)
             .subscribe()
-            .autoDispose(scopeProvider, Lifecycle.Event.ON_DESTROY)
 
         if (savedInstanceState == null) {
             router.newRootScreen(MultipleChildsDestination)
