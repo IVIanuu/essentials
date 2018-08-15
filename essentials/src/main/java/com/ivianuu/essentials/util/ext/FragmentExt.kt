@@ -45,6 +45,11 @@ inline fun Fragment.requireArgs() =
 
 inline fun Fragment.requireView() = view ?: throw IllegalStateException("view is null")
 
+
+inline fun <reified T : Fragment> Fragment.parentFragment() = requireParentFragment() as T
+
+inline fun <reified T : Fragment> Fragment.targetFragment() = requireTargetFragment() as T
+
 inline fun Fragment.requireParentFragment() =
     parentFragment ?: throw IllegalStateException("parent fragment is null")
 
