@@ -16,26 +16,24 @@
 
 package com.ivianuu.essentials.injection
 
-import com.ivianuu.daggerextensions.view.ViewInjectionModule
-import com.ivianuu.daggerextensions.work.WorkerInjectionModule
+import com.ivianuu.essentials.app.EssentialsAppInitializerModule
 import com.ivianuu.essentials.app.EssentialsAppModule
+import com.ivianuu.essentials.app.EssentialsAppServiceModule
 import dagger.Module
 import dagger.android.AndroidInjectionModule
 import dagger.android.support.AndroidSupportInjectionModule
 
 /**
- * Wraps essential modules
+ * Wraps all essential modules
  */
 @Module(
     includes = [
         AndroidInjectionModule::class,
         AndroidSupportInjectionModule::class,
         EssentialsAppModule::class,
-        EssentialsAppInitializerModule_::class,
-        EssentialsAppServiceModule_::class,
-        SystemServiceModule::class,
-        ViewInjectionModule::class,
-        WorkerInjectionModule::class
+        EssentialsAppInitializerModule::class,
+        EssentialsAppServiceModule::class,
+        SystemServiceModule::class
     ]
 )
 object EssentialsModule

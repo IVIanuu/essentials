@@ -18,8 +18,6 @@ package com.ivianuu.essentials.app
 
 import android.app.Application
 import android.content.pm.ApplicationInfo
-import com.ivianuu.daggerextensions.AutoBindsIntoSet
-import com.ivianuu.essentials.injection.EssentialsAppInitializerModule
 import com.ivianuu.essentials.util.analytics.Analytics
 import com.ivianuu.essentials.util.analytics.DebugAnalyticsLogger
 import com.ivianuu.essentials.util.ext.containsFlag
@@ -29,8 +27,6 @@ import javax.inject.Inject
 /**
  * Plants a timber tree while in debug mode
  */
-@EssentialsAppInitializerModule
-@AutoBindsIntoSet(AppInitializer::class)
 class TimberAppInitializer @Inject constructor(
     private val analyticsLogger: DebugAnalyticsLogger
 ) : AppInitializer {

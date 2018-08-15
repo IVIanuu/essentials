@@ -22,20 +22,14 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
 import android.support.v4.app.FragmentManager
 import android.view.View
-import com.ivianuu.daggerextensions.AutoBindsIntoSet
 import com.ivianuu.essentials.app.AppService
-import com.ivianuu.essentials.injection.EssentialsAppServiceModule
 import com.ivianuu.essentials.util.ext.doOnActivityCreated
 import com.ivianuu.essentials.util.ext.doOnFragmentViewCreated
 import javax.inject.Inject
-import javax.inject.Singleton
 
 /**
  * Manages toolbar fragments
  */
-@EssentialsAppServiceModule
-@Singleton
-@AutoBindsIntoSet(AppService::class)
 class ToolbarService @Inject constructor(private val application: Application) : AppService {
     override fun start() {
         application.doOnActivityCreated { activity, _ ->

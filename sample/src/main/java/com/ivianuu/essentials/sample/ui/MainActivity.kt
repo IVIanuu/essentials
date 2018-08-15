@@ -1,3 +1,4 @@
+
 /*
  * Copyright 2018 Manuel Wrage
  *
@@ -21,23 +22,15 @@ import android.app.Application
 import android.arch.lifecycle.Lifecycle
 import android.os.Bundle
 import com.ivianuu.autodispose.autoDispose
-import com.ivianuu.daggerextensions.AutoContribute
-import com.ivianuu.essentials.injection.ActivityBindingModule
-import com.ivianuu.essentials.injection.ActivityBindingSet
-import com.ivianuu.essentials.injection.FragmentBindingModule_
-import com.ivianuu.essentials.injection.PerActivity
 import com.ivianuu.essentials.ui.base.BaseActivity
-import com.ivianuu.essentials.ui.base.EssentialsActivityModule
 import com.ivianuu.essentials.ui.common.TextInputDestination
 import com.ivianuu.essentials.util.ext.d
+import dagger.Binds
+import dagger.Module
 import io.reactivex.Observable
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-@ActivityBindingSet
-@ActivityBindingModule
-@PerActivity
-@AutoContribute(modules = [EssentialsActivityModule::class, FragmentBindingModule_::class])
 class MainActivity : BaseActivity() {
 
     @Inject lateinit var app: Application
@@ -66,5 +59,13 @@ class MainActivity : BaseActivity() {
             )
         )
     }
+
+}
+
+@Module
+abstract class MainActivityModule {
+
+    @Binds
+    abstract fun bindBaseActivity(mainActivity: MainActivity): BaseActivity
 
 }

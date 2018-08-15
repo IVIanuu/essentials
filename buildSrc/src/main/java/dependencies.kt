@@ -16,7 +16,6 @@ object Versions {
     const val compass = "738292d98d"
     const val constraintLayout = "1.1.2"
     const val dagger = "2.17"
-    const val daggerExtensions = "4b3be761d2"
     const val epoxy = "2.16.0"
     const val epoxyPrefs = "d8b597dedc"
     const val fabric = "2.7.1"
@@ -68,13 +67,6 @@ object Deps {
     const val daggerAndroidSupport = "com.google.dagger:dagger-android-support:${Versions.dagger}"
     const val daggerCompiler = "com.google.dagger:dagger-compiler:${Versions.dagger}"
     const val daggerAndroidProcessor = "com.google.dagger:dagger-android-processor:${Versions.dagger}"
-
-    const val daggerExtensions = "com.github.IVIanuu.dagger-extensions:daggerextensions:${Versions.daggerExtensions}"
-    const val daggerExtensionsCompiler =
-        "com.github.IVIanuu.dagger-extensions:daggerextensions-compiler:${Versions.daggerExtensions}"
-    const val daggerExtensionsView = "com.github.IVIanuu.dagger-extensions:daggerextensions-view:${Versions.daggerExtensions}"
-    const val daggerExtensionsWork =
-        "com.github.IVIanuu.dagger-extensions:daggerextensions-work:${Versions.daggerExtensions}"
 
     const val epoxy = "com.airbnb.android:epoxy:${Versions.epoxy}"
     const val epoxyProcessor = "com.airbnb.android:epoxy-processor:${Versions.epoxy}"

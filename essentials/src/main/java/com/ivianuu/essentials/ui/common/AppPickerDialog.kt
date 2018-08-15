@@ -5,12 +5,9 @@ import android.os.Bundle
 import com.afollestad.materialdialogs.MaterialDialog
 import com.ivianuu.autodispose.autoDispose
 import com.ivianuu.compass.Destination
-import com.ivianuu.daggerextensions.AutoContribute
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.data.app.AppInfo
 import com.ivianuu.essentials.data.app.AppStore
-import com.ivianuu.essentials.injection.EssentialsFragmentBindingModule
-import com.ivianuu.essentials.injection.PerFragment
 import com.ivianuu.essentials.ui.base.BaseDialogFragment
 import com.ivianuu.essentials.ui.traveler.destination.ResultDestination
 import com.ivianuu.essentials.util.ext.MAIN
@@ -27,9 +24,6 @@ data class AppPickerDestination(
 /**
  * App picker
  */
-@EssentialsFragmentBindingModule
-@PerFragment
-@AutoContribute
 class AppPickerDialog : BaseDialogFragment() {
 
     @Inject lateinit var appStore: AppStore

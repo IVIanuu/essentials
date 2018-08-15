@@ -16,24 +16,16 @@
 
 package com.ivianuu.essentials.app
 
-import android.view.View
-import androidx.work.Worker
-import com.ivianuu.essentials.injection.KtHasViewInjector
-import com.ivianuu.essentials.injection.KtHasWorkerInjector
-import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.DaggerApplication
 import javax.inject.Inject
 
 /**
  * App
  */
-abstract class BaseApp : DaggerApplication(), KtHasViewInjector, KtHasWorkerInjector {
+abstract class BaseApp : DaggerApplication() {
 
     @Inject internal lateinit var appInitializers: Set<@JvmSuppressWildcards AppInitializer>
     @Inject internal lateinit var appServices: Set<@JvmSuppressWildcards AppService>
-
-    @Inject override lateinit var viewInjector: DispatchingAndroidInjector<View>
-    @Inject override lateinit var workerInjector: DispatchingAndroidInjector<Worker>
 
     override fun onCreate() {
         super.onCreate()
