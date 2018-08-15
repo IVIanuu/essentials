@@ -43,6 +43,7 @@ class ChildNavigationFragment : BaseFragment() {
 
         val destination = childNavigationDestination()
 
+
         title.text = "Container: ${destination.index}, Count: ${destination.count}"
         view.setBackgroundColor(COLORS[destination.index])
 
