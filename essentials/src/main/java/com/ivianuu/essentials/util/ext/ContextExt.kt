@@ -21,6 +21,7 @@
 package com.ivianuu.essentials.util.ext
 
 import android.app.Activity
+import android.app.Application
 import android.content.*
 import android.content.pm.PackageManager
 import android.content.res.Configuration
@@ -186,3 +187,7 @@ inline fun Context.toThemedContext(theme: Resources.Theme): Context =
 
 inline fun ContextAware.toThemedContext(theme: Resources.Theme) =
     providedContext.toThemedContext(theme)
+
+inline fun <reified T : Application> Context.app() = applicationContext as T
+
+inline fun <reified T : Application> ContextAware.app() = providedContext.app<T>()

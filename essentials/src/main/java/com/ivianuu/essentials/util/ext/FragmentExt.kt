@@ -20,6 +20,7 @@
 
 package com.ivianuu.essentials.util.ext
 
+import android.app.Activity
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.view.View
@@ -34,6 +35,8 @@ inline fun Fragment.hideInputMethod() {
 inline fun Fragment.showInputMethod(view: View) {
     requireActivity().showInputMethod(view)
 }
+
+inline fun <reified T : Activity> Fragment.activity() = requireActivity() as T
 
 inline fun Fragment.requireAppCompatActivity() = requireActivity() as AppCompatActivity
 
