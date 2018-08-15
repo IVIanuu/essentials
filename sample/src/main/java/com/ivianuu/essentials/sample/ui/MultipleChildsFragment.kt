@@ -20,8 +20,10 @@ import android.os.Bundle
 import android.view.View
 import com.ivianuu.compass.Destination
 import com.ivianuu.essentials.sample.R
-import com.ivianuu.essentials.ui.base.BaseFragment
+import com.ivianuu.essentials.ui.base.BaseViewModelFragment
+import com.ivianuu.essentials.ui.common.BaseViewModel
 import com.ivianuu.essentials.util.ext.setupKeyFragmentSwapperRouter
+import javax.inject.Inject
 
 @Destination(MultipleChildsFragment::class)
 object MultipleChildsDestination
@@ -29,9 +31,14 @@ object MultipleChildsDestination
 /**
  * @author Manuel Wrage (IVIanuu)
  */
-class MultipleChildsFragment : BaseFragment() {
+class MultipleChildsFragment : BaseViewModelFragment<MultipleChildsViewModel>() {
 
     override val layoutRes = R.layout.fragment_multiple_childs
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        viewModel
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -50,3 +57,5 @@ class MultipleChildsFragment : BaseFragment() {
             arrayOf(R.id.container_0, R.id.container_1, R.id.container_2)
     }
 }
+
+class MultipleChildsViewModel @Inject constructor() : BaseViewModel()

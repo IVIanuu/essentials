@@ -16,32 +16,12 @@
 
 package com.ivianuu.essentials.sample.app
 
-import android.app.Application
 import android.util.Log
-import com.ivianuu.essentials.app.AppInitializer
 import com.ivianuu.essentials.app.AppService
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoSet
 import javax.inject.Inject
-
-/**
- * @author Manuel Wrage (IVIanuu)
- */
-class MyAppInitializer @Inject constructor() : AppInitializer {
-    override fun init(app: Application) {
-        Log.d("testt", "on init")
-    }
-}
-
-@Module
-abstract class AppInitializerModule {
-
-    @IntoSet
-    @Binds
-    abstract fun bindMyAppInitializer(myAppInitializer: MyAppInitializer): AppInitializer
-
-}
 
 class MyAppService @Inject constructor() : AppService {
     override fun start() {

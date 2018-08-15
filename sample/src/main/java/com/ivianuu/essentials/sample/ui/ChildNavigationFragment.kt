@@ -24,6 +24,9 @@ import com.ivianuu.compass.Detour
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.base.BaseFragment
 import com.ivianuu.essentials.ui.traveler.detour.HorizontalDetour
+import com.ivianuu.essentials.util.ext.bindActivityViewModel
+import com.ivianuu.essentials.util.ext.bindParentViewModel
+import com.ivianuu.essentials.util.ext.d
 import com.ivianuu.essentials.util.ext.localRouter
 import kotlinx.android.synthetic.main.fragment_child_navigation.*
 
@@ -38,11 +41,21 @@ class ChildNavigationFragment : BaseFragment() {
 
     override val layoutRes = R.layout.fragment_child_navigation
 
+    private val parentViewModel by bindParentViewModel<ChildNavigationContainerViewModel>()
+    private val activityViewModel by bindActivityViewModel<MainViewModel>()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        parentViewModel
+        d { "parent view model -> $parentViewModel" }
+        activityViewModel
+        d { "activity view model -> $activityViewModel" }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         val destination = childNavigationDestination()
-
 
         title.text = "Container: ${destination.index}, Count: ${destination.count}"
         view.setBackgroundColor(COLORS[destination.index])

@@ -16,7 +16,21 @@
 
 package com.ivianuu.essentials.app
 
+import android.content.pm.ApplicationInfo
+import android.graphics.Bitmap
+import com.bumptech.glide.Glide
+import com.crashlytics.android.Crashlytics
+import com.ivianuu.essentials.util.AppIcon
+import com.ivianuu.essentials.util.AppIconModelLoader
+import com.ivianuu.essentials.util.EnsureMainThreadScheduler
+import com.ivianuu.essentials.util.analytics.Analytics
+import com.ivianuu.essentials.util.analytics.DebugAnalyticsLogger
+import com.ivianuu.essentials.util.analytics.FabricAnalyticsLogger
+import com.ivianuu.essentials.util.ext.containsFlag
 import dagger.android.support.DaggerApplication
+import io.fabric.sdk.android.Fabric
+import io.reactivex.android.plugins.RxAndroidPlugins
+import timber.log.Timber
 import javax.inject.Inject
 
 /**
@@ -24,17 +38,32 @@ import javax.inject.Inject
  */
 abstract class BaseApp : DaggerApplication() {
 
-    @Inject internal lateinit var appInitializers: Set<@JvmSuppressWildcards AppInitializer>
     @Inject internal lateinit var appServices: Set<@JvmSuppressWildcards AppService>
+
+    @Inject
+    internal lateinit var appIconModelLoaderFactory: AppIconModelLoader.Factory
+    @Inject
+    internal lateinit var debugAnalyticsLogger: DebugAnalyticsLogger
+    @Inject
+    internal lateinit var fabricAnalyticsLogger: FabricAnalyticsLogger
 
     override fun onCreate() {
         super.onCreate()
-        appInitializers.forEach { initializeAppInitializer(it) }
-        appServices.forEach { startAppService(it) }
-    }
 
-    protected open fun initializeAppInitializer(appInitializer: AppInitializer) {
-        appInitializer.init(this)
+        if (applicationInfo.flags.containsFlag(ApplicationInfo.FLAG_DEBUGGABLE)) {
+            Timber.plant(Timber.DebugTree())
+            Analytics.addLogger(debugAnalyticsLogger)
+        } else {
+            Fabric.with(this, Crashlytics())
+            Analytics.addLogger(fabricAnalyticsLogger)
+        }
+
+        Glide.get(this).registry
+            .append(AppIcon::class.java, Bitmap::class.java, appIconModelLoaderFactory)
+
+        RxAndroidPlugins.setInitMainThreadSchedulerHandler { EnsureMainThreadScheduler.INSTANCE }
+
+        appServices.forEach { startAppService(it) }
     }
 
     protected open fun startAppService(appService: AppService) {

@@ -16,7 +16,6 @@
 
 package com.ivianuu.essentials.injection
 
-import com.ivianuu.essentials.app.EssentialsAppInitializerModule
 import com.ivianuu.essentials.app.EssentialsAppModule
 import com.ivianuu.essentials.app.EssentialsAppServiceModule
 import dagger.Module
@@ -31,7 +30,6 @@ import dagger.android.support.AndroidSupportInjectionModule
         AndroidInjectionModule::class,
         AndroidSupportInjectionModule::class,
         EssentialsAppModule::class,
-        EssentialsAppInitializerModule::class,
         EssentialsAppServiceModule::class,
         SystemServiceModule::class
     ]

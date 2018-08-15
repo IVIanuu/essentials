@@ -23,6 +23,8 @@ import android.arch.lifecycle.Lifecycle
 import android.os.Bundle
 import com.ivianuu.autodispose.autoDispose
 import com.ivianuu.essentials.ui.base.BaseActivity
+import com.ivianuu.essentials.ui.base.BaseViewModelActivity
+import com.ivianuu.essentials.ui.common.BaseViewModel
 import com.ivianuu.essentials.ui.common.TextInputDestination
 import com.ivianuu.essentials.util.ext.d
 import dagger.Binds
@@ -31,7 +33,7 @@ import io.reactivex.Observable
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-class MainActivity : BaseActivity() {
+class MainActivity : BaseViewModelActivity<MainViewModel>() {
 
     @Inject lateinit var app: Application
     @Inject lateinit var app2: Application
@@ -39,6 +41,8 @@ class MainActivity : BaseActivity() {
     @SuppressLint("PrivateResource")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        viewModel
 
         Observable.interval(1, TimeUnit.SECONDS)
             .doOnDispose { d { "on dispose" } }
@@ -61,6 +65,8 @@ class MainActivity : BaseActivity() {
     }
 
 }
+
+class MainViewModel @Inject constructor() : BaseViewModel()
 
 @Module
 abstract class MainActivityModule {
