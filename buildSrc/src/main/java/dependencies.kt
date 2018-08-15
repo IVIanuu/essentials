@@ -34,6 +34,7 @@ object Versions {
     const val rxPermissions = "de32df8112"
     const val rxPreferences = "2.0.0"
     const val rxSystemSettings = "aec2722332"
+    const val superUser = "1.0.0.+"
     const val support = "28.0.0-alpha3"
     const val stickyHeaders = "0f48d56a25"
     const val timber = "4.7.0"
@@ -112,6 +113,8 @@ object Deps {
     const val rxPreferences = "com.f2prateek.rx.preferences2:rx-preferences:${Versions.rxPreferences}"
     const val rxSystemSettings =
         "com.github.IVIanuu:rx-system-settings:${Versions.rxSystemSettings}"
+
+    const val superUser = "eu.chainfire:libsuperuser:${Versions.superUser}"
 
     const val supportAppCompat = "com.android.support:appcompat-v7:${Versions.support}"
     const val supportCardView = "com.android.support:cardview-v7:${Versions.support}"

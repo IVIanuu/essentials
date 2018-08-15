@@ -18,8 +18,8 @@ package com.ivianuu.essentials.ui.epoxy
 
 import android.view.View
 import com.airbnb.epoxy.EpoxyHolder
-import com.ivianuu.autodispose.OutsideLifecycleException
-import com.ivianuu.autodispose.ScopeProvider
+import com.uber.autodispose.OutsideScopeException
+import com.uber.autodispose.ScopeProvider
 import kotlinx.android.extensions.LayoutContainer
 
 /**
@@ -35,5 +35,5 @@ open class BaseEpoxyHolder : EpoxyHolder(), LayoutContainer, ScopeProvider {
     }
 
     override fun requestScope() =
-        boundModel?.requestScope() ?: throw OutsideLifecycleException("no model bound")
+        boundModel?.requestScope() ?: throw OutsideScopeException("no model bound")
 }

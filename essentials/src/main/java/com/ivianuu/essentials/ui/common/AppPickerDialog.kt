@@ -3,7 +3,6 @@ package com.ivianuu.essentials.ui.common
 import android.app.Dialog
 import android.os.Bundle
 import com.afollestad.materialdialogs.MaterialDialog
-import com.ivianuu.autodispose.autoDispose
 import com.ivianuu.compass.Destination
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.data.app.AppInfo
@@ -12,7 +11,8 @@ import com.ivianuu.essentials.ui.base.BaseDialogFragment
 import com.ivianuu.essentials.ui.traveler.destination.ResultDestination
 import com.ivianuu.essentials.util.ext.MAIN
 import com.ivianuu.essentials.util.ext.string
-import io.reactivex.rxkotlin.subscribeBy
+import com.uber.autodispose.autoDisposable
+import com.uber.autodispose.subscribeBy
 import javax.inject.Inject
 
 @Destination(AppPickerDialog::class)
@@ -47,12 +47,12 @@ class AppPickerDialog : BaseDialogFragment() {
 
         appStore.launchableApps()
             .observeOn(MAIN)
+            .autoDisposable(scopeProvider)
             .subscribeBy {
                 apps.clear()
                 apps.addAll(it)
                 dialog.setItems(*apps.map { it.appName }.toTypedArray())
             }
-            .autoDispose(scopeProvider)
 
         return dialog
     }
