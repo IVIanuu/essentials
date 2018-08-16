@@ -29,7 +29,7 @@ data class TextInputDestination(
     override var resultCode: Int,
     val title: String,
     val inputHint: String = "",
-    val inputType: Int = 0,
+    val inputType: Int = -1,
     val prefill: String = "",
     val allowEmptyInput: Boolean = false
 ) : ResultDestination
