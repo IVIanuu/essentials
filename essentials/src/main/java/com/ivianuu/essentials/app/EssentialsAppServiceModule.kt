@@ -2,6 +2,7 @@ package com.ivianuu.essentials.app
 
 import com.ivianuu.essentials.injection.AutoInjector
 import com.ivianuu.essentials.ui.common.back.BackHandler
+import com.ivianuu.essentials.ui.common.toolbar.ToolbarService
 import com.ivianuu.essentials.util.screenlogger.ScreenLogger
 import dagger.Binds
 import dagger.Module
