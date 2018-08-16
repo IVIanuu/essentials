@@ -25,4 +25,8 @@ abstract class EssentialsAppServiceModule {
     @Binds
     abstract fun bindScreenLogger(screenLogger: ScreenLogger): AppService
 
+    @IntoSet
+    @Binds
+    abstract fun bindToolbarService(toolbarService: ToolbarService): AppService
+
 }
