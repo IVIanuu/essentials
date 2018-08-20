@@ -25,9 +25,6 @@ android {
 }
 
 dependencies {
-    kapt Deps.compassCompiler
-    kapt Deps.daggerCompiler
-    kapt Deps.daggerAndroidProcessor
-    kapt Deps.epoxyProcessor
     implementation project(':essentials')
+    kapt project(':essentials-compiler')
 }

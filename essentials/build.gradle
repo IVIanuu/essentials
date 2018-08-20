@@ -41,7 +41,6 @@ android {
 
 dependencies {
     api Deps.archLifecycleExtensions
-    kapt Deps.archLifecycleCompiler
     api Deps.archWorkRuntime
 
     api Deps.autoDispose
@@ -52,19 +51,17 @@ dependencies {
     api Deps.autoDisposeArchKtx
 
     api Deps.compass
-    kapt Deps.compassCompiler
 
     api Deps.constraintLayout
 
     api Deps.dagger
     api Deps.daggerAndroid
     api Deps.daggerAndroidSupport
-    kapt Deps.daggerCompiler
-    kapt Deps.daggerAndroidProcessor
 
     api Deps.epoxy
-    kapt Deps.epoxyProcessor
     api Deps.epoxyPrefs
+
+    kapt project(':essentials-compiler')
 
     implementation(Deps.fabric) {
         transitive = true

@@ -1,0 +1,5 @@
+androidx.lifecycle.LifecycleProcessor
+com.airbnb.epoxy.EpoxyProcessor
+com.ivianuu.compass.CompassProcessor
+dagger.android.processor.AndroidProcessor
+dagger.internal.codegen.ComponentProcessor

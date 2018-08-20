@@ -1,1 +1,1 @@
-include ':sample', ':essentials'
+include ':sample', ':essentials', ':essentials-compiler'
