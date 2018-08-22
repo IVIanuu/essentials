@@ -21,7 +21,7 @@ object Versions {
     const val fabric = "2.7.1"
     const val fastScroll = "1.0.17"
     const val glide = "4.7.1"
-    const val kotlin = "1.2.51"
+    const val kotlin = "1.2.61"
     const val ktx = "0.3"
     const val mavenGradle = "2.1"
     const val materialDialogs = "0.9.6.0"
