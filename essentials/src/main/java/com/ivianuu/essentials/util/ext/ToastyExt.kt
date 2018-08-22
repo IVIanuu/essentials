@@ -25,62 +25,62 @@ import android.widget.Toast
 import com.ivianuu.essentials.util.ContextAware
 import es.dmoral.toasty.Toasty
 
-inline fun Context.errorToast(message: String): Toast =
+inline fun Context.toastError(message: String): Toast =
     Toasty.error(this, message).apply { show() }
 
-inline fun Context.errorToast(messageRes: Int, vararg args: Any) =
-    errorToast(getString(messageRes, *args))
+inline fun Context.toastError(messageRes: Int, vararg args: Any) =
+    toastError(getString(messageRes, *args))
 
-inline fun Context.infoToast(message: String): Toast =
+inline fun Context.toastInfo(message: String): Toast =
     Toasty.info(this, message).apply { show() }
 
-inline fun Context.infoToast(messageRes: Int, vararg args: Any) =
-    infoToast(getString(messageRes, *args))
+inline fun Context.toastInfo(messageRes: Int, vararg args: Any) =
+    toastInfo(getString(messageRes, *args))
 
-inline fun Context.normalToast(message: String): Toast =
+inline fun Context.toastNormal(message: String): Toast =
     Toasty.normal(this, message).apply { show() }
 
-inline fun Context.normalToast(messageRes: Int, vararg args: Any) =
-    normalToast(getString(messageRes, *args))
+inline fun Context.toastNormal(messageRes: Int, vararg args: Any) =
+    toastNormal(getString(messageRes, *args))
 
-inline fun Context.successToast(message: String): Toast =
+inline fun Context.toastSuccess(message: String): Toast =
     Toasty.success(this, message).apply { show() }
 
-inline fun Context.successToast(messageRes: Int, vararg args: Any) =
-    successToast(getString(messageRes, *args))
+inline fun Context.toastSuccess(messageRes: Int, vararg args: Any) =
+    toastSuccess(getString(messageRes, *args))
 
-inline fun Context.warningToast(message: String): Toast =
+inline fun Context.toastWarning(message: String): Toast =
     Toasty.warning(this, message).apply { show() }
 
-inline fun Context.warningToast(messageRes: Int, vararg args: Any) =
-    warningToast(getString(messageRes, *args))
+inline fun Context.toastWarning(messageRes: Int, vararg args: Any) =
+    toastWarning(getString(messageRes, *args))
 
-inline fun ContextAware.errorToast(message: String) =
-    providedContext.errorToast(message)
+inline fun ContextAware.toastError(message: String) =
+    providedContext.toastError(message)
 
-inline fun ContextAware.errorToast(messageRes: Int, vararg args: Any) =
-    providedContext.errorToast(messageRes, *args)
+inline fun ContextAware.toastError(messageRes: Int, vararg args: Any) =
+    providedContext.toastError(messageRes, *args)
 
-inline fun ContextAware.infoToast(message: String) =
-    providedContext.infoToast(message)
+inline fun ContextAware.toastInfo(message: String) =
+    providedContext.toastInfo(message)
 
-inline fun ContextAware.infoToast(messageRes: Int, vararg args: Any) =
-    providedContext.infoToast(messageRes, *args)
+inline fun ContextAware.toastInfo(messageRes: Int, vararg args: Any) =
+    providedContext.toastInfo(messageRes, *args)
 
-inline fun ContextAware.normalToast(message: String) =
-    providedContext.normalToast(message)
+inline fun ContextAware.toastNormal(message: String) =
+    providedContext.toastNormal(message)
 
-inline fun ContextAware.normalToast(messageRes: Int, vararg args: Any) =
-    providedContext.normalToast(messageRes, *args)
+inline fun ContextAware.toastNormal(messageRes: Int, vararg args: Any) =
+    providedContext.toastNormal(messageRes, *args)
 
-inline fun ContextAware.successToast(message: String) =
-    providedContext.successToast(message)
+inline fun ContextAware.toastSuccess(message: String) =
+    providedContext.toastSuccess(message)
 
-inline fun ContextAware.successToast(messageRes: Int, vararg args: Any) =
-    providedContext.successToast(messageRes, *args)
+inline fun ContextAware.toastSuccess(messageRes: Int, vararg args: Any) =
+    providedContext.toastSuccess(messageRes, *args)
 
-inline fun ContextAware.warningToast(message: String) =
-    providedContext.warningToast(message)
+inline fun ContextAware.toastWarning(message: String) =
+    providedContext.toastWarning(message)
 
-inline fun ContextAware.warningToast(messageRes: Int, vararg args: Any) =
-    providedContext.warningToast(messageRes, *args)
+inline fun ContextAware.toastWarning(messageRes: Int, vararg args: Any) =
+    providedContext.toastWarning(messageRes, *args)

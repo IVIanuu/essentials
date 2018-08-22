@@ -28,43 +28,43 @@ class Toaster @Inject constructor(private val app: Application) {
 
     private val handler = Handler()
 
-    fun errorToast(messageRes: Int, vararg args: Any) {
-        handler.post { app.errorToast(messageRes, *args) }
+    fun toastError(messageRes: Int, vararg args: Any) {
+        handler.post { app.toastError(messageRes, *args) }
     }
 
-    fun errorToast(message: String) {
-        handler.post { app.errorToast(message) }
+    fun toastError(message: String) {
+        handler.post { app.toastError(message) }
     }
 
-    fun infoToast(messageRes: Int, vararg args: Any) {
-        handler.post { app.infoToast(messageRes, *args) }
+    fun toastInfo(messageRes: Int, vararg args: Any) {
+        handler.post { app.toastInfo(messageRes, *args) }
     }
 
-    fun infoToast(message: String) {
-        handler.post { app.infoToast(message) }
+    fun toastInfo(message: String) {
+        handler.post { app.toastInfo(message) }
     }
 
-    fun normalToast(messageRes: Int, vararg args: Any) {
-        handler.post { app.normalToast(messageRes, *args) }
+    fun toastNormal(messageRes: Int, vararg args: Any) {
+        handler.post { app.toastNormal(messageRes, *args) }
     }
 
-    fun normalToast(message: String) {
-        handler.post { app.normalToast(message) }
+    fun toastNormal(message: String) {
+        handler.post { app.toastNormal(message) }
     }
 
-    fun successToast(messageRes: Int, vararg args: Any) {
-        handler.post { app.successToast(messageRes, *args) }
+    fun toastSuccess(messageRes: Int, vararg args: Any) {
+        handler.post { app.toastSuccess(messageRes, *args) }
     }
 
-    fun successToast(message: String) {
-        handler.post { app.successToast(message) }
+    fun toastSuccess(message: String) {
+        handler.post { app.toastSuccess(message) }
     }
 
-    fun warningToast(messageRes: Int, vararg args: Any) {
-        handler.post { app.warningToast(messageRes, *args) }
+    fun toastWarning(messageRes: Int, vararg args: Any) {
+        handler.post { app.toastWarning(messageRes, *args) }
     }
 
-    fun warningToast(message: String) {
-        handler.post { app.warningToast(message) }
+    fun toastWarning(message: String) {
+        handler.post { app.toastWarning(message) }
     }
 }
