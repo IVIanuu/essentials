@@ -20,6 +20,12 @@ import android.support.v7.widget.RecyclerView
 import android.view.MotionEvent
 import android.view.View
 
+inline fun <reified T : RecyclerView.LayoutManager> RecyclerView.layoutManager() =
+    layoutManager as T
+
+inline fun <reified T : RecyclerView.Adapter<*>> RecyclerView.adapter() =
+    adapter as T
+
 fun RecyclerView.doOnScrollStateChanged(action: ((recyclerView: RecyclerView, newState: Int) -> Unit)?) =
     addOnScrollListener(onScrollStateChanged = action)
 

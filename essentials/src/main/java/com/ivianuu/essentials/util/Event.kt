@@ -17,10 +17,17 @@
 package com.ivianuu.essentials.util
 
 /**
- * Simple result
+ * Consumable event
  */
-sealed class Result<out T : Any> {
-    data class Success<out T : Any>(val data: T) : Result<T>()
-    data class Error(val throwable: Throwable) : Result<Nothing>()
-    object Loading : Result<Nothing>()
+open class Event<T : Any>(private val data: T) {
+
+    var hasBeenHandled = false
+        private set
+
+    fun handle(action: (data: T) -> Unit) {
+        hasBeenHandled = true
+        action.invoke(data)
+    }
+
+    fun peekContent() = data
 }
