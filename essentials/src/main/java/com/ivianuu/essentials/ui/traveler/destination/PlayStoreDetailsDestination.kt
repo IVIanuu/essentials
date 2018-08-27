@@ -14,3 +14,4 @@ data class PlayStoreDetailsDestination(val packageName: String) {
             playStoreDetailsUrl(destination.packageName)
     }
 }
+
