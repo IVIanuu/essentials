@@ -8,7 +8,6 @@ object Versions {
     const val versionCode = 1
     const val versionName = "1.0"
 
-
     const val androidGradlePlugin = "3.1.4"
     const val archLifecycle = "1.1.1"
     const val archWork = "1.0.0-alpha07"
