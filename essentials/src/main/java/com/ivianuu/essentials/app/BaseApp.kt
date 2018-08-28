@@ -39,13 +39,9 @@ import javax.inject.Inject
 abstract class BaseApp : DaggerApplication() {
 
     @Inject internal lateinit var appServices: Set<@JvmSuppressWildcards AppService>
-
-    @Inject
-    internal lateinit var appIconModelLoaderFactory: AppIconModelLoader.Factory
-    @Inject
-    internal lateinit var debugAnalyticsLogger: DebugAnalyticsLogger
-    @Inject
-    internal lateinit var fabricAnalyticsLogger: FabricAnalyticsLogger
+    @Inject internal lateinit var appIconModelLoaderFactory: AppIconModelLoader.Factory
+    @Inject internal lateinit var debugAnalyticsLogger: DebugAnalyticsLogger
+    @Inject internal lateinit var fabricAnalyticsLogger: FabricAnalyticsLogger
 
     override fun onCreate() {
         super.onCreate()
