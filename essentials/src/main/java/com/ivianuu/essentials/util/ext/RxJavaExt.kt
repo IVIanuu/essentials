@@ -41,7 +41,6 @@ private val onErrorStub: (Throwable) -> Unit = {
         OnErrorNotImplementedException(it)
     )
 }
-private val onErrorPrint: (Throwable) -> Unit = Throwable::printStackTrace
 
 inline val COMPUTATION get() = Schedulers.computation()
 inline val IO get() = Schedulers.io()
