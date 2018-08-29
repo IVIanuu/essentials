@@ -18,9 +18,7 @@ package com.ivianuu.essentials.sample.injection
 
 import android.arch.lifecycle.ViewModel
 import com.ivianuu.essentials.injection.ViewModelKey
-import com.ivianuu.essentials.sample.ui.ChildNavigationContainerViewModel
 import com.ivianuu.essentials.sample.ui.MainViewModel
-import com.ivianuu.essentials.sample.ui.MultipleChildsViewModel
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
@@ -33,17 +31,7 @@ abstract class ViewModelModule {
 
     @Binds
     @IntoMap
-    @ViewModelKey(ChildNavigationContainerViewModel::class)
-    abstract fun bindChildNavigationContainerViewModel(childNavigationContainerViewModel: ChildNavigationContainerViewModel): ViewModel
-
-    @Binds
-    @IntoMap
     @ViewModelKey(MainViewModel::class)
     abstract fun bindMainViewModel(mainViewModel: MainViewModel): ViewModel
-
-    @Binds
-    @IntoMap
-    @ViewModelKey(MultipleChildsViewModel::class)
-    abstract fun bindMultipleChildsViewModel(multipleChildsViewModel: MultipleChildsViewModel): ViewModel
 
 }

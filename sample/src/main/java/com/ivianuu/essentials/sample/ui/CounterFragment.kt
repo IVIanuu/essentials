@@ -16,49 +16,51 @@
 
 package com.ivianuu.essentials.sample.ui
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import com.ivianuu.compass.Destination
+import com.ivianuu.compass.Detour
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.base.BaseFragment
-import com.ivianuu.essentials.ui.common.BaseViewModel
-import com.ivianuu.essentials.util.ext.bindViewModel
-import com.ivianuu.essentials.util.ext.setupKeyFragmentSwapperRouter
-import javax.inject.Inject
+import com.ivianuu.essentials.ui.traveler.detour.HorizontalDetour
+import com.ivianuu.essentials.util.ext.bindActivityViewModel
+import com.ivianuu.essentials.util.ext.d
+import kotlinx.android.synthetic.main.fragment_counter.*
 
-@Destination(MultipleChildsFragment::class)
-object MultipleChildsDestination
+@Detour(HorizontalDetour::class)
+@Destination(CounterFragment::class)
+data class CounterDestination(val count: Int)
 
 /**
  * @author Manuel Wrage (IVIanuu)
  */
-class MultipleChildsFragment : BaseFragment() {
+class CounterFragment : BaseFragment() {
 
-    override val layoutRes = R.layout.fragment_multiple_childs
+    override val layoutRes = R.layout.fragment_counter
 
-    private val viewModel by bindViewModel<MultipleChildsViewModel>()
+    private val activityViewModel by bindActivityViewModel<MainViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel
+
+        activityViewModel
+        d { "activity view model -> $activityViewModel" }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        CONTAINER_IDS.forEachIndexed { index, containerId ->
-            val router = setupKeyFragmentSwapperRouter(containerId)
+        val destination = counterDestination()
 
-            if (savedInstanceState == null) {
-                router.replaceScreen(ChildNavigationContainerDestination(index))
-            }
+        view.setBackgroundColor(Color.RED)
+
+        pop_to_root.setOnClickListener { router.backToRoot() }
+        prev.setOnClickListener { router.exit() }
+
+        next.setOnClickListener {
+            router.navigateTo(CounterDestination(destination.count + 1))
         }
     }
 
-    private companion object {
-        private val CONTAINER_IDS =
-            arrayOf(R.id.container_0, R.id.container_1, R.id.container_2)
-    }
 }
-
-class MultipleChildsViewModel @Inject constructor() : BaseViewModel()

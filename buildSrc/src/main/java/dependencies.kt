@@ -13,7 +13,7 @@ object Versions {
     const val archWork = "1.0.0-alpha08"
     const val autoDispose = "1.0.0-RC2"
     const val butterknife = "9.0.0-SNAPSHOT"
-    const val compass = "738292d98d"
+    const val compass = "986d5cec7f"
     const val constraintLayout = "1.1.2"
     const val dagger = "2.17"
     const val epoxy = "2.16.2"
@@ -25,13 +25,11 @@ object Versions {
     const val ktx = "0.3"
     const val mavenGradle = "2.1"
     const val materialDialogs = "0.9.6.0"
-    const val rxActivityResult = "7aa338925c"
     const val rxAndroid = "2.1.0"
     const val rxAndroid2 = "6a27d8ca6d"
     const val rxBinding = "2.1.1"
     const val rxJava = "2.1.16"
     const val rxKotlin = "2.2.0"
-    const val rxPermissions = "de32df8112"
     const val rxPreferences = "2.0.0"
     const val rxSystemSettings = "aec2722332"
     const val superUser = "1.0.0.+"
@@ -97,7 +95,6 @@ object Deps {
 
     const val mavenGradlePlugin = "com.github.dcendents:android-maven-gradle-plugin:${Versions.mavenGradle}"
 
-    const val rxActivityResult = "com.github.IVIanuu:rx-activity-result:${Versions.rxActivityResult}"
     const val rxAndroid = "io.reactivex.rxjava2:rxandroid:${Versions.rxAndroid}"
     const val rxAndroid2 = "com.github.IVIanuu:rx-android:${Versions.rxAndroid2}"
 
@@ -109,7 +106,6 @@ object Deps {
 
     const val rxJava = "io.reactivex.rxjava2:rxjava:${Versions.rxJava}"
     const val rxKotlin = "io.reactivex.rxjava2:rxkotlin:${Versions.rxKotlin}"
-    const val rxPermissions = "com.github.IVIanuu:rx-permissions:${Versions.rxPermissions}"
     const val rxPreferences = "com.f2prateek.rx.preferences2:rx-preferences:${Versions.rxPreferences}"
     const val rxSystemSettings =
         "com.github.IVIanuu:rx-system-settings:${Versions.rxSystemSettings}"

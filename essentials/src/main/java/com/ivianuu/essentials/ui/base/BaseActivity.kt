@@ -26,11 +26,12 @@ import com.ivianuu.essentials.injection.KtHasSupportFragmentInjector
 import com.ivianuu.essentials.ui.common.back.BackHandler
 import com.ivianuu.essentials.ui.traveler.RouterHolder
 import com.ivianuu.essentials.util.ViewModelFactoryHolder
-import com.ivianuu.essentials.util.ext.setupRouter
 import com.ivianuu.essentials.util.ext.unsafeLazy
 import com.ivianuu.essentials.util.screenlogger.IdentifiableScreen
 import com.ivianuu.traveler.Navigator
+import com.ivianuu.traveler.NavigatorHolder
 import com.ivianuu.traveler.Router
+import com.ivianuu.traveler.lifecycleobserver.NavigatorLifecycleObserver
 import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider
 import dagger.android.DispatchingAndroidInjector
 import javax.inject.Inject
@@ -41,11 +42,14 @@ import javax.inject.Inject
 abstract class BaseActivity : AppCompatActivity(), KtHasSupportFragmentInjector, Injectable,
     IdentifiableScreen, RouterHolder, ViewModelFactoryHolder {
 
-    @Inject lateinit var backHandler: BackHandler
+    @Inject lateinit var navigatorHolder: NavigatorHolder
+    @Inject override lateinit var router: Router
 
     @Inject override lateinit var supportFragmentInjector: DispatchingAndroidInjector<Fragment>
 
     @Inject override lateinit var viewModelFactory: ViewModelProvider.Factory
+
+    @Inject lateinit var backHandler: BackHandler
 
     protected open val layoutRes = -1
 
@@ -61,12 +65,10 @@ abstract class BaseActivity : AppCompatActivity(), KtHasSupportFragmentInjector,
 
     val scopeProvider = AndroidLifecycleScopeProvider.from(this)
 
-    override lateinit var router: Router
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        router = setupRouter(navigator, fragmentContainer)
+        NavigatorLifecycleObserver.start(this, navigator, navigatorHolder)
 
         if (layoutRes != -1) setContentView(layoutRes)
     }

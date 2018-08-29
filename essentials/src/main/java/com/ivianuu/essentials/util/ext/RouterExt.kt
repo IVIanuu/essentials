@@ -22,6 +22,7 @@ import com.ivianuu.traveler.Router
 import com.ivianuu.traveler.commands.Command
 import com.ivianuu.traveler.onCommandApplied
 import com.ivianuu.traveler.onCommandsApplied
+import io.reactivex.Maybe
 import io.reactivex.Observable
 
 fun <T : Any> Router.results(resultCode: Int): Observable<T> = Observable.create { e ->
@@ -60,6 +61,8 @@ fun Router.commandApplied(): Observable<Command> = Observable.create { e ->
     e.setCancellable { removeNavigationListener(listener) }
 }
 
-fun <T : Any> Router.navigateToForResult(destination: ResultDestination): Observable<T> =
+fun <T : Any> Router.navigateToForResult(destination: ResultDestination): Maybe<T> =
     results<T>(destination.resultCode)
+        .take(1)
+        .singleElement()
         .doOnSubscribe { navigateTo(destination) }

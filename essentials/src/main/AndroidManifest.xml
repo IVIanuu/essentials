@@ -15,4 +15,19 @@
   -->
 
 
-<manifest package="com.ivianuu.essentials" />
+<manifest package="com.ivianuu.essentials"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <application>
+
+        <activity
+            android:name=".ui.common.ActivityResultActivity"
+            android:theme="@style/EssentialsTransparent" />
+
+        <activity
+            android:name=".ui.common.PermissionActivity"
+            android:theme="@style/EssentialsTransparent" />
+
+    </application>
+
+</manifest>

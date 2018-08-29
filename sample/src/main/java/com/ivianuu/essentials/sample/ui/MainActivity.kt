@@ -22,11 +22,11 @@ import android.app.Application
 import android.os.Bundle
 import com.ivianuu.essentials.ui.base.BaseActivity
 import com.ivianuu.essentials.ui.common.BaseViewModel
-import com.ivianuu.essentials.ui.common.TextInputDestination
-import com.ivianuu.essentials.util.autoCleared
+import com.ivianuu.essentials.ui.common.PermissionDestination
+import com.ivianuu.essentials.ui.common.PermissionResult
 import com.ivianuu.essentials.util.ext.bindViewModel
-import com.ivianuu.essentials.util.ext.completableSubject
 import com.ivianuu.essentials.util.ext.d
+import com.ivianuu.essentials.util.ext.navigateToForResult
 import com.uber.autodispose.autoDisposable
 import dagger.Binds
 import dagger.Module
@@ -38,10 +38,6 @@ class MainActivity : BaseActivity() {
 
     @Inject lateinit var app: Application
     @Inject lateinit var app2: Application
-
-    private val adapter by autoCleared<String>()
-
-    private val subject = completableSubject()
 
     private val viewModel by bindViewModel<MainViewModel>()
 
@@ -59,16 +55,36 @@ class MainActivity : BaseActivity() {
             .subscribe()
 
         if (savedInstanceState == null) {
-            router.newRootScreen(MultipleChildsDestination)
+            router.newRootScreen(CounterDestination(1))
         }
 
-        router.navigateTo(
+        /*router.navigateTo(
             TextInputDestination(
                 1,
                 "Hello",
                 "Hint"
             )
+        )*/
+
+        /*router.navigateToForResult<ActivityResult>(ActivityResultDestination(
+            1,
+            Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
+        ))
+            .autoDisposable(scopeProvider)
+            .subscribe {
+                d { "on activity result -> $it" }
+            }*/
+
+        router.navigateToForResult<PermissionResult>(
+            PermissionDestination(
+                2,
+                arrayOf(android.Manifest.permission.CAMERA)
+            )
         )
+            .autoDisposable(scopeProvider)
+            .subscribe {
+                d { "on permission result -> $it" }
+            }
     }
 
 }

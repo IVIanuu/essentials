@@ -13,16 +13,16 @@ import dagger.multibindings.IntoSet
 @Module
 abstract class EssentialsAppServiceModule {
 
-    @IntoSet
     @Binds
+    @IntoSet
     abstract fun bindAutoInjector(autoInjector: AutoInjector): AppService
 
-    @IntoSet
     @Binds
+    @IntoSet
     abstract fun bindBackHandler(backHandler: BackHandler): AppService
 
-    @IntoSet
     @Binds
+    @IntoSet
     abstract fun bindScreenLogger(screenLogger: ScreenLogger): AppService
 
 }
