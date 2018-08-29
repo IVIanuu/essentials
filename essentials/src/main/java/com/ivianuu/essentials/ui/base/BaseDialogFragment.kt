@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.ui.base
 
+import android.arch.lifecycle.ViewModelProvider
 import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -28,6 +29,7 @@ import com.ivianuu.essentials.injection.KtHasSupportFragmentInjector
 import com.ivianuu.essentials.ui.common.back.BackListener
 import com.ivianuu.essentials.ui.traveler.RouterHolder
 import com.ivianuu.essentials.util.ContextAware
+import com.ivianuu.essentials.util.ViewModelFactoryHolder
 import com.ivianuu.essentials.util.screenlogger.IdentifiableScreen
 import com.ivianuu.traveler.Router
 import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider
@@ -39,11 +41,13 @@ import javax.inject.Inject
  */
 abstract class BaseDialogFragment : AppCompatDialogFragment(),
     BackListener, KtHasSupportFragmentInjector, Injectable, IdentifiableScreen,
-    ContextAware, RouterHolder {
+    ContextAware, RouterHolder, ViewModelFactoryHolder {
 
     @Inject override lateinit var router: Router
 
     @Inject override lateinit var supportFragmentInjector: DispatchingAndroidInjector<Fragment>
+
+    @Inject override lateinit var viewModelFactory: ViewModelProvider.Factory
 
     val scopeProvider = AndroidLifecycleScopeProvider.from(this)
 

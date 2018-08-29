@@ -14,18 +14,19 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.base
+package com.ivianuu.essentials.util
 
 import android.arch.lifecycle.ViewModel
-import com.ivianuu.essentials.util.DaggerViewModelFactory
-import com.ivianuu.essentials.util.ext.unsafeLazy
-import com.ivianuu.essentials.util.ext.viewModel
+import android.arch.lifecycle.ViewModelProvider
 import javax.inject.Inject
+import javax.inject.Provider
 
 /**
- * Essentials view model dialog fragment
+ * A [ViewModelProvider.Factory] which creates instances via dagger
+ * It's possible to inject activity/editorFragment scoped objects into [VM]'s
  */
-abstract class BaseViewModelDialogFragment<VM : ViewModel> : BaseDialogFragment() {
-    @Inject lateinit var viewModelFactory: DaggerViewModelFactory<VM>
-    protected val viewModel: VM by unsafeLazy { viewModel<ViewModel>(viewModelFactory) as VM }
+class SingleDaggerViewModelFactory<VM : ViewModel>
+@Inject constructor(private val viewModel: Provider<VM>) : ViewModelProvider.Factory {
+    @Suppress("UNCHECKED_CAST")
+    override fun <T : ViewModel> create(modelClass: Class<T>): T = viewModel.get() as T
 }

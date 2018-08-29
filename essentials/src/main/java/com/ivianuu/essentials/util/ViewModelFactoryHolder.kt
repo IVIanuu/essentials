@@ -14,12 +14,13 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.common
+package com.ivianuu.essentials.util
+
+import android.arch.lifecycle.ViewModelProvider
 
 /**
- * @author Manuel Wrage (IVIanuu)
+ * View model factory holder
  */
-interface LabeledScreen {
-    val screenLabel: CharSequence? get() = null
-    val screenLabelRes: Int get() = 0
+interface ViewModelFactoryHolder {
+    val viewModelFactory: ViewModelProvider.Factory
 }

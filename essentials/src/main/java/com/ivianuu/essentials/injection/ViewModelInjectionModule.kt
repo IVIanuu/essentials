@@ -14,18 +14,20 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.base
+package com.ivianuu.essentials.injection
 
-import android.arch.lifecycle.ViewModel
+import android.arch.lifecycle.ViewModelProvider
 import com.ivianuu.essentials.util.DaggerViewModelFactory
-import com.ivianuu.essentials.util.ext.unsafeLazy
-import com.ivianuu.essentials.util.ext.viewModel
-import javax.inject.Inject
+import dagger.Binds
+import dagger.Module
 
 /**
- * Essentials view model activity
+ * View model injection module
  */
-abstract class BaseViewModelActivity<VM : ViewModel> : BaseActivity() {
-    @Inject lateinit var viewModelFactory: DaggerViewModelFactory<VM>
-    protected val viewModel: VM by unsafeLazy { viewModel<ViewModel>(viewModelFactory) as VM }
+@Module
+abstract class ViewModelInjectionModule {
+
+    @Binds
+    abstract fun bindViewModelFactory(factory: DaggerViewModelFactory): ViewModelProvider.Factory
+
 }

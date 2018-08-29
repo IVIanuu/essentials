@@ -14,18 +14,16 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.base
+package com.ivianuu.essentials.injection
 
 import android.arch.lifecycle.ViewModel
-import com.ivianuu.essentials.util.DaggerViewModelFactory
-import com.ivianuu.essentials.util.ext.unsafeLazy
-import com.ivianuu.essentials.util.ext.viewModel
-import javax.inject.Inject
+import dagger.MapKey
+import kotlin.reflect.KClass
 
 /**
- * Essentials view model fragment
+ * Viewmodel key
  */
-abstract class BaseViewModelFragment<VM : ViewModel> : BaseFragment() {
-    @Inject lateinit var viewModelFactory: DaggerViewModelFactory<VM>
-    protected val viewModel: VM by unsafeLazy { viewModel<ViewModel>(viewModelFactory) as VM }
-}
+@Target(AnnotationTarget.FUNCTION)
+@Retention(AnnotationRetention.RUNTIME)
+@MapKey
+annotation class ViewModelKey(val value: KClass<out ViewModel>)

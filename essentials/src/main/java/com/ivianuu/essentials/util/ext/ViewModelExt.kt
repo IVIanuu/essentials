@@ -22,9 +22,11 @@ import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelStoreOwner
 import android.support.v4.app.Fragment
+import com.ivianuu.essentials.util.ViewModelFactoryHolder
 
 inline fun ViewModelStoreOwner.viewModelProvider(
-    factory: ViewModelProvider.Factory = ViewModelProvider.NewInstanceFactory()
+    factory: ViewModelProvider.Factory = (this as? ViewModelFactoryHolder)?.viewModelFactory
+        ?: ViewModelProvider.NewInstanceFactory()
 ) = ViewModelProvider(this, factory)
 
 inline fun <reified T : ViewModel> ViewModelStoreOwner.viewModel() =

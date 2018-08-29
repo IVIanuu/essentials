@@ -31,7 +31,8 @@ import dagger.android.support.AndroidSupportInjectionModule
         AndroidSupportInjectionModule::class,
         EssentialsAppModule::class,
         EssentialsAppServiceModule::class,
-        SystemServiceModule::class
+        SystemServiceModule::class,
+        ViewModelInjectionModule::class
     ]
 )
 object EssentialsModule

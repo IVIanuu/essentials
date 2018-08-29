@@ -18,9 +18,7 @@ package com.ivianuu.essentials.ui.state
 
 import android.os.Bundle
 import android.view.View
-import com.ivianuu.essentials.ui.base.BaseViewModelFragment
 import com.ivianuu.essentials.util.ext.MAIN
-import com.uber.autodispose.autoDisposable
 
 /**
  * State fragment

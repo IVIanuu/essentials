@@ -20,9 +20,10 @@ import android.os.Bundle
 import android.view.View
 import com.ivianuu.compass.Destination
 import com.ivianuu.essentials.sample.R
-import com.ivianuu.essentials.ui.base.BaseViewModelFragment
+import com.ivianuu.essentials.ui.base.BaseFragment
 import com.ivianuu.essentials.ui.common.BaseViewModel
 import com.ivianuu.essentials.util.ext.bindParentViewModel
+import com.ivianuu.essentials.util.ext.bindViewModel
 import com.ivianuu.essentials.util.ext.d
 import com.ivianuu.essentials.util.ext.setupCompassFragmentRouter
 import com.ivianuu.essentials.util.screenlogger.ScreenLogger
@@ -34,10 +35,12 @@ data class ChildNavigationContainerDestination(val index: Int)
 /**
  * @author Manuel Wrage (IVIanuu)
  */
-class ChildNavigationContainerFragment : BaseViewModelFragment<ChildNavigationContainerViewModel>(),
+class ChildNavigationContainerFragment : BaseFragment(),
     ScreenLogger.Ignore {
 
     override val layoutRes = R.layout.fragment_child_navigation_container
+
+    private val viewModel by bindViewModel<ChildNavigationContainerViewModel>()
 
     private val parentViewModel by bindParentViewModel<MultipleChildsViewModel>()
 

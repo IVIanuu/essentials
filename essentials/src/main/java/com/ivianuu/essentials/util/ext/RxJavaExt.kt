@@ -188,6 +188,15 @@ inline fun <T1, T2, T3, T4, T5, T6, T7, T8, T9> Observables.combineLatest(
 interface ScopeProviderHolder {
     val scopeProvider: ScopeProvider
 
+    fun Completable.autoSubscribe(
+        onError: (Throwable) -> Unit = onErrorStub,
+        onComplete: () -> Unit = onCompleteStub
+    ) = autoSubscribe(
+        scopeProvider = scopeProvider,
+        onError = onError,
+        onComplete = onComplete
+    )
+
     fun Completable.subscribeForUi(
         onError: (Throwable) -> Unit = onErrorStub,
         onComplete: () -> Unit = onCompleteStub
@@ -243,6 +252,17 @@ interface ScopeProviderHolder {
 
 interface LifecycleScopeProviderHolder<E> : ScopeProviderHolder {
     override val scopeProvider: LifecycleScopeProvider<E>
+
+    fun Completable.autoSubscribe(
+        untilEvent: E,
+        onError: (Throwable) -> Unit = onErrorStub,
+        onComplete: () -> Unit = onCompleteStub
+    ) = autoSubscribe(
+        scopeProvider = scopeProvider,
+        untilEvent = untilEvent,
+        onError = onError,
+        onComplete = onComplete
+    )
 
     fun Completable.subscribeForUi(
         untilEvent: E,
@@ -434,4 +454,25 @@ fun <T : Any, E> Single<T>.subscribeForUi(
     .subscribeBy(
         onError = onError,
         onSuccess = onSuccess
+    )
+
+fun Completable.autoSubscribe(
+    scopeProvider: ScopeProvider,
+    onError: (Throwable) -> Unit = onErrorStub,
+    onComplete: () -> Unit = onCompleteStub
+) = autoDisposable(scopeProvider)
+    .subscribeBy(
+        onError = onError,
+        onComplete = onComplete
+    )
+
+fun <E> Completable.autoSubscribe(
+    scopeProvider: LifecycleScopeProvider<E>,
+    untilEvent: E,
+    onError: (Throwable) -> Unit,
+    onComplete: () -> Unit
+) = autoDisposable(scopeProvider, untilEvent)
+    .subscribeBy(
+        onError = onError,
+        onComplete = onComplete
     )

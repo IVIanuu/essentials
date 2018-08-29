@@ -18,15 +18,28 @@ package com.ivianuu.essentials.util
 
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
+
 import javax.inject.Inject
 import javax.inject.Provider
+import javax.inject.Singleton
 
 /**
- * A [ViewModelProvider.Factory] which creates instances via dagger
- * It's possible to inject activity/editorFragment scoped objects into [VM]'s
+ * Dagger view model factory
  */
-class DaggerViewModelFactory<VM : ViewModel>
-@Inject constructor(private val viewModel: Provider<VM>) : ViewModelProvider.Factory {
-    @Suppress("UNCHECKED_CAST")
-    override fun <T : ViewModel> create(modelClass: Class<T>): T = viewModel.get() as T
+@Singleton
+class DaggerViewModelFactory @Inject constructor(
+    private val creators: Map<Class<out ViewModel>, @JvmSuppressWildcards Provider<ViewModel>>
+) : ViewModelProvider.Factory {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        val creator = creators[modelClass] ?: creators.entries.firstOrNull {
+            modelClass.isAssignableFrom(it.key)
+        }?.value ?: throw IllegalArgumentException("unknown model class $modelClass")
+        try {
+            @Suppress("UNCHECKED_CAST")
+            return creator.get() as T
+        } catch (e: Exception) {
+            throw RuntimeException(e)
+        }
+
+    }
 }

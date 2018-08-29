@@ -21,10 +21,11 @@ import android.annotation.SuppressLint
 import android.app.Application
 import android.os.Bundle
 import com.ivianuu.essentials.ui.base.BaseActivity
-import com.ivianuu.essentials.ui.base.BaseViewModelActivity
 import com.ivianuu.essentials.ui.common.BaseViewModel
 import com.ivianuu.essentials.ui.common.TextInputDestination
 import com.ivianuu.essentials.util.autoCleared
+import com.ivianuu.essentials.util.ext.bindViewModel
+import com.ivianuu.essentials.util.ext.completableSubject
 import com.ivianuu.essentials.util.ext.d
 import com.uber.autodispose.autoDisposable
 import dagger.Binds
@@ -33,12 +34,16 @@ import io.reactivex.Observable
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-class MainActivity : BaseViewModelActivity<MainViewModel>() {
+class MainActivity : BaseActivity() {
 
     @Inject lateinit var app: Application
     @Inject lateinit var app2: Application
 
     private val adapter by autoCleared<String>()
+
+    private val subject = completableSubject()
+
+    private val viewModel by bindViewModel<MainViewModel>()
 
     @SuppressLint("PrivateResource")
     override fun onCreate(savedInstanceState: Bundle?) {
