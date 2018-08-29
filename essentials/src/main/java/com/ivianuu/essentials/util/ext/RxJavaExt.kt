@@ -21,13 +21,27 @@
 package com.ivianuu.essentials.util.ext
 
 import com.ivianuu.essentials.util.tuples.*
-import io.reactivex.Observable
-import io.reactivex.Scheduler
+import com.uber.autodispose.ScopeProvider
+import com.uber.autodispose.autoDisposable
+import com.uber.autodispose.lifecycle.LifecycleScopeProvider
+import com.uber.autodispose.subscribeBy
+import io.reactivex.*
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.exceptions.OnErrorNotImplementedException
 import io.reactivex.functions.*
+import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.rxkotlin.Observables
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.*
+
+private val onCompleteStub: () -> Unit = {}
+private val onNextStub: (Any) -> Unit = {}
+private val onErrorStub: (Throwable) -> Unit = {
+    RxJavaPlugins.onError(
+        OnErrorNotImplementedException(it)
+    )
+}
+private val onErrorPrint: (Throwable) -> Unit = Throwable::printStackTrace
 
 inline val COMPUTATION get() = Schedulers.computation()
 inline val IO get() = Schedulers.io()
@@ -170,3 +184,254 @@ inline fun <T1, T2, T3, T4, T5, T6, T7, T8, T9> Observables.combineLatest(
         Function9 { t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6, t7: T7, t8: T8, t9: T9 ->
             Ennead(t1, t2, t3, t4, t5, t6, t7, t8, t9)
         })!!
+
+interface ScopeProviderHolder {
+    val scopeProvider: ScopeProvider
+
+    fun Completable.subscribeForUi(
+        onError: (Throwable) -> Unit = onErrorStub,
+        onComplete: () -> Unit = onCompleteStub
+    ) = subscribeForUi(
+        scopeProvider = scopeProvider,
+        onError = onError,
+        onComplete = onComplete
+    )
+
+    fun <T : Any> Flowable<T>.subscribeForUi(
+        onError: (Throwable) -> Unit = onErrorStub,
+        onComplete: () -> Unit = onCompleteStub,
+        onNext: (T) -> Unit = onNextStub
+    ) = subscribeForUi(
+        scopeProvider = scopeProvider,
+        onError = onError,
+        onComplete = onComplete,
+        onNext = onNext
+    )
+
+    fun <T : Any> Maybe<T>.subscribeForUi(
+        onError: (Throwable) -> Unit = onErrorStub,
+        onComplete: () -> Unit = onCompleteStub,
+        onSuccess: (T) -> Unit = onNextStub
+    ) = subscribeForUi(
+        scopeProvider = scopeProvider,
+        onError = onError,
+        onComplete = onComplete,
+        onSuccess = onSuccess
+    )
+
+    fun <T : Any> Observable<T>.subscribeForUi(
+        onError: (Throwable) -> Unit = onErrorStub,
+        onComplete: () -> Unit = onCompleteStub,
+        onNext: (T) -> Unit = onNextStub
+    ) = subscribeForUi(
+        scopeProvider = scopeProvider,
+        onError = onError,
+        onComplete = onComplete,
+        onNext = onNext
+    )
+
+    fun <T : Any> Single<T>.subscribeForUi(
+        onError: (Throwable) -> Unit = onErrorStub,
+        onSuccess: (T) -> Unit = onNextStub
+    ) = subscribeForUi(
+        scopeProvider = scopeProvider,
+        onError = onError,
+        onSuccess = onSuccess
+    )
+}
+
+
+interface LifecycleScopeProviderHolder<E> : ScopeProviderHolder {
+    override val scopeProvider: LifecycleScopeProvider<E>
+
+    fun Completable.subscribeForUi(
+        untilEvent: E,
+        onError: (Throwable) -> Unit = onErrorStub,
+        onComplete: () -> Unit = onCompleteStub
+    ) = subscribeForUi(
+        scopeProvider = scopeProvider,
+        untilEvent = untilEvent,
+        onError = onError,
+        onComplete = onComplete
+    )
+
+    fun <T : Any> Flowable<T>.subscribeForUi(
+        untilEvent: E,
+        onError: (Throwable) -> Unit = onErrorStub,
+        onComplete: () -> Unit = onCompleteStub,
+        onNext: (T) -> Unit = onNextStub
+    ) = subscribeForUi(
+        scopeProvider = scopeProvider,
+        untilEvent = untilEvent,
+        onError = onError,
+        onComplete = onComplete,
+        onNext = onNext
+    )
+
+    fun <T : Any> Maybe<T>.subscribeForUi(
+        untilEvent: E,
+        onError: (Throwable) -> Unit = onErrorStub,
+        onComplete: () -> Unit = onCompleteStub,
+        onSuccess: (T) -> Unit = onNextStub
+    ) = subscribeForUi(
+        scopeProvider = scopeProvider,
+        untilEvent = untilEvent,
+        onError = onError,
+        onComplete = onComplete,
+        onSuccess = onSuccess
+    )
+
+    fun <T : Any> Observable<T>.subscribeForUi(
+        untilEvent: E,
+        onError: (Throwable) -> Unit = onErrorStub,
+        onComplete: () -> Unit = onCompleteStub,
+        onNext: (T) -> Unit = onNextStub
+    ) = subscribeForUi(
+        scopeProvider = scopeProvider,
+        untilEvent = untilEvent,
+        onError = onError,
+        onComplete = onComplete,
+        onNext = onNext
+    )
+
+    fun <T : Any> Single<T>.subscribeForUi(
+        untilEvent: E,
+        onError: (Throwable) -> Unit = onErrorStub,
+        onSuccess: (T) -> Unit = onNextStub
+    ) = subscribeForUi(
+        scopeProvider = scopeProvider,
+        untilEvent = untilEvent,
+        onError = onError,
+        onSuccess = onSuccess
+    )
+}
+
+fun Completable.subscribeForUi(
+    scopeProvider: ScopeProvider,
+    onError: (Throwable) -> Unit = onErrorStub,
+    onComplete: () -> Unit = onCompleteStub
+) =
+    observeOn(MAIN)
+        .autoDisposable(scopeProvider)
+        .subscribeBy(
+            onError = onError,
+            onComplete = onComplete
+        )
+
+fun <T : Any> Flowable<T>.subscribeForUi(
+    scopeProvider: ScopeProvider,
+    onError: (Throwable) -> Unit = onErrorStub,
+    onComplete: () -> Unit = onCompleteStub,
+    onNext: (T) -> Unit = onNextStub
+) = observeOn(MAIN)
+    .autoDisposable(scopeProvider)
+    .subscribeBy(
+        onError = onError,
+        onComplete = onComplete,
+        onNext = onNext
+    )
+
+fun <T : Any> Maybe<T>.subscribeForUi(
+    scopeProvider: ScopeProvider,
+    onError: (Throwable) -> Unit = onErrorStub,
+    onComplete: () -> Unit = onCompleteStub,
+    onSuccess: (T) -> Unit = onNextStub
+) = observeOn(MAIN)
+    .autoDisposable(scopeProvider)
+    .subscribeBy(
+        onError = onError,
+        onComplete = onComplete,
+        onSuccess = onSuccess
+    )
+
+fun <T : Any> Observable<T>.subscribeForUi(
+    scopeProvider: ScopeProvider,
+    onError: (Throwable) -> Unit = onErrorStub,
+    onComplete: () -> Unit = onCompleteStub,
+    onNext: (T) -> Unit = onNextStub
+) = observeOn(MAIN)
+    .autoDisposable(scopeProvider)
+    .subscribeBy(
+        onError = onError,
+        onComplete = onComplete,
+        onNext = onNext
+    )
+
+fun <T : Any> Single<T>.subscribeForUi(
+    scopeProvider: ScopeProvider,
+    onError: (Throwable) -> Unit = onErrorStub,
+    onSuccess: (T) -> Unit = onNextStub
+) = observeOn(MAIN)
+    .autoDisposable(scopeProvider)
+    .subscribeBy(
+        onError = onError,
+        onSuccess = onSuccess
+    )
+
+fun <E> Completable.subscribeForUi(
+    scopeProvider: LifecycleScopeProvider<E>,
+    untilEvent: E,
+    onError: (Throwable) -> Unit = onErrorStub,
+    onComplete: () -> Unit = onCompleteStub
+) =
+    observeOn(MAIN)
+        .autoDisposable(scopeProvider, untilEvent)
+        .subscribeBy(
+            onError = onError,
+            onComplete = onComplete
+        )
+
+fun <T : Any, E> Flowable<T>.subscribeForUi(
+    scopeProvider: LifecycleScopeProvider<E>,
+    untilEvent: E,
+    onError: (Throwable) -> Unit = onErrorStub,
+    onComplete: () -> Unit = onCompleteStub,
+    onNext: (T) -> Unit = onNextStub
+) = observeOn(MAIN)
+    .autoDisposable(scopeProvider, untilEvent)
+    .subscribeBy(
+        onError = onError,
+        onComplete = onComplete,
+        onNext = onNext
+    )
+
+
+fun <T : Any, E> Maybe<T>.subscribeForUi(
+    scopeProvider: LifecycleScopeProvider<E>,
+    untilEvent: E,
+    onError: (Throwable) -> Unit = onErrorStub,
+    onComplete: () -> Unit = onCompleteStub,
+    onSuccess: (T) -> Unit = onNextStub
+) = observeOn(MAIN)
+    .autoDisposable(scopeProvider, untilEvent)
+    .subscribeBy(
+        onError = onError,
+        onComplete = onComplete,
+        onSuccess = onSuccess
+    )
+
+fun <T : Any, E> Observable<T>.subscribeForUi(
+    scopeProvider: LifecycleScopeProvider<E>,
+    untilEvent: E,
+    onError: (Throwable) -> Unit = onErrorStub,
+    onComplete: () -> Unit = onCompleteStub,
+    onNext: (T) -> Unit = onNextStub
+) = observeOn(MAIN)
+    .autoDisposable(scopeProvider, untilEvent)
+    .subscribeBy(
+        onError = onError,
+        onComplete = onComplete,
+        onNext = onNext
+    )
+
+fun <T : Any, E> Single<T>.subscribeForUi(
+    scopeProvider: LifecycleScopeProvider<E>,
+    untilEvent: E,
+    onError: (Throwable) -> Unit = onErrorStub,
+    onSuccess: (T) -> Unit = onNextStub
+) = observeOn(MAIN)
+    .autoDisposable(scopeProvider, untilEvent)
+    .subscribeBy(
+        onError = onError,
+        onSuccess = onSuccess
+    )

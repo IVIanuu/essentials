@@ -23,10 +23,11 @@ import com.ivianuu.essentials.util.rx.DisposableScopeProvider
 /**
  * Base epoxy model with holder
  */
-abstract class BaseEpoxyModel : EpoxyModelWithHolder<BaseEpoxyHolder>(),
-    DisposableScopeProvider by DisposableScopeProvider() {
+abstract class BaseEpoxyModel : EpoxyModelWithHolder<BaseEpoxyHolder>() {
 
     private var currentHolder: BaseEpoxyHolder? = null
+
+    val scopeProvider = DisposableScopeProvider()
 
     @CallSuper
     override fun bind(holder: BaseEpoxyHolder) {
@@ -46,7 +47,7 @@ abstract class BaseEpoxyModel : EpoxyModelWithHolder<BaseEpoxyHolder>(),
     private fun unbindInternal() {
         currentHolder?.let { it.boundModel = null }
         currentHolder = null
-        dispose()
+        scopeProvider.dispose()
     }
 
 }

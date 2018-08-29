@@ -22,10 +22,12 @@ import com.ivianuu.essentials.util.rx.DisposableScopeProvider
 /**
  * A [ViewModel] which auto disposes itself
  */
-abstract class BaseViewModel : ViewModel(), DisposableScopeProvider by DisposableScopeProvider() {
+abstract class BaseViewModel : ViewModel() {
+
+    protected val scopeProvider = DisposableScopeProvider()
 
     override fun onCleared() {
-        dispose()
+        scopeProvider.dispose()
         super.onCleared()
     }
 

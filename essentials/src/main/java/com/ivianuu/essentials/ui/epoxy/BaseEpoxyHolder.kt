@@ -25,15 +25,16 @@ import kotlinx.android.extensions.LayoutContainer
 /**
  * Base epoxy holder
  */
-open class BaseEpoxyHolder : EpoxyHolder(), LayoutContainer, ScopeProvider {
+open class BaseEpoxyHolder : EpoxyHolder(), LayoutContainer {
     override lateinit var containerView: View
 
     var boundModel: BaseEpoxyModel? = null
+
+    val scopeProvider: ScopeProvider
+        get() = boundModel?.scopeProvider ?: throw OutsideScopeException("no model bound")
 
     override fun bindView(itemView: View) {
         containerView = itemView
     }
 
-    override fun requestScope() =
-        boundModel?.requestScope() ?: throw OutsideScopeException("no model bound")
 }
