@@ -24,6 +24,7 @@ import com.ivianuu.essentials.ui.base.BaseActivity
 import com.ivianuu.essentials.ui.base.BaseViewModelActivity
 import com.ivianuu.essentials.ui.common.BaseViewModel
 import com.ivianuu.essentials.ui.common.TextInputDestination
+import com.ivianuu.essentials.util.autoCleared
 import com.ivianuu.essentials.util.ext.d
 import com.uber.autodispose.autoDisposable
 import dagger.Binds
@@ -36,6 +37,8 @@ class MainActivity : BaseViewModelActivity<MainViewModel>() {
 
     @Inject lateinit var app: Application
     @Inject lateinit var app2: Application
+
+    private val adapter by autoCleared<String>()
 
     @SuppressLint("PrivateResource")
     override fun onCreate(savedInstanceState: Bundle?) {
