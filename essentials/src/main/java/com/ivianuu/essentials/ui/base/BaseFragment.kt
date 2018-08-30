@@ -49,7 +49,8 @@ abstract class BaseFragment : Fragment(), BackListener, KtHasSupportFragmentInje
 
     @Inject override lateinit var viewModelFactory: ViewModelProvider.Factory
 
-    val scopeProvider = AndroidLifecycleScopeProvider.from(this)
+    val scopeProvider: LifecycleScopeProvider<Lifecycle.Event> =
+        AndroidLifecycleScopeProvider.from(this)
     lateinit var viewScopeProvider: LifecycleScopeProvider<Lifecycle.Event>
 
     protected open val layoutRes = -1

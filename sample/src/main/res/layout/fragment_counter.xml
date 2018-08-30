@@ -2,38 +2,31 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:gravity="center">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="72dp"
-        android:layout_gravity="bottom"
-        android:background="#ffffff">
+    <TextView
+        android:id="@+id/count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp" />
 
-        <android.support.design.button.MaterialButton
-            android:id="@+id/pop_to_root"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="Pop to root"
-            style="@style/Widget.MaterialComponents.Button.TextButton" />
+    <android.support.design.button.MaterialButton
+        android:id="@+id/increase"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Increase" />
 
-        <android.support.design.button.MaterialButton
-            android:id="@+id/prev"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="Previous"
-            style="@style/Widget.MaterialComponents.Button.TextButton" />
+    <android.support.design.button.MaterialButton
+        android:id="@+id/decrease"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Decrease" />
 
-        <android.support.design.button.MaterialButton
-            android:id="@+id/next"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="Next"
-            style="@style/Widget.MaterialComponents.Button.TextButton" />
-
-    </LinearLayout>
+    <android.support.design.button.MaterialButton
+        android:id="@+id/reset"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Reset" />
 
 </LinearLayout>

@@ -158,5 +158,3 @@ class BackHandler @Inject constructor(private val application: Application) : Ap
         private const val KEY_TRANSACTION_INDEX = "BackHandler.transactionIndex"
     }
 }
-
-

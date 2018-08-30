@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.ui.base
 
+import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.ViewModelProvider
 import android.content.Context
 import android.os.Bundle
@@ -33,6 +34,7 @@ import com.ivianuu.essentials.util.ViewModelFactoryHolder
 import com.ivianuu.essentials.util.screenlogger.IdentifiableScreen
 import com.ivianuu.traveler.Router
 import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider
+import com.uber.autodispose.lifecycle.LifecycleScopeProvider
 import dagger.android.DispatchingAndroidInjector
 import javax.inject.Inject
 
@@ -49,7 +51,8 @@ abstract class BaseDialogFragment : AppCompatDialogFragment(),
 
     @Inject override lateinit var viewModelFactory: ViewModelProvider.Factory
 
-    val scopeProvider = AndroidLifecycleScopeProvider.from(this)
+    val scopeProvider: LifecycleScopeProvider<Lifecycle.Event> =
+        AndroidLifecycleScopeProvider.from(this)
 
     protected open val layoutRes = -1
 

@@ -16,51 +16,43 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import com.ivianuu.compass.Destination
-import com.ivianuu.compass.Detour
 import com.ivianuu.essentials.sample.R
-import com.ivianuu.essentials.ui.base.BaseFragment
-import com.ivianuu.essentials.ui.traveler.detour.HorizontalDetour
-import com.ivianuu.essentials.util.ext.bindActivityViewModel
+import com.ivianuu.essentials.ui.state.StateFragment
+import com.ivianuu.essentials.ui.state.withState
 import com.ivianuu.essentials.util.ext.d
+import com.ivianuu.essentials.util.ext.viewModel
 import kotlinx.android.synthetic.main.fragment_counter.*
 
-@Detour(HorizontalDetour::class)
 @Destination(CounterFragment::class)
-data class CounterDestination(val count: Int)
+object CounterDestination
 
 /**
  * @author Manuel Wrage (IVIanuu)
  */
-class CounterFragment : BaseFragment() {
+class CounterFragment : StateFragment() {
 
     override val layoutRes = R.layout.fragment_counter
 
-    private val activityViewModel by bindActivityViewModel<MainViewModel>()
+    private val viewModel get() = viewModel<CounterViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        activityViewModel
-        d { "activity view model -> $activityViewModel" }
+        viewModel.subscribe { postInvalidate() }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val destination = counterDestination()
-
-        view.setBackgroundColor(Color.RED)
-
-        pop_to_root.setOnClickListener { router.backToRoot() }
-        prev.setOnClickListener { router.exit() }
-
-        next.setOnClickListener {
-            router.navigateTo(CounterDestination(destination.count + 1))
-        }
+        increase.setOnClickListener { viewModel.increaseClicked() }
+        decrease.setOnClickListener { viewModel.decreaseClicked() }
+        reset.setOnClickListener { viewModel.resetClicked() }
     }
 
+    override fun invalidate() {
+        d { "invalidate" }
+        withState(viewModel) { count.text = "Count: $it" }
+    }
 }
