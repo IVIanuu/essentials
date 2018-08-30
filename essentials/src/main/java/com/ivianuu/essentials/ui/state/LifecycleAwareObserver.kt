@@ -122,13 +122,9 @@ internal class LifecycleAwareObserver<T>(
         locked.set(true)
     }
 
-    private fun requireOwner(): LifecycleOwner {
-        return owner!!
-    }
+    private fun requireOwner(): LifecycleOwner = owner!!
 
     companion object {
-
         private val DEFAULT_ACTIVE_STATE = Lifecycle.State.STARTED
-
     }
 }
