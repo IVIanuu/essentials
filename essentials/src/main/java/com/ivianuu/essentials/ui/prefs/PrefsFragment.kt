@@ -2,6 +2,8 @@ package com.ivianuu.essentials.ui.prefs
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.os.Bundle
+import android.view.View
 import com.airbnb.epoxy.EpoxyController
 import com.ivianuu.epoxyprefs.*
 import com.ivianuu.essentials.ui.simple.SimpleFragment
@@ -21,8 +23,18 @@ abstract class PrefsFragment : SimpleFragment() {
         get() =
             EpoxyPrefsPlugins.getDefaultSharedPreferencesName(requireContext())
 
-    private val sharedPreferences by unsafeLazy {
+    protected val sharedPreferences by unsafeLazy {
         requireContext().getSharedPreferences(sharedPreferencesName, Context.MODE_PRIVATE)
+    }
+
+    protected open val usePreferenceDividerDecoration = true
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        if (usePreferenceDividerDecoration) {
+            list.addItemDecoration(PreferenceDividerDecoration(requireContext()))
+        }
     }
 
     override fun onStart() {
