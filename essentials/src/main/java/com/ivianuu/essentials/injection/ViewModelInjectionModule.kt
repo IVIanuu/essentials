@@ -16,16 +16,22 @@
 
 package com.ivianuu.essentials.injection
 
+import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
 import com.ivianuu.essentials.util.DaggerViewModelFactory
 import dagger.Binds
 import dagger.Module
+import dagger.multibindings.Multibinds
+import javax.inject.Provider
 
 /**
  * View model injection module
  */
 @Module
 abstract class ViewModelInjectionModule {
+
+    @Multibinds
+    abstract fun viewModelProviders(): Map<Class<out ViewModel>, @JvmSuppressWildcards Provider<ViewModel>>
 
     @Binds
     abstract fun bindViewModelFactory(factory: DaggerViewModelFactory): ViewModelProvider.Factory
