@@ -23,116 +23,61 @@ import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelStoreOwner
 import android.support.v4.app.Fragment
 import com.ivianuu.essentials.util.ViewModelFactoryHolder
+import kotlin.reflect.KClass
 
 inline fun ViewModelStoreOwner.viewModelProvider(
-    factory: ViewModelProvider.Factory = (this as? ViewModelFactoryHolder)?.viewModelFactory
-        ?: ViewModelProvider.NewInstanceFactory()
+    factory: ViewModelProvider.Factory = defaultViewModelFactory()
 ) = ViewModelProvider(this, factory)
 
-inline fun <reified T : ViewModel> ViewModelStoreOwner.viewModel() =
-    viewModelProvider()[T::class.java]
-
 inline fun <reified T : ViewModel> ViewModelStoreOwner.viewModel(
-    factory: ViewModelProvider.Factory
-) = viewModelProvider(factory)[T::class.java]
-
-inline fun <reified T : ViewModel> ViewModelStoreOwner.viewModel(
-    key: String
-) = viewModelProvider()[key, T::class.java]
-
-inline fun <reified T : ViewModel> ViewModelStoreOwner.viewModel(
-    key: String,
-    factory: ViewModelProvider.Factory
+    factory: ViewModelProvider.Factory = defaultViewModelFactory(),
+    key: String = T::class.defaultViewModelKey
 ) = viewModelProvider(factory).get(key, T::class.java)
 
-inline fun <reified T : ViewModel> ViewModelStoreOwner.bindViewModel() =
-    unsafeLazy { viewModel<T>() }
-
 inline fun <reified T : ViewModel> ViewModelStoreOwner.bindViewModel(
-    crossinline factory: () -> ViewModelProvider.Factory
-) = unsafeLazy { viewModel<T>(factory()) }
-
-inline fun <reified T : ViewModel> ViewModelStoreOwner.bindViewModel(
-    key: String
-) = unsafeLazy { viewModel<T>(key) }
-
-inline fun <reified T : ViewModel> Fragment.activityViewModel() =
-    requireActivity().viewModel<T>()
+    crossinline keyProvider: () -> String = { T::class.defaultViewModelKey },
+    crossinline factoryProvider: () -> ViewModelProvider.Factory = { defaultViewModelFactory() }
+) = unsafeLazy { viewModel<T>(factoryProvider(), keyProvider()) }
 
 inline fun <reified T : ViewModel> Fragment.activityViewModel(
-    factory: ViewModelProvider.Factory
-) = requireActivity().viewModel<T>(factory)
-
-inline fun <reified T : ViewModel> Fragment.activityViewModel(
-    key: String
-) = requireActivity().viewModel<T>(key)
-
-inline fun <reified T : ViewModel> Fragment.activityViewModel(
-    key: String,
-    factory: ViewModelProvider.Factory
-) = requireActivity().viewModel<T>(key, factory)
-
-inline fun <reified T : ViewModel> Fragment.bindActivityViewModel() =
-    unsafeLazy { activityViewModel<T>() }
+    factory: ViewModelProvider.Factory = defaultViewModelFactory(),
+    key: String = T::class.defaultViewModelKey
+) = requireActivity().viewModel<T>(factory, key)
 
 inline fun <reified T : ViewModel> Fragment.bindActivityViewModel(
-    crossinline factory: () -> ViewModelProvider.Factory
-) = unsafeLazy { activityViewModel<T>(factory()) }
-
-inline fun <reified T : ViewModel> Fragment.bindActivityViewModel(
-    key: String
-) = unsafeLazy { activityViewModel<T>(key) }
-
-inline fun <reified T : ViewModel> Fragment.parentViewModel() =
-    requireParentFragment().viewModel<T>()
+    crossinline keyProvider: () -> String = { T::class.defaultViewModelKey },
+    crossinline factoryProvider: () -> ViewModelProvider.Factory = { defaultViewModelFactory() }
+) = unsafeLazy { activityViewModel<T>(factoryProvider(), keyProvider()) }
 
 inline fun <reified T : ViewModel> Fragment.parentViewModel(
-    factory: ViewModelProvider.Factory
-) = requireParentFragment().viewModel<T>(factory)
-
-inline fun <reified T : ViewModel> Fragment.parentViewModel(
-    key: String
-) = requireParentFragment().viewModel<T>()
-
-inline fun <reified T : ViewModel> Fragment.parentViewModel(
-    key: String,
-    factory: ViewModelProvider.Factory
-) = requireParentFragment().viewModel<T>(key, factory)
-
-inline fun <reified T : ViewModel> Fragment.bindParentViewModel() =
-    unsafeLazy { parentViewModel<T>() }
+    factory: ViewModelProvider.Factory = defaultViewModelFactory(),
+    key: String = T::class.defaultViewModelKey
+) = requireParentFragment().viewModel<T>(factory, key)
 
 inline fun <reified T : ViewModel> Fragment.bindParentViewModel(
-    crossinline factory: () -> ViewModelProvider.Factory
-) = unsafeLazy { parentViewModel<T>(factory()) }
-
-inline fun <reified T : ViewModel> Fragment.bindParentViewModel(
-    key: String
-) = unsafeLazy { parentViewModel<T>(key) }
-
-inline fun <reified T : ViewModel> Fragment.targetViewModel() =
-    requireTargetFragment().viewModel<T>()
+    crossinline keyProvider: () -> String = { T::class.defaultViewModelKey },
+    crossinline factoryProvider: () -> ViewModelProvider.Factory = { defaultViewModelFactory() }
+) = unsafeLazy { parentViewModel<T>(factoryProvider(), keyProvider()) }
 
 inline fun <reified T : ViewModel> Fragment.targetViewModel(
-    factory: ViewModelProvider.Factory
-) = requireTargetFragment().viewModel<T>(factory)
-
-inline fun <reified T : ViewModel> Fragment.targetViewModel(
-    key: String
-) = requireTargetFragment().viewModel<T>(key)
-
-inline fun <reified T : ViewModel> Fragment.targetViewModel(
-    key: String,
-    factory: ViewModelProvider.Factory
-) = requireTargetFragment().viewModel<T>(key, factory)
-
-inline fun <reified T : ViewModel> Fragment.bindTargetViewModel() =
-    unsafeLazy { targetViewModel<T>() }
+    factory: ViewModelProvider.Factory = defaultViewModelFactory(),
+    key: String = T::class.defaultViewModelKey
+) = requireTargetFragment().viewModel<T>(factory, key)
 
 inline fun <reified T : ViewModel> Fragment.bindTargetViewModel(
-    crossinline factory: () -> ViewModelProvider.Factory
-) = unsafeLazy { targetViewModel<T>(factory()) }
+    crossinline keyProvider: () -> String = { T::class.defaultViewModelKey },
+    crossinline factoryProvider: () -> ViewModelProvider.Factory = { defaultViewModelFactory() }
+) = unsafeLazy { targetViewModel<T>(factoryProvider(), keyProvider()) }
 
-inline fun <reified T : ViewModel> Fragment.bindTargetViewModel(
-    key: String
-) = unsafeLazy { targetViewModel<T>(key) }
+@PublishedApi
+internal inline val KClass<*>.defaultViewModelKey
+    get() = "android.arch.lifecycle.ViewModelProvider.DefaultKey:" + java.canonicalName
+
+
+@PublishedApi
+internal inline fun ViewModelStoreOwner.defaultViewModelFactory() =
+    if (this is ViewModelFactoryHolder) {
+        viewModelFactory
+    } else {
+        ViewModelProvider.NewInstanceFactory()
+    }

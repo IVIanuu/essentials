@@ -14,7 +14,7 @@ import com.ivianuu.essentials.ui.epoxy.simpleLoading
 import com.ivianuu.essentials.ui.epoxy.simpleText
 import com.ivianuu.essentials.ui.simple.SimpleFragment
 import com.ivianuu.essentials.ui.state.StateViewModel
-import com.ivianuu.essentials.ui.state.bindStateViewModel
+import com.ivianuu.essentials.ui.state.bindViewModel
 import com.ivianuu.essentials.ui.state.stateEpoxyController
 import com.ivianuu.essentials.ui.traveler.detour.FadeDetour
 import com.ivianuu.essentials.util.Result
@@ -35,7 +35,7 @@ object ListDestination
  */
 class ListFragment : SimpleFragment() {
 
-    private val viewModel by bindStateViewModel<ListViewModel, Result<List<String>>>()
+    private val viewModel by bindViewModel(ListViewModel::class)
 
     override val toolbarMenuRes = R.menu.fragment_list
 
