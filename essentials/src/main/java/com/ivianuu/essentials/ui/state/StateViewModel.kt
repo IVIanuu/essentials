@@ -1,8 +1,11 @@
 package com.ivianuu.essentials.ui.state
 
+import android.arch.lifecycle.LifecycleOwner
 import com.ivianuu.essentials.ui.common.BaseViewModel
-import com.uber.autodispose.ScopeProvider
+import com.ivianuu.essentials.util.ext.MAIN
 import com.uber.autodispose.autoDisposable
+import io.reactivex.disposables.Disposable
+import io.reactivex.functions.Consumer
 
 /**
  * State view model
@@ -32,14 +35,23 @@ abstract class StateViewModel<S : Any>(initialState: S? = null) : BaseViewModel(
         stateStore.set(reducer)
     }
 
-    protected fun subscribe(subscriber: (S) -> Unit) =
+    protected fun subscribe(subscriber: (S) -> Unit): Disposable =
         stateStore.observable
+            .observeOn(MAIN)
             .autoDisposable(scopeProvider)
             .subscribe(subscriber)
 
-    fun subscribe(scopeProvider: ScopeProvider, subscriber: (S) -> Unit) =
-        stateStore.observable
+    fun subscribe(owner: LifecycleOwner, subscriber: (S) -> Unit): Disposable {
+        val lifecycleAwareObserver = LifecycleAwareObserver(
+            owner,
+            alwaysDeliverLastValueWhenUnlocked = true,
+            onNext = Consumer<S> { subscriber(it) }
+        )
+
+        return stateStore.observable
+            .observeOn(MAIN)
             .autoDisposable(scopeProvider)
-            .subscribe(subscriber)
+            .subscribeWith(lifecycleAwareObserver)
+    }
 
 }

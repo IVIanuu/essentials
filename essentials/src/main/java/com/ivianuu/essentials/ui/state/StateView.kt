@@ -6,7 +6,6 @@ import android.arch.lifecycle.ViewModelStoreOwner
 import android.os.Handler
 import android.os.Looper
 import android.os.Message
-import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider
 
 private val PENDING_INVALIDATES = HashSet<Int>()
 private val HANDLER = Handler(Looper.getMainLooper(), Handler.Callback { message ->
@@ -31,5 +30,5 @@ interface StateView : LifecycleOwner, ViewModelStoreOwner {
     }
 
     fun <S : Any> StateViewModel<S>.subscribe(subscriber: (S) -> Unit) =
-        subscribe(AndroidLifecycleScopeProvider.from(lifecycle), subscriber)
+        subscribe(this@StateView, subscriber)
 }

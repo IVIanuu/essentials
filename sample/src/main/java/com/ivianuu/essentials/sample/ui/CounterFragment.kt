@@ -22,10 +22,9 @@ import com.ivianuu.compass.Destination
 import com.ivianuu.compass.Detour
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.state.StateFragment
+import com.ivianuu.essentials.ui.state.bindStateViewModel
 import com.ivianuu.essentials.ui.state.withState
 import com.ivianuu.essentials.ui.traveler.detour.HorizontalDetour
-import com.ivianuu.essentials.util.ext.d
-import com.ivianuu.essentials.util.ext.viewModel
 import kotlinx.android.synthetic.main.fragment_counter.*
 
 @Detour(HorizontalDetour::class)
@@ -39,12 +38,11 @@ class CounterFragment : StateFragment() {
 
     override val layoutRes = R.layout.fragment_counter
 
-    private val viewModel get() = viewModel<CounterViewModel>()
+    private val viewModel by bindStateViewModel<CounterViewModel, CounterState>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel.setDestination(counterDestination())
-        viewModel.subscribe { postInvalidate() }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -60,7 +58,6 @@ class CounterFragment : StateFragment() {
     }
 
     override fun invalidate() {
-        d { "invalidate" }
         withState(viewModel) { count.text = "Screen: ${it.screen}, Count: ${it.count}" }
     }
 }

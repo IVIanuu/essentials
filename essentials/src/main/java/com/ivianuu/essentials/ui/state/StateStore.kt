@@ -7,7 +7,6 @@ import com.uber.autodispose.autoDisposable
 import com.uber.autodispose.subscribeBy
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
-import io.reactivex.subjects.BehaviorSubject
 import java.util.*
 
 /**
@@ -17,7 +16,7 @@ internal class StateStore<S : Any>(scopeProvider: ScopeProvider) {
 
     private val subject = behaviorSubject<S>()
 
-    private val flushQueueSubject = BehaviorSubject.create<Unit>()
+    private val flushQueueSubject = behaviorSubject<Unit>()
 
     private val jobs = Jobs<S>()
 
