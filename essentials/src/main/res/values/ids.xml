@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <item name="app_bar" type="id" />
     <item name="coordinator_layout" type="id" />
     <item name="list" type="id" />
     <item name="progress_bar" type="id" />

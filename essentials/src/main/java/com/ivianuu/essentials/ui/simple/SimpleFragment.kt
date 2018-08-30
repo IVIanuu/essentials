@@ -2,6 +2,7 @@ package com.ivianuu.essentials.ui.simple
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.support.design.widget.AppBarLayout
 import android.support.design.widget.CoordinatorLayout
 import android.support.v4.app.isInBackstack
 import android.support.v7.widget.Toolbar
@@ -25,6 +26,11 @@ abstract class SimpleFragment : StateFragment() {
     protected open val lightToolbar: Boolean get() = primaryColor().isLight
 
     protected val epoxyController by unsafeLazy { epoxyController() }
+
+    val appBar
+        get() = _appBar ?: throw IllegalStateException("no app bar layout")
+    private val _appBar: AppBarLayout?
+        get() = view?.findViewById(R.id.app_bar)
 
     val coordinatorLayout
         get() =
