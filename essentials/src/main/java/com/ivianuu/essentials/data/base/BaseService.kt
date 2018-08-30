@@ -5,7 +5,7 @@ import android.content.Intent
 import android.os.IBinder
 import com.ivianuu.essentials.injection.AutoInjector
 import com.ivianuu.essentials.injection.Injectable
-import com.ivianuu.essentials.util.rx.DisposableScopeProvider
+import com.ivianuu.essentials.util.rx.disposableScopeProvider
 import dagger.android.AndroidInjection
 
 /**
@@ -13,7 +13,7 @@ import dagger.android.AndroidInjection
  */
 abstract class BaseService : Service(), Injectable {
 
-    val scopeProvider = DisposableScopeProvider()
+    val scopeProvider = disposableScopeProvider()
 
     override fun onCreate() {
         if (this !is AutoInjector.Ignore) {

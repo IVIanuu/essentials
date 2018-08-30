@@ -22,11 +22,11 @@ import com.bumptech.glide.Glide
 import com.crashlytics.android.Crashlytics
 import com.ivianuu.essentials.util.AppIcon
 import com.ivianuu.essentials.util.AppIconModelLoader
-import com.ivianuu.essentials.util.EnsureMainThreadScheduler
 import com.ivianuu.essentials.util.analytics.Analytics
 import com.ivianuu.essentials.util.analytics.DebugAnalyticsLogger
 import com.ivianuu.essentials.util.analytics.FabricAnalyticsLogger
 import com.ivianuu.essentials.util.ext.containsFlag
+import com.ivianuu.essentials.util.rx.EnsureMainThreadScheduler
 import dagger.android.support.DaggerApplication
 import io.fabric.sdk.android.Fabric
 import io.reactivex.android.plugins.RxAndroidPlugins

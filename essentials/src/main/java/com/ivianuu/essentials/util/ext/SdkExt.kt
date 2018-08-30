@@ -36,5 +36,5 @@ inline val isOreo
 inline val isOreoMr1
     get() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1
 
-inline val isP
+inline val isPie
     get() = Build.VERSION.SDK_INT > Build.VERSION_CODES.O_MR1

@@ -19,15 +19,18 @@ package com.ivianuu.essentials.sample.ui
 import android.os.Bundle
 import android.view.View
 import com.ivianuu.compass.Destination
+import com.ivianuu.compass.Detour
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.state.StateFragment
 import com.ivianuu.essentials.ui.state.withState
+import com.ivianuu.essentials.ui.traveler.detour.HorizontalDetour
 import com.ivianuu.essentials.util.ext.d
 import com.ivianuu.essentials.util.ext.viewModel
 import kotlinx.android.synthetic.main.fragment_counter.*
 
+@Detour(HorizontalDetour::class)
 @Destination(CounterFragment::class)
-object CounterDestination
+data class CounterDestination(val screen: Int)
 
 /**
  * @author Manuel Wrage (IVIanuu)
@@ -40,6 +43,7 @@ class CounterFragment : StateFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        viewModel.setDestination(counterDestination())
         viewModel.subscribe { postInvalidate() }
     }
 
@@ -49,10 +53,14 @@ class CounterFragment : StateFragment() {
         increase.setOnClickListener { viewModel.increaseClicked() }
         decrease.setOnClickListener { viewModel.decreaseClicked() }
         reset.setOnClickListener { viewModel.resetClicked() }
+
+        screen_up.setOnClickListener { viewModel.screenUpClicked() }
+        screen_down.setOnClickListener { viewModel.screenDownClicked() }
+        root_screen.setOnClickListener { viewModel.rootScreenClicked() }
     }
 
     override fun invalidate() {
         d { "invalidate" }
-        withState(viewModel) { count.text = "Count: $it" }
+        withState(viewModel) { count.text = "Screen: ${it.screen}, Count: ${it.count}" }
     }
 }

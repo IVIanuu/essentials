@@ -24,7 +24,7 @@ import android.support.v7.app.AppCompatActivity
 import com.ivianuu.compass.CompassFragmentAppNavigator
 import com.ivianuu.essentials.injection.Injectable
 import com.ivianuu.essentials.injection.KtHasSupportFragmentInjector
-import com.ivianuu.essentials.ui.common.back.BackHandler
+import com.ivianuu.essentials.ui.common.BackListener
 import com.ivianuu.essentials.ui.traveler.RouterHolder
 import com.ivianuu.essentials.util.ViewModelFactoryHolder
 import com.ivianuu.essentials.util.ext.unsafeLazy
@@ -51,8 +51,6 @@ abstract class BaseActivity : AppCompatActivity(), KtHasSupportFragmentInjector,
 
     @Inject override lateinit var viewModelFactory: ViewModelProvider.Factory
 
-    @Inject lateinit var backHandler: BackHandler
-
     protected open val layoutRes = -1
 
     open val fragmentContainer = android.R.id.content
@@ -77,8 +75,8 @@ abstract class BaseActivity : AppCompatActivity(), KtHasSupportFragmentInjector,
     }
 
     override fun onBackPressed() {
-        if (!backHandler.handleBack(this)) {
-            super.onBackPressed()
-        }
+        val currentFragment = supportFragmentManager.findFragmentById(fragmentContainer)
+        if (currentFragment is BackListener && currentFragment.handleBack()) return
+        super.onBackPressed()
     }
 }

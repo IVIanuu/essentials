@@ -29,4 +29,22 @@
         android:layout_height="wrap_content"
         android:text="Reset" />
 
+    <android.support.design.button.MaterialButton
+        android:id="@+id/screen_up"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Screen Up" />
+
+    <android.support.design.button.MaterialButton
+        android:id="@+id/screen_down"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Screen Down" />
+
+    <android.support.design.button.MaterialButton
+        android:id="@+id/root_screen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Root Screen" />
+
 </LinearLayout>

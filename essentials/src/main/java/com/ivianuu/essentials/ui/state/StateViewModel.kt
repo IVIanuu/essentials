@@ -11,7 +11,8 @@ abstract class StateViewModel<S : Any>(initialState: S? = null) : BaseViewModel(
 
     private val stateStore = StateStore<S>(scopeProvider)
 
-    val state get() = stateStore.state
+    val state
+        get() = stateStore.state
 
     init {
         if (initialState != null) {

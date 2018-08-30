@@ -22,7 +22,6 @@ import android.content.pm.PackageManager
 import android.preference.PreferenceManager
 import androidx.work.WorkManager
 import com.f2prateek.rx.preferences2.RxSharedPreferences
-import com.ivianuu.essentials.injection.DefaultSharedPrefs
 import com.ivianuu.rxsystemsettings.RxSystemSettings
 import dagger.Module
 import dagger.Provides
@@ -35,16 +34,14 @@ import javax.inject.Singleton
 object EssentialsAppModule {
 
     @JvmStatic
-    @DefaultSharedPrefs
     @Provides
     fun provideSharedPrefs(application: Application): SharedPreferences =
         PreferenceManager.getDefaultSharedPreferences(application)
 
     @JvmStatic
-    @DefaultSharedPrefs
     @Singleton
     @Provides
-    fun provideRxSharedPrefs(@DefaultSharedPrefs prefs: SharedPreferences): RxSharedPreferences =
+    fun provideRxSharedPrefs(prefs: SharedPreferences): RxSharedPreferences =
         RxSharedPreferences.create(prefs)
 
     @JvmStatic

@@ -2,7 +2,7 @@ package com.ivianuu.essentials.data.base
 
 import android.service.notification.NotificationListenerService
 import com.ivianuu.essentials.injection.AutoInjector
-import com.ivianuu.essentials.util.rx.DisposableScopeProvider
+import com.ivianuu.essentials.util.rx.disposableScopeProvider
 import dagger.android.AndroidInjection
 
 /**
@@ -10,8 +10,8 @@ import dagger.android.AndroidInjection
  */
 abstract class BaseNotificationListenerService : NotificationListenerService() {
 
-    val scopeProvider = DisposableScopeProvider()
-    val connectedScopeProvider = DisposableScopeProvider()
+    val scopeProvider = disposableScopeProvider()
+    val connectedScopeProvider = disposableScopeProvider()
 
     override fun onCreate() {
         if (this !is AutoInjector.Ignore) {

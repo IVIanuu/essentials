@@ -22,6 +22,9 @@ import android.arch.lifecycle.LifecycleOwner
 import com.ivianuu.essentials.util.SimpleLifecycleObserver
 import io.reactivex.Observable
 
+fun Lifecycle.doOnAny(action: (owner: LifecycleOwner, event: Lifecycle.Event) -> Unit) =
+    addObserver(onAny = action)
+
 fun Lifecycle.doOnCreate(action: (owner: LifecycleOwner) -> Unit) = addObserver(onCreate = action)
 
 fun Lifecycle.doOnStart(action: (owner: LifecycleOwner) -> Unit) = addObserver(onStart = action)
@@ -35,6 +38,7 @@ fun Lifecycle.doOnStop(action: (owner: LifecycleOwner) -> Unit) = addObserver(on
 fun Lifecycle.doOnDestroy(action: (owner: LifecycleOwner) -> Unit) = addObserver(onDestroy = action)
 
 fun Lifecycle.addObserver(
+    onAny: ((owner: LifecycleOwner, event: Lifecycle.Event) -> Unit)? = null,
     onCreate: ((owner: LifecycleOwner) -> Unit)? = null,
     onStart: ((owner: LifecycleOwner) -> Unit)? = null,
     onResume: ((owner: LifecycleOwner) -> Unit)? = null,
@@ -43,6 +47,12 @@ fun Lifecycle.addObserver(
     onDestroy: ((owner: LifecycleOwner) -> Unit)? = null
 ): LifecycleObserver {
     val observer = object : SimpleLifecycleObserver() {
+
+        override fun onAny(owner: LifecycleOwner, event: Lifecycle.Event) {
+            onAny?.invoke(owner, event)
+            super.onAny(owner, event)
+        }
+
         override fun onCreate(owner: LifecycleOwner) {
             super.onCreate(owner)
             onCreate?.invoke(owner)
@@ -82,7 +92,6 @@ fun Lifecycle.addObserver(
 fun Lifecycle.events(): Observable<Lifecycle.Event> = Observable.create { e ->
     val observer = object : SimpleLifecycleObserver() {
         override fun onAny(owner: LifecycleOwner, event: Lifecycle.Event) {
-            super.onAny(owner, event)
             if (!e.isDisposed) {
                 e.onNext(event)
             }

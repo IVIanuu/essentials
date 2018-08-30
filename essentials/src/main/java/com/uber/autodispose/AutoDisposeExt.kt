@@ -23,31 +23,31 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.exceptions.OnErrorNotImplementedException
 import io.reactivex.plugins.RxJavaPlugins
 
-inline fun <E> Completable.autoDisposable(
+fun <E> Completable.autoDisposable(
     scopeProvider: LifecycleScopeProvider<E>,
     untilEvent: E
 ) =
     autoDisposable(scopeProvider.toScopeProvider(untilEvent))
 
-inline fun <T, E> Flowable<T>.autoDisposable(
+fun <T, E> Flowable<T>.autoDisposable(
     scopeProvider: LifecycleScopeProvider<E>,
     untilEvent: E
 ) =
     autoDisposable(scopeProvider.toScopeProvider(untilEvent))
 
-inline fun <T, E> Maybe<T>.autoDisposable(
+fun <T, E> Maybe<T>.autoDisposable(
     scopeProvider: LifecycleScopeProvider<E>,
     untilEvent: E
 ) =
     autoDisposable(scopeProvider.toScopeProvider(untilEvent))
 
-inline fun <T, E> Observable<T>.autoDisposable(
+fun <T, E> Observable<T>.autoDisposable(
     scopeProvider: LifecycleScopeProvider<E>,
     untilEvent: E
 ) =
     autoDisposable(scopeProvider.toScopeProvider(untilEvent))
 
-inline fun <T, E> Single<T>.autoDisposable(
+fun <T, E> Single<T>.autoDisposable(
     scopeProvider: LifecycleScopeProvider<E>,
     untilEvent: E
 ) =

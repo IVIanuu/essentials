@@ -21,7 +21,7 @@ import dagger.MapKey
 import kotlin.reflect.KClass
 
 /**
- * Viewmodel key
+ * View model key
  */
 @Target(AnnotationTarget.FUNCTION)
 @Retention(AnnotationRetention.RUNTIME)

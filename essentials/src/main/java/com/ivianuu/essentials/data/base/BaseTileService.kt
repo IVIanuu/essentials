@@ -4,7 +4,7 @@ import android.annotation.TargetApi
 import android.os.Build
 import android.service.quicksettings.TileService
 import com.ivianuu.essentials.injection.AutoInjector
-import com.ivianuu.essentials.util.rx.DisposableScopeProvider
+import com.ivianuu.essentials.util.rx.disposableScopeProvider
 import dagger.android.AndroidInjection
 
 /**
@@ -13,8 +13,8 @@ import dagger.android.AndroidInjection
 @TargetApi(Build.VERSION_CODES.N)
 abstract class BaseTileService : TileService() {
 
-    val scopeProvider = DisposableScopeProvider()
-    val listeningScopeProvider = DisposableScopeProvider()
+    val scopeProvider = disposableScopeProvider()
+    val listeningScopeProvider = disposableScopeProvider()
 
     override fun onCreate() {
         if (this !is AutoInjector.Ignore) {

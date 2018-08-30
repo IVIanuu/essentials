@@ -34,6 +34,9 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import com.ivianuu.essentials.util.ContextAware
 
+@PublishedApi
+internal val VALUE = TypedValue()
+
 inline fun Context.anim(resId: Int): Animation = AnimationUtils.loadAnimation(this, resId)
 
 inline fun Context.intArray(resId: Int): IntArray = resources.getIntArray(resId)
@@ -115,6 +118,3 @@ inline fun ContextAware.string(resId: Int) = providedContext.string(resId)
 
 inline fun ContextAware.string(resId: Int, vararg args: Any) =
     providedContext.string(resId, *args)
-
-@PublishedApi
-internal val VALUE = TypedValue()

@@ -3,7 +3,7 @@ package com.ivianuu.essentials.data.base
 import android.accessibilityservice.AccessibilityService
 import com.ivianuu.essentials.injection.AutoInjector
 import com.ivianuu.essentials.injection.Injectable
-import com.ivianuu.essentials.util.rx.DisposableScopeProvider
+import com.ivianuu.essentials.util.rx.disposableScopeProvider
 import dagger.android.AndroidInjection
 
 /**
@@ -11,7 +11,7 @@ import dagger.android.AndroidInjection
  */
 abstract class BaseAccessibilityService : AccessibilityService(), Injectable {
 
-    val scopeProvider = DisposableScopeProvider()
+    val scopeProvider = disposableScopeProvider()
 
     override fun onCreate() {
         if (this !is AutoInjector.Ignore) {

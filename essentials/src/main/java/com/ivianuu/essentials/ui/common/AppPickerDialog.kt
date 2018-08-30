@@ -48,9 +48,9 @@ class AppPickerDialog : BaseDialogFragment() {
         appStore.launchableApps()
             .observeOn(MAIN)
             .autoDisposable(scopeProvider)
-            .subscribeBy {
+            .subscribeBy { newApps ->
                 apps.clear()
-                apps.addAll(it)
+                apps.addAll(newApps)
                 dialog.setItems(*apps.map { it.appName }.toTypedArray())
             }
 

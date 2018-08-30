@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.util
+package com.ivianuu.essentials.util.rx
 
 import android.os.Handler
 import android.os.Looper
@@ -35,7 +35,8 @@ class EnsureMainThreadScheduler : Scheduler() {
 
     override fun scheduleDirect(run: Runnable, delay: Long, unit: TimeUnit): Disposable {
         val run = RxJavaPlugins.onSchedule(run)
-        val scheduled = ScheduledRunnable(handler, run)
+        val scheduled =
+            ScheduledRunnable(handler, run)
 
         if (delay == 0L) {
             if (isMainThread) {
@@ -50,7 +51,8 @@ class EnsureMainThreadScheduler : Scheduler() {
         return scheduled
     }
 
-    override fun createWorker(): Scheduler.Worker = MainThreadWorker(handler)
+    override fun createWorker(): Scheduler.Worker =
+        MainThreadWorker(handler)
 
     private class MainThreadWorker(private val handler: Handler) : Scheduler.Worker() {
 
@@ -63,7 +65,11 @@ class EnsureMainThreadScheduler : Scheduler() {
 
             val run = RxJavaPlugins.onSchedule(run)
 
-            val scheduled = ScheduledRunnable(handler, run)
+            val scheduled =
+                ScheduledRunnable(
+                    handler,
+                    run
+                )
 
             if (delay == 0L) {
                 if (isMainThread) {

@@ -43,4 +43,4 @@ class DisposableScopeProviderImpl : DisposableScopeProvider {
 
 }
 
-fun DisposableScopeProvider() = DisposableScopeProviderImpl()
+fun disposableScopeProvider() = DisposableScopeProviderImpl()
