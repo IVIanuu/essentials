@@ -56,21 +56,21 @@ inline fun <reified T : ViewModel> ViewModelStoreOwner.bindViewModel(
     key: String
 ) = unsafeLazy { viewModel<T>(key) }
 
-inline fun <reified T : ViewModel> Fragment.activityViewModel(): T =
-    requireActivity().viewModelProvider()[T::class.java]
+inline fun <reified T : ViewModel> Fragment.activityViewModel() =
+    requireActivity().viewModel<T>()
 
 inline fun <reified T : ViewModel> Fragment.activityViewModel(
     factory: ViewModelProvider.Factory
-) = requireActivity().viewModelProvider(factory)[T::class.java]
+) = requireActivity().viewModel<T>(factory)
 
 inline fun <reified T : ViewModel> Fragment.activityViewModel(
     key: String
-) = requireActivity().viewModelProvider()[key, T::class.java]
+) = requireActivity().viewModel<T>(key)
 
 inline fun <reified T : ViewModel> Fragment.activityViewModel(
     key: String,
     factory: ViewModelProvider.Factory
-) = requireActivity().viewModelProvider(factory).get(key, T::class.java)
+) = requireActivity().viewModel<T>(key, factory)
 
 inline fun <reified T : ViewModel> Fragment.bindActivityViewModel() =
     unsafeLazy { activityViewModel<T>() }
@@ -83,21 +83,21 @@ inline fun <reified T : ViewModel> Fragment.bindActivityViewModel(
     key: String
 ) = unsafeLazy { activityViewModel<T>(key) }
 
-inline fun <reified T : ViewModel> Fragment.parentViewModel(): T =
-    requireParentFragment().viewModelProvider()[T::class.java]
+inline fun <reified T : ViewModel> Fragment.parentViewModel() =
+    requireParentFragment().viewModel<T>()
 
 inline fun <reified T : ViewModel> Fragment.parentViewModel(
     factory: ViewModelProvider.Factory
-) = requireParentFragment().viewModelProvider(factory)[T::class.java]
+) = requireParentFragment().viewModel<T>(factory)
 
 inline fun <reified T : ViewModel> Fragment.parentViewModel(
     key: String
-) = requireParentFragment().viewModelProvider()[key, T::class.java]
+) = requireParentFragment().viewModel<T>()
 
 inline fun <reified T : ViewModel> Fragment.parentViewModel(
     key: String,
     factory: ViewModelProvider.Factory
-) = requireParentFragment().viewModelProvider(factory).get(key, T::class.java)
+) = requireParentFragment().viewModel<T>(key, factory)
 
 inline fun <reified T : ViewModel> Fragment.bindParentViewModel() =
     unsafeLazy { parentViewModel<T>() }
@@ -110,21 +110,21 @@ inline fun <reified T : ViewModel> Fragment.bindParentViewModel(
     key: String
 ) = unsafeLazy { parentViewModel<T>(key) }
 
-inline fun <reified T : ViewModel> Fragment.targetViewModel(): T =
-    requireTargetFragment().viewModelProvider()[T::class.java]
+inline fun <reified T : ViewModel> Fragment.targetViewModel() =
+    requireTargetFragment().viewModel<T>()
 
 inline fun <reified T : ViewModel> Fragment.targetViewModel(
     factory: ViewModelProvider.Factory
-) = requireTargetFragment().viewModelProvider(factory)[T::class.java]
+) = requireTargetFragment().viewModel<T>(factory)
 
 inline fun <reified T : ViewModel> Fragment.targetViewModel(
     key: String
-) = requireTargetFragment().viewModelProvider()[key, T::class.java]
+) = requireTargetFragment().viewModel<T>(key)
 
 inline fun <reified T : ViewModel> Fragment.targetViewModel(
     key: String,
     factory: ViewModelProvider.Factory
-) = requireTargetFragment().viewModelProvider(factory).get(key, T::class.java)
+) = requireTargetFragment().viewModel<T>(key, factory)
 
 inline fun <reified T : ViewModel> Fragment.bindTargetViewModel() =
     unsafeLazy { targetViewModel<T>() }
