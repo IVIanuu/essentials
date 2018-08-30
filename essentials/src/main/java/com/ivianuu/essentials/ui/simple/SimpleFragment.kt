@@ -3,6 +3,7 @@ package com.ivianuu.essentials.ui.simple
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.support.design.widget.CoordinatorLayout
+import android.support.v4.app.isInBackstack
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import android.view.View
@@ -20,20 +21,17 @@ abstract class SimpleFragment : StateFragment() {
     override val layoutRes = R.layout.fragment_simple
 
     protected open val toolbarMenuRes = 0
-    protected open val toolbarBackButton = true
+    protected open val toolbarBackButton get() = isInBackstack
     protected open val lightToolbar: Boolean get() = primaryColor().isLight
 
     protected val epoxyController by unsafeLazy { epoxyController() }
 
     open val coordinatorLayout
-        get() =
-            requireView().findViewById<CoordinatorLayout>(R.id.coordinator_layout)
+        get() = requireView().findViewById<CoordinatorLayout>(R.id.coordinator_layout)
     open val list
-        get() =
-            requireView().findViewById<EpoxyRecyclerView>(R.id.list)
+        get() = requireView().findViewById<EpoxyRecyclerView>(R.id.list)
     open val toolbar
-        get() =
-            requireView().findViewById<Toolbar>(R.id.toolbar)
+        get() = requireView().findViewById<Toolbar>(R.id.toolbar)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
