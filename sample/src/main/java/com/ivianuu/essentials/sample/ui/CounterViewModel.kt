@@ -47,6 +47,10 @@ class CounterViewModel @Inject constructor(private val router: Router) :
     fun rootScreenClicked() {
         router.backToRoot()
     }
+
+    fun listScreenClicked() {
+        router.navigateTo(ListDestination)
+    }
 }
 
 data class CounterState(

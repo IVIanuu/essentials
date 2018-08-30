@@ -47,4 +47,10 @@
         android:layout_height="wrap_content"
         android:text="Root Screen" />
 
+    <android.support.design.button.MaterialButton
+        android:id="@+id/list_screen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="List Screen" />
+
 </LinearLayout>

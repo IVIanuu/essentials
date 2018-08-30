@@ -55,6 +55,7 @@ class CounterFragment : StateFragment() {
         screen_up.setOnClickListener { viewModel.screenUpClicked() }
         screen_down.setOnClickListener { viewModel.screenDownClicked() }
         root_screen.setOnClickListener { viewModel.rootScreenClicked() }
+        list_screen.setOnClickListener { viewModel.listScreenClicked() }
     }
 
     override fun invalidate() {
