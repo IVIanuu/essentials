@@ -26,12 +26,23 @@ abstract class SimpleFragment : StateFragment() {
 
     protected val epoxyController by unsafeLazy { epoxyController() }
 
-    open val coordinatorLayout
-        get() = requireView().findViewById<CoordinatorLayout>(R.id.coordinator_layout)
-    open val list
-        get() = requireView().findViewById<EpoxyRecyclerView>(R.id.list)
-    open val toolbar
-        get() = requireView().findViewById<Toolbar>(R.id.toolbar)
+    val coordinatorLayout
+        get() =
+            _coordinatorLayout ?: throw IllegalStateException("no coordinator layout found")
+    private val _coordinatorLayout: CoordinatorLayout?
+        get() = view?.findViewById(R.id.coordinator_layout)
+
+    val list
+        get() =
+            _list ?: throw IllegalStateException("no list found")
+    private val _list: EpoxyRecyclerView?
+        get() = view?.findViewById(R.id.list)
+
+    val toolbar
+        get() =
+            _toolbar ?: throw IllegalStateException("no toolbar found")
+    private val _toolbar: Toolbar?
+        get() = view?.findViewById(R.id.toolbar)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,7 +53,7 @@ abstract class SimpleFragment : StateFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        with(toolbar) {
+        _toolbar?.run {
             if (toolbarMenuRes != 0) {
                 inflateMenu(toolbarMenuRes)
                 setOnMenuItemClickListener { onOptionsItemSelected(it) }
@@ -64,7 +75,7 @@ abstract class SimpleFragment : StateFragment() {
                 .forEach { it.icon?.tint(subTitleColor) }
         }
 
-        list.setController(epoxyController)
+        _list?.setController(epoxyController)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -74,7 +85,6 @@ abstract class SimpleFragment : StateFragment() {
 
     override fun onDestroyView() {
         epoxyController.cancelPendingModelBuild()
-        list.adapter = null
         super.onDestroyView()
     }
 
