@@ -16,13 +16,14 @@
 
 package com.ivianuu.essentials.util.ext
 
+import android.os.Handler
 import android.support.v7.widget.RecyclerView
 import com.airbnb.epoxy.*
 import com.ivianuu.epoxyprefs.PreferenceEpoxyController
 import com.ivianuu.epoxyprefs.preferenceEpoxyController
 
 fun epoxyController(buildModels: EpoxyController.() -> Unit): EpoxyController {
-    return object : EpoxyController() {
+    return object : EpoxyController(handler(true), handler(false)) {
         override fun buildModels() {
             buildModels.invoke(this)
         }
@@ -30,7 +31,7 @@ fun epoxyController(buildModels: EpoxyController.() -> Unit): EpoxyController {
 }
 
 fun <T> typedEpoxyController(buildModels: TypedEpoxyController<T>.(data: T) -> Unit): TypedEpoxyController<T> {
-    return object : TypedEpoxyController<T>() {
+    return object : TypedEpoxyController<T>(handler(true), handler(false)) {
         override fun buildModels(data: T) {
             buildModels.invoke(this, data)
         }
@@ -38,7 +39,7 @@ fun <T> typedEpoxyController(buildModels: TypedEpoxyController<T>.(data: T) -> U
 }
 
 fun <T, U> typed2EpoxyController(buildModels: Typed2EpoxyController<T, U>.(data1: T, data2: U) -> Unit): Typed2EpoxyController<T, U> {
-    return object : Typed2EpoxyController<T, U>() {
+    return object : Typed2EpoxyController<T, U>(handler(true), handler(false)) {
         override fun buildModels(data1: T, data2: U) {
             buildModels.invoke(this, data1, data2)
         }
@@ -46,7 +47,7 @@ fun <T, U> typed2EpoxyController(buildModels: Typed2EpoxyController<T, U>.(data1
 }
 
 fun <T, U, V> typed3EpoxyController(buildModels: Typed3EpoxyController<T, U, V>.(data1: T, data2: U, data3: V) -> Unit): Typed3EpoxyController<T, U, V> {
-    return object : Typed3EpoxyController<T, U, V>() {
+    return object : Typed3EpoxyController<T, U, V>(handler(true), handler(false)) {
         override fun buildModels(data1: T, data2: U, data3: V) {
             buildModels.invoke(this, data1, data2, data3)
         }
@@ -54,7 +55,7 @@ fun <T, U, V> typed3EpoxyController(buildModels: Typed3EpoxyController<T, U, V>.
 }
 
 fun <T, U, V, W> typed4EpoxyController(buildModels: Typed4EpoxyController<T, U, V, W>.(data1: T, data2: U, data3: V, data4: W) -> Unit): Typed4EpoxyController<T, U, V, W> {
-    return object : Typed4EpoxyController<T, U, V, W>() {
+    return object : Typed4EpoxyController<T, U, V, W>(handler(true), handler(false)) {
         override fun buildModels(data1: T, data2: U, data3: V, data4: W) {
             buildModels.invoke(this, data1, data2, data3, data4)
         }
@@ -101,3 +102,7 @@ fun <T, U, V, W> RecyclerView.setTyped3EpoxyController(buildModels: Typed4EpoxyC
 
 fun RecyclerView.setPreferenceController(buildsModels: PreferenceEpoxyController.() -> Unit) =
     setEpoxyController(preferenceEpoxyController(context, buildsModels))
+
+@PublishedApi
+internal fun handler(async: Boolean): Handler =
+    if (async) EpoxyAsyncUtil.getAsyncBackgroundHandler() else EpoxyAsyncUtil.MAIN_THREAD_HANDLER

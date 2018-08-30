@@ -23,7 +23,6 @@ package com.ivianuu.essentials.util.ext
 import android.support.v7.widget.Toolbar
 import android.view.View
 import com.ivianuu.epoxyprefs.PreferenceModel
-import com.ivianuu.epoxyprefs.clickListener
 import com.ivianuu.traveler.Router
 
 inline fun Toolbar.exitOnNavigationClick(router: Router) {
