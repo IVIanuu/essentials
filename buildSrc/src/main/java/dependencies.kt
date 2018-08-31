@@ -19,7 +19,6 @@ object Versions {
     const val epoxy = "2.16.4"
     const val epoxyPrefs = "cf8f1d2cb6"
     const val fabric = "2.7.1"
-    const val fastScroll = "1.0.17"
     const val glide = "4.8.0"
     const val kotlin = "1.2.61"
     const val ktx = "0.3"
@@ -81,8 +80,6 @@ object Deps {
     const val epoxyPrefs = "com.github.IVIanuu:epoxy-prefs:${Versions.epoxyPrefs}"
 
     const val fabric = "com.crashlytics.sdk.android:crashlytics:${Versions.fabric}@aar"
-
-    const val fastScroll = "com.simplecityapps:recyclerview-fastscroll:${Versions.fastScroll}"
 
     const val glide = "com.github.bumptech.glide:glide:${Versions.glide}"
 

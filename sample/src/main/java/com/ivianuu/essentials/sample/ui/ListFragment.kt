@@ -39,6 +39,8 @@ class ListFragment : SimpleFragment() {
 
     override val toolbarMenuRes = R.menu.fragment_list
 
+    override val showFastScroller = true
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -100,8 +102,8 @@ class ListViewModel @Inject constructor() : StateViewModel<Result<List<String>>>
     }
 
     private fun generateList() = when (listOf(1, 2, 3).shuffled().first()) {
-        1 -> (0..5000).map { "Title: $it" }
-        2 -> (0..10).map { "Title: $it" }
+        1 -> (0..500).map { "Title: $it" }
+        2 -> (0..20).map { "Title: $it" }
         else -> emptyList()
     }
 }

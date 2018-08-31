@@ -67,8 +67,6 @@ dependencies {
         transitive = true
     }
 
-    api Deps.fastScroll
-
     api Deps.glide
 
     api Deps.kotlinStdLib
