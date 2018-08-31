@@ -22,7 +22,13 @@ internal class StateStore<S : Any>(scopeProvider: ScopeProvider) {
 
     val observable: Observable<S> = subject.distinctUntilChanged()
 
-    val state get() = subject.requireValue()
+    internal val state: S
+        get() {
+            requireInitialState()
+            return subject.requireValue()
+        }
+
+    private val hasInitialState = subject.value != null
 
     init {
         flushQueueSubject
@@ -37,15 +43,18 @@ internal class StateStore<S : Any>(scopeProvider: ScopeProvider) {
     }
 
     fun setInitialState(initialState: S) {
+        if (hasInitialState) throw IllegalStateException("initial state already set")
         subject.onNext(initialState)
     }
 
     fun get(block: (S) -> Unit) {
+        requireInitialState()
         jobs.enqueueGetStateBlock(block)
         flushQueueSubject.onNext(Unit)
     }
 
     fun set(stateReducer: S.() -> S) {
+        if (!hasInitialState) throw IllegalStateException("set initial state must be called first")
         jobs.enqueueSetStateBlock(stateReducer)
         flushQueueSubject.onNext(Unit)
     }
@@ -71,6 +80,10 @@ internal class StateStore<S : Any>(scopeProvider: ScopeProvider) {
         var e: Throwable? = throwable
         while (e?.cause != null) e = e.cause
         e?.let { throw it }
+    }
+
+    private fun requireInitialState() {
+        if (!hasInitialState) throw IllegalStateException("set initial state must be called first")
     }
 
     private class Jobs<S> {
