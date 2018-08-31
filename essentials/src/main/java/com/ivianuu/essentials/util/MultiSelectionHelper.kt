@@ -34,7 +34,7 @@ class MultiSelectionHelper<T>(private val onChanged: (selectedItems: List<T>) ->
         onChanged.invoke(selectedItems)
     }
 
-    fun setItemsSelected(items: List<T>, selected: Boolean) {
+    fun setItemsSelected(items: Collection<T>, selected: Boolean) {
         if (selected) {
             _selectedItems.addAll(items)
         } else {

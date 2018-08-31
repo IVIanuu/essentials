@@ -26,27 +26,28 @@ abstract class SimpleFragment : StateFragment() {
 
     protected val epoxyController by unsafeLazy { epoxyController() }
 
-    val appBar
-        get() = _appBar ?: throw IllegalStateException("no app bar layout")
-    private val _appBar: AppBarLayout?
+    val appBar get() = optionalAppBar ?: throw IllegalStateException("no app bar layout")
+
+    val optionalAppBar: AppBarLayout?
         get() = view?.findViewById(R.id.app_bar)
 
     val coordinatorLayout
-        get() =
-            _coordinatorLayout ?: throw IllegalStateException("no coordinator layout found")
-    private val _coordinatorLayout: CoordinatorLayout?
+        get() = optionalCoordinatorLayout
+            ?: throw IllegalStateException("no coordinator layout found")
+
+    val optionalCoordinatorLayout: CoordinatorLayout?
         get() = view?.findViewById(R.id.coordinator_layout)
 
-    val list
-        get() =
-            _list ?: throw IllegalStateException("no list found")
-    private val _list: EpoxyRecyclerView?
-        get() = view?.findViewById(R.id.list)
+    val recyclerView
+        get() = optionalRecyclerView ?: throw IllegalStateException("no recycler view found")
+
+    val optionalRecyclerView: EpoxyRecyclerView?
+        get() = view?.findViewById(R.id.recycler_view)
 
     val toolbar
-        get() =
-            _toolbar ?: throw IllegalStateException("no toolbar found")
-    private val _toolbar: Toolbar?
+        get() = optionalToolbar ?: throw IllegalStateException("no toolbar found")
+
+    val optionalToolbar: Toolbar?
         get() = view?.findViewById(R.id.toolbar)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,7 +59,7 @@ abstract class SimpleFragment : StateFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        _toolbar?.run {
+        optionalToolbar?.run {
             if (toolbarMenuRes != 0) {
                 inflateMenu(toolbarMenuRes)
                 setOnMenuItemClickListener { onOptionsItemSelected(it) }
@@ -80,7 +81,7 @@ abstract class SimpleFragment : StateFragment() {
                 .forEach { it.icon?.tint(subTitleColor) }
         }
 
-        _list?.setController(epoxyController)
+        optionalRecyclerView?.setController(epoxyController)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -97,6 +98,7 @@ abstract class SimpleFragment : StateFragment() {
         epoxyController.requestModelBuild()
     }
 
-    protected open fun epoxyController(): EpoxyController = epoxyController {}
+    protected open fun epoxyController(): EpoxyController = epoxyController {
+    }
 
 }

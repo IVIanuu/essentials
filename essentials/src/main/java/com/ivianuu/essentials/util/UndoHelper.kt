@@ -33,7 +33,7 @@ class UndoHelper<T>(private val callback: Callback<T>) {
     fun isPendingAction(item: T) =
         _pendingActionItems.contains(item)
 
-    fun enqueueAction(block: Int, items: List<T> = emptyList()) {
+    fun enqueueAction(block: Int, items: Collection<T> = emptyList()) {
         commitPendingAction()
         pendingAction = block
         _pendingActionItems.addAll(items)

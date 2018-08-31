@@ -61,4 +61,6 @@ class CounterFragment : StateFragment() {
     override fun invalidate() {
         withState(viewModel) { count.text = "Screen: ${it.screen}, Count: ${it.count}" }
     }
+
+
 }

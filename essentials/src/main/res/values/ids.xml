@@ -2,8 +2,8 @@
 <resources>
     <item name="app_bar" type="id" />
     <item name="coordinator_layout" type="id" />
-    <item name="list" type="id" />
     <item name="progress_bar" type="id" />
+    <item name="recycler_view" type="id" />
     <item name="text" type="id" />
     <item name="toolbar" type="id" />
 </resources>

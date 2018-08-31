@@ -33,7 +33,7 @@ abstract class PrefsFragment : SimpleFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         if (usePreferenceDividerDecoration) {
-            list.addItemDecoration(PreferenceDividerDecoration(requireContext()))
+            optionalRecyclerView?.addItemDecoration(PreferenceDividerDecoration(requireContext()))
         }
     }
 
