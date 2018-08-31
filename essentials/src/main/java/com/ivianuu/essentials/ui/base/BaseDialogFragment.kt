@@ -67,9 +67,9 @@ abstract class BaseDialogFragment : AppCompatDialogFragment(),
         super.onCreateView(inflater, container, savedInstanceState)
     }
 
-    override fun onStop() {
+    override fun onDestroyView() {
         disposables.clear()
-        super.onStop()
+        super.onDestroyView()
     }
 
     override fun supportFragmentInjector(): AndroidInjector<Fragment> = supportFragmentInjector
