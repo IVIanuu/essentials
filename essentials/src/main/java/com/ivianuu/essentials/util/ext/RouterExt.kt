@@ -17,10 +17,7 @@
 package com.ivianuu.essentials.util.ext
 
 import android.content.Intent
-import com.ivianuu.essentials.ui.common.ActivityResult
-import com.ivianuu.essentials.ui.common.ActivityResultDestination
-import com.ivianuu.essentials.ui.common.PermissionDestination
-import com.ivianuu.essentials.ui.common.RequestCodeGenerator
+import com.ivianuu.essentials.ui.common.*
 import com.ivianuu.essentials.ui.traveler.destination.ResultDestination
 import com.ivianuu.traveler.ResultListener
 import com.ivianuu.traveler.Router
@@ -94,5 +91,6 @@ fun Router.requestPermissions(
         resultCode
     )
 
-    return navigateToForResult(destination)
+    return navigateToForResult<PermissionResult>(destination)
+        .map { it.allGranted }
 }
