@@ -6,11 +6,14 @@ import com.ivianuu.essentials.util.ext.MAIN
 import com.uber.autodispose.autoDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Consumer
+import io.reactivex.schedulers.Schedulers
 
 /**
  * State view model
  */
 abstract class StateViewModel<S : Any>(initialState: S? = null) : BaseViewModel() {
+
+    private val backgroundScheduler = Schedulers.single()
 
     private val stateStore = StateStore<S>(scopeProvider)
 
@@ -53,5 +56,4 @@ abstract class StateViewModel<S : Any>(initialState: S? = null) : BaseViewModel(
             .autoDisposable(scopeProvider)
             .subscribeWith(lifecycleAwareObserver)
     }
-
 }

@@ -17,7 +17,7 @@ import javax.inject.Inject
 
 @Destination(AppPickerDialog::class)
 data class AppPickerDestination(
-    val title: String? = null,
+    val title: CharSequence? = null,
     override val resultCode: Int
 ) : ResultDestination
 
