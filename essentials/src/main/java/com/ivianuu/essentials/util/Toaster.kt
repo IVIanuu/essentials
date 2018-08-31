@@ -32,7 +32,7 @@ class Toaster @Inject constructor(private val app: Application) {
         handler.post { app.toastError(messageRes, *args) }
     }
 
-    fun toastError(message: String) {
+    fun toastError(message: CharSequence) {
         handler.post { app.toastError(message) }
     }
 
@@ -40,7 +40,7 @@ class Toaster @Inject constructor(private val app: Application) {
         handler.post { app.toastInfo(messageRes, *args) }
     }
 
-    fun toastInfo(message: String) {
+    fun toastInfo(message: CharSequence) {
         handler.post { app.toastInfo(message) }
     }
 
@@ -48,7 +48,7 @@ class Toaster @Inject constructor(private val app: Application) {
         handler.post { app.toastNormal(messageRes, *args) }
     }
 
-    fun toastNormal(message: String) {
+    fun toastNormal(message: CharSequence) {
         handler.post { app.toastNormal(message) }
     }
 
@@ -56,7 +56,7 @@ class Toaster @Inject constructor(private val app: Application) {
         handler.post { app.toastSuccess(messageRes, *args) }
     }
 
-    fun toastSuccess(message: String) {
+    fun toastSuccess(message: CharSequence) {
         handler.post { app.toastSuccess(message) }
     }
 
@@ -64,7 +64,7 @@ class Toaster @Inject constructor(private val app: Application) {
         handler.post { app.toastWarning(messageRes, *args) }
     }
 
-    fun toastWarning(message: String) {
+    fun toastWarning(message: CharSequence) {
         handler.post { app.toastWarning(message) }
     }
 }

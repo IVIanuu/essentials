@@ -25,61 +25,61 @@ import android.widget.Toast
 import com.ivianuu.essentials.util.ContextAware
 import es.dmoral.toasty.Toasty
 
-inline fun Context.toastError(message: String): Toast =
+inline fun Context.toastError(message: CharSequence): Toast =
     Toasty.error(this, message).apply { show() }
 
 inline fun Context.toastError(messageRes: Int, vararg args: Any) =
     toastError(getString(messageRes, *args))
 
-inline fun Context.toastInfo(message: String): Toast =
+inline fun Context.toastInfo(message: CharSequence): Toast =
     Toasty.info(this, message).apply { show() }
 
 inline fun Context.toastInfo(messageRes: Int, vararg args: Any) =
     toastInfo(getString(messageRes, *args))
 
-inline fun Context.toastNormal(message: String): Toast =
+inline fun Context.toastNormal(message: CharSequence): Toast =
     Toasty.normal(this, message).apply { show() }
 
 inline fun Context.toastNormal(messageRes: Int, vararg args: Any) =
     toastNormal(getString(messageRes, *args))
 
-inline fun Context.toastSuccess(message: String): Toast =
+inline fun Context.toastSuccess(message: CharSequence): Toast =
     Toasty.success(this, message).apply { show() }
 
 inline fun Context.toastSuccess(messageRes: Int, vararg args: Any) =
     toastSuccess(getString(messageRes, *args))
 
-inline fun Context.toastWarning(message: String): Toast =
+inline fun Context.toastWarning(message: CharSequence): Toast =
     Toasty.warning(this, message).apply { show() }
 
 inline fun Context.toastWarning(messageRes: Int, vararg args: Any) =
     toastWarning(getString(messageRes, *args))
 
-inline fun ContextAware.toastError(message: String) =
+inline fun ContextAware.toastError(message: CharSequence) =
     providedContext.toastError(message)
 
 inline fun ContextAware.toastError(messageRes: Int, vararg args: Any) =
     providedContext.toastError(messageRes, *args)
 
-inline fun ContextAware.toastInfo(message: String) =
+inline fun ContextAware.toastInfo(message: CharSequence) =
     providedContext.toastInfo(message)
 
 inline fun ContextAware.toastInfo(messageRes: Int, vararg args: Any) =
     providedContext.toastInfo(messageRes, *args)
 
-inline fun ContextAware.toastNormal(message: String) =
+inline fun ContextAware.toastNormal(message: CharSequence) =
     providedContext.toastNormal(message)
 
 inline fun ContextAware.toastNormal(messageRes: Int, vararg args: Any) =
     providedContext.toastNormal(messageRes, *args)
 
-inline fun ContextAware.toastSuccess(message: String) =
+inline fun ContextAware.toastSuccess(message: CharSequence) =
     providedContext.toastSuccess(message)
 
 inline fun ContextAware.toastSuccess(messageRes: Int, vararg args: Any) =
     providedContext.toastSuccess(messageRes, *args)
 
-inline fun ContextAware.toastWarning(message: String) =
+inline fun ContextAware.toastWarning(message: CharSequence) =
     providedContext.toastWarning(message)
 
 inline fun ContextAware.toastWarning(messageRes: Int, vararg args: Any) =
