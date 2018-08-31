@@ -16,9 +16,13 @@
 
 package com.ivianuu.essentials.util.ext
 
+import android.support.v4.text.PrecomputedTextCompat
+import android.support.v4.widget.TextViewCompat
+import android.support.v7.widget.AppCompatTextView
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.TextView
+import java.util.concurrent.Executor
 
 fun TextView.doBeforeTextChanged(action: (s: CharSequence, start: Int, count: Int, after: Int) -> Unit) =
     addTextChangedListener(beforeTextChanged = action)
@@ -49,4 +53,13 @@ fun TextView.addTextChangedListener(
     }
     addTextChangedListener(textWatcher)
     return textWatcher
+}
+
+internal fun TextView.setTextFuture(
+    text: CharSequence,
+    params: PrecomputedTextCompat.Params = TextViewCompat.getTextMetricsParams(this),
+    executor: Executor? = null
+) {
+    (this as? AppCompatTextView)
+        ?.setTextFuture(PrecomputedTextCompat.getTextFuture(text, params, executor))
 }
