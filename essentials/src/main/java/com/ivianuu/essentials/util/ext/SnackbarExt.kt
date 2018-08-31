@@ -19,11 +19,11 @@ package com.ivianuu.essentials.util.ext
 import android.support.design.widget.BaseTransientBottomBar
 import android.support.design.widget.Snackbar
 
-fun Snackbar.doOnShown(action: (transientBottomBar: Snackbar) -> Unit) =
-    addCallback(onShown = action)
+fun Snackbar.doOnShown(block: (transientBottomBar: Snackbar) -> Unit) =
+    addCallback(onShown = block)
 
-fun Snackbar.doOnDismissed(action: (transientBottomBar: Snackbar, event: Int) -> Unit) =
-    addCallback(onDismissed = action)
+fun Snackbar.doOnDismissed(block: (transientBottomBar: Snackbar, event: Int) -> Unit) =
+    addCallback(onDismissed = block)
 
 fun Snackbar.addCallback(
     onShown: ((transientBottomBar: Snackbar) -> Unit)? = null,

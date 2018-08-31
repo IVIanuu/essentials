@@ -26,11 +26,11 @@ inline fun <reified T : RecyclerView.LayoutManager> RecyclerView.layoutManager()
 inline fun <reified T : RecyclerView.Adapter<*>> RecyclerView.adapter() =
     adapter as T
 
-fun RecyclerView.doOnScrollStateChanged(action: ((recyclerView: RecyclerView, newState: Int) -> Unit)?) =
-    addOnScrollListener(onScrollStateChanged = action)
+fun RecyclerView.doOnScrollStateChanged(block: ((recyclerView: RecyclerView, newState: Int) -> Unit)?) =
+    addOnScrollListener(onScrollStateChanged = block)
 
-fun RecyclerView.doOnScrolled(action: ((recyclerView: RecyclerView, dx: Int, dy: Int) -> Unit)?) =
-    addOnScrollListener(onScrolled = action)
+fun RecyclerView.doOnScrolled(block: ((recyclerView: RecyclerView, dx: Int, dy: Int) -> Unit)?) =
+    addOnScrollListener(onScrolled = block)
 
 fun RecyclerView.addOnScrollListener(
     onScrollStateChanged: ((recyclerView: RecyclerView, newState: Int) -> Unit)? = null,
@@ -49,14 +49,14 @@ fun RecyclerView.addOnScrollListener(
     return listener
 }
 
-fun RecyclerView.doOnItemInterceptTouchEvent(action: (rv: RecyclerView, e: MotionEvent) -> Boolean) =
-    addOnItemTouchListener(onInterceptTouchEvent = action)
+fun RecyclerView.doOnItemInterceptTouchEvent(block: (rv: RecyclerView, e: MotionEvent) -> Boolean) =
+    addOnItemTouchListener(onInterceptTouchEvent = block)
 
-fun RecyclerView.doOnItemTouchEvent(action: (rv: RecyclerView, e: MotionEvent) -> Unit) =
-    addOnItemTouchListener(onTouchEvent = action)
+fun RecyclerView.doOnItemTouchEvent(block: (rv: RecyclerView, e: MotionEvent) -> Unit) =
+    addOnItemTouchListener(onTouchEvent = block)
 
-fun RecyclerView.doOnItemRequestDisallowInterceptTouchEvent(action: (disallowIntercept: Boolean) -> Unit) =
-    addOnItemTouchListener(onRequestDisallowInterceptTouchEvent = action)
+fun RecyclerView.doOnItemRequestDisallowInterceptTouchEvent(block: (disallowIntercept: Boolean) -> Unit) =
+    addOnItemTouchListener(onRequestDisallowInterceptTouchEvent = block)
 
 fun RecyclerView.addOnItemTouchListener(
     onInterceptTouchEvent: ((rv: RecyclerView, e: MotionEvent) -> Boolean)? = null,
@@ -79,11 +79,11 @@ fun RecyclerView.addOnItemTouchListener(
     return listener
 }
 
-fun RecyclerView.doOnChildViewAttachedToWindow(action: (view: View) -> Unit) =
-    addOnChildAttachStateChangeListener(onChildViewAttachedToWindow = action)
+fun RecyclerView.doOnChildViewAttachedToWindow(block: (view: View) -> Unit) =
+    addOnChildAttachStateChangeListener(onChildViewAttachedToWindow = block)
 
-fun RecyclerView.doOnChildViewDetachedFromWindow(action: (view: View) -> Unit) =
-    addOnChildAttachStateChangeListener(onChildViewDetachedFromWindow = action)
+fun RecyclerView.doOnChildViewDetachedFromWindow(block: (view: View) -> Unit) =
+    addOnChildAttachStateChangeListener(onChildViewDetachedFromWindow = block)
 
 fun RecyclerView.addOnChildAttachStateChangeListener(
     onChildViewAttachedToWindow: ((view: View) -> Unit)? = null,
@@ -102,20 +102,20 @@ fun RecyclerView.addOnChildAttachStateChangeListener(
     return listener
 }
 
-fun RecyclerView.Adapter<*>.doOnChanged(action: () -> Unit) =
-    registerAdapterDataObserver(onChanged = action)
+fun RecyclerView.Adapter<*>.doOnChanged(block: () -> Unit) =
+    registerAdapterDataObserver(onChanged = block)
 
-fun RecyclerView.Adapter<*>.doOnItemRangeChanged(action: (positionStart: Int, itemCount: Int, payload: Any?) -> Unit) =
-    registerAdapterDataObserver(onItemRangeChanged = action)
+fun RecyclerView.Adapter<*>.doOnItemRangeChanged(block: (positionStart: Int, itemCount: Int, payload: Any?) -> Unit) =
+    registerAdapterDataObserver(onItemRangeChanged = block)
 
-fun RecyclerView.Adapter<*>.doOnItemRangeInserted(action: (positionStart: Int, itemCount: Int) -> Unit) =
-    registerAdapterDataObserver(onItemRangeInserted = action)
+fun RecyclerView.Adapter<*>.doOnItemRangeInserted(block: (positionStart: Int, itemCount: Int) -> Unit) =
+    registerAdapterDataObserver(onItemRangeInserted = block)
 
-fun RecyclerView.Adapter<*>.doOnItemRangeRemoved(action: (positionStart: Int, itemCount: Int) -> Unit) =
-    registerAdapterDataObserver(onItemRangeRemoved = action)
+fun RecyclerView.Adapter<*>.doOnItemRangeRemoved(block: (positionStart: Int, itemCount: Int) -> Unit) =
+    registerAdapterDataObserver(onItemRangeRemoved = block)
 
-fun RecyclerView.Adapter<*>.doOnItemRangeMoved(action: (fromPosition: Int, toPosition: Int, itemCount: Int) -> Unit) =
-    registerAdapterDataObserver(onItemRangeMoved = action)
+fun RecyclerView.Adapter<*>.doOnItemRangeMoved(block: (fromPosition: Int, toPosition: Int, itemCount: Int) -> Unit) =
+    registerAdapterDataObserver(onItemRangeMoved = block)
 
 fun RecyclerView.Adapter<*>.registerAdapterDataObserver(
     onChanged: (() -> Unit?)? = null,

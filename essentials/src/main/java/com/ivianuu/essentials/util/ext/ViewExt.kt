@@ -28,11 +28,11 @@ inline val View.activity: Activity?
 
 inline fun View.requireActivity() = context.findActivityOrThrow()
 
-fun View.doOnViewAttachedToWindow(action: ((v: View) -> Unit)?) =
-    addOnAttachStateChangeListener(onViewAttachedToWindow = action)
+fun View.doOnViewAttachedToWindow(block: ((v: View) -> Unit)?) =
+    addOnAttachStateChangeListener(onViewAttachedToWindow = block)
 
-fun View.doOnViewDetachedFromWindow(action: ((v: View) -> Unit)?) =
-    addOnAttachStateChangeListener(onViewDetachedFromWindow = action)
+fun View.doOnViewDetachedFromWindow(block: ((v: View) -> Unit)?) =
+    addOnAttachStateChangeListener(onViewDetachedFromWindow = block)
 
 fun View.addOnAttachStateChangeListener(
     onViewAttachedToWindow: ((v: View) -> Unit)? = null,

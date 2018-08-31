@@ -21,11 +21,68 @@ package com.ivianuu.essentials.util
  */
 sealed class Option<T : Any> {
     data class Some<T : Any>(val value: T) : Option<T>()
-    class None<T : Any> : Option<Nothing>() {
+    object None : Option<Nothing>() {
         override fun toString() = "None"
-
-        companion object {
-            val INSTANCE = None<Any>()
-        }
     }
+}
+
+inline val <T : Any> Option<T>.isSome
+    get() = this is Option.Some
+
+fun <T : Any> T?.toOption() = if (this != null) {
+    Option.Some(this)
+} else {
+    Option.None
+}
+
+inline fun <T : Any> optionOf(value: T?) = value.toOption()
+
+inline fun <T : Any> absent(): Option<T> = Option.None as Option<T>
+
+inline fun <T : Any> Option<T>.get() = if (this is Option.Some) {
+    this.value
+} else {
+    null
+}
+
+inline fun <T : Any> Option<T>.getOrDefault(other: T) = get() ?: other
+
+inline fun <T : Any> Option<T>.getOrDefault(other: () -> T) = get() ?: other.invoke()
+
+inline fun <T : Any, X : Throwable> Option<T>.getOrThrow(throwable: X) = get() ?: throw throwable
+
+inline fun <T : Any, X : Throwable> Option<T>.getOrThrow(throwable: () -> X) =
+    get() ?: throw throwable.invoke()
+
+inline fun <T : Any> Option<T>.require() =
+    get() ?: IllegalStateException("called require but is none")
+
+inline fun <T : Any, U : Any> Option<T>.map(mapper: (T) -> U) = if (this is Option.Some) {
+    optionOf(mapper.invoke(value))
+} else {
+    absent()
+}
+
+inline fun <T : Any, U : Any> Option<T>.flatMap(mapper: (T) -> Option<U>) =
+    if (this is Option.Some) {
+        mapper.invoke(value)
+    } else {
+        absent()
+    }
+
+inline fun <T : Any> Option<T>.filter(predicate: (T) -> Boolean) =
+    if (this is Option.Some && predicate.invoke(value)) {
+        this
+    } else {
+        absent<T>()
+    }
+
+inline fun <T : Any> Option<T>.ifSome(consumer: (T) -> Unit) {
+    if (this is Option.Some) {
+        consumer.invoke(value)
+    }
+}
+
+inline fun <T : Any> Option<T>.ifNone(func: () -> Unit) {
+    if (!isSome) func()
 }

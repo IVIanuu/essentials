@@ -18,14 +18,14 @@ package com.ivianuu.essentials.util.ext
 
 import android.support.design.widget.TabLayout
 
-fun TabLayout.doOnTabSelected(action: (tab: TabLayout.Tab) -> Unit) =
-    addOnTabSelectedListener(onTabSelected = action)
+fun TabLayout.doOnTabSelected(block: (tab: TabLayout.Tab) -> Unit) =
+    addOnTabSelectedListener(onTabSelected = block)
 
-fun TabLayout.doOnTabUnselected(action: (tab: TabLayout.Tab) -> Unit) =
-    addOnTabSelectedListener(onTabUnselected = action)
+fun TabLayout.doOnTabUnselected(block: (tab: TabLayout.Tab) -> Unit) =
+    addOnTabSelectedListener(onTabUnselected = block)
 
-fun TabLayout.doOnTabReselected(action: (tab: TabLayout.Tab) -> Unit) =
-    addOnTabSelectedListener(onTabReselected = action)
+fun TabLayout.doOnTabReselected(block: (tab: TabLayout.Tab) -> Unit) =
+    addOnTabSelectedListener(onTabReselected = block)
 
 fun TabLayout.addOnTabSelectedListener(
     onTabSelected: ((tab: TabLayout.Tab) -> Unit)? = null,

@@ -33,9 +33,9 @@ class UndoHelper<T>(private val callback: Callback<T>) {
     fun isPendingAction(item: T) =
         _pendingActionItems.contains(item)
 
-    fun enqueueAction(action: Int, items: List<T> = emptyList()) {
+    fun enqueueAction(block: Int, items: List<T> = emptyList()) {
         commitPendingAction()
-        pendingAction = action
+        pendingAction = block
         _pendingActionItems.addAll(items)
     }
 
@@ -57,7 +57,7 @@ class UndoHelper<T>(private val callback: Callback<T>) {
     }
 
     interface Callback<T> {
-        fun commitAction(action: Int, items: List<T>)
+        fun commitAction(block: Int, items: List<T>)
     }
 
     companion object {

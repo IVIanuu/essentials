@@ -22,9 +22,5 @@ package com.ivianuu.essentials.util.ext
 
 import com.f2prateek.rx.preferences2.Preference
 
-inline var <T> Preference<T>.value: T
-    get() = get()
-    set(value) = set(value)
-
 inline fun <T : Any> Preference<T>.asLiveData() =
     asObservable().toLiveData()

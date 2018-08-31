@@ -22,26 +22,26 @@ import android.content.ComponentCallbacks2
 import android.content.res.Configuration
 import android.os.Bundle
 
-fun Application.doOnActivityCreated(action: (activity: Activity, savedInstanceState: Bundle?) -> Unit) =
-    registerActivityLifecycleCallbacks(onActivityCreated = action)
+fun Application.doOnActivityCreated(block: (activity: Activity, savedInstanceState: Bundle?) -> Unit) =
+    registerActivityLifecycleCallbacks(onActivityCreated = block)
 
-fun Application.doOnActivityStarted(action: (activity: Activity) -> Unit) =
-    registerActivityLifecycleCallbacks(onActivityStarted = action)
+fun Application.doOnActivityStarted(block: (activity: Activity) -> Unit) =
+    registerActivityLifecycleCallbacks(onActivityStarted = block)
 
-fun Application.doOnActivityResumed(action: (activity: Activity) -> Unit) =
-    registerActivityLifecycleCallbacks(onActivityResumed = action)
+fun Application.doOnActivityResumed(block: (activity: Activity) -> Unit) =
+    registerActivityLifecycleCallbacks(onActivityResumed = block)
 
-fun Application.doOnActivityPaused(action: (activity: Activity) -> Unit) =
-    registerActivityLifecycleCallbacks(onActivityPaused = action)
+fun Application.doOnActivityPaused(block: (activity: Activity) -> Unit) =
+    registerActivityLifecycleCallbacks(onActivityPaused = block)
 
-fun Application.doOnActivityStopped(action: (activity: Activity) -> Unit) =
-    registerActivityLifecycleCallbacks(onActivityStopped = action)
+fun Application.doOnActivityStopped(block: (activity: Activity) -> Unit) =
+    registerActivityLifecycleCallbacks(onActivityStopped = block)
 
-fun Application.doOnActivitySaveInstanceState(action: (activity: Activity, outState: Bundle) -> Unit) =
-    registerActivityLifecycleCallbacks(onActivitySaveInstanceState = action)
+fun Application.doOnActivitySaveInstanceState(block: (activity: Activity, outState: Bundle) -> Unit) =
+    registerActivityLifecycleCallbacks(onActivitySaveInstanceState = block)
 
-fun Application.doOnActivityDestroyed(action: (activity: Activity) -> Unit) =
-    registerActivityLifecycleCallbacks(onActivityDestroyed = action)
+fun Application.doOnActivityDestroyed(block: (activity: Activity) -> Unit) =
+    registerActivityLifecycleCallbacks(onActivityDestroyed = block)
 
 fun Application.registerActivityLifecycleCallbacks(
     onActivityCreated: ((activity: Activity, savedInstanceState: Bundle?) -> Unit)? = null,
@@ -85,14 +85,14 @@ fun Application.registerActivityLifecycleCallbacks(
     return callbacks
 }
 
-fun Application.doOnConfigurationChanged(action: (newConfig: Configuration) -> Unit) =
-    registerComponentCallbacks(onConfigurationChanged = action)
+fun Application.doOnConfigurationChanged(block: (newConfig: Configuration) -> Unit) =
+    registerComponentCallbacks(onConfigurationChanged = block)
 
-fun Application.doOnLowMemory(action: () -> Unit) =
-    registerComponentCallbacks(onLowMemory = action)
+fun Application.doOnLowMemory(block: () -> Unit) =
+    registerComponentCallbacks(onLowMemory = block)
 
-fun Application.doOnTrimMemory(action: (level: Int) -> Unit) =
-    registerComponentCallbacks(onTrimMemory = action)
+fun Application.doOnTrimMemory(block: (level: Int) -> Unit) =
+    registerComponentCallbacks(onTrimMemory = block)
 
 fun Application.registerComponentCallbacks(
     onConfigurationChanged: ((newConfig: Configuration) -> Unit)? = null,

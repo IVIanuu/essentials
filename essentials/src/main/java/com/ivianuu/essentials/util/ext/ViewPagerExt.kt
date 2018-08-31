@@ -18,14 +18,14 @@ package com.ivianuu.essentials.util.ext
 
 import android.support.v4.view.ViewPager
 
-fun ViewPager.doOnPageScrolled(action: (position: Int, positionOffset: Float, positionOffsetPixels: Int) -> Unit) =
-    addOnPageChangeListener(onPageScrolled = action)
+fun ViewPager.doOnPageScrolled(block: (position: Int, positionOffset: Float, positionOffsetPixels: Int) -> Unit) =
+    addOnPageChangeListener(onPageScrolled = block)
 
-fun ViewPager.doOnPageSelected(action: (position: Int) -> Unit) =
-    addOnPageChangeListener(onPageSelected = action)
+fun ViewPager.doOnPageSelected(block: (position: Int) -> Unit) =
+    addOnPageChangeListener(onPageSelected = block)
 
-fun ViewPager.doOnPageScrollStateChanged(action: (state: Int) -> Unit) =
-    addOnPageChangeListener(onPageScrollStateChanged = action)
+fun ViewPager.doOnPageScrollStateChanged(block: (state: Int) -> Unit) =
+    addOnPageChangeListener(onPageScrollStateChanged = block)
 
 fun ViewPager.addOnPageChangeListener(
     onPageScrolled: ((position: Int, positionOffset: Float, positionOffsetPixels: Int) -> Unit)? = null,

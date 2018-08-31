@@ -129,9 +129,9 @@ inline fun ContextAware.textArrayAttr(
 @PublishedApi
 internal inline fun <T> Context.withTypedArray(
     vararg attr: Int,
-    action: (TypedArray) -> T
+    block: (TypedArray) -> T
 ): T =
-    theme.obtainStyledAttributes(attr).use(action)
+    theme.obtainStyledAttributes(attr).use(block)
 
 @PublishedApi
 internal inline fun Context.getTypedArrayWithAttributes(vararg attr: Int): TypedArray =

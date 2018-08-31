@@ -24,9 +24,9 @@ open class Event<T : Any>(private val data: T) {
     var hasBeenHandled = false
         private set
 
-    fun handle(action: (data: T) -> Unit) {
+    fun handle(block: (data: T) -> Unit) {
         hasBeenHandled = true
-        action.invoke(data)
+        block.invoke(data)
     }
 
     fun peekContent() = data

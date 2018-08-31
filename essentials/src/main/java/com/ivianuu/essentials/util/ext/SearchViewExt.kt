@@ -31,11 +31,11 @@ fun SearchView.closes(predicate: (() -> Boolean)? = null): Observable<Unit> =
         e.setCancellable { setOnCloseListener(null) }
     }
 
-fun SearchView.doOnQueryTextChange(action: (newText: String) -> Boolean) =
-    setOnQueryTextListener(onQueryTextChange = action)
+fun SearchView.doOnQueryTextChange(block: (newText: String) -> Boolean) =
+    setOnQueryTextListener(onQueryTextChange = block)
 
-fun SearchView.doOnQueryTextSubmit(action: (query: String) -> Boolean) =
-    setOnQueryTextListener(onQueryTextSubmit = action)
+fun SearchView.doOnQueryTextSubmit(block: (query: String) -> Boolean) =
+    setOnQueryTextListener(onQueryTextSubmit = block)
 
 fun SearchView.setOnQueryTextListener(
     onQueryTextChange: ((newText: String) -> Boolean)? = null,

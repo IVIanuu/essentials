@@ -22,11 +22,7 @@ package com.ivianuu.essentials.util.ext
 
 import android.app.Activity
 import android.support.v4.app.Fragment
-import android.support.v7.app.AppCompatActivity
 import android.view.View
-
-inline val Fragment.appCompatActivity: AppCompatActivity?
-    get() = activity as AppCompatActivity?
 
 inline fun Fragment.hideInputMethod() {
     requireActivity().hideInputMethod()
@@ -38,13 +34,10 @@ inline fun Fragment.showInputMethod(view: View) {
 
 inline fun <reified T : Activity> Fragment.activity() = requireActivity() as T
 
-inline fun Fragment.requireAppCompatActivity() = requireActivity() as AppCompatActivity
-
 inline fun Fragment.requireArgs() =
     arguments ?: throw IllegalStateException("no arguments provided")
 
 inline fun Fragment.requireView() = view ?: throw IllegalStateException("view is null")
-
 
 inline fun <reified T : Fragment> Fragment.parentFragment() = requireParentFragment() as T
 

@@ -22,20 +22,20 @@ import android.arch.lifecycle.LifecycleOwner
 import com.ivianuu.essentials.util.SimpleLifecycleObserver
 import io.reactivex.Observable
 
-fun Lifecycle.doOnAny(action: (owner: LifecycleOwner, event: Lifecycle.Event) -> Unit) =
-    addObserver(onAny = action)
+fun Lifecycle.doOnAny(block: (owner: LifecycleOwner, event: Lifecycle.Event) -> Unit) =
+    addObserver(onAny = block)
 
-fun Lifecycle.doOnCreate(action: (owner: LifecycleOwner) -> Unit) = addObserver(onCreate = action)
+fun Lifecycle.doOnCreate(block: (owner: LifecycleOwner) -> Unit) = addObserver(onCreate = block)
 
-fun Lifecycle.doOnStart(action: (owner: LifecycleOwner) -> Unit) = addObserver(onStart = action)
+fun Lifecycle.doOnStart(block: (owner: LifecycleOwner) -> Unit) = addObserver(onStart = block)
 
-fun Lifecycle.doOnResume(action: (owner: LifecycleOwner) -> Unit) = addObserver(onResume = action)
+fun Lifecycle.doOnResume(block: (owner: LifecycleOwner) -> Unit) = addObserver(onResume = block)
 
-fun Lifecycle.doOnPause(action: (owner: LifecycleOwner) -> Unit) = addObserver(onPause = action)
+fun Lifecycle.doOnPause(block: (owner: LifecycleOwner) -> Unit) = addObserver(onPause = block)
 
-fun Lifecycle.doOnStop(action: (owner: LifecycleOwner) -> Unit) = addObserver(onStop = action)
+fun Lifecycle.doOnStop(block: (owner: LifecycleOwner) -> Unit) = addObserver(onStop = block)
 
-fun Lifecycle.doOnDestroy(action: (owner: LifecycleOwner) -> Unit) = addObserver(onDestroy = action)
+fun Lifecycle.doOnDestroy(block: (owner: LifecycleOwner) -> Unit) = addObserver(onDestroy = block)
 
 fun Lifecycle.addObserver(
     onAny: ((owner: LifecycleOwner, event: Lifecycle.Event) -> Unit)? = null,

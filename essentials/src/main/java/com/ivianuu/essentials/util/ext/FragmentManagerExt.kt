@@ -38,87 +38,87 @@ inline fun <reified T : Fragment> FragmentManager.requireFragByTag(tag: String) 
 
 fun FragmentManager.doOnFragmentPreAttached(
     recursive: Boolean,
-    action: (fm: FragmentManager, f: Fragment, context: Context) -> Unit
+    block: (fm: FragmentManager, f: Fragment, context: Context) -> Unit
 ) =
-    registerFragmentLifecycleCallbacks(recursive, onFragmentPreAttached = action)
+    registerFragmentLifecycleCallbacks(recursive, onFragmentPreAttached = block)
 
 fun FragmentManager.doOnFragmentAttached(
     recursive: Boolean,
-    action: (fm: FragmentManager, f: Fragment, context: Context) -> Unit
+    block: (fm: FragmentManager, f: Fragment, context: Context) -> Unit
 ) =
-    registerFragmentLifecycleCallbacks(recursive, onFragmentAttached = action)
+    registerFragmentLifecycleCallbacks(recursive, onFragmentAttached = block)
 
 fun FragmentManager.doOnFragmentPreCreated(
     recursive: Boolean,
-    action: (fm: FragmentManager, f: Fragment, savedInstanceState: Bundle?) -> Unit
+    block: (fm: FragmentManager, f: Fragment, savedInstanceState: Bundle?) -> Unit
 ) =
-    registerFragmentLifecycleCallbacks(recursive, onFragmentPreCreated = action)
+    registerFragmentLifecycleCallbacks(recursive, onFragmentPreCreated = block)
 
 fun FragmentManager.doOnFragmentCreated(
     recursive: Boolean,
-    action: (fm: FragmentManager, f: Fragment, savedInstanceState: Bundle?) -> Unit
+    block: (fm: FragmentManager, f: Fragment, savedInstanceState: Bundle?) -> Unit
 ) =
-    registerFragmentLifecycleCallbacks(recursive, onFragmentCreated = action)
+    registerFragmentLifecycleCallbacks(recursive, onFragmentCreated = block)
 
 fun FragmentManager.doOnFragmentActivityCreated(
     recursive: Boolean,
-    action: (fm: FragmentManager, f: Fragment, savedInstanceState: Bundle?) -> Unit
+    block: (fm: FragmentManager, f: Fragment, savedInstanceState: Bundle?) -> Unit
 ) =
-    registerFragmentLifecycleCallbacks(recursive, onFragmentActivityCreated = action)
+    registerFragmentLifecycleCallbacks(recursive, onFragmentActivityCreated = block)
 
 fun FragmentManager.doOnFragmentViewCreated(
     recursive: Boolean,
-    action: (fm: FragmentManager, f: Fragment, view: View, savedInstanceState: Bundle?) -> Unit
+    block: (fm: FragmentManager, f: Fragment, view: View, savedInstanceState: Bundle?) -> Unit
 ) =
-    registerFragmentLifecycleCallbacks(recursive, onFragmentViewCreated = action)
+    registerFragmentLifecycleCallbacks(recursive, onFragmentViewCreated = block)
 
 fun FragmentManager.doOnFragmentStarted(
     recursive: Boolean,
-    action: (fm: FragmentManager, f: Fragment) -> Unit
+    block: (fm: FragmentManager, f: Fragment) -> Unit
 ) =
-    registerFragmentLifecycleCallbacks(recursive, onFragmentStarted = action)
+    registerFragmentLifecycleCallbacks(recursive, onFragmentStarted = block)
 
 fun FragmentManager.doOnFragmentResumed(
     recursive: Boolean,
-    action: (fm: FragmentManager, f: Fragment) -> Unit
+    block: (fm: FragmentManager, f: Fragment) -> Unit
 ) =
-    registerFragmentLifecycleCallbacks(recursive, onFragmentResumed = action)
+    registerFragmentLifecycleCallbacks(recursive, onFragmentResumed = block)
 
 fun FragmentManager.doOnFragmentPaused(
     recursive: Boolean,
-    action: (fm: FragmentManager, f: Fragment) -> Unit
+    block: (fm: FragmentManager, f: Fragment) -> Unit
 ) =
-    registerFragmentLifecycleCallbacks(recursive, onFragmentPaused = action)
+    registerFragmentLifecycleCallbacks(recursive, onFragmentPaused = block)
 
 fun FragmentManager.doOnFragmentStopped(
     recursive: Boolean,
-    action: (fm: FragmentManager, f: Fragment) -> Unit
+    block: (fm: FragmentManager, f: Fragment) -> Unit
 ) =
-    registerFragmentLifecycleCallbacks(recursive, onFragmentStopped = action)
+    registerFragmentLifecycleCallbacks(recursive, onFragmentStopped = block)
 
 fun FragmentManager.doOnFragmentSaveInstanceState(
     recursive: Boolean,
-    action: (fm: FragmentManager, f: Fragment, outState: Bundle) -> Unit
+    block: (fm: FragmentManager, f: Fragment, outState: Bundle) -> Unit
 ) =
-    registerFragmentLifecycleCallbacks(recursive, onFragmentSaveInstanceState = action)
+    registerFragmentLifecycleCallbacks(recursive, onFragmentSaveInstanceState = block)
 
 fun FragmentManager.doOnFragmentViewDestroyed(
     recursive: Boolean,
-    action: (fm: FragmentManager, f: Fragment) -> Unit
+    block: (fm: FragmentManager, f: Fragment) -> Unit
 ) =
-    registerFragmentLifecycleCallbacks(recursive, onFragmentViewDestroyed = action)
+    registerFragmentLifecycleCallbacks(recursive, onFragmentViewDestroyed = block)
 
 fun FragmentManager.doOnFragmentDestroyed(
     recursive: Boolean,
-    action: (fm: FragmentManager, f: Fragment) -> Unit
+    block: (fm: FragmentManager, f: Fragment) -> Unit
 ) =
-    registerFragmentLifecycleCallbacks(recursive, onFragmentDestroyed = action)
+    registerFragmentLifecycleCallbacks(recursive, onFragmentDestroyed = block)
 
 fun FragmentManager.doOnFragmentDetached(
     recursive: Boolean,
-    action: (fm: FragmentManager, f: Fragment) -> Unit
+    block: (fm: FragmentManager, f: Fragment) -> Unit
 ) =
-    registerFragmentLifecycleCallbacks(recursive, onFragmentDetached = action)
+    registerFragmentLifecycleCallbacks(recursive, onFragmentDetached = block)
 
 fun FragmentManager.registerFragmentLifecycleCallbacks(
     recursive: Boolean,

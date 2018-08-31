@@ -22,7 +22,6 @@ package com.ivianuu.essentials.util.ext
 
 import android.annotation.TargetApi
 import android.app.Activity
-import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import android.view.View
@@ -41,16 +40,6 @@ inline fun Activity.hideInputMethod() {
 
 inline fun Activity.showInputMethod(view: View) {
     systemService<InputMethodManager>().showSoftInput(view, 0)
-}
-
-inline fun Activity.finishWithoutTransition() {
-    overridePendingTransition(0, 0)
-    finish()
-}
-
-inline fun Activity.finishWithResult(resultCode: Int, data: Intent? = null) {
-    setResult(resultCode, data)
-    finish()
 }
 
 inline var Activity.statusBarColor: Int

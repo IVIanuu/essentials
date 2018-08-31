@@ -24,14 +24,14 @@ import android.text.TextWatcher
 import android.widget.TextView
 import java.util.concurrent.Executor
 
-fun TextView.doBeforeTextChanged(action: (s: CharSequence, start: Int, count: Int, after: Int) -> Unit) =
-    addTextChangedListener(beforeTextChanged = action)
+fun TextView.doBeforeTextChanged(block: (s: CharSequence, start: Int, count: Int, after: Int) -> Unit) =
+    addTextChangedListener(beforeTextChanged = block)
 
-fun TextView.doOnTextChanged(action: (s: CharSequence, start: Int, before: Int, count: Int) -> Unit) =
-    addTextChangedListener(onTextChanged = action)
+fun TextView.doOnTextChanged(block: (s: CharSequence, start: Int, before: Int, count: Int) -> Unit) =
+    addTextChangedListener(onTextChanged = block)
 
-fun TextView.doAfterTextChanged(action: (s: Editable) -> Unit) =
-    addTextChangedListener(afterTextChanged = action)
+fun TextView.doAfterTextChanged(block: (s: Editable) -> Unit) =
+    addTextChangedListener(afterTextChanged = block)
 
 fun TextView.addTextChangedListener(
     beforeTextChanged: ((s: CharSequence, start: Int, count: Int, after: Int) -> Unit)? = null,

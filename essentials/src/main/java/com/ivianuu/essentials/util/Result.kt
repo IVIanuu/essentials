@@ -27,5 +27,4 @@ sealed class Result<out T : Any> {
     inline val isSuccess get() = this is Success<*>
     inline val isError get() = this is Error
     inline val isLoading get() = this is Loading
-
 }
