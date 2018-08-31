@@ -9,7 +9,7 @@ inline fun <reified T : StateViewModel<S>, reified S : Any> StateFragment.viewMo
     clazz: KClass<T>,
     factory: ViewModelProvider.Factory = defaultViewModelFactory(),
     key: String = T::class.defaultViewModelKey
-) = viewModelProvider(factory).get(key, clazz.java)
+) = viewModelProvider(factory).get(key, clazz.java).setupViewModel(this)
 
 inline fun <reified T : StateViewModel<S>, reified S : Any> StateFragment.bindViewModel(
     clazz: KClass<T>,
@@ -21,7 +21,7 @@ inline fun <reified T : StateViewModel<S>, reified S : Any> StateFragment.activi
     clazz: KClass<T>,
     factory: ViewModelProvider.Factory = defaultViewModelFactory(),
     key: String = T::class.defaultViewModelKey
-) = requireActivity().viewModelProvider(factory).get(key, clazz.java)
+) = requireActivity().viewModelProvider(factory).get(key, clazz.java).setupViewModel(this)
 
 inline fun <reified T : StateViewModel<S>, reified S : Any> StateFragment.bindActivityViewModel(
     clazz: KClass<T>,
@@ -33,7 +33,7 @@ inline fun <reified T : StateViewModel<S>, reified S : Any> StateFragment.parent
     clazz: KClass<T>,
     factory: ViewModelProvider.Factory = defaultViewModelFactory(),
     key: String = T::class.defaultViewModelKey
-) = requireParentFragment().viewModelProvider(factory).get(key, clazz.java)
+) = requireParentFragment().viewModelProvider(factory).get(key, clazz.java).setupViewModel(this)
 
 inline fun <reified T : StateViewModel<S>, reified S : Any> StateFragment.bindParentViewModel(
     clazz: KClass<T>,
@@ -45,7 +45,7 @@ inline fun <reified T : StateViewModel<S>, reified S : Any> StateFragment.target
     clazz: KClass<T>,
     factory: ViewModelProvider.Factory = defaultViewModelFactory(),
     key: String = T::class.defaultViewModelKey
-) = requireTargetFragment().viewModelProvider(factory).get(key, clazz.java)
+) = requireTargetFragment().viewModelProvider(factory).get(key, clazz.java).setupViewModel(this)
 
 inline fun <reified T : StateViewModel<S>, reified S : Any> StateFragment.bindTargetViewModel(
     clazz: KClass<T>,
