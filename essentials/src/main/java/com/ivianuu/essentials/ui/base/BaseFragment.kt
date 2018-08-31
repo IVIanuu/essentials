@@ -16,7 +16,6 @@
 
 package com.ivianuu.essentials.ui.base
 
-import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.ViewModelProvider
 import android.content.Context
 import android.os.Bundle
@@ -31,11 +30,10 @@ import com.ivianuu.essentials.util.ContextAware
 import com.ivianuu.essentials.util.ViewModelFactoryHolder
 import com.ivianuu.essentials.util.screenlogger.IdentifiableScreen
 import com.ivianuu.traveler.Router
-import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider
-import com.uber.autodispose.lifecycle.LifecycleScopeProvider
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
+import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
 
 /**
@@ -50,9 +48,7 @@ abstract class BaseFragment : Fragment(), BackListener, HasSupportFragmentInject
 
     @Inject override lateinit var viewModelFactory: ViewModelProvider.Factory
 
-    val scopeProvider: LifecycleScopeProvider<Lifecycle.Event> =
-        AndroidLifecycleScopeProvider.from(this)
-    lateinit var viewScopeProvider: LifecycleScopeProvider<Lifecycle.Event>
+    protected val disposables = CompositeDisposable()
 
     protected open val layoutRes = -1
 
@@ -69,9 +65,9 @@ abstract class BaseFragment : Fragment(), BackListener, HasSupportFragmentInject
         super.onCreateView(inflater, container, savedInstanceState)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        viewScopeProvider = AndroidLifecycleScopeProvider.from(viewLifecycleOwner)
+    override fun onDestroyView() {
+        disposables.clear()
+        super.onDestroyView()
     }
 
     override fun supportFragmentInjector(): AndroidInjector<Fragment> = supportFragmentInjector

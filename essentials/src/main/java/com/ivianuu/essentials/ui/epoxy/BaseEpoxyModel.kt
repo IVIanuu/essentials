@@ -18,7 +18,7 @@ package com.ivianuu.essentials.ui.epoxy
 
 import android.support.annotation.CallSuper
 import com.airbnb.epoxy.EpoxyModelWithHolder
-import com.ivianuu.essentials.util.rx.disposableScopeProvider
+import io.reactivex.disposables.CompositeDisposable
 
 /**
  * Base epoxy model with holder
@@ -27,7 +27,7 @@ abstract class BaseEpoxyModel : EpoxyModelWithHolder<BaseEpoxyHolder>() {
 
     private var currentHolder: BaseEpoxyHolder? = null
 
-    val scopeProvider = disposableScopeProvider()
+    val disposables = CompositeDisposable()
 
     @CallSuper
     override fun bind(holder: BaseEpoxyHolder) {
@@ -47,7 +47,7 @@ abstract class BaseEpoxyModel : EpoxyModelWithHolder<BaseEpoxyHolder>() {
     private fun unbindInternal() {
         currentHolder?.let { it.boundModel = null }
         currentHolder = null
-        scopeProvider.dispose()
+        disposables.clear()
     }
 
 }

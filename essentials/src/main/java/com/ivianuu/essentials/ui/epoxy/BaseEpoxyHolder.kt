@@ -18,8 +18,7 @@ package com.ivianuu.essentials.ui.epoxy
 
 import android.view.View
 import com.airbnb.epoxy.EpoxyHolder
-import com.uber.autodispose.OutsideScopeException
-import com.uber.autodispose.ScopeProvider
+import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.extensions.LayoutContainer
 
 /**
@@ -30,8 +29,8 @@ open class BaseEpoxyHolder : EpoxyHolder(), LayoutContainer {
 
     var boundModel: BaseEpoxyModel? = null
 
-    val scopeProvider: ScopeProvider
-        get() = boundModel?.scopeProvider ?: throw OutsideScopeException("no model bound")
+    val disposables: CompositeDisposable
+        get() = boundModel?.disposables ?: throw IllegalStateException("no model bound")
 
     override fun bindView(itemView: View) {
         containerView = itemView

@@ -43,13 +43,6 @@ dependencies {
     api Deps.archLifecycleExtensions
     api Deps.archWorkRuntime
 
-    api Deps.autoDispose
-    api Deps.autoDisposeKtx
-    api Deps.autoDisposeAndroid
-    api Deps.autoDisposeAndroidKtx
-    api Deps.autoDisposeArch
-    api Deps.autoDisposeArchKtx
-
     api Deps.compass
 
     api Deps.constraintLayout

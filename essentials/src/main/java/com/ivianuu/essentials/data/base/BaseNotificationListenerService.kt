@@ -2,16 +2,16 @@ package com.ivianuu.essentials.data.base
 
 import android.service.notification.NotificationListenerService
 import com.ivianuu.essentials.injection.AutoInjector
-import com.ivianuu.essentials.util.rx.disposableScopeProvider
 import dagger.android.AndroidInjection
+import io.reactivex.disposables.CompositeDisposable
 
 /**
  * Base notification listener service
  */
 abstract class BaseNotificationListenerService : NotificationListenerService() {
 
-    val scopeProvider = disposableScopeProvider()
-    val connectedScopeProvider = disposableScopeProvider()
+    protected val disposables = CompositeDisposable()
+    protected val connectedDisposables = CompositeDisposable()
 
     override fun onCreate() {
         if (this !is AutoInjector.Ignore) {
@@ -21,12 +21,12 @@ abstract class BaseNotificationListenerService : NotificationListenerService() {
     }
 
     override fun onDestroy() {
-        scopeProvider.dispose()
+        disposables.clear()
         super.onDestroy()
     }
 
     override fun onListenerDisconnected() {
-        connectedScopeProvider.dispose()
+        connectedDisposables.clear()
         super.onListenerDisconnected()
     }
 

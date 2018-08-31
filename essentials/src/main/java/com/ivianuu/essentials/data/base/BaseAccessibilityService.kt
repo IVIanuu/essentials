@@ -3,15 +3,15 @@ package com.ivianuu.essentials.data.base
 import android.accessibilityservice.AccessibilityService
 import com.ivianuu.essentials.injection.AutoInjector
 import com.ivianuu.essentials.injection.Injectable
-import com.ivianuu.essentials.util.rx.disposableScopeProvider
 import dagger.android.AndroidInjection
+import io.reactivex.disposables.CompositeDisposable
 
 /**
  * Base accessibility service
  */
 abstract class BaseAccessibilityService : AccessibilityService(), Injectable {
 
-    val scopeProvider = disposableScopeProvider()
+    protected val disposables = CompositeDisposable()
 
     override fun onCreate() {
         if (this !is AutoInjector.Ignore) {
@@ -21,7 +21,7 @@ abstract class BaseAccessibilityService : AccessibilityService(), Injectable {
     }
 
     override fun onDestroy() {
-        scopeProvider.dispose()
+        disposables.clear()
         super.onDestroy()
     }
 

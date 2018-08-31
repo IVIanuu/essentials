@@ -2,17 +2,20 @@ package com.ivianuu.essentials.ui.state
 
 import com.ivianuu.essentials.util.ext.behaviorSubject
 import com.ivianuu.essentials.util.ext.requireValue
-import com.uber.autodispose.ScopeProvider
-import com.uber.autodispose.autoDisposable
-import com.uber.autodispose.subscribeBy
 import io.reactivex.Observable
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
+import io.reactivex.rxkotlin.addTo
+import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import java.util.*
 
 /**
  * State store
  */
-internal class StateStore<S : Any>(scopeProvider: ScopeProvider) {
+internal class StateStore<S : Any> : Disposable {
+
+    private val disposables = CompositeDisposable()
 
     private val subject = behaviorSubject<S>()
 
@@ -35,11 +38,11 @@ internal class StateStore<S : Any>(scopeProvider: ScopeProvider) {
             .observeOn(Schedulers.newThread())
             // We don't want race conditions with setting the state on multiple background threads
             // simultaneously in which two state reducers get the same initial state to reduce.
-            .autoDisposable(scopeProvider)
             .subscribeBy(
                 onNext = { flushQueues() },
                 onError = { handleError(it) }
             )
+            .addTo(disposables)
     }
 
     fun setInitialState(initialState: S) {
@@ -117,5 +120,11 @@ internal class StateStore<S : Any>(scopeProvider: ScopeProvider) {
             setStateQueue = LinkedList()
             return queue
         }
+    }
+
+    override fun isDisposed() = disposables.isDisposed
+
+    override fun dispose() {
+        disposables.dispose()
     }
 }

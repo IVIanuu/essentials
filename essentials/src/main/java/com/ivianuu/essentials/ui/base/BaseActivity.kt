@@ -16,7 +16,6 @@
 
 package com.ivianuu.essentials.ui.base
 
-import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -32,11 +31,10 @@ import com.ivianuu.traveler.Navigator
 import com.ivianuu.traveler.NavigatorHolder
 import com.ivianuu.traveler.Router
 import com.ivianuu.traveler.lifecycleobserver.NavigatorLifecycleObserver
-import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider
-import com.uber.autodispose.lifecycle.LifecycleScopeProvider
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
+import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
 
 /**
@@ -64,8 +62,7 @@ abstract class BaseActivity : AppCompatActivity(), HasSupportFragmentInjector, I
         )
     }
 
-    val scopeProvider: LifecycleScopeProvider<Lifecycle.Event> =
-        AndroidLifecycleScopeProvider.from(this)
+    protected val disposables = CompositeDisposable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,6 +70,11 @@ abstract class BaseActivity : AppCompatActivity(), HasSupportFragmentInjector, I
         NavigatorLifecycleObserver.start(this, navigator, navigatorHolder)
 
         if (layoutRes != -1) setContentView(layoutRes)
+    }
+
+    override fun onDestroy() {
+        disposables.clear()
+        super.onDestroy()
     }
 
     override fun onBackPressed() {

@@ -4,8 +4,8 @@ import android.annotation.TargetApi
 import android.os.Build
 import android.service.quicksettings.TileService
 import com.ivianuu.essentials.injection.AutoInjector
-import com.ivianuu.essentials.util.rx.disposableScopeProvider
 import dagger.android.AndroidInjection
+import io.reactivex.disposables.CompositeDisposable
 
 /**
  * Base tile service
@@ -13,8 +13,8 @@ import dagger.android.AndroidInjection
 @TargetApi(Build.VERSION_CODES.N)
 abstract class BaseTileService : TileService() {
 
-    val scopeProvider = disposableScopeProvider()
-    val listeningScopeProvider = disposableScopeProvider()
+    protected val disposables = CompositeDisposable()
+    protected val listeningDisposables = CompositeDisposable()
 
     override fun onCreate() {
         if (this !is AutoInjector.Ignore) {
@@ -24,12 +24,12 @@ abstract class BaseTileService : TileService() {
     }
 
     override fun onDestroy() {
-        scopeProvider.dispose()
+        disposables.clear()
         super.onDestroy()
     }
 
     override fun onStopListening() {
-        listeningScopeProvider.dispose()
+        listeningDisposables.clear()
         super.onStopListening()
     }
 
