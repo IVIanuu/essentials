@@ -23,7 +23,7 @@ abstract class PrefsFragment : SimpleFragment() {
         get() =
             EpoxyPrefsPlugins.getDefaultSharedPreferencesName(requireContext())
 
-    protected val sharedPreferences by unsafeLazy {
+    protected val sharedPreferences: SharedPreferences by unsafeLazy {
         requireContext().getSharedPreferences(sharedPreferencesName, Context.MODE_PRIVATE)
     }
 

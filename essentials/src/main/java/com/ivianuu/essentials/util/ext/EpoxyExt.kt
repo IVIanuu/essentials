@@ -63,7 +63,7 @@ fun <T, U, V, W> typed4EpoxyController(buildModels: Typed4EpoxyController<T, U, 
 }
 
 fun <T> listEpoxyController(buildModel: EpoxyController.(item: T) -> Unit): TypedEpoxyController<List<T>> =
-    typedEpoxyController { it.forEach { buildModel.invoke(this, it) } }
+    typedEpoxyController { data -> data.forEach { buildModel.invoke(this, it) } }
 
 fun <T : EpoxyController> RecyclerView.setEpoxyController(epoxyController: T): T {
     adapter = epoxyController.adapter

@@ -28,7 +28,7 @@ private object UNINITIALIZED_VALUE
  */
 @RestrictTo(RestrictTo.Scope.LIBRARY)
 class LifecycleAwareLazy<out T>(
-    private val owner: LifecycleOwner,
+    owner: LifecycleOwner,
     private val event: Lifecycle.Event = Lifecycle.Event.ON_CREATE,
     initializer: () -> T
 ) : Lazy<T>,

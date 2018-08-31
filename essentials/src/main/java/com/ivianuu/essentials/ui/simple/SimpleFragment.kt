@@ -98,8 +98,6 @@ abstract class SimpleFragment : StateFragment() {
         epoxyController.requestModelBuild()
     }
 
-    override fun onOptionsItemSelected(item: MenuItem) = super.onOptionsItemSelected(item)
-
     abstract fun epoxyController(): EpoxyController
 
 }
