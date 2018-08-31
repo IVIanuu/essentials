@@ -23,7 +23,6 @@ import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import com.ivianuu.compass.CompassFragmentAppNavigator
 import com.ivianuu.essentials.injection.Injectable
-import com.ivianuu.essentials.injection.KtHasSupportFragmentInjector
 import com.ivianuu.essentials.ui.common.BackListener
 import com.ivianuu.essentials.ui.traveler.RouterHolder
 import com.ivianuu.essentials.util.ViewModelFactoryHolder
@@ -35,19 +34,21 @@ import com.ivianuu.traveler.Router
 import com.ivianuu.traveler.lifecycleobserver.NavigatorLifecycleObserver
 import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider
 import com.uber.autodispose.lifecycle.LifecycleScopeProvider
+import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
+import dagger.android.support.HasSupportFragmentInjector
 import javax.inject.Inject
 
 /**
  * Base activity
  */
-abstract class BaseActivity : AppCompatActivity(), KtHasSupportFragmentInjector, Injectable,
+abstract class BaseActivity : AppCompatActivity(), HasSupportFragmentInjector, Injectable,
     IdentifiableScreen, RouterHolder, ViewModelFactoryHolder {
 
     @Inject lateinit var navigatorHolder: NavigatorHolder
     @Inject override lateinit var router: Router
 
-    @Inject override lateinit var supportFragmentInjector: DispatchingAndroidInjector<Fragment>
+    @Inject lateinit var supportFragmentInjector: DispatchingAndroidInjector<Fragment>
 
     @Inject override lateinit var viewModelFactory: ViewModelProvider.Factory
 
@@ -79,4 +80,6 @@ abstract class BaseActivity : AppCompatActivity(), KtHasSupportFragmentInjector,
         if (currentFragment is BackListener && currentFragment.handleBack()) return
         super.onBackPressed()
     }
+
+    override fun supportFragmentInjector(): AndroidInjector<Fragment> = supportFragmentInjector
 }

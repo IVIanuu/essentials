@@ -36,9 +36,7 @@ import javax.inject.Inject
 class AutoInjector @Inject constructor(private val application: Application) : AppService {
 
     override fun start() {
-        application.doOnActivityCreated { activity, _ ->
-            handleActivity(activity)
-        }
+        application.doOnActivityCreated { activity, _ -> handleActivity(activity) }
     }
 
     private fun handleActivity(activity: Activity) {

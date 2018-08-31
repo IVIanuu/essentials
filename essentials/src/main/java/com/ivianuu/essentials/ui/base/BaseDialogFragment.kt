@@ -26,7 +26,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.ivianuu.essentials.injection.Injectable
-import com.ivianuu.essentials.injection.KtHasSupportFragmentInjector
 import com.ivianuu.essentials.ui.common.BackListener
 import com.ivianuu.essentials.ui.traveler.RouterHolder
 import com.ivianuu.essentials.util.ContextAware
@@ -35,19 +34,21 @@ import com.ivianuu.essentials.util.screenlogger.IdentifiableScreen
 import com.ivianuu.traveler.Router
 import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider
 import com.uber.autodispose.lifecycle.LifecycleScopeProvider
+import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
+import dagger.android.support.HasSupportFragmentInjector
 import javax.inject.Inject
 
 /**
  * Base dialog fragment
  */
 abstract class BaseDialogFragment : AppCompatDialogFragment(),
-    BackListener, KtHasSupportFragmentInjector, Injectable, IdentifiableScreen,
+    BackListener, HasSupportFragmentInjector, Injectable, IdentifiableScreen,
     ContextAware, RouterHolder, ViewModelFactoryHolder {
 
     @Inject override lateinit var router: Router
 
-    @Inject override lateinit var supportFragmentInjector: DispatchingAndroidInjector<Fragment>
+    @Inject lateinit var supportFragmentInjector: DispatchingAndroidInjector<Fragment>
 
     @Inject override lateinit var viewModelFactory: ViewModelProvider.Factory
 
@@ -68,4 +69,6 @@ abstract class BaseDialogFragment : AppCompatDialogFragment(),
     } else {
         super.onCreateView(inflater, container, savedInstanceState)
     }
+
+    override fun supportFragmentInjector(): AndroidInjector<Fragment> = supportFragmentInjector
 }
