@@ -14,7 +14,7 @@ object Versions {
     const val autoDispose = "1.0.0-RC2"
     const val butterknife = "9.0.0-SNAPSHOT"
     const val compass = "759d57b0c6"
-    const val constraintLayout = "1.1.2"
+    const val constraintLayout = "1.1.3"
     const val dagger = "2.17"
     const val epoxy = "2.16.4"
     const val epoxyPrefs = "cf8f1d2cb6"
