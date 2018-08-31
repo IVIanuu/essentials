@@ -39,8 +39,6 @@ class ListFragment : SimpleFragment() {
 
     override val toolbarMenuRes = R.menu.fragment_list
 
-    override val showFastScroller = true
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 

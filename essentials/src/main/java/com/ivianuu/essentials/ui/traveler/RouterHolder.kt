@@ -16,8 +16,6 @@
 
 package com.ivianuu.essentials.ui.traveler
 
-import android.support.v4.app.Fragment
-import android.support.v4.app.isInBackstack
 import android.support.v7.widget.Toolbar
 import android.view.View
 import com.ivianuu.epoxyprefs.PreferenceModel
@@ -31,10 +29,8 @@ import com.ivianuu.traveler.Router
 interface RouterHolder {
     val router: Router
 
-    fun Toolbar.exitOnNavigationClick(force: Boolean = false) {
-        if (force || (this is Fragment && isInBackstack)) {
-            exitOnNavigationClick(router)
-        }
+    fun Toolbar.exitOnNavigationClick() {
+        exitOnNavigationClick(router)
     }
 
     fun View.navigateOnClick(key: () -> Any) {

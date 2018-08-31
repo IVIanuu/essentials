@@ -18,7 +18,6 @@ package com.ivianuu.essentials.util.ext
 
 import android.content.Intent
 import com.ivianuu.essentials.ui.common.*
-import com.ivianuu.essentials.ui.traveler.command.ToastMessage
 import com.ivianuu.essentials.ui.traveler.destination.ResultDestination
 import com.ivianuu.traveler.ResultListener
 import com.ivianuu.traveler.Router
@@ -94,44 +93,4 @@ fun Router.requestPermissions(
 
     return navigateToForResult<PermissionResult>(destination)
         .map { it.allGranted }
-}
-
-fun Router.showErrorMessage(message: CharSequence) {
-    customCommands(ToastMessage(ToastMessage.TYPE_ERROR, message, 0, emptyArray()))
-}
-
-fun Router.showErrorMessage(messageRes: Int, vararg args: Any) {
-    customCommands(ToastMessage(ToastMessage.TYPE_ERROR, null, messageRes, args))
-}
-
-fun Router.showInfoMessage(message: CharSequence) {
-    customCommands(ToastMessage(ToastMessage.TYPE_INFO, message, 0, emptyArray()))
-}
-
-fun Router.showInfoMessage(messageRes: Int, vararg args: Any) {
-    customCommands(ToastMessage(ToastMessage.TYPE_INFO, null, messageRes, args))
-}
-
-fun Router.showNormalMessage(message: CharSequence) {
-    customCommands(ToastMessage(ToastMessage.TYPE_NORMAL, message, 0, emptyArray()))
-}
-
-fun Router.showNormalMessage(messageRes: Int, vararg args: Any) {
-    customCommands(ToastMessage(ToastMessage.TYPE_NORMAL, null, messageRes, args))
-}
-
-fun Router.showSuccessMessage(message: CharSequence) {
-    customCommands(ToastMessage(ToastMessage.TYPE_SUCCESS, message, 0, emptyArray()))
-}
-
-fun Router.showSuccessMessage(messageRes: Int, vararg args: Any) {
-    customCommands(ToastMessage(ToastMessage.TYPE_SUCCESS, null, messageRes, args))
-}
-
-fun Router.showWarningMessage(message: CharSequence) {
-    customCommands(ToastMessage(ToastMessage.TYPE_WARNING, message, 0, emptyArray()))
-}
-
-fun Router.showWarningMessage(messageRes: Int, vararg args: Any) {
-    customCommands(ToastMessage(ToastMessage.TYPE_WARNING, null, messageRes, args))
 }
