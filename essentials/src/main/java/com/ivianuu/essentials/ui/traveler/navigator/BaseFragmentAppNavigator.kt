@@ -3,7 +3,7 @@ package com.ivianuu.essentials.ui.traveler.navigator
 import android.app.Activity
 import android.support.v4.app.FragmentManager
 import com.ivianuu.compass.CompassFragmentAppNavigator
-import com.ivianuu.essentials.ui.traveler.command.Toast
+import com.ivianuu.essentials.ui.traveler.command.ToastMessage
 import com.ivianuu.essentials.util.ext.*
 import com.ivianuu.traveler.commands.Command
 
@@ -18,18 +18,21 @@ open class BaseFragmentAppNavigator(
 
     override fun applyCommand(command: Command) {
         when (command) {
-            is Toast -> {
+            is ToastMessage -> {
                 val message = when {
                     command.message != null -> command.message
-                    command.messageRes != 0 -> activity.string(command.messageRes, *command.args)
+                    command.messageRes != 0 -> activity.string(
+                        command.messageRes,
+                        *command.messageArgs
+                    )
                     else -> throw IllegalArgumentException("must specify one of message or messageRes")
                 }
                 when (command.type) {
-                    Toast.TYPE_ERROR -> activity.toastError(message)
-                    Toast.TYPE_INFO -> activity.toastInfo(message)
-                    Toast.TYPE_NORMAL -> activity.toastNormal(message)
-                    Toast.TYPE_SUCCESS -> activity.toastSuccess(message)
-                    Toast.TYPE_WARNING -> activity.toastWarning(message)
+                    ToastMessage.TYPE_ERROR -> activity.toastError(message)
+                    ToastMessage.TYPE_INFO -> activity.toastInfo(message)
+                    ToastMessage.TYPE_NORMAL -> activity.toastNormal(message)
+                    ToastMessage.TYPE_SUCCESS -> activity.toastSuccess(message)
+                    ToastMessage.TYPE_WARNING -> activity.toastWarning(message)
                     else -> throw IllegalArgumentException("unknown type -> ${command.type}")
                 }
             }

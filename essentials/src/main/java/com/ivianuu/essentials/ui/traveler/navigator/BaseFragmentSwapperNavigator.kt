@@ -25,7 +25,7 @@ import com.ivianuu.traveler.commands.Command
 /**
  * Fragment swapper navigator which uses keys
  */
-class CompassFragmentSwapperNavigator(
+class BaseFragmentSwapperNavigator(
     fm: FragmentManager,
     containerId: Int,
     hideStrategy: HideStrategy = HideStrategy.DETACH,

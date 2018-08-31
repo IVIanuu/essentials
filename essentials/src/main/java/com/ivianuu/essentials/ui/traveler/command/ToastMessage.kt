@@ -3,13 +3,13 @@ package com.ivianuu.essentials.ui.traveler.command
 import com.ivianuu.traveler.commands.Command
 
 /**
- * Toast command
+ * ToastMessage command
  */
-data class Toast(
+data class ToastMessage(
     val type: Int,
     val message: CharSequence?,
     val messageRes: Int,
-    val args: Array<out Any>
+    val messageArgs: Array<out Any>
 ) : Command {
     companion object {
         const val TYPE_ERROR = 0
