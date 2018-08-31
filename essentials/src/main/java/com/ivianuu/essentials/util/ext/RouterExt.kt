@@ -16,6 +16,11 @@
 
 package com.ivianuu.essentials.util.ext
 
+import android.content.Intent
+import com.ivianuu.essentials.ui.common.ActivityResult
+import com.ivianuu.essentials.ui.common.ActivityResultDestination
+import com.ivianuu.essentials.ui.common.PermissionDestination
+import com.ivianuu.essentials.ui.common.RequestCodeGenerator
 import com.ivianuu.essentials.ui.traveler.destination.ResultDestination
 import com.ivianuu.traveler.ResultListener
 import com.ivianuu.traveler.Router
@@ -66,3 +71,29 @@ fun <T : Any> Router.navigateToForResult(destination: ResultDestination): Maybe<
         .take(1)
         .singleElement()
         .doOnSubscribe { navigateTo(destination) }
+
+fun Router.navigateToForActivityResult(
+    requestCode: Int = RequestCodeGenerator.generate(),
+    intent: Intent
+): Maybe<ActivityResult> {
+    val destination = ActivityResultDestination(
+        requestCode,
+        intent,
+        requestCode
+    )
+
+    return navigateToForResult(destination)
+}
+
+fun Router.requestPermissions(
+    requestCode: Int = RequestCodeGenerator.generate(),
+    vararg permissions: String
+): Maybe<Boolean> {
+    val destination = PermissionDestination(
+        requestCode,
+        permissions.toList().toTypedArray(),
+        requestCode
+    )
+
+    return navigateToForResult(destination)
+}
