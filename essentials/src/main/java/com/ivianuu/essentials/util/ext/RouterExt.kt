@@ -72,20 +72,26 @@ fun <T : Any> Router.navigateToForResult(destination: ResultDestination): Maybe<
         .singleElement()
         .doOnSubscribe { navigateTo(destination) }
 
-fun Router.navigateToForActivityResult(intent: Intent): Maybe<ActivityResult> {
-    val code = RequestCodeGenerator.generate()
-    val destination = ActivityResultDestination(code, intent, code)
+fun Router.navigateToForActivityResult(intent: Intent) =
+    navigateToForActivityResult(RequestCodeGenerator.generate(), intent)
+
+fun Router.navigateToForActivityResult(resultCode: Int, intent: Intent): Maybe<ActivityResult> {
+    val destination = ActivityResultDestination(resultCode, intent, resultCode)
     return navigateToForResult(destination)
 }
 
 fun Router.requestPermissions(
     vararg permissions: String
+) = requestPermissions(RequestCodeGenerator.generate(), *permissions)
+
+fun Router.requestPermissions(
+    resultCode: Int,
+    vararg permissions: String
 ): Maybe<Boolean> {
-    val code = RequestCodeGenerator.generate()
     val destination = PermissionDestination(
-        code,
+        resultCode,
         permissions.toList().toTypedArray(),
-        code
+        resultCode
     )
 
     return navigateToForResult(destination)
