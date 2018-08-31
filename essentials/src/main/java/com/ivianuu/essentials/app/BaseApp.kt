@@ -43,21 +43,34 @@ abstract class BaseApp : DaggerApplication() {
     @Inject internal lateinit var debugAnalyticsLogger: DebugAnalyticsLogger
     @Inject internal lateinit var fabricAnalyticsLogger: FabricAnalyticsLogger
 
+    protected open val initTimber = true
+    protected open val initFabric = true
+    protected open val initGlide = true
+    protected open val initRxJava = true
+
     override fun onCreate() {
         super.onCreate()
 
         if (applicationInfo.flags.containsFlag(ApplicationInfo.FLAG_DEBUGGABLE)) {
-            Timber.plant(Timber.DebugTree())
-            Analytics.addLogger(debugAnalyticsLogger)
+            if (initTimber) {
+                Timber.plant(Timber.DebugTree())
+                Analytics.addLogger(debugAnalyticsLogger)
+            }
         } else {
-            Fabric.with(this, Crashlytics())
-            Analytics.addLogger(fabricAnalyticsLogger)
+            if (initFabric) {
+                Fabric.with(this, Crashlytics())
+                Analytics.addLogger(fabricAnalyticsLogger)
+            }
         }
 
-        Glide.get(this).registry
-            .append(AppIcon::class.java, Bitmap::class.java, appIconModelLoaderFactory)
+        if (initGlide) {
+            Glide.get(this).registry
+                .append(AppIcon::class.java, Bitmap::class.java, appIconModelLoaderFactory)
+        }
 
-        RxAndroidPlugins.setInitMainThreadSchedulerHandler { EnsureMainThreadScheduler.INSTANCE }
+        if (initRxJava) {
+            RxAndroidPlugins.setInitMainThreadSchedulerHandler { EnsureMainThreadScheduler.INSTANCE }
+        }
 
         appServices.forEach { startAppService(it) }
     }
