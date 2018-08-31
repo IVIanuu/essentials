@@ -1,7 +1,6 @@
 package com.ivianuu.essentials.ui.simple
 
 import android.annotation.SuppressLint
-import android.graphics.drawable.StateListDrawable
 import android.os.Bundle
 import android.support.design.widget.AppBarLayout
 import android.support.design.widget.CoordinatorLayout
@@ -11,7 +10,6 @@ import android.view.View
 import com.airbnb.epoxy.EpoxyController
 import com.airbnb.epoxy.EpoxyRecyclerView
 import com.ivianuu.essentials.R
-import com.ivianuu.essentials.ui.common.FastScroller
 import com.ivianuu.essentials.ui.state.StateFragment
 import com.ivianuu.essentials.util.ext.*
 
@@ -25,8 +23,6 @@ abstract class SimpleFragment : StateFragment() {
     protected open val toolbarMenuRes = 0
     protected open val toolbarBackButton get() = isInBackstack
     protected open val lightToolbar: Boolean get() = primaryColor().isLight
-
-    protected open val showFastScroller = false
 
     protected val epoxyController by unsafeLazy { epoxyController() }
 
@@ -84,21 +80,7 @@ abstract class SimpleFragment : StateFragment() {
                 .forEach { it.icon?.tint(subTitleColor) }
         }
 
-        _list?.let {
-            it.setController(epoxyController)
-            if (showFastScroller) {
-                FastScroller(
-                    it,
-                    drawable(R.drawable.thumb_drawable) as StateListDrawable,
-                    drawable(R.drawable.line_drawable),
-                    drawable(R.drawable.thumb_drawable) as StateListDrawable,
-                    drawable(R.drawable.thumb_drawable),
-                    dimenPx(R.dimen.fastscroll_default_thickness),
-                    dimenPx(R.dimen.fastscroll_minimum_range),
-                    dimenPxOffset(R.dimen.fastscroll_margin)
-                )
-            }
-        }
+        _list?.setController(epoxyController)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
