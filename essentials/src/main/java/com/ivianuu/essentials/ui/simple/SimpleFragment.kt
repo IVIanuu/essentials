@@ -97,6 +97,6 @@ abstract class SimpleFragment : StateFragment() {
         epoxyController.requestModelBuild()
     }
 
-    abstract fun epoxyController(): EpoxyController
+    protected open fun epoxyController(): EpoxyController = epoxyController {}
 
 }
