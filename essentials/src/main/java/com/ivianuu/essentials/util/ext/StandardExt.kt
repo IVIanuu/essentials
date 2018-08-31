@@ -1,5 +1,7 @@
 package com.ivianuu.essentials.util.ext
 
+// todo inline fun <T, R> T.switch(block: T.() -> R) = block(this)
+
 inline fun <T, R> T.runIf(condition: Boolean, block: T.() -> R): R? = run {
     if (condition) {
         block()
