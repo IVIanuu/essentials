@@ -1,5 +1,6 @@
 package com.ivianuu.essentials.ui.common
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import com.ivianuu.compass.Destination
@@ -39,4 +40,8 @@ data class ActivityResult(
     val requestCode: Int,
     val resultCode: Int,
     val data: Intent?
-)
+) {
+    val isOk get() = resultCode == Activity.RESULT_OK
+    val isCanceled get() = resultCode == Activity.RESULT_CANCELED
+    val isFirstUser get() = resultCode == Activity.RESULT_FIRST_USER
+}
