@@ -16,16 +16,20 @@
 
 package com.ivianuu.essentials.ui.epoxy
 
+import android.content.Context
 import android.view.View
 import com.airbnb.epoxy.EpoxyHolder
+import com.ivianuu.essentials.util.ContextAware
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.extensions.LayoutContainer
 
 /**
  * Base epoxy holder
  */
-open class BaseEpoxyHolder : EpoxyHolder(), LayoutContainer {
+open class BaseEpoxyHolder : EpoxyHolder(), ContextAware, LayoutContainer {
     override lateinit var containerView: View
+    override val providedContext: Context
+        get() = containerView.context
 
     var boundModel: BaseEpoxyModel? = null
 
