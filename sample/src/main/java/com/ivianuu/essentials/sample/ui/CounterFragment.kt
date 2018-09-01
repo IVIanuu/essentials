@@ -21,7 +21,7 @@ import android.view.View
 import com.ivianuu.compass.Destination
 import com.ivianuu.compass.Detour
 import com.ivianuu.essentials.sample.R
-import com.ivianuu.essentials.ui.state.StateFragment
+import com.ivianuu.essentials.ui.base.BaseFragment
 import com.ivianuu.essentials.ui.state.bindViewModel
 import com.ivianuu.essentials.ui.state.withState
 import com.ivianuu.essentials.ui.traveler.detour.HorizontalDetour
@@ -34,7 +34,7 @@ data class CounterDestination(val screen: Int)
 /**
  * @author Manuel Wrage (IVIanuu)
  */
-class CounterFragment : StateFragment() {
+class CounterFragment : BaseFragment() {
 
     override val layoutRes = R.layout.fragment_counter
 

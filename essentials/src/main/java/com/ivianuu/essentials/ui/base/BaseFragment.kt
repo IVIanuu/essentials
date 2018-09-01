@@ -25,6 +25,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.ivianuu.essentials.injection.Injectable
 import com.ivianuu.essentials.ui.common.BackListener
+import com.ivianuu.essentials.ui.state.StateView
 import com.ivianuu.essentials.ui.traveler.RouterHolder
 import com.ivianuu.essentials.util.ContextAware
 import com.ivianuu.essentials.util.ViewModelFactoryHolder
@@ -40,7 +41,7 @@ import javax.inject.Inject
  * Base fragment
  */
 abstract class BaseFragment : Fragment(), BackListener, HasSupportFragmentInjector,
-    Injectable, IdentifiableScreen, ContextAware, RouterHolder, ViewModelFactoryHolder {
+    Injectable, IdentifiableScreen, ContextAware, RouterHolder, ViewModelFactoryHolder, StateView {
 
     @Inject override lateinit var router: Router
 
@@ -63,6 +64,11 @@ abstract class BaseFragment : Fragment(), BackListener, HasSupportFragmentInject
         inflater.inflate(layoutRes, container, false)
     } else {
         super.onCreateView(inflater, container, savedInstanceState)
+    }
+
+    override fun onStart() {
+        super.onStart()
+        postInvalidate()
     }
 
     override fun onDestroyView() {

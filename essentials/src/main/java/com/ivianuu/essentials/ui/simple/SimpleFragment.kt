@@ -10,13 +10,13 @@ import android.view.View
 import com.airbnb.epoxy.EpoxyController
 import com.airbnb.epoxy.EpoxyRecyclerView
 import com.ivianuu.essentials.R
-import com.ivianuu.essentials.ui.state.StateFragment
+import com.ivianuu.essentials.ui.base.BaseFragment
 import com.ivianuu.essentials.util.ext.*
 
 /**
  * Simple fragment
  */
-abstract class SimpleFragment : StateFragment() {
+abstract class SimpleFragment : BaseFragment() {
 
     override val layoutRes = R.layout.fragment_simple
 
