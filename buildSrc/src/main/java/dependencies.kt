@@ -32,7 +32,7 @@ object Versions {
     const val rxSystemSettings = "aec2722332"
     const val superUser = "1.0.0.+"
     const val support = "28.0.0-alpha3"
-    const val stickyHeaders = "0f48d56a25"
+    const val stickyHeaders = "cb79dcf452"
     const val timber = "4.7.0"
     const val toasty = "1.3.0"
     const val traveler = "bc1ba011ee"
