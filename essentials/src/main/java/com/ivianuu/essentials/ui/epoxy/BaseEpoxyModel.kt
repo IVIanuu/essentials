@@ -30,8 +30,8 @@ import kotlinx.android.extensions.LayoutContainer
 abstract class BaseEpoxyModel : EpoxyModelWithHolder<BaseEpoxyHolder>(), ContextAware,
     LayoutContainer {
 
-    override val containerView: View?
-        get() = currentHolder?.containerView
+    override val containerView: View
+        get() = currentHolder!!.containerView
 
     override val providedContext: Context
         get() = currentHolder!!.providedContext
