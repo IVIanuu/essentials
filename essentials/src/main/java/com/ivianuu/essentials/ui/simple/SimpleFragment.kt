@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.support.design.widget.AppBarLayout
 import android.support.design.widget.CoordinatorLayout
 import android.support.v4.app.isInBackstack
+import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
 import android.view.View
 import com.airbnb.epoxy.EpoxyController
@@ -88,6 +89,11 @@ abstract class SimpleFragment : BaseFragment() {
                 .forEach { it.icon?.tint(subTitleColor) }
         }
 
+        optionalRecyclerView?.run {
+            setController(epoxyController)
+            this@SimpleFragment.layoutManager()?.let { layoutManager = it }
+        }
+
         optionalRecyclerView?.setController(epoxyController)
     }
 
@@ -106,5 +112,7 @@ abstract class SimpleFragment : BaseFragment() {
     }
 
     protected open fun epoxyController(): EpoxyController = EmptyEpoxyController
+
+    protected open fun layoutManager(): RecyclerView.LayoutManager? = null
 
 }
