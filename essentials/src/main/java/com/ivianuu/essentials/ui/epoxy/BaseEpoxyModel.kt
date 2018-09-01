@@ -16,27 +16,14 @@
 
 package com.ivianuu.essentials.ui.epoxy
 
-import android.content.Context
 import android.support.annotation.CallSuper
-import android.view.View
 import com.airbnb.epoxy.EpoxyModelWithHolder
-import com.ivianuu.essentials.util.ContextAware
 import io.reactivex.disposables.CompositeDisposable
-import kotlinx.android.extensions.LayoutContainer
 
 /**
  * Base epoxy model with holder
  */
-abstract class BaseEpoxyModel : EpoxyModelWithHolder<BaseEpoxyHolder>(), ContextAware,
-    LayoutContainer {
-
-    override val containerView: View
-        get() = currentHolder!!.containerView
-
-    override val providedContext: Context
-        get() = currentHolder!!.providedContext
-
-    private var currentHolder: BaseEpoxyHolder? = null
+abstract class BaseEpoxyModel : EpoxyModelWithHolder<BaseEpoxyHolder>() {
 
     val disposables = CompositeDisposable()
 
@@ -44,9 +31,6 @@ abstract class BaseEpoxyModel : EpoxyModelWithHolder<BaseEpoxyHolder>(), Context
     override fun bind(holder: BaseEpoxyHolder) {
         super.bind(holder)
         unbindInternal()
-
-        holder.boundModel = this
-        currentHolder = holder
     }
 
     @CallSuper
@@ -56,8 +40,6 @@ abstract class BaseEpoxyModel : EpoxyModelWithHolder<BaseEpoxyHolder>(), Context
     }
 
     private fun unbindInternal() {
-        currentHolder?.let { it.boundModel = null }
-        currentHolder = null
         disposables.clear()
     }
 
