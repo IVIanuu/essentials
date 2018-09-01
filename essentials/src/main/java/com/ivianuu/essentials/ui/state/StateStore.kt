@@ -31,7 +31,7 @@ internal class StateStore<S : Any> : Disposable {
             return subject.requireValue()
         }
 
-    private val hasInitialState = subject.value != null
+    private val hasInitialState get() = subject.value != null
 
     init {
         flushQueueSubject
@@ -57,7 +57,7 @@ internal class StateStore<S : Any> : Disposable {
     }
 
     fun set(stateReducer: S.() -> S) {
-        if (!hasInitialState) throw IllegalStateException("set initial state must be called first")
+        requireInitialState()
         jobs.enqueueSetStateBlock(stateReducer)
         flushQueueSubject.onNext(Unit)
     }

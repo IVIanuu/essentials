@@ -1,8 +1,6 @@
 package com.ivianuu.essentials.sample.ui
 
-import android.os.Bundle
 import android.view.MenuItem
-import android.view.View
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import com.ivianuu.compass.Destination
@@ -19,9 +17,9 @@ import com.ivianuu.essentials.ui.state.stateEpoxyController
 import com.ivianuu.essentials.ui.traveler.detour.FadeDetour
 import com.ivianuu.essentials.util.Result
 import com.ivianuu.essentials.util.ext.COMPUTATION
-import com.uber.autodispose.autoDisposable
-import com.uber.autodispose.subscribeBy
 import io.reactivex.Single
+import io.reactivex.rxkotlin.addTo
+import io.reactivex.rxkotlin.subscribeBy
 import kotlinx.android.synthetic.main.single_line_list_item.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -38,12 +36,7 @@ class ListFragment : SimpleFragment() {
     private val viewModel by bindViewModel(ListViewModel::class)
 
     override val toolbarMenuRes = R.menu.fragment_list
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        toolbar.title = "List"
-    }
+    override val toolbarTitle = "List"
 
     override fun epoxyController() = stateEpoxyController(viewModel) { state ->
         when (state) {
@@ -95,8 +88,8 @@ class ListViewModel @Inject constructor() : StateViewModel<Result<List<String>>>
             .subscribeOn(COMPUTATION)
             .map { generateList() }
             .delay(1, TimeUnit.SECONDS)
-            .autoDisposable(scopeProvider)
             .subscribeBy { setState { Result.Success(it) } }
+            .addTo(disposables)
     }
 
     private fun generateList() = when (listOf(1, 2, 3).shuffled().first()) {

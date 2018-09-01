@@ -13,7 +13,7 @@ import kotlinx.android.synthetic.main.item_simple_loading.*
 @EpoxyModelClass(layout = R2.layout.item_simple_loading)
 abstract class SimpleLoadingModel : BaseEpoxyModel() {
 
-    @EpoxyAttribute var progressColor = 9
+    @EpoxyAttribute var progressColor = 0
     @EpoxyAttribute var progressColorRes = 0
 
     override fun bind(holder: BaseEpoxyHolder) {
