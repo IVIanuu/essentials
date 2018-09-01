@@ -20,6 +20,8 @@ abstract class SimpleFragment : BaseFragment() {
 
     override val layoutRes = R.layout.fragment_simple
 
+    protected open val toolbarTitle: String? = null
+    protected open val toolbarTitleRes = 0
     protected open val toolbarMenuRes = 0
     protected open val toolbarBackButton get() = isInBackstack
     protected open val lightToolbar: Boolean get() = primaryColor().isLight
@@ -60,6 +62,11 @@ abstract class SimpleFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         optionalToolbar?.run {
+            when {
+                toolbarTitle != null -> title = toolbarTitle
+                toolbarTitleRes != 0 -> setTitle(toolbarTitleRes)
+            }
+
             if (toolbarMenuRes != 0) {
                 inflateMenu(toolbarMenuRes)
                 setOnMenuItemClickListener { onOptionsItemSelected(it) }
@@ -98,7 +105,6 @@ abstract class SimpleFragment : BaseFragment() {
         epoxyController.requestModelBuild()
     }
 
-    protected open fun epoxyController(): EpoxyController = epoxyController {
-    }
+    protected open fun epoxyController(): EpoxyController = EmptyEpoxyController
 
 }
