@@ -8,11 +8,11 @@ object Versions {
     const val versionCode = 1
     const val versionName = "1.0"
 
-    const val androidGradlePlugin = "3.1.4"
+    const val androidGradlePlugin = "3.2.0-rc02"
     const val archLifecycle = "1.1.1"
     const val archWork = "1.0.0-alpha08"
     const val butterknife = "9.0.0-SNAPSHOT"
-    const val compass = "759d57b0c6"
+    const val compass = "9b7977c6b0"
     const val constraintLayout = "1.1.3"
     const val dagger = "2.17"
     const val epoxy = "2.16.4"
