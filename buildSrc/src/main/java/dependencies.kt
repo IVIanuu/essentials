@@ -12,7 +12,7 @@ object Versions {
     const val archLifecycle = "1.1.1"
     const val archWork = "1.0.0-alpha08"
     const val butterknife = "9.0.0-SNAPSHOT"
-    const val compass = "b850adbb1f"
+    const val compass = "bc1fc110dc"
     const val constraintLayout = "1.1.3"
     const val dagger = "2.17"
     const val epoxy = "2.16.4"
