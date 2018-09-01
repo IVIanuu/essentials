@@ -76,5 +76,8 @@ abstract class BaseFragment : Fragment(), BackListener, HasSupportFragmentInject
         super.onDestroyView()
     }
 
+    override fun invalidate() {
+    }
+
     override fun supportFragmentInjector(): AndroidInjector<Fragment> = supportFragmentInjector
 }

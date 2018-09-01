@@ -17,8 +17,7 @@ abstract class StateViewModel<S : Any>(initialState: S? = null) : BaseViewModel(
 
     private val stateStore = StateStore<S>()
 
-    val state
-        get() = stateStore.state
+    val state get() = stateStore.state
 
     init {
         disposables.add(stateStore)
