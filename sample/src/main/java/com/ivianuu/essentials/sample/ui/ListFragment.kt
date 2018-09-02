@@ -15,7 +15,6 @@ import com.ivianuu.essentials.ui.state.StateViewModel
 import com.ivianuu.essentials.ui.state.bindViewModel
 import com.ivianuu.essentials.ui.state.stateEpoxyController
 import com.ivianuu.essentials.ui.traveler.detour.FadeDetour
-import com.ivianuu.essentials.util.Result
 import com.ivianuu.essentials.util.ext.COMPUTATION
 import io.reactivex.Single
 import io.reactivex.rxkotlin.addTo
@@ -39,25 +38,22 @@ class ListFragment : SimpleFragment() {
     override val toolbarTitle = "List"
 
     override fun epoxyController() = stateEpoxyController(viewModel) { state ->
-        when (state) {
-            is Result.Loading -> {
-                simpleLoading {
-                    id("loading")
-                }
+        if (state.loading) {
+            simpleLoading {
+                id("loading")
             }
-            is Result.Success -> {
-                if (state.data.isNotEmpty()) {
-                    state.data.forEach { title ->
-                        singleLineListItem {
-                            id(title)
-                            title(title)
-                        }
+        } else {
+            if (state.items.isNotEmpty()) {
+                state.items.forEach { title ->
+                    singleLineListItem {
+                        id(title)
+                        title(title)
                     }
-                } else {
-                    simpleText {
-                        id("empty")
-                        text("Hmm empty..")
-                    }
+                }
+            } else {
+                simpleText {
+                    id("empty")
+                    text("Hmm empty..")
                 }
             }
         }
@@ -71,10 +67,10 @@ class ListFragment : SimpleFragment() {
     }
 }
 
-class ListViewModel @Inject constructor() : StateViewModel<Result<List<String>>>() {
+class ListViewModel @Inject constructor() : StateViewModel<ListState>() {
 
     init {
-        setInitialState(Result.Loading)
+        setInitialState(ListState(false, emptyList()))
         generateNewState()
     }
 
@@ -84,11 +80,12 @@ class ListViewModel @Inject constructor() : StateViewModel<Result<List<String>>>
 
     private fun generateNewState() {
         Single.just(Unit)
-            .doOnSubscribe { setState { Result.Loading } }
+            .doOnSubscribe { setState { copy(loading = true) } }
+            .doOnSuccess { setState { copy(loading = false) } }
             .subscribeOn(COMPUTATION)
             .map { generateList() }
             .delay(1, TimeUnit.SECONDS)
-            .subscribeBy { setState { Result.Success(it) } }
+            .subscribeBy { setState { copy(items = it) } }
             .addTo(disposables)
     }
 
@@ -98,6 +95,11 @@ class ListViewModel @Inject constructor() : StateViewModel<Result<List<String>>>
         else -> emptyList()
     }
 }
+
+data class ListState(
+    val loading: Boolean,
+    val items: List<String>
+)
 
 @EpoxyModelClass(layout = R.layout.single_line_list_item)
 abstract class SingleLineListItemModel : BaseEpoxyModel() {
