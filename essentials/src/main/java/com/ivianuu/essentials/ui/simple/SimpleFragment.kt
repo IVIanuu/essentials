@@ -80,11 +80,7 @@ abstract class SimpleFragment : BaseFragment() {
 
             val titleColor = primaryTextColor(!lightToolbar)
             val subTitleColor = secondaryTextColor(!lightToolbar)
-            val iconColor = if (lightToolbar) {
-                subTitleColor
-            } else {
-                titleColor
-            }
+            val iconColor = iconColor(!lightToolbar)
 
             setTitleTextColor(titleColor)
             setSubtitleTextColor(subTitleColor)

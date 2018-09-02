@@ -73,7 +73,7 @@ inline fun Context.iconColor(color: Int) = iconColor(color.isDark)
 
 inline fun Context.iconColor(dark: Boolean) = color(
     if (dark) {
-        R.color.secondary_text_default_material_dark
+        R.color.primary_text_default_material_dark
     } else {
         R.color.secondary_text_default_material_light
     }
