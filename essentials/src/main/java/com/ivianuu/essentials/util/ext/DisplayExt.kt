@@ -22,7 +22,6 @@ package com.ivianuu.essentials.util.ext
 
 import android.annotation.TargetApi
 import android.content.Context
-import android.content.res.Resources
 import android.os.Build
 import android.util.DisplayMetrics
 import android.view.Surface
@@ -31,15 +30,15 @@ import android.view.WindowManager
 import com.ivianuu.essentials.util.ContextAware
 
 @PublishedApi
-internal inline val systemMetrics: DisplayMetrics
-    get() = Resources.getSystem().displayMetrics
-
-@PublishedApi
 internal val displayMetrics = DisplayMetrics()
 
-inline val Int.dp: Float get() = (this * systemMetrics.density)
+inline fun Context.dpToPx(dp: Int) = dp * resources.displayMetrics.density
 
-inline val Int.sp: Float get() = (this * systemMetrics.scaledDensity)
+inline fun ContextAware.dpToPx(dp: Int) = providedContext.dpToPx(dp)
+
+inline fun Context.spToPx(sp: Int) = sp * resources.displayMetrics.scaledDensity
+
+inline fun ContextAware.spToPx(sp: Int) = providedContext.spToPx(sp)
 
 inline val Context.isPortrait: Boolean
     get() = !isLandscape
