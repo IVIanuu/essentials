@@ -35,12 +35,10 @@ abstract class FragmentSwapperNavigator(
     private var swapOnReselection: Boolean = true
 ) : Navigator {
 
-    override fun applyCommands(commands: Array<Command>) {
-        commands.forEach { command ->
-            when (command) {
-                is Replace -> swapTo(command)
-                else -> throw IllegalStateException("unsupported command $command")
-            }
+    override fun applyCommand(command: Command) {
+        when (command) {
+            is Replace -> swapTo(command)
+            else -> throw IllegalStateException("unsupported command $command")
         }
     }
 

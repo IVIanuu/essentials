@@ -95,7 +95,6 @@ dependencies {
     api Deps.toasty
 
     api Deps.traveler
-    api Deps.travelerLifecycleObserver
 }
 
 // build a jar with source files

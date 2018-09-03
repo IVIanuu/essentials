@@ -41,11 +41,11 @@ class CounterViewModel @Inject constructor(private val router: Router) :
     }
 
     fun screenDownClicked() {
-        router.exit()
+        router.finish()
     }
 
     fun rootScreenClicked() {
-        router.backToRoot()
+        router.popToRoot()
     }
 
     fun listScreenClicked() {

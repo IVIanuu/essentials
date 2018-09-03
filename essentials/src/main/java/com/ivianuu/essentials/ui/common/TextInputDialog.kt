@@ -50,9 +50,9 @@ class TextInputDialog : BaseDialogFragment() {
                 destination.prefill,
                 destination.allowEmptyInput
             ) { _, input ->
-                router.exitWithResult(destination.resultCode, input)
+                router.popWithResult(destination.resultCode, input)
             }
-            .onNegative { _, _ -> router.exit() }
+            .onNegative { _, _ -> router.pop() }
             .inputType(destination.inputType)
             .positiveText(R.string.action_ok)
             .negativeText(R.string.action_cancel)

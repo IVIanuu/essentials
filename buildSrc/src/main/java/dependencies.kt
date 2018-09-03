@@ -12,7 +12,7 @@ object Versions {
     const val archLifecycle = "1.1.1"
     const val archWork = "1.0.0-alpha08"
     const val butterknife = "9.0.0-SNAPSHOT"
-    const val compass = "bc1fc110dc"
+    const val compass = "40c2b76f6c"
     const val constraintLayout = "1.1.3"
     const val dagger = "2.17"
     const val epoxy = "2.16.4"
@@ -35,7 +35,7 @@ object Versions {
     const val stickyHeaders = "cb79dcf452"
     const val timber = "4.7.0"
     const val toasty = "1.3.0"
-    const val traveler = "bc1ba011ee"
+    const val traveler = "a7a26380d9"
 }
 
 object Deps {
@@ -104,6 +104,5 @@ object Deps {
 
     const val toasty = "com.github.GrenderG:Toasty:${Versions.toasty}"
 
-    const val traveler = "com.github.IVIanuu.traveler:traveler:${Versions.traveler}"
-    const val travelerLifecycleObserver = "com.github.IVIanuu.traveler:traveler-lifecycleobserver:${Versions.traveler}"
+    const val traveler = "com.github.IVIanuu:traveler:${Versions.traveler}"
 }

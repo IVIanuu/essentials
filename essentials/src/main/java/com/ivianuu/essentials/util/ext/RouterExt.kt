@@ -21,9 +21,6 @@ import com.ivianuu.essentials.ui.common.*
 import com.ivianuu.essentials.ui.traveler.destination.ResultDestination
 import com.ivianuu.traveler.ResultListener
 import com.ivianuu.traveler.Router
-import com.ivianuu.traveler.commands.Command
-import com.ivianuu.traveler.onCommandApplied
-import com.ivianuu.traveler.onCommandsApplied
 import io.reactivex.Maybe
 import io.reactivex.Observable
 
@@ -41,26 +38,6 @@ fun <T : Any> Router.results(resultCode: Int): Observable<T> = Observable.create
     if (!e.isDisposed) {
         addResultListener(resultCode, listener)
     }
-}
-
-fun Router.commandsApplied(): Observable<Array<out Command>> = Observable.create { e ->
-    val listener = onCommandsApplied {
-        if (!e.isDisposed) {
-            e.onNext(it)
-        }
-    }
-
-    e.setCancellable { removeNavigationListener(listener) }
-}
-
-fun Router.commandApplied(): Observable<Command> = Observable.create { e ->
-    val listener = onCommandApplied {
-        if (!e.isDisposed) {
-            e.onNext(it)
-        }
-    }
-
-    e.setCancellable { removeNavigationListener(listener) }
 }
 
 fun <T : Any> Router.navigateToForResult(destination: ResultDestination): Maybe<T> =

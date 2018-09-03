@@ -30,7 +30,7 @@ import com.ivianuu.essentials.util.screenlogger.IdentifiableScreen
 import com.ivianuu.traveler.Navigator
 import com.ivianuu.traveler.NavigatorHolder
 import com.ivianuu.traveler.Router
-import com.ivianuu.traveler.lifecycleobserver.NavigatorLifecycleObserver
+import com.ivianuu.traveler.setNavigator
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
@@ -50,6 +50,8 @@ abstract class BaseActivity : AppCompatActivity(), HasSupportFragmentInjector, I
 
     @Inject override lateinit var viewModelFactory: ViewModelProvider.Factory
 
+    open val startDestination: Any? = null
+
     protected open val layoutRes = -1
 
     open val fragmentContainer = android.R.id.content
@@ -67,9 +69,13 @@ abstract class BaseActivity : AppCompatActivity(), HasSupportFragmentInjector, I
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        NavigatorLifecycleObserver.start(this, navigator, navigatorHolder)
+        navigatorHolder.setNavigator(this, navigator)
 
         if (layoutRes != -1) setContentView(layoutRes)
+
+        if (savedInstanceState == null) {
+            startDestination?.let { router.newRoot(it) }
+        }
     }
 
     override fun onDestroy() {

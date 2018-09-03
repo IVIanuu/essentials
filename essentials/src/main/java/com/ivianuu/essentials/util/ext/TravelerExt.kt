@@ -26,7 +26,7 @@ import com.ivianuu.epoxyprefs.PreferenceModel
 import com.ivianuu.traveler.Router
 
 inline fun Toolbar.exitOnNavigationClick(router: Router) {
-    setNavigationOnClickListener { router.exit() }
+    setNavigationOnClickListener { router.pop() }
 }
 
 inline fun View.navigateOnClick(router: Router, crossinline key: () -> Any) {
