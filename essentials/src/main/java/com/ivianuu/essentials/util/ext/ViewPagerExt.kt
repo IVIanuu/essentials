@@ -16,7 +16,7 @@
 
 package com.ivianuu.essentials.util.ext
 
-import android.support.v4.view.ViewPager
+import androidx.viewpager.widget.ViewPager
 
 fun ViewPager.doOnPageScrolled(block: (position: Int, positionOffset: Float, positionOffsetPixels: Int) -> Unit) =
     addOnPageChangeListener(onPageScrolled = block)

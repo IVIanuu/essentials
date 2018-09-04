@@ -16,11 +16,11 @@
 
 package com.ivianuu.essentials.ui.traveler.navigator
 
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentTransaction
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import com.ivianuu.compass.CompassFragmentNavigatorHelper
-import com.ivianuu.traveler.commands.Command
+import com.ivianuu.traveler.command.Command
 
 /**
  * Fragment swapper navigator which uses keys

@@ -3,14 +3,15 @@ buildscript {
         google()
         jcenter()
         mavenCentral()
+        maven { url "https://jitpack.io" }
         maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
     }
 
     dependencies {
         classpath Deps.androidGradlePlugin
-        classpath Deps.butterknifeGradlePlugin
         classpath Deps.kotlinGradlePlugin
         classpath Deps.mavenGradlePlugin
+        classpath Deps.r2GradlePlugin
     }
 }
 

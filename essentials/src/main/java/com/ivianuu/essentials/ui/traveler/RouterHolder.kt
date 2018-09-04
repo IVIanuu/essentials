@@ -16,8 +16,8 @@
 
 package com.ivianuu.essentials.ui.traveler
 
-import android.support.v7.widget.Toolbar
 import android.view.View
+import androidx.appcompat.widget.Toolbar
 import com.ivianuu.epoxyprefs.PreferenceModel
 import com.ivianuu.essentials.util.ext.exitOnNavigationClick
 import com.ivianuu.essentials.util.ext.navigateOnClick

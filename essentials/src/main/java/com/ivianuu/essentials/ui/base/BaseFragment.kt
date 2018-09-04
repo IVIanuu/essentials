@@ -16,13 +16,13 @@
 
 package com.ivianuu.essentials.ui.base
 
-import android.arch.lifecycle.ViewModelProvider
 import android.content.Context
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.ivianuu.essentials.injection.Injectable
 import com.ivianuu.essentials.ui.common.BackListener
 import com.ivianuu.essentials.ui.state.StateView
@@ -40,8 +40,8 @@ import javax.inject.Inject
 /**
  * Base fragment
  */
-abstract class BaseFragment : Fragment(), BackListener, HasSupportFragmentInjector,
-    Injectable, IdentifiableScreen, ContextAware, RouterHolder, ViewModelFactoryHolder, StateView {
+abstract class BaseFragment : Fragment(), BackListener, ContextAware, HasSupportFragmentInjector,
+    Injectable, IdentifiableScreen, RouterHolder, ViewModelFactoryHolder, StateView {
 
     @Inject override lateinit var router: Router
 

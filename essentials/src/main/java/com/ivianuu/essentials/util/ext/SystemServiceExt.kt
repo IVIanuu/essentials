@@ -17,7 +17,7 @@
 package com.ivianuu.essentials.util.ext
 
 import android.content.Context
-import android.support.v4.content.ContextCompat
+import androidx.core.content.ContextCompat
 import com.ivianuu.essentials.util.ContextAware
 
 inline fun <reified T> Context.systemService() =

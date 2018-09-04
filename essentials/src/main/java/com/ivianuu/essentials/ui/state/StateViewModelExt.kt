@@ -1,6 +1,6 @@
 package com.ivianuu.essentials.ui.state
 
-import android.arch.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProvider
 import com.ivianuu.essentials.ui.base.BaseFragment
 import com.ivianuu.essentials.util.ext.*
 import com.ivianuu.essentials.util.lifecycleAwareLazy

@@ -16,8 +16,8 @@
 
 package com.ivianuu.essentials.util.ext
 
-import android.arch.lifecycle.ViewModel
-import android.arch.lifecycle.ViewModelStore
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelStore
 import java.lang.reflect.Field
 
 private var viewModelMapField: Field? = null

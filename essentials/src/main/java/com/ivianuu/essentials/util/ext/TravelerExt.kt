@@ -20,8 +20,8 @@
 
 package com.ivianuu.essentials.util.ext
 
-import android.support.v7.widget.Toolbar
 import android.view.View
+import androidx.appcompat.widget.Toolbar
 import com.ivianuu.epoxyprefs.PreferenceModel
 import com.ivianuu.traveler.Router
 

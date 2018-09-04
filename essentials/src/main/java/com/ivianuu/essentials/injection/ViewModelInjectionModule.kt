@@ -16,8 +16,8 @@
 
 package com.ivianuu.essentials.injection
 
-import android.arch.lifecycle.ViewModel
-import android.arch.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.ivianuu.essentials.util.DaggerViewModelFactory
 import dagger.Binds
 import dagger.Module
@@ -31,9 +31,6 @@ abstract class ViewModelInjectionModule {
 
     @Multibinds
     abstract fun viewModelProviders(): Map<Class<out ViewModel>, ViewModel>
-
-    @Multibinds
-    abstract fun viewModelProvidersWithStringKeys(): Map<String, ViewModel>
 
     @Binds
     abstract fun bindViewModelFactory(factory: DaggerViewModelFactory): ViewModelProvider.Factory

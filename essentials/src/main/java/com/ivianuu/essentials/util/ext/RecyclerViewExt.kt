@@ -16,9 +16,9 @@
 
 package com.ivianuu.essentials.util.ext
 
-import android.support.v7.widget.RecyclerView
 import android.view.MotionEvent
 import android.view.View
+import androidx.recyclerview.widget.RecyclerView
 
 inline fun <reified T : RecyclerView.LayoutManager> RecyclerView.layoutManager() =
     layoutManager as T

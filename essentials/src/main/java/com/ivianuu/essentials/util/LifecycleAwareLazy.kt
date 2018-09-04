@@ -16,9 +16,8 @@
 
 package com.ivianuu.essentials.util
 
-import android.arch.lifecycle.Lifecycle
-import android.arch.lifecycle.LifecycleOwner
-import android.support.annotation.RestrictTo
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
 import java.io.Serializable
 
 private object UNINITIALIZED_VALUE
@@ -26,7 +25,6 @@ private object UNINITIALIZED_VALUE
 /**
  * This was copied from SynchronizedLazyImpl but modified to automatically initialize in ON_CREATE.
  */
-@RestrictTo(RestrictTo.Scope.LIBRARY)
 class LifecycleAwareLazy<out T>(
     owner: LifecycleOwner,
     private val event: Lifecycle.Event = Lifecycle.Event.ON_CREATE,

@@ -17,19 +17,15 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import android.app.Application
 import com.ivianuu.essentials.ui.base.BaseActivity
 import dagger.Binds
 import dagger.Module
-import javax.inject.Inject
 
 class MainActivity : BaseActivity() {
 
-    @Inject lateinit var app: Application
-    @Inject lateinit var app2: Application
-
     override val startDestination: Any?
         get() = CounterDestination(1)
+
 }
 
 @Module

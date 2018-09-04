@@ -16,13 +16,13 @@
 
 package com.ivianuu.essentials.ui.traveler.navigator
 
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentTransaction
-import android.support.v4.app.containerId
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
+import androidx.fragment.app.containerId
 import com.ivianuu.traveler.BaseNavigator
-import com.ivianuu.traveler.commands.Command
-import com.ivianuu.traveler.commands.Replace
+import com.ivianuu.traveler.command.Command
+import com.ivianuu.traveler.command.Replace
 
 /**
  * A navigator which swaps and reuses fragments

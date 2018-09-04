@@ -16,7 +16,7 @@
 
 package com.ivianuu.essentials.util.ext
 
-import android.support.v7.widget.SearchView
+import androidx.appcompat.widget.SearchView
 import io.reactivex.Observable
 
 fun SearchView.closes(predicate: (() -> Boolean)? = null): Observable<Unit> =

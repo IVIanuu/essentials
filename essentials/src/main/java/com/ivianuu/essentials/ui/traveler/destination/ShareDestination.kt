@@ -19,7 +19,7 @@ package com.ivianuu.essentials.ui.traveler.destination
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.support.v4.app.ShareCompat
+import androidx.core.app.ShareCompat
 import com.ivianuu.compass.ActivityRouteFactory
 import com.ivianuu.compass.Destination
 import com.ivianuu.compass.DoNotSerialize

@@ -16,7 +16,7 @@
 
 package com.ivianuu.essentials.util.ext
 
-import android.support.design.widget.TabLayout
+import com.google.android.material.tabs.TabLayout
 
 fun TabLayout.doOnTabSelected(block: (tab: TabLayout.Tab) -> Unit) =
     addOnTabSelectedListener(onTabSelected = block)

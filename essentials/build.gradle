@@ -19,7 +19,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'com.github.dcendents.android-maven'
-apply plugin: 'com.jakewharton.butterknife'
+apply plugin: 'com.ivianuu.r2'
 
 group='com.github.ivianuu'
 
@@ -40,6 +40,11 @@ android {
 }
 
 dependencies {
+    api Deps.androidxAppCompat
+    api Deps.androidxCardView
+    api Deps.androidxCoreKtx
+    api Deps.androidxPalette
+
     api Deps.archLifecycleExtensions
     api Deps.archWorkRuntime
 
@@ -64,7 +69,9 @@ dependencies {
 
     api Deps.kotlinStdLib
 
-    api Deps.ktx
+    api Deps.legacyAnnotations
+
+    api Deps.materialComponents
 
     api Deps.materialDialogsCore
     api Deps.materialDialogsCommons
@@ -80,11 +87,6 @@ dependencies {
     api Deps.rxKotlin
     api Deps.rxPreferences
     api Deps.rxSystemSettings
-
-    api Deps.supportAppCompat
-    api Deps.supportCardView
-    api Deps.supportDesign
-    api Deps.supportPalette
 
     api Deps.superUser
 

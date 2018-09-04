@@ -16,7 +16,7 @@
 
 package com.ivianuu.essentials.sample.injection
 
-import android.arch.lifecycle.ViewModel
+import androidx.lifecycle.ViewModel
 import com.ivianuu.essentials.injection.ViewModelKey
 import com.ivianuu.essentials.sample.ui.CounterViewModel
 import com.ivianuu.essentials.sample.ui.ListViewModel

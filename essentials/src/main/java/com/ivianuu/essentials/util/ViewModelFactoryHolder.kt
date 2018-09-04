@@ -16,7 +16,7 @@
 
 package com.ivianuu.essentials.util
 
-import android.arch.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProvider
 
 /**
  * View model factory holder

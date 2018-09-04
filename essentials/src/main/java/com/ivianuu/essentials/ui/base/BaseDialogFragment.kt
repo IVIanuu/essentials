@@ -16,14 +16,14 @@
 
 package com.ivianuu.essentials.ui.base
 
-import android.arch.lifecycle.ViewModelProvider
 import android.content.Context
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.app.AppCompatDialogFragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatDialogFragment
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.ivianuu.essentials.injection.Injectable
 import com.ivianuu.essentials.ui.common.BackListener
 import com.ivianuu.essentials.ui.traveler.RouterHolder
@@ -40,9 +40,9 @@ import javax.inject.Inject
 /**
  * Base dialog fragment
  */
-abstract class BaseDialogFragment : AppCompatDialogFragment(),
-    BackListener, HasSupportFragmentInjector, Injectable, IdentifiableScreen,
-    ContextAware, RouterHolder, ViewModelFactoryHolder {
+abstract class BaseDialogFragment : AppCompatDialogFragment(), BackListener, ContextAware,
+    HasSupportFragmentInjector, Injectable, IdentifiableScreen, RouterHolder,
+    ViewModelFactoryHolder {
 
     @Inject override lateinit var router: Router
 

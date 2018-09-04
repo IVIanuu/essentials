@@ -16,7 +16,7 @@
 
 package com.ivianuu.essentials.ui.epoxy
 
-import android.support.annotation.CallSuper
+import androidx.annotation.CallSuper
 import com.airbnb.epoxy.EpoxyModelWithHolder
 import io.reactivex.disposables.CompositeDisposable
 

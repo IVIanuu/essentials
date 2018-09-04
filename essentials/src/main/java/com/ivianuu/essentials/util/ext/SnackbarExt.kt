@@ -16,8 +16,8 @@
 
 package com.ivianuu.essentials.util.ext
 
-import android.support.design.widget.BaseTransientBottomBar
-import android.support.design.widget.Snackbar
+import com.google.android.material.snackbar.BaseTransientBottomBar
+import com.google.android.material.snackbar.Snackbar
 
 fun Snackbar.doOnShown(block: (transientBottomBar: Snackbar) -> Unit) =
     addCallback(onShown = block)

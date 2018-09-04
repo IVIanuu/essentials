@@ -16,8 +16,8 @@
 
 package com.ivianuu.essentials.util.ext
 
-import android.support.design.widget.FloatingActionButton
 import android.view.View
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 var FloatingActionButton.shouldShow: Boolean
     get() = visibility == View.VISIBLE

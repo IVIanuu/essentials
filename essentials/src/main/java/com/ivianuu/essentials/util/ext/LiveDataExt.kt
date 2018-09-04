@@ -20,16 +20,17 @@
 
 package com.ivianuu.essentials.util.ext
 
-import android.arch.lifecycle.LifecycleOwner
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.Observer
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import com.ivianuu.essentials.util.SingleLiveEvent
 import io.reactivex.*
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.subscribeBy
 import java.util.concurrent.atomic.AtomicReference
 
+// todo replace with overload constructor once available
 inline fun <T> mutableLiveData(initialValue: T? = null) =
     MutableLiveData<T>().applyIf(initialValue != null) {
         value = initialValue

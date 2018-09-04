@@ -29,8 +29,8 @@ import android.content.res.Resources
 import android.os.BatteryManager
 import android.os.Build
 import android.os.PowerManager
-import android.support.v4.content.ContextCompat
-import android.support.v7.view.ContextThemeWrapper
+import androidx.appcompat.view.ContextThemeWrapper
+import androidx.core.content.ContextCompat
 import com.ivianuu.essentials.util.ContextAware
 
 inline val Context.isTablet: Boolean

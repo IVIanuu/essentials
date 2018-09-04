@@ -16,8 +16,8 @@
 
 package com.ivianuu.essentials.ui.common
 
-import android.support.v4.app.FragmentTransaction
 import android.view.View
+import androidx.fragment.app.FragmentTransaction
 import java.lang.ref.WeakReference
 
 /**

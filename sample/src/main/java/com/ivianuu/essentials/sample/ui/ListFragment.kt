@@ -16,6 +16,8 @@ import com.ivianuu.essentials.ui.state.bindViewModel
 import com.ivianuu.essentials.ui.state.stateEpoxyController
 import com.ivianuu.essentials.ui.traveler.detour.FadeDetour
 import com.ivianuu.essentials.util.ext.COMPUTATION
+import com.ivianuu.essentials.util.ext.andTrue
+import com.ivianuu.essentials.util.ext.d
 import io.reactivex.Single
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.subscribeBy
@@ -38,6 +40,8 @@ class ListFragment : SimpleFragment() {
     override val toolbarTitle = "List"
 
     override fun epoxyController() = stateEpoxyController(viewModel) { state ->
+        d { "bind state -> $state" }
+
         if (state.loading) {
             simpleLoading {
                 id("loading")
@@ -59,11 +63,9 @@ class ListFragment : SimpleFragment() {
         }
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.action_refresh -> viewModel.refreshClicked()
-        }
-        return true
+    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+        R.id.action_refresh -> viewModel.refreshClicked().andTrue()
+        else -> false
     }
 }
 
@@ -72,6 +74,8 @@ class ListViewModel @Inject constructor() : StateViewModel<ListState>() {
     init {
         setInitialState(ListState(false, emptyList()))
         generateNewState()
+
+        subscribe { d { "state changed -> $it" } }
     }
 
     fun refreshClicked() {
@@ -80,11 +84,11 @@ class ListViewModel @Inject constructor() : StateViewModel<ListState>() {
 
     private fun generateNewState() {
         Single.just(Unit)
-            .doOnSubscribe { setState { copy(loading = true) } }
-            .doOnSuccess { setState { copy(loading = false) } }
             .subscribeOn(COMPUTATION)
             .map { generateList() }
             .delay(1, TimeUnit.SECONDS)
+            .doOnSubscribe { setState { copy(loading = true) } }
+            .doOnSuccess { setState { copy(loading = false) } }
             .subscribeBy { setState { copy(items = it) } }
             .addTo(disposables)
     }
