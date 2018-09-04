@@ -12,7 +12,7 @@ object Versions {
     const val archLifecycle = "1.1.1"
     const val archWork = "1.0.0-alpha08"
     const val butterknife = "9.0.0-SNAPSHOT"
-    const val compass = "40c2b76f6c"
+    const val compass = "a120353c80"
     const val constraintLayout = "1.1.3"
     const val dagger = "2.17"
     const val epoxy = "2.16.4"
@@ -35,7 +35,7 @@ object Versions {
     const val stickyHeaders = "cb79dcf452"
     const val timber = "4.7.0"
     const val toasty = "1.3.0"
-    const val traveler = "a7a26380d9"
+    const val traveler = "7c4b2ea85e"
 }
 
 object Deps {

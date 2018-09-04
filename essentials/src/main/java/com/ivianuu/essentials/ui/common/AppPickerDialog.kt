@@ -37,11 +37,11 @@ class AppPickerDialog : BaseDialogFragment() {
             .title(destination.title ?: string(R.string.dialog_title_app_picker))
             .negativeText(R.string.action_cancel)
             .autoDismiss(false)
-            .onNegative { _, _ -> router.pop() }
+            .onNegative { _, _ -> router.exit() }
             .items()
             .itemsCallback { _, _, position, _ ->
                 val app = apps[position]
-                router.popWithResult(destination.resultCode, app)
+                router.exitWithResult(destination.resultCode, app)
             }
             .build()
 

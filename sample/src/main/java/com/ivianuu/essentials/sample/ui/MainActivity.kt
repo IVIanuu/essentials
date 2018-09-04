@@ -35,7 +35,7 @@ class MainActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
 
         if (savedInstanceState == null) {
-            router.newRoot(CounterDestination(1))
+            router.newRootScreen(CounterDestination(1))
         }
     }
 

@@ -20,7 +20,7 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentTransaction
 import android.support.v4.app.containerId
-import com.ivianuu.traveler.Navigator
+import com.ivianuu.traveler.BaseNavigator
 import com.ivianuu.traveler.commands.Command
 import com.ivianuu.traveler.commands.Replace
 
@@ -33,7 +33,7 @@ abstract class FragmentSwapperNavigator(
     private val containerId: Int,
     private val hideStrategy: HideStrategy = HideStrategy.DETACH,
     private var swapOnReselection: Boolean = true
-) : Navigator {
+) : BaseNavigator() {
 
     override fun applyCommand(command: Command) {
         when (command) {
@@ -157,7 +157,7 @@ abstract class FragmentSwapperNavigator(
         null
     }
 
-    protected open fun unknownScreen(command: Command) {
+    override fun unknownScreen(command: Command) {
         throw IllegalArgumentException("unknown screen $command")
     }
 

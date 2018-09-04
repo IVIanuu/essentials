@@ -30,7 +30,7 @@ import com.ivianuu.essentials.util.screenlogger.IdentifiableScreen
 import com.ivianuu.traveler.Navigator
 import com.ivianuu.traveler.NavigatorHolder
 import com.ivianuu.traveler.Router
-import com.ivianuu.traveler.setNavigator
+import com.ivianuu.traveler.extension.setNavigator
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
@@ -74,7 +74,7 @@ abstract class BaseActivity : AppCompatActivity(), HasSupportFragmentInjector, I
         if (layoutRes != -1) setContentView(layoutRes)
 
         if (savedInstanceState == null) {
-            startDestination?.let { router.newRoot(it) }
+            startDestination?.let { router.newRootScreen(it) }
         }
     }
 

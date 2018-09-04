@@ -75,7 +75,7 @@ abstract class SimpleFragment : BaseFragment() {
 
             if (toolbarBackButton) {
                 setNavigationIcon(R.drawable.abc_ic_ab_back_material)
-                setNavigationOnClickListener { router.pop() }
+                setNavigationOnClickListener { router.exit() }
             }
 
             val titleColor = primaryTextColor(!lightToolbar)
