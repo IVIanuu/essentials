@@ -16,7 +16,7 @@ object Versions {
     const val constraintLayout = "1.1.3"
     const val dagger = "2.17"
     const val epoxy = "2.16.4"
-    const val epoxyPrefs = "cf8f1d2cb6"
+    const val epoxyPrefs = "c199cb7277"
     const val fabric = "2.7.1"
     const val glide = "4.8.0"
     const val kotlin = "1.2.61"
