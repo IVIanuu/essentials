@@ -39,6 +39,7 @@ object Versions {
     const val traveler = "a46a5e6204"
 }
 
+
 object Deps {
     const val androidGradlePlugin = "com.android.tools.build:gradle:${Versions.androidGradlePlugin}"
 
