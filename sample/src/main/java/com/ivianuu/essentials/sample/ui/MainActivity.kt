@@ -21,7 +21,6 @@ import com.ivianuu.essentials.ui.base.BaseActivity
 import dagger.Binds
 import dagger.Module
 
-
 class MainActivity : BaseActivity() {
 
     override val startDestination: Any?
