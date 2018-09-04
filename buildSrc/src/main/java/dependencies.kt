@@ -31,7 +31,7 @@ object Versions {
     const val rxPreferences = "2.0.0"
     const val rxSystemSettings = "aec2722332"
     const val superUser = "1.0.0.+"
-    const val support = "28.0.0-alpha3"
+    const val support = "28.0.0-rc01"
     const val stickyHeaders = "cb79dcf452"
     const val timber = "4.7.0"
     const val toasty = "1.3.0"
