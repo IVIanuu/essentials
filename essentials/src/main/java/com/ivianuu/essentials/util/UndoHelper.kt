@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.util
 
+
 /**
  * Simple helper class for screens with a undo logic
  */
