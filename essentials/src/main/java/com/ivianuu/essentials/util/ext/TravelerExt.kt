@@ -29,24 +29,13 @@ inline fun Toolbar.exitOnNavigationClick(router: Router) {
     setNavigationOnClickListener { router.exit() }
 }
 
-inline fun View.navigateOnClick(router: Router, crossinline key: () -> Any) {
+fun View.navigateOnClick(router: Router, key: () -> Any) {
     setOnClickListener { router.navigateTo(key()) }
 }
 
-inline fun View.navigateOnClick(router: Router, key: Any) {
-    setOnClickListener { router.navigateTo(key) }
-}
-
-inline fun PreferenceModel.Builder.navigateOnClick(router: Router, crossinline key: () -> Any) {
+fun PreferenceModel.Builder.navigateOnClick(router: Router, key: () -> Any) {
     clickListener {
         router.navigateTo(key())
-        true
-    }
-}
-
-inline fun PreferenceModel.Builder.navigateOnClick(router: Router, key: Any) {
-    clickListener {
-        router.navigateTo(key)
         true
     }
 }

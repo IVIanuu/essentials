@@ -37,15 +37,8 @@ interface RouterHolder {
         navigateOnClick(router, key)
     }
 
-    fun View.navigateOnClick(key: Any) {
-        navigateOnClick(router, key)
-    }
-
     fun PreferenceModel.Builder.navigateOnClick(key: () -> Any) {
         navigateOnClick(router, key)
     }
 
-    fun PreferenceModel.Builder.navigateOnClick(key: Any) {
-        navigateOnClick(router, key)
-    }
 }

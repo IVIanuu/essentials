@@ -1,7 +1,5 @@
 package com.ivianuu.essentials.sample.ui
 
-import android.os.Bundle
-import android.view.View
 import com.ivianuu.essentials.util.ext.epoxyController
 
 /**
@@ -9,11 +7,7 @@ import com.ivianuu.essentials.util.ext.epoxyController
  */
 class PrefsFragment : com.ivianuu.essentials.ui.prefs.PrefsFragment() {
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        toolbar.title = "Prefs"
-    }
+    override val toolbarTitle = "Prefs"
 
     override fun epoxyController() = epoxyController {
         switchPreference {
