@@ -17,9 +17,7 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import android.annotation.SuppressLint
 import android.app.Application
-import android.os.Bundle
 import com.ivianuu.essentials.ui.base.BaseActivity
 import dagger.Binds
 import dagger.Module
@@ -30,15 +28,8 @@ class MainActivity : BaseActivity() {
     @Inject lateinit var app: Application
     @Inject lateinit var app2: Application
 
-    @SuppressLint("PrivateResource")
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        if (savedInstanceState == null) {
-            router.newRootScreen(CounterDestination(1))
-        }
-    }
-
+    override val startDestination: Any?
+        get() = CounterDestination(1)
 }
 
 @Module
