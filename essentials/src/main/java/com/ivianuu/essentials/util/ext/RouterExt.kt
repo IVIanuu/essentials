@@ -25,6 +25,7 @@ import io.reactivex.Maybe
 import io.reactivex.Observable
 
 fun <T : Any> Router.results(resultCode: Int): Observable<T> = Observable.create { e ->
+    @Suppress("UNCHECKED_CAST")
     val listener = object : ResultListener {
         override fun onResult(result: Any) {
             if (!e.isDisposed) {
