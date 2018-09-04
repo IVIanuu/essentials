@@ -19,7 +19,7 @@ package com.ivianuu.essentials.util
 /**
  * Simple helper class for screens with a undo logic
  */
-class UndoHelper<T>(private val callback: Callback<T>) {
+class UndoHelper<T>(private val callback: (action: Int, items: List<T>) -> Unit) {
 
     val pendingActionItems
         get() = _pendingActionItems.toList()
@@ -28,19 +28,19 @@ class UndoHelper<T>(private val callback: Callback<T>) {
     var pendingAction = ACTION_NONE
         private set
 
-    fun hasPendingActions() = pendingAction != ACTION_NONE
+    val hasPendingActions get() = pendingAction != ACTION_NONE
 
     fun isPendingAction(item: T) =
         _pendingActionItems.contains(item)
 
-    fun enqueueAction(block: Int, items: Collection<T> = emptyList()) {
+    fun enqueueAction(action: Int, items: Collection<T> = emptyList()) {
         commitPendingAction()
-        pendingAction = block
+        pendingAction = action
         _pendingActionItems.addAll(items)
     }
 
     fun commitPendingAction() = if (pendingAction != ACTION_NONE) {
-        callback.commitAction(pendingAction, _pendingActionItems)
+        callback(pendingAction, _pendingActionItems)
         _pendingActionItems.clear()
         pendingAction = ACTION_NONE
         true
@@ -54,10 +54,6 @@ class UndoHelper<T>(private val callback: Callback<T>) {
         true
     } else {
         false
-    }
-
-    interface Callback<T> {
-        fun commitAction(block: Int, items: List<T>)
     }
 
     companion object {
