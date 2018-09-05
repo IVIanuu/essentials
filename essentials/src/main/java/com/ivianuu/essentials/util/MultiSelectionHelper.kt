@@ -25,6 +25,8 @@ class MultiSelectionHelper<T>(private val onChanged: (selectedItems: List<T>) ->
         get() = _selectedItems
     private val _selectedItems = mutableListOf<T>()
 
+    val hasSelections get() = selectedItems.isNotEmpty()
+
     fun setItemSelected(item: T, selected: Boolean) {
         if (selected) {
             _selectedItems.add(item)
@@ -50,5 +52,4 @@ class MultiSelectionHelper<T>(private val onChanged: (selectedItems: List<T>) ->
 
     fun isSelected(item: T) = selectedItems.contains(item)
 
-    fun hasSelections() = selectedItems.isNotEmpty()
 }
