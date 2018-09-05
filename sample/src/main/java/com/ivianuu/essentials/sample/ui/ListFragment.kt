@@ -19,7 +19,6 @@ import com.ivianuu.essentials.util.ext.COMPUTATION
 import com.ivianuu.essentials.util.ext.andTrue
 import com.ivianuu.essentials.util.ext.d
 import io.reactivex.Single
-import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.subscribeBy
 import kotlinx.android.synthetic.main.single_line_list_item.*
 import java.util.concurrent.TimeUnit
@@ -90,7 +89,7 @@ class ListViewModel @Inject constructor() : StateViewModel<ListState>() {
             .doOnSubscribe { setState { copy(loading = true) } }
             .doOnSuccess { setState { copy(loading = false) } }
             .subscribeBy { setState { copy(items = it) } }
-            .addTo(disposables)
+            .disposeOnClear()
     }
 
     private fun generateList() = when (listOf(1, 2, 3).shuffled().first()) {

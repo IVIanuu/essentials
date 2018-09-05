@@ -18,6 +18,7 @@ package com.ivianuu.essentials.ui.common
 
 import androidx.lifecycle.ViewModel
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
 
 /**
  * A [ViewModel] which auto disposes itself
@@ -31,4 +32,5 @@ abstract class BaseViewModel : ViewModel() {
         super.onCleared()
     }
 
+    protected fun Disposable.disposeOnClear() = disposables.add(this)
 }
