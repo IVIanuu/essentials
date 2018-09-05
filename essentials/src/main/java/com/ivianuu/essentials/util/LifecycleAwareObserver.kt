@@ -1,8 +1,23 @@
-package com.ivianuu.essentials.ui.state
+/*
+ * Copyright 2018 Manuel Wrage
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.ivianuu.essentials.util
 
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
-import com.ivianuu.essentials.util.SimpleLifecycleObserver
 import com.ivianuu.essentials.util.lifecycle.LifecyclePlugins
 import io.reactivex.Observer
 import io.reactivex.disposables.Disposable
@@ -15,7 +30,7 @@ import java.util.concurrent.atomic.AtomicReference
 /**
  * Lifecycle aware observer
  */
-internal class LifecycleAwareObserver<T : Any>(
+class LifecycleAwareObserver<T : Any>(
     owner: LifecycleOwner,
     private val activeState: Lifecycle.State = LifecyclePlugins.DEFAULT_ACTIVE_STATE,
     private val alwaysDeliverLastValueWhenUnlocked: Boolean = false,
@@ -109,9 +124,7 @@ internal class LifecycleAwareObserver<T : Any>(
         DisposableHelper.dispose(this)
     }
 
-    override fun isDisposed(): Boolean {
-        return get() === DisposableHelper.DISPOSED
-    }
+    override fun isDisposed() = get() === DisposableHelper.DISPOSED
 
     private fun updateLock() {
         if (owner?.lifecycle?.currentState?.isAtLeast(activeState) == true) {
@@ -122,9 +135,7 @@ internal class LifecycleAwareObserver<T : Any>(
     }
 
     private fun unlock() {
-        if (!locked.getAndSet(false)) {
-            return
-        }
+        if (!locked.getAndSet(false)) return
         if (!isDisposed) {
             val valueToDeliverOnUnlock =
                 if (alwaysDeliverLastValueWhenUnlocked && lastValue != null) lastValue else lastUndeliveredValue
@@ -140,10 +151,12 @@ internal class LifecycleAwareObserver<T : Any>(
     }
 
     private fun requireOwner(): LifecycleOwner = owner!!
-}
 
-private val onSubscribeStub: (Disposable) -> Unit = {}
-private val onCompleteStub: () -> Unit = {}
-private val onNextStub: (Any) -> Unit = {}
-private val onErrorStub: (Throwable) -> Unit =
-    { RxJavaPlugins.onError(OnErrorNotImplementedException(it)) }
+    private companion object {
+        private val onSubscribeStub: (Disposable) -> Unit = {}
+        private val onCompleteStub: () -> Unit = {}
+        private val onNextStub: (Any) -> Unit = {}
+        private val onErrorStub: (Throwable) -> Unit =
+            { RxJavaPlugins.onError(OnErrorNotImplementedException(it)) }
+    }
+}
