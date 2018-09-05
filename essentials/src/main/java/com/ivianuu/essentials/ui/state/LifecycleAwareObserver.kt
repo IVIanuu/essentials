@@ -15,9 +15,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicReference
 
 /**
- * An wrapper around an [Observer] associated with a [LifecycleOwner]. It has an [activeState], and when in a lifecycle state greater
- * than the [activeState] (as defined by [Lifecycle.State.isAtLeast()]) it will deliver values to the [sourceObserver] or [onNext] lambda.
- * When in a lower lifecycle state, the most recent update will be saved, and delivered when active again.
+ * Lifecycle aware observer
  */
 internal class LifecycleAwareObserver<T>(
     owner: LifecycleOwner,
