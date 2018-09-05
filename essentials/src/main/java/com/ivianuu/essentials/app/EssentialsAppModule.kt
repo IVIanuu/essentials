@@ -17,12 +17,14 @@
 package com.ivianuu.essentials.app
 
 import android.app.Application
+import android.content.Context
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.preference.PreferenceManager
 import androidx.work.WorkManager
 import com.f2prateek.rx.preferences2.RxSharedPreferences
 import com.ivianuu.rxsystemsettings.RxSystemSettings
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -31,30 +33,38 @@ import javax.inject.Singleton
  * Essentials app module
  */
 @Module
-object EssentialsAppModule {
+abstract class EssentialsAppModule {
 
-    @JvmStatic
-    @Provides
-    fun provideSharedPrefs(application: Application): SharedPreferences =
-        PreferenceManager.getDefaultSharedPreferences(application)
+    @Binds
+    abstract fun bindContext(app: Application): Context
 
-    @JvmStatic
-    @Singleton
-    @Provides
-    fun provideRxSharedPrefs(prefs: SharedPreferences): RxSharedPreferences =
-        RxSharedPreferences.create(prefs)
+    @Module
+    companion object {
 
-    @JvmStatic
-    @Provides
-    fun providePackageManager(app: Application): PackageManager = app.packageManager
+        @JvmStatic
+        @Provides
+        fun provideSharedPrefs(context: Context): SharedPreferences =
+            PreferenceManager.getDefaultSharedPreferences(context)
 
-    @JvmStatic
-    @Singleton
-    @Provides
-    fun provideRxSystemSettings(app: Application) = RxSystemSettings.create(app)
+        @JvmStatic
+        @Singleton
+        @Provides
+        fun provideRxSharedPrefs(prefs: SharedPreferences): RxSharedPreferences =
+            RxSharedPreferences.create(prefs)
 
-    @JvmStatic
-    @Provides
-    fun provideWorkManager(): WorkManager = WorkManager.getInstance()
+        @JvmStatic
+        @Provides
+        fun providePackageManager(context: Context): PackageManager = context.packageManager
+
+        @JvmStatic
+        @Singleton
+        @Provides
+        fun provideRxSystemSettings(context: Context) = RxSystemSettings.create(context)
+
+        @JvmStatic
+        @Provides
+        fun provideWorkManager(): WorkManager = WorkManager.getInstance()
+
+    }
 
 }

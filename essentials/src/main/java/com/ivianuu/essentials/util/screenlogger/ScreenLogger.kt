@@ -33,7 +33,7 @@ import javax.inject.Singleton
  * Utility class to help with screen logging
  */
 @Singleton
-class ScreenLogger @Inject constructor(private val application: Application) : AppService {
+class ScreenLogger @Inject constructor(private val app: Application) : AppService {
 
     private val listeners = mutableListOf<Listener>()
 
@@ -42,7 +42,7 @@ class ScreenLogger @Inject constructor(private val application: Application) : A
     }
 
     override fun start() {
-        application.doOnActivityCreated { activity, savedInstanceState ->
+        app.doOnActivityCreated { activity, savedInstanceState ->
             handleActivity(activity, savedInstanceState)
         }
     }
@@ -79,7 +79,7 @@ class ScreenLogger @Inject constructor(private val application: Application) : A
 
     private fun getId(screen: IdentifiableScreen): String = when {
         screen.screenId.isNotEmpty() -> screen.screenId
-        screen.screenIdRes != 0 -> application.getString(screen.screenIdRes)
+        screen.screenIdRes != 0 -> app.getString(screen.screenIdRes)
         else -> parseName(screen.javaClass.simpleName)
     }
 

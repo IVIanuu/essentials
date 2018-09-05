@@ -52,210 +52,210 @@ object SystemServiceModule {
 
     @JvmStatic
     @Provides
-    fun provideSubscriptionManager(app: Application) = app.systemService<SubscriptionManager>()
+    fun provideSubscriptionManager(context: Context) = context.systemService<SubscriptionManager>()
 
     @JvmStatic
     @Provides
-    fun provideUsageStatsManager(app: Application) = app.systemService<UsageStatsManager>()
+    fun provideUsageStatsManager(context: Context) = context.systemService<UsageStatsManager>()
 
     @JvmStatic
     @Provides
-    fun provideAppWidgetManager(app: Application) = app.systemService<AppWidgetManager>()
+    fun provideAppWidgetManager(context: Context) = context.systemService<AppWidgetManager>()
 
     @JvmStatic
     @Provides
-    fun provideBatteryManager(app: Application) = app.systemService<BatteryManager>()
+    fun provideBatteryManager(context: Context) = context.systemService<BatteryManager>()
 
     @JvmStatic
     @Provides
-    fun provideCameraManager(app: Application) = app.systemService<CameraManager>()
+    fun provideCameraManager(context: Context) = context.systemService<CameraManager>()
 
     @JvmStatic
     @Provides
-    fun provideJobScheduler(app: Application) = app.systemService<JobScheduler>()
+    fun provideJobScheduler(context: Context) = context.systemService<JobScheduler>()
 
     @JvmStatic
     @Provides
-    fun provideLauncherApps(app: Application) = app.systemService<LauncherApps>()
+    fun provideLauncherApps(context: Context) = context.systemService<LauncherApps>()
 
     @JvmStatic
     @Provides
-    fun provideMediaProjectionManager(app: Application) =
-        app.systemService<MediaProjectionManager>()
+    fun provideMediaProjectionManager(context: Context) =
+        context.systemService<MediaProjectionManager>()
 
     @JvmStatic
     @Provides
-    fun provideMediaSessionManager(app: Application) = app.systemService<MediaSessionManager>()
+    fun provideMediaSessionManager(context: Context) = context.systemService<MediaSessionManager>()
 
     @JvmStatic
     @Provides
-    fun provideRestrictionsManager(app: Application) = app.systemService<RestrictionsManager>()
+    fun provideRestrictionsManager(context: Context) = context.systemService<RestrictionsManager>()
 
     @JvmStatic
     @Provides
-    fun provideTelecomManager(app: Application) = app.systemService<TelecomManager>()
+    fun provideTelecomManager(context: Context) = context.systemService<TelecomManager>()
 
     @JvmStatic
     @Provides
-    fun provideTvInputManager(app: Application) = app.systemService<TvInputManager>()
+    fun provideTvInputManager(context: Context) = context.systemService<TvInputManager>()
 
     @JvmStatic
     @Provides
-    fun provideAppOpsManager(app: Application) = app.systemService<AppOpsManager>()
+    fun provideAppOpsManager(context: Context) = context.systemService<AppOpsManager>()
 
     @JvmStatic
     @Provides
-    fun provideCaptioningManager(app: Application) = app.systemService<CaptioningManager>()
+    fun provideCaptioningManager(context: Context) = context.systemService<CaptioningManager>()
 
     @JvmStatic
     @Provides
-    fun provideConsumerIrManager(app: Application) = app.systemService<ConsumerIrManager>()
+    fun provideConsumerIrManager(context: Context) = context.systemService<ConsumerIrManager>()
 
     @JvmStatic
     @Provides
-    fun providePrintManager(app: Application) = app.systemService<PrintManager>()
+    fun providePrintManager(context: Context) = context.systemService<PrintManager>()
 
     @JvmStatic
     @Provides
-    fun provideBluetoothManager(app: Application) = app.systemService<BluetoothManager>()
+    fun provideBluetoothManager(context: Context) = context.systemService<BluetoothManager>()
 
     @JvmStatic
     @Provides
-    fun provideDisplayManager(app: Application) = app.systemService<DisplayManager>()
+    fun provideDisplayManager(context: Context) = context.systemService<DisplayManager>()
 
     @JvmStatic
     @Provides
-    fun provideUserManager(app: Application) = app.systemService<UserManager>()
+    fun provideUserManager(context: Context) = context.systemService<UserManager>()
 
     @JvmStatic
     @Provides
-    fun provideInputManager(app: Application) = app.systemService<InputManager>()
+    fun provideInputManager(context: Context) = context.systemService<InputManager>()
 
     @JvmStatic
     @Provides
-    fun provideMediaRouter(app: Application) = app.systemService<MediaRouter>()
+    fun provideMediaRouter(context: Context) = context.systemService<MediaRouter>()
 
     @JvmStatic
     @Provides
-    fun provideNsdManager(app: Application) = app.systemService<NsdManager>()
+    fun provideNsdManager(context: Context) = context.systemService<NsdManager>()
 
     // todo change method when support library fixes the issue
     @JvmStatic
     @Provides
-    fun provideAccessibilityManager(app: Application) =
-        app.getSystemService(Context.ACCESSIBILITY_SERVICE) as AccessibilityManager
+    fun provideAccessibilityManager(context: Context) =
+        context.getSystemService(Context.ACCESSIBILITY_SERVICE) as AccessibilityManager
 
     @JvmStatic
     @Provides
-    fun provideAccountManager(app: Application) = app.systemService<AccountManager>()
+    fun provideAccountManager(context: Context) = context.systemService<AccountManager>()
 
     @JvmStatic
     @Provides
-    fun provideActivityManager(app: Application) = app.systemService<ActivityManager>()
+    fun provideActivityManager(context: Context) = context.systemService<ActivityManager>()
 
     @JvmStatic
     @Provides
-    fun provideAlarmManager(app: Application) = app.systemService<AlarmManager>()
+    fun provideAlarmManager(context: Context) = context.systemService<AlarmManager>()
 
     @JvmStatic
     @Provides
-    fun provideAudioManager(app: Application) = app.systemService<AudioManager>()
+    fun provideAudioManager(context: Context) = context.systemService<AudioManager>()
 
     @JvmStatic
     @Provides
-    fun provideClipboardManager(app: Application) = app.systemService<ClipboardManager>()
+    fun provideClipboardManager(context: Context) = context.systemService<ClipboardManager>()
 
     @JvmStatic
     @Provides
-    fun provideConnectivityManager(app: Application) = app.systemService<ConnectivityManager>()
+    fun provideConnectivityManager(context: Context) = context.systemService<ConnectivityManager>()
 
     @JvmStatic
     @Provides
-    fun provideDevicePolicyManagerManager(app: Application) =
-        app.systemService<DevicePolicyManager>()
+    fun provideDevicePolicyManagerManager(context: Context) =
+        context.systemService<DevicePolicyManager>()
 
     @JvmStatic
     @Provides
-    fun provideDownloadManager(app: Application) = app.systemService<DownloadManager>()
+    fun provideDownloadManager(context: Context) = context.systemService<DownloadManager>()
 
     @JvmStatic
     @Provides
-    fun provideDropBoxManager(app: Application) = app.systemService<DropBoxManager>()
+    fun provideDropBoxManager(context: Context) = context.systemService<DropBoxManager>()
 
     @JvmStatic
     @Provides
-    fun provideInputMethodManager(app: Application) = app.systemService<InputMethodManager>()
+    fun provideInputMethodManager(context: Context) = context.systemService<InputMethodManager>()
 
     @JvmStatic
     @Provides
-    fun provideKeyguardManager(app: Application) = app.systemService<KeyguardManager>()
+    fun provideKeyguardManager(context: Context) = context.systemService<KeyguardManager>()
 
     @JvmStatic
     @Provides
-    fun provideLayoutInflater(app: Application) = app.systemService<LayoutInflater>()
+    fun provideLayoutInflater(context: Context) = context.systemService<LayoutInflater>()
 
     @JvmStatic
     @Provides
-    fun provideLocationManager(app: Application) = app.systemService<LocationManager>()
+    fun provideLocationManager(context: Context) = context.systemService<LocationManager>()
 
     @JvmStatic
     @Provides
-    fun provideNfcManager(app: Application) = app.systemService<NfcManager>()
+    fun provideNfcManager(context: Context) = context.systemService<NfcManager>()
 
     @JvmStatic
     @Provides
-    fun provideNotificationManager(app: Application) = app.systemService<NotificationManager>()
+    fun provideNotificationManager(context: Context) = context.systemService<NotificationManager>()
 
     @JvmStatic
     @Provides
-    fun providePowerManager(app: Application) = app.systemService<PowerManager>()
+    fun providePowerManager(context: Context) = context.systemService<PowerManager>()
 
     @JvmStatic
     @Provides
-    fun provideSearchManager(app: Application) = app.systemService<SearchManager>()
+    fun provideSearchManager(context: Context) = context.systemService<SearchManager>()
 
     @JvmStatic
     @Provides
-    fun provideSensorManager(app: Application) = app.systemService<SensorManager>()
+    fun provideSensorManager(context: Context) = context.systemService<SensorManager>()
 
     @JvmStatic
     @Provides
-    fun provideStorageManager(app: Application) = app.systemService<StorageManager>()
+    fun provideStorageManager(context: Context) = context.systemService<StorageManager>()
 
     @JvmStatic
     @Provides
-    fun provideTelephonyManager(app: Application) = app.systemService<TelephonyManager>()
+    fun provideTelephonyManager(context: Context) = context.systemService<TelephonyManager>()
 
     @JvmStatic
     @Provides
-    fun provideTextServicesManager(app: Application) = app.systemService<TextServicesManager>()
+    fun provideTextServicesManager(context: Context) = context.systemService<TextServicesManager>()
 
     @JvmStatic
     @Provides
-    fun provideUiModeManager(app: Application) = app.systemService<UiModeManager>()
+    fun provideUiModeManager(context: Context) = context.systemService<UiModeManager>()
 
     @JvmStatic
     @Provides
-    fun provideUsbManager(app: Application) = app.systemService<UsbManager>()
+    fun provideUsbManager(context: Context) = context.systemService<UsbManager>()
 
     @JvmStatic
     @Provides
-    fun provideVibrator(app: Application) = app.systemService<Vibrator>()
+    fun provideVibrator(context: Context) = context.systemService<Vibrator>()
 
     @JvmStatic
     @Provides
-    fun provideWallpaperManager(app: Application) = app.systemService<WallpaperManager>()
+    fun provideWallpaperManager(context: Context) = context.systemService<WallpaperManager>()
 
     @JvmStatic
     @Provides
-    fun provideWifiP2pManager(app: Application) = app.systemService<WifiP2pManager>()
+    fun provideWifiP2pManager(context: Context) = context.systemService<WifiP2pManager>()
 
     @JvmStatic
     @Provides
-    fun provideWifiManager(app: Application) = app.systemService<WifiManager>()
+    fun provideWifiManager(context: Context) = context.systemService<WifiManager>()
 
     @JvmStatic
     @Provides
-    fun provideWindowManager(app: Application) = app.systemService<WindowManager>()
+    fun provideWindowManager(context: Context) = context.systemService<WindowManager>()
 
 }

@@ -16,7 +16,7 @@
 
 package com.ivianuu.essentials.util
 
-import android.app.Application
+import android.content.Context
 import android.os.Handler
 import com.ivianuu.essentials.util.ext.*
 import javax.inject.Inject
@@ -24,47 +24,47 @@ import javax.inject.Inject
 /**
  * Toasts system messages
  */
-class Toaster @Inject constructor(private val app: Application) {
+class Toaster @Inject constructor(private val context: Context) {
 
     private val handler = Handler()
 
     fun toastError(messageRes: Int, vararg args: Any) {
-        handler.post { app.toastError(messageRes, *args) }
+        handler.post { context.toastError(messageRes, *args) }
     }
 
     fun toastError(message: CharSequence) {
-        handler.post { app.toastError(message) }
+        handler.post { context.toastError(message) }
     }
 
     fun toastInfo(messageRes: Int, vararg args: Any) {
-        handler.post { app.toastInfo(messageRes, *args) }
+        handler.post { context.toastInfo(messageRes, *args) }
     }
 
     fun toastInfo(message: CharSequence) {
-        handler.post { app.toastInfo(message) }
+        handler.post { context.toastInfo(message) }
     }
 
     fun toastNormal(messageRes: Int, vararg args: Any) {
-        handler.post { app.toastNormal(messageRes, *args) }
+        handler.post { context.toastNormal(messageRes, *args) }
     }
 
     fun toastNormal(message: CharSequence) {
-        handler.post { app.toastNormal(message) }
+        handler.post { context.toastNormal(message) }
     }
 
     fun toastSuccess(messageRes: Int, vararg args: Any) {
-        handler.post { app.toastSuccess(messageRes, *args) }
+        handler.post { context.toastSuccess(messageRes, *args) }
     }
 
     fun toastSuccess(message: CharSequence) {
-        handler.post { app.toastSuccess(message) }
+        handler.post { context.toastSuccess(message) }
     }
 
     fun toastWarning(messageRes: Int, vararg args: Any) {
-        handler.post { app.toastWarning(messageRes, *args) }
+        handler.post { context.toastWarning(messageRes, *args) }
     }
 
     fun toastWarning(message: CharSequence) {
-        handler.post { app.toastWarning(message) }
+        handler.post { context.toastWarning(message) }
     }
 }

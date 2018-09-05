@@ -16,16 +16,17 @@
 
 package com.ivianuu.essentials.util
 
-import android.app.Application
+import android.content.Context
+import com.ivianuu.essentials.util.ext.string
 import javax.inject.Inject
 
 /**
  * Provides [String]'s from resources
  */
-class StringProvider @Inject constructor(private val app: Application) {
+class StringProvider @Inject constructor(private val context: Context) {
 
-    fun string(resId: Int): String = app.getString(resId)
+    fun string(resId: Int) = context.string(resId)
 
-    fun string(resId: Int, vararg args: Any): String = app.getString(resId, *args)
+    fun string(resId: Int, vararg args: Any) = context.string(resId, *args)
 
 }
