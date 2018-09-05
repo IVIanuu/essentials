@@ -11,10 +11,7 @@ fun Disposable.disposedWith(
 ) = apply {
     owner.lifecycle.addObserver(object : SimpleLifecycleObserver() {
         override fun onAny(owner: LifecycleOwner, e: Lifecycle.Event) {
-            if (event == e) {
-                owner.lifecycle.removeObserver(this)
-                dispose()
-            }
+            if (event == e) dispose()
         }
     })
 }

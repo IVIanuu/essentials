@@ -44,7 +44,6 @@ class LifecycleAwareObserver<T : Any>(
 
         override fun onDestroy(owner: LifecycleOwner) {
             super.onDestroy(owner)
-            requireOwner().lifecycle.removeObserver(this)
             this@LifecycleAwareObserver.owner = null
             if (!isDisposed) {
                 dispose()
