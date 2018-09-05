@@ -24,9 +24,7 @@ import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.base.BaseFragment
 import com.ivianuu.essentials.ui.state.bindViewModel
 import com.ivianuu.essentials.ui.state.withState
-import com.ivianuu.essentials.ui.test.events
 import com.ivianuu.essentials.ui.traveler.detour.HorizontalDetour
-import com.ivianuu.essentials.util.ext.checkAllMatched
 import kotlinx.android.synthetic.main.fragment_counter.*
 
 @Detour(HorizontalDetour::class)
@@ -45,15 +43,6 @@ class CounterFragment : BaseFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel.setDestination(counterDestination())
-
-        events(viewModel) {
-            when (it) {
-                is CounterEvent.NavigateTo -> router.navigateTo(it.destination)
-                is CounterEvent.GoBack -> router.exit()
-                is CounterEvent.GoToRoot -> router.backToRoot()
-                is CounterEvent.GoToList -> router.navigateTo(ListDestination)
-            }.checkAllMatched()
-        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

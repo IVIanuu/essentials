@@ -142,8 +142,8 @@ internal class LifecycleAwareObserver<T : Any>(
     private fun requireOwner(): LifecycleOwner = owner!!
 }
 
-internal val onSubscribeStub: (Disposable) -> Unit = {}
-internal val onCompleteStub: () -> Unit = {}
-internal val onNextStub: (Any) -> Unit = {}
-internal val onErrorStub: (Throwable) -> Unit =
+private val onSubscribeStub: (Disposable) -> Unit = {}
+private val onCompleteStub: () -> Unit = {}
+private val onNextStub: (Any) -> Unit = {}
+private val onErrorStub: (Throwable) -> Unit =
     { RxJavaPlugins.onError(OnErrorNotImplementedException(it)) }
