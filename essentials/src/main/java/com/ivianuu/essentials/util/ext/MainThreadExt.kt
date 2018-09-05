@@ -16,6 +16,16 @@
 
 package com.ivianuu.essentials.util.ext
 
+import android.os.Handler
 import android.os.Looper
 
+private val mainHandler = Handler(Looper.getMainLooper())
+
 inline val isMainThread get() = Looper.myLooper() == Looper.getMainLooper()
+
+fun mainThread(block: () -> Unit) {
+    when {
+        isMainThread -> block.invoke()
+        else -> mainHandler.post(block)
+    }
+}
