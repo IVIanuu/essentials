@@ -19,16 +19,13 @@ package com.ivianuu.essentials.util
 import androidx.lifecycle.GenericLifecycleObserver
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
-import com.ivianuu.essentials.util.lifecycle.LifecyclePlugins
 
-open class ActiveInactiveObserver(
-    val activeState: Lifecycle.State = LifecyclePlugins.DEFAULT_ACTIVE_STATE
-) : GenericLifecycleObserver {
+open class ActiveInactiveObserver : GenericLifecycleObserver {
 
     private var isActive = false
 
     override fun onStateChanged(owner: LifecycleOwner, event: Lifecycle.Event) {
-        if (owner.lifecycle.currentState.isAtLeast(activeState)) {
+        if (owner.lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
             if (!isActive) {
                 isActive = true
                 onActive(owner)
@@ -51,11 +48,10 @@ open class ActiveInactiveObserver(
 
 fun lifecycleAwareComponent(
     owner: LifecycleOwner,
-    activeState: Lifecycle.State = LifecyclePlugins.DEFAULT_ACTIVE_STATE,
     onInactive: ((LifecycleOwner) -> Unit)? = null,
     onActive: ((LifecycleOwner) -> Unit)? = null
 ) {
-    owner.lifecycle.addObserver(object : ActiveInactiveObserver(activeState) {
+    owner.lifecycle.addObserver(object : ActiveInactiveObserver() {
         override fun onActive(owner: LifecycleOwner) {
             super.onActive(owner)
             onActive?.invoke(owner)

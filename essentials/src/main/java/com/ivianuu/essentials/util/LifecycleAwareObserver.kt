@@ -18,7 +18,6 @@ package com.ivianuu.essentials.util
 
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
-import com.ivianuu.essentials.util.lifecycle.LifecyclePlugins
 import io.reactivex.Observer
 import io.reactivex.disposables.Disposable
 import io.reactivex.exceptions.OnErrorNotImplementedException
@@ -32,7 +31,6 @@ import java.util.concurrent.atomic.AtomicReference
  */
 class LifecycleAwareObserver<T : Any>(
     owner: LifecycleOwner,
-    private val activeState: Lifecycle.State = LifecyclePlugins.DEFAULT_ACTIVE_STATE,
     private val alwaysDeliverLastValueWhenUnlocked: Boolean = false,
     private val sourceObserver: Observer<T>
 ) : AtomicReference<Disposable>(), Observer<T>, Disposable {
@@ -63,7 +61,6 @@ class LifecycleAwareObserver<T : Any>(
 
     constructor(
         owner: LifecycleOwner,
-        activeState: Lifecycle.State = LifecyclePlugins.DEFAULT_ACTIVE_STATE,
         alwaysDeliverLastValueWhenUnlocked: Boolean = false,
         onSubscribe: (Disposable) -> Unit = onSubscribeStub,
         onError: (Throwable) -> Unit = onErrorStub,
@@ -71,7 +68,6 @@ class LifecycleAwareObserver<T : Any>(
         onNext: (T) -> Unit = onNextStub
     ) : this(
         owner,
-        activeState,
         alwaysDeliverLastValueWhenUnlocked,
         object : Observer<T> {
             override fun onSubscribe(d: Disposable) {
@@ -127,7 +123,7 @@ class LifecycleAwareObserver<T : Any>(
     override fun isDisposed() = get() === DisposableHelper.DISPOSED
 
     private fun updateLock() {
-        if (owner?.lifecycle?.currentState?.isAtLeast(activeState) == true) {
+        if (owner?.lifecycle?.currentState?.isAtLeast(Lifecycle.State.STARTED) == true) {
             unlock()
         } else {
             lock()
