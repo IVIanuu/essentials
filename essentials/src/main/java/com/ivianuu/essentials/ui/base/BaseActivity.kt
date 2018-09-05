@@ -34,7 +34,6 @@ import com.ivianuu.traveler.extension.setNavigator
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
-import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
 
 /**
@@ -64,8 +63,6 @@ abstract class BaseActivity : AppCompatActivity(), HasSupportFragmentInjector, I
         )
     }
 
-    protected val disposables = CompositeDisposable()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -76,11 +73,6 @@ abstract class BaseActivity : AppCompatActivity(), HasSupportFragmentInjector, I
         if (savedInstanceState == null) {
             startDestination?.let { router.newRootScreen(it) }
         }
-    }
-
-    override fun onDestroy() {
-        disposables.clear()
-        super.onDestroy()
     }
 
     override fun onBackPressed() {

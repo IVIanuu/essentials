@@ -34,7 +34,6 @@ import com.ivianuu.traveler.Router
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
-import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
 
 /**
@@ -48,8 +47,6 @@ abstract class BaseFragment : Fragment(), BackListener, ContextAware, HasSupport
     @Inject lateinit var supportFragmentInjector: DispatchingAndroidInjector<Fragment>
 
     @Inject override lateinit var viewModelFactory: ViewModelProvider.Factory
-
-    protected val disposables = CompositeDisposable()
 
     protected open val layoutRes = -1
 
@@ -69,11 +66,6 @@ abstract class BaseFragment : Fragment(), BackListener, ContextAware, HasSupport
     override fun onStart() {
         super.onStart()
         postInvalidate()
-    }
-
-    override fun onDestroyView() {
-        disposables.clear()
-        super.onDestroyView()
     }
 
     override fun invalidate() {

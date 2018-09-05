@@ -34,7 +34,6 @@ import com.ivianuu.traveler.Router
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
-import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
 
 /**
@@ -50,8 +49,6 @@ abstract class BaseDialogFragment : AppCompatDialogFragment(), BackListener, Con
 
     @Inject override lateinit var viewModelFactory: ViewModelProvider.Factory
 
-    protected val disposables = CompositeDisposable()
-
     protected open val layoutRes = -1
 
     override val providedContext: Context
@@ -65,11 +62,6 @@ abstract class BaseDialogFragment : AppCompatDialogFragment(), BackListener, Con
         inflater.inflate(layoutRes, container, false)
     } else {
         super.onCreateView(inflater, container, savedInstanceState)
-    }
-
-    override fun onDestroyView() {
-        disposables.clear()
-        super.onDestroyView()
     }
 
     override fun supportFragmentInjector(): AndroidInjector<Fragment> = supportFragmentInjector
