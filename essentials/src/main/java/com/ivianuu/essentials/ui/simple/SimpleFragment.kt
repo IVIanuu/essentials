@@ -66,7 +66,10 @@ abstract class SimpleFragment : BaseFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        epoxyController.onRestoreInstanceState(savedInstanceState)
+        try {
+            epoxyController.onRestoreInstanceState(savedInstanceState)
+        } catch (e: Exception) {
+        }
 
         savedInstanceState?.let {
             layoutManagerState = it.getParcelable(KEY_LAYOUT_MANAGER_STATE)
@@ -115,7 +118,10 @@ abstract class SimpleFragment : BaseFragment() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        epoxyController.onSaveInstanceState(outState)
+        try {
+            epoxyController.onSaveInstanceState(outState)
+        } catch (e: Exception) {
+        }
 
         if (view != null) {
             layoutManagerState = optionalRecyclerView?.layoutManager?.onSaveInstanceState()
