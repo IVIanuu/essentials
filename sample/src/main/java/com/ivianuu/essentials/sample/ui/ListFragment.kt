@@ -1,5 +1,6 @@
 package com.ivianuu.essentials.sample.ui
 
+import android.os.Bundle
 import android.view.MenuItem
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
@@ -18,6 +19,8 @@ import com.ivianuu.essentials.ui.traveler.detour.FadeDetour
 import com.ivianuu.essentials.util.ext.COMPUTATION
 import com.ivianuu.essentials.util.ext.andTrue
 import com.ivianuu.essentials.util.ext.d
+import com.ivianuu.essentials.util.ext.subscribeUi
+import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.rxkotlin.subscribeBy
 import kotlinx.android.synthetic.main.single_line_list_item.*
@@ -38,9 +41,14 @@ class ListFragment : SimpleFragment() {
     override val toolbarMenuRes = R.menu.fragment_list
     override val toolbarTitle = "List"
 
-    override fun epoxyController() = stateEpoxyController(viewModel) { state ->
-        d { "bind state -> $state" }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
+        Observable.interval(1, TimeUnit.SECONDS)
+            .subscribeUi(this) { d { "sub -> $it" } }
+    }
+
+    override fun epoxyController() = stateEpoxyController(viewModel) { state ->
         if (state.loading) {
             simpleLoading {
                 id("loading")
