@@ -2,7 +2,7 @@ package com.ivianuu.essentials.util.ext
 
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
-import com.ivianuu.essentials.util.SimpleLifecycleObserver
+import com.ivianuu.essentials.util.lifecycle.SimpleLifecycleObserver
 import io.reactivex.disposables.Disposable
 
 fun Disposable.disposedWith(

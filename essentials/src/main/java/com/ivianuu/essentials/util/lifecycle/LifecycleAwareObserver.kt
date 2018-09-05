@@ -14,15 +14,17 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.util
+package com.ivianuu.essentials.util.lifecycle
 
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
+import com.ivianuu.essentials.util.ext.onCompleteStub
+import com.ivianuu.essentials.util.ext.onErrorStub
+import com.ivianuu.essentials.util.ext.onNextStub
+import com.ivianuu.essentials.util.ext.onSubscribeStub
 import io.reactivex.Observer
 import io.reactivex.disposables.Disposable
-import io.reactivex.exceptions.OnErrorNotImplementedException
 import io.reactivex.internal.disposables.DisposableHelper
-import io.reactivex.plugins.RxJavaPlugins
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicReference
 
@@ -40,13 +42,11 @@ class LifecycleAwareObserver<T : Any>(
         override fun onAny(owner: LifecycleOwner, event: Lifecycle.Event) {
             super.onAny(owner, event)
             updateLock()
-        }
-
-        override fun onDestroy(owner: LifecycleOwner) {
-            super.onDestroy(owner)
-            this@LifecycleAwareObserver.owner = null
-            if (!isDisposed) {
-                dispose()
+            if (event == Lifecycle.Event.ON_DESTROY) {
+                this@LifecycleAwareObserver.owner = null
+                if (!isDisposed) {
+                    dispose()
+                }
             }
         }
     }
@@ -146,12 +146,4 @@ class LifecycleAwareObserver<T : Any>(
     }
 
     private fun requireOwner(): LifecycleOwner = owner!!
-
-    private companion object {
-        private val onSubscribeStub: (Disposable) -> Unit = {}
-        private val onCompleteStub: () -> Unit = {}
-        private val onNextStub: (Any) -> Unit = {}
-        private val onErrorStub: (Throwable) -> Unit =
-            { RxJavaPlugins.onError(OnErrorNotImplementedException(it)) }
-    }
 }

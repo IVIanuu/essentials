@@ -31,7 +31,7 @@ import androidx.appcompat.view.ContextThemeWrapper
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
 import com.ivianuu.essentials.util.ContextAware
-import com.ivianuu.essentials.util.lifecycleAwareComponent
+import com.ivianuu.essentials.util.lifecycle.lifecycleAwareComponent
 
 inline val Context.isTablet: Boolean
     get() = resources.configuration.screenLayout and Configuration.SCREENLAYOUT_SIZE_MASK >= Configuration.SCREENLAYOUT_SIZE_LARGE

@@ -18,7 +18,7 @@ package com.ivianuu.essentials.util.ext
 
 import android.content.SharedPreferences
 import androidx.lifecycle.LifecycleOwner
-import com.ivianuu.essentials.util.lifecycleAwareComponent
+import com.ivianuu.essentials.util.lifecycle.lifecycleAwareComponent
 import io.reactivex.Observable
 import io.reactivex.ObservableEmitter
 import io.reactivex.ObservableOnSubscribe

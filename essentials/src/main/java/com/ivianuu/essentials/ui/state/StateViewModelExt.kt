@@ -3,7 +3,7 @@ package com.ivianuu.essentials.ui.state
 import androidx.lifecycle.ViewModelProvider
 import com.ivianuu.essentials.ui.base.BaseFragment
 import com.ivianuu.essentials.util.ext.*
-import com.ivianuu.essentials.util.lifecycleAwareLazy
+import com.ivianuu.essentials.util.lifecycle.lifecycleAwareLazy
 import kotlin.reflect.KClass
 
 inline fun <reified T : StateViewModel<S>, reified S : Any> BaseFragment.viewModel(
@@ -55,7 +55,5 @@ inline fun <reified T : StateViewModel<S>, reified S : Any> BaseFragment.bindTar
 ) = lifecycleAwareLazy { targetViewModel(clazz, factoryProvider(), keyProvider()) }
 
 @PublishedApi
-internal inline fun <reified T : StateViewModel<S>, reified S> T.setupViewModel(BaseFragment: BaseFragment) =
-    apply {
-        subscribe(BaseFragment) { BaseFragment.postInvalidate() }
-    }
+internal inline fun <reified T : StateViewModel<S>, reified S> T.setupViewModel(baseFragment: BaseFragment) =
+    apply { subscribe(baseFragment) { baseFragment.postInvalidate() } }

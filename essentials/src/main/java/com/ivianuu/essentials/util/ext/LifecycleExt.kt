@@ -19,7 +19,7 @@ package com.ivianuu.essentials.util.ext
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LifecycleOwner
-import com.ivianuu.essentials.util.SimpleLifecycleObserver
+import com.ivianuu.essentials.util.lifecycle.SimpleLifecycleObserver
 import io.reactivex.Observable
 
 fun Lifecycle.doOnAny(block: (owner: LifecycleOwner, event: Lifecycle.Event) -> Unit) =
