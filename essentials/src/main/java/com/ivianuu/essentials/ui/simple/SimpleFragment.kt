@@ -2,11 +2,13 @@ package com.ivianuu.essentials.ui.simple
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.os.Parcelable
 import android.view.View
 import androidx.appcompat.widget.Toolbar
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.fragment.app.isInBackstack
 import androidx.recyclerview.widget.RecyclerView
+import com.airbnb.epoxy.DiffResult
 import com.airbnb.epoxy.EpoxyController
 import com.airbnb.epoxy.EpoxyRecyclerView
 import com.google.android.material.appbar.AppBarLayout
@@ -53,9 +55,22 @@ abstract class SimpleFragment : BaseFragment() {
     val optionalToolbar: Toolbar?
         get() = view?.findViewById(R.id.toolbar)
 
+    private val modelBuiltListener: (DiffResult) -> Unit = {
+        if (layoutManagerState != null) {
+            optionalRecyclerView?.layoutManager?.onRestoreInstanceState(layoutManagerState)
+            layoutManagerState = null
+        }
+    }
+
+    private var layoutManagerState: Parcelable? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         epoxyController.onRestoreInstanceState(savedInstanceState)
+
+        savedInstanceState?.let {
+            layoutManagerState = it.getParcelable(KEY_LAYOUT_MANAGER_STATE)
+        }
     }
 
     @SuppressLint("PrivateResource")
@@ -95,16 +110,24 @@ abstract class SimpleFragment : BaseFragment() {
             this@SimpleFragment.layoutManager()?.let { layoutManager = it }
         }
 
-        optionalRecyclerView?.setController(epoxyController)
+        epoxyController.addModelBuildListener(modelBuiltListener)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         epoxyController.onSaveInstanceState(outState)
+
+        if (view != null) {
+            layoutManagerState = optionalRecyclerView?.layoutManager?.onSaveInstanceState()
+        }
+
+        outState.putParcelable(KEY_LAYOUT_MANAGER_STATE, layoutManagerState)
     }
 
     override fun onDestroyView() {
+        layoutManagerState = optionalRecyclerView?.layoutManager?.onSaveInstanceState()
         epoxyController.cancelPendingModelBuild()
+        epoxyController.removeModelBuildListener(modelBuiltListener)
         super.onDestroyView()
     }
 
@@ -116,4 +139,7 @@ abstract class SimpleFragment : BaseFragment() {
 
     protected open fun layoutManager(): RecyclerView.LayoutManager? = null
 
+    companion object {
+        private const val KEY_LAYOUT_MANAGER_STATE = "SimpleFragment.layoutManagerState"
+    }
 }
