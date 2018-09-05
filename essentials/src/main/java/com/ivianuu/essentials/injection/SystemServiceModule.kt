@@ -139,11 +139,10 @@ object SystemServiceModule {
     @Provides
     fun provideNsdManager(context: Context) = context.systemService<NsdManager>()
 
-    // todo change method when support library fixes the issue
     @JvmStatic
     @Provides
     fun provideAccessibilityManager(context: Context) =
-        context.getSystemService(Context.ACCESSIBILITY_SERVICE) as AccessibilityManager
+        context.systemService<AccessibilityManager>()
 
     @JvmStatic
     @Provides
