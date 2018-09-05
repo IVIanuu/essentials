@@ -1,76 +1,86 @@
 package com.ivianuu.essentials.ui.state
 
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.OnLifecycleEvent
+import com.ivianuu.essentials.util.SimpleLifecycleObserver
 import com.ivianuu.essentials.util.lifecycle.LifecyclePlugins
 import io.reactivex.Observer
 import io.reactivex.disposables.Disposable
-import io.reactivex.functions.Action
-import io.reactivex.functions.Consumer
+import io.reactivex.exceptions.OnErrorNotImplementedException
 import io.reactivex.internal.disposables.DisposableHelper
-import io.reactivex.internal.functions.Functions
-import io.reactivex.internal.observers.LambdaObserver
+import io.reactivex.plugins.RxJavaPlugins
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicReference
 
 /**
  * Lifecycle aware observer
  */
-internal class LifecycleAwareObserver<T>(
+internal class LifecycleAwareObserver<T : Any>(
     owner: LifecycleOwner,
     private val activeState: Lifecycle.State = LifecyclePlugins.DEFAULT_ACTIVE_STATE,
     private val alwaysDeliverLastValueWhenUnlocked: Boolean = false,
     private val sourceObserver: Observer<T>
-) : AtomicReference<Disposable>(), LifecycleObserver, Observer<T>, Disposable {
+) : AtomicReference<Disposable>(), Observer<T>, Disposable {
+
+    private val lifecycleObserver = object : SimpleLifecycleObserver() {
+
+        override fun onAny(owner: LifecycleOwner, event: Lifecycle.Event) {
+            super.onAny(owner, event)
+            updateLock()
+        }
+
+        override fun onDestroy(owner: LifecycleOwner) {
+            super.onDestroy(owner)
+            requireOwner().lifecycle.removeObserver(this)
+            this@LifecycleAwareObserver.owner = null
+            if (!isDisposed) {
+                dispose()
+            }
+        }
+    }
+
+    private val locked = AtomicBoolean(true)
+
+    private var owner: LifecycleOwner? = owner
+
+    private var lastUndeliveredValue: T? = null
+    private var lastValue: T? = null
 
     constructor(
         owner: LifecycleOwner,
         activeState: Lifecycle.State = LifecyclePlugins.DEFAULT_ACTIVE_STATE,
         alwaysDeliverLastValueWhenUnlocked: Boolean = false,
-        onComplete: Action = Functions.EMPTY_ACTION,
-        onSubscribe: Consumer<in Disposable> = Functions.emptyConsumer(),
-        onError: Consumer<in Throwable> = Functions.ON_ERROR_MISSING,
-        onNext: Consumer<T> = Functions.emptyConsumer()
+        onSubscribe: (Disposable) -> Unit = onSubscribeStub,
+        onError: (Throwable) -> Unit = onErrorStub,
+        onComplete: () -> Unit = onCompleteStub,
+        onNext: (T) -> Unit = onNextStub
     ) : this(
         owner,
         activeState,
         alwaysDeliverLastValueWhenUnlocked,
-        LambdaObserver<T>(onNext, onError, onComplete, onSubscribe)
-    )
+        object : Observer<T> {
+            override fun onSubscribe(d: Disposable) {
+                onSubscribe.invoke(d)
+            }
 
-    private var owner: LifecycleOwner? = owner
-    private var lastUndeliveredValue: T? = null
-    private var lastValue: T? = null
-    private val locked = AtomicBoolean(true)
+            override fun onNext(t: T) {
+                onNext.invoke(t)
+            }
+
+            override fun onError(e: Throwable) {
+                onError.invoke(e)
+            }
+
+            override fun onComplete() {
+                onComplete.invoke()
+            }
+        }
+    )
 
     override fun onSubscribe(d: Disposable) {
         if (DisposableHelper.setOnce(this, d)) {
-            requireOwner().lifecycle.addObserver(this)
+            requireOwner().lifecycle.addObserver(lifecycleObserver)
             sourceObserver.onSubscribe(this)
-        }
-    }
-
-    @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
-    fun onDestroy() {
-        requireOwner().lifecycle.removeObserver(this)
-        owner = null
-        if (!isDisposed) {
-            dispose()
-        }
-    }
-
-    @OnLifecycleEvent(Lifecycle.Event.ON_ANY)
-    fun onLifecycleEvent() {
-        updateLock()
-    }
-
-    private fun updateLock() {
-        if (owner?.lifecycle?.currentState?.isAtLeast(activeState) == true) {
-            unlock()
-        } else {
-            lock()
         }
     }
 
@@ -103,6 +113,14 @@ internal class LifecycleAwareObserver<T>(
         return get() === DisposableHelper.DISPOSED
     }
 
+    private fun updateLock() {
+        if (owner?.lifecycle?.currentState?.isAtLeast(activeState) == true) {
+            unlock()
+        } else {
+            lock()
+        }
+    }
+
     private fun unlock() {
         if (!locked.getAndSet(false)) {
             return
@@ -123,3 +141,9 @@ internal class LifecycleAwareObserver<T>(
 
     private fun requireOwner(): LifecycleOwner = owner!!
 }
+
+internal val onSubscribeStub: (Disposable) -> Unit = {}
+internal val onCompleteStub: () -> Unit = {}
+internal val onNextStub: (Any) -> Unit = {}
+internal val onErrorStub: (Throwable) -> Unit =
+    { RxJavaPlugins.onError(OnErrorNotImplementedException(it)) }

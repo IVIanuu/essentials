@@ -17,15 +17,7 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import android.content.Intent
-import android.os.Bundle
-import android.os.Handler
-import android.preference.PreferenceManager
 import com.ivianuu.essentials.ui.base.BaseActivity
-import com.ivianuu.essentials.util.ext.d
-import com.ivianuu.essentials.util.ext.intentFilterOf
-import com.ivianuu.essentials.util.ext.registerOnSharedPreferenceChangeListener
-import com.ivianuu.essentials.util.ext.registerReceiver
 import dagger.Binds
 import dagger.Module
 
@@ -34,30 +26,6 @@ class MainActivity : BaseActivity() {
     override val startDestination: Any?
         get() = CounterDestination(1)
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        val handler = Handler()
-
-        handler.postDelayed(this, 1000L) {
-
-        }
-
-        val prefs = PreferenceManager.getDefaultSharedPreferences(this)
-
-        prefs.registerOnSharedPreferenceChangeListener(this) {
-
-        }
-
-        registerReceiver(
-            this, intentFilterOf(
-                Intent.ACTION_SCREEN_OFF,
-                Intent.ACTION_SCREEN_ON
-            )
-        ) {
-            d { "on receive -> $it" }
-        }
-    }
 }
 
 @Module

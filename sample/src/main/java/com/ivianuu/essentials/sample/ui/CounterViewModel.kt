@@ -1,6 +1,6 @@
 package com.ivianuu.essentials.sample.ui
 
-import com.ivianuu.essentials.ui.state.StateViewModel
+import com.ivianuu.essentials.ui.test.TestViewModel
 import com.ivianuu.traveler.Router
 import javax.inject.Inject
 
@@ -8,7 +8,7 @@ import javax.inject.Inject
  * Counter view model
  */
 class CounterViewModel @Inject constructor(private val router: Router) :
-    StateViewModel<CounterState>() {
+    TestViewModel<CounterState, CounterEvent>() {
 
     private lateinit var destination: CounterDestination
 
@@ -37,20 +37,33 @@ class CounterViewModel @Inject constructor(private val router: Router) :
     }
 
     fun screenUpClicked() {
-        withState { router.navigateTo(CounterDestination(it.screen + 1)) }
+        withState {
+            offerEvent { CounterEvent.NavigateTo(CounterDestination(it.screen + 1)) }
+            //router.navigateTo(CounterDestination(it.screen + 1))
+        }
     }
 
     fun screenDownClicked() {
-        router.exit()
+        offerEvent { CounterEvent.GoBack }
+        //router.exit()
     }
 
     fun rootScreenClicked() {
-        router.backToRoot()
+        offerEvent { CounterEvent.GoToRoot }
+        //router.backToRoot()
     }
 
     fun listScreenClicked() {
-        router.navigateTo(ListDestination)
+        offerEvent { CounterEvent.GoToList }
+        //router.navigateTo(ListDestination)
     }
+}
+
+sealed class CounterEvent {
+    data class NavigateTo(val destination: CounterDestination) : CounterEvent()
+    object GoBack : CounterEvent()
+    object GoToRoot : CounterEvent()
+    object GoToList : CounterEvent()
 }
 
 data class CounterState(

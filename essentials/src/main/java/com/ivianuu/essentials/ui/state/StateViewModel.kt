@@ -4,7 +4,6 @@ import androidx.lifecycle.LifecycleOwner
 import com.ivianuu.essentials.ui.common.BaseViewModel
 import com.ivianuu.essentials.util.ext.MAIN
 import io.reactivex.disposables.Disposable
-import io.reactivex.functions.Consumer
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
 
@@ -49,7 +48,7 @@ abstract class StateViewModel<S : Any>(initialState: S? = null) : BaseViewModel(
         val lifecycleAwareObserver = LifecycleAwareObserver(
             owner,
             alwaysDeliverLastValueWhenUnlocked = true,
-            onNext = Consumer<S> { subscriber(it) }
+            onNext = subscriber
         )
 
         return stateStore.observable
