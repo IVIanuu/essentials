@@ -16,8 +16,6 @@
 
 @file:Suppress("NOTHING_TO_INLINE")
 
-// Aliases to other public API.
-
 package com.ivianuu.essentials.util.ext
 
 import android.annotation.TargetApi
@@ -38,8 +36,8 @@ inline fun Activity.hideInputMethod() {
     )
 }
 
-inline fun Activity.showInputMethod(view: View) {
-    systemService<InputMethodManager>().showSoftInput(view, 0)
+inline fun Activity.showInputMethod(view: View, flags: Int = 0) {
+    systemService<InputMethodManager>().showSoftInput(view, flags)
 }
 
 inline var Activity.statusBarColor: Int

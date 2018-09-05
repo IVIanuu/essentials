@@ -16,13 +16,11 @@
 
 @file:Suppress("NOTHING_TO_INLINE")
 
-// Aliases to other public API.
-
 package com.ivianuu.essentials.util.ext
 
 import java.util.*
 
-inline fun MutableList<*>.swap(from: Int, to: Int) {
+inline fun <T> MutableList<T>.swap(from: Int, to: Int) {
     Collections.swap(this, from, to)
 }
 

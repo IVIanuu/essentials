@@ -20,6 +20,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelStore
 import java.lang.reflect.Field
 
+// todo make this non reflection when support library adds the keys() function
+
 private var viewModelMapField: Field? = null
 
 val ViewModelStore.viewModels: Map<String, ViewModel>

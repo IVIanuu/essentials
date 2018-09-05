@@ -16,8 +16,6 @@
 
 @file:Suppress("NOTHING_TO_INLINE")
 
-// Aliases to other public API.
-
 package com.ivianuu.essentials.util.ext
 
 import com.ivianuu.essentials.util.tuples.*

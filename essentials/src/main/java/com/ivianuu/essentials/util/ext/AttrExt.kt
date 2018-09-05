@@ -16,8 +16,6 @@
 
 @file:Suppress("NOTHING_TO_INLINE")
 
-// Aliases to other public API.
-
 package com.ivianuu.essentials.util.ext
 
 import android.annotation.TargetApi
@@ -132,7 +130,3 @@ internal inline fun <T> Context.withTypedArray(
     block: (TypedArray) -> T
 ): T =
     theme.obtainStyledAttributes(attr).use(block)
-
-@PublishedApi
-internal inline fun Context.getTypedArrayWithAttributes(vararg attr: Int): TypedArray =
-    theme.obtainStyledAttributes(attr)
