@@ -29,7 +29,11 @@ import android.os.Build
 import android.os.PowerManager
 import androidx.appcompat.view.ContextThemeWrapper
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
 import com.ivianuu.essentials.util.ContextAware
+import com.ivianuu.essentials.util.lifecycle.LifecyclePlugins
+import com.ivianuu.essentials.util.lifecycleAwareComponent
 
 inline val Context.isTablet: Boolean
     get() = resources.configuration.screenLayout and Configuration.SCREENLAYOUT_SIZE_MASK >= Configuration.SCREENLAYOUT_SIZE_LARGE
@@ -117,9 +121,9 @@ inline fun ContextAware.startForegroundServiceCompat(intent: Intent) {
     providedContext.startForegroundServiceCompat(intent)
 }
 
-inline fun Context.registerReceiver(
+fun Context.registerReceiver(
     intentFilter: IntentFilter,
-    crossinline onReceive: (intent: Intent) -> Unit
+    onReceive: (intent: Intent) -> Unit
 ): BroadcastReceiver {
     return object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
@@ -128,10 +132,89 @@ inline fun Context.registerReceiver(
     }.also { registerReceiver(it, intentFilter) }
 }
 
-inline fun ContextAware.registerReceiver(
+fun ContextAware.registerReceiver(
     intentFilter: IntentFilter,
-    crossinline onReceive: (intent: Intent) -> Unit
+    onReceive: (intent: Intent) -> Unit
 ) = providedContext.registerReceiver(intentFilter, onReceive)
+
+fun Context.registerReceiver(
+    owner: LifecycleOwner,
+    intentFilter: IntentFilter,
+    onReceive: (intent: Intent) -> Unit
+) {
+    registerReceiver(owner, LifecyclePlugins.DEFAULT_ACTIVE_STATE, intentFilter, onReceive)
+}
+
+fun ContextAware.registerReceiver(
+    owner: LifecycleOwner,
+    intentFilter: IntentFilter,
+    onReceive: (intent: Intent) -> Unit
+) {
+    providedContext.registerReceiver(owner, intentFilter, onReceive)
+}
+
+fun Context.registerReceiver(
+    owner: LifecycleOwner,
+    activeState: Lifecycle.State,
+    intentFilter: IntentFilter,
+    onReceive: (intent: Intent) -> Unit
+) {
+    val receiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            onReceive.invoke(intent)
+        }
+    }
+
+    registerReceiver(owner, activeState, receiver, intentFilter)
+}
+
+fun ContextAware.registerReceiver(
+    owner: LifecycleOwner,
+    activeState: Lifecycle.State,
+    intentFilter: IntentFilter,
+    onReceive: (intent: Intent) -> Unit
+) {
+    providedContext.registerReceiver(owner, activeState, intentFilter, onReceive)
+}
+
+fun Context.registerReceiver(
+    owner: LifecycleOwner,
+    receiver: BroadcastReceiver,
+    intentFilter: IntentFilter
+) {
+    registerReceiver(owner, LifecyclePlugins.DEFAULT_ACTIVE_STATE, receiver, intentFilter)
+}
+
+fun ContextAware.registerReceiver(
+    owner: LifecycleOwner,
+    receiver: BroadcastReceiver,
+    intentFilter: IntentFilter
+) {
+    providedContext.registerReceiver(owner, receiver, intentFilter)
+}
+
+fun Context.registerReceiver(
+    owner: LifecycleOwner,
+    activeState: Lifecycle.State,
+    receiver: BroadcastReceiver,
+    intentFilter: IntentFilter
+) {
+    lifecycleAwareComponent(
+        owner = owner,
+        activeState = activeState,
+        onActive = { registerReceiver(receiver, intentFilter) },
+        onInactive = { unregisterReceiver(receiver) }
+    )
+}
+
+fun ContextAware.registerReceiver(
+    owner: LifecycleOwner,
+    activeState: Lifecycle.State,
+    receiver: BroadcastReceiver,
+    intentFilter: IntentFilter
+) {
+    providedContext.registerReceiver(owner, activeState, receiver, intentFilter)
+}
 
 inline fun Context.unregisterReceiverSafe(receiver: BroadcastReceiver) {
     try {

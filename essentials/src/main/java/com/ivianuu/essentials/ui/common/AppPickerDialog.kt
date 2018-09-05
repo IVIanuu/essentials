@@ -10,8 +10,8 @@ import com.ivianuu.essentials.data.app.AppStore
 import com.ivianuu.essentials.ui.base.BaseDialogFragment
 import com.ivianuu.essentials.ui.traveler.destination.ResultDestination
 import com.ivianuu.essentials.util.ext.MAIN
+import com.ivianuu.essentials.util.ext.disposedWith
 import com.ivianuu.essentials.util.ext.string
-import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.subscribeBy
 import javax.inject.Inject
 
@@ -52,7 +52,7 @@ class AppPickerDialog : BaseDialogFragment() {
                 apps.addAll(newApps)
                 dialog.setItems(*apps.map { it.appName }.toTypedArray())
             }
-            .addTo(disposables)
+            .disposedWith(viewLifecycleOwner)
 
         return dialog
     }

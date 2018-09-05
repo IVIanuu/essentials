@@ -17,9 +17,34 @@
 package com.ivianuu.essentials.util.ext
 
 import android.content.SharedPreferences
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
+import com.ivianuu.essentials.util.lifecycle.LifecyclePlugins
+import com.ivianuu.essentials.util.lifecycleAwareComponent
 import io.reactivex.Observable
 import io.reactivex.ObservableEmitter
 import io.reactivex.ObservableOnSubscribe
+
+fun SharedPreferences.registerOnSharedPreferenceChangeListener(
+    owner: LifecycleOwner,
+    onChange: (String) -> Unit
+) = registerOnSharedPreferenceChangeListener(owner, LifecyclePlugins.DEFAULT_ACTIVE_STATE, onChange)
+
+fun SharedPreferences.registerOnSharedPreferenceChangeListener(
+    owner: LifecycleOwner,
+    activeState: Lifecycle.State,
+    onChange: (String) -> Unit
+) {
+    val listener =
+        SharedPreferences.OnSharedPreferenceChangeListener { _, key -> onChange.invoke(key) }
+
+    lifecycleAwareComponent(
+        owner = owner,
+        activeState = activeState,
+        onActive = { registerOnSharedPreferenceChangeListener(listener) },
+        onInactive = { unregisterOnSharedPreferenceChangeListener(listener) }
+    )
+}
 
 fun SharedPreferences.changes(): Observable<String> =
     Observable.create(object : ObservableOnSubscribe<String> {

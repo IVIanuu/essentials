@@ -4,6 +4,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.OnLifecycleEvent
+import com.ivianuu.essentials.util.lifecycle.LifecyclePlugins
 import io.reactivex.Observer
 import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Action
@@ -19,14 +20,14 @@ import java.util.concurrent.atomic.AtomicReference
  */
 internal class LifecycleAwareObserver<T>(
     owner: LifecycleOwner,
-    private val activeState: Lifecycle.State = DEFAULT_ACTIVE_STATE,
+    private val activeState: Lifecycle.State = LifecyclePlugins.DEFAULT_ACTIVE_STATE,
     private val alwaysDeliverLastValueWhenUnlocked: Boolean = false,
     private val sourceObserver: Observer<T>
 ) : AtomicReference<Disposable>(), LifecycleObserver, Observer<T>, Disposable {
 
     constructor(
         owner: LifecycleOwner,
-        activeState: Lifecycle.State = DEFAULT_ACTIVE_STATE,
+        activeState: Lifecycle.State = LifecyclePlugins.DEFAULT_ACTIVE_STATE,
         alwaysDeliverLastValueWhenUnlocked: Boolean = false,
         onComplete: Action = Functions.EMPTY_ACTION,
         onSubscribe: Consumer<in Disposable> = Functions.emptyConsumer(),
@@ -121,8 +122,4 @@ internal class LifecycleAwareObserver<T>(
     }
 
     private fun requireOwner(): LifecycleOwner = owner!!
-
-    companion object {
-        private val DEFAULT_ACTIVE_STATE = Lifecycle.State.STARTED
-    }
 }
