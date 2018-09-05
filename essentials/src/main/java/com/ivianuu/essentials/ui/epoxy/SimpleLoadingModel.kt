@@ -25,13 +25,11 @@ abstract class SimpleLoadingModel : BaseEpoxyModel() {
                 else -> 0
             }
 
-            if (progressColor != 0) {
-                val colorStateList = ColorStateList.valueOf(progressColor)
-                with(holder.progress_bar) {
-                    progressTintList = colorStateList
-                    secondaryProgressTintList = colorStateList
-                    indeterminateTintList = colorStateList
-                }
+            val colorStateList = ColorStateList.valueOf(progressColor)
+            with(holder.progress_bar) {
+                progressTintList = colorStateList
+                secondaryProgressTintList = colorStateList
+                indeterminateTintList = colorStateList
             }
         }
     }

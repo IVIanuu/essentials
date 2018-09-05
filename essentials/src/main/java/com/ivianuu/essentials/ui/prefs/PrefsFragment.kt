@@ -7,17 +7,13 @@ import android.view.View
 import com.airbnb.epoxy.EpoxyController
 import com.ivianuu.epoxyprefs.*
 import com.ivianuu.essentials.ui.simple.SimpleFragment
+import com.ivianuu.essentials.util.ext.registerOnSharedPreferenceChangeListener
 import com.ivianuu.essentials.util.ext.unsafeLazy
 
 /**
  * Prefs fragment
  */
 abstract class PrefsFragment : SimpleFragment() {
-
-    private val sharedPreferencesChangeListener =
-        SharedPreferences.OnSharedPreferenceChangeListener { _, _ ->
-            postInvalidate()
-        }
 
     protected open val sharedPreferencesName
         get() =
@@ -29,22 +25,18 @@ abstract class PrefsFragment : SimpleFragment() {
 
     protected open val usePreferenceDividerDecoration = true
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        sharedPreferences.registerOnSharedPreferenceChangeListener(this) { postInvalidate() }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         if (usePreferenceDividerDecoration) {
             optionalRecyclerView?.addItemDecoration(PreferenceDividerDecoration(requireContext()))
         }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        sharedPreferences.registerOnSharedPreferenceChangeListener(sharedPreferencesChangeListener)
-    }
-
-    override fun onStop() {
-        super.onStop()
-        sharedPreferences.unregisterOnSharedPreferenceChangeListener(sharedPreferencesChangeListener)
     }
 
     protected fun EpoxyController.preference(init: PreferenceModel.Builder.() -> Unit) =
