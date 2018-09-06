@@ -13,6 +13,18 @@ class AppStore @Inject constructor(
     private val packageManager: PackageManager
 ) {
 
+    suspend fun installedAppsCo(): List<AppInfo> {
+        return packageManager.getInstalledApplications(0)
+            .map {
+                AppInfo(
+                    appName = it.loadLabel(packageManager).toString(),
+                    packageName = it.packageName
+                )
+            }
+            .distinctBy { it.packageName }
+            .sortedBy { it.appName.toLowerCase() }
+    }
+
     fun installedApps(): Single<List<AppInfo>> = Single.fromCallable {
         packageManager.getInstalledApplications(0)
             .map {
@@ -39,4 +51,12 @@ class AppStore @Inject constructor(
             .distinctBy { it.packageName }
             .sortedBy { it.appName.toLowerCase() }
     }.subscribeOn(IO)
+
+    fun appInfo(packageName: String): Single<AppInfo> = Single.fromCallable {
+        AppInfo(
+            packageName,
+            packageManager.getApplicationInfo(packageName, 0).loadLabel(packageManager)
+                .toString()
+        )
+    }
 }

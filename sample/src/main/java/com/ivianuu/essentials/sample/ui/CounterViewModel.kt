@@ -23,7 +23,6 @@ class CounterViewModel @Inject constructor(private val router: Router) :
         Observable.interval(1, TimeUnit.SECONDS)
             .subscribe { _showToast.offer(it) }
             .disposeOnClear()
-
     }
 
     fun setDestination(destination: CounterDestination) {

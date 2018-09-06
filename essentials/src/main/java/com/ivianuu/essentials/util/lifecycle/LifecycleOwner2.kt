@@ -22,6 +22,9 @@ import androidx.lifecycle.LiveData
 import com.ivianuu.essentials.util.ext.*
 import io.reactivex.*
 import io.reactivex.rxkotlin.subscribeBy
+import kotlinx.coroutines.experimental.CoroutineScope
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.launch
 
 /**
  * Extensions for lifecycle owner
@@ -78,4 +81,9 @@ interface LifecycleOwner2 : LifecycleOwner {
         onError: (Throwable) -> Unit = onErrorStub,
         onSuccess: (T) -> Unit = onNextStub
     ) = observeOn(MAIN).subscribeBy(onError, onSuccess).disposedWith(this@LifecycleOwner2, event)
+
+    fun launchUi(
+        event: Lifecycle.Event = lifecycle.correspondingEvent(),
+        block: suspend CoroutineScope.() -> Unit
+    ) = launch(context = UI, block = block).canceledWith(this, event)
 }
