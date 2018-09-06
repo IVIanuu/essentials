@@ -17,7 +17,7 @@ import com.ivianuu.essentials.ui.state.stateEpoxyController
 import com.ivianuu.essentials.ui.traveler.detour.FadeDetour
 import com.ivianuu.essentials.util.ext.COMPUTATION
 import com.ivianuu.essentials.util.ext.andTrue
-import io.reactivex.Single
+import com.ivianuu.essentials.util.ext.toSingle
 import io.reactivex.rxkotlin.subscribeBy
 import kotlinx.android.synthetic.main.single_line_list_item.*
 import java.util.concurrent.TimeUnit
@@ -77,7 +77,7 @@ class ListViewModel @Inject constructor() : StateViewModel<ListState>() {
     }
 
     private fun generateNewState() {
-        Single.just(Unit)
+        Unit.toSingle()
             .subscribeOn(COMPUTATION)
             .map { generateList() }
             .delay(1, TimeUnit.SECONDS)
