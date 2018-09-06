@@ -8,7 +8,7 @@ fun <A : StateViewModel<B>, B : Any> BaseFragment.stateEpoxyController(
     viewModel1: A,
     buildModels: EpoxyController.(state: B) -> Unit
 ) = epoxyController {
-    if (view == null || isRemoving) return@epoxyController
+    if (view == null) return@epoxyController
     withState(viewModel1) { buildModels.invoke(this, it) }
 }
 
@@ -17,7 +17,7 @@ fun <A : StateViewModel<B>, B : Any, C : StateViewModel<D>, D : Any> BaseFragmen
     viewModel2: C,
     buildModels: EpoxyController.(state1: B, state2: D) -> Unit
 ) = epoxyController {
-    if (view == null || isRemoving) return@epoxyController
+    if (view == null) return@epoxyController
     withState(viewModel1, viewModel2) { state1, state2 -> buildModels.invoke(this, state1, state2) }
 }
 
@@ -27,7 +27,7 @@ fun <A : StateViewModel<B>, B : Any, C : StateViewModel<D>, D : Any, E : StateVi
     viewModel3: E,
     buildModels: EpoxyController.(state1: B, state2: D, state3: F) -> Unit
 ) = epoxyController {
-    if (view == null || isRemoving) return@epoxyController
+    if (view == null) return@epoxyController
     withState(viewModel1, viewModel2, viewModel3) { state1, state2, state3 ->
         buildModels.invoke(this, state1, state2, state3)
     }
@@ -42,7 +42,7 @@ fun <A : StateViewModel<B>,
     viewModel4: G,
     buildModels: EpoxyController.(state1: B, state2: D, state3: F, state4: H) -> Unit
 ) = epoxyController {
-    if (view == null || isRemoving) return@epoxyController
+    if (view == null) return@epoxyController
     withState(viewModel1, viewModel2, viewModel3, viewModel4) { state1, state2, state3, state4 ->
         buildModels.invoke(this, state1, state2, state3, state4)
     }
@@ -56,7 +56,7 @@ fun <A : StateViewModel<B>, B : Any, C : StateViewModel<D>, D : Any, E : StateVi
     viewModel5: I,
     buildModels: EpoxyController.(state1: B, state2: D, state3: F, state4: H, state5: J) -> Unit
 ) = epoxyController {
-    if (view == null || isRemoving) return@epoxyController
+    if (view == null) return@epoxyController
     withState(
         viewModel1,
         viewModel2,
