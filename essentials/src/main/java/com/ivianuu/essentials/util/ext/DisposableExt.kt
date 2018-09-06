@@ -7,11 +7,11 @@ import io.reactivex.disposables.Disposable
 
 fun Disposable.disposedWith(
     owner: LifecycleOwner,
-    event: Lifecycle.Event = Lifecycle.Event.ON_DESTROY
+    event: Lifecycle.Event = owner.lifecycle.correspondingEvent()
 ) = apply {
     owner.lifecycle.addObserver(object : SimpleLifecycleObserver() {
         override fun onAny(owner: LifecycleOwner, e: Lifecycle.Event) {
-            if (event == e) dispose()
+            if (event == e || e == Lifecycle.Event.ON_DESTROY) dispose()
         }
     })
 }

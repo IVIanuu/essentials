@@ -113,3 +113,22 @@ fun Lifecycle.state(): Observable<Lifecycle.State> = events()
     .map { currentState }
     .startWith(currentState)
     .distinctUntilChanged()
+
+fun Lifecycle.correspondingEvent(): Lifecycle.Event {
+    // get last value based on the current state
+    val lastEvent = when (currentState) {
+        Lifecycle.State.INITIALIZED -> Lifecycle.Event.ON_CREATE
+        Lifecycle.State.CREATED -> Lifecycle.Event.ON_START
+        Lifecycle.State.STARTED, Lifecycle.State.RESUMED -> Lifecycle.Event.ON_RESUME
+        Lifecycle.State.DESTROYED -> Lifecycle.Event.ON_DESTROY
+    }
+
+    return when (lastEvent) {
+        Lifecycle.Event.ON_CREATE -> Lifecycle.Event.ON_DESTROY
+        Lifecycle.Event.ON_START -> Lifecycle.Event.ON_STOP
+        Lifecycle.Event.ON_RESUME -> Lifecycle.Event.ON_PAUSE
+        Lifecycle.Event.ON_PAUSE -> Lifecycle.Event.ON_STOP
+        Lifecycle.Event.ON_STOP -> Lifecycle.Event.ON_DESTROY
+        else -> throw IllegalStateException("Lifecycle has ended! Last event was $lastEvent")
+    }
+}

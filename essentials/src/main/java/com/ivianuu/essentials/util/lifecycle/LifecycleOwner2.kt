@@ -37,13 +37,13 @@ interface LifecycleOwner2 : LifecycleOwner {
     }
 
     fun Completable.subscribeUi(
-        event: Lifecycle.Event = Lifecycle.Event.ON_DESTROY,
+        event: Lifecycle.Event = lifecycle.correspondingEvent(),
         onError: (Throwable) -> Unit = onErrorStub,
         onComplete: () -> Unit = onCompleteStub
     ) = observeOn(MAIN).subscribeBy(onError, onComplete).disposedWith(this@LifecycleOwner2, event)
 
     fun <T : Any> Flowable<T>.subscribeUi(
-        event: Lifecycle.Event = Lifecycle.Event.ON_DESTROY,
+        event: Lifecycle.Event = lifecycle.correspondingEvent(),
         onError: (Throwable) -> Unit = onErrorStub,
         onComplete: () -> Unit = onCompleteStub,
         onNext: (T) -> Unit = onNextStub
@@ -53,7 +53,7 @@ interface LifecycleOwner2 : LifecycleOwner {
     )
 
     fun <T : Any> Maybe<T>.subscribeUi(
-        event: Lifecycle.Event = Lifecycle.Event.ON_DESTROY,
+        event: Lifecycle.Event = lifecycle.correspondingEvent(),
         onError: (Throwable) -> Unit = onErrorStub,
         onComplete: () -> Unit = onCompleteStub,
         onSuccess: (T) -> Unit = onNextStub
@@ -64,7 +64,7 @@ interface LifecycleOwner2 : LifecycleOwner {
     ).disposedWith(this@LifecycleOwner2, event)
 
     fun <T : Any> Observable<T>.subscribeUi(
-        event: Lifecycle.Event = Lifecycle.Event.ON_DESTROY,
+        event: Lifecycle.Event = lifecycle.correspondingEvent(),
         onError: (Throwable) -> Unit = onErrorStub,
         onComplete: () -> Unit = onCompleteStub,
         onNext: (T) -> Unit = onNextStub
@@ -74,7 +74,7 @@ interface LifecycleOwner2 : LifecycleOwner {
     )
 
     fun <T : Any> Single<T>.subscribeUi(
-        event: Lifecycle.Event = Lifecycle.Event.ON_DESTROY,
+        event: Lifecycle.Event = lifecycle.correspondingEvent(),
         onError: (Throwable) -> Unit = onErrorStub,
         onSuccess: (T) -> Unit = onNextStub
     ) = observeOn(MAIN).subscribeBy(onError, onSuccess).disposedWith(this@LifecycleOwner2, event)

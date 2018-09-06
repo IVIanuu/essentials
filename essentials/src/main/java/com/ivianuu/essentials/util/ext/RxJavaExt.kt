@@ -190,14 +190,14 @@ fun <T : Any> (() -> T).toSingle(): Single<T> = Single.fromCallable(this)
 
 fun Completable.subscribeUi(
     owner: LifecycleOwner,
-    event: Lifecycle.Event = Lifecycle.Event.ON_DESTROY,
+    event: Lifecycle.Event = owner.lifecycle.correspondingEvent(),
     onError: (Throwable) -> Unit = onErrorStub,
     onComplete: () -> Unit = onCompleteStub
 ) = observeOn(MAIN).subscribeBy(onError, onComplete).disposedWith(owner, event)
 
 fun <T : Any> Flowable<T>.subscribeUi(
     owner: LifecycleOwner,
-    event: Lifecycle.Event = Lifecycle.Event.ON_DESTROY,
+    event: Lifecycle.Event = owner.lifecycle.correspondingEvent(),
     onError: (Throwable) -> Unit = onErrorStub,
     onComplete: () -> Unit = onCompleteStub,
     onNext: (T) -> Unit = onNextStub
@@ -205,7 +205,7 @@ fun <T : Any> Flowable<T>.subscribeUi(
 
 fun <T : Any> Maybe<T>.subscribeUi(
     owner: LifecycleOwner,
-    event: Lifecycle.Event = Lifecycle.Event.ON_DESTROY,
+    event: Lifecycle.Event = owner.lifecycle.correspondingEvent(),
     onError: (Throwable) -> Unit = onErrorStub,
     onComplete: () -> Unit = onCompleteStub,
     onSuccess: (T) -> Unit = onNextStub
@@ -213,7 +213,7 @@ fun <T : Any> Maybe<T>.subscribeUi(
 
 fun <T : Any> Observable<T>.subscribeUi(
     owner: LifecycleOwner,
-    event: Lifecycle.Event = Lifecycle.Event.ON_DESTROY,
+    event: Lifecycle.Event = owner.lifecycle.correspondingEvent(),
     onError: (Throwable) -> Unit = onErrorStub,
     onComplete: () -> Unit = onCompleteStub,
     onNext: (T) -> Unit = onNextStub
@@ -221,7 +221,7 @@ fun <T : Any> Observable<T>.subscribeUi(
 
 fun <T : Any> Single<T>.subscribeUi(
     owner: LifecycleOwner,
-    event: Lifecycle.Event = Lifecycle.Event.ON_DESTROY,
+    event: Lifecycle.Event = owner.lifecycle.correspondingEvent(),
     onError: (Throwable) -> Unit = onErrorStub,
     onSuccess: (T) -> Unit = onNextStub
 ) = observeOn(MAIN).subscribeBy(onError, onSuccess).disposedWith(owner, event)
