@@ -31,7 +31,7 @@ import java.util.concurrent.atomic.AtomicReference
 /**
  * Lifecycle aware observer
  */
-class LifecycleAwareObserver<T : Any>(
+internal class LifecycleAwareObserver<T : Any>(
     owner: LifecycleOwner,
     private val alwaysDeliverLastValueWhenUnlocked: Boolean = false,
     private val sourceObserver: Observer<T>

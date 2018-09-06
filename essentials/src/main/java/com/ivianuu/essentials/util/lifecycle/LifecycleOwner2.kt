@@ -14,20 +14,23 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.util
+package com.ivianuu.essentials.util.lifecycle
+
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LiveData
+import com.ivianuu.essentials.util.ext.observeK
 
 /**
- * Consumable event
+ * Extensions for lifecycle owner
  */
-open class Event<T : Any>(private val data: T) {
+interface LifecycleOwner2 : LifecycleOwner {
 
-    var hasBeenHandled = false
-        private set
-
-    fun handle(block: (data: T) -> Unit) {
-        hasBeenHandled = true
-        block.invoke(data)
+    fun <T> LiveData<T>.observe(onChanged: (T) -> Unit) {
+        observeK(this@LifecycleOwner2, onChanged)
     }
 
-    fun peekContent() = data
+    fun <T> LiveEvent<T>.consume(consumer: (T) -> Unit) {
+        consume(this@LifecycleOwner2, consumer)
+    }
+
 }

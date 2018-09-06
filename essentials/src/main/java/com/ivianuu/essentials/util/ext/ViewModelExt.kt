@@ -22,7 +22,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
-import com.ivianuu.essentials.util.ViewModelFactoryHolder
+import com.ivianuu.essentials.util.viewmodel.ViewModelFactoryHolder
 import kotlin.reflect.KClass
 
 inline fun ViewModelStoreOwner.viewModelProvider(

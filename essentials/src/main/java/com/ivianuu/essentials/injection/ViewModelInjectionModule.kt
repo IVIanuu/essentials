@@ -18,7 +18,7 @@ package com.ivianuu.essentials.injection
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.ivianuu.essentials.util.DaggerViewModelFactory
+import com.ivianuu.essentials.util.viewmodel.DaggerViewModelFactory
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.Multibinds

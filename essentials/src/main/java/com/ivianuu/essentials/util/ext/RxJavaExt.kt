@@ -18,10 +18,9 @@
 
 package com.ivianuu.essentials.util.ext
 
-import androidx.lifecycle.LifecycleOwner
-import com.ivianuu.essentials.util.lifecycle.LifecycleAwareObserver
 import com.ivianuu.essentials.util.tuples.*
-import io.reactivex.*
+import io.reactivex.Observable
+import io.reactivex.Scheduler
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.exceptions.OnErrorNotImplementedException
@@ -178,44 +177,3 @@ inline fun <T1, T2, T3, T4, T5, T6, T7, T8, T9> Observables.combineLatest(
         Function9 { t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6, t7: T7, t8: T8, t9: T9 ->
             Ennead(t1, t2, t3, t4, t5, t6, t7, t8, t9)
         })!!
-
-fun Completable.subscribeUi(
-    owner: LifecycleOwner,
-    onError: (Throwable) -> Unit = onErrorStub,
-    onComplete: () -> Unit = onCompleteStub
-) = toObservable<Unit>().subscribeUi(owner, onError, onComplete)
-
-fun <T : Any> Flowable<T>.subscribeUi(
-    owner: LifecycleOwner,
-    onError: (Throwable) -> Unit = onErrorStub,
-    onComplete: () -> Unit = onCompleteStub,
-    onNext: (T) -> Unit = onNextStub
-) = toObservable().subscribeUi(owner, onError, onComplete, onNext)
-
-fun <T : Any> Maybe<T>.subscribeUi(
-    owner: LifecycleOwner,
-    onError: (Throwable) -> Unit = onErrorStub,
-    onComplete: () -> Unit = onCompleteStub,
-    onSuccess: (T) -> Unit = onNextStub
-) = toObservable().subscribeUi(owner, onError, onComplete, onSuccess)
-
-fun <T : Any> Observable<T>.subscribeUi(
-    owner: LifecycleOwner,
-    onError: (Throwable) -> Unit = onErrorStub,
-    onComplete: () -> Unit = onCompleteStub,
-    onNext: (T) -> Unit = onNextStub
-): Disposable = observeOn(MAIN)
-    .subscribeWith(
-        LifecycleAwareObserver(
-            owner,
-            onError = onError,
-            onComplete = onComplete,
-            onNext = onNext
-        )
-    )
-
-fun <T : Any> Single<T>.subscribeUi(
-    owner: LifecycleOwner,
-    onError: (Throwable) -> Unit = onErrorStub,
-    onSuccess: (T) -> Unit = onNextStub
-) = toObservable().subscribeUi(owner, onError, onNext = onSuccess)

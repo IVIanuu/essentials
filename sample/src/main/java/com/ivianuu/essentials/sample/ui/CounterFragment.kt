@@ -25,6 +25,7 @@ import com.ivianuu.essentials.ui.base.BaseFragment
 import com.ivianuu.essentials.ui.state.bindViewModel
 import com.ivianuu.essentials.ui.state.withState
 import com.ivianuu.essentials.ui.traveler.detour.HorizontalDetour
+import com.ivianuu.essentials.util.ext.d
 import kotlinx.android.synthetic.main.fragment_counter.*
 
 @Detour(HorizontalDetour::class)
@@ -47,6 +48,9 @@ class CounterFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        viewModel.showToast.consume { d { "consuming1 -> $it " } }
+        viewModel.showToast.consume { d { "consuming2 -> $it" } }
 
         increase.setOnClickListener { viewModel.increaseClicked() }
         decrease.setOnClickListener { viewModel.decreaseClicked() }

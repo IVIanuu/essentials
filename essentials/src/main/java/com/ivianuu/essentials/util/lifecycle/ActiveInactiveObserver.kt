@@ -18,6 +18,7 @@ package com.ivianuu.essentials.util.lifecycle
 
 import androidx.lifecycle.GenericLifecycleObserver
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 
 open class ActiveInactiveObserver : GenericLifecycleObserver {
@@ -50,8 +51,8 @@ fun lifecycleAwareComponent(
     owner: LifecycleOwner,
     onInactive: ((LifecycleOwner) -> Unit)? = null,
     onActive: ((LifecycleOwner) -> Unit)? = null
-) {
-    owner.lifecycle.addObserver(object : ActiveInactiveObserver() {
+): LifecycleObserver {
+    val observer = object : ActiveInactiveObserver() {
         override fun onActive(owner: LifecycleOwner) {
             super.onActive(owner)
             onActive?.invoke(owner)
@@ -61,5 +62,9 @@ fun lifecycleAwareComponent(
             super.onInactive(owner)
             onInactive?.invoke(owner)
         }
-    })
+    }
+
+    owner.lifecycle.addObserver(observer)
+
+    return observer
 }

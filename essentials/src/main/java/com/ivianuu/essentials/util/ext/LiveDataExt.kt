@@ -22,7 +22,6 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
-import com.ivianuu.essentials.util.SingleLiveEvent
 import io.reactivex.*
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.subscribeBy
@@ -33,8 +32,6 @@ inline fun <T> mutableLiveData(initialValue: T? = null) =
     MutableLiveData<T>().applyIf(initialValue != null) {
         value = initialValue
     }
-
-inline fun <T> singleLiveEvent() = SingleLiveEvent<T>()
 
 fun <T> LiveData<T>.observeK(owner: LifecycleOwner, onChanged: (T) -> Unit) {
     observe(owner, Observer<T> { it?.let(onChanged) })
@@ -69,9 +66,7 @@ fun <T : Any> Observable<T>.toLiveData(): LiveData<T> = object : LiveData<T>() {
         disposable.set(
             subscribeBy(
                 onNext = { postValue(it) },
-                onError = {
-                    throw RuntimeException(it)
-                }
+                onError = { throw RuntimeException(it) }
             )
         )
     }

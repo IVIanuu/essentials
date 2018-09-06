@@ -18,8 +18,7 @@ import com.ivianuu.essentials.ui.state.stateEpoxyController
 import com.ivianuu.essentials.ui.traveler.detour.FadeDetour
 import com.ivianuu.essentials.util.ext.COMPUTATION
 import com.ivianuu.essentials.util.ext.andTrue
-import com.ivianuu.essentials.util.ext.d
-import com.ivianuu.essentials.util.ext.subscribeUi
+import com.ivianuu.essentials.util.ext.publishSubject
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.rxkotlin.subscribeBy
@@ -44,8 +43,7 @@ class ListFragment : SimpleFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        Observable.interval(1, TimeUnit.SECONDS)
-            .subscribeUi(this) { d { "sub -> $it" } }
+        viewModel.showCount.subscribeUi()
     }
 
     override fun epoxyController() = stateEpoxyController(viewModel) { state ->
@@ -78,11 +76,15 @@ class ListFragment : SimpleFragment() {
 
 class ListViewModel @Inject constructor() : StateViewModel<ListState>() {
 
+    val showCount = publishSubject<Long>()
+
     init {
         setInitialState(ListState(false, emptyList()))
         generateNewState()
 
-        subscribe { d { "state changed -> $it" } }
+        Observable.interval(1, TimeUnit.SECONDS)
+            .subscribe { showCount.onNext(it) }
+            .disposeOnClear()
     }
 
     fun refreshClicked() {

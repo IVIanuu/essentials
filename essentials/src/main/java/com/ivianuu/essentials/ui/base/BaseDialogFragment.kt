@@ -28,9 +28,9 @@ import com.ivianuu.essentials.injection.Injectable
 import com.ivianuu.essentials.ui.common.BackListener
 import com.ivianuu.essentials.ui.traveler.RouterHolder
 import com.ivianuu.essentials.util.ContextAware
-import com.ivianuu.essentials.util.ViewModelFactoryHolder
-import com.ivianuu.essentials.util.lifecycle.RxLifecycleOwner
+import com.ivianuu.essentials.util.lifecycle.LifecycleOwner2
 import com.ivianuu.essentials.util.screenlogger.IdentifiableScreen
+import com.ivianuu.essentials.util.viewmodel.ViewModelFactoryHolder
 import com.ivianuu.traveler.Router
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
@@ -41,7 +41,7 @@ import javax.inject.Inject
  * Base dialog fragment
  */
 abstract class BaseDialogFragment : AppCompatDialogFragment(), BackListener, ContextAware,
-    HasSupportFragmentInjector, Injectable, IdentifiableScreen, RouterHolder, RxLifecycleOwner,
+    HasSupportFragmentInjector, Injectable, IdentifiableScreen, LifecycleOwner2, RouterHolder,
     ViewModelFactoryHolder {
 
     @Inject override lateinit var router: Router
