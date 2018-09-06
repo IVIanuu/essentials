@@ -1,6 +1,5 @@
 package com.ivianuu.essentials.sample.ui
 
-import android.os.Bundle
 import android.view.MenuItem
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
@@ -18,8 +17,6 @@ import com.ivianuu.essentials.ui.state.stateEpoxyController
 import com.ivianuu.essentials.ui.traveler.detour.FadeDetour
 import com.ivianuu.essentials.util.ext.COMPUTATION
 import com.ivianuu.essentials.util.ext.andTrue
-import com.ivianuu.essentials.util.ext.publishSubject
-import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.rxkotlin.subscribeBy
 import kotlinx.android.synthetic.main.single_line_list_item.*
@@ -39,12 +36,6 @@ class ListFragment : SimpleFragment() {
 
     override val toolbarMenuRes = R.menu.fragment_list
     override val toolbarTitle = "List"
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        viewModel.showCount.subscribeUi()
-    }
 
     override fun epoxyController() = stateEpoxyController(viewModel) { state ->
         if (state.loading) {
@@ -76,15 +67,9 @@ class ListFragment : SimpleFragment() {
 
 class ListViewModel @Inject constructor() : StateViewModel<ListState>() {
 
-    val showCount = publishSubject<Long>()
-
     init {
         setInitialState(ListState(false, emptyList()))
         generateNewState()
-
-        Observable.interval(1, TimeUnit.SECONDS)
-            .subscribe { showCount.onNext(it) }
-            .disposeOnClear()
     }
 
     fun refreshClicked() {
