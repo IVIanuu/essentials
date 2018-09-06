@@ -14,6 +14,7 @@ object Versions {
     const val archWork = "1.0.0-alpha08"
     const val compass = "f1ac07eed9"
     const val constraintLayout = "1.1.3"
+    const val coroutines = "0.25.3"
     const val dagger = "2.16"
     const val epoxy = "2.16.4"
     const val epoxyPrefs = "c199cb7277"
@@ -59,6 +60,13 @@ object Deps {
 
     const val constraintLayout =
         "androidx.constraintlayout:constraintlayout:${Versions.constraintLayout}"
+
+    const val coroutinesAndroid =
+        "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.coroutines}"
+    const val coroutinesCore =
+        "org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.coroutines}"
+    const val coroutinesRxJava =
+        "org.jetbrains.kotlinx:kotlinx-coroutines-rx2:${Versions.coroutines}"
 
     const val dagger = "com.google.dagger:dagger:${Versions.dagger}"
     const val daggerAndroid = "com.google.dagger:dagger-android:${Versions.dagger}"

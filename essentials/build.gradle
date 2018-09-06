@@ -45,6 +45,10 @@ dependencies {
     api Deps.androidxCoreKtx
     api Deps.androidxPalette
 
+    api Deps.coroutinesAndroid
+    api Deps.coroutinesCore
+    api Deps.coroutinesRxJava
+
     api Deps.archLifecycleExtensions
     api Deps.archWorkRuntime
 
