@@ -18,6 +18,7 @@ package com.ivianuu.essentials.util.lifecycle
 
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
+import com.ivianuu.essentials.util.ext.doOnDestroy
 import com.ivianuu.essentials.util.ext.mainThread
 import java.util.*
 
@@ -26,7 +27,7 @@ import java.util.*
  */
 open class LiveEvent<T> {
 
-    private val consumers = mutableSetOf<ConsumerEntry<T>>()
+    private val consumers = mutableSetOf<ConsumerEntry>()
 
     private val pendingEvents = LinkedList<T>()
 
@@ -38,7 +39,9 @@ open class LiveEvent<T> {
     }
 
     fun removeConsumer(consumer: (T) -> Unit) {
-        consumers.removeAll { it.consumer == consumer }
+        consumers.removeAll { entry ->
+            (entry.consumer == consumer).also { if (it) entry.onRemove() }
+        }
     }
 
     protected open fun offer(event: T) {
@@ -57,14 +60,24 @@ open class LiveEvent<T> {
         }
     }
 
-    private class ConsumerEntry<T>(
+    private inner class ConsumerEntry(
         val owner: LifecycleOwner,
         val consumer: (T) -> Unit
     ) {
         val isActive get() = owner.lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)
 
+        private val lifecycleObserver = owner.lifecycle.doOnDestroy { removeConsumer(consumer) }
+
+        init {
+            owner.lifecycle.addObserver(lifecycleObserver)
+        }
+
         operator fun invoke(event: T) {
             consumer.invoke(event)
+        }
+
+        fun onRemove() {
+            owner.lifecycle.removeObserver(lifecycleObserver)
         }
     }
 }
