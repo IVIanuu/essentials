@@ -21,10 +21,10 @@ import com.ivianuu.essentials.ui.common.*
 import com.ivianuu.essentials.ui.traveler.destination.ResultDestination
 import com.ivianuu.traveler.ResultListener
 import com.ivianuu.traveler.Router
-import io.reactivex.Maybe
 import io.reactivex.Observable
+import kotlinx.coroutines.experimental.suspendCancellableCoroutine
 
-fun <T : Any> Router.results(resultCode: Int): Observable<T> = Observable.create { e ->
+fun <T> Router.results(resultCode: Int): Observable<T> = Observable.create { e ->
     @Suppress("UNCHECKED_CAST")
     val listener = object : ResultListener {
         override fun onResult(result: Any) {
@@ -41,34 +41,46 @@ fun <T : Any> Router.results(resultCode: Int): Observable<T> = Observable.create
     }
 }
 
-fun <T : Any> Router.navigateToForResult(destination: ResultDestination): Maybe<T> =
-    results<T>(destination.resultCode)
-        .take(1)
-        .singleElement()
-        .doOnSubscribe { navigateTo(destination) }
+@Suppress("UNCHECKED_CAST")
+suspend fun <T> Router.navigateToForResult(destination: ResultDestination) =
+    suspendCancellableCoroutine<T> { continuation ->
+        val listener = object : ResultListener {
+            override fun onResult(result: Any) {
+                d { "on result -> $result" }
+                continuation.resume(result as T)
+                removeResultListener(destination.resultCode, this)
+            }
+        }
 
-fun Router.navigateToForActivityResult(intent: Intent) =
+        continuation.invokeOnCancellation {
+            d { "cancel" }
+            removeResultListener(destination.resultCode, listener)
+        }
+
+        addResultListener(destination.resultCode, listener)
+
+        navigateTo(destination)
+    }
+
+suspend fun Router.navigateToForActivityResult(intent: Intent) =
     navigateToForActivityResult(RequestCodeGenerator.generate(), intent)
 
-fun Router.navigateToForActivityResult(resultCode: Int, intent: Intent): Maybe<ActivityResult> {
-    val destination = ActivityResultDestination(resultCode, intent, resultCode)
-    return navigateToForResult(destination)
-}
+suspend fun Router.navigateToForActivityResult(resultCode: Int, intent: Intent) =
+    navigateToForResult<ActivityResult>(ActivityResultDestination(resultCode, intent, resultCode))
 
-fun Router.requestPermissions(
+suspend fun Router.requestPermissions(
     vararg permissions: String
 ) = requestPermissions(RequestCodeGenerator.generate(), *permissions)
 
-fun Router.requestPermissions(
+suspend fun Router.requestPermissions(
     resultCode: Int,
     vararg permissions: String
-): Maybe<Boolean> {
+): Boolean {
     val destination = PermissionDestination(
         resultCode,
         permissions.toList().toTypedArray(),
         resultCode
     )
 
-    return navigateToForResult<PermissionResult>(destination)
-        .map { it.allGranted }
+    return navigateToForResult<PermissionResult>(destination).allGranted
 }

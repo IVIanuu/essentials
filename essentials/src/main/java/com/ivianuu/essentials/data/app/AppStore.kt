@@ -2,19 +2,20 @@ package com.ivianuu.essentials.data.app
 
 import android.content.Intent
 import android.content.pm.PackageManager
-import com.ivianuu.essentials.util.ext.IO
-import io.reactivex.Single
+import com.ivianuu.essentials.util.AppCoroutineDispatchers
+import kotlinx.coroutines.experimental.withContext
 import javax.inject.Inject
 
 /**
  * Store for [AppInfo]'s
  */
 class AppStore @Inject constructor(
+    private val dispatchers: AppCoroutineDispatchers,
     private val packageManager: PackageManager
 ) {
 
-    suspend fun installedAppsCo(): List<AppInfo> {
-        return packageManager.getInstalledApplications(0)
+    suspend fun installedApps() = withContext(dispatchers.io) {
+        packageManager.getInstalledApplications(0)
             .map {
                 AppInfo(
                     appName = it.loadLabel(packageManager).toString(),
@@ -25,19 +26,7 @@ class AppStore @Inject constructor(
             .sortedBy { it.appName.toLowerCase() }
     }
 
-    fun installedApps(): Single<List<AppInfo>> = Single.fromCallable {
-        packageManager.getInstalledApplications(0)
-            .map {
-                AppInfo(
-                    appName = it.loadLabel(packageManager).toString(),
-                    packageName = it.packageName
-                )
-            }
-            .distinctBy { it.packageName }
-            .sortedBy { it.appName.toLowerCase() }
-    }.subscribeOn(IO)
-
-    fun launchableApps(): Single<List<AppInfo>> = Single.fromCallable {
+    suspend fun launchableApps() = withContext(dispatchers.io) {
         val intent = Intent(Intent.ACTION_MAIN).apply {
             addCategory(Intent.CATEGORY_LAUNCHER)
         }
@@ -50,9 +39,9 @@ class AppStore @Inject constructor(
             }
             .distinctBy { it.packageName }
             .sortedBy { it.appName.toLowerCase() }
-    }.subscribeOn(IO)
+    }
 
-    fun appInfo(packageName: String): Single<AppInfo> = Single.fromCallable {
+    suspend fun appInfo(packageName: String) = withContext(dispatchers.io) {
         AppInfo(
             packageName,
             packageManager.getApplicationInfo(packageName, 0).loadLabel(packageManager)

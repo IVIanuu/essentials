@@ -2,6 +2,7 @@
   <dictionary name="IVIanuu">
     <words>
       <w>butterknife</w>
+      <w>coroutine</w>
     </words>
   </dictionary>
 </component>

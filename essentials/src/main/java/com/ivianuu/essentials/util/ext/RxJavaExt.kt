@@ -29,7 +29,6 @@ import io.reactivex.functions.*
 import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.rxkotlin.Observables
 import io.reactivex.rxkotlin.subscribeBy
-import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.*
 
 internal val onSubscribeStub: (Disposable) -> Unit = {}
@@ -37,10 +36,6 @@ internal val onCompleteStub: () -> Unit = {}
 internal val onNextStub: (Any) -> Unit = {}
 internal val onErrorStub: (Throwable) -> Unit =
     { RxJavaPlugins.onError(OnErrorNotImplementedException(it)) }
-
-inline val COMPUTATION get() = Schedulers.computation()
-inline val IO get() = Schedulers.io()
-inline val MAIN: Scheduler get() = AndroidSchedulers.mainThread()
 
 inline fun <T : Any> BehaviorSubject<T>.requireValue() =
     value ?: throw IllegalStateException("value is null")
@@ -193,7 +188,10 @@ fun Completable.subscribeUi(
     event: Lifecycle.Event = owner.lifecycle.correspondingEvent(),
     onError: (Throwable) -> Unit = onErrorStub,
     onComplete: () -> Unit = onCompleteStub
-) = observeOn(MAIN).subscribeBy(onError, onComplete).disposedWith(owner, event)
+) = observeOn(AndroidSchedulers.mainThread()).subscribeBy(onError, onComplete).disposedWith(
+    owner,
+    event
+)
 
 fun <T : Any> Flowable<T>.subscribeUi(
     owner: LifecycleOwner,
@@ -201,7 +199,10 @@ fun <T : Any> Flowable<T>.subscribeUi(
     onError: (Throwable) -> Unit = onErrorStub,
     onComplete: () -> Unit = onCompleteStub,
     onNext: (T) -> Unit = onNextStub
-) = observeOn(MAIN).subscribeBy(onError, onComplete, onNext).disposedWith(owner, event)
+) = observeOn(AndroidSchedulers.mainThread()).subscribeBy(onError, onComplete, onNext).disposedWith(
+    owner,
+    event
+)
 
 fun <T : Any> Maybe<T>.subscribeUi(
     owner: LifecycleOwner,
@@ -209,7 +210,11 @@ fun <T : Any> Maybe<T>.subscribeUi(
     onError: (Throwable) -> Unit = onErrorStub,
     onComplete: () -> Unit = onCompleteStub,
     onSuccess: (T) -> Unit = onNextStub
-) = observeOn(MAIN).subscribeBy(onError, onComplete, onSuccess).disposedWith(owner, event)
+) = observeOn(AndroidSchedulers.mainThread()).subscribeBy(
+    onError,
+    onComplete,
+    onSuccess
+).disposedWith(owner, event)
 
 fun <T : Any> Observable<T>.subscribeUi(
     owner: LifecycleOwner,
@@ -217,11 +222,17 @@ fun <T : Any> Observable<T>.subscribeUi(
     onError: (Throwable) -> Unit = onErrorStub,
     onComplete: () -> Unit = onCompleteStub,
     onNext: (T) -> Unit = onNextStub
-) = observeOn(MAIN).subscribeBy(onError, onComplete, onNext).disposedWith(owner, event)
+) = observeOn(AndroidSchedulers.mainThread()).subscribeBy(onError, onComplete, onNext).disposedWith(
+    owner,
+    event
+)
 
 fun <T : Any> Single<T>.subscribeUi(
     owner: LifecycleOwner,
     event: Lifecycle.Event = owner.lifecycle.correspondingEvent(),
     onError: (Throwable) -> Unit = onErrorStub,
     onSuccess: (T) -> Unit = onNextStub
-) = observeOn(MAIN).subscribeBy(onError, onSuccess).disposedWith(owner, event)
+) = observeOn(AndroidSchedulers.mainThread()).subscribeBy(onError, onSuccess).disposedWith(
+    owner,
+    event
+)

@@ -21,6 +21,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import com.ivianuu.essentials.util.ext.*
 import io.reactivex.*
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.subscribeBy
 import kotlinx.coroutines.experimental.CoroutineScope
 import kotlinx.coroutines.experimental.android.UI
@@ -43,24 +44,23 @@ interface LifecycleOwner2 : LifecycleOwner {
         event: Lifecycle.Event = lifecycle.correspondingEvent(),
         onError: (Throwable) -> Unit = onErrorStub,
         onComplete: () -> Unit = onCompleteStub
-    ) = observeOn(MAIN).subscribeBy(onError, onComplete).disposedWith(this@LifecycleOwner2, event)
+    ) = observeOn(AndroidSchedulers.mainThread())
+        .subscribeBy(onError, onComplete).disposedWith(this@LifecycleOwner2, event)
 
     fun <T : Any> Flowable<T>.subscribeUi(
         event: Lifecycle.Event = lifecycle.correspondingEvent(),
         onError: (Throwable) -> Unit = onErrorStub,
         onComplete: () -> Unit = onCompleteStub,
         onNext: (T) -> Unit = onNextStub
-    ) = observeOn(MAIN).subscribeBy(onError, onComplete, onNext).disposedWith(
-        this@LifecycleOwner2,
-        event
-    )
+    ) = observeOn(AndroidSchedulers.mainThread())
+        .subscribeBy(onError, onComplete, onNext).disposedWith(this@LifecycleOwner2, event)
 
     fun <T : Any> Maybe<T>.subscribeUi(
         event: Lifecycle.Event = lifecycle.correspondingEvent(),
         onError: (Throwable) -> Unit = onErrorStub,
         onComplete: () -> Unit = onCompleteStub,
         onSuccess: (T) -> Unit = onNextStub
-    ) = observeOn(MAIN).subscribeBy(
+    ) = observeOn(AndroidSchedulers.mainThread()).subscribeBy(
         onError,
         onComplete,
         onSuccess
@@ -71,7 +71,11 @@ interface LifecycleOwner2 : LifecycleOwner {
         onError: (Throwable) -> Unit = onErrorStub,
         onComplete: () -> Unit = onCompleteStub,
         onNext: (T) -> Unit = onNextStub
-    ) = observeOn(MAIN).subscribeBy(onError, onComplete, onNext).disposedWith(
+    ) = observeOn(AndroidSchedulers.mainThread()).subscribeBy(
+        onError,
+        onComplete,
+        onNext
+    ).disposedWith(
         this@LifecycleOwner2,
         event
     )
@@ -80,7 +84,10 @@ interface LifecycleOwner2 : LifecycleOwner {
         event: Lifecycle.Event = lifecycle.correspondingEvent(),
         onError: (Throwable) -> Unit = onErrorStub,
         onSuccess: (T) -> Unit = onNextStub
-    ) = observeOn(MAIN).subscribeBy(onError, onSuccess).disposedWith(this@LifecycleOwner2, event)
+    ) = observeOn(AndroidSchedulers.mainThread()).subscribeBy(
+        onError,
+        onSuccess
+    ).disposedWith(this@LifecycleOwner2, event)
 
     fun launchUi(
         event: Lifecycle.Event = lifecycle.correspondingEvent(),

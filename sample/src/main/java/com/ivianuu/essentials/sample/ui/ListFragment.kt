@@ -15,11 +15,10 @@ import com.ivianuu.essentials.ui.state.StateViewModel
 import com.ivianuu.essentials.ui.state.bindViewModel
 import com.ivianuu.essentials.ui.state.stateEpoxyController
 import com.ivianuu.essentials.ui.traveler.detour.FadeDetour
-import com.ivianuu.essentials.util.ext.COMPUTATION
+import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.ext.andTrue
-import com.ivianuu.essentials.util.ext.toSingle
-import io.reactivex.rxkotlin.subscribeBy
 import kotlinx.android.synthetic.main.single_line_list_item.*
+import kotlinx.coroutines.experimental.delay
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -65,7 +64,9 @@ class ListFragment : SimpleFragment() {
     }
 }
 
-class ListViewModel @Inject constructor() : StateViewModel<ListState>() {
+class ListViewModel @Inject constructor(
+    private val dispatchers: AppCoroutineDispatchers
+) : StateViewModel<ListState>() {
 
     init {
         setInitialState(ListState(false, emptyList()))
@@ -77,14 +78,12 @@ class ListViewModel @Inject constructor() : StateViewModel<ListState>() {
     }
 
     private fun generateNewState() {
-        Unit.toSingle()
-            .subscribeOn(COMPUTATION)
-            .map { generateList() }
-            .delay(1, TimeUnit.SECONDS)
-            .doOnSubscribe { setState { copy(loading = true) } }
-            .doOnSuccess { setState { copy(loading = false) } }
-            .subscribeBy { setState { copy(items = it) } }
-            .disposeOnClear()
+        launchWithParent(dispatchers.computation) {
+            setState { copy(loading = true) }
+            delay(1, TimeUnit.SECONDS)
+            val list = generateList()
+            setState { copy(loading = false, items = list) }
+        }
     }
 
     private fun generateList() = when (listOf(1, 2, 3).shuffled().first()) {

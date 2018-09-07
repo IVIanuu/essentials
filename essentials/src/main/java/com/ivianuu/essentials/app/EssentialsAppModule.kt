@@ -23,10 +23,16 @@ import android.content.pm.PackageManager
 import android.preference.PreferenceManager
 import androidx.work.WorkManager
 import com.f2prateek.rx.preferences2.RxSharedPreferences
+import com.ivianuu.essentials.util.AppCoroutineDispatchers
+import com.ivianuu.essentials.util.rx.AppRxSchedulers
 import com.ivianuu.rxsystemsettings.RxSystemSettings
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.rx2.asCoroutineDispatcher
 import javax.inject.Singleton
 
 /**
@@ -40,6 +46,24 @@ abstract class EssentialsAppModule {
 
     @Module
     companion object {
+
+        @JvmStatic
+        @Singleton
+        @Provides
+        fun provideCoroutineDispatchers(schedulers: AppRxSchedulers) = AppCoroutineDispatchers(
+            io = schedulers.io.asCoroutineDispatcher(),
+            computation = schedulers.computation.asCoroutineDispatcher(),
+            main = UI
+        )
+
+        @JvmStatic
+        @Singleton
+        @Provides
+        fun provideRxSchedulers() = AppRxSchedulers(
+            io = Schedulers.io(),
+            computation = Schedulers.computation(),
+            main = AndroidSchedulers.mainThread()
+        )
 
         @JvmStatic
         @Provides
