@@ -1,4 +1,4 @@
-package com.ivianuu.essentials.ui.state
+package com.ivianuu.essentials.ui.mvrx
 
 import com.ivianuu.essentials.util.ext.behaviorSubject
 import com.ivianuu.essentials.util.ext.requireValue
@@ -13,7 +13,7 @@ import java.util.*
 /**
  * State store
  */
-internal class StateStore<S : Any> : Disposable {
+internal class MvRxStateStore<S : MvRxState> : Disposable {
 
     private val disposables = CompositeDisposable()
 

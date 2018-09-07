@@ -41,8 +41,7 @@ import javax.inject.Inject
  * Base activity
  */
 abstract class BaseActivity : AppCompatActivity(), HasSupportFragmentInjector, Injectable,
-    IdentifiableScreen, LifecycleOwner2, RouterHolder,
-    ViewModelFactoryHolder {
+    IdentifiableScreen, LifecycleOwner2, RouterHolder, ViewModelFactoryHolder {
 
     @Inject lateinit var navigatorHolder: NavigatorHolder
     @Inject override lateinit var router: Router

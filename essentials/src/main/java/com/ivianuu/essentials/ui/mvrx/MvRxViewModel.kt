@@ -1,4 +1,4 @@
-package com.ivianuu.essentials.ui.state
+package com.ivianuu.essentials.ui.mvrx
 
 import androidx.lifecycle.LifecycleOwner
 import com.ivianuu.essentials.ui.common.BaseViewModel
@@ -11,11 +11,11 @@ import io.reactivex.schedulers.Schedulers
 /**
  * State view model
  */
-abstract class StateViewModel<S : Any>(initialState: S? = null) : BaseViewModel() {
+abstract class MvRxViewModel<S : MvRxState>(initialState: S? = null) : BaseViewModel() {
 
     private val backgroundScheduler = Schedulers.single()
 
-    private val stateStore = StateStore<S>()
+    private val stateStore = MvRxStateStore<S>()
 
     val state get() = stateStore.state
 

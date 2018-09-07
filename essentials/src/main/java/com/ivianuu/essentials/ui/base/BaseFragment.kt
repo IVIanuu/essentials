@@ -25,7 +25,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.ivianuu.essentials.injection.Injectable
 import com.ivianuu.essentials.ui.common.BackListener
-import com.ivianuu.essentials.ui.state.StateView
+import com.ivianuu.essentials.ui.mvrx.MvRxView
 import com.ivianuu.essentials.ui.traveler.RouterHolder
 import com.ivianuu.essentials.util.ContextAware
 import com.ivianuu.essentials.util.lifecycle.LifecycleOwner2
@@ -43,7 +43,7 @@ import javax.inject.Inject
 abstract class BaseFragment : Fragment(), BackListener, ContextAware, HasSupportFragmentInjector,
     Injectable, IdentifiableScreen, LifecycleOwner2, RouterHolder,
     ViewModelFactoryHolder,
-    StateView {
+    MvRxView {
 
     @Inject override lateinit var router: Router
 

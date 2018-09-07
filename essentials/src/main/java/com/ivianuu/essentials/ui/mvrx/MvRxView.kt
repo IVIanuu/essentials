@@ -1,4 +1,4 @@
-package com.ivianuu.essentials.ui.state
+package com.ivianuu.essentials.ui.mvrx
 
 import android.os.Handler
 import android.os.Looper
@@ -9,7 +9,7 @@ import androidx.lifecycle.ViewModelStoreOwner
 
 private val PENDING_INVALIDATES = HashSet<Int>()
 private val HANDLER = Handler(Looper.getMainLooper(), Handler.Callback { message ->
-    val view = message.obj as StateView
+    val view = message.obj as MvRxView
     PENDING_INVALIDATES.remove(System.identityHashCode(view))
 
     if (view.lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
@@ -19,7 +19,7 @@ private val HANDLER = Handler(Looper.getMainLooper(), Handler.Callback { message
     true
 })
 
-interface StateView : LifecycleOwner, ViewModelStoreOwner {
+interface MvRxView : LifecycleOwner, ViewModelStoreOwner {
 
     fun invalidate()
 
@@ -29,6 +29,6 @@ interface StateView : LifecycleOwner, ViewModelStoreOwner {
         }
     }
 
-    fun <S : Any> StateViewModel<S>.subscribe(subscriber: (S) -> Unit) =
-        subscribe(this@StateView, subscriber)
+    fun <S : MvRxState> MvRxViewModel<S>.subscribe(subscriber: (S) -> Unit) =
+        subscribe(this@MvRxView, subscriber)
 }
