@@ -17,12 +17,7 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import android.os.Bundle
-import com.ivianuu.essentials.data.app.AppInfo
 import com.ivianuu.essentials.ui.base.BaseActivity
-import com.ivianuu.essentials.ui.common.AppPickerDestination
-import com.ivianuu.essentials.util.ext.d
-import com.ivianuu.essentials.util.ext.navigateToForResult
 import dagger.Binds
 import dagger.Module
 
@@ -30,16 +25,6 @@ class MainActivity : BaseActivity() {
 
     override val startDestination: Any?
         get() = CounterDestination(1)
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        launchUi {
-            val appInfo =
-                router.navigateToForResult<AppInfo>(AppPickerDestination("Hello", 1))
-            d { "on result -> $appInfo" }
-        }
-    }
 
 }
 

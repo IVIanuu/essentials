@@ -25,11 +25,9 @@ fun Job.canceledWith(
     owner: LifecycleOwner,
     event: Lifecycle.Event = owner.lifecycle.correspondingEvent()
 ) = apply {
-    apply {
-        owner.lifecycle.addObserver(object : SimpleLifecycleObserver() {
-            override fun onAny(owner: LifecycleOwner, e: Lifecycle.Event) {
-                if (event == e || e == Lifecycle.Event.ON_DESTROY) cancel()
-            }
-        })
-    }
+    owner.lifecycle.addObserver(object : SimpleLifecycleObserver() {
+        override fun onAny(owner: LifecycleOwner, e: Lifecycle.Event) {
+            if (event == e || e == Lifecycle.Event.ON_DESTROY) cancel()
+        }
+    })
 }

@@ -24,6 +24,7 @@ import dagger.android.support.DaggerApplication
  * App
  */
 class App : BaseApp() {
+
     override fun applicationInjector(): AndroidInjector<out DaggerApplication> =
         DaggerAppComponent.builder().create(this)
 }

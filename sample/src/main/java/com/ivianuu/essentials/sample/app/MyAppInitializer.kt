@@ -16,8 +16,8 @@
 
 package com.ivianuu.essentials.sample.app
 
-import android.util.Log
 import com.ivianuu.essentials.app.AppService
+import com.ivianuu.essentials.util.ext.d
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoSet
@@ -25,7 +25,7 @@ import javax.inject.Inject
 
 class MyAppService @Inject constructor() : AppService {
     override fun start() {
-        Log.d("testtt", "start")
+        d { "start" }
     }
 }
 
