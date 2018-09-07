@@ -16,10 +16,6 @@
 
 package androidx.fragment.app
 
-import android.view.ViewGroup
-
-val Fragment.container: ViewGroup? get() = mContainer
-
 val Fragment.containerId get() = mContainerId
 
 val Fragment.isInBackstack get() = isInBackStack

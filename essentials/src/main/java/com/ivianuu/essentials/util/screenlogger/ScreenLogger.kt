@@ -24,8 +24,6 @@ import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import com.ivianuu.essentials.app.AppService
 import com.ivianuu.essentials.util.analytics.Analytics
-import com.ivianuu.essentials.util.ext.doOnActivityCreated
-import com.ivianuu.essentials.util.ext.doOnFragmentCreated
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -42,9 +40,29 @@ class ScreenLogger @Inject constructor(private val app: Application) : AppServic
     }
 
     override fun start() {
-        app.doOnActivityCreated { activity, savedInstanceState ->
-            handleActivity(activity, savedInstanceState)
-        }
+        app.registerActivityLifecycleCallbacks(object : Application.ActivityLifecycleCallbacks {
+            override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
+                handleActivity(activity, savedInstanceState)
+            }
+
+            override fun onActivityStarted(activity: Activity) {
+            }
+
+            override fun onActivityResumed(activity: Activity) {
+            }
+
+            override fun onActivityPaused(activity: Activity) {
+            }
+
+            override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle?) {
+            }
+
+            override fun onActivityStopped(activity: Activity) {
+            }
+
+            override fun onActivityDestroyed(activity: Activity) {
+            }
+        })
     }
 
     fun addListener(listener: Listener) {
@@ -65,15 +83,24 @@ class ScreenLogger @Inject constructor(private val app: Application) : AppServic
         }
 
         if (activity is FragmentActivity) {
-            activity.supportFragmentManager.doOnFragmentCreated(true) { _: FragmentManager, fragment: Fragment, bundle: Bundle? ->
-                if (fragment is IdentifiableScreen
-                    && fragment !is Ignore
-                    && bundle == null) {
-                    val name = getId(fragment)
-                    listeners.toList()
-                        .forEach { it.screenLaunched(name) }
+            activity.supportFragmentManager.registerFragmentLifecycleCallbacks(object :
+                FragmentManager.FragmentLifecycleCallbacks() {
+                override fun onFragmentCreated(
+                    fm: FragmentManager,
+                    f: Fragment,
+                    savedInstanceState: Bundle?
+                ) {
+                    super.onFragmentCreated(fm, f, savedInstanceState)
+                    if (f is IdentifiableScreen
+                        && f !is Ignore
+                        && savedInstanceState == null
+                    ) {
+                        val name = getId(f)
+                        listeners.toList()
+                            .forEach { it.screenLaunched(name) }
+                    }
                 }
-            }
+            }, true)
         }
     }
 

@@ -1,6 +1,7 @@
 package com.ivianuu.essentials.ui.simple
 
 import android.annotation.SuppressLint
+import android.graphics.PorterDuff
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.View
@@ -102,10 +103,10 @@ abstract class SimpleFragment : BaseFragment() {
 
             setTitleTextColor(titleColor)
             setSubtitleTextColor(subTitleColor)
-            navigationIcon?.tint(iconColor)
-            overflowIcon?.tint(iconColor)
+            navigationIcon?.setColorFilter(iconColor, PorterDuff.Mode.SRC_IN)
+            overflowIcon?.setColorFilter(iconColor, PorterDuff.Mode.SRC_IN)
             menu.items
-                .forEach { it.icon?.tint(iconColor) }
+                .forEach { it.icon?.setColorFilter(iconColor, PorterDuff.Mode.SRC_IN) }
         }
 
         optionalRecyclerView?.run {

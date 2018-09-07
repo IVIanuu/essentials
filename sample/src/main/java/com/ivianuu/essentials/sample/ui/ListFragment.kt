@@ -12,11 +12,10 @@ import com.ivianuu.essentials.ui.epoxy.simpleLoading
 import com.ivianuu.essentials.ui.epoxy.simpleText
 import com.ivianuu.essentials.ui.simple.SimpleFragment
 import com.ivianuu.essentials.ui.state.StateViewModel
-import com.ivianuu.essentials.ui.state.bindViewModel
 import com.ivianuu.essentials.ui.state.stateEpoxyController
+import com.ivianuu.essentials.ui.state.viewModel
 import com.ivianuu.essentials.ui.traveler.detour.FadeDetour
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
-import com.ivianuu.essentials.util.ext.andTrue
 import kotlinx.android.synthetic.main.single_line_list_item.*
 import kotlinx.coroutines.experimental.delay
 import java.util.concurrent.TimeUnit
@@ -31,7 +30,7 @@ object ListDestination
  */
 class ListFragment : SimpleFragment() {
 
-    private val viewModel by bindViewModel(ListViewModel::class)
+    private val viewModel by viewModel(ListViewModel::class)
 
     override val toolbarMenuRes = R.menu.fragment_list
     override val toolbarTitle = "List"
@@ -59,7 +58,10 @@ class ListFragment : SimpleFragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
-        R.id.action_refresh -> viewModel.refreshClicked().andTrue()
+        R.id.action_refresh -> {
+            viewModel.refreshClicked()
+            true
+        }
         else -> false
     }
 }
