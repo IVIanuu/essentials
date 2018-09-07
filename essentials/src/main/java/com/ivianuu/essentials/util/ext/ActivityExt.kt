@@ -26,9 +26,6 @@ import android.view.View
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 
-inline val Activity.contentView: View
-    get() = findViewById(android.R.id.content)
-
 inline fun Activity.hideInputMethod() {
     systemService<InputMethodManager>().hideSoftInputFromWindow(
         window.peekDecorView().windowToken,

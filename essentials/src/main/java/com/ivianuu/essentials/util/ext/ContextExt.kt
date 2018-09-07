@@ -18,16 +18,13 @@
 
 package com.ivianuu.essentials.util.ext
 
-import android.app.Activity
 import android.app.Application
 import android.content.*
 import android.content.pm.PackageManager
 import android.content.res.Configuration
-import android.content.res.Resources
 import android.os.BatteryManager
 import android.os.Build
 import android.os.PowerManager
-import androidx.appcompat.view.ContextThemeWrapper
 import androidx.core.content.ContextCompat
 import com.ivianuu.essentials.util.ContextAware
 
@@ -133,38 +130,6 @@ fun ContextAware.registerReceiver(
     onReceive: (intent: Intent) -> Unit
 ) = providedContext.registerReceiver(intentFilter, onReceive)
 
-inline fun Context.unregisterReceiverSafe(receiver: BroadcastReceiver) {
-    try {
-        unregisterReceiver(receiver)
-    } catch (e: IllegalArgumentException) {
-        // ignore
-    }
-}
-
-inline fun ContextAware.unregisterReceiverSafe(receiver: BroadcastReceiver) {
-    providedContext.unregisterReceiverSafe(receiver)
-}
-
-fun Context.findActivity(): Activity? {
-    var context = this
-    while (context is ContextWrapper) {
-        if (context is Activity) {
-            return context
-        }
-        context = context.baseContext
-    }
-
-    return context as? Activity
-}
-
-inline fun ContextAware.findActivity() = providedContext.findActivity()
-
-inline fun Context.findActivityOrThrow() =
-    findActivity() ?: throw IllegalStateException("base context is no activity")
-
-inline fun ContextAware.findActivityOrThrow() =
-    providedContext.findActivityOrThrow()
-
 fun Context.hasPermissions(vararg permissions: String): Boolean {
     return permissions.all {
         ContextCompat.checkSelfPermission(this, it) == PackageManager.PERMISSION_GRANTED
@@ -173,18 +138,6 @@ fun Context.hasPermissions(vararg permissions: String): Boolean {
 
 fun ContextAware.hasPermissions(vararg permissions: String) =
     providedContext.hasPermissions(*permissions)
-
-inline fun Context.toThemedContext(resId: Int): Context =
-    ContextThemeWrapper(this, resId)
-
-inline fun ContextAware.toThemedContext(resId: Int) =
-    providedContext.toThemedContext(resId)
-
-inline fun Context.toThemedContext(theme: Resources.Theme): Context =
-    ContextThemeWrapper(this, theme)
-
-inline fun ContextAware.toThemedContext(theme: Resources.Theme) =
-    providedContext.toThemedContext(theme)
 
 inline fun <reified T : Application> Context.app() = applicationContext as T
 

@@ -19,13 +19,8 @@
 package com.ivianuu.essentials.util.ext
 
 import android.view.View
-import androidx.appcompat.widget.Toolbar
 import com.ivianuu.epoxyprefs.PreferenceModel
 import com.ivianuu.traveler.Router
-
-inline fun Toolbar.exitOnNavigationClick(router: Router) {
-    setNavigationOnClickListener { router.exit() }
-}
 
 fun View.navigateOnClick(router: Router, key: () -> Any) {
     setOnClickListener { router.navigateTo(key()) }

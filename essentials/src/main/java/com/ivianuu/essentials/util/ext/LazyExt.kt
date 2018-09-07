@@ -16,6 +16,4 @@
 
 package com.ivianuu.essentials.util.ext
 
-fun <T> semiSafeLazy(initializer: () -> T) = lazy(LazyThreadSafetyMode.PUBLICATION, initializer)
-
 fun <T> unsafeLazy(initializer: () -> T) = lazy(LazyThreadSafetyMode.NONE, initializer)

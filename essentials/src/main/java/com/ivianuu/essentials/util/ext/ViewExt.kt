@@ -18,13 +18,7 @@
 
 package com.ivianuu.essentials.util.ext
 
-import android.app.Activity
 import android.view.View
-
-inline val View.activity: Activity?
-    get() = context.findActivity()
-
-inline fun View.requireActivity() = context.findActivityOrThrow()
 
 fun View.doOnViewAttachedToWindow(block: ((v: View) -> Unit)?) =
     addOnAttachStateChangeListener(onViewAttachedToWindow = block)
