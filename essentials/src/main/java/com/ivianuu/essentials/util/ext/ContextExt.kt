@@ -29,9 +29,7 @@ import android.os.Build
 import android.os.PowerManager
 import androidx.appcompat.view.ContextThemeWrapper
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.LifecycleOwner
 import com.ivianuu.essentials.util.ContextAware
-import com.ivianuu.essentials.util.lifecycle.lifecycleAwareComponent
 
 inline val Context.isTablet: Boolean
     get() = resources.configuration.screenLayout and Configuration.SCREENLAYOUT_SIZE_MASK >= Configuration.SCREENLAYOUT_SIZE_LARGE
@@ -134,49 +132,6 @@ fun ContextAware.registerReceiver(
     intentFilter: IntentFilter,
     onReceive: (intent: Intent) -> Unit
 ) = providedContext.registerReceiver(intentFilter, onReceive)
-
-
-fun Context.registerReceiver(
-    owner: LifecycleOwner,
-    intentFilter: IntentFilter,
-    onReceive: (intent: Intent) -> Unit
-) {
-    val receiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context, intent: Intent) {
-            onReceive.invoke(intent)
-        }
-    }
-
-    registerReceiver(owner, receiver, intentFilter)
-}
-
-fun ContextAware.registerReceiver(
-    owner: LifecycleOwner,
-    intentFilter: IntentFilter,
-    onReceive: (intent: Intent) -> Unit
-) {
-    providedContext.registerReceiver(owner, intentFilter, onReceive)
-}
-
-fun Context.registerReceiver(
-    owner: LifecycleOwner,
-    receiver: BroadcastReceiver,
-    intentFilter: IntentFilter
-) {
-    lifecycleAwareComponent(
-        owner = owner,
-        onActive = { registerReceiver(receiver, intentFilter) },
-        onInactive = { unregisterReceiver(receiver) }
-    )
-}
-
-fun ContextAware.registerReceiver(
-    owner: LifecycleOwner,
-    receiver: BroadcastReceiver,
-    intentFilter: IntentFilter
-) {
-    providedContext.registerReceiver(owner, receiver, intentFilter)
-}
 
 inline fun Context.unregisterReceiverSafe(receiver: BroadcastReceiver) {
     try {
