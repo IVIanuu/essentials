@@ -20,6 +20,7 @@ import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
+import android.content.res.Resources
 import android.preference.PreferenceManager
 import androidx.work.WorkManager
 import com.f2prateek.rx.preferences2.RxSharedPreferences
@@ -79,6 +80,10 @@ abstract class EssentialsAppModule {
         @JvmStatic
         @Provides
         fun providePackageManager(context: Context): PackageManager = context.packageManager
+
+        @JvmStatic
+        @Provides
+        fun provideResources(context: Context): Resources = context.resources
 
         @JvmStatic
         @Singleton

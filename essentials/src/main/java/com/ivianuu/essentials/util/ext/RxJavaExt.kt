@@ -20,16 +20,34 @@ package com.ivianuu.essentials.util.ext
 
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
-import com.ivianuu.essentials.util.tuples.*
-import io.reactivex.*
+import com.ivianuu.essentials.util.tuples.Ennead
+import com.ivianuu.essentials.util.tuples.Octet
+import com.ivianuu.essentials.util.tuples.Quartet
+import com.ivianuu.essentials.util.tuples.Quintet
+import com.ivianuu.essentials.util.tuples.Septet
+import com.ivianuu.essentials.util.tuples.Sextet
+import io.reactivex.Completable
+import io.reactivex.Flowable
+import io.reactivex.Maybe
+import io.reactivex.Observable
+import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.exceptions.OnErrorNotImplementedException
-import io.reactivex.functions.*
+import io.reactivex.functions.Function4
+import io.reactivex.functions.Function5
+import io.reactivex.functions.Function6
+import io.reactivex.functions.Function7
+import io.reactivex.functions.Function8
+import io.reactivex.functions.Function9
 import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.rxkotlin.Observables
 import io.reactivex.rxkotlin.subscribeBy
-import io.reactivex.subjects.*
+import io.reactivex.subjects.BehaviorSubject
+import io.reactivex.subjects.CompletableSubject
+import io.reactivex.subjects.MaybeSubject
+import io.reactivex.subjects.PublishSubject
+import io.reactivex.subjects.SingleSubject
 
 internal val onSubscribeStub: (Disposable) -> Unit = {}
 internal val onCompleteStub: () -> Unit = {}

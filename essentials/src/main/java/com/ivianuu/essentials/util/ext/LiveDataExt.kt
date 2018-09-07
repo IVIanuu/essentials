@@ -22,15 +22,19 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
-import io.reactivex.*
+import io.reactivex.BackpressureStrategy
+import io.reactivex.Flowable
+import io.reactivex.Maybe
+import io.reactivex.Observable
+import io.reactivex.Single
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.subscribeBy
 import java.util.concurrent.atomic.AtomicReference
 
 // todo replace with overload constructor once available
 inline fun <T> mutableLiveData(initialValue: T? = null) =
-    MutableLiveData<T>().applyIf(initialValue != null) {
-        value = initialValue
+    MutableLiveData<T>().apply {
+        if (initialValue != null) value = initialValue
     }
 
 fun <T> LiveData<T>.observeK(owner: LifecycleOwner, onChanged: (T) -> Unit) {

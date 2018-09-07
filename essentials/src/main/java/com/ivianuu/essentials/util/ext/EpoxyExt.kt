@@ -18,7 +18,12 @@ package com.ivianuu.essentials.util.ext
 
 import android.os.Handler
 import androidx.recyclerview.widget.RecyclerView
-import com.airbnb.epoxy.*
+import com.airbnb.epoxy.EpoxyAsyncUtil
+import com.airbnb.epoxy.EpoxyController
+import com.airbnb.epoxy.Typed2EpoxyController
+import com.airbnb.epoxy.Typed3EpoxyController
+import com.airbnb.epoxy.Typed4EpoxyController
+import com.airbnb.epoxy.TypedEpoxyController
 import com.ivianuu.epoxyprefs.PreferenceEpoxyController
 import com.ivianuu.epoxyprefs.preferenceEpoxyController
 

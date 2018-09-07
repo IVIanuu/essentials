@@ -2,7 +2,11 @@ package com.ivianuu.essentials.ui.state
 
 import androidx.lifecycle.ViewModelProvider
 import com.ivianuu.essentials.ui.base.BaseFragment
-import com.ivianuu.essentials.util.ext.*
+import com.ivianuu.essentials.util.ext.defaultViewModelFactory
+import com.ivianuu.essentials.util.ext.defaultViewModelKey
+import com.ivianuu.essentials.util.ext.requireParentFragment
+import com.ivianuu.essentials.util.ext.requireTargetFragment
+import com.ivianuu.essentials.util.ext.viewModelProvider
 import com.ivianuu.essentials.util.lifecycle.lifecycleAwareLazy
 import kotlin.reflect.KClass
 

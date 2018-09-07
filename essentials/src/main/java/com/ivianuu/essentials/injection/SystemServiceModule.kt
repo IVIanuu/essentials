@@ -1,7 +1,15 @@
 package com.ivianuu.essentials.injection
 
 import android.accounts.AccountManager
-import android.app.*
+import android.app.ActivityManager
+import android.app.AlarmManager
+import android.app.AppOpsManager
+import android.app.DownloadManager
+import android.app.KeyguardManager
+import android.app.NotificationManager
+import android.app.SearchManager
+import android.app.UiModeManager
+import android.app.WallpaperManager
 import android.app.admin.DevicePolicyManager
 import android.app.job.JobScheduler
 import android.app.usage.UsageStatsManager
@@ -28,7 +36,11 @@ import android.net.nsd.NsdManager
 import android.net.wifi.WifiManager
 import android.net.wifi.p2p.WifiP2pManager
 import android.nfc.NfcManager
-import android.os.*
+import android.os.BatteryManager
+import android.os.DropBoxManager
+import android.os.PowerManager
+import android.os.UserManager
+import android.os.Vibrator
 import android.os.storage.StorageManager
 import android.print.PrintManager
 import android.telecom.TelecomManager

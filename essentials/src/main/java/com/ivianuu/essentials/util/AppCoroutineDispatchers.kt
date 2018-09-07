@@ -19,7 +19,7 @@ package com.ivianuu.essentials.util
 import kotlinx.coroutines.experimental.CoroutineDispatcher
 
 /**
- * @author Manuel Wrage (IVIanuu)
+ * Dispatchers which should be used with coroutines
  */
 data class AppCoroutineDispatchers(
     val computation: CoroutineDispatcher,

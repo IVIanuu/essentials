@@ -18,6 +18,7 @@ package com.ivianuu.essentials.app
 
 import android.content.pm.ApplicationInfo
 import android.graphics.Bitmap
+import android.os.Looper
 import com.bumptech.glide.Glide
 import com.crashlytics.android.Crashlytics
 import com.ivianuu.essentials.util.AppIcon
@@ -26,10 +27,10 @@ import com.ivianuu.essentials.util.analytics.Analytics
 import com.ivianuu.essentials.util.analytics.DebugAnalyticsLogger
 import com.ivianuu.essentials.util.analytics.FabricAnalyticsLogger
 import com.ivianuu.essentials.util.ext.containsFlag
-import com.ivianuu.essentials.util.rx.EnsureMainThreadScheduler
 import dagger.android.support.DaggerApplication
 import io.fabric.sdk.android.Fabric
 import io.reactivex.android.plugins.RxAndroidPlugins
+import io.reactivex.android.schedulers.AndroidSchedulers
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -69,7 +70,8 @@ abstract class BaseApp : DaggerApplication() {
         }
 
         if (initRxJava) {
-            RxAndroidPlugins.setInitMainThreadSchedulerHandler { EnsureMainThreadScheduler.INSTANCE }
+            val scheduler = AndroidSchedulers.from(Looper.getMainLooper(), true)
+            RxAndroidPlugins.setInitMainThreadSchedulerHandler { scheduler }
         }
 
         appServices.forEach { startAppService(it) }
