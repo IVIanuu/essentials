@@ -5,6 +5,7 @@ import com.ivianuu.essentials.injection.AutoInjector
 import com.ivianuu.essentials.injection.Injectable
 import dagger.android.AndroidInjection
 import io.reactivex.disposables.CompositeDisposable
+import kotlinx.coroutines.experimental.Job
 
 /**
  * Base notification listener service
@@ -12,7 +13,10 @@ import io.reactivex.disposables.CompositeDisposable
 abstract class BaseNotificationListenerService : NotificationListenerService(), Injectable {
 
     protected val disposables = CompositeDisposable()
+    protected val job = Job()
+
     protected val connectedDisposables = CompositeDisposable()
+    protected val connectedJob = Job()
 
     override fun onCreate() {
         if (this !is AutoInjector.Ignore) {
@@ -28,6 +32,7 @@ abstract class BaseNotificationListenerService : NotificationListenerService(), 
 
     override fun onListenerDisconnected() {
         connectedDisposables.clear()
+        connectedJob.cancel()
         super.onListenerDisconnected()
     }
 }

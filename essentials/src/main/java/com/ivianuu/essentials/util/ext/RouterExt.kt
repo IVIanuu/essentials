@@ -17,7 +17,11 @@
 package com.ivianuu.essentials.util.ext
 
 import android.content.Intent
-import com.ivianuu.essentials.ui.common.*
+import com.ivianuu.essentials.ui.common.ActivityResult
+import com.ivianuu.essentials.ui.common.ActivityResultDestination
+import com.ivianuu.essentials.ui.common.PermissionDestination
+import com.ivianuu.essentials.ui.common.PermissionResult
+import com.ivianuu.essentials.ui.common.RequestCodeGenerator
 import com.ivianuu.essentials.ui.traveler.destination.ResultDestination
 import com.ivianuu.traveler.ResultListener
 import com.ivianuu.traveler.Router
@@ -46,14 +50,12 @@ suspend fun <T> Router.navigateToForResult(destination: ResultDestination) =
     suspendCancellableCoroutine<T> { continuation ->
         val listener = object : ResultListener {
             override fun onResult(result: Any) {
-                d { "on result -> $result" }
                 continuation.resume(result as T)
                 removeResultListener(destination.resultCode, this)
             }
         }
 
         continuation.invokeOnCancellation {
-            d { "cancel" }
             removeResultListener(destination.resultCode, listener)
         }
 

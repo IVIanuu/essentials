@@ -12,8 +12,8 @@ import com.ivianuu.essentials.ui.epoxy.simpleLoading
 import com.ivianuu.essentials.ui.epoxy.simpleText
 import com.ivianuu.essentials.ui.simple.SimpleFragment
 import com.ivianuu.essentials.ui.state.StateViewModel
+import com.ivianuu.essentials.ui.state.bindViewModel
 import com.ivianuu.essentials.ui.state.stateEpoxyController
-import com.ivianuu.essentials.ui.state.viewModel
 import com.ivianuu.essentials.ui.traveler.detour.FadeDetour
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import kotlinx.android.synthetic.main.single_line_list_item.*
@@ -30,7 +30,7 @@ object ListDestination
  */
 class ListFragment : SimpleFragment() {
 
-    private val viewModel by viewModel(ListViewModel::class)
+    private val viewModel by bindViewModel(ListViewModel::class)
 
     override val toolbarMenuRes = R.menu.fragment_list
     override val toolbarTitle = "List"
