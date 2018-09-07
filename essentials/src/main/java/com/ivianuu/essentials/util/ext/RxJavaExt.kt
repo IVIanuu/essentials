@@ -29,7 +29,8 @@ import io.reactivex.functions.*
 import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.rxkotlin.Observables
 import io.reactivex.rxkotlin.subscribeBy
-import io.reactivex.subjects.*
+import io.reactivex.subjects.BehaviorSubject
+import io.reactivex.subjects.PublishSubject
 
 internal val onSubscribeStub: (Disposable) -> Unit = {}
 internal val onCompleteStub: () -> Unit = {}
@@ -47,13 +48,7 @@ inline fun <T : Any> behaviorSubject(defaultValue: T? = null): BehaviorSubject<T
         BehaviorSubject.create()
     }
 
-inline fun completableSubject(): CompletableSubject = CompletableSubject.create()
-
-inline fun <T : Any> maybeSubject(): MaybeSubject<T> = MaybeSubject.create()
-
 inline fun <T : Any> publishSubject(): PublishSubject<T> = PublishSubject.create()
-
-inline fun <T : Any> singleSubject(): SingleSubject<T> = SingleSubject.create()
 
 inline fun <T1, T2, T3, T4> Observables.combineLatest(
     source1: Observable<T1>,
