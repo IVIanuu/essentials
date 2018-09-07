@@ -16,6 +16,7 @@ class AppStore @Inject constructor(
 
     suspend fun installedApps() = withContext(dispatchers.io) {
         packageManager.getInstalledApplications(0)
+            .asSequence()
             .map {
                 AppInfo(
                     appName = it.loadLabel(packageManager).toString(),
@@ -24,6 +25,7 @@ class AppStore @Inject constructor(
             }
             .distinctBy { it.packageName }
             .sortedBy { it.appName.toLowerCase() }
+            .toList()
     }
 
     suspend fun launchableApps() = withContext(dispatchers.io) {
@@ -31,6 +33,7 @@ class AppStore @Inject constructor(
             addCategory(Intent.CATEGORY_LAUNCHER)
         }
         packageManager.queryIntentActivities(intent, 0)
+            .asSequence()
             .map {
                 AppInfo(
                     appName = it.loadLabel(packageManager).toString(),
@@ -39,6 +42,7 @@ class AppStore @Inject constructor(
             }
             .distinctBy { it.packageName }
             .sortedBy { it.appName.toLowerCase() }
+            .toList()
     }
 
     suspend fun appInfo(packageName: String) = withContext(dispatchers.io) {

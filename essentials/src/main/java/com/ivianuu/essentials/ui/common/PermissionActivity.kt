@@ -6,13 +6,34 @@ import android.os.Bundle
 import com.ivianuu.compass.Destination
 import com.ivianuu.essentials.ui.base.BaseActivity
 import com.ivianuu.essentials.ui.traveler.destination.ResultDestination
+import java.util.*
 
 @Destination(PermissionActivity::class)
 data class PermissionDestination(
     override val resultCode: Int,
     val permissions: Array<String>,
     val requestCode: Int = RequestCodeGenerator.generate()
-) : ResultDestination
+) : ResultDestination {
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as PermissionDestination
+
+        if (resultCode != other.resultCode) return false
+        if (!Arrays.equals(permissions, other.permissions)) return false
+        if (requestCode != other.requestCode) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = resultCode
+        result = 31 * result + Arrays.hashCode(permissions)
+        result = 31 * result + requestCode
+        return result
+    }
+}
 
 /**
  * Activity result activity
@@ -66,5 +87,23 @@ data class PermissionResult(
 ) {
 
     val allGranted get() = grantResults.all { it == PackageManager.PERMISSION_GRANTED }
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
 
+        other as PermissionResult
+
+        if (requestCode != other.requestCode) return false
+        if (!Arrays.equals(permissions, other.permissions)) return false
+        if (!Arrays.equals(grantResults, other.grantResults)) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = requestCode
+        result = 31 * result + Arrays.hashCode(permissions)
+        result = 31 * result + Arrays.hashCode(grantResults)
+        return result
+    }
 }
