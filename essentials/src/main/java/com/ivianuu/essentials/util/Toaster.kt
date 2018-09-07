@@ -30,43 +30,43 @@ class Toaster @Inject constructor(
 ) {
 
     fun error(messageRes: Int, vararg args: Any) = mainThread {
-        Toasty.error(context, string(messageRes, *args))
+        Toasty.error(context, string(messageRes, *args)).show()
     }
 
     fun error(message: CharSequence) = mainThread {
-        Toasty.error(context, message)
+        Toasty.error(context, message).show()
     }
 
     fun info(messageRes: Int, vararg args: Any) = mainThread {
-        Toasty.info(context, string(messageRes, *args))
+        Toasty.info(context, string(messageRes, *args)).show()
     }
 
     fun info(message: CharSequence) = mainThread {
-        Toasty.info(context, message)
+        Toasty.info(context, message).show()
     }
 
     fun normal(messageRes: Int, vararg args: Any) = mainThread {
-        Toasty.normal(context, string(messageRes, *args))
+        Toasty.normal(context, string(messageRes, *args)).show()
     }
 
     fun normal(message: CharSequence) = mainThread {
-        Toasty.normal(context, message)
+        Toasty.normal(context, message).show()
     }
 
     fun success(messageRes: Int, vararg args: Any) = mainThread {
-        Toasty.success(context, string(messageRes, *args))
+        Toasty.success(context, string(messageRes, *args)).show()
     }
 
     fun success(message: CharSequence) = mainThread {
-        Toasty.success(context, message)
+        Toasty.success(context, message).show()
     }
 
     fun warning(messageRes: Int, vararg args: Any) = mainThread {
-        Toasty.warning(context, string(messageRes, *args))
+        Toasty.warning(context, string(messageRes, *args)).show()
     }
 
     fun warning(message: CharSequence) = mainThread {
-        Toasty.warning(context, message)
+        Toasty.warning(context, message).show()
     }
 
     private fun string(resId: Int, vararg args: Any) = stringProvider.string(resId, *args)
