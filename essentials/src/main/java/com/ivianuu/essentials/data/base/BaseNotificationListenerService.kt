@@ -16,7 +16,8 @@ abstract class BaseNotificationListenerService : NotificationListenerService(), 
     protected val job = Job()
 
     protected val connectedDisposables = CompositeDisposable()
-    protected val connectedJob = Job()
+    protected var connectedJob = Job()
+        private set
 
     override fun onCreate() {
         if (this !is AutoInjector.Ignore) {
@@ -27,7 +28,15 @@ abstract class BaseNotificationListenerService : NotificationListenerService(), 
 
     override fun onDestroy() {
         disposables.clear()
+        job.cancel()
         super.onDestroy()
+    }
+
+    override fun onListenerConnected() {
+        super.onListenerConnected()
+        if (connectedJob.isCompleted) {
+            connectedJob = Job()
+        }
     }
 
     override fun onListenerDisconnected() {

@@ -19,7 +19,8 @@ abstract class BaseTileService : TileService(), Injectable {
     protected val job = Job()
 
     protected val listeningDisposables = CompositeDisposable()
-    protected val listeningJob = Job()
+    protected var listeningJob = Job()
+        private set
 
     override fun onCreate() {
         if (this !is AutoInjector.Ignore) {
@@ -32,6 +33,13 @@ abstract class BaseTileService : TileService(), Injectable {
         disposables.clear()
         job.cancel()
         super.onDestroy()
+    }
+
+    override fun onStartListening() {
+        super.onStartListening()
+        if (listeningJob.isCompleted) {
+            listeningJob = Job()
+        }
     }
 
     override fun onStopListening() {
