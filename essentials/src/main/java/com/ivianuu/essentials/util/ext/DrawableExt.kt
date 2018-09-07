@@ -14,18 +14,20 @@
  * limitations under the License.
  */
 
-@file:Suppress("NOTHING_TO_INLINE")
-
 package com.ivianuu.essentials.util.ext
 
-import java.util.*
+import android.graphics.PorterDuff
+import android.graphics.drawable.Drawable
 
-inline fun <T> MutableList<T>.swap(from: Int, to: Int) {
-    Collections.swap(this, from, to)
-}
-
-inline fun <T> List<T>.swapped(from: Int, to: Int): List<T> {
-    val copy = toMutableList()
-    copy.swap(from, to)
-    return copy
+fun Drawable.tint(
+    color: Int,
+    mode: PorterDuff.Mode = PorterDuff.Mode.SRC_IN,
+    mutate: Boolean = true
+): Drawable {
+    return if (mutate) {
+        mutate().apply { setColorFilter(color, mode) }
+    } else {
+        setColorFilter(color, mode)
+        this
+    }
 }

@@ -23,6 +23,8 @@ import android.widget.Toast
 import com.ivianuu.essentials.util.ContextAware
 import es.dmoral.toasty.Toasty
 
+// todo make toasts always run on the main thread
+
 inline fun Context.toastError(message: CharSequence): Toast =
     Toasty.error(this, message).apply { show() }
 

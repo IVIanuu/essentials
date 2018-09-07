@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.state
+package com.ivianuu.essentials.util.lifecycle
 
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
-import com.ivianuu.essentials.util.lifecycle.SimpleLifecycleObserver
 import java.io.Serializable
 
 private object UNINITIALIZED_VALUE
@@ -75,3 +74,15 @@ class LifecycleAwareLazy<out T>(
     override fun toString(): String =
         if (isInitialized()) value.toString() else "Lazy value not initialized yet."
 }
+
+@JvmName("lifecycleAwareLazy2")
+fun <T> LifecycleOwner.lifecycleAwareLazy(
+    event: Lifecycle.Event = Lifecycle.Event.ON_CREATE,
+    initializer: () -> T
+) = lifecycleAwareLazy(this, event, initializer)
+
+fun <T> lifecycleAwareLazy(
+    owner: LifecycleOwner,
+    event: Lifecycle.Event = Lifecycle.Event.ON_CREATE,
+    initializer: () -> T
+) = LifecycleAwareLazy(owner, event, initializer)

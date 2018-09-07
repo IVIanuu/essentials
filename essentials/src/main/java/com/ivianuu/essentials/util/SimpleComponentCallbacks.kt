@@ -14,18 +14,21 @@
  * limitations under the License.
  */
 
-@file:Suppress("NOTHING_TO_INLINE")
+package com.ivianuu.essentials.util
 
-package com.ivianuu.essentials.util.ext
+import android.content.ComponentCallbacks2
+import android.content.res.Configuration
 
-import java.util.*
+/**
+ * Simple component callbacks
+ */
+open class SimpleComponentCallbacks : ComponentCallbacks2 {
+    override fun onConfigurationChanged(newConfig: Configuration) {
+    }
 
-inline fun <T> MutableList<T>.swap(from: Int, to: Int) {
-    Collections.swap(this, from, to)
-}
+    override fun onLowMemory() {
+    }
 
-inline fun <T> List<T>.swapped(from: Int, to: Int): List<T> {
-    val copy = toMutableList()
-    copy.swap(from, to)
-    return copy
+    override fun onTrimMemory(level: Int) {
+    }
 }

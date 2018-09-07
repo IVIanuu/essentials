@@ -29,8 +29,7 @@ import io.reactivex.functions.*
 import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.rxkotlin.Observables
 import io.reactivex.rxkotlin.subscribeBy
-import io.reactivex.subjects.BehaviorSubject
-import io.reactivex.subjects.PublishSubject
+import io.reactivex.subjects.*
 
 internal val onSubscribeStub: (Disposable) -> Unit = {}
 internal val onCompleteStub: () -> Unit = {}
@@ -48,7 +47,13 @@ inline fun <T : Any> behaviorSubject(defaultValue: T? = null): BehaviorSubject<T
         BehaviorSubject.create()
     }
 
+inline fun completableSubject(): CompletableSubject = CompletableSubject.create()
+
+inline fun <T : Any> maybeSubject(): MaybeSubject<T> = MaybeSubject.create()
+
 inline fun <T : Any> publishSubject(): PublishSubject<T> = PublishSubject.create()
+
+inline fun <T : Any> singleSubject(): SingleSubject<T> = SingleSubject.create()
 
 inline fun <T1, T2, T3, T4> Observables.combineLatest(
     source1: Observable<T1>,
@@ -169,6 +174,14 @@ inline fun <T1, T2, T3, T4, T5, T6, T7, T8, T9> Observables.combineLatest(
         Function9 { t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6, t7: T7, t8: T8, t9: T9 ->
             Ennead(t1, t2, t3, t4, t5, t6, t7, t8, t9)
         })!!
+
+fun <T : Any> T?.toMaybe(): Maybe<T> =
+    Maybe.create { s -> if (this != null) s.onSuccess(this); s.onComplete() }
+
+fun <T : Any> (() -> T).toMaybe(): Maybe<T> = Maybe.fromCallable(this)
+
+fun <T : Any> T.toSingle(): Single<T> = Single.just(this)
+fun <T : Any> (() -> T).toSingle(): Single<T> = Single.fromCallable(this)
 
 fun Completable.subscribeUi(
     owner: LifecycleOwner,

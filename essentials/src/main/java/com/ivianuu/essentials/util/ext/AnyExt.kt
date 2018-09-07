@@ -18,14 +18,8 @@
 
 package com.ivianuu.essentials.util.ext
 
-import java.util.*
+inline fun Any.andTrue() = true
 
-inline fun <T> MutableList<T>.swap(from: Int, to: Int) {
-    Collections.swap(this, from, to)
-}
+inline fun Any.andFalse() = false
 
-inline fun <T> List<T>.swapped(from: Int, to: Int): List<T> {
-    val copy = toMutableList()
-    copy.swap(from, to)
-    return copy
-}
+inline fun <T> T.checkAllMatched() = this

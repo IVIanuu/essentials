@@ -2,6 +2,7 @@ package com.ivianuu.essentials.ui.state
 
 import androidx.lifecycle.LifecycleOwner
 import com.ivianuu.essentials.ui.common.BaseViewModel
+import com.ivianuu.essentials.util.lifecycle.LifecycleAwareObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.addTo

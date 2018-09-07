@@ -17,6 +17,19 @@
 package com.ivianuu.essentials.util.ext
 
 import androidx.appcompat.widget.SearchView
+import io.reactivex.Observable
+
+fun SearchView.closes(predicate: (() -> Boolean)? = null): Observable<Unit> =
+    Observable.create { e ->
+        setOnCloseListener {
+            if (!e.isDisposed) {
+                e.onNext(Unit)
+            }
+            predicate?.invoke() ?: true
+        }
+
+        e.setCancellable { setOnCloseListener(null) }
+    }
 
 fun SearchView.doOnQueryTextChange(block: (newText: String) -> Boolean) =
     setOnQueryTextListener(onQueryTextChange = block)

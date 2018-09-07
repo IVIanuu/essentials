@@ -26,8 +26,8 @@ inline fun Fragment.hideInputMethod() {
     requireActivity().hideInputMethod()
 }
 
-inline fun Fragment.showInputMethod(view: View, flags: Int = 0) {
-    requireActivity().showInputMethod(view, flags)
+inline fun Fragment.showInputMethod(view: View) {
+    requireActivity().showInputMethod(view)
 }
 
 inline fun <reified T : Activity> Fragment.activity() = requireActivity() as T

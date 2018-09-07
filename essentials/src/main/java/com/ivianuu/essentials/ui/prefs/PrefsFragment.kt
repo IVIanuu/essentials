@@ -7,6 +7,7 @@ import android.view.View
 import com.airbnb.epoxy.EpoxyController
 import com.ivianuu.epoxyprefs.*
 import com.ivianuu.essentials.ui.simple.SimpleFragment
+import com.ivianuu.essentials.util.ext.registerOnSharedPreferenceChangeListener
 import com.ivianuu.essentials.util.ext.unsafeLazy
 
 /**
@@ -15,12 +16,8 @@ import com.ivianuu.essentials.util.ext.unsafeLazy
 abstract class PrefsFragment : SimpleFragment() {
 
     protected open val sharedPreferencesName
-        get() = EpoxyPrefsPlugins.getDefaultSharedPreferencesName(requireContext())
-
-    private val preferencesChangeListener =
-        SharedPreferences.OnSharedPreferenceChangeListener { _, _ ->
-            postInvalidate()
-        }
+        get() =
+            EpoxyPrefsPlugins.getDefaultSharedPreferencesName(requireContext())
 
     protected val sharedPreferences: SharedPreferences by unsafeLazy {
         requireContext().getSharedPreferences(sharedPreferencesName, Context.MODE_PRIVATE)
@@ -28,14 +25,10 @@ abstract class PrefsFragment : SimpleFragment() {
 
     protected open val usePreferenceDividerDecoration = true
 
-    override fun onStart() {
-        super.onStart()
-        sharedPreferences.registerOnSharedPreferenceChangeListener(preferencesChangeListener)
-    }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
-    override fun onStop() {
-        super.onStop()
-        sharedPreferences.unregisterOnSharedPreferenceChangeListener(preferencesChangeListener)
+        sharedPreferences.registerOnSharedPreferenceChangeListener(this) { postInvalidate() }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

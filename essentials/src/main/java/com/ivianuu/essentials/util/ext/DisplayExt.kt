@@ -34,6 +34,10 @@ inline fun Context.dpToPx(dp: Int) = dp * resources.displayMetrics.density
 
 inline fun ContextAware.dpToPx(dp: Int) = providedContext.dpToPx(dp)
 
+inline fun Context.spToPx(sp: Int) = sp * resources.displayMetrics.scaledDensity
+
+inline fun ContextAware.spToPx(sp: Int) = providedContext.spToPx(sp)
+
 inline val Context.isPortrait: Boolean
     get() = !isLandscape
 

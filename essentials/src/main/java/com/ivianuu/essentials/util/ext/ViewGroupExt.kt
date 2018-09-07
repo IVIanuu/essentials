@@ -24,3 +24,26 @@ import android.view.ViewGroup
 
 inline fun ViewGroup.inflate(resId: Int, attachToRoot: Boolean): View =
     LayoutInflater.from(context).inflate(resId, this, attachToRoot)
+
+fun ViewGroup.doOnChildViewAdded(block: (parent: View, child: View) -> Unit) =
+    setOnHierarchyChangeListener(onChildViewAdded = block)
+
+fun ViewGroup.doOnChildViewRemoved(block: (parent: View, child: View) -> Unit) =
+    setOnHierarchyChangeListener(onChildViewRemoved = block)
+
+fun ViewGroup.setOnHierarchyChangeListener(
+    onChildViewAdded: ((parent: View, child: View) -> Unit)? = null,
+    onChildViewRemoved: ((parent: View, child: View) -> Unit)? = null
+): ViewGroup.OnHierarchyChangeListener {
+    val listener = object : ViewGroup.OnHierarchyChangeListener {
+        override fun onChildViewAdded(parent: View, child: View) {
+            onChildViewAdded?.invoke(parent, child)
+        }
+
+        override fun onChildViewRemoved(parent: View, child: View) {
+            onChildViewRemoved?.invoke(parent, child)
+        }
+    }
+    setOnHierarchyChangeListener(listener)
+    return listener
+}

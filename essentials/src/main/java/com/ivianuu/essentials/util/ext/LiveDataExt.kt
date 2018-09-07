@@ -29,7 +29,9 @@ import java.util.concurrent.atomic.AtomicReference
 
 // todo replace with overload constructor once available
 inline fun <T> mutableLiveData(initialValue: T? = null) =
-    MutableLiveData<T>().apply { if (initialValue != null) value = initialValue }
+    MutableLiveData<T>().applyIf(initialValue != null) {
+        value = initialValue
+    }
 
 fun <T> LiveData<T>.observeK(owner: LifecycleOwner, onChanged: (T) -> Unit) {
     observe(owner, Observer<T> { it?.let(onChanged) })

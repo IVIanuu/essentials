@@ -19,11 +19,12 @@ package com.ivianuu.essentials.injection
 import android.app.Activity
 import android.app.Application
 import android.content.Context
-import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import com.ivianuu.essentials.app.AppService
+import com.ivianuu.essentials.util.ext.doOnActivityCreated
+import com.ivianuu.essentials.util.ext.doOnFragmentPreAttached
 import dagger.android.AndroidInjection
 import dagger.android.support.AndroidSupportInjection
 import dagger.android.support.HasSupportFragmentInjector
@@ -35,30 +36,7 @@ import javax.inject.Inject
 class AutoInjector @Inject constructor(private val application: Application) : AppService {
 
     override fun start() {
-        application.registerActivityLifecycleCallbacks(object :
-            Application.ActivityLifecycleCallbacks {
-            override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
-                handleActivity(activity)
-            }
-
-            override fun onActivityStarted(activity: Activity) {
-            }
-
-            override fun onActivityResumed(activity: Activity) {
-            }
-
-            override fun onActivityPaused(activity: Activity) {
-            }
-
-            override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle?) {
-            }
-
-            override fun onActivityStopped(activity: Activity) {
-            }
-
-            override fun onActivityDestroyed(activity: Activity) {
-            }
-        })
+        application.doOnActivityCreated { activity, _ -> handleActivity(activity) }
     }
 
     private fun handleActivity(activity: Activity) {
@@ -67,19 +45,12 @@ class AutoInjector @Inject constructor(private val application: Application) : A
         }
 
         if (activity is FragmentActivity && activity is HasSupportFragmentInjector) {
-            activity.supportFragmentManager.registerFragmentLifecycleCallbacks(object :
-                FragmentManager.FragmentLifecycleCallbacks() {
-                override fun onFragmentPreAttached(
-                    fm: FragmentManager,
-                    f: Fragment,
-                    context: Context
-                ) {
-                    super.onFragmentPreAttached(fm, f, context)
-                    if (f is Injectable && f !is Ignore) {
-                        AndroidSupportInjection.inject(f)
+            activity.supportFragmentManager
+                .doOnFragmentPreAttached(true) { _: FragmentManager, fragment: Fragment, _: Context ->
+                    if (fragment is Injectable && fragment !is Ignore) {
+                        AndroidSupportInjection.inject(fragment)
                     }
                 }
-            }, true)
         }
     }
 

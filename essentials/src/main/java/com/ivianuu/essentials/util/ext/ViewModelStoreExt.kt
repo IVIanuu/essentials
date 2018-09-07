@@ -14,18 +14,24 @@
  * limitations under the License.
  */
 
-@file:Suppress("NOTHING_TO_INLINE")
-
 package com.ivianuu.essentials.util.ext
 
-import java.util.*
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelStore
+import java.lang.reflect.Field
 
-inline fun <T> MutableList<T>.swap(from: Int, to: Int) {
-    Collections.swap(this, from, to)
-}
+// todo make this non reflection when support library adds the keys() function
 
-inline fun <T> List<T>.swapped(from: Int, to: Int): List<T> {
-    val copy = toMutableList()
-    copy.swap(from, to)
-    return copy
-}
+private var viewModelMapField: Field? = null
+
+val ViewModelStore.viewModels: Map<String, ViewModel>
+    get() {
+        var field = viewModelMapField
+        if (field == null) {
+            field = javaClass.getDeclaredField("mMap")
+            field!!.isAccessible = true
+            viewModelMapField = field
+        }
+
+        return field[this] as Map<String, ViewModel>
+    }
