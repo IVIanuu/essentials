@@ -170,14 +170,6 @@ inline fun <T1, T2, T3, T4, T5, T6, T7, T8, T9> Observables.combineLatest(
             Ennead(t1, t2, t3, t4, t5, t6, t7, t8, t9)
         })!!
 
-fun <T : Any> T?.toMaybe(): Maybe<T> =
-    Maybe.create { s -> if (this != null) s.onSuccess(this); s.onComplete() }
-
-fun <T : Any> (() -> T).toMaybe(): Maybe<T> = Maybe.fromCallable(this)
-
-fun <T : Any> T.toSingle(): Single<T> = Single.just(this)
-fun <T : Any> (() -> T).toSingle(): Single<T> = Single.fromCallable(this)
-
 fun Completable.subscribeUi(
     owner: LifecycleOwner,
     event: Lifecycle.Event = owner.lifecycle.correspondingEvent(),
