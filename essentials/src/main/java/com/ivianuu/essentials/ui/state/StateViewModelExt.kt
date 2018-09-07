@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModelStoreOwner
 import com.ivianuu.essentials.ui.base.BaseFragment
 import com.ivianuu.essentials.util.ext.requireParentFragment
 import com.ivianuu.essentials.util.ext.requireTargetFragment
-import com.ivianuu.essentials.util.lifecycle.lifecycleAwareLazy
 import com.ivianuu.essentials.util.viewmodel.ViewModelFactoryHolder
 import kotlin.reflect.KClass
 
@@ -13,7 +12,7 @@ inline fun <reified T : StateViewModel<S>, reified S : Any> BaseFragment.viewMod
     clazz: KClass<T>,
     crossinline keyProvider: () -> String = { T::class.defaultViewModelKey },
     crossinline factoryProvider: () -> ViewModelProvider.Factory = { defaultViewModelFactory() }
-) = lifecycleAwareLazy {
+) = LifecycleAwareLazy(this) {
     viewModelProvider(factoryProvider()).get(keyProvider(), clazz.java)
         .setupViewModel(this)
 }
@@ -22,7 +21,7 @@ inline fun <reified T : StateViewModel<S>, reified S : Any> BaseFragment.activit
     clazz: KClass<T>,
     crossinline keyProvider: () -> String = { T::class.defaultViewModelKey },
     crossinline factoryProvider: () -> ViewModelProvider.Factory = { defaultViewModelFactory() }
-) = lifecycleAwareLazy {
+) = LifecycleAwareLazy(this) {
     requireActivity().viewModelProvider(factoryProvider()).get(keyProvider(), clazz.java)
         .setupViewModel(this)
 }
@@ -31,7 +30,7 @@ inline fun <reified T : StateViewModel<S>, reified S : Any> BaseFragment.parentV
     clazz: KClass<T>,
     crossinline keyProvider: () -> String = { T::class.defaultViewModelKey },
     crossinline factoryProvider: () -> ViewModelProvider.Factory = { defaultViewModelFactory() }
-) = lifecycleAwareLazy {
+) = LifecycleAwareLazy(this) {
     requireParentFragment().viewModelProvider(factoryProvider()).get(keyProvider(), clazz.java)
         .setupViewModel(this)
 }
@@ -40,7 +39,7 @@ inline fun <reified T : StateViewModel<S>, reified S : Any> BaseFragment.targetV
     clazz: KClass<T>,
     crossinline keyProvider: () -> String = { T::class.defaultViewModelKey },
     crossinline factoryProvider: () -> ViewModelProvider.Factory = { defaultViewModelFactory() }
-) = lifecycleAwareLazy {
+) = LifecycleAwareLazy(this) {
     requireTargetFragment().viewModelProvider(factoryProvider()).get(keyProvider(), clazz.java)
         .setupViewModel(this)
 }

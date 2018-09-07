@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.util.lifecycle
+package com.ivianuu.essentials.ui.state
 
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
@@ -22,6 +22,7 @@ import com.ivianuu.essentials.util.ext.onCompleteStub
 import com.ivianuu.essentials.util.ext.onErrorStub
 import com.ivianuu.essentials.util.ext.onNextStub
 import com.ivianuu.essentials.util.ext.onSubscribeStub
+import com.ivianuu.essentials.util.lifecycle.SimpleLifecycleObserver
 import io.reactivex.Observer
 import io.reactivex.disposables.Disposable
 import io.reactivex.internal.disposables.DisposableHelper
