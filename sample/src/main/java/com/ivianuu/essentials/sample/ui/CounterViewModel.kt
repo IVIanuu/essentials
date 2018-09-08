@@ -13,7 +13,7 @@ import javax.inject.Inject
  * Counter view model
  */
 class CounterViewModel @Inject constructor(private val router: Router) :
-    MvRxViewModel<CounterState>() {
+    MvRxViewModel<CounterState>(CounterState()) {
 
     val showToast: LiveEvent<Long> get() = _showToast
     private val _showToast = mutableLiveEvent<Long>()
@@ -29,7 +29,7 @@ class CounterViewModel @Inject constructor(private val router: Router) :
     fun setDestination(destination: CounterDestination) {
         if (this::destination.isInitialized) return
         this.destination = destination
-        setInitialState(CounterState(destination.screen, 0))
+        setState { copy(screen = destination.screen) }
     }
 
     fun increaseClicked() {
@@ -68,6 +68,6 @@ class CounterViewModel @Inject constructor(private val router: Router) :
 }
 
 data class CounterState(
-    val screen: Int,
-    val count: Int
+    val screen: Int = 0,
+    val count: Int = 0
 ) : MvRxState

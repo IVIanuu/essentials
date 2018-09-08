@@ -8,9 +8,12 @@ import com.ivianuu.compass.Detour
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.epoxy.BaseEpoxyHolder
 import com.ivianuu.essentials.ui.epoxy.BaseEpoxyModel
+import com.ivianuu.essentials.ui.epoxy.simpleLoading
+import com.ivianuu.essentials.ui.epoxy.simpleText
 import com.ivianuu.essentials.ui.mvrx.MvRxState
 import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
 import com.ivianuu.essentials.ui.mvrx.bindViewModel
+import com.ivianuu.essentials.ui.mvrx.simpleEpoxyController
 import com.ivianuu.essentials.ui.simple.SimpleFragment
 import com.ivianuu.essentials.ui.traveler.detour.FadeDetour
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
@@ -33,7 +36,7 @@ class ListFragment : SimpleFragment() {
     override val toolbarMenuRes = R.menu.fragment_list
     override val toolbarTitle = "List"
 
-    override fun epoxyController() = stateEpoxyController(viewModel) { state ->
+    override fun epoxyController() = simpleEpoxyController(viewModel) { state ->
         if (state.loading) {
             simpleLoading {
                 id("loading")

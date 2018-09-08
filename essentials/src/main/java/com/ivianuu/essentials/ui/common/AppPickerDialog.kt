@@ -10,6 +10,7 @@ import com.ivianuu.essentials.data.app.AppInfo
 import com.ivianuu.essentials.data.app.AppStore
 import com.ivianuu.essentials.ui.base.BaseDialogFragment
 import com.ivianuu.essentials.ui.traveler.destination.ResultDestination
+import com.ivianuu.essentials.util.ext.launchUi
 import com.ivianuu.essentials.util.ext.string
 import javax.inject.Inject
 
@@ -43,7 +44,7 @@ class AppPickerDialog : BaseDialogFragment() {
             }
             .build()
 
-        launchUi(Lifecycle.Event.ON_DESTROY) {
+        launchUi(this, Lifecycle.Event.ON_DESTROY) {
             val newApps = appStore.installedApps()
             apps.clear()
             apps.addAll(newApps)
