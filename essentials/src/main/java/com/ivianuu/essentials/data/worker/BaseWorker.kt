@@ -1,5 +1,6 @@
 package com.ivianuu.essentials.data.worker
 
+import android.annotation.SuppressLint
 import android.content.Context
 import androidx.work.WorkFinishedCallback
 import androidx.work.Worker
@@ -21,6 +22,7 @@ abstract class BaseWorker : Worker(), ContextAware, Injectable {
     protected val disposables = CompositeDisposable()
     protected val job = Job()
 
+    @SuppressLint("RestrictedApi")
     override fun onStartWork(callback: WorkFinishedCallback) {
         if (this !is AutoInjector.Ignore) {
             WorkerInjection.inject(this)
