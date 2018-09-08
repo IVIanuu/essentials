@@ -23,16 +23,17 @@ import com.ivianuu.compass.Destination
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.base.BaseDialogFragment
 import com.ivianuu.essentials.ui.traveler.destination.ResultDestination
+import com.ivianuu.essentials.util.RequestCodeGenerator
 
 @Destination(TextInputDialog::class)
 data class TextInputDestination(
-    override var resultCode: Int,
     val title: String,
     val inputHint: String = "",
     val inputType: Int = -1,
     val prefill: String = "",
-    val allowEmptyInput: Boolean = false
-) : ResultDestination
+    val allowEmptyInput: Boolean = false,
+    override var resultCode: Int = RequestCodeGenerator.generate()
+) : ResultDestination<CharSequence>
 
 /**
  * Text input dialog

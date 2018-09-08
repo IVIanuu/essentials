@@ -17,12 +17,10 @@
 package com.ivianuu.essentials.util.ext
 
 import android.content.Intent
-import com.ivianuu.essentials.ui.common.ActivityResult
 import com.ivianuu.essentials.ui.common.ActivityResultDestination
 import com.ivianuu.essentials.ui.common.PermissionDestination
-import com.ivianuu.essentials.ui.common.PermissionResult
-import com.ivianuu.essentials.ui.common.RequestCodeGenerator
 import com.ivianuu.essentials.ui.traveler.destination.ResultDestination
+import com.ivianuu.essentials.util.RequestCodeGenerator
 import com.ivianuu.traveler.ResultListener
 import com.ivianuu.traveler.Router
 import io.reactivex.Observable
@@ -46,11 +44,11 @@ fun <T> Router.results(resultCode: Int): Observable<T> = Observable.create { e -
 }
 
 @Suppress("UNCHECKED_CAST")
-suspend fun <T> Router.navigateToForResult(destination: ResultDestination) =
-    suspendCancellableCoroutine<T> { continuation ->
+suspend fun <D : ResultDestination<R>, R> Router.navigateToForResult(destination: D) =
+    suspendCancellableCoroutine<R> { continuation ->
         val listener = object : ResultListener {
             override fun onResult(result: Any) {
-                continuation.resume(result as T)
+                continuation.resume(result as R)
                 removeResultListener(destination.resultCode, this)
             }
         }
@@ -68,7 +66,7 @@ suspend fun Router.navigateToForActivityResult(intent: Intent) =
     navigateToForActivityResult(RequestCodeGenerator.generate(), intent)
 
 suspend fun Router.navigateToForActivityResult(resultCode: Int, intent: Intent) =
-    navigateToForResult<ActivityResult>(ActivityResultDestination(resultCode, intent, resultCode))
+    navigateToForResult(ActivityResultDestination(resultCode, intent, resultCode))
 
 suspend fun Router.requestPermissions(
     vararg permissions: String
@@ -84,5 +82,5 @@ suspend fun Router.requestPermissions(
         resultCode
     )
 
-    return navigateToForResult<PermissionResult>(destination).allGranted
+    return navigateToForResult(destination).allGranted
 }

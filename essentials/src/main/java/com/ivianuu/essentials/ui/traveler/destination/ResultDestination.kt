@@ -19,6 +19,6 @@ package com.ivianuu.essentials.ui.traveler.destination
 /**
  * Marks a key as screen that returns a result
  */
-interface ResultDestination {
+interface ResultDestination<R> {
     val resultCode: Int
 }

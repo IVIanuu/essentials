@@ -1,4 +1,4 @@
-package com.ivianuu.essentials.ui.common
+package com.ivianuu.essentials.util
 
 import java.util.concurrent.atomic.AtomicInteger
 

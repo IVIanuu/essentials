@@ -6,13 +6,14 @@ import android.os.Bundle
 import com.ivianuu.compass.Destination
 import com.ivianuu.essentials.ui.base.BaseActivity
 import com.ivianuu.essentials.ui.traveler.destination.ResultDestination
+import com.ivianuu.essentials.util.RequestCodeGenerator
 
 @Destination(ActivityResultActivity::class)
 data class ActivityResultDestination(
     override val resultCode: Int,
     val intent: Intent,
     val requestCode: Int = RequestCodeGenerator.generate()
-) : ResultDestination
+) : ResultDestination<ActivityResult>
 
 /**
  * Activity result activity

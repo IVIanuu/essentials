@@ -10,6 +10,7 @@ import com.ivianuu.essentials.data.app.AppInfo
 import com.ivianuu.essentials.data.app.AppStore
 import com.ivianuu.essentials.ui.base.BaseDialogFragment
 import com.ivianuu.essentials.ui.traveler.destination.ResultDestination
+import com.ivianuu.essentials.util.RequestCodeGenerator
 import com.ivianuu.essentials.util.ext.launchUi
 import com.ivianuu.essentials.util.ext.string
 import javax.inject.Inject
@@ -17,8 +18,8 @@ import javax.inject.Inject
 @Destination(AppPickerDialog::class)
 data class AppPickerDestination(
     val title: CharSequence? = null,
-    override val resultCode: Int
-) : ResultDestination
+    override val resultCode: Int = RequestCodeGenerator.generate()
+) : ResultDestination<AppInfo>
 
 /**
  * App picker

@@ -6,6 +6,7 @@ import android.os.Bundle
 import com.ivianuu.compass.Destination
 import com.ivianuu.essentials.ui.base.BaseActivity
 import com.ivianuu.essentials.ui.traveler.destination.ResultDestination
+import com.ivianuu.essentials.util.RequestCodeGenerator
 import java.util.*
 
 @Destination(PermissionActivity::class)
@@ -13,7 +14,7 @@ data class PermissionDestination(
     override val resultCode: Int,
     val permissions: Array<String>,
     val requestCode: Int = RequestCodeGenerator.generate()
-) : ResultDestination {
+) : ResultDestination<PermissionResult> {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
