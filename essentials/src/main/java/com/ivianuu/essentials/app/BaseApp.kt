@@ -19,14 +19,18 @@ package com.ivianuu.essentials.app
 import android.content.pm.ApplicationInfo
 import android.graphics.Bitmap
 import android.os.Looper
+import androidx.work.Worker
 import com.bumptech.glide.Glide
 import com.crashlytics.android.Crashlytics
+import com.ivianuu.essentials.injection.worker.HasWorkerInjector
 import com.ivianuu.essentials.util.AppIcon
 import com.ivianuu.essentials.util.AppIconModelLoader
 import com.ivianuu.essentials.util.analytics.Analytics
 import com.ivianuu.essentials.util.analytics.DebugAnalyticsLogger
 import com.ivianuu.essentials.util.analytics.FabricAnalyticsLogger
 import com.ivianuu.essentials.util.ext.containsFlag
+import dagger.android.AndroidInjector
+import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.DaggerApplication
 import io.fabric.sdk.android.Fabric
 import io.reactivex.android.plugins.RxAndroidPlugins
@@ -37,12 +41,14 @@ import javax.inject.Inject
 /**
  * App
  */
-abstract class BaseApp : DaggerApplication() {
+abstract class BaseApp : DaggerApplication(), HasWorkerInjector {
 
     @Inject internal lateinit var appServices: Set<@JvmSuppressWildcards AppService>
     @Inject internal lateinit var appIconModelLoaderFactory: AppIconModelLoader.Factory
     @Inject internal lateinit var debugAnalyticsLogger: DebugAnalyticsLogger
     @Inject internal lateinit var fabricAnalyticsLogger: FabricAnalyticsLogger
+
+    @Inject lateinit var workerInjector: DispatchingAndroidInjector<Worker>
 
     protected open val initTimber = true
     protected open val initFabric = true
@@ -76,6 +82,8 @@ abstract class BaseApp : DaggerApplication() {
 
         appServices.forEach { startAppService(it) }
     }
+
+    override fun workerInjector(): AndroidInjector<Worker> = workerInjector
 
     protected open fun startAppService(appService: AppService) {
         appService.start()

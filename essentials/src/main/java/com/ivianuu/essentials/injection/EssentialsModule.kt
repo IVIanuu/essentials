@@ -18,6 +18,8 @@ package com.ivianuu.essentials.injection
 
 import com.ivianuu.essentials.app.EssentialsAppModule
 import com.ivianuu.essentials.app.EssentialsAppServiceModule
+import com.ivianuu.essentials.injection.viewmodel.ViewModelInjectionModule
+import com.ivianuu.essentials.injection.worker.WorkerInjectionModule
 import com.ivianuu.essentials.ui.base.EssentialsActivityBindingModule
 import com.ivianuu.essentials.ui.traveler.TravelerModule
 import dagger.Module
@@ -36,7 +38,8 @@ import dagger.android.support.AndroidSupportInjectionModule
         EssentialsAppServiceModule::class,
         SystemServiceModule::class,
         TravelerModule::class,
-        ViewModelInjectionModule::class
+        ViewModelInjectionModule::class,
+        WorkerInjectionModule::class
     ]
 )
 object EssentialsModule

@@ -22,8 +22,8 @@ import com.ivianuu.compass.Destination
 import com.ivianuu.compass.Detour
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.base.BaseFragment
-import com.ivianuu.essentials.ui.state.bindViewModel
-import com.ivianuu.essentials.ui.state.withState
+import com.ivianuu.essentials.ui.mvrx.bindViewModel
+import com.ivianuu.essentials.ui.mvrx.withState
 import com.ivianuu.essentials.ui.traveler.detour.HorizontalDetour
 import kotlinx.android.synthetic.main.fragment_counter.*
 

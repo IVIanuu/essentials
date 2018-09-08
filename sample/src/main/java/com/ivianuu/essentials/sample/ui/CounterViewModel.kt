@@ -1,6 +1,7 @@
 package com.ivianuu.essentials.sample.ui
 
-import com.ivianuu.essentials.ui.state.StateViewModel
+import com.ivianuu.essentials.ui.mvrx.MvRxState
+import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
 import com.ivianuu.essentials.util.lifecycle.LiveEvent
 import com.ivianuu.essentials.util.lifecycle.mutableLiveEvent
 import com.ivianuu.traveler.Router
@@ -12,7 +13,7 @@ import javax.inject.Inject
  * Counter view model
  */
 class CounterViewModel @Inject constructor(private val router: Router) :
-    StateViewModel<CounterState>() {
+    MvRxViewModel<CounterState>() {
 
     val showToast: LiveEvent<Long> get() = _showToast
     private val _showToast = mutableLiveEvent<Long>()
@@ -69,4 +70,4 @@ class CounterViewModel @Inject constructor(private val router: Router) :
 data class CounterState(
     val screen: Int,
     val count: Int
-)
+) : MvRxState

@@ -8,12 +8,10 @@ import com.ivianuu.compass.Detour
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.epoxy.BaseEpoxyHolder
 import com.ivianuu.essentials.ui.epoxy.BaseEpoxyModel
-import com.ivianuu.essentials.ui.epoxy.simpleLoading
-import com.ivianuu.essentials.ui.epoxy.simpleText
+import com.ivianuu.essentials.ui.mvrx.MvRxState
+import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
+import com.ivianuu.essentials.ui.mvrx.bindViewModel
 import com.ivianuu.essentials.ui.simple.SimpleFragment
-import com.ivianuu.essentials.ui.state.StateViewModel
-import com.ivianuu.essentials.ui.state.bindViewModel
-import com.ivianuu.essentials.ui.state.stateEpoxyController
 import com.ivianuu.essentials.ui.traveler.detour.FadeDetour
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import kotlinx.android.synthetic.main.single_line_list_item.*
@@ -68,7 +66,7 @@ class ListFragment : SimpleFragment() {
 
 class ListViewModel @Inject constructor(
     private val dispatchers: AppCoroutineDispatchers
-) : StateViewModel<ListState>() {
+) : MvRxViewModel<ListState>(ListState()) {
 
     init {
         setInitialState(ListState(false, emptyList()))
@@ -96,9 +94,9 @@ class ListViewModel @Inject constructor(
 }
 
 data class ListState(
-    val loading: Boolean,
-    val items: List<String>
-)
+    val loading: Boolean = false,
+    val items: List<String> = emptyList()
+) : MvRxState
 
 @EpoxyModelClass(layout = R.layout.single_line_list_item)
 abstract class SingleLineListItemModel : BaseEpoxyModel() {

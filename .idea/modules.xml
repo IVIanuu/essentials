@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Essentials.iml" filepath="$PROJECT_DIR$/Essentials.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/Essentials.iml" filepath="$PROJECT_DIR$/.idea/Essentials.iml" />
       <module fileurl="file://$PROJECT_DIR$/buildSrc/buildSrc.iml" filepath="$PROJECT_DIR$/buildSrc/buildSrc.iml" />
       <module fileurl="file://$PROJECT_DIR$/essentials/essentials.iml" filepath="$PROJECT_DIR$/essentials/essentials.iml" />
       <module fileurl="file://$PROJECT_DIR$/essentials-compiler/essentials-compiler.iml" filepath="$PROJECT_DIR$/essentials-compiler/essentials-compiler.iml" />

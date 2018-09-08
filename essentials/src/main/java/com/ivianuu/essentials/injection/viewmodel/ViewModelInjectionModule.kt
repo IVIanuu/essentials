@@ -14,16 +14,25 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.injection
+package com.ivianuu.essentials.injection.viewmodel
 
 import androidx.lifecycle.ViewModel
-import dagger.MapKey
-import kotlin.reflect.KClass
+import androidx.lifecycle.ViewModelProvider
+import com.ivianuu.essentials.util.viewmodel.DaggerViewModelFactory
+import dagger.Binds
+import dagger.Module
+import dagger.multibindings.Multibinds
 
 /**
- * View model key
+ * View model injection module
  */
-@Target(AnnotationTarget.FUNCTION)
-@Retention(AnnotationRetention.RUNTIME)
-@MapKey
-annotation class ViewModelKey(val value: KClass<out ViewModel>)
+@Module
+abstract class ViewModelInjectionModule {
+
+    @Multibinds
+    abstract fun viewModelProviders(): Map<Class<out ViewModel>, ViewModel>
+
+    @Binds
+    abstract fun bindViewModelFactory(factory: DaggerViewModelFactory): ViewModelProvider.Factory
+
+}
