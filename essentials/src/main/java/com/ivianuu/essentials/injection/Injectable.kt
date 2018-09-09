@@ -19,4 +19,6 @@ package com.ivianuu.essentials.injection
 /**
  * Marks a component as injectable
  */
-interface Injectable
+interface Injectable {
+    val shouldInject get() = true
+}

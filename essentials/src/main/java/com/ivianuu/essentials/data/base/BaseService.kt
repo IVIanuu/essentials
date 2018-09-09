@@ -3,7 +3,6 @@ package com.ivianuu.essentials.data.base
 import android.app.Service
 import android.content.Intent
 import android.os.IBinder
-import com.ivianuu.essentials.injection.AutoInjector
 import com.ivianuu.essentials.injection.Injectable
 import dagger.android.AndroidInjection
 import io.reactivex.disposables.CompositeDisposable
@@ -18,7 +17,7 @@ abstract class BaseService : Service(), Injectable {
     protected val job = Job()
 
     override fun onCreate() {
-        if (this !is AutoInjector.Ignore) {
+        if (shouldInject) {
             AndroidInjection.inject(this)
         }
         super.onCreate()

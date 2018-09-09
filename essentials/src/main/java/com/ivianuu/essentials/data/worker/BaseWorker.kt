@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import androidx.work.WorkFinishedCallback
 import androidx.work.Worker
-import com.ivianuu.essentials.injection.AutoInjector
 import com.ivianuu.essentials.injection.Injectable
 import com.ivianuu.essentials.injection.worker.WorkerInjection
 import com.ivianuu.essentials.util.ContextAware
@@ -24,7 +23,7 @@ abstract class BaseWorker : Worker(), ContextAware, Injectable {
 
     @SuppressLint("RestrictedApi")
     override fun onStartWork(callback: WorkFinishedCallback) {
-        if (this !is AutoInjector.Ignore) {
+        if (shouldInject) {
             WorkerInjection.inject(this)
         }
         super.onStartWork(callback)

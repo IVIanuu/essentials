@@ -19,9 +19,11 @@ package com.ivianuu.essentials.app
 import android.content.pm.ApplicationInfo
 import android.graphics.Bitmap
 import android.os.Looper
+import android.view.View
 import androidx.work.Worker
 import com.bumptech.glide.Glide
 import com.crashlytics.android.Crashlytics
+import com.ivianuu.essentials.injection.view.HasViewInjector
 import com.ivianuu.essentials.injection.worker.HasWorkerInjector
 import com.ivianuu.essentials.util.AppIcon
 import com.ivianuu.essentials.util.AppIconModelLoader
@@ -41,13 +43,14 @@ import javax.inject.Inject
 /**
  * App
  */
-abstract class BaseApp : DaggerApplication(), HasWorkerInjector {
+abstract class BaseApp : DaggerApplication(), HasViewInjector, HasWorkerInjector {
 
     @Inject internal lateinit var appServices: Set<@JvmSuppressWildcards AppService>
     @Inject internal lateinit var appIconModelLoaderFactory: AppIconModelLoader.Factory
     @Inject internal lateinit var debugAnalyticsLogger: DebugAnalyticsLogger
     @Inject internal lateinit var fabricAnalyticsLogger: FabricAnalyticsLogger
 
+    @Inject lateinit var viewInjector: DispatchingAndroidInjector<View>
     @Inject lateinit var workerInjector: DispatchingAndroidInjector<Worker>
 
     protected open val initTimber = true
@@ -82,6 +85,8 @@ abstract class BaseApp : DaggerApplication(), HasWorkerInjector {
 
         appServices.forEach { startAppService(it) }
     }
+
+    override fun viewInjector(): AndroidInjector<View> = viewInjector
 
     override fun workerInjector(): AndroidInjector<Worker> = workerInjector
 

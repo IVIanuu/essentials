@@ -24,14 +24,17 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.ivianuu.essentials.injection.Injectable
+import com.ivianuu.essentials.injection.view.HasViewInjector
 import com.ivianuu.essentials.ui.common.BackListener
 import com.ivianuu.essentials.ui.mvrx.MvRxView
 import com.ivianuu.essentials.util.ContextAware
+import com.ivianuu.essentials.util.ViewInjectionContextWrapper
 import com.ivianuu.essentials.util.screenlogger.IdentifiableScreen
 import com.ivianuu.essentials.util.viewmodel.ViewModelFactoryHolder
 import com.ivianuu.traveler.Router
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
+import dagger.android.support.AndroidSupportInjection
 import dagger.android.support.HasSupportFragmentInjector
 import javax.inject.Inject
 
@@ -39,11 +42,12 @@ import javax.inject.Inject
  * Base fragment
  */
 abstract class BaseFragment : Fragment(), BackListener, ContextAware, HasSupportFragmentInjector,
-    Injectable, IdentifiableScreen, MvRxView, ViewModelFactoryHolder {
+    HasViewInjector, Injectable, IdentifiableScreen, MvRxView, ViewModelFactoryHolder {
 
     @Inject lateinit var router: Router
 
     @Inject lateinit var supportFragmentInjector: DispatchingAndroidInjector<Fragment>
+    @Inject lateinit var viewInjector: DispatchingAndroidInjector<View>
 
     @Inject override lateinit var viewModelFactory: ViewModelProvider.Factory
 
@@ -52,12 +56,20 @@ abstract class BaseFragment : Fragment(), BackListener, ContextAware, HasSupport
     override val providedContext: Context
         get() = requireActivity()
 
+    override fun onAttach(context: Context?) {
+        AndroidSupportInjection.inject(this)
+        super.onAttach(context)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? = if (layoutRes != -1) {
-        inflater.inflate(layoutRes, container, false)
+        val viewInjectionContext =
+            ViewInjectionContextWrapper(requireContext(), this)
+        val viewInjectionInflater = inflater.cloneInContext(viewInjectionContext)
+        viewInjectionInflater.inflate(layoutRes, container, false)
     } else {
         super.onCreateView(inflater, container, savedInstanceState)
     }
@@ -71,4 +83,6 @@ abstract class BaseFragment : Fragment(), BackListener, ContextAware, HasSupport
     }
 
     override fun supportFragmentInjector(): AndroidInjector<Fragment> = supportFragmentInjector
+
+    override fun viewInjector(): AndroidInjector<View> = viewInjector
 }

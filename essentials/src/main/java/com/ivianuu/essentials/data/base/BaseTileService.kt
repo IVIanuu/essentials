@@ -3,7 +3,6 @@ package com.ivianuu.essentials.data.base
 import android.annotation.TargetApi
 import android.os.Build
 import android.service.quicksettings.TileService
-import com.ivianuu.essentials.injection.AutoInjector
 import com.ivianuu.essentials.injection.Injectable
 import dagger.android.AndroidInjection
 import io.reactivex.disposables.CompositeDisposable
@@ -23,7 +22,7 @@ abstract class BaseTileService : TileService(), Injectable {
         private set
 
     override fun onCreate() {
-        if (this !is AutoInjector.Ignore) {
+        if (shouldInject) {
             AndroidInjection.inject(this)
         }
         super.onCreate()

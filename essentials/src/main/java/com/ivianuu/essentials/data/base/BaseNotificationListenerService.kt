@@ -1,7 +1,6 @@
 package com.ivianuu.essentials.data.base
 
 import android.service.notification.NotificationListenerService
-import com.ivianuu.essentials.injection.AutoInjector
 import com.ivianuu.essentials.injection.Injectable
 import dagger.android.AndroidInjection
 import io.reactivex.disposables.CompositeDisposable
@@ -20,7 +19,7 @@ abstract class BaseNotificationListenerService : NotificationListenerService(), 
         private set
 
     override fun onCreate() {
-        if (this !is AutoInjector.Ignore) {
+        if (shouldInject) {
             AndroidInjection.inject(this)
         }
         super.onCreate()
