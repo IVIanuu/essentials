@@ -72,7 +72,6 @@ class ListViewModel @Inject constructor(
 ) : MvRxViewModel<ListState>(ListState()) {
 
     init {
-        setInitialState(ListState(false, emptyList()))
         generateNewState()
     }
 

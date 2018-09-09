@@ -31,7 +31,6 @@ import com.ivianuu.essentials.util.ContextAware
 import com.ivianuu.essentials.util.ViewInjectionContextWrapper
 import com.ivianuu.essentials.util.screenlogger.IdentifiableScreen
 import com.ivianuu.essentials.util.viewmodel.ViewModelFactoryHolder
-import com.ivianuu.traveler.Router
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.AndroidSupportInjection
@@ -44,8 +43,6 @@ import javax.inject.Inject
 abstract class BaseDialogFragment : AppCompatDialogFragment(), BackListener, ContextAware,
     HasSupportFragmentInjector, HasViewInjector, Injectable, IdentifiableScreen,
     ViewModelFactoryHolder {
-
-    @Inject lateinit var router: Router
 
     @Inject lateinit var supportFragmentInjector: DispatchingAndroidInjector<Fragment>
     @Inject lateinit var viewInjector: DispatchingAndroidInjector<View>
