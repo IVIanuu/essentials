@@ -11,10 +11,10 @@ class PackageHelper @Inject constructor(private val packageManager: PackageManag
 
     fun isAppInstalled(packageName: String) = packageManager.isAppInstalled(packageName)
 
-    fun isLaunchable(packageName: String) =
+    fun isAppLaunchable(packageName: String) =
         packageManager.getLaunchIntentForPackage(packageName) != null
 
-    fun isEnabled(packageName: String) =
+    fun isAppEnabled(packageName: String) =
         packageManager.getApplicationInfo(packageName, 0).enabled
 
 }
