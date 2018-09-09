@@ -26,7 +26,7 @@ import javax.inject.Inject
  */
 class Toaster @Inject constructor(
     private val context: Context,
-    private val stringProvider: StringProvider
+    private val resourceProvider: ResourceProvider
 ) {
 
     fun error(messageRes: Int, vararg args: Any) = mainThread {
@@ -69,5 +69,5 @@ class Toaster @Inject constructor(
         Toasty.warning(context, message).show()
     }
 
-    private fun string(resId: Int, vararg args: Any) = stringProvider.string(resId, *args)
+    private fun string(resId: Int, vararg args: Any) = resourceProvider.string(resId, *args)
 }

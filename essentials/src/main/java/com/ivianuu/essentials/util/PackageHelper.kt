@@ -14,4 +14,7 @@ class PackageHelper @Inject constructor(private val packageManager: PackageManag
     fun isLaunchable(packageName: String) =
         packageManager.getLaunchIntentForPackage(packageName) != null
 
+    fun isEnabled(packageName: String) =
+        packageManager.getApplicationInfo(packageName, 0).enabled
+
 }

@@ -1,10 +1,10 @@
 package com.ivianuu.essentials.ui.epoxy
 
 import android.content.res.ColorStateList
+import androidx.core.content.ContextCompat
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import com.ivianuu.essentials.R2
-import com.ivianuu.essentials.util.ext.color
 import kotlinx.android.synthetic.main.item_simple_loading.*
 
 /**
@@ -21,7 +21,10 @@ abstract class SimpleLoadingModel : BaseEpoxyModel() {
         if (progressColor != 0 || progressColorRes != 0) {
             val progressColor = when {
                 progressColor != 0 -> progressColor
-                progressColorRes != 0 -> holder.containerView.context.color(progressColorRes)
+                progressColorRes != 0 -> ContextCompat.getColor(
+                    holder.containerView.context,
+                    progressColorRes
+                )
                 else -> 0
             }
 
