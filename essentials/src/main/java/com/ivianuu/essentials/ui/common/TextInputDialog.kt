@@ -24,6 +24,8 @@ import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.base.BaseDialogFragment
 import com.ivianuu.essentials.ui.traveler.destination.ResultDestination
 import com.ivianuu.essentials.util.RequestCodeGenerator
+import com.ivianuu.traveler.Router
+import javax.inject.Inject
 
 @Destination(TextInputDialog::class)
 data class TextInputDestination(
@@ -39,6 +41,8 @@ data class TextInputDestination(
  * Text input dialog
  */
 class TextInputDialog : BaseDialogFragment() {
+
+    @Inject lateinit var router: Router
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val destination = textInputDestination()

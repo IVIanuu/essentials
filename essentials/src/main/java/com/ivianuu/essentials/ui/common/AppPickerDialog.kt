@@ -13,6 +13,7 @@ import com.ivianuu.essentials.ui.traveler.destination.ResultDestination
 import com.ivianuu.essentials.util.RequestCodeGenerator
 import com.ivianuu.essentials.util.ext.launchUi
 import com.ivianuu.essentials.util.ext.string
+import com.ivianuu.traveler.Router
 import javax.inject.Inject
 
 @Destination(AppPickerDialog::class)
@@ -27,6 +28,7 @@ data class AppPickerDestination(
 class AppPickerDialog : BaseDialogFragment() {
 
     @Inject lateinit var appStore: AppStore
+    @Inject lateinit var router: Router
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val apps = mutableListOf<AppInfo>()
