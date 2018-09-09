@@ -22,15 +22,11 @@ import com.ivianuu.essentials.util.ext.primaryTextColor
 import com.ivianuu.essentials.util.ext.secondaryTextColor
 import com.ivianuu.essentials.util.ext.tint
 import com.ivianuu.essentials.util.ext.unsafeLazy
-import com.ivianuu.traveler.Router
-import javax.inject.Inject
 
 /**
  * Simple fragment
  */
 abstract class SimpleFragment : BaseFragment() {
-
-    @Inject lateinit var router: Router
 
     override val layoutRes = R.layout.fragment_simple
 

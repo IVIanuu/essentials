@@ -13,12 +13,12 @@ import com.ivianuu.essentials.ui.traveler.destination.ResultDestination
 import com.ivianuu.essentials.util.RequestCodeGenerator
 import com.ivianuu.essentials.util.ext.launchUi
 import com.ivianuu.essentials.util.ext.string
-import com.ivianuu.traveler.Router
 import javax.inject.Inject
 
 @Destination(AppPickerDialog::class)
 data class AppPickerDestination(
     val title: CharSequence? = null,
+    val launchableOnly: Boolean = false,
     override val resultCode: Int = RequestCodeGenerator.generate()
 ) : ResultDestination<AppInfo>
 
@@ -28,7 +28,6 @@ data class AppPickerDestination(
 class AppPickerDialog : BaseDialogFragment() {
 
     @Inject lateinit var appStore: AppStore
-    @Inject lateinit var router: Router
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val apps = mutableListOf<AppInfo>()
@@ -48,7 +47,11 @@ class AppPickerDialog : BaseDialogFragment() {
             .build()
 
         launchUi(this, Lifecycle.Event.ON_DESTROY) {
-            val newApps = appStore.installedApps()
+            val newApps = if (destination.launchableOnly) {
+                appStore.launchableApps()
+            } else {
+                appStore.installedApps()
+            }
             apps.clear()
             apps.addAll(newApps)
             dialog.setItems(*apps.map { it.appName }.toTypedArray())
