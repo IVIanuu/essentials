@@ -25,7 +25,10 @@ import com.ivianuu.essentials.ui.base.BaseFragment
 import com.ivianuu.essentials.ui.mvrx.bindViewModel
 import com.ivianuu.essentials.ui.mvrx.withState
 import com.ivianuu.essentials.ui.traveler.detour.HorizontalDetour
+import com.ivianuu.essentials.util.ext.launchUi
 import kotlinx.android.synthetic.main.fragment_counter.*
+import kotlinx.coroutines.experimental.channels.actor
+import kotlinx.coroutines.experimental.channels.consumeEach
 
 @Detour(HorizontalDetour::class)
 @Destination(CounterFragment::class)
@@ -48,7 +51,11 @@ class CounterFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        increase.setOnClickListener { viewModel.increaseClicked() }
+        val increaseActor = actor<Unit> {
+            channel.consumeEach { viewModel.increaseClicked() }
+        }
+
+        increase.setOnClickListener { launchUi(this) { increaseActor.send(Unit) } }
         decrease.setOnClickListener { viewModel.decreaseClicked() }
         reset.setOnClickListener { viewModel.resetClicked() }
 
