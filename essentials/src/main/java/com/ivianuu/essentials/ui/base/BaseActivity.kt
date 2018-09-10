@@ -25,6 +25,7 @@ import com.ivianuu.compass.CompassFragmentAppNavigator
 import com.ivianuu.essentials.injection.Injectable
 import com.ivianuu.essentials.injection.view.HasViewInjector
 import com.ivianuu.essentials.ui.common.BackListener
+import com.ivianuu.essentials.ui.mvrx.MvRxView
 import com.ivianuu.essentials.util.ext.unsafeLazy
 import com.ivianuu.essentials.util.screenlogger.IdentifiableScreen
 import com.ivianuu.essentials.util.viewmodel.ViewModelFactoryHolder
@@ -42,7 +43,7 @@ import javax.inject.Inject
  * Base activity
  */
 abstract class BaseActivity : AppCompatActivity(), HasSupportFragmentInjector, HasViewInjector,
-    Injectable, IdentifiableScreen, ViewModelFactoryHolder {
+    Injectable, IdentifiableScreen, MvRxView, ViewModelFactoryHolder {
 
     @Inject lateinit var navigatorHolder: NavigatorHolder
     @Inject lateinit var router: Router
@@ -83,6 +84,9 @@ abstract class BaseActivity : AppCompatActivity(), HasSupportFragmentInjector, H
         val currentFragment = supportFragmentManager.findFragmentById(fragmentContainer)
         if (currentFragment is BackListener && currentFragment.handleBack()) return
         super.onBackPressed()
+    }
+
+    override fun invalidate() {
     }
 
     override fun supportFragmentInjector(): AndroidInjector<Fragment> = supportFragmentInjector
