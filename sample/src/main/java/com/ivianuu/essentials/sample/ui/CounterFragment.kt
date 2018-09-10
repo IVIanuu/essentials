@@ -26,6 +26,7 @@ import com.ivianuu.essentials.ui.mvrx.bindViewModel
 import com.ivianuu.essentials.ui.mvrx.withState
 import com.ivianuu.essentials.ui.traveler.detour.HorizontalDetour
 import com.ivianuu.essentials.util.ext.launchUi
+import com.ivianuu.essentials.util.ext.setTextFuture
 import kotlinx.android.synthetic.main.fragment_counter.*
 import kotlinx.coroutines.experimental.channels.actor
 import kotlinx.coroutines.experimental.channels.consumeEach
@@ -66,6 +67,6 @@ class CounterFragment : BaseFragment() {
     }
 
     override fun invalidate() {
-        withState(viewModel) { count.text = "Screen: ${it.screen}, Count: ${it.count}" }
+        withState(viewModel) { count.setTextFuture("Screen: ${it.screen}, Count: ${it.count}") }
     }
 }

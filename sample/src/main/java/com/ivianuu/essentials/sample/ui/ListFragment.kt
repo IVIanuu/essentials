@@ -17,6 +17,7 @@ import com.ivianuu.essentials.ui.mvrx.simpleEpoxyController
 import com.ivianuu.essentials.ui.simple.SimpleFragment
 import com.ivianuu.essentials.ui.traveler.detour.FadeDetour
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
+import com.ivianuu.essentials.util.ext.setTextFuture
 import kotlinx.android.synthetic.main.single_line_list_item.*
 import kotlinx.coroutines.experimental.delay
 import java.util.concurrent.TimeUnit
@@ -107,7 +108,7 @@ abstract class SingleLineListItemModel : SimpleEpoxyModel() {
 
     override fun bind(holder: BaseEpoxyHolder) {
         super.bind(holder)
-        holder.title.text = title
+        holder.title.setTextFuture(title)
     }
 
 }
