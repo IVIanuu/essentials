@@ -1,5 +1,6 @@
 package com.ivianuu.essentials.sample.ui
 
+import com.ivianuu.essentials.sample.data.ThemeManager
 import com.ivianuu.essentials.ui.mvrx.MvRxState
 import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
 import com.ivianuu.essentials.util.lifecycle.LiveEvent
@@ -12,7 +13,10 @@ import javax.inject.Inject
 /**
  * Counter view model
  */
-class CounterViewModel @Inject constructor(private val router: Router) :
+class CounterViewModel @Inject constructor(
+    private val router: Router,
+    private val themeManager: ThemeManager
+) :
     MvRxViewModel<CounterState>(CounterState()) {
 
     val showToast: LiveEvent<Long> get() = _showToast
@@ -64,6 +68,10 @@ class CounterViewModel @Inject constructor(private val router: Router) :
 
     fun listScreenClicked() {
         router.navigateTo(ListDestination)
+    }
+
+    fun toggleThemeClicked() {
+        themeManager.toggleTheme()
     }
 }
 

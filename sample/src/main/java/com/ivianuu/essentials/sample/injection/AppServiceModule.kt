@@ -14,26 +14,19 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.sample.app
+package com.ivianuu.essentials.sample.injection
 
 import com.ivianuu.essentials.app.AppService
-import com.ivianuu.essentials.util.ext.d
+import com.ivianuu.essentials.sample.data.ThemeManager
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoSet
-import javax.inject.Inject
-
-class MyAppService @Inject constructor() : AppService {
-    override fun start() {
-        d { "start" }
-    }
-}
 
 @Module
 abstract class AppServiceModule {
 
     @IntoSet
     @Binds
-    abstract fun bindMyAppService(myAppService: MyAppService): AppService
+    abstract fun bindThemeManager(themeManager: ThemeManager): AppService
 
 }

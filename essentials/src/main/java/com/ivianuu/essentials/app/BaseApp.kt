@@ -31,6 +31,7 @@ import com.ivianuu.essentials.util.analytics.Analytics
 import com.ivianuu.essentials.util.analytics.DebugAnalyticsLogger
 import com.ivianuu.essentials.util.analytics.FabricAnalyticsLogger
 import com.ivianuu.essentials.util.ext.containsFlag
+import com.ivianuu.essentials.util.resources.ResourcesPlugins
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.DaggerApplication
@@ -84,6 +85,11 @@ abstract class BaseApp : DaggerApplication(), HasViewInjector, HasWorkerInjector
         }
 
         appServices.forEach { startAppService(it) }
+    }
+
+    override fun setTheme(resid: Int) {
+        super.setTheme(resid)
+        ResourcesPlugins.themeResId = resid
     }
 
     override fun viewInjector(): AndroidInjector<View> = viewInjector

@@ -3,6 +3,8 @@ package com.ivianuu.essentials.util
 import android.annotation.SuppressLint
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.util.ext.isDark
+import com.ivianuu.essentials.util.resources.AttributeProvider
+import com.ivianuu.essentials.util.resources.ResourceProvider
 import javax.inject.Inject
 
 /**

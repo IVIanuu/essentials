@@ -18,6 +18,7 @@ package com.ivianuu.essentials.util
 
 import android.content.Context
 import com.ivianuu.essentials.util.ext.mainThread
+import com.ivianuu.essentials.util.resources.ResourceProvider
 import es.dmoral.toasty.Toasty
 import javax.inject.Inject
 
