@@ -22,7 +22,6 @@ import android.widget.TextView
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.text.PrecomputedTextCompat
 import androidx.core.widget.TextViewCompat
-import java.util.concurrent.Executor
 
 fun TextView.doBeforeTextChanged(block: (s: CharSequence, start: Int, count: Int, after: Int) -> Unit) =
     addTextChangedListener(beforeTextChanged = block)
@@ -55,11 +54,14 @@ fun TextView.addTextChangedListener(
     return textWatcher
 }
 
-fun TextView.setTextFuture(
-    text: CharSequence,
-    params: PrecomputedTextCompat.Params = TextViewCompat.getTextMetricsParams(this),
-    executor: Executor? = null
-) {
+fun TextView.setTextFuture(textRes: Int, vararg args: Any) {
+    setTextFuture(context.getString(textRes, *args))
+}
+
+fun TextView.setTextFuture(text: CharSequence) {
     (this as? AppCompatTextView)
-        ?.setTextFuture(PrecomputedTextCompat.getTextFuture(text, params, executor))
+        ?.setTextFuture(
+            PrecomputedTextCompat
+                .getTextFuture(text, TextViewCompat.getTextMetricsParams(this), null)
+        )
 }
