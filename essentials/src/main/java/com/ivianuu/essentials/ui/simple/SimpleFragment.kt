@@ -13,6 +13,7 @@ import com.airbnb.epoxy.EpoxyController
 import com.airbnb.epoxy.EpoxyRecyclerView
 import com.google.android.material.appbar.AppBarLayout
 import com.ivianuu.essentials.R
+import com.ivianuu.essentials.injection.ForActivity
 import com.ivianuu.essentials.ui.base.BaseFragment
 import com.ivianuu.essentials.util.ThemeHelper
 import com.ivianuu.essentials.util.ext.isLight
@@ -26,7 +27,7 @@ import javax.inject.Inject
  */
 abstract class SimpleFragment : BaseFragment() {
 
-    @Inject lateinit var themeHelper: ThemeHelper
+    @field:ForActivity @Inject lateinit var themeHelper: ThemeHelper
 
     override val layoutRes = R.layout.fragment_simple
 

@@ -21,6 +21,7 @@ import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentActivity
 import com.ivianuu.essentials.injection.ForActivity
+import com.ivianuu.essentials.util.ThemeHelper
 import com.ivianuu.essentials.util.resources.AttributeProvider
 import com.ivianuu.essentials.util.resources.ResourceProvider
 import dagger.Binds
@@ -63,6 +64,14 @@ abstract class BaseActivityModule<T : BaseActivity> {
         @Provides
         fun provideActivityResourceProvider(@ForActivity context: Context) =
             ResourceProvider(context)
+
+        @JvmStatic
+        @ForActivity
+        @Provides
+        fun provideActivityThemeHelper(
+            @ForActivity attributeProvider: AttributeProvider,
+            @ForActivity resourceProvider: ResourceProvider
+        ) = ThemeHelper(attributeProvider, resourceProvider)
     }
 
 }
