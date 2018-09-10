@@ -18,7 +18,7 @@
 package com.ivianuu.essentials.sample.ui
 
 import com.ivianuu.essentials.ui.base.BaseActivity
-import dagger.Binds
+import com.ivianuu.essentials.ui.base.BaseActivityModule
 import dagger.Module
 
 class MainActivity : BaseActivity() {
@@ -29,9 +29,4 @@ class MainActivity : BaseActivity() {
 }
 
 @Module
-abstract class MainActivityModule {
-
-    @Binds
-    abstract fun bindBaseActivity(mainActivity: MainActivity): BaseActivity
-
-}
+abstract class MainActivityModule : BaseActivityModule<MainActivity>()

@@ -16,17 +16,11 @@
 
 package com.ivianuu.essentials.sample.app
 
-import android.app.Application
-import dagger.Binds
+import com.ivianuu.essentials.app.BaseAppModule
 import dagger.Module
 
 /**
  * @author Manuel Wrage (IVIanuu)
  */
 @Module
-abstract class AppModule {
-
-    @Binds
-    abstract fun bindApplication(app: App): Application
-
-}
+abstract class AppModule : BaseAppModule<App>()

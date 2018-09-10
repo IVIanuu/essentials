@@ -17,16 +17,24 @@
 package com.ivianuu.essentials.ui.base
 
 import android.app.Activity
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentActivity
+import com.ivianuu.essentials.injection.ForActivity
+import com.ivianuu.essentials.util.resources.AttributeProvider
+import com.ivianuu.essentials.util.resources.ResourceProvider
 import dagger.Binds
 import dagger.Module
+import dagger.Provides
 
 /**
  * Provides some common deps for activities
  */
 @Module(includes = [EssentialsFragmentBindingModule::class])
-abstract class EssentialsActivityModule {
+abstract class BaseActivityModule<T : BaseActivity> {
+
+    @Binds
+    abstract fun bindBaseActivity(t: T): BaseActivity
 
     @Binds
     abstract fun bindAppCompatActivity(baseActivity: BaseActivity): AppCompatActivity
@@ -36,5 +44,25 @@ abstract class EssentialsActivityModule {
 
     @Binds
     abstract fun bindActivity(fragmentActivity: FragmentActivity): Activity
+
+    @ForActivity
+    @Binds
+    abstract fun bindContext(activity: Activity): Context
+
+    @Module
+    companion object {
+
+        @JvmStatic
+        @ForActivity
+        @Provides
+        fun provideActivityAttributeProvider(@ForActivity context: Context) =
+            AttributeProvider(context)
+
+        @JvmStatic
+        @ForActivity
+        @Provides
+        fun provideActivityResourceProvider(@ForActivity context: Context) =
+            ResourceProvider(context)
+    }
 
 }

@@ -40,7 +40,13 @@ import javax.inject.Singleton
  * Essentials app module
  */
 @Module
-abstract class EssentialsAppModule {
+abstract class BaseAppModule<T : BaseApp> {
+
+    @Binds
+    abstract fun bindBaseApp(t: T): BaseApp
+
+    @Binds
+    abstract fun bindApplication(baseApp: BaseApp): Application
 
     @Binds
     abstract fun bindContext(app: Application): Context
