@@ -2,7 +2,6 @@ package com.ivianuu.essentials.util
 
 import android.content.Context
 import android.content.res.ColorStateList
-import android.content.res.Resources
 import android.content.res.TypedArray
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -18,10 +17,9 @@ import javax.inject.Inject
 /**
  * Resource provider
  */
-class ResourceProvider @Inject constructor(
-    private val context: Context,
-    private val resources: Resources
-) {
+class ResourceProvider @Inject constructor(private val context: Context) {
+
+    private val resources get() = context.resources
 
     private val typedValue = TypedValue()
 
