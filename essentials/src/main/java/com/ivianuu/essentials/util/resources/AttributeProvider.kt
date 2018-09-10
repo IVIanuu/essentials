@@ -1,5 +1,6 @@
 package com.ivianuu.essentials.util.resources
 
+import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.content.Context
 import android.content.res.ColorStateList
@@ -7,17 +8,13 @@ import android.content.res.TypedArray
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
 import android.os.Build
-import androidx.appcompat.view.ContextThemeWrapper
 import androidx.core.content.res.use
 import javax.inject.Inject
 
 /**
  * Provide attributes
  */
-class AttributeProvider @Inject constructor(private val baseContext: Context) {
-
-    private var appliedTheme = 0
-    private var themedContext = baseContext
+class AttributeProvider @Inject constructor(private val context: Context) {
 
     fun boolean(attr: Int, defaultValue: Boolean = false): Boolean =
         withTypedArray(attr) { getBoolean(0, defaultValue) }
@@ -66,19 +63,9 @@ class AttributeProvider @Inject constructor(private val baseContext: Context) {
         defaultValue: Array<CharSequence>? = null
     ): Array<CharSequence>? = withTypedArray(attr) { getTextArray(0) ?: defaultValue }
 
+    @SuppressLint("Recycle")
     private inline fun <T> withTypedArray(
         vararg attr: Int,
         block: TypedArray.() -> T
-    ): T {
-        checkTheme()
-        return themedContext.theme.obtainStyledAttributes(attr).use(block)
-    }
-
-    private fun checkTheme() {
-        val themeResId = ResourcesPlugins.themeResId
-        if (appliedTheme != themeResId) {
-            themedContext = ContextThemeWrapper(baseContext, themeResId)
-            appliedTheme = themeResId
-        }
-    }
+    ): T = context.obtainStyledAttributes(attr).use(block)
 }

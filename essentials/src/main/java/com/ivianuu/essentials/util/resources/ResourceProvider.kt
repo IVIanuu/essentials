@@ -1,10 +1,15 @@
 package com.ivianuu.essentials.util.resources
 
 import android.content.Context
+import android.content.res.ColorStateList
+import android.content.res.TypedArray
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Typeface
+import android.graphics.drawable.Drawable
 import android.util.TypedValue
+import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import androidx.appcompat.view.ContextThemeWrapper
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import javax.inject.Inject
@@ -12,68 +17,53 @@ import javax.inject.Inject
 /**
  * Resource provider
  */
-class ResourceProvider @Inject constructor(private val baseContext: Context) {
+class ResourceProvider @Inject constructor(private val context: Context) {
 
-    private var appliedTheme = 0
-    private var themedContext = baseContext
+    private val resources get() = context.resources
 
     private val typedValue = TypedValue()
 
-    fun anim(resId: Int) = withContext { AnimationUtils.loadAnimation(themedContext, resId) }
+    fun anim(resId: Int): Animation = AnimationUtils.loadAnimation(context, resId)
 
-    fun intArray(resId: Int) = withContext { resources.getIntArray(resId) }
+    fun intArray(resId: Int): IntArray = resources.getIntArray(resId)
 
-    fun stringArray(resId: Int) = withContext { resources.getStringArray(resId) }
+    fun stringArray(resId: Int): Array<String> = resources.getStringArray(resId)
 
-    fun textArray(resId: Int) = withContext { resources.getTextArray(resId) }
+    fun textArray(resId: Int): Array<CharSequence> = resources.getTextArray(resId)
 
-    fun typedArray(resId: Int) = withContext { resources.obtainTypedArray(resId) }
+    fun typedArray(resId: Int): TypedArray = resources.obtainTypedArray(resId)
 
-    fun bool(resId: Int) = withContext { resources.getBoolean(resId) }
+    fun bool(resId: Int): Boolean = resources.getBoolean(resId)
 
-    fun dimen(resId: Int) = withContext { resources.getDimension(resId) }
+    fun dimen(resId: Int): Float = resources.getDimension(resId)
 
-    fun dimenPx(resId: Int) = withContext { resources.getDimensionPixelSize(resId) }
+    fun dimenPx(resId: Int): Int = resources.getDimensionPixelSize(resId)
 
-    fun dimenPxOffset(resId: Int) = withContext { resources.getDimensionPixelOffset(resId) }
+    fun dimenPxOffset(resId: Int): Int = resources.getDimensionPixelOffset(resId)
 
-    fun float(resId: Int) = withContext {
+    fun float(resId: Int): Float {
         resources.getValue(resId, typedValue, true)
-        typedValue.float
+        return typedValue.float
     }
 
-    fun int(resId: Int) =
-        withContext { resources.getInteger(resId) }
+    fun int(resId: Int): Int = resources.getInteger(resId)
 
-    fun bitmap(resId: Int) =
-        withContext { BitmapFactory.decodeResource(resources, resId) }
+    fun bitmap(resId: Int): Bitmap = BitmapFactory.decodeResource(resources, resId)
 
-    fun color(resId: Int) = withContext { ContextCompat.getColor(themedContext, resId) }
+    fun color(resId: Int): Int = ContextCompat.getColor(context, resId)
 
-    fun colorStateList(resId: Int) =
-        withContext { ContextCompat.getColorStateList(themedContext, resId)!! }
+    fun colorStateList(resId: Int): ColorStateList =
+        ContextCompat.getColorStateList(context, resId)!!
 
-    fun drawable(resId: Int) =
-        withContext { ContextCompat.getDrawable(themedContext, resId)!! }
+    fun drawable(resId: Int): Drawable =
+        ContextCompat.getDrawable(context, resId)!!
 
-    fun font(resId: Int) =
-        withContext { ResourcesCompat.getFont(themedContext, resId)!! }
+    fun font(resId: Int): Typeface =
+        ResourcesCompat.getFont(context, resId)!!
 
-    fun string(resId: Int) = withContext { themedContext.getString(resId) }
+    fun string(resId: Int): String = context.getString(resId)
 
-    fun string(resId: Int, vararg args: Any) =
-        withContext { themedContext.getString(resId, *args) }
-
-    private inline fun <T> withContext(block: Context.() -> T): T {
-        checkTheme()
-        return block(themedContext)
-    }
-
-    private fun checkTheme() {
-        val themeResId = ResourcesPlugins.themeResId
-        if (appliedTheme != themeResId) {
-            themedContext = ContextThemeWrapper(baseContext, themeResId)
-            appliedTheme = themeResId
-        }
-    }
+    fun string(resId: Int, vararg args: Any): String =
+        context.getString(resId, *args)
+    
 }

@@ -17,27 +17,15 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import android.os.Bundle
 import com.ivianuu.essentials.ui.base.BaseActivity
-import com.ivianuu.essentials.util.ThemeHelper
-import com.ivianuu.essentials.util.ext.d
-import com.ivianuu.essentials.util.resources.ResourcesPlugins
 import dagger.Binds
 import dagger.Module
-import javax.inject.Inject
 
 class MainActivity : BaseActivity() {
-
-    @Inject lateinit var themeHelper: ThemeHelper
 
     override val startDestination: Any?
         get() = CounterDestination(1)
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        setTheme(ResourcesPlugins.themeResId)
-        super.onCreate(savedInstanceState)
-        d { "is bg dark ? ${themeHelper.isWindowBackgroundDark()}" }
-    }
 }
 
 @Module

@@ -56,8 +56,6 @@ class CounterFragment : BaseFragment() {
         screen_down.setOnClickListener { viewModel.screenDownClicked() }
         root_screen.setOnClickListener { viewModel.rootScreenClicked() }
         list_screen.setOnClickListener { viewModel.listScreenClicked() }
-
-        toggle_theme.setOnClickListener { viewModel.toggleThemeClicked() }
     }
 
     override fun invalidate() {
