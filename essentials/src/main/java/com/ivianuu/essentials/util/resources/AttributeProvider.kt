@@ -16,7 +16,7 @@ import javax.inject.Inject
  */
 class AttributeProvider @Inject constructor(private val baseContext: Context) {
 
-    private var appliedTheme = ResourcesPlugins.themeResId
+    private var appliedTheme = 0
     private var themedContext = baseContext
 
     fun boolean(attr: Int, defaultValue: Boolean = false): Boolean =
@@ -69,7 +69,10 @@ class AttributeProvider @Inject constructor(private val baseContext: Context) {
     private inline fun <T> withTypedArray(
         vararg attr: Int,
         block: TypedArray.() -> T
-    ): T = themedContext.theme.obtainStyledAttributes(attr).use(block)
+    ): T {
+        checkTheme()
+        return themedContext.theme.obtainStyledAttributes(attr).use(block)
+    }
 
     private fun checkTheme() {
         val themeResId = ResourcesPlugins.themeResId

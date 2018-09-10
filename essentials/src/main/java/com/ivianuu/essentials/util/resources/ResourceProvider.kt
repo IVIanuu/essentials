@@ -14,7 +14,7 @@ import javax.inject.Inject
  */
 class ResourceProvider @Inject constructor(private val baseContext: Context) {
 
-    private var appliedTheme = ResourcesPlugins.themeResId
+    private var appliedTheme = 0
     private var themedContext = baseContext
 
     private val typedValue = TypedValue()

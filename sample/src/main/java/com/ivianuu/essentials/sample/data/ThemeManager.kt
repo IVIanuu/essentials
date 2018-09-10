@@ -6,7 +6,6 @@ import android.app.Application
 import com.f2prateek.rx.preferences2.RxSharedPreferences
 import com.ivianuu.essentials.app.AppService
 import com.ivianuu.essentials.sample.R
-import com.ivianuu.essentials.util.ext.d
 import com.ivianuu.essentials.util.ext.registerActivityLifecycleCallbacks
 import com.ivianuu.essentials.util.resources.ResourcesPlugins
 import javax.inject.Inject
@@ -33,7 +32,6 @@ class ThemeManager @Inject constructor(
         )
 
         darkPref.asObservable()
-
             .subscribe { setTheme(it) }
     }
 
@@ -42,9 +40,7 @@ class ThemeManager @Inject constructor(
     }
 
     private fun setTheme(dark: Boolean) {
-        d { "set theme $dark" }
         val themeResId = if (dark) R.style.AppThemeDark else R.style.AppThemeLight
-        application.setTheme(themeResId)
         ResourcesPlugins.themeResId = themeResId
         currentActivity?.recreate()
     }

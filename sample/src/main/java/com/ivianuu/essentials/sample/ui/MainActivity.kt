@@ -36,10 +36,8 @@ class MainActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(ResourcesPlugins.themeResId)
         super.onCreate(savedInstanceState)
-
         d { "is bg dark ? ${themeHelper.isWindowBackgroundDark()}" }
     }
-
 }
 
 @Module
