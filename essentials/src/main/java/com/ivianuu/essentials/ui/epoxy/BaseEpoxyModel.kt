@@ -23,18 +23,18 @@ import io.reactivex.disposables.CompositeDisposable
 /**
  * Base epoxy model with holder
  */
-abstract class BaseEpoxyModel : EpoxyModelWithHolder<BaseEpoxyHolder>() {
+abstract class BaseEpoxyModel<H : BaseEpoxyHolder> : EpoxyModelWithHolder<H>() {
 
     val disposables = CompositeDisposable()
 
     @CallSuper
-    override fun bind(holder: BaseEpoxyHolder) {
+    override fun bind(holder: H) {
         super.bind(holder)
         unbindInternal()
     }
 
     @CallSuper
-    override fun unbind(holder: BaseEpoxyHolder) {
+    override fun unbind(holder: H) {
         super.unbind(holder)
         unbindInternal()
     }

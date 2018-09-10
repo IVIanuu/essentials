@@ -11,7 +11,7 @@ import kotlinx.android.synthetic.main.item_simple_loading.*
  * Simple loading model
  */
 @EpoxyModelClass(layout = R2.layout.item_simple_loading)
-abstract class SimpleLoadingModel : BaseEpoxyModel() {
+abstract class SimpleLoadingModel : SimpleEpoxyModel() {
 
     @EpoxyAttribute var progressColor = 0
     @EpoxyAttribute var progressColorRes = 0

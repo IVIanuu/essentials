@@ -56,7 +56,7 @@ fun TextView.addTextChangedListener(
 }
 
 fun TextView.setTextFuture(
-     text: CharSequence,
+    text: CharSequence,
     params: PrecomputedTextCompat.Params = TextViewCompat.getTextMetricsParams(this),
     executor: Executor? = null
 ) {

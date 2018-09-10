@@ -7,7 +7,7 @@ import com.ivianuu.compass.Destination
 import com.ivianuu.compass.Detour
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.epoxy.BaseEpoxyHolder
-import com.ivianuu.essentials.ui.epoxy.BaseEpoxyModel
+import com.ivianuu.essentials.ui.epoxy.SimpleEpoxyModel
 import com.ivianuu.essentials.ui.epoxy.simpleLoading
 import com.ivianuu.essentials.ui.epoxy.simpleText
 import com.ivianuu.essentials.ui.mvrx.MvRxState
@@ -101,7 +101,7 @@ data class ListState(
 ) : MvRxState
 
 @EpoxyModelClass(layout = R.layout.single_line_list_item)
-abstract class SingleLineListItemModel : BaseEpoxyModel() {
+abstract class SingleLineListItemModel : SimpleEpoxyModel() {
 
     @EpoxyAttribute lateinit var title: String
 

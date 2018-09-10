@@ -9,7 +9,7 @@ import kotlinx.android.synthetic.main.item_simple_text.*
  * Simple text model
  */
 @EpoxyModelClass(layout = R2.layout.item_simple_text)
-abstract class SimpleTextModel : BaseEpoxyModel() {
+abstract class SimpleTextModel : SimpleEpoxyModel() {
 
     @EpoxyAttribute var text = ""
     @EpoxyAttribute var textRes = 0
