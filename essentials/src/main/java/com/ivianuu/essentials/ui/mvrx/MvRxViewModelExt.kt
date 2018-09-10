@@ -1,7 +1,8 @@
 package com.ivianuu.essentials.ui.mvrx
 
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
-import com.ivianuu.essentials.ui.base.BaseFragment
 import com.ivianuu.essentials.util.ext.defaultViewModelFactory
 import com.ivianuu.essentials.util.ext.defaultViewModelKey
 import com.ivianuu.essentials.util.ext.requireParentFragment
@@ -10,54 +11,66 @@ import com.ivianuu.essentials.util.ext.viewModelProvider
 import com.ivianuu.essentials.util.lifecycle.lifecycleAwareLazy
 import kotlin.reflect.KClass
 
-inline fun <reified T : MvRxViewModel<S>, reified S : MvRxState> BaseFragment.viewModel(
-    clazz: KClass<T>,
+inline fun <T : MvRxView, reified VM : MvRxViewModel<S>, reified S : MvRxState> T.viewModel(
+    clazz: KClass<VM>,
     factory: ViewModelProvider.Factory = defaultViewModelFactory(),
-    key: String = T::class.defaultViewModelKey
+    key: String = VM::class.defaultViewModelKey
 ) = viewModelProvider(factory).get(key, clazz.java).setupViewModel(this)
 
-inline fun <reified T : MvRxViewModel<S>, reified S : MvRxState> BaseFragment.bindViewModel(
-    clazz: KClass<T>,
-    crossinline keyProvider: () -> String = { T::class.defaultViewModelKey },
+inline fun <T : MvRxView, reified VM : MvRxViewModel<S>, reified S : MvRxState> T.bindViewModel(
+    clazz: KClass<VM>,
+    crossinline keyProvider: () -> String = { VM::class.defaultViewModelKey },
     crossinline factoryProvider: () -> ViewModelProvider.Factory = { defaultViewModelFactory() }
 ) = lifecycleAwareLazy { viewModel(clazz, factoryProvider(), keyProvider()) }
 
-inline fun <reified T : MvRxViewModel<S>, reified S : MvRxState> BaseFragment.activityViewModel(
-    clazz: KClass<T>,
+inline fun <T : MvRxView, reified VM : MvRxViewModel<S>, reified S : MvRxState> T.activityViewModel(
+    clazz: KClass<VM>,
     factory: ViewModelProvider.Factory = defaultViewModelFactory(),
-    key: String = T::class.defaultViewModelKey
-) = requireActivity().viewModelProvider(factory).get(key, clazz.java).setupViewModel(this)
+    key: String = VM::class.defaultViewModelKey
+): VM {
+    val activity = when {
+        this is FragmentActivity -> this
+        this is Fragment -> requireActivity()
+        else -> throw IllegalArgumentException("must be an activity or an fragment")
+    }
 
-inline fun <reified T : MvRxViewModel<S>, reified S : MvRxState> BaseFragment.bindActivityViewModel(
-    clazz: KClass<T>,
-    crossinline keyProvider: () -> String = { T::class.defaultViewModelKey },
+    return activity.viewModelProvider(factory).get(key, clazz.java).setupViewModel(this)
+}
+
+inline fun <T : MvRxView, reified VM : MvRxViewModel<S>, reified S : MvRxState> T.bindActivityViewModel(
+    clazz: KClass<VM>,
+    crossinline keyProvider: () -> String = { VM::class.defaultViewModelKey },
     crossinline factoryProvider: () -> ViewModelProvider.Factory = { defaultViewModelFactory() }
 ) = lifecycleAwareLazy { activityViewModel(clazz, factoryProvider(), keyProvider()) }
 
-inline fun <reified T : MvRxViewModel<S>, reified S : MvRxState> BaseFragment.parentViewModel(
-    clazz: KClass<T>,
+inline fun <T, reified VM : MvRxViewModel<S>, reified S : MvRxState> T.parentViewModel(
+    clazz: KClass<VM>,
     factory: ViewModelProvider.Factory = defaultViewModelFactory(),
-    key: String = T::class.defaultViewModelKey
-) = requireParentFragment().viewModelProvider(factory).get(key, clazz.java).setupViewModel(this)
+    key: String = VM::class.defaultViewModelKey
+) where T : MvRxView, T : Fragment =
+    requireParentFragment().viewModelProvider(factory).get(key, clazz.java).setupViewModel(this)
 
-inline fun <reified T : MvRxViewModel<S>, reified S : MvRxState> BaseFragment.bindParentViewModel(
-    clazz: KClass<T>,
-    crossinline keyProvider: () -> String = { T::class.defaultViewModelKey },
+inline fun <T, reified VM : MvRxViewModel<S>, reified S : MvRxState> T.bindParentViewModel(
+    clazz: KClass<VM>,
+    crossinline keyProvider: () -> String = { VM::class.defaultViewModelKey },
     crossinline factoryProvider: () -> ViewModelProvider.Factory = { defaultViewModelFactory() }
-) = lifecycleAwareLazy { parentViewModel(clazz, factoryProvider(), keyProvider()) }
+) where T : MvRxView, T : Fragment =
+    lifecycleAwareLazy { parentViewModel(clazz, factoryProvider(), keyProvider()) }
 
-inline fun <reified T : MvRxViewModel<S>, reified S : MvRxState> BaseFragment.targetViewModel(
-    clazz: KClass<T>,
+inline fun <T, reified VM : MvRxViewModel<S>, reified S : MvRxState> T.targetViewModel(
+    clazz: KClass<VM>,
     factory: ViewModelProvider.Factory = defaultViewModelFactory(),
-    key: String = T::class.defaultViewModelKey
-) = requireTargetFragment().viewModelProvider(factory).get(key, clazz.java).setupViewModel(this)
+    key: String = VM::class.defaultViewModelKey
+) where T : MvRxView, T : Fragment =
+    requireTargetFragment().viewModelProvider(factory).get(key, clazz.java).setupViewModel(this)
 
-inline fun <reified T : MvRxViewModel<S>, reified S : MvRxState> BaseFragment.bindTargetViewModel(
-    clazz: KClass<T>,
-    crossinline keyProvider: () -> String = { T::class.defaultViewModelKey },
+inline fun <T, reified VM : MvRxViewModel<S>, reified S : MvRxState> T.bindTargetViewModel(
+    clazz: KClass<VM>,
+    crossinline keyProvider: () -> String = { VM::class.defaultViewModelKey },
     crossinline factoryProvider: () -> ViewModelProvider.Factory = { defaultViewModelFactory() }
-) = lifecycleAwareLazy { targetViewModel(clazz, factoryProvider(), keyProvider()) }
+) where T : MvRxView, T : Fragment =
+    lifecycleAwareLazy { targetViewModel(clazz, factoryProvider(), keyProvider()) }
 
 @PublishedApi
-internal inline fun <reified T : MvRxViewModel<S>, reified S> T.setupViewModel(baseFragment: BaseFragment) =
-    apply { subscribe(baseFragment) { baseFragment.postInvalidate() } }
+internal inline fun <reified VM : MvRxViewModel<S>, reified S> VM.setupViewModel(view: MvRxView) =
+    apply { subscribe(view) { view.postInvalidate() } }

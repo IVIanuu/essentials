@@ -30,6 +30,12 @@ android {
         minSdkVersion Versions.minSdk
         targetSdkVersion Versions.targetSdk
         consumerProguardFiles 'proguard-rules.txt'
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = ['dagger.android.experimentalUseStringKeys': 'true']
+            }
+        }
     }
     androidExtensions {
         experimental = true
