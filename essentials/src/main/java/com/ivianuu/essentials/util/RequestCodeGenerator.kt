@@ -7,7 +7,7 @@ import java.util.concurrent.atomic.AtomicInteger
  */
 object RequestCodeGenerator {
 
-    private val codes = AtomicInteger(0)
+    private val codes = AtomicInteger(5000)
 
     fun generate() = codes.incrementAndGet()
 
