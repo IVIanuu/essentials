@@ -55,13 +55,15 @@ open class LiveEvent<T> {
 
     private fun dispatchPendingEvents() {
         requireMainThread()
-        if (consumers.any { it.isActive }) {
 
+        if (pendingEvents.isNotEmpty()) {
             val activeConsumers = consumers.filter { it.isActive }
 
-            while (pendingEvents.isNotEmpty()) {
-                val event = pendingEvents.poll()
-                activeConsumers.forEach { it(event) }
+            if (activeConsumers.isNotEmpty()) {
+                while (pendingEvents.isNotEmpty()) {
+                    val event = pendingEvents.poll()
+                    activeConsumers.forEach { it(event) }
+                }
             }
         }
     }
