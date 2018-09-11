@@ -82,7 +82,7 @@ open class LiveEvent<T> {
 
             override fun onStateChanged(owner: LifecycleOwner, event: Lifecycle.Event) {
                 super.onStateChanged(owner, event)
-                if (event == Lifecycle.Event.ON_DESTROY) {
+                if (owner.lifecycle.currentState == Lifecycle.State.DESTROYED) {
                     removeConsumer(consumer)
                 }
             }
