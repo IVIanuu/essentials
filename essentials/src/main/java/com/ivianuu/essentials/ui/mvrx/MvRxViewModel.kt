@@ -3,10 +3,9 @@ package com.ivianuu.essentials.ui.mvrx
 import androidx.lifecycle.LifecycleOwner
 import com.ivianuu.essentials.ui.common.BaseViewModel
 import com.ivianuu.essentials.util.lifecycle.LifecycleAwareObserver
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.addTo
-import kotlinx.coroutines.experimental.android.UI
-import kotlinx.coroutines.experimental.rx2.asObservable
 
 /**
  * State view model
@@ -18,6 +17,8 @@ abstract class MvRxViewModel<S : MvRxState>(initialState: S? = null) : BaseViewM
     val state get() = stateStore.state
 
     init {
+        disposables.add(stateStore)
+
         if (initialState != null) {
             setInitialState(initialState)
         }
@@ -36,8 +37,8 @@ abstract class MvRxViewModel<S : MvRxState>(initialState: S? = null) : BaseViewM
     }
 
     protected fun subscribe(subscriber: (S) -> Unit): Disposable =
-        stateStore.channel
-            .asObservable(UI)
+        stateStore.observable
+            .observeOn(AndroidSchedulers.mainThread())
             .subscribe(subscriber)
             .addTo(disposables)
 
@@ -48,8 +49,8 @@ abstract class MvRxViewModel<S : MvRxState>(initialState: S? = null) : BaseViewM
             onNext = subscriber
         )
 
-        return stateStore.channel
-            .asObservable(UI)
+        return stateStore.observable
+            .observeOn(AndroidSchedulers.mainThread())
             .subscribeWith(lifecycleAwareObserver)
             .addTo(disposables)
     }

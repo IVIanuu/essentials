@@ -1,67 +1,80 @@
 package com.ivianuu.essentials.ui.mvrx
 
-import kotlinx.coroutines.experimental.CoroutineDispatcher
-import kotlinx.coroutines.experimental.DefaultDispatcher
-import kotlinx.coroutines.experimental.channels.Channel
-import kotlinx.coroutines.experimental.channels.ConflatedBroadcastChannel
-import kotlinx.coroutines.experimental.channels.actor
-import kotlinx.coroutines.experimental.channels.consumeEach
+import com.ivianuu.essentials.util.ext.behaviorSubject
+import com.ivianuu.essentials.util.ext.requireValue
+import io.reactivex.Observable
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
+import io.reactivex.rxkotlin.addTo
+import io.reactivex.rxkotlin.subscribeBy
+import io.reactivex.schedulers.Schedulers
 import java.util.*
 
 /**
- * Mvrx state store
+ * State store
  */
-internal class MvRxStateStore<S : Any>(coroutineDispatcher: CoroutineDispatcher = DefaultDispatcher) {
+internal class MvRxStateStore<S : MvRxState> : Disposable {
 
-    private val stateChannel = ConflatedBroadcastChannel<S>()
+    private val disposables = CompositeDisposable()
 
-    val channel = stateChannel.openSubscription()
+    private val subject = behaviorSubject<S>()
+
+    private val flushQueueSubject = behaviorSubject<Unit>()
+
+    private val jobs = Jobs<S>()
+
+    val observable: Observable<S> = subject.distinctUntilChanged()
 
     internal val state: S
         get() {
             requireInitialState()
-            return stateChannel.value
+            return subject.requireValue()
         }
 
-    private val hasInitialState get() = stateChannel.valueOrNull != null
+    private val hasInitialState get() = subject.value != null
 
-    private val actor =
-        actor<Message<S>>(context = coroutineDispatcher, capacity = Channel.UNLIMITED) {
-            val getQueue = LinkedList<(S) -> Unit>()
-
-            channel.consumeEach { msg ->
-                try {
-                    when (msg) {
-                        is Message.GetQueueElement<S> -> getQueue.push(msg.block)
-
-                        is Message.SetQueueElement<S> -> stateChannel.value
-                            .let { msg.reducer(it) }
-                            .let { stateChannel.offer(it) }
-                    }
-
-                    if (channel.isEmpty) {
-                        getQueue.forEach { it(stateChannel.value) }
-                        getQueue.clear()
-                    }
-                } catch (t: Throwable) {
-                    handleError(t)
-                }
-            }
+    init {
+        flushQueueSubject
+            .observeOn(Schedulers.newThread())
+            // We don't want race conditions with setting the state on multiple background threads
+            // simultaneously in which two state reducers get the same initial state to reduce.
+            .subscribeBy(
+                onNext = { flushQueues() },
+                onError = { handleError(it) }
+            )
+            .addTo(disposables)
     }
 
     fun setInitialState(initialState: S) {
         if (hasInitialState) throw IllegalStateException("initial state already set")
-        stateChannel.offer(initialState)
+        subject.onNext(initialState)
     }
 
     fun get(block: (S) -> Unit) {
         requireInitialState()
-        actor.offer(Message.GetQueueElement(block))
+        jobs.enqueueGetStateBlock(block)
+        flushQueueSubject.onNext(Unit)
     }
 
     fun set(stateReducer: S.() -> S) {
         requireInitialState()
-        actor.offer(Message.SetQueueElement(stateReducer))
+        jobs.enqueueSetStateBlock(stateReducer)
+        flushQueueSubject.onNext(Unit)
+    }
+
+    private fun flushQueues() {
+        flushSetStateQueue()
+        val block = jobs.dequeueGetStateBlock() ?: return
+        block(state)
+        flushQueues()
+    }
+
+    private fun flushSetStateQueue() {
+        val blocks = jobs.dequeueAllSetStateBlocks() ?: return
+
+        blocks
+            .fold(state) { state, reducer -> state.reducer() }
+            .run { subject.onNext(this) }
     }
 
     private fun handleError(throwable: Throwable) {
@@ -76,8 +89,42 @@ internal class MvRxStateStore<S : Any>(coroutineDispatcher: CoroutineDispatcher 
         if (!hasInitialState) throw IllegalStateException("set initial state must be called first")
     }
 
-    private sealed class Message<S> {
-        class SetQueueElement<S>(val reducer: S.() -> S) : Message<S>()
-        class GetQueueElement<S>(val block: (S) -> Unit) : Message<S>()
+    private class Jobs<S> {
+
+        private val getStateQueue = LinkedList<(state: S) -> Unit>()
+        private var setStateQueue = LinkedList<S.() -> S>()
+
+        @Synchronized
+        fun enqueueGetStateBlock(block: (state: S) -> Unit) {
+            getStateQueue.push(block)
+        }
+
+        @Synchronized
+        fun enqueueSetStateBlock(block: S.() -> S) {
+            setStateQueue.push(block)
+        }
+
+        @Synchronized
+        fun dequeueGetStateBlock(): ((state: S) -> Unit)? {
+            if (getStateQueue.isEmpty()) return null
+
+            return getStateQueue.removeFirst()
+        }
+
+        @Synchronized
+        fun dequeueAllSetStateBlocks(): List<(S.() -> S)>? {
+            // do not allocate empty queue for no-op flushes
+            if (setStateQueue.isEmpty()) return null
+
+            val queue = setStateQueue
+            setStateQueue = LinkedList()
+            return queue
+        }
+    }
+
+    override fun isDisposed() = disposables.isDisposed
+
+    override fun dispose() {
+        disposables.dispose()
     }
 }
