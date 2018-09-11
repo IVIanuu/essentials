@@ -18,8 +18,8 @@ package com.ivianuu.essentials.util.lifecycle
 
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
-import com.ivianuu.essentials.util.ext.doOnDestroy
 import com.ivianuu.essentials.util.ext.mainThread
+import com.ivianuu.essentials.util.ext.requireMainThread
 import java.util.*
 
 /**
@@ -34,28 +34,34 @@ open class LiveEvent<T> {
     val hasActiveConsumers get() = consumers.any { it.isActive }
 
     fun consume(owner: LifecycleOwner, consumer: (T) -> Unit) {
+        requireMainThread()
         consumers.add(ConsumerEntry(owner, consumer))
-        dispatchPendingEvents()
+        if (owner.lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
+            dispatchPendingEvents()
+        }
     }
 
     fun removeConsumer(consumer: (T) -> Unit) {
+        requireMainThread()
         consumers.removeAll { entry ->
             (entry.consumer == consumer).also { if (it) entry.onRemove() }
         }
     }
 
-    protected open fun offer(event: T) {
+    protected open fun offer(event: T) = mainThread {
         pendingEvents.add(event)
         dispatchPendingEvents()
     }
 
-    private fun dispatchPendingEvents() = mainThread {
+    private fun dispatchPendingEvents() {
+        requireMainThread()
         if (consumers.any { it.isActive }) {
+
+            val activeConsumers = consumers.filter { it.isActive }
+
             while (pendingEvents.isNotEmpty()) {
                 val event = pendingEvents.poll()
-                consumers
-                    .filter { it.isActive }
-                    .forEach { it(event) }
+                activeConsumers.forEach { it(event) }
             }
         }
     }
@@ -66,7 +72,19 @@ open class LiveEvent<T> {
     ) {
         val isActive get() = owner.lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)
 
-        private val lifecycleObserver = owner.lifecycle.doOnDestroy { removeConsumer(consumer) }
+        private val lifecycleObserver = object : ActiveInactiveObserver() {
+            override fun onActive(owner: LifecycleOwner) {
+                super.onActive(owner)
+                dispatchPendingEvents()
+            }
+
+            override fun onStateChanged(owner: LifecycleOwner, event: Lifecycle.Event) {
+                super.onStateChanged(owner, event)
+                if (event == Lifecycle.Event.ON_DESTROY) {
+                    removeConsumer(consumer)
+                }
+            }
+        }
 
         init {
             owner.lifecycle.addObserver(lifecycleObserver)

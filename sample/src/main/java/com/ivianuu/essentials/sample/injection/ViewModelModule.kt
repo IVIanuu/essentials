@@ -20,6 +20,7 @@ import androidx.lifecycle.ViewModel
 import com.ivianuu.essentials.injection.viewmodel.ViewModelKey
 import com.ivianuu.essentials.sample.ui.CounterViewModel
 import com.ivianuu.essentials.sample.ui.ListViewModel
+import com.ivianuu.essentials.sample.ui.MainViewModel
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
@@ -39,5 +40,10 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(ListViewModel::class)
     abstract fun bindListViewModel(listViewModel: ListViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(MainViewModel::class)
+    abstract fun bindMainViewModel(mainViewModel: MainViewModel): ViewModel
 
 }

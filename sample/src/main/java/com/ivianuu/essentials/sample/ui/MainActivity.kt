@@ -17,15 +17,50 @@
 
 package com.ivianuu.essentials.sample.ui
 
+import android.os.Bundle
 import com.ivianuu.essentials.ui.base.BaseActivity
 import com.ivianuu.essentials.ui.base.BaseActivityModule
+import com.ivianuu.essentials.ui.common.BaseViewModel
+import com.ivianuu.essentials.util.ext.bindViewModel
+import com.ivianuu.essentials.util.ext.d
+import com.ivianuu.essentials.util.lifecycle.LiveEvent
+import com.ivianuu.essentials.util.lifecycle.mutableLiveEvent
 import dagger.Module
+import kotlinx.coroutines.experimental.delay
+import javax.inject.Inject
 
 class MainActivity : BaseActivity() {
 
     override val startDestination: Any?
         get() = CounterDestination(1)
 
+    private val viewModel by bindViewModel<MainViewModel>()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        viewModel.myEvent.consume(this) { d { "on event" } }
+    }
+}
+
+class MainViewModel @Inject constructor() : BaseViewModel() {
+
+    val myEvent: LiveEvent<Unit> get() = _myEvent
+    private val _myEvent = mutableLiveEvent<Unit>()
+
+    init {
+        d { "offer event" }
+        _myEvent.offer(Unit)
+
+        launchWithParent {
+            delay(3000)
+            d { "offer event" }
+            _myEvent.offer(Unit)
+            delay(3000)
+            d { "offer event" }
+            _myEvent.offer(Unit)
+        }
+    }
 }
 
 @Module

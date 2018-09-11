@@ -29,3 +29,9 @@ fun mainThread(block: () -> Unit) {
         else -> mainHandler.post(block)
     }
 }
+
+fun requireMainThread() {
+    if (!isMainThread) {
+        throw IllegalStateException("must be called from the main thread")
+    }
+}
