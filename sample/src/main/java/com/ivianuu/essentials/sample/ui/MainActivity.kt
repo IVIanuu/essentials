@@ -17,10 +17,8 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import android.os.Bundle
 import com.ivianuu.essentials.ui.base.BaseActivity
 import com.ivianuu.essentials.ui.base.BaseActivityModule
-import com.ivianuu.essentials.ui.common.asActivityResultDestinationOrNull
 import dagger.Module
 
 class MainActivity : BaseActivity() {

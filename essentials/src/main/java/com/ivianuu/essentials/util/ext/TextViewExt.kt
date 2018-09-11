@@ -59,9 +59,14 @@ fun TextView.setTextFuture(textRes: Int, vararg args: Any) {
 }
 
 fun TextView.setTextFuture(text: CharSequence) {
-    (this as? AppCompatTextView)
-        ?.setTextFuture(
-            PrecomputedTextCompat
-                .getTextFuture(text, TextViewCompat.getTextMetricsParams(this), null)
+    if (this is AppCompatTextView) {
+        val precomputedText = PrecomputedTextCompat
+            .getTextFuture(text, TextViewCompat.getTextMetricsParams(this), null)
+        setTextFuture(precomputedText)
+    } else {
+        val precomputedText = PrecomputedTextCompat.create(
+            text, TextViewCompat.getTextMetricsParams(this)
         )
+        TextViewCompat.setPrecomputedText(this, precomputedText)
+    }
 }
