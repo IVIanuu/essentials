@@ -9,10 +9,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginEnd="72dp"
-        android:layout_marginStart="72dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:gravity="center"
         android:textColor="?android:textColorSecondary"
         android:textSize="20sp"
-        tools:text="Hey haha" />
+        tools:text="Hey haha jkanekj awkf akef wa fdk akfaw kf ak fk ksf ks <fk ska fk af ka  fkaf ka fakf ka f akg k wffawkwafawfw" />
 
 </FrameLayout>
