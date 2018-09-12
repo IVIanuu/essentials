@@ -16,7 +16,9 @@
 
 package com.ivianuu.essentials.ui.epoxy
 
+import android.view.View
 import androidx.annotation.CallSuper
+import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelWithHolder
 import io.reactivex.disposables.CompositeDisposable
 
@@ -25,12 +27,22 @@ import io.reactivex.disposables.CompositeDisposable
  */
 abstract class BaseEpoxyModel<H : BaseEpoxyHolder> : EpoxyModelWithHolder<H>() {
 
-    val disposables = CompositeDisposable()
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var onClick: ((View) -> Unit)? = null
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var onLongClick: ((View) -> Boolean)? = null
+
+    protected val disposables: CompositeDisposable
+        get() {
+            if (_disposables == null) _disposables = CompositeDisposable()
+            return _disposables!!
+        }
+    private var _disposables: CompositeDisposable? = null
 
     @CallSuper
     override fun bind(holder: H) {
         super.bind(holder)
         unbindInternal()
+        holder.containerView.setOnClickListener(onClick)
+        holder.containerView.setOnLongClickListener(onLongClick)
     }
 
     @CallSuper
@@ -40,7 +52,6 @@ abstract class BaseEpoxyModel<H : BaseEpoxyHolder> : EpoxyModelWithHolder<H>() {
     }
 
     private fun unbindInternal() {
-        disposables.clear()
+        _disposables?.clear()
     }
-
 }
