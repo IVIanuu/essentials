@@ -14,7 +14,7 @@ abstract class MvRxViewModel<S : MvRxState>(initialState: S? = null) : BaseViewM
 
     private val stateStore = MvRxStateStore<S>()
 
-    val state get() = stateStore.state
+    internal val state get() = stateStore.state
 
     init {
         disposables.add(stateStore)
