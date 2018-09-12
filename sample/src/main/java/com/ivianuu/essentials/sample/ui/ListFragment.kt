@@ -61,7 +61,7 @@ class ListFragment : SimpleFragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
-        R.id.action_refresh -> viewModel.refreshClicked().andTrue
+        R.id.action_refresh -> viewModel.refreshClicked().andTrue()
         else -> false
     }
 }

@@ -46,6 +46,12 @@ abstract class BaseEpoxyModel<H : BaseEpoxyHolder> : EpoxyModelWithHolder<H>(), 
         }
     private var _disposables: CompositeDisposable? = null
 
+    protected open val onClickView: View? = null
+    protected open val useContainerForClicks = true
+
+    protected open val onLongClickView: View? = null
+    protected open val useContainerForLongClicks = true
+
     private var _boundHolder: H? = null
 
     @CallSuper
@@ -54,8 +60,17 @@ abstract class BaseEpoxyModel<H : BaseEpoxyHolder> : EpoxyModelWithHolder<H>(), 
         unbindInternal()
         super.bind(holder)
 
-        holder.containerView.setOnClickListener(onClick)
-        holder.containerView.setOnLongClickListener(onLongClick)
+        if (onClickView != null) {
+            onClickView?.setOnClickListener(onClick)
+        } else if (useContainerForClicks) {
+            holder.containerView.setOnClickListener(onClick)
+        }
+
+        if (onLongClickView != null) {
+            onLongClickView?.setOnLongClickListener(onLongClick)
+        } else if (useContainerForLongClicks) {
+            holder.containerView.setOnLongClickListener(onLongClick)
+        }
     }
 
     @CallSuper
