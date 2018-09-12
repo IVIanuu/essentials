@@ -13,6 +13,10 @@ class CounterViewModel @Inject constructor(private val router: Router) :
 
     private lateinit var destination: CounterDestination
 
+    init {
+        logStateChanges()
+    }
+
     fun setDestination(destination: CounterDestination) {
         if (this::destination.isInitialized) return
         this.destination = destination

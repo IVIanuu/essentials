@@ -20,7 +20,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import com.ivianuu.essentials.util.ext.onCompleteStub
 import com.ivianuu.essentials.util.ext.onErrorStub
-import com.ivianuu.essentials.util.ext.onNextStub
 import com.ivianuu.essentials.util.ext.onSubscribeStub
 import io.reactivex.Observer
 import io.reactivex.disposables.Disposable
@@ -31,7 +30,7 @@ import java.util.concurrent.atomic.AtomicReference
 /**
  * Lifecycle aware observer
  */
-internal class LifecycleAwareObserver<T : Any>(
+internal class LifecycleAwareObserver<T>(
     owner: LifecycleOwner,
     private val alwaysDeliverLastValueWhenUnlocked: Boolean = false,
     private val sourceObserver: Observer<T>
@@ -64,7 +63,7 @@ internal class LifecycleAwareObserver<T : Any>(
         onSubscribe: (Disposable) -> Unit = onSubscribeStub,
         onError: (Throwable) -> Unit = onErrorStub,
         onComplete: () -> Unit = onCompleteStub,
-        onNext: (T) -> Unit = onNextStub
+        onNext: (T) -> Unit = {}
     ) : this(
         owner,
         alwaysDeliverLastValueWhenUnlocked,
