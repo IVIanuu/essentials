@@ -41,26 +41,26 @@ abstract class SimpleFragment : BaseFragment() {
 
     val appBar get() = optionalAppBar ?: throw IllegalStateException("no app bar layout")
 
-    val optionalAppBar: AppBarLayout?
+    open val optionalAppBar: AppBarLayout?
         get() = view?.findViewById(R.id.app_bar)
 
     val coordinatorLayout
         get() = optionalCoordinatorLayout
             ?: throw IllegalStateException("no coordinator layout found")
 
-    val optionalCoordinatorLayout: CoordinatorLayout?
+    open val optionalCoordinatorLayout: CoordinatorLayout?
         get() = view?.findViewById(R.id.coordinator_layout)
 
     val recyclerView
         get() = optionalRecyclerView ?: throw IllegalStateException("no recycler view found")
 
-    val optionalRecyclerView: EpoxyRecyclerView?
+    open val optionalRecyclerView: EpoxyRecyclerView?
         get() = view?.findViewById(R.id.recycler_view)
 
     val toolbar
         get() = optionalToolbar ?: throw IllegalStateException("no toolbar found")
 
-    val optionalToolbar: Toolbar?
+    open val optionalToolbar: Toolbar?
         get() = view?.findViewById(R.id.toolbar)
 
     private val modelBuiltListener: (DiffResult) -> Unit = {
