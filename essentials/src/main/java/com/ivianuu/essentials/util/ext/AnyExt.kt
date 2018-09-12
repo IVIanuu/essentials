@@ -18,8 +18,8 @@
 
 package com.ivianuu.essentials.util.ext
 
-inline fun Any.andTrue() = true
+inline val Any.andTrue get() = true
 
-inline fun Any.andFalse() = false
+inline val Any.andFalse get() = false
 
-inline fun <T> T.checkAllMatched() = this
+inline val <T> T.checkAllMatched get() = this
