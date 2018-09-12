@@ -203,6 +203,14 @@ inline val Fragment.batteryLevel
 inline val View.batteryLevel
     get() = context.batteryLevel
 
+inline fun Context.dp(dp: Int) = dp * displayMetrics.density
+
+inline fun ContextAware.dp(dp: Int) = providedContext.dp(dp)
+
+inline fun Fragment.dp(dp: Int) = requireContext().dp(dp)
+
+inline fun View.dp(dp: Int) = context.dp(dp)
+
 inline fun <reified T> Context.componentName() = ComponentName(this, T::class.java)
 
 inline fun <reified T> ContextAware.componentName() =

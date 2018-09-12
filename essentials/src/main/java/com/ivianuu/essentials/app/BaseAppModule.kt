@@ -25,6 +25,7 @@ import android.preference.PreferenceManager
 import androidx.work.WorkManager
 import com.f2prateek.rx.preferences2.RxSharedPreferences
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
+import com.ivianuu.essentials.util.ContextAware
 import com.ivianuu.essentials.util.rx.AppRxSchedulers
 import com.ivianuu.rxsystemsettings.RxSystemSettings
 import dagger.Binds
@@ -53,6 +54,13 @@ abstract class BaseAppModule<T : BaseApp> {
 
     @Module
     companion object {
+
+        @JvmStatic
+        @Singleton
+        @Provides
+        fun provideContextAwareness(context: Context) = object : ContextAware {
+            override val providedContext = context
+        }
 
         @JvmStatic
         @Singleton
