@@ -181,15 +181,15 @@ abstract class MvRxViewModel<S : MvRxState>(initialState: S? = null) : BaseViewM
         .subscribeLifecycle(owner) { (a, b, c, d, e) -> subscriber(a, b, c, d, e) }
 
     private fun <T> Observable<T>.subscribeLifecycle(
-        lifecycleOwner: LifecycleOwner? = null,
+        owner: LifecycleOwner? = null,
         subscriber: (T) -> Unit
     ): Disposable {
-        if (lifecycleOwner == null) {
+        if (owner == null) {
             return observeOn(AndroidSchedulers.mainThread()).subscribe(subscriber).disposeOnClear()
         }
 
         val lifecycleAwareObserver = LifecycleAwareObserver(
-            lifecycleOwner,
+            owner,
             alwaysDeliverLastValueWhenUnlocked = true,
             onNext = subscriber
         )
