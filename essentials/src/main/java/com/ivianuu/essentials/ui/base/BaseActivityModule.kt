@@ -21,12 +21,8 @@ import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentActivity
 import com.ivianuu.essentials.injection.ForActivity
-import com.ivianuu.essentials.util.ThemeHelper
-import com.ivianuu.essentials.util.resources.AttributeProvider
-import com.ivianuu.essentials.util.resources.ResourceProvider
 import dagger.Binds
 import dagger.Module
-import dagger.Provides
 
 /**
  * Provides some common deps for activities
@@ -49,29 +45,5 @@ abstract class BaseActivityModule<T : BaseActivity> {
     @ForActivity
     @Binds
     abstract fun bindContext(activity: Activity): Context
-
-    @Module
-    companion object {
-
-        @JvmStatic
-        @ForActivity
-        @Provides
-        fun provideActivityAttributeProvider(@ForActivity context: Context) =
-            AttributeProvider(context)
-
-        @JvmStatic
-        @ForActivity
-        @Provides
-        fun provideActivityResourceProvider(@ForActivity context: Context) =
-            ResourceProvider(context)
-
-        @JvmStatic
-        @ForActivity
-        @Provides
-        fun provideActivityThemeHelper(
-            @ForActivity attributeProvider: AttributeProvider,
-            @ForActivity resourceProvider: ResourceProvider
-        ) = ThemeHelper(attributeProvider, resourceProvider)
-    }
 
 }

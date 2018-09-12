@@ -55,7 +55,7 @@ fun TextView.addTextChangedListener(
 }
 
 fun TextView.setTextFuture(textRes: Int, vararg args: Any) {
-    setTextFuture(context.getString(textRes, *args))
+    setTextFuture(string(textRes, *args))
 }
 
 fun TextView.setTextFuture(text: CharSequence) {

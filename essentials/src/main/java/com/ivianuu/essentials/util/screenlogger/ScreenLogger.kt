@@ -26,6 +26,7 @@ import com.ivianuu.essentials.app.AppService
 import com.ivianuu.essentials.util.analytics.Analytics
 import com.ivianuu.essentials.util.ext.doOnActivityCreated
 import com.ivianuu.essentials.util.ext.doOnFragmentCreated
+import com.ivianuu.essentials.util.ext.string
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -80,7 +81,7 @@ class ScreenLogger @Inject constructor(private val app: Application) : AppServic
 
     private fun getId(screen: IdentifiableScreen): String = when {
         screen.screenId.isNotEmpty() -> screen.screenId
-        screen.screenIdRes != 0 -> app.getString(screen.screenIdRes)
+        screen.screenIdRes != 0 -> app.string(screen.screenIdRes)
         else -> parseName(screen.javaClass.simpleName)
     }
 

@@ -18,57 +18,58 @@ package com.ivianuu.essentials.util
 
 import android.content.Context
 import com.ivianuu.essentials.util.ext.mainThread
-import com.ivianuu.essentials.util.resources.ResourceProvider
-import es.dmoral.toasty.Toasty
+import com.ivianuu.essentials.util.ext.toastError
+import com.ivianuu.essentials.util.ext.toastInfo
+import com.ivianuu.essentials.util.ext.toastNormal
+import com.ivianuu.essentials.util.ext.toastSuccess
+import com.ivianuu.essentials.util.ext.toastWarning
 import javax.inject.Inject
 
 /**
  * Toasts system messages
  */
-class Toaster @Inject constructor(
-    private val context: Context,
-    private val resourceProvider: ResourceProvider
-) {
+class Toaster @Inject constructor(context: Context) : ContextAware {
+
+    override val providedContext = context
 
     fun error(messageRes: Int, vararg args: Any) = mainThread {
-        Toasty.error(context, string(messageRes, *args)).show()
+        toastError(messageRes, *args)
     }
 
     fun error(message: CharSequence) = mainThread {
-        Toasty.error(context, message).show()
+        toastError(message)
     }
 
     fun info(messageRes: Int, vararg args: Any) = mainThread {
-        Toasty.info(context, string(messageRes, *args)).show()
+        toastInfo(messageRes, *args)
     }
 
     fun info(message: CharSequence) = mainThread {
-        Toasty.info(context, message).show()
+        toastInfo(message)
     }
 
     fun normal(messageRes: Int, vararg args: Any) = mainThread {
-        Toasty.normal(context, string(messageRes, *args)).show()
+        toastNormal(messageRes, *args)
     }
 
     fun normal(message: CharSequence) = mainThread {
-        Toasty.normal(context, message).show()
+        toastNormal(message)
     }
 
     fun success(messageRes: Int, vararg args: Any) = mainThread {
-        Toasty.success(context, string(messageRes, *args)).show()
+        toastSuccess(messageRes, *args)
     }
 
     fun success(message: CharSequence) = mainThread {
-        Toasty.success(context, message).show()
+        toastSuccess(message)
     }
 
     fun warning(messageRes: Int, vararg args: Any) = mainThread {
-        Toasty.warning(context, string(messageRes, *args)).show()
+        toastWarning(messageRes, *args)
     }
 
     fun warning(message: CharSequence) = mainThread {
-        Toasty.warning(context, message).show()
+        toastWarning(message)
     }
 
-    private fun string(resId: Int, vararg args: Any) = resourceProvider.string(resId, *args)
 }

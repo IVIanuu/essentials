@@ -12,6 +12,7 @@ import com.ivianuu.essentials.ui.base.BaseDialogFragment
 import com.ivianuu.essentials.ui.traveler.destination.ResultDestination
 import com.ivianuu.essentials.util.RequestCodeGenerator
 import com.ivianuu.essentials.util.ext.launchUi
+import com.ivianuu.essentials.util.ext.string
 import javax.inject.Inject
 
 @Destination(AppPickerDialog::class)
@@ -34,7 +35,7 @@ class AppPickerDialog : BaseDialogFragment() {
         val destination = appPickerDestination()
 
         val dialog = MaterialDialog.Builder(requireContext())
-            .title(destination.title ?: getString(R.string.dialog_title_app_picker))
+            .title(destination.title ?: string(R.string.dialog_title_app_picker))
             .negativeText(R.string.action_cancel)
             .autoDismiss(false)
             .onNegative { _, _ -> router.exit() }

@@ -27,8 +27,9 @@ import com.ivianuu.essentials.injection.Injectable
 import com.ivianuu.essentials.injection.view.HasViewInjector
 import com.ivianuu.essentials.ui.common.BackListener
 import com.ivianuu.essentials.ui.mvrx.MvRxView
-import com.ivianuu.essentials.util.ContextAware
+import com.ivianuu.essentials.ui.traveler.RouterHolder
 import com.ivianuu.essentials.util.ViewInjectionContextWrapper
+import com.ivianuu.essentials.util.lifecycle.LifecycleOwner2
 import com.ivianuu.essentials.util.screenlogger.IdentifiableScreen
 import com.ivianuu.essentials.util.viewmodel.ViewModelFactoryHolder
 import com.ivianuu.traveler.Router
@@ -41,10 +42,11 @@ import javax.inject.Inject
 /**
  * Base fragment
  */
-abstract class BaseFragment : Fragment(), BackListener, ContextAware, HasSupportFragmentInjector,
-    HasViewInjector, Injectable, IdentifiableScreen, MvRxView, ViewModelFactoryHolder {
+abstract class BaseFragment : Fragment(), BackListener, HasSupportFragmentInjector,
+    HasViewInjector, Injectable, IdentifiableScreen, LifecycleOwner2, MvRxView, RouterHolder,
+    ViewModelFactoryHolder {
 
-    @Inject lateinit var router: Router
+    @Inject override lateinit var router: Router
 
     @Inject lateinit var supportFragmentInjector: DispatchingAndroidInjector<Fragment>
     @Inject lateinit var viewInjector: DispatchingAndroidInjector<View>
@@ -52,9 +54,6 @@ abstract class BaseFragment : Fragment(), BackListener, ContextAware, HasSupport
     @Inject override lateinit var viewModelFactory: ViewModelProvider.Factory
 
     protected open val layoutRes = -1
-
-    override val providedContext: Context
-        get() = requireActivity()
 
     override fun onAttach(context: Context?) {
         AndroidSupportInjection.inject(this)

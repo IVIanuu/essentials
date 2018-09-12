@@ -20,15 +20,24 @@ import android.view.View
 import androidx.annotation.CallSuper
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelWithHolder
+import com.ivianuu.essentials.util.ContextAware
 import io.reactivex.disposables.CompositeDisposable
+import kotlinx.android.extensions.LayoutContainer
 
 /**
  * Base epoxy model with holder
  */
-abstract class BaseEpoxyModel<H : BaseEpoxyHolder> : EpoxyModelWithHolder<H>() {
+abstract class BaseEpoxyModel<H : BaseEpoxyHolder> : EpoxyModelWithHolder<H>(), LayoutContainer,
+    ContextAware {
 
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var onClick: ((View) -> Unit)? = null
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var onLongClick: ((View) -> Boolean)? = null
+
+    override val containerView
+        get() = _boundHolder!!.containerView
+
+    override val providedContext
+        get() = _boundHolder!!.providedContext
 
     protected val disposables: CompositeDisposable
         get() {
@@ -37,18 +46,23 @@ abstract class BaseEpoxyModel<H : BaseEpoxyHolder> : EpoxyModelWithHolder<H>() {
         }
     private var _disposables: CompositeDisposable? = null
 
+    private var _boundHolder: H? = null
+
     @CallSuper
     override fun bind(holder: H) {
-        super.bind(holder)
+        _boundHolder = holder
         unbindInternal()
+        super.bind(holder)
+
         holder.containerView.setOnClickListener(onClick)
         holder.containerView.setOnLongClickListener(onLongClick)
     }
 
     @CallSuper
     override fun unbind(holder: H) {
-        super.unbind(holder)
         unbindInternal()
+        _boundHolder = null
+        super.unbind(holder)
     }
 
     private fun unbindInternal() {

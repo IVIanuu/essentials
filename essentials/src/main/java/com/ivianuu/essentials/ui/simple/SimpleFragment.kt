@@ -13,21 +13,20 @@ import com.airbnb.epoxy.EpoxyController
 import com.airbnb.epoxy.EpoxyRecyclerView
 import com.google.android.material.appbar.AppBarLayout
 import com.ivianuu.essentials.R
-import com.ivianuu.essentials.injection.ForActivity
 import com.ivianuu.essentials.ui.base.BaseFragment
-import com.ivianuu.essentials.util.ThemeHelper
+import com.ivianuu.essentials.util.ext.iconColor
 import com.ivianuu.essentials.util.ext.isLight
 import com.ivianuu.essentials.util.ext.items
+import com.ivianuu.essentials.util.ext.primaryColor
+import com.ivianuu.essentials.util.ext.primaryTextColor
+import com.ivianuu.essentials.util.ext.secondaryTextColor
 import com.ivianuu.essentials.util.ext.tint
 import com.ivianuu.essentials.util.ext.unsafeLazy
-import javax.inject.Inject
 
 /**
  * Simple fragment
  */
 abstract class SimpleFragment : BaseFragment() {
-
-    @field:ForActivity @Inject lateinit var themeHelper: ThemeHelper
 
     override val layoutRes = R.layout.fragment_simple
 
@@ -35,7 +34,7 @@ abstract class SimpleFragment : BaseFragment() {
     protected open val toolbarTitleRes = 0
     protected open val toolbarMenuRes = 0
     protected open val toolbarBackButton get() = isInBackstack
-    protected open val lightToolbar: Boolean get() = themeHelper.primaryColor().isLight
+    protected open val lightToolbar: Boolean get() = primaryColor().isLight
 
     protected val epoxyController by unsafeLazy { epoxyController() }
 
@@ -104,9 +103,9 @@ abstract class SimpleFragment : BaseFragment() {
                 setNavigationOnClickListener { router.exit() }
             }
 
-            val titleColor = themeHelper.primaryTextColor(!lightToolbar)
-            val subTitleColor = themeHelper.secondaryTextColor(!lightToolbar)
-            val iconColor = themeHelper.iconColor(!lightToolbar)
+            val titleColor = primaryTextColor(!lightToolbar)
+            val subTitleColor = secondaryTextColor(!lightToolbar)
+            val iconColor = iconColor(!lightToolbar)
 
             setTitleTextColor(titleColor)
             setSubtitleTextColor(subTitleColor)

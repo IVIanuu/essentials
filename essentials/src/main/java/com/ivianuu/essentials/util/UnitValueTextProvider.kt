@@ -3,6 +3,7 @@ package com.ivianuu.essentials.util
 import android.content.Context
 import com.ivianuu.epoxyprefs.SeekBarPreferenceModel
 import com.ivianuu.essentials.R
+import com.ivianuu.essentials.util.ext.string
 
 class UnitValueTextProvider(
     private val context: Context,
@@ -10,11 +11,11 @@ class UnitValueTextProvider(
 ) : SeekBarPreferenceModel.ValueTextProvider {
 
     override fun getText(value: Int) = when (unit) {
-        Unit.DP -> context.getString(R.string.seek_bar_pref_format_dp, value)
-        Unit.MILLIS -> context.getString(R.string.seek_bar_pref_format_millis, value)
-        Unit.PERCENTAGE -> context.getString(R.string.seek_bar_pref_format_percentage, value)
-        Unit.PX -> context.getString(R.string.seek_bar_pref_format_px, value)
-        Unit.SECONDS -> context.getString(R.string.seek_bar_pref_format_seconds, value)
+        Unit.DP -> context.string(R.string.seek_bar_pref_format_dp, value)
+        Unit.MILLIS -> context.string(R.string.seek_bar_pref_format_millis, value)
+        Unit.PERCENTAGE -> context.string(R.string.seek_bar_pref_format_percentage, value)
+        Unit.PX -> context.string(R.string.seek_bar_pref_format_px, value)
+        Unit.SECONDS -> context.string(R.string.seek_bar_pref_format_seconds, value)
     }
 
     enum class Unit {

@@ -17,7 +17,9 @@
 package com.ivianuu.essentials.util.ext
 
 import android.content.Context
+import android.view.View
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import com.ivianuu.essentials.util.ContextAware
 
 inline fun <reified T> Context.systemService() =
@@ -25,3 +27,9 @@ inline fun <reified T> Context.systemService() =
 
 inline fun <reified T> ContextAware.systemService() =
     providedContext.systemService<T>()
+
+inline fun <reified T> Fragment.systemService() =
+    requireContext().systemService<T>()
+
+inline fun <reified T> View.systemService() =
+    context.systemService<T>()

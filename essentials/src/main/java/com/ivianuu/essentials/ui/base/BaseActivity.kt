@@ -26,7 +26,9 @@ import com.ivianuu.essentials.injection.Injectable
 import com.ivianuu.essentials.injection.view.HasViewInjector
 import com.ivianuu.essentials.ui.common.BackListener
 import com.ivianuu.essentials.ui.mvrx.MvRxView
+import com.ivianuu.essentials.ui.traveler.RouterHolder
 import com.ivianuu.essentials.util.ext.unsafeLazy
+import com.ivianuu.essentials.util.lifecycle.LifecycleOwner2
 import com.ivianuu.essentials.util.screenlogger.IdentifiableScreen
 import com.ivianuu.essentials.util.viewmodel.ViewModelFactoryHolder
 import com.ivianuu.traveler.Navigator
@@ -43,10 +45,11 @@ import javax.inject.Inject
  * Base activity
  */
 abstract class BaseActivity : AppCompatActivity(), HasSupportFragmentInjector, HasViewInjector,
-    Injectable, IdentifiableScreen, MvRxView, ViewModelFactoryHolder {
+    Injectable, IdentifiableScreen, LifecycleOwner2, MvRxView, RouterHolder,
+    ViewModelFactoryHolder {
 
     @Inject lateinit var navigatorHolder: NavigatorHolder
-    @Inject lateinit var router: Router
+    @Inject override lateinit var router: Router
 
     @Inject lateinit var supportFragmentInjector: DispatchingAndroidInjector<Fragment>
     @Inject lateinit var viewInjector: DispatchingAndroidInjector<View>
