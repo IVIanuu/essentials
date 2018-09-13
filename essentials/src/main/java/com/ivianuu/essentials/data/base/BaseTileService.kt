@@ -5,29 +5,25 @@ import android.os.Build
 import android.service.quicksettings.TileService
 import com.ivianuu.essentials.injection.Injectable
 import com.ivianuu.essentials.util.coroutines.CancellableCoroutineScope
+import com.ivianuu.essentials.util.coroutines.cancelCoroutineScope
 import dagger.android.AndroidInjection
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.android.Main
-import kotlin.coroutines.CoroutineContext
 
 /**
  * Base tile service
  */
 @TargetApi(Build.VERSION_CODES.N)
-abstract class BaseTileService : TileService(), CoroutineScope, Injectable {
-
-    override val coroutineContext: CoroutineContext
-        get() = Dispatchers.Main + job
+abstract class BaseTileService : TileService(), CoroutineScope by CancellableCoroutineScope(),
+    Injectable {
 
     protected val disposables = CompositeDisposable()
 
-    private val job = Job()
-
     protected val listeningDisposables = CompositeDisposable()
-    protected var listeningCoroutineScope = CancellableCoroutineScope()
+
+    protected val listeningCoroutineScope: CoroutineScope
+        get() = _listeningCoroutineScope
+    private var _listeningCoroutineScope = CancellableCoroutineScope()
 
     override fun onCreate() {
         if (shouldInject) {
@@ -38,18 +34,18 @@ abstract class BaseTileService : TileService(), CoroutineScope, Injectable {
 
     override fun onDestroy() {
         disposables.clear()
-        job.cancel()
+        cancelCoroutineScope()
         super.onDestroy()
     }
 
     override fun onStartListening() {
         super.onStartListening()
-        listeningCoroutineScope = CancellableCoroutineScope()
+        _listeningCoroutineScope = CancellableCoroutineScope()
     }
 
     override fun onStopListening() {
         listeningDisposables.clear()
-        listeningCoroutineScope.cancel()
+        _listeningCoroutineScope.cancel()
         super.onStopListening()
     }
 }

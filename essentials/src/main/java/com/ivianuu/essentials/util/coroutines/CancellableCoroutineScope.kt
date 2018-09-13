@@ -28,6 +28,6 @@ private class CancellableCoroutineScopeImpl : CancellableCoroutineScope {
     }
 }
 
-fun CoroutineScope.cancel() {
+fun CoroutineScope.cancelCoroutineScope() {
     delegate<CancellableCoroutineScopeImpl>().cancel()
 }

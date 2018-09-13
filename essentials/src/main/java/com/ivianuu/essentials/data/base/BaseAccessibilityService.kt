@@ -3,25 +3,19 @@ package com.ivianuu.essentials.data.base
 import android.accessibilityservice.AccessibilityService
 import android.view.accessibility.AccessibilityEvent
 import com.ivianuu.essentials.injection.Injectable
+import com.ivianuu.essentials.util.coroutines.CancellableCoroutineScope
+import com.ivianuu.essentials.util.coroutines.cancelCoroutineScope
 import dagger.android.AndroidInjection
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.android.Main
-import kotlin.coroutines.CoroutineContext
 
 /**
  * Base accessibility service
  */
-abstract class BaseAccessibilityService : AccessibilityService(), CoroutineScope, Injectable {
-
-    override val coroutineContext: CoroutineContext
-        get() = Dispatchers.Main + job
+abstract class BaseAccessibilityService : AccessibilityService(),
+    CoroutineScope by CancellableCoroutineScope(), Injectable {
 
     val disposables = CompositeDisposable()
-
-    private val job = Job()
 
     override fun onCreate() {
         if (shouldInject) {
@@ -32,7 +26,7 @@ abstract class BaseAccessibilityService : AccessibilityService(), CoroutineScope
 
     override fun onDestroy() {
         disposables.clear()
-        job.cancel()
+        cancelCoroutineScope()
         super.onDestroy()
     }
 

@@ -18,7 +18,7 @@ package com.ivianuu.essentials.ui.common
 
 import androidx.lifecycle.ViewModel
 import com.ivianuu.essentials.util.coroutines.CancellableCoroutineScope
-import com.ivianuu.essentials.util.coroutines.cancel
+import com.ivianuu.essentials.util.coroutines.cancelCoroutineScope
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.addTo
@@ -33,7 +33,7 @@ abstract class BaseViewModel : ViewModel(), CoroutineScope by CancellableCorouti
 
     override fun onCleared() {
         disposables.clear()
-        cancel()
+        cancelCoroutineScope()
         super.onCleared()
     }
 
