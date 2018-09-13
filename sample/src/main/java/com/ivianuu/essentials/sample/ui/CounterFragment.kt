@@ -54,9 +54,12 @@ class CounterFragment : BaseFragment(), CounterFragmentDelegate by CounterFragme
     private val delegate by bindDelegate(CounterFragmentDelegateImpl::class)
     private val viewModel by bindViewModel(CounterViewModel::class)
 
+    init {
+        delegate.init(this)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        delegate.init(this)
         viewModel.setDestination(counterDestination())
 
         launch {
@@ -78,7 +81,7 @@ class CounterFragment : BaseFragment(), CounterFragmentDelegate by CounterFragme
         root_screen.setOnClickListener { viewModel.rootScreenClicked() }
         list_screen.setOnClickListener { viewModel.listScreenClicked() }
 
-        launchView {
+        viewCoroutineScope.launch {
             suspendCancellableCoroutine<Unit> {
                 it.invokeOnCancellation { d { "view on cancel" } }
             }

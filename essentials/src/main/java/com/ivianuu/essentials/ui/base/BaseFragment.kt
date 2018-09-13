@@ -114,11 +114,4 @@ abstract class BaseFragment : Fragment(), BackListener, CoroutineScope, HasSuppo
 
     override fun viewInjector(): AndroidInjector<View> = viewInjector
 
-    fun launchView(
-        context: CoroutineContext = EmptyCoroutineContext,
-        start: CoroutineStart = CoroutineStart.DEFAULT,
-        onCompletion: CompletionHandler? = null,
-        block: suspend CoroutineScope.() -> Unit
-    ) = viewCoroutineScope.launch(context, start, onCompletion, block)
-
 }
