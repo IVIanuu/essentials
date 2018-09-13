@@ -20,25 +20,14 @@ fun <T : Any> Any.delegate(clazz: KClass<T>) =
 
 inline fun <reified T : Any> Any.delegate() = delegate(T::class)
 
-fun <T : Any> Any.delegateOrNull(clazz: KClass<T>) = try {
-    delegate(clazz)
-} catch (e: Exception) {
-    null
-}
+fun <T : Any> Any.delegateOrNull(clazz: KClass<T>) = tryOrNull { delegate(clazz) }
 
 inline fun <reified T : Any> Any.delegateOrNull() = delegateOrNull(T::class)
 
 fun Any.bindDelegates() = unsafeLazy { delegates() }
 
 fun Any.delegates() =
-    delegatesFields()
-        .mapNotNull {
-            try {
-                it.get(this)
-            } catch (e: Exception) {
-                null
-            }
-        }
+    delegatesFields().mapNotNull { tryOrNull { it.get(this) } }
 
 private fun Any.delegatesFields() =
     delegateCache.getOrPut(javaClass) { collectDelegatesRecursively(javaClass) }
