@@ -22,7 +22,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
 import com.ivianuu.essentials.injection.Injectable
 import com.ivianuu.essentials.injection.view.HasViewInjector
@@ -31,6 +30,7 @@ import com.ivianuu.essentials.ui.mvrx.MvRxView
 import com.ivianuu.essentials.ui.traveler.RouterHolder
 import com.ivianuu.essentials.util.ViewInjectionContextWrapper
 import com.ivianuu.essentials.util.lifecycle.LifecycleCoroutineScope
+import com.ivianuu.essentials.util.lifecycle.LifecycleJob
 import com.ivianuu.essentials.util.lifecycle.LifecycleOwner2
 import com.ivianuu.essentials.util.screenlogger.IdentifiableScreen
 import com.ivianuu.essentials.util.viewmodel.ViewModelFactoryHolder
@@ -39,35 +39,22 @@ import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.AndroidSupportInjection
 import dagger.android.support.HasSupportFragmentInjector
-import kotlinx.coroutines.Job
+import kotlinx.coroutines.CompletionHandler
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.CoroutineStart
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.android.Main
+import kotlinx.coroutines.launch
 import javax.inject.Inject
-
-interface MyInterface {
-    fun hallo()
-}
-
-class MyInterfaceImpl : MyInterface {
-    override fun hallo() {
-    }
-}
-
-interface YourInterface {
-    fun bye()
-}
-
-class YourInterfaceImpl : YourInterface {
-    override fun bye() {
-    }
-}
+import kotlin.coroutines.CoroutineContext
+import kotlin.coroutines.EmptyCoroutineContext
 
 /**
  * Base fragment
  */
-abstract class BaseFragment : Fragment(), BackListener, HasSupportFragmentInjector,
-    HasViewInjector, Injectable, IdentifiableScreen, LifecycleCoroutineScope,
-    LifecycleOwner2, MyInterface by MyInterfaceImpl(), MvRxView, RouterHolder,
-    ViewModelFactoryHolder,
-    YourInterface by YourInterfaceImpl() {
+abstract class BaseFragment : Fragment(), BackListener, CoroutineScope, HasSupportFragmentInjector,
+    HasViewInjector, Injectable, IdentifiableScreen, LifecycleOwner2, MvRxView, RouterHolder,
+    ViewModelFactoryHolder {
 
     @Inject override lateinit var router: Router
 
@@ -76,9 +63,12 @@ abstract class BaseFragment : Fragment(), BackListener, HasSupportFragmentInject
 
     @Inject override lateinit var viewModelFactory: ViewModelProvider.Factory
 
-    override val job = Job()
+    override val coroutineContext: CoroutineContext
+        get() = Dispatchers.Main + job
 
-    val viewCoroutineScope
+    val job = LifecycleJob(this)
+
+    val viewCoroutineScope: CoroutineScope
         get() = _viewCoroutineScope ?: throw IllegalArgumentException("view == null")
     private var _viewCoroutineScope: LifecycleCoroutineScope? = null
 
@@ -104,7 +94,7 @@ abstract class BaseFragment : Fragment(), BackListener, HasSupportFragmentInject
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        _viewCoroutineScope = ViewLifecycleCoroutineScope(viewLifecycleOwner)
+        _viewCoroutineScope = LifecycleCoroutineScope(viewLifecycleOwner)
     }
 
     override fun onStart() {
@@ -124,13 +114,11 @@ abstract class BaseFragment : Fragment(), BackListener, HasSupportFragmentInject
 
     override fun viewInjector(): AndroidInjector<View> = viewInjector
 
-    private class ViewLifecycleCoroutineScope(
-        private val owner: LifecycleOwner
-    ) : LifecycleCoroutineScope, LifecycleOwner by owner {
-        override val job = Job()
+    fun launchView(
+        context: CoroutineContext = EmptyCoroutineContext,
+        start: CoroutineStart = CoroutineStart.DEFAULT,
+        onCompletion: CompletionHandler? = null,
+        block: suspend CoroutineScope.() -> Unit
+    ) = viewCoroutineScope.launch(context, start, onCompletion, block)
 
-        init {
-            initCoroutineScope()
-        }
-    }
 }

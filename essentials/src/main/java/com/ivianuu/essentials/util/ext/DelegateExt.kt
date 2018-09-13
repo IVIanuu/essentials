@@ -9,17 +9,23 @@ private val delegateCache = mutableMapOf<KClass<*>, Set<Field>>()
 
 fun <T : Any> Any.bindDelegate(clazz: KClass<T>) = unsafeLazy { delegate(clazz) }
 
-fun <T : Any> Any.delegateOrNull(clazz: KClass<T>) = try {
-    delegate(clazz)
-} catch (e: Exception) {
-    null
-}
+inline fun <reified T : Any> Any.bindDelegate() = bindDelegate(T::class)
 
 @Suppress("UNCHECKED_CAST")
 fun <T : Any> Any.delegate(clazz: KClass<T>) =
     delegatesFields()
         .first { it.type.isAssignableFrom(clazz.java) }
         .get(this) as T
+
+inline fun <reified T : Any> Any.delegate() = delegate(T::class)
+
+fun <T : Any> Any.delegateOrNull(clazz: KClass<T>) = try {
+    delegate(clazz)
+} catch (e: Exception) {
+    null
+}
+
+inline fun <reified T : Any> Any.delegateOrNull() = delegateOrNull(T::class)
 
 fun Any.bindDelegates() = unsafeLazy { delegates() }
 

@@ -29,6 +29,8 @@ import com.ivianuu.essentials.injection.view.HasViewInjector
 import com.ivianuu.essentials.ui.common.BackListener
 import com.ivianuu.essentials.ui.traveler.RouterHolder
 import com.ivianuu.essentials.util.ViewInjectionContextWrapper
+import com.ivianuu.essentials.util.lifecycle.LifecycleCoroutineScope
+import com.ivianuu.essentials.util.lifecycle.LifecycleJob
 import com.ivianuu.essentials.util.lifecycle.LifecycleOwner2
 import com.ivianuu.essentials.util.screenlogger.IdentifiableScreen
 import com.ivianuu.essentials.util.viewmodel.ViewModelFactoryHolder
@@ -37,12 +39,15 @@ import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.AndroidSupportInjection
 import dagger.android.support.HasSupportFragmentInjector
+import kotlinx.coroutines.CompletionHandler
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.android.Main
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
+import kotlin.coroutines.EmptyCoroutineContext
 
 /**
  * Base dialog fragment
@@ -60,9 +65,13 @@ abstract class BaseDialogFragment : AppCompatDialogFragment(), BackListener,
     override val coroutineContext: CoroutineContext
         get() = Dispatchers.Main + job
 
-    protected open val layoutRes = -1
+    val job = LifecycleJob(this)
 
-    protected val job = Job()
+    val viewCoroutineScope: CoroutineScope
+        get() = _viewCoroutineScope ?: throw IllegalArgumentException("view == null")
+    private var _viewCoroutineScope: LifecycleCoroutineScope? = null
+
+    protected open val layoutRes = -1
 
     override fun onAttach(context: Context?) {
         AndroidSupportInjection.inject(this)
@@ -82,7 +91,24 @@ abstract class BaseDialogFragment : AppCompatDialogFragment(), BackListener,
         super.onCreateView(inflater, container, savedInstanceState)
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        _viewCoroutineScope = LifecycleCoroutineScope(viewLifecycleOwner)
+    }
+
+    override fun onDestroyView() {
+        _viewCoroutineScope = null
+        super.onDestroyView()
+    }
+
     override fun supportFragmentInjector(): AndroidInjector<Fragment> = supportFragmentInjector
 
     override fun viewInjector(): AndroidInjector<View> = viewInjector
+
+    fun launchView(
+        context: CoroutineContext = EmptyCoroutineContext,
+        start: CoroutineStart = CoroutineStart.DEFAULT,
+        onCompletion: CompletionHandler? = null,
+        block: suspend CoroutineScope.() -> Unit
+    ) = viewCoroutineScope.launch(context, start, onCompletion, block)
 }

@@ -28,7 +28,7 @@ import com.ivianuu.essentials.ui.common.BackListener
 import com.ivianuu.essentials.ui.mvrx.MvRxView
 import com.ivianuu.essentials.ui.traveler.RouterHolder
 import com.ivianuu.essentials.util.ext.unsafeLazy
-import com.ivianuu.essentials.util.lifecycle.LifecycleCoroutineScope
+import com.ivianuu.essentials.util.lifecycle.LifecycleJob
 import com.ivianuu.essentials.util.lifecycle.LifecycleOwner2
 import com.ivianuu.essentials.util.screenlogger.IdentifiableScreen
 import com.ivianuu.essentials.util.viewmodel.ViewModelFactoryHolder
@@ -40,15 +40,17 @@ import dagger.android.AndroidInjection
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
-import kotlinx.coroutines.Job
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.android.Main
 import javax.inject.Inject
+import kotlin.coroutines.CoroutineContext
 
 /**
  * Base activity
  */
-abstract class BaseActivity : AppCompatActivity(), HasSupportFragmentInjector, HasViewInjector,
-    Injectable, IdentifiableScreen, LifecycleCoroutineScope, LifecycleOwner2, MvRxView,
-    RouterHolder,
+abstract class BaseActivity : AppCompatActivity(), CoroutineScope, HasSupportFragmentInjector,
+    HasViewInjector, Injectable, IdentifiableScreen, LifecycleOwner2, MvRxView, RouterHolder,
     ViewModelFactoryHolder {
 
     @Inject lateinit var navigatorHolder: NavigatorHolder
@@ -59,7 +61,10 @@ abstract class BaseActivity : AppCompatActivity(), HasSupportFragmentInjector, H
 
     @Inject override lateinit var viewModelFactory: ViewModelProvider.Factory
 
-    override val job = Job()
+    override val coroutineContext: CoroutineContext
+        get() = Dispatchers.Main + job
+
+    val job = LifecycleJob(this)
 
     protected open val layoutRes = -1
 
@@ -77,8 +82,6 @@ abstract class BaseActivity : AppCompatActivity(), HasSupportFragmentInjector, H
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
-
-        initCoroutineScope()
 
         navigatorHolder.setNavigator(this, navigator)
 

@@ -29,6 +29,8 @@ import com.ivianuu.essentials.util.ext.bindDelegate
 import com.ivianuu.essentials.util.ext.d
 import com.ivianuu.essentials.util.ext.setTextFuture
 import kotlinx.android.synthetic.main.fragment_counter.*
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.suspendCancellableCoroutine
 
 interface CounterFragmentDelegate
 
@@ -56,6 +58,12 @@ class CounterFragment : BaseFragment(), CounterFragmentDelegate by CounterFragme
         super.onCreate(savedInstanceState)
         delegate.init(this)
         viewModel.setDestination(counterDestination())
+
+        launch {
+            suspendCancellableCoroutine<Unit> {
+                it.invokeOnCancellation { d { "on cancel" } }
+            }
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -69,6 +77,12 @@ class CounterFragment : BaseFragment(), CounterFragmentDelegate by CounterFragme
         screen_down.setOnClickListener { viewModel.screenDownClicked() }
         root_screen.setOnClickListener { viewModel.rootScreenClicked() }
         list_screen.setOnClickListener { viewModel.listScreenClicked() }
+
+        launchView {
+            suspendCancellableCoroutine<Unit> {
+                it.invokeOnCancellation { d { "view on cancel" } }
+            }
+        }
     }
 
     override fun invalidate() {
