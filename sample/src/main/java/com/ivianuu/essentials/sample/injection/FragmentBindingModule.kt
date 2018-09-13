@@ -17,8 +17,8 @@
 package com.ivianuu.essentials.sample.injection
 
 import com.ivianuu.essentials.injection.PerFragment
-import com.ivianuu.essentials.sample.ui.CounterFragment
-import com.ivianuu.essentials.sample.ui.ListFragment
+import com.ivianuu.essentials.sample.ui.counter.CounterFragment
+import com.ivianuu.essentials.sample.ui.list.ListFragment
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 

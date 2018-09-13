@@ -1,5 +1,6 @@
-package com.ivianuu.essentials.sample.ui
+package com.ivianuu.essentials.sample.ui.counter
 
+import com.ivianuu.essentials.sample.ui.list.ListDestination
 import com.ivianuu.essentials.ui.mvrx.MvRxState
 import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
 import com.ivianuu.traveler.Router

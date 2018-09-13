@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.sample.ui
+package com.ivianuu.essentials.sample.ui.counter
 
 import android.os.Bundle
 import android.view.View
@@ -35,7 +35,8 @@ import kotlinx.coroutines.suspendCancellableCoroutine
 
 interface CounterFragmentDelegate
 
-class CounterFragmentDelegateImpl : CounterFragmentDelegate {
+class CounterFragmentDelegateImpl :
+    CounterFragmentDelegate {
     fun init(counterFragment: CounterFragment) {
         d { "init called" }
     }

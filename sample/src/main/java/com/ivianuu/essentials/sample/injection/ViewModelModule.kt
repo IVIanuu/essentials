@@ -18,9 +18,9 @@ package com.ivianuu.essentials.sample.injection
 
 import androidx.lifecycle.ViewModel
 import com.ivianuu.essentials.injection.viewmodel.ViewModelKey
-import com.ivianuu.essentials.sample.ui.CounterViewModel
-import com.ivianuu.essentials.sample.ui.ListViewModel
 import com.ivianuu.essentials.sample.ui.MainViewModel
+import com.ivianuu.essentials.sample.ui.counter.CounterViewModel
+import com.ivianuu.essentials.sample.ui.list.ListViewModel
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
