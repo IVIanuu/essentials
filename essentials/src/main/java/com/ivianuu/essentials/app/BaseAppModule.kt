@@ -33,8 +33,8 @@ import dagger.Module
 import dagger.Provides
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import kotlinx.coroutines.experimental.android.UI
-import kotlinx.coroutines.experimental.rx2.asCoroutineDispatcher
+import kotlinx.coroutines.android.UI
+import kotlinx.coroutines.rx2.asCoroutineDispatcher
 import javax.inject.Singleton
 
 /**

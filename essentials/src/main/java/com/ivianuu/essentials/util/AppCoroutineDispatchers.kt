@@ -16,7 +16,7 @@
 
 package com.ivianuu.essentials.util
 
-import kotlinx.coroutines.experimental.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineDispatcher
 
 /**
  * Dispatchers which should be used with coroutines

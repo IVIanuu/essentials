@@ -23,13 +23,11 @@ import com.ivianuu.essentials.ui.base.BaseActivityModule
 import com.ivianuu.essentials.ui.common.BaseViewModel
 import com.ivianuu.essentials.util.ext.bindViewModel
 import com.ivianuu.essentials.util.ext.d
-import com.ivianuu.essentials.util.ext.displayMetrics
-import com.ivianuu.essentials.util.ext.realScreenHeight
-import com.ivianuu.essentials.util.ext.screenHeight
 import com.ivianuu.essentials.util.lifecycle.LiveEvent
 import com.ivianuu.essentials.util.lifecycle.mutableLiveEvent
 import dagger.Module
-import kotlinx.coroutines.experimental.delay
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class MainActivity : BaseActivity() {
@@ -42,21 +40,20 @@ class MainActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel.myEvent.consume { d { "on event" } }
-
-        d { "ext screen height -> $screenHeight, ext real screen height -> $realScreenHeight, res screen height -> ${displayMetrics.heightPixels}" }
     }
 }
 
 class MainViewModel @Inject constructor() : BaseViewModel() {
 
-    val myEvent: LiveEvent<Unit> get() = _myEvent
+    val myEvent: LiveEvent<Unit>
+        get() = _myEvent
     private val _myEvent = mutableLiveEvent<Unit>()
 
     init {
         d { "offer event" }
         _myEvent.offer(Unit)
 
-        launchWithParent {
+        launch {
             delay(3000)
             d { "offer event" }
             _myEvent.offer(Unit)

@@ -3,7 +3,6 @@ package com.ivianuu.essentials.util.lifecycle
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
-import com.ivianuu.essentials.util.ext.canceledWith
 import com.ivianuu.essentials.util.ext.correspondingEvent
 import com.ivianuu.essentials.util.ext.disposedWith
 import com.ivianuu.essentials.util.ext.observeK
@@ -17,9 +16,6 @@ import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.subscribeBy
-import kotlinx.coroutines.experimental.CoroutineScope
-import kotlinx.coroutines.experimental.android.UI
-import kotlinx.coroutines.experimental.launch
 
 /**
  * Extensions for lifecycle owner
@@ -83,8 +79,4 @@ interface LifecycleOwner2 : LifecycleOwner {
         onSuccess
     ).disposedWith(this@LifecycleOwner2, event)
 
-    fun launchUi(
-        event: Lifecycle.Event = lifecycle.correspondingEvent(),
-        block: suspend CoroutineScope.() -> Unit
-    ) = launch(context = UI, block = block).canceledWith(this, event)
 }

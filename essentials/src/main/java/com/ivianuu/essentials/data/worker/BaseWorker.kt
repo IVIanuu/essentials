@@ -8,7 +8,7 @@ import com.ivianuu.essentials.injection.Injectable
 import com.ivianuu.essentials.injection.worker.WorkerInjection
 import com.ivianuu.essentials.util.ContextAware
 import io.reactivex.disposables.CompositeDisposable
-import kotlinx.coroutines.experimental.Job
+import kotlinx.coroutines.Job
 
 /**
  * Base worker

@@ -19,7 +19,7 @@ package com.ivianuu.essentials.util.ext
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import com.ivianuu.essentials.util.lifecycle.SimpleLifecycleObserver
-import kotlinx.coroutines.experimental.Job
+import kotlinx.coroutines.Job
 
 fun Job.canceledWith(
     owner: LifecycleOwner,

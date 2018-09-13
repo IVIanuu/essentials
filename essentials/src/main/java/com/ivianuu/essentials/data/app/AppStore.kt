@@ -3,7 +3,7 @@ package com.ivianuu.essentials.data.app
 import android.content.Intent
 import android.content.pm.PackageManager
 import com.ivianuu.essentials.util.AppCoroutineDispatchers
-import kotlinx.coroutines.experimental.withContext
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 /**

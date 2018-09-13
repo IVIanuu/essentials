@@ -4,7 +4,7 @@ import android.service.notification.NotificationListenerService
 import com.ivianuu.essentials.injection.Injectable
 import dagger.android.AndroidInjection
 import io.reactivex.disposables.CompositeDisposable
-import kotlinx.coroutines.experimental.Job
+import kotlinx.coroutines.Job
 
 /**
  * Base notification listener service

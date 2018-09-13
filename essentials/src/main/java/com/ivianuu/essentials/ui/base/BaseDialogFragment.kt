@@ -37,23 +37,32 @@ import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.AndroidSupportInjection
 import dagger.android.support.HasSupportFragmentInjector
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.android.Main
 import javax.inject.Inject
+import kotlin.coroutines.CoroutineContext
 
 /**
  * Base dialog fragment
  */
 abstract class BaseDialogFragment : AppCompatDialogFragment(), BackListener,
-    HasSupportFragmentInjector, HasViewInjector, Injectable, IdentifiableScreen,
+    CoroutineScope, HasSupportFragmentInjector, HasViewInjector, Injectable, IdentifiableScreen,
     LifecycleOwner2, RouterHolder, ViewModelFactoryHolder {
 
     @Inject override lateinit var router: Router
+    @Inject override lateinit var viewModelFactory: ViewModelProvider.Factory
 
     @Inject lateinit var supportFragmentInjector: DispatchingAndroidInjector<Fragment>
     @Inject lateinit var viewInjector: DispatchingAndroidInjector<View>
 
-    @Inject override lateinit var viewModelFactory: ViewModelProvider.Factory
+    override val coroutineContext: CoroutineContext
+        get() = Dispatchers.Main + job
 
     protected open val layoutRes = -1
+
+    protected val job = Job()
 
     override fun onAttach(context: Context?) {
         AndroidSupportInjection.inject(this)

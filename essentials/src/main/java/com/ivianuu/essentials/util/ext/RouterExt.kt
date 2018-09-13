@@ -24,7 +24,8 @@ import com.ivianuu.essentials.util.RequestCodeGenerator
 import com.ivianuu.traveler.ResultListener
 import com.ivianuu.traveler.Router
 import io.reactivex.Observable
-import kotlinx.coroutines.experimental.suspendCancellableCoroutine
+import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlin.coroutines.resume
 
 fun <T> Router.results(resultCode: Int): Observable<T> = Observable.create { e ->
     @Suppress("UNCHECKED_CAST")

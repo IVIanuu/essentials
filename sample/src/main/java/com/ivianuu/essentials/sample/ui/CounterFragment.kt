@@ -25,8 +25,18 @@ import com.ivianuu.essentials.ui.base.BaseFragment
 import com.ivianuu.essentials.ui.mvrx.bindViewModel
 import com.ivianuu.essentials.ui.mvrx.withState
 import com.ivianuu.essentials.ui.traveler.detour.HorizontalDetour
+import com.ivianuu.essentials.util.ext.bindDelegate
+import com.ivianuu.essentials.util.ext.d
 import com.ivianuu.essentials.util.ext.setTextFuture
 import kotlinx.android.synthetic.main.fragment_counter.*
+
+interface CounterFragmentDelegate
+
+class CounterFragmentDelegateImpl : CounterFragmentDelegate {
+    fun init(counterFragment: CounterFragment) {
+        d { "init called" }
+    }
+}
 
 @Detour(HorizontalDetour::class)
 @Destination(CounterFragment::class)
@@ -35,14 +45,16 @@ data class CounterDestination(val screen: Int)
 /**
  * @author Manuel Wrage (IVIanuu)
  */
-class CounterFragment : BaseFragment() {
+class CounterFragment : BaseFragment(), CounterFragmentDelegate by CounterFragmentDelegateImpl() {
 
     override val layoutRes = R.layout.fragment_counter
 
+    private val delegate by bindDelegate(CounterFragmentDelegateImpl::class)
     private val viewModel by bindViewModel(CounterViewModel::class)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        delegate.init(this)
         viewModel.setDestination(counterDestination())
     }
 

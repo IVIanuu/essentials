@@ -5,7 +5,7 @@ import android.view.accessibility.AccessibilityEvent
 import com.ivianuu.essentials.injection.Injectable
 import dagger.android.AndroidInjection
 import io.reactivex.disposables.CompositeDisposable
-import kotlinx.coroutines.experimental.Job
+import kotlinx.coroutines.Job
 
 /**
  * Base accessibility service

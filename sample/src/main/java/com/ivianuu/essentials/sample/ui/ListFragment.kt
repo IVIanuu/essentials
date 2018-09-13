@@ -20,7 +20,8 @@ import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.ext.andTrue
 import com.ivianuu.essentials.util.ext.setTextFuture
 import kotlinx.android.synthetic.main.single_line_list_item.*
-import kotlinx.coroutines.experimental.delay
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -79,7 +80,7 @@ class ListViewModel @Inject constructor(
     }
 
     private fun generateNewState() {
-        launchWithParent(dispatchers.computation) {
+        launch(dispatchers.computation) {
             setState { copy(loading = true) }
             delay(1, TimeUnit.SECONDS)
             val list = generateList()

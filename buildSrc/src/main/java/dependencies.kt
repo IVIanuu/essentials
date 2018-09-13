@@ -8,19 +8,19 @@ object Versions {
     const val versionCode = 1
     const val versionName = "1.0"
 
-    const val androidGradlePlugin = "3.2.0-rc03"
+    const val androidGradlePlugin = "3.3.0-alpha10"
     const val androidx = "1.0.0-rc02"
     const val androidxArch = "2.0.0-rc01"
     const val archWork = "1.0.0-alpha08"
-    const val compass = "e637e2a698"
+    const val compass = "4a1743b796"
     const val constraintLayout = "1.1.3"
-    const val coroutines = "0.25.3"
+    const val coroutines = "0.26.0-eap13"
     const val dagger = "2.16"
     const val epoxy = "2.16.4"
     const val epoxyPrefs = "c199cb7277"
     const val fabric = "2.7.1"
     const val glide = "4.8.0"
-    const val kotlin = "1.2.61"
+    const val kotlin = "1.3-M2"
     const val legacySupport = "28.0.0-rc02"
     const val mavenGradle = "2.1"
     const val materialComponents = "1.0.0-rc01"
@@ -83,7 +83,7 @@ object Deps {
     const val glide = "com.github.bumptech.glide:glide:${Versions.glide}"
 
     const val kotlinGradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.kotlin}"
-    const val kotlinStdLib = "org.jetbrains.kotlin:kotlin-stdlib-jre7:${Versions.kotlin}"
+    const val kotlinStdLib = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${Versions.kotlin}"
 
     const val legacyAnnotations =
         "com.android.support:support-annotations:${Versions.legacySupport}"

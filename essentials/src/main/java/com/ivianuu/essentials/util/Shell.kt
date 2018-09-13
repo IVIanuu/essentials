@@ -17,7 +17,7 @@
 package com.ivianuu.essentials.util
 
 import eu.chainfire.libsuperuser.Shell
-import kotlinx.coroutines.experimental.withContext
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import javax.inject.Singleton
 

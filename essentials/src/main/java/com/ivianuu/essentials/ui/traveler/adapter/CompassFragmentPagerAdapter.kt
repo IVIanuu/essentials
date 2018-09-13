@@ -19,7 +19,7 @@ package com.ivianuu.essentials.ui.traveler.adapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
-import com.ivianuu.compass.requireFragment
+import com.ivianuu.compass.fragment
 
 /**
  * Key fragment pager adapter
@@ -29,7 +29,7 @@ open class CompassFragmentPagerAdapter(
     private val destinations: List<Any>
 ) : FragmentPagerAdapter(fm) {
 
-    override fun getItem(position: Int): Fragment = destinations[position].requireFragment()
+    override fun getItem(position: Int): Fragment = destinations[position].fragment()
 
     override fun getCount() = destinations.size
 }

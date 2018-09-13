@@ -22,6 +22,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
 import com.ivianuu.essentials.injection.Injectable
 import com.ivianuu.essentials.injection.view.HasViewInjector
@@ -29,6 +30,7 @@ import com.ivianuu.essentials.ui.common.BackListener
 import com.ivianuu.essentials.ui.mvrx.MvRxView
 import com.ivianuu.essentials.ui.traveler.RouterHolder
 import com.ivianuu.essentials.util.ViewInjectionContextWrapper
+import com.ivianuu.essentials.util.lifecycle.LifecycleCoroutineScope
 import com.ivianuu.essentials.util.lifecycle.LifecycleOwner2
 import com.ivianuu.essentials.util.screenlogger.IdentifiableScreen
 import com.ivianuu.essentials.util.viewmodel.ViewModelFactoryHolder
@@ -37,14 +39,35 @@ import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.AndroidSupportInjection
 import dagger.android.support.HasSupportFragmentInjector
+import kotlinx.coroutines.Job
 import javax.inject.Inject
+
+interface MyInterface {
+    fun hallo()
+}
+
+class MyInterfaceImpl : MyInterface {
+    override fun hallo() {
+    }
+}
+
+interface YourInterface {
+    fun bye()
+}
+
+class YourInterfaceImpl : YourInterface {
+    override fun bye() {
+    }
+}
 
 /**
  * Base fragment
  */
 abstract class BaseFragment : Fragment(), BackListener, HasSupportFragmentInjector,
-    HasViewInjector, Injectable, IdentifiableScreen, LifecycleOwner2, MvRxView, RouterHolder,
-    ViewModelFactoryHolder {
+    HasViewInjector, Injectable, IdentifiableScreen, LifecycleCoroutineScope,
+    LifecycleOwner2, MyInterface by MyInterfaceImpl(), MvRxView, RouterHolder,
+    ViewModelFactoryHolder,
+    YourInterface by YourInterfaceImpl() {
 
     @Inject override lateinit var router: Router
 
@@ -52,6 +75,12 @@ abstract class BaseFragment : Fragment(), BackListener, HasSupportFragmentInject
     @Inject lateinit var viewInjector: DispatchingAndroidInjector<View>
 
     @Inject override lateinit var viewModelFactory: ViewModelProvider.Factory
+
+    override val job = Job()
+
+    val viewCoroutineScope
+        get() = _viewCoroutineScope ?: throw IllegalArgumentException("view == null")
+    private var _viewCoroutineScope: LifecycleCoroutineScope? = null
 
     protected open val layoutRes = -1
 
@@ -73,9 +102,19 @@ abstract class BaseFragment : Fragment(), BackListener, HasSupportFragmentInject
         super.onCreateView(inflater, container, savedInstanceState)
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        _viewCoroutineScope = ViewLifecycleCoroutineScope(viewLifecycleOwner)
+    }
+
     override fun onStart() {
         super.onStart()
         postInvalidate()
+    }
+
+    override fun onDestroyView() {
+        _viewCoroutineScope = null
+        super.onDestroyView()
     }
 
     override fun invalidate() {
@@ -84,4 +123,14 @@ abstract class BaseFragment : Fragment(), BackListener, HasSupportFragmentInject
     override fun supportFragmentInjector(): AndroidInjector<Fragment> = supportFragmentInjector
 
     override fun viewInjector(): AndroidInjector<View> = viewInjector
+
+    private class ViewLifecycleCoroutineScope(
+        private val owner: LifecycleOwner
+    ) : LifecycleCoroutineScope, LifecycleOwner by owner {
+        override val job = Job()
+
+        init {
+            initCoroutineScope()
+        }
+    }
 }

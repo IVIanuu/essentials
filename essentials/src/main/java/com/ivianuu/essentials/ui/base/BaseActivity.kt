@@ -28,6 +28,7 @@ import com.ivianuu.essentials.ui.common.BackListener
 import com.ivianuu.essentials.ui.mvrx.MvRxView
 import com.ivianuu.essentials.ui.traveler.RouterHolder
 import com.ivianuu.essentials.util.ext.unsafeLazy
+import com.ivianuu.essentials.util.lifecycle.LifecycleCoroutineScope
 import com.ivianuu.essentials.util.lifecycle.LifecycleOwner2
 import com.ivianuu.essentials.util.screenlogger.IdentifiableScreen
 import com.ivianuu.essentials.util.viewmodel.ViewModelFactoryHolder
@@ -39,13 +40,15 @@ import dagger.android.AndroidInjection
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
+import kotlinx.coroutines.Job
 import javax.inject.Inject
 
 /**
  * Base activity
  */
 abstract class BaseActivity : AppCompatActivity(), HasSupportFragmentInjector, HasViewInjector,
-    Injectable, IdentifiableScreen, LifecycleOwner2, MvRxView, RouterHolder,
+    Injectable, IdentifiableScreen, LifecycleCoroutineScope, LifecycleOwner2, MvRxView,
+    RouterHolder,
     ViewModelFactoryHolder {
 
     @Inject lateinit var navigatorHolder: NavigatorHolder
@@ -56,11 +59,12 @@ abstract class BaseActivity : AppCompatActivity(), HasSupportFragmentInjector, H
 
     @Inject override lateinit var viewModelFactory: ViewModelProvider.Factory
 
-    open val startDestination: Any? = null
+    override val job = Job()
 
     protected open val layoutRes = -1
 
     open val fragmentContainer = android.R.id.content
+    open val startDestination: Any? = null
 
     protected open val navigator: Navigator by unsafeLazy {
         CompassFragmentAppNavigator(
@@ -73,6 +77,8 @@ abstract class BaseActivity : AppCompatActivity(), HasSupportFragmentInjector, H
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
+
+        initCoroutineScope()
 
         navigatorHolder.setNavigator(this, navigator)
 
