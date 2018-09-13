@@ -35,7 +35,7 @@ abstract class BaseViewModel : ViewModel(), CoroutineScope {
         get() = Dispatchers.Main + job
 
     protected val disposables = CompositeDisposable()
-    protected val job = Job()
+    private val job = Job()
 
     override fun onCleared() {
         disposables.clear()
