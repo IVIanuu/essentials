@@ -12,11 +12,11 @@ android {
         versionCode Versions.versionCode
         versionName Versions.versionName
 
-        javaCompileOptions {
+        /*javaCompileOptions {
             annotationProcessorOptions {
                 arguments = ['dagger.android.experimentalUseStringKeys': 'true']
             }
-        }
+        }*/
     }
     androidExtensions {
         experimental = true
