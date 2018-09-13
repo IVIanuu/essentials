@@ -45,11 +45,23 @@ inline val Context.configuration: Configuration
 inline val ContextAware.configuration
     get() = providedContext.configuration
 
+inline val Fragment.configuration
+    get() = requireContext().configuration
+
+inline val View.configuration
+    get() = context.configuration
+
 inline val Context.displayMetrics: DisplayMetrics
     get() = resources.displayMetrics
 
 inline val ContextAware.displayMetrics
     get() = providedContext.displayMetrics
+
+inline val Fragment.displayMetrics
+    get() = requireContext().displayMetrics
+
+inline val View.displayMetrics
+    get() = context.displayMetrics
 
 inline val Context.rotation
     get() = systemService<WindowManager>().defaultDisplay.rotation
@@ -88,10 +100,7 @@ inline val View.isLandscape
     get() = context.isLandscape
 
 inline val Context.screenWidth: Int
-    get() {
-        systemService<WindowManager>().defaultDisplay.getMetrics(_displayMetrics)
-        return _displayMetrics.widthPixels
-    }
+    get() = displayMetrics.widthPixels
 
 inline val ContextAware.screenWidth
     get() = providedContext.screenWidth
@@ -103,10 +112,7 @@ inline val View.screenWidth
     get() = context.screenWidth
 
 inline val Context.screenHeight: Int
-    get() {
-        systemService<WindowManager>().defaultDisplay.getMetrics(_displayMetrics)
-        return _displayMetrics.heightPixels
-    }
+    get() = displayMetrics.heightPixels
 
 inline val ContextAware.screenHeight
     get() = providedContext.screenHeight
