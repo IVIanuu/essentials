@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/visible_action"
+        android:icon="@drawable/ic_info_outline_white_48dp"
+        app:showAsAction="always"
+        android:title="Dummy" />
+
+    <item
+        android:id="@+id/dummy"
+        android:title="Dummy" />
+
+</menu>
