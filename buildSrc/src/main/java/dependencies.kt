@@ -15,7 +15,7 @@ object Versions {
     const val compass = "d512599f8f"
     const val constraintLayout = "1.1.3"
     const val coroutines = "0.26.0-eap13"
-    const val dagger = "2.16"
+    const val dagger = "2.17"
     const val epoxy = "2.16.4"
     const val epoxyPrefs = "c199cb7277"
     const val fabric = "2.7.1"
@@ -83,6 +83,7 @@ object Deps {
     const val glide = "com.github.bumptech.glide:glide:${Versions.glide}"
 
     const val kotlinGradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.kotlin}"
+    const val kotlinReflect = "org.jetbrains.kotlin:kotlin-reflect:${Versions.kotlin}"
     const val kotlinStdLib = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${Versions.kotlin}"
 
     const val legacyAnnotations =

@@ -13,4 +13,7 @@ abstract class WorkerInjectionModule {
 
     @Multibinds
     abstract fun workerInjectorFactories(): Map<Class<out Worker>, AndroidInjector.Factory<out Worker>>
+
+    @Multibinds
+    abstract fun workerInjectorFactoriesWithStringKeys(): Map<String, AndroidInjector.Factory<out Worker>>
 }
