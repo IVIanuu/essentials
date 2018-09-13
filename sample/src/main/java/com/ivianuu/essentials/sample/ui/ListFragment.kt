@@ -16,7 +16,7 @@ import com.ivianuu.essentials.ui.mvrx.bindViewModel
 import com.ivianuu.essentials.ui.mvrx.simpleEpoxyController
 import com.ivianuu.essentials.ui.simple.SimpleFragment
 import com.ivianuu.essentials.ui.traveler.detour.FadeDetour
-import com.ivianuu.essentials.util.AppCoroutineDispatchers
+import com.ivianuu.essentials.util.coroutines.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.ext.andTrue
 import com.ivianuu.essentials.util.ext.setTextFuture
 import kotlinx.android.synthetic.main.single_line_list_item.*

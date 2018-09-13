@@ -6,15 +6,23 @@ import android.os.IBinder
 import com.ivianuu.essentials.injection.Injectable
 import dagger.android.AndroidInjection
 import io.reactivex.disposables.CompositeDisposable
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.android.Main
+import kotlin.coroutines.CoroutineContext
 
 /**
  * Base service
  */
-abstract class BaseService : Service(), Injectable {
+abstract class BaseService : Service(), CoroutineScope, Injectable {
+
+    override val coroutineContext: CoroutineContext
+        get() = Dispatchers.Main + job
 
     protected val disposables = CompositeDisposable()
-    protected val job = Job()
+
+    private val job = Job()
 
     override fun onCreate() {
         if (shouldInject) {

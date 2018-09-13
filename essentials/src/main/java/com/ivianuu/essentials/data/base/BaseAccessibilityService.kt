@@ -5,15 +5,23 @@ import android.view.accessibility.AccessibilityEvent
 import com.ivianuu.essentials.injection.Injectable
 import dagger.android.AndroidInjection
 import io.reactivex.disposables.CompositeDisposable
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.android.Main
+import kotlin.coroutines.CoroutineContext
 
 /**
  * Base accessibility service
  */
-abstract class BaseAccessibilityService : AccessibilityService(), Injectable {
+abstract class BaseAccessibilityService : AccessibilityService(), CoroutineScope, Injectable {
 
-    protected val disposables = CompositeDisposable()
-    protected val job = Job()
+    override val coroutineContext: CoroutineContext
+        get() = Dispatchers.Main + job
+
+    val disposables = CompositeDisposable()
+
+    private val job = Job()
 
     override fun onCreate() {
         if (shouldInject) {

@@ -4,22 +4,30 @@ import android.annotation.TargetApi
 import android.os.Build
 import android.service.quicksettings.TileService
 import com.ivianuu.essentials.injection.Injectable
+import com.ivianuu.essentials.util.coroutines.CancellableCoroutineScope
 import dagger.android.AndroidInjection
 import io.reactivex.disposables.CompositeDisposable
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.android.Main
+import kotlin.coroutines.CoroutineContext
 
 /**
  * Base tile service
  */
 @TargetApi(Build.VERSION_CODES.N)
-abstract class BaseTileService : TileService(), Injectable {
+abstract class BaseTileService : TileService(), CoroutineScope, Injectable {
+
+    override val coroutineContext: CoroutineContext
+        get() = Dispatchers.Main + job
 
     protected val disposables = CompositeDisposable()
-    protected val job = Job()
+
+    private val job = Job()
 
     protected val listeningDisposables = CompositeDisposable()
-    protected var listeningJob = Job()
-        private set
+    protected var listeningCoroutineScope = CancellableCoroutineScope()
 
     override fun onCreate() {
         if (shouldInject) {
@@ -36,14 +44,12 @@ abstract class BaseTileService : TileService(), Injectable {
 
     override fun onStartListening() {
         super.onStartListening()
-        if (listeningJob.isCompleted) {
-            listeningJob = Job()
-        }
+        listeningCoroutineScope = CancellableCoroutineScope()
     }
 
     override fun onStopListening() {
         listeningDisposables.clear()
-        listeningJob.cancel()
+        listeningCoroutineScope.cancel()
         super.onStopListening()
     }
 }

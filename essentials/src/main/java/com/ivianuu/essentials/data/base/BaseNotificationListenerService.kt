@@ -2,20 +2,31 @@ package com.ivianuu.essentials.data.base
 
 import android.service.notification.NotificationListenerService
 import com.ivianuu.essentials.injection.Injectable
+import com.ivianuu.essentials.util.coroutines.CancellableCoroutineScope
 import dagger.android.AndroidInjection
 import io.reactivex.disposables.CompositeDisposable
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.android.Main
+import kotlin.coroutines.CoroutineContext
 
 /**
  * Base notification listener service
  */
-abstract class BaseNotificationListenerService : NotificationListenerService(), Injectable {
+abstract class BaseNotificationListenerService : NotificationListenerService(), CoroutineScope,
+    Injectable {
+
+    override val coroutineContext: CoroutineContext
+        get() = Dispatchers.Main + job
 
     protected val disposables = CompositeDisposable()
-    protected val job = Job()
+
+    private val job = Job()
 
     protected val connectedDisposables = CompositeDisposable()
-    protected var connectedJob = Job()
+
+    protected var connectedCoroutineScope = CancellableCoroutineScope()
         private set
 
     override fun onCreate() {
@@ -33,14 +44,12 @@ abstract class BaseNotificationListenerService : NotificationListenerService(), 
 
     override fun onListenerConnected() {
         super.onListenerConnected()
-        if (connectedJob.isCompleted) {
-            connectedJob = Job()
-        }
+        connectedCoroutineScope = CancellableCoroutineScope()
     }
 
     override fun onListenerDisconnected() {
         connectedDisposables.clear()
-        connectedJob.cancel()
+        connectedCoroutineScope.cancel()
         super.onListenerDisconnected()
     }
 }

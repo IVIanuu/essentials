@@ -24,8 +24,8 @@ import android.content.res.Resources
 import android.preference.PreferenceManager
 import androidx.work.WorkManager
 import com.f2prateek.rx.preferences2.RxSharedPreferences
-import com.ivianuu.essentials.util.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.ContextAware
+import com.ivianuu.essentials.util.coroutines.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.rx.AppRxSchedulers
 import com.ivianuu.rxsystemsettings.RxSystemSettings
 import dagger.Binds
@@ -65,11 +65,12 @@ abstract class BaseAppModule<T : BaseApp> {
         @JvmStatic
         @Singleton
         @Provides
-        fun provideCoroutineDispatchers(schedulers: AppRxSchedulers) = AppCoroutineDispatchers(
-            io = schedulers.io.asCoroutineDispatcher(),
-            computation = schedulers.computation.asCoroutineDispatcher(),
-            main = UI
-        )
+        fun provideCoroutineDispatchers(schedulers: AppRxSchedulers) =
+            AppCoroutineDispatchers(
+                io = schedulers.io.asCoroutineDispatcher(),
+                computation = schedulers.computation.asCoroutineDispatcher(),
+                main = UI
+            )
 
         @JvmStatic
         @Singleton

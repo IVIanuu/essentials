@@ -8,18 +8,23 @@ import com.ivianuu.essentials.injection.Injectable
 import com.ivianuu.essentials.injection.worker.WorkerInjection
 import com.ivianuu.essentials.util.ContextAware
 import io.reactivex.disposables.CompositeDisposable
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
+import kotlin.coroutines.CoroutineContext
 
 /**
  * Base worker
  */
-abstract class BaseWorker : Worker(), ContextAware, Injectable {
+abstract class BaseWorker : Worker(), ContextAware, CoroutineScope, Injectable {
+
+    override val coroutineContext: CoroutineContext
+        get() = job
 
     override val providedContext: Context
         get() = applicationContext
 
     protected val disposables = CompositeDisposable()
-    protected val job = Job()
+    private val job = Job()
 
     @SuppressLint("RestrictedApi")
     override fun onStartWork(callback: WorkFinishedCallback) {

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.util
+package com.ivianuu.essentials.util.coroutines
 
 import kotlinx.coroutines.CoroutineDispatcher
 

@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.util
 
+import com.ivianuu.essentials.util.coroutines.AppCoroutineDispatchers
 import eu.chainfire.libsuperuser.Shell
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
