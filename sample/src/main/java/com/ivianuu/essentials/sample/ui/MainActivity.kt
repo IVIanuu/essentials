@@ -20,7 +20,8 @@ package com.ivianuu.essentials.sample.ui
 import android.os.Bundle
 import com.ivianuu.essentials.ui.base.BaseActivity
 import com.ivianuu.essentials.ui.base.BaseActivityModule
-import com.ivianuu.essentials.ui.common.BaseViewModel
+import com.ivianuu.essentials.ui.mvrx.MvRxState
+import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
 import com.ivianuu.essentials.util.ext.bindViewModel
 import com.ivianuu.essentials.util.ext.d
 import com.ivianuu.essentials.util.lifecycle.LiveEvent
@@ -43,7 +44,9 @@ class MainActivity : BaseActivity() {
     }
 }
 
-class MainViewModel @Inject constructor() : BaseViewModel() {
+class MainViewModel @Inject constructor() : MvRxViewModel<MainState>(
+    MainState
+) {
 
     val myEvent: LiveEvent<Unit>
         get() = _myEvent
@@ -63,6 +66,8 @@ class MainViewModel @Inject constructor() : BaseViewModel() {
         }
     }
 }
+
+object MainState : MvRxState
 
 @Module
 abstract class MainActivityModule : BaseActivityModule<MainActivity>()

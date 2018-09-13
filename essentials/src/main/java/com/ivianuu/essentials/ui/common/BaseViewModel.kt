@@ -17,29 +17,23 @@
 package com.ivianuu.essentials.ui.common
 
 import androidx.lifecycle.ViewModel
+import com.ivianuu.essentials.util.coroutines.CancellableCoroutineScope
+import com.ivianuu.essentials.util.coroutines.cancel
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.addTo
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.android.Main
-import kotlin.coroutines.CoroutineContext
 
 /**
  * A [ViewModel] which auto disposes itself
  */
-abstract class BaseViewModel : ViewModel(), CoroutineScope {
-
-    override val coroutineContext: CoroutineContext
-        get() = Dispatchers.Main + job
+abstract class BaseViewModel : ViewModel(), CoroutineScope by CancellableCoroutineScope() {
 
     protected val disposables = CompositeDisposable()
-    private val job = Job()
 
     override fun onCleared() {
         disposables.clear()
-        job.cancel()
+        cancel()
         super.onCleared()
     }
 
