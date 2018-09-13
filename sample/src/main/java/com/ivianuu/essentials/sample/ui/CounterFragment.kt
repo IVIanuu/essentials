@@ -25,6 +25,7 @@ import com.ivianuu.essentials.ui.base.BaseFragment
 import com.ivianuu.essentials.ui.mvrx.bindViewModel
 import com.ivianuu.essentials.ui.mvrx.withState
 import com.ivianuu.essentials.ui.traveler.detour.HorizontalDetour
+import com.ivianuu.essentials.util.ext.applyIf
 import com.ivianuu.essentials.util.ext.bindDelegate
 import com.ivianuu.essentials.util.ext.d
 import com.ivianuu.essentials.util.ext.setTextFuture
@@ -55,6 +56,7 @@ class CounterFragment : BaseFragment(), CounterFragmentDelegate by CounterFragme
     private val viewModel by bindViewModel(CounterViewModel::class)
 
     init {
+        applyIf(true) { }
         delegate.init(this)
     }
 
