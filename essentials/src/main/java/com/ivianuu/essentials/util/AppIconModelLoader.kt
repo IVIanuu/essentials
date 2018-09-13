@@ -1,8 +1,7 @@
 package com.ivianuu.essentials.util
 
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
-import androidx.core.graphics.drawable.toBitmap
+import android.graphics.drawable.Drawable
 import com.bumptech.glide.Priority
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.Options
@@ -11,26 +10,35 @@ import com.bumptech.glide.load.model.ModelLoader
 import com.bumptech.glide.load.model.ModelLoaderFactory
 import com.bumptech.glide.load.model.MultiModelLoaderFactory
 import com.bumptech.glide.signature.ObjectKey
+import com.ivianuu.essentials.util.coroutines.AppCoroutineDispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import javax.inject.Inject
+import javax.inject.Provider
 
 data class AppIcon(val packageName: String)
 
 /**
  * Fetches images for [AppIcon]'s
  */
-class AppIconFetcher(
-        private val packageManager: PackageManager,
-        private val app: AppIcon,
-        private val width: Int,
-        private val height: Int
-) : DataFetcher<Bitmap> {
+class AppIconFetcher @Inject constructor(
+    private val dispatchers: AppCoroutineDispatchers,
+    private val packageManager: PackageManager
+) : DataFetcher<Drawable> {
 
-    override fun loadData(priority: Priority, callback: DataFetcher.DataCallback<in Bitmap>) {
-        val drawable = packageManager.getApplicationIcon(app.packageName)
-        if (drawable != null) {
-            callback.onDataReady(drawable.toBitmap(width, height))
-        } else {
-            callback.onLoadFailed(Exception())
+    lateinit var app: AppIcon
+
+    private lateinit var job: Job
+
+    override fun loadData(priority: Priority, callback: DataFetcher.DataCallback<in Drawable>) {
+        job = GlobalScope.launch(dispatchers.io) {
+            val drawable = packageManager.getApplicationIcon(app.packageName)
+            if (drawable != null) {
+                callback.onDataReady(drawable)
+            } else {
+                callback.onLoadFailed(Exception())
+            }
         }
     }
 
@@ -38,9 +46,10 @@ class AppIconFetcher(
     }
 
     override fun cancel() {
+        job.cancel()
     }
 
-    override fun getDataClass() = Bitmap::class.java
+    override fun getDataClass() = Drawable::class.java
 
     override fun getDataSource() = DataSource.LOCAL
 }
@@ -48,28 +57,30 @@ class AppIconFetcher(
 /**
  * Model loader to load [AppIcon]'s
  */
-class AppIconModelLoader(private val packageManager: PackageManager) : ModelLoader<AppIcon, Bitmap> {
+class AppIconModelLoader @Inject constructor(
+    private val appIconFetcherProvider: Provider<AppIconFetcher>
+) : ModelLoader<AppIcon, Drawable> {
 
     override fun buildLoadData(
-            model: AppIcon,
-            width: Int,
-            height: Int,
-            options: Options
-    ): ModelLoader.LoadData<Bitmap> {
-        return ModelLoader.LoadData<Bitmap>(
-                ObjectKey(model),
-                AppIconFetcher(packageManager, model, width, height)
+        model: AppIcon,
+        width: Int,
+        height: Int,
+        options: Options
+    ): ModelLoader.LoadData<Drawable> {
+        return ModelLoader.LoadData<Drawable>(
+            ObjectKey(model),
+            appIconFetcherProvider.get().apply { app = model }
         )
     }
 
     override fun handles(model: AppIcon) = true
 
     class Factory @Inject constructor(
-            private val packageManager: PackageManager
-    ) : ModelLoaderFactory<AppIcon, Bitmap> {
+        private val appIconModelLoaderProvider: Provider<AppIconModelLoader>
+    ) : ModelLoaderFactory<AppIcon, Drawable> {
 
-        override fun build(multiFactory: MultiModelLoaderFactory) =
-                AppIconModelLoader(packageManager)
+        override fun build(multiFactory: MultiModelLoaderFactory): AppIconModelLoader =
+            appIconModelLoaderProvider.get()
 
         override fun teardown() {
         }

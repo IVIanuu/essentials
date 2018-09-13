@@ -17,7 +17,7 @@
 package com.ivianuu.essentials.app
 
 import android.content.pm.ApplicationInfo
-import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
 import android.os.Looper
 import android.view.View
 import androidx.work.Worker
@@ -75,7 +75,7 @@ abstract class BaseApp : DaggerApplication(), HasViewInjector, HasWorkerInjector
 
         if (initGlide) {
             Glide.get(this).registry
-                .append(AppIcon::class.java, Bitmap::class.java, appIconModelLoaderFactory)
+                .append(AppIcon::class.java, Drawable::class.java, appIconModelLoaderFactory)
         }
 
         if (initRxJava) {
