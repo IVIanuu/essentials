@@ -1,5 +1,6 @@
 package com.ivianuu.essentials.util.coroutines
 
+import com.ivianuu.essentials.util.ext.delegate
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -11,12 +12,10 @@ import kotlin.coroutines.CoroutineContext
  */
 interface CancellableCoroutineScope : CoroutineScope {
     fun cancel()
-
-    companion object {
-        operator fun invoke(): CancellableCoroutineScope =
-            CancellableCoroutineScopeImpl()
-    }
 }
+
+@Suppress("FunctionName")
+fun CancellableCoroutineScope(): CancellableCoroutineScope = CancellableCoroutineScopeImpl()
 
 private class CancellableCoroutineScopeImpl : CancellableCoroutineScope {
     override val coroutineContext: CoroutineContext
@@ -27,4 +26,8 @@ private class CancellableCoroutineScopeImpl : CancellableCoroutineScope {
     override fun cancel() {
         job.cancel()
     }
+}
+
+fun CoroutineScope.cancel() {
+    delegate<CancellableCoroutineScopeImpl>().cancel()
 }
