@@ -15,7 +15,7 @@ object Versions {
     const val compass = "d512599f8f"
     const val constraintLayout = "1.1.3"
     const val coroutines = "0.26.0-eap13"
-    const val dagger = "2.17"
+    const val dagger = "2.16"
     const val epoxy = "2.16.4"
     const val epoxyPrefs = "c199cb7277"
     const val fabric = "2.7.1"
