@@ -19,19 +19,19 @@ package com.ivianuu.essentials.ui.epoxy
 import android.content.Context
 import android.view.View
 import com.airbnb.epoxy.EpoxyHolder
+import com.ivianuu.epoxyktx.KtEpoxyHolder
 import com.ivianuu.essentials.util.ContextAware
 import kotlinx.android.extensions.LayoutContainer
 
 /**
  * Base epoxy holder
  */
-open class BaseEpoxyHolder : EpoxyHolder(), LayoutContainer, ContextAware {
+open class BaseEpoxyHolder : KtEpoxyHolder(), ContextAware {
 
-    override lateinit var containerView: View
     override lateinit var providedContext: Context
 
     override fun bindView(itemView: View) {
-        containerView = itemView
+        super.bindView(itemView)
         providedContext = itemView.context
     }
 

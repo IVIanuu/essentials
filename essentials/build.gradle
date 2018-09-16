@@ -69,6 +69,7 @@ dependencies {
     api Deps.daggerAndroidSupport
 
     api Deps.epoxy
+    api Deps.epoxyKtx
     api Deps.epoxyPrefs
 
     kapt project(':essentials-compiler')

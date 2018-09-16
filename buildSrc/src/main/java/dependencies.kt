@@ -18,6 +18,7 @@ object Versions {
     const val coroutines = "0.26.0-eap13"
     const val dagger = "2.16"
     const val epoxy = "2.16.4"
+    const val epoxyKtx = "ebd6f05946"
     const val epoxyPrefs = "c199cb7277"
     const val fabric = "2.7.1"
     const val glide = "4.8.0"
@@ -44,7 +45,6 @@ object Versions {
     const val toasty = "1.3.0"
     const val traveler = "a46a5e6204"
 }
-
 
 object Deps {
     const val androidGradlePlugin = "com.android.tools.build:gradle:${Versions.androidGradlePlugin}"
@@ -82,6 +82,7 @@ object Deps {
 
     const val epoxy = "com.airbnb.android:epoxy:${Versions.epoxy}"
     const val epoxyProcessor = "com.airbnb.android:epoxy-processor:${Versions.epoxy}"
+    const val epoxyKtx = "com.github.IVIanuu:epoxy-ktx:${Versions.epoxyKtx}"
     const val epoxyPrefs = "com.github.IVIanuu:epoxy-prefs:${Versions.epoxyPrefs}"
 
     const val fabric = "com.crashlytics.sdk.android:crashlytics:${Versions.fabric}@aar"

@@ -2,7 +2,7 @@ package com.ivianuu.essentials.ui.mvrx
 
 import androidx.fragment.app.Fragment
 import com.airbnb.epoxy.EpoxyController
-import com.ivianuu.essentials.util.ext.epoxyController
+import com.ivianuu.epoxyktx.epoxyController
 
 fun <A : MvRxViewModel<B>, B : MvRxState> Any.simpleEpoxyController(
     viewModel1: A,
