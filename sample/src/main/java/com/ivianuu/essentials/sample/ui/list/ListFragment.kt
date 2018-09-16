@@ -3,6 +3,7 @@ package com.ivianuu.essentials.sample.ui.list
 import android.view.MenuItem
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
+import com.ivianuu.androidktx.appcompat.widget.textFuture
 import com.ivianuu.compass.Destination
 import com.ivianuu.compass.Detour
 import com.ivianuu.essentials.sample.R
@@ -15,7 +16,6 @@ import com.ivianuu.essentials.ui.mvrx.simpleEpoxyController
 import com.ivianuu.essentials.ui.simple.SimpleFragment
 import com.ivianuu.essentials.ui.traveler.detour.FadeDetour
 import com.ivianuu.essentials.util.ext.andTrue
-import com.ivianuu.essentials.util.ext.setTextFuture
 import kotlinx.android.synthetic.main.single_line_list_item.*
 
 @Detour(FadeDetour::class)
@@ -67,7 +67,7 @@ abstract class SingleLineListItemModel : SimpleEpoxyModel() {
 
     override fun bind(holder: BaseEpoxyHolder) {
         super.bind(holder)
-        holder.title.setTextFuture(title)
+        holder.title.textFuture = title
     }
 
 }

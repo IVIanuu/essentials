@@ -1,7 +1,7 @@
 package com.ivianuu.essentials.ui.mvrx
 
-import com.ivianuu.essentials.util.ext.behaviorSubject
 import com.ivianuu.essentials.util.ext.requireValue
+import com.ivianuu.rxjavaktx.BehaviorSubject
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -17,9 +17,9 @@ internal class MvRxStateStore<S : MvRxState> : Disposable {
 
     private val disposables = CompositeDisposable()
 
-    private val subject = behaviorSubject<S>()
+    private val subject = BehaviorSubject<S>()
 
-    private val flushQueueSubject = behaviorSubject<Unit>()
+    private val flushQueueSubject = BehaviorSubject<Unit>()
 
     private val jobs = Jobs<S>()
 
@@ -96,12 +96,12 @@ internal class MvRxStateStore<S : MvRxState> : Disposable {
 
         @Synchronized
         fun enqueueGetStateBlock(block: (state: S) -> Unit) {
-            getStateQueue.push(block)
+            getStateQueue.add(block)
         }
 
         @Synchronized
         fun enqueueSetStateBlock(block: S.() -> S) {
-            setStateQueue.push(block)
+            setStateQueue.add(block)
         }
 
         @Synchronized

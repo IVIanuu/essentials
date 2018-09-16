@@ -3,12 +3,11 @@ package com.ivianuu.essentials.ui.mvrx
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
-import com.ivianuu.essentials.util.ext.defaultViewModelFactory
-import com.ivianuu.essentials.util.ext.defaultViewModelKey
-import com.ivianuu.essentials.util.ext.requireParentFragment
-import com.ivianuu.essentials.util.ext.requireTargetFragment
-import com.ivianuu.essentials.util.ext.viewModelProvider
-import com.ivianuu.essentials.util.lifecycle.lifecycleAwareLazy
+import com.ivianuu.androidktx.fragment.app.requireParentFragment
+import com.ivianuu.androidktx.fragment.app.requireTargetFragment
+import com.ivianuu.androidktx.lifecycle.defaultViewModelKey
+import com.ivianuu.androidktx.lifecycle.viewModelProvider
+import com.ivianuu.essentials.util.viewmodel.ViewModelFactoryHolder
 import kotlin.reflect.KClass
 
 inline fun <T : MvRxView, reified VM : MvRxViewModel<S>, reified S : MvRxState> T.viewModel(
@@ -74,3 +73,10 @@ inline fun <T, reified VM : MvRxViewModel<S>, reified S : MvRxState> T.bindTarge
 @PublishedApi
 internal inline fun <reified VM : MvRxViewModel<S>, reified S> VM.setupViewModel(view: MvRxView) =
     apply { subscribe(view) { view.postInvalidate() } }
+
+@PublishedApi
+internal fun Any.defaultViewModelFactory() = if (this is ViewModelFactoryHolder) {
+    viewModelFactory
+} else {
+    ViewModelProvider.NewInstanceFactory()
+}

@@ -21,13 +21,13 @@ import com.ivianuu.essentials.ui.common.ActivityResultDestination
 import com.ivianuu.essentials.ui.common.PermissionDestination
 import com.ivianuu.essentials.ui.traveler.destination.ResultDestination
 import com.ivianuu.essentials.util.RequestCodeGenerator
+import com.ivianuu.rxjavaktx.observable
 import com.ivianuu.traveler.ResultListener
 import com.ivianuu.traveler.Router
-import io.reactivex.Observable
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
 
-fun <T> Router.results(resultCode: Int): Observable<T> = Observable.create { e ->
+fun <T> Router.results(resultCode: Int) = observable<T> { e ->
     @Suppress("UNCHECKED_CAST")
     val listener = object : ResultListener {
         override fun onResult(result: Any) {

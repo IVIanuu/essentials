@@ -9,6 +9,8 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.view.View
 import androidx.fragment.app.Fragment
+import com.ivianuu.androidktx.core.content.color
+import com.ivianuu.androidktx.core.content.colorAttr
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.util.ContextAware
 

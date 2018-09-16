@@ -3,6 +3,7 @@ package com.ivianuu.essentials.ui.common
 import android.app.Dialog
 import android.os.Bundle
 import com.afollestad.materialdialogs.MaterialDialog
+import com.ivianuu.androidktx.fragment.app.string
 import com.ivianuu.compass.Destination
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.data.app.AppInfo
@@ -10,7 +11,6 @@ import com.ivianuu.essentials.data.app.AppStore
 import com.ivianuu.essentials.ui.base.BaseDialogFragment
 import com.ivianuu.essentials.ui.traveler.destination.ResultDestination
 import com.ivianuu.essentials.util.RequestCodeGenerator
-import com.ivianuu.essentials.util.ext.string
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 

@@ -1,1 +1,1 @@
-include ':sample', ':essentials', ':essentials-compiler'
+include ':sample', ':essentials', ':essentials-compiler', ':ktuples', ':koptional'

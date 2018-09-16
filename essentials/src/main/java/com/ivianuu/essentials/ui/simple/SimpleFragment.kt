@@ -12,15 +12,20 @@ import com.airbnb.epoxy.DiffResult
 import com.airbnb.epoxy.EpoxyController
 import com.airbnb.epoxy.EpoxyRecyclerView
 import com.google.android.material.appbar.AppBarLayout
+import com.ivianuu.androidktx.appcompat.widget.menuIconColor
+import com.ivianuu.androidktx.appcompat.widget.navigationIconColor
+import com.ivianuu.androidktx.appcompat.widget.navigationIconResource
+import com.ivianuu.androidktx.appcompat.widget.overflowIconColor
+import com.ivianuu.androidktx.appcompat.widget.subtitleTextColor
+import com.ivianuu.androidktx.appcompat.widget.titleResource
+import com.ivianuu.androidktx.appcompat.widget.titleTextColor
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.base.BaseFragment
 import com.ivianuu.essentials.util.ext.iconColor
 import com.ivianuu.essentials.util.ext.isLight
-import com.ivianuu.essentials.util.ext.items
 import com.ivianuu.essentials.util.ext.primaryColor
 import com.ivianuu.essentials.util.ext.primaryTextColor
 import com.ivianuu.essentials.util.ext.secondaryTextColor
-import com.ivianuu.essentials.util.ext.tint
 import com.ivianuu.essentials.util.ext.unsafeLazy
 
 /**
@@ -90,7 +95,7 @@ abstract class SimpleFragment : BaseFragment() {
         optionalToolbar?.run {
             when {
                 toolbarTitle != null -> title = toolbarTitle
-                toolbarTitleRes != 0 -> setTitle(toolbarTitleRes)
+                toolbarTitleRes != 0 -> titleResource = toolbarTitleRes
             }
 
             if (toolbarMenuRes != 0) {
@@ -99,7 +104,7 @@ abstract class SimpleFragment : BaseFragment() {
             }
 
             if (toolbarBackButton) {
-                setNavigationIcon(R.drawable.abc_ic_ab_back_material)
+                navigationIconResource = R.drawable.abc_ic_ab_back_material
                 setNavigationOnClickListener { router.exit() }
             }
 
@@ -107,12 +112,11 @@ abstract class SimpleFragment : BaseFragment() {
             val subTitleColor = secondaryTextColor(!lightToolbar)
             val iconColor = iconColor(!lightToolbar)
 
-            setTitleTextColor(titleColor)
-            setSubtitleTextColor(subTitleColor)
-            navigationIcon?.tint(iconColor)
-            overflowIcon?.tint(iconColor)
-            menu.items
-                .forEach { it.icon?.tint(iconColor) }
+            titleTextColor = titleColor
+            subtitleTextColor = subTitleColor
+            navigationIconColor = iconColor
+            overflowIconColor = iconColor
+            menuIconColor = iconColor
         }
 
         optionalRecyclerView?.run {

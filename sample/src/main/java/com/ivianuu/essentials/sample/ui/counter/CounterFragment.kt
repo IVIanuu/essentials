@@ -16,8 +16,10 @@
 
 package com.ivianuu.essentials.sample.ui.counter
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.View
+import com.ivianuu.androidktx.appcompat.widget.textFuture
 import com.ivianuu.compass.Destination
 import com.ivianuu.compass.Detour
 import com.ivianuu.essentials.sample.R
@@ -25,10 +27,8 @@ import com.ivianuu.essentials.ui.base.BaseFragment
 import com.ivianuu.essentials.ui.mvrx.bindViewModel
 import com.ivianuu.essentials.ui.mvrx.withState
 import com.ivianuu.essentials.ui.traveler.detour.HorizontalDetour
-import com.ivianuu.essentials.util.ext.applyIf
 import com.ivianuu.essentials.util.ext.bindDelegate
-import com.ivianuu.essentials.util.ext.d
-import com.ivianuu.essentials.util.ext.setTextFuture
+import com.ivianuu.timberktx.d
 import kotlinx.android.synthetic.main.fragment_counter.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
@@ -57,7 +57,6 @@ class CounterFragment : BaseFragment(), CounterFragmentDelegate by CounterFragme
     private val viewModel by bindViewModel(CounterViewModel::class)
 
     init {
-        applyIf(true) { }
         delegate.init(this)
     }
 
@@ -74,6 +73,8 @@ class CounterFragment : BaseFragment(), CounterFragmentDelegate by CounterFragme
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        increase.setBackgroundColor(Color.BLACK)
 
         increase.setOnClickListener { viewModel.increaseClicked() }
         decrease.setOnClickListener { viewModel.decreaseClicked() }
@@ -92,6 +93,6 @@ class CounterFragment : BaseFragment(), CounterFragmentDelegate by CounterFragme
     }
 
     override fun invalidate() {
-        withState(viewModel) { count.setTextFuture("Screen: ${it.screen}, Count: ${it.count}") }
+        withState(viewModel) { count.textFuture = "Screen: ${it.screen}, Count: ${it.count}" }
     }
 }

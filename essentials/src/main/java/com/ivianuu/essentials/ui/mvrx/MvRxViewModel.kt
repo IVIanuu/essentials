@@ -2,10 +2,9 @@ package com.ivianuu.essentials.ui.mvrx
 
 import androidx.lifecycle.LifecycleOwner
 import com.ivianuu.essentials.ui.common.BaseViewModel
-import com.ivianuu.essentials.util.ext.d
-import com.ivianuu.essentials.util.lifecycle.LifecycleAwareObserver
-import com.ivianuu.essentials.util.tuples.Quartet
-import com.ivianuu.essentials.util.tuples.Quintet
+import com.ivianuu.ktuples.Quadruple
+import com.ivianuu.ktuples.Quintuple
+import com.ivianuu.timberktx.d
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -144,7 +143,14 @@ abstract class MvRxViewModel<S : MvRxState>(initialState: S? = null) : BaseViewM
         prop4: KProperty1<S, D>,
         subscriber: (A, B, C, D) -> Unit
     ) = stateStore.observable
-        .map { Quartet(prop1.get(it), prop2.get(it), prop3.get(it), prop4.get(it)) }
+        .map {
+            Quadruple(
+                prop1.get(it),
+                prop2.get(it),
+                prop3.get(it),
+                prop4.get(it)
+            )
+        }
         .distinctUntilChanged()
         .subscribeLifecycle(owner) { (a, b, c, d) -> subscriber(a, b, c, d) }
 
@@ -176,7 +182,15 @@ abstract class MvRxViewModel<S : MvRxState>(initialState: S? = null) : BaseViewM
         prop5: KProperty1<S, E>,
         subscriber: (A, B, C, D, E) -> Unit
     ) = stateStore.observable
-        .map { Quintet(prop1.get(it), prop2.get(it), prop3.get(it), prop4.get(it), prop5.get(it)) }
+        .map {
+            Quintuple(
+                prop1.get(it),
+                prop2.get(it),
+                prop3.get(it),
+                prop4.get(it),
+                prop5.get(it)
+            )
+        }
         .distinctUntilChanged()
         .subscribeLifecycle(owner) { (a, b, c, d, e) -> subscriber(a, b, c, d, e) }
 

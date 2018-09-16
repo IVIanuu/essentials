@@ -18,15 +18,15 @@
 package com.ivianuu.essentials.sample.ui
 
 import android.os.Bundle
+import com.ivianuu.androidktx.lifecycle.bindViewModel
 import com.ivianuu.essentials.sample.ui.counter.CounterDestination
 import com.ivianuu.essentials.ui.base.BaseActivity
 import com.ivianuu.essentials.ui.base.BaseActivityModule
 import com.ivianuu.essentials.ui.mvrx.MvRxState
 import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
-import com.ivianuu.essentials.util.ext.bindViewModel
-import com.ivianuu.essentials.util.ext.d
-import com.ivianuu.essentials.util.lifecycle.LiveEvent
-import com.ivianuu.essentials.util.lifecycle.mutableLiveEvent
+import com.ivianuu.essentials.util.ext.MutableLiveEvent
+import com.ivianuu.liveevent.LiveEvent
+import com.ivianuu.timberktx.d
 import dagger.Module
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -41,17 +41,16 @@ class MainActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         viewModel.myEvent.consume { d { "on event" } }
     }
 }
 
-class MainViewModel @Inject constructor() : MvRxViewModel<MainState>(
-    MainState
-) {
+class MainViewModel @Inject constructor() : MvRxViewModel<MainState>(MainState) {
 
     val myEvent: LiveEvent<Unit>
         get() = _myEvent
-    private val _myEvent = mutableLiveEvent<Unit>()
+    private val _myEvent = MutableLiveEvent<Unit>()
 
     init {
         d { "offer event" }

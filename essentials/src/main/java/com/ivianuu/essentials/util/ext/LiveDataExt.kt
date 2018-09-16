@@ -18,7 +18,6 @@
 
 package com.ivianuu.essentials.util.ext
 
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
@@ -32,16 +31,10 @@ import io.reactivex.rxkotlin.subscribeBy
 import java.util.concurrent.atomic.AtomicReference
 
 // todo replace with overload constructor once available
-inline fun <T> mutableLiveData(initialValue: T? = null) =
+inline fun <T> MutableLiveData(initialValue: T? = null) =
     MutableLiveData<T>().apply {
         if (initialValue != null) value = initialValue
     }
-
-fun <T> LiveData<T>.observeK(owner: LifecycleOwner, onChanged: (T) -> Unit) {
-    observe(owner, Observer<T> { it?.let(onChanged) })
-}
-
-inline fun <T> LiveData<T>.requireValue() = value ?: throw IllegalStateException("value is null")
 
 inline fun <T : Any> LiveData<T>.toFlowable(strategy: BackpressureStrategy = BackpressureStrategy.LATEST): Flowable<T> =
     toObservable().toFlowable(strategy)

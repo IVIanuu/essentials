@@ -22,11 +22,11 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
+import com.ivianuu.androidktx.core.app.doOnActivityCreated
+import com.ivianuu.androidktx.core.content.string
+import com.ivianuu.androidktx.fragment.app.doOnFragmentCreated
 import com.ivianuu.essentials.app.AppService
 import com.ivianuu.essentials.util.analytics.Analytics
-import com.ivianuu.essentials.util.ext.doOnActivityCreated
-import com.ivianuu.essentials.util.ext.doOnFragmentCreated
-import com.ivianuu.essentials.util.ext.string
 import javax.inject.Inject
 import javax.inject.Singleton
 

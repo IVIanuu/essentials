@@ -51,6 +51,8 @@ dependencies {
     api Deps.androidxCoreKtx
     api Deps.androidxPalette
 
+    api Deps.androidKtx
+
     api Deps.coroutinesAndroid
     api Deps.coroutinesCore
     api Deps.coroutinesRxJava
@@ -80,9 +82,14 @@ dependencies {
     api Deps.kotlinReflect
     api Deps.kotlinStdLib
 
+    api project(":ktuples")
+
     api Deps.legacyAnnotations
 
+    api Deps.liveEvent
+
     api Deps.materialComponents
+    api Deps.materialComponentsKtx
 
     api Deps.materialDialogsCore
     api Deps.materialDialogsCommons
@@ -90,7 +97,9 @@ dependencies {
     api Deps.rxAndroid
     api Deps.rxAndroid2
     api Deps.rxJava
+    api Deps.rxJavaKtx
     api Deps.rxKotlin
+    api Deps.rxLifecycle
     api Deps.rxPreferences
     api Deps.rxSystemSettings
 
@@ -99,6 +108,7 @@ dependencies {
     api Deps.stickyHeaders
 
     api Deps.timber
+    api Deps.timberKtx
 
     api Deps.toasty
 

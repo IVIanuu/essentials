@@ -32,6 +32,7 @@ import com.ivianuu.essentials.util.lifecycle.LifecycleJob
 import com.ivianuu.essentials.util.lifecycle.LifecycleOwner2
 import com.ivianuu.essentials.util.screenlogger.IdentifiableScreen
 import com.ivianuu.essentials.util.viewmodel.ViewModelFactoryHolder
+import com.ivianuu.rxlifecycle.RxLifecycleOwner
 import com.ivianuu.traveler.Navigator
 import com.ivianuu.traveler.NavigatorHolder
 import com.ivianuu.traveler.Router
@@ -51,7 +52,7 @@ import kotlin.coroutines.CoroutineContext
  */
 abstract class BaseActivity : AppCompatActivity(), CoroutineScope, HasSupportFragmentInjector,
     HasViewInjector, Injectable, IdentifiableScreen, LifecycleOwner2, MvRxView, RouterHolder,
-    ViewModelFactoryHolder {
+    RxLifecycleOwner, ViewModelFactoryHolder {
 
     @Inject lateinit var navigatorHolder: NavigatorHolder
     @Inject override lateinit var router: Router

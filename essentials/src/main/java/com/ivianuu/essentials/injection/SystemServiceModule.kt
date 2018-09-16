@@ -52,7 +52,7 @@ import android.view.accessibility.AccessibilityManager
 import android.view.accessibility.CaptioningManager
 import android.view.inputmethod.InputMethodManager
 import android.view.textservice.TextServicesManager
-import com.ivianuu.essentials.util.ext.systemService
+import com.ivianuu.androidktx.core.content.systemService
 import dagger.Module
 import dagger.Provides
 

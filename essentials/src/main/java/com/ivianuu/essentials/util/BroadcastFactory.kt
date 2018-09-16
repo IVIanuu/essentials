@@ -19,7 +19,7 @@ package com.ivianuu.essentials.util
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import com.ivianuu.essentials.util.ext.intentFilterOf
+import com.ivianuu.androidktx.core.content.intentFilterOf
 import com.ivianuu.rxandroid.RxBroadcastReceiver
 import io.reactivex.Observable
 import javax.inject.Inject

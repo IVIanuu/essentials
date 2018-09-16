@@ -2,7 +2,7 @@ package com.ivianuu.essentials.util.analytics
 
 import com.crashlytics.android.answers.Answers
 import com.crashlytics.android.answers.CustomEvent
-import com.ivianuu.essentials.util.ext.d
+import com.ivianuu.timberktx.d
 import timber.log.Timber
 import javax.inject.Inject
 

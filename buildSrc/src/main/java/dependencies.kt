@@ -11,6 +11,7 @@ object Versions {
     const val androidGradlePlugin = "3.3.0-alpha10"
     const val androidx = "1.0.0-rc02"
     const val androidxArch = "2.0.0-rc01"
+    const val androidKtx = "c8b74c5f1a"
     const val archWork = "1.0.0-alpha08"
     const val compass = "57edb3b872"
     const val constraintLayout = "1.1.3"
@@ -22,19 +23,24 @@ object Versions {
     const val glide = "4.8.0"
     const val kotlin = "1.3-M2"
     const val legacySupport = "28.0.0-rc02"
+    const val liveEvent = "99f6fff9d3"
     const val mavenGradle = "2.1"
     const val materialComponents = "1.0.0-rc01"
+    const val materialComponentsKtx = "29d78cec5a"
     const val materialDialogs = "0.9.6.0"
     const val r2 = "06e702d39f"
     const val rxAndroid = "2.1.0"
     const val rxAndroid2 = "6a27d8ca6d"
     const val rxJava = "2.2.1"
+    const val rxJavaKtx = "a29d2ace0c"
     const val rxKotlin = "2.3.0"
+    const val rxLifecycle = "47909e07b6"
     const val rxPreferences = "2.0.0"
     const val rxSystemSettings = "aec2722332"
     const val superUser = "1.0.0.+"
     const val stickyHeaders = "578be41578"
     const val timber = "4.7.1"
+    const val timberKtx = "6c36383cc4"
     const val toasty = "1.3.0"
     const val traveler = "a46a5e6204"
 }
@@ -48,10 +54,10 @@ object Deps {
     const val androidxCoreKtx = "androidx.core:core-ktx:${Versions.androidx}"
     const val androidxPalette = "androidx.palette:palette:${Versions.androidx}"
 
+    const val androidKtx = "com.github.IVIanuu:android-ktx:${Versions.androidKtx}"
+
     const val archLifecycleExtensions =
         "androidx.lifecycle:lifecycle-extensions:${Versions.androidxArch}"
-    const val archLifecycleCompiler =
-        "androidx.lifecycle:lifecycle-compiler:${Versions.androidxArch}"
 
     const val archWorkRuntime = "android.arch.work:work-runtime-ktx:${Versions.archWork}"
 
@@ -89,8 +95,12 @@ object Deps {
     const val legacyAnnotations =
         "com.android.support:support-annotations:${Versions.legacySupport}"
 
+    const val liveEvent = "com.github.IVIanuu:liveevent:${Versions.liveEvent}"
+
     const val materialComponents =
         "com.google.android.material:material:${Versions.materialComponents}"
+    const val materialComponentsKtx =
+        "com.github.IVIanuu:material-components-ktx:${Versions.materialComponentsKtx}"
 
     const val materialDialogsCore = "com.afollestad.material-dialogs:core:${Versions.materialDialogs}"
     const val materialDialogsCommons = "com.afollestad.material-dialogs:commons:${Versions.materialDialogs}"
@@ -101,9 +111,10 @@ object Deps {
 
     const val rxAndroid = "io.reactivex.rxjava2:rxandroid:${Versions.rxAndroid}"
     const val rxAndroid2 = "com.github.IVIanuu:rx-android:${Versions.rxAndroid2}"
-
     const val rxJava = "io.reactivex.rxjava2:rxjava:${Versions.rxJava}"
+    const val rxJavaKtx = "com.github.IVIanuu:rx-java-ktx:${Versions.rxJavaKtx}"
     const val rxKotlin = "io.reactivex.rxjava2:rxkotlin:${Versions.rxKotlin}"
+    const val rxLifecycle = "com.github.IVIanuu:rx-lifecycle:${Versions.rxLifecycle}"
     const val rxPreferences = "com.f2prateek.rx.preferences2:rx-preferences:${Versions.rxPreferences}"
     const val rxSystemSettings =
         "com.github.IVIanuu:rx-system-settings:${Versions.rxSystemSettings}"
@@ -113,6 +124,7 @@ object Deps {
     const val stickyHeaders = "com.github.IVIanuu:sticky-headers:${Versions.stickyHeaders}"
 
     const val timber = "com.jakewharton.timber:timber:${Versions.timber}"
+    const val timberKtx = "com.github.IVIanuu:timber-ktx:${Versions.timberKtx}"
 
     const val toasty = "com.github.GrenderG:Toasty:${Versions.toasty}"
 
