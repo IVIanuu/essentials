@@ -80,7 +80,6 @@ dependencies {
 
     api Deps.glide
 
-    api Deps.kotlinReflect
     api Deps.kotlinStdLib
 
     api project(":ktuples")
