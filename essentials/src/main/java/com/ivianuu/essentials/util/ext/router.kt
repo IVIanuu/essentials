@@ -48,7 +48,7 @@ fun <T> Router.results(resultCode: Int) = observable<T> { e ->
 }
 
 @Suppress("UNCHECKED_CAST")
-suspend fun <D : ResultDestination<R>, R> Router.navigateToForResult(destination: D) =
+suspend fun <D : ResultDestination<R>, R> Router.navigateForResult(destination: D) =
     suspendCancellableCoroutine<R> { continuation ->
         val listener = object : ResultListener {
             override fun invoke(result: Any) {
@@ -66,11 +66,11 @@ suspend fun <D : ResultDestination<R>, R> Router.navigateToForResult(destination
         navigate(destination)
     }
 
-suspend fun Router.navigateToForActivityResult(intent: Intent) =
-    navigateToForActivityResult(RequestCodeGenerator.generate(), intent)
+suspend fun Router.navigateForActivityResult(intent: Intent) =
+    navigateForActivityResult(RequestCodeGenerator.generate(), intent)
 
-suspend fun Router.navigateToForActivityResult(resultCode: Int, intent: Intent) =
-    navigateToForResult(ActivityResultDestination(resultCode, intent, resultCode))
+suspend fun Router.navigateForActivityResult(resultCode: Int, intent: Intent) =
+    navigateForResult(ActivityResultDestination(resultCode, intent, resultCode))
 
 suspend fun Router.requestPermissions(
     vararg permissions: String
@@ -86,5 +86,5 @@ suspend fun Router.requestPermissions(
         resultCode
     )
 
-    return navigateToForResult(destination).allGranted
+    return navigateForResult(destination).allGranted
 }
