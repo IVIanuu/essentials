@@ -19,7 +19,7 @@ object Versions {
     const val dagger = "2.16"
     const val epoxy = "2.16.4"
     const val epoxyKtx = "ebd6f05946"
-    const val epoxyPrefs = "c199cb7277"
+    const val epoxyPrefs = "3adb2d2649"
     const val fabric = "2.7.1"
     const val glide = "4.8.0"
     const val kotlin = "1.3-M2"
