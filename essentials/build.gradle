@@ -82,6 +82,11 @@ dependencies {
 
     api Deps.kotlinStdLib
 
+    api Deps.kPrefs
+    api Deps.kPrefsCoroutines
+    api Deps.kPrefsLifecycle
+    api Deps.kPrefsRx
+
     api project(":ktuples")
 
     api Deps.legacyAnnotations
@@ -100,7 +105,6 @@ dependencies {
     api Deps.rxJavaKtx
     api Deps.rxKotlin
     api Deps.rxLifecycle
-    api Deps.rxPreferences
     api Deps.rxSystemSettings
 
     api Deps.superUser

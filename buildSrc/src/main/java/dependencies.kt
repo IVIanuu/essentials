@@ -23,6 +23,7 @@ object Versions {
     const val fabric = "2.7.1"
     const val glide = "4.8.0"
     const val kotlin = "1.3-M2"
+    const val kPrefs = "991ad5f3dd"
     const val legacySupport = "28.0.0-rc02"
     const val liveEvent = "3f028efcb4"
     const val mavenGradle = "2.1"
@@ -36,7 +37,6 @@ object Versions {
     const val rxJavaKtx = "a29d2ace0c"
     const val rxKotlin = "2.3.0"
     const val rxLifecycle = "47909e07b6"
-    const val rxPreferences = "2.0.0"
     const val rxSystemSettings = "aec2722332"
     const val superUser = "1.0.0.+"
     const val stickyHeaders = "578be41578"
@@ -92,6 +92,11 @@ object Deps {
     const val kotlinGradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.kotlin}"
     const val kotlinStdLib = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${Versions.kotlin}"
 
+    const val kPrefs = "com.github.IVIanuu.kprefs:kprefs:${Versions.kPrefs}"
+    const val kPrefsCoroutines = "com.github.IVIanuu.kprefs:kprefs-coroutines:${Versions.kPrefs}"
+    const val kPrefsLifecycle = "com.github.IVIanuu.kprefs:kprefs-lifecycle:${Versions.kPrefs}"
+    const val kPrefsRx = "com.github.IVIanuu.kprefs:kprefs-rx:${Versions.kPrefs}"
+
     const val legacyAnnotations =
         "com.android.support:support-annotations:${Versions.legacySupport}"
 
@@ -115,7 +120,6 @@ object Deps {
     const val rxJavaKtx = "com.github.IVIanuu:rx-java-ktx:${Versions.rxJavaKtx}"
     const val rxKotlin = "io.reactivex.rxjava2:rxkotlin:${Versions.rxKotlin}"
     const val rxLifecycle = "com.github.IVIanuu:rx-lifecycle:${Versions.rxLifecycle}"
-    const val rxPreferences = "com.f2prateek.rx.preferences2:rx-preferences:${Versions.rxPreferences}"
     const val rxSystemSettings =
         "com.github.IVIanuu:rx-system-settings:${Versions.rxSystemSettings}"
 

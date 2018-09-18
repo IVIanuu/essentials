@@ -23,10 +23,10 @@ import android.content.pm.PackageManager
 import android.content.res.Resources
 import android.preference.PreferenceManager
 import androidx.work.WorkManager
-import com.f2prateek.rx.preferences2.RxSharedPreferences
 import com.ivianuu.essentials.util.ContextAware
 import com.ivianuu.essentials.util.coroutines.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.rx.AppRxSchedulers
+import com.ivianuu.kprefs.KSharedPreferences
 import com.ivianuu.rxsystemsettings.RxSystemSettings
 import dagger.Binds
 import dagger.Module
@@ -89,8 +89,8 @@ abstract class BaseAppModule<T : BaseApp> {
         @JvmStatic
         @Singleton
         @Provides
-        fun provideRxSharedPrefs(prefs: SharedPreferences): RxSharedPreferences =
-            RxSharedPreferences.create(prefs)
+        fun provideKSharedPrefs(prefs: SharedPreferences) =
+            KSharedPreferences(prefs)
 
         @JvmStatic
         @Provides
