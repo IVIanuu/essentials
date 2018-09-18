@@ -27,6 +27,7 @@ import com.ivianuu.essentials.util.ext.primaryColor
 import com.ivianuu.essentials.util.ext.primaryTextColor
 import com.ivianuu.essentials.util.ext.secondaryTextColor
 import com.ivianuu.essentials.util.ext.unsafeLazy
+import com.ivianuu.traveler.exit
 
 /**
  * Simple fragment

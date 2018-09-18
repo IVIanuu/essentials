@@ -4,6 +4,9 @@ import com.ivianuu.essentials.sample.ui.list.ListDestination
 import com.ivianuu.essentials.ui.mvrx.MvRxState
 import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
 import com.ivianuu.traveler.Router
+import com.ivianuu.traveler.backToRoot
+import com.ivianuu.traveler.exit
+import com.ivianuu.traveler.navigateTo
 import javax.inject.Inject
 
 /**

@@ -20,7 +20,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.ivianuu.compass.CompassFragmentNavigatorHelper
-import com.ivianuu.traveler.command.Command
+import com.ivianuu.traveler.Command
 
 /**
  * Fragment swapper navigator which uses keys

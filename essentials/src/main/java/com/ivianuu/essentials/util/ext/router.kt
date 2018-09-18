@@ -24,13 +24,16 @@ import com.ivianuu.essentials.util.RequestCodeGenerator
 import com.ivianuu.rxjavaktx.observable
 import com.ivianuu.traveler.ResultListener
 import com.ivianuu.traveler.Router
+import com.ivianuu.traveler.addResultListener
+import com.ivianuu.traveler.navigateTo
+import com.ivianuu.traveler.removeResultListener
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
 
 fun <T> Router.results(resultCode: Int) = observable<T> { e ->
     @Suppress("UNCHECKED_CAST")
     val listener = object : ResultListener {
-        override fun onResult(result: Any) {
+        override fun invoke(result: Any) {
             if (!e.isDisposed) {
                 e.onNext(result as T)
             }
@@ -48,7 +51,7 @@ fun <T> Router.results(resultCode: Int) = observable<T> { e ->
 suspend fun <D : ResultDestination<R>, R> Router.navigateToForResult(destination: D) =
     suspendCancellableCoroutine<R> { continuation ->
         val listener = object : ResultListener {
-            override fun onResult(result: Any) {
+            override fun invoke(result: Any) {
                 continuation.resume(result as R)
                 removeResultListener(destination.resultCode, this)
             }

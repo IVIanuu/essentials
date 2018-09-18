@@ -36,7 +36,8 @@ import com.ivianuu.rxlifecycle.RxLifecycleOwner
 import com.ivianuu.traveler.Navigator
 import com.ivianuu.traveler.NavigatorHolder
 import com.ivianuu.traveler.Router
-import com.ivianuu.traveler.extension.setNavigator
+import com.ivianuu.traveler.newRootScreen
+import com.ivianuu.traveler.setNavigator
 import dagger.android.AndroidInjection
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector

@@ -15,7 +15,7 @@ object TravelerModule {
     @JvmStatic
     @Singleton
     @Provides
-    fun provideTraveler() = Traveler.create()
+    fun provideTraveler() = Traveler()
 
     @JvmStatic
     @Provides

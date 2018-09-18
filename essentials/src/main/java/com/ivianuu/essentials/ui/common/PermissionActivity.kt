@@ -7,6 +7,7 @@ import com.ivianuu.compass.Destination
 import com.ivianuu.essentials.ui.base.BaseActivity
 import com.ivianuu.essentials.ui.traveler.destination.ResultDestination
 import com.ivianuu.essentials.util.RequestCodeGenerator
+import com.ivianuu.traveler.sendResult
 import java.util.*
 
 @Destination(PermissionActivity::class)

@@ -24,6 +24,8 @@ import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.base.BaseDialogFragment
 import com.ivianuu.essentials.ui.traveler.destination.ResultDestination
 import com.ivianuu.essentials.util.RequestCodeGenerator
+import com.ivianuu.traveler.exit
+import com.ivianuu.traveler.exitWithResult
 
 @Destination(TextInputDialog::class)
 data class TextInputDestination(

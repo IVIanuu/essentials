@@ -18,12 +18,12 @@
 package com.ivianuu.essentials.sample.ui
 
 import android.os.Bundle
-import com.ivianuu.androidktx.lifecycle.bindViewModel
 import com.ivianuu.essentials.sample.ui.counter.CounterDestination
 import com.ivianuu.essentials.ui.base.BaseActivity
 import com.ivianuu.essentials.ui.base.BaseActivityModule
 import com.ivianuu.essentials.ui.mvrx.MvRxState
 import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
+import com.ivianuu.essentials.ui.mvrx.bindViewModel
 import com.ivianuu.essentials.util.ext.MutableLiveEvent
 import com.ivianuu.liveevent.LiveEvent
 import com.ivianuu.timberktx.d
@@ -37,11 +37,10 @@ class MainActivity : BaseActivity() {
     override val startDestination: Any?
         get() = CounterDestination(1)
 
-    private val viewModel by bindViewModel<MainViewModel>()
+    private val viewModel by bindViewModel(MainViewModel::class)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         viewModel.myEvent.consume { d { "on event" } }
     }
 }

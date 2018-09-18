@@ -21,8 +21,8 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.containerId
 import com.ivianuu.traveler.BaseNavigator
-import com.ivianuu.traveler.command.Command
-import com.ivianuu.traveler.command.Replace
+import com.ivianuu.traveler.Command
+import com.ivianuu.traveler.Replace
 
 /**
  * A navigator which swaps and reuses fragments

@@ -22,6 +22,8 @@ import android.view.View
 import androidx.appcompat.widget.Toolbar
 import com.ivianuu.epoxyprefs.PreferenceModel
 import com.ivianuu.traveler.Router
+import com.ivianuu.traveler.exit
+import com.ivianuu.traveler.navigateTo
 
 inline fun Toolbar.exitOnNavigationClick(router: Router) {
     setNavigationOnClickListener { router.exit() }
@@ -32,8 +34,5 @@ fun View.navigateOnClick(router: Router, key: () -> Any) {
 }
 
 fun PreferenceModel.Builder.navigateOnClick(router: Router, key: () -> Any) {
-    clickListener {
-        router.navigateTo(key())
-        true
-    }
+    clickListener { router.navigateTo(key()).andTrue() }
 }

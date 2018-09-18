@@ -11,6 +11,8 @@ import com.ivianuu.essentials.data.app.AppStore
 import com.ivianuu.essentials.ui.base.BaseDialogFragment
 import com.ivianuu.essentials.ui.traveler.destination.ResultDestination
 import com.ivianuu.essentials.util.RequestCodeGenerator
+import com.ivianuu.traveler.exit
+import com.ivianuu.traveler.exitWithResult
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
