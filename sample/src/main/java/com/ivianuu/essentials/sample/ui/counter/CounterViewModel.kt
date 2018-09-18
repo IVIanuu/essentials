@@ -4,9 +4,9 @@ import com.ivianuu.essentials.sample.ui.list.ListDestination
 import com.ivianuu.essentials.ui.mvrx.MvRxState
 import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
 import com.ivianuu.traveler.Router
-import com.ivianuu.traveler.backToRoot
-import com.ivianuu.traveler.exit
-import com.ivianuu.traveler.navigateTo
+import com.ivianuu.traveler.goBack
+import com.ivianuu.traveler.navigate
+import com.ivianuu.traveler.popToRoot
 import javax.inject.Inject
 
 /**
@@ -46,19 +46,19 @@ class CounterViewModel @Inject constructor(private val router: Router) :
     }
 
     fun screenUpClicked() {
-        withState { router.navigateTo(CounterDestination(it.screen + 1)) }
+        withState { router.navigate(CounterDestination(it.screen + 1)) }
     }
 
     fun screenDownClicked() {
-        router.exit()
+        router.goBack()
     }
 
     fun rootScreenClicked() {
-        router.backToRoot()
+        router.popToRoot()
     }
 
     fun listScreenClicked() {
-        router.navigateTo(ListDestination)
+        router.navigate(ListDestination)
     }
 
 }

@@ -27,7 +27,6 @@ import com.ivianuu.essentials.util.ext.primaryColor
 import com.ivianuu.essentials.util.ext.primaryTextColor
 import com.ivianuu.essentials.util.ext.secondaryTextColor
 import com.ivianuu.essentials.util.ext.unsafeLazy
-import com.ivianuu.traveler.exit
 
 /**
  * Simple fragment
@@ -106,7 +105,7 @@ abstract class SimpleFragment : BaseFragment() {
 
             if (toolbarBackButton) {
                 navigationIconResource = R.drawable.abc_ic_ab_back_material
-                setNavigationOnClickListener { router.exit() }
+                goBackOnNavigationClick()
             }
 
             val titleColor = primaryTextColor(!lightToolbar)

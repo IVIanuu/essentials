@@ -22,17 +22,17 @@ import android.view.View
 import androidx.appcompat.widget.Toolbar
 import com.ivianuu.epoxyprefs.PreferenceModel
 import com.ivianuu.traveler.Router
-import com.ivianuu.traveler.exit
-import com.ivianuu.traveler.navigateTo
+import com.ivianuu.traveler.goBack
+import com.ivianuu.traveler.navigate
 
-inline fun Toolbar.exitOnNavigationClick(router: Router) {
-    setNavigationOnClickListener { router.exit() }
+inline fun Toolbar.goBackOnNavigationClick(router: Router) {
+    setNavigationOnClickListener { router.goBack() }
 }
 
 fun View.navigateOnClick(router: Router, key: () -> Any) {
-    setOnClickListener { router.navigateTo(key()) }
+    setOnClickListener { router.navigate(key()) }
 }
 
 fun PreferenceModel.Builder.navigateOnClick(router: Router, key: () -> Any) {
-    clickListener { router.navigateTo(key()).andTrue() }
+    clickListener { router.navigate(key()).andTrue() }
 }

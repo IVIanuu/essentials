@@ -25,7 +25,7 @@ import com.ivianuu.rxjavaktx.observable
 import com.ivianuu.traveler.ResultListener
 import com.ivianuu.traveler.Router
 import com.ivianuu.traveler.addResultListener
-import com.ivianuu.traveler.navigateTo
+import com.ivianuu.traveler.navigate
 import com.ivianuu.traveler.removeResultListener
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
@@ -63,7 +63,7 @@ suspend fun <D : ResultDestination<R>, R> Router.navigateToForResult(destination
 
         addResultListener(destination.resultCode, listener)
 
-        navigateTo(destination)
+        navigate(destination)
     }
 
 suspend fun Router.navigateToForActivityResult(intent: Intent) =

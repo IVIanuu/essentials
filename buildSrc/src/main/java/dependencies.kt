@@ -13,7 +13,7 @@ object Versions {
     const val androidxArch = "2.0.0-rc01"
     const val androidKtx = "78e2a2449c"
     const val archWork = "1.0.0-alpha08"
-    const val compass = "32d41baa97"
+    const val compass = "d43b7784c7"
     const val constraintLayout = "1.1.3"
     const val coroutines = "0.26.0-eap13"
     const val dagger = "2.16"
@@ -43,7 +43,7 @@ object Versions {
     const val timber = "4.7.1"
     const val timberKtx = "6c36383cc4"
     const val toasty = "1.3.0"
-    const val traveler = "e6e858548f"
+    const val traveler = "bdad7833f3"
 }
 
 object Deps {

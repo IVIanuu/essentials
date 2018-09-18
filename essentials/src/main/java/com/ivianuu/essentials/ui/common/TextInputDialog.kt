@@ -24,8 +24,8 @@ import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.base.BaseDialogFragment
 import com.ivianuu.essentials.ui.traveler.destination.ResultDestination
 import com.ivianuu.essentials.util.RequestCodeGenerator
-import com.ivianuu.traveler.exit
-import com.ivianuu.traveler.exitWithResult
+import com.ivianuu.traveler.goBack
+import com.ivianuu.traveler.goBackWithResult
 
 @Destination(TextInputDialog::class)
 data class TextInputDestination(
@@ -53,9 +53,9 @@ class TextInputDialog : BaseDialogFragment() {
                 destination.prefill,
                 destination.allowEmptyInput
             ) { _, input ->
-                router.exitWithResult(destination.resultCode, input)
+                router.goBackWithResult(destination.resultCode, input)
             }
-            .onNegative { _, _ -> router.exit() }
+            .onNegative { _, _ -> router.goBack() }
             .inputType(destination.inputType)
             .positiveText(R.string.action_ok)
             .negativeText(R.string.action_cancel)

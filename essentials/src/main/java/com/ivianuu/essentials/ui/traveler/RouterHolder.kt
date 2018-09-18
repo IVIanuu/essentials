@@ -3,7 +3,7 @@ package com.ivianuu.essentials.ui.traveler
 import android.view.View
 import androidx.appcompat.widget.Toolbar
 import com.ivianuu.epoxyprefs.PreferenceModel
-import com.ivianuu.essentials.util.ext.exitOnNavigationClick
+import com.ivianuu.essentials.util.ext.goBackOnNavigationClick
 import com.ivianuu.essentials.util.ext.navigateOnClick
 import com.ivianuu.traveler.Router
 
@@ -13,8 +13,8 @@ import com.ivianuu.traveler.Router
 interface RouterHolder {
     val router: Router
 
-    fun Toolbar.exitOnNavigationClick() {
-        exitOnNavigationClick(router)
+    fun Toolbar.goBackOnNavigationClick() {
+        goBackOnNavigationClick(router)
     }
 
     fun View.navigateOnClick(key: () -> Any) {

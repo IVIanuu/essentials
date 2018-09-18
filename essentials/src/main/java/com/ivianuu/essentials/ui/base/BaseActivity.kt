@@ -36,8 +36,8 @@ import com.ivianuu.rxlifecycle.RxLifecycleOwner
 import com.ivianuu.traveler.Navigator
 import com.ivianuu.traveler.NavigatorHolder
 import com.ivianuu.traveler.Router
-import com.ivianuu.traveler.newRootScreen
 import com.ivianuu.traveler.setNavigator
+import com.ivianuu.traveler.setRoot
 import dagger.android.AndroidInjection
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
@@ -90,7 +90,7 @@ abstract class BaseActivity : AppCompatActivity(), CoroutineScope, HasSupportFra
         if (layoutRes != -1) setContentView(layoutRes)
 
         if (savedInstanceState == null) {
-            startDestination?.let { router.newRootScreen(it) }
+            startDestination?.let { router.setRoot(it) }
         }
     }
 

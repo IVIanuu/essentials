@@ -11,8 +11,8 @@ import com.ivianuu.essentials.data.app.AppStore
 import com.ivianuu.essentials.ui.base.BaseDialogFragment
 import com.ivianuu.essentials.ui.traveler.destination.ResultDestination
 import com.ivianuu.essentials.util.RequestCodeGenerator
-import com.ivianuu.traveler.exit
-import com.ivianuu.traveler.exitWithResult
+import com.ivianuu.traveler.goBack
+import com.ivianuu.traveler.goBackWithResult
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -39,11 +39,11 @@ class AppPickerDialog : BaseDialogFragment() {
             .title(destination.title ?: string(R.string.dialog_title_app_picker))
             .negativeText(R.string.action_cancel)
             .autoDismiss(false)
-            .onNegative { _, _ -> router.exit() }
+            .onNegative { _, _ -> router.goBack() }
             .items()
             .itemsCallback { _, _, position, _ ->
                 val app = apps[position]
-                router.exitWithResult(destination.resultCode, app)
+                router.goBackWithResult(destination.resultCode, app)
             }
             .build()
 
