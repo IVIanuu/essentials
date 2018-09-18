@@ -89,6 +89,7 @@ abstract class BaseActivity : AppCompatActivity(), CoroutineScope, HasSupportFra
 
         if (layoutRes != -1) setContentView(layoutRes)
 
+
         if (savedInstanceState == null) {
             startDestination?.let { router.setRoot(it) }
         }
