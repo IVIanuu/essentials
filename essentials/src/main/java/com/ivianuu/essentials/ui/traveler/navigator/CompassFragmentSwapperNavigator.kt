@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.ui.traveler.navigator
 
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.ivianuu.compass.CompassFragmentNavigatorHelper
@@ -47,3 +48,25 @@ class CompassFragmentSwapperNavigator(
     }
 
 }
+
+fun FragmentActivity.CompassFragmentSwapperNavigator(
+    containerId: Int,
+    hideStrategy: FragmentSwapperNavigator.HideStrategy = FragmentSwapperNavigator.HideStrategy.DETACH,
+    swapOnReselection: Boolean = true
+) = CompassFragmentSwapperNavigator(
+    supportFragmentManager,
+    containerId,
+    hideStrategy,
+    swapOnReselection
+)
+
+fun Fragment.CompassFragmentSwapperNavigator(
+    containerId: Int,
+    hideStrategy: FragmentSwapperNavigator.HideStrategy = FragmentSwapperNavigator.HideStrategy.DETACH,
+    swapOnReselection: Boolean = true
+) = CompassFragmentSwapperNavigator(
+    childFragmentManager,
+    containerId,
+    hideStrategy,
+    swapOnReselection
+)
