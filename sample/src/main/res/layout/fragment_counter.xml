@@ -53,5 +53,10 @@
         android:layout_height="wrap_content"
         android:text="List Screen" />
 
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/state_screen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="State screen" />
 
 </LinearLayout>

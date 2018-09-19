@@ -21,6 +21,7 @@ import com.ivianuu.essentials.injection.viewmodel.ViewModelKey
 import com.ivianuu.essentials.sample.ui.MainViewModel
 import com.ivianuu.essentials.sample.ui.counter.CounterViewModel
 import com.ivianuu.essentials.sample.ui.list.ListViewModel
+import com.ivianuu.essentials.sample.ui.state.StateViewModel
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
@@ -45,5 +46,10 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(MainViewModel::class)
     abstract fun bindMainViewModel(mainViewModel: MainViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(StateViewModel::class)
+    abstract fun bindStateViewModel(stateViewModel: StateViewModel): ViewModel
 
 }

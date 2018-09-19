@@ -19,6 +19,7 @@ package com.ivianuu.essentials.sample.injection
 import com.ivianuu.essentials.injection.PerFragment
 import com.ivianuu.essentials.sample.ui.counter.CounterFragment
 import com.ivianuu.essentials.sample.ui.list.ListFragment
+import com.ivianuu.essentials.sample.ui.state.StateFragment
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
@@ -35,5 +36,9 @@ abstract class FragmentBindingModule {
     @PerFragment
     @ContributesAndroidInjector
     abstract fun bindListFragment(): ListFragment
+
+    @PerFragment
+    @ContributesAndroidInjector
+    abstract fun bindStateFragment(): StateFragment
 
 }

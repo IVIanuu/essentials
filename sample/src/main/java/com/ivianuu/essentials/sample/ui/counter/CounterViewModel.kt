@@ -1,6 +1,7 @@
 package com.ivianuu.essentials.sample.ui.counter
 
 import com.ivianuu.essentials.sample.ui.list.ListDestination
+import com.ivianuu.essentials.sample.ui.state.StateDestination
 import com.ivianuu.essentials.ui.mvrx.MvRxState
 import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
 import com.ivianuu.traveler.Router
@@ -28,13 +29,13 @@ class CounterViewModel @Inject constructor(private val router: Router) :
     }
 
     fun increaseClicked() {
-        setState { copy(count = count + 1) }
+        setState { copy(count = count.inc()) }
     }
 
     fun decreaseClicked() {
         setState {
             if (count > 0) {
-                copy(count = count - 1)
+                copy(count = count.dec())
             } else {
                 copy(count = 0)
             }
@@ -46,7 +47,7 @@ class CounterViewModel @Inject constructor(private val router: Router) :
     }
 
     fun screenUpClicked() {
-        withState { router.navigate(CounterDestination(it.screen + 1)) }
+        withState { router.navigate(CounterDestination(it.screen.inc())) }
     }
 
     fun screenDownClicked() {
@@ -61,6 +62,9 @@ class CounterViewModel @Inject constructor(private val router: Router) :
         router.navigate(ListDestination)
     }
 
+    fun stateScreenClicked() {
+        router.navigate(StateDestination)
+    }
 }
 
 data class CounterState(

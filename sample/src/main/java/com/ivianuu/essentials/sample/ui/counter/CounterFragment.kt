@@ -84,6 +84,7 @@ class CounterFragment : BaseFragment(), CounterFragmentDelegate by CounterFragme
         screen_down.setOnClickListener { viewModel.screenDownClicked() }
         root_screen.setOnClickListener { viewModel.rootScreenClicked() }
         list_screen.setOnClickListener { viewModel.listScreenClicked() }
+        state_screen.setOnClickListener { viewModel.stateScreenClicked() }
 
         viewCoroutineScope.launch {
             suspendCancellableCoroutine<Unit> {

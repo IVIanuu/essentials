@@ -74,11 +74,7 @@ abstract class BaseActivity : AppCompatActivity(), CoroutineScope, HasSupportFra
     open val startDestination: Any? = null
 
     protected open val navigator: Navigator by unsafeLazy {
-        CompassFragmentAppNavigator(
-            this,
-            supportFragmentManager,
-            fragmentContainer
-        )
+        CompassFragmentAppNavigator(fragmentContainer)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -87,8 +83,9 @@ abstract class BaseActivity : AppCompatActivity(), CoroutineScope, HasSupportFra
 
         navigatorHolder.setNavigator(this, navigator)
 
-        if (layoutRes != -1) setContentView(layoutRes)
-
+        if (layoutRes != -1) {
+            setContentView(layoutRes)
+        }
 
         if (savedInstanceState == null) {
             startDestination?.let { router.setRoot(it) }

@@ -23,7 +23,7 @@ object Versions {
     const val fabric = "2.7.1"
     const val glide = "4.8.0"
     const val kotlin = "1.3-M2"
-    const val kPrefs = "991ad5f3dd"
+    const val kPrefs = "ed6db8f348"
     const val legacySupport = "28.0.0-rc02"
     const val liveEvent = "3f028efcb4"
     const val mavenGradle = "2.1"
