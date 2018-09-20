@@ -12,7 +12,7 @@ object Versions {
     const val androidx = "1.0.0-rc02"
     const val androidxArch = "2.0.0-rc01"
     const val androidKtx = "78e2a2449c"
-    const val archWork = "1.0.0-alpha08"
+    const val archWork = "1.0.0-alpha09"
     const val compass = "21532b92e7"
     const val constraintLayout = "1.1.3"
     const val coroutines = "0.26.0-eap13"

@@ -1,8 +1,10 @@
 package com.ivianuu.essentials.injection.worker
 
 import androidx.work.Worker
+import androidx.work.WorkerFactory
+import com.ivianuu.essentials.util.worker.DaggerWorkerFactory
+import dagger.Binds
 import dagger.Module
-import dagger.android.AndroidInjector
 import dagger.multibindings.Multibinds
 
 /**
@@ -12,8 +14,10 @@ import dagger.multibindings.Multibinds
 abstract class WorkerInjectionModule {
 
     @Multibinds
-    abstract fun workerInjectorFactories(): Map<Class<out Worker>, AndroidInjector.Factory<out Worker>>
+    abstract fun workerProviders(): Map<Class<out Worker>, Worker>
 
-    @Multibinds
-    abstract fun workerInjectorFactoriesWithStringKeys(): Map<String, AndroidInjector.Factory<out Worker>>
+    @Binds
+    abstract fun bindWorkerFactory(factory: DaggerWorkerFactory): WorkerFactory
+
+
 }

@@ -20,11 +20,12 @@ import android.content.pm.ApplicationInfo
 import android.graphics.drawable.Drawable
 import android.os.Looper
 import android.view.View
-import androidx.work.Worker
+import androidx.work.Configuration
+import androidx.work.WorkManager
+import androidx.work.WorkerFactory
 import com.bumptech.glide.Glide
 import com.crashlytics.android.Crashlytics
 import com.ivianuu.essentials.injection.view.HasViewInjector
-import com.ivianuu.essentials.injection.worker.HasWorkerInjector
 import com.ivianuu.essentials.util.AppIcon
 import com.ivianuu.essentials.util.AppIconModelLoader
 import com.ivianuu.essentials.util.analytics.Analytics
@@ -43,7 +44,7 @@ import javax.inject.Inject
 /**
  * App
  */
-abstract class BaseApp : DaggerApplication(), HasViewInjector, HasWorkerInjector {
+abstract class BaseApp : DaggerApplication(), HasViewInjector {
 
     @Inject internal lateinit var appServices: Set<@JvmSuppressWildcards AppService>
     @Inject internal lateinit var appIconModelLoaderFactory: AppIconModelLoader.Factory
@@ -51,7 +52,8 @@ abstract class BaseApp : DaggerApplication(), HasViewInjector, HasWorkerInjector
     @Inject internal lateinit var fabricAnalyticsLogger: FabricAnalyticsLogger
 
     @Inject lateinit var viewInjector: DispatchingAndroidInjector<View>
-    @Inject lateinit var workerInjector: DispatchingAndroidInjector<Worker>
+
+    @Inject lateinit var workerFactory: WorkerFactory
 
     protected open val initTimber = true
     protected open val initFabric = true
@@ -60,6 +62,11 @@ abstract class BaseApp : DaggerApplication(), HasViewInjector, HasWorkerInjector
 
     override fun onCreate() {
         super.onCreate()
+
+        WorkManager.initialize(
+            this,
+            Configuration.Builder().setWorkerFactory(workerFactory).build()
+        )
 
         if (applicationInfo.flags.containsFlag(ApplicationInfo.FLAG_DEBUGGABLE)) {
             if (initTimber) {
@@ -87,8 +94,6 @@ abstract class BaseApp : DaggerApplication(), HasViewInjector, HasWorkerInjector
     }
 
     override fun viewInjector(): AndroidInjector<View> = viewInjector
-
-    override fun workerInjector(): AndroidInjector<Worker> = workerInjector
 
     protected open fun startAppService(appService: AppService) {
         appService.start()

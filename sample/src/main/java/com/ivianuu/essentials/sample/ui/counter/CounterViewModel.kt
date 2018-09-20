@@ -1,5 +1,8 @@
 package com.ivianuu.essentials.sample.ui.counter
 
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
+import com.ivianuu.essentials.sample.data.MyWorker
 import com.ivianuu.essentials.sample.ui.list.ListDestination
 import com.ivianuu.essentials.sample.ui.state.StateDestination
 import com.ivianuu.essentials.ui.mvrx.MvRxState
@@ -13,8 +16,10 @@ import javax.inject.Inject
 /**
  * Counter view model
  */
-class CounterViewModel @Inject constructor(private val router: Router) :
-    MvRxViewModel<CounterState>(CounterState()) {
+class CounterViewModel @Inject constructor(
+    private val router: Router,
+    private val workManager: WorkManager
+) : MvRxViewModel<CounterState>(CounterState()) {
 
     private lateinit var destination: CounterDestination
 
@@ -64,6 +69,10 @@ class CounterViewModel @Inject constructor(private val router: Router) :
 
     fun stateScreenClicked() {
         router.navigate(StateDestination)
+    }
+
+    fun doWorkClicked() {
+        workManager.enqueue(OneTimeWorkRequestBuilder<MyWorker>().build())
     }
 }
 

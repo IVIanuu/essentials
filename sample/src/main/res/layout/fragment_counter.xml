@@ -59,4 +59,10 @@
         android:layout_height="wrap_content"
         android:text="State screen" />
 
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/do_work"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Do Work" />
+
 </LinearLayout>
