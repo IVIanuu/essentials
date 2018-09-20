@@ -53,6 +53,8 @@ dependencies {
 
     api Deps.androidKtx
 
+    api Deps.assistedInject
+
     api Deps.coroutinesAndroid
     api Deps.coroutinesCore
     api Deps.coroutinesRxJava
@@ -87,6 +89,11 @@ dependencies {
     api Deps.kPrefsLifecycle
     api Deps.kPrefsRx
 
+    api Deps.kSystemSettings
+    api Deps.kSystemSettingsCoroutines
+    api Deps.kSystemSettingsLifecycle
+    api Deps.kSystemSettingsRx
+
     api project(":ktuples")
 
     api Deps.legacyAnnotations
@@ -105,7 +112,6 @@ dependencies {
     api Deps.rxJavaKtx
     api Deps.rxKotlin
     api Deps.rxLifecycle
-    api Deps.rxSystemSettings
 
     api Deps.superUser
 

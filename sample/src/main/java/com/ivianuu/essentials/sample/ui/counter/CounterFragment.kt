@@ -19,6 +19,8 @@ package com.ivianuu.essentials.sample.ui.counter
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.ivianuu.androidktx.appcompat.widget.textFuture
 import com.ivianuu.compass.Destination
 import com.ivianuu.compass.Detour
@@ -27,20 +29,8 @@ import com.ivianuu.essentials.ui.base.BaseFragment
 import com.ivianuu.essentials.ui.mvrx.bindViewModel
 import com.ivianuu.essentials.ui.mvrx.withState
 import com.ivianuu.essentials.ui.traveler.detour.HorizontalDetour
-import com.ivianuu.essentials.util.ext.bindDelegate
-import com.ivianuu.timberktx.d
 import kotlinx.android.synthetic.main.fragment_counter.*
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.suspendCancellableCoroutine
-
-interface CounterFragmentDelegate
-
-class CounterFragmentDelegateImpl :
-    CounterFragmentDelegate {
-    fun init(counterFragment: CounterFragment) {
-        d { "init called" }
-    }
-}
+import javax.inject.Inject
 
 @Detour(HorizontalDetour::class)
 @Destination(CounterFragment::class)
@@ -49,24 +39,16 @@ data class CounterDestination(val screen: Int)
 /**
  * @author Manuel Wrage (IVIanuu)
  */
-class CounterFragment : BaseFragment(), CounterFragmentDelegate by CounterFragmentDelegateImpl() {
+class CounterFragment : BaseFragment() {
+
+    @Inject lateinit var counterViewModelFactory: CounterViewModelFactory
 
     override val layoutRes = R.layout.fragment_counter
 
-    private val delegate by bindDelegate(CounterFragmentDelegateImpl::class)
-    private val viewModel by bindViewModel(CounterViewModel::class)
-
-    init {
-        delegate.init(this)
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        viewModel.setDestination(counterDestination())
-
-        launch {
-            suspendCancellableCoroutine<Unit> {
-                it.invokeOnCancellation { d { "on cancel" } }
+    private val viewModel by bindViewModel(CounterViewModel::class) {
+        object : ViewModelProvider.Factory {
+            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+                return counterViewModelFactory.create(counterDestination()) as T
             }
         }
     }
@@ -84,14 +66,7 @@ class CounterFragment : BaseFragment(), CounterFragmentDelegate by CounterFragme
         screen_down.setOnClickListener { viewModel.screenDownClicked() }
         root_screen.setOnClickListener { viewModel.rootScreenClicked() }
         list_screen.setOnClickListener { viewModel.listScreenClicked() }
-        state_screen.setOnClickListener { viewModel.stateScreenClicked() }
         do_work.setOnClickListener { viewModel.doWorkClicked() }
-
-        viewCoroutineScope.launch {
-            suspendCancellableCoroutine<Unit> {
-                it.invokeOnCancellation { d { "view on cancel" } }
-            }
-        }
     }
 
     override fun invalidate() {

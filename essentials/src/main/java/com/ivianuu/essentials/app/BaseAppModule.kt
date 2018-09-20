@@ -27,7 +27,7 @@ import com.ivianuu.essentials.util.ContextAware
 import com.ivianuu.essentials.util.coroutines.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.rx.AppRxSchedulers
 import com.ivianuu.kprefs.KSharedPreferences
-import com.ivianuu.rxsystemsettings.RxSystemSettings
+import com.ivianuu.ksystemsettings.KSystemSettings
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -93,17 +93,18 @@ abstract class BaseAppModule<T : BaseApp> {
             KSharedPreferences(prefs)
 
         @JvmStatic
+        @Singleton
+        @Provides
+        fun provideKSystemSettings(context: Context) =
+            KSystemSettings(context)
+
+        @JvmStatic
         @Provides
         fun providePackageManager(context: Context): PackageManager = context.packageManager
 
         @JvmStatic
         @Provides
         fun provideResources(context: Context): Resources = context.resources
-
-        @JvmStatic
-        @Singleton
-        @Provides
-        fun provideRxSystemSettings(context: Context) = RxSystemSettings.create(context)
 
         @JvmStatic
         @Provides

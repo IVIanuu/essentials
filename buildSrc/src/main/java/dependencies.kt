@@ -13,7 +13,8 @@ object Versions {
     const val androidxArch = "2.0.0-rc01"
     const val androidKtx = "78e2a2449c"
     const val archWork = "1.0.0-alpha09"
-    const val compass = "21532b92e7"
+    const val assistedInject = "3d89bf2261"
+    const val compass = "e9891a283a"
     const val constraintLayout = "1.1.3"
     const val coroutines = "0.26.0-eap13"
     const val dagger = "2.16"
@@ -24,6 +25,7 @@ object Versions {
     const val glide = "4.8.0"
     const val kotlin = "1.3-M2"
     const val kPrefs = "ed6db8f348"
+    const val kSystemSettings = "b98df0f4a8"
     const val legacySupport = "28.0.0-rc02"
     const val liveEvent = "3f028efcb4"
     const val mavenGradle = "2.1"
@@ -37,7 +39,6 @@ object Versions {
     const val rxJavaKtx = "a29d2ace0c"
     const val rxKotlin = "2.3.0"
     const val rxLifecycle = "47909e07b6"
-    const val rxSystemSettings = "aec2722332"
     const val superUser = "1.0.0.+"
     const val stickyHeaders = "578be41578"
     const val timber = "4.7.1"
@@ -60,6 +61,11 @@ object Deps {
         "androidx.lifecycle:lifecycle-extensions:${Versions.androidxArch}"
 
     const val archWorkRuntime = "android.arch.work:work-runtime-ktx:${Versions.archWork}"
+
+    const val assistedInject =
+        "com.github.IVIanuu.assisted-inject:assistedinject:${Versions.assistedInject}"
+    const val assistedInjectCompiler =
+        "com.github.IVIanuu.assisted-inject:assistedinject-compiler:${Versions.assistedInject}"
 
     const val compass = "com.github.IVIanuu.compass:compass:${Versions.compass}"
     const val compassCompiler = "com.github.IVIanuu.compass:compass-compiler:${Versions.compass}"
@@ -97,6 +103,15 @@ object Deps {
     const val kPrefsLifecycle = "com.github.IVIanuu.kprefs:kprefs-lifecycle:${Versions.kPrefs}"
     const val kPrefsRx = "com.github.IVIanuu.kprefs:kprefs-rx:${Versions.kPrefs}"
 
+    const val kSystemSettings =
+        "com.github.IVIanuu.ksystem-settings:ksystemsettings:${Versions.kSystemSettings}"
+    const val kSystemSettingsCoroutines =
+        "com.github.IVIanuu.ksystem-settings:ksystemsettings-coroutines:${Versions.kSystemSettings}"
+    const val kSystemSettingsLifecycle =
+        "com.github.IVIanuu.ksystem-settings:ksystemsettings-lifecycle:${Versions.kSystemSettings}"
+    const val kSystemSettingsRx =
+        "com.github.IVIanuu.ksystem-settings:ksystemsettings-rx:${Versions.kSystemSettings}"
+
     const val legacyAnnotations =
         "com.android.support:support-annotations:${Versions.legacySupport}"
 
@@ -120,8 +135,6 @@ object Deps {
     const val rxJavaKtx = "com.github.IVIanuu:rx-java-ktx:${Versions.rxJavaKtx}"
     const val rxKotlin = "io.reactivex.rxjava2:rxkotlin:${Versions.rxKotlin}"
     const val rxLifecycle = "com.github.IVIanuu:rx-lifecycle:${Versions.rxLifecycle}"
-    const val rxSystemSettings =
-        "com.github.IVIanuu:rx-system-settings:${Versions.rxSystemSettings}"
 
     const val superUser = "eu.chainfire:libsuperuser:${Versions.superUser}"
 

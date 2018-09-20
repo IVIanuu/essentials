@@ -2,35 +2,28 @@ package com.ivianuu.essentials.sample.ui.counter
 
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
+import com.ivianuu.assistedinject.Assisted
+import com.ivianuu.assistedinject.AssistedInject
 import com.ivianuu.essentials.sample.data.MyWorker
 import com.ivianuu.essentials.sample.ui.list.ListDestination
-import com.ivianuu.essentials.sample.ui.state.StateDestination
 import com.ivianuu.essentials.ui.mvrx.MvRxState
 import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
 import com.ivianuu.traveler.Router
 import com.ivianuu.traveler.goBack
 import com.ivianuu.traveler.navigate
 import com.ivianuu.traveler.popToRoot
-import javax.inject.Inject
 
 /**
  * Counter view model
  */
-class CounterViewModel @Inject constructor(
+class CounterViewModel @AssistedInject constructor(
+    @Assisted private val destination: CounterDestination,
     private val router: Router,
     private val workManager: WorkManager
-) : MvRxViewModel<CounterState>(CounterState()) {
-
-    private lateinit var destination: CounterDestination
+) : MvRxViewModel<CounterState>(CounterState(screen = destination.screen)) {
 
     init {
         logStateChanges()
-    }
-
-    fun setDestination(destination: CounterDestination) {
-        if (this::destination.isInitialized) return
-        this.destination = destination
-        setState { copy(screen = destination.screen) }
     }
 
     fun increaseClicked() {
@@ -65,10 +58,6 @@ class CounterViewModel @Inject constructor(
 
     fun listScreenClicked() {
         router.navigate(ListDestination)
-    }
-
-    fun stateScreenClicked() {
-        router.navigate(StateDestination)
     }
 
     fun doWorkClicked() {
