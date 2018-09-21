@@ -21,7 +21,7 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.ivianuu.compass.CompassFragmentAppNavigator
+import com.ivianuu.compass.fragment.CompassFragmentAppNavigator
 import com.ivianuu.essentials.injection.Injectable
 import com.ivianuu.essentials.injection.view.HasViewInjector
 import com.ivianuu.essentials.ui.common.BackListener
@@ -36,7 +36,7 @@ import com.ivianuu.rxlifecycle.RxLifecycleOwner
 import com.ivianuu.traveler.Navigator
 import com.ivianuu.traveler.NavigatorHolder
 import com.ivianuu.traveler.Router
-import com.ivianuu.traveler.setNavigator
+import com.ivianuu.traveler.lifecycle.setNavigator
 import com.ivianuu.traveler.setRoot
 import dagger.android.AndroidInjection
 import dagger.android.AndroidInjector

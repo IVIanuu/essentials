@@ -18,10 +18,10 @@ package com.ivianuu.essentials.ui.traveler.destination
 
 import android.content.Context
 import android.content.Intent
-import com.ivianuu.compass.ActivityRouteFactory
 import com.ivianuu.compass.Destination
 import com.ivianuu.compass.DoNotSerialize
 import com.ivianuu.compass.RouteFactory
+import com.ivianuu.compass.android.ActivityRouteFactory
 
 /**
  * Key for a simple intent

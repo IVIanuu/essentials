@@ -19,7 +19,7 @@ package com.ivianuu.essentials.ui.traveler.adapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
-import com.ivianuu.compass.fragment
+import com.ivianuu.compass.fragment.fragment
 
 /**
  * Key fragment state pager adapter

@@ -157,10 +157,6 @@ abstract class FragmentSwapperNavigator(
         null
     }
 
-    override fun unknownScreen(command: Command) {
-        throw IllegalArgumentException("unknown screen $command")
-    }
-
     enum class HideStrategy {
         HIDE, DETACH, REMOVE
     }

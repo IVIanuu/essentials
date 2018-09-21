@@ -63,6 +63,8 @@ dependencies {
     api Deps.archWorkRuntime
 
     api Deps.compass
+    api Deps.compassAndroid
+    api Deps.compassFragment
 
     api Deps.constraintLayout
 
@@ -123,6 +125,9 @@ dependencies {
     api Deps.toasty
 
     api Deps.traveler
+    api Deps.travelerAndroid
+    api Deps.travelerFragment
+    api Deps.travelerLifecycle
 }
 
 // build a jar with source files

@@ -20,10 +20,10 @@ import android.content.Context
 import android.content.Intent
 import android.provider.Settings
 import androidx.core.net.toUri
-import com.ivianuu.compass.ActivityRouteFactory
 import com.ivianuu.compass.Destination
 import com.ivianuu.compass.DoNotSerialize
 import com.ivianuu.compass.RouteFactory
+import com.ivianuu.compass.android.ActivityRouteFactory
 
 /**
  * Open s the app info of the app
