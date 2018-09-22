@@ -20,6 +20,7 @@ import android.app.Activity
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentActivity
+import com.ivianuu.essentials.injection.EssentialsFragmentBindingModule
 import com.ivianuu.essentials.injection.ForActivity
 import dagger.Binds
 import dagger.Module

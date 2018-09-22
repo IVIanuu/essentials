@@ -1,6 +1,5 @@
-package com.ivianuu.essentials.ui.base
+package com.ivianuu.essentials.injection
 
-import com.ivianuu.essentials.injection.PerFragment
 import com.ivianuu.essentials.ui.common.AppPickerDialog
 import com.ivianuu.essentials.ui.common.TextInputDialog
 import dagger.Module

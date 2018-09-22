@@ -16,11 +16,9 @@
 
 package com.ivianuu.essentials.injection
 
-import com.ivianuu.essentials.app.EssentialsAppServiceModule
 import com.ivianuu.essentials.injection.view.ViewInjectionModule
 import com.ivianuu.essentials.injection.viewmodel.ViewModelInjectionModule
 import com.ivianuu.essentials.injection.worker.WorkerInjectionModule
-import com.ivianuu.essentials.ui.base.EssentialsActivityBindingModule
 import com.ivianuu.essentials.ui.traveler.TravelerModule
 import dagger.Module
 import dagger.android.AndroidInjectionModule

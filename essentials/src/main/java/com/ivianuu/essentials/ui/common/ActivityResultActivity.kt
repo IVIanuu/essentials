@@ -7,7 +7,7 @@ import com.ivianuu.compass.Destination
 import com.ivianuu.essentials.ui.base.BaseActivity
 import com.ivianuu.essentials.ui.traveler.destination.ResultDestination
 import com.ivianuu.essentials.util.RequestCodeGenerator
-import com.ivianuu.traveler.sendResult
+import com.ivianuu.traveler.goBackWithResult
 
 @Destination(ActivityResultActivity::class)
 data class ActivityResultDestination(
@@ -31,9 +31,11 @@ class ActivityResultActivity : BaseActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        router.sendResult(destination.resultCode, ActivityResult(requestCode, resultCode, data))
+        router.goBackWithResult(
+            destination.resultCode,
+            ActivityResult(requestCode, resultCode, data)
+        )
         overridePendingTransition(0, 0)
-        finish()
     }
 
 }

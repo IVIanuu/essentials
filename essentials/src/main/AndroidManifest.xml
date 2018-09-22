@@ -25,6 +25,10 @@
             android:theme="@style/EssentialsTransparent" />
 
         <activity
+            android:name=".ui.common.ColorPickerActivity"
+            android:theme="@style/EssentialsTransparent" />
+
+        <activity
             android:name=".ui.common.PermissionActivity"
             android:theme="@style/EssentialsTransparent" />
 

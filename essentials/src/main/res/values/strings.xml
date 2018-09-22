@@ -20,6 +20,9 @@
     <!-- App picker -->
     <string name="dialog_title_app_picker">App Picker</string>
 
+    <!-- Color picker -->
+    <string name="dialog_title_color_picker">Color Picker</string>
+
     <!-- Dialogs -->
     <string name="action_cancel">Cancel</string>
     <string name="action_close">Close</string>
