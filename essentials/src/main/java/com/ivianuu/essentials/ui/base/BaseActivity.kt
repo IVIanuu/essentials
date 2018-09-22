@@ -86,8 +86,6 @@ abstract class BaseActivity : AppCompatActivity(), CoroutineScope, HasSupportFra
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
 
-        navigatorHolder.setNavigator(this, navigator)
-
         if (layoutRes != -1) {
             setContentView(layoutRes)
         }
@@ -95,6 +93,11 @@ abstract class BaseActivity : AppCompatActivity(), CoroutineScope, HasSupportFra
         if (savedInstanceState == null) {
             startDestination?.let { router.setRoot(it) }
         }
+    }
+
+    override fun onResumeFragments() {
+        super.onResumeFragments()
+        navigatorHolder.setNavigator(this, navigator)
     }
 
     override fun onBackPressed() {
