@@ -12,7 +12,7 @@ import com.ivianuu.essentials.ui.base.BaseDialogFragment
 import com.ivianuu.essentials.ui.traveler.destination.ResultDestination
 import com.ivianuu.essentials.util.RequestCodeGenerator
 import com.ivianuu.traveler.goBack
-import com.ivianuu.traveler.goBackWithResult
+import com.ivianuu.traveler.result.goBackWithResult
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 

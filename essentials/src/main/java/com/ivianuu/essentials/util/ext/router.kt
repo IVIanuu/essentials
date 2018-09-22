@@ -22,11 +22,11 @@ import com.ivianuu.essentials.ui.common.PermissionDestination
 import com.ivianuu.essentials.ui.traveler.destination.ResultDestination
 import com.ivianuu.essentials.util.RequestCodeGenerator
 import com.ivianuu.rxjavaktx.observable
-import com.ivianuu.traveler.ResultListener
 import com.ivianuu.traveler.Router
-import com.ivianuu.traveler.addResultListener
 import com.ivianuu.traveler.navigate
-import com.ivianuu.traveler.removeResultListener
+import com.ivianuu.traveler.result.ResultListener
+import com.ivianuu.traveler.result.addResultListener
+import com.ivianuu.traveler.result.removeResultListener
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
 

@@ -20,9 +20,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.containerId
-import com.ivianuu.traveler.BaseNavigator
 import com.ivianuu.traveler.Command
 import com.ivianuu.traveler.Replace
+import com.ivianuu.traveler.SimpleNavigator
 
 /**
  * A navigator which swaps and reuses fragments
@@ -33,7 +33,7 @@ abstract class FragmentSwapperNavigator(
     private val containerId: Int,
     private val hideStrategy: HideStrategy = HideStrategy.DETACH,
     private var swapOnReselection: Boolean = true
-) : BaseNavigator() {
+) : SimpleNavigator() {
 
     override fun applyCommand(command: Command) {
         when (command) {

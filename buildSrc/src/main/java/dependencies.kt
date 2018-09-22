@@ -9,12 +9,12 @@ object Versions {
     const val versionName = "1.0"
 
     const val androidGradlePlugin = "3.3.0-alpha10"
-    const val androidx = "1.0.0-rc02"
+    const val androidx = "1.0.0"
     const val androidxArch = "2.0.0-rc01"
     const val androidKtx = "99bfc02e6b"
     const val archWork = "1.0.0-alpha09"
     const val assistedInject = "c5d6b9ef6b"
-    const val compass = "47cb7d58b5"
+    const val compass = "c4f3c1cfe8"
     const val constraintLayout = "1.1.3"
     const val coroutines = "0.26.1-eap13"
     const val dagger = "2.16"
@@ -44,7 +44,7 @@ object Versions {
     const val timber = "4.7.1"
     const val timberKtx = "202c07bac4"
     const val toasty = "1.3.0"
-    const val traveler = "bad12c82e7"
+    const val traveler = "67a8ff8481"
 }
 
 object Deps {
@@ -153,4 +153,8 @@ object Deps {
         "com.github.IVIanuu.traveler:traveler-fragment:${Versions.traveler}"
     const val travelerLifecycle =
         "com.github.IVIanuu.traveler:traveler-lifecycle:${Versions.traveler}"
+    const val travelerPlugin =
+        "com.github.IVIanuu.traveler:traveler-plugin:${Versions.traveler}"
+    const val travelerResult =
+        "com.github.IVIanuu.traveler:traveler-result:${Versions.traveler}"
 }

@@ -21,7 +21,7 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.ivianuu.compass.fragment.CompassFragmentAppNavigator
+import com.ivianuu.compass.fragment.CompassFragmentAppNavigatorPlugin
 import com.ivianuu.essentials.injection.Injectable
 import com.ivianuu.essentials.injection.view.HasViewInjector
 import com.ivianuu.essentials.ui.common.BackListener
@@ -37,6 +37,8 @@ import com.ivianuu.traveler.Navigator
 import com.ivianuu.traveler.NavigatorHolder
 import com.ivianuu.traveler.Router
 import com.ivianuu.traveler.lifecycle.setNavigator
+import com.ivianuu.traveler.plugin.NavigatorPlugin
+import com.ivianuu.traveler.plugin.pluginNavigatorOf
 import com.ivianuu.traveler.setRoot
 import dagger.android.AndroidInjection
 import dagger.android.AndroidInjector
@@ -74,7 +76,10 @@ abstract class BaseActivity : AppCompatActivity(), CoroutineScope, HasSupportFra
     open val startDestination: Any? = null
 
     protected open val navigator: Navigator by unsafeLazy {
-        CompassFragmentAppNavigator(fragmentContainer)
+        val plugins = mutableListOf<NavigatorPlugin>()
+        plugins.addAll(navigatorPlugins())
+        plugins.add(CompassFragmentAppNavigatorPlugin(fragmentContainer))
+        pluginNavigatorOf(plugins)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -104,4 +109,6 @@ abstract class BaseActivity : AppCompatActivity(), CoroutineScope, HasSupportFra
     override fun supportFragmentInjector(): AndroidInjector<Fragment> = supportFragmentInjector
 
     override fun viewInjector(): AndroidInjector<View> = viewInjector
+
+    protected open fun navigatorPlugins() = emptyList<NavigatorPlugin>()
 }

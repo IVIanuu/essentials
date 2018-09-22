@@ -7,7 +7,7 @@ import com.ivianuu.compass.Destination
 import com.ivianuu.essentials.ui.base.BaseActivity
 import com.ivianuu.essentials.ui.traveler.destination.ResultDestination
 import com.ivianuu.essentials.util.RequestCodeGenerator
-import com.ivianuu.traveler.goBackWithResult
+import com.ivianuu.traveler.result.goBackWithResult
 
 @Destination(ActivityResultActivity::class)
 data class ActivityResultDestination(

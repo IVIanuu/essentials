@@ -17,62 +17,19 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import android.os.Bundle
 import com.ivianuu.essentials.sample.ui.counter.CounterDestination
 import com.ivianuu.essentials.ui.base.BaseActivity
 import com.ivianuu.essentials.ui.base.BaseActivityModule
-import com.ivianuu.essentials.ui.common.ColorPickerDestination
-import com.ivianuu.essentials.ui.mvrx.MvRxState
-import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
-import com.ivianuu.essentials.ui.mvrx.bindViewModel
-import com.ivianuu.essentials.util.ext.MutableLiveEvent
-import com.ivianuu.essentials.util.ext.navigateForResult
-import com.ivianuu.liveevent.LiveEvent
-import com.ivianuu.timberktx.d
 import dagger.Module
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 class MainActivity : BaseActivity() {
 
     override val startDestination: Any?
         get() = CounterDestination(1)
 
-    private val viewModel by bindViewModel(MainViewModel::class)
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        viewModel.myEvent.consume { d { "on event" } }
-
-        launch {
-            d { "color ${router.navigateForResult(ColorPickerDestination())}" }
-        }
-    }
+    override fun navigatorPlugins() =
+        listOf(MaterialDialogNavigatorPlugin(this))
 }
-
-class MainViewModel @Inject constructor() : MvRxViewModel<MainState>(MainState) {
-
-    val myEvent: LiveEvent<Unit>
-        get() = _myEvent
-    private val _myEvent = MutableLiveEvent<Unit>()
-
-    init {
-        d { "offer event" }
-        _myEvent.offer(Unit)
-
-        launch {
-            delay(3000)
-            d { "offer event" }
-            _myEvent.offer(Unit)
-            delay(3000)
-            d { "offer event" }
-            _myEvent.offer(Unit)
-        }
-    }
-}
-
-object MainState : MvRxState
 
 @Module
 abstract class MainActivityModule : BaseActivityModule<MainActivity>()
