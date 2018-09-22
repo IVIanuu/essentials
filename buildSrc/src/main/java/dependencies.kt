@@ -33,6 +33,8 @@ object Versions {
     const val materialComponentsKtx = "beb91ef514"
     const val materialDialogs = "0.9.6.0"
     const val r2 = "06e702d39f"
+
+
     const val rxAndroid = "2.1.0"
     const val rxAndroid2 = "6a27d8ca6d"
     const val rxJava = "2.2.1"
