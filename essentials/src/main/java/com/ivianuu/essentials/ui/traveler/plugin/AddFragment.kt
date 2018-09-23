@@ -14,26 +14,30 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.sample.ui
+package com.ivianuu.essentials.ui.traveler.plugin
 
-import android.content.Context
-import com.afollestad.materialdialogs.MaterialDialog
+import androidx.fragment.app.FragmentManager
+import com.ivianuu.compass.fragment.fragment
 import com.ivianuu.traveler.Command
-import com.ivianuu.traveler.Router
 import com.ivianuu.traveler.plugin.NavigatorPlugin
 
 /**
- * @author Manuel Wrage (IVIanuu)
+ * Adds the fragment for the [destination]
  */
-data class ShowMaterialDialog(val builder: MaterialDialog.Builder.() -> Unit) : Command
+data class AddFragment(val destination: Any) : Command
 
-fun MaterialDialogNavigatorPlugin(context: Context) = NavigatorPlugin<ShowMaterialDialog> {
-    MaterialDialog.Builder(context)
-        .apply(it.builder)
-        .show()
+fun AddFragmentPlugin(fragmentManager: FragmentManager) = NavigatorPlugin<AddFragment> {
+    try {
+        fragmentManager.executePendingTransactions()
+    } catch (e: Exception) {
+    }
+
+    val fragment = it.destination.fragment()
+
+    fragmentManager.beginTransaction()
+        .add(fragment, it.destination.toString())
+        .addToBackStack(it.destination.toString())
+        .commit()
+
     true
-}
-
-fun Router.showDialog(builder: MaterialDialog.Builder.() -> Unit) {
-    executeCommands(ShowMaterialDialog(builder))
 }

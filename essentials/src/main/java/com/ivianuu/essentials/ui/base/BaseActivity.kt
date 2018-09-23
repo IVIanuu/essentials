@@ -27,6 +27,7 @@ import com.ivianuu.essentials.injection.view.HasViewInjector
 import com.ivianuu.essentials.ui.common.BackListener
 import com.ivianuu.essentials.ui.mvrx.MvRxView
 import com.ivianuu.essentials.ui.traveler.RouterHolder
+import com.ivianuu.essentials.ui.traveler.plugin.AddFragmentPlugin
 import com.ivianuu.essentials.util.ext.unsafeLazy
 import com.ivianuu.essentials.util.lifecycle.LifecycleJob
 import com.ivianuu.essentials.util.lifecycle.LifecycleOwner2
@@ -79,6 +80,7 @@ abstract class BaseActivity : AppCompatActivity(), CoroutineScope, HasSupportFra
         val plugins = mutableListOf<NavigatorPlugin>()
         plugins.addAll(navigatorPlugins())
         plugins.add(CompassFragmentAppNavigatorPlugin(fragmentContainer))
+        plugins.add(AddFragmentPlugin(supportFragmentManager))
         pluginNavigatorOf(plugins)
     }
 

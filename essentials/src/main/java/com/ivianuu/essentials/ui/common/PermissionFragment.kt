@@ -4,13 +4,13 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import com.ivianuu.compass.Destination
-import com.ivianuu.essentials.ui.base.BaseActivity
+import com.ivianuu.essentials.ui.base.BaseFragment
 import com.ivianuu.essentials.ui.traveler.destination.ResultDestination
 import com.ivianuu.essentials.util.RequestCodeGenerator
-import com.ivianuu.traveler.result.sendResult
+import com.ivianuu.traveler.result.goBackWithResult
 import java.util.*
 
-@Destination(PermissionActivity::class)
+@Destination(PermissionFragment::class)
 data class PermissionDestination(
     override val resultCode: Int,
     val permissions: Array<String>,
@@ -40,26 +40,24 @@ data class PermissionDestination(
 /**
  * Activity result activity
  */
-class PermissionActivity : BaseActivity() {
+class PermissionFragment : BaseFragment() {
 
     private val destination by bindPermissionDestination()
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        overridePendingTransition(0, 0)
         super.onCreate(savedInstanceState)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             requestPermissions(destination.permissions, destination.requestCode)
         } else {
-            router.sendResult(destination.resultCode, PermissionResult(
+            router.goBackWithResult(
+                destination.resultCode, PermissionResult(
                 destination.requestCode,
                 destination.permissions,
                 destination.permissions
                     .map { PackageManager.PERMISSION_GRANTED }
                     .toIntArray()
             ))
-
-            finish()
         }
     }
 
@@ -69,17 +67,13 @@ class PermissionActivity : BaseActivity() {
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        router.sendResult(
+
+        router.goBackWithResult(
             destination.resultCode,
             PermissionResult(requestCode, permissions, grantResults)
         )
-        finish()
     }
 
-    override fun finish() {
-        super.finish()
-        overridePendingTransition(0, 0)
-    }
 }
 
 data class PermissionResult(

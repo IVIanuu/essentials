@@ -31,7 +31,6 @@ import dagger.android.support.AndroidSupportInjectionModule
     includes = [
         AndroidInjectionModule::class,
         AndroidSupportInjectionModule::class,
-        EssentialsActivityBindingModule::class,
         EssentialsAppServiceModule::class,
         SystemServiceModule::class,
         TravelerModule::class,

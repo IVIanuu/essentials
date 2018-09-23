@@ -16,7 +16,10 @@
 
 package com.ivianuu.essentials.injection
 
+import com.ivianuu.essentials.ui.common.ActivityResultFragment
 import com.ivianuu.essentials.ui.common.AppPickerDialog
+import com.ivianuu.essentials.ui.common.ColorPickerFragment
+import com.ivianuu.essentials.ui.common.PermissionFragment
 import com.ivianuu.essentials.ui.common.TextInputDialog
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
@@ -29,7 +32,19 @@ abstract class EssentialsFragmentBindingModule {
 
     @PerFragment
     @ContributesAndroidInjector
+    abstract fun bindActivityResultFragment(): ActivityResultFragment
+
+    @PerFragment
+    @ContributesAndroidInjector
     abstract fun bindAppPickerDialog(): AppPickerDialog
+
+    @PerFragment
+    @ContributesAndroidInjector
+    abstract fun bindColorPickerFragment(): ColorPickerFragment
+
+    @PerFragment
+    @ContributesAndroidInjector
+    abstract fun bindPermissionFragment(): PermissionFragment
 
     @PerFragment
     @ContributesAndroidInjector

@@ -17,10 +17,20 @@
 
 package com.ivianuu.essentials.sample.ui
 
+import android.Manifest
+import android.content.Intent
+import android.os.Bundle
+import android.provider.Settings
 import com.ivianuu.essentials.sample.ui.counter.CounterDestination
 import com.ivianuu.essentials.ui.base.BaseActivity
 import com.ivianuu.essentials.ui.base.BaseActivityModule
+import com.ivianuu.essentials.ui.common.ColorPickerDestination
+import com.ivianuu.essentials.util.ext.addFragmentForResult
+import com.ivianuu.essentials.util.ext.navigateForActivityResult
+import com.ivianuu.essentials.util.ext.requestPermissions
+import com.ivianuu.timberktx.d
 import dagger.Module
+import kotlinx.coroutines.launch
 
 class MainActivity : BaseActivity() {
 
@@ -29,6 +39,27 @@ class MainActivity : BaseActivity() {
 
     override fun navigatorPlugins() =
         listOf(MaterialDialogNavigatorPlugin(this))
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        launch {
+            val result =
+                router.navigateForActivityResult(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS))
+
+            d { "result -> $result" }
+
+            val granted =
+                router.requestPermissions(Manifest.permission.CAMERA)
+
+            d { "granted -> $granted" }
+
+            val color =
+                router.addFragmentForResult(ColorPickerDestination())
+
+            d { "color -> $color" }
+        }
+    }
 }
 
 @Module

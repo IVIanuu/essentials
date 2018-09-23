@@ -20,12 +20,13 @@ import android.os.Bundle
 import com.afollestad.materialdialogs.color.ColorChooserDialog
 import com.ivianuu.compass.Destination
 import com.ivianuu.essentials.R
-import com.ivianuu.essentials.ui.base.BaseActivity
+import com.ivianuu.essentials.ui.base.BaseFragment
 import com.ivianuu.essentials.ui.traveler.destination.ResultDestination
 import com.ivianuu.essentials.util.RequestCodeGenerator
+import com.ivianuu.traveler.goBack
 import com.ivianuu.traveler.result.goBackWithResult
 
-@Destination(ColorPickerActivity::class)
+@Destination(ColorPickerFragment::class)
 data class ColorPickerDestination(
     val titleRes: Int = R.string.dialog_title_color_picker,
     val preselect: Int = 0,
@@ -33,28 +34,34 @@ data class ColorPickerDestination(
 ) : ResultDestination<Int>
 
 /**
- * Color picker activity
+ * Color picker fragment
  */
-class ColorPickerActivity : BaseActivity(), ColorChooserDialog.ColorCallback {
+class ColorPickerFragment : BaseFragment(), ColorChooserDialog.ColorCallback {
 
     private val destination by bindColorPickerDestination()
+
+    private var colorSelected = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        ColorChooserDialog.Builder(this, destination.titleRes)
+        ColorChooserDialog.Builder(requireContext(), destination.titleRes)
             .apply {
                 if (destination.preselect != 0) {
                     preselect(destination.preselect)
                 }
             }
-            .show(supportFragmentManager)
+            .show(childFragmentManager)
     }
 
     override fun onColorSelection(dialog: ColorChooserDialog, selectedColor: Int) {
         router.goBackWithResult(destination.resultCode, selectedColor)
+        colorSelected = true
     }
 
     override fun onColorChooserDismissed(dialog: ColorChooserDialog) {
+        if (!colorSelected) {
+            router.goBack()
+        }
     }
 }

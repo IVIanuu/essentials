@@ -14,7 +14,7 @@ object Versions {
     const val androidKtx = "99bfc02e6b"
     const val archWork = "1.0.0-alpha09"
     const val assistedInject = "c5d6b9ef6b"
-    const val compass = "c4f3c1cfe8"
+    const val compass = "c4955340fa"
     const val constraintLayout = "1.1.3"
     const val coroutines = "0.26.1-eap13"
     const val dagger = "2.16"
@@ -29,12 +29,10 @@ object Versions {
     const val legacySupport = "28.0.0-rc02"
     const val liveEvent = "42c1ff3426"
     const val mavenGradle = "2.1"
-    const val materialComponents = "1.0.0-rc01"
+    const val materialComponents = "1.0.0"
     const val materialComponentsKtx = "beb91ef514"
     const val materialDialogs = "0.9.6.0"
     const val r2 = "06e702d39f"
-
-
     const val rxAndroid = "2.1.0"
     const val rxAndroid2 = "6a27d8ca6d"
     const val rxJava = "2.2.1"
@@ -46,7 +44,7 @@ object Versions {
     const val timber = "4.7.1"
     const val timberKtx = "202c07bac4"
     const val toasty = "1.3.0"
-    const val traveler = "67a8ff8481"
+    const val traveler = "f10c7170eb"
 }
 
 object Deps {

@@ -6,10 +6,8 @@ import com.ivianuu.assistedinject.Assisted
 import com.ivianuu.assistedinject.AssistedInject
 import com.ivianuu.essentials.sample.data.MyWorker
 import com.ivianuu.essentials.sample.ui.list.ListDestination
-import com.ivianuu.essentials.sample.ui.showDialog
 import com.ivianuu.essentials.ui.mvrx.MvRxState
 import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
-import com.ivianuu.timberktx.d
 import com.ivianuu.traveler.Router
 import com.ivianuu.traveler.goBack
 import com.ivianuu.traveler.navigate
@@ -27,11 +25,11 @@ class CounterViewModel @AssistedInject constructor(
     init {
         logStateChanges()
 
-        router.showDialog {
+        /*router.showDialog {
             title("Hello")
             positiveText("OK")
             onPositive { dialog, which -> d { "positive clicked" } }
-        }
+        }*/
     }
 
     fun increaseClicked() {

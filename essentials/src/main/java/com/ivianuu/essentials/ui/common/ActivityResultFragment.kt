@@ -4,12 +4,12 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import com.ivianuu.compass.Destination
-import com.ivianuu.essentials.ui.base.BaseActivity
+import com.ivianuu.essentials.ui.base.BaseFragment
 import com.ivianuu.essentials.ui.traveler.destination.ResultDestination
 import com.ivianuu.essentials.util.RequestCodeGenerator
 import com.ivianuu.traveler.result.goBackWithResult
 
-@Destination(ActivityResultActivity::class)
+@Destination(ActivityResultFragment::class)
 data class ActivityResultDestination(
     override val resultCode: Int,
     val intent: Intent,
@@ -17,14 +17,13 @@ data class ActivityResultDestination(
 ) : ResultDestination<ActivityResult>
 
 /**
- * Activity result activity
+ * Activity result fragment
  */
-class ActivityResultActivity : BaseActivity() {
+class ActivityResultFragment : BaseFragment() {
 
     private val destination by bindActivityResultDestination()
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        overridePendingTransition(0, 0)
         super.onCreate(savedInstanceState)
         startActivityForResult(destination.intent, destination.requestCode)
     }
@@ -35,7 +34,6 @@ class ActivityResultActivity : BaseActivity() {
             destination.resultCode,
             ActivityResult(requestCode, resultCode, data)
         )
-        overridePendingTransition(0, 0)
     }
 
 }
