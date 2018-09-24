@@ -19,25 +19,32 @@ package com.ivianuu.essentials.ui.traveler.plugin
 import androidx.fragment.app.FragmentManager
 import com.ivianuu.compass.fragment.fragment
 import com.ivianuu.traveler.Command
-import com.ivianuu.traveler.plugin.NavigatorPlugin
+import com.ivianuu.traveler.plugin.TypedNavigatorPlugin
 
 /**
  * Adds the fragment for the [destination]
  */
 data class AddFragment(val destination: Any) : Command
 
-fun AddFragmentPlugin(fragmentManager: FragmentManager) = NavigatorPlugin<AddFragment> {
-    try {
-        fragmentManager.executePendingTransactions()
-    } catch (e: Exception) {
+/**
+ * A navigator plugin which allows to add fragments instead of replacing them
+ */
+class AddFragmentPlugin(private val fragmentManager: FragmentManager) :
+    TypedNavigatorPlugin<AddFragment>(AddFragment::class) {
+    override fun applyCommandTyped(command: AddFragment): Boolean {
+        try {
+            fragmentManager.executePendingTransactions()
+        } catch (e: Exception) {
+        }
+
+        val fragment = command.destination.fragment()
+        val tag = command.destination.toString()
+
+        fragmentManager.beginTransaction()
+            .add(fragment, tag)
+            .addToBackStack(tag)
+            .commit()
+
+        return true
     }
-
-    val fragment = it.destination.fragment()
-
-    fragmentManager.beginTransaction()
-        .add(fragment, it.destination.toString())
-        .addToBackStack(it.destination.toString())
-        .commit()
-
-    true
 }
