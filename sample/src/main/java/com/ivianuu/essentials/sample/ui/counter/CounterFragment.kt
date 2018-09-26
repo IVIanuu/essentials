@@ -19,6 +19,7 @@ package com.ivianuu.essentials.sample.ui.counter
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
+import androidx.core.view.doOnPreDraw
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.ivianuu.androidktx.appcompat.widget.textFuture
@@ -55,6 +56,8 @@ class CounterFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        view.doOnPreDraw { }
 
         increase.setBackgroundColor(Color.BLACK)
 

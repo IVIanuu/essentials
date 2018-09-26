@@ -22,7 +22,7 @@ import android.content.res.Configuration
 /**
  * Simple component callbacks
  */
-open class SimpleComponentCallbacks : ComponentCallbacks2 {
+interface SimpleComponentCallbacks : ComponentCallbacks2 {
     override fun onConfigurationChanged(newConfig: Configuration) {
     }
 

@@ -22,4 +22,4 @@ inline fun <T> T.andTrue() = true
 
 inline fun <T> T.andFalse() = false
 
-inline fun <T> T.checkAllMatched() = this
+inline val <T> T.exhaustive get() = this

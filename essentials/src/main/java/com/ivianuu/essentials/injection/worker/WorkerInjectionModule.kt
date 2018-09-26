@@ -19,5 +19,4 @@ abstract class WorkerInjectionModule {
     @Binds
     abstract fun bindWorkerFactory(factory: DaggerWorkerFactory): WorkerFactory
 
-
 }

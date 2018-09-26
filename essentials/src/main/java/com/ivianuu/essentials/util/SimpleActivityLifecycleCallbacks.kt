@@ -23,7 +23,7 @@ import android.os.Bundle
 /**
  * Simple activity lifecycle callbacks
  */
-open class SimpleActivityLifecycleCallbacks : Application.ActivityLifecycleCallbacks {
+interface SimpleActivityLifecycleCallbacks : Application.ActivityLifecycleCallbacks {
 
     override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
     }
