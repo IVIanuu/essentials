@@ -26,7 +26,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import com.ivianuu.director.Controller
 import com.ivianuu.director.arch.lifecycle.ControllerLifecycleOwner
-import com.ivianuu.director.arch.viewmodel.ControllerViewModelStore
+import com.ivianuu.director.arch.lifecycle.LifecycleController
 import com.ivianuu.director.common.contextRef
 import com.ivianuu.director.requireActivity
 import com.ivianuu.essentials.injection.Injectable
@@ -38,6 +38,7 @@ import com.ivianuu.essentials.ui.traveler.RouterHolder
 import com.ivianuu.essentials.util.ContextAware
 import com.ivianuu.essentials.util.ViewInjectionContextWrapper
 import com.ivianuu.essentials.util.ext.unsafeLazy
+import com.ivianuu.essentials.util.lifecycle.LifecycleCoroutineScope
 import com.ivianuu.essentials.util.lifecycle.LifecycleJob
 import com.ivianuu.essentials.util.lifecycle.LifecycleOwner2
 import com.ivianuu.essentials.util.screenlogger.IdentifiableScreen
@@ -57,10 +58,9 @@ import kotlin.coroutines.CoroutineContext
 /**
  * Base fragment
  */
-abstract class BaseController : Controller(), ContextAware, CoroutineScope, HasControllerInjector,
-    HasViewInjector, Injectable, IdentifiableScreen, LayoutContainer, LifecycleOwner,
-    LifecycleOwner2, MvRxView,
-    RouterHolder, RxLifecycleOwner, ViewModelFactoryHolder, ViewModelStoreOwner {
+abstract class BaseController : LifecycleController(), ContextAware, CoroutineScope, HasControllerInjector,
+    HasViewInjector, Injectable, IdentifiableScreen, LayoutContainer,
+    LifecycleOwner2, MvRxView, RouterHolder, RxLifecycleOwner, ViewModelFactoryHolder {
 
     @set:Inject var travelerRouter: Router by contextRef()
     @set:Inject var controllerInjector: DispatchingAndroidInjector<Controller> by contextRef()
@@ -80,14 +80,11 @@ abstract class BaseController : Controller(), ContextAware, CoroutineScope, HasC
 
     val job by unsafeLazy { LifecycleJob(this) }
 
-    /**val viewCoroutineScope: CoroutineScope
+    val viewCoroutineScope: CoroutineScope
         get() = _viewCoroutineScope ?: throw IllegalArgumentException("view == null")
-    private var _viewCoroutineScope: LifecycleCoroutineScope? = null*/
+    private var _viewCoroutineScope: LifecycleCoroutineScope? = null
 
     protected open val layoutRes = -1
-
-    private val lifecycleOwner = ControllerLifecycleOwner()
-    private val viewModelStore = ControllerViewModelStore()
 
     override fun onContextAvailable(context: Context) {
         DirectorInjection.inject(this)
@@ -119,22 +116,18 @@ abstract class BaseController : Controller(), ContextAware, CoroutineScope, HasC
     override fun onDestroyView(view: View) {
         containerView = null
         clearFindViewByIdCache()
-        // _viewCoroutineScope = null
+        _viewCoroutineScope = null
         super.onDestroyView(view)
     }
 
     override fun invalidate() {
     }
 
-    override fun getLifecycle() = lifecycleOwner.lifecycle
-
-    override fun getViewModelStore() = viewModelStore
-
     override fun controllerInjector(): AndroidInjector<Controller> = controllerInjector
 
     override fun viewInjector(): AndroidInjector<View> = viewInjector
 
     protected open fun onViewCreated(view: View) {
-        // todo _viewCoroutineScope = LifecycleCoroutineScope(viewLifecycleOwner)
+        _viewCoroutineScope = LifecycleCoroutineScope(viewLifecycleOwner)
     }
 }

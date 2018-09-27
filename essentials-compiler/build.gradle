@@ -18,7 +18,8 @@ apply plugin: 'java-library'
 apply plugin: 'kotlin'
 apply plugin: 'com.github.dcendents.android-maven'
 
-group='com.github.ivianuu'
+group=Versions.groupId
+version=Versions.versionName
 
 sourceCompatibility = "1.7"
 targetCompatibility = "1.7"
@@ -29,4 +30,12 @@ dependencies {
     implementation Deps.compassCompiler
     implementation Deps.daggerAndroidProcessor
     implementation Deps.daggerCompiler
+}
+
+install {
+    repositories.mavenInstaller {
+        pom.groupId = Versions.groupId
+        pom.version = Versions.versionName
+        pom.artifactId = project.name
+    }
 }

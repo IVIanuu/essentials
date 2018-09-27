@@ -21,7 +21,8 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.ivianuu.r2'
 
-group='com.github.ivianuu'
+group=Versions.groupId
+version=Versions.versionName
 
 android {
     compileSdkVersion Versions.compileSdk
@@ -51,7 +52,13 @@ dependencies {
     api Deps.androidxCoreKtx
     api Deps.androidxPalette
 
-    api Deps.androidKtx
+    api Deps.androidKtxAppCompat
+    api Deps.androidKtxCardView
+    api Deps.androidKtxCore
+    api Deps.androidKtxFragment
+    api Deps.androidKtxLifecycle
+    api Deps.androidKtxRecyclerView
+    api Deps.androidKtxViewPager
 
     api Deps.assistedInject
 
@@ -75,9 +82,8 @@ dependencies {
 
     api Deps.director
     api Deps.directorArchLifecycle
-    api Deps.directorArchViewModel
     api Deps.directorCommon
-    api Deps.directorCommon
+    api Deps.directorDialog
     api Deps.directorViewPager
 
     api Deps.epoxy
@@ -161,4 +167,12 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
 artifacts {
     archives sourcesJar
     archives javadocJar
+}
+
+install {
+    repositories.mavenInstaller {
+        pom.groupId = Versions.groupId
+        pom.version = Versions.versionName
+        pom.artifactId = project.name
+    }
 }
