@@ -19,7 +19,6 @@ package com.ivianuu.essentials.sample.injection
 import androidx.lifecycle.ViewModel
 import com.ivianuu.essentials.injection.viewmodel.ViewModelKey
 import com.ivianuu.essentials.sample.ui.list.ListViewModel
-import com.ivianuu.essentials.sample.ui.state.StateViewModel
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
@@ -39,10 +38,5 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(ListViewModel::class)
     abstract fun bindListViewModel(listViewModel: ListViewModel): ViewModel
-
-    @Binds
-    @IntoMap
-    @ViewModelKey(StateViewModel::class)
-    abstract fun bindStateViewModel(stateViewModel: StateViewModel): ViewModel
 
 }

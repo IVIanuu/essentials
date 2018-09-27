@@ -2,6 +2,7 @@ package com.ivianuu.essentials.ui.mvrx
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import com.ivianuu.androidktx.fragment.app.requireParentFragment
@@ -114,4 +115,16 @@ internal fun Any.defaultViewModelFactory() = if (this is ViewModelFactoryHolder)
     viewModelFactory
 } else {
     ViewModelProvider.NewInstanceFactory()
+}
+
+@PublishedApi
+internal fun <T : MvRxView, V> T.lifecycleAwareLazy(initializer: () -> V): LifecycleAwareLazy<V> {
+    val initEvent = if (this is Controller) {
+        // on start is onCreateView in the controller world
+        Lifecycle.Event.ON_START
+    } else {
+        Lifecycle.Event.ON_CREATE
+    }
+
+    return lifecycleAwareLazy(initEvent, initializer)
 }

@@ -16,33 +16,49 @@
 
 package com.ivianuu.essentials.sample.ui.counter
 
-import android.graphics.Color
-import android.os.Bundle
 import android.view.View
-import androidx.core.view.doOnPreDraw
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.ivianuu.androidktx.appcompat.widget.textFuture
 import com.ivianuu.compass.Destination
 import com.ivianuu.compass.Detour
+import com.ivianuu.compass.director.ControllerDetour
+import com.ivianuu.director.RouterTransaction
+import com.ivianuu.director.common.HorizontalChangeHandler
+import com.ivianuu.director.common.contextRef
+import com.ivianuu.director.popChangeHandler
+import com.ivianuu.director.pushChangeHandler
 import com.ivianuu.essentials.sample.R
-import com.ivianuu.essentials.ui.base.BaseFragment
+import com.ivianuu.essentials.ui.base.BaseController
 import com.ivianuu.essentials.ui.mvrx.bindViewModel
 import com.ivianuu.essentials.ui.mvrx.withState
-import com.ivianuu.essentials.ui.traveler.detour.HorizontalDetour
+import dagger.Subcomponent
+import dagger.android.AndroidInjector
 import kotlinx.android.synthetic.main.fragment_counter.*
 import javax.inject.Inject
 
-@Detour(HorizontalDetour::class)
-@Destination(CounterFragment::class)
+class CounterDetour : ControllerDetour<CounterDestination> {
+    override fun setupTransaction(
+        destination: CounterDestination,
+        data: Any?,
+        transaction: RouterTransaction
+    ) {
+        transaction
+            .pushChangeHandler(HorizontalChangeHandler())
+            .popChangeHandler(HorizontalChangeHandler())
+    }
+}
+
+@Detour(CounterDetour::class)
+@Destination(CounterController::class)
 data class CounterDestination(val screen: Int)
 
 /**
  * @author Manuel Wrage (IVIanuu)
  */
-class CounterFragment : BaseFragment() {
+class CounterController : BaseController() {
 
-    @Inject lateinit var counterViewModelFactory: CounterViewModelFactory
+    @set:Inject var counterViewModelFactory: CounterViewModelFactory by contextRef()
 
     override val layoutRes = R.layout.fragment_counter
 
@@ -54,12 +70,8 @@ class CounterFragment : BaseFragment() {
         }
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        view.doOnPreDraw { }
-
-        increase.setBackgroundColor(Color.BLACK)
+    override fun onViewCreated(view: View) {
+        super.onViewCreated(view)
 
         increase.setOnClickListener { viewModel.increaseClicked() }
         decrease.setOnClickListener { viewModel.decreaseClicked() }
@@ -75,4 +87,10 @@ class CounterFragment : BaseFragment() {
     override fun invalidate() {
         withState(viewModel) { count.textFuture = "Screen: ${it.screen}, Count: ${it.count}" }
     }
+}
+
+@Subcomponent
+interface CounterControllerSubcomponent : AndroidInjector<CounterController> {
+    @Subcomponent.Builder
+    abstract class Builder : AndroidInjector.Builder<CounterController>()
 }

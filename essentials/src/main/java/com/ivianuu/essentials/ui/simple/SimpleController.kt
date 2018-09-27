@@ -55,32 +55,33 @@ abstract class SimpleController : BaseController() {
         get() = router.backstack.firstOrNull()?.controller != this
     protected open val lightToolbar: Boolean get() = primaryColor().isLight
 
-    protected val epoxyController get() = _epoxyController ?: throw IllegalStateException()
+    protected val epoxyController
+        get() = _epoxyController ?: throw IllegalStateException("no epoxy controller initialized")
     private var _epoxyController: EpoxyController? = null
 
     val appBar get() = optionalAppBar ?: throw IllegalStateException("no app bar layout")
 
     open val optionalAppBar: AppBarLayout?
-        get() = view?.findViewById(R.id.app_bar)
+        get() = containerView?.findViewById(R.id.app_bar)
 
     val coordinatorLayout
         get() = optionalCoordinatorLayout
             ?: throw IllegalStateException("no coordinator layout found")
 
     open val optionalCoordinatorLayout: CoordinatorLayout?
-        get() = view?.findViewById(R.id.coordinator_layout)
+        get() = containerView?.findViewById(R.id.coordinator_layout)
 
     val recyclerView
         get() = optionalRecyclerView ?: throw IllegalStateException("no recycler view found")
 
     open val optionalRecyclerView: EpoxyRecyclerView?
-        get() = view?.findViewById(R.id.recycler_view)
+        get() = containerView?.findViewById(R.id.recycler_view)
 
     val toolbar
         get() = optionalToolbar ?: throw IllegalStateException("no toolbar found")
 
     open val optionalToolbar: Toolbar?
-        get() = view?.findViewById(R.id.toolbar)
+        get() = containerView?.findViewById(R.id.toolbar)
 
     private val modelBuiltListener: (DiffResult) -> Unit = {
         if (layoutManagerState != null) {

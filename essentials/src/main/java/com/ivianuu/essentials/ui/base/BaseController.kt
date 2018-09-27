@@ -27,6 +27,7 @@ import androidx.lifecycle.ViewModelStoreOwner
 import com.ivianuu.director.Controller
 import com.ivianuu.director.arch.lifecycle.ControllerLifecycleOwner
 import com.ivianuu.director.arch.viewmodel.ControllerViewModelStore
+import com.ivianuu.director.common.contextRef
 import com.ivianuu.director.requireActivity
 import com.ivianuu.essentials.injection.Injectable
 import com.ivianuu.essentials.injection.director.DirectorInjection
@@ -36,7 +37,7 @@ import com.ivianuu.essentials.ui.mvrx.MvRxView
 import com.ivianuu.essentials.ui.traveler.RouterHolder
 import com.ivianuu.essentials.util.ContextAware
 import com.ivianuu.essentials.util.ViewInjectionContextWrapper
-import com.ivianuu.essentials.util.lifecycle.LifecycleCoroutineScope
+import com.ivianuu.essentials.util.ext.unsafeLazy
 import com.ivianuu.essentials.util.lifecycle.LifecycleJob
 import com.ivianuu.essentials.util.lifecycle.LifecycleOwner2
 import com.ivianuu.essentials.util.screenlogger.IdentifiableScreen
@@ -46,6 +47,7 @@ import com.ivianuu.traveler.Router
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import kotlinx.android.extensions.LayoutContainer
+import kotlinx.android.synthetic.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.android.Main
@@ -60,10 +62,12 @@ abstract class BaseController : Controller(), ContextAware, CoroutineScope, HasC
     LifecycleOwner2, MvRxView,
     RouterHolder, RxLifecycleOwner, ViewModelFactoryHolder, ViewModelStoreOwner {
 
-    @Inject lateinit var travelerRouter: Router
+    @set:Inject var travelerRouter: Router by contextRef()
+    @set:Inject var controllerInjector: DispatchingAndroidInjector<Controller> by contextRef()
+    @set:Inject var viewInjector: DispatchingAndroidInjector<View> by contextRef()
+    @set:Inject override var viewModelFactory: ViewModelProvider.Factory by contextRef()
 
-    override val containerView: View?
-        get() = view
+    override var containerView: View? = null
 
     override val providedContext: Context
         get() = requireActivity()
@@ -71,28 +75,23 @@ abstract class BaseController : Controller(), ContextAware, CoroutineScope, HasC
     override val providedRouter: Router
         get() = travelerRouter
 
-    @Inject lateinit var controllerInjector: DispatchingAndroidInjector<Controller>
-    @Inject lateinit var viewInjector: DispatchingAndroidInjector<View>
-
-    @Inject override lateinit var viewModelFactory: ViewModelProvider.Factory
-
     override val coroutineContext: CoroutineContext
         get() = Dispatchers.Main + job
 
-    val job = LifecycleJob(this)
+    val job by unsafeLazy { LifecycleJob(this) }
 
-    val viewCoroutineScope: CoroutineScope
+    /**val viewCoroutineScope: CoroutineScope
         get() = _viewCoroutineScope ?: throw IllegalArgumentException("view == null")
-    private var _viewCoroutineScope: LifecycleCoroutineScope? = null
+    private var _viewCoroutineScope: LifecycleCoroutineScope? = null*/
 
     protected open val layoutRes = -1
 
     private val lifecycleOwner = ControllerLifecycleOwner()
     private val viewModelStore = ControllerViewModelStore()
 
-    override fun onCreate() {
-        super.onCreate()
+    override fun onContextAvailable(context: Context) {
         DirectorInjection.inject(this)
+        super.onContextAvailable(context)
     }
 
     override fun onCreateView(
@@ -104,6 +103,8 @@ abstract class BaseController : Controller(), ContextAware, CoroutineScope, HasC
             ViewInjectionContextWrapper(requireActivity(), this)
         val viewInjectionInflater = inflater.cloneInContext(viewInjectionContext)
         val view = viewInjectionInflater.inflate(layoutRes, container, false)
+            .also { containerView = it }
+
         onViewCreated(view)
         view
     } else {
@@ -116,7 +117,9 @@ abstract class BaseController : Controller(), ContextAware, CoroutineScope, HasC
     }
 
     override fun onDestroyView(view: View) {
-        _viewCoroutineScope = null
+        containerView = null
+        clearFindViewByIdCache()
+        // _viewCoroutineScope = null
         super.onDestroyView(view)
     }
 

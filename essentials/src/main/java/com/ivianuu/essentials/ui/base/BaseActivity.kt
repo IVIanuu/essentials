@@ -60,8 +60,7 @@ import kotlin.coroutines.CoroutineContext
  */
 abstract class BaseActivity : AppCompatActivity(), CoroutineScope, HasControllerInjector,
     HasSupportFragmentInjector, HasViewInjector, Injectable, IdentifiableScreen, LifecycleOwner2,
-    MvRxView,
-    RouterHolder, RxLifecycleOwner, ViewModelFactoryHolder {
+    MvRxView, RouterHolder, RxLifecycleOwner, ViewModelFactoryHolder {
 
     @Inject lateinit var navigatorHolder: NavigatorHolder
     @Inject lateinit var travelerRouter: Router
