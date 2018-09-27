@@ -74,7 +74,7 @@ class CounterController : BaseController() {
         super.onViewCreated(view)
 
         increase.setOnClickListener { viewModel.increaseClicked() }
-        decrease.setOnClickListener { viewModel.decreaseClicked() }
+        decrease.setOnClibaseckListener { viewModel.decreaseClicked() }
         reset.setOnClickListener { viewModel.resetClicked() }
 
         screen_up.setOnClickListener { viewModel.screenUpClicked() }

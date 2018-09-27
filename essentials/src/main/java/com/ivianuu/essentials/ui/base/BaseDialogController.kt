@@ -17,43 +17,25 @@
 package com.ivianuu.essentials.ui.base
 
 import android.content.Context
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatDialogFragment
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelStore
 import androidx.lifecycle.ViewModelStoreOwner
-import com.ivianuu.director.Controller
 import com.ivianuu.director.arch.lifecycle.ControllerLifecycleOwner
 import com.ivianuu.director.arch.lifecycle.ControllerViewModelStoreOwner
 import com.ivianuu.director.common.contextRef
-import com.ivianuu.director.common.viewRef
 import com.ivianuu.director.dialog.DialogController
 import com.ivianuu.director.requireActivity
 import com.ivianuu.essentials.injection.Injectable
 import com.ivianuu.essentials.injection.director.DirectorInjection
-import com.ivianuu.essentials.injection.director.HasControllerInjector
-import com.ivianuu.essentials.injection.view.HasViewInjector
-import com.ivianuu.essentials.ui.common.BackListener
 import com.ivianuu.essentials.ui.traveler.RouterHolder
-import com.ivianuu.essentials.util.ViewInjectionContextWrapper
+import com.ivianuu.essentials.util.ContextAware
 import com.ivianuu.essentials.util.ext.unsafeLazy
-import com.ivianuu.essentials.util.lifecycle.LifecycleCoroutineScope
 import com.ivianuu.essentials.util.lifecycle.LifecycleJob
 import com.ivianuu.essentials.util.lifecycle.LifecycleOwner2
 import com.ivianuu.essentials.util.screenlogger.IdentifiableScreen
 import com.ivianuu.essentials.util.viewmodel.ViewModelFactoryHolder
 import com.ivianuu.rxlifecycle.RxLifecycleOwner
 import com.ivianuu.traveler.Router
-import dagger.android.AndroidInjector
-import dagger.android.DispatchingAndroidInjector
-import dagger.android.support.AndroidSupportInjection
-import dagger.android.support.HasSupportFragmentInjector
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.android.Main
@@ -64,12 +46,15 @@ import kotlin.coroutines.CoroutineContext
  * Base dialog controller
  */
 abstract class BaseDialogController : DialogController(),
-    CoroutineScope, Injectable, IdentifiableScreen,
+    ContextAware, CoroutineScope, Injectable, IdentifiableScreen,
     LifecycleOwner, LifecycleOwner2, RouterHolder, RxLifecycleOwner, ViewModelFactoryHolder,
     ViewModelStoreOwner {
 
     @set:Inject var travelerRouter: Router by contextRef()
     @set:Inject override var viewModelFactory: ViewModelProvider.Factory by contextRef()
+
+    override val providedContext: Context
+        get() = requireActivity()
 
     override val providedRouter: Router
         get() = travelerRouter
