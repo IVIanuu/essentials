@@ -21,8 +21,12 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.ivianuu.compass.director.CompassControllerAppNavigatorPlugin
 import com.ivianuu.compass.fragment.CompassFragmentAppNavigatorPlugin
+import com.ivianuu.director.Controller
+import com.ivianuu.director.attachRouter
 import com.ivianuu.essentials.injection.Injectable
+import com.ivianuu.essentials.injection.director.HasControllerInjector
 import com.ivianuu.essentials.injection.view.HasViewInjector
 import com.ivianuu.essentials.ui.common.BackListener
 import com.ivianuu.essentials.ui.mvrx.MvRxView
@@ -54,17 +58,22 @@ import kotlin.coroutines.CoroutineContext
 /**
  * Base activity
  */
-abstract class BaseActivity : AppCompatActivity(), CoroutineScope, HasSupportFragmentInjector,
-    HasViewInjector, Injectable, IdentifiableScreen, LifecycleOwner2, MvRxView, RouterHolder,
-    RxLifecycleOwner, ViewModelFactoryHolder {
+abstract class BaseActivity : AppCompatActivity(), CoroutineScope, HasControllerInjector,
+    HasSupportFragmentInjector, HasViewInjector, Injectable, IdentifiableScreen, LifecycleOwner2,
+    MvRxView,
+    RouterHolder, RxLifecycleOwner, ViewModelFactoryHolder {
 
     @Inject lateinit var navigatorHolder: NavigatorHolder
-    @Inject override lateinit var router: Router
+    @Inject lateinit var travelerRouter: Router
 
+    @Inject lateinit var controllerInjector: DispatchingAndroidInjector<Controller>
     @Inject lateinit var supportFragmentInjector: DispatchingAndroidInjector<Fragment>
     @Inject lateinit var viewInjector: DispatchingAndroidInjector<View>
 
     @Inject override lateinit var viewModelFactory: ViewModelProvider.Factory
+
+    override val providedRouter: Router
+        get() = travelerRouter
 
     override val coroutineContext: CoroutineContext
         get() = Dispatchers.Main + job
@@ -76,13 +85,21 @@ abstract class BaseActivity : AppCompatActivity(), CoroutineScope, HasSupportFra
     open val fragmentContainer = android.R.id.content
     open val startDestination: Any? = null
 
+    open val useDirector = false
+
     protected open val navigator: Navigator by unsafeLazy {
         val plugins = mutableListOf<NavigatorPlugin>()
         plugins.addAll(navigatorPlugins())
-        plugins.add(CompassFragmentAppNavigatorPlugin(fragmentContainer))
+        if (useDirector) {
+            plugins.add(CompassControllerAppNavigatorPlugin(this, router!!))
+        } else {
+            plugins.add(CompassFragmentAppNavigatorPlugin(fragmentContainer))
+        }
         plugins.add(AddFragmentPlugin(supportFragmentManager))
         pluginNavigatorOf(plugins)
     }
+
+    private var router: com.ivianuu.director.Router? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
@@ -92,8 +109,12 @@ abstract class BaseActivity : AppCompatActivity(), CoroutineScope, HasSupportFra
             setContentView(layoutRes)
         }
 
+        if (useDirector) {
+            router = attachRouter(findViewById(fragmentContainer), savedInstanceState)
+        }
+
         if (savedInstanceState == null) {
-            startDestination?.let { router.setRoot(it) }
+            startDestination?.let { travelerRouter.setRoot(it) }
         }
     }
 
@@ -103,13 +124,21 @@ abstract class BaseActivity : AppCompatActivity(), CoroutineScope, HasSupportFra
     }
 
     override fun onBackPressed() {
-        val currentFragment = supportFragmentManager.findFragmentById(fragmentContainer)
-        if (currentFragment is BackListener && currentFragment.handleBack()) return
-        super.onBackPressed()
+        if (useDirector) {
+            if (!router!!.handleBack()) {
+                super.onBackPressed()
+            }
+        } else {
+            val currentFragment = supportFragmentManager.findFragmentById(fragmentContainer)
+            if (currentFragment is BackListener && currentFragment.handleBack()) return
+            super.onBackPressed()
+        }
     }
 
     override fun invalidate() {
     }
+
+    override fun controllerInjector(): AndroidInjector<Controller> = controllerInjector
 
     override fun supportFragmentInjector(): AndroidInjector<Fragment> = supportFragmentInjector
 

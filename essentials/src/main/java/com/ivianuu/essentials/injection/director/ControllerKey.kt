@@ -14,33 +14,16 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.injection
+package com.ivianuu.essentials.injection.director
 
-import javax.inject.Qualifier
+import com.ivianuu.director.Controller
+import dagger.MapKey
+import kotlin.reflect.KClass
 
-@Qualifier
-annotation class ForApp
-
-@Qualifier
-annotation class ForActivity
-
-@Qualifier
-annotation class ForController
-
-@Qualifier
-annotation class ForChildController
-
-@Qualifier
-annotation class ForFragment
-
-@Qualifier
-annotation class ForChildFragment
-
-@Qualifier
-annotation class ForService
-
-@Qualifier
-annotation class ForView
-
-@Qualifier
-annotation class ForChildView
+/**
+ * Controller key
+ */
+@MapKey
+@Retention(AnnotationRetention.RUNTIME)
+@Target(AnnotationTarget.FUNCTION)
+annotation class ControllerKey(val value: KClass<out Controller>)

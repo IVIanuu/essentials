@@ -11,17 +11,17 @@ import com.ivianuu.traveler.Router
  * Router aware component
  */
 interface RouterHolder {
-    val router: Router
+    val providedRouter: Router
 
     fun Toolbar.goBackOnNavigationClick() {
-        goBackOnNavigationClick(router)
+        goBackOnNavigationClick(providedRouter)
     }
 
     fun View.navigateOnClick(key: () -> Any) {
-        navigateOnClick(router, key)
+        navigateOnClick(providedRouter, key)
     }
 
     fun PreferenceModel.Builder.navigateOnClick(key: () -> Any) {
-        navigateOnClick(router, key)
+        navigateOnClick(providedRouter, key)
     }
 }

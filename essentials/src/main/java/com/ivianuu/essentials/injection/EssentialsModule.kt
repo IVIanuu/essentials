@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.injection
 
+import com.ivianuu.essentials.injection.director.DirectorInjectionModule
 import com.ivianuu.essentials.injection.view.ViewInjectionModule
 import com.ivianuu.essentials.injection.viewmodel.ViewModelInjectionModule
 import com.ivianuu.essentials.injection.worker.WorkerInjectionModule
@@ -31,6 +32,7 @@ import dagger.android.support.AndroidSupportInjectionModule
     includes = [
         AndroidInjectionModule::class,
         AndroidSupportInjectionModule::class,
+        DirectorInjectionModule::class,
         EssentialsAppServiceModule::class,
         SystemServiceModule::class,
         TravelerModule::class,

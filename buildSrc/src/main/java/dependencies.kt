@@ -14,10 +14,11 @@ object Versions {
     const val androidKtx = "99bfc02e6b"
     const val archWork = "1.0.0-alpha09"
     const val assistedInject = "c5d6b9ef6b"
-    const val compass = "82ec5fa49f"
+    const val compass = "250c9b4d20"
     const val constraintLayout = "1.1.3"
     const val coroutines = "0.26.1-eap13"
     const val dagger = "2.16"
+    const val director = "6fef661154"
     const val epoxy = "2.16.4"
     const val epoxyKtx = "251c360b7e"
     const val epoxyPrefs = "91146f163e"
@@ -44,7 +45,7 @@ object Versions {
     const val timber = "4.7.1"
     const val timberKtx = "202c07bac4"
     const val toasty = "1.3.0"
-    const val traveler = "081997dfd5"
+    const val traveler = "daadc231e0"
 }
 
 object Deps {
@@ -70,6 +71,7 @@ object Deps {
     const val compass = "com.github.IVIanuu.compass:compass:${Versions.compass}"
     const val compassAndroid = "com.github.IVIanuu.compass:compass-android:${Versions.compass}"
     const val compassCompiler = "com.github.IVIanuu.compass:compass-compiler:${Versions.compass}"
+    const val compassDirector = "com.github.IVIanuu.compass:compass-director:${Versions.compass}"
     const val compassFragment = "com.github.IVIanuu.compass:compass-fragment:${Versions.compass}"
 
     const val constraintLayout =
@@ -87,6 +89,16 @@ object Deps {
     const val daggerAndroidSupport = "com.google.dagger:dagger-android-support:${Versions.dagger}"
     const val daggerCompiler = "com.google.dagger:dagger-compiler:${Versions.dagger}"
     const val daggerAndroidProcessor = "com.google.dagger:dagger-android-processor:${Versions.dagger}"
+
+    const val director = "com.github.IVIanuu.director:director:${Versions.director}"
+    const val directorArchLifecycle =
+        "com.github.IVIanuu.director:director-arch-lifecycle:${Versions.director}"
+    const val directorArchViewModel =
+        "com.github.IVIanuu.director:director-arch-viewmodel:${Versions.director}"
+    const val directorCommon = "com.github.IVIanuu.director:director-common:${Versions.director}"
+    const val directorDialog = "com.github.IVIanuu.director:director-dialog:${Versions.director}"
+    const val directorViewPager =
+        "com.github.IVIanuu.director:director-viewpager:${Versions.director}"
 
     const val epoxy = "com.airbnb.android:epoxy:${Versions.epoxy}"
     const val epoxyProcessor = "com.airbnb.android:epoxy-processor:${Versions.epoxy}"
@@ -149,6 +161,8 @@ object Deps {
 
     const val traveler = "com.github.IVIanuu.traveler:traveler:${Versions.traveler}"
     const val travelerAndroid = "com.github.IVIanuu.traveler:traveler-android:${Versions.traveler}"
+    const val travelerDirector =
+        "com.github.IVIanuu.traveler:traveler-director:${Versions.traveler}"
     const val travelerFragment =
         "com.github.IVIanuu.traveler:traveler-fragment:${Versions.traveler}"
     const val travelerLifecycle =

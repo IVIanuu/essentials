@@ -14,33 +14,23 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.injection
+package com.ivianuu.essentials.injection.director
 
-import javax.inject.Qualifier
+import android.view.View
+import com.ivianuu.director.Controller
+import dagger.Module
+import dagger.android.AndroidInjector
+import dagger.multibindings.Multibinds
 
-@Qualifier
-annotation class ForApp
+/**
+ * Director injection module
+ */
+@Module
+abstract class DirectorInjectionModule {
 
-@Qualifier
-annotation class ForActivity
+    @Multibinds
+    abstract fun controllerInjectorFactories(): Map<Class<out View>, AndroidInjector.Factory<out Controller>>
 
-@Qualifier
-annotation class ForController
-
-@Qualifier
-annotation class ForChildController
-
-@Qualifier
-annotation class ForFragment
-
-@Qualifier
-annotation class ForChildFragment
-
-@Qualifier
-annotation class ForService
-
-@Qualifier
-annotation class ForView
-
-@Qualifier
-annotation class ForChildView
+    @Multibinds
+    abstract fun controllerInjectorFactoriesWithStringKeys(): Map<String, AndroidInjector.Factory<out Controller>>
+}

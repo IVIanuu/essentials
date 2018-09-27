@@ -1,12 +1,26 @@
+/*
+ * Copyright 2018 Manuel Wrage
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.ivianuu.essentials.ui.simple
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.View
 import androidx.appcompat.widget.Toolbar
 import androidx.coordinatorlayout.widget.CoordinatorLayout
-import androidx.fragment.app.isInBackstack
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.epoxy.DiffResult
 import com.airbnb.epoxy.EpoxyController
@@ -20,7 +34,7 @@ import com.ivianuu.androidktx.appcompat.widget.subtitleTextColor
 import com.ivianuu.androidktx.appcompat.widget.titleResource
 import com.ivianuu.androidktx.appcompat.widget.titleTextColor
 import com.ivianuu.essentials.R
-import com.ivianuu.essentials.ui.base.BaseFragment
+import com.ivianuu.essentials.ui.base.BaseController
 import com.ivianuu.essentials.util.ext.iconColor
 import com.ivianuu.essentials.util.ext.isLight
 import com.ivianuu.essentials.util.ext.primaryColor
@@ -28,16 +42,17 @@ import com.ivianuu.essentials.util.ext.primaryTextColor
 import com.ivianuu.essentials.util.ext.secondaryTextColor
 
 /**
- * Simple fragment
+ * Simple controller
  */
-abstract class SimpleFragment : BaseFragment() {
+abstract class SimpleController : BaseController() {
 
     override val layoutRes = R.layout.fragment_simple
 
     protected open val toolbarTitle: String? = null
     protected open val toolbarTitleRes = 0
     protected open val toolbarMenuRes = 0
-    protected open val toolbarBackButton get() = isInBackstack
+    protected open val toolbarBackButton
+        get() = router.backstack.firstOrNull()?.controller != this
     protected open val lightToolbar: Boolean get() = primaryColor().isLight
 
     protected val epoxyController get() = _epoxyController ?: throw IllegalStateException()
@@ -76,21 +91,19 @@ abstract class SimpleFragment : BaseFragment() {
 
     private var layoutManagerState: Parcelable? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onRestoreViewState(view: View, savedViewState: Bundle) {
+        super.onRestoreViewState(view, savedViewState)
+
         /*try {
             epoxyController.onRestoreInstanceState(savedInstanceState)
         } catch (e: Exception) {
         }*/
 
-        savedInstanceState?.let {
-            layoutManagerState = it.getParcelable(KEY_LAYOUT_MANAGER_STATE)
-        }
+        layoutManagerState = savedViewState.getParcelable(KEY_LAYOUT_MANAGER_STATE)
     }
 
-    @SuppressLint("PrivateResource")
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onViewCreated(view: View) {
+        super.onViewCreated(view)
 
         optionalToolbar?.run {
             when {
@@ -124,32 +137,23 @@ abstract class SimpleFragment : BaseFragment() {
                 addModelBuildListener(modelBuiltListener)
                 setController(this)
             }
-            this@SimpleFragment.layoutManager()?.let { layoutManager = it }
+            this@SimpleController.layoutManager()?.let { layoutManager = it }
         }
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        /*try {
-            epoxyController.onSaveInstanceState(outState)
-        } catch (e: Exception) {
-        }*/
-
-        if (view != null) {
-            layoutManagerState = optionalRecyclerView?.layoutManager?.onSaveInstanceState()
-        }
-
+    override fun onSaveViewState(view: View, outState: Bundle) {
+        super.onSaveViewState(view, outState)
+        layoutManagerState = optionalRecyclerView?.layoutManager?.onSaveInstanceState()
         outState.putParcelable(KEY_LAYOUT_MANAGER_STATE, layoutManagerState)
     }
 
-    override fun onDestroyView() {
-        layoutManagerState = optionalRecyclerView?.layoutManager?.onSaveInstanceState()
+    override fun onDestroyView(view: View) {
+        super.onDestroyView(view)
         _epoxyController?.let {
             it.cancelPendingModelBuild()
             it.removeModelBuildListener(modelBuiltListener)
         }
         _epoxyController = null
-        super.onDestroyView()
     }
 
     override fun invalidate() {

@@ -21,13 +21,20 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatDialogFragment
-import androidx.fragment.app.Fragment
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStoreOwner
+import com.ivianuu.director.Controller
+import com.ivianuu.director.arch.lifecycle.ControllerLifecycleOwner
+import com.ivianuu.director.arch.viewmodel.ControllerViewModelStore
+import com.ivianuu.director.requireActivity
 import com.ivianuu.essentials.injection.Injectable
+import com.ivianuu.essentials.injection.director.DirectorInjection
+import com.ivianuu.essentials.injection.director.HasControllerInjector
 import com.ivianuu.essentials.injection.view.HasViewInjector
-import com.ivianuu.essentials.ui.common.BackListener
+import com.ivianuu.essentials.ui.mvrx.MvRxView
 import com.ivianuu.essentials.ui.traveler.RouterHolder
+import com.ivianuu.essentials.util.ContextAware
 import com.ivianuu.essentials.util.ViewInjectionContextWrapper
 import com.ivianuu.essentials.util.lifecycle.LifecycleCoroutineScope
 import com.ivianuu.essentials.util.lifecycle.LifecycleJob
@@ -38,8 +45,7 @@ import com.ivianuu.rxlifecycle.RxLifecycleOwner
 import com.ivianuu.traveler.Router
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
-import dagger.android.support.AndroidSupportInjection
-import dagger.android.support.HasSupportFragmentInjector
+import kotlinx.android.extensions.LayoutContainer
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.android.Main
@@ -47,20 +53,28 @@ import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
 /**
- * Base dialog fragment
+ * Base fragment
  */
-abstract class BaseDialogFragment : AppCompatDialogFragment(), BackListener,
-    CoroutineScope, HasSupportFragmentInjector, HasViewInjector, Injectable, IdentifiableScreen,
-    LifecycleOwner2, RouterHolder, RxLifecycleOwner, ViewModelFactoryHolder {
+abstract class BaseController : Controller(), ContextAware, CoroutineScope, HasControllerInjector,
+    HasViewInjector, Injectable, IdentifiableScreen, LayoutContainer, LifecycleOwner,
+    LifecycleOwner2, MvRxView,
+    RouterHolder, RxLifecycleOwner, ViewModelFactoryHolder, ViewModelStoreOwner {
 
-    @Inject lateinit var router: Router
-    @Inject override lateinit var viewModelFactory: ViewModelProvider.Factory
+    @Inject lateinit var travelerRouter: Router
 
-    @Inject lateinit var supportFragmentInjector: DispatchingAndroidInjector<Fragment>
-    @Inject lateinit var viewInjector: DispatchingAndroidInjector<View>
+    override val containerView: View?
+        get() = view
+
+    override val providedContext: Context
+        get() = requireActivity()
 
     override val providedRouter: Router
-        get() = router
+        get() = travelerRouter
+
+    @Inject lateinit var controllerInjector: DispatchingAndroidInjector<Controller>
+    @Inject lateinit var viewInjector: DispatchingAndroidInjector<View>
+
+    @Inject override lateinit var viewModelFactory: ViewModelProvider.Factory
 
     override val coroutineContext: CoroutineContext
         get() = Dispatchers.Main + job
@@ -73,36 +87,51 @@ abstract class BaseDialogFragment : AppCompatDialogFragment(), BackListener,
 
     protected open val layoutRes = -1
 
-    override fun onAttach(context: Context?) {
-        AndroidSupportInjection.inject(this)
-        super.onAttach(context)
+    private val lifecycleOwner = ControllerLifecycleOwner()
+    private val viewModelStore = ControllerViewModelStore()
+
+    override fun onCreate() {
+        super.onCreate()
+        DirectorInjection.inject(this)
     }
 
     override fun onCreateView(
         inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? = if (layoutRes != -1) {
+        container: ViewGroup,
+        savedViewState: Bundle?
+    ): View = if (layoutRes != -1) {
         val viewInjectionContext =
-            ViewInjectionContextWrapper(requireContext(), this)
+            ViewInjectionContextWrapper(requireActivity(), this)
         val viewInjectionInflater = inflater.cloneInContext(viewInjectionContext)
-        viewInjectionInflater.inflate(layoutRes, container, false)
+        val view = viewInjectionInflater.inflate(layoutRes, container, false)
+        onViewCreated(view)
+        view
     } else {
-        super.onCreateView(inflater, container, savedInstanceState)
+        throw IllegalStateException("no layout res provided")
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        _viewCoroutineScope = LifecycleCoroutineScope(viewLifecycleOwner)
+    override fun onAttach(view: View) {
+        super.onAttach(view)
+        postInvalidate()
     }
 
-    override fun onDestroyView() {
+    override fun onDestroyView(view: View) {
         _viewCoroutineScope = null
-        super.onDestroyView()
+        super.onDestroyView(view)
     }
 
-    override fun supportFragmentInjector(): AndroidInjector<Fragment> = supportFragmentInjector
+    override fun invalidate() {
+    }
+
+    override fun getLifecycle() = lifecycleOwner.lifecycle
+
+    override fun getViewModelStore() = viewModelStore
+
+    override fun controllerInjector(): AndroidInjector<Controller> = controllerInjector
 
     override fun viewInjector(): AndroidInjector<View> = viewInjector
 
+    protected open fun onViewCreated(view: View) {
+        // todo _viewCoroutineScope = LifecycleCoroutineScope(viewLifecycleOwner)
+    }
 }

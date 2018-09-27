@@ -53,7 +53,10 @@ abstract class BaseFragment : Fragment(), BackListener, CoroutineScope, HasSuppo
     HasViewInjector, Injectable, IdentifiableScreen, LifecycleOwner2, MvRxView, RouterHolder,
     RxLifecycleOwner, ViewModelFactoryHolder {
 
-    @Inject override lateinit var router: Router
+    @Inject lateinit var router: Router
+
+    override val providedRouter: Router
+        get() = router
 
     @Inject lateinit var supportFragmentInjector: DispatchingAndroidInjector<Fragment>
     @Inject lateinit var viewInjector: DispatchingAndroidInjector<View>
