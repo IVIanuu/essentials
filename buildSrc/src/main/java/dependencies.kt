@@ -6,7 +6,7 @@ object Versions {
     const val minSdk = 21
     const val targetSdk = 28
     const val versionCode = 1
-    const val versionName = "SNAPSHOT"
+    const val versionName = "0.0.1-dev1"
     const val groupId = "com.ivianuu.essentials"
 
     const val androidGradlePlugin = "3.2.0"
@@ -15,12 +15,12 @@ object Versions {
     const val androidKtx = "SNAPSHOT"
     const val archWork = "1.0.0-alpha09"
     const val assistedInject = "SNAPSHOT"
-    const val compass = "SNAPSHOT"
+    const val compass = "0.0.1-dev1"
     const val constraintLayout = "1.1.3"
     const val contributor = "SNAPSHOT"
     const val coroutines = "0.26.1-eap13"
     const val dagger = "2.17"
-    const val director = "SNAPSHOT"
+    const val director = "0.0.1-dev1"
     const val epoxy = "2.18.0"
     const val epoxyKtx = "SNAPSHOT"
     const val epoxyPrefs = "SNAPSHOT"
@@ -47,7 +47,7 @@ object Versions {
     const val timber = "4.7.1"
     const val timberKtx = "SNAPSHOT"
     const val toasty = "1.3.0"
-    const val traveler = "SNAPSHOT"
+    const val traveler = "0.0.1-dev1"
 }
 
 object Deps {
