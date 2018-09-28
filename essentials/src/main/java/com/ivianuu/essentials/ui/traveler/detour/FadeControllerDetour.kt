@@ -14,16 +14,19 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.injection.director
+package com.ivianuu.essentials.ui.traveler.detour
 
-import com.ivianuu.director.Controller
-import dagger.MapKey
-import kotlin.reflect.KClass
+import com.ivianuu.compass.director.ControllerDetour
+import com.ivianuu.director.RouterTransaction
+import com.ivianuu.director.common.FadeChangeHandler
+import com.ivianuu.director.popChangeHandler
+import com.ivianuu.director.pushChangeHandler
 
 /**
- * Controller key
+ * @author Manuel Wrage (IVIanuu)
  */
-@MapKey
-@Retention(AnnotationRetention.RUNTIME)
-@Target(AnnotationTarget.FUNCTION)
-annotation class ControllerKey(val value: KClass<out Controller>)
+class FadeControllerDetour : ControllerDetour<Any> {
+    override fun setupTransaction(destination: Any, data: Any?, transaction: RouterTransaction) {
+        transaction.pushChangeHandler(FadeChangeHandler()).popChangeHandler(FadeChangeHandler())
+    }
+}

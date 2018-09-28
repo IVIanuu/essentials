@@ -17,12 +17,13 @@ object Versions {
     const val assistedInject = "SNAPSHOT"
     const val compass = "SNAPSHOT"
     const val constraintLayout = "1.1.3"
+    const val contributor = "SNAPSHOT"
     const val coroutines = "0.26.1-eap13"
-    const val dagger = "2.16"
+    const val dagger = "2.17"
     const val director = "SNAPSHOT"
     const val epoxy = "2.18.0"
     const val epoxyKtx = "SNAPSHOT"
-    const val epoxyPrefs = "91146f163e"
+    const val epoxyPrefs = "SNAPSHOT"
     const val fabric = "2.7.1"
     const val glide = "4.8.0"
     const val kotlin = "1.3.0-rc-57"
@@ -81,6 +82,13 @@ object Deps {
     const val compassDirector = "com.ivianuu.compass:compass-director:${Versions.compass}"
     const val compassFragment = "com.ivianuu.compass:compass-fragment:${Versions.compass}"
 
+    const val contributor = "com.ivianuu.contributor:contributor:${Versions.contributor}"
+    const val contributorCompiler =
+        "com.ivianuu.contributor:contributor-compiler:${Versions.contributor}"
+    const val contributorDirector =
+        "com.ivianuu.contributor:contributor-director:${Versions.contributor}"
+    const val contributorView = "com.ivianuu.contributor:contributor-view:${Versions.contributor}"
+
     const val constraintLayout =
         "androidx.constraintlayout:constraintlayout:${Versions.constraintLayout}"
 
@@ -108,7 +116,7 @@ object Deps {
     const val epoxy = "com.airbnb.android:epoxy:${Versions.epoxy}"
     const val epoxyProcessor = "com.airbnb.android:epoxy-processor:${Versions.epoxy}"
     const val epoxyKtx = "com.ivianuu.epoxyktx:epoxyktx:${Versions.epoxyKtx}"
-    const val epoxyPrefs = "com.github.IVIanuu:epoxy-prefs:${Versions.epoxyPrefs}"
+    const val epoxyPrefs = "com.ivianuu.epoxyprefs:epoxyprefs:${Versions.epoxyPrefs}"
 
     const val fabric = "com.crashlytics.sdk.android:crashlytics:${Versions.fabric}@aar"
 

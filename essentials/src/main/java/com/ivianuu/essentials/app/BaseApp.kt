@@ -25,7 +25,7 @@ import androidx.work.WorkManager
 import androidx.work.WorkerFactory
 import com.bumptech.glide.Glide
 import com.crashlytics.android.Crashlytics
-import com.ivianuu.essentials.injection.view.HasViewInjector
+import com.ivianuu.contributor.view.HasViewInjector
 import com.ivianuu.essentials.util.AppIcon
 import com.ivianuu.essentials.util.AppIconModelLoader
 import com.ivianuu.essentials.util.analytics.Analytics

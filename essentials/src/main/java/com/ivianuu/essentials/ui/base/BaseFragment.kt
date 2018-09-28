@@ -23,8 +23,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.ivianuu.contributor.view.HasViewInjector
 import com.ivianuu.essentials.injection.Injectable
-import com.ivianuu.essentials.injection.view.HasViewInjector
 import com.ivianuu.essentials.ui.common.BackListener
 import com.ivianuu.essentials.ui.mvrx.MvRxView
 import com.ivianuu.essentials.ui.traveler.RouterHolder

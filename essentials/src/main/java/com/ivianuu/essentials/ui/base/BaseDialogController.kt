@@ -20,13 +20,13 @@ import android.content.Context
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
+import com.ivianuu.contributor.director.DirectorInjection
 import com.ivianuu.director.arch.lifecycle.ControllerLifecycleOwner
 import com.ivianuu.director.arch.lifecycle.ControllerViewModelStoreOwner
 import com.ivianuu.director.common.contextRef
 import com.ivianuu.director.dialog.DialogController
 import com.ivianuu.director.requireActivity
 import com.ivianuu.essentials.injection.Injectable
-import com.ivianuu.essentials.injection.director.DirectorInjection
 import com.ivianuu.essentials.ui.traveler.RouterHolder
 import com.ivianuu.essentials.util.ContextAware
 import com.ivianuu.essentials.util.ext.unsafeLazy

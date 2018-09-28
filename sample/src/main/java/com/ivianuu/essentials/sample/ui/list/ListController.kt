@@ -6,11 +6,6 @@ import com.airbnb.epoxy.EpoxyModelClass
 import com.ivianuu.androidktx.appcompat.widget.textFuture
 import com.ivianuu.compass.Destination
 import com.ivianuu.compass.Detour
-import com.ivianuu.compass.director.ControllerDetour
-import com.ivianuu.director.RouterTransaction
-import com.ivianuu.director.common.VerticalChangeHandler
-import com.ivianuu.director.popChangeHandler
-import com.ivianuu.director.pushChangeHandler
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.epoxy.BaseEpoxyHolder
 import com.ivianuu.essentials.ui.epoxy.SimpleEpoxyModel
@@ -19,24 +14,11 @@ import com.ivianuu.essentials.ui.epoxy.simpleText
 import com.ivianuu.essentials.ui.mvrx.bindViewModel
 import com.ivianuu.essentials.ui.mvrx.simpleEpoxyController
 import com.ivianuu.essentials.ui.simple.SimpleController
+import com.ivianuu.essentials.ui.traveler.detour.VerticalControllerDetour
 import com.ivianuu.essentials.util.ext.andTrue
-import dagger.Subcomponent
-import dagger.android.AndroidInjector
 import kotlinx.android.synthetic.main.single_line_list_item.*
 
-class ListDetour : ControllerDetour<ListDestination> {
-    override fun setupTransaction(
-        destination: ListDestination,
-        data: Any?,
-        transaction: RouterTransaction
-    ) {
-        transaction
-            .pushChangeHandler(VerticalChangeHandler())
-            .popChangeHandler(VerticalChangeHandler())
-    }
-}
-
-@Detour(ListDetour::class)
+@Detour(VerticalControllerDetour::class)
 @Destination(ListController::class)
 object ListDestination
 
@@ -88,10 +70,4 @@ abstract class SingleLineListItemModel : SimpleEpoxyModel() {
         holder.title.textFuture = title
     }
 
-}
-
-@Subcomponent
-interface ListControllerSubcomponent : AndroidInjector<ListController> {
-    @Subcomponent.Builder
-    abstract class Builder : AndroidInjector.Builder<ListController>()
 }

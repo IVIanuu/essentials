@@ -34,6 +34,7 @@ abstract class ViewModelModule {
     @ViewModelKey(CounterViewModel::class)
     abstract fun bindCounterViewModel(counterViewModel: CounterViewModel): ViewModel
      */
+
     @Binds
     @IntoMap
     @ViewModelKey(ListViewModel::class)

@@ -23,11 +23,11 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.ivianuu.compass.director.CompassControllerAppNavigatorPlugin
 import com.ivianuu.compass.fragment.CompassFragmentAppNavigatorPlugin
+import com.ivianuu.contributor.director.HasControllerInjector
+import com.ivianuu.contributor.view.HasViewInjector
 import com.ivianuu.director.Controller
 import com.ivianuu.director.attachRouter
 import com.ivianuu.essentials.injection.Injectable
-import com.ivianuu.essentials.injection.director.HasControllerInjector
-import com.ivianuu.essentials.injection.view.HasViewInjector
 import com.ivianuu.essentials.ui.common.BackListener
 import com.ivianuu.essentials.ui.mvrx.MvRxView
 import com.ivianuu.essentials.ui.traveler.RouterHolder

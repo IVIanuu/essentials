@@ -14,14 +14,20 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.injection.director
+package com.ivianuu.essentials.ui.traveler.detour
 
-import com.ivianuu.director.Controller
-import dagger.android.AndroidInjector
+import com.ivianuu.compass.director.ControllerDetour
+import com.ivianuu.director.RouterTransaction
+import com.ivianuu.director.common.VerticalChangeHandler
+import com.ivianuu.director.popChangeHandler
+import com.ivianuu.director.pushChangeHandler
 
 /**
  * @author Manuel Wrage (IVIanuu)
  */
-interface HasControllerInjector {
-    fun controllerInjector(): AndroidInjector<Controller>
+class VerticalControllerDetour : ControllerDetour<Any> {
+    override fun setupTransaction(destination: Any, data: Any?, transaction: RouterTransaction) {
+        transaction.pushChangeHandler(VerticalChangeHandler())
+            .popChangeHandler(VerticalChangeHandler())
+    }
 }

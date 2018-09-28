@@ -14,23 +14,24 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.injection.director
+package com.ivianuu.essentials.ui.traveler.detour
 
-import android.view.View
-import com.ivianuu.director.Controller
-import dagger.Module
-import dagger.android.AndroidInjector
-import dagger.multibindings.Multibinds
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
+import com.ivianuu.compass.fragment.FragmentDetour
+import com.ivianuu.essentials.R
 
 /**
- * Director injection module
+ * Fading animation
  */
-@Module
-abstract class DirectorInjectionModule {
-
-    @Multibinds
-    abstract fun controllerInjectorFactories(): Map<Class<out View>, AndroidInjector.Factory<out Controller>>
-
-    @Multibinds
-    abstract fun controllerInjectorFactoriesWithStringKeys(): Map<String, AndroidInjector.Factory<out Controller>>
+open class FadeFragmentDetour : FragmentDetour<Any> {
+    override fun setupTransaction(
+        destination: Any,
+        data: Any?,
+        currentFragment: Fragment?,
+        nextFragment: Fragment,
+        transaction: FragmentTransaction
+    ) {
+        transaction.setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
+    }
 }

@@ -16,8 +16,8 @@
 
 package com.ivianuu.essentials.injection
 
-import com.ivianuu.essentials.injection.director.DirectorInjectionModule
-import com.ivianuu.essentials.injection.view.ViewInjectionModule
+import com.ivianuu.contributor.director.DirectorInjectionModule
+import com.ivianuu.contributor.view.ViewInjectionModule
 import com.ivianuu.essentials.injection.viewmodel.ViewModelInjectionModule
 import com.ivianuu.essentials.injection.worker.WorkerInjectionModule
 import com.ivianuu.essentials.ui.traveler.TravelerModule

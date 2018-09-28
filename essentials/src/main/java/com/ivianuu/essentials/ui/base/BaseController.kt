@@ -21,18 +21,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelStoreOwner
+import com.ivianuu.contributor.director.DirectorInjection
+import com.ivianuu.contributor.director.HasControllerInjector
+import com.ivianuu.contributor.view.HasViewInjector
 import com.ivianuu.director.Controller
-import com.ivianuu.director.arch.lifecycle.ControllerLifecycleOwner
 import com.ivianuu.director.arch.lifecycle.LifecycleController
 import com.ivianuu.director.common.contextRef
 import com.ivianuu.director.requireActivity
 import com.ivianuu.essentials.injection.Injectable
-import com.ivianuu.essentials.injection.director.DirectorInjection
-import com.ivianuu.essentials.injection.director.HasControllerInjector
-import com.ivianuu.essentials.injection.view.HasViewInjector
 import com.ivianuu.essentials.ui.mvrx.MvRxView
 import com.ivianuu.essentials.ui.traveler.RouterHolder
 import com.ivianuu.essentials.util.ContextAware
@@ -58,7 +55,8 @@ import kotlin.coroutines.CoroutineContext
 /**
  * Base fragment
  */
-abstract class BaseController : LifecycleController(), ContextAware, CoroutineScope, HasControllerInjector,
+abstract class BaseController : LifecycleController(), ContextAware, CoroutineScope,
+    HasControllerInjector,
     HasViewInjector, Injectable, IdentifiableScreen, LayoutContainer,
     LifecycleOwner2, MvRxView, RouterHolder, RxLifecycleOwner, ViewModelFactoryHolder {
 
@@ -108,11 +106,6 @@ abstract class BaseController : LifecycleController(), ContextAware, CoroutineSc
         throw IllegalStateException("no layout res provided")
     }
 
-    override fun onAttach(view: View) {
-        super.onAttach(view)
-        postInvalidate()
-    }
-
     override fun onDestroyView(view: View) {
         containerView = null
         clearFindViewByIdCache()
@@ -129,5 +122,6 @@ abstract class BaseController : LifecycleController(), ContextAware, CoroutineSc
 
     protected open fun onViewCreated(view: View) {
         _viewCoroutineScope = LifecycleCoroutineScope(viewLifecycleOwner)
+        postInvalidate()
     }
 }

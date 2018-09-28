@@ -69,16 +69,13 @@ abstract class PrefsController : SimpleController() {
         if (usePreferenceDividerDecoration) {
             optionalRecyclerView?.addItemDecoration(PreferenceDividerDecoration(requireActivity()))
         }
-    }
 
-    override fun onAttach(view: View) {
-        super.onAttach(view)
         sharedPreferences.registerOnSharedPreferenceChangeListener(sharedPreferenceChangeListener)
     }
 
-    override fun onDetach(view: View) {
-        super.onDetach(view)
+    override fun onDestroyView(view: View) {
         sharedPreferences.unregisterOnSharedPreferenceChangeListener(sharedPreferenceChangeListener)
+        super.onDestroyView(view)
     }
 
     protected fun EpoxyController.preference(init: PreferenceModel.Builder.() -> Unit) =

@@ -16,36 +16,21 @@
 
 package com.ivianuu.essentials.sample.injection
 
-import com.ivianuu.director.Controller
-import com.ivianuu.essentials.injection.director.ControllerKey
+import com.ivianuu.contributor.ContributeInjector
+import com.ivianuu.essentials.injection.PerController
 import com.ivianuu.essentials.sample.ui.counter.CounterController
-import com.ivianuu.essentials.sample.ui.counter.CounterControllerSubcomponent
 import com.ivianuu.essentials.sample.ui.list.ListController
-import com.ivianuu.essentials.sample.ui.list.ListControllerSubcomponent
-import dagger.Binds
 import dagger.Module
-import dagger.android.AndroidInjector
-import dagger.multibindings.IntoMap
 
-@Module(
-    subcomponents = [
-        CounterControllerSubcomponent::class,
-        ListControllerSubcomponent::class
-    ]
-)
+@Module
 abstract class ControllerBindingModule {
 
-    @Binds
-    @IntoMap
-    @ControllerKey(CounterController::class)
-    abstract fun bindCounterControllerInjectorFactory(
-        builder: CounterControllerSubcomponent.Builder
-    ): AndroidInjector.Factory<out Controller>
+    @PerController
+    @ContributeInjector
+    abstract fun bindCounterController(): CounterController
 
-    @Binds
-    @IntoMap
-    @ControllerKey(ListController::class)
-    abstract fun bindListControllerInjectorFactory(
-        builder: ListControllerSubcomponent.Builder
-    ): AndroidInjector.Factory<out Controller>
+    @PerController
+    @ContributeInjector
+    abstract fun bindListController(): ListController
+
 }

@@ -26,6 +26,7 @@ targetCompatibility = "1.7"
 
 dependencies {
     implementation Deps.assistedInjectCompiler
+    implementation Deps.contributorCompiler
     implementation Deps.epoxyProcessor
     implementation Deps.compassCompiler
     implementation Deps.daggerAndroidProcessor

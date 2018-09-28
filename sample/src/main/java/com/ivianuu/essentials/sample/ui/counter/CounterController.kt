@@ -22,34 +22,16 @@ import androidx.lifecycle.ViewModelProvider
 import com.ivianuu.androidktx.appcompat.widget.textFuture
 import com.ivianuu.compass.Destination
 import com.ivianuu.compass.Detour
-import com.ivianuu.compass.director.ControllerDetour
-import com.ivianuu.director.RouterTransaction
-import com.ivianuu.director.common.HorizontalChangeHandler
 import com.ivianuu.director.common.contextRef
-import com.ivianuu.director.popChangeHandler
-import com.ivianuu.director.pushChangeHandler
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.base.BaseController
 import com.ivianuu.essentials.ui.mvrx.bindViewModel
 import com.ivianuu.essentials.ui.mvrx.withState
-import dagger.Subcomponent
-import dagger.android.AndroidInjector
+import com.ivianuu.essentials.ui.traveler.detour.HorizontalControllerDetour
 import kotlinx.android.synthetic.main.fragment_counter.*
 import javax.inject.Inject
 
-class CounterDetour : ControllerDetour<CounterDestination> {
-    override fun setupTransaction(
-        destination: CounterDestination,
-        data: Any?,
-        transaction: RouterTransaction
-    ) {
-        transaction
-            .pushChangeHandler(HorizontalChangeHandler())
-            .popChangeHandler(HorizontalChangeHandler())
-    }
-}
-
-@Detour(CounterDetour::class)
+@Detour(HorizontalControllerDetour::class)
 @Destination(CounterController::class)
 data class CounterDestination(val screen: Int)
 
@@ -74,7 +56,7 @@ class CounterController : BaseController() {
         super.onViewCreated(view)
 
         increase.setOnClickListener { viewModel.increaseClicked() }
-        decrease.setOnClibaseckListener { viewModel.decreaseClicked() }
+        decrease.setOnClickListener { viewModel.decreaseClicked() }
         reset.setOnClickListener { viewModel.resetClicked() }
 
         screen_up.setOnClickListener { viewModel.screenUpClicked() }
@@ -87,10 +69,4 @@ class CounterController : BaseController() {
     override fun invalidate() {
         withState(viewModel) { count.textFuture = "Screen: ${it.screen}, Count: ${it.count}" }
     }
-}
-
-@Subcomponent
-interface CounterControllerSubcomponent : AndroidInjector<CounterController> {
-    @Subcomponent.Builder
-    abstract class Builder : AndroidInjector.Builder<CounterController>()
 }

@@ -24,7 +24,7 @@ import com.ivianuu.essentials.R
 /**
  * Horizontal sliding detour
  */
-open class HorizontalDetour : FragmentDetour<Any> {
+open class HorizontalFragmentDetour : FragmentDetour<Any> {
     override fun setupTransaction(
         destination: Any,
         data: Any?,

@@ -2,7 +2,7 @@ package com.ivianuu.essentials.util
 
 import android.content.Context
 import android.content.ContextWrapper
-import com.ivianuu.essentials.injection.view.HasViewInjector
+import com.ivianuu.contributor.view.HasViewInjector
 
 /**
  * Wraps a [Context] and is a [HasViewInjector]

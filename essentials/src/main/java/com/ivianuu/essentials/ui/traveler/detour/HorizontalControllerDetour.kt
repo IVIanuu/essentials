@@ -16,22 +16,18 @@
 
 package com.ivianuu.essentials.ui.traveler.detour
 
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
-import com.ivianuu.compass.fragment.FragmentDetour
-import com.ivianuu.essentials.R
+import com.ivianuu.compass.director.ControllerDetour
+import com.ivianuu.director.RouterTransaction
+import com.ivianuu.director.common.HorizontalChangeHandler
+import com.ivianuu.director.popChangeHandler
+import com.ivianuu.director.pushChangeHandler
 
 /**
- * Fading animation
+ * @author Manuel Wrage (IVIanuu)
  */
-open class FadeDetour : FragmentDetour<Any> {
-    override fun setupTransaction(
-        destination: Any,
-        data: Any?,
-        currentFragment: Fragment?,
-        nextFragment: Fragment,
-        transaction: FragmentTransaction
-    ) {
-        transaction.setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
+class HorizontalControllerDetour : ControllerDetour<Any> {
+    override fun setupTransaction(destination: Any, data: Any?, transaction: RouterTransaction) {
+        transaction.pushChangeHandler(HorizontalChangeHandler())
+            .popChangeHandler(HorizontalChangeHandler())
     }
 }
