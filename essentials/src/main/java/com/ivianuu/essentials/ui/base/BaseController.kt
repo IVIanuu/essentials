@@ -56,8 +56,7 @@ import kotlin.coroutines.CoroutineContext
  * Base fragment
  */
 abstract class BaseController : LifecycleController(), ContextAware, CoroutineScope,
-    HasControllerInjector,
-    HasViewInjector, Injectable, IdentifiableScreen, LayoutContainer,
+    HasControllerInjector, HasViewInjector, Injectable, IdentifiableScreen, LayoutContainer,
     LifecycleOwner2, MvRxView, RouterHolder, RxLifecycleOwner, ViewModelFactoryHolder {
 
     @set:Inject var travelerRouter: Router by contextRef()

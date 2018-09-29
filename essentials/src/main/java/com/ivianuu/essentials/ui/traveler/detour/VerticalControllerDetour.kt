@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.ui.traveler.detour
 
 import com.ivianuu.compass.director.ControllerDetour
+import com.ivianuu.director.Controller
 import com.ivianuu.director.RouterTransaction
 import com.ivianuu.director.common.VerticalChangeHandler
 import com.ivianuu.director.popChangeHandler
@@ -26,7 +27,13 @@ import com.ivianuu.director.pushChangeHandler
  * @author Manuel Wrage (IVIanuu)
  */
 class VerticalControllerDetour : ControllerDetour<Any> {
-    override fun setupTransaction(destination: Any, data: Any?, transaction: RouterTransaction) {
+    override fun setupTransaction(
+        destination: Any,
+        data: Any?,
+        currentController: Controller?,
+        nextController: Controller,
+        transaction: RouterTransaction
+    ) {
         transaction.pushChangeHandler(VerticalChangeHandler())
             .popChangeHandler(VerticalChangeHandler())
     }

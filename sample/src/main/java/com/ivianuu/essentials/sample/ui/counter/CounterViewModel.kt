@@ -69,6 +69,16 @@ class CounterViewModel @AssistedInject constructor(
     fun doWorkClicked() {
         workManager.enqueue(OneTimeWorkRequestBuilder<MyWorker>().build())
     }
+
+    fun backClicked() {
+        withState {
+            if (it.count > 0) {
+                setState { copy(count = count.dec()) }
+            } else {
+                router.goBack()
+            }
+        }
+    }
 }
 
 data class CounterState(

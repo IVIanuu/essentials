@@ -21,17 +21,18 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.ivianuu.compass.director.CompassControllerAppNavigatorPlugin
-import com.ivianuu.compass.fragment.CompassFragmentAppNavigatorPlugin
+import com.ivianuu.compass.director.CompassControllerNavigator
+import com.ivianuu.compass.fragment.CompassFragmentNavigator
 import com.ivianuu.contributor.director.HasControllerInjector
 import com.ivianuu.contributor.view.HasViewInjector
 import com.ivianuu.director.Controller
 import com.ivianuu.director.attachRouter
+import com.ivianuu.essentials.R
 import com.ivianuu.essentials.injection.Injectable
 import com.ivianuu.essentials.ui.common.BackListener
 import com.ivianuu.essentials.ui.mvrx.MvRxView
 import com.ivianuu.essentials.ui.traveler.RouterHolder
-import com.ivianuu.essentials.ui.traveler.plugin.AddFragmentPlugin
+import com.ivianuu.essentials.ui.traveler.navigator.AddFragmentPlugin
 import com.ivianuu.essentials.util.ext.unsafeLazy
 import com.ivianuu.essentials.util.lifecycle.LifecycleJob
 import com.ivianuu.essentials.util.lifecycle.LifecycleOwner2
@@ -41,9 +42,10 @@ import com.ivianuu.rxlifecycle.RxLifecycleOwner
 import com.ivianuu.traveler.Navigator
 import com.ivianuu.traveler.NavigatorHolder
 import com.ivianuu.traveler.Router
+import com.ivianuu.traveler.android.AppNavigator
+import com.ivianuu.traveler.common.ResultNavigator
+import com.ivianuu.traveler.common.compositeNavigatorOf
 import com.ivianuu.traveler.lifecycle.setNavigator
-import com.ivianuu.traveler.plugin.NavigatorPlugin
-import com.ivianuu.traveler.plugin.pluginNavigatorOf
 import com.ivianuu.traveler.setRoot
 import dagger.android.AndroidInjection
 import dagger.android.AndroidInjector
@@ -81,21 +83,23 @@ abstract class BaseActivity : AppCompatActivity(), CoroutineScope, HasController
 
     protected open val layoutRes = -1
 
-    open val fragmentContainer = android.R.id.content
+    open val fragmentContainer = R.id.container
     open val startDestination: Any? = null
 
     open val useDirector = false
 
     protected open val navigator: Navigator by unsafeLazy {
-        val plugins = mutableListOf<NavigatorPlugin>()
-        plugins.addAll(navigatorPlugins())
+        val navigators = mutableListOf<ResultNavigator>()
+        navigators.addAll(navigators())
         if (useDirector) {
-            plugins.add(CompassControllerAppNavigatorPlugin(this, router!!))
+            navigators.add(CompassControllerNavigator(router!!))
         } else {
-            plugins.add(CompassFragmentAppNavigatorPlugin(fragmentContainer))
+            navigators.add(CompassFragmentNavigator(fragmentContainer))
         }
-        plugins.add(AddFragmentPlugin(supportFragmentManager))
-        pluginNavigatorOf(plugins)
+
+        navigators.add(AppNavigator())
+        navigators.add(AddFragmentPlugin(supportFragmentManager))
+        compositeNavigatorOf(navigators)
     }
 
     private var router: com.ivianuu.director.Router? = null
@@ -104,9 +108,7 @@ abstract class BaseActivity : AppCompatActivity(), CoroutineScope, HasController
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
 
-        if (layoutRes != -1) {
-            setContentView(layoutRes)
-        }
+        setContentView(if (layoutRes != -1) layoutRes else R.layout.activity_default)
 
         if (useDirector) {
             router = attachRouter(findViewById(fragmentContainer), savedInstanceState)
@@ -143,5 +145,5 @@ abstract class BaseActivity : AppCompatActivity(), CoroutineScope, HasController
 
     override fun viewInjector(): AndroidInjector<View> = viewInjector
 
-    protected open fun navigatorPlugins() = emptyList<NavigatorPlugin>()
+    protected open fun navigators() = emptyList<ResultNavigator>()
 }

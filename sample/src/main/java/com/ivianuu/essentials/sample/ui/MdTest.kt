@@ -20,14 +20,14 @@ import android.content.Context
 import com.afollestad.materialdialogs.MaterialDialog
 import com.ivianuu.traveler.Command
 import com.ivianuu.traveler.Router
-import com.ivianuu.traveler.plugin.NavigatorPlugin
+import com.ivianuu.traveler.common.TypedResultNavigator
 
 /**
  * @author Manuel Wrage (IVIanuu)
  */
 data class ShowMaterialDialog(val builder: MaterialDialog.Builder.() -> Unit) : Command
 
-fun MaterialDialogNavigatorPlugin(context: Context) = NavigatorPlugin<ShowMaterialDialog> {
+fun MaterialDialogNavigatorPlugin(context: Context) = TypedResultNavigator<ShowMaterialDialog> {
     MaterialDialog.Builder(context)
         .apply(it.builder)
         .show()

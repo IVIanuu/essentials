@@ -28,6 +28,7 @@ import com.ivianuu.essentials.ui.base.BaseController
 import com.ivianuu.essentials.ui.mvrx.bindViewModel
 import com.ivianuu.essentials.ui.mvrx.withState
 import com.ivianuu.essentials.ui.traveler.detour.HorizontalControllerDetour
+import com.ivianuu.essentials.util.ext.andTrue
 import kotlinx.android.synthetic.main.fragment_counter.*
 import javax.inject.Inject
 
@@ -69,4 +70,6 @@ class CounterController : BaseController() {
     override fun invalidate() {
         withState(viewModel) { count.textFuture = "Screen: ${it.screen}, Count: ${it.count}" }
     }
+
+    override fun handleBack() = viewModel.backClicked().andTrue()
 }

@@ -20,7 +20,7 @@ import android.content.Intent
 import com.ivianuu.essentials.ui.common.ActivityResultDestination
 import com.ivianuu.essentials.ui.common.PermissionDestination
 import com.ivianuu.essentials.ui.traveler.destination.ResultDestination
-import com.ivianuu.essentials.ui.traveler.plugin.AddFragment
+import com.ivianuu.essentials.ui.traveler.navigator.AddFragment
 import com.ivianuu.essentials.util.RequestCodeGenerator
 import com.ivianuu.rxjavaktx.observable
 import com.ivianuu.traveler.Router
@@ -106,5 +106,9 @@ suspend fun <D : ResultDestination<R>, R> Router.addFragmentForResult(destinatio
 
         addResultListener(destination.resultCode, listener)
 
-        executeCommands(AddFragment(destination))
+        addFragment(destination)
     }
+
+fun Router.addFragment(destination: Any) {
+    executeCommands(AddFragment(destination))
+}

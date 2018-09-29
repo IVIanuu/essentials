@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.traveler.plugin
+package com.ivianuu.essentials.ui.traveler.navigator
 
 import androidx.fragment.app.FragmentManager
 import com.ivianuu.compass.fragment.fragment
 import com.ivianuu.traveler.Command
-import com.ivianuu.traveler.plugin.TypedNavigatorPlugin
+import com.ivianuu.traveler.common.TypedResultNavigator
 
 /**
  * Adds the fragment for the [destination]
@@ -27,11 +27,11 @@ import com.ivianuu.traveler.plugin.TypedNavigatorPlugin
 data class AddFragment(val destination: Any) : Command
 
 /**
- * A navigator plugin which allows to add fragments instead of replacing them
+ * A [Navigator] which allows to add fragments instead of replacing them
  */
 class AddFragmentPlugin(private val fragmentManager: FragmentManager) :
-    TypedNavigatorPlugin<AddFragment>(AddFragment::class) {
-    override fun applyCommandTyped(command: AddFragment): Boolean {
+    TypedResultNavigator<AddFragment>(AddFragment::class) {
+    override fun applyTypedCommandWithResult(command: AddFragment): Boolean {
         try {
             fragmentManager.executePendingTransactions()
         } catch (e: Exception) {

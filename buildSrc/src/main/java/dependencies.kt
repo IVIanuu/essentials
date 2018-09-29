@@ -6,7 +6,7 @@ object Versions {
     const val minSdk = 21
     const val targetSdk = 28
     const val versionCode = 1
-    const val versionName = "0.0.1-dev1"
+    const val versionName = "0.0.1-dev2"
     const val groupId = "com.ivianuu.essentials"
 
     const val androidGradlePlugin = "3.2.0"
@@ -15,7 +15,7 @@ object Versions {
     const val androidKtx = "SNAPSHOT"
     const val archWork = "1.0.0-alpha09"
     const val assistedInject = "SNAPSHOT"
-    const val compass = "0.0.1-dev1"
+    const val compass = "0.0.1-dev4"
     const val constraintLayout = "1.1.3"
     const val contributor = "SNAPSHOT"
     const val coroutines = "0.26.1-eap13"
@@ -47,7 +47,7 @@ object Versions {
     const val timber = "4.7.1"
     const val timberKtx = "SNAPSHOT"
     const val toasty = "1.3.0"
-    const val traveler = "0.0.1-dev1"
+    const val traveler = "0.0.1-dev5"
 }
 
 object Deps {
@@ -174,6 +174,8 @@ object Deps {
 
     const val traveler = "com.ivianuu.traveler:traveler:${Versions.traveler}"
     const val travelerAndroid = "com.ivianuu.traveler:traveler-android:${Versions.traveler}"
+    const val travelerCommon =
+        "com.ivianuu.traveler:traveler-common:${Versions.traveler}"
     const val travelerDirector =
         "com.ivianuu.traveler:traveler-director:${Versions.traveler}"
     const val travelerFragment =

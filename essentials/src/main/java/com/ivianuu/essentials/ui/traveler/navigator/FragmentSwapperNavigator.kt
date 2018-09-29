@@ -21,8 +21,10 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.containerId
 import com.ivianuu.traveler.Command
+import com.ivianuu.traveler.Forward
 import com.ivianuu.traveler.Replace
-import com.ivianuu.traveler.SimpleNavigator
+import com.ivianuu.traveler.common.TypedResultNavigator
+import com.ivianuu.traveler.fragment.FragmentKey
 
 /**
  * A navigator which swaps and reuses fragments
@@ -33,16 +35,11 @@ abstract class FragmentSwapperNavigator(
     private val containerId: Int,
     private val hideStrategy: HideStrategy = HideStrategy.DETACH,
     private var swapOnReselection: Boolean = true
-) : SimpleNavigator() {
+) : TypedResultNavigator<Replace>(Replace::class) {
 
-    override fun applyCommand(command: Command) {
-        when (command) {
-            is Replace -> swapTo(command)
-            else -> throw IllegalStateException("unsupported command $command")
-        }
-    }
+    override fun applyTypedCommandWithResult(command: Replace) = swapTo(command)
 
-    protected open fun swapTo(command: Replace) {
+    protected open fun swapTo(command: Replace): Boolean {
         val newKey = command.key
 
         val oldFragment = getCurrentFragment()
@@ -57,15 +54,11 @@ abstract class FragmentSwapperNavigator(
                 getFragmentTag(newKey)
             )
             transaction.commitNow()
-            return
+            return true
         }
 
         val newFragment = getOrCreateFragmentForKey(newKey, command.data)
-
-        if (newFragment == null) {
-            unknownScreen(command)
-            return
-        }
+            ?: return unknownScreen(newKey)
 
         val transaction = fm.beginTransaction()
 
@@ -124,11 +117,21 @@ abstract class FragmentSwapperNavigator(
 
         // commit
         transaction.commitNow()
+
+        return true
     }
 
-    protected abstract fun createFragment(key: Any, data: Any?): Fragment?
+    protected open fun createFragment(key: Any, data: Any?): Fragment? {
+        return when (key) {
+            is FragmentKey -> key.createFragment(data)
+            else -> null
+        }
+    }
 
-    protected open fun getFragmentTag(key: Any) = key.toString()
+    protected open fun getFragmentTag(key: Any) = when (key) {
+        is FragmentKey -> key.getFragmentTag()
+        else -> key.toString()
+    }
 
     protected open fun setupFragmentTransaction(
         command: Command,
@@ -136,7 +139,16 @@ abstract class FragmentSwapperNavigator(
         nextFragment: Fragment,
         transaction: FragmentTransaction
     ) {
+        val key = when (command) {
+            is Forward -> command.key
+            is Replace -> command.key
+            else -> null
+        } as? FragmentKey ?: return
+
+        key.setupFragmentTransaction(command, currentFragment, nextFragment, transaction)
     }
+
+    protected open fun unknownScreen(key: Any) = false
 
     private fun getCurrentFragment(): Fragment? = fm.fragments
         .filter { it.isVisible && it.isAdded && it.containerId == containerId }

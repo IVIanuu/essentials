@@ -20,8 +20,12 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
-import com.ivianuu.compass.fragment.CompassFragmentNavigatorHelper
+import com.ivianuu.compass.fragment.CompassFragmentKey
+import com.ivianuu.compass.fragment.fragmentDetourOrNull
+import com.ivianuu.compass.fragment.fragmentOrNull
 import com.ivianuu.traveler.Command
+import com.ivianuu.traveler.Forward
+import com.ivianuu.traveler.Replace
 
 /**
  * Fragment swapper navigator which uses keys
@@ -33,10 +37,10 @@ class CompassFragmentSwapperNavigator(
     swapOnReselection: Boolean = true
 ) : FragmentSwapperNavigator(fm, containerId, hideStrategy, swapOnReselection) {
 
-    private val helper = CompassFragmentNavigatorHelper()
-
-    override fun createFragment(key: Any, data: Any?) =
-        helper.createFragment(key, data)
+    override fun createFragment(key: Any, data: Any?): Fragment? {
+        if (key is CompassFragmentKey) return key.createFragment(data)
+        return key.fragmentOrNull() ?: super.createFragment(key, data)
+    }
 
     override fun setupFragmentTransaction(
         command: Command,
@@ -44,7 +48,26 @@ class CompassFragmentSwapperNavigator(
         nextFragment: Fragment,
         transaction: FragmentTransaction
     ) {
-        helper.setupFragmentTransaction(command, currentFragment, nextFragment, transaction)
+        val key = when (command) {
+            is Forward -> command.key
+            is Replace -> command.key
+            else -> null
+        }
+
+        val data = when (command) {
+            is Forward -> command.data
+            is Replace -> command.data
+            else -> null
+        }
+
+        if (key is CompassFragmentKey) {
+            key.setupFragmentTransaction(command, currentFragment, nextFragment, transaction)
+        } else if (key != null) {
+            key.fragmentDetourOrNull()?.setupTransaction(
+                key, data,
+                currentFragment, nextFragment, transaction
+            )
+        }
     }
 
 }
