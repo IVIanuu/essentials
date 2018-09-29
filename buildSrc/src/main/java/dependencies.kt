@@ -15,7 +15,7 @@ object Versions {
     const val androidKtx = "SNAPSHOT"
     const val archWork = "1.0.0-alpha09"
     const val assistedInject = "SNAPSHOT"
-    const val compass = "0.0.1-dev5"
+    const val compass = "0.0.1-dev4"
     const val constraintLayout = "1.1.3"
     const val contributor = "SNAPSHOT"
     const val coroutines = "0.26.1-eap13"
