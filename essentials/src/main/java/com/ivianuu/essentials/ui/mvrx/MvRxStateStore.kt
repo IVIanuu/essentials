@@ -13,11 +13,11 @@ import java.util.*
 /**
  * State store
  */
-internal class MvRxStateStore<S : MvRxState> : Disposable {
+internal class MvRxStateStore<S : MvRxState>(initialState: S) : Disposable {
 
     private val disposables = CompositeDisposable()
 
-    private val subject = BehaviorSubject<S>()
+    private val subject = BehaviorSubject(initialState)
 
     private val flushQueueSubject = BehaviorSubject<Unit>()
 
@@ -26,12 +26,7 @@ internal class MvRxStateStore<S : MvRxState> : Disposable {
     val observable: Observable<S> = subject.distinctUntilChanged()
 
     internal val state: S
-        get() {
-            requireInitialState()
-            return subject.requireValue()
-        }
-
-    private val hasInitialState get() = subject.value != null
+        get() = subject.requireValue()
 
     init {
         flushQueueSubject
@@ -45,19 +40,12 @@ internal class MvRxStateStore<S : MvRxState> : Disposable {
             .addTo(disposables)
     }
 
-    fun setInitialState(initialState: S) {
-        if (hasInitialState) throw IllegalStateException("initial state already set")
-        subject.onNext(initialState)
-    }
-
     fun get(block: (S) -> Unit) {
-        requireInitialState()
         jobs.enqueueGetStateBlock(block)
         flushQueueSubject.onNext(Unit)
     }
 
     fun set(stateReducer: S.() -> S) {
-        requireInitialState()
         jobs.enqueueSetStateBlock(stateReducer)
         flushQueueSubject.onNext(Unit)
     }
@@ -83,10 +71,6 @@ internal class MvRxStateStore<S : MvRxState> : Disposable {
         var e: Throwable? = throwable
         while (e?.cause != null) e = e.cause
         e?.let { throw it }
-    }
-
-    private fun requireInitialState() {
-        if (!hasInitialState) throw IllegalStateException("set initial state must be called first")
     }
 
     private class Jobs<S> {

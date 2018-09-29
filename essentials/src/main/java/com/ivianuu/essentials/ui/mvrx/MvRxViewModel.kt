@@ -13,22 +13,14 @@ import kotlin.reflect.KProperty1
 /**
  * State view model
  */
-abstract class MvRxViewModel<S : MvRxState>(initialState: S? = null) : BaseViewModel() {
+abstract class MvRxViewModel<S : MvRxState>(initialState: S) : BaseViewModel() {
 
-    private val stateStore = MvRxStateStore<S>()
+    private val stateStore = MvRxStateStore(initialState)
 
     internal val state get() = stateStore.state
 
     init {
         disposables.add(stateStore)
-
-        if (initialState != null) {
-            setInitialState(initialState)
-        }
-    }
-
-    protected fun setInitialState(initialState: S) {
-        stateStore.setInitialState(initialState)
     }
 
     protected fun withState(block: (S) -> Unit) {
