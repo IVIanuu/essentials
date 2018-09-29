@@ -71,5 +71,11 @@ class CounterController : BaseController() {
         withState(viewModel) { count.textFuture = "Screen: ${it.screen}, Count: ${it.count}" }
     }
 
-    override fun handleBack() = viewModel.backClicked().andTrue()
+    override fun handleBack() = withState(viewModel) {
+        if (it.ignoreBack) {
+            false
+        } else {
+            viewModel.backClicked().andTrue()
+        }
+    }
 }

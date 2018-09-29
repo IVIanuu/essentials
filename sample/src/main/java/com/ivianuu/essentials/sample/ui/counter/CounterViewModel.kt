@@ -22,6 +22,8 @@ class CounterViewModel @AssistedInject constructor(
     private val workManager: WorkManager
 ) : MvRxViewModel<CounterState>(CounterState(screen = destination.screen)) {
 
+    private var finish = false
+
     init {
         logStateChanges()
 
@@ -75,7 +77,7 @@ class CounterViewModel @AssistedInject constructor(
             if (it.count > 0) {
                 setState { copy(count = count.dec()) }
             } else {
-                router.goBack()
+                setState { copy(ignoreBack = true) }
             }
         }
     }
@@ -83,5 +85,6 @@ class CounterViewModel @AssistedInject constructor(
 
 data class CounterState(
     val screen: Int = 0,
-    val count: Int = 0
+    val count: Int = 0,
+    val ignoreBack: Boolean = false
 ) : MvRxState
