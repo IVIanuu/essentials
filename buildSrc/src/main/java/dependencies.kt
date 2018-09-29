@@ -6,7 +6,7 @@ object Versions {
     const val minSdk = 21
     const val targetSdk = 28
     const val versionCode = 1
-    const val versionName = "0.0.1-dev3"
+    const val versionName = "0.0.1-dev4"
     const val groupId = "com.ivianuu.essentials"
 
     const val androidGradlePlugin = "3.2.0"

@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.util.ext
 
 import android.app.Activity
+import android.app.Application
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -25,6 +26,8 @@ import androidx.annotation.RequiresApi
 import com.ivianuu.androidktx.core.app.hideInputMethod
 import com.ivianuu.androidktx.core.app.showInputMethod
 import com.ivianuu.androidktx.core.app.startActivityForResult
+import com.ivianuu.androidktx.core.content.app
+import com.ivianuu.androidktx.core.content.intent
 import com.ivianuu.director.Controller
 import com.ivianuu.director.requireActivity
 
@@ -34,6 +37,14 @@ inline fun Controller.hideInputMethod() {
 
 inline fun Controller.showInputMethod(view: View, flags: Int = 0) {
     requireActivity().showInputMethod(view, flags)
+}
+
+inline fun <reified T : Controller> Controller.startActivity() {
+    startActivity(requireActivity().intent<T>())
+}
+
+inline fun <reified T : Controller> Controller.startActivity(init: Intent.() -> Unit) {
+    startActivity(requireActivity().intent<T>(init))
 }
 
 @RequiresApi(Build.VERSION_CODES.JELLY_BEAN)
@@ -50,5 +61,31 @@ inline fun <reified T : Activity> Controller.startActivityForResult(
     options: Bundle? = null,
     init: Intent.() -> Unit
 ) {
-    requireActivity().startActivityForResult<T>(requestCode, options, init)
+    startActivityForResult(requireActivity().intent<T>(init), requestCode, options)
 }
+
+inline fun <reified T : Activity> Controller.activity() = requireActivity() as T
+
+inline fun Controller.requireParentController() =
+    parentController ?: throw IllegalStateException("parent Controller is null")
+
+inline fun Controller.requireTargetController() =
+    targetController ?: throw IllegalStateException("target Controller is null")
+
+inline fun <reified T : Controller> Controller.parentController() = requireParentController() as T
+
+inline fun <reified T : Controller> Controller.parentControllerOrNull() = try {
+    parentController<T>()
+} catch (e: Exception) {
+    null
+}
+
+inline fun <reified T : Controller> Controller.targetController() = requireTargetController() as T
+
+inline fun <reified T : Controller> Controller.targetControllerOrNull() = try {
+    targetController<T>()
+} catch (e: Exception) {
+    null
+}
+
+inline fun <reified T : Application> Controller.app() = requireActivity().app<T>()
