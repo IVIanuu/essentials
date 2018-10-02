@@ -17,7 +17,7 @@ object Versions {
     const val assistedInject = "352898f040"
     const val compass = "bf346782dd"
     const val constraintLayout = "1.1.3"
-    const val contributor = "fbb6269f72"
+    const val contributor = "ac1f955deb"
     const val coroutines = "0.26.1-eap13"
     const val dagger = "2.16"
     const val director = "79236fe023"
