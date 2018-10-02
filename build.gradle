@@ -1,9 +1,9 @@
 buildscript {
     repositories {
+        mavenLocal()
         google()
         jcenter()
         mavenCentral()
-        mavenLocal()
         maven { url "https://jitpack.io" }
         maven { url "https://dl.bintray.com/kotlin/kotlin-eap" }
         maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
@@ -19,10 +19,10 @@ buildscript {
 
 allprojects {
     repositories {
+        mavenLocal()
         google()
         jcenter()
         mavenCentral()
-        mavenLocal()
         maven { url "https://jitpack.io" }
         maven { url "https://dl.bintray.com/kotlin/kotlin-eap" }
         maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
