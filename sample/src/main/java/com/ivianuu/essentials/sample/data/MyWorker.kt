@@ -32,6 +32,7 @@ class MyWorker @Inject constructor(
 
     override fun doWork(): Result {
         d { "hello" }
+        Thread.sleep(1000)
         return Result.SUCCESS
     }
 }

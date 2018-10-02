@@ -27,7 +27,7 @@ import com.ivianuu.traveler.common.TypedResultNavigator
  */
 data class ShowMaterialDialog(val builder: MaterialDialog.Builder.() -> Unit) : Command
 
-fun MaterialDialogNavigatorPlugin(context: Context) = TypedResultNavigator<ShowMaterialDialog> {
+fun MaterialDialogNavigator(context: Context) = TypedResultNavigator<ShowMaterialDialog> {
     MaterialDialog.Builder(context)
         .apply(it.builder)
         .show()

@@ -1,6 +1,7 @@
 package com.ivianuu.essentials.sample.ui.counter
 
 import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.State
 import androidx.work.WorkManager
 import com.ivianuu.assistedinject.Assisted
 import com.ivianuu.assistedinject.AssistedInject
@@ -8,6 +9,8 @@ import com.ivianuu.essentials.sample.data.MyWorker
 import com.ivianuu.essentials.sample.ui.list.ListDestination
 import com.ivianuu.essentials.ui.mvrx.MvRxState
 import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
+import com.ivianuu.essentials.util.Toaster
+import com.ivianuu.essentials.util.ext.toObservable
 import com.ivianuu.traveler.Router
 import com.ivianuu.traveler.goBack
 import com.ivianuu.traveler.navigate
@@ -19,19 +22,12 @@ import com.ivianuu.traveler.popToRoot
 class CounterViewModel @AssistedInject constructor(
     @Assisted private val destination: CounterDestination,
     private val router: Router,
+    private val toaster: Toaster,
     private val workManager: WorkManager
 ) : MvRxViewModel<CounterState>(CounterState(screen = destination.screen)) {
 
-    private var finish = false
-
     init {
         logStateChanges()
-
-        /*router.showDialog {
-            title("Hello")
-            positiveText("OK")
-            onPositive { dialog, which -> d { "positive clicked" } }
-        }*/
     }
 
     fun increaseClicked() {
@@ -69,7 +65,15 @@ class CounterViewModel @AssistedInject constructor(
     }
 
     fun doWorkClicked() {
-        workManager.enqueue(OneTimeWorkRequestBuilder<MyWorker>().build())
+        val request = OneTimeWorkRequestBuilder<MyWorker>().build()
+        workManager.enqueue(request)
+
+        workManager.getStatusById(request.id)
+            .toObservable()
+            .map { it.state }
+            .filter { it == State.SUCCEEDED }
+            .subscribe { toaster.success("Work finished!") }
+            .disposeOnClear()
     }
 
     fun backClicked() {

@@ -28,7 +28,7 @@ class MainActivity : BaseActivity() {
         get() = CounterDestination(1)
 
     override fun navigators() =
-        listOf(MaterialDialogNavigatorPlugin(this))
+        listOf(MaterialDialogNavigator(this))
 
     override val useDirector: Boolean
         get() = true
