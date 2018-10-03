@@ -19,7 +19,7 @@ package com.ivianuu.essentials.sample.ui.counter
 import android.view.View
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.ivianuu.androidktx.appcompat.widget.textFuture
+import com.ivianuu.androidktx.appcompat.widget.setTextFuture
 import com.ivianuu.compass.Destination
 import com.ivianuu.compass.Detour
 import com.ivianuu.director.common.contextRef
@@ -68,7 +68,7 @@ class CounterController : BaseController() {
     }
 
     override fun invalidate() {
-        withState(viewModel) { count.textFuture = "Screen: ${it.screen}, Count: ${it.count}" }
+        withState(viewModel) { count.setTextFuture("Screen: ${it.screen}, Count: ${it.count}") }
     }
 
     override fun handleBack() = withState(viewModel) {

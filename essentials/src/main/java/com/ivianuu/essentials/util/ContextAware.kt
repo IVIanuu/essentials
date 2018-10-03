@@ -96,90 +96,90 @@ interface ContextAware {
     val providedContext: Context
 }
 
-inline fun ContextAware.booleanAttr(attr: Int, defaultValue: Boolean = false) =
+fun ContextAware.booleanAttr(attr: Int, defaultValue: Boolean = false) =
     providedContext.booleanAttr(attr, defaultValue)
 
-inline fun ContextAware.colorAttr(attr: Int, defaultValue: Int = 0) =
+fun ContextAware.colorAttr(attr: Int, defaultValue: Int = 0) =
     providedContext.colorAttr(attr, defaultValue)
 
-inline fun ContextAware.colorStateListAttr(
+fun ContextAware.colorStateListAttr(
     attr: Int,
     defaultValue: ColorStateList? = null
 ) =
     providedContext.colorStateListAttr(attr, defaultValue)
 
-inline fun ContextAware.dimenAttr(attr: Int, defaultValue: Float = 0f) =
+fun ContextAware.dimenAttr(attr: Int, defaultValue: Float = 0f) =
     providedContext.dimenAttr(attr, defaultValue)
 
-inline fun ContextAware.dimenPxOffsetAttr(attr: Int, defaultValue: Int = 0) =
+fun ContextAware.dimenPxOffsetAttr(attr: Int, defaultValue: Int = 0) =
     providedContext.dimenPxOffsetAttr(attr, defaultValue)
 
-inline fun ContextAware.dimenPxAttr(attr: Int, defaultValue: Int = 0) =
+fun ContextAware.dimenPxAttr(attr: Int, defaultValue: Int = 0) =
     providedContext.dimenPxAttr(attr, defaultValue)
 
-inline fun ContextAware.drawableAttr(attr: Int, defaultValue: Drawable? = null) =
+fun ContextAware.drawableAttr(attr: Int, defaultValue: Drawable? = null) =
     providedContext.drawableAttr(attr, defaultValue)
 
-inline fun ContextAware.floatAttr(attr: Int, defaultValue: Float = 0f) =
+fun ContextAware.floatAttr(attr: Int, defaultValue: Float = 0f) =
     providedContext.floatAttr(attr, defaultValue)
 
 @TargetApi(Build.VERSION_CODES.O)
-inline fun ContextAware.fontAttr(attr: Int, defaultValue: Typeface? = null) =
+fun ContextAware.fontAttr(attr: Int, defaultValue: Typeface? = null) =
     providedContext.fontAttr(attr, defaultValue)
 
-inline fun ContextAware.intArrayAttr(attr: Int, defaultValue: Int = 0) =
+fun ContextAware.intArrayAttr(attr: Int, defaultValue: Int = 0) =
     providedContext.intArrayAttr(attr, defaultValue)
 
-inline fun ContextAware.integerAttr(attr: Int, defaultValue: Int = 0) =
+fun ContextAware.integerAttr(attr: Int, defaultValue: Int = 0) =
     providedContext.integerAttr(attr, defaultValue)
 
-inline fun ContextAware.stringAttr(attr: Int, defaultValue: String? = null) =
+fun ContextAware.stringAttr(attr: Int, defaultValue: String? = null) =
     providedContext.stringAttr(attr, defaultValue)
 
-inline fun ContextAware.textAttr(attr: Int, defaultValue: CharSequence? = null) =
+fun ContextAware.textAttr(attr: Int, defaultValue: CharSequence? = null) =
     providedContext.textAttr(attr, defaultValue)
 
-inline fun ContextAware.textArrayAttr(
+fun ContextAware.textArrayAttr(
     attr: Int,
     defaultValue: Array<CharSequence>? = null
 ) = providedContext.textArrayAttr(attr, defaultValue)
 
-inline fun ContextAware.anim(resId: Int) = providedContext.anim(resId)
+fun ContextAware.anim(resId: Int) = providedContext.anim(resId)
 
-inline fun ContextAware.intArray(resId: Int) = providedContext.intArray(resId)
+fun ContextAware.intArray(resId: Int) = providedContext.intArray(resId)
 
-inline fun ContextAware.stringArray(resId: Int) = providedContext.stringArray(resId)
+fun ContextAware.stringArray(resId: Int) = providedContext.stringArray(resId)
 
-inline fun ContextAware.textArray(resId: Int) = providedContext.textArray(resId)
+fun ContextAware.textArray(resId: Int) = providedContext.textArray(resId)
 
-inline fun ContextAware.typedArray(resId: Int) = providedContext.typedArray(resId)
+fun ContextAware.typedArray(resId: Int) = providedContext.typedArray(resId)
 
-inline fun ContextAware.bool(resId: Int) = providedContext.bool(resId)
+fun ContextAware.bool(resId: Int) = providedContext.bool(resId)
 
-inline fun ContextAware.dimen(resId: Int) = providedContext.dimen(resId)
+fun ContextAware.dimen(resId: Int) = providedContext.dimen(resId)
 
-inline fun ContextAware.dimenPx(resId: Int) = providedContext.dimenPx(resId)
+fun ContextAware.dimenPx(resId: Int) = providedContext.dimenPx(resId)
 
-inline fun ContextAware.dimenPxOffset(resId: Int) = providedContext.dimenPxOffset(resId)
+fun ContextAware.dimenPxOffset(resId: Int) = providedContext.dimenPxOffset(resId)
 
-inline fun ContextAware.float(resId: Int) = providedContext.float(resId)
+fun ContextAware.float(resId: Int) = providedContext.float(resId)
 
-inline fun ContextAware.int(resId: Int): Int = providedContext.int(resId)
+fun ContextAware.int(resId: Int): Int = providedContext.int(resId)
 
-inline fun ContextAware.bitmap(resId: Int) = providedContext.bitmap(resId)
+fun ContextAware.bitmap(resId: Int) = providedContext.bitmap(resId)
 
-inline fun ContextAware.color(resId: Int) = providedContext.color(resId)
+fun ContextAware.color(resId: Int) = providedContext.color(resId)
 
-inline fun ContextAware.colorStateList(resId: Int) =
+fun ContextAware.colorStateList(resId: Int) =
     providedContext.colorStateList(resId)
 
-inline fun ContextAware.drawable(resId: Int) = providedContext.drawable(resId)
+fun ContextAware.drawable(resId: Int) = providedContext.drawable(resId)
 
-inline fun ContextAware.font(resId: Int) = providedContext.font(resId)
+fun ContextAware.font(resId: Int) = providedContext.font(resId)
 
-inline fun ContextAware.string(resId: Int) = providedContext.string(resId)
+fun ContextAware.string(resId: Int) = providedContext.string(resId)
 
-inline fun ContextAware.string(resId: Int, vararg args: Any) =
+fun ContextAware.string(resId: Int, vararg args: Any) =
     providedContext.string(resId, *args)
 
 inline fun <reified T> ContextAware.intent() = providedContext.intent<T>()
@@ -265,15 +265,15 @@ inline val ContextAware.isCharging
 inline val ContextAware.batteryLevel
     get() = providedContext.batteryLevel
 
-inline fun ContextAware.dp(dp: Int) = providedContext.dp(dp)
+fun ContextAware.dp(dp: Int) = providedContext.dp(dp)
 
 inline fun <reified T> ContextAware.componentName() =
     providedContext.componentName<T>()
 
-inline fun ContextAware.componentName(className: String) =
+fun ContextAware.componentName(className: String) =
     providedContext.componentName(className)
 
-inline fun ContextAware.startForegroundServiceCompat(intent: Intent) {
+fun ContextAware.startForegroundServiceCompat(intent: Intent) {
     providedContext.startForegroundServiceCompat(intent)
 }
 
@@ -285,7 +285,7 @@ fun ContextAware.registerReceiver(
 fun ContextAware.hasPermissions(vararg permissions: String) =
     providedContext.hasPermissions(*permissions)
 
-inline fun ContextAware.isAppInstalled(packageName: String) =
+fun ContextAware.isAppInstalled(packageName: String) =
     providedContext.isAppInstalled(packageName)
 
 fun ContextAware.isAppLaunchable(packageName: String) =

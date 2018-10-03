@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-@file:Suppress("NOTHING_TO_INLINE")
+
 
 package com.ivianuu.essentials.util.ext
 
@@ -31,15 +31,15 @@ import io.reactivex.rxkotlin.subscribeBy
 import java.util.concurrent.atomic.AtomicReference
 
 // todo replace with overload constructor once available
-inline fun <T> MutableLiveData(initialValue: T? = null) =
+fun <T> MutableLiveData(initialValue: T? = null) =
     MutableLiveData<T>().apply {
         if (initialValue != null) value = initialValue
     }
 
-inline fun <T : Any> LiveData<T>.toFlowable(strategy: BackpressureStrategy = BackpressureStrategy.LATEST): Flowable<T> =
+fun <T : Any> LiveData<T>.toFlowable(strategy: BackpressureStrategy = BackpressureStrategy.LATEST): Flowable<T> =
     toObservable().toFlowable(strategy)
 
-inline fun <T : Any> Flowable<T>.toLiveData() =
+fun <T : Any> Flowable<T>.toLiveData() =
     toObservable().toLiveData()
 
 fun <T : Any> LiveData<T>.toObservable(): Observable<T> = Observable.create { e ->
@@ -74,14 +74,14 @@ fun <T : Any> Observable<T>.toLiveData(): LiveData<T> = object : LiveData<T>() {
     }
 }
 
-inline fun <T : Any> LiveData<T>.toMaybe(): Maybe<T> =
+fun <T : Any> LiveData<T>.toMaybe(): Maybe<T> =
     toObservable().singleElement()
 
-inline fun <T : Any> Maybe<T>.toLiveData() =
+fun <T : Any> Maybe<T>.toLiveData() =
     toObservable().toLiveData()
 
-inline fun <T : Any> LiveData<T>.toSingle(): Single<T> =
+fun <T : Any> LiveData<T>.toSingle(): Single<T> =
     toObservable().singleOrError()
 
-inline fun <T : Any> Single<T>.toLiveData() =
+fun <T : Any> Single<T>.toLiveData() =
     toObservable().toLiveData()

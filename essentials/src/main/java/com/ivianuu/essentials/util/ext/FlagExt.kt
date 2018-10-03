@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-@file:Suppress("NOTHING_TO_INLINE")
+
 
 package com.ivianuu.essentials.util.ext
 
-inline fun Int.addFlag(flag: Int): Int = this or flag
-inline fun Int.removeFlag(flag: Int): Int = this and flag.inv()
-inline fun Int.containsFlag(flag: Int) = this and flag == flag
-inline fun Int.notContainsFlag(flag: Int) = !containsFlag(flag)
+fun Int.addFlag(flag: Int): Int = this or flag
+fun Int.removeFlag(flag: Int): Int = this and flag.inv()
+fun Int.containsFlag(flag: Int) = this and flag == flag
+fun Int.notContainsFlag(flag: Int) = !containsFlag(flag)

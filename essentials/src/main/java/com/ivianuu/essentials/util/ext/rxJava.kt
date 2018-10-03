@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-@file:Suppress("NOTHING_TO_INLINE")
+
 
 package com.ivianuu.essentials.util.ext
 
@@ -34,10 +34,10 @@ import io.reactivex.functions.Function9
 import io.reactivex.rxkotlin.Observables
 import io.reactivex.subjects.BehaviorSubject
 
-inline fun <T : Any> BehaviorSubject<T>.requireValue() =
+fun <T : Any> BehaviorSubject<T>.requireValue() =
     value ?: throw IllegalStateException("value is null")
 
-inline fun <T1, T2, T3, T4> Observables.combineLatest(
+fun <T1, T2, T3, T4> Observables.combineLatest(
     source1: Observable<T1>,
     source2: Observable<T2>,
     source3: Observable<T3>,
@@ -52,7 +52,7 @@ inline fun <T1, T2, T3, T4> Observables.combineLatest(
             Quadruple(t1, t2, t3, t4)
         })!!
 
-inline fun <T1, T2, T3, T4, T5> Observables.combineLatest(
+fun <T1, T2, T3, T4, T5> Observables.combineLatest(
     source1: Observable<T1>,
     source2: Observable<T2>,
     source3: Observable<T3>,
@@ -69,7 +69,7 @@ inline fun <T1, T2, T3, T4, T5> Observables.combineLatest(
             Quintuple(t1, t2, t3, t4, t5)
         })!!
 
-inline fun <T1, T2, T3, T4, T5, T6> Observables.combineLatest(
+fun <T1, T2, T3, T4, T5, T6> Observables.combineLatest(
     source1: Observable<T1>,
     source2: Observable<T2>,
     source3: Observable<T3>,
@@ -88,7 +88,7 @@ inline fun <T1, T2, T3, T4, T5, T6> Observables.combineLatest(
             Sextuple(t1, t2, t3, t4, t5, t6)
         })!!
 
-inline fun <T1, T2, T3, T4, T5, T6, T7> Observables.combineLatest(
+fun <T1, T2, T3, T4, T5, T6, T7> Observables.combineLatest(
     source1: Observable<T1>,
     source2: Observable<T2>,
     source3: Observable<T3>,
@@ -109,7 +109,7 @@ inline fun <T1, T2, T3, T4, T5, T6, T7> Observables.combineLatest(
             Septuple(t1, t2, t3, t4, t5, t6, t7)
         })!!
 
-inline fun <T1, T2, T3, T4, T5, T6, T7, T8> Observables.combineLatest(
+fun <T1, T2, T3, T4, T5, T6, T7, T8> Observables.combineLatest(
     source1: Observable<T1>,
     source2: Observable<T2>,
     source3: Observable<T3>,
@@ -132,7 +132,7 @@ inline fun <T1, T2, T3, T4, T5, T6, T7, T8> Observables.combineLatest(
             Octuple(t1, t2, t3, t4, t5, t6, t7, t8)
         })!!
 
-inline fun <T1, T2, T3, T4, T5, T6, T7, T8, T9> Observables.combineLatest(
+fun <T1, T2, T3, T4, T5, T6, T7, T8, T9> Observables.combineLatest(
     source1: Observable<T1>,
     source2: Observable<T2>,
     source3: Observable<T3>,

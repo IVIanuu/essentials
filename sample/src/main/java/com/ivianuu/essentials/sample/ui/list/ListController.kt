@@ -3,7 +3,7 @@ package com.ivianuu.essentials.sample.ui.list
 import android.view.MenuItem
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
-import com.ivianuu.androidktx.appcompat.widget.textFuture
+import com.ivianuu.androidktx.appcompat.widget.setTextFuture
 import com.ivianuu.compass.Destination
 import com.ivianuu.compass.Detour
 import com.ivianuu.essentials.sample.R
@@ -67,7 +67,7 @@ abstract class SingleLineListItemModel : SimpleEpoxyModel() {
 
     override fun bind(holder: BaseEpoxyHolder) {
         super.bind(holder)
-        holder.title.textFuture = title
+        holder.title.setTextFuture(title)
     }
 
 }

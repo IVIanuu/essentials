@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-@file:Suppress("NOTHING_TO_INLINE")
+
 
 package com.ivianuu.essentials.util.ext
 
-inline fun <T> T.andTrue() = true
+fun <T> T.andTrue() = true
 
-inline fun <T> T.andFalse() = false
+fun <T> T.andFalse() = false
 
 inline val <T> T.exhaustive get() = this

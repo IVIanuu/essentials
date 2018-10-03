@@ -1,10 +1,8 @@
 package com.ivianuu.essentials.ui.epoxy
 
+import android.content.res.ColorStateList
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
-import com.ivianuu.androidktx.core.widget.indeterminateColor
-import com.ivianuu.androidktx.core.widget.progressColor
-import com.ivianuu.androidktx.core.widget.secondaryProgressColor
 import com.ivianuu.essentials.R2
 import com.ivianuu.essentials.util.color
 import kotlinx.android.synthetic.main.item_simple_loading.*
@@ -27,9 +25,12 @@ abstract class SimpleLoadingModel : SimpleEpoxyModel() {
                 else -> 0
             }
 
-            progress_bar.progressColor = progressColor
-            progress_bar.secondaryProgressColor = progressColor
-            progress_bar.indeterminateColor = progressColor
+            val colorStateList = ColorStateList.valueOf(progressColor)
+            with(progress_bar) {
+                progressBackgroundTintList = colorStateList
+                secondaryProgressTintList = colorStateList
+                indeterminateTintList = colorStateList
+            }
         }
     }
 

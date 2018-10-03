@@ -31,11 +31,11 @@ import com.ivianuu.androidktx.core.content.intent
 import com.ivianuu.director.Controller
 import com.ivianuu.director.requireActivity
 
-inline fun Controller.hideInputMethod() {
+fun Controller.hideInputMethod() {
     requireActivity().hideInputMethod()
 }
 
-inline fun Controller.showInputMethod(view: View, flags: Int = 0) {
+fun Controller.showInputMethod(view: View, flags: Int = 0) {
     requireActivity().showInputMethod(view, flags)
 }
 
@@ -66,10 +66,10 @@ inline fun <reified T : Activity> Controller.startActivityForResult(
 
 inline fun <reified T : Activity> Controller.activity() = requireActivity() as T
 
-inline fun Controller.requireParentController() =
+fun Controller.requireParentController() =
     parentController ?: throw IllegalStateException("parent Controller is null")
 
-inline fun Controller.requireTargetController() =
+fun Controller.requireTargetController() =
     targetController ?: throw IllegalStateException("target Controller is null")
 
 inline fun <reified T : Controller> Controller.parentController() = requireParentController() as T

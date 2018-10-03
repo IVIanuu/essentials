@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-@file:Suppress("NOTHING_TO_INLINE")
+
 
 package com.ivianuu.essentials.util.ext
 
 import java.util.*
 
-inline fun <T> MutableList<T>.swap(from: Int, to: Int) {
+fun <T> MutableList<T>.swap(from: Int, to: Int) {
     Collections.swap(this, from, to)
 }

@@ -1,6 +1,7 @@
 package com.ivianuu.essentials.ui.simple
 
 import android.annotation.SuppressLint
+import android.graphics.PorterDuff
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.View
@@ -12,13 +13,7 @@ import com.airbnb.epoxy.DiffResult
 import com.airbnb.epoxy.EpoxyController
 import com.airbnb.epoxy.EpoxyRecyclerView
 import com.google.android.material.appbar.AppBarLayout
-import com.ivianuu.androidktx.appcompat.widget.menuIconColor
-import com.ivianuu.androidktx.appcompat.widget.navigationIconColor
-import com.ivianuu.androidktx.appcompat.widget.navigationIconResource
-import com.ivianuu.androidktx.appcompat.widget.overflowIconColor
-import com.ivianuu.androidktx.appcompat.widget.subtitleTextColor
-import com.ivianuu.androidktx.appcompat.widget.titleResource
-import com.ivianuu.androidktx.appcompat.widget.titleTextColor
+import com.ivianuu.androidktx.core.view.items
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.base.BaseFragment
 import com.ivianuu.essentials.util.ext.iconColor
@@ -95,7 +90,7 @@ abstract class SimpleFragment : BaseFragment() {
         optionalToolbar?.run {
             when {
                 toolbarTitle != null -> title = toolbarTitle
-                toolbarTitleRes != 0 -> titleResource = toolbarTitleRes
+                toolbarTitleRes != 0 -> setTitle(toolbarTitleRes)
             }
 
             if (toolbarMenuRes != 0) {
@@ -104,7 +99,7 @@ abstract class SimpleFragment : BaseFragment() {
             }
 
             if (toolbarBackButton) {
-                navigationIconResource = R.drawable.abc_ic_ab_back_material
+                setNavigationIcon(R.drawable.abc_ic_ab_back_material)
                 goBackOnNavigationClick()
             }
 
@@ -112,11 +107,14 @@ abstract class SimpleFragment : BaseFragment() {
             val subTitleColor = secondaryTextColor(!lightToolbar)
             val iconColor = iconColor(!lightToolbar)
 
-            titleTextColor = titleColor
-            subtitleTextColor = subTitleColor
-            navigationIconColor = iconColor
-            overflowIconColor = iconColor
-            menuIconColor = iconColor
+            setTitleTextColor(titleColor)
+            setSubtitleTextColor(subTitleColor)
+            navigationIcon?.setColorFilter(iconColor, PorterDuff.Mode.SRC_IN)
+            overflowIcon?.setColorFilter(iconColor, PorterDuff.Mode.SRC_IN)
+
+            menu.items
+                .mapNotNull { it.icon }
+                .forEach { it.setColorFilter(iconColor, PorterDuff.Mode.SRC_IN) }
         }
 
         optionalRecyclerView?.run {

@@ -1,5 +1,5 @@
 @file:SuppressLint("PrivateResource")
-@file:Suppress("NOTHING_TO_INLINE")
+
 
 // Aliases to other public API.
 
@@ -14,54 +14,54 @@ import com.ivianuu.androidktx.core.content.colorAttr
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.util.ContextAware
 
-inline fun Context.isWindowBackgroundDark() =
+fun Context.isWindowBackgroundDark() =
     colorAttr(android.R.attr.windowBackground).isDark
 
-inline fun ContextAware.isWindowBackgroundDark() =
+fun ContextAware.isWindowBackgroundDark() =
     providedContext.isWindowBackgroundDark()
 
-inline fun Fragment.isWindowBackgroundDark() = requireContext().isWindowBackgroundDark()
+fun Fragment.isWindowBackgroundDark() = requireContext().isWindowBackgroundDark()
 
-inline fun View.isWindowBackgroundDark() = context.isWindowBackgroundDark()
+fun View.isWindowBackgroundDark() = context.isWindowBackgroundDark()
 
-inline fun Context.primaryColor() = colorAttr(android.R.attr.colorPrimary)
+fun Context.primaryColor() = colorAttr(android.R.attr.colorPrimary)
 
-inline fun ContextAware.primaryColor() =
+fun ContextAware.primaryColor() =
     providedContext.colorAttr(android.R.attr.colorPrimary)
 
-inline fun Fragment.primaryColor() =
+fun Fragment.primaryColor() =
     requireContext().colorAttr(android.R.attr.colorPrimary)
 
-inline fun View.primaryColor() =
+fun View.primaryColor() =
     context.colorAttr(android.R.attr.colorPrimary)
 
-inline fun Context.primaryColorDark() = colorAttr(android.R.attr.colorPrimaryDark)
+fun Context.primaryColorDark() = colorAttr(android.R.attr.colorPrimaryDark)
 
-inline fun ContextAware.primaryColorDark() =
+fun ContextAware.primaryColorDark() =
     providedContext.primaryColorDark()
 
-inline fun Fragment.primaryColorDark() =
+fun Fragment.primaryColorDark() =
     requireContext().primaryColorDark()
 
-inline fun View.primaryColorDark() =
+fun View.primaryColorDark() =
     context.primaryColorDark()
 
-inline fun Context.accentColor() = colorAttr(android.R.attr.colorAccent)
+fun Context.accentColor() = colorAttr(android.R.attr.colorAccent)
 
-inline fun ContextAware.accentColor() =
+fun ContextAware.accentColor() =
     providedContext.accentColor()
 
-inline fun Fragment.accentColor() =
+fun Fragment.accentColor() =
     requireContext().accentColor()
 
-inline fun View.accentColor() =
+fun View.accentColor() =
     context.accentColor()
 
-inline fun Context.cardColor() = cardColor(isWindowBackgroundDark())
+fun Context.cardColor() = cardColor(isWindowBackgroundDark())
 
-inline fun Context.cardColor(color: Int) = cardColor(color.isDark)
+fun Context.cardColor(color: Int) = cardColor(color.isDark)
 
-inline fun Context.cardColor(dark: Boolean) = color(
+fun Context.cardColor(dark: Boolean) = color(
     if (dark) {
         R.color.cardview_dark_background
     } else {
@@ -69,38 +69,38 @@ inline fun Context.cardColor(dark: Boolean) = color(
     }
 )
 
-inline fun ContextAware.cardColor() =
+fun ContextAware.cardColor() =
     providedContext.cardColor()
 
-inline fun ContextAware.cardColor(color: Int) =
+fun ContextAware.cardColor(color: Int) =
     providedContext.cardColor(color)
 
-inline fun ContextAware.cardColor(dark: Boolean) =
+fun ContextAware.cardColor(dark: Boolean) =
     providedContext.cardColor(dark)
 
-inline fun Fragment.cardColor() =
+fun Fragment.cardColor() =
     requireContext().cardColor()
 
-inline fun Fragment.cardColor(color: Int) =
+fun Fragment.cardColor(color: Int) =
     requireContext().cardColor(color)
 
-inline fun Fragment.cardColor(dark: Boolean) =
+fun Fragment.cardColor(dark: Boolean) =
     requireContext().cardColor(dark)
 
-inline fun View.cardColor() =
+fun View.cardColor() =
     context.cardColor()
 
-inline fun View.cardColor(color: Int) =
+fun View.cardColor(color: Int) =
     context.cardColor(color)
 
-inline fun View.cardColor(dark: Boolean) =
+fun View.cardColor(dark: Boolean) =
     context.cardColor(dark)
 
-inline fun Context.iconColor() = iconColor(isWindowBackgroundDark())
+fun Context.iconColor() = iconColor(isWindowBackgroundDark())
 
-inline fun Context.iconColor(color: Int) = iconColor(color.isDark)
+fun Context.iconColor(color: Int) = iconColor(color.isDark)
 
-inline fun Context.iconColor(dark: Boolean) = color(
+fun Context.iconColor(dark: Boolean) = color(
     if (dark) {
         R.color.primary_text_default_material_dark
     } else {
@@ -108,38 +108,38 @@ inline fun Context.iconColor(dark: Boolean) = color(
     }
 )
 
-inline fun ContextAware.iconColor() =
+fun ContextAware.iconColor() =
     providedContext.iconColor()
 
-inline fun ContextAware.iconColor(color: Int) =
+fun ContextAware.iconColor(color: Int) =
     providedContext.iconColor(color)
 
-inline fun ContextAware.iconColor(dark: Boolean) =
+fun ContextAware.iconColor(dark: Boolean) =
     providedContext.iconColor(dark)
 
-inline fun Fragment.iconColor() =
+fun Fragment.iconColor() =
     requireContext().iconColor()
 
-inline fun Fragment.iconColor(color: Int) =
+fun Fragment.iconColor(color: Int) =
     requireContext().iconColor(color)
 
-inline fun Fragment.iconColor(dark: Boolean) =
+fun Fragment.iconColor(dark: Boolean) =
     requireContext().iconColor(dark)
 
-inline fun View.iconColor() =
+fun View.iconColor() =
     context.iconColor()
 
-inline fun View.iconColor(color: Int) =
+fun View.iconColor(color: Int) =
     context.iconColor(color)
 
-inline fun View.iconColor(dark: Boolean) =
+fun View.iconColor(dark: Boolean) =
     context.iconColor(dark)
 
-inline fun Context.rippleColor() = rippleColor(isWindowBackgroundDark())
+fun Context.rippleColor() = rippleColor(isWindowBackgroundDark())
 
-inline fun Context.rippleColor(color: Int) = rippleColor(color.isDark)
+fun Context.rippleColor(color: Int) = rippleColor(color.isDark)
 
-inline fun Context.rippleColor(dark: Boolean) = color(
+fun Context.rippleColor(dark: Boolean) = color(
     if (dark) {
         R.color.ripple_material_dark
     } else {
@@ -147,38 +147,38 @@ inline fun Context.rippleColor(dark: Boolean) = color(
     }
 )
 
-inline fun ContextAware.rippleColor() =
+fun ContextAware.rippleColor() =
     providedContext.rippleColor()
 
-inline fun ContextAware.rippleColor(color: Int) =
+fun ContextAware.rippleColor(color: Int) =
     providedContext.rippleColor(color)
 
-inline fun ContextAware.rippleColor(dark: Boolean) =
+fun ContextAware.rippleColor(dark: Boolean) =
     providedContext.rippleColor(dark)
 
-inline fun Fragment.rippleColor() =
+fun Fragment.rippleColor() =
     requireContext().rippleColor()
 
-inline fun Fragment.rippleColor(color: Int) =
+fun Fragment.rippleColor(color: Int) =
     requireContext().rippleColor(color)
 
-inline fun Fragment.rippleColor(dark: Boolean) =
+fun Fragment.rippleColor(dark: Boolean) =
     requireContext().rippleColor(dark)
 
-inline fun View.rippleColor() =
+fun View.rippleColor() =
     context.rippleColor()
 
-inline fun View.rippleColor(color: Int) =
+fun View.rippleColor(color: Int) =
     context.rippleColor(color)
 
-inline fun View.rippleColor(dark: Boolean) =
+fun View.rippleColor(dark: Boolean) =
     context.rippleColor(dark)
 
-inline fun Context.primaryTextColor() = primaryTextColor(isWindowBackgroundDark())
+fun Context.primaryTextColor() = primaryTextColor(isWindowBackgroundDark())
 
-inline fun Context.primaryTextColor(color: Int) = primaryTextColor(color.isDark)
+fun Context.primaryTextColor(color: Int) = primaryTextColor(color.isDark)
 
-inline fun Context.primaryTextColor(dark: Boolean) = color(
+fun Context.primaryTextColor(dark: Boolean) = color(
     if (dark) {
         R.color.primary_text_default_material_dark
     } else {
@@ -186,38 +186,38 @@ inline fun Context.primaryTextColor(dark: Boolean) = color(
     }
 )
 
-inline fun ContextAware.primaryTextColor() =
+fun ContextAware.primaryTextColor() =
     providedContext.primaryTextColor()
 
-inline fun ContextAware.primaryTextColor(color: Int) =
+fun ContextAware.primaryTextColor(color: Int) =
     providedContext.primaryTextColor(color)
 
-inline fun ContextAware.primaryTextColor(dark: Boolean) =
+fun ContextAware.primaryTextColor(dark: Boolean) =
     providedContext.primaryTextColor(dark)
 
-inline fun Fragment.primaryTextColor() =
+fun Fragment.primaryTextColor() =
     requireContext().primaryTextColor()
 
-inline fun Fragment.primaryTextColor(color: Int) =
+fun Fragment.primaryTextColor(color: Int) =
     requireContext().primaryTextColor(color)
 
-inline fun Fragment.primaryTextColor(dark: Boolean) =
+fun Fragment.primaryTextColor(dark: Boolean) =
     requireContext().primaryTextColor(dark)
 
-inline fun View.primaryTextColor() =
+fun View.primaryTextColor() =
     context.primaryTextColor()
 
-inline fun View.primaryTextColor(color: Int) =
+fun View.primaryTextColor(color: Int) =
     context.primaryTextColor(color)
 
-inline fun View.primaryTextColor(dark: Boolean) =
+fun View.primaryTextColor(dark: Boolean) =
     context.primaryTextColor(dark)
 
-inline fun Context.primaryDisabledTextColor() = primaryDisabledTextColor(isWindowBackgroundDark())
+fun Context.primaryDisabledTextColor() = primaryDisabledTextColor(isWindowBackgroundDark())
 
-inline fun Context.primaryDisabledTextColor(color: Int) = primaryDisabledTextColor(color.isDark)
+fun Context.primaryDisabledTextColor(color: Int) = primaryDisabledTextColor(color.isDark)
 
-inline fun Context.primaryDisabledTextColor(dark: Boolean) = color(
+fun Context.primaryDisabledTextColor(dark: Boolean) = color(
     if (dark) {
         R.color.primary_text_disabled_material_dark
     } else {
@@ -225,38 +225,38 @@ inline fun Context.primaryDisabledTextColor(dark: Boolean) = color(
     }
 )
 
-inline fun ContextAware.primaryDisabledTextColor() =
+fun ContextAware.primaryDisabledTextColor() =
     providedContext.primaryDisabledTextColor()
 
-inline fun ContextAware.primaryDisabledTextColor(color: Int) =
+fun ContextAware.primaryDisabledTextColor(color: Int) =
     providedContext.primaryDisabledTextColor(color)
 
-inline fun ContextAware.primaryDisabledTextColor(dark: Boolean) =
+fun ContextAware.primaryDisabledTextColor(dark: Boolean) =
     providedContext.primaryDisabledTextColor(dark)
 
-inline fun Fragment.primaryDisabledTextColor() =
+fun Fragment.primaryDisabledTextColor() =
     requireContext().primaryDisabledTextColor()
 
-inline fun Fragment.primaryDisabledTextColor(color: Int) =
+fun Fragment.primaryDisabledTextColor(color: Int) =
     requireContext().primaryDisabledTextColor(color)
 
-inline fun Fragment.primaryDisabledTextColor(dark: Boolean) =
+fun Fragment.primaryDisabledTextColor(dark: Boolean) =
     requireContext().primaryDisabledTextColor(dark)
 
-inline fun View.primaryDisabledTextColor() =
+fun View.primaryDisabledTextColor() =
     context.primaryDisabledTextColor()
 
-inline fun View.primaryDisabledTextColor(color: Int) =
+fun View.primaryDisabledTextColor(color: Int) =
     context.primaryDisabledTextColor(color)
 
-inline fun View.primaryDisabledTextColor(dark: Boolean) =
+fun View.primaryDisabledTextColor(dark: Boolean) =
     context.primaryDisabledTextColor(dark)
 
-inline fun Context.secondaryTextColor() = secondaryTextColor(isWindowBackgroundDark())
+fun Context.secondaryTextColor() = secondaryTextColor(isWindowBackgroundDark())
 
-inline fun Context.secondaryTextColor(color: Int) = secondaryTextColor(color.isDark)
+fun Context.secondaryTextColor(color: Int) = secondaryTextColor(color.isDark)
 
-inline fun Context.secondaryTextColor(dark: Boolean) = color(
+fun Context.secondaryTextColor(dark: Boolean) = color(
     if (dark) {
         R.color.secondary_text_default_material_dark
     } else {
@@ -264,39 +264,39 @@ inline fun Context.secondaryTextColor(dark: Boolean) = color(
     }
 )
 
-inline fun ContextAware.secondaryTextColor() =
+fun ContextAware.secondaryTextColor() =
     providedContext.secondaryTextColor()
 
-inline fun ContextAware.secondaryTextColor(color: Int) =
+fun ContextAware.secondaryTextColor(color: Int) =
     providedContext.secondaryTextColor(color)
 
-inline fun ContextAware.secondaryTextColor(dark: Boolean) =
+fun ContextAware.secondaryTextColor(dark: Boolean) =
     providedContext.secondaryTextColor(dark)
 
-inline fun Fragment.secondaryTextColor() =
+fun Fragment.secondaryTextColor() =
     requireContext().secondaryTextColor()
 
-inline fun Fragment.secondaryTextColor(color: Int) =
+fun Fragment.secondaryTextColor(color: Int) =
     requireContext().secondaryTextColor(color)
 
-inline fun Fragment.secondaryTextColor(dark: Boolean) =
+fun Fragment.secondaryTextColor(dark: Boolean) =
     requireContext().secondaryTextColor(dark)
 
-inline fun View.secondaryTextColor() =
+fun View.secondaryTextColor() =
     context.secondaryTextColor()
 
-inline fun View.secondaryTextColor(color: Int) =
+fun View.secondaryTextColor(color: Int) =
     context.secondaryTextColor(color)
 
-inline fun View.secondaryTextColor(dark: Boolean) =
+fun View.secondaryTextColor(dark: Boolean) =
     context.secondaryTextColor(dark)
 
-inline fun Context.secondaryDisabledTextColor() =
+fun Context.secondaryDisabledTextColor() =
     secondaryDisabledTextColor(isWindowBackgroundDark())
 
-inline fun Context.secondaryDisabledTextColor(color: Int) = secondaryDisabledTextColor(color.isDark)
+fun Context.secondaryDisabledTextColor(color: Int) = secondaryDisabledTextColor(color.isDark)
 
-inline fun Context.secondaryDisabledTextColor(dark: Boolean) = color(
+fun Context.secondaryDisabledTextColor(dark: Boolean) = color(
     if (dark) {
         R.color.secondary_text_disabled_material_dark
     } else {
@@ -304,29 +304,29 @@ inline fun Context.secondaryDisabledTextColor(dark: Boolean) = color(
     }
 )
 
-inline fun ContextAware.secondaryDisabledTextColor() =
+fun ContextAware.secondaryDisabledTextColor() =
     providedContext.secondaryDisabledTextColor()
 
-inline fun ContextAware.secondaryDisabledTextColor(color: Int) =
+fun ContextAware.secondaryDisabledTextColor(color: Int) =
     providedContext.secondaryDisabledTextColor(color)
 
-inline fun ContextAware.secondaryDisabledTextColor(dark: Boolean) =
+fun ContextAware.secondaryDisabledTextColor(dark: Boolean) =
     providedContext.secondaryDisabledTextColor(dark)
 
-inline fun Fragment.secondaryDisabledTextColor() =
+fun Fragment.secondaryDisabledTextColor() =
     requireContext().secondaryDisabledTextColor()
 
-inline fun Fragment.secondaryDisabledTextColor(color: Int) =
+fun Fragment.secondaryDisabledTextColor(color: Int) =
     requireContext().secondaryDisabledTextColor(color)
 
-inline fun Fragment.secondaryDisabledTextColor(dark: Boolean) =
+fun Fragment.secondaryDisabledTextColor(dark: Boolean) =
     requireContext().secondaryDisabledTextColor(dark)
 
-inline fun View.secondaryDisabledTextColor() =
+fun View.secondaryDisabledTextColor() =
     context.secondaryDisabledTextColor()
 
-inline fun View.secondaryDisabledTextColor(color: Int) =
+fun View.secondaryDisabledTextColor(color: Int) =
     context.secondaryDisabledTextColor(color)
 
-inline fun View.secondaryDisabledTextColor(dark: Boolean) =
+fun View.secondaryDisabledTextColor(dark: Boolean) =
     context.secondaryDisabledTextColor(dark)
