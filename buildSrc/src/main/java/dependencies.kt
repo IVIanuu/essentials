@@ -11,7 +11,7 @@ object Versions {
     const val androidGradlePlugin = "3.2.0"
     const val androidx = "1.0.0"
     const val androidxArch = "2.0.0-rc01"
-    const val androidKtx = "4f1af64084"
+    const val androidKtx = "249afab581"
     const val archWork = "1.0.0-alpha09"
     const val assistedInject = "e9f26c013c"
     const val compass = "eb199b7992"
