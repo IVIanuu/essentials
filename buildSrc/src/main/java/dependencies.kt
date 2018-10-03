@@ -7,47 +7,46 @@ object Versions {
     const val targetSdk = 28
     const val versionCode = 1
     const val versionName = "0.0.1"
-    const val groupId = "com.github.IVIanuu.essentials"
 
     const val androidGradlePlugin = "3.2.0"
     const val androidx = "1.0.0"
     const val androidxArch = "2.0.0-rc01"
     const val androidKtx = "c2bdf711aa"
     const val archWork = "1.0.0-alpha09"
-    const val assistedInject = "352898f040"
-    const val compass = "bf346782dd"
+    const val assistedInject = "e9f26c013c"
+    const val compass = "eb199b7992"
     const val constraintLayout = "1.1.3"
-    const val contributor = "ac1f955deb"
+    const val contributor = "c22ffeeb72"
     const val coroutines = "0.26.1-eap13"
     const val dagger = "2.16"
-    const val director = "79236fe023"
+    const val director = "b905694b16"
     const val epoxy = "2.18.0"
-    const val epoxyKtx = "8d3fe07387"
-    const val epoxyPrefs = "ce7e5ba8c7"
+    const val epoxyKtx = "de78126d07"
+    const val epoxyPrefs = "fa12eced9d"
     const val fabric = "2.7.1"
     const val glide = "4.8.0"
     const val kotlin = "1.3.0-rc-57"
-    const val kPrefs = "ac3e3919ad"
-    const val kSystemSettings = "903dc76cd6"
+    const val kPrefs = "eb16f5c1ab"
+    const val kSettings = "8da04e4b70"
     const val legacySupport = "28.0.0"
-    const val liveEvent = "98d2cdd7bc"
+    const val liveEvent = "1ce8501a6f"
     const val mavenGradle = "2.1"
     const val materialComponents = "1.0.0"
-    const val materialComponentsKtx = "beb91ef514"
+    const val materialComponentsKtx = "e9d6f910fd"
     const val materialDialogs = "0.9.6.0"
     const val r2 = "06e702d39f"
     const val rxAndroid = "2.1.0"
-    const val rxAndroid2 = "f254773aca"
+    const val rxAndroid2 = "458ddc5b53"
     const val rxJava = "2.2.2"
     const val rxJavaKtx = "0494edf16f"
     const val rxKotlin = "2.3.0"
     const val rxLifecycle = "52409cf2db"
     const val superUser = "1.0.0.+"
-    const val stickyHeaders = "8968ad28ee"
+    const val stickyHeaders = "18693c5180"
     const val timber = "4.7.1"
-    const val timberKtx = "bc686ff9fa"
+    const val timberKtx = "518ec9bd8d"
     const val toasty = "1.3.0"
-    const val traveler = "a88783ae0f"
+    const val traveler = "a710148189"
 }
 
 object Deps {
@@ -135,14 +134,14 @@ object Deps {
     const val kPrefsLifecycle = "com.github.IVIanuu.kprefs:kprefs-lifecycle:${Versions.kPrefs}"
     const val kPrefsRx = "com.github.IVIanuu.kprefs:kprefs-rx:${Versions.kPrefs}"
 
-    const val kSystemSettings =
-        "com.github.IVIanuu.ksystem-settings:ksystemsettings:${Versions.kSystemSettings}"
-    const val kSystemSettingsCoroutines =
-        "com.github.IVIanuu.ksystem-settings:ksystemsettings-coroutines:${Versions.kSystemSettings}"
-    const val kSystemSettingsLifecycle =
-        "com.github.IVIanuu.ksystem-settings:ksystemsettings-lifecycle:${Versions.kSystemSettings}"
-    const val kSystemSettingsRx =
-        "com.github.IVIanuu.ksystem-settings:ksystemsettings-rx:${Versions.kSystemSettings}"
+    const val kSettings =
+        "com.github.IVIanuu.ksettings:ksettings:${Versions.kSettings}"
+    const val kSettingsCoroutines =
+        "com.github.IVIanuu.ksettings:ksettings-coroutines:${Versions.kSettings}"
+    const val kSettingsLifecycle =
+        "com.github.IVIanuu.ksettings:ksettings-lifecycle:${Versions.kSettings}"
+    const val kSettingsRx =
+        "com.github.IVIanuu.ksettings:ksettings-rx:${Versions.kSettings}"
 
     const val legacyAnnotations =
         "com.android.support:support-annotations:${Versions.legacySupport}"

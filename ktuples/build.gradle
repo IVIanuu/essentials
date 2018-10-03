@@ -16,6 +16,9 @@
 
 apply plugin: 'java-library'
 apply plugin: 'kotlin'
+apply plugin: 'com.github.dcendents.android-maven'
+
+group='com.github.ivianuu'
 
 sourceCompatibility = "1.7"
 targetCompatibility = "1.7"
@@ -24,4 +27,36 @@ dependencies {
     api Deps.kotlinStdLib
 }
 
-apply from: rootProject.file('gradle/local-publish.gradle')
+if (project.hasProperty("android")) { // Android libraries
+    task sourcesJar(type: Jar) {
+        from android.sourceSets.main.java.srcDirs
+        classifier = 'sources'
+    }
+
+    task javadoc(type: Javadoc) {
+        failOnError  false
+        source = android.sourceSets.main.java.sourceFiles
+        classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+        classpath += configurations.compile
+    }
+
+    task javadocJar(type: Jar, dependsOn: javadoc) {
+        classifier = 'javadoc'
+        from javadoc.destinationDir
+    }
+} else { // Java libraries
+    task sourcesJar(type: Jar, dependsOn: classes) {
+        from sourceSets.main.allSource
+        classifier = 'sources'
+    }
+
+    task javadocJar(type: Jar, dependsOn: javadoc) {
+        classifier = 'javadoc'
+        from javadoc.destinationDir
+    }
+}
+
+artifacts {
+    archives sourcesJar
+    archives javadocJar
+}

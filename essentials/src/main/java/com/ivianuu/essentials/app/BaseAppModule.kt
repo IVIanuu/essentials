@@ -26,8 +26,8 @@ import androidx.work.WorkManager
 import com.ivianuu.essentials.util.ContextAware
 import com.ivianuu.essentials.util.coroutines.AppCoroutineDispatchers
 import com.ivianuu.essentials.util.rx.AppRxSchedulers
-import com.ivianuu.kprefs.KSharedPreferences
-import com.ivianuu.ksystemsettings.KSystemSettings
+import com.ivianuu.kprefs.KPrefs
+import com.ivianuu.ksettings.KSettings
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -90,13 +90,13 @@ abstract class BaseAppModule<T : BaseApp> {
         @Singleton
         @Provides
         fun provideKSharedPrefs(prefs: SharedPreferences) =
-            KSharedPreferences(prefs)
+            KPrefs(prefs)
 
         @JvmStatic
         @Singleton
         @Provides
         fun provideKSystemSettings(context: Context) =
-            KSystemSettings(context)
+            KSettings(context)
 
         @JvmStatic
         @Provides
