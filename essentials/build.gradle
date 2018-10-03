@@ -52,7 +52,6 @@ dependencies {
     api Deps.androidxPalette
 
     api Deps.androidKtxAppCompat
-    api Deps.androidKtxCardView
     api Deps.androidKtxCore
     api Deps.androidKtxFragment
     api Deps.androidKtxLifecycle

@@ -11,7 +11,7 @@ object Versions {
     const val androidGradlePlugin = "3.2.0"
     const val androidx = "1.0.0"
     const val androidxArch = "2.0.0-rc01"
-    const val androidKtx = "c2bdf711aa"
+    const val androidKtx = "4f1af64084"
     const val archWork = "1.0.0-alpha09"
     const val assistedInject = "e9f26c013c"
     const val compass = "eb199b7992"
@@ -59,7 +59,6 @@ object Deps {
 
     const val androidKtxAppCompat =
         "com.github.IVIanuu.android-ktx:appcompat:${Versions.androidKtx}"
-    const val androidKtxCardView = "com.github.IVIanuu.android-ktx:cardview:${Versions.androidKtx}"
     const val androidKtxCore = "com.github.IVIanuu.android-ktx:core:${Versions.androidKtx}"
     const val androidKtxFragment = "com.github.IVIanuu.android-ktx:fragment:${Versions.androidKtx}"
     const val androidKtxLifecycle =
