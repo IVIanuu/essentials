@@ -1,52 +1,56 @@
 @file:Suppress("ClassName", "unused")
 
-object Versions {
-    // android
+object Build {
+    const val applicationId = "com.ivianuu.essentials.sample"
+    const val buildToolsVersion = "28.0.2"
+
     const val compileSdk = 28
     const val minSdk = 21
     const val targetSdk = 28
     const val versionCode = 1
     const val versionName = "0.0.1"
+}
 
+object Versions {
     const val androidGradlePlugin = "3.2.0"
     const val androidx = "1.0.0"
     const val androidxArch = "2.0.0-rc01"
-    const val androidKtx = "249afab581"
+    const val androidKtx = "0cf0a07f49"
     const val archWork = "1.0.0-alpha09"
-    const val assistedInject = "e9f26c013c"
-    const val compass = "eb199b7992"
+    const val assistedInject = "9411c08d60"
+    const val compass = "0ae819dd73"
     const val constraintLayout = "1.1.3"
-    const val contributor = "c22ffeeb72"
+    const val contributor = "93fdd2c4e9"
     const val coroutines = "0.26.1-eap13"
     const val dagger = "2.16"
-    const val director = "b905694b16"
+    const val director = "1de9f6346c"
     const val epoxy = "2.18.0"
-    const val epoxyKtx = "de78126d07"
-    const val epoxyPrefs = "fa12eced9d"
+    const val epoxyKtx = "9dde1f5a9c"
+    const val epoxyPrefs = "6c31aa79e8"
     const val fabric = "2.7.1"
     const val glide = "4.8.0"
     const val kotlin = "1.3.0-rc-57"
-    const val kPrefs = "eb16f5c1ab"
-    const val kSettings = "8da04e4b70"
+    const val kPrefs = "3ff94953eb"
+    const val kSettings = "1b5acf9585"
     const val legacySupport = "28.0.0"
-    const val liveEvent = "1ce8501a6f"
+    const val liveEvent = "4281cc30ff"
     const val mavenGradle = "2.1"
     const val materialComponents = "1.0.0"
-    const val materialComponentsKtx = "e9d6f910fd"
+    const val materialComponentsKtx = "c4c5dda45a"
     const val materialDialogs = "0.9.6.0"
     const val r2 = "06e702d39f"
     const val rxAndroid = "2.1.0"
     const val rxAndroid2 = "458ddc5b53"
     const val rxJava = "2.2.2"
-    const val rxJavaKtx = "0494edf16f"
+    const val rxJavaKtx = "015125e952"
     const val rxKotlin = "2.3.0"
     const val rxLifecycle = "52409cf2db"
     const val superUser = "1.0.0.+"
-    const val stickyHeaders = "18693c5180"
+    const val stickyHeaders = "44c5192160"
     const val timber = "4.7.1"
-    const val timberKtx = "518ec9bd8d"
+    const val timberKtx = "f7547da781"
     const val toasty = "1.3.0"
-    const val traveler = "a710148189"
+    const val traveler = "788a0f325c"
 }
 
 object Deps {
@@ -58,15 +62,15 @@ object Deps {
     const val androidxPalette = "androidx.palette:palette:${Versions.androidx}"
 
     const val androidKtxAppCompat =
-        "com.github.IVIanuu.android-ktx:appcompat:${Versions.androidKtx}"
-    const val androidKtxCore = "com.github.IVIanuu.android-ktx:core:${Versions.androidKtx}"
-    const val androidKtxFragment = "com.github.IVIanuu.android-ktx:fragment:${Versions.androidKtx}"
+        "com.github.IVIanuu.android-ktx:androidktx-appcompat:${Versions.androidKtx}"
+    const val androidKtxCore = "com.github.IVIanuu.android-ktx:androidktx-core:${Versions.androidKtx}"
+    const val androidKtxFragment = "com.github.IVIanuu.android-ktx:androidktx-fragment:${Versions.androidKtx}"
     const val androidKtxLifecycle =
-        "com.github.IVIanuu.android-ktx:lifecycle:${Versions.androidKtx}"
+        "com.github.IVIanuu.android-ktx:androidktx-lifecycle:${Versions.androidKtx}"
     const val androidKtxRecyclerView =
-        "com.github.IVIanuu.android-ktx:recyclerview:${Versions.androidKtx}"
+        "com.github.IVIanuu.android-ktx:androidktx-recyclerview:${Versions.androidKtx}"
     const val androidKtxViewPager =
-        "com.github.IVIanuu.android-ktx:viewpager:${Versions.androidKtx}"
+        "com.github.IVIanuu.android-ktx:androidktx-viewpager:${Versions.androidKtx}"
 
     const val archLifecycleExtensions =
         "androidx.lifecycle:lifecycle-extensions:${Versions.androidxArch}"

@@ -13,7 +13,6 @@ import javax.inject.Singleton
 /**
  * App component
  */
-@InjectorKeyRegistry([ControllerKey::class])
 @Singleton
 @Component(
     modules = [
