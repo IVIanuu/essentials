@@ -26,7 +26,7 @@ sealed class Option<T : Any> {
     }
 }
 
-inline val <T : Any> Option<T>.isSome
+val <T : Any> Option<T>.isSome
     get() = this is Option.Some
 
 fun <T : Any> T?.toOption() = if (this != null) {
@@ -35,26 +35,26 @@ fun <T : Any> T?.toOption() = if (this != null) {
     Option.None
 }
 
-inline fun <T : Any> optionOf(value: T?) = value.toOption()
+fun <T : Any> optionOf(value: T?) = value.toOption()
 
-inline fun <T : Any> absent(): Option<T> = Option.None as Option<T>
+fun <T : Any> absent(): Option<T> = Option.None as Option<T>
 
-inline fun <T : Any> Option<T>.get() = if (this is Option.Some) {
+fun <T : Any> Option<T>.get() = if (this is Option.Some) {
     this.value
 } else {
     null
 }
 
-inline fun <T : Any> Option<T>.getOrDefault(other: T) = get() ?: other
+fun <T : Any> Option<T>.getOrDefault(other: T) = get() ?: other
 
 inline fun <T : Any> Option<T>.getOrDefault(other: () -> T) = get() ?: other.invoke()
 
-inline fun <T : Any, X : Throwable> Option<T>.getOrThrow(throwable: X) = get() ?: throw throwable
+fun <T : Any, X : Throwable> Option<T>.getOrThrow(throwable: X) = get() ?: throw throwable
 
 inline fun <T : Any, X : Throwable> Option<T>.getOrThrow(throwable: () -> X) =
     get() ?: throw throwable.invoke()
 
-inline fun <T : Any> Option<T>.require() =
+fun <T : Any> Option<T>.require() =
     get() ?: IllegalStateException("called require but is none")
 
 inline fun <T : Any, U : Any> Option<T>.map(mapper: (T) -> U) = if (this is Option.Some) {
