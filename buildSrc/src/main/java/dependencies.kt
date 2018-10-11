@@ -14,7 +14,7 @@ object Build {
 object Versions {
     const val androidGradlePlugin = "3.2.0"
     const val androidx = "1.0.0"
-    const val androidxArch = "2.0.0-rc01"
+    const val androidxArch = "2.0.0"
     const val androidKtx = "0cf0a07f49"
     const val archWork = "1.0.0-alpha09"
     const val assistedInject = "9411c08d60"

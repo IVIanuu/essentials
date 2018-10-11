@@ -21,6 +21,7 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.ivianuu.compass.android.CompassAppNavigator
 import com.ivianuu.compass.director.CompassControllerNavigator
 import com.ivianuu.compass.fragment.CompassFragmentNavigator
 import com.ivianuu.contributor.director.HasControllerInjector
@@ -42,7 +43,6 @@ import com.ivianuu.rxlifecycle.RxLifecycleOwner
 import com.ivianuu.traveler.Navigator
 import com.ivianuu.traveler.NavigatorHolder
 import com.ivianuu.traveler.Router
-import com.ivianuu.traveler.android.AppNavigator
 import com.ivianuu.traveler.common.ResultNavigator
 import com.ivianuu.traveler.common.compositeNavigatorOf
 import com.ivianuu.traveler.lifecycle.setNavigator
@@ -97,7 +97,7 @@ abstract class BaseActivity : AppCompatActivity(), CoroutineScope, HasController
             navigators.add(CompassFragmentNavigator(fragmentContainer))
         }
 
-        navigators.add(AppNavigator())
+        navigators.add(CompassAppNavigator(this))
         navigators.add(AddFragmentPlugin(supportFragmentManager))
         compositeNavigatorOf(navigators)
     }
