@@ -33,7 +33,8 @@ import dagger.Module
 import dagger.Provides
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import kotlinx.coroutines.android.UI
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.android.Main
 import kotlinx.coroutines.rx2.asCoroutineDispatcher
 import javax.inject.Singleton
 
@@ -69,7 +70,7 @@ abstract class BaseAppModule<T : BaseApp> {
             AppCoroutineDispatchers(
                 io = schedulers.io.asCoroutineDispatcher(),
                 computation = schedulers.computation.asCoroutineDispatcher(),
-                main = UI
+                main = Dispatchers.Main
             )
 
         @JvmStatic

@@ -59,25 +59,26 @@ abstract class BaseApp : DaggerApplication(), HasViewInjector {
     protected open val initFabric = true
     protected open val initGlide = true
     protected open val initRxJava = true
+    protected open val initWorkManager = true
 
     override fun onCreate() {
         super.onCreate()
 
-        WorkManager.initialize(
-            this,
-            Configuration.Builder().setWorkerFactory(workerFactory).build()
-        )
+        if (initWorkManager) {
+            WorkManager.initialize(
+                this,
+                Configuration.Builder().setWorkerFactory(workerFactory).build()
+            )
+        }
 
-        if (applicationInfo.flags.containsFlag(ApplicationInfo.FLAG_DEBUGGABLE)) {
-            if (initTimber) {
-                Timber.plant(Timber.DebugTree())
-                Analytics.addLogger(debugAnalyticsLogger)
-            }
-        } else {
-            if (initFabric) {
-                Fabric.with(this, Crashlytics())
-                Analytics.addLogger(fabricAnalyticsLogger)
-            }
+        val isDebuggable = applicationInfo.flags.containsFlag(ApplicationInfo.FLAG_DEBUGGABLE)
+
+        if (isDebuggable && initTimber) {
+            Timber.plant(Timber.DebugTree())
+            Analytics.addLogger(debugAnalyticsLogger)
+        } else if (!isDebuggable && initFabric) {
+            Fabric.with(this, Crashlytics())
+            Analytics.addLogger(fabricAnalyticsLogger)
         }
 
         if (initGlide) {

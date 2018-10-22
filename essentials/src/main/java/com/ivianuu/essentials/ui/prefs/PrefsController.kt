@@ -50,8 +50,7 @@ import com.ivianuu.essentials.util.ext.unsafeLazy
 abstract class PrefsController : SimpleController() {
 
     protected open val sharedPreferencesName
-        get() =
-            EpoxyPrefsPlugins.getDefaultSharedPreferencesName(requireActivity())
+        get() = EpoxyPrefsPlugins.getDefaultSharedPreferencesName(requireActivity())
 
     protected val sharedPreferences: SharedPreferences by unsafeLazy {
         requireActivity().getSharedPreferences(sharedPreferencesName, Context.MODE_PRIVATE)

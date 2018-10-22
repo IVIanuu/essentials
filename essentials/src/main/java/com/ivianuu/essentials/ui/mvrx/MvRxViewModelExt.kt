@@ -107,7 +107,7 @@ inline fun <T, reified VM : MvRxViewModel<S>, reified S : MvRxState> T.bindTarge
     lifecycleAwareLazy { targetViewModel(clazz, factoryProvider(), keyProvider()) }
 
 @PublishedApi
-internal inline fun <reified VM : MvRxViewModel<S>, reified S> VM.setupViewModel(view: MvRxView) =
+internal fun <VM : MvRxViewModel<S>, S> VM.setupViewModel(view: MvRxView) =
     apply { subscribe(view) { view.postInvalidate() } }
 
 @PublishedApi

@@ -23,5 +23,5 @@ class UnitValueTextProvider(
     }
 }
 
-inline fun SeekBarPreferenceModel.Builder.unitValueTextProvider(unit: UnitValueTextProvider.Unit) =
+fun SeekBarPreferenceModel.Builder.unitValueTextProvider(unit: UnitValueTextProvider.Unit) =
     valueTextProvider(UnitValueTextProvider(context, unit))

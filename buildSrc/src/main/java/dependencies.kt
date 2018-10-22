@@ -2,7 +2,7 @@
 
 object Build {
     const val applicationId = "com.ivianuu.essentials.sample"
-    const val buildToolsVersion = "28.0.2"
+    const val buildToolsVersion = "28.0.3"
 
     const val compileSdk = 28
     const val minSdk = 21
@@ -12,7 +12,7 @@ object Build {
 }
 
 object Versions {
-    const val androidGradlePlugin = "3.2.0"
+    const val androidGradlePlugin = "3.2.1"
     const val androidx = "1.0.0"
     const val androidxArch = "2.0.0"
     const val androidKtx = "0cf0a07f49"
@@ -24,7 +24,7 @@ object Versions {
     const val coroutines = "0.26.1-eap13"
     const val dagger = "2.16"
     const val director = "1de9f6346c"
-    const val epoxy = "2.18.0"
+    const val epoxy = "2.19.0"
     const val epoxyKtx = "9dde1f5a9c"
     const val epoxyPrefs = "6c31aa79e8"
     const val fabric = "2.7.1"
