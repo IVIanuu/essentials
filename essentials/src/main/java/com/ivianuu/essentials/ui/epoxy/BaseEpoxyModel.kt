@@ -67,6 +67,19 @@ abstract class BaseEpoxyModel<H : BaseEpoxyHolder> : EpoxyModelWithHolder<H>(), 
     @CallSuper
     override fun unbind(holder: H) {
         _boundHolder = null
+
+        if (onClickView != null) {
+            onClickView?.setOnClickListener(null)
+        } else if (useContainerForClicks) {
+            holder.containerView.setOnClickListener(null)
+        }
+
+        if (onLongClickView != null) {
+            onLongClickView?.setOnClickListener(null)
+        } else if (useContainerForLongClicks) {
+            holder.containerView.setOnLongClickListener(null)
+        }
+
         super.unbind(holder)
     }
 
