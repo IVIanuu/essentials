@@ -4,27 +4,37 @@ import android.annotation.TargetApi
 import android.os.Build
 import android.service.quicksettings.TileService
 import com.ivianuu.essentials.injection.Injectable
-import com.ivianuu.essentials.util.coroutines.CancellableCoroutineScope
-import com.ivianuu.essentials.util.coroutines.cancelCoroutineScope
+import com.ivianuu.essentials.util.coroutines.ScopeCoroutineScope
+import com.ivianuu.scopes.MutableScope
+import com.ivianuu.scopes.Scope
+import com.ivianuu.scopes.coroutines.cancelBy
 import dagger.android.AndroidInjection
-import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.android.Main
+import kotlin.coroutines.CoroutineContext
 
 /**
  * Base tile service
  */
 @TargetApi(Build.VERSION_CODES.N)
-abstract class BaseTileService : TileService(), CoroutineScope by CancellableCoroutineScope(),
+abstract class BaseTileService : TileService(), CoroutineScope,
     Injectable {
 
-    protected val disposables = CompositeDisposable()
+    val scope: Scope get() = _scope
+    private val _scope = MutableScope()
 
-    protected val listeningDisposables = CompositeDisposable()
+    override val coroutineContext: CoroutineContext
+        get() = Dispatchers.Main + job
 
-    protected val listeningCoroutineScope: CoroutineScope
-        get() = _listeningCoroutineScope
-    private var _listeningCoroutineScope = CancellableCoroutineScope()
+    val job = Job().cancelBy(scope)
 
+    val listeningScope: Scope get() = _listeningScope
+    private var _listeningScope = MutableScope()
+
+    val listeningCoroutineScope: CoroutineScope get() = _listeningCoroutineScope
+    private var _listeningCoroutineScope = ScopeCoroutineScope(listeningScope)
     override fun onCreate() {
         if (shouldInject) {
             AndroidInjection.inject(this)
@@ -33,19 +43,18 @@ abstract class BaseTileService : TileService(), CoroutineScope by CancellableCor
     }
 
     override fun onDestroy() {
-        disposables.clear()
-        cancelCoroutineScope()
+        _scope.close()
         super.onDestroy()
     }
 
     override fun onStartListening() {
         super.onStartListening()
-        _listeningCoroutineScope = CancellableCoroutineScope()
+        _listeningScope = MutableScope()
+        _listeningCoroutineScope = ScopeCoroutineScope(_listeningScope)
     }
 
     override fun onStopListening() {
-        listeningDisposables.clear()
-        _listeningCoroutineScope.cancel()
+        _listeningScope.close()
         super.onStopListening()
     }
 }

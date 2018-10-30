@@ -29,12 +29,11 @@ import com.ivianuu.essentials.ui.common.BackListener
 import com.ivianuu.essentials.ui.mvrx.MvRxView
 import com.ivianuu.essentials.ui.traveler.RouterHolder
 import com.ivianuu.essentials.util.ViewInjectionContextWrapper
-import com.ivianuu.essentials.util.lifecycle.LifecycleCoroutineScope
-import com.ivianuu.essentials.util.lifecycle.LifecycleJob
-import com.ivianuu.essentials.util.lifecycle.LifecycleOwner2
+import com.ivianuu.essentials.util.coroutines.ScopeCoroutineScope
 import com.ivianuu.essentials.util.screenlogger.IdentifiableScreen
 import com.ivianuu.essentials.util.viewmodel.ViewModelFactoryHolder
-import com.ivianuu.rxlifecycle.RxLifecycleOwner
+import com.ivianuu.scopes.archlifecycle.onDestroy
+import com.ivianuu.scopes.coroutines.cancelBy
 import com.ivianuu.traveler.Router
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
@@ -42,6 +41,7 @@ import dagger.android.support.AndroidSupportInjection
 import dagger.android.support.HasSupportFragmentInjector
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.android.Main
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
@@ -50,8 +50,8 @@ import kotlin.coroutines.CoroutineContext
  * Base fragment
  */
 abstract class BaseFragment : Fragment(), BackListener, CoroutineScope, HasSupportFragmentInjector,
-    HasViewInjector, Injectable, IdentifiableScreen, LifecycleOwner2, MvRxView, RouterHolder,
-    RxLifecycleOwner, ViewModelFactoryHolder {
+    HasViewInjector, Injectable, IdentifiableScreen, MvRxView, RouterHolder,
+    ViewModelFactoryHolder {
 
     @Inject lateinit var router: Router
 
@@ -66,11 +66,11 @@ abstract class BaseFragment : Fragment(), BackListener, CoroutineScope, HasSuppo
     override val coroutineContext: CoroutineContext
         get() = Dispatchers.Main + job
 
-    val job = LifecycleJob(this)
+    val job = Job().cancelBy(onDestroy)
 
     val viewCoroutineScope: CoroutineScope
         get() = _viewCoroutineScope ?: throw IllegalArgumentException("view == null")
-    private var _viewCoroutineScope: LifecycleCoroutineScope? = null
+    private var _viewCoroutineScope: ScopeCoroutineScope? = null
 
     protected open val layoutRes = -1
 
@@ -94,7 +94,7 @@ abstract class BaseFragment : Fragment(), BackListener, CoroutineScope, HasSuppo
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        _viewCoroutineScope = LifecycleCoroutineScope(viewLifecycleOwner)
+        _viewCoroutineScope = ScopeCoroutineScope(viewLifecycleOwner.onDestroy)
     }
 
     override fun onStart() {

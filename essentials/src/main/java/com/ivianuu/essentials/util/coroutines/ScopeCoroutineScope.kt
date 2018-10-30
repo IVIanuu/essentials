@@ -14,10 +14,8 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.common
+package com.ivianuu.essentials.util.coroutines
 
-import androidx.lifecycle.ViewModel
-import com.ivianuu.scopes.MutableScope
 import com.ivianuu.scopes.Scope
 import com.ivianuu.scopes.coroutines.cancelBy
 import kotlinx.coroutines.CoroutineScope
@@ -27,21 +25,12 @@ import kotlinx.coroutines.android.Main
 import kotlin.coroutines.CoroutineContext
 
 /**
- * A [ViewModel] which auto disposes itself
+ * @author Manuel Wrage (IVIanuu)
  */
-abstract class BaseViewModel : ViewModel(), CoroutineScope {
+class ScopeCoroutineScope(private val scope: Scope) : CoroutineScope {
 
-    protected val scope: Scope get() = _scope
-    private val _scope = MutableScope()
+    private val job = Job().cancelBy(scope)
 
     override val coroutineContext: CoroutineContext
         get() = Dispatchers.Main + job
-
-    val job = Job().cancelBy(_scope)
-
-    override fun onCleared() {
-        _scope.close()
-        super.onCleared()
-    }
-
 }

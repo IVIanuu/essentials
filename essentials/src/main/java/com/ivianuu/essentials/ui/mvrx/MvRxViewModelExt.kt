@@ -24,7 +24,7 @@ inline fun <T : MvRxView, reified VM : MvRxViewModel<S>, reified S : MvRxState> 
     clazz: KClass<VM>,
     crossinline keyProvider: () -> String = { VM::class.defaultViewModelKey },
     crossinline factoryProvider: () -> ViewModelProvider.Factory = { defaultViewModelFactory() }
-) = lifecycleAwareLazy { viewModel(clazz, factoryProvider(), keyProvider()) }
+) = viewModelLazy { viewModel(clazz, factoryProvider(), keyProvider()) }
 
 inline fun <T : MvRxView, reified VM : MvRxViewModel<S>, reified S : MvRxState> T.activityViewModel(
     clazz: KClass<VM>,
@@ -45,7 +45,7 @@ inline fun <T : MvRxView, reified VM : MvRxViewModel<S>, reified S : MvRxState> 
     clazz: KClass<VM>,
     crossinline keyProvider: () -> String = { VM::class.defaultViewModelKey },
     crossinline factoryProvider: () -> ViewModelProvider.Factory = { defaultViewModelFactory() }
-) = lifecycleAwareLazy { activityViewModel(clazz, factoryProvider(), keyProvider()) }
+) = viewModelLazy { activityViewModel(clazz, factoryProvider(), keyProvider()) }
 
 inline fun <T, reified VM : MvRxViewModel<S>, reified S : MvRxState> T.parentViewModel(
     clazz: KClass<VM>,
@@ -59,7 +59,7 @@ inline fun <T, reified VM : MvRxViewModel<S>, reified S : MvRxState> T.bindParen
     crossinline keyProvider: () -> String = { VM::class.defaultViewModelKey },
     crossinline factoryProvider: () -> ViewModelProvider.Factory = { defaultViewModelFactory() }
 ) where T : MvRxView, T : Fragment =
-    lifecycleAwareLazy { parentViewModel(clazz, factoryProvider(), keyProvider()) }
+    viewModelLazy { parentViewModel(clazz, factoryProvider(), keyProvider()) }
 
 inline fun <T, reified VM : MvRxViewModel<S>, reified S : MvRxState> T.targetViewModel(
     clazz: KClass<VM>,
@@ -73,7 +73,7 @@ inline fun <T, reified VM : MvRxViewModel<S>, reified S : MvRxState> T.bindTarge
     crossinline keyProvider: () -> String = { VM::class.defaultViewModelKey },
     crossinline factoryProvider: () -> ViewModelProvider.Factory = { defaultViewModelFactory() }
 ) where T : MvRxView, T : Fragment =
-    lifecycleAwareLazy { targetViewModel(clazz, factoryProvider(), keyProvider()) }
+    viewModelLazy { targetViewModel(clazz, factoryProvider(), keyProvider()) }
 
 inline fun <T, reified VM : MvRxViewModel<S>, reified S : MvRxState> T.parentViewModel(
     clazz: KClass<VM>,
@@ -90,7 +90,7 @@ inline fun <T, reified VM : MvRxViewModel<S>, reified S : MvRxState> T.bindParen
     crossinline keyProvider: () -> String = { VM::class.defaultViewModelKey },
     crossinline factoryProvider: () -> ViewModelProvider.Factory = { defaultViewModelFactory() }
 ) where T : MvRxView, T : Controller =
-    lifecycleAwareLazy { parentViewModel(clazz, factoryProvider(), keyProvider()) }
+    viewModelLazy { parentViewModel(clazz, factoryProvider(), keyProvider()) }
 
 inline fun <T, reified VM : MvRxViewModel<S>, reified S : MvRxState> T.targetViewModel(
     clazz: KClass<VM>,
@@ -104,7 +104,7 @@ inline fun <T, reified VM : MvRxViewModel<S>, reified S : MvRxState> T.bindTarge
     crossinline keyProvider: () -> String = { VM::class.defaultViewModelKey },
     crossinline factoryProvider: () -> ViewModelProvider.Factory = { defaultViewModelFactory() }
 ) where T : MvRxView, T : Controller =
-    lifecycleAwareLazy { targetViewModel(clazz, factoryProvider(), keyProvider()) }
+    viewModelLazy { targetViewModel(clazz, factoryProvider(), keyProvider()) }
 
 @PublishedApi
 internal fun <VM : MvRxViewModel<S>, S> VM.setupViewModel(view: MvRxView) =
@@ -118,7 +118,7 @@ internal fun Any.defaultViewModelFactory() = if (this is ViewModelFactoryHolder)
 }
 
 @PublishedApi
-internal fun <T : MvRxView, V> T.lifecycleAwareLazy(initializer: () -> V): LifecycleAwareLazy<V> {
+internal fun <T : MvRxView, V> T.viewModelLazy(initializer: () -> V): LifecycleAwareLazy<V> {
     val initEvent = if (this is Controller) {
         // on start is onCreateView in the controller world
         Lifecycle.Event.ON_START

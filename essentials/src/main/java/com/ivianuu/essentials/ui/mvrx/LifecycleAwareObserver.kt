@@ -37,7 +37,6 @@ internal class LifecycleAwareObserver<T>(
 ) : AtomicReference<Disposable>(), Observer<T>, Disposable {
 
     private val lifecycleObserver = object : SimpleLifecycleObserver() {
-
         override fun onAny(owner: LifecycleOwner, event: Lifecycle.Event) {
             super.onAny(owner, event)
             updateLock()

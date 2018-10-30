@@ -10,7 +10,7 @@ import com.ivianuu.liveevent.LiveEvent
  */
 interface LifecycleOwner2 : LifecycleOwner {
 
-    fun <T> LiveData<T>.observe(onChanged: (T) -> Unit) {
+    fun <T> LiveData<T>.observeK(onChanged: (T) -> Unit) {
         observeK(this@LifecycleOwner2, onChanged)
     }
 

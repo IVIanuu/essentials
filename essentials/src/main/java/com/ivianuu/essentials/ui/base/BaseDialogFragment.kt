@@ -22,15 +22,16 @@ import androidx.lifecycle.ViewModelProvider
 import com.ivianuu.essentials.injection.Injectable
 import com.ivianuu.essentials.ui.common.BackListener
 import com.ivianuu.essentials.ui.traveler.RouterHolder
-import com.ivianuu.essentials.util.lifecycle.LifecycleJob
 import com.ivianuu.essentials.util.lifecycle.LifecycleOwner2
 import com.ivianuu.essentials.util.screenlogger.IdentifiableScreen
 import com.ivianuu.essentials.util.viewmodel.ViewModelFactoryHolder
-import com.ivianuu.rxlifecycle.RxLifecycleOwner
+import com.ivianuu.scopes.archlifecycle.onDestroy
+import com.ivianuu.scopes.coroutines.cancelBy
 import com.ivianuu.traveler.Router
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.android.Main
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
@@ -40,7 +41,7 @@ import kotlin.coroutines.CoroutineContext
  */
 abstract class BaseDialogFragment : AppCompatDialogFragment(), BackListener,
     CoroutineScope, Injectable, IdentifiableScreen,
-    LifecycleOwner2, RouterHolder, RxLifecycleOwner, ViewModelFactoryHolder {
+    LifecycleOwner2, RouterHolder, ViewModelFactoryHolder {
 
     @Inject lateinit var router: Router
     @Inject override lateinit var viewModelFactory: ViewModelProvider.Factory
@@ -51,7 +52,7 @@ abstract class BaseDialogFragment : AppCompatDialogFragment(), BackListener,
     override val coroutineContext: CoroutineContext
         get() = Dispatchers.Main + job
 
-    val job = LifecycleJob(this)
+    val job = Job().cancelBy(onDestroy)
 
     override fun onAttach(context: Context?) {
         AndroidSupportInjection.inject(this)

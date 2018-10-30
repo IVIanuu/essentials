@@ -2,26 +2,36 @@ package com.ivianuu.essentials.data.base
 
 import android.service.notification.NotificationListenerService
 import com.ivianuu.essentials.injection.Injectable
-import com.ivianuu.essentials.util.coroutines.CancellableCoroutineScope
-import com.ivianuu.essentials.util.coroutines.cancelCoroutineScope
+import com.ivianuu.essentials.util.coroutines.ScopeCoroutineScope
+import com.ivianuu.scopes.MutableScope
+import com.ivianuu.scopes.Scope
+import com.ivianuu.scopes.coroutines.cancelBy
 import dagger.android.AndroidInjection
-import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.android.Main
+import kotlin.coroutines.CoroutineContext
 
 /**
  * Base notification listener service
  */
 abstract class BaseNotificationListenerService : NotificationListenerService(),
-    CoroutineScope by CancellableCoroutineScope(), Injectable {
+    CoroutineScope, Injectable {
 
-    protected val disposables = CompositeDisposable()
+    val scope: Scope get() = _scope
+    private val _scope = MutableScope()
 
-    protected val connectedDisposables = CompositeDisposable()
+    override val coroutineContext: CoroutineContext
+        get() = Dispatchers.Main + job
 
-    protected val connectedCoroutineScope: CoroutineScope
-        get() = _connectedCoroutineScope
-    protected var _connectedCoroutineScope = CancellableCoroutineScope()
-        private set
+    val job = Job().cancelBy(scope)
+
+    val connectedScope: Scope get() = _connectedScope
+    private var _connectedScope = MutableScope()
+
+    val connectedCoroutineScope: CoroutineScope get() = _connectedCoroutineScope
+    private var _connectedCoroutineScope = ScopeCoroutineScope(connectedScope)
 
     override fun onCreate() {
         if (shouldInject) {
@@ -31,19 +41,18 @@ abstract class BaseNotificationListenerService : NotificationListenerService(),
     }
 
     override fun onDestroy() {
-        disposables.clear()
-        cancelCoroutineScope()
+        _scope.close()
         super.onDestroy()
     }
 
     override fun onListenerConnected() {
         super.onListenerConnected()
-        _connectedCoroutineScope = CancellableCoroutineScope()
+        _connectedScope = MutableScope()
+        _connectedCoroutineScope = ScopeCoroutineScope(_connectedScope)
     }
 
     override fun onListenerDisconnected() {
-        connectedDisposables.clear()
-        _connectedCoroutineScope.cancel()
+        _connectedScope.close()
         super.onListenerDisconnected()
     }
 }

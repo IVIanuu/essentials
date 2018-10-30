@@ -4,6 +4,7 @@ import androidx.lifecycle.LifecycleOwner
 import com.ivianuu.essentials.ui.common.BaseViewModel
 import com.ivianuu.ktuples.Quadruple
 import com.ivianuu.ktuples.Quintuple
+import com.ivianuu.scopes.rx.disposeBy
 import com.ivianuu.timberktx.d
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -16,12 +17,9 @@ import kotlin.reflect.KProperty1
 abstract class MvRxViewModel<S : MvRxState>(initialState: S) : BaseViewModel() {
 
     private val stateStore = MvRxStateStore(initialState)
+        .also { it.disposeBy(scope) }
 
     internal val state get() = stateStore.state
-
-    init {
-        disposables.add(stateStore)
-    }
 
     protected fun withState(block: (S) -> Unit) {
         stateStore.get(block)
@@ -191,7 +189,8 @@ abstract class MvRxViewModel<S : MvRxState>(initialState: S) : BaseViewModel() {
         subscriber: (T) -> Unit
     ): Disposable {
         if (owner == null) {
-            return observeOn(AndroidSchedulers.mainThread()).subscribe(subscriber).disposeOnClear()
+            return observeOn(AndroidSchedulers.mainThread()).subscribe(subscriber)
+                .disposeBy(scope)
         }
 
         val lifecycleAwareObserver = LifecycleAwareObserver(
@@ -200,7 +199,7 @@ abstract class MvRxViewModel<S : MvRxState>(initialState: S) : BaseViewModel() {
             onNext = subscriber
         )
         return observeOn(AndroidSchedulers.mainThread()).subscribeWith(lifecycleAwareObserver)
-            .disposeOnClear()
+            .disposeBy(scope)
     }
 
     override fun toString() = "${this::class.java.simpleName} -> $state"

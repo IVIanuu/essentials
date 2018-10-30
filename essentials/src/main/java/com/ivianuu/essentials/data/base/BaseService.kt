@@ -4,18 +4,18 @@ import android.app.Service
 import android.content.Intent
 import android.os.IBinder
 import com.ivianuu.essentials.injection.Injectable
-import com.ivianuu.essentials.util.coroutines.CancellableCoroutineScope
-import com.ivianuu.essentials.util.coroutines.cancelCoroutineScope
+import com.ivianuu.scopes.MutableScope
+import com.ivianuu.scopes.Scope
 import dagger.android.AndroidInjection
-import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.CoroutineScope
 
 /**
  * Base service
  */
-abstract class BaseService : Service(), CoroutineScope by CancellableCoroutineScope(), Injectable {
+abstract class BaseService : Service(), CoroutineScope, Injectable {
 
-    protected val disposables = CompositeDisposable()
+    val scope: Scope get() = _scope
+    private val _scope = MutableScope()
 
     override fun onCreate() {
         if (shouldInject) {
@@ -25,8 +25,7 @@ abstract class BaseService : Service(), CoroutineScope by CancellableCoroutineSc
     }
 
     override fun onDestroy() {
-        disposables.clear()
-        cancelCoroutineScope()
+        _scope.close()
         super.onDestroy()
     }
 

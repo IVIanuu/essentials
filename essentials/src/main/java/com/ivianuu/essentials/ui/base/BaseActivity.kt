@@ -35,11 +35,10 @@ import com.ivianuu.essentials.ui.mvrx.MvRxView
 import com.ivianuu.essentials.ui.traveler.RouterHolder
 import com.ivianuu.essentials.ui.traveler.navigator.AddFragmentPlugin
 import com.ivianuu.essentials.util.ext.unsafeLazy
-import com.ivianuu.essentials.util.lifecycle.LifecycleJob
-import com.ivianuu.essentials.util.lifecycle.LifecycleOwner2
 import com.ivianuu.essentials.util.screenlogger.IdentifiableScreen
 import com.ivianuu.essentials.util.viewmodel.ViewModelFactoryHolder
-import com.ivianuu.rxlifecycle.RxLifecycleOwner
+import com.ivianuu.scopes.archlifecycle.onDestroy
+import com.ivianuu.scopes.coroutines.cancelBy
 import com.ivianuu.traveler.Navigator
 import com.ivianuu.traveler.NavigatorHolder
 import com.ivianuu.traveler.Router
@@ -53,6 +52,7 @@ import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.android.Main
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
@@ -61,8 +61,8 @@ import kotlin.coroutines.CoroutineContext
  * Base activity
  */
 abstract class BaseActivity : AppCompatActivity(), CoroutineScope, HasControllerInjector,
-    HasSupportFragmentInjector, HasViewInjector, Injectable, IdentifiableScreen, LifecycleOwner2,
-    MvRxView, RouterHolder, RxLifecycleOwner, ViewModelFactoryHolder {
+    HasSupportFragmentInjector, HasViewInjector, Injectable, IdentifiableScreen,
+    MvRxView, RouterHolder, ViewModelFactoryHolder {
 
     @Inject lateinit var navigatorHolder: NavigatorHolder
     @Inject lateinit var travelerRouter: Router
@@ -76,10 +76,10 @@ abstract class BaseActivity : AppCompatActivity(), CoroutineScope, HasController
     override val providedRouter: Router
         get() = travelerRouter
 
+    val job = Job().cancelBy(onDestroy)
+
     override val coroutineContext: CoroutineContext
         get() = Dispatchers.Main + job
-
-    val job = LifecycleJob(this)
 
     protected open val layoutRes = -1
 

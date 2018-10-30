@@ -139,7 +139,14 @@ dependencies {
     api(Deps.rxJava)
     api(Deps.rxJavaKtx)
     api(Deps.rxKotlin)
-    api(Deps.rxLifecycle)
+
+    api(Deps.scopes)
+    api(Deps.scopesAndroid)
+    api(Deps.scopesArchLifecycle)
+    api(Deps.scopesArchLifecycleFragment)
+    api(Deps.scopesCoroutines)
+    api(Deps.scopesDirector)
+    api(Deps.scopesRx)
 
     api(Deps.superUser)
 

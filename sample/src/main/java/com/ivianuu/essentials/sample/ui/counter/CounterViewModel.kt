@@ -11,6 +11,7 @@ import com.ivianuu.essentials.ui.mvrx.MvRxState
 import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.essentials.util.ext.toObservable
+import com.ivianuu.scopes.rx.disposeBy
 import com.ivianuu.traveler.Router
 import com.ivianuu.traveler.goBack
 import com.ivianuu.traveler.navigate
@@ -73,7 +74,7 @@ class CounterViewModel @AssistedInject constructor(
             .map { it.state }
             .filter { it == State.SUCCEEDED }
             .subscribe { toaster.success("Work finished!") }
-            .disposeOnClear()
+            .disposeBy(scope)
     }
 
     fun backClicked() {

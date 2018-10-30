@@ -29,7 +29,7 @@ object Versions {
     const val epoxyPrefs = "6c31aa79e8"
     const val fabric = "2.7.1"
     const val glide = "4.8.0"
-    const val kotlin = "1.3.0-rc-57"
+    const val kotlin = "1.3.0"
     const val kPrefs = "3ff94953eb"
     const val kSettings = "1b5acf9585"
     const val legacySupport = "28.0.0"
@@ -44,7 +44,7 @@ object Versions {
     const val rxJava = "2.2.2"
     const val rxJavaKtx = "015125e952"
     const val rxKotlin = "2.3.0"
-    const val rxLifecycle = "52409cf2db"
+    const val scopes = "3d5435e0ee"
     const val superUser = "1.0.0.+"
     const val stickyHeaders = "44c5192160"
     const val timber = "4.7.1"
@@ -168,7 +168,16 @@ object Deps {
     const val rxJava = "io.reactivex.rxjava2:rxjava:${Versions.rxJava}"
     const val rxJavaKtx = "com.github.IVIanuu:rx-java-ktx:${Versions.rxJavaKtx}"
     const val rxKotlin = "io.reactivex.rxjava2:rxkotlin:${Versions.rxKotlin}"
-    const val rxLifecycle = "com.github.IVIanuu:rx-lifecycle:${Versions.rxLifecycle}"
+
+    const val scopes = "com.github.IVIanuu.scopes:scopes:${Versions.scopes}"
+    const val scopesAndroid = "com.github.IVIanuu.scopes:scopes-android:${Versions.scopes}"
+    const val scopesArchLifecycle =
+        "com.github.IVIanuu.scopes:scopes-archlifecycle:${Versions.scopes}"
+    const val scopesArchLifecycleFragment =
+        "com.github.IVIanuu.scopes:scopes-archlifecycle-fragment:${Versions.scopes}"
+    const val scopesCoroutines = "com.github.IVIanuu.scopes:scopes-coroutines:${Versions.scopes}"
+    const val scopesDirector = "com.github.IVIanuu.scopes:scopes-director:${Versions.scopes}"
+    const val scopesRx = "com.github.IVIanuu.scopes:scopes-rx:${Versions.scopes}"
 
     const val superUser = "eu.chainfire:libsuperuser:${Versions.superUser}"
 
