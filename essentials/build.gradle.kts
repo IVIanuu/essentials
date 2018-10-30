@@ -144,6 +144,7 @@ dependencies {
     api(Deps.scopesAndroid)
     api(Deps.scopesArchLifecycle)
     api(Deps.scopesArchLifecycleFragment)
+    api(Deps.scopesCommon)
     api(Deps.scopesCoroutines)
     api(Deps.scopesDirector)
     api(Deps.scopesRx)

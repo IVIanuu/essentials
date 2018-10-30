@@ -34,28 +34,20 @@ import com.ivianuu.essentials.ui.mvrx.MvRxView
 import com.ivianuu.essentials.ui.traveler.RouterHolder
 import com.ivianuu.essentials.util.ContextAware
 import com.ivianuu.essentials.util.ViewInjectionContextWrapper
-import com.ivianuu.essentials.util.coroutines.ScopeCoroutineScope
 import com.ivianuu.essentials.util.lifecycle.LifecycleOwner2
 import com.ivianuu.essentials.util.screenlogger.IdentifiableScreen
 import com.ivianuu.essentials.util.viewmodel.ViewModelFactoryHolder
-import com.ivianuu.scopes.archlifecycle.onDestroy
-import com.ivianuu.scopes.coroutines.cancelBy
 import com.ivianuu.traveler.Router
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.android.Main
 import javax.inject.Inject
-import kotlin.coroutines.CoroutineContext
 
 /**
  * Base fragment
  */
-abstract class BaseController : LifecycleController(), ContextAware, CoroutineScope,
+abstract class BaseController : LifecycleController(), ContextAware,
     HasControllerInjector, HasViewInjector, Injectable, IdentifiableScreen, LayoutContainer,
     LifecycleOwner2, MvRxView, RouterHolder, ViewModelFactoryHolder {
 
@@ -71,15 +63,6 @@ abstract class BaseController : LifecycleController(), ContextAware, CoroutineSc
 
     override val providedRouter: Router
         get() = travelerRouter
-
-    val job = Job().cancelBy(onDestroy)
-
-    override val coroutineContext: CoroutineContext
-        get() = Dispatchers.Main + job
-
-    val viewCoroutineScope: CoroutineScope
-        get() = _viewCoroutineScope ?: throw IllegalArgumentException("view == null")
-    private var _viewCoroutineScope: ScopeCoroutineScope? = null
 
     protected open val layoutRes = -1
 
@@ -108,7 +91,6 @@ abstract class BaseController : LifecycleController(), ContextAware, CoroutineSc
     override fun onDestroyView(view: View) {
         containerView = null
         clearFindViewByIdCache()
-        _viewCoroutineScope = null
         super.onDestroyView(view)
     }
 
@@ -120,7 +102,6 @@ abstract class BaseController : LifecycleController(), ContextAware, CoroutineSc
     override fun viewInjector(): AndroidInjector<View> = viewInjector
 
     protected open fun onViewCreated(view: View) {
-        _viewCoroutineScope = ScopeCoroutineScope(viewLifecycleOwner.onDestroy)
         postInvalidate()
     }
 }

@@ -29,27 +29,19 @@ import com.ivianuu.essentials.ui.common.BackListener
 import com.ivianuu.essentials.ui.mvrx.MvRxView
 import com.ivianuu.essentials.ui.traveler.RouterHolder
 import com.ivianuu.essentials.util.ViewInjectionContextWrapper
-import com.ivianuu.essentials.util.coroutines.ScopeCoroutineScope
 import com.ivianuu.essentials.util.screenlogger.IdentifiableScreen
 import com.ivianuu.essentials.util.viewmodel.ViewModelFactoryHolder
-import com.ivianuu.scopes.archlifecycle.onDestroy
-import com.ivianuu.scopes.coroutines.cancelBy
 import com.ivianuu.traveler.Router
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.AndroidSupportInjection
 import dagger.android.support.HasSupportFragmentInjector
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.android.Main
 import javax.inject.Inject
-import kotlin.coroutines.CoroutineContext
 
 /**
  * Base fragment
  */
-abstract class BaseFragment : Fragment(), BackListener, CoroutineScope, HasSupportFragmentInjector,
+abstract class BaseFragment : Fragment(), BackListener, HasSupportFragmentInjector,
     HasViewInjector, Injectable, IdentifiableScreen, MvRxView, RouterHolder,
     ViewModelFactoryHolder {
 
@@ -62,15 +54,6 @@ abstract class BaseFragment : Fragment(), BackListener, CoroutineScope, HasSuppo
     @Inject lateinit var viewInjector: DispatchingAndroidInjector<View>
 
     @Inject override lateinit var viewModelFactory: ViewModelProvider.Factory
-
-    override val coroutineContext: CoroutineContext
-        get() = Dispatchers.Main + job
-
-    val job = Job().cancelBy(onDestroy)
-
-    val viewCoroutineScope: CoroutineScope
-        get() = _viewCoroutineScope ?: throw IllegalArgumentException("view == null")
-    private var _viewCoroutineScope: ScopeCoroutineScope? = null
 
     protected open val layoutRes = -1
 
@@ -92,19 +75,9 @@ abstract class BaseFragment : Fragment(), BackListener, CoroutineScope, HasSuppo
         super.onCreateView(inflater, container, savedInstanceState)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        _viewCoroutineScope = ScopeCoroutineScope(viewLifecycleOwner.onDestroy)
-    }
-
     override fun onStart() {
         super.onStart()
         postInvalidate()
-    }
-
-    override fun onDestroyView() {
-        _viewCoroutineScope = null
-        super.onDestroyView()
     }
 
     override fun invalidate() {

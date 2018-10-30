@@ -32,21 +32,14 @@ import com.ivianuu.essentials.util.ContextAware
 import com.ivianuu.essentials.util.lifecycle.LifecycleOwner2
 import com.ivianuu.essentials.util.screenlogger.IdentifiableScreen
 import com.ivianuu.essentials.util.viewmodel.ViewModelFactoryHolder
-import com.ivianuu.scopes.archlifecycle.onDestroy
-import com.ivianuu.scopes.coroutines.cancelBy
 import com.ivianuu.traveler.Router
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.android.Main
 import javax.inject.Inject
-import kotlin.coroutines.CoroutineContext
 
 /**
  * Base dialog controller
  */
 abstract class BaseDialogController : DialogController(),
-    ContextAware, CoroutineScope, Injectable, IdentifiableScreen,
+    ContextAware, Injectable, IdentifiableScreen,
     LifecycleOwner, LifecycleOwner2, RouterHolder, ViewModelFactoryHolder,
     ViewModelStoreOwner {
 
@@ -59,13 +52,8 @@ abstract class BaseDialogController : DialogController(),
     override val providedRouter: Router
         get() = travelerRouter
 
-    override val coroutineContext: CoroutineContext
-        get() = Dispatchers.Main + job
-
     private val lifecycleOwner = ControllerLifecycleOwner()
     private val viewModelStoreOwner = ControllerViewModelStoreOwner()
-
-    val job = Job().cancelBy(onDestroy)
 
     override fun onContextAvailable(context: Context) {
         DirectorInjection.inject(this)

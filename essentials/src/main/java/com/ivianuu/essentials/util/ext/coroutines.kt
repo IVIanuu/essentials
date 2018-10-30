@@ -14,23 +14,24 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.util.coroutines
+package com.ivianuu.essentials.util.ext
 
-import com.ivianuu.scopes.Scope
-import com.ivianuu.scopes.coroutines.cancelBy
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.android.Main
+import kotlinx.coroutines.CoroutineStart
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
+import kotlin.coroutines.EmptyCoroutineContext
 
-/**
- * @author Manuel Wrage (IVIanuu)
- */
-class ScopeCoroutineScope(private val scope: Scope) : CoroutineScope {
+fun launch(
+    context: CoroutineContext = EmptyCoroutineContext,
+    start: CoroutineStart = CoroutineStart.DEFAULT,
+    block: suspend CoroutineScope.() -> Unit
+) = GlobalScope.launch(context, start, block)
 
-    private val job = Job().cancelBy(scope)
-
-    override val coroutineContext: CoroutineContext
-        get() = Dispatchers.Main + job
-}
+fun <T> async(
+    context: CoroutineContext = EmptyCoroutineContext,
+    start: CoroutineStart = CoroutineStart.DEFAULT,
+    block: suspend CoroutineScope.() -> T
+) = GlobalScope.async(context, start, block)

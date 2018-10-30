@@ -44,7 +44,7 @@ object Versions {
     const val rxJava = "2.2.2"
     const val rxJavaKtx = "015125e952"
     const val rxKotlin = "2.3.0"
-    const val scopes = "3d5435e0ee"
+    const val scopes = "ad65c3ef46"
     const val superUser = "1.0.0.+"
     const val stickyHeaders = "44c5192160"
     const val timber = "4.7.1"
@@ -175,6 +175,7 @@ object Deps {
         "com.github.IVIanuu.scopes:scopes-archlifecycle:${Versions.scopes}"
     const val scopesArchLifecycleFragment =
         "com.github.IVIanuu.scopes:scopes-archlifecycle-fragment:${Versions.scopes}"
+    const val scopesCommon = "com.github.IVIanuu.scopes:scopes-common:${Versions.scopes}"
     const val scopesCoroutines = "com.github.IVIanuu.scopes:scopes-coroutines:${Versions.scopes}"
     const val scopesDirector = "com.github.IVIanuu.scopes:scopes-director:${Versions.scopes}"
     const val scopesRx = "com.github.IVIanuu.scopes:scopes-rx:${Versions.scopes}"
