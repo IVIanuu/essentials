@@ -3,9 +3,8 @@ package com.ivianuu.essentials.sample.ui.list
 import com.ivianuu.essentials.ui.mvrx.MvRxState
 import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
 import com.ivianuu.essentials.util.coroutines.AppCoroutineDispatchers
+import com.ivianuu.scopes.coroutines.launch
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class ListViewModel @Inject constructor(
@@ -21,9 +20,9 @@ class ListViewModel @Inject constructor(
     }
 
     private fun generateNewState() {
-        launch(dispatchers.computation) {
+        scope.launch(dispatchers.computation) {
             setState { copy(loading = true) }
-            delay(1, TimeUnit.SECONDS)
+            delay(1000)
             val list = generateList()
             setState { copy(loading = false, items = list) }
         }

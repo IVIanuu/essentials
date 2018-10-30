@@ -11,9 +11,10 @@ import com.ivianuu.essentials.data.app.AppStore
 import com.ivianuu.essentials.ui.base.BaseDialogFragment
 import com.ivianuu.essentials.ui.traveler.destination.ResultDestination
 import com.ivianuu.essentials.util.RequestCodeGenerator
+import com.ivianuu.scopes.archlifecycle.onDestroy
+import com.ivianuu.scopes.coroutines.launch
 import com.ivianuu.traveler.goBack
 import com.ivianuu.traveler.result.goBackWithResult
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @Destination(AppPickerDialog::class)
@@ -47,7 +48,7 @@ class AppPickerDialog : BaseDialogFragment() {
             }
             .build()
 
-        launch {
+        onDestroy.launch {
             val newApps = if (destination.launchableOnly) {
                 appStore.launchableApps()
             } else {
