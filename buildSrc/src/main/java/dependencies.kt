@@ -44,7 +44,7 @@ object Versions {
     const val rxJava = "2.2.2"
     const val rxJavaKtx = "015125e952"
     const val rxKotlin = "2.3.0"
-    const val scopes = "520af97196"
+    const val scopes = "91dcabb54f"
     const val superUser = "1.0.0.+"
     const val stickyHeaders = "44c5192160"
     const val timber = "4.7.1"
