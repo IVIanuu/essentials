@@ -23,13 +23,22 @@ import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.annotation.RequiresApi
+import androidx.lifecycle.Lifecycle
 import com.ivianuu.androidktx.core.app.hideInputMethod
 import com.ivianuu.androidktx.core.app.showInputMethod
 import com.ivianuu.androidktx.core.app.startActivityForResult
 import com.ivianuu.androidktx.core.content.app
 import com.ivianuu.androidktx.core.content.intent
 import com.ivianuu.director.Controller
+import com.ivianuu.director.arch.lifecycle.LifecycleController
 import com.ivianuu.director.requireActivity
+import com.ivianuu.scopes.archlifecycle.onCreate
+import com.ivianuu.scopes.archlifecycle.onDestroy
+import com.ivianuu.scopes.archlifecycle.onPause
+import com.ivianuu.scopes.archlifecycle.onResume
+import com.ivianuu.scopes.archlifecycle.onStart
+import com.ivianuu.scopes.archlifecycle.onStop
+import com.ivianuu.scopes.archlifecycle.scopeFor
 
 fun Controller.hideInputMethod() {
     requireActivity().hideInputMethod()
@@ -89,3 +98,23 @@ inline fun <reified T : Controller> Controller.targetControllerOrNull() = try {
 }
 
 inline fun <reified T : Application> Controller.app() = requireActivity().app<T>()
+
+fun LifecycleController.viewScopeFor(event: Lifecycle.Event) = viewLifecycleOwner.scopeFor(event)
+
+val LifecycleController.viewOnCreate
+    get() = viewLifecycleOwner.onCreate
+
+val LifecycleController.viewOnStart
+    get() = viewLifecycleOwner.onStart
+
+val LifecycleController.viewOnResume
+    get() = viewLifecycleOwner.onResume
+
+val LifecycleController.viewOnPause
+    get() = viewLifecycleOwner.onPause
+
+val LifecycleController.viewOnStop
+    get() = viewLifecycleOwner.onStop
+
+val LifecycleController.viewOnDestroy
+    get() = viewLifecycleOwner.onDestroy

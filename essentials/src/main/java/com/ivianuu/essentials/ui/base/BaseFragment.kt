@@ -29,13 +29,16 @@ import com.ivianuu.essentials.ui.common.BackListener
 import com.ivianuu.essentials.ui.mvrx.MvRxView
 import com.ivianuu.essentials.ui.traveler.RouterHolder
 import com.ivianuu.essentials.util.ViewInjectionContextWrapper
+import com.ivianuu.essentials.util.coroutines.asMainCoroutineScope
 import com.ivianuu.essentials.util.screenlogger.IdentifiableScreen
 import com.ivianuu.essentials.util.viewmodel.ViewModelFactoryHolder
+import com.ivianuu.scopes.archlifecycle.fragment.viewOnDestroy
 import com.ivianuu.traveler.Router
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.AndroidSupportInjection
 import dagger.android.support.HasSupportFragmentInjector
+import kotlinx.coroutines.CoroutineScope
 import javax.inject.Inject
 
 /**
@@ -46,6 +49,10 @@ abstract class BaseFragment : Fragment(), BackListener, HasSupportFragmentInject
     ViewModelFactoryHolder {
 
     @Inject lateinit var router: Router
+
+    val viewCoroutineScope
+        get() = _viewCoroutineScope ?: throw IllegalStateException("view not attached")
+    private var _viewCoroutineScope: CoroutineScope? = null
 
     override val providedRouter: Router
         get() = router
@@ -75,9 +82,19 @@ abstract class BaseFragment : Fragment(), BackListener, HasSupportFragmentInject
         super.onCreateView(inflater, container, savedInstanceState)
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        _viewCoroutineScope = viewOnDestroy.asMainCoroutineScope()
+    }
+
     override fun onStart() {
         super.onStart()
         postInvalidate()
+    }
+
+    override fun onDestroyView() {
+        _viewCoroutineScope = null
+        super.onDestroyView()
     }
 
     override fun invalidate() {

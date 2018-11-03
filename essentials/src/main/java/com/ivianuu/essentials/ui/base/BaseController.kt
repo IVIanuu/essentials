@@ -34,14 +34,18 @@ import com.ivianuu.essentials.ui.mvrx.MvRxView
 import com.ivianuu.essentials.ui.traveler.RouterHolder
 import com.ivianuu.essentials.util.ContextAware
 import com.ivianuu.essentials.util.ViewInjectionContextWrapper
+import com.ivianuu.essentials.util.coroutines.asMainCoroutineScope
+import com.ivianuu.essentials.util.ext.viewOnDestroy
 import com.ivianuu.essentials.util.lifecycle.LifecycleOwner2
 import com.ivianuu.essentials.util.screenlogger.IdentifiableScreen
 import com.ivianuu.essentials.util.viewmodel.ViewModelFactoryHolder
+import com.ivianuu.scopes.archlifecycle.onDestroy
 import com.ivianuu.traveler.Router
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.*
+import kotlinx.coroutines.CoroutineScope
 import javax.inject.Inject
 
 /**
@@ -55,6 +59,12 @@ abstract class BaseController : LifecycleController(), ContextAware,
     @set:Inject var controllerInjector: DispatchingAndroidInjector<Controller> by contextRef()
     @set:Inject var viewInjector: DispatchingAndroidInjector<View> by contextRef()
     @set:Inject override var viewModelFactory: ViewModelProvider.Factory by contextRef()
+
+    val coroutineScope = onDestroy.asMainCoroutineScope()
+
+    val viewCoroutineScope
+        get() = _viewCoroutineScope ?: throw IllegalStateException("view not attached")
+    private var _viewCoroutineScope: CoroutineScope? = null
 
     override var containerView: View? = null
 
@@ -82,7 +92,10 @@ abstract class BaseController : LifecycleController(), ContextAware,
         val view = viewInjectionInflater.inflate(layoutRes, container, false)
             .also { containerView = it }
 
+        _viewCoroutineScope = viewOnDestroy.asMainCoroutineScope()
+
         onViewCreated(view)
+
         view
     } else {
         throw IllegalStateException("no layout res provided")
@@ -90,6 +103,7 @@ abstract class BaseController : LifecycleController(), ContextAware,
 
     override fun onDestroyView(view: View) {
         containerView = null
+        _viewCoroutineScope = null
         clearFindViewByIdCache()
         super.onDestroyView(view)
     }

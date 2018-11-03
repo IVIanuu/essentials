@@ -34,9 +34,11 @@ import com.ivianuu.essentials.ui.common.BackListener
 import com.ivianuu.essentials.ui.mvrx.MvRxView
 import com.ivianuu.essentials.ui.traveler.RouterHolder
 import com.ivianuu.essentials.ui.traveler.navigator.AddFragmentPlugin
+import com.ivianuu.essentials.util.coroutines.asMainCoroutineScope
 import com.ivianuu.essentials.util.ext.unsafeLazy
 import com.ivianuu.essentials.util.screenlogger.IdentifiableScreen
 import com.ivianuu.essentials.util.viewmodel.ViewModelFactoryHolder
+import com.ivianuu.scopes.archlifecycle.onDestroy
 import com.ivianuu.traveler.Navigator
 import com.ivianuu.traveler.NavigatorHolder
 import com.ivianuu.traveler.Router
@@ -65,6 +67,8 @@ abstract class BaseActivity : AppCompatActivity(), HasControllerInjector,
     @Inject lateinit var viewInjector: DispatchingAndroidInjector<View>
 
     @Inject override lateinit var viewModelFactory: ViewModelProvider.Factory
+
+    val coroutineScope = onDestroy.asMainCoroutineScope()
 
     override val providedRouter: Router
         get() = travelerRouter

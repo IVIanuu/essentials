@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.work.Worker
 import com.ivianuu.essentials.injection.Injectable
 import com.ivianuu.essentials.util.ContextAware
+import com.ivianuu.essentials.util.coroutines.asMainCoroutineScope
 import com.ivianuu.scopes.MutableScope
 import com.ivianuu.scopes.Scope
 
@@ -17,6 +18,8 @@ abstract class BaseWorker : Worker(), ContextAware, Injectable {
 
     val scope: Scope get() = _scope
     private val _scope = MutableScope()
+
+    val coroutineScope = scope.asMainCoroutineScope()
 
     override fun onStopped(cancelled: Boolean) {
         _scope.close()

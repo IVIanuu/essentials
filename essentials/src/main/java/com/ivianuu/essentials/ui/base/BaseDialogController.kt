@@ -29,9 +29,11 @@ import com.ivianuu.director.requireActivity
 import com.ivianuu.essentials.injection.Injectable
 import com.ivianuu.essentials.ui.traveler.RouterHolder
 import com.ivianuu.essentials.util.ContextAware
+import com.ivianuu.essentials.util.coroutines.asMainCoroutineScope
 import com.ivianuu.essentials.util.lifecycle.LifecycleOwner2
 import com.ivianuu.essentials.util.screenlogger.IdentifiableScreen
 import com.ivianuu.essentials.util.viewmodel.ViewModelFactoryHolder
+import com.ivianuu.scopes.archlifecycle.onDestroy
 import com.ivianuu.traveler.Router
 import javax.inject.Inject
 
@@ -54,6 +56,8 @@ abstract class BaseDialogController : DialogController(),
 
     private val lifecycleOwner = ControllerLifecycleOwner()
     private val viewModelStoreOwner = ControllerViewModelStoreOwner()
+
+    val coroutineScope = onDestroy.asMainCoroutineScope()
 
     override fun onContextAvailable(context: Context) {
         DirectorInjection.inject(this)

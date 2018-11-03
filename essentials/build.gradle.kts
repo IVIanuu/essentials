@@ -146,7 +146,6 @@ dependencies {
     api(Deps.scopesArchLifecycleFragment)
     api(Deps.scopesCommon)
     api(Deps.scopesCoroutines)
-    api(Deps.scopesDirector)
     api(Deps.scopesRx)
 
     api(Deps.superUser)

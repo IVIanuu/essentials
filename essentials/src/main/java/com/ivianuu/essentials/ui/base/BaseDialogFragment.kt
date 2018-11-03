@@ -22,9 +22,11 @@ import androidx.lifecycle.ViewModelProvider
 import com.ivianuu.essentials.injection.Injectable
 import com.ivianuu.essentials.ui.common.BackListener
 import com.ivianuu.essentials.ui.traveler.RouterHolder
+import com.ivianuu.essentials.util.coroutines.asMainCoroutineScope
 import com.ivianuu.essentials.util.lifecycle.LifecycleOwner2
 import com.ivianuu.essentials.util.screenlogger.IdentifiableScreen
 import com.ivianuu.essentials.util.viewmodel.ViewModelFactoryHolder
+import com.ivianuu.scopes.archlifecycle.onDestroy
 import com.ivianuu.traveler.Router
 import dagger.android.support.AndroidSupportInjection
 import javax.inject.Inject
@@ -37,6 +39,8 @@ abstract class BaseDialogFragment : AppCompatDialogFragment(), BackListener,
 
     @Inject lateinit var router: Router
     @Inject override lateinit var viewModelFactory: ViewModelProvider.Factory
+
+    val coroutineScope = onDestroy.asMainCoroutineScope()
 
     override val providedRouter: Router
         get() = router

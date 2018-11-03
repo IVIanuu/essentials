@@ -4,6 +4,7 @@ import android.annotation.TargetApi
 import android.os.Build
 import android.service.quicksettings.TileService
 import com.ivianuu.essentials.injection.Injectable
+import com.ivianuu.essentials.util.coroutines.asMainCoroutineScope
 import com.ivianuu.scopes.MutableScope
 import com.ivianuu.scopes.Scope
 import dagger.android.AndroidInjection
@@ -18,8 +19,13 @@ abstract class BaseTileService : TileService(),
     val scope: Scope get() = _scope
     private val _scope = MutableScope()
 
+    val coroutineScope = scope.asMainCoroutineScope()
+
     val listeningScope: Scope get() = _listeningScope
     private var _listeningScope = MutableScope()
+
+    val listeningCoroutineScope get() = _listeningCoroutineScope
+    private var _listeningCoroutineScope = _listeningScope.asMainCoroutineScope()
 
     override fun onCreate() {
         if (shouldInject) {
@@ -36,6 +42,7 @@ abstract class BaseTileService : TileService(),
     override fun onStartListening() {
         super.onStartListening()
         _listeningScope = MutableScope()
+        _listeningCoroutineScope = _listeningScope.asMainCoroutineScope()
     }
 
     override fun onStopListening() {

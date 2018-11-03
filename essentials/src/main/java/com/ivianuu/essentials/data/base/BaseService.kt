@@ -4,6 +4,7 @@ import android.app.Service
 import android.content.Intent
 import android.os.IBinder
 import com.ivianuu.essentials.injection.Injectable
+import com.ivianuu.essentials.util.coroutines.asMainCoroutineScope
 import com.ivianuu.scopes.MutableScope
 import com.ivianuu.scopes.Scope
 import dagger.android.AndroidInjection
@@ -15,6 +16,8 @@ abstract class BaseService : Service(), Injectable {
 
     val scope: Scope get() = _scope
     private val _scope = MutableScope()
+
+    val coroutineScope = scope.asMainCoroutineScope()
 
     override fun onCreate() {
         if (shouldInject) {
