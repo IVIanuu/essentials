@@ -33,6 +33,7 @@ import com.ivianuu.essentials.util.coroutines.asMainCoroutineScope
 import com.ivianuu.essentials.util.screenlogger.IdentifiableScreen
 import com.ivianuu.essentials.util.viewmodel.ViewModelFactoryHolder
 import com.ivianuu.scopes.archlifecycle.fragment.viewOnDestroy
+import com.ivianuu.scopes.archlifecycle.onDestroy
 import com.ivianuu.traveler.Router
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
@@ -49,6 +50,8 @@ abstract class BaseFragment : Fragment(), BackListener, HasSupportFragmentInject
     ViewModelFactoryHolder {
 
     @Inject lateinit var router: Router
+
+    val coroutineScope = onDestroy.asMainCoroutineScope()
 
     val viewCoroutineScope
         get() = _viewCoroutineScope ?: throw IllegalStateException("view not attached")
