@@ -6,7 +6,6 @@
       <module fileurl="file://$PROJECT_DIR$/buildSrc/buildSrc.iml" filepath="$PROJECT_DIR$/buildSrc/buildSrc.iml" />
       <module fileurl="file://$PROJECT_DIR$/essentials/essentials.iml" filepath="$PROJECT_DIR$/essentials/essentials.iml" />
       <module fileurl="file://$PROJECT_DIR$/essentials-compiler/essentials-compiler.iml" filepath="$PROJECT_DIR$/essentials-compiler/essentials-compiler.iml" />
-      <module fileurl="file://$PROJECT_DIR$/koptional/koptional.iml" filepath="$PROJECT_DIR$/koptional/koptional.iml" />
       <module fileurl="file://$PROJECT_DIR$/ktuples/ktuples.iml" filepath="$PROJECT_DIR$/ktuples/ktuples.iml" />
       <module fileurl="file://$PROJECT_DIR$/sample/sample.iml" filepath="$PROJECT_DIR$/sample/sample.iml" />
     </modules>

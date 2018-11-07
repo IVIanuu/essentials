@@ -11,7 +11,6 @@
             <option value="$PROJECT_DIR$/buildSrc" />
             <option value="$PROJECT_DIR$/essentials" />
             <option value="$PROJECT_DIR$/essentials-compiler" />
-            <option value="$PROJECT_DIR$/koptional" />
             <option value="$PROJECT_DIR$/ktuples" />
             <option value="$PROJECT_DIR$/sample" />
           </set>
