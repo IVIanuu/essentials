@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.util.viewmodel
+package com.ivianuu.essentials.util
 
 import androidx.lifecycle.ViewModelProvider
 

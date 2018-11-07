@@ -27,8 +27,8 @@ import com.ivianuu.contributor.view.HasViewInjector
 import com.ivianuu.essentials.ui.common.BackListener
 import com.ivianuu.essentials.ui.mvrx.MvRxView
 import com.ivianuu.essentials.util.ViewInjectionContextWrapper
+import com.ivianuu.essentials.util.ViewModelFactoryHolder
 import com.ivianuu.essentials.util.asMainCoroutineScope
-import com.ivianuu.essentials.util.viewmodel.ViewModelFactoryHolder
 import com.ivianuu.scopes.archlifecycle.fragment.viewOnDestroy
 import com.ivianuu.scopes.archlifecycle.onDestroy
 import com.ivianuu.traveler.Router

@@ -28,9 +28,9 @@ import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.common.BackListener
 import com.ivianuu.essentials.ui.mvrx.MvRxView
 import com.ivianuu.essentials.ui.traveler.navigator.AddFragmentPlugin
+import com.ivianuu.essentials.util.ViewModelFactoryHolder
 import com.ivianuu.essentials.util.asMainCoroutineScope
 import com.ivianuu.essentials.util.ext.unsafeLazy
-import com.ivianuu.essentials.util.viewmodel.ViewModelFactoryHolder
 import com.ivianuu.scopes.archlifecycle.onDestroy
 import com.ivianuu.traveler.Navigator
 import com.ivianuu.traveler.NavigatorHolder

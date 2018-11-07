@@ -8,7 +8,7 @@ import com.ivianuu.androidktx.fragment.app.requireParentFragment
 import com.ivianuu.androidktx.fragment.app.requireTargetFragment
 import com.ivianuu.androidktx.lifecycle.defaultViewModelKey
 import com.ivianuu.androidktx.lifecycle.viewModelProvider
-import com.ivianuu.essentials.util.viewmodel.ViewModelFactoryHolder
+import com.ivianuu.essentials.util.ViewModelFactoryHolder
 import kotlin.reflect.KClass
 
 inline fun <T : MvRxView, reified VM : MvRxViewModel<S>, reified S : MvRxState> T.viewModel(
