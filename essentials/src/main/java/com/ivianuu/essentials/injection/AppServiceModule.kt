@@ -14,17 +14,18 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.util
+package com.ivianuu.essentials.injection
+
+import com.ivianuu.essentials.app.AppService
+import dagger.Module
+import dagger.multibindings.Multibinds
 
 /**
- * Simple result
+ * @author Manuel Wrage (IVIanuu)
  */
-sealed class Result<out T : Any> {
-    data class Success<out T : Any>(val data: T) : Result<T>()
-    data class Error(val throwable: Throwable) : Result<Nothing>()
-    object Loading : Result<Nothing>()
+@Module
+internal abstract class AppServiceModule {
 
-    inline val isSuccess get() = this is Success<*>
-    inline val isError get() = this is Error
-    inline val isLoading get() = this is Loading
+    @Multibinds
+    abstract fun bindAppServices(): Set<@JvmSuppressWildcards AppService>
 }

@@ -1,7 +1,6 @@
 package com.ivianuu.essentials.data.base
 
 import android.service.notification.NotificationListenerService
-import com.ivianuu.essentials.injection.Injectable
 import com.ivianuu.essentials.util.asMainCoroutineScope
 import com.ivianuu.scopes.MutableScope
 import com.ivianuu.scopes.ReusableScope
@@ -11,7 +10,7 @@ import dagger.android.AndroidInjection
 /**
  * Base notification listener service
  */
-abstract class BaseNotificationListenerService : NotificationListenerService(), Injectable {
+abstract class BaseNotificationListenerService : NotificationListenerService() {
 
     val scope: Scope get() = _scope
     private val _scope = MutableScope()
@@ -24,9 +23,7 @@ abstract class BaseNotificationListenerService : NotificationListenerService(), 
     val connectedCoroutineScope = _connectedScope.asMainCoroutineScope()
 
     override fun onCreate() {
-        if (shouldInject) {
-            AndroidInjection.inject(this)
-        }
+        AndroidInjection.inject(this)
         super.onCreate()
     }
 

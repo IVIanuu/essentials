@@ -2,7 +2,6 @@ package com.ivianuu.essentials.data.base
 
 import android.accessibilityservice.AccessibilityService
 import android.view.accessibility.AccessibilityEvent
-import com.ivianuu.essentials.injection.Injectable
 import com.ivianuu.essentials.util.asMainCoroutineScope
 import com.ivianuu.scopes.MutableScope
 import com.ivianuu.scopes.Scope
@@ -11,7 +10,7 @@ import dagger.android.AndroidInjection
 /**
  * Base accessibility service
  */
-abstract class BaseAccessibilityService : AccessibilityService(), Injectable {
+abstract class BaseAccessibilityService : AccessibilityService() {
 
     val scope: Scope get() = _scope
     private val _scope = MutableScope()
@@ -19,9 +18,7 @@ abstract class BaseAccessibilityService : AccessibilityService(), Injectable {
     val coroutineScope = scope.asMainCoroutineScope()
 
     override fun onCreate() {
-        if (shouldInject) {
-            AndroidInjection.inject(this)
-        }
+        AndroidInjection.inject(this)
         super.onCreate()
     }
 

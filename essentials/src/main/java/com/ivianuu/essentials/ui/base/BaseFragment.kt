@@ -24,13 +24,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.ivianuu.contributor.view.HasViewInjector
-import com.ivianuu.essentials.injection.Injectable
 import com.ivianuu.essentials.ui.common.BackListener
 import com.ivianuu.essentials.ui.mvrx.MvRxView
-import com.ivianuu.essentials.ui.traveler.RouterHolder
 import com.ivianuu.essentials.util.ViewInjectionContextWrapper
 import com.ivianuu.essentials.util.asMainCoroutineScope
-import com.ivianuu.essentials.util.screenlogger.IdentifiableScreen
 import com.ivianuu.essentials.util.viewmodel.ViewModelFactoryHolder
 import com.ivianuu.scopes.archlifecycle.fragment.viewOnDestroy
 import com.ivianuu.scopes.archlifecycle.onDestroy
@@ -46,8 +43,7 @@ import javax.inject.Inject
  * Base fragment
  */
 abstract class BaseFragment : Fragment(), BackListener, HasSupportFragmentInjector,
-    HasViewInjector, Injectable, IdentifiableScreen, MvRxView, RouterHolder,
-    ViewModelFactoryHolder {
+    HasViewInjector, MvRxView, ViewModelFactoryHolder {
 
     @Inject lateinit var router: Router
 
@@ -56,9 +52,6 @@ abstract class BaseFragment : Fragment(), BackListener, HasSupportFragmentInject
     val viewCoroutineScope
         get() = _viewCoroutineScope ?: throw IllegalStateException("view not attached")
     private var _viewCoroutineScope: CoroutineScope? = null
-
-    override val providedRouter: Router
-        get() = router
 
     @Inject lateinit var supportFragmentInjector: DispatchingAndroidInjector<Fragment>
     @Inject lateinit var viewInjector: DispatchingAndroidInjector<View>

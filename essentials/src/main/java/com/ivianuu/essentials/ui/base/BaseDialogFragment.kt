@@ -19,11 +19,8 @@ package com.ivianuu.essentials.ui.base
 import android.content.Context
 import androidx.appcompat.app.AppCompatDialogFragment
 import androidx.lifecycle.ViewModelProvider
-import com.ivianuu.essentials.injection.Injectable
 import com.ivianuu.essentials.ui.common.BackListener
-import com.ivianuu.essentials.ui.traveler.RouterHolder
 import com.ivianuu.essentials.util.asMainCoroutineScope
-import com.ivianuu.essentials.util.screenlogger.IdentifiableScreen
 import com.ivianuu.essentials.util.viewmodel.ViewModelFactoryHolder
 import com.ivianuu.scopes.archlifecycle.onDestroy
 import com.ivianuu.traveler.Router
@@ -34,15 +31,12 @@ import javax.inject.Inject
  * Base dialog fragment
  */
 abstract class BaseDialogFragment : AppCompatDialogFragment(), BackListener,
-    Injectable, IdentifiableScreen, RouterHolder, ViewModelFactoryHolder {
+    ViewModelFactoryHolder {
 
     @Inject lateinit var router: Router
     @Inject override lateinit var viewModelFactory: ViewModelProvider.Factory
 
     val coroutineScope = onDestroy.asMainCoroutineScope()
-
-    override val providedRouter: Router
-        get() = router
 
     override fun onAttach(context: Context?) {
         AndroidSupportInjection.inject(this)

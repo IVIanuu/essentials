@@ -3,7 +3,6 @@ package com.ivianuu.essentials.data.base
 import android.annotation.TargetApi
 import android.os.Build
 import android.service.quicksettings.TileService
-import com.ivianuu.essentials.injection.Injectable
 import com.ivianuu.essentials.util.asMainCoroutineScope
 import com.ivianuu.scopes.MutableScope
 import com.ivianuu.scopes.ReusableScope
@@ -14,8 +13,7 @@ import dagger.android.AndroidInjection
  * Base tile service
  */
 @TargetApi(Build.VERSION_CODES.N)
-abstract class BaseTileService : TileService(),
-    Injectable {
+abstract class BaseTileService : TileService() {
 
     val scope: Scope get() = _scope
     private val _scope = MutableScope()
@@ -28,9 +26,7 @@ abstract class BaseTileService : TileService(),
     val listeningCoroutineScope = _listeningScope.asMainCoroutineScope()
 
     override fun onCreate() {
-        if (shouldInject) {
-            AndroidInjection.inject(this)
-        }
+        AndroidInjection.inject(this)
         super.onCreate()
     }
 

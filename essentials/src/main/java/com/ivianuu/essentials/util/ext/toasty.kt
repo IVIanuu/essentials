@@ -6,40 +6,50 @@ package com.ivianuu.essentials.util.ext
 
 import android.content.Context
 import android.view.View
-import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.ivianuu.androidktx.core.content.string
 import com.ivianuu.essentials.util.ContextAware
 import es.dmoral.toasty.Toasty
 
-fun Context.toastError(message: CharSequence): Toast =
+fun Context.toastError(message: CharSequence) = mainThread {
     Toasty.error(this, message).apply { show() }
+}
 
-fun Context.toastError(messageRes: Int, vararg args: Any) =
-    toastError(getString(messageRes, *args))
+fun Context.toastError(messageRes: Int, vararg args: Any) {
+    toastError(string(messageRes, *args))
+}
 
-fun Context.toastInfo(message: CharSequence): Toast =
+fun Context.toastInfo(message: CharSequence) = mainThread {
     Toasty.info(this, message).apply { show() }
+}
 
-fun Context.toastInfo(messageRes: Int, vararg args: Any) =
-    toastInfo(getString(messageRes, *args))
+fun Context.toastInfo(messageRes: Int, vararg args: Any) {
+    toastInfo(string(messageRes, *args))
+}
 
-fun Context.toastNormal(message: CharSequence): Toast =
+fun Context.toastNormal(message: CharSequence) = mainThread {
     Toasty.normal(this, message).apply { show() }
+}
 
-fun Context.toastNormal(messageRes: Int, vararg args: Any) =
-    toastNormal(getString(messageRes, *args))
+fun Context.toastNormal(messageRes: Int, vararg args: Any) {
+    toastNormal(string(messageRes, *args))
+}
 
-fun Context.toastSuccess(message: CharSequence): Toast =
+fun Context.toastSuccess(message: CharSequence) = mainThread {
     Toasty.success(this, message).apply { show() }
+}
 
-fun Context.toastSuccess(messageRes: Int, vararg args: Any) =
-    toastSuccess(getString(messageRes, *args))
+fun Context.toastSuccess(messageRes: Int, vararg args: Any) {
+    toastSuccess(string(messageRes, *args))
+}
 
-fun Context.toastWarning(message: CharSequence): Toast =
+fun Context.toastWarning(message: CharSequence) = mainThread {
     Toasty.warning(this, message).apply { show() }
+}
 
-fun Context.toastWarning(messageRes: Int, vararg args: Any) =
-    toastWarning(getString(messageRes, *args))
+fun Context.toastWarning(messageRes: Int, vararg args: Any) {
+    toastWarning(string(messageRes, *args))
+}
 
 fun ContextAware.toastError(message: CharSequence) =
     providedContext.toastError(message)

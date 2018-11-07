@@ -19,15 +19,9 @@
 package com.ivianuu.essentials.util.ext
 
 import android.view.View
-import androidx.appcompat.widget.Toolbar
 import com.ivianuu.epoxyprefs.PreferenceModel
 import com.ivianuu.traveler.Router
-import com.ivianuu.traveler.goBack
 import com.ivianuu.traveler.navigate
-
-fun Toolbar.goBackOnNavigationClick(router: Router) {
-    setNavigationOnClickListener { router.goBack() }
-}
 
 fun View.navigateOnClick(router: Router, key: () -> Any) {
     setOnClickListener { router.navigate(key()) }

@@ -24,18 +24,13 @@ import androidx.work.Configuration
 import androidx.work.WorkManager
 import androidx.work.WorkerFactory
 import com.bumptech.glide.Glide
-import com.crashlytics.android.Crashlytics
 import com.ivianuu.contributor.view.HasViewInjector
 import com.ivianuu.essentials.util.AppIcon
 import com.ivianuu.essentials.util.AppIconModelLoader
-import com.ivianuu.essentials.util.analytics.Analytics
-import com.ivianuu.essentials.util.analytics.DebugAnalyticsLogger
-import com.ivianuu.essentials.util.analytics.FabricAnalyticsLogger
 import com.ivianuu.essentials.util.ext.containsFlag
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.DaggerApplication
-import io.fabric.sdk.android.Fabric
 import io.reactivex.android.plugins.RxAndroidPlugins
 import io.reactivex.android.schedulers.AndroidSchedulers
 import timber.log.Timber
@@ -49,15 +44,12 @@ abstract class BaseApp : DaggerApplication(), HasViewInjector {
 
     @Inject internal lateinit var appServices: Set<@JvmSuppressWildcards AppService>
     @Inject internal lateinit var appIconModelLoaderFactory: AppIconModelLoader.Factory
-    @Inject internal lateinit var debugAnalyticsLogger: DebugAnalyticsLogger
-    @Inject internal lateinit var fabricAnalyticsLogger: FabricAnalyticsLogger
 
     @Inject internal lateinit var viewInjector: DispatchingAndroidInjector<View>
 
     @Inject internal lateinit var workerFactory: Provider<WorkerFactory>
 
     protected open val initTimber = true
-    protected open val initFabric = true
     protected open val initGlide = true
     protected open val initRxJava = true
     protected open val initWorkManager = true
@@ -76,10 +68,6 @@ abstract class BaseApp : DaggerApplication(), HasViewInjector {
 
         if (isDebuggable && initTimber) {
             Timber.plant(Timber.DebugTree())
-            Analytics.addLogger(debugAnalyticsLogger)
-        } else if (!isDebuggable && initFabric) {
-            Fabric.with(this, Crashlytics())
-            Analytics.addLogger(fabricAnalyticsLogger)
         }
 
         if (initGlide) {

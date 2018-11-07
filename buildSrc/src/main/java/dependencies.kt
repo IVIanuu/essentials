@@ -26,7 +26,6 @@ object Versions {
     const val epoxy = "2.19.0"
     const val epoxyKtx = "9dde1f5a9c"
     const val epoxyPrefs = "6c31aa79e8"
-    const val fabric = "2.7.1"
     const val glide = "4.8.0"
     const val kotlin = "1.3.0"
     const val kPrefs = "8e4b5f3859"
@@ -112,8 +111,6 @@ object Deps {
     const val epoxyProcessor = "com.airbnb.android:epoxy-processor:${Versions.epoxy}"
     const val epoxyKtx = "com.github.IVIanuu:epoxy-ktx:${Versions.epoxyKtx}"
     const val epoxyPrefs = "com.github.IVIanuu:epoxy-prefs:${Versions.epoxyPrefs}"
-
-    const val fabric = "com.crashlytics.sdk.android:crashlytics:${Versions.fabric}@aar"
 
     const val glide = "com.github.bumptech.glide:glide:${Versions.glide}"
 

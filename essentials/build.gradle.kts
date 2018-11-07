@@ -96,10 +96,6 @@ dependencies {
 
     kapt(project(":essentials-compiler"))
 
-    implementation(Deps.fabric) {
-        isTransitive = true
-    }
-
     api(Deps.glide)
 
     api(Deps.kotlinStdLib)

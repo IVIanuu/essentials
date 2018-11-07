@@ -1,5 +1,6 @@
 package com.ivianuu.essentials.sample.ui.counter
 
+import android.content.Context
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.State
 import androidx.work.WorkManager
@@ -9,8 +10,8 @@ import com.ivianuu.essentials.sample.data.MyWorker
 import com.ivianuu.essentials.sample.ui.list.ListDestination
 import com.ivianuu.essentials.ui.mvrx.MvRxState
 import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
-import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.essentials.util.ext.toObservable
+import com.ivianuu.essentials.util.ext.toastSuccess
 import com.ivianuu.scopes.rx.disposeBy
 import com.ivianuu.traveler.Router
 import com.ivianuu.traveler.goBack
@@ -22,8 +23,8 @@ import com.ivianuu.traveler.popToRoot
  */
 class CounterViewModel @AssistedInject constructor(
     @Assisted private val destination: CounterDestination,
+    private val context: Context,
     private val router: Router,
-    private val toaster: Toaster,
     private val workManager: WorkManager
 ) : MvRxViewModel<CounterState>(CounterState(screen = destination.screen)) {
 
@@ -73,7 +74,7 @@ class CounterViewModel @AssistedInject constructor(
             .toObservable()
             .map { it.state }
             .filter { it == State.SUCCEEDED }
-            .subscribe { toaster.success("Work finished!") }
+            .subscribe { context.toastSuccess("Work finished!") }
             .disposeBy(scope)
     }
 

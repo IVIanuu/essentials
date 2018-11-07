@@ -25,14 +25,11 @@ import com.ivianuu.compass.android.CompassAppNavigator
 import com.ivianuu.compass.fragment.CompassFragmentNavigator
 import com.ivianuu.contributor.view.HasViewInjector
 import com.ivianuu.essentials.R
-import com.ivianuu.essentials.injection.Injectable
 import com.ivianuu.essentials.ui.common.BackListener
 import com.ivianuu.essentials.ui.mvrx.MvRxView
-import com.ivianuu.essentials.ui.traveler.RouterHolder
 import com.ivianuu.essentials.ui.traveler.navigator.AddFragmentPlugin
 import com.ivianuu.essentials.util.asMainCoroutineScope
 import com.ivianuu.essentials.util.ext.unsafeLazy
-import com.ivianuu.essentials.util.screenlogger.IdentifiableScreen
 import com.ivianuu.essentials.util.viewmodel.ViewModelFactoryHolder
 import com.ivianuu.scopes.archlifecycle.onDestroy
 import com.ivianuu.traveler.Navigator
@@ -51,9 +48,8 @@ import javax.inject.Inject
 /**
  * Base activity
  */
-abstract class BaseActivity : AppCompatActivity(),
-    HasSupportFragmentInjector, HasViewInjector, Injectable, IdentifiableScreen,
-    MvRxView, RouterHolder, ViewModelFactoryHolder {
+abstract class BaseActivity : AppCompatActivity(), HasSupportFragmentInjector, HasViewInjector,
+    MvRxView, ViewModelFactoryHolder {
 
     @Inject lateinit var navigatorHolder: NavigatorHolder
     @Inject lateinit var router: Router
@@ -64,9 +60,6 @@ abstract class BaseActivity : AppCompatActivity(),
     @Inject override lateinit var viewModelFactory: ViewModelProvider.Factory
 
     val coroutineScope = onDestroy.asMainCoroutineScope()
-
-    override val providedRouter: Router
-        get() = router
 
     protected open val layoutRes = -1
 

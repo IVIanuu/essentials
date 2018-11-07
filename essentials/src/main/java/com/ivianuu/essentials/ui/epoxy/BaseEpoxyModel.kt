@@ -21,6 +21,7 @@ import androidx.annotation.CallSuper
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelWithHolder
 import com.ivianuu.essentials.util.ContextAware
+import com.ivianuu.scopes.ReusableScope
 import kotlinx.android.extensions.LayoutContainer
 
 /**
@@ -46,8 +47,12 @@ abstract class BaseEpoxyModel<H : BaseEpoxyHolder> : EpoxyModelWithHolder<H>(), 
 
     private var _boundHolder: H? = null
 
+    protected val scope get() = _scope
+    private val _scope = ReusableScope()
+
     @CallSuper
     override fun bind(holder: H) {
+        _scope.clear()
         _boundHolder = holder
         super.bind(holder)
 
@@ -66,6 +71,7 @@ abstract class BaseEpoxyModel<H : BaseEpoxyHolder> : EpoxyModelWithHolder<H>(), 
 
     @CallSuper
     override fun unbind(holder: H) {
+        _scope.clear()
         _boundHolder = null
 
         if (onClickView != null) {
