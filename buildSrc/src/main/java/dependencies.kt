@@ -17,7 +17,6 @@ object Versions {
     const val androidxArch = "2.0.0"
     const val androidKtx = "0cf0a07f49"
     const val archWork = "1.0.0-alpha09"
-    const val assistedInject = "9411c08d60"
     const val compass = "95030ccb06"
     const val constraintLayout = "1.1.3"
     const val contributor = "93fdd2c4e9"
@@ -74,11 +73,6 @@ object Deps {
         "androidx.lifecycle:lifecycle-extensions:${Versions.androidxArch}"
 
     const val archWorkRuntime = "android.arch.work:work-runtime-ktx:${Versions.archWork}"
-
-    const val assistedInject =
-        "com.github.IVIanuu.assisted-inject:assistedinject:${Versions.assistedInject}"
-    const val assistedInjectCompiler =
-        "com.github.IVIanuu.assisted-inject:assistedinject-compiler:${Versions.assistedInject}"
 
     const val compass = "com.github.IVIanuu.compass:compass:${Versions.compass}"
     const val compassAndroid = "com.github.IVIanuu.compass:compass-android:${Versions.compass}"

@@ -4,8 +4,6 @@ import android.content.Context
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.State
 import androidx.work.WorkManager
-import com.ivianuu.assistedinject.Assisted
-import com.ivianuu.assistedinject.AssistedInject
 import com.ivianuu.essentials.sample.data.MyWorker
 import com.ivianuu.essentials.sample.ui.list.ListDestination
 import com.ivianuu.essentials.ui.mvrx.MvRxState
@@ -17,19 +15,27 @@ import com.ivianuu.traveler.Router
 import com.ivianuu.traveler.goBack
 import com.ivianuu.traveler.navigate
 import com.ivianuu.traveler.popToRoot
+import javax.inject.Inject
 
 /**
  * Counter view model
  */
-class CounterViewModel @AssistedInject constructor(
-    @Assisted private val destination: CounterDestination,
+class CounterViewModel @Inject constructor(
     private val context: Context,
     private val router: Router,
     private val workManager: WorkManager
-) : MvRxViewModel<CounterState>(CounterState(screen = destination.screen)) {
+) : MvRxViewModel<CounterState>(CounterState()) {
+
+    private lateinit var destination: CounterDestination
 
     init {
         logStateChanges()
+    }
+
+    fun setDestination(destination: CounterDestination) {
+        if (this::destination.isInitialized) return
+        this.destination = destination
+        setState { copy(screen = destination.screen) }
     }
 
     fun increaseClicked() {
@@ -77,20 +83,9 @@ class CounterViewModel @AssistedInject constructor(
             .subscribe { context.toastSuccess("Work finished!") }
             .disposeBy(scope)
     }
-
-    fun backClicked() {
-        withState {
-            if (it.count > 0) {
-                setState { copy(count = count.dec()) }
-            } else {
-                setState { copy(ignoreBack = true) }
-            }
-        }
-    }
 }
 
 data class CounterState(
     val screen: Int = 0,
-    val count: Int = 0,
-    val ignoreBack: Boolean = false
+    val count: Int = 0
 ) : MvRxState

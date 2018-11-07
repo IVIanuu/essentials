@@ -68,8 +68,6 @@ dependencies {
     api(Deps.androidKtxRecyclerView)
     api(Deps.androidKtxViewPager)
 
-    api(Deps.assistedInject)
-
     api(Deps.contributor)
     api(Deps.contributorView)
 
