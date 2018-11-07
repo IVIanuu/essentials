@@ -38,7 +38,7 @@ abstract class SimpleFragment : BaseFragment() {
     protected val epoxyController get() = _epoxyController ?: throw IllegalStateException()
     private var _epoxyController: EpoxyController? = null
 
-    val appBar get() = optionalAppBar ?: throw IllegalStateException("no app bar layout")
+    val appBar get() = optionalAppBar ?: throw IllegalStateException("no app bar layout found")
 
     open val optionalAppBar: AppBarLayout?
         get() = view?.findViewById(R.id.app_bar)
@@ -118,7 +118,7 @@ abstract class SimpleFragment : BaseFragment() {
         }
 
         optionalRecyclerView?.run {
-            _epoxyController = epoxyController().apply {
+            _epoxyController = epoxyController()?.apply {
                 addModelBuildListener(modelBuiltListener)
                 setController(this)
             }
@@ -154,7 +154,7 @@ abstract class SimpleFragment : BaseFragment() {
         _epoxyController?.requestModelBuild()
     }
 
-    protected open fun epoxyController(): EpoxyController = EmptyEpoxyController
+    protected open fun epoxyController(): EpoxyController? = null
 
     protected open fun layoutManager(): RecyclerView.LayoutManager? = null
 
