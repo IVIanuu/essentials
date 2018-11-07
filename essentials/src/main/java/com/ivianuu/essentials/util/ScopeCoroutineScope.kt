@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.util.coroutines
+package com.ivianuu.essentials.util
 
 import com.ivianuu.scopes.Scope
 import com.ivianuu.scopes.coroutines.cancelBy

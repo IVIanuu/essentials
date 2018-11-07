@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.util.worker
+package com.ivianuu.essentials.util
 
 import android.content.Context
 import androidx.work.NonBlockingWorker

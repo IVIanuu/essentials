@@ -40,6 +40,7 @@ import io.reactivex.android.plugins.RxAndroidPlugins
 import io.reactivex.android.schedulers.AndroidSchedulers
 import timber.log.Timber
 import javax.inject.Inject
+import javax.inject.Provider
 
 /**
  * App
@@ -51,9 +52,9 @@ abstract class BaseApp : DaggerApplication(), HasViewInjector {
     @Inject internal lateinit var debugAnalyticsLogger: DebugAnalyticsLogger
     @Inject internal lateinit var fabricAnalyticsLogger: FabricAnalyticsLogger
 
-    @Inject lateinit var viewInjector: DispatchingAndroidInjector<View>
+    @Inject internal lateinit var viewInjector: DispatchingAndroidInjector<View>
 
-    @Inject lateinit var workerFactory: WorkerFactory
+    @Inject internal lateinit var workerFactory: Provider<WorkerFactory>
 
     protected open val initTimber = true
     protected open val initFabric = true
@@ -67,7 +68,7 @@ abstract class BaseApp : DaggerApplication(), HasViewInjector {
         if (initWorkManager) {
             WorkManager.initialize(
                 this,
-                Configuration.Builder().setWorkerFactory(workerFactory).build()
+                Configuration.Builder().setWorkerFactory(workerFactory.get()).build()
             )
         }
 

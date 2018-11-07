@@ -18,7 +18,7 @@ package com.ivianuu.essentials.ui.mvrx
 
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
-import com.ivianuu.essentials.util.lifecycle.SimpleLifecycleObserver
+import com.ivianuu.essentials.util.SimpleLifecycleObserver
 import java.io.Serializable
 
 private object UNINITIALIZED_VALUE

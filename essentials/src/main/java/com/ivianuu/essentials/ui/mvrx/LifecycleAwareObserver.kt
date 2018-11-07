@@ -18,7 +18,7 @@ package com.ivianuu.essentials.ui.mvrx
 
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
-import com.ivianuu.essentials.util.lifecycle.SimpleLifecycleObserver
+import com.ivianuu.essentials.util.SimpleLifecycleObserver
 import io.reactivex.Observer
 import io.reactivex.disposables.Disposable
 import io.reactivex.exceptions.OnErrorNotImplementedException

@@ -22,8 +22,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.ivianuu.essentials.injection.Injectable
 import com.ivianuu.essentials.ui.common.BackListener
 import com.ivianuu.essentials.ui.traveler.RouterHolder
-import com.ivianuu.essentials.util.coroutines.asMainCoroutineScope
-import com.ivianuu.essentials.util.lifecycle.LifecycleOwner2
+import com.ivianuu.essentials.util.asMainCoroutineScope
 import com.ivianuu.essentials.util.screenlogger.IdentifiableScreen
 import com.ivianuu.essentials.util.viewmodel.ViewModelFactoryHolder
 import com.ivianuu.scopes.archlifecycle.onDestroy
@@ -35,7 +34,7 @@ import javax.inject.Inject
  * Base dialog fragment
  */
 abstract class BaseDialogFragment : AppCompatDialogFragment(), BackListener,
-    Injectable, IdentifiableScreen, LifecycleOwner2, RouterHolder, ViewModelFactoryHolder {
+    Injectable, IdentifiableScreen, RouterHolder, ViewModelFactoryHolder {
 
     @Inject lateinit var router: Router
     @Inject override lateinit var viewModelFactory: ViewModelProvider.Factory

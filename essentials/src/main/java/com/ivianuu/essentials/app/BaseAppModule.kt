@@ -24,17 +24,11 @@ import android.content.res.Resources
 import android.preference.PreferenceManager
 import androidx.work.WorkManager
 import com.ivianuu.essentials.util.ContextAware
-import com.ivianuu.essentials.util.coroutines.AppCoroutineDispatchers
-import com.ivianuu.essentials.util.rx.AppRxSchedulers
 import com.ivianuu.kprefs.KPrefs
 import com.ivianuu.ksettings.KSettings
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.rx2.asCoroutineDispatcher
 import javax.inject.Singleton
 
 /**
@@ -61,25 +55,6 @@ abstract class BaseAppModule<T : BaseApp> {
         fun provideContextAwareness(context: Context) = object : ContextAware {
             override val providedContext = context
         }
-
-        @JvmStatic
-        @Singleton
-        @Provides
-        fun provideCoroutineDispatchers(schedulers: AppRxSchedulers) =
-            AppCoroutineDispatchers(
-                io = schedulers.io.asCoroutineDispatcher(),
-                computation = schedulers.computation.asCoroutineDispatcher(),
-                main = Dispatchers.Main
-            )
-
-        @JvmStatic
-        @Singleton
-        @Provides
-        fun provideRxSchedulers() = AppRxSchedulers(
-            io = Schedulers.io(),
-            computation = Schedulers.computation(),
-            main = AndroidSchedulers.mainThread()
-        )
 
         @JvmStatic
         @Provides

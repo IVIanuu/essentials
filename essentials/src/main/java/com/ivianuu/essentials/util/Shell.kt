@@ -16,8 +16,8 @@
 
 package com.ivianuu.essentials.util
 
-import com.ivianuu.essentials.util.coroutines.AppCoroutineDispatchers
 import eu.chainfire.libsuperuser.Shell
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -26,17 +26,17 @@ import javax.inject.Singleton
  * Shell
  */
 @Singleton
-class Shell @Inject constructor(private val dispatchers: AppCoroutineDispatchers) {
+class Shell @Inject constructor() {
 
     suspend fun run(command: String) = run(listOf(command))
 
     suspend fun run(commands: Collection<String>) =
         run(commands.toTypedArray())
 
-    suspend fun run(commands: Array<String>) = withContext(dispatchers.io) {
+    suspend fun run(commands: Array<String>) = withContext(Dispatchers.IO) {
         Shell.SU.run(commands).toList()
     }
 
-    suspend fun available() = withContext(dispatchers.io) { Shell.SU.available() }
+    suspend fun available() = withContext(Dispatchers.IO) { Shell.SU.available() }
 
 }

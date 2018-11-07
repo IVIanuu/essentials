@@ -17,7 +17,7 @@
 package com.ivianuu.essentials.ui.common
 
 import androidx.lifecycle.ViewModel
-import com.ivianuu.essentials.util.coroutines.asMainCoroutineScope
+import com.ivianuu.essentials.util.asMainCoroutineScope
 import com.ivianuu.scopes.MutableScope
 import com.ivianuu.scopes.Scope
 

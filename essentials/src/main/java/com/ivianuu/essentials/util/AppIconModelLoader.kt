@@ -10,7 +10,7 @@ import com.bumptech.glide.load.model.ModelLoader
 import com.bumptech.glide.load.model.ModelLoaderFactory
 import com.bumptech.glide.load.model.MultiModelLoaderFactory
 import com.bumptech.glide.signature.ObjectKey
-import com.ivianuu.essentials.util.coroutines.AppCoroutineDispatchers
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -22,17 +22,15 @@ data class AppIcon(val packageName: String)
 /**
  * Fetches images for [AppIcon]'s
  */
-class AppIconFetcher @Inject constructor(
-    private val dispatchers: AppCoroutineDispatchers,
-    private val packageManager: PackageManager
-) : DataFetcher<Drawable> {
+class AppIconFetcher @Inject constructor(private val packageManager: PackageManager) :
+    DataFetcher<Drawable> {
 
     lateinit var app: AppIcon
 
     private lateinit var job: Job
 
     override fun loadData(priority: Priority, callback: DataFetcher.DataCallback<in Drawable>) {
-        job = GlobalScope.launch(dispatchers.io) {
+        job = GlobalScope.launch(Dispatchers.IO) {
             val drawable = packageManager.getApplicationIcon(app.packageName)
             if (drawable != null) {
                 callback.onDataReady(drawable)
