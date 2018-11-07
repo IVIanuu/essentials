@@ -30,9 +30,6 @@ class MainActivity : BaseActivity() {
     override fun navigators() =
         listOf(MaterialDialogNavigator(this))
 
-    override val useDirector: Boolean
-        get() = true
-
 }
 
 @Module

@@ -25,12 +25,6 @@ annotation class PerActivity
 annotation class PerBroadcastReceiver
 
 @Scope
-annotation class PerController
-
-@Scope
-annotation class PerChildController
-
-@Scope
 annotation class PerFragment
 
 @Scope

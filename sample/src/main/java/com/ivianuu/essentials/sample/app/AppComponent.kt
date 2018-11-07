@@ -1,7 +1,5 @@
 package com.ivianuu.essentials.sample.app
 
-import com.ivianuu.contributor.InjectorKeyRegistry
-import com.ivianuu.contributor.director.ControllerKey
 import com.ivianuu.essentials.injection.EssentialsModule
 import com.ivianuu.essentials.sample.injection.ActivityBindingModule
 import com.ivianuu.essentials.sample.injection.ViewModelModule

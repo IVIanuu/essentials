@@ -22,12 +22,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.ivianuu.compass.android.CompassAppNavigator
-import com.ivianuu.compass.director.CompassControllerNavigator
 import com.ivianuu.compass.fragment.CompassFragmentNavigator
-import com.ivianuu.contributor.director.HasControllerInjector
 import com.ivianuu.contributor.view.HasViewInjector
-import com.ivianuu.director.Controller
-import com.ivianuu.director.attachRouter
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.injection.Injectable
 import com.ivianuu.essentials.ui.common.BackListener
@@ -55,14 +51,13 @@ import javax.inject.Inject
 /**
  * Base activity
  */
-abstract class BaseActivity : AppCompatActivity(), HasControllerInjector,
+abstract class BaseActivity : AppCompatActivity(),
     HasSupportFragmentInjector, HasViewInjector, Injectable, IdentifiableScreen,
     MvRxView, RouterHolder, ViewModelFactoryHolder {
 
     @Inject lateinit var navigatorHolder: NavigatorHolder
-    @Inject lateinit var travelerRouter: Router
+    @Inject lateinit var router: Router
 
-    @Inject lateinit var controllerInjector: DispatchingAndroidInjector<Controller>
     @Inject lateinit var supportFragmentInjector: DispatchingAndroidInjector<Fragment>
     @Inject lateinit var viewInjector: DispatchingAndroidInjector<View>
 
@@ -71,43 +66,32 @@ abstract class BaseActivity : AppCompatActivity(), HasControllerInjector,
     val coroutineScope = onDestroy.asMainCoroutineScope()
 
     override val providedRouter: Router
-        get() = travelerRouter
+        get() = router
 
     protected open val layoutRes = -1
 
     open val fragmentContainer = R.id.container
     open val startDestination: Any? = null
 
-    open val useDirector = false
-
     protected open val navigator: Navigator by unsafeLazy {
         val navigators = mutableListOf<ResultNavigator>()
         navigators.addAll(navigators())
-        if (useDirector) {
-            navigators.add(CompassControllerNavigator(router!!))
-        } else {
-            navigators.add(CompassFragmentNavigator(fragmentContainer))
-        }
-
+        navigators.add(CompassFragmentNavigator(fragmentContainer))
         navigators.add(CompassAppNavigator(this))
         navigators.add(AddFragmentPlugin(supportFragmentManager))
         compositeNavigatorOf(navigators)
     }
 
-    private var router: com.ivianuu.director.Router? = null
-
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
 
-        setContentView(if (layoutRes != -1) layoutRes else R.layout.activity_default)
-
-        if (useDirector) {
-            router = attachRouter(findViewById(fragmentContainer), savedInstanceState)
+        if (layoutRes != -1) {
+            setContentView(layoutRes)
         }
 
         if (savedInstanceState == null) {
-            startDestination?.let { travelerRouter.setRoot(it) }
+            startDestination?.let { router.setRoot(it) }
         }
     }
 
@@ -117,21 +101,13 @@ abstract class BaseActivity : AppCompatActivity(), HasControllerInjector,
     }
 
     override fun onBackPressed() {
-        if (useDirector) {
-            if (!router!!.handleBack()) {
-                super.onBackPressed()
-            }
-        } else {
-            val currentFragment = supportFragmentManager.findFragmentById(fragmentContainer)
-            if (currentFragment is BackListener && currentFragment.handleBack()) return
-            super.onBackPressed()
-        }
+        val currentFragment = supportFragmentManager.findFragmentById(fragmentContainer)
+        if (currentFragment is BackListener && currentFragment.handleBack()) return
+        super.onBackPressed()
     }
 
     override fun invalidate() {
     }
-
-    override fun controllerInjector(): AndroidInjector<Controller> = controllerInjector
 
     override fun supportFragmentInjector(): AndroidInjector<Fragment> = supportFragmentInjector
 

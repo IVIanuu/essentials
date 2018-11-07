@@ -30,8 +30,8 @@ class LifecycleAwareLazy<out T>(
     owner: LifecycleOwner,
     private val event: Lifecycle.Event = Lifecycle.Event.ON_CREATE,
     initializer: () -> T
-) : Lazy<T>,
-    Serializable {
+) : Lazy<T>, Serializable {
+
     private var initializer: (() -> T)? = initializer
     @Volatile private var _value: Any? = UNINITIALIZED_VALUE
     // final field is required to enable safe publication of constructed instance

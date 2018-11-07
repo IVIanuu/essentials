@@ -16,32 +16,32 @@
 
 package com.ivianuu.essentials.sample.ui.counter
 
+import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.ivianuu.androidktx.appcompat.widget.setTextFuture
 import com.ivianuu.compass.Destination
 import com.ivianuu.compass.Detour
-import com.ivianuu.director.common.contextRef
 import com.ivianuu.essentials.sample.R
-import com.ivianuu.essentials.ui.base.BaseController
+import com.ivianuu.essentials.ui.base.BaseFragment
 import com.ivianuu.essentials.ui.mvrx.bindViewModel
 import com.ivianuu.essentials.ui.mvrx.withState
-import com.ivianuu.essentials.ui.traveler.detour.HorizontalControllerDetour
+import com.ivianuu.essentials.ui.traveler.detour.HorizontalDetour
 import com.ivianuu.essentials.util.ext.andTrue
 import kotlinx.android.synthetic.main.fragment_counter.*
 import javax.inject.Inject
 
-@Detour(HorizontalControllerDetour::class)
-@Destination(CounterController::class)
+@Detour(HorizontalDetour::class)
+@Destination(CounterFragment::class)
 data class CounterDestination(val screen: Int)
 
 /**
  * @author Manuel Wrage (IVIanuu)
  */
-class CounterController : BaseController() {
+class CounterFragment : BaseFragment() {
 
-    @set:Inject var counterViewModelFactory: CounterViewModelFactory by contextRef()
+    @Inject lateinit var counterViewModelFactory: CounterViewModelFactory
 
     override val layoutRes = R.layout.fragment_counter
 
@@ -53,8 +53,8 @@ class CounterController : BaseController() {
         }
     }
 
-    override fun onViewCreated(view: View) {
-        super.onViewCreated(view)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         increase.setOnClickListener { viewModel.increaseClicked() }
         decrease.setOnClickListener { viewModel.decreaseClicked() }

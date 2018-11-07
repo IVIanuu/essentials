@@ -13,19 +13,19 @@ import com.ivianuu.essentials.ui.epoxy.simpleLoading
 import com.ivianuu.essentials.ui.epoxy.simpleText
 import com.ivianuu.essentials.ui.mvrx.bindViewModel
 import com.ivianuu.essentials.ui.mvrx.simpleEpoxyController
-import com.ivianuu.essentials.ui.simple.SimpleController
-import com.ivianuu.essentials.ui.traveler.detour.VerticalControllerDetour
+import com.ivianuu.essentials.ui.simple.SimpleFragment
+import com.ivianuu.essentials.ui.traveler.detour.HorizontalDetour
 import com.ivianuu.essentials.util.ext.andTrue
 import kotlinx.android.synthetic.main.single_line_list_item.*
 
-@Detour(VerticalControllerDetour::class)
-@Destination(ListController::class)
+@Detour(HorizontalDetour::class)
+@Destination(ListFragment::class)
 object ListDestination
 
 /**
  * @author Manuel Wrage (IVIanuu)
  */
-class ListController : SimpleController() {
+class ListFragment : SimpleFragment() {
 
     private val viewModel by bindViewModel(ListViewModel::class)
 

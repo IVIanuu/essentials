@@ -16,21 +16,21 @@
 
 package com.ivianuu.essentials.sample.injection
 
-import com.ivianuu.contributor.ContributeInjector
-import com.ivianuu.essentials.injection.PerController
-import com.ivianuu.essentials.sample.ui.counter.CounterController
-import com.ivianuu.essentials.sample.ui.list.ListController
+import com.ivianuu.essentials.injection.PerFragment
+import com.ivianuu.essentials.sample.ui.counter.CounterFragment
+import com.ivianuu.essentials.sample.ui.list.ListFragment
 import dagger.Module
+import dagger.android.ContributesAndroidInjector
 
 @Module
-abstract class ControllerBindingModule {
+abstract class FragmentBindingModule {
 
-    @PerController
-    @ContributeInjector
-    abstract fun bindCounterController(): CounterController
+    @PerFragment
+    @ContributesAndroidInjector
+    abstract fun bindCounterFragment(): CounterFragment
 
-    @PerController
-    @ContributeInjector
-    abstract fun bindListController(): ListController
+    @PerFragment
+    @ContributesAndroidInjector
+    abstract fun bindListFragment(): ListFragment
 
 }

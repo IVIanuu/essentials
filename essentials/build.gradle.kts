@@ -71,7 +71,6 @@ dependencies {
     api(Deps.assistedInject)
 
     api(Deps.contributor)
-    api(Deps.contributorDirector)
     api(Deps.contributorView)
 
     api(Deps.coroutinesAndroid)
@@ -83,7 +82,6 @@ dependencies {
 
     api(Deps.compass)
     api(Deps.compassAndroid)
-    api(Deps.compassDirector)
     api(Deps.compassFragment)
 
     api(Deps.constraintLayout)
@@ -91,12 +89,6 @@ dependencies {
     api(Deps.dagger)
     api(Deps.daggerAndroid)
     api(Deps.daggerAndroidSupport)
-
-    api(Deps.director)
-    api(Deps.directorArchLifecycle)
-    api(Deps.directorCommon)
-    api(Deps.directorDialog)
-    api(Deps.directorViewPager)
 
     api(Deps.epoxy)
     api(Deps.epoxyKtx)
@@ -159,7 +151,6 @@ dependencies {
 
     api(Deps.traveler)
     api(Deps.travelerAndroid)
-    api(Deps.travelerDirector)
     api(Deps.travelerFragment)
     api(Deps.travelerLifecycle)
 }

@@ -18,19 +18,18 @@ object Versions {
     const val androidKtx = "0cf0a07f49"
     const val archWork = "1.0.0-alpha09"
     const val assistedInject = "9411c08d60"
-    const val compass = "ef8d78b6d1"
+    const val compass = "95030ccb06"
     const val constraintLayout = "1.1.3"
     const val contributor = "93fdd2c4e9"
     const val coroutines = "1.0.0"
-    const val dagger = "2.16"
-    const val director = "1de9f6346c"
+    const val dagger = "2.19"
     const val epoxy = "2.19.0"
     const val epoxyKtx = "9dde1f5a9c"
     const val epoxyPrefs = "6c31aa79e8"
     const val fabric = "2.7.1"
     const val glide = "4.8.0"
     const val kotlin = "1.3.0"
-    const val kPrefs = "08c3804963"
+    const val kPrefs = "8e4b5f3859"
     const val kSettings = "1bd9347740"
     const val legacySupport = "28.0.0"
     const val liveEvent = "4281cc30ff"
@@ -44,13 +43,13 @@ object Versions {
     const val rxJava = "2.2.2"
     const val rxJavaKtx = "015125e952"
     const val rxKotlin = "2.3.0"
-    const val scopes = "a3e44810ed"
+    const val scopes = "1a360d16ad"
     const val superUser = "1.0.0.+"
     const val stickyHeaders = "44c5192160"
     const val timber = "4.7.1"
     const val timberKtx = "f7547da781"
     const val toasty = "1.3.0"
-    const val traveler = "788a0f325c"
+    const val traveler = "21c2bf5f07"
 }
 
 object Deps {
@@ -85,14 +84,11 @@ object Deps {
     const val compass = "com.github.IVIanuu.compass:compass:${Versions.compass}"
     const val compassAndroid = "com.github.IVIanuu.compass:compass-android:${Versions.compass}"
     const val compassCompiler = "com.github.IVIanuu.compass:compass-compiler:${Versions.compass}"
-    const val compassDirector = "com.github.IVIanuu.compass:compass-director:${Versions.compass}"
     const val compassFragment = "com.github.IVIanuu.compass:compass-fragment:${Versions.compass}"
 
     const val contributor = "com.github.IVIanuu.contributor:contributor:${Versions.contributor}"
     const val contributorCompiler =
         "com.github.IVIanuu.contributor:contributor-compiler:${Versions.contributor}"
-    const val contributorDirector =
-        "com.github.IVIanuu.contributor:contributor-director:${Versions.contributor}"
     const val contributorView =
         "com.github.IVIanuu.contributor:contributor-view:${Versions.contributor}"
 
@@ -111,14 +107,6 @@ object Deps {
     const val daggerAndroidSupport = "com.google.dagger:dagger-android-support:${Versions.dagger}"
     const val daggerCompiler = "com.google.dagger:dagger-compiler:${Versions.dagger}"
     const val daggerAndroidProcessor = "com.google.dagger:dagger-android-processor:${Versions.dagger}"
-
-    const val director = "com.github.IVIanuu.director:director:${Versions.director}"
-    const val directorArchLifecycle =
-        "com.github.IVIanuu.director:director-arch-lifecycle:${Versions.director}"
-    const val directorCommon = "com.github.IVIanuu.director:director-common:${Versions.director}"
-    const val directorDialog = "com.github.IVIanuu.director:director-dialog:${Versions.director}"
-    const val directorViewPager =
-        "com.github.IVIanuu.director:director-viewpager:${Versions.director}"
 
     const val epoxy = "com.airbnb.android:epoxy:${Versions.epoxy}"
     const val epoxyProcessor = "com.airbnb.android:epoxy-processor:${Versions.epoxy}"
@@ -192,8 +180,6 @@ object Deps {
     const val travelerAndroid = "com.github.IVIanuu.traveler:traveler-android:${Versions.traveler}"
     const val travelerCommon =
         "com.github.IVIanuu.traveler:traveler-common:${Versions.traveler}"
-    const val travelerDirector =
-        "com.github.IVIanuu.traveler:traveler-director:${Versions.traveler}"
     const val travelerFragment =
         "com.github.IVIanuu.traveler:traveler-fragment:${Versions.traveler}"
     const val travelerLifecycle =
