@@ -24,7 +24,6 @@ import androidx.lifecycle.ViewModelProvider
 import com.ivianuu.compass.android.CompassAppNavigator
 import com.ivianuu.compass.fragment.CompassFragmentNavigator
 import com.ivianuu.contributor.view.HasViewInjector
-import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.common.BackListener
 import com.ivianuu.essentials.ui.mvrx.MvRxView
 import com.ivianuu.essentials.ui.traveler.navigator.AddFragmentPlugin
@@ -63,7 +62,7 @@ abstract class BaseActivity : AppCompatActivity(), HasSupportFragmentInjector, H
 
     protected open val layoutRes = -1
 
-    open val fragmentContainer = R.id.container
+    open val fragmentContainer = android.R.id.content
     open val startDestination: Any? = null
 
     protected open val navigator: Navigator by unsafeLazy {
