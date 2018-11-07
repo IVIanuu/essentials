@@ -121,7 +121,6 @@ dependencies {
     api(Deps.materialDialogsCommons)
 
     api(Deps.rxAndroid)
-    api(Deps.rxAndroid2)
     api(Deps.rxJava)
     api(Deps.rxJavaKtx)
     api(Deps.rxKotlin)

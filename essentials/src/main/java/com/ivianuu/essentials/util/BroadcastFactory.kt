@@ -16,11 +16,12 @@
 
 package com.ivianuu.essentials.util
 
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import com.ivianuu.androidktx.core.content.intentFilterOf
-import com.ivianuu.rxandroid.RxBroadcastReceiver
+import com.ivianuu.rxjavaktx.observable
 import io.reactivex.Observable
 import javax.inject.Inject
 
@@ -31,6 +32,19 @@ class BroadcastFactory @Inject constructor(private val context: Context) {
 
     fun create(vararg actions: String): Observable<Intent> = create(intentFilterOf(*actions))
 
-    fun create(intentFilter: IntentFilter): Observable<Intent> =
-        RxBroadcastReceiver.create(context, intentFilter)
+    fun create(intentFilter: IntentFilter) = observable<Intent> { e ->
+        val broadcastReceiver = object : BroadcastReceiver() {
+            override fun onReceive(context: Context, intent: Intent) {
+                if (!e.isDisposed) {
+                    e.onNext(intent)
+                }
+            }
+        }
+
+        e.setCancellable { context.unregisterReceiver(broadcastReceiver) }
+
+        if (!e.isDisposed) {
+            context.registerReceiver(broadcastReceiver, intentFilter)
+        }
+    }
 }

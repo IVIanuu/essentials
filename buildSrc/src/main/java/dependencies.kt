@@ -37,7 +37,6 @@ object Versions {
     const val materialDialogs = "0.9.6.0"
     const val r2 = "06e702d39f"
     const val rxAndroid = "2.1.0"
-    const val rxAndroid2 = "458ddc5b53"
     const val rxJava = "2.2.2"
     const val rxJavaKtx = "015125e952"
     const val rxKotlin = "2.3.0"
@@ -143,7 +142,6 @@ object Deps {
     const val r2GradlePlugin = "com.github.IVIanuu:r2:${Versions.r2}"
 
     const val rxAndroid = "io.reactivex.rxjava2:rxandroid:${Versions.rxAndroid}"
-    const val rxAndroid2 = "com.github.IVIanuu:rx-android:${Versions.rxAndroid2}"
     const val rxJava = "io.reactivex.rxjava2:rxjava:${Versions.rxJava}"
     const val rxJavaKtx = "com.github.IVIanuu:rx-java-ktx:${Versions.rxJavaKtx}"
     const val rxKotlin = "io.reactivex.rxjava2:rxkotlin:${Versions.rxKotlin}"
@@ -175,8 +173,6 @@ object Deps {
         "com.github.IVIanuu.traveler:traveler-fragment:${Versions.traveler}"
     const val travelerLifecycle =
         "com.github.IVIanuu.traveler:traveler-lifecycle:${Versions.traveler}"
-    const val travelerPlugin =
-        "com.github.IVIanuu.traveler:traveler-plugin:${Versions.traveler}"
     const val travelerResult =
         "com.github.IVIanuu.traveler:traveler-result:${Versions.traveler}"
 }
