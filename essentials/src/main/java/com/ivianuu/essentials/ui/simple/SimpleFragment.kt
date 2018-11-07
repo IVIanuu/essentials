@@ -35,7 +35,11 @@ abstract class SimpleFragment : BaseFragment() {
     protected open val toolbarBackButton get() = isInBackstack
     protected open val lightToolbar: Boolean get() = primaryColor().isLight
 
-    protected val epoxyController get() = _epoxyController ?: throw IllegalStateException()
+    val optionalEpoxyController: EpoxyController? get() = _epoxyController
+    val epoxyController
+        get() = optionalEpoxyController
+            ?: throw IllegalStateException("no epoxy controller instantiated")
+
     private var _epoxyController: EpoxyController? = null
 
     val appBar get() = optionalAppBar ?: throw IllegalStateException("no app bar layout found")
