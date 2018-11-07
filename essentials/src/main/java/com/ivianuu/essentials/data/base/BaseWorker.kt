@@ -1,4 +1,4 @@
-package com.ivianuu.essentials.data.worker
+package com.ivianuu.essentials.data.base
 
 import android.content.Context
 import androidx.work.Worker

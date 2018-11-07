@@ -17,7 +17,7 @@
 package com.ivianuu.essentials.sample.data
 
 import android.content.pm.PackageManager
-import com.ivianuu.essentials.data.worker.BaseWorker
+import com.ivianuu.essentials.data.base.BaseWorker
 import com.ivianuu.essentials.sample.app.App
 import com.ivianuu.timberktx.d
 import javax.inject.Inject
