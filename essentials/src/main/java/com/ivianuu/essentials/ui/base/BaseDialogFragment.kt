@@ -17,9 +17,9 @@
 package com.ivianuu.essentials.ui.base
 
 import android.content.Context
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatDialogFragment
 import androidx.lifecycle.ViewModelProvider
-import com.ivianuu.essentials.ui.common.BackListener
 import com.ivianuu.essentials.util.ViewModelFactoryHolder
 import com.ivianuu.essentials.util.asMainCoroutineScope
 import com.ivianuu.scopes.archlifecycle.onDestroy
@@ -30,7 +30,7 @@ import javax.inject.Inject
 /**
  * Base dialog fragment
  */
-abstract class BaseDialogFragment : AppCompatDialogFragment(), BackListener,
+abstract class BaseDialogFragment : AppCompatDialogFragment(), OnBackPressedCallback,
     ViewModelFactoryHolder {
 
     @Inject lateinit var router: Router
@@ -41,6 +41,14 @@ abstract class BaseDialogFragment : AppCompatDialogFragment(), BackListener,
     override fun onAttach(context: Context) {
         AndroidSupportInjection.inject(this)
         super.onAttach(context)
+        requireActivity().addOnBackPressedCallback(this)
     }
+
+    override fun onDetach() {
+        requireActivity().removeOnBackPressedCallback(this)
+        super.onDetach()
+    }
+
+    override fun handleOnBackPressed() = false
 
 }

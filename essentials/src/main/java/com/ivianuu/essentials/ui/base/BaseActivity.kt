@@ -17,12 +17,12 @@
 package com.ivianuu.essentials.ui.base
 
 import android.os.Bundle
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.ivianuu.compass.android.CompassAppNavigator
 import com.ivianuu.compass.fragment.CompassFragmentNavigator
-import com.ivianuu.essentials.ui.common.BackListener
 import com.ivianuu.essentials.ui.mvrx.MvRxView
 import com.ivianuu.essentials.ui.traveler.navigator.AddFragmentPlugin
 import com.ivianuu.essentials.util.ViewModelFactoryHolder
@@ -45,7 +45,8 @@ import javax.inject.Inject
 /**
  * Base activity
  */
-abstract class BaseActivity : AppCompatActivity(), HasSupportFragmentInjector,
+abstract class BaseActivity : AppCompatActivity(), OnBackPressedCallback,
+    HasSupportFragmentInjector,
     MvRxView, ViewModelFactoryHolder {
 
     @Inject lateinit var navigatorHolder: NavigatorHolder
@@ -87,16 +88,6 @@ abstract class BaseActivity : AppCompatActivity(), HasSupportFragmentInjector,
     override fun onResumeFragments() {
         super.onResumeFragments()
         navigatorHolder.setNavigator(this, navigator)
-    }
-
-    override fun onBackPressed() {
-        supportFragmentManager.fragments.filterIsInstance<BackListener>().forEach {
-            if (it.handleBack()) {
-                return
-            }
-        }
-
-        super.onBackPressed()
     }
 
     override fun invalidate() {

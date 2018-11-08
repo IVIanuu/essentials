@@ -21,9 +21,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.ivianuu.essentials.ui.common.BackListener
 import com.ivianuu.essentials.ui.mvrx.MvRxView
 import com.ivianuu.essentials.util.ViewModelFactoryHolder
 import com.ivianuu.essentials.util.asMainCoroutineScope
@@ -40,7 +40,7 @@ import javax.inject.Inject
 /**
  * Base fragment
  */
-abstract class BaseFragment : Fragment(), BackListener, HasSupportFragmentInjector,
+abstract class BaseFragment : Fragment(), OnBackPressedCallback, HasSupportFragmentInjector,
     MvRxView, ViewModelFactoryHolder {
 
     @Inject lateinit var router: Router
@@ -60,6 +60,7 @@ abstract class BaseFragment : Fragment(), BackListener, HasSupportFragmentInject
     override fun onAttach(context: Context) {
         AndroidSupportInjection.inject(this)
         super.onAttach(context)
+        requireActivity().addOnBackPressedCallback(this)
     }
 
     override fun onCreateView(
@@ -87,18 +88,15 @@ abstract class BaseFragment : Fragment(), BackListener, HasSupportFragmentInject
         super.onDestroyView()
     }
 
+    override fun onDetach() {
+        super.onDetach()
+        requireActivity().removeOnBackPressedCallback(this)
+    }
+
     override fun invalidate() {
     }
 
-    override fun handleBack(): Boolean {
-        childFragmentManager.fragments.filterIsInstance<BackListener>().forEach {
-            if (it.handleBack()) {
-                return true
-            }
-        }
-
-        return false
-    }
+    override fun handleOnBackPressed() = false
 
     override fun supportFragmentInjector(): AndroidInjector<Fragment> = supportFragmentInjector
 
