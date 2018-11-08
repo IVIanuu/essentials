@@ -26,6 +26,7 @@ data class AppPickerDestination(
 /**
  * App picker
  */
+// todo remove/ move to somewhere else
 class AppPickerDialog : BaseDialogFragment() {
 
     @Inject lateinit var appStore: AppStore

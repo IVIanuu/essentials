@@ -36,6 +36,7 @@ data class ColorPickerDestination(
 /**
  * Color picker fragment
  */
+// todo remove/ move to somewhere else
 class ColorPickerFragment : BaseFragment(), ColorChooserDialog.ColorCallback {
 
     private val destination by bindColorPickerDestination()

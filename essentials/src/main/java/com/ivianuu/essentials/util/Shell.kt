@@ -25,6 +25,7 @@ import javax.inject.Singleton
 /**
  * Shell
  */
+// todo remove
 @Singleton
 class Shell @Inject constructor() {
 

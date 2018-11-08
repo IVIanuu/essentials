@@ -40,6 +40,7 @@ data class TextInputDestination(
 /**
  * Text input dialog
  */
+// todo remove/ move to somewhere else
 class TextInputDialog : BaseDialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {

@@ -9,6 +9,7 @@ import javax.inject.Inject
 /**
  * Store for [AppInfo]'s
  */
+// todo remove
 class AppStore @Inject constructor(private val packageManager: PackageManager) {
 
     suspend fun installedApps() = withContext(Dispatchers.IO) {

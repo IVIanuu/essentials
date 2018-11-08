@@ -22,6 +22,7 @@ data class AppIcon(val packageName: String)
 /**
  * Fetches images for [AppIcon]'s
  */
+// todo remove
 class AppIconFetcher @Inject constructor(private val packageManager: PackageManager) :
     DataFetcher<Drawable> {
 
