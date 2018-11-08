@@ -29,7 +29,6 @@ java {
 dependencies {
     api(Deps.kotlinStdLib)
 
-    implementation(Deps.contributorCompiler)
     implementation(Deps.epoxyProcessor)
     implementation(Deps.compassCompiler)
     implementation(Deps.daggerAndroidProcessor)

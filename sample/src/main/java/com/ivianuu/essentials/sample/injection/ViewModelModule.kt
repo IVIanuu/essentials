@@ -24,6 +24,8 @@ import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
 
+annotation class BindsViewModel
+
 /**
  * View model module
  */

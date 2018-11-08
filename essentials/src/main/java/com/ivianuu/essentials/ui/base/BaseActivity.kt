@@ -17,13 +17,11 @@
 package com.ivianuu.essentials.ui.base
 
 import android.os.Bundle
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.ivianuu.compass.android.CompassAppNavigator
 import com.ivianuu.compass.fragment.CompassFragmentNavigator
-import com.ivianuu.contributor.view.HasViewInjector
 import com.ivianuu.essentials.ui.common.BackListener
 import com.ivianuu.essentials.ui.mvrx.MvRxView
 import com.ivianuu.essentials.ui.traveler.navigator.AddFragmentPlugin
@@ -47,14 +45,13 @@ import javax.inject.Inject
 /**
  * Base activity
  */
-abstract class BaseActivity : AppCompatActivity(), HasSupportFragmentInjector, HasViewInjector,
+abstract class BaseActivity : AppCompatActivity(), HasSupportFragmentInjector,
     MvRxView, ViewModelFactoryHolder {
 
     @Inject lateinit var navigatorHolder: NavigatorHolder
     @Inject lateinit var router: Router
 
     @Inject lateinit var supportFragmentInjector: DispatchingAndroidInjector<Fragment>
-    @Inject lateinit var viewInjector: DispatchingAndroidInjector<View>
 
     @Inject override lateinit var viewModelFactory: ViewModelProvider.Factory
 
@@ -106,8 +103,6 @@ abstract class BaseActivity : AppCompatActivity(), HasSupportFragmentInjector, H
     }
 
     override fun supportFragmentInjector(): AndroidInjector<Fragment> = supportFragmentInjector
-
-    override fun viewInjector(): AndroidInjector<View> = viewInjector
 
     protected open fun navigators() = emptyList<ResultNavigator>()
 }

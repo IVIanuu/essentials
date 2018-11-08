@@ -23,7 +23,8 @@ abstract class BaseTileService : TileService() {
     val listeningScope: Scope get() = _listeningScope
     private val _listeningScope = ReusableScope()
 
-    val listeningCoroutineScope = _listeningScope.asMainCoroutineScope()
+    val listeningCoroutineScope get() = _listeningCoroutineScope
+    private var _listeningCoroutineScope = _listeningScope.asMainCoroutineScope()
 
     override fun onCreate() {
         AndroidInjection.inject(this)
@@ -33,6 +34,11 @@ abstract class BaseTileService : TileService() {
     override fun onDestroy() {
         _scope.close()
         super.onDestroy()
+    }
+
+    override fun onStartListening() {
+        super.onStartListening()
+        _listeningCoroutineScope = _listeningScope.asMainCoroutineScope()
     }
 
     override fun onStopListening() {

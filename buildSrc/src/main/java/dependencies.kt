@@ -19,7 +19,6 @@ object Versions {
     const val archWork = "1.0.0-alpha09"
     const val compass = "95030ccb06"
     const val constraintLayout = "1.1.3"
-    const val contributor = "93fdd2c4e9"
     const val coroutines = "1.0.0"
     const val dagger = "2.19"
     const val epoxy = "2.19.0"
@@ -77,12 +76,6 @@ object Deps {
     const val compassAndroid = "com.github.IVIanuu.compass:compass-android:${Versions.compass}"
     const val compassCompiler = "com.github.IVIanuu.compass:compass-compiler:${Versions.compass}"
     const val compassFragment = "com.github.IVIanuu.compass:compass-fragment:${Versions.compass}"
-
-    const val contributor = "com.github.IVIanuu.contributor:contributor:${Versions.contributor}"
-    const val contributorCompiler =
-        "com.github.IVIanuu.contributor:contributor-compiler:${Versions.contributor}"
-    const val contributorView =
-        "com.github.IVIanuu.contributor:contributor-view:${Versions.contributor}"
 
     const val constraintLayout =
         "androidx.constraintlayout:constraintlayout:${Versions.constraintLayout}"

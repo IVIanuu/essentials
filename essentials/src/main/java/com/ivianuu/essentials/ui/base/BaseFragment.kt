@@ -23,10 +23,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.ivianuu.contributor.view.HasViewInjector
 import com.ivianuu.essentials.ui.common.BackListener
 import com.ivianuu.essentials.ui.mvrx.MvRxView
-import com.ivianuu.essentials.util.ViewInjectionContextWrapper
 import com.ivianuu.essentials.util.ViewModelFactoryHolder
 import com.ivianuu.essentials.util.asMainCoroutineScope
 import com.ivianuu.scopes.archlifecycle.fragment.viewOnDestroy
@@ -43,7 +41,7 @@ import javax.inject.Inject
  * Base fragment
  */
 abstract class BaseFragment : Fragment(), BackListener, HasSupportFragmentInjector,
-    HasViewInjector, MvRxView, ViewModelFactoryHolder {
+    MvRxView, ViewModelFactoryHolder {
 
     @Inject lateinit var router: Router
 
@@ -54,7 +52,6 @@ abstract class BaseFragment : Fragment(), BackListener, HasSupportFragmentInject
     private var _viewCoroutineScope: CoroutineScope? = null
 
     @Inject lateinit var supportFragmentInjector: DispatchingAndroidInjector<Fragment>
-    @Inject lateinit var viewInjector: DispatchingAndroidInjector<View>
 
     @Inject override lateinit var viewModelFactory: ViewModelProvider.Factory
 
@@ -70,10 +67,7 @@ abstract class BaseFragment : Fragment(), BackListener, HasSupportFragmentInject
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? = if (layoutRes != -1) {
-        val viewInjectionContext =
-            ViewInjectionContextWrapper(requireContext(), this)
-        val viewInjectionInflater = inflater.cloneInContext(viewInjectionContext)
-        viewInjectionInflater.inflate(layoutRes, container, false)
+        inflater.inflate(layoutRes, container, false)
     } else {
         super.onCreateView(inflater, container, savedInstanceState)
     }
@@ -107,7 +101,5 @@ abstract class BaseFragment : Fragment(), BackListener, HasSupportFragmentInject
     }
 
     override fun supportFragmentInjector(): AndroidInjector<Fragment> = supportFragmentInjector
-
-    override fun viewInjector(): AndroidInjector<View> = viewInjector
 
 }

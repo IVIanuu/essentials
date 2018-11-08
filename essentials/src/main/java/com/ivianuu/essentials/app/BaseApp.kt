@@ -19,17 +19,13 @@ package com.ivianuu.essentials.app
 import android.content.pm.ApplicationInfo
 import android.graphics.drawable.Drawable
 import android.os.Looper
-import android.view.View
 import androidx.work.Configuration
 import androidx.work.WorkManager
 import androidx.work.WorkerFactory
 import com.bumptech.glide.Glide
-import com.ivianuu.contributor.view.HasViewInjector
 import com.ivianuu.essentials.util.AppIcon
 import com.ivianuu.essentials.util.AppIconModelLoader
 import com.ivianuu.essentials.util.ext.containsFlag
-import dagger.android.AndroidInjector
-import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.DaggerApplication
 import io.reactivex.android.plugins.RxAndroidPlugins
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -40,12 +36,10 @@ import javax.inject.Provider
 /**
  * App
  */
-abstract class BaseApp : DaggerApplication(), HasViewInjector {
+abstract class BaseApp : DaggerApplication() {
 
     @Inject internal lateinit var appServices: Set<@JvmSuppressWildcards AppService>
     @Inject internal lateinit var appIconModelLoaderFactory: AppIconModelLoader.Factory
-
-    @Inject internal lateinit var viewInjector: DispatchingAndroidInjector<View>
 
     @Inject internal lateinit var workerFactory: Provider<WorkerFactory>
 
@@ -82,8 +76,6 @@ abstract class BaseApp : DaggerApplication(), HasViewInjector {
 
         appServices.forEach { startAppService(it) }
     }
-
-    override fun viewInjector(): AndroidInjector<View> = viewInjector
 
     protected open fun startAppService(appService: AppService) {
         appService.start()

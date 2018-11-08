@@ -20,7 +20,8 @@ abstract class BaseNotificationListenerService : NotificationListenerService() {
     val connectedScope: Scope get() = _connectedScope
     private val _connectedScope = ReusableScope()
 
-    val connectedCoroutineScope = _connectedScope.asMainCoroutineScope()
+    val connectedCoroutineScope get() = _connectedCoroutineScope
+    private var _connectedCoroutineScope = _connectedScope.asMainCoroutineScope()
 
     override fun onCreate() {
         AndroidInjection.inject(this)
@@ -30,6 +31,11 @@ abstract class BaseNotificationListenerService : NotificationListenerService() {
     override fun onDestroy() {
         _scope.close()
         super.onDestroy()
+    }
+
+    override fun onListenerConnected() {
+        super.onListenerConnected()
+        _connectedCoroutineScope = _connectedScope.asMainCoroutineScope()
     }
 
     override fun onListenerDisconnected() {
