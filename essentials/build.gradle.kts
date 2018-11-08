@@ -39,6 +39,7 @@ android {
         javaCompileOptions {
             annotationProcessorOptions {
                 argument("dagger.android.experimentalUseStringKeys", "true")
+                argument("dagger.formatGeneratedSource", "disabled")
             }
         }
     }

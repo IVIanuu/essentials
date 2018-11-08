@@ -93,6 +93,8 @@ abstract class BaseActivity : AppCompatActivity(), OnBackPressedCallback,
     override fun invalidate() {
     }
 
+    override fun handleOnBackPressed() = false
+
     override fun supportFragmentInjector(): AndroidInjector<Fragment> = supportFragmentInjector
 
     protected open fun navigators() = emptyList<ResultNavigator>()
