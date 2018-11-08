@@ -96,6 +96,16 @@ abstract class BaseFragment : Fragment(), BackListener, HasSupportFragmentInject
     override fun invalidate() {
     }
 
+    override fun handleBack(): Boolean {
+        childFragmentManager.fragments.filterIsInstance<BackListener>().forEach {
+            if (it.handleBack()) {
+                return true
+            }
+        }
+
+        return false
+    }
+
     override fun supportFragmentInjector(): AndroidInjector<Fragment> = supportFragmentInjector
 
     override fun viewInjector(): AndroidInjector<View> = viewInjector

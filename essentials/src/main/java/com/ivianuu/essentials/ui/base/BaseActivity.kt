@@ -93,8 +93,12 @@ abstract class BaseActivity : AppCompatActivity(), HasSupportFragmentInjector, H
     }
 
     override fun onBackPressed() {
-        val currentFragment = supportFragmentManager.findFragmentById(fragmentContainer)
-        if (currentFragment is BackListener && currentFragment.handleBack()) return
+        supportFragmentManager.fragments.filterIsInstance<BackListener>().forEach {
+            if (it.handleBack()) {
+                return
+            }
+        }
+
         super.onBackPressed()
     }
 
