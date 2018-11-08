@@ -16,4 +16,6 @@
 
 package androidx.fragment.app
 
+val Fragment.containerId get() = mContainerId
+
 val Fragment.isInBackstack get() = isInBackStack
