@@ -36,11 +36,11 @@ android {
         targetSdkVersion(Build.targetSdk)
         consumerProguardFile("proguard-rules.txt")
 
-        //javaCompileOptions {
-        //    annotationProcessorOptions {
-        //        arguments = ["dagger.android.experimentalUseStringKeys": "true"]
-        //    }
-        //}
+        javaCompileOptions {
+            annotationProcessorOptions {
+                argument("dagger.android.experimentalUseStringKeys", "true")
+            }
+        }
     }
 
     androidExtensions {

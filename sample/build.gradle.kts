@@ -17,6 +17,12 @@ android {
         targetSdkVersion(Build.targetSdk)
         versionCode = Build.versionCode
         versionName = Build.versionName
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                argument("dagger.android.experimentalUseStringKeys", "true")
+            }
+        }
     }
 
     androidExtensions {
