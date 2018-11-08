@@ -13,8 +13,14 @@ object Build {
 
 object Versions {
     const val androidGradlePlugin = "3.2.1"
+
     const val androidx = "1.0.0"
     const val androidxArch = "2.0.0"
+
+    const val androidxActivity = "1.0.0-alpha01"
+    const val androidxCore = "1.1.0-alpha01"
+    const val androidxFragment = "1.1.0-alpha01"
+
     const val androidKtx = "0cf0a07f49"
     const val archWork = "1.0.0-alpha09"
     const val compass = "95030ccb06"
@@ -51,9 +57,11 @@ object Versions {
 object Deps {
     const val androidGradlePlugin = "com.android.tools.build:gradle:${Versions.androidGradlePlugin}"
 
+    const val androidxActivity = "androidx.activity:activity:${Versions.androidxActivity}"
     const val androidxAppCompat = "androidx.appcompat:appcompat:${Versions.androidx}"
     const val androidxCardView = "androidx.cardview:cardview:${Versions.androidx}"
     const val androidxCoreKtx = "androidx.core:core-ktx:${Versions.androidx}"
+    const val androidxFragment = "androidx.fragment:fragment:${Versions.androidxFragment}"
     const val androidxPalette = "androidx.palette:palette:${Versions.androidx}"
 
     const val androidKtxAppCompat =

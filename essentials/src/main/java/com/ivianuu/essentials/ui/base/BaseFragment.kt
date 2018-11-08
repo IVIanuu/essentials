@@ -57,7 +57,7 @@ abstract class BaseFragment : Fragment(), BackListener, HasSupportFragmentInject
 
     protected open val layoutRes = -1
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         AndroidSupportInjection.inject(this)
         super.onAttach(context)
     }
