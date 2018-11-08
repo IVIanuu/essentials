@@ -2,7 +2,6 @@ package com.ivianuu.essentials.injection.worker
 
 import androidx.work.Worker
 import androidx.work.WorkerFactory
-import com.ivianuu.essentials.util.DaggerWorkerFactory
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.Multibinds
