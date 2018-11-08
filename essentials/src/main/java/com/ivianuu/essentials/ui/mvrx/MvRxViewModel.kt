@@ -2,8 +2,12 @@ package com.ivianuu.essentials.ui.mvrx
 
 import androidx.lifecycle.LifecycleOwner
 import com.ivianuu.essentials.ui.common.BaseViewModel
+import com.ivianuu.ktuples.Nonuple
+import com.ivianuu.ktuples.Octuple
 import com.ivianuu.ktuples.Quadruple
 import com.ivianuu.ktuples.Quintuple
+import com.ivianuu.ktuples.Septuple
+import com.ivianuu.ktuples.Sextuple
 import com.ivianuu.scopes.rx.disposeBy
 import com.ivianuu.timberktx.d
 import io.reactivex.Observable
@@ -183,6 +187,275 @@ abstract class MvRxViewModel<S : MvRxState>(initialState: S) : BaseViewModel() {
         }
         .distinctUntilChanged()
         .subscribeLifecycle(owner) { (a, b, c, d, e) -> subscriber(a, b, c, d, e) }
+
+    protected fun <A, B, C, D, E, F> selectSubscribe(
+        prop1: KProperty1<S, A>,
+        prop2: KProperty1<S, B>,
+        prop3: KProperty1<S, C>,
+        prop4: KProperty1<S, D>,
+        prop5: KProperty1<S, E>,
+        prop6: KProperty1<S, F>,
+        subscriber: (A, B, C, D, E, F) -> Unit
+    ) = selectSubscribeInternal(null, prop1, prop2, prop3, prop4, prop5, prop6, subscriber)
+
+    fun <A, B, C, D, E, F> selectSubscribe(
+        owner: LifecycleOwner,
+        prop1: KProperty1<S, A>,
+        prop2: KProperty1<S, B>,
+        prop3: KProperty1<S, C>,
+        prop4: KProperty1<S, D>,
+        prop5: KProperty1<S, E>,
+        prop6: KProperty1<S, F>,
+        subscriber: (A, B, C, D, E, F) -> Unit
+    ) = selectSubscribeInternal(owner, prop1, prop2, prop3, prop4, prop5, prop6, subscriber)
+
+    private fun <A, B, C, D, E, F> selectSubscribeInternal(
+        owner: LifecycleOwner?,
+        prop1: KProperty1<S, A>,
+        prop2: KProperty1<S, B>,
+        prop3: KProperty1<S, C>,
+        prop4: KProperty1<S, D>,
+        prop5: KProperty1<S, E>,
+        prop6: KProperty1<S, F>,
+        subscriber: (A, B, C, D, E, F) -> Unit
+    ) = stateStore.observable
+        .map {
+            Sextuple(
+                prop1.get(it),
+                prop2.get(it),
+                prop3.get(it),
+                prop4.get(it),
+                prop5.get(it),
+                prop6.get(it)
+            )
+        }
+        .distinctUntilChanged()
+        .subscribeLifecycle(owner) { (a, b, c, d, e, f) -> subscriber(a, b, c, d, e, f) }
+
+    protected fun <A, B, C, D, E, F, G> selectSubscribe(
+        prop1: KProperty1<S, A>,
+        prop2: KProperty1<S, B>,
+        prop3: KProperty1<S, C>,
+        prop4: KProperty1<S, D>,
+        prop5: KProperty1<S, E>,
+        prop6: KProperty1<S, F>,
+        prop7: KProperty1<S, G>,
+        subscriber: (A, B, C, D, E, F, G) -> Unit
+    ) = selectSubscribeInternal(null, prop1, prop2, prop3, prop4, prop5, prop6, prop7, subscriber)
+
+    fun <A, B, C, D, E, F, G> selectSubscribe(
+        owner: LifecycleOwner,
+        prop1: KProperty1<S, A>,
+        prop2: KProperty1<S, B>,
+        prop3: KProperty1<S, C>,
+        prop4: KProperty1<S, D>,
+        prop5: KProperty1<S, E>,
+        prop6: KProperty1<S, F>,
+        prop7: KProperty1<S, G>,
+        subscriber: (A, B, C, D, E, F, G) -> Unit
+    ) = selectSubscribeInternal(owner, prop1, prop2, prop3, prop4, prop5, prop6, prop7, subscriber)
+
+    private fun <A, B, C, D, E, F, G> selectSubscribeInternal(
+        owner: LifecycleOwner?,
+        prop1: KProperty1<S, A>,
+        prop2: KProperty1<S, B>,
+        prop3: KProperty1<S, C>,
+        prop4: KProperty1<S, D>,
+        prop5: KProperty1<S, E>,
+        prop6: KProperty1<S, F>,
+        prop7: KProperty1<S, G>,
+        subscriber: (A, B, C, D, E, F, G) -> Unit
+    ) = stateStore.observable
+        .map {
+            Septuple(
+                prop1.get(it),
+                prop2.get(it),
+                prop3.get(it),
+                prop4.get(it),
+                prop5.get(it),
+                prop6.get(it),
+                prop7.get(it)
+            )
+        }
+        .distinctUntilChanged()
+        .subscribeLifecycle(owner) { (a, b, c, d, e, f, g) -> subscriber(a, b, c, d, e, f, g) }
+
+    protected fun <A, B, C, D, E, F, G, H> selectSubscribe(
+        prop1: KProperty1<S, A>,
+        prop2: KProperty1<S, B>,
+        prop3: KProperty1<S, C>,
+        prop4: KProperty1<S, D>,
+        prop5: KProperty1<S, E>,
+        prop6: KProperty1<S, F>,
+        prop7: KProperty1<S, G>,
+        prop8: KProperty1<S, H>,
+        subscriber: (A, B, C, D, E, F, G, H) -> Unit
+    ) = selectSubscribeInternal(
+        null,
+        prop1,
+        prop2,
+        prop3,
+        prop4,
+        prop5,
+        prop6,
+        prop7,
+        prop8,
+        subscriber
+    )
+
+    fun <A, B, C, D, E, F, G, H> selectSubscribe(
+        owner: LifecycleOwner,
+        prop1: KProperty1<S, A>,
+        prop2: KProperty1<S, B>,
+        prop3: KProperty1<S, C>,
+        prop4: KProperty1<S, D>,
+        prop5: KProperty1<S, E>,
+        prop6: KProperty1<S, F>,
+        prop7: KProperty1<S, G>,
+        prop8: KProperty1<S, H>,
+        subscriber: (A, B, C, D, E, F, G, H) -> Unit
+    ) = selectSubscribeInternal(
+        owner,
+        prop1,
+        prop2,
+        prop3,
+        prop4,
+        prop5,
+        prop6,
+        prop7,
+        prop8,
+        subscriber
+    )
+
+    private fun <A, B, C, D, E, F, G, H> selectSubscribeInternal(
+        owner: LifecycleOwner?,
+        prop1: KProperty1<S, A>,
+        prop2: KProperty1<S, B>,
+        prop3: KProperty1<S, C>,
+        prop4: KProperty1<S, D>,
+        prop5: KProperty1<S, E>,
+        prop6: KProperty1<S, F>,
+        prop7: KProperty1<S, G>,
+        prop8: KProperty1<S, H>,
+        subscriber: (A, B, C, D, E, F, G, H) -> Unit
+    ) = stateStore.observable
+        .map {
+            Octuple(
+                prop1.get(it),
+                prop2.get(it),
+                prop3.get(it),
+                prop4.get(it),
+                prop5.get(it),
+                prop6.get(it),
+                prop7.get(it),
+                prop8.get(it)
+            )
+        }
+        .distinctUntilChanged()
+        .subscribeLifecycle(owner) { (a, b, c, d, e, f, g, h) ->
+            subscriber(
+                a,
+                b,
+                c,
+                d,
+                e,
+                f,
+                g,
+                h
+            )
+        }
+
+    protected fun <A, B, C, D, E, F, G, H, I> selectSubscribe(
+        prop1: KProperty1<S, A>,
+        prop2: KProperty1<S, B>,
+        prop3: KProperty1<S, C>,
+        prop4: KProperty1<S, D>,
+        prop5: KProperty1<S, E>,
+        prop6: KProperty1<S, F>,
+        prop7: KProperty1<S, G>,
+        prop8: KProperty1<S, H>,
+        prop9: KProperty1<S, I>,
+        subscriber: (A, B, C, D, E, F, G, H, I) -> Unit
+    ) = selectSubscribeInternal(
+        null,
+        prop1,
+        prop2,
+        prop3,
+        prop4,
+        prop5,
+        prop6,
+        prop7,
+        prop8,
+        prop9,
+        subscriber
+    )
+
+    fun <A, B, C, D, E, F, G, H, I> selectSubscribe(
+        owner: LifecycleOwner,
+        prop1: KProperty1<S, A>,
+        prop2: KProperty1<S, B>,
+        prop3: KProperty1<S, C>,
+        prop4: KProperty1<S, D>,
+        prop5: KProperty1<S, E>,
+        prop6: KProperty1<S, F>,
+        prop7: KProperty1<S, G>,
+        prop8: KProperty1<S, H>,
+        prop9: KProperty1<S, I>,
+        subscriber: (A, B, C, D, E, F, G, H, I) -> Unit
+    ) = selectSubscribeInternal(
+        owner,
+        prop1,
+        prop2,
+        prop3,
+        prop4,
+        prop5,
+        prop6,
+        prop7,
+        prop8,
+        prop9,
+        subscriber
+    )
+
+    private fun <A, B, C, D, E, F, G, H, I> selectSubscribeInternal(
+        owner: LifecycleOwner?,
+        prop1: KProperty1<S, A>,
+        prop2: KProperty1<S, B>,
+        prop3: KProperty1<S, C>,
+        prop4: KProperty1<S, D>,
+        prop5: KProperty1<S, E>,
+        prop6: KProperty1<S, F>,
+        prop7: KProperty1<S, G>,
+        prop8: KProperty1<S, H>,
+        prop9: KProperty1<S, I>,
+        subscriber: (A, B, C, D, E, F, G, H, I) -> Unit
+    ) = stateStore.observable
+        .map {
+            Nonuple(
+                prop1.get(it),
+                prop2.get(it),
+                prop3.get(it),
+                prop4.get(it),
+                prop5.get(it),
+                prop6.get(it),
+                prop7.get(it),
+                prop8.get(it),
+                prop9.get(it)
+            )
+        }
+        .distinctUntilChanged()
+        .subscribeLifecycle(owner) { (a, b, c, d, e, f, g, h, i) ->
+            subscriber(
+                a,
+                b,
+                c,
+                d,
+                e,
+                f,
+                g,
+                h,
+                i
+            )
+        }
 
     private fun <T> Observable<T>.subscribeLifecycle(
         owner: LifecycleOwner? = null,

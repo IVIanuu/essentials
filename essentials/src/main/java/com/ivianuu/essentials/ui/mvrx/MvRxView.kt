@@ -67,4 +67,73 @@ interface MvRxView : LifecycleOwner, ViewModelStoreOwner {
         prop5: KProperty1<S, E>,
         subscriber: (A, B, C, D, E) -> Unit
     ) = selectSubscribe(this@MvRxView, prop1, prop2, prop3, prop4, prop5, subscriber)
+
+    fun <S : MvRxState, A, B, C, D, E, F> MvRxViewModel<S>.selectSubscribe(
+        prop1: KProperty1<S, A>,
+        prop2: KProperty1<S, B>,
+        prop3: KProperty1<S, C>,
+        prop4: KProperty1<S, D>,
+        prop5: KProperty1<S, E>,
+        prop6: KProperty1<S, F>,
+        subscriber: (A, B, C, D, E, F) -> Unit
+    ) = selectSubscribe(this@MvRxView, prop1, prop2, prop3, prop4, prop5, prop6, subscriber)
+
+    fun <S : MvRxState, A, B, C, D, E, F, G> MvRxViewModel<S>.selectSubscribe(
+        prop1: KProperty1<S, A>,
+        prop2: KProperty1<S, B>,
+        prop3: KProperty1<S, C>,
+        prop4: KProperty1<S, D>,
+        prop5: KProperty1<S, E>,
+        prop6: KProperty1<S, F>,
+        prop7: KProperty1<S, G>,
+        subscriber: (A, B, C, D, E, F, G) -> Unit
+    ) = selectSubscribe(this@MvRxView, prop1, prop2, prop3, prop4, prop5, prop6, prop7, subscriber)
+
+    fun <S : MvRxState, A, B, C, D, E, F, G, H> MvRxViewModel<S>.selectSubscribe(
+        prop1: KProperty1<S, A>,
+        prop2: KProperty1<S, B>,
+        prop3: KProperty1<S, C>,
+        prop4: KProperty1<S, D>,
+        prop5: KProperty1<S, E>,
+        prop6: KProperty1<S, F>,
+        prop7: KProperty1<S, G>,
+        prop8: KProperty1<S, H>,
+        subscriber: (A, B, C, D, E, F, G, H) -> Unit
+    ) = selectSubscribe(
+        this@MvRxView,
+        prop1,
+        prop2,
+        prop3,
+        prop4,
+        prop5,
+        prop6,
+        prop7,
+        prop8,
+        subscriber
+    )
+
+    fun <S : MvRxState, A, B, C, D, E, F, G, H, I> MvRxViewModel<S>.selectSubscribe(
+        prop1: KProperty1<S, A>,
+        prop2: KProperty1<S, B>,
+        prop3: KProperty1<S, C>,
+        prop4: KProperty1<S, D>,
+        prop5: KProperty1<S, E>,
+        prop6: KProperty1<S, F>,
+        prop7: KProperty1<S, G>,
+        prop8: KProperty1<S, H>,
+        prop9: KProperty1<S, I>,
+        subscriber: (A, B, C, D, E, F, G, H, I) -> Unit
+    ) = selectSubscribe(
+        this@MvRxView,
+        prop1,
+        prop2,
+        prop3,
+        prop4,
+        prop5,
+        prop6,
+        prop7,
+        prop8,
+        prop9,
+        subscriber
+    )
 }
