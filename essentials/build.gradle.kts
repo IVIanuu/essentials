@@ -135,6 +135,12 @@ dependencies {
 
     api(Deps.superUser)
 
+    api(Deps.stateStore)
+    api(Deps.stateStoreAndroid)
+    api(Deps.stateStoreCoroutines)
+    api(Deps.stateStoreLifecycle)
+    api(Deps.stateStoreRx)
+
     api(Deps.stickyHeaders)
 
     api(Deps.timber)

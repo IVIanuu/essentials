@@ -28,11 +28,11 @@ import com.ivianuu.traveler.goBack
  */
 abstract class SimpleFragment : BaseFragment() {
 
-    override val layoutRes = R.layout.fragment_simple
+    override val layoutRes get() = R.layout.fragment_simple
 
-    protected open val toolbarTitle: String? = null
-    protected open val toolbarTitleRes = 0
-    protected open val toolbarMenuRes = 0
+    protected open val toolbarTitle: String? get() = null
+    protected open val toolbarTitleRes get() = 0
+    protected open val toolbarMenuRes get() = 0
     protected open val toolbarBackButton get() = isInBackstack
     protected open val lightToolbar: Boolean get() = primaryColor().isLight
 

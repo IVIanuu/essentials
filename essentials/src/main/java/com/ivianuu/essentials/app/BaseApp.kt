@@ -19,19 +19,17 @@ package com.ivianuu.essentials.app
 import android.content.pm.ApplicationInfo
 import android.graphics.drawable.Drawable
 import android.os.Looper
-import androidx.work.Configuration
-import androidx.work.WorkManager
-import androidx.work.WorkerFactory
 import com.bumptech.glide.Glide
 import com.ivianuu.essentials.util.AppIcon
 import com.ivianuu.essentials.util.AppIconModelLoader
 import com.ivianuu.essentials.util.ext.containsFlag
+import com.ivianuu.statestore.StateStorePlugins
+import com.ivianuu.statestore.android.MAIN_THREAD_EXECUTOR
 import dagger.android.support.DaggerApplication
 import io.reactivex.android.plugins.RxAndroidPlugins
 import io.reactivex.android.schedulers.AndroidSchedulers
 import timber.log.Timber
 import javax.inject.Inject
-import javax.inject.Provider
 
 /**
  * App
@@ -41,22 +39,13 @@ abstract class BaseApp : DaggerApplication() {
     @Inject internal lateinit var appServices: Set<@JvmSuppressWildcards AppService>
     @Inject internal lateinit var appIconModelLoaderFactory: AppIconModelLoader.Factory
 
-    @Inject internal lateinit var workerFactory: Provider<WorkerFactory>
-
-    protected open val initTimber = true
-    protected open val initGlide = true
-    protected open val initRxJava = true
-    protected open val initWorkManager = true
+    protected open val initTimber get() = true
+    protected open val initGlide get() = true
+    protected open val initRxJava get() = true
+    protected open val initStateStore get() = true
 
     override fun onCreate() {
         super.onCreate()
-
-        if (initWorkManager) {
-            WorkManager.initialize(
-                this,
-                Configuration.Builder().setWorkerFactory(workerFactory.get()).build()
-            )
-        }
 
         val isDebuggable = applicationInfo.flags.containsFlag(ApplicationInfo.FLAG_DEBUGGABLE)
 
@@ -64,14 +53,18 @@ abstract class BaseApp : DaggerApplication() {
             Timber.plant(Timber.DebugTree())
         }
 
-        if (initGlide) {
-            Glide.get(this).registry
-                .append(AppIcon::class.java, Drawable::class.java, appIconModelLoaderFactory)
-        }
-
         if (initRxJava) {
             val scheduler = AndroidSchedulers.from(Looper.getMainLooper(), true)
             RxAndroidPlugins.setInitMainThreadSchedulerHandler { scheduler }
+        }
+
+        if (initStateStore) {
+            StateStorePlugins.defaultCallbackExecutor = MAIN_THREAD_EXECUTOR
+        }
+
+        if (initGlide) {
+            Glide.get(this).registry
+                .append(AppIcon::class.java, Drawable::class.java, appIconModelLoaderFactory)
         }
 
         appServices.forEach { startAppService(it) }

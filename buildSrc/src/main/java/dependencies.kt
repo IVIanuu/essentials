@@ -20,10 +20,10 @@ object Versions {
     const val androidxActivity = "1.0.0-alpha01"
     const val androidxCore = "1.1.0-alpha01"
     const val androidxFragment = "1.1.0-alpha01"
-
     const val androidKtx = "0cf0a07f49"
-    const val archWork = "1.0.0-alpha09"
-    const val compass = "95030ccb06"
+    const val archWork = "1.0.0-alpha11"
+
+    const val compass = "28507eee7f"
     const val constraintLayout = "1.1.3"
     const val coroutines = "1.0.0"
     const val dagger = "2.19"
@@ -47,6 +47,7 @@ object Versions {
     const val rxKotlin = "2.3.0"
     const val scopes = "1a360d16ad"
     const val superUser = "1.0.0.+"
+    const val stateStore = "b011f55df4"
     const val stickyHeaders = "44c5192160"
     const val timber = "4.7.1"
     const val timberKtx = "f7547da781"
@@ -146,6 +147,15 @@ object Deps {
     const val rxJava = "io.reactivex.rxjava2:rxjava:${Versions.rxJava}"
     const val rxJavaKtx = "com.github.IVIanuu:rx-java-ktx:${Versions.rxJavaKtx}"
     const val rxKotlin = "io.reactivex.rxjava2:rxkotlin:${Versions.rxKotlin}"
+
+    const val stateStore = "com.github.IVIanuu.statestore:statestore:${Versions.stateStore}"
+    const val stateStoreAndroid =
+        "com.github.IVIanuu.statestore:statestore-android:${Versions.stateStore}"
+    const val stateStoreCoroutines =
+        "com.github.IVIanuu.statestore:statestore-coroutines:${Versions.stateStore}"
+    const val stateStoreLifecycle =
+        "com.github.IVIanuu.statestore:statestore-lifecycle:${Versions.stateStore}"
+    const val stateStoreRx = "com.github.IVIanuu.statestore:statestore-rx:${Versions.stateStore}"
 
     const val scopes = "com.github.IVIanuu.scopes:scopes:${Versions.scopes}"
     const val scopesAndroid = "com.github.IVIanuu.scopes:scopes-android:${Versions.scopes}"

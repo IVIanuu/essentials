@@ -3,7 +3,6 @@ package com.ivianuu.essentials.sample.app
 import com.ivianuu.essentials.injection.EssentialsModule
 import com.ivianuu.essentials.sample.injection.ActivityBindingModule
 import com.ivianuu.essentials.sample.injection.ViewModelModule
-import com.ivianuu.essentials.sample.injection.WorkerModule
 import dagger.Component
 import dagger.android.AndroidInjector
 import javax.inject.Singleton
@@ -17,8 +16,7 @@ import javax.inject.Singleton
         ActivityBindingModule::class,
         AppModule::class,
         EssentialsModule::class,
-        ViewModelModule::class,
-        WorkerModule::class
+        ViewModelModule::class
     ]
 )
 interface AppComponent : AndroidInjector<App> {

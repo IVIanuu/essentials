@@ -5,6 +5,7 @@ import android.os.Bundle
 import com.afollestad.materialdialogs.MaterialDialog
 import com.ivianuu.androidktx.fragment.app.string
 import com.ivianuu.compass.Destination
+import com.ivianuu.compass.fragment.destination
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.data.app.AppInfo
 import com.ivianuu.essentials.data.app.AppStore
@@ -34,7 +35,7 @@ class AppPickerDialog : BaseDialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val apps = mutableListOf<AppInfo>()
 
-        val destination = appPickerDestination()
+        val destination = destination<AppPickerDestination>()
 
         val dialog = MaterialDialog.Builder(requireContext())
             .title(destination.title ?: string(R.string.dialog_title_app_picker))

@@ -4,6 +4,7 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import com.ivianuu.compass.Destination
+import com.ivianuu.compass.fragment.bindDestination
 import com.ivianuu.essentials.ui.base.BaseFragment
 import com.ivianuu.essentials.ui.traveler.destination.ResultDestination
 import com.ivianuu.essentials.util.RequestCodeGenerator
@@ -42,7 +43,7 @@ data class PermissionDestination(
  */
 class PermissionFragment : BaseFragment() {
 
-    private val destination by bindPermissionDestination()
+    private val destination by bindDestination<PermissionDestination>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

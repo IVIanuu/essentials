@@ -2,6 +2,7 @@ package com.ivianuu.essentials.data.base
 
 import android.content.Context
 import androidx.work.Worker
+import androidx.work.WorkerParameters
 import com.ivianuu.essentials.util.ContextAware
 import com.ivianuu.essentials.util.asMainCoroutineScope
 import com.ivianuu.scopes.MutableScope
@@ -10,7 +11,9 @@ import com.ivianuu.scopes.Scope
 /**
  * Base worker
  */
-abstract class BaseWorker : Worker(), ContextAware {
+abstract class BaseWorker(
+    context: Context, workerParams: WorkerParameters
+) : Worker(context, workerParams), ContextAware {
 
     override val providedContext: Context
         get() = applicationContext
@@ -20,8 +23,9 @@ abstract class BaseWorker : Worker(), ContextAware {
 
     val coroutineScope = scope.asMainCoroutineScope()
 
-    override fun onStopped(cancelled: Boolean) {
+    override fun onStopped() {
         _scope.close()
-        super.onStopped(cancelled)
+
+        super.onStopped()
     }
 }

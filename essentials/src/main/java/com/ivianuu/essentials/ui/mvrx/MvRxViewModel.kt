@@ -2,6 +2,7 @@ package com.ivianuu.essentials.ui.mvrx
 
 import androidx.lifecycle.LifecycleOwner
 import com.ivianuu.essentials.ui.common.BaseViewModel
+import com.ivianuu.essentials.util.ext.closeBy
 import com.ivianuu.ktuples.Nonuple
 import com.ivianuu.ktuples.Octuple
 import com.ivianuu.ktuples.Quadruple
@@ -9,6 +10,8 @@ import com.ivianuu.ktuples.Quintuple
 import com.ivianuu.ktuples.Septuple
 import com.ivianuu.ktuples.Sextuple
 import com.ivianuu.scopes.rx.disposeBy
+import com.ivianuu.statestore.StateStore
+import com.ivianuu.statestore.rx.observable
 import com.ivianuu.timberktx.d
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -20,17 +23,17 @@ import kotlin.reflect.KProperty1
  */
 abstract class MvRxViewModel<S : MvRxState>(initialState: S) : BaseViewModel() {
 
-    private val stateStore = MvRxStateStore(initialState)
-        .also { it.disposeBy(scope) }
+    private val stateStore = StateStore(initialState)
+        .closeBy(scope)
 
-    internal val state get() = stateStore.state
+    internal val state get() = stateStore.peekState()
 
     protected fun withState(block: (S) -> Unit) {
-        stateStore.get(block)
+        stateStore.withState(block)
     }
 
     protected fun setState(reducer: S.() -> S) {
-        stateStore.set(reducer)
+        stateStore.setState(reducer)
     }
 
     fun logStateChanges() {

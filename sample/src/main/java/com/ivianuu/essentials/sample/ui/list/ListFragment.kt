@@ -20,7 +20,7 @@ import kotlinx.android.synthetic.main.single_line_list_item.*
 
 @Detour(HorizontalDetour::class)
 @Destination(ListFragment::class)
-object ListDestination
+class ListDestination
 
 /**
  * @author Manuel Wrage (IVIanuu)

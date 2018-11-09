@@ -10,6 +10,7 @@ import javax.inject.Inject
 class ListViewModel @Inject constructor() : MvRxViewModel<ListState>(ListState()) {
 
     init {
+        logStateChanges()
         generateNewState()
     }
 

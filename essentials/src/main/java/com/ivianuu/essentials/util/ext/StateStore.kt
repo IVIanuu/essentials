@@ -14,23 +14,9 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.sample.injection
+package com.ivianuu.essentials.util.ext
 
-import androidx.work.Worker
-import com.ivianuu.essentials.injection.worker.WorkerKey
-import com.ivianuu.essentials.sample.data.MyWorker
-import dagger.Binds
-import dagger.Module
-import dagger.multibindings.IntoMap
+import com.ivianuu.scopes.Scope
+import com.ivianuu.statestore.StateStore
 
-/**
- * @author Manuel Wrage (IVIanuu)
- */
-@Module
-abstract class WorkerModule {
-
-    @Binds
-    @IntoMap
-    @WorkerKey(MyWorker::class)
-    abstract fun bindMyWorker(myWorker: MyWorker): Worker
-}
+fun <T> StateStore<T>.closeBy(scope: Scope) = apply { scope.addListener { close() } }

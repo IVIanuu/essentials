@@ -1,21 +1,24 @@
 package com.ivianuu.essentials.sample.ui.counter
 
 import android.content.Context
-import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.State
 import androidx.work.WorkManager
-import com.ivianuu.essentials.sample.data.MyWorker
 import com.ivianuu.essentials.sample.ui.list.ListDestination
 import com.ivianuu.essentials.ui.mvrx.MvRxState
+import com.ivianuu.essentials.ui.mvrx.MvRxView
 import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
-import com.ivianuu.essentials.util.ext.toObservable
-import com.ivianuu.essentials.util.ext.toastSuccess
-import com.ivianuu.scopes.rx.disposeBy
+import com.ivianuu.essentials.util.ext.toastInfo
 import com.ivianuu.traveler.Router
 import com.ivianuu.traveler.goBack
 import com.ivianuu.traveler.navigate
 import com.ivianuu.traveler.popToRoot
 import javax.inject.Inject
+
+/**
+ * @author Manuel Wrage (IVIanuu)
+ */
+interface MvRxViewModelFactory<S : MvRxState> {
+    fun create(view: MvRxView, state: S): MvRxViewModel<S>
+}
 
 /**
  * Counter view model
@@ -69,19 +72,11 @@ class CounterViewModel @Inject constructor(
     }
 
     fun listScreenClicked() {
-        router.navigate(ListDestination)
+        router.navigate(ListDestination())
     }
 
     fun doWorkClicked() {
-        val request = OneTimeWorkRequestBuilder<MyWorker>().build()
-        workManager.enqueue(request)
-
-        workManager.getStatusById(request.id)
-            .toObservable()
-            .map { it.state }
-            .filter { it == State.SUCCEEDED }
-            .subscribe { context.toastSuccess("Work finished!") }
-            .disposeBy(scope)
+        context.toastInfo("Not implemented")
     }
 }
 

@@ -22,11 +22,6 @@
             </intent-filter>
         </activity>
 
-        <provider
-            android:name="androidx.work.impl.WorkManagerInitializer"
-            android:authorities="${applicationId}.workmanager-init"
-            android:enabled="false" />
-
     </application>
 
 </manifest>

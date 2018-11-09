@@ -19,6 +19,7 @@ package com.ivianuu.essentials.ui.common
 import android.os.Bundle
 import com.afollestad.materialdialogs.color.ColorChooserDialog
 import com.ivianuu.compass.Destination
+import com.ivianuu.compass.fragment.bindDestination
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.base.BaseFragment
 import com.ivianuu.essentials.ui.traveler.destination.ResultDestination
@@ -39,7 +40,7 @@ data class ColorPickerDestination(
 // todo remove/ move to somewhere else
 class ColorPickerFragment : BaseFragment(), ColorChooserDialog.ColorCallback {
 
-    private val destination by bindColorPickerDestination()
+    private val destination by bindDestination<ColorPickerDestination>()
 
     private var colorSelected = false
 

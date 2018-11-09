@@ -21,6 +21,7 @@ import android.view.View
 import com.ivianuu.androidktx.appcompat.widget.setTextFuture
 import com.ivianuu.compass.Destination
 import com.ivianuu.compass.Detour
+import com.ivianuu.compass.fragment.destination
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.base.BaseFragment
 import com.ivianuu.essentials.ui.mvrx.bindViewModel
@@ -43,7 +44,7 @@ class CounterFragment : BaseFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel.setDestination(counterDestination())
+        viewModel.setDestination(destination())
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

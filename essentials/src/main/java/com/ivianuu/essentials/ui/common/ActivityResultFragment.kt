@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import com.ivianuu.compass.Destination
+import com.ivianuu.compass.fragment.bindDestination
 import com.ivianuu.essentials.ui.base.BaseFragment
 import com.ivianuu.essentials.ui.traveler.destination.ResultDestination
 import com.ivianuu.essentials.util.RequestCodeGenerator
@@ -21,7 +22,7 @@ data class ActivityResultDestination(
  */
 class ActivityResultFragment : BaseFragment() {
 
-    private val destination by bindActivityResultDestination()
+    private val destination by bindDestination<ActivityResultDestination>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

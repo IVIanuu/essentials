@@ -20,6 +20,7 @@ import android.app.Dialog
 import android.os.Bundle
 import com.afollestad.materialdialogs.MaterialDialog
 import com.ivianuu.compass.Destination
+import com.ivianuu.compass.fragment.destination
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.base.BaseDialogFragment
 import com.ivianuu.essentials.ui.traveler.destination.ResultDestination
@@ -44,7 +45,7 @@ data class TextInputDestination(
 class TextInputDialog : BaseDialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val destination = textInputDestination()
+        val destination = destination<TextInputDestination>()
 
         return MaterialDialog.Builder(requireContext())
             .autoDismiss(false)
