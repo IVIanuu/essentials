@@ -20,24 +20,14 @@ import android.content.Context
 import android.content.Intent
 import android.provider.Settings
 import androidx.core.net.toUri
-import com.ivianuu.compass.Destination
-import com.ivianuu.compass.DoNotSerialize
-import com.ivianuu.compass.RouteFactory
-import com.ivianuu.compass.android.ActivityRouteFactory
+import com.ivianuu.traveler.android.ActivityKey
 
 /**
  * Open s the app info of the app
  */
-@DoNotSerialize
-@RouteFactory(AppInfoDestination.RouteFactory::class)
-@Destination
-data class AppInfoDestination(val packageName: String) {
-    class RouteFactory : ActivityRouteFactory<AppInfoDestination> {
-        override fun createActivityIntent(
-            context: Context,
-            destination: AppInfoDestination
-        ): Intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-            data = "package:${destination.packageName}".toUri()
+data class AppInfoDestination(val packageName: String) : ActivityKey {
+    override fun createIntent(context: Context, data: Any?) =
+        Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+            this.data = "package:$packageName".toUri()
         }
-    }
 }

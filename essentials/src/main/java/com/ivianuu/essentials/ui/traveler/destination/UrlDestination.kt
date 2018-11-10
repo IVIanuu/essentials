@@ -1,17 +1,14 @@
 package com.ivianuu.essentials.ui.traveler.destination
 
-import com.ivianuu.compass.Destination
-import com.ivianuu.compass.DoNotSerialize
-import com.ivianuu.compass.RouteFactory
+import android.content.Context
+import android.content.Intent
+import androidx.core.net.toUri
+import com.ivianuu.traveler.android.ActivityKey
 
 /**
- * Open s the app info of the app
+ * Opens the url in the browser
  */
-@DoNotSerialize
-@RouteFactory(UrlDestination.RouteFactory::class)
-@Destination
-data class UrlDestination(val url: String) {
-    class RouteFactory : UrlRouteFactory<UrlDestination>() {
-        override fun createUrl(destination: UrlDestination) = destination.url
-    }
+data class UrlDestination(val url: String) : ActivityKey {
+    override fun createIntent(context: Context, data: Any?) =
+        Intent(Intent.ACTION_VIEW).apply { this.data = url.toUri() }
 }

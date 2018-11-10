@@ -24,6 +24,7 @@ import com.ivianuu.essentials.ui.traveler.navigator.AddFragment
 import com.ivianuu.essentials.util.RequestCodeGenerator
 import com.ivianuu.rxjavaktx.observable
 import com.ivianuu.traveler.Router
+import com.ivianuu.traveler.fragment.FragmentKey
 import com.ivianuu.traveler.navigate
 import com.ivianuu.traveler.result.ResultListener
 import com.ivianuu.traveler.result.addResultListener
@@ -91,7 +92,7 @@ suspend fun Router.requestPermissions(
 }
 
 @Suppress("UNCHECKED_CAST")
-suspend fun <D : ResultDestination<R>, R> Router.addFragmentForResult(destination: D) =
+suspend fun <D, R> Router.addFragmentForResult(destination: D) where D : FragmentKey, D : ResultDestination<R> =
     suspendCancellableCoroutine<R> { continuation ->
         val listener = object : ResultListener {
             override fun invoke(result: Any) {
@@ -109,6 +110,6 @@ suspend fun <D : ResultDestination<R>, R> Router.addFragmentForResult(destinatio
         addFragment(destination)
     }
 
-fun Router.addFragment(destination: Any) {
+fun Router.addFragment(destination: FragmentKey) {
     executeCommands(AddFragment(destination))
 }

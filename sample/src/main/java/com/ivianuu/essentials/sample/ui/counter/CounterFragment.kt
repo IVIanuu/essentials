@@ -19,19 +19,21 @@ package com.ivianuu.essentials.sample.ui.counter
 import android.os.Bundle
 import android.view.View
 import com.ivianuu.androidktx.appcompat.widget.setTextFuture
-import com.ivianuu.compass.Destination
-import com.ivianuu.compass.Detour
-import com.ivianuu.compass.fragment.destination
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.base.BaseFragment
 import com.ivianuu.essentials.ui.mvrx.bindViewModel
 import com.ivianuu.essentials.ui.mvrx.withState
-import com.ivianuu.essentials.ui.traveler.detour.HorizontalDetour
+import com.ivianuu.essentials.ui.traveler.anim.HorizontalFragmentTransactionSetup
+import com.ivianuu.essentials.ui.traveler.key.BaseFragmentDestination
+import com.ivianuu.essentials.ui.traveler.key.destination
+import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_counter.*
 
-@Detour(HorizontalDetour::class)
-@Destination(CounterFragment::class)
-data class CounterDestination(val screen: Int)
+@Parcelize
+data class CounterDestination(val screen: Int) : BaseFragmentDestination(
+    CounterFragment::class,
+    HorizontalFragmentTransactionSetup()
+)
 
 /**
  * @author Manuel Wrage (IVIanuu)

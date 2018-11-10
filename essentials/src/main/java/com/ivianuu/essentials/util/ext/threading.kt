@@ -14,22 +14,16 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.traveler.adapter
+package com.ivianuu.essentials.util.ext
 
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentPagerAdapter
-import com.ivianuu.compass.fragment.fragment
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.Dispatchers
 
-/**
- * Key fragment pager adapter
- */
-open class CompassFragmentPagerAdapter(
-    fm: FragmentManager,
-    private val destinations: List<Any>
-) : FragmentPagerAdapter(fm) {
+val coroutinesDefault get() = Dispatchers.Default
+val coroutinesIo get() = Dispatchers.IO
+val coroutinesMain get() = Dispatchers.Main
 
-    override fun getItem(position: Int): Fragment = destinations[position].fragment()
-
-    override fun getCount() = destinations.size
-}
+val rxComputation get() = Schedulers.computation()
+val rxIo get() = Schedulers.io()
+val rxMain get() = AndroidSchedulers.mainThread()

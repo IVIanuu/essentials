@@ -17,14 +17,14 @@
 package com.ivianuu.essentials.ui.traveler.navigator
 
 import androidx.fragment.app.FragmentManager
-import com.ivianuu.compass.fragment.fragment
 import com.ivianuu.traveler.Command
 import com.ivianuu.traveler.common.TypedResultNavigator
+import com.ivianuu.traveler.fragment.FragmentKey
 
 /**
  * Adds the fragment for the [destination]
  */
-data class AddFragment(val destination: Any) : Command
+data class AddFragment(val destination: FragmentKey) : Command
 
 /**
  * A [Navigator] which allows to add fragments instead of replacing them
@@ -37,7 +37,7 @@ class AddFragmentPlugin(private val fragmentManager: FragmentManager) :
         } catch (e: Exception) {
         }
 
-        val fragment = command.destination.fragment()
+        val fragment = command.destination.createFragment(null)
         val tag = command.destination.toString()
 
         fragmentManager.beginTransaction()

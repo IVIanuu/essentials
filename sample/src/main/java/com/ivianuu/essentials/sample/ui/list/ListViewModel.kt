@@ -2,7 +2,7 @@ package com.ivianuu.essentials.sample.ui.list
 
 import com.ivianuu.essentials.ui.mvrx.MvRxState
 import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
-import kotlinx.coroutines.Dispatchers
+import com.ivianuu.essentials.util.ext.coroutinesDefault
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -19,7 +19,7 @@ class ListViewModel @Inject constructor() : MvRxViewModel<ListState>(ListState()
     }
 
     private fun generateNewState() {
-        coroutineScope.launch(Dispatchers.Default) {
+        coroutineScope.launch(coroutinesDefault) {
             setState { copy(loading = true) }
             delay(1000)
             val list = generateList()

@@ -30,7 +30,6 @@ dependencies {
     api(Deps.kotlinStdLib)
 
     implementation(Deps.epoxyProcessor)
-    implementation(Deps.compassCompiler)
     implementation(Deps.daggerAndroidProcessor)
     implementation(Deps.daggerCompiler)
 }

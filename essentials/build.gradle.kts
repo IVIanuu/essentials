@@ -78,10 +78,6 @@ dependencies {
     api(Deps.archLifecycleExtensions)
     api(Deps.archWorkRuntime)
 
-    api(Deps.compass)
-    api(Deps.compassAndroid)
-    api(Deps.compassFragment)
-
     api(Deps.constraintLayout)
 
     api(Deps.dagger)

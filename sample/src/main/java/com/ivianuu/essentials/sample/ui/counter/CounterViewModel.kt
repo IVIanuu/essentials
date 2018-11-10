@@ -1,10 +1,8 @@
 package com.ivianuu.essentials.sample.ui.counter
 
 import android.content.Context
-import androidx.work.WorkManager
 import com.ivianuu.essentials.sample.ui.list.ListDestination
 import com.ivianuu.essentials.ui.mvrx.MvRxState
-import com.ivianuu.essentials.ui.mvrx.MvRxView
 import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
 import com.ivianuu.essentials.util.ext.toastInfo
 import com.ivianuu.traveler.Router
@@ -14,19 +12,11 @@ import com.ivianuu.traveler.popToRoot
 import javax.inject.Inject
 
 /**
- * @author Manuel Wrage (IVIanuu)
- */
-interface MvRxViewModelFactory<S : MvRxState> {
-    fun create(view: MvRxView, state: S): MvRxViewModel<S>
-}
-
-/**
  * Counter view model
  */
 class CounterViewModel @Inject constructor(
     private val context: Context,
-    private val router: Router,
-    private val workManager: WorkManager
+    private val router: Router
 ) : MvRxViewModel<CounterState>(CounterState()) {
 
     private lateinit var destination: CounterDestination

@@ -3,19 +3,20 @@ package com.ivianuu.essentials.ui.common
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import com.ivianuu.compass.Destination
-import com.ivianuu.compass.fragment.bindDestination
 import com.ivianuu.essentials.ui.base.BaseFragment
 import com.ivianuu.essentials.ui.traveler.destination.ResultDestination
+import com.ivianuu.essentials.ui.traveler.key.BaseFragmentDestination
+import com.ivianuu.essentials.ui.traveler.key.bindDestination
 import com.ivianuu.essentials.util.RequestCodeGenerator
 import com.ivianuu.traveler.result.goBackWithResult
+import kotlinx.android.parcel.Parcelize
 
-@Destination(ActivityResultFragment::class)
+@Parcelize
 data class ActivityResultDestination(
     override val resultCode: Int,
     val intent: Intent,
     val requestCode: Int = RequestCodeGenerator.generate()
-) : ResultDestination<ActivityResult>
+) : BaseFragmentDestination(ActivityResultFragment::class), ResultDestination<ActivityResult>
 
 /**
  * Activity result fragment

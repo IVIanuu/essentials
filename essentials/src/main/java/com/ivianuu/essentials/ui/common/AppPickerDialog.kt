@@ -4,25 +4,26 @@ import android.app.Dialog
 import android.os.Bundle
 import com.afollestad.materialdialogs.MaterialDialog
 import com.ivianuu.androidktx.fragment.app.string
-import com.ivianuu.compass.Destination
-import com.ivianuu.compass.fragment.destination
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.data.app.AppInfo
 import com.ivianuu.essentials.data.app.AppStore
 import com.ivianuu.essentials.ui.base.BaseDialogFragment
 import com.ivianuu.essentials.ui.traveler.destination.ResultDestination
+import com.ivianuu.essentials.ui.traveler.key.BaseFragmentDestination
+import com.ivianuu.essentials.ui.traveler.key.destination
 import com.ivianuu.essentials.util.RequestCodeGenerator
 import com.ivianuu.traveler.goBack
 import com.ivianuu.traveler.result.goBackWithResult
+import kotlinx.android.parcel.Parcelize
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-@Destination(AppPickerDialog::class)
+@Parcelize
 data class AppPickerDestination(
     val title: CharSequence? = null,
     val launchableOnly: Boolean = false,
     override val resultCode: Int = RequestCodeGenerator.generate()
-) : ResultDestination<AppInfo>
+) : BaseFragmentDestination(AppPickerDialog::class), ResultDestination<AppInfo>
 
 /**
  * App picker

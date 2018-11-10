@@ -16,10 +16,10 @@
 
 package com.ivianuu.essentials.util
 
+import com.ivianuu.essentials.util.ext.coroutinesMain
 import com.ivianuu.scopes.Scope
 import com.ivianuu.scopes.coroutines.cancelBy
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlin.coroutines.CoroutineContext
 
@@ -36,9 +36,9 @@ fun MainScopeCoroutineScope(
     scope: Scope,
     coroutineContext: CoroutineContext? = null
 ) = if (coroutineContext != null) {
-    ScopeCoroutineScope(scope, coroutineContext + Dispatchers.Main)
+    ScopeCoroutineScope(scope, coroutineContext + coroutinesMain)
 } else {
-    ScopeCoroutineScope(scope, Dispatchers.Main)
+    ScopeCoroutineScope(scope, coroutinesMain)
 }
 
 fun Scope.asCoroutineScope(coroutineContext: CoroutineContext? = null) =

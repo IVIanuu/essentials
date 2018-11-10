@@ -30,7 +30,7 @@ import com.ivianuu.traveler.fragment.FragmentKey
  * A navigator which swaps and reuses fragments
  * This navigator does not provide any backstack functionality
  */
-abstract class FragmentSwapperNavigator(
+open class FragmentSwapperNavigator(
     private val fm: FragmentManager,
     private val containerId: Int,
     private val hideStrategy: HideStrategy = HideStrategy.DETACH,

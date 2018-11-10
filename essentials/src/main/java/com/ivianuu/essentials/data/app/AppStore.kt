@@ -2,7 +2,7 @@ package com.ivianuu.essentials.data.app
 
 import android.content.Intent
 import android.content.pm.PackageManager
-import kotlinx.coroutines.Dispatchers
+import com.ivianuu.essentials.util.ext.coroutinesIo
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -12,7 +12,7 @@ import javax.inject.Inject
 // todo remove
 class AppStore @Inject constructor(private val packageManager: PackageManager) {
 
-    suspend fun installedApps() = withContext(Dispatchers.IO) {
+    suspend fun installedApps() = withContext(coroutinesIo) {
         packageManager.getInstalledApplications(0)
             .asSequence()
             .map {
@@ -26,7 +26,7 @@ class AppStore @Inject constructor(private val packageManager: PackageManager) {
             .toList()
     }
 
-    suspend fun launchableApps() = withContext(Dispatchers.IO) {
+    suspend fun launchableApps() = withContext(coroutinesIo) {
         val intent = Intent(Intent.ACTION_MAIN).apply {
             addCategory(Intent.CATEGORY_LAUNCHER)
         }
@@ -43,7 +43,7 @@ class AppStore @Inject constructor(private val packageManager: PackageManager) {
             .toList()
     }
 
-    suspend fun appInfo(packageName: String) = withContext(Dispatchers.IO) {
+    suspend fun appInfo(packageName: String) = withContext(coroutinesIo) {
         AppInfo(
             packageName,
             packageManager.getApplicationInfo(packageName, 0).loadLabel(packageManager)

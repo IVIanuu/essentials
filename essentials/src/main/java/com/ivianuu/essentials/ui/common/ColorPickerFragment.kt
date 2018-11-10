@@ -18,21 +18,22 @@ package com.ivianuu.essentials.ui.common
 
 import android.os.Bundle
 import com.afollestad.materialdialogs.color.ColorChooserDialog
-import com.ivianuu.compass.Destination
-import com.ivianuu.compass.fragment.bindDestination
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.base.BaseFragment
 import com.ivianuu.essentials.ui.traveler.destination.ResultDestination
+import com.ivianuu.essentials.ui.traveler.key.BaseFragmentDestination
+import com.ivianuu.essentials.ui.traveler.key.bindDestination
 import com.ivianuu.essentials.util.RequestCodeGenerator
 import com.ivianuu.traveler.goBack
 import com.ivianuu.traveler.result.goBackWithResult
+import kotlinx.android.parcel.Parcelize
 
-@Destination(ColorPickerFragment::class)
+@Parcelize
 data class ColorPickerDestination(
     val titleRes: Int = R.string.dialog_title_color_picker,
     val preselect: Int = 0,
     override val resultCode: Int = RequestCodeGenerator.generate()
-) : ResultDestination<Int>
+) : BaseFragmentDestination(ColorPickerFragment::class), ResultDestination<Int>
 
 /**
  * Color picker fragment

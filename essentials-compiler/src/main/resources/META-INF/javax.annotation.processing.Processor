@@ -1,4 +1,3 @@
 com.airbnb.epoxy.EpoxyProcessor
-com.ivianuu.compass.processor.CompassProcessor
 dagger.android.processor.AndroidProcessor
 dagger.internal.codegen.ComponentProcessor

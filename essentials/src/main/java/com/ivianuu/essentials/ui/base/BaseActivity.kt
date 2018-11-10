@@ -21,8 +21,6 @@ import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.ivianuu.compass.android.CompassAppNavigator
-import com.ivianuu.compass.fragment.CompassFragmentNavigator
 import com.ivianuu.essentials.ui.mvrx.MvRxView
 import com.ivianuu.essentials.ui.traveler.navigator.AddFragmentPlugin
 import com.ivianuu.essentials.util.ViewModelFactoryHolder
@@ -32,8 +30,10 @@ import com.ivianuu.scopes.archlifecycle.onDestroy
 import com.ivianuu.traveler.Navigator
 import com.ivianuu.traveler.NavigatorHolder
 import com.ivianuu.traveler.Router
+import com.ivianuu.traveler.android.AppNavigator
 import com.ivianuu.traveler.common.ResultNavigator
 import com.ivianuu.traveler.common.compositeNavigatorOf
+import com.ivianuu.traveler.fragment.FragmentNavigator
 import com.ivianuu.traveler.lifecycle.setNavigator
 import com.ivianuu.traveler.setRoot
 import dagger.android.AndroidInjection
@@ -66,8 +66,8 @@ abstract class BaseActivity : AppCompatActivity(), OnBackPressedCallback,
     protected open val navigator: Navigator by unsafeLazy {
         val navigators = mutableListOf<ResultNavigator>()
         navigators.addAll(navigators())
-        navigators.add(CompassFragmentNavigator(fragmentContainer))
-        navigators.add(CompassAppNavigator(this))
+        navigators.add(FragmentNavigator(fragmentContainer))
+        navigators.add(AppNavigator(this))
         navigators.add(AddFragmentPlugin(supportFragmentManager))
         compositeNavigatorOf(navigators)
     }

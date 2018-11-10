@@ -19,16 +19,17 @@ package com.ivianuu.essentials.ui.common
 import android.app.Dialog
 import android.os.Bundle
 import com.afollestad.materialdialogs.MaterialDialog
-import com.ivianuu.compass.Destination
-import com.ivianuu.compass.fragment.destination
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.base.BaseDialogFragment
 import com.ivianuu.essentials.ui.traveler.destination.ResultDestination
+import com.ivianuu.essentials.ui.traveler.key.BaseFragmentDestination
+import com.ivianuu.essentials.ui.traveler.key.destination
 import com.ivianuu.essentials.util.RequestCodeGenerator
 import com.ivianuu.traveler.goBack
 import com.ivianuu.traveler.result.goBackWithResult
+import kotlinx.android.parcel.Parcelize
 
-@Destination(TextInputDialog::class)
+@Parcelize
 data class TextInputDestination(
     val title: String,
     val inputHint: String = "",
@@ -36,7 +37,7 @@ data class TextInputDestination(
     val prefill: String = "",
     val allowEmptyInput: Boolean = false,
     override var resultCode: Int = RequestCodeGenerator.generate()
-) : ResultDestination<CharSequence>
+) : BaseFragmentDestination(TextInputDialog::class), ResultDestination<CharSequence>
 
 /**
  * Text input dialog

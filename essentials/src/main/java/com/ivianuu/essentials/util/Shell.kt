@@ -16,8 +16,8 @@
 
 package com.ivianuu.essentials.util
 
+import com.ivianuu.essentials.util.ext.coroutinesIo
 import eu.chainfire.libsuperuser.Shell
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -34,10 +34,10 @@ class Shell @Inject constructor() {
     suspend fun run(commands: Collection<String>) =
         run(commands.toTypedArray())
 
-    suspend fun run(commands: Array<String>) = withContext(Dispatchers.IO) {
+    suspend fun run(commands: Array<String>) = withContext(coroutinesIo) {
         Shell.SU.run(commands).toList()
     }
 
-    suspend fun available() = withContext(Dispatchers.IO) { Shell.SU.available() }
+    suspend fun available() = withContext(coroutinesIo) { Shell.SU.available() }
 
 }

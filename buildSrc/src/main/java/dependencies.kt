@@ -23,7 +23,6 @@ object Versions {
     const val androidKtx = "0cf0a07f49"
     const val archWork = "1.0.0-alpha11"
 
-    const val compass = "28507eee7f"
     const val constraintLayout = "1.1.3"
     const val coroutines = "1.0.0"
     const val dagger = "2.19"
@@ -80,11 +79,6 @@ object Deps {
         "androidx.lifecycle:lifecycle-extensions:${Versions.androidxArch}"
 
     const val archWorkRuntime = "android.arch.work:work-runtime-ktx:${Versions.archWork}"
-
-    const val compass = "com.github.IVIanuu.compass:compass:${Versions.compass}"
-    const val compassAndroid = "com.github.IVIanuu.compass:compass-android:${Versions.compass}"
-    const val compassCompiler = "com.github.IVIanuu.compass:compass-compiler:${Versions.compass}"
-    const val compassFragment = "com.github.IVIanuu.compass:compass-fragment:${Versions.compass}"
 
     const val constraintLayout =
         "androidx.constraintlayout:constraintlayout:${Versions.constraintLayout}"

@@ -14,16 +14,22 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.util
+package com.ivianuu.essentials.ui.traveler.adapter
 
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentStatePagerAdapter
+import com.ivianuu.traveler.fragment.FragmentKey
 
 /**
- * @author Manuel Wrage (IVIanuu)
+ * Key fragment state pager adapter
  */
-object RxSchedulers {
-    val Computation get() = Schedulers.computation()
-    val IO get() = Schedulers.io()
-    val Main get() = AndroidSchedulers.mainThread()
+open class DestinationFragmentStatePagerAdapter(
+    fm: FragmentManager,
+    private val destinations: List<FragmentKey>
+) : FragmentStatePagerAdapter(fm) {
+
+    override fun getItem(position: Int) =
+        destinations[position].createFragment(null)
+
+    override fun getCount() = destinations.size
 }

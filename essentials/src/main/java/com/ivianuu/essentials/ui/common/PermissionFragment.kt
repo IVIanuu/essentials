@@ -3,20 +3,21 @@ package com.ivianuu.essentials.ui.common
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import com.ivianuu.compass.Destination
-import com.ivianuu.compass.fragment.bindDestination
 import com.ivianuu.essentials.ui.base.BaseFragment
 import com.ivianuu.essentials.ui.traveler.destination.ResultDestination
+import com.ivianuu.essentials.ui.traveler.key.BaseFragmentDestination
+import com.ivianuu.essentials.ui.traveler.key.bindDestination
 import com.ivianuu.essentials.util.RequestCodeGenerator
 import com.ivianuu.traveler.result.goBackWithResult
+import kotlinx.android.parcel.Parcelize
 import java.util.*
 
-@Destination(PermissionFragment::class)
+@Parcelize
 data class PermissionDestination(
     override val resultCode: Int,
     val permissions: Array<String>,
     val requestCode: Int = RequestCodeGenerator.generate()
-) : ResultDestination<PermissionResult> {
+) : BaseFragmentDestination(PermissionFragment::class), ResultDestination<PermissionResult> {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false

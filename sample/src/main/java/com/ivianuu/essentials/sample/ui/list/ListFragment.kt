@@ -4,8 +4,6 @@ import android.view.MenuItem
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import com.ivianuu.androidktx.appcompat.widget.setTextFuture
-import com.ivianuu.compass.Destination
-import com.ivianuu.compass.Detour
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.epoxy.BaseEpoxyHolder
 import com.ivianuu.essentials.ui.epoxy.SimpleEpoxyModel
@@ -14,13 +12,17 @@ import com.ivianuu.essentials.ui.epoxy.simpleText
 import com.ivianuu.essentials.ui.mvrx.bindViewModel
 import com.ivianuu.essentials.ui.mvrx.simpleEpoxyController
 import com.ivianuu.essentials.ui.simple.SimpleFragment
-import com.ivianuu.essentials.ui.traveler.detour.HorizontalDetour
+import com.ivianuu.essentials.ui.traveler.anim.HorizontalFragmentTransactionSetup
+import com.ivianuu.essentials.ui.traveler.key.BaseFragmentDestination
 import com.ivianuu.essentials.util.ext.andTrue
+import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.single_line_list_item.*
 
-@Detour(HorizontalDetour::class)
-@Destination(ListFragment::class)
-class ListDestination
+@Parcelize
+class ListDestination : BaseFragmentDestination(
+    ListFragment::class,
+    HorizontalFragmentTransactionSetup()
+)
 
 /**
  * @author Manuel Wrage (IVIanuu)

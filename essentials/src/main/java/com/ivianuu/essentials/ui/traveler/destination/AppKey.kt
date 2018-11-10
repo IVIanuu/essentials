@@ -18,20 +18,14 @@ package com.ivianuu.essentials.ui.traveler.destination
 
 import android.content.Context
 import android.content.Intent
-import com.ivianuu.compass.Destination
-import com.ivianuu.compass.DoNotSerialize
-import com.ivianuu.compass.RouteFactory
-import com.ivianuu.compass.android.ActivityRouteFactory
+import com.ivianuu.traveler.android.ActivityKey
 
 /**
  * Launches the app
  */
-@DoNotSerialize
-@RouteFactory(AppDestination.RouteFactory::class)
-@Destination
-data class AppDestination(val packageName: String) {
-    class RouteFactory : ActivityRouteFactory<AppDestination> {
-        override fun createActivityIntent(context: Context, destination: AppDestination): Intent =
-            context.packageManager.getLaunchIntentForPackage(destination.packageName)
-    }
+data class AppDestination(val packageName: String) : ActivityKey {
+
+    override fun createIntent(context: Context, data: Any?): Intent =
+        context.packageManager.getLaunchIntentForPackage(packageName)!!
+
 }
