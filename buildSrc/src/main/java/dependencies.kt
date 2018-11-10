@@ -46,7 +46,7 @@ object Versions {
     const val rxKotlin = "2.3.0"
     const val scopes = "1a360d16ad"
     const val superUser = "1.0.0.+"
-    const val stateStore = "b011f55df4"
+    const val stateStore = "a608e92fcf"
     const val stickyHeaders = "44c5192160"
     const val timber = "4.7.1"
     const val timberKtx = "f7547da781"

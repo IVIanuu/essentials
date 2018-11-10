@@ -3,13 +3,11 @@ package com.ivianuu.essentials.ui.simple
 import android.annotation.SuppressLint
 import android.graphics.PorterDuff
 import android.os.Bundle
-import android.os.Parcelable
 import android.view.View
 import androidx.appcompat.widget.Toolbar
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.fragment.app.isInBackstack
 import androidx.recyclerview.widget.RecyclerView
-import com.airbnb.epoxy.DiffResult
 import com.airbnb.epoxy.EpoxyController
 import com.airbnb.epoxy.EpoxyRecyclerView
 import com.google.android.material.appbar.AppBarLayout
@@ -67,27 +65,6 @@ abstract class SimpleFragment : BaseFragment() {
     open val optionalToolbar: Toolbar?
         get() = view?.findViewById(R.id.toolbar)
 
-    private val modelBuiltListener: (DiffResult) -> Unit = {
-        if (layoutManagerState != null) {
-            optionalRecyclerView?.layoutManager?.onRestoreInstanceState(layoutManagerState)
-            layoutManagerState = null
-        }
-    }
-
-    private var layoutManagerState: Parcelable? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        /*try {
-            epoxyController.onRestoreInstanceState(savedInstanceState)
-        } catch (e: Exception) {
-        }*/
-
-        savedInstanceState?.let {
-            layoutManagerState = it.getParcelable(KEY_LAYOUT_MANAGER_STATE)
-        }
-    }
-
     @SuppressLint("PrivateResource")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -123,34 +100,13 @@ abstract class SimpleFragment : BaseFragment() {
         }
 
         optionalRecyclerView?.run {
-            _epoxyController = epoxyController()?.apply {
-                addModelBuildListener(modelBuiltListener)
-                setController(this)
-            }
+            _epoxyController = epoxyController()?.also { setController(it) }
             this@SimpleFragment.layoutManager()?.let { layoutManager = it }
         }
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        /*try {
-            epoxyController.onSaveInstanceState(outState)
-        } catch (e: Exception) {
-        }*/
-
-        if (view != null) {
-            layoutManagerState = optionalRecyclerView?.layoutManager?.onSaveInstanceState()
-        }
-
-        outState.putParcelable(KEY_LAYOUT_MANAGER_STATE, layoutManagerState)
-    }
-
     override fun onDestroyView() {
-        layoutManagerState = optionalRecyclerView?.layoutManager?.onSaveInstanceState()
-        _epoxyController?.let {
-            it.cancelPendingModelBuild()
-            it.removeModelBuildListener(modelBuiltListener)
-        }
+        _epoxyController?.cancelPendingModelBuild()
         _epoxyController = null
         super.onDestroyView()
     }
@@ -163,7 +119,4 @@ abstract class SimpleFragment : BaseFragment() {
 
     protected open fun layoutManager(): RecyclerView.LayoutManager? = null
 
-    companion object {
-        private const val KEY_LAYOUT_MANAGER_STATE = "SimpleFragment.layoutManagerState"
-    }
 }

@@ -80,7 +80,7 @@ abstract class BaseFragment : Fragment(), OnBackPressedCallback, HasSupportFragm
 
     override fun onStart() {
         super.onStart()
-        postInvalidate()
+        invalidate()
     }
 
     override fun onDestroyView() {
