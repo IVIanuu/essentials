@@ -14,25 +14,23 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.injection
+package com.ivianuu.essentials.picker
 
-import com.ivianuu.essentials.ui.common.ActivityResultFragment
-import com.ivianuu.essentials.ui.common.PermissionFragment
+import com.ivianuu.essentials.injection.PerFragment
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
 /**
- * Essentials fragment binding module
+ * Essentials picker module
  */
 @Module
-abstract class EssentialsFragmentBindingModule {
+abstract class EssentialsPickerModule {
 
     @PerFragment
     @ContributesAndroidInjector
-    abstract fun bindActivityResultFragment(): ActivityResultFragment
+    abstract fun bindColorPickerFragment(): ColorPickerFragment
 
     @PerFragment
     @ContributesAndroidInjector
-    abstract fun bindPermissionFragment(): PermissionFragment
-
+    abstract fun bindTextInputDialog(): TextInputDialog
 }

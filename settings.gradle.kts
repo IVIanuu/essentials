@@ -2,6 +2,8 @@ include(
     ":essentials",
     ":essentials-app",
     ":essentials-compiler",
+    ":essentials-picker",
+    ":essentials-shell",
     ":ktuples",
     ":sample"
 )

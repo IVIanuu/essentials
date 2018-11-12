@@ -2,6 +2,7 @@ package com.ivianuu.essentials.sample.app
 
 import com.ivianuu.essentials.app.EssentialsAppModule
 import com.ivianuu.essentials.injection.EssentialsModule
+import com.ivianuu.essentials.picker.EssentialsPickerModule
 import com.ivianuu.essentials.sample.injection.ActivityBindingModule
 import com.ivianuu.essentials.sample.injection.ViewModelModule
 import dagger.Component
@@ -18,6 +19,7 @@ import javax.inject.Singleton
         AppModule::class,
         EssentialsModule::class,
         EssentialsAppModule::class,
+        EssentialsPickerModule::class,
         ViewModelModule::class
     ]
 )

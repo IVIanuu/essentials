@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.common
+package com.ivianuu.essentials.picker
 
 import android.os.Bundle
 import com.afollestad.materialdialogs.color.ColorChooserDialog

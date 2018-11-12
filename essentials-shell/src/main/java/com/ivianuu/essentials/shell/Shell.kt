@@ -14,19 +14,16 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.util
+package com.ivianuu.essentials.shell
 
 import com.ivianuu.essentials.util.ext.coroutinesIo
 import eu.chainfire.libsuperuser.Shell
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
-import javax.inject.Singleton
 
 /**
  * Shell
  */
-// todo remove
-@Singleton
 class Shell @Inject constructor() {
 
     suspend fun run(command: String) = run(listOf(command))

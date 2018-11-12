@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.common
+package com.ivianuu.essentials.picker
 
 import android.app.Dialog
 import android.os.Bundle
@@ -42,7 +42,6 @@ data class TextInputDestination(
 /**
  * Text input dialog
  */
-// todo remove/ move to somewhere else
 class TextInputDialog : BaseDialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
