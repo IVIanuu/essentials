@@ -1,5 +1,6 @@
 import org.gradle.jvm.tasks.Jar
 import org.jetbrains.kotlin.gradle.internal.AndroidExtensionsExtension
+import java.io.File
 
 /*
  * Copyright 2018 Manuel Wrage
@@ -57,6 +58,7 @@ android {
 dependencies {
     api(project(":essentials"))
     kapt(project(":essentials-compiler"))
+    api(Deps.glide)
 }
 
 val sourcesJar = task("sourcesJar", Jar::class) {

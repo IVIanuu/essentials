@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.app
+package com.ivianuu.essentials.app.glide
 
 import android.content.pm.PackageManager
 import android.graphics.drawable.Drawable

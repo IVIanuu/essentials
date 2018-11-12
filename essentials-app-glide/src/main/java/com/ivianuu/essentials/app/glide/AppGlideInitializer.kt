@@ -14,20 +14,24 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.app
+package com.ivianuu.essentials.app.glide
 
-import com.ivianuu.essentials.injection.PerFragment
-import dagger.Module
-import dagger.android.ContributesAndroidInjector
+import android.app.Application
+import android.graphics.drawable.Drawable
+import com.bumptech.glide.Glide
+import com.ivianuu.essentials.app.AppService
+import javax.inject.Inject
 
 /**
- * @author Manuel Wrage (IVIanuu)
+ * Initializes the app icon model loader
  */
-@Module
-abstract class EssentialsAppModule {
+class AppGlideInitializer @Inject constructor(
+    private val appIconModelLoaderFactory: AppIconModelLoader.Factory,
+    private val application: Application
+) : AppService {
 
-    @PerFragment
-    @ContributesAndroidInjector
-    abstract fun bindAppPickerDialog(): AppPickerDialog
-
+    override fun start() {
+        Glide.get(application).registry
+            .append(AppIcon::class.java, Drawable::class.java, appIconModelLoaderFactory)
+    }
 }

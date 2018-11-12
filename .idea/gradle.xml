@@ -11,6 +11,7 @@
             <option value="$PROJECT_DIR$/buildSrc" />
             <option value="$PROJECT_DIR$/essentials" />
             <option value="$PROJECT_DIR$/essentials-app" />
+            <option value="$PROJECT_DIR$/essentials-app-glide" />
             <option value="$PROJECT_DIR$/essentials-compiler" />
             <option value="$PROJECT_DIR$/essentials-picker" />
             <option value="$PROJECT_DIR$/essentials-shell" />

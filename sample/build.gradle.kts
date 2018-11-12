@@ -40,6 +40,7 @@ android {
 dependencies {
     implementation(project(":essentials"))
     implementation(project(":essentials-app"))
+    implementation(project(":essentials-app-glide"))
     implementation(project(":essentials-shell"))
     implementation(project(":essentials-picker"))
     kapt(project(":essentials-compiler"))

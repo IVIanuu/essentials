@@ -1,6 +1,7 @@
 package com.ivianuu.essentials.sample.app
 
 import com.ivianuu.essentials.app.EssentialsAppModule
+import com.ivianuu.essentials.app.glide.EssentialsAppGlideModule
 import com.ivianuu.essentials.injection.EssentialsModule
 import com.ivianuu.essentials.picker.EssentialsPickerModule
 import com.ivianuu.essentials.sample.injection.ActivityBindingModule
@@ -19,6 +20,7 @@ import javax.inject.Singleton
         AppModule::class,
         EssentialsModule::class,
         EssentialsAppModule::class,
+        EssentialsAppGlideModule::class,
         EssentialsPickerModule::class,
         ViewModelModule::class
     ]

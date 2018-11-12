@@ -14,23 +14,20 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.app
+package com.ivianuu.essentials.app.glide
 
-import android.app.Application
-import android.graphics.drawable.Drawable
-import com.bumptech.glide.Glide
-import javax.inject.Inject
+import com.ivianuu.essentials.app.AppService
+import dagger.Binds
+import dagger.Module
+import dagger.multibindings.IntoSet
 
 /**
- * Initializes the app icon model loader
+ * @author Manuel Wrage (IVIanuu)
  */
-class AppGlideInitializer @Inject constructor(
-    private val appIconModelLoaderFactory: AppIconModelLoader.Factory,
-    private val application: Application
-) : AppService {
+@Module
+abstract class EssentialsAppGlideModule {
 
-    override fun start() {
-        Glide.get(application).registry
-            .append(AppIcon::class.java, Drawable::class.java, appIconModelLoaderFactory)
-    }
+    @Binds
+    @IntoSet
+    abstract fun bindAppGlideInitializer(appGlideInitializer: AppGlideInitializer): AppService
 }
