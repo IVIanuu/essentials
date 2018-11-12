@@ -39,5 +39,6 @@ android {
 
 dependencies {
     implementation(project(":essentials"))
+    implementation(project(":essentials-app"))
     kapt(project(":essentials-compiler"))
 }

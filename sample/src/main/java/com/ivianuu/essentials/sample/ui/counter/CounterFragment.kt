@@ -18,7 +18,6 @@ package com.ivianuu.essentials.sample.ui.counter
 
 import android.os.Bundle
 import android.view.View
-import com.ivianuu.androidktx.appcompat.widget.setTextFuture
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.base.BaseFragment
 import com.ivianuu.essentials.ui.mvrx.bindViewModel
@@ -64,7 +63,7 @@ class CounterFragment : BaseFragment() {
     }
 
     override fun invalidate() {
-        withState(viewModel) { count.setTextFuture("Screen: ${it.screen}, Count: ${it.count}") }
+        withState(viewModel) { count.text = "Screen: ${it.screen}, Count: ${it.count}" }
     }
 
 }

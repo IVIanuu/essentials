@@ -1,5 +1,6 @@
 package com.ivianuu.essentials.sample.app
 
+import com.ivianuu.essentials.app.EssentialsAppModule
 import com.ivianuu.essentials.injection.EssentialsModule
 import com.ivianuu.essentials.sample.injection.ActivityBindingModule
 import com.ivianuu.essentials.sample.injection.ViewModelModule
@@ -16,6 +17,7 @@ import javax.inject.Singleton
         ActivityBindingModule::class,
         AppModule::class,
         EssentialsModule::class,
+        EssentialsAppModule::class,
         ViewModelModule::class
     ]
 )

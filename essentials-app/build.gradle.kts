@@ -21,7 +21,6 @@ plugins {
     id("kotlin-android")
     id("kotlin-android-extensions")
     id("kotlin-kapt")
-    id("com.ivianuu.r2")
     id("com.github.dcendents.android-maven")
 }
 
@@ -34,7 +33,6 @@ android {
         buildToolsVersion = Build.buildToolsVersion
         minSdkVersion(Build.minSdk)
         targetSdkVersion(Build.targetSdk)
-        consumerProguardFile("proguard-rules.txt")
 
         javaCompileOptions {
             annotationProcessorOptions {
@@ -57,95 +55,9 @@ android {
 }
 
 dependencies {
-    api(Deps.androidxActivity)
-    api(Deps.androidxAppCompat)
-    api(Deps.androidxCardView)
-    api(Deps.androidxCoreKtx)
-    api(Deps.androidxFragment)
-    api(Deps.androidxPalette)
-
-    api(Deps.androidKtxAppCompat)
-    api(Deps.androidKtxCore)
-    api(Deps.androidKtxFragment)
-    api(Deps.androidKtxLifecycle)
-    api(Deps.androidKtxRecyclerView)
-    api(Deps.androidKtxViewPager)
-
-    api(Deps.coroutinesAndroid)
-    api(Deps.coroutinesCore)
-    api(Deps.coroutinesRxJava)
-
-    api(Deps.archLifecycleExtensions)
-    api(Deps.archWorkRuntime)
-
-    api(Deps.constraintLayout)
-
-    api(Deps.dagger)
-    api(Deps.daggerAndroid)
-    api(Deps.daggerAndroidSupport)
-
-    api(Deps.epoxy)
-    api(Deps.epoxyKtx)
-    api(Deps.epoxyPrefs)
-
+    api(project(":essentials"))
     kapt(project(":essentials-compiler"))
-
-    api(Deps.kotlinStdLib)
-
-    api(Deps.kPrefs)
-    api(Deps.kPrefsCoroutines)
-    api(Deps.kPrefsLifecycle)
-    api(Deps.kPrefsRx)
-
-    api(Deps.kSettings)
-    api(Deps.kSettingsCoroutines)
-    api(Deps.kSettingsLifecycle)
-    api(Deps.kSettingsRx)
-
-    api(project(":ktuples"))
-
-    api(Deps.legacyAnnotations)
-
-    api(Deps.liveEvent)
-
-    api(Deps.materialComponents)
-    api(Deps.materialComponentsKtx)
-
-    api(Deps.materialDialogsCore)
-    api(Deps.materialDialogsCommons)
-
-    api(Deps.rxAndroid)
-    api(Deps.rxJava)
-    api(Deps.rxJavaKtx)
-    api(Deps.rxKotlin)
-
-    api(Deps.scopes)
-    api(Deps.scopesAndroid)
-    api(Deps.scopesArchLifecycle)
-    api(Deps.scopesArchLifecycleFragment)
-    api(Deps.scopesCommon)
-    api(Deps.scopesCoroutines)
-    api(Deps.scopesRx)
-
-    api(Deps.superUser)
-
-    api(Deps.stateStore)
-    api(Deps.stateStoreAndroid)
-    api(Deps.stateStoreCoroutines)
-    api(Deps.stateStoreLifecycle)
-    api(Deps.stateStoreRx)
-
-    api(Deps.stickyHeaders)
-
-    api(Deps.timber)
-    api(Deps.timberKtx)
-
-    api(Deps.toasty)
-
-    api(Deps.traveler)
-    api(Deps.travelerAndroid)
-    api(Deps.travelerFragment)
-    api(Deps.travelerLifecycle)
+    api(Deps.glide)
 }
 
 val sourcesJar = task("sourcesJar", Jar::class) {

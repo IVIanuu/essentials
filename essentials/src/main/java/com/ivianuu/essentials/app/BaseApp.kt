@@ -17,11 +17,7 @@
 package com.ivianuu.essentials.app
 
 import android.content.pm.ApplicationInfo
-import android.graphics.drawable.Drawable
 import android.os.Looper
-import com.bumptech.glide.Glide
-import com.ivianuu.essentials.util.AppIcon
-import com.ivianuu.essentials.util.AppIconModelLoader
 import com.ivianuu.essentials.util.ext.containsFlag
 import com.ivianuu.statestore.StateStorePlugins
 import com.ivianuu.statestore.android.MAIN_THREAD_EXECUTOR
@@ -37,20 +33,19 @@ import javax.inject.Inject
 abstract class BaseApp : DaggerApplication() {
 
     @Inject internal lateinit var appServices: Set<@JvmSuppressWildcards AppService>
-    @Inject internal lateinit var appIconModelLoaderFactory: AppIconModelLoader.Factory
 
     protected open val initTimber get() = true
-    protected open val initGlide get() = true
     protected open val initRxJava get() = true
     protected open val initStateStore get() = true
 
     override fun onCreate() {
         super.onCreate()
 
-        val isDebuggable = applicationInfo.flags.containsFlag(ApplicationInfo.FLAG_DEBUGGABLE)
-
-        if (isDebuggable && initTimber) {
-            Timber.plant(Timber.DebugTree())
+        if (initTimber) {
+            val isDebuggable = applicationInfo.flags.containsFlag(ApplicationInfo.FLAG_DEBUGGABLE)
+            if (isDebuggable) {
+                Timber.plant(Timber.DebugTree())
+            }
         }
 
         if (initRxJava) {
@@ -60,11 +55,6 @@ abstract class BaseApp : DaggerApplication() {
 
         if (initStateStore) {
             StateStorePlugins.defaultCallbackExecutor = MAIN_THREAD_EXECUTOR
-        }
-
-        if (initGlide) {
-            Glide.get(this).registry
-                .append(AppIcon::class.java, Drawable::class.java, appIconModelLoaderFactory)
         }
 
         appServices.forEach { startAppService(it) }
