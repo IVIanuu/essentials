@@ -39,11 +39,11 @@ abstract class BaseEpoxyModel<H : BaseEpoxyHolder> : EpoxyModelWithHolder<H>(), 
     override val providedContext
         get() = _boundHolder!!.providedContext
 
-    protected open val onClickView: View? = null
-    protected open val useContainerForClicks = true
+    protected open val onClickView: View? get() = null
+    protected open val useContainerForClicks get() = true
 
-    protected open val onLongClickView: View? = null
-    protected open val useContainerForLongClicks = true
+    protected open val onLongClickView: View? get() = null
+    protected open val useContainerForLongClicks get() = true
 
     private var _boundHolder: H? = null
 

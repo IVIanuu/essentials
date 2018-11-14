@@ -17,6 +17,8 @@
 
 package com.ivianuu.essentials.sample.ui
 
+import android.os.Bundle
+import androidx.test.core.app.ActivityScenario
 import com.ivianuu.essentials.sample.ui.counter.CounterDestination
 import com.ivianuu.essentials.ui.base.BaseActivity
 import com.ivianuu.essentials.ui.base.BaseActivityModule
