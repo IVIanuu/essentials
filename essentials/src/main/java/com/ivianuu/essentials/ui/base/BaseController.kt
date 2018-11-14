@@ -46,8 +46,7 @@ import javax.inject.Inject
  * Base controller
  */
 abstract class BaseController : LifecycleController(), ContextAware, HasControllerInjector,
-    HasViewInjector,
-    LayoutContainer, MvRxView, ViewModelFactoryHolder {
+    HasViewInjector, LayoutContainer, MvRxView, ViewModelFactoryHolder {
 
     @Inject lateinit var travelerRouter: Router
 
@@ -90,6 +89,15 @@ abstract class BaseController : LifecycleController(), ContextAware, HasControll
     override fun onBindView(view: View) {
         super.onBindView(view)
         _viewCoroutineScope = unbindView.asMainCoroutineScope()
+    }
+
+    override fun onRestoreViewState(view: View, savedViewState: Bundle) {
+        invalidate()
+        super.onRestoreViewState(view, savedViewState)
+    }
+
+    override fun onAttach(view: View) {
+        super.onAttach(view)
         invalidate()
     }
 
