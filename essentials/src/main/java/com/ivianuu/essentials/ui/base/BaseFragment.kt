@@ -59,7 +59,7 @@ abstract class BaseFragment : Fragment(), OnBackPressedCallback, HasSupportFragm
         get() = _viewCoroutineScope ?: throw IllegalStateException("view not attached")
     private var _viewCoroutineScope: CoroutineScope? = null
 
-    protected open val layoutRes = -1
+    protected open val layoutRes get() = -1
 
     override fun onAttach(context: Context) {
         AndroidSupportInjection.inject(this)

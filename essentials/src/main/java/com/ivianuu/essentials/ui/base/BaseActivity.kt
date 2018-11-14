@@ -71,10 +71,13 @@ abstract class BaseActivity : AppCompatActivity(), OnBackPressedCallback,
 
     val coroutineScope = onDestroy.asMainCoroutineScope()
 
-    protected open val layoutRes = -1
+    protected open val layoutRes get() = R.layout.activity_default
 
-    open val fragmentContainer = android.R.id.content
-    open val startDestination: Any? = null
+    open val containerId
+        get() = R.id.container
+
+    open val startDestination: Any?
+        get() = null
 
     private var router: com.ivianuu.director.Router? = null
 
@@ -84,7 +87,7 @@ abstract class BaseActivity : AppCompatActivity(), OnBackPressedCallback,
         if (useDirector) {
             navigators.add(ControllerNavigator(router!!))
         } else {
-            navigators.add(FragmentNavigator(fragmentContainer))
+            navigators.add(FragmentNavigator(containerId))
         }
         navigators.add(AppNavigator(this))
         navigators.add(AddFragmentPlugin(supportFragmentManager))
@@ -97,10 +100,11 @@ abstract class BaseActivity : AppCompatActivity(), OnBackPressedCallback,
 
         addOnBackPressedCallback(this)
 
-        setContentView(if (layoutRes != -1) layoutRes else R.layout.activity_default)
+        setContentView(layoutRes)
 
         if (useDirector) {
-            router = attachRouter(findViewById(fragmentContainer), savedInstanceState)
+            router = attachRouter(findViewById(containerId), savedInstanceState)
+            navigatorHolder.setNavigator(this, navigator)
         }
 
         if (savedInstanceState == null) {
@@ -110,7 +114,9 @@ abstract class BaseActivity : AppCompatActivity(), OnBackPressedCallback,
 
     override fun onResumeFragments() {
         super.onResumeFragments()
-        navigatorHolder.setNavigator(this, navigator)
+        if (!useDirector) {
+            navigatorHolder.setNavigator(this, navigator)
+        }
     }
 
     override fun invalidate() {
@@ -123,9 +129,7 @@ abstract class BaseActivity : AppCompatActivity(), OnBackPressedCallback,
     }
 
     override fun controllerInjector(): AndroidInjector<Controller> = controllerInjector
-
     override fun supportFragmentInjector(): AndroidInjector<Fragment> = supportFragmentInjector
-
     override fun viewInjector(): AndroidInjector<View> = viewInjector
 
     protected open fun navigators() = emptyList<ResultNavigator>()
