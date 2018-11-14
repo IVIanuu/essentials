@@ -48,6 +48,7 @@ android {
 }
 
 dependencies {
+    api(Deps.superUser)
     api(project(":essentials"))
     kapt(project(":essentials-compiler"))
 }

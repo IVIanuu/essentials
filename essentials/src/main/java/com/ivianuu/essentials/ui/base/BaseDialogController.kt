@@ -16,10 +16,12 @@
 
 package com.ivianuu.essentials.ui.base
 
+import android.content.Context
 import androidx.lifecycle.ViewModelProvider
 import com.ivianuu.director.contributor.DirectorInjection
 import com.ivianuu.director.dialog.DialogController
 import com.ivianuu.director.scopes.destroy
+import com.ivianuu.essentials.util.ContextAware
 import com.ivianuu.essentials.util.ViewModelFactoryHolder
 import com.ivianuu.essentials.util.asMainCoroutineScope
 import com.ivianuu.traveler.Router
@@ -28,10 +30,13 @@ import javax.inject.Inject
 /**
  * Base dialog controller
  */
-abstract class BaseDialogController : DialogController(), ViewModelFactoryHolder {
+abstract class BaseDialogController : DialogController(), ContextAware, ViewModelFactoryHolder {
 
     @Inject lateinit var travelerRouter: Router
     @Inject override lateinit var viewModelFactory: ViewModelProvider.Factory
+
+    override val providedContext: Context
+        get() = activity
 
     val coroutineScope = destroy.asMainCoroutineScope()
 

@@ -139,8 +139,6 @@ dependencies {
     api(Deps.scopesCoroutines)
     api(Deps.scopesRx)
 
-    api(Deps.superUser)
-
     api(Deps.stateStore)
     api(Deps.stateStoreAndroid)
     api(Deps.stateStoreCoroutines)
