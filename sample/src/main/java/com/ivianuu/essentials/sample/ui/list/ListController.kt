@@ -10,28 +10,28 @@ import com.ivianuu.essentials.ui.epoxy.simpleLoading
 import com.ivianuu.essentials.ui.epoxy.simpleText
 import com.ivianuu.essentials.ui.mvrx.bindViewModel
 import com.ivianuu.essentials.ui.mvrx.simpleEpoxyController
-import com.ivianuu.essentials.ui.simple.SimpleFragment
-import com.ivianuu.essentials.ui.traveler.anim.HorizontalFragmentTransactionSetup
-import com.ivianuu.essentials.ui.traveler.key.BaseFragmentDestination
+import com.ivianuu.essentials.ui.simple.SimpleController
+import com.ivianuu.essentials.ui.traveler.anim.VerticalControllerTransactionSetup
+import com.ivianuu.essentials.ui.traveler.key.BaseControllerDestination
 import com.ivianuu.essentials.util.ext.andTrue
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.single_line_list_item.*
 
 @Parcelize
-class ListDestination : BaseFragmentDestination(
-    ListFragment::class,
-    HorizontalFragmentTransactionSetup()
+class ListDestination : BaseControllerDestination(
+    ListController::class,
+    VerticalControllerTransactionSetup()
 )
 
 /**
  * @author Manuel Wrage (IVIanuu)
  */
-class ListFragment : SimpleFragment() {
+class ListController : SimpleController() {
 
     private val viewModel by bindViewModel(ListViewModel::class)
 
-    override val toolbarMenuRes = R.menu.fragment_list
-    override val toolbarTitle = "List"
+    override val toolbarMenuRes get() = R.menu.fragment_list
+    override val toolbarTitle get() = "List"
 
     override fun epoxyController() = simpleEpoxyController(viewModel) { state ->
         if (state.loading) {
@@ -55,7 +55,7 @@ class ListFragment : SimpleFragment() {
         }
     }
 
-    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+    override fun onToolbarMenuItemClicked(item: MenuItem) = when (item.itemId) {
         R.id.action_refresh -> viewModel.refreshClicked().andTrue()
         else -> false
     }

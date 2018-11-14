@@ -16,6 +16,8 @@
 
 package com.ivianuu.essentials.injection
 
+import com.ivianuu.contributor.view.ViewInjectionModule
+import com.ivianuu.director.contributor.DirectorInjectionModule
 import com.ivianuu.essentials.injection.viewmodel.ViewModelInjectionModule
 import com.ivianuu.essentials.ui.traveler.TravelerModule
 import dagger.Module
@@ -30,8 +32,10 @@ import dagger.android.support.AndroidSupportInjectionModule
         AndroidInjectionModule::class,
         AndroidSupportInjectionModule::class,
         AppServiceModule::class,
+        DirectorInjectionModule::class,
         SystemServiceModule::class,
         TravelerModule::class,
+        ViewInjectionModule::class,
         ViewModelInjectionModule::class
     ]
 )

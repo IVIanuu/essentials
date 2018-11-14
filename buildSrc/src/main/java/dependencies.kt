@@ -24,8 +24,10 @@ object Versions {
     const val archWork = "1.0.0-alpha11"
 
     const val constraintLayout = "1.1.3"
+    const val contributor = "efa69d138b"
     const val coroutines = "1.0.0"
     const val dagger = "2.19"
+    const val director = "58214ae185"
     const val epoxy = "2.19.0"
     const val epoxyKtx = "9dde1f5a9c"
     const val epoxyPrefs = "6c31aa79e8"
@@ -80,6 +82,12 @@ object Deps {
 
     const val archWorkRuntime = "android.arch.work:work-runtime-ktx:${Versions.archWork}"
 
+    const val contributor = "com.github.IVIanuu.contributor:contributor:${Versions.contributor}"
+    const val contributorCompiler =
+        "com.github.IVIanuu.contributor:contributor-compiler:${Versions.contributor}"
+    const val contributorView =
+        "com.github.IVIanuu.contributor:contributor-view:${Versions.contributor}"
+
     const val constraintLayout =
         "androidx.constraintlayout:constraintlayout:${Versions.constraintLayout}"
 
@@ -95,6 +103,19 @@ object Deps {
     const val daggerAndroidSupport = "com.google.dagger:dagger-android-support:${Versions.dagger}"
     const val daggerCompiler = "com.google.dagger:dagger-compiler:${Versions.dagger}"
     const val daggerAndroidProcessor = "com.google.dagger:dagger-android-processor:${Versions.dagger}"
+
+    const val director = "com.github.IVIanuu.director:director:${Versions.director}"
+    const val directorArchLifecycle =
+        "com.github.IVIanuu.director:director-arch-lifecycle:${Versions.director}"
+    const val directorCommon = "com.github.IVIanuu.director:director-common:${Versions.director}"
+    const val directorContributor =
+        "com.github.IVIanuu.director:director-contributor:${Versions.director}"
+    const val directorDialog = "com.github.IVIanuu.director:director-dialog:${Versions.director}"
+    const val directorScopes = "com.github.IVIanuu.director:director-scopes:${Versions.director}"
+    const val directorTraveler =
+        "com.github.IVIanuu.director:director-traveler:${Versions.director}"
+    const val directorViewPager =
+        "com.github.IVIanuu.director:director-viewpager:${Versions.director}"
 
     const val epoxy = "com.airbnb.android:epoxy:${Versions.epoxy}"
     const val epoxyProcessor = "com.airbnb.android:epoxy-processor:${Versions.epoxy}"

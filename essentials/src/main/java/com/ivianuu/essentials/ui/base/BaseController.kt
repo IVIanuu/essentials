@@ -21,37 +21,46 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.OnBackPressedCallback
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.ivianuu.contributor.view.HasViewInjector
+import com.ivianuu.director.Controller
+import com.ivianuu.director.arch.lifecycle.LifecycleController
+import com.ivianuu.director.contributor.DirectorInjection
+import com.ivianuu.director.contributor.HasControllerInjector
+import com.ivianuu.director.scopes.unbindView
 import com.ivianuu.essentials.ui.mvrx.MvRxView
+import com.ivianuu.essentials.util.ContextAware
 import com.ivianuu.essentials.util.ViewInjectionContextWrapper
 import com.ivianuu.essentials.util.ViewModelFactoryHolder
 import com.ivianuu.essentials.util.asMainCoroutineScope
-import com.ivianuu.scopes.archlifecycle.fragment.viewOnDestroy
 import com.ivianuu.scopes.archlifecycle.onDestroy
 import com.ivianuu.traveler.Router
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
-import dagger.android.support.AndroidSupportInjection
-import dagger.android.support.HasSupportFragmentInjector
+import kotlinx.android.extensions.LayoutContainer
+import kotlinx.android.synthetic.*
 import kotlinx.coroutines.CoroutineScope
 import javax.inject.Inject
 
 /**
- * Base fragment
+ * Base controller
  */
-abstract class BaseFragment : Fragment(), OnBackPressedCallback, HasSupportFragmentInjector,
+abstract class BaseController : LifecycleController(), ContextAware, HasControllerInjector,
     HasViewInjector,
-    MvRxView, ViewModelFactoryHolder {
+    LayoutContainer, MvRxView, ViewModelFactoryHolder {
 
-    @Inject lateinit var router: Router
+    @Inject lateinit var travelerRouter: Router
 
-    @Inject lateinit var supportFragmentInjector: DispatchingAndroidInjector<Fragment>
+    @Inject lateinit var controllerInjector: DispatchingAndroidInjector<Controller>
     @Inject lateinit var viewInjector: DispatchingAndroidInjector<View>
 
     @Inject override lateinit var viewModelFactory: ViewModelProvider.Factory
+
+    override val containerView: View?
+        get() = view
+
+    override val providedContext: Context
+        get() = activity
 
     val coroutineScope = onDestroy.asMainCoroutineScope()
 
@@ -61,51 +70,39 @@ abstract class BaseFragment : Fragment(), OnBackPressedCallback, HasSupportFragm
 
     protected open val layoutRes = -1
 
-    override fun onAttach(context: Context) {
-        AndroidSupportInjection.inject(this)
-        super.onAttach(context)
-        requireActivity().addOnBackPressedCallback(this)
+    override fun onCreate() {
+        DirectorInjection.inject(this)
+        super.onCreate()
     }
 
-    override fun onCreateView(
+    override fun onInflateView(
         inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? = if (layoutRes != -1) {
-        val injectorInflater = inflater.cloneInContext(
-            ViewInjectionContextWrapper(requireContext(), this)
-        )
+        container: ViewGroup,
+        savedViewState: Bundle?
+    ): View = if (layoutRes != -1) {
+        val injectorInflater =
+            inflater.cloneInContext(ViewInjectionContextWrapper(activity, this))
         injectorInflater.inflate(layoutRes, container, false)
     } else {
-        super.onCreateView(inflater, container, savedInstanceState)
+        throw IllegalStateException("no layoutRes provided")
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        _viewCoroutineScope = viewOnDestroy.asMainCoroutineScope()
-    }
-
-    override fun onStart() {
-        super.onStart()
+    override fun onBindView(view: View) {
+        super.onBindView(view)
+        _viewCoroutineScope = unbindView.asMainCoroutineScope()
         invalidate()
     }
 
-    override fun onDestroyView() {
+    override fun onUnbindView(view: View) {
         _viewCoroutineScope = null
-        super.onDestroyView()
-    }
-
-    override fun onDetach() {
-        super.onDetach()
-        requireActivity().removeOnBackPressedCallback(this)
+        clearFindViewByIdCache()
+        super.onUnbindView(view)
     }
 
     override fun invalidate() {
     }
 
-    override fun handleOnBackPressed() = false
-
-    override fun supportFragmentInjector(): AndroidInjector<Fragment> = supportFragmentInjector
+    override fun controllerInjector(): AndroidInjector<Controller> = controllerInjector
 
     override fun viewInjector(): AndroidInjector<View> = viewInjector
 }

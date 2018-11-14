@@ -16,7 +16,7 @@ abstract class ActivityBindingModule {
     @ContributesAndroidInjector(
         modules = [
             MainActivityModule::class,
-            FragmentBindingModule::class
+            ControllerBindingModule::class
         ]
     )
     abstract fun bindMainActivity(): MainActivity

@@ -29,8 +29,9 @@ java {
 dependencies {
     api(Deps.kotlinStdLib)
 
+    implementation(Deps.contributorCompiler)
     implementation(Deps.epoxyProcessor)
-    implementation(Deps.daggerAndroidProcessor)
+    //implementation(Deps.daggerAndroidProcessor) // todo reinclude in next dagger version
     implementation(Deps.daggerCompiler)
 }
 

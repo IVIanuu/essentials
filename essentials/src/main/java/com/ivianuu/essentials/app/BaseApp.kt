@@ -18,9 +18,15 @@ package com.ivianuu.essentials.app
 
 import android.content.pm.ApplicationInfo
 import android.os.Looper
+import android.view.View
+import com.ivianuu.contributor.view.HasViewInjector
+import com.ivianuu.director.Controller
+import com.ivianuu.director.contributor.HasControllerInjector
 import com.ivianuu.essentials.util.ext.containsFlag
 import com.ivianuu.statestore.StateStorePlugins
 import com.ivianuu.statestore.android.MAIN_THREAD_EXECUTOR
+import dagger.android.AndroidInjector
+import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.DaggerApplication
 import io.reactivex.android.plugins.RxAndroidPlugins
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -30,9 +36,11 @@ import javax.inject.Inject
 /**
  * App
  */
-abstract class BaseApp : DaggerApplication() {
+abstract class BaseApp : DaggerApplication(), HasControllerInjector, HasViewInjector {
 
     @Inject internal lateinit var appServices: Set<@JvmSuppressWildcards AppService>
+    @Inject lateinit var controllerInjector: DispatchingAndroidInjector<Controller>
+    @Inject lateinit var viewInjector: DispatchingAndroidInjector<View>
 
     protected open val initTimber get() = true
     protected open val initRxJava get() = true
@@ -63,4 +71,8 @@ abstract class BaseApp : DaggerApplication() {
     protected open fun startAppService(appService: AppService) {
         appService.start()
     }
+
+    override fun controllerInjector(): AndroidInjector<Controller> = controllerInjector
+
+    override fun viewInjector(): AndroidInjector<View> = viewInjector
 }

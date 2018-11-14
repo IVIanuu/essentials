@@ -80,9 +80,21 @@ dependencies {
 
     api(Deps.constraintLayout)
 
+    api(Deps.contributor)
+    api(Deps.contributorView)
+
     api(Deps.dagger)
     api(Deps.daggerAndroid)
     api(Deps.daggerAndroidSupport)
+
+    api(Deps.director)
+    api(Deps.directorArchLifecycle)
+    api(Deps.directorCommon)
+    api(Deps.directorContributor)
+    api(Deps.directorDialog)
+    api(Deps.directorScopes)
+    api(Deps.directorTraveler)
+    api(Deps.directorViewPager)
 
     api(Deps.epoxy)
     api(Deps.epoxyKtx)

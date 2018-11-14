@@ -17,10 +17,17 @@
 package com.ivianuu.essentials.ui.base
 
 import android.os.Bundle
+import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.ivianuu.contributor.view.HasViewInjector
+import com.ivianuu.director.Controller
+import com.ivianuu.director.attachRouter
+import com.ivianuu.director.contributor.HasControllerInjector
+import com.ivianuu.director.traveler.ControllerNavigator
+import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.mvrx.MvRxView
 import com.ivianuu.essentials.ui.traveler.navigator.AddFragmentPlugin
 import com.ivianuu.essentials.util.ViewModelFactoryHolder
@@ -46,15 +53,21 @@ import javax.inject.Inject
  * Base activity
  */
 abstract class BaseActivity : AppCompatActivity(), OnBackPressedCallback,
+    HasControllerInjector,
     HasSupportFragmentInjector,
+    HasViewInjector,
     MvRxView, ViewModelFactoryHolder {
 
     @Inject lateinit var navigatorHolder: NavigatorHolder
-    @Inject lateinit var router: Router
+    @Inject lateinit var travelerRouter: Router
 
+    @Inject lateinit var controllerInjector: DispatchingAndroidInjector<Controller>
     @Inject lateinit var supportFragmentInjector: DispatchingAndroidInjector<Fragment>
+    @Inject lateinit var viewInjector: DispatchingAndroidInjector<View>
 
     @Inject override lateinit var viewModelFactory: ViewModelProvider.Factory
+
+    open val useDirector = false
 
     val coroutineScope = onDestroy.asMainCoroutineScope()
 
@@ -63,10 +76,16 @@ abstract class BaseActivity : AppCompatActivity(), OnBackPressedCallback,
     open val fragmentContainer = android.R.id.content
     open val startDestination: Any? = null
 
+    private var router: com.ivianuu.director.Router? = null
+
     protected open val navigator: Navigator by unsafeLazy {
         val navigators = mutableListOf<ResultNavigator>()
         navigators.addAll(navigators())
-        navigators.add(FragmentNavigator(fragmentContainer))
+        if (useDirector) {
+            navigators.add(ControllerNavigator(router!!))
+        } else {
+            navigators.add(FragmentNavigator(fragmentContainer))
+        }
         navigators.add(AppNavigator(this))
         navigators.add(AddFragmentPlugin(supportFragmentManager))
         compositeNavigatorOf(navigators)
@@ -76,12 +95,16 @@ abstract class BaseActivity : AppCompatActivity(), OnBackPressedCallback,
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
 
-        if (layoutRes != -1) {
-            setContentView(layoutRes)
+        addOnBackPressedCallback(this)
+
+        setContentView(if (layoutRes != -1) layoutRes else R.layout.activity_default)
+
+        if (useDirector) {
+            router = attachRouter(findViewById(fragmentContainer), savedInstanceState)
         }
 
         if (savedInstanceState == null) {
-            startDestination?.let { router.setRoot(it) }
+            startDestination?.let { travelerRouter.setRoot(it) }
         }
     }
 
@@ -93,9 +116,17 @@ abstract class BaseActivity : AppCompatActivity(), OnBackPressedCallback,
     override fun invalidate() {
     }
 
-    override fun handleOnBackPressed() = false
+    override fun handleOnBackPressed() = if (useDirector) {
+        router!!.handleBack()
+    } else {
+        false
+    }
+
+    override fun controllerInjector(): AndroidInjector<Controller> = controllerInjector
 
     override fun supportFragmentInjector(): AndroidInjector<Fragment> = supportFragmentInjector
+
+    override fun viewInjector(): AndroidInjector<View> = viewInjector
 
     protected open fun navigators() = emptyList<ResultNavigator>()
 }

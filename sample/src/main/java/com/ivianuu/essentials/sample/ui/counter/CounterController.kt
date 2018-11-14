@@ -16,40 +16,39 @@
 
 package com.ivianuu.essentials.sample.ui.counter
 
-import android.os.Bundle
 import android.view.View
 import com.ivianuu.essentials.sample.R
-import com.ivianuu.essentials.ui.base.BaseFragment
+import com.ivianuu.essentials.ui.base.BaseController
 import com.ivianuu.essentials.ui.mvrx.bindViewModel
 import com.ivianuu.essentials.ui.mvrx.withState
-import com.ivianuu.essentials.ui.traveler.anim.HorizontalFragmentTransactionSetup
-import com.ivianuu.essentials.ui.traveler.key.BaseFragmentDestination
+import com.ivianuu.essentials.ui.traveler.anim.HorizontalControllerTransactionSetup
+import com.ivianuu.essentials.ui.traveler.key.BaseControllerDestination
 import com.ivianuu.essentials.ui.traveler.key.destination
 import kotlinx.android.parcel.Parcelize
-import kotlinx.android.synthetic.main.fragment_counter.*
+import kotlinx.android.synthetic.main.controller_counter.*
 
 @Parcelize
-data class CounterDestination(val screen: Int) : BaseFragmentDestination(
-    CounterFragment::class,
-    HorizontalFragmentTransactionSetup()
+data class CounterDestination(val screen: Int) : BaseControllerDestination(
+    CounterController::class,
+    HorizontalControllerTransactionSetup()
 )
 
 /**
  * @author Manuel Wrage (IVIanuu)
  */
-class CounterFragment : BaseFragment() {
+class CounterController : BaseController() {
 
-    override val layoutRes = R.layout.fragment_counter
+    override val layoutRes = R.layout.controller_counter
 
     private val viewModel by bindViewModel(CounterViewModel::class)
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onCreate() {
+        super.onCreate()
         viewModel.setDestination(destination())
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onBindView(view: View) {
+        super.onBindView(view)
 
         increase.setOnClickListener { viewModel.increaseClicked() }
         decrease.setOnClickListener { viewModel.decreaseClicked() }

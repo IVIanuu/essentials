@@ -25,6 +25,12 @@ annotation class ForApp
 annotation class ForActivity
 
 @Qualifier
+annotation class ForController
+
+@Qualifier
+annotation class ForChildController
+
+@Qualifier
 annotation class ForFragment
 
 @Qualifier

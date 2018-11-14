@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2018 Manuel Wrage
  *
@@ -15,22 +14,18 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.sample.ui
+package com.ivianuu.essentials.util
 
-import com.ivianuu.essentials.sample.ui.counter.CounterDestination
-import com.ivianuu.essentials.ui.base.BaseActivity
-import com.ivianuu.essentials.ui.base.BaseActivityModule
-import dagger.Module
+import android.content.Context
+import android.content.ContextWrapper
+import com.ivianuu.contributor.view.HasViewInjector
 
-class MainActivity : BaseActivity() {
-
-    override val useDirector: Boolean
-        get() = true
-
-    override val startDestination: Any?
-        get() = CounterDestination(1)
-
-}
-
-@Module
-abstract class MainActivityModule : BaseActivityModule<MainActivity>()
+/**
+ * Wraps a [Context] and is a [HasViewInjector]
+ * to make it possible to inject stuff from a [android.support.v4.app.Fragment]
+ * into [View]'s
+ */
+class ViewInjectionContextWrapper(
+    context: Context,
+    private val hasViewInjector: HasViewInjector
+) : ContextWrapper(context), HasViewInjector by hasViewInjector
