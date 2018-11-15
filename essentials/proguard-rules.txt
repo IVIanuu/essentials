@@ -2,9 +2,20 @@
 -keepclassmembernames class android.arch.lifecycle.ViewModelStore { *; }
 
 # Dagger AndroidInjectionKey
+-keepnames public class * extends android.app.Application
 -keepnames public class * extends android.app.Activity
+-keepnames public class * extends android.content.BroadcastReceiver
+-keepnames public class * extends android.content.ContentProvider
 -keepnames public class * extends android.app.Service
 -keepnames public class * extends android.view.View
 -keepnames public class * extends androidx.fragment.app.Fragment
 -keepnames public class * extends androidx.work.Worker
 -keepnames public class * extends com.ivianuu.director.Controller
+
+# Coroutines
+-keepclassmembernames class kotlinx.** {
+    volatile <fields>;
+}
+# Keep Coroutine class names. See https://github.com/Kotlin/kotlinx.coroutines/issues/657.
+# This should be removed when bug is fixed.
+-keepnames class kotlinx.** { *; }
