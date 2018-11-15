@@ -19,24 +19,19 @@ package com.ivianuu.essentials.ui.traveler.anim
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import com.ivianuu.essentials.R
-import com.ivianuu.essentials.ui.traveler.key.FragmentTransactionSetup
+import com.ivianuu.essentials.ui.traveler.key.BaseFragmentKey
 import com.ivianuu.traveler.Command
 
 /**
- * @author Manuel Wrage (IVIanuu)
+ * Fade fragment key setup
  */
-class HorizontalFragmentTransactionSetup : FragmentTransactionSetup {
-    override fun setupFragmentTransaction(
+class FadeFragmentKeySetup : BaseFragmentKey.Setup {
+    override fun apply(
         command: Command,
         currentFragment: Fragment?,
         nextFragment: Fragment,
         transaction: FragmentTransaction
     ) {
-        transaction.setCustomAnimations(
-            R.anim.slide_in_right,
-            R.anim.slide_out_left,
-            R.anim.slide_in_left,
-            R.anim.slide_out_right
-        )
+        transaction.setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
     }
 }

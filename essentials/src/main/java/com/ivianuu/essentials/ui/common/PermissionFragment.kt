@@ -4,25 +4,26 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import com.ivianuu.essentials.ui.base.BaseFragment
-import com.ivianuu.essentials.ui.traveler.destination.ResultDestination
-import com.ivianuu.essentials.ui.traveler.key.BaseFragmentDestination
-import com.ivianuu.essentials.ui.traveler.key.bindDestination
+import com.ivianuu.essentials.ui.traveler.key.BaseFragmentKey
+import com.ivianuu.essentials.ui.traveler.key.ResultKey
+import com.ivianuu.essentials.ui.traveler.key.bindKey
 import com.ivianuu.essentials.util.RequestCodeGenerator
 import com.ivianuu.traveler.result.goBackWithResult
 import kotlinx.android.parcel.Parcelize
 import java.util.*
 
 @Parcelize
-data class PermissionDestination(
+data class PermissionKey(
     override val resultCode: Int,
     val permissions: Array<String>,
     val requestCode: Int = RequestCodeGenerator.generate()
-) : BaseFragmentDestination(PermissionFragment::class), ResultDestination<PermissionResult> {
+) : BaseFragmentKey(PermissionFragment::class),
+    ResultKey<PermissionResult> {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as PermissionDestination
+        other as PermissionKey
 
         if (resultCode != other.resultCode) return false
         if (!Arrays.equals(permissions, other.permissions)) return false
@@ -44,19 +45,19 @@ data class PermissionDestination(
  */
 class PermissionFragment : BaseFragment() {
 
-    private val destination by bindDestination<PermissionDestination>()
+    private val key by bindKey<PermissionKey>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            requestPermissions(destination.permissions, destination.requestCode)
+            requestPermissions(key.permissions, key.requestCode)
         } else {
             router.goBackWithResult(
-                destination.resultCode, PermissionResult(
-                destination.requestCode,
-                destination.permissions,
-                destination.permissions
+                key.resultCode, PermissionResult(
+                    key.requestCode,
+                    key.permissions,
+                    key.permissions
                     .map { PackageManager.PERMISSION_GRANTED }
                     .toIntArray()
             ))
@@ -71,7 +72,7 @@ class PermissionFragment : BaseFragment() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
         router.goBackWithResult(
-            destination.resultCode,
+            key.resultCode,
             PermissionResult(requestCode, permissions, grantResults)
         )
     }

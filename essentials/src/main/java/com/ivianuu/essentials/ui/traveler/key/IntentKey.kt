@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.traveler.destination
+package com.ivianuu.essentials.ui.traveler.key
 
 import android.content.Context
 import android.content.Intent
@@ -23,6 +23,6 @@ import com.ivianuu.traveler.android.ActivityKey
 /**
  * Key for a simple intent
  */
-class IntentDestination(val intent: Intent) : ActivityKey {
+class IntentKey(val intent: Intent) : ActivityKey {
     override fun createIntent(context: Context, data: Any?) = intent
 }

@@ -17,9 +17,7 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import android.os.Bundle
-import androidx.test.core.app.ActivityScenario
-import com.ivianuu.essentials.sample.ui.counter.CounterDestination
+import com.ivianuu.essentials.sample.ui.counter.CounterKey
 import com.ivianuu.essentials.ui.base.BaseActivity
 import com.ivianuu.essentials.ui.base.BaseActivityModule
 import dagger.Module
@@ -29,8 +27,8 @@ class MainActivity : BaseActivity() {
     override val useDirector: Boolean
         get() = true
 
-    override val startDestination: Any?
-        get() = CounterDestination(1)
+    override val startKey: Any?
+        get() = CounterKey(1)
 
 }
 

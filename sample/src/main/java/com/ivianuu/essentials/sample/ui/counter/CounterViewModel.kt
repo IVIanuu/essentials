@@ -1,7 +1,7 @@
 package com.ivianuu.essentials.sample.ui.counter
 
 import android.content.Context
-import com.ivianuu.essentials.sample.ui.list.ListDestination
+import com.ivianuu.essentials.sample.ui.list.ListKey
 import com.ivianuu.essentials.ui.mvrx.MvRxState
 import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
 import com.ivianuu.essentials.util.ext.toastInfo
@@ -19,16 +19,16 @@ class CounterViewModel @Inject constructor(
     private val router: Router
 ) : MvRxViewModel<CounterState>(CounterState()) {
 
-    private lateinit var destination: CounterDestination
+    private lateinit var key: CounterKey
 
     init {
         logStateChanges()
     }
 
-    fun setDestination(destination: CounterDestination) {
-        if (this::destination.isInitialized) return
-        this.destination = destination
-        setState { copy(screen = destination.screen) }
+    fun setKey(key: CounterKey) {
+        if (this::key.isInitialized) return
+        this.key = key
+        setState { copy(screen = key.screen) }
     }
 
     fun increaseClicked() {
@@ -50,7 +50,7 @@ class CounterViewModel @Inject constructor(
     }
 
     fun screenUpClicked() {
-        withState { router.navigate(CounterDestination(it.screen.inc())) }
+        withState { router.navigate(CounterKey(it.screen.inc())) }
     }
 
     fun screenDownClicked() {
@@ -62,7 +62,7 @@ class CounterViewModel @Inject constructor(
     }
 
     fun listScreenClicked() {
-        router.navigate(ListDestination())
+        router.navigate(ListKey())
     }
 
     fun doWorkClicked() {

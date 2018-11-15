@@ -11,16 +11,16 @@ import com.ivianuu.essentials.ui.epoxy.simpleText
 import com.ivianuu.essentials.ui.mvrx.bindViewModel
 import com.ivianuu.essentials.ui.mvrx.simpleEpoxyController
 import com.ivianuu.essentials.ui.simple.SimpleController
-import com.ivianuu.essentials.ui.traveler.anim.VerticalControllerTransactionSetup
-import com.ivianuu.essentials.ui.traveler.key.BaseControllerDestination
+import com.ivianuu.essentials.ui.traveler.anim.VerticalControllerKeySetup
+import com.ivianuu.essentials.ui.traveler.key.BaseControllerKey
 import com.ivianuu.essentials.util.ext.andTrue
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.single_line_list_item.*
 
 @Parcelize
-class ListDestination : BaseControllerDestination(
+class ListKey : BaseControllerKey(
     ListController::class,
-    VerticalControllerTransactionSetup()
+    VerticalControllerKeySetup()
 )
 
 /**

@@ -18,24 +18,24 @@ package com.ivianuu.essentials.ui.traveler.anim
 
 import com.ivianuu.director.Controller
 import com.ivianuu.director.RouterTransaction
-import com.ivianuu.director.common.changehandler.VerticalChangeHandler
+import com.ivianuu.director.common.changehandler.HorizontalChangeHandler
 import com.ivianuu.director.popChangeHandler
 import com.ivianuu.director.pushChangeHandler
-import com.ivianuu.essentials.ui.traveler.key.ControllerTransactionSetup
+import com.ivianuu.essentials.ui.traveler.key.BaseControllerKey
 import com.ivianuu.traveler.Command
 
 /**
- * Vertical controller transaction setup
+ * Horizontal controller transaction setup
  */
-class VerticalControllerTransactionSetup : ControllerTransactionSetup {
-    override fun setupTransaction(
+class HorizontalControllerKeySetup : BaseControllerKey.Setup {
+    override fun apply(
         command: Command,
         currentController: Controller?,
         nextController: Controller,
         transaction: RouterTransaction
     ) {
         transaction
-            .pushChangeHandler(VerticalChangeHandler())
-            .popChangeHandler(VerticalChangeHandler())
+            .pushChangeHandler(HorizontalChangeHandler())
+            .popChangeHandler(HorizontalChangeHandler())
     }
 }

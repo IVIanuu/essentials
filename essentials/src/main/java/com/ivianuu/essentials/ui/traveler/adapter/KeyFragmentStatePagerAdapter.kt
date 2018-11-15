@@ -14,10 +14,22 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.util.ext
+package com.ivianuu.essentials.ui.traveler.adapter
 
-import com.ivianuu.liveevent.LiveEventPlugins
-import com.ivianuu.liveevent.MutableLiveEvent
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentStatePagerAdapter
+import com.ivianuu.traveler.fragment.FragmentKey
 
-fun <T> MutableLiveEvent(maxSize: Int = LiveEventPlugins.defaultMaxSize) =
-    MutableLiveEvent<T>(maxSize)
+/**
+ * Key fragment state pager adapter
+ */
+open class KeyFragmentStatePagerAdapter(
+    fm: FragmentManager,
+    private val keys: List<FragmentKey>
+) : FragmentStatePagerAdapter(fm) {
+
+    override fun getItem(position: Int) =
+        keys[position].createFragment(null)
+
+    override fun getCount() = keys.size
+}

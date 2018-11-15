@@ -24,13 +24,13 @@ import com.ivianuu.essentials.util.ext.unsafeLazy
 import com.ivianuu.traveler.Command
 import kotlin.reflect.KClass
 
-interface ControllerDestination : ControllerKey, Parcelable {
-
-    val target: KClass<out Controller>
-    val controllerTransactionSetup: ControllerTransactionSetup? get() = null
+abstract class BaseControllerKey(
+    val target: KClass<out Controller>,
+    open val setup: Setup? = null
+) : ControllerKey, Parcelable {
 
     override fun createController(data: Any?): Controller = target.java.newInstance().apply {
-        args.apply { putParcelable(KEY_DESTINATION, this@ControllerDestination) }
+        args.apply { putParcelable(KEY_KEY, this@BaseControllerKey) }
     }
 
     override fun setupTransaction(
@@ -39,32 +39,25 @@ interface ControllerDestination : ControllerKey, Parcelable {
         nextController: Controller,
         transaction: RouterTransaction
     ) {
-        controllerTransactionSetup?.setupTransaction(
-            command, currentController, nextController, transaction
+        setup?.apply(command, currentController, nextController, transaction)
+    }
+
+    interface Setup {
+        fun apply(
+            command: Command,
+            currentController: Controller?,
+            nextController: Controller,
+            transaction: RouterTransaction
         )
     }
 }
 
-abstract class BaseControllerDestination(
-    override val target: KClass<out Controller>,
-    override val controllerTransactionSetup: ControllerTransactionSetup? = null
-) : ControllerDestination
+fun <T : Parcelable> Controller.key(): T = args.getParcelable(KEY_KEY)!!
 
-interface ControllerTransactionSetup {
-    fun setupTransaction(
-        command: Command,
-        currentController: Controller?,
-        nextController: Controller,
-        transaction: RouterTransaction
-    )
-}
-
-fun <T : Parcelable> Controller.destination(): T = args.getParcelable(KEY_DESTINATION)!!
-
-fun <T : Parcelable> Controller.destinationOrNull() = try {
-    destination<T>()
+fun <T : Parcelable> Controller.keyOrNull() = try {
+    key<T>()
 } catch (e: Exception) {
     null
 }
 
-fun <T : Parcelable> Controller.bindDestination() = unsafeLazy { destination<T>() }
+fun <T : Parcelable> Controller.bindKey() = unsafeLazy { key<T>() }

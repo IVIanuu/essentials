@@ -14,22 +14,11 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.traveler.destination
-
-import android.app.Activity
-import android.content.Context
-import android.content.Intent
-import androidx.core.app.ShareCompat
-import com.ivianuu.traveler.android.ActivityKey
+package com.ivianuu.essentials.ui.traveler.key
 
 /**
- * Shares the [text]
+ * Marks a key as screen that returns a result
  */
-data class ShareDestination(val text: String) : ActivityKey {
-    override fun createIntent(context: Context, data: Any?): Intent =
-        ShareCompat.IntentBuilder
-            .from(context as Activity)
-            .setType("text/plain")
-            .setText(text)
-            .createChooserIntent()
+interface ResultKey<R> {
+    val resultCode: Int
 }

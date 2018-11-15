@@ -4,36 +4,37 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import com.ivianuu.essentials.ui.base.BaseFragment
-import com.ivianuu.essentials.ui.traveler.destination.ResultDestination
-import com.ivianuu.essentials.ui.traveler.key.BaseFragmentDestination
-import com.ivianuu.essentials.ui.traveler.key.bindDestination
+import com.ivianuu.essentials.ui.traveler.key.BaseFragmentKey
+import com.ivianuu.essentials.ui.traveler.key.ResultKey
+import com.ivianuu.essentials.ui.traveler.key.bindKey
 import com.ivianuu.essentials.util.RequestCodeGenerator
 import com.ivianuu.traveler.result.goBackWithResult
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-data class ActivityResultDestination(
+data class ActivityResultKey(
     override val resultCode: Int,
     val intent: Intent,
     val requestCode: Int = RequestCodeGenerator.generate()
-) : BaseFragmentDestination(ActivityResultFragment::class), ResultDestination<ActivityResult>
+) : BaseFragmentKey(ActivityResultFragment::class),
+    ResultKey<ActivityResult>
 
 /**
  * Activity result fragment
  */
 class ActivityResultFragment : BaseFragment() {
 
-    private val destination by bindDestination<ActivityResultDestination>()
+    private val key by bindKey<ActivityResultKey>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        startActivityForResult(destination.intent, destination.requestCode)
+        startActivityForResult(key.intent, key.requestCode)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         router.goBackWithResult(
-            destination.resultCode,
+            key.resultCode,
             ActivityResult(requestCode, resultCode, data)
         )
     }

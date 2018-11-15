@@ -14,18 +14,22 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.traveler.destination
+package com.ivianuu.essentials.ui.traveler.key
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import androidx.core.app.ShareCompat
 import com.ivianuu.traveler.android.ActivityKey
 
 /**
- * Launches the app
+ * Shares the [text]
  */
-data class AppDestination(val packageName: String) : ActivityKey {
-
+data class ShareKey(val text: String) : ActivityKey {
     override fun createIntent(context: Context, data: Any?): Intent =
-        context.packageManager.getLaunchIntentForPackage(packageName)!!
-
+        ShareCompat.IntentBuilder
+            .from(context as Activity)
+            .setType("text/plain")
+            .setText(text)
+            .createChooserIntent()
 }

@@ -17,9 +17,9 @@
 package com.ivianuu.essentials.util.ext
 
 import android.content.Intent
-import com.ivianuu.essentials.ui.common.ActivityResultDestination
-import com.ivianuu.essentials.ui.common.PermissionDestination
-import com.ivianuu.essentials.ui.traveler.destination.ResultDestination
+import com.ivianuu.essentials.ui.common.ActivityResultKey
+import com.ivianuu.essentials.ui.common.PermissionKey
+import com.ivianuu.essentials.ui.traveler.key.ResultKey
 import com.ivianuu.essentials.ui.traveler.navigator.AddFragment
 import com.ivianuu.essentials.util.RequestCodeGenerator
 import com.ivianuu.rxjavaktx.observable
@@ -50,29 +50,29 @@ fun <T> Router.results(resultCode: Int) = observable<T> { e ->
 }
 
 @Suppress("UNCHECKED_CAST")
-suspend fun <D : ResultDestination<R>, R> Router.navigateForResult(destination: D) =
+suspend fun <D : ResultKey<R>, R> Router.navigateForResult(key: D) =
     suspendCancellableCoroutine<R> { continuation ->
         val listener = object : ResultListener {
             override fun invoke(result: Any) {
                 continuation.resume(result as R)
-                removeResultListener(destination.resultCode, this)
+                removeResultListener(key.resultCode, this)
             }
         }
 
         continuation.invokeOnCancellation {
-            removeResultListener(destination.resultCode, listener)
+            removeResultListener(key.resultCode, listener)
         }
 
-        addResultListener(destination.resultCode, listener)
+        addResultListener(key.resultCode, listener)
 
-        navigate(destination)
+        navigate(key)
     }
 
 suspend fun Router.navigateForActivityResult(intent: Intent) =
-    addFragmentForResult(ActivityResultDestination(RequestCodeGenerator.generate(), intent))
+    addFragmentForResult(ActivityResultKey(RequestCodeGenerator.generate(), intent))
 
 suspend fun Router.navigateForActivityResult(resultCode: Int, intent: Intent) =
-    addFragmentForResult(ActivityResultDestination(resultCode, intent, resultCode))
+    addFragmentForResult(ActivityResultKey(resultCode, intent, resultCode))
 
 suspend fun Router.requestPermissions(
     vararg permissions: String
@@ -82,34 +82,34 @@ suspend fun Router.requestPermissions(
     resultCode: Int,
     vararg permissions: String
 ): Boolean {
-    val destination = PermissionDestination(
+    val key = PermissionKey(
         resultCode,
         permissions.toList().toTypedArray(),
         resultCode
     )
 
-    return addFragmentForResult(destination).allGranted
+    return addFragmentForResult(key).allGranted
 }
 
 @Suppress("UNCHECKED_CAST")
-suspend fun <D, R> Router.addFragmentForResult(destination: D) where D : FragmentKey, D : ResultDestination<R> =
+suspend fun <D, R> Router.addFragmentForResult(key: D) where D : FragmentKey, D : ResultKey<R> =
     suspendCancellableCoroutine<R> { continuation ->
         val listener = object : ResultListener {
             override fun invoke(result: Any) {
                 continuation.resume(result as R)
-                removeResultListener(destination.resultCode, this)
+                removeResultListener(key.resultCode, this)
             }
         }
 
         continuation.invokeOnCancellation {
-            removeResultListener(destination.resultCode, listener)
+            removeResultListener(key.resultCode, listener)
         }
 
-        addResultListener(destination.resultCode, listener)
+        addResultListener(key.resultCode, listener)
 
-        addFragment(destination)
+        addFragment(key)
     }
 
-fun Router.addFragment(destination: FragmentKey) {
-    executeCommands(AddFragment(destination))
+fun Router.addFragment(key: FragmentKey) {
+    executeCommands(AddFragment(key))
 }

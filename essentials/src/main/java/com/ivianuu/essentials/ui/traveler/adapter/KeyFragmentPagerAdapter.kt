@@ -14,11 +14,22 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.traveler.destination
+package com.ivianuu.essentials.ui.traveler.adapter
+
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentPagerAdapter
+import com.ivianuu.traveler.fragment.FragmentKey
 
 /**
- * Marks a key as screen that returns a result
+ * Key fragment pager adapter
  */
-interface ResultDestination<R> {
-    val resultCode: Int
+open class KeyFragmentPagerAdapter(
+    fm: FragmentManager,
+    private val keys: List<FragmentKey>
+) : FragmentPagerAdapter(fm) {
+
+    override fun getItem(position: Int) =
+        keys[position].createFragment(null)
+
+    override fun getCount() = keys.size
 }

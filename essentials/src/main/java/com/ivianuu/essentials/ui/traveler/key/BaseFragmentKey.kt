@@ -25,16 +25,16 @@ import com.ivianuu.traveler.Command
 import com.ivianuu.traveler.fragment.FragmentKey
 import kotlin.reflect.KClass
 
-interface FragmentDestination : FragmentKey, Parcelable {
-
-    val target: KClass<out Fragment>
-    val fragmentTransactionSetup: FragmentTransactionSetup? get() = null
+abstract class BaseFragmentKey(
+    val target: KClass<out Fragment>,
+    open val setup: Setup? = null
+) : FragmentKey, Parcelable {
 
     override fun createFragment(data: Any?): Fragment = target.java.newInstance().apply {
         arguments = if (arguments != null) {
-            arguments!!.apply { putParcelable(KEY_DESTINATION, this@FragmentDestination) }
+            arguments!!.apply { putParcelable(KEY_KEY, this@BaseFragmentKey) }
         } else {
-            bundleOf(KEY_DESTINATION to this@FragmentDestination)
+            bundleOf(KEY_KEY to this@BaseFragmentKey)
         }
     }
 
@@ -44,33 +44,25 @@ interface FragmentDestination : FragmentKey, Parcelable {
         nextFragment: Fragment,
         transaction: FragmentTransaction
     ) {
-        fragmentTransactionSetup?.setupFragmentTransaction(
-            command, currentFragment, nextFragment, transaction
+        setup?.apply(command, currentFragment, nextFragment, transaction)
+    }
+
+    interface Setup {
+        fun apply(
+            command: Command,
+            currentFragment: Fragment?,
+            nextFragment: Fragment,
+            transaction: FragmentTransaction
         )
     }
 }
 
-abstract class BaseFragmentDestination(
-    override val target: KClass<out Fragment>,
-    override val fragmentTransactionSetup: FragmentTransactionSetup? = null
-) : FragmentDestination
+fun <T : Parcelable> Fragment.key(): T = arguments!!.getParcelable(KEY_KEY)!!
 
-interface FragmentTransactionSetup {
-    fun setupFragmentTransaction(
-        command: Command,
-        currentFragment: Fragment?,
-        nextFragment: Fragment,
-        transaction: FragmentTransaction
-    ) {
-    }
-}
-
-fun <T : Parcelable> Fragment.destination(): T = arguments!!.getParcelable(KEY_DESTINATION)!!
-
-fun <T : Parcelable> Fragment.destinationOrNull() = try {
-    destination<T>()
+fun <T : Parcelable> Fragment.keyOrNull() = try {
+    key<T>()
 } catch (e: Exception) {
     null
 }
 
-fun <T : Parcelable> Fragment.bindDestination() = unsafeLazy { destination<T>() }
+fun <T : Parcelable> Fragment.bindKey() = unsafeLazy { key<T>() }

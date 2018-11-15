@@ -22,9 +22,9 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.ivianuu.androidktx.fragment.app.string
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.base.BaseDialogFragment
-import com.ivianuu.essentials.ui.traveler.destination.ResultDestination
-import com.ivianuu.essentials.ui.traveler.key.BaseFragmentDestination
-import com.ivianuu.essentials.ui.traveler.key.destination
+import com.ivianuu.essentials.ui.traveler.key.BaseFragmentKey
+import com.ivianuu.essentials.ui.traveler.key.ResultKey
+import com.ivianuu.essentials.ui.traveler.key.key
 import com.ivianuu.essentials.util.RequestCodeGenerator
 import com.ivianuu.traveler.goBack
 import com.ivianuu.traveler.result.goBackWithResult
@@ -33,11 +33,11 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @Parcelize
-data class AppPickerDestination(
+data class AppPickerKey(
     val title: CharSequence? = null,
     val launchableOnly: Boolean = false,
     override val resultCode: Int = RequestCodeGenerator.generate()
-) : BaseFragmentDestination(AppPickerDialog::class), ResultDestination<AppInfo>
+) : BaseFragmentKey(AppPickerDialog::class), ResultKey<AppInfo>
 
 /**
  * App picker
@@ -49,22 +49,22 @@ class AppPickerDialog : BaseDialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val apps = mutableListOf<com.ivianuu.essentials.app.AppInfo>()
 
-        val destination = destination<AppPickerDestination>()
+        val key = key<AppPickerKey>()
 
         val dialog = MaterialDialog.Builder(requireContext())
-            .title(destination.title ?: string(R.string.dialog_title_app_picker))
+            .title(key.title ?: string(R.string.dialog_title_app_picker))
             .negativeText(R.string.action_cancel)
             .autoDismiss(false)
             .onNegative { _, _ -> router.goBack() }
             .items()
             .itemsCallback { _, _, position, _ ->
                 val app = apps[position]
-                router.goBackWithResult(destination.resultCode, app)
+                router.goBackWithResult(key.resultCode, app)
             }
             .build()
 
         coroutineScope.launch {
-            val newApps = if (destination.launchableOnly) {
+            val newApps = if (key.launchableOnly) {
                 appStore.launchableApps()
             } else {
                 appStore.installedApps()

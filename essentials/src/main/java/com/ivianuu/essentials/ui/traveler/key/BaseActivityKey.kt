@@ -26,35 +26,30 @@ import com.ivianuu.traveler.Command
 import com.ivianuu.traveler.android.ActivityKey
 import kotlin.reflect.KClass
 
-interface ActivityDestination : ActivityKey, Parcelable {
-    val target: KClass<out Activity>
-
-    val activityStartOptionsProvider: ActivityStartOptionsProvider? get() = null
+abstract class BaseActivityKey(
+    val target: KClass<out Activity>,
+    open val startOptions: StartOptions? = null
+) : ActivityKey, Parcelable {
 
     override fun createIntent(context: Context, data: Any?) =
         Intent(context, target.java).apply {
-            putExtra(KEY_DESTINATION, this@ActivityDestination)
+            putExtra(KEY_KEY, this@BaseActivityKey)
         }
 
     override fun createStartActivityOptions(command: Command, activityIntent: Intent) =
-        activityStartOptionsProvider?.createActivityStartOptions(command, activityIntent)
+        startOptions?.get(command, activityIntent)
+
+    interface StartOptions {
+        fun get(command: Command, activityIntent: Intent): Bundle? = null
+    }
 }
 
-abstract class BaseActivityDestination(
-    override val target: KClass<out Activity>,
-    override val activityStartOptionsProvider: ActivityStartOptionsProvider? = null
-) : ActivityDestination
+fun <T : Parcelable> Activity.key(): T = intent!!.extras!!.getParcelable(KEY_KEY)!!
 
-interface ActivityStartOptionsProvider {
-    fun createActivityStartOptions(command: Command, activityIntent: Intent): Bundle? = null
-}
-
-fun <T : Parcelable> Activity.destination(): T = intent!!.extras!!.getParcelable(KEY_DESTINATION)!!
-
-fun <T : Parcelable> Activity.destinationOrNull() = try {
-    destination<T>()
+fun <T : Parcelable> Activity.keyOrNull() = try {
+    key<T>()
 } catch (e: Exception) {
     null
 }
 
-fun <T : Parcelable> Activity.bindDestination() = unsafeLazy { destination<T>() }
+fun <T : Parcelable> Activity.bindKey() = unsafeLazy { key<T>() }

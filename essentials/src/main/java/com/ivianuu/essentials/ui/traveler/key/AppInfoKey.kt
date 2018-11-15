@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.traveler.destination
+package com.ivianuu.essentials.ui.traveler.key
 
 import android.content.Context
 import android.content.Intent
@@ -25,7 +25,7 @@ import com.ivianuu.traveler.android.ActivityKey
 /**
  * Open s the app info of the app
  */
-data class AppInfoDestination(val packageName: String) : ActivityKey {
+data class AppInfoKey(val packageName: String) : ActivityKey {
     override fun createIntent(context: Context, data: Any?) =
         Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
             this.data = "package:$packageName".toUri()

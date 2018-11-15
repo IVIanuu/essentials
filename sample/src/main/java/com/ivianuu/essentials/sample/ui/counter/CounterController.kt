@@ -21,16 +21,16 @@ import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.base.BaseController
 import com.ivianuu.essentials.ui.mvrx.bindViewModel
 import com.ivianuu.essentials.ui.mvrx.withState
-import com.ivianuu.essentials.ui.traveler.anim.HorizontalControllerTransactionSetup
-import com.ivianuu.essentials.ui.traveler.key.BaseControllerDestination
-import com.ivianuu.essentials.ui.traveler.key.destination
+import com.ivianuu.essentials.ui.traveler.anim.HorizontalControllerKeySetup
+import com.ivianuu.essentials.ui.traveler.key.BaseControllerKey
+import com.ivianuu.essentials.ui.traveler.key.key
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.controller_counter.*
 
 @Parcelize
-data class CounterDestination(val screen: Int) : BaseControllerDestination(
+data class CounterKey(val screen: Int) : BaseControllerKey(
     CounterController::class,
-    HorizontalControllerTransactionSetup()
+    HorizontalControllerKeySetup()
 )
 
 /**
@@ -38,13 +38,13 @@ data class CounterDestination(val screen: Int) : BaseControllerDestination(
  */
 class CounterController : BaseController() {
 
-    override val layoutRes = R.layout.controller_counter
+    override val layoutRes get() = R.layout.controller_counter
 
     private val viewModel by bindViewModel(CounterViewModel::class)
 
     override fun onCreate() {
         super.onCreate()
-        viewModel.setDestination(destination())
+        viewModel.setKey(key())
     }
 
     override fun onBindView(view: View) {

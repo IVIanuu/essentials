@@ -16,22 +16,26 @@
 
 package com.ivianuu.essentials.ui.traveler.anim
 
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
-import com.ivianuu.essentials.R
-import com.ivianuu.essentials.ui.traveler.key.FragmentTransactionSetup
+import com.ivianuu.director.Controller
+import com.ivianuu.director.RouterTransaction
+import com.ivianuu.director.common.changehandler.VerticalChangeHandler
+import com.ivianuu.director.popChangeHandler
+import com.ivianuu.director.pushChangeHandler
+import com.ivianuu.essentials.ui.traveler.key.BaseControllerKey
 import com.ivianuu.traveler.Command
 
 /**
- * @author Manuel Wrage (IVIanuu)
+ * Vertical controller key setup
  */
-class FadeFragmentTransactionSetup : FragmentTransactionSetup {
-    override fun setupFragmentTransaction(
+class VerticalControllerKeySetup : BaseControllerKey.Setup {
+    override fun apply(
         command: Command,
-        currentFragment: Fragment?,
-        nextFragment: Fragment,
-        transaction: FragmentTransaction
+        currentController: Controller?,
+        nextController: Controller,
+        transaction: RouterTransaction
     ) {
-        transaction.setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
+        transaction
+            .pushChangeHandler(VerticalChangeHandler())
+            .popChangeHandler(VerticalChangeHandler())
     }
 }

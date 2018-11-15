@@ -22,9 +22,9 @@ import com.ivianuu.traveler.common.TypedResultNavigator
 import com.ivianuu.traveler.fragment.FragmentKey
 
 /**
- * Adds the fragment for the [destination]
+ * Adds the fragment for the [key]
  */
-data class AddFragment(val destination: FragmentKey) : Command
+data class AddFragment(val key: FragmentKey) : Command
 
 /**
  * A [Navigator] which allows to add fragments instead of replacing them
@@ -37,8 +37,8 @@ class AddFragmentPlugin(private val fragmentManager: FragmentManager) :
         } catch (e: Exception) {
         }
 
-        val fragment = command.destination.createFragment(null)
-        val tag = command.destination.toString()
+        val fragment = command.key.createFragment(null)
+        val tag = command.key.toString()
 
         fragmentManager.beginTransaction()
             .add(fragment, tag)

@@ -14,22 +14,17 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.traveler.adapter
+package com.ivianuu.essentials.ui.traveler.key
 
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentPagerAdapter
-import com.ivianuu.traveler.fragment.FragmentKey
+import android.content.Context
+import android.content.Intent
+import androidx.core.net.toUri
+import com.ivianuu.traveler.android.ActivityKey
 
 /**
- * Key fragment pager adapter
+ * Opens the url in the browser
  */
-open class DestinationFragmentPagerAdapter(
-    fm: FragmentManager,
-    private val destinations: List<FragmentKey>
-) : FragmentPagerAdapter(fm) {
-
-    override fun getItem(position: Int) =
-        destinations[position].createFragment(null)
-
-    override fun getCount() = destinations.size
+data class UrlKey(val url: String) : ActivityKey {
+    override fun createIntent(context: Context, data: Any?) =
+        Intent(Intent.ACTION_VIEW).apply { this.data = url.toUri() }
 }

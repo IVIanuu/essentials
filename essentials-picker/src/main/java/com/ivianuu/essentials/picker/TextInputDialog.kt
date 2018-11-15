@@ -21,23 +21,23 @@ import android.os.Bundle
 import com.afollestad.materialdialogs.MaterialDialog
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.base.BaseDialogFragment
-import com.ivianuu.essentials.ui.traveler.destination.ResultDestination
-import com.ivianuu.essentials.ui.traveler.key.BaseFragmentDestination
-import com.ivianuu.essentials.ui.traveler.key.destination
+import com.ivianuu.essentials.ui.traveler.key.BaseFragmentKey
+import com.ivianuu.essentials.ui.traveler.key.ResultKey
+import com.ivianuu.essentials.ui.traveler.key.key
 import com.ivianuu.essentials.util.RequestCodeGenerator
 import com.ivianuu.traveler.goBack
 import com.ivianuu.traveler.result.goBackWithResult
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-data class TextInputDestination(
+data class TextInputKey(
     val title: String,
     val inputHint: String = "",
     val inputType: Int = -1,
     val prefill: String = "",
     val allowEmptyInput: Boolean = false,
     override var resultCode: Int = RequestCodeGenerator.generate()
-) : BaseFragmentDestination(TextInputDialog::class), ResultDestination<CharSequence>
+) : BaseFragmentKey(TextInputDialog::class), ResultKey<CharSequence>
 
 /**
  * Text input dialog
@@ -45,20 +45,20 @@ data class TextInputDestination(
 class TextInputDialog : BaseDialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val destination = destination<TextInputDestination>()
+        val key = key<TextInputKey>()
 
         return MaterialDialog.Builder(requireContext())
             .autoDismiss(false)
-            .title(destination.title)
+            .title(key.title)
             .input(
-                destination.inputHint,
-                destination.prefill,
-                destination.allowEmptyInput
+                key.inputHint,
+                key.prefill,
+                key.allowEmptyInput
             ) { _, input ->
-                router.goBackWithResult(destination.resultCode, input)
+                router.goBackWithResult(key.resultCode, input)
             }
             .onNegative { _, _ -> router.goBack() }
-            .inputType(destination.inputType)
+            .inputType(key.inputType)
             .positiveText(R.string.action_ok)
             .negativeText(R.string.action_cancel)
             .build()

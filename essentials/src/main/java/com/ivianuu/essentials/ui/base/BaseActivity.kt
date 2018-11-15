@@ -76,7 +76,7 @@ abstract class BaseActivity : AppCompatActivity(), OnBackPressedCallback,
     open val containerId
         get() = R.id.container
 
-    open val startDestination: Any?
+    open val startKey: Any?
         get() = null
 
     private var router: com.ivianuu.director.Router? = null
@@ -108,7 +108,7 @@ abstract class BaseActivity : AppCompatActivity(), OnBackPressedCallback,
         }
 
         if (savedInstanceState == null) {
-            startDestination?.let { travelerRouter.setRoot(it) }
+            startKey?.let { travelerRouter.setRoot(it) }
         }
     }
 

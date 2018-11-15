@@ -20,45 +20,44 @@ import android.os.Bundle
 import com.afollestad.materialdialogs.color.ColorChooserDialog
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.base.BaseFragment
-import com.ivianuu.essentials.ui.traveler.destination.ResultDestination
-import com.ivianuu.essentials.ui.traveler.key.BaseFragmentDestination
-import com.ivianuu.essentials.ui.traveler.key.bindDestination
+import com.ivianuu.essentials.ui.traveler.key.BaseFragmentKey
+import com.ivianuu.essentials.ui.traveler.key.ResultKey
+import com.ivianuu.essentials.ui.traveler.key.bindKey
 import com.ivianuu.essentials.util.RequestCodeGenerator
 import com.ivianuu.traveler.goBack
 import com.ivianuu.traveler.result.goBackWithResult
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-data class ColorPickerDestination(
+data class ColorPickerKey(
     val titleRes: Int = R.string.dialog_title_color_picker,
     val preselect: Int = 0,
     override val resultCode: Int = RequestCodeGenerator.generate()
-) : BaseFragmentDestination(ColorPickerFragment::class), ResultDestination<Int>
+) : BaseFragmentKey(ColorPickerFragment::class), ResultKey<Int>
 
 /**
  * Color picker fragment
  */
-// todo remove/ move to somewhere else
 class ColorPickerFragment : BaseFragment(), ColorChooserDialog.ColorCallback {
 
-    private val destination by bindDestination<ColorPickerDestination>()
+    private val key by bindKey<ColorPickerKey>()
 
     private var colorSelected = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        ColorChooserDialog.Builder(requireContext(), destination.titleRes)
+        ColorChooserDialog.Builder(requireContext(), key.titleRes)
             .apply {
-                if (destination.preselect != 0) {
-                    preselect(destination.preselect)
+                if (key.preselect != 0) {
+                    preselect(key.preselect)
                 }
             }
             .show(childFragmentManager)
     }
 
     override fun onColorSelection(dialog: ColorChooserDialog, selectedColor: Int) {
-        router.goBackWithResult(destination.resultCode, selectedColor)
+        router.goBackWithResult(key.resultCode, selectedColor)
         colorSelected = true
     }
 

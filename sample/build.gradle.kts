@@ -45,6 +45,6 @@ dependencies {
     implementation(project(":essentials-picker"))
     kapt(project(":essentials-compiler"))
 
-    androidTestImplementation(project("essentials-android-test"))
-    testImplementation(project("essentials-test"))
+    androidTestImplementation(project(":essentials-android-test"))
+    testImplementation(project(":essentials-test"))
 }
