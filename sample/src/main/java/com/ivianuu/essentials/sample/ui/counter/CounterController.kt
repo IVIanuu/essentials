@@ -16,7 +16,6 @@
 
 package com.ivianuu.essentials.sample.ui.counter
 
-import android.annotation.SuppressLint
 import android.view.View
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.base.BaseController
@@ -24,7 +23,6 @@ import com.ivianuu.essentials.ui.mvrx.bindViewModel
 import com.ivianuu.essentials.ui.mvrx.withState
 import com.ivianuu.essentials.ui.traveler.anim.HorizontalControllerKeySetup
 import com.ivianuu.essentials.ui.traveler.key.BaseControllerKey
-import com.ivianuu.essentials.ui.traveler.key.key
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.controller_counter.*
 
@@ -62,7 +60,6 @@ class CounterController : BaseController() {
         do_work.setOnClickListener { viewModel.doWorkClicked() }
     }
 
-    @SuppressLint("SetTextI18n")
     override fun invalidate() {
         withState(viewModel) { count.text = "Screen: ${it.screen}, Count: ${it.count}" }
     }

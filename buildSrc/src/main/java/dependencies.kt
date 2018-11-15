@@ -30,7 +30,7 @@ object Versions {
     const val contributor = "efa69d138b"
     const val coroutines = "1.0.0"
     const val dagger = "2.19"
-    const val director = "3183ba72cf"
+    const val director = "7228780b94"
     const val epoxy = "2.19.0"
     const val epoxyKtx = "9dde1f5a9c"
     const val epoxyPrefs = "63955db07c"
