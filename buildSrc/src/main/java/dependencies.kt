@@ -33,7 +33,7 @@ object Versions {
     const val director = "3183ba72cf"
     const val epoxy = "2.19.0"
     const val epoxyKtx = "9dde1f5a9c"
-    const val epoxyPrefs = "59c03cd555"
+    const val epoxyPrefs = "63955db07c"
     const val glide = "4.8.0"
     const val kotlin = "1.3.10"
     const val kPrefs = "8e4b5f3859"
