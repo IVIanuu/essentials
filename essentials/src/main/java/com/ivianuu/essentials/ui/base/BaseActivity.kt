@@ -79,7 +79,7 @@ abstract class BaseActivity : AppCompatActivity(), OnBackPressedCallback,
     open val startKey: Any?
         get() = null
 
-    private var router: com.ivianuu.director.Router? = null
+    var router: com.ivianuu.director.Router? = null
 
     protected open val navigator: Navigator by unsafeLazy {
         val navigators = mutableListOf<ResultNavigator>()
@@ -104,7 +104,6 @@ abstract class BaseActivity : AppCompatActivity(), OnBackPressedCallback,
 
         if (useDirector) {
             router = attachRouter(findViewById(containerId), savedInstanceState)
-            navigatorHolder.setNavigator(this, navigator)
         }
 
         if (savedInstanceState == null) {
@@ -114,9 +113,7 @@ abstract class BaseActivity : AppCompatActivity(), OnBackPressedCallback,
 
     override fun onResumeFragments() {
         super.onResumeFragments()
-        if (!useDirector) {
-            navigatorHolder.setNavigator(this, navigator)
-        }
+        navigatorHolder.setNavigator(this, navigator)
     }
 
     override fun invalidate() {
