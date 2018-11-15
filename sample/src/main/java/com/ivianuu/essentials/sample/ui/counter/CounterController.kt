@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.sample.ui.counter
 
+import android.annotation.SuppressLint
 import android.view.View
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.base.BaseController
@@ -61,6 +62,7 @@ class CounterController : BaseController() {
         do_work.setOnClickListener { viewModel.doWorkClicked() }
     }
 
+    @SuppressLint("SetTextI18n")
     override fun invalidate() {
         withState(viewModel) { count.text = "Screen: ${it.screen}, Count: ${it.count}" }
     }
