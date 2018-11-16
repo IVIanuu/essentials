@@ -25,16 +25,17 @@ interface PrefValueHolder<T> {
     val value: T
 }
 
-private fun <T, V> KClass<T>.findEnumFor(value: V): T where T : Enum<T>, T : PrefValueHolder<V> {
-    val enums = java.enumConstants
-    return enums.first { it.value == value }
-}
+fun <T, V> KClass<T>.valueFor(value: V) where T : Enum<T>, T : PrefValueHolder<V> =
+    java.enumConstants.first { it.value == value }
+
+fun <T, V> KClass<T>.valueForOrNull(value: V) where T : Enum<T>, T : PrefValueHolder<V> =
+    java.enumConstants.firstOrNull { it.value == value }
 
 private class EnumBooleanPrefAdapter<T>(
     private val clazz: KClass<T>
 ) : Pref.Adapter<T> where T : Enum<T>, T : PrefValueHolder<Boolean> {
     override fun get(key: String, preferences: SharedPreferences) =
-        clazz.findEnumFor(preferences.getBoolean(key, false))
+        clazz.valueFor(preferences.getBoolean(key, false))
 
     override fun set(key: String, value: T, editor: SharedPreferences.Editor) {
         editor.putBoolean(key, value.value)
@@ -45,7 +46,7 @@ private class EnumIntPrefAdapter<T>(
     private val clazz: KClass<T>
 ) : Pref.Adapter<T> where T : Enum<T>, T : PrefValueHolder<Int> {
     override fun get(key: String, preferences: SharedPreferences) =
-        clazz.findEnumFor(preferences.getInt(key, 0))
+        clazz.valueFor(preferences.getInt(key, 0))
 
     override fun set(key: String, value: T, editor: SharedPreferences.Editor) {
         editor.putInt(key, value.value)
@@ -69,7 +70,7 @@ private class EnumFloatPrefAdapter<T>(
     private val clazz: KClass<T>
 ) : Pref.Adapter<T> where T : Enum<T>, T : PrefValueHolder<Float> {
     override fun get(key: String, preferences: SharedPreferences) =
-        clazz.findEnumFor(preferences.getFloat(key, 0f))
+        clazz.valueFor(preferences.getFloat(key, 0f))
 
     override fun set(key: String, value: T, editor: SharedPreferences.Editor) {
         editor.putFloat(key, value.value)
@@ -93,7 +94,7 @@ private class EnumLongPrefAdapter<T>(
     private val clazz: KClass<T>
 ) : Pref.Adapter<T> where T : Enum<T>, T : PrefValueHolder<Long> {
     override fun get(key: String, preferences: SharedPreferences) =
-        clazz.findEnumFor(preferences.getLong(key, 0L))
+        clazz.valueFor(preferences.getLong(key, 0L))
 
     override fun set(key: String, value: T, editor: SharedPreferences.Editor) {
         editor.putLong(key, value.value)
@@ -117,7 +118,7 @@ private class EnumStringPrefAdapter<T>(
     private val clazz: KClass<T>
 ) : Pref.Adapter<T> where T : Enum<T>, T : PrefValueHolder<String> {
     override fun get(key: String, preferences: SharedPreferences) =
-        clazz.findEnumFor(preferences.getString(key, "")!!)
+        clazz.valueFor(preferences.getString(key, "")!!)
 
     override fun set(key: String, value: T, editor: SharedPreferences.Editor) {
         editor.putString(key, value.value)
@@ -142,7 +143,7 @@ private class EnumStringSetPrefAdapter<T>(
 ) : Pref.Adapter<Set<T>> where T : Enum<T>, T : PrefValueHolder<String> {
     override fun get(key: String, preferences: SharedPreferences) =
         preferences.getStringSet(key, emptySet())!!
-            .map { clazz.findEnumFor(it) }
+            .map { clazz.valueFor(it) }
             .toSet()
 
     override fun set(key: String, value: Set<T>, editor: SharedPreferences.Editor) {
