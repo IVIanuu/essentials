@@ -43,8 +43,8 @@ object Versions {
     const val junit = "4.12"
 
     const val kotlin = "1.3.10"
-    const val kPrefs = "8e4b5f3859"
-    const val kSettings = "1bd9347740"
+    const val kPrefs = "71823c1318"
+    const val kSettings = "70219d641b"
     const val legacySupport = "28.0.0"
     const val liveEvent = "1e265df911"
     const val mavenGradle = "2.1"
