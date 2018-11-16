@@ -22,11 +22,15 @@ import com.ivianuu.essentials.sample.ui.counter.CounterKey
 import com.ivianuu.essentials.ui.base.BaseActivity
 import com.ivianuu.essentials.ui.base.BaseActivityModule
 import com.ivianuu.essentials.util.ext.coroutinesMain
+import com.ivianuu.kprefs.KPrefs
 import com.ivianuu.timberktx.d
 import dagger.Module
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 class MainActivity : BaseActivity() {
+
+    @Inject lateinit var prefs: KPrefs
 
     override val useDirector: Boolean
         get() = true
