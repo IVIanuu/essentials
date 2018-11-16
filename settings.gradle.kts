@@ -6,7 +6,6 @@ include(
     ":essentials-picker",
     ":essentials-shell",
     ":essentials-test",
-    ":essentials-android-test",
     ":ktuples",
     ":sample"
 )

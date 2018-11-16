@@ -14,18 +14,13 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.util
-
-import android.content.Context
-import android.content.ContextWrapper
-import com.ivianuu.contributor.view.HasViewInjector
+package com.ivianuu.essentials.sample
 
 /**
- * Wraps a [Context] and is a [HasViewInjector]
- * to make it possible to inject stuff from a [android.support.v4.app.Fragment]
- * into [View]s
+ * @author Manuel Wrage (IVIanuu)
  */
-class ViewInjectionContextWrapper(
-    context: Context,
-    private val hasViewInjector: HasViewInjector
-) : ContextWrapper(context), HasViewInjector by hasViewInjector
+class SampleTest {
+
+    fun test() {
+    }
+}

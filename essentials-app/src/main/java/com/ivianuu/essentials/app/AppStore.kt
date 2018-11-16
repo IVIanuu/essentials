@@ -23,7 +23,7 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 /**
- * Store for [AppInfo]'s
+ * Store for [AppInfo]s
  */
 class AppStore @Inject constructor(private val packageManager: PackageManager) {
 

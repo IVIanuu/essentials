@@ -21,15 +21,13 @@ android {
         javaCompileOptions {
             annotationProcessorOptions {
                 argument("dagger.android.experimentalUseStringKeys", "true")
+                argument("dagger.formatGeneratedSource", "disabled")
             }
         }
     }
 
     androidExtensions {
-        // isExperimental = true
-        configure(delegateClosureOf<AndroidExtensionsExtension> {
-            isExperimental = true
-        })
+        isExperimental = true
     }
 
     kapt {
@@ -45,6 +43,5 @@ dependencies {
     implementation(project(":essentials-picker"))
     kapt(project(":essentials-compiler"))
 
-    androidTestImplementation(project(":essentials-android-test"))
     testImplementation(project(":essentials-test"))
 }

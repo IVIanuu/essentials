@@ -36,7 +36,7 @@ import javax.inject.Provider
 data class AppIcon(val packageName: String)
 
 /**
- * Fetches images for [AppIcon]'s
+ * Fetches images for [AppIcon]s
  */
 class AppIconFetcher @Inject constructor(private val packageManager: PackageManager) :
     DataFetcher<Drawable> {
@@ -69,7 +69,7 @@ class AppIconFetcher @Inject constructor(private val packageManager: PackageMana
 }
 
 /**
- * Model loader to load [AppIcon]'s
+ * Model loader to load [AppIcon]s
  */
 class AppIconModelLoader @Inject constructor(
     private val appIconFetcherProvider: Provider<AppIconFetcher>

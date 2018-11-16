@@ -15,13 +15,18 @@ object Versions {
     const val androidGradlePlugin = "3.2.1"
 
     const val androidxArch = "2.0.0"
-
     const val androidxActivity = "1.0.0-alpha01"
     const val androidxAppCompat = "1.0.2"
     const val androidxCardView = "1.0.0"
     const val androidxCore = "1.0.0"
     const val androidxFragment = "1.1.0-alpha01"
     const val androidxPalette = "1.0.0"
+
+    const val androidxTestCore = "1.0.0"
+    const val androidxTestJunit = "1.0.0"
+    const val androidxTestRules = "1.1.0"
+    const val androidxTestRunner = "1.1.0"
+
     const val androidKtx = "0cf0a07f49"
 
     const val archWork = "1.0.0-alpha11"
@@ -35,6 +40,8 @@ object Versions {
     const val epoxyKtx = "9dde1f5a9c"
     const val epoxyPrefs = "63955db07c"
     const val glide = "4.8.0"
+    const val junit = "4.12"
+
     const val kotlin = "1.3.10"
     const val kPrefs = "8e4b5f3859"
     const val kSettings = "1bd9347740"
@@ -44,7 +51,9 @@ object Versions {
     const val materialComponents = "1.0.0"
     const val materialComponentsKtx = "c4c5dda45a"
     const val materialDialogs = "0.9.6.0"
+    const val mockitoKotlin = "2.0.0"
     const val r2 = "06e702d39f"
+    const val roboelectric = "4.0.2"
     const val rxAndroid = "2.1.0"
     const val rxJava = "2.2.2"
     const val rxJavaKtx = "015125e952"
@@ -67,7 +76,15 @@ object Deps {
     const val androidxCardView = "androidx.cardview:cardview:${Versions.androidxCardView}"
     const val androidxCoreKtx = "androidx.core:core-ktx:${Versions.androidxCore}"
     const val androidxFragment = "androidx.fragment:fragment:${Versions.androidxFragment}"
+    const val androidxFragmentTesting =
+        "androidx.fragment:fragment-testing:${Versions.androidxFragment}"
+
     const val androidxPalette = "androidx.palette:palette:${Versions.androidxPalette}"
+
+    const val androidxTestCore = "androidx.test:core:${Versions.androidxTestCore}"
+    const val androidxTestJunit = "androidx.test.ext:junit:${Versions.androidxTestJunit}"
+    const val androidxTestRules = "androidx.test:rules:${Versions.androidxTestRules}"
+    const val androidxTestRunner = "androidx.test:runner:${Versions.androidxTestRunner}"
 
     const val androidKtxAppCompat =
         "com.github.IVIanuu.android-ktx:androidktx-appcompat:${Versions.androidKtx}"
@@ -115,6 +132,8 @@ object Deps {
         "com.github.IVIanuu.director:director-contributor:${Versions.director}"
     const val directorDialog = "com.github.IVIanuu.director:director-dialog:${Versions.director}"
     const val directorScopes = "com.github.IVIanuu.director:director-scopes:${Versions.director}"
+    const val directorTesting =
+        "com.github.IVIanuu.director:director-testing:${Versions.director}"
     const val directorTraveler =
         "com.github.IVIanuu.director:director-traveler:${Versions.director}"
     const val directorViewPager =
@@ -126,6 +145,8 @@ object Deps {
     const val epoxyPrefs = "com.github.IVIanuu:epoxy-prefs:${Versions.epoxyPrefs}"
 
     const val glide = "com.github.bumptech.glide:glide:${Versions.glide}"
+
+    const val junit = "junit:junit:${Versions.junit}"
 
     const val kotlinGradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.kotlin}"
     const val kotlinStdLib = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${Versions.kotlin}"
@@ -159,7 +180,11 @@ object Deps {
 
     const val mavenGradlePlugin = "com.github.dcendents:android-maven-gradle-plugin:${Versions.mavenGradle}"
 
+    const val mockitoKotlin = "com.nhaarman.mockitokotlin2:mockito-kotlin:${Versions.mockitoKotlin}"
+
     const val r2GradlePlugin = "com.github.IVIanuu:r2:${Versions.r2}"
+
+    const val roboelectric = "org.robolectric:robolectric:${Versions.roboelectric}"
 
     const val rxAndroid = "io.reactivex.rxjava2:rxandroid:${Versions.rxAndroid}"
     const val rxJava = "io.reactivex.rxjava2:rxjava:${Versions.rxJava}"

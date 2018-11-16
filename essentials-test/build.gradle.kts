@@ -27,7 +27,16 @@ java {
 }
 
 dependencies {
+    api(Deps.androidxFragmentTesting)
+    api(Deps.androidxTestCore)
+    api(Deps.androidxTestJunit)
+    api(Deps.androidxTestRules)
+    api(Deps.androidxTestRunner)
+    api(Deps.directorTesting)
+    api(Deps.junit)
     api(Deps.kotlinStdLib)
+    api(Deps.mockitoKotlin)
+    api(Deps.roboelectric)
 }
 
 val sourcesJar = task("sourcesJar", Jar::class) {
