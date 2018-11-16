@@ -19,13 +19,13 @@ package com.ivianuu.essentials.ui.traveler.anim
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import com.ivianuu.essentials.R
-import com.ivianuu.essentials.ui.traveler.key.BaseFragmentKey
+import com.ivianuu.essentials.ui.traveler.key.FragmentKey
 import com.ivianuu.traveler.Command
 
 /**
  * Horizontal fragment key setup
  */
-class HorizontalFragmentKeySetup : BaseFragmentKey.Setup {
+class HorizontalFragmentKeySetup : FragmentKey.Setup {
     override fun apply(
         command: Command,
         currentFragment: Fragment?,

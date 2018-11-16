@@ -25,16 +25,16 @@ import com.ivianuu.traveler.Command
 import com.ivianuu.traveler.fragment.FragmentKey
 import kotlin.reflect.KClass
 
-abstract class BaseFragmentKey(
+abstract class FragmentKey(
     val target: KClass<out Fragment>,
     open val setup: Setup? = null
 ) : FragmentKey, Parcelable {
 
     override fun createFragment(data: Any?): Fragment = target.java.newInstance().apply {
         arguments = if (arguments != null) {
-            arguments!!.apply { putParcelable(KEY_KEY, this@BaseFragmentKey) }
+            arguments!!.apply { putParcelable(KEY_KEY, this@FragmentKey) }
         } else {
-            bundleOf(KEY_KEY to this@BaseFragmentKey)
+            bundleOf(KEY_KEY to this@FragmentKey)
         }
     }
 

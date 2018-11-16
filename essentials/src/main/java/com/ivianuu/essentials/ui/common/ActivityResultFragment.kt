@@ -4,7 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import com.ivianuu.essentials.ui.base.BaseFragment
-import com.ivianuu.essentials.ui.traveler.key.BaseFragmentKey
+import com.ivianuu.essentials.ui.traveler.key.FragmentKey
 import com.ivianuu.essentials.ui.traveler.key.ResultKey
 import com.ivianuu.essentials.ui.traveler.key.bindKey
 import com.ivianuu.essentials.util.RequestCodeGenerator
@@ -16,7 +16,7 @@ data class ActivityResultKey(
     override val resultCode: Int,
     val intent: Intent,
     val requestCode: Int = RequestCodeGenerator.generate()
-) : BaseFragmentKey(ActivityResultFragment::class),
+) : FragmentKey(ActivityResultFragment::class),
     ResultKey<ActivityResult>
 
 /**

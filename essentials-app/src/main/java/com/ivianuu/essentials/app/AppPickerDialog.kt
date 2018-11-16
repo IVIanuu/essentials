@@ -22,7 +22,7 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.ivianuu.androidktx.fragment.app.string
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.base.BaseDialogFragment
-import com.ivianuu.essentials.ui.traveler.key.BaseFragmentKey
+import com.ivianuu.essentials.ui.traveler.key.FragmentKey
 import com.ivianuu.essentials.ui.traveler.key.ResultKey
 import com.ivianuu.essentials.ui.traveler.key.key
 import com.ivianuu.essentials.util.RequestCodeGenerator
@@ -37,7 +37,7 @@ data class AppPickerKey(
     val title: CharSequence? = null,
     val launchableOnly: Boolean = false,
     override val resultCode: Int = RequestCodeGenerator.generate()
-) : BaseFragmentKey(AppPickerDialog::class), ResultKey<AppInfo>
+) : FragmentKey(AppPickerDialog::class), ResultKey<AppInfo>
 
 /**
  * App picker

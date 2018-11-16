@@ -26,14 +26,14 @@ import com.ivianuu.traveler.Command
 import com.ivianuu.traveler.android.ActivityKey
 import kotlin.reflect.KClass
 
-abstract class BaseActivityKey(
+abstract class ActivityKey(
     val target: KClass<out Activity>,
     open val startOptions: StartOptions? = null
 ) : ActivityKey, Parcelable {
 
     override fun createIntent(context: Context, data: Any?) =
         Intent(context, target.java).apply {
-            putExtra(KEY_KEY, this@BaseActivityKey)
+            putExtra(KEY_KEY, this@ActivityKey)
         }
 
     override fun createStartActivityOptions(command: Command, activityIntent: Intent) =

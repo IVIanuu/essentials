@@ -4,7 +4,7 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import com.ivianuu.essentials.ui.base.BaseFragment
-import com.ivianuu.essentials.ui.traveler.key.BaseFragmentKey
+import com.ivianuu.essentials.ui.traveler.key.FragmentKey
 import com.ivianuu.essentials.ui.traveler.key.ResultKey
 import com.ivianuu.essentials.ui.traveler.key.bindKey
 import com.ivianuu.essentials.util.RequestCodeGenerator
@@ -17,7 +17,7 @@ data class PermissionKey(
     override val resultCode: Int,
     val permissions: Array<String>,
     val requestCode: Int = RequestCodeGenerator.generate()
-) : BaseFragmentKey(PermissionFragment::class),
+) : FragmentKey(PermissionFragment::class),
     ResultKey<PermissionResult> {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

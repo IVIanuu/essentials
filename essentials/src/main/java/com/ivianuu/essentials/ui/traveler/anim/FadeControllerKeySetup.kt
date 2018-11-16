@@ -21,13 +21,13 @@ import com.ivianuu.director.RouterTransaction
 import com.ivianuu.director.common.changehandler.FadeChangeHandler
 import com.ivianuu.director.popChangeHandler
 import com.ivianuu.director.pushChangeHandler
-import com.ivianuu.essentials.ui.traveler.key.BaseControllerKey
+import com.ivianuu.essentials.ui.traveler.key.ControllerKey
 import com.ivianuu.traveler.Command
 
 /**
  * Fade controller key setup
  */
-class FadeControllerKeySetup : BaseControllerKey.Setup {
+class FadeControllerKeySetup : ControllerKey.Setup {
     override fun apply(
         command: Command,
         currentController: Controller?,

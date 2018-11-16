@@ -21,13 +21,13 @@ import com.ivianuu.director.RouterTransaction
 import com.ivianuu.director.common.changehandler.VerticalChangeHandler
 import com.ivianuu.director.popChangeHandler
 import com.ivianuu.director.pushChangeHandler
-import com.ivianuu.essentials.ui.traveler.key.BaseControllerKey
+import com.ivianuu.essentials.ui.traveler.key.ControllerKey
 import com.ivianuu.traveler.Command
 
 /**
  * Vertical controller key setup
  */
-class VerticalControllerKeySetup : BaseControllerKey.Setup {
+class VerticalControllerKeySetup : ControllerKey.Setup {
     override fun apply(
         command: Command,
         currentController: Controller?,

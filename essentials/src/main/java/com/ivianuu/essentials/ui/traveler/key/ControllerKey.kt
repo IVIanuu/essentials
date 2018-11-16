@@ -24,13 +24,13 @@ import com.ivianuu.essentials.util.ext.unsafeLazy
 import com.ivianuu.traveler.Command
 import kotlin.reflect.KClass
 
-abstract class BaseControllerKey(
+abstract class ControllerKey(
     val target: KClass<out Controller>,
     open val setup: Setup? = null
 ) : ControllerKey, Parcelable {
 
     override fun createController(data: Any?): Controller = target.java.newInstance().apply {
-        args.apply { putParcelable(KEY_KEY, this@BaseControllerKey) }
+        args.apply { putParcelable(KEY_KEY, this@ControllerKey) }
     }
 
     override fun setupTransaction(

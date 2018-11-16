@@ -21,7 +21,7 @@ import android.os.Bundle
 import com.afollestad.materialdialogs.MaterialDialog
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.base.BaseDialogFragment
-import com.ivianuu.essentials.ui.traveler.key.BaseFragmentKey
+import com.ivianuu.essentials.ui.traveler.key.FragmentKey
 import com.ivianuu.essentials.ui.traveler.key.ResultKey
 import com.ivianuu.essentials.ui.traveler.key.key
 import com.ivianuu.essentials.util.RequestCodeGenerator
@@ -37,7 +37,7 @@ data class TextInputKey(
     val prefill: String = "",
     val allowEmptyInput: Boolean = false,
     override var resultCode: Int = RequestCodeGenerator.generate()
-) : BaseFragmentKey(TextInputDialog::class), ResultKey<CharSequence>
+) : FragmentKey(TextInputDialog::class), ResultKey<CharSequence>
 
 /**
  * Text input dialog
