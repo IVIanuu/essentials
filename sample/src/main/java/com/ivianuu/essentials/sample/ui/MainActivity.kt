@@ -21,6 +21,7 @@ import android.os.Bundle
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import com.ivianuu.essentials.app.AppStore
+import com.ivianuu.essentials.sample.data.MyOtherWorker
 import com.ivianuu.essentials.sample.data.MyWorker
 import com.ivianuu.essentials.sample.ui.counter.CounterKey
 import com.ivianuu.essentials.ui.base.BaseActivity
@@ -31,6 +32,7 @@ import javax.inject.Inject
 class MainActivity : BaseActivity() {
 
     @Inject lateinit var appStore: AppStore
+    @Inject lateinit var workManager: WorkManager
 
     override val useDirector: Boolean
         get() = true
@@ -40,8 +42,12 @@ class MainActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        WorkManager.getInstance().enqueue(
+        workManager.enqueue(
             OneTimeWorkRequestBuilder<MyWorker>()
+                .build()
+        )
+        workManager.enqueue(
+            OneTimeWorkRequestBuilder<MyOtherWorker>()
                 .build()
         )
     }

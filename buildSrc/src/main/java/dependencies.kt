@@ -32,7 +32,7 @@ Versions {
 
     const val archWork = "1.0.0-alpha11"
 
-    const val assistedInject = "18c716578f"
+    const val assistedInject = "850d2548f1"
 
     const val constraintLayout = "1.1.3"
     const val contributor = "efa69d138b"

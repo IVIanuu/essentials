@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.sample.injection
 
+import com.ivianuu.essentials.sample.data.MyOtherWorker
 import com.ivianuu.essentials.sample.data.MyWorker
 import com.ivianuu.essentials.work.InjectWorkerFactory
 import com.ivianuu.essentials.work.WorkerKey
@@ -33,5 +34,10 @@ abstract class WorkerModule {
     @IntoMap
     @WorkerKey(MyWorker::class)
     abstract fun bindMyWorker(factory: MyWorker.Factory): InjectWorkerFactory
+
+    @Binds
+    @IntoMap
+    @WorkerKey(MyOtherWorker::class)
+    abstract fun bindMyOtherWorker(factory: MyOtherWorker.Factory): InjectWorkerFactory
 
 }
