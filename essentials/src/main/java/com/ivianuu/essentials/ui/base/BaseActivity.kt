@@ -17,15 +17,10 @@
 package com.ivianuu.essentials.ui.base
 
 import android.os.Bundle
-import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.ivianuu.contributor.view.HasViewInjector
-import com.ivianuu.director.Controller
 import com.ivianuu.director.attachRouter
-import com.ivianuu.director.contributor.HasControllerInjector
 import com.ivianuu.director.traveler.ControllerNavigator
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.mvrx.MvRxView
@@ -33,6 +28,9 @@ import com.ivianuu.essentials.ui.traveler.navigator.AddFragmentPlugin
 import com.ivianuu.essentials.util.ViewModelFactoryHolder
 import com.ivianuu.essentials.util.asMainCoroutineScope
 import com.ivianuu.essentials.util.ext.unsafeLazy
+import com.ivianuu.injectors.CompositeInjectors
+import com.ivianuu.injectors.HasInjectors
+import com.ivianuu.injectors.android.inject
 import com.ivianuu.scopes.archlifecycle.onDestroy
 import com.ivianuu.traveler.Navigator
 import com.ivianuu.traveler.NavigatorHolder
@@ -43,29 +41,19 @@ import com.ivianuu.traveler.common.compositeNavigatorOf
 import com.ivianuu.traveler.fragment.FragmentNavigator
 import com.ivianuu.traveler.lifecycle.setNavigator
 import com.ivianuu.traveler.setRoot
-import dagger.android.AndroidInjection
-import dagger.android.AndroidInjector
-import dagger.android.DispatchingAndroidInjector
-import dagger.android.support.HasSupportFragmentInjector
 import javax.inject.Inject
 
 /**
  * Base activity
  */
-abstract class BaseActivity : AppCompatActivity(), OnBackPressedCallback,
-    HasControllerInjector,
-    HasSupportFragmentInjector,
-    HasViewInjector,
+abstract class BaseActivity : AppCompatActivity(), HasInjectors, OnBackPressedCallback,
     MvRxView, ViewModelFactoryHolder {
+
+    @Inject override lateinit var injectors: CompositeInjectors
+    @Inject override lateinit var viewModelFactory: ViewModelProvider.Factory
 
     @Inject lateinit var navigatorHolder: NavigatorHolder
     @Inject lateinit var travelerRouter: Router
-
-    @Inject lateinit var controllerInjector: DispatchingAndroidInjector<Controller>
-    @Inject lateinit var supportFragmentInjector: DispatchingAndroidInjector<Fragment>
-    @Inject lateinit var viewInjector: DispatchingAndroidInjector<View>
-
-    @Inject override lateinit var viewModelFactory: ViewModelProvider.Factory
 
     open val useDirector = false
 
@@ -95,7 +83,7 @@ abstract class BaseActivity : AppCompatActivity(), OnBackPressedCallback,
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        AndroidInjection.inject(this)
+        inject()
         super.onCreate(savedInstanceState)
 
         addOnBackPressedCallback(this)
@@ -124,10 +112,6 @@ abstract class BaseActivity : AppCompatActivity(), OnBackPressedCallback,
     } else {
         false
     }
-
-    override fun controllerInjector(): AndroidInjector<Controller> = controllerInjector
-    override fun supportFragmentInjector(): AndroidInjector<Fragment> = supportFragmentInjector
-    override fun viewInjector(): AndroidInjector<View> = viewInjector
 
     protected open fun navigators() = emptyList<ResultNavigator>()
 }

@@ -80,17 +80,11 @@ dependencies {
 
     api(Deps.constraintLayout)
 
-    api(Deps.contributor)
-    api(Deps.contributorView)
-
     api(Deps.dagger)
-    api(Deps.daggerAndroid)
-    api(Deps.daggerAndroidSupport)
 
     api(Deps.director)
     api(Deps.directorArchLifecycle)
     api(Deps.directorCommon)
-    api(Deps.directorContributor)
     api(Deps.directorDialog)
     api(Deps.directorScopes)
     api(Deps.directorTraveler)
@@ -101,6 +95,10 @@ dependencies {
     api(Deps.epoxyPrefs)
 
     kapt(project(":essentials-compiler"))
+
+    api(Deps.injectors)
+    api(Deps.injectorsAndroid)
+    api(Deps.injectorsFragment)
 
     api(Deps.kotlinStdLib)
 

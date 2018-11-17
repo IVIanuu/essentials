@@ -11,7 +11,8 @@ object Build {
     const val versionName = "0.0.1"
 }
 
-object Versions {
+object
+Versions {
     const val androidGradlePlugin = "3.2.1"
 
     const val androidxArch = "2.0.0"
@@ -40,8 +41,8 @@ object Versions {
     const val epoxyKtx = "9dde1f5a9c"
     const val epoxyPrefs = "f10b99d7c1"
     const val glide = "4.8.0"
+    const val injectors = "995ca52397"
     const val junit = "4.12"
-
     const val kotlin = "1.3.10"
     const val kPrefs = "79aac06ee7"
     const val kSettings = "70219d641b"
@@ -119,17 +120,12 @@ object Deps {
         "org.jetbrains.kotlinx:kotlinx-coroutines-rx2:${Versions.coroutines}"
 
     const val dagger = "com.google.dagger:dagger:${Versions.dagger}"
-    const val daggerAndroid = "com.google.dagger:dagger-android:${Versions.dagger}"
-    const val daggerAndroidSupport = "com.google.dagger:dagger-android-support:${Versions.dagger}"
     const val daggerCompiler = "com.google.dagger:dagger-compiler:${Versions.dagger}"
-    const val daggerAndroidProcessor = "com.google.dagger:dagger-android-processor:${Versions.dagger}"
 
     const val director = "com.github.IVIanuu.director:director:${Versions.director}"
     const val directorArchLifecycle =
         "com.github.IVIanuu.director:director-arch-lifecycle:${Versions.director}"
     const val directorCommon = "com.github.IVIanuu.director:director-common:${Versions.director}"
-    const val directorContributor =
-        "com.github.IVIanuu.director:director-contributor:${Versions.director}"
     const val directorDialog = "com.github.IVIanuu.director:director-dialog:${Versions.director}"
     const val directorScopes = "com.github.IVIanuu.director:director-scopes:${Versions.director}"
     const val directorTesting =
@@ -145,6 +141,14 @@ object Deps {
     const val epoxyPrefs = "com.github.IVIanuu:epoxy-prefs:${Versions.epoxyPrefs}"
 
     const val glide = "com.github.bumptech.glide:glide:${Versions.glide}"
+
+    const val injectors = "com.github.IVIanuu.injectors:injectors:${Versions.injectors}"
+    const val injectorsAndroid =
+        "com.github.IVIanuu.injectors:injectors-android:${Versions.injectors}"
+    const val injectorsCompiler =
+        "com.github.IVIanuu.injectors:injectors-compiler:${Versions.injectors}"
+    const val injectorsFragment =
+        "com.github.IVIanuu.injectors:injectors-fragment:${Versions.injectors}"
 
     const val junit = "junit:junit:${Versions.junit}"
 

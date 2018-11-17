@@ -17,20 +17,23 @@
 package com.ivianuu.essentials.picker
 
 import com.ivianuu.essentials.injection.PerFragment
+import com.ivianuu.injectors.ContributesInjector
 import dagger.Module
-import dagger.android.ContributesAndroidInjector
 
 /**
  * Essentials picker module
  */
+@Module(includes = [EssentialsPickerBindingModule_Contributions::class])
+abstract class EssentialsPickerModule
+
 @Module
-abstract class EssentialsPickerModule {
+internal abstract class EssentialsPickerBindingModule {
 
     @PerFragment
-    @ContributesAndroidInjector
+    @ContributesInjector
     abstract fun bindColorPickerFragment(): ColorPickerFragment
 
     @PerFragment
-    @ContributesAndroidInjector
+    @ContributesInjector
     abstract fun bindTextInputDialog(): TextInputDialog
 }

@@ -18,21 +18,25 @@ package com.ivianuu.essentials.injection
 
 import com.ivianuu.essentials.ui.common.ActivityResultFragment
 import com.ivianuu.essentials.ui.common.PermissionFragment
+import com.ivianuu.injectors.ContributesInjector
 import dagger.Module
-import dagger.android.ContributesAndroidInjector
 
 /**
  * Essentials fragment binding module
  */
+@Module(includes = [RealEssentialsFragmentBindingModule_Contributions::class])
+abstract class EssentialsFragmentBindingModule
+
 @Module
-abstract class EssentialsFragmentBindingModule {
+// todo merge when possible with injectors
+internal abstract class RealEssentialsFragmentBindingModule {
 
     @PerFragment
-    @ContributesAndroidInjector
+    @ContributesInjector
     abstract fun bindActivityResultFragment(): ActivityResultFragment
 
     @PerFragment
-    @ContributesAndroidInjector
+    @ContributesInjector
     abstract fun bindPermissionFragment(): PermissionFragment
 
 }

@@ -19,18 +19,18 @@ package com.ivianuu.essentials.sample.injection
 import com.ivianuu.essentials.injection.PerController
 import com.ivianuu.essentials.sample.ui.counter.CounterController
 import com.ivianuu.essentials.sample.ui.list.ListController
+import com.ivianuu.injectors.ContributesInjector
 import dagger.Module
-import dagger.android.ContributesAndroidInjector
 
 @Module
 abstract class ControllerBindingModule {
 
     @PerController
-    @ContributesAndroidInjector
+    @ContributesInjector
     abstract fun bindCounterController(): CounterController
 
     @PerController
-    @ContributesAndroidInjector
+    @ContributesInjector
     abstract fun bindListController(): ListController
 
 }

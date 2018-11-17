@@ -3,7 +3,7 @@ package com.ivianuu.essentials.data.base
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import dagger.android.AndroidInjection
+import com.ivianuu.injectors.android.inject
 
 /**
  * Base broadcast receiver
@@ -11,6 +11,6 @@ import dagger.android.AndroidInjection
 abstract class BaseBroadcastReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
-        AndroidInjection.inject(this, context)
+        inject(context)
     }
 }

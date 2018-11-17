@@ -14,23 +14,19 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.app
+package com.ivianuu.essentials.injection
 
-import com.ivianuu.essentials.injection.PerFragment
-import com.ivianuu.injectors.ContributesInjector
-import dagger.Module
+import androidx.work.Worker
+import com.ivianuu.injectors.HasInjectors
+import com.ivianuu.injectors.Injector
+import com.ivianuu.injectors.inject
 
-/**
- * @author Manuel Wrage (IVIanuu)
- */
-@Module(includes = [EssentialsAppBindingModule_Contributions::class])
-abstract class EssentialsAppModule
-
-@Module
-internal abstract class EssentialsAppBindingModule {
-
-    @PerFragment
-    @ContributesInjector
-    abstract fun bindAppPickerDialog(): AppPickerDialog
-
+private val INJECTORS_FINDER: (Worker) -> HasInjectors? = {
+    it.applicationContext as? HasInjectors
 }
+
+fun Injector.Companion.inject(instance: Worker) {
+    inject(instance, INJECTORS_FINDER)
+}
+
+fun Worker.inject() = Injector.inject(this)

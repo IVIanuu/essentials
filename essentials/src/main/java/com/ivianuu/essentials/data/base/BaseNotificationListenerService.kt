@@ -2,10 +2,10 @@ package com.ivianuu.essentials.data.base
 
 import android.service.notification.NotificationListenerService
 import com.ivianuu.essentials.util.asMainCoroutineScope
+import com.ivianuu.injectors.android.inject
 import com.ivianuu.scopes.MutableScope
 import com.ivianuu.scopes.ReusableScope
 import com.ivianuu.scopes.Scope
-import dagger.android.AndroidInjection
 
 /**
  * Base notification listener service
@@ -24,7 +24,7 @@ abstract class BaseNotificationListenerService : NotificationListenerService() {
     private var _connectedCoroutineScope = _connectedScope.asMainCoroutineScope()
 
     override fun onCreate() {
-        AndroidInjection.inject(this)
+        inject()
         super.onCreate()
     }
 

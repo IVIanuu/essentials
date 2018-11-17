@@ -18,9 +18,9 @@ package com.ivianuu.essentials.ui.base
 
 import android.content.Context
 import androidx.lifecycle.ViewModelProvider
-import com.ivianuu.director.contributor.DirectorInjection
 import com.ivianuu.director.dialog.DialogController
 import com.ivianuu.director.scopes.destroy
+import com.ivianuu.essentials.injection.inject
 import com.ivianuu.essentials.util.ContextAware
 import com.ivianuu.essentials.util.ViewModelFactoryHolder
 import com.ivianuu.essentials.util.asMainCoroutineScope
@@ -41,7 +41,7 @@ abstract class BaseDialogController : DialogController(), ContextAware, ViewMode
     val coroutineScope = destroy.asMainCoroutineScope()
 
     override fun onCreate() {
-        DirectorInjection.inject(this)
+        inject()
         super.onCreate()
     }
 }

@@ -22,9 +22,9 @@ import androidx.appcompat.app.AppCompatDialogFragment
 import androidx.lifecycle.ViewModelProvider
 import com.ivianuu.essentials.util.ViewModelFactoryHolder
 import com.ivianuu.essentials.util.asMainCoroutineScope
+import com.ivianuu.injectors.fragment.inject
 import com.ivianuu.scopes.archlifecycle.onDestroy
 import com.ivianuu.traveler.Router
-import dagger.android.support.AndroidSupportInjection
 import javax.inject.Inject
 
 /**
@@ -39,7 +39,7 @@ abstract class BaseDialogFragment : AppCompatDialogFragment(), OnBackPressedCall
     val coroutineScope = onDestroy.asMainCoroutineScope()
 
     override fun onAttach(context: Context) {
-        AndroidSupportInjection.inject(this)
+        inject()
         super.onAttach(context)
         requireActivity().addOnBackPressedCallback(this)
     }

@@ -17,14 +17,14 @@
 package com.ivianuu.essentials.sample.app
 
 import com.ivianuu.essentials.app.BaseApp
-import dagger.android.AndroidInjector
-import dagger.android.support.DaggerApplication
+import com.ivianuu.injectors.Injector
 
 /**
  * App
  */
 class App : BaseApp() {
 
-    override fun applicationInjector(): AndroidInjector<out DaggerApplication> =
+    override fun applicationInjector(): Injector<out BaseApp> =
         DaggerAppComponent.builder().create(this)
+
 }

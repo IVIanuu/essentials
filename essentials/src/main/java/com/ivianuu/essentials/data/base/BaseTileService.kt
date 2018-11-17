@@ -4,10 +4,10 @@ import android.annotation.TargetApi
 import android.os.Build
 import android.service.quicksettings.TileService
 import com.ivianuu.essentials.util.asMainCoroutineScope
+import com.ivianuu.injectors.android.inject
 import com.ivianuu.scopes.MutableScope
 import com.ivianuu.scopes.ReusableScope
 import com.ivianuu.scopes.Scope
-import dagger.android.AndroidInjection
 
 /**
  * Base tile service
@@ -27,7 +27,7 @@ abstract class BaseTileService : TileService() {
     private var _listeningCoroutineScope = _listeningScope.asMainCoroutineScope()
 
     override fun onCreate() {
-        AndroidInjection.inject(this)
+        inject()
         super.onCreate()
     }
 

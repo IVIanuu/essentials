@@ -16,18 +16,16 @@
 
 package com.ivianuu.essentials.app
 
+import android.app.Application
 import android.content.pm.ApplicationInfo
 import android.os.Looper
-import android.view.View
-import com.ivianuu.contributor.view.HasViewInjector
-import com.ivianuu.director.Controller
-import com.ivianuu.director.contributor.HasControllerInjector
 import com.ivianuu.essentials.util.ext.containsFlag
+import com.ivianuu.injectors.CompositeInjectors
+import com.ivianuu.injectors.HasInjectors
+import com.ivianuu.injectors.Injector
+import com.ivianuu.injectors.Injectors
 import com.ivianuu.statestore.StateStorePlugins
 import com.ivianuu.statestore.android.MAIN_THREAD_EXECUTOR
-import dagger.android.AndroidInjector
-import dagger.android.DispatchingAndroidInjector
-import dagger.android.support.DaggerApplication
 import io.reactivex.android.plugins.RxAndroidPlugins
 import io.reactivex.android.schedulers.AndroidSchedulers
 import timber.log.Timber
@@ -36,17 +34,25 @@ import javax.inject.Inject
 /**
  * App
  */
-abstract class BaseApp : DaggerApplication(), HasControllerInjector, HasViewInjector {
+abstract class BaseApp : Application(), HasInjectors {
 
+    @Inject internal lateinit var _injectors: CompositeInjectors
     @Inject internal lateinit var appServices: Set<@JvmSuppressWildcards AppService>
-    @Inject lateinit var controllerInjector: DispatchingAndroidInjector<Controller>
-    @Inject lateinit var viewInjector: DispatchingAndroidInjector<View>
+
+    override val injectors: Injectors
+        get() {
+            injectIfNeeded()
+            return _injectors
+        }
 
     protected open val initTimber get() = true
     protected open val initRxJava get() = true
     protected open val initStateStore get() = true
 
+    private var injected = false
+
     override fun onCreate() {
+        injectIfNeeded()
         super.onCreate()
 
         if (initTimber) {
@@ -72,7 +78,13 @@ abstract class BaseApp : DaggerApplication(), HasControllerInjector, HasViewInje
         appService.start()
     }
 
-    override fun controllerInjector(): AndroidInjector<Controller> = controllerInjector
+    protected abstract fun applicationInjector(): Injector<out BaseApp>
 
-    override fun viewInjector(): AndroidInjector<View> = viewInjector
+    private fun injectIfNeeded() {
+        if (!injected) {
+            injected = true
+            (applicationInjector() as Injector<BaseApp>)
+                .inject(this)
+        }
+    }
 }

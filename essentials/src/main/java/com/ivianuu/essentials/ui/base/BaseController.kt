@@ -22,21 +22,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
-import com.ivianuu.contributor.view.HasViewInjector
-import com.ivianuu.director.Controller
 import com.ivianuu.director.arch.lifecycle.LifecycleController
-import com.ivianuu.director.contributor.DirectorInjection
-import com.ivianuu.director.contributor.HasControllerInjector
 import com.ivianuu.director.scopes.unbindView
+import com.ivianuu.essentials.injection.inject
 import com.ivianuu.essentials.ui.mvrx.MvRxView
 import com.ivianuu.essentials.util.ContextAware
-import com.ivianuu.essentials.util.ViewInjectionContextWrapper
+import com.ivianuu.essentials.util.HasInjectorsContextWrapper
 import com.ivianuu.essentials.util.ViewModelFactoryHolder
 import com.ivianuu.essentials.util.asMainCoroutineScope
+import com.ivianuu.injectors.CompositeInjectors
+import com.ivianuu.injectors.HasInjectors
 import com.ivianuu.scopes.archlifecycle.onDestroy
 import com.ivianuu.traveler.Router
-import dagger.android.AndroidInjector
-import dagger.android.DispatchingAndroidInjector
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.*
 import kotlinx.coroutines.CoroutineScope
@@ -45,15 +42,13 @@ import javax.inject.Inject
 /**
  * Base controller
  */
-abstract class BaseController : LifecycleController(), ContextAware, HasControllerInjector,
-    HasViewInjector, LayoutContainer, MvRxView, ViewModelFactoryHolder {
+abstract class BaseController : LifecycleController(), ContextAware, HasInjectors,
+    LayoutContainer, MvRxView, ViewModelFactoryHolder {
+
+    @Inject override lateinit var injectors: CompositeInjectors
+    @Inject override lateinit var viewModelFactory: ViewModelProvider.Factory
 
     @Inject lateinit var travelerRouter: Router
-
-    @Inject lateinit var controllerInjector: DispatchingAndroidInjector<Controller>
-    @Inject lateinit var viewInjector: DispatchingAndroidInjector<View>
-
-    @Inject override lateinit var viewModelFactory: ViewModelProvider.Factory
 
     override val containerView: View?
         get() = view
@@ -70,7 +65,7 @@ abstract class BaseController : LifecycleController(), ContextAware, HasControll
     protected open val layoutRes get() = -1
 
     override fun onCreate() {
-        DirectorInjection.inject(this)
+        inject()
         super.onCreate()
     }
 
@@ -80,7 +75,7 @@ abstract class BaseController : LifecycleController(), ContextAware, HasControll
         savedViewState: Bundle?
     ): View = if (layoutRes != -1) {
         val injectorInflater =
-            inflater.cloneInContext(ViewInjectionContextWrapper(activity, this))
+            inflater.cloneInContext(HasInjectorsContextWrapper(activity, this))
         injectorInflater.inflate(layoutRes, container, false)
     } else {
         throw IllegalStateException("no layoutRes provided")
@@ -110,7 +105,4 @@ abstract class BaseController : LifecycleController(), ContextAware, HasControll
     override fun invalidate() {
     }
 
-    override fun controllerInjector(): AndroidInjector<Controller> = controllerInjector
-
-    override fun viewInjector(): AndroidInjector<View> = viewInjector
 }

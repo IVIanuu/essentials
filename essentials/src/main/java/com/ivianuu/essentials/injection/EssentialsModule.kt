@@ -16,26 +16,20 @@
 
 package com.ivianuu.essentials.injection
 
-import com.ivianuu.contributor.view.ViewInjectionModule
-import com.ivianuu.director.contributor.DirectorInjectionModule
 import com.ivianuu.essentials.injection.viewmodel.ViewModelInjectionModule
 import com.ivianuu.essentials.ui.traveler.TravelerModule
+import com.ivianuu.injectors.InjectorModule
 import dagger.Module
-import dagger.android.AndroidInjectionModule
-import dagger.android.support.AndroidSupportInjectionModule
 
 /**
  * Wraps all essential modules
  */
 @Module(
     includes = [
-        AndroidInjectionModule::class,
-        AndroidSupportInjectionModule::class,
         AppServiceModule::class,
-        DirectorInjectionModule::class,
+        InjectorModule::class,
         SystemServiceModule::class,
         TravelerModule::class,
-        ViewInjectionModule::class,
         ViewModelInjectionModule::class
     ]
 )

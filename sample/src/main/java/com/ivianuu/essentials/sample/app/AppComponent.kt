@@ -4,10 +4,10 @@ import com.ivianuu.essentials.app.EssentialsAppModule
 import com.ivianuu.essentials.app.glide.EssentialsAppGlideModule
 import com.ivianuu.essentials.injection.EssentialsModule
 import com.ivianuu.essentials.picker.EssentialsPickerModule
-import com.ivianuu.essentials.sample.injection.ActivityBindingModule
+import com.ivianuu.essentials.sample.injection.ActivityBindingModule_Contributions
 import com.ivianuu.essentials.sample.injection.ViewModelModule
+import com.ivianuu.injectors.Injector
 import dagger.Component
-import dagger.android.AndroidInjector
 import javax.inject.Singleton
 
 /**
@@ -16,7 +16,7 @@ import javax.inject.Singleton
 @Singleton
 @Component(
     modules = [
-        ActivityBindingModule::class,
+        ActivityBindingModule_Contributions::class,
         AppModule::class,
         EssentialsModule::class,
         EssentialsAppModule::class,
@@ -25,7 +25,7 @@ import javax.inject.Singleton
         ViewModelModule::class
     ]
 )
-interface AppComponent : AndroidInjector<App> {
+interface AppComponent : Injector<App> {
     @Component.Builder
-    abstract class Builder : AndroidInjector.Builder<App>()
+    abstract class Builder : Injector.Builder<App>()
 }

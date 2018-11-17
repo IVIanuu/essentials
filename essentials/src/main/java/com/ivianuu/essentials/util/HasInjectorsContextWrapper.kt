@@ -18,14 +18,14 @@ package com.ivianuu.essentials.util
 
 import android.content.Context
 import android.content.ContextWrapper
-import com.ivianuu.contributor.view.HasViewInjector
+import com.ivianuu.injectors.HasInjectors
 
 /**
- * Wraps a [Context] and is a [HasViewInjector]
- * to make it possible to inject stuff from a [android.support.v4.app.Fragment]
- * into [View]s
+ * Wraps a [Context] and is a [HasInjectors]
+ * to make it possible to inject stuff from a [com.ivianuu.director.Controller]
+ * into [android.view.View]s
  */
-class ViewInjectionContextWrapper(
+class HasInjectorsContextWrapper(
     context: Context,
-    private val hasViewInjector: HasViewInjector
-) : ContextWrapper(context), HasViewInjector by hasViewInjector
+    private val hasInjectors: HasInjectors
+) : ContextWrapper(context), HasInjectors by hasInjectors

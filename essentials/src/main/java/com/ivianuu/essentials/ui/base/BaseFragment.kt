@@ -24,34 +24,29 @@ import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.ivianuu.contributor.view.HasViewInjector
 import com.ivianuu.essentials.ui.mvrx.MvRxView
-import com.ivianuu.essentials.util.ViewInjectionContextWrapper
+import com.ivianuu.essentials.util.HasInjectorsContextWrapper
 import com.ivianuu.essentials.util.ViewModelFactoryHolder
 import com.ivianuu.essentials.util.asMainCoroutineScope
+import com.ivianuu.injectors.CompositeInjectors
+import com.ivianuu.injectors.HasInjectors
+import com.ivianuu.injectors.fragment.inject
 import com.ivianuu.scopes.archlifecycle.fragment.viewOnDestroy
 import com.ivianuu.scopes.archlifecycle.onDestroy
 import com.ivianuu.traveler.Router
-import dagger.android.AndroidInjector
-import dagger.android.DispatchingAndroidInjector
-import dagger.android.support.AndroidSupportInjection
-import dagger.android.support.HasSupportFragmentInjector
 import kotlinx.coroutines.CoroutineScope
 import javax.inject.Inject
 
 /**
  * Base fragment
  */
-abstract class BaseFragment : Fragment(), OnBackPressedCallback, HasSupportFragmentInjector,
-    HasViewInjector,
+abstract class BaseFragment : Fragment(), HasInjectors, OnBackPressedCallback,
     MvRxView, ViewModelFactoryHolder {
 
-    @Inject lateinit var router: Router
-
-    @Inject lateinit var supportFragmentInjector: DispatchingAndroidInjector<Fragment>
-    @Inject lateinit var viewInjector: DispatchingAndroidInjector<View>
-
+    @Inject override lateinit var injectors: CompositeInjectors
     @Inject override lateinit var viewModelFactory: ViewModelProvider.Factory
+
+    @Inject lateinit var router: Router
 
     val coroutineScope = onDestroy.asMainCoroutineScope()
 
@@ -62,7 +57,7 @@ abstract class BaseFragment : Fragment(), OnBackPressedCallback, HasSupportFragm
     protected open val layoutRes get() = -1
 
     override fun onAttach(context: Context) {
-        AndroidSupportInjection.inject(this)
+        inject()
         super.onAttach(context)
         requireActivity().addOnBackPressedCallback(this)
     }
@@ -73,7 +68,7 @@ abstract class BaseFragment : Fragment(), OnBackPressedCallback, HasSupportFragm
         savedInstanceState: Bundle?
     ): View? = if (layoutRes != -1) {
         val injectorInflater = inflater.cloneInContext(
-            ViewInjectionContextWrapper(requireContext(), this)
+            HasInjectorsContextWrapper(requireContext(), this)
         )
         injectorInflater.inflate(layoutRes, container, false)
     } else {
@@ -105,7 +100,4 @@ abstract class BaseFragment : Fragment(), OnBackPressedCallback, HasSupportFragm
 
     override fun handleOnBackPressed() = false
 
-    override fun supportFragmentInjector(): AndroidInjector<Fragment> = supportFragmentInjector
-
-    override fun viewInjector(): AndroidInjector<View> = viewInjector
 }
