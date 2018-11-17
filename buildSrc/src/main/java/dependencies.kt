@@ -32,6 +32,8 @@ Versions {
 
     const val archWork = "1.0.0-alpha11"
 
+    const val assistedInject = "18c716578f"
+
     const val constraintLayout = "1.1.3"
     const val contributor = "efa69d138b"
     const val coroutines = "1.0.0"
@@ -102,6 +104,11 @@ object Deps {
         "androidx.lifecycle:lifecycle-extensions:${Versions.androidxArch}"
 
     const val archWorkRuntime = "android.arch.work:work-runtime-ktx:${Versions.archWork}"
+
+    const val assistedInject =
+        "com.github.IVIanuu.assisted-inject:assistedinject:${Versions.assistedInject}"
+    const val assistedInjectCompiler =
+        "com.github.IVIanuu.assisted-inject:assistedinject-compiler:${Versions.assistedInject}"
 
     const val contributor = "com.github.IVIanuu.contributor:contributor:${Versions.contributor}"
     const val contributorCompiler =

@@ -14,19 +14,15 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.injection
+package com.ivianuu.essentials.work
 
-/*
-import com.ivianuu.injectors.HasInjectors
-import com.ivianuu.injectors.Injector
-import com.ivianuu.injectors.inject
+import android.content.Context
+import androidx.work.Worker
+import androidx.work.WorkerParameters
 
-private val INJECTORS_FINDER: (Worker) -> HasInjectors? = {
-    it.applicationContext as? HasInjectors
+/**
+ * A factory for [Worker]s
+ */
+interface InjectWorkerFactory {
+    fun create(context: Context, workerParams: WorkerParameters): Worker
 }
-
-fun Injector.Companion.inject(instance: Worker) {
-    inject(instance, INJECTORS_FINDER)
-}
-
-fun Worker.inject() = Injector.inject(this)*/

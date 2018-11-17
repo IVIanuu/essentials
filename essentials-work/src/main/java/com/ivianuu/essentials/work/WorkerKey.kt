@@ -14,19 +14,14 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.injection
+package com.ivianuu.essentials.work
 
-/*
-import com.ivianuu.injectors.HasInjectors
-import com.ivianuu.injectors.Injector
-import com.ivianuu.injectors.inject
+import androidx.work.Worker
+import dagger.MapKey
+import kotlin.reflect.KClass
 
-private val INJECTORS_FINDER: (Worker) -> HasInjectors? = {
-    it.applicationContext as? HasInjectors
-}
-
-fun Injector.Companion.inject(instance: Worker) {
-    inject(instance, INJECTORS_FINDER)
-}
-
-fun Worker.inject() = Injector.inject(this)*/
+/**
+ * @author Manuel Wrage (IVIanuu)
+ */
+@MapKey
+annotation class WorkerKey(val value: KClass<out Worker>)

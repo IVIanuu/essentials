@@ -22,7 +22,6 @@ import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.content.res.Resources
 import android.preference.PreferenceManager
-import androidx.work.WorkManager
 import com.ivianuu.essentials.util.ContextAware
 import com.ivianuu.kprefs.KPrefs
 import com.ivianuu.ksettings.KSettings
@@ -80,10 +79,6 @@ abstract class BaseAppModule<T : BaseApp> {
         @JvmStatic
         @Provides
         fun provideResources(context: Context): Resources = context.resources
-
-        @JvmStatic
-        @Provides
-        fun provideWorkManager(): WorkManager = WorkManager.getInstance()
 
     }
 

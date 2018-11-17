@@ -14,19 +14,24 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.injection
+package com.ivianuu.essentials.sample.injection
 
-/*
-import com.ivianuu.injectors.HasInjectors
-import com.ivianuu.injectors.Injector
-import com.ivianuu.injectors.inject
+import com.ivianuu.essentials.sample.data.MyWorker
+import com.ivianuu.essentials.work.InjectWorkerFactory
+import com.ivianuu.essentials.work.WorkerKey
+import dagger.Binds
+import dagger.Module
+import dagger.multibindings.IntoMap
 
-private val INJECTORS_FINDER: (Worker) -> HasInjectors? = {
-    it.applicationContext as? HasInjectors
+/**
+ * @author Manuel Wrage (IVIanuu)
+ */
+@Module
+abstract class WorkerModule {
+
+    @Binds
+    @IntoMap
+    @WorkerKey(MyWorker::class)
+    abstract fun bindMyWorker(factory: MyWorker.Factory): InjectWorkerFactory
+
 }
-
-fun Injector.Companion.inject(instance: Worker) {
-    inject(instance, INJECTORS_FINDER)
-}
-
-fun Worker.inject() = Injector.inject(this)*/

@@ -17,7 +17,11 @@
 
 package com.ivianuu.essentials.sample.ui
 
+import android.os.Bundle
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
 import com.ivianuu.essentials.app.AppStore
+import com.ivianuu.essentials.sample.data.MyWorker
 import com.ivianuu.essentials.sample.ui.counter.CounterKey
 import com.ivianuu.essentials.ui.base.BaseActivity
 import com.ivianuu.essentials.ui.base.BaseActivityModule
@@ -33,6 +37,14 @@ class MainActivity : BaseActivity() {
 
     override val startKey: Any?
         get() = CounterKey(1)
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        WorkManager.getInstance().enqueue(
+            OneTimeWorkRequestBuilder<MyWorker>()
+                .build()
+        )
+    }
 
 }
 

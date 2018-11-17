@@ -20,7 +20,6 @@ android {
 
         javaCompileOptions {
             annotationProcessorOptions {
-                argument("dagger.android.experimentalUseStringKeys", "true")
                 argument("dagger.formatGeneratedSource", "disabled")
             }
         }
@@ -49,6 +48,7 @@ dependencies {
     implementation(project(":essentials-app-glide"))
     implementation(project(":essentials-shell"))
     implementation(project(":essentials-picker"))
+    implementation(project(":essentials-work"))
     kapt(project(":essentials-compiler"))
 
     testImplementation(project(":essentials-test"))

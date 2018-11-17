@@ -57,6 +57,7 @@ android {
 dependencies {
     api(project(":essentials"))
     kapt(project(":essentials-compiler"))
+    api(Deps.archWorkRuntime)
 }
 
 val sourcesJar = task("sourcesJar", Jar::class) {

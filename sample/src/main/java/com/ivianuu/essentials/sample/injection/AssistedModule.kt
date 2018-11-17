@@ -14,19 +14,12 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.injection
+package com.ivianuu.essentials.sample.injection
 
-/*
-import com.ivianuu.injectors.HasInjectors
-import com.ivianuu.injectors.Injector
-import com.ivianuu.injectors.inject
+import com.ivianuu.assistedinject.AssistedModule
 
-private val INJECTORS_FINDER: (Worker) -> HasInjectors? = {
-    it.applicationContext as? HasInjectors
-}
-
-fun Injector.Companion.inject(instance: Worker) {
-    inject(instance, INJECTORS_FINDER)
-}
-
-fun Worker.inject() = Injector.inject(this)*/
+/**
+ * @author Manuel Wrage (IVIanuu)
+ */
+@AssistedModule
+object AssistedModule

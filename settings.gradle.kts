@@ -6,6 +6,7 @@ include(
     ":essentials-picker",
     ":essentials-shell",
     ":essentials-test",
+    ":essentials-work",
     ":ktuples",
     ":sample"
 )

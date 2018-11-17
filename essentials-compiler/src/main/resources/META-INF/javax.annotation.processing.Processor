@@ -1,3 +1,4 @@
 com.airbnb.epoxy.EpoxyProcessor
+com.ivianuu.assistedinject.compiler.AssistedInjectProcessor
 com.ivianuu.injectors.compiler.InjectorsProcessor
 dagger.internal.codegen.ComponentProcessor

@@ -38,7 +38,6 @@ android {
 
         javaCompileOptions {
             annotationProcessorOptions {
-                argument("dagger.android.experimentalUseStringKeys", "true")
                 argument("dagger.formatGeneratedSource", "disabled")
             }
         }
@@ -71,12 +70,13 @@ dependencies {
     api(Deps.androidKtxRecyclerView)
     api(Deps.androidKtxViewPager)
 
+    api(Deps.assistedInject)
+
     api(Deps.coroutinesAndroid)
     api(Deps.coroutinesCore)
     api(Deps.coroutinesRxJava)
 
     api(Deps.archLifecycleExtensions)
-    api(Deps.archWorkRuntime)
 
     api(Deps.constraintLayout)
 

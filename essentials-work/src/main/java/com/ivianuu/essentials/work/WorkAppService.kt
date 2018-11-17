@@ -14,19 +14,27 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.injection
+package com.ivianuu.essentials.work
 
-/*
-import com.ivianuu.injectors.HasInjectors
-import com.ivianuu.injectors.Injector
-import com.ivianuu.injectors.inject
+import android.content.Context
+import androidx.work.Configuration
+import androidx.work.WorkManager
+import com.ivianuu.essentials.app.AppService
+import javax.inject.Inject
 
-private val INJECTORS_FINDER: (Worker) -> HasInjectors? = {
-    it.applicationContext as? HasInjectors
+/**
+ * Initializes the [WorkManager]
+ */
+class WorkAppService @Inject constructor(
+    private val context: Context,
+    private val factory: DaggerWorkerFactory
+) : AppService {
+    override fun start() {
+        WorkManager.initialize(
+            context,
+            Configuration.Builder()
+                .setWorkerFactory(factory)
+                .build()
+        )
+    }
 }
-
-fun Injector.Companion.inject(instance: Worker) {
-    inject(instance, INJECTORS_FINDER)
-}
-
-fun Worker.inject() = Injector.inject(this)*/
