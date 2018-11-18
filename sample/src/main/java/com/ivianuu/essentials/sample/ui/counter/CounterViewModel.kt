@@ -1,6 +1,8 @@
 package com.ivianuu.essentials.sample.ui.counter
 
 import android.content.Context
+import com.ivianuu.assistedinject.Assisted
+import com.ivianuu.assistedinject.AssistedInject
 import com.ivianuu.essentials.sample.ui.list.ListKey
 import com.ivianuu.essentials.ui.mvrx.MvRxState
 import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
@@ -9,27 +11,15 @@ import com.ivianuu.traveler.Router
 import com.ivianuu.traveler.goBack
 import com.ivianuu.traveler.navigate
 import com.ivianuu.traveler.popToRoot
-import javax.inject.Inject
 
 /**
  * Counter view model
  */
-class CounterViewModel @Inject constructor(
+class CounterViewModel @AssistedInject constructor(
+    @Assisted private val key: CounterKey,
     private val context: Context,
     private val router: Router
-) : MvRxViewModel<CounterState>(CounterState()) {
-
-    private lateinit var key: CounterKey
-
-    init {
-        logStateChanges()
-    }
-
-    fun setKey(key: CounterKey) {
-        if (this::key.isInitialized) return
-        this.key = key
-        setState { copy(screen = key.screen) }
-    }
+) : MvRxViewModel<CounterState>(CounterState(key.screen)) {
 
     fun increaseClicked() {
         setState { copy(count = count.inc()) }
@@ -71,6 +61,6 @@ class CounterViewModel @Inject constructor(
 }
 
 data class CounterState(
-    val screen: Int = 0,
+    val screen: Int,
     val count: Int = 0
 ) : MvRxState

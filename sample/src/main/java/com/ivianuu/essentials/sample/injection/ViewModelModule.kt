@@ -18,7 +18,6 @@ package com.ivianuu.essentials.sample.injection
 
 import androidx.lifecycle.ViewModel
 import com.ivianuu.essentials.injection.viewmodel.ViewModelKey
-import com.ivianuu.essentials.sample.ui.counter.CounterViewModel
 import com.ivianuu.essentials.sample.ui.list.ListViewModel
 import dagger.Binds
 import dagger.Module
@@ -29,11 +28,6 @@ import dagger.multibindings.IntoMap
  */
 @Module
 abstract class ViewModelModule {
-
-    @Binds
-    @IntoMap
-    @ViewModelKey(CounterViewModel::class)
-    abstract fun bindCounterViewModel(counterViewModel: CounterViewModel): ViewModel
 
     @Binds
     @IntoMap

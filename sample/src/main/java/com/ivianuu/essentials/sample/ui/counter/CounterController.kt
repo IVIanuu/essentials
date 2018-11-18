@@ -17,6 +17,8 @@
 package com.ivianuu.essentials.sample.ui.counter
 
 import android.view.View
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.base.BaseController
 import com.ivianuu.essentials.ui.mvrx.bindViewModel
@@ -26,6 +28,7 @@ import com.ivianuu.essentials.ui.traveler.key.ControllerKey
 import com.ivianuu.essentials.ui.traveler.key.key
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.controller_counter.*
+import javax.inject.Inject
 
 @Parcelize
 data class CounterKey(val screen: Int) : ControllerKey(
@@ -38,14 +41,19 @@ data class CounterKey(val screen: Int) : ControllerKey(
  */
 class CounterController : BaseController() {
 
+    @Inject lateinit var counterViewModelFactory: CounterViewModelFactory
+
     override val layoutRes get() = R.layout.controller_counter
 
-    private val viewModel by bindViewModel(CounterViewModel::class)
-
-    override fun onCreate() {
-        super.onCreate()
-        viewModel.setKey(key())
+    private val viewModel by bindViewModel(CounterViewModel::class) {
+        viewModelFactory { counterViewModelFactory.create(key()) }
     }
+
+    private fun viewModelFactory(create: (Class<*>) -> ViewModel) =
+        object : ViewModelProvider.Factory {
+            override fun <T : ViewModel?> create(modelClass: Class<T>) =
+                create(modelClass) as T
+        }
 
     override fun onBindView(view: View) {
         super.onBindView(view)

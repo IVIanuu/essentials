@@ -21,6 +21,7 @@ import android.content.pm.PackageManager
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.ivianuu.assistedinject.Assisted
+import com.ivianuu.assistedinject.AssistedFactory
 import com.ivianuu.assistedinject.AssistedInject
 import com.ivianuu.essentials.sample.app.App
 import com.ivianuu.essentials.work.InjectWorkerFactory
@@ -29,6 +30,7 @@ import com.ivianuu.timberktx.d
 /**
  * @author Manuel Wrage (IVIanuu)
  */
+@AssistedFactory(MyWorker.Factory::class)
 class MyWorker @AssistedInject constructor(
     @Assisted private val context: Context,
     @Assisted private val workerParams: WorkerParameters,
@@ -41,7 +43,6 @@ class MyWorker @AssistedInject constructor(
         return Result.SUCCESS
     }
 
-    @AssistedInject.Factory
     interface Factory : InjectWorkerFactory
 
 }

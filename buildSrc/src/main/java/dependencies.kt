@@ -32,7 +32,7 @@ Versions {
 
     const val archWork = "1.0.0-alpha11"
 
-    const val assistedInject = "850d2548f1"
+    const val assistedInject = "52c84c8296"
 
     const val constraintLayout = "1.1.3"
     const val contributor = "efa69d138b"
@@ -63,7 +63,7 @@ Versions {
     const val rxKotlin = "2.3.0"
     const val scopes = "d9e4485f16"
     const val superUser = "1.0.0.+"
-    const val stateStore = "6063560b05"
+    const val stateStore = "bc25513ffa"
     const val stickyHeaders = "44c5192160"
     const val timber = "4.7.1"
     const val timberKtx = "f7547da781"
