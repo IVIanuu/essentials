@@ -33,8 +33,8 @@ abstract class BaseEpoxyModel<H : BaseEpoxyHolder> : EpoxyModelWithHolder<H>(), 
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var onClick: ((View) -> Unit)? = null
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var onLongClick: ((View) -> Boolean)? = null
 
-    override val containerView: View?
-        get() = _boundHolder?.containerView
+    override val containerView
+        get() = _boundHolder!!.containerView
 
     override val providedContext
         get() = _boundHolder!!.providedContext
