@@ -27,14 +27,14 @@ import kotlinx.android.extensions.LayoutContainer
 /**
  * Base epoxy model with holder
  */
-abstract class BaseEpoxyModel<H : BaseEpoxyHolder> : EpoxyModelWithHolder<H>(), LayoutContainer,
-    ContextAware {
+abstract class BaseEpoxyModel<H : BaseEpoxyHolder> : EpoxyModelWithHolder<H>(), ContextAware,
+    LayoutContainer {
 
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var onClick: ((View) -> Unit)? = null
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var onLongClick: ((View) -> Boolean)? = null
 
-    override val containerView
-        get() = _boundHolder!!.containerView
+    override val containerView: View?
+        get() = _boundHolder?.containerView
 
     override val providedContext
         get() = _boundHolder!!.providedContext
@@ -71,9 +71,6 @@ abstract class BaseEpoxyModel<H : BaseEpoxyHolder> : EpoxyModelWithHolder<H>(), 
 
     @CallSuper
     override fun unbind(holder: H) {
-        _scope.clear()
-        _boundHolder = null
-
         if (onClickView != null) {
             onClickView?.setOnClickListener(null)
         } else if (useContainerForClicks) {
@@ -85,6 +82,9 @@ abstract class BaseEpoxyModel<H : BaseEpoxyHolder> : EpoxyModelWithHolder<H>(), 
         } else if (useContainerForLongClicks) {
             holder.containerView.setOnLongClickListener(null)
         }
+
+        _scope.clear()
+        _boundHolder = null
 
         super.unbind(holder)
     }
