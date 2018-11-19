@@ -46,12 +46,18 @@ abstract class BaseApp : Application(), HasInjectors {
     override fun onCreate() {
         injectIfNeeded()
         super.onCreate()
+        onInitialize()
+        onStartAppServices()
+    }
 
+    protected open fun onInitialize() {
         appInitializer
             .filter { shouldInitializeAppInitializer(it.key) }
             .map { it.value.get() }
             .forEach { it.initialize(this) }
+    }
 
+    protected open fun onStartAppServices() {
         appServices
             .filter { shouldStartAppService(it.key) }
             .map { it.value.get() }

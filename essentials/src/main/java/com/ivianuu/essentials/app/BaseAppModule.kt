@@ -20,9 +20,7 @@ import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
-import android.content.res.Resources
-import android.preference.PreferenceManager
-import com.ivianuu.essentials.util.ContextAware
+import com.ivianuu.essentials.util.EssentialsPreferenceManager
 import com.ivianuu.kprefs.KPrefs
 import com.ivianuu.ksettings.KSettings
 import dagger.Binds
@@ -49,16 +47,9 @@ abstract class BaseAppModule<T : BaseApp> {
     companion object {
 
         @JvmStatic
-        @Singleton
-        @Provides
-        fun provideContextAwareness(context: Context) = object : ContextAware {
-            override val providedContext = context
-        }
-
-        @JvmStatic
         @Provides
         fun provideSharedPrefs(context: Context): SharedPreferences =
-            PreferenceManager.getDefaultSharedPreferences(context)
+            EssentialsPreferenceManager.getDefaultSharedPreferences(context)
 
         @JvmStatic
         @Singleton
@@ -75,10 +66,6 @@ abstract class BaseAppModule<T : BaseApp> {
         @JvmStatic
         @Provides
         fun providePackageManager(context: Context): PackageManager = context.packageManager
-
-        @JvmStatic
-        @Provides
-        fun provideResources(context: Context): Resources = context.resources
 
     }
 
