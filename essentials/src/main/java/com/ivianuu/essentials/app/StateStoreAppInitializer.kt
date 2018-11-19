@@ -14,22 +14,20 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.app.glide
+package com.ivianuu.essentials.app
 
-import com.ivianuu.essentials.app.AppInitializer
-import com.ivianuu.essentials.injection.AppInitializerKey
-import dagger.Binds
-import dagger.Module
-import dagger.multibindings.IntoMap
+import android.app.Application
+import com.ivianuu.statestore.StateStorePlugins
+import com.ivianuu.statestore.android.MAIN_THREAD_EXECUTOR
+import javax.inject.Inject
 
 /**
- * Essentials app glide module
+ * Sets the default callback executor to the main thread
  */
-@Module
-abstract class EssentialsAppGlideModule {
+class StateStoreAppInitializer @Inject constructor() : AppInitializer {
 
-    @Binds
-    @IntoMap
-    @AppInitializerKey(AppGlideInitializer::class)
-    abstract fun bindAppGlideInitializer(appGlideInitializer: AppGlideInitializer): AppInitializer
+    override fun initialize(app: Application) {
+        StateStorePlugins.defaultCallbackExecutor = MAIN_THREAD_EXECUTOR
+    }
+
 }

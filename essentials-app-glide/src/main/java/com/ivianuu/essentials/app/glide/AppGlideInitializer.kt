@@ -19,19 +19,18 @@ package com.ivianuu.essentials.app.glide
 import android.app.Application
 import android.graphics.drawable.Drawable
 import com.bumptech.glide.Glide
-import com.ivianuu.essentials.app.AppService
+import com.ivianuu.essentials.app.AppInitializer
 import javax.inject.Inject
 
 /**
  * Initializes the app icon model loader
  */
 class AppGlideInitializer @Inject constructor(
-    private val appIconModelLoaderFactory: AppIconModelLoader.Factory,
-    private val application: Application
-) : AppService {
+    private val appIconModelLoaderFactory: AppIconModelLoader.Factory
+) : AppInitializer {
 
-    override fun start() {
-        Glide.get(application).registry
+    override fun initialize(app: Application) {
+        Glide.get(app).registry
             .append(AppIcon::class.java, Drawable::class.java, appIconModelLoaderFactory)
     }
 }

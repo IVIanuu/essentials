@@ -14,27 +14,20 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.work
+package com.ivianuu.essentials.app
 
-import android.content.Context
-import androidx.work.Configuration
-import androidx.work.WorkManager
-import com.ivianuu.essentials.app.AppService
+import android.app.Application
+import android.os.Looper
+import io.reactivex.android.plugins.RxAndroidPlugins
+import io.reactivex.android.schedulers.AndroidSchedulers
 import javax.inject.Inject
 
 /**
- * Initializes the [WorkManager]
+ * Enables async main thread schedulers
  */
-class WorkAppService @Inject constructor(
-    private val context: Context,
-    private val factory: DaggerWorkerFactory
-) : AppService {
-    override fun start() {
-        WorkManager.initialize(
-            context,
-            Configuration.Builder()
-                .setWorkerFactory(factory)
-                .build()
-        )
+class RxJavaAppInitializer @Inject constructor() : AppInitializer {
+    override fun initialize(app: Application) {
+        val scheduler = AndroidSchedulers.from(Looper.getMainLooper(), true)
+        RxAndroidPlugins.setInitMainThreadSchedulerHandler { scheduler }
     }
 }

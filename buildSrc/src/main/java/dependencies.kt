@@ -11,8 +11,7 @@ object Build {
     const val versionName = "0.0.1"
 }
 
-object
-Versions {
+object Versions {
     const val androidGradlePlugin = "3.2.1"
 
     const val androidxArch = "2.0.0"

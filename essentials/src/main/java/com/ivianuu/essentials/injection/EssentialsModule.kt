@@ -26,7 +26,9 @@ import dagger.Module
  */
 @Module(
     includes = [
+        AppInitializerModule::class,
         AppServiceModule::class,
+        EssentialsAppInitializerModule::class,
         InjectorModule::class,
         SystemServiceModule::class,
         TravelerModule::class,

@@ -17,19 +17,12 @@
 package com.ivianuu.essentials.app
 
 import android.app.Application
-import android.content.pm.ApplicationInfo
-import android.os.Looper
-import com.ivianuu.essentials.util.ext.containsFlag
 import com.ivianuu.injectors.CompositeInjectors
 import com.ivianuu.injectors.HasInjectors
 import com.ivianuu.injectors.Injector
 import com.ivianuu.injectors.Injectors
-import com.ivianuu.statestore.StateStorePlugins
-import com.ivianuu.statestore.android.MAIN_THREAD_EXECUTOR
-import io.reactivex.android.plugins.RxAndroidPlugins
-import io.reactivex.android.schedulers.AndroidSchedulers
-import timber.log.Timber
 import javax.inject.Inject
+import javax.inject.Provider
 
 /**
  * App
@@ -37,7 +30,10 @@ import javax.inject.Inject
 abstract class BaseApp : Application(), HasInjectors {
 
     @Inject internal lateinit var _injectors: CompositeInjectors
-    @Inject internal lateinit var appServices: Set<@JvmSuppressWildcards AppService>
+    @Inject
+    internal lateinit var appInitializer: Map<Class<out AppInitializer>, @JvmSuppressWildcards Provider<AppInitializer>>
+    @Inject
+    internal lateinit var appServices: Map<Class<out AppService>, @JvmSuppressWildcards Provider<AppService>>
 
     override val injectors: Injectors
         get() {
@@ -45,38 +41,26 @@ abstract class BaseApp : Application(), HasInjectors {
             return _injectors
         }
 
-    protected open val initTimber get() = true
-    protected open val initRxJava get() = true
-    protected open val initStateStore get() = true
-
     private var injected = false
 
     override fun onCreate() {
         injectIfNeeded()
         super.onCreate()
 
-        if (initTimber) {
-            val isDebuggable = applicationInfo.flags.containsFlag(ApplicationInfo.FLAG_DEBUGGABLE)
-            if (isDebuggable) {
-                Timber.plant(Timber.DebugTree())
-            }
-        }
+        appInitializer
+            .filter { shouldInitializeAppInitializer(it.key) }
+            .map { it.value.get() }
+            .forEach { it.initialize(this) }
 
-        if (initRxJava) {
-            val scheduler = AndroidSchedulers.from(Looper.getMainLooper(), true)
-            RxAndroidPlugins.setInitMainThreadSchedulerHandler { scheduler }
-        }
-
-        if (initStateStore) {
-            StateStorePlugins.defaultCallbackExecutor = MAIN_THREAD_EXECUTOR
-        }
-
-        appServices.forEach { startAppService(it) }
+        appServices
+            .filter { shouldStartAppService(it.key) }
+            .map { it.value.get() }
+            .forEach { it.start() }
     }
 
-    protected open fun startAppService(appService: AppService) {
-        appService.start()
-    }
+    protected open fun shouldInitializeAppInitializer(clazz: Class<out AppInitializer>) = true
+
+    protected open fun shouldStartAppService(clazz: Class<out AppService>) = true
 
     protected abstract fun applicationInjector(): Injector<out BaseApp>
 

@@ -14,22 +14,13 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.app.glide
+package com.ivianuu.essentials.app
 
-import com.ivianuu.essentials.app.AppInitializer
-import com.ivianuu.essentials.injection.AppInitializerKey
-import dagger.Binds
-import dagger.Module
-import dagger.multibindings.IntoMap
+import android.app.Application
 
 /**
- * Essentials app glide module
+ * Initializes stuff on app start up
  */
-@Module
-abstract class EssentialsAppGlideModule {
-
-    @Binds
-    @IntoMap
-    @AppInitializerKey(AppGlideInitializer::class)
-    abstract fun bindAppGlideInitializer(appGlideInitializer: AppGlideInitializer): AppInitializer
+interface AppInitializer {
+    fun initialize(app: Application)
 }

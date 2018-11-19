@@ -14,22 +14,24 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.app.glide
+package com.ivianuu.essentials.app
 
-import com.ivianuu.essentials.app.AppInitializer
-import com.ivianuu.essentials.injection.AppInitializerKey
-import dagger.Binds
-import dagger.Module
-import dagger.multibindings.IntoMap
+import android.app.Application
+import android.content.pm.ApplicationInfo
+import com.ivianuu.essentials.util.ext.containsFlag
+import timber.log.Timber
+import javax.inject.Inject
 
 /**
- * Essentials app glide module
+ * Initializes timber in debug builds
  */
-@Module
-abstract class EssentialsAppGlideModule {
+class TimberAppInitializer @Inject constructor() : AppInitializer {
 
-    @Binds
-    @IntoMap
-    @AppInitializerKey(AppGlideInitializer::class)
-    abstract fun bindAppGlideInitializer(appGlideInitializer: AppGlideInitializer): AppInitializer
+    override fun initialize(app: Application) {
+        val isDebuggable = app.applicationInfo.flags.containsFlag(ApplicationInfo.FLAG_DEBUGGABLE)
+        if (isDebuggable) {
+            Timber.plant(Timber.DebugTree())
+        }
+    }
+
 }

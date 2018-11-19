@@ -16,6 +16,9 @@
 
 package com.ivianuu.essentials.sample.app
 
+import android.util.Log
+import com.ivianuu.essentials.app.AppInitializer
+import com.ivianuu.essentials.app.AppService
 import com.ivianuu.essentials.app.BaseApp
 import com.ivianuu.injectors.Injector
 
@@ -27,4 +30,13 @@ class App : BaseApp() {
     override fun applicationInjector(): Injector<out BaseApp> =
         DaggerAppComponent.builder().create(this)
 
+    override fun shouldInitializeAppInitializer(clazz: Class<out AppInitializer>): Boolean {
+        return super.shouldInitializeAppInitializer(clazz)
+            .also { Log.d("testt", "init $clazz app initializer") }
+    }
+
+    override fun shouldStartAppService(clazz: Class<out AppService>): Boolean {
+        return super.shouldStartAppService(clazz)
+            .also { Log.d("testt", "start $clazz app service") }
+    }
 }

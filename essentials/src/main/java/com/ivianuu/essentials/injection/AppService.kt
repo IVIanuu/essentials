@@ -17,15 +17,24 @@
 package com.ivianuu.essentials.injection
 
 import com.ivianuu.essentials.app.AppService
+import dagger.MapKey
 import dagger.Module
 import dagger.multibindings.Multibinds
+import kotlin.reflect.KClass
 
 /**
- * @author Manuel Wrage (IVIanuu)
+ * Map key for [AppService]s
+ */
+@MapKey
+annotation class AppServiceKey(val value: KClass<out AppService>)
+
+/**
+ * App service module
  */
 @Module
 internal abstract class AppServiceModule {
 
     @Multibinds
-    abstract fun bindAppServices(): Set<@JvmSuppressWildcards AppService>
+    abstract fun bindAppServices(): Map<Class<out AppService>, @JvmSuppressWildcards AppService>
+
 }

@@ -16,10 +16,11 @@
 
 package com.ivianuu.essentials.work
 
-import com.ivianuu.essentials.app.AppService
+import com.ivianuu.essentials.app.AppInitializer
+import com.ivianuu.essentials.injection.AppInitializerKey
 import dagger.Binds
 import dagger.Module
-import dagger.multibindings.IntoSet
+import dagger.multibindings.IntoMap
 
 /**
  * @author Manuel Wrage (IVIanuu)
@@ -28,8 +29,9 @@ import dagger.multibindings.IntoSet
 abstract class EssentialsWorkInitializerModule {
 
     @Binds
-    @IntoSet
-    abstract fun bindWorkAppService(workAppService: WorkAppService): AppService
+    @IntoMap
+    @AppInitializerKey(WorkAppInitializer::class)
+    abstract fun bindWorkAppService(workAppInitializer: WorkAppInitializer): AppInitializer
 
 
 }
