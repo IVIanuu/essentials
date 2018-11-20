@@ -22,7 +22,7 @@ import javax.inject.Scope
 annotation class PerActivity
 
 @Scope
-annotation class PerBroadcastReceiver
+annotation class PerReceiver
 
 @Scope
 annotation class PerController

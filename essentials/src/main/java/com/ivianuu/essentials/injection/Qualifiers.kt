@@ -25,6 +25,9 @@ annotation class ForApp
 annotation class ForActivity
 
 @Qualifier
+annotation class ForReceiver
+
+@Qualifier
 annotation class ForController
 
 @Qualifier
