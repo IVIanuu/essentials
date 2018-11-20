@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.ui.base
 
 import android.os.Bundle
-import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.ivianuu.director.attachRouter
@@ -46,7 +45,7 @@ import javax.inject.Inject
 /**
  * Base activity
  */
-abstract class BaseActivity : AppCompatActivity(), HasInjectors, OnBackPressedCallback,
+abstract class BaseActivity : AppCompatActivity(), HasInjectors,
     MvRxView, ViewModelFactoryHolder {
 
     @Inject override lateinit var injectors: CompositeInjectors
@@ -86,8 +85,6 @@ abstract class BaseActivity : AppCompatActivity(), HasInjectors, OnBackPressedCa
         inject()
         super.onCreate(savedInstanceState)
 
-        addOnBackPressedCallback(this)
-
         setContentView(layoutRes)
 
         if (useDirector) {
@@ -107,10 +104,10 @@ abstract class BaseActivity : AppCompatActivity(), HasInjectors, OnBackPressedCa
     override fun invalidate() {
     }
 
-    override fun handleOnBackPressed() = if (useDirector) {
-        router!!.handleBack()
-    } else {
-        false
+    override fun onBackPressed() {
+        if (!useDirector || !router!!.handleBack()) {
+            super.onBackPressed()
+        }
     }
 
     protected open fun navigators() = emptyList<ResultNavigator>()

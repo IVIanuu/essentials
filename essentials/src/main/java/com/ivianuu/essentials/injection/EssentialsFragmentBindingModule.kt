@@ -28,7 +28,7 @@ import dagger.Module
 abstract class EssentialsFragmentBindingModule
 
 @Module
-// todo merge when possible with injectors
+// todo merge once possible with injectors
 internal abstract class RealEssentialsFragmentBindingModule {
 
     @PerFragment

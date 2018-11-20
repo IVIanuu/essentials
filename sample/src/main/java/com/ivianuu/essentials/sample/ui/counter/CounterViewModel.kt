@@ -7,6 +7,7 @@ import com.ivianuu.essentials.sample.ui.list.ListKey
 import com.ivianuu.essentials.ui.mvrx.MvRxState
 import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
 import com.ivianuu.essentials.util.ext.toastInfo
+import com.ivianuu.timberktx.d
 import com.ivianuu.traveler.Router
 import com.ivianuu.traveler.goBack
 import com.ivianuu.traveler.navigate
@@ -20,6 +21,11 @@ class CounterViewModel @AssistedInject constructor(
     private val context: Context,
     private val router: Router
 ) : MvRxViewModel<CounterState>(CounterState(key.screen)) {
+
+    override fun onCleared() {
+        super.onCleared()
+        d { "on cleared" }
+    }
 
     fun increaseClicked() {
         setState { copy(count = count.inc()) }
@@ -40,7 +46,11 @@ class CounterViewModel @AssistedInject constructor(
     }
 
     fun screenUpClicked() {
-        withState { router.navigate(CounterKey(it.screen.inc())) }
+        d { "screen up clicked" }
+        withState {
+            d { "navigate" }
+            router.navigate(CounterKey(it.screen.inc()))
+        }
     }
 
     fun screenDownClicked() {
