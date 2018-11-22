@@ -29,7 +29,7 @@ import dagger.multibindings.Multibinds
 abstract class ViewModelInjectionModule {
 
     @Multibinds
-    abstract fun viewModelProviders(): Map<Class<out ViewModel>, ViewModel>
+    abstract fun bindViewModelProviders(): Map<Class<out ViewModel>, ViewModel>
 
     @Binds
     abstract fun bindViewModelFactory(factory: DaggerViewModelFactory): ViewModelProvider.Factory

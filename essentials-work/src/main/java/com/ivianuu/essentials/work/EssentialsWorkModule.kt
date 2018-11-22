@@ -31,7 +31,7 @@ import dagger.multibindings.Multibinds
 abstract class EssentialsWorkModule {
 
     @Multibinds
-    abstract fun workerProviders(): Map<Class<out ViewModel>, InjectWorkerFactory>
+    abstract fun bindWorkerProviders(): Map<Class<out ViewModel>, InjectWorkerFactory>
 
     @Binds
     abstract fun bindWorkerFactory(factory: DaggerWorkerFactory): WorkerFactory
