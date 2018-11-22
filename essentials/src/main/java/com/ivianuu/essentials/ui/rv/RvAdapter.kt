@@ -2,7 +2,9 @@ package com.ivianuu.essentials.ui.rv
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.*
+import java.util.*
 import java.util.concurrent.Executor
+
 
 /**
  * @author Manuel Wrage (IVIanuu)
@@ -81,6 +83,22 @@ class RvAdapter(
 
     fun setModels(models: List<RvModel<*>>) {
         helper.submitList(models)
+    }
+
+    fun moveModel(from: Int, to: Int) {
+        val updatedList = models.toMutableList()
+        Collections.swap(updatedList, from, to)
+        notifyItemMoved(from, to)
+
+        /*   helper.submitList()
+
+           val interruptedDiff = differ.forceListOverride(updatedList)
+
+           if (interruptedDiff) {
+               // The move interrupted a model rebuild/diff that was in progress,
+               // so models may be out of date and we should force them to rebuilt
+               epoxyController.requestModelBuild()
+           }*/
     }
 
     private companion object {

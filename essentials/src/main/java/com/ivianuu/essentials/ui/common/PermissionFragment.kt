@@ -1,13 +1,13 @@
 package com.ivianuu.essentials.ui.common
 
 import android.content.pm.PackageManager
-import android.os.Build
 import android.os.Bundle
 import com.ivianuu.essentials.ui.base.BaseFragment
 import com.ivianuu.essentials.ui.traveler.key.FragmentKey
 import com.ivianuu.essentials.ui.traveler.key.ResultKey
 import com.ivianuu.essentials.ui.traveler.key.bindKey
 import com.ivianuu.essentials.util.RequestCodeGenerator
+import com.ivianuu.essentials.util.ext.isM
 import com.ivianuu.traveler.result.goBackWithResult
 import kotlinx.android.parcel.Parcelize
 import java.util.*
@@ -50,7 +50,7 @@ class PermissionFragment : BaseFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        if (isM()) {
             requestPermissions(key.permissions, key.requestCode)
         } else {
             router.goBackWithResult(

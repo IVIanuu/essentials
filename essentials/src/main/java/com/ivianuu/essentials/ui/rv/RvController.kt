@@ -7,7 +7,7 @@ import java.util.concurrent.Executor
  * @author Manuel Wrage (IVIanuu)
  */
 abstract class RvController(
-    private val diffingExecutor: Executor = RvPlugins.defaultDiffingExecutor,
+    diffingExecutor: Executor = RvPlugins.defaultDiffingExecutor,
     private val buildingExecutor: Executor = RvPlugins.defaultBuildingExecutor
 ) {
 
@@ -46,9 +46,15 @@ abstract class RvController(
         currentModels.addAll(models)
     }
 
+    fun moveModel(from: Int, to: Int) {
+        adapter.moveModel(from, to)
+    }
+
+
     open fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
     }
 
     open fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
     }
+
 }
