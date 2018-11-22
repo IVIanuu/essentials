@@ -22,7 +22,7 @@ import com.ivianuu.essentials.sample.ui.list.ListController
 import com.ivianuu.injectors.ContributesInjector
 import dagger.Module
 
-@Module
+@Module(includes = [ControllerBindingModule_Contributions::class])
 abstract class ControllerBindingModule {
 
     @PerController

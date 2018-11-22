@@ -23,11 +23,8 @@ import dagger.Module
 /**
  * Essentials picker module
  */
-@Module(includes = [EssentialsPickerBindingModule_Contributions::class])
-abstract class EssentialsPickerModule
-
-@Module
-internal abstract class EssentialsPickerBindingModule {
+@Module(includes = [EssentialsPickerModule_Contributions::class])
+abstract class EssentialsPickerModule {
 
     @PerFragment
     @ContributesInjector
@@ -36,4 +33,5 @@ internal abstract class EssentialsPickerBindingModule {
     @PerFragment
     @ContributesInjector
     abstract fun bindTextInputDialog(): TextInputDialog
+
 }

@@ -24,12 +24,8 @@ import dagger.Module
 /**
  * Essentials fragment binding module
  */
-@Module(includes = [RealEssentialsFragmentBindingModule_Contributions::class])
-abstract class EssentialsFragmentBindingModule
-
-@Module
-// todo merge once possible with injectors
-internal abstract class RealEssentialsFragmentBindingModule {
+@Module(includes = [EssentialsFragmentBindingModule_Contributions::class])
+abstract class EssentialsFragmentBindingModule {
 
     @PerFragment
     @ContributesInjector

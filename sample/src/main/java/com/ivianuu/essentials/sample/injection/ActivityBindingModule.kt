@@ -9,14 +9,14 @@ import dagger.Module
 /**
  * Activity binding module
  */
-@Module
+@Module(includes = [ActivityBindingModule_Contributions::class])
 abstract class ActivityBindingModule {
 
     @PerActivity
     @ContributesInjector(
         modules = [
             MainActivityModule::class,
-            ControllerBindingModule_Contributions::class
+            ControllerBindingModule::class
         ]
     )
     abstract fun bindMainActivity(): MainActivity

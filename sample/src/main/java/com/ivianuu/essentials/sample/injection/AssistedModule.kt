@@ -17,9 +17,11 @@
 package com.ivianuu.essentials.sample.injection
 
 import com.ivianuu.assistedinject.AssistedModule
+import dagger.Module
 
 /**
  * @author Manuel Wrage (IVIanuu)
  */
 @AssistedModule
+@Module(includes = [AssistedModule_AssistedModule::class])
 object AssistedModule

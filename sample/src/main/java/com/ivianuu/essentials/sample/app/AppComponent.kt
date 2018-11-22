@@ -4,8 +4,8 @@ import com.ivianuu.essentials.app.EssentialsAppModule
 import com.ivianuu.essentials.app.glide.EssentialsAppGlideModule
 import com.ivianuu.essentials.injection.EssentialsModule
 import com.ivianuu.essentials.picker.EssentialsPickerModule
-import com.ivianuu.essentials.sample.injection.ActivityBindingModule_Contributions
-import com.ivianuu.essentials.sample.injection.AssistedModule_AssistedModule
+import com.ivianuu.essentials.sample.injection.ActivityBindingModule
+import com.ivianuu.essentials.sample.injection.AssistedModule
 import com.ivianuu.essentials.sample.injection.ViewModelModule
 import com.ivianuu.essentials.sample.injection.WorkerModule
 import com.ivianuu.essentials.work.EssentialsWorkInitializerModule
@@ -20,9 +20,9 @@ import javax.inject.Singleton
 @Singleton
 @Component(
     modules = [
-        ActivityBindingModule_Contributions::class,
+        ActivityBindingModule::class,
         AppModule::class,
-        AssistedModule_AssistedModule::class,
+        AssistedModule::class,
         EssentialsModule::class,
         EssentialsAppModule::class,
         EssentialsAppGlideModule::class,

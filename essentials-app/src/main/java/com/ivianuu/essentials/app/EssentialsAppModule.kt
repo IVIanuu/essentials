@@ -23,11 +23,8 @@ import dagger.Module
 /**
  * @author Manuel Wrage (IVIanuu)
  */
-@Module(includes = [EssentialsAppBindingModule_Contributions::class])
-abstract class EssentialsAppModule
-
-@Module
-internal abstract class EssentialsAppBindingModule {
+@Module(includes = [EssentialsAppModule_Contributions::class])
+abstract class EssentialsAppModule {
 
     @PerFragment
     @ContributesInjector
