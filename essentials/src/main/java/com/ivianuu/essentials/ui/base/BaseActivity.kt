@@ -19,11 +19,11 @@ package com.ivianuu.essentials.ui.base
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import com.ivianuu.director.Router
 import com.ivianuu.director.attachRouter
 import com.ivianuu.director.traveler.ControllerNavigator
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.mvrx.MvRxView
-import com.ivianuu.essentials.ui.traveler.navigator.AddFragmentPlugin
 import com.ivianuu.essentials.util.ViewModelFactoryHolder
 import com.ivianuu.essentials.util.asMainCoroutineScope
 import com.ivianuu.essentials.util.ext.unsafeLazy
@@ -33,11 +33,9 @@ import com.ivianuu.injectors.android.inject
 import com.ivianuu.scopes.archlifecycle.onDestroy
 import com.ivianuu.traveler.Navigator
 import com.ivianuu.traveler.NavigatorHolder
-import com.ivianuu.traveler.Router
 import com.ivianuu.traveler.android.AppNavigator
 import com.ivianuu.traveler.common.ResultNavigator
 import com.ivianuu.traveler.common.compositeNavigatorOf
-import com.ivianuu.traveler.fragment.FragmentNavigator
 import com.ivianuu.traveler.lifecycle.setNavigator
 import com.ivianuu.traveler.setRoot
 import javax.inject.Inject
@@ -52,9 +50,7 @@ abstract class BaseActivity : AppCompatActivity(), HasInjectors,
     @Inject override lateinit var viewModelFactory: ViewModelProvider.Factory
 
     @Inject lateinit var navigatorHolder: NavigatorHolder
-    @Inject lateinit var travelerRouter: Router
-
-    open val useDirector = false
+    @Inject lateinit var travelerRouter: com.ivianuu.traveler.Router
 
     val coroutineScope = onDestroy.asMainCoroutineScope()
 
@@ -66,18 +62,13 @@ abstract class BaseActivity : AppCompatActivity(), HasInjectors,
     open val startKey: Any?
         get() = null
 
-    var router: com.ivianuu.director.Router? = null
+    lateinit var router: Router
 
     protected open val navigator: Navigator by unsafeLazy {
         val navigators = mutableListOf<ResultNavigator>()
         navigators.addAll(navigators())
-        if (useDirector) {
-            navigators.add(ControllerNavigator(router!!))
-        } else {
-            navigators.add(FragmentNavigator(containerId))
-        }
+        navigators.add(ControllerNavigator(router))
         navigators.add(AppNavigator(this))
-        navigators.add(AddFragmentPlugin(supportFragmentManager))
         compositeNavigatorOf(navigators)
     }
 
@@ -87,25 +78,19 @@ abstract class BaseActivity : AppCompatActivity(), HasInjectors,
 
         setContentView(layoutRes)
 
-        if (useDirector) {
-            router = attachRouter(findViewById(containerId), savedInstanceState)
-        }
+        router = attachRouter(findViewById(containerId), savedInstanceState)
+        navigatorHolder.setNavigator(navigator)
 
         if (savedInstanceState == null) {
             startKey?.let { travelerRouter.setRoot(it) }
         }
     }
 
-    override fun onResumeFragments() {
-        super.onResumeFragments()
-        navigatorHolder.setNavigator(this, navigator)
-    }
-
     override fun invalidate() {
     }
 
     override fun onBackPressed() {
-        if (!useDirector || !router!!.handleBack()) {
+        if (!router.handleBack()) {
             super.onBackPressed()
         }
     }

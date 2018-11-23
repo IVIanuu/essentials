@@ -31,12 +31,6 @@ annotation class PerController
 annotation class PerChildController
 
 @Scope
-annotation class PerFragment
-
-@Scope
-annotation class PerChildFragment
-
-@Scope
 annotation class PerService
 
 @Scope

@@ -1,15 +1,16 @@
 package com.ivianuu.essentials.ui.mvrx
 
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.ivianuu.androidktx.fragment.app.requireParentFragment
-import com.ivianuu.androidktx.fragment.app.requireTargetFragment
+import androidx.lifecycle.ViewModelStoreOwner
 import com.ivianuu.androidktx.lifecycle.defaultViewModelKey
 import com.ivianuu.androidktx.lifecycle.viewModelProvider
+import com.ivianuu.director.Controller
 import com.ivianuu.essentials.util.ViewModelFactoryHolder
+import com.ivianuu.essentials.util.ext.requireParentController
+import com.ivianuu.essentials.util.ext.requireTargetController
 import kotlin.reflect.KClass
 
 inline fun <T : MvRxView, reified VM : MvRxViewModel<S>, reified S : MvRxState> T.viewModel(
@@ -41,8 +42,8 @@ inline fun <T : MvRxView, reified VM : MvRxViewModel<S>, reified S : MvRxState> 
 ): VM {
     val activity = when {
         this is FragmentActivity -> this
-        this is Fragment -> requireActivity()
-        else -> throw IllegalArgumentException("must be an activity or an fragment")
+        this is Controller -> activity
+        else -> throw IllegalArgumentException("must be an activity or an controller")
     }
 
     return activity.viewModelProvider(factory).get(key, clazz.java).setupViewModel(this)
@@ -68,49 +69,49 @@ inline fun <T, reified VM : MvRxViewModel<S>, reified S : MvRxState> T.parentVie
     clazz: KClass<VM>,
     factory: ViewModelProvider.Factory = defaultViewModelFactory(),
     key: String = VM::class.defaultViewModelKey
-) where T : MvRxView, T : Fragment =
-    requireParentFragment().viewModelProvider(factory).get(key, clazz.java).setupViewModel(this)
+) where T : MvRxView, T : Controller =
+    (requireParentController() as ViewModelStoreOwner).viewModelProvider(factory).get(key, clazz.java).setupViewModel(this)
 
 inline fun <T, reified VM : MvRxViewModel<S>, reified S : MvRxState> T.bindParentViewModel(
     clazz: KClass<VM>,
     crossinline keyProvider: () -> String = { VM::class.defaultViewModelKey },
     crossinline factoryProvider: () -> ViewModelProvider.Factory = { defaultViewModelFactory() }
-) where T : MvRxView, T : Fragment =
+) where T : MvRxView, T : Controller =
     viewModelLazy { parentViewModel(clazz, factoryProvider(), keyProvider()) }
 
 inline fun <T, reified VM : MvRxViewModel<S>, reified S : MvRxState> T.existingParentViewModel(
     clazz: KClass<VM>,
     key: String = VM::class.defaultViewModelKey
-) where T : MvRxView, T : Fragment = parentViewModel(clazz, ExistingViewModelFactory, key)
+) where T : MvRxView, T : Controller = parentViewModel(clazz, ExistingViewModelFactory, key)
 
 inline fun <T, reified VM : MvRxViewModel<S>, reified S : MvRxState> T.bindExistingParentViewModel(
     clazz: KClass<VM>,
     crossinline keyProvider: () -> String = { VM::class.defaultViewModelKey }
-) where T : MvRxView, T : Fragment = viewModelLazy { existingParentViewModel(clazz, keyProvider()) }
+) where T : MvRxView, T : Controller = viewModelLazy { existingParentViewModel(clazz, keyProvider()) }
 
 inline fun <T, reified VM : MvRxViewModel<S>, reified S : MvRxState> T.targetViewModel(
     clazz: KClass<VM>,
     factory: ViewModelProvider.Factory = defaultViewModelFactory(),
     key: String = VM::class.defaultViewModelKey
-) where T : MvRxView, T : Fragment =
-    requireTargetFragment().viewModelProvider(factory).get(key, clazz.java).setupViewModel(this)
+) where T : MvRxView, T : Controller =
+    (requireTargetController() as ViewModelStoreOwner).viewModelProvider(factory).get(key, clazz.java).setupViewModel(this)
 
 inline fun <T, reified VM : MvRxViewModel<S>, reified S : MvRxState> T.bindTargetViewModel(
     clazz: KClass<VM>,
     crossinline keyProvider: () -> String = { VM::class.defaultViewModelKey },
     crossinline factoryProvider: () -> ViewModelProvider.Factory = { defaultViewModelFactory() }
-) where T : MvRxView, T : Fragment =
+) where T : MvRxView, T : Controller =
     viewModelLazy { targetViewModel(clazz, factoryProvider(), keyProvider()) }
 
 inline fun <T, reified VM : MvRxViewModel<S>, reified S : MvRxState> T.existingTargetViewModel(
     clazz: KClass<VM>,
     key: String = VM::class.defaultViewModelKey
-) where T : MvRxView, T : Fragment = targetViewModel(clazz, ExistingViewModelFactory, key)
+) where T : MvRxView, T : Controller = targetViewModel(clazz, ExistingViewModelFactory, key)
 
 inline fun <T, reified VM : MvRxViewModel<S>, reified S : MvRxState> T.bindExistingTargetViewModel(
     clazz: KClass<VM>,
     crossinline keyProvider: () -> String = { VM::class.defaultViewModelKey }
-) where T : MvRxView, T : Fragment =
+) where T : MvRxView, T : Controller =
     viewModelLazy { existingTargetViewModel(clazz, keyProvider()) }
 
 @PublishedApi

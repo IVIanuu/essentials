@@ -60,12 +60,10 @@ dependencies {
     api(Deps.androidxAppCompat)
     api(Deps.androidxCardView)
     api(Deps.androidxCoreKtx)
-    api(Deps.androidxFragment)
     api(Deps.androidxPalette)
 
     api(Deps.androidKtxAppCompat)
     api(Deps.androidKtxCore)
-    api(Deps.androidKtxFragment)
     api(Deps.androidKtxLifecycle)
     api(Deps.androidKtxRecyclerView)
     api(Deps.androidKtxViewPager)
@@ -98,7 +96,6 @@ dependencies {
 
     api(Deps.injectors)
     api(Deps.injectorsAndroid)
-    api(Deps.injectorsFragment)
 
     api(Deps.kotlinStdLib)
 
@@ -132,7 +129,6 @@ dependencies {
     api(Deps.scopes)
     api(Deps.scopesAndroid)
     api(Deps.scopesArchLifecycle)
-    api(Deps.scopesArchLifecycleFragment)
     api(Deps.scopesCommon)
     api(Deps.scopesCoroutines)
     api(Deps.scopesRx)
@@ -152,7 +148,6 @@ dependencies {
 
     api(Deps.traveler)
     api(Deps.travelerAndroid)
-    api(Deps.travelerFragment)
     api(Deps.travelerLifecycle)
 }
 

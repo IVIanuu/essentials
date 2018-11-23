@@ -27,7 +27,6 @@ java {
 }
 
 dependencies {
-    api(Deps.androidxFragmentTesting)
     api(Deps.androidxTestCore)
     api(Deps.androidxTestJunit)
     api(Deps.androidxTestRules)

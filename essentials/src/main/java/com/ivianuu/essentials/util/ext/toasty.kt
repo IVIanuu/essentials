@@ -6,7 +6,6 @@ package com.ivianuu.essentials.util.ext
 
 import android.content.Context
 import android.view.View
-import androidx.fragment.app.Fragment
 import com.ivianuu.androidktx.core.content.string
 import com.ivianuu.essentials.util.ContextAware
 import es.dmoral.toasty.Toasty
@@ -80,36 +79,6 @@ fun ContextAware.toastWarning(message: CharSequence) =
 
 fun ContextAware.toastWarning(messageRes: Int, vararg args: Any) =
     providedContext.toastWarning(messageRes, *args)
-
-fun Fragment.toastError(message: CharSequence) =
-    requireContext().toastError(message)
-
-fun Fragment.toastError(messageRes: Int, vararg args: Any) =
-    requireContext().toastError(messageRes, *args)
-
-fun Fragment.toastInfo(message: CharSequence) =
-    requireContext().toastInfo(message)
-
-fun Fragment.toastInfo(messageRes: Int, vararg args: Any) =
-    requireContext().toastInfo(messageRes, *args)
-
-fun Fragment.toastNormal(message: CharSequence) =
-    requireContext().toastNormal(message)
-
-fun Fragment.toastNormal(messageRes: Int, vararg args: Any) =
-    requireContext().toastNormal(messageRes, *args)
-
-fun Fragment.toastSuccess(message: CharSequence) =
-    requireContext().toastSuccess(message)
-
-fun Fragment.toastSuccess(messageRes: Int, vararg args: Any) =
-    requireContext().toastSuccess(messageRes, *args)
-
-fun Fragment.toastWarning(message: CharSequence) =
-    requireContext().toastWarning(message)
-
-fun Fragment.toastWarning(messageRes: Int, vararg args: Any) =
-    requireContext().toastWarning(messageRes, *args)
 
 fun View.toastError(message: CharSequence) =
     context.toastError(message)

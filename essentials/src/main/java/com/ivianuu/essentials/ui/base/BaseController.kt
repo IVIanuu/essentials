@@ -64,9 +64,9 @@ abstract class BaseController : LifecycleController(), ContextAware, HasInjector
 
     protected open val layoutRes get() = -1
 
-    override fun onCreate() {
+    override fun onCreate(savedInstanceState: Bundle?) {
         inject()
-        super.onCreate()
+        super.onCreate(savedInstanceState)
     }
 
     override fun onInflateView(

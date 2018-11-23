@@ -8,7 +8,6 @@ package com.ivianuu.essentials.util.ext
 import android.annotation.SuppressLint
 import android.content.Context
 import android.view.View
-import androidx.fragment.app.Fragment
 import com.ivianuu.androidktx.core.content.color
 import com.ivianuu.androidktx.core.content.colorAttr
 import com.ivianuu.essentials.R
@@ -20,17 +19,12 @@ fun Context.isWindowBackgroundDark() =
 fun ContextAware.isWindowBackgroundDark() =
     providedContext.isWindowBackgroundDark()
 
-fun Fragment.isWindowBackgroundDark() = requireContext().isWindowBackgroundDark()
-
 fun View.isWindowBackgroundDark() = context.isWindowBackgroundDark()
 
 fun Context.primaryColor() = colorAttr(android.R.attr.colorPrimary)
 
 fun ContextAware.primaryColor() =
     providedContext.colorAttr(android.R.attr.colorPrimary)
-
-fun Fragment.primaryColor() =
-    requireContext().colorAttr(android.R.attr.colorPrimary)
 
 fun View.primaryColor() =
     context.colorAttr(android.R.attr.colorPrimary)
@@ -40,9 +34,6 @@ fun Context.primaryColorDark() = colorAttr(android.R.attr.colorPrimaryDark)
 fun ContextAware.primaryColorDark() =
     providedContext.primaryColorDark()
 
-fun Fragment.primaryColorDark() =
-    requireContext().primaryColorDark()
-
 fun View.primaryColorDark() =
     context.primaryColorDark()
 
@@ -50,9 +41,6 @@ fun Context.accentColor() = colorAttr(android.R.attr.colorAccent)
 
 fun ContextAware.accentColor() =
     providedContext.accentColor()
-
-fun Fragment.accentColor() =
-    requireContext().accentColor()
 
 fun View.accentColor() =
     context.accentColor()
@@ -77,15 +65,6 @@ fun ContextAware.cardColor(color: Int) =
 
 fun ContextAware.cardColor(dark: Boolean) =
     providedContext.cardColor(dark)
-
-fun Fragment.cardColor() =
-    requireContext().cardColor()
-
-fun Fragment.cardColor(color: Int) =
-    requireContext().cardColor(color)
-
-fun Fragment.cardColor(dark: Boolean) =
-    requireContext().cardColor(dark)
 
 fun View.cardColor() =
     context.cardColor()
@@ -117,15 +96,6 @@ fun ContextAware.iconColor(color: Int) =
 fun ContextAware.iconColor(dark: Boolean) =
     providedContext.iconColor(dark)
 
-fun Fragment.iconColor() =
-    requireContext().iconColor()
-
-fun Fragment.iconColor(color: Int) =
-    requireContext().iconColor(color)
-
-fun Fragment.iconColor(dark: Boolean) =
-    requireContext().iconColor(dark)
-
 fun View.iconColor() =
     context.iconColor()
 
@@ -155,15 +125,6 @@ fun ContextAware.rippleColor(color: Int) =
 
 fun ContextAware.rippleColor(dark: Boolean) =
     providedContext.rippleColor(dark)
-
-fun Fragment.rippleColor() =
-    requireContext().rippleColor()
-
-fun Fragment.rippleColor(color: Int) =
-    requireContext().rippleColor(color)
-
-fun Fragment.rippleColor(dark: Boolean) =
-    requireContext().rippleColor(dark)
 
 fun View.rippleColor() =
     context.rippleColor()
@@ -195,15 +156,6 @@ fun ContextAware.primaryTextColor(color: Int) =
 fun ContextAware.primaryTextColor(dark: Boolean) =
     providedContext.primaryTextColor(dark)
 
-fun Fragment.primaryTextColor() =
-    requireContext().primaryTextColor()
-
-fun Fragment.primaryTextColor(color: Int) =
-    requireContext().primaryTextColor(color)
-
-fun Fragment.primaryTextColor(dark: Boolean) =
-    requireContext().primaryTextColor(dark)
-
 fun View.primaryTextColor() =
     context.primaryTextColor()
 
@@ -233,15 +185,6 @@ fun ContextAware.primaryDisabledTextColor(color: Int) =
 
 fun ContextAware.primaryDisabledTextColor(dark: Boolean) =
     providedContext.primaryDisabledTextColor(dark)
-
-fun Fragment.primaryDisabledTextColor() =
-    requireContext().primaryDisabledTextColor()
-
-fun Fragment.primaryDisabledTextColor(color: Int) =
-    requireContext().primaryDisabledTextColor(color)
-
-fun Fragment.primaryDisabledTextColor(dark: Boolean) =
-    requireContext().primaryDisabledTextColor(dark)
 
 fun View.primaryDisabledTextColor() =
     context.primaryDisabledTextColor()
@@ -273,15 +216,6 @@ fun ContextAware.secondaryTextColor(color: Int) =
 fun ContextAware.secondaryTextColor(dark: Boolean) =
     providedContext.secondaryTextColor(dark)
 
-fun Fragment.secondaryTextColor() =
-    requireContext().secondaryTextColor()
-
-fun Fragment.secondaryTextColor(color: Int) =
-    requireContext().secondaryTextColor(color)
-
-fun Fragment.secondaryTextColor(dark: Boolean) =
-    requireContext().secondaryTextColor(dark)
-
 fun View.secondaryTextColor() =
     context.secondaryTextColor()
 
@@ -312,15 +246,6 @@ fun ContextAware.secondaryDisabledTextColor(color: Int) =
 
 fun ContextAware.secondaryDisabledTextColor(dark: Boolean) =
     providedContext.secondaryDisabledTextColor(dark)
-
-fun Fragment.secondaryDisabledTextColor() =
-    requireContext().secondaryDisabledTextColor()
-
-fun Fragment.secondaryDisabledTextColor(color: Int) =
-    requireContext().secondaryDisabledTextColor(color)
-
-fun Fragment.secondaryDisabledTextColor(dark: Boolean) =
-    requireContext().secondaryDisabledTextColor(dark)
 
 fun View.secondaryDisabledTextColor() =
     context.secondaryDisabledTextColor()

@@ -19,7 +19,6 @@ object Versions {
     const val androidxAppCompat = "1.0.2"
     const val androidxCardView = "1.0.0"
     const val androidxCore = "1.0.0"
-    const val androidxFragment = "1.1.0-alpha01"
     const val androidxPalette = "1.0.0"
 
     const val androidxTestCore = "1.0.0"
@@ -36,7 +35,7 @@ object Versions {
     const val constraintLayout = "1.1.3"
     const val coroutines = "1.0.0"
     const val dagger = "2.19"
-    const val director = "1f288de0f4"
+    const val director = "1d423cbc5a"
     const val epoxy = "2.19.0"
     const val epoxyKtx = "9dde1f5a9c"
     const val epoxyPrefs = "f10b99d7c1"
@@ -76,9 +75,6 @@ object Deps {
     const val androidxAppCompat = "androidx.appcompat:appcompat:${Versions.androidxAppCompat}"
     const val androidxCardView = "androidx.cardview:cardview:${Versions.androidxCardView}"
     const val androidxCoreKtx = "androidx.core:core-ktx:${Versions.androidxCore}"
-    const val androidxFragment = "androidx.fragment:fragment:${Versions.androidxFragment}"
-    const val androidxFragmentTesting =
-        "androidx.fragment:fragment-testing:${Versions.androidxFragment}"
 
     const val androidxPalette = "androidx.palette:palette:${Versions.androidxPalette}"
 
@@ -90,7 +86,6 @@ object Deps {
     const val androidKtxAppCompat =
         "com.github.IVIanuu.android-ktx:androidktx-appcompat:${Versions.androidKtx}"
     const val androidKtxCore = "com.github.IVIanuu.android-ktx:androidktx-core:${Versions.androidKtx}"
-    const val androidKtxFragment = "com.github.IVIanuu.android-ktx:androidktx-fragment:${Versions.androidKtx}"
     const val androidKtxLifecycle =
         "com.github.IVIanuu.android-ktx:androidktx-lifecycle:${Versions.androidKtx}"
     const val androidKtxRecyclerView =
@@ -146,8 +141,6 @@ object Deps {
         "com.github.IVIanuu.injectors:injectors-android:${Versions.injectors}"
     const val injectorsCompiler =
         "com.github.IVIanuu.injectors:injectors-compiler:${Versions.injectors}"
-    const val injectorsFragment =
-        "com.github.IVIanuu.injectors:injectors-fragment:${Versions.injectors}"
 
     const val junit = "junit:junit:${Versions.junit}"
 
@@ -207,8 +200,6 @@ object Deps {
     const val scopesAndroid = "com.github.IVIanuu.scopes:scopes-android:${Versions.scopes}"
     const val scopesArchLifecycle =
         "com.github.IVIanuu.scopes:scopes-arch-lifecycle:${Versions.scopes}"
-    const val scopesArchLifecycleFragment =
-        "com.github.IVIanuu.scopes:scopes-arch-lifecycle-fragment:${Versions.scopes}"
     const val scopesCommon = "com.github.IVIanuu.scopes:scopes-common:${Versions.scopes}"
     const val scopesCoroutines = "com.github.IVIanuu.scopes:scopes-coroutines:${Versions.scopes}"
     const val scopesRx = "com.github.IVIanuu.scopes:scopes-rx:${Versions.scopes}"
@@ -226,8 +217,6 @@ object Deps {
     const val travelerAndroid = "com.github.IVIanuu.traveler:traveler-android:${Versions.traveler}"
     const val travelerCommon =
         "com.github.IVIanuu.traveler:traveler-common:${Versions.traveler}"
-    const val travelerFragment =
-        "com.github.IVIanuu.traveler:traveler-fragment:${Versions.traveler}"
     const val travelerLifecycle =
         "com.github.IVIanuu.traveler:traveler-lifecycle:${Versions.traveler}"
     const val travelerResult =

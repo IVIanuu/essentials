@@ -2,8 +2,14 @@ package com.ivianuu.essentials.ui.common
 
 import android.content.pm.PackageManager
 import android.os.Bundle
-import com.ivianuu.essentials.ui.base.BaseFragment
-import com.ivianuu.essentials.ui.traveler.key.FragmentKey
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import com.ivianuu.director.ControllerChangeHandler
+import com.ivianuu.director.ControllerChangeType
+import com.ivianuu.essentials.ui.base.BaseController
+import com.ivianuu.essentials.ui.traveler.anim.DialogControllerKeySetup
+import com.ivianuu.essentials.ui.traveler.key.ControllerKey
 import com.ivianuu.essentials.ui.traveler.key.ResultKey
 import com.ivianuu.essentials.ui.traveler.key.bindKey
 import com.ivianuu.essentials.util.RequestCodeGenerator
@@ -13,17 +19,17 @@ import kotlinx.android.parcel.Parcelize
 import java.util.*
 
 @Parcelize
-data class PermissionKey(
+data class PermissionRequestKey(
     override val resultCode: Int,
     val permissions: Array<String>,
     val requestCode: Int = RequestCodeGenerator.generate()
-) : FragmentKey(PermissionFragment::class),
+) : ControllerKey(PermissionRequestController::class, DialogControllerKeySetup()),
     ResultKey<PermissionResult> {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as PermissionKey
+        other as PermissionRequestKey
 
         if (resultCode != other.resultCode) return false
         if (!Arrays.equals(permissions, other.permissions)) return false
@@ -41,37 +47,46 @@ data class PermissionKey(
 }
 
 /**
- * Activity result activity
+ * Permission request controller
  */
-class PermissionFragment : BaseFragment() {
+class PermissionRequestController : BaseController() {
 
-    private val key by bindKey<PermissionKey>()
+    private val key by bindKey<PermissionRequestKey>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         if (isM()) {
             requestPermissions(key.permissions, key.requestCode)
-        } else {
-            router.goBackWithResult(
+        }
+    }
+
+    override fun onInflateView(
+        inflater: LayoutInflater,
+        container: ViewGroup,
+        savedViewState: Bundle?
+    ) = View(activity)
+
+    override fun onAttach(view: View) {
+        super.onAttach(view)
+        if (!isM()) {
+            travelerRouter.goBackWithResult(
                 key.resultCode, PermissionResult(
                     key.requestCode,
                     key.permissions,
                     key.permissions
-                    .map { PackageManager.PERMISSION_GRANTED }
-                    .toIntArray()
-            ))
+                        .map { PackageManager.PERMISSION_GRANTED }
+                        .toIntArray()
+                ))
         }
     }
 
     override fun onRequestPermissionsResult(
         requestCode: Int,
-        permissions: Array<out String>,
+        permissions: Array<String>,
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-
-        router.goBackWithResult(
+        travelerRouter.goBackWithResult(
             key.resultCode,
             PermissionResult(requestCode, permissions, grantResults)
         )

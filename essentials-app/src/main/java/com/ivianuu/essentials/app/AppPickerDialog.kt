@@ -19,13 +19,13 @@ package com.ivianuu.essentials.app
 import android.app.Dialog
 import android.os.Bundle
 import com.afollestad.materialdialogs.MaterialDialog
-import com.ivianuu.androidktx.fragment.app.string
-import com.ivianuu.essentials.R
-import com.ivianuu.essentials.ui.base.BaseDialogFragment
-import com.ivianuu.essentials.ui.traveler.key.FragmentKey
+import com.ivianuu.essentials.ui.base.BaseDialogController
+import com.ivianuu.essentials.ui.traveler.anim.DialogControllerKeySetup
+import com.ivianuu.essentials.ui.traveler.key.ControllerKey
 import com.ivianuu.essentials.ui.traveler.key.ResultKey
 import com.ivianuu.essentials.ui.traveler.key.key
 import com.ivianuu.essentials.util.RequestCodeGenerator
+import com.ivianuu.essentials.util.string
 import com.ivianuu.traveler.goBack
 import com.ivianuu.traveler.result.goBackWithResult
 import kotlinx.android.parcel.Parcelize
@@ -37,29 +37,29 @@ data class AppPickerKey(
     val title: CharSequence? = null,
     val launchableOnly: Boolean = false,
     override val resultCode: Int = RequestCodeGenerator.generate()
-) : FragmentKey(AppPickerDialog::class), ResultKey<AppInfo>
+) : ControllerKey(AppPickerDialog::class, DialogControllerKeySetup()), ResultKey<AppInfo>
 
 /**
  * App picker
  */
-class AppPickerDialog : BaseDialogFragment() {
+class AppPickerDialog : BaseDialogController() {
 
     @Inject lateinit var appStore: AppStore
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+    override fun onCreateDialog(savedViewState: Bundle?): Dialog {
         val apps = mutableListOf<com.ivianuu.essentials.app.AppInfo>()
 
         val key = key<AppPickerKey>()
 
-        val dialog = MaterialDialog.Builder(requireContext())
+        val dialog = MaterialDialog.Builder(activity)
             .title(key.title ?: string(R.string.dialog_title_app_picker))
             .negativeText(R.string.action_cancel)
             .autoDismiss(false)
-            .onNegative { _, _ -> router.goBack() }
+            .onNegative { _, _ -> travelerRouter.goBack() }
             .items()
             .itemsCallback { _, _, position, _ ->
                 val app = apps[position]
-                router.goBackWithResult(key.resultCode, app)
+                travelerRouter.goBackWithResult(key.resultCode, app)
             }
             .build()
 

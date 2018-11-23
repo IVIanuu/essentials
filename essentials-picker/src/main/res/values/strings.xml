@@ -16,15 +16,6 @@
   -->
 
 <resources>
-    <!-- Dialogs -->
-    <string name="action_cancel">Cancel</string>
-    <string name="action_close">Close</string>
-    <string name="action_ok">OK</string>
-
-    <string name="seek_bar_pref_format_dp">%d dp</string>
-    <string name="seek_bar_pref_format_millis">%d ms</string>
-    <string name="seek_bar_pref_format_percentage">%d%%</string>
-    <string name="seek_bar_pref_format_px">%d px</string>
-    <string name="seek_bar_pref_format_seconds">%d seconds</string>
-
+    <!-- Color picker -->
+    <string name="dialog_title_color_picker">Color Picker</string>
 </resources>

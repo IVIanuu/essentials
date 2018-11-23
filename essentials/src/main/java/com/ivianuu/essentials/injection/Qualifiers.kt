@@ -34,12 +34,6 @@ annotation class ForController
 annotation class ForChildController
 
 @Qualifier
-annotation class ForFragment
-
-@Qualifier
-annotation class ForChildFragment
-
-@Qualifier
 annotation class ForService
 
 @Qualifier

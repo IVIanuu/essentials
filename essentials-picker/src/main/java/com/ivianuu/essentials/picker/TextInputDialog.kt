@@ -20,8 +20,9 @@ import android.app.Dialog
 import android.os.Bundle
 import com.afollestad.materialdialogs.MaterialDialog
 import com.ivianuu.essentials.R
-import com.ivianuu.essentials.ui.base.BaseDialogFragment
-import com.ivianuu.essentials.ui.traveler.key.FragmentKey
+import com.ivianuu.essentials.ui.base.BaseDialogController
+import com.ivianuu.essentials.ui.traveler.anim.DialogControllerKeySetup
+import com.ivianuu.essentials.ui.traveler.key.ControllerKey
 import com.ivianuu.essentials.ui.traveler.key.ResultKey
 import com.ivianuu.essentials.ui.traveler.key.key
 import com.ivianuu.essentials.util.RequestCodeGenerator
@@ -37,17 +38,17 @@ data class TextInputKey(
     val prefill: String = "",
     val allowEmptyInput: Boolean = false,
     override var resultCode: Int = RequestCodeGenerator.generate()
-) : FragmentKey(TextInputDialog::class), ResultKey<CharSequence>
+) : ControllerKey(TextInputDialog::class, DialogControllerKeySetup()), ResultKey<CharSequence>
 
 /**
  * Text input dialog
  */
-class TextInputDialog : BaseDialogFragment() {
+class TextInputDialog : BaseDialogController() {
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+    override fun onCreateDialog(savedViewState: Bundle?): Dialog {
         val key = key<TextInputKey>()
 
-        return MaterialDialog.Builder(requireContext())
+        return MaterialDialog.Builder(activity)
             .autoDismiss(false)
             .title(key.title)
             .input(
@@ -55,9 +56,9 @@ class TextInputDialog : BaseDialogFragment() {
                 key.prefill,
                 key.allowEmptyInput
             ) { _, input ->
-                router.goBackWithResult(key.resultCode, input)
+                travelerRouter.goBackWithResult(key.resultCode, input)
             }
-            .onNegative { _, _ -> router.goBack() }
+            .onNegative { _, _ -> travelerRouter.goBack() }
             .inputType(key.inputType)
             .positiveText(R.string.action_ok)
             .negativeText(R.string.action_cancel)

@@ -30,7 +30,7 @@ class ListController : SimpleController() {
 
     private val viewModel by bindViewModel(ListViewModel::class)
 
-    override val toolbarMenuRes get() = R.menu.fragment_list
+    override val toolbarMenuRes get() = R.menu.controller_list
     override val toolbarTitle get() = "List"
 
     override fun epoxyController() = simpleEpoxyController(viewModel) { state ->

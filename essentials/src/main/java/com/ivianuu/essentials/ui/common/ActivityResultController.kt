@@ -3,8 +3,12 @@ package com.ivianuu.essentials.ui.common
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import com.ivianuu.essentials.ui.base.BaseFragment
-import com.ivianuu.essentials.ui.traveler.key.FragmentKey
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import com.ivianuu.essentials.ui.base.BaseController
+import com.ivianuu.essentials.ui.traveler.anim.DialogControllerKeySetup
+import com.ivianuu.essentials.ui.traveler.key.ControllerKey
 import com.ivianuu.essentials.ui.traveler.key.ResultKey
 import com.ivianuu.essentials.ui.traveler.key.bindKey
 import com.ivianuu.essentials.util.RequestCodeGenerator
@@ -16,13 +20,13 @@ data class ActivityResultKey(
     override val resultCode: Int,
     val intent: Intent,
     val requestCode: Int = RequestCodeGenerator.generate()
-) : FragmentKey(ActivityResultFragment::class),
+) : ControllerKey(ActivityResultController::class, DialogControllerKeySetup()),
     ResultKey<ActivityResult>
 
 /**
- * Activity result fragment
+ * Activity result controller
  */
-class ActivityResultFragment : BaseFragment() {
+class ActivityResultController : BaseController() {
 
     private val key by bindKey<ActivityResultKey>()
 
@@ -31,9 +35,15 @@ class ActivityResultFragment : BaseFragment() {
         startActivityForResult(key.intent, key.requestCode)
     }
 
+    override fun onInflateView(
+        inflater: LayoutInflater,
+        container: ViewGroup,
+        savedViewState: Bundle?
+    ) = View(activity)
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        router.goBackWithResult(
+        travelerRouter.goBackWithResult(
             key.resultCode,
             ActivityResult(requestCode, resultCode, data)
         )

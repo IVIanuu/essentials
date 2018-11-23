@@ -16,23 +16,23 @@
 
 package com.ivianuu.essentials.injection
 
-import com.ivianuu.essentials.ui.common.ActivityResultFragment
-import com.ivianuu.essentials.ui.common.PermissionFragment
+import com.ivianuu.essentials.ui.common.ActivityResultController
+import com.ivianuu.essentials.ui.common.PermissionRequestController
 import com.ivianuu.injectors.ContributesInjector
 import dagger.Module
 
 /**
- * Essentials fragment binding module
+ * Essentials controller binding module
  */
-@Module(includes = [EssentialsFragmentBindingModule_Contributions::class])
-abstract class EssentialsFragmentBindingModule {
+@Module(includes = [EssentialsControllerBindingModule_Contributions::class])
+abstract class EssentialsControllerBindingModule {
 
-    @PerFragment
+    @PerController
     @ContributesInjector
-    abstract fun bindActivityResultFragment(): ActivityResultFragment
+    abstract fun bindActivityResultController(): ActivityResultController
 
-    @PerFragment
+    @PerController
     @ContributesInjector
-    abstract fun bindPermissionFragment(): PermissionFragment
+    abstract fun bindPermissionController(): PermissionRequestController
 
 }

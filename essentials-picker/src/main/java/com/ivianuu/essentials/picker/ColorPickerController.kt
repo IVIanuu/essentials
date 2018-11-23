@@ -17,10 +17,13 @@
 package com.ivianuu.essentials.picker
 
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import com.afollestad.materialdialogs.color.ColorChooserDialog
-import com.ivianuu.essentials.R
-import com.ivianuu.essentials.ui.base.BaseFragment
-import com.ivianuu.essentials.ui.traveler.key.FragmentKey
+import com.ivianuu.essentials.ui.base.BaseController
+import com.ivianuu.essentials.ui.traveler.anim.DialogControllerKeySetup
+import com.ivianuu.essentials.ui.traveler.key.ControllerKey
 import com.ivianuu.essentials.ui.traveler.key.ResultKey
 import com.ivianuu.essentials.ui.traveler.key.bindKey
 import com.ivianuu.essentials.util.RequestCodeGenerator
@@ -33,12 +36,12 @@ data class ColorPickerKey(
     val titleRes: Int = R.string.dialog_title_color_picker,
     val preselect: Int = 0,
     override val resultCode: Int = RequestCodeGenerator.generate()
-) : FragmentKey(ColorPickerFragment::class), ResultKey<Int>
+) : ControllerKey(ColorPickerController::class, DialogControllerKeySetup()), ResultKey<Int>
 
 /**
- * Color picker fragment
+ * Color picker controller
  */
-class ColorPickerFragment : BaseFragment(), ColorChooserDialog.ColorCallback {
+class ColorPickerController : BaseController(), ColorChooserDialog.ColorCallback {
 
     private val key by bindKey<ColorPickerKey>()
 
@@ -46,24 +49,29 @@ class ColorPickerFragment : BaseFragment(), ColorChooserDialog.ColorCallback {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        ColorChooserDialog.Builder(requireContext(), key.titleRes)
+        ColorChooserDialog.Builder(activity, key.titleRes)
             .apply {
                 if (key.preselect != 0) {
                     preselect(key.preselect)
                 }
             }
-            .show(childFragmentManager)
+            .show(activity.supportFragmentManager)
     }
 
+    override fun onInflateView(
+        inflater: LayoutInflater,
+        container: ViewGroup,
+        savedViewState: Bundle?
+    ) = View(activity)
+
     override fun onColorSelection(dialog: ColorChooserDialog, selectedColor: Int) {
-        router.goBackWithResult(key.resultCode, selectedColor)
+        travelerRouter.goBackWithResult(key.resultCode, selectedColor)
         colorSelected = true
     }
 
     override fun onColorChooserDismissed(dialog: ColorChooserDialog) {
         if (!colorSelected) {
-            router.goBack()
+            travelerRouter.goBack()
         }
     }
 }

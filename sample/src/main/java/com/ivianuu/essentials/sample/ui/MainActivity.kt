@@ -31,11 +31,7 @@ import javax.inject.Inject
 
 class MainActivity : BaseActivity() {
 
-    @Inject lateinit var appStore: AppStore
     @Inject lateinit var workManager: WorkManager
-
-    override val useDirector: Boolean
-        get() = true
 
     override val startKey: Any?
         get() = CounterKey(1)

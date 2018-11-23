@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.ui.base
 
 import android.content.Context
+import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
 import com.ivianuu.director.dialog.DialogController
 import com.ivianuu.director.scopes.destroy
@@ -40,8 +41,8 @@ abstract class BaseDialogController : DialogController(), ContextAware, ViewMode
 
     val coroutineScope = destroy.asMainCoroutineScope()
 
-    override fun onCreate() {
+    override fun onCreate(savedInstanceState: Bundle?) {
         inject()
-        super.onCreate()
+        super.onCreate(savedInstanceState)
     }
 }

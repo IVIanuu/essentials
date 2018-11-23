@@ -16,7 +16,7 @@
 
 package com.ivianuu.essentials.app
 
-import com.ivianuu.essentials.injection.PerFragment
+import com.ivianuu.essentials.injection.PerController
 import com.ivianuu.injectors.ContributesInjector
 import dagger.Module
 
@@ -26,7 +26,7 @@ import dagger.Module
 @Module(includes = [EssentialsAppModule_Contributions::class])
 abstract class EssentialsAppModule {
 
-    @PerFragment
+    @PerController
     @ContributesInjector
     abstract fun bindAppPickerDialog(): AppPickerDialog
 

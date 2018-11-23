@@ -18,13 +18,11 @@ package com.ivianuu.essentials.util.ext
 
 import android.content.Intent
 import com.ivianuu.essentials.ui.common.ActivityResultKey
-import com.ivianuu.essentials.ui.common.PermissionKey
+import com.ivianuu.essentials.ui.common.PermissionRequestKey
 import com.ivianuu.essentials.ui.traveler.key.ResultKey
-import com.ivianuu.essentials.ui.traveler.navigator.AddFragment
 import com.ivianuu.essentials.util.RequestCodeGenerator
 import com.ivianuu.rxjavaktx.observable
 import com.ivianuu.traveler.Router
-import com.ivianuu.traveler.fragment.FragmentKey
 import com.ivianuu.traveler.navigate
 import com.ivianuu.traveler.result.ResultListener
 import com.ivianuu.traveler.result.addResultListener
@@ -69,10 +67,10 @@ suspend fun <D : ResultKey<R>, R> Router.navigateForResult(key: D) =
     }
 
 suspend fun Router.navigateForActivityResult(intent: Intent) =
-    addFragmentForResult(ActivityResultKey(RequestCodeGenerator.generate(), intent))
+    navigateForResult(ActivityResultKey(RequestCodeGenerator.generate(), intent))
 
 suspend fun Router.navigateForActivityResult(resultCode: Int, intent: Intent) =
-    addFragmentForResult(ActivityResultKey(resultCode, intent, resultCode))
+    navigateForResult(ActivityResultKey(resultCode, intent, resultCode))
 
 suspend fun Router.requestPermissions(
     vararg permissions: String
@@ -82,34 +80,11 @@ suspend fun Router.requestPermissions(
     resultCode: Int,
     vararg permissions: String
 ): Boolean {
-    val key = PermissionKey(
+    val key = PermissionRequestKey(
         resultCode,
         permissions.toList().toTypedArray(),
         resultCode
     )
 
-    return addFragmentForResult(key).allGranted
-}
-
-@Suppress("UNCHECKED_CAST")
-suspend fun <D, R> Router.addFragmentForResult(key: D) where D : FragmentKey, D : ResultKey<R> =
-    suspendCancellableCoroutine<R> { continuation ->
-        val listener = object : ResultListener {
-            override fun invoke(result: Any) {
-                continuation.resume(result as R)
-                removeResultListener(key.resultCode, this)
-            }
-        }
-
-        continuation.invokeOnCancellation {
-            removeResultListener(key.resultCode, listener)
-        }
-
-        addResultListener(key.resultCode, listener)
-
-        addFragment(key)
-    }
-
-fun Router.addFragment(key: FragmentKey) {
-    executeCommands(AddFragment(key))
+    return navigateForResult(key).allGranted
 }

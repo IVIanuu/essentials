@@ -40,7 +40,7 @@ import com.ivianuu.traveler.goBack
  */
 abstract class SimpleController : BaseController() {
 
-    override val layoutRes get() = R.layout.fragment_simple
+    override val layoutRes get() = R.layout.controller_simple
 
     protected open val toolbarTitle: String? get() = null
     protected open val toolbarTitleRes get() = 0
