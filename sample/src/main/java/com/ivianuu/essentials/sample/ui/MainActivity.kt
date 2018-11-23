@@ -20,13 +20,20 @@ package com.ivianuu.essentials.sample.ui
 import android.os.Bundle
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
+import com.ivianuu.essentials.app.AppPickerKey
 import com.ivianuu.essentials.app.AppStore
+import com.ivianuu.essentials.picker.ColorPickerKey
+import com.ivianuu.essentials.picker.TextInputDialog
+import com.ivianuu.essentials.picker.TextInputKey
 import com.ivianuu.essentials.sample.data.MyOtherWorker
 import com.ivianuu.essentials.sample.data.MyWorker
 import com.ivianuu.essentials.sample.ui.counter.CounterKey
 import com.ivianuu.essentials.ui.base.BaseActivity
 import com.ivianuu.essentials.ui.base.BaseActivityModule
+import com.ivianuu.essentials.util.ext.navigateForResult
+import com.ivianuu.timberktx.d
 import dagger.Module
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class MainActivity : BaseActivity() {
@@ -38,6 +45,15 @@ class MainActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        if (savedInstanceState == null) {
+            coroutineScope.launch {
+                val color = travelerRouter.navigateForResult(TextInputKey("Title"))
+                d { "color -> $color" }
+                d { "backstack ${router.backstack.map { it.controller.javaClass.simpleName }}" }
+            }
+        }
+
         workManager.enqueue(
             OneTimeWorkRequestBuilder<MyWorker>()
                 .build()

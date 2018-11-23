@@ -18,7 +18,9 @@ package com.ivianuu.essentials.picker
 
 import android.app.Dialog
 import android.os.Bundle
+import androidx.annotation.StringRes
 import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.input.input
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.base.BaseDialogController
 import com.ivianuu.essentials.ui.traveler.anim.DialogControllerKeySetup
@@ -38,7 +40,7 @@ data class TextInputKey(
     val prefill: String = "",
     val allowEmptyInput: Boolean = false,
     override var resultCode: Int = RequestCodeGenerator.generate()
-) : ControllerKey(TextInputDialog::class, DialogControllerKeySetup()), ResultKey<CharSequence>
+) : ControllerKey(TextInputDialog::class, DialogControllerKeySetup()), ResultKey<String>
 
 /**
  * Text input dialog
@@ -48,21 +50,18 @@ class TextInputDialog : BaseDialogController() {
     override fun onCreateDialog(savedViewState: Bundle?): Dialog {
         val key = key<TextInputKey>()
 
-        return MaterialDialog.Builder(activity)
-            .autoDismiss(false)
-            .title(key.title)
+        return MaterialDialog(activity)
+            .noAutoDismiss()
+            .title(text = key.title)
             .input(
-                key.inputHint,
-                key.prefill,
-                key.allowEmptyInput
+                hint = key.inputHint,
+                prefill = key.prefill,
+                inputType = key.inputType
             ) { _, input ->
-                travelerRouter.goBackWithResult(key.resultCode, input)
+                travelerRouter.goBackWithResult(key.resultCode, input.toString())
             }
-            .onNegative { _, _ -> travelerRouter.goBack() }
-            .inputType(key.inputType)
-            .positiveText(R.string.action_ok)
-            .negativeText(R.string.action_cancel)
-            .build()
+            .positiveButton(R.string.action_ok)
+            .negativeButton(R.string.action_cancel) { travelerRouter.goBack() }
     }
 
 }

@@ -16,12 +16,16 @@
 
 package com.ivianuu.essentials.picker
 
+import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.afollestad.materialdialogs.color.ColorChooserDialog
+import androidx.annotation.ColorInt
+import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.color.colorChooser
 import com.ivianuu.essentials.ui.base.BaseController
+import com.ivianuu.essentials.ui.base.BaseDialogController
 import com.ivianuu.essentials.ui.traveler.anim.DialogControllerKeySetup
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
 import com.ivianuu.essentials.ui.traveler.key.ResultKey
@@ -35,43 +39,29 @@ import kotlinx.android.parcel.Parcelize
 data class ColorPickerKey(
     val titleRes: Int = R.string.dialog_title_color_picker,
     val preselect: Int = 0,
+    val allowCustomArgb: Boolean = true,
+    val showAlphaSelector: Boolean = false,
     override val resultCode: Int = RequestCodeGenerator.generate()
 ) : ControllerKey(ColorPickerController::class, DialogControllerKeySetup()), ResultKey<Int>
 
 /**
  * Color picker controller
  */
-class ColorPickerController : BaseController(), ColorChooserDialog.ColorCallback {
+class ColorPickerController : BaseDialogController() {
 
     private val key by bindKey<ColorPickerKey>()
 
-    private var colorSelected = false
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        ColorChooserDialog.Builder(activity, key.titleRes)
-            .apply {
-                if (key.preselect != 0) {
-                    preselect(key.preselect)
-                }
-            }
-            .show(activity.supportFragmentManager)
+    override fun onCreateDialog(savedViewState: Bundle?): Dialog {
+        return MaterialDialog(activity)
+            .title(key.titleRes)
+            .colorChooser(
+                colors = ColorPalette.PRIMARY_COLORS,
+                subColors = ColorPalette.PRIMARY_COLORS_SUB,
+                initialSelection = if (key.preselect != 0) key.preselect else null,
+                allowCustomArgb = key.allowCustomArgb,
+                showAlphaSelector = key.showAlphaSelector
+            ) { _, color -> travelerRouter.goBackWithResult(key.resultCode, color) }
+            .negativeButton(R.string.action_cancel)
     }
 
-    override fun onInflateView(
-        inflater: LayoutInflater,
-        container: ViewGroup,
-        savedViewState: Bundle?
-    ) = View(activity)
-
-    override fun onColorSelection(dialog: ColorChooserDialog, selectedColor: Int) {
-        travelerRouter.goBackWithResult(key.resultCode, selectedColor)
-        colorSelected = true
-    }
-
-    override fun onColorChooserDismissed(dialog: ColorChooserDialog) {
-        if (!colorSelected) {
-            travelerRouter.goBack()
-        }
-    }
 }

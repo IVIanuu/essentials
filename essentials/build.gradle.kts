@@ -60,7 +60,6 @@ dependencies {
     api(Deps.androidxAppCompat)
     api(Deps.androidxCardView)
     api(Deps.androidxCoreKtx)
-    api(Deps.androidxPalette)
 
     api(Deps.androidKtxAppCompat)
     api(Deps.androidKtxCore)
@@ -119,7 +118,6 @@ dependencies {
     api(Deps.materialComponentsKtx)
 
     api(Deps.materialDialogsCore)
-    api(Deps.materialDialogsCommons)
 
     api(Deps.rxAndroid)
     api(Deps.rxJava)
@@ -138,8 +136,6 @@ dependencies {
     api(Deps.stateStoreCoroutines)
     api(Deps.stateStoreLifecycle)
     api(Deps.stateStoreRx)
-
-    api(Deps.stickyHeaders)
 
     api(Deps.timber)
     api(Deps.timberKtx)

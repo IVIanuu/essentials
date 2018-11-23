@@ -19,7 +19,6 @@ object Versions {
     const val androidxAppCompat = "1.0.2"
     const val androidxCardView = "1.0.0"
     const val androidxCore = "1.0.0"
-    const val androidxPalette = "1.0.0"
 
     const val androidxTestCore = "1.0.0"
     const val androidxTestJunit = "1.0.0"
@@ -50,7 +49,7 @@ object Versions {
     const val mavenGradle = "2.1"
     const val materialComponents = "1.0.0"
     const val materialComponentsKtx = "c4c5dda45a"
-    const val materialDialogs = "0.9.6.0"
+    const val materialDialogs = "2.0.0-rc1"
     const val mockitoKotlin = "2.0.0"
     const val r2 = "06e702d39f"
     const val roboelectric = "4.0.2"
@@ -61,7 +60,6 @@ object Versions {
     const val scopes = "d9e4485f16"
     const val superUser = "1.0.0.+"
     const val stateStore = "bc25513ffa"
-    const val stickyHeaders = "44c5192160"
     const val timber = "4.7.1"
     const val timberKtx = "f7547da781"
     const val toasty = "1.3.0"
@@ -75,8 +73,6 @@ object Deps {
     const val androidxAppCompat = "androidx.appcompat:appcompat:${Versions.androidxAppCompat}"
     const val androidxCardView = "androidx.cardview:cardview:${Versions.androidxCardView}"
     const val androidxCoreKtx = "androidx.core:core-ktx:${Versions.androidxCore}"
-
-    const val androidxPalette = "androidx.palette:palette:${Versions.androidxPalette}"
 
     const val androidxTestCore = "androidx.test:core:${Versions.androidxTestCore}"
     const val androidxTestJunit = "androidx.test.ext:junit:${Versions.androidxTestJunit}"
@@ -172,7 +168,8 @@ object Deps {
         "com.github.IVIanuu:material-components-ktx:${Versions.materialComponentsKtx}"
 
     const val materialDialogsCore = "com.afollestad.material-dialogs:core:${Versions.materialDialogs}"
-    const val materialDialogsCommons = "com.afollestad.material-dialogs:commons:${Versions.materialDialogs}"
+    const val materialDialogsInput = "com.afollestad.material-dialogs:input:${Versions.materialDialogs}"
+    const val materialDialogsColor = "com.afollestad.material-dialogs:color:${Versions.materialDialogs}"
 
     const val mavenGradlePlugin = "com.github.dcendents:android-maven-gradle-plugin:${Versions.mavenGradle}"
 
@@ -205,8 +202,6 @@ object Deps {
     const val scopesRx = "com.github.IVIanuu.scopes:scopes-rx:${Versions.scopes}"
 
     const val superUser = "eu.chainfire:libsuperuser:${Versions.superUser}"
-
-    const val stickyHeaders = "com.github.IVIanuu:sticky-headers:${Versions.stickyHeaders}"
 
     const val timber = "com.jakewharton.timber:timber:${Versions.timber}"
     const val timberKtx = "com.github.IVIanuu:timber-ktx:${Versions.timberKtx}"

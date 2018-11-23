@@ -19,7 +19,6 @@ package com.ivianuu.essentials.app
 import android.content.Intent
 import android.content.pm.PackageManager
 import com.ivianuu.essentials.util.ext.coroutinesIo
-import com.ivianuu.timberktx.d
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -29,7 +28,6 @@ import javax.inject.Inject
 class AppStore @Inject constructor(private val packageManager: PackageManager) {
 
     suspend fun installedApps() = withContext(coroutinesIo) {
-        d { "running on ${Thread.currentThread().name}" }
         packageManager.getInstalledApplications(0)
             .asSequence()
             .map {

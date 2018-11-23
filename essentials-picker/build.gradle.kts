@@ -57,6 +57,8 @@ android {
 dependencies {
     api(project(":essentials"))
     kapt(project(":essentials-compiler"))
+    api(Deps.materialDialogsInput)
+    api(Deps.materialDialogsColor)
 }
 
 val sourcesJar = task("sourcesJar", Jar::class) {

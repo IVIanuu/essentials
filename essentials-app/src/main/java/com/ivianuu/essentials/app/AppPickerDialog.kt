@@ -19,6 +19,7 @@ package com.ivianuu.essentials.app
 import android.app.Dialog
 import android.os.Bundle
 import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.list.listItems
 import com.ivianuu.essentials.ui.base.BaseDialogController
 import com.ivianuu.essentials.ui.traveler.anim.DialogControllerKeySetup
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
@@ -34,7 +35,7 @@ import javax.inject.Inject
 
 @Parcelize
 data class AppPickerKey(
-    val title: CharSequence? = null,
+    val title: String? = null,
     val launchableOnly: Boolean = false,
     override val resultCode: Int = RequestCodeGenerator.generate()
 ) : ControllerKey(AppPickerDialog::class, DialogControllerKeySetup()), ResultKey<AppInfo>
@@ -51,17 +52,11 @@ class AppPickerDialog : BaseDialogController() {
 
         val key = key<AppPickerKey>()
 
-        val dialog = MaterialDialog.Builder(activity)
-            .title(key.title ?: string(R.string.dialog_title_app_picker))
-            .negativeText(R.string.action_cancel)
-            .autoDismiss(false)
-            .onNegative { _, _ -> travelerRouter.goBack() }
-            .items()
-            .itemsCallback { _, _, position, _ ->
-                val app = apps[position]
-                travelerRouter.goBackWithResult(key.resultCode, app)
-            }
-            .build()
+        val dialog = MaterialDialog(activity)
+            .title(text = key.title ?: string(R.string.dialog_title_app_picker))
+            .positiveButton(R.string.action_ok)
+            .negativeButton(R.string.action_cancel) { travelerRouter.goBack() }
+            .noAutoDismiss()
 
         coroutineScope.launch {
             val newApps = if (key.launchableOnly) {
@@ -71,7 +66,11 @@ class AppPickerDialog : BaseDialogController() {
             }
             apps.clear()
             apps.addAll(newApps)
-            dialog.setItems(*apps.map { it.appName }.toTypedArray())
+
+            dialog.listItems(items = apps.map { it.appName }) { _, index, _ ->
+                val app = apps[index]
+                travelerRouter.goBackWithResult(key.resultCode, app)
+            }
         }
 
         return dialog
