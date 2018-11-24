@@ -23,18 +23,22 @@ import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.base.BaseController
 import com.ivianuu.essentials.ui.mvrx.bindViewModel
 import com.ivianuu.essentials.ui.mvrx.withState
-import com.ivianuu.essentials.ui.traveler.anim.HorizontalControllerKeySetup
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
 import com.ivianuu.essentials.ui.traveler.key.key
 import kotlinx.android.parcel.Parcelize
-import kotlinx.android.synthetic.main.controller_counter.*
+import kotlinx.android.synthetic.main.controller_counter.count
+import kotlinx.android.synthetic.main.controller_counter.decrease
+import kotlinx.android.synthetic.main.controller_counter.do_work
+import kotlinx.android.synthetic.main.controller_counter.increase
+import kotlinx.android.synthetic.main.controller_counter.list_screen
+import kotlinx.android.synthetic.main.controller_counter.reset
+import kotlinx.android.synthetic.main.controller_counter.root_screen
+import kotlinx.android.synthetic.main.controller_counter.screen_down
+import kotlinx.android.synthetic.main.controller_counter.screen_up
 import javax.inject.Inject
 
 @Parcelize
-data class CounterKey(val screen: Int) : ControllerKey(
-    CounterController::class,
-    HorizontalControllerKeySetup()
-)
+data class CounterKey(val screen: Int) : ControllerKey(CounterController::class)
 
 /**
  * @author Manuel Wrage (IVIanuu)

@@ -5,10 +5,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.ivianuu.director.ControllerChangeHandler
-import com.ivianuu.director.ControllerChangeType
 import com.ivianuu.essentials.ui.base.BaseController
-import com.ivianuu.essentials.ui.traveler.anim.DialogControllerKeySetup
+import com.ivianuu.essentials.ui.traveler.NavOptions
+import com.ivianuu.essentials.ui.traveler.dialog
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
 import com.ivianuu.essentials.ui.traveler.key.ResultKey
 import com.ivianuu.essentials.ui.traveler.key.bindKey
@@ -23,7 +22,7 @@ data class PermissionRequestKey(
     override val resultCode: Int,
     val permissions: Array<String>,
     val requestCode: Int = RequestCodeGenerator.generate()
-) : ControllerKey(PermissionRequestController::class, DialogControllerKeySetup()),
+) : ControllerKey(PermissionRequestController::class, NavOptions().dialog()),
     ResultKey<PermissionResult> {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

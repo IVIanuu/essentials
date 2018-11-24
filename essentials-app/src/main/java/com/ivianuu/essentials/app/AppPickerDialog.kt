@@ -21,7 +21,8 @@ import android.os.Bundle
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.list.listItems
 import com.ivianuu.essentials.ui.base.BaseDialogController
-import com.ivianuu.essentials.ui.traveler.anim.DialogControllerKeySetup
+import com.ivianuu.essentials.ui.traveler.NavOptions
+import com.ivianuu.essentials.ui.traveler.dialog
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
 import com.ivianuu.essentials.ui.traveler.key.ResultKey
 import com.ivianuu.essentials.ui.traveler.key.key
@@ -38,7 +39,7 @@ data class AppPickerKey(
     val title: String? = null,
     val launchableOnly: Boolean = false,
     override val resultCode: Int = RequestCodeGenerator.generate()
-) : ControllerKey(AppPickerDialog::class, DialogControllerKeySetup()), ResultKey<AppInfo>
+) : ControllerKey(AppPickerDialog::class, NavOptions().dialog()), ResultKey<AppInfo>
 
 /**
  * App picker

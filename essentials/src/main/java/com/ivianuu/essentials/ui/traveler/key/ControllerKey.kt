@@ -20,13 +20,17 @@ import android.os.Parcelable
 import com.ivianuu.director.Controller
 import com.ivianuu.director.RouterTransaction
 import com.ivianuu.director.traveler.ControllerKey
+import com.ivianuu.essentials.ui.traveler.ControllerNavOptions
+import com.ivianuu.essentials.ui.traveler.applyToTransaction
 import com.ivianuu.essentials.util.ext.unsafeLazy
 import com.ivianuu.traveler.Command
+import com.ivianuu.traveler.Forward
+import com.ivianuu.traveler.Replace
 import kotlin.reflect.KClass
 
 abstract class ControllerKey(
     val target: KClass<out Controller>,
-    open val setup: Setup? = null
+    open val defaultNavOptions: ControllerNavOptions? = null
 ) : ControllerKey, Parcelable {
 
     override fun createController(data: Any?): Controller = target.java.newInstance().apply {
@@ -39,17 +43,16 @@ abstract class ControllerKey(
         nextController: Controller,
         transaction: RouterTransaction
     ) {
-        setup?.apply(command, currentController, nextController, transaction)
+        val data = when (command) {
+            is Forward -> command.data
+            is Replace -> command.data
+            else -> null
+        }
+
+        (data as? ControllerNavOptions ?: defaultNavOptions)
+            ?.applyToTransaction(transaction)
     }
 
-    interface Setup {
-        fun apply(
-            command: Command,
-            currentController: Controller?,
-            nextController: Controller,
-            transaction: RouterTransaction
-        )
-    }
 }
 
 fun <T : Parcelable> Controller.key(): T = args.getParcelable(KEY_KEY)!!

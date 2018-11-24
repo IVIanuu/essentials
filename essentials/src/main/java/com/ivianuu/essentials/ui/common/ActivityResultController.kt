@@ -7,7 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.ivianuu.essentials.ui.base.BaseController
-import com.ivianuu.essentials.ui.traveler.anim.DialogControllerKeySetup
+import com.ivianuu.essentials.ui.traveler.NavOptions
+import com.ivianuu.essentials.ui.traveler.dialog
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
 import com.ivianuu.essentials.ui.traveler.key.ResultKey
 import com.ivianuu.essentials.ui.traveler.key.bindKey
@@ -20,7 +21,7 @@ data class ActivityResultKey(
     override val resultCode: Int,
     val intent: Intent,
     val requestCode: Int = RequestCodeGenerator.generate()
-) : ControllerKey(ActivityResultController::class, DialogControllerKeySetup()),
+) : ControllerKey(ActivityResultController::class, NavOptions().dialog()),
     ResultKey<ActivityResult>
 
 /**

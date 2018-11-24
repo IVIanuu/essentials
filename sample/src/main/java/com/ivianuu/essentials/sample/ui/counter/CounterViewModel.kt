@@ -6,6 +6,8 @@ import com.ivianuu.assistedinject.AssistedInject
 import com.ivianuu.essentials.sample.ui.list.ListKey
 import com.ivianuu.essentials.ui.mvrx.MvRxState
 import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
+import com.ivianuu.essentials.ui.traveler.NavOptions
+import com.ivianuu.essentials.ui.traveler.horizontal
 import com.ivianuu.essentials.util.ext.toastInfo
 import com.ivianuu.timberktx.d
 import com.ivianuu.traveler.Router
@@ -49,7 +51,10 @@ class CounterViewModel @AssistedInject constructor(
         d { "screen up clicked" }
         withState {
             d { "navigate" }
-            router.navigate(CounterKey(it.screen.inc()))
+            router.navigate(
+                CounterKey(it.screen.inc()),
+                NavOptions().horizontal()
+            )
         }
     }
 

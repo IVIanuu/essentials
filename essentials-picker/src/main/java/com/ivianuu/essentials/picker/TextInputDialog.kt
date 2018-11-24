@@ -18,12 +18,12 @@ package com.ivianuu.essentials.picker
 
 import android.app.Dialog
 import android.os.Bundle
-import androidx.annotation.StringRes
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.input.input
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.base.BaseDialogController
-import com.ivianuu.essentials.ui.traveler.anim.DialogControllerKeySetup
+import com.ivianuu.essentials.ui.traveler.NavOptions
+import com.ivianuu.essentials.ui.traveler.dialog
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
 import com.ivianuu.essentials.ui.traveler.key.ResultKey
 import com.ivianuu.essentials.ui.traveler.key.key
@@ -40,7 +40,7 @@ data class TextInputKey(
     val prefill: String = "",
     val allowEmptyInput: Boolean = false,
     override var resultCode: Int = RequestCodeGenerator.generate()
-) : ControllerKey(TextInputDialog::class, DialogControllerKeySetup()), ResultKey<String>
+) : ControllerKey(TextInputDialog::class, NavOptions().dialog()), ResultKey<String>
 
 /**
  * Text input dialog
