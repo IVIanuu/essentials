@@ -48,7 +48,7 @@ fun <T> Router.results(resultCode: Int) = observable<T> { e ->
 }
 
 @Suppress("UNCHECKED_CAST")
-suspend fun <D : ResultKey<R>, R> Router.navigateForResult(key: D) =
+suspend fun <D : ResultKey<R>, R> Router.navigateForResult(key: D, data: Any? = null) =
     suspendCancellableCoroutine<R> { continuation ->
         val listener = object : ResultListener {
             override fun invoke(result: Any) {
@@ -63,7 +63,7 @@ suspend fun <D : ResultKey<R>, R> Router.navigateForResult(key: D) =
 
         addResultListener(key.resultCode, listener)
 
-        navigate(key)
+        navigate(key, data)
     }
 
 suspend fun Router.navigateForActivityResult(intent: Intent) =
