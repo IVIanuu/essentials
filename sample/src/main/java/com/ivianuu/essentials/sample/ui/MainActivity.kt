@@ -43,27 +43,6 @@ class MainActivity : BaseActivity() {
     override val startKey: Any?
         get() = CounterKey(1)
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        if (savedInstanceState == null) {
-            coroutineScope.launch {
-                val color = travelerRouter.navigateForResult(TextInputKey("Title"))
-                d { "color -> $color" }
-                d { "backstack ${router.backstack.map { it.controller.javaClass.simpleName }}" }
-            }
-        }
-
-        workManager.enqueue(
-            OneTimeWorkRequestBuilder<MyWorker>()
-                .build()
-        )
-        workManager.enqueue(
-            OneTimeWorkRequestBuilder<MyOtherWorker>()
-                .build()
-        )
-    }
-
 }
 
 @Module
