@@ -4,6 +4,7 @@ include(
     ":essentials-app-glide",
     ":essentials-compiler",
     ":essentials-picker",
+    ":essentials-securesettings",
     ":essentials-shell",
     ":essentials-test",
     ":essentials-work",
