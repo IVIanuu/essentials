@@ -67,7 +67,10 @@ class AppPickerDialog : BaseDialogController() {
             apps.clear()
             apps.addAll(newApps)
 
-            dialog.listItems(items = apps.map { it.appName }) { _, index, _ ->
+            dialog.listItems(
+                items = apps.map { it.appName },
+                waitForPositiveButton = false
+            ) { _, index, _ ->
                 val app = apps[index]
                 travelerRouter.goBackWithResult(key.resultCode, app)
             }
