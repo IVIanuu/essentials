@@ -20,12 +20,16 @@ package com.ivianuu.essentials.sample.ui
 import com.ivianuu.essentials.sample.ui.counter.CounterKey
 import com.ivianuu.essentials.ui.base.BaseActivity
 import com.ivianuu.essentials.ui.base.BaseActivityModule
+import com.ivianuu.traveler.Navigator
 import dagger.Module
 
 class MainActivity : BaseActivity() {
 
     override val startKey: Any?
         get() = CounterKey(1)
+
+    override val navigator: Navigator
+        get() = super.navigator
 
 }
 
