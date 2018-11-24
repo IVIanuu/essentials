@@ -14,7 +14,7 @@ android {
         applicationId = Build.applicationId
         buildToolsVersion = Build.buildToolsVersion
         minSdkVersion(Build.minSdk)
-        targetSdkVersion(Build.targetSdk)
+        targetSdkVersion(Build.targetSdkSample)
         versionCode = Build.versionCode
         versionName = Build.versionName
 
@@ -46,6 +46,7 @@ dependencies {
     implementation(project(":essentials"))
     implementation(project(":essentials-app"))
     implementation(project(":essentials-app-glide"))
+    implementation(project(":essentials-hidenavbar"))
     implementation(project(":essentials-shell"))
     implementation(project(":essentials-picker"))
     implementation(project(":essentials-securesettings"))

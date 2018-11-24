@@ -18,15 +18,10 @@
 package com.ivianuu.essentials.sample.ui
 
 import android.os.Bundle
+import com.ivianuu.essentials.hidenavbar.NavBarSettingsKey
 import com.ivianuu.essentials.sample.ui.counter.CounterKey
-import com.ivianuu.essentials.securesettings.SecureSettingsKey
 import com.ivianuu.essentials.ui.base.BaseActivity
 import com.ivianuu.essentials.ui.base.BaseActivityModule
-import com.ivianuu.essentials.util.ext.results
-import com.ivianuu.essentials.util.ext.rxMain
-import com.ivianuu.scopes.archlifecycle.onDestroy
-import com.ivianuu.scopes.rx.disposeBy
-import com.ivianuu.timberktx.d
 import com.ivianuu.traveler.navigate
 import dagger.Module
 
@@ -37,13 +32,8 @@ class MainActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        travelerRouter.results<Boolean>(2)
-            .observeOn(rxMain)
-            .subscribe { d { "permission $it" } }
-            .disposeBy(onDestroy)
-
         if (savedInstanceState == null) {
-            travelerRouter.navigate(SecureSettingsKey(resultCode = 2))
+            travelerRouter.navigate(NavBarSettingsKey(true))
         }
     }
 

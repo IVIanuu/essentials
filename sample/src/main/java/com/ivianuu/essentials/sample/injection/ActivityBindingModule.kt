@@ -1,5 +1,6 @@
 package com.ivianuu.essentials.sample.injection
 
+import com.ivianuu.essentials.hidenavbar.EssentialsNavBarBindingModule
 import com.ivianuu.essentials.injection.PerActivity
 import com.ivianuu.essentials.sample.ui.MainActivity
 import com.ivianuu.essentials.sample.ui.MainActivityModule
@@ -18,7 +19,8 @@ abstract class ActivityBindingModule {
         modules = [
             MainActivityModule::class,
             ControllerBindingModule::class,
-            EssentialsSecureSettingsModule::class
+            EssentialsSecureSettingsModule::class,
+            EssentialsNavBarBindingModule::class
         ]
     )
     abstract fun bindMainActivity(): MainActivity

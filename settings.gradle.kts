@@ -3,6 +3,7 @@ include(
     ":essentials-app",
     ":essentials-app-glide",
     ":essentials-compiler",
+    ":essentials-hidenavbar",
     ":essentials-picker",
     ":essentials-securesettings",
     ":essentials-shell",
