@@ -18,5 +18,11 @@ package com.ivianuu.essentials.util.ext
 
 import com.ivianuu.director.Controller
 import com.ivianuu.materialdialogs.MaterialDialog
+import com.ivianuu.materialdialogs.callback.onDismiss
+
+fun MaterialDialog.setupWithController(controller: Controller) = apply {
+    onDismiss { controller.router.popCurrentController() }
+}
 
 fun Controller.MaterialDialog() = com.ivianuu.materialdialogs.MaterialDialog(activity)
+    .also { it.setupWithController(this) }

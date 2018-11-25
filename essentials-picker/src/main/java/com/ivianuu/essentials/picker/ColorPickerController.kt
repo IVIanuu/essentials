@@ -17,23 +17,18 @@
 package com.ivianuu.essentials.picker
 
 import android.os.Bundle
-import android.os.Parcelable
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import com.ivianuu.director.common.changehandler.FadeChangeHandler
 import com.ivianuu.essentials.ui.base.BaseController
 import com.ivianuu.essentials.ui.traveler.NavOptions
-import com.ivianuu.essentials.ui.traveler.dialog
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
 import com.ivianuu.essentials.ui.traveler.key.ResultKey
 import com.ivianuu.essentials.ui.traveler.key.bindKey
 import com.ivianuu.essentials.util.RequestCodeGenerator
-import com.ivianuu.materialdialogs.MaterialDialog
-import com.ivianuu.materialdialogs.callback.onDismiss
+import com.ivianuu.essentials.util.ext.MaterialDialog
 import com.ivianuu.materialdialogs.color.colorChooser
-import com.ivianuu.traveler.goBack
-import com.ivianuu.traveler.result.goBackWithResult
+import com.ivianuu.traveler.result.sendResult
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
@@ -57,14 +52,13 @@ class ColorPickerController : BaseController() {
         inflater: LayoutInflater,
         container: ViewGroup,
         savedViewState: Bundle?
-    ) = MaterialDialog(activity)
+    ) = MaterialDialog()
         .title(key.titleRes)
-        .onDismiss { travelerRouter.goBack() }
         .colorChooser(
             initialSelection = if (key.preselect != 0) key.preselect else null,
             allowCustomArgb = key.allowCustomArgb,
             showAlphaSelector = key.showAlphaSelector
-        ) { _, color -> travelerRouter.goBackWithResult(key.resultCode, color) }
+        ) { _, color -> travelerRouter.sendResult(key.resultCode, color) }
         .negativeButton(R.string.action_cancel)
         .view
 

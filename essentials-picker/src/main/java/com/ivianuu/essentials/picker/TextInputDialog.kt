@@ -28,11 +28,9 @@ import com.ivianuu.essentials.ui.traveler.key.ControllerKey
 import com.ivianuu.essentials.ui.traveler.key.ResultKey
 import com.ivianuu.essentials.ui.traveler.key.key
 import com.ivianuu.essentials.util.RequestCodeGenerator
-import com.ivianuu.materialdialogs.MaterialDialog
-import com.ivianuu.materialdialogs.callback.onDismiss
+import com.ivianuu.essentials.util.ext.MaterialDialog
 import com.ivianuu.materialdialogs.input.input
-import com.ivianuu.traveler.goBack
-import com.ivianuu.traveler.result.goBackWithResult
+import com.ivianuu.traveler.result.sendResult
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
@@ -57,19 +55,17 @@ class TextInputDialog : BaseController() {
     ): View {
         val key = key<TextInputKey>()
 
-        return MaterialDialog(activity)
-            .autoDismiss(false)
+        return MaterialDialog()
             .title(text = key.title)
-            .onDismiss { travelerRouter.goBack() }
             .input(
                 hint = key.inputHint,
                 prefill = key.prefill,
                 inputType = key.inputType
             ) { _, input ->
-                travelerRouter.goBackWithResult(key.resultCode, input.toString())
+                travelerRouter.sendResult(key.resultCode, input.toString())
             }
             .positiveButton(R.string.action_ok)
-            .negativeButton(R.string.action_cancel) { travelerRouter.goBack() }
+            .negativeButton(R.string.action_cancel)
             .view
     }
 
