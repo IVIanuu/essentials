@@ -50,8 +50,8 @@ class ColorPickerController : BaseDialogController() {
         return MaterialDialog(activity)
             .title(key.titleRes)
             .colorChooser(
-                colors = ColorPalette.PRIMARY_COLORS,
-                subColors = ColorPalette.PRIMARY_COLORS_SUB,
+                colors = PRIMARY_COLORS,
+                subColors = PRIMARY_COLORS_SUB,
                 initialSelection = if (key.preselect != 0) key.preselect else null,
                 allowCustomArgb = key.allowCustomArgb,
                 showAlphaSelector = key.showAlphaSelector

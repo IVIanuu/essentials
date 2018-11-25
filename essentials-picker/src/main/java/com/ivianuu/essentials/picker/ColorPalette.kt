@@ -16,378 +16,174 @@
 
 package com.ivianuu.essentials.picker
 
-import android.graphics.Color
+import android.graphics.Color.parseColor
 
-internal object ColorPalette {
+internal val PRIMARY_COLORS = intArrayOf(
+    parseColor("#F44336"), parseColor("#E91E63"), parseColor("#9C27B0"),
+    parseColor("#673AB7"), parseColor("#3F51B5"), parseColor("#2196F3"),
+    parseColor("#03A9F4"), parseColor("#00BCD4"), parseColor("#009688"),
+    parseColor("#4CAF50"), parseColor("#8BC34A"), parseColor("#CDDC39"),
+    parseColor("#FFEB3B"), parseColor("#FFC107"), parseColor("#FF9800"),
+    parseColor("#FF5722"), parseColor("#795548"), parseColor("#9E9E9E"),
+    parseColor("#607D8B")
+)
 
-    val PRIMARY_COLORS = intArrayOf(
-        Color.parseColor("#F44336"),
-        Color.parseColor("#E91E63"),
-        Color.parseColor("#9C27B0"),
-        Color.parseColor("#673AB7"),
-        Color.parseColor("#3F51B5"),
-        Color.parseColor("#2196F3"),
-        Color.parseColor("#03A9F4"),
-        Color.parseColor("#00BCD4"),
-        Color.parseColor("#009688"),
-        Color.parseColor("#4CAF50"),
-        Color.parseColor("#8BC34A"),
-        Color.parseColor("#CDDC39"),
-        Color.parseColor("#FFEB3B"),
-        Color.parseColor("#FFC107"),
-        Color.parseColor("#FF9800"),
-        Color.parseColor("#FF5722"),
-        Color.parseColor("#795548"),
-        Color.parseColor("#9E9E9E"),
-        Color.parseColor("#607D8B")
+internal val PRIMARY_COLORS_SUB = arrayOf(
+    intArrayOf(
+        parseColor("#FFEBEE"), parseColor("#FFCDD2"), parseColor("#EF9A9A"),
+        parseColor("#E57373"), parseColor("#EF5350"), parseColor("#F44336"),
+        parseColor("#E53935"), parseColor("#D32F2F"), parseColor("#C62828"),
+        parseColor("#B71C1C")
+    ), intArrayOf(
+        parseColor("#FCE4EC"), parseColor("#F8BBD0"), parseColor("#F48FB1"),
+        parseColor("#F06292"), parseColor("#EC407A"), parseColor("#E91E63"),
+        parseColor("#D81B60"), parseColor("#C2185B"), parseColor("#AD1457"),
+        parseColor("#880E4F")
+    ), intArrayOf(
+        parseColor("#F3E5F5"), parseColor("#E1BEE7"), parseColor("#CE93D8"),
+        parseColor("#BA68C8"), parseColor("#AB47BC"), parseColor("#9C27B0"),
+        parseColor("#8E24AA"), parseColor("#7B1FA2"), parseColor("#6A1B9A"),
+        parseColor("#4A148C")
+    ), intArrayOf(
+        parseColor("#EDE7F6"), parseColor("#D1C4E9"), parseColor("#B39DDB"),
+        parseColor("#9575CD"), parseColor("#7E57C2"), parseColor("#673AB7"),
+        parseColor("#5E35B1"), parseColor("#512DA8"), parseColor("#4527A0"),
+        parseColor("#311B92")
+    ), intArrayOf(
+        parseColor("#E8EAF6"), parseColor("#C5CAE9"), parseColor("#9FA8DA"),
+        parseColor("#7986CB"), parseColor("#5C6BC0"), parseColor("#3F51B5"),
+        parseColor("#3949AB"), parseColor("#303F9F"), parseColor("#283593"),
+        parseColor("#1A237E")
+    ), intArrayOf(
+        parseColor("#E3F2FD"), parseColor("#BBDEFB"), parseColor("#90CAF9"),
+        parseColor("#64B5F6"), parseColor("#42A5F5"), parseColor("#2196F3"),
+        parseColor("#1E88E5"), parseColor("#1976D2"), parseColor("#1565C0"),
+        parseColor("#0D47A1")
+    ), intArrayOf(
+        parseColor("#E1F5FE"), parseColor("#B3E5FC"), parseColor("#81D4FA"),
+        parseColor("#4FC3F7"), parseColor("#29B6F6"), parseColor("#03A9F4"),
+        parseColor("#039BE5"), parseColor("#0288D1"), parseColor("#0277BD"),
+        parseColor("#01579B")
+    ), intArrayOf(
+        parseColor("#E0F7FA"), parseColor("#B2EBF2"), parseColor("#80DEEA"),
+        parseColor("#4DD0E1"), parseColor("#26C6DA"), parseColor("#00BCD4"),
+        parseColor("#00ACC1"), parseColor("#0097A7"), parseColor("#00838F"),
+        parseColor("#006064")
+    ), intArrayOf(
+        parseColor("#E0F2F1"), parseColor("#B2DFDB"), parseColor("#80CBC4"),
+        parseColor("#4DB6AC"), parseColor("#26A69A"), parseColor("#009688"),
+        parseColor("#00897B"), parseColor("#00796B"), parseColor("#00695C"),
+        parseColor("#004D40")
+    ), intArrayOf(
+        parseColor("#E8F5E9"), parseColor("#C8E6C9"), parseColor("#A5D6A7"),
+        parseColor("#81C784"), parseColor("#66BB6A"), parseColor("#4CAF50"),
+        parseColor("#43A047"), parseColor("#388E3C"), parseColor("#2E7D32"),
+        parseColor("#1B5E20")
+    ), intArrayOf(
+        parseColor("#F1F8E9"), parseColor("#DCEDC8"), parseColor("#C5E1A5"),
+        parseColor("#AED581"), parseColor("#9CCC65"), parseColor("#8BC34A"),
+        parseColor("#7CB342"), parseColor("#689F38"), parseColor("#558B2F"),
+        parseColor("#33691E")
+    ), intArrayOf(
+        parseColor("#F9FBE7"), parseColor("#F0F4C3"), parseColor("#E6EE9C"),
+        parseColor("#DCE775"), parseColor("#D4E157"), parseColor("#CDDC39"),
+        parseColor("#C0CA33"), parseColor("#AFB42B"), parseColor("#9E9D24"),
+        parseColor("#827717")
+    ), intArrayOf(
+        parseColor("#FFFDE7"), parseColor("#FFF9C4"), parseColor("#FFF59D"),
+        parseColor("#FFF176"), parseColor("#FFEE58"), parseColor("#FFEB3B"),
+        parseColor("#FDD835"), parseColor("#FBC02D"), parseColor("#F9A825"),
+        parseColor("#F57F17")
+    ), intArrayOf(
+        parseColor("#FFF8E1"), parseColor("#FFECB3"), parseColor("#FFE082"),
+        parseColor("#FFD54F"), parseColor("#FFCA28"), parseColor("#FFC107"),
+        parseColor("#FFB300"), parseColor("#FFA000"), parseColor("#FF8F00"),
+        parseColor("#FF6F00")
+    ), intArrayOf(
+        parseColor("#FFF3E0"), parseColor("#FFE0B2"), parseColor("#FFCC80"),
+        parseColor("#FFB74D"), parseColor("#FFA726"), parseColor("#FF9800"),
+        parseColor("#FB8C00"), parseColor("#F57C00"), parseColor("#EF6C00"),
+        parseColor("#E65100")
+    ), intArrayOf(
+        parseColor("#FBE9E7"), parseColor("#FFCCBC"), parseColor("#FFAB91"),
+        parseColor("#FF8A65"), parseColor("#FF7043"), parseColor("#FF5722"),
+        parseColor("#F4511E"), parseColor("#E64A19"), parseColor("#D84315"),
+        parseColor("#BF360C")
+    ), intArrayOf(
+        parseColor("#EFEBE9"), parseColor("#D7CCC8"), parseColor("#BCAAA4"),
+        parseColor("#A1887F"), parseColor("#8D6E63"), parseColor("#795548"),
+        parseColor("#6D4C41"), parseColor("#5D4037"), parseColor("#4E342E"),
+        parseColor("#3E2723")
+    ), intArrayOf(
+        parseColor("#FAFAFA"), parseColor("#F5F5F5"), parseColor("#EEEEEE"),
+        parseColor("#E0E0E0"), parseColor("#BDBDBD"), parseColor("#9E9E9E"),
+        parseColor("#757575"), parseColor("#616161"), parseColor("#424242"),
+        parseColor("#212121")
+    ), intArrayOf(
+        parseColor("#ECEFF1"), parseColor("#CFD8DC"), parseColor("#B0BEC5"),
+        parseColor("#90A4AE"), parseColor("#78909C"), parseColor("#607D8B"),
+        parseColor("#546E7A"), parseColor("#455A64"), parseColor("#37474F"),
+        parseColor("#263238")
     )
+)
 
-    val PRIMARY_COLORS_SUB = arrayOf(
-        intArrayOf(
-            Color.parseColor("#FFEBEE"),
-            Color.parseColor("#FFCDD2"),
-            Color.parseColor("#EF9A9A"),
-            Color.parseColor("#E57373"),
-            Color.parseColor("#EF5350"),
-            Color.parseColor("#F44336"),
-            Color.parseColor("#E53935"),
-            Color.parseColor("#D32F2F"),
-            Color.parseColor("#C62828"),
-            Color.parseColor("#B71C1C")
-        ),
-        intArrayOf(
-            Color.parseColor("#FCE4EC"),
-            Color.parseColor("#F8BBD0"),
-            Color.parseColor("#F48FB1"),
-            Color.parseColor("#F06292"),
-            Color.parseColor("#EC407A"),
-            Color.parseColor("#E91E63"),
-            Color.parseColor("#D81B60"),
-            Color.parseColor("#C2185B"),
-            Color.parseColor("#AD1457"),
-            Color.parseColor("#880E4F")
-        ),
-        intArrayOf(
-            Color.parseColor("#F3E5F5"),
-            Color.parseColor("#E1BEE7"),
-            Color.parseColor("#CE93D8"),
-            Color.parseColor("#BA68C8"),
-            Color.parseColor("#AB47BC"),
-            Color.parseColor("#9C27B0"),
-            Color.parseColor("#8E24AA"),
-            Color.parseColor("#7B1FA2"),
-            Color.parseColor("#6A1B9A"),
-            Color.parseColor("#4A148C")
-        ),
-        intArrayOf(
-            Color.parseColor("#EDE7F6"),
-            Color.parseColor("#D1C4E9"),
-            Color.parseColor("#B39DDB"),
-            Color.parseColor("#9575CD"),
-            Color.parseColor("#7E57C2"),
-            Color.parseColor("#673AB7"),
-            Color.parseColor("#5E35B1"),
-            Color.parseColor("#512DA8"),
-            Color.parseColor("#4527A0"),
-            Color.parseColor("#311B92")
-        ),
-        intArrayOf(
-            Color.parseColor("#E8EAF6"),
-            Color.parseColor("#C5CAE9"),
-            Color.parseColor("#9FA8DA"),
-            Color.parseColor("#7986CB"),
-            Color.parseColor("#5C6BC0"),
-            Color.parseColor("#3F51B5"),
-            Color.parseColor("#3949AB"),
-            Color.parseColor("#303F9F"),
-            Color.parseColor("#283593"),
-            Color.parseColor("#1A237E")
-        ),
-        intArrayOf(
-            Color.parseColor("#E3F2FD"),
-            Color.parseColor("#BBDEFB"),
-            Color.parseColor("#90CAF9"),
-            Color.parseColor("#64B5F6"),
-            Color.parseColor("#42A5F5"),
-            Color.parseColor("#2196F3"),
-            Color.parseColor("#1E88E5"),
-            Color.parseColor("#1976D2"),
-            Color.parseColor("#1565C0"),
-            Color.parseColor("#0D47A1")
-        ),
-        intArrayOf(
-            Color.parseColor("#E1F5FE"),
-            Color.parseColor("#B3E5FC"),
-            Color.parseColor("#81D4FA"),
-            Color.parseColor("#4FC3F7"),
-            Color.parseColor("#29B6F6"),
-            Color.parseColor("#03A9F4"),
-            Color.parseColor("#039BE5"),
-            Color.parseColor("#0288D1"),
-            Color.parseColor("#0277BD"),
-            Color.parseColor("#01579B")
-        ),
-        intArrayOf(
-            Color.parseColor("#E0F7FA"),
-            Color.parseColor("#B2EBF2"),
-            Color.parseColor("#80DEEA"),
-            Color.parseColor("#4DD0E1"),
-            Color.parseColor("#26C6DA"),
-            Color.parseColor("#00BCD4"),
-            Color.parseColor("#00ACC1"),
-            Color.parseColor("#0097A7"),
-            Color.parseColor("#00838F"),
-            Color.parseColor("#006064")
-        ),
-        intArrayOf(
-            Color.parseColor("#E0F2F1"),
-            Color.parseColor("#B2DFDB"),
-            Color.parseColor("#80CBC4"),
-            Color.parseColor("#4DB6AC"),
-            Color.parseColor("#26A69A"),
-            Color.parseColor("#009688"),
-            Color.parseColor("#00897B"),
-            Color.parseColor("#00796B"),
-            Color.parseColor("#00695C"),
-            Color.parseColor("#004D40")
-        ),
-        intArrayOf(
-            Color.parseColor("#E8F5E9"),
-            Color.parseColor("#C8E6C9"),
-            Color.parseColor("#A5D6A7"),
-            Color.parseColor("#81C784"),
-            Color.parseColor("#66BB6A"),
-            Color.parseColor("#4CAF50"),
-            Color.parseColor("#43A047"),
-            Color.parseColor("#388E3C"),
-            Color.parseColor("#2E7D32"),
-            Color.parseColor("#1B5E20")
-        ),
-        intArrayOf(
-            Color.parseColor("#F1F8E9"),
-            Color.parseColor("#DCEDC8"),
-            Color.parseColor("#C5E1A5"),
-            Color.parseColor("#AED581"),
-            Color.parseColor("#9CCC65"),
-            Color.parseColor("#8BC34A"),
-            Color.parseColor("#7CB342"),
-            Color.parseColor("#689F38"),
-            Color.parseColor("#558B2F"),
-            Color.parseColor("#33691E")
-        ),
-        intArrayOf(
-            Color.parseColor("#F9FBE7"),
-            Color.parseColor("#F0F4C3"),
-            Color.parseColor("#E6EE9C"),
-            Color.parseColor("#DCE775"),
-            Color.parseColor("#D4E157"),
-            Color.parseColor("#CDDC39"),
-            Color.parseColor("#C0CA33"),
-            Color.parseColor("#AFB42B"),
-            Color.parseColor("#9E9D24"),
-            Color.parseColor("#827717")
-        ),
-        intArrayOf(
-            Color.parseColor("#FFFDE7"),
-            Color.parseColor("#FFF9C4"),
-            Color.parseColor("#FFF59D"),
-            Color.parseColor("#FFF176"),
-            Color.parseColor("#FFEE58"),
-            Color.parseColor("#FFEB3B"),
-            Color.parseColor("#FDD835"),
-            Color.parseColor("#FBC02D"),
-            Color.parseColor("#F9A825"),
-            Color.parseColor("#F57F17")
-        ),
-        intArrayOf(
-            Color.parseColor("#FFF8E1"),
-            Color.parseColor("#FFECB3"),
-            Color.parseColor("#FFE082"),
-            Color.parseColor("#FFD54F"),
-            Color.parseColor("#FFCA28"),
-            Color.parseColor("#FFC107"),
-            Color.parseColor("#FFB300"),
-            Color.parseColor("#FFA000"),
-            Color.parseColor("#FF8F00"),
-            Color.parseColor("#FF6F00")
-        ),
-        intArrayOf(
-            Color.parseColor("#FFF3E0"),
-            Color.parseColor("#FFE0B2"),
-            Color.parseColor("#FFCC80"),
-            Color.parseColor("#FFB74D"),
-            Color.parseColor("#FFA726"),
-            Color.parseColor("#FF9800"),
-            Color.parseColor("#FB8C00"),
-            Color.parseColor("#F57C00"),
-            Color.parseColor("#EF6C00"),
-            Color.parseColor("#E65100")
-        ),
-        intArrayOf(
-            Color.parseColor("#FBE9E7"),
-            Color.parseColor("#FFCCBC"),
-            Color.parseColor("#FFAB91"),
-            Color.parseColor("#FF8A65"),
-            Color.parseColor("#FF7043"),
-            Color.parseColor("#FF5722"),
-            Color.parseColor("#F4511E"),
-            Color.parseColor("#E64A19"),
-            Color.parseColor("#D84315"),
-            Color.parseColor("#BF360C")
-        ),
-        intArrayOf(
-            Color.parseColor("#EFEBE9"),
-            Color.parseColor("#D7CCC8"),
-            Color.parseColor("#BCAAA4"),
-            Color.parseColor("#A1887F"),
-            Color.parseColor("#8D6E63"),
-            Color.parseColor("#795548"),
-            Color.parseColor("#6D4C41"),
-            Color.parseColor("#5D4037"),
-            Color.parseColor("#4E342E"),
-            Color.parseColor("#3E2723")
-        ),
-        intArrayOf(
-            Color.parseColor("#FAFAFA"),
-            Color.parseColor("#F5F5F5"),
-            Color.parseColor("#EEEEEE"),
-            Color.parseColor("#E0E0E0"),
-            Color.parseColor("#BDBDBD"),
-            Color.parseColor("#9E9E9E"),
-            Color.parseColor("#757575"),
-            Color.parseColor("#616161"),
-            Color.parseColor("#424242"),
-            Color.parseColor("#212121")
-        ),
-        intArrayOf(
-            Color.parseColor("#ECEFF1"),
-            Color.parseColor("#CFD8DC"),
-            Color.parseColor("#B0BEC5"),
-            Color.parseColor("#90A4AE"),
-            Color.parseColor("#78909C"),
-            Color.parseColor("#607D8B"),
-            Color.parseColor("#546E7A"),
-            Color.parseColor("#455A64"),
-            Color.parseColor("#37474F"),
-            Color.parseColor("#263238")
-        )
-    )
+internal val ACCENT_COLORS = intArrayOf(
+    parseColor("#FF1744"), parseColor("#F50057"), parseColor("#D500F9"),
+    parseColor("#651FFF"), parseColor("#3D5AFE"), parseColor("#2979FF"),
+    parseColor("#00B0FF"), parseColor("#00E5FF"), parseColor("#1DE9B6"),
+    parseColor("#00E676"), parseColor("#76FF03"), parseColor("#C6FF00"),
+    parseColor("#FFEA00"), parseColor("#FFC400"), parseColor("#FF9100"),
+    parseColor("#FF3D00")
+)
 
-    val ACCENT_COLORS = intArrayOf(
-        Color.parseColor("#FF1744"),
-        Color.parseColor("#F50057"),
-        Color.parseColor("#D500F9"),
-        Color.parseColor("#651FFF"),
-        Color.parseColor("#3D5AFE"),
-        Color.parseColor("#2979FF"),
-        Color.parseColor("#00B0FF"),
-        Color.parseColor("#00E5FF"),
-        Color.parseColor("#1DE9B6"),
-        Color.parseColor("#00E676"),
-        Color.parseColor("#76FF03"),
-        Color.parseColor("#C6FF00"),
-        Color.parseColor("#FFEA00"),
-        Color.parseColor("#FFC400"),
-        Color.parseColor("#FF9100"),
-        Color.parseColor("#FF3D00")
+internal val ACCENT_COLORS_SUB = arrayOf(
+    intArrayOf(
+        parseColor("#FF8A80"), parseColor("#FF5252"), parseColor("#FF1744"),
+        parseColor("#D50000")
+    ), intArrayOf(
+        parseColor("#FF80AB"), parseColor("#FF4081"), parseColor("#F50057"),
+        parseColor("#C51162")
+    ), intArrayOf(
+        parseColor("#EA80FC"), parseColor("#E040FB"), parseColor("#D500F9"),
+        parseColor("#AA00FF")
+    ), intArrayOf(
+        parseColor("#B388FF"), parseColor("#7C4DFF"), parseColor("#651FFF"),
+        parseColor("#6200EA")
+    ), intArrayOf(
+        parseColor("#8C9EFF"), parseColor("#536DFE"), parseColor("#3D5AFE"),
+        parseColor("#304FFE")
+    ), intArrayOf(
+        parseColor("#82B1FF"), parseColor("#448AFF"), parseColor("#2979FF"),
+        parseColor("#2962FF")
+    ), intArrayOf(
+        parseColor("#80D8FF"), parseColor("#40C4FF"), parseColor("#00B0FF"),
+        parseColor("#0091EA")
+    ), intArrayOf(
+        parseColor("#84FFFF"), parseColor("#18FFFF"), parseColor("#00E5FF"),
+        parseColor("#00B8D4")
+    ), intArrayOf(
+        parseColor("#A7FFEB"), parseColor("#64FFDA"), parseColor("#1DE9B6"),
+        parseColor("#00BFA5")
+    ), intArrayOf(
+        parseColor("#B9F6CA"), parseColor("#69F0AE"), parseColor("#00E676"),
+        parseColor("#00C853")
+    ), intArrayOf(
+        parseColor("#CCFF90"), parseColor("#B2FF59"), parseColor("#76FF03"),
+        parseColor("#64DD17")
+    ), intArrayOf(
+        parseColor("#F4FF81"), parseColor("#EEFF41"), parseColor("#C6FF00"),
+        parseColor("#AEEA00")
+    ), intArrayOf(
+        parseColor("#FFFF8D"), parseColor("#FFFF00"), parseColor("#FFEA00"),
+        parseColor("#FFD600")
+    ), intArrayOf(
+        parseColor("#FFE57F"), parseColor("#FFD740"), parseColor("#FFC400"),
+        parseColor("#FFAB00")
+    ), intArrayOf(
+        parseColor("#FFD180"), parseColor("#FFAB40"), parseColor("#FF9100"),
+        parseColor("#FF6D00")
+    ), intArrayOf(
+        parseColor("#FF9E80"), parseColor("#FF6E40"), parseColor("#FF3D00"),
+        parseColor("#DD2C00")
     )
-
-    val ACCENT_COLORS_SUB = arrayOf(
-        intArrayOf(
-            Color.parseColor("#FF8A80"),
-            Color.parseColor("#FF5252"),
-            Color.parseColor("#FF1744"),
-            Color.parseColor("#D50000")
-        ),
-        intArrayOf(
-            Color.parseColor("#FF80AB"),
-            Color.parseColor("#FF4081"),
-            Color.parseColor("#F50057"),
-            Color.parseColor("#C51162")
-        ),
-        intArrayOf(
-            Color.parseColor("#EA80FC"),
-            Color.parseColor("#E040FB"),
-            Color.parseColor("#D500F9"),
-            Color.parseColor("#AA00FF")
-        ),
-        intArrayOf(
-            Color.parseColor("#B388FF"),
-            Color.parseColor("#7C4DFF"),
-            Color.parseColor("#651FFF"),
-            Color.parseColor("#6200EA")
-        ),
-        intArrayOf(
-            Color.parseColor("#8C9EFF"),
-            Color.parseColor("#536DFE"),
-            Color.parseColor("#3D5AFE"),
-            Color.parseColor("#304FFE")
-        ),
-        intArrayOf(
-            Color.parseColor("#82B1FF"),
-            Color.parseColor("#448AFF"),
-            Color.parseColor("#2979FF"),
-            Color.parseColor("#2962FF")
-        ),
-        intArrayOf(
-            Color.parseColor("#80D8FF"),
-            Color.parseColor("#40C4FF"),
-            Color.parseColor("#00B0FF"),
-            Color.parseColor("#0091EA")
-        ),
-        intArrayOf(
-            Color.parseColor("#84FFFF"),
-            Color.parseColor("#18FFFF"),
-            Color.parseColor("#00E5FF"),
-            Color.parseColor("#00B8D4")
-        ),
-        intArrayOf(
-            Color.parseColor("#A7FFEB"),
-            Color.parseColor("#64FFDA"),
-            Color.parseColor("#1DE9B6"),
-            Color.parseColor("#00BFA5")
-        ),
-        intArrayOf(
-            Color.parseColor("#B9F6CA"),
-            Color.parseColor("#69F0AE"),
-            Color.parseColor("#00E676"),
-            Color.parseColor("#00C853")
-        ),
-        intArrayOf(
-            Color.parseColor("#CCFF90"),
-            Color.parseColor("#B2FF59"),
-            Color.parseColor("#76FF03"),
-            Color.parseColor("#64DD17")
-        ),
-        intArrayOf(
-            Color.parseColor("#F4FF81"),
-            Color.parseColor("#EEFF41"),
-            Color.parseColor("#C6FF00"),
-            Color.parseColor("#AEEA00")
-        ),
-        intArrayOf(
-            Color.parseColor("#FFFF8D"),
-            Color.parseColor("#FFFF00"),
-            Color.parseColor("#FFEA00"),
-            Color.parseColor("#FFD600")
-        ),
-        intArrayOf(
-            Color.parseColor("#FFE57F"),
-            Color.parseColor("#FFD740"),
-            Color.parseColor("#FFC400"),
-            Color.parseColor("#FFAB00")
-        ),
-        intArrayOf(
-            Color.parseColor("#FFD180"),
-            Color.parseColor("#FFAB40"),
-            Color.parseColor("#FF9100"),
-            Color.parseColor("#FF6D00")
-        ),
-        intArrayOf(
-            Color.parseColor("#FF9E80"),
-            Color.parseColor("#FF6E40"),
-            Color.parseColor("#FF3D00"),
-            Color.parseColor("#DD2C00")
-        )
-    )
-}
+)
