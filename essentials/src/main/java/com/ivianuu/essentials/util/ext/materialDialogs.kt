@@ -16,9 +16,14 @@
 
 package com.ivianuu.essentials.util.ext
 
+import android.app.Activity
+import android.view.ViewGroup
 import com.ivianuu.director.Controller
 import com.ivianuu.materialdialogs.MaterialDialog
 import com.ivianuu.materialdialogs.callback.onDismiss
+
+val Activity.dialogContainer get() = findViewById<ViewGroup>(android.R.id.content)
+val Controller.dialogContainer get() = activity.dialogContainer
 
 fun MaterialDialog.setupWithController(controller: Controller) = apply {
     onDismiss { controller.router.popCurrentController() }

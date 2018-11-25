@@ -18,18 +18,14 @@
 package com.ivianuu.essentials.sample.ui
 
 import android.os.Bundle
-import android.os.Handler
-import android.os.Parcelable
-import androidx.core.os.postDelayed
 import com.ivianuu.essentials.hidenavbar.NavBarSettingsKey
-import com.ivianuu.essentials.picker.ColorPickerController
-import com.ivianuu.essentials.picker.ColorPickerKey
-import com.ivianuu.essentials.picker.TextInputKey
 import com.ivianuu.essentials.sample.ui.counter.CounterKey
 import com.ivianuu.essentials.securesettings.SecureSettingsKey
 import com.ivianuu.essentials.securesettings.canWriteSecureSettings
 import com.ivianuu.essentials.ui.base.BaseActivity
 import com.ivianuu.essentials.ui.base.BaseActivityModule
+import com.ivianuu.essentials.util.ext.dialogContainer
+import com.ivianuu.materialdialogs.MaterialDialog
 import com.ivianuu.traveler.navigate
 import dagger.Module
 
@@ -47,6 +43,13 @@ class MainActivity : BaseActivity() {
                 travelerRouter.navigate(SecureSettingsKey())
             }
         }
+
+        MaterialDialog()
+            .title(text = "Hello")
+            .message(text = "Message")
+            .positiveButton(text = "OK")
+            .negativeButton(text = "Cancel")
+            .showInContainer(dialogContainer)
     }
 
 }

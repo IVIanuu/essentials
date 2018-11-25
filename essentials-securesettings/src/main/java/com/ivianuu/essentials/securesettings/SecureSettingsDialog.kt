@@ -16,11 +16,12 @@
 
 package com.ivianuu.essentials.securesettings
 
-import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.ivianuu.director.ControllerChangeHandler
+import com.ivianuu.director.ControllerChangeType
 import com.ivianuu.essentials.shell.Shell
 import com.ivianuu.essentials.ui.base.BaseController
 import com.ivianuu.essentials.ui.traveler.NavOptions
@@ -79,10 +80,15 @@ class SecureSettingsDialog : BaseController() {
             .view
     }
 
-    override fun onAttach(view: View) {
-        super.onAttach(view)
-        if (activity.canWriteSecureSettings()) {
-            travelerRouter.goBackWithResult(key.resultCode, true)
+    override fun onChangeEnded(
+        changeHandler: ControllerChangeHandler,
+        changeType: ControllerChangeType
+    ) {
+        super.onChangeEnded(changeHandler, changeType)
+        if (changeType.isEnter) {
+            if (activity.canWriteSecureSettings()) {
+                travelerRouter.goBackWithResult(key.resultCode, true)
+            }
         }
     }
 

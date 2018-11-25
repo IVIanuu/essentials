@@ -19,9 +19,9 @@ package com.ivianuu.essentials.hidenavbar
 import android.content.SharedPreferences
 import android.os.Bundle
 import com.ivianuu.epoxyktx.epoxyController
-import com.ivianuu.epoxyprefs.changeListener
-import com.ivianuu.epoxyprefs.summaryRes
-import com.ivianuu.epoxyprefs.titleRes
+import com.ivianuu.epoxyprefs.onChange
+import com.ivianuu.epoxyprefs.summary
+import com.ivianuu.epoxyprefs.title
 import com.ivianuu.essentials.securesettings.SecureSettingsKey
 import com.ivianuu.essentials.securesettings.canWriteSecureSettings
 import com.ivianuu.essentials.ui.prefs.PrefsController
@@ -57,9 +57,9 @@ class NavBarSettingsController : PrefsController() {
             switchPreference {
                 sharedPreferences(navBarSharedPrefs)
                 key("hide_nav_bar_enabled")
-                summaryRes(R.string.pref_summary_hide_nav_bar_enabled)
-                titleRes(R.string.pref_title_hide_nav_bar_enabled)
-                changeListener<Boolean> { _, newValue ->
+                summary(R.string.pref_summary_hide_nav_bar_enabled)
+                title(R.string.pref_title_hide_nav_bar_enabled)
+                onChange<Boolean> { _, newValue ->
                     if (activity.canWriteSecureSettings() || !newValue) {
                         true
                     } else if (newValue) {
@@ -77,16 +77,16 @@ class NavBarSettingsController : PrefsController() {
         checkboxPreference {
             sharedPreferences(navBarSharedPrefs)
             key("rot270_fix")
-            summaryRes(R.string.pref_summary_rot270_fix)
-            titleRes(R.string.pref_title_rot270_fix)
+            summary(R.string.pref_summary_rot270_fix)
+            title(R.string.pref_title_rot270_fix)
             enabled(settingsEnabled && !prefs.tabletMode.get())
         }
 
         checkboxPreference {
             sharedPreferences(navBarSharedPrefs)
             key("tablet_mode")
-            summaryRes(R.string.pref_summary_tablet_mode)
-            titleRes(R.string.pref_title_tablet_mode)
+            summary(R.string.pref_summary_tablet_mode)
+            title(R.string.pref_title_tablet_mode)
             enabled(settingsEnabled && !prefs.rot270Fix.get())
         }
 
@@ -94,8 +94,8 @@ class NavBarSettingsController : PrefsController() {
             sharedPreferences(navBarSharedPrefs)
             key("show_nav_bar_screen_off")
             defaultValue(true)
-            summaryRes(R.string.pref_summary_show_nav_bar_screen_off)
-            titleRes(R.string.pref_title_show_nav_bar_screen_off)
+            summary(R.string.pref_summary_show_nav_bar_screen_off)
+            title(R.string.pref_title_show_nav_bar_screen_off)
             enabled(settingsEnabled)
         }
 
@@ -103,8 +103,8 @@ class NavBarSettingsController : PrefsController() {
             sharedPreferences(navBarSharedPrefs)
             key("full_overscan")
             defaultValue(true)
-            summaryRes(R.string.pref_summary_full_overscan)
-            titleRes(R.string.pref_title_full_overscan)
+            summary(R.string.pref_summary_full_overscan)
+            title(R.string.pref_title_full_overscan)
             enabled(settingsEnabled)
         }
     }

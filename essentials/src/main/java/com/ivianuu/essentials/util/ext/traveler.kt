@@ -18,15 +18,10 @@
 
 package com.ivianuu.essentials.util.ext
 
-import android.view.View
 import com.ivianuu.epoxyprefs.PreferenceModel
 import com.ivianuu.traveler.Router
 import com.ivianuu.traveler.navigate
 
-fun View.navigateOnClick(router: Router, key: () -> Any) {
-    setOnClickListener { router.navigate(key()) }
-}
-
-fun PreferenceModel.Builder.navigateOnClick(router: Router, key: () -> Any) {
-    clickListener { router.navigate(key()).andTrue() }
+fun PreferenceModel.Builder.onClickKey(router: Router, key: () -> Any) {
+    onClick { router.navigate(key()).andTrue() }
 }
