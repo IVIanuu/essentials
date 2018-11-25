@@ -60,7 +60,6 @@ class AppPickerDialog : BaseController() {
 
         val dialog = MaterialDialog()
             .title(text = key.title ?: string(R.string.dialog_title_app_picker))
-            .positiveButton(R.string.action_ok)
             .negativeButton(R.string.action_cancel)
 
         coroutineScope.launch {
