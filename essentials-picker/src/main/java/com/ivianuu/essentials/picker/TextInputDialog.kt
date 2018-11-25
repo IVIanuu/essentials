@@ -16,18 +16,21 @@
 
 package com.ivianuu.essentials.picker
 
-import android.app.Dialog
 import android.os.Bundle
-import com.afollestad.materialdialogs.MaterialDialog
-import com.afollestad.materialdialogs.input.input
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import com.ivianuu.essentials.R
-import com.ivianuu.essentials.ui.base.BaseDialogController
+import com.ivianuu.essentials.ui.base.BaseController
 import com.ivianuu.essentials.ui.traveler.NavOptions
 import com.ivianuu.essentials.ui.traveler.dialog
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
 import com.ivianuu.essentials.ui.traveler.key.ResultKey
 import com.ivianuu.essentials.ui.traveler.key.key
 import com.ivianuu.essentials.util.RequestCodeGenerator
+import com.ivianuu.materialdialogs.MaterialDialog
+import com.ivianuu.materialdialogs.callback.onDismiss
+import com.ivianuu.materialdialogs.input.input
 import com.ivianuu.traveler.goBack
 import com.ivianuu.traveler.result.goBackWithResult
 import kotlinx.android.parcel.Parcelize
@@ -45,14 +48,19 @@ data class TextInputKey(
 /**
  * Text input dialog
  */
-class TextInputDialog : BaseDialogController() {
+class TextInputDialog : BaseController() {
 
-    override fun onCreateDialog(savedViewState: Bundle?): Dialog {
+    override fun onInflateView(
+        inflater: LayoutInflater,
+        container: ViewGroup,
+        savedViewState: Bundle?
+    ): View {
         val key = key<TextInputKey>()
 
         return MaterialDialog(activity)
-            .noAutoDismiss()
+            .autoDismiss(false)
             .title(text = key.title)
+            .onDismiss { travelerRouter.goBack() }
             .input(
                 hint = key.inputHint,
                 prefill = key.prefill,
@@ -62,6 +70,7 @@ class TextInputDialog : BaseDialogController() {
             }
             .positiveButton(R.string.action_ok)
             .negativeButton(R.string.action_cancel) { travelerRouter.goBack() }
+            .view
     }
 
 }

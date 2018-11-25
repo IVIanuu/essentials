@@ -35,7 +35,7 @@ object Versions {
     const val constraintLayout = "1.1.3"
     const val coroutines = "1.0.0"
     const val dagger = "2.19"
-    const val director = "5d01965259"
+    const val director = "fb58427bb9"
     const val epoxy = "2.19.0"
     const val epoxyKtx = "9dde1f5a9c"
     const val epoxyPrefs = "a1f1175c3a"
@@ -50,7 +50,7 @@ object Versions {
     const val mavenGradle = "2.1"
     const val materialComponents = "1.0.0"
     const val materialComponentsKtx = "c4c5dda45a"
-    const val materialDialogs = "2.0.0-rc1"
+    const val materialDialogs = "30c80f961e"
     const val mockitoKotlin = "2.0.0"
     const val r2 = "06e702d39f"
     const val roboelectric = "4.0.2"
@@ -117,7 +117,6 @@ object Deps {
     const val directorArchLifecycle =
         "com.github.IVIanuu.director:director-arch-lifecycle:${Versions.director}"
     const val directorCommon = "com.github.IVIanuu.director:director-common:${Versions.director}"
-    const val directorDialog = "com.github.IVIanuu.director:director-dialog:${Versions.director}"
     const val directorScopes = "com.github.IVIanuu.director:director-scopes:${Versions.director}"
     const val directorTesting =
         "com.github.IVIanuu.director:director-testing:${Versions.director}"
@@ -168,9 +167,9 @@ object Deps {
     const val materialComponentsKtx =
         "com.github.IVIanuu:material-components-ktx:${Versions.materialComponentsKtx}"
 
-    const val materialDialogsCore = "com.afollestad.material-dialogs:core:${Versions.materialDialogs}"
-    const val materialDialogsInput = "com.afollestad.material-dialogs:input:${Versions.materialDialogs}"
-    const val materialDialogsColor = "com.afollestad.material-dialogs:color:${Versions.materialDialogs}"
+    const val materialDialogs = "com.github.IVIanuu.material-dialogs:materialdialogs:${Versions.materialDialogs}"
+    const val materialDialogsColor = "com.github.IVIanuu.material-dialogs:materialdialogs-color:${Versions.materialDialogs}"
+    const val materialDialogsInput = "com.github.IVIanuu.material-dialogs:materialdialogs-input:${Versions.materialDialogs}"
 
     const val mavenGradlePlugin = "com.github.dcendents:android-maven-gradle-plugin:${Versions.mavenGradle}"
 

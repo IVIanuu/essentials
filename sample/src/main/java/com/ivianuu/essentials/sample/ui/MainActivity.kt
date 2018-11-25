@@ -18,8 +18,16 @@
 package com.ivianuu.essentials.sample.ui
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Parcelable
+import androidx.core.os.postDelayed
 import com.ivianuu.essentials.hidenavbar.NavBarSettingsKey
+import com.ivianuu.essentials.picker.ColorPickerController
+import com.ivianuu.essentials.picker.ColorPickerKey
+import com.ivianuu.essentials.picker.TextInputKey
 import com.ivianuu.essentials.sample.ui.counter.CounterKey
+import com.ivianuu.essentials.securesettings.SecureSettingsKey
+import com.ivianuu.essentials.securesettings.canWriteSecureSettings
 import com.ivianuu.essentials.ui.base.BaseActivity
 import com.ivianuu.essentials.ui.base.BaseActivityModule
 import com.ivianuu.traveler.navigate
@@ -33,7 +41,11 @@ class MainActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
 
         if (savedInstanceState == null) {
-            travelerRouter.navigate(NavBarSettingsKey(true))
+            if (canWriteSecureSettings()) {
+                travelerRouter.navigate(NavBarSettingsKey(true))
+            } else {
+                travelerRouter.navigate(SecureSettingsKey())
+            }
         }
     }
 
