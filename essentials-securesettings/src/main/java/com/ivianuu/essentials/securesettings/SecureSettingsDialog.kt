@@ -29,8 +29,7 @@ import com.ivianuu.essentials.ui.traveler.key.ResultKey
 import com.ivianuu.essentials.ui.traveler.key.bindKey
 import com.ivianuu.essentials.ui.traveler.vertical
 import com.ivianuu.essentials.util.RequestCodeGenerator
-import com.ivianuu.essentials.util.ext.toastError
-import com.ivianuu.essentials.util.ext.toastSuccess
+import com.ivianuu.essentials.util.ext.toast
 import com.ivianuu.materialdialogs.MaterialDialog
 import com.ivianuu.traveler.navigate
 import com.ivianuu.traveler.result.goBackWithResult
@@ -67,7 +66,7 @@ class SecureSettingsDialog : BaseController() {
                         shell.run("pm grant ${activity.packageName} android.permission.WRITE_SECURE_SETTINGS")
                         handlePermissionResult(activity.canWriteSecureSettings())
                     } catch (e: Exception) {
-                        toastError(R.string.msg_secure_settings_no_root)
+                        toast(R.string.msg_secure_settings_no_root)
                     }
                 }
             }
@@ -92,10 +91,10 @@ class SecureSettingsDialog : BaseController() {
 
     private fun handlePermissionResult(success: Boolean) {
         if (success) {
-            toastSuccess(R.string.msg_secure_settings_permission_granted)
+            toast(R.string.msg_secure_settings_permission_granted)
             travelerRouter.goBackWithResult(key.resultCode, true)
         } else {
-            toastError(R.string.msg_secure_settings_permission_denied)
+            toast(R.string.msg_secure_settings_permission_denied)
         }
     }
 }

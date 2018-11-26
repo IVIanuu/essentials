@@ -63,7 +63,6 @@ object Versions {
     const val stateStore = "bc25513ffa"
     const val timber = "4.7.1"
     const val timberKtx = "f7547da781"
-    const val toasty = "1.3.0"
     const val traveler = "e1cb60c864"
 }
 
@@ -205,8 +204,6 @@ object Deps {
 
     const val timber = "com.jakewharton.timber:timber:${Versions.timber}"
     const val timberKtx = "com.github.IVIanuu:timber-ktx:${Versions.timberKtx}"
-
-    const val toasty = "com.github.GrenderG:Toasty:${Versions.toasty}"
 
     const val traveler = "com.github.IVIanuu.traveler:traveler:${Versions.traveler}"
     const val travelerAndroid = "com.github.IVIanuu.traveler:traveler-android:${Versions.traveler}"

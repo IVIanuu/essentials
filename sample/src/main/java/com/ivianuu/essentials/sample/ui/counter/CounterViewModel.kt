@@ -8,7 +8,7 @@ import com.ivianuu.essentials.ui.mvrx.MvRxState
 import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
 import com.ivianuu.essentials.ui.traveler.NavOptions
 import com.ivianuu.essentials.ui.traveler.horizontal
-import com.ivianuu.essentials.util.ext.toastInfo
+import com.ivianuu.essentials.util.ext.toast
 import com.ivianuu.timberktx.d
 import com.ivianuu.traveler.Router
 import com.ivianuu.traveler.goBack
@@ -71,7 +71,7 @@ class CounterViewModel @AssistedInject constructor(
     }
 
     fun doWorkClicked() {
-        context.toastInfo("Not implemented")
+        context.toast("Not implemented")
     }
 }
 

@@ -32,7 +32,7 @@ import com.ivianuu.essentials.app.AppService
 import com.ivianuu.essentials.util.BroadcastFactory
 import com.ivianuu.essentials.util.ext.combineLatest
 import com.ivianuu.essentials.util.ext.rxMain
-import com.ivianuu.essentials.util.ext.toastError
+import com.ivianuu.essentials.util.ext.toast
 import com.ivianuu.kprefs.rx.observable
 import com.ivianuu.rxjavaktx.observable
 import com.ivianuu.timberktx.d
@@ -121,7 +121,7 @@ import javax.inject.Singleton
     }
 
     private fun onFailedToToggleNavBar() {
-        app.toastError(R.string.msg_failed_to_toggle_nav_bar)
+        app.toast(R.string.msg_failed_to_toggle_nav_bar)
     }
 
     private fun getNavigationBarHeight(): Int {

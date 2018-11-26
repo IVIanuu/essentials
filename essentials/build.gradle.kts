@@ -139,8 +139,6 @@ dependencies {
     api(Deps.timber)
     api(Deps.timberKtx)
 
-    api(Deps.toasty)
-
     api(Deps.traveler)
     api(Deps.travelerAndroid)
     api(Deps.travelerLifecycle)
