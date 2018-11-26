@@ -21,6 +21,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.ivianuu.director.Router
 import com.ivianuu.director.attachRouter
+import com.ivianuu.director.handleBack
 import com.ivianuu.director.traveler.ControllerNavigator
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.mvrx.MvRxView
@@ -36,7 +37,6 @@ import com.ivianuu.traveler.NavigatorHolder
 import com.ivianuu.traveler.android.AppNavigator
 import com.ivianuu.traveler.common.ResultNavigator
 import com.ivianuu.traveler.common.compositeNavigatorOf
-import com.ivianuu.traveler.lifecycle.setNavigator
 import com.ivianuu.traveler.setRoot
 import javax.inject.Inject
 

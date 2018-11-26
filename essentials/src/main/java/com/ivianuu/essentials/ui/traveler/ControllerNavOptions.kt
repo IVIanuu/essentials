@@ -24,8 +24,6 @@ import com.ivianuu.director.common.changehandler.AutoTransitionChangeHandler
 import com.ivianuu.director.common.changehandler.FadeChangeHandler
 import com.ivianuu.director.common.changehandler.HorizontalChangeHandler
 import com.ivianuu.director.common.changehandler.VerticalChangeHandler
-import com.ivianuu.director.popChangeHandler
-import com.ivianuu.director.pushChangeHandler
 
 /**
  * @author Manuel Wrage (IVIanuu)
