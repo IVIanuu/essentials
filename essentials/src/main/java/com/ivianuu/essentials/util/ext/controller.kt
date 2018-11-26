@@ -31,6 +31,8 @@ import com.ivianuu.androidktx.core.content.app
 import com.ivianuu.androidktx.core.content.intent
 import com.ivianuu.director.Controller
 import com.ivianuu.director.arch.lifecycle.LifecycleController
+import com.ivianuu.director.startActivity
+import com.ivianuu.director.startActivityForResult
 import com.ivianuu.scopes.archlifecycle.onCreate
 import com.ivianuu.scopes.archlifecycle.onDestroy
 import com.ivianuu.scopes.archlifecycle.onPause

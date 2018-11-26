@@ -19,6 +19,7 @@ package com.ivianuu.essentials.util.ext
 import android.app.Activity
 import android.view.ViewGroup
 import com.ivianuu.director.Controller
+import com.ivianuu.director.popCurrentController
 import com.ivianuu.materialdialogs.MaterialDialog
 import com.ivianuu.materialdialogs.callback.onDismiss
 
