@@ -63,7 +63,7 @@ class CounterController : BaseController() {
     }
 
     override fun invalidate() {
-        withState(viewModel) { count.text = "Screen: ${it.screen}, Count: ${it.count}" }
+        withState(viewModel) { count.text = "Screen : ${it.screen}, Count: ${it.count}" }
     }
 
 }
