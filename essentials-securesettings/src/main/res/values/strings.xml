@@ -22,7 +22,7 @@
     <string name="action_pc_instructions">PC Instructions</string>
     <string name="action_use_root">Use Root</string>
 
-    <!-- Secure settings instructios -->
+    <!-- Secure settings instructions -->
     <string name="screen_label_secure_settings_instructions">PC Instructions</string>
     <string name="pref_summary_secure_settings_header">Follow the instructions to grant the permission with a PC (Windows, Mac or Linux)</string>
 
