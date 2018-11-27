@@ -16,19 +16,18 @@
 
 package com.ivianuu.essentials.picker
 
+import android.app.Dialog
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.ViewGroup
-import com.ivianuu.director.common.changehandler.FadeChangeHandler
-import com.ivianuu.essentials.ui.base.BaseController
+import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.color.colorChooser
+import com.ivianuu.essentials.ui.base.BaseDialogController
 import com.ivianuu.essentials.ui.traveler.NavOptions
+import com.ivianuu.essentials.ui.traveler.dialog
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
 import com.ivianuu.essentials.ui.traveler.key.ResultKey
 import com.ivianuu.essentials.ui.traveler.key.bindKey
 import com.ivianuu.essentials.util.RequestCodeGenerator
-import com.ivianuu.essentials.util.ext.MaterialDialog
-import com.ivianuu.materialdialogs.color.colorChooser
-import com.ivianuu.traveler.result.sendResult
+import com.ivianuu.traveler.result.goBackWithResult
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
@@ -38,28 +37,26 @@ data class ColorPickerKey(
     val allowCustomArgb: Boolean = true,
     val showAlphaSelector: Boolean = false,
     override val resultCode: Int = RequestCodeGenerator.generate()
-) : ControllerKey(ColorPickerController::class, NavOptions()
-    .push(FadeChangeHandler(removesFromViewOnPush = false))), ResultKey<Int>
+) : ControllerKey(ColorPickerController::class, NavOptions().dialog()), ResultKey<Int>
 
 /**
  * Color picker controller
  */
-class ColorPickerController : BaseController() {
+class ColorPickerController : BaseDialogController() {
 
     private val key by bindKey<ColorPickerKey>()
 
-    override fun onInflateView(
-        inflater: LayoutInflater,
-        container: ViewGroup,
-        savedViewState: Bundle?
-    ) = MaterialDialog()
-        .title(key.titleRes)
-        .colorChooser(
-            initialSelection = if (key.preselect != 0) key.preselect else null,
-            allowCustomArgb = key.allowCustomArgb,
-            showAlphaSelector = key.showAlphaSelector
-        ) { _, color -> travelerRouter.sendResult(key.resultCode, color) }
-        .negativeButton(R.string.action_cancel)
-        .view
+    override fun onCreateDialog(savedViewState: Bundle?): Dialog {
+        return MaterialDialog(activity)
+            .title(key.titleRes)
+            .colorChooser(
+                colors = PRIMARY_COLORS,
+                subColors = PRIMARY_COLORS_SUB,
+                initialSelection = if (key.preselect != 0) key.preselect else null,
+                allowCustomArgb = key.allowCustomArgb,
+                showAlphaSelector = key.showAlphaSelector
+            ) { _, color -> travelerRouter.goBackWithResult(key.resultCode, color) }
+            .negativeButton(R.string.action_cancel)
+    }
 
 }

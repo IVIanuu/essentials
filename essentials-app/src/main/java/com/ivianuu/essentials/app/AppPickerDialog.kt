@@ -16,21 +16,20 @@
 
 package com.ivianuu.essentials.app
 
+import android.app.Dialog
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import com.ivianuu.essentials.ui.base.BaseController
+import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.list.listItems
+import com.ivianuu.essentials.ui.base.BaseDialogController
 import com.ivianuu.essentials.ui.traveler.NavOptions
 import com.ivianuu.essentials.ui.traveler.dialog
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
 import com.ivianuu.essentials.ui.traveler.key.ResultKey
 import com.ivianuu.essentials.ui.traveler.key.key
 import com.ivianuu.essentials.util.RequestCodeGenerator
-import com.ivianuu.essentials.util.ext.MaterialDialog
 import com.ivianuu.essentials.util.string
-import com.ivianuu.materialdialogs.list.listItems
-import com.ivianuu.traveler.result.sendResult
+import com.ivianuu.traveler.goBack
+import com.ivianuu.traveler.result.goBackWithResult
 import kotlinx.android.parcel.Parcelize
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -45,22 +44,20 @@ data class AppPickerKey(
 /**
  * App picker
  */
-class AppPickerDialog : BaseController() {
+class AppPickerDialog : BaseDialogController() {
 
     @Inject lateinit var appStore: AppStore
 
-    override fun onInflateView(
-        inflater: LayoutInflater,
-        container: ViewGroup,
-        savedViewState: Bundle?
-    ): View {
+    override fun onCreateDialog(savedViewState: Bundle?): Dialog {
         val apps = mutableListOf<com.ivianuu.essentials.app.AppInfo>()
 
         val key = key<AppPickerKey>()
 
-        val dialog = MaterialDialog()
+        val dialog = MaterialDialog(activity)
             .title(text = key.title ?: string(R.string.dialog_title_app_picker))
-            .negativeButton(R.string.action_cancel)
+            .positiveButton(R.string.action_ok)
+            .negativeButton(R.string.action_cancel) { travelerRouter.goBack() }
+            .noAutoDismiss()
 
         coroutineScope.launch {
             val newApps = if (key.launchableOnly) {
@@ -76,10 +73,10 @@ class AppPickerDialog : BaseController() {
                 waitForPositiveButton = false
             ) { _, index, _ ->
                 val app = apps[index]
-                travelerRouter.sendResult(key.resultCode, app)
+                travelerRouter.goBackWithResult(key.resultCode, app)
             }
         }
 
-        return dialog.view
+        return dialog
     }
 }

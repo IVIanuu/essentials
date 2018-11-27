@@ -82,6 +82,7 @@ dependencies {
     api(Deps.director)
     api(Deps.directorArchLifecycle)
     api(Deps.directorCommon)
+    api(Deps.directorDialog)
     api(Deps.directorScopes)
     api(Deps.directorTraveler)
     api(Deps.directorViewPager)
@@ -116,7 +117,7 @@ dependencies {
     api(Deps.materialComponents)
     api(Deps.materialComponentsKtx)
 
-    api(Deps.materialDialogs)
+    api(Deps.materialDialogsCore)
 
     api(Deps.rxAndroid)
     api(Deps.rxJava)

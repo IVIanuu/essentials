@@ -18,13 +18,14 @@
 package com.ivianuu.essentials.sample.ui
 
 import android.os.Bundle
-import com.ivianuu.essentials.hidenavbar.NavBarSettingsKey
+import com.ivianuu.essentials.app.AppInfo
 import com.ivianuu.essentials.sample.ui.counter.CounterKey
-import com.ivianuu.essentials.securesettings.SecureSettingsKey
-import com.ivianuu.essentials.securesettings.canWriteSecureSettings
 import com.ivianuu.essentials.ui.base.BaseActivity
 import com.ivianuu.essentials.ui.base.BaseActivityModule
-import com.ivianuu.traveler.navigate
+import com.ivianuu.essentials.util.ext.results
+import com.ivianuu.scopes.archlifecycle.onDestroy
+import com.ivianuu.scopes.rx.disposeBy
+import com.ivianuu.timberktx.d
 import dagger.Module
 
 class MainActivity : BaseActivity() {
@@ -34,13 +35,9 @@ class MainActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        if (savedInstanceState == null) {
-            if (canWriteSecureSettings()) {
-                travelerRouter.navigate(NavBarSettingsKey(true))
-            } else {
-                travelerRouter.navigate(SecureSettingsKey())
-            }
-        }
+        travelerRouter.results<AppInfo>(1)
+            .subscribe { d { "app picked $it" } }
+            .disposeBy(onDestroy)
     }
 
 }

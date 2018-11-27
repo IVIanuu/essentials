@@ -19,6 +19,7 @@ package com.ivianuu.essentials.sample.ui.counter
 import android.view.View
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.ivianuu.androidktx.core.view.onClick
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.base.BaseController
 import com.ivianuu.essentials.ui.mvrx.bindViewModel
@@ -62,15 +63,15 @@ class CounterController : BaseController() {
     override fun onBindView(view: View) {
         super.onBindView(view)
 
-        increase.setOnClickListener { viewModel.increaseClicked() }
-        decrease.setOnClickListener { viewModel.decreaseClicked() }
-        reset.setOnClickListener { viewModel.resetClicked() }
+        increase.onClick { viewModel.increaseClicked() }
+        decrease.onClick { viewModel.decreaseClicked() }
+        reset.onClick { viewModel.resetClicked() }
 
-        screen_up.setOnClickListener { viewModel.screenUpClicked() }
-        screen_down.setOnClickListener { viewModel.screenDownClicked() }
-        root_screen.setOnClickListener { viewModel.rootScreenClicked() }
-        list_screen.setOnClickListener { viewModel.listScreenClicked() }
-        do_work.setOnClickListener { viewModel.doWorkClicked() }
+        screen_up.onClick { viewModel.screenUpClicked() }
+        screen_down.onClick { viewModel.screenDownClicked() }
+        root_screen.onClick { viewModel.rootScreenClicked() }
+        list_screen.onClick { viewModel.listScreenClicked() }
+        do_work.onClick { viewModel.doWorkClicked() }
     }
 
     override fun invalidate() {

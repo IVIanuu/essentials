@@ -16,12 +16,12 @@
 
 package com.ivianuu.essentials.securesettings
 
+import android.app.Dialog
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
+import com.afollestad.materialdialogs.MaterialDialog
 import com.ivianuu.essentials.shell.Shell
-import com.ivianuu.essentials.ui.base.BaseController
+import com.ivianuu.essentials.ui.base.BaseDialogController
 import com.ivianuu.essentials.ui.traveler.NavOptions
 import com.ivianuu.essentials.ui.traveler.dialog
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
@@ -30,7 +30,6 @@ import com.ivianuu.essentials.ui.traveler.key.bindKey
 import com.ivianuu.essentials.ui.traveler.vertical
 import com.ivianuu.essentials.util.RequestCodeGenerator
 import com.ivianuu.essentials.util.ext.toast
-import com.ivianuu.materialdialogs.MaterialDialog
 import com.ivianuu.traveler.navigate
 import com.ivianuu.traveler.result.goBackWithResult
 import com.ivianuu.traveler.result.sendResult
@@ -46,17 +45,13 @@ class SecureSettingsKey(
 /**
  * @author Manuel Wrage (IVIanuu)
  */
-class SecureSettingsDialog : BaseController() {
+class SecureSettingsDialog : BaseDialogController() {
 
     @Inject lateinit var shell: Shell
 
     private val key by bindKey<SecureSettingsKey>()
 
-    override fun onInflateView(
-        inflater: LayoutInflater,
-        container: ViewGroup,
-        savedViewState: Bundle?
-    ): View {
+    override fun onCreateDialog(savedViewState: Bundle?): Dialog {
         return MaterialDialog(activity)
             .title(R.string.dialog_title_secure_settings)
             .message(R.string.dialog_message_secure_settings)
@@ -73,8 +68,7 @@ class SecureSettingsDialog : BaseController() {
             .negativeButton(R.string.action_pc_instructions) {
                 travelerRouter.navigate(SecureSettingsInstructionsKey(), NavOptions().vertical())
             }
-            .autoDismiss(false)
-            .view
+            .noAutoDismiss()
     }
 
     override fun onAttach(view: View) {

@@ -16,21 +16,20 @@
 
 package com.ivianuu.essentials.picker
 
+import android.app.Dialog
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.input.input
 import com.ivianuu.essentials.R
-import com.ivianuu.essentials.ui.base.BaseController
+import com.ivianuu.essentials.ui.base.BaseDialogController
 import com.ivianuu.essentials.ui.traveler.NavOptions
 import com.ivianuu.essentials.ui.traveler.dialog
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
 import com.ivianuu.essentials.ui.traveler.key.ResultKey
 import com.ivianuu.essentials.ui.traveler.key.key
 import com.ivianuu.essentials.util.RequestCodeGenerator
-import com.ivianuu.essentials.util.ext.MaterialDialog
-import com.ivianuu.materialdialogs.input.input
-import com.ivianuu.traveler.result.sendResult
+import com.ivianuu.traveler.goBack
+import com.ivianuu.traveler.result.goBackWithResult
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
@@ -46,27 +45,23 @@ data class TextInputKey(
 /**
  * Text input dialog
  */
-class TextInputDialog : BaseController() {
+class TextInputDialog : BaseDialogController() {
 
-    override fun onInflateView(
-        inflater: LayoutInflater,
-        container: ViewGroup,
-        savedViewState: Bundle?
-    ): View {
+    override fun onCreateDialog(savedViewState: Bundle?): Dialog {
         val key = key<TextInputKey>()
 
-        return MaterialDialog()
+        return MaterialDialog(activity)
+            .noAutoDismiss()
             .title(text = key.title)
             .input(
                 hint = key.inputHint,
                 prefill = key.prefill,
                 inputType = key.inputType
             ) { _, input ->
-                travelerRouter.sendResult(key.resultCode, input.toString())
+                travelerRouter.goBackWithResult(key.resultCode, input.toString())
             }
             .positiveButton(R.string.action_ok)
-            .negativeButton(R.string.action_cancel)
-            .view
+            .negativeButton(R.string.action_cancel) { travelerRouter.goBack() }
     }
 
 }
