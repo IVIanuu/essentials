@@ -25,7 +25,7 @@ object Versions {
     const val androidxTestRules = "1.1.0"
     const val androidxTestRunner = "1.1.0"
 
-    const val androidKtx = "635efffd28"
+    const val androidKtx = "0cf0a07f49"
 
     const val archWork = "1.0.0-alpha11"
 
