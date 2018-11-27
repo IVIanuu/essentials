@@ -16,10 +16,9 @@ object Versions {
     const val androidGradlePlugin = "3.2.1"
 
     const val androidxArch = "2.0.0"
-    const val androidxActivity = "1.0.0-alpha01"
     const val androidxAppCompat = "1.0.2"
     const val androidxCardView = "1.0.0"
-    const val androidxCore = "1.0.0"
+    const val androidxCore = "1.0.1"
 
     const val androidxTestCore = "1.0.0"
     const val androidxTestJunit = "1.0.0"
@@ -69,7 +68,6 @@ object Versions {
 object Deps {
     const val androidGradlePlugin = "com.android.tools.build:gradle:${Versions.androidGradlePlugin}"
 
-    const val androidxActivity = "androidx.activity:activity:${Versions.androidxActivity}"
     const val androidxAppCompat = "androidx.appcompat:appcompat:${Versions.androidxAppCompat}"
     const val androidxCardView = "androidx.cardview:cardview:${Versions.androidxCardView}"
     const val androidxCoreKtx = "androidx.core:core-ktx:${Versions.androidxCore}"

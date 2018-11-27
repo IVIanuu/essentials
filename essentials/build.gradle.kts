@@ -56,7 +56,6 @@ android {
 }
 
 dependencies {
-    api(Deps.androidxActivity)
     api(Deps.androidxAppCompat)
     api(Deps.androidxCardView)
     api(Deps.androidxCoreKtx)
