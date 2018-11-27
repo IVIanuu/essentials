@@ -74,7 +74,7 @@ class SecureSettingsDialog : BaseDialogController() {
     override fun onAttach(view: View) {
         super.onAttach(view)
         if (activity.canWriteSecureSettings()) {
-            travelerRouter.goBackWithResult(key.resultCode, true)
+            handlePermissionResult(true)
         }
     }
 
