@@ -7,7 +7,6 @@ import com.ivianuu.essentials.injection.EssentialsModule
 import com.ivianuu.essentials.picker.EssentialsPickerModule
 import com.ivianuu.essentials.sample.injection.ActivityBindingModule
 import com.ivianuu.essentials.sample.injection.AssistedModule
-import com.ivianuu.essentials.sample.injection.ViewModelModule
 import com.ivianuu.essentials.sample.injection.WorkerModule
 import com.ivianuu.essentials.work.EssentialsWorkInitializerModule
 import com.ivianuu.essentials.work.EssentialsWorkModule
@@ -31,7 +30,6 @@ import javax.inject.Singleton
         EssentialsPickerModule::class,
         EssentialsWorkModule::class,
         EssentialsWorkInitializerModule::class,
-        ViewModelModule::class,
         WorkerModule::class
     ]
 )

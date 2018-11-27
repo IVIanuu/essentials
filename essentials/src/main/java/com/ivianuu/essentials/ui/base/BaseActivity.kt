@@ -18,14 +18,11 @@ package com.ivianuu.essentials.ui.base
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import com.ivianuu.director.Router
 import com.ivianuu.director.attachRouter
 import com.ivianuu.director.handleBack
 import com.ivianuu.director.traveler.ControllerNavigator
 import com.ivianuu.essentials.R
-import com.ivianuu.essentials.ui.mvrx.MvRxView
-import com.ivianuu.essentials.util.ViewModelFactoryHolder
 import com.ivianuu.essentials.util.asMainCoroutineScope
 import com.ivianuu.essentials.util.ext.unsafeLazy
 import com.ivianuu.injectors.CompositeInjectors
@@ -43,11 +40,9 @@ import javax.inject.Inject
 /**
  * Base activity
  */
-abstract class BaseActivity : AppCompatActivity(), HasInjectors,
-    MvRxView, ViewModelFactoryHolder {
+abstract class BaseActivity : AppCompatActivity(), HasInjectors {
 
     @Inject override lateinit var injectors: CompositeInjectors
-    @Inject override lateinit var viewModelFactory: ViewModelProvider.Factory
 
     @Inject lateinit var navigatorHolder: NavigatorHolder
     @Inject lateinit var travelerRouter: com.ivianuu.traveler.Router
@@ -84,9 +79,6 @@ abstract class BaseActivity : AppCompatActivity(), HasInjectors,
         if (savedInstanceState == null) {
             startKey?.let { travelerRouter.setRoot(it) }
         }
-    }
-
-    override fun invalidate() {
     }
 
     override fun onBackPressed() {

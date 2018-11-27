@@ -16,7 +16,6 @@
 
 package com.ivianuu.essentials.injection
 
-import com.ivianuu.essentials.injection.viewmodel.ViewModelInjectionModule
 import com.ivianuu.essentials.ui.traveler.TravelerModule
 import com.ivianuu.injectors.InjectorModule
 import dagger.Module
@@ -31,8 +30,7 @@ import dagger.Module
         EssentialsAppInitializerModule::class,
         InjectorModule::class,
         SystemServiceModule::class,
-        TravelerModule::class,
-        ViewModelInjectionModule::class
+        TravelerModule::class
     ]
 )
 object EssentialsModule

@@ -17,8 +17,6 @@
 package com.ivianuu.essentials.sample.ui.counter
 
 import android.view.View
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.base.BaseController
 import com.ivianuu.essentials.ui.mvrx.bindViewModel
@@ -45,19 +43,10 @@ data class CounterKey(val screen: Int) : ControllerKey(CounterController::class)
  */
 class CounterController : BaseController() {
 
-    @Inject lateinit var counterViewModelFactory: CounterViewModelFactory
-
     override val layoutRes get() = R.layout.controller_counter
 
-    private val viewModel by bindViewModel(CounterViewModel::class) {
-        viewModelFactory { counterViewModelFactory.create(key()) }
-    }
-
-    private fun viewModelFactory(create: (Class<*>) -> ViewModel) =
-        object : ViewModelProvider.Factory {
-            override fun <T : ViewModel?> create(modelClass: Class<T>) =
-                create(modelClass) as T
-        }
+    @Inject lateinit var counterViewModelFactory: CounterViewModelFactory
+    private val viewModel by bindViewModel { counterViewModelFactory.create(key()) }
 
     override fun onBindView(view: View) {
         super.onBindView(view)

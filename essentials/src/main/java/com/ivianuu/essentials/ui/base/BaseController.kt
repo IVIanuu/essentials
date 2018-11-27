@@ -21,14 +21,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.ViewModelProvider
 import com.ivianuu.director.arch.lifecycle.LifecycleController
 import com.ivianuu.director.scopes.unbindView
 import com.ivianuu.essentials.injection.inject
 import com.ivianuu.essentials.ui.mvrx.MvRxView
 import com.ivianuu.essentials.util.ContextAware
 import com.ivianuu.essentials.util.HasInjectorsContextWrapper
-import com.ivianuu.essentials.util.ViewModelFactoryHolder
 import com.ivianuu.essentials.util.asMainCoroutineScope
 import com.ivianuu.injectors.CompositeInjectors
 import com.ivianuu.injectors.HasInjectors
@@ -43,10 +41,9 @@ import javax.inject.Inject
  * Base controller
  */
 abstract class BaseController : LifecycleController(), ContextAware, HasInjectors,
-    LayoutContainer, MvRxView, ViewModelFactoryHolder {
+    LayoutContainer, MvRxView {
 
     @Inject override lateinit var injectors: CompositeInjectors
-    @Inject override lateinit var viewModelFactory: ViewModelProvider.Factory
 
     @Inject lateinit var travelerRouter: Router
 

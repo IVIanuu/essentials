@@ -17,6 +17,8 @@ import com.ivianuu.essentials.ui.traveler.vertical
 import com.ivianuu.essentials.util.ext.andTrue
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.single_line_list_item.title
+import javax.inject.Inject
+import javax.inject.Provider
 
 @Parcelize
 class ListKey : ControllerKey(
@@ -29,7 +31,8 @@ class ListKey : ControllerKey(
  */
 class ListController : SimpleController() {
 
-    private val viewModel by bindViewModel(ListViewModel::class)
+    @Inject lateinit var viewModelProvider: Provider<ListViewModel>
+    private val viewModel by bindViewModel { viewModelProvider.get() }
 
     override val toolbarMenuRes get() = R.menu.controller_list
     override val toolbarTitle get() = "List"
