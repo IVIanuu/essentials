@@ -24,6 +24,7 @@ import com.ivianuu.epoxyprefs.summary
 import com.ivianuu.epoxyprefs.title
 import com.ivianuu.essentials.ui.prefs.PrefsController
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
+import com.ivianuu.essentials.util.ext.toast
 import com.ivianuu.essentials.util.string
 import kotlinx.android.parcel.Parcelize
 import javax.inject.Inject
@@ -94,6 +95,7 @@ class SecureSettingsInstructionsController : PrefsController() {
             onClick {
                 clipboardManager.text =
                         "adb shell pm grant ${activity.packageName} android.permission.WRITE_SECURE_SETTINGS"
+                toast(R.string.msg_secure_settings_copied_to_clipboard)
                 true
             }
         }
