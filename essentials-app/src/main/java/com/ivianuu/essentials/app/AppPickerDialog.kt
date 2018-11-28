@@ -55,7 +55,6 @@ class AppPickerDialog : BaseDialogController() {
 
         val dialog = MaterialDialog(activity)
             .title(text = key.title ?: string(R.string.dialog_title_app_picker))
-            .positiveButton(R.string.action_ok)
             .negativeButton(R.string.action_cancel) { travelerRouter.goBack() }
             .noAutoDismiss()
 
