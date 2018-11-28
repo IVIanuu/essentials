@@ -27,7 +27,7 @@ import javax.inject.Singleton
 class NavBarPrefs @Inject constructor(
     @NavBarSharedPrefs prefs: KPrefs
 ) {
-    val fullOverscan = prefs.boolean("full_overscan", true)
+    val fullOverscan = prefs.boolean("full_overscan")
     val hideNavBarEnabled = prefs.boolean("hide_nav_bar_enabled")
     val rot270Fix = prefs.boolean("rot270_fix")
     val showNavBarScreenOff = prefs.boolean("show_nav_bar_screen_off", true)

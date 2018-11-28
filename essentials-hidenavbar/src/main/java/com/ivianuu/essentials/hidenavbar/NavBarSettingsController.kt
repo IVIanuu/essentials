@@ -102,7 +102,6 @@ class NavBarSettingsController : PrefsController() {
         checkboxPreference {
             sharedPreferences(navBarSharedPrefs)
             key("full_overscan")
-            defaultValue(true)
             summary(R.string.pref_summary_full_overscan)
             title(R.string.pref_title_full_overscan)
             enabled(settingsEnabled)
