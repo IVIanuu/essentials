@@ -8,10 +8,10 @@ package com.ivianuu.essentials.util.ext
 import android.annotation.SuppressLint
 import android.content.Context
 import android.view.View
-import com.ivianuu.androidktx.core.content.color
-import com.ivianuu.androidktx.core.content.colorAttr
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.util.ContextAware
+import com.ivianuu.kommon.core.content.color
+import com.ivianuu.kommon.core.content.colorAttr
 
 fun Context.isWindowBackgroundDark() =
     colorAttr(android.R.attr.windowBackground).isDark

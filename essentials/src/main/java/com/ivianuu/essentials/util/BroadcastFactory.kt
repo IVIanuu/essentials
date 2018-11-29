@@ -20,7 +20,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import com.ivianuu.androidktx.core.content.intentFilterOf
+import com.ivianuu.kommon.core.content.intentFilterOf
 import com.ivianuu.rxjavaktx.observable
 import io.reactivex.Observable
 import javax.inject.Inject

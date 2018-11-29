@@ -25,8 +25,6 @@ object Versions {
     const val androidxTestRules = "1.1.0"
     const val androidxTestRunner = "1.1.0"
 
-    const val androidKtx = "0cf0a07f49"
-
     const val archWork = "1.0.0-alpha11"
 
     const val assistedInject = "74bd099811"
@@ -41,6 +39,7 @@ object Versions {
     const val glide = "4.8.0"
     const val injectors = "edc5350f6b"
     const val junit = "4.12"
+    const val kommon = "ae20896ec2"
     const val kotlin = "1.3.10"
     const val kPrefs = "79aac06ee7"
     const val kSettings = "70219d641b"
@@ -48,7 +47,6 @@ object Versions {
     const val liveEvent = "1e265df911"
     const val mavenGradle = "2.1"
     const val materialComponents = "1.0.0"
-    const val materialComponentsKtx = "c4c5dda45a"
     const val materialDialogs = "2.0.0-rc1"
     const val mockitoKotlin = "2.0.0"
     const val r2 = "06e702d39f"
@@ -76,16 +74,6 @@ object Deps {
     const val androidxTestJunit = "androidx.test.ext:junit:${Versions.androidxTestJunit}"
     const val androidxTestRules = "androidx.test:rules:${Versions.androidxTestRules}"
     const val androidxTestRunner = "androidx.test:runner:${Versions.androidxTestRunner}"
-
-    const val androidKtxAppCompat =
-        "com.github.IVIanuu.android-ktx:androidktx-appcompat:${Versions.androidKtx}"
-    const val androidKtxCore = "com.github.IVIanuu.android-ktx:androidktx-core:${Versions.androidKtx}"
-    const val androidKtxLifecycle =
-        "com.github.IVIanuu.android-ktx:androidktx-lifecycle:${Versions.androidKtx}"
-    const val androidKtxRecyclerView =
-        "com.github.IVIanuu.android-ktx:androidktx-recyclerview:${Versions.androidKtx}"
-    const val androidKtxViewPager =
-        "com.github.IVIanuu.android-ktx:androidktx-viewpager:${Versions.androidKtx}"
 
     const val archLifecycleExtensions =
         "androidx.lifecycle:lifecycle-extensions:${Versions.androidxArch}"
@@ -138,6 +126,18 @@ object Deps {
 
     const val junit = "junit:junit:${Versions.junit}"
 
+    const val kommonAppCompat =
+        "com.github.IVIanuu.kommon:kommon-appcompat:${Versions.kommon}"
+    const val kommonCore = "com.github.IVIanuu.kommon:kommon-core:${Versions.kommon}"
+    const val kommonLifecycle =
+        "com.github.IVIanuu.kommon:kommon-lifecycle:${Versions.kommon}"
+    const val kommonMaterial =
+        "com.github.IVIanuu.kommon:kommon-material:${Versions.kommon}"
+    const val kommonRecyclerView =
+        "com.github.IVIanuu.kommon:kommon-recyclerview:${Versions.kommon}"
+    const val kommonViewPager =
+        "com.github.IVIanuu.kommon:kommon-viewpager:${Versions.kommon}"
+    
     const val kotlinGradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.kotlin}"
     const val kotlinStdLib = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${Versions.kotlin}"
 
@@ -162,8 +162,6 @@ object Deps {
 
     const val materialComponents =
         "com.google.android.material:material:${Versions.materialComponents}"
-    const val materialComponentsKtx =
-        "com.github.IVIanuu:material-components-ktx:${Versions.materialComponentsKtx}"
 
     const val materialDialogsCore =
         "com.afollestad.material-dialogs:core:${Versions.materialDialogs}"

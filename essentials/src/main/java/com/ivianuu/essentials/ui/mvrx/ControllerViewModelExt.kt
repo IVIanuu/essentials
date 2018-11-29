@@ -17,11 +17,11 @@
 package com.ivianuu.essentials.ui.mvrx
 
 import androidx.lifecycle.ViewModelStoreOwner
-import com.ivianuu.androidktx.lifecycle.defaultViewModelKey
 import com.ivianuu.director.Controller
 import com.ivianuu.essentials.ui.base.BaseController
 import com.ivianuu.essentials.util.ext.requireParentController
 import com.ivianuu.essentials.util.ext.requireTargetController
+import com.ivianuu.kommon.lifecycle.defaultViewModelKey
 
 inline fun <reified VM : MvRxViewModel<*>> BaseController.activityViewModel(
     key: String = VM::class.defaultViewModelKey,

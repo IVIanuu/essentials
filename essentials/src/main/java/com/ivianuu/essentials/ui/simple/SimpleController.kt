@@ -25,7 +25,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.epoxy.EpoxyController
 import com.airbnb.epoxy.EpoxyRecyclerView
 import com.google.android.material.appbar.AppBarLayout
-import com.ivianuu.androidktx.core.view.items
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.base.BaseController
 import com.ivianuu.essentials.util.ext.iconColor
@@ -33,6 +32,7 @@ import com.ivianuu.essentials.util.ext.isLight
 import com.ivianuu.essentials.util.ext.primaryColor
 import com.ivianuu.essentials.util.ext.primaryTextColor
 import com.ivianuu.essentials.util.ext.secondaryTextColor
+import com.ivianuu.kommon.core.view.items
 import com.ivianuu.traveler.goBack
 
 /**

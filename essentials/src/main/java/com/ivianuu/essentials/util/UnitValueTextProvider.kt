@@ -1,9 +1,9 @@
 package com.ivianuu.essentials.util
 
 import android.content.Context
-import com.ivianuu.androidktx.core.content.string
 import com.ivianuu.epoxyprefs.SeekBarPreferenceModel
 import com.ivianuu.essentials.R
+import com.ivianuu.kommon.core.content.string
 
 class UnitValueTextProvider(
     private val context: Context,

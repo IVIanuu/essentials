@@ -60,12 +60,6 @@ dependencies {
     api(Deps.androidxCardView)
     api(Deps.androidxCoreKtx)
 
-    api(Deps.androidKtxAppCompat)
-    api(Deps.androidKtxCore)
-    api(Deps.androidKtxLifecycle)
-    api(Deps.androidKtxRecyclerView)
-    api(Deps.androidKtxViewPager)
-
     api(Deps.assistedInject)
 
     api(Deps.coroutinesAndroid)
@@ -95,6 +89,12 @@ dependencies {
     api(Deps.injectors)
     api(Deps.injectorsAndroid)
 
+    api(Deps.kommonAppCompat)
+    api(Deps.kommonCore)
+    api(Deps.kommonLifecycle)
+    api(Deps.kommonRecyclerView)
+    api(Deps.kommonViewPager)
+
     api(Deps.kotlinStdLib)
 
     api(Deps.kPrefs)
@@ -114,7 +114,6 @@ dependencies {
     api(Deps.liveEvent)
 
     api(Deps.materialComponents)
-    api(Deps.materialComponentsKtx)
 
     api(Deps.materialDialogsCore)
 

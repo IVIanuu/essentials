@@ -19,8 +19,8 @@ package com.ivianuu.essentials.util.ext
 import android.content.Context
 import android.view.View
 import android.widget.Toast
-import com.ivianuu.androidktx.core.content.string
 import com.ivianuu.essentials.util.ContextAware
+import com.ivianuu.kommon.core.content.string
 
 fun Context.toast(message: CharSequence) = mainThread {
     Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
