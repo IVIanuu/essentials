@@ -17,7 +17,7 @@
 <resources>
     <string name="msg_failed_to_toggle_nav_bar">Failed to toggle the nav bar!</string>
 
-    <string name="screen_label_nav_bar_settings">Navigation Bar Settings</string>
+    <string name="screen_label_nav_bar_settings">Navigation Bar</string>
 
     <string name="pref_title_hide_nav_bar_enabled">Hide Navigation Bar</string>
     <string name="pref_summary_hide_nav_bar_enabled">Toggle the navigation bar state.</string>
