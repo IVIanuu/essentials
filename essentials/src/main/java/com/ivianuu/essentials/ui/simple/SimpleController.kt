@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.ui.simple
 
 import android.graphics.PorterDuff
+import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.widget.Toolbar
@@ -79,9 +80,8 @@ abstract class SimpleController : BaseController() {
     open val optionalToolbar: Toolbar?
         get() = view?.findViewById(R.id.toolbar)
 
-    override fun onBindView(view: View) {
-        super.onBindView(view)
-
+    override fun onBindView(view: View, savedViewState: Bundle?) {
+        super.onBindView(view, savedViewState)
         optionalToolbar?.run {
             when {
                 toolbarTitle != null -> title = toolbarTitle

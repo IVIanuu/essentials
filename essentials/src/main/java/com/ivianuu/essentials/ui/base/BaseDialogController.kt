@@ -42,4 +42,5 @@ abstract class BaseDialogController : DialogController(), ContextAware {
         inject()
         super.onCreate(savedInstanceState)
     }
+
 }

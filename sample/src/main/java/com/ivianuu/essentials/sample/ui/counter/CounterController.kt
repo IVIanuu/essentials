@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.sample.ui.counter
 
+import android.os.Bundle
 import android.view.View
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.base.BaseController
@@ -48,8 +49,8 @@ class CounterController : BaseController() {
     @Inject lateinit var counterViewModelFactory: CounterViewModelFactory
     private val viewModel by bindViewModel { counterViewModelFactory.create(key()) }
 
-    override fun onBindView(view: View) {
-        super.onBindView(view)
+    override fun onBindView(view: View, savedViewState: Bundle?) {
+        super.onBindView(view, savedViewState)
 
         increase.setOnClickListener { viewModel.increaseClicked() }
         decrease.setOnClickListener { viewModel.decreaseClicked() }
