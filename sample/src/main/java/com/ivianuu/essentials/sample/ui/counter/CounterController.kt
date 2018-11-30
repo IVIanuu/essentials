@@ -20,7 +20,7 @@ import android.os.Bundle
 import android.view.View
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.base.BaseController
-import com.ivianuu.essentials.ui.mvrx.bindViewModel
+import com.ivianuu.essentials.ui.mvrx.viewModel
 import com.ivianuu.essentials.ui.mvrx.withState
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
 import com.ivianuu.essentials.ui.traveler.key.key
@@ -47,7 +47,7 @@ class CounterController : BaseController() {
     override val layoutRes get() = R.layout.controller_counter
 
     @Inject lateinit var counterViewModelFactory: CounterViewModelFactory
-    private val viewModel by bindViewModel { counterViewModelFactory.create(key()) }
+    private val viewModel by viewModel { counterViewModelFactory.create(key()) }
 
     override fun onBindView(view: View, savedViewState: Bundle?) {
         super.onBindView(view, savedViewState)

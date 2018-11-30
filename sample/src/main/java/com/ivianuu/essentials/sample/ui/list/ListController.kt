@@ -8,8 +8,8 @@ import com.ivianuu.essentials.ui.epoxy.BaseEpoxyHolder
 import com.ivianuu.essentials.ui.epoxy.SimpleEpoxyModel
 import com.ivianuu.essentials.ui.epoxy.simpleLoading
 import com.ivianuu.essentials.ui.epoxy.simpleText
-import com.ivianuu.essentials.ui.mvrx.bindViewModel
 import com.ivianuu.essentials.ui.mvrx.simpleEpoxyController
+import com.ivianuu.essentials.ui.mvrx.viewModel
 import com.ivianuu.essentials.ui.simple.SimpleController
 import com.ivianuu.essentials.ui.traveler.NavOptions
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
@@ -32,7 +32,7 @@ class ListKey : ControllerKey(
 class ListController : SimpleController() {
 
     @Inject lateinit var viewModelProvider: Provider<ListViewModel>
-    private val viewModel by bindViewModel { viewModelProvider.get() }
+    private val viewModel by viewModel { viewModelProvider.get() }
 
     override val toolbarMenuRes get() = R.menu.controller_list
     override val toolbarTitle get() = "List"

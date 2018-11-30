@@ -18,22 +18,29 @@ package com.ivianuu.essentials.ui.common
 
 import androidx.lifecycle.ViewModel
 import com.ivianuu.essentials.util.asMainCoroutineScope
-import com.ivianuu.scopes.MutableScope
-import com.ivianuu.scopes.Scope
 
 /**
  * A [ViewModel] which auto disposes itself
  */
 abstract class BaseViewModel : ViewModel() {
 
-    protected val scope: Scope get() = _scope
-    private val _scope = MutableScope()
-
     val coroutineScope = scope.asMainCoroutineScope()
 
+    private val clearedListeners = mutableListOf<(() -> Unit)>()
+
     override fun onCleared() {
-        _scope.close()
+        clearedListeners.forEach { it() }
         super.onCleared()
+    }
+
+    fun addClearedListener(listener: () -> Unit) {
+        if (!clearedListeners.contains(listener)) {
+            clearedListeners.add(listener)
+        }
+    }
+
+    fun removeClearedListener(listener: () -> Unit) {
+        clearedListeners.remove(listener)
     }
 
 }

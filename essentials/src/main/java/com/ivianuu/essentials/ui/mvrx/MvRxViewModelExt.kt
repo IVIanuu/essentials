@@ -7,22 +7,19 @@ import androidx.lifecycle.ViewModelStoreOwner
 import com.ivianuu.kommon.lifecycle.defaultViewModelKey
 
 inline fun <reified VM : MvRxViewModel<*>> MvRxView.viewModel(
-    key: String = VM::class.defaultViewModelKey,
-    noinline factory: () -> VM
-) = viewModelProvider(factory).get(key, VM::class.java).setupViewModel(this)
-
-inline fun <reified VM : MvRxViewModel<*>> MvRxView.bindViewModel(
     crossinline keyProvider: () -> String = { VM::class.defaultViewModelKey },
     noinline factory: () -> VM
-) = viewModelLazy { viewModel(keyProvider(), factory) }
+) = viewModelLazy {
+    viewModelProvider(factory).get(keyProvider(), VM::class.java).setupViewModel(this)
+}
 
 inline fun <reified VM : MvRxViewModel<*>> MvRxView.existingViewModel(
-    key: String = VM::class.defaultViewModelKey
-) = viewModel<VM>(key, ExistingViewModelFactory())
-
-inline fun <reified VM : MvRxViewModel<*>> MvRxView.bindExistingViewModel(
     crossinline keyProvider: () -> String = { VM::class.defaultViewModelKey }
-) = viewModelLazy { existingViewModel<VM>(keyProvider()) }
+) = viewModelLazy {
+    viewModelProvider<VM>(ExistingViewModelFactory())
+        .get(keyProvider(), VM::class.java)
+        .setupViewModel(this)
+}
 
 @PublishedApi
 internal fun <VM : MvRxViewModel<*>> VM.setupViewModel(view: MvRxView) =

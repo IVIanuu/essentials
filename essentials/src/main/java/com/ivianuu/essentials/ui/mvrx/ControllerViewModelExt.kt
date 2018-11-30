@@ -17,67 +17,64 @@
 package com.ivianuu.essentials.ui.mvrx
 
 import androidx.lifecycle.ViewModelStoreOwner
-import com.ivianuu.director.Controller
 import com.ivianuu.essentials.ui.base.BaseController
 import com.ivianuu.essentials.util.ext.requireParentController
 import com.ivianuu.essentials.util.ext.requireTargetController
 import com.ivianuu.kommon.lifecycle.defaultViewModelKey
 
 inline fun <reified VM : MvRxViewModel<*>> BaseController.activityViewModel(
-    key: String = VM::class.defaultViewModelKey,
-    noinline factory: () -> VM
-) = activity.viewModelProvider(factory).get(key, VM::class.java).setupViewModel(this)
-
-inline fun <reified VM : MvRxViewModel<*>> BaseController.bindActivityViewModel(
     crossinline keyProvider: () -> String = { VM::class.defaultViewModelKey },
     noinline factory: () -> VM
-) = viewModelLazy { activityViewModel(keyProvider(), factory) }
+) = viewModelLazy {
+    activity.viewModelProvider(factory).get(keyProvider(), VM::class.java).setupViewModel(this)
+}
 
 inline fun <reified VM : MvRxViewModel<*>> BaseController.existingActivityViewModel(
-    key: String = VM::class.defaultViewModelKey
-) = activityViewModel<VM>(key, ExistingViewModelFactory())
-
-inline fun <reified VM : MvRxViewModel<*>> BaseController.bindExistingActivityViewModel(
-    key: String = VM::class.defaultViewModelKey
-) = viewModelLazy { existingActivityViewModel<VM>(key) }
+    crossinline keyProvider: () -> String = { VM::class.defaultViewModelKey }
+) = viewModelLazy {
+    activity.viewModelProvider<VM>(ExistingViewModelFactory())
+        .get(keyProvider(), VM::class.java)
+        .setupViewModel(this)
+}
 
 inline fun <reified VM : MvRxViewModel<*>> BaseController.parentViewModel(
-    key: String = VM::class.defaultViewModelKey,
-    noinline factory: () -> VM
-) = (requireParentController() as ViewModelStoreOwner).viewModelProvider(factory).get(
-    key,
-    VM::class.java
-).setupViewModel(this)
-
-inline fun <reified VM : MvRxViewModel<*>> BaseController.bindParentViewModel(
     crossinline keyProvider: () -> String = { VM::class.defaultViewModelKey },
     noinline factory: () -> VM
-) = viewModelLazy { parentViewModel(keyProvider(), factory) }
+) = viewModelLazy {
+    (requireParentController() as ViewModelStoreOwner).viewModelProvider(factory).get(
+        keyProvider(),
+        VM::class.java
+    ).setupViewModel(this)
+}
 
 inline fun <reified VM : MvRxViewModel<*>> BaseController.existingParentViewModel(
-    key: String = VM::class.defaultViewModelKey
-) = parentViewModel<VM>(key, ExistingViewModelFactory())
-
-inline fun <reified VM : MvRxViewModel<*>> BaseController.bindExistingParentViewModel(
     crossinline keyProvider: () -> String = { VM::class.defaultViewModelKey }
-) = viewModelLazy { existingParentViewModel<VM>(keyProvider()) }
+) = viewModelLazy {
+    (requireParentController() as ViewModelStoreOwner).viewModelProvider<VM>(
+        ExistingViewModelFactory()
+    ).get(
+        keyProvider(),
+        VM::class.java
+    ).setupViewModel(this)
+}
 
 inline fun <reified VM : MvRxViewModel<*>> BaseController.targetViewModel(
-    key: String = VM::class.defaultViewModelKey,
-    noinline factory: () -> VM
-) = (requireTargetController() as ViewModelStoreOwner).viewModelProvider(factory)
-    .get(key, VM::class.java).setupViewModel(this)
-
-inline fun <T, reified VM : MvRxViewModel<*>> BaseController.bindTargetViewModel(
     crossinline keyProvider: () -> String = { VM::class.defaultViewModelKey },
     noinline factory: () -> VM
-) where T : Controller =
-    viewModelLazy { targetViewModel(keyProvider(), factory) }
+) = viewModelLazy {
+    (requireTargetController() as ViewModelStoreOwner).viewModelProvider(factory).get(
+        keyProvider(),
+        VM::class.java
+    ).setupViewModel(this)
+}
 
 inline fun <reified VM : MvRxViewModel<*>> BaseController.existingTargetViewModel(
-    key: String = VM::class.defaultViewModelKey
-) = targetViewModel<VM>(key, ExistingViewModelFactory())
-
-inline fun <reified VM : MvRxViewModel<*>> BaseController.bindExistingTargetViewModel(
     crossinline keyProvider: () -> String = { VM::class.defaultViewModelKey }
-) = viewModelLazy { existingTargetViewModel<VM>(keyProvider()) }
+) = viewModelLazy {
+    (requireTargetController() as ViewModelStoreOwner).viewModelProvider<VM>(
+        ExistingViewModelFactory()
+    ).get(
+        keyProvider(),
+        VM::class.java
+    ).setupViewModel(this)
+}
