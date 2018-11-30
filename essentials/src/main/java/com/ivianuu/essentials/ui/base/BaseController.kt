@@ -81,14 +81,15 @@ abstract class BaseController : LifecycleController(), ContextAware, HasInjector
     override fun onBindView(view: View, savedViewState: Bundle?) {
         super.onBindView(view, savedViewState)
         _viewCoroutineScope = unbindView.asMainCoroutineScope()
-
-        if (savedViewState == null) {
-            invalidate()
-        }
     }
 
     override fun onRestoreViewState(view: View, savedViewState: Bundle) {
         super.onRestoreViewState(view, savedViewState)
+        invalidate()
+    }
+
+    override fun onAttach(view: View) {
+        super.onAttach(view)
         invalidate()
     }
 
