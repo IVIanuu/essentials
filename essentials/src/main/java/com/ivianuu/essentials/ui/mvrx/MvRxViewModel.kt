@@ -2,6 +2,7 @@ package com.ivianuu.essentials.ui.mvrx
 
 import androidx.lifecycle.LifecycleOwner
 import com.ivianuu.essentials.ui.common.BaseViewModel
+import com.ivianuu.essentials.ui.common.scope
 import com.ivianuu.essentials.util.ext.closeBy
 import com.ivianuu.scopes.rx.disposeBy
 import com.ivianuu.statestore.StateStore
