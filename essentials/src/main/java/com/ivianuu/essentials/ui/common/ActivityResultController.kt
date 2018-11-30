@@ -11,19 +11,16 @@ import com.ivianuu.essentials.ui.base.BaseController
 import com.ivianuu.essentials.ui.traveler.NavOptions
 import com.ivianuu.essentials.ui.traveler.dialog
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
-import com.ivianuu.essentials.ui.traveler.key.ResultKey
 import com.ivianuu.essentials.ui.traveler.key.bindKey
-import com.ivianuu.essentials.util.RequestCodeGenerator
 import com.ivianuu.traveler.result.goBackWithResult
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class ActivityResultKey(
-    override val resultCode: Int,
+    val resultCode: Int,
     val intent: Intent,
-    val requestCode: Int = RequestCodeGenerator.generate()
-) : ControllerKey(ActivityResultController::class, NavOptions().dialog()),
-    ResultKey<ActivityResult>
+    val requestCode: Int
+) : ControllerKey(ActivityResultController::class, NavOptions().dialog())
 
 /**
  * Activity result controller

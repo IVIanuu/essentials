@@ -25,9 +25,7 @@ import com.ivianuu.essentials.ui.base.BaseDialogController
 import com.ivianuu.essentials.ui.traveler.NavOptions
 import com.ivianuu.essentials.ui.traveler.dialog
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
-import com.ivianuu.essentials.ui.traveler.key.ResultKey
 import com.ivianuu.essentials.ui.traveler.key.key
-import com.ivianuu.essentials.util.RequestCodeGenerator
 import com.ivianuu.traveler.goBack
 import com.ivianuu.traveler.result.goBackWithResult
 import kotlinx.android.parcel.Parcelize
@@ -39,8 +37,8 @@ data class TextInputKey(
     val inputType: Int = -1,
     val prefill: String = "",
     val allowEmptyInput: Boolean = false,
-    override var resultCode: Int = RequestCodeGenerator.generate()
-) : ControllerKey(TextInputDialog::class, NavOptions().dialog()), ResultKey<String>
+    val resultCode: Int
+) : ControllerKey(TextInputDialog::class, NavOptions().dialog())
 
 /**
  * Text input dialog

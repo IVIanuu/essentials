@@ -24,9 +24,7 @@ import com.ivianuu.essentials.ui.base.BaseDialogController
 import com.ivianuu.essentials.ui.traveler.NavOptions
 import com.ivianuu.essentials.ui.traveler.dialog
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
-import com.ivianuu.essentials.ui.traveler.key.ResultKey
 import com.ivianuu.essentials.ui.traveler.key.bindKey
-import com.ivianuu.essentials.util.RequestCodeGenerator
 import com.ivianuu.traveler.result.goBackWithResult
 import kotlinx.android.parcel.Parcelize
 
@@ -36,13 +34,13 @@ data class ColorPickerKey(
     val preselect: Int = 0,
     val allowCustomArgb: Boolean = true,
     val showAlphaSelector: Boolean = false,
-    override val resultCode: Int = RequestCodeGenerator.generate()
-) : ControllerKey(ColorPickerController::class, NavOptions().dialog()), ResultKey<Int>
+    val resultCode: Int
+) : ControllerKey(ColorPickerDialog::class, NavOptions().dialog())
 
 /**
  * Color picker controller
  */
-class ColorPickerController : BaseDialogController() {
+class ColorPickerDialog : BaseDialogController() {
 
     private val key by bindKey<ColorPickerKey>()
 

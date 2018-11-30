@@ -24,9 +24,7 @@ import com.ivianuu.essentials.ui.base.BaseDialogController
 import com.ivianuu.essentials.ui.traveler.NavOptions
 import com.ivianuu.essentials.ui.traveler.dialog
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
-import com.ivianuu.essentials.ui.traveler.key.ResultKey
 import com.ivianuu.essentials.ui.traveler.key.key
-import com.ivianuu.essentials.util.RequestCodeGenerator
 import com.ivianuu.essentials.util.string
 import com.ivianuu.traveler.goBack
 import com.ivianuu.traveler.result.goBackWithResult
@@ -38,8 +36,8 @@ import javax.inject.Inject
 data class AppPickerKey(
     val title: String? = null,
     val launchableOnly: Boolean = false,
-    override val resultCode: Int = RequestCodeGenerator.generate()
-) : ControllerKey(AppPickerDialog::class, NavOptions().dialog()), ResultKey<AppInfo>
+    val resultCode: Int
+) : ControllerKey(AppPickerDialog::class, NavOptions().dialog())
 
 /**
  * App picker

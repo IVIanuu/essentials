@@ -25,10 +25,8 @@ import com.ivianuu.essentials.ui.base.BaseDialogController
 import com.ivianuu.essentials.ui.traveler.NavOptions
 import com.ivianuu.essentials.ui.traveler.dialog
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
-import com.ivianuu.essentials.ui.traveler.key.ResultKey
 import com.ivianuu.essentials.ui.traveler.key.bindKey
 import com.ivianuu.essentials.ui.traveler.vertical
-import com.ivianuu.essentials.util.RequestCodeGenerator
 import com.ivianuu.essentials.util.ext.toast
 import com.ivianuu.traveler.navigate
 import com.ivianuu.traveler.result.goBackWithResult
@@ -39,8 +37,8 @@ import javax.inject.Inject
 
 @Parcelize
 class SecureSettingsKey(
-    override val resultCode: Int = RequestCodeGenerator.generate()
-) : ControllerKey(SecureSettingsDialog::class, NavOptions().dialog()), ResultKey<Boolean>
+    val resultCode: Int
+) : ControllerKey(SecureSettingsDialog::class, NavOptions().dialog())
 
 /**
  * @author Manuel Wrage (IVIanuu)

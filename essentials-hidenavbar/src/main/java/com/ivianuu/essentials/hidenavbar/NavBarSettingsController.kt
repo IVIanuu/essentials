@@ -30,6 +30,7 @@ import com.ivianuu.essentials.ui.traveler.key.key
 import com.ivianuu.traveler.navigate
 import kotlinx.android.parcel.Parcelize
 import javax.inject.Inject
+import kotlin.random.Random
 
 @Parcelize
 class NavBarSettingsKey(
@@ -63,7 +64,7 @@ class NavBarSettingsController : PrefsController() {
                     if (activity.canWriteSecureSettings() || !newValue) {
                         true
                     } else if (newValue) {
-                        travelerRouter.navigate(SecureSettingsKey())
+                        travelerRouter.navigate(SecureSettingsKey(Random(Int.MAX_VALUE).nextInt()))
                         false
                     } else {
                         true

@@ -28,7 +28,7 @@ abstract class EssentialsPickerModule {
 
     @PerController
     @ContributesInjector
-    abstract fun bindColorPickerController(): ColorPickerController
+    abstract fun bindColorPickerController(): ColorPickerDialog
 
     @PerController
     @ContributesInjector
