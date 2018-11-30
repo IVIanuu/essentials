@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-
-
 package com.ivianuu.essentials.util.ext
 
 import com.ivianuu.ktuples.Nonuple

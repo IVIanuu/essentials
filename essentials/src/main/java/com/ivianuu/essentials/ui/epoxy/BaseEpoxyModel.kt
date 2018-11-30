@@ -22,6 +22,7 @@ import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelWithHolder
 import com.ivianuu.essentials.util.ContextAware
 import com.ivianuu.scopes.ReusableScope
+import com.ivianuu.scopes.Scope
 import kotlinx.android.extensions.LayoutContainer
 
 /**
@@ -47,12 +48,17 @@ abstract class BaseEpoxyModel<H : BaseEpoxyHolder> : EpoxyModelWithHolder<H>(), 
 
     private var _boundHolder: H? = null
 
-    protected val scope get() = _scope
-    private val _scope = ReusableScope()
+    val scope: Scope
+        get() {
+            if (_scope == null) _scope = ReusableScope()
+            return _scope!!
+        }
+
+    private var _scope: ReusableScope? = null
 
     @CallSuper
     override fun bind(holder: H) {
-        _scope.clear()
+        _scope?.clear()
         _boundHolder = holder
         super.bind(holder)
 
@@ -83,7 +89,7 @@ abstract class BaseEpoxyModel<H : BaseEpoxyHolder> : EpoxyModelWithHolder<H>(), 
             holder.containerView.setOnLongClickListener(null)
         }
 
-        _scope.clear()
+        _scope?.clear()
         _boundHolder = null
 
         super.unbind(holder)
