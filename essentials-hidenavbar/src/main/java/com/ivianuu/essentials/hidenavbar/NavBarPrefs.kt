@@ -33,4 +33,6 @@ class NavBarPrefs @Inject constructor(
     val rot270Fix = prefs.boolean("rot270_fix")
     val showNavBarScreenOff = prefs.boolean("show_nav_bar_screen_off", true)
     val tabletMode = prefs.boolean("tablet_mode")
+
+    internal val wasNavBarHidden = prefs.boolean("was_nav_bar_hidden")
 }

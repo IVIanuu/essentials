@@ -100,8 +100,13 @@ import javax.inject.Singleton
                 }
                 .disposeBy(enabledScope)
         } else {
-            // force showing the nav bar
-            updateNavBarState(true)
+            // only force the nav bar to be shown if it was hidden by us
+            if (prefs.wasNavBarHidden.isSet && prefs.wasNavBarHidden.get()) {
+                // force showing the nav bar
+                updateNavBarState(true)
+            }
+
+            prefs.wasNavBarHidden.delete()
         }
     }
 
@@ -131,6 +136,7 @@ import javax.inject.Singleton
                 getNavigationBarHeight() - (if (prefs.fullOverscan.get()) 0 else OVERSCAN_LEFT_PIXELS)
             val rect = getOverscanRect(if (hide) navBarHeight else 0)
             overscanHelper.setDisplayOverScan(rect)
+            prefs.wasNavBarHidden.set(hide)
         } catch (e: Exception) {
             e.printStackTrace()
             if (!failQuiet) {
