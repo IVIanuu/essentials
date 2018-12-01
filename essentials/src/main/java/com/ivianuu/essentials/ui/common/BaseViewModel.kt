@@ -24,7 +24,7 @@ import com.ivianuu.essentials.util.asMainCoroutineScope
  */
 abstract class BaseViewModel : ViewModel() {
 
-    val coroutineScope = scope.asMainCoroutineScope()
+    val coroutineScope by lazy { scope.asMainCoroutineScope() }
 
     private val clearedListeners = mutableListOf<(() -> Unit)>()
 
