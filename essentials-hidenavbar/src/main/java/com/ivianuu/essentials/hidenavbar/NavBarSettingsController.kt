@@ -18,6 +18,7 @@ package com.ivianuu.essentials.hidenavbar
 
 import android.content.SharedPreferences
 import android.os.Bundle
+import com.ivianuu.director.scopes.destroy
 import com.ivianuu.epoxyktx.epoxyController
 import com.ivianuu.epoxyprefs.onChange
 import com.ivianuu.epoxyprefs.summary
@@ -26,15 +27,17 @@ import com.ivianuu.essentials.securesettings.SecureSettingsKey
 import com.ivianuu.essentials.securesettings.canWriteSecureSettings
 import com.ivianuu.essentials.ui.prefs.PrefsController
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
-import com.ivianuu.essentials.ui.traveler.key.key
+import com.ivianuu.essentials.ui.traveler.key.bindKey
+import com.ivianuu.essentials.util.ext.results
+import com.ivianuu.scopes.rx.disposeBy
 import com.ivianuu.traveler.navigate
 import kotlinx.android.parcel.Parcelize
 import javax.inject.Inject
-import kotlin.random.Random
 
 @Parcelize
 class NavBarSettingsKey(
-    val showHideNavBarSetting: Boolean
+    val showMainSwitch: Boolean,
+    val showNavBarHidden: Boolean
 ) : ControllerKey(NavBarSettingsController::class)
 
 /**
@@ -48,23 +51,34 @@ class NavBarSettingsController : PrefsController() {
     override val toolbarTitleRes: Int
         get() = R.string.screen_label_nav_bar_settings
 
+    private val key by bindKey<NavBarSettingsKey>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         sharedPreferences = navBarSharedPrefs // todo ugly
+
+        travelerRouter.results<Boolean>(RESULT_CODE_MAIN_SWITCH)
+            .filter { it }
+            .subscribe { prefs.manageNavBar.set(true) }
+            .disposeBy(destroy)
+
+        travelerRouter.results<Boolean>(RESULT_CODE_NAV_BAR_HIDDEN)
+            .filter { it }
+            .subscribe { prefs.navBarHidden.set(true) }
+            .disposeBy(destroy)
     }
 
     override fun epoxyController() = epoxyController {
-        if (key<NavBarSettingsKey>().showHideNavBarSetting) {
+        if (key.showMainSwitch) {
             switchPreference {
                 sharedPreferences(navBarSharedPrefs)
-                key("hide_nav_bar_enabled")
-                summary(R.string.pref_summary_hide_nav_bar_enabled)
-                title(R.string.pref_title_hide_nav_bar_enabled)
+                key("manage_nav_bar")
+                title(R.string.pref_title_manage_nav_bar)
                 onChange<Boolean> { _, newValue ->
                     if (activity.canWriteSecureSettings() || !newValue) {
                         true
                     } else if (newValue) {
-                        travelerRouter.navigate(SecureSettingsKey(Random(Int.MAX_VALUE).nextInt()))
+                        travelerRouter.navigate(SecureSettingsKey(RESULT_CODE_MAIN_SWITCH))
                         false
                     } else {
                         true
@@ -73,14 +87,34 @@ class NavBarSettingsController : PrefsController() {
             }
         }
 
-        val settingsEnabled = prefs.hideNavBarEnabled.get()
+        val mainSwitchEnabled = prefs.manageNavBar.get()
+
+        if (key.showNavBarHidden) {
+            switchPreference {
+                sharedPreferences(navBarSharedPrefs)
+                key("nav_bar_hidden")
+                summary(R.string.pref_summary_nav_bar_hidden)
+                title(R.string.pref_title_nav_bar_hidden)
+                enabled(mainSwitchEnabled)
+                onChange<Boolean> { _, newValue ->
+                    if (activity.canWriteSecureSettings() || !newValue) {
+                        true
+                    } else if (newValue) {
+                        travelerRouter.navigate(SecureSettingsKey(RESULT_CODE_NAV_BAR_HIDDEN))
+                        false
+                    } else {
+                        true
+                    }
+                }
+            }
+        }
 
         checkboxPreference {
             sharedPreferences(navBarSharedPrefs)
             key("rot270_fix")
             summary(R.string.pref_summary_rot270_fix)
             title(R.string.pref_title_rot270_fix)
-            enabled(settingsEnabled && !prefs.tabletMode.get())
+            enabled(mainSwitchEnabled && !prefs.tabletMode.get())
         }
 
         checkboxPreference {
@@ -88,7 +122,7 @@ class NavBarSettingsController : PrefsController() {
             key("tablet_mode")
             summary(R.string.pref_summary_tablet_mode)
             title(R.string.pref_title_tablet_mode)
-            enabled(settingsEnabled && !prefs.rot270Fix.get())
+            enabled(mainSwitchEnabled && !prefs.rot270Fix.get())
         }
 
         checkboxPreference {
@@ -97,7 +131,7 @@ class NavBarSettingsController : PrefsController() {
             defaultValue(true)
             summary(R.string.pref_summary_show_nav_bar_screen_off)
             title(R.string.pref_title_show_nav_bar_screen_off)
-            enabled(settingsEnabled)
+            enabled(mainSwitchEnabled)
         }
 
         checkboxPreference {
@@ -105,8 +139,12 @@ class NavBarSettingsController : PrefsController() {
             key("full_overscan")
             summary(R.string.pref_summary_full_overscan)
             title(R.string.pref_title_full_overscan)
-            enabled(settingsEnabled)
+            enabled(mainSwitchEnabled)
         }
     }
 
+    private companion object {
+        private const val RESULT_CODE_MAIN_SWITCH = 1234
+        private const val RESULT_CODE_NAV_BAR_HIDDEN = 12345
+    }
 }

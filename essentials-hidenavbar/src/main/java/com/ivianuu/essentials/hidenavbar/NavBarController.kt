@@ -35,6 +35,8 @@ import com.ivianuu.kommon.core.content.isScreenOff
 import com.ivianuu.kommon.core.content.rotation
 import com.ivianuu.kprefs.rx.observable
 import com.ivianuu.rxjavaktx.observable
+import com.ivianuu.scopes.ReusableScope
+import com.ivianuu.scopes.rx.disposeBy
 import com.ivianuu.timberktx.d
 import io.reactivex.rxkotlin.Observables
 import javax.inject.Inject
@@ -51,39 +53,56 @@ import javax.inject.Singleton
     private val overscanHelper: OverscanHelper
 ) : AppService {
 
+    private val enabledScope = ReusableScope()
+
     @SuppressLint("CheckResult")
     override fun start() {
-        Observables
-            .combineLatest(
-                prefs.hideNavBarEnabled.observable,
-                prefs.fullOverscan.observable,
-                prefs.rot270Fix.observable,
-                prefs.tabletMode.observable,
-                configChanges().startWith(Unit),
-                rotationChanges().startWith(app.rotation)
+        prefs.manageNavBar.observable
+            .subscribe { updateEnabledState(it) }
+    }
+
+    private fun updateEnabledState(enabled: Boolean) {
+        enabledScope.clear()
+
+        if (enabled) {
+            Observables
+                .combineLatest(
+                    prefs.navBarHidden.observable,
+                    prefs.fullOverscan.observable,
+                    prefs.rot270Fix.observable,
+                    prefs.tabletMode.observable,
+                    configChanges().startWith(Unit),
+                    rotationChanges().startWith(app.rotation)
+                )
+                .observeOn(rxMain)
+                .subscribe { updateNavBarState(false) }
+                .disposeBy(enabledScope)
+
+            broadcastFactory.create(
+                Intent.ACTION_SCREEN_OFF,
+                Intent.ACTION_SCREEN_ON,
+                Intent.ACTION_USER_PRESENT
             )
-            .observeOn(rxMain)
-            .subscribe { updateNavBarState(false) }
+                .map { Unit }
+                .startWith(Unit)
+                .filter { prefs.showNavBarScreenOff.get() }
+                .map { keyguardManager.isKeyguardLocked || app.isScreenOff }
+                .subscribe {
+                    d { "on screen state changed $it" }
+                    updateNavBarState(it)
+                }
+                .disposeBy(enabledScope)
 
-        broadcastFactory.create(
-            Intent.ACTION_SCREEN_OFF,
-            Intent.ACTION_SCREEN_ON,
-            Intent.ACTION_USER_PRESENT
-        )
-            .map { Unit }
-            .startWith(Unit)
-            .filter { prefs.showNavBarScreenOff.get() }
-            .map { keyguardManager.isKeyguardLocked || app.isScreenOff }
-            .subscribe {
-                d { "on screen state changed $it" }
-                updateNavBarState(it)
-            }
-
-        broadcastFactory.create(Intent.ACTION_SHUTDOWN)
-            .subscribe {
-                d { "force show because of reboot" }
-                updateNavBarState(true)
-            }
+            broadcastFactory.create(Intent.ACTION_SHUTDOWN)
+                .subscribe {
+                    d { "force show because of reboot" }
+                    updateNavBarState(true)
+                }
+                .disposeBy(enabledScope)
+        } else {
+            // force showing the nav bar
+            updateNavBarState(true)
+        }
     }
 
     private fun updateNavBarState(
@@ -93,7 +112,7 @@ import javax.inject.Singleton
         if (forceShow) {
             updateNavBarStateInternal(false)
         } else {
-            val shouldHide = prefs.hideNavBarEnabled.get()
+            val shouldHide = prefs.navBarHidden.get()
             updateNavBarStateInternal(shouldHide)
         }
     }

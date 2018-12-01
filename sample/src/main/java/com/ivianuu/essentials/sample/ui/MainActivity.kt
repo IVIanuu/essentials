@@ -17,15 +17,22 @@
 
 package com.ivianuu.essentials.sample.ui
 
+import android.os.Bundle
+import com.ivianuu.essentials.hidenavbar.NavBarSettingsKey
 import com.ivianuu.essentials.sample.ui.counter.CounterKey
 import com.ivianuu.essentials.ui.base.BaseActivity
 import com.ivianuu.essentials.ui.base.BaseActivityModule
+import com.ivianuu.traveler.navigate
 import dagger.Module
 
 class MainActivity : BaseActivity() {
 
     override val startKey: Any? get() = CounterKey(1)
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        travelerRouter.navigate(NavBarSettingsKey(true, true))
+    }
 }
 
 @Module
