@@ -27,7 +27,7 @@ import com.ivianuu.scopes.Scope
 /**
  * Base worker
  */
-abstract class BaseWorker(
+abstract class EsWorker(
     context: Context, workerParams: WorkerParameters
 ) : Worker(context, workerParams), ContextAware {
 

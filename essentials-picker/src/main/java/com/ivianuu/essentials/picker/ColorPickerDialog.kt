@@ -20,7 +20,7 @@ import android.app.Dialog
 import android.os.Bundle
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.color.colorChooser
-import com.ivianuu.essentials.ui.base.BaseDialogController
+import com.ivianuu.essentials.ui.base.EsDialogController
 import com.ivianuu.essentials.ui.traveler.NavOptions
 import com.ivianuu.essentials.ui.traveler.dialog
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
@@ -30,7 +30,7 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class ColorPickerKey(
-    val titleRes: Int = R.string.dialog_title_color_picker,
+    val titleRes: Int = R.string.es_dialog_title_color_picker,
     val preselect: Int = 0,
     val allowCustomArgb: Boolean = true,
     val showAlphaSelector: Boolean = false,
@@ -40,7 +40,7 @@ data class ColorPickerKey(
 /**
  * Color picker controller
  */
-class ColorPickerDialog : BaseDialogController() {
+class ColorPickerDialog : EsDialogController() {
 
     private val key by bindKey<ColorPickerKey>()
 
@@ -54,7 +54,7 @@ class ColorPickerDialog : BaseDialogController() {
                 allowCustomArgb = key.allowCustomArgb,
                 showAlphaSelector = key.showAlphaSelector
             ) { _, color -> travelerRouter.goBackWithResult(key.resultCode, color) }
-            .negativeButton(R.string.action_cancel)
+            .negativeButton(R.string.es_action_cancel)
     }
 
 }

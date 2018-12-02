@@ -11,7 +11,7 @@ import com.ivianuu.scopes.Scope
 /**
  * Base service
  */
-abstract class BaseService : Service() {
+abstract class EsService : Service() {
 
     val scope: Scope get() = _scope
     private val _scope = MutableScope()

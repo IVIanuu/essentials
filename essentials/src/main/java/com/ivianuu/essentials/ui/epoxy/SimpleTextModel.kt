@@ -3,7 +3,7 @@ package com.ivianuu.essentials.ui.epoxy
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import com.ivianuu.essentials.R2
-import kotlinx.android.synthetic.main.item_simple_text.*
+import kotlinx.android.synthetic.main.item_simple_text.text
 
 /**
  * Simple text model
@@ -14,7 +14,7 @@ abstract class SimpleTextModel : SimpleEpoxyModel() {
     @EpoxyAttribute var text = ""
     @EpoxyAttribute var textRes = 0
 
-    override fun bind(holder: BaseEpoxyHolder) {
+    override fun bind(holder: EsEpoxyHolder) {
         super.bind(holder)
 
         when {

@@ -40,62 +40,62 @@ class SecureSettingsInstructionsController : PrefsController() {
     @Inject lateinit var clipboardManager: ClipboardManager
 
     override val toolbarTitleRes: Int
-        get() = R.string.screen_label_secure_settings_instructions
+        get() = R.string.es_screen_label_secure_settings_instructions
 
     override fun epoxyController() = epoxyController {
         preference {
             key("secure_settings_header")
-            summary(R.string.pref_summary_secure_settings_header)
+            summary(R.string.es_pref_summary_secure_settings_header)
         }
 
         preference {
             key("secure_settings_step_1")
-            title(R.string.pref_title_secure_settings_step_1)
-            summary(R.string.pref_summary_secure_settings_step_1)
+            title(R.string.es_pref_title_secure_settings_step_1)
+            summary(R.string.es_pref_summary_secure_settings_step_1)
             clickable(false)
         }
 
         preference {
             key("secure_settings_step_two")
-            title(R.string.pref_title_secure_settings_step_2)
-            summary(R.string.pref_summary_secure_settings_step_2)
+            title(R.string.es_pref_title_secure_settings_step_2)
+            summary(R.string.es_pref_summary_secure_settings_step_2)
             clickable(false)
         }
 
         preference {
             key("secure_settings_step_3")
-            title(R.string.pref_title_secure_settings_step_3)
+            title(R.string.es_pref_title_secure_settings_step_3)
         }
 
         preference {
             key("secure_settings_link_gadget_hacks")
             icon(R.drawable.ic_link)
-            summary(R.string.pref_summary_secure_settings_link_gadget_hacks)
+            summary(R.string.es_pref_summary_secure_settings_link_gadget_hacks)
             onClickUrl { "https://youtu.be/CDuxcrrWLnY" }
         }
 
         preference {
             key("secure_settings_link_lifehacker")
             icon(R.drawable.ic_link)
-            summary(R.string.pref_summary_secure_settings_link_lifehacker)
+            summary(R.string.es_pref_summary_secure_settings_link_lifehacker)
             onClickUrl { "https://lifehacker.com/the-easiest-way-to-install-androids-adb-and-fastboot-to-1586992378" }
         }
 
         preference {
             key("secure_settings_link_xda")
             icon(R.drawable.ic_link)
-            summary(R.string.pref_summary_secure_settings_link_xda)
+            summary(R.string.es_pref_summary_secure_settings_link_xda)
             onClickUrl { "https://www.xda-developers.com/install-adb-windows-macos-linux/" }
         }
 
         preference {
             key("secure_settings_step_4")
-            title(R.string.pref_title_secure_settings_step_4)
-            summary(string(R.string.pref_summary_secure_settings_step_4, activity.packageName))
+            title(R.string.es_pref_title_secure_settings_step_4)
+            summary(string(R.string.es_pref_summary_secure_settings_step_4, activity.packageName))
             onClick {
                 clipboardManager.text =
                         "adb shell pm grant ${activity.packageName} android.permission.WRITE_SECURE_SETTINGS"
-                toast(R.string.msg_secure_settings_copied_to_clipboard)
+                toast(R.string.es_msg_secure_settings_copied_to_clipboard)
                 true
             }
         }

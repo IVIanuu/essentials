@@ -14,24 +14,23 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.securesettings
+package com.ivianuu.essentials.ui.epoxy
 
-import com.ivianuu.essentials.injection.PerController
-import com.ivianuu.injectors.ContributesInjector
-import dagger.Module
+import android.content.Context
+import android.view.View
+import com.ivianuu.epoxyktx.KtEpoxyHolder
+import com.ivianuu.essentials.util.ContextAware
 
 /**
- * Essentials secure settings module
+ * Base epoxy holder
  */
-@Module(includes = [EssentialsSecureSettingsModule_Contributions::class])
-abstract class EssentialsSecureSettingsModule {
+open class EsEpoxyHolder : KtEpoxyHolder(), ContextAware {
 
-    @PerController
-    @ContributesInjector
-    abstract fun bindSecureSettingsDialog(): SecureSettingsDialog
+    override lateinit var providedContext: Context
 
-    @PerController
-    @ContributesInjector
-    abstract fun bindSecureSettingsInstructionsController(): SecureSettingsInstructionsController
+    override fun bindView(itemView: View) {
+        super.bindView(itemView)
+        providedContext = itemView.context
+    }
 
 }

@@ -1,10 +1,10 @@
 package com.ivianuu.essentials.sample.injection
 
-import com.ivianuu.essentials.hidenavbar.EssentialsNavBarBindingModule
+import com.ivianuu.essentials.hidenavbar.EsNavBarBindingModule
 import com.ivianuu.essentials.injection.PerActivity
 import com.ivianuu.essentials.sample.ui.MainActivity
 import com.ivianuu.essentials.sample.ui.MainActivityModule
-import com.ivianuu.essentials.securesettings.EssentialsSecureSettingsModule
+import com.ivianuu.essentials.securesettings.EsSecureSettingsModule
 import com.ivianuu.injectors.ContributesInjector
 import dagger.Module
 
@@ -19,8 +19,8 @@ abstract class ActivityBindingModule {
         modules = [
             MainActivityModule::class,
             ControllerBindingModule::class,
-            EssentialsSecureSettingsModule::class,
-            EssentialsNavBarBindingModule::class
+            EsSecureSettingsModule::class,
+            EsNavBarBindingModule::class
         ]
     )
     abstract fun bindMainActivity(): MainActivity

@@ -16,11 +16,18 @@
 
 package com.ivianuu.essentials.sample.app
 
-import com.ivianuu.essentials.app.BaseAppModule
+import com.ivianuu.essentials.app.EsApp
+import com.ivianuu.essentials.app.EsAppModule
+import dagger.Binds
 import dagger.Module
 
 /**
  * @author Manuel Wrage (IVIanuu)
  */
-@Module
-abstract class AppModule : BaseAppModule<App>()
+@Module(includes = [EsAppModule::class])
+abstract class AppModule {
+
+    @Binds
+    abstract fun bindApplication(app: App): EsApp
+
+}

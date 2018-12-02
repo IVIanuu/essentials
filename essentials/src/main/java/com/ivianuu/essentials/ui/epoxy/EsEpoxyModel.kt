@@ -28,7 +28,7 @@ import kotlinx.android.extensions.LayoutContainer
 /**
  * Base epoxy model with holder
  */
-abstract class BaseEpoxyModel<H : BaseEpoxyHolder> : EpoxyModelWithHolder<H>(), ContextAware,
+abstract class EsEpoxyModel<H : EsEpoxyHolder> : EpoxyModelWithHolder<H>(), ContextAware,
     LayoutContainer {
 
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var onClick: ((View) -> Unit)? = null

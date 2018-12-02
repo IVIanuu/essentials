@@ -23,7 +23,7 @@ import android.preference.PreferenceManager
 /**
  * @author Manuel Wrage (IVIanuu)
  */
-object EssentialsPreferenceManager {
+object EsPreferenceManager {
 
     private var defaultSharedPreferences: SharedPreferences? = null
 

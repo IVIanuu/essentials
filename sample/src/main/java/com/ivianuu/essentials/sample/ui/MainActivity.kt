@@ -20,12 +20,13 @@ package com.ivianuu.essentials.sample.ui
 import android.os.Bundle
 import com.ivianuu.essentials.hidenavbar.NavBarSettingsKey
 import com.ivianuu.essentials.sample.ui.counter.CounterKey
-import com.ivianuu.essentials.ui.base.BaseActivity
-import com.ivianuu.essentials.ui.base.BaseActivityModule
+import com.ivianuu.essentials.ui.base.EsActivity
+import com.ivianuu.essentials.ui.base.EsActivityModule
 import com.ivianuu.traveler.navigate
+import dagger.Binds
 import dagger.Module
 
-class MainActivity : BaseActivity() {
+class MainActivity : EsActivity() {
 
     override val startKey: Any? get() = CounterKey(1)
 
@@ -35,5 +36,10 @@ class MainActivity : BaseActivity() {
     }
 }
 
-@Module
-abstract class MainActivityModule : BaseActivityModule<MainActivity>()
+@Module(includes = [EsActivityModule::class])
+abstract class MainActivityModule {
+
+    @Binds
+    abstract fun bindEsActivity(mainActivity: MainActivity): EsActivity
+
+}

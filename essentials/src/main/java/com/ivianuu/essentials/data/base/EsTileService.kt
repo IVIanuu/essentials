@@ -13,7 +13,7 @@ import com.ivianuu.scopes.Scope
  * Base tile service
  */
 @TargetApi(Build.VERSION_CODES.N)
-abstract class BaseTileService : TileService() {
+abstract class EsTileService : TileService() {
 
     val scope: Scope get() = _scope
     private val _scope = MutableScope()

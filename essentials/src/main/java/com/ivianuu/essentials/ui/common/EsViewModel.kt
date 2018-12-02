@@ -22,7 +22,7 @@ import com.ivianuu.essentials.util.asMainCoroutineScope
 /**
  * A [ViewModel] which auto disposes itself
  */
-abstract class BaseViewModel : ViewModel() {
+abstract class EsViewModel : ViewModel() {
 
     val coroutineScope by lazy { scope.asMainCoroutineScope() }
 

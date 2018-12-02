@@ -20,7 +20,7 @@ import android.app.Dialog
 import android.os.Bundle
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.list.listItems
-import com.ivianuu.essentials.ui.base.BaseDialogController
+import com.ivianuu.essentials.ui.base.EsDialogController
 import com.ivianuu.essentials.ui.traveler.NavOptions
 import com.ivianuu.essentials.ui.traveler.dialog
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
@@ -42,7 +42,7 @@ data class AppPickerKey(
 /**
  * App picker
  */
-class AppPickerDialog : BaseDialogController() {
+class AppPickerDialog : EsDialogController() {
 
     @Inject lateinit var appStore: AppStore
 
@@ -52,8 +52,8 @@ class AppPickerDialog : BaseDialogController() {
         val key = key<AppPickerKey>()
 
         val dialog = MaterialDialog(activity)
-            .title(text = key.title ?: string(R.string.dialog_title_app_picker))
-            .negativeButton(R.string.action_cancel) { travelerRouter.goBack() }
+            .title(text = key.title ?: string(R.string.es_dialog_title_app_picker))
+            .negativeButton(R.string.es_action_cancel) { travelerRouter.goBack() }
             .noAutoDismiss()
 
         coroutineScope.launch {

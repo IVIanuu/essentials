@@ -49,7 +49,7 @@ class NavBarSettingsController : PrefsController() {
     @field:NavBarSharedPrefs @Inject lateinit var navBarSharedPrefs: SharedPreferences
 
     override val toolbarTitleRes: Int
-        get() = R.string.screen_label_nav_bar_settings
+        get() = R.string.es_screen_label_nav_bar_settings
 
     private val key by bindKey<NavBarSettingsKey>()
 
@@ -73,7 +73,7 @@ class NavBarSettingsController : PrefsController() {
             switchPreference {
                 sharedPreferences(navBarSharedPrefs)
                 key("manage_nav_bar")
-                title(R.string.pref_title_manage_nav_bar)
+                title(R.string.es_pref_title_manage_nav_bar)
                 onChange<Boolean> { _, newValue ->
                     if (activity.canWriteSecureSettings() || !newValue) {
                         true
@@ -93,8 +93,8 @@ class NavBarSettingsController : PrefsController() {
             switchPreference {
                 sharedPreferences(navBarSharedPrefs)
                 key("nav_bar_hidden")
-                summary(R.string.pref_summary_nav_bar_hidden)
-                title(R.string.pref_title_nav_bar_hidden)
+                summary(R.string.es_pref_summary_nav_bar_hidden)
+                title(R.string.es_pref_title_nav_bar_hidden)
                 enabled(mainSwitchEnabled)
                 onChange<Boolean> { _, newValue ->
                     if (activity.canWriteSecureSettings() || !newValue) {
@@ -112,16 +112,16 @@ class NavBarSettingsController : PrefsController() {
         checkboxPreference {
             sharedPreferences(navBarSharedPrefs)
             key("rot270_fix")
-            summary(R.string.pref_summary_rot270_fix)
-            title(R.string.pref_title_rot270_fix)
+            summary(R.string.es_pref_summary_rot270_fix)
+            title(R.string.es_pref_title_rot270_fix)
             enabled(mainSwitchEnabled && !prefs.tabletMode.get())
         }
 
         checkboxPreference {
             sharedPreferences(navBarSharedPrefs)
             key("tablet_mode")
-            summary(R.string.pref_summary_tablet_mode)
-            title(R.string.pref_title_tablet_mode)
+            summary(R.string.es_pref_summary_tablet_mode)
+            title(R.string.es_pref_title_tablet_mode)
             enabled(mainSwitchEnabled && !prefs.rot270Fix.get())
         }
 
@@ -129,16 +129,16 @@ class NavBarSettingsController : PrefsController() {
             sharedPreferences(navBarSharedPrefs)
             key("show_nav_bar_screen_off")
             defaultValue(true)
-            summary(R.string.pref_summary_show_nav_bar_screen_off)
-            title(R.string.pref_title_show_nav_bar_screen_off)
+            summary(R.string.es_pref_summary_show_nav_bar_screen_off)
+            title(R.string.es_pref_title_show_nav_bar_screen_off)
             enabled(mainSwitchEnabled)
         }
 
         checkboxPreference {
             sharedPreferences(navBarSharedPrefs)
             key("full_overscan")
-            summary(R.string.pref_summary_full_overscan)
-            title(R.string.pref_title_full_overscan)
+            summary(R.string.es_pref_summary_full_overscan)
+            title(R.string.es_pref_title_full_overscan)
             enabled(mainSwitchEnabled)
         }
     }

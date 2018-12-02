@@ -16,15 +16,15 @@
 
 package com.ivianuu.essentials.sample.app
 
-import com.ivianuu.essentials.app.BaseApp
+import com.ivianuu.essentials.app.EsApp
 import com.ivianuu.injectors.Injector
 
 /**
  * App
  */
-class App : BaseApp() {
+class App : EsApp() {
 
-    override fun applicationInjector(): Injector<out BaseApp> =
+    override fun applicationInjector(): Injector<out EsApp> =
         DaggerAppComponent.builder().create(this)
 
 }

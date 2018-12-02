@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.ivianuu.director.requestPermissions
-import com.ivianuu.essentials.ui.base.BaseController
+import com.ivianuu.essentials.ui.base.EsController
 import com.ivianuu.essentials.ui.traveler.NavOptions
 import com.ivianuu.essentials.ui.traveler.dialog
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
@@ -25,7 +25,7 @@ data class PermissionRequestKey(
 /**
  * Permission request controller
  */
-class PermissionRequestController : BaseController() {
+class PermissionRequestController : EsController() {
 
     private val key by bindKey<PermissionRequestKey>()
 

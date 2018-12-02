@@ -4,7 +4,7 @@ import android.view.MenuItem
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import com.ivianuu.essentials.sample.R
-import com.ivianuu.essentials.ui.epoxy.BaseEpoxyHolder
+import com.ivianuu.essentials.ui.epoxy.EsEpoxyHolder
 import com.ivianuu.essentials.ui.epoxy.SimpleEpoxyModel
 import com.ivianuu.essentials.ui.epoxy.simpleLoading
 import com.ivianuu.essentials.ui.epoxy.simpleText
@@ -70,7 +70,7 @@ abstract class SingleLineListItemModel : SimpleEpoxyModel() {
 
     @EpoxyAttribute lateinit var title: String
 
-    override fun bind(holder: BaseEpoxyHolder) {
+    override fun bind(holder: EsEpoxyHolder) {
         super.bind(holder)
         holder.title.text = title
     }

@@ -27,7 +27,7 @@ import com.airbnb.epoxy.EpoxyController
 import com.airbnb.epoxy.EpoxyRecyclerView
 import com.google.android.material.appbar.AppBarLayout
 import com.ivianuu.essentials.R
-import com.ivianuu.essentials.ui.base.BaseController
+import com.ivianuu.essentials.ui.base.EsController
 import com.ivianuu.essentials.util.ext.iconColor
 import com.ivianuu.essentials.util.ext.isLight
 import com.ivianuu.essentials.util.ext.primaryColor
@@ -39,7 +39,7 @@ import com.ivianuu.traveler.goBack
 /**
  * Simple controller
  */
-abstract class SimpleController : BaseController() {
+abstract class SimpleController : EsController() {
 
     override val layoutRes get() = R.layout.controller_simple
 

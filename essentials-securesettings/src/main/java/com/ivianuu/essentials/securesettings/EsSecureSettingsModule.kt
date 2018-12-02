@@ -14,25 +14,24 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.injection
+package com.ivianuu.essentials.securesettings
 
-import com.ivianuu.essentials.ui.common.ActivityResultController
-import com.ivianuu.essentials.ui.common.PermissionRequestController
+import com.ivianuu.essentials.injection.PerController
 import com.ivianuu.injectors.ContributesInjector
 import dagger.Module
 
 /**
- * Essentials controller binding module
+ * Essentials secure settings module
  */
-@Module(includes = [EssentialsControllerBindingModule_Contributions::class])
-abstract class EssentialsControllerBindingModule {
+@Module(includes = [EsSecureSettingsModule_Contributions::class])
+abstract class EsSecureSettingsModule {
 
     @PerController
     @ContributesInjector
-    abstract fun bindActivityResultController(): ActivityResultController
+    abstract fun bindSecureSettingsDialog(): SecureSettingsDialog
 
     @PerController
     @ContributesInjector
-    abstract fun bindPermissionController(): PermissionRequestController
+    abstract fun bindSecureSettingsInstructionsController(): SecureSettingsInstructionsController
 
 }

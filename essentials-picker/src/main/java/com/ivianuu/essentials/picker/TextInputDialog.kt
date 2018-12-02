@@ -21,7 +21,7 @@ import android.os.Bundle
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.input.input
 import com.ivianuu.essentials.R
-import com.ivianuu.essentials.ui.base.BaseDialogController
+import com.ivianuu.essentials.ui.base.EsDialogController
 import com.ivianuu.essentials.ui.traveler.NavOptions
 import com.ivianuu.essentials.ui.traveler.dialog
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
@@ -43,7 +43,7 @@ data class TextInputKey(
 /**
  * Text input dialog
  */
-class TextInputDialog : BaseDialogController() {
+class TextInputDialog : EsDialogController() {
 
     override fun onCreateDialog(savedViewState: Bundle?): Dialog {
         val key = key<TextInputKey>()
@@ -58,8 +58,8 @@ class TextInputDialog : BaseDialogController() {
             ) { _, input ->
                 travelerRouter.goBackWithResult(key.resultCode, input.toString())
             }
-            .positiveButton(R.string.action_ok)
-            .negativeButton(R.string.action_cancel) { travelerRouter.goBack() }
+            .positiveButton(R.string.es_action_ok)
+            .negativeButton(R.string.es_action_cancel) { travelerRouter.goBack() }
     }
 
 }

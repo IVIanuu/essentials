@@ -14,23 +14,23 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.epoxy
+package com.ivianuu.essentials.injection
 
-import android.content.Context
-import android.view.View
-import com.ivianuu.epoxyktx.KtEpoxyHolder
-import com.ivianuu.essentials.util.ContextAware
+import com.ivianuu.essentials.ui.traveler.TravelerModule
+import com.ivianuu.injectors.InjectorModule
+import dagger.Module
 
 /**
- * Base epoxy holder
+ * Wraps all essential modules
  */
-open class BaseEpoxyHolder : KtEpoxyHolder(), ContextAware {
-
-    override lateinit var providedContext: Context
-
-    override fun bindView(itemView: View) {
-        super.bindView(itemView)
-        providedContext = itemView.context
-    }
-
-}
+@Module(
+    includes = [
+        AppInitializerModule::class,
+        AppServiceModule::class,
+        EsAppInitializerModule::class,
+        InjectorModule::class,
+        SystemServiceModule::class,
+        TravelerModule::class
+    ]
+)
+object EsModule

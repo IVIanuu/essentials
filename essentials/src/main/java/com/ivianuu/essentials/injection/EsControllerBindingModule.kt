@@ -14,20 +14,25 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.app
+package com.ivianuu.essentials.injection
 
-import com.ivianuu.essentials.injection.PerController
+import com.ivianuu.essentials.ui.common.ActivityResultController
+import com.ivianuu.essentials.ui.common.PermissionRequestController
 import com.ivianuu.injectors.ContributesInjector
 import dagger.Module
 
 /**
- * @author Manuel Wrage (IVIanuu)
+ * Essentials controller binding module
  */
-@Module(includes = [EssentialsAppModule_Contributions::class])
-abstract class EssentialsAppModule {
+@Module(includes = [EsControllerBindingModule_Contributions::class])
+abstract class EsControllerBindingModule {
 
     @PerController
     @ContributesInjector
-    abstract fun bindAppPickerDialog(): AppPickerDialog
+    abstract fun bindActivityResultController(): ActivityResultController
+
+    @PerController
+    @ContributesInjector
+    abstract fun bindPermissionController(): PermissionRequestController
 
 }

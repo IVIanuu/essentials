@@ -146,7 +146,7 @@ import javax.inject.Singleton
     }
 
     private fun onFailedToToggleNavBar() {
-        app.toast(R.string.msg_failed_to_toggle_nav_bar)
+        app.toast(R.string.es_msg_failed_to_toggle_nav_bar)
     }
 
     private fun getNavigationBarHeight(): Int {

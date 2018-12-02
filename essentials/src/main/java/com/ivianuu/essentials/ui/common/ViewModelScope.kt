@@ -19,11 +19,11 @@ package com.ivianuu.essentials.ui.common
 import com.ivianuu.scopes.BaseScope
 import com.ivianuu.scopes.cache.ScopeStore
 
-val BaseViewModel.scope get() = scopeCache.get(this)
+val EsViewModel.scope get() = scopeCache.get(this)
 
-private val scopeCache = ScopeStore<BaseViewModel> { ViewModelScope(it) }
+private val scopeCache = ScopeStore<EsViewModel> { ViewModelScope(it) }
 
-private class ViewModelScope(viewModel: BaseViewModel) : BaseScope() {
+private class ViewModelScope(viewModel: EsViewModel) : BaseScope() {
 
     init {
         viewModel.addClearedListener { close() }

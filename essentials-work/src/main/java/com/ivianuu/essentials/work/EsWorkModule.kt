@@ -16,22 +16,33 @@
 
 package com.ivianuu.essentials.work
 
-import com.ivianuu.essentials.app.AppInitializer
-import com.ivianuu.essentials.injection.AppInitializerKey
+import androidx.lifecycle.ViewModel
+import androidx.work.WorkManager
+import androidx.work.WorkerFactory
 import dagger.Binds
 import dagger.Module
-import dagger.multibindings.IntoMap
+import dagger.Provides
+import dagger.multibindings.Multibinds
 
 /**
- * @author Manuel Wrage (IVIanuu)
+ * Essentials work module
  */
 @Module
-abstract class EssentialsWorkInitializerModule {
+abstract class EsWorkModule {
+
+    @Multibinds
+    abstract fun bindWorkerProviders(): Map<Class<out ViewModel>, InjectWorkerFactory>
 
     @Binds
-    @IntoMap
-    @AppInitializerKey(WorkAppInitializer::class)
-    abstract fun bindWorkAppService(workAppInitializer: WorkAppInitializer): AppInitializer
+    abstract fun bindWorkerFactory(factory: DaggerWorkerFactory): WorkerFactory
 
+    @Module
+    companion object {
+
+        @JvmStatic
+        @Provides
+        fun provideWorkManager(): WorkManager = WorkManager.getInstance()
+
+    }
 
 }

@@ -20,7 +20,7 @@ import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
-import com.ivianuu.essentials.util.EssentialsPreferenceManager
+import com.ivianuu.essentials.util.EsPreferenceManager
 import com.ivianuu.kprefs.KPrefs
 import com.ivianuu.ksettings.KSettings
 import dagger.Binds
@@ -32,13 +32,10 @@ import javax.inject.Singleton
  * Essentials app module
  */
 @Module
-abstract class BaseAppModule<T : BaseApp> {
+abstract class EsAppModule {
 
     @Binds
-    abstract fun bindBaseApp(t: T): BaseApp
-
-    @Binds
-    abstract fun bindApplication(baseApp: BaseApp): Application
+    abstract fun bindApplication(esApp: EsApp): Application
 
     @Binds
     abstract fun bindContext(app: Application): Context
@@ -49,7 +46,7 @@ abstract class BaseAppModule<T : BaseApp> {
         @JvmStatic
         @Provides
         fun provideSharedPrefs(context: Context): SharedPreferences =
-            EssentialsPreferenceManager.getDefaultSharedPreferences(context)
+            EsPreferenceManager.getDefaultSharedPreferences(context)
 
         @JvmStatic
         @Singleton

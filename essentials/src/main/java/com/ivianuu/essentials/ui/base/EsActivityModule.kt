@@ -20,7 +20,6 @@ import android.app.Activity
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentActivity
-import com.ivianuu.essentials.injection.EssentialsControllerBindingModule
 import com.ivianuu.essentials.injection.ForActivity
 import dagger.Binds
 import dagger.Module
@@ -28,14 +27,11 @@ import dagger.Module
 /**
  * Provides some common deps for activities
  */
-@Module(includes = [EssentialsControllerBindingModule::class])
-abstract class BaseActivityModule<T : BaseActivity> {
+@Module
+abstract class EsActivityModule {
 
     @Binds
-    abstract fun bindBaseActivity(t: T): BaseActivity
-
-    @Binds
-    abstract fun bindAppCompatActivity(baseActivity: BaseActivity): AppCompatActivity
+    abstract fun bindAppCompatActivity(esActivity: EsActivity): AppCompatActivity
 
     @Binds
     abstract fun bindFragmentActivity(appCompatActivity: AppCompatActivity): FragmentActivity

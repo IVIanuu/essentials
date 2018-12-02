@@ -14,24 +14,24 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.picker
+package com.ivianuu.essentials.work
 
-import com.ivianuu.essentials.injection.PerController
-import com.ivianuu.injectors.ContributesInjector
+import com.ivianuu.essentials.app.AppInitializer
+import com.ivianuu.essentials.injection.AppInitializerKey
+import dagger.Binds
 import dagger.Module
+import dagger.multibindings.IntoMap
 
 /**
- * Essentials picker module
+ * @author Manuel Wrage (IVIanuu)
  */
-@Module(includes = [EssentialsPickerModule_Contributions::class])
-abstract class EssentialsPickerModule {
+@Module
+abstract class EsWorkInitializerModule {
 
-    @PerController
-    @ContributesInjector
-    abstract fun bindColorPickerController(): ColorPickerDialog
+    @Binds
+    @IntoMap
+    @AppInitializerKey(WorkAppInitializer::class)
+    abstract fun bindWorkAppService(workAppInitializer: WorkAppInitializer): AppInitializer
 
-    @PerController
-    @ContributesInjector
-    abstract fun bindTextInputDialog(): TextInputDialog
 
 }

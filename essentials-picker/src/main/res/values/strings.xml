@@ -17,5 +17,5 @@
 
 <resources>
     <!-- Color picker -->
-    <string name="dialog_title_color_picker">Color Picker</string>
+    <string name="es_dialog_title_color_picker">Color Picker</string>
 </resources>

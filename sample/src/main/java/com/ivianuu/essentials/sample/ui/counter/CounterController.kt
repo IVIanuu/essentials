@@ -19,7 +19,7 @@ package com.ivianuu.essentials.sample.ui.counter
 import android.os.Bundle
 import android.view.View
 import com.ivianuu.essentials.sample.R
-import com.ivianuu.essentials.ui.base.BaseController
+import com.ivianuu.essentials.ui.base.EsController
 import com.ivianuu.essentials.ui.mvrx.viewModel
 import com.ivianuu.essentials.ui.mvrx.withState
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
@@ -42,7 +42,7 @@ data class CounterKey(val screen: Int) : ControllerKey(CounterController::class)
 /**
  * @author Manuel Wrage (IVIanuu)
  */
-class CounterController : BaseController() {
+class CounterController : EsController() {
 
     override val layoutRes get() = R.layout.controller_counter
 

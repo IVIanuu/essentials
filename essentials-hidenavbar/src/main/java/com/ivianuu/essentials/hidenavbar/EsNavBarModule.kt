@@ -36,7 +36,7 @@ annotation class NavBarSharedPrefs
  * Nav bar module
  */
 @Module
-abstract class EssentialsNavBarModule {
+abstract class EsNavBarModule {
 
     @Binds
     @IntoMap
@@ -63,8 +63,8 @@ abstract class EssentialsNavBarModule {
 
 }
 
-@Module(includes = [EssentialsNavBarBindingModule_Contributions::class])
-abstract class EssentialsNavBarBindingModule {
+@Module(includes = [EsNavBarBindingModule_Contributions::class])
+abstract class EsNavBarBindingModule {
 
     @PerController
     @ContributesInjector

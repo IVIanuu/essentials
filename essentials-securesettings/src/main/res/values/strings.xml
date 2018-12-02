@@ -17,33 +17,33 @@
 <resources>
 
     <!-- Secure settings dialog -->
-    <string name="dialog_title_secure_settings">Permission Required</string>
-    <string name="dialog_message_secure_settings">Grant the \"Write Secure Settings\" permission. You either need a PC or root to do that.</string>
-    <string name="action_pc_instructions">PC Instructions</string>
-    <string name="action_use_root">Use Root</string>
+    <string name="es_dialog_title_secure_settings">Permission Required</string>
+    <string name="es_dialog_message_secure_settings">Grant the \"Write Secure Settings\" permission. You either need a PC or root to do that.</string>
+    <string name="es_action_pc_instructions">PC Instructions</string>
+    <string name="es_action_use_root">Use Root</string>
 
     <!-- Secure settings instructions -->
-    <string name="screen_label_secure_settings_instructions">PC Instructions</string>
-    <string name="pref_summary_secure_settings_header">Follow the instructions to grant the permission with a PC (Windows, Mac or Linux)</string>
+    <string name="es_screen_label_secure_settings_instructions">PC Instructions</string>
+    <string name="es_pref_summary_secure_settings_header">Follow the instructions to grant the permission with a PC (Windows, Mac or Linux)</string>
 
-    <string name="pref_title_secure_settings_step_1">1 - Activate the Developer Options</string>
-    <string name="pref_summary_secure_settings_step_1">Go to Android-Settings -> Phone Info -> Search for Build Number and tap multiple times until the Developer options are active.</string>
+    <string name="es_pref_title_secure_settings_step_1">1 - Activate the Developer Options</string>
+    <string name="es_pref_summary_secure_settings_step_1">Go to Android-Settings -> Phone Info -> Search for Build Number and tap multiple times until the Developer options are active.</string>
 
-    <string name="pref_title_secure_settings_step_2">2 - Enable USB-Debugging</string>
-    <string name="pref_summary_secure_settings_step_2">Go to Android-Settings -> Developer Options -> Enable USB-Debugging</string>
+    <string name="es_pref_title_secure_settings_step_2">2 - Enable USB-Debugging</string>
+    <string name="es_pref_summary_secure_settings_step_2">Go to Android-Settings -> Developer Options -> Enable USB-Debugging</string>
 
-    <string name="pref_title_secure_settings_step_3">3 - Install ADB on your PC.</string>
-    <string name="pref_summary_secure_settings_link_gadget_hacks">Gadget-Hacks - Run adb commands using Google Chrome</string>
-    <string name="pref_summary_secure_settings_link_lifehacker">Lifehacker - The Easiest Way to Install Android ADB</string>
-    <string name="pref_summary_secure_settings_link_xda">XDA Developers - How to Install ADB on Windows, macOS and Linux</string>
+    <string name="es_pref_title_secure_settings_step_3">3 - Install ADB on your PC.</string>
+    <string name="es_pref_summary_secure_settings_link_gadget_hacks">Gadget-Hacks - Run adb commands using Google Chrome</string>
+    <string name="es_pref_summary_secure_settings_link_lifehacker">Lifehacker - The Easiest Way to Install Android ADB</string>
+    <string name="es_pref_summary_secure_settings_link_xda">XDA Developers - How to Install ADB on Windows, macOS and Linux</string>
 
-    <string name="pref_title_secure_settings_step_4">4 - Execute the ADB Command</string>
-    <string name="pref_summary_secure_settings_step_4">adb shell pm grant %s android.permission.WRITE_SECURE_SETTINGS\n\nClick to copy.</string>
+    <string name="es_pref_title_secure_settings_step_4">4 - Execute the ADB Command</string>
+    <string name="es_pref_summary_secure_settings_step_4">adb shell pm grant %s android.permission.WRITE_SECURE_SETTINGS\n\nClick to copy.</string>
 
-    <string name="msg_secure_settings_no_root">Your device is not rooted you have to manually grant the permissions. Please follow the steps above</string>
+    <string name="es_msg_secure_settings_no_root">Your device is not rooted you have to manually grant the permissions. Please follow the steps above</string>
 
-    <string name="msg_secure_settings_permission_denied">Permission denied! Make sure to follow the steps above.</string>
-    <string name="msg_secure_settings_permission_granted">Permission granted! Where good to go now.</string>
-    <string name="msg_secure_settings_copied_to_clipboard">Copied to clipboard!</string>
+    <string name="es_msg_secure_settings_permission_denied">Permission denied! Make sure to follow the steps above.</string>
+    <string name="es_msg_secure_settings_permission_granted">Permission granted! Where good to go now.</string>
+    <string name="es_msg_secure_settings_copied_to_clipboard">Copied to clipboard!</string>
 
 </resources>

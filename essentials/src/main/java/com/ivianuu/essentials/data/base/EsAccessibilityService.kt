@@ -10,7 +10,7 @@ import com.ivianuu.scopes.Scope
 /**
  * Base accessibility service
  */
-abstract class BaseAccessibilityService : AccessibilityService() {
+abstract class EsAccessibilityService : AccessibilityService() {
 
     val scope: Scope get() = _scope
     private val _scope = MutableScope()

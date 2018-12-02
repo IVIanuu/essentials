@@ -8,7 +8,7 @@ import com.ivianuu.injectors.android.inject
 /**
  * Base broadcast receiver
  */
-abstract class BaseBroadcastReceiver : BroadcastReceiver() {
+abstract class EsBroadcastReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
         inject(context)

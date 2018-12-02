@@ -14,35 +14,22 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.work
+package com.ivianuu.essentials.app.glide
 
-import androidx.lifecycle.ViewModel
-import androidx.work.WorkManager
-import androidx.work.WorkerFactory
+import com.ivianuu.essentials.app.AppInitializer
+import com.ivianuu.essentials.injection.AppInitializerKey
 import dagger.Binds
 import dagger.Module
-import dagger.Provides
-import dagger.multibindings.Multibinds
+import dagger.multibindings.IntoMap
 
 /**
- * Essentials work module
+ * Essentials app glide module
  */
 @Module
-abstract class EssentialsWorkModule {
-
-    @Multibinds
-    abstract fun bindWorkerProviders(): Map<Class<out ViewModel>, InjectWorkerFactory>
+abstract class EsAppGlideModule {
 
     @Binds
-    abstract fun bindWorkerFactory(factory: DaggerWorkerFactory): WorkerFactory
-
-    @Module
-    companion object {
-
-        @JvmStatic
-        @Provides
-        fun provideWorkManager(): WorkManager = WorkManager.getInstance()
-
-    }
-
+    @IntoMap
+    @AppInitializerKey(AppGlideInitializer::class)
+    abstract fun bindAppGlideInitializer(appGlideInitializer: AppGlideInitializer): AppInitializer
 }

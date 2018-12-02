@@ -7,7 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.ivianuu.director.startActivityForResult
-import com.ivianuu.essentials.ui.base.BaseController
+import com.ivianuu.essentials.ui.base.EsController
 import com.ivianuu.essentials.ui.traveler.NavOptions
 import com.ivianuu.essentials.ui.traveler.dialog
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
@@ -25,7 +25,7 @@ data class ActivityResultKey(
 /**
  * Activity result controller
  */
-class ActivityResultController : BaseController() {
+class ActivityResultController : EsController() {
 
     private val key by bindKey<ActivityResultKey>()
 
@@ -54,8 +54,8 @@ data class ActivityResult(
     val requestCode: Int,
     val resultCode: Int,
     val data: Intent?
-) {
-    val isOk get() = resultCode == Activity.RESULT_OK
-    val isCanceled get() = resultCode == Activity.RESULT_CANCELED
-    val isFirstUser get() = resultCode == Activity.RESULT_FIRST_USER
-}
+)
+
+val ActivityResult.isOk get() = resultCode == Activity.RESULT_OK
+val ActivityResult.isCanceled get() = resultCode == Activity.RESULT_CANCELED
+val ActivityResult.isFirstUser get() = resultCode == Activity.RESULT_FIRST_USER

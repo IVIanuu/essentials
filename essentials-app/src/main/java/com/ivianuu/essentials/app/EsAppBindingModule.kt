@@ -14,22 +14,20 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.app.glide
+package com.ivianuu.essentials.app
 
-import com.ivianuu.essentials.app.AppInitializer
-import com.ivianuu.essentials.injection.AppInitializerKey
-import dagger.Binds
+import com.ivianuu.essentials.injection.PerController
+import com.ivianuu.injectors.ContributesInjector
 import dagger.Module
-import dagger.multibindings.IntoMap
 
 /**
- * Essentials app glide module
+ * @author Manuel Wrage (IVIanuu)
  */
-@Module
-abstract class EssentialsAppGlideModule {
+@Module(includes = [EsAppBindingModule_Contributions::class])
+abstract class EsAppBindingModule {
 
-    @Binds
-    @IntoMap
-    @AppInitializerKey(AppGlideInitializer::class)
-    abstract fun bindAppGlideInitializer(appGlideInitializer: AppGlideInitializer): AppInitializer
+    @PerController
+    @ContributesInjector
+    abstract fun bindAppPickerDialog(): AppPickerDialog
+
 }

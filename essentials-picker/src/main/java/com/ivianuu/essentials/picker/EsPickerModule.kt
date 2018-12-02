@@ -14,23 +14,24 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.injection
+package com.ivianuu.essentials.picker
 
-import com.ivianuu.essentials.ui.traveler.TravelerModule
-import com.ivianuu.injectors.InjectorModule
+import com.ivianuu.essentials.injection.PerController
+import com.ivianuu.injectors.ContributesInjector
 import dagger.Module
 
 /**
- * Wraps all essential modules
+ * Essentials picker module
  */
-@Module(
-    includes = [
-        AppInitializerModule::class,
-        AppServiceModule::class,
-        EssentialsAppInitializerModule::class,
-        InjectorModule::class,
-        SystemServiceModule::class,
-        TravelerModule::class
-    ]
-)
-object EssentialsModule
+@Module(includes = [EsPickerModule_Contributions::class])
+abstract class EsPickerModule {
+
+    @PerController
+    @ContributesInjector
+    abstract fun bindColorPickerController(): ColorPickerDialog
+
+    @PerController
+    @ContributesInjector
+    abstract fun bindTextInputDialog(): TextInputDialog
+
+}

@@ -21,7 +21,7 @@ import android.os.Bundle
 import android.view.View
 import com.afollestad.materialdialogs.MaterialDialog
 import com.ivianuu.essentials.shell.Shell
-import com.ivianuu.essentials.ui.base.BaseDialogController
+import com.ivianuu.essentials.ui.base.EsDialogController
 import com.ivianuu.essentials.ui.traveler.NavOptions
 import com.ivianuu.essentials.ui.traveler.dialog
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
@@ -43,7 +43,7 @@ class SecureSettingsKey(
 /**
  * @author Manuel Wrage (IVIanuu)
  */
-class SecureSettingsDialog : BaseDialogController() {
+class SecureSettingsDialog : EsDialogController() {
 
     @Inject lateinit var shell: Shell
 
@@ -51,19 +51,19 @@ class SecureSettingsDialog : BaseDialogController() {
 
     override fun onCreateDialog(savedViewState: Bundle?): Dialog {
         return MaterialDialog(activity)
-            .title(R.string.dialog_title_secure_settings)
-            .message(R.string.dialog_message_secure_settings)
-            .positiveButton(R.string.action_use_root) {
+            .title(R.string.es_dialog_title_secure_settings)
+            .message(R.string.es_dialog_message_secure_settings)
+            .positiveButton(R.string.es_action_use_root) {
                 coroutineScope.launch {
                     try {
                         shell.run("pm grant ${activity.packageName} android.permission.WRITE_SECURE_SETTINGS")
                         handlePermissionResult(activity.canWriteSecureSettings())
                     } catch (e: Exception) {
-                        toast(R.string.msg_secure_settings_no_root)
+                        toast(R.string.es_msg_secure_settings_no_root)
                     }
                 }
             }
-            .negativeButton(R.string.action_pc_instructions) {
+            .negativeButton(R.string.es_action_pc_instructions) {
                 travelerRouter.navigate(SecureSettingsInstructionsKey(), NavOptions().vertical())
             }
             .noAutoDismiss()
@@ -83,10 +83,10 @@ class SecureSettingsDialog : BaseDialogController() {
 
     private fun handlePermissionResult(success: Boolean) {
         if (success) {
-            toast(R.string.msg_secure_settings_permission_granted)
+            toast(R.string.es_msg_secure_settings_permission_granted)
             travelerRouter.goBackWithResult(key.resultCode, true)
         } else {
-            toast(R.string.msg_secure_settings_permission_denied)
+            toast(R.string.es_msg_secure_settings_permission_denied)
         }
     }
 }

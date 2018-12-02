@@ -29,7 +29,7 @@ import javax.inject.Inject
 /**
  * Base dialog controller
  */
-abstract class BaseDialogController : DialogController(), ContextAware {
+abstract class EsDialogController : DialogController(), ContextAware {
 
     @Inject lateinit var travelerRouter: Router
 

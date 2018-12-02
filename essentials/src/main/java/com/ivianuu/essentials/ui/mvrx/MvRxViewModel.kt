@@ -1,7 +1,7 @@
 package com.ivianuu.essentials.ui.mvrx
 
 import androidx.lifecycle.LifecycleOwner
-import com.ivianuu.essentials.ui.common.BaseViewModel
+import com.ivianuu.essentials.ui.common.EsViewModel
 import com.ivianuu.essentials.ui.common.scope
 import com.ivianuu.essentials.util.ext.closeBy
 import com.ivianuu.scopes.rx.disposeBy
@@ -14,7 +14,7 @@ import io.reactivex.disposables.Disposable
 /**
  * State view model
  */
-abstract class MvRxViewModel<S : MvRxState>(initialState: S) : BaseViewModel() {
+abstract class MvRxViewModel<S : MvRxState>(initialState: S) : EsViewModel() {
 
     private val stateStore = StateStore(initialState)
         .closeBy(scope)

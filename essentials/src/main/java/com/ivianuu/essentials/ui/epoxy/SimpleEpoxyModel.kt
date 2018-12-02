@@ -3,4 +3,4 @@ package com.ivianuu.essentials.ui.epoxy
 /**
  * Simple epoxy model with holder
  */
-abstract class SimpleEpoxyModel : BaseEpoxyModel<BaseEpoxyHolder>()
+abstract class SimpleEpoxyModel : EsEpoxyModel<EsEpoxyHolder>()

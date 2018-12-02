@@ -27,7 +27,7 @@ import javax.inject.Provider
 /**
  * App
  */
-abstract class BaseApp : Application(), HasInjectors {
+abstract class EsApp : Application(), HasInjectors {
 
     @Inject internal lateinit var _injectors: CompositeInjectors
     @Inject
@@ -68,12 +68,12 @@ abstract class BaseApp : Application(), HasInjectors {
 
     protected open fun shouldStartAppService(clazz: Class<out AppService>) = true
 
-    protected abstract fun applicationInjector(): Injector<out BaseApp>
+    protected abstract fun applicationInjector(): Injector<out EsApp>
 
     private fun injectIfNeeded() {
         if (!injected) {
             injected = true
-            (applicationInjector() as Injector<BaseApp>)
+            (applicationInjector() as Injector<EsApp>)
                 .inject(this)
         }
     }

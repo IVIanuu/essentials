@@ -10,7 +10,7 @@ import com.ivianuu.scopes.Scope
 /**
  * Base notification listener service
  */
-abstract class BaseNotificationListenerService : NotificationListenerService() {
+abstract class EsNotificationListenerService : NotificationListenerService() {
 
     val scope: Scope get() = _scope
     private val _scope = MutableScope()

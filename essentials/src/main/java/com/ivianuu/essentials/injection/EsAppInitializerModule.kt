@@ -28,7 +28,7 @@ import dagger.multibindings.IntoMap
  * Essentials app initializer module
  */
 @Module
-abstract class EssentialsAppInitializerModule {
+abstract class EsAppInitializerModule {
 
     @Binds
     @IntoMap

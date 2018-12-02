@@ -17,5 +17,5 @@
 
 <resources>
     <!-- App picker -->
-    <string name="dialog_title_app_picker">App Picker</string>
+    <string name="es_dialog_title_app_picker">App Picker</string>
 </resources>

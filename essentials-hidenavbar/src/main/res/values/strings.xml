@@ -15,22 +15,22 @@
   -->
 
 <resources>
-    <string name="msg_failed_to_toggle_nav_bar">Failed to toggle the nav bar!</string>
+    <string name="es_msg_failed_to_toggle_nav_bar">Failed to toggle the nav bar!</string>
 
-    <string name="screen_label_nav_bar_settings">Navigation Bar</string>
+    <string name="es_screen_label_nav_bar_settings">Navigation Bar</string>
 
-    <string name="pref_title_manage_nav_bar">Main Switch</string>
+    <string name="es_pref_title_manage_nav_bar">Main Switch</string>
 
-    <string name="pref_title_nav_bar_hidden">Hide Navigation Bar</string>
-    <string name="pref_summary_nav_bar_hidden">Toggle the navigation bar state.</string>
+    <string name="es_pref_title_nav_bar_hidden">Hide Navigation Bar</string>
+    <string name="es_pref_summary_nav_bar_hidden">Toggle the navigation bar state.</string>
 
-    <string name="pref_title_rot270_fix">Landscape Fix</string>
-    <string name="pref_summary_rot270_fix">Some devices show the original nav bar on the side while in landscape mode. Enable this setting to prevent that behavior.</string>
-    <string name="pref_title_show_nav_bar_screen_off">Show While Screen Is Off</string>
-    <string name="pref_summary_show_nav_bar_screen_off">This will show the navigation bar while the screen is off or locked. Disabling this option leads to display cutouts on the lock screen and wake-up issues on some devices.</string>
-    <string name="pref_title_tablet_mode">Tablet Mode</string>
-    <string name="pref_summary_tablet_mode">Most tablets force the nav bar to always be on the bottom of the screen. Turn on to take that behavior into count.</string>
-    <string name="pref_title_full_overscan">Full Overscan [Experimental]</string>
-    <string name="pref_summary_full_overscan">Enable this option to remove the left 1 pixel at the bottom. This can break things on some devices.</string>
+    <string name="es_pref_title_rot270_fix">Landscape Fix</string>
+    <string name="es_pref_summary_rot270_fix">Some devices show the original nav bar on the side while in landscape mode. Enable this setting to prevent that behavior.</string>
+    <string name="es_pref_title_show_nav_bar_screen_off">Show While Screen Is Off</string>
+    <string name="es_pref_summary_show_nav_bar_screen_off">This will show the navigation bar while the screen is off or locked. Disabling this option leads to display cutouts on the lock screen and wake-up issues on some devices.</string>
+    <string name="es_pref_title_tablet_mode">Tablet Mode</string>
+    <string name="es_pref_summary_tablet_mode">Most tablets force the nav bar to always be on the bottom of the screen. Turn on to take that behavior into count.</string>
+    <string name="es_pref_title_full_overscan">Full Overscan [Experimental]</string>
+    <string name="es_pref_summary_full_overscan">Enable this option to remove the left 1 pixel at the bottom. This can break things on some devices.</string>
 
 </resources>

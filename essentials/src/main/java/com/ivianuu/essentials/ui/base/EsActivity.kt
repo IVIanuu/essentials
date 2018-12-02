@@ -40,7 +40,7 @@ import javax.inject.Inject
 /**
  * Base activity
  */
-abstract class BaseActivity : AppCompatActivity(), HasInjectors {
+abstract class EsActivity : AppCompatActivity(), HasInjectors {
 
     @Inject override lateinit var injectors: CompositeInjectors
 
