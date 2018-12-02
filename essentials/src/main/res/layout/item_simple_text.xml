@@ -12,8 +12,8 @@
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
         android:gravity="center"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
         android:textColor="?android:textColorSecondary"
-        android:textSize="20sp"
         tools:text="No results" />
 
 </FrameLayout>
