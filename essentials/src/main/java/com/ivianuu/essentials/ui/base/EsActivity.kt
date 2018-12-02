@@ -52,7 +52,7 @@ abstract class EsActivity : AppCompatActivity(), HasInjectors {
     protected open val layoutRes get() = R.layout.es_activity_default
 
     open val containerId
-        get() = R.id.container
+        get() = R.id.es_container
 
     open val startKey: Any?
         get() = null
