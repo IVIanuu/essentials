@@ -69,21 +69,21 @@ class SecureSettingsInstructionsController : PrefsController() {
 
         preference {
             key("secure_settings_link_gadget_hacks")
-            icon(R.drawable.ic_link)
+            icon(R.drawable.es_ic_link)
             summary(R.string.es_pref_summary_secure_settings_link_gadget_hacks)
             onClickUrl { "https://youtu.be/CDuxcrrWLnY" }
         }
 
         preference {
             key("secure_settings_link_lifehacker")
-            icon(R.drawable.ic_link)
+            icon(R.drawable.es_ic_link)
             summary(R.string.es_pref_summary_secure_settings_link_lifehacker)
             onClickUrl { "https://lifehacker.com/the-easiest-way-to-install-androids-adb-and-fastboot-to-1586992378" }
         }
 
         preference {
             key("secure_settings_link_xda")
-            icon(R.drawable.ic_link)
+            icon(R.drawable.es_ic_link)
             summary(R.string.es_pref_summary_secure_settings_link_xda)
             onClickUrl { "https://www.xda-developers.com/install-adb-windows-macos-linux/" }
         }

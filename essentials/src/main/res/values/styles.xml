@@ -14,7 +14,13 @@
   ~ limitations under the License.
   -->
 
-<com.ivianuu.director.common.ChangeHandlerFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/container"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" />
+<resources>
+
+    <style name="Theme.Es.Light" parent="Theme.MaterialComponents.Light.NoActionBar" />
+
+    <style name="Theme.Es" parent="Theme.MaterialComponents.NoActionBar" />
+
+    <style name="Theme.Es.DayNight" parent="Theme.MaterialComponents.DayNight" />
+
+
+</resources>

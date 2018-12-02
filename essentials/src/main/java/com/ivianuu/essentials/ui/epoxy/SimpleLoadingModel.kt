@@ -5,12 +5,12 @@ import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import com.ivianuu.essentials.R2
 import com.ivianuu.essentials.util.color
-import kotlinx.android.synthetic.main.item_simple_loading.progress_bar
+import kotlinx.android.synthetic.main.es_item_simple_loading.es_progress_bar
 
 /**
  * Simple loading model
  */
-@EpoxyModelClass(layout = R2.layout.item_simple_loading)
+@EpoxyModelClass(layout = R2.layout.es_item_simple_loading)
 abstract class SimpleLoadingModel : SimpleEpoxyModel() {
 
     @EpoxyAttribute var progressColor = 0
@@ -26,7 +26,7 @@ abstract class SimpleLoadingModel : SimpleEpoxyModel() {
             }
 
             val colorStateList = ColorStateList.valueOf(progressColor)
-            with(progress_bar) {
+            with(es_progress_bar) {
                 progressBackgroundTintList = colorStateList
                 secondaryProgressTintList = colorStateList
                 indeterminateTintList = colorStateList

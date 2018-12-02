@@ -1,9 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <item name="app_bar" type="id" />
-    <item name="coordinator_layout" type="id" />
-    <item name="progress_bar" type="id" />
-    <item name="recycler_view" type="id" />
-    <item name="text" type="id" />
-    <item name="toolbar" type="id" />
+
+    <!-- Default activity -->
+    <item name="es_container" type="id" />
+
+    <!-- Simple controller -->
+    <item name="es_app_bar" type="id" />
+    <item name="es_coordinator_layout" type="id" />
+    <item name="es_recycler_view" type="id" />
+    <item name="es_toolbar" type="id" />
+
+    <!-- Simple text model -->
+    <item name="es_text" type="id" />
+
+    <!-- Simple loading model -->
+    <item name="es_progress_bar" type="id" />
+
 </resources>

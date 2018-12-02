@@ -41,7 +41,7 @@ import com.ivianuu.traveler.goBack
  */
 abstract class SimpleController : EsController() {
 
-    override val layoutRes get() = R.layout.controller_simple
+    override val layoutRes get() = R.layout.es_controller_simple
 
     protected open val toolbarTitle: String? get() = null
     protected open val toolbarTitleRes get() = 0
@@ -59,26 +59,26 @@ abstract class SimpleController : EsController() {
     val appBar get() = optionalAppBar ?: throw IllegalStateException("no app bar layout found")
 
     open val optionalAppBar: AppBarLayout?
-        get() = view?.findViewById(R.id.app_bar)
+        get() = view?.findViewById(R.id.es_app_bar)
 
     val coordinatorLayout
         get() = optionalCoordinatorLayout
             ?: throw IllegalStateException("no coordinator layout found")
 
     open val optionalCoordinatorLayout: CoordinatorLayout?
-        get() = view?.findViewById(R.id.coordinator_layout)
+        get() = view?.findViewById(R.id.es_coordinator_layout)
 
     val recyclerView
         get() = optionalRecyclerView ?: throw IllegalStateException("no recycler view found")
 
     open val optionalRecyclerView: EpoxyRecyclerView?
-        get() = view?.findViewById(R.id.recycler_view)
+        get() = view?.findViewById(R.id.es_recycler_view)
 
     val toolbar
         get() = optionalToolbar ?: throw IllegalStateException("no toolbar found")
 
     open val optionalToolbar: Toolbar?
-        get() = view?.findViewById(R.id.toolbar)
+        get() = view?.findViewById(R.id.es_toolbar)
 
     override fun onBindView(view: View, savedViewState: Bundle?) {
         super.onBindView(view, savedViewState)

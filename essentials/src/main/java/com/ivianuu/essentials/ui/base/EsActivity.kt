@@ -49,7 +49,7 @@ abstract class EsActivity : AppCompatActivity(), HasInjectors {
 
     val coroutineScope = onDestroy.asMainCoroutineScope()
 
-    protected open val layoutRes get() = R.layout.activity_default
+    protected open val layoutRes get() = R.layout.es_activity_default
 
     open val containerId
         get() = R.id.container
