@@ -15,16 +15,6 @@
   -->
 
 <resources>
-
-    <style name="Theme.Es.Light" parent="Theme.MaterialComponents.Light.NoActionBar" />
-
-    <style name="Theme.Es.Dark" parent="Theme.MaterialComponents.NoActionBar" />
-
-    <style name="Theme.Es.DayNight" parent="Theme.MaterialComponents.DayNight" />
-
-    <style name="Theme.Es.Dark.Lighter" parent="Theme.MaterialComponents.NoActionBar">
-        <item name="android:colorBackground">@color/es_dark_lighter_color_background</item>
-        <item name="colorSurface">@color/es_dark_lighter_color_surface</item>
-    </style>
-
+    <color name="es_dark_lighter_color_background">#303030</color>
+    <color name="es_dark_lighter_color_surface">#424242</color>
 </resources>
