@@ -38,13 +38,9 @@ import com.ivianuu.scopes.archlifecycle.*
 
 val Controller.rootRouter: Router
     get() {
-        var parent: Controller? = this
-
-        while (parent?.parentController != null) {
-            parent = parent.parentController
-        }
-
-        return parent!!.router
+        fun Controller.rootController(): Controller =
+                if (parentController != null) parentController!!.rootController() else this
+        return rootController().router
     }
 
 fun Controller.hideInputMethod() {

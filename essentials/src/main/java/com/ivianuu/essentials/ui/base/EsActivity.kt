@@ -23,6 +23,7 @@ import com.ivianuu.director.attachRouter
 import com.ivianuu.director.handleBack
 import com.ivianuu.director.traveler.ControllerNavigator
 import com.ivianuu.essentials.R
+import com.ivianuu.essentials.ui.common.RouterActivity
 import com.ivianuu.essentials.util.asMainCoroutineScope
 import com.ivianuu.essentials.util.ext.unsafeLazy
 import com.ivianuu.injectors.CompositeInjectors
@@ -40,7 +41,7 @@ import javax.inject.Inject
 /**
  * Base activity
  */
-abstract class EsActivity : AppCompatActivity(), HasInjectors {
+abstract class EsActivity : AppCompatActivity(), HasInjectors, RouterActivity {
 
     @Inject override lateinit var injectors: CompositeInjectors
 
@@ -57,7 +58,7 @@ abstract class EsActivity : AppCompatActivity(), HasInjectors {
     open val startKey: Any?
         get() = null
 
-    lateinit var router: Router
+    override lateinit var router: Router
 
     protected open val navigator: Navigator by unsafeLazy {
         val navigators = mutableListOf<ResultNavigator>()
