@@ -19,9 +19,30 @@
 package com.ivianuu.essentials.util.ext
 
 import com.ivianuu.epoxyprefs.PreferenceModel
+import com.ivianuu.rxjavaktx.observable
 import com.ivianuu.traveler.Router
 import com.ivianuu.traveler.navigate
+import com.ivianuu.traveler.result.ResultListener
+import com.ivianuu.traveler.result.addResultListener
+import com.ivianuu.traveler.result.removeResultListener
 
 fun PreferenceModel.Builder.onClickKey(router: Router, key: () -> Any) {
     onClick { router.navigate(key()).andTrue() }
+}
+
+fun <T> Router.results(resultCode: Int) = observable<T> { e ->
+    @Suppress("UNCHECKED_CAST")
+    val listener = object : ResultListener {
+        override fun invoke(result: Any) {
+            if (!e.isDisposed) {
+                e.onNext(result as T)
+            }
+        }
+    }
+
+    e.setCancellable { removeResultListener(resultCode, listener) }
+
+    if (!e.isDisposed) {
+        addResultListener(resultCode, listener)
+    }
 }

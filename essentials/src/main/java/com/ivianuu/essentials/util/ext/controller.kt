@@ -25,6 +25,7 @@ import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.Lifecycle
 import com.ivianuu.director.Controller
+import com.ivianuu.director.Router
 import com.ivianuu.director.arch.lifecycle.LifecycleController
 import com.ivianuu.director.startActivity
 import com.ivianuu.director.startActivityForResult
@@ -33,13 +34,18 @@ import com.ivianuu.kommon.core.app.showInputMethod
 import com.ivianuu.kommon.core.app.startActivityForResult
 import com.ivianuu.kommon.core.content.app
 import com.ivianuu.kommon.core.content.intent
-import com.ivianuu.scopes.archlifecycle.onCreate
-import com.ivianuu.scopes.archlifecycle.onDestroy
-import com.ivianuu.scopes.archlifecycle.onPause
-import com.ivianuu.scopes.archlifecycle.onResume
-import com.ivianuu.scopes.archlifecycle.onStart
-import com.ivianuu.scopes.archlifecycle.onStop
-import com.ivianuu.scopes.archlifecycle.scopeFor
+import com.ivianuu.scopes.archlifecycle.*
+
+val Controller.rootRouter: Router
+    get() {
+        var parent: Controller? = this
+
+        while (parent?.parentController != null) {
+            parent = parent.parentController
+        }
+
+        return parent!!.router
+    }
 
 fun Controller.hideInputMethod() {
     activity.hideInputMethod()

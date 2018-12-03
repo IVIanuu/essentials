@@ -29,7 +29,7 @@ object Versions {
 
     const val assistedInject = "74bd099811"
 
-    const val constraintLayout = "1.1.3"
+    const val constraintLayout = "2.0.0-alpha2"
     const val coroutines = "1.0.0"
     const val dagger = "2.19"
     const val director = "38721b3566"
