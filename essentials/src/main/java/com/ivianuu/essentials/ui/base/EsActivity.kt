@@ -24,6 +24,7 @@ import com.ivianuu.director.handleBack
 import com.ivianuu.director.traveler.ControllerNavigator
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.common.RouterActivity
+import com.ivianuu.essentials.ui.mvrx.MvRxView
 import com.ivianuu.essentials.util.asMainCoroutineScope
 import com.ivianuu.essentials.util.ext.unsafeLazy
 import com.ivianuu.injectors.CompositeInjectors
@@ -41,7 +42,7 @@ import javax.inject.Inject
 /**
  * Base activity
  */
-abstract class EsActivity : AppCompatActivity(), HasInjectors, RouterActivity {
+abstract class EsActivity : AppCompatActivity(), HasInjectors, MvRxView, RouterActivity {
 
     @Inject override lateinit var injectors: CompositeInjectors
 
@@ -75,6 +76,11 @@ abstract class EsActivity : AppCompatActivity(), HasInjectors, RouterActivity {
         setContentView(layoutRes)
 
         onInitializeRouter(savedInstanceState)
+
+        invalidate()
+    }
+
+    override fun invalidate() {
     }
 
     override fun onBackPressed() {

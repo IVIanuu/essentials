@@ -18,9 +18,11 @@ package com.ivianuu.essentials.ui.base
 
 import android.content.Context
 import android.os.Bundle
+import android.view.View
 import com.ivianuu.director.dialog.DialogController
 import com.ivianuu.director.scopes.destroy
 import com.ivianuu.essentials.injection.inject
+import com.ivianuu.essentials.ui.mvrx.MvRxView
 import com.ivianuu.essentials.util.ContextAware
 import com.ivianuu.essentials.util.asMainCoroutineScope
 import com.ivianuu.traveler.Router
@@ -29,7 +31,7 @@ import javax.inject.Inject
 /**
  * Base dialog controller
  */
-abstract class EsDialogController : DialogController(), ContextAware {
+abstract class EsDialogController : DialogController(), ContextAware, MvRxView {
 
     @Inject lateinit var travelerRouter: Router
 
@@ -43,7 +45,20 @@ abstract class EsDialogController : DialogController(), ContextAware {
         super.onCreate(savedInstanceState)
     }
 
+    override fun onRestoreViewState(view: View, savedViewState: Bundle) {
+        super.onRestoreViewState(view, savedViewState)
+        invalidate()
+    }
+
+    override fun onAttach(view: View) {
+        super.onAttach(view)
+        invalidate()
+    }
+
     protected open fun onInject() {
         inject()
+    }
+
+    override fun invalidate() {
     }
 }
