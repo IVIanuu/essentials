@@ -19,6 +19,10 @@ package com.ivianuu.essentials.ui.base
 import android.content.Context
 import android.os.Bundle
 import android.view.View
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.ViewModelStore
+import com.ivianuu.director.arch.lifecycle.ControllerLifecycleOwner
+import com.ivianuu.director.arch.lifecycle.ControllerViewModelStoreOwner
 import com.ivianuu.director.dialog.DialogController
 import com.ivianuu.director.scopes.destroy
 import com.ivianuu.essentials.injection.inject
@@ -37,6 +41,9 @@ abstract class EsDialogController : DialogController(), ContextAware, MvRxView {
 
     override val providedContext: Context
         get() = activity
+
+    private val lifecycleOwner = ControllerLifecycleOwner()
+    private val viewModelStoreOwner = ControllerViewModelStoreOwner()
 
     val coroutineScope = destroy.asMainCoroutineScope()
 
@@ -61,4 +68,8 @@ abstract class EsDialogController : DialogController(), ContextAware, MvRxView {
 
     override fun invalidate() {
     }
+
+    override fun getLifecycle(): Lifecycle = lifecycleOwner.lifecycle
+
+    override fun getViewModelStore(): ViewModelStore = viewModelStoreOwner.viewModelStore
 }
