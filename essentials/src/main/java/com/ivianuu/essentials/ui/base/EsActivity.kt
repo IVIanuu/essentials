@@ -80,6 +80,16 @@ abstract class EsActivity : AppCompatActivity(), HasInjectors, MvRxView, RouterA
         invalidate()
     }
 
+    override fun onResume() {
+        super.onResume()
+        navigatorHolder.setNavigator(navigator)
+    }
+
+    override fun onPause() {
+        navigatorHolder.removeNavigator()
+        super.onPause()
+    }
+
     override fun invalidate() {
     }
 
@@ -95,7 +105,6 @@ abstract class EsActivity : AppCompatActivity(), HasInjectors, MvRxView, RouterA
 
     protected open fun onInitializeRouter(savedInstanceState: Bundle?) {
         router = attachRouter(findViewById(containerId), savedInstanceState)
-        navigatorHolder.setNavigator(navigator)
 
         if (savedInstanceState == null) {
             startKey?.let { travelerRouter.setRoot(it) }
