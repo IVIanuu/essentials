@@ -82,6 +82,7 @@ abstract class SimpleController : EsController() {
 
     override fun onBindView(view: View, savedViewState: Bundle?) {
         super.onBindView(view, savedViewState)
+
         optionalToolbar?.run {
             when {
                 toolbarTitle != null -> title = toolbarTitle
