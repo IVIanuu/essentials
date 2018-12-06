@@ -39,8 +39,11 @@ abstract class EsDialogController : DialogController(), ContextAware {
     val coroutineScope = destroy.asMainCoroutineScope()
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        inject()
+        onInject()
         super.onCreate(savedInstanceState)
     }
 
+    protected open fun onInject() {
+        inject()
+    }
 }

@@ -69,22 +69,30 @@ abstract class EsActivity : AppCompatActivity(), HasInjectors, RouterActivity {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        inject()
+        onInject()
         super.onCreate(savedInstanceState)
 
         setContentView(layoutRes)
 
-        router = attachRouter(findViewById(containerId), savedInstanceState)
-        navigatorHolder.setNavigator(navigator)
-
-        if (savedInstanceState == null) {
-            startKey?.let { travelerRouter.setRoot(it) }
-        }
+        onInitializeRouter(savedInstanceState)
     }
 
     override fun onBackPressed() {
         if (!router.handleBack()) {
             super.onBackPressed()
+        }
+    }
+
+    protected open fun onInject() {
+        inject()
+    }
+
+    protected open fun onInitializeRouter(savedInstanceState: Bundle?) {
+        router = attachRouter(findViewById(containerId), savedInstanceState)
+        navigatorHolder.setNavigator(navigator)
+
+        if (savedInstanceState == null) {
+            startKey?.let { travelerRouter.setRoot(it) }
         }
     }
 

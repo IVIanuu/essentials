@@ -50,6 +50,11 @@ abstract class EsApp : Application(), HasInjectors {
         onStartAppServices()
     }
 
+    protected open fun onInject() {
+        (applicationInjector() as Injector<EsApp>)
+            .inject(this)
+    }
+
     protected open fun onInitialize() {
         appInitializer
             .filter { shouldInitializeAppInitializer(it.key) }
@@ -73,8 +78,7 @@ abstract class EsApp : Application(), HasInjectors {
     private fun injectIfNeeded() {
         if (!injected) {
             injected = true
-            (applicationInjector() as Injector<EsApp>)
-                .inject(this)
+            onInject()
         }
     }
 }

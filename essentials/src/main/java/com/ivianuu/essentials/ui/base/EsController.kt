@@ -62,7 +62,7 @@ abstract class EsController : LifecycleController(), ContextAware, HasInjectors,
     protected open val layoutRes get() = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        inject()
+        onInject()
         super.onCreate(savedInstanceState)
     }
 
@@ -102,4 +102,7 @@ abstract class EsController : LifecycleController(), ContextAware, HasInjectors,
     override fun invalidate() {
     }
 
+    protected open fun onInject() {
+        inject()
+    }
 }
