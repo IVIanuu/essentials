@@ -20,16 +20,16 @@ import android.os.Bundle
 
 interface ViewModelListener {
 
-    fun preInit(viewModel: ViewModel, savedInstanceState: Bundle?) {
+    fun preInit(viewModel: ViewModel, savedInstanceState: SavedState?) {
     }
 
-    fun postInit(viewModel: ViewModel, savedInstanceState: Bundle?) {
+    fun postInit(viewModel: ViewModel, savedInstanceState: SavedState?) {
     }
 
-    fun onRestoreInstanceState(viewModel: ViewModel, savedInstanceState: Bundle) {
+    fun onRestoreInstanceState(viewModel: ViewModel, savedInstanceState: SavedState) {
     }
 
-    fun onSaveInstanceState(viewModel: ViewModel, outState: Bundle) {
+    fun onSaveInstanceState(viewModel: ViewModel, outState: SavedState) {
     }
 
     fun preCleared(viewModel: ViewModel) {

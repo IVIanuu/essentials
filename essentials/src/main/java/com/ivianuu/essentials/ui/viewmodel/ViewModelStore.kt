@@ -25,7 +25,6 @@ import kotlin.reflect.KClass
 open class ViewModelStore {
 
     val viewModels get() = _viewModels.toMap()
-
     private val _viewModels = mutableMapOf<String, ViewModel>()
 
     private var savedState: Bundle? = null
@@ -45,6 +44,7 @@ open class ViewModelStore {
             _viewModels[key] = viewModel
 
             val viewModelState = savedState?.getBundle(KEY_VIEW_MODEL_STATE_PREFIX + key)
+                ?.let { BundleSavedState(it) }
 
             listeners.toList().forEach { it.onViewModelAdded(this, viewModel, viewModelState) }
 
@@ -63,8 +63,10 @@ open class ViewModelStore {
         val bundle = Bundle()
 
         _viewModels
-            .mapValues { Bundle().apply { it.value.saveInstanceState(this) } }
-            .forEach { bundle.putBundle(it.key, it.value) }
+            .mapValues { (_, vm) ->
+                BundleSavedState(Bundle()).also { vm.saveInstanceState(it) }
+            }
+            .forEach { bundle.putBundle(it.key, it.value.bundle) }
 
         return bundle
     }

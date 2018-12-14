@@ -26,7 +26,7 @@ interface ViewModelStoreListener {
     fun onViewModelAdded(
         viewModelStore: ViewModelStore,
         viewModel: ViewModel,
-        savedInstanceState: Bundle?
+        savedInstanceState: SavedState?
     ) {
     }
 

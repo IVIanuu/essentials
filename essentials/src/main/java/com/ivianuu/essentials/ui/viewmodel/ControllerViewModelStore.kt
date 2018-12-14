@@ -23,8 +23,7 @@ import com.ivianuu.director.ControllerLifecycleListener
 /**
  * Controller view model helper
  */
-class ControllerViewModelStore(controller: Controller, savedInstanceState: Bundle?) :
-    ViewModelStore() {
+class ControllerViewModelStore(controller: Controller, savedInstanceState: Bundle?) : ViewModelStore() {
 
     init {
         restoreInstanceState(savedInstanceState)

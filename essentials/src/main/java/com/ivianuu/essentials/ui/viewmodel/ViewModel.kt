@@ -27,13 +27,13 @@ abstract class ViewModel {
 
     private var superCalled = false
 
-    protected open fun onInit(savedInstanceState: Bundle?) {
+    protected open fun onInit(savedInstanceState: SavedState?) {
     }
 
-    protected open fun onRestoreInstanceState(savedInstanceState: Bundle) {
+    protected open fun onRestoreInstanceState(savedInstanceState: SavedState) {
     }
 
-    protected open fun onSaveInstanceState(outState: Bundle) {
+    protected open fun onSaveInstanceState(outState: SavedState) {
     }
 
     protected open fun onCleared() {
@@ -49,18 +49,18 @@ abstract class ViewModel {
         listeners.remove(listener)
     }
 
-    internal fun initialize(savedInstanceState: Bundle?) {
+    internal fun initialize(savedInstanceState: SavedState?) {
         listeners.toList().forEach { it.preInit(this, savedInstanceState) }
         requireSuperCalled { onInit(savedInstanceState) }
         listeners.toList().forEach { it.postInit(this, savedInstanceState) }
     }
 
-    internal fun restoreInstanceState(savedInstanceState: Bundle) {
+    internal fun restoreInstanceState(savedInstanceState: SavedState) {
         requireSuperCalled { onRestoreInstanceState(savedInstanceState) }
         listeners.toList().forEach { it.onRestoreInstanceState(this, savedInstanceState) }
     }
 
-    internal fun saveInstanceState(outState: Bundle) {
+    internal fun saveInstanceState(outState: SavedState) {
         requireSuperCalled { onSaveInstanceState(outState) }
         listeners.toList().forEach { it.onSaveInstanceState(this, outState) }
     }

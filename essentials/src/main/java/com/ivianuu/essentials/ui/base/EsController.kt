@@ -40,8 +40,7 @@ import javax.inject.Inject
 /**
  * Base controller
  */
-abstract class EsController : LifecycleController(), ContextAware, HasInjectors,
-    LayoutContainer, MvRxView {
+abstract class EsController : LifecycleController(), ContextAware, HasInjectors, LayoutContainer, MvRxView {
 
     @Inject override lateinit var injectors: CompositeInjectors
 
