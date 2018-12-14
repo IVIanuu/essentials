@@ -16,10 +16,8 @@
 
 package com.ivianuu.essentials.ui.viewmodel
 
-import android.os.Bundle
-
 /**
- * @author Manuel Wrage (IVIanuu)
+ * A view model
  */
 abstract class ViewModel {
 

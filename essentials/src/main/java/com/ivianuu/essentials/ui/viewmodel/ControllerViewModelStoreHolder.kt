@@ -22,28 +22,28 @@ import com.ivianuu.director.ControllerLifecycleListener
 import com.ivianuu.director.retainedLazy
 
 /**
- * Controller view model helper
+ * Controller view model store holder
  */
 class ControllerViewModelStoreHolder(controller: Controller) : ViewModelStoreHolder {
 
-    override val viewModelStore by controller.retainedLazy(KEY_VIEW_MODEL_STORE) { ViewModelStore() }
+    override val viewModels by controller.retainedLazy(KEY_VIEW_MODEL_STORE) { ViewModelStore() }
 
     private val lifecycleListener = object : ControllerLifecycleListener {
 
         override fun preCreate(controller: Controller, savedInstanceState: Bundle?) {
-            viewModelStore.restoreInstanceState(savedInstanceState?.getBundle(KEY_VIEW_MODEL_STORE))
+            viewModels.restoreInstanceState(savedInstanceState?.getBundle(KEY_VIEW_MODEL_STORE))
             super.preCreate(controller, savedInstanceState)
         }
 
         override fun onSaveInstanceState(controller: Controller, outState: Bundle) {
             super.onSaveInstanceState(controller, outState)
-            outState.putBundle(KEY_VIEW_MODEL_STORE, viewModelStore.saveInstanceState())
+            outState.putBundle(KEY_VIEW_MODEL_STORE, viewModels.saveInstanceState())
         }
 
         override fun postDestroy(controller: Controller) {
             super.postDestroy(controller)
             if (!controller.activity.isChangingConfigurations) {
-                viewModelStore.clear()
+                viewModels.clear()
             }
         }
     }

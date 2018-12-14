@@ -6,11 +6,10 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.util.Size
 import android.util.SizeF
-import androidx.core.os.bundleOf
 import java.io.Serializable
 
 /**
- * @author Manuel Wrage (IVIanuu)
+ * Saved state
  */
 interface SavedState {
 

@@ -16,10 +16,8 @@
 
 package com.ivianuu.essentials.ui.viewmodel
 
-import android.os.Bundle
-
 /**
- * @author Manuel Wrage (IVIanuu)
+ * A listener for [ViewModelStore]s
  */
 interface ViewModelStoreListener {
 

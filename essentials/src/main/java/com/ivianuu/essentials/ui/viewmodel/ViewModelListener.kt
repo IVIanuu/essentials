@@ -16,8 +16,9 @@
 
 package com.ivianuu.essentials.ui.viewmodel
 
-import android.os.Bundle
-
+/**
+ * A listener for [ViewModel]s
+ */
 interface ViewModelListener {
 
     fun preInit(viewModel: ViewModel, savedInstanceState: SavedState?) {

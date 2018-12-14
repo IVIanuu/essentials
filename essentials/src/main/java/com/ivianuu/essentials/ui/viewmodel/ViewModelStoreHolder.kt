@@ -1,8 +1,8 @@
 package com.ivianuu.essentials.ui.viewmodel
 
 /**
- * @author Manuel Wrage (IVIanuu)
+ * Holds a [ViewModelStore]
  */
 interface ViewModelStoreHolder {
-    val viewModelStore: ViewModelStore
+    val viewModels: ViewModelStore
 }

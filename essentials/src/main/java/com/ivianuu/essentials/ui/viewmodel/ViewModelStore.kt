@@ -20,7 +20,7 @@ import android.os.Bundle
 import kotlin.reflect.KClass
 
 /**
- * @author Manuel Wrage (IVIanuu)
+ * Store for [ViewModel]s
  */
 open class ViewModelStore {
 
