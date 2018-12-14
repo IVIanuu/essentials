@@ -19,27 +19,31 @@ package com.ivianuu.essentials.ui.viewmodel
 import android.os.Bundle
 import com.ivianuu.director.Controller
 import com.ivianuu.director.ControllerLifecycleListener
+import com.ivianuu.director.retainedLazy
 
 /**
  * Controller view model helper
  */
-class ControllerViewModelStore(controller: Controller, savedInstanceState: Bundle?) : ViewModelStore() {
+class ControllerViewModelStoreHolder(controller: Controller) : ViewModelStoreHolder {
 
-    init {
-        restoreInstanceState(savedInstanceState)
-    }
+    override val viewModelStore by controller.retainedLazy(KEY_VIEW_MODEL_STORE) { ViewModelStore() }
 
     private val lifecycleListener = object : ControllerLifecycleListener {
 
+        override fun preCreate(controller: Controller, savedInstanceState: Bundle?) {
+            viewModelStore.restoreInstanceState(savedInstanceState?.getBundle(KEY_VIEW_MODEL_STORE))
+            super.preCreate(controller, savedInstanceState)
+        }
+
         override fun onSaveInstanceState(controller: Controller, outState: Bundle) {
             super.onSaveInstanceState(controller, outState)
-            outState.putBundle(KEY_VIEW_MODEL_STORE, saveInstanceState())
+            outState.putBundle(KEY_VIEW_MODEL_STORE, viewModelStore.saveInstanceState())
         }
 
         override fun postDestroy(controller: Controller) {
             super.postDestroy(controller)
             if (!controller.activity.isChangingConfigurations) {
-                clear()
+                viewModelStore.clear()
             }
         }
     }
@@ -49,6 +53,6 @@ class ControllerViewModelStore(controller: Controller, savedInstanceState: Bundl
     }
 
     private companion object {
-        private const val KEY_VIEW_MODEL_STORE = "ControllerViewModelStore.viewModelStore"
+        private const val KEY_VIEW_MODEL_STORE = "ControllerViewModelStoreHolder.viewModelStore"
     }
 }
