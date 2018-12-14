@@ -46,7 +46,7 @@ object Versions {
     const val legacySupport = "28.0.0"
     const val liveEvent = "1e265df911"
     const val mavenGradle = "2.1"
-    const val materialComponents = "1.1.0-alpha01"
+    const val materialComponents = "1.1.0-alpha02"
     const val materialDialogs = "2.0.0-rc1"
     const val mockitoKotlin = "2.0.0"
     const val r2 = "06e702d39f"

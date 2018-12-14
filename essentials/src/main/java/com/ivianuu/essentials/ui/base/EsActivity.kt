@@ -54,7 +54,11 @@ abstract class EsActivity : AppCompatActivity(), HasInjectors, MvRxView, RouterA
     protected open val layoutRes get() = R.layout.es_activity_default
 
     open val containerId
-        get() = R.id.es_container
+        get() = if (layoutRes == R.layout.es_activity_default) {
+            R.id.es_container
+        } else {
+            android.R.id.content
+        }
 
     open val startKey: Any?
         get() = null
