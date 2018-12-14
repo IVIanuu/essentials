@@ -25,6 +25,8 @@ abstract class ViewModel {
 
     private var superCalled = false
 
+    private lateinit var viewModelStore: ViewModelStore
+
     protected open fun onInit(savedInstanceState: SavedState?) {
     }
 
@@ -37,36 +39,42 @@ abstract class ViewModel {
     protected open fun onCleared() {
     }
 
-    fun addListener(listener: ViewModelListener) {
+    fun addViewModelListener(listener: ViewModelListener) {
         if (!listeners.contains(listener)) {
             listeners.add(listener)
         }
     }
 
-    fun removeListener(listener: ViewModelListener) {
+    fun removeViewModelListener(listener: ViewModelListener) {
         listeners.remove(listener)
     }
 
-    internal fun initialize(savedInstanceState: SavedState?) {
-        listeners.toList().forEach { it.preInit(this, savedInstanceState) }
+    internal fun initialize(store: ViewModelStore, savedInstanceState: SavedState?) {
+        viewModelStore = store
+        notifyListeners { it.preInit(this, savedInstanceState) }
         requireSuperCalled { onInit(savedInstanceState) }
-        listeners.toList().forEach { it.postInit(this, savedInstanceState) }
+        notifyListeners { it.postInit(this, savedInstanceState) }
     }
 
     internal fun restoreInstanceState(savedInstanceState: SavedState) {
         requireSuperCalled { onRestoreInstanceState(savedInstanceState) }
-        listeners.toList().forEach { it.onRestoreInstanceState(this, savedInstanceState) }
+        notifyListeners { it.onRestoreInstanceState(this, savedInstanceState) }
     }
 
     internal fun saveInstanceState(outState: SavedState) {
         requireSuperCalled { onSaveInstanceState(outState) }
-        listeners.toList().forEach { it.onSaveInstanceState(this, outState) }
+        notifyListeners { it.onSaveInstanceState(this, outState) }
     }
 
     internal fun clear() {
-        listeners.toList().forEach { it.preCleared(this) }
+        notifyListeners { it.preCleared(this) }
         requireSuperCalled { onCleared() }
-        listeners.toList().forEach { it.postCleared(this) }
+        notifyListeners { it.postCleared(this) }
+    }
+
+    private inline fun notifyListeners(action: (ViewModelListener) -> Unit) {
+        val allListeners = listeners + viewModelStore.getViewModelListeners()
+        allListeners.forEach(action)
     }
 
     private inline fun requireSuperCalled(block: () -> Unit) {

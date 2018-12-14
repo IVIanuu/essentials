@@ -29,7 +29,8 @@ open class ViewModelStore {
 
     private var savedState: Bundle? = null
 
-    private val listeners = mutableListOf<ViewModelStoreListener>()
+    private val storeListeners = mutableListOf<ViewModelStoreListener>()
+    private val viewModelListeners = mutableListOf<ViewModelListener>()
 
     operator fun <T : ViewModel> get(
         clazz: KClass<T>,
@@ -46,9 +47,9 @@ open class ViewModelStore {
             val viewModelState = savedState?.getBundle(KEY_VIEW_MODEL_STATE_PREFIX + key)
                 ?.let { BundleSavedState(it) }
 
-            listeners.toList().forEach { it.onViewModelAdded(this, viewModel, viewModelState) }
+            storeListeners.toList().forEach { it.onViewModelAdded(this, viewModel, viewModelState) }
 
-            viewModel.initialize(viewModelState)
+            viewModel.initialize(this, viewModelState)
             viewModelState?.let { viewModel.restoreInstanceState(it) }
         }
 
@@ -77,15 +78,28 @@ open class ViewModelStore {
         savedState = null
     }
 
-    fun addListener(listener: ViewModelStoreListener) {
-        if (!listeners.contains(listener)) {
-            listeners.add(listener)
+    fun addStoreListener(listener: ViewModelStoreListener) {
+        if (!storeListeners.contains(listener)) {
+            storeListeners.add(listener)
         }
     }
 
-    fun removeListener(listener: ViewModelStoreListener) {
-        listeners.remove(listener)
+    fun removeStoreListener(listener: ViewModelStoreListener) {
+        storeListeners.remove(listener)
     }
+
+    fun addViewModelListener(listener: ViewModelListener) {
+        if (!viewModelListeners.contains(listener)) {
+            viewModelListeners.add(listener)
+        }
+    }
+
+    fun removeViewModelListener(listener: ViewModelListener) {
+        viewModelListeners.remove(listener)
+    }
+
+    internal fun getViewModelListeners() =
+        viewModelListeners.toList()
 
     private companion object {
         private const val KEY_VIEW_MODEL_STATE_PREFIX = "ViewModelStore.viewModelState"
