@@ -10,7 +10,7 @@ private val scopeCache = ScopeStore<ViewModel> { ViewModelScope(it) }
 private class ViewModelScope(viewModel: ViewModel) : BaseScope() {
 
     init {
-        viewModel.addListener(object : ViewModelListener {
+        viewModel.addViewModelListener(object : ViewModelListener {
             override fun preCleared(viewModel: ViewModel) {
                 super.preCleared(viewModel)
                 close()

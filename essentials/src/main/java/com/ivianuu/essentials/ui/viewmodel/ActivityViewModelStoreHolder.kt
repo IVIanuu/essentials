@@ -12,7 +12,7 @@ private val viewModelStores = mutableMapOf<String, ViewModelStore>()
  */
 class ActivityViewModelStoreHolder(
     private val activity: Activity,
-    private val savedInstanceState: Bundle?
+    savedInstanceState: Bundle?
 ) : ViewModelStoreHolder {
 
     override lateinit var viewModels: ViewModelStore
