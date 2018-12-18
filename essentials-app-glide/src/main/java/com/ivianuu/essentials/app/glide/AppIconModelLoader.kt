@@ -26,6 +26,8 @@ import com.bumptech.glide.load.model.ModelLoader
 import com.bumptech.glide.load.model.ModelLoaderFactory
 import com.bumptech.glide.load.model.MultiModelLoaderFactory
 import com.bumptech.glide.signature.ObjectKey
+import com.ivianuu.assistedinject.Assisted
+import com.ivianuu.assistedinject.AssistedInject
 import com.ivianuu.essentials.util.ext.coroutinesIo
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
@@ -38,12 +40,13 @@ data class AppIcon(val packageName: String)
 /**
  * Fetches images for [AppIcon]s
  */
-class AppIconFetcher @Inject constructor(private val packageManager: PackageManager) :
+class AppIconFetcher @AssistedInject constructor(
+    @Assisted private val app: AppIcon,
+    private val packageManager: PackageManager
+) :
     DataFetcher<Drawable> {
 
-    lateinit var app: AppIcon
-
-    private lateinit var job: Job
+    private var job: Job? = null
 
     override fun loadData(priority: Priority, callback: DataFetcher.DataCallback<in Drawable>) {
         job = GlobalScope.launch(coroutinesIo) {
@@ -60,7 +63,7 @@ class AppIconFetcher @Inject constructor(private val packageManager: PackageMana
     }
 
     override fun cancel() {
-        job.cancel()
+        job?.cancel()
     }
 
     override fun getDataClass() = Drawable::class.java
@@ -72,7 +75,7 @@ class AppIconFetcher @Inject constructor(private val packageManager: PackageMana
  * Model loader to load [AppIcon]s
  */
 class AppIconModelLoader @Inject constructor(
-    private val appIconFetcherProvider: Provider<AppIconFetcher>
+    private val appIconFetcherFactory: AppIconFetcherFactory
 ) : ModelLoader<AppIcon, Drawable> {
 
     override fun buildLoadData(
@@ -80,12 +83,9 @@ class AppIconModelLoader @Inject constructor(
         width: Int,
         height: Int,
         options: Options
-    ): ModelLoader.LoadData<Drawable> {
-        return ModelLoader.LoadData<Drawable>(
-            ObjectKey(model),
-            appIconFetcherProvider.get().apply { app = model }
-        )
-    }
+    ): ModelLoader.LoadData<Drawable> = ModelLoader.LoadData(
+        ObjectKey(model), appIconFetcherFactory.create(model)
+    )
 
     override fun handles(model: AppIcon) = true
 

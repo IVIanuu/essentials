@@ -60,8 +60,7 @@ fun <A : MvRxViewModel<B>, B : MvRxState, C : MvRxViewModel<D>, D : MvRxState, E
     viewModel5: I,
     buildModels: EpoxyController.(state1: B, state2: D, state3: F, state4: H, state5: J) -> Unit
 ) = epoxyController {
-    if (this@simpleEpoxyController is Controller && view == null
-    ) return@epoxyController
+    if (this@simpleEpoxyController is Controller && view == null) return@epoxyController
     withState(
         viewModel1,
         viewModel2,

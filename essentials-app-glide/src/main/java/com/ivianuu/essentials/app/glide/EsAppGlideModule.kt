@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.app.glide
 
+import com.ivianuu.assistedinject.AssistedModule
 import com.ivianuu.essentials.app.AppInitializer
 import com.ivianuu.essentials.injection.AppInitializerKey
 import dagger.Binds
@@ -25,11 +26,13 @@ import dagger.multibindings.IntoMap
 /**
  * Essentials app glide module
  */
-@Module
+@AssistedModule
+@Module(includes = [EsAppGlideModule_AssistedModule::class])
 abstract class EsAppGlideModule {
 
     @Binds
     @IntoMap
     @AppInitializerKey(AppGlideInitializer::class)
     abstract fun bindAppGlideInitializer(appGlideInitializer: AppGlideInitializer): AppInitializer
+
 }
