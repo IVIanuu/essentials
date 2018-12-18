@@ -22,6 +22,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.ivianuu.director.arch.lifecycle.LifecycleController
+import com.ivianuu.director.scopes.destroy
 import com.ivianuu.director.scopes.unbindView
 import com.ivianuu.essentials.injection.inject
 import com.ivianuu.essentials.ui.mvrx.MvRxView
@@ -30,7 +31,6 @@ import com.ivianuu.essentials.util.HasInjectorsContextWrapper
 import com.ivianuu.essentials.util.asMainCoroutineScope
 import com.ivianuu.injectors.CompositeInjectors
 import com.ivianuu.injectors.HasInjectors
-import com.ivianuu.scopes.archlifecycle.onDestroy
 import com.ivianuu.traveler.Router
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.*
@@ -52,7 +52,7 @@ abstract class EsController : LifecycleController(), ContextAware, HasInjectors,
     override val providedContext: Context
         get() = activity
 
-    val coroutineScope = onDestroy.asMainCoroutineScope()
+    val coroutineScope = destroy.asMainCoroutineScope()
 
     val viewCoroutineScope
         get() = _viewCoroutineScope ?: throw IllegalStateException("view not attached")

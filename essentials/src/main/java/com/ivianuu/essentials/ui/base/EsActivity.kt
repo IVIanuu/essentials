@@ -30,7 +30,7 @@ import com.ivianuu.essentials.util.ext.unsafeLazy
 import com.ivianuu.injectors.CompositeInjectors
 import com.ivianuu.injectors.HasInjectors
 import com.ivianuu.injectors.android.inject
-import com.ivianuu.scopes.archlifecycle.onDestroy
+import com.ivianuu.scopes.android.lifecycle.onDestroy
 import com.ivianuu.traveler.Navigator
 import com.ivianuu.traveler.NavigatorHolder
 import com.ivianuu.traveler.android.AppNavigator
@@ -108,7 +108,7 @@ abstract class EsActivity : AppCompatActivity(), HasInjectors, MvRxView, RouterA
     }
 
     protected open fun onInitializeRouter(savedInstanceState: Bundle?) {
-        router = attachRouter(findViewById(containerId), savedInstanceState)
+        router = attachRouter(containerId, savedInstanceState)
 
         if (savedInstanceState == null) {
             startKey?.let { travelerRouter.setRoot(it) }

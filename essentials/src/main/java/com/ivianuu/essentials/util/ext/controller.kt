@@ -23,10 +23,8 @@ import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.annotation.RequiresApi
-import androidx.lifecycle.Lifecycle
 import com.ivianuu.director.Controller
 import com.ivianuu.director.Router
-import com.ivianuu.director.arch.lifecycle.LifecycleController
 import com.ivianuu.director.startActivity
 import com.ivianuu.director.startActivityForResult
 import com.ivianuu.kommon.core.app.hideInputMethod
@@ -34,7 +32,6 @@ import com.ivianuu.kommon.core.app.showInputMethod
 import com.ivianuu.kommon.core.app.startActivityForResult
 import com.ivianuu.kommon.core.content.app
 import com.ivianuu.kommon.core.content.intent
-import com.ivianuu.scopes.archlifecycle.*
 
 val Controller.rootRouter: Router
     get() {
@@ -99,18 +96,3 @@ inline fun <reified T : Controller> Controller.targetControllerOrNull() = try {
 }
 
 inline fun <reified T : Application> Controller.app() = activity.app<T>()
-
-fun LifecycleController.viewScopeFor(event: Lifecycle.Event) = viewLifecycleOwner.scopeFor(event)
-
-val LifecycleController.viewOnCreate
-    get() = viewLifecycleOwner.onCreate
-val LifecycleController.viewOnStart
-    get() = viewLifecycleOwner.onStart
-val LifecycleController.viewOnResume
-    get() = viewLifecycleOwner.onResume
-val LifecycleController.viewOnPause
-    get() = viewLifecycleOwner.onPause
-val LifecycleController.viewOnStop
-    get() = viewLifecycleOwner.onStop
-val LifecycleController.viewOnDestroy
-    get() = viewLifecycleOwner.onDestroy
