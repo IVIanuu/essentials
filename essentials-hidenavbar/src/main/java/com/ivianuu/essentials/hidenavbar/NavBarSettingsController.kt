@@ -28,6 +28,7 @@ import com.ivianuu.essentials.securesettings.canWriteSecureSettings
 import com.ivianuu.essentials.ui.prefs.PrefsController
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
 import com.ivianuu.essentials.ui.traveler.key.bindKey
+import com.ivianuu.essentials.util.ext.fromPref
 import com.ivianuu.essentials.util.ext.results
 import com.ivianuu.scopes.rx.disposeBy
 import com.ivianuu.traveler.navigate
@@ -45,6 +46,7 @@ class NavBarSettingsKey(
  */
 class NavBarSettingsController : PrefsController() {
 
+    @Inject lateinit var navBarPrefs: NavBarPrefs
     @Inject lateinit var prefs: NavBarPrefs
     @field:NavBarSharedPrefs @Inject lateinit var navBarSharedPrefs: SharedPreferences
 
@@ -71,8 +73,8 @@ class NavBarSettingsController : PrefsController() {
     override fun epoxyController() = epoxyController {
         if (key.showMainSwitch) {
             switchPreference {
+                fromPref(navBarPrefs.manageNavBar)
                 sharedPreferences(navBarSharedPrefs)
-                key("manage_nav_bar")
                 title(R.string.es_pref_title_manage_nav_bar)
                 onChange<Boolean> { _, newValue ->
                     if (activity.canWriteSecureSettings() || !newValue) {
@@ -91,8 +93,8 @@ class NavBarSettingsController : PrefsController() {
 
         if (key.showNavBarHidden) {
             switchPreference {
+                fromPref(prefs.navBarHidden)
                 sharedPreferences(navBarSharedPrefs)
-                key("nav_bar_hidden")
                 summary(R.string.es_pref_summary_nav_bar_hidden)
                 title(R.string.es_pref_title_nav_bar_hidden)
                 enabled(mainSwitchEnabled)
@@ -110,33 +112,32 @@ class NavBarSettingsController : PrefsController() {
         }
 
         checkboxPreference {
+            fromPref(prefs.rot270Fix)
             sharedPreferences(navBarSharedPrefs)
-            key("rot270_fix")
             summary(R.string.es_pref_summary_rot270_fix)
             title(R.string.es_pref_title_rot270_fix)
             enabled(mainSwitchEnabled && !prefs.tabletMode.get())
         }
 
         checkboxPreference {
+            fromPref(prefs.tabletMode)
             sharedPreferences(navBarSharedPrefs)
-            key("tablet_mode")
             summary(R.string.es_pref_summary_tablet_mode)
             title(R.string.es_pref_title_tablet_mode)
             enabled(mainSwitchEnabled && !prefs.rot270Fix.get())
         }
 
         checkboxPreference {
+            fromPref(prefs.showNavBarScreenOff)
             sharedPreferences(navBarSharedPrefs)
-            key("show_nav_bar_screen_off")
-            defaultValue(true)
             summary(R.string.es_pref_summary_show_nav_bar_screen_off)
             title(R.string.es_pref_title_show_nav_bar_screen_off)
             enabled(mainSwitchEnabled)
         }
 
         checkboxPreference {
+            fromPref(prefs.fullOverscan)
             sharedPreferences(navBarSharedPrefs)
-            key("full_overscan")
             summary(R.string.es_pref_summary_full_overscan)
             title(R.string.es_pref_title_full_overscan)
             enabled(mainSwitchEnabled)

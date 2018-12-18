@@ -15,34 +15,32 @@ object Build {
 object Versions {
     const val androidGradlePlugin = "3.2.1"
 
-    const val androidxArch = "2.0.0"
     const val androidxAppCompat = "1.0.2"
     const val androidxCardView = "1.0.0"
     const val androidxCore = "1.0.1"
+    const val androidxLifecycle = "2.0.0"
+    const val androidxWork = "1.0.0-alpha11"
 
     const val androidxTestCore = "1.0.0"
     const val androidxTestJunit = "1.0.0"
     const val androidxTestRules = "1.1.0"
     const val androidxTestRunner = "1.1.0"
 
-    const val archWork = "1.0.0-alpha11"
-
     const val assistedInject = "74bd099811"
-
     const val constraintLayout = "2.0.0-alpha2"
     const val coroutines = "1.0.0"
     const val dagger = "2.19"
-    const val director = "38721b3566"
+    const val director = "89bd76eb32"
     const val epoxy = "2.19.0"
     const val epoxyKtx = "9dde1f5a9c"
     const val epoxyPrefs = "0a007754c4"
     const val glide = "4.8.0"
     const val injectors = "edc5350f6b"
     const val junit = "4.12"
-    const val kommon = "ae20896ec2"
+    const val kommon = "6c51279983"
     const val kotlin = "1.3.10"
-    const val kPrefs = "8016cf1e45"
-    const val kSettings = "cfc39053f4"
+    const val kPrefs = "ff00f64c9b"
+    const val kSettings = "4b27df8a77"
     const val legacySupport = "28.0.0"
     const val liveEvent = "1e265df911"
     const val mavenGradle = "2.1"
@@ -55,9 +53,9 @@ object Versions {
     const val rxJava = "2.2.2"
     const val rxJavaKtx = "015125e952"
     const val rxKotlin = "2.3.0"
-    const val scopes = "d9e4485f16"
+    const val scopes = "6c630efcd6"
     const val superUser = "1.0.0.+"
-    const val stateStore = "bc25513ffa"
+    const val stateStore = "19518b13f6"
     const val timber = "4.7.1"
     const val timberKtx = "f7547da781"
     const val traveler = "e1cb60c864"
@@ -69,16 +67,14 @@ object Deps {
     const val androidxAppCompat = "androidx.appcompat:appcompat:${Versions.androidxAppCompat}"
     const val androidxCardView = "androidx.cardview:cardview:${Versions.androidxCardView}"
     const val androidxCoreKtx = "androidx.core:core-ktx:${Versions.androidxCore}"
+    const val androidxLifecycleExtensions =
+        "androidx.lifecycle:lifecycle-extensions:${Versions.androidxLifecycle}"
+    const val androidxWorkRuntime = "android.arch.work:work-runtime-ktx:${Versions.androidxWork}"
 
     const val androidxTestCore = "androidx.test:core:${Versions.androidxTestCore}"
     const val androidxTestJunit = "androidx.test.ext:junit:${Versions.androidxTestJunit}"
     const val androidxTestRules = "androidx.test:rules:${Versions.androidxTestRules}"
     const val androidxTestRunner = "androidx.test:runner:${Versions.androidxTestRunner}"
-
-    const val archLifecycleExtensions =
-        "androidx.lifecycle:lifecycle-extensions:${Versions.androidxArch}"
-
-    const val archWorkRuntime = "android.arch.work:work-runtime-ktx:${Versions.archWork}"
 
     const val assistedInject =
         "com.github.IVIanuu.assisted-inject:assistedinject:${Versions.assistedInject}"
@@ -143,15 +139,15 @@ object Deps {
 
     const val kPrefs = "com.github.IVIanuu.kprefs:kprefs:${Versions.kPrefs}"
     const val kPrefsCoroutines = "com.github.IVIanuu.kprefs:kprefs-coroutines:${Versions.kPrefs}"
-    const val kPrefsLifecycle = "com.github.IVIanuu.kprefs:kprefs-lifecycle:${Versions.kPrefs}"
+    const val kPrefsLiveData = "com.github.IVIanuu.kprefs:kprefs-livedata:${Versions.kPrefs}"
     const val kPrefsRx = "com.github.IVIanuu.kprefs:kprefs-rx:${Versions.kPrefs}"
 
     const val kSettings =
         "com.github.IVIanuu.ksettings:ksettings:${Versions.kSettings}"
     const val kSettingsCoroutines =
         "com.github.IVIanuu.ksettings:ksettings-coroutines:${Versions.kSettings}"
-    const val kSettingsLifecycle =
-        "com.github.IVIanuu.ksettings:ksettings-lifecycle:${Versions.kSettings}"
+    const val kSettingsLiveData =
+        "com.github.IVIanuu.ksettings:ksettings-livedata:${Versions.kSettings}"
     const val kSettingsRx =
         "com.github.IVIanuu.ksettings:ksettings-rx:${Versions.kSettings}"
 
@@ -188,16 +184,18 @@ object Deps {
         "com.github.IVIanuu.statestore:statestore-android:${Versions.stateStore}"
     const val stateStoreCoroutines =
         "com.github.IVIanuu.statestore:statestore-coroutines:${Versions.stateStore}"
-    const val stateStoreLifecycle =
-        "com.github.IVIanuu.statestore:statestore-lifecycle:${Versions.stateStore}"
+    const val stateStoreLiveData =
+        "com.github.IVIanuu.statestore:statestore-livedata:${Versions.stateStore}"
     const val stateStoreRx = "com.github.IVIanuu.statestore:statestore-rx:${Versions.stateStore}"
 
     const val scopes = "com.github.IVIanuu.scopes:scopes:${Versions.scopes}"
     const val scopesAndroid = "com.github.IVIanuu.scopes:scopes-android:${Versions.scopes}"
-    const val scopesArchLifecycle =
-        "com.github.IVIanuu.scopes:scopes-arch-lifecycle:${Versions.scopes}"
+    const val scopesAndroidLifecycle =
+        "com.github.IVIanuu.scopes:scopes-android-lifecycle:${Versions.scopes}"
     const val scopesCommon = "com.github.IVIanuu.scopes:scopes-common:${Versions.scopes}"
     const val scopesCoroutines = "com.github.IVIanuu.scopes:scopes-coroutines:${Versions.scopes}"
+    const val scopesLiveData =
+        "com.github.IVIanuu.scopes:scopes-livedata:${Versions.scopes}"
     const val scopesRx = "com.github.IVIanuu.scopes:scopes-rx:${Versions.scopes}"
 
     const val superUser = "eu.chainfire:libsuperuser:${Versions.superUser}"

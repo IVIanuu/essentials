@@ -66,7 +66,7 @@ dependencies {
     api(Deps.coroutinesCore)
     api(Deps.coroutinesRxJava)
 
-    api(Deps.archLifecycleExtensions)
+    api(Deps.androidxLifecycleExtensions)
 
     api(Deps.constraintLayout)
 
@@ -100,12 +100,12 @@ dependencies {
 
     api(Deps.kPrefs)
     api(Deps.kPrefsCoroutines)
-    api(Deps.kPrefsLifecycle)
+    api(Deps.kPrefsLiveData)
     api(Deps.kPrefsRx)
 
     api(Deps.kSettings)
     api(Deps.kSettingsCoroutines)
-    api(Deps.kSettingsLifecycle)
+    api(Deps.kSettingsLiveData)
     api(Deps.kSettingsRx)
 
     api(project(":ktuples"))
@@ -125,7 +125,8 @@ dependencies {
 
     api(Deps.scopes)
     api(Deps.scopesAndroid)
-    api(Deps.scopesArchLifecycle)
+    api(Deps.scopesAndroidLifecycle)
+    api(Deps.scopesLiveData)
     api(Deps.scopesCommon)
     api(Deps.scopesCoroutines)
     api(Deps.scopesRx)
@@ -133,7 +134,7 @@ dependencies {
     api(Deps.stateStore)
     api(Deps.stateStoreAndroid)
     api(Deps.stateStoreCoroutines)
-    api(Deps.stateStoreLifecycle)
+    api(Deps.stateStoreLiveData)
     api(Deps.stateStoreRx)
 
     api(Deps.timber)
