@@ -27,10 +27,10 @@ import com.ivianuu.essentials.ui.traveler.dialog
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
 import com.ivianuu.essentials.ui.traveler.key.bindKey
 import com.ivianuu.essentials.ui.traveler.vertical
+import com.ivianuu.essentials.util.ext.goBackWithResult
+import com.ivianuu.essentials.util.ext.sendResult
 import com.ivianuu.essentials.util.ext.toast
 import com.ivianuu.traveler.navigate
-import com.ivianuu.traveler.result.goBackWithResult
-import com.ivianuu.traveler.result.sendResult
 import kotlinx.android.parcel.Parcelize
 import kotlinx.coroutines.launch
 import javax.inject.Inject

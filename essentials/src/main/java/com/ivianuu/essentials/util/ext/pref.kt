@@ -15,10 +15,13 @@ fun <T, S> PreferenceModel.Builder.fromEnumPref(pref: Pref<T>) where T : Enum<T>
     defaultValue(pref.get().value)
 }
 
-fun <T : Any> PreferenceModel.Builder.dependency(dependency: Pref<T>) {
-    dependency(dependency.key, dependency.get(), dependency.defaultValue)
+fun <T : Any> PreferenceModel.Builder.dependency(dependency: Pref<T>, value: T) {
+    dependency(dependency.key, value, dependency.defaultValue)
 }
 
-fun <T, S> PreferenceModel.Builder.enumDependency(dependency: Pref<T>) where T : Enum<T>, T : PrefValueHolder<S> {
-    dependency(dependency.key, dependency.get().value, dependency.defaultValue.value)
+fun <T, S> PreferenceModel.Builder.enumDependency(
+    dependency: Pref<T>,
+    value: T
+) where T : Enum<T>, T : PrefValueHolder<S> {
+    dependency(dependency.key, value, dependency.defaultValue.value)
 }

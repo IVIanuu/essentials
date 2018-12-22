@@ -32,7 +32,6 @@ import com.ivianuu.injectors.HasInjectors
 import com.ivianuu.injectors.android.inject
 import com.ivianuu.scopes.android.lifecycle.onDestroy
 import com.ivianuu.traveler.Navigator
-import com.ivianuu.traveler.NavigatorHolder
 import com.ivianuu.traveler.android.AppNavigator
 import com.ivianuu.traveler.common.ResultNavigator
 import com.ivianuu.traveler.common.compositeNavigatorOf
@@ -46,7 +45,6 @@ abstract class EsActivity : AppCompatActivity(), HasInjectors, MvRxView, RouterA
 
     @Inject override lateinit var injectors: CompositeInjectors
 
-    @Inject lateinit var navigatorHolder: NavigatorHolder
     @Inject lateinit var travelerRouter: com.ivianuu.traveler.Router
 
     val coroutineScope = onDestroy.asMainCoroutineScope()
@@ -86,11 +84,11 @@ abstract class EsActivity : AppCompatActivity(), HasInjectors, MvRxView, RouterA
 
     override fun onResumeFragments() {
         super.onResumeFragments()
-        navigatorHolder.setNavigator(navigator)
+        travelerRouter.setNavigator(navigator)
     }
 
     override fun onPause() {
-        navigatorHolder.removeNavigator()
+        travelerRouter.removeNavigator()
         super.onPause()
     }
 

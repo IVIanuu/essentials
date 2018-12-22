@@ -30,7 +30,7 @@ object Versions {
     const val constraintLayout = "2.0.0-alpha2"
     const val coroutines = "1.0.0"
     const val dagger = "2.19"
-    const val director = "89bd76eb32"
+    const val director = "68fdafdcc3"
     const val epoxy = "2.19.0"
     const val epoxyKtx = "9dde1f5a9c"
     const val epoxyPrefs = "0a007754c4"
@@ -58,7 +58,7 @@ object Versions {
     const val stateStore = "19518b13f6"
     const val timber = "4.7.1"
     const val timberKtx = "f7547da781"
-    const val traveler = "e1cb60c864"
+    const val traveler = "ab66233b33"
 }
 
 object Deps {
@@ -209,6 +209,4 @@ object Deps {
         "com.github.IVIanuu.traveler:traveler-common:${Versions.traveler}"
     const val travelerLifecycle =
         "com.github.IVIanuu.traveler:traveler-lifecycle:${Versions.traveler}"
-    const val travelerResult =
-        "com.github.IVIanuu.traveler:traveler-result:${Versions.traveler}"
 }

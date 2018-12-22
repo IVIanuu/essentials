@@ -25,9 +25,9 @@ import com.ivianuu.essentials.ui.traveler.NavOptions
 import com.ivianuu.essentials.ui.traveler.dialog
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
 import com.ivianuu.essentials.ui.traveler.key.key
+import com.ivianuu.essentials.util.ext.goBackWithResult
 import com.ivianuu.essentials.util.string
 import com.ivianuu.traveler.goBack
-import com.ivianuu.traveler.result.goBackWithResult
 import kotlinx.android.parcel.Parcelize
 import kotlinx.coroutines.launch
 import javax.inject.Inject
