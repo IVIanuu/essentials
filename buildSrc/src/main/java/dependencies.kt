@@ -30,7 +30,7 @@ object Versions {
     const val constraintLayout = "2.0.0-alpha2"
     const val coroutines = "1.0.0"
     const val dagger = "2.19"
-    const val director = "68fdafdcc3"
+    const val director = "af5c7b5506"
     const val epoxy = "2.19.0"
     const val epoxyKtx = "9dde1f5a9c"
     const val epoxyPrefs = "0a007754c4"
