@@ -14,17 +14,17 @@ interface ComponentHolder {
 }
 
 inline fun <reified T : Any> ComponentHolder.inject(
-    name: String? = null, noinline parameters: (() -> Parameters)? = null
-) = inject(T::class, name, parameters)
+    name: String? = null, noinline params: (() -> Parameters)? = null
+) = inject(T::class, name, params)
 
 fun <T : Any> ComponentHolder.inject(
     clazz: KClass<T>,
     name: String? = null,
-    parameters: (() -> Parameters)? = null
+    params: (() -> Parameters)? = null
 ) =
     lazy(LazyThreadSafetyMode.NONE) {
         withComponent {
-            it.get(clazz, name, parameters?.invoke() ?: emptyParameters())
+            it.get(clazz, name, params?.invoke() ?: emptyParameters())
         }
     }
 

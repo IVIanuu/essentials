@@ -1,7 +1,5 @@
 package com.ivianuu.injekt
 
-import com.ivianuu.injekt.Declaration.Type.FACTORY
-import com.ivianuu.injekt.Declaration.Type.SINGLE
 import kotlin.reflect.KClass
 
 /**
@@ -17,7 +15,7 @@ fun component(
     modules: Iterable<Module> = emptyList(),
     dependsOn: Iterable<Component> = emptyList()
 ): Component {
-    val moduleDeclarations = modules.map { module -> module.declarations }.fold {
+    val moduleDeclarations = modules.map { it.declarations }.fold {
         info { "Registering declaration $it" }
     }
 
@@ -40,20 +38,37 @@ fun component(
  * than the current Component.
  */
 class Component internal constructor(
-    private val declarations: Set<Declaration<*>>,
+    declarations: Set<Declaration<*>>,
     dependsOn: Iterable<Component>
 ) {
 
-    private val instances = mutableMapOf<String, Any>()
     val context = ComponentContext(this, dependsOn)
 
+    private val instances = mutableSetOf<InstanceHolder<*>>()
+
     init {
-        // Initialize eager singletons
         declarations
-            .filter { it.eager }
-            .forEach { declaration ->
-                instances[declaration.key] = declaration.provider(context, emptyParameters()) as Any
+            .map {
+                val type = it.type
+                when (type) {
+                    is Declaration.Type.Factory -> FactoryInstanceHolder(it)
+                    is Declaration.Type.Single -> {
+                        if (type.synchronized) {
+                            SynchronizedSingleInstanceHolder(it)
+                        } else {
+                            UnsafeSingleInstanceHolder(it)
+                        }
+                    }
+                }
             }
+            .forEach { instances.add(it) }
+
+        // Initialize eager singletons
+        instances
+            .filter {
+                (it.declaration.type as? Declaration.Type.Single)?.eager == true
+            }
+            .forEach { it.get(context, emptyParameters()) }
     }
 
     /**
@@ -73,8 +88,8 @@ class Component internal constructor(
      */
     inline fun <reified T : Any> inject(
         name: String? = null,
-        noinline parameters: (() -> Parameters)? = null
-    ) = context.inject<T>(name, parameters)
+        noinline params: (() -> Parameters)? = null
+    ) = context.inject<T>(name, params)
 
     /**
      * Injects requested dependency lazily.
@@ -82,16 +97,16 @@ class Component internal constructor(
     fun <T : Any> inject(
         clazz: KClass<T>,
         name: String? = null,
-        parameters: (() -> Parameters)? = null
-    ) = context.inject(clazz, name, parameters)
+        params: (() -> Parameters)? = null
+    ) = context.inject(clazz, name, params)
 
     /**
      * Injects requested dependency immediately.
      */
     inline fun <reified T : Any> get(
         name: String? = null,
-        parameters: Parameters = emptyParameters()
-    ) = get(T::class, name, parameters)
+        params: Parameters = emptyParameters()
+    ) = get(T::class, name, params)
 
     /**
      * Injects requested dependency immediately.
@@ -99,43 +114,30 @@ class Component internal constructor(
     fun <T : Any> get(
         clazz: KClass<T>,
         name: String? = null,
-        parameters: Parameters = emptyParameters()
-    ) = context.get(clazz, name, parameters)
+        params: Parameters = emptyParameters()
+    ) = context.get(clazz, name, params)
 
     internal fun <T : Any> thisComponentInject(
         clazz: KClass<T>,
         name: String?,
-        parameters: Parameters,
+        params: Parameters,
         internal: Boolean
     ): T? {
-        val declaration = declarations.firstOrNull {
-            (if (!internal) !it.internal else true)
-                    && it.classes.contains(clazz)
-                    && name == it.name
+        val instance = instances.firstOrNull {
+            (if (!internal) !it.declaration.internal else true)
+                    && it.declaration.classes.contains(clazz)
+                    && name == it.declaration.name
         }
-        if (declaration == null || (declaration.internal && !internal)) {
-            return null
+        return if (instance == null || (instance.declaration.internal && !internal)) {
+            null
         } else {
             try {
-                info { "Injecting dependency for ${declaration.key}" }
-                val instance = when (declaration.type) {
-                    FACTORY -> declaration.provider(context, parameters).also {
-                        debug { "Created instance for ${declaration.key}" }
-                    }
-                    SINGLE -> {
-                        instances[declaration.key]?.also {
-                            debug { "Returning existing singleton instance for ${declaration.key}" }
-                        } ?: declaration.provider(context, parameters).also { newInstance ->
-                            debug { "Created singleton instance for ${declaration.key}" }
-                            instances[declaration.key] = newInstance
-                        }
-                    }
-                }
-                return instance as T
+                info { "Injecting dependency for ${instance.declaration.key}" }
+                instance.get(context, params) as T
             } catch (e: InjektException) {
                 throw e
             } catch (e: Exception) {
-                throw InstanceCreationException("Could not instantiate $declaration", e)
+                throw InstanceCreationException("Could not instantiate $instance", e)
             }
         }
     }
@@ -145,10 +147,10 @@ class Component internal constructor(
         name: String?,
         internal: Boolean
     ) =
-        declarations.any {
-            (if (!internal) !it.internal else true)
-                    && it.classes.contains(clazz)
-                    && name == it.name
+        instances.any {
+            (if (!internal) !it.declaration.internal else true)
+                    && it.declaration.classes.contains(clazz)
+                    && name == it.declaration.name
         }
 
 }
@@ -178,46 +180,46 @@ class ComponentContext(
 
     inline fun <reified T : Any> inject(
         name: String? = null,
-        noinline parameters: (() -> Parameters)? = null,
+        noinline params: (() -> Parameters)? = null,
         internal: Boolean = false
     ) =
-        inject(T::class, name, parameters, internal)
+        inject(T::class, name, params, internal)
 
     fun <T : Any> inject(
         clazz: KClass<T>,
         name: String? = null,
-        parameters: (() -> Parameters)? = null,
+        params: (() -> Parameters)? = null,
         internal: Boolean = false
     ) = lazy {
         get(
             clazz,
             name = name,
-            parameters = parameters?.invoke() ?: emptyParameters(),
+            params = params?.invoke() ?: emptyParameters(),
             internal = internal
         )
     }
 
     inline fun <reified T : Any> get(
         name: String? = null,
-        parameters: Parameters = emptyParameters(),
+        params: Parameters = emptyParameters(),
         internal: Boolean = false
     ) =
-        get(T::class, name, parameters, internal)
+        get(T::class, name, params, internal)
 
     fun <T : Any> get(
         clazz: KClass<T>,
         name: String? = null,
-        parameters: Parameters = emptyParameters(),
+        params: Parameters = emptyParameters(),
         internal: Boolean = false
-    ) = injectInternal(clazz, name, parameters, internal)
+    ) = injectInternal(clazz, name, params, internal)
 
     private fun <T : Any> injectInternal(
         clazz: KClass<T>,
         name: String? = null,
-        parameters: Parameters = emptyParameters(),
+        params: Parameters = emptyParameters(),
         internal: Boolean = false
     ): T {
-        val value = thisComponent.thisComponentInject(clazz, name, parameters, internal)
+        val value = thisComponent.thisComponentInject(clazz, name, params, internal)
         return when {
             value != null -> value
             else -> {

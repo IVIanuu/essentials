@@ -1,8 +1,6 @@
 package com.ivianuu.injekt
 
 import com.ivianuu.injekt.Declaration.Type
-import com.ivianuu.injekt.Declaration.Type.FACTORY
-import com.ivianuu.injekt.Declaration.Type.SINGLE
 import kotlin.reflect.KClass
 
 /**
@@ -41,17 +39,18 @@ fun <T : Any> Module.factory(
     name: String? = null,
     internal: Boolean = false,
     body: DeclarationBuilder.(Parameters) -> T
-) = provide(clazz, FACTORY, name, internal, false, body)
+) = provide(clazz, Type.Factory, name, internal, body)
 
 /**
  * Provides a singleton dependency
  */
 inline fun <reified T : Any> Module.single(
     name: String? = null,
-    eager: Boolean = false,
     internal: Boolean = false,
+    eager: Boolean = false,
+    synchronized: Boolean = false,
     noinline body: DeclarationBuilder.(Parameters) -> T
-) = single(T::class, name, eager, internal, body)
+) = single(T::class, name, internal, eager, synchronized, body)
 
 /**
  * Provides a singleton dependency
@@ -59,25 +58,24 @@ inline fun <reified T : Any> Module.single(
 fun <T : Any> Module.single(
     clazz: KClass<T>,
     name: String? = null,
-    eager: Boolean = false,
     internal: Boolean = false,
+    eager: Boolean = false,
+    synchronized: Boolean = false,
     body: DeclarationBuilder.(Parameters) -> T
-) = provide(clazz, SINGLE, name, internal, eager, body)
+) = provide(clazz, Type.Single(eager, synchronized), name, internal, body)
 
 inline fun <reified T : Any> Module.provide(
     type: Type,
     name: String? = null,
     internal: Boolean = false,
-    eager: Boolean = false,
     noinline body: DeclarationBuilder.(Parameters) -> T
-) = provide(T::class, type, name, internal, eager, body)
+) = provide(T::class, type, name, internal, body)
 
 fun <T : Any> Module.provide(
     clazz: KClass<T>,
     type: Type,
     name: String? = null,
     internal: Boolean = false,
-    eager: Boolean = false,
     body: DeclarationBuilder.(Parameters) -> T
 ): Declaration<T> {
     val declaration =
@@ -87,8 +85,7 @@ fun <T : Any> Module.provide(
             clazz = clazz,
             name = name,
             provider = { context, params -> body.invoke(DeclarationBuilder(context), params) },
-            internal = internal,
-            eager = eager
+            internal = internal
         )
 
     val existingDeclaration = declarations.firstOrNull { it.key == declaration.key }
@@ -123,8 +120,8 @@ fun <T : Any> DeclarationBuilder.get(
  */
 inline fun <reified T : Any> DeclarationBuilder.lazy(
     name: String? = null,
-    noinline parameters: (() -> Parameters)? = null
-) = lazy(T::class, name, parameters)
+    noinline params: (() -> Parameters)? = null
+) = lazy(T::class, name, params)
 
 /**
  * Lazy version of [get]
@@ -132,5 +129,5 @@ inline fun <reified T : Any> DeclarationBuilder.lazy(
 fun <T : Any> DeclarationBuilder.lazy(
     clazz: KClass<T>,
     name: String? = null,
-    parameters: (() -> Parameters)? = null
-) = context.inject(clazz, name, parameters)
+    params: (() -> Parameters)? = null
+) = context.inject(clazz, name, params)

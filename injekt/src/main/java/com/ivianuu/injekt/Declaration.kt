@@ -12,8 +12,7 @@ data class Declaration<T : Any>(
     var types: List<KClass<*>> = emptyList(),
     val name: String?,
     val provider: Provider<T>,
-    val internal: Boolean,
-    val eager: Boolean
+    val internal: Boolean
 ) {
 
     internal val classes: List<KClass<*>> = listOf(clazz) + types
@@ -32,7 +31,14 @@ data class Declaration<T : Any>(
         return this
     }
 
-    enum class Type { FACTORY, SINGLE }
+    sealed class Type {
+        object Factory : Type()
+
+        data class Single(
+            val eager: Boolean,
+            val synchronized: Boolean
+        ) : Type()
+    }
 
     override fun toString() =
         "${clazz.java.name}(type=$type${name?.let { ", name=$it" }.orEmpty()}${moduleName?.let { ", module=$it" }.orEmpty()})"
