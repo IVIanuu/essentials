@@ -2,8 +2,6 @@ package com.ivianuu.injekt
 
 import com.ivianuu.injekt.Declaration.Type.FACTORY
 import com.ivianuu.injekt.Declaration.Type.SINGLE
-import com.ivianuu.injekt.Key.ClassKey
-import com.ivianuu.injekt.Key.NameKey
 import kotlin.reflect.KClass
 
 /**
@@ -42,16 +40,16 @@ fun component(
  * than the current Component.
  */
 class Component internal constructor(
-    private val declarations: Declarations,
+    private val declarations: Set<Declaration<*>>,
     dependsOn: Iterable<Component>
 ) {
 
-    private val instances = mutableMapOf<Key, Any>()
+    private val instances = mutableMapOf<String, Any>()
     val context = ComponentContext(this, dependsOn)
 
     init {
         // Initialize eager singletons
-        declarations.values
+        declarations
             .filter { it.eager }
             .forEach { declaration ->
                 instances[declaration.key] = declaration.provider(context, emptyParameters()) as Any
@@ -76,8 +74,7 @@ class Component internal constructor(
     inline fun <reified T : Any> inject(
         name: String? = null,
         noinline parameters: (() -> Parameters)? = null
-    ) =
-        context.inject<T>(name, parameters)
+    ) = context.inject<T>(name, parameters)
 
     /**
      * Injects requested dependency lazily.
@@ -103,31 +100,34 @@ class Component internal constructor(
         clazz: KClass<T>,
         name: String? = null,
         parameters: Parameters = emptyParameters()
-    ) =
-        context.get(clazz, name, parameters)
+    ) = context.get(clazz, name, parameters)
 
-    @Suppress("UNCHECKED_CAST", "MemberVisibilityCanBePrivate")
-    internal fun <T> thisComponentInjectByKey(
-        key: Key,
+    internal fun <T : Any> thisComponentInject(
+        clazz: KClass<T>,
+        name: String?,
         parameters: Parameters,
         internal: Boolean
     ): T? {
-        val declaration = declarations[key]
+        val declaration = declarations.firstOrNull {
+            (if (!internal) !it.internal else true)
+                    && it.classes.contains(clazz)
+                    && name == it.name
+        }
         if (declaration == null || (declaration.internal && !internal)) {
             return null
         } else {
             try {
-                info { "Injecting dependency for ${key.stringIdentifier}" }
+                info { "Injecting dependency for ${declaration.key}" }
                 val instance = when (declaration.type) {
                     FACTORY -> declaration.provider(context, parameters).also {
-                        debug { "Created instance for ${key.stringIdentifier}" }
+                        debug { "Created instance for ${declaration.key}" }
                     }
                     SINGLE -> {
-                        instances[key]?.also {
-                            debug { "Returning existing singleton instance for ${key.stringIdentifier}" }
+                        instances[declaration.key]?.also {
+                            debug { "Returning existing singleton instance for ${declaration.key}" }
                         } ?: declaration.provider(context, parameters).also { newInstance ->
-                            debug { "Created singleton instance for ${key.stringIdentifier}" }
-                            instances[key] = newInstance as Any
+                            debug { "Created singleton instance for ${declaration.key}" }
+                            instances[declaration.key] = newInstance
                         }
                     }
                 }
@@ -140,14 +140,17 @@ class Component internal constructor(
         }
     }
 
-    internal fun thisComponentCanInject(key: Key, internal: Boolean) =
-        declarations.filter { if (!internal) !it.value.internal else true }.containsKey(key)
+    internal fun thisComponentCanInject(
+        clazz: KClass<*>,
+        name: String?,
+        internal: Boolean
+    ) =
+        declarations.any {
+            (if (!internal) !it.internal else true)
+                    && it.classes.contains(clazz)
+                    && name == it.name
+        }
 
-    internal fun canInject(key: Key) =
-        context.canInject(key)
-
-    internal fun <T> injectByKey(key: Key) =
-        context.injectByKey<T>(key)
 }
 
 /**
@@ -160,33 +163,18 @@ class ComponentContext(
     private val dependsOn: Iterable<Component>
 ) {
 
-    fun <T> injectByKey(
-        key: Key,
-        parameters: Parameters = emptyParameters(),
-        internal: Boolean = false
-    ): T {
-        val value = thisComponent.thisComponentInjectByKey<T>(key, parameters, internal)
-        return when {
-            value != null -> value
-            else -> {
-                val component = dependsOn.find { component -> component.canInject(key) }
-                    ?: throw InjectionException("No binding found for ${key.stringIdentifier}")
-                component.injectByKey(key) as T
-            }
-        }
-    }
-
-    fun canInject(key: Key, internal: Boolean = false): Boolean =
-        when {
-            thisComponent.thisComponentCanInject(key = key, internal = internal) -> true
-            else -> dependsOn.any { component -> component.canInject(key) }
-        }
-
     inline fun <reified T : Any> canInject(name: String? = null, internal: Boolean = false) =
         canInject(T::class, name, internal)
 
-    fun <T : Any> canInject(clazz: KClass<T>, name: String? = null, internal: Boolean = false) =
-        canInject(key = Key.of(clazz, name), internal = internal)
+    fun <T : Any> canInject(
+        clazz: KClass<T>,
+        name: String? = null,
+        internal: Boolean = false
+    ): Boolean =
+        when {
+            thisComponent.thisComponentCanInject(clazz, name, internal = internal) -> true
+            else -> dependsOn.any { it.canInject(clazz, name) }
+        }
 
     inline fun <reified T : Any> inject(
         name: String? = null,
@@ -221,25 +209,35 @@ class ComponentContext(
         name: String? = null,
         parameters: Parameters = emptyParameters(),
         internal: Boolean = false
-    ) =
-        injectByKey<T>(key = Key.of(clazz, name), parameters = parameters, internal = internal)
+    ) = injectInternal(clazz, name, parameters, internal)
 
+    private fun <T : Any> injectInternal(
+        clazz: KClass<T>,
+        name: String? = null,
+        parameters: Parameters = emptyParameters(),
+        internal: Boolean = false
+    ): T {
+        val value = thisComponent.thisComponentInject(clazz, name, parameters, internal)
+        return when {
+            value != null -> value
+            else -> {
+                val component = dependsOn.find { component -> component.canInject(clazz, name) }
+                    ?: throw InjectionException("No binding found for ${clazz.java.name + name.orEmpty()}")
+                component.get(clazz, name)
+            }
+        }
+    }
 }
 
-private fun Iterable<Declarations>.fold(each: ((Declaration<*>) -> Unit)? = null): Declarations =
-    fold(mutableMapOf()) { acc, currDeclarations ->
-        currDeclarations.entries.forEach { entry ->
-            val existingDeclaration = acc[entry.key]
-            existingDeclaration?.let { declaration ->
-                if (!declaration.internal) throw OverrideException(entry.value, declaration)
-            }
-            each?.invoke(entry.value)
-        }
-        acc.apply { putAll(currDeclarations) }
-    }
+private fun Iterable<Set<Declaration<*>>>.fold(each: ((Declaration<*>) -> Unit)? = null): Set<Declaration<*>> =
+    fold(mutableSetOf()) { acc, currDeclarations ->
+        currDeclarations.forEach { entry ->
+            val existingDeclaration = acc.firstOrNull { it.key == entry.key }
 
-private val Key.stringIdentifier
-    get() = when (this) {
-        is ClassKey<*> -> "class ${clazz.java.name}"
-        is NameKey -> "name $name"
+            existingDeclaration?.let { declaration ->
+                if (!declaration.internal) throw OverrideException(entry, declaration)
+            }
+            each?.invoke(entry)
+        }
+        acc.apply { addAll(currDeclarations) }
     }

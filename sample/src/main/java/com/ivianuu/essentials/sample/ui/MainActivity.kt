@@ -17,7 +17,6 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import android.app.Activity
 import android.content.Context
 import android.content.res.Resources
 import android.os.Bundle
@@ -30,6 +29,10 @@ import com.ivianuu.director.pushChangeHandler
 import com.ivianuu.director.pushController
 import com.ivianuu.director.toTransaction
 import com.ivianuu.essentials.hidenavbar.NavBarSettingsKey
+import com.ivianuu.essentials.sample.injekt.activityComponent
+import com.ivianuu.essentials.sample.injekt.activityModule
+import com.ivianuu.essentials.sample.injekt.controllerComponent
+import com.ivianuu.essentials.sample.injekt.simpleModule
 import com.ivianuu.essentials.sample.ui.counter.CounterKey
 import com.ivianuu.essentials.ui.base.EsActivity
 import com.ivianuu.essentials.ui.base.EsActivityModule
@@ -67,8 +70,6 @@ class MyController : LifecycleController(), ComponentHolder {
     }
 
     private val viewModel by inject<MainViewModel> { parametersOf("my_id") }
-
-    var viewComponent: Component? = null
 
     override fun onInflateView(
         inflater: LayoutInflater,
@@ -114,7 +115,7 @@ class MainViewModel(
 }
 
 fun mainActivityModule(activity: MainActivity) = activityModule(activity) {
-    single(eager = true) { MyEagerDep() } bind Activity::class bind Context::class
+    single(eager = true) { MyEagerDep() }
 }
 
 fun myControllerModule(controller: MyController) = simpleModule(controller) {

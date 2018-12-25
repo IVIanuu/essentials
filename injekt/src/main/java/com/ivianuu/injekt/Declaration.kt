@@ -6,7 +6,6 @@ import kotlin.reflect.KClass
  * Represents a dependency declaration.
  */
 data class Declaration<T : Any>(
-    val key: Key,
     val type: Type,
     val moduleName: String?,
     val clazz: KClass<T>,
@@ -16,6 +15,10 @@ data class Declaration<T : Any>(
     val internal: Boolean,
     val eager: Boolean
 ) {
+
+    internal val classes: List<KClass<*>> = listOf(clazz) + types
+
+    val key = clazz.java.name + name.orEmpty()
 
     /**
      * Add a compatible type to current bounded definition

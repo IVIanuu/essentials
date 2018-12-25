@@ -12,7 +12,7 @@ import kotlin.reflect.KClass
  */
 @ModuleDslMarker
 class Module internal constructor(val name: String? = null) {
-    internal val declarations = mutableMapOf<Key, Declaration<*>>()
+    internal val declarations = mutableSetOf<Declaration<*>>()
 }
 
 /**
@@ -25,7 +25,7 @@ fun module(name: String? = null, body: Module.() -> Unit) =
 annotation class ModuleDslMarker
 
 /**
- * Provides the dependency via a factory. A new instance will be created every time the dependency is requested.
+ * Provides a dependency
  */
 inline fun <reified T : Any> Module.factory(
     name: String? = null,
@@ -34,7 +34,7 @@ inline fun <reified T : Any> Module.factory(
 ) = factory(T::class, name, internal, body)
 
 /**
- * Provides the dependency via a factory. A new instance will be created every time the dependency is requested.
+ * Provides a dependency
  */
 fun <T : Any> Module.factory(
     clazz: KClass<T>,
@@ -44,7 +44,7 @@ fun <T : Any> Module.factory(
 ) = provide(clazz, FACTORY, name, internal, false, body)
 
 /**
- * Provides the dependency as a singleton. Only one instance (per component) will be created.
+ * Provides a singleton dependency
  */
 inline fun <reified T : Any> Module.single(
     name: String? = null,
@@ -54,7 +54,7 @@ inline fun <reified T : Any> Module.single(
 ) = single(T::class, name, eager, internal, body)
 
 /**
- * Provides the dependency as a singleton. Only one instance (per component) will be created.
+ * Provides a singleton dependency
  */
 fun <T : Any> Module.single(
     clazz: KClass<T>,
@@ -80,10 +80,8 @@ fun <T : Any> Module.provide(
     eager: Boolean = false,
     body: DeclarationBuilder.(Parameters) -> T
 ): Declaration<T> {
-    val key = Key.of(clazz, name)
     val declaration =
         Declaration(
-            key = key,
             type = type,
             moduleName = name,
             clazz = clazz,
@@ -93,12 +91,12 @@ fun <T : Any> Module.provide(
             eager = eager
         )
 
-    val existingDeclaration = declarations[key]
+    val existingDeclaration = declarations.firstOrNull { it.key == declaration.key }
     if (existingDeclaration != null) {
         throw OverrideException(declaration, existingDeclaration)
     }
 
-    declarations[key] = declaration
+    declarations.add(declaration)
 
     return declaration
 }
@@ -109,12 +107,30 @@ class DeclarationBuilder(val context: ComponentContext)
  * Provides a dependency which has already been declared in the current context (total set of modules of the
  * current component) to be able to inject transitive dependencies within a module.
  */
-inline fun <reified T : Any> DeclarationBuilder.get(name: String? = null) =
-    context.get<T>(name = name, internal = true)
+inline fun <reified T : Any> DeclarationBuilder.get(name: String? = null) = get(T::class, name)
 
 /**
- * Provides a [Lazy] version of dependency. Should only be required to circumvent a circular dependency cycle.
- * Better solution is to structure classes in a way that circular dependencies are not necessary.
+ * Provides a dependency which has already been declared in the current context (total set of modules of the
+ * current component) to be able to inject transitive dependencies within a module.
  */
-inline fun <reified T : Any> DeclarationBuilder.lazy(name: String? = null) =
-    context.inject<T>(name = name, internal = true)
+fun <T : Any> DeclarationBuilder.get(
+    clazz: KClass<T>,
+    name: String? = null
+) = context.get(clazz, name)
+
+/**
+ * Lazy version of [get]
+ */
+inline fun <reified T : Any> DeclarationBuilder.lazy(
+    name: String? = null,
+    noinline parameters: (() -> Parameters)? = null
+) = lazy(T::class, name, parameters)
+
+/**
+ * Lazy version of [get]
+ */
+fun <T : Any> DeclarationBuilder.lazy(
+    clazz: KClass<T>,
+    name: String? = null,
+    parameters: (() -> Parameters)? = null
+) = context.inject(clazz, name, parameters)
