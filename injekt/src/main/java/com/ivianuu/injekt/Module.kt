@@ -48,9 +48,8 @@ inline fun <reified T : Any> Module.single(
     name: String? = null,
     internal: Boolean = false,
     eager: Boolean = false,
-    synchronized: Boolean = false,
     noinline body: DeclarationBuilder.(Parameters) -> T
-) = single(T::class, name, internal, eager, synchronized, body)
+) = single(T::class, name, internal, eager, body)
 
 /**
  * Provides a singleton dependency
@@ -60,9 +59,8 @@ fun <T : Any> Module.single(
     name: String? = null,
     internal: Boolean = false,
     eager: Boolean = false,
-    synchronized: Boolean = false,
     body: DeclarationBuilder.(Parameters) -> T
-) = provide(clazz, Type.Single(eager, synchronized), name, internal, body)
+) = provide(clazz, Type.Single(eager), name, internal, body)
 
 inline fun <reified T : Any> Module.provide(
     type: Type,

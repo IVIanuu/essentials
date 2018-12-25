@@ -1,6 +1,8 @@
 package com.ivianuu.essentials.sample.injekt
 
-/*
+import com.ivianuu.injekt.*
+import kotlin.reflect.KClass
+
 /**
  * Provides the dependency via a factory. A new instance will be created every time the dependency is requested.
  */
@@ -47,6 +49,6 @@ inline fun <reified T : Any> DeclarationBuilder.create() = create(T::class)
  */
 fun <T : Any> DeclarationBuilder.create(clazz: KClass<T>): T {
     val ctor = clazz.java.constructors.firstOrNull() ?: error("No constructor found for class '$clazz'")
-    val args = ctor.parameterTypes.map { get(it) }.toTypedArray()
+    val args = ctor.parameterTypes.map { get(it.kotlin) }.toTypedArray()
     return ctor.newInstance(*args) as T
-}*/
+}

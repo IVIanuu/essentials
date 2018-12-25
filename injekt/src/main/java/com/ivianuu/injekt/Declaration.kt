@@ -33,11 +33,7 @@ data class Declaration<T : Any>(
 
     sealed class Type {
         object Factory : Type()
-
-        data class Single(
-            val eager: Boolean,
-            val synchronized: Boolean
-        ) : Type()
+        data class Single(val eager: Boolean) : Type()
     }
 
     override fun toString() =

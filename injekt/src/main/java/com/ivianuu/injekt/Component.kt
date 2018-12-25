@@ -52,13 +52,7 @@ class Component internal constructor(
                 val type = it.type
                 when (type) {
                     is Declaration.Type.Factory -> FactoryInstanceHolder(it)
-                    is Declaration.Type.Single -> {
-                        if (type.synchronized) {
-                            SynchronizedSingleInstanceHolder(it)
-                        } else {
-                            UnsafeSingleInstanceHolder(it)
-                        }
-                    }
+                    is Declaration.Type.Single -> SingleInstanceHolder(it)
                 }
             }
             .forEach { instances.add(it) }

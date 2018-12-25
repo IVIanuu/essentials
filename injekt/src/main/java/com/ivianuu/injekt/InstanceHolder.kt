@@ -20,37 +20,7 @@ internal class FactoryInstanceHolder<T : Any>(
 
 }
 
-internal class SynchronizedSingleInstanceHolder<T : Any>(
-    override val declaration: Declaration<T>
-) : InstanceHolder<T> {
-
-    @Volatile private var _value: Any? = UNINITIALIZED_VALUE
-    private val lock = this
-
-    override fun get(context: ComponentContext, params: Parameters): T {
-        var value = _value
-        if (value !== UNINITIALIZED_VALUE) {
-            @Suppress("UNCHECKED_CAST")
-            debug { "Returning existing singleton instance for ${declaration.key}" }
-            return value as T
-        }
-
-        return synchronized(lock) {
-            value = _value
-            if (value !== UNINITIALIZED_VALUE) {
-                debug { "Returning existing singleton instance for ${declaration.key}" }
-                @Suppress("UNCHECKED_CAST") value as T
-            } else {
-                val typedValue = declaration.binding(context, params)
-                debug { "Created singleton instance for ${declaration.key}" }
-                _value = typedValue
-                typedValue
-            }
-        }
-    }
-}
-
-internal class UnsafeSingleInstanceHolder<T : Any>(
+internal class SingleInstanceHolder<T : Any>(
     override val declaration: Declaration<T>
 ) : InstanceHolder<T> {
 
