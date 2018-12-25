@@ -24,7 +24,7 @@ import com.ivianuu.essentials.ui.base.EsDialogController
 import com.ivianuu.essentials.ui.traveler.NavOptions
 import com.ivianuu.essentials.ui.traveler.dialog
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
-import com.ivianuu.essentials.ui.traveler.key.key
+import com.ivianuu.essentials.ui.traveler.key.getKey
 import com.ivianuu.essentials.util.ext.goBackWithResult
 import com.ivianuu.essentials.util.string
 import com.ivianuu.traveler.goBack
@@ -47,9 +47,9 @@ class AppPickerDialog : EsDialogController() {
     @Inject lateinit var appStore: AppStore
 
     override fun onCreateDialog(savedViewState: Bundle?): Dialog {
-        val apps = mutableListOf<com.ivianuu.essentials.app.AppInfo>()
+        val apps = mutableListOf<AppInfo>()
 
-        val key = key<AppPickerKey>()
+        val key = getKey<AppPickerKey>()
 
         val dialog = MaterialDialog(activity)
             .title(text = key.title ?: string(R.string.es_dialog_title_app_picker))

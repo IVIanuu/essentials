@@ -16,7 +16,7 @@ import com.ivianuu.essentials.ui.traveler.key.ControllerKey
 import com.ivianuu.essentials.ui.traveler.vertical
 import com.ivianuu.essentials.util.ext.andTrue
 import kotlinx.android.parcel.Parcelize
-import kotlinx.android.synthetic.main.single_line_list_item.title
+import kotlinx.android.synthetic.main.single_line_list_item.*
 import javax.inject.Inject
 import javax.inject.Provider
 

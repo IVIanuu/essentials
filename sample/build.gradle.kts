@@ -54,5 +54,7 @@ dependencies {
     implementation(project(":essentials-work"))
     kapt(project(":essentials-compiler"))
 
+    implementation(project(":injekt"))
+
     testImplementation(project(":essentials-test"))
 }

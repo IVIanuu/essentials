@@ -10,7 +10,7 @@ import com.ivianuu.essentials.ui.base.EsController
 import com.ivianuu.essentials.ui.traveler.NavOptions
 import com.ivianuu.essentials.ui.traveler.dialog
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
-import com.ivianuu.essentials.ui.traveler.key.bindKey
+import com.ivianuu.essentials.ui.traveler.key.key
 import com.ivianuu.essentials.util.ext.goBackWithResult
 import com.ivianuu.essentials.util.ext.isM
 import kotlinx.android.parcel.Parcelize
@@ -27,7 +27,7 @@ data class PermissionRequestKey(
  */
 class PermissionRequestController : EsController() {
 
-    private val key by bindKey<PermissionRequestKey>()
+    private val key by key<PermissionRequestKey>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

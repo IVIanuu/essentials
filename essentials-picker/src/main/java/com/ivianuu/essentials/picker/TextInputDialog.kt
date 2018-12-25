@@ -25,7 +25,7 @@ import com.ivianuu.essentials.ui.base.EsDialogController
 import com.ivianuu.essentials.ui.traveler.NavOptions
 import com.ivianuu.essentials.ui.traveler.dialog
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
-import com.ivianuu.essentials.ui.traveler.key.key
+import com.ivianuu.essentials.ui.traveler.key.getKey
 import com.ivianuu.essentials.util.ext.goBackWithResult
 import com.ivianuu.traveler.goBack
 import kotlinx.android.parcel.Parcelize
@@ -46,7 +46,7 @@ data class TextInputKey(
 class TextInputDialog : EsDialogController() {
 
     override fun onCreateDialog(savedViewState: Bundle?): Dialog {
-        val key = key<TextInputKey>()
+        val key = getKey<TextInputKey>()
 
         return MaterialDialog(activity)
             .noAutoDismiss()

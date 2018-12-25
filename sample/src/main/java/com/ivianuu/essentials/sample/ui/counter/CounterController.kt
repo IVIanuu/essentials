@@ -23,17 +23,9 @@ import com.ivianuu.essentials.ui.base.EsController
 import com.ivianuu.essentials.ui.mvrx.viewModel
 import com.ivianuu.essentials.ui.mvrx.withState
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
-import com.ivianuu.essentials.ui.traveler.key.key
+import com.ivianuu.essentials.ui.traveler.key.getKey
 import kotlinx.android.parcel.Parcelize
-import kotlinx.android.synthetic.main.controller_counter.count
-import kotlinx.android.synthetic.main.controller_counter.decrease
-import kotlinx.android.synthetic.main.controller_counter.do_work
-import kotlinx.android.synthetic.main.controller_counter.increase
-import kotlinx.android.synthetic.main.controller_counter.list_screen
-import kotlinx.android.synthetic.main.controller_counter.reset
-import kotlinx.android.synthetic.main.controller_counter.root_screen
-import kotlinx.android.synthetic.main.controller_counter.screen_down
-import kotlinx.android.synthetic.main.controller_counter.screen_up
+import kotlinx.android.synthetic.main.controller_counter.*
 import javax.inject.Inject
 
 @Parcelize
@@ -47,7 +39,7 @@ class CounterController : EsController() {
     override val layoutRes get() = R.layout.controller_counter
 
     @Inject lateinit var counterViewModelFactory: CounterViewModelFactory
-    private val viewModel by viewModel { counterViewModelFactory.create(key()) }
+    private val viewModel by viewModel { counterViewModelFactory.create(getKey()) }
 
     override fun onBindView(view: View, savedViewState: Bundle?) {
         super.onBindView(view, savedViewState)

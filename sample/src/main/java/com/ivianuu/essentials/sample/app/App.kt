@@ -18,13 +18,46 @@ package com.ivianuu.essentials.sample.app
 
 import com.ivianuu.essentials.app.EsApp
 import com.ivianuu.injectors.Injector
+import com.ivianuu.injekt.*
+import com.ivianuu.timberktx.d
+import com.ivianuu.timberktx.e
+import com.ivianuu.timberktx.i
+import com.ivianuu.timberktx.w
 
 /**
  * App
  */
-class App : EsApp() {
+class App : EsApp(), ComponentHolder {
+
+    override val component = component(
+        module {
+            single("name") { "Manuel" }
+        }
+    )
 
     override fun applicationInjector(): Injector<out EsApp> =
         DaggerAppComponent.builder().create(this)
+
+    override fun onCreate() {
+        super.onCreate()
+        Injekt.logger = object : Injekt.Logger {
+            override fun debug(msg: String) {
+                d { msg }
+            }
+
+            override fun info(msg: String) {
+                i { msg }
+            }
+
+            override fun warn(msg: String) {
+                w { msg }
+            }
+
+            override fun error(msg: String, throwable: Throwable?) {
+                e(throwable) { msg }
+            }
+
+        }
+    }
 
 }

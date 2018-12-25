@@ -24,7 +24,7 @@ import com.ivianuu.essentials.ui.base.EsDialogController
 import com.ivianuu.essentials.ui.traveler.NavOptions
 import com.ivianuu.essentials.ui.traveler.dialog
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
-import com.ivianuu.essentials.ui.traveler.key.bindKey
+import com.ivianuu.essentials.ui.traveler.key.key
 import com.ivianuu.essentials.util.ext.goBackWithResult
 import kotlinx.android.parcel.Parcelize
 
@@ -42,7 +42,7 @@ data class ColorPickerKey(
  */
 class ColorPickerDialog : EsDialogController() {
 
-    private val key by bindKey<ColorPickerKey>()
+    private val key by key<ColorPickerKey>()
 
     override fun onCreateDialog(savedViewState: Bundle?): Dialog {
         return MaterialDialog(activity)

@@ -55,12 +55,12 @@ abstract class ControllerKey(
 
 }
 
-fun <T : Parcelable> Controller.key(): T = args.getParcelable(KEY_KEY)!!
+fun <T : Parcelable> Controller.getKey(): T = args.getParcelable(KEY_KEY)!!
 
-fun <T : Parcelable> Controller.keyOrNull() = try {
+fun <T : Parcelable> Controller.getKeyOrNull() = try {
     key<T>()
 } catch (e: Exception) {
     null
 }
 
-fun <T : Parcelable> Controller.bindKey() = unsafeLazy { key<T>() }
+fun <T : Parcelable> Controller.key() = unsafeLazy { getKey<T>() }

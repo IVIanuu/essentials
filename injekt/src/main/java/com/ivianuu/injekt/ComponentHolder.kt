@@ -32,7 +32,7 @@ inline fun <reified T : Any> ComponentHolder.get(name: String? = null) =
     get(T::class, name)
 
 fun <T : Any> ComponentHolder.get(clazz: KClass<T>, name: String? = null) =
-    withComponent { it.get<T>(clazz, name) }
+    withComponent { it.get(clazz, name) }
 
 inline fun <reified T : Any> ComponentHolder.canInject(name: String? = null) =
     canInject(T::class, name)

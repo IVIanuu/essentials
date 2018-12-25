@@ -44,12 +44,12 @@ abstract class ActivityKey(
     }
 }
 
-fun <T : Parcelable> Activity.key(): T = intent!!.extras!!.getParcelable(KEY_KEY)!!
+fun <T : Parcelable> Activity.getKey(): T = intent!!.extras!!.getParcelable(KEY_KEY)!!
 
-fun <T : Parcelable> Activity.keyOrNull() = try {
+fun <T : Parcelable> Activity.getKeyOrNull() = try {
     key<T>()
 } catch (e: Exception) {
     null
 }
 
-fun <T : Parcelable> Activity.bindKey() = unsafeLazy { key<T>() }
+fun <T : Parcelable> Activity.key() = unsafeLazy { getKey<T>() }

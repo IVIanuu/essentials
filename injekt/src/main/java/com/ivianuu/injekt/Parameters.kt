@@ -6,6 +6,9 @@ package com.ivianuu.injekt
 @Suppress("UNCHECKED_CAST")
 class Parameters(vararg values: Any?) {
 
+    /**
+     * All values of this
+     */
     val values: List<*> = values.toList()
 
     private fun <T> elementAt(i: Int): T =
@@ -22,14 +25,12 @@ class Parameters(vararg values: Any?) {
     operator fun <T> component9(): T = elementAt(8)
 
     /**
-     * get element at given index
-     * return T
+     * Returns the element [i]
      */
     operator fun <T> get(i: Int) = values[i] as T
 
     /**
-     * Get first element of given type T
-     * return T
+     * Returns the first element of [T]
      */
     inline fun <reified T> get() = values.first { it is T }
 
