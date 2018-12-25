@@ -71,6 +71,17 @@ class MyController : LifecycleController(), ComponentHolder {
 
     private val viewModel by inject<MainViewModel> { parametersOf("my_id") }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val provider = component.context.provider(MainActivity::class)
+
+        val one = provider()
+        val two = provider()
+        val three = provider()
+
+        d { "one $one, two $two, three $three" }
+    }
+
     override fun onInflateView(
         inflater: LayoutInflater,
         container: ViewGroup,

@@ -213,6 +213,13 @@ class ComponentContext(
         internal: Boolean = false
     ) = injectInternal(clazz, name, params, internal)
 
+    fun <T : Any> provider(
+        clazz: KClass<T>,
+        name: String? = null,
+        params: Parameters = emptyParameters(),
+        internal: Boolean = false
+    ) = { get(clazz, name, params, internal) }
+
     private fun <T : Any> injectInternal(
         clazz: KClass<T>,
         name: String? = null,

@@ -84,7 +84,7 @@ fun <T : Any> Module.provide(
             moduleName = name,
             clazz = clazz,
             name = name,
-            provider = { context, params -> body.invoke(DeclarationBuilder(context), params) },
+            binding = { context, params -> body.invoke(DeclarationBuilder(context), params) },
             internal = internal
         )
 

@@ -30,9 +30,7 @@ import com.ivianuu.timberktx.w
 class App : EsApp(), ComponentHolder {
 
     override val component = component(
-        module {
-            single("name") { "Manuel" }
-        }
+        module { single("name") { "Manuel" } }
     )
 
     override fun applicationInjector(): Injector<out EsApp> =

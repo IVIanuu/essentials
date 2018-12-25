@@ -15,7 +15,7 @@ internal class FactoryInstanceHolder<T : Any>(
 ) : InstanceHolder<T> {
 
     override fun get(context: ComponentContext, params: Parameters) =
-        declaration.provider(context, params)
+        declaration.binding(context, params)
             .also { debug { "Created instance for ${declaration.key}" } }
 
 }
@@ -41,7 +41,7 @@ internal class SynchronizedSingleInstanceHolder<T : Any>(
                 debug { "Returning existing singleton instance for ${declaration.key}" }
                 @Suppress("UNCHECKED_CAST") value as T
             } else {
-                val typedValue = declaration.provider(context, params)
+                val typedValue = declaration.binding(context, params)
                 debug { "Created singleton instance for ${declaration.key}" }
                 _value = typedValue
                 typedValue
@@ -58,7 +58,7 @@ internal class UnsafeSingleInstanceHolder<T : Any>(
 
     override fun get(context: ComponentContext, params: Parameters): T {
         if (_value === UNINITIALIZED_VALUE) {
-            _value = declaration.provider(context, params)
+            _value = declaration.binding(context, params)
         }
         @Suppress("UNCHECKED_CAST")
         return _value as T

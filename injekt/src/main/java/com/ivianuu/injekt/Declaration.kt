@@ -11,7 +11,7 @@ data class Declaration<T : Any>(
     val clazz: KClass<T>,
     var types: List<KClass<*>> = emptyList(),
     val name: String?,
-    val provider: Provider<T>,
+    val binding: (ComponentContext, Parameters) -> T,
     val internal: Boolean
 ) {
 
