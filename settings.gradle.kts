@@ -9,6 +9,7 @@ include(
     ":essentials-shell",
     ":essentials-test",
     ":essentials-work",
+    ":injekt",
     ":ktuples",
     ":sample"
 )
