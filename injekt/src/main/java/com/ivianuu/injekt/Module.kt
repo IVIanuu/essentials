@@ -125,7 +125,6 @@ fun <T : Any> DeclarationBuilder.get(
  */
 fun Module.module(
     name: String? = null,
-    createOnStart: Boolean = false,
     body: Module.() -> Unit
 ) = Module(name).apply(body)
     .also { module(it) }

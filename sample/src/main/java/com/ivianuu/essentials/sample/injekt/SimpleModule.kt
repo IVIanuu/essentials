@@ -10,15 +10,14 @@ inline fun <reified T : Any> simpleModule(
     name: String? = null,
     createOnStart: Boolean = false,
     noinline body: (Module.() -> Unit)? = null
-) = simpleModule(T::class, instance, name, createOnStart, body)
+) = simpleModule(T::class, instance, name, body)
 
 fun <T : Any> simpleModule(
     clazz: KClass<T>,
     instance: T,
     name: String? = null,
-    createOnStart: Boolean = false,
     body: (Module.() -> Unit)? = null
-) = module(name, createOnStart) {
+) = module(name) {
     // bind instance
     single(clazz) { instance }
 

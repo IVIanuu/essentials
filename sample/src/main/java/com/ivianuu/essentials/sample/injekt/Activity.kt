@@ -26,17 +26,15 @@ fun Activity.activityComponent(
 inline fun <reified T : Activity> activityModule(
     activity: T,
     name: String? = null,
-    createOnStart: Boolean = false,
     noinline body: (Module.() -> Unit)? = null
-) = activityModule(T::class, activity, name, createOnStart, body)
+) = activityModule(T::class, activity, name, body)
 
 fun <T : Activity> activityModule(
     clazz: KClass<T>,
     activity: T,
     name: String? = null,
-    createOnStart: Boolean = false,
     body: (Module.() -> Unit)? = null
-) = simpleModule(clazz, activity, name, createOnStart) {
+) = simpleModule(clazz, activity, name) {
 
     single<Application> { activity.application }
 
