@@ -8,10 +8,10 @@ import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.component
 
 fun Controller.controllerComponent(
-    modules: Iterable<Module> = emptyList(),
-    dependsOn: Iterable<Component> = emptyList()
+    modules: List<Module> = emptyList(),
+    dependsOn: List<Component> = emptyList()
 ): Component {
-    val deps = mutableSetOf<Component>()
+    val deps = mutableListOf<Component>()
 
     // application
     (application as? ComponentHolder)?.component?.let { deps.add(it) }

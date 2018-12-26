@@ -7,7 +7,6 @@ import kotlin.reflect.KClass
  */
 data class Declaration<T : Any>(
     val kind: Kind,
-    val moduleName: String?,
     val primaryType: KClass<T>,
     var boundTypes: List<KClass<*>> = emptyList(),
     val name: String?,

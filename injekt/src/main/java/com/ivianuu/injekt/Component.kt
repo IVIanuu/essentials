@@ -6,11 +6,11 @@ import kotlin.reflect.KClass
  * The actual dependency container which provides instances
  */
 class Component internal constructor(
-    declarations: Set<Declaration<*>>,
+    declarations: List<Declaration<*>>,
     private val dependsOn: Iterable<Component>
 ) {
 
-    private val instances = mutableSetOf<InstanceHolder<*>>()
+    private val instances = mutableListOf<InstanceHolder<*>>()
 
     init {
         // map the declarations to instance holders
@@ -44,7 +44,7 @@ class Component internal constructor(
         type: KClass<T>,
         name: String?,
         params: () -> Parameters
-    ): T {
+    ): T = synchronized(this) {
         val instance = instances.firstOrNull {
             it.declaration.classes.contains(type)
                     && it.declaration.name == name
@@ -52,7 +52,7 @@ class Component internal constructor(
 
         return if (instance != null) {
             try {
-                info { "Injecting dependency for ${instance.declaration.key}" }
+                info { "Injecting instance for ${instance.declaration.key}" }
                 @Suppress("UNCHECKED_CAST")
                 instance.get(this, params()) as T
             } catch (e: InjektException) {
@@ -66,10 +66,10 @@ class Component internal constructor(
                     it.declaration.classes.contains(type)
                             && name == it.declaration.name
                 }
-            } ?: throw InjectionException("No binding found for ${type.java.name + name.orEmpty()}")
+            }
+                ?: throw InjectionException("Could not create instance for ${type.java.name + name.orEmpty()}")
 
             component.getInternal(type, name, params)
         }
     }
-
 }

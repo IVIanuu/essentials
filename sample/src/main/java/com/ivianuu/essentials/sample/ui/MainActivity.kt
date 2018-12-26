@@ -28,9 +28,6 @@ import com.ivianuu.director.arch.lifecycle.LifecycleController
 import com.ivianuu.director.pushChangeHandler
 import com.ivianuu.director.pushController
 import com.ivianuu.director.toTransaction
-import com.ivianuu.essentials.app.AppInitializer
-import com.ivianuu.essentials.app.RxJavaAppInitializer
-import com.ivianuu.essentials.app.TimberAppInitializer
 import com.ivianuu.essentials.hidenavbar.NavBarSettingsKey
 import com.ivianuu.essentials.sample.injekt.activityComponent
 import com.ivianuu.essentials.sample.injekt.activityModule
@@ -45,12 +42,11 @@ import com.ivianuu.timberktx.d
 import com.ivianuu.traveler.navigate
 import dagger.Binds
 import dagger.Module
-import kotlin.reflect.KClass
 
 class MainActivity : EsActivity(), ComponentHolder {
 
     override val component =
-        activityComponent(listOf(mainActivityModule(this)))
+        activityComponent(listOf(mainActivityModule(this), mainActivityModule(this)))
 
     override val startKey: Any? get() = CounterKey(1)
 
@@ -63,8 +59,6 @@ class MainActivity : EsActivity(), ComponentHolder {
             MyController().toTransaction()
                 .pushChangeHandler(SimpleSwapChangeHandler(false))
         )
-
-        val map = component.get<Map<KClass<out AppInitializer>, AppInitializer>>("app_initializers")
     }
 }
 
@@ -119,15 +113,8 @@ class MainViewModel(
 
 }
 
-fun mainActivityModule(activity: MainActivity) = activityModule(activity) {
+fun mainActivityModule(activity: MainActivity) = activityModule(activity, "main") {
     single(createOnStart = true) { MyEagerDep() }
-
-    factory("app_initializers") {
-        mapOf(
-            RxJavaAppInitializer::class to get<RxJavaAppInitializer>(parameters = { it }),
-            TimberAppInitializer::class to get<TimberAppInitializer>(parameters = { it })
-        )
-    }
 }
 
 fun myControllerModule(controller: MyController) = simpleModule(controller) {

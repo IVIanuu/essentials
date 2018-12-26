@@ -7,10 +7,10 @@ import com.ivianuu.injekt.*
 import kotlin.reflect.KClass
 
 fun Activity.activityComponent(
-    modules: Iterable<Module> = emptyList(),
-    dependsOn: Iterable<Component> = emptyList()
+    modules: List<Module> = emptyList(),
+    dependsOn: List<Component> = emptyList()
 ): Component {
-    val deps = mutableSetOf<Component>()
+    val deps = mutableListOf<Component>()
 
     // application
     (application as? ComponentHolder)?.component?.let { deps.add(it) }

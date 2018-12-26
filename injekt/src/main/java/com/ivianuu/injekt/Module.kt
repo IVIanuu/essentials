@@ -90,7 +90,6 @@ fun <T : Any> Module.provide(
     val declaration =
         Declaration(
             kind = kind,
-            moduleName = name,
             primaryType = type,
             name = name,
             provider = { context, params ->
