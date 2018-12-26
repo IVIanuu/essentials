@@ -13,12 +13,6 @@ interface ComponentHolder {
     val component: Component
 }
 
-inline fun <reified T : Any> ComponentHolder.canInject(name: String? = null) =
-    canInject(T::class, name)
-
-fun <T : Any> ComponentHolder.canInject(type: KClass<T>, name: String? = null) =
-    withComponent { it.canInject(type, name) }
-
 inline fun <reified T : Any> ComponentHolder.inject(
     name: String? = null, noinline params: (() -> Parameters)? = null
 ) = inject(T::class, name, params)

@@ -24,7 +24,7 @@ data class Declaration<T : Any>(
      */
     infix fun bind(type: KClass<*>): Declaration<*> {
         if (!type.java.isAssignableFrom(this.primaryType.java)) {
-            throw IllegalArgumentException("Can't bind kind '$clazz' for definition $this")
+            throw IllegalArgumentException("Can't bind kind '$type' for definition $this")
         } else {
             boundTypes += type
         }

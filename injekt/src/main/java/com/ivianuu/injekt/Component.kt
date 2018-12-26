@@ -49,8 +49,7 @@ class Component internal constructor(
     init {
         declarations
             .map {
-                val type = it.kind
-                when (type) {
+                when (it.kind) {
                     is Declaration.Kind.Factory -> FactoryInstanceHolder(it)
                     is Declaration.Kind.Single -> SingleInstanceHolder(it)
                 }
@@ -64,18 +63,6 @@ class Component internal constructor(
             }
             .forEach { it.get(context, emptyParameters()) }
     }
-
-    /**
-     * Returns `true` if this component is capable of injecting requested dependency.
-     */
-    inline fun <reified T : Any> canInject(name: String? = null) =
-        canInject(T::class, name)
-
-    /**
-     * Returns `true` if this component is capable of injecting requested dependency.
-     */
-    fun <T : Any> canInject(type: KClass<T>, name: String? = null) =
-        context.canInject(type, name)
 
     /**
      * Injects requested dependency lazily.
@@ -155,6 +142,9 @@ class Component internal constructor(
         }
     }
 
+    internal fun canInject(type: KClass<*>, name: String? = null) =
+        context.canInject(type, name)
+
     internal fun thisComponentCanInject(
         type: KClass<*>,
         name: String?,
@@ -165,7 +155,6 @@ class Component internal constructor(
                     && it.declaration.classes.contains(type)
                     && name == it.declaration.name
         }
-
 }
 
 /**
@@ -177,19 +166,6 @@ class ComponentContext(
     private val thisComponent: Component,
     private val dependsOn: Iterable<Component>
 ) {
-
-    inline fun <reified T : Any> canInject(name: String? = null, internal: Boolean = false) =
-        canInject(T::class, name, internal)
-
-    fun <T : Any> canInject(
-        type: KClass<T>,
-        name: String? = null,
-        internal: Boolean = false
-    ): Boolean =
-        when {
-            thisComponent.thisComponentCanInject(type, name, internal = internal) -> true
-            else -> dependsOn.any { it.canInject(type, name) }
-        }
 
     inline fun <reified T : Any> inject(
         name: String? = null,
@@ -255,6 +231,16 @@ class ComponentContext(
             }
         }
     }
+
+    internal fun canInject(
+        type: KClass<*>,
+        name: String? = null,
+        internal: Boolean = false
+    ): Boolean =
+        when {
+            thisComponent.thisComponentCanInject(type, name, internal = internal) -> true
+            else -> dependsOn.any { it.canInject(type, name) }
+        }
 }
 
 private fun Iterable<Set<Declaration<*>>>.fold(each: ((Declaration<*>) -> Unit)? = null): Set<Declaration<*>> =
