@@ -126,7 +126,7 @@ class MainViewModel(
 }
 
 fun mainActivityModule(activity: MainActivity) = activityModule(activity) {
-    single(eager = true) { MyEagerDep() }
+    single(createOnStart = true) { MyEagerDep() }
 }
 
 fun myControllerModule(controller: MyController) = simpleModule(controller) {
@@ -137,7 +137,7 @@ fun myControllerModule(controller: MyController) = simpleModule(controller) {
             get(),
             get(),
             get(),
-            get("name")
+            get("username")
         )
     }
 }

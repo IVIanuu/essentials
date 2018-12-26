@@ -17,7 +17,7 @@ data class Declaration<T : Any>(
 
     internal val classes: List<KClass<*>> = listOf(primaryType) + boundTypes
 
-    val key = "Class: ${primaryType.java.name} Name: $name"
+    val key = "Class: ${primaryType.java.name}${name?.let { " Name: $it" }.orEmpty()}"
 
     /**
      * Add a compatible kind to current bounded definition
@@ -32,10 +32,11 @@ data class Declaration<T : Any>(
     }
 
     sealed class Kind {
-        object Factory : Kind()
+        object Factory : Kind() {
+            override fun toString() = "Factory"
+        }
+
         data class Single(val eager: Boolean) : Kind()
     }
 
-    override fun toString() =
-        "${primaryType.java.name}(kind=$kind${name?.let { ", name=$it" }.orEmpty()}${moduleName?.let { ", module=$it" }.orEmpty()})"
 }
