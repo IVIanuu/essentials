@@ -115,6 +115,8 @@ class MainViewModel(
 
 fun mainActivityModule(activity: MainActivity) = activityModule(activity, "main") {
     single(createOnStart = true) { MyEagerDep() }
+
+    factory { activity }
 }
 
 fun myControllerModule(controller: MyController) = simpleModule(controller) {

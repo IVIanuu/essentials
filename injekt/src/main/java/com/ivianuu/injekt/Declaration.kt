@@ -20,13 +20,19 @@ data class Declaration<T : Any>(
     /**
      * Add a compatible kind to current bounded definition
      */
-    infix fun bind(type: KClass<*>): Declaration<*> {
+    infix fun bind(type: KClass<*>) = apply {
         if (!type.java.isAssignableFrom(this.primaryType.java)) {
             throw IllegalArgumentException("Can't bind kind '$type' for definition $this")
         } else {
             boundTypes += type
         }
-        return this
+    }
+
+    /**
+     * Add a compatible kind to current bounded definition
+     */
+    infix fun binds(types: Array<KClass<*>>) = apply {
+        types.forEach { bind(it) }
     }
 
     sealed class Kind {
