@@ -12,7 +12,7 @@ internal class FactoryInstanceHolder<T : Any>(
 ) : InstanceHolder<T> {
 
     override fun get(component: Component, params: Parameters) =
-        declaration.binding(component, params)
+        declaration.provider(component, params)
             .also { debug { "Created instance for ${declaration.key}" } }
 
 }
@@ -25,7 +25,7 @@ internal class SingleInstanceHolder<T : Any>(
 
     override fun get(component: Component, params: Parameters): T {
         if (_value === UNINITIALIZED_VALUE) {
-            _value = declaration.binding(component, params)
+            _value = declaration.provider(component, params)
             debug { "Created singleton instance for ${declaration.key}" }
         } else {
             debug { "Returning existing singleton instance for ${declaration.key}" }

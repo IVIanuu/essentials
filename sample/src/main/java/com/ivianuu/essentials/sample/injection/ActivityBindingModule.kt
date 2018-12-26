@@ -9,7 +9,7 @@ import com.ivianuu.injectors.ContributesInjector
 import dagger.Module
 
 /**
- * Activity binding module
+ * Activity provider module
  */
 @Module(includes = [ActivityBindingModule_Contributions::class])
 abstract class ActivityBindingModule {

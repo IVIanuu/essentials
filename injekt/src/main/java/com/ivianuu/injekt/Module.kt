@@ -93,7 +93,7 @@ fun <T : Any> Module.provide(
             moduleName = name,
             primaryType = type,
             name = name,
-            binding = { context, params ->
+            provider = { context, params ->
                 body.invoke(DeclarationBuilder(context), params)
             }
         )
