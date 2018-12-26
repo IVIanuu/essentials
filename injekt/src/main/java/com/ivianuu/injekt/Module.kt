@@ -9,15 +9,22 @@ import kotlin.reflect.KClass
  * of your application.
  */
 @ModuleDslMarker
-class Module internal constructor(val name: String? = null) {
+class Module internal constructor(
+    val name: String? = null,
+    val createOnStart: Boolean = false
+) {
     internal val declarations = mutableSetOf<Declaration<*>>()
 }
 
 /**
  * Defines a [Module] (with an optional name).
  */
-fun module(name: String? = null, body: Module.() -> Unit) =
-    Module(name).apply(body)
+fun module(
+    name: String? = null,
+    createOnStart: Boolean = false,
+    body: Module.() -> Unit
+) =
+    Module(name, createOnStart).apply(body)
 
 @DslMarker
 annotation class ModuleDslMarker
@@ -27,9 +34,8 @@ annotation class ModuleDslMarker
  */
 inline fun <reified T : Any> Module.factory(
     name: String? = null,
-    internal: Boolean = false,
     noinline body: DeclarationBuilder.(Parameters) -> T
-) = factory(type = T::class, name = name, internal = internal, body = body)
+) = factory(type = T::class, name = name, body = body)
 
 /**
  * Provides a dependency
@@ -37,23 +43,20 @@ inline fun <reified T : Any> Module.factory(
 fun <T : Any> Module.factory(
     type: KClass<T>,
     name: String? = null,
-    internal: Boolean = false,
     body: DeclarationBuilder.(Parameters) -> T
-) = provide(type = type, kind = Kind.Factory, name = name, internal = internal, body = body)
+) = provide(type = type, kind = Kind.Factory, name = name, body = body)
 
 /**
  * Provides a singleton dependency
  */
 inline fun <reified T : Any> Module.single(
     name: String? = null,
-    createOnStart: Boolean = false,
-    internal: Boolean = false,
+    createOnStart: Boolean = this.createOnStart,
     noinline body: DeclarationBuilder.(Parameters) -> T
 ) = single(
     type = T::class,
     name = name,
     createOnStart = createOnStart,
-    internal = internal,
     body = body
 )
 
@@ -63,29 +66,25 @@ inline fun <reified T : Any> Module.single(
 fun <T : Any> Module.single(
     type: KClass<T>,
     name: String? = null,
-    createOnStart: Boolean = false,
-    internal: Boolean = false,
+    createOnStart: Boolean = this.createOnStart,
     body: DeclarationBuilder.(Parameters) -> T
 ) = provide(
     type = type,
     kind = Kind.Single(createOnStart),
     name = name,
-    internal = internal,
     body = body
 )
 
 inline fun <reified T : Any> Module.provide(
     kind: Kind,
     name: String? = null,
-    internal: Boolean = false,
     noinline body: DeclarationBuilder.(Parameters) -> T
-) = provide(type = T::class, kind = kind, name = name, internal = internal, body = body)
+) = provide(type = T::class, kind = kind, name = name, body = body)
 
 fun <T : Any> Module.provide(
     type: KClass<T>,
     kind: Kind,
     name: String? = null,
-    internal: Boolean = false,
     body: DeclarationBuilder.(Parameters) -> T
 ): Declaration<T> {
     val declaration =
@@ -94,8 +93,9 @@ fun <T : Any> Module.provide(
             moduleName = name,
             primaryType = type,
             name = name,
-            binding = { context, params -> body.invoke(DeclarationBuilder(context), params) },
-            internal = internal
+            binding = { context, params ->
+                body.invoke(DeclarationBuilder(context, createOnStart), params)
+            }
         )
 
     val existingDeclaration = declarations.firstOrNull { it.key == declaration.key }
@@ -108,7 +108,10 @@ fun <T : Any> Module.provide(
     return declaration
 }
 
-class DeclarationBuilder(val context: ComponentContext)
+class DeclarationBuilder(
+    val context: ComponentContext,
+    val createOnStart: Boolean
+)
 
 /**
  * Provides a dependency which has already been declared in the current context (total set of modules of the

@@ -120,15 +120,13 @@ class Component internal constructor(
     internal fun <T : Any> thisComponentInject(
         type: KClass<T>,
         name: String?,
-        params: Parameters,
-        internal: Boolean
+        params: Parameters
     ): T? {
         val instance = instances.firstOrNull {
-            (if (!internal) !it.declaration.internal else true)
-                    && it.declaration.classes.contains(type)
+            it.declaration.classes.contains(type)
                     && name == it.declaration.name
         }
-        return if (instance == null || (instance.declaration.internal && !internal)) {
+        return if (instance == null) {
             null
         } else {
             try {
@@ -147,12 +145,10 @@ class Component internal constructor(
 
     internal fun thisComponentCanInject(
         type: KClass<*>,
-        name: String?,
-        internal: Boolean
+        name: String?
     ) =
         instances.any {
-            (if (!internal) !it.declaration.internal else true)
-                    && it.declaration.classes.contains(type)
+            it.declaration.classes.contains(type)
                     && name == it.declaration.name
         }
 }
@@ -221,7 +217,7 @@ class ComponentContext(
         params: Parameters = emptyParameters(),
         internal: Boolean = false
     ): T {
-        val value = thisComponent.thisComponentInject(type, name, params, internal)
+        val value = thisComponent.thisComponentInject(type, name, params)
         return when {
             value != null -> value
             else -> {
@@ -234,11 +230,10 @@ class ComponentContext(
 
     internal fun canInject(
         type: KClass<*>,
-        name: String? = null,
-        internal: Boolean = false
+        name: String? = null
     ): Boolean =
         when {
-            thisComponent.thisComponentCanInject(type, name, internal = internal) -> true
+            thisComponent.thisComponentCanInject(type, name) -> true
             else -> dependsOn.any { it.canInject(type, name) }
         }
 }
@@ -249,7 +244,7 @@ private fun Iterable<Set<Declaration<*>>>.fold(each: ((Declaration<*>) -> Unit)?
             val existingDeclaration = acc.firstOrNull { it.key == entry.key }
 
             existingDeclaration?.let { declaration ->
-                if (!declaration.internal) throw OverrideException(entry, declaration)
+                throw OverrideException(entry, declaration)
             }
             each?.invoke(entry)
         }

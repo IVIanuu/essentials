@@ -7,37 +7,33 @@ import kotlin.reflect.KClass
  * Provides the dependency via a factory. A new instance will be created every time the dependency is requested.
  */
 inline fun <reified T : Any> Module.factory(
-    name: String? = null,
-    internal: Boolean = false
-) = factory(name, internal) { create<T>() }
+    name: String? = null
+) = factory(name) { create<T>() }
 
 /**
  * Provides the dependency via a factory. A new instance will be created every time the dependency is requested.
  */
 fun <T : Any> Module.factory(
     clazz: KClass<T>,
-    name: String? = null,
-    internal: Boolean = false
-) = factory(clazz, name, internal) { create(clazz) }
+    name: String? = null
+) = factory(clazz, name) { create(clazz) }
 
 /**
  * Create a Single definition for given kind T
  */
 inline fun <reified T : Any> Module.single(
     name: String? = null,
-    eager: Boolean = false,
-    internal: Boolean = false
-) = single(name, eager, internal) { create<T>() }
+    createOnStart: Boolean = false
+) = single(name, createOnStart) { create<T>() }
 
 /**
  * Create a Single definition for given kind T
  */
 fun <T : Any> Module.single(
     clazz: KClass<T>,
-    eager: Boolean = false,
     name: String? = null,
-    internal: Boolean = false
-) = single(clazz, name, eager, internal) { create(clazz) }
+    createOnStart: Boolean = false
+) = single(clazz, name, createOnStart) { create(clazz) }
 
 /**
  * Create instance for kind T and inject dependencies into 1st constructor

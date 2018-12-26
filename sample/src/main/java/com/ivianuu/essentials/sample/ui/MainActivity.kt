@@ -45,9 +45,8 @@ import dagger.Module
 
 class MainActivity : EsActivity(), ComponentHolder {
 
-    override val component by unsafeLazy {
+    override val component =
         activityComponent(listOf(mainActivityModule(this)))
-    }
 
     override val startKey: Any? get() = CounterKey(1)
 

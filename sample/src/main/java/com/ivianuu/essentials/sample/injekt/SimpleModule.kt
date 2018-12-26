@@ -8,15 +8,17 @@ import kotlin.reflect.KClass
 inline fun <reified T : Any> simpleModule(
     instance: T,
     name: String? = null,
+    createOnStart: Boolean = false,
     noinline body: (Module.() -> Unit)? = null
-) = simpleModule(T::class, instance, name, body)
+) = simpleModule(T::class, instance, name, createOnStart, body)
 
 fun <T : Any> simpleModule(
     clazz: KClass<T>,
     instance: T,
     name: String? = null,
+    createOnStart: Boolean = false,
     body: (Module.() -> Unit)? = null
-) = module(name) {
+) = module(name, createOnStart) {
     // bind instance
     single(clazz) { instance }
 

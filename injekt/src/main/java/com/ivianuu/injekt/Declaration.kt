@@ -11,8 +11,7 @@ data class Declaration<T : Any>(
     val primaryType: KClass<T>,
     var boundTypes: List<KClass<*>> = emptyList(),
     val name: String?,
-    val binding: (ComponentContext, Parameters) -> T,
-    val internal: Boolean
+    val binding: (ComponentContext, Parameters) -> T
 ) {
 
     internal val classes: List<KClass<*>> = listOf(primaryType) + boundTypes
