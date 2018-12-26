@@ -13,8 +13,8 @@ fun component(vararg modules: Module) =
  * And depends on any of [dependsOn]
  */
 fun component(
-    modules: List<Module> = emptyList(),
-    dependsOn: List<Component> = emptyList()
+    modules: Collection<Module> = emptyList(),
+    dependsOn: Collection<Component> = emptyList()
 ): Component {
     val moduleDeclarations = modules
         .flatMap { module -> module.declarations + module.subModules.flatMap { it.declarations } }

@@ -7,8 +7,7 @@ import kotlin.reflect.KClass
  * A module provides the actual dependencies
  */
 class Module internal constructor(
-    val name: String? = null,
-    val createOnStart: Boolean = false
+    val name: String? = null
 ) {
     val declarations = mutableListOf<Declaration<*>>()
     val subModules = mutableListOf<Module>()
@@ -19,9 +18,8 @@ class Module internal constructor(
  */
 fun module(
     name: String? = null,
-    createOnStart: Boolean = false,
     body: Module.() -> Unit
-) = Module(name, createOnStart).apply(body)
+) = Module(name).apply(body)
 
 /**
  * Provides a dependency
@@ -45,7 +43,7 @@ fun <T : Any> Module.factory(
  */
 inline fun <reified T : Any> Module.single(
     name: String? = null,
-    createOnStart: Boolean = this.createOnStart,
+    createOnStart: Boolean = false,
     noinline body: DeclarationBuilder.(Parameters) -> T
 ) = single(
     type = T::class,
@@ -60,7 +58,7 @@ inline fun <reified T : Any> Module.single(
 fun <T : Any> Module.single(
     type: KClass<T>,
     name: String? = null,
-    createOnStart: Boolean = this.createOnStart,
+    createOnStart: Boolean = false,
     body: DeclarationBuilder.(Parameters) -> T
 ) = provide(
     type = type,
@@ -129,7 +127,7 @@ fun Module.module(
     name: String? = null,
     createOnStart: Boolean = false,
     body: Module.() -> Unit
-) = Module(name, createOnStart).apply(body)
+) = Module(name).apply(body)
     .also { module(it) }
 
 /**
