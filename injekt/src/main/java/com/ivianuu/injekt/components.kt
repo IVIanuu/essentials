@@ -15,58 +15,43 @@ fun component(
     modules: Iterable<Module> = emptyList(),
     dependsOn: Iterable<Component> = emptyList()
 ): Component {
-    val moduleDeclarations = modules.map { it.declarations }.fold {
-        info { "Registering declaration $it" }
-    }
+    val moduleDeclarations = modules
+        .map { module ->
+            module.declarations + module.subModules.flatMap { subModule ->
+                subModule.declarations
+            }
+        }
+        .fold { info { "Registering declaration $it" } }
 
     return Component(moduleDeclarations, dependsOn)
 }
 
 /**
- * Injects requested dependency immediately.
+ * Returns a instance of [T] matching the [name] and [params]
  */
 inline fun <reified T : Any> Component.get(
     name: String? = null,
-    params: Parameters = emptyParameters()
+    noinline params: () -> Parameters = emptyParametersProvider
 ) = get(T::class, name, params)
 
 /**
- * Injects requested dependency lazily.
+ * Lazily returns a instance of [T] matching the [name] and [params]
  */
 inline fun <reified T : Any> Component.inject(
     name: String? = null,
-    noinline params: (() -> Parameters)? = null
+    noinline params: () -> Parameters = emptyParametersProvider
 ) = inject(T::class, name, params)
 
 /**
- * Injects requested dependency lazily.
+ * Lazily returns a instance of [T] matching the [type], [name] and [params]
  */
 fun <T : Any> Component.inject(
     type: KClass<T>,
     name: String? = null,
-    params: (() -> Parameters)? = null
-) = lazy {
-    get(type, name, params?.invoke() ?: emptyParameters())
-}
+    params: () -> Parameters = emptyParametersProvider
+) = lazy { get(type, name, params) }
 
-/**
- * Returns a provider for the requested dependency
- */
-inline fun <reified T : Any> Component.provider(
-    name: String? = null,
-    params: Parameters = emptyParameters()
-) = provider(T::class, name, params)
-
-/**
- * Returns a provider for the requested dependency
- */
-fun <T : Any> Component.provider(
-    type: KClass<T>,
-    name: String? = null,
-    params: Parameters = emptyParameters()
-) = { get(type, name, params) }
-
-private fun Iterable<Set<Declaration<*>>>.fold(each: ((Declaration<*>) -> Unit)? = null): Set<Declaration<*>> =
+private fun Iterable<List<Declaration<*>>>.fold(each: ((Declaration<*>) -> Unit)? = null): Set<Declaration<*>> =
     fold(mutableSetOf()) { acc, currDeclarations ->
         currDeclarations.forEach { entry ->
             val existingDeclaration = acc.firstOrNull { it.key == entry.key }

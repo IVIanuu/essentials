@@ -68,18 +68,7 @@ class MyController : LifecycleController(), ComponentHolder {
         controllerComponent(listOf(myControllerModule(this)))
     }
 
-    private val viewModel by inject<MainViewModel> { parametersOf("my_id") }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        val provider = provider(MainActivity::class)
-
-        val one = provider()
-        val two = provider()
-        val three = provider()
-
-        d { "one $one, two $two, three $three" }
-    }
+    private val viewModel by inject<MainViewModel> { parametersOf("my_password") }
 
     override fun onInflateView(
         inflater: LayoutInflater,

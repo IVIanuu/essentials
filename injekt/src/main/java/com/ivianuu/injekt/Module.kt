@@ -4,30 +4,24 @@ import com.ivianuu.injekt.Declaration.Kind
 import kotlin.reflect.KClass
 
 /**
- * A module consists of dependency declarations and describes how dependencies are provided.
- * Each module should represent a logical unit. For instance there should be separate modules for each functionality
- * of your application.
+ * A module provides the actual dependencies
  */
-@ModuleDslMarker
 class Module internal constructor(
     val name: String? = null,
     val createOnStart: Boolean = false
 ) {
-    internal val declarations = mutableSetOf<Declaration<*>>()
+    val declarations = mutableListOf<Declaration<*>>()
+    val subModules = mutableListOf<Module>()
 }
 
 /**
- * Defines a [Module] (with an optional name).
+ * Defines a [Module]
  */
 fun module(
     name: String? = null,
     createOnStart: Boolean = false,
     body: Module.() -> Unit
-) =
-    Module(name, createOnStart).apply(body)
-
-@DslMarker
-annotation class ModuleDslMarker
+) = Module(name, createOnStart).apply(body)
 
 /**
  * Provides a dependency
@@ -119,12 +113,29 @@ class DeclarationBuilder(val component: Component)
 /** Calls trough [Component.get] */
 inline fun <reified T : Any> DeclarationBuilder.get(
     name: String? = null,
-    noinline parameters: () -> Parameters = { emptyParameters() }
+    noinline parameters: () -> Parameters = emptyParametersProvider
 ) = get(T::class, name, parameters)
 
 /** Calls trough [Component.get] */
 fun <T : Any> DeclarationBuilder.get(
     type: KClass<T>,
     name: String? = null,
-    parameters: () -> Parameters = { emptyParameters() }
-) = component.get(type, name, parameters())
+    parameters: () -> Parameters = emptyParametersProvider
+) = component.get(type, name, parameters)
+
+/**
+ * Defines a sub module
+ */
+fun Module.module(
+    name: String? = null,
+    createOnStart: Boolean = false,
+    body: Module.() -> Unit
+) = Module(name, createOnStart).apply(body)
+    .also { module(it) }
+
+/**
+ * Adds the [module] to [Module.subModules]
+ */
+fun Module.module(module: Module) {
+    subModules.add(module)
+}

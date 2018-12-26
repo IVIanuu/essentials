@@ -14,16 +14,16 @@ interface ComponentHolder {
 
 /** Calls trough [Component.inject] */
 inline fun <reified T : Any> ComponentHolder.inject(
-    name: String? = null, noinline params: (() -> Parameters)? = null
+    name: String? = null,
+    noinline params: () -> Parameters = emptyParametersProvider
 ) = inject(T::class, name, params)
 
 /** Calls trough [Component.inject] */
 fun <T : Any> ComponentHolder.inject(
     type: KClass<T>,
     name: String? = null,
-    params: (() -> Parameters)? = null
-) =
-    lazy { component.get(type, name, params?.invoke() ?: emptyParameters()) }
+    params: () -> Parameters = emptyParametersProvider
+) = lazy { component.get(type, name, params) }
 
 /** Calls trough [Component.get] */
 inline fun <reified T : Any> ComponentHolder.get(name: String? = null) =
@@ -32,11 +32,3 @@ inline fun <reified T : Any> ComponentHolder.get(name: String? = null) =
 /** Calls trough [Component.get] */
 fun <T : Any> ComponentHolder.get(type: KClass<T>, name: String? = null) =
     component.get(type, name)
-
-/** Calls trough [Component.provider] */
-inline fun <reified T : Any> ComponentHolder.provider(name: String? = null) =
-    provider(T::class, name)
-
-/** Calls trough [Component.provider] */
-fun <T : Any> ComponentHolder.provider(type: KClass<T>, name: String? = null) =
-    component.provider(type, name)

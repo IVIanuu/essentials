@@ -13,6 +13,7 @@ class Component internal constructor(
     private val instances = mutableSetOf<InstanceHolder<*>>()
 
     init {
+        // map the declarations to instance holders
         declarations
             .map {
                 when (it.kind) {
@@ -31,69 +32,44 @@ class Component internal constructor(
     }
 
     /**
-     * Returns a instance of [T] for the given parameters
+     * Returns a instance of [T] matching the [type], [name] and [params]
      */
     fun <T : Any> get(
         type: KClass<T>,
         name: String? = null,
-        params: Parameters = emptyParameters()
+        params: () -> Parameters = emptyParametersProvider
     ) = getInternal(type, name, params)
 
     private fun <T : Any> getInternal(
         type: KClass<T>,
-        name: String? = null,
-        params: Parameters = emptyParameters()
-    ): T {
-        val value = thisComponentInject(type, name, params)
-        return when {
-            value != null -> value
-            else -> {
-                val component = dependsOn.find { component -> component.canInject(type, name) }
-                    ?: throw InjectionException("No binding found for ${type.java.name + name.orEmpty()}")
-                component.getInternal(type, name)
-            }
-        }
-    }
-
-    private fun canInject(
-        type: KClass<*>,
-        name: String? = null
-    ): Boolean =
-        when {
-            thisComponentCanInject(type, name) -> true
-            else -> dependsOn.any { it.canInject(type, name) }
-        }
-
-    private fun <T : Any> thisComponentInject(
-        type: KClass<T>,
         name: String?,
-        params: Parameters
-    ): T? {
+        params: () -> Parameters
+    ): T {
         val instance = instances.firstOrNull {
             it.declaration.classes.contains(type)
-                    && name == it.declaration.name
+                    && it.declaration.name == name
         }
-        return if (instance == null) {
-            null
-        } else {
+
+        return if (instance != null) {
             try {
                 info { "Injecting dependency for ${instance.declaration.key}" }
                 @Suppress("UNCHECKED_CAST")
-                instance.get(this, params) as T
+                instance.get(this, params()) as T
             } catch (e: InjektException) {
                 throw e
             } catch (e: Exception) {
                 throw InstanceCreationException("Could not instantiate $instance", e)
             }
+        } else {
+            val component = dependsOn.find {
+                it.instances.any {
+                    it.declaration.classes.contains(type)
+                            && name == it.declaration.name
+                }
+            } ?: throw InjectionException("No binding found for ${type.java.name + name.orEmpty()}")
+
+            component.getInternal(type, name, params)
         }
     }
 
-    private fun thisComponentCanInject(
-        type: KClass<*>,
-        name: String?
-    ) =
-        instances.any {
-            it.declaration.classes.contains(type)
-                    && name == it.declaration.name
-        }
 }
