@@ -19,7 +19,7 @@ object Versions {
     const val androidxCardView = "1.0.0"
     const val androidxCore = "1.0.1"
     const val androidxLifecycle = "2.0.0"
-    const val androidxWork = "1.0.0-alpha11"
+    const val androidxWork = "1.0.0-beta01"
 
     const val androidxTestCore = "1.0.0"
     const val androidxTestJunit = "1.0.0"
@@ -30,7 +30,7 @@ object Versions {
     const val constraintLayout = "2.0.0-alpha2"
     const val coroutines = "1.0.0"
     const val dagger = "2.19"
-    const val director = "af5c7b5506"
+    const val director = "daa4ec173f"
     const val epoxy = "2.19.0"
     const val epoxyKtx = "9dde1f5a9c"
     const val epoxyPrefs = "0a007754c4"

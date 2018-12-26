@@ -7,24 +7,27 @@ import androidx.lifecycle.ViewModelStoreOwner
 import com.ivianuu.kommon.lifecycle.defaultViewModelKey
 
 inline fun <reified VM : MvRxViewModel<*>> MvRxView.viewModel(
-    crossinline keyProvider: () -> String = { VM::class.defaultViewModelKey },
+    crossinline from: () -> ViewModelStoreOwner = { this },
+    crossinline key: () -> String = { VM::class.defaultViewModelKey },
     noinline factory: () -> VM
-) = viewModelLazy { getViewModel(keyProvider(), factory) }
-
-inline fun <reified VM : MvRxViewModel<*>> MvRxView.existingViewModel(
-    crossinline keyProvider: () -> String = { VM::class.defaultViewModelKey }
-) = viewModelLazy { getExistingViewModel<VM>(keyProvider()) }
+) = viewModelLazy { getViewModel(from(), key(), factory) }
 
 inline fun <reified VM : MvRxViewModel<*>> MvRxView.getViewModel(
+    from: ViewModelStoreOwner = this,
     key: String = VM::class.defaultViewModelKey,
     noinline factory: () -> VM
-) = viewModelProvider(factory).get(key, VM::class.java).setupViewModel(this)
+) = viewModelProvider(from, factory).get(key, VM::class.java)
+    .setupViewModel(this)
+
+inline fun <reified VM : MvRxViewModel<*>> MvRxView.existingViewModel(
+    crossinline from: () -> ViewModelStoreOwner = { this },
+    crossinline key: () -> String = { VM::class.defaultViewModelKey }
+) = viewModel<VM>(from, key, ExistingViewModelFactory())
 
 inline fun <reified VM : MvRxViewModel<*>> MvRxView.getExistingViewModel(
+    from: ViewModelStoreOwner = this,
     key: String = VM::class.defaultViewModelKey
-) = viewModelProvider<VM>(ExistingViewModelFactory())
-    .get(key, VM::class.java)
-    .setupViewModel(this)
+) = getViewModel(from, key, ExistingViewModelFactory<VM>())
 
 @PublishedApi
 internal fun <VM : MvRxViewModel<*>> VM.setupViewModel(view: MvRxView) =
@@ -35,14 +38,15 @@ internal fun <V> MvRxView.viewModelLazy(initializer: () -> V) =
     lifecycleAwareLazy(Lifecycle.Event.ON_START, initializer)
 
 @PublishedApi
-internal fun <VM : MvRxViewModel<*>> ViewModelStoreOwner.viewModelProvider(
+internal fun <VM : MvRxViewModel<*>> viewModelProvider(
+    from: ViewModelStoreOwner,
     factory: () -> VM
-) = ViewModelProvider(this, MvRxViewModelFactory(factory))
+) = ViewModelProvider(from, MvRxViewModelFactory(factory))
 
 @PublishedApi
 internal class ExistingViewModelFactory<VM : MvRxViewModel<*>> : () -> VM {
     override fun invoke(): VM {
-        throw IllegalStateException("viewmodel does not exist.")
+        throw IllegalStateException("view model does not exist.")
     }
 }
 

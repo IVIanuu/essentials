@@ -33,5 +33,4 @@ abstract class EsWorkInitializerModule {
     @AppInitializerKey(WorkAppInitializer::class)
     abstract fun bindWorkAppService(workAppInitializer: WorkAppInitializer): AppInitializer
 
-
 }
