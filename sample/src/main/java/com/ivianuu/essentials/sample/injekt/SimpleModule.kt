@@ -8,7 +8,6 @@ import kotlin.reflect.KClass
 inline fun <reified T : Any> simpleModule(
     instance: T,
     name: String? = null,
-    createOnStart: Boolean = false,
     noinline body: (Module.() -> Unit)? = null
 ) = simpleModule(T::class, instance, name, body)
 

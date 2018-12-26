@@ -36,7 +36,7 @@ fun <T : Any> Module.factory(
     type: KClass<T>,
     name: String? = null,
     body: DeclarationBuilder.(Parameters) -> T
-) = provide(type = type, kind = Kind.Factory, name = name, body = body)
+) = provide(type = type, kind = Kind.FACTORY, name = name, createOnStart = false, body = body)
 
 /**
  * Provides a singleton dependency
@@ -62,8 +62,9 @@ fun <T : Any> Module.single(
     body: DeclarationBuilder.(Parameters) -> T
 ) = provide(
     type = type,
-    kind = Kind.Single(createOnStart),
+    kind = Kind.SINGLE,
     name = name,
+    createOnStart = createOnStart,
     body = body
 )
 
@@ -73,8 +74,9 @@ fun <T : Any> Module.single(
 inline fun <reified T : Any> Module.provide(
     kind: Kind,
     name: String? = null,
+    createOnStart: Boolean = false,
     noinline body: DeclarationBuilder.(Parameters) -> T
-) = provide(type = T::class, kind = kind, name = name, body = body)
+) = provide(type = T::class, kind = kind, name = name, createOnStart = createOnStart, body = body)
 
 /**
  * Provides a dependency
@@ -83,6 +85,7 @@ fun <T : Any> Module.provide(
     type: KClass<T>,
     kind: Kind,
     name: String? = null,
+    createOnStart: Boolean = false,
     body: DeclarationBuilder.(Parameters) -> T
 ): Declaration<T> {
     val declaration =
@@ -90,6 +93,7 @@ fun <T : Any> Module.provide(
             kind = kind,
             primaryType = type,
             name = name,
+            eager = createOnStart,
             provider = { context, params ->
                 body.invoke(DeclarationBuilder(context), params)
             }

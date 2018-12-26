@@ -1,5 +1,6 @@
 package com.ivianuu.injekt
 
+import java.util.concurrent.ConcurrentHashMap
 import kotlin.reflect.KClass
 
 /**
@@ -7,27 +8,27 @@ import kotlin.reflect.KClass
  */
 class Component internal constructor(
     declarations: List<Declaration<*>>,
-    private val dependsOn: Iterable<Component>
+    private val dependencies: Iterable<Component>
 ) {
 
-    private val declarations = mutableListOf<InstanceHolder<*>>()
+    private val declarations = mutableSetOf<InstanceHolder<*>>()
+    private val declarationsByName: MutableMap<String, InstanceHolder<*>> = ConcurrentHashMap()
+    private val declarationsByType: MutableMap<KClass<*>, InstanceHolder<*>> = ConcurrentHashMap()
 
     init {
         // map the declarations to instance holders
         declarations
             .map {
                 when (it.kind) {
-                    is Declaration.Kind.Factory -> FactoryInstanceHolder(it)
-                    is Declaration.Kind.Single -> SingleInstanceHolder(it)
+                    Declaration.Kind.FACTORY -> FactoryInstanceHolder(it)
+                    Declaration.Kind.SINGLE -> SingleInstanceHolder(it)
                 }
             }
             .forEach { this.declarations.add(it) }
 
         // Initialize eager singletons
         this.declarations
-            .filter {
-                (it.declaration.kind as? Declaration.Kind.Single)?.eager == true
-            }
+            .filter { it.declaration.kind == Declaration.Kind.SINGLE && it.declaration.eager }
             .forEach { it.get(this, emptyParameters()) }
     }
 
@@ -45,24 +46,43 @@ class Component internal constructor(
         name: String?,
         params: () -> Parameters
     ): T = synchronized(this) {
-        val instance = declarations.firstOrNull {
-            it.declaration.classes.contains(type)
-                    && it.declaration.name == name
-        }
-
+        val instance = findDeclaration(type, name)
         return if (instance != null) {
             @Suppress("UNCHECKED_CAST")
             instance.create(this, params()) as T
         } else {
-            val component = dependsOn.find {
-                it.declarations.any {
-                    it.declaration.classes.contains(type)
-                            && name == it.declaration.name
+            throw InjectionException("Could not find declaration for ${type.java.name + name.orEmpty()}")
+        }
+    }
+
+    private fun findDeclaration(type: KClass<*>, name: String?): InstanceHolder<*>? {
+        var declaration: InstanceHolder<*>?
+
+        if (name != null) {
+            declaration = declarationsByName[name]
+                    ?: declarations.firstOrNull { it.declaration.name == name }
+                ?.also { declarationsByName[name] = it }
+        } else {
+            declaration = declarationsByType[type]
+                    ?: declarations.firstOrNull { it.declaration.classes.contains(type) }
+                ?.also { declarationsByType[type] = it }
+        }
+
+        if (declaration == null) {
+            for (component in dependencies) {
+                declaration = component.findDeclaration(type, name)
+
+                if (declaration != null) {
+                    if (name != null) {
+                        declarationsByName[name] = declaration
+                    } else {
+                        declarationsByType[type] = declaration
+                    }
+                    break
                 }
             }
-                ?: throw InjectionException("Could not find declaration for ${type.java.name + name.orEmpty()}")
-
-            component.getInternal(type, name, params)
         }
+
+        return declaration
     }
 }

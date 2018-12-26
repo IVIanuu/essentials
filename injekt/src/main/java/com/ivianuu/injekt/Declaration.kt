@@ -6,14 +6,15 @@ import kotlin.reflect.KClass
  * Represents a dependency declaration.
  */
 data class Declaration<T : Any>(
-    val kind: Kind,
     val primaryType: KClass<T>,
-    var boundTypes: List<KClass<*>> = emptyList(),
     val name: String?,
-    val provider: (Component, Parameters) -> T
+    val kind: Kind,
+    var secondaryTypes: List<KClass<*>> = emptyList(),
+    val provider: (Component, Parameters) -> T,
+    val eager: Boolean
 ) {
 
-    internal val classes: List<KClass<*>> get() = listOf(primaryType) + boundTypes
+    internal val classes: List<KClass<*>> get() = listOf(primaryType) + secondaryTypes
 
     val key = "Class: ${primaryType.java.name}${name?.let { " Name: $it" }.orEmpty()}"
 
@@ -24,7 +25,7 @@ data class Declaration<T : Any>(
         if (!type.java.isAssignableFrom(this.primaryType.java)) {
             throw IllegalArgumentException("Can't bind kind '$type' for definition $this")
         } else {
-            boundTypes += type
+            secondaryTypes += type
         }
     }
 
@@ -35,12 +36,5 @@ data class Declaration<T : Any>(
         types.forEach { bind(it) }
     }
 
-    sealed class Kind {
-        object Factory : Kind() {
-            override fun toString() = "Factory"
-        }
-
-        data class Single(val eager: Boolean) : Kind()
-    }
-
+    enum class Kind { FACTORY, SINGLE }
 }
