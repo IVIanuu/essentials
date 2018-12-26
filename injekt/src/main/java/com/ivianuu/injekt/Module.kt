@@ -94,7 +94,7 @@ fun <T : Any> Module.provide(
             primaryType = type,
             name = name,
             binding = { context, params ->
-                body.invoke(DeclarationBuilder(context, createOnStart), params)
+                body.invoke(DeclarationBuilder(context), params)
             }
         )
 
@@ -108,10 +108,7 @@ fun <T : Any> Module.provide(
     return declaration
 }
 
-class DeclarationBuilder(
-    val context: ComponentContext,
-    val createOnStart: Boolean
-)
+class DeclarationBuilder(val context: ComponentContext)
 
 /**
  * Provides a dependency which has already been declared in the current context (total set of modules of the
@@ -127,20 +124,3 @@ fun <T : Any> DeclarationBuilder.get(
     type: KClass<T>,
     name: String? = null
 ) = context.get(type, name)
-
-/**
- * Lazy version of [get]
- */
-inline fun <reified T : Any> DeclarationBuilder.lazy(
-    name: String? = null,
-    noinline params: (() -> Parameters)? = null
-) = lazy(T::class, name, params)
-
-/**
- * Lazy version of [get]
- */
-fun <T : Any> DeclarationBuilder.lazy(
-    type: KClass<T>,
-    name: String? = null,
-    params: (() -> Parameters)? = null
-) = context.inject(type, name, params)
