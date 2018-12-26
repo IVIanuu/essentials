@@ -3,26 +3,6 @@ package com.ivianuu.injekt
 import kotlin.reflect.KClass
 
 /**
- * Defines a [Component].
- */
-fun component(vararg modules: Module) =
-    component(modules = modules.asIterable())
-
-/**
- * Defines a [Component].
- */
-fun component(
-    modules: Iterable<Module> = emptyList(),
-    dependsOn: Iterable<Component> = emptyList()
-): Component {
-    val moduleDeclarations = modules.map { it.declarations }.fold {
-        info { "Registering declaration $it" }
-    }
-
-    return Component(moduleDeclarations, dependsOn)
-}
-
-/**
  * Along with [Modules][Module] a Component is the heart of dependency injection via InjektPlugins.
  *
  * It performs the actual injection and will also hold the singleton instances of dependencies declared as singletons.
@@ -39,10 +19,8 @@ fun component(
  */
 class Component internal constructor(
     declarations: Set<Declaration<*>>,
-    dependsOn: Iterable<Component>
+    private val dependsOn: Iterable<Component>
 ) {
-
-    val context = ComponentContext(this, dependsOn)
 
     private val instances = mutableSetOf<InstanceHolder<*>>()
 
@@ -61,63 +39,44 @@ class Component internal constructor(
             .filter {
                 (it.declaration.kind as? Declaration.Kind.Single)?.eager == true
             }
-            .forEach { it.get(context, emptyParameters()) }
+            .forEach { it.get(this, emptyParameters()) }
     }
 
     /**
-     * Injects requested dependency lazily.
-     */
-    inline fun <reified T : Any> inject(
-        name: String? = null,
-        noinline params: (() -> Parameters)? = null
-    ) = context.inject<T>(name, params)
-
-    /**
-     * Injects requested dependency lazily.
-     */
-    fun <T : Any> inject(
-        type: KClass<T>,
-        name: String? = null,
-        params: (() -> Parameters)? = null
-    ) = context.inject(type, name, params)
-
-    /**
-     * Injects requested dependency immediately.
-     */
-    inline fun <reified T : Any> get(
-        name: String? = null,
-        params: Parameters = emptyParameters()
-    ) = get(T::class, name, params)
-
-    /**
-     * Injects requested dependency immediately.
+     * Returns a instance of [T] for the given parameters
      */
     fun <T : Any> get(
         type: KClass<T>,
         name: String? = null,
         params: Parameters = emptyParameters()
-    ) = context.get(type, name, params)
+    ) = getInternal(type, name, params)
 
-    /**
-     * Returns a provider for the requested dependency
-     */
-    inline fun <reified T : Any> provider(
-        name: String? = null,
-        params: Parameters = emptyParameters(),
-        internal: Boolean = false
-    ) = provider(T::class, name, params, internal)
-
-    /**
-     * Returns a provider for the requested dependency
-     */
-    fun <T : Any> provider(
+    private fun <T : Any> getInternal(
         type: KClass<T>,
         name: String? = null,
-        params: Parameters = emptyParameters(),
-        internal: Boolean = false
-    ) = context.provider(type, name, params, internal)
+        params: Parameters = emptyParameters()
+    ): T {
+        val value = thisComponentInject(type, name, params)
+        return when {
+            value != null -> value
+            else -> {
+                val component = dependsOn.find { component -> component.canInject(type, name) }
+                    ?: throw InjectionException("No binding found for ${type.java.name + name.orEmpty()}")
+                component.getInternal(type, name)
+            }
+        }
+    }
 
-    internal fun <T : Any> thisComponentInject(
+    private fun canInject(
+        type: KClass<*>,
+        name: String? = null
+    ): Boolean =
+        when {
+            thisComponentCanInject(type, name) -> true
+            else -> dependsOn.any { it.canInject(type, name) }
+        }
+
+    private fun <T : Any> thisComponentInject(
         type: KClass<T>,
         name: String?,
         params: Parameters
@@ -131,7 +90,8 @@ class Component internal constructor(
         } else {
             try {
                 info { "Injecting dependency for ${instance.declaration.key}" }
-                instance.get(context, params) as T
+                @Suppress("UNCHECKED_CAST")
+                instance.get(this, params) as T
             } catch (e: InjektException) {
                 throw e
             } catch (e: Exception) {
@@ -140,10 +100,7 @@ class Component internal constructor(
         }
     }
 
-    internal fun canInject(type: KClass<*>, name: String? = null) =
-        context.canInject(type, name)
-
-    internal fun thisComponentCanInject(
+    private fun thisComponentCanInject(
         type: KClass<*>,
         name: String?
     ) =
@@ -152,101 +109,3 @@ class Component internal constructor(
                     && name == it.declaration.name
         }
 }
-
-/**
- * ComponentContext is used internally to represent the total set of [Components][Component] and thus possible
- * injections for the current context consisting of the current Component and all Components that have been specified
- * via `dependsOn` (see [component]).
- */
-class ComponentContext(
-    private val thisComponent: Component,
-    private val dependsOn: Iterable<Component>
-) {
-
-    inline fun <reified T : Any> inject(
-        name: String? = null,
-        noinline params: (() -> Parameters)? = null,
-        internal: Boolean = false
-    ) =
-        inject(T::class, name, params, internal)
-
-    fun <T : Any> inject(
-        type: KClass<T>,
-        name: String? = null,
-        params: (() -> Parameters)? = null,
-        internal: Boolean = false
-    ) = lazy {
-        get(
-            type,
-            name = name,
-            params = params?.invoke() ?: emptyParameters(),
-            internal = internal
-        )
-    }
-
-    inline fun <reified T : Any> get(
-        name: String? = null,
-        params: Parameters = emptyParameters(),
-        internal: Boolean = false
-    ) =
-        get(T::class, name, params, internal)
-
-    fun <T : Any> get(
-        type: KClass<T>,
-        name: String? = null,
-        params: Parameters = emptyParameters(),
-        internal: Boolean = false
-    ) = injectInternal(type, name, params, internal)
-
-    inline fun <reified T : Any> provider(
-        name: String? = null,
-        params: Parameters = emptyParameters(),
-        internal: Boolean = false
-    ) = provider(T::class, name, params, internal)
-
-    fun <T : Any> provider(
-        type: KClass<T>,
-        name: String? = null,
-        params: Parameters = emptyParameters(),
-        internal: Boolean = false
-    ) = { get(type, name, params, internal) }
-
-    private fun <T : Any> injectInternal(
-        type: KClass<T>,
-        name: String? = null,
-        params: Parameters = emptyParameters(),
-        internal: Boolean = false
-    ): T {
-        val value = thisComponent.thisComponentInject(type, name, params)
-        return when {
-            value != null -> value
-            else -> {
-                val component = dependsOn.find { component -> component.canInject(type, name) }
-                    ?: throw InjectionException("No binding found for ${type.java.name + name.orEmpty()}")
-                component.get(type, name)
-            }
-        }
-    }
-
-    internal fun canInject(
-        type: KClass<*>,
-        name: String? = null
-    ): Boolean =
-        when {
-            thisComponent.thisComponentCanInject(type, name) -> true
-            else -> dependsOn.any { it.canInject(type, name) }
-        }
-}
-
-private fun Iterable<Set<Declaration<*>>>.fold(each: ((Declaration<*>) -> Unit)? = null): Set<Declaration<*>> =
-    fold(mutableSetOf()) { acc, currDeclarations ->
-        currDeclarations.forEach { entry ->
-            val existingDeclaration = acc.firstOrNull { it.key == entry.key }
-
-            existingDeclaration?.let { declaration ->
-                throw OverrideException(entry, declaration)
-            }
-            each?.invoke(entry)
-        }
-        acc.apply { addAll(currDeclarations) }
-    }

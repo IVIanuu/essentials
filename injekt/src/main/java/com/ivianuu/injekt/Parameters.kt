@@ -41,9 +41,7 @@ class Parameters(vararg values: Any?) {
  */
 fun parametersOf(vararg values: Any?) = Parameters(*values)
 
-private val emptyParams by lazy(LazyThreadSafetyMode.NONE) { parametersOf() }
-
 /**
  * Returns empty [Parameters]
  */
-fun emptyParameters() = emptyParams
+fun emptyParameters() = parametersOf()

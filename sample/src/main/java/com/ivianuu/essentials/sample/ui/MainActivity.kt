@@ -72,7 +72,7 @@ class MyController : LifecycleController(), ComponentHolder {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val provider = component.context.provider(MainActivity::class)
+        val provider = provider(MainActivity::class)
 
         val one = provider()
         val two = provider()

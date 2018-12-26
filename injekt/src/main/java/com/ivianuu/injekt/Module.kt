@@ -75,12 +75,18 @@ fun <T : Any> Module.single(
     body = body
 )
 
+/**
+ * Provides a dependency
+ */
 inline fun <reified T : Any> Module.provide(
     kind: Kind,
     name: String? = null,
     noinline body: DeclarationBuilder.(Parameters) -> T
 ) = provide(type = T::class, kind = kind, name = name, body = body)
 
+/**
+ * Provides a dependency
+ */
 fun <T : Any> Module.provide(
     type: KClass<T>,
     kind: Kind,
@@ -108,13 +114,16 @@ fun <T : Any> Module.provide(
     return declaration
 }
 
-class DeclarationBuilder(val context: ComponentContext)
+class DeclarationBuilder(val component: Component)
 
 /**
  * Provides a dependency which has already been declared in the current context (total set of modules of the
  * current component) to be able to inject transitive dependencies within a module.
  */
-inline fun <reified T : Any> DeclarationBuilder.get(name: String? = null) = get(T::class, name)
+inline fun <reified T : Any> DeclarationBuilder.get(
+    name: String? = null,
+    noinline parameters: () -> Parameters = { emptyParameters() }
+) = get(T::class, name, parameters)
 
 /**
  * Provides a dependency which has already been declared in the current context (total set of modules of the
@@ -122,5 +131,6 @@ inline fun <reified T : Any> DeclarationBuilder.get(name: String? = null) = get(
  */
 fun <T : Any> DeclarationBuilder.get(
     type: KClass<T>,
-    name: String? = null
-) = context.get(type, name)
+    name: String? = null,
+    parameters: () -> Parameters = { emptyParameters() }
+) = component.get(type, name, parameters())
