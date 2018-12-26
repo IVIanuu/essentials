@@ -23,10 +23,10 @@ fun component(
 }
 
 /**
- * Along with [Modules][Module] a Component is the heart of dependency injection via Injekt.
+ * Along with [Modules][Module] a Component is the heart of dependency injection via InjektPlugins.
  *
  * It performs the actual injection and will also hold the singleton instances of dependencies declared as singletons.
- * This is an important aspect of Injekt! As long as the same Component reference is used for injection, the same
+ * This is an important aspect of InjektPlugins! As long as the same Component reference is used for injection, the same
  * singleton instances are reused. Once the Component is eligible for garbage collection so are the instances hold by
  * this component. The developer is responsible for holding a Component reference and releasing it when necessary. This
  * design was chosen in contrast to other DI libraries that for instance work with a global, singleton state to prevent
@@ -49,10 +49,10 @@ class Component internal constructor(
     init {
         declarations
             .map {
-                val type = it.type
+                val type = it.kind
                 when (type) {
-                    is Declaration.Type.Factory -> FactoryInstanceHolder(it)
-                    is Declaration.Type.Single -> SingleInstanceHolder(it)
+                    is Declaration.Kind.Factory -> FactoryInstanceHolder(it)
+                    is Declaration.Kind.Single -> SingleInstanceHolder(it)
                 }
             }
             .forEach { instances.add(it) }
@@ -60,7 +60,7 @@ class Component internal constructor(
         // Initialize eager singletons
         instances
             .filter {
-                (it.declaration.type as? Declaration.Type.Single)?.eager == true
+                (it.declaration.kind as? Declaration.Kind.Single)?.eager == true
             }
             .forEach { it.get(context, emptyParameters()) }
     }
@@ -74,8 +74,8 @@ class Component internal constructor(
     /**
      * Returns `true` if this component is capable of injecting requested dependency.
      */
-    fun <T : Any> canInject(clazz: KClass<T>, name: String? = null) =
-        context.canInject(clazz, name)
+    fun <T : Any> canInject(type: KClass<T>, name: String? = null) =
+        context.canInject(type, name)
 
     /**
      * Injects requested dependency lazily.
@@ -89,10 +89,10 @@ class Component internal constructor(
      * Injects requested dependency lazily.
      */
     fun <T : Any> inject(
-        clazz: KClass<T>,
+        type: KClass<T>,
         name: String? = null,
         params: (() -> Parameters)? = null
-    ) = context.inject(clazz, name, params)
+    ) = context.inject(type, name, params)
 
     /**
      * Injects requested dependency immediately.
@@ -106,20 +106,39 @@ class Component internal constructor(
      * Injects requested dependency immediately.
      */
     fun <T : Any> get(
-        clazz: KClass<T>,
+        type: KClass<T>,
         name: String? = null,
         params: Parameters = emptyParameters()
-    ) = context.get(clazz, name, params)
+    ) = context.get(type, name, params)
+
+    /**
+     * Returns a provider for the requested dependency
+     */
+    inline fun <reified T : Any> provider(
+        name: String? = null,
+        params: Parameters = emptyParameters(),
+        internal: Boolean = false
+    ) = provider(T::class, name, params, internal)
+
+    /**
+     * Returns a provider for the requested dependency
+     */
+    fun <T : Any> provider(
+        type: KClass<T>,
+        name: String? = null,
+        params: Parameters = emptyParameters(),
+        internal: Boolean = false
+    ) = context.provider(type, name, params, internal)
 
     internal fun <T : Any> thisComponentInject(
-        clazz: KClass<T>,
+        type: KClass<T>,
         name: String?,
         params: Parameters,
         internal: Boolean
     ): T? {
         val instance = instances.firstOrNull {
             (if (!internal) !it.declaration.internal else true)
-                    && it.declaration.classes.contains(clazz)
+                    && it.declaration.classes.contains(type)
                     && name == it.declaration.name
         }
         return if (instance == null || (instance.declaration.internal && !internal)) {
@@ -137,13 +156,13 @@ class Component internal constructor(
     }
 
     internal fun thisComponentCanInject(
-        clazz: KClass<*>,
+        type: KClass<*>,
         name: String?,
         internal: Boolean
     ) =
         instances.any {
             (if (!internal) !it.declaration.internal else true)
-                    && it.declaration.classes.contains(clazz)
+                    && it.declaration.classes.contains(type)
                     && name == it.declaration.name
         }
 
@@ -163,13 +182,13 @@ class ComponentContext(
         canInject(T::class, name, internal)
 
     fun <T : Any> canInject(
-        clazz: KClass<T>,
+        type: KClass<T>,
         name: String? = null,
         internal: Boolean = false
     ): Boolean =
         when {
-            thisComponent.thisComponentCanInject(clazz, name, internal = internal) -> true
-            else -> dependsOn.any { it.canInject(clazz, name) }
+            thisComponent.thisComponentCanInject(type, name, internal = internal) -> true
+            else -> dependsOn.any { it.canInject(type, name) }
         }
 
     inline fun <reified T : Any> inject(
@@ -180,13 +199,13 @@ class ComponentContext(
         inject(T::class, name, params, internal)
 
     fun <T : Any> inject(
-        clazz: KClass<T>,
+        type: KClass<T>,
         name: String? = null,
         params: (() -> Parameters)? = null,
         internal: Boolean = false
     ) = lazy {
         get(
-            clazz,
+            type,
             name = name,
             params = params?.invoke() ?: emptyParameters(),
             internal = internal
@@ -201,32 +220,38 @@ class ComponentContext(
         get(T::class, name, params, internal)
 
     fun <T : Any> get(
-        clazz: KClass<T>,
+        type: KClass<T>,
         name: String? = null,
         params: Parameters = emptyParameters(),
         internal: Boolean = false
-    ) = injectInternal(clazz, name, params, internal)
+    ) = injectInternal(type, name, params, internal)
+
+    inline fun <reified T : Any> provider(
+        name: String? = null,
+        params: Parameters = emptyParameters(),
+        internal: Boolean = false
+    ) = provider(T::class, name, params, internal)
 
     fun <T : Any> provider(
-        clazz: KClass<T>,
+        type: KClass<T>,
         name: String? = null,
         params: Parameters = emptyParameters(),
         internal: Boolean = false
-    ) = { get(clazz, name, params, internal) }
+    ) = { get(type, name, params, internal) }
 
     private fun <T : Any> injectInternal(
-        clazz: KClass<T>,
+        type: KClass<T>,
         name: String? = null,
         params: Parameters = emptyParameters(),
         internal: Boolean = false
     ): T {
-        val value = thisComponent.thisComponentInject(clazz, name, params, internal)
+        val value = thisComponent.thisComponentInject(type, name, params, internal)
         return when {
             value != null -> value
             else -> {
-                val component = dependsOn.find { component -> component.canInject(clazz, name) }
-                    ?: throw InjectionException("No binding found for ${clazz.java.name + name.orEmpty()}")
-                component.get(clazz, name)
+                val component = dependsOn.find { component -> component.canInject(type, name) }
+                    ?: throw InjectionException("No binding found for ${type.java.name + name.orEmpty()}")
+                component.get(type, name)
             }
         }
     }

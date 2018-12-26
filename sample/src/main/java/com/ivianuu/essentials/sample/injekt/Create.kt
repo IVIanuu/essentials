@@ -21,7 +21,7 @@ fun <T : Any> Module.factory(
 ) = factory(clazz, name, internal) { create(clazz) }
 
 /**
- * Create a Single definition for given type T
+ * Create a Single definition for given kind T
  */
 inline fun <reified T : Any> Module.single(
     name: String? = null,
@@ -30,7 +30,7 @@ inline fun <reified T : Any> Module.single(
 ) = single(name, eager, internal) { create<T>() }
 
 /**
- * Create a Single definition for given type T
+ * Create a Single definition for given kind T
  */
 fun <T : Any> Module.single(
     clazz: KClass<T>,
@@ -40,12 +40,12 @@ fun <T : Any> Module.single(
 ) = single(clazz, name, eager, internal) { create(clazz) }
 
 /**
- * Create instance for type T and inject dependencies into 1st constructor
+ * Create instance for kind T and inject dependencies into 1st constructor
  */
 inline fun <reified T : Any> DeclarationBuilder.create() = create(T::class)
 
 /**
- * Create instance for type T and inject dependencies into 1st constructor
+ * Create instance for kind T and inject dependencies into 1st constructor
  */
 fun <T : Any> DeclarationBuilder.create(clazz: KClass<T>): T {
     val ctor = clazz.java.constructors.firstOrNull() ?: error("No constructor found for class '$clazz'")

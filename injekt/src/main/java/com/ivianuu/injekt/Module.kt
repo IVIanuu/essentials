@@ -1,6 +1,6 @@
 package com.ivianuu.injekt
 
-import com.ivianuu.injekt.Declaration.Type
+import com.ivianuu.injekt.Declaration.Kind
 import kotlin.reflect.KClass
 
 /**
@@ -29,58 +29,70 @@ inline fun <reified T : Any> Module.factory(
     name: String? = null,
     internal: Boolean = false,
     noinline body: DeclarationBuilder.(Parameters) -> T
-) = factory(T::class, name, internal, body)
+) = factory(type = T::class, name = name, internal = internal, body = body)
 
 /**
  * Provides a dependency
  */
 fun <T : Any> Module.factory(
-    clazz: KClass<T>,
+    type: KClass<T>,
     name: String? = null,
     internal: Boolean = false,
     body: DeclarationBuilder.(Parameters) -> T
-) = provide(clazz, Type.Factory, name, internal, body)
+) = provide(type = type, kind = Kind.Factory, name = name, internal = internal, body = body)
 
 /**
  * Provides a singleton dependency
  */
 inline fun <reified T : Any> Module.single(
     name: String? = null,
+    createOnStart: Boolean = false,
     internal: Boolean = false,
-    eager: Boolean = false,
     noinline body: DeclarationBuilder.(Parameters) -> T
-) = single(T::class, name, internal, eager, body)
+) = single(
+    type = T::class,
+    name = name,
+    createOnStart = createOnStart,
+    internal = internal,
+    body = body
+)
 
 /**
  * Provides a singleton dependency
  */
 fun <T : Any> Module.single(
-    clazz: KClass<T>,
+    type: KClass<T>,
     name: String? = null,
+    createOnStart: Boolean = false,
     internal: Boolean = false,
-    eager: Boolean = false,
     body: DeclarationBuilder.(Parameters) -> T
-) = provide(clazz, Type.Single(eager), name, internal, body)
+) = provide(
+    type = type,
+    kind = Kind.Single(createOnStart),
+    name = name,
+    internal = internal,
+    body = body
+)
 
 inline fun <reified T : Any> Module.provide(
-    type: Type,
+    kind: Kind,
     name: String? = null,
     internal: Boolean = false,
     noinline body: DeclarationBuilder.(Parameters) -> T
-) = provide(T::class, type, name, internal, body)
+) = provide(type = T::class, kind = kind, name = name, internal = internal, body = body)
 
 fun <T : Any> Module.provide(
-    clazz: KClass<T>,
-    type: Type,
+    type: KClass<T>,
+    kind: Kind,
     name: String? = null,
     internal: Boolean = false,
     body: DeclarationBuilder.(Parameters) -> T
 ): Declaration<T> {
     val declaration =
         Declaration(
-            type = type,
+            kind = kind,
             moduleName = name,
-            clazz = clazz,
+            primaryType = type,
             name = name,
             binding = { context, params -> body.invoke(DeclarationBuilder(context), params) },
             internal = internal
@@ -109,9 +121,9 @@ inline fun <reified T : Any> DeclarationBuilder.get(name: String? = null) = get(
  * current component) to be able to inject transitive dependencies within a module.
  */
 fun <T : Any> DeclarationBuilder.get(
-    clazz: KClass<T>,
+    type: KClass<T>,
     name: String? = null
-) = context.get(clazz, name)
+) = context.get(type, name)
 
 /**
  * Lazy version of [get]
@@ -125,7 +137,7 @@ inline fun <reified T : Any> DeclarationBuilder.lazy(
  * Lazy version of [get]
  */
 fun <T : Any> DeclarationBuilder.lazy(
-    clazz: KClass<T>,
+    type: KClass<T>,
     name: String? = null,
     params: (() -> Parameters)? = null
-) = context.inject(clazz, name, params)
+) = context.inject(type, name, params)

@@ -2,18 +2,18 @@
 <resources>
 
     <!-- Default activity -->
-    <item name="es_container" type="id" />
+    <item name="es_container" kind="id" />
 
     <!-- Simple controller -->
-    <item name="es_app_bar" type="id" />
-    <item name="es_coordinator_layout" type="id" />
-    <item name="es_recycler_view" type="id" />
-    <item name="es_toolbar" type="id" />
+    <item name="es_app_bar" kind="id" />
+    <item name="es_coordinator_layout" kind="id" />
+    <item name="es_recycler_view" kind="id" />
+    <item name="es_toolbar" kind="id" />
 
     <!-- Simple text model -->
-    <item name="es_text" type="id" />
+    <item name="es_text" kind="id" />
 
     <!-- Simple loading model -->
-    <item name="es_progress_bar" type="id" />
+    <item name="es_progress_bar" kind="id" />
 
 </resources>

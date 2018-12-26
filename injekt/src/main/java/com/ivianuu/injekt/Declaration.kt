@@ -6,36 +6,36 @@ import kotlin.reflect.KClass
  * Represents a dependency declaration.
  */
 data class Declaration<T : Any>(
-    val type: Type,
+    val kind: Kind,
     val moduleName: String?,
-    val clazz: KClass<T>,
-    var types: List<KClass<*>> = emptyList(),
+    val primaryType: KClass<T>,
+    var boundTypes: List<KClass<*>> = emptyList(),
     val name: String?,
     val binding: (ComponentContext, Parameters) -> T,
     val internal: Boolean
 ) {
 
-    internal val classes: List<KClass<*>> = listOf(clazz) + types
+    internal val classes: List<KClass<*>> = listOf(primaryType) + boundTypes
 
-    val key = clazz.java.name + name.orEmpty()
+    val key = "Class: ${primaryType.java.name} Name: $name"
 
     /**
-     * Add a compatible type to current bounded definition
+     * Add a compatible kind to current bounded definition
      */
-    infix fun bind(clazz: KClass<*>): Declaration<*> {
-        if (!clazz.java.isAssignableFrom(this.clazz.java)) {
-            throw IllegalArgumentException("Can't bind type '$clazz' for definition $this")
+    infix fun bind(type: KClass<*>): Declaration<*> {
+        if (!type.java.isAssignableFrom(this.primaryType.java)) {
+            throw IllegalArgumentException("Can't bind kind '$clazz' for definition $this")
         } else {
-            types += clazz
+            boundTypes += type
         }
         return this
     }
 
-    sealed class Type {
-        object Factory : Type()
-        data class Single(val eager: Boolean) : Type()
+    sealed class Kind {
+        object Factory : Kind()
+        data class Single(val eager: Boolean) : Kind()
     }
 
     override fun toString() =
-        "${clazz.java.name}(type=$type${name?.let { ", name=$it" }.orEmpty()}${moduleName?.let { ", module=$it" }.orEmpty()})"
+        "${primaryType.java.name}(kind=$kind${name?.let { ", name=$it" }.orEmpty()}${moduleName?.let { ", module=$it" }.orEmpty()})"
 }

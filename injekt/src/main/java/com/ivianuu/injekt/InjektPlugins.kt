@@ -3,7 +3,7 @@ package com.ivianuu.injekt
 /**
  * Global configurations
  */
-object Injekt {
+object InjektPlugins {
 
     interface Logger {
         fun debug(msg: String)

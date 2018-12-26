@@ -38,7 +38,7 @@ class App : EsApp(), ComponentHolder {
 
     override fun onCreate() {
         super.onCreate()
-        Injekt.logger = object : Injekt.Logger {
+        InjektPlugins.logger = object : InjektPlugins.Logger {
             override fun debug(msg: String) {
                 d { msg }
             }

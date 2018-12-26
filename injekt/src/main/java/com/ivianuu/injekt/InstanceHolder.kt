@@ -1,8 +1,5 @@
 package com.ivianuu.injekt
 
-/**
- * @author Manuel Wrage (IVIanuu)
- */
 internal interface InstanceHolder<T : Any> {
     val declaration: Declaration<T>
     fun get(context: ComponentContext, params: Parameters): T
@@ -29,6 +26,9 @@ internal class SingleInstanceHolder<T : Any>(
     override fun get(context: ComponentContext, params: Parameters): T {
         if (_value === UNINITIALIZED_VALUE) {
             _value = declaration.binding(context, params)
+            debug { "Created singleton instance for ${declaration.key}" }
+        } else {
+            debug { "Returning existing singleton instance for ${declaration.key}" }
         }
         @Suppress("UNCHECKED_CAST")
         return _value as T
