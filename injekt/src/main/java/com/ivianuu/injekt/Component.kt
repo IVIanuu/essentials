@@ -51,15 +51,8 @@ class Component internal constructor(
         }
 
         return if (instance != null) {
-            try {
-                info { "Injecting instance for ${instance.declaration.key}" }
-                @Suppress("UNCHECKED_CAST")
-                instance.get(this, params()) as T
-            } catch (e: InjektException) {
-                throw e
-            } catch (e: Exception) {
-                throw InstanceCreationException("Could not instantiate $instance", e)
-            }
+            @Suppress("UNCHECKED_CAST")
+            instance.create(this, params()) as T
         } else {
             val component = dependsOn.find {
                 it.declarations.any {
@@ -67,7 +60,7 @@ class Component internal constructor(
                             && name == it.declaration.name
                 }
             }
-                ?: throw InjectionException("Could not create instance for ${type.java.name + name.orEmpty()}")
+                ?: throw InjectionException("Could not find declaration for ${type.java.name + name.orEmpty()}")
 
             component.getInternal(type, name, params)
         }

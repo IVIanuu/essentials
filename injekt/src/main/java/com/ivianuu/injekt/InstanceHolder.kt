@@ -2,7 +2,19 @@ package com.ivianuu.injekt
 
 internal interface InstanceHolder<T : Any> {
     val declaration: Declaration<T>
+
     fun get(component: Component, params: Parameters): T
+
+    fun create(component: Component, params: Parameters): T {
+        return try {
+            info { "Injecting instance for ${declaration.key}" }
+            get(component, params)
+        } catch (e: InjektException) {
+            throw e
+        } catch (e: Exception) {
+            throw InstanceCreationException("Could not instantiate $declaration", e)
+        }
+    }
 }
 
 private object UNINITIALIZED_VALUE
