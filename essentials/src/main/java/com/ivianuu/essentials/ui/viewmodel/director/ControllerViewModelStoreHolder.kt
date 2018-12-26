@@ -14,17 +14,20 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.viewmodel
+package com.ivianuu.essentials.ui.viewmodel.director
 
 import android.os.Bundle
 import com.ivianuu.director.Controller
 import com.ivianuu.director.ControllerLifecycleListener
 import com.ivianuu.director.retainedLazy
+import com.ivianuu.essentials.ui.viewmodel.ViewModelStore
+import com.ivianuu.essentials.ui.viewmodel.ViewModelStoreHolder
 
 /**
  * Controller view model store holder
  */
-class ControllerViewModelStoreHolder(controller: Controller) : ViewModelStoreHolder {
+class ControllerViewModelStoreHolder(controller: Controller) :
+    ViewModelStoreHolder {
 
     override val viewModels by controller.retainedLazy(KEY_VIEW_MODEL_STORE) { ViewModelStore() }
 

@@ -22,7 +22,7 @@ import kotlin.reflect.KClass
 /**
  * Store for [ViewModel]s
  */
-open class ViewModelStore {
+class ViewModelStore {
 
     val viewModels get() = _viewModels.toMap()
     private val _viewModels = mutableMapOf<String, ViewModel>()
@@ -47,7 +47,9 @@ open class ViewModelStore {
             val viewModelState = savedState?.getBundle(KEY_VIEW_MODEL_STATE_PREFIX + key)
                 ?.let { BundleSavedState(it) }
 
-            storeListeners.toList().forEach { it.onViewModelAdded(this, viewModel, viewModelState) }
+            // todo should this be called before or after initization?
+            storeListeners.toList()
+                .forEach { it.onViewModelAdded(this, viewModel, viewModelState) }
 
             viewModel.initialize(this, viewModelState)
             viewModelState?.let { viewModel.restoreInstanceState(it) }

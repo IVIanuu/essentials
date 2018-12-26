@@ -1,8 +1,10 @@
-package com.ivianuu.essentials.ui.viewmodel
+package com.ivianuu.essentials.ui.viewmodel.android
 
 import android.app.Activity
 import android.app.Application
 import android.os.Bundle
+import com.ivianuu.essentials.ui.viewmodel.ViewModelStore
+import com.ivianuu.essentials.ui.viewmodel.ViewModelStoreHolder
 import java.util.*
 
 private val viewModelStores = mutableMapOf<String, ViewModelStore>()
