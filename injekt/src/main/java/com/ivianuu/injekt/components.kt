@@ -3,13 +3,14 @@ package com.ivianuu.injekt
 import kotlin.reflect.KClass
 
 /**
- * Defines a [Component].
+ * Returns a [Component] which contains [modules]
  */
 fun component(vararg modules: Module) =
     component(modules = modules.toList())
 
 /**
- * Defines a [Component].
+ * Returns a [Component] which contains [modules]
+ * And depends on any of [dependsOn]
  */
 fun component(
     modules: List<Module> = emptyList(),
@@ -54,26 +55,3 @@ fun <T : Any> Component.inject(
     name: String? = null,
     params: () -> Parameters = emptyParametersProvider
 ) = lazy { get(type, name, params) }
-
-private inline fun <T, K> Iterable<T>.findDuplicates(selector: (T) -> K): List<T> {
-    val set = HashSet<K>()
-    val list = ArrayList<T>()
-    for (e in this) {
-        val key = selector(e)
-        if (!set.add(key)) list.add(e)
-    }
-    return list
-}
-
-private fun Iterable<List<Declaration<*>>>.fold(each: ((Declaration<*>) -> Unit)? = null): Set<Declaration<*>> =
-    fold(mutableSetOf()) { acc, currDeclarations ->
-        currDeclarations.forEach { entry ->
-            val existingDeclaration = acc.firstOrNull { it.key == entry.key }
-
-            existingDeclaration?.let { declaration ->
-                throw OverrideException(entry, declaration)
-            }
-            each?.invoke(entry)
-        }
-        acc.apply { addAll(currDeclarations) }
-    }
