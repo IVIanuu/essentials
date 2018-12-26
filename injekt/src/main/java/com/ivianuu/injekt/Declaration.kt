@@ -13,7 +13,7 @@ data class Declaration<T : Any>(
     val provider: (Component, Parameters) -> T
 ) {
 
-    internal val classes: List<KClass<*>> = listOf(primaryType) + boundTypes
+    internal val classes: List<KClass<*>> get() = listOf(primaryType) + boundTypes
 
     val key = "Class: ${primaryType.java.name}${name?.let { " Name: $it" }.orEmpty()}"
 

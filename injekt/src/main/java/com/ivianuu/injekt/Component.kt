@@ -3,14 +3,14 @@ package com.ivianuu.injekt
 import kotlin.reflect.KClass
 
 /**
- * The actual dependency container which provides instances
+ * The actual dependency container which provides declarations
  */
 class Component internal constructor(
     declarations: List<Declaration<*>>,
     private val dependsOn: Iterable<Component>
 ) {
 
-    private val instances = mutableListOf<InstanceHolder<*>>()
+    private val declarations = mutableListOf<InstanceHolder<*>>()
 
     init {
         // map the declarations to instance holders
@@ -21,10 +21,10 @@ class Component internal constructor(
                     is Declaration.Kind.Single -> SingleInstanceHolder(it)
                 }
             }
-            .forEach { instances.add(it) }
+            .forEach { this.declarations.add(it) }
 
         // Initialize eager singletons
-        instances
+        this.declarations
             .filter {
                 (it.declaration.kind as? Declaration.Kind.Single)?.eager == true
             }
@@ -45,7 +45,7 @@ class Component internal constructor(
         name: String?,
         params: () -> Parameters
     ): T = synchronized(this) {
-        val instance = instances.firstOrNull {
+        val instance = declarations.firstOrNull {
             it.declaration.classes.contains(type)
                     && it.declaration.name == name
         }
@@ -62,7 +62,7 @@ class Component internal constructor(
             }
         } else {
             val component = dependsOn.find {
-                it.instances.any {
+                it.declarations.any {
                     it.declaration.classes.contains(type)
                             && name == it.declaration.name
                 }
