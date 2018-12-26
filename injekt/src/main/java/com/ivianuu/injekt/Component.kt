@@ -3,19 +3,7 @@ package com.ivianuu.injekt
 import kotlin.reflect.KClass
 
 /**
- * Along with [Modules][Module] a Component is the heart of dependency injection via InjektPlugins.
- *
- * It performs the actual injection and will also hold the singleton instances of dependencies declared as singletons.
- * This is an important aspect of InjektPlugins! As long as the same Component reference is used for injection, the same
- * singleton instances are reused. Once the Component is eligible for garbage collection so are the instances hold by
- * this component. The developer is responsible for holding a Component reference and releasing it when necessary. This
- * design was chosen in contrast to other DI libraries that for instance work with a global, singleton state to prevent
- * accidental memory leaks.
- *
- * However great care should be taken when dependent Components are specified via `dependsOn` at [component]. If
- * dependent Components are specified and the current Component has a greater scope (lifespan) than the other Components,
- * references to these Components are still held. Dependent Components should always have an equal or greater scope
- * than the current Component.
+ * The actual dependency container which provides instances
  */
 class Component internal constructor(
     declarations: Set<Declaration<*>>,

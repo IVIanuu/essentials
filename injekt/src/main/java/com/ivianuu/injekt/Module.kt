@@ -116,19 +116,13 @@ fun <T : Any> Module.provide(
 
 class DeclarationBuilder(val component: Component)
 
-/**
- * Provides a dependency which has already been declared in the current context (total set of modules of the
- * current component) to be able to inject transitive dependencies within a module.
- */
+/** Calls trough [Component.get] */
 inline fun <reified T : Any> DeclarationBuilder.get(
     name: String? = null,
     noinline parameters: () -> Parameters = { emptyParameters() }
 ) = get(T::class, name, parameters)
 
-/**
- * Provides a dependency which has already been declared in the current context (total set of modules of the
- * current component) to be able to inject transitive dependencies within a module.
- */
+/** Calls trough [Component.get] */
 fun <T : Any> DeclarationBuilder.get(
     type: KClass<T>,
     name: String? = null,
