@@ -33,7 +33,7 @@ class Component internal constructor(
 
                 info {
                     val kw = if (isOverride) "Override" else "Declare"
-                    "$kw ${declaration.key}"
+                    "$kw $declaration"
                 }
 
                 declaration.instance.component = this
@@ -61,8 +61,16 @@ class Component internal constructor(
         params: () -> Parameters
     ): T = synchronized(this) {
         val declaration = findDeclaration(type, name)
+
         return if (declaration != null) {
             @Suppress("UNCHECKED_CAST")
+
+            if (declaration.instance.isCreated) {
+                debug { "Returning existing instance for $declaration" }
+            } else {
+                debug { "Created instance for $declaration" }
+            }
+
             declaration.instance.create(params()) as T
         } else {
             throw InjectionException("Could not find declaration for ${type.java.name + name.orEmpty()}")

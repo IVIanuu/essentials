@@ -24,6 +24,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.ViewModel
 import com.ivianuu.director.SimpleSwapChangeHandler
 import com.ivianuu.director.arch.lifecycle.LifecycleController
 import com.ivianuu.director.pushChangeHandler
@@ -33,6 +34,7 @@ import com.ivianuu.essentials.hidenavbar.NavBarSettingsKey
 import com.ivianuu.essentials.sample.injekt.activityComponent
 import com.ivianuu.essentials.sample.injekt.activityModule
 import com.ivianuu.essentials.sample.injekt.controllerComponent
+import com.ivianuu.essentials.sample.injekt.viewModel
 import com.ivianuu.essentials.sample.ui.counter.CounterKey
 import com.ivianuu.essentials.ui.base.EsActivity
 import com.ivianuu.essentials.ui.base.EsActivityModule
@@ -68,7 +70,7 @@ class MyController : LifecycleController(), ComponentHolder {
         controllerComponent(listOf(myControllerModule(this)))
     }
 
-    private val viewModel by inject<MainViewModel> { parametersOf("my_password") }
+    private val viewModel by viewModel<MainViewModel> { parametersOf("my_password") }
 
     override fun onInflateView(
         inflater: LayoutInflater,
@@ -106,7 +108,7 @@ class MainViewModel(
     private val context: Context,
     private val resources: Resources,
     private val name: String
-) {
+) : ViewModel() {
 
     fun print() {
         d { "hello $name password is $password" }
@@ -121,7 +123,7 @@ fun mainActivityModule(activity: MainActivity) = activityModule(activity) {
 fun myControllerModule(controller: MyController) = module {
     factory { controller }
 
-    factory { (password: String) ->
+    viewModel { (password: String) ->
         MainViewModel(
             password,
             get(),

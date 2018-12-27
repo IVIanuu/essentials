@@ -20,8 +20,6 @@ data class Declaration<T : Any> private constructor(
 
     internal val classes: List<KClass<*>> get() = listOf(primaryType) + secondaryTypes
 
-    val key = "Class: ${primaryType.getFullName()}${name?.let { " Name: $it" }.orEmpty()}"
-
     /**
      * Add a compatible kind to current bounded definition
      */
@@ -47,7 +45,7 @@ data class Declaration<T : Any> private constructor(
         val name = name?.let { "name:'$name', " } ?: ""
         val type = "type:'${primaryType.getFullName()}'"
         val secondaryTypes = if (secondaryTypes.isNotEmpty()) {
-            val typesAsString = secondaryTypes.joinToString(",") { it.getFullName() }
+            val typesAsString = secondaryTypes.joinToString(", ") { it.getFullName() }
             ", secondary types:$typesAsString"
         } else ""
         return "$kind[$name$type$secondaryTypes]"
