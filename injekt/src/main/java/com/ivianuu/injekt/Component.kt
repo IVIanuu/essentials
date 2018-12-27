@@ -1,6 +1,5 @@
 package com.ivianuu.injekt
 
-import java.util.concurrent.ConcurrentHashMap
 import kotlin.reflect.KClass
 
 /**
@@ -12,8 +11,8 @@ class Component internal constructor(
 ) {
 
     private val declarations = mutableSetOf<InstanceHolder<*>>()
-    private val declarationsByName: MutableMap<String, InstanceHolder<*>> = ConcurrentHashMap()
-    private val declarationsByType: MutableMap<KClass<*>, InstanceHolder<*>> = ConcurrentHashMap()
+    private val declarationsByName = mutableMapOf<String, InstanceHolder<*>>()
+    private val declarationsByType = mutableMapOf<KClass<*>, InstanceHolder<*>>()
 
     init {
         // map the declarations to instance holders

@@ -16,16 +16,8 @@
 
 package com.ivianuu.essentials.ui.traveler
 
-import com.ivianuu.director.ControllerChangeHandler
-import com.ivianuu.director.RouterTransaction
-import com.ivianuu.director.SimpleSwapChangeHandler
-import com.ivianuu.director.common.changehandler.AnimatorChangeHandler
-import com.ivianuu.director.common.changehandler.AutoTransitionChangeHandler
-import com.ivianuu.director.common.changehandler.FadeChangeHandler
-import com.ivianuu.director.common.changehandler.HorizontalChangeHandler
-import com.ivianuu.director.common.changehandler.VerticalChangeHandler
-import com.ivianuu.director.popChangeHandler
-import com.ivianuu.director.pushChangeHandler
+import com.ivianuu.director.*
+import com.ivianuu.director.common.changehandler.*
 
 /**
  * @author Manuel Wrage (IVIanuu)
@@ -55,6 +47,10 @@ fun ControllerNavOptions.applyToTransaction(transaction: RouterTransaction) = ap
     transaction.pushChangeHandler(push())
     transaction.popChangeHandler(pop())
 }
+
+fun ControllerNavOptions.handler(
+    changeHandler: ControllerChangeHandler
+) = push(changeHandler).pop(changeHandler)
 
 fun ControllerNavOptions.fade(
     duration: Long = AnimatorChangeHandler.DEFAULT_ANIMATION_DURATION,
