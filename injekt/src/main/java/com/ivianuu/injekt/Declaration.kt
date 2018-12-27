@@ -26,6 +26,8 @@ data class Declaration<T : Any> private constructor(
      * Add a compatible kind to current bounded definition
      */
     infix fun bind(type: KClass<*>) = apply {
+        if (secondaryTypes.contains(type)) return@apply
+
         if (!type.java.isAssignableFrom(this.primaryType.java)) {
             throw IllegalArgumentException("Can't bind kind '$type' for definition $this")
         } else {

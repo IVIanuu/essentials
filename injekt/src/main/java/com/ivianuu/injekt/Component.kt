@@ -6,7 +6,7 @@ import kotlin.reflect.KClass
  * The actual dependency container which provides declarations
  */
 class Component internal constructor(
-    val dependencies: Set<Component>,
+    private val dependencies: Set<Component>,
     modules: Collection<Module>
 ) {
 
