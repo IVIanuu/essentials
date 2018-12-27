@@ -57,6 +57,7 @@ class Component internal constructor(
     private fun findDeclaration(type: KClass<*>, name: String?): InstanceHolder<*>? {
         var declaration: InstanceHolder<*>?
 
+        // check cached values
         if (name != null) {
             declaration = declarationsByName[name]
                     ?: declarations.firstOrNull { it.declaration.name == name }
@@ -67,6 +68,7 @@ class Component internal constructor(
                 ?.also { declarationsByType[type] = it }
         }
 
+        // check other components
         if (declaration == null) {
             for (component in dependencies) {
                 declaration = component.findDeclaration(type, name)

@@ -21,30 +21,30 @@ import com.ivianuu.essentials.ui.base.EsController
 import com.ivianuu.kommon.lifecycle.defaultViewModelKey
 
 inline fun <reified VM : MvRxViewModel<*>> EsController.activityViewModel(
-    crossinline key: () -> String = { VM::class.defaultViewModelKey },
+    noinline key: () -> String = { VM::class.defaultViewModelKey },
     noinline factory: () -> VM
 ) = viewModel({ activity }, key, factory)
 
 inline fun <reified VM : MvRxViewModel<*>> EsController.existingActivityViewModel(
-    crossinline key: () -> String = { VM::class.defaultViewModelKey }
+    noinline key: () -> String = { VM::class.defaultViewModelKey }
 ) = existingViewModel<VM>({ activity }, key)
 
 inline fun <reified VM : MvRxViewModel<*>> EsController.parentViewModel(
-    crossinline key: () -> String = { VM::class.defaultViewModelKey },
+    noinline key: () -> String = { VM::class.defaultViewModelKey },
     noinline factory: () -> VM
 ) = viewModel({ parentController as ViewModelStoreOwner }, key, factory)
 
 inline fun <reified VM : MvRxViewModel<*>> EsController.existingParentViewModel(
-    crossinline key: () -> String = { VM::class.defaultViewModelKey }
+    noinline key: () -> String = { VM::class.defaultViewModelKey }
 ) = existingViewModel<VM>({ parentController as ViewModelStoreOwner }, key)
 
 inline fun <reified VM : MvRxViewModel<*>> EsController.targetViewModel(
-    crossinline key: () -> String = { VM::class.defaultViewModelKey },
+    noinline key: () -> String = { VM::class.defaultViewModelKey },
     noinline factory: () -> VM
 ) = viewModel({ targetController as ViewModelStoreOwner }, key, factory)
 
 inline fun <reified VM : MvRxViewModel<*>> EsController.existingTargetViewModel(
-    crossinline key: () -> String = { VM::class.defaultViewModelKey }
+    noinline key: () -> String = { VM::class.defaultViewModelKey }
 ) = existingViewModel<VM>({ targetController as ViewModelStoreOwner }, key)
 
 inline fun <reified VM : MvRxViewModel<*>> EsController.getActivityViewModel(

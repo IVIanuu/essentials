@@ -32,7 +32,6 @@ import com.ivianuu.essentials.hidenavbar.NavBarSettingsKey
 import com.ivianuu.essentials.sample.injekt.activityComponent
 import com.ivianuu.essentials.sample.injekt.activityModule
 import com.ivianuu.essentials.sample.injekt.controllerComponent
-import com.ivianuu.essentials.sample.injekt.simpleModule
 import com.ivianuu.essentials.sample.ui.counter.CounterKey
 import com.ivianuu.essentials.ui.base.EsActivity
 import com.ivianuu.essentials.ui.base.EsActivityModule
@@ -113,11 +112,11 @@ class MainViewModel(
 
 }
 
-fun mainActivityModule(activity: MainActivity) = activityModule(activity, "main") {
+fun mainActivityModule(activity: MainActivity) = activityModule(activity) {
     single(createOnStart = true) { MyEagerDep() }
 }
 
-fun myControllerModule(controller: MyController) = simpleModule(controller) {
+fun myControllerModule(controller: MyController) = module {
     factory { (password: String) ->
         MainViewModel(
             password,

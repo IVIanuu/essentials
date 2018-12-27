@@ -7,8 +7,8 @@ import androidx.lifecycle.ViewModelStoreOwner
 import com.ivianuu.kommon.lifecycle.defaultViewModelKey
 
 inline fun <reified VM : MvRxViewModel<*>> MvRxView.viewModel(
-    crossinline from: () -> ViewModelStoreOwner = { this },
-    crossinline key: () -> String = { VM::class.defaultViewModelKey },
+    noinline from: () -> ViewModelStoreOwner = { this },
+    noinline key: () -> String = { VM::class.defaultViewModelKey },
     noinline factory: () -> VM
 ) = viewModelLazy { getViewModel(from(), key(), factory) }
 
@@ -20,8 +20,8 @@ inline fun <reified VM : MvRxViewModel<*>> MvRxView.getViewModel(
     .setupViewModel(this)
 
 inline fun <reified VM : MvRxViewModel<*>> MvRxView.existingViewModel(
-    crossinline from: () -> ViewModelStoreOwner = { this },
-    crossinline key: () -> String = { VM::class.defaultViewModelKey }
+    noinline from: () -> ViewModelStoreOwner = { this },
+    noinline key: () -> String = { VM::class.defaultViewModelKey }
 ) = viewModel<VM>(from, key, ExistingViewModelFactory())
 
 inline fun <reified VM : MvRxViewModel<*>> MvRxView.getExistingViewModel(

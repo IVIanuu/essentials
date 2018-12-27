@@ -2,7 +2,10 @@ package com.ivianuu.essentials.sample.injekt
 
 import android.app.Activity
 import android.app.Application
-import android.content.Context
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ComponentActivity
+import androidx.fragment.app.FragmentActivity
+import com.ivianuu.essentials.sample.ui.MainActivity
 import com.ivianuu.injekt.*
 import kotlin.reflect.KClass
 
@@ -25,21 +28,22 @@ fun Activity.activityComponent(
 
 inline fun <reified T : Activity> activityModule(
     activity: T,
-    name: String? = null,
     noinline body: (Module.() -> Unit)? = null
-) = activityModule(T::class, activity, name, body)
+) = activityModule(T::class, activity, body)
 
 fun <T : Activity> activityModule(
-    clazz: KClass<T>,
+    type: KClass<T>,
     activity: T,
-    name: String? = null,
     body: (Module.() -> Unit)? = null
-) = simpleModule(clazz, activity, name) {
+) = module {
+    factory(type) { activity }
 
-    single<Application> { activity.application }
+    bind<MainActivity, AppCompatActivity>()
+    bind<AppCompatActivity, FragmentActivity>()
+    bind<FragmentActivity, ComponentActivity>()
+    factory<Activity> { activity }
 
-    single<Activity> { activity }
-    single<Context> { activity }
+    factory<Application> { activity.application }
 
     factory { activity.resources }
 

@@ -24,7 +24,7 @@ class MyOtherWorker @AssistedInject constructor(
 
     override fun doWork(): Result {
         d { "dowork" }
-        return Result.SUCCESS
+        return Result.success()
     }
 
     interface Factory : InjectWorkerFactory

@@ -6,9 +6,7 @@ import kotlin.reflect.KClass
 /**
  * A module provides the actual dependencies
  */
-class Module internal constructor(
-    val name: String? = null
-) {
+class Module internal constructor() {
     val declarations = mutableListOf<Declaration<*>>()
     val subModules = mutableListOf<Module>()
 }
@@ -17,9 +15,8 @@ class Module internal constructor(
  * Defines a [Module]
  */
 fun module(
-    name: String? = null,
     body: Module.() -> Unit
-) = Module(name).apply(body)
+) = Module().apply(body)
 
 /**
  * Provides a dependency
@@ -36,7 +33,7 @@ fun <T : Any> Module.factory(
     type: KClass<T>,
     name: String? = null,
     body: DeclarationBuilder.(Parameters) -> T
-) = provide(type = type, kind = Kind.FACTORY, name = name, createOnStart = false, body = body)
+) = declare(type = type, kind = Kind.FACTORY, name = name, createOnStart = false, body = body)
 
 /**
  * Provides a singleton dependency
@@ -60,7 +57,7 @@ fun <T : Any> Module.single(
     name: String? = null,
     createOnStart: Boolean = false,
     body: DeclarationBuilder.(Parameters) -> T
-) = provide(
+) = declare(
     type = type,
     kind = Kind.SINGLE,
     name = name,
@@ -69,44 +66,61 @@ fun <T : Any> Module.single(
 )
 
 /**
- * Provides a dependency
+ * Adds a [Declaration] for the provided params
  */
-inline fun <reified T : Any> Module.provide(
+inline fun <reified T : Any> Module.declare(
     kind: Kind,
     name: String? = null,
     createOnStart: Boolean = false,
     noinline body: DeclarationBuilder.(Parameters) -> T
-) = provide(type = T::class, kind = kind, name = name, createOnStart = createOnStart, body = body)
+) = declare(type = T::class, kind = kind, name = name, createOnStart = createOnStart, body = body)
 
 /**
- * Provides a dependency
+ * Adds a [Declaration] for the provided params
  */
-fun <T : Any> Module.provide(
+fun <T : Any> Module.declare(
     type: KClass<T>,
     kind: Kind,
     name: String? = null,
     createOnStart: Boolean = false,
     body: DeclarationBuilder.(Parameters) -> T
-): Declaration<T> {
-    val declaration =
-        Declaration(
-            kind = kind,
-            primaryType = type,
-            name = name,
-            eager = createOnStart,
-            provider = { context, params ->
-                body.invoke(DeclarationBuilder(context), params)
-            }
-        )
+) = declare(
+    Declaration(
+        kind = kind,
+        primaryType = type,
+        name = name,
+        eager = createOnStart,
+        provider = { context, params ->
+            body.invoke(DeclarationBuilder(context), params)
+        }
+    )
+)
 
-    val existingDeclaration = declarations.firstOrNull { it.key == declaration.key }
-    if (existingDeclaration != null) {
-        throw OverrideException(declaration, existingDeclaration)
-    }
+/**
+ * Adds the [declaration]
+ */
+fun <T : Any> Module.declare(
+    declaration: Declaration<T>
+) = declaration.also { declarations.add(it) }
 
-    declarations.add(declaration)
+/**
+ * Adds a binding for [type] and [name] to [to] to a previously added [Declaration]
+ */
+inline fun <reified T : S, reified S : Any> Module.bind(name: String? = null) =
+    bind(T::class, S::class, name)
 
-    return declaration
+/**
+ * Adds a binding for [type] and [name] to [to] to a previously added [Declaration]
+ */
+fun <T : S, S : Any> Module.bind(
+    type: KClass<T>,
+    to: KClass<S>,
+    name: String? = null
+) {
+    val declaration = declarations.firstOrNull { it.classes.contains(type) && name == name }
+        ?: throw IllegalArgumentException("no declaration found for $type")
+
+    declaration.bind(to)
 }
 
 class DeclarationBuilder(val component: Component)
@@ -127,11 +141,8 @@ fun <T : Any> DeclarationBuilder.get(
 /**
  * Defines a sub module
  */
-fun Module.module(
-    name: String? = null,
-    body: Module.() -> Unit
-) = Module(name).apply(body)
-    .also { module(it) }
+fun Module.module(body: Module.() -> Unit) =
+    Module().apply(body).also { module(it) }
 
 /**
  * Adds the [module] to [Module.subModules]
