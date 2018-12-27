@@ -16,7 +16,9 @@
 
 package com.ivianuu.essentials.sample.app
 
+import android.app.Application
 import com.ivianuu.essentials.app.EsApp
+import com.ivianuu.essentials.util.ext.unsafeLazy
 import com.ivianuu.injectors.Injector
 import com.ivianuu.injekt.*
 import com.ivianuu.timberktx.d
@@ -29,9 +31,14 @@ import com.ivianuu.timberktx.w
  */
 class App : EsApp(), ComponentHolder {
 
-    override val component = component(
-        module { single("username") { "Manuel" } }
-    )
+    override val component by unsafeLazy {
+        component(
+            module {
+                factory<Application> { this@App }
+                single("username") { "Manuel" }
+            }
+        )
+    }
 
     override fun applicationInjector(): Injector<out EsApp> =
         DaggerAppComponent.builder().create(this)

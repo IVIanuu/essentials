@@ -15,14 +15,7 @@ fun component(vararg modules: Module) =
 fun component(
     modules: Collection<Module> = emptyList(),
     dependsOn: Collection<Component> = emptyList()
-): Component {
-    val component = Component()
-
-    modules.forEach { component.addModule(it) }
-    dependsOn.forEach { component.addDependency(it) }
-
-    return component
-}
+) = Component(dependsOn.toSet(), modules)
 
 /**
  * Returns a instance of [T] matching the [name] and [params]

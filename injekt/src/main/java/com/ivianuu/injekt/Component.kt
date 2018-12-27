@@ -5,13 +5,46 @@ import kotlin.reflect.KClass
 /**
  * The actual dependency container which provides declarations
  */
-class Component internal constructor() {
+class Component internal constructor(
+    val dependencies: Set<Component>,
+    modules: Collection<Module>
+) {
 
     private val declarations = mutableListOf<Declaration<*>>()
     private val declarationsByName = mutableMapOf<String, Declaration<*>>()
     private val declarationsByType = mutableMapOf<KClass<*>, Declaration<*>>()
 
-    private val dependencies = mutableListOf<Component>()
+    init {
+        modules
+            .flatMap { (listOf(it) + it.subModules) }
+            .flatMap { it.declarations }
+            .forEach { declaration ->
+                val isOverride = declarations.remove(declaration)
+                        || dependencies.any {
+                    it.thisComponentFindDeclaration(
+                        declaration.primaryType,
+                        declaration.name
+                    ) != null
+                }
+
+                if (isOverride && !declaration.override) {
+                    throw OverrideException("Try to override declaration $declaration")
+                }
+
+                info {
+                    val kw = if (isOverride) "Override" else "Declare"
+                    "$kw ${declaration.key}"
+                }
+
+                declaration.instance.component = this
+
+                declarations.add(declaration)
+
+                if (declaration.eager) {
+                    declaration.instance.get(emptyParameters())
+                }
+            }
+    }
 
     /**
      * Returns a instance of [T] matching the [type], [name] and [params]
@@ -21,43 +54,6 @@ class Component internal constructor() {
         name: String? = null,
         params: () -> Parameters = emptyParametersProvider
     ) = getInternal(type, name, params)
-
-    /**
-     * Adds the [Declaration]s of the [Module]
-     */
-    fun addModule(module: Module) {
-        (listOf(module) + module.subModules)
-            .flatMap { it.declarations }
-            .forEach { addDeclaration(it) }
-    }
-
-    /**
-     * Adds the [component] as a dependency
-     */
-    fun addDependency(component: Component) {
-        dependencies.add(component)
-    }
-
-    private fun addDeclaration(declaration: Declaration<*>) {
-        val isOverride = declarations.remove(declaration)
-
-        if (isOverride && !declaration.override) {
-            throw OverrideException("Try to override declaration $declaration")
-        }
-
-        info {
-            val kw = if (isOverride) "Override" else "Declare"
-            "$kw ${declaration.key}"
-        }
-
-        declaration.instance.component = this
-
-        declarations.add(declaration)
-
-        if (declaration.eager) {
-            declaration.instance.get(emptyParameters())
-        }
-    }
 
     private fun <T : Any> getInternal(
         type: KClass<T>,
@@ -76,8 +72,13 @@ class Component internal constructor() {
     private fun findDeclaration(
         type: KClass<*>,
         name: String?
+    ) = thisComponentFindDeclaration(type, name) ?: findDeclarationInDependencies(type, name)
+
+    private fun thisComponentFindDeclaration(
+        type: KClass<*>,
+        name: String?
     ): Declaration<*>? {
-        var declaration = if (name != null) {
+        return if (name != null) {
             declarationsByName[name]
                 ?: declarations.firstOrNull { it.name == name }
                     ?.also { declarationsByName[name] = it }
@@ -86,23 +87,25 @@ class Component internal constructor() {
                 ?: declarations.firstOrNull { it.classes.contains(type) }
                     ?.also { declarationsByType[type] = it }
         }
+    }
 
-        // search in dependencies
-        if (declaration == null) {
-            for (component in dependencies) {
-                declaration = component.findDeclaration(type, name)
-                if (declaration != null) {
-                    if (name != null) {
-                        declarationsByName[name] = declaration
-                    } else {
-                        declarationsByType[type] = declaration
-                    }
-                    break
+    private fun findDeclarationInDependencies(
+        type: KClass<*>,
+        name: String?
+    ): Declaration<*>? {
+        for (component in dependencies) {
+            val declaration = component.findDeclaration(type, name)
+            if (declaration != null) {
+                if (name != null) {
+                    declarationsByName[name] = declaration
+                } else {
+                    declarationsByType[type] = declaration
                 }
+
+                return declaration
             }
         }
 
-        return declaration
+        return null
     }
-
 }

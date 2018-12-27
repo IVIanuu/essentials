@@ -17,6 +17,7 @@
 
 package com.ivianuu.essentials.sample.ui
 
+import android.app.Application
 import android.content.Context
 import android.content.res.Resources
 import android.os.Bundle
@@ -99,6 +100,7 @@ class MyEagerDep {
 
 class MainViewModel(
     private val password: String,
+    private val application: Application,
     private val myController: MyController,
     private val mainActivity: MainActivity,
     private val context: Context,
@@ -117,11 +119,12 @@ fun mainActivityModule(activity: MainActivity) = activityModule(activity) {
 }
 
 fun myControllerModule(controller: MyController) = module {
-    factory(override = true) { controller }
+    factory { controller }
 
     factory { (password: String) ->
         MainViewModel(
             password,
+            get(),
             get(),
             get(),
             get(),
