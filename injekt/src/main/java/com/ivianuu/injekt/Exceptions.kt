@@ -5,11 +5,6 @@ open class InjektException(message: String, throwable: Throwable? = null) :
 
 class InjectionException(message: String) : InjektException(message)
 
-class OverrideException(message: String) : InjektException(message) {
-    constructor(
-        override: Declaration<*>,
-        existing: Declaration<*>
-    ) : this("$override would override $existing")
-}
+class OverrideException(message: String) : InjektException(message)
 
 class InstanceCreationException(message: String, cause: Throwable) : InjektException(message, cause)

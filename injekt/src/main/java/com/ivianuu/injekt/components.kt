@@ -16,19 +16,12 @@ fun component(
     modules: Collection<Module> = emptyList(),
     dependsOn: Collection<Component> = emptyList()
 ): Component {
-    val moduleDeclarations = modules
-        .flatMap { module -> module.declarations + module.subModules.flatMap { it.declarations } }
+    val component = Component()
 
-    // find overrides
-    moduleDeclarations
-        .groupBy { it.key }
-        .filterValues { it.size > 1 }
-        .map { it.value.first() to it.value[1] }
-        .forEach { throw OverrideException(it.first, it.second) }
+    modules.forEach { component.addModule(it) }
+    dependsOn.forEach { component.addDependency(it) }
 
-    moduleDeclarations.forEach { info { "Registering declaration $it" } }
-
-    return Component(moduleDeclarations, dependsOn)
+    return component
 }
 
 /**

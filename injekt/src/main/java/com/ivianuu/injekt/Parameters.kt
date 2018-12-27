@@ -19,10 +19,6 @@ class Parameters(vararg values: Any?) {
     operator fun <T> component3(): T = elementAt(2)
     operator fun <T> component4(): T = elementAt(3)
     operator fun <T> component5(): T = elementAt(4)
-    operator fun <T> component6(): T = elementAt(5)
-    operator fun <T> component7(): T = elementAt(6)
-    operator fun <T> component8(): T = elementAt(7)
-    operator fun <T> component9(): T = elementAt(8)
 
     /**
      * Returns the element [i]

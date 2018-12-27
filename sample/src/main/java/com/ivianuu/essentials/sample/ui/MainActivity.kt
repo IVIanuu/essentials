@@ -117,6 +117,8 @@ fun mainActivityModule(activity: MainActivity) = activityModule(activity) {
 }
 
 fun myControllerModule(controller: MyController) = module {
+    factory(override = true) { controller }
+
     factory { (password: String) ->
         MainViewModel(
             password,
