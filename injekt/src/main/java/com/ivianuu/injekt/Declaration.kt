@@ -10,7 +10,6 @@ data class Declaration<T : Any>(
     val name: String?,
     val kind: Kind,
     var secondaryTypes: List<KClass<*>> = emptyList(),
-    var setBindings: List<SetBinding>,
     val provider: (Component, Parameters) -> T,
     val eager: Boolean
 ) {
@@ -37,14 +36,5 @@ data class Declaration<T : Any>(
         types.forEach { bind(it) }
     }
 
-    fun <S : Any> bindIntoSet(implementation: KClass<S>, setName: String? = null) {
-        setBindings += SetBinding(implementation, setName)
-    }
-
     enum class Kind { FACTORY, SINGLE }
 }
-
-data class SetBinding(
-    val implementation: KClass<*>,
-    val setName: String? = null
-)
