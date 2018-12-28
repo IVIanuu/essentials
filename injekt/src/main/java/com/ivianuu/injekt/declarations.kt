@@ -13,20 +13,27 @@ inline infix fun Declaration<*>.intoSet(options: () -> SetBinding<*>) = apply {
     intoSet(options())
 }
 
-infix fun Declaration<*>.intoSet(type: KClass<*>) = intoSet(SetBinding(type, null))
+inline infix fun <reified T : Any> Declaration<T>.intoSet(type: KClass<T>) =
+    intoSet(SetBinding(type, null))
 
 /*
 inline infix fun Declaration<*>.intoMap(options: () -> MapBinding) = apply {
     intoMap(options())
 }*/
 
-infix fun Declaration<*>.intoClassMap(type: KClass<*>) = apply {
-    intoMap(classMapBinding(type, primaryType::class))
+inline infix fun <reified T : Any> Declaration<*>.intoClassMap(type: KClass<T>) = apply {
+    intoMap(classMapBinding<T>(primaryType::class))
 }
 
-infix inline fun Declaration<*>.intoStringMap(
-    body: () -> Pair<KClass<*>, String>
+inline infix fun <reified T : Any> Declaration<*>.intoClassMap(body: () -> Pair<KClass<T>, String?>) =
+    apply {
+        val (_, name) = body()
+        intoMap(classMapBinding<T>(primaryType::class, name))
+    }
+
+inline infix fun <reified T : Any> Declaration<*>.intoStringMap(
+    body: () -> Pair<KClass<T>, String>
 ) = apply {
     val (type, key) = body()
-    intoMap(stringMapBinding(type, key))
+    intoMap(stringMapBinding<T>(key))
 }

@@ -34,13 +34,13 @@ inline fun <reified T : AppCompatActivity> activityModule(
     noinline definition: ModuleDefinition? = null
 ) = activityModule(T::class, activity, name, definition)
 
-fun <T : AppCompatActivity> activityModule(
+inline fun <reified T : AppCompatActivity> activityModule(
     type: KClass<T>,
     activity: T,
     name: String? = null,
-    definition: ModuleDefinition? = null
+    noinline definition: ModuleDefinition? = null
 ) = module(name = name) {
-    factory(type) { activity }
+    factory { activity }
 
     bind(type, AppCompatActivity::class)
     bind<AppCompatActivity, FragmentActivity>()

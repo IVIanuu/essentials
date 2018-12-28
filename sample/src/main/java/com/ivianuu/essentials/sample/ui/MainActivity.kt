@@ -118,6 +118,10 @@ fun mainActivityModule(activity: MainActivity) = activityModule(activity, "MainA
     single(createOnStart = true) { MyEagerDep() }
 
     appInitializer { RxJavaAppInitializer() }
+
+    single { TimberAppInitializer() } intoClassMap { AppInitializer::class to APP_INITIALIZERS }
+
+    single { RxJavaAppInitializer() } intoClassMap AppInitializer::class
 }
 
 fun myControllerModule(controller: MyController) = module(name = "MyControllerModule") {

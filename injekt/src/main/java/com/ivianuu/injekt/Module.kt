@@ -70,18 +70,7 @@ inline fun <reified T : Any> Module.factory(
     name: String? = null,
     override: Boolean = false,
     noinline definition: Definition<T>
-) = factory(type = T::class, name = name, override = override, definition = definition)
-
-/**
- * Provides a dependency
- */
-fun <T : Any> Module.factory(
-    type: KClass<T>,
-    name: String? = null,
-    override: Boolean = false,
-    definition: Definition<T>
 ) = declare(
-    type = type,
     kind = Kind.FACTORY,
     name = name,
     createOnStart = false,
@@ -97,25 +86,7 @@ inline fun <reified T : Any> Module.single(
     override: Boolean = false,
     createOnStart: Boolean = false,
     noinline definition: Definition<T>
-) = single(
-    type = T::class,
-    name = name,
-    override = override,
-    createOnStart = createOnStart,
-    definition = definition
-)
-
-/**
- * Provides a singleton dependency
- */
-fun <T : Any> Module.single(
-    type: KClass<T>,
-    name: String? = null,
-    override: Boolean = false,
-    createOnStart: Boolean = false,
-    definition: Definition<T>
 ) = declare(
-    type = type,
     kind = Kind.SINGLE,
     name = name,
     override = override,
@@ -133,26 +104,7 @@ inline fun <reified T : Any> Module.declare(
     createOnStart: Boolean = false,
     noinline definition: Definition<T>
 ) = declare(
-    type = T::class,
-    kind = kind,
-    name = name,
-    override = override,
-    createOnStart = createOnStart,
-    definition = definition
-)
-
-/**
- * Adds a [Declaration] for the provided params
- */
-fun <T : Any> Module.declare(
-    type: KClass<T>,
-    kind: Kind,
-    name: String? = null,
-    override: Boolean = false,
-    createOnStart: Boolean = false,
-    definition: Definition<T>
-) = declare(
-    Declaration.create(type, name, kind, definition).also {
+    Declaration.create(T::class, name, kind, definition).also {
         it.options.createOnStart = createOnStart
         it.options.override = override
     }
