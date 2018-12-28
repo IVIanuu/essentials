@@ -14,8 +14,11 @@ fun component(vararg modules: Module) =
  */
 fun component(
     modules: Collection<Module> = emptyList(),
-    dependsOn: Collection<Component> = emptyList()
-) = Component(dependsOn.toSet(), modules)
+    dependencies: Collection<Component> = emptyList()
+) = Component().apply {
+    dependencies.forEach { addDependency(it) }
+    modules.forEach { addModule(it) }
+}
 
 /**
  * Returns a instance of [T] matching the [name] and [params]

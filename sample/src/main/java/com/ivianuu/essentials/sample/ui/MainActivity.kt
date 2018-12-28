@@ -25,8 +25,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModel
-import com.ivianuu.director.*
+import com.ivianuu.director.SimpleSwapChangeHandler
 import com.ivianuu.director.arch.lifecycle.LifecycleController
+import com.ivianuu.director.pushChangeHandler
+import com.ivianuu.director.pushController
+import com.ivianuu.director.toTransaction
 import com.ivianuu.essentials.app.AppInitializer
 import com.ivianuu.essentials.app.RxJavaAppInitializer
 import com.ivianuu.essentials.app.TimberAppInitializer
@@ -79,10 +82,6 @@ class MyController : LifecycleController(), ComponentHolder {
     override fun onBindView(view: View, savedViewState: Bundle?) {
         super.onBindView(view, savedViewState)
         viewModel.print()
-
-        val appInitializers = component.getSet(AppInitializer::class)
-
-        d { "app initializers $appInitializers" }
     }
 
 }
@@ -122,7 +121,6 @@ class MainViewModel(
 
 fun mainActivityModule(activity: MainActivity) = activityModule(activity) {
     single(createOnStart = true) { MyEagerDep() }
-    //   factory { RxJavaAppInitializer() } intoSet setBinding<AppInitializer>("SET_BINDINGS")
 
     appInitializer { RxJavaAppInitializer() }
 }
@@ -130,17 +128,7 @@ fun mainActivityModule(activity: MainActivity) = activityModule(activity) {
 fun myControllerModule(controller: MyController) = module {
     factory { controller }
 
-    bindIntoSet<Controller, MyController>(setName = APP_INITIALIZERS)
-
-//    factory { RxJavaAppInitializer() } intoSet AppInitializer::class
-
     appInitializer { TimberAppInitializer() }
-
-//    factory { controller } intoMap classMapBinding<AppInitializer>(RxJavaAppInitializer::class)
-
-//    factory { controller } intoMap stringMapBinding<AppInitializer>("key")
-
-    //   factory { controller }.intoStringMap { Controller::class to "main" }
 
     viewModel { (password: String) ->
         MainViewModel(
@@ -154,6 +142,4 @@ fun myControllerModule(controller: MyController) = module {
             component.getMap(APP_INITIALIZERS)
         )
     }
-
-    //factory { TimberAppInitializer() } intoSet AppInitializer::class
 }

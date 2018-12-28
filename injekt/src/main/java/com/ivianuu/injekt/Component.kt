@@ -5,44 +5,56 @@ import kotlin.reflect.KClass
 /**
  * The actual dependency container which provides declarations
  */
-class Component internal constructor(
-    private val dependencies: Set<Component>,
-    modules: Collection<Module>
-) {
+class Component internal constructor() {
 
     private val declarations = mutableListOf<Declaration<*>>()
     private val declarationsByName = mutableMapOf<String, Declaration<*>>()
     private val declarationsByType = mutableMapOf<KClass<*>, Declaration<*>>()
 
-    init {
-        modules
-            .flatMap { it.declarations }
-            .forEach { declaration ->
-                val isOverride = declarations.remove(declaration)
-                        || dependencies.any {
-                    it.thisComponentFindDeclaration(
-                        declaration.primaryType,
-                        declaration.name
-                    ) != null
-                }
+    /**
+     * Adds all [Declaration]s of the [module]
+     */
+    fun addModule(module: Module) {
+        module.declarations.forEach { saveDeclaration(it, false) }
+    }
 
-                if (isOverride && !declaration.options.override) {
-                    throw OverrideException("Try to override declaration $declaration")
-                }
+    /**
+     * Adds all
+     */
+    fun addDependency(dependency: Component) {
+        dependency.declarations.forEach { saveDeclaration(it, true) }
+    }
 
-                info {
-                    val kw = if (isOverride) "Override" else "Declare"
-                    "$kw $declaration"
-                }
+    private fun saveDeclaration(
+        declaration: Declaration<*>,
+        fromDependency: Boolean
+    ) {
+        val isOverride = declarations.remove(declaration)
 
-                declaration.instance.component = this
+        if (isOverride && !declaration.options.override) {
+            throw OverrideException("Try to override declaration $declaration")
+        }
 
-                declarations.add(declaration)
+        info {
+            val kw = if (isOverride) "Override" else "Declare"
+            "$kw $declaration"
+        }
 
-                if (declaration.options.createOnStart) {
-                    declaration.instance.get(null)
-                }
-            }
+        if (!fromDependency) {
+            declaration.instance.component = this
+        }
+
+        declarations.add(declaration)
+
+        if (declaration.name != null) {
+            declarationsByName[declaration.name] = declaration
+        } else {
+            declarationsByType[declaration.primaryType] = declaration
+        }
+
+        if (!fromDependency && declaration.options.createOnStart) {
+            declaration.instance.get(null)
+        }
     }
 
     /**
@@ -59,8 +71,7 @@ class Component internal constructor(
         name: String? = null,
         params: ParamsDefinition? = null
     ): Set<T> {
-        val declarations = (listOf(this) + dependencies)
-            .flatMap { it.getSetBindings(type, name) }
+        val declarations = getSetBindings(type, name)
 
         return declarations.map { it.resolveInstance(params) }
             .toSet() as Set<T>
@@ -71,9 +82,7 @@ class Component internal constructor(
         name: String? = null,
         params: ParamsDefinition? = null
     ): Set<() -> T> {
-        val declarations = (listOf(this) + dependencies)
-            .flatMap { it.getSetBindings(type, name) }
-
+        val declarations = getSetBindings(type, name)
         return declarations.map { { it.resolveInstance(params) } }
             .toSet() as Set<() -> T>
     }
@@ -84,9 +93,7 @@ class Component internal constructor(
         name: String? = null,
         params: ParamsDefinition? = null
     ): Map<K, T> {
-        val declarations = (listOf(this) + dependencies)
-            .flatMap { it.getMapBindings(type, keyType, name) }
-
+        val declarations = getMapBindings(type, keyType, name)
         return declarations.map {
             val binding = it.mapBindings.first { it.keyType == keyType }
             binding.key to it.resolveInstance(params)
@@ -111,41 +118,10 @@ class Component internal constructor(
     private fun findDeclaration(
         type: KClass<*>,
         name: String?
-    ) = thisComponentFindDeclaration(type, name) ?: findDeclarationInDependencies(type, name)
-
-    private fun thisComponentFindDeclaration(
-        type: KClass<*>,
-        name: String?
-    ): Declaration<*>? {
-        return if (name != null) {
-            declarationsByName[name]
-                ?: declarations.firstOrNull { it.name == name }
-                    ?.also { declarationsByName[name] = it }
-        } else {
-            declarationsByType[type]
-                ?: declarations.firstOrNull { it.classes.contains(type) }
-                    ?.also { declarationsByType[type] = it }
-        }
-    }
-
-    private fun findDeclarationInDependencies(
-        type: KClass<*>,
-        name: String?
-    ): Declaration<*>? {
-        for (component in dependencies) {
-            val declaration = component.findDeclaration(type, name)
-            if (declaration != null) {
-                if (name != null) {
-                    declarationsByName[name] = declaration
-                } else {
-                    declarationsByType[type] = declaration
-                }
-
-                return declaration
-            }
-        }
-
-        return null
+    ): Declaration<*>? = if (name != null) {
+        declarationsByName[name]
+    } else {
+        declarationsByType[type]
     }
 
     private fun getSetBindings(

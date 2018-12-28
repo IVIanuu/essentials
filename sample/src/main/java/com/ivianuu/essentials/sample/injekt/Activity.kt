@@ -11,30 +11,30 @@ import kotlin.reflect.KClass
 
 fun Activity.activityComponent(
     modules: List<Module> = emptyList(),
-    dependsOn: List<Component> = emptyList()
+    dependencies: List<Component> = emptyList()
 ): Component {
     val deps = mutableListOf<Component>()
 
     // application
     (application as? ComponentHolder)?.component?.let { deps.add(it) }
 
-    deps.addAll(dependsOn)
+    deps.addAll(dependencies)
 
     return component(
         modules = modules,
-        dependsOn = deps
+        dependencies = dependencies
     )
 }
 
 inline fun <reified T : AppCompatActivity> activityModule(
     activity: T,
-    noinline body: (Module.() -> Unit)? = null
-) = activityModule(T::class, activity, body)
+    noinline definition: ModuleDefinition? = null
+) = activityModule(T::class, activity, definition)
 
 fun <T : AppCompatActivity> activityModule(
     type: KClass<T>,
     activity: T,
-    body: (Module.() -> Unit)? = null
+    definition: ModuleDefinition? = null
 ) = module {
     factory(type) { activity }
 
@@ -48,6 +48,5 @@ fun <T : AppCompatActivity> activityModule(
 
     factory { activity.resources }
 
-    // invoke the child
-    body?.invoke(this)
+    definition?.invoke(this)
 }

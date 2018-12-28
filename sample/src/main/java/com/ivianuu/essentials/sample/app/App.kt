@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.sample.app
 
+import android.content.Context
 import com.ivianuu.essentials.app.EsApp
 import com.ivianuu.essentials.sample.injekt.TimberLogger
 import com.ivianuu.essentials.util.ext.unsafeLazy
@@ -31,6 +32,7 @@ class App : EsApp(), ComponentHolder {
         component(
             module {
                 single("username") { "Manuel" }
+                factory<Context> { this@App }
             }
         )
     }

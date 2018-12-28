@@ -9,9 +9,9 @@ import com.ivianuu.injekt.component
 
 fun Controller.controllerComponent(
     modules: List<Module> = emptyList(),
-    dependsOn: List<Component> = emptyList()
+    dependencies: List<Component> = emptyList()
 ): Component {
-    val deps = mutableListOf<Component>()
+    val deps = mutableSetOf<Component>()
 
     // application
     (application as? ComponentHolder)?.component?.let { deps.add(it) }
@@ -22,10 +22,10 @@ fun Controller.controllerComponent(
     // parent
     (activity as? ComponentHolder)?.component?.let { deps.add(it) }
 
-    deps.addAll(dependsOn)
+    deps.addAll(dependencies)
 
     return component(
         modules = modules,
-        dependsOn = deps
+        dependencies = deps
     )
 }

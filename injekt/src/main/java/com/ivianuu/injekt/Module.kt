@@ -26,6 +26,8 @@ class Module internal constructor(
         declaration.options.createOnStart = createOnStart
         declaration.options.override = override
 
+        debug { "Declare $declaration" }
+
         declarations.add(declaration)
 
         if (declaration.name != null) {
@@ -45,8 +47,8 @@ class Module internal constructor(
 fun module(
     createOnStart: Boolean = false,
     override: Boolean = false,
-    body: Module.() -> Unit
-) = Module(createOnStart, override).apply(body)
+    definition: ModuleDefinition
+) = Module(createOnStart, override).apply(definition)
 
 /**
  * Provides a dependency
