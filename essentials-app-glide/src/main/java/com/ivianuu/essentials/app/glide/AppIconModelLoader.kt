@@ -82,7 +82,7 @@ class AppIconModelLoader(
         height: Int,
         options: Options
     ): ModelLoader.LoadData<Drawable> = ModelLoader.LoadData(
-        ObjectKey(model), appIconFetcherProvider { parametersOf(model) }
+        ObjectKey(model), appIconFetcherProvider.get { parametersOf(model) }
     )
 
     override fun handles(model: AppIcon) = true
@@ -92,7 +92,7 @@ class AppIconModelLoader(
     ) : ModelLoaderFactory<AppIcon, Drawable> {
 
         override fun build(multiFactory: MultiModelLoaderFactory): AppIconModelLoader =
-            appIconModelLoaderProvider(null)
+            appIconModelLoaderProvider.get()
 
         override fun teardown() {
         }
