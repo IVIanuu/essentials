@@ -12,17 +12,15 @@ class Module internal constructor(
     val name: String?
 ) {
 
-    lateinit var component: Component
-        private set
-    private var componentSet = false
+    val component get() = _component ?: error("${nameString()} component not initialized")
+    private var _component: Component? = null
 
     internal fun setComponent(component: Component) {
-        if (componentSet) {
+        if (_component != null) {
             error("${nameString()}Modules cannot be reused")
         }
-        componentSet = true
 
-        this.component = component
+        _component = component
     }
 
     internal val declarations = mutableListOf<Declaration<*>>()
