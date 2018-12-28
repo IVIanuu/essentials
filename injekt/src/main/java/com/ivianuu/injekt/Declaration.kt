@@ -21,6 +21,9 @@ data class Declaration<T : Any> private constructor(
 
     internal val classes: List<KClass<*>> get() = listOf(primaryType) + secondaryTypes
 
+    /**
+     * Resolves the instance
+     */
     fun resolveInstance(
         params: ParamsDefinition?
     ) = instance.get(params)

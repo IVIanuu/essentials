@@ -7,7 +7,7 @@ import kotlin.reflect.KClass
  */
 class Component internal constructor(val name: String?) {
 
-    private val declarations = mutableListOf<Declaration<*>>()
+    private val declarations = mutableSetOf<Declaration<*>>()
     private val declarationsByName = mutableMapOf<String, Declaration<*>>()
     private val declarationsByType = mutableMapOf<KClass<*>, Declaration<*>>()
 
@@ -19,17 +19,22 @@ class Component internal constructor(val name: String?) {
 
         val onStartDeclarations = mutableSetOf<Declaration<*>>()
 
-        module.declarations.forEach {
-            saveDeclaration(it, null)
+        measureDurationOnly {
+            module.declarations.forEach {
+                saveDeclaration(it, null)
+                it.instance.setComponent(this)
 
-            it.instance.setComponent(this)
-
-            if (it.options.createOnStart) {
-                onStartDeclarations.add(it)
+                if (it.options.createOnStart) {
+                    onStartDeclarations.add(it)
+                }
             }
+        }.let {
+            debug { "${nameString()}Adding module ${module.nameString()}took $it ms" }
         }
 
-        onStartDeclarations.forEach { it.resolveInstance(null) }
+        measureDurationOnly {
+            onStartDeclarations.forEach { it.resolveInstance(null) }
+        }.let { debug { "${nameString()}Instantiating eager instances ${module.nameString()}took $it ms" } }
     }
 
     /**

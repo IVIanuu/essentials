@@ -44,13 +44,13 @@ internal fun Module.nameString() = if (name != null) {
     ""
 }
 
-internal fun measureDurationOnly(code: () -> Unit): Double {
+fun measureDurationOnly(code: () -> Unit): Double {
     val start = System.nanoTime()
     code()
     return (System.nanoTime() - start) / 1000000.0
 }
 
-internal fun <T> measureDuration(code: () -> T): Pair<T, Double> {
+fun <T> measureDuration(code: () -> T): Pair<T, Double> {
     val start = System.nanoTime()
     val result = code()
     val duration = (System.nanoTime() - start) / 1000000.0
