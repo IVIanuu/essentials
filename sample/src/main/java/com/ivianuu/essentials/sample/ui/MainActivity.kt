@@ -24,40 +24,41 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModel
+import com.ivianuu.director.SimpleSwapChangeHandler
 import com.ivianuu.director.arch.lifecycle.LifecycleController
-import com.ivianuu.essentials.app.AppInitializer
-import com.ivianuu.essentials.app.TimberAppInitializer
+import com.ivianuu.director.pushChangeHandler
+import com.ivianuu.director.pushController
+import com.ivianuu.director.toTransaction
+import com.ivianuu.essentials.hidenavbar.NavBarSettingsKey
+import com.ivianuu.essentials.sample.injekt.activityComponent
 import com.ivianuu.essentials.sample.injekt.activityModule
-import com.ivianuu.essentials.sample.injekt.appInitializer
 import com.ivianuu.essentials.sample.injekt.controllerComponent
 import com.ivianuu.essentials.sample.injekt.viewModel
-import com.ivianuu.essentials.sample.perfs.runPerfTest
+import com.ivianuu.essentials.sample.ui.counter.CounterKey
+import com.ivianuu.essentials.ui.base.EsActivity
 import com.ivianuu.essentials.util.ext.unsafeLazy
 import com.ivianuu.injekt.*
 import com.ivianuu.timberktx.d
+import com.ivianuu.traveler.navigate
 import dagger.Module
-import kotlin.reflect.KClass
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : EsActivity(), ComponentHolder {
 
-/*    override val component =
+    override val component =
         activityComponent(listOf(mainActivityModule(this)), name = "MainActivityComponent")
-*/
-    // override val startKey: Any? get() = CounterKey(1)
+
+    override val startKey: Any? get() = CounterKey(1)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        runPerfTest()
+        travelerRouter.navigate(NavBarSettingsKey(true, true))
 
-        //   travelerRouter.navigate(NavBarSettingsKey(true, true))
-
-        /* router.pushController(
+        router.pushController(
              MyController().toTransaction()
                  .pushChangeHandler(SimpleSwapChangeHandler(false))
-         )*/
+        )
     }
 }
 
@@ -99,13 +100,11 @@ class MainViewModel(
     private val mainActivity: MainActivity,
     private val context: Context,
     private val resources: Resources,
-    private val name: String,
-    private val appInitializers: Map<KClass<out AppInitializer>, AppInitializer>
+    private val name: String
 ) : ViewModel() {
 
     fun print() {
         d { "hello $name password is $password" }
-        d { "app initializers $appInitializers" }
     }
 
 }
@@ -117,8 +116,6 @@ fun mainActivityModule(activity: MainActivity) = activityModule(activity, "MainA
 fun myControllerModule(controller: MyController) = module(name = "MyControllerModule") {
     factory { controller }
 
-    appInitializer { TimberAppInitializer() }
-
     viewModel { (password: String) ->
         MainViewModel(
             password,
@@ -127,8 +124,7 @@ fun myControllerModule(controller: MyController) = module(name = "MyControllerMo
             get(),
             get(),
             get(),
-            get("username"),
-            emptyMap()
+            get("username")
         )
     }
 }

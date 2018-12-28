@@ -36,6 +36,7 @@ object Versions {
     const val epoxyPrefs = "0a007754c4"
     const val glide = "4.8.0"
     const val injectors = "edc5350f6b"
+    const val injekt = "0cfbcd8691"
     const val junit = "4.12"
     const val kommon = "6c51279983"
     const val kotlin = "1.3.10"
@@ -120,6 +121,10 @@ object Deps {
     const val injectorsCompiler =
         "com.github.IVIanuu.injectors:injectors-compiler:${Versions.injectors}"
 
+    const val injekt = "com.github.IVIanuu.injekt:injekt:${Versions.injekt}"
+    const val injektAndroid = "com.github.IVIanuu.injekt:injekt-android:${Versions.injekt}"
+    const val injektReflect = "com.github.IVIanuu.injekt:injekt-reflect:${Versions.injekt}"
+
     const val junit = "junit:junit:${Versions.junit}"
 
     const val kommonAppCompat =
@@ -179,15 +184,6 @@ object Deps {
     const val rxJavaKtx = "com.github.IVIanuu:rx-java-ktx:${Versions.rxJavaKtx}"
     const val rxKotlin = "io.reactivex.rxjava2:rxkotlin:${Versions.rxKotlin}"
 
-    const val stateStore = "com.github.IVIanuu.statestore:statestore:${Versions.stateStore}"
-    const val stateStoreAndroid =
-        "com.github.IVIanuu.statestore:statestore-android:${Versions.stateStore}"
-    const val stateStoreCoroutines =
-        "com.github.IVIanuu.statestore:statestore-coroutines:${Versions.stateStore}"
-    const val stateStoreLiveData =
-        "com.github.IVIanuu.statestore:statestore-livedata:${Versions.stateStore}"
-    const val stateStoreRx = "com.github.IVIanuu.statestore:statestore-rx:${Versions.stateStore}"
-
     const val scopes = "com.github.IVIanuu.scopes:scopes:${Versions.scopes}"
     const val scopesAndroid = "com.github.IVIanuu.scopes:scopes-android:${Versions.scopes}"
     const val scopesAndroidLifecycle =
@@ -197,6 +193,15 @@ object Deps {
     const val scopesLiveData =
         "com.github.IVIanuu.scopes:scopes-livedata:${Versions.scopes}"
     const val scopesRx = "com.github.IVIanuu.scopes:scopes-rx:${Versions.scopes}"
+
+    const val stateStore = "com.github.IVIanuu.statestore:statestore:${Versions.stateStore}"
+    const val stateStoreAndroid =
+        "com.github.IVIanuu.statestore:statestore-android:${Versions.stateStore}"
+    const val stateStoreCoroutines =
+        "com.github.IVIanuu.statestore:statestore-coroutines:${Versions.stateStore}"
+    const val stateStoreLiveData =
+        "com.github.IVIanuu.statestore:statestore-livedata:${Versions.stateStore}"
+    const val stateStoreRx = "com.github.IVIanuu.statestore:statestore-rx:${Versions.stateStore}"
 
     const val superUser = "eu.chainfire:libsuperuser:${Versions.superUser}"
 

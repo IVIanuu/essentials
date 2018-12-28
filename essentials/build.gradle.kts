@@ -89,6 +89,10 @@ dependencies {
     api(Deps.injectors)
     api(Deps.injectorsAndroid)
 
+    api(Deps.injekt)
+    api(Deps.injektAndroid)
+    api(Deps.injektReflect)
+
     api(Deps.kommonAppCompat)
     api(Deps.kommonCore)
     api(Deps.kommonLifecycle)
