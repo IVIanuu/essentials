@@ -17,16 +17,11 @@
 package com.ivianuu.essentials.hidenavbar
 
 import com.ivianuu.kprefs.KPrefs
-import javax.inject.Inject
-import javax.inject.Singleton
 
 /**
  * @author Manuel Wrage (IVIanuu)
  */
-@Singleton
-class NavBarPrefs @Inject constructor(
-    @NavBarSharedPrefs prefs: KPrefs
-) {
+class NavBarPrefs(prefs: KPrefs) {
     val manageNavBar = prefs.boolean("manage_nav_bar")
     val fullOverscan = prefs.boolean("full_overscan")
     val navBarHidden = prefs.boolean("nav_bar_hidden")

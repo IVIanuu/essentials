@@ -18,15 +18,19 @@ package com.ivianuu.essentials.sample.ui.counter
 
 import android.os.Bundle
 import android.view.View
+import com.ivianuu.essentials.app.appContext
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.base.EsController
 import com.ivianuu.essentials.ui.mvrx.viewModel
 import com.ivianuu.essentials.ui.mvrx.withState
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
 import com.ivianuu.essentials.ui.traveler.key.getKey
+import com.ivianuu.injekt.factory
+import com.ivianuu.injekt.get
+import com.ivianuu.injekt.module
+import com.ivianuu.injekt.parametersOf
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.controller_counter.*
-import javax.inject.Inject
 
 @Parcelize
 data class CounterKey(val screen: Int) : ControllerKey(CounterController::class)
@@ -38,8 +42,9 @@ class CounterController : EsController() {
 
     override val layoutRes get() = R.layout.controller_counter
 
-    @Inject lateinit var counterViewModelFactory: CounterViewModelFactory
-    private val viewModel by viewModel { counterViewModelFactory.create(getKey()) }
+    private val viewModel by viewModel {
+        get<CounterViewModel> { parametersOf(getKey<CounterKey>()) }
+    }
 
     override fun onBindView(view: View, savedViewState: Bundle?) {
         super.onBindView(view, savedViewState)
@@ -59,4 +64,10 @@ class CounterController : EsController() {
         withState(viewModel) { count.text = "Screen : ${it.screen}, Count: ${it.count}" }
     }
 
+    override fun modules() = listOf(counterControllerModule())
+
+}
+
+fun counterControllerModule() = module {
+    factory { (key: CounterKey) -> CounterViewModel(key, appContext(), get()) }
 }

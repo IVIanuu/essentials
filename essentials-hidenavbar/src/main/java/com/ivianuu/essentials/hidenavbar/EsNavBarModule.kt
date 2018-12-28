@@ -16,58 +16,25 @@
 
 package com.ivianuu.essentials.hidenavbar
 
-import android.content.Context
 import android.content.SharedPreferences
-import com.ivianuu.essentials.app.AppService
-import com.ivianuu.essentials.injection.AppServiceKey
-import com.ivianuu.essentials.injection.PerController
-import com.ivianuu.injectors.ContributesInjector
+import com.ivianuu.essentials.app.appContext
+import com.ivianuu.injekt.factory
+import com.ivianuu.injekt.get
+import com.ivianuu.injekt.module
+import com.ivianuu.injekt.single
 import com.ivianuu.kprefs.KPrefs
-import dagger.Binds
-import dagger.Module
-import dagger.Provides
-import dagger.multibindings.IntoMap
-import javax.inject.Qualifier
 
-@Qualifier
-annotation class NavBarSharedPrefs
+const val NAV_BAR_SHARED_PREFS = "navBarSharedPrefs"
+const val NAV_BAR_PREFS = "navBarPrefs"
 
 /**
- * Nav bar module
+ * Provides nav bar related dependencies
  */
-@Module
-abstract class EsNavBarModule {
+fun esNavBarModule() = module {
+    factory(name = NAV_BAR_SHARED_PREFS) { NavBarPlugins.getDefaultSharedPreferences(appContext()) }
+    single(name = NAV_BAR_PREFS) { KPrefs(get<SharedPreferences>(NAV_BAR_SHARED_PREFS)) }
+    single { NavBarPrefs(get(NAV_BAR_PREFS)) }
 
-    @Binds
-    @IntoMap
-    @AppServiceKey(NavBarController::class)
-    abstract fun bindNavBarController(navBarController: NavBarController): AppService
-
-    @Module
-    companion object {
-
-        @NavBarSharedPrefs
-        @JvmStatic
-        @Provides
-        fun provideNavBarSharedPrefs(context: Context) =
-            NavBarPlugins.getDefaultSharedPreferences(context)
-
-        @NavBarSharedPrefs
-        @JvmStatic
-        @Provides
-        fun provideNavBarKPrefs(
-            @NavBarSharedPrefs sharedPrefs: SharedPreferences
-        ) = KPrefs(sharedPrefs)
-
-    }
-
-}
-
-@Module(includes = [EsNavBarBindingModule_Contributions::class])
-abstract class EsNavBarBindingModule {
-
-    @PerController
-    @ContributesInjector
-    abstract fun bindNavBarSettingsController(): NavBarSettingsController
-
+    single(createOnStart = true) { NavBarController(get(), get(), get(), get(), get()) }
+    factory { OverscanHelper(get()) }
 }

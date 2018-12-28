@@ -26,16 +26,13 @@ object Versions {
     const val androidxTestRules = "1.1.0"
     const val androidxTestRunner = "1.1.0"
 
-    const val assistedInject = "74bd099811"
     const val constraintLayout = "2.0.0-alpha2"
     const val coroutines = "1.0.0"
-    const val dagger = "2.19"
     const val director = "daa4ec173f"
     const val epoxy = "2.19.0"
     const val epoxyKtx = "9dde1f5a9c"
     const val epoxyPrefs = "0a007754c4"
     const val glide = "4.8.0"
-    const val injectors = "edc5350f6b"
     const val injekt = "0cfbcd8691"
     const val junit = "4.12"
     const val kommon = "6c51279983"
@@ -77,11 +74,6 @@ object Deps {
     const val androidxTestRules = "androidx.test:rules:${Versions.androidxTestRules}"
     const val androidxTestRunner = "androidx.test:runner:${Versions.androidxTestRunner}"
 
-    const val assistedInject =
-        "com.github.IVIanuu.assisted-inject:assistedinject:${Versions.assistedInject}"
-    const val assistedInjectCompiler =
-        "com.github.IVIanuu.assisted-inject:assistedinject-compiler:${Versions.assistedInject}"
-
     const val constraintLayout =
         "androidx.constraintlayout:constraintlayout:${Versions.constraintLayout}"
 
@@ -91,9 +83,6 @@ object Deps {
         "org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.coroutines}"
     const val coroutinesRxJava =
         "org.jetbrains.kotlinx:kotlinx-coroutines-rx2:${Versions.coroutines}"
-
-    const val dagger = "com.google.dagger:dagger:${Versions.dagger}"
-    const val daggerCompiler = "com.google.dagger:dagger-compiler:${Versions.dagger}"
 
     const val director = "com.github.IVIanuu.director:director:${Versions.director}"
     const val directorArchLifecycle =
@@ -114,12 +103,6 @@ object Deps {
     const val epoxyPrefs = "com.github.IVIanuu:epoxy-prefs:${Versions.epoxyPrefs}"
 
     const val glide = "com.github.bumptech.glide:glide:${Versions.glide}"
-
-    const val injectors = "com.github.IVIanuu.injectors:injectors:${Versions.injectors}"
-    const val injectorsAndroid =
-        "com.github.IVIanuu.injectors:injectors-android:${Versions.injectors}"
-    const val injectorsCompiler =
-        "com.github.IVIanuu.injectors:injectors-compiler:${Versions.injectors}"
 
     const val injekt = "com.github.IVIanuu.injekt:injekt:${Versions.injekt}"
     const val injektAndroid = "com.github.IVIanuu.injekt:injekt-android:${Versions.injekt}"

@@ -30,10 +30,10 @@ import com.ivianuu.essentials.ui.traveler.vertical
 import com.ivianuu.essentials.util.ext.goBackWithResult
 import com.ivianuu.essentials.util.ext.sendResult
 import com.ivianuu.essentials.util.ext.toast
+import com.ivianuu.injekt.inject
 import com.ivianuu.traveler.navigate
 import kotlinx.android.parcel.Parcelize
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @Parcelize
 class SecureSettingsKey(
@@ -45,7 +45,7 @@ class SecureSettingsKey(
  */
 class SecureSettingsDialog : EsDialogController() {
 
-    @Inject lateinit var shell: Shell
+    private val shell by inject<Shell>()
 
     private val key by key<SecureSettingsKey>()
 
@@ -59,6 +59,7 @@ class SecureSettingsDialog : EsDialogController() {
                         shell.run("pm grant ${activity.packageName} android.permission.WRITE_SECURE_SETTINGS")
                         handlePermissionResult(activity.canWriteSecureSettings())
                     } catch (e: Exception) {
+                        e.printStackTrace()
                         toast(R.string.es_msg_secure_settings_no_root)
                     }
                 }

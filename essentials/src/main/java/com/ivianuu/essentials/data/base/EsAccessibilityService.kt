@@ -2,25 +2,34 @@ package com.ivianuu.essentials.data.base
 
 import android.accessibilityservice.AccessibilityService
 import android.view.accessibility.AccessibilityEvent
+import com.ivianuu.essentials.injection.bindInstanceModule
+import com.ivianuu.essentials.injection.componentName
+import com.ivianuu.essentials.injection.getComponentDependencies
 import com.ivianuu.essentials.util.asMainCoroutineScope
-import com.ivianuu.injectors.android.inject
+import com.ivianuu.essentials.util.ext.unsafeLazy
+import com.ivianuu.injekt.ComponentHolder
+import com.ivianuu.injekt.Module
+import com.ivianuu.injekt.component
 import com.ivianuu.scopes.MutableScope
 import com.ivianuu.scopes.Scope
 
 /**
  * Base accessibility service
  */
-abstract class EsAccessibilityService : AccessibilityService() {
+abstract class EsAccessibilityService : AccessibilityService(), ComponentHolder {
+
+    override val component by unsafeLazy {
+        component(
+            modules = implicitModules() + modules(),
+            dependencies = dependencies(),
+            name = componentName()
+        )
+    }
 
     val scope: Scope get() = _scope
     private val _scope = MutableScope()
 
     val coroutineScope = scope.asMainCoroutineScope()
-
-    override fun onCreate() {
-        inject()
-        super.onCreate()
-    }
 
     override fun onDestroy() {
         _scope.close()
@@ -32,4 +41,10 @@ abstract class EsAccessibilityService : AccessibilityService() {
 
     override fun onInterrupt() {
     }
+
+    protected open fun dependencies() = getComponentDependencies()
+
+    protected open fun modules() = emptyList<Module>()
+
+    protected open fun implicitModules() = listOf(bindInstanceModule(this))
 }

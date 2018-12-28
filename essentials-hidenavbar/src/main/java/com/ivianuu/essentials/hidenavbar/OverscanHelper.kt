@@ -20,15 +20,12 @@ import android.annotation.SuppressLint
 import android.graphics.Rect
 import android.os.IBinder
 import android.view.WindowManager
-import javax.inject.Inject
 
 /**
  * Utils to access overscan with reflection
  */
 @SuppressLint("PrivateApi")
-class OverscanHelper @Inject constructor(
-    private val windowManager: WindowManager
-) {
+class OverscanHelper(private val windowManager: WindowManager) {
 
     private val windowManagerService by lazy {
         val cls = Class.forName("android.view.IWindowManager\$Stub")

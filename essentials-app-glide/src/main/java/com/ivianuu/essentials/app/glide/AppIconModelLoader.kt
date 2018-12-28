@@ -26,22 +26,20 @@ import com.bumptech.glide.load.model.ModelLoader
 import com.bumptech.glide.load.model.ModelLoaderFactory
 import com.bumptech.glide.load.model.MultiModelLoaderFactory
 import com.bumptech.glide.signature.ObjectKey
-import com.ivianuu.assistedinject.Assisted
-import com.ivianuu.assistedinject.AssistedInject
+import com.ivianuu.essentials.injection.Provider
 import com.ivianuu.essentials.util.ext.coroutinesIo
+import com.ivianuu.injekt.parametersOf
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import javax.inject.Inject
-import javax.inject.Provider
 
 data class AppIcon(val packageName: String)
 
 /**
  * Fetches images for [AppIcon]s
  */
-class AppIconFetcher @AssistedInject constructor(
-    @Assisted private val app: AppIcon,
+class AppIconFetcher(
+    private val app: AppIcon,
     private val packageManager: PackageManager
 ) :
     DataFetcher<Drawable> {
@@ -74,8 +72,8 @@ class AppIconFetcher @AssistedInject constructor(
 /**
  * Model loader to load [AppIcon]s
  */
-class AppIconModelLoader @Inject constructor(
-    private val appIconFetcherFactory: AppIconFetcherFactory
+class AppIconModelLoader(
+    private val appIconFetcherProvider: Provider<AppIconFetcher>
 ) : ModelLoader<AppIcon, Drawable> {
 
     override fun buildLoadData(
@@ -84,17 +82,17 @@ class AppIconModelLoader @Inject constructor(
         height: Int,
         options: Options
     ): ModelLoader.LoadData<Drawable> = ModelLoader.LoadData(
-        ObjectKey(model), appIconFetcherFactory.create(model)
+        ObjectKey(model), appIconFetcherProvider { parametersOf(model) }
     )
 
     override fun handles(model: AppIcon) = true
 
-    class Factory @Inject constructor(
+    class Factory(
         private val appIconModelLoaderProvider: Provider<AppIconModelLoader>
     ) : ModelLoaderFactory<AppIcon, Drawable> {
 
         override fun build(multiFactory: MultiModelLoaderFactory): AppIconModelLoader =
-            appIconModelLoaderProvider.get()
+            appIconModelLoaderProvider(null)
 
         override fun teardown() {
         }

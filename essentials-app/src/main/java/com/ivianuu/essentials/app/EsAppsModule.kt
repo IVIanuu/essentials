@@ -16,18 +16,13 @@
 
 package com.ivianuu.essentials.app
 
-import com.ivianuu.essentials.injection.PerController
-import com.ivianuu.injectors.ContributesInjector
-import dagger.Module
+import com.ivianuu.injekt.factory
+import com.ivianuu.injekt.get
+import com.ivianuu.injekt.module
 
 /**
- * @author Manuel Wrage (IVIanuu)
+ * Binds dependencies related to this module
  */
-@Module(includes = [EsAppBindingModule_Contributions::class])
-abstract class EsAppBindingModule {
-
-    @PerController
-    @ContributesInjector
-    abstract fun bindAppPickerDialog(): AppPickerDialog
-
+fun esAppsModule() = module(name = "EsAppsModule") {
+    factory { AppStore(get()) }
 }

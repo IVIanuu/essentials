@@ -20,12 +20,11 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import com.ivianuu.essentials.util.ext.coroutinesIo
 import kotlinx.coroutines.withContext
-import javax.inject.Inject
 
 /**
  * Store for [AppInfo]s
  */
-class AppStore @Inject constructor(private val packageManager: PackageManager) {
+class AppStore(private val packageManager: PackageManager) {
 
     suspend fun installedApps() = withContext(coroutinesIo) {
         packageManager.getInstalledApplications(0)

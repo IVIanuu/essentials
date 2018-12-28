@@ -60,8 +60,6 @@ dependencies {
     api(Deps.androidxCardView)
     api(Deps.androidxCoreKtx)
 
-    api(Deps.assistedInject)
-
     api(Deps.coroutinesAndroid)
     api(Deps.coroutinesCore)
     api(Deps.coroutinesRxJava)
@@ -69,8 +67,6 @@ dependencies {
     api(Deps.androidxLifecycleExtensions)
 
     api(Deps.constraintLayout)
-
-    api(Deps.dagger)
 
     api(Deps.director)
     api(Deps.directorArchLifecycle)
@@ -85,9 +81,6 @@ dependencies {
     api(Deps.epoxyPrefs)
 
     kapt(project(":essentials-compiler"))
-
-    api(Deps.injectors)
-    api(Deps.injectorsAndroid)
 
     api(Deps.injekt)
     api(Deps.injektAndroid)

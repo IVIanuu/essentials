@@ -27,10 +27,10 @@ import com.ivianuu.essentials.ui.traveler.key.ControllerKey
 import com.ivianuu.essentials.ui.traveler.key.getKey
 import com.ivianuu.essentials.util.ext.goBackWithResult
 import com.ivianuu.essentials.util.string
+import com.ivianuu.injekt.inject
 import com.ivianuu.traveler.goBack
 import kotlinx.android.parcel.Parcelize
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @Parcelize
 data class AppPickerKey(
@@ -44,7 +44,7 @@ data class AppPickerKey(
  */
 class AppPickerDialog : EsDialogController() {
 
-    @Inject lateinit var appStore: AppStore
+    private val appStore by inject<AppStore>()
 
     override fun onCreateDialog(savedViewState: Bundle?): Dialog {
         val apps = mutableListOf<AppInfo>()

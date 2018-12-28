@@ -16,37 +16,22 @@
 
 package com.ivianuu.essentials.sample.app
 
-import android.content.Context
 import com.ivianuu.essentials.app.EsApp
-import com.ivianuu.essentials.sample.injekt.TimberLogger
-import com.ivianuu.essentials.util.ext.unsafeLazy
-import com.ivianuu.injectors.Injector
-import com.ivianuu.injekt.*
+import com.ivianuu.essentials.app.esAppsModule
+import com.ivianuu.essentials.app.glide.esAppGlideModule
+import com.ivianuu.essentials.hidenavbar.esNavBarModule
+import com.ivianuu.essentials.shell.esShellModule
 
 /**
  * App
  */
-class App : EsApp(), ComponentHolder {
+class App : EsApp() {
 
-    override val component by unsafeLazy {
-        component(
-            modules = listOf(
-                module(name = "AppModule") {
-                    single("username") { "Manuel" }
-                    factory<Context> { this@App }
-                }
-            ),
-            name = "AppComponent"
-        )
-    }
-
-    override fun applicationInjector(): Injector<out EsApp> =
-        DaggerAppComponent.builder().create(this)
-
-    override fun onCreate() {
-        super.onCreate()
-        InjektPlugins.logger = TimberLogger()
-        component
-    }
+    override fun modules() = listOf(
+        esAppsModule(),
+        esAppGlideModule(),
+        esNavBarModule(),
+        esShellModule()
+    )
 
 }

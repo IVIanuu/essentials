@@ -17,68 +17,80 @@
 package com.ivianuu.essentials.app
 
 import android.app.Application
-import com.ivianuu.injectors.CompositeInjectors
-import com.ivianuu.injectors.HasInjectors
-import com.ivianuu.injectors.Injector
-import com.ivianuu.injectors.Injectors
-import javax.inject.Inject
-import javax.inject.Provider
+import android.content.pm.ApplicationInfo
+import android.os.Looper
+import com.ivianuu.essentials.injection.GlobalComponentHolder
+import com.ivianuu.essentials.injection.esModules
+import com.ivianuu.essentials.util.ext.containsFlag
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.android.androidLogger
+import com.ivianuu.statestore.StateStorePlugins
+import com.ivianuu.statestore.android.MAIN_THREAD_EXECUTOR
+import io.reactivex.android.plugins.RxAndroidPlugins
+import io.reactivex.android.schedulers.AndroidSchedulers
+import timber.log.Timber
 
 /**
  * App
  */
-abstract class EsApp : Application(), HasInjectors {
+abstract class EsApp : Application(), ComponentHolder {
 
-    @Inject internal lateinit var _injectors: CompositeInjectors
-    @Inject
-    internal lateinit var appInitializer: Map<Class<out AppInitializer>, @JvmSuppressWildcards Provider<AppInitializer>>
-    @Inject
-    internal lateinit var appServices: Map<Class<out AppService>, @JvmSuppressWildcards Provider<AppService>>
-
-    override val injectors: Injectors
+    override val component: Component
         get() {
-            injectIfNeeded()
-            return _injectors
+            createComponentIfNeeded()
+            return _component
         }
 
-    private var injected = false
+    private lateinit var _component: Component
+    private var componentCreated = false
 
     override fun onCreate() {
-        injectIfNeeded()
         super.onCreate()
+        onCreateComponent()
         onInitialize()
-        onStartAppServices()
     }
 
-    protected open fun onInject() {
-        (applicationInjector() as Injector<EsApp>)
-            .inject(this)
+    protected open fun onCreateComponent() {
+        InjektPlugins.logger = androidLogger()
+        _component = component(
+            modules = implicitModules() + modules(),
+            dependencies = dependencies()
+        ).also { GlobalComponentHolder.initialize(it) }
     }
 
     protected open fun onInitialize() {
-        appInitializer
-            .filter { shouldInitializeAppInitializer(it.key) }
-            .map { it.value.get() }
-            .forEach { it.initialize(this) }
+        initializeRxJava()
+        initializeStateStore()
+        initializeTimber()
     }
 
-    protected open fun onStartAppServices() {
-        appServices
-            .filter { shouldStartAppService(it.key) }
-            .map { it.value.get() }
-            .forEach { it.start() }
+    protected open fun initializeRxJava() {
+        val scheduler = AndroidSchedulers.from(Looper.getMainLooper(), true)
+        RxAndroidPlugins.setInitMainThreadSchedulerHandler { scheduler }
     }
 
-    protected open fun shouldInitializeAppInitializer(clazz: Class<out AppInitializer>) = true
+    protected open fun initializeStateStore() {
+        StateStorePlugins.defaultCallbackExecutor = MAIN_THREAD_EXECUTOR
+    }
 
-    protected open fun shouldStartAppService(clazz: Class<out AppService>) = true
+    protected open fun initializeTimber() {
+        val isDebuggable = applicationInfo.flags.containsFlag(ApplicationInfo.FLAG_DEBUGGABLE)
+        if (isDebuggable) {
+            Timber.plant(Timber.DebugTree())
+        }
+    }
 
-    protected abstract fun applicationInjector(): Injector<out EsApp>
+    protected open fun dependencies(): List<Component> = emptyList()
 
-    private fun injectIfNeeded() {
-        if (!injected) {
-            injected = true
-            onInject()
+    protected open fun implicitModules() =
+        listOf(esAppModule(this)) + esModules()
+
+    protected open fun modules(): List<Module> = emptyList()
+
+    private fun createComponentIfNeeded() {
+        if (!componentCreated) {
+            componentCreated = true
+            onCreateComponent()
         }
     }
 }

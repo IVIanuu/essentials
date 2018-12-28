@@ -24,27 +24,38 @@ import android.view.ViewGroup
 import com.ivianuu.director.arch.lifecycle.LifecycleController
 import com.ivianuu.director.scopes.destroy
 import com.ivianuu.director.scopes.unbindView
-import com.ivianuu.essentials.injection.inject
+import com.ivianuu.essentials.injection.bindInstanceModule
+import com.ivianuu.essentials.injection.componentName
+import com.ivianuu.essentials.injection.getComponentDependencies
 import com.ivianuu.essentials.ui.mvrx.MvRxView
+import com.ivianuu.essentials.util.ComponentHolderContextWrapper
 import com.ivianuu.essentials.util.ContextAware
-import com.ivianuu.essentials.util.HasInjectorsContextWrapper
 import com.ivianuu.essentials.util.asMainCoroutineScope
-import com.ivianuu.injectors.CompositeInjectors
-import com.ivianuu.injectors.HasInjectors
+import com.ivianuu.essentials.util.ext.unsafeLazy
+import com.ivianuu.injekt.ComponentHolder
+import com.ivianuu.injekt.Module
+import com.ivianuu.injekt.component
+import com.ivianuu.injekt.inject
 import com.ivianuu.traveler.Router
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.*
 import kotlinx.coroutines.CoroutineScope
-import javax.inject.Inject
 
 /**
  * Base controller
  */
-abstract class EsController : LifecycleController(), ContextAware, HasInjectors, LayoutContainer, MvRxView {
+abstract class EsController : LifecycleController(), ContextAware, ComponentHolder, LayoutContainer,
+    MvRxView {
 
-    @Inject override lateinit var injectors: CompositeInjectors
+    override val component by unsafeLazy {
+        component(
+            modules = implicitModules() + modules(),
+            dependencies = dependencies(),
+            name = componentName()
+        )
+    }
 
-    @Inject lateinit var travelerRouter: Router
+    val travelerRouter by inject<Router>()
 
     override val containerView: View?
         get() = view
@@ -60,18 +71,13 @@ abstract class EsController : LifecycleController(), ContextAware, HasInjectors,
 
     protected open val layoutRes get() = -1
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        onInject()
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onInflateView(
         inflater: LayoutInflater,
         container: ViewGroup,
         savedViewState: Bundle?
     ): View = if (layoutRes != -1) {
         val injectorInflater =
-            inflater.cloneInContext(HasInjectorsContextWrapper(activity, this))
+            inflater.cloneInContext(ComponentHolderContextWrapper(activity, this))
         injectorInflater.inflate(layoutRes, container, false)
     } else {
         throw IllegalStateException("no layoutRes provided")
@@ -101,7 +107,9 @@ abstract class EsController : LifecycleController(), ContextAware, HasInjectors,
     override fun invalidate() {
     }
 
-    protected open fun onInject() {
-        inject()
-    }
+    protected open fun dependencies() = getComponentDependencies()
+
+    protected open fun modules() = emptyList<Module>()
+
+    protected open fun implicitModules() = listOf(bindInstanceModule(this))
 }

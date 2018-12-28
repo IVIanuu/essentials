@@ -5,9 +5,8 @@ import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
 import com.ivianuu.essentials.util.ext.coroutinesDefault
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-class ListViewModel @Inject constructor() : MvRxViewModel<ListState>(ListState()) {
+class ListViewModel : MvRxViewModel<ListState>(ListState()) {
 
     init {
         logStateChanges()

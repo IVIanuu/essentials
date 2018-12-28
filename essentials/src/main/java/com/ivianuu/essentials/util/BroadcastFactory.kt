@@ -23,12 +23,11 @@ import android.content.IntentFilter
 import com.ivianuu.kommon.core.content.intentFilterOf
 import com.ivianuu.rxjavaktx.observable
 import io.reactivex.Observable
-import javax.inject.Inject
 
 /**
  * A factory for broadcast receiver observables
  */
-class BroadcastFactory @Inject constructor(private val context: Context) {
+class BroadcastFactory(private val context: Context) {
 
     fun create(vararg actions: String): Observable<Intent> = create(intentFilterOf(*actions))
 

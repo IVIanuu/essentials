@@ -17,14 +17,21 @@
 package com.ivianuu.essentials.shell
 
 import com.ivianuu.essentials.util.ext.coroutinesIo
-import eu.chainfire.libsuperuser.Shell
+import com.ivianuu.injekt.factory
+import com.ivianuu.injekt.module
 import kotlinx.coroutines.withContext
-import javax.inject.Inject
+
+/**
+ * Provides all dependencies related to this module
+ */
+fun esShellModule() = module {
+    factory { Shell() }
+}
 
 /**
  * Shell
  */
-class Shell @Inject constructor() {
+class Shell {
 
     suspend fun run(command: String) = run(listOf(command))
 
@@ -32,9 +39,11 @@ class Shell @Inject constructor() {
         run(commands.toTypedArray())
 
     suspend fun run(commands: Array<String>) = withContext(coroutinesIo) {
-        Shell.SU.run(commands).toList()
+        eu.chainfire.libsuperuser.Shell.SU.run(commands).toList()
     }
 
-    suspend fun available() = withContext(coroutinesIo) { Shell.SU.available() }
+    suspend fun available() = withContext(coroutinesIo) {
+        eu.chainfire.libsuperuser.Shell.SU.available()
+    }
 
 }

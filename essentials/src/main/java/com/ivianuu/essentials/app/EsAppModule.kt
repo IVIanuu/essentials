@@ -19,51 +19,28 @@ package com.ivianuu.essentials.app
 import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
-import android.content.pm.PackageManager
 import com.ivianuu.essentials.util.EsPreferenceManager
+import com.ivianuu.injekt.*
 import com.ivianuu.kprefs.KPrefs
 import com.ivianuu.ksettings.KSettings
-import dagger.Binds
-import dagger.Module
-import dagger.Provides
-import javax.inject.Singleton
+
+fun Module.appContext() = get<Context>(APP_CONTEXT)
+
+const val APP_CONTEXT = "appContext"
 
 /**
- * Essentials app module
+ * Basic app dependencies such as preferences or package manager
  */
-@Module
-abstract class EsAppModule {
+inline fun <reified T : EsApp> esAppModule(esApp: T) = module(name = "EsAppModule") {
+    // app
+    factory { esApp } bind Application::class
+    factory(name = APP_CONTEXT) { esApp as Context }
 
-    @Binds
-    abstract fun bindApplication(esApp: EsApp): Application
+    // prefs
+    factory { EsPreferenceManager.getDefaultSharedPreferences(appContext()) }
+    single { KPrefs(get<SharedPreferences>()) }
 
-    @Binds
-    abstract fun bindContext(app: Application): Context
+    single { KSettings(appContext()) }
 
-    @Module
-    companion object {
-
-        @JvmStatic
-        @Provides
-        fun provideSharedPrefs(context: Context): SharedPreferences =
-            EsPreferenceManager.getDefaultSharedPreferences(context)
-
-        @JvmStatic
-        @Singleton
-        @Provides
-        fun provideKSharedPrefs(prefs: SharedPreferences) =
-            KPrefs(prefs)
-
-        @JvmStatic
-        @Singleton
-        @Provides
-        fun provideKSystemSettings(context: Context) =
-            KSettings(context)
-
-        @JvmStatic
-        @Provides
-        fun providePackageManager(context: Context): PackageManager = context.packageManager
-
-    }
-
+    factory { appContext().packageManager!! }
 }

@@ -16,23 +16,16 @@
 
 package com.ivianuu.essentials.app.glide
 
-import com.ivianuu.assistedinject.AssistedModule
-import com.ivianuu.essentials.app.AppInitializer
-import com.ivianuu.essentials.injection.AppInitializerKey
-import dagger.Binds
-import dagger.Module
-import dagger.multibindings.IntoMap
+import com.ivianuu.essentials.injection.provider
+import com.ivianuu.injekt.factory
+import com.ivianuu.injekt.get
+import com.ivianuu.injekt.module
 
 /**
- * Essentials app glide module
+ * Binds dependencies related to this module
  */
-@AssistedModule
-@Module(includes = [EsAppGlideModule_AssistedModule::class])
-abstract class EsAppGlideModule {
-
-    @Binds
-    @IntoMap
-    @AppInitializerKey(AppGlideInitializer::class)
-    abstract fun bindAppGlideInitializer(appGlideInitializer: AppGlideInitializer): AppInitializer
-
+fun esAppGlideModule() = module {
+    factory { AppIconModelLoader.Factory(provider()) }
+    factory { AppIconModelLoader(get()) }
+    factory { (app: AppIcon) -> AppIconFetcher(app, get()) }
 }

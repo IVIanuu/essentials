@@ -14,24 +14,12 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.securesettings
+package com.ivianuu.essentials.injection
 
-import com.ivianuu.essentials.injection.PerController
-import com.ivianuu.injectors.ContributesInjector
-import dagger.Module
+import com.ivianuu.essentials.ui.traveler.travelerModule
+import com.ivianuu.essentials.util.esUtilModule
 
 /**
- * Essentials secure settings module
+ * The core module set of Essentials
  */
-@Module(includes = [EsSecureSettingsModule_Contributions::class])
-abstract class EsSecureSettingsModule {
-
-    @PerController
-    @ContributesInjector
-    abstract fun bindSecureSettingsDialog(): SecureSettingsDialog
-
-    @PerController
-    @ContributesInjector
-    abstract fun bindSecureSettingsInstructionsController(): SecureSettingsInstructionsController
-
-}
+fun esModules() = listOf(travelerModule(), esUtilModule(), systemServiceModule())

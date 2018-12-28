@@ -30,10 +30,10 @@ import com.ivianuu.essentials.ui.traveler.key.ControllerKey
 import com.ivianuu.essentials.ui.traveler.key.key
 import com.ivianuu.essentials.util.ext.fromPref
 import com.ivianuu.essentials.util.ext.results
+import com.ivianuu.injekt.inject
 import com.ivianuu.scopes.rx.disposeBy
 import com.ivianuu.traveler.navigate
 import kotlinx.android.parcel.Parcelize
-import javax.inject.Inject
 
 @Parcelize
 class NavBarSettingsKey(
@@ -46,9 +46,11 @@ class NavBarSettingsKey(
  */
 class NavBarSettingsController : PrefsController() {
 
-    @Inject lateinit var navBarPrefs: NavBarPrefs
-    @Inject lateinit var prefs: NavBarPrefs
-    @field:NavBarSharedPrefs @Inject lateinit var navBarSharedPrefs: SharedPreferences
+    private val prefs by inject<NavBarPrefs>()
+    private val navBarSharedPrefs by inject<SharedPreferences>(NAV_BAR_SHARED_PREFS)
+
+    override val sharedPreferences: SharedPreferences
+        get() = navBarSharedPrefs
 
     override val toolbarTitleRes: Int
         get() = R.string.es_screen_label_nav_bar_settings
@@ -57,7 +59,6 @@ class NavBarSettingsController : PrefsController() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        sharedPreferences = navBarSharedPrefs // todo ugly
 
         travelerRouter.results<Boolean>(RESULT_CODE_MAIN_SWITCH)
             .filter { it }
@@ -73,7 +74,7 @@ class NavBarSettingsController : PrefsController() {
     override fun epoxyController() = epoxyController {
         if (key.showMainSwitch) {
             switchPreference {
-                fromPref(navBarPrefs.manageNavBar)
+                fromPref(prefs.manageNavBar)
                 sharedPreferences(navBarSharedPrefs)
                 title(R.string.es_pref_title_manage_nav_bar)
                 onChange<Boolean> { _, newValue ->

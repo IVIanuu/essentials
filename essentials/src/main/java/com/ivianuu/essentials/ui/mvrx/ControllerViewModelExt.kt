@@ -18,11 +18,12 @@ package com.ivianuu.essentials.ui.mvrx
 
 import androidx.lifecycle.ViewModelStoreOwner
 import com.ivianuu.essentials.ui.base.EsController
+import com.ivianuu.injekt.get
 import com.ivianuu.kommon.lifecycle.defaultViewModelKey
 
 inline fun <reified VM : MvRxViewModel<*>> EsController.activityViewModel(
     noinline key: () -> String = { VM::class.defaultViewModelKey },
-    noinline factory: () -> VM
+    noinline factory: () -> VM = { get() }
 ) = viewModel({ activity }, key, factory)
 
 inline fun <reified VM : MvRxViewModel<*>> EsController.existingActivityViewModel(
@@ -31,7 +32,7 @@ inline fun <reified VM : MvRxViewModel<*>> EsController.existingActivityViewMode
 
 inline fun <reified VM : MvRxViewModel<*>> EsController.parentViewModel(
     noinline key: () -> String = { VM::class.defaultViewModelKey },
-    noinline factory: () -> VM
+    noinline factory: () -> VM = { get() }
 ) = viewModel({ parentController as ViewModelStoreOwner }, key, factory)
 
 inline fun <reified VM : MvRxViewModel<*>> EsController.existingParentViewModel(
@@ -40,7 +41,7 @@ inline fun <reified VM : MvRxViewModel<*>> EsController.existingParentViewModel(
 
 inline fun <reified VM : MvRxViewModel<*>> EsController.targetViewModel(
     noinline key: () -> String = { VM::class.defaultViewModelKey },
-    noinline factory: () -> VM
+    noinline factory: () -> VM = { get() }
 ) = viewModel({ targetController as ViewModelStoreOwner }, key, factory)
 
 inline fun <reified VM : MvRxViewModel<*>> EsController.existingTargetViewModel(
@@ -49,7 +50,7 @@ inline fun <reified VM : MvRxViewModel<*>> EsController.existingTargetViewModel(
 
 inline fun <reified VM : MvRxViewModel<*>> EsController.getActivityViewModel(
     key: String = VM::class.defaultViewModelKey,
-    noinline factory: () -> VM
+    noinline factory: () -> VM = { get() }
 ) = getViewModel(activity, key, factory)
 
 inline fun <reified VM : MvRxViewModel<*>> EsController.getExistingActivityViewModel(
@@ -58,7 +59,7 @@ inline fun <reified VM : MvRxViewModel<*>> EsController.getExistingActivityViewM
 
 inline fun <reified VM : MvRxViewModel<*>> EsController.getParentViewModel(
     key: String = VM::class.defaultViewModelKey,
-    noinline factory: () -> VM
+    noinline factory: () -> VM = { get() }
 ) = getViewModel(parentController as ViewModelStoreOwner, key, factory)
 
 inline fun <reified VM : MvRxViewModel<*>> EsController.getExistingParentViewModel(
@@ -67,7 +68,7 @@ inline fun <reified VM : MvRxViewModel<*>> EsController.getExistingParentViewMod
 
 inline fun <reified VM : MvRxViewModel<*>> EsController.getTargetViewModel(
     key: String = VM::class.defaultViewModelKey,
-    noinline factory: () -> VM
+    noinline factory: () -> VM = { get() }
 ) = getViewModel(targetController as ViewModelStoreOwner, key, factory)
 
 inline fun <reified VM : MvRxViewModel<*>> EsController.getExistingTargetViewModel(

@@ -25,19 +25,33 @@ import com.ivianuu.director.arch.lifecycle.ControllerLifecycleOwner
 import com.ivianuu.director.arch.lifecycle.ControllerViewModelStoreOwner
 import com.ivianuu.director.dialog.DialogController
 import com.ivianuu.director.scopes.destroy
-import com.ivianuu.essentials.injection.inject
+import com.ivianuu.essentials.injection.bindInstanceModule
+import com.ivianuu.essentials.injection.componentName
+import com.ivianuu.essentials.injection.getComponentDependencies
 import com.ivianuu.essentials.ui.mvrx.MvRxView
 import com.ivianuu.essentials.util.ContextAware
 import com.ivianuu.essentials.util.asMainCoroutineScope
+import com.ivianuu.essentials.util.ext.unsafeLazy
+import com.ivianuu.injekt.ComponentHolder
+import com.ivianuu.injekt.Module
+import com.ivianuu.injekt.component
+import com.ivianuu.injekt.inject
 import com.ivianuu.traveler.Router
-import javax.inject.Inject
 
 /**
  * Base dialog controller
  */
-abstract class EsDialogController : DialogController(), ContextAware, MvRxView {
+abstract class EsDialogController : DialogController(), ComponentHolder, ContextAware, MvRxView {
 
-    @Inject lateinit var travelerRouter: Router
+    override val component by unsafeLazy {
+        component(
+            modules = implicitModules() + modules(),
+            dependencies = dependencies(),
+            name = componentName()
+        )
+    }
+
+    val travelerRouter by inject<Router>()
 
     override val providedContext: Context
         get() = activity
@@ -48,7 +62,6 @@ abstract class EsDialogController : DialogController(), ContextAware, MvRxView {
     val coroutineScope = destroy.asMainCoroutineScope()
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        onInject()
         super.onCreate(savedInstanceState)
     }
 
@@ -62,14 +75,16 @@ abstract class EsDialogController : DialogController(), ContextAware, MvRxView {
         invalidate()
     }
 
-    protected open fun onInject() {
-        inject()
-    }
-
     override fun invalidate() {
     }
 
     override fun getLifecycle(): Lifecycle = lifecycleOwner.lifecycle
 
     override fun getViewModelStore(): ViewModelStore = viewModelStoreOwner.viewModelStore
+
+    protected open fun dependencies() = getComponentDependencies()
+
+    protected open fun modules() = emptyList<Module>()
+
+    protected open fun implicitModules() = listOf(bindInstanceModule(this))
 }

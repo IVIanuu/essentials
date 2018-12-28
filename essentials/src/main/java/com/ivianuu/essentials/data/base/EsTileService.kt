@@ -3,8 +3,14 @@ package com.ivianuu.essentials.data.base
 import android.annotation.TargetApi
 import android.os.Build
 import android.service.quicksettings.TileService
+import com.ivianuu.essentials.injection.bindInstanceModule
+import com.ivianuu.essentials.injection.componentName
+import com.ivianuu.essentials.injection.getComponentDependencies
 import com.ivianuu.essentials.util.asMainCoroutineScope
-import com.ivianuu.injectors.android.inject
+import com.ivianuu.essentials.util.ext.unsafeLazy
+import com.ivianuu.injekt.ComponentHolder
+import com.ivianuu.injekt.Module
+import com.ivianuu.injekt.component
 import com.ivianuu.scopes.MutableScope
 import com.ivianuu.scopes.ReusableScope
 import com.ivianuu.scopes.Scope
@@ -13,7 +19,15 @@ import com.ivianuu.scopes.Scope
  * Base tile service
  */
 @TargetApi(Build.VERSION_CODES.N)
-abstract class EsTileService : TileService() {
+abstract class EsTileService : TileService(), ComponentHolder {
+
+    override val component by unsafeLazy {
+        component(
+            modules = implicitModules() + modules(),
+            dependencies = dependencies(),
+            name = componentName()
+        )
+    }
 
     val scope: Scope get() = _scope
     private val _scope = MutableScope()
@@ -25,11 +39,6 @@ abstract class EsTileService : TileService() {
 
     val listeningCoroutineScope get() = _listeningCoroutineScope
     private var _listeningCoroutineScope = _listeningScope.asMainCoroutineScope()
-
-    override fun onCreate() {
-        inject()
-        super.onCreate()
-    }
 
     override fun onDestroy() {
         _scope.close()
@@ -45,4 +54,11 @@ abstract class EsTileService : TileService() {
         _listeningScope.clear()
         super.onStopListening()
     }
+
+    protected open fun dependencies() = getComponentDependencies()
+
+    protected open fun modules() = emptyList<Module>()
+
+    protected open fun implicitModules() = listOf(bindInstanceModule(this))
+
 }

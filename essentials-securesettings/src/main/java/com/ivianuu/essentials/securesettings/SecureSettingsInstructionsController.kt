@@ -26,8 +26,8 @@ import com.ivianuu.essentials.ui.prefs.PrefsController
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
 import com.ivianuu.essentials.util.ext.toast
 import com.ivianuu.essentials.util.string
+import com.ivianuu.injekt.inject
 import kotlinx.android.parcel.Parcelize
-import javax.inject.Inject
 
 @Parcelize
 class SecureSettingsInstructionsKey : ControllerKey(SecureSettingsInstructionsController::class)
@@ -37,7 +37,7 @@ class SecureSettingsInstructionsKey : ControllerKey(SecureSettingsInstructionsCo
  */
 class SecureSettingsInstructionsController : PrefsController() {
 
-    @Inject lateinit var clipboardManager: ClipboardManager
+    private val clipboardManager by inject<ClipboardManager>()
 
     override val toolbarTitleRes: Int
         get() = R.string.es_screen_label_secure_settings_instructions

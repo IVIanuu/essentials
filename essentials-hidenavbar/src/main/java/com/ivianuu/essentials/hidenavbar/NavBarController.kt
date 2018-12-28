@@ -16,7 +16,6 @@
 
 package com.ivianuu.essentials.hidenavbar
 
-import android.annotation.SuppressLint
 import android.app.Application
 import android.app.KeyguardManager
 import android.content.Intent
@@ -24,7 +23,6 @@ import android.graphics.Rect
 import android.hardware.SensorManager
 import android.view.OrientationEventListener
 import android.view.Surface
-import com.ivianuu.essentials.app.AppService
 import com.ivianuu.essentials.util.BroadcastFactory
 import com.ivianuu.essentials.util.ext.combineLatest
 import com.ivianuu.essentials.util.ext.rxMain
@@ -39,24 +37,21 @@ import com.ivianuu.scopes.ReusableScope
 import com.ivianuu.scopes.rx.disposeBy
 import com.ivianuu.timberktx.d
 import io.reactivex.rxkotlin.Observables
-import javax.inject.Inject
-import javax.inject.Singleton
 
 /**
  * Handles the state of the navigation bar
  */
-@Singleton class NavBarController @Inject constructor(
+class NavBarController(
     private val broadcastFactory: BroadcastFactory,
     private val app: Application,
     private val keyguardManager: KeyguardManager,
     private val prefs: NavBarPrefs,
     private val overscanHelper: OverscanHelper
-) : AppService {
+) {
 
     private val enabledScope = ReusableScope()
 
-    @SuppressLint("CheckResult")
-    override fun start() {
+    init {
         prefs.manageNavBar.observable
             .subscribe { updateEnabledState(it) }
     }

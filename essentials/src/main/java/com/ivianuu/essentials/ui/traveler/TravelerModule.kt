@@ -1,19 +1,12 @@
 package com.ivianuu.essentials.ui.traveler
 
+import com.ivianuu.injekt.module
+import com.ivianuu.injekt.single
 import com.ivianuu.traveler.Router
-import dagger.Module
-import dagger.Provides
-import javax.inject.Singleton
 
 /**
- * Traveler module
+ * Provides the global [Router]
  */
-@Module
-object TravelerModule {
-
-    @JvmStatic
-    @Singleton
-    @Provides
-    fun provideRouter() = Router()
-
+fun travelerModule() = module(name = "TravelerModule") {
+    single { Router() }
 }

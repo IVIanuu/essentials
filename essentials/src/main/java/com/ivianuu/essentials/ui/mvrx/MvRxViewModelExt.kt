@@ -4,18 +4,19 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
+import com.ivianuu.injekt.get
 import com.ivianuu.kommon.lifecycle.defaultViewModelKey
 
 inline fun <reified VM : MvRxViewModel<*>> MvRxView.viewModel(
     noinline from: () -> ViewModelStoreOwner = { this },
     noinline key: () -> String = { VM::class.defaultViewModelKey },
-    noinline factory: () -> VM
+    noinline factory: () -> VM = { get() }
 ) = viewModelLazy { getViewModel(from(), key(), factory) }
 
 inline fun <reified VM : MvRxViewModel<*>> MvRxView.getViewModel(
     from: ViewModelStoreOwner = this,
     key: String = VM::class.defaultViewModelKey,
-    noinline factory: () -> VM
+    noinline factory: () -> VM = { get() }
 ) = viewModelProvider(from, factory).get(key, VM::class.java)
     .setupViewModel(this)
 

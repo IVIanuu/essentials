@@ -23,29 +23,38 @@ import com.ivianuu.director.attachRouter
 import com.ivianuu.director.handleBack
 import com.ivianuu.director.traveler.ControllerNavigator
 import com.ivianuu.essentials.R
+import com.ivianuu.essentials.injection.bindInstanceModule
+import com.ivianuu.essentials.injection.componentName
+import com.ivianuu.essentials.injection.getComponentDependencies
 import com.ivianuu.essentials.ui.common.RouterActivity
 import com.ivianuu.essentials.ui.mvrx.MvRxView
 import com.ivianuu.essentials.util.asMainCoroutineScope
 import com.ivianuu.essentials.util.ext.unsafeLazy
-import com.ivianuu.injectors.CompositeInjectors
-import com.ivianuu.injectors.HasInjectors
-import com.ivianuu.injectors.android.inject
+import com.ivianuu.injekt.ComponentHolder
+import com.ivianuu.injekt.Module
+import com.ivianuu.injekt.component
+import com.ivianuu.injekt.inject
 import com.ivianuu.scopes.android.lifecycle.onDestroy
 import com.ivianuu.traveler.Navigator
 import com.ivianuu.traveler.android.AppNavigator
 import com.ivianuu.traveler.common.ResultNavigator
 import com.ivianuu.traveler.common.compositeNavigatorOf
 import com.ivianuu.traveler.setRoot
-import javax.inject.Inject
 
 /**
  * Base activity
  */
-abstract class EsActivity : AppCompatActivity(), HasInjectors, MvRxView, RouterActivity {
+abstract class EsActivity : AppCompatActivity(), ComponentHolder, MvRxView, RouterActivity {
 
-    @Inject override lateinit var injectors: CompositeInjectors
+    override val component by unsafeLazy {
+        component(
+            modules = implicitModules() + modules(),
+            dependencies = dependencies(),
+            name = componentName()
+        )
+    }
 
-    @Inject lateinit var travelerRouter: com.ivianuu.traveler.Router
+    val travelerRouter by inject<com.ivianuu.traveler.Router>()
 
     val coroutineScope = onDestroy.asMainCoroutineScope()
 
@@ -72,7 +81,6 @@ abstract class EsActivity : AppCompatActivity(), HasInjectors, MvRxView, RouterA
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        onInject()
         super.onCreate(savedInstanceState)
 
         setContentView(layoutRes)
@@ -101,10 +109,6 @@ abstract class EsActivity : AppCompatActivity(), HasInjectors, MvRxView, RouterA
         }
     }
 
-    protected open fun onInject() {
-        inject()
-    }
-
     protected open fun onInitializeRouter(savedInstanceState: Bundle?) {
         router = attachRouter(containerId, savedInstanceState)
 
@@ -114,4 +118,10 @@ abstract class EsActivity : AppCompatActivity(), HasInjectors, MvRxView, RouterA
     }
 
     protected open fun navigators() = emptyList<ResultNavigator>()
+
+    protected open fun dependencies() = getComponentDependencies()
+
+    protected open fun modules() = emptyList<Module>()
+
+    protected open fun implicitModules() = listOf(bindInstanceModule(this))
 }

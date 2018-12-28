@@ -14,27 +14,18 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.injection
+package com.ivianuu.essentials.util
 
-import com.ivianuu.essentials.app.AppService
-import dagger.MapKey
-import dagger.Module
-import dagger.multibindings.Multibinds
-import kotlin.reflect.KClass
+import android.content.Context
+import android.content.ContextWrapper
+import com.ivianuu.injekt.ComponentHolder
 
 /**
- * Map key for [AppService]s
+ * Wraps a [Context] and is a [ComponentHolder]
+ * to make it possible to inject stuff from a [com.ivianuu.director.Controller]
+ * into [android.view.View]s
  */
-@MapKey
-annotation class AppServiceKey(val value: KClass<out AppService>)
-
-/**
- * App service module
- */
-@Module
-internal abstract class AppServiceModule {
-
-    @Multibinds
-    abstract fun bindAppServices(): Map<Class<out AppService>, @JvmSuppressWildcards AppService>
-
-}
+class ComponentHolderContextWrapper(
+    context: Context,
+    componentHolder: ComponentHolder
+) : ContextWrapper(context), ComponentHolder by componentHolder
