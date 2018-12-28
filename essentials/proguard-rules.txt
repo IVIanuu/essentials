@@ -1,17 +1,3 @@
-# View models
--keepclassmembernames class android.arch.lifecycle.ViewModelStore { *; }
-
-# Dagger AndroidInjectionKey
--keepnames public class * extends android.app.Application
--keepnames public class * extends android.app.Activity
--keepnames public class * extends android.content.BroadcastReceiver
--keepnames public class * extends android.content.ContentProvider
--keepnames public class * extends android.app.Service
--keepnames public class * extends android.view.View
--keepnames public class * extends androidx.fragment.app.Fragment
--keepnames public class * extends androidx.work.Worker
--keepnames public class * extends com.ivianuu.director.Controller
-
 # Coroutines
 -keepclassmembernames class kotlinx.** {
     volatile <fields>;
