@@ -28,9 +28,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModel
 import com.ivianuu.director.arch.lifecycle.LifecycleController
 import com.ivianuu.essentials.app.AppInitializer
-import com.ivianuu.essentials.app.RxJavaAppInitializer
 import com.ivianuu.essentials.app.TimberAppInitializer
-import com.ivianuu.essentials.sample.injekt.*
+import com.ivianuu.essentials.sample.injekt.activityModule
+import com.ivianuu.essentials.sample.injekt.appInitializer
+import com.ivianuu.essentials.sample.injekt.controllerComponent
+import com.ivianuu.essentials.sample.injekt.viewModel
 import com.ivianuu.essentials.sample.perfs.runPerfTest
 import com.ivianuu.essentials.util.ext.unsafeLazy
 import com.ivianuu.injekt.*
@@ -110,12 +112,6 @@ class MainViewModel(
 
 fun mainActivityModule(activity: MainActivity) = activityModule(activity, "MainActivityModule") {
     single(createOnStart = true) { MyEagerDep() }
-
-    appInitializer { RxJavaAppInitializer() }
-
-    single { TimberAppInitializer() } intoClassMap { AppInitializer::class to APP_INITIALIZERS }
-
-    single { RxJavaAppInitializer() } intoClassMap AppInitializer::class
 }
 
 fun myControllerModule(controller: MyController) = module(name = "MyControllerModule") {
@@ -132,7 +128,7 @@ fun myControllerModule(controller: MyController) = module(name = "MyControllerMo
             get(),
             get(),
             get("username"),
-            component.getMap(APP_INITIALIZERS)
+            emptyMap()
         )
     }
 }

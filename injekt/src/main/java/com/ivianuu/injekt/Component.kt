@@ -42,7 +42,7 @@ class Component internal constructor(val name: String?) {
     }
 
     /**
-     * Adds all
+     * Adds all [Declaration]s of [dependency] to this component
      */
     fun addDependency(dependency: Component) {
         dependency.declarations.forEach { saveDeclaration(it, dependency) }
@@ -83,40 +83,6 @@ class Component internal constructor(val name: String?) {
         params: ParamsDefinition? = null
     ) = getInternal(type, name, params)
 
-    fun <T : Any> getSet(
-        type: KClass<T>,
-        name: String? = null,
-        params: ParamsDefinition? = null
-    ): Set<T> {
-        val declarations = getSetBindings(type, name)
-
-        return declarations.map { it.resolveInstance(params) }
-            .toSet() as Set<T>
-    }
-
-    fun <T : Any> getLazySet(
-        type: KClass<T>,
-        name: String? = null,
-        params: ParamsDefinition? = null
-    ): Set<() -> T> {
-        val declarations = getSetBindings(type, name)
-        return declarations.map { { it.resolveInstance(params) } }
-            .toSet() as Set<() -> T>
-    }
-
-    fun <K : Any, T : Any> getMap(
-        keyType: KClass<K>,
-        type: KClass<T>,
-        name: String? = null,
-        params: ParamsDefinition? = null
-    ): Map<K, T> {
-        val declarations = getMapBindings(type, keyType, name)
-        return declarations.map {
-            val binding = it.mapBindings.first { it.keyType == keyType }
-            binding.key to it.resolveInstance(params)
-        }.toMap() as Map<K, T>
-    }
-
     private fun <T : Any> getInternal(
         type: KClass<T>,
         name: String?,
@@ -141,26 +107,4 @@ class Component internal constructor(val name: String?) {
         declarationsByType[type]
     }
 
-    private fun getSetBindings(
-        type: KClass<*>,
-        name: String?
-    ) = declarations
-        .filter { declaration ->
-            declaration.setBindings
-                .any { it.type == type && it.name == name }
-        }
-
-    private fun getMapBindings(
-        type: KClass<*>,
-        keyType: KClass<*>,
-        name: String?
-    ) = declarations
-        .filter { declaration ->
-            declaration.mapBindings
-                .any {
-                    it.type == type
-                            && it.keyType == keyType
-                            && it.name == name
-                }
-        }
 }

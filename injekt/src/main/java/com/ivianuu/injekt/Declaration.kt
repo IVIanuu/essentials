@@ -12,8 +12,6 @@ data class Declaration<T : Any> private constructor(
 
     var options = Options()
     var secondaryTypes: List<KClass<*>> = emptyList()
-    var setBindings: List<SetBinding<*>> = emptyList()
-    var mapBindings: List<MapBinding<*, *>> = emptyList()
 
     lateinit var kind: Kind
     lateinit var definition: Definition<T>
@@ -41,22 +39,6 @@ data class Declaration<T : Any> private constructor(
         }
     }
 
-    infix fun intoSet(options: SetBinding<*>) {
-        if (!options.type.java.isAssignableFrom(this.primaryType.java)) {
-            throw IllegalArgumentException("Can't bind kind '${options.type}' for definition $this")
-        } else {
-            setBindings += options
-        }
-    }
-
-    infix fun intoMap(options: MapBinding<*, *>) {
-        if (!options.type.java.isAssignableFrom(this.primaryType.java)) {
-            throw IllegalArgumentException("Can't bind kind '${options.type}' for definition $this")
-        } else {
-            mapBindings += options
-        }
-    }
-
     override fun toString(): String {
         val kind = kind.toString()
         val name = name?.let { "name:'$name', " } ?: ""
@@ -65,15 +47,7 @@ data class Declaration<T : Any> private constructor(
             val typesAsString = secondaryTypes.joinToString(", ") { it.getFullName() }
             ", secondary types:$typesAsString"
         } else ""
-        val setBindings = if (setBindings.isNotEmpty()) {
-            val typesAsString = setBindings.joinToString(", ")
-            ", set bindings :$typesAsString"
-        } else ""
-        val mapBindings = if (setBindings.isNotEmpty()) {
-            val typesAsString = mapBindings.joinToString(", ")
-            ", map bindings :$typesAsString"
-        } else ""
-        return "$kind[$name$type$secondaryTypes$setBindings$mapBindings]"
+        return "$kind[$name$type$secondaryTypes]"
     }
 
     enum class Kind { FACTORY, SINGLE }

@@ -20,6 +20,7 @@ class Module internal constructor(
         if (componentSet) {
             error("${nameString()}Modules cannot be reused")
         }
+        componentSet = true
 
         this.component = component
     }
@@ -168,21 +169,6 @@ fun <T : S, S : Any> Module.bind(
         ?: throw IllegalArgumentException("no declaration found for $type")
 
     declaration.bind(to)
-}
-
-/**
- * Adds a binding for [type] and [name] to [to] to a previously added [Declaration]
- */
-inline fun <reified T : Any, reified S : Any> Module.bindIntoSet(
-    declarationName: String? = null,
-    setBinding: SetBinding<S>
-) = getDeclaration(S::class, declarationName).intoSet(setBinding)
-
-inline fun <reified T : Any, reified S : Any> Module.bindIntoSet(
-    declarationName: String? = null,
-    setName: String? = null
-) {
-    bindIntoSet<T, S>(declarationName, setBinding<S>(setName))
 }
 
 @PublishedApi

@@ -45,8 +45,3 @@ fun <T : Any> Component.inject(
     name: String? = null,
     params: ParamsDefinition? = null
 ) = lazy { get(type, name, params) }
-
-inline fun <reified K : Any, reified T : Any> Component.getMap(
-    name: String? = null,
-    noinline params: ParamsDefinition? = null
-) = getMap(K::class, T::class, name, params)
