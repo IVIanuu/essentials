@@ -11,7 +11,8 @@ import kotlin.reflect.KClass
 
 fun Activity.activityComponent(
     modules: List<Module> = emptyList(),
-    dependencies: List<Component> = emptyList()
+    dependencies: List<Component> = emptyList(),
+    name: String? = null
 ): Component {
     val deps = mutableListOf<Component>()
 
@@ -22,20 +23,23 @@ fun Activity.activityComponent(
 
     return component(
         modules = modules,
-        dependencies = dependencies
+        dependencies = dependencies,
+        name = name
     )
 }
 
 inline fun <reified T : AppCompatActivity> activityModule(
     activity: T,
+    name: String? = null,
     noinline definition: ModuleDefinition? = null
-) = activityModule(T::class, activity, definition)
+) = activityModule(T::class, activity, name, definition)
 
 fun <T : AppCompatActivity> activityModule(
     type: KClass<T>,
     activity: T,
+    name: String? = null,
     definition: ModuleDefinition? = null
-) = module {
+) = module(name = name) {
     factory(type) { activity }
 
     bind(type, AppCompatActivity::class)

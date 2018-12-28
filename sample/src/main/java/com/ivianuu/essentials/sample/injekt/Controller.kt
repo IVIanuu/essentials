@@ -9,7 +9,8 @@ import com.ivianuu.injekt.component
 
 fun Controller.controllerComponent(
     modules: List<Module> = emptyList(),
-    dependencies: List<Component> = emptyList()
+    dependencies: List<Component> = emptyList(),
+    name: String? = null
 ): Component {
     val deps = mutableSetOf<Component>()
 
@@ -26,6 +27,7 @@ fun Controller.controllerComponent(
 
     return component(
         modules = modules,
-        dependencies = deps
+        dependencies = deps,
+        name = name
     )
 }

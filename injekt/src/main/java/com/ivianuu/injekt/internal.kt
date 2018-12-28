@@ -32,6 +32,18 @@ internal inline fun error(msgAndThrowable: () -> Pair<String, Throwable?>) {
     }
 }
 
+internal fun Component.nameString() = if (name != null) {
+    "$name "
+} else {
+    ""
+}
+
+internal fun Module.nameString() = if (name != null) {
+    "$name "
+} else {
+    ""
+}
+
 internal fun measureDurationOnly(code: () -> Unit): Double {
     val start = System.nanoTime()
     code()

@@ -14,8 +14,9 @@ fun component(vararg modules: Module) =
  */
 fun component(
     modules: Collection<Module> = emptyList(),
-    dependencies: Collection<Component> = emptyList()
-) = Component().apply {
+    dependencies: Collection<Component> = emptyList(),
+    name: String? = null
+) = Component(name).apply {
     dependencies.forEach { addDependency(it) }
     modules.forEach { addModule(it) }
 }

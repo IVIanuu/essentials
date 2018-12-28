@@ -30,10 +30,13 @@ class App : EsApp(), ComponentHolder {
 
     override val component by unsafeLazy {
         component(
-            module {
-                single("username") { "Manuel" }
-                factory<Context> { this@App }
-            }
+            modules = listOf(
+                module(name = "AppModule") {
+                    single("username") { "Manuel" }
+                    factory<Context> { this@App }
+                }
+            ),
+            name = "AppComponent"
         )
     }
 
@@ -43,6 +46,7 @@ class App : EsApp(), ComponentHolder {
     override fun onCreate() {
         super.onCreate()
         InjektPlugins.logger = TimberLogger()
+        component
     }
 
 }

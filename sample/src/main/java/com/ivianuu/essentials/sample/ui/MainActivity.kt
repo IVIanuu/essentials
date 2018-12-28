@@ -49,7 +49,7 @@ import kotlin.reflect.KClass
 class MainActivity : EsActivity(), ComponentHolder {
 
     override val component =
-        activityComponent(listOf(mainActivityModule(this)))
+        activityComponent(listOf(mainActivityModule(this)), name = "MainActivityComponent")
 
     override val startKey: Any? get() = CounterKey(1)
 
@@ -68,7 +68,7 @@ class MainActivity : EsActivity(), ComponentHolder {
 class MyController : LifecycleController(), ComponentHolder {
 
     override val component by unsafeLazy {
-        controllerComponent(listOf(myControllerModule(this)))
+        controllerComponent(listOf(myControllerModule(this)), name = "MyControllerComponent")
     }
 
     private val viewModel by inject<MainViewModel> { parametersOf("123456") }
@@ -119,13 +119,13 @@ class MainViewModel(
 
 }
 
-fun mainActivityModule(activity: MainActivity) = activityModule(activity) {
+fun mainActivityModule(activity: MainActivity) = activityModule(activity, "MainActivityModule") {
     single(createOnStart = true) { MyEagerDep() }
 
     appInitializer { RxJavaAppInitializer() }
 }
 
-fun myControllerModule(controller: MyController) = module {
+fun myControllerModule(controller: MyController) = module(name = "MyControllerModule") {
     factory { controller }
 
     appInitializer { TimberAppInitializer() }

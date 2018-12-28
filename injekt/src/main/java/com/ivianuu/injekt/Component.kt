@@ -5,7 +5,7 @@ import kotlin.reflect.KClass
 /**
  * The actual dependency container which provides declarations
  */
-class Component internal constructor() {
+class Component internal constructor(val name: String?) {
 
     private val declarations = mutableListOf<Declaration<*>>()
     private val declarationsByName = mutableMapOf<String, Declaration<*>>()
@@ -15,33 +15,41 @@ class Component internal constructor() {
      * Adds all [Declaration]s of the [module]
      */
     fun addModule(module: Module) {
-        module.declarations.forEach { saveDeclaration(it, false) }
+        module.setComponent(this)
+        module.declarations.forEach {
+            saveDeclaration(it)
+            setInstanceComponent(it)
+            createEagerInstance(it)
+        }
+    }
+
+    private fun createEagerInstance(declaration: Declaration<*>) {
+        if (declaration.options.createOnStart) {
+            declaration.resolveInstance(null)
+        }
+    }
+
+    private fun setInstanceComponent(declaration: Declaration<*>) {
+        declaration.instance.component = this
     }
 
     /**
      * Adds all
      */
     fun addDependency(dependency: Component) {
-        dependency.declarations.forEach { saveDeclaration(it, true) }
+        dependency.declarations.forEach { saveDeclaration(it) }
     }
 
-    private fun saveDeclaration(
-        declaration: Declaration<*>,
-        fromDependency: Boolean
-    ) {
+    private fun saveDeclaration(declaration: Declaration<*>) {
         val isOverride = declarations.remove(declaration)
 
         if (isOverride && !declaration.options.override) {
-            throw OverrideException("Try to override declaration $declaration")
+            throw OverrideException("${nameString()}Try to override declaration $declaration")
         }
 
         info {
             val kw = if (isOverride) "Override" else "Declare"
-            "$kw $declaration"
-        }
-
-        if (!fromDependency) {
-            declaration.instance.component = this
+            "${nameString()}$kw $declaration"
         }
 
         declarations.add(declaration)
@@ -50,10 +58,6 @@ class Component internal constructor() {
             declarationsByName[declaration.name] = declaration
         } else {
             declarationsByType[declaration.primaryType] = declaration
-        }
-
-        if (!fromDependency && declaration.options.createOnStart) {
-            declaration.instance.get(null)
         }
     }
 
@@ -111,7 +115,7 @@ class Component internal constructor() {
             @Suppress("UNCHECKED_CAST")
             declaration.resolveInstance(params) as T
         } else {
-            throw InjectionException("Could not find declaration for ${type.java.name + name.orEmpty()}")
+            throw InjectionException("${nameString()}Could not find declaration for ${type.java.name + name.orEmpty()}")
         }
     }
 

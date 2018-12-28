@@ -11,9 +11,9 @@ abstract class Instance<T : Any>(val declaration: Declaration<T>) {
 
     fun get(params: ParamsDefinition?): T {
         if (isCreated) {
-            debug { "Returning existing instance for $declaration" }
+            info { "${component.nameString()}Returning existing instance for $declaration" }
         } else {
-            debug { "Created instance for $declaration" }
+            info { "${component.nameString()}Created instance for $declaration" }
         }
 
         return getInternal(params)
@@ -25,7 +25,10 @@ abstract class Instance<T : Any>(val declaration: Declaration<T>) {
         } catch (e: InjektException) {
             throw e
         } catch (e: Exception) {
-            throw InstanceCreationException("Could not instantiate $declaration", e)
+            throw InstanceCreationException(
+                "${component.nameString()}Could not instantiate $declaration",
+                e
+            )
         }
     }
 
@@ -41,9 +44,7 @@ internal class FactoryInstance<T : Any>(
         get() = false
 
     override fun getInternal(params: ParamsDefinition?) =
-        declaration.definition.invoke(
-            DeclarationBuilder(component), params?.invoke() ?: emptyParameters()
-        )
+        declaration.definition.invoke(params?.invoke() ?: emptyParameters())
 
 }
 
@@ -72,10 +73,8 @@ internal class SingleInstance<T : Any>(
             if (_v2 !== UNINITIALIZED_VALUE) {
                 @Suppress("UNCHECKED_CAST") (_v2 as T)
             } else {
-                val typedValue = declaration.definition.invoke(
-                    DeclarationBuilder(component),
-                    params?.invoke() ?: emptyParameters()
-                )
+                val typedValue = declaration.definition
+                    .invoke(params?.invoke() ?: emptyParameters())
                 _value = typedValue
                 typedValue
             }

@@ -8,8 +8,22 @@ import kotlin.reflect.KClass
  */
 class Module internal constructor(
     val createOnStart: Boolean,
-    val override: Boolean
+    val override: Boolean,
+    val name: String?
 ) {
+
+    lateinit var component: Component
+        private set
+    private var componentSet = false
+
+    internal fun setComponent(component: Component) {
+        if (componentSet) {
+            error("${nameString()}Modules cannot be reused")
+        }
+
+        this.component = component
+    }
+
     internal val declarations = mutableListOf<Declaration<*>>()
     internal val declarationsByName = mutableMapOf<String, Declaration<*>>()
     internal val declarationsByType = mutableMapOf<KClass<*>, Declaration<*>>()
@@ -25,8 +39,6 @@ class Module internal constructor(
 
         declaration.options.createOnStart = createOnStart
         declaration.options.override = override
-
-        debug { "Declare $declaration" }
 
         declarations.add(declaration)
 
@@ -47,8 +59,9 @@ class Module internal constructor(
 fun module(
     createOnStart: Boolean = false,
     override: Boolean = false,
+    name: String? = null,
     definition: ModuleDefinition
-) = Module(createOnStart, override).apply(definition)
+) = Module(createOnStart, override, name).apply(definition)
 
 /**
  * Provides a dependency
@@ -198,16 +211,14 @@ internal fun Module.getDeclaration(type: KClass<*>, name: String?): Declaration<
     } ?: throw IllegalArgumentException("no declaration found for type: $type name: $name")
 }
 
-class DeclarationBuilder(val component: Component)
-
 /** Calls trough [Component.get] */
-inline fun <reified T : Any> DeclarationBuilder.get(
+inline fun <reified T : Any> Module.get(
     name: String? = null,
     noinline params: ParamsDefinition? = null
 ) = get(T::class, name, params)
 
 /** Calls trough [Component.get] */
-fun <T : Any> DeclarationBuilder.get(
+fun <T : Any> Module.get(
     type: KClass<T>,
     name: String? = null,
     params: ParamsDefinition? = null
