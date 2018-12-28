@@ -16,7 +16,6 @@
 
 package com.ivianuu.essentials.sample.app
 
-import android.app.Application
 import com.ivianuu.essentials.app.EsApp
 import com.ivianuu.essentials.sample.injekt.TimberLogger
 import com.ivianuu.essentials.util.ext.unsafeLazy
@@ -31,7 +30,6 @@ class App : EsApp(), ComponentHolder {
     override val component by unsafeLazy {
         component(
             module {
-                factory<Application> { this@App }
                 single("username") { "Manuel" }
             }
         )

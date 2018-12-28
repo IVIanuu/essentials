@@ -22,7 +22,7 @@ fun component(
  */
 inline fun <reified T : Any> Component.get(
     name: String? = null,
-    noinline params: () -> Parameters = emptyParametersProvider
+    noinline params: ParamsDefinition? = null
 ) = get(T::class, name, params)
 
 /**
@@ -30,7 +30,7 @@ inline fun <reified T : Any> Component.get(
  */
 inline fun <reified T : Any> Component.inject(
     name: String? = null,
-    noinline params: () -> Parameters = emptyParametersProvider
+    noinline params: ParamsDefinition? = null
 ) = inject(T::class, name, params)
 
 /**
@@ -39,5 +39,10 @@ inline fun <reified T : Any> Component.inject(
 fun <T : Any> Component.inject(
     type: KClass<T>,
     name: String? = null,
-    params: () -> Parameters = emptyParametersProvider
+    params: ParamsDefinition? = null
 ) = lazy { get(type, name, params) }
+
+inline fun <reified K : Any, reified T : Any> Component.getMap(
+    name: String? = null,
+    noinline params: ParamsDefinition? = null
+) = getMap(K::class, T::class, name, params)

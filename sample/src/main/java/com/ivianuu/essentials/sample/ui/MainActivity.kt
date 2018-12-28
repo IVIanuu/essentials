@@ -25,16 +25,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModel
-import com.ivianuu.director.SimpleSwapChangeHandler
+import com.ivianuu.director.*
 import com.ivianuu.director.arch.lifecycle.LifecycleController
-import com.ivianuu.director.pushChangeHandler
-import com.ivianuu.director.pushController
-import com.ivianuu.director.toTransaction
+import com.ivianuu.essentials.app.AppInitializer
+import com.ivianuu.essentials.app.RxJavaAppInitializer
+import com.ivianuu.essentials.app.TimberAppInitializer
 import com.ivianuu.essentials.hidenavbar.NavBarSettingsKey
-import com.ivianuu.essentials.sample.injekt.activityComponent
-import com.ivianuu.essentials.sample.injekt.activityModule
-import com.ivianuu.essentials.sample.injekt.controllerComponent
-import com.ivianuu.essentials.sample.injekt.viewModel
+import com.ivianuu.essentials.sample.injekt.*
 import com.ivianuu.essentials.sample.ui.counter.CounterKey
 import com.ivianuu.essentials.ui.base.EsActivity
 import com.ivianuu.essentials.ui.base.EsActivityModule
@@ -44,6 +41,7 @@ import com.ivianuu.timberktx.d
 import com.ivianuu.traveler.navigate
 import dagger.Binds
 import dagger.Module
+import kotlin.reflect.KClass
 
 class MainActivity : EsActivity(), ComponentHolder {
 
@@ -70,7 +68,7 @@ class MyController : LifecycleController(), ComponentHolder {
         controllerComponent(listOf(myControllerModule(this)))
     }
 
-    private val viewModel by viewModel<MainViewModel> { parametersOf("my_password") }
+    private val viewModel by inject<MainViewModel> { parametersOf("123456") }
 
     override fun onInflateView(
         inflater: LayoutInflater,
@@ -81,6 +79,10 @@ class MyController : LifecycleController(), ComponentHolder {
     override fun onBindView(view: View, savedViewState: Bundle?) {
         super.onBindView(view, savedViewState)
         viewModel.print()
+
+        val appInitializers = component.getSet(AppInitializer::class)
+
+        d { "app initializers $appInitializers" }
     }
 
 }
@@ -107,21 +109,38 @@ class MainViewModel(
     private val mainActivity: MainActivity,
     private val context: Context,
     private val resources: Resources,
-    private val name: String
+    private val name: String,
+    private val appInitializers: Map<KClass<out AppInitializer>, AppInitializer>
 ) : ViewModel() {
 
     fun print() {
         d { "hello $name password is $password" }
+        d { "app initializers $appInitializers" }
     }
 
 }
 
 fun mainActivityModule(activity: MainActivity) = activityModule(activity) {
     single(createOnStart = true) { MyEagerDep() }
+    //   factory { RxJavaAppInitializer() } intoSet setBinding<AppInitializer>("SET_BINDINGS")
+
+    appInitializer { RxJavaAppInitializer() }
 }
 
 fun myControllerModule(controller: MyController) = module {
     factory { controller }
+
+    bindIntoSet<Controller, MyController>(setName = APP_INITIALIZERS)
+
+//    factory { RxJavaAppInitializer() } intoSet AppInitializer::class
+
+    appInitializer { TimberAppInitializer() }
+
+//    factory { controller } intoMap classMapBinding<AppInitializer>(RxJavaAppInitializer::class)
+
+//    factory { controller } intoMap stringMapBinding<AppInitializer>("key")
+
+    //   factory { controller }.intoStringMap { Controller::class to "main" }
 
     viewModel { (password: String) ->
         MainViewModel(
@@ -131,7 +150,10 @@ fun myControllerModule(controller: MyController) = module {
             get(),
             get(),
             get(),
-            get("username")
+            get("username"),
+            component.getMap(APP_INITIALIZERS)
         )
     }
+
+    //factory { TimberAppInitializer() } intoSet AppInitializer::class
 }

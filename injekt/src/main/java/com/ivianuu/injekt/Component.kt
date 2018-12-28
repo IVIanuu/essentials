@@ -16,7 +16,6 @@ class Component internal constructor(
 
     init {
         modules
-            .flatMap { (listOf(it) + it.subModules) }
             .flatMap { it.declarations }
             .forEach { declaration ->
                 val isOverride = declarations.remove(declaration)
@@ -27,7 +26,7 @@ class Component internal constructor(
                     ) != null
                 }
 
-                if (isOverride && !declaration.override) {
+                if (isOverride && !declaration.options.override) {
                     throw OverrideException("Try to override declaration $declaration")
                 }
 
@@ -40,8 +39,8 @@ class Component internal constructor(
 
                 declarations.add(declaration)
 
-                if (declaration.eager) {
-                    declaration.instance.get(emptyParameters())
+                if (declaration.options.createOnStart) {
+                    declaration.instance.get(null)
                 }
             }
     }
@@ -52,26 +51,58 @@ class Component internal constructor(
     fun <T : Any> get(
         type: KClass<T>,
         name: String? = null,
-        params: () -> Parameters = emptyParametersProvider
+        params: ParamsDefinition? = null
     ) = getInternal(type, name, params)
+
+    fun <T : Any> getSet(
+        type: KClass<T>,
+        name: String? = null,
+        params: ParamsDefinition? = null
+    ): Set<T> {
+        val declarations = (listOf(this) + dependencies)
+            .flatMap { it.getSetBindings(type, name) }
+
+        return declarations.map { it.resolveInstance(params) }
+            .toSet() as Set<T>
+    }
+
+    fun <T : Any> getLazySet(
+        type: KClass<T>,
+        name: String? = null,
+        params: ParamsDefinition? = null
+    ): Set<() -> T> {
+        val declarations = (listOf(this) + dependencies)
+            .flatMap { it.getSetBindings(type, name) }
+
+        return declarations.map { { it.resolveInstance(params) } }
+            .toSet() as Set<() -> T>
+    }
+
+    fun <K : Any, T : Any> getMap(
+        keyType: KClass<K>,
+        type: KClass<T>,
+        name: String? = null,
+        params: ParamsDefinition? = null
+    ): Map<K, T> {
+        val declarations = (listOf(this) + dependencies)
+            .flatMap { it.getMapBindings(type, keyType, name) }
+
+        return declarations.map {
+            val binding = it.mapBindings.first { it.keyType == keyType }
+            binding.key to it.resolveInstance(params)
+        }.toMap() as Map<K, T>
+    }
 
     private fun <T : Any> getInternal(
         type: KClass<T>,
         name: String?,
-        params: () -> Parameters
+        params: ParamsDefinition?
     ): T = synchronized(this) {
         val declaration = findDeclaration(type, name)
 
         return if (declaration != null) {
             @Suppress("UNCHECKED_CAST")
-
-            if (declaration.instance.isCreated) {
-                debug { "Returning existing instance for $declaration" }
-            } else {
-                debug { "Created instance for $declaration" }
-            }
-
-            declaration.instance.create(params()) as T
+            declaration.resolveInstance(params) as T
         } else {
             throw InjectionException("Could not find declaration for ${type.java.name + name.orEmpty()}")
         }
@@ -116,4 +147,27 @@ class Component internal constructor(
 
         return null
     }
+
+    private fun getSetBindings(
+        type: KClass<*>,
+        name: String?
+    ) = declarations
+        .filter { declaration ->
+            declaration.setBindings
+                .any { it.type == type && it.name == name }
+        }
+
+    private fun getMapBindings(
+        type: KClass<*>,
+        keyType: KClass<*>,
+        name: String?
+    ) = declarations
+        .filter { declaration ->
+            declaration.mapBindings
+                .any {
+                    it.type == type
+                            && it.keyType == keyType
+                            && it.name == name
+                }
+        }
 }

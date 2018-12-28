@@ -41,6 +41,3 @@ fun parametersOf(vararg values: Any?) = Parameters(*values)
  * Returns empty [Parameters]
  */
 fun emptyParameters() = parametersOf()
-
-@PublishedApi
-internal val emptyParametersProvider = { emptyParameters() }

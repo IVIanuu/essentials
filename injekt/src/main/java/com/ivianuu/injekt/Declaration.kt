@@ -10,18 +10,23 @@ data class Declaration<T : Any> private constructor(
     val name: String?
 ) {
 
-    var override = false
-    var eager = false
+    var options = Options()
     var secondaryTypes: List<KClass<*>> = emptyList()
+    var setBindings: List<SetBinding<*>> = emptyList()
+    var mapBindings: List<MapBinding<*, *>> = emptyList()
 
     lateinit var kind: Kind
-    lateinit var provider: DeclarationBuilder.(Parameters) -> T
+    lateinit var definition: Definition<T>
     lateinit var instance: Instance<T>
 
     internal val classes: List<KClass<*>> get() = listOf(primaryType) + secondaryTypes
 
+    fun resolveInstance(
+        params: ParamsDefinition?
+    ) = instance.get(params)
+
     /**
-     * Add a compatible kind to current bounded definition
+     * Binds this [Declaration] to [type]
      */
     infix fun bind(type: KClass<*>) = apply {
         if (secondaryTypes.contains(type)) return@apply
@@ -33,11 +38,20 @@ data class Declaration<T : Any> private constructor(
         }
     }
 
-    /**
-     * Add a compatible kind to current bounded definition
-     */
-    infix fun binds(types: Array<KClass<*>>) = apply {
-        types.forEach { bind(it) }
+    infix fun intoSet(options: SetBinding<*>) {
+        if (!options.type.java.isAssignableFrom(this.primaryType.java)) {
+            throw IllegalArgumentException("Can't bind kind '${options.type}' for definition $this")
+        } else {
+            setBindings += options
+        }
+    }
+
+    infix fun intoMap(options: MapBinding<*, *>) {
+        if (!options.type.java.isAssignableFrom(this.primaryType.java)) {
+            throw IllegalArgumentException("Can't bind kind '${options.type}' for definition $this")
+        } else {
+            mapBindings += options
+        }
     }
 
     override fun toString(): String {
@@ -48,7 +62,15 @@ data class Declaration<T : Any> private constructor(
             val typesAsString = secondaryTypes.joinToString(", ") { it.getFullName() }
             ", secondary types:$typesAsString"
         } else ""
-        return "$kind[$name$type$secondaryTypes]"
+        val setBindings = if (setBindings.isNotEmpty()) {
+            val typesAsString = setBindings.joinToString(", ")
+            ", set bindings :$typesAsString"
+        } else ""
+        val mapBindings = if (setBindings.isNotEmpty()) {
+            val typesAsString = mapBindings.joinToString(", ")
+            ", map bindings :$typesAsString"
+        } else ""
+        return "$kind[$name$type$secondaryTypes$setBindings$mapBindings]"
     }
 
     enum class Kind { FACTORY, SINGLE }
@@ -59,7 +81,7 @@ data class Declaration<T : Any> private constructor(
             primaryType: KClass<T>,
             name: String? = null,
             kind: Kind,
-            provider: DeclarationBuilder.(Parameters) -> T
+            definition: Definition<T>
         ): Declaration<T> {
             val declaration = Declaration(primaryType, name)
 
@@ -70,7 +92,7 @@ data class Declaration<T : Any> private constructor(
                 Kind.SINGLE -> SingleInstance(declaration)
             }
 
-            declaration.provider = provider
+            declaration.definition = definition
 
             return declaration
         }

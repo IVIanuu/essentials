@@ -10,8 +10,9 @@ class Module internal constructor(
     val createOnStart: Boolean,
     val override: Boolean
 ) {
-    internal var declarations = mutableListOf<Declaration<*>>()
-    internal val subModules = mutableListOf<Module>()
+    internal val declarations = mutableListOf<Declaration<*>>()
+    internal val declarationsByName = mutableMapOf<String, Declaration<*>>()
+    internal val declarationsByType = mutableMapOf<KClass<*>, Declaration<*>>()
 
     /**
      * Adds the [declaration]
@@ -19,23 +20,23 @@ class Module internal constructor(
     fun <T : Any> declare(
         declaration: Declaration<T>
     ): Declaration<T> {
-        val createOnStart = if (createOnStart) createOnStart else declaration.eager
-        val override = if (override) override else declaration.override
+        val createOnStart = if (createOnStart) createOnStart else declaration.options.createOnStart
+        val override = if (override) override else declaration.options.override
 
-        declaration.eager = createOnStart
-        declaration.override = override
+        declaration.options.createOnStart = createOnStart
+        declaration.options.override = override
 
         declarations.add(declaration)
+
+        if (declaration.name != null) {
+            declarationsByName[declaration.name]
+        } else {
+            declarationsByType[declaration.primaryType]
+        }
 
         return declaration
     }
 
-    /**
-     * Adds the [module] to [Module.subModules]
-     */
-    fun module(module: Module) {
-        subModules.add(module)
-    }
 }
 
 /**
@@ -53,8 +54,8 @@ fun module(
 inline fun <reified T : Any> Module.factory(
     name: String? = null,
     override: Boolean = false,
-    noinline provider: DeclarationBuilder.(Parameters) -> T
-) = factory(type = T::class, name = name, override = override, provider = provider)
+    noinline definition: Definition<T>
+) = factory(type = T::class, name = name, override = override, definition = definition)
 
 /**
  * Provides a dependency
@@ -63,14 +64,14 @@ fun <T : Any> Module.factory(
     type: KClass<T>,
     name: String? = null,
     override: Boolean = false,
-    provider: DeclarationBuilder.(Parameters) -> T
+    definition: Definition<T>
 ) = declare(
     type = type,
     kind = Kind.FACTORY,
     name = name,
     createOnStart = false,
     override = override,
-    provider = provider
+    definition = definition
 )
 
 /**
@@ -80,13 +81,13 @@ inline fun <reified T : Any> Module.single(
     name: String? = null,
     override: Boolean = false,
     createOnStart: Boolean = false,
-    noinline provider: DeclarationBuilder.(Parameters) -> T
+    noinline definition: Definition<T>
 ) = single(
     type = T::class,
     name = name,
     override = override,
     createOnStart = createOnStart,
-    provider = provider
+    definition = definition
 )
 
 /**
@@ -97,14 +98,14 @@ fun <T : Any> Module.single(
     name: String? = null,
     override: Boolean = false,
     createOnStart: Boolean = false,
-    provider: DeclarationBuilder.(Parameters) -> T
+    definition: Definition<T>
 ) = declare(
     type = type,
     kind = Kind.SINGLE,
     name = name,
     override = override,
     createOnStart = createOnStart,
-    provider = provider
+    definition = definition
 )
 
 /**
@@ -115,14 +116,14 @@ inline fun <reified T : Any> Module.declare(
     name: String? = null,
     override: Boolean = false,
     createOnStart: Boolean = false,
-    noinline provider: DeclarationBuilder.(Parameters) -> T
+    noinline definition: Definition<T>
 ) = declare(
     type = T::class,
     kind = kind,
     name = name,
     override = override,
     createOnStart = createOnStart,
-    provider = provider
+    definition = definition
 )
 
 /**
@@ -134,11 +135,11 @@ fun <T : Any> Module.declare(
     name: String? = null,
     override: Boolean = false,
     createOnStart: Boolean = false,
-    provider: DeclarationBuilder.(Parameters) -> T
+    definition: Definition<T>
 ) = declare(
-    Declaration.create(type, name, kind, provider).also {
-        it.eager = createOnStart
-        it.override = override
+    Declaration.create(type, name, kind, definition).also {
+        it.options.createOnStart = createOnStart
+        it.options.override = override
     }
 )
 
@@ -162,27 +163,50 @@ fun <T : S, S : Any> Module.bind(
     declaration.bind(to)
 }
 
+/**
+ * Adds a binding for [type] and [name] to [to] to a previously added [Declaration]
+ */
+inline fun <reified T : Any, reified S : Any> Module.bindIntoSet(
+    declarationName: String? = null,
+    setBinding: SetBinding<S>
+) = bindIntoSet(T::class, declarationName, setBinding)
+
+/**
+ * Adds a binding for [declarationType] and [declarationName] to [to] to a previously added [Declaration]
+ */
+fun <T : Any> Module.bindIntoSet(
+    declarationType: KClass<*>,
+    declarationName: String? = null,
+    setBinding: SetBinding<T>
+) {
+    getDeclaration(declarationType, declarationName).intoSet(setBinding)
+}
+
+inline fun <reified T : Any, reified S : Any> Module.bindIntoSet(
+    declarationName: String? = null,
+    setName: String? = null
+) = getDeclaration(S::class, declarationName).intoSet(setBinding(T::class, setName))
+
+@PublishedApi
+internal fun Module.getDeclaration(type: KClass<*>, name: String?): Declaration<*> {
+    return if (name != null) {
+        declarationsByName[name]
+    } else {
+        declarationsByType[type]
+    } ?: throw IllegalArgumentException("no declaration found for type: $type name: $name")
+}
+
 class DeclarationBuilder(val component: Component)
 
 /** Calls trough [Component.get] */
 inline fun <reified T : Any> DeclarationBuilder.get(
     name: String? = null,
-    noinline parameters: () -> Parameters = emptyParametersProvider
-) = get(T::class, name, parameters)
+    noinline params: ParamsDefinition? = null
+) = get(T::class, name, params)
 
 /** Calls trough [Component.get] */
 fun <T : Any> DeclarationBuilder.get(
     type: KClass<T>,
     name: String? = null,
-    parameters: () -> Parameters = emptyParametersProvider
-) = component.get(type, name, parameters)
-
-/**
- * Defines a sub module
- */
-fun Module.module(
-    createOnStart: Boolean = false,
-    override: Boolean = false,
-    body: Module.() -> Unit
-) =
-    Module(createOnStart, override).apply(body).also { module(it) }
+    params: ParamsDefinition? = null
+) = component.get(type, name, params)
