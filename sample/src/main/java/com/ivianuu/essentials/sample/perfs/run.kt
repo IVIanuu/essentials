@@ -19,8 +19,24 @@ private fun runEmptyTest() {
 }
 
 private fun run400Test() {
-    for (i in 0 until 5) {
+    var startMax = -1.0
+    var startMin = -1.0
+    val startAll = arrayListOf<Double>()
+
+    for (i in 0 until 100) {
         val (component, startDuration) = measureDuration { component(perfModule400()) }
+
+        if (i != 0) {
+            if (startMax == -1.0 || startDuration > startMax) {
+                startMax = startDuration
+            }
+
+            if (startMin == -1.0 || startDuration < startMin) {
+                startMin = startDuration
+            }
+
+            startAll.add(startDuration)
+        }
 
         d { "test $i 400 started in $startDuration ms" }
 
@@ -33,4 +49,8 @@ private fun run400Test() {
 
         d { "test $i 400 executed in $executionDuration ms" }
     }
+
+    val avgStartTime = startAll.fold(0.0) { d, d1 -> d + d1 } / startAll.size
+
+    d { "completed 400 test average: $avgStartTime max: $startMax min $startMin" }
 }

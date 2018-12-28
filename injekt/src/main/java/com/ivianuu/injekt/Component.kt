@@ -23,6 +23,7 @@ class Component internal constructor(val name: String?) {
         measureDurationOnly {
             module.declarations.forEach {
                 saveDeclaration(it, null)
+
                 it.instance.setComponent(this)
 
                 if (it.options.createOnStart) {

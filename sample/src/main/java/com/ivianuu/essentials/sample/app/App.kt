@@ -18,7 +18,6 @@ package com.ivianuu.essentials.sample.app
 
 import android.content.Context
 import com.ivianuu.essentials.app.EsApp
-import com.ivianuu.essentials.sample.perfs.runPerfTest
 import com.ivianuu.essentials.util.ext.unsafeLazy
 import com.ivianuu.injectors.Injector
 import com.ivianuu.injekt.*
@@ -43,12 +42,11 @@ class App : EsApp(), ComponentHolder {
     override fun applicationInjector(): Injector<out EsApp> =
         DaggerAppComponent.builder().create(this)
 
-
     override fun onCreate() {
         super.onCreate()
         //    InjektPlugins.logger = TimberLogger()
 
-        runPerfTest()
+        //      runPerfTest()
 
 
         component

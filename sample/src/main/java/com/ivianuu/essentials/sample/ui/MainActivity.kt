@@ -24,44 +24,38 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModel
-import com.ivianuu.director.SimpleSwapChangeHandler
 import com.ivianuu.director.arch.lifecycle.LifecycleController
-import com.ivianuu.director.pushChangeHandler
-import com.ivianuu.director.pushController
-import com.ivianuu.director.toTransaction
 import com.ivianuu.essentials.app.AppInitializer
 import com.ivianuu.essentials.app.RxJavaAppInitializer
 import com.ivianuu.essentials.app.TimberAppInitializer
-import com.ivianuu.essentials.hidenavbar.NavBarSettingsKey
 import com.ivianuu.essentials.sample.injekt.*
-import com.ivianuu.essentials.sample.ui.counter.CounterKey
-import com.ivianuu.essentials.ui.base.EsActivity
-import com.ivianuu.essentials.ui.base.EsActivityModule
+import com.ivianuu.essentials.sample.perfs.runPerfTest
 import com.ivianuu.essentials.util.ext.unsafeLazy
 import com.ivianuu.injekt.*
 import com.ivianuu.timberktx.d
-import com.ivianuu.traveler.navigate
-import dagger.Binds
 import dagger.Module
 import kotlin.reflect.KClass
 
-class MainActivity : EsActivity(), ComponentHolder {
+class MainActivity : AppCompatActivity() {
 
-    override val component =
+/*    override val component =
         activityComponent(listOf(mainActivityModule(this)), name = "MainActivityComponent")
-
-    override val startKey: Any? get() = CounterKey(1)
+*/
+    // override val startKey: Any? get() = CounterKey(1)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        travelerRouter.navigate(NavBarSettingsKey(true, true))
+        runPerfTest()
 
-        router.pushController(
-            MyController().toTransaction()
-                .pushChangeHandler(SimpleSwapChangeHandler(false))
-        )
+        //   travelerRouter.navigate(NavBarSettingsKey(true, true))
+
+        /* router.pushController(
+             MyController().toTransaction()
+                 .pushChangeHandler(SimpleSwapChangeHandler(false))
+         )*/
     }
 }
 
@@ -86,11 +80,11 @@ class MyController : LifecycleController(), ComponentHolder {
 
 }
 
-@Module(includes = [EsActivityModule::class])
+@Module//(includes = [EsActivityModule::class])
 abstract class MainActivityModule {
 
-    @Binds
-    abstract fun bindEsActivity(mainActivity: MainActivity): EsActivity
+    // @Binds
+    //  abstract fun bindEsActivity(mainActivity: MainActivity): EsActivity
 
 }
 
