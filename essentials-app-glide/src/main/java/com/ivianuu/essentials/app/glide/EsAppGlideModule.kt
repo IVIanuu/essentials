@@ -26,6 +26,6 @@ import com.ivianuu.injekt.module
  */
 fun esAppGlideModule() = module {
     factory { AppIconModelLoader.Factory(provider()) }
-    factory { AppIconModelLoader(get()) }
-    factory { (app: AppIcon) -> AppIconFetcher(app, get()) }
+    factory { AppIconModelLoader(provider()) }
+    factory { AppIconFetcher(it[0], get()) }
 }
