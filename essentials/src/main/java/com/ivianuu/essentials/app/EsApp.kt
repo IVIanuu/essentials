@@ -20,8 +20,11 @@ import android.app.Application
 import android.content.pm.ApplicationInfo
 import android.os.Looper
 import com.ivianuu.essentials.injection.GlobalComponentHolder
+import com.ivianuu.essentials.injection.bindInstanceModule
 import com.ivianuu.essentials.injection.esModules
 import com.ivianuu.essentials.util.ext.containsFlag
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.android.androidLogger
 import com.ivianuu.statestore.StateStorePlugins
 import com.ivianuu.statestore.android.MAIN_THREAD_EXECUTOR
 import io.reactivex.android.plugins.RxAndroidPlugins
@@ -81,7 +84,7 @@ abstract class EsApp : Application(), ComponentHolder {
     protected open fun dependencies(): List<Component> = emptyList()
 
     protected open fun implicitModules() =
-        listOf(esAppModule(this)) + esModules()
+        listOf(bindInstanceModule(this), esAppModule(this)) + esModules()
 
     protected open fun modules(): List<Module> = emptyList()
 

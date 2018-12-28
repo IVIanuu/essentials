@@ -18,7 +18,6 @@ package com.ivianuu.essentials.sample.ui.counter
 
 import android.os.Bundle
 import android.view.View
-import com.ivianuu.essentials.app.appContext
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.base.EsController
 import com.ivianuu.essentials.ui.mvrx.viewModel
@@ -69,5 +68,5 @@ class CounterController : EsController() {
 }
 
 fun counterControllerModule() = module {
-    factory { (key: CounterKey) -> CounterViewModel(key, appContext(), get()) }
+    factory { (key: CounterKey) -> CounterViewModel(key, get(), get()) }
 }

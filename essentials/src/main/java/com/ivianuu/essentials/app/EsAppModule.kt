@@ -20,27 +20,25 @@ import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
 import com.ivianuu.essentials.util.EsPreferenceManager
-import com.ivianuu.injekt.*
+import com.ivianuu.injekt.factory
+import com.ivianuu.injekt.get
+import com.ivianuu.injekt.module
+import com.ivianuu.injekt.single
 import com.ivianuu.kprefs.KPrefs
 import com.ivianuu.ksettings.KSettings
-
-fun Module.appContext() = get<Context>(APP_CONTEXT)
-
-const val APP_CONTEXT = "appContext"
 
 /**
  * Basic app dependencies such as preferences or package manager
  */
 inline fun <reified T : EsApp> esAppModule(esApp: T) = module(name = "EsAppModule") {
     // app
-    factory { esApp } bind Application::class
-    factory(name = APP_CONTEXT) { esApp as Context }
+    factory { esApp } bind Application::class bind Context::class
 
     // prefs
-    factory { EsPreferenceManager.getDefaultSharedPreferences(appContext()) }
+    factory { EsPreferenceManager.getDefaultSharedPreferences(get()) }
     single { KPrefs(get<SharedPreferences>()) }
 
-    single { KSettings(appContext()) }
+    single { KSettings(get<Context>()) }
 
-    factory { appContext().packageManager!! }
+    factory { get<Context>().packageManager!! }
 }

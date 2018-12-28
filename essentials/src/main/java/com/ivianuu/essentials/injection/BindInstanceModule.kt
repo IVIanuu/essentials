@@ -2,10 +2,12 @@ package com.ivianuu.essentials.injection
 
 import com.ivianuu.injekt.factory
 import com.ivianuu.injekt.module
+import kotlin.reflect.KClass
 
-inline fun <reified T : Any> bindInstanceModule(
+fun <T : Any> bindInstanceModule(
     instance: T,
+    override: Boolean = false,
     name: String? = null
-) = module(name = name) {
-    factory { instance }
+) = module(override = override, name = name) {
+    factory(instance::class as KClass<T>) { instance }
 }

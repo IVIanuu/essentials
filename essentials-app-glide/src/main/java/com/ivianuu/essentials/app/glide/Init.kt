@@ -2,12 +2,11 @@ package com.ivianuu.essentials.app.glide
 
 import android.graphics.drawable.Drawable
 import com.bumptech.glide.Glide
-import com.ivianuu.essentials.app.APP_CONTEXT
 import com.ivianuu.injekt.Component
 import com.ivianuu.injekt.get
 
 fun initializeAppGlide(component: Component) {
-    Glide.get(component.get(APP_CONTEXT)).registry
+    Glide.get(component.get()).registry
         .append(
             AppIcon::class.java,
             Drawable::class.java,
