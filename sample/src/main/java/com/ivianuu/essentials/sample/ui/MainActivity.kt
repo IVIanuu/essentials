@@ -94,12 +94,7 @@ abstract class MainActivityModule {
 
 }
 
-class MyEagerDep {
-
-    init {
-        d { "initialized eager dep" }
-    }
-}
+class MyEagerDep
 
 class MainViewModel(
     private val password: String,

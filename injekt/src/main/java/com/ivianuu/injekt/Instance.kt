@@ -6,14 +6,31 @@ package com.ivianuu.injekt
 abstract class Instance<T : Any>(val declaration: Declaration<T>) {
 
     lateinit var component: Component
+        private set
+    private var componentSet = false
+
+    internal fun setComponent(component: Component) {
+        if (componentSet) {
+            error("Instances cannot be reused $declaration")
+        }
+
+        this.component = component
+    }
+
 
     abstract val isCreated: Boolean
 
     fun get(params: ParamsDefinition?): T {
-        if (isCreated) {
-            info { "${component.nameString()}Returning existing instance for $declaration" }
-        } else {
-            info { "${component.nameString()}Created instance for $declaration" }
+        when {
+            isCreated -> info {
+                "${component.nameString()}Return existing instance for $declaration"
+            }
+            declaration.options.createOnStart -> info {
+                "${component.nameString()}Create instance on start up $declaration"
+            }
+            else -> info {
+                "${component.nameString()}Create instance $declaration"
+            }
         }
 
         return getInternal(params)

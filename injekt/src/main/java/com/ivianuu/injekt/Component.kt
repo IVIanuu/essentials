@@ -16,31 +16,30 @@ class Component internal constructor(val name: String?) {
      */
     fun addModule(module: Module) {
         module.setComponent(this)
+
+        val onStartDeclarations = mutableSetOf<Declaration<*>>()
+
         module.declarations.forEach {
-            saveDeclaration(it)
-            setInstanceComponent(it)
-            createEagerInstance(it)
-        }
-    }
+            saveDeclaration(it, null)
 
-    private fun createEagerInstance(declaration: Declaration<*>) {
-        if (declaration.options.createOnStart) {
-            declaration.resolveInstance(null)
-        }
-    }
+            it.instance.setComponent(this)
 
-    private fun setInstanceComponent(declaration: Declaration<*>) {
-        declaration.instance.component = this
+            if (it.options.createOnStart) {
+                onStartDeclarations.add(it)
+            }
+        }
+
+        onStartDeclarations.forEach { it.resolveInstance(null) }
     }
 
     /**
      * Adds all
      */
     fun addDependency(dependency: Component) {
-        dependency.declarations.forEach { saveDeclaration(it) }
+        dependency.declarations.forEach { saveDeclaration(it, dependency) }
     }
 
-    private fun saveDeclaration(declaration: Declaration<*>) {
+    private fun saveDeclaration(declaration: Declaration<*>, dependency: Component?) {
         val isOverride = declarations.remove(declaration)
 
         if (isOverride && !declaration.options.override) {
@@ -49,7 +48,12 @@ class Component internal constructor(val name: String?) {
 
         info {
             val kw = if (isOverride) "Override" else "Declare"
-            "${nameString()}$kw $declaration"
+            val depString = if (dependency != null) {
+                " from ${dependency.nameString()}"
+            } else {
+                " "
+            }
+            "${nameString()}$kw$depString$declaration"
         }
 
         declarations.add(declaration)
