@@ -113,7 +113,7 @@ fun systemServiceModule() = module {
     systemServices.add(WindowManager::class)
 
     systemServices
-        .filterIsInstance<KClass<Any>>()
+        .map { it as KClass<Any> }
         .forEach { service ->
             factory(service) { ContextCompat.getSystemService(get(), service.java)!! }
         }

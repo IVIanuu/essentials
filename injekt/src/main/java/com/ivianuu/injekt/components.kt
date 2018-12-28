@@ -1,5 +1,7 @@
 package com.ivianuu.injekt
 
+import kotlin.reflect.KClass
+
 /**
  * Returns a [Component] which contains [modules]
  */
@@ -33,7 +35,16 @@ inline fun <reified T : Any> Component.get(
 inline fun <reified T : Any> Component.inject(
     name: String? = null,
     noinline params: ParamsDefinition? = null
-) = lazy { get<T>(name, params) }
+) = inject(T::class, name, params)
+
+/**
+ * Lazily returns a instance of [T] matching the [name] and [params]
+ */
+fun <T : Any> Component.inject(
+    type: KClass<T>,
+    name: String? = null,
+    params: ParamsDefinition? = null
+) = lazy { get(type, name, params) }
 
 inline fun <reified K : Any, reified T : Any> Component.getMap(
     name: String? = null,

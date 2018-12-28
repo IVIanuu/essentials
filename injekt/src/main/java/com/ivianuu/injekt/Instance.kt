@@ -1,5 +1,7 @@
 package com.ivianuu.injekt
 
+import com.ivianuu.injekt.InjektPlugins.logger
+
 /**
  * The [Instance] of an [Declaration]
  */
@@ -21,16 +23,14 @@ abstract class Instance<T : Any>(val declaration: Declaration<T>) {
     abstract val isCreated: Boolean
 
     fun get(params: ParamsDefinition?): T {
-        when {
-            isCreated -> info {
-                "${component.nameString()}Return existing instance for $declaration"
+        logger?.let { logger ->
+            val msg = when {
+                isCreated -> "${component.nameString()}Return existing instance for $declaration"
+                declaration.options.createOnStart -> "${component.nameString()}Create instance on start up $declaration"
+                else -> "${component.nameString()}Create instance $declaration"
             }
-            declaration.options.createOnStart -> info {
-                "${component.nameString()}Create instance on start up $declaration"
-            }
-            else -> info {
-                "${component.nameString()}Create instance $declaration"
-            }
+
+            logger.info(msg)
         }
 
         return getInternal(params)

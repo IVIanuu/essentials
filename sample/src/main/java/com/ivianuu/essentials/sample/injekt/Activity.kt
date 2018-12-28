@@ -40,7 +40,7 @@ inline fun <reified T : AppCompatActivity> activityModule(
     name: String? = null,
     noinline definition: ModuleDefinition? = null
 ) = module(name = name) {
-    factory { activity }
+    factory(type) { activity }
 
     bind(type, AppCompatActivity::class)
     bind<AppCompatActivity, FragmentActivity>()

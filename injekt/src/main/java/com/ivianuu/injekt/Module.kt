@@ -70,7 +70,18 @@ inline fun <reified T : Any> Module.factory(
     name: String? = null,
     override: Boolean = false,
     noinline definition: Definition<T>
+) = factory(T::class, name, override, definition)
+
+/**
+ * Provides a dependency
+ */
+fun <T : Any> Module.factory(
+    type: KClass<T>,
+    name: String? = null,
+    override: Boolean = false,
+    definition: Definition<T>
 ) = declare(
+    type = type,
     kind = Kind.FACTORY,
     name = name,
     createOnStart = false,
@@ -86,7 +97,19 @@ inline fun <reified T : Any> Module.single(
     override: Boolean = false,
     createOnStart: Boolean = false,
     noinline definition: Definition<T>
+) = single(T::class, name, override, createOnStart, definition)
+
+/**
+ * Provides a singleton dependency
+ */
+fun <T : Any> Module.single(
+    type: KClass<T>,
+    name: String? = null,
+    override: Boolean = false,
+    createOnStart: Boolean = false,
+    definition: Definition<T>
 ) = declare(
+    type = type,
     kind = Kind.SINGLE,
     name = name,
     override = override,
@@ -105,6 +128,23 @@ inline fun <reified T : Any> Module.declare(
     noinline definition: Definition<T>
 ) = declare(
     Declaration.create(T::class, name, kind, definition).also {
+        it.options.createOnStart = createOnStart
+        it.options.override = override
+    }
+)
+
+/**
+ * Adds a [Declaration] for the provided params
+ */
+fun <T : Any> Module.declare(
+    type: KClass<T>,
+    kind: Kind,
+    name: String? = null,
+    override: Boolean = false,
+    createOnStart: Boolean = false,
+    definition: Definition<T>
+) = declare(
+    Declaration.create(type, name, kind, definition).also {
         it.options.createOnStart = createOnStart
         it.options.override = override
     }
@@ -136,23 +176,14 @@ fun <T : S, S : Any> Module.bind(
 inline fun <reified T : Any, reified S : Any> Module.bindIntoSet(
     declarationName: String? = null,
     setBinding: SetBinding<S>
-) = bindIntoSet(T::class, declarationName, setBinding)
-
-/**
- * Adds a binding for [declarationType] and [declarationName] to [to] to a previously added [Declaration]
- */
-fun <T : Any> Module.bindIntoSet(
-    declarationType: KClass<*>,
-    declarationName: String? = null,
-    setBinding: SetBinding<T>
-) {
-    getDeclaration(declarationType, declarationName).intoSet(setBinding)
-}
+) = getDeclaration(S::class, declarationName).intoSet(setBinding)
 
 inline fun <reified T : Any, reified S : Any> Module.bindIntoSet(
     declarationName: String? = null,
     setName: String? = null
-) = getDeclaration(S::class, declarationName).intoSet(setBinding(T::class, setName))
+) {
+    bindIntoSet<T, S>(declarationName, setBinding<S>(setName))
+}
 
 @PublishedApi
 internal fun Module.getDeclaration(type: KClass<*>, name: String?): Declaration<*> {

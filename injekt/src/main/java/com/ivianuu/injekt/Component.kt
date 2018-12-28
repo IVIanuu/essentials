@@ -1,5 +1,6 @@
 package com.ivianuu.injekt
 
+import com.ivianuu.injekt.InjektPlugins.logger
 import kotlin.reflect.KClass
 
 /**
@@ -29,12 +30,14 @@ class Component internal constructor(val name: String?) {
                 }
             }
         }.let {
-            debug { "${nameString()}Adding module ${module.nameString()}took $it ms" }
+            logger?.debug("${nameString()}Adding module ${module.nameString()}took $it ms")
         }
 
         measureDurationOnly {
             onStartDeclarations.forEach { it.resolveInstance(null) }
-        }.let { debug { "${nameString()}Instantiating eager instances ${module.nameString()}took $it ms" } }
+        }.let {
+            logger?.debug("${nameString()}Instantiating eager instances ${module.nameString()}took $it ms")
+        }
     }
 
     /**
@@ -51,14 +54,14 @@ class Component internal constructor(val name: String?) {
             throw OverrideException("${nameString()}Try to override declaration $declaration")
         }
 
-        info {
+        logger?.let { logger ->
             val kw = if (isOverride) "Override" else "Declare"
             val depString = if (dependency != null) {
                 " from ${dependency.nameString()}"
             } else {
                 " "
             }
-            "${nameString()}$kw$depString$declaration"
+            logger.debug("${nameString()}$kw$depString$declaration")
         }
 
         declarations.add(declaration)
@@ -66,7 +69,7 @@ class Component internal constructor(val name: String?) {
         if (declaration.name != null) {
             declarationsByName[declaration.name] = declaration
         } else {
-            declarationsByType[declaration.primaryType] = declaration
+            declaration.classes.forEach { declarationsByType[it] = declaration }
         }
     }
 

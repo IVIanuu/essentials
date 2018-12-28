@@ -43,11 +43,13 @@ class App : EsApp(), ComponentHolder {
     override fun applicationInjector(): Injector<out EsApp> =
         DaggerAppComponent.builder().create(this)
 
+
     override fun onCreate() {
         super.onCreate()
         //    InjektPlugins.logger = TimberLogger()
 
         runPerfTest()
+
 
         component
     }
