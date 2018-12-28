@@ -22,8 +22,6 @@ import android.os.Looper
 import com.ivianuu.essentials.injection.GlobalComponentHolder
 import com.ivianuu.essentials.injection.esModules
 import com.ivianuu.essentials.util.ext.containsFlag
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.android.androidLogger
 import com.ivianuu.statestore.StateStorePlugins
 import com.ivianuu.statestore.android.MAIN_THREAD_EXECUTOR
 import io.reactivex.android.plugins.RxAndroidPlugins
@@ -46,7 +44,7 @@ abstract class EsApp : Application(), ComponentHolder {
 
     override fun onCreate() {
         super.onCreate()
-        onCreateComponent()
+        createComponentIfNeeded()
         onInitialize()
     }
 
