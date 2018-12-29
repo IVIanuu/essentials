@@ -30,7 +30,7 @@ abstract class EsBroadcastReceiver : BroadcastReceiver(), ComponentHolder {
     protected open fun modules(
         context: Context,
         intent: Intent
-    ) = listOf(bindInstanceModule(this))
+    ) = emptyList<Module>()
 
     protected open fun implicitModules() = listOf(bindInstanceModule(this))
 }
