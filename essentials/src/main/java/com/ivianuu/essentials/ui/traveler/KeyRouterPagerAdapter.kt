@@ -16,11 +16,7 @@
 
 package com.ivianuu.essentials.ui.traveler
 
-import com.ivianuu.director.Controller
-import com.ivianuu.director.Router
-import com.ivianuu.director.hasRootController
-import com.ivianuu.director.setRoot
-import com.ivianuu.director.toTransaction
+import com.ivianuu.director.*
 import com.ivianuu.director.traveler.ControllerKey
 import com.ivianuu.director.viewpager.RouterPagerAdapter
 

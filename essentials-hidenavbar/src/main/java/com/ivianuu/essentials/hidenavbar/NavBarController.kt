@@ -23,6 +23,7 @@ import android.graphics.Rect
 import android.hardware.SensorManager
 import android.view.OrientationEventListener
 import android.view.Surface
+import com.ivianuu.essentials.app.AppService
 import com.ivianuu.essentials.util.BroadcastFactory
 import com.ivianuu.essentials.util.ext.combineLatest
 import com.ivianuu.essentials.util.ext.rxMain
@@ -47,13 +48,14 @@ class NavBarController(
     private val keyguardManager: KeyguardManager,
     private val prefs: NavBarPrefs,
     private val overscanHelper: OverscanHelper
-) {
+) : AppService() {
 
     private val enabledScope = ReusableScope()
 
-    init {
+    override fun start() {
         prefs.manageNavBar.observable
             .subscribe { updateEnabledState(it) }
+            .disposeBy(scope)
     }
 
     private fun updateEnabledState(enabled: Boolean) {

@@ -16,19 +16,9 @@
 
 package com.ivianuu.essentials.util.ext
 
-import com.ivianuu.ktuples.Nonuple
-import com.ivianuu.ktuples.Octuple
-import com.ivianuu.ktuples.Quadruple
-import com.ivianuu.ktuples.Quintuple
-import com.ivianuu.ktuples.Septuple
-import com.ivianuu.ktuples.Sextuple
+import com.ivianuu.ktuples.*
 import io.reactivex.Observable
-import io.reactivex.functions.Function4
-import io.reactivex.functions.Function5
-import io.reactivex.functions.Function6
-import io.reactivex.functions.Function7
-import io.reactivex.functions.Function8
-import io.reactivex.functions.Function9
+import io.reactivex.functions.*
 import io.reactivex.rxkotlin.Observables
 import io.reactivex.subjects.BehaviorSubject
 

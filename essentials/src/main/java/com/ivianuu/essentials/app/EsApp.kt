@@ -17,19 +17,15 @@
 package com.ivianuu.essentials.app
 
 import android.app.Application
-import android.content.pm.ApplicationInfo
-import android.os.Looper
 import com.ivianuu.essentials.injection.GlobalComponentHolder
 import com.ivianuu.essentials.injection.bindInstanceModule
-import com.ivianuu.essentials.injection.esModules
-import com.ivianuu.essentials.util.ext.containsFlag
+import com.ivianuu.essentials.injection.systemServiceModule
+import com.ivianuu.essentials.ui.traveler.travelerModule
+import com.ivianuu.essentials.util.esUtilModule
+import com.ivianuu.essentials.util.ext.unsafeLazy
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.android.androidLogger
-import com.ivianuu.statestore.StateStorePlugins
-import com.ivianuu.statestore.android.MAIN_THREAD_EXECUTOR
-import io.reactivex.android.plugins.RxAndroidPlugins
-import io.reactivex.android.schedulers.AndroidSchedulers
-import timber.log.Timber
+import kotlin.reflect.KClass
 
 /**
  * App
@@ -45,48 +41,61 @@ abstract class EsApp : Application(), ComponentHolder {
     private lateinit var _component: Component
     private var componentCreated = false
 
+    private val appInitializers by unsafeLazy {
+        get<MultiBindingMap<KClass<out AppInitializer>, AppInitializer>>(APP_INITIALIZERS)
+            .toProviderMap()
+    }
+    private val appServices by unsafeLazy {
+        get<MultiBindingMap<KClass<out AppService>, AppService>>(APP_SERVICES)
+            .toProviderMap()
+    }
+
     override fun onCreate() {
         super.onCreate()
         createComponentIfNeeded()
         onInitialize()
+        onStartAppServices()
     }
 
     protected open fun onCreateComponent() {
         configureInjekt { androidLogger() }
 
         _component = component {
-            modules(implicitModules() + this@EsApp.modules())
             dependencies(this@EsApp.dependencies())
+            modules(implicitModules() + this@EsApp.modules())
             GlobalComponentHolder.initialize(this)
         }
     }
 
     protected open fun onInitialize() {
-        initializeRxJava()
-        initializeStateStore()
-        initializeTimber()
+        appInitializers
+            .filterKeys { shouldInitialize(it) }
+            .map { it.value.get() }
+            .forEach { it.initialize(this) }
     }
 
-    protected open fun initializeRxJava() {
-        val scheduler = AndroidSchedulers.from(Looper.getMainLooper(), true)
-        RxAndroidPlugins.setInitMainThreadSchedulerHandler { scheduler }
+    protected open fun shouldInitialize(type: KClass<out AppInitializer>) = true
+
+    protected open fun onStartAppServices() {
+        appServices
+            .filterKeys { shouldStartAppService(it) }
+            .map { it.value.get() }
+            .forEach { it.start() }
     }
 
-    protected open fun initializeStateStore() {
-        StateStorePlugins.defaultCallbackExecutor = MAIN_THREAD_EXECUTOR
-    }
-
-    protected open fun initializeTimber() {
-        val isDebuggable = applicationInfo.flags.containsFlag(ApplicationInfo.FLAG_DEBUGGABLE)
-        if (isDebuggable) {
-            Timber.plant(Timber.DebugTree())
-        }
-    }
+    protected open fun shouldStartAppService(type: KClass<out AppService>) = true
 
     protected open fun dependencies(): List<Component> = emptyList()
 
-    protected open fun implicitModules() =
-        listOf(bindInstanceModule(this), esAppModule(this)) + esModules()
+    protected open fun implicitModules() = listOf(
+        bindInstanceModule(this),
+        esAppModule(this),
+        esAppInitializersModule(),
+        esAppServicesModule(),
+        esUtilModule(),
+        travelerModule(),
+        systemServiceModule()
+    )
 
     protected open fun modules(): List<Module> = emptyList()
 

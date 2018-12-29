@@ -26,8 +26,8 @@ import com.bumptech.glide.load.model.ModelLoader
 import com.bumptech.glide.load.model.ModelLoaderFactory
 import com.bumptech.glide.load.model.MultiModelLoaderFactory
 import com.bumptech.glide.signature.ObjectKey
-import com.ivianuu.essentials.injection.Provider
 import com.ivianuu.essentials.util.ext.coroutinesIo
+import com.ivianuu.injekt.Provider
 import com.ivianuu.injekt.parametersOf
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job

@@ -28,11 +28,7 @@ import com.airbnb.epoxy.EpoxyRecyclerView
 import com.google.android.material.appbar.AppBarLayout
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.base.EsController
-import com.ivianuu.essentials.util.ext.iconColor
-import com.ivianuu.essentials.util.ext.isLight
-import com.ivianuu.essentials.util.ext.primaryColor
-import com.ivianuu.essentials.util.ext.primaryTextColor
-import com.ivianuu.essentials.util.ext.secondaryTextColor
+import com.ivianuu.essentials.util.ext.*
 import com.ivianuu.kommon.core.view.items
 import com.ivianuu.traveler.goBack
 

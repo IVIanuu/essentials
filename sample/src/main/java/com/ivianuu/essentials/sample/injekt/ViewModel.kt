@@ -8,7 +8,7 @@ import com.ivianuu.injekt.*
 inline fun <reified T : ViewModel> Module.viewModel(
     name: String? = null,
     override: Boolean = false,
-    noinline definition: BeanDefinition<T>
+    noinline definition: Definition<T>
 ) = factory(T::class, name, override, definition)
 
 @Suppress("UNCHECKED_CAST")

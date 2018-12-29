@@ -16,15 +16,17 @@
 
 package com.ivianuu.essentials.app.glide
 
-import com.ivianuu.essentials.injection.provider
+import com.ivianuu.essentials.app.appInitializer
 import com.ivianuu.injekt.factory
 import com.ivianuu.injekt.get
 import com.ivianuu.injekt.module
+import com.ivianuu.injekt.provider
 
 /**
  * Binds dependencies related to this module
  */
 fun esAppGlideModule() = module {
+    appInitializer { AppGlideAppInitializer(get()) }
     factory { AppIconModelLoader.Factory(provider()) }
     factory { AppIconModelLoader(provider()) }
     factory { AppIconFetcher(it[0], get()) }

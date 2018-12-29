@@ -3,7 +3,7 @@ package com.ivianuu.essentials.ui.epoxy
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import com.ivianuu.essentials.R2
-import kotlinx.android.synthetic.main.es_item_simple_text.es_text
+import kotlinx.android.synthetic.main.es_item_simple_text.*
 
 /**
  * Simple text model

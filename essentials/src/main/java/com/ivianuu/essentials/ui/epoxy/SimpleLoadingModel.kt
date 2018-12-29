@@ -5,7 +5,7 @@ import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import com.ivianuu.essentials.R2
 import com.ivianuu.essentials.util.color
-import kotlinx.android.synthetic.main.es_item_simple_loading.es_progress_bar
+import kotlinx.android.synthetic.main.es_item_simple_loading.*
 
 /**
  * Simple loading model
