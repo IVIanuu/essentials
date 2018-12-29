@@ -52,11 +52,13 @@ abstract class EsApp : Application(), ComponentHolder {
     }
 
     protected open fun onCreateComponent() {
-        InjektPlugins.logger = androidLogger()
-        _component = component(
-            modules = implicitModules() + modules(),
-            dependencies = dependencies()
-        ).also { GlobalComponentHolder.initialize(it) }
+        configureInjekt { androidLogger() }
+
+        _component = component {
+            modules(implicitModules() + this@EsApp.modules())
+            dependencies(this@EsApp.dependencies())
+            GlobalComponentHolder.initialize(this)
+        }
     }
 
     protected open fun onInitialize() {

@@ -1,9 +1,13 @@
 package com.ivianuu.essentials.injection
 
-import com.ivianuu.injekt.Module
-import com.ivianuu.injekt.ParamsDefinition
-import com.ivianuu.injekt.get
+import com.ivianuu.injekt.*
 import kotlin.reflect.KClass
+
+fun lazyComponent(
+    name: String? = null,
+    createEagerInstances: Boolean = true,
+    definition: ComponentDefinition
+) = lazy { component(name, createEagerInstances, definition) }
 
 inline fun <reified T : Any> Module.lazy(
     name: String? = null,

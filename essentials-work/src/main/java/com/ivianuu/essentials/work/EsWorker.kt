@@ -21,12 +21,13 @@ import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.ivianuu.essentials.injection.bindInstanceModule
 import com.ivianuu.essentials.injection.componentName
+import com.ivianuu.essentials.injection.lazyComponent
 import com.ivianuu.essentials.util.ContextAware
 import com.ivianuu.essentials.util.asMainCoroutineScope
-import com.ivianuu.essentials.util.ext.unsafeLazy
 import com.ivianuu.injekt.ComponentHolder
 import com.ivianuu.injekt.Module
-import com.ivianuu.injekt.component
+import com.ivianuu.injekt.dependencies
+import com.ivianuu.injekt.modules
 import com.ivianuu.scopes.MutableScope
 import com.ivianuu.scopes.Scope
 
@@ -37,12 +38,9 @@ abstract class EsWorker(
     context: Context, workerParams: WorkerParameters
 ) : Worker(context, workerParams), ComponentHolder, ContextAware {
 
-    override val component by unsafeLazy {
-        component(
-            modules = implicitModules() + modules(),
-            dependencies = dependencies(),
-            name = componentName()
-        )
+    override val component by lazyComponent(componentName()) {
+        dependencies(this@EsWorker.dependencies())
+        modules(implicitModules() + this@EsWorker.modules())
     }
 
     override val providedContext: Context

@@ -28,14 +28,11 @@ import com.ivianuu.director.scopes.destroy
 import com.ivianuu.essentials.injection.bindInstanceModule
 import com.ivianuu.essentials.injection.componentName
 import com.ivianuu.essentials.injection.getComponentDependencies
+import com.ivianuu.essentials.injection.lazyComponent
 import com.ivianuu.essentials.ui.mvrx.MvRxView
 import com.ivianuu.essentials.util.ContextAware
 import com.ivianuu.essentials.util.asMainCoroutineScope
-import com.ivianuu.essentials.util.ext.unsafeLazy
-import com.ivianuu.injekt.ComponentHolder
-import com.ivianuu.injekt.Module
-import com.ivianuu.injekt.component
-import com.ivianuu.injekt.inject
+import com.ivianuu.injekt.*
 import com.ivianuu.traveler.Router
 
 /**
@@ -43,12 +40,9 @@ import com.ivianuu.traveler.Router
  */
 abstract class EsDialogController : DialogController(), ComponentHolder, ContextAware, MvRxView {
 
-    override val component by unsafeLazy {
-        component(
-            modules = implicitModules() + modules(),
-            dependencies = dependencies(),
-            name = componentName()
-        )
+    override val component by lazyComponent(componentName()) {
+        dependencies(this@EsDialogController.dependencies())
+        modules(implicitModules() + this@EsDialogController.modules())
     }
 
     val travelerRouter by inject<Router>()
@@ -60,10 +54,6 @@ abstract class EsDialogController : DialogController(), ComponentHolder, Context
     private val viewModelStoreOwner = ControllerViewModelStoreOwner()
 
     val coroutineScope = destroy.asMainCoroutineScope()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onRestoreViewState(view: View, savedViewState: Bundle) {
         super.onRestoreViewState(view, savedViewState)
