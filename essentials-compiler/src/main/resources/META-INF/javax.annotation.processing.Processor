@@ -1,1 +1,2 @@
 com.airbnb.epoxy.EpoxyProcessor
+com.ivianuu.injekt.compiler.InjektProcessor

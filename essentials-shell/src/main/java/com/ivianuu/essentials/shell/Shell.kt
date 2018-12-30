@@ -17,20 +17,17 @@
 package com.ivianuu.essentials.shell
 
 import com.ivianuu.essentials.util.ext.coroutinesIo
-import com.ivianuu.injekt.factory
-import com.ivianuu.injekt.module
+import com.ivianuu.injekt.codegen.AutoModule
+import com.ivianuu.injekt.codegen.Factory
 import kotlinx.coroutines.withContext
 
-/**
- * Provides all dependencies related to this module
- */
-fun esShellModule() = module {
-    factory { Shell() }
-}
+@AutoModule(moduleName = "esShellModule")
+private object AutoModule
 
 /**
  * Shell
  */
+@Factory
 class Shell {
 
     suspend fun run(command: String) = run(listOf(command))

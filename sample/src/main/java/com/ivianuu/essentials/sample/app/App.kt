@@ -20,6 +20,7 @@ import com.ivianuu.essentials.app.EsApp
 import com.ivianuu.essentials.app.esAppsModule
 import com.ivianuu.essentials.app.glide.esAppGlideModule
 import com.ivianuu.essentials.hidenavbar.esNavBarModule
+import com.ivianuu.essentials.sample.injekt.autoModule
 import com.ivianuu.essentials.shell.esShellModule
 
 /**
@@ -28,10 +29,11 @@ import com.ivianuu.essentials.shell.esShellModule
 class App : EsApp() {
 
     override fun modules() = listOf(
-        esAppsModule(),
-        esAppGlideModule(),
-        esNavBarModule(),
-        esShellModule()
+        autoModule,
+        esAppsModule,
+        esAppGlideModule,
+        esNavBarModule,
+        esShellModule
     )
 
 

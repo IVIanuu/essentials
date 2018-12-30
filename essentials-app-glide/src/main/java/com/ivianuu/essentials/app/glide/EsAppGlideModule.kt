@@ -16,18 +16,17 @@
 
 package com.ivianuu.essentials.app.glide
 
-import com.ivianuu.essentials.app.appInitializer
-import com.ivianuu.injekt.factory
-import com.ivianuu.injekt.get
+import com.ivianuu.essentials.app.bindAppInitializer
+import com.ivianuu.injekt.codegen.AutoModule
 import com.ivianuu.injekt.module
-import com.ivianuu.injekt.provider
+
+@AutoModule(internal = true)
+private object AutoModule
 
 /**
  * Binds dependencies related to this module
  */
-fun esAppGlideModule() = module {
-    appInitializer { AppGlideAppInitializer(get()) }
-    factory { AppIconModelLoader.Factory(provider()) }
-    factory { AppIconModelLoader(provider()) }
-    factory { AppIconFetcher(it[0], get()) }
+val esAppGlideModule = module("EsAppGlideModule") {
+    module(autoModule)
+    bindAppInitializer<AppGlideAppInitializer>()
 }

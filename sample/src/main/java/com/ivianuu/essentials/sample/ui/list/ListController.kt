@@ -15,8 +15,6 @@ import com.ivianuu.essentials.ui.traveler.NavOptions
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
 import com.ivianuu.essentials.ui.traveler.vertical
 import com.ivianuu.essentials.util.ext.andTrue
-import com.ivianuu.injekt.factory
-import com.ivianuu.injekt.module
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.single_line_list_item.*
 
@@ -62,12 +60,6 @@ class ListController : SimpleController() {
         R.id.action_refresh -> viewModel.refreshClicked().andTrue()
         else -> false
     }
-
-    override fun modules() = listOf(listControllerModule())
-}
-
-fun listControllerModule() = module {
-    factory { ListViewModel() }
 }
 
 @EpoxyModelClass(layout = R.layout.single_line_list_item)

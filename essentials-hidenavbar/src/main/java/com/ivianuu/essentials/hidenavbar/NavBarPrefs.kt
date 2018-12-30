@@ -16,12 +16,15 @@
 
 package com.ivianuu.essentials.hidenavbar
 
+import com.ivianuu.injekt.codegen.Name
+import com.ivianuu.injekt.codegen.Single
 import com.ivianuu.kprefs.KPrefs
 
 /**
- * @author Manuel Wrage (IVIanuu)
+ * Nav bar prefs
  */
-class NavBarPrefs(prefs: KPrefs) {
+@Single
+class NavBarPrefs(@Name(NAV_BAR_PREFS) prefs: KPrefs) {
     val manageNavBar = prefs.boolean("manage_nav_bar")
     val fullOverscan = prefs.boolean("full_overscan")
     val navBarHidden = prefs.boolean("nav_bar_hidden")

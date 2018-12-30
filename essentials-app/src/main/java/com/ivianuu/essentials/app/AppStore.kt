@@ -19,11 +19,13 @@ package com.ivianuu.essentials.app
 import android.content.Intent
 import android.content.pm.PackageManager
 import com.ivianuu.essentials.util.ext.coroutinesIo
+import com.ivianuu.injekt.codegen.Factory
 import kotlinx.coroutines.withContext
 
 /**
  * Store for [AppInfo]s
  */
+@Factory
 class AppStore(private val packageManager: PackageManager) {
 
     suspend fun installedApps() = withContext(coroutinesIo) {

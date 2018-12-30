@@ -33,7 +33,7 @@ object Versions {
     const val epoxyKtx = "9dde1f5a9c"
     const val epoxyPrefs = "0a007754c4"
     const val glide = "4.8.0"
-    const val injekt = "7adef4bfd7"
+    const val injekt = "6a388ad009"
     const val junit = "4.12"
     const val kommon = "6c51279983"
     const val kotlin = "1.3.11"
@@ -106,7 +106,8 @@ object Deps {
 
     const val injekt = "com.github.IVIanuu.injekt:injekt:${Versions.injekt}"
     const val injektAndroid = "com.github.IVIanuu.injekt:injekt-android:${Versions.injekt}"
-    const val injektReflect = "com.github.IVIanuu.injekt:injekt-reflect:${Versions.injekt}"
+    const val injektCodegen = "com.github.IVIanuu.injekt:injekt-codegen:${Versions.injekt}"
+    const val injektCompiler = "com.github.IVIanuu.injekt:injekt-compiler:${Versions.injekt}"
 
     const val junit = "junit:junit:${Versions.junit}"
 

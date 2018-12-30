@@ -20,10 +20,7 @@ import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
 import com.ivianuu.essentials.util.EsPreferenceManager
-import com.ivianuu.injekt.factory
-import com.ivianuu.injekt.get
-import com.ivianuu.injekt.module
-import com.ivianuu.injekt.single
+import com.ivianuu.injekt.*
 import com.ivianuu.kprefs.KPrefs
 import com.ivianuu.ksettings.KSettings
 

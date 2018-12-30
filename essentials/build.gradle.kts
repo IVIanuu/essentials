@@ -84,7 +84,7 @@ dependencies {
 
     api(Deps.injekt)
     api(Deps.injektAndroid)
-    api(Deps.injektReflect)
+    api(Deps.injektCodegen)
 
     api(Deps.kommonAppCompat)
     api(Deps.kommonCore)

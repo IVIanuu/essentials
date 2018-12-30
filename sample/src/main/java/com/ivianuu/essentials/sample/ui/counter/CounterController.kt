@@ -24,9 +24,7 @@ import com.ivianuu.essentials.ui.mvrx.viewModel
 import com.ivianuu.essentials.ui.mvrx.withState
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
 import com.ivianuu.essentials.ui.traveler.key.getKey
-import com.ivianuu.injekt.factory
 import com.ivianuu.injekt.get
-import com.ivianuu.injekt.module
 import com.ivianuu.injekt.parametersOf
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.controller_counter.*
@@ -63,10 +61,4 @@ class CounterController : EsController() {
         withState(viewModel) { count.text = "Screen : ${it.screen}, Count: ${it.count}" }
     }
 
-    override fun modules() = listOf(counterControllerModule())
-
-}
-
-fun counterControllerModule() = module {
-    factory { (key: CounterKey) -> CounterViewModel(key, get(), get()) }
 }
