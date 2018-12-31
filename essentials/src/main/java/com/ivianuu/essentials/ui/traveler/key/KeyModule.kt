@@ -1,0 +1,22 @@
+package com.ivianuu.essentials.ui.traveler.key
+
+import android.os.Bundle
+import com.ivianuu.injekt.module
+import com.ivianuu.injekt.single
+import kotlin.reflect.KClass
+
+/**
+ * Binds the the key
+ */
+fun keyModule(
+    bundle: Bundle?,
+    throwIfNotAvailable: Boolean = true
+) = module {
+    if (bundle != null && bundle.containsKey(TRAVELER_KEY_CLASS) && bundle.containsKey(TRAVELER_KEY)) {
+        val className = bundle.getString(TRAVELER_KEY_CLASS)!!
+        val type = Class.forName(className).kotlin as KClass<Any>
+        single(type) { bundle.getParcelable(TRAVELER_KEY)!! }
+    } else if (throwIfNotAvailable) {
+        error("No traveler key in bundle $bundle")
+    }
+}

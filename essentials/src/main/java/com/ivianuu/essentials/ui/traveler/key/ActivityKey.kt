@@ -33,7 +33,8 @@ abstract class ActivityKey(
 
     override fun createIntent(context: Context, data: Any?) =
         Intent(context, target.java).apply {
-            putExtra(KEY_KEY, this@ActivityKey)
+            putExtra(TRAVELER_KEY, this@ActivityKey)
+            putExtra(TRAVELER_KEY_CLASS, this@ActivityKey.javaClass.name)
         }
 
     override fun createStartActivityOptions(command: Command, activityIntent: Intent) =
@@ -44,7 +45,7 @@ abstract class ActivityKey(
     }
 }
 
-fun <T : Parcelable> Activity.getKey(): T = intent!!.extras!!.getParcelable(KEY_KEY)!!
+fun <T : Parcelable> Activity.getKey(): T = intent!!.extras!!.getParcelable(TRAVELER_KEY)!!
 
 fun <T : Parcelable> Activity.getKeyOrNull() = try {
     key<T>()

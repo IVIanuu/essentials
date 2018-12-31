@@ -20,7 +20,7 @@ import com.ivianuu.traveler.popToRoot
  */
 @Factory
 class CounterViewModel(
-    @Param private val key: CounterKey,
+    key: CounterKey,
     private val context: Context,
     private val router: Router
 ) : MvRxViewModel<CounterState>(CounterState(key.screen)) {

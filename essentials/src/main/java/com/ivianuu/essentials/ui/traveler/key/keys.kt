@@ -16,4 +16,5 @@
 
 package com.ivianuu.essentials.ui.traveler.key
 
-internal const val KEY_KEY = "com.ivianuu.essentials.ui.traveler.key.KEY"
+const val TRAVELER_KEY = "com.ivianuu.essentials.ui.traveler.key.KEY"
+const val TRAVELER_KEY_CLASS = "com.ivianuu.essentials.ui.traveler.key.KEY_CLASS"

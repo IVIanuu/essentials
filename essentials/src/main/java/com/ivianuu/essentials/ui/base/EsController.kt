@@ -29,6 +29,7 @@ import com.ivianuu.essentials.injection.bindInstanceModule
 import com.ivianuu.essentials.injection.getComponentDependencies
 import com.ivianuu.essentials.injection.lazyComponent
 import com.ivianuu.essentials.ui.mvrx.MvRxView
+import com.ivianuu.essentials.ui.traveler.key.keyModule
 import com.ivianuu.essentials.util.ComponentHolderContextWrapper
 import com.ivianuu.essentials.util.ContextAware
 import com.ivianuu.essentials.util.asMainCoroutineScope
@@ -107,5 +108,8 @@ abstract class EsController : LifecycleController(), ContextAware, ComponentHold
 
     protected open fun modules() = emptyList<Module>()
 
-    protected open fun implicitModules() = listOf(bindInstanceModule(this))
+    protected open fun implicitModules() = listOf(
+        bindInstanceModule(this),
+        keyModule(args)
+    )
 }

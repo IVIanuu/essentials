@@ -34,7 +34,10 @@ abstract class ControllerKey(
 ) : ControllerKey, Parcelable {
 
     override fun createController(data: Any?): Controller = target.java.newInstance().apply {
-        args.apply { putParcelable(KEY_KEY, this@ControllerKey) }
+        args.apply {
+            putParcelable(TRAVELER_KEY, this@ControllerKey)
+            putString(TRAVELER_KEY_CLASS, this@ControllerKey.javaClass.name)
+        }
     }
 
     override fun setupTransaction(
@@ -55,7 +58,7 @@ abstract class ControllerKey(
 
 }
 
-fun <T : Parcelable> Controller.getKey(): T = args.getParcelable(KEY_KEY)!!
+fun <T : Parcelable> Controller.getKey(): T = args.getParcelable(TRAVELER_KEY)!!
 
 fun <T : Parcelable> Controller.getKeyOrNull() = try {
     key<T>()

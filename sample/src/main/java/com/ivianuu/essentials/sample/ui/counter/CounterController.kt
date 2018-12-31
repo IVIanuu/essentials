@@ -23,9 +23,6 @@ import com.ivianuu.essentials.ui.base.EsController
 import com.ivianuu.essentials.ui.mvrx.viewModel
 import com.ivianuu.essentials.ui.mvrx.withState
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
-import com.ivianuu.essentials.ui.traveler.key.getKey
-import com.ivianuu.injekt.get
-import com.ivianuu.injekt.parametersOf
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.controller_counter.*
 
@@ -39,9 +36,7 @@ class CounterController : EsController() {
 
     override val layoutRes get() = R.layout.controller_counter
 
-    private val viewModel by viewModel {
-        get<CounterViewModel> { parametersOf(getKey<CounterKey>()) }
-    }
+    private val viewModel by viewModel<CounterViewModel>()
 
     override fun onBindView(view: View, savedViewState: Bundle?) {
         super.onBindView(view, savedViewState)
