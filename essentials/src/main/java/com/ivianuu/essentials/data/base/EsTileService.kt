@@ -8,10 +8,7 @@ import com.ivianuu.essentials.injection.bindInstanceModule
 import com.ivianuu.essentials.injection.getComponentDependencies
 import com.ivianuu.essentials.injection.lazyComponent
 import com.ivianuu.essentials.util.asMainCoroutineScope
-import com.ivianuu.injekt.ComponentHolder
-import com.ivianuu.injekt.Module
-import com.ivianuu.injekt.dependencies
-import com.ivianuu.injekt.modules
+import com.ivianuu.injekt.*
 import com.ivianuu.scopes.MutableScope
 import com.ivianuu.scopes.ReusableScope
 import com.ivianuu.scopes.Scope
@@ -23,7 +20,7 @@ import com.ivianuu.scopes.Scope
 abstract class EsTileService : TileService(), ComponentHolder {
 
     override val component by lazyComponent {
-        dependencies(this@EsTileService.dependencies())
+        dependencies(implicitDependencies() + this@EsTileService.dependencies())
         modules(implicitModules() + this@EsTileService.modules())
     }
 
@@ -53,7 +50,9 @@ abstract class EsTileService : TileService(), ComponentHolder {
         super.onStopListening()
     }
 
-    protected open fun dependencies() = getComponentDependencies()
+    protected open fun dependencies() = emptyList<Component>()
+
+    protected open fun implicitDependencies() = getComponentDependencies()
 
     protected open fun modules() = emptyList<Module>()
 

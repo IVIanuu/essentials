@@ -45,7 +45,7 @@ import com.ivianuu.traveler.setRoot
 abstract class EsActivity : AppCompatActivity(), ComponentHolder, MvRxView, RouterActivity {
 
     override val component by lazyComponent {
-        dependencies(this@EsActivity.dependencies())
+        dependencies(implicitDependencies() + this@EsActivity.dependencies())
         modules(implicitModules() + this@EsActivity.modules())
     }
 
@@ -69,9 +69,7 @@ abstract class EsActivity : AppCompatActivity(), ComponentHolder, MvRxView, Rout
 
     protected open val navigator: Navigator by unsafeLazy {
         val navigators = mutableListOf<ResultNavigator>()
-        navigators.addAll(navigators())
-        navigators.add(ControllerNavigator(router))
-        navigators.add(AppNavigator(this))
+        navigators.addAll(navigators() + implicitNavigators())
         compositeNavigatorOf(navigators)
     }
 
@@ -114,7 +112,14 @@ abstract class EsActivity : AppCompatActivity(), ComponentHolder, MvRxView, Rout
 
     protected open fun navigators() = emptyList<ResultNavigator>()
 
-    protected open fun dependencies() = getComponentDependencies()
+    protected open fun implicitNavigators() = listOf(
+        ControllerNavigator(router),
+        AppNavigator(this)
+    )
+
+    protected open fun dependencies() = emptyList<Component>()
+
+    protected open fun implicitDependencies() = getComponentDependencies()
 
     protected open fun modules() = emptyList<Module>()
 

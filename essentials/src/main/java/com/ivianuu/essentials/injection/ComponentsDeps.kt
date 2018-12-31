@@ -9,7 +9,7 @@ import com.ivianuu.director.Controller
 import com.ivianuu.injekt.Component
 import com.ivianuu.injekt.ComponentHolder
 
-fun Application.getComponentDependencies() = emptyList<ComponentHolder>()
+fun Application.getComponentDependencies() = emptyList<Component>()
 
 fun Activity.getComponentDependencies(): List<Component> {
     val deps = mutableListOf<Component>()

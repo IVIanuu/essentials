@@ -23,10 +23,7 @@ import com.ivianuu.essentials.injection.bindInstanceModule
 import com.ivianuu.essentials.injection.lazyComponent
 import com.ivianuu.essentials.util.ContextAware
 import com.ivianuu.essentials.util.asMainCoroutineScope
-import com.ivianuu.injekt.ComponentHolder
-import com.ivianuu.injekt.Module
-import com.ivianuu.injekt.dependencies
-import com.ivianuu.injekt.modules
+import com.ivianuu.injekt.*
 import com.ivianuu.scopes.MutableScope
 import com.ivianuu.scopes.Scope
 
@@ -38,7 +35,7 @@ abstract class EsWorker(
 ) : Worker(context, workerParams), ComponentHolder, ContextAware {
 
     override val component by lazyComponent {
-        dependencies(this@EsWorker.dependencies())
+        dependencies(implicitDependencies() + this@EsWorker.dependencies())
         modules(implicitModules() + this@EsWorker.modules())
     }
 
@@ -55,7 +52,9 @@ abstract class EsWorker(
         super.onStopped()
     }
 
-    protected open fun dependencies() =
+    protected open fun dependencies() = emptyList<Component>()
+
+    protected open fun implicitDependencies() =
         (applicationContext as? ComponentHolder)?.component?.let { listOf(it) } ?: emptyList()
 
     protected open fun modules() = emptyList<Module>()

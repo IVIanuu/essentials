@@ -8,10 +8,7 @@ import com.ivianuu.essentials.injection.bindInstanceModule
 import com.ivianuu.essentials.injection.getComponentDependencies
 import com.ivianuu.essentials.injection.lazyComponent
 import com.ivianuu.essentials.util.asMainCoroutineScope
-import com.ivianuu.injekt.ComponentHolder
-import com.ivianuu.injekt.Module
-import com.ivianuu.injekt.dependencies
-import com.ivianuu.injekt.modules
+import com.ivianuu.injekt.*
 import com.ivianuu.scopes.MutableScope
 import com.ivianuu.scopes.Scope
 
@@ -21,7 +18,7 @@ import com.ivianuu.scopes.Scope
 abstract class EsService : Service(), ComponentHolder {
 
     override val component by lazyComponent {
-        dependencies(this@EsService.dependencies())
+        dependencies(implicitDependencies() + this@EsService.dependencies())
         modules(implicitModules() + this@EsService.modules())
     }
 
@@ -37,7 +34,9 @@ abstract class EsService : Service(), ComponentHolder {
 
     override fun onBind(intent: Intent): IBinder? = null
 
-    protected open fun dependencies() = getComponentDependencies()
+    protected open fun dependencies() = emptyList<Component>()
+
+    protected open fun implicitDependencies() = getComponentDependencies()
 
     protected open fun modules() = emptyList<Module>()
 

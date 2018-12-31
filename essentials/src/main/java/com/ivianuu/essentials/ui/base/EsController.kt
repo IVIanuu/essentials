@@ -45,7 +45,7 @@ abstract class EsController : LifecycleController(), ContextAware, ComponentHold
     MvRxView {
 
     override val component by lazyComponent {
-        dependencies(this@EsController.dependencies())
+        dependencies(implicitDependencies() + this@EsController.dependencies())
         modules(implicitModules() + this@EsController.modules())
     }
 
@@ -101,7 +101,9 @@ abstract class EsController : LifecycleController(), ContextAware, ComponentHold
     override fun invalidate() {
     }
 
-    protected open fun dependencies() = getComponentDependencies()
+    protected open fun dependencies() = emptyList<Component>()
+
+    protected open fun implicitDependencies() = getComponentDependencies()
 
     protected open fun modules() = emptyList<Module>()
 

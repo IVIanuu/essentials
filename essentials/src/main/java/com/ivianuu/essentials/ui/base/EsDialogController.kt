@@ -41,7 +41,7 @@ import com.ivianuu.traveler.Router
 abstract class EsDialogController : DialogController(), ComponentHolder, ContextAware, MvRxView {
 
     override val component by lazyComponent {
-        dependencies(this@EsDialogController.dependencies())
+        dependencies(implicitDependencies() + this@EsDialogController.dependencies())
         modules(implicitModules() + this@EsDialogController.modules())
     }
 
@@ -72,7 +72,9 @@ abstract class EsDialogController : DialogController(), ComponentHolder, Context
 
     override fun getViewModelStore(): ViewModelStore = viewModelStoreOwner.viewModelStore
 
-    protected open fun dependencies() = getComponentDependencies()
+    protected open fun dependencies() = emptyList<Component>()
+
+    protected open fun implicitDependencies() = getComponentDependencies()
 
     protected open fun modules() = emptyList<Module>()
 

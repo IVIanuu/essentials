@@ -58,7 +58,7 @@ abstract class EsApp : Application(), ComponentHolder {
         configureInjekt { androidLogger() }
 
         _component = component {
-            dependencies(this@EsApp.dependencies())
+            dependencies(implicitDependencies() + this@EsApp.dependencies())
             modules(implicitModules() + this@EsApp.modules())
             GlobalComponentHolder.initialize(this)
         }
@@ -83,6 +83,8 @@ abstract class EsApp : Application(), ComponentHolder {
     protected open fun shouldStartAppService(type: KClass<out AppService>) = true
 
     protected open fun dependencies(): List<Component> = emptyList()
+
+    protected open fun implicitDependencies() = getComponentDependencies()
 
     protected open fun implicitModules() = listOf(
         bindInstanceModule(this),

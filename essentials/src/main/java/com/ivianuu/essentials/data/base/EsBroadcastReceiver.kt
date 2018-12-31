@@ -17,20 +17,20 @@ abstract class EsBroadcastReceiver : BroadcastReceiver(), ComponentHolder {
 
     override fun onReceive(context: Context, intent: Intent) {
         component = component {
-            dependencies(this@EsBroadcastReceiver.dependencies(context, intent))
-            modules(implicitModules() + this@EsBroadcastReceiver.modules(context, intent))
+            dependencies(
+                implicitDependencies(context) + this@EsBroadcastReceiver.dependencies(
+                    context
+                )
+            )
+            modules(implicitModules(context) + this@EsBroadcastReceiver.modules(context))
         }
     }
 
-    protected open fun dependencies(
-        context: Context,
-        intent: Intent
-    ) = getComponentDependencies(context)
+    protected open fun dependencies(context: Context) = emptyList<Component>()
 
-    protected open fun modules(
-        context: Context,
-        intent: Intent
-    ) = emptyList<Module>()
+    protected open fun implicitDependencies(context: Context) = getComponentDependencies(context)
 
-    protected open fun implicitModules() = listOf(bindInstanceModule(this))
+    protected open fun modules(context: Context) = emptyList<Module>()
+
+    protected open fun implicitModules(context: Context) = listOf(bindInstanceModule(this))
 }
