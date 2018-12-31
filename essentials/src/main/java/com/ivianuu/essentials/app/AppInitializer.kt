@@ -1,14 +1,13 @@
 package com.ivianuu.essentials.app
 
 import android.app.Application
-import com.ivianuu.essentials.injection.bindIntoMap
-import com.ivianuu.essentials.injection.intoMap
-import com.ivianuu.essentials.injection.mapBinding
+import com.ivianuu.essentials.injection.multibinding.bindIntoClassMap
+import com.ivianuu.essentials.injection.multibinding.classMapBinding
+import com.ivianuu.essentials.injection.multibinding.intoClassMap
 import com.ivianuu.injekt.Definition
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.factory
 import com.ivianuu.injekt.module
-import kotlin.reflect.KClass
 
 const val APP_INITIALIZERS = "appInitializers"
 
@@ -23,14 +22,13 @@ inline fun <reified T : AppInitializer> Module.appInitializer(
     name: String? = null,
     override: Boolean = false,
     noinline definition: Definition<T>
-) = factory(name, override, definition) intoMap (APP_INITIALIZERS to T::class)
+) = factory(name, override, definition) intoClassMap APP_INITIALIZERS
 
 inline fun <reified T : AppInitializer> Module.bindAppInitializer() =
-    bindIntoMap<KClass<out AppInitializer>, AppInitializer, T>(APP_INITIALIZERS, T::class)
+    bindIntoClassMap<AppInitializer, T>(APP_INITIALIZERS)
 
 val esAppInitializersModule = module {
-    mapBinding<KClass<out AppInitializer>, AppInitializer>(APP_INITIALIZERS)
-
+    classMapBinding<AppInitializer>(APP_INITIALIZERS)
     bindAppInitializer<RxJavaAppInitializer>()
     bindAppInitializer<StateStoreAppInitializer>()
     bindAppInitializer<TimberAppInitializer>()

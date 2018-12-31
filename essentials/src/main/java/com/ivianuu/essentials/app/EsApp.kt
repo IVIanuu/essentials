@@ -17,7 +17,12 @@
 package com.ivianuu.essentials.app
 
 import android.app.Application
-import com.ivianuu.essentials.injection.*
+import com.ivianuu.essentials.injection.GlobalComponentHolder
+import com.ivianuu.essentials.injection.bindInstanceModule
+import com.ivianuu.essentials.injection.getComponentDependencies
+import com.ivianuu.essentials.injection.multibinding.ClassMultiBindingMap
+import com.ivianuu.essentials.injection.multibinding.toProviderMap
+import com.ivianuu.essentials.injection.systemServiceModule
 import com.ivianuu.essentials.ui.traveler.travelerModule
 import com.ivianuu.essentials.util.ext.unsafeLazy
 import com.ivianuu.injekt.*
@@ -39,11 +44,11 @@ abstract class EsApp : Application(), ComponentHolder {
     private var componentCreated = false
 
     private val appInitializers by unsafeLazy {
-        get<MultiBindingMap<KClass<out AppInitializer>, AppInitializer>>(APP_INITIALIZERS)
+        get<ClassMultiBindingMap<AppInitializer>>(APP_INITIALIZERS)
             .toProviderMap()
     }
     private val appServices by unsafeLazy {
-        get<MultiBindingMap<KClass<out AppService>, AppService>>(APP_SERVICES)
+        get<ClassMultiBindingMap<AppService>>(APP_SERVICES)
             .toProviderMap()
     }
 

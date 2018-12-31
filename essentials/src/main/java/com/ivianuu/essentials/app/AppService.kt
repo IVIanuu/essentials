@@ -1,15 +1,14 @@
 package com.ivianuu.essentials.app
 
-import com.ivianuu.essentials.injection.bindIntoMap
-import com.ivianuu.essentials.injection.intoMap
-import com.ivianuu.essentials.injection.mapBinding
+import com.ivianuu.essentials.injection.multibinding.bindIntoClassMap
+import com.ivianuu.essentials.injection.multibinding.classMapBinding
+import com.ivianuu.essentials.injection.multibinding.intoClassMap
 import com.ivianuu.injekt.Definition
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.module
 import com.ivianuu.injekt.single
 import com.ivianuu.scopes.MutableScope
 import com.ivianuu.scopes.Scope
-import kotlin.reflect.KClass
 
 const val APP_SERVICES = "appServices"
 
@@ -30,11 +29,11 @@ inline fun <reified T : AppService> Module.appService(
     name: String? = null,
     override: Boolean = false,
     noinline definition: Definition<T>
-) = single(name, override, false, definition) intoMap (APP_SERVICES to T::class)
+) = single(name, override, false, definition) intoClassMap APP_SERVICES
 
 inline fun <reified T : AppService> Module.bindAppService() =
-    bindIntoMap<KClass<out AppService>, AppService, T>(APP_SERVICES, T::class)
+    bindIntoClassMap<AppService, T>(APP_SERVICES)
 
 val esAppServicesModule = module {
-    mapBinding<KClass<out AppService>, AppService>(APP_SERVICES)
+    classMapBinding<AppService>(APP_SERVICES)
 }
