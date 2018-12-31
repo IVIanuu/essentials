@@ -4,10 +4,11 @@ import android.annotation.TargetApi
 import android.os.Build
 import android.service.quicksettings.TileService
 import com.ivianuu.essentials.injection.bindInstanceModule
+import com.ivianuu.essentials.injection.serviceComponent
 
-import com.ivianuu.essentials.injection.getComponentDependencies
-import com.ivianuu.essentials.injection.lazyComponent
+
 import com.ivianuu.essentials.util.asMainCoroutineScope
+import com.ivianuu.essentials.util.ext.unsafeLazy
 import com.ivianuu.injekt.*
 import com.ivianuu.scopes.MutableScope
 import com.ivianuu.scopes.ReusableScope
@@ -19,9 +20,12 @@ import com.ivianuu.scopes.Scope
 @TargetApi(Build.VERSION_CODES.N)
 abstract class EsTileService : TileService(), ComponentHolder {
 
-    override val component by lazyComponent {
-        dependencies(implicitDependencies() + this@EsTileService.dependencies())
-        modules(implicitModules() + this@EsTileService.modules())
+    override val component by unsafeLazy {
+        serviceComponent {
+            dependencies(this@EsTileService.dependencies())
+            modules(bindInstanceModule(this@EsTileService))
+            modules(this@EsTileService.modules())
+        }
     }
 
     val scope: Scope get() = _scope
@@ -52,10 +56,6 @@ abstract class EsTileService : TileService(), ComponentHolder {
 
     protected open fun dependencies() = emptyList<Component>()
 
-    protected open fun implicitDependencies() = getComponentDependencies()
-
     protected open fun modules() = emptyList<Module>()
-
-    protected open fun implicitModules() = listOf(bindInstanceModule(this))
 
 }

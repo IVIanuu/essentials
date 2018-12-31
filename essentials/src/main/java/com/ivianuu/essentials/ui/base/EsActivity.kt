@@ -23,9 +23,10 @@ import com.ivianuu.director.attachRouter
 import com.ivianuu.director.handleBack
 import com.ivianuu.director.traveler.ControllerNavigator
 import com.ivianuu.essentials.R
+import com.ivianuu.essentials.injection.activityComponent
 import com.ivianuu.essentials.injection.bindInstanceModule
-import com.ivianuu.essentials.injection.getComponentDependencies
-import com.ivianuu.essentials.injection.lazyComponent
+
+
 import com.ivianuu.essentials.ui.common.RouterActivity
 import com.ivianuu.essentials.ui.mvrx.MvRxView
 import com.ivianuu.essentials.ui.traveler.key.keyModule
@@ -44,9 +45,15 @@ import com.ivianuu.traveler.setRoot
  */
 abstract class EsActivity : AppCompatActivity(), ComponentHolder, MvRxView, RouterActivity {
 
-    override val component by lazyComponent {
-        dependencies(implicitDependencies() + this@EsActivity.dependencies())
-        modules(implicitModules() + this@EsActivity.modules())
+    override val component by unsafeLazy {
+        activityComponent {
+            dependencies(this@EsActivity.dependencies())
+            modules(
+                bindInstanceModule(this@EsActivity),
+                keyModule(intent.extras, false)
+            )
+            modules(this@EsActivity.modules())
+        }
     }
 
     val travelerRouter by inject<com.ivianuu.traveler.Router>()
@@ -69,7 +76,9 @@ abstract class EsActivity : AppCompatActivity(), ComponentHolder, MvRxView, Rout
 
     protected open val navigator: Navigator by unsafeLazy {
         val navigators = mutableListOf<ResultNavigator>()
-        navigators.addAll(navigators() + implicitNavigators())
+        navigators.addAll(navigators())
+        navigators.add(ControllerNavigator(router))
+        navigators.add(AppNavigator(this))
         compositeNavigatorOf(navigators)
     }
 
@@ -112,19 +121,8 @@ abstract class EsActivity : AppCompatActivity(), ComponentHolder, MvRxView, Rout
 
     protected open fun navigators() = emptyList<ResultNavigator>()
 
-    protected open fun implicitNavigators() = listOf(
-        ControllerNavigator(router),
-        AppNavigator(this)
-    )
-
     protected open fun dependencies() = emptyList<Component>()
-
-    protected open fun implicitDependencies() = getComponentDependencies()
 
     protected open fun modules() = emptyList<Module>()
 
-    protected open fun implicitModules() = listOf(
-        bindInstanceModule(this),
-        keyModule(intent.extras, false)
-    )
 }

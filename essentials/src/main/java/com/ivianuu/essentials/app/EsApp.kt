@@ -20,7 +20,7 @@ import android.app.Application
 import com.ivianuu.essentials.injection.GlobalComponentHolder
 import com.ivianuu.essentials.injection.bindInstanceModule
 import com.ivianuu.essentials.injection.esModule
-import com.ivianuu.essentials.injection.getComponentDependencies
+
 import com.ivianuu.essentials.injection.multibinding.ClassMultiBindingMap
 import com.ivianuu.essentials.injection.multibinding.toProviderMap
 import com.ivianuu.essentials.util.ext.unsafeLazy
@@ -62,8 +62,12 @@ abstract class EsApp : Application(), ComponentHolder {
         configureInjekt { androidLogger() }
 
         _component = component {
-            dependencies(implicitDependencies() + this@EsApp.dependencies())
-            modules(implicitModules() + this@EsApp.modules())
+            dependencies(this@EsApp.dependencies())
+            modules(
+                bindInstanceModule(this@EsApp),
+                esAppModule(this@EsApp), esModule
+            )
+            modules(this@EsApp.modules())
             GlobalComponentHolder.initialize(this)
         }
     }
@@ -87,14 +91,6 @@ abstract class EsApp : Application(), ComponentHolder {
     protected open fun shouldStartAppService(type: KClass<out AppService>) = true
 
     protected open fun dependencies(): List<Component> = emptyList()
-
-    protected open fun implicitDependencies() = getComponentDependencies()
-
-    protected open fun implicitModules() = listOf(
-        bindInstanceModule(this),
-        esAppModule(this),
-        esModule
-    )
 
     protected open fun modules(): List<Module> = emptyList()
 

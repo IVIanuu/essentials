@@ -4,10 +4,11 @@ import android.app.Service
 import android.content.Intent
 import android.os.IBinder
 import com.ivianuu.essentials.injection.bindInstanceModule
+import com.ivianuu.essentials.injection.serviceComponent
 
-import com.ivianuu.essentials.injection.getComponentDependencies
-import com.ivianuu.essentials.injection.lazyComponent
+
 import com.ivianuu.essentials.util.asMainCoroutineScope
+import com.ivianuu.essentials.util.ext.unsafeLazy
 import com.ivianuu.injekt.*
 import com.ivianuu.scopes.MutableScope
 import com.ivianuu.scopes.Scope
@@ -17,9 +18,12 @@ import com.ivianuu.scopes.Scope
  */
 abstract class EsService : Service(), ComponentHolder {
 
-    override val component by lazyComponent {
-        dependencies(implicitDependencies() + this@EsService.dependencies())
-        modules(implicitModules() + this@EsService.modules())
+    override val component by unsafeLazy {
+        serviceComponent {
+            dependencies(this@EsService.dependencies())
+            modules(bindInstanceModule(this@EsService))
+            modules(this@EsService.modules())
+        }
     }
 
     val scope: Scope get() = _scope
@@ -36,10 +40,6 @@ abstract class EsService : Service(), ComponentHolder {
 
     protected open fun dependencies() = emptyList<Component>()
 
-    protected open fun implicitDependencies() = getComponentDependencies()
-
     protected open fun modules() = emptyList<Module>()
-
-    protected open fun implicitModules() = listOf(bindInstanceModule(this))
 
 }

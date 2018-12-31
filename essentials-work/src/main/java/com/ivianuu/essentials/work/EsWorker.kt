@@ -20,9 +20,9 @@ import android.content.Context
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.ivianuu.essentials.injection.bindInstanceModule
-import com.ivianuu.essentials.injection.lazyComponent
 import com.ivianuu.essentials.util.ContextAware
 import com.ivianuu.essentials.util.asMainCoroutineScope
+import com.ivianuu.essentials.util.ext.unsafeLazy
 import com.ivianuu.injekt.*
 import com.ivianuu.scopes.MutableScope
 import com.ivianuu.scopes.Scope
@@ -34,9 +34,12 @@ abstract class EsWorker(
     context: Context, workerParams: WorkerParameters
 ) : Worker(context, workerParams), ComponentHolder, ContextAware {
 
-    override val component by lazyComponent {
-        dependencies(implicitDependencies() + this@EsWorker.dependencies())
-        modules(implicitModules() + this@EsWorker.modules())
+    override val component by unsafeLazy {
+        workerComponent {
+            dependencies(this@EsWorker.dependencies())
+            modules(bindInstanceModule(this@EsWorker))
+            modules(this@EsWorker.modules())
+        }
     }
 
     override val providedContext: Context
@@ -54,10 +57,6 @@ abstract class EsWorker(
 
     protected open fun dependencies() = emptyList<Component>()
 
-    protected open fun implicitDependencies() =
-        (applicationContext as? ComponentHolder)?.component?.let { listOf(it) } ?: emptyList()
-
     protected open fun modules() = emptyList<Module>()
 
-    protected open fun implicitModules() = listOf(bindInstanceModule(this))
 }

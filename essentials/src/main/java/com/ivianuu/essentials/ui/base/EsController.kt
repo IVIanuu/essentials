@@ -25,14 +25,15 @@ import com.ivianuu.director.arch.lifecycle.LifecycleController
 import com.ivianuu.director.scopes.destroy
 import com.ivianuu.director.scopes.unbindView
 import com.ivianuu.essentials.injection.bindInstanceModule
+import com.ivianuu.essentials.injection.controllerComponent
 
-import com.ivianuu.essentials.injection.getComponentDependencies
-import com.ivianuu.essentials.injection.lazyComponent
+
 import com.ivianuu.essentials.ui.mvrx.MvRxView
 import com.ivianuu.essentials.ui.traveler.key.keyModule
 import com.ivianuu.essentials.util.ComponentHolderContextWrapper
 import com.ivianuu.essentials.util.ContextAware
 import com.ivianuu.essentials.util.asMainCoroutineScope
+import com.ivianuu.essentials.util.ext.unsafeLazy
 import com.ivianuu.injekt.*
 import com.ivianuu.traveler.Router
 import kotlinx.android.extensions.LayoutContainer
@@ -45,9 +46,12 @@ import kotlinx.coroutines.CoroutineScope
 abstract class EsController : LifecycleController(), ContextAware, ComponentHolder, LayoutContainer,
     MvRxView {
 
-    override val component by lazyComponent {
-        dependencies(implicitDependencies() + this@EsController.dependencies())
-        modules(implicitModules() + this@EsController.modules())
+    override val component by unsafeLazy {
+        controllerComponent {
+            dependencies(this@EsController.dependencies())
+            modules(bindInstanceModule(this@EsController), keyModule(args))
+            modules(this@EsController.modules())
+        }
     }
 
     val travelerRouter by inject<Router>()
@@ -104,12 +108,6 @@ abstract class EsController : LifecycleController(), ContextAware, ComponentHold
 
     protected open fun dependencies() = emptyList<Component>()
 
-    protected open fun implicitDependencies() = getComponentDependencies()
-
     protected open fun modules() = emptyList<Module>()
 
-    protected open fun implicitModules() = listOf(
-        bindInstanceModule(this),
-        keyModule(args)
-    )
 }

@@ -26,13 +26,14 @@ import com.ivianuu.director.arch.lifecycle.ControllerViewModelStoreOwner
 import com.ivianuu.director.dialog.DialogController
 import com.ivianuu.director.scopes.destroy
 import com.ivianuu.essentials.injection.bindInstanceModule
+import com.ivianuu.essentials.injection.controllerComponent
 
-import com.ivianuu.essentials.injection.getComponentDependencies
-import com.ivianuu.essentials.injection.lazyComponent
+
 import com.ivianuu.essentials.ui.mvrx.MvRxView
 import com.ivianuu.essentials.ui.traveler.key.keyModule
 import com.ivianuu.essentials.util.ContextAware
 import com.ivianuu.essentials.util.asMainCoroutineScope
+import com.ivianuu.essentials.util.ext.unsafeLazy
 import com.ivianuu.injekt.*
 import com.ivianuu.traveler.Router
 
@@ -41,9 +42,12 @@ import com.ivianuu.traveler.Router
  */
 abstract class EsDialogController : DialogController(), ComponentHolder, ContextAware, MvRxView {
 
-    override val component by lazyComponent {
-        dependencies(implicitDependencies() + this@EsDialogController.dependencies())
-        modules(implicitModules() + this@EsDialogController.modules())
+    override val component by unsafeLazy {
+        controllerComponent {
+            dependencies(this@EsDialogController.dependencies())
+            modules(bindInstanceModule(this@EsDialogController), keyModule(args))
+            modules(this@EsDialogController.modules())
+        }
     }
 
     val travelerRouter by inject<Router>()
@@ -75,12 +79,5 @@ abstract class EsDialogController : DialogController(), ComponentHolder, Context
 
     protected open fun dependencies() = emptyList<Component>()
 
-    protected open fun implicitDependencies() = getComponentDependencies()
-
     protected open fun modules() = emptyList<Module>()
-
-    protected open fun implicitModules() = listOf(
-        bindInstanceModule(this),
-        keyModule(args)
-    )
 }
