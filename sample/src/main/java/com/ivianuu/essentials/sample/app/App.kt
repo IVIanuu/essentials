@@ -16,12 +16,15 @@
 
 package com.ivianuu.essentials.sample.app
 
+import android.content.SharedPreferences
+import androidx.core.content.edit
 import com.ivianuu.essentials.app.EsApp
 import com.ivianuu.essentials.apps.esAppsModule
 import com.ivianuu.essentials.apps.glide.esAppsGlideModule
 import com.ivianuu.essentials.hidenavbar.esNavBarModule
 import com.ivianuu.essentials.sample.injekt.autoModule
 import com.ivianuu.essentials.shell.esShellModule
+import com.ivianuu.injekt.get
 
 /**
  * App
@@ -36,5 +39,9 @@ class App : EsApp() {
         esShellModule
     )
 
+    override fun onCreate() {
+        super.onCreate()
+        get<SharedPreferences>().edit { putString("key", "test") }
+    }
 
 }

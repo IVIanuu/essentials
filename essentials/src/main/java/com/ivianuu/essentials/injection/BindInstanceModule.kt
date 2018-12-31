@@ -4,9 +4,6 @@ import com.ivianuu.injekt.factory
 import com.ivianuu.injekt.module
 import kotlin.reflect.KClass
 
-fun <T : Any> bindInstanceModule(
-    instance: T,
-    override: Boolean = false
-) = module(override = override) {
+fun <T : Any> bindInstanceModule(instance: T) = module {
     factory(instance::class as KClass<T>) { instance }
 }

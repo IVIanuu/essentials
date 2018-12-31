@@ -19,7 +19,7 @@ package com.ivianuu.essentials.app
 import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
-import com.ivianuu.essentials.util.EsPreferenceManager
+import com.ivianuu.essentials.injection.sharedPreferences
 import com.ivianuu.injekt.*
 import com.ivianuu.kprefs.KPrefs
 import com.ivianuu.ksettings.KSettings
@@ -32,7 +32,7 @@ inline fun <reified T : EsApp> esAppModule(esApp: T) = module {
     factory { esApp } bind Application::class bind Context::class
 
     // prefs
-    factory { EsPreferenceManager.getDefaultSharedPreferences(get()) }
+    sharedPreferences(esApp.packageName + "_preferences")
     single { KPrefs(get<SharedPreferences>()) }
 
     single { KSettings(get<Context>()) }

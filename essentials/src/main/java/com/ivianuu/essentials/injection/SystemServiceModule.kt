@@ -62,6 +62,7 @@ val systemServiceModule = module {
         }
 }
 
+@Suppress("DEPRECATION")
 private fun getSystemServices(): Set<KClass<*>> {
     val systemServices = mutableSetOf<KClass<*>>()
 
