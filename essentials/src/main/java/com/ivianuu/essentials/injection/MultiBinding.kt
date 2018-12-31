@@ -1,9 +1,6 @@
 package com.ivianuu.essentials.injection
 
 import com.ivianuu.injekt.*
-import kotlin.collections.set
-
-import com.ivianuu.injekt.*
 import java.util.*
 import kotlin.collections.set
 
@@ -14,7 +11,7 @@ const val KEY_SET_BINDINGS = "setBindings"
  * Adds a declaration for a map of [K, T] with the name [mapName]
  */
 fun <K : Any, T : Any> Module.mapBinding(mapName: String) {
-    factory(name = mapName, override = true) { emptyMap<K, T>() }
+    factory(name = mapName, override = true) { MultiBindingMap<K, T>(emptyMap()) }
 }
 
 infix fun <K : Any, T : Any, S : T> Declaration<S>.intoMap(pair: Pair<String, K>) =
@@ -38,7 +35,7 @@ infix fun <K : Any, T : Any, S : T> Declaration<S>.intoMap(pair: Pair<String, K>
     }
 
 fun <T : Any> Module.setBinding(setName: String) {
-    factory(name = setName, override = true) { emptySet<T>() }
+    factory(name = setName, override = true) { MultiBindingSet<T>(emptySet()) }
 }
 
 inline fun <reified T : Any, reified S : T> Module.bindIntoSet(
