@@ -5,21 +5,25 @@ import android.accounts.AccountManager
 import android.app.*
 import android.app.admin.DevicePolicyManager
 import android.app.job.JobScheduler
+import android.app.usage.NetworkStatsManager
 import android.app.usage.UsageStatsManager
 import android.appwidget.AppWidgetManager
 import android.bluetooth.BluetoothManager
 import android.content.ClipboardManager
 import android.content.RestrictionsManager
 import android.content.pm.LauncherApps
+import android.content.pm.ShortcutManager
 import android.hardware.ConsumerIrManager
 import android.hardware.SensorManager
 import android.hardware.camera2.CameraManager
 import android.hardware.display.DisplayManager
+import android.hardware.fingerprint.FingerprintManager
 import android.hardware.input.InputManager
 import android.hardware.usb.UsbManager
 import android.location.LocationManager
 import android.media.AudioManager
 import android.media.MediaRouter
+import android.media.midi.MidiManager
 import android.media.projection.MediaProjectionManager
 import android.media.session.MediaSessionManager
 import android.media.tv.TvInputManager
@@ -29,9 +33,11 @@ import android.net.wifi.WifiManager
 import android.net.wifi.p2p.WifiP2pManager
 import android.nfc.NfcManager
 import android.os.*
+import android.os.health.SystemHealthManager
 import android.os.storage.StorageManager
 import android.print.PrintManager
 import android.telecom.TelecomManager
+import android.telephony.CarrierConfigManager
 import android.telephony.SubscriptionManager
 import android.telephony.TelephonyManager
 import android.view.LayoutInflater
@@ -49,7 +55,31 @@ import kotlin.reflect.KClass
  * Module which binds all available system services
  */
 val systemServiceModule = module {
+    getSystemServices()
+        .map { it as KClass<Any> }
+        .forEach { service ->
+            factory(service) { ContextCompat.getSystemService(get(), service.java)!! }
+        }
+}
+
+private fun getSystemServices(): Set<KClass<*>> {
     val systemServices = mutableSetOf<KClass<*>>()
+
+    if (Build.VERSION.SDK_INT >= 23) {
+        systemServices.add(CarrierConfigManager::class)
+        systemServices.add(FingerprintManager::class)
+        systemServices.add(MidiManager::class)
+        systemServices.add(NetworkStatsManager::class)
+    }
+
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        systemServices.add(HardwarePropertiesManager::class)
+        systemServices.add(SystemHealthManager::class)
+    }
+
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+        systemServices.add(ShortcutManager::class)
+    }
 
     if (Build.VERSION.SDK_INT > 22) {
         systemServices.add(SubscriptionManager::class)
@@ -115,9 +145,5 @@ val systemServiceModule = module {
     systemServices.add(WifiManager::class)
     systemServices.add(WindowManager::class)
 
-    systemServices
-        .map { it as KClass<Any> }
-        .forEach { service ->
-            factory(service) { ContextCompat.getSystemService(get(), service.java)!! }
-        }
+    return systemServices
 }
