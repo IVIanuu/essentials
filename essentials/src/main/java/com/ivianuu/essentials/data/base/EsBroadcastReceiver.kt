@@ -4,7 +4,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import com.ivianuu.essentials.injection.bindInstanceModule
-import com.ivianuu.essentials.injection.componentName
+
 import com.ivianuu.essentials.injection.getComponentDependencies
 import com.ivianuu.injekt.*
 
@@ -16,7 +16,7 @@ abstract class EsBroadcastReceiver : BroadcastReceiver(), ComponentHolder {
     override lateinit var component: Component
 
     override fun onReceive(context: Context, intent: Intent) {
-        component = component(componentName()) {
+        component = component {
             dependencies(this@EsBroadcastReceiver.dependencies(context, intent))
             modules(implicitModules() + this@EsBroadcastReceiver.modules(context, intent))
         }

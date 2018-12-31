@@ -48,7 +48,7 @@ import kotlin.reflect.KClass
 /**
  * Module which binds all available system services
  */
-val systemServiceModule = module(name = "SystemServiceModule") {
+val systemServiceModule = module {
     val systemServices = mutableSetOf<KClass<*>>()
 
     if (Build.VERSION.SDK_INT > 22) {

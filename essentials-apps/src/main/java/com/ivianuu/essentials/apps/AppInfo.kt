@@ -14,27 +14,12 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.sample.app
-
-import com.ivianuu.essentials.app.EsApp
-import com.ivianuu.essentials.apps.esAppsModule
-import com.ivianuu.essentials.apps.glide.esAppsGlideModule
-import com.ivianuu.essentials.hidenavbar.esNavBarModule
-import com.ivianuu.essentials.sample.injekt.autoModule
-import com.ivianuu.essentials.shell.esShellModule
+package com.ivianuu.essentials.apps
 
 /**
- * App
+ * Simple application info
  */
-class App : EsApp() {
-
-    override fun modules() = listOf(
-        autoModule,
-        esAppsModule,
-        esAppsGlideModule,
-        esNavBarModule,
-        esShellModule
-    )
-
-
-}
+data class AppInfo(
+    val packageName: String,
+    val appName: String
+)

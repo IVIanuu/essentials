@@ -1,7 +1,7 @@
 include(
     ":essentials",
-    ":essentials-app",
-    ":essentials-app-glide",
+    ":essentials-apps",
+    ":essentials-apps-glide",
     ":essentials-compiler",
     ":essentials-hidenavbar",
     ":essentials-picker",

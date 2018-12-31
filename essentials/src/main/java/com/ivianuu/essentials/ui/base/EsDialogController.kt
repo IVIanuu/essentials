@@ -26,7 +26,7 @@ import com.ivianuu.director.arch.lifecycle.ControllerViewModelStoreOwner
 import com.ivianuu.director.dialog.DialogController
 import com.ivianuu.director.scopes.destroy
 import com.ivianuu.essentials.injection.bindInstanceModule
-import com.ivianuu.essentials.injection.componentName
+
 import com.ivianuu.essentials.injection.getComponentDependencies
 import com.ivianuu.essentials.injection.lazyComponent
 import com.ivianuu.essentials.ui.mvrx.MvRxView
@@ -40,7 +40,7 @@ import com.ivianuu.traveler.Router
  */
 abstract class EsDialogController : DialogController(), ComponentHolder, ContextAware, MvRxView {
 
-    override val component by lazyComponent(componentName()) {
+    override val component by lazyComponent {
         dependencies(this@EsDialogController.dependencies())
         modules(implicitModules() + this@EsDialogController.modules())
     }

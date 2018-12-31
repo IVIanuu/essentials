@@ -28,7 +28,7 @@ inline fun <reified T : AppInitializer> Module.appInitializer(
 inline fun <reified T : AppInitializer> Module.bindAppInitializer() =
     bindIntoMap<KClass<out AppInitializer>, AppInitializer, T>(APP_INITIALIZERS, T::class)
 
-val esAppInitializersModule = module("EsAppInitializersModule") {
+val esAppInitializersModule = module {
     mapBinding<KClass<out AppInitializer>, AppInitializer>(APP_INITIALIZERS)
 
     bindAppInitializer<RxJavaAppInitializer>()

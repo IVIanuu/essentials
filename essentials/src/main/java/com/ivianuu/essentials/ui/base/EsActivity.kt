@@ -24,7 +24,7 @@ import com.ivianuu.director.handleBack
 import com.ivianuu.director.traveler.ControllerNavigator
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.injection.bindInstanceModule
-import com.ivianuu.essentials.injection.componentName
+
 import com.ivianuu.essentials.injection.getComponentDependencies
 import com.ivianuu.essentials.injection.lazyComponent
 import com.ivianuu.essentials.ui.common.RouterActivity
@@ -44,7 +44,7 @@ import com.ivianuu.traveler.setRoot
  */
 abstract class EsActivity : AppCompatActivity(), ComponentHolder, MvRxView, RouterActivity {
 
-    override val component by lazyComponent(componentName()) {
+    override val component by lazyComponent {
         dependencies(this@EsActivity.dependencies())
         modules(implicitModules() + this@EsActivity.modules())
     }

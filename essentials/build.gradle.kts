@@ -35,12 +35,6 @@ android {
         minSdkVersion(Build.minSdk)
         targetSdkVersion(Build.targetSdk)
         consumerProguardFile("proguard-rules.txt")
-
-        javaCompileOptions {
-            annotationProcessorOptions {
-                argument("dagger.formatGeneratedSource", "disabled")
-            }
-        }
     }
 
     androidExtensions {

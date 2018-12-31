@@ -14,27 +14,20 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.sample.app
+package com.ivianuu.essentials.apps.glide
 
-import com.ivianuu.essentials.app.EsApp
-import com.ivianuu.essentials.apps.esAppsModule
-import com.ivianuu.essentials.apps.glide.esAppsGlideModule
-import com.ivianuu.essentials.hidenavbar.esNavBarModule
-import com.ivianuu.essentials.sample.injekt.autoModule
-import com.ivianuu.essentials.shell.esShellModule
+import com.ivianuu.essentials.app.bindAppInitializer
+import com.ivianuu.essentials.apps.glide.autoModule
+import com.ivianuu.injekt.codegen.AutoModule
+import com.ivianuu.injekt.module
+
+@AutoModule(internal = true)
+private object AutoModule
 
 /**
- * App
+ * Binds dependencies related to this module
  */
-class App : EsApp() {
-
-    override fun modules() = listOf(
-        autoModule,
-        esAppsModule,
-        esAppsGlideModule,
-        esNavBarModule,
-        esShellModule
-    )
-
-
+val esAppsGlideModule = module {
+    module(autoModule)
+    bindAppInitializer<AppGlideAppInitializer>()
 }

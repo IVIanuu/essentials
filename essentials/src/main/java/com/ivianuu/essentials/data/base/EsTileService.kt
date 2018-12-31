@@ -4,7 +4,7 @@ import android.annotation.TargetApi
 import android.os.Build
 import android.service.quicksettings.TileService
 import com.ivianuu.essentials.injection.bindInstanceModule
-import com.ivianuu.essentials.injection.componentName
+
 import com.ivianuu.essentials.injection.getComponentDependencies
 import com.ivianuu.essentials.injection.lazyComponent
 import com.ivianuu.essentials.util.asMainCoroutineScope
@@ -22,7 +22,7 @@ import com.ivianuu.scopes.Scope
 @TargetApi(Build.VERSION_CODES.N)
 abstract class EsTileService : TileService(), ComponentHolder {
 
-    override val component by lazyComponent(componentName()) {
+    override val component by lazyComponent {
         dependencies(this@EsTileService.dependencies())
         modules(implicitModules() + this@EsTileService.modules())
     }

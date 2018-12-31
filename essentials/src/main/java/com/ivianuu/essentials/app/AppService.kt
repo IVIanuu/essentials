@@ -35,6 +35,6 @@ inline fun <reified T : AppService> Module.appService(
 inline fun <reified T : AppService> Module.bindAppService() =
     bindIntoMap<KClass<out AppService>, AppService, T>(APP_SERVICES, T::class)
 
-val esAppServicesModule = module("EsAppServicesModule") {
+val esAppServicesModule = module {
     mapBinding<KClass<out AppService>, AppService>(APP_SERVICES)
 }

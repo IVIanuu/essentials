@@ -34,7 +34,7 @@ private object AutoModule
 /**
  * Provides nav bar related dependencies
  */
-val esNavBarModule = module("EsNavBarModule") {
+val esNavBarModule = module {
     module(autoModule)
 
     bindAppService<NavBarController>()

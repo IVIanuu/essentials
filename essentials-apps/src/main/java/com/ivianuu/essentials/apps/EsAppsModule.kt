@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.app
+package com.ivianuu.essentials.apps
 
 import com.ivianuu.injekt.codegen.AutoModule
 

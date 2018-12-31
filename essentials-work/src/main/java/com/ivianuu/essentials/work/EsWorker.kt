@@ -20,7 +20,6 @@ import android.content.Context
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.ivianuu.essentials.injection.bindInstanceModule
-import com.ivianuu.essentials.injection.componentName
 import com.ivianuu.essentials.injection.lazyComponent
 import com.ivianuu.essentials.util.ContextAware
 import com.ivianuu.essentials.util.asMainCoroutineScope
@@ -38,7 +37,7 @@ abstract class EsWorker(
     context: Context, workerParams: WorkerParameters
 ) : Worker(context, workerParams), ComponentHolder, ContextAware {
 
-    override val component by lazyComponent(componentName()) {
+    override val component by lazyComponent {
         dependencies(this@EsWorker.dependencies())
         modules(implicitModules() + this@EsWorker.modules())
     }

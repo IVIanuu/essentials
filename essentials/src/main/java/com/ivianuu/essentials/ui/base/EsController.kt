@@ -25,7 +25,7 @@ import com.ivianuu.director.arch.lifecycle.LifecycleController
 import com.ivianuu.director.scopes.destroy
 import com.ivianuu.director.scopes.unbindView
 import com.ivianuu.essentials.injection.bindInstanceModule
-import com.ivianuu.essentials.injection.componentName
+
 import com.ivianuu.essentials.injection.getComponentDependencies
 import com.ivianuu.essentials.injection.lazyComponent
 import com.ivianuu.essentials.ui.mvrx.MvRxView
@@ -44,7 +44,7 @@ import kotlinx.coroutines.CoroutineScope
 abstract class EsController : LifecycleController(), ContextAware, ComponentHolder, LayoutContainer,
     MvRxView {
 
-    override val component by lazyComponent(componentName()) {
+    override val component by lazyComponent {
         dependencies(this@EsController.dependencies())
         modules(implicitModules() + this@EsController.modules())
     }

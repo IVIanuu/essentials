@@ -4,7 +4,7 @@ import android.app.Service
 import android.content.Intent
 import android.os.IBinder
 import com.ivianuu.essentials.injection.bindInstanceModule
-import com.ivianuu.essentials.injection.componentName
+
 import com.ivianuu.essentials.injection.getComponentDependencies
 import com.ivianuu.essentials.injection.lazyComponent
 import com.ivianuu.essentials.util.asMainCoroutineScope
@@ -20,7 +20,7 @@ import com.ivianuu.scopes.Scope
  */
 abstract class EsService : Service(), ComponentHolder {
 
-    override val component by lazyComponent(componentName()) {
+    override val component by lazyComponent {
         dependencies(this@EsService.dependencies())
         modules(implicitModules() + this@EsService.modules())
     }

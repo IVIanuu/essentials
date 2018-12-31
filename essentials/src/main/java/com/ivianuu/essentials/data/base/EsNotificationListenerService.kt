@@ -2,7 +2,7 @@ package com.ivianuu.essentials.data.base
 
 import android.service.notification.NotificationListenerService
 import com.ivianuu.essentials.injection.bindInstanceModule
-import com.ivianuu.essentials.injection.componentName
+
 import com.ivianuu.essentials.injection.getComponentDependencies
 import com.ivianuu.essentials.injection.lazyComponent
 import com.ivianuu.essentials.util.asMainCoroutineScope
@@ -19,7 +19,7 @@ import com.ivianuu.scopes.Scope
  */
 abstract class EsNotificationListenerService : NotificationListenerService(), ComponentHolder {
 
-    override val component by lazyComponent(componentName()) {
+    override val component by lazyComponent {
         dependencies(this@EsNotificationListenerService.dependencies())
         modules(implicitModules() + this@EsNotificationListenerService.modules())
     }

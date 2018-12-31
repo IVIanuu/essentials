@@ -33,12 +33,6 @@ android {
         buildToolsVersion = Build.buildToolsVersion
         minSdkVersion(Build.minSdk)
         targetSdkVersion(Build.targetSdk)
-
-        javaCompileOptions {
-            annotationProcessorOptions {
-                argument("dagger.formatGeneratedSource", "disabled")
-            }
-        }
     }
 
     kapt {

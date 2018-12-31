@@ -17,12 +17,6 @@ android {
         targetSdkVersion(Build.targetSdkSample)
         versionCode = Build.versionCode
         versionName = Build.versionName
-
-        javaCompileOptions {
-            annotationProcessorOptions {
-                argument("dagger.formatGeneratedSource", "disabled")
-            }
-        }
     }
 
     buildTypes {
@@ -44,8 +38,8 @@ android {
 
 dependencies {
     implementation(project(":essentials"))
-    implementation(project(":essentials-app"))
-    implementation(project(":essentials-app-glide"))
+    implementation(project(":essentials-apps"))
+    implementation(project(":essentials-apps-glide"))
     implementation(project(":essentials-hidenavbar"))
     implementation(project(":essentials-shell"))
     implementation(project(":essentials-picker"))

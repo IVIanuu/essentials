@@ -27,7 +27,7 @@ import com.ivianuu.ksettings.KSettings
 /**
  * Basic app dependencies such as preferences or package manager
  */
-inline fun <reified T : EsApp> esAppModule(esApp: T) = module(name = "EsAppModule") {
+inline fun <reified T : EsApp> esAppModule(esApp: T) = module {
     // app
     factory { esApp } bind Application::class bind Context::class
 
