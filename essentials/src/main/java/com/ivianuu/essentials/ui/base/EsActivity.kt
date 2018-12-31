@@ -29,6 +29,7 @@ import com.ivianuu.essentials.injection.lazyComponent
 import com.ivianuu.essentials.ui.common.RouterActivity
 import com.ivianuu.essentials.ui.mvrx.MvRxView
 import com.ivianuu.essentials.ui.traveler.key.keyModule
+import com.ivianuu.essentials.ui.traveler.travelerModule
 import com.ivianuu.essentials.util.asMainCoroutineScope
 import com.ivianuu.essentials.util.ext.unsafeLazy
 import com.ivianuu.injekt.*
@@ -124,6 +125,8 @@ abstract class EsActivity : AppCompatActivity(), ComponentHolder, MvRxView, Rout
     protected open fun modules() = emptyList<Module>()
 
     protected open fun implicitModules() = listOf(
-        bindInstanceModule(this), keyModule(intent.extras, false)
+        bindInstanceModule(this),
+        travelerModule,
+        keyModule(intent.extras, false)
     )
 }
