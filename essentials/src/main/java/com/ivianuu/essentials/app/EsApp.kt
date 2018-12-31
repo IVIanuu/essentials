@@ -19,11 +19,10 @@ package com.ivianuu.essentials.app
 import android.app.Application
 import com.ivianuu.essentials.injection.GlobalComponentHolder
 import com.ivianuu.essentials.injection.bindInstanceModule
+import com.ivianuu.essentials.injection.esModule
 import com.ivianuu.essentials.injection.getComponentDependencies
 import com.ivianuu.essentials.injection.multibinding.ClassMultiBindingMap
 import com.ivianuu.essentials.injection.multibinding.toProviderMap
-import com.ivianuu.essentials.injection.systemServiceModule
-import com.ivianuu.essentials.ui.traveler.travelerModule
 import com.ivianuu.essentials.util.ext.unsafeLazy
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.android.androidLogger
@@ -94,11 +93,7 @@ abstract class EsApp : Application(), ComponentHolder {
     protected open fun implicitModules() = listOf(
         bindInstanceModule(this),
         esAppModule(this),
-        autoModule,
-        esAppInitializersModule,
-        esAppServicesModule,
-        travelerModule,
-        systemServiceModule
+        esModule
     )
 
     protected open fun modules(): List<Module> = emptyList()
