@@ -19,12 +19,12 @@ package com.ivianuu.essentials.app
 import android.app.Application
 import com.ivianuu.essentials.injection.esModule
 
-import com.ivianuu.essentials.injection.multibinding.ClassMultiBindingMap
-import com.ivianuu.essentials.injection.multibinding.toProviderMap
 import com.ivianuu.essentials.util.ext.unsafeLazy
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.android.androidLogger
 import com.ivianuu.injekt.android.applicationComponent
+import com.ivianuu.injekt.multibinding.ClassMultiBindingMap
+import com.ivianuu.injekt.multibinding.toProviderMap
 import kotlin.reflect.KClass
 
 /**

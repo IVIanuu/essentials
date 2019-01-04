@@ -1,11 +1,11 @@
 package com.ivianuu.essentials.app
 
-import com.ivianuu.essentials.injection.multibinding.bindIntoClassMap
-import com.ivianuu.essentials.injection.multibinding.classMapBinding
-import com.ivianuu.essentials.injection.multibinding.intoClassMap
 import com.ivianuu.injekt.Definition
 import com.ivianuu.injekt.ModuleContext
 import com.ivianuu.injekt.module
+import com.ivianuu.injekt.multibinding.bindIntoClassMap
+import com.ivianuu.injekt.multibinding.classMapBinding
+import com.ivianuu.injekt.multibinding.intoClassMap
 import com.ivianuu.injekt.single
 import com.ivianuu.scopes.MutableScope
 import com.ivianuu.scopes.Scope
@@ -34,6 +34,6 @@ inline fun <reified T : AppService> ModuleContext.appService(
 inline fun <reified T : AppService> ModuleContext.bindAppService() =
     bindIntoClassMap<AppService, T>(APP_SERVICES)
 
-val esAppServicesModule = module {
+val esAppServicesModule = module("EsAppServicesModule") {
     classMapBinding<AppService>(APP_SERVICES)
 }

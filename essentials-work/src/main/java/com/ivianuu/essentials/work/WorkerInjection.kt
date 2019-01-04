@@ -5,10 +5,10 @@ import androidx.work.ListenableWorker
 import androidx.work.Worker
 import androidx.work.WorkerFactory
 import androidx.work.WorkerParameters
-import com.ivianuu.essentials.injection.multibinding.StringMultiBindingMap
-import com.ivianuu.essentials.injection.multibinding.intoStringMap
-import com.ivianuu.essentials.injection.multibinding.toProviderMap
 import com.ivianuu.injekt.*
+import com.ivianuu.injekt.multibinding.StringMultiBindingMap
+import com.ivianuu.injekt.multibinding.intoStringMap
+import com.ivianuu.injekt.multibinding.toProviderMap
 
 /**
  * Uses [Injekt] to instantiate workers

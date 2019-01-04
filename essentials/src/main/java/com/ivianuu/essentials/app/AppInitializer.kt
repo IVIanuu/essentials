@@ -1,13 +1,13 @@
 package com.ivianuu.essentials.app
 
 import android.app.Application
-import com.ivianuu.essentials.injection.multibinding.bindIntoClassMap
-import com.ivianuu.essentials.injection.multibinding.classMapBinding
-import com.ivianuu.essentials.injection.multibinding.intoClassMap
 import com.ivianuu.injekt.Definition
 import com.ivianuu.injekt.ModuleContext
 import com.ivianuu.injekt.factory
 import com.ivianuu.injekt.module
+import com.ivianuu.injekt.multibinding.bindIntoClassMap
+import com.ivianuu.injekt.multibinding.classMapBinding
+import com.ivianuu.injekt.multibinding.intoClassMap
 
 const val APP_INITIALIZERS = "appInitializers"
 
@@ -27,7 +27,7 @@ inline fun <reified T : AppInitializer> ModuleContext.appInitializer(
 inline fun <reified T : AppInitializer> ModuleContext.bindAppInitializer() =
     bindIntoClassMap<AppInitializer, T>(APP_INITIALIZERS)
 
-val esAppInitializersModule = module {
+val esAppInitializersModule = module("EsAppInitializersModule") {
     classMapBinding<AppInitializer>(APP_INITIALIZERS)
 
     appInitializer { RxJavaAppInitializer() }

@@ -9,7 +9,7 @@ import com.ivianuu.injekt.module
 /**
  * Core modules
  */
-val esModule = module {
+val esModule = module("EsModule") {
     module(esAppInitializersModule)
     module(esAppServicesModule)
     module(esUtilsModule)

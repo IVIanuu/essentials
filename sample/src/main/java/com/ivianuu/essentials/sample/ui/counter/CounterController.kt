@@ -23,7 +23,6 @@ import com.ivianuu.essentials.ui.base.EsController
 import com.ivianuu.essentials.ui.mvrx.viewModel
 import com.ivianuu.essentials.ui.mvrx.withState
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
-import com.ivianuu.injekt.android.applicationContext
 import com.ivianuu.injekt.factory
 import com.ivianuu.injekt.get
 import com.ivianuu.injekt.module
@@ -65,5 +64,5 @@ class CounterController : EsController() {
 }
 
 val counterModule = module {
-    factory { CounterViewModel(get(), applicationContext(), get()) }
+    factory { CounterViewModel(get(), get(), get()) }
 }
