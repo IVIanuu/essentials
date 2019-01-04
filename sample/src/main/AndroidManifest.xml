@@ -28,8 +28,7 @@
         <provider
             android:name="androidx.work.impl.WorkManagerInitializer"
             android:enabled="false"
-            android:exported="false"
-            android:authorities="${applicationId}.workmanager-init" />
+            tools:ignore="ExportedContentProvider" />
 
     </application>
 
