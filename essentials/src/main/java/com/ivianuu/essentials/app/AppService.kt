@@ -4,7 +4,7 @@ import com.ivianuu.essentials.injection.multibinding.bindIntoClassMap
 import com.ivianuu.essentials.injection.multibinding.classMapBinding
 import com.ivianuu.essentials.injection.multibinding.intoClassMap
 import com.ivianuu.injekt.Definition
-import com.ivianuu.injekt.Module
+import com.ivianuu.injekt.ModuleContext
 import com.ivianuu.injekt.module
 import com.ivianuu.injekt.single
 import com.ivianuu.scopes.MutableScope
@@ -25,13 +25,13 @@ abstract class AppService {
 
 }
 
-inline fun <reified T : AppService> Module.appService(
+inline fun <reified T : AppService> ModuleContext.appService(
     name: String? = null,
     override: Boolean = false,
     noinline definition: Definition<T>
 ) = single(name, override, false, definition) intoClassMap APP_SERVICES
 
-inline fun <reified T : AppService> Module.bindAppService() =
+inline fun <reified T : AppService> ModuleContext.bindAppService() =
     bindIntoClassMap<AppService, T>(APP_SERVICES)
 
 val esAppServicesModule = module {

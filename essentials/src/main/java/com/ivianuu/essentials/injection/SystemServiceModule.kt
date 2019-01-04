@@ -46,8 +46,8 @@ import android.view.accessibility.CaptioningManager
 import android.view.inputmethod.InputMethodManager
 import android.view.textservice.TextServicesManager
 import androidx.core.content.ContextCompat
+import com.ivianuu.injekt.android.applicationContext
 import com.ivianuu.injekt.factory
-import com.ivianuu.injekt.get
 import com.ivianuu.injekt.module
 import kotlin.reflect.KClass
 
@@ -58,7 +58,12 @@ val systemServiceModule = module {
     getSystemServices()
         .map { it as KClass<Any> }
         .forEach { service ->
-            factory(service) { ContextCompat.getSystemService(get(), service.java)!! }
+            factory(service) {
+                ContextCompat.getSystemService(
+                    applicationContext(),
+                    service.java
+                )!!
+            }
         }
 }
 

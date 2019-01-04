@@ -1,6 +1,6 @@
 package com.ivianuu.essentials.injection.multibinding
 
-import com.ivianuu.injekt.Declaration
+import com.ivianuu.injekt.BeanDefinition
 import com.ivianuu.injekt.ParamsDefinition
 import com.ivianuu.injekt.Provider
 import com.ivianuu.injekt.provider
@@ -12,9 +12,9 @@ typealias LongMultiBindingMap<T> = MultiBindingMap<Long, T>
 typealias StringMultiBindingMap<T> = MultiBindingMap<String, T>
 
 /**
- * Wraps a [Map] of [Declaration]s
+ * Wraps a [Map] of [BeanDefinition]s
  */
-data class MultiBindingMap<K : Any, T : Any>(val map: Map<K, Declaration<T>>)
+data class MultiBindingMap<K : Any, T : Any>(val map: Map<K, BeanDefinition<T>>)
 
 /**
  * Returns a [Map] of [K] and [T]s

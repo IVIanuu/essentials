@@ -18,14 +18,14 @@ package com.ivianuu.essentials.util
 
 import android.content.Context
 import android.content.ContextWrapper
-import com.ivianuu.injekt.ComponentHolder
+import com.ivianuu.injekt.InjektTrait
 
 /**
- * Wraps a [Context] and is a [ComponentHolder]
+ * Wraps a [Context] and is a [InjektTrait]
  * to make it possible to inject stuff from a [com.ivianuu.director.Controller]
  * into [android.view.View]s
  */
-class ComponentHolderContextWrapper(
+class InjektTraitContextWrapper(
     context: Context,
-    componentHolder: ComponentHolder
-) : ContextWrapper(context), ComponentHolder by componentHolder
+    InjektTrait: InjektTrait
+) : ContextWrapper(context), InjektTrait by InjektTrait

@@ -1,14 +1,14 @@
 package com.ivianuu.essentials.injection.multibinding
 
-import com.ivianuu.injekt.Declaration
+import com.ivianuu.injekt.BeanDefinition
 import com.ivianuu.injekt.ParamsDefinition
 import com.ivianuu.injekt.Provider
 import com.ivianuu.injekt.provider
 
 /**
- * Wraps a [Set] of [Declaration]s
+ * Wraps a [Set] of [BeanDefinition]s
  */
-data class MultiBindingSet<T : Any>(val set: Set<Declaration<T>>)
+data class MultiBindingSet<T : Any>(val set: Set<BeanDefinition<T>>)
 
 /**
  * Returns a [Set] of [T]s

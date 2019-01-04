@@ -18,10 +18,10 @@ import org.jetbrains.kotlin.gradle.internal.AndroidExtensionsExtension
  */
 plugins {
     id("com.android.library")
+    id("com.jakewharton.butterknife")
     id("kotlin-android")
     id("kotlin-android-extensions")
     id("kotlin-kapt")
-    id("com.ivianuu.r2")
     id("com.github.dcendents.android-maven")
 }
 
@@ -38,7 +38,6 @@ android {
     }
 
     androidExtensions {
-        // isExperimental = true
         configure(delegateClosureOf<AndroidExtensionsExtension> {
             isExperimental = true
         })
@@ -78,7 +77,6 @@ dependencies {
 
     api(Deps.injekt)
     api(Deps.injektAndroid)
-    api(Deps.injektCodegen)
 
     api(Deps.kommonAppCompat)
     api(Deps.kommonCore)

@@ -7,8 +7,6 @@ import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
 import com.ivianuu.essentials.ui.traveler.NavOptions
 import com.ivianuu.essentials.ui.traveler.horizontal
 import com.ivianuu.essentials.util.ext.toast
-import com.ivianuu.injekt.codegen.Factory
-import com.ivianuu.injekt.codegen.Param
 import com.ivianuu.timberktx.d
 import com.ivianuu.traveler.Router
 import com.ivianuu.traveler.goBack
@@ -18,7 +16,6 @@ import com.ivianuu.traveler.popToRoot
 /**
  * Counter view model
  */
-@Factory
 class CounterViewModel(
     key: CounterKey,
     private val context: Context,

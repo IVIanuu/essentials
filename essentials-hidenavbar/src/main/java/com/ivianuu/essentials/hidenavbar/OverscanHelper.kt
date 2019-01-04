@@ -20,13 +20,11 @@ import android.annotation.SuppressLint
 import android.graphics.Rect
 import android.os.IBinder
 import android.view.WindowManager
-import com.ivianuu.injekt.codegen.Factory
 
 /**
  * Utils to access overscan with reflection
  */
 @SuppressLint("PrivateApi")
-@Factory
 class OverscanHelper(private val windowManager: WindowManager) {
 
     private val windowManagerService by lazy {

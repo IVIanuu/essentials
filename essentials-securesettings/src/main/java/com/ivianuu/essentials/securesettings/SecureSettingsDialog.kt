@@ -38,7 +38,7 @@ import kotlinx.coroutines.launch
 @Parcelize
 class SecureSettingsKey(
     val resultCode: Int
-) : ControllerKey(SecureSettingsDialog::class, NavOptions().dialog())
+) : ControllerKey(::SecureSettingsDialog, NavOptions().dialog())
 
 /**
  * @author Manuel Wrage (IVIanuu)

@@ -20,7 +20,7 @@ data class ActivityResultKey(
     val resultCode: Int,
     val intent: Intent,
     val requestCode: Int
-) : ControllerKey(ActivityResultController::class, NavOptions().dialog())
+) : ControllerKey(::ActivityResultController, NavOptions().dialog())
 
 /**
  * Activity result controller

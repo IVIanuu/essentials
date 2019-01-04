@@ -1,13 +1,12 @@
 package com.ivianuu.essentials.data.base
 
 import android.service.notification.NotificationListenerService
-import com.ivianuu.essentials.injection.bindInstanceModule
-import com.ivianuu.essentials.injection.serviceComponent
-
-
 import com.ivianuu.essentials.util.asMainCoroutineScope
 import com.ivianuu.essentials.util.ext.unsafeLazy
-import com.ivianuu.injekt.*
+import com.ivianuu.injekt.InjektTrait
+import com.ivianuu.injekt.Module
+import com.ivianuu.injekt.android.serviceComponent
+import com.ivianuu.injekt.modules
 import com.ivianuu.scopes.MutableScope
 import com.ivianuu.scopes.ReusableScope
 import com.ivianuu.scopes.Scope
@@ -15,12 +14,10 @@ import com.ivianuu.scopes.Scope
 /**
  * Base notification listener service
  */
-abstract class EsNotificationListenerService : NotificationListenerService(), ComponentHolder {
+abstract class EsNotificationListenerService : NotificationListenerService(), InjektTrait {
 
     override val component by unsafeLazy {
-        serviceComponent {
-            dependencies(this@EsNotificationListenerService.dependencies())
-            modules(bindInstanceModule(this@EsNotificationListenerService))
+        serviceComponent(this) {
             modules(this@EsNotificationListenerService.modules())
         }
     }
@@ -50,8 +47,6 @@ abstract class EsNotificationListenerService : NotificationListenerService(), Co
         _connectedScope.clear()
         super.onListenerDisconnected()
     }
-
-    protected open fun dependencies() = emptyList<Component>()
 
     protected open fun modules() = emptyList<Module>()
 

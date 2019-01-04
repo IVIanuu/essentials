@@ -29,7 +29,6 @@ java {
 dependencies {
     api(Deps.kotlinStdLib)
     implementation(Deps.epoxyProcessor)
-    implementation(Deps.injektCompiler)
 }
 
 val sourcesJar = task("sourcesJar", Jar::class) {

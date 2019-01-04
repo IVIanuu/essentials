@@ -38,7 +38,7 @@ data class TextInputKey(
     val prefill: String = "",
     val allowEmptyInput: Boolean = false,
     val resultCode: Int
-) : ControllerKey(TextInputDialog::class, NavOptions().dialog())
+) : ControllerKey(::TextInputDialog, NavOptions().dialog())
 
 /**
  * Text input dialog

@@ -25,7 +25,6 @@ import com.ivianuu.director.arch.lifecycle.ControllerLifecycleOwner
 import com.ivianuu.director.arch.lifecycle.ControllerViewModelStoreOwner
 import com.ivianuu.director.dialog.DialogController
 import com.ivianuu.director.scopes.destroy
-import com.ivianuu.essentials.injection.bindInstanceModule
 import com.ivianuu.essentials.injection.controllerComponent
 
 
@@ -40,12 +39,11 @@ import com.ivianuu.traveler.Router
 /**
  * Base dialog controller
  */
-abstract class EsDialogController : DialogController(), ComponentHolder, ContextAware, MvRxView {
+abstract class EsDialogController : DialogController(), InjektTrait, ContextAware, MvRxView {
 
     override val component by unsafeLazy {
-        controllerComponent {
-            dependencies(this@EsDialogController.dependencies())
-            modules(bindInstanceModule(this@EsDialogController), keyModule(args))
+        controllerComponent(this) {
+            modules(keyModule(args))
             modules(this@EsDialogController.modules())
         }
     }

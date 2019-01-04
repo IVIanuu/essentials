@@ -20,7 +20,7 @@ data class PermissionRequestKey(
     val resultCode: Int,
     val permissions: Set<String>,
     val requestCode: Int
-) : ControllerKey(PermissionRequestController::class, NavOptions().dialog())
+) : ControllerKey(::PermissionRequestController, NavOptions().dialog())
 
 /**
  * Permission request controller

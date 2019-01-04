@@ -37,7 +37,7 @@ data class AppPickerKey(
     val title: String? = null,
     val launchableOnly: Boolean = false,
     val resultCode: Int
-) : ControllerKey(AppPickerDialog::class, NavOptions().dialog())
+) : ControllerKey(::AppPickerDialog, NavOptions().dialog())
 
 /**
  * App picker

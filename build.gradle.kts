@@ -12,10 +12,9 @@ buildscript {
 
     dependencies {
         classpath(Deps.androidGradlePlugin)
-        classpath("com.android.tools.build.jetifier:jetifier-processor:1.0.0-beta02")
+        classpath(Deps.butterknifeGradlePlugin)
         classpath(Deps.kotlinGradlePlugin)
         classpath(Deps.mavenGradlePlugin)
-        classpath(Deps.r2GradlePlugin)
     }
 }
 

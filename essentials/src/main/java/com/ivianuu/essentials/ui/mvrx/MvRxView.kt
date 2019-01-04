@@ -6,7 +6,7 @@ import android.os.Message
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelStoreOwner
-import com.ivianuu.injekt.ComponentHolder
+import com.ivianuu.injekt.InjektTrait
 
 private val PENDING_INVALIDATES = HashSet<Int>()
 private val HANDLER = Handler(Looper.getMainLooper(), Handler.Callback { message ->
@@ -20,7 +20,7 @@ private val HANDLER = Handler(Looper.getMainLooper(), Handler.Callback { message
     true
 })
 
-interface MvRxView : ComponentHolder, LifecycleOwner, ViewModelStoreOwner {
+interface MvRxView : InjektTrait, LifecycleOwner, ViewModelStoreOwner {
 
     fun invalidate()
 

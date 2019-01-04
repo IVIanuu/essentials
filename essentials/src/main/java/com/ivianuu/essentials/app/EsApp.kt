@@ -17,8 +17,6 @@
 package com.ivianuu.essentials.app
 
 import android.app.Application
-import com.ivianuu.essentials.injection.GlobalComponentHolder
-import com.ivianuu.essentials.injection.bindInstanceModule
 import com.ivianuu.essentials.injection.esModule
 
 import com.ivianuu.essentials.injection.multibinding.ClassMultiBindingMap
@@ -26,12 +24,13 @@ import com.ivianuu.essentials.injection.multibinding.toProviderMap
 import com.ivianuu.essentials.util.ext.unsafeLazy
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.android.androidLogger
+import com.ivianuu.injekt.android.applicationComponent
 import kotlin.reflect.KClass
 
 /**
  * App
  */
-abstract class EsApp : Application(), ComponentHolder {
+abstract class EsApp : Application(), InjektTrait {
 
     override val component: Component
         get() {
@@ -61,14 +60,9 @@ abstract class EsApp : Application(), ComponentHolder {
     protected open fun onCreateComponent() {
         configureInjekt { androidLogger() }
 
-        _component = component {
-            dependencies(this@EsApp.dependencies())
-            modules(
-                bindInstanceModule(this@EsApp),
-                esAppModule(this@EsApp), esModule
-            )
+        _component = applicationComponent(this) {
+            modules(esAppModule(this@EsApp), esModule)
             modules(this@EsApp.modules())
-            GlobalComponentHolder.initialize(this)
         }
     }
 
@@ -89,8 +83,6 @@ abstract class EsApp : Application(), ComponentHolder {
     }
 
     protected open fun shouldStartAppService(type: KClass<out AppService>) = true
-
-    protected open fun dependencies(): List<Component> = emptyList()
 
     protected open fun modules(): List<Module> = emptyList()
 

@@ -26,6 +26,8 @@ object Versions {
     const val androidxTestRules = "1.1.0"
     const val androidxTestRunner = "1.1.0"
 
+    const val butterknife = "9.0.0-rc3"
+
     const val constraintLayout = "2.0.0-alpha2"
     const val coroutines = "1.1.0"
     const val director = "daa4ec173f"
@@ -33,7 +35,7 @@ object Versions {
     const val epoxyKtx = "9dde1f5a9c"
     const val epoxyPrefs = "0a007754c4"
     const val glide = "4.8.0"
-    const val injekt = "7329a231e8"
+    const val injekt = "8b0a4d6017"
     const val junit = "4.12"
     const val kommon = "6c51279983"
     const val kotlin = "1.3.11"
@@ -74,6 +76,9 @@ object Deps {
     const val androidxTestRules = "androidx.test:rules:${Versions.androidxTestRules}"
     const val androidxTestRunner = "androidx.test:runner:${Versions.androidxTestRunner}"
 
+    const val butterknifeGradlePlugin =
+        "com.jakewharton:butterknife-gradle-plugin:${Versions.butterknife}"
+
     const val constraintLayout =
         "androidx.constraintlayout:constraintlayout:${Versions.constraintLayout}"
 
@@ -106,8 +111,6 @@ object Deps {
 
     const val injekt = "com.github.IVIanuu.injekt:injekt:${Versions.injekt}"
     const val injektAndroid = "com.github.IVIanuu.injekt:injekt-android:${Versions.injekt}"
-    const val injektCodegen = "com.github.IVIanuu.injekt:injekt-codegen:${Versions.injekt}"
-    const val injektCompiler = "com.github.IVIanuu.injekt:injekt-compiler:${Versions.injekt}"
 
     const val junit = "junit:junit:${Versions.junit}"
 

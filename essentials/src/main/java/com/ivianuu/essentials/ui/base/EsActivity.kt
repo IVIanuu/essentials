@@ -23,16 +23,16 @@ import com.ivianuu.director.attachRouter
 import com.ivianuu.director.handleBack
 import com.ivianuu.director.traveler.ControllerNavigator
 import com.ivianuu.essentials.R
-import com.ivianuu.essentials.injection.activityComponent
-import com.ivianuu.essentials.injection.bindInstanceModule
-
-
 import com.ivianuu.essentials.ui.common.RouterActivity
 import com.ivianuu.essentials.ui.mvrx.MvRxView
 import com.ivianuu.essentials.ui.traveler.key.keyModule
 import com.ivianuu.essentials.util.asMainCoroutineScope
 import com.ivianuu.essentials.util.ext.unsafeLazy
-import com.ivianuu.injekt.*
+import com.ivianuu.injekt.InjektTrait
+import com.ivianuu.injekt.Module
+import com.ivianuu.injekt.android.activityComponent
+import com.ivianuu.injekt.inject
+import com.ivianuu.injekt.modules
 import com.ivianuu.scopes.android.lifecycle.onDestroy
 import com.ivianuu.traveler.Navigator
 import com.ivianuu.traveler.android.AppNavigator
@@ -43,15 +43,11 @@ import com.ivianuu.traveler.setRoot
 /**
  * Base activity
  */
-abstract class EsActivity : AppCompatActivity(), ComponentHolder, MvRxView, RouterActivity {
+abstract class EsActivity : AppCompatActivity(), InjektTrait, MvRxView, RouterActivity {
 
     override val component by unsafeLazy {
-        activityComponent {
-            dependencies(this@EsActivity.dependencies())
-            modules(
-                bindInstanceModule(this@EsActivity),
-                keyModule(intent.extras, false)
-            )
+        activityComponent(this) {
+            modules(keyModule(intent.extras, false))
             modules(this@EsActivity.modules())
         }
     }
@@ -120,8 +116,6 @@ abstract class EsActivity : AppCompatActivity(), ComponentHolder, MvRxView, Rout
     }
 
     protected open fun navigators() = emptyList<ResultNavigator>()
-
-    protected open fun dependencies() = emptyList<Component>()
 
     protected open fun modules() = emptyList<Module>()
 

@@ -17,17 +17,13 @@
 package com.ivianuu.essentials.shell
 
 import com.ivianuu.essentials.util.ext.coroutinesIo
-import com.ivianuu.injekt.codegen.AutoModule
-import com.ivianuu.injekt.codegen.Factory
+import com.ivianuu.injekt.factory
+import com.ivianuu.injekt.module
 import kotlinx.coroutines.withContext
-
-@AutoModule(moduleName = "esShellModule")
-private object AutoModule
 
 /**
  * Shell
  */
-@Factory
 class Shell {
 
     suspend fun run(command: String) = run(listOf(command))
@@ -43,4 +39,8 @@ class Shell {
         eu.chainfire.libsuperuser.Shell.SU.available()
     }
 
+}
+
+val esShellModule = module("EsShellModule") {
+    factory { Shell() }
 }

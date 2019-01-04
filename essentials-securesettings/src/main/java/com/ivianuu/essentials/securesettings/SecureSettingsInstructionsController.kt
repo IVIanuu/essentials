@@ -30,7 +30,7 @@ import com.ivianuu.injekt.inject
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-class SecureSettingsInstructionsKey : ControllerKey(SecureSettingsInstructionsController::class)
+class SecureSettingsInstructionsKey : ControllerKey(::SecureSettingsInstructionsController)
 
 /**
  * Asks the user for the secure settings permission

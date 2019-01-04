@@ -3,12 +3,10 @@ package com.ivianuu.essentials.sample.ui.list
 import com.ivianuu.essentials.ui.mvrx.MvRxState
 import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
 import com.ivianuu.essentials.util.ext.coroutinesDefault
-import com.ivianuu.injekt.codegen.Factory
 import com.ivianuu.timberktx.d
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-@Factory
 class ListViewModel(
     private val listKey: ListKey
 ) : MvRxViewModel<ListState>(ListState()) {

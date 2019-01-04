@@ -26,14 +26,13 @@ import com.ivianuu.essentials.util.ext.unsafeLazy
 import com.ivianuu.traveler.Command
 import com.ivianuu.traveler.Forward
 import com.ivianuu.traveler.Replace
-import kotlin.reflect.KClass
 
 abstract class ControllerKey(
-    val target: KClass<out Controller>,
+    val factory: () -> Controller,
     open val defaultNavOptions: ControllerNavOptions? = null
 ) : ControllerKey, Parcelable {
 
-    override fun createController(data: Any?): Controller = target.java.newInstance().apply {
+    override fun createController(data: Any?): Controller = factory().apply {
         args.apply {
             putParcelable(TRAVELER_KEY, this@ControllerKey)
             putString(TRAVELER_KEY_CLASS, this@ControllerKey.javaClass.name)

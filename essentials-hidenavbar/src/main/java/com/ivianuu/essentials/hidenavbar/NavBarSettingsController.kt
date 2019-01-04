@@ -39,7 +39,7 @@ import kotlinx.android.parcel.Parcelize
 class NavBarSettingsKey(
     val showMainSwitch: Boolean,
     val showNavBarHidden: Boolean
-) : ControllerKey(NavBarSettingsController::class)
+) : ControllerKey(::NavBarSettingsController)
 
 /**
  * Nav bar settings

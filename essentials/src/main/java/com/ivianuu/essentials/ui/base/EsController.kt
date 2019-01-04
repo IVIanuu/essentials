@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.ui.base
 
+
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -24,17 +25,17 @@ import android.view.ViewGroup
 import com.ivianuu.director.arch.lifecycle.LifecycleController
 import com.ivianuu.director.scopes.destroy
 import com.ivianuu.director.scopes.unbindView
-import com.ivianuu.essentials.injection.bindInstanceModule
 import com.ivianuu.essentials.injection.controllerComponent
-
-
 import com.ivianuu.essentials.ui.mvrx.MvRxView
 import com.ivianuu.essentials.ui.traveler.key.keyModule
-import com.ivianuu.essentials.util.ComponentHolderContextWrapper
 import com.ivianuu.essentials.util.ContextAware
+import com.ivianuu.essentials.util.InjektTraitContextWrapper
 import com.ivianuu.essentials.util.asMainCoroutineScope
 import com.ivianuu.essentials.util.ext.unsafeLazy
-import com.ivianuu.injekt.*
+import com.ivianuu.injekt.InjektTrait
+import com.ivianuu.injekt.Module
+import com.ivianuu.injekt.inject
+import com.ivianuu.injekt.modules
 import com.ivianuu.traveler.Router
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.*
@@ -43,13 +44,12 @@ import kotlinx.coroutines.CoroutineScope
 /**
  * Base controller
  */
-abstract class EsController : LifecycleController(), ContextAware, ComponentHolder, LayoutContainer,
+abstract class EsController : LifecycleController(), ContextAware, InjektTrait, LayoutContainer,
     MvRxView {
 
     override val component by unsafeLazy {
-        controllerComponent {
-            dependencies(this@EsController.dependencies())
-            modules(bindInstanceModule(this@EsController), keyModule(args))
+        controllerComponent(this) {
+            modules(keyModule(args))
             modules(this@EsController.modules())
         }
     }
@@ -76,7 +76,7 @@ abstract class EsController : LifecycleController(), ContextAware, ComponentHold
         savedViewState: Bundle?
     ): View = if (layoutRes != -1) {
         val injectorInflater =
-            inflater.cloneInContext(ComponentHolderContextWrapper(activity, this))
+            inflater.cloneInContext(InjektTraitContextWrapper(activity, this))
         injectorInflater.inflate(layoutRes, container, false)
     } else {
         throw IllegalStateException("no layoutRes provided")
@@ -105,8 +105,6 @@ abstract class EsController : LifecycleController(), ContextAware, ComponentHold
 
     override fun invalidate() {
     }
-
-    protected open fun dependencies() = emptyList<Component>()
 
     protected open fun modules() = emptyList<Module>()
 

@@ -16,7 +16,10 @@
 
 package com.ivianuu.essentials.apps
 
-import com.ivianuu.injekt.codegen.AutoModule
+import com.ivianuu.injekt.factory
+import com.ivianuu.injekt.get
+import com.ivianuu.injekt.module
 
-@AutoModule(moduleName = "esAppsModule")
-private object AutoModule
+val esAppsModule = module("EsAppsModule") {
+    factory { AppStore(get()) }
+}

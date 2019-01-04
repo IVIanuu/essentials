@@ -35,7 +35,7 @@ data class ColorPickerKey(
     val allowCustomArgb: Boolean = true,
     val showAlphaSelector: Boolean = false,
     val resultCode: Int
-) : ControllerKey(ColorPickerDialog::class, NavOptions().dialog())
+) : ControllerKey(::ColorPickerDialog, NavOptions().dialog())
 
 /**
  * Color picker controller

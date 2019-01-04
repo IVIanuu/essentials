@@ -5,7 +5,7 @@ import java.util.*
 
 const val KEY_SET_BINDINGS = "setBindings"
 
-fun <T : Any> Module.setBinding(setName: String) {
+fun <T : Any> ModuleContext.setBinding(setName: String) {
     factory(name = setName, override = true) {
         MultiBindingSet<T>(
             emptySet()
@@ -13,20 +13,20 @@ fun <T : Any> Module.setBinding(setName: String) {
     }
 }
 
-infix fun <T : Any, S : T> Declaration<S>.intoSet(setName: String) = apply {
+infix fun <T : Any, S : T> BeanDefinition<S>.intoSet(setName: String) = apply {
     attributes.getOrSet(KEY_SET_BINDINGS) { mutableSetOf<String>() }.add(setName)
 
-    module.factory(name = setName, override = true) {
-        component.declarationRegistry
-            .getAllDeclarations()
+    moduleContext.factory(name = setName, override = true) {
+        component.beanRegistry
+            .getAllDefinitions()
             .filter { it.attributes.get<Set<String>>(KEY_SET_BINDINGS)?.contains(setName) == true }
-            .map { it as Declaration<T> }
+            .map { it as BeanDefinition<T> }
             .toSet()
             .let { MultiBindingSet(it) }
     }
 }
 
-inline fun <reified T : Any, reified S : T> Module.bindIntoSet(
+inline fun <reified T : Any, reified S : T> ModuleContext.bindIntoSet(
     setName: String,
     declarationName: String? = null
 ) =
