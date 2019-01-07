@@ -1,5 +1,6 @@
 package com.ivianuu.essentials.app
 
+import com.ivianuu.injekt.BeanDefinition
 import com.ivianuu.injekt.Definition
 import com.ivianuu.injekt.ModuleContext
 import com.ivianuu.injekt.module
@@ -29,9 +30,9 @@ inline fun <reified T : AppService> ModuleContext.appService(
     name: String? = null,
     override: Boolean = false,
     noinline definition: Definition<T>
-) = single(name, override, false, definition) intoClassMap APP_SERVICES
+): BeanDefinition<T> = single(name, override, false, definition) intoClassMap APP_SERVICES
 
-inline fun <reified T : AppService> ModuleContext.bindAppService() =
+inline fun <reified T : AppService> ModuleContext.bindAppService(): BeanDefinition<AppService> =
     bindIntoClassMap<AppService, T>(APP_SERVICES)
 
 val esAppServicesModule = module("EsAppServicesModule") {

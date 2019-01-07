@@ -80,10 +80,10 @@ class LifecycleAwareLazy<out T>(
 fun <T> LifecycleOwner.lifecycleAwareLazy(
     event: Lifecycle.Event = Lifecycle.Event.ON_CREATE,
     initializer: () -> T
-) = lifecycleAwareLazy(this, event, initializer)
+): Lazy<T> = lifecycleAwareLazy(this, event, initializer)
 
 fun <T> lifecycleAwareLazy(
     owner: LifecycleOwner,
     event: Lifecycle.Event = Lifecycle.Event.ON_CREATE,
     initializer: () -> T
-) = LifecycleAwareLazy(owner, event, initializer)
+): Lazy<T> = LifecycleAwareLazy(owner, event, initializer)

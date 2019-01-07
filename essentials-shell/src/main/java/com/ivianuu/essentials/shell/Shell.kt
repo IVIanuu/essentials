@@ -26,16 +26,16 @@ import kotlinx.coroutines.withContext
  */
 class Shell {
 
-    suspend fun run(command: String) = run(listOf(command))
+    suspend fun run(command: String): List<String> = run(listOf(command))
 
-    suspend fun run(commands: Collection<String>) =
+    suspend fun run(commands: Collection<String>): List<String> =
         run(commands.toTypedArray())
 
-    suspend fun run(commands: Array<String>) = withContext(coroutinesIo) {
+    suspend fun run(commands: Array<String>): List<String> = withContext(coroutinesIo) {
         eu.chainfire.libsuperuser.Shell.SU.run(commands).toList()
     }
 
-    suspend fun available() = withContext(coroutinesIo) {
+    suspend fun available(): Boolean = withContext(coroutinesIo) {
         eu.chainfire.libsuperuser.Shell.SU.available()
     }
 

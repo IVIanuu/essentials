@@ -56,6 +56,6 @@ data class ActivityResult(
     val data: Intent?
 )
 
-val ActivityResult.isOk get() = resultCode == Activity.RESULT_OK
-val ActivityResult.isCanceled get() = resultCode == Activity.RESULT_CANCELED
-val ActivityResult.isFirstUser get() = resultCode == Activity.RESULT_FIRST_USER
+val ActivityResult.isOk: Boolean get() = resultCode == Activity.RESULT_OK
+val ActivityResult.isCanceled: Boolean get() = resultCode == Activity.RESULT_CANCELED
+val ActivityResult.isFirstUser: Boolean get() = resultCode == Activity.RESULT_FIRST_USER

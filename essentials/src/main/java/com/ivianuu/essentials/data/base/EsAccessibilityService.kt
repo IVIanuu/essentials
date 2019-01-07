@@ -10,6 +10,7 @@ import com.ivianuu.injekt.android.serviceComponent
 import com.ivianuu.injekt.modules
 import com.ivianuu.scopes.MutableScope
 import com.ivianuu.scopes.Scope
+import kotlinx.coroutines.CoroutineScope
 
 /**
  * Base accessibility service
@@ -25,7 +26,7 @@ abstract class EsAccessibilityService : AccessibilityService(), InjektTrait {
     val scope: Scope get() = _scope
     private val _scope = MutableScope()
 
-    val coroutineScope = scope.asMainCoroutineScope()
+    val coroutineScope: CoroutineScope = scope.asMainCoroutineScope()
 
     override fun onDestroy() {
         _scope.close()
@@ -38,6 +39,6 @@ abstract class EsAccessibilityService : AccessibilityService(), InjektTrait {
     override fun onInterrupt() {
     }
 
-    protected open fun modules() = emptyList<Module>()
+    protected open fun modules(): List<Module> = emptyList<Module>()
 
 }

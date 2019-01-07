@@ -27,7 +27,7 @@ import io.reactivex.rxkotlin.subscribeBy
 import java.util.concurrent.atomic.AtomicReference
 
 // todo replace with overload constructor once available
-fun <T> MutableLiveData(initialValue: T? = null) =
+fun <T> MutableLiveData(initialValue: T? = null): MutableLiveData<T> =
     MutableLiveData<T>().apply {
         if (initialValue != null) value = initialValue
     }
@@ -35,7 +35,7 @@ fun <T> MutableLiveData(initialValue: T? = null) =
 fun <T : Any> LiveData<T>.toFlowable(strategy: BackpressureStrategy = BackpressureStrategy.LATEST): Flowable<T> =
     toObservable().toFlowable(strategy)
 
-fun <T : Any> Flowable<T>.toLiveData() =
+fun <T : Any> Flowable<T>.toLiveData(): LiveData<T> =
     toObservable().toLiveData()
 
 fun <T : Any> LiveData<T>.toObservable(): Observable<T> = Observable.create { e ->
@@ -73,11 +73,11 @@ fun <T : Any> Observable<T>.toLiveData(): LiveData<T> = object : LiveData<T>() {
 fun <T : Any> LiveData<T>.toMaybe(): Maybe<T> =
     toObservable().singleElement()
 
-fun <T : Any> Maybe<T>.toLiveData() =
+fun <T : Any> Maybe<T>.toLiveData(): LiveData<T> =
     toObservable().toLiveData()
 
 fun <T : Any> LiveData<T>.toSingle(): Single<T> =
     toObservable().singleOrError()
 
-fun <T : Any> Single<T>.toLiveData() =
+fun <T : Any> Single<T>.toLiveData(): LiveData<T> =
     toObservable().toLiveData()

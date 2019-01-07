@@ -38,5 +38,5 @@ open class KeyRouterPagerAdapter(
         }
     }
 
-    override fun getCount() = keys.size
+    override fun getCount(): Int = keys.size
 }

@@ -74,6 +74,6 @@ data class PermissionResult(
     val requestCode: Int,
     val permissions: Set<String>,
     val grantResults: IntArray
-) {
-    val allGranted get() = grantResults.all { it == PackageManager.PERMISSION_GRANTED }
-}
+)
+
+val PermissionResult.allGranted: Boolean get() = grantResults.all { it == PackageManager.PERMISSION_GRANTED }

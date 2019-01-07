@@ -26,17 +26,22 @@ fun Context.toast(message: CharSequence) = mainThread {
     Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
 }
 
-fun Context.toast(messageRes: Int, vararg args: Any) =
+fun Context.toast(messageRes: Int, vararg args: Any) {
     toast(string(messageRes, *args))
+}
 
-fun ContextAware.toast(message: CharSequence) =
+fun ContextAware.toast(message: CharSequence) {
     providedContext.toast(message)
+}
 
-fun ContextAware.toast(messageRes: Int, vararg args: Any) =
+fun ContextAware.toast(messageRes: Int, vararg args: Any) {
     providedContext.toast(messageRes, *args)
+}
 
-fun View.toast(message: CharSequence) =
+fun View.toast(message: CharSequence) {
     context.toast(message)
+}
 
-fun View.toast(messageRes: Int, vararg args: Any) =
+fun View.toast(messageRes: Int, vararg args: Any) {
     context.toast(messageRes, *args)
+}

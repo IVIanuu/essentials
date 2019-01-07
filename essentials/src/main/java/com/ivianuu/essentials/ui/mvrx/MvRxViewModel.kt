@@ -33,10 +33,10 @@ abstract class MvRxViewModel<S : MvRxState>(initialState: S) : EsViewModel() {
         subscribe { d { "new state -> $it" } }
     }
 
-    protected fun subscribe(subscriber: (S) -> Unit) =
+    protected fun subscribe(subscriber: (S) -> Unit): Disposable =
         stateStore.observable.subscribeLifecycle(null, subscriber)
 
-    fun subscribe(owner: LifecycleOwner, subscriber: (S) -> Unit) =
+    fun subscribe(owner: LifecycleOwner, subscriber: (S) -> Unit): Disposable =
         stateStore.observable.subscribeLifecycle(owner, subscriber)
 
     private fun <T> Observable<T>.subscribeLifecycle(

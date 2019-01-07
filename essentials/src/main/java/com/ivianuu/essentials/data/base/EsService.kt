@@ -35,6 +35,6 @@ abstract class EsService : Service(), InjektTrait {
 
     override fun onBind(intent: Intent): IBinder? = null
 
-    protected open fun modules() = emptyList<Module>()
+    protected open fun modules(): List<Module> = emptyList<Module>()
 
 }

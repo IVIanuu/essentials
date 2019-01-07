@@ -16,14 +16,17 @@
 
 package com.ivianuu.essentials.util.ext
 
+import io.reactivex.Scheduler
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.MainCoroutineDispatcher
 
-val coroutinesDefault get() = Dispatchers.Default
-val coroutinesIo get() = Dispatchers.IO
-val coroutinesMain get() = Dispatchers.Main
+val coroutinesDefault: CoroutineDispatcher get() = Dispatchers.Default
+val coroutinesIo: CoroutineDispatcher get() = Dispatchers.IO
+val coroutinesMain: MainCoroutineDispatcher get() = Dispatchers.Main
 
-val rxComputation get() = Schedulers.computation()
-val rxIo get() = Schedulers.io()
-val rxMain get() = AndroidSchedulers.mainThread()
+val rxComputation: Scheduler get() = Schedulers.computation()
+val rxIo: Scheduler get() = Schedulers.io()
+val rxMain: Scheduler get() = AndroidSchedulers.mainThread()

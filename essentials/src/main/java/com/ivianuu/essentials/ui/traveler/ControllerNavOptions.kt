@@ -27,94 +27,94 @@ class ControllerNavOptions {
     private var pushHandler: ControllerChangeHandler? = null
     private var popHandler: ControllerChangeHandler? = null
 
-    fun push() = pushHandler
+    fun push(): ControllerChangeHandler? = pushHandler
 
-    fun push(handler: ControllerChangeHandler?) = apply {
+    fun push(handler: ControllerChangeHandler?): ControllerNavOptions = apply {
         pushHandler = handler
     }
 
-    fun pop() = popHandler
+    fun pop(): ControllerChangeHandler? = popHandler
 
-    fun pop(handler: ControllerChangeHandler?) = apply {
+    fun pop(handler: ControllerChangeHandler?): ControllerNavOptions = apply {
         popHandler = handler
     }
 
 }
 
-fun NavOptions() = ControllerNavOptions()
+fun NavOptions(): ControllerNavOptions = ControllerNavOptions()
 
-fun ControllerNavOptions.applyToTransaction(transaction: RouterTransaction) = apply {
+fun ControllerNavOptions.applyToTransaction(transaction: RouterTransaction): ControllerNavOptions = apply {
     transaction.pushChangeHandler(push())
     transaction.popChangeHandler(pop())
 }
 
 fun ControllerNavOptions.handler(
     changeHandler: ControllerChangeHandler
-) = push(changeHandler).pop(changeHandler)
+): ControllerNavOptions = push(changeHandler).pop(changeHandler)
 
 fun ControllerNavOptions.fade(
     duration: Long = AnimatorChangeHandler.DEFAULT_ANIMATION_DURATION,
     removesFromViewOnPush: Boolean = true
-) = fadePush(duration, removesFromViewOnPush)
+): ControllerNavOptions = fadePush(duration, removesFromViewOnPush)
     .fadePop(duration, removesFromViewOnPush)
 
 fun ControllerNavOptions.fadePush(
     duration: Long = AnimatorChangeHandler.DEFAULT_ANIMATION_DURATION,
     removesFromViewOnPush: Boolean = true
-) = push(FadeChangeHandler(duration, removesFromViewOnPush))
+): ControllerNavOptions = push(FadeChangeHandler(duration, removesFromViewOnPush))
 
 fun ControllerNavOptions.fadePop(
     duration: Long = AnimatorChangeHandler.DEFAULT_ANIMATION_DURATION,
     removesFromViewOnPush: Boolean = true
-) = pop(FadeChangeHandler(duration, removesFromViewOnPush))
+): ControllerNavOptions = pop(FadeChangeHandler(duration, removesFromViewOnPush))
 
 fun ControllerNavOptions.horizontal(
     duration: Long = AnimatorChangeHandler.DEFAULT_ANIMATION_DURATION,
     removesFromViewOnPush: Boolean = true
-) = horizontalPush(duration, removesFromViewOnPush)
+): ControllerNavOptions = horizontalPush(duration, removesFromViewOnPush)
     .horizontalPop(duration, removesFromViewOnPush)
 
 fun ControllerNavOptions.horizontalPush(
     duration: Long = AnimatorChangeHandler.DEFAULT_ANIMATION_DURATION,
     removesFromViewOnPush: Boolean = true
-) = push(HorizontalChangeHandler(duration, removesFromViewOnPush))
+): ControllerNavOptions = push(HorizontalChangeHandler(duration, removesFromViewOnPush))
 
 fun ControllerNavOptions.horizontalPop(
     duration: Long = AnimatorChangeHandler.DEFAULT_ANIMATION_DURATION,
     removesFromViewOnPush: Boolean = true
-) = pop(HorizontalChangeHandler(duration, removesFromViewOnPush))
+): ControllerNavOptions = pop(HorizontalChangeHandler(duration, removesFromViewOnPush))
 
 fun ControllerNavOptions.vertical(
     duration: Long = AnimatorChangeHandler.DEFAULT_ANIMATION_DURATION,
     removesFromViewOnPush: Boolean = true
-) = verticalPush(duration, removesFromViewOnPush)
+): ControllerNavOptions = verticalPush(duration, removesFromViewOnPush)
     .verticalPop(duration, removesFromViewOnPush)
 
 fun ControllerNavOptions.verticalPush(
     duration: Long = AnimatorChangeHandler.DEFAULT_ANIMATION_DURATION,
     removesFromViewOnPush: Boolean = true
-) = push(VerticalChangeHandler(duration, removesFromViewOnPush))
+): ControllerNavOptions = push(VerticalChangeHandler(duration, removesFromViewOnPush))
 
 fun ControllerNavOptions.verticalPop(
     duration: Long = AnimatorChangeHandler.DEFAULT_ANIMATION_DURATION,
     removesFromViewOnPush: Boolean = true
-) = pop(VerticalChangeHandler(duration, removesFromViewOnPush))
+): ControllerNavOptions = pop(VerticalChangeHandler(duration, removesFromViewOnPush))
 
-fun ControllerNavOptions.auto() =
+fun ControllerNavOptions.auto(): ControllerNavOptions =
     autoPush().autoPop()
 
-fun ControllerNavOptions.autoPush() =
+fun ControllerNavOptions.autoPush(): ControllerNavOptions =
     push(AutoTransitionChangeHandler())
 
-fun ControllerNavOptions.autoPop() = pop(AutoTransitionChangeHandler())
+fun ControllerNavOptions.autoPop(): ControllerNavOptions = pop(AutoTransitionChangeHandler())
 
-fun ControllerNavOptions.dialog() =
+fun ControllerNavOptions.dialog(): ControllerNavOptions =
     dialogPush().dialogPop()
 
-fun ControllerNavOptions.dialogPush() = push(
+fun ControllerNavOptions.dialogPush(): ControllerNavOptions = push(
     SimpleSwapChangeHandler(false)
 )
 
-fun ControllerNavOptions.dialogPop() = pop(
+fun ControllerNavOptions.dialogPop(): ControllerNavOptions = pop(
     SimpleSwapChangeHandler(false)
 )

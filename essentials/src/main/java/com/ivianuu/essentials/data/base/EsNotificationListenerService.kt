@@ -48,6 +48,6 @@ abstract class EsNotificationListenerService : NotificationListenerService(), In
         super.onListenerDisconnected()
     }
 
-    protected open fun modules() = emptyList<Module>()
+    protected open fun modules(): List<Module> = emptyList<Module>()
 
 }

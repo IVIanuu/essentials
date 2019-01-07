@@ -15,7 +15,7 @@ fun <T : Controller> controllerComponent(
     name: String? = instance.javaClass.simpleName + "Component",
     createEagerInstances: Boolean = true,
     definition: ComponentDefinition? = null
-) = component(name, createEagerInstances) {
+): Component = component(name, createEagerInstances) {
     instance.parentComponentOrNull()?.let { components(it) }
     modules(instanceModule(instance))
     definition?.invoke(this)
@@ -43,4 +43,4 @@ fun Controller.parentComponentOrNull(): Component? {
 /**
  * Returns the parent [Component] or throws
  */
-fun Controller.parentComponent() = parentComponentOrNull() ?: error("No parent found for $this")
+fun Controller.parentComponent(): Component = parentComponentOrNull() ?: error("No parent found for $this")

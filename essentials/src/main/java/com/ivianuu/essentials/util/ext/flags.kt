@@ -20,5 +20,5 @@ package com.ivianuu.essentials.util.ext
 
 fun Int.addFlag(flag: Int): Int = this or flag
 fun Int.removeFlag(flag: Int): Int = this and flag.inv()
-fun Int.containsFlag(flag: Int) = this and flag == flag
-fun Int.notContainsFlag(flag: Int) = !containsFlag(flag)
+fun Int.containsFlag(flag: Int): Boolean = this and flag == flag
+fun Int.notContainsFlag(flag: Int): Boolean = !containsFlag(flag)

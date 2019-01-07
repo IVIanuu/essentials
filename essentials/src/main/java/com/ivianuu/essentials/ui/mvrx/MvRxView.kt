@@ -7,6 +7,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelStoreOwner
 import com.ivianuu.injekt.InjektTrait
+import io.reactivex.disposables.Disposable
 
 private val PENDING_INVALIDATES = HashSet<Int>()
 private val HANDLER = Handler(Looper.getMainLooper(), Handler.Callback { message ->
@@ -30,7 +31,7 @@ interface MvRxView : InjektTrait, LifecycleOwner, ViewModelStoreOwner {
         }
     }
 
-    fun <S : MvRxState> MvRxViewModel<S>.subscribe(subscriber: (S) -> Unit) =
+    fun <S : MvRxState> MvRxViewModel<S>.subscribe(subscriber: (S) -> Unit): Disposable =
         subscribe(this@MvRxView, subscriber)
 
 }

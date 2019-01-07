@@ -73,26 +73,26 @@ inline fun <reified T : Activity> Controller.startActivityForResult(
     startActivityForResult(activity.intent<T>(init), requestCode, options)
 }
 
-inline fun <reified T : Activity> Controller.activity() = activity as T
+inline fun <reified T : Activity> Controller.activity(): T = activity as T
 
-fun Controller.requireParentController() =
+fun Controller.requireParentController(): Controller =
     parentController ?: throw IllegalStateException("parent Controller is null")
 
-fun Controller.requireTargetController() =
+fun Controller.requireTargetController(): Controller =
     targetController ?: throw IllegalStateException("target Controller is null")
 
-inline fun <reified T : Controller> Controller.parentController() = requireParentController() as T
-inline fun <reified T : Controller> Controller.parentControllerOrNull() = try {
+inline fun <reified T : Controller> Controller.parentController(): T = requireParentController() as T
+inline fun <reified T : Controller> Controller.parentControllerOrNull(): T? = try {
     parentController<T>()
 } catch (e: Exception) {
     null
 }
 
-inline fun <reified T : Controller> Controller.targetController() = requireTargetController() as T
-inline fun <reified T : Controller> Controller.targetControllerOrNull() = try {
+inline fun <reified T : Controller> Controller.targetController(): T = requireTargetController() as T
+inline fun <reified T : Controller> Controller.targetControllerOrNull(): T? = try {
     targetController<T>()
 } catch (e: Exception) {
     null
 }
 
-inline fun <reified T : Application> Controller.app() = activity.app<T>()
+inline fun <reified T : Application> Controller.app(): T = activity.app<T>()

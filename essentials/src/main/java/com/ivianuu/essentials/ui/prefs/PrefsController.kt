@@ -52,30 +52,30 @@ abstract class PrefsController : SimpleController() {
         super.onUnbindView(view)
     }
 
-    protected fun EpoxyController.preference(init: PreferenceModel.Builder.() -> Unit) =
+    protected fun EpoxyController.preference(init: PreferenceModel.Builder.() -> Unit): PreferenceModel =
         preference(activity, init)
 
-    protected fun EpoxyController.categoryPreference(init: CategoryPreferenceModel.Builder.() -> Unit) =
+    protected fun EpoxyController.categoryPreference(init: CategoryPreferenceModel.Builder.() -> Unit): CategoryPreferenceModel =
         categoryPreference(activity, init)
 
-    protected fun EpoxyController.checkboxPreference(init: CheckboxPreferenceModel.Builder.() -> Unit) =
+    protected fun EpoxyController.checkboxPreference(init: CheckboxPreferenceModel.Builder.() -> Unit): CheckboxPreferenceModel =
         checkboxPreference(activity, init)
 
-    protected fun EpoxyController.editTextPreference(init: EditTextPreferenceModel.Builder.() -> Unit) =
+    protected fun EpoxyController.editTextPreference(init: EditTextPreferenceModel.Builder.() -> Unit): EditTextPreferenceModel =
         editTextPreference(activity, init)
 
-    protected fun EpoxyController.multiSelectListPreference(init: MultiSelectListPreferenceModel.Builder.() -> Unit) =
+    protected fun EpoxyController.multiSelectListPreference(init: MultiSelectListPreferenceModel.Builder.() -> Unit): MultiSelectListPreferenceModel =
         multiSelectListPreference(activity, init)
 
-    protected fun EpoxyController.radioButtonPreference(init: RadioButtonPreferenceModel.Builder.() -> Unit) =
+    protected fun EpoxyController.radioButtonPreference(init: RadioButtonPreferenceModel.Builder.() -> Unit): RadioButtonPreferenceModel =
         radioButtonPreference(activity, init)
 
-    protected fun EpoxyController.seekBarPreference(init: SeekBarPreferenceModel.Builder.() -> Unit) =
+    protected fun EpoxyController.seekBarPreference(init: SeekBarPreferenceModel.Builder.() -> Unit): SeekBarPreferenceModel =
         seekBarPreference(activity, init)
 
-    protected fun EpoxyController.singleItemListPreference(init: SingleItemListPreferenceModel.Builder.() -> Unit) =
+    protected fun EpoxyController.singleItemListPreference(init: SingleItemListPreferenceModel.Builder.() -> Unit): SingleItemListPreferenceModel =
         singleItemListPreference(activity, init)
 
-    protected fun EpoxyController.switchPreference(init: SwitchPreferenceModel.Builder.() -> Unit) =
+    protected fun EpoxyController.switchPreference(init: SwitchPreferenceModel.Builder.() -> Unit): SwitchPreferenceModel =
         switchPreference(activity, init)
 }

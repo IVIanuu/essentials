@@ -75,7 +75,5 @@ abstract class EsDialogController : DialogController(), InjektTrait, ContextAwar
 
     override fun getViewModelStore(): ViewModelStore = viewModelStoreOwner.viewModelStore
 
-    protected open fun dependencies() = emptyList<Component>()
-
-    protected open fun modules() = emptyList<Module>()
+    protected open fun modules(): List<Module> = emptyList<Module>()
 }

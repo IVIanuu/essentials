@@ -26,10 +26,10 @@ interface PrefValueHolder<T> {
     val value: T
 }
 
-fun <T, V> KClass<T>.valueFor(value: V, defaultValue: T) where T : Enum<T>, T : PrefValueHolder<V> =
+fun <T, V> KClass<T>.valueFor(value: V, defaultValue: T): T where T : Enum<T>, T : PrefValueHolder<V> =
     java.enumConstants.firstOrNull { it.value == value } ?: defaultValue
 
-fun <T, V> KClass<T>.valueForOrNull(value: V) where T : Enum<T>, T : PrefValueHolder<V> =
+fun <T, V> KClass<T>.valueForOrNull(value: V): T? where T : Enum<T>, T : PrefValueHolder<V> =
     java.enumConstants.firstOrNull { it.value == value }
 
 private class EnumBooleanPrefAdapter<T>(
@@ -47,7 +47,7 @@ private class EnumBooleanPrefAdapter<T>(
 inline fun <reified T> KPrefs.enumBoolean(
     key: String,
     defaultValue: T
-) where T : Enum<T>, T : PrefValueHolder<Boolean> =
+): CustomPref<T> where T : Enum<T>, T : PrefValueHolder<Boolean> =
     enumBoolean(key, defaultValue, T::class)
 
 fun <T> KPrefs.enumBoolean(
@@ -72,7 +72,7 @@ private class EnumIntPrefAdapter<T>(
 inline fun <reified T> KPrefs.enumInt(
     key: String,
     defaultValue: T
-) where T : Enum<T>, T : PrefValueHolder<Int> =
+): CustomPref<T> where T : Enum<T>, T : PrefValueHolder<Int> =
     enumInt(key, defaultValue, T::class)
 
 fun <T> KPrefs.enumInt(
@@ -97,7 +97,7 @@ private class EnumFloatPrefAdapter<T>(
 inline fun <reified T> KPrefs.enumFloat(
     key: String,
     defaultValue: T
-) where T : Enum<T>, T : PrefValueHolder<Float> =
+): CustomPref<T> where T : Enum<T>, T : PrefValueHolder<Float> =
     enumFloat(key, defaultValue, T::class)
 
 fun <T> KPrefs.enumFloat(
@@ -122,7 +122,7 @@ private class EnumLongPrefAdapter<T>(
 inline fun <reified T> KPrefs.enumLong(
     key: String,
     defaultValue: T
-) where T : Enum<T>, T : PrefValueHolder<Long> =
+): CustomPref<T> where T : Enum<T>, T : PrefValueHolder<Long> =
     enumLong(key, defaultValue, T::class)
 
 fun <T> KPrefs.enumLong(
@@ -147,7 +147,7 @@ private class EnumStringPrefAdapter<T>(
 inline fun <reified T> KPrefs.enumString(
     key: String,
     defaultValue: T
-) where T : Enum<T>, T : PrefValueHolder<String> =
+): CustomPref<T> where T : Enum<T>, T : PrefValueHolder<String> =
     enumString(key, defaultValue, T::class)
 
 fun <T> KPrefs.enumString(
@@ -173,7 +173,7 @@ private class EnumStringSetPrefAdapter<T>(
 inline fun <reified T> KPrefs.enumStringSet(
     key: String,
     defaultValue: Set<T>
-) where T : Enum<T>, T : PrefValueHolder<String> =
+): CustomPref<Set<T>> where T : Enum<T>, T : PrefValueHolder<String> =
     enumStringSet(key, defaultValue, T::class)
 
 fun <T> KPrefs.enumStringSet(

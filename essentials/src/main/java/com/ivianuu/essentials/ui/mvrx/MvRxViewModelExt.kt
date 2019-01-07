@@ -11,38 +11,38 @@ inline fun <reified VM : MvRxViewModel<*>> MvRxView.viewModel(
     noinline from: () -> ViewModelStoreOwner = { this },
     noinline key: () -> String = { VM::class.defaultViewModelKey },
     noinline factory: () -> VM = { get() }
-) = viewModelLazy { getViewModel(from(), key(), factory) }
+): Lazy<VM> = viewModelLazy { getViewModel(from(), key(), factory) }
 
 inline fun <reified VM : MvRxViewModel<*>> MvRxView.getViewModel(
     from: ViewModelStoreOwner = this,
     key: String = VM::class.defaultViewModelKey,
     noinline factory: () -> VM = { get() }
-) = viewModelProvider(from, factory).get(key, VM::class.java)
+): VM = viewModelProvider(from, factory).get(key, VM::class.java)
     .setupViewModel(this)
 
 inline fun <reified VM : MvRxViewModel<*>> MvRxView.existingViewModel(
     noinline from: () -> ViewModelStoreOwner = { this },
     noinline key: () -> String = { VM::class.defaultViewModelKey }
-) = viewModel<VM>(from, key, ExistingViewModelFactory())
+): Lazy<VM> = viewModel<VM>(from, key, ExistingViewModelFactory())
 
 inline fun <reified VM : MvRxViewModel<*>> MvRxView.getExistingViewModel(
     from: ViewModelStoreOwner = this,
     key: String = VM::class.defaultViewModelKey
-) = getViewModel(from, key, ExistingViewModelFactory<VM>())
+): VM = getViewModel(from, key, ExistingViewModelFactory<VM>())
 
 @PublishedApi
-internal fun <VM : MvRxViewModel<*>> VM.setupViewModel(view: MvRxView) =
+internal fun <VM : MvRxViewModel<*>> VM.setupViewModel(view: MvRxView): VM =
     apply { subscribe(view) { view.postInvalidate() } }
 
 @PublishedApi
-internal fun <V> MvRxView.viewModelLazy(initializer: () -> V) =
+internal fun <V> MvRxView.viewModelLazy(initializer: () -> V): Lazy<V> =
     lifecycleAwareLazy(Lifecycle.Event.ON_START, initializer)
 
 @PublishedApi
 internal fun <VM : MvRxViewModel<*>> viewModelProvider(
     from: ViewModelStoreOwner,
     factory: () -> VM
-) = ViewModelProvider(from, MvRxViewModelFactory(factory))
+): ViewModelProvider = ViewModelProvider(from, MvRxViewModelFactory(factory))
 
 @PublishedApi
 internal class ExistingViewModelFactory<VM : MvRxViewModel<*>> : () -> VM {

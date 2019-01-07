@@ -18,8 +18,8 @@
 
 package com.ivianuu.essentials.util.ext
 
-fun <T> T.andTrue() = true
+fun <T> T.andTrue(): Boolean = true
 
-fun <T> T.andFalse() = false
+fun <T> T.andFalse(): Boolean = false
 
-inline val <T> T.exhaustive get() = this
+inline val <T> T.exhaustive: T get() = this

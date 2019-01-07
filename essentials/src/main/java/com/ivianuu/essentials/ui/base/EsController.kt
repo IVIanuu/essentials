@@ -106,6 +106,6 @@ abstract class EsController : LifecycleController(), ContextAware, InjektTrait, 
     override fun invalidate() {
     }
 
-    protected open fun modules() = emptyList<Module>()
+    protected open fun modules(): List<Module> = emptyList<Module>()
 
 }

@@ -23,6 +23,7 @@ import com.ivianuu.rxjavaktx.BehaviorSubject
 import com.ivianuu.traveler.Router
 import com.ivianuu.traveler.goBack
 import com.ivianuu.traveler.navigate
+import io.reactivex.Observable
 import io.reactivex.rxkotlin.ofType
 
 fun PreferenceModel.Builder.onClickKey(router: Router, key: () -> Any) {
@@ -38,7 +39,7 @@ internal data class Result(
 @PublishedApi
 internal val results = BehaviorSubject<Result>()
 
-inline fun <reified T : Any> Router.results(resultCode: Int) = results
+inline fun <reified T : Any> Router.results(resultCode: Int): Observable<T> = results
     .filter { it.resultCode == resultCode }
     .map { it.result }
     .ofType<T>()

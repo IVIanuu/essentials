@@ -19,4 +19,4 @@ package com.ivianuu.essentials.util.ext
 import com.ivianuu.scopes.Scope
 import com.ivianuu.statestore.StateStore
 
-fun <T> StateStore<T>.closeBy(scope: Scope) = apply { scope.addListener { close() } }
+fun <T> StateStore<T>.closeBy(scope: Scope): StateStore<T> = apply { scope.addListener { close() } }

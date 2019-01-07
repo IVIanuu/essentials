@@ -26,7 +26,7 @@ import kotlin.coroutines.CoroutineContext
 fun ScopeCoroutineScope(
     scope: Scope,
     coroutineContext: CoroutineContext? = null
-) = if (coroutineContext != null) {
+): CoroutineScope = if (coroutineContext != null) {
     CoroutineScope(coroutineContext + Job().cancelBy(scope))
 } else {
     CoroutineScope(Job().cancelBy(scope))
@@ -35,14 +35,14 @@ fun ScopeCoroutineScope(
 fun MainScopeCoroutineScope(
     scope: Scope,
     coroutineContext: CoroutineContext? = null
-) = if (coroutineContext != null) {
+): CoroutineScope = if (coroutineContext != null) {
     ScopeCoroutineScope(scope, coroutineContext + coroutinesMain)
 } else {
     ScopeCoroutineScope(scope, coroutinesMain)
 }
 
-fun Scope.asCoroutineScope(coroutineContext: CoroutineContext? = null) =
+fun Scope.asCoroutineScope(coroutineContext: CoroutineContext? = null): CoroutineScope =
     ScopeCoroutineScope(this, coroutineContext)
 
-fun Scope.asMainCoroutineScope(coroutineContext: CoroutineContext? = null) =
+fun Scope.asMainCoroutineScope(coroutineContext: CoroutineContext? = null): CoroutineScope =
     MainScopeCoroutineScope(this, coroutineContext)

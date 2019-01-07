@@ -31,13 +31,13 @@ abstract class ActivityKey(
     open val startOptions: StartOptions? = null
 ) : ActivityKey, Parcelable {
 
-    override fun createIntent(context: Context, data: Any?) =
+    override fun createIntent(context: Context, data: Any?): Intent =
         Intent(context, target.java).apply {
             putExtra(TRAVELER_KEY, this@ActivityKey)
             putExtra(TRAVELER_KEY_CLASS, this@ActivityKey.javaClass.name)
         }
 
-    override fun createStartActivityOptions(command: Command, activityIntent: Intent) =
+    override fun createStartActivityOptions(command: Command, activityIntent: Intent): Bundle? =
         startOptions?.get(command, activityIntent)
 
     interface StartOptions {
@@ -47,10 +47,10 @@ abstract class ActivityKey(
 
 fun <T : Parcelable> Activity.getKey(): T = intent!!.extras!!.getParcelable(TRAVELER_KEY)!!
 
-fun <T : Parcelable> Activity.getKeyOrNull() = try {
-    key<T>()
+fun <T : Parcelable> Activity.getKeyOrNull(): T? = try {
+    getKey<T>()
 } catch (e: Exception) {
     null
 }
 
-fun <T : Parcelable> Activity.key() = unsafeLazy { getKey<T>() }
+fun <T : Parcelable> Activity.key(): Lazy<T> = unsafeLazy { getKey<T>() }

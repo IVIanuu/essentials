@@ -54,6 +54,6 @@ inline fun <reified T : Worker> ModuleContext.worker(
     name: String? = null,
     override: Boolean = false,
     noinline definition: WorkerDefinition<T>
-) = factory(name, override) { (context: Context, workerParams: WorkerParameters) ->
+): BeanDefinition<T> = factory(name, override) { (context: Context, workerParams: WorkerParameters) ->
     definition(this, context, workerParams)
 } intoStringMap (WORKER_MAP to T::class.java.name)

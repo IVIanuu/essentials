@@ -19,5 +19,5 @@ package com.ivianuu.essentials.util.ext
 import com.ivianuu.liveevent.LiveEventPlugins
 import com.ivianuu.liveevent.MutableLiveEvent
 
-fun <T> MutableLiveEvent(maxSize: Int = LiveEventPlugins.defaultMaxSize) =
+fun <T> MutableLiveEvent(maxSize: Int = LiveEventPlugins.defaultMaxSize): MutableLiveEvent<T> =
     MutableLiveEvent<T>(maxSize)

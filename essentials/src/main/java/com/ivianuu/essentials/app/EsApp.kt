@@ -73,7 +73,7 @@ abstract class EsApp : Application(), InjektTrait {
             .forEach { it.initialize(this) }
     }
 
-    protected open fun shouldInitialize(type: KClass<out AppInitializer>) = true
+    protected open fun shouldInitialize(type: KClass<out AppInitializer>): Boolean = true
 
     protected open fun onStartAppServices() {
         appServices
@@ -82,7 +82,7 @@ abstract class EsApp : Application(), InjektTrait {
             .forEach { it.start() }
     }
 
-    protected open fun shouldStartAppService(type: KClass<out AppService>) = true
+    protected open fun shouldStartAppService(type: KClass<out AppService>): Boolean = true
 
     protected open fun modules(): List<Module> = emptyList()
 

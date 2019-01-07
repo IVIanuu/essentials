@@ -1,7 +1,9 @@
 package com.ivianuu.essentials.app
 
 import android.app.Application
+import com.ivianuu.injekt.BeanDefinition
 import com.ivianuu.injekt.Definition
+import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.ModuleContext
 import com.ivianuu.injekt.factory
 import com.ivianuu.injekt.module
@@ -22,9 +24,9 @@ inline fun <reified T : AppInitializer> ModuleContext.appInitializer(
     name: String? = null,
     override: Boolean = false,
     noinline definition: Definition<T>
-) = factory(name, override, definition) intoClassMap APP_INITIALIZERS
+): BeanDefinition<T> = factory(name, override, definition) intoClassMap APP_INITIALIZERS
 
-inline fun <reified T : AppInitializer> ModuleContext.bindAppInitializer() =
+inline fun <reified T : AppInitializer> ModuleContext.bindAppInitializer(): BeanDefinition<AppInitializer> =
     bindIntoClassMap<AppInitializer, T>(APP_INITIALIZERS)
 
 val esAppInitializersModule = module("EsAppInitializersModule") {

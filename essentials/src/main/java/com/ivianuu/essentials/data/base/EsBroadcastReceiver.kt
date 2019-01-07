@@ -23,6 +23,6 @@ abstract class EsBroadcastReceiver : BroadcastReceiver(), InjektTrait {
         }
     }
 
-    protected open fun modules(context: Context) = emptyList<Module>()
+    protected open fun modules(context: Context): List<Module> = emptyList<Module>()
 
 }

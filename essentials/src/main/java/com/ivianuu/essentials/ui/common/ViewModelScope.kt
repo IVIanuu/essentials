@@ -17,9 +17,10 @@
 package com.ivianuu.essentials.ui.common
 
 import com.ivianuu.scopes.BaseScope
+import com.ivianuu.scopes.Scope
 import com.ivianuu.scopes.cache.ScopeStore
 
-val EsViewModel.scope get() = scopeCache.get(this)
+val EsViewModel.scope: Scope get() = scopeCache.get(this)
 
 private val scopeCache = ScopeStore<EsViewModel> { ViewModelScope(it) }
 

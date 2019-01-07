@@ -129,5 +129,5 @@ abstract class SimpleController : EsController() {
 
     protected open fun layoutManager(): RecyclerView.LayoutManager? = null
 
-    protected open fun onToolbarMenuItemClicked(item: MenuItem) = false
+    protected open fun onToolbarMenuItemClicked(item: MenuItem): Boolean = false
 }

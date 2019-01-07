@@ -19,5 +19,5 @@ package com.ivianuu.essentials.securesettings
 import android.content.Context
 import com.ivianuu.kommon.core.content.hasPermissions
 
-fun Context.canWriteSecureSettings() =
+fun Context.canWriteSecureSettings(): Boolean =
     hasPermissions(android.Manifest.permission.WRITE_SECURE_SETTINGS)
