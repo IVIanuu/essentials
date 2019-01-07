@@ -17,12 +17,18 @@
 package com.ivianuu.essentials.app
 
 import android.app.Application
+import android.content.pm.ApplicationInfo
 import com.ivianuu.essentials.injection.esModule
-
+import com.ivianuu.essentials.util.ext.containsFlag
 import com.ivianuu.essentials.util.ext.unsafeLazy
-import com.ivianuu.injekt.*
+import com.ivianuu.injekt.Component
+import com.ivianuu.injekt.InjektTrait
+import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.android.androidLogger
 import com.ivianuu.injekt.android.applicationComponent
+import com.ivianuu.injekt.configureInjekt
+import com.ivianuu.injekt.get
+import com.ivianuu.injekt.modules
 import com.ivianuu.injekt.multibinding.ClassMultiBindingMap
 import com.ivianuu.injekt.multibinding.toProviderMap
 import kotlin.reflect.KClass
@@ -58,7 +64,9 @@ abstract class EsApp : Application(), InjektTrait {
     }
 
     protected open fun onCreateComponent() {
-        configureInjekt { androidLogger() }
+        if (applicationInfo.flags.containsFlag(ApplicationInfo.FLAG_DEBUGGABLE)) {
+            configureInjekt { androidLogger() }
+        }
 
         _component = applicationComponent(this) {
             modules(esAppModule(this@EsApp), esModule)
