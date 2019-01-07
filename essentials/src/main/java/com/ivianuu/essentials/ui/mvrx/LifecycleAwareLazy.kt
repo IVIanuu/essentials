@@ -24,11 +24,11 @@ import java.io.Serializable
 private object UNINITIALIZED_VALUE
 
 /**
- * This was copied from SynchronizedLazyImpl but modified to automatically initialize in ON_CREATE.
+ * This was copied from SynchronizedLazyImpl but modified to automatically initialize in ON_START.
  */
-class LifecycleAwareLazy<out T>(
+class LifecycleAwareLazy<T>(
     owner: LifecycleOwner,
-    private val event: Lifecycle.Event = Lifecycle.Event.ON_CREATE,
+    private val event: Lifecycle.Event = Lifecycle.Event.ON_START,
     initializer: () -> T
 ) : Lazy<T>, Serializable {
 
@@ -78,12 +78,12 @@ class LifecycleAwareLazy<out T>(
 
 @JvmName("lifecycleAwareLazy2")
 fun <T> LifecycleOwner.lifecycleAwareLazy(
-    event: Lifecycle.Event = Lifecycle.Event.ON_CREATE,
+    event: Lifecycle.Event = Lifecycle.Event.ON_START,
     initializer: () -> T
 ): Lazy<T> = lifecycleAwareLazy(this, event, initializer)
 
 fun <T> lifecycleAwareLazy(
     owner: LifecycleOwner,
-    event: Lifecycle.Event = Lifecycle.Event.ON_CREATE,
+    event: Lifecycle.Event = Lifecycle.Event.ON_START,
     initializer: () -> T
 ): Lazy<T> = LifecycleAwareLazy(owner, event, initializer)

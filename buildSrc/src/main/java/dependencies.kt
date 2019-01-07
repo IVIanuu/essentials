@@ -28,6 +28,7 @@ object Versions {
 
     const val butterknife = "9.0.0-rc3"
 
+    const val closeable = "615c9d602e"
     const val constraintLayout = "2.0.0-alpha2"
     const val coroutines = "1.1.0"
     const val director = "daa4ec173f"
@@ -78,6 +79,10 @@ object Deps {
 
     const val butterknifeGradlePlugin =
         "com.jakewharton:butterknife-gradle-plugin:${Versions.butterknife}"
+
+    const val closeable = "com.github.IVIanuu.closeable:closeable:${Versions.closeable}"
+    const val closeableCoroutines = "com.github.IVIanuu.closeable:closeable-coroutines:${Versions.closeable}"
+    const val closeableRx = "com.github.IVIanuu.closeable:closeable-rx:${Versions.closeable}"
 
     const val constraintLayout =
         "androidx.constraintlayout:constraintlayout:${Versions.constraintLayout}"

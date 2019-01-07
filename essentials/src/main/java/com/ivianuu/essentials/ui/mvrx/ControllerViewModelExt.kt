@@ -28,7 +28,7 @@ inline fun <reified VM : MvRxViewModel<*>> EsController.activityViewModel(
 
 inline fun <reified VM : MvRxViewModel<*>> EsController.existingActivityViewModel(
     noinline key: () -> String = { VM::class.defaultViewModelKey }
-): Lazy<VM> = existingViewModel<VM>({ activity }, key)
+): Lazy<VM> = existingViewModel({ activity }, key)
 
 inline fun <reified VM : MvRxViewModel<*>> EsController.parentViewModel(
     noinline key: () -> String = { VM::class.defaultViewModelKey },
@@ -37,7 +37,7 @@ inline fun <reified VM : MvRxViewModel<*>> EsController.parentViewModel(
 
 inline fun <reified VM : MvRxViewModel<*>> EsController.existingParentViewModel(
     noinline key: () -> String = { VM::class.defaultViewModelKey }
-): Lazy<VM> = existingViewModel<VM>({ parentController as ViewModelStoreOwner }, key)
+): Lazy<VM> = existingViewModel({ parentController as ViewModelStoreOwner }, key)
 
 inline fun <reified VM : MvRxViewModel<*>> EsController.targetViewModel(
     noinline key: () -> String = { VM::class.defaultViewModelKey },
@@ -46,7 +46,7 @@ inline fun <reified VM : MvRxViewModel<*>> EsController.targetViewModel(
 
 inline fun <reified VM : MvRxViewModel<*>> EsController.existingTargetViewModel(
     noinline key: () -> String = { VM::class.defaultViewModelKey }
-): Lazy<VM> = existingViewModel<VM>({ targetController as ViewModelStoreOwner }, key)
+): Lazy<VM> = existingViewModel({ targetController as ViewModelStoreOwner }, key)
 
 inline fun <reified VM : MvRxViewModel<*>> EsController.getActivityViewModel(
     key: String = VM::class.defaultViewModelKey,
@@ -55,7 +55,7 @@ inline fun <reified VM : MvRxViewModel<*>> EsController.getActivityViewModel(
 
 inline fun <reified VM : MvRxViewModel<*>> EsController.getExistingActivityViewModel(
     key: String = VM::class.defaultViewModelKey
-): VM = getExistingViewModel<VM>(activity, key)
+): VM = getExistingViewModel(activity, key)
 
 inline fun <reified VM : MvRxViewModel<*>> EsController.getParentViewModel(
     key: String = VM::class.defaultViewModelKey,
@@ -64,7 +64,7 @@ inline fun <reified VM : MvRxViewModel<*>> EsController.getParentViewModel(
 
 inline fun <reified VM : MvRxViewModel<*>> EsController.getExistingParentViewModel(
     key: String = VM::class.defaultViewModelKey
-): VM = getExistingViewModel<VM>(parentController as ViewModelStoreOwner, key)
+): VM = getExistingViewModel(parentController as ViewModelStoreOwner, key)
 
 inline fun <reified VM : MvRxViewModel<*>> EsController.getTargetViewModel(
     key: String = VM::class.defaultViewModelKey,
@@ -73,4 +73,4 @@ inline fun <reified VM : MvRxViewModel<*>> EsController.getTargetViewModel(
 
 inline fun <reified VM : MvRxViewModel<*>> EsController.getExistingTargetViewModel(
     key: String = VM::class.defaultViewModelKey
-): VM = getExistingViewModel<VM>(targetController as ViewModelStoreOwner, key)
+): VM = getExistingViewModel(targetController as ViewModelStoreOwner, key)

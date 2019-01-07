@@ -6,6 +6,7 @@ import android.os.Message
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelStoreOwner
+import com.ivianuu.closeable.Closeable
 import com.ivianuu.injekt.InjektTrait
 import io.reactivex.disposables.Disposable
 
@@ -31,7 +32,7 @@ interface MvRxView : InjektTrait, LifecycleOwner, ViewModelStoreOwner {
         }
     }
 
-    fun <S : MvRxState> MvRxViewModel<S>.subscribe(subscriber: (S) -> Unit): Disposable =
+    fun <S : MvRxState> MvRxViewModel<S>.subscribe(subscriber: (S) -> Unit): Closeable =
         subscribe(this@MvRxView, subscriber)
 
 }

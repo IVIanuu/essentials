@@ -53,6 +53,10 @@ dependencies {
     api(Deps.androidxCardView)
     api(Deps.androidxCoreKtx)
 
+    api(Deps.closeable)
+    api(Deps.closeableCoroutines)
+    api(Deps.closeableRx)
+
     api(Deps.coroutinesAndroid)
     api(Deps.coroutinesCore)
     api(Deps.coroutinesRxJava)

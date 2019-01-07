@@ -1,9 +1,14 @@
 package com.ivianuu.essentials.ui.mvrx
 
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
+import com.ivianuu.closeable.Closeable
+import com.ivianuu.closeable.rx.asCloseable
 import com.ivianuu.essentials.ui.common.EsViewModel
 import com.ivianuu.essentials.ui.common.scope
 import com.ivianuu.essentials.util.ext.closeBy
+import com.ivianuu.kommon.lifecycle.doOnAny
+import com.ivianuu.scopes.Scope
 import com.ivianuu.scopes.rx.disposeBy
 import com.ivianuu.statestore.StateStore
 import com.ivianuu.statestore.rx.observable
@@ -16,8 +21,7 @@ import io.reactivex.disposables.Disposable
  */
 abstract class MvRxViewModel<S : MvRxState>(initialState: S) : EsViewModel() {
 
-    private val stateStore = StateStore(initialState)
-        .closeBy(scope)
+    private val stateStore = StateStore(initialState).closeBy(scope)
 
     internal val state get() = stateStore.peekState()
 
@@ -33,27 +37,11 @@ abstract class MvRxViewModel<S : MvRxState>(initialState: S) : EsViewModel() {
         subscribe { d { "new state -> $it" } }
     }
 
-    protected fun subscribe(subscriber: (S) -> Unit): Disposable =
-        stateStore.observable.subscribeLifecycle(null, subscriber)
+    protected fun subscribe(subscriber: (S) -> Unit): Closeable =
+        stateStore.observable.subscribe(subscriber).asCloseable()
 
-    fun subscribe(owner: LifecycleOwner, subscriber: (S) -> Unit): Disposable =
-        stateStore.observable.subscribeLifecycle(owner, subscriber)
-
-    private fun <T> Observable<T>.subscribeLifecycle(
-        owner: LifecycleOwner? = null,
-        subscriber: (T) -> Unit
-    ): Disposable {
-        if (owner == null) {
-            return subscribe(subscriber).disposeBy(scope)
-        }
-
-        val lifecycleAwareObserver = LifecycleAwareObserver(
-            owner,
-            alwaysDeliverLastValueWhenUnlocked = true,
-            onNext = subscriber
-        )
-        return subscribeWith(lifecycleAwareObserver).disposeBy(scope)
-    }
+    fun subscribe(owner: LifecycleOwner, subscriber: (S) -> Unit): Closeable =
+        LifecycleStateListener(owner, stateStore, subscriber)
 
     override fun toString() = "${this::class.java.simpleName} -> $state"
 }
