@@ -24,7 +24,7 @@ import com.ivianuu.director.viewpager.RouterPagerAdapter
  * A [RouterPagerAdapter] which uses [ControllerKey]s
  */
 open class KeyRouterPagerAdapter(
-    private val host: Controller,
+    host: Controller,
     private val keys: List<ControllerKey>
 ) : RouterPagerAdapter(host) {
 

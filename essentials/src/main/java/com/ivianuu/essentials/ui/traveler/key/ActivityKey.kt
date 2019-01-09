@@ -48,7 +48,7 @@ abstract class ActivityKey(
 fun <T : Parcelable> Activity.getKey(): T = intent!!.extras!!.getParcelable(TRAVELER_KEY)!!
 
 fun <T : Parcelable> Activity.getKeyOrNull(): T? = try {
-    getKey<T>()
+    getKey()
 } catch (e: Exception) {
     null
 }

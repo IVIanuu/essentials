@@ -60,7 +60,7 @@ abstract class ControllerKey(
 fun <T : Parcelable> Controller.getKey(): T = args.getParcelable(TRAVELER_KEY)!!
 
 fun <T : Parcelable> Controller.getKeyOrNull(): T? = try {
-    getKey<T>()
+    getKey()
 } catch (e: Exception) {
     null
 }

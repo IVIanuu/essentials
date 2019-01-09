@@ -83,16 +83,16 @@ fun Controller.requireTargetController(): Controller =
 
 inline fun <reified T : Controller> Controller.parentController(): T = requireParentController() as T
 inline fun <reified T : Controller> Controller.parentControllerOrNull(): T? = try {
-    parentController<T>()
+    parentController()
 } catch (e: Exception) {
     null
 }
 
 inline fun <reified T : Controller> Controller.targetController(): T = requireTargetController() as T
 inline fun <reified T : Controller> Controller.targetControllerOrNull(): T? = try {
-    targetController<T>()
+    targetController()
 } catch (e: Exception) {
     null
 }
 
-inline fun <reified T : Application> Controller.app(): T = activity.app<T>()
+inline fun <reified T : Application> Controller.app(): T = activity.app()

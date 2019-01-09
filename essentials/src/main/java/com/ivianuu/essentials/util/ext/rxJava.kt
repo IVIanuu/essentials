@@ -38,7 +38,7 @@ fun <T1, T2, T3, T4> Observables.combineLatest(
         source4,
         Function4 { t1: T1, t2: T2, t3: T3, t4: T4 ->
             Quadruple(t1, t2, t3, t4)
-        })!!
+        })
 }
 
 fun <T1, T2, T3, T4, T5> Observables.combineLatest(
@@ -56,7 +56,7 @@ fun <T1, T2, T3, T4, T5> Observables.combineLatest(
         source5,
         Function5 { t1: T1, t2: T2, t3: T3, t4: T4, t5: T5 ->
             Quintuple(t1, t2, t3, t4, t5)
-        })!!
+        })
 }
 
 fun <T1, T2, T3, T4, T5, T6> Observables.combineLatest(
@@ -76,7 +76,7 @@ fun <T1, T2, T3, T4, T5, T6> Observables.combineLatest(
         source6,
         Function6 { t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6 ->
             Sextuple(t1, t2, t3, t4, t5, t6)
-        })!!
+        })
 }
 
 fun <T1, T2, T3, T4, T5, T6, T7> Observables.combineLatest(
@@ -98,7 +98,7 @@ fun <T1, T2, T3, T4, T5, T6, T7> Observables.combineLatest(
         source7,
         Function7 { t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6, t7: T7 ->
             Septuple(t1, t2, t3, t4, t5, t6, t7)
-        })!!
+        })
 }
 
 fun <T1, T2, T3, T4, T5, T6, T7, T8> Observables.combineLatest(
@@ -122,7 +122,7 @@ fun <T1, T2, T3, T4, T5, T6, T7, T8> Observables.combineLatest(
         source8,
         Function8 { t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6, t7: T7, t8: T8 ->
             Octuple(t1, t2, t3, t4, t5, t6, t7, t8)
-        })!!
+        })
 }
 
 fun <T1, T2, T3, T4, T5, T6, T7, T8, T9> Observables.combineLatest(
@@ -148,5 +148,5 @@ fun <T1, T2, T3, T4, T5, T6, T7, T8, T9> Observables.combineLatest(
         source9,
         Function9 { t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6, t7: T7, t8: T8, t9: T9 ->
             Nonuple(t1, t2, t3, t4, t5, t6, t7, t8, t9)
-        })!!
+        })
 }

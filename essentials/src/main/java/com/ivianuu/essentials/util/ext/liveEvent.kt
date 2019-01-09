@@ -20,4 +20,4 @@ import com.ivianuu.liveevent.LiveEventPlugins
 import com.ivianuu.liveevent.MutableLiveEvent
 
 fun <T> MutableLiveEvent(maxSize: Int = LiveEventPlugins.defaultMaxSize): MutableLiveEvent<T> =
-    MutableLiveEvent<T>(maxSize)
+    MutableLiveEvent(maxSize)

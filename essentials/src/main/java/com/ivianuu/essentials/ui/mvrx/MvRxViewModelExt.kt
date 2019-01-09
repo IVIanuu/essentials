@@ -23,12 +23,12 @@ inline fun <reified VM : MvRxViewModel<*>> MvRxView.getViewModel(
 inline fun <reified VM : MvRxViewModel<*>> MvRxView.existingViewModel(
     noinline from: () -> ViewModelStoreOwner = { this },
     noinline key: () -> String = { VM::class.defaultViewModelKey }
-): Lazy<VM> = viewModel<VM>(from, key, ExistingViewModelFactory())
+): Lazy<VM> = viewModel(from, key, ExistingViewModelFactory())
 
 inline fun <reified VM : MvRxViewModel<*>> MvRxView.getExistingViewModel(
     from: ViewModelStoreOwner = this,
     key: String = VM::class.defaultViewModelKey
-): VM = getViewModel(from, key, ExistingViewModelFactory<VM>())
+): VM = getViewModel(from, key, ExistingViewModelFactory())
 
 @PublishedApi
 internal fun <VM : MvRxViewModel<*>> VM.setupViewModel(view: MvRxView): VM =

@@ -91,15 +91,16 @@ class AppIconModelLoader(
 
     override fun handles(model: AppIcon) = true
 
-    @com.ivianuu.injekt.annotations.Factory
-    class Factory(
-        private val appIconModelLoaderProvider: Provider<AppIconModelLoader>
-    ) : ModelLoaderFactory<AppIcon, Drawable> {
+}
 
-        override fun build(multiFactory: MultiModelLoaderFactory): AppIconModelLoader =
-            appIconModelLoaderProvider.get()
+@Factory
+class AppIconModelLoaderFactory(
+    private val appIconModelLoaderProvider: Provider<AppIconModelLoader>
+) : ModelLoaderFactory<AppIcon, Drawable> {
 
-        override fun teardown() {
-        }
+    override fun build(multiFactory: MultiModelLoaderFactory): AppIconModelLoader =
+        appIconModelLoaderProvider.get()
+
+    override fun teardown() {
     }
 }

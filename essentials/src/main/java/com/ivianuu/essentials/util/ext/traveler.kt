@@ -42,7 +42,7 @@ internal val results = PublishSubject<Result>()
 inline fun <reified T : Any> Router.results(resultCode: Int): Observable<T> = results
     .filter { it.resultCode == resultCode }
     .map { it.result }
-    .ofType<T>()
+    .ofType()
 
 fun Router.sendResult(resultCode: Int, result: Any) {
     results.onNext(Result(resultCode, result))

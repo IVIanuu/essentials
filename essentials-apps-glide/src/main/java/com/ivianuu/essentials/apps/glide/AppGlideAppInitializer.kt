@@ -10,7 +10,7 @@ import com.ivianuu.injekt.annotations.Factory
  * Initializes glide
  */
 @Factory
-class AppGlideAppInitializer(private val factory: AppIconModelLoader.Factory) : AppInitializer {
+class AppGlideAppInitializer(private val factory: AppIconModelLoaderFactory) : AppInitializer {
 
     override fun initialize(app: Application) {
         Glide.get(app).registry

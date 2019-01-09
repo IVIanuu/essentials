@@ -243,10 +243,10 @@ fun ContextAware.isAppLaunchable(packageName: String): Boolean =
 fun ContextAware.isAppEnabled(packageName: String): Boolean =
     providedContext.isAppEnabled(packageName)
 
-inline fun <reified T : Application> ContextAware.app(): T = providedContext.app<T>()
+inline fun <reified T : Application> ContextAware.app(): T = providedContext.app()
 
 inline fun <reified T> ContextAware.systemService(): T =
-    providedContext.systemService<T>()
+    providedContext.systemService()
 
 inline fun <reified T> ContextAware.systemServiceOrNull(): T? =
     providedContext.systemServiceOrNull<T>()
