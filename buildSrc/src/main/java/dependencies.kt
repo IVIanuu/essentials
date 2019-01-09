@@ -48,7 +48,6 @@ object Versions {
     const val materialComponents = "1.1.0-alpha02"
     const val materialDialogs = "2.0.0-rc1"
     const val mockitoKotlin = "2.0.0"
-    const val r2 = "06e702d39f"
     const val roboelectric = "4.0.2"
     const val rxAndroid = "2.1.0"
     const val rxJava = "2.2.2"
@@ -170,8 +169,6 @@ object Deps {
     const val mavenGradlePlugin = "com.github.dcendents:android-maven-gradle-plugin:${Versions.mavenGradle}"
 
     const val mockitoKotlin = "com.nhaarman.mockitokotlin2:mockito-kotlin:${Versions.mockitoKotlin}"
-
-    const val r2GradlePlugin = "com.github.IVIanuu:r2:${Versions.r2}"
 
     const val roboelectric = "org.robolectric:robolectric:${Versions.roboelectric}"
 
