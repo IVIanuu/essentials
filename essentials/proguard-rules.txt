@@ -8,3 +8,10 @@
 
 -keepnames class kotlinx.coroutines.internal.MainDispatcherFactory {}
 -keepnames class kotlinx.coroutines.CoroutineExceptionHandler {}
+
+# Injekt
+
+-keep public class * implements com.ivianuu.injekt.DefinitionFactory { *; }
+
+-keep @com.ivianuu.injekt.annotations.Factory public class *
+-keep @com.ivianuu.injekt.annotations.Single public class *
