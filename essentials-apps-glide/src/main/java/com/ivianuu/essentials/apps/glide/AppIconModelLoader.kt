@@ -28,6 +28,8 @@ import com.bumptech.glide.load.model.MultiModelLoaderFactory
 import com.bumptech.glide.signature.ObjectKey
 import com.ivianuu.essentials.util.ext.coroutinesIo
 import com.ivianuu.injekt.Provider
+import com.ivianuu.injekt.annotations.Factory
+import com.ivianuu.injekt.annotations.Param
 import com.ivianuu.injekt.parametersOf
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
@@ -38,8 +40,9 @@ data class AppIcon(val packageName: String)
 /**
  * Fetches images for [AppIcon]s
  */
+@Factory
 class AppIconFetcher(
-    private val app: AppIcon,
+    @Param private val app: AppIcon,
     private val packageManager: PackageManager
 ) :
     DataFetcher<Drawable> {
@@ -72,6 +75,7 @@ class AppIconFetcher(
 /**
  * Model loader to load [AppIcon]s
  */
+@Factory
 class AppIconModelLoader(
     private val appIconFetcherProvider: Provider<AppIconFetcher>
 ) : ModelLoader<AppIcon, Drawable> {
@@ -87,6 +91,7 @@ class AppIconModelLoader(
 
     override fun handles(model: AppIcon) = true
 
+    @com.ivianuu.injekt.annotations.Factory
     class Factory(
         private val appIconModelLoaderProvider: Provider<AppIconModelLoader>
     ) : ModelLoaderFactory<AppIcon, Drawable> {

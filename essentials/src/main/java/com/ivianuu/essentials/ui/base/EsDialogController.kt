@@ -16,8 +16,8 @@
 
 package com.ivianuu.essentials.ui.base
 
+
 import android.content.Context
-import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelStore
@@ -26,14 +26,15 @@ import com.ivianuu.director.arch.lifecycle.ControllerViewModelStoreOwner
 import com.ivianuu.director.dialog.DialogController
 import com.ivianuu.director.scopes.destroy
 import com.ivianuu.essentials.injection.controllerComponent
-
-
 import com.ivianuu.essentials.ui.mvrx.MvRxView
 import com.ivianuu.essentials.ui.traveler.key.keyModule
 import com.ivianuu.essentials.util.ContextAware
 import com.ivianuu.essentials.util.asMainCoroutineScope
 import com.ivianuu.essentials.util.ext.unsafeLazy
-import com.ivianuu.injekt.*
+import com.ivianuu.injekt.InjektTrait
+import com.ivianuu.injekt.Module
+import com.ivianuu.injekt.inject
+import com.ivianuu.injekt.modules
 import com.ivianuu.traveler.Router
 
 /**
@@ -58,11 +59,6 @@ abstract class EsDialogController : DialogController(), InjektTrait, ContextAwar
 
     val coroutineScope = destroy.asMainCoroutineScope()
 
-    override fun onRestoreViewState(view: View, savedViewState: Bundle) {
-        super.onRestoreViewState(view, savedViewState)
-        invalidate()
-    }
-
     override fun onAttach(view: View) {
         super.onAttach(view)
         invalidate()
@@ -75,5 +71,5 @@ abstract class EsDialogController : DialogController(), InjektTrait, ContextAwar
 
     override fun getViewModelStore(): ViewModelStore = viewModelStoreOwner.viewModelStore
 
-    protected open fun modules(): List<Module> = emptyList<Module>()
+    protected open fun modules(): List<Module> = emptyList()
 }

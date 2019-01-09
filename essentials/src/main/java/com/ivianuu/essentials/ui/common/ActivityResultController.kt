@@ -11,8 +11,8 @@ import com.ivianuu.essentials.ui.base.EsController
 import com.ivianuu.essentials.ui.traveler.NavOptions
 import com.ivianuu.essentials.ui.traveler.dialog
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
-import com.ivianuu.essentials.ui.traveler.key.key
 import com.ivianuu.essentials.util.ext.goBackWithResult
+import com.ivianuu.injekt.inject
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
@@ -27,7 +27,7 @@ data class ActivityResultKey(
  */
 class ActivityResultController : EsController() {
 
-    private val key by key<ActivityResultKey>()
+    private val key by inject<ActivityResultKey>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

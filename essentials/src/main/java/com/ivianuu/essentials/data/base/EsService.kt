@@ -8,7 +8,6 @@ import com.ivianuu.essentials.util.ext.unsafeLazy
 import com.ivianuu.injekt.InjektTrait
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.android.serviceComponent
-import com.ivianuu.injekt.modules
 import com.ivianuu.scopes.MutableScope
 import com.ivianuu.scopes.Scope
 
@@ -35,6 +34,6 @@ abstract class EsService : Service(), InjektTrait {
 
     override fun onBind(intent: Intent): IBinder? = null
 
-    protected open fun modules(): List<Module> = emptyList<Module>()
+    protected open fun modules(): List<Module> = emptyList()
 
 }

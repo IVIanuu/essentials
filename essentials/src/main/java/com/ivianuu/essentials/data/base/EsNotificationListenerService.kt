@@ -6,7 +6,6 @@ import com.ivianuu.essentials.util.ext.unsafeLazy
 import com.ivianuu.injekt.InjektTrait
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.android.serviceComponent
-import com.ivianuu.injekt.modules
 import com.ivianuu.scopes.MutableScope
 import com.ivianuu.scopes.ReusableScope
 import com.ivianuu.scopes.Scope
@@ -48,6 +47,6 @@ abstract class EsNotificationListenerService : NotificationListenerService(), In
         super.onListenerDisconnected()
     }
 
-    protected open fun modules(): List<Module> = emptyList<Module>()
+    protected open fun modules(): List<Module> = emptyList()
 
 }

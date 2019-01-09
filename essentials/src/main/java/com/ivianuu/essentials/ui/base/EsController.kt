@@ -87,11 +87,6 @@ abstract class EsController : LifecycleController(), ContextAware, InjektTrait, 
         _viewCoroutineScope = unbindView.asMainCoroutineScope()
     }
 
-    override fun onRestoreViewState(view: View, savedViewState: Bundle) {
-        super.onRestoreViewState(view, savedViewState)
-        invalidate()
-    }
-
     override fun onAttach(view: View) {
         super.onAttach(view)
         invalidate()
@@ -106,6 +101,6 @@ abstract class EsController : LifecycleController(), ContextAware, InjektTrait, 
     override fun invalidate() {
     }
 
-    protected open fun modules(): List<Module> = emptyList<Module>()
+    protected open fun modules(): List<Module> = emptyList()
 
 }

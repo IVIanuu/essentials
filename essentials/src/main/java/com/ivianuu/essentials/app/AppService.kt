@@ -1,12 +1,11 @@
 package com.ivianuu.essentials.app
 
-import com.ivianuu.injekt.BeanDefinition
+import com.ivianuu.injekt.BindingContext
 import com.ivianuu.injekt.Definition
-import com.ivianuu.injekt.ModuleContext
+import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.module
-import com.ivianuu.injekt.multibinding.bindIntoClassMap
-import com.ivianuu.injekt.multibinding.classMapBinding
-import com.ivianuu.injekt.multibinding.intoClassMap
+import com.ivianuu.injekt.multibinding.bindIntoMap
+import com.ivianuu.injekt.multibinding.mapBinding
 import com.ivianuu.injekt.single
 import com.ivianuu.scopes.MutableScope
 import com.ivianuu.scopes.Scope
@@ -26,15 +25,16 @@ abstract class AppService {
 
 }
 
-inline fun <reified T : AppService> ModuleContext.appService(
+inline fun <reified T : AppService> Module.appService(
     name: String? = null,
     override: Boolean = false,
     noinline definition: Definition<T>
-): BeanDefinition<T> = single(name, override, false, definition) intoClassMap APP_SERVICES
+): BindingContext<T> =
+    single(name, null, override, false, definition) bindIntoMap (APP_SERVICES to T::class)
 
-inline fun <reified T : AppService> ModuleContext.bindAppService(): BeanDefinition<AppService> =
-    bindIntoClassMap<AppService, T>(APP_SERVICES)
+inline fun <reified T : AppService> Module.bindAppService(name: String? = null): BindingContext<T> =
+    bindIntoMap(T::class, APP_SERVICES, T::class, name)
 
 val esAppServicesModule = module("EsAppServicesModule") {
-    classMapBinding<AppService>(APP_SERVICES)
+    mapBinding(APP_SERVICES)
 }

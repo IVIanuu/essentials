@@ -27,7 +27,6 @@ import com.ivianuu.essentials.securesettings.SecureSettingsKey
 import com.ivianuu.essentials.securesettings.canWriteSecureSettings
 import com.ivianuu.essentials.ui.prefs.PrefsController
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
-import com.ivianuu.essentials.ui.traveler.key.key
 import com.ivianuu.essentials.util.ext.fromPref
 import com.ivianuu.essentials.util.ext.results
 import com.ivianuu.injekt.inject
@@ -55,7 +54,7 @@ class NavBarSettingsController : PrefsController() {
     override val toolbarTitleRes: Int
         get() = R.string.es_screen_label_nav_bar_settings
 
-    private val key by key<NavBarSettingsKey>()
+    private val key by inject<NavBarSettingsKey>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

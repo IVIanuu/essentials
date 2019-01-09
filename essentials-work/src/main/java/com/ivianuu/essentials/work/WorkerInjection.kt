@@ -5,19 +5,22 @@ import androidx.work.ListenableWorker
 import androidx.work.Worker
 import androidx.work.WorkerFactory
 import androidx.work.WorkerParameters
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.multibinding.StringMultiBindingMap
-import com.ivianuu.injekt.multibinding.intoStringMap
-import com.ivianuu.injekt.multibinding.toProviderMap
+import com.ivianuu.injekt.BindingContext
+import com.ivianuu.injekt.DefinitionContext
+import com.ivianuu.injekt.Module
+import com.ivianuu.injekt.Provider
+import com.ivianuu.injekt.factory
+import com.ivianuu.injekt.module
+import com.ivianuu.injekt.multibinding.bindIntoMap
+import com.ivianuu.injekt.multibinding.getProviderMap
+import com.ivianuu.injekt.parametersOf
 
 /**
  * Uses [Injekt] to instantiate workers
  */
 class InjektWorkerFactory(
-    workersMap: StringMultiBindingMap<Worker>
+    private val workers: Map<String, Provider<Worker>>
 ) : WorkerFactory() {
-
-    private val workers = workersMap.toProviderMap()
 
     override fun createWorker(
         appContext: Context,
@@ -39,7 +42,7 @@ const val WORKER_MAP = "workers"
  * Contains the [InjektWorkerFactory]
  */
 val workerInjectionModule = module("WorkerInjectionModule") {
-    factory { InjektWorkerFactory(get(WORKER_MAP)) }
+    factory { InjektWorkerFactory(getProviderMap(WORKER_MAP)) }
 }
 
 /**
@@ -50,10 +53,18 @@ typealias WorkerDefinition<T> = DefinitionContext.(context: Context, workerParam
 /**
  * Defines a [Worker] which will be used in conjunction with the [InjektWorkerFactory]
  */
-inline fun <reified T : Worker> ModuleContext.worker(
+inline fun <reified T : Worker> Module.worker(
     name: String? = null,
     override: Boolean = false,
     noinline definition: WorkerDefinition<T>
-): BeanDefinition<T> = factory(name, override) { (context: Context, workerParams: WorkerParameters) ->
-    definition(this, context, workerParams)
-} intoStringMap (WORKER_MAP to T::class.java.name)
+): BindingContext<T> {
+    return factory(name, null, override) { (context: Context, workerParams: WorkerParameters) ->
+        definition(this, context, workerParams)
+    } bindIntoMap (WORKER_MAP to T::class.java.name)
+}
+
+/**
+ * Binds a already existing [Worker]
+ */
+inline fun <reified T : Worker> Module.bindWorker(name: String? = null): BindingContext<T> =
+    bindIntoMap(T::class, WORKER_MAP, T::class.java.name, name)

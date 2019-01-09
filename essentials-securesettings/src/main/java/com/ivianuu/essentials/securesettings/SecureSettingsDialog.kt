@@ -25,7 +25,6 @@ import com.ivianuu.essentials.ui.base.EsDialogController
 import com.ivianuu.essentials.ui.traveler.NavOptions
 import com.ivianuu.essentials.ui.traveler.dialog
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
-import com.ivianuu.essentials.ui.traveler.key.key
 import com.ivianuu.essentials.ui.traveler.vertical
 import com.ivianuu.essentials.util.ext.goBackWithResult
 import com.ivianuu.essentials.util.ext.sendResult
@@ -45,9 +44,8 @@ class SecureSettingsKey(
  */
 class SecureSettingsDialog : EsDialogController() {
 
+    private val key by inject<SecureSettingsKey>()
     private val shell by inject<Shell>()
-
-    private val key by key<SecureSettingsKey>()
 
     override fun onCreateDialog(savedViewState: Bundle?): Dialog {
         return MaterialDialog(activity)

@@ -15,11 +15,8 @@ import com.ivianuu.essentials.ui.traveler.NavOptions
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
 import com.ivianuu.essentials.ui.traveler.vertical
 import com.ivianuu.essentials.util.ext.andTrue
-import com.ivianuu.injekt.factory
-import com.ivianuu.injekt.get
-import com.ivianuu.injekt.module
 import kotlinx.android.parcel.Parcelize
-import kotlinx.android.synthetic.main.single_line_list_item.*
+import kotlinx.android.synthetic.main.single_line_list_item.title
 
 @Parcelize
 class ListKey : ControllerKey(::ListController, NavOptions().vertical())
@@ -33,8 +30,6 @@ class ListController : SimpleController() {
 
     override val toolbarMenuRes get() = R.menu.controller_list
     override val toolbarTitle get() = "List"
-
-    override fun modules() = listOf(listModule)
 
     override fun epoxyController() = simpleEpoxyController(viewModel) { state ->
         if (state.loading) {
@@ -62,10 +57,6 @@ class ListController : SimpleController() {
         R.id.action_refresh -> viewModel.refreshClicked().andTrue()
         else -> false
     }
-}
-
-val listModule = module {
-    factory { ListViewModel(get()) }
 }
 
 @EpoxyModelClass(layout = R.layout.single_line_list_item)

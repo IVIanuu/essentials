@@ -31,17 +31,17 @@ object Versions {
     const val closeable = "615c9d602e"
     const val constraintLayout = "2.0.0-alpha2"
     const val coroutines = "1.1.0"
-    const val director = "daa4ec173f"
+    const val director = "f06a31b9bf"
     const val epoxy = "2.19.0"
     const val epoxyKtx = "9dde1f5a9c"
     const val epoxyPrefs = "0a007754c4"
     const val glide = "4.8.0"
-    const val injekt = "20bc5a9c3c"
+    const val injekt = "7f0c4b3101"
     const val junit = "4.12"
     const val kommon = "6c51279983"
     const val kotlin = "1.3.11"
-    const val kPrefs = "ff00f64c9b"
-    const val kSettings = "4b27df8a77"
+    const val kPrefs = "c9d566f7db"
+    const val kSettings = "ab9a903934"
     const val legacySupport = "28.0.0"
     const val liveEvent = "1e265df911"
     const val mavenGradle = "2.1"
@@ -54,12 +54,12 @@ object Versions {
     const val rxJava = "2.2.2"
     const val rxJavaKtx = "015125e952"
     const val rxKotlin = "2.3.0"
-    const val scopes = "6c630efcd6"
+    const val scopes = "e628b82667"
     const val superUser = "1.0.0.+"
-    const val stateStore = "19518b13f6"
+    const val stateStore = "bb8b2cee1f"
     const val timber = "4.7.1"
     const val timberKtx = "f7547da781"
-    const val traveler = "ab66233b33"
+    const val traveler = "4505d48ca6"
 }
 
 object Deps {
@@ -116,6 +116,8 @@ object Deps {
 
     const val injekt = "com.github.IVIanuu.injekt:injekt:${Versions.injekt}"
     const val injektAndroid = "com.github.IVIanuu.injekt:injekt-android:${Versions.injekt}"
+    const val injektAnnotations = "com.github.IVIanuu.injekt:injekt-annotations:${Versions.injekt}"
+    const val injektCompiler = "com.github.IVIanuu.injekt:injekt-compiler:${Versions.injekt}"
     const val injektMultiBinding =
         "com.github.IVIanuu.injekt:injekt-multibinding:${Versions.injekt}"
 

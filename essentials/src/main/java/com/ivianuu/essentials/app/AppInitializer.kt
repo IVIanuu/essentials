@@ -1,15 +1,13 @@
 package com.ivianuu.essentials.app
 
 import android.app.Application
-import com.ivianuu.injekt.BeanDefinition
+import com.ivianuu.injekt.BindingContext
 import com.ivianuu.injekt.Definition
 import com.ivianuu.injekt.Module
-import com.ivianuu.injekt.ModuleContext
 import com.ivianuu.injekt.factory
 import com.ivianuu.injekt.module
-import com.ivianuu.injekt.multibinding.bindIntoClassMap
-import com.ivianuu.injekt.multibinding.classMapBinding
-import com.ivianuu.injekt.multibinding.intoClassMap
+import com.ivianuu.injekt.multibinding.bindIntoMap
+import com.ivianuu.injekt.multibinding.mapBinding
 
 const val APP_INITIALIZERS = "appInitializers"
 
@@ -20,19 +18,19 @@ interface AppInitializer {
     fun initialize(app: Application)
 }
 
-inline fun <reified T : AppInitializer> ModuleContext.appInitializer(
+inline fun <reified T : AppInitializer> Module.appInitializer(
     name: String? = null,
     override: Boolean = false,
     noinline definition: Definition<T>
-): BeanDefinition<T> = factory(name, override, definition) intoClassMap APP_INITIALIZERS
+): BindingContext<T> =
+    factory(name, null, override, definition) bindIntoMap (APP_INITIALIZERS to T::class)
 
-inline fun <reified T : AppInitializer> ModuleContext.bindAppInitializer(): BeanDefinition<AppInitializer> =
-    bindIntoClassMap<AppInitializer, T>(APP_INITIALIZERS)
+inline fun <reified T : AppInitializer> Module.bindAppInitializer(name: String? = null): BindingContext<T> =
+    bindIntoMap(T::class, APP_INITIALIZERS, T::class, name)
 
 val esAppInitializersModule = module("EsAppInitializersModule") {
-    classMapBinding<AppInitializer>(APP_INITIALIZERS)
-
-    appInitializer { RxJavaAppInitializer() }
-    appInitializer { StateStoreAppInitializer() }
-    appInitializer { TimberAppInitializer() }
+    mapBinding(APP_INITIALIZERS)
+    bindAppInitializer<RxJavaAppInitializer>()
+    bindAppInitializer<StateStoreAppInitializer>()
+    bindAppInitializer<TimberAppInitializer>()
 }

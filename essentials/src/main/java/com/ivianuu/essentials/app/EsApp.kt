@@ -27,10 +27,8 @@ import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.android.androidLogger
 import com.ivianuu.injekt.android.applicationComponent
 import com.ivianuu.injekt.configureInjekt
-import com.ivianuu.injekt.get
 import com.ivianuu.injekt.modules
-import com.ivianuu.injekt.multibinding.ClassMultiBindingMap
-import com.ivianuu.injekt.multibinding.toProviderMap
+import com.ivianuu.injekt.multibinding.getProviderMap
 import kotlin.reflect.KClass
 
 /**
@@ -48,12 +46,10 @@ abstract class EsApp : Application(), InjektTrait {
     private var componentCreated = false
 
     private val appInitializers by unsafeLazy {
-        get<ClassMultiBindingMap<AppInitializer>>(APP_INITIALIZERS)
-            .toProviderMap()
+        getProviderMap<KClass<out AppInitializer>, AppInitializer>(APP_INITIALIZERS)
     }
     private val appServices by unsafeLazy {
-        get<ClassMultiBindingMap<AppService>>(APP_SERVICES)
-            .toProviderMap()
+        getProviderMap<KClass<out AppService>, AppService>(APP_SERVICES)
     }
 
     override fun onCreate() {
