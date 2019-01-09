@@ -62,7 +62,7 @@ abstract class EsApp : Application(), InjektTrait {
         }
 
         _component = applicationComponent(this) {
-            modules(esAppModule(packageName), esModule)
+            modules(esAppModule, esModule)
             modules(this@EsApp.modules())
         }
     }

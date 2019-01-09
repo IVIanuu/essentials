@@ -37,8 +37,8 @@ class App : EsApp() {
     override fun modules() = listOf(
         esAppsGlideModule,
         esNavBarModule,
-        workerModule,
-        workerInjectionModule
+        workerInjectionModule,
+        workerModule
     )
 
     private val workerFactory by inject<InjektWorkerFactory>()
