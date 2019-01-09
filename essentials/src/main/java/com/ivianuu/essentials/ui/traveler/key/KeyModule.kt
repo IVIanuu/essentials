@@ -6,7 +6,7 @@ import com.ivianuu.injekt.single
 import kotlin.reflect.KClass
 
 /**
- * Binds the the key
+ * Modules to bind a traveler key
  */
 fun keyModule(
     bundle: Bundle?,

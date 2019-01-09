@@ -115,7 +115,7 @@ abstract class EsActivity : AppCompatActivity(), InjektTrait, MvRxView, RouterAc
         }
     }
 
-    protected open fun navigators(): List<ResultNavigator> = emptyList<ResultNavigator>()
+    protected open fun navigators(): List<ResultNavigator> = emptyList()
 
     protected open fun modules(): List<Module> = emptyList()
 

@@ -10,12 +10,12 @@ class UnitValueTextProvider(
     private val unit: Unit
 ) : (Int) -> String {
 
-    override fun invoke(p1: Int) = when (unit) {
-        Unit.DP -> context.string(R.string.es_seek_bar_pref_format_dp, p1)
-        Unit.MILLIS -> context.string(R.string.es_seek_bar_pref_format_millis, p1)
-        Unit.PERCENTAGE -> context.string(R.string.es_seek_bar_pref_format_percentage, p1)
-        Unit.PX -> context.string(R.string.es_seek_bar_pref_format_px, p1)
-        Unit.SECONDS -> context.string(R.string.es_seek_bar_pref_format_seconds, p1)
+    override fun invoke(value: Int) = when (unit) {
+        Unit.DP -> context.string(R.string.es_seek_bar_pref_format_dp, value)
+        Unit.MILLIS -> context.string(R.string.es_seek_bar_pref_format_millis, value)
+        Unit.PERCENTAGE -> context.string(R.string.es_seek_bar_pref_format_percentage, value)
+        Unit.PX -> context.string(R.string.es_seek_bar_pref_format_px, value)
+        Unit.SECONDS -> context.string(R.string.es_seek_bar_pref_format_seconds, value)
     }
 
     enum class Unit {

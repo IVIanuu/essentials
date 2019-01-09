@@ -105,8 +105,6 @@ dependencies {
 
     api(project(":ktuples"))
 
-    api(Deps.legacyAnnotations)
-
     api(Deps.liveEvent)
 
     api(Deps.materialComponents)

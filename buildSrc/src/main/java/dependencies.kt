@@ -26,38 +26,37 @@ object Versions {
     const val androidxTestRules = "1.1.0"
     const val androidxTestRunner = "1.1.0"
 
-    const val butterknife = "9.0.0-rc3"
+    const val butterknife = "10.0.0"
 
     const val closeable = "615c9d602e"
     const val constraintLayout = "2.0.0-alpha2"
     const val coroutines = "1.1.0"
     const val director = "af7be42e7f"
-    const val epoxy = "2.19.0"
-    const val epoxyKtx = "9dde1f5a9c"
-    const val epoxyPrefs = "0a007754c4"
+    const val epoxy = "3.0.0"
+    const val epoxyKtx = "8f0f09739f"
+    const val epoxyPrefs = "2be0cb35db"
     const val glide = "4.8.0"
-    const val injekt = "5388479000"
+    const val injekt = "930f0dd4b8"
     const val junit = "4.12"
     const val kommon = "6c51279983"
     const val kotlin = "1.3.11"
     const val kPrefs = "c9d566f7db"
     const val kSettings = "ab9a903934"
-    const val legacySupport = "28.0.0"
     const val liveEvent = "1e265df911"
     const val mavenGradle = "2.1"
     const val materialComponents = "1.1.0-alpha02"
-    const val materialDialogs = "2.0.0-rc1"
+    const val materialDialogs = "2.0.0-rc7"
     const val mockitoKotlin = "2.0.0"
     const val roboelectric = "4.0.2"
     const val rxAndroid = "2.1.0"
-    const val rxJava = "2.2.2"
+    const val rxJava = "2.2.5"
     const val rxJavaKtx = "015125e952"
     const val rxKotlin = "2.3.0"
     const val scopes = "e628b82667"
     const val superUser = "1.0.0.+"
     const val stateStore = "bb8b2cee1f"
     const val timber = "4.7.1"
-    const val timberKtx = "f7547da781"
+    const val timberKtx = "892242ce50"
     const val traveler = "4505d48ca6"
 }
 
@@ -150,9 +149,6 @@ object Deps {
         "com.github.IVIanuu.ksettings:ksettings-livedata:${Versions.kSettings}"
     const val kSettingsRx =
         "com.github.IVIanuu.ksettings:ksettings-rx:${Versions.kSettings}"
-
-    const val legacyAnnotations =
-        "com.android.support:support-annotations:${Versions.legacySupport}"
 
     const val liveEvent = "com.github.IVIanuu:liveevent:${Versions.liveEvent}"
 

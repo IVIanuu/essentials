@@ -16,11 +16,19 @@
 
 package com.ivianuu.essentials.ui.traveler
 
-import com.ivianuu.director.*
-import com.ivianuu.director.common.changehandler.*
+import com.ivianuu.director.ControllerChangeHandler
+import com.ivianuu.director.RouterTransaction
+import com.ivianuu.director.SimpleSwapChangeHandler
+import com.ivianuu.director.common.changehandler.AnimatorChangeHandler
+import com.ivianuu.director.common.changehandler.AutoTransitionChangeHandler
+import com.ivianuu.director.common.changehandler.FadeChangeHandler
+import com.ivianuu.director.common.changehandler.HorizontalChangeHandler
+import com.ivianuu.director.common.changehandler.VerticalChangeHandler
+import com.ivianuu.director.popChangeHandler
+import com.ivianuu.director.pushChangeHandler
 
 /**
- * @author Manuel Wrage (IVIanuu)
+ * Nav options for controllers
  */
 class ControllerNavOptions {
 

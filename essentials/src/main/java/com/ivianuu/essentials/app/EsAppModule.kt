@@ -29,12 +29,9 @@ import com.ivianuu.ksettings.KSettings
 /**
  * Basic app dependencies such as preferences or package manager
  */
-inline fun <reified T : EsApp> esAppModule(esApp: T) = module {
-    // prefs
-    sharedPreferences(esApp.packageName + "_preferences")
+fun esAppModule(packageName: String) = module {
+    sharedPreferences(packageName + "_preferences")
     single { KPrefs(get<SharedPreferences>()) }
-
     single { KSettings(context()) }
-
     factory { context().packageManager!! }
 }
