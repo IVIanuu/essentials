@@ -18,17 +18,11 @@
 
 package com.ivianuu.essentials.util.ext
 
-import com.ivianuu.epoxyprefs.PreferenceModel
 import com.ivianuu.rxjavaktx.PublishSubject
 import com.ivianuu.traveler.Router
 import com.ivianuu.traveler.goBack
-import com.ivianuu.traveler.navigate
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.ofType
-
-fun PreferenceModel.Builder.onClickKey(router: Router, key: () -> Any) {
-    onClick { router.navigate(key()).andTrue() }
-}
 
 @PublishedApi
 internal data class Result(
