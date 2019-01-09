@@ -19,7 +19,7 @@
 package com.ivianuu.essentials.util.ext
 
 import com.ivianuu.epoxyprefs.PreferenceModel
-import com.ivianuu.rxjavaktx.BehaviorSubject
+import com.ivianuu.rxjavaktx.PublishSubject
 import com.ivianuu.traveler.Router
 import com.ivianuu.traveler.goBack
 import com.ivianuu.traveler.navigate
@@ -37,7 +37,7 @@ internal data class Result(
 )
 
 @PublishedApi
-internal val results = BehaviorSubject<Result>()
+internal val results = PublishSubject<Result>()
 
 inline fun <reified T : Any> Router.results(resultCode: Int): Observable<T> = results
     .filter { it.resultCode == resultCode }
