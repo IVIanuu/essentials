@@ -15,7 +15,6 @@ import com.ivianuu.timberktx.d
 val workerModule = module {
     bindWorker<MyWorkerOne>()
     bindWorker<MyWorkerTwo>()
-    d { "bound workers ${getDefinitions()}" }
 }
 
 @Factory

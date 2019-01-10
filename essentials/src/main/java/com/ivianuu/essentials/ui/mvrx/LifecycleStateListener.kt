@@ -15,6 +15,9 @@ class LifecycleStateListener<T>(
     private val subscriber: (T) -> Unit
 ) : SimpleLifecycleObserver(), Closeable {
 
+    override var isClosed = false
+        private set
+
     init {
         owner.lifecycle.addObserver(this)
     }
