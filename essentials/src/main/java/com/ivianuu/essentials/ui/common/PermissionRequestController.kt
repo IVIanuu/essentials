@@ -1,6 +1,7 @@
 package com.ivianuu.essentials.ui.common
 
 import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,7 +12,6 @@ import com.ivianuu.essentials.ui.traveler.NavOptions
 import com.ivianuu.essentials.ui.traveler.dialog
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
 import com.ivianuu.essentials.util.ext.goBackWithResult
-import com.ivianuu.essentials.util.ext.isM
 import com.ivianuu.injekt.inject
 import kotlinx.android.parcel.Parcelize
 
@@ -31,7 +31,7 @@ class PermissionRequestController : EsController() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (isM()) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             requestPermissions(key.permissions.toTypedArray(), key.requestCode)
         }
     }
@@ -44,7 +44,7 @@ class PermissionRequestController : EsController() {
 
     override fun onAttach(view: View) {
         super.onAttach(view)
-        if (!isM()) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             travelerRouter.goBackWithResult(
                 key.resultCode, PermissionResult(
                     key.requestCode,
