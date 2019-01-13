@@ -1,7 +1,6 @@
 package com.ivianuu.essentials.sample.ui.list
 
 import com.ivianuu.essentials.injection.CONTROLLER_SCOPE
-import com.ivianuu.essentials.ui.mvrx.MvRxState
 import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
 import com.ivianuu.essentials.util.ext.coroutinesDefault
 import com.ivianuu.injekt.annotations.Factory
@@ -43,4 +42,4 @@ class ListViewModel(
 data class ListState(
     val loading: Boolean = false,
     val items: List<String> = emptyList()
-) : MvRxState
+)

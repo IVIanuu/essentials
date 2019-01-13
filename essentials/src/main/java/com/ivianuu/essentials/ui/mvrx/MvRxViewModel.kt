@@ -13,7 +13,7 @@ import com.ivianuu.timberktx.d
 /**
  * State view model
  */
-abstract class MvRxViewModel<S : MvRxState>(initialState: S) : EsViewModel() {
+abstract class MvRxViewModel<S>(initialState: S) : EsViewModel() {
 
     private val stateStore = StateStore(initialState).closeBy(scope)
 

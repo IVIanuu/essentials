@@ -4,7 +4,7 @@ import com.airbnb.epoxy.EpoxyController
 import com.ivianuu.director.Controller
 import com.ivianuu.epoxyktx.epoxyController
 
-fun <A : MvRxViewModel<B>, B : MvRxState> Any.simpleEpoxyController(
+fun <A : MvRxViewModel<B>, B> Any.simpleEpoxyController(
     viewModel1: A,
     buildModels: EpoxyController.(state: B) -> Unit
 ): EpoxyController = epoxyController {
@@ -13,7 +13,7 @@ fun <A : MvRxViewModel<B>, B : MvRxState> Any.simpleEpoxyController(
     withState(viewModel1) { buildModels.invoke(this, it) }
 }
 
-fun <A : MvRxViewModel<B>, B : MvRxState, C : MvRxViewModel<D>, D : MvRxState> Any.simpleEpoxyController(
+fun <A : MvRxViewModel<B>, B, C : MvRxViewModel<D>, D> Any.simpleEpoxyController(
     viewModel1: A,
     viewModel2: C,
     buildModels: EpoxyController.(state1: B, state2: D) -> Unit
@@ -23,7 +23,7 @@ fun <A : MvRxViewModel<B>, B : MvRxState, C : MvRxViewModel<D>, D : MvRxState> A
     withState(viewModel1, viewModel2) { state1, state2 -> buildModels.invoke(this, state1, state2) }
 }
 
-fun <A : MvRxViewModel<B>, B : MvRxState, C : MvRxViewModel<D>, D : MvRxState, E : MvRxViewModel<F>, F : MvRxState> Any.simpleEpoxyController(
+fun <A : MvRxViewModel<B>, B, C : MvRxViewModel<D>, D, E : MvRxViewModel<F>, F> Any.simpleEpoxyController(
     viewModel1: A,
     viewModel2: C,
     viewModel3: E,
@@ -37,8 +37,8 @@ fun <A : MvRxViewModel<B>, B : MvRxState, C : MvRxViewModel<D>, D : MvRxState, E
 }
 
 fun <A : MvRxViewModel<B>,
-        B : MvRxState,
-        C : MvRxViewModel<D>, D : MvRxState, E : MvRxViewModel<F>, F : MvRxState, G : MvRxViewModel<H>, H : MvRxState> Any.simpleEpoxyController(
+        B,
+        C : MvRxViewModel<D>, D, E : MvRxViewModel<F>, F, G : MvRxViewModel<H>, H> Any.simpleEpoxyController(
     viewModel1: A,
     viewModel2: C,
     viewModel3: E,
@@ -52,7 +52,7 @@ fun <A : MvRxViewModel<B>,
     }
 }
 
-fun <A : MvRxViewModel<B>, B : MvRxState, C : MvRxViewModel<D>, D : MvRxState, E : MvRxViewModel<F>, F : MvRxState, G : MvRxViewModel<H>, H : MvRxState, I : MvRxViewModel<J>, J : MvRxState> Any.simpleEpoxyController(
+fun <A : MvRxViewModel<B>, B, C : MvRxViewModel<D>, D, E : MvRxViewModel<F>, F, G : MvRxViewModel<H>, H, I : MvRxViewModel<J>, J> Any.simpleEpoxyController(
     viewModel1: A,
     viewModel2: C,
     viewModel3: E,

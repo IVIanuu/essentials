@@ -3,7 +3,6 @@ package com.ivianuu.essentials.sample.ui.counter
 import android.content.Context
 import com.ivianuu.essentials.injection.CONTROLLER_SCOPE
 import com.ivianuu.essentials.sample.ui.list.ListKey
-import com.ivianuu.essentials.ui.mvrx.MvRxState
 import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
 import com.ivianuu.essentials.ui.traveler.NavOptions
 import com.ivianuu.essentials.ui.traveler.horizontal
@@ -79,4 +78,4 @@ class CounterViewModel(
 data class CounterState(
     val screen: Int,
     val count: Int = 0
-) : MvRxState
+)
