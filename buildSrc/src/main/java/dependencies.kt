@@ -28,7 +28,7 @@ object Versions {
 
     const val butterknife = "10.0.0"
 
-    const val closeable = "44131abc46"
+    const val closeable = "781f345dae"
     const val constraintLayout = "2.0.0-alpha2"
     const val coroutines = "1.1.0"
     const val director = "af7be42e7f"

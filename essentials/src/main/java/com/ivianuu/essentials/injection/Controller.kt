@@ -71,13 +71,13 @@ fun Controller.getActivityComponent(): Component =
     getActivityComponentOrNull() ?: error("No activity component found for $this")
 
 /**
- * Returns the [Component] of the activity or null
+ * Returns the [Component] of the application or null
  */
 fun Controller.getApplicationComponentOrNull(): Component? =
     (application as? InjektTrait)?.component
 
 /**
- * Returns the [Component] of the activity or throws
+ * Returns the [Component] of the application or throws
  */
 fun Controller.getApplicationComponent(): Component =
     getApplicationComponentOrNull() ?: error("No application component found for $this")
