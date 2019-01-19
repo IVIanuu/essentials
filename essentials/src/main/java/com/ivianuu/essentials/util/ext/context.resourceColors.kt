@@ -21,15 +21,15 @@ fun ContextAware.isWindowBackgroundDark(): Boolean =
 
 fun View.isWindowBackgroundDark(): Boolean = context.isWindowBackgroundDark()
 
-fun Context.primaryColor(): Int = colorAttr(android.R.attr.colorPrimary)
+fun Context.primaryColor(): Int = colorAttr(R.attr.colorPrimary)
 
 fun ContextAware.primaryColor(): Int =
-    providedContext.colorAttr(android.R.attr.colorPrimary)
+    providedContext.primaryColor()
 
 fun View.primaryColor(): Int =
-    context.colorAttr(android.R.attr.colorPrimary)
+    context.primaryColor()
 
-fun Context.primaryColorDark(): Int = colorAttr(android.R.attr.colorPrimaryDark)
+fun Context.primaryColorDark(): Int = colorAttr(R.attr.colorPrimaryDark)
 
 fun ContextAware.primaryColorDark(): Int =
     providedContext.primaryColorDark()
@@ -37,7 +37,7 @@ fun ContextAware.primaryColorDark(): Int =
 fun View.primaryColorDark(): Int =
     context.primaryColorDark()
 
-fun Context.secondaryColor(): Int = colorAttr(android.R.attr.colorSecondary)
+fun Context.secondaryColor(): Int = colorAttr(R.attr.colorSecondary)
 
 fun ContextAware.secondaryColor(): Int =
     providedContext.secondaryColor()
