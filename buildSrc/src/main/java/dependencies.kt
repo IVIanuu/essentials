@@ -13,13 +13,13 @@ object Build {
 }
 
 object Versions {
-    const val androidGradlePlugin = "3.2.1"
+    const val androidGradlePlugin = "3.3.0"
 
     const val androidxAppCompat = "1.0.2"
     const val androidxCardView = "1.0.0"
     const val androidxCore = "1.0.1"
     const val androidxLifecycle = "2.0.0"
-    const val androidxWork = "1.0.0-beta01"
+    const val androidxWork = "1.0.0-beta02"
 
     const val androidxTestCore = "1.0.0"
     const val androidxTestJunit = "1.0.0"
@@ -29,7 +29,7 @@ object Versions {
     const val butterknife = "10.0.0"
 
     const val closeable = "781f345dae"
-    const val constraintLayout = "2.0.0-alpha2"
+    const val constraintLayout = "2.0.0-alpha3"
     const val coroutines = "1.1.0"
     const val director = "af7be42e7f"
     const val epoxy = "3.0.0"

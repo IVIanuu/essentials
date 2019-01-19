@@ -23,7 +23,7 @@ import com.ivianuu.injekt.InjektTrait
 /**
  * Wraps a [Context] and is a [InjektTrait]
  * to make it possible to inject stuff from a [com.ivianuu.director.Controller]
- * into [android.view.View]s
+ * into [android.view.View]s or other [Context] layers
  */
 class InjektTraitContextWrapper(
     context: Context,

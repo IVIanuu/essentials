@@ -23,14 +23,26 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlin.coroutines.CoroutineContext
 
+private class ScopeCoroutineScopeImpl(
+    private val scope: Scope,
+    private val srcContext: CoroutineContext?
+) : CoroutineScope {
+
+    private val job = Job().cancelBy(scope)
+
+    override val coroutineContext: CoroutineContext
+        get() = if (srcContext != null) {
+            srcContext + job
+        } else {
+            job
+        }
+
+}
+
 fun ScopeCoroutineScope(
     scope: Scope,
     coroutineContext: CoroutineContext? = null
-): CoroutineScope = if (coroutineContext != null) {
-    CoroutineScope(coroutineContext + Job().cancelBy(scope))
-} else {
-    CoroutineScope(Job().cancelBy(scope))
-}
+): CoroutineScope = ScopeCoroutineScope(scope, coroutineContext)
 
 fun MainScopeCoroutineScope(
     scope: Scope,

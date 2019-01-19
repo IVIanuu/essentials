@@ -37,13 +37,13 @@ fun ContextAware.primaryColorDark(): Int =
 fun View.primaryColorDark(): Int =
     context.primaryColorDark()
 
-fun Context.accentColor(): Int = colorAttr(android.R.attr.colorAccent)
+fun Context.secondaryColor(): Int = colorAttr(android.R.attr.colorSecondary)
 
-fun ContextAware.accentColor(): Int =
-    providedContext.accentColor()
+fun ContextAware.secondaryColor(): Int =
+    providedContext.secondaryColor()
 
-fun View.accentColor(): Int =
-    context.accentColor()
+fun View.secondaryColor(): Int =
+    context.secondaryColor()
 
 fun Context.cardColor(): Int = cardColor(isWindowBackgroundDark())
 
