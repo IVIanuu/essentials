@@ -30,7 +30,6 @@ import com.ivianuu.essentials.util.ext.rxMain
 import com.ivianuu.essentials.util.ext.toast
 import com.ivianuu.injekt.annotations.Single
 import com.ivianuu.kommon.core.app.doOnConfigurationChanged
-import com.ivianuu.kommon.core.content.isLandscape
 import com.ivianuu.kommon.core.content.isScreenOff
 import com.ivianuu.kommon.core.content.rotation
 import com.ivianuu.kprefs.rx.observable
@@ -148,12 +147,13 @@ class NavBarController(
     }
 
     private fun getNavigationBarHeight(): Int {
-        val id = app.resources.getIdentifier(
-            if (!app.isLandscape) "navigation_bar_height" else "navigation_bar_height_landscape",
-            "dimen", "android"
-        )
+        val name = when (app.rotation) {
+            Surface.ROTATION_0, Surface.ROTATION_180 -> "navigation_bar_height"
+            else -> "navigation_bar_width"
+        }
+        val id = app.resources.getIdentifier(name, "dimen", "android")
         return if (id > 0) {
-            app.resources.getDimensionPixelSize(id) //- 1
+            app.resources.getDimensionPixelSize(id)
         } else 0
     }
 
