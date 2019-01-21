@@ -68,8 +68,7 @@ class NavBarController(
                 .combineLatest(
                     prefs.navBarHidden.observable,
                     prefs.fullOverscan.observable,
-                    prefs.rot270Fix.observable,
-                    prefs.tabletMode.observable,
+                    prefs.rotationMode.observable,
                     configChanges().startWith(Unit),
                     rotationChanges().startWith(app.rotation)
                 )
@@ -158,26 +157,27 @@ class NavBarController(
         } else 0
     }
 
-    private fun getOverscanRect(navBarHeight: Int) = when {
-        prefs.rot270Fix.get() -> {
+    private fun getOverscanRect(navBarHeight: Int) = when (prefs.rotationMode.get()) {
+        NavBarRotationMode.MARSHMALLOW -> {
             when (app.rotation) {
+                Surface.ROTATION_90 -> Rect(0, 0, 0, -navBarHeight)
+                Surface.ROTATION_180 -> Rect(0, -navBarHeight, 0, 0)
                 Surface.ROTATION_270 -> Rect(0, -navBarHeight, 0, 0)
+                else -> Rect(0, 0, 0, -navBarHeight)
+            }
+        }
+        NavBarRotationMode.NOUGAT -> {
+            when (app.rotation) {
                 Surface.ROTATION_180 -> Rect(0, -navBarHeight, 0, 0)
                 else -> Rect(0, 0, 0, -navBarHeight)
             }
         }
-        prefs.tabletMode.get() -> {
+        NavBarRotationMode.TABLET -> {
             when (app.rotation) {
-                Surface.ROTATION_270 -> Rect(0, 0, -navBarHeight, 0)
                 Surface.ROTATION_90 -> Rect(-navBarHeight, 0, 0, 0)
+                Surface.ROTATION_180 -> Rect(0, -navBarHeight, 0, 0)
+                Surface.ROTATION_270 -> Rect(0, 0, -navBarHeight, 0)
                 else -> Rect(0, 0, 0, -navBarHeight)
-            }
-        }
-        else -> {
-            if (app.rotation == Surface.ROTATION_180) {
-                Rect(0, -navBarHeight, 0, 0)
-            } else {
-                Rect(0, 0, 0, -navBarHeight)
             }
         }
     }
@@ -202,10 +202,7 @@ class NavBarController(
     }
 
     private fun configChanges() = observable<Unit> { e ->
-        val callbacks = app.doOnConfigurationChanged {
-            e.onNext(Unit)
-        }
-
+        val callbacks = app.doOnConfigurationChanged { e.onNext(Unit) }
         e.setCancellable { app.unregisterComponentCallbacks(callbacks) }
     }
 

@@ -19,38 +19,40 @@ package com.ivianuu.essentials.hidenavbar
 import android.annotation.SuppressLint
 import android.graphics.Rect
 import android.os.IBinder
-import android.view.WindowManager
 import com.ivianuu.injekt.annotations.Factory
+import com.ivianuu.timberktx.d
 
 /**
  * Utils to access overscan with reflection
  */
 @SuppressLint("PrivateApi")
 @Factory
-class OverscanHelper(private val windowManager: WindowManager) {
-
-    private val windowManagerService by lazy {
-        val cls = Class.forName("android.view.IWindowManager\$Stub")
-        val invoke = Class.forName("android.os.ServiceManager")
-            .getMethod("checkService", String::class.java)
-            .invoke(null, "window")
-
-        cls.getMethod("asInterface", IBinder::class.java)
-            .invoke(null, invoke)
-    }
-
-    private val setOverscanMethod by lazy {
-        windowManagerService.javaClass.getDeclaredMethod(
-            "setOverscan",
-            Int::class.java, Int::class.java, Int::class.java, Int::class.java, Int::class.java
-        ).apply { isAccessible = true }
-    }
+class OverscanHelper {
 
     fun setDisplayOverScan(rect: Rect) {
-        val displayId = windowManager.defaultDisplay.displayId
+        d { "set display overscan $rect" }
         setOverscanMethod.invoke(
             windowManagerService,
-            displayId, rect.left, rect.top, rect.right, rect.bottom
+            0, rect.left, rect.top, rect.right, rect.bottom
         )
+    }
+
+    private companion object {
+        private val windowManagerService by lazy {
+            val cls = Class.forName("android.view.IWindowManager\$Stub")
+            val invoke = Class.forName("android.os.ServiceManager")
+                .getMethod("checkService", String::class.java)
+                .invoke(null, "window")
+
+            cls.getMethod("asInterface", IBinder::class.java)
+                .invoke(null, invoke)
+        }
+
+        private val setOverscanMethod by lazy {
+            windowManagerService.javaClass.getDeclaredMethod(
+                "setOverscan",
+                Int::class.java, Int::class.java, Int::class.java, Int::class.java, Int::class.java
+            ).apply { isAccessible = true }
+        }
     }
 }

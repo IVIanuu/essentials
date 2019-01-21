@@ -20,6 +20,8 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import com.ivianuu.director.scopes.destroy
 import com.ivianuu.epoxyktx.epoxyController
+import com.ivianuu.epoxyprefs.entries
+import com.ivianuu.epoxyprefs.entryValues
 import com.ivianuu.epoxyprefs.onChange
 import com.ivianuu.epoxyprefs.summary
 import com.ivianuu.epoxyprefs.title
@@ -27,6 +29,7 @@ import com.ivianuu.essentials.securesettings.SecureSettingsKey
 import com.ivianuu.essentials.securesettings.canWriteSecureSettings
 import com.ivianuu.essentials.ui.prefs.PrefsController
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
+import com.ivianuu.essentials.util.ext.fromEnumPref
 import com.ivianuu.essentials.util.ext.fromPref
 import com.ivianuu.essentials.util.ext.results
 import com.ivianuu.injekt.inject
@@ -111,20 +114,13 @@ class NavBarSettingsController : PrefsController() {
             }
         }
 
-        checkboxPreference {
-            fromPref(prefs.rot270Fix)
+        singleItemListPreference {
+            fromEnumPref(prefs.rotationMode)
             sharedPreferences(navBarSharedPrefs)
-            summary(R.string.es_pref_summary_rot270_fix)
-            title(R.string.es_pref_title_rot270_fix)
-            enabled(mainSwitchEnabled && !prefs.tabletMode.get())
-        }
-
-        checkboxPreference {
-            fromPref(prefs.tabletMode)
-            sharedPreferences(navBarSharedPrefs)
-            summary(R.string.es_pref_summary_tablet_mode)
-            title(R.string.es_pref_title_tablet_mode)
-            enabled(mainSwitchEnabled && !prefs.rot270Fix.get())
+            summary(R.string.es_pref_summary_nav_bar_rotation_mode)
+            title(R.string.es_pref_title_nav_bar_rotation_mode)
+            entries(R.array.es_entries_nav_bar_rotation_mode)
+            entryValues(R.array.es_values_nav_bar_rotation_mode)
         }
 
         checkboxPreference {

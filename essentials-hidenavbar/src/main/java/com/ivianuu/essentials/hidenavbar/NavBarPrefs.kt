@@ -16,6 +16,8 @@
 
 package com.ivianuu.essentials.hidenavbar
 
+import android.os.Build
+import com.ivianuu.essentials.util.enumString
 import com.ivianuu.injekt.annotations.Name
 import com.ivianuu.injekt.annotations.Single
 import com.ivianuu.kprefs.KPrefs
@@ -28,9 +30,15 @@ class NavBarPrefs(@Name(NAV_BAR_PREFS) prefs: KPrefs) {
     val manageNavBar = prefs.boolean("manage_nav_bar")
     val fullOverscan = prefs.boolean("full_overscan")
     val navBarHidden = prefs.boolean("nav_bar_hidden")
-    val rot270Fix = prefs.boolean("rot270_fix")
+    val rotationMode = prefs.enumString(
+        "rotation_mode",
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            NavBarRotationMode.NOUGAT
+        } else {
+            NavBarRotationMode.MARSHMALLOW
+        }
+    )
     val showNavBarScreenOff = prefs.boolean("show_nav_bar_screen_off", true)
-    val tabletMode = prefs.boolean("tablet_mode")
 
     internal val wasNavBarHidden = prefs.boolean("was_nav_bar_hidden")
 }

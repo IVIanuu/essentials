@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="es_entries_nav_bar_rotation_mode">
+        <item>@string/es_nav_bar_rotation_mode_marshmallow</item>
+        <item>@string/es_nav_bar_rotation_mode_nougat</item>
+        <item>@string/es_nav_bar_rotation_mode_tablet</item>
+    </string-array>
+
+    <string-array name="es_values_nav_bar_rotation_mode">
+        <item>marshmallow</item>
+        <item>nougat</item>
+        <item>tablet</item>
+    </string-array>
+
+</resources>
