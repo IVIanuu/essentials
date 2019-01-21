@@ -25,7 +25,7 @@
     <string name="es_pref_summary_nav_bar_hidden">Toggle the navigation bar state.</string>
 
     <string name="es_pref_title_nav_bar_rotation_mode">Rotation Mode</string>
-    <string name="es_pref_summary_nav_bar_rotation_mode">Define on which side of the screen the nav bar is located.</string>
+    <string name="es_pref_summary_nav_bar_rotation_mode">Define on which side of the screen the nav bar is located in landscape mode.</string>
     <string name="es_nav_bar_rotation_mode_marshmallow">Marshmallow (Right side of the screen)</string>
     <string name="es_nav_bar_rotation_mode_nougat">Nougat (Bottom of the device)</string>
     <string name="es_nav_bar_rotation_mode_tablet">Tablet (Bottom of the screen)</string>
