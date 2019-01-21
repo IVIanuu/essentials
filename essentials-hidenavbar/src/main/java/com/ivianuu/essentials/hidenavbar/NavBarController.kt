@@ -131,7 +131,7 @@ class NavBarController(
         try {
             val navBarHeight =
                 getNavigationBarHeight() - (if (prefs.fullOverscan.get()) 0 else OVERSCAN_LEFT_PIXELS)
-            val rect = getOverscanRect(if (hide) navBarHeight else 0)
+            val rect = getOverscanRect(if (hide) -navBarHeight else 0)
             overscanHelper.setDisplayOverScan(rect)
             prefs.wasNavBarHidden.set(hide)
         } catch (e: Exception) {
@@ -160,24 +160,24 @@ class NavBarController(
     private fun getOverscanRect(navBarHeight: Int) = when (prefs.rotationMode.get()) {
         NavBarRotationMode.MARSHMALLOW -> {
             when (app.rotation) {
-                Surface.ROTATION_90 -> Rect(0, 0, 0, -navBarHeight)
-                Surface.ROTATION_180 -> Rect(0, -navBarHeight, 0, 0)
-                Surface.ROTATION_270 -> Rect(0, -navBarHeight, 0, 0)
-                else -> Rect(0, 0, 0, -navBarHeight)
+                Surface.ROTATION_90 -> Rect(0, 0, 0, navBarHeight)
+                Surface.ROTATION_180 -> Rect(0, navBarHeight, 0, 0)
+                Surface.ROTATION_270 -> Rect(0, navBarHeight, 0, 0)
+                else -> Rect(0, 0, 0, navBarHeight)
             }
         }
         NavBarRotationMode.NOUGAT -> {
             when (app.rotation) {
-                Surface.ROTATION_180 -> Rect(0, -navBarHeight, 0, 0)
-                else -> Rect(0, 0, 0, -navBarHeight)
+                Surface.ROTATION_180 -> Rect(0, navBarHeight, 0, 0)
+                else -> Rect(0, 0, 0, navBarHeight)
             }
         }
         NavBarRotationMode.TABLET -> {
             when (app.rotation) {
-                Surface.ROTATION_90 -> Rect(-navBarHeight, 0, 0, 0)
-                Surface.ROTATION_180 -> Rect(0, -navBarHeight, 0, 0)
-                Surface.ROTATION_270 -> Rect(0, 0, -navBarHeight, 0)
-                else -> Rect(0, 0, 0, -navBarHeight)
+                Surface.ROTATION_90 -> Rect(navBarHeight, 0, 0, 0)
+                Surface.ROTATION_180 -> Rect(0, navBarHeight, 0, 0)
+                Surface.ROTATION_270 -> Rect(0, 0, navBarHeight, 0)
+                else -> Rect(0, 0, 0, navBarHeight)
             }
         }
     }
