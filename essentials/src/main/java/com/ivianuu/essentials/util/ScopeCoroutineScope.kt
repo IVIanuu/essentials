@@ -42,7 +42,7 @@ private class ScopeCoroutineScopeImpl(
 fun ScopeCoroutineScope(
     scope: Scope,
     coroutineContext: CoroutineContext? = null
-): CoroutineScope = ScopeCoroutineScope(scope, coroutineContext)
+): CoroutineScope = ScopeCoroutineScopeImpl(scope, coroutineContext)
 
 fun MainScopeCoroutineScope(
     scope: Scope,
