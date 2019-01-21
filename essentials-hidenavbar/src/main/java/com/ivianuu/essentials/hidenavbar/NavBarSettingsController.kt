@@ -121,6 +121,7 @@ class NavBarSettingsController : PrefsController() {
             title(R.string.es_pref_title_nav_bar_rotation_mode)
             entries(R.array.es_entries_nav_bar_rotation_mode)
             entryValues(R.array.es_values_nav_bar_rotation_mode)
+            enabled(mainSwitchEnabled)
         }
 
         checkboxPreference {
