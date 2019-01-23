@@ -68,5 +68,11 @@ inline fun <reified T : Worker> Module.worker(
 /**
  * Binds a already existing [Worker]
  */
-inline fun <reified T : Worker> Module.bindWorker(name: String? = null): BindingContext<T> =
-    bindIntoMap(T::class, WORKER_MAP, T::class.java.name, name)
+inline fun <reified T : Worker> Module.bindWorker(name: String? = null) {
+    bindIntoMap<T>(
+        WORKER_MAP,
+        T::class.java.name,
+        implementationType = T::class,
+        implementationName = name
+    )
+}

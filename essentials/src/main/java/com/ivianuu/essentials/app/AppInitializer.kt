@@ -25,8 +25,14 @@ inline fun <reified T : AppInitializer> Module.appInitializer(
 ): BindingContext<T> =
     factory(name, null, override, definition) bindIntoMap (APP_INITIALIZERS to T::class)
 
-inline fun <reified T : AppInitializer> Module.bindAppInitializer(name: String? = null): BindingContext<T> =
-    bindIntoMap(T::class, APP_INITIALIZERS, T::class, name)
+inline fun <reified T : AppInitializer> Module.bindAppInitializer(name: String? = null) {
+    bindIntoMap<T>(
+        APP_INITIALIZERS,
+        T::class,
+        implementationType = T::class,
+        implementationName = name
+    )
+}
 
 val esAppInitializersModule = module("EsAppInitializersModule") {
     mapBinding(APP_INITIALIZERS)

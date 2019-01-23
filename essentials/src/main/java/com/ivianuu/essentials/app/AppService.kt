@@ -13,7 +13,7 @@ import com.ivianuu.scopes.Scope
 const val APP_SERVICES = "appServices"
 
 /**
- * Will be started on app start up and lifes as long as the app lives
+ * Will be started on app start up and lives as long as the app lives
  */
 abstract class AppService {
 
@@ -32,8 +32,9 @@ inline fun <reified T : AppService> Module.appService(
 ): BindingContext<T> =
     single(name, null, override, false, definition) bindIntoMap (APP_SERVICES to T::class)
 
-inline fun <reified T : AppService> Module.bindAppService(name: String? = null): BindingContext<T> =
-    bindIntoMap(T::class, APP_SERVICES, T::class, name)
+inline fun <reified T : AppService> Module.bindAppService(name: String? = null) {
+    bindIntoMap<T>(APP_SERVICES, T::class, implementationType = T::class, implementationName = name)
+}
 
 val esAppServicesModule = module("EsAppServicesModule") {
     mapBinding(APP_SERVICES)
