@@ -20,7 +20,7 @@ import com.ivianuu.scopes.Scope
 abstract class EsTileService : TileService(), InjektTrait {
 
     override val component by unsafeLazy {
-        serviceComponent(this) {
+        serviceComponent {
             modules(this@EsTileService.modules())
         }
     }

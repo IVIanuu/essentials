@@ -17,7 +17,7 @@ import com.ivianuu.scopes.Scope
 abstract class EsService : Service(), InjektTrait {
 
     override val component by unsafeLazy {
-        serviceComponent(this) {
+        serviceComponent {
             modules(this@EsService.modules())
         }
     }

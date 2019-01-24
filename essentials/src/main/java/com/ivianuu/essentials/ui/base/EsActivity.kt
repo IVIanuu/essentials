@@ -46,7 +46,7 @@ import com.ivianuu.traveler.setRoot
 abstract class EsActivity : AppCompatActivity(), InjektTrait, MvRxView, RouterActivity {
 
     override val component by unsafeLazy {
-        activityComponent(this) {
+        activityComponent {
             modules(keyModule(intent.extras, false))
             modules(this@EsActivity.modules())
         }

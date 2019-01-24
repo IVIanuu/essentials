@@ -61,7 +61,7 @@ abstract class EsApp : Application(), InjektTrait {
             configureInjekt { androidLogger() }
         }
 
-        _component = applicationComponent(this) {
+        _component = applicationComponent {
             modules(esAppModule, esModule)
             modules(this@EsApp.modules())
         }

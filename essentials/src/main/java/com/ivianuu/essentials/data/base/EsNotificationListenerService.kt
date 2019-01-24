@@ -16,7 +16,7 @@ import com.ivianuu.scopes.Scope
 abstract class EsNotificationListenerService : NotificationListenerService(), InjektTrait {
 
     override val component by unsafeLazy {
-        serviceComponent(this) {
+        serviceComponent {
             modules(this@EsNotificationListenerService.modules())
         }
     }

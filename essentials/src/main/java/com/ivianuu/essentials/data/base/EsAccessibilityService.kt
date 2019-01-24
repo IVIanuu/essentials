@@ -17,7 +17,7 @@ import kotlinx.coroutines.CoroutineScope
 abstract class EsAccessibilityService : AccessibilityService(), InjektTrait {
 
     override val component by unsafeLazy {
-        serviceComponent(this) {
+        serviceComponent {
             modules(this@EsAccessibilityService.modules())
         }
     }
