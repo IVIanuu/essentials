@@ -20,7 +20,9 @@ package com.ivianuu.essentials.ui.base
 import android.content.Context
 import android.view.View
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelStore
+import androidx.lifecycle.ViewModelStoreOwner
 import com.ivianuu.director.arch.lifecycle.ControllerLifecycleOwner
 import com.ivianuu.director.arch.lifecycle.ControllerViewModelStoreOwner
 import com.ivianuu.director.dialog.DialogController
@@ -40,7 +42,8 @@ import com.ivianuu.traveler.Router
 /**
  * Base dialog controller
  */
-abstract class EsDialogController : DialogController(), InjektTrait, ContextAware, MvRxView {
+abstract class EsDialogController : DialogController(),
+    ContextAware, InjektTrait, LifecycleOwner, MvRxView, ViewModelStoreOwner {
 
     override val component by unsafeLazy {
         controllerComponent(this) {

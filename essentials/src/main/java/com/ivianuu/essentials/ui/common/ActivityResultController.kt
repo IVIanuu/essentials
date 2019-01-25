@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.ivianuu.director.activityresult.registerActivityResultListener
+import com.ivianuu.director.activityresult.startActivityForResult
 import com.ivianuu.essentials.ui.base.EsController
 import com.ivianuu.essentials.ui.traveler.NavOptions
 import com.ivianuu.essentials.ui.traveler.dialog
@@ -30,7 +32,15 @@ class ActivityResultController : EsController() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        ///startActivityForResult(key.intent, key.requestCode)
+
+        registerActivityResultListener(key.requestCode) { requestCode, resultCode, data ->
+            travelerRouter.goBackWithResult(
+                key.resultCode,
+                ActivityResult(requestCode, resultCode, data)
+            )
+        }
+
+        startActivityForResult(key.intent, key.requestCode)
     }
 
     override fun onInflateView(
@@ -38,14 +48,6 @@ class ActivityResultController : EsController() {
         container: ViewGroup,
         savedViewState: Bundle?
     ) = View(activity)
-
-    /*override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        travelerRouter.goBackWithResult(
-            key.resultCode,
-            ActivityResult(requestCode, resultCode, data)
-        )
-    }*/
 
 }
 

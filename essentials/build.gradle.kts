@@ -1,6 +1,3 @@
-import org.gradle.jvm.tasks.Jar
-import org.jetbrains.kotlin.gradle.internal.AndroidExtensionsExtension
-
 /*
  * Copyright 2018 Manuel Wrage
  *
@@ -53,9 +50,12 @@ dependencies {
     api(Deps.constraintLayout)
 
     api(Deps.director)
+    api(Deps.directorActivityResult)
     api(Deps.directorArchLifecycle)
     api(Deps.directorCommon)
     api(Deps.directorDialog)
+    api(Deps.directorFragmentHost)
+    api(Deps.directorPermission)
     api(Deps.directorScopes)
     api(Deps.directorTraveler)
     api(Deps.directorViewPager)

@@ -6,6 +6,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.ivianuu.director.permission.PermissionCallback
+import com.ivianuu.director.permission.registerPermissionCallback
+import com.ivianuu.director.permission.requestPermissions
 import com.ivianuu.essentials.ui.base.EsController
 import com.ivianuu.essentials.ui.traveler.NavOptions
 import com.ivianuu.essentials.ui.traveler.dialog
@@ -28,12 +31,25 @@ class PermissionRequestController : EsController() {
 
     private val key by inject<PermissionRequestKey>()
 
-    /*override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            registerPermissionCallback(key.requestCode, object : PermissionCallback {
+                override fun onRequestPermissionsResult(
+                    requestCode: Int,
+                    permissions: Array<out String>,
+                    grantResults: IntArray
+                ) {
+                    travelerRouter.goBackWithResult(
+                        key.resultCode,
+                        PermissionResult(requestCode, permissions.toSet(), grantResults)
+                    )
+                }
+            })
+
             requestPermissions(key.permissions.toTypedArray(), key.requestCode)
         }
-    }*/
+    }
 
     override fun onInflateView(
         inflater: LayoutInflater,
@@ -55,18 +71,6 @@ class PermissionRequestController : EsController() {
         }
     }
 
-   /* override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        travelerRouter.goBackWithResult(
-            key.resultCode,
-            PermissionResult(requestCode, permissions.toSet(), grantResults)
-        )
-    }
-*/
 }
 
 data class PermissionResult(

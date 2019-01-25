@@ -16,13 +16,18 @@
 
 package com.ivianuu.essentials.ui.base
 
-
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.ivianuu.director.arch.lifecycle.LifecycleController
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.ViewModelStore
+import androidx.lifecycle.ViewModelStoreOwner
+import com.ivianuu.director.Controller
+import com.ivianuu.director.arch.lifecycle.ControllerLifecycleOwner
+import com.ivianuu.director.arch.lifecycle.ControllerViewModelStoreOwner
 import com.ivianuu.director.scopes.destroy
 import com.ivianuu.director.scopes.unbindView
 import com.ivianuu.essentials.injection.controllerComponent
@@ -44,8 +49,8 @@ import kotlinx.coroutines.CoroutineScope
 /**
  * Base controller
  */
-abstract class EsController : LifecycleController(), ContextAware, InjektTrait, LayoutContainer,
-    MvRxView {
+abstract class EsController : Controller(), ContextAware, InjektTrait, LayoutContainer,
+    LifecycleOwner, MvRxView, ViewModelStoreOwner {
 
     override val component by unsafeLazy {
         controllerComponent(this) {
@@ -63,6 +68,10 @@ abstract class EsController : LifecycleController(), ContextAware, InjektTrait, 
         get() = activity
 
     val coroutineScope = destroy.asMainCoroutineScope()
+
+    private val lifecycleOwner = ControllerLifecycleOwner()
+    private val viewModelStoreOwner =
+        ControllerViewModelStoreOwner()
 
     val viewCoroutineScope
         get() = _viewCoroutineScope ?: error("view not attached")
@@ -100,6 +109,10 @@ abstract class EsController : LifecycleController(), ContextAware, InjektTrait, 
 
     override fun invalidate() {
     }
+
+    override fun getLifecycle(): Lifecycle = lifecycleOwner.lifecycle
+
+    override fun getViewModelStore(): ViewModelStore = viewModelStoreOwner.viewModelStore
 
     protected open fun modules(): List<Module> = emptyList()
 
