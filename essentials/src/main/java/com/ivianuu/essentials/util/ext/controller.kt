@@ -25,8 +25,6 @@ import android.view.View
 import androidx.annotation.RequiresApi
 import com.ivianuu.director.Controller
 import com.ivianuu.director.Router
-import com.ivianuu.director.startActivity
-import com.ivianuu.director.startActivityForResult
 import com.ivianuu.kommon.core.app.hideInputMethod
 import com.ivianuu.kommon.core.app.showInputMethod
 import com.ivianuu.kommon.core.app.startActivityForResult
@@ -48,40 +46,16 @@ fun Controller.showInputMethod(view: View, flags: Int = 0) {
     activity.showInputMethod(view, flags)
 }
 
-inline fun <reified T : Controller> Controller.startActivity() {
-    startActivity(activity.intent<T>())
-}
-
-inline fun <reified T : Controller> Controller.startActivity(init: Intent.() -> Unit) {
-    startActivity(activity.intent<T>(init))
-}
-
-@RequiresApi(Build.VERSION_CODES.JELLY_BEAN)
-inline fun <reified T : Activity> Controller.startActivityForResult(
-    requestCode: Int,
-    options: Bundle? = null
-) {
-    activity.startActivityForResult<T>(requestCode, options)
-}
-
-@RequiresApi(Build.VERSION_CODES.JELLY_BEAN)
-inline fun <reified T : Activity> Controller.startActivityForResult(
-    requestCode: Int,
-    options: Bundle? = null,
-    init: Intent.() -> Unit
-) {
-    startActivityForResult(activity.intent<T>(init), requestCode, options)
-}
-
 inline fun <reified T : Activity> Controller.activity(): T = activity as T
 
 fun Controller.requireParentController(): Controller =
-    parentController ?: throw IllegalStateException("parent Controller is null")
+    parentController ?: error("parent Controller is null")
 
 fun Controller.requireTargetController(): Controller =
-    targetController ?: throw IllegalStateException("target Controller is null")
+    targetController ?: error("target Controller is null")
 
 inline fun <reified T : Controller> Controller.parentController(): T = requireParentController() as T
+
 inline fun <reified T : Controller> Controller.parentControllerOrNull(): T? = try {
     parentController()
 } catch (e: Exception) {
@@ -89,6 +63,7 @@ inline fun <reified T : Controller> Controller.parentControllerOrNull(): T? = tr
 }
 
 inline fun <reified T : Controller> Controller.targetController(): T = requireTargetController() as T
+
 inline fun <reified T : Controller> Controller.targetControllerOrNull(): T? = try {
     targetController()
 } catch (e: Exception) {

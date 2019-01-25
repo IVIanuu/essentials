@@ -20,33 +20,20 @@ plugins {
     id("com.android.library")
     id("com.jakewharton.butterknife")
     id("kotlin-android")
-    id("kotlin-android-extensions")
     id("kotlin-kapt")
-    id("com.github.dcendents.android-maven")
 }
 
-group = "com.github.ivianuu"
+apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/android-build-lib.gradle")
+apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-android-ext.gradle")
+apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-kapt.gradle")
 
 android {
-    compileSdkVersion(Build.compileSdk)
-
     defaultConfig {
-        buildToolsVersion = Build.buildToolsVersion
-        minSdkVersion(Build.minSdk)
-        targetSdkVersion(Build.targetSdk)
         consumerProguardFile("proguard-rules.txt")
     }
-
-    androidExtensions {
-        configure(delegateClosureOf<AndroidExtensionsExtension> {
-            isExperimental = true
-        })
-    }
-
-    kapt {
-        correctErrorTypes = true
-    }
 }
+
+apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/jitpack-publish.gradle")
 
 dependencies {
     api(Deps.androidxAppCompat)
@@ -136,27 +123,4 @@ dependencies {
     api(Deps.traveler)
     api(Deps.travelerAndroid)
     api(Deps.travelerLifecycle)
-}
-
-val sourcesJar = task("sourcesJar", Jar::class) {
-    from(android.sourceSets["main"].java.srcDirs)
-    classifier = "sources"
-}
-
-val javadoc = task("javadoc", Javadoc::class) {
-    isFailOnError = false
-    source = android.sourceSets["main"].java.sourceFiles
-    classpath += project.files(android.bootClasspath.joinToString(File.pathSeparator))
-    classpath += configurations.compile
-}
-
-val javadocJar = task("javadocJar", Jar::class) {
-    dependsOn(javadoc)
-    classifier = "javadoc"
-    from(javadoc.destinationDir)
-}
-
-artifacts {
-    add("archives", sourcesJar)
-    add("archives", javadocJar)
 }

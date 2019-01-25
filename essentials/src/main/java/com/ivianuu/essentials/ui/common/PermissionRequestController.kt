@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.ivianuu.director.requestPermissions
 import com.ivianuu.essentials.ui.base.EsController
 import com.ivianuu.essentials.ui.traveler.NavOptions
 import com.ivianuu.essentials.ui.traveler.dialog
@@ -29,12 +28,12 @@ class PermissionRequestController : EsController() {
 
     private val key by inject<PermissionRequestKey>()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+    /*override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             requestPermissions(key.permissions.toTypedArray(), key.requestCode)
         }
-    }
+    }*/
 
     override fun onInflateView(
         inflater: LayoutInflater,
@@ -56,7 +55,7 @@ class PermissionRequestController : EsController() {
         }
     }
 
-    override fun onRequestPermissionsResult(
+   /* override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<String>,
         grantResults: IntArray
@@ -67,7 +66,7 @@ class PermissionRequestController : EsController() {
             PermissionResult(requestCode, permissions.toSet(), grantResults)
         )
     }
-
+*/
 }
 
 data class PermissionResult(

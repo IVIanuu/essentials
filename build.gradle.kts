@@ -5,7 +5,6 @@ buildscript {
         jcenter()
         mavenCentral()
         maven("https://jitpack.io")
-        maven("https://dl.bintray.com/kotlin/kotlin-eap")
         maven("https://oss.sonatype.org/content/repositories/snapshots")
         maven("https://dl.bintray.com/drummer-aidan/maven/")
     }
@@ -25,7 +24,6 @@ allprojects {
         jcenter()
         mavenCentral()
         maven("https://jitpack.io")
-        maven("https://dl.bintray.com/kotlin/kotlin-eap")
         maven("https://oss.sonatype.org/content/repositories/snapshots")
         maven("https://dl.bintray.com/drummer-aidan/maven/")
     }

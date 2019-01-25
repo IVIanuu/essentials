@@ -32,6 +32,6 @@ fun mainThread(block: () -> Unit) {
 
 fun requireMainThread() {
     if (!isMainThread) {
-        throw IllegalStateException("must be called from the main thread")
+        error("must be called from the main thread")
     }
 }

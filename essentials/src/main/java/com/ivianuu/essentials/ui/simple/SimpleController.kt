@@ -48,30 +48,30 @@ abstract class SimpleController : EsController() {
     val optionalEpoxyController: EpoxyController? get() = _epoxyController
     val epoxyController
         get() = optionalEpoxyController
-            ?: throw IllegalStateException("no epoxy controller instantiated")
+            ?: error("no epoxy controller instantiated")
 
     private var _epoxyController: EpoxyController? = null
 
-    val appBar get() = optionalAppBar ?: throw IllegalStateException("no app bar layout found")
+    val appBar get() = optionalAppBar ?: error("no app bar layout found")
 
     open val optionalAppBar: AppBarLayout?
         get() = view?.findViewById(R.id.es_app_bar)
 
     val coordinatorLayout
         get() = optionalCoordinatorLayout
-            ?: throw IllegalStateException("no coordinator layout found")
+            ?: error("no coordinator layout found")
 
     open val optionalCoordinatorLayout: CoordinatorLayout?
         get() = view?.findViewById(R.id.es_coordinator_layout)
 
     val recyclerView
-        get() = optionalRecyclerView ?: throw IllegalStateException("no recycler view found")
+        get() = optionalRecyclerView ?: error("no recycler view found")
 
     open val optionalRecyclerView: EpoxyRecyclerView?
         get() = view?.findViewById(R.id.es_recycler_view)
 
     val toolbar
-        get() = optionalToolbar ?: throw IllegalStateException("no toolbar found")
+        get() = optionalToolbar ?: error("no toolbar found")
 
     open val optionalToolbar: Toolbar?
         get() = view?.findViewById(R.id.es_toolbar)

@@ -31,7 +31,7 @@ object Versions {
     const val closeable = "8fcea9afdb"
     const val constraintLayout = "2.0.0-alpha3"
     const val coroutines = "1.1.0"
-    const val director = "6e4e280bee"
+    const val director = "a9bfec82a6"
     const val epoxy = "3.0.0"
     const val epoxyKtx = "9e8f7d3b81"
     const val epoxyPrefs = "d34a5a0476"
@@ -49,7 +49,7 @@ object Versions {
     const val mockitoKotlin = "2.0.0"
     const val roboelectric = "4.0.2"
     const val rxAndroid = "2.1.0"
-    const val rxJava = "2.2.5"
+    const val rxJava = "2.2.6"
     const val rxJavaKtx = "88fba996a1"
     const val rxKotlin = "2.3.0"
     const val scopes = "dcbe44f5d0"
@@ -93,10 +93,14 @@ object Deps {
         "org.jetbrains.kotlinx:kotlinx-coroutines-rx2:${Versions.coroutines}"
 
     const val director = "com.github.IVIanuu.director:director:${Versions.director}"
+    const val directorActivityResult = "com.github.IVIanuu.director:director-activityresult:${Versions.director}"
     const val directorArchLifecycle =
         "com.github.IVIanuu.director:director-arch-lifecycle:${Versions.director}"
     const val directorCommon = "com.github.IVIanuu.director:director-common:${Versions.director}"
     const val directorDialog = "com.github.IVIanuu.director:director-dialog:${Versions.director}"
+    const val directorFragmentHost = "com.github.IVIanuu.director:director-fragmenthost:${Versions.director}"
+    const val directorPermission = "com.github.IVIanuu.director:director-permission:${Versions.director}"
+    const val directorRetained = "com.github.IVIanuu.director:director-retained:${Versions.director}"
     const val directorScopes = "com.github.IVIanuu.director:director-scopes:${Versions.director}"
     const val directorTesting =
         "com.github.IVIanuu.director:director-testing:${Versions.director}"

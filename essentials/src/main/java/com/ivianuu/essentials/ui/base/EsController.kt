@@ -65,7 +65,7 @@ abstract class EsController : LifecycleController(), ContextAware, InjektTrait, 
     val coroutineScope = destroy.asMainCoroutineScope()
 
     val viewCoroutineScope
-        get() = _viewCoroutineScope ?: throw IllegalStateException("view not attached")
+        get() = _viewCoroutineScope ?: error("view not attached")
     private var _viewCoroutineScope: CoroutineScope? = null
 
     protected open val layoutRes get() = -1
@@ -79,7 +79,7 @@ abstract class EsController : LifecycleController(), ContextAware, InjektTrait, 
             inflater.cloneInContext(InjektTraitContextWrapper(activity, this))
         injectorInflater.inflate(layoutRes, container, false)
     } else {
-        throw IllegalStateException("no layoutRes provided")
+        error("no layoutRes provided")
     }
 
     override fun onBindView(view: View, savedViewState: Bundle?) {

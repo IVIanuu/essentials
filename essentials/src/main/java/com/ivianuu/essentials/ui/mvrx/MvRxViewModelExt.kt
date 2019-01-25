@@ -47,7 +47,7 @@ internal fun <VM : MvRxViewModel<*>> viewModelProvider(
 @PublishedApi
 internal class ExistingViewModelFactory<VM : MvRxViewModel<*>> : () -> VM {
     override fun invoke(): VM {
-        throw IllegalStateException("view model does not exist.")
+        error("view model does not exist.")
     }
 }
 

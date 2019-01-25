@@ -20,60 +20,17 @@ import java.io.File
 plugins {
     id("com.android.library")
     id("kotlin-android")
-    id("kotlin-android-extensions")
     id("kotlin-kapt")
-    id("com.github.dcendents.android-maven")
 }
 
-group = "com.github.ivianuu"
-
-android {
-    compileSdkVersion(Build.compileSdk)
-
-    defaultConfig {
-        buildToolsVersion = Build.buildToolsVersion
-        minSdkVersion(Build.minSdk)
-        targetSdkVersion(Build.targetSdk)
-    }
-
-    androidExtensions {
-        // isExperimental = true
-        configure(delegateClosureOf<AndroidExtensionsExtension> {
-            isExperimental = true
-        })
-    }
-
-    kapt {
-        correctErrorTypes = true
-    }
-}
+apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/android-build-lib.gradle")
+apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-android-ext.gradle")
+apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-kapt.gradle")
+apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/jitpack-publish.gradle")
 
 dependencies {
     api(project(":essentials"))
     kapt(project(":essentials-compiler"))
     api(Deps.materialDialogsInput)
     api(Deps.materialDialogsColor)
-}
-
-val sourcesJar = task("sourcesJar", Jar::class) {
-    from(android.sourceSets["main"].java.srcDirs)
-    classifier = "sources"
-}
-
-val javadoc = task("javadoc", Javadoc::class) {
-    isFailOnError = false
-    source = android.sourceSets["main"].java.sourceFiles
-    classpath += project.files(android.bootClasspath.joinToString(File.pathSeparator))
-    classpath += configurations.compile
-}
-
-val javadocJar = task("javadocJar", Jar::class) {
-    dependsOn(javadoc)
-    classifier = "javadoc"
-    from(javadoc.destinationDir)
-}
-
-artifacts {
-    add("archives", sourcesJar)
-    add("archives", javadocJar)
 }

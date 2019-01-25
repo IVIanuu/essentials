@@ -20,7 +20,7 @@ abstract class SimpleTextModel : SimpleEpoxyModel() {
         when {
             text.isNotEmpty() -> holder.es_text.text = text
             textRes != 0 -> holder.es_text.setText(textRes)
-            else -> throw IllegalStateException("you must specify one of text or textRes")
+            else -> error("you must specify one of text or textRes")
         }
     }
 

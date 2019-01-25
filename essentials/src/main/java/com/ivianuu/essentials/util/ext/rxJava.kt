@@ -23,7 +23,7 @@ import io.reactivex.rxkotlin.Observables
 import io.reactivex.subjects.BehaviorSubject
 
 fun <T : Any> BehaviorSubject<T>.requireValue(): T =
-    value ?: throw IllegalStateException("value is null")
+    value ?: error("value is null")
 
 fun <T1, T2, T3, T4> Observables.combineLatest(
     source1: Observable<T1>,

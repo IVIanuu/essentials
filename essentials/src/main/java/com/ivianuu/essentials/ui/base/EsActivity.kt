@@ -19,8 +19,9 @@ package com.ivianuu.essentials.ui.base
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.ivianuu.director.Router
-import com.ivianuu.director.attachRouter
+import com.ivianuu.director.fragmenthost.getRouter
 import com.ivianuu.director.handleBack
+import com.ivianuu.director.hasRootController
 import com.ivianuu.director.traveler.ControllerNavigator
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.common.RouterActivity
@@ -83,7 +84,7 @@ abstract class EsActivity : AppCompatActivity(), InjektTrait, MvRxView, RouterAc
 
         setContentView(layoutRes)
 
-        onInitializeRouter(savedInstanceState)
+        onInitializeRouter()
 
         invalidate()
     }
@@ -107,10 +108,9 @@ abstract class EsActivity : AppCompatActivity(), InjektTrait, MvRxView, RouterAc
         }
     }
 
-    protected open fun onInitializeRouter(savedInstanceState: Bundle?) {
-        router = attachRouter(containerId, savedInstanceState)
-
-        if (savedInstanceState == null) {
+    protected open fun onInitializeRouter() {
+        router = getRouter(containerId)
+        if (!router.hasRootController) {
             startKey?.let { travelerRouter.setRoot(it) }
         }
     }
