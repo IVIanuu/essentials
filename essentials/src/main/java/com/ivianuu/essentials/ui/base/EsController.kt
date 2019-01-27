@@ -83,12 +83,12 @@ abstract class EsController : Controller(), ContextAware, InjektTrait, LayoutCon
         inflater: LayoutInflater,
         container: ViewGroup,
         savedViewState: Bundle?
-    ): View = if (layoutRes != -1) {
+    ): View {
+        check(layoutRes != -1) { "no layoutRes provided" }
+
         val injectorInflater =
             inflater.cloneInContext(InjektTraitContextWrapper(activity, this))
-        injectorInflater.inflate(layoutRes, container, false)
-    } else {
-        error("no layoutRes provided")
+        return injectorInflater.inflate(layoutRes, container, false)
     }
 
     override fun onBindView(view: View, savedViewState: Bundle?) {
