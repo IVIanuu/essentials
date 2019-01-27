@@ -44,7 +44,7 @@ object Versions {
     const val epoxyKtx = "b4c1237204"
     const val epoxyPrefs = "ef07e18d8a"
     const val glide = "4.8.0"
-    const val injekt = "2954f19f7d"
+    const val injekt = "1b023675af"
     const val junit = "4.12"
     const val kommon = "a12f5b652c"
     const val kotlin = "1.3.20"
