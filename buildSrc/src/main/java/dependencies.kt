@@ -39,7 +39,7 @@ object Versions {
     const val closeable = "72c95e4fdd"
     const val constraintLayout = "2.0.0-alpha3"
     const val coroutines = "1.1.0"
-    const val director = "a130bd852b"
+    const val director = "c371f6471e"
     const val epoxy = "3.0.0"
     const val epoxyKtx = "b4c1237204"
     const val epoxyPrefs = "ef07e18d8a"
