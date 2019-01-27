@@ -25,7 +25,7 @@ plugins {
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/android-build-lib.gradle")
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-android-ext.gradle")
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-kapt.gradle")
-apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/jitpack-publish.gradle")
+apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/mvn-publish.gradle")
 
 dependencies {
     api(project(":essentials"))
