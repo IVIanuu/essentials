@@ -53,7 +53,7 @@ object Versions {
     const val liveEvent = "1e265df911"
     const val mavenGradle = "2.1"
     const val materialComponents = "1.1.0-alpha02"
-    const val materialDialogs = "2.0.0-rc7"
+    const val materialDialogs = "2.0.0-rc8"
     const val mockitoKotlin = "2.0.0"
     const val roboelectric = "4.0.2"
     const val rxAndroid = "2.1.0"
