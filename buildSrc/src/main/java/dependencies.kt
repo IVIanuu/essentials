@@ -15,7 +15,7 @@ object Build {
 object Publishing {
     const val groupId = "com.ivianuu.essentials"
     const val vcsUrl = "https://github.com/IVIanuu/essentials"
-    const val version = "git"
+    const val version = "${Build.versionName}-dev-1"
 }
 
 object Versions {
@@ -36,20 +36,20 @@ object Versions {
 
     const val butterknife = "10.0.0"
 
-    const val closeable = "72c95e4fdd"
+    const val closeable = "0.0.1-dev-1"
     const val constraintLayout = "2.0.0-alpha3"
     const val coroutines = "1.1.0"
-    const val director = "48e1ebe580"
+    const val director = "0.0.1-dev-1"
     const val epoxy = "3.0.0"
-    const val epoxyKtx = "b4c1237204"
-    const val epoxyPrefs = "ef07e18d8a"
+    const val epoxyKtx = "0.0.1-dev-1"
+    const val epoxyPrefs = "0.0.1-dev-1"
     const val glide = "4.8.0"
-    const val injekt = "1b023675af"
+    const val injekt = "0.0.1-dev-1"
     const val junit = "4.12"
-    const val kommon = "bca222a03d"
+    const val kommon = "0.0.1-dev-1"
     const val kotlin = "1.3.20"
-    const val kPrefs = "daa8a3e6e4"
-    const val kSettings = "ff3b8c153d"
+    const val kPrefs = "0.0.1-dev-1"
+    const val kSettings = "0.0.1-dev-1"
     const val liveEvent = "1e265df911"
     const val mavenGradle = "2.1"
     const val materialComponents = "1.1.0-alpha02"
@@ -58,14 +58,14 @@ object Versions {
     const val roboelectric = "4.0.2"
     const val rxAndroid = "2.1.0"
     const val rxJava = "2.2.6"
-    const val rxJavaKtx = "ff3bbff999"
+    const val rxJavaKtx = "0.0.1-dev-1"
     const val rxKotlin = "2.3.0"
-    const val scopes = "0d133ad789"
+    const val scopes = "0.0.1-dev-1"
     const val superUser = "1.0.0.+"
-    const val stateStore = "3c6bc5c3d1"
+    const val stateStore = "0.0.1-dev-1"
     const val timber = "4.7.1"
-    const val timberKtx = "d307ce3f60"
-    const val traveler = "5e9749f150"
+    const val timberKtx = "0.0.1-dev-1"
+    const val traveler = "0.0.1-dev-1"
 }
 
 object Deps {
