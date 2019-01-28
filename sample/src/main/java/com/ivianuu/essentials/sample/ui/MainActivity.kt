@@ -21,11 +21,6 @@ import android.os.Bundle
 import com.ivianuu.essentials.hidenavbar.NavBarSettingsKey
 import com.ivianuu.essentials.sample.ui.counter.CounterKey
 import com.ivianuu.essentials.ui.base.EsActivity
-import com.ivianuu.essentials.util.ext.copy
-import com.ivianuu.injekt.get
-import com.ivianuu.kprefs.KPrefs
-import com.ivianuu.kprefs.coroutines.receiveChannel
-import com.ivianuu.kprefs.rx.observable
 import com.ivianuu.traveler.navigate
 
 class MainActivity : EsActivity() {

@@ -39,14 +39,14 @@ object Versions {
     const val closeable = "72c95e4fdd"
     const val constraintLayout = "2.0.0-alpha3"
     const val coroutines = "1.1.0"
-    const val director = "c371f6471e"
+    const val director = "48e1ebe580"
     const val epoxy = "3.0.0"
     const val epoxyKtx = "b4c1237204"
     const val epoxyPrefs = "ef07e18d8a"
     const val glide = "4.8.0"
     const val injekt = "1b023675af"
     const val junit = "4.12"
-    const val kommon = "a12f5b652c"
+    const val kommon = "bca222a03d"
     const val kotlin = "1.3.20"
     const val kPrefs = "daa8a3e6e4"
     const val kSettings = "ff3b8c153d"
@@ -65,7 +65,7 @@ object Versions {
     const val stateStore = "3c6bc5c3d1"
     const val timber = "4.7.1"
     const val timberKtx = "d307ce3f60"
-    const val traveler = "929fae2c1a"
+    const val traveler = "5e9749f150"
 }
 
 object Deps {
