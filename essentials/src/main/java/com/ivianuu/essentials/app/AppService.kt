@@ -1,5 +1,6 @@
 package com.ivianuu.essentials.app
 
+import com.ivianuu.essentials.util.asMainCoroutineScope
 import com.ivianuu.injekt.BindingContext
 import com.ivianuu.injekt.Definition
 import com.ivianuu.injekt.Module
@@ -19,6 +20,8 @@ abstract class AppService {
 
     val scope: Scope get() = _scope
     private val _scope = MutableScope()
+
+    val coroutineScope = scope.asMainCoroutineScope()
 
     open fun start() {
     }
