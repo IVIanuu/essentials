@@ -33,11 +33,11 @@ fun <T, V> KClass<T>.valueForOrNull(value: V): T? where T : Enum<T>, T : PrefVal
     java.enumConstants.firstOrNull { it.value == value }
 
 private class EnumBooleanPrefAdapter<T>(
-    private val clazz: KClass<T>,
+    private val type: KClass<T>,
     private val defaultValue: T
 ) : Pref.Adapter<T> where T : Enum<T>, T : PrefValueHolder<Boolean> {
     override fun get(key: String, preferences: SharedPreferences): T =
-        clazz.valueFor(preferences.getBoolean(key, false), defaultValue)
+        type.valueFor(preferences.getBoolean(key, false), defaultValue)
 
     override fun set(key: String, value: T, editor: SharedPreferences.Editor) {
         editor.putBoolean(key, value.value)
@@ -53,16 +53,16 @@ inline fun <reified T> KPrefs.enumBoolean(
 fun <T> KPrefs.enumBoolean(
     key: String,
     defaultValue: T,
-    clazz: KClass<T>
+    type: KClass<T>
 ): CustomPref<T> where T : Enum<T>, T : PrefValueHolder<Boolean> =
-    custom(key, defaultValue, EnumBooleanPrefAdapter(clazz, defaultValue))
+    custom(key, defaultValue, EnumBooleanPrefAdapter(type, defaultValue))
 
 private class EnumIntPrefAdapter<T>(
-    private val clazz: KClass<T>,
+    private val type: KClass<T>,
     private val defaultValue: T
 ) : Pref.Adapter<T> where T : Enum<T>, T : PrefValueHolder<Int> {
     override fun get(key: String, preferences: SharedPreferences): T =
-        clazz.valueFor(preferences.getInt(key, 0), defaultValue)
+        type.valueFor(preferences.getInt(key, 0), defaultValue)
 
     override fun set(key: String, value: T, editor: SharedPreferences.Editor) {
         editor.putInt(key, value.value)
@@ -78,16 +78,16 @@ inline fun <reified T> KPrefs.enumInt(
 fun <T> KPrefs.enumInt(
     key: String,
     defaultValue: T,
-    clazz: KClass<T>
+    type: KClass<T>
 ): CustomPref<T> where T : Enum<T>, T : PrefValueHolder<Int> =
-    custom(key, defaultValue, EnumIntPrefAdapter(clazz, defaultValue))
+    custom(key, defaultValue, EnumIntPrefAdapter(type, defaultValue))
 
 private class EnumFloatPrefAdapter<T>(
-    private val clazz: KClass<T>,
+    private val type: KClass<T>,
     private val defaultValue: T
 ) : Pref.Adapter<T> where T : Enum<T>, T : PrefValueHolder<Float> {
     override fun get(key: String, preferences: SharedPreferences) =
-        clazz.valueFor(preferences.getFloat(key, 0f), defaultValue)
+        type.valueFor(preferences.getFloat(key, 0f), defaultValue)
 
     override fun set(key: String, value: T, editor: SharedPreferences.Editor) {
         editor.putFloat(key, value.value)
@@ -103,16 +103,16 @@ inline fun <reified T> KPrefs.enumFloat(
 fun <T> KPrefs.enumFloat(
     key: String,
     defaultValue: T,
-    clazz: KClass<T>
+    type: KClass<T>
 ): CustomPref<T> where T : Enum<T>, T : PrefValueHolder<Float> =
-    custom(key, defaultValue, EnumFloatPrefAdapter(clazz, defaultValue))
+    custom(key, defaultValue, EnumFloatPrefAdapter(type, defaultValue))
 
 private class EnumLongPrefAdapter<T>(
-    private val clazz: KClass<T>,
+    private val type: KClass<T>,
     private val defaultValue: T
 ) : Pref.Adapter<T> where T : Enum<T>, T : PrefValueHolder<Long> {
     override fun get(key: String, preferences: SharedPreferences): T =
-        clazz.valueFor(preferences.getLong(key, 0L), defaultValue)
+        type.valueFor(preferences.getLong(key, 0L), defaultValue)
 
     override fun set(key: String, value: T, editor: SharedPreferences.Editor) {
         editor.putLong(key, value.value)
@@ -128,16 +128,16 @@ inline fun <reified T> KPrefs.enumLong(
 fun <T> KPrefs.enumLong(
     key: String,
     defaultValue: T,
-    clazz: KClass<T>
+    type: KClass<T>
 ): CustomPref<T> where T : Enum<T>, T : PrefValueHolder<Long> =
-    custom(key, defaultValue, EnumLongPrefAdapter(clazz, defaultValue))
+    custom(key, defaultValue, EnumLongPrefAdapter(type, defaultValue))
 
 private class EnumStringPrefAdapter<T>(
-    private val clazz: KClass<T>,
+    private val type: KClass<T>,
     private val defaultValue: T
 ) : Pref.Adapter<T> where T : Enum<T>, T : PrefValueHolder<String> {
     override fun get(key: String, preferences: SharedPreferences) =
-        clazz.valueFor(preferences.getString(key, "")!!, defaultValue)
+        type.valueFor(preferences.getString(key, "")!!, defaultValue)
 
     override fun set(key: String, value: T, editor: SharedPreferences.Editor) {
         editor.putString(key, value.value)
@@ -153,16 +153,16 @@ inline fun <reified T> KPrefs.enumString(
 fun <T> KPrefs.enumString(
     key: String,
     defaultValue: T,
-    clazz: KClass<T>
+    type: KClass<T>
 ): CustomPref<T> where T : Enum<T>, T : PrefValueHolder<String> =
-    custom(key, defaultValue, EnumStringPrefAdapter(clazz, defaultValue))
+    custom(key, defaultValue, EnumStringPrefAdapter(type, defaultValue))
 
 private class EnumStringSetPrefAdapter<T>(
-    private val clazz: KClass<T>
+    private val type: KClass<T>
 ) : Pref.Adapter<Set<T>> where T : Enum<T>, T : PrefValueHolder<String> {
     override fun get(key: String, preferences: SharedPreferences) =
         preferences.getStringSet(key, emptySet())!!
-            .mapNotNull { clazz.valueForOrNull(it) }
+            .mapNotNull { type.valueForOrNull(it) }
             .toSet()
 
     override fun set(key: String, value: Set<T>, editor: SharedPreferences.Editor) {
@@ -179,6 +179,6 @@ inline fun <reified T> KPrefs.enumStringSet(
 fun <T> KPrefs.enumStringSet(
     key: String,
     defaultValue: Set<T>,
-    clazz: KClass<T>
+    type: KClass<T>
 ): CustomPref<Set<T>> where T : Enum<T>, T : PrefValueHolder<String> =
-    custom(key, defaultValue, EnumStringSetPrefAdapter(clazz))
+    custom(key, defaultValue, EnumStringSetPrefAdapter(type))
