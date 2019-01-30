@@ -18,17 +18,40 @@
 package com.ivianuu.essentials.sample.ui
 
 import android.os.Bundle
+import androidx.lifecycle.ViewModelStore
+import androidx.lifecycle.ViewModelStoreOwner
 import com.ivianuu.essentials.hidenavbar.NavBarSettingsKey
 import com.ivianuu.essentials.sample.ui.counter.CounterKey
 import com.ivianuu.essentials.ui.base.EsActivity
+import com.ivianuu.essentials.util.ext.cast
+import com.ivianuu.essentials.util.getClassDelegate
+import com.ivianuu.essentials.util.getClassDelegates
+import com.ivianuu.scopes.Scope
+import com.ivianuu.scopes.android.lifecycle.onDestroy
+import com.ivianuu.timberktx.d
 import com.ivianuu.traveler.navigate
 
-class MainActivity : EsActivity() {
+class ViewModelStoreOwnerImpl : ViewModelStoreOwner {
+    private val _viewModelStore by lazy { ViewModelStore() }
+    override fun getViewModelStore(): ViewModelStore = _viewModelStore
+
+    fun init(scope: Scope) {
+        d { "init" }
+        scope.addListener { _viewModelStore.clear() }
+    }
+}
+
+class MainActivity : EsActivity(), ViewModelStoreOwner by ViewModelStoreOwnerImpl() {
 
     override val startKey: Any? get() = CounterKey(1)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         travelerRouter.navigate(NavBarSettingsKey(true, true))
+
+        getClassDelegates().forEach { d { "found delegate -> $it" } }
+
+        getClassDelegate<ViewModelStoreOwner>()
+            .cast<ViewModelStoreOwnerImpl>().init(onDestroy)
     }
 }

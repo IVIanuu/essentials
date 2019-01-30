@@ -1,8 +1,32 @@
+/*
+ * Copyright 2018 Manuel Wrage
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.ivianuu.essentials.injection
 
 import android.accessibilityservice.AccessibilityService
 import android.accounts.AccountManager
-import android.app.*
+import android.app.ActivityManager
+import android.app.AlarmManager
+import android.app.AppOpsManager
+import android.app.DownloadManager
+import android.app.KeyguardManager
+import android.app.NotificationManager
+import android.app.SearchManager
+import android.app.UiModeManager
+import android.app.WallpaperManager
 import android.app.admin.DevicePolicyManager
 import android.app.job.JobScheduler
 import android.app.usage.NetworkStatsManager
@@ -32,7 +56,13 @@ import android.net.nsd.NsdManager
 import android.net.wifi.WifiManager
 import android.net.wifi.p2p.WifiP2pManager
 import android.nfc.NfcManager
-import android.os.*
+import android.os.BatteryManager
+import android.os.Build
+import android.os.DropBoxManager
+import android.os.HardwarePropertiesManager
+import android.os.PowerManager
+import android.os.UserManager
+import android.os.Vibrator
 import android.os.health.SystemHealthManager
 import android.os.storage.StorageManager
 import android.print.PrintManager
@@ -46,6 +76,7 @@ import android.view.accessibility.CaptioningManager
 import android.view.inputmethod.InputMethodManager
 import android.view.textservice.TextServicesManager
 import androidx.core.content.ContextCompat
+import com.ivianuu.essentials.util.ext.cast
 import com.ivianuu.injekt.factory
 import com.ivianuu.injekt.get
 import com.ivianuu.injekt.module
@@ -56,7 +87,7 @@ import kotlin.reflect.KClass
  */
 val systemServiceModule = module("SystemServicesModule") {
     getSystemServices()
-        .map { it as KClass<Any> }
+        .map { it.cast<KClass<Any>>() }
         .forEach { service ->
             factory(service) {
                 ContextCompat.getSystemService(
