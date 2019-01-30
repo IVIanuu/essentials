@@ -60,7 +60,7 @@ object Versions {
     const val rxJava = "2.2.6"
     const val rxJavaKtx = "0.0.1-dev-1"
     const val rxKotlin = "2.3.0"
-    const val scopes = "0.0.1-dev-1"
+    const val scopes = "0.0.1-dev-2"
     const val superUser = "1.0.0.+"
     const val stateStore = "0.0.1-dev-1"
     const val timber = "4.7.1"

@@ -24,16 +24,14 @@ import com.ivianuu.traveler.goBack
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.ofType
 
-@PublishedApi
-internal data class Result(
+private data class Result(
     val resultCode: Int,
     val result: Any
 )
 
-@PublishedApi
-internal val results = PublishSubject<Result>()
+private val results = PublishSubject<Result>()
 
-inline fun <reified T : Any> Router.results(resultCode: Int): Observable<T> = results
+fun <reified T : Any> Router.results(resultCode: Int): Observable<T> = results
     .filter { it.resultCode == resultCode }
     .map { it.result }
     .ofType()

@@ -16,7 +16,7 @@
 
 package com.ivianuu.essentials.ui.common
 
-import com.ivianuu.scopes.BaseScope
+import com.ivianuu.scopes.AbstractScope
 import com.ivianuu.scopes.Scope
 import com.ivianuu.scopes.cache.ScopeStore
 
@@ -24,7 +24,7 @@ val EsViewModel.scope: Scope get() = scopeCache.get(this)
 
 private val scopeCache = ScopeStore<EsViewModel> { ViewModelScope(it) }
 
-private class ViewModelScope(viewModel: EsViewModel) : BaseScope() {
+private class ViewModelScope(viewModel: EsViewModel) : AbstractScope() {
 
     init {
         viewModel.addClearedListener { close() }

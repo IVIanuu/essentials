@@ -21,7 +21,7 @@ import android.os.Looper
 
 private val mainHandler = Handler(Looper.getMainLooper())
 
-inline val isMainThread: Boolean get() = Looper.myLooper() == Looper.getMainLooper()
+val isMainThread: Boolean get() = Looper.myLooper() == Looper.getMainLooper()
 
 fun mainThread(block: () -> Unit) {
     when {

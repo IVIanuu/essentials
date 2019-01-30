@@ -126,3 +126,9 @@ fun ControllerNavOptions.dialogPush(): ControllerNavOptions = push(
 fun ControllerNavOptions.dialogPop(): ControllerNavOptions = pop(
     SimpleSwapChangeHandler(false)
 )
+
+fun ControllerNavOptions.nonePop(): ControllerNavOptions = pop(null)
+
+fun ControllerNavOptions.nonePush(): ControllerNavOptions = push(null)
+
+fun ControllerNavOptions.none(): ControllerNavOptions = nonePop().nonePush()

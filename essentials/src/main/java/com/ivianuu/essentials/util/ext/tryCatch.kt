@@ -6,4 +6,4 @@ inline fun <T> tryOrNull(block: () -> T): T? = try {
     null
 }
 
-inline fun <T> tryOrDefault(defaultValue: T, block: () -> T): T = tryOrNull(block) ?: defaultValue
+inline fun <T> tryOrElse(defaultValue: T, block: () -> T): T = tryOrNull(block) ?: defaultValue
