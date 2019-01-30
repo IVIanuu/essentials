@@ -22,7 +22,7 @@ import com.ivianuu.rxjavaktx.PublishSubject
 import com.ivianuu.traveler.Router
 import com.ivianuu.traveler.goBack
 import io.reactivex.Observable
-import io.reactivex.rxkotlin.ofType
+import kotlin.reflect.KClass
 
 private data class Result(
     val resultCode: Int,
@@ -31,10 +31,15 @@ private data class Result(
 
 private val results = PublishSubject<Result>()
 
-fun <reified T : Any> Router.results(resultCode: Int): Observable<T> = results
-    .filter { it.resultCode == resultCode }
-    .map { it.result }
-    .ofType()
+inline fun <reified T : Any> Router.results(resultCode: Int): Observable<T> =
+    results(T::class, resultCode)
+
+fun <T : Any> Router.results(type: KClass<T>, resultCode: Int): Observable<T> {
+    return results
+        .filter { it.resultCode == resultCode }
+        .map { it.result }
+        .ofType(type.java)
+}
 
 fun Router.sendResult(resultCode: Int, result: Any) {
     results.onNext(Result(resultCode, result))
