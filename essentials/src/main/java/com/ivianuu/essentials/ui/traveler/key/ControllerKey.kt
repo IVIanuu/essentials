@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.ui.traveler.key
 
+import android.os.Bundle
 import android.os.Parcelable
 import com.ivianuu.director.Controller
 import com.ivianuu.director.RouterTransaction
@@ -33,11 +34,8 @@ abstract class ControllerKey(
     open val defaultNavOptions: ControllerNavOptions? = null
 ) : ControllerKey, Parcelable {
 
-    override fun createController(data: Any?): Controller = factory().apply {
-        args.apply {
-            putParcelable(TRAVELER_KEY, this@ControllerKey)
-            putString(TRAVELER_KEY_CLASS, this@ControllerKey.javaClass.name)
-        }
+    override fun createController(data: Any?): Controller = factory().also {
+        addTo(it.args)
     }
 
     override fun setupTransaction(
@@ -56,6 +54,11 @@ abstract class ControllerKey(
             ?.applyToTransaction(transaction)
     }
 
+}
+
+fun com.ivianuu.essentials.ui.traveler.key.ControllerKey.addTo(bundle: Bundle) {
+    bundle.putParcelable(TRAVELER_KEY, this)
+    bundle.putString(TRAVELER_KEY_CLASS, javaClass.name)
 }
 
 fun <T : Parcelable> Controller.getKey(): T = args.getParcelable(TRAVELER_KEY)!!

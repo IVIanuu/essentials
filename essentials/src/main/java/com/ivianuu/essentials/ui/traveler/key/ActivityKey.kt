@@ -32,10 +32,7 @@ abstract class ActivityKey(
 ) : ActivityKey, Parcelable {
 
     override fun createIntent(context: Context, data: Any?): Intent =
-        Intent(context, target.java).apply {
-            putExtra(TRAVELER_KEY, this@ActivityKey)
-            putExtra(TRAVELER_KEY_CLASS, this@ActivityKey.javaClass.name)
-        }
+        Intent(context, target.java).also { addTo(it) }
 
     override fun createStartActivityOptions(command: Command, activityIntent: Intent): Bundle? =
         startOptions?.get(command, activityIntent)
@@ -43,6 +40,11 @@ abstract class ActivityKey(
     interface StartOptions {
         fun get(command: Command, activityIntent: Intent): Bundle? = null
     }
+}
+
+fun com.ivianuu.essentials.ui.traveler.key.ActivityKey.addTo(intent: Intent) {
+    intent.putExtra(TRAVELER_KEY, this)
+    intent.putExtra(TRAVELER_KEY_CLASS, javaClass.name)
 }
 
 fun <T : Parcelable> Activity.getKey(): T = intent!!.extras!!.getParcelable(TRAVELER_KEY)!!
