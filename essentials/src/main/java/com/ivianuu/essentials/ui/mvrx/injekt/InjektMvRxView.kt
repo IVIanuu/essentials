@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.mvrx
+package com.ivianuu.essentials.ui.mvrx.injekt
 
+import com.ivianuu.essentials.ui.mvrx.MvRxView
 import com.ivianuu.injekt.InjektTrait
 
 /**

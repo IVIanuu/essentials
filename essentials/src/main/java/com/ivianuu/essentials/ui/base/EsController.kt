@@ -31,7 +31,7 @@ import com.ivianuu.director.arch.lifecycle.ControllerViewModelStoreOwner
 import com.ivianuu.director.scopes.destroy
 import com.ivianuu.director.scopes.unbindView
 import com.ivianuu.essentials.injection.controllerComponent
-import com.ivianuu.essentials.ui.mvrx.InjektMvRxView
+import com.ivianuu.essentials.ui.mvrx.injekt.InjektMvRxView
 import com.ivianuu.essentials.ui.traveler.key.keyModule
 import com.ivianuu.essentials.util.ContextAware
 import com.ivianuu.essentials.util.InjektTraitContextWrapper
@@ -48,7 +48,8 @@ import kotlinx.coroutines.CoroutineScope
 /**
  * Base controller
  */
-abstract class EsController : Controller(), ContextAware, InjektMvRxView, LayoutContainer,
+abstract class EsController : Controller(), ContextAware,
+    InjektMvRxView, LayoutContainer,
     LifecycleOwner, ViewModelStoreOwner {
 
     override val component by unsafeLazy {

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.mvrx
+package com.ivianuu.essentials.ui.mvrx.lifecycle
 
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
@@ -33,7 +33,8 @@ class LifecycleAwareLazy<T>(
 ) : Lazy<T>, Serializable {
 
     private var initializer: (() -> T)? = initializer
-    @Volatile private var _value: Any? = UNINITIALIZED_VALUE
+    @Volatile private var _value: Any? =
+        UNINITIALIZED_VALUE
     // final field is required to enable safe publication of constructed instance
     private val lock = this
 

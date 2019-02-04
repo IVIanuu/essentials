@@ -21,6 +21,7 @@ import com.ivianuu.closeable.Closeable
 import com.ivianuu.closeable.rx.asCloseable
 import com.ivianuu.essentials.ui.common.EsViewModel
 import com.ivianuu.essentials.ui.common.scope
+import com.ivianuu.essentials.ui.mvrx.lifecycle.LifecycleStateListener
 import com.ivianuu.essentials.util.ext.closeBy
 import com.ivianuu.statestore.StateStore
 import com.ivianuu.statestore.rx.observable
@@ -51,7 +52,11 @@ abstract class MvRxViewModel<S>(initialState: S) : EsViewModel() {
         stateStore.observable.subscribe(subscriber).asCloseable().closeBy(scope)
 
     fun subscribe(owner: LifecycleOwner, subscriber: (S) -> Unit): Closeable =
-        LifecycleStateListener(owner, stateStore, subscriber)
+        LifecycleStateListener(
+            owner,
+            stateStore,
+            subscriber
+        )
 
     override fun toString() = "${this::class.java.simpleName} -> $state"
 }

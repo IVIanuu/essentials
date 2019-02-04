@@ -20,7 +20,7 @@ import android.os.Bundle
 import android.view.View
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.base.EsController
-import com.ivianuu.essentials.ui.mvrx.viewModel
+import com.ivianuu.essentials.ui.mvrx.injekt.viewModel
 import com.ivianuu.essentials.ui.mvrx.withState
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
 import kotlinx.android.parcel.Parcelize

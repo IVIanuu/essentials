@@ -14,10 +14,15 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.mvrx
+package com.ivianuu.essentials.ui.mvrx.injekt
 
 import androidx.lifecycle.ViewModelStoreOwner
 import com.ivianuu.essentials.ui.base.EsController
+import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
+import com.ivianuu.essentials.ui.mvrx.existingViewModel
+import com.ivianuu.essentials.ui.mvrx.getExistingViewModel
+import com.ivianuu.essentials.ui.mvrx.getViewModel
+import com.ivianuu.essentials.ui.mvrx.viewModel
 import com.ivianuu.injekt.get
 import com.ivianuu.kommon.lifecycle.defaultViewModelKey
 

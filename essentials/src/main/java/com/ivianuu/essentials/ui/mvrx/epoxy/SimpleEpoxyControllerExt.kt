@@ -14,11 +14,13 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.mvrx
+package com.ivianuu.essentials.ui.mvrx.epoxy
 
 import com.airbnb.epoxy.EpoxyController
 import com.ivianuu.director.Controller
 import com.ivianuu.epoxyktx.epoxyController
+import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
+import com.ivianuu.essentials.ui.mvrx.withState
 
 fun <A : MvRxViewModel<B>, B> Any.simpleEpoxyController(
     viewModel1: A,
@@ -36,7 +38,10 @@ fun <A : MvRxViewModel<B>, B, C : MvRxViewModel<D>, D> Any.simpleEpoxyController
 ): EpoxyController = epoxyController {
     if (this@simpleEpoxyController is Controller && view == null
     ) return@epoxyController
-    withState(viewModel1, viewModel2) { state1, state2 -> buildModels.invoke(this, state1, state2) }
+    withState(
+        viewModel1,
+        viewModel2
+    ) { state1, state2 -> buildModels.invoke(this, state1, state2) }
 }
 
 fun <A : MvRxViewModel<B>, B, C : MvRxViewModel<D>, D, E : MvRxViewModel<F>, F> Any.simpleEpoxyController(
@@ -47,7 +52,11 @@ fun <A : MvRxViewModel<B>, B, C : MvRxViewModel<D>, D, E : MvRxViewModel<F>, F> 
 ): EpoxyController = epoxyController {
     if (this@simpleEpoxyController is Controller && view == null
     ) return@epoxyController
-    withState(viewModel1, viewModel2, viewModel3) { state1, state2, state3 ->
+    withState(
+        viewModel1,
+        viewModel2,
+        viewModel3
+    ) { state1, state2, state3 ->
         buildModels.invoke(this, state1, state2, state3)
     }
 }
@@ -63,7 +72,12 @@ fun <A : MvRxViewModel<B>,
 ): EpoxyController = epoxyController {
     if (this@simpleEpoxyController is Controller && view == null
     ) return@epoxyController
-    withState(viewModel1, viewModel2, viewModel3, viewModel4) { state1, state2, state3, state4 ->
+    withState(
+        viewModel1,
+        viewModel2,
+        viewModel3,
+        viewModel4
+    ) { state1, state2, state3, state4 ->
         buildModels.invoke(this, state1, state2, state3, state4)
     }
 }

@@ -28,7 +28,7 @@ import com.ivianuu.director.arch.lifecycle.ControllerViewModelStoreOwner
 import com.ivianuu.director.dialog.DialogController
 import com.ivianuu.director.scopes.destroy
 import com.ivianuu.essentials.injection.controllerComponent
-import com.ivianuu.essentials.ui.mvrx.InjektMvRxView
+import com.ivianuu.essentials.ui.mvrx.injekt.InjektMvRxView
 import com.ivianuu.essentials.ui.traveler.key.keyModule
 import com.ivianuu.essentials.util.ContextAware
 import com.ivianuu.essentials.util.asMainCoroutineScope
