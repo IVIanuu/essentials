@@ -25,11 +25,10 @@ import com.ivianuu.director.hasRootController
 import com.ivianuu.director.traveler.ControllerNavigator
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.common.RouterActivity
-import com.ivianuu.essentials.ui.mvrx.MvRxView
+import com.ivianuu.essentials.ui.mvrx.InjektMvRxView
 import com.ivianuu.essentials.ui.traveler.key.keyModule
 import com.ivianuu.essentials.util.asMainCoroutineScope
 import com.ivianuu.essentials.util.ext.unsafeLazy
-import com.ivianuu.injekt.InjektTrait
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.android.activityComponent
 import com.ivianuu.injekt.inject
@@ -44,7 +43,7 @@ import com.ivianuu.traveler.setRoot
 /**
  * Base activity
  */
-abstract class EsActivity : AppCompatActivity(), InjektTrait, MvRxView, RouterActivity {
+abstract class EsActivity : AppCompatActivity(), InjektMvRxView, RouterActivity {
 
     override val component by unsafeLazy {
         activityComponent {

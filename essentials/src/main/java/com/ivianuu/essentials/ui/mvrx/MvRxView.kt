@@ -23,7 +23,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelStoreOwner
 import com.ivianuu.closeable.Closeable
-import com.ivianuu.injekt.InjektTrait
 
 private val PENDING_INVALIDATES = HashSet<Int>()
 private val HANDLER = Handler(Looper.getMainLooper(), Handler.Callback { message ->
@@ -37,7 +36,7 @@ private val HANDLER = Handler(Looper.getMainLooper(), Handler.Callback { message
     true
 })
 
-interface MvRxView : InjektTrait, LifecycleOwner, ViewModelStoreOwner {
+interface MvRxView : LifecycleOwner, ViewModelStoreOwner {
 
     fun invalidate()
 
