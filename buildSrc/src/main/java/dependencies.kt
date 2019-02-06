@@ -79,6 +79,7 @@ object Versions {
     const val scopes = "0.0.1-dev-2"
     const val superUser = "1.0.0.+"
     const val stateStore = "0.0.1-dev-1"
+    const val stdlibx = "0.0.1-dev-1"
     const val timber = "4.7.1"
     const val timberKtx = "0.0.1-dev-1"
     const val traveler = "0.0.1-dev-1"
@@ -222,6 +223,8 @@ object Deps {
     const val stateStoreLiveData =
         "com.ivianuu.statestore:statestore-livedata:${Versions.stateStore}"
     const val stateStoreRx = "com.ivianuu.statestore:statestore-rx:${Versions.stateStore}"
+
+    const val stdlibx = "com.ivianuu.stdlibx:stdlibx:${Versions.stdlibx}"
 
     const val superUser = "eu.chainfire:libsuperuser:${Versions.superUser}"
 

@@ -14,70 +14,10 @@
  * limitations under the License.
  */
 
-
-
 package com.ivianuu.essentials.util.ext
 
 import java.util.*
 
 fun <T> MutableList<T>.swap(from: Int, to: Int) {
     Collections.swap(this, from, to)
-}
-
-inline fun <T> Iterable<T>.takeUntil(predicate: (T) -> Boolean): List<T> {
-    val list = mutableListOf<T>()
-    for (item in this) {
-        list.add(item)
-        if (!predicate(item))
-            break
-    }
-
-    return list
-}
-
-inline fun <T> Array<out T>.takeUntil(predicate: (T) -> Boolean): List<T> {
-    val list = mutableListOf<T>()
-    for (item in this) {
-        list.add(item)
-        if (!predicate(item))
-            break
-    }
-    return list
-}
-
-inline fun <T> List<T>.takeLastUntil(predicate: (T) -> Boolean): List<T> {
-    val list = mutableListOf<T>()
-    for (item in reversed()) {
-        list.add(item)
-        if (!predicate(item))
-            break
-    }
-    return list
-}
-
-inline fun <T> Array<out T>.takeLastUntil(predicate: (T) -> Boolean): List<T> {
-    val list = mutableListOf<T>()
-    for (item in reversed()) {
-        list.add(item)
-        if (!predicate(item))
-            break
-    }
-
-    return list
-}
-
-inline fun <T, R> Iterable<T>.firstNotNullResult(transform: (T) -> R?): R? {
-    for (element in this) {
-        val result = transform(element)
-        if (result != null) return result
-    }
-    return null
-}
-
-inline fun <T, R> Array<T>.firstNotNullResult(transform: (T) -> R?): R? {
-    for (element in this) {
-        val result = transform(element)
-        if (result != null) return result
-    }
-    return null
 }
