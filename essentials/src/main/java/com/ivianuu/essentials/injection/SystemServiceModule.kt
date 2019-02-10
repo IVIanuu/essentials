@@ -76,10 +76,10 @@ import android.view.accessibility.CaptioningManager
 import android.view.inputmethod.InputMethodManager
 import android.view.textservice.TextServicesManager
 import androidx.core.content.ContextCompat
-import com.ivianuu.essentials.util.ext.cast
 import com.ivianuu.injekt.factory
 import com.ivianuu.injekt.get
 import com.ivianuu.injekt.module
+import com.ivianuu.stdlibx.cast
 import kotlin.reflect.KClass
 
 /**
