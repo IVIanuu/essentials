@@ -22,12 +22,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelStore
-import androidx.lifecycle.ViewModelStoreOwner
 import com.ivianuu.director.Controller
-import com.ivianuu.director.arch.lifecycle.ControllerLifecycleOwner
-import com.ivianuu.director.arch.lifecycle.ControllerViewModelStoreOwner
+import com.ivianuu.director.activity
+import com.ivianuu.director.androidx.lifecycle.lifecycleOwner
+import com.ivianuu.director.androidx.lifecycle.viewModelStoreOwner
 import com.ivianuu.director.scopes.destroy
 import com.ivianuu.director.scopes.unbindView
 import com.ivianuu.essentials.injection.controllerComponent
@@ -49,8 +48,7 @@ import kotlinx.coroutines.CoroutineScope
  * Base controller
  */
 abstract class EsController : Controller(), ContextAware,
-    InjektMvRxView, LayoutContainer,
-    LifecycleOwner, ViewModelStoreOwner {
+    InjektMvRxView, LayoutContainer {
 
     override val component by unsafeLazy {
         controllerComponent(this) {
@@ -68,10 +66,6 @@ abstract class EsController : Controller(), ContextAware,
         get() = activity
 
     val coroutineScope = destroy.asMainCoroutineScope()
-
-    private val lifecycleOwner = ControllerLifecycleOwner()
-    private val viewModelStoreOwner =
-        ControllerViewModelStoreOwner()
 
     val viewCoroutineScope
         get() = _viewCoroutineScope ?: error("view not attached")

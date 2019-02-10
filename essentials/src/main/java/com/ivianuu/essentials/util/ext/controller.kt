@@ -18,18 +18,14 @@ package com.ivianuu.essentials.util.ext
 
 import android.app.Activity
 import android.app.Application
-import android.content.Intent
-import android.os.Build
-import android.os.Bundle
 import android.view.View
-import androidx.annotation.RequiresApi
 import com.ivianuu.director.Controller
 import com.ivianuu.director.Router
+import com.ivianuu.director.activity
+import com.ivianuu.director.parentController
 import com.ivianuu.kommon.core.app.hideInputMethod
 import com.ivianuu.kommon.core.app.showInputMethod
-import com.ivianuu.kommon.core.app.startActivityForResult
 import com.ivianuu.kommon.core.content.app
-import com.ivianuu.kommon.core.content.intent
 
 val Controller.rootRouter: Router
     get() {

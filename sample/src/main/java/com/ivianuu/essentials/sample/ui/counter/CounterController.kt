@@ -25,11 +25,8 @@ import com.ivianuu.essentials.ui.mvrx.withState
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.controller_counter.count
-import kotlinx.android.synthetic.main.controller_counter.decrease
 import kotlinx.android.synthetic.main.controller_counter.do_work
-import kotlinx.android.synthetic.main.controller_counter.increase
 import kotlinx.android.synthetic.main.controller_counter.list_screen
-import kotlinx.android.synthetic.main.controller_counter.reset
 import kotlinx.android.synthetic.main.controller_counter.root_screen
 import kotlinx.android.synthetic.main.controller_counter.screen_down
 import kotlinx.android.synthetic.main.controller_counter.screen_up
@@ -49,10 +46,6 @@ class CounterController : EsController() {
     override fun onBindView(view: View, savedViewState: Bundle?) {
         super.onBindView(view, savedViewState)
 
-        increase.setOnClickListener { viewModel.increaseClicked() }
-        decrease.setOnClickListener { viewModel.decreaseClicked() }
-        reset.setOnClickListener { viewModel.resetClicked() }
-
         screen_up.setOnClickListener { viewModel.screenUpClicked() }
         screen_down.setOnClickListener { viewModel.screenDownClicked() }
         root_screen.setOnClickListener { viewModel.rootScreenClicked() }
@@ -61,7 +54,7 @@ class CounterController : EsController() {
     }
 
     override fun invalidate() {
-        withState(viewModel) { count.text = "Screen : ${it.screen}, Count: ${it.count}" }
+        withState(viewModel) { count.text = "Screen : ${it.screen}" }
     }
 
 }

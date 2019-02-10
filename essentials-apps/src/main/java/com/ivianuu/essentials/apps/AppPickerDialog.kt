@@ -18,12 +18,12 @@ package com.ivianuu.essentials.apps
 
 import android.app.Dialog
 import android.os.Bundle
-import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.list.listItems
 import com.ivianuu.essentials.ui.base.EsDialogController
 import com.ivianuu.essentials.ui.traveler.NavOptions
 import com.ivianuu.essentials.ui.traveler.dialog
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
+import com.ivianuu.essentials.util.ext.dialog
 import com.ivianuu.essentials.util.ext.goBackWithResult
 import com.ivianuu.essentials.util.string
 import com.ivianuu.injekt.get
@@ -51,10 +51,11 @@ class AppPickerDialog : EsDialogController() {
 
         val key = get<AppPickerKey>()
 
-        val dialog = MaterialDialog(activity)
-            .title(text = key.title ?: string(R.string.es_dialog_title_app_picker))
-            .negativeButton(R.string.es_action_cancel) { travelerRouter.goBack() }
-            .noAutoDismiss()
+        val dialog = dialog {
+            title(text = key.title ?: string(R.string.es_dialog_title_app_picker))
+            negativeButton(R.string.es_action_cancel) { travelerRouter.goBack() }
+            noAutoDismiss()
+        }
 
         coroutineScope.launch {
             val newApps = if (key.launchableOnly) {

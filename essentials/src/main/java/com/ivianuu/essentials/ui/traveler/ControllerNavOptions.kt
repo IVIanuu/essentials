@@ -17,13 +17,13 @@
 package com.ivianuu.essentials.ui.traveler
 
 import com.ivianuu.director.ControllerChangeHandler
+import com.ivianuu.director.DirectorPlugins
 import com.ivianuu.director.RouterTransaction
 import com.ivianuu.director.SimpleSwapChangeHandler
-import com.ivianuu.director.common.changehandler.AnimatorChangeHandler
-import com.ivianuu.director.common.changehandler.AutoTransitionChangeHandler
 import com.ivianuu.director.common.changehandler.FadeChangeHandler
 import com.ivianuu.director.common.changehandler.HorizontalChangeHandler
 import com.ivianuu.director.common.changehandler.VerticalChangeHandler
+import com.ivianuu.director.common.changehandler.defaultAnimationDuration
 import com.ivianuu.director.popChangeHandler
 import com.ivianuu.director.pushChangeHandler
 
@@ -61,60 +61,52 @@ fun ControllerNavOptions.handler(
 ): ControllerNavOptions = push(changeHandler).pop(changeHandler)
 
 fun ControllerNavOptions.fade(
-    duration: Long = AnimatorChangeHandler.DEFAULT_ANIMATION_DURATION,
+    duration: Long = DirectorPlugins.defaultAnimationDuration,
     removesFromViewOnPush: Boolean = true
 ): ControllerNavOptions = fadePush(duration, removesFromViewOnPush)
     .fadePop(duration, removesFromViewOnPush)
 
 fun ControllerNavOptions.fadePush(
-    duration: Long = AnimatorChangeHandler.DEFAULT_ANIMATION_DURATION,
+    duration: Long = DirectorPlugins.defaultAnimationDuration,
     removesFromViewOnPush: Boolean = true
 ): ControllerNavOptions = push(FadeChangeHandler(duration, removesFromViewOnPush))
 
 fun ControllerNavOptions.fadePop(
-    duration: Long = AnimatorChangeHandler.DEFAULT_ANIMATION_DURATION,
+    duration: Long = DirectorPlugins.defaultAnimationDuration,
     removesFromViewOnPush: Boolean = true
 ): ControllerNavOptions = pop(FadeChangeHandler(duration, removesFromViewOnPush))
 
 fun ControllerNavOptions.horizontal(
-    duration: Long = AnimatorChangeHandler.DEFAULT_ANIMATION_DURATION,
+    duration: Long = DirectorPlugins.defaultAnimationDuration,
     removesFromViewOnPush: Boolean = true
 ): ControllerNavOptions = horizontalPush(duration, removesFromViewOnPush)
     .horizontalPop(duration, removesFromViewOnPush)
 
 fun ControllerNavOptions.horizontalPush(
-    duration: Long = AnimatorChangeHandler.DEFAULT_ANIMATION_DURATION,
+    duration: Long = DirectorPlugins.defaultAnimationDuration,
     removesFromViewOnPush: Boolean = true
 ): ControllerNavOptions = push(HorizontalChangeHandler(duration, removesFromViewOnPush))
 
 fun ControllerNavOptions.horizontalPop(
-    duration: Long = AnimatorChangeHandler.DEFAULT_ANIMATION_DURATION,
+    duration: Long = DirectorPlugins.defaultAnimationDuration,
     removesFromViewOnPush: Boolean = true
 ): ControllerNavOptions = pop(HorizontalChangeHandler(duration, removesFromViewOnPush))
 
 fun ControllerNavOptions.vertical(
-    duration: Long = AnimatorChangeHandler.DEFAULT_ANIMATION_DURATION,
+    duration: Long = DirectorPlugins.defaultAnimationDuration,
     removesFromViewOnPush: Boolean = true
 ): ControllerNavOptions = verticalPush(duration, removesFromViewOnPush)
     .verticalPop(duration, removesFromViewOnPush)
 
 fun ControllerNavOptions.verticalPush(
-    duration: Long = AnimatorChangeHandler.DEFAULT_ANIMATION_DURATION,
+    duration: Long = DirectorPlugins.defaultAnimationDuration,
     removesFromViewOnPush: Boolean = true
 ): ControllerNavOptions = push(VerticalChangeHandler(duration, removesFromViewOnPush))
 
 fun ControllerNavOptions.verticalPop(
-    duration: Long = AnimatorChangeHandler.DEFAULT_ANIMATION_DURATION,
+    duration: Long = DirectorPlugins.defaultAnimationDuration,
     removesFromViewOnPush: Boolean = true
 ): ControllerNavOptions = pop(VerticalChangeHandler(duration, removesFromViewOnPush))
-
-fun ControllerNavOptions.auto(): ControllerNavOptions =
-    autoPush().autoPop()
-
-fun ControllerNavOptions.autoPush(): ControllerNavOptions =
-    push(AutoTransitionChangeHandler())
-
-fun ControllerNavOptions.autoPop(): ControllerNavOptions = pop(AutoTransitionChangeHandler())
 
 fun ControllerNavOptions.dialog(): ControllerNavOptions =
     dialogPush().dialogPop()

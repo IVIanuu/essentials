@@ -19,13 +19,14 @@ package com.ivianuu.essentials.securesettings
 import android.app.Dialog
 import android.os.Bundle
 import android.view.View
-import com.afollestad.materialdialogs.MaterialDialog
+import com.ivianuu.director.activity
 import com.ivianuu.essentials.shell.Shell
 import com.ivianuu.essentials.ui.base.EsDialogController
 import com.ivianuu.essentials.ui.traveler.NavOptions
 import com.ivianuu.essentials.ui.traveler.dialog
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
 import com.ivianuu.essentials.ui.traveler.vertical
+import com.ivianuu.essentials.util.ext.dialog
 import com.ivianuu.essentials.util.ext.goBackWithResult
 import com.ivianuu.essentials.util.ext.sendResult
 import com.ivianuu.essentials.util.ext.toast
@@ -47,25 +48,24 @@ class SecureSettingsDialog : EsDialogController() {
     private val key by inject<SecureSettingsKey>()
     private val shell by inject<Shell>()
 
-    override fun onCreateDialog(savedViewState: Bundle?): Dialog {
-        return MaterialDialog(activity)
-            .title(R.string.es_dialog_title_secure_settings)
-            .message(R.string.es_dialog_message_secure_settings)
-            .positiveButton(R.string.es_action_use_root) {
-                coroutineScope.launch {
-                    try {
-                        shell.run("pm grant ${activity.packageName} android.permission.WRITE_SECURE_SETTINGS")
-                        handlePermissionResult(activity.canWriteSecureSettings())
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                        toast(R.string.es_msg_secure_settings_no_root)
-                    }
+    override fun onCreateDialog(savedViewState: Bundle?): Dialog = dialog {
+        title(R.string.es_dialog_title_secure_settings)
+        message(R.string.es_dialog_message_secure_settings)
+        positiveButton(R.string.es_action_use_root) {
+            coroutineScope.launch {
+                try {
+                    shell.run("pm grant ${activity.packageName} android.permission.WRITE_SECURE_SETTINGS")
+                    handlePermissionResult(activity.canWriteSecureSettings())
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    toast(R.string.es_msg_secure_settings_no_root)
                 }
             }
-            .negativeButton(R.string.es_action_pc_instructions) {
-                travelerRouter.navigate(SecureSettingsInstructionsKey(), NavOptions().vertical())
-            }
-            .noAutoDismiss()
+        }
+        negativeButton(R.string.es_action_pc_instructions) {
+            travelerRouter.navigate(SecureSettingsInstructionsKey(), NavOptions().vertical())
+        }
+        noAutoDismiss()
     }
 
     override fun onAttach(view: View) {

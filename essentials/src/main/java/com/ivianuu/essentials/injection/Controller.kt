@@ -17,7 +17,9 @@
 package com.ivianuu.essentials.injection
 
 import com.ivianuu.director.Controller
+import com.ivianuu.director.activity
 import com.ivianuu.director.application
+import com.ivianuu.director.parentController
 import com.ivianuu.injekt.Component
 import com.ivianuu.injekt.ComponentDefinition
 import com.ivianuu.injekt.InjektTrait

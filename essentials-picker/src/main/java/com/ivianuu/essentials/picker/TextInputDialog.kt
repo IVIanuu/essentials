@@ -18,13 +18,13 @@ package com.ivianuu.essentials.picker
 
 import android.app.Dialog
 import android.os.Bundle
-import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.input.input
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.base.EsDialogController
 import com.ivianuu.essentials.ui.traveler.NavOptions
 import com.ivianuu.essentials.ui.traveler.dialog
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
+import com.ivianuu.essentials.util.ext.dialog
 import com.ivianuu.essentials.util.ext.goBackWithResult
 import com.ivianuu.injekt.get
 import com.ivianuu.traveler.goBack
@@ -45,21 +45,19 @@ data class TextInputKey(
  */
 class TextInputDialog : EsDialogController() {
 
-    override fun onCreateDialog(savedViewState: Bundle?): Dialog {
+    override fun onCreateDialog(savedViewState: Bundle?): Dialog = dialog {
         val key = get<TextInputKey>()
-
-        return MaterialDialog(activity)
-            .noAutoDismiss()
-            .title(text = key.title)
-            .input(
-                hint = key.inputHint,
-                prefill = key.prefill,
-                inputType = key.inputType
-            ) { _, input ->
-                travelerRouter.goBackWithResult(key.resultCode, input.toString())
-            }
-            .positiveButton(R.string.es_action_ok)
-            .negativeButton(R.string.es_action_cancel) { travelerRouter.goBack() }
+        noAutoDismiss()
+        title(text = key.title)
+        input(
+            hint = key.inputHint,
+            prefill = key.prefill,
+            inputType = key.inputType
+        ) { _, input ->
+            travelerRouter.goBackWithResult(key.resultCode, input.toString())
+        }
+        positiveButton(R.string.es_action_ok)
+        negativeButton(R.string.es_action_cancel) { travelerRouter.goBack() }
     }
 
 }

@@ -17,6 +17,8 @@
 package com.ivianuu.essentials.ui.mvrx.director
 
 import androidx.lifecycle.ViewModelStoreOwner
+import com.ivianuu.director.activity
+import com.ivianuu.director.parentController
 import com.ivianuu.essentials.ui.base.EsController
 import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
 import com.ivianuu.essentials.ui.mvrx.getViewModel

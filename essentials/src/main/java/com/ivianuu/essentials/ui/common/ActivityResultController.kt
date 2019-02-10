@@ -22,8 +22,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.ivianuu.director.activityresult.registerActivityResultListener
-import com.ivianuu.director.activityresult.startActivityForResult
+import com.ivianuu.director.activity
+import com.ivianuu.director.activitycallbacks.addActivityResultListener
+import com.ivianuu.director.activitycallbacks.startActivityForResult
 import com.ivianuu.essentials.ui.base.EsController
 import com.ivianuu.essentials.ui.traveler.NavOptions
 import com.ivianuu.essentials.ui.traveler.dialog
@@ -49,7 +50,7 @@ class ActivityResultController : EsController() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        registerActivityResultListener(key.requestCode) { requestCode, resultCode, data ->
+        addActivityResultListener(key.requestCode) { requestCode, resultCode, data ->
             travelerRouter.goBackWithResult(
                 key.resultCode,
                 ActivityResult(requestCode, resultCode, data)

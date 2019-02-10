@@ -17,11 +17,11 @@
 package com.ivianuu.essentials.ui.base
 
 import android.os.Bundle
+import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import com.ivianuu.director.Router
 import com.ivianuu.director.fragmenthost.getRouter
-import com.ivianuu.director.handleBack
-import com.ivianuu.director.hasRootController
+import com.ivianuu.director.hasRoot
 import com.ivianuu.director.traveler.ControllerNavigator
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.common.RouterActivity
@@ -109,8 +109,8 @@ abstract class EsActivity : AppCompatActivity(),
     }
 
     protected open fun onInitializeRouter() {
-        router = getRouter(containerId)
-        if (!router.hasRootController) {
+        router = getRouter(findViewById<ViewGroup>(containerId))
+        if (!router.hasRoot) {
             startKey?.let { travelerRouter.setRoot(it) }
         }
     }

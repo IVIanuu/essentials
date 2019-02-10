@@ -55,7 +55,7 @@ object Versions {
     const val closeable = "0.0.1-dev-1"
     const val constraintLayout = "2.0.0-alpha3"
     const val coroutines = "1.1.0"
-    const val director = "0.0.1-dev-3"
+    const val director = "0.0.1-dev-4"
     const val epoxy = "3.0.0"
     const val epoxyKtx = "0.0.1-dev-1"
     const val epoxyPrefs = "0.0.1-dev-1"
@@ -121,13 +121,13 @@ object Deps {
         "org.jetbrains.kotlinx:kotlinx-coroutines-rx2:${Versions.coroutines}"
 
     const val director = "com.ivianuu.director:director:${Versions.director}"
-    const val directorActivityResult = "com.ivianuu.director:director-activityresult:${Versions.director}"
-    const val directorArchLifecycle =
-        "com.ivianuu.director:director-arch-lifecycle:${Versions.director}"
+    const val directorActivityCallbacks =
+        "com.ivianuu.director:director-activitycallbacks:${Versions.director}"
+    const val directorAndroidxLifecycle =
+        "com.ivianuu.director:director-androidx-lifecycle:${Versions.director}"
     const val directorCommon = "com.ivianuu.director:director-common:${Versions.director}"
     const val directorDialog = "com.ivianuu.director:director-dialog:${Versions.director}"
     const val directorFragmentHost = "com.ivianuu.director:director-fragmenthost:${Versions.director}"
-    const val directorPermission = "com.ivianuu.director:director-permission:${Versions.director}"
     const val directorRetained = "com.ivianuu.director:director-retained:${Versions.director}"
     const val directorScopes = "com.ivianuu.director:director-scopes:${Versions.director}"
     const val directorTesting =

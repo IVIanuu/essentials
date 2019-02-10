@@ -18,6 +18,7 @@ package com.ivianuu.essentials.hidenavbar
 
 import android.content.SharedPreferences
 import android.os.Bundle
+import com.ivianuu.director.activity
 import com.ivianuu.director.scopes.destroy
 import com.ivianuu.epoxyktx.epoxyController
 import com.ivianuu.epoxyprefs.entries

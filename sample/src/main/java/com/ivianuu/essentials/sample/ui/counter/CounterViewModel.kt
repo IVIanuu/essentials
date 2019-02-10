@@ -45,24 +45,6 @@ class CounterViewModel(
         d { "on cleared" }
     }
 
-    fun increaseClicked() {
-        setState { copy(count = count.inc()) }
-    }
-
-    fun decreaseClicked() {
-        setState {
-            if (count > 0) {
-                copy(count = count.dec())
-            } else {
-                copy(count = 0)
-            }
-        }
-    }
-
-    fun resetClicked() {
-        setState { copy(count = 0) }
-    }
-
     fun screenUpClicked() {
         d { "screen up clicked" }
         withState {
@@ -91,7 +73,4 @@ class CounterViewModel(
     }
 }
 
-data class CounterState(
-    val screen: Int,
-    val count: Int = 0
-)
+data class CounterState(val screen: Int)

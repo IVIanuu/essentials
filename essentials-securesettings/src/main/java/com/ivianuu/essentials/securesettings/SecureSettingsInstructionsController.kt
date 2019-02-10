@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.securesettings
 
 import android.content.ClipboardManager
+import com.ivianuu.director.activity
 import com.ivianuu.epoxyktx.epoxyController
 import com.ivianuu.epoxyprefs.icon
 import com.ivianuu.epoxyprefs.onClickUrl
