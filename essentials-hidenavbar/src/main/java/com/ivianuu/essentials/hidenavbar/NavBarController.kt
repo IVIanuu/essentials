@@ -55,7 +55,7 @@ class NavBarController(
     private val enabledScope = ReusableScope()
 
     override fun start() {
-        prefs.manageNavBar.observable
+        prefs.manageNavBar.observable()
             .subscribe { updateEnabledState(it) }
             .disposeBy(scope)
     }
@@ -66,9 +66,9 @@ class NavBarController(
         if (enabled) {
             Observables
                 .combineLatest(
-                    prefs.navBarHidden.observable,
-                    prefs.fullOverscan.observable,
-                    prefs.rotationMode.observable,
+                    prefs.navBarHidden.observable(),
+                    prefs.fullOverscan.observable(),
+                    prefs.rotationMode.observable(),
                     configChanges().startWith(Unit),
                     rotationChanges().startWith(app.rotation)
                 )
