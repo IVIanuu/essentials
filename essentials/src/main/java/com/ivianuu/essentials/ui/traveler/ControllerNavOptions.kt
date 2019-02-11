@@ -108,16 +108,26 @@ fun ControllerNavOptions.verticalPop(
     removesFromViewOnPush: Boolean = true
 ): ControllerNavOptions = pop(VerticalChangeHandler(duration, removesFromViewOnPush))
 
+fun ControllerNavOptions.swap(
+    removesFromViewOnPush: Boolean = true
+): ControllerNavOptions = swapPush(removesFromViewOnPush).swapPop(removesFromViewOnPush)
+
+fun ControllerNavOptions.swapPush(
+    removesFromViewOnPush: Boolean = true
+): ControllerNavOptions = push(SimpleSwapChangeHandler(removesFromViewOnPush))
+
+fun ControllerNavOptions.swapPop(
+    removesFromViewOnPush: Boolean = true
+): ControllerNavOptions = pop(SimpleSwapChangeHandler(removesFromViewOnPush))
+
 fun ControllerNavOptions.dialog(): ControllerNavOptions =
     dialogPush().dialogPop()
 
-fun ControllerNavOptions.dialogPush(): ControllerNavOptions = push(
-    SimpleSwapChangeHandler(false)
-)
+fun ControllerNavOptions.dialogPush(): ControllerNavOptions =
+    swapPush(true)
 
-fun ControllerNavOptions.dialogPop(): ControllerNavOptions = pop(
-    SimpleSwapChangeHandler(false)
-)
+fun ControllerNavOptions.dialogPop(): ControllerNavOptions =
+    swapPop(true)
 
 fun ControllerNavOptions.nonePop(): ControllerNavOptions = pop(null)
 
