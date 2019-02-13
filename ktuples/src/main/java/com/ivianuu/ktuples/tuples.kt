@@ -18,7 +18,28 @@ package com.ivianuu.ktuples
 
 import java.io.Serializable
 
-data class Quadruple<out A, out B, out C, out D>(
+data class Tuple1<out A>(
+    val first: A
+) : Serializable {
+    override fun toString(): String = "($first)"
+}
+
+data class Tuple2<out A, out B>(
+    val first: A,
+    val second: B
+) : Serializable {
+    override fun toString(): String = "($first, $second)"
+}
+
+data class Tuple3<out A, out B, out C>(
+    val first: A,
+    val second: B,
+    val third: C
+) : Serializable {
+    override fun toString(): String = "($first, $second, $third)"
+}
+
+data class Tuple4<out A, out B, out C, out D>(
     val first: A,
     val second: B,
     val third: C,
@@ -27,7 +48,7 @@ data class Quadruple<out A, out B, out C, out D>(
     override fun toString(): String = "($first, $second, $third, $fourth)"
 }
 
-data class Quintuple<out A, out B, out C, out D, out E>(
+data class Tuple5<out A, out B, out C, out D, out E>(
     val first: A,
     val second: B,
     val third: C,
@@ -37,7 +58,7 @@ data class Quintuple<out A, out B, out C, out D, out E>(
     override fun toString(): String = "($first, $second, $third, $fourth, $fifth)"
 }
 
-data class Sextuple<out A, out B, out C, out D, out E, out F>(
+data class Tuple6<out A, out B, out C, out D, out E, out F>(
     val first: A,
     val second: B,
     val third: C,
@@ -48,7 +69,7 @@ data class Sextuple<out A, out B, out C, out D, out E, out F>(
     override fun toString(): String = "($first, $second, $third, $fourth, $fifth, $sixth)"
 }
 
-data class Septuple<out A, out B, out C, out D, out E, out F, out G>(
+data class Tuple7<out A, out B, out C, out D, out E, out F, out G>(
     val first: A,
     val second: B,
     val third: C,
@@ -60,7 +81,7 @@ data class Septuple<out A, out B, out C, out D, out E, out F, out G>(
     override fun toString(): String = "($first, $second, $third, $fourth, $fifth, $sixth, $seventh)"
 }
 
-data class Octuple<out A, out B, out C, out D, out E, out F, out G, out H>(
+data class Tuple8<out A, out B, out C, out D, out E, out F, out G, out H>(
     val first: A,
     val second: B,
     val third: C,
@@ -74,7 +95,7 @@ data class Octuple<out A, out B, out C, out D, out E, out F, out G, out H>(
         "($first, $second, $third, $fourth, $fifth, $sixth, $seventh, $eighth)"
 }
 
-data class Nonuple<out A, out B, out C, out D, out E, out F, out G, out H, out I>(
+data class Tuple9<out A, out B, out C, out D, out E, out F, out G, out H, out I>(
     val first: A,
     val second: B,
     val third: C,

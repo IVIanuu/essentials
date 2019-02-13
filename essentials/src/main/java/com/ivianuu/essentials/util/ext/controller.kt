@@ -30,7 +30,7 @@ import com.ivianuu.kommon.core.content.app
 val Controller.rootRouter: Router
     get() {
         fun Controller.rootController(): Controller =
-            parentController?.let { it.rootController() } ?: this
+            parentController?.rootController() ?: this
         return rootController().router
     }
 

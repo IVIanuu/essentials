@@ -51,7 +51,7 @@ abstract class EsController : Controller(), ContextAware,
     InjektMvRxView, LayoutContainer {
 
     override val component by unsafeLazy {
-        controllerComponent(this) {
+        controllerComponent {
             modules(keyModule(args))
             modules(this@EsController.modules())
         }
@@ -79,7 +79,6 @@ abstract class EsController : Controller(), ContextAware,
         savedViewState: Bundle?
     ): View {
         check(layoutRes != -1) { "no layoutRes provided" }
-
         val injectorInflater =
             inflater.cloneInContext(InjektTraitContextWrapper(activity, this))
         return injectorInflater.inflate(layoutRes, container, false)
@@ -92,7 +91,7 @@ abstract class EsController : Controller(), ContextAware,
 
     override fun onAttach(view: View) {
         super.onAttach(view)
-        invalidate()
+        postInvalidate()
     }
 
     override fun onUnbindView(view: View) {

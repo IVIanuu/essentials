@@ -34,33 +34,31 @@ const val CHILD_CONTROLLER_SCOPE = "child_controller_scope"
 /**
  * Returns a [Component] with convenient configurations
  */
-fun <T : Controller> controllerComponent(
-    instance: T,
-    name: String? = instance.javaClass.simpleName + "Component",
+fun <T : Controller> T.controllerComponent(
+    name: String? = javaClass.simpleName + "Component",
     deferCreateEagerInstances: Boolean = false,
     definition: ComponentDefinition? = null
 ): Component = component(name, deferCreateEagerInstances) {
     scopeNames(CONTROLLER_SCOPE)
-    (instance.getParentControllerComponentOrNull()
-        ?: instance.getActivityComponentOrNull()
-        ?: instance.getApplicationComponentOrNull())?.let { dependencies(it) }
-    addInstance(instance)
+    (getParentControllerComponentOrNull()
+        ?: getActivityComponentOrNull()
+        ?: getApplicationComponentOrNull())?.let { dependencies(it) }
+    addInstance(this@controllerComponent)
     definition?.invoke(this)
 }
 
 /**
  * Returns a [Component] with convenient configurations
  */
-fun <T : Controller> childControllerComponent(
-    instance: T,
-    name: String? = instance.javaClass.simpleName + "Component",
+fun <T : Controller> T.childControllerComponent(
+    name: String? = javaClass.simpleName + "Component",
     definition: ComponentDefinition? = null
 ): Component = component(name) {
     scopeNames(CHILD_CONTROLLER_SCOPE)
-    (instance.getParentControllerComponentOrNull()
-        ?: instance.getActivityComponentOrNull()
-        ?: instance.getApplicationComponentOrNull())?.let { dependencies(it) }
-    addInstance(instance)
+    (getParentControllerComponentOrNull()
+        ?: getActivityComponentOrNull()
+        ?: getApplicationComponentOrNull())?.let { dependencies(it) }
+    addInstance(this@childControllerComponent)
     definition?.invoke(this)
 }
 

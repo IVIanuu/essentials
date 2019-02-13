@@ -58,13 +58,13 @@ class AppPickerDialog : EsDialogController() {
         }
 
         coroutineScope.launch {
-            val newApps = if (key.launchableOnly) {
+            val allApps = if (key.launchableOnly) {
                 appStore.launchableApps()
             } else {
                 appStore.installedApps()
             }
             apps.clear()
-            apps.addAll(newApps)
+            apps.addAll(allApps)
 
             dialog.listItems(
                 items = apps.map { it.appName },

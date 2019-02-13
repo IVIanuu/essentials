@@ -46,7 +46,7 @@ abstract class EsDialogController : DialogController(),
     ContextAware, InjektMvRxView, LifecycleOwner, ViewModelStoreOwner {
 
     override val component by unsafeLazy {
-        controllerComponent(this) {
+        controllerComponent {
             modules(keyModule(args))
             modules(this@EsDialogController.modules())
         }
@@ -61,7 +61,7 @@ abstract class EsDialogController : DialogController(),
 
     override fun onAttach(view: View) {
         super.onAttach(view)
-        invalidate()
+        postInvalidate()
     }
 
     override fun invalidate() {

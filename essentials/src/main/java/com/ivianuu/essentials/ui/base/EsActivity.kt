@@ -85,8 +85,11 @@ abstract class EsActivity : AppCompatActivity(),
         setContentView(layoutRes)
 
         onInitializeRouter()
+    }
 
-        invalidate()
+    override fun onStart() {
+        super.onStart()
+        postInvalidate()
     }
 
     override fun onResumeFragments() {
