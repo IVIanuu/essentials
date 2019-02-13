@@ -40,11 +40,6 @@ class CounterViewModel(
     private val router: Router
 ) : MvRxViewModel<CounterState>(CounterState(key.screen)) {
 
-    override fun onCleared() {
-        super.onCleared()
-        d { "on cleared" }
-    }
-
     fun screenUpClicked() {
         d { "screen up clicked" }
         withState {

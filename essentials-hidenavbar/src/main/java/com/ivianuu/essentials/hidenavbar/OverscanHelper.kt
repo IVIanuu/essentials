@@ -29,7 +29,7 @@ import com.ivianuu.timberktx.d
 @Factory
 class OverscanHelper {
 
-    fun setDisplayOverScan(rect: Rect) {
+    fun setDisplayOverscan(rect: Rect) {
         d { "set display overscan $rect" }
         setOverscanMethod.invoke(
             windowManagerService,

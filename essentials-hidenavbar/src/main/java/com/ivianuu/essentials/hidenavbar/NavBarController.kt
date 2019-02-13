@@ -133,7 +133,7 @@ class NavBarController(
             val navBarHeight =
                 getNavigationBarHeight() - (if (prefs.fullOverscan.get()) 0 else OVERSCAN_LEFT_PIXELS)
             val rect = getOverscanRect(if (hide) -navBarHeight else 0)
-            overscanHelper.setDisplayOverScan(rect)
+            overscanHelper.setDisplayOverscan(rect)
             prefs.wasNavBarHidden.set(hide)
         } catch (e: Exception) {
             e.printStackTrace()
