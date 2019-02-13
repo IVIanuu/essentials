@@ -124,10 +124,10 @@ fun ControllerNavOptions.dialog(): ControllerNavOptions =
     dialogPush().dialogPop()
 
 fun ControllerNavOptions.dialogPush(): ControllerNavOptions =
-    swapPush(true)
+    swapPush(false)
 
 fun ControllerNavOptions.dialogPop(): ControllerNavOptions =
-    swapPop(true)
+    swapPop(false)
 
 fun ControllerNavOptions.nonePop(): ControllerNavOptions = pop(null)
 
