@@ -48,7 +48,7 @@ class SecureSettingsDialog : EsDialogController() {
     private val key by inject<SecureSettingsKey>()
     private val shell by inject<Shell>()
 
-    override fun onCreateDialog(savedViewState: Bundle?): Dialog = dialog {
+    override fun onBuildDialog(savedViewState: Bundle?): Dialog = dialog {
         title(R.string.es_dialog_title_secure_settings)
         message(R.string.es_dialog_message_secure_settings)
         positiveButton(R.string.es_action_use_root) {

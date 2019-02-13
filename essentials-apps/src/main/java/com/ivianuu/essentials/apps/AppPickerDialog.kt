@@ -46,7 +46,7 @@ class AppPickerDialog : EsDialogController() {
 
     private val appStore by inject<AppStore>()
 
-    override fun onCreateDialog(savedViewState: Bundle?): Dialog {
+    override fun onBuildDialog(savedViewState: Bundle?): Dialog {
         val apps = mutableListOf<AppInfo>()
 
         val key = get<AppPickerKey>()

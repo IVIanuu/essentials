@@ -73,7 +73,7 @@ abstract class EsController : Controller(), ContextAware,
 
     protected open val layoutRes get() = -1
 
-    override fun onInflateView(
+    override fun onBuildView(
         inflater: LayoutInflater,
         container: ViewGroup,
         savedViewState: Bundle?

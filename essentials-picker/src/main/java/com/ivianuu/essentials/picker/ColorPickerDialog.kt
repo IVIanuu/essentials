@@ -44,7 +44,7 @@ class ColorPickerDialog : EsDialogController() {
 
     private val key by inject<ColorPickerKey>()
 
-    override fun onCreateDialog(savedViewState: Bundle?): Dialog = dialog {
+    override fun onBuildDialog(savedViewState: Bundle?): Dialog = dialog {
         title(key.titleRes)
         colorChooser(
             colors = PRIMARY_COLORS,
