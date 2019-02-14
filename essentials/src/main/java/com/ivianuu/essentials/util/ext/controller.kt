@@ -21,11 +21,14 @@ import android.app.Application
 import android.view.View
 import com.ivianuu.director.Controller
 import com.ivianuu.director.Router
+import com.ivianuu.director.RouterTransaction
 import com.ivianuu.director.activity
 import com.ivianuu.director.parentController
 import com.ivianuu.kommon.core.app.hideInputMethod
 import com.ivianuu.kommon.core.app.showInputMethod
 import com.ivianuu.kommon.core.content.app
+
+val Controller.transaction: RouterTransaction get() = router.backstack.first { it.controller == this }
 
 val Controller.rootRouter: Router
     get() {
