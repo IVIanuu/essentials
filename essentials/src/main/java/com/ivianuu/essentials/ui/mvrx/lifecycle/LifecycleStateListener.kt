@@ -23,9 +23,11 @@ import com.ivianuu.essentials.util.SimpleLifecycleObserver
 import com.ivianuu.statestore.StateStore
 
 /**
- * @author Manuel Wrage (IVIanuu)
+ * Attaches and detaches the [subscriber] to the [store]
+ * based on the lifecycle of the [owner]
+ * and is also a [Closeable]
  */
-class LifecycleStateListener<T>(
+internal class LifecycleStateListener<T>(
     private val owner: LifecycleOwner,
     private val store: StateStore<T>,
     private val subscriber: (T) -> Unit

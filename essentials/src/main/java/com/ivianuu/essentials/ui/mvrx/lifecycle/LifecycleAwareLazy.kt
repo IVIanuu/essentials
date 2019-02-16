@@ -21,16 +21,13 @@ import androidx.lifecycle.LifecycleOwner
 import com.ivianuu.essentials.util.SimpleLifecycleObserver
 import java.io.Serializable
 
-private object UNINITIALIZED_VALUE
-
-/**
- * This was copied from SynchronizedLazyImpl but modified to automatically initialize in ON_START.
- */
-class LifecycleAwareLazy<T>(
+internal class LifecycleAwareLazy<T>(
     owner: LifecycleOwner,
-    private val event: Lifecycle.Event = Lifecycle.Event.ON_START,
+    private val event: Lifecycle.Event = Lifecycle.Event.ON_CREATE,
     initializer: () -> T
 ) : Lazy<T>, Serializable {
+
+    private object UNINITIALIZED_VALUE
 
     private var initializer: (() -> T)? = initializer
     @Volatile private var _value: Any? =
@@ -77,14 +74,7 @@ class LifecycleAwareLazy<T>(
         if (isInitialized()) value.toString() else "Lazy value not initialized yet."
 }
 
-@JvmName("lifecycleAwareLazy2")
-fun <T> LifecycleOwner.lifecycleAwareLazy(
-    event: Lifecycle.Event = Lifecycle.Event.ON_START,
+internal fun <T> LifecycleOwner.lifecycleAwareLazy(
+    event: Lifecycle.Event = Lifecycle.Event.ON_CREATE,
     initializer: () -> T
-): Lazy<T> = lifecycleAwareLazy(this, event, initializer)
-
-fun <T> lifecycleAwareLazy(
-    owner: LifecycleOwner,
-    event: Lifecycle.Event = Lifecycle.Event.ON_START,
-    initializer: () -> T
-): Lazy<T> = LifecycleAwareLazy(owner, event, initializer)
+): Lazy<T> = LifecycleAwareLazy(this, event, initializer)

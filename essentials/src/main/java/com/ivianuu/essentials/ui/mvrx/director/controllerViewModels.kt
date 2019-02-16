@@ -14,69 +14,43 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.mvrx.injekt
+package com.ivianuu.essentials.ui.mvrx.director
 
 import androidx.lifecycle.ViewModelStoreOwner
 import com.ivianuu.director.activity
 import com.ivianuu.director.parentController
 import com.ivianuu.essentials.ui.base.EsController
 import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
-import com.ivianuu.essentials.ui.mvrx.existingViewModel
-import com.ivianuu.essentials.ui.mvrx.getExistingViewModel
 import com.ivianuu.essentials.ui.mvrx.getViewModel
 import com.ivianuu.essentials.ui.mvrx.viewModel
-import com.ivianuu.injekt.get
 import com.ivianuu.kommon.lifecycle.defaultViewModelKey
 
 inline fun <reified VM : MvRxViewModel<*>> EsController.activityViewModel(
-    noinline key: () -> String = { VM::class.defaultViewModelKey }
-): Lazy<VM> = viewModel({ activity as ViewModelStoreOwner }, key) { get<VM>() }
-
-inline fun <reified VM : MvRxViewModel<*>> EsController.existingActivityViewModel(
-    noinline key: () -> String = { VM::class.defaultViewModelKey }
-): Lazy<VM> = existingViewModel({ activity as ViewModelStoreOwner }, key)
+    noinline key: () -> String = { VM::class.defaultViewModelKey },
+    noinline factory: () -> VM
+): Lazy<VM> = viewModel({ activity as ViewModelStoreOwner }, key, factory)
 
 inline fun <reified VM : MvRxViewModel<*>> EsController.parentViewModel(
     noinline key: () -> String = { VM::class.defaultViewModelKey },
     noinline factory: () -> VM
 ): Lazy<VM> = viewModel({ parentController as ViewModelStoreOwner }, key, factory)
 
-inline fun <reified VM : MvRxViewModel<*>> EsController.existingParentViewModel(
-    noinline key: () -> String = { VM::class.defaultViewModelKey }
-): Lazy<VM> = existingViewModel({ parentController as ViewModelStoreOwner }, key)
-
 inline fun <reified VM : MvRxViewModel<*>> EsController.targetViewModel(
     noinline key: () -> String = { VM::class.defaultViewModelKey },
     noinline factory: () -> VM
 ): Lazy<VM> = viewModel({ targetController as ViewModelStoreOwner }, key, factory)
-
-inline fun <reified VM : MvRxViewModel<*>> EsController.existingTargetViewModel(
-    noinline key: () -> String = { VM::class.defaultViewModelKey }
-): Lazy<VM> = existingViewModel({ targetController as ViewModelStoreOwner }, key)
 
 inline fun <reified VM : MvRxViewModel<*>> EsController.getActivityViewModel(
     key: String = VM::class.defaultViewModelKey,
     noinline factory: () -> VM
 ): VM = getViewModel(activity as ViewModelStoreOwner, key, factory)
 
-inline fun <reified VM : MvRxViewModel<*>> EsController.getExistingActivityViewModel(
-    key: String = VM::class.defaultViewModelKey
-): VM = getExistingViewModel(activity as ViewModelStoreOwner, key)
-
 inline fun <reified VM : MvRxViewModel<*>> EsController.getParentViewModel(
     key: String = VM::class.defaultViewModelKey,
     noinline factory: () -> VM
 ): VM = getViewModel(parentController as ViewModelStoreOwner, key, factory)
 
-inline fun <reified VM : MvRxViewModel<*>> EsController.getExistingParentViewModel(
-    key: String = VM::class.defaultViewModelKey
-): VM = getExistingViewModel(parentController as ViewModelStoreOwner, key)
-
 inline fun <reified VM : MvRxViewModel<*>> EsController.getTargetViewModel(
     key: String = VM::class.defaultViewModelKey,
     noinline factory: () -> VM
 ): VM = getViewModel(targetController as ViewModelStoreOwner, key, factory)
-
-inline fun <reified VM : MvRxViewModel<*>> EsController.getExistingTargetViewModel(
-    key: String = VM::class.defaultViewModelKey
-): VM = getExistingViewModel(targetController as ViewModelStoreOwner, key)

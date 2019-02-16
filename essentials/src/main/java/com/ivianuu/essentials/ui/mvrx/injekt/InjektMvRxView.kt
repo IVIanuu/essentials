@@ -20,6 +20,6 @@ import com.ivianuu.essentials.ui.mvrx.MvRxView
 import com.ivianuu.injekt.InjektTrait
 
 /**
- * @author Manuel Wrage (IVIanuu)
+ * Wraps [MvRxView] and [InjektTrait]
  */
 interface InjektMvRxView : MvRxView, InjektTrait
