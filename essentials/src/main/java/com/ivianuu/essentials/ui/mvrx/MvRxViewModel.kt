@@ -49,7 +49,7 @@ abstract class MvRxViewModel<S>(initialState: S) : EsViewModel() {
     }
 
     protected fun subscribe(subscriber: (S) -> Unit): Closeable =
-        stateStore.observable.subscribe(subscriber).asCloseable().closeBy(scope)
+        stateStore.observable().subscribe(subscriber).asCloseable().closeBy(scope)
 
     fun subscribe(owner: LifecycleOwner, subscriber: (S) -> Unit): Closeable =
         LifecycleStateListener(

@@ -25,7 +25,6 @@ import com.ivianuu.essentials.ui.mvrx.existingViewModel
 import com.ivianuu.essentials.ui.mvrx.getExistingViewModel
 import com.ivianuu.kommon.lifecycle.defaultViewModelKey
 
-
 inline fun <reified VM : MvRxViewModel<*>> EsController.existingActivityViewModel(
     noinline key: () -> String = { VM::class.defaultViewModelKey }
 ): Lazy<VM> = existingViewModel({ activity as ViewModelStoreOwner }, key)
