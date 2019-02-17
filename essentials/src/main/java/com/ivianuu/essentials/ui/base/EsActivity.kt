@@ -38,6 +38,7 @@ import com.ivianuu.traveler.Navigator
 import com.ivianuu.traveler.android.AppNavigator
 import com.ivianuu.traveler.common.ResultNavigator
 import com.ivianuu.traveler.common.compositeNavigatorOf
+import com.ivianuu.traveler.lifecycle.setNavigator
 import com.ivianuu.traveler.setRoot
 
 /**
@@ -89,17 +90,12 @@ abstract class EsActivity : AppCompatActivity(),
 
     override fun onStart() {
         super.onStart()
-        postInvalidate()
+        invalidate()
     }
 
     override fun onResumeFragments() {
         super.onResumeFragments()
-        travelerRouter.setNavigator(navigator)
-    }
-
-    override fun onPause() {
-        travelerRouter.removeNavigator()
-        super.onPause()
+        travelerRouter.setNavigator(this, navigator)
     }
 
     override fun invalidate() {

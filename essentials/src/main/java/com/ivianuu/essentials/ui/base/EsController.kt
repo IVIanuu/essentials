@@ -91,7 +91,7 @@ abstract class EsController : Controller(), ContextAware,
 
     override fun onAttach(view: View) {
         super.onAttach(view)
-        postInvalidate()
+        invalidate()
     }
 
     override fun onUnbindView(view: View) {
