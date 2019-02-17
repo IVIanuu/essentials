@@ -39,5 +39,5 @@ fun <T, S> PreferenceModel.Builder.enumDependency(
     dependency: Pref<T>,
     value: T
 ) where T : Enum<T>, T : PrefValueHolder<S> {
-    dependency(dependency.key, value, dependency.defaultValue.value)
+    dependency(dependency.key, value.value, dependency.defaultValue.value)
 }
