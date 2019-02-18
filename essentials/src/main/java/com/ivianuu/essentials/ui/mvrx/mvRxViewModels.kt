@@ -52,7 +52,7 @@ internal fun <VM : MvRxViewModel<*>> VM.setupViewModel(view: MvRxView): VM =
 
 @PublishedApi
 internal fun <V> MvRxView.viewModelLazy(initializer: () -> V): Lazy<V> =
-    lifecycleAwareLazy(Lifecycle.Event.ON_START, initializer)
+    lifecycleAwareLazy(Lifecycle.Event.ON_CREATE, initializer)
 
 @PublishedApi
 internal fun <VM : MvRxViewModel<*>> viewModelProvider(
