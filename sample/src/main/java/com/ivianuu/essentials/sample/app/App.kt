@@ -17,17 +17,13 @@
 package com.ivianuu.essentials.sample.app
 
 import androidx.work.Configuration
-import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import com.ivianuu.essentials.app.EsApp
 import com.ivianuu.essentials.apps.glide.esAppsGlideModule
 import com.ivianuu.essentials.hidenavbar.esNavBarModule
-import com.ivianuu.essentials.sample.work.MyWorkerOne
-import com.ivianuu.essentials.sample.work.MyWorkerTwo
 import com.ivianuu.essentials.sample.work.workerModule
-import com.ivianuu.essentials.work.InjektWorkerFactory
 import com.ivianuu.essentials.work.workerInjectionModule
-import com.ivianuu.injekt.inject
+import com.ivianuu.injekt.get
 
 /**
  * App
@@ -41,22 +37,12 @@ class App : EsApp() {
         workerModule
     )
 
-    private val workerFactory by inject<InjektWorkerFactory>()
-
     override fun onCreate() {
         super.onCreate()
         WorkManager.initialize(
             this, Configuration.Builder()
-                .setWorkerFactory(workerFactory)
+                .setWorkerFactory(get())
                 .build()
-        )
-
-        WorkManager.getInstance().enqueue(
-            OneTimeWorkRequestBuilder<MyWorkerOne>().build()
-        )
-
-        WorkManager.getInstance().enqueue(
-            OneTimeWorkRequestBuilder<MyWorkerTwo>().build()
         )
     }
 

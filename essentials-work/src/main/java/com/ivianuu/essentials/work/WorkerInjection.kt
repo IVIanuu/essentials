@@ -25,6 +25,7 @@ import com.ivianuu.injekt.BindingContext
 import com.ivianuu.injekt.DefinitionContext
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Provider
+import com.ivianuu.injekt.bindType
 import com.ivianuu.injekt.factory
 import com.ivianuu.injekt.module
 import com.ivianuu.injekt.multibinding.bindIntoMap
@@ -60,7 +61,7 @@ const val WORKER_MAP = "workers"
  */
 val workerInjectionModule = module("WorkerInjectionModule") {
     mapBinding(WORKER_MAP)
-    factory { InjektWorkerFactory(getProviderMap(WORKER_MAP)) }
+    factory { InjektWorkerFactory(getProviderMap(WORKER_MAP)) } bindType WorkerFactory::class
 }
 
 /**
@@ -86,8 +87,8 @@ inline fun <reified T : Worker> Module.worker(
  */
 inline fun <reified T : Worker> Module.bindWorker(name: String? = null) {
     bindIntoMap<T>(
-        WORKER_MAP,
-        T::class.java.name,
+        mapName = WORKER_MAP,
+        mapKey = T::class.java.name,
         implementationType = T::class,
         implementationName = name
     )

@@ -31,7 +31,7 @@ object Build {
 object Publishing {
     const val groupId = "com.ivianuu.essentials"
     const val vcsUrl = "https://github.com/IVIanuu/essentials"
-    const val version = "${Build.versionName}-dev-16"
+    const val version = "${Build.versionName}-dev-17"
 }
 
 object Versions {
@@ -68,7 +68,7 @@ object Versions {
     const val kSettings = "0.0.1-dev-2"
     const val liveEvent = "1e265df911"
     const val mavenGradle = "2.1"
-    const val materialComponents = "1.1.0-alpha02"
+    const val materialComponents = "1.1.0-alpha04"
     const val materialDialogs = "2.0.0-rc8"
     const val mockitoKotlin = "2.0.0"
     const val roboelectric = "4.0.2"
@@ -79,7 +79,7 @@ object Versions {
     const val scopes = "0.0.1-dev-2"
     const val superUser = "1.0.0.+"
     const val stateStore = "0.0.1-dev-2"
-    const val stdlibx = "0.0.1-dev-3"
+    const val stdlibx = "0.0.1-dev-4"
     const val timber = "4.7.1"
     const val timberKtx = "0.0.1-dev-1"
     const val traveler = "0.0.1-dev-2"

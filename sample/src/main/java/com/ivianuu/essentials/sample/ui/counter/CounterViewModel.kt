@@ -16,15 +16,16 @@
 
 package com.ivianuu.essentials.sample.ui.counter
 
-import android.content.Context
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
 import com.ivianuu.essentials.injection.CONTROLLER_SCOPE
 import com.ivianuu.essentials.sample.ui.list.ListKey
+import com.ivianuu.essentials.sample.work.MyWorkerOne
+import com.ivianuu.essentials.sample.work.MyWorkerTwo
 import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
 import com.ivianuu.essentials.ui.traveler.NavOptions
 import com.ivianuu.essentials.ui.traveler.horizontal
-import com.ivianuu.essentials.util.ext.toast
 import com.ivianuu.injekt.annotations.Factory
-import com.ivianuu.timberktx.d
 import com.ivianuu.traveler.Router
 import com.ivianuu.traveler.goBack
 import com.ivianuu.traveler.navigate
@@ -36,14 +37,11 @@ import com.ivianuu.traveler.popToRoot
 @Factory(scopeName = CONTROLLER_SCOPE)
 class CounterViewModel(
     key: CounterKey,
-    private val context: Context,
     private val router: Router
 ) : MvRxViewModel<CounterState>(CounterState(key.screen)) {
 
     fun screenUpClicked() {
-        d { "screen up clicked" }
         withState {
-            d { "navigate" }
             router.navigate(
                 CounterKey(it.screen.inc()),
                 NavOptions().horizontal()
@@ -64,7 +62,13 @@ class CounterViewModel(
     }
 
     fun doWorkClicked() {
-        context.toast("Not implemented")
+        WorkManager.getInstance().enqueue(
+            OneTimeWorkRequestBuilder<MyWorkerOne>().build()
+        )
+
+        WorkManager.getInstance().enqueue(
+            OneTimeWorkRequestBuilder<MyWorkerTwo>().build()
+        )
     }
 }
 
