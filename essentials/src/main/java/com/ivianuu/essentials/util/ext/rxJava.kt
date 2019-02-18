@@ -16,9 +16,19 @@
 
 package com.ivianuu.essentials.util.ext
 
-import com.ivianuu.ktuples.*
+import com.ivianuu.ktuples.Tuple4
+import com.ivianuu.ktuples.Tuple5
+import com.ivianuu.ktuples.Tuple6
+import com.ivianuu.ktuples.Tuple7
+import com.ivianuu.ktuples.Tuple8
+import com.ivianuu.ktuples.Tuple9
 import io.reactivex.Observable
-import io.reactivex.functions.*
+import io.reactivex.functions.Function4
+import io.reactivex.functions.Function5
+import io.reactivex.functions.Function6
+import io.reactivex.functions.Function7
+import io.reactivex.functions.Function8
+import io.reactivex.functions.Function9
 import io.reactivex.rxkotlin.Observables
 import io.reactivex.subjects.BehaviorSubject
 

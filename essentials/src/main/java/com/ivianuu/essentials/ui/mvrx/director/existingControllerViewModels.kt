@@ -16,7 +16,6 @@
 
 package com.ivianuu.essentials.ui.mvrx.director
 
-import androidx.lifecycle.ViewModelStoreOwner
 import com.ivianuu.director.activity
 import com.ivianuu.director.parentController
 import com.ivianuu.essentials.ui.base.EsController
@@ -24,27 +23,28 @@ import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
 import com.ivianuu.essentials.ui.mvrx.existingViewModel
 import com.ivianuu.essentials.ui.mvrx.getExistingViewModel
 import com.ivianuu.kommon.lifecycle.defaultViewModelKey
+import com.ivianuu.stdlibx.cast
 
 inline fun <reified VM : MvRxViewModel<*>> EsController.existingActivityViewModel(
     noinline key: () -> String = { VM::class.defaultViewModelKey }
-): Lazy<VM> = existingViewModel({ activity as ViewModelStoreOwner }, key)
+): Lazy<VM> = existingViewModel({ activity.cast() }, key)
 
 inline fun <reified VM : MvRxViewModel<*>> EsController.existingParentViewModel(
     noinline key: () -> String = { VM::class.defaultViewModelKey }
-): Lazy<VM> = existingViewModel({ parentController as ViewModelStoreOwner }, key)
+): Lazy<VM> = existingViewModel({ parentController.cast() }, key)
 
 inline fun <reified VM : MvRxViewModel<*>> EsController.existingTargetViewModel(
     noinline key: () -> String = { VM::class.defaultViewModelKey }
-): Lazy<VM> = existingViewModel({ targetController as ViewModelStoreOwner }, key)
+): Lazy<VM> = existingViewModel({ targetController.cast() }, key)
 
 inline fun <reified VM : MvRxViewModel<*>> EsController.getExistingActivityViewModel(
     key: String = VM::class.defaultViewModelKey
-): VM = getExistingViewModel(activity as ViewModelStoreOwner, key)
+): VM = getExistingViewModel(activity.cast(), key)
 
 inline fun <reified VM : MvRxViewModel<*>> EsController.getExistingParentViewModel(
     key: String = VM::class.defaultViewModelKey
-): VM = getExistingViewModel(parentController as ViewModelStoreOwner, key)
+): VM = getExistingViewModel(parentController.cast(), key)
 
 inline fun <reified VM : MvRxViewModel<*>> EsController.getExistingTargetViewModel(
     key: String = VM::class.defaultViewModelKey
-): VM = getExistingViewModel(targetController as ViewModelStoreOwner, key)
+): VM = getExistingViewModel(targetController.cast(), key)

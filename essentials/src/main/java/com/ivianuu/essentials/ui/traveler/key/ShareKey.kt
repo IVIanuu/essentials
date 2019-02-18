@@ -16,10 +16,10 @@
 
 package com.ivianuu.essentials.ui.traveler.key
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import androidx.core.app.ShareCompat
+import com.ivianuu.stdlibx.cast
 import com.ivianuu.traveler.android.ActivityKey
 
 /**
@@ -28,7 +28,7 @@ import com.ivianuu.traveler.android.ActivityKey
 data class ShareKey(val text: String) : ActivityKey {
     override fun createIntent(context: Context, data: Any?): Intent =
         ShareCompat.IntentBuilder
-            .from(context as Activity)
+            .from(context.cast())
             .setType("text/plain")
             .setText(text)
             .createChooserIntent()
