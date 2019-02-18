@@ -81,7 +81,7 @@ class NavBarSettingsController : PrefsController() {
                 sharedPreferences(navBarSharedPrefs)
                 title(R.string.es_pref_title_manage_nav_bar)
                 onChange<Boolean> { _, newValue ->
-                    if (activity.canWriteSecureSettings() || !newValue) {
+                    if (!newValue || activity.canWriteSecureSettings()) {
                         true
                     } else if (newValue) {
                         travelerRouter.navigate(SecureSettingsKey(RESULT_CODE_MAIN_SWITCH))

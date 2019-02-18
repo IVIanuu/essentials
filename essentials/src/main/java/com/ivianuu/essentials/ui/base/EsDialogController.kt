@@ -61,7 +61,7 @@ abstract class EsDialogController : DialogController(),
 
     override fun onAttach(view: View) {
         super.onAttach(view)
-        postInvalidate()
+        invalidate()
     }
 
     override fun invalidate() {

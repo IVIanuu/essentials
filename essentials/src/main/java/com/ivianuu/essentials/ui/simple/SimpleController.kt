@@ -114,16 +114,14 @@ abstract class SimpleController : EsController() {
                 .forEach { it.setColorFilter(iconColor, PorterDuff.Mode.SRC_IN) }
         }
 
+        if (_epoxyController == null) {
+            _epoxyController = epoxyController()
+        }
+
         optionalRecyclerView?.run {
-            _epoxyController = epoxyController()?.also { setController(it) }
+            _epoxyController?.let { setController(it) }
             this@SimpleController.layoutManager()?.let { layoutManager = it }
         }
-    }
-
-    override fun onUnbindView(view: View) {
-        _epoxyController?.cancelPendingModelBuild()
-        _epoxyController = null
-        super.onUnbindView(view)
     }
 
     override fun invalidate() {
@@ -135,4 +133,5 @@ abstract class SimpleController : EsController() {
     protected open fun layoutManager(): RecyclerView.LayoutManager? = null
 
     protected open fun onToolbarMenuItemClicked(item: MenuItem): Boolean = false
+
 }

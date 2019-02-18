@@ -44,7 +44,9 @@ internal class LifecycleStateListener<T>(
         super.onAny(owner, event)
         val state = owner.lifecycle.currentState
         when {
-            state.isAtLeast(Lifecycle.State.STARTED) -> { store.addStateListener(subscriber) }
+            state.isAtLeast(Lifecycle.State.RESUMED) -> {
+                store.addStateListener(subscriber)
+            }
             state == Lifecycle.State.DESTROYED -> { close() }
             else -> { store.removeStateListener(subscriber) }
         }

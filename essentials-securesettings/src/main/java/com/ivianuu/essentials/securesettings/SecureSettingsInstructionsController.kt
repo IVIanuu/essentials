@@ -97,7 +97,7 @@ class SecureSettingsInstructionsController : PrefsController() {
                 clipboardManager.text =
                         "adb shell pm grant ${activity.packageName} android.permission.WRITE_SECURE_SETTINGS"
                 toast(R.string.es_msg_secure_settings_copied_to_clipboard)
-                true
+                return@onClick true
             }
         }
     }

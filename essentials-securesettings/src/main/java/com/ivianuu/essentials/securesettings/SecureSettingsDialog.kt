@@ -41,7 +41,7 @@ class SecureSettingsKey(
 ) : ControllerKey(::SecureSettingsDialog, NavOptions().dialog())
 
 /**
- * @author Manuel Wrage (IVIanuu)
+ * Asks the user for the secure settings permission
  */
 class SecureSettingsDialog : EsDialogController() {
 
