@@ -34,7 +34,7 @@ abstract class MvRxViewModel<S>(initialState: S) : EsViewModel() {
 
     private val stateStore = StateStore(initialState).closeBy(scope)
 
-    internal val state get() = stateStore.peekState()
+    @PublishedApi internal val state get() = stateStore.peekState()
 
     protected fun withState(block: (S) -> Unit) {
         stateStore.withState(block)

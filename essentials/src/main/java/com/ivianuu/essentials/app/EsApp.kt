@@ -57,8 +57,10 @@ abstract class EsApp : Application(), InjektTrait {
     }
 
     protected open fun onCreateComponent() {
-        if (applicationInfo.flags.containsFlag(ApplicationInfo.FLAG_DEBUGGABLE)) {
-            configureInjekt { androidLogger() }
+        configureInjekt {
+            if (applicationInfo.flags.containsFlag(ApplicationInfo.FLAG_DEBUGGABLE)) {
+                androidLogger()
+            }
         }
 
         _component = applicationComponent {

@@ -23,6 +23,7 @@ import com.ivianuu.essentials.util.ext.unsafeLazy
 import com.ivianuu.injekt.InjektTrait
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.android.serviceComponent
+import com.ivianuu.injekt.modules
 import com.ivianuu.scopes.MutableScope
 import com.ivianuu.scopes.Scope
 import kotlinx.coroutines.CoroutineScope

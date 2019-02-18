@@ -24,6 +24,7 @@ import com.ivianuu.injekt.Component
 import com.ivianuu.injekt.InjektTrait
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.android.receiverComponent
+import com.ivianuu.injekt.modules
 
 /**
  * Base broadcast receiver

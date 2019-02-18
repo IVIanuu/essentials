@@ -39,6 +39,7 @@ class App : EsApp() {
 
     override fun onCreate() {
         super.onCreate()
+
         WorkManager.initialize(
             this, Configuration.Builder()
                 .setWorkerFactory(get())

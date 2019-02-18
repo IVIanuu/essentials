@@ -34,32 +34,32 @@ const val CHILD_CONTROLLER_SCOPE = "child_controller_scope"
 /**
  * Returns a [Component] with convenient configurations
  */
-fun <T : Controller> T.controllerComponent(
+inline fun <T : Controller> T.controllerComponent(
     name: String? = javaClass.simpleName + "Component",
     deferCreateEagerInstances: Boolean = false,
-    definition: ComponentDefinition? = null
+    definition: ComponentDefinition = {}
 ): Component = component(name, deferCreateEagerInstances) {
     scopeNames(CONTROLLER_SCOPE)
     (getParentControllerComponentOrNull()
         ?: getActivityComponentOrNull()
         ?: getApplicationComponentOrNull())?.let { dependencies(it) }
     addInstance(this@controllerComponent)
-    definition?.invoke(this)
+    definition.invoke(this)
 }
 
 /**
  * Returns a [Component] with convenient configurations
  */
-fun <T : Controller> T.childControllerComponent(
+inline fun <T : Controller> T.childControllerComponent(
     name: String? = javaClass.simpleName + "Component",
-    definition: ComponentDefinition? = null
+    definition: ComponentDefinition
 ): Component = component(name) {
     scopeNames(CHILD_CONTROLLER_SCOPE)
     (getParentControllerComponentOrNull()
         ?: getActivityComponentOrNull()
         ?: getApplicationComponentOrNull())?.let { dependencies(it) }
     addInstance(this@childControllerComponent)
-    definition?.invoke(this)
+    definition.invoke(this)
 }
 
 /**
