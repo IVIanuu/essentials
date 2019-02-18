@@ -30,7 +30,6 @@ import com.ivianuu.essentials.ui.simple.SimpleController
 import com.ivianuu.essentials.ui.traveler.NavOptions
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
 import com.ivianuu.essentials.ui.traveler.vertical
-import com.ivianuu.stdlibx.andTrue
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.single_line_list_item.title
 
@@ -70,7 +69,10 @@ class ListController : SimpleController() {
     }
 
     override fun onToolbarMenuItemClicked(item: MenuItem) = when (item.itemId) {
-        R.id.action_refresh -> viewModel.refreshClicked().andTrue()
+        R.id.action_refresh -> {
+            viewModel.refreshClicked()
+            true
+        }
         else -> false
     }
 }

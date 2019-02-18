@@ -52,7 +52,7 @@ object Versions {
 
     const val butterknife = "10.0.0"
 
-    const val closeable = "0.0.1-dev-1"
+    const val closeable = "0.0.1-dev-2"
     const val constraintLayout = "2.0.0-alpha3"
     const val coroutines = "1.1.0"
     const val director = "0.0.1-dev-8"
@@ -64,8 +64,8 @@ object Versions {
     const val junit = "4.12"
     const val kommon = "0.0.1-dev-1"
     const val kotlin = "1.3.21"
-    const val kPrefs = "0.0.1-dev-3"
-    const val kSettings = "0.0.1-dev-2"
+    const val kPrefs = "0.0.1-dev-4"
+    const val kSettings = "0.0.1-dev-3"
     const val liveEvent = "1e265df911"
     const val mavenGradle = "2.1"
     const val materialComponents = "1.1.0-alpha04"
