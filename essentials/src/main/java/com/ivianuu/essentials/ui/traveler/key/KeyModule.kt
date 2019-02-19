@@ -23,7 +23,7 @@ import com.ivianuu.injekt.single
 import kotlin.reflect.KClass
 
 /**
- * Modules to bind a traveler key
+ * Module to bind a traveler key
  */
 fun keyModule(
     bundle: Bundle?,

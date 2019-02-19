@@ -23,6 +23,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelStoreOwner
 import com.ivianuu.closeable.Closeable
+import com.ivianuu.statestore.Consumer
 
 private val PENDING_INVALIDATES = HashSet<Int>()
 private val HANDLER = Handler(Looper.getMainLooper(), Handler.Callback { message ->
@@ -46,7 +47,7 @@ interface MvRxView : LifecycleOwner, ViewModelStoreOwner {
         }
     }
 
-    fun <S> MvRxViewModel<S>.subscribe(subscriber: (S) -> Unit): Closeable =
-        subscribe(this@MvRxView, subscriber)
+    fun <S> MvRxViewModel<S>.subscribe(consumer: Consumer<S>): Closeable =
+        subscribe(this@MvRxView, consumer)
 
 }

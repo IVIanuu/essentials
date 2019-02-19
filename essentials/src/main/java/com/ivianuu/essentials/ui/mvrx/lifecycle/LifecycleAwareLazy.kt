@@ -19,13 +19,12 @@ package com.ivianuu.essentials.ui.mvrx.lifecycle
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import com.ivianuu.essentials.util.SimpleLifecycleObserver
-import java.io.Serializable
 
 internal class LifecycleAwareLazy<T>(
     owner: LifecycleOwner,
     private val event: Lifecycle.Event = Lifecycle.Event.ON_CREATE,
     initializer: () -> T
-) : Lazy<T>, Serializable {
+) : Lazy<T> {
 
     private object UNINITIALIZED_VALUE
 

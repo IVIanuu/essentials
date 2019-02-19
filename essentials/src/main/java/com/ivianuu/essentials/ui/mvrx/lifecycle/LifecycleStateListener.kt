@@ -23,14 +23,14 @@ import com.ivianuu.essentials.util.SimpleLifecycleObserver
 import com.ivianuu.statestore.StateStore
 
 /**
- * Attaches and detaches the [subscriber] to the [store]
+ * Attaches and detaches the [consumer] to the [store]
  * based on the lifecycle of the [owner]
  * and is also a [Closeable]
  */
 internal class LifecycleStateListener<T>(
     private val owner: LifecycleOwner,
     private val store: StateStore<T>,
-    private val subscriber: (T) -> Unit
+    private val consumer: (T) -> Unit
 ) : SimpleLifecycleObserver(), Closeable {
 
     override var isClosed = false
@@ -45,16 +45,18 @@ internal class LifecycleStateListener<T>(
         val state = owner.lifecycle.currentState
         when {
             state.isAtLeast(Lifecycle.State.RESUMED) -> {
-                store.addStateListener(subscriber)
+                store.addStateListener(consumer)
             }
             state == Lifecycle.State.DESTROYED -> { close() }
-            else -> { store.removeStateListener(subscriber) }
+            else -> {
+                store.removeStateListener(consumer)
+            }
         }
     }
 
     override fun close() {
         owner.lifecycle.removeObserver(this)
-        store.removeStateListener(subscriber)
+        store.removeStateListener(consumer)
     }
 
 }
