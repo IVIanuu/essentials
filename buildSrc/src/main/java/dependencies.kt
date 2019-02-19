@@ -60,7 +60,7 @@ object Versions {
     const val epoxyKtx = "0.0.1-dev-1"
     const val epoxyPrefs = "0.0.1-dev-2"
     const val glide = "4.8.0"
-    const val injekt = "0.0.1-dev-5"
+    const val injekt = "0.0.1-dev-6"
     const val junit = "4.12"
     const val kommon = "0.0.1-dev-1"
     const val kotlin = "1.3.21"
@@ -147,6 +147,7 @@ object Deps {
     const val injekt = "com.ivianuu.injekt:injekt:${Versions.injekt}"
     const val injektAndroid = "com.ivianuu.injekt:injekt-android:${Versions.injekt}"
     const val injektAnnotations = "com.ivianuu.injekt:injekt-annotations:${Versions.injekt}"
+    const val injektCommon = "com.ivianuu.injekt:injekt-common:${Versions.injekt}"
     const val injektCompiler = "com.ivianuu.injekt:injekt-compiler:${Versions.injekt}"
     const val injektMultiBinding =
         "com.ivianuu.injekt:injekt-multibinding:${Versions.injekt}"

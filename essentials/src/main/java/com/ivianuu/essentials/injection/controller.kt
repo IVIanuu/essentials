@@ -23,7 +23,7 @@ import com.ivianuu.director.parentController
 import com.ivianuu.injekt.Component
 import com.ivianuu.injekt.ComponentDefinition
 import com.ivianuu.injekt.InjektTrait
-import com.ivianuu.injekt.addInstance
+import com.ivianuu.injekt.common.addInstance
 import com.ivianuu.injekt.component
 import com.ivianuu.injekt.dependencies
 import com.ivianuu.injekt.scopeNames
@@ -52,7 +52,7 @@ inline fun <T : Controller> T.controllerComponent(
  */
 inline fun <T : Controller> T.childControllerComponent(
     name: String? = javaClass.simpleName + "Component",
-    definition: ComponentDefinition
+    definition: ComponentDefinition = {}
 ): Component = component(name) {
     scopeNames(CHILD_CONTROLLER_SCOPE)
     (getParentControllerComponentOrNull()

@@ -68,6 +68,7 @@ dependencies {
     api(Deps.injekt)
     api(Deps.injektAndroid)
     api(Deps.injektAnnotations)
+    api(Deps.injektCommon)
     api(Deps.injektMultiBinding)
 
     api(Deps.kommonAppCompat)
