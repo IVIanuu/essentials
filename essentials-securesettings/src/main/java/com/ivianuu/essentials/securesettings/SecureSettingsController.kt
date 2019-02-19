@@ -60,6 +60,19 @@ class SecureSettingsController : SimpleController() {
         }
 
         preference(context) {
+            key("use_pc")
+            summary(R.string.es_pref_summary_use_pc)
+            title(R.string.es_pref_title_use_pc)
+            onClick {
+                travelerRouter.navigate(
+                    SecureSettingsPcInstructionsKey(),
+                    NavOptions().handler(VerticalFadeChangeHandler())
+                )
+                return@onClick true
+            }
+        }
+
+        preference(context) {
             key("use_root")
             summary(R.string.es_pref_summary_use_root)
             title(R.string.es_pref_title_use_root)
@@ -73,19 +86,6 @@ class SecureSettingsController : SimpleController() {
                         toast(R.string.es_msg_secure_settings_no_root)
                     }
                 }
-                return@onClick true
-            }
-        }
-
-        preference(context) {
-            key("use_pc")
-            summary(R.string.es_pref_summary_use_pc)
-            title(R.string.es_pref_title_use_pc)
-            onClick {
-                travelerRouter.navigate(
-                    SecureSettingsPcInstructionsKey(),
-                    NavOptions().handler(VerticalFadeChangeHandler())
-                )
                 return@onClick true
             }
         }
