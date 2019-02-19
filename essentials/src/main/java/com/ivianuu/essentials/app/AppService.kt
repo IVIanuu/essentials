@@ -55,6 +55,9 @@ inline fun <reified T : AppService> Module.bindAppService(name: String? = null) 
     bindIntoClassMap<T>(APP_SERVICES, implementationName = name)
 }
 
-val esAppServicesModule = module("EsAppServicesModule") {
+val appServiceInjectionModule = module("AppServiceInjectionModule") {
     mapBinding(APP_SERVICES)
+}
+
+val esAppServicesModule = module("EsAppServicesModule") {
 }
