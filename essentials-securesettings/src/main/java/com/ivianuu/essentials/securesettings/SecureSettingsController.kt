@@ -16,17 +16,19 @@
 
 package com.ivianuu.essentials.securesettings
 
-import android.app.Dialog
-import android.os.Bundle
 import android.view.View
 import com.ivianuu.director.activity
+import com.ivianuu.director.context
+import com.ivianuu.epoxyktx.epoxyController
+import com.ivianuu.epoxyprefs.preference
+import com.ivianuu.epoxyprefs.summary
+import com.ivianuu.epoxyprefs.title
 import com.ivianuu.essentials.shell.Shell
-import com.ivianuu.essentials.ui.base.EsDialogController
+import com.ivianuu.essentials.ui.common.VerticalFadeChangeHandler
+import com.ivianuu.essentials.ui.simple.SimpleController
 import com.ivianuu.essentials.ui.traveler.NavOptions
-import com.ivianuu.essentials.ui.traveler.dialog
+import com.ivianuu.essentials.ui.traveler.handler
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
-import com.ivianuu.essentials.ui.traveler.vertical
-import com.ivianuu.essentials.util.ext.dialog
 import com.ivianuu.essentials.util.ext.goBackWithResult
 import com.ivianuu.essentials.util.ext.sendResult
 import com.ivianuu.essentials.util.ext.toast
@@ -38,39 +40,60 @@ import kotlinx.coroutines.launch
 @Parcelize
 class SecureSettingsKey(
     val resultCode: Int
-) : ControllerKey(::SecureSettingsDialog, NavOptions().dialog())
+) : ControllerKey(::SecureSettingsController)
 
 /**
  * Asks the user for the secure settings permission
  */
-class SecureSettingsDialog : EsDialogController() {
+class SecureSettingsController : SimpleController() {
+
+    override val toolbarTitleRes: Int
+        get() = R.string.es_screen_label_secure_settings
 
     private val key by inject<SecureSettingsKey>()
     private val shell by inject<Shell>()
 
-    override fun onBuildDialog(savedViewState: Bundle?): Dialog = dialog {
-        title(R.string.es_dialog_title_secure_settings)
-        message(R.string.es_dialog_message_secure_settings)
-        positiveButton(R.string.es_action_use_root) {
-            coroutineScope.launch {
-                try {
-                    shell.run("pm grant ${activity.packageName} android.permission.WRITE_SECURE_SETTINGS")
-                    handlePermissionResult(activity.canWriteSecureSettings())
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                    toast(R.string.es_msg_secure_settings_no_root)
+    override fun epoxyController() = epoxyController {
+        preference(context) {
+            key("secure_settings_header")
+            summary(R.string.es_pref_summary_secure_settings_header)
+        }
+
+        preference(context) {
+            key("use_root")
+            summary(R.string.es_pref_summary_use_root)
+            title(R.string.es_pref_title_use_root)
+            onClick {
+                coroutineScope.launch {
+                    try {
+                        shell.run("pm grant ${activity.packageName} android.permission.WRITE_SECURE_SETTINGS")
+                        handlePermissionResult(activity.canWriteSecureSettings())
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                        toast(R.string.es_msg_secure_settings_no_root)
+                    }
                 }
+                return@onClick true
             }
         }
-        negativeButton(R.string.es_action_pc_instructions) {
-            travelerRouter.navigate(SecureSettingsInstructionsKey(), NavOptions().vertical())
+
+        preference(context) {
+            key("use_pc")
+            summary(R.string.es_pref_summary_use_pc)
+            title(R.string.es_pref_title_use_pc)
+            onClick {
+                travelerRouter.navigate(
+                    SecureSettingsPcInstructionsKey(),
+                    NavOptions().handler(VerticalFadeChangeHandler())
+                )
+                return@onClick true
+            }
         }
-        noAutoDismiss()
     }
 
     override fun onAttach(view: View) {
         super.onAttach(view)
-        if (activity.canWriteSecureSettings()) {
+        if (canWriteSecureSettings()) {
             handlePermissionResult(true)
         }
     }

@@ -18,7 +18,6 @@ package com.ivianuu.essentials.hidenavbar
 
 import android.content.SharedPreferences
 import android.os.Bundle
-import com.ivianuu.director.activity
 import com.ivianuu.director.scopes.destroy
 import com.ivianuu.epoxyktx.epoxyController
 import com.ivianuu.epoxyprefs.entries
@@ -81,7 +80,7 @@ class NavBarSettingsController : PrefsController() {
                 sharedPreferences(navBarSharedPrefs)
                 title(R.string.es_pref_title_manage_nav_bar)
                 onChange<Boolean> { _, newValue ->
-                    if (!newValue || activity.canWriteSecureSettings()) {
+                    if (!newValue || canWriteSecureSettings()) {
                         true
                     } else if (newValue) {
                         travelerRouter.navigate(SecureSettingsKey(RESULT_CODE_MAIN_SWITCH))
@@ -103,7 +102,7 @@ class NavBarSettingsController : PrefsController() {
                 title(R.string.es_pref_title_nav_bar_hidden)
                 enabled(mainSwitchEnabled)
                 onChange<Boolean> { _, newValue ->
-                    if (activity.canWriteSecureSettings() || !newValue) {
+                    if (canWriteSecureSettings() || !newValue) {
                         true
                     } else if (newValue) {
                         travelerRouter.navigate(SecureSettingsKey(RESULT_CODE_NAV_BAR_HIDDEN))

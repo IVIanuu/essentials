@@ -17,11 +17,19 @@
 
 package com.ivianuu.essentials.sample.ui
 
+import android.os.Bundle
 import com.ivianuu.essentials.sample.ui.counter.CounterKey
+import com.ivianuu.essentials.securesettings.SecureSettingsKey
 import com.ivianuu.essentials.ui.base.EsActivity
+import com.ivianuu.traveler.navigate
 
 class MainActivity : EsActivity() {
 
     override val startKey: Any? get() = CounterKey(1)
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        travelerRouter.navigate(SecureSettingsKey(1))
+    }
 
 }
