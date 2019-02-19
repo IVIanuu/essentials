@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-import org.jetbrains.kotlin.gradle.internal.AndroidExtensionsExtension
-
 plugins {
     id("com.android.application")
     id("kotlin-android")
@@ -40,6 +38,7 @@ dependencies {
     implementation(project(":essentials"))
     implementation(project(":essentials-apps"))
     implementation(project(":essentials-apps-glide"))
+    implementation(project(":essentials-apps-ui"))
     implementation(project(":essentials-hidenavbar"))
     implementation(project(":essentials-shell"))
     implementation(project(":essentials-picker"))

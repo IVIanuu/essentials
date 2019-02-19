@@ -18,6 +18,7 @@ include(
     ":essentials",
     ":essentials-apps",
     ":essentials-apps-glide",
+    ":essentials-apps-ui",
     ":essentials-compiler",
     ":essentials-hidenavbar",
     ":essentials-picker",

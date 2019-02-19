@@ -16,6 +16,7 @@
 
 plugins {
     id("com.android.library")
+    id("com.jakewharton.butterknife")
     id("kotlin-android")
     id("kotlin-android-extensions")
     id("kotlin-kapt")
@@ -28,5 +29,7 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/mv
 
 dependencies {
     api(project(":essentials"))
+    api(project(":essentials-apps"))
+    api(project(":essentials-apps-glide"))
     kapt(project(":essentials-compiler"))
 }
