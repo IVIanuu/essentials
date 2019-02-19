@@ -16,12 +16,12 @@
 
 package com.ivianuu.essentials.app
 
+import com.ivianuu.essentials.injection.bindIntoClassMap
 import com.ivianuu.essentials.util.asMainCoroutineScope
 import com.ivianuu.injekt.BindingContext
 import com.ivianuu.injekt.Definition
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.module
-import com.ivianuu.injekt.multibinding.bindIntoMap
 import com.ivianuu.injekt.multibinding.mapBinding
 import com.ivianuu.injekt.single
 import com.ivianuu.scopes.MutableScope
@@ -49,10 +49,10 @@ inline fun <reified T : AppService> Module.appService(
     override: Boolean = false,
     noinline definition: Definition<T>
 ): BindingContext<T> =
-    single(name, null, override, false, definition) bindIntoMap (APP_SERVICES to T::class)
+    single(name, null, override, false, definition) bindIntoClassMap APP_SERVICES
 
 inline fun <reified T : AppService> Module.bindAppService(name: String? = null) {
-    bindIntoMap<T>(APP_SERVICES, T::class, implementationType = T::class, implementationName = name)
+    bindIntoClassMap<T>(APP_SERVICES, implementationName = name)
 }
 
 val esAppServicesModule = module("EsAppServicesModule") {

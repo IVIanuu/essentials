@@ -19,6 +19,7 @@ package com.ivianuu.essentials.app
 import android.app.Application
 import android.content.pm.ApplicationInfo
 import com.ivianuu.essentials.injection.esModule
+import com.ivianuu.essentials.injection.injectProviderClassMap
 import com.ivianuu.essentials.util.ext.containsFlag
 import com.ivianuu.injekt.Component
 import com.ivianuu.injekt.InjektTrait
@@ -27,7 +28,6 @@ import com.ivianuu.injekt.android.androidLogger
 import com.ivianuu.injekt.android.applicationComponent
 import com.ivianuu.injekt.configureInjekt
 import com.ivianuu.injekt.modules
-import com.ivianuu.injekt.multibinding.injectProviderMap
 import kotlin.reflect.KClass
 
 /**
@@ -44,10 +44,10 @@ abstract class EsApp : Application(), InjektTrait {
     private lateinit var _component: Component
     private var componentCreated = false
 
-    private val appInitializers by injectProviderMap<KClass<out AppInitializer>, AppInitializer>(
-        APP_INITIALIZERS
-    )
-    private val appServices by injectProviderMap<KClass<out AppService>, AppService>(APP_SERVICES)
+    private val appInitializers
+            by injectProviderClassMap<AppInitializer>(APP_INITIALIZERS)
+    private val appServices
+            by injectProviderClassMap<AppService>(APP_SERVICES)
 
     override fun onCreate() {
         super.onCreate()

@@ -29,7 +29,7 @@ abstract class EsViewModel : ViewModel() {
     private val clearedListeners = mutableListOf<(() -> Unit)>()
 
     override fun onCleared() {
-        clearedListeners.forEach { it() }
+        clearedListeners.toList().forEach { it() }
         super.onCleared()
     }
 
