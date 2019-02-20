@@ -106,7 +106,6 @@ dependencies {
     api(Deps.scopes)
     api(Deps.scopesAndroid)
     api(Deps.scopesAndroidLifecycle)
-    api(Deps.scopesLiveData)
     api(Deps.scopesCommon)
     api(Deps.scopesCoroutines)
     api(Deps.scopesRx)

@@ -31,7 +31,7 @@ object Build {
 object Publishing {
     const val groupId = "com.ivianuu.essentials"
     const val vcsUrl = "https://github.com/IVIanuu/essentials"
-    const val version = "${Build.versionName}-dev-21"
+    const val version = "${Build.versionName}-dev-22"
 }
 
 object Versions {
@@ -55,7 +55,7 @@ object Versions {
     const val closeable = "0.0.1-dev-2"
     const val constraintLayout = "2.0.0-alpha3"
     const val coroutines = "1.1.0"
-    const val director = "0.0.1-dev-9"
+    const val director = "0.0.1-dev-10"
     const val epoxy = "3.0.0"
     const val epoxyKtx = "0.0.1-dev-1"
     const val epoxyPrefs = "0.0.1-dev-2"
@@ -76,7 +76,7 @@ object Versions {
     const val rxJava = "2.2.6"
     const val rxJavaKtx = "0.0.1-dev-1"
     const val rxKotlin = "2.3.0"
-    const val scopes = "0.0.1-dev-2"
+    const val scopes = "0.0.1-dev-3"
     const val superUser = "1.0.0.+"
     const val stateStore = "0.0.1-dev-2"
     const val stdlibx = "0.0.1-dev-4"
@@ -212,8 +212,6 @@ object Deps {
         "com.ivianuu.scopes:scopes-android-lifecycle:${Versions.scopes}"
     const val scopesCommon = "com.ivianuu.scopes:scopes-common:${Versions.scopes}"
     const val scopesCoroutines = "com.ivianuu.scopes:scopes-coroutines:${Versions.scopes}"
-    const val scopesLiveData =
-        "com.ivianuu.scopes:scopes-livedata:${Versions.scopes}"
     const val scopesRx = "com.ivianuu.scopes:scopes-rx:${Versions.scopes}"
 
     const val stateStore = "com.ivianuu.statestore:statestore:${Versions.stateStore}"
