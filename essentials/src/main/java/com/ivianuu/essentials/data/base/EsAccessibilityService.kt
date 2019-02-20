@@ -18,7 +18,6 @@ package com.ivianuu.essentials.data.base
 
 import android.accessibilityservice.AccessibilityService
 import android.view.accessibility.AccessibilityEvent
-import com.ivianuu.essentials.util.asMainCoroutineScope
 import com.ivianuu.essentials.util.ext.unsafeLazy
 import com.ivianuu.injekt.InjektTrait
 import com.ivianuu.injekt.Module
@@ -26,12 +25,12 @@ import com.ivianuu.injekt.android.serviceComponent
 import com.ivianuu.injekt.modules
 import com.ivianuu.scopes.MutableScope
 import com.ivianuu.scopes.Scope
-import kotlinx.coroutines.CoroutineScope
+import com.ivianuu.scopes.ScopeOwner
 
 /**
  * Base accessibility service
  */
-abstract class EsAccessibilityService : AccessibilityService(), InjektTrait {
+abstract class EsAccessibilityService : AccessibilityService(), InjektTrait, ScopeOwner {
 
     override val component by unsafeLazy {
         serviceComponent {
@@ -39,10 +38,8 @@ abstract class EsAccessibilityService : AccessibilityService(), InjektTrait {
         }
     }
 
-    val scope: Scope get() = _scope
+    override val scope: Scope get() = _scope
     private val _scope = MutableScope()
-
-    val coroutineScope: CoroutineScope = scope.asMainCoroutineScope()
 
     override fun onDestroy() {
         _scope.close()

@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.app
 
 import com.ivianuu.essentials.injection.bindIntoClassMap
-import com.ivianuu.essentials.util.asMainCoroutineScope
 import com.ivianuu.injekt.BindingContext
 import com.ivianuu.injekt.Definition
 import com.ivianuu.injekt.Module
@@ -26,18 +25,17 @@ import com.ivianuu.injekt.multibinding.mapBinding
 import com.ivianuu.injekt.single
 import com.ivianuu.scopes.MutableScope
 import com.ivianuu.scopes.Scope
+import com.ivianuu.scopes.ScopeOwner
 
 const val APP_SERVICES = "appServices"
 
 /**
  * Will be started on app start up and lives as long as the app lives
  */
-abstract class AppService {
+abstract class AppService : ScopeOwner {
 
-    val scope: Scope get() = _scope
+    override val scope: Scope get() = _scope
     private val _scope = MutableScope()
-
-    val coroutineScope = scope.asMainCoroutineScope()
 
     open fun start() {
     }

@@ -34,21 +34,22 @@ import com.ivianuu.essentials.ui.mvrx.injekt.InjektMvRxView
 import com.ivianuu.essentials.ui.traveler.key.keyModule
 import com.ivianuu.essentials.util.ContextAware
 import com.ivianuu.essentials.util.InjektTraitContextWrapper
-import com.ivianuu.essentials.util.asMainCoroutineScope
+import com.ivianuu.essentials.util.coroutineScope
 import com.ivianuu.essentials.util.ext.unsafeLazy
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.inject
 import com.ivianuu.injekt.modules
+import com.ivianuu.scopes.Scope
+import com.ivianuu.scopes.ScopeOwner
 import com.ivianuu.traveler.Router
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.*
-import kotlinx.coroutines.CoroutineScope
 
 /**
  * Base controller
  */
 abstract class EsController : Controller(), ContextAware,
-    InjektMvRxView, LayoutContainer {
+    InjektMvRxView, LayoutContainer, ScopeOwner {
 
     override val component by unsafeLazy {
         controllerComponent {
@@ -57,7 +58,8 @@ abstract class EsController : Controller(), ContextAware,
         }
     }
 
-    val travelerRouter by inject<Router>()
+    override val scope: Scope
+        get() = destroy
 
     override val containerView: View?
         get() = view
@@ -65,11 +67,10 @@ abstract class EsController : Controller(), ContextAware,
     override val providedContext: Context
         get() = activity
 
-    val coroutineScope = destroy.asMainCoroutineScope()
+    val travelerRouter by inject<Router>()
 
-    val viewCoroutineScope
-        get() = _viewCoroutineScope ?: error("view not attached")
-    private var _viewCoroutineScope: CoroutineScope? = null
+    val coroutineScope get() = destroy.coroutineScope
+    val viewCoroutineScope get() = unbindView.coroutineScope
 
     protected open val layoutRes get() = -1
 
@@ -84,18 +85,12 @@ abstract class EsController : Controller(), ContextAware,
         return injectorInflater.inflate(layoutRes, container, false)
     }
 
-    override fun onBindView(view: View, savedViewState: Bundle?) {
-        super.onBindView(view, savedViewState)
-        _viewCoroutineScope = unbindView.asMainCoroutineScope()
-    }
-
     override fun onAttach(view: View) {
         super.onAttach(view)
         invalidate()
     }
 
     override fun onUnbindView(view: View) {
-        _viewCoroutineScope = null
         clearFindViewByIdCache()
         super.onUnbindView(view)
     }

@@ -18,10 +18,14 @@ package com.ivianuu.essentials.util
 
 import com.ivianuu.essentials.util.ext.coroutinesMain
 import com.ivianuu.scopes.Scope
+import com.ivianuu.scopes.ScopeOwner
 import com.ivianuu.scopes.coroutines.cancelBy
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlin.coroutines.CoroutineContext
+
+val Scope.coroutineScope by scoped { it.asMainCoroutineScope() }
+val ScopeOwner.coroutineScope get() = scope.coroutineScope
 
 private class ScopeCoroutineScopeImpl(
     private val scope: Scope,

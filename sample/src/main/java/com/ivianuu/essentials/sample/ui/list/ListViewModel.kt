@@ -18,6 +18,7 @@ package com.ivianuu.essentials.sample.ui.list
 
 import com.ivianuu.essentials.injection.CONTROLLER_SCOPE
 import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
+import com.ivianuu.essentials.util.coroutineScope
 import com.ivianuu.essentials.util.ext.coroutinesDefault
 import com.ivianuu.injekt.annotations.Factory
 import com.ivianuu.timberktx.d

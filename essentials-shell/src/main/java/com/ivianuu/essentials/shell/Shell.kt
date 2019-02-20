@@ -26,17 +26,17 @@ import kotlinx.coroutines.withContext
 @Factory
 class Shell {
 
-    suspend fun run(command: String): List<String> = run(listOf(command))
-
-    suspend fun run(commands: Collection<String>): List<String> =
-        run(commands.toTypedArray())
-
-    suspend fun run(commands: Array<String>): List<String> = withContext(coroutinesIo) {
+    suspend fun run(vararg commands: String): List<String> = withContext(coroutinesIo) {
         eu.chainfire.libsuperuser.Shell.SU.run(commands).toList()
     }
 
-    suspend fun available(): Boolean = withContext(coroutinesIo) {
+    suspend fun isAvailable(): Boolean = withContext(coroutinesIo) {
         eu.chainfire.libsuperuser.Shell.SU.available()
     }
 
 }
+
+suspend fun Shell.run(command: String): List<String> = run(command)
+
+suspend fun Shell.run(commands: Iterable<String>): List<String> =
+    run(*commands.toList().toTypedArray())

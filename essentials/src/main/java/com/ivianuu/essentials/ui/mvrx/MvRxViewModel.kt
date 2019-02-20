@@ -20,7 +20,6 @@ import androidx.lifecycle.LifecycleOwner
 import com.ivianuu.closeable.Closeable
 import com.ivianuu.closeable.rx.asCloseable
 import com.ivianuu.essentials.ui.common.EsViewModel
-import com.ivianuu.essentials.ui.common.scope
 import com.ivianuu.essentials.ui.mvrx.lifecycle.LifecycleStateListener
 import com.ivianuu.essentials.util.ext.closeBy
 import com.ivianuu.statestore.Consumer

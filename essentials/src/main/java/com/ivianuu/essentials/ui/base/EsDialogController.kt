@@ -20,30 +20,33 @@ package com.ivianuu.essentials.ui.base
 import android.content.Context
 import android.view.View
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelStore
-import androidx.lifecycle.ViewModelStoreOwner
 import com.ivianuu.director.activity
 import com.ivianuu.director.androidx.lifecycle.lifecycleOwner
 import com.ivianuu.director.androidx.lifecycle.viewModelStoreOwner
 import com.ivianuu.director.dialog.DialogController
 import com.ivianuu.director.scopes.destroy
+import com.ivianuu.director.scopes.unbindView
 import com.ivianuu.essentials.injection.controllerComponent
 import com.ivianuu.essentials.ui.mvrx.injekt.InjektMvRxView
 import com.ivianuu.essentials.ui.traveler.key.keyModule
 import com.ivianuu.essentials.util.ContextAware
-import com.ivianuu.essentials.util.asMainCoroutineScope
+import com.ivianuu.essentials.util.coroutineScope
 import com.ivianuu.essentials.util.ext.unsafeLazy
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.inject
 import com.ivianuu.injekt.modules
+import com.ivianuu.scopes.Scope
+import com.ivianuu.scopes.ScopeOwner
 import com.ivianuu.traveler.Router
+import kotlinx.android.extensions.LayoutContainer
+import kotlinx.android.synthetic.*
 
 /**
  * Base dialog controller
  */
 abstract class EsDialogController : DialogController(),
-    ContextAware, InjektMvRxView, LifecycleOwner, ViewModelStoreOwner {
+    ContextAware, InjektMvRxView, LayoutContainer, ScopeOwner {
 
     override val component by unsafeLazy {
         controllerComponent {
@@ -52,16 +55,28 @@ abstract class EsDialogController : DialogController(),
         }
     }
 
-    val travelerRouter by inject<Router>()
+    override val scope: Scope
+        get() = destroy
+
+    override val containerView: View?
+        get() = view
 
     override val providedContext: Context
         get() = activity
 
-    val coroutineScope = destroy.asMainCoroutineScope()
+    val coroutineScope get() = destroy.coroutineScope
+    val viewCoroutineScope get() = unbindView.coroutineScope
+
+    val travelerRouter by inject<Router>()
 
     override fun onAttach(view: View) {
         super.onAttach(view)
         invalidate()
+    }
+
+    override fun onUnbindView(view: View) {
+        clearFindViewByIdCache()
+        super.onUnbindView(view)
     }
 
     override fun invalidate() {

@@ -28,7 +28,7 @@ import kotlinx.coroutines.withContext
 @Factory
 class AppStore(private val packageManager: PackageManager) {
 
-    suspend fun installedApps(): List<AppInfo> = withContext(coroutinesIo) {
+    suspend fun getInstalledApps(): List<AppInfo> = withContext(coroutinesIo) {
         packageManager.getInstalledApplications(0)
             .asSequence()
             .map {
@@ -42,7 +42,7 @@ class AppStore(private val packageManager: PackageManager) {
             .toList()
     }
 
-    suspend fun launchableApps(): List<AppInfo> = withContext(coroutinesIo) {
+    suspend fun getLaunchableApps(): List<AppInfo> = withContext(coroutinesIo) {
         val intent = Intent(Intent.ACTION_MAIN).apply {
             addCategory(Intent.CATEGORY_LAUNCHER)
         }
@@ -59,7 +59,7 @@ class AppStore(private val packageManager: PackageManager) {
             .toList()
     }
 
-    suspend fun appInfo(packageName: String): AppInfo = withContext(coroutinesIo) {
+    suspend fun getAppInfo(packageName: String): AppInfo = withContext(coroutinesIo) {
         AppInfo(
             packageName,
             packageManager.getApplicationInfo(packageName, 0).loadLabel(packageManager)

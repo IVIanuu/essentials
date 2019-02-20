@@ -20,7 +20,7 @@ import com.ivianuu.scopes.AbstractScope
 import com.ivianuu.scopes.Scope
 import com.ivianuu.scopes.cache.ScopeStore
 
-val EsViewModel.scope: Scope get() = scopeCache.get(this)
+val EsViewModel.viewModelScope: Scope get() = scopeCache.get(this)
 
 private val scopeCache = ScopeStore<EsViewModel> { ViewModelScope(it) }
 

@@ -33,6 +33,7 @@ import com.ivianuu.essentials.ui.mvrx.epoxy.simpleEpoxyController
 import com.ivianuu.essentials.ui.mvrx.injekt.viewModel
 import com.ivianuu.essentials.ui.simple.SimpleController
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
+import com.ivianuu.essentials.util.coroutineScope
 import com.ivianuu.essentials.util.ext.goBackWithResult
 import com.ivianuu.injekt.annotations.Factory
 import com.ivianuu.traveler.Router
@@ -110,9 +111,9 @@ class AppPickerViewModel(
     init {
         coroutineScope.launch {
             val apps = if (key.launchableOnly) {
-                appStore.launchableApps()
+                appStore.getLaunchableApps()
             } else {
-                appStore.installedApps()
+                appStore.getInstalledApps()
             }
             setState { copy(apps = apps, loading = false) }
         }

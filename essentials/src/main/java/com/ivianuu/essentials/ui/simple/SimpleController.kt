@@ -114,7 +114,6 @@ abstract class SimpleController : EsController() {
                 .forEach { it.setColorFilter(iconColor, PorterDuff.Mode.SRC_IN) }
         }
 
-
         optionalRecyclerView?.run {
             _epoxyController = epoxyController()?.also { setController(it) }
             this@SimpleController.layoutManager()?.let { layoutManager = it }

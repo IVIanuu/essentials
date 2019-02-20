@@ -27,12 +27,13 @@ import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.common.RouterActivity
 import com.ivianuu.essentials.ui.mvrx.injekt.InjektMvRxView
 import com.ivianuu.essentials.ui.traveler.key.keyModule
-import com.ivianuu.essentials.util.asMainCoroutineScope
 import com.ivianuu.essentials.util.ext.unsafeLazy
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.android.activityComponent
 import com.ivianuu.injekt.inject
 import com.ivianuu.injekt.modules
+import com.ivianuu.scopes.Scope
+import com.ivianuu.scopes.ScopeOwner
 import com.ivianuu.scopes.android.lifecycle.onDestroy
 import com.ivianuu.traveler.Navigator
 import com.ivianuu.traveler.android.AppNavigator
@@ -45,7 +46,7 @@ import com.ivianuu.traveler.setRoot
  * Base activity
  */
 abstract class EsActivity : AppCompatActivity(),
-    InjektMvRxView, RouterActivity {
+    InjektMvRxView, RouterActivity, ScopeOwner {
 
     override val component by unsafeLazy {
         activityComponent {
@@ -54,9 +55,10 @@ abstract class EsActivity : AppCompatActivity(),
         }
     }
 
-    val travelerRouter by inject<com.ivianuu.traveler.Router>()
+    override val scope: Scope
+        get() = onDestroy
 
-    val coroutineScope = onDestroy.asMainCoroutineScope()
+    val travelerRouter by inject<com.ivianuu.traveler.Router>()
 
     protected open val layoutRes get() = R.layout.es_activity_default
 

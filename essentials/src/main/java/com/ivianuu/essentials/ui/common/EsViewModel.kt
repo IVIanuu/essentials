@@ -17,14 +17,16 @@
 package com.ivianuu.essentials.ui.common
 
 import androidx.lifecycle.ViewModel
-import com.ivianuu.essentials.util.asMainCoroutineScope
+import com.ivianuu.scopes.Scope
+import com.ivianuu.scopes.ScopeOwner
 
 /**
  * A [ViewModel] which auto disposes itself
  */
-abstract class EsViewModel : ViewModel() {
+abstract class EsViewModel : ViewModel(), ScopeOwner {
 
-    val coroutineScope by lazy { scope.asMainCoroutineScope() }
+    override val scope: Scope
+        get() = viewModelScope
 
     private val clearedListeners = mutableListOf<(() -> Unit)>()
 

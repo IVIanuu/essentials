@@ -23,13 +23,14 @@ import com.airbnb.epoxy.EpoxyModelWithHolder
 import com.ivianuu.essentials.util.ContextAware
 import com.ivianuu.scopes.ReusableScope
 import com.ivianuu.scopes.Scope
+import com.ivianuu.scopes.ScopeOwner
 import kotlinx.android.extensions.LayoutContainer
 
 /**
  * Base epoxy model with holder
  */
 abstract class EsEpoxyModel<H : EsEpoxyHolder> : EpoxyModelWithHolder<H>(), ContextAware,
-    LayoutContainer {
+    LayoutContainer, ScopeOwner {
 
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var onClick: ((View) -> Unit)? = null
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var onLongClick: ((View) -> Boolean)? = null
@@ -48,7 +49,7 @@ abstract class EsEpoxyModel<H : EsEpoxyHolder> : EpoxyModelWithHolder<H>(), Cont
 
     private var _boundHolder: H? = null
 
-    val scope: Scope
+    override val scope: Scope
         get() {
             if (_scope == null) _scope = ReusableScope()
             return _scope!!

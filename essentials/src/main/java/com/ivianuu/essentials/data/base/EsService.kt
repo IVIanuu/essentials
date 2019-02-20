@@ -19,7 +19,6 @@ package com.ivianuu.essentials.data.base
 import android.app.Service
 import android.content.Intent
 import android.os.IBinder
-import com.ivianuu.essentials.util.asMainCoroutineScope
 import com.ivianuu.essentials.util.ext.unsafeLazy
 import com.ivianuu.injekt.InjektTrait
 import com.ivianuu.injekt.Module
@@ -27,11 +26,12 @@ import com.ivianuu.injekt.android.serviceComponent
 import com.ivianuu.injekt.modules
 import com.ivianuu.scopes.MutableScope
 import com.ivianuu.scopes.Scope
+import com.ivianuu.scopes.ScopeOwner
 
 /**
  * Base service
  */
-abstract class EsService : Service(), InjektTrait {
+abstract class EsService : Service(), InjektTrait, ScopeOwner {
 
     override val component by unsafeLazy {
         serviceComponent {
@@ -39,10 +39,8 @@ abstract class EsService : Service(), InjektTrait {
         }
     }
 
-    val scope: Scope get() = _scope
+    override val scope: Scope get() = _scope
     private val _scope = MutableScope()
-
-    val coroutineScope = scope.asMainCoroutineScope()
 
     override fun onDestroy() {
         _scope.close()
