@@ -16,26 +16,57 @@
 
 package com.ivianuu.essentials.util
 
+import com.ivianuu.scopes.CloseListener
 import com.ivianuu.scopes.Scope
-import kotlin.properties.ReadOnlyProperty
+import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 
-class ScopedProperty<T>(private val initializer: (Scope) -> T) : ReadOnlyProperty<Scope, T> {
+class ScopedProperty<T>(private val initializer: (Scope) -> T) : ReadWriteProperty<Scope, T> {
+
+    private val valuesByScope =
+        mutableMapOf<Scope, Any?>()
+    private val listenersByScope =
+        mutableMapOf<Scope, RefScopeListener>()
+
+    override fun getValue(thisRef: Scope, property: KProperty<*>): T {
+        require(!thisRef.isClosed) { "Cannot access field of a closed scope" }
+        var value = valuesByScope.getOrElse(thisRef) { UNINITIALIZED }
+
+        if (value === UNINITIALIZED) {
+            value = initializer(thisRef)
+            valuesByScope[thisRef] = value
+        }
+
+        ensureListenerAdded(thisRef)
+
+        return value as T
+    }
+
+    override fun setValue(thisRef: Scope, property: KProperty<*>, value: T) {
+        require(!thisRef.isClosed) { "Cannot access field of a closed scope" }
+        valuesByScope[thisRef] = value
+        ensureListenerAdded(thisRef)
+    }
+
+    private fun ensureListenerAdded(scope: Scope) {
+        if (!listenersByScope.contains(scope)) {
+            listenersByScope[scope] = RefScopeListener(scope)
+        }
+    }
 
     private object UNINITIALIZED
 
-    private var _value: Any? = UNINITIALIZED
+    private inner class RefScopeListener(private val scope: Scope) : CloseListener {
 
-    override fun getValue(thisRef: Scope, property: KProperty<*>): T {
-        require(!thisRef.isClosed) { "Cannot access field of a closed viewModelScope" }
-        if (_value === UNINITIALIZED) {
-            _value = initializer(thisRef)
-            thisRef.addListener { _value = UNINITIALIZED }
+        init {
+            scope.addListener(this)
         }
 
-        return _value as T
+        override fun invoke() {
+            valuesByScope.remove(scope)
+            listenersByScope.remove(scope)
+        }
     }
-
 }
 
 fun <T> scoped(initializer: (Scope) -> T): ScopedProperty<T> = ScopedProperty(initializer)
