@@ -21,23 +21,18 @@ import android.content.Context
 import android.view.View
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelStore
-import com.ivianuu.director.activity
 import com.ivianuu.director.androidx.lifecycle.lifecycleOwner
 import com.ivianuu.director.androidx.lifecycle.viewModelStoreOwner
+import com.ivianuu.director.context
 import com.ivianuu.director.dialog.DialogController
-import com.ivianuu.director.scopes.destroy
-import com.ivianuu.director.scopes.unbindView
 import com.ivianuu.essentials.injection.controllerComponent
 import com.ivianuu.essentials.ui.mvrx.injekt.InjektMvRxView
 import com.ivianuu.essentials.ui.traveler.key.keyModule
 import com.ivianuu.essentials.util.ContextAware
-import com.ivianuu.essentials.util.coroutineScope
 import com.ivianuu.essentials.util.ext.unsafeLazy
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.inject
 import com.ivianuu.injekt.modules
-import com.ivianuu.scopes.Scope
-import com.ivianuu.scopes.ScopeOwner
 import com.ivianuu.traveler.Router
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.*
@@ -46,7 +41,7 @@ import kotlinx.android.synthetic.*
  * Base dialog controller
  */
 abstract class EsDialogController : DialogController(),
-    ContextAware, InjektMvRxView, LayoutContainer, ScopeOwner {
+    ContextAware, InjektMvRxView, LayoutContainer {
 
     override val component by unsafeLazy {
         controllerComponent {
@@ -55,17 +50,11 @@ abstract class EsDialogController : DialogController(),
         }
     }
 
-    override val scope: Scope
-        get() = destroy
-
     override val containerView: View?
         get() = view
 
     override val providedContext: Context
-        get() = activity
-
-    val coroutineScope get() = destroy.coroutineScope
-    val viewCoroutineScope get() = unbindView.coroutineScope
+        get() = context
 
     val travelerRouter by inject<Router>()
 

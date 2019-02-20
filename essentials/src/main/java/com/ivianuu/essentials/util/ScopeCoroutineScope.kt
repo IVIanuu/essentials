@@ -24,41 +24,19 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlin.coroutines.CoroutineContext
 
-val Scope.coroutineScope by scoped { it.asMainCoroutineScope() }
-val ScopeOwner.coroutineScope get() = scope.coroutineScope
+private const val KEY_COROUTINE_SCOPE = "coroutineScope"
 
-private class ScopeCoroutineScopeImpl(
-    private val scope: Scope,
-    private val srcContext: CoroutineContext?
-) : CoroutineScope {
+val Scope.coroutineScope: CoroutineScope
+    get() = properties.getOrSet(KEY_COROUTINE_SCOPE) {
+        ScopeCoroutineScope(this)
+    }
+val ScopeOwner.coroutineScope: CoroutineScope get() = scope.coroutineScope
+
+private class ScopeCoroutineScope(scope: Scope) : CoroutineScope {
 
     private val job = Job().cancelBy(scope)
 
     override val coroutineContext: CoroutineContext
-        get() = if (srcContext != null) {
-            srcContext + job
-        } else {
-            job
-        }
+        get() = job + coroutinesMain
 
 }
-
-fun ScopeCoroutineScope(
-    scope: Scope,
-    coroutineContext: CoroutineContext? = null
-): CoroutineScope = ScopeCoroutineScopeImpl(scope, coroutineContext)
-
-fun MainScopeCoroutineScope(
-    scope: Scope,
-    coroutineContext: CoroutineContext? = null
-): CoroutineScope = if (coroutineContext != null) {
-    ScopeCoroutineScope(scope, coroutineContext + coroutinesMain)
-} else {
-    ScopeCoroutineScope(scope, coroutinesMain)
-}
-
-fun Scope.asCoroutineScope(coroutineContext: CoroutineContext? = null): CoroutineScope =
-    ScopeCoroutineScope(this, coroutineContext)
-
-fun Scope.asMainCoroutineScope(coroutineContext: CoroutineContext? = null): CoroutineScope =
-    MainScopeCoroutineScope(this, coroutineContext)
