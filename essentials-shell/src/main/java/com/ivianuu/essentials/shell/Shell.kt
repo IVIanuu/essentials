@@ -18,6 +18,7 @@ package com.ivianuu.essentials.shell
 
 import com.ivianuu.essentials.util.ext.coroutinesIo
 import com.ivianuu.injekt.annotations.Factory
+import eu.chainfire.libsuperuser.Shell.SU
 import kotlinx.coroutines.withContext
 
 /**
@@ -27,11 +28,11 @@ import kotlinx.coroutines.withContext
 class Shell {
 
     suspend fun run(vararg commands: String): List<String> = withContext(coroutinesIo) {
-        eu.chainfire.libsuperuser.Shell.SU.run(commands).toList()
+        SU.run(commands).toList()
     }
 
     suspend fun isAvailable(): Boolean = withContext(coroutinesIo) {
-        eu.chainfire.libsuperuser.Shell.SU.available()
+        SU.available()
     }
 
 }
