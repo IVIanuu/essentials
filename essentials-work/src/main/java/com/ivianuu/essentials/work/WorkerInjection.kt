@@ -17,14 +17,19 @@
 package com.ivianuu.essentials.work
 
 import android.content.Context
+import androidx.work.Configuration
 import androidx.work.ListenableWorker
+import androidx.work.WorkManager
 import androidx.work.Worker
 import androidx.work.WorkerFactory
 import androidx.work.WorkerParameters
+import com.ivianuu.essentials.app.AppInitializer
+import com.ivianuu.essentials.app.bindAppInitializer
 import com.ivianuu.injekt.BindingContext
 import com.ivianuu.injekt.DefinitionContext
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Provider
+import com.ivianuu.injekt.annotations.Factory
 import com.ivianuu.injekt.bindType
 import com.ivianuu.injekt.factory
 import com.ivianuu.injekt.module
@@ -92,4 +97,28 @@ inline fun <reified T : Worker> Module.bindWorker(name: String? = null) {
         implementationType = T::class,
         implementationName = name
     )
+}
+
+/**
+ * Module for the [WorkerAppInitializer]
+ */
+val workerInitializerModule = module {
+    bindAppInitializer<WorkerAppInitializer>()
+}
+
+/**
+ * Initializes the [WorkManager] with a injected [WorkerFactory]
+ */
+@Factory
+class WorkerAppInitializer(
+    private val context: Context,
+    private val workerFactory: WorkerFactory
+) : AppInitializer {
+    override fun initialize() {
+        WorkManager.initialize(
+            context, Configuration.Builder()
+                .setWorkerFactory(workerFactory)
+                .build()
+        )
+    }
 }

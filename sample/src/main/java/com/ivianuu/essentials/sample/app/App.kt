@@ -16,14 +16,12 @@
 
 package com.ivianuu.essentials.sample.app
 
-import androidx.work.Configuration
-import androidx.work.WorkManager
 import com.ivianuu.essentials.app.EsApp
 import com.ivianuu.essentials.apps.glide.esAppsGlideModule
 import com.ivianuu.essentials.hidenavbar.esNavBarModule
 import com.ivianuu.essentials.sample.work.workerModule
+import com.ivianuu.essentials.work.workerInitializerModule
 import com.ivianuu.essentials.work.workerInjectionModule
-import com.ivianuu.injekt.get
 
 /**
  * App
@@ -34,17 +32,8 @@ class App : EsApp() {
         esAppsGlideModule,
         esNavBarModule,
         workerInjectionModule,
+        workerInitializerModule,
         workerModule
     )
-
-    override fun onCreate() {
-        super.onCreate()
-
-        WorkManager.initialize(
-            this, Configuration.Builder()
-                .setWorkerFactory(get())
-                .build()
-        )
-    }
 
 }
