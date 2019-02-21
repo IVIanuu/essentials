@@ -11,6 +11,6 @@
 
 # Injekt
 -keepclassmembers,allowobfuscation class * { @com.ivianuu.injekt.annotations.** *; }
--keep class **_Factory
--if class **_Factory
+-keep class **__Factory
+-if class **__Factory
 -keep class <1>
