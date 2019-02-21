@@ -26,9 +26,12 @@ import com.ivianuu.injekt.annotations.Factory
  * Initializes glide
  */
 @Factory
-class AppGlideAppInitializer(private val factory: AppIconModelLoaderFactory) : AppInitializer {
+class AppGlideAppInitializer(
+    private val app: Application,
+    private val factory: AppIconModelLoaderFactory
+) : AppInitializer {
 
-    override fun initialize(app: Application) {
+    override fun initialize() {
         Glide.get(app).registry
             .append(
                 AppIcon::class.java,

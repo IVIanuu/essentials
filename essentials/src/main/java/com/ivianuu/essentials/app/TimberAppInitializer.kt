@@ -26,9 +26,11 @@ import timber.log.Timber
  * Initializes timber in debug builds
  */
 @Factory
-class TimberAppInitializer : AppInitializer {
+class TimberAppInitializer(
+    private val app: Application
+) : AppInitializer {
 
-    override fun initialize(app: Application) {
+    override fun initialize() {
         val isDebuggable = app.applicationInfo.flags.containsFlag(ApplicationInfo.FLAG_DEBUGGABLE)
         if (isDebuggable) {
             Timber.plant(Timber.DebugTree())

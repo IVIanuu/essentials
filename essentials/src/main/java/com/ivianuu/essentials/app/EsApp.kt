@@ -80,7 +80,7 @@ abstract class EsApp : Application(), InjektTrait, ScopeOwner {
         appInitializers
             .filterKeys { shouldInitialize(it) }
             .map { it.value.get() }
-            .forEach { it.initialize(this) }
+            .forEach { it.initialize() }
     }
 
     protected open fun shouldInitialize(type: KClass<out AppInitializer>): Boolean = true

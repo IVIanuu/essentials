@@ -16,7 +16,6 @@
 
 package com.ivianuu.essentials.app
 
-import android.app.Application
 import com.ivianuu.injekt.annotations.Factory
 import com.ivianuu.statestore.StateStorePlugins
 import com.ivianuu.statestore.android.MAIN_THREAD_EXECUTOR
@@ -27,7 +26,7 @@ import com.ivianuu.statestore.android.MAIN_THREAD_EXECUTOR
 @Factory
 class StateStoreAppInitializer : AppInitializer {
 
-    override fun initialize(app: Application) {
+    override fun initialize() {
         StateStorePlugins.defaultCallbackExecutor = MAIN_THREAD_EXECUTOR
     }
 

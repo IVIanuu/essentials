@@ -16,7 +16,6 @@
 
 package com.ivianuu.essentials.app
 
-import android.app.Application
 import com.ivianuu.essentials.injection.bindIntoClassMap
 import com.ivianuu.injekt.BindingContext
 import com.ivianuu.injekt.Definition
@@ -31,7 +30,7 @@ const val APP_INITIALIZERS = "appInitializers"
  * Initializes what ever on app start up
  */
 interface AppInitializer {
-    fun initialize(app: Application)
+    fun initialize()
 }
 
 inline fun <reified T : AppInitializer> Module.appInitializer(
