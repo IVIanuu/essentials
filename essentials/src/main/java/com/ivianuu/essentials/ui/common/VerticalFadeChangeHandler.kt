@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.ui.common
 
 import android.animation.Animator
-import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.view.View
 import android.view.ViewGroup
@@ -25,6 +24,7 @@ import com.ivianuu.director.DirectorPlugins
 import com.ivianuu.director.common.changehandler.AnimatorChangeHandler
 import com.ivianuu.director.common.changehandler.defaultAnimationDuration
 import com.ivianuu.director.defaultRemovesFromViewOnPush
+import com.ivianuu.kommon.core.animation.animatorSetOf
 
 /**
  * Vertical fade change handler
@@ -42,7 +42,7 @@ class VerticalFadeChangeHandler(
         isPush: Boolean,
         toAddedToContainer: Boolean
     ): Animator {
-        val animator = AnimatorSet()
+        val animator = animatorSetOf()
 
         if (isPush && to != null) {
             animator.play(ObjectAnimator.ofFloat(to, View.ALPHA, 0f, 1f))

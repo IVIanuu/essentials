@@ -62,7 +62,7 @@ object Versions {
     const val glide = "4.8.0"
     const val injekt = "0.0.1-dev-7"
     const val junit = "4.12"
-    const val kommon = "0.0.1-dev-1"
+    const val kommon = "0.0.1-dev-2"
     const val kotlin = "1.3.21"
     const val kPrefs = "0.0.1-dev-4"
     const val kSettings = "0.0.1-dev-3"
