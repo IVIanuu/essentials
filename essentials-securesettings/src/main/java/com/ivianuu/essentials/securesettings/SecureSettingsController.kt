@@ -40,7 +40,8 @@ import kotlinx.coroutines.launch
 
 @Parcelize
 class SecureSettingsKey(
-    val resultCode: Int
+    val resultCode: Int,
+    val showHideNavBarHint: Boolean = false
 ) : ControllerKey(::SecureSettingsController)
 
 /**
@@ -57,7 +58,13 @@ class SecureSettingsController : SimpleController() {
     override fun epoxyController() = epoxyController {
         preference(context) {
             key("secure_settings_header")
-            summary(R.string.es_pref_summary_secure_settings_header)
+            summary(
+                if (this@SecureSettingsController.key.showHideNavBarHint) {
+                    R.string.es_pref_summary_secure_settings_header_hide_nav_bar
+                } else {
+                    R.string.es_pref_summary_secure_settings_header
+                }
+            )
         }
 
         preference(context) {

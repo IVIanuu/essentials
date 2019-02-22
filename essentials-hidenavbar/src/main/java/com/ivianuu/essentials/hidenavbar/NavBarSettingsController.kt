@@ -83,7 +83,11 @@ class NavBarSettingsController : PrefsController() {
                     if (!newValue || canWriteSecureSettings()) {
                         true
                     } else if (newValue) {
-                        travelerRouter.navigate(SecureSettingsKey(RESULT_CODE_MAIN_SWITCH))
+                        travelerRouter.navigate(
+                            SecureSettingsKey(
+                                RESULT_CODE_MAIN_SWITCH, true
+                            )
+                        )
                         false
                     } else {
                         true
@@ -105,7 +109,11 @@ class NavBarSettingsController : PrefsController() {
                     if (canWriteSecureSettings() || !newValue) {
                         true
                     } else if (newValue) {
-                        travelerRouter.navigate(SecureSettingsKey(RESULT_CODE_NAV_BAR_HIDDEN))
+                        travelerRouter.navigate(
+                            SecureSettingsKey(
+                                RESULT_CODE_NAV_BAR_HIDDEN, true
+                            )
+                        )
                         false
                     } else {
                         true
