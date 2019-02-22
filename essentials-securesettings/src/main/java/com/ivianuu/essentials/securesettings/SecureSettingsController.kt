@@ -107,6 +107,7 @@ class SecureSettingsController : SimpleController() {
     }
 
     override fun handleBack(): Boolean {
+        // todo should we send a result in this case?
         travelerRouter.sendResult(key.resultCode, false)
         return super.handleBack()
     }
