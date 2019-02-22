@@ -24,6 +24,12 @@ import androidx.core.os.bundleOf
  */
 abstract class ViewModel {
 
+    // todo allow to specify whether to retain instance or not?
+
+    // todo allow to specify restoration mode could be lazily or instant
+    // todo this would require a way to construct view models
+    // so we would need a ViewModelFactory
+
     private val listeners = mutableSetOf<ViewModelListener>()
 
     private var superCalled = false

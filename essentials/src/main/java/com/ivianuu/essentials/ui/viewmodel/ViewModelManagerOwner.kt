@@ -16,9 +16,21 @@
 
 package com.ivianuu.essentials.ui.viewmodel
 
+import com.ivianuu.essentials.util.ext.unsafeLazy
+
 /**
  * @author Manuel Wrage (IVIanuu)
  */
 interface ViewModelManagerOwner {
     val viewModelManager: ViewModelManager
 }
+
+inline fun <reified T : ViewModel> ViewModelManagerOwner.viewModel(
+    crossinline key: () -> String = { T::class.defaultViewModelKey },
+    noinline factory: () -> T
+): Lazy<T> = unsafeLazy { getViewModel(key(), factory) }
+
+inline fun <reified T : ViewModel> ViewModelManagerOwner.getViewModel(
+    key: String? = null,
+    noinline factory: () -> T
+): T = viewModelManager.get(key, factory)
