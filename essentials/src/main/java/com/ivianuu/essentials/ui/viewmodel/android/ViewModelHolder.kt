@@ -22,8 +22,8 @@ import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import com.ivianuu.essentials.ui.viewmodel.ViewModelManager
 import com.ivianuu.essentials.ui.viewmodel.ViewModelManagerOwner
-import com.ivianuu.essentials.util.ParceledSavedState
-import com.ivianuu.essentials.util.toParceledSavedState
+import com.ivianuu.essentials.util.getSavedState
+import com.ivianuu.essentials.util.putSavedState
 
 /**
  * Holder for [ViewModelManager]s
@@ -39,17 +39,13 @@ class ViewModelHolder : Fragment(), ViewModelManagerOwner {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModelManager.restoreState(
-            savedInstanceState
-                ?.getParcelable<ParceledSavedState>(KEY_VIEW_MODELS)
+            savedInstanceState?.getSavedState(KEY_VIEW_MODELS)
         )
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putParcelable(
-            KEY_VIEW_MODELS,
-            viewModelManager.saveState().toParceledSavedState()
-        )
+        outState.putSavedState(KEY_VIEW_MODELS, viewModelManager.saveState())
     }
 
     override fun onDestroy() {

@@ -230,3 +230,13 @@ class ParceledSavedState() : Any(), SavedState, Parcelable {
     }
 
 }
+
+fun Bundle.putSavedState(key: String, savedState: SavedState) {
+    if (savedState is ParceledSavedState) {
+        putParcelable(key, savedState)
+    } else {
+        putParcelable(key, savedState.toParceledSavedState())
+    }
+}
+
+fun Bundle.getSavedState(key: String): ParceledSavedState? = getParcelable(key)
