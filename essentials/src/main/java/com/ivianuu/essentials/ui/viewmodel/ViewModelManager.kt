@@ -33,25 +33,40 @@ class ViewModelManager {
     private val viewModelListeners = mutableSetOf<ViewModelListener>()
 
     fun <T : ViewModel> get(
-        type: KClass<T>,
-        key: String? = null,
+        key: String,
         factory: () -> T
-    ): T = getInternal(key ?: type.defaultViewModelKey, factory)
+    ): T {
+        var viewModel = _viewModels[key] as? T
+        if (viewModel == null) {
+            viewModel = factory()
+            _viewModels[key] = viewModel
+            val savedState = viewModelStates.remove(key)
+            viewModelListeners.forEach { viewModel.addListener(it) }
+            viewModel.initialize(savedState)
+        }
 
-    fun <T : ViewModel> getOrNull(type: KClass<T>, key: String? = null): T? =
-        _viewModels[key ?: type.defaultViewModelKey] as? T
+        return viewModel
+    }
+
+    fun <T : ViewModel> getOrNull(key: String): T? =
+        _viewModels[key] as? T
 
     fun restoreState(savedState: SavedState?) {
         if (savedState == null) return
-        this.viewModelStates.putAll(savedState.entries as Map<out String, SavedState>)
+        val viewModelStates = savedState.get<SavedState>(KEY_VIEW_MODELS)!!
+        this.viewModelStates.putAll(viewModelStates.entries as Map<out String, SavedState>)
     }
 
     fun saveState(): SavedState {
         val savedState = savedStateOf()
 
+        val viewModelsStates = savedStateOf()
+
         _viewModels
             .mapValues { it.value.saveState() }
-            .forEach { (key, state) -> savedState[key] = state }
+            .forEach { (key, state) -> viewModelsStates[key] = state }
+
+        savedState[KEY_VIEW_MODELS] = viewModelsStates
 
         return savedState
     }
@@ -71,33 +86,25 @@ class ViewModelManager {
         _viewModels.values.forEach { it.removeListener(listener) }
     }
 
-    private fun <T : ViewModel> getInternal(key: String, factory: () -> T): T {
-        var viewModel = _viewModels[key] as? T
-        if (viewModel == null) {
-            viewModel = factory()
-            _viewModels[key] = viewModel
-            val savedState = viewModelStates.remove(key)
-            viewModelListeners.forEach { viewModel.addListener(it) }
-            viewModel.initialize(savedState)
-        }
-
-        return viewModel
-    }
-
     private companion object {
         private const val KEY_VIEW_MODELS = "ViewModelManager.viewModels"
     }
 
 }
 
-inline fun <reified T : ViewModel> ViewModelManager.get(
-    key: String? = null,
-    noinline factory: () -> T
-): T = get(T::class, key, factory)
+fun <T : ViewModel> ViewModelManager.get(
+    type: KClass<T>,
+    factory: () -> T
+): T = get(type.defaultViewModelKey, factory)
 
-inline fun <reified T : ViewModel> ViewModelManager.getOrNull(
-    key: String? = null
-): T? = getOrNull(T::class, key)
+fun <T : ViewModel> ViewModelManager.getOrNull(type: KClass<T>): T? =
+    getOrNull(type.defaultViewModelKey)
+
+inline fun <reified T : ViewModel> ViewModelManager.get(
+    noinline factory: () -> T
+): T = get(T::class, factory)
+
+inline fun <reified T : ViewModel> ViewModelManager.getOrNull(): T? = getOrNull(T::class)
 
 val <T : ViewModel> KClass<T>.defaultViewModelKey
-    get() = "ViewModelStore.defaultKey:" + java.canonicalName
+    get() = "ViewModelManager.defaultKey:" + java.canonicalName
