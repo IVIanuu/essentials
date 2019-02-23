@@ -76,7 +76,6 @@ abstract class EsApp : Application(), InjektTrait, ScopeOwner {
     }
 
     protected open fun onInitialize() {
-        println("on init $appInitializers")
         appInitializers
             .filterKeys { shouldInitialize(it) }
             .map { it.value.get() }

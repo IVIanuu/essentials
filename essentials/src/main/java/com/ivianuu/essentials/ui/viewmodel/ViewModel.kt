@@ -16,8 +16,8 @@
 
 package com.ivianuu.essentials.ui.viewmodel
 
-import android.os.Bundle
-import androidx.core.os.bundleOf
+import com.ivianuu.essentials.util.SavedState
+import com.ivianuu.essentials.util.savedStateOf
 
 /**
  * @author Manuel Wrage (IVIanuu)
@@ -28,13 +28,13 @@ abstract class ViewModel {
 
     // todo allow to specify restoration mode could be lazily or instant
     // todo this would require a way to construct view models
-    // so we would need a ViewModelFactory
+    // todo so we would need a ViewModelFactory
 
     private val listeners = mutableSetOf<ViewModelListener>()
 
     private var superCalled = false
 
-    protected open fun onInitialize(savedState: Bundle?) {
+    protected open fun onInitialize(savedState: SavedState?) {
         superCalled = true
     }
 
@@ -42,7 +42,7 @@ abstract class ViewModel {
         superCalled = true
     }
 
-    protected open fun onSaveState(savedState: Bundle) {
+    protected open fun onSaveState(savedState: SavedState) {
         superCalled = true
     }
 
@@ -54,7 +54,7 @@ abstract class ViewModel {
         listeners.remove(listener)
     }
 
-    internal fun initialize(savedState: Bundle?) {
+    internal fun initialize(savedState: SavedState?) {
         notifyListeners { it.preInitialize(this, savedState) }
         requireSuperCalled { onInitialize(savedState) }
         notifyListeners { it.postInitialize(this, savedState) }
@@ -66,8 +66,8 @@ abstract class ViewModel {
         notifyListeners { it.postDestroy(this) }
     }
 
-    internal fun saveState(): Bundle {
-        val savedState = bundleOf()
+    internal fun saveState(): SavedState {
+        val savedState = savedStateOf()
         requireSuperCalled { onSaveState(savedState) }
         notifyListeners { it.onSaveState(this, savedState) }
         return savedState
@@ -86,10 +86,10 @@ abstract class ViewModel {
 }
 
 interface ViewModelListener {
-    fun preInitialize(viewModel: ViewModel, savedState: Bundle?) {
+    fun preInitialize(viewModel: ViewModel, savedState: SavedState?) {
     }
 
-    fun postInitialize(viewModel: ViewModel, savedState: Bundle?) {
+    fun postInitialize(viewModel: ViewModel, savedState: SavedState?) {
     }
 
     fun preDestroy(viewModel: ViewModel) {
@@ -98,6 +98,6 @@ interface ViewModelListener {
     fun postDestroy(viewModel: ViewModel) {
     }
 
-    fun onSaveState(viewModel: ViewModel, outState: Bundle) {
+    fun onSaveState(viewModel: ViewModel, savedState: SavedState) {
     }
 }

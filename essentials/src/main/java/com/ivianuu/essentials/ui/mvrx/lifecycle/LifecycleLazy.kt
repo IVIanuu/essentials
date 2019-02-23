@@ -20,7 +20,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import com.ivianuu.essentials.util.SimpleLifecycleObserver
 
-internal class LifecycleAwareLazy<T>(
+internal class LifecycleLazy<T>(
     owner: LifecycleOwner,
     private val event: Lifecycle.Event = Lifecycle.Event.ON_CREATE,
     initializer: () -> T
@@ -37,7 +37,7 @@ internal class LifecycleAwareLazy<T>(
     init {
         owner.lifecycle.addObserver(object : SimpleLifecycleObserver() {
             override fun onAny(owner: LifecycleOwner, event: Lifecycle.Event) {
-                if (this@LifecycleAwareLazy.event == event) {
+                if (this@LifecycleLazy.event == event) {
                     if (!isInitialized()) value
                     owner.lifecycle.removeObserver(this)
                 }
@@ -73,7 +73,7 @@ internal class LifecycleAwareLazy<T>(
         if (isInitialized()) value.toString() else "Lazy value not initialized yet."
 }
 
-internal fun <T> LifecycleOwner.lifecycleAwareLazy(
-    event: Lifecycle.Event = Lifecycle.Event.ON_CREATE,
+@PublishedApi
+internal fun <T> LifecycleOwner.lifecycleLazy(
     initializer: () -> T
-): Lazy<T> = LifecycleAwareLazy(this, event, initializer)
+): Lazy<T> = LifecycleLazy(this, initializer = initializer)

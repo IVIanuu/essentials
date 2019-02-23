@@ -16,10 +16,8 @@
 
 package com.ivianuu.essentials.ui.viewmodel
 
-import android.os.Bundle
-import android.os.Parcelable
-import androidx.core.os.bundleOf
-import kotlinx.android.parcel.Parcelize
+import com.ivianuu.essentials.util.SavedState
+import com.ivianuu.essentials.util.savedStateOf
 import kotlin.reflect.KClass
 
 /**
@@ -30,7 +28,7 @@ class ViewModelManager {
     val viewModels: Map<String, ViewModel> get() = _viewModels
     private val _viewModels = mutableMapOf<String, ViewModel>()
 
-    private var viewModelStates = mutableMapOf<String, Bundle>()
+    private var viewModelStates = mutableMapOf<String, SavedState>()
 
     private val viewModelListeners = mutableSetOf<ViewModelListener>()
 
@@ -43,22 +41,17 @@ class ViewModelManager {
     fun <T : ViewModel> getOrNull(type: KClass<T>, key: String? = null): T? =
         _viewModels[key ?: type.defaultViewModelKey] as? T
 
-    fun restoreState(savedState: Bundle?) {
+    fun restoreState(savedState: SavedState?) {
         if (savedState == null) return
-        viewModelStates.putAll(
-            savedState.getParcelableArrayList<ViewModelState>(KEY_VIEW_MODELS)!!
-                .associateBy { it.key }
-                .mapValues { it.value.savedState }
-        )
+        this.viewModelStates.putAll(savedState.entries as Map<out String, SavedState>)
     }
 
-    fun saveState(): Bundle {
-        val savedState = bundleOf()
+    fun saveState(): SavedState {
+        val savedState = savedStateOf()
 
         _viewModels
             .mapValues { it.value.saveState() }
-            .map { ViewModelState(it.key, it.value) }
-            .let { savedState.putParcelableArrayList(KEY_VIEW_MODELS, ArrayList(it)) }
+            .forEach { (key, state) -> savedState[key] = state }
 
         return savedState
     }
@@ -82,6 +75,7 @@ class ViewModelManager {
         var viewModel = _viewModels[key] as? T
         if (viewModel == null) {
             viewModel = factory()
+            _viewModels[key] = viewModel
             val savedState = viewModelStates.remove(key)
             viewModelListeners.forEach { viewModel.addListener(it) }
             viewModel.initialize(savedState)
@@ -90,14 +84,8 @@ class ViewModelManager {
         return viewModel
     }
 
-    @Parcelize
-    private class ViewModelState(
-        val key: String,
-        val savedState: Bundle
-    ) : Parcelable
-
     private companion object {
-        private const val KEY_VIEW_MODELS = "viewmodels"
+        private const val KEY_VIEW_MODELS = "ViewModelManager.viewModels"
     }
 
 }

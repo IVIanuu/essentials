@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.viewmodel
+package com.ivianuu.essentials.ui.viewmodel.testing
 
 // todo testing artifact
 
