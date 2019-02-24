@@ -18,22 +18,37 @@ package com.ivianuu.essentials.sample.ui.list
 
 import com.ivianuu.essentials.injection.CONTROLLER_SCOPE
 import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
+import com.ivianuu.essentials.util.SavedState
 import com.ivianuu.essentials.util.coroutineScope
 import com.ivianuu.essentials.util.ext.coroutinesDefault
 import com.ivianuu.injekt.annotations.Factory
-import com.ivianuu.timberktx.d
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Factory(scopeName = CONTROLLER_SCOPE)
-class ListViewModel(
-    private val listKey: ListKey
-) : MvRxViewModel<ListState>(ListState()) {
+class ListViewModel : MvRxViewModel<ListState>(ListState()) {
 
     init {
-        d { "list key $listKey" }
         logStateChanges()
-        generateNewState()
+    }
+
+    override fun onInitialize(savedState: SavedState?) {
+        super.onInitialize(savedState)
+        if (savedState == null) {
+            generateNewState()
+        } else {
+            savedState.get<List<String>>("items")?.let {
+                setState { copy(items = it) }
+            }
+        }
+    }
+
+    override fun onSaveState(savedState: SavedState) {
+        super.onSaveState(savedState)
+        val state = peekState()
+        if (!state.loading) {
+            savedState["items"] = state.items
+        }
     }
 
     fun refreshClicked() {

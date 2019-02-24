@@ -20,14 +20,14 @@ package com.ivianuu.essentials.ui.base
 import android.content.Context
 import android.view.View
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.ViewModelStore
 import com.ivianuu.director.androidx.lifecycle.lifecycleOwner
-import com.ivianuu.director.androidx.lifecycle.viewModelStoreOwner
 import com.ivianuu.director.context
 import com.ivianuu.director.dialog.DialogController
 import com.ivianuu.essentials.injection.controllerComponent
 import com.ivianuu.essentials.ui.mvrx.injekt.InjektMvRxView
 import com.ivianuu.essentials.ui.traveler.key.keyModule
+import com.ivianuu.essentials.ui.viewmodel.ViewModelManager
+import com.ivianuu.essentials.ui.viewmodel.director.viewModelManagerOwner
 import com.ivianuu.essentials.util.ContextAware
 import com.ivianuu.essentials.util.ext.unsafeLazy
 import com.ivianuu.injekt.Module
@@ -58,6 +58,13 @@ abstract class EsDialogController : DialogController(),
 
     val travelerRouter by inject<Router>()
 
+    override val viewModelManager: ViewModelManager
+        get() = viewModelManagerOwner.viewModelManager
+
+    init {
+        viewModelManagerOwner // todo remove this
+    }
+
     override fun onAttach(view: View) {
         super.onAttach(view)
         invalidate()
@@ -72,8 +79,6 @@ abstract class EsDialogController : DialogController(),
     }
 
     override fun getLifecycle(): Lifecycle = lifecycleOwner.lifecycle
-
-    override fun getViewModelStore(): ViewModelStore = viewModelStoreOwner.viewModelStore
 
     protected open fun modules(): List<Module> = emptyList()
 }

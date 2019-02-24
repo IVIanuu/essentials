@@ -14,19 +14,34 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.common
+package com.ivianuu.essentials.ui.viewmodel.scopes
 
 import com.ivianuu.essentials.ui.viewmodel.ViewModel
-import com.ivianuu.essentials.ui.viewmodel.scopes.scopeOwner
+import com.ivianuu.essentials.ui.viewmodel.ViewModelListener
+import com.ivianuu.scopes.AbstractScope
 import com.ivianuu.scopes.Scope
 import com.ivianuu.scopes.ScopeOwner
+import com.ivianuu.scopes.cache.ScopeStore
 
-/**
- * A [ViewModel] which auto disposes itself
- */
-abstract class EsViewModel : ViewModel(), ScopeOwner {
+val ViewModel.scopeOwner: ScopeOwner
+    get() = scopeCache.get(this) as ScopeOwner
+
+val ViewModel.scope: Scope get() = scopeOwner.scope
+
+private val scopeCache = ScopeStore<ViewModel> { ViewModelScope(it) }
+
+private class ViewModelScope(viewModel: ViewModel) : AbstractScope(), ScopeOwner {
 
     override val scope: Scope
-        get() = scopeOwner.scope
+        get() = this
+
+    init {
+        viewModel.addListener(object : ViewModelListener {
+            override fun postDestroy(viewModel: ViewModel) {
+                super.postDestroy(viewModel)
+                close()
+            }
+        })
+    }
 
 }

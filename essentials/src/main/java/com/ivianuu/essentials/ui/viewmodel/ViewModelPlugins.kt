@@ -14,20 +14,19 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.common
+package com.ivianuu.essentials.ui.viewmodel
 
-import com.ivianuu.scopes.AbstractScope
-import com.ivianuu.scopes.Scope
-import com.ivianuu.scopes.cache.ScopeStore
+/**
+ * Global configurations
+ */
+object ViewModelPlugins
 
-val EsViewModel.viewModelScope: Scope get() = scopeCache.get(this)
+internal val viewModelListeners = mutableSetOf<ViewModelListener>()
 
-private val scopeCache = ScopeStore<EsViewModel> { ViewModelScope(it) }
+fun ViewModelPlugins.addViewModelListener(listener: ViewModelListener) {
+    viewModelListeners.add(listener)
+}
 
-private class ViewModelScope(viewModel: EsViewModel) : AbstractScope() {
-
-    init {
-        viewModel.addClearedListener { close() }
-    }
-
+fun ViewModelPlugins.removeViewModelListener(listener: ViewModelListener) {
+    viewModelListeners.remove(listener)
 }

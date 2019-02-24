@@ -37,6 +37,8 @@ abstract class MvRxViewModel<S>(initialState: S) : EsViewModel() {
 
     @PublishedApi internal val state get() = stateStore.peekState()
 
+    protected fun peekState(): S = stateStore.peekState()
+
     protected fun withState(consumer: Consumer<S>) {
         stateStore.withState(consumer)
     }
@@ -59,5 +61,5 @@ abstract class MvRxViewModel<S>(initialState: S) : EsViewModel() {
             consumer
         )
 
-    override fun toString() = "${this::class.java.simpleName} -> $state"
+    override fun toString() = "${javaClass.simpleName} -> $state"
 }

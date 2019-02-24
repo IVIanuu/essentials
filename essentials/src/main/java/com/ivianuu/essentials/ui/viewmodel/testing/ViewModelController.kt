@@ -18,45 +18,44 @@ package com.ivianuu.essentials.ui.viewmodel.testing
 
 // todo testing artifact
 
-/**
-import android.os.Bundle
+
+import com.ivianuu.essentials.ui.viewmodel.ViewModel
+import com.ivianuu.essentials.ui.viewmodel.ViewModelListenerStore
+import com.ivianuu.essentials.ui.viewmodel.doOnPostDestroy
+import com.ivianuu.essentials.util.SavedState
 
 /**
  * @author Manuel Wrage (IVIanuu)
-*/
+ */
 class ViewModelController(private val viewModel: ViewModel) {
 
-fun initialize(savedState: Bundle?) {
-viewModel.initialize(savedState)
-}
+    fun initialize(savedState: SavedState?) {
+        viewModel.initialize(ViewModelListenerStore.Global, savedState)
+    }
 
-fun saveState(): Bundle = viewModel.saveState()
+    fun saveState(): SavedState = viewModel.saveState()
 
-fun destroy() {
-viewModel.destroy()
-}
+    fun destroy() {
+        viewModel.destroy()
+    }
 
 }
 
 private val controllersByViewModel = mutableMapOf<ViewModel, ViewModelController>()
 
-val ViewModel.controller get() = controllersByViewModel.getOrPut(this) {
-ViewModelController(this).also {
-addListener(object : ViewModelListener {
-override fun postDestroy(viewModel: ViewModel) {
-super.postDestroy(viewModel)
-controllersByViewModel.remove(viewModel)
-}
-})
-}
+val ViewModel.controller: ViewModelController
+    get() = controllersByViewModel.getOrPut(this) {
+        ViewModelController(this).also {
+            doOnPostDestroy { controllersByViewModel.remove(this) }
+        }
+    }
+
+fun ViewModel.initialize(savedState: SavedState?) {
+    controller.initialize(savedState)
 }
 
-fun ViewModel.dispatchInitialize(savedState: Bundle?) {
-controller.initialize(savedState)
+fun ViewModel.saveState(): SavedState = controller.saveState()
+
+fun ViewModel.destroy() {
+    controller.destroy()
 }
-
-fun ViewModel.dispatchSaveState(): Bundle = controller.saveState()
-
-fun ViewModel.dispatchDestroy() {
-controller.destroy()
-}*/

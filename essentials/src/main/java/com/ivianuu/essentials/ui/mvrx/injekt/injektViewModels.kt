@@ -16,19 +16,19 @@
 
 package com.ivianuu.essentials.ui.mvrx.injekt
 
-import androidx.lifecycle.ViewModelStoreOwner
 import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
 import com.ivianuu.essentials.ui.mvrx.getViewModel
 import com.ivianuu.essentials.ui.mvrx.viewModel
+import com.ivianuu.essentials.ui.viewmodel.ViewModelManagerOwner
+import com.ivianuu.essentials.ui.viewmodel.defaultViewModelKey
 import com.ivianuu.injekt.get
-import com.ivianuu.kommon.lifecycle.defaultViewModelKey
 
 inline fun <reified VM : MvRxViewModel<*>> InjektMvRxView.viewModel(
-    noinline from: () -> ViewModelStoreOwner = { this },
+    noinline from: () -> ViewModelManagerOwner = { this },
     noinline key: () -> String = { VM::class.defaultViewModelKey }
 ): Lazy<VM> = viewModel<VM>(from, key) { get() }
 
 inline fun <reified VM : MvRxViewModel<*>> InjektMvRxView.getViewModel(
-    from: ViewModelStoreOwner = this,
+    from: ViewModelManagerOwner = this,
     key: String = VM::class.defaultViewModelKey
 ): VM = getViewModel(from, key) { get() }

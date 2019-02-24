@@ -27,6 +27,8 @@ import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.common.RouterActivity
 import com.ivianuu.essentials.ui.mvrx.injekt.InjektMvRxView
 import com.ivianuu.essentials.ui.traveler.key.keyModule
+import com.ivianuu.essentials.ui.viewmodel.ViewModelManager
+import com.ivianuu.essentials.ui.viewmodel.android.viewModelManagerOwner
 import com.ivianuu.essentials.util.ext.unsafeLazy
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.android.activityComponent
@@ -81,6 +83,9 @@ abstract class EsActivity : AppCompatActivity(),
         navigators.add(AppNavigator(this))
         compositeNavigatorOf(navigators)
     }
+
+    override val viewModelManager: ViewModelManager
+        get() = viewModelManagerOwner.viewModelManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

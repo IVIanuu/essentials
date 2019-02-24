@@ -33,6 +33,7 @@ import com.ivianuu.essentials.ui.mvrx.epoxy.simpleEpoxyController
 import com.ivianuu.essentials.ui.mvrx.injekt.viewModel
 import com.ivianuu.essentials.ui.simple.SimpleController
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
+import com.ivianuu.essentials.util.SavedState
 import com.ivianuu.essentials.util.coroutineScope
 import com.ivianuu.essentials.util.ext.goBackWithResult
 import com.ivianuu.injekt.annotations.Factory
@@ -104,11 +105,12 @@ abstract class AppInfoModel : SimpleEpoxyModel() {
 @Factory(scopeName = CONTROLLER_SCOPE)
 class AppPickerViewModel(
     private val key: AppPickerKey,
-    appStore: AppStore,
+    private val appStore: AppStore,
     private val router: Router
 ) : MvRxViewModel<AppPickerState>(AppPickerState()) {
 
-    init {
+    override fun onInitialize(savedState: SavedState?) {
+        super.onInitialize(savedState)
         coroutineScope.launch {
             val apps = if (key.launchableOnly) {
                 appStore.getLaunchableApps()

@@ -32,6 +32,8 @@ abstract class ViewModel {
 
     private val listeners = mutableSetOf<ViewModelListener>()
 
+    private lateinit var listenerStore: ViewModelListenerStore
+
     private var superCalled = false
 
     protected open fun onInitialize(savedState: SavedState?) {
@@ -54,7 +56,11 @@ abstract class ViewModel {
         listeners.remove(listener)
     }
 
-    internal fun initialize(savedState: SavedState?) {
+    internal fun initialize(
+        listenerStore: ViewModelListenerStore,
+        savedState: SavedState?
+    ) {
+        this.listenerStore = listenerStore
         notifyListeners { it.preInitialize(this, savedState) }
         requireSuperCalled { onInitialize(savedState) }
         notifyListeners { it.postInitialize(this, savedState) }
@@ -74,7 +80,7 @@ abstract class ViewModel {
     }
 
     private inline fun notifyListeners(block: (ViewModelListener) -> Unit) {
-        listeners.toList().forEach(block)
+        (listenerStore.getListeners() + listeners.toList()).forEach(block)
     }
 
     private inline fun requireSuperCalled(block: () -> Unit) {
@@ -83,21 +89,4 @@ abstract class ViewModel {
         check(superCalled) { "super not called" }
     }
 
-}
-
-interface ViewModelListener {
-    fun preInitialize(viewModel: ViewModel, savedState: SavedState?) {
-    }
-
-    fun postInitialize(viewModel: ViewModel, savedState: SavedState?) {
-    }
-
-    fun preDestroy(viewModel: ViewModel) {
-    }
-
-    fun postDestroy(viewModel: ViewModel) {
-    }
-
-    fun onSaveState(viewModel: ViewModel, savedState: SavedState) {
-    }
 }

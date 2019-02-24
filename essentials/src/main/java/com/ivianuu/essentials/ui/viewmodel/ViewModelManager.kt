@@ -30,10 +30,13 @@ class ViewModelManager {
 
     private var viewModelStates = mutableMapOf<String, SavedState>()
 
-    private val viewModelListeners = mutableSetOf<ViewModelListener>()
+    internal val viewModelListeners = mutableSetOf<ViewModelListener>()
+
+    private val listenerStore = ViewModelListenerStore.Manager(this)
 
     fun <T : ViewModel> get(
-        key: String,
+        type: KClass<T>,
+        key: String = type.defaultViewModelKey,
         factory: () -> T
     ): T {
         var viewModel = _viewModels[key] as? T
@@ -41,15 +44,11 @@ class ViewModelManager {
             viewModel = factory()
             _viewModels[key] = viewModel
             val savedState = viewModelStates.remove(key)
-            viewModelListeners.forEach { viewModel.addListener(it) }
-            viewModel.initialize(savedState)
+            viewModel.initialize(listenerStore, savedState)
         }
 
         return viewModel
     }
-
-    fun <T : ViewModel> getOrNull(key: String): T? =
-        _viewModels[key] as? T
 
     fun restoreState(savedState: SavedState?) {
         if (savedState == null) return
@@ -78,12 +77,10 @@ class ViewModelManager {
 
     fun addViewModelListener(listener: ViewModelListener) {
         viewModelListeners.add(listener)
-        _viewModels.values.forEach { it.addListener(listener) }
     }
 
     fun removeViewModelListener(listener: ViewModelListener) {
         viewModelListeners.remove(listener)
-        _viewModels.values.forEach { it.removeListener(listener) }
     }
 
     private companion object {
@@ -92,19 +89,19 @@ class ViewModelManager {
 
 }
 
-fun <T : ViewModel> ViewModelManager.get(
-    type: KClass<T>,
-    factory: () -> T
-): T = get(type.defaultViewModelKey, factory)
-
-fun <T : ViewModel> ViewModelManager.getOrNull(type: KClass<T>): T? =
-    getOrNull(type.defaultViewModelKey)
-
 inline fun <reified T : ViewModel> ViewModelManager.get(
+    key: String = T::class.defaultViewModelKey,
     noinline factory: () -> T
-): T = get(T::class, factory)
+): T = get(T::class, key, factory)
 
-inline fun <reified T : ViewModel> ViewModelManager.getOrNull(): T? = getOrNull(T::class)
+fun <T : ViewModel> ViewModelManager.getOrNull(
+    type: KClass<T>,
+    key: String = type.defaultViewModelKey
+): T? = viewModels[key] as? T
+
+inline fun <reified T : ViewModel> ViewModelManager.getOrNull(
+    key: String = T::class.defaultViewModelKey
+): T? = getOrNull(T::class, key)
 
 val <T : ViewModel> KClass<T>.defaultViewModelKey
     get() = "ViewModelManager.defaultKey:" + java.canonicalName
