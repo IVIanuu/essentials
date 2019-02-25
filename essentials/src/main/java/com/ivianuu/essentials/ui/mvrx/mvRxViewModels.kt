@@ -18,7 +18,7 @@ package com.ivianuu.essentials.ui.mvrx
 
 import com.ivianuu.essentials.ui.mvrx.lifecycle.lifecycleLazy
 import com.ivianuu.essentials.ui.viewmodel.ViewModelManagerOwner
-import com.ivianuu.essentials.ui.viewmodel.get
+import com.ivianuu.essentials.ui.viewmodel.getViewModel
 import com.ivianuu.kommon.lifecycle.defaultViewModelKey
 
 inline fun <reified VM : MvRxViewModel<*>> MvRxView.viewModel(
@@ -31,7 +31,7 @@ inline fun <reified VM : MvRxViewModel<*>> MvRxView.getViewModel(
     from: ViewModelManagerOwner = this,
     key: String = VM::class.defaultViewModelKey,
     noinline factory: () -> VM
-): VM = from.viewModelManager.get(key, factory).setupViewModel(this)
+): VM = getViewModel(from, key, factory).setupViewModel(this)
 
 @PublishedApi
 internal fun <VM : MvRxViewModel<*>> VM.setupViewModel(view: MvRxView): VM =
