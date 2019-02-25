@@ -22,7 +22,7 @@ import com.ivianuu.scopes.Scope
 import com.ivianuu.scopes.ScopeOwner
 
 /**
- * A [ViewModel] which auto disposes itself
+ * A [ViewModel] which is also a [ScopeOwner]
  */
 abstract class EsViewModel : ViewModel(), ScopeOwner {
 

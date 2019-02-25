@@ -17,9 +17,9 @@
 package com.ivianuu.essentials.util.ext
 
 import com.ivianuu.director.Router
-import com.ivianuu.director.RouterTransaction
+import com.ivianuu.director.Transaction
 
-val Router.topTransaction: RouterTransaction? get() = backstack.lastOrNull()
-val Router.rootTransaction: RouterTransaction? get() = backstack.firstOrNull()
-operator fun Router.get(index: Int): RouterTransaction = backstack[index]
-fun Router.getOrNull(index: Int): RouterTransaction? = backstack.getOrNull(index)
+val Router.topTransaction: Transaction? get() = backstack.lastOrNull()
+val Router.rootTransaction: Transaction? get() = backstack.firstOrNull()
+operator fun Router.get(index: Int): Transaction = backstack[index]
+fun Router.getOrNull(index: Int): Transaction? = backstack.getOrNull(index)

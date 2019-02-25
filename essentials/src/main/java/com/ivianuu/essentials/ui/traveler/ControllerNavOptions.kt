@@ -16,10 +16,10 @@
 
 package com.ivianuu.essentials.ui.traveler
 
-import com.ivianuu.director.ControllerChangeHandler
+import com.ivianuu.director.ChangeHandler
 import com.ivianuu.director.DirectorPlugins
-import com.ivianuu.director.RouterTransaction
 import com.ivianuu.director.SimpleSwapChangeHandler
+import com.ivianuu.director.Transaction
 import com.ivianuu.director.common.changehandler.FadeChangeHandler
 import com.ivianuu.director.common.changehandler.HorizontalChangeHandler
 import com.ivianuu.director.common.changehandler.VerticalChangeHandler
@@ -32,18 +32,18 @@ import com.ivianuu.director.pushChangeHandler
  */
 class ControllerNavOptions {
 
-    private var pushHandler: ControllerChangeHandler? = null
-    private var popHandler: ControllerChangeHandler? = null
+    private var pushHandler: ChangeHandler? = null
+    private var popHandler: ChangeHandler? = null
 
-    fun push(): ControllerChangeHandler? = pushHandler
+    fun push(): ChangeHandler? = pushHandler
 
-    fun push(handler: ControllerChangeHandler?): ControllerNavOptions = apply {
+    fun push(handler: ChangeHandler?): ControllerNavOptions = apply {
         pushHandler = handler
     }
 
-    fun pop(): ControllerChangeHandler? = popHandler
+    fun pop(): ChangeHandler? = popHandler
 
-    fun pop(handler: ControllerChangeHandler?): ControllerNavOptions = apply {
+    fun pop(handler: ChangeHandler?): ControllerNavOptions = apply {
         popHandler = handler
     }
 
@@ -51,13 +51,14 @@ class ControllerNavOptions {
 
 fun NavOptions(): ControllerNavOptions = ControllerNavOptions()
 
-fun ControllerNavOptions.applyToTransaction(transaction: RouterTransaction): ControllerNavOptions = apply {
+fun ControllerNavOptions.applyToTransaction(transaction: Transaction): ControllerNavOptions =
+    apply {
     transaction.pushChangeHandler(push())
     transaction.popChangeHandler(pop())
 }
 
 fun ControllerNavOptions.handler(
-    changeHandler: ControllerChangeHandler
+    changeHandler: ChangeHandler
 ): ControllerNavOptions = push(changeHandler).pop(changeHandler)
 
 fun ControllerNavOptions.fade(

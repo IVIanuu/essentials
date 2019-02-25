@@ -19,7 +19,7 @@ package com.ivianuu.essentials.ui.traveler.key
 import android.os.Bundle
 import android.os.Parcelable
 import com.ivianuu.director.Controller
-import com.ivianuu.director.RouterTransaction
+import com.ivianuu.director.Transaction
 import com.ivianuu.director.traveler.ControllerKey
 import com.ivianuu.essentials.ui.traveler.ControllerNavOptions
 import com.ivianuu.essentials.ui.traveler.applyToTransaction
@@ -42,7 +42,7 @@ abstract class ControllerKey(
         command: Command,
         currentController: Controller?,
         nextController: Controller,
-        transaction: RouterTransaction
+        transaction: Transaction
     ) {
         val data = when (command) {
             is Forward -> command.data

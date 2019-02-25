@@ -18,7 +18,7 @@ package com.ivianuu.essentials.ui.viewmodel.director
 
 import android.os.Bundle
 import com.ivianuu.director.Controller
-import com.ivianuu.director.ControllerLifecycleListener
+import com.ivianuu.director.ControllerListener
 import com.ivianuu.director.activity
 import com.ivianuu.director.doOnPostDestroy
 import com.ivianuu.director.retained.retained
@@ -32,21 +32,19 @@ import com.ivianuu.essentials.util.putSavedState
  */
 class ControllerViewModelManagerOwner(
     private val controller: Controller
-) : ControllerLifecycleListener, ViewModelManagerOwner {
+) : ControllerListener, ViewModelManagerOwner {
 
     override val viewModelManager by controller.retained { ViewModelManager() }
 
     init {
-        controller.addLifecycleListener(this)
+        controller.addListener(this)
     }
 
-    override fun preCreate(controller: Controller, savedInstanceState: Bundle?) {
-        super.preCreate(controller, savedInstanceState)
-        viewModelManager.restoreState(savedInstanceState?.getSavedState(KEY_VIEW_MODELS))
+    override fun onRestoreInstanceState(controller: Controller, savedInstanceState: Bundle) {
+        viewModelManager.restoreState(savedInstanceState.getSavedState(KEY_VIEW_MODELS))
     }
 
     override fun onSaveInstanceState(controller: Controller, outState: Bundle) {
-        super.onSaveInstanceState(controller, outState)
         outState.putSavedState(KEY_VIEW_MODELS, viewModelManager.saveState())
     }
 

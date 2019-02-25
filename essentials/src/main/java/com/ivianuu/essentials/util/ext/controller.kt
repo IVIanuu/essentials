@@ -21,7 +21,6 @@ import android.app.Application
 import android.view.View
 import com.ivianuu.director.Controller
 import com.ivianuu.director.Router
-import com.ivianuu.director.RouterTransaction
 import com.ivianuu.director.activity
 import com.ivianuu.director.parentController
 import com.ivianuu.director.scopes.destroy
@@ -33,8 +32,6 @@ import com.ivianuu.kommon.core.content.app
 
 val Controller.coroutineScope get() = destroy.coroutineScope
 val Controller.viewCoroutineScope get() = unbindView.coroutineScope
-
-val Controller.transaction: RouterTransaction get() = router.backstack.first { it.controller == this }
 
 val Controller.rootRouter: Router
     get() {
