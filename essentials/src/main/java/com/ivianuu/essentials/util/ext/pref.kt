@@ -18,8 +18,8 @@ package com.ivianuu.essentials.util.ext
 
 import com.ivianuu.epoxyprefs.PreferenceModel
 import com.ivianuu.epoxyprefs.dependency
-import com.ivianuu.essentials.util.PrefValueHolder
 import com.ivianuu.kprefs.Pref
+import com.ivianuu.kprefs.common.PrefValueHolder
 
 fun <T : Any> PreferenceModel.Builder.fromPref(pref: Pref<T>) {
     key(pref.key)

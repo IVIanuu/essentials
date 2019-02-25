@@ -64,7 +64,7 @@ object Versions {
     const val junit = "4.12"
     const val kommon = "0.0.1-dev-3"
     const val kotlin = "1.3.21"
-    const val kPrefs = "0.0.1-dev-4"
+    const val kPrefs = "0.0.1-dev-5"
     const val kSettings = "0.0.1-dev-3"
     const val liveEvent = "1e265df911"
     const val mavenGradle = "2.1"
@@ -170,6 +170,7 @@ object Deps {
     const val kotlinStdLib = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${Versions.kotlin}"
 
     const val kPrefs = "com.ivianuu.kprefs:kprefs:${Versions.kPrefs}"
+    const val kPrefsCommon = "com.ivianuu.kprefs:kprefs-common:${Versions.kPrefs}"
     const val kPrefsCoroutines = "com.ivianuu.kprefs:kprefs-coroutines:${Versions.kPrefs}"
     const val kPrefsLiveData = "com.ivianuu.kprefs:kprefs-livedata:${Versions.kPrefs}"
     const val kPrefsRx = "com.ivianuu.kprefs:kprefs-rx:${Versions.kPrefs}"

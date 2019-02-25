@@ -16,7 +16,7 @@
 
 package com.ivianuu.essentials.hidenavbar
 
-import com.ivianuu.essentials.util.PrefValueHolder
+import com.ivianuu.kprefs.common.PrefValueHolder
 
 /**
  * Nav bar rotation behavior

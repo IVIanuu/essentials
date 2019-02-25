@@ -81,6 +81,7 @@ dependencies {
     api(Deps.kotlinStdLib)
 
     api(Deps.kPrefs)
+    api(Deps.kPrefsCommon)
     api(Deps.kPrefsCoroutines)
     api(Deps.kPrefsLiveData)
     api(Deps.kPrefsRx)

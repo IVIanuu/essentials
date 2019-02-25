@@ -17,11 +17,11 @@
 package com.ivianuu.essentials.hidenavbar
 
 import android.os.Build
-import com.ivianuu.essentials.util.enumString
 import com.ivianuu.injekt.android.APPLICATION_SCOPE
 import com.ivianuu.injekt.annotations.Name
 import com.ivianuu.injekt.annotations.Single
 import com.ivianuu.kprefs.KPrefs
+import com.ivianuu.kprefs.common.enumString
 
 /**
  * Nav bar prefs
