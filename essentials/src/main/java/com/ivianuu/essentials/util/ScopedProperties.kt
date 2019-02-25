@@ -27,6 +27,8 @@ interface Properties {
 
     fun <T> set(key: String, value: T)
 
+    fun <T> remove(key: String): T?
+
     fun contains(key: String): Boolean
 
 }
@@ -66,6 +68,8 @@ private class RealProperties : Properties {
     override fun <T> set(key: String, value: T) {
         properties[key] = value as Any?
     }
+
+    override fun <T> remove(key: String): T? = properties.remove(key) as? T
 
     override fun contains(key: String) = properties.contains(key)
 

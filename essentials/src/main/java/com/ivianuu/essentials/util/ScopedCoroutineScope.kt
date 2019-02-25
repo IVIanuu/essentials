@@ -28,11 +28,11 @@ private const val KEY_COROUTINE_SCOPE = "coroutineScope"
 
 val Scope.coroutineScope: CoroutineScope
     get() = properties.getOrSet(KEY_COROUTINE_SCOPE) {
-        ScopeCoroutineScope(this)
+        ScopedCoroutineScope(this)
     }
 val ScopeOwner.coroutineScope: CoroutineScope get() = scope.coroutineScope
 
-private class ScopeCoroutineScope(scope: Scope) : CoroutineScope {
+private class ScopedCoroutineScope(scope: Scope) : CoroutineScope {
 
     private val job = Job().cancelBy(scope)
 
