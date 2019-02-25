@@ -27,6 +27,7 @@ import com.ivianuu.director.activity
 import com.ivianuu.director.androidx.lifecycle.lifecycleOwner
 import com.ivianuu.director.context
 import com.ivianuu.essentials.injection.controllerComponent
+import com.ivianuu.essentials.ui.common.layoutContainer
 import com.ivianuu.essentials.ui.mvrx.injekt.InjektMvRxView
 import com.ivianuu.essentials.ui.traveler.key.keyModule
 import com.ivianuu.essentials.ui.viewmodel.ViewModelManager
@@ -39,7 +40,6 @@ import com.ivianuu.injekt.inject
 import com.ivianuu.injekt.modules
 import com.ivianuu.traveler.Router
 import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.*
 
 /**
  * Base controller
@@ -54,7 +54,7 @@ abstract class EsController : Controller(), ContextAware, InjektMvRxView, Layout
     }
 
     override val containerView: View?
-        get() = view
+        get() = layoutContainer.containerView
 
     override val providedContext: Context
         get() = context
@@ -84,11 +84,6 @@ abstract class EsController : Controller(), ContextAware, InjektMvRxView, Layout
     override fun onAttach(view: View) {
         super.onAttach(view)
         invalidate()
-    }
-
-    override fun onUnbindView(view: View) {
-        clearFindViewByIdCache()
-        super.onUnbindView(view)
     }
 
     override fun invalidate() {
