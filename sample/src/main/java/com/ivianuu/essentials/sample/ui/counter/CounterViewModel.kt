@@ -31,9 +31,6 @@ import com.ivianuu.traveler.goBack
 import com.ivianuu.traveler.navigate
 import com.ivianuu.traveler.popToRoot
 
-/**
- * Counter view model
- */
 @Factory(scopeName = CONTROLLER_SCOPE)
 class CounterViewModel(
     key: CounterKey,

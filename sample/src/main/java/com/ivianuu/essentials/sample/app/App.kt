@@ -23,9 +23,6 @@ import com.ivianuu.essentials.sample.work.workerModule
 import com.ivianuu.essentials.work.workerInitializerModule
 import com.ivianuu.essentials.work.workerInjectionModule
 
-/**
- * App
- */
 class App : EsApp() {
 
     override fun modules() = listOf(

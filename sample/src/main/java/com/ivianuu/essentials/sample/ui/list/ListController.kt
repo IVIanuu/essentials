@@ -36,9 +36,6 @@ import kotlinx.android.synthetic.main.single_line_list_item.title
 @Parcelize
 class ListKey : ControllerKey(::ListController, NavOptions().vertical())
 
-/**
- * @author Manuel Wrage (IVIanuu)
- */
 class ListController : SimpleController() {
 
     private val viewModel by viewModel<ListViewModel>()

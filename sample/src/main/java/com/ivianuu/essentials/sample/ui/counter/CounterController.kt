@@ -34,9 +34,6 @@ import kotlinx.android.synthetic.main.controller_counter.screen_up
 @Parcelize
 data class CounterKey(val screen: Int) : ControllerKey(::CounterController)
 
-/**
- * @author Manuel Wrage (IVIanuu)
- */
 class CounterController : EsController() {
 
     override val layoutRes get() = R.layout.controller_counter
