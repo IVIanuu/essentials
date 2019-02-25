@@ -26,11 +26,13 @@ interface ViewModelManagerOwner {
 }
 
 inline fun <reified T : ViewModel> ViewModelManagerOwner.viewModel(
+    crossinline from: () -> ViewModelManagerOwner = { this },
     crossinline key: () -> String = { T::class.defaultViewModelKey },
     noinline factory: () -> T
-): Lazy<T> = unsafeLazy { getViewModel(key(), factory) }
+): Lazy<T> = unsafeLazy { getViewModel(from(), key(), factory) }
 
 inline fun <reified T : ViewModel> ViewModelManagerOwner.getViewModel(
+    from: ViewModelManagerOwner = this,
     key: String = T::class.defaultViewModelKey,
     noinline factory: () -> T
-): T = viewModelManager.get(key, factory)
+): T = from.viewModelManager.get(key, factory)
