@@ -17,7 +17,7 @@
 package com.ivianuu.essentials.ui.viewmodel.scopes
 
 import com.ivianuu.essentials.ui.viewmodel.ViewModel
-import com.ivianuu.essentials.ui.viewmodel.ViewModelListener
+import com.ivianuu.essentials.ui.viewmodel.doOnPostDestroy
 import com.ivianuu.scopes.AbstractScope
 import com.ivianuu.scopes.Scope
 import com.ivianuu.scopes.ScopeOwner
@@ -28,7 +28,7 @@ val ViewModel.scopeOwner: ScopeOwner
 
 val ViewModel.scope: Scope get() = scopeOwner.scope
 
-private val scopeCache = ScopeStore<ViewModel> { ViewModelScope(it) }
+private val scopeCache = ScopeStore(::ViewModelScope)
 
 private class ViewModelScope(viewModel: ViewModel) : AbstractScope(), ScopeOwner {
 
@@ -36,12 +36,7 @@ private class ViewModelScope(viewModel: ViewModel) : AbstractScope(), ScopeOwner
         get() = this
 
     init {
-        viewModel.addListener(object : ViewModelListener {
-            override fun postDestroy(viewModel: ViewModel) {
-                super.postDestroy(viewModel)
-                close()
-            }
-        })
+        viewModel.doOnPostDestroy { close() }
     }
 
 }

@@ -28,7 +28,7 @@ import com.ivianuu.essentials.util.putSavedState
 /**
  * Holder for [ViewModelManager]s
  */
-class ViewModelHolder : Fragment(), ViewModelManagerOwner {
+class AndroidViewModelManagerOwner : Fragment(), ViewModelManagerOwner {
 
     override val viewModelManager = ViewModelManager()
 
@@ -54,14 +54,15 @@ class ViewModelHolder : Fragment(), ViewModelManagerOwner {
     }
 
     companion object {
-        private const val TAG = "com.ivianuu.essentials.ui.viewmodel.android.ViewModelHolder"
+        private const val TAG =
+            "com.ivianuu.essentials.ui.viewmodel.android.AndroidViewModelManagerOwner"
 
-        private const val KEY_VIEW_MODELS = "ViewModelHolder.viewModels"
+        private const val KEY_VIEW_MODELS = "AndroidViewModelManagerOwner.viewModels"
 
         internal fun get(fm: FragmentManager): ViewModelManagerOwner {
-            var holder = fm.findFragmentByTag(TAG) as? ViewModelHolder
+            var holder = fm.findFragmentByTag(TAG) as? AndroidViewModelManagerOwner
             if (holder == null) {
-                holder = ViewModelHolder()
+                holder = AndroidViewModelManagerOwner()
                 fm.beginTransaction()
                     .add(holder, TAG)
                     .commitNow()
@@ -75,13 +76,13 @@ class ViewModelHolder : Fragment(), ViewModelManagerOwner {
 }
 
 val FragmentActivity.viewModelManagerOwner: ViewModelManagerOwner
-    get() = ViewModelHolder.get(supportFragmentManager)
+    get() = AndroidViewModelManagerOwner.get(supportFragmentManager)
 
 val FragmentActivity.viewModelManager: ViewModelManager
     get() = viewModelManagerOwner.viewModelManager
 
 val Fragment.viewModelManagerOwner: ViewModelManagerOwner
-    get() = ViewModelHolder.get(childFragmentManager)
+    get() = AndroidViewModelManagerOwner.get(childFragmentManager)
 
 val Fragment.viewModelManager: ViewModelManager
     get() = viewModelManagerOwner.viewModelManager
