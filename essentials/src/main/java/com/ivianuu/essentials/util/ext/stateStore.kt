@@ -16,7 +16,15 @@
 
 package com.ivianuu.essentials.util.ext
 
+import com.ivianuu.closeable.Closeable
 import com.ivianuu.scopes.Scope
+import com.ivianuu.statestore.StateListener
 import com.ivianuu.statestore.StateStore
 
 fun <T> StateStore<T>.closeBy(scope: Scope): StateStore<T> = apply { scope.addListener { close() } }
+
+fun <T> StateStore<T>.addCloseableListener(listener: StateListener<T>): Closeable {
+    val closeable = Closeable { removeStateListener(listener) }
+    addStateListener(listener)
+    return closeable
+}

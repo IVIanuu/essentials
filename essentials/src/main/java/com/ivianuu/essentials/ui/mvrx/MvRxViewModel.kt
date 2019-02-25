@@ -18,14 +18,13 @@ package com.ivianuu.essentials.ui.mvrx
 
 import androidx.lifecycle.LifecycleOwner
 import com.ivianuu.closeable.Closeable
-import com.ivianuu.closeable.rx.asCloseable
 import com.ivianuu.essentials.ui.common.EsViewModel
 import com.ivianuu.essentials.ui.mvrx.lifecycle.LifecycleStateListener
+import com.ivianuu.essentials.util.ext.addCloseableListener
 import com.ivianuu.essentials.util.ext.closeBy
 import com.ivianuu.statestore.Consumer
 import com.ivianuu.statestore.Reducer
 import com.ivianuu.statestore.StateStore
-import com.ivianuu.statestore.rx.observable
 import com.ivianuu.timberktx.d
 
 /**
@@ -35,9 +34,7 @@ abstract class MvRxViewModel<S>(initialState: S) : EsViewModel() {
 
     private val stateStore = StateStore(initialState).closeBy(scope)
 
-    @PublishedApi internal val state get() = stateStore.peekState()
-
-    protected fun peekState(): S = stateStore.peekState()
+    fun peekState(): S = stateStore.peekState()
 
     protected fun withState(consumer: Consumer<S>) {
         stateStore.withState(consumer)
@@ -52,7 +49,7 @@ abstract class MvRxViewModel<S>(initialState: S) : EsViewModel() {
     }
 
     protected fun subscribe(consumer: Consumer<S>): Closeable =
-        stateStore.observable().subscribe(consumer).asCloseable().closeBy(scope)
+        stateStore.addCloseableListener(consumer).closeBy(scope)
 
     fun subscribe(owner: LifecycleOwner, consumer: Consumer<S>): Closeable =
         LifecycleStateListener(
@@ -61,5 +58,5 @@ abstract class MvRxViewModel<S>(initialState: S) : EsViewModel() {
             consumer
         )
 
-    override fun toString() = "${javaClass.simpleName} -> $state"
+    override fun toString() = "${javaClass.simpleName} -> ${peekState()}"
 }
