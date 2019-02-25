@@ -16,9 +16,9 @@
 
 package com.ivianuu.essentials.ui.mvrx.lifecycle
 
+import androidx.lifecycle.GenericLifecycleObserver
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
-import com.ivianuu.essentials.util.SimpleLifecycleObserver
 
 internal class LifecycleLazy<T>(
     owner: LifecycleOwner,
@@ -35,8 +35,8 @@ internal class LifecycleLazy<T>(
     private val lock = this
 
     init {
-        owner.lifecycle.addObserver(object : SimpleLifecycleObserver() {
-            override fun onAny(owner: LifecycleOwner, event: Lifecycle.Event) {
+        owner.lifecycle.addObserver(object : GenericLifecycleObserver {
+            override fun onStateChanged(source: LifecycleOwner, event: Lifecycle.Event) {
                 if (this@LifecycleLazy.event == event) {
                     if (!isInitialized()) value
                     owner.lifecycle.removeObserver(this)

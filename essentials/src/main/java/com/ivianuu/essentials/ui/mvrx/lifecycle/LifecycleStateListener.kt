@@ -16,10 +16,10 @@
 
 package com.ivianuu.essentials.ui.mvrx.lifecycle
 
+import androidx.lifecycle.GenericLifecycleObserver
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import com.ivianuu.closeable.Closeable
-import com.ivianuu.essentials.util.SimpleLifecycleObserver
 import com.ivianuu.statestore.StateStore
 
 /**
@@ -31,7 +31,7 @@ internal class LifecycleStateListener<T>(
     private val owner: LifecycleOwner,
     private val store: StateStore<T>,
     private val consumer: (T) -> Unit
-) : SimpleLifecycleObserver(), Closeable {
+) : GenericLifecycleObserver, Closeable {
 
     override var isClosed = false
         private set
@@ -40,8 +40,7 @@ internal class LifecycleStateListener<T>(
         owner.lifecycle.addObserver(this)
     }
 
-    override fun onAny(owner: LifecycleOwner, event: Lifecycle.Event) {
-        super.onAny(owner, event)
+    override fun onStateChanged(source: LifecycleOwner, event: Lifecycle.Event) {
         val state = owner.lifecycle.currentState
         when {
             state.isAtLeast(Lifecycle.State.RESUMED) -> {
