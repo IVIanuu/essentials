@@ -40,12 +40,15 @@ abstract class ListController(
     private var hasBuiltModelsEver = false
 
     private val buildModelsAction: () -> Unit = {
-        currentModels.clear()
+        cancelPendingModelBuild()
+
         isBuildingModels = true
         buildModels()
         isBuildingModels = false
+
         adapter.setModels(currentModels.toList())
         currentModels.clear()
+
         hasBuiltModelsEver = true
     }
 
