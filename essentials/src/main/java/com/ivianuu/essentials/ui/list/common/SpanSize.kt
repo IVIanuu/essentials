@@ -40,6 +40,10 @@ class ListModelSpanSizeLookUp(
 
     var defaultSpanSize = 1
 
+    init {
+        isSpanIndexCacheEnabled = true
+    }
+
     constructor(
         controller: ListController,
         layoutManager: GridLayoutManager
