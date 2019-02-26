@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.ui.list
 
+import android.os.Bundle
 import androidx.recyclerview.widget.RecyclerView
 
 /**
@@ -35,6 +36,13 @@ interface ListControllerListener {
     fun onModelsBuildResult(controller: ListController, result: DiffResult) {
     }
 
+    fun onRestoreState(controller: ListController, savedState: Bundle) {
+    }
+
+    fun onSaveState(controller: ListController, savedState: Bundle) {
+    }
+
+
 }
 
 fun ListController.doOnAttachedToRecyclerView(
@@ -53,33 +61,49 @@ fun ListController.doOnModelsBuildResult(
     block: (controller: ListController, result: DiffResult) -> Unit
 ): ListControllerListener = addListener(onModelsBuildResult = block)
 
+fun ListController.doOnRestoreState(
+    block: (controller: ListController, savedState: Bundle) -> Unit
+): ListControllerListener = addListener(onRestoreState = block)
+
+fun ListController.doOnSaveState(
+    block: (controller: ListController, savedState: Bundle) -> Unit
+): ListControllerListener = addListener(onSaveState = block)
+
 fun ListController.addListener(
     onAttachedToRecyclerView: ((controller: ListController, recyclerView: RecyclerView) -> Unit)? = null,
     onDetachedFromRecyclerView: ((controller: ListController, recyclerView: RecyclerView) -> Unit)? = null,
     onInterceptBuildModels: ((controller: ListController, models: MutableList<ListModel<*>>) -> Unit)? = null,
-    onModelsBuildResult: ((controller: ListController, result: DiffResult) -> Unit)? = null
+    onModelsBuildResult: ((controller: ListController, result: DiffResult) -> Unit)? = null,
+    onRestoreState: ((controller: ListController, savedState: Bundle) -> Unit)? = null,
+    onSaveState: ((controller: ListController, savedState: Bundle) -> Unit)? = null
 ): ListControllerListener = ListControllerListener(
     onAttachedToRecyclerView, onDetachedFromRecyclerView,
     onInterceptBuildModels,
-    onModelsBuildResult
+    onModelsBuildResult,
+    onRestoreState, onSaveState
 ).also { addListener(it) }
 
 fun ListControllerListener(
     onAttachedToRecyclerView: ((controller: ListController, recyclerView: RecyclerView) -> Unit)? = null,
     onDetachedFromRecyclerView: ((controller: ListController, recyclerView: RecyclerView) -> Unit)? = null,
     onInterceptBuildModels: ((controller: ListController, models: MutableList<ListModel<*>>) -> Unit)? = null,
-    onModelsBuildResult: ((controller: ListController, result: DiffResult) -> Unit)? = null
+    onModelsBuildResult: ((controller: ListController, result: DiffResult) -> Unit)? = null,
+    onRestoreState: ((controller: ListController, savedState: Bundle) -> Unit)? = null,
+    onSaveState: ((controller: ListController, savedState: Bundle) -> Unit)? = null
 ): ListControllerListener = LambdaListControllerListener(
     onAttachedToRecyclerView, onDetachedFromRecyclerView,
     onInterceptBuildModels,
-    onModelsBuildResult
+    onModelsBuildResult,
+    onRestoreState, onSaveState
 )
 
 class LambdaListControllerListener(
     private val onAttachedToRecyclerView: ((controller: ListController, recyclerView: RecyclerView) -> Unit)? = null,
     private val onDetachedFromRecyclerView: ((controller: ListController, recyclerView: RecyclerView) -> Unit)? = null,
     private val onInterceptBuildModels: ((controller: ListController, models: MutableList<ListModel<*>>) -> Unit)? = null,
-    private val onModelsBuildResult: ((controller: ListController, result: DiffResult) -> Unit)? = null
+    private val onModelsBuildResult: ((controller: ListController, result: DiffResult) -> Unit)? = null,
+    private val onRestoreState: ((controller: ListController, savedState: Bundle) -> Unit)? = null,
+    private val onSaveState: ((controller: ListController, savedState: Bundle) -> Unit)? = null
 ) : ListControllerListener {
 
     override fun onAttachedToRecyclerView(controller: ListController, recyclerView: RecyclerView) {
@@ -102,6 +126,14 @@ class LambdaListControllerListener(
 
     override fun onModelsBuildResult(controller: ListController, result: DiffResult) {
         onModelsBuildResult?.invoke(controller, result)
+    }
+
+    override fun onRestoreState(controller: ListController, savedState: Bundle) {
+        onRestoreState?.invoke(controller, savedState)
+    }
+
+    override fun onSaveState(controller: ListController, savedState: Bundle) {
+        onSaveState?.invoke(controller, savedState)
     }
 
 }

@@ -18,11 +18,15 @@ package com.ivianuu.essentials.ui.list
 
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
+import com.ivianuu.essentials.ui.list.internal.ViewStateManager
 
 /**
  * View holder used by [ListAdapter]s
  */
-class ListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+class ListViewHolder(
+    itemView: View,
+    shouldSaveInitialViewState: Boolean
+) : RecyclerView.ViewHolder(itemView) {
 
     var model: ListModel<ListHolder>? = null
         private set
@@ -31,7 +35,16 @@ class ListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private set
     private var holderCreated = false
 
-    fun bind(model: ListModel<*>) {
+    private var initialViewState: ViewStateManager.ViewState? = null
+
+    init {
+        if (shouldSaveInitialViewState) {
+            initialViewState = ViewStateManager.ViewState()
+                .also { it.save(itemView) }
+        }
+    }
+
+    internal fun bind(model: ListModel<*>) {
         this.model = model as ListModel<ListHolder>
 
         if (!holderCreated) {
@@ -43,9 +56,13 @@ class ListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         model.bind(holder)
     }
 
-    fun unbind() {
+    internal fun unbind() {
         model?.unbind(holder)
         model = null
+    }
+
+    internal fun restoreInitialViewState() {
+        initialViewState?.restore(itemView)
     }
 
 }

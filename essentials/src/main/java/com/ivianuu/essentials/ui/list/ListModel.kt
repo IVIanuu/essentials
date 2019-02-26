@@ -33,11 +33,13 @@ abstract class ListModel<H : ListHolder> {
             field = value
         }
 
-    val properties = ModelProperties()
-
     open val viewType: Int get() = layoutRes
 
-    protected abstract val layoutRes: Int
+    open val layoutRes = 0
+
+    val properties = ModelProperties()
+
+    open val shouldSaveViewState = false
 
     private val listeners = mutableSetOf<ListModelListener>()
     private var superCalled = false
@@ -48,8 +50,10 @@ abstract class ListModel<H : ListHolder> {
 
     protected abstract fun onCreateHolder(): H
 
-    protected open fun onBuildView(parent: ViewGroup): View =
-        LayoutInflater.from(parent.context).inflate(layoutRes, parent, false)
+    protected open fun onBuildView(parent: ViewGroup): View {
+        check(layoutRes != 0) { "specify a layoutRes if you don't override onBuildView" }
+        return LayoutInflater.from(parent.context).inflate(layoutRes, parent, false)
+    }
 
     protected open fun onBind(holder: H) {
         superCalled = true

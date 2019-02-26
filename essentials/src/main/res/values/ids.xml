@@ -32,4 +32,7 @@
     <!-- Simple loading model -->
     <item name="es_progress_bar" type="id" />
 
+    <!-- Lists -->
+    <item name="state_saving_id" type="id" />
+
 </resources>

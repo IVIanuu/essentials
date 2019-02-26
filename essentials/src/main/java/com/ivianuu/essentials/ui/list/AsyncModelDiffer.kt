@@ -19,6 +19,7 @@ package com.ivianuu.essentials.ui.list
 import android.os.Handler
 import android.os.Looper
 import androidx.recyclerview.widget.DiffUtil
+import com.ivianuu.essentials.ui.list.internal.DiffPayload
 import java.util.concurrent.Executor
 
 private val handler = Handler(Looper.getMainLooper())
@@ -87,6 +88,11 @@ class AsyncModelDiffer(
                     val oldModel = previousModels[oldItemPosition]
                     val newModel = newModels[newItemPosition]
                     return oldModel == newModel
+                }
+
+                override fun getChangePayload(oldItemPosition: Int, newItemPosition: Int): Any? {
+                    val oldModel = previousModels[oldItemPosition]
+                    return DiffPayload(oldModel)
                 }
             })
 

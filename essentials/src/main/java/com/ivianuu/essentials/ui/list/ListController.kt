@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.ui.list
 
+import android.os.Bundle
 import android.os.Handler
 import androidx.recyclerview.widget.RecyclerView
 import java.util.concurrent.Executor
@@ -126,6 +127,30 @@ abstract class ListController(
     protected open fun onModelsBuildResult(result: DiffResult) {
     }
 
+    protected open fun onRestoreState(savedState: Bundle) {
+    }
+
+    protected open fun onSaveState(savedState: Bundle) {
+    }
+
+    fun saveState(): Bundle {
+        val bundle = Bundle()
+
+        bundle.putBundle(KEY_ADAPTER_STATE, adapter.saveState())
+
+        val instanceState = Bundle()
+        onSaveState(instanceState)
+        bundle.putBundle(KEY_INSTANCE_STATE, instanceState)
+
+        return bundle
+    }
+
+    fun restoreState(savedState: Bundle?) {
+        if (savedState == null) return
+        adapter.restoreState(savedState.getBundle(KEY_ADAPTER_STATE))
+        onRestoreState(savedState.getBundle(KEY_INSTANCE_STATE)!!)
+    }
+
     @PublishedApi
     internal fun addInternal(model: ListModel<*>) {
         add(model)
@@ -185,6 +210,11 @@ abstract class ListController(
 
     private enum class RequestedModelBuildType {
         NONE, NEXT_FRAME, DELAYED
+    }
+
+    private companion object {
+        private const val KEY_ADAPTER_STATE = "ListController.adapter"
+        private const val KEY_INSTANCE_STATE = "ListController.instanceState"
     }
 
 }
