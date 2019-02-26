@@ -28,8 +28,7 @@ interface BaseListTouchCallback<T : ListModel<*>> {
 
 }
 
-interface ListDragCallback<T : ListModel<*>> :
-    BaseListTouchCallback<T> {
+interface ListDragCallback<T : ListModel<*>> : BaseListTouchCallback<T> {
 
     fun onDragStarted(model: T, itemView: View, adapterPosition: Int)
 
@@ -39,8 +38,7 @@ interface ListDragCallback<T : ListModel<*>> :
 
 }
 
-interface ListSwipeCallback<T : ListModel<*>> :
-    BaseListTouchCallback<T> {
+interface ListSwipeCallback<T : ListModel<*>> : BaseListTouchCallback<T> {
 
     fun onSwipeStarted(model: T, itemView: View, adapterPosition: Int)
 

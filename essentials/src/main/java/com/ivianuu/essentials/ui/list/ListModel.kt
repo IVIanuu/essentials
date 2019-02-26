@@ -69,23 +69,23 @@ abstract class ListModel<H : ListHolder> {
     protected open fun onFailedToRecycle(holder: H): Boolean = true
 
     protected fun <T> property(
-        key: String? = null,
+        key: String,
         doHash: Boolean = true,
-        defaultValue: (String) -> T
-    ): ReadWriteProperty<ListModel<*>, T> = ModelPropertyDelegate(key, doHash, defaultValue)
+        defaultValue: () -> T
+    ): ReadWriteProperty<ListModel<*>, T> = ModelPropertyDelegate(this, key, doHash, defaultValue)
 
     protected fun <T> requiredProperty(
-        key: String? = null,
+        key: String,
         doHash: Boolean = true
-    ): ReadWriteProperty<ListModel<*>, T> = ModelPropertyDelegate(key, doHash) {
-        error("missing property $it use optionalProperty() for optional ones")
+    ): ReadWriteProperty<ListModel<*>, T> = ModelPropertyDelegate(this, key, doHash) {
+        error("missing property with key $key use optionalProperty() for optional ones")
     }
 
     protected fun <T> optionalProperty(
-        key: String? = null,
+        key: String,
         doHash: Boolean = true
     ): ReadWriteProperty<ListModel<*>, T?> =
-        ModelPropertyDelegate(key, doHash) { null }
+        ModelPropertyDelegate(this, key, doHash) { null }
 
     fun addListener(listener: ListModelListener) {
         listeners.add(listener)

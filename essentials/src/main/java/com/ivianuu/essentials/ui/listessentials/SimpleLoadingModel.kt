@@ -27,8 +27,8 @@ import kotlinx.android.synthetic.main.es_item_simple_loading.es_progress_bar
  */
 open class SimpleLoadingModel : SimpleListModel() {
 
-    var progressColor by property { 0 }
-    var progressColorRes by property { 0 }
+    var progressColor by property("progressColor") { 0 }
+    var progressColorRes by property("processColorRes") { 0 }
 
     override val layoutRes: Int
         get() = R.layout.es_item_simple_loading

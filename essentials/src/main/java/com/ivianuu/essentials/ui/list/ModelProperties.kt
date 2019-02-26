@@ -29,9 +29,18 @@ class ModelProperties internal constructor() {
     val entries: Map<String, ModelProperty<*>> get() = _entries
     private val _entries = mutableMapOf<String, ModelProperty<*>>()
 
+    private val propertyDelegates = mutableMapOf<String, ModelPropertyDelegate<*>>()
+
     internal fun addedToController() {
-        // todo find a way to ensure that all properties are initialized
+        // force init of all delegates to have consistent equals() and hashCode() results
+        propertyDelegates.forEach { it.value.initializeValue() }
+        propertyDelegates.clear()
+
         addedToController = true
+    }
+
+    internal fun registerDelegate(delegate: ModelPropertyDelegate<*>) {
+        propertyDelegates[delegate.key] = delegate
     }
 
     fun <T> getPropertyEntry(key: String): ModelProperty<T>? =
@@ -42,6 +51,7 @@ class ModelProperties internal constructor() {
     ) {
         check(!addedToController) { "cannot change properties on added models" }
         _entries[property.key] = property
+        propertyDelegates.remove(property.key)
     }
 
     internal fun <T> getOrSetProperty(
@@ -106,39 +116,41 @@ data class ModelProperty<T>(
 )
 
 internal class ModelPropertyDelegate<T>(
-    private val key: String? = null,
+    private val model: ListModel<*>,
+    val key: String,
     private val doHash: Boolean = true,
-    private val defaultValue: (String) -> T
+    private val defaultValue: () -> T
 ) : ReadWriteProperty<ListModel<*>, T> {
 
-    private var realKey: String? = key
+    init {
+        model.properties.registerDelegate(this)
+    }
+
+    fun initializeValue() {
+        getValueInternal()
+    }
 
     override fun getValue(thisRef: ListModel<*>, property: KProperty<*>): T {
-        val key = getRealKey(thisRef, property)
-        return thisRef.properties.getOrSetProperty(key) {
-            ModelProperty(
-                key,
-                defaultValue(key),
-                doHash
-            )
-        }.value
+        return getValueInternal()
     }
 
     override fun setValue(thisRef: ListModel<*>, property: KProperty<*>, value: T) {
-        thisRef.properties.setProperty(
+        model.properties.setProperty(
             ModelProperty(
-                getRealKey(thisRef, property),
+                key,
                 value,
                 doHash
             )
         )
     }
 
-    private fun getRealKey(thisRef: ListModel<*>, property: KProperty<*>): String {
-        if (realKey == null) {
-            realKey = key ?: "${thisRef.javaClass.name}.${property.name}"
-        }
-
-        return realKey!!
+    private fun getValueInternal(): T {
+        return model.properties.getOrSetProperty(key) {
+            ModelProperty(
+                key,
+                defaultValue(),
+                doHash
+            )
+        }.value
     }
 }
