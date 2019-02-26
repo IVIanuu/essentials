@@ -97,7 +97,7 @@ abstract class ListController(
         _modelListeners.remove(listener)
     }
 
-    inline fun <T : ListModel<*>> T.add(block: T.() -> Unit) {
+    inline fun <T : ListModel<*>> T.add(block: T.() -> Unit = {}) {
         addTo(this@ListController, block)
     }
 

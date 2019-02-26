@@ -213,7 +213,7 @@ fun ListModel<*>.id(id: String?) {
 
 inline fun <T : ListModel<*>> T.addTo(
     controller: ListController,
-    block: T.() -> Unit
+    block: T.() -> Unit = {}
 ) {
     block()
     controller.addInternal(this)

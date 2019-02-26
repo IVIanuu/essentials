@@ -33,6 +33,13 @@ fun <T : ListModel<*>> T.onClick(
     )
 }
 
+fun <T : ListModel<*>> T.onClick(
+    viewId: Int,
+    block: (T, View) -> Unit
+) {
+    onClick({ it.findViewById(viewId) }, block)
+}
+
 fun <T : ListModel<*>> T.onLongClick(
     viewProvider: (View) -> View = { it },
     block: (T, View) -> Boolean
@@ -42,4 +49,11 @@ fun <T : ListModel<*>> T.onLongClick(
         postBind = { _, holder -> viewProvider(holder.itemView).setOnLongClickListener(listener) },
         preUnbind = { _, holder -> viewProvider(holder.itemView).setOnLongClickListener(null) }
     )
+}
+
+fun <T : ListModel<*>> T.onLongClick(
+    viewId: Int,
+    block: (T, View) -> Boolean
+) {
+    onLongClick({ it.findViewById(viewId) }, block)
 }
