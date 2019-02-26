@@ -102,7 +102,7 @@ internal class ModelPropertyDelegate<T>(
 
     override fun getValue(thisRef: ListModel<*>, property: KProperty<*>): T {
         val key = getRealKey(thisRef, property)
-        return thisRef.properties.getPropertyOrSetDefault<T>(key) {
+        return thisRef.properties.getPropertyOrSetDefault(key) {
             ModelProperty(
                 key,
                 defaultValue(key),

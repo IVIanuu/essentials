@@ -23,7 +23,7 @@ import com.ivianuu.essentials.ui.list.defaultDiffingExecutor
 import java.util.concurrent.Executor
 
 /**
- * @author Manuel Wrage (IVIanuu)
+ * Simple [ListController] which takes invokes [buildModels] to build models
  */
 class SimpleListController(
     diffingExecutor: Executor = ListPlugins.defaultDiffingExecutor,

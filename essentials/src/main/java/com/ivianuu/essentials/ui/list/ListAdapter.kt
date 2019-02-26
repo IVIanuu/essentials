@@ -90,6 +90,11 @@ class ListAdapter(
         controller.detachedFromRecyclerView(recyclerView)
     }
 
+    override fun setHasStableIds(hasStableIds: Boolean) {
+        require(hasStableIds) { "This implementation relies on hasStableIds" }
+        super.setHasStableIds(hasStableIds)
+    }
+
     fun setModels(models: List<ListModel<*>>) {
         helper.submitList(models)
     }

@@ -25,13 +25,10 @@ import com.ivianuu.scopes.ScopeOwner
 import kotlinx.android.extensions.LayoutContainer
 
 /**
- * Base epoxy model with holder
+ * Base list model with holder
  */
 abstract class EsListModel<H : EsListHolder> : ListModel<H>(), ContextAware, LayoutContainer,
     ScopeOwner {
-
-    var onClick by optionalProperty<((View) -> Unit)?>(doHash = false)
-    var onLongClick by optionalProperty<((View) -> Boolean)?>(doHash = false)
 
     override val containerView
         get() = _boundHolder!!.containerView
@@ -59,36 +56,11 @@ abstract class EsListModel<H : EsListHolder> : ListModel<H>(), ContextAware, Lay
         _scope?.clear()
         _boundHolder = holder
         super.onBind(holder)
-
-        if (onClickView != null) {
-            onClickView?.setOnClickListener(onClick)
-        } else if (useContainerForClicks) {
-            holder.containerView.setOnClickListener(onClick)
-        }
-
-        if (onLongClickView != null) {
-            onLongClickView?.setOnLongClickListener(onLongClick)
-        } else if (useContainerForLongClicks) {
-            holder.containerView.setOnLongClickListener(onLongClick)
-        }
     }
 
     override fun onUnbind(holder: H) {
-        if (onClickView != null) {
-            onClickView?.setOnClickListener(null)
-        } else if (useContainerForClicks) {
-            holder.containerView.setOnClickListener(null)
-        }
-
-        if (onLongClickView != null) {
-            onLongClickView?.setOnClickListener(null)
-        } else if (useContainerForLongClicks) {
-            holder.containerView.setOnLongClickListener(null)
-        }
-
         _scope?.clear()
         _boundHolder = null
-
         super.onUnbind(holder)
     }
 

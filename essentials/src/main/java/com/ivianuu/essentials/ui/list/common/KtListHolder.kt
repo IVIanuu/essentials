@@ -21,7 +21,7 @@ import com.ivianuu.essentials.ui.list.ListHolder
 import kotlinx.android.extensions.LayoutContainer
 
 /**
- * @author Manuel Wrage (IVIanuu)
+ * A [ListHolder] which is also a [LayoutContainer]
  */
 open class KtListHolder : ListHolder(), LayoutContainer {
     override val containerView: View

@@ -21,7 +21,7 @@ import com.ivianuu.essentials.ui.list.common.KtListHolder
 import com.ivianuu.essentials.util.ContextAware
 
 /**
- * Base epoxy holder
+ * Base list holder
  */
 open class EsListHolder : KtListHolder(), ContextAware {
 
