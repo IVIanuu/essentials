@@ -141,7 +141,7 @@ abstract class ListModel<H : ListHolder> {
     internal fun addedToController() {
         check(id != 0L) { "id must be set" }
         addedToController = true
-        properties.addedToController = true
+        properties.addedToController()
     }
 
     private inline fun notifyListeners(block: (ListModelListener) -> Unit) {

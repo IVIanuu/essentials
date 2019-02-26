@@ -24,11 +24,13 @@ import kotlin.reflect.KProperty
  */
 class ModelProperties internal constructor() {
 
-    internal var addedToController = false
+    private var addedToController = false
 
     private val _entries = mutableMapOf<String, ModelProperty<*>>()
 
-    private var allowSetProperty = false
+    internal fun addedToController() {
+        addedToController = true
+    }
 
     internal fun <T> getProperty(key: String): ModelProperty<T>? =
         _entries[key] as? ModelProperty<T>?
@@ -36,22 +38,19 @@ class ModelProperties internal constructor() {
     internal fun <T> setProperty(
         property: ModelProperty<T>
     ) {
-        check(!addedToController || allowSetProperty) {
-            "cannot change properties on added models"
-        }
+
+        check(!addedToController) { "cannot change properties on added models" }
         _entries[property.key] = property
     }
 
-    internal fun <T> getPropertyOrSetDefault(
+    internal fun <T> getPropertyOrSet(
         key: String,
         defaultValue: () -> ModelProperty<T>
     ): ModelProperty<T> {
         var property = getProperty<T>(key)
         if (property == null) {
             property = defaultValue()
-            allowSetProperty = true
             setProperty(property)
-            allowSetProperty = false
         }
 
         return property
@@ -102,7 +101,7 @@ internal class ModelPropertyDelegate<T>(
 
     override fun getValue(thisRef: ListModel<*>, property: KProperty<*>): T {
         val key = getRealKey(thisRef, property)
-        return thisRef.properties.getPropertyOrSetDefault(key) {
+        return thisRef.properties.getPropertyOrSet(key) {
             ModelProperty(
                 key,
                 defaultValue(key),
