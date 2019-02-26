@@ -70,28 +70,21 @@ abstract class ListModel<H : ListHolder> {
     protected fun <T> property(
         key: String? = null,
         doHash: Boolean = true,
-        includeInToString: Boolean = true,
         defaultValue: (String) -> T
-    ): ReadWriteProperty<ListModel<*>, T> = ModelPropertyDelegate(
-        key, doHash, includeInToString, defaultValue
-    )
+    ): ReadWriteProperty<ListModel<*>, T> = ModelPropertyDelegate(key, doHash, defaultValue)
 
     protected fun <T> requiredProperty(
         key: String? = null,
-        doHash: Boolean = true,
-        includeInToString: Boolean = true
-    ): ReadWriteProperty<ListModel<*>, T> = ModelPropertyDelegate(
-        key, doHash, includeInToString
-    ) {
+        doHash: Boolean = true
+    ): ReadWriteProperty<ListModel<*>, T> = ModelPropertyDelegate(key, doHash) {
         error("missing property $it use optionalProperty() for optional ones")
     }
 
     protected fun <T> optionalProperty(
         key: String? = null,
-        doHash: Boolean = true,
-        includeInToString: Boolean = true
+        doHash: Boolean = true
     ): ReadWriteProperty<ListModel<*>, T?> =
-        ModelPropertyDelegate(key, doHash, includeInToString) { null }
+        ModelPropertyDelegate(key, doHash) { null }
 
     fun addListener(listener: ListModelListener) {
         listeners.add(listener)
@@ -199,10 +192,9 @@ fun <T> ListModel<*>.setProperty(property: ModelProperty<T>) {
 fun <T> ListModel<*>.setProperty(
     key: String,
     value: T,
-    doHash: Boolean = true,
-    includeInToString: Boolean = true
+    doHash: Boolean = true
 ) {
-    setProperty(ModelProperty(key, value, doHash, includeInToString))
+    setProperty(ModelProperty(key, value, doHash))
 }
 
 fun ListModel<*>.id(id: Long) {

@@ -36,7 +36,9 @@ class ModelProperties internal constructor() {
     internal fun <T> setProperty(
         property: ModelProperty<T>
     ) {
-        check(!addedToController || allowSetProperty) { "cannot change properties on added models" }
+        check(!addedToController || allowSetProperty) {
+            "cannot change properties on added models"
+        }
         _entries[property.key] = property
     }
 
@@ -59,20 +61,26 @@ class ModelProperties internal constructor() {
         if (this === other) return true
         if (other !is ModelProperties) return false
 
-        val entries = _entries.filterValues { it.doHash }
-        val otherEntries = other._entries.filterValues { it.doHash }
+        val entries = _entries
+            .filterValues { it.doHash }
+            .map { it.value }
+        val otherEntries = other._entries
+            .filterValues { it.doHash }
+            .map { it.value }
         if (entries != otherEntries) return false
 
         return true
     }
 
     override fun hashCode(): Int {
-        val entries = _entries.filterValues { it.doHash }
+        val entries = _entries
+            .filterValues { it.doHash }
+            .map { it.value }
         return entries.hashCode()
     }
 
     override fun toString(): String {
-        val entries = _entries.filterValues { it.includeInToString }
+        val entries = _entries.map { it.value }
         return entries.toString()
     }
 
@@ -81,18 +89,12 @@ class ModelProperties internal constructor() {
 data class ModelProperty<T>(
     val key: String,
     val value: T,
-    val doHash: Boolean = true,
-    val includeInToString: Boolean = true
-) {
-    override fun toString(): String {
-        return value.toString()
-    }
-}
+    val doHash: Boolean = true
+)
 
 internal class ModelPropertyDelegate<T>(
     private val key: String? = null,
     private val doHash: Boolean = true,
-    private val includeInToString: Boolean = true,
     private val defaultValue: (String) -> T
 ) : ReadWriteProperty<ListModel<*>, T> {
 
@@ -104,8 +106,7 @@ internal class ModelPropertyDelegate<T>(
             ModelProperty(
                 key,
                 defaultValue(key),
-                doHash,
-                includeInToString
+                doHash
             )
         }.value
     }
@@ -115,8 +116,7 @@ internal class ModelPropertyDelegate<T>(
             ModelProperty(
                 getRealKey(thisRef, property),
                 value,
-                doHash,
-                includeInToString
+                doHash
             )
         )
     }
