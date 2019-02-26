@@ -62,6 +62,8 @@ abstract class ListController(
     internal val modelListeners get() = _modelListeners
     private val _modelListeners = mutableSetOf<ListModelListener>()
 
+    private val listeners = mutableSetOf<ListControllerListener>()
+
     open fun requestModelBuild() {
         check(!isBuildingModels) { "cannot call requestModelBuild() inside buildModels()" }
         if (hasBuiltModelsEver) {
@@ -131,18 +133,22 @@ abstract class ListController(
 
     internal fun attachedToRecyclerView(recyclerView: RecyclerView) {
         onAttachedToRecyclerView(recyclerView)
+        notifyListeners { it.onAttachedToRecyclerView(this, recyclerView) }
     }
 
     internal fun detachedFromRecyclerView(recyclerView: RecyclerView) {
         onDetachedFromRecyclerView(recyclerView)
+        notifyListeners { it.onDetachedFromRecyclerView(this, recyclerView) }
     }
 
     internal fun modelsBuildResult(result: DiffResult) {
         onModelsBuildResult(result)
+        notifyListeners { it.onModelsBuildResult(this, result) }
     }
 
     private fun interceptBuildModels() {
         onInterceptBuildModels(currentModels)
+        notifyListeners { it.onInterceptBuildModels(this, currentModels) }
     }
 
     fun addModelListener(listener: ListModelListener) {
@@ -151,6 +157,14 @@ abstract class ListController(
 
     fun removeModelListener(listener: ListModelListener) {
         _modelListeners.remove(listener)
+    }
+
+    fun addListener(listener: ListControllerListener) {
+        listeners.add(listener)
+    }
+
+    fun removeListener(listener: ListControllerListener) {
+        listeners.remove(listener)
     }
 
     inline fun <T : ListModel<*>> T.add(block: T.() -> Unit = {}) {
@@ -163,6 +177,10 @@ abstract class ListController(
 
     private fun checkBuildingModels() {
         check(isBuildingModels) { "cannot add models outside of buildModels()" }
+    }
+
+    private inline fun notifyListeners(block: (ListControllerListener) -> Unit) {
+        listeners.toList().forEach(block)
     }
 
     private enum class RequestedModelBuildType {

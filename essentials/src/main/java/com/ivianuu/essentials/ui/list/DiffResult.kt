@@ -21,7 +21,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListUpdateCallback
 import androidx.recyclerview.widget.RecyclerView
 
-class DiffResult(
+data class DiffResult(
     val previousModels: List<ListModel<*>>,
     val newModels: List<ListModel<*>>,
     val differResult: DiffUtil.DiffResult?

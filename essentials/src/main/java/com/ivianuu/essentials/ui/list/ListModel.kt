@@ -44,6 +44,7 @@ abstract class ListModel<H : ListHolder> {
 
     private lateinit var controller: ListController
     private var addedToController = false
+    private var blockMutations = false
 
     protected abstract fun onCreateHolder(): H
 
@@ -147,8 +148,11 @@ abstract class ListModel<H : ListHolder> {
 
         this.controller = controller
         addedToController = true
+    }
 
-        properties.addedToController()
+    internal fun blockMutations() {
+        blockMutations = true
+        properties.blockMutations()
     }
 
     private inline fun notifyListeners(block: (ListModelListener) -> Unit) {

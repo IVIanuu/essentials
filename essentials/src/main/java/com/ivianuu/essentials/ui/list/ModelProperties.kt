@@ -24,19 +24,19 @@ import kotlin.reflect.KProperty
  */
 class ModelProperties internal constructor() {
 
-    private var addedToController = false
+    private var blockMutations = false
 
     val entries: Map<String, ModelProperty<*>> get() = _entries
     private val _entries = mutableMapOf<String, ModelProperty<*>>()
 
     private val propertyDelegates = mutableMapOf<String, ModelPropertyDelegate<*>>()
 
-    internal fun addedToController() {
+    internal fun blockMutations() {
         // force init of all delegates to have consistent equals() and hashCode() results
         propertyDelegates.forEach { it.value.initializeValue() }
         propertyDelegates.clear()
 
-        addedToController = true
+        blockMutations = true
     }
 
     internal fun registerDelegate(delegate: ModelPropertyDelegate<*>) {
@@ -49,7 +49,7 @@ class ModelProperties internal constructor() {
     fun <T> setProperty(
         property: ModelProperty<T>
     ) {
-        check(!addedToController) { "cannot change properties on added models" }
+        check(!blockMutations) { "cannot change properties on added models" }
         _entries[property.key] = property
         propertyDelegates.remove(property.key)
     }
