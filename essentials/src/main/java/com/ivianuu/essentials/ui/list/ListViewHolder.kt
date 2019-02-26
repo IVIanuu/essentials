@@ -50,4 +50,4 @@ class ListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
 }
 
-fun ListViewHolder.requireModel() = model ?: error("model is null")
+fun ListViewHolder.requireModel(): ListModel<ListHolder> = model ?: error("model is null")

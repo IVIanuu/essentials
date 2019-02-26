@@ -16,8 +16,11 @@
 
 package com.ivianuu.essentials.ui.list
 
+import android.os.Handler
 import androidx.recyclerview.widget.RecyclerView
 import java.util.concurrent.Executor
+
+private val delayedModelBuildHandler = Handler()
 
 /**
  * @author Manuel Wrage (IVIanuu)
@@ -46,15 +49,45 @@ abstract class ListController(
         hasBuiltModelsEver = true
     }
 
+    private val delayedModelBuildAction: () -> Unit = {
+        buildingExecutor.execute(buildModelsAction)
+    }
+
+    private var requestedModelBuildType = RequestedModelBuildType.NONE
+
     internal val modelListeners get() = _modelListeners
     private val _modelListeners = mutableSetOf<ListModelListener>()
 
     open fun requestModelBuild() {
         check(!isBuildingModels) { "cannot call requestModelBuild() inside buildModels()" }
         if (hasBuiltModelsEver) {
-            buildingExecutor.execute(buildModelsAction)
+            delayedModelBuildHandler.post(delayedModelBuildAction)
         } else {
             buildModelsAction()
+        }
+    }
+
+    fun requestDelayedModelBuild(delayMs: Long): Unit = synchronized(this) {
+        check(!isBuildingModels) {
+            "Cannot call requestDelayedModelBuild() from inside buildModels"
+        }
+
+        if (requestedModelBuildType == RequestedModelBuildType.DELAYED) {
+            cancelPendingModelBuild()
+        } else if (requestedModelBuildType == RequestedModelBuildType.NEXT_FRAME) {
+            return
+        }
+
+        requestedModelBuildType =
+            if (delayMs == 0L) RequestedModelBuildType.NEXT_FRAME else RequestedModelBuildType.DELAYED
+
+        delayedModelBuildHandler.postDelayed(delayedModelBuildAction, delayMs)
+    }
+
+    fun cancelPendingModelBuild(): Unit = synchronized(this) {
+        if (requestedModelBuildType != RequestedModelBuildType.NONE) {
+            requestedModelBuildType = RequestedModelBuildType.NONE
+            delayedModelBuildHandler.removeCallbacks(delayedModelBuildAction)
         }
     }
 
@@ -107,6 +140,10 @@ abstract class ListController(
 
     private fun checkBuildingModels() {
         check(isBuildingModels) { "cannot add models outside of buildModels()" }
+    }
+
+    private enum class RequestedModelBuildType {
+        NONE, NEXT_FRAME, DELAYED
     }
 
 }
