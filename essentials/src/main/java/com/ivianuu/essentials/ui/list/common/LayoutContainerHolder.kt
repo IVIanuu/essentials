@@ -25,5 +25,5 @@ import kotlinx.android.extensions.LayoutContainer
  */
 open class LayoutContainerHolder : ListHolder(), LayoutContainer {
     override val containerView: View
-        get() = itemView
+        get() = view
 }

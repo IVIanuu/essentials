@@ -23,14 +23,14 @@ import android.view.View
  */
 abstract class ListHolder {
 
-    lateinit var itemView: View
+    lateinit var view: View
 
-    protected open fun onBindView(itemView: View) {
+    protected open fun onBindView(view: View) {
     }
 
-    internal fun bindView(itemView: View) {
-        this.itemView = itemView
-        onBindView(itemView)
+    internal fun bindView(view: View) {
+        this.view = view
+        onBindView(view)
     }
 
 }

@@ -26,6 +26,6 @@ import com.ivianuu.essentials.util.ContextAware
 open class EsListHolder : LayoutContainerHolder(), ContextAware {
 
     override val providedContext: Context
-        get() = itemView.context
+        get() = view.context
 
 }

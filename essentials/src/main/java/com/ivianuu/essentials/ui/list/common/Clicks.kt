@@ -20,16 +20,14 @@ import android.view.View
 import com.ivianuu.essentials.ui.list.ListModel
 import com.ivianuu.essentials.ui.list.addListener
 
-// todo pass holders instead of views?
-
 fun <T : ListModel<*>> T.onClick(
     viewProvider: (View) -> View = { it },
     block: (T, View) -> Unit
 ) {
     val listener = View.OnClickListener { block(this, it) }
     addListener(
-        postBind = { _, holder -> viewProvider(holder.itemView).setOnClickListener(listener) },
-        preUnbind = { _, holder -> viewProvider(holder.itemView).setOnClickListener(null) }
+        postBind = { _, holder -> viewProvider(holder.view).setOnClickListener(listener) },
+        preUnbind = { _, holder -> viewProvider(holder.view).setOnClickListener(null) }
     )
 }
 
@@ -46,8 +44,8 @@ fun <T : ListModel<*>> T.onLongClick(
 ) {
     val listener = View.OnLongClickListener { block(this, it) }
     addListener(
-        postBind = { _, holder -> viewProvider(holder.itemView).setOnLongClickListener(listener) },
-        preUnbind = { _, holder -> viewProvider(holder.itemView).setOnLongClickListener(null) }
+        postBind = { _, holder -> viewProvider(holder.view).setOnLongClickListener(listener) },
+        preUnbind = { _, holder -> viewProvider(holder.view).setOnLongClickListener(null) }
     )
 }
 
