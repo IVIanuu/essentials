@@ -112,6 +112,9 @@ abstract class ListController(
     protected open fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
     }
 
+    protected open fun onModelsBuildResult(result: DiffResult) {
+    }
+
     @PublishedApi
     internal fun addInternal(model: ListModel<*>) {
         add(model)
@@ -123,6 +126,10 @@ abstract class ListController(
 
     internal fun detachedFromRecyclerView(recyclerView: RecyclerView) {
         onDetachedFromRecyclerView(recyclerView)
+    }
+
+    internal fun modelsBuildResult(result: DiffResult) {
+        onModelsBuildResult(result)
     }
 
     fun addModelListener(listener: ListModelListener) {

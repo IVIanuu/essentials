@@ -17,10 +17,6 @@
 package com.ivianuu.essentials.ui.list
 
 import android.view.ViewGroup
-import androidx.recyclerview.widget.AdapterListUpdateCallback
-import androidx.recyclerview.widget.AsyncDifferConfig
-import androidx.recyclerview.widget.AsyncListDiffer
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.ivianuu.essentials.util.ext.swap
 import java.util.concurrent.Executor
@@ -28,22 +24,20 @@ import java.util.concurrent.Executor
 /**
  * List adapter for [ListModel]s
  */
-class ListAdapter(
+open class ListAdapter(
     private val controller: ListController,
     diffingExecutor: Executor
 ) : RecyclerView.Adapter<ListViewHolder>() {
 
-    private val helper = AsyncListDiffer<ListModel<*>>(
-        AdapterListUpdateCallback(this),
-        AsyncDifferConfig.Builder(DIFF_CALLBACK)
-            .setBackgroundThreadExecutor(diffingExecutor)
-            .build()
-    )
+    private val helper = AsyncModelDiffer(diffingExecutor) { result ->
+        result.dispatchTo(this)
+        controller.modelsBuildResult(result)
+    }
 
     /**
      * All current models
      */
-    val models: List<ListModel<*>> get() = helper.currentList
+    val models: List<ListModel<*>> get() = helper.currentModels
 
     init {
         setHasStableIds(true)
@@ -94,29 +88,15 @@ class ListAdapter(
         controller.detachedFromRecyclerView(recyclerView)
     }
 
-    override fun setHasStableIds(hasStableIds: Boolean) {
+    final override fun setHasStableIds(hasStableIds: Boolean) {
         require(hasStableIds) { "This implementation relies on stable ids" }
         super.setHasStableIds(hasStableIds)
     }
 
     fun setModels(models: List<ListModel<*>>) {
-        helper.submitList(models.toList())
+        helper.submitModels(models.toList())
     }
 
-    private companion object {
-        private val DIFF_CALLBACK =
-            object : DiffUtil.ItemCallback<ListModel<*>>() {
-                override fun areItemsTheSame(
-                    oldItem: ListModel<*>,
-                    newItem: ListModel<*>
-                ): Boolean = oldItem.id == newItem.id
-
-                override fun areContentsTheSame(
-                    oldItem: ListModel<*>,
-                    newItem: ListModel<*>
-                ): Boolean = oldItem == newItem
-            }
-    }
 }
 
 fun ListAdapter.getModelAt(index: Int): ListModel<*> = models[index]
