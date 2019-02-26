@@ -24,7 +24,7 @@ interface BaseListTouchCallback<T : ListModel<*>> {
 
     fun getMovementFlagsForModel(model: T, adapterPosition: Int): Int
 
-    fun clearView(model: T, itemView: View)
+    fun clearModelView(model: T, itemView: View)
 
 }
 

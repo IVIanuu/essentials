@@ -43,21 +43,20 @@ class ListAdapter(
     /**
      * All current models
      */
-    val models: List<ListModel<*>> get() = _models
-    private val _models get() = helper.currentList
+    val models: List<ListModel<*>> get() = helper.currentList
 
     init {
         setHasStableIds(true)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder {
-        val model = _models.first { it.viewType == viewType }
+        val model = models.first { it.viewType == viewType }
         val view = model.buildView(parent)
         return ListViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
-        val model = _models[position]
+        val model = models[position]
         holder.bind(model)
     }
 
@@ -66,11 +65,11 @@ class ListAdapter(
         holder.unbind()
     }
 
-    override fun getItemId(position: Int): Long = _models[position].id
+    override fun getItemId(position: Int): Long = models[position].id
 
-    override fun getItemCount(): Int = _models.size
+    override fun getItemCount(): Int = models.size
 
-    override fun getItemViewType(position: Int): Int = _models[position].viewType
+    override fun getItemViewType(position: Int): Int = models[position].viewType
 
     override fun onViewAttachedToWindow(holder: ListViewHolder) {
         super.onViewAttachedToWindow(holder)
@@ -126,13 +125,43 @@ fun ListAdapter.addModel(model: ListModel<*>) {
     setModels(newModels)
 }
 
+fun ListAdapter.addModel(index: Int, model: ListModel<*>) {
+    val newModels = models.toMutableList()
+    newModels.add(index, model)
+    setModels(newModels)
+}
+
+fun ListAdapter.addModels(vararg models: ListModel<*>) {
+    val newModels = models.toMutableList()
+    newModels.addAll(models)
+    setModels(newModels)
+}
+
+fun ListAdapter.addModels(index: Int, vararg models: ListModel<*>) {
+    val newModels = models.toMutableList()
+    newModels.addAll(index, models.asList())
+    setModels(newModels)
+}
+
+fun ListAdapter.addModels(models: Iterable<ListModel<*>>) {
+    val newModels = models.toMutableList()
+    newModels.addAll(models)
+    setModels(newModels)
+}
+
+fun ListAdapter.addModels(index: Int, models: Iterable<ListModel<*>>) {
+    val newModels = models.toMutableList()
+    newModels.addAll(index, models.toList())
+    setModels(newModels)
+}
+
 fun ListAdapter.removeModel(model: ListModel<*>) {
     val newModels = models.toMutableList()
     newModels.remove(model)
     setModels(newModels)
 }
 
-fun ListAdapter.swapModels(from: Int, to: Int) {
+fun ListAdapter.moveModel(from: Int, to: Int) {
     val newModels = models.toMutableList()
     newModels.swap(from, to)
     setModels(newModels)
