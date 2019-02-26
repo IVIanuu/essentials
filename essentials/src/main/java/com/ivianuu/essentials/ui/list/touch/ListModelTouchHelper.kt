@@ -27,27 +27,27 @@ import kotlin.reflect.KClass
 
 object ListTouchHelper {
 
-    fun initDragging(recyclerView: RecyclerView): DragBuilder {
+    fun dragging(recyclerView: RecyclerView): DragBuilder {
         return DragBuilder(recyclerView)
     }
 
     class DragBuilder internal constructor(private val recyclerView: RecyclerView) {
-        fun forVerticalList(): DragBuilder2 {
-            return withDirections(ItemTouchHelper.UP or ItemTouchHelper.DOWN)
+        fun vertical(): DragBuilder2 {
+            return directions(ItemTouchHelper.UP or ItemTouchHelper.DOWN)
         }
 
-        fun forHorizontalList(): DragBuilder2 {
-            return withDirections(ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT)
+        fun horizontal(): DragBuilder2 {
+            return directions(ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT)
         }
 
-        fun forGrid(): DragBuilder2 {
-            return withDirections(
+        fun grid(): DragBuilder2 {
+            return directions(
                 ItemTouchHelper.UP or ItemTouchHelper.DOWN or ItemTouchHelper.LEFT
                         or ItemTouchHelper.RIGHT
             )
         }
 
-        fun withDirections(directionFlags: Int): DragBuilder2 {
+        fun directions(directionFlags: Int): DragBuilder2 {
             return DragBuilder2(recyclerView, makeMovementFlags(directionFlags, 0))
         }
     }
@@ -57,7 +57,7 @@ object ListTouchHelper {
         private val movementFlags: Int
     ) {
 
-        fun <U : ListModel<*>> withTarget(targetModelClass: KClass<U>): DragBuilder3<U> {
+        fun <U : ListModel<*>> target(targetModelClass: KClass<U>): DragBuilder3<U> {
             val targetClasses = ArrayList<KClass<out ListModel<*>>>(1)
             targetClasses.add(targetModelClass)
 
@@ -67,15 +67,15 @@ object ListTouchHelper {
             )
         }
 
-        fun withTargets(vararg targetModelClasses: KClass<out ListModel<*>>): DragBuilder3<ListModel<*>> {
+        fun targets(vararg targetModelClasses: KClass<out ListModel<*>>): DragBuilder3<ListModel<*>> {
             return DragBuilder3(
                 recyclerView, movementFlags, ListModel::class,
                 targetModelClasses.toList()
             )
         }
 
-        fun forAllModels(): DragBuilder3<ListModel<*>> {
-            return withTarget(ListModel::class)
+        fun all(): DragBuilder3<ListModel<*>> {
+            return target(ListModel::class)
         }
     }
 
@@ -86,7 +86,7 @@ object ListTouchHelper {
         private val targetModelClasses: List<KClass<out ListModel<*>>>
     ) {
 
-        fun andCallbacks(callbacks: DragCallbacks<U>): ItemTouchHelper {
+        fun callbacks(callbacks: DragCallbacks<U>): ItemTouchHelper {
             val itemTouchHelper =
                 ItemTouchHelper(object : ListModelTouchCallback<U>(targetModelClass) {
 
@@ -158,25 +158,25 @@ object ListTouchHelper {
         }
     }
 
-    fun initSwiping(recyclerView: RecyclerView): SwipeBuilder {
+    fun swiping(recyclerView: RecyclerView): SwipeBuilder {
         return SwipeBuilder(recyclerView)
     }
 
     class SwipeBuilder internal constructor(private val recyclerView: RecyclerView) {
 
         fun right(): SwipeBuilder2 {
-            return withDirections(ItemTouchHelper.RIGHT)
+            return directions(ItemTouchHelper.RIGHT)
         }
 
         fun left(): SwipeBuilder2 {
-            return withDirections(ItemTouchHelper.LEFT)
+            return directions(ItemTouchHelper.LEFT)
         }
 
         fun leftAndRight(): SwipeBuilder2 {
-            return withDirections(ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT)
+            return directions(ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT)
         }
 
-        fun withDirections(directionFlags: Int): SwipeBuilder2 {
+        fun directions(directionFlags: Int): SwipeBuilder2 {
             return SwipeBuilder2(recyclerView, makeMovementFlags(0, directionFlags))
         }
     }
@@ -186,7 +186,7 @@ object ListTouchHelper {
         private val movementFlags: Int
     ) {
 
-        fun <U : ListModel<*>> withTarget(targetModelClass: KClass<U>): SwipeBuilder3<U> {
+        fun <U : ListModel<*>> target(targetModelClass: KClass<U>): SwipeBuilder3<U> {
             val targetClasses = ArrayList<KClass<out ListModel<*>>>(1)
             targetClasses.add(targetModelClass)
 
@@ -196,7 +196,7 @@ object ListTouchHelper {
             )
         }
 
-        fun withTargets(
+        fun targets(
             vararg targetModelClasses: KClass<out ListModel<*>>
         ): SwipeBuilder3<ListModel<*>> {
             return SwipeBuilder3(
@@ -205,8 +205,8 @@ object ListTouchHelper {
             )
         }
 
-        fun forAllModels(): SwipeBuilder3<ListModel<*>> {
-            return withTarget(ListModel::class)
+        fun all(): SwipeBuilder3<ListModel<*>> {
+            return target(ListModel::class)
         }
     }
 
@@ -217,7 +217,7 @@ object ListTouchHelper {
         private val targetModelClasses: List<KClass<out ListModel<*>>>
     ) {
 
-        fun andCallbacks(callbacks: SwipeCallbacks<U>): ItemTouchHelper {
+        fun callbacks(callbacks: SwipeCallbacks<U>): ItemTouchHelper {
             val itemTouchHelper =
                 ItemTouchHelper(object : ListModelTouchCallback<U>(targetModelClass) {
 
