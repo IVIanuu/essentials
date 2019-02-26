@@ -100,7 +100,7 @@ class ListAdapter(
     }
 
     fun setModels(models: List<ListModel<*>>) {
-        helper.submitList(models)
+        helper.submitList(models.toList())
     }
 
     private companion object {

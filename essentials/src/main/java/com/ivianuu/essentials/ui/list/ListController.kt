@@ -42,6 +42,7 @@ abstract class ListController(
         buildModels()
         isBuildingModels = false
         adapter.setModels(currentModels.toList())
+        currentModels.clear()
         hasBuiltModelsEver = true
     }
 
