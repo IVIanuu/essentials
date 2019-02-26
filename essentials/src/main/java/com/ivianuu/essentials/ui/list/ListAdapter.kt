@@ -119,6 +119,10 @@ class ListAdapter(
     }
 }
 
+fun ListAdapter.getModelAt(index: Int): ListModel<*> = models[index]
+
+fun ListAdapter.indexOfModel(model: ListModel<*>): Int = models.indexOf(model)
+
 fun ListAdapter.addModel(model: ListModel<*>) {
     val newModels = models.toMutableList()
     newModels.add(model)
