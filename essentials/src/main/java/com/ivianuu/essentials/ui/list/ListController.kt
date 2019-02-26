@@ -44,6 +44,7 @@ abstract class ListController(
 
         isBuildingModels = true
         buildModels()
+        interceptBuildModels()
         isBuildingModels = false
 
         adapter.setModels(currentModels.toList())
