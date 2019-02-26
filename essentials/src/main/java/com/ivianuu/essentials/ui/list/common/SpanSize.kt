@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.list.span
+package com.ivianuu.essentials.ui.list.common
 
 import androidx.recyclerview.widget.GridLayoutManager
 import com.ivianuu.essentials.ui.list.ListAdapter

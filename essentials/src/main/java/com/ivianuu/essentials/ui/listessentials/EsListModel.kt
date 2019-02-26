@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.list.essentials
+package com.ivianuu.essentials.ui.listessentials
 
 import android.view.View
 import com.ivianuu.essentials.ui.list.ListModel

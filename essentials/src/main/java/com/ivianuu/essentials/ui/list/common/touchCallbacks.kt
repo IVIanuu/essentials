@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.list.touch
+package com.ivianuu.essentials.ui.list.common
 
 import android.graphics.Canvas
 import android.view.View
@@ -28,7 +28,8 @@ interface BaseListTouchCallback<T : ListModel<*>> {
 
 }
 
-interface ListDragCallback<T : ListModel<*>> : BaseListTouchCallback<T> {
+interface ListDragCallback<T : ListModel<*>> :
+    BaseListTouchCallback<T> {
 
     fun onDragStarted(model: T, itemView: View, adapterPosition: Int)
 
@@ -38,7 +39,8 @@ interface ListDragCallback<T : ListModel<*>> : BaseListTouchCallback<T> {
 
 }
 
-interface ListSwipeCallback<T : ListModel<*>> : BaseListTouchCallback<T> {
+interface ListSwipeCallback<T : ListModel<*>> :
+    BaseListTouchCallback<T> {
 
     fun onSwipeStarted(model: T, itemView: View, adapterPosition: Int)
 

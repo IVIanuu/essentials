@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.list.touch
+package com.ivianuu.essentials.ui.list.common
 
 import android.graphics.Canvas
 import android.view.View
@@ -48,7 +48,10 @@ object ListTouchHelper {
         }
 
         fun directions(directionFlags: Int): DragBuilder2 {
-            return DragBuilder2(recyclerView, makeMovementFlags(directionFlags, 0))
+            return DragBuilder2(
+                recyclerView,
+                makeMovementFlags(directionFlags, 0)
+            )
         }
     }
 
@@ -133,7 +136,8 @@ object ListTouchHelper {
         }
     }
 
-    abstract class DragCallbacks<T : ListModel<*>> : ListDragCallback<T> {
+    abstract class DragCallbacks<T : ListModel<*>> :
+        ListDragCallback<T> {
         fun isDragEnabledForModel(model: T): Boolean = true
         override fun getMovementFlagsForModel(model: T, adapterPosition: Int): Int = 0
 
@@ -177,7 +181,10 @@ object ListTouchHelper {
         }
 
         fun directions(directionFlags: Int): SwipeBuilder2 {
-            return SwipeBuilder2(recyclerView, makeMovementFlags(0, directionFlags))
+            return SwipeBuilder2(
+                recyclerView,
+                makeMovementFlags(0, directionFlags)
+            )
         }
     }
 
@@ -271,7 +278,8 @@ object ListTouchHelper {
         }
     }
 
-    abstract class SwipeCallbacks<T : ListModel<*>> : ListSwipeCallback<T> {
+    abstract class SwipeCallbacks<T : ListModel<*>> :
+        ListSwipeCallback<T> {
         fun isSwipeEnabledForModel(model: T): Boolean = true
         override fun getMovementFlagsForModel(model: T, adapterPosition: Int): Int = 0
 

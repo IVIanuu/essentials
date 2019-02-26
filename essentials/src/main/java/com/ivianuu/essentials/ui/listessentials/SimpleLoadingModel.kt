@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.list.essentials
+package com.ivianuu.essentials.ui.listessentials
 
 import android.content.res.ColorStateList
 import com.ivianuu.essentials.R

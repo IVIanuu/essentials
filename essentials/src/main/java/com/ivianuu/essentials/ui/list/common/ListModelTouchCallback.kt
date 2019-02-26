@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.list.touch
+package com.ivianuu.essentials.ui.list.common
 
 import android.graphics.Canvas
 import android.view.View
@@ -31,7 +31,8 @@ import kotlin.reflect.KClass
 @Suppress("UNCHECKED_CAST")
 abstract class ListModelTouchCallback<T : ListModel<*>>(
     private val targetModelClass: KClass<T>? = null
-) : ItemTouchHelper.Callback(), ListDragCallback<T>, ListSwipeCallback<T> {
+) : ItemTouchHelper.Callback(), ListDragCallback<T>,
+    ListSwipeCallback<T> {
 
     private var holderBeingDragged: ListViewHolder? = null
     private var holderBeingSwiped: ListViewHolder? = null
@@ -155,7 +156,10 @@ abstract class ListModelTouchCallback<T : ListModel<*>>(
         // selected for drag when another view finishes its swipe off animation. To prevent that we
         // keep the recyclerview marked as having an active selection for a brief period after a
         // touch event ends.
-        recyclerView.postDelayed({ recyclerView.hasSelection = false }, TOUCH_DEBOUNCE_MILLIS)
+        recyclerView.postDelayed(
+            { recyclerView.hasSelection = false },
+            TOUCH_DEBOUNCE_MILLIS
+        )
     }
 
     override fun onChildDraw(
