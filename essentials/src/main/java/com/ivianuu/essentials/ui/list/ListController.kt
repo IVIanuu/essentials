@@ -70,7 +70,12 @@ abstract class ListController(
         }
     }
 
-    fun requestDelayedModelBuild(delayMs: Long): Unit = synchronized(this) {
+    open fun requestImmediateModelBuild() {
+        check(!isBuildingModels) { "cannot call requestImmediateModelBuild() inside buildModels()" }
+        buildModelsAction()
+    }
+
+    open fun requestDelayedModelBuild(delayMs: Long): Unit = synchronized(this) {
         check(!isBuildingModels) {
             "Cannot call requestDelayedModelBuild() from inside buildModels"
         }
@@ -112,6 +117,9 @@ abstract class ListController(
     protected open fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
     }
 
+    protected open fun onInterceptBuildModels(models: MutableList<ListModel<*>>) {
+    }
+
     protected open fun onModelsBuildResult(result: DiffResult) {
     }
 
@@ -130,6 +138,10 @@ abstract class ListController(
 
     internal fun modelsBuildResult(result: DiffResult) {
         onModelsBuildResult(result)
+    }
+
+    private fun interceptBuildModels() {
+        onInterceptBuildModels(currentModels)
     }
 
     fun addModelListener(listener: ListModelListener) {
