@@ -22,10 +22,11 @@ import androidx.recyclerview.widget.AsyncDifferConfig
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.ivianuu.essentials.util.ext.swap
 import java.util.concurrent.Executor
 
 /**
- * @author Manuel Wrage (IVIanuu)
+ * List adapter for [ListModel]s
  */
 class ListAdapter(
     private val controller: ListController,
@@ -39,20 +40,24 @@ class ListAdapter(
             .build()
     )
 
-    private val models get() = helper.currentList
+    /**
+     * All current models
+     */
+    val models: List<ListModel<*>> get() = _models
+    private val _models get() = helper.currentList
 
     init {
         setHasStableIds(true)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder {
-        val model = models.first { it.viewType == viewType }
+        val model = _models.first { it.viewType == viewType }
         val view = model.buildView(parent)
         return ListViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
-        val model = models[position]
+        val model = _models[position]
         holder.bind(model)
     }
 
@@ -61,11 +66,11 @@ class ListAdapter(
         holder.unbind()
     }
 
-    override fun getItemId(position: Int): Long = models[position].id
+    override fun getItemId(position: Int): Long = _models[position].id
 
-    override fun getItemCount(): Int = models.size
+    override fun getItemCount(): Int = _models.size
 
-    override fun getItemViewType(position: Int): Int = models[position].viewType
+    override fun getItemViewType(position: Int): Int = _models[position].viewType
 
     override fun onViewAttachedToWindow(holder: ListViewHolder) {
         super.onViewAttachedToWindow(holder)
@@ -91,7 +96,7 @@ class ListAdapter(
     }
 
     override fun setHasStableIds(hasStableIds: Boolean) {
-        require(hasStableIds) { "This implementation relies on hasStableIds" }
+        require(hasStableIds) { "This implementation relies on stable ids" }
         super.setHasStableIds(hasStableIds)
     }
 
@@ -105,14 +110,34 @@ class ListAdapter(
                 override fun areItemsTheSame(
                     oldItem: ListModel<*>,
                     newItem: ListModel<*>
-                ): Boolean =
-                    oldItem.id == newItem.id
+                ): Boolean = oldItem.id == newItem.id
 
                 override fun areContentsTheSame(
                     oldItem: ListModel<*>,
                     newItem: ListModel<*>
-                ): Boolean =
-                    oldItem == newItem
+                ): Boolean = oldItem == newItem
             }
     }
+}
+
+fun ListAdapter.addModel(model: ListModel<*>) {
+    val newModels = models.toMutableList()
+    newModels.add(model)
+    setModels(newModels)
+}
+
+fun ListAdapter.removeModel(model: ListModel<*>) {
+    val newModels = models.toMutableList()
+    newModels.remove(model)
+    setModels(newModels)
+}
+
+fun ListAdapter.swapModels(from: Int, to: Int) {
+    val newModels = models.toMutableList()
+    newModels.swap(from, to)
+    setModels(newModels)
+}
+
+fun ListAdapter.clearModels() {
+    setModels(emptyList())
 }
