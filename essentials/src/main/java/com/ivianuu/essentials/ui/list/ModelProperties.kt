@@ -89,33 +89,7 @@ data class ModelProperty<T>(
     }
 }
 
-fun <T> ListModel<*>.property(
-    key: String? = null,
-    doHash: Boolean = true,
-    includeInToString: Boolean = true,
-    defaultValue: (String) -> T
-): ReadWriteProperty<ListModel<*>, T> = ModelPropertyDelegate(
-    key, doHash, includeInToString, defaultValue
-)
-
-fun <T> ListModel<*>.requiredProperty(
-    key: String? = null,
-    doHash: Boolean = true,
-    includeInToString: Boolean = true
-): ReadWriteProperty<ListModel<*>, T> = ModelPropertyDelegate(
-    key, doHash, includeInToString
-) {
-    error("missing property $it use optionalProperty() for optional ones")
-}
-
-fun <T> ListModel<*>.optionalProperty(
-    key: String? = null,
-    doHash: Boolean = true,
-    includeInToString: Boolean = true
-): ReadWriteProperty<ListModel<*>, T?> =
-    ModelPropertyDelegate(key, doHash, includeInToString) { null }
-
-private class ModelPropertyDelegate<T>(
+internal class ModelPropertyDelegate<T>(
     private val key: String? = null,
     private val doHash: Boolean = true,
     private val includeInToString: Boolean = true,

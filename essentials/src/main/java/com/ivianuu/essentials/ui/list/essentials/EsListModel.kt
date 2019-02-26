@@ -18,7 +18,6 @@ package com.ivianuu.essentials.ui.list.essentials
 
 import android.view.View
 import com.ivianuu.essentials.ui.list.ListModel
-import com.ivianuu.essentials.ui.list.optionalProperty
 import com.ivianuu.essentials.util.ContextAware
 import com.ivianuu.scopes.ReusableScope
 import com.ivianuu.scopes.Scope

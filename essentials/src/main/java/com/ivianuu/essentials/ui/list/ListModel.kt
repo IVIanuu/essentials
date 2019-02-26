@@ -20,6 +20,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.ivianuu.essentials.ui.list.internal.hash64Bit
+import kotlin.properties.ReadWriteProperty
 
 /**
  * @author Manuel Wrage (IVIanuu)
@@ -65,6 +66,32 @@ abstract class ListModel<H : ListHolder> {
     }
 
     protected open fun onFailedToRecycle(holder: H): Boolean = true
+
+    protected fun <T> property(
+        key: String? = null,
+        doHash: Boolean = true,
+        includeInToString: Boolean = true,
+        defaultValue: (String) -> T
+    ): ReadWriteProperty<ListModel<*>, T> = ModelPropertyDelegate(
+        key, doHash, includeInToString, defaultValue
+    )
+
+    protected fun <T> requiredProperty(
+        key: String? = null,
+        doHash: Boolean = true,
+        includeInToString: Boolean = true
+    ): ReadWriteProperty<ListModel<*>, T> = ModelPropertyDelegate(
+        key, doHash, includeInToString
+    ) {
+        error("missing property $it use optionalProperty() for optional ones")
+    }
+
+    protected fun <T> optionalProperty(
+        key: String? = null,
+        doHash: Boolean = true,
+        includeInToString: Boolean = true
+    ): ReadWriteProperty<ListModel<*>, T?> =
+        ModelPropertyDelegate(key, doHash, includeInToString) { null }
 
     fun addListener(listener: ListModelListener) {
         listeners.add(listener)

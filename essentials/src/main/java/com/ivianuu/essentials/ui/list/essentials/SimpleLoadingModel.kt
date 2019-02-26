@@ -19,7 +19,6 @@ package com.ivianuu.essentials.ui.list.essentials
 import android.content.res.ColorStateList
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.list.ListModelCreator
-import com.ivianuu.essentials.ui.list.property
 import com.ivianuu.essentials.util.color
 import kotlinx.android.synthetic.main.es_item_simple_loading.es_progress_bar
 
