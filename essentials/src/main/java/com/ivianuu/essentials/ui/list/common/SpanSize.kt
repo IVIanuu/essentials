@@ -21,6 +21,7 @@ import com.ivianuu.essentials.ui.list.ListAdapter
 import com.ivianuu.essentials.ui.list.ListController
 import com.ivianuu.essentials.ui.list.ListModel
 import com.ivianuu.essentials.ui.list.getModelAt
+import com.ivianuu.essentials.ui.list.getProperty
 import com.ivianuu.essentials.ui.list.setProperty
 
 private const val KEY_SPAN_SIZE_OVERRIDE = "ListModelSpanSizeLookUp.spanSizeOverride"
@@ -48,8 +49,7 @@ class ListModelSpanSizeLookUp(
         val model = adapter.getModelAt(position)
         val spanCount = layoutManager.spanCount
         val itemCount = adapter.itemCount
-        val spanSizeOverride = model.properties
-            .getProperty<SpanSizeCallback>(KEY_SPAN_SIZE_OVERRIDE)?.value
+        val spanSizeOverride = model.getProperty<SpanSizeCallback>(KEY_SPAN_SIZE_OVERRIDE)
         return spanSizeOverride?.getSpanSize(spanCount, position, itemCount)
             ?: (model as? SpanSizeCallback)?.getSpanSize(spanCount, position, itemCount)
             ?: defaultSpanSize

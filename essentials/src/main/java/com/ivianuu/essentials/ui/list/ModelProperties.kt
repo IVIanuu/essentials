@@ -26,6 +26,7 @@ class ModelProperties internal constructor() {
 
     private var addedToController = false
 
+    val entries: Map<String, ModelProperty<*>> get() = _entries
     private val _entries = mutableMapOf<String, ModelProperty<*>>()
 
     internal fun addedToController() {
@@ -33,24 +34,24 @@ class ModelProperties internal constructor() {
         addedToController = true
     }
 
-    internal fun <T> getProperty(key: String): ModelProperty<T>? =
+    fun <T> getPropertyEntry(key: String): ModelProperty<T>? =
         _entries[key] as? ModelProperty<T>?
 
-    internal fun <T> setProperty(
+    fun <T> setProperty(
         property: ModelProperty<T>
     ) {
         check(!addedToController) { "cannot change properties on added models" }
         _entries[property.key] = property
     }
 
-    internal fun <T> getPropertyOrSet(
+    internal fun <T> getOrSetProperty(
         key: String,
         defaultValue: () -> ModelProperty<T>
     ): ModelProperty<T> {
-        var property = getProperty<T>(key)
+        var property = getPropertyEntry<T>(key)
         if (property == null) {
             property = defaultValue()
-            setProperty(property)
+            _entries[key] = property
         }
 
         return property
@@ -85,6 +86,19 @@ class ModelProperties internal constructor() {
 
 }
 
+fun <T> ModelProperties.getProperty(key: String): T? = getPropertyEntry<T>(key)?.value
+
+fun <T> ModelProperties.requireProperty(key: String): T = getProperty<T>(key)
+    ?: error("missing property for key $key")
+
+fun <T> ModelProperties.setProperty(
+    key: String,
+    value: T,
+    doHash: Boolean = true
+) {
+    setProperty(ModelProperty(key, value, doHash))
+}
+
 data class ModelProperty<T>(
     val key: String,
     val value: T,
@@ -101,7 +115,7 @@ internal class ModelPropertyDelegate<T>(
 
     override fun getValue(thisRef: ListModel<*>, property: KProperty<*>): T {
         val key = getRealKey(thisRef, property)
-        return thisRef.properties.getPropertyOrSet(key) {
+        return thisRef.properties.getOrSetProperty(key) {
             ModelProperty(
                 key,
                 defaultValue(key),

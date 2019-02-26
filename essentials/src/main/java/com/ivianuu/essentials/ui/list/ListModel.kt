@@ -189,19 +189,18 @@ abstract class ListModel<H : ListHolder> {
     }
 }
 
-fun <T> ListModel<*>.getProperty(key: String): ModelProperty<T>? =
+fun <T> ListModel<*>.getProperty(key: String): T? =
     properties.getProperty(key)
 
-fun <T> ListModel<*>.setProperty(property: ModelProperty<T>) {
-    properties.setProperty(property)
-}
+fun <T> ListModel<*>.requireProperty(key: String): T =
+    properties.requireProperty(key)
 
 fun <T> ListModel<*>.setProperty(
     key: String,
     value: T,
     doHash: Boolean = true
 ) {
-    setProperty(ModelProperty(key, value, doHash))
+    properties.setProperty(key, value, doHash)
 }
 
 fun ListModel<*>.id(id: Long) {
