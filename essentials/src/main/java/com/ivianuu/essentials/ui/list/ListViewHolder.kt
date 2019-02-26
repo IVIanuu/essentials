@@ -49,3 +49,5 @@ class ListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     }
 
 }
+
+fun ListViewHolder.requireModel() = model ?: error("model is null")

@@ -73,16 +73,16 @@ class ListAdapter(
 
     override fun onViewAttachedToWindow(holder: ListViewHolder) {
         super.onViewAttachedToWindow(holder)
-        holder.model!!.attach(holder.holder)
+        holder.requireModel().attach(holder.holder)
     }
 
     override fun onViewDetachedFromWindow(holder: ListViewHolder) {
         super.onViewDetachedFromWindow(holder)
-        holder.model!!.detach(holder.holder)
+        holder.requireModel().detach(holder.holder)
     }
 
     override fun onFailedToRecycleView(holder: ListViewHolder): Boolean =
-        holder.model!!.failedToRecycleView(holder.holder)
+        holder.requireModel().failedToRecycleView(holder.holder)
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)

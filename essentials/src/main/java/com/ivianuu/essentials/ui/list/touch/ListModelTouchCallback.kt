@@ -25,6 +25,7 @@ import com.ivianuu.essentials.ui.list.ListAdapter
 import com.ivianuu.essentials.ui.list.ListModel
 import com.ivianuu.essentials.ui.list.ListViewHolder
 import com.ivianuu.essentials.ui.list.moveModel
+import com.ivianuu.essentials.ui.list.requireModel
 import kotlin.reflect.KClass
 
 @Suppress("UNCHECKED_CAST")
@@ -41,7 +42,7 @@ abstract class ListModelTouchCallback<T : ListModel<*>>(
     ): Int {
         viewHolder as ListViewHolder
 
-        val model = viewHolder.model!!
+        val model = viewHolder.requireModel()
 
         // If multiple touch callbacks are registered on the recyclerview (to support combinations of
         // dragging and dropping) then we won't want to enable anything if another
@@ -66,7 +67,7 @@ abstract class ListModelTouchCallback<T : ListModel<*>>(
         target as ListViewHolder
 
         // By default we don't allow dropping on a model that isn't a drag target
-        return isTouchableModel(target.model!!)
+        return isTouchableModel(target.requireModel())
     }
 
     protected open fun isTouchableModel(model: ListModel<*>): Boolean =
@@ -83,7 +84,7 @@ abstract class ListModelTouchCallback<T : ListModel<*>>(
         val toPosition = target.adapterPosition
         (recyclerView.adapter as ListAdapter).moveModel(fromPosition, toPosition)
 
-        val model = viewHolder.model!!
+        val model = viewHolder.requireModel()
         check(isTouchableModel(model)) {
             "A model was dragged that is not a valid target: ${model.javaClass}"
         }
@@ -95,7 +96,7 @@ abstract class ListModelTouchCallback<T : ListModel<*>>(
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
         viewHolder as ListViewHolder
 
-        val model = viewHolder.model!!
+        val model = viewHolder.requireModel()
         val view = viewHolder.itemView
         val position = viewHolder.adapterPosition
 
@@ -112,7 +113,7 @@ abstract class ListModelTouchCallback<T : ListModel<*>>(
         if (viewHolder != null) {
             viewHolder as ListViewHolder
 
-            val model = viewHolder.model!!
+            val model = viewHolder.requireModel()
 
             check(isTouchableModel(model)) {
                 "A model was selected that is not a valid target: ${model.javaClass}"
@@ -170,7 +171,7 @@ abstract class ListModelTouchCallback<T : ListModel<*>>(
 
         viewHolder as ListViewHolder
 
-        val model = viewHolder.model!!
+        val model = viewHolder.requireModel()
         check(isTouchableModel(model)) {
             "A model was selected that is not a valid target: ${model.javaClass}"
         }

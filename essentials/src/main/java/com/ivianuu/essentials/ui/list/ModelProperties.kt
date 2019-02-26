@@ -29,6 +29,7 @@ class ModelProperties internal constructor() {
     private val _entries = mutableMapOf<String, ModelProperty<*>>()
 
     internal fun addedToController() {
+        // todo find a way to ensure that all properties are initialized
         addedToController = true
     }
 
@@ -38,7 +39,6 @@ class ModelProperties internal constructor() {
     internal fun <T> setProperty(
         property: ModelProperty<T>
     ) {
-
         check(!addedToController) { "cannot change properties on added models" }
         _entries[property.key] = property
     }
