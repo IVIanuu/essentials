@@ -17,13 +17,13 @@
 package com.ivianuu.essentials.ui.list.essentials
 
 import android.content.Context
-import com.ivianuu.essentials.ui.list.common.KtListHolder
+import com.ivianuu.essentials.ui.list.common.LayoutContainerHolder
 import com.ivianuu.essentials.util.ContextAware
 
 /**
  * Base list holder
  */
-open class EsListHolder : KtListHolder(), ContextAware {
+open class EsListHolder : LayoutContainerHolder(), ContextAware {
 
     override val providedContext: Context
         get() = itemView.context

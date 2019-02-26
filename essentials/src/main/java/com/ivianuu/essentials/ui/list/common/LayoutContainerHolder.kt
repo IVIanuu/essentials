@@ -23,7 +23,7 @@ import kotlinx.android.extensions.LayoutContainer
 /**
  * A [ListHolder] which is also a [LayoutContainer]
  */
-open class KtListHolder : ListHolder(), LayoutContainer {
+open class LayoutContainerHolder : ListHolder(), LayoutContainer {
     override val containerView: View
         get() = itemView
 }

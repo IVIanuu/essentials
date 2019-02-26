@@ -42,6 +42,7 @@ abstract class ListModel<H : ListHolder> {
     private val listeners = mutableSetOf<ListModelListener>()
     private var superCalled = false
 
+    private lateinit var controller: ListController
     private var addedToController = false
 
     protected abstract fun onCreateHolder(): H
@@ -138,14 +139,20 @@ abstract class ListModel<H : ListHolder> {
         return result
     }
 
-    internal fun addedToController() {
+    internal fun addedToController(controller: ListController) {
+        check(!addedToController) {
+            "already added to a controller ${this.controller} cannot add to $controller"
+        }
         check(id != 0L) { "id must be set" }
+
+        this.controller = controller
         addedToController = true
+
         properties.addedToController()
     }
 
     private inline fun notifyListeners(block: (ListModelListener) -> Unit) {
-        listeners.toList().forEach(block)
+        (controller.modelListeners + listeners.toList()).forEach(block)
     }
 
     private inline fun requireSuperCalled(block: () -> Unit) {

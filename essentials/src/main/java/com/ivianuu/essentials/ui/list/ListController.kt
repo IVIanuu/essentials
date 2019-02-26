@@ -46,6 +46,9 @@ abstract class ListController(
         hasBuiltModelsEver = true
     }
 
+    internal val modelListeners get() = _modelListeners
+    private val _modelListeners = mutableSetOf<ListModelListener>()
+
     open fun requestModelBuild() {
         check(!isBuildingModels) { "cannot call requestModelBuild() inside buildModels()" }
         if (hasBuiltModelsEver) {
@@ -59,8 +62,8 @@ abstract class ListController(
 
     protected fun add(models: Iterable<ListModel<*>>) {
         checkBuildingModels()
+        models.forEach { it.addedToController(this) }
         currentModels.addAll(models)
-        models.forEach { it.addedToController() }
     }
 
     protected fun add(vararg models: ListModel<*>) {
@@ -84,6 +87,14 @@ abstract class ListController(
 
     internal fun detachedFromRecyclerView(recyclerView: RecyclerView) {
         onDetachedFromRecyclerView(recyclerView)
+    }
+
+    fun addModelListener(listener: ListModelListener) {
+        _modelListeners.add(listener)
+    }
+
+    fun removeModelListener(listener: ListModelListener) {
+        _modelListeners.remove(listener)
     }
 
     inline fun <T : ListModel<*>> T.add(block: T.() -> Unit) {

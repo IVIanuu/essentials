@@ -124,6 +124,30 @@ fun ListModel<*>.addListener(
     onFailedToRecycleView
 ).also { addListener(it) }
 
+fun ListController.addModelListener(
+    preCreateHolder: ((model: ListModel<*>) -> Unit)? = null,
+    postCreateHolder: ((model: ListModel<*>, holder: ListHolder) -> Unit)? = null,
+    preCreateView: ((model: ListModel<*>) -> Unit)? = null,
+    postCreateView: ((model: ListModel<*>, view: View) -> Unit)? = null,
+    preBind: ((model: ListModel<*>, holder: ListHolder) -> Unit)? = null,
+    postBind: ((model: ListModel<*>, holder: ListHolder) -> Unit)? = null,
+    preUnbind: ((model: ListModel<*>, holder: ListHolder) -> Unit)? = null,
+    postUnbind: ((model: ListModel<*>, holder: ListHolder) -> Unit)? = null,
+    preAttach: ((model: ListModel<*>, holder: ListHolder) -> Unit)? = null,
+    postAttach: ((model: ListModel<*>, holder: ListHolder) -> Unit)? = null,
+    preDetach: ((model: ListModel<*>, holder: ListHolder) -> Unit)? = null,
+    postDetach: ((model: ListModel<*>, holder: ListHolder) -> Unit)? = null,
+    onFailedToRecycleView: ((model: ListModel<*>, holder: ListHolder) -> Unit)? = null
+): ListModelListener = ListModelListener(
+    preCreateHolder, postCreateHolder,
+    preCreateView, postCreateView,
+    preBind, postBind,
+    preUnbind, postUnbind,
+    preAttach, postAttach,
+    preDetach, postDetach,
+    onFailedToRecycleView
+).also { addModelListener(it) }
+
 fun ListModelListener(
     preCreateHolder: ((model: ListModel<*>) -> Unit)? = null,
     postCreateHolder: ((model: ListModel<*>, holder: ListHolder) -> Unit)? = null,
