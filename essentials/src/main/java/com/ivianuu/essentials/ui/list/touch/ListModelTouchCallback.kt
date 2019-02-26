@@ -29,8 +29,9 @@ import kotlin.reflect.KClass
 
 @Suppress("UNCHECKED_CAST")
 abstract class ListModelTouchCallback<T : ListModel<*>>(
-    private val targetModelClass: KClass<T>
+    private val targetModelClass: KClass<T>? = null
 ) : ItemTouchHelper.Callback(), ListDragCallback<T>, ListSwipeCallback<T> {
+
     private var holderBeingDragged: ListViewHolder? = null
     private var holderBeingSwiped: ListViewHolder? = null
 
@@ -69,7 +70,7 @@ abstract class ListModelTouchCallback<T : ListModel<*>>(
     }
 
     protected open fun isTouchableModel(model: ListModel<*>): Boolean =
-        targetModelClass.java.isInstance(model)
+        targetModelClass?.java?.isInstance(model) ?: false
 
     override fun onMove(
         recyclerView: RecyclerView,
