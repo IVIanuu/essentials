@@ -94,14 +94,5 @@ inline fun <reified T : ViewModel> ViewModelManager.get(
     noinline factory: () -> T
 ): T = get(T::class, key, factory)
 
-fun <T : ViewModel> ViewModelManager.getOrNull(
-    type: KClass<T>,
-    key: String = type.defaultViewModelKey
-): T? = viewModels[key] as? T
-
-inline fun <reified T : ViewModel> ViewModelManager.getOrNull(
-    key: String = T::class.defaultViewModelKey
-): T? = getOrNull(T::class, key)
-
-val <T : ViewModel> KClass<T>.defaultViewModelKey
+val <T : ViewModel> KClass<T>.defaultViewModelKey: String
     get() = "ViewModelManager.defaultKey:" + java.canonicalName

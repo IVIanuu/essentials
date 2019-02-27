@@ -16,25 +16,22 @@
 
 package com.ivianuu.essentials.ui.viewmodel.injekt
 
-import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
+import com.ivianuu.essentials.ui.viewmodel.ViewModel
 import com.ivianuu.essentials.ui.viewmodel.ViewModelManagerOwner
 import com.ivianuu.essentials.ui.viewmodel.defaultViewModelKey
 import com.ivianuu.essentials.ui.viewmodel.getViewModel
 import com.ivianuu.essentials.ui.viewmodel.viewModel
 import com.ivianuu.injekt.InjektTrait
 import com.ivianuu.injekt.get
-import kotlin.reflect.KClass
 
-inline fun <T, reified VM : MvRxViewModel<*>> T.viewModel(
-    type: KClass<VM>,
+interface InjektViewModelManagerOwner : InjektTrait, ViewModelManagerOwner
+
+inline fun <reified T : ViewModel> InjektViewModelManagerOwner.viewModel(
     crossinline from: () -> ViewModelManagerOwner = { this },
-    crossinline key: () -> String = { type.defaultViewModelKey }
-): Lazy<VM> where T : InjektTrait, T : ViewModelManagerOwner =
-    viewModel<VM>(from, key) { get() }
+    crossinline key: () -> String = { T::class.defaultViewModelKey }
+): Lazy<T> = viewModel<T>(from, key) { get() }
 
-inline fun <T, reified VM : MvRxViewModel<*>> T.getViewModel(
-    type: KClass<VM>,
+inline fun <reified T : ViewModel> InjektViewModelManagerOwner.getViewModel(
     from: ViewModelManagerOwner = this,
-    key: String = type.defaultViewModelKey
-): VM where T : InjektTrait, T : ViewModelManagerOwner =
-    getViewModel<VM>(from, key) { get() }
+    key: String = T::class.defaultViewModelKey
+): T = getViewModel(from, key) { get() }

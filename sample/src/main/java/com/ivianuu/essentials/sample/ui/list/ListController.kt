@@ -25,7 +25,7 @@ import com.ivianuu.essentials.ui.epoxy.SimpleEpoxyModel
 import com.ivianuu.essentials.ui.epoxy.simpleLoading
 import com.ivianuu.essentials.ui.epoxy.simpleText
 import com.ivianuu.essentials.ui.mvrx.epoxy.simpleEpoxyController
-import com.ivianuu.essentials.ui.mvrx.injekt.viewModel
+import com.ivianuu.essentials.ui.mvrx.injekt.mvRxViewModel
 import com.ivianuu.essentials.ui.simple.SimpleController
 import com.ivianuu.essentials.ui.traveler.NavOptions
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
@@ -38,7 +38,7 @@ class ListKey : ControllerKey(::ListController, NavOptions().vertical())
 
 class ListController : SimpleController() {
 
-    private val viewModel by viewModel<ListViewModel>()
+    private val viewModel by mvRxViewModel<ListViewModel>()
 
     override val toolbarMenuRes get() = R.menu.controller_list
     override val toolbarTitle get() = "List"

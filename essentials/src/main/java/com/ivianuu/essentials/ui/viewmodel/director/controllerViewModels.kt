@@ -4,7 +4,7 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ *  
  * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
@@ -14,27 +14,23 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.mvrx
+package com.ivianuu.essentials.ui.viewmodel.director
 
-import com.ivianuu.essentials.ui.mvrx.lifecycle.lifecycleLazy
+import com.ivianuu.director.Controller
+import com.ivianuu.essentials.ui.viewmodel.ViewModel
 import com.ivianuu.essentials.ui.viewmodel.ViewModelManagerOwner
+import com.ivianuu.essentials.ui.viewmodel.defaultViewModelKey
 import com.ivianuu.essentials.ui.viewmodel.getViewModel
-import com.ivianuu.kommon.lifecycle.defaultViewModelKey
+import com.ivianuu.essentials.util.ext.unsafeLazy
 
-inline fun <reified T : MvRxViewModel<*>> MvRxView.mvRxViewModel(
-    noinline from: () -> ViewModelManagerOwner = { this },
-    noinline key: () -> String = { T::class.defaultViewModelKey },
+inline fun <reified T : ViewModel> Controller.viewModel(
+    crossinline from: () -> ViewModelManagerOwner = { viewModelManagerOwner },
+    crossinline key: () -> String = { T::class.defaultViewModelKey },
     noinline factory: () -> T
-): Lazy<T> = lifecycleLazy { getMvRxViewModel(from(), key(), factory) }
+): Lazy<T> = unsafeLazy { getViewModel(from(), key(), factory) }
 
-inline fun <reified T : MvRxViewModel<*>> MvRxView.getMvRxViewModel(
-    from: ViewModelManagerOwner = this,
+inline fun <reified T : ViewModel> Controller.getViewModel(
+    from: ViewModelManagerOwner = viewModelManagerOwner,
     key: String = T::class.defaultViewModelKey,
     noinline factory: () -> T
-): T = getViewModel(from, key, factory).setupViewModel(this)
-
-@PublishedApi
-internal fun <T : MvRxViewModel<*>> T.setupViewModel(view: MvRxView): T =
-    apply {
-        subscribe(view) { view.postInvalidate() }
-    }
+): T = from.getViewModel(from, key, factory)

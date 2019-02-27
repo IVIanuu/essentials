@@ -30,13 +30,15 @@ import com.ivianuu.essentials.ui.epoxy.SimpleEpoxyModel
 import com.ivianuu.essentials.ui.epoxy.simpleLoading
 import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
 import com.ivianuu.essentials.ui.mvrx.epoxy.simpleEpoxyController
-import com.ivianuu.essentials.ui.mvrx.injekt.viewModel
+import com.ivianuu.essentials.ui.mvrx.injekt.mvRxViewModel
+import com.ivianuu.essentials.ui.mvrx.withState
 import com.ivianuu.essentials.ui.simple.SimpleController
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
 import com.ivianuu.essentials.util.SavedState
 import com.ivianuu.essentials.util.coroutineScope
 import com.ivianuu.essentials.util.ext.goBackWithResult
 import com.ivianuu.injekt.annotations.Factory
+import com.ivianuu.timberktx.d
 import com.ivianuu.traveler.Router
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.es_item_app.icon
@@ -57,7 +59,13 @@ class AppPickerController : SimpleController() {
     override val toolbarTitleRes: Int
         get() = R.string.es_screen_label_app_picker
 
-    private val viewModel by viewModel<AppPickerViewModel>()
+    private val viewModel by mvRxViewModel<AppPickerViewModel>()
+
+    override fun invalidate() {
+        val state = withState(viewModel) { it }
+        d { "invalidate state is $state" }
+        super.invalidate()
+    }
 
     override fun epoxyController() = simpleEpoxyController(viewModel) { state ->
         if (state.loading) {
@@ -111,13 +119,20 @@ class AppPickerViewModel(
 
     override fun onInitialize(savedState: SavedState?) {
         super.onInitialize(savedState)
+        d { "on init" }
         coroutineScope.launch {
             val apps = if (key.launchableOnly) {
                 appStore.getLaunchableApps()
             } else {
                 appStore.getInstalledApps()
             }
-            setState { copy(apps = apps, loading = false) }
+
+            d { "apps loaded $apps" }
+
+            setState {
+                d { "setting state" }
+                copy(apps = apps, loading = false)
+            }
         }
     }
 

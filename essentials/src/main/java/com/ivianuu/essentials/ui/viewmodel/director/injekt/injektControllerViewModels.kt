@@ -14,25 +14,30 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.mvrx.injekt
+package com.ivianuu.essentials.ui.viewmodel.director.injekt
 
-import com.ivianuu.essentials.ui.mvrx.MvRxView
-import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
-import com.ivianuu.essentials.ui.mvrx.getMvRxViewModel
-import com.ivianuu.essentials.ui.mvrx.mvRxViewModel
+import com.ivianuu.director.Controller
+import com.ivianuu.essentials.ui.viewmodel.ViewModel
 import com.ivianuu.essentials.ui.viewmodel.ViewModelManagerOwner
 import com.ivianuu.essentials.ui.viewmodel.defaultViewModelKey
+import com.ivianuu.essentials.ui.viewmodel.director.viewModel
+import com.ivianuu.essentials.ui.viewmodel.director.viewModelManagerOwner
+import com.ivianuu.essentials.ui.viewmodel.getViewModel
 import com.ivianuu.injekt.InjektTrait
 import com.ivianuu.injekt.get
 
-interface InjektMvRxView : InjektTrait, MvRxView
+inline fun <reified T : ViewModel> Controller.viewModel(
+    crossinline from: () -> ViewModelManagerOwner = { viewModelManagerOwner },
+    crossinline key: () -> String = { T::class.defaultViewModelKey }
+): Lazy<T> {
+    this as InjektTrait
+    return viewModel(from, key) { get<T>() }
+}
 
-inline fun <reified T : MvRxViewModel<*>> InjektMvRxView.mvRxViewModel(
-    noinline from: () -> ViewModelManagerOwner = { this },
-    noinline key: () -> String = { T::class.defaultViewModelKey }
-): Lazy<T> = mvRxViewModel<T>(from, key) { get() }
-
-inline fun <reified T : MvRxViewModel<*>> InjektMvRxView.getMvRxViewModel(
-    from: ViewModelManagerOwner = this,
+inline fun <reified T : ViewModel> Controller.getViewModel(
+    from: ViewModelManagerOwner = viewModelManagerOwner,
     key: String = T::class.defaultViewModelKey
-): T = getMvRxViewModel<T>(from, key) { get() }
+): T {
+    this as InjektTrait
+    return from.getViewModel(from, key) { get<T>() }
+}

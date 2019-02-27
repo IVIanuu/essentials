@@ -20,7 +20,7 @@ import android.os.Bundle
 import android.view.View
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.base.EsController
-import com.ivianuu.essentials.ui.mvrx.injekt.viewModel
+import com.ivianuu.essentials.ui.mvrx.injekt.mvRxViewModel
 import com.ivianuu.essentials.ui.mvrx.withState
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
 import kotlinx.android.parcel.Parcelize
@@ -38,7 +38,7 @@ class CounterController : EsController() {
 
     override val layoutRes get() = R.layout.controller_counter
 
-    private val viewModel by viewModel<CounterViewModel>()
+    private val viewModel by mvRxViewModel<CounterViewModel>()
 
     override fun onBindView(view: View, savedViewState: Bundle?) {
         super.onBindView(view, savedViewState)

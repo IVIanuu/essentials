@@ -46,8 +46,7 @@ import com.ivianuu.traveler.setRoot
 /**
  * Base activity
  */
-abstract class EsActivity : AppCompatActivity(),
-    InjektMvRxView, ScopeOwner {
+abstract class EsActivity : AppCompatActivity(), InjektMvRxView, ScopeOwner {
 
     override val component by unsafeLazy {
         activityComponent {
