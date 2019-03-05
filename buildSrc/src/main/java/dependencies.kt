@@ -41,7 +41,7 @@ object Versions {
     const val androidxCardView = "1.0.0"
     const val androidxCore = "1.0.1"
     const val androidxLifecycle = "2.0.0"
-    const val androidxWork = "1.0.0-beta03"
+    const val androidxWork = "1.0.0"
 
     const val androidxTestCore = "1.0.0"
     const val androidxTestJunit = "1.0.0"
@@ -60,7 +60,7 @@ object Versions {
     const val epoxyKtx = "0.0.1-dev-1"
     const val epoxyPrefs = "0.0.1-dev-3"
     const val glide = "4.8.0"
-    const val injekt = "0.0.1-dev-7"
+    const val injekt = "0.0.1-dev-10"
     const val junit = "4.12"
     const val kommon = "0.0.1-dev-3"
     const val kotlin = "1.3.21"

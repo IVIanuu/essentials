@@ -35,10 +35,9 @@ const val CHILD_CONTROLLER_SCOPE = "child_controller_scope"
  * Returns a [Component] with convenient configurations
  */
 inline fun <T : Controller> T.controllerComponent(
-    name: String? = javaClass.simpleName + "Component",
-    deferCreateEagerInstances: Boolean = false,
+    createEagerInstances: Boolean = true,
     definition: ComponentDefinition = {}
-): Component = component(name, deferCreateEagerInstances) {
+): Component = component(createEagerInstances) {
     scopeNames(CONTROLLER_SCOPE)
     (getParentControllerComponentOrNull()
         ?: getActivityComponentOrNull()
@@ -51,9 +50,9 @@ inline fun <T : Controller> T.controllerComponent(
  * Returns a [Component] with convenient configurations
  */
 inline fun <T : Controller> T.childControllerComponent(
-    name: String? = javaClass.simpleName + "Component",
+    createEagerInstances: Boolean = true,
     definition: ComponentDefinition = {}
-): Component = component(name) {
+): Component = component(createEagerInstances) {
     scopeNames(CHILD_CONTROLLER_SCOPE)
     (getParentControllerComponentOrNull()
         ?: getActivityComponentOrNull()

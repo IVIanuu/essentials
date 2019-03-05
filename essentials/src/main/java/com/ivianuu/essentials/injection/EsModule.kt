@@ -26,7 +26,7 @@ import com.ivianuu.injekt.module
 /**
  * Core modules
  */
-val esModule = module("EsModule") {
+val esModule = module {
     module(appInitializerInjectionModule)
     module(appServiceInjectionModule)
     module(esAppInitializersModule)

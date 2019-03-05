@@ -85,7 +85,7 @@ import kotlin.reflect.KClass
 /**
  * Module which binds all available system services
  */
-val systemServiceModule = module("SystemServicesModule") {
+val systemServiceModule = module {
     getSystemServices()
         .map { it.cast<KClass<Any>>() }
         .forEach { service ->

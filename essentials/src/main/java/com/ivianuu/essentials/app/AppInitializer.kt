@@ -44,11 +44,11 @@ inline fun <reified T : AppInitializer> Module.bindAppInitializer(name: String? 
     bindIntoClassMap<T>(APP_INITIALIZERS, implementationName = name)
 }
 
-val appInitializerInjectionModule = module("AppInitializerInjectionModule") {
+val appInitializerInjectionModule = module {
     mapBinding(APP_INITIALIZERS)
 }
 
-val esAppInitializersModule = module("EsAppInitializersModule") {
+val esAppInitializersModule = module {
     bindAppInitializer<RxJavaAppInitializer>()
     bindAppInitializer<StateStoreAppInitializer>()
     bindAppInitializer<TimberAppInitializer>()

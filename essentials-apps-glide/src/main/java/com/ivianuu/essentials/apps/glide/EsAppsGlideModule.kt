@@ -22,6 +22,6 @@ import com.ivianuu.injekt.module
 /**
  * Binds dependencies related to this module
  */
-val esAppsGlideModule = module("EsAppsGlideModule") {
+val esAppsGlideModule = module {
     bindAppInitializer<AppGlideAppInitializer>()
 }

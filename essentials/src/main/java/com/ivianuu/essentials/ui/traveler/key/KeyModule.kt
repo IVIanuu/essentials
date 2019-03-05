@@ -28,7 +28,7 @@ import kotlin.reflect.KClass
 fun keyModule(
     bundle: Bundle?,
     throwIfNotAvailable: Boolean = true
-) = module("KeyModule") {
+) = module {
     if (bundle != null && bundle.containsKey(TRAVELER_KEY_CLASS) && bundle.containsKey(TRAVELER_KEY)) {
         val className = bundle.getString(TRAVELER_KEY_CLASS)!!
         val type = Class.forName(className).kotlin as KClass<Any>

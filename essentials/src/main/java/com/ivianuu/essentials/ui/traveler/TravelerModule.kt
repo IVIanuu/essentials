@@ -23,6 +23,6 @@ import com.ivianuu.traveler.Router
 /**
  * Provides the global [Router]
  */
-val travelerModule = module("TravelerModule") {
+val travelerModule = module {
     single { Router() }
 }

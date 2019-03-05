@@ -39,7 +39,7 @@ import com.ivianuu.injekt.multibinding.mapBinding
 import com.ivianuu.injekt.parametersOf
 
 /**
- * Uses [Injekt] to instantiate workers
+ * Uses injekt to instantiate workers
  */
 class InjektWorkerFactory(
     private val workers: Map<String, Provider<Worker>>
@@ -64,7 +64,7 @@ const val WORKER_MAP = "workers"
 /**
  * Contains the [InjektWorkerFactory]
  */
-val workerInjectionModule = module("WorkerInjectionModule") {
+val workerInjectionModule = module {
     mapBinding(WORKER_MAP)
     factory { InjektWorkerFactory(getProviderMap(WORKER_MAP)) } bindType WorkerFactory::class
 }
