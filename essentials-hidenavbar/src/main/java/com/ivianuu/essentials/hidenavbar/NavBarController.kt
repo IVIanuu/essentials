@@ -37,7 +37,6 @@ import com.ivianuu.kprefs.rx.observable
 import com.ivianuu.rxjavaktx.observable
 import com.ivianuu.scopes.ReusableScope
 import com.ivianuu.scopes.rx.disposeBy
-import com.ivianuu.timberktx.d
 import io.reactivex.rxkotlin.Observables
 
 /**
@@ -85,17 +84,11 @@ class NavBarController(
                 .startWith(Unit)
                 .filter { prefs.showNavBarScreenOff.get() }
                 .map { keyguardManager.isKeyguardLocked || app.isScreenOff }
-                .subscribe {
-                    d { "on screen state changed $it" }
-                    updateNavBarState(it)
-                }
+                .subscribe { updateNavBarState(it) }
                 .disposeBy(enabledScope)
 
             broadcastFactory.create(Intent.ACTION_SHUTDOWN)
-                .subscribe {
-                    d { "force show because of reboot" }
-                    updateNavBarState(true)
-                }
+                .subscribe { updateNavBarState(true) }
                 .disposeBy(enabledScope)
         } else {
             // only force the nav bar to be shown if it was hidden by us
@@ -111,7 +104,6 @@ class NavBarController(
     private fun updateNavBarState(
         forceShow: Boolean
     ) {
-        d { "update nav bar force show $forceShow" }
         if (forceShow) {
             updateNavBarStateInternal(false)
         } else {
@@ -121,7 +113,6 @@ class NavBarController(
     }
 
     private fun updateNavBarStateInternal(hide: Boolean) {
-        d { "update nav bar internal hide $hide" }
         updateNavBar(hide, true)
     }
 

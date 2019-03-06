@@ -27,7 +27,6 @@ import com.ivianuu.essentials.apps.glide.AppIcon
 import com.ivianuu.essentials.injection.CONTROLLER_SCOPE
 import com.ivianuu.essentials.ui.epoxy.EsEpoxyHolder
 import com.ivianuu.essentials.ui.epoxy.SimpleEpoxyModel
-import com.ivianuu.essentials.ui.epoxy.simpleLoading
 import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
 import com.ivianuu.essentials.ui.mvrx.epoxy.simpleEpoxyController
 import com.ivianuu.essentials.ui.mvrx.injekt.mvRxViewModel
@@ -38,7 +37,6 @@ import com.ivianuu.essentials.util.SavedState
 import com.ivianuu.essentials.util.coroutineScope
 import com.ivianuu.essentials.util.ext.goBackWithResult
 import com.ivianuu.injekt.annotations.Factory
-import com.ivianuu.timberktx.d
 import com.ivianuu.traveler.Router
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.es_item_app.icon
@@ -63,7 +61,6 @@ class AppPickerController : SimpleController() {
 
     override fun invalidate() {
         val state = withState(viewModel) { it }
-        d { "invalidate state is $state" }
         super.invalidate()
     }
 
@@ -119,7 +116,6 @@ class AppPickerViewModel(
 
     override fun onInitialize(savedState: SavedState?) {
         super.onInitialize(savedState)
-        d { "on init" }
         coroutineScope.launch {
             val apps = if (key.launchableOnly) {
                 appStore.getLaunchableApps()
@@ -127,12 +123,7 @@ class AppPickerViewModel(
                 appStore.getInstalledApps()
             }
 
-            d { "apps loaded $apps" }
-
-            setState {
-                d { "setting state" }
-                copy(apps = apps, loading = false)
-            }
+            setState { copy(apps = apps, loading = false) }
         }
     }
 

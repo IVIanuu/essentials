@@ -41,10 +41,6 @@ class MyWorkerOne(
     navBarPrefs: NavBarPrefs
 ) : EsWorker(context, workerParams) {
 
-    init {
-        d { "hello $windowManager, $navBarPrefs" }
-    }
-
     override fun doWork(): Result {
         d { "do work" }
         return Result.success()
@@ -57,10 +53,6 @@ class MyWorkerTwo(
     @Param workerParams: WorkerParameters,
     packageManager: PackageManager
 ) : EsWorker(context, workerParams) {
-
-    init {
-        d { "hello $packageManager" }
-    }
 
     override fun doWork(): Result {
         d { "do work" }

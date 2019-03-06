@@ -20,7 +20,6 @@ import android.annotation.SuppressLint
 import android.graphics.Rect
 import android.os.IBinder
 import com.ivianuu.injekt.annotations.Factory
-import com.ivianuu.timberktx.d
 
 /**
  * Utils to access overscan with reflection
@@ -30,7 +29,6 @@ import com.ivianuu.timberktx.d
 class OverscanHelper {
 
     fun setDisplayOverscan(rect: Rect) {
-        d { "set display overscan $rect" }
         setOverscanMethod.invoke(
             windowManagerService,
             0, rect.left, rect.top, rect.right, rect.bottom

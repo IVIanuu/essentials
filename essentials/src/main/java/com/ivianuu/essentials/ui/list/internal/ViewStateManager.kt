@@ -23,7 +23,6 @@ import android.view.View
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.list.ListViewHolder
 import com.ivianuu.essentials.ui.list.requireModel
-import com.ivianuu.timberktx.d
 import kotlinx.android.parcel.Parcelize
 
 internal class ViewStateManager {
@@ -34,8 +33,6 @@ internal class ViewStateManager {
         if (!holder.requireModel().shouldSaveViewState) return
         val state = viewStates[holder.itemId]
 
-        d { "restore for ${holder.model}" }
-
         if (state != null) {
             state.restore(holder.itemView)
         } else {
@@ -45,8 +42,6 @@ internal class ViewStateManager {
 
     fun save(holder: ListViewHolder) {
         if (!holder.requireModel().shouldSaveViewState) return
-
-        d { "save for ${holder.model}" }
 
         val state = viewStates.getOrPut(holder.itemId) { ViewState() }
         state.save(holder.itemView)

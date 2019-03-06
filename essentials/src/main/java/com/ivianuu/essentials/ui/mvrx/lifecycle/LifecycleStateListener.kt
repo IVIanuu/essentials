@@ -21,7 +21,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import com.ivianuu.closeable.Closeable
 import com.ivianuu.statestore.StateStore
-import com.ivianuu.timberktx.d
 
 /**
  * Attaches and detaches the [consumer] to the [store]
@@ -39,29 +38,19 @@ internal class LifecycleStateListener<T>(
 
     init {
         owner.lifecycle.addObserver(this)
-        d { "on init lifecycle state listener" }
     }
 
     override fun onStateChanged(source: LifecycleOwner, event: Lifecycle.Event) {
         val state = owner.lifecycle.currentState
 
-        d { "on state changed $state" }
-
         when {
-            state.isAtLeast(Lifecycle.State.STARTED) -> {
-                d { "add state listener" }
-                store.addStateListener(consumer)
-            }
+            state.isAtLeast(Lifecycle.State.STARTED) -> store.addStateListener(consumer)
             state == Lifecycle.State.DESTROYED -> { close() }
-            else -> {
-                d { "remove state listener" }
-                store.removeStateListener(consumer)
-            }
+            else -> store.removeStateListener(consumer)
         }
     }
 
     override fun close() {
-        d { "close" }
         owner.lifecycle.removeObserver(this)
         store.removeStateListener(consumer)
     }
