@@ -60,7 +60,7 @@ object Versions {
     const val epoxyKtx = "0.0.1-dev-1"
     const val epoxyPrefs = "0.0.1-dev-3"
     const val glide = "4.8.0"
-    const val injekt = "0.0.1-dev-11"
+    const val injekt = "0.0.1-dev-12"
     const val junit = "4.12"
     const val kommon = "0.0.1-dev-3"
     const val kotlin = "1.3.21"

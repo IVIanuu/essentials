@@ -94,7 +94,6 @@ inline fun <reified T : Worker> Module.bindWorker(name: String? = null) {
     bindIntoMap<T>(
         mapName = WORKER_MAP,
         mapKey = T::class.java.name,
-        implementationType = T::class,
         implementationName = name
     )
 }

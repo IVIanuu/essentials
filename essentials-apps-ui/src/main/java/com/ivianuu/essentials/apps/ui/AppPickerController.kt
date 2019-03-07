@@ -27,10 +27,10 @@ import com.ivianuu.essentials.apps.glide.AppIcon
 import com.ivianuu.essentials.injection.CONTROLLER_SCOPE
 import com.ivianuu.essentials.ui.epoxy.EsEpoxyHolder
 import com.ivianuu.essentials.ui.epoxy.SimpleEpoxyModel
+import com.ivianuu.essentials.ui.epoxy.simpleLoading
 import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
 import com.ivianuu.essentials.ui.mvrx.epoxy.simpleEpoxyController
 import com.ivianuu.essentials.ui.mvrx.injekt.mvRxViewModel
-import com.ivianuu.essentials.ui.mvrx.withState
 import com.ivianuu.essentials.ui.simple.SimpleController
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
 import com.ivianuu.essentials.util.SavedState
@@ -58,11 +58,6 @@ class AppPickerController : SimpleController() {
         get() = R.string.es_screen_label_app_picker
 
     private val viewModel by mvRxViewModel<AppPickerViewModel>()
-
-    override fun invalidate() {
-        val state = withState(viewModel) { it }
-        super.invalidate()
-    }
 
     override fun epoxyController() = simpleEpoxyController(viewModel) { state ->
         if (state.loading) {
