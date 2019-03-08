@@ -16,21 +16,9 @@
 
 package com.ivianuu.essentials.ui.epoxy
 
-import android.content.Context
-import android.view.View
 import com.ivianuu.epoxyktx.KtEpoxyHolder
-import com.ivianuu.essentials.util.ContextAware
 
 /**
  * Base epoxy holder
  */
-open class EsEpoxyHolder : KtEpoxyHolder(), ContextAware {
-
-    override lateinit var providedContext: Context
-
-    override fun bindView(itemView: View) {
-        super.bindView(itemView)
-        providedContext = itemView.context
-    }
-
-}
+open class EsEpoxyHolder : KtEpoxyHolder()

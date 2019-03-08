@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.ui.epoxy
 
+import android.content.Context
 import android.view.View
 import androidx.annotation.CallSuper
 import com.airbnb.epoxy.EpoxyAttribute
@@ -24,30 +25,23 @@ import com.ivianuu.essentials.util.ContextAware
 import com.ivianuu.scopes.ReusableScope
 import com.ivianuu.scopes.Scope
 import com.ivianuu.scopes.ScopeOwner
-import kotlinx.android.extensions.LayoutContainer
 
 /**
  * Base epoxy model with holder
  */
 abstract class EsEpoxyModel<H : EsEpoxyHolder> : EpoxyModelWithHolder<H>(), ContextAware,
-    LayoutContainer, ScopeOwner {
+    ScopeOwner {
 
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var onClick: ((View) -> Unit)? = null
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var onLongClick: ((View) -> Boolean)? = null
 
-    override val containerView
-        get() = _boundHolder!!.containerView
-
-    override val providedContext
-        get() = _boundHolder!!.providedContext
+    override lateinit var providedContext: Context
 
     protected open val onClickView: View? get() = null
-    protected open val useContainerForClicks get() = true
+    protected open val useContainerForClicks: Boolean get() = true
 
     protected open val onLongClickView: View? get() = null
-    protected open val useContainerForLongClicks get() = true
-
-    private var _boundHolder: H? = null
+    protected open val useContainerForLongClicks: Boolean get() = true
 
     override val scope: Scope
         get() {
@@ -60,7 +54,8 @@ abstract class EsEpoxyModel<H : EsEpoxyHolder> : EpoxyModelWithHolder<H>(), Cont
     @CallSuper
     override fun bind(holder: H) {
         _scope?.clear()
-        _boundHolder = holder
+        providedContext = holder.containerView.context
+
         super.bind(holder)
 
         if (onClickView != null) {
@@ -91,7 +86,6 @@ abstract class EsEpoxyModel<H : EsEpoxyHolder> : EpoxyModelWithHolder<H>(), Cont
         }
 
         _scope?.clear()
-        _boundHolder = null
 
         super.unbind(holder)
     }
