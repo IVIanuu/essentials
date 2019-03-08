@@ -37,10 +37,7 @@ abstract class EsEpoxyModel<H : EsEpoxyHolder> : EpoxyModelWithHolder<H>(), Cont
 
     override lateinit var providedContext: Context
 
-    protected open val onClickView: View? get() = null
     protected open val useContainerForClicks: Boolean get() = true
-
-    protected open val onLongClickView: View? get() = null
     protected open val useContainerForLongClicks: Boolean get() = true
 
     override val scope: Scope
@@ -58,14 +55,16 @@ abstract class EsEpoxyModel<H : EsEpoxyHolder> : EpoxyModelWithHolder<H>(), Cont
 
         super.bind(holder)
 
+        val onClickView = getOnClickView(holder)
         if (onClickView != null) {
-            onClickView?.setOnClickListener(onClick)
+            onClickView.setOnClickListener(onClick)
         } else if (useContainerForClicks) {
             holder.containerView.setOnClickListener(onClick)
         }
 
+        val onLongClickView = getOnLongClickView(holder)
         if (onLongClickView != null) {
-            onLongClickView?.setOnLongClickListener(onLongClick)
+            onLongClickView.setOnLongClickListener(onLongClick)
         } else if (useContainerForLongClicks) {
             holder.containerView.setOnLongClickListener(onLongClick)
         }
@@ -73,14 +72,16 @@ abstract class EsEpoxyModel<H : EsEpoxyHolder> : EpoxyModelWithHolder<H>(), Cont
 
     @CallSuper
     override fun unbind(holder: H) {
+        val onClickView = getOnClickView(holder)
         if (onClickView != null) {
-            onClickView?.setOnClickListener(null)
+            onClickView.setOnClickListener(null)
         } else if (useContainerForClicks) {
             holder.containerView.setOnClickListener(null)
         }
 
+        val onLongClickView = getOnLongClickView(holder)
         if (onLongClickView != null) {
-            onLongClickView?.setOnClickListener(null)
+            onLongClickView.setOnClickListener(null)
         } else if (useContainerForLongClicks) {
             holder.containerView.setOnLongClickListener(null)
         }
@@ -89,5 +90,8 @@ abstract class EsEpoxyModel<H : EsEpoxyHolder> : EpoxyModelWithHolder<H>(), Cont
 
         super.unbind(holder)
     }
+
+    protected open fun getOnClickView(holder: H): View? = null
+    protected open fun getOnLongClickView(holder: H): View? = null
 
 }
