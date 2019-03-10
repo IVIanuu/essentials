@@ -43,7 +43,7 @@ class SecureSettingsPcInstructionsController : SimpleController() {
     private val clipboardManager by inject<ClipboardManager>()
 
     override val toolbarTitleRes: Int
-        get() = R.string.es_screen_label_secure_settings_pc_instructions
+        get() = R.string.es_title_secure_settings_pc_instructions
 
     override fun epoxyController() = epoxyController {
         preference(context) {

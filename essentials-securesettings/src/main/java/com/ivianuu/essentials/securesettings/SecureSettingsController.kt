@@ -50,7 +50,7 @@ class SecureSettingsKey(
 class SecureSettingsController : SimpleController() {
 
     override val toolbarTitleRes: Int
-        get() = R.string.es_screen_label_secure_settings
+        get() = R.string.es_title_secure_settings
 
     private val key by inject<SecureSettingsKey>()
     private val shell by inject<Shell>()

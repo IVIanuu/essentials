@@ -55,7 +55,7 @@ class NavBarSettingsController : PrefsController() {
         get() = navBarSharedPrefs
 
     override val toolbarTitleRes: Int
-        get() = R.string.es_screen_label_nav_bar_settings
+        get() = R.string.es_title_nav_bar_settings
 
     private val key by inject<NavBarSettingsKey>()
 

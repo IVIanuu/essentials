@@ -15,5 +15,5 @@
   -->
 
 <resources>
-    <string name="es_screen_label_app_picker">App Picker</string>
+    <string name="es_title_app_picker">App Picker</string>
 </resources>

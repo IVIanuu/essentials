@@ -55,7 +55,7 @@ data class AppPickerKey(
 class AppPickerController : SimpleController() {
 
     override val toolbarTitleRes: Int
-        get() = R.string.es_screen_label_app_picker
+        get() = R.string.es_title_app_picker
 
     private val viewModel by mvRxViewModel<AppPickerViewModel>()
 
