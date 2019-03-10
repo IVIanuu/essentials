@@ -26,7 +26,7 @@ import com.ivianuu.kprefs.common.enumString
 /**
  * Nav bar prefs
  */
-@Single(scopeName = APPLICATION_SCOPE)
+@Single(APPLICATION_SCOPE)
 class NavBarPrefs(@Name(NAV_BAR_PREFS) prefs: KPrefs) {
     val manageNavBar = prefs.boolean("manage_nav_bar")
     val fullOverscan = prefs.boolean("full_overscan")

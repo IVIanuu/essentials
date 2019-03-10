@@ -31,7 +31,7 @@ import com.ivianuu.traveler.goBack
 import com.ivianuu.traveler.navigate
 import com.ivianuu.traveler.popToRoot
 
-@Factory(scopeName = CONTROLLER_SCOPE)
+@Factory(CONTROLLER_SCOPE)
 class CounterViewModel(
     key: CounterKey,
     private val router: Router

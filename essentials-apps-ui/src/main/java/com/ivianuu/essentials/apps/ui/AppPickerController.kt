@@ -102,7 +102,7 @@ abstract class AppInfoModel : SimpleEpoxyModel() {
 /**
  * View model for the [AppPickerController]
  */
-@Factory(scopeName = CONTROLLER_SCOPE)
+@Factory(CONTROLLER_SCOPE)
 class AppPickerViewModel(
     private val key: AppPickerKey,
     private val appStore: AppStore,

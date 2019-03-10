@@ -25,7 +25,7 @@ import com.ivianuu.injekt.annotations.Factory
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-@Factory(scopeName = CONTROLLER_SCOPE)
+@Factory(CONTROLLER_SCOPE)
 class ListViewModel : MvRxViewModel<ListState>(ListState()) {
 
     init {

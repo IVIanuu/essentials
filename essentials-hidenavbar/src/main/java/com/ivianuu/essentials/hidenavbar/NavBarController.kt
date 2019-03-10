@@ -42,7 +42,7 @@ import io.reactivex.rxkotlin.Observables
 /**
  * Handles the state of the navigation bar
  */
-@Single(scopeName = APPLICATION_SCOPE)
+@Single(APPLICATION_SCOPE)
 class NavBarController(
     private val broadcastFactory: BroadcastFactory,
     private val app: Application,
