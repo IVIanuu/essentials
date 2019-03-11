@@ -25,7 +25,6 @@ import android.util.Size
 import android.util.SizeF
 import android.util.SparseArray
 import androidx.core.os.bundleOf
-import com.ivianuu.timberktx.d
 import java.io.Serializable
 import java.util.*
 
@@ -127,8 +126,6 @@ class ParceledSavedState() : Any(), SavedState, Parcelable {
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         val bundle = bundleOf()
-
-        d { "write to parcel $this" }
 
         val keys = arrayListOf<Any?>()
         val values = arrayListOf<Any?>()
