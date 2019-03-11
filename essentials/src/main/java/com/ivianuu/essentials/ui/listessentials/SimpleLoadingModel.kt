@@ -43,7 +43,7 @@ open class SimpleLoadingModel : SimpleListModel() {
             }
 
             val colorStateList = ColorStateList.valueOf(progressColor)
-            with(es_progress_bar) {
+            with(holder.es_progress_bar) {
                 progressBackgroundTintList = colorStateList
                 secondaryProgressTintList = colorStateList
                 indeterminateTintList = colorStateList
