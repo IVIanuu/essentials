@@ -174,8 +174,11 @@ class ParceledSavedState() : Any(), SavedState, Parcelable {
     }
 
     private fun Any?.checkType() {
+        // null values are ok
+        if (this == null) return
+
         require(ACCEPTABLE_CLASSES.any { it.java.isInstance(this) }) {
-            "Can't put value with type $javaClass into ParceledSavedState"
+            "Can't put value with type ${this.javaClass} into ParceledSavedState"
         }
     }
 
@@ -228,7 +231,8 @@ class ParceledSavedState() : Any(), SavedState, Parcelable {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) SizeF::class else Int::class,
 
             // will be auto converted to ParceledSavedState
-            SavedState::class
+            SavedState::class,
+            ParceledSavedState::class
         )
     }
 
