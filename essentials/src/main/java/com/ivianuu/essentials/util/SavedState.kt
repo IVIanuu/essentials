@@ -60,6 +60,9 @@ class MapSavedState : SavedState {
 
     override fun contains(key: String): Boolean = _entries.contains(key)
 
+    override fun toString(): String {
+        return "MapSavedState($entries)"
+    }
 }
 
 fun savedStateOf(vararg pairs: Pair<String, Any?>): SavedState {
@@ -167,7 +170,7 @@ class ParceledSavedState() : Any(), SavedState, Parcelable {
     }
 
     override fun toString(): String {
-        return "ParceledSavedState $_entries"
+        return "ParceledSavedState($_entries)"
     }
 
     private fun Any?.checkType() {
@@ -232,11 +235,12 @@ class ParceledSavedState() : Any(), SavedState, Parcelable {
 }
 
 fun Bundle.putSavedState(key: String, savedState: SavedState) {
-    if (savedState is ParceledSavedState) {
+    if (savedState is Parcelable) {
         putParcelable(key, savedState)
     } else {
         putParcelable(key, savedState.toParceledSavedState())
     }
 }
 
-fun Bundle.getSavedState(key: String): ParceledSavedState? = getParcelable(key)
+fun Bundle.getSavedState(key: String): SavedState? =
+    getParcelable<Parcelable>(key) as? SavedState
