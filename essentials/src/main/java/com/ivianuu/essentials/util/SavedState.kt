@@ -25,6 +25,7 @@ import android.util.Size
 import android.util.SizeF
 import android.util.SparseArray
 import androidx.core.os.bundleOf
+import com.ivianuu.timberktx.d
 import java.io.Serializable
 import java.util.*
 
@@ -61,7 +62,7 @@ class MapSavedState : SavedState {
     override fun contains(key: String): Boolean = _entries.contains(key)
 
     override fun toString(): String {
-        return "MapSavedState($entries)"
+        return "MapSavedState $entries"
     }
 }
 
@@ -127,6 +128,8 @@ class ParceledSavedState() : Any(), SavedState, Parcelable {
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         val bundle = bundleOf()
 
+        d { "write to parcel $this" }
+
         val keys = arrayListOf<Any?>()
         val values = arrayListOf<Any?>()
 
@@ -170,7 +173,7 @@ class ParceledSavedState() : Any(), SavedState, Parcelable {
     }
 
     override fun toString(): String {
-        return "ParceledSavedState($_entries)"
+        return "ParceledSavedState $_entries"
     }
 
     private fun Any?.checkType() {
