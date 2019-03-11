@@ -65,17 +65,39 @@ class MapSavedState : SavedState {
     }
 }
 
-fun savedStateOf(vararg pairs: Pair<String, Any?>): SavedState {
+fun mapSavedStateOf(vararg pairs: Pair<String, Any?>): MapSavedState {
     val savedState = MapSavedState()
     pairs.forEach { (key, value) -> savedState[key] = value }
     return savedState
 }
 
+fun savedStateOf(vararg pairs: Pair<String, Any?>): SavedState {
+    val savedState = SavedStatePlugins.savedStateFactory()
+    pairs.forEach { (key, value) -> savedState[key] = value }
+    return savedState
+}
+
+object SavedStatePlugins
+
+private var _savedStateFactory: SavedStateFactory = DefaultSavedStateFactory
+
+typealias SavedStateFactory = () -> SavedState
+
+object DefaultSavedStateFactory : SavedStateFactory {
+    override fun invoke(): SavedState = MapSavedState()
+}
+
+var SavedStatePlugins.savedStateFactory: SavedStateFactory
+    get() = _savedStateFactory
+    set(value) {
+        _savedStateFactory = value
+    }
+
 //
 // map
 //
 fun Map<String, *>.toSavedSaved(): SavedState {
-    val savedState = savedStateOf()
+    val savedState = SavedStatePlugins.savedStateFactory()
     forEach { (key, value) -> savedState[key] = value }
     return savedState
 }
@@ -84,6 +106,9 @@ fun Map<String, *>.toSavedSaved(): SavedState {
 // android
 //
 
+object AndroidSavedStateFactory : SavedStateFactory {
+    override fun invoke(): SavedState = ParceledSavedState()
+}
 
 fun parceledSavedStateOf(vararg pairs: Pair<String, Any?>): ParceledSavedState {
     val savedState = ParceledSavedState()
@@ -231,8 +256,7 @@ class ParceledSavedState() : Any(), SavedState, Parcelable {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) SizeF::class else Int::class,
 
             // will be auto converted to ParceledSavedState
-            SavedState::class,
-            ParceledSavedState::class
+            SavedState::class
         )
     }
 
