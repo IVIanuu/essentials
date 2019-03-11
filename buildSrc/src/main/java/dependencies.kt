@@ -58,7 +58,7 @@ object Versions {
     const val director = "0.0.1-dev-17"
     const val epoxy = "3.3.0"
     const val epoxyKtx = "0.0.1-dev-1"
-    const val epoxyPrefs = "0.0.1-dev-3"
+    const val epoxyPrefs = "0.0.1-dev-4"
     const val glide = "4.8.0"
     const val injekt = "0.0.1-dev-13"
     const val junit = "4.12"
