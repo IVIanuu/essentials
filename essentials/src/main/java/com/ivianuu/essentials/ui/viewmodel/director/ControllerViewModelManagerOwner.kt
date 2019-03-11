@@ -34,7 +34,7 @@ class ControllerViewModelManagerOwner(
     private val controller: Controller
 ) : ControllerListener, ViewModelManagerOwner {
 
-    override val viewModelManager by controller.retained { ViewModelManager() }
+    override val viewModelManager by controller.retained(initializer = ::ViewModelManager)
 
     init {
         controller.addListener(this)

@@ -77,18 +77,18 @@ abstract class EsApp : Application(), InjektTrait, ScopeOwner {
 
     protected open fun onInitialize() {
         appInitializers
-            .filterKeys { shouldInitialize(it) }
+            .filterKeys(this::shouldInitialize)
             .map { it.value.get() }
-            .forEach { it.initialize() }
+            .forEach(AppInitializer::initialize)
     }
 
     protected open fun shouldInitialize(type: KClass<out AppInitializer>): Boolean = true
 
     protected open fun onStartAppServices() {
         appServices
-            .filterKeys { shouldStartAppService(it) }
+            .filterKeys(this::shouldStartAppService)
             .map { it.value.get() }
-            .forEach { it.start() }
+            .forEach(AppService::start)
     }
 
     protected open fun shouldStartAppService(type: KClass<out AppService>): Boolean = true

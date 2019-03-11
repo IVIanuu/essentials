@@ -111,7 +111,7 @@ open class ListAdapter(
     }
 
     fun saveState(): Bundle = Bundle().apply {
-        _boundViewHolders.forEach { viewStateManager.save(it) }
+        _boundViewHolders.forEach(viewStateManager::save)
         putBundle(KEY_VIEW_STATE_MANAGER, viewStateManager.saveToBundle())
     }
 
@@ -123,7 +123,7 @@ open class ListAdapter(
         if (savedState == null) return
 
         savedState.getBundle(KEY_VIEW_STATE_MANAGER)!!
-            .let { viewStateManager.restoreFromBundle(it) }
+            .let(viewStateManager::restoreFromBundle)
     }
 
     final override fun setHasStableIds(hasStableIds: Boolean) {

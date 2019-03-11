@@ -41,7 +41,7 @@ inline fun <T : Controller> T.controllerComponent(
     scopeNames(CONTROLLER_SCOPE)
     (getParentControllerComponentOrNull()
         ?: getActivityComponentOrNull()
-        ?: getApplicationComponentOrNull())?.let { dependencies(it) }
+        ?: getApplicationComponentOrNull())?.let(this::dependencies)
     addInstance(this@controllerComponent)
     definition.invoke(this)
 }
@@ -56,7 +56,7 @@ inline fun <T : Controller> T.childControllerComponent(
     scopeNames(CHILD_CONTROLLER_SCOPE)
     (getParentControllerComponentOrNull()
         ?: getActivityComponentOrNull()
-        ?: getApplicationComponentOrNull())?.let { dependencies(it) }
+        ?: getApplicationComponentOrNull())?.let(this::dependencies)
     addInstance(this@childControllerComponent)
     definition.invoke(this)
 }

@@ -50,7 +50,7 @@ internal class ViewStateManager {
     fun restoreFromBundle(bundle: Bundle) {
         viewStates.putAll(
             bundle.getParcelableArrayList<ViewStateWithId>(KEY_HOLDER_STATES)!!
-                .associateBy { it.id }
+                .associateBy(ViewStateWithId::id)
                 .mapValues { it.value.state }
         )
     }

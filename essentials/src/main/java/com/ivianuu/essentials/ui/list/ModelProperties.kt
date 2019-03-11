@@ -72,11 +72,11 @@ class ModelProperties internal constructor() {
         if (other !is ModelProperties) return false
 
         val entries = _entries
-            .filterValues { it.doHash }
-            .map { it.value }
+            .filterValues(ModelProperty<*>::doHash)
+            .map(Map.Entry<String, ModelProperty<*>>::value)
         val otherEntries = other._entries
-            .filterValues { it.doHash }
-            .map { it.value }
+            .filterValues(ModelProperty<*>::doHash)
+            .map(Map.Entry<String, ModelProperty<*>>::value)
         if (entries != otherEntries) return false
 
         return true
@@ -84,13 +84,13 @@ class ModelProperties internal constructor() {
 
     override fun hashCode(): Int {
         val entries = _entries
-            .filterValues { it.doHash }
-            .map { it.value }
+            .filterValues(ModelProperty<*>::doHash)
+            .map(Map.Entry<String, ModelProperty<*>>::value)
         return entries.hashCode()
     }
 
     override fun toString(): String {
-        val entries = _entries.map { it.value }
+        val entries = _entries.map(Map.Entry<String, ModelProperty<*>>::value)
         return entries.toString()
     }
 

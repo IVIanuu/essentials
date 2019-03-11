@@ -32,7 +32,7 @@ abstract class ActivityKey(
 ) : ActivityKey, Parcelable {
 
     override fun createIntent(context: Context, data: Any?): Intent =
-        Intent(context, target.java).also { addTo(it) }
+        Intent(context, target.java).also(this::addTo)
 
     override fun createStartActivityOptions(command: Command, activityIntent: Intent): Bundle? =
         startOptions?.get(command, activityIntent)

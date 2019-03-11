@@ -92,7 +92,7 @@ abstract class SimpleController : EsController() {
 
             if (toolbarMenuRes != 0) {
                 inflateMenu(toolbarMenuRes)
-                setOnMenuItemClickListener { onToolbarMenuItemClicked(it) }
+                setOnMenuItemClickListener(this@SimpleController::onToolbarMenuItemClicked)
             }
 
             if (toolbarBackButton) {
@@ -115,7 +115,7 @@ abstract class SimpleController : EsController() {
         }
 
         optionalRecyclerView?.run {
-            _epoxyController = epoxyController()?.also { setController(it) }
+            _epoxyController = epoxyController()?.also(this::setController)
             this@SimpleController.layoutManager()?.let { layoutManager = it }
         }
     }

@@ -72,6 +72,8 @@ abstract class EsEpoxyModel<H : EsEpoxyHolder> : EpoxyModelWithHolder<H>(), Cont
 
     @CallSuper
     override fun unbind(holder: H) {
+        _scope?.clear()
+
         val onClickView = getOnClickView(holder)
         if (onClickView != null) {
             onClickView.setOnClickListener(null)
@@ -85,8 +87,6 @@ abstract class EsEpoxyModel<H : EsEpoxyHolder> : EpoxyModelWithHolder<H>(), Cont
         } else if (useContainerForLongClicks) {
             holder.containerView.setOnLongClickListener(null)
         }
-
-        _scope?.clear()
 
         super.unbind(holder)
     }

@@ -87,7 +87,7 @@ abstract class ListController(
         if (requestedModelBuildType == RequestedModelBuildType.DELAYED) {
             cancelPendingModelBuild()
         } else if (requestedModelBuildType == RequestedModelBuildType.NEXT_FRAME) {
-            return
+            return@requestDelayedModelBuild
         }
 
         requestedModelBuildType =

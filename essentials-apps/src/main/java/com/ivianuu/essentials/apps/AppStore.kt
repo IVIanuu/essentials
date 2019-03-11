@@ -37,7 +37,7 @@ class AppStore(private val packageManager: PackageManager) {
                     packageName = it.packageName
                 )
             }
-            .distinctBy { it.packageName }
+            .distinctBy(AppInfo::packageName)
             .sortedBy { it.appName.toLowerCase() }
             .toList()
     }
@@ -54,7 +54,7 @@ class AppStore(private val packageManager: PackageManager) {
                     packageName = it.activityInfo.packageName
                 )
             }
-            .distinctBy { it.packageName }
+            .distinctBy(AppInfo::packageName)
             .sortedBy { it.appName.toLowerCase() }
             .toList()
     }

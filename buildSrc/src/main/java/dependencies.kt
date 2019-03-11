@@ -78,7 +78,7 @@ object Versions {
     const val rxKotlin = "2.3.0"
     const val scopes = "0.0.1-dev-3"
     const val superUser = "1.0.0.+"
-    const val stateStore = "0.0.1-dev-2"
+    const val stateStore = "0.0.1-dev-3"
     const val stdlibx = "0.0.1-dev-4"
     const val timber = "4.7.1"
     const val timberKtx = "0.0.1-dev-1"

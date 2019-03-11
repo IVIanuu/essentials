@@ -122,7 +122,7 @@ fun ListModel<*>.addListener(
     preAttach, postAttach,
     preDetach, postDetach,
     onFailedToRecycleView
-).also { addListener(it) }
+).also(this::addListener)
 
 fun ListController.addModelListener(
     preCreateHolder: ((model: ListModel<*>) -> Unit)? = null,
@@ -146,7 +146,7 @@ fun ListController.addModelListener(
     preAttach, postAttach,
     preDetach, postDetach,
     onFailedToRecycleView
-).also { addModelListener(it) }
+).also(this::addModelListener)
 
 fun ListModelListener(
     preCreateHolder: ((model: ListModel<*>) -> Unit)? = null,

@@ -62,7 +62,7 @@ abstract class ViewModel {
 
     internal fun destroy() {
         notifyListeners { it.preDestroy(this) }
-        requireSuperCalled { onDestroy() }
+        requireSuperCalled(this::onDestroy)
         notifyListeners { it.postDestroy(this) }
     }
 

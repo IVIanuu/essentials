@@ -81,7 +81,7 @@ fun ListController.addListener(
     onInterceptBuildModels,
     onModelsBuildResult,
     onRestoreState, onSaveState
-).also { addListener(it) }
+).also(this::addListener)
 
 fun ListControllerListener(
     onAttachedToRecyclerView: ((controller: ListController, recyclerView: RecyclerView) -> Unit)? = null,

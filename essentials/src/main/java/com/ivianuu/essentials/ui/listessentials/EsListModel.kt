@@ -16,33 +16,26 @@
 
 package com.ivianuu.essentials.ui.listessentials
 
+import android.content.Context
 import android.view.View
 import com.ivianuu.essentials.ui.list.ListModel
 import com.ivianuu.essentials.util.ContextAware
 import com.ivianuu.scopes.ReusableScope
 import com.ivianuu.scopes.Scope
 import com.ivianuu.scopes.ScopeOwner
-import kotlinx.android.extensions.LayoutContainer
 
 /**
  * Base list model with holder
  */
-abstract class EsListModel<H : EsListHolder> : ListModel<H>(), ContextAware, LayoutContainer,
-    ScopeOwner {
+abstract class EsListModel<H : EsListHolder> : ListModel<H>(), ContextAware, ScopeOwner {
 
-    override val containerView
-        get() = _boundHolder!!.containerView
+    override lateinit var providedContext: Context
 
-    override val providedContext
-        get() = _boundHolder!!.providedContext
+    var onClick: ((View) -> Unit)? by optionalProperty("onClick")
+    var onLongClick: ((View) -> Boolean)? by optionalProperty("onLongClick")
 
-    protected open val onClickView: View? get() = null
     protected open val useContainerForClicks get() = true
-
-    protected open val onLongClickView: View? get() = null
     protected open val useContainerForLongClicks get() = true
-
-    private var _boundHolder: H? = null
 
     override val scope: Scope
         get() {
@@ -54,14 +47,44 @@ abstract class EsListModel<H : EsListHolder> : ListModel<H>(), ContextAware, Lay
 
     override fun onBind(holder: H) {
         _scope?.clear()
-        _boundHolder = holder
         super.onBind(holder)
+
+        val onClickView = getOnClickView(holder)
+        if (onClickView != null) {
+            onClickView.setOnClickListener(onClick)
+        } else if (useContainerForClicks) {
+            holder.containerView.setOnClickListener(onClick)
+        }
+
+        val onLongClickView = getOnLongClickView(holder)
+        if (onLongClickView != null) {
+            onLongClickView.setOnLongClickListener(onLongClick)
+        } else if (useContainerForLongClicks) {
+            holder.containerView.setOnLongClickListener(onLongClick)
+        }
     }
 
     override fun onUnbind(holder: H) {
         _scope?.clear()
-        _boundHolder = null
+
+        val onClickView = getOnClickView(holder)
+        if (onClickView != null) {
+            onClickView.setOnClickListener(null)
+        } else if (useContainerForClicks) {
+            holder.containerView.setOnClickListener(null)
+        }
+
+        val onLongClickView = getOnLongClickView(holder)
+        if (onLongClickView != null) {
+            onLongClickView.setOnClickListener(null)
+        } else if (useContainerForLongClicks) {
+            holder.containerView.setOnLongClickListener(null)
+        }
+
         super.onUnbind(holder)
     }
+
+    protected open fun getOnClickView(holder: H): View? = null
+    protected open fun getOnLongClickView(holder: H): View? = null
 
 }
