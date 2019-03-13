@@ -1,0 +1,49 @@
+/*
+ * Copyright 2018 Manuel Wrage
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.ivianuu.essentials.hidenavbar
+
+import android.os.Build
+import com.ivianuu.injekt.annotations.Factory
+import com.ivianuu.ksettings.KSettings
+import com.ivianuu.ksettings.Setting
+
+/**
+ * Deactivates non sdk interface detection
+ */
+@Factory
+class NonSdkInterfacesHelper(private val settings: KSettings) {
+
+    fun disableNonSdkInterfaceDetection() {
+        if (Build.VERSION.SDK_INT >= 29) {
+            val hiddenApiPolicy = settings.int(
+                "hidden_api_policy", Setting.Type.GLOBAL
+            )
+            hiddenApiPolicy.set(0)
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            val hiddenApiPrePieAppsSetting = settings.int(
+                "hidden_api_policy_pre_p_apps", Setting.Type.GLOBAL
+            )
+            val hiddenApiOnPieAppsSetting = settings.int(
+                "hidden_api_policy_p_apps", Setting.Type.GLOBAL
+            )
+
+            hiddenApiPrePieAppsSetting.set(1)
+            hiddenApiOnPieAppsSetting.set(1)
+        }
+    }
+
+}

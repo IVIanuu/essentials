@@ -47,6 +47,7 @@ class NavBarController(
     private val broadcastFactory: BroadcastFactory,
     private val app: Application,
     private val keyguardManager: KeyguardManager,
+    private val nonSdkInterfacesHelper: NonSdkInterfacesHelper,
     private val prefs: NavBarPrefs,
     private val overscanHelper: OverscanHelper
 ) : AppService() {
@@ -121,6 +122,9 @@ class NavBarController(
         failQuiet: Boolean
     ) {
         try {
+            // ensure that we can access non sdk interfaces
+            if (hide) nonSdkInterfacesHelper.disableNonSdkInterfaceDetection()
+
             val navBarHeight =
                 getNavigationBarHeight() - (if (prefs.fullOverscan.get()) 0 else OVERSCAN_LEFT_PIXELS)
             val rect = getOverscanRect(if (hide) -navBarHeight else 0)
