@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.listessentials
+package com.ivianuu.essentials.ui.list
 
 import android.content.res.ColorStateList
 import com.ivianuu.essentials.R
-import com.ivianuu.essentials.ui.list.ListModelCreator
 import com.ivianuu.essentials.util.color
+import com.ivianuu.list.annotations.Model
 import kotlinx.android.synthetic.main.es_item_simple_loading.es_progress_bar
 
 /**
  * Simple loading model
  */
-open class SimpleLoadingModel : SimpleListModel() {
+@Model open class SimpleLoadingModel : SimpleListModel() {
 
     var progressColor by property("progressColor") { 0 }
     var progressColorRes by property("processColorRes") { 0 }
@@ -51,5 +51,4 @@ open class SimpleLoadingModel : SimpleListModel() {
         }
     }
 
-    companion object : ListModelCreator<SimpleLoadingModel>(::SimpleLoadingModel)
 }

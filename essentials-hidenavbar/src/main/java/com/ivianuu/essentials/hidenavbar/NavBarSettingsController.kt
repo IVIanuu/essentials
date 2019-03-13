@@ -49,7 +49,7 @@ class NavBarSettingsKey(
 class NavBarSettingsController : PrefsController() {
 
     private val prefs by inject<NavBarPrefs>()
-    private val navBarSharedPrefs by inject<SharedPreferences>(NAV_BAR_SHARED_PREFS)
+    private val navBarSharedPrefs by inject<SharedPreferences>(NavBar)
 
     override val sharedPreferences: SharedPreferences
         get() = navBarSharedPrefs

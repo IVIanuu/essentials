@@ -24,7 +24,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.AppStore
 import com.ivianuu.essentials.apps.glide.AppIcon
-import com.ivianuu.essentials.injection.CONTROLLER_SCOPE
+import com.ivianuu.essentials.injection.ControllerScope
 import com.ivianuu.essentials.ui.epoxy.EsEpoxyHolder
 import com.ivianuu.essentials.ui.epoxy.SimpleEpoxyModel
 import com.ivianuu.essentials.ui.epoxy.simpleLoading
@@ -102,7 +102,7 @@ abstract class AppInfoModel : SimpleEpoxyModel() {
 /**
  * View model for the [AppPickerController]
  */
-@Factory(CONTROLLER_SCOPE)
+@Factory(ControllerScope::class)
 class AppPickerViewModel(
     private val key: AppPickerKey,
     private val appStore: AppStore,

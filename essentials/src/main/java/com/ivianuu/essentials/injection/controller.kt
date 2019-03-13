@@ -23,22 +23,28 @@ import com.ivianuu.director.parentController
 import com.ivianuu.injekt.Component
 import com.ivianuu.injekt.ComponentDefinition
 import com.ivianuu.injekt.InjektTrait
+import com.ivianuu.injekt.NamedScope
+import com.ivianuu.injekt.Qualifier
+import com.ivianuu.injekt.StringQualifier
 import com.ivianuu.injekt.common.addInstance
 import com.ivianuu.injekt.component
 import com.ivianuu.injekt.dependencies
-import com.ivianuu.injekt.scopeNames
+import com.ivianuu.injekt.scopes
 
-const val CONTROLLER_SCOPE = "controller_scope"
-const val CHILD_CONTROLLER_SCOPE = "child_controller_scope"
+object ControllerScope : NamedScope("ControllerScope")
+object ChildControllerScope : NamedScope("ChildControllerScope")
+
+object ForController : StringQualifier("ForController")
+object ForChildController : StringQualifier("ForChildController")
 
 /**
  * Returns a [Component] with convenient configurations
  */
-inline fun <T : Controller> T.controllerComponent(
+inline fun <reified T : Controller> T.controllerComponent(
     createEagerInstances: Boolean = true,
     definition: ComponentDefinition = {}
 ): Component = component(createEagerInstances) {
-    scopeNames(CONTROLLER_SCOPE)
+    scopes(ControllerScope)
     (getParentControllerComponentOrNull()
         ?: getActivityComponentOrNull()
         ?: getApplicationComponentOrNull())?.let(this::dependencies)
@@ -49,11 +55,11 @@ inline fun <T : Controller> T.controllerComponent(
 /**
  * Returns a [Component] with convenient configurations
  */
-inline fun <T : Controller> T.childControllerComponent(
+inline fun <reified T : Controller> T.childControllerComponent(
     createEagerInstances: Boolean = true,
     definition: ComponentDefinition = {}
 ): Component = component(createEagerInstances) {
-    scopeNames(CHILD_CONTROLLER_SCOPE)
+    scopes(ChildControllerScope)
     (getParentControllerComponentOrNull()
         ?: getActivityComponentOrNull()
         ?: getApplicationComponentOrNull())?.let(this::dependencies)

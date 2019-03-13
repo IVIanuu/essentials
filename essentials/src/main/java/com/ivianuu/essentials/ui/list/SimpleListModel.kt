@@ -16,21 +16,9 @@
 
 package com.ivianuu.essentials.ui.list
 
-import android.view.View
-
 /**
- * @author Manuel Wrage (IVIanuu)
+ * Simple list model with holder
  */
-abstract class ListHolder {
-
-    lateinit var view: View
-
-    protected open fun onBindView(view: View) {
-    }
-
-    internal fun bindView(view: View) {
-        this.view = view
-        onBindView(view)
-    }
-
+abstract class SimpleListModel : EsListModel<EsListHolder>() {
+    override fun onCreateHolder(): EsListHolder = EsListHolder()
 }

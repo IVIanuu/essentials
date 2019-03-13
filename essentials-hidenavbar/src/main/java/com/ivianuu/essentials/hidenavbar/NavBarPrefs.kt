@@ -17,8 +17,9 @@
 package com.ivianuu.essentials.hidenavbar
 
 import android.os.Build
-import com.ivianuu.injekt.android.APPLICATION_SCOPE
+import com.ivianuu.injekt.android.ApplicationScope
 import com.ivianuu.injekt.annotations.Name
+import com.ivianuu.injekt.annotations.Qualified
 import com.ivianuu.injekt.annotations.Single
 import com.ivianuu.kprefs.KPrefs
 import com.ivianuu.kprefs.common.enumString
@@ -26,8 +27,8 @@ import com.ivianuu.kprefs.common.enumString
 /**
  * Nav bar prefs
  */
-@Single(APPLICATION_SCOPE)
-class NavBarPrefs(@Name(NAV_BAR_PREFS) prefs: KPrefs) {
+@Single(ApplicationScope::class)
+class NavBarPrefs(@Qualified(NavBar::class) prefs: KPrefs) {
     val manageNavBar = prefs.boolean("manage_nav_bar")
     val fullOverscan = prefs.boolean("full_overscan")
     val navBarHidden = prefs.boolean("nav_bar_hidden")

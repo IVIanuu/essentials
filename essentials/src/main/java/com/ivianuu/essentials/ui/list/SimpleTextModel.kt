@@ -16,28 +16,24 @@
 
 package com.ivianuu.essentials.ui.list
 
-import java.util.concurrent.Executor
-import java.util.concurrent.Executors
+import com.ivianuu.list.annotations.Model
+import kotlinx.android.synthetic.main.es_item_simple_text.es_text
 
 /**
- * Global configurations
+ * Simple text model
  */
-object ListPlugins
+@Model open class SimpleTextModel : SimpleListModel() {
 
-private val defaultExecutor = Executors.newSingleThreadExecutor()
+    var text by property("text") { "" }
+    var textRes by property("textRes") { 0 }
 
-private var _defaultDiffingExecutor: Executor = defaultExecutor
-
-var ListPlugins.defaultDiffingExecutor: Executor
-    get() = _defaultDiffingExecutor
-    set(value) {
-        _defaultDiffingExecutor = value
+    override fun onBind(holder: EsListHolder) {
+        super.onBind(holder)
+        when {
+            text.isNotEmpty() -> holder.es_text.text = text
+            textRes != 0 -> holder.es_text.setText(textRes)
+            else -> error("you must specify one of text or textRes")
+        }
     }
 
-private var _defaultBuildingExecutor: Executor = defaultExecutor
-
-var ListPlugins.defaultBuildingExecutor: Executor
-    get() = _defaultBuildingExecutor
-    set(value) {
-        _defaultBuildingExecutor = value
-    }
+}

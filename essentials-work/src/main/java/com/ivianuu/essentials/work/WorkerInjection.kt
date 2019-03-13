@@ -29,6 +29,8 @@ import com.ivianuu.injekt.BindingContext
 import com.ivianuu.injekt.DefinitionContext
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Provider
+import com.ivianuu.injekt.Qualifier
+import com.ivianuu.injekt.StringQualifier
 import com.ivianuu.injekt.annotations.Factory
 import com.ivianuu.injekt.bindType
 import com.ivianuu.injekt.factory
@@ -59,14 +61,14 @@ class InjektWorkerFactory(
 /**
  * The map of [Worker]s used by the [InjektWorkerFactory]
  */
-const val WORKER_MAP = "workers"
+object WorkerMap : StringQualifier("WorkerMap")
 
 /**
  * Contains the [InjektWorkerFactory]
  */
 val workerInjectionModule = module {
-    mapBinding(WORKER_MAP)
-    factory { InjektWorkerFactory(getProviderMap(WORKER_MAP)) } bindType WorkerFactory::class
+    mapBinding(WorkerMap)
+    factory { InjektWorkerFactory(getProviderMap(WorkerMap)) } bindType WorkerFactory::class
 }
 
 /**
@@ -78,23 +80,23 @@ typealias WorkerDefinition<T> = DefinitionContext.(context: Context, workerParam
  * Defines a [Worker] which will be used in conjunction with the [InjektWorkerFactory]
  */
 inline fun <reified T : Worker> Module.worker(
-    name: String? = null,
+    qualifier: Qualifier? = null,
     override: Boolean = false,
     noinline definition: WorkerDefinition<T>
 ): BindingContext<T> {
-    return factory(name, null, override) { (context: Context, workerParams: WorkerParameters) ->
+    return factory(qualifier, null, override) { (context: Context, workerParams: WorkerParameters) ->
         definition(this, context, workerParams)
-    } bindIntoMap (WORKER_MAP to T::class.java.name)
+    } bindIntoMap (WorkerMap to T::class.java.name)
 }
 
 /**
  * Binds a already existing [Worker]
  */
-inline fun <reified T : Worker> Module.bindWorker(name: String? = null) {
+inline fun <reified T : Worker> Module.bindWorker(qualifier: Qualifier? = null) {
     bindIntoMap<T>(
-        mapName = WORKER_MAP,
+        mapQualifier = WorkerMap,
         mapKey = T::class.java.name,
-        implementationName = name
+        implementationQualifier = qualifier
     )
 }
 

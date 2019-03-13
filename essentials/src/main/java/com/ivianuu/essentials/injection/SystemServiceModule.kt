@@ -77,7 +77,8 @@ import android.view.inputmethod.InputMethodManager
 import android.view.textservice.TextServicesManager
 import androidx.core.content.ContextCompat
 import com.ivianuu.injekt.Binding
-import com.ivianuu.injekt.createFactory
+import com.ivianuu.injekt.FactoryKind
+import com.ivianuu.injekt.create
 import com.ivianuu.injekt.get
 import com.ivianuu.injekt.module
 import com.ivianuu.stdlibx.cast
@@ -91,8 +92,9 @@ val systemServiceModule = module {
         .map { it.cast<KClass<Any>>() }
         .forEach { service ->
             add(
-                Binding.createFactory(
+                Binding.create(
                     type = service,
+                    kind = FactoryKind,
                     definition = {
                         ContextCompat.getSystemService(
                             get(),

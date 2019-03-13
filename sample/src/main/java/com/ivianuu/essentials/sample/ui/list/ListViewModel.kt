@@ -16,7 +16,7 @@
 
 package com.ivianuu.essentials.sample.ui.list
 
-import com.ivianuu.essentials.injection.CONTROLLER_SCOPE
+import com.ivianuu.essentials.injection.ControllerScope
 import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
 import com.ivianuu.essentials.util.SavedState
 import com.ivianuu.essentials.util.coroutineScope
@@ -25,7 +25,7 @@ import com.ivianuu.injekt.annotations.Factory
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-@Factory(CONTROLLER_SCOPE)
+@Factory(ControllerScope::class)
 class ListViewModel : MvRxViewModel<ListState>(ListState()) {
 
     init {

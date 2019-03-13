@@ -14,11 +14,18 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.listessentials
+package com.ivianuu.essentials.ui.list
+
+import android.content.Context
+import com.ivianuu.essentials.util.ContextAware
+import com.ivianuu.list.common.LayoutContainerHolder
 
 /**
- * Simple list model with holder
+ * Base list holder
  */
-abstract class SimpleListModel : EsListModel<EsListHolder>() {
-    override fun onCreateHolder(): EsListHolder = EsListHolder()
+open class EsListHolder : LayoutContainerHolder(), ContextAware {
+
+    override val providedContext: Context
+        get() = view.context
+
 }

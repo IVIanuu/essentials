@@ -93,6 +93,10 @@ dependencies {
 
     api(project(":ktuples"))
 
+    api(Deps.list)
+    api(Deps.listAnnotations)
+    api(Deps.listCommon)
+
     api(Deps.liveEvent)
 
     api(Deps.materialComponents)

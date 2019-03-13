@@ -28,7 +28,7 @@ import com.ivianuu.essentials.util.BroadcastFactory
 import com.ivianuu.essentials.util.ext.combineLatest
 import com.ivianuu.essentials.util.ext.rxMain
 import com.ivianuu.essentials.util.ext.toast
-import com.ivianuu.injekt.android.APPLICATION_SCOPE
+import com.ivianuu.injekt.android.ApplicationScope
 import com.ivianuu.injekt.annotations.Single
 import com.ivianuu.kommon.core.app.doOnConfigurationChanged
 import com.ivianuu.kommon.core.content.isScreenOff
@@ -42,7 +42,7 @@ import io.reactivex.rxkotlin.Observables
 /**
  * Handles the state of the navigation bar
  */
-@Single(APPLICATION_SCOPE)
+@Single(ApplicationScope::class)
 class NavBarController(
     private val broadcastFactory: BroadcastFactory,
     private val app: Application,

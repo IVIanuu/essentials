@@ -51,9 +51,9 @@ abstract class EsApp : Application(), InjektTrait, ScopeOwner {
     private val _scope = MutableScope()
 
     private val appInitializers
-            by injectProviderClassMap<AppInitializer>(APP_INITIALIZERS)
+            by injectProviderClassMap<AppInitializer>(AppInitializers)
     private val appServices
-            by injectProviderClassMap<AppService>(APP_SERVICES)
+            by injectProviderClassMap<AppService>(AppServices)
 
     override fun onCreate() {
         super.onCreate()

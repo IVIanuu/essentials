@@ -19,7 +19,8 @@ package com.ivianuu.essentials.ui.traveler.key
 import android.os.Bundle
 import android.os.Parcelable
 import com.ivianuu.injekt.Binding
-import com.ivianuu.injekt.createSingle
+import com.ivianuu.injekt.SingleKind
+import com.ivianuu.injekt.create
 import com.ivianuu.injekt.module
 import kotlin.reflect.KClass
 
@@ -34,8 +35,9 @@ fun keyModule(
         val className = bundle.getString(TRAVELER_KEY_CLASS)!!
         val type = Class.forName(className).kotlin as KClass<Any>
         add(
-            Binding.createSingle<Parcelable>(
+            Binding.create<Parcelable>(
                 type = type,
+                kind = SingleKind,
                 definition = { bundle.getParcelable(TRAVELER_KEY)!! }
             )
         )
