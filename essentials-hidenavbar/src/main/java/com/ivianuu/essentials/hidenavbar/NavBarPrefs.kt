@@ -18,7 +18,6 @@ package com.ivianuu.essentials.hidenavbar
 
 import android.os.Build
 import com.ivianuu.injekt.android.ApplicationScope
-import com.ivianuu.injekt.annotations.Name
 import com.ivianuu.injekt.annotations.Qualified
 import com.ivianuu.injekt.annotations.Single
 import com.ivianuu.kprefs.KPrefs

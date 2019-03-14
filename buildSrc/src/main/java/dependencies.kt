@@ -23,7 +23,6 @@ object Build {
     const val compileSdk = 28
     const val minSdk = 21
     const val targetSdk = 28
-    const val targetSdkSample = 28
     const val versionCode = 1
     const val versionName = "0.0.1"
 }
@@ -31,7 +30,7 @@ object Build {
 object Publishing {
     const val groupId = "com.ivianuu.essentials"
     const val vcsUrl = "https://github.com/IVIanuu/essentials"
-    const val version = "${Build.versionName}-dev-35"
+    const val version = "${Build.versionName}-dev-36"
 }
 
 object Versions {
@@ -60,7 +59,7 @@ object Versions {
     const val epoxyKtx = "0.0.1-dev-1"
     const val epoxyPrefs = "0.0.1-dev-6"
     const val glide = "4.8.0"
-    const val injekt = "0.0.1-dev-15"
+    const val injekt = "0.0.1-dev-16"
     const val junit = "4.12"
     const val kommon = "0.0.1-dev-3"
     const val kotlin = "1.3.21"
