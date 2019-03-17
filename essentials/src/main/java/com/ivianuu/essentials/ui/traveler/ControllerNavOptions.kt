@@ -17,8 +17,8 @@
 package com.ivianuu.essentials.ui.traveler
 
 import com.ivianuu.director.ChangeHandler
+import com.ivianuu.director.DefaultChangeHandler
 import com.ivianuu.director.DirectorPlugins
-import com.ivianuu.director.SimpleSwapChangeHandler
 import com.ivianuu.director.Transaction
 import com.ivianuu.director.common.changehandler.FadeChangeHandler
 import com.ivianuu.director.common.changehandler.HorizontalChangeHandler
@@ -109,29 +109,24 @@ fun ControllerNavOptions.verticalPop(
     removesFromViewOnPush: Boolean = true
 ): ControllerNavOptions = pop(VerticalChangeHandler(duration, removesFromViewOnPush))
 
-fun ControllerNavOptions.swap(
-    removesFromViewOnPush: Boolean = true
-): ControllerNavOptions = swapPush(removesFromViewOnPush).swapPop(removesFromViewOnPush)
-
-fun ControllerNavOptions.swapPush(
-    removesFromViewOnPush: Boolean = true
-): ControllerNavOptions = push(SimpleSwapChangeHandler(removesFromViewOnPush))
-
-fun ControllerNavOptions.swapPop(
-    removesFromViewOnPush: Boolean = true
-): ControllerNavOptions = pop(SimpleSwapChangeHandler(removesFromViewOnPush))
-
 fun ControllerNavOptions.dialog(): ControllerNavOptions =
     dialogPush().dialogPop()
 
 fun ControllerNavOptions.dialogPush(): ControllerNavOptions =
-    swapPush(false)
+    nonePush(false)
 
 fun ControllerNavOptions.dialogPop(): ControllerNavOptions =
-    swapPop(false)
+    nonePop(false)
 
-fun ControllerNavOptions.nonePop(): ControllerNavOptions = pop(null)
+fun ControllerNavOptions.nonePop(removesFromViewOnPush: Boolean = true): ControllerNavOptions = pop(
+    DefaultChangeHandler(removesFromViewOnPush)
+)
 
-fun ControllerNavOptions.nonePush(): ControllerNavOptions = push(null)
+fun ControllerNavOptions.nonePush(
+    removesFromViewOnPush: Boolean = true
+): ControllerNavOptions = push(
+    DefaultChangeHandler(removesFromViewOnPush)
+)
 
-fun ControllerNavOptions.none(): ControllerNavOptions = nonePop().nonePush()
+fun ControllerNavOptions.none(removesFromViewOnPush: Boolean = true): ControllerNavOptions =
+    nonePop(removesFromViewOnPush).nonePush(removesFromViewOnPush)
