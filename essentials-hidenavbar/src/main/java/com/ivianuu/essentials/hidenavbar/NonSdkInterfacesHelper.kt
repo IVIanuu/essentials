@@ -20,6 +20,7 @@ import android.os.Build
 import com.ivianuu.injekt.annotations.Factory
 import com.ivianuu.ksettings.KSettings
 import com.ivianuu.ksettings.Setting
+import com.ivianuu.timberktx.d
 
 /**
  * Deactivates non sdk interface detection
@@ -28,12 +29,17 @@ import com.ivianuu.ksettings.Setting
 class NonSdkInterfacesHelper(private val settings: KSettings) {
 
     fun disableNonSdkInterfaceDetection() {
-        if (Build.VERSION.SDK_INT >= 29) {
+        // todo use sdk ints once android q increases it
+        if (Build.VERSION.CODENAME == "Q") {
+            d { "disable non sdk on 29" }
+
             val hiddenApiPolicy = settings.int(
                 "hidden_api_policy", Setting.Type.GLOBAL
             )
-            hiddenApiPolicy.set(0)
+            hiddenApiPolicy.set(1)
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            d { "disable non sdk on p" }
+
             val hiddenApiPrePieAppsSetting = settings.int(
                 "hidden_api_policy_pre_p_apps", Setting.Type.GLOBAL
             )

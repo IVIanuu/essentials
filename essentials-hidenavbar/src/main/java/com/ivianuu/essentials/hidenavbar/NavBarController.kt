@@ -123,7 +123,7 @@ class NavBarController(
     ) {
         try {
             // ensure that we can access non sdk interfaces
-            if (hide) nonSdkInterfacesHelper.disableNonSdkInterfaceDetection()
+            nonSdkInterfacesHelper.disableNonSdkInterfaceDetection()
 
             val navBarHeight =
                 getNavigationBarHeight() - (if (prefs.fullOverscan.get()) 0 else OVERSCAN_LEFT_PIXELS)
