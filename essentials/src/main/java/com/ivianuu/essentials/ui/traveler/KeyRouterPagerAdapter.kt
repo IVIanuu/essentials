@@ -16,8 +16,8 @@
 
 package com.ivianuu.essentials.ui.traveler
 
-import com.ivianuu.director.Controller
 import com.ivianuu.director.Router
+import com.ivianuu.director.RouterManager
 import com.ivianuu.director.hasRoot
 import com.ivianuu.director.setRoot
 import com.ivianuu.director.toTransaction
@@ -28,14 +28,14 @@ import com.ivianuu.director.viewpager.RouterPagerAdapter
  * A [RouterPagerAdapter] which uses [ControllerKey]s
  */
 open class KeyRouterPagerAdapter(
-    host: Controller,
+    routerManager: RouterManager,
     private val keys: List<ControllerKey>
-) : RouterPagerAdapter(host.childRouterManager) {
+) : RouterPagerAdapter(routerManager) {
 
     override fun configureRouter(router: Router, position: Int) {
         if (!router.hasRoot) {
             router.setRoot(
-                keys[position]
+                getKey(position)
                     .createController(null)
                     .toTransaction()
             )
@@ -43,4 +43,6 @@ open class KeyRouterPagerAdapter(
     }
 
     override fun getCount(): Int = keys.size
+
+    protected fun getKey(position: Int): ControllerKey = keys[position]
 }
