@@ -17,6 +17,9 @@
 package com.ivianuu.essentials.util.ext
 
 import android.graphics.Color
+import kotlin.math.max
+import kotlin.math.min
+import kotlin.math.round
 
 val Int.isDark: Boolean
     get() = !isLight
@@ -53,7 +56,7 @@ fun Int.inverted(): Int {
 }
 
 fun Int.adjustAlpha(factor: Float): Int {
-    val alpha = Math.round(Color.alpha(this) * factor)
+    val alpha = round(Color.alpha(this) * factor).toInt()
     val red = Color.red(this)
     val green = Color.green(this)
     val blue = Color.blue(this)
@@ -61,7 +64,7 @@ fun Int.adjustAlpha(factor: Float): Int {
 }
 
 fun Int.withAlpha(alpha: Float): Int {
-    val a = Math.min(255, Math.max(0, (alpha * 255).toInt())) shl 24
+    val a = min(255, max(0, (alpha * 255).toInt())) shl 24
     val rgb = 0x00ffffff and this
     return a + rgb
 }
