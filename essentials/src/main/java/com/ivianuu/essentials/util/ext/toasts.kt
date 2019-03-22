@@ -1,0 +1,46 @@
+/*
+ * Copyright 2018 Manuel Wrage
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.ivianuu.essentials.util.ext
+
+import android.content.Context
+import android.view.View
+import android.widget.Toast
+import com.ivianuu.essentials.util.ContextAware
+import com.ivianuu.kommon.core.content.string
+
+fun Context.toast(message: CharSequence) =
+    mainThread { Toast.makeText(this, message, Toast.LENGTH_SHORT).show() }
+
+fun Context.toast(messageRes: Int, vararg args: Any) {
+    toast(string(messageRes, *args))
+}
+
+fun ContextAware.toast(message: CharSequence) {
+    providedContext.toast(message)
+}
+
+fun ContextAware.toast(messageRes: Int, vararg args: Any) {
+    providedContext.toast(messageRes, *args)
+}
+
+fun View.toast(message: CharSequence) {
+    context.toast(message)
+}
+
+fun View.toast(messageRes: Int, vararg args: Any) {
+    context.toast(messageRes, *args)
+}
