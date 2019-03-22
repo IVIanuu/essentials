@@ -23,7 +23,7 @@ import com.ivianuu.essentials.util.ContextAware
 import com.ivianuu.kommon.core.content.string
 
 fun Context.toast(message: CharSequence) =
-    mainThread(Toast.makeText(this, message, Toast.LENGTH_SHORT)::show)
+    mainThread { Toast.makeText(this, message, Toast.LENGTH_SHORT).show() }
 
 fun Context.toast(messageRes: Int, vararg args: Any) {
     toast(string(messageRes, *args))
