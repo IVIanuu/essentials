@@ -73,6 +73,7 @@ class NavBarController(
             }
 
             prefs.wasNavBarHidden.delete()
+
             return
         }
 
@@ -80,7 +81,7 @@ class NavBarController(
             .combineLatest(
                 prefChanges(),
                 configChanges().startWith(Unit),
-                rotationChangesWhileScreenOn(),
+                rotationChangesWhileScreenOn().startWith(Unit),
                 screenState()
             )
             .map {
