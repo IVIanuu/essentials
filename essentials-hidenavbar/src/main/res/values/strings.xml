@@ -15,8 +15,6 @@
   -->
 
 <resources>
-    <string name="es_msg_failed_to_toggle_nav_bar">Failed to toggle the nav bar!</string>
-
     <string name="es_title_nav_bar_settings">Navigation Bar</string>
 
     <string name="es_pref_title_manage_nav_bar">Main Switch</string>

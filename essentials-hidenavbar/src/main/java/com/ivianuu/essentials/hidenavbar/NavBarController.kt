@@ -26,17 +26,18 @@ import android.view.Surface
 import com.ivianuu.essentials.app.AppService
 import com.ivianuu.essentials.util.BroadcastFactory
 import com.ivianuu.essentials.util.ext.combineLatest
-import com.ivianuu.essentials.util.ext.rxMain
-import com.ivianuu.essentials.util.ext.toast
 import com.ivianuu.injekt.android.ApplicationScope
 import com.ivianuu.injekt.annotations.Single
 import com.ivianuu.kommon.core.app.doOnConfigurationChanged
-import com.ivianuu.kommon.core.content.isScreenOff
+import com.ivianuu.kommon.core.content.isScreenOn
 import com.ivianuu.kommon.core.content.rotation
 import com.ivianuu.kprefs.rx.observable
+import com.ivianuu.rxjavaktx.emptyObservable
 import com.ivianuu.rxjavaktx.observable
 import com.ivianuu.scopes.ReusableScope
 import com.ivianuu.scopes.rx.disposeBy
+import com.ivianuu.timberktx.d
+import io.reactivex.Observable
 import io.reactivex.rxkotlin.Observables
 
 /**
@@ -44,8 +45,8 @@ import io.reactivex.rxkotlin.Observables
  */
 @Single(ApplicationScope::class)
 class NavBarController(
-    private val broadcastFactory: BroadcastFactory,
     private val app: Application,
+    private val broadcastFactory: BroadcastFactory,
     private val keyguardManager: KeyguardManager,
     private val nonSdkInterfacesHelper: NonSdkInterfacesHelper,
     private val prefs: NavBarPrefs,
@@ -63,64 +64,44 @@ class NavBarController(
     private fun updateEnabledState(enabled: Boolean) {
         enabledScope.clear()
 
-        if (enabled) {
-            Observables
-                .combineLatest(
-                    prefs.navBarHidden.observable(),
-                    prefs.fullOverscan.observable(),
-                    prefs.rotationMode.observable(),
-                    configChanges().startWith(Unit),
-                    rotationChanges().startWith(app.rotation)
-                )
-                .observeOn(rxMain)
-                .subscribe { updateNavBarState(false) }
-                .disposeBy(enabledScope)
-
-            broadcastFactory.create(
-                Intent.ACTION_SCREEN_OFF,
-                Intent.ACTION_SCREEN_ON,
-                Intent.ACTION_USER_PRESENT
-            )
-                .map { Unit }
-                .startWith(Unit)
-                .filter { prefs.showNavBarScreenOff.get() }
-                .map { keyguardManager.isKeyguardLocked || app.isScreenOff }
-                .subscribe(this::updateNavBarState)
-                .disposeBy(enabledScope)
-
-            broadcastFactory.create(Intent.ACTION_SHUTDOWN)
-                .subscribe { updateNavBarState(true) }
-                .disposeBy(enabledScope)
-        } else {
+        if (!enabled) {
             // only force the nav bar to be shown if it was hidden by us
             if (prefs.wasNavBarHidden.isSet && prefs.wasNavBarHidden.get()) {
+                d { "force show nav bar because it was hidden by us" }
                 // force showing the nav bar
-                updateNavBarState(true)
+                updateNavBarState(false)
             }
 
             prefs.wasNavBarHidden.delete()
+            return
         }
+
+        Observables
+            .combineLatest(
+                prefChanges(),
+                configChanges().startWith(Unit),
+                rotationChangesWhileScreenOn(),
+                screenState()
+            )
+            .map {
+                prefs.navBarHidden.get()
+                        && (!prefs.showNavBarScreenOff.get()
+                        || (!keyguardManager.isKeyguardLocked && app.isScreenOn))
+            }
+            .subscribe(this::updateNavBarState)
+            .disposeBy(enabledScope)
+
+        // force show on shut downs
+        broadcastFactory.create(Intent.ACTION_SHUTDOWN)
+            .subscribe {
+                d { "show nav bar because of shutdown" }
+                updateNavBarState(false)
+            }
+            .disposeBy(enabledScope)
     }
 
-    private fun updateNavBarState(
-        forceShow: Boolean
-    ) {
-        if (forceShow) {
-            updateNavBarStateInternal(false)
-        } else {
-            val shouldHide = prefs.navBarHidden.get()
-            updateNavBarStateInternal(shouldHide)
-        }
-    }
-
-    private fun updateNavBarStateInternal(hide: Boolean) {
-        updateNavBar(hide, true)
-    }
-
-    private fun updateNavBar(
-        hide: Boolean,
-        failQuiet: Boolean
-    ) {
+    private fun updateNavBarState(hide: Boolean) {
+        d { "update nav bar state: hide $hide" }
         try {
             try {
                 // ensure that we can access non sdk interfaces
@@ -136,14 +117,7 @@ class NavBarController(
             prefs.wasNavBarHidden.set(hide)
         } catch (e: Exception) {
             e.printStackTrace()
-            if (!failQuiet) {
-                onFailedToToggleNavBar()
-            }
         }
-    }
-
-    private fun onFailedToToggleNavBar() {
-        app.toast(R.string.es_msg_failed_to_toggle_nav_bar)
     }
 
     private fun getNavigationBarHeight(): Int {
@@ -182,11 +156,36 @@ class NavBarController(
         }
     }
 
+    private fun prefChanges(): Observable<Unit> {
+        return Observables.combineLatest(
+            prefs.navBarHidden.observable(),
+            prefs.fullOverscan.observable(),
+            prefs.rotationMode.observable(),
+            prefs.showNavBarScreenOff.observable()
+        ).map { Unit }
+    }
+
+    private fun rotationChangesWhileScreenOn(): Observable<Unit> {
+        return screenState()
+            .switchMap {
+                if (it && !keyguardManager.isKeyguardLocked) {
+                    rotationChanges()
+                        .doOnSubscribe { d { "sub for rotation" } }
+                        .doOnDispose { d { "dispose rotation" } }
+                } else {
+                    d { "do not observe rotation while screen is off" }
+                    emptyObservable()
+                }
+            }
+            .map { Unit }
+    }
+
     private fun rotationChanges() = observable<Int> { e ->
+        var currentRotation = app.rotation
+
         val listener = object : OrientationEventListener(
             app, SensorManager.SENSOR_DELAY_NORMAL
         ) {
-            private var currentRotation = app.rotation
             override fun onOrientationChanged(orientation: Int) {
                 val rotation = app.rotation
                 if (rotation != currentRotation) {
@@ -194,16 +193,30 @@ class NavBarController(
                     currentRotation = rotation
                 }
             }
+
         }
 
         e.setCancellable(listener::disable)
 
         listener.enable()
+
+        e.onNext(currentRotation)
     }
 
     private fun configChanges() = observable<Unit> { e ->
         val callbacks = app.doOnConfigurationChanged { e.onNext(Unit) }
         e.setCancellable { app.unregisterComponentCallbacks(callbacks) }
+    }
+
+    private fun screenState(): Observable<Boolean> {
+        return broadcastFactory.create(
+            Intent.ACTION_SCREEN_OFF,
+            Intent.ACTION_SCREEN_ON,
+            Intent.ACTION_USER_PRESENT
+        )
+            .map { app.isScreenOn }
+            .startWith(app.isScreenOn)
+            .distinctUntilChanged()
     }
 
     companion object {
