@@ -26,7 +26,6 @@ import android.view.Surface
 import com.ivianuu.essentials.app.AppService
 import com.ivianuu.essentials.util.BroadcastFactory
 import com.ivianuu.essentials.util.ext.combineLatest
-import com.ivianuu.essentials.util.ext.rxIo
 import com.ivianuu.injekt.android.ApplicationScope
 import com.ivianuu.injekt.annotations.Single
 import com.ivianuu.kommon.core.app.doOnConfigurationChanged
@@ -85,7 +84,6 @@ class NavBarController(
                 rotationChangesWhileScreenOn().startWith(Unit),
                 screenState()
             )
-            .observeOn(rxIo)
             .map {
                 prefs.navBarHidden.get()
                         && (!prefs.showNavBarScreenOff.get()
@@ -97,6 +95,7 @@ class NavBarController(
         // force show on shut downs
         broadcastFactory.create(Intent.ACTION_SHUTDOWN)
             .subscribe {
+                enabledScope.clear()
                 d { "show nav bar because of shutdown" }
                 updateNavBarState(false)
             }
