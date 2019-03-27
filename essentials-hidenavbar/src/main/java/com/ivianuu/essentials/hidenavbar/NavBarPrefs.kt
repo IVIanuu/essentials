@@ -29,7 +29,6 @@ import com.ivianuu.kprefs.common.enumString
 @Single(ApplicationScope::class)
 class NavBarPrefs(@Qualified(NavBar::class) prefs: KPrefs) {
     val manageNavBar = prefs.boolean("manage_nav_bar")
-    val fullOverscan = prefs.boolean("full_overscan")
     val navBarHidden = prefs.boolean("nav_bar_hidden")
     val rotationMode = prefs.enumString(
         "rotation_mode",

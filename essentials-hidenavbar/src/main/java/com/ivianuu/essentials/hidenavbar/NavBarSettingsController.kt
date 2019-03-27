@@ -140,13 +140,6 @@ class NavBarSettingsController : PrefsController() {
             enabled(mainSwitchEnabled)
         }
 
-        checkboxPreference {
-            fromPref(prefs.fullOverscan)
-            sharedPreferences(navBarSharedPrefs)
-            summary(R.string.es_pref_summary_full_overscan)
-            title(R.string.es_pref_title_full_overscan)
-            enabled(mainSwitchEnabled)
-        }
     }
 
     private companion object {

@@ -112,8 +112,7 @@ class NavBarController(
                 e.printStackTrace()
             }
 
-            val navBarHeight =
-                getNavigationBarHeight() - (if (prefs.fullOverscan.get()) 0 else OVERSCAN_LEFT_PIXELS)
+            val navBarHeight = getNavigationBarHeight()
             val rect = getOverscanRect(if (hide) -navBarHeight else 0)
             overscanHelper.setDisplayOverscan(rect)
             prefs.wasNavBarHidden.set(hide)
@@ -161,7 +160,6 @@ class NavBarController(
     private fun prefChanges(): Observable<Unit> {
         return Observables.combineLatest(
             prefs.navBarHidden.observable(),
-            prefs.fullOverscan.observable(),
             prefs.rotationMode.observable(),
             prefs.showNavBarScreenOff.observable()
         ).map { Unit }
@@ -220,7 +218,4 @@ class NavBarController(
             .startWith(app.isScreenOn)
     }
 
-    companion object {
-        private const val OVERSCAN_LEFT_PIXELS = 1
-    }
 }
