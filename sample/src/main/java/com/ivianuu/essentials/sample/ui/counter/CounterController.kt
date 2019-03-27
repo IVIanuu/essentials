@@ -24,6 +24,7 @@ import com.ivianuu.essentials.ui.mvrx.injekt.mvRxViewModel
 import com.ivianuu.essentials.ui.mvrx.withState
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
 import kotlinx.android.parcel.Parcelize
+import kotlinx.android.synthetic.main.controller_counter.check_apps
 import kotlinx.android.synthetic.main.controller_counter.count
 import kotlinx.android.synthetic.main.controller_counter.do_work
 import kotlinx.android.synthetic.main.controller_counter.list_screen
@@ -47,6 +48,7 @@ class CounterController : EsController() {
         screen_down.setOnClickListener { viewModel.screenDownClicked() }
         root_screen.setOnClickListener { viewModel.rootScreenClicked() }
         list_screen.setOnClickListener { viewModel.listScreenClicked() }
+        check_apps.setOnClickListener { viewModel.checkAppsClicked() }
         do_work.setOnClickListener { viewModel.doWorkClicked() }
     }
 
