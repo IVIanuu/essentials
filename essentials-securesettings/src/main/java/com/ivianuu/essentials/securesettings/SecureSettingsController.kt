@@ -18,14 +18,9 @@ package com.ivianuu.essentials.securesettings
 
 import android.view.View
 import com.ivianuu.director.activity
-import com.ivianuu.director.context
-import com.ivianuu.epoxyktx.epoxyController
-import com.ivianuu.epoxyprefs.preference
-import com.ivianuu.epoxyprefs.summary
-import com.ivianuu.epoxyprefs.title
 import com.ivianuu.essentials.shell.Shell
 import com.ivianuu.essentials.ui.common.VerticalFadeChangeHandler
-import com.ivianuu.essentials.ui.simple.SimpleController
+import com.ivianuu.essentials.ui.prefs.PrefsController
 import com.ivianuu.essentials.ui.traveler.NavOptions
 import com.ivianuu.essentials.ui.traveler.handler
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
@@ -34,6 +29,11 @@ import com.ivianuu.essentials.util.ext.goBackWithResult
 import com.ivianuu.essentials.util.ext.sendResult
 import com.ivianuu.essentials.util.ext.toast
 import com.ivianuu.injekt.inject
+import com.ivianuu.list.common.modelController
+import com.ivianuu.listprefs.key
+import com.ivianuu.listprefs.onClick
+import com.ivianuu.listprefs.summary
+import com.ivianuu.listprefs.title
 import com.ivianuu.traveler.navigate
 import kotlinx.android.parcel.Parcelize
 import kotlinx.coroutines.launch
@@ -47,7 +47,7 @@ class SecureSettingsKey(
 /**
  * Asks the user for the secure settings permission
  */
-class SecureSettingsController : SimpleController() {
+class SecureSettingsController : PrefsController() {
 
     override val toolbarTitleRes: Int
         get() = R.string.es_title_secure_settings
@@ -55,8 +55,8 @@ class SecureSettingsController : SimpleController() {
     private val key by inject<SecureSettingsKey>()
     private val shell by inject<Shell>()
 
-    override fun epoxyController() = epoxyController {
-        preference(context) {
+    override fun modelController() = modelController {
+        preference {
             key("secure_settings_header")
             summary(
                 if (this@SecureSettingsController.key.showHideNavBarHint) {
@@ -67,7 +67,7 @@ class SecureSettingsController : SimpleController() {
             )
         }
 
-        preference(context) {
+        preference {
             key("use_pc")
             summary(R.string.es_pref_summary_use_pc)
             title(R.string.es_pref_title_use_pc)
@@ -80,7 +80,7 @@ class SecureSettingsController : SimpleController() {
             }
         }
 
-        preference(context) {
+        preference {
             key("use_root")
             summary(R.string.es_pref_summary_use_root)
             title(R.string.es_pref_title_use_root)

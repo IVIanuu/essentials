@@ -18,18 +18,19 @@ package com.ivianuu.essentials.securesettings
 
 import android.content.ClipboardManager
 import com.ivianuu.director.activity
-import com.ivianuu.director.context
-import com.ivianuu.epoxyktx.epoxyController
-import com.ivianuu.epoxyprefs.icon
-import com.ivianuu.epoxyprefs.onClickUrl
-import com.ivianuu.epoxyprefs.preference
-import com.ivianuu.epoxyprefs.summary
-import com.ivianuu.epoxyprefs.title
-import com.ivianuu.essentials.ui.simple.SimpleController
+import com.ivianuu.essentials.ui.prefs.PrefsController
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
 import com.ivianuu.essentials.util.ext.toast
 import com.ivianuu.essentials.util.string
 import com.ivianuu.injekt.inject
+import com.ivianuu.list.common.modelController
+import com.ivianuu.listprefs.clickable
+import com.ivianuu.listprefs.icon
+import com.ivianuu.listprefs.key
+import com.ivianuu.listprefs.onClick
+import com.ivianuu.listprefs.onClickUrl
+import com.ivianuu.listprefs.summary
+import com.ivianuu.listprefs.title
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
@@ -38,60 +39,60 @@ class SecureSettingsPcInstructionsKey : ControllerKey(::SecureSettingsPcInstruct
 /**
  * Asks the user for the secure settings permission
  */
-class SecureSettingsPcInstructionsController : SimpleController() {
+class SecureSettingsPcInstructionsController : PrefsController() {
 
     private val clipboardManager by inject<ClipboardManager>()
 
     override val toolbarTitleRes: Int
         get() = R.string.es_title_secure_settings_pc_instructions
 
-    override fun epoxyController() = epoxyController {
-        preference(context) {
+    override fun modelController() = modelController {
+        preference {
             key("secure_settings_header")
             summary(R.string.es_pref_summary_secure_settings_pc_instructions_header)
         }
 
-        preference(context) {
+        preference {
             key("secure_settings_step_1")
             title(R.string.es_pref_title_secure_settings_step_1)
             summary(R.string.es_pref_summary_secure_settings_step_1)
             clickable(false)
         }
 
-        preference(context) {
+        preference {
             key("secure_settings_step_two")
             title(R.string.es_pref_title_secure_settings_step_2)
             summary(R.string.es_pref_summary_secure_settings_step_2)
             clickable(false)
         }
 
-        preference(context) {
+        preference {
             key("secure_settings_step_3")
             title(R.string.es_pref_title_secure_settings_step_3)
         }
 
-        preference(context) {
+        preference {
             key("secure_settings_link_gadget_hacks")
             icon(R.drawable.es_ic_link)
             summary(R.string.es_pref_summary_secure_settings_link_gadget_hacks)
             onClickUrl { "https://youtu.be/CDuxcrrWLnY" }
         }
 
-        preference(context) {
+        preference {
             key("secure_settings_link_lifehacker")
             icon(R.drawable.es_ic_link)
             summary(R.string.es_pref_summary_secure_settings_link_lifehacker)
             onClickUrl { "https://lifehacker.com/the-easiest-way-to-install-androids-adb-and-fastboot-to-1586992378" }
         }
 
-        preference(context) {
+        preference {
             key("secure_settings_link_xda")
             icon(R.drawable.es_ic_link)
             summary(R.string.es_pref_summary_secure_settings_link_xda)
             onClickUrl { "https://www.xda-developers.com/install-adb-windows-macos-linux/" }
         }
 
-        preference(context) {
+        preference {
             key("secure_settings_step_4")
             title(R.string.es_pref_title_secure_settings_step_4)
             summary(string(R.string.es_pref_summary_secure_settings_step_4, activity.packageName))

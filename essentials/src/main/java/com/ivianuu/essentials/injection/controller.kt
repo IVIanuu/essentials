@@ -30,8 +30,8 @@ import com.ivianuu.injekt.component
 import com.ivianuu.injekt.dependencies
 import com.ivianuu.injekt.scopes
 
-object ControllerScope : StringScope("ControllerScope")
-object ChildControllerScope : StringScope("ChildControllerScope")
+object PerController : StringScope("PerController")
+object PerChildController : StringScope("PerChildController")
 
 object ForController : StringQualifier("ForController")
 object ForChildController : StringQualifier("ForChildController")
@@ -43,7 +43,7 @@ inline fun <reified T : Controller> T.controllerComponent(
     createEagerInstances: Boolean = true,
     definition: ComponentDefinition = {}
 ): Component = component(createEagerInstances) {
-    scopes(ControllerScope)
+    scopes(PerController)
     (getParentControllerComponentOrNull()
         ?: getActivityComponentOrNull()
         ?: getApplicationComponentOrNull())?.let(this::dependencies)
@@ -58,7 +58,7 @@ inline fun <reified T : Controller> T.childControllerComponent(
     createEagerInstances: Boolean = true,
     definition: ComponentDefinition = {}
 ): Component = component(createEagerInstances) {
-    scopes(ChildControllerScope)
+    scopes(PerChildController)
     (getParentControllerComponentOrNull()
         ?: getActivityComponentOrNull()
         ?: getApplicationComponentOrNull())?.let(this::dependencies)

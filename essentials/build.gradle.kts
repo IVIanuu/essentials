@@ -15,7 +15,6 @@
  */
 plugins {
     id("com.android.library")
-    id("com.jakewharton.butterknife")
     id("kotlin-android")
     id("kotlin-kapt")
 }
@@ -59,10 +58,6 @@ dependencies {
     api(Deps.directorTraveler)
     api(Deps.directorViewPager)
 
-    api(Deps.epoxy)
-    api(Deps.epoxyKtx)
-    api(Deps.epoxyPrefs)
-
     kapt(project(":essentials-compiler"))
 
     api(Deps.injekt)
@@ -96,6 +91,7 @@ dependencies {
     api(Deps.list)
     api(Deps.listAnnotations)
     api(Deps.listCommon)
+    api(Deps.listPrefs)
 
     api(Deps.liveEvent)
 

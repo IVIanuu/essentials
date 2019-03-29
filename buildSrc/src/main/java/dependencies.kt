@@ -49,15 +49,10 @@ object Versions {
 
     const val bintray = "1.8.4"
 
-    const val butterknife = "10.0.0"
-
     const val closeable = "0.0.1-dev-2"
     const val constraintLayout = "2.0.0-alpha3"
     const val coroutines = "1.1.0"
     const val director = "0.0.1-dev-19"
-    const val epoxy = "3.3.0"
-    const val epoxyKtx = "0.0.1-dev-1"
-    const val epoxyPrefs = "0.0.1-dev-6"
     const val glide = "4.8.0"
     const val injekt = "0.0.1-dev-20"
     const val junit = "4.12"
@@ -65,7 +60,8 @@ object Versions {
     const val kotlin = "1.3.21"
     const val kPrefs = "0.0.1-dev-5"
     const val kSettings = "0.0.1-dev-3"
-    const val list = "0.0.1-dev-10"
+    const val list = "0.0.1-dev-13"
+    const val listPrefs = "0.0.1-dev-1"
     const val liveEvent = "1e265df911"
     const val mavenGradle = "2.1"
     const val materialComponents = "1.1.0-alpha05"
@@ -103,9 +99,6 @@ object Deps {
     const val bintrayGradlePlugin =
         "com.jfrog.bintray.gradle:gradle-bintray-plugin:${Versions.bintray}"
 
-    const val butterknifeGradlePlugin =
-        "com.jakewharton:butterknife-gradle-plugin:${Versions.butterknife}"
-
     const val closeable = "com.ivianuu.closeable:closeable:${Versions.closeable}"
     const val closeableCoroutines = "com.ivianuu.closeable:closeable-coroutines:${Versions.closeable}"
     const val closeableRx = "com.ivianuu.closeable:closeable-rx:${Versions.closeable}"
@@ -136,11 +129,6 @@ object Deps {
         "com.ivianuu.director:director-traveler:${Versions.director}"
     const val directorViewPager =
         "com.ivianuu.director:director-viewpager:${Versions.director}"
-
-    const val epoxy = "com.airbnb.android:epoxy:${Versions.epoxy}"
-    const val epoxyProcessor = "com.airbnb.android:epoxy-processor:${Versions.epoxy}"
-    const val epoxyKtx = "com.ivianuu.epoxyktx:epoxyktx:${Versions.epoxyKtx}"
-    const val epoxyPrefs = "com.ivianuu.epoxyprefs:epoxyprefs:${Versions.epoxyPrefs}"
 
     const val glide = "com.github.bumptech.glide:glide:${Versions.glide}"
 
@@ -188,6 +176,7 @@ object Deps {
     const val listAnnotations = "com.ivianuu.list:list-annotations:${Versions.list}"
     const val listCommon = "com.ivianuu.list:list-common:${Versions.list}"
     const val listCompiler = "com.ivianuu.list:list-compiler:${Versions.list}"
+    const val listPrefs = "com.ivianuu.listprefs:listprefs:${Versions.listPrefs}"
 
     const val liveEvent = "com.github.IVIanuu:liveevent:${Versions.liveEvent}"
 

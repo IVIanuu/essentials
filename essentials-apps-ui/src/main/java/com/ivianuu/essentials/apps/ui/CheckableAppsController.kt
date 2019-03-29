@@ -18,8 +18,6 @@ package com.ivianuu.essentials.apps.ui
 
 import android.os.Bundle
 import android.view.MenuItem
-import com.airbnb.epoxy.EpoxyAttribute
-import com.airbnb.epoxy.EpoxyModelClass
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
@@ -27,11 +25,11 @@ import com.ivianuu.director.scopes.destroy
 import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.AppStore
 import com.ivianuu.essentials.apps.glide.AppIcon
-import com.ivianuu.essentials.ui.epoxy.EsEpoxyHolder
-import com.ivianuu.essentials.ui.epoxy.SimpleEpoxyModel
-import com.ivianuu.essentials.ui.epoxy.simpleLoading
+import com.ivianuu.essentials.ui.list.EsListHolder
+import com.ivianuu.essentials.ui.list.SimpleListModel
+import com.ivianuu.essentials.ui.list.simpleLoading
 import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
-import com.ivianuu.essentials.ui.mvrx.epoxy.simpleEpoxyController
+import com.ivianuu.essentials.ui.mvrx.epoxy.mvRxModelController
 import com.ivianuu.essentials.ui.mvrx.mvRxViewModel
 import com.ivianuu.essentials.ui.simple.SimpleController
 import com.ivianuu.essentials.util.SavedState
@@ -41,6 +39,9 @@ import com.ivianuu.injekt.annotations.Factory
 import com.ivianuu.injekt.annotations.Param
 import com.ivianuu.injekt.get
 import com.ivianuu.injekt.parametersOf
+import com.ivianuu.list.annotations.Model
+import com.ivianuu.list.common.onClick
+import com.ivianuu.list.id
 import com.ivianuu.rxjavaktx.BehaviorSubject
 import com.ivianuu.rxjavaktx.PublishSubject
 import com.ivianuu.scopes.ReusableScope
@@ -82,7 +83,7 @@ abstract class CheckableAppsController : SimpleController() {
         super.onDestroy()
     }
 
-    override fun epoxyController() = simpleEpoxyController(viewModel) { state ->
+    override fun modelController() = mvRxModelController(viewModel) { state ->
         if (state.loading) {
             simpleLoading {
                 id("loading")
@@ -92,7 +93,7 @@ abstract class CheckableAppsController : SimpleController() {
                 checkableApp {
                     id(app.info.packageName)
                     app(app)
-                    onClick { viewModel.appClicked(app) }
+                    onClick { _, _ -> viewModel.appClicked(app) }
                 }
             }
         }
@@ -108,12 +109,15 @@ abstract class CheckableAppsController : SimpleController() {
     abstract fun onCheckedAppsChanged(apps: Set<String>)
 }
 
-@EpoxyModelClass(layout = R2.layout.es_item_checkable_app)
-abstract class CheckableAppModel : SimpleEpoxyModel() {
+@Model
+class CheckableAppModel : SimpleListModel() {
 
-    @EpoxyAttribute lateinit var app: CheckableApp
+    var app by requiredProperty<CheckableApp>("app")
 
-    override fun bind(holder: EsEpoxyHolder) {
+    override val layoutRes: Int
+        get() = R.layout.es_item_checkable_app
+
+    override fun bind(holder: EsListHolder) {
         super.bind(holder)
         with(holder) {
             Glide.with(icon)

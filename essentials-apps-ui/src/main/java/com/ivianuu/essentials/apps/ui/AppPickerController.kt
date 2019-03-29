@@ -16,20 +16,18 @@
 
 package com.ivianuu.essentials.apps.ui
 
-import com.airbnb.epoxy.EpoxyAttribute
-import com.airbnb.epoxy.EpoxyModelClass
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.AppStore
 import com.ivianuu.essentials.apps.glide.AppIcon
-import com.ivianuu.essentials.injection.ControllerScope
-import com.ivianuu.essentials.ui.epoxy.EsEpoxyHolder
-import com.ivianuu.essentials.ui.epoxy.SimpleEpoxyModel
-import com.ivianuu.essentials.ui.epoxy.simpleLoading
+import com.ivianuu.essentials.injection.PerController
+import com.ivianuu.essentials.ui.list.EsListHolder
+import com.ivianuu.essentials.ui.list.SimpleListModel
+import com.ivianuu.essentials.ui.list.simpleLoading
 import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
-import com.ivianuu.essentials.ui.mvrx.epoxy.simpleEpoxyController
+import com.ivianuu.essentials.ui.mvrx.epoxy.mvRxModelController
 import com.ivianuu.essentials.ui.mvrx.injekt.mvRxViewModel
 import com.ivianuu.essentials.ui.simple.SimpleController
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
@@ -37,6 +35,9 @@ import com.ivianuu.essentials.util.SavedState
 import com.ivianuu.essentials.util.coroutineScope
 import com.ivianuu.essentials.util.ext.goBackWithResult
 import com.ivianuu.injekt.annotations.Factory
+import com.ivianuu.list.annotations.Model
+import com.ivianuu.list.common.onClick
+import com.ivianuu.list.id
 import com.ivianuu.traveler.Router
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.es_item_app.icon
@@ -59,7 +60,7 @@ class AppPickerController : SimpleController() {
 
     private val viewModel by mvRxViewModel<AppPickerViewModel>()
 
-    override fun epoxyController() = simpleEpoxyController(viewModel) { state ->
+    override fun modelController() = mvRxModelController(viewModel) { state ->
         if (state.loading) {
             simpleLoading {
                 id("loading")
@@ -69,7 +70,7 @@ class AppPickerController : SimpleController() {
                 appInfo {
                     id(app.packageName)
                     app(app)
-                    onClick { viewModel.appClicked(app) }
+                    onClick { _, _ -> viewModel.appClicked(app) }
                 }
             }
         }
@@ -77,12 +78,15 @@ class AppPickerController : SimpleController() {
 
 }
 
-@EpoxyModelClass(layout = R2.layout.es_item_app)
-abstract class AppInfoModel : SimpleEpoxyModel() {
+@Model
+class AppInfoModel : SimpleListModel() {
 
-    @EpoxyAttribute lateinit var app: AppInfo
+    var app by requiredProperty<AppInfo>("app")
 
-    override fun bind(holder: EsEpoxyHolder) {
+    override val layoutRes: Int
+        get() = R.layout.es_item_app
+
+    override fun bind(holder: EsListHolder) {
         super.bind(holder)
         with(holder) {
             Glide.with(icon)
@@ -102,7 +106,7 @@ abstract class AppInfoModel : SimpleEpoxyModel() {
 /**
  * View model for the [AppPickerController]
  */
-@Factory(ControllerScope::class)
+@Factory(PerController::class)
 class AppPickerViewModel(
     private val key: AppPickerKey,
     private val appStore: AppStore,

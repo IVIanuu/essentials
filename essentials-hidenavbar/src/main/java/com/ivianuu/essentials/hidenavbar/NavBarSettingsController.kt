@@ -19,12 +19,7 @@ package com.ivianuu.essentials.hidenavbar
 import android.content.SharedPreferences
 import android.os.Bundle
 import com.ivianuu.director.scopes.destroy
-import com.ivianuu.epoxyktx.epoxyController
-import com.ivianuu.epoxyprefs.entries
-import com.ivianuu.epoxyprefs.entryValues
-import com.ivianuu.epoxyprefs.onChange
-import com.ivianuu.epoxyprefs.summary
-import com.ivianuu.epoxyprefs.title
+
 import com.ivianuu.essentials.securesettings.SecureSettingsKey
 import com.ivianuu.essentials.securesettings.canWriteSecureSettings
 import com.ivianuu.essentials.ui.prefs.PrefsController
@@ -33,6 +28,14 @@ import com.ivianuu.essentials.util.ext.fromEnumPref
 import com.ivianuu.essentials.util.ext.fromPref
 import com.ivianuu.essentials.util.ext.results
 import com.ivianuu.injekt.inject
+import com.ivianuu.list.common.modelController
+import com.ivianuu.listprefs.enabled
+import com.ivianuu.listprefs.entries
+import com.ivianuu.listprefs.entryValues
+import com.ivianuu.listprefs.onChange
+import com.ivianuu.listprefs.sharedPreferences
+import com.ivianuu.listprefs.summary
+import com.ivianuu.listprefs.title
 import com.ivianuu.scopes.rx.disposeBy
 import com.ivianuu.traveler.navigate
 import kotlinx.android.parcel.Parcelize
@@ -73,7 +76,7 @@ class NavBarSettingsController : PrefsController() {
             .disposeBy(destroy)
     }
 
-    override fun epoxyController() = epoxyController {
+    override fun modelController() = modelController {
         if (key.showMainSwitch) {
             switchPreference {
                 fromPref(prefs.manageNavBar)

@@ -16,42 +16,44 @@
 
 package com.ivianuu.essentials.ui.mvrx.epoxy
 
-import com.airbnb.epoxy.EpoxyController
+
 import com.ivianuu.director.Controller
-import com.ivianuu.epoxyktx.epoxyController
+
 import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
 import com.ivianuu.essentials.ui.mvrx.withState
+import com.ivianuu.list.ModelController
+import com.ivianuu.list.common.modelController
 
-fun <A : MvRxViewModel<B>, B> Any.simpleEpoxyController(
+fun <A : MvRxViewModel<B>, B> Any.mvRxModelController(
     viewModel1: A,
-    buildModels: EpoxyController.(state: B) -> Unit
-): EpoxyController = epoxyController {
-    if (this@simpleEpoxyController is Controller && view == null
-    ) return@epoxyController
+    buildModels: ModelController.(state: B) -> Unit
+): ModelController = modelController {
+    if (this@mvRxModelController is Controller && view == null
+    ) return@modelController
     withState(viewModel1) { buildModels.invoke(this, it) }
 }
 
-fun <A : MvRxViewModel<B>, B, C : MvRxViewModel<D>, D> Any.simpleEpoxyController(
+fun <A : MvRxViewModel<B>, B, C : MvRxViewModel<D>, D> Any.simpleModelController(
     viewModel1: A,
     viewModel2: C,
-    buildModels: EpoxyController.(state1: B, state2: D) -> Unit
-): EpoxyController = epoxyController {
-    if (this@simpleEpoxyController is Controller && view == null
-    ) return@epoxyController
+    buildModels: ModelController.(state1: B, state2: D) -> Unit
+): ModelController = modelController {
+    if (this@simpleModelController is Controller && view == null
+    ) return@modelController
     withState(
         viewModel1,
         viewModel2
     ) { state1, state2 -> buildModels.invoke(this, state1, state2) }
 }
 
-fun <A : MvRxViewModel<B>, B, C : MvRxViewModel<D>, D, E : MvRxViewModel<F>, F> Any.simpleEpoxyController(
+fun <A : MvRxViewModel<B>, B, C : MvRxViewModel<D>, D, E : MvRxViewModel<F>, F> Any.simpleModelController(
     viewModel1: A,
     viewModel2: C,
     viewModel3: E,
-    buildModels: EpoxyController.(state1: B, state2: D, state3: F) -> Unit
-): EpoxyController = epoxyController {
-    if (this@simpleEpoxyController is Controller && view == null
-    ) return@epoxyController
+    buildModels: ModelController.(state1: B, state2: D, state3: F) -> Unit
+): ModelController = modelController {
+    if (this@simpleModelController is Controller && view == null
+    ) return@modelController
     withState(
         viewModel1,
         viewModel2,
@@ -63,15 +65,15 @@ fun <A : MvRxViewModel<B>, B, C : MvRxViewModel<D>, D, E : MvRxViewModel<F>, F> 
 
 fun <A : MvRxViewModel<B>,
         B,
-        C : MvRxViewModel<D>, D, E : MvRxViewModel<F>, F, G : MvRxViewModel<H>, H> Any.simpleEpoxyController(
+        C : MvRxViewModel<D>, D, E : MvRxViewModel<F>, F, G : MvRxViewModel<H>, H> Any.simpleModelController(
     viewModel1: A,
     viewModel2: C,
     viewModel3: E,
     viewModel4: G,
-    buildModels: EpoxyController.(state1: B, state2: D, state3: F, state4: H) -> Unit
-): EpoxyController = epoxyController {
-    if (this@simpleEpoxyController is Controller && view == null
-    ) return@epoxyController
+    buildModels: ModelController.(state1: B, state2: D, state3: F, state4: H) -> Unit
+): ModelController = modelController {
+    if (this@simpleModelController is Controller && view == null
+    ) return@modelController
     withState(
         viewModel1,
         viewModel2,
@@ -82,15 +84,15 @@ fun <A : MvRxViewModel<B>,
     }
 }
 
-fun <A : MvRxViewModel<B>, B, C : MvRxViewModel<D>, D, E : MvRxViewModel<F>, F, G : MvRxViewModel<H>, H, I : MvRxViewModel<J>, J> Any.simpleEpoxyController(
+fun <A : MvRxViewModel<B>, B, C : MvRxViewModel<D>, D, E : MvRxViewModel<F>, F, G : MvRxViewModel<H>, H, I : MvRxViewModel<J>, J> Any.simpleModelController(
     viewModel1: A,
     viewModel2: C,
     viewModel3: E,
     viewModel4: G,
     viewModel5: I,
-    buildModels: EpoxyController.(state1: B, state2: D, state3: F, state4: H, state5: J) -> Unit
-): EpoxyController = epoxyController {
-    if (this@simpleEpoxyController is Controller && view == null) return@epoxyController
+    buildModels: ModelController.(state1: B, state2: D, state3: F, state4: H, state5: J) -> Unit
+): ModelController = modelController {
+    if (this@simpleModelController is Controller && view == null) return@modelController
     withState(
         viewModel1,
         viewModel2,

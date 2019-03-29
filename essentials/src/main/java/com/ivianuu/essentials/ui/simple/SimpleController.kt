@@ -23,11 +23,10 @@ import android.view.View
 import androidx.appcompat.widget.Toolbar
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.recyclerview.widget.RecyclerView
-import com.airbnb.epoxy.EpoxyController
-import com.airbnb.epoxy.EpoxyRecyclerView
 import com.google.android.material.appbar.AppBarLayout
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.base.EsController
+import com.ivianuu.essentials.ui.common.EsRecyclerView
 import com.ivianuu.essentials.util.ext.iconColor
 import com.ivianuu.essentials.util.ext.isLight
 import com.ivianuu.essentials.util.ext.primaryColor
@@ -35,6 +34,7 @@ import com.ivianuu.essentials.util.ext.primaryTextColor
 import com.ivianuu.essentials.util.ext.rootTransaction
 import com.ivianuu.essentials.util.ext.secondaryTextColor
 import com.ivianuu.kommon.core.view.items
+import com.ivianuu.list.ModelController
 import com.ivianuu.traveler.goBack
 
 /**
@@ -50,12 +50,12 @@ abstract class SimpleController : EsController() {
     protected open val toolbarBackButton get() = router.rootTransaction?.controller != this
     protected open val lightToolbar: Boolean get() = primaryColor().isLight
 
-    val optionalEpoxyController: EpoxyController? get() = _epoxyController
-    val epoxyController
-        get() = optionalEpoxyController
+    val optionalModelController: ModelController? get() = _modelController
+    val modelController
+        get() = optionalModelController
             ?: error("no epoxy controller instantiated")
 
-    private var _epoxyController: EpoxyController? = null
+    private var _modelController: ModelController? = null
 
     val appBar get() = optionalAppBar ?: error("no app bar layout found")
 
@@ -72,7 +72,7 @@ abstract class SimpleController : EsController() {
     val recyclerView
         get() = optionalRecyclerView ?: error("no recycler view found")
 
-    open val optionalRecyclerView: EpoxyRecyclerView?
+    open val optionalRecyclerView: EsRecyclerView?
         get() = view?.findViewById(R.id.es_recycler_view)
 
     val toolbar
@@ -115,22 +115,24 @@ abstract class SimpleController : EsController() {
         }
 
         optionalRecyclerView?.run {
-            _epoxyController = epoxyController()?.also(this::setController)
+            _modelController = modelController()?.also {
+                adapter = it.adapter
+            }
             this@SimpleController.layoutManager()?.let { layoutManager = it }
         }
     }
 
     override fun onUnbindView(view: View) {
-        _epoxyController?.cancelPendingModelBuild()
-        _epoxyController = null
+        _modelController?.cancelPendingModelBuild()
+        _modelController = null
         super.onUnbindView(view)
     }
 
     override fun invalidate() {
-        _epoxyController?.requestModelBuild()
+        _modelController?.requestModelBuild()
     }
 
-    protected open fun epoxyController(): EpoxyController? = null
+    protected open fun modelController(): ModelController? = null
 
     protected open fun layoutManager(): RecyclerView.LayoutManager? = null
 

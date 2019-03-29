@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.ui.list
 
+import com.ivianuu.essentials.R
 import com.ivianuu.list.annotations.Model
 import kotlinx.android.synthetic.main.es_item_simple_text.es_text
 
@@ -26,6 +27,9 @@ import kotlinx.android.synthetic.main.es_item_simple_text.es_text
 
     var text by property("text") { "" }
     var textRes by property("textRes") { 0 }
+
+    override val layoutRes: Int
+        get() = R.layout.es_item_simple_text
 
     override fun bind(holder: EsListHolder) {
         super.bind(holder)

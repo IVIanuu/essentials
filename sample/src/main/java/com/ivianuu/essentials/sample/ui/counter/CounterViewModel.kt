@@ -18,7 +18,7 @@ package com.ivianuu.essentials.sample.ui.counter
 
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
-import com.ivianuu.essentials.injection.ControllerScope
+import com.ivianuu.essentials.injection.PerController
 import com.ivianuu.essentials.sample.ui.checkapps.CheckAppsKey
 import com.ivianuu.essentials.sample.ui.list.ListKey
 import com.ivianuu.essentials.sample.work.MyWorkerOne
@@ -32,7 +32,7 @@ import com.ivianuu.traveler.goBack
 import com.ivianuu.traveler.navigate
 import com.ivianuu.traveler.popToRoot
 
-@Factory(ControllerScope::class)
+@Factory(PerController::class)
 class CounterViewModel(
     key: CounterKey,
     private val router: Router

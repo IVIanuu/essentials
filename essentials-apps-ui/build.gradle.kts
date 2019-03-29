@@ -16,7 +16,6 @@
 
 plugins {
     id("com.android.library")
-    id("com.jakewharton.butterknife")
     id("kotlin-android")
     id("kotlin-android-extensions")
     id("kotlin-kapt")

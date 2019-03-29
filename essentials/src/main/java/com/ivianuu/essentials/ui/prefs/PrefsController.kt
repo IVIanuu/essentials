@@ -19,29 +19,22 @@ package com.ivianuu.essentials.ui.prefs
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
-import com.airbnb.epoxy.EpoxyController
 import com.ivianuu.director.activity
-import com.ivianuu.epoxyprefs.CategoryPreferenceModel
-import com.ivianuu.epoxyprefs.CheckboxPreferenceModel
-import com.ivianuu.epoxyprefs.EditTextPreferenceModel
-import com.ivianuu.epoxyprefs.MultiSelectListPreferenceModel
-import com.ivianuu.epoxyprefs.PreferenceDividerDecoration
-import com.ivianuu.epoxyprefs.PreferenceModel
-import com.ivianuu.epoxyprefs.RadioButtonPreferenceModel
-import com.ivianuu.epoxyprefs.SeekBarPreferenceModel
-import com.ivianuu.epoxyprefs.SingleItemListPreferenceModel
-import com.ivianuu.epoxyprefs.SwitchPreferenceModel
-import com.ivianuu.epoxyprefs.categoryPreference
-import com.ivianuu.epoxyprefs.checkboxPreference
-import com.ivianuu.epoxyprefs.editTextPreference
-import com.ivianuu.epoxyprefs.multiSelectListPreference
-import com.ivianuu.epoxyprefs.preference
-import com.ivianuu.epoxyprefs.radioButtonPreference
-import com.ivianuu.epoxyprefs.seekBarPreference
-import com.ivianuu.epoxyprefs.singleItemListPreference
-import com.ivianuu.epoxyprefs.switchPreference
 import com.ivianuu.essentials.ui.simple.SimpleController
 import com.ivianuu.injekt.inject
+import com.ivianuu.list.ModelController
+import com.ivianuu.list.addTo
+import com.ivianuu.listprefs.CategoryPreferenceModel
+import com.ivianuu.listprefs.CheckboxPreferenceModel
+import com.ivianuu.listprefs.EditTextPreferenceModel
+import com.ivianuu.listprefs.MultiSelectListPreferenceModel
+import com.ivianuu.listprefs.PreferenceDividerDecoration
+import com.ivianuu.listprefs.PreferenceModel
+import com.ivianuu.listprefs.RadioButtonPreferenceModel
+import com.ivianuu.listprefs.SeekBarPreferenceModel
+import com.ivianuu.listprefs.SingleItemListPreferenceModel
+import com.ivianuu.listprefs.SwitchPreferenceModel
+import com.ivianuu.listprefs.context
 
 /**
  * Prefs controller
@@ -74,30 +67,30 @@ abstract class PrefsController : SimpleController() {
         sharedPreferences.unregisterOnSharedPreferenceChangeListener(sharedPreferenceChangeListener)
     }
 
-    protected fun EpoxyController.preference(init: PreferenceModel.Builder.() -> Unit): PreferenceModel =
-        preference(activity, init)
+    protected fun ModelController.preference(init: PreferenceModel.() -> Unit): PreferenceModel =
+        PreferenceModel().apply { context(activity) }.apply(init).addTo(this)
 
-    protected fun EpoxyController.categoryPreference(init: CategoryPreferenceModel.Builder.() -> Unit): CategoryPreferenceModel =
-        categoryPreference(activity, init)
+    protected fun ModelController.categoryPreference(init: CategoryPreferenceModel.() -> Unit): CategoryPreferenceModel =
+        CategoryPreferenceModel().apply { context(activity) }.apply(init).addTo(this)
 
-    protected fun EpoxyController.checkboxPreference(init: CheckboxPreferenceModel.Builder.() -> Unit): CheckboxPreferenceModel =
-        checkboxPreference(activity, init)
+    protected fun ModelController.checkboxPreference(init: CheckboxPreferenceModel.() -> Unit): CheckboxPreferenceModel =
+        CheckboxPreferenceModel().apply { context(activity) }.apply(init).addTo(this)
 
-    protected fun EpoxyController.editTextPreference(init: EditTextPreferenceModel.Builder.() -> Unit): EditTextPreferenceModel =
-        editTextPreference(activity, init)
+    protected fun ModelController.editTextPreference(init: EditTextPreferenceModel.() -> Unit): EditTextPreferenceModel =
+        EditTextPreferenceModel().apply { context(activity) }.apply(init).addTo(this)
 
-    protected fun EpoxyController.multiSelectListPreference(init: MultiSelectListPreferenceModel.Builder.() -> Unit): MultiSelectListPreferenceModel =
-        multiSelectListPreference(activity, init)
+    protected fun ModelController.multiSelectListPreference(init: MultiSelectListPreferenceModel.() -> Unit): MultiSelectListPreferenceModel =
+        MultiSelectListPreferenceModel().apply { context(activity) }.apply(init).addTo(this)
 
-    protected fun EpoxyController.radioButtonPreference(init: RadioButtonPreferenceModel.Builder.() -> Unit): RadioButtonPreferenceModel =
-        radioButtonPreference(activity, init)
+    protected fun ModelController.radioButtonPreference(init: RadioButtonPreferenceModel.() -> Unit): RadioButtonPreferenceModel =
+        RadioButtonPreferenceModel().apply { context(activity) }.apply(init).addTo(this)
 
-    protected fun EpoxyController.seekBarPreference(init: SeekBarPreferenceModel.Builder.() -> Unit): SeekBarPreferenceModel =
-        seekBarPreference(activity, init)
+    protected fun ModelController.seekBarPreference(init: SeekBarPreferenceModel.() -> Unit): SeekBarPreferenceModel =
+        SeekBarPreferenceModel().apply { context(activity) }.apply(init).addTo(this)
 
-    protected fun EpoxyController.singleItemListPreference(init: SingleItemListPreferenceModel.Builder.() -> Unit): SingleItemListPreferenceModel =
-        singleItemListPreference(activity, init)
+    protected fun ModelController.singleItemListPreference(init: SingleItemListPreferenceModel.() -> Unit): SingleItemListPreferenceModel =
+        SingleItemListPreferenceModel().apply { context(activity) }.apply(init).addTo(this)
 
-    protected fun EpoxyController.switchPreference(init: SwitchPreferenceModel.Builder.() -> Unit): SwitchPreferenceModel =
-        switchPreference(activity, init)
+    protected fun ModelController.switchPreference(init: SwitchPreferenceModel.() -> Unit): SwitchPreferenceModel =
+        SwitchPreferenceModel().apply { context(activity) }.apply(init).addTo(this)
 }

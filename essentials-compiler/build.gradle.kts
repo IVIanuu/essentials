@@ -23,7 +23,6 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/mv
 
 dependencies {
     api(Deps.kotlinStdLib)
-    implementation(Deps.epoxyProcessor)
     implementation(Deps.injektCompiler)
     implementation(Deps.listCompiler)
 }
