@@ -39,14 +39,14 @@ abstract class EsListModel<H : EsListHolder> : ListModel<H>(), ContextAware, Sco
 
     private var _scope: ReusableScope? = null
 
-    override fun onBind(holder: H) {
+    override fun bind(holder: H) {
         _scope?.clear()
-        super.onBind(holder)
+        super.bind(holder)
     }
 
-    override fun onUnbind(holder: H) {
+    override fun unbind(holder: H) {
         _scope?.clear()
-        super.onUnbind(holder)
+        super.unbind(holder)
     }
 
 }

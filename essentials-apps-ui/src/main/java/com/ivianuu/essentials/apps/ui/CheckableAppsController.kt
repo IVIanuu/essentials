@@ -32,12 +32,15 @@ import com.ivianuu.essentials.ui.epoxy.SimpleEpoxyModel
 import com.ivianuu.essentials.ui.epoxy.simpleLoading
 import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
 import com.ivianuu.essentials.ui.mvrx.epoxy.simpleEpoxyController
-import com.ivianuu.essentials.ui.mvrx.injekt.mvRxViewModel
+import com.ivianuu.essentials.ui.mvrx.mvRxViewModel
 import com.ivianuu.essentials.ui.simple.SimpleController
 import com.ivianuu.essentials.util.SavedState
 import com.ivianuu.essentials.util.coroutineScope
 import com.ivianuu.essentials.util.ext.coroutinesIo
 import com.ivianuu.injekt.annotations.Factory
+import com.ivianuu.injekt.annotations.Param
+import com.ivianuu.injekt.get
+import com.ivianuu.injekt.parametersOf
 import com.ivianuu.rxjavaktx.BehaviorSubject
 import com.ivianuu.rxjavaktx.PublishSubject
 import com.ivianuu.scopes.ReusableScope
@@ -58,7 +61,12 @@ abstract class CheckableAppsController : SimpleController() {
     override val toolbarMenuRes
         get() = R.menu.controller_checkable_apps
 
-    private val viewModel by mvRxViewModel<CheckableAppsViewModel>()
+    protected open val launchableAppsOnly: Boolean
+        get() = false
+
+    private val viewModel by mvRxViewModel<CheckableAppsViewModel> {
+        get { parametersOf(launchableAppsOnly) }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -126,6 +134,7 @@ abstract class CheckableAppModel : SimpleEpoxyModel() {
  */
 @Factory
 class CheckableAppsViewModel(
+    @Param private val launchableOnly: Boolean,
     private val appStore: AppStore
 ) : MvRxViewModel<CheckableAppsState>(CheckableAppsState()) {
 
@@ -140,7 +149,13 @@ class CheckableAppsViewModel(
 
         Observables
             .combineLatest(
-                coroutineScope.async { appStore.getInstalledApps() }
+                coroutineScope.async {
+                    if (launchableOnly) {
+                        appStore.getLaunchableApps()
+                    } else {
+                        appStore.getInstalledApps()
+                    }
+                }
                     .asSingle(coroutinesIo)
                     .toObservable(),
                 checkedApps

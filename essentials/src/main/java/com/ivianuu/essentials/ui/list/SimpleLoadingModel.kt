@@ -33,8 +33,8 @@ import kotlinx.android.synthetic.main.es_item_simple_loading.es_progress_bar
     override val layoutRes: Int
         get() = R.layout.es_item_simple_loading
 
-    override fun onBind(holder: EsListHolder) {
-        super.onBind(holder)
+    override fun bind(holder: EsListHolder) {
+        super.bind(holder)
         if (progressColor != 0 || progressColorRes != 0) {
             val progressColor = when {
                 progressColor != 0 -> progressColor

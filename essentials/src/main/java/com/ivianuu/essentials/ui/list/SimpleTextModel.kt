@@ -27,8 +27,8 @@ import kotlinx.android.synthetic.main.es_item_simple_text.es_text
     var text by property("text") { "" }
     var textRes by property("textRes") { 0 }
 
-    override fun onBind(holder: EsListHolder) {
-        super.onBind(holder)
+    override fun bind(holder: EsListHolder) {
+        super.bind(holder)
         when {
             text.isNotEmpty() -> holder.es_text.text = text
             textRes != 0 -> holder.es_text.setText(textRes)
