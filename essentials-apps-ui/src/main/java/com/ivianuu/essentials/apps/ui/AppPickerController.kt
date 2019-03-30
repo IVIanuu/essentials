@@ -25,7 +25,7 @@ import com.ivianuu.essentials.apps.glide.AppIcon
 import com.ivianuu.essentials.injection.PerController
 import com.ivianuu.essentials.ui.list.EsListHolder
 import com.ivianuu.essentials.ui.list.SimpleListModel
-import com.ivianuu.essentials.ui.list.simpleLoading
+import com.ivianuu.essentials.ui.list.SimpleLoadingModel
 import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
 import com.ivianuu.essentials.ui.mvrx.epoxy.mvRxModelController
 import com.ivianuu.essentials.ui.mvrx.injekt.mvRxViewModel
@@ -35,9 +35,9 @@ import com.ivianuu.essentials.util.SavedState
 import com.ivianuu.essentials.util.coroutineScope
 import com.ivianuu.essentials.util.ext.goBackWithResult
 import com.ivianuu.injekt.annotations.Factory
-import com.ivianuu.list.annotations.Model
 import com.ivianuu.list.common.onClick
 import com.ivianuu.list.id
+
 import com.ivianuu.traveler.Router
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.es_item_app.icon
@@ -62,14 +62,14 @@ class AppPickerController : SimpleController() {
 
     override fun modelController() = mvRxModelController(viewModel) { state ->
         if (state.loading) {
-            simpleLoading {
+            SimpleLoadingModel {
                 id("loading")
             }
         } else {
             state.apps.forEach { app ->
-                appInfo {
+                AppInfoModel().add {
                     id(app.packageName)
-                    app(app)
+                    this.app = app
                     onClick { _, _ -> viewModel.appClicked(app) }
                 }
             }
@@ -78,8 +78,7 @@ class AppPickerController : SimpleController() {
 
 }
 
-@Model
-class AppInfoModel : SimpleListModel() {
+private class AppInfoModel : SimpleListModel() {
 
     var app by requiredProperty<AppInfo>("app")
 

@@ -20,16 +20,15 @@ import android.view.MenuItem
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.list.EsListHolder
 import com.ivianuu.essentials.ui.list.SimpleListModel
-import com.ivianuu.essentials.ui.list.simpleLoading
-import com.ivianuu.essentials.ui.list.simpleText
-import com.ivianuu.essentials.ui.list.text
+import com.ivianuu.essentials.ui.list.SimpleLoadingModel
+import com.ivianuu.essentials.ui.list.SimpleTextModel
 import com.ivianuu.essentials.ui.mvrx.epoxy.mvRxModelController
 import com.ivianuu.essentials.ui.mvrx.injekt.mvRxViewModel
 import com.ivianuu.essentials.ui.simple.SimpleController
 import com.ivianuu.essentials.ui.traveler.NavOptions
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
 import com.ivianuu.essentials.ui.traveler.vertical
-import com.ivianuu.list.annotations.Model
+
 import com.ivianuu.list.id
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.single_line_list_item.title
@@ -46,21 +45,21 @@ class ListController : SimpleController() {
 
     override fun modelController() = mvRxModelController(viewModel) { state ->
         if (state.loading) {
-            simpleLoading {
+            SimpleLoadingModel {
                 id("loading")
             }
         } else {
             if (state.items.isNotEmpty()) {
                 state.items.forEach { title ->
-                    singleLineListItem {
+                    SingleLineListItemModel().add {
                         id(title)
-                        title(title)
+                        this.title = title
                     }
                 }
             } else {
-                simpleText {
+                SimpleTextModel {
                     id("empty")
-                    text("Hmm empty..")
+                    text = "Hmm empty.."
                 }
             }
         }
@@ -75,7 +74,6 @@ class ListController : SimpleController() {
     }
 }
 
-@Model
 class SingleLineListItemModel : SimpleListModel() {
 
     var title by requiredProperty<String>("title")

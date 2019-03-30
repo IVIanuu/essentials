@@ -27,7 +27,7 @@ import com.ivianuu.essentials.apps.AppStore
 import com.ivianuu.essentials.apps.glide.AppIcon
 import com.ivianuu.essentials.ui.list.EsListHolder
 import com.ivianuu.essentials.ui.list.SimpleListModel
-import com.ivianuu.essentials.ui.list.simpleLoading
+import com.ivianuu.essentials.ui.list.SimpleLoadingModel
 import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
 import com.ivianuu.essentials.ui.mvrx.epoxy.mvRxModelController
 import com.ivianuu.essentials.ui.mvrx.mvRxViewModel
@@ -39,7 +39,7 @@ import com.ivianuu.injekt.annotations.Factory
 import com.ivianuu.injekt.annotations.Param
 import com.ivianuu.injekt.get
 import com.ivianuu.injekt.parametersOf
-import com.ivianuu.list.annotations.Model
+
 import com.ivianuu.list.common.onClick
 import com.ivianuu.list.id
 import com.ivianuu.rxjavaktx.BehaviorSubject
@@ -85,14 +85,14 @@ abstract class CheckableAppsController : SimpleController() {
 
     override fun modelController() = mvRxModelController(viewModel) { state ->
         if (state.loading) {
-            simpleLoading {
+            SimpleLoadingModel {
                 id("loading")
             }
         } else {
             state.apps.forEach { app ->
-                checkableApp {
+                CheckableAppModel().add {
                     id(app.info.packageName)
-                    app(app)
+                    this.app = app
                     onClick { _, _ -> viewModel.appClicked(app) }
                 }
             }
@@ -109,8 +109,7 @@ abstract class CheckableAppsController : SimpleController() {
     abstract fun onCheckedAppsChanged(apps: Set<String>)
 }
 
-@Model
-class CheckableAppModel : SimpleListModel() {
+private class CheckableAppModel : SimpleListModel() {
 
     var app by requiredProperty<CheckableApp>("app")
 

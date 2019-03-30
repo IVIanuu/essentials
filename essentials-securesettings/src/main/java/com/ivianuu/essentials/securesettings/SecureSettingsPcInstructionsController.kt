@@ -24,10 +24,7 @@ import com.ivianuu.essentials.util.ext.toast
 import com.ivianuu.essentials.util.string
 import com.ivianuu.injekt.inject
 import com.ivianuu.list.common.modelController
-import com.ivianuu.listprefs.clickable
 import com.ivianuu.listprefs.icon
-import com.ivianuu.listprefs.key
-import com.ivianuu.listprefs.onClick
 import com.ivianuu.listprefs.onClickUrl
 import com.ivianuu.listprefs.summary
 import com.ivianuu.listprefs.title
@@ -47,60 +44,60 @@ class SecureSettingsPcInstructionsController : PrefsController() {
         get() = R.string.es_title_secure_settings_pc_instructions
 
     override fun modelController() = modelController {
-        preference {
-            key("secure_settings_header")
+        PreferenceModel {
+            key = "secure_settings_header"
             summary(R.string.es_pref_summary_secure_settings_pc_instructions_header)
         }
 
-        preference {
-            key("secure_settings_step_1")
+        PreferenceModel {
+            key = "secure_settings_step_1"
             title(R.string.es_pref_title_secure_settings_step_1)
             summary(R.string.es_pref_summary_secure_settings_step_1)
-            clickable(false)
+            clickable = false
         }
 
-        preference {
-            key("secure_settings_step_two")
+        PreferenceModel {
+            key = "secure_settings_step_two"
             title(R.string.es_pref_title_secure_settings_step_2)
             summary(R.string.es_pref_summary_secure_settings_step_2)
-            clickable(false)
+            clickable = false
         }
 
-        preference {
-            key("secure_settings_step_3")
+        PreferenceModel {
+            key = "secure_settings_step_3"
             title(R.string.es_pref_title_secure_settings_step_3)
         }
 
-        preference {
-            key("secure_settings_link_gadget_hacks")
+        PreferenceModel {
+            key = "secure_settings_link_gadget_hacks"
             icon(R.drawable.es_ic_link)
             summary(R.string.es_pref_summary_secure_settings_link_gadget_hacks)
             onClickUrl { "https://youtu.be/CDuxcrrWLnY" }
         }
 
-        preference {
-            key("secure_settings_link_lifehacker")
+        PreferenceModel {
+            key = "secure_settings_link_lifehacker"
             icon(R.drawable.es_ic_link)
             summary(R.string.es_pref_summary_secure_settings_link_lifehacker)
             onClickUrl { "https://lifehacker.com/the-easiest-way-to-install-androids-adb-and-fastboot-to-1586992378" }
         }
 
-        preference {
-            key("secure_settings_link_xda")
+        PreferenceModel {
+            key = "secure_settings_link_xda"
             icon(R.drawable.es_ic_link)
             summary(R.string.es_pref_summary_secure_settings_link_xda)
             onClickUrl { "https://www.xda-developers.com/install-adb-windows-macos-linux/" }
         }
 
-        preference {
-            key("secure_settings_step_4")
+        PreferenceModel {
+            key = "secure_settings_step_4"
             title(R.string.es_pref_title_secure_settings_step_4)
-            summary(string(R.string.es_pref_summary_secure_settings_step_4, activity.packageName))
-            onClick {
+            summary = string(R.string.es_pref_summary_secure_settings_step_4, activity.packageName)
+            onClick = {
                 clipboardManager.text =
                         "adb shell pm grant ${activity.packageName} android.permission.WRITE_SECURE_SETTINGS"
                 toast(R.string.es_msg_secure_settings_copied_to_clipboard)
-                return@onClick true
+                true
             }
         }
     }

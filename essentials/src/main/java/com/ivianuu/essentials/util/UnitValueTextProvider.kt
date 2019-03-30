@@ -25,7 +25,6 @@ import com.ivianuu.essentials.util.UnitValueTextProvider.Unit.PX
 import com.ivianuu.essentials.util.UnitValueTextProvider.Unit.SECONDS
 import com.ivianuu.kommon.core.content.string
 import com.ivianuu.listprefs.SeekBarPreferenceModel
-import com.ivianuu.listprefs.valueTextProvider
 
 class UnitValueTextProvider(
     private val context: Context,
@@ -46,5 +45,5 @@ class UnitValueTextProvider(
 }
 
 fun SeekBarPreferenceModel.unitValueTextProvider(unit: UnitValueTextProvider.Unit) {
-    valueTextProvider(UnitValueTextProvider(context, unit))
+    valueTextProvider = UnitValueTextProvider(context, unit)
 }

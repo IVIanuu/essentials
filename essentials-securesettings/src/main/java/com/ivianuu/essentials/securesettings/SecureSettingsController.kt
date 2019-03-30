@@ -30,8 +30,6 @@ import com.ivianuu.essentials.util.ext.sendResult
 import com.ivianuu.essentials.util.ext.toast
 import com.ivianuu.injekt.inject
 import com.ivianuu.list.common.modelController
-import com.ivianuu.listprefs.key
-import com.ivianuu.listprefs.onClick
 import com.ivianuu.listprefs.summary
 import com.ivianuu.listprefs.title
 import com.ivianuu.traveler.navigate
@@ -56,8 +54,8 @@ class SecureSettingsController : PrefsController() {
     private val shell by inject<Shell>()
 
     override fun modelController() = modelController {
-        preference {
-            key("secure_settings_header")
+        PreferenceModel {
+            key = "secure_settings_header"
             summary(
                 if (this@SecureSettingsController.key.showHideNavBarHint) {
                     R.string.es_pref_summary_secure_settings_header_hide_nav_bar
@@ -67,24 +65,24 @@ class SecureSettingsController : PrefsController() {
             )
         }
 
-        preference {
-            key("use_pc")
-            summary(R.string.es_pref_summary_use_pc)
+        PreferenceModel {
+            key = "use_pc"
             title(R.string.es_pref_title_use_pc)
-            onClick {
+            summary(R.string.es_pref_summary_use_pc)
+            onClick = {
                 travelerRouter.navigate(
                     SecureSettingsPcInstructionsKey(),
                     NavOptions().handler(VerticalFadeChangeHandler())
                 )
-                return@onClick true
+                true
             }
         }
 
-        preference {
-            key("use_root")
-            summary(R.string.es_pref_summary_use_root)
+        PreferenceModel {
+            key = "use_root"
             title(R.string.es_pref_title_use_root)
-            onClick {
+            summary(R.string.es_pref_summary_use_root)
+            onClick = {
                 coroutineScope.launch {
                     try {
                         shell.run("pm grant ${activity.packageName} android.permission.WRITE_SECURE_SETTINGS")
@@ -94,7 +92,8 @@ class SecureSettingsController : PrefsController() {
                         toast(R.string.es_msg_secure_settings_no_root)
                     }
                 }
-                return@onClick true
+
+                true
             }
         }
     }

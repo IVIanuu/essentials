@@ -17,19 +17,17 @@
 package com.ivianuu.essentials.ui.list
 
 import com.ivianuu.essentials.R
-import com.ivianuu.list.annotations.Model
+import com.ivianuu.list.ListModelFactory
+
 import kotlinx.android.synthetic.main.es_item_simple_text.es_text
 
 /**
  * Simple text model
  */
-@Model open class SimpleTextModel : SimpleListModel() {
+open class SimpleTextModel : SimpleListModel(layoutRes = R.layout.es_item_simple_text) {
 
     var text by property("text") { "" }
     var textRes by property("textRes") { 0 }
-
-    override val layoutRes: Int
-        get() = R.layout.es_item_simple_text
 
     override fun bind(holder: EsListHolder) {
         super.bind(holder)
@@ -39,5 +37,7 @@ import kotlinx.android.synthetic.main.es_item_simple_text.es_text
             else -> error("you must specify one of text or textRes")
         }
     }
+
+    companion object : ListModelFactory<SimpleTextModel>(::SimpleTextModel)
 
 }

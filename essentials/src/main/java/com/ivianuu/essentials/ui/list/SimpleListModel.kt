@@ -19,6 +19,9 @@ package com.ivianuu.essentials.ui.list
 /**
  * Simple list model with holder
  */
-abstract class SimpleListModel : EsListModel<EsListHolder>() {
+abstract class SimpleListModel(
+    id: Any? = null,
+    layoutRes: Int = -1
+) : EsListModel<EsListHolder>(id, layoutRes) {
     override fun createHolder(): EsListHolder = EsListHolder()
 }

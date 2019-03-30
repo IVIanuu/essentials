@@ -24,17 +24,7 @@ import com.ivianuu.essentials.ui.simple.SimpleController
 import com.ivianuu.injekt.inject
 import com.ivianuu.list.ModelController
 import com.ivianuu.list.addTo
-import com.ivianuu.listprefs.CategoryPreferenceModel
-import com.ivianuu.listprefs.CheckboxPreferenceModel
-import com.ivianuu.listprefs.EditTextPreferenceModel
-import com.ivianuu.listprefs.MultiSelectListPreferenceModel
-import com.ivianuu.listprefs.PreferenceDividerDecoration
-import com.ivianuu.listprefs.PreferenceModel
-import com.ivianuu.listprefs.RadioButtonPreferenceModel
-import com.ivianuu.listprefs.SeekBarPreferenceModel
-import com.ivianuu.listprefs.SingleItemListPreferenceModel
-import com.ivianuu.listprefs.SwitchPreferenceModel
-import com.ivianuu.listprefs.context
+import com.ivianuu.listprefs.*
 
 /**
  * Prefs controller
@@ -67,30 +57,32 @@ abstract class PrefsController : SimpleController() {
         sharedPreferences.unregisterOnSharedPreferenceChangeListener(sharedPreferenceChangeListener)
     }
 
-    protected fun ModelController.preference(init: PreferenceModel.() -> Unit): PreferenceModel =
-        PreferenceModel().apply { context(activity) }.apply(init).addTo(this)
+    // todo find a better way for those extensions
 
-    protected fun ModelController.categoryPreference(init: CategoryPreferenceModel.() -> Unit): CategoryPreferenceModel =
-        CategoryPreferenceModel().apply { context(activity) }.apply(init).addTo(this)
+    protected fun ModelController.PreferenceModel(init: PreferenceModel.() -> Unit): PreferenceModel =
+        PreferenceModel().apply { context = activity }.apply(init).addTo(this)
 
-    protected fun ModelController.checkboxPreference(init: CheckboxPreferenceModel.() -> Unit): CheckboxPreferenceModel =
-        CheckboxPreferenceModel().apply { context(activity) }.apply(init).addTo(this)
+    protected fun ModelController.CategoryPreferenceModel(init: CategoryPreferenceModel.() -> Unit): CategoryPreferenceModel =
+        CategoryPreferenceModel().apply { context = activity }.apply(init).addTo(this)
 
-    protected fun ModelController.editTextPreference(init: EditTextPreferenceModel.() -> Unit): EditTextPreferenceModel =
-        EditTextPreferenceModel().apply { context(activity) }.apply(init).addTo(this)
+    protected fun ModelController.CheckboxPreferenceModel(init: CheckboxPreferenceModel.() -> Unit): CheckboxPreferenceModel =
+        CheckboxPreferenceModel().apply { context = activity }.apply(init).addTo(this)
 
-    protected fun ModelController.multiSelectListPreference(init: MultiSelectListPreferenceModel.() -> Unit): MultiSelectListPreferenceModel =
-        MultiSelectListPreferenceModel().apply { context(activity) }.apply(init).addTo(this)
+    protected fun ModelController.EditTextPreferenceModel(init: EditTextPreferenceModel.() -> Unit): EditTextPreferenceModel =
+        EditTextPreferenceModel().apply { context = activity }.apply(init).addTo(this)
 
-    protected fun ModelController.radioButtonPreference(init: RadioButtonPreferenceModel.() -> Unit): RadioButtonPreferenceModel =
-        RadioButtonPreferenceModel().apply { context(activity) }.apply(init).addTo(this)
+    protected fun ModelController.MultiSelectListPreferenceModel(init: MultiSelectListPreferenceModel.() -> Unit): MultiSelectListPreferenceModel =
+        MultiSelectListPreferenceModel().apply { context = activity }.apply(init).addTo(this)
 
-    protected fun ModelController.seekBarPreference(init: SeekBarPreferenceModel.() -> Unit): SeekBarPreferenceModel =
-        SeekBarPreferenceModel().apply { context(activity) }.apply(init).addTo(this)
+    protected fun ModelController.RadioButtonPreferenceModel(init: RadioButtonPreferenceModel.() -> Unit): RadioButtonPreferenceModel =
+        RadioButtonPreferenceModel().apply { context = activity }.apply(init).addTo(this)
 
-    protected fun ModelController.singleItemListPreference(init: SingleItemListPreferenceModel.() -> Unit): SingleItemListPreferenceModel =
-        SingleItemListPreferenceModel().apply { context(activity) }.apply(init).addTo(this)
+    protected fun ModelController.SeekBarPreferenceModel(init: SeekBarPreferenceModel.() -> Unit): SeekBarPreferenceModel =
+        SeekBarPreferenceModel().apply { context = activity }.apply(init).addTo(this)
 
-    protected fun ModelController.switchPreference(init: SwitchPreferenceModel.() -> Unit): SwitchPreferenceModel =
-        SwitchPreferenceModel().apply { context(activity) }.apply(init).addTo(this)
+    protected fun ModelController.SingleItemListPreferenceModel(init: SingleItemListPreferenceModel.() -> Unit): SingleItemListPreferenceModel =
+        SingleItemListPreferenceModel().apply { context = activity }.apply(init).addTo(this)
+
+    protected fun ModelController.SwitchPreferenceModel(init: SwitchPreferenceModel.() -> Unit): SwitchPreferenceModel =
+        SwitchPreferenceModel().apply { context = activity }.apply(init).addTo(this)
 }
