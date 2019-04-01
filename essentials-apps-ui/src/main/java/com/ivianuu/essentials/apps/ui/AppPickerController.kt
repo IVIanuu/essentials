@@ -27,8 +27,8 @@ import com.ivianuu.essentials.ui.list.EsListHolder
 import com.ivianuu.essentials.ui.list.SimpleListModel
 import com.ivianuu.essentials.ui.list.SimpleLoadingModel
 import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
-import com.ivianuu.essentials.ui.mvrx.epoxy.mvRxModelController
 import com.ivianuu.essentials.ui.mvrx.injekt.mvRxViewModel
+import com.ivianuu.essentials.ui.mvrx.list.mvRxModelController
 import com.ivianuu.essentials.ui.simple.SimpleController
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
 import com.ivianuu.essentials.util.SavedState
@@ -37,7 +37,6 @@ import com.ivianuu.essentials.util.ext.goBackWithResult
 import com.ivianuu.injekt.annotations.Factory
 import com.ivianuu.list.common.onClick
 import com.ivianuu.list.id
-
 import com.ivianuu.traveler.Router
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.es_item_app.icon

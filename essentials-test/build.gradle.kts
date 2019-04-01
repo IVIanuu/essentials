@@ -26,7 +26,6 @@ dependencies {
     api(Deps.androidxTestJunit)
     api(Deps.androidxTestRules)
     api(Deps.androidxTestRunner)
-    api(Deps.directorTesting)
     api(Deps.junit)
     api(Deps.kotlinStdLib)
     api(Deps.mockitoKotlin)

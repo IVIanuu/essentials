@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.mvrx.epoxy
+package com.ivianuu.essentials.ui.mvrx.list
 
 
 import com.ivianuu.director.Controller

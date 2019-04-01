@@ -54,9 +54,9 @@ dependencies {
     api(Deps.directorCommon)
     api(Deps.directorDialog)
     api(Deps.directorFragmentHost)
+    api(Deps.directorPager)
     api(Deps.directorScopes)
     api(Deps.directorTraveler)
-    api(Deps.directorViewPager)
 
     kapt(project(":essentials-compiler"))
 

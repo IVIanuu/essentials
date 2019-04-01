@@ -52,7 +52,7 @@ object Versions {
     const val closeable = "0.0.1-dev-2"
     const val constraintLayout = "2.0.0-alpha3"
     const val coroutines = "1.1.0"
-    const val director = "0.0.1-dev-19"
+    const val director = "0.0.1-dev-20"
     const val glide = "4.8.0"
     const val injekt = "0.0.1-dev-20"
     const val junit = "4.12"
@@ -121,14 +121,12 @@ object Deps {
     const val directorCommon = "com.ivianuu.director:director-common:${Versions.director}"
     const val directorDialog = "com.ivianuu.director:director-dialog:${Versions.director}"
     const val directorFragmentHost = "com.ivianuu.director:director-fragmenthost:${Versions.director}"
+    const val directorPager =
+        "com.ivianuu.director:director-pager:${Versions.director}"
     const val directorRetained = "com.ivianuu.director:director-retained:${Versions.director}"
     const val directorScopes = "com.ivianuu.director:director-scopes:${Versions.director}"
-    const val directorTesting =
-        "com.ivianuu.director:director-testing:${Versions.director}"
     const val directorTraveler =
         "com.ivianuu.director:director-traveler:${Versions.director}"
-    const val directorViewPager =
-        "com.ivianuu.director:director-viewpager:${Versions.director}"
 
     const val glide = "com.github.bumptech.glide:glide:${Versions.glide}"
 

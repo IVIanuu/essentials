@@ -27,12 +27,7 @@ import com.google.android.material.appbar.AppBarLayout
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.base.EsController
 import com.ivianuu.essentials.ui.common.EsRecyclerView
-import com.ivianuu.essentials.util.ext.iconColor
-import com.ivianuu.essentials.util.ext.isLight
-import com.ivianuu.essentials.util.ext.primaryColor
-import com.ivianuu.essentials.util.ext.primaryTextColor
-import com.ivianuu.essentials.util.ext.rootTransaction
-import com.ivianuu.essentials.util.ext.secondaryTextColor
+import com.ivianuu.essentials.util.ext.*
 import com.ivianuu.kommon.core.view.items
 import com.ivianuu.list.ModelController
 import com.ivianuu.traveler.goBack
@@ -81,8 +76,8 @@ abstract class SimpleController : EsController() {
     open val optionalToolbar: Toolbar?
         get() = view?.findViewById(R.id.es_toolbar)
 
-    override fun onBindView(view: View, savedViewState: Bundle?) {
-        super.onBindView(view, savedViewState)
+    override fun onViewCreated(view: View, savedViewState: Bundle?) {
+        super.onViewCreated(view, savedViewState)
 
         optionalToolbar?.run {
             when {
@@ -122,10 +117,10 @@ abstract class SimpleController : EsController() {
         }
     }
 
-    override fun onUnbindView(view: View) {
+    override fun onDestroyView(view: View) {
         _modelController?.cancelPendingModelBuild()
         _modelController = null
-        super.onUnbindView(view)
+        super.onDestroyView(view)
     }
 
     override fun invalidate() {

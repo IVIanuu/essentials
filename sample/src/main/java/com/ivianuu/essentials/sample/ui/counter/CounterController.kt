@@ -16,7 +16,6 @@
 
 package com.ivianuu.essentials.sample.ui.counter
 
-import android.os.Bundle
 import android.view.View
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.base.EsController
@@ -24,13 +23,7 @@ import com.ivianuu.essentials.ui.mvrx.injekt.mvRxViewModel
 import com.ivianuu.essentials.ui.mvrx.withState
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
 import kotlinx.android.parcel.Parcelize
-import kotlinx.android.synthetic.main.controller_counter.check_apps
-import kotlinx.android.synthetic.main.controller_counter.count
-import kotlinx.android.synthetic.main.controller_counter.do_work
-import kotlinx.android.synthetic.main.controller_counter.list_screen
-import kotlinx.android.synthetic.main.controller_counter.root_screen
-import kotlinx.android.synthetic.main.controller_counter.screen_down
-import kotlinx.android.synthetic.main.controller_counter.screen_up
+import kotlinx.android.synthetic.main.controller_counter.*
 
 @Parcelize
 data class CounterKey(val screen: Int) : ControllerKey(::CounterController)
@@ -41,9 +34,8 @@ class CounterController : EsController() {
 
     private val viewModel by mvRxViewModel<CounterViewModel>()
 
-    override fun onBindView(view: View, savedViewState: Bundle?) {
-        super.onBindView(view, savedViewState)
-
+    override fun onAttach(view: View) {
+        super.onAttach(view)
         screen_up.setOnClickListener { viewModel.screenUpClicked() }
         screen_down.setOnClickListener { viewModel.screenDownClicked() }
         root_screen.setOnClickListener { viewModel.rootScreenClicked() }

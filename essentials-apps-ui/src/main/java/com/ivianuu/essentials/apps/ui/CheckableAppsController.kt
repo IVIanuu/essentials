@@ -29,7 +29,7 @@ import com.ivianuu.essentials.ui.list.EsListHolder
 import com.ivianuu.essentials.ui.list.SimpleListModel
 import com.ivianuu.essentials.ui.list.SimpleLoadingModel
 import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
-import com.ivianuu.essentials.ui.mvrx.epoxy.mvRxModelController
+import com.ivianuu.essentials.ui.mvrx.list.mvRxModelController
 import com.ivianuu.essentials.ui.mvrx.mvRxViewModel
 import com.ivianuu.essentials.ui.simple.SimpleController
 import com.ivianuu.essentials.util.SavedState

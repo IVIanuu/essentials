@@ -22,13 +22,12 @@ import com.ivianuu.essentials.ui.list.EsListHolder
 import com.ivianuu.essentials.ui.list.SimpleListModel
 import com.ivianuu.essentials.ui.list.SimpleLoadingModel
 import com.ivianuu.essentials.ui.list.SimpleTextModel
-import com.ivianuu.essentials.ui.mvrx.epoxy.mvRxModelController
 import com.ivianuu.essentials.ui.mvrx.injekt.mvRxViewModel
+import com.ivianuu.essentials.ui.mvrx.list.mvRxModelController
 import com.ivianuu.essentials.ui.simple.SimpleController
 import com.ivianuu.essentials.ui.traveler.NavOptions
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
 import com.ivianuu.essentials.ui.traveler.vertical
-
 import com.ivianuu.list.id
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.single_line_list_item.title

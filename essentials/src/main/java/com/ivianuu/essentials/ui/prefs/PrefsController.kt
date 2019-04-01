@@ -40,8 +40,8 @@ abstract class PrefsController : SimpleController() {
             postInvalidate()
         }
 
-    override fun onBindView(view: View, savedViewState: Bundle?) {
-        super.onBindView(view, savedViewState)
+    override fun onViewCreated(view: View, savedViewState: Bundle?) {
+        super.onViewCreated(view, savedViewState)
         if (usePreferenceDividerDecoration) {
             optionalRecyclerView?.addItemDecoration(PreferenceDividerDecoration(activity))
         }

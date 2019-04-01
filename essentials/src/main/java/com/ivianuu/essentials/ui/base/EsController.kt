@@ -54,7 +54,8 @@ abstract class EsController : Controller(), ContextAware, InjektMvRxView, Layout
     }
 
     override val containerView: View?
-        get() = view
+        get() = _containerView
+    protected var _containerView: View? = null
 
     override val providedContext: Context
         get() = context
@@ -70,7 +71,7 @@ abstract class EsController : Controller(), ContextAware, InjektMvRxView, Layout
         viewModelManagerOwner // todo remove this
     }
 
-    override fun onBuildView(
+    override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup,
         savedViewState: Bundle?
@@ -79,6 +80,7 @@ abstract class EsController : Controller(), ContextAware, InjektMvRxView, Layout
         val injectorInflater =
             inflater.cloneInContext(InjektTraitContextWrapper(activity, this))
         return injectorInflater.inflate(layoutRes, container, false)
+            .also { setContentView(it, savedViewState) }
     }
 
     override fun onAttach(view: View) {
@@ -86,9 +88,10 @@ abstract class EsController : Controller(), ContextAware, InjektMvRxView, Layout
         invalidate()
     }
 
-    override fun onUnbindView(view: View) {
+    override fun onDestroyView(view: View) {
         clearFindViewByIdCache()
-        super.onUnbindView(view)
+        _containerView = null
+        super.onDestroyView(view)
     }
 
     override fun invalidate() {
@@ -97,5 +100,13 @@ abstract class EsController : Controller(), ContextAware, InjektMvRxView, Layout
     override fun getLifecycle(): Lifecycle = lifecycleOwner.lifecycle
 
     protected open fun modules(): List<Module> = emptyList()
+
+    protected fun setContentView(view: View, savedViewState: Bundle?) {
+        _containerView = view
+        onViewCreated(view, savedViewState)
+    }
+
+    protected open fun onViewCreated(view: View, savedViewState: Bundle?) {
+    }
 
 }

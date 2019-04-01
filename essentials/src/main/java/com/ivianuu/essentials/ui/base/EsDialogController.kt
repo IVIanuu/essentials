@@ -18,30 +18,29 @@ package com.ivianuu.essentials.ui.base
 
 
 import android.content.Context
-import android.view.View
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
 import com.ivianuu.director.androidx.lifecycle.lifecycleOwner
 import com.ivianuu.director.context
 import com.ivianuu.director.dialog.DialogController
 import com.ivianuu.essentials.injection.controllerComponent
-import com.ivianuu.essentials.ui.mvrx.injekt.InjektMvRxView
 import com.ivianuu.essentials.ui.traveler.key.keyModule
 import com.ivianuu.essentials.ui.viewmodel.ViewModelManager
+import com.ivianuu.essentials.ui.viewmodel.ViewModelManagerOwner
 import com.ivianuu.essentials.ui.viewmodel.director.viewModelManagerOwner
 import com.ivianuu.essentials.util.ContextAware
 import com.ivianuu.essentials.util.ext.unsafeLazy
+import com.ivianuu.injekt.InjektTrait
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.inject
 import com.ivianuu.injekt.modules
 import com.ivianuu.traveler.Router
-import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.*
 
 /**
  * Base dialog controller
  */
-abstract class EsDialogController : DialogController(),
-    ContextAware, InjektMvRxView, LayoutContainer {
+abstract class EsDialogController : DialogController(), ContextAware, InjektTrait, LifecycleOwner,
+    ViewModelManagerOwner {
 
     override val component by unsafeLazy {
         controllerComponent {
@@ -49,9 +48,6 @@ abstract class EsDialogController : DialogController(),
             modules(this@EsDialogController.modules())
         }
     }
-
-    override val containerView: View?
-        get() = view
 
     override val providedContext: Context
         get() = context
@@ -63,19 +59,6 @@ abstract class EsDialogController : DialogController(),
 
     init {
         viewModelManagerOwner // todo remove this
-    }
-
-    override fun onAttach(view: View) {
-        super.onAttach(view)
-        invalidate()
-    }
-
-    override fun onUnbindView(view: View) {
-        clearFindViewByIdCache()
-        super.onUnbindView(view)
-    }
-
-    override fun invalidate() {
     }
 
     override fun getLifecycle(): Lifecycle = lifecycleOwner.lifecycle
