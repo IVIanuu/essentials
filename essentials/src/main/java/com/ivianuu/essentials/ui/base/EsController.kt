@@ -55,7 +55,7 @@ abstract class EsController : Controller(), ContextAware, InjektMvRxView, Layout
 
     override val containerView: View?
         get() = _containerView
-    protected var _containerView: View? = null
+    private var _containerView: View? = null
 
     override val providedContext: Context
         get() = context
