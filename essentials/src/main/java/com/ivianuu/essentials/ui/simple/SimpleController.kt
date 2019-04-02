@@ -37,12 +37,13 @@ import com.ivianuu.traveler.goBack
  */
 abstract class SimpleController : EsController() {
 
-    override val layoutRes get() = R.layout.es_controller_simple
+    override val layoutRes: Int
+        get() = R.layout.es_controller_simple
 
     protected open val toolbarTitle: String? get() = null
-    protected open val toolbarTitleRes get() = 0
-    protected open val toolbarMenuRes get() = 0
-    protected open val toolbarBackButton get() = router.rootTransaction?.controller != this
+    protected open val toolbarTitleRes: Int get() = 0
+    protected open val toolbarMenuRes: Int get() = 0
+    protected open val toolbarBackButton: Boolean get() = router.rootTransaction?.controller != this
     protected open val lightToolbar: Boolean get() = primaryColor().isLight
 
     val optionalModelController: ModelController? get() = _modelController
@@ -53,28 +54,27 @@ abstract class SimpleController : EsController() {
     private var _modelController: ModelController? = null
 
     val appBar get() = optionalAppBar ?: error("no app bar layout found")
-
     open val optionalAppBar: AppBarLayout?
-        get() = view?.findViewById(R.id.es_app_bar)
+        get() = containerView?.findViewById(R.id.es_app_bar)
 
     val coordinatorLayout
         get() = optionalCoordinatorLayout
             ?: error("no coordinator layout found")
 
     open val optionalCoordinatorLayout: CoordinatorLayout?
-        get() = view?.findViewById(R.id.es_coordinator_layout)
+        get() = containerView?.findViewById(R.id.es_coordinator_layout)
 
     val recyclerView
         get() = optionalRecyclerView ?: error("no recycler view found")
 
     open val optionalRecyclerView: EsRecyclerView?
-        get() = view?.findViewById(R.id.es_recycler_view)
+        get() = containerView?.findViewById(R.id.es_recycler_view)
 
     val toolbar
         get() = optionalToolbar ?: error("no toolbar found")
 
     open val optionalToolbar: Toolbar?
-        get() = view?.findViewById(R.id.es_toolbar)
+        get() = containerView?.findViewById(R.id.es_toolbar)
 
     override fun onViewCreated(view: View, savedViewState: Bundle?) {
         super.onViewCreated(view, savedViewState)
