@@ -60,7 +60,7 @@ class ActivityResultController : EsController() {
         startActivityForResult(key.intent, key.requestCode)
     }
 
-    override fun onBuildView(
+    override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup,
         savedViewState: Bundle?

@@ -60,7 +60,7 @@ class PermissionRequestController : EsController() {
         }
     }
 
-    override fun onBuildView(
+    override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup,
         savedViewState: Bundle?

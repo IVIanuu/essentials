@@ -24,14 +24,14 @@ import com.ivianuu.director.Router
 import com.ivianuu.director.activity
 import com.ivianuu.director.parentController
 import com.ivianuu.director.scopes.destroy
-import com.ivianuu.director.scopes.unbindView
+import com.ivianuu.director.scopes.destroyView
 import com.ivianuu.essentials.util.coroutineScope
 import com.ivianuu.kommon.core.app.hideInputMethod
 import com.ivianuu.kommon.core.app.showInputMethod
 import com.ivianuu.kommon.core.content.app
 
 val Controller.coroutineScope get() = destroy.coroutineScope
-val Controller.viewCoroutineScope get() = unbindView.coroutineScope
+val Controller.viewCoroutineScope get() = destroyView.coroutineScope
 
 val Controller.rootRouter: Router
     get() {
@@ -53,21 +53,10 @@ inline fun <reified T : Activity> Controller.activity(): T = activity as T
 fun Controller.requireParentController(): Controller =
     parentController ?: error("parent Controller is null")
 
-fun Controller.requireTargetController(): Controller =
-    targetController ?: error("target Controller is null")
-
 inline fun <reified T : Controller> Controller.parentController(): T = requireParentController() as T
 
 inline fun <reified T : Controller> Controller.parentControllerOrNull(): T? = try {
     parentController()
-} catch (e: Exception) {
-    null
-}
-
-inline fun <reified T : Controller> Controller.targetController(): T = requireTargetController() as T
-
-inline fun <reified T : Controller> Controller.targetControllerOrNull(): T? = try {
-    targetController()
 } catch (e: Exception) {
     null
 }

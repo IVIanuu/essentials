@@ -45,7 +45,7 @@ data class TextInputKey(
  */
 class TextInputDialog : EsDialogController() {
 
-    override fun onBuildDialog(savedViewState: Bundle?): Dialog = dialog {
+    override fun onCreateDialog(savedViewState: Bundle?): Dialog = dialog {
         val key = get<TextInputKey>()
         noAutoDismiss()
         title(text = key.title)
