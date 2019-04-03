@@ -17,10 +17,10 @@
 buildscript {
     repositories {
         mavenLocal()
+        maven("https://dl.bintray.com/ivianuu/maven/")
         google()
         jcenter()
         mavenCentral()
-        maven("https://dl.bintray.com/ivianuu/maven/")
         maven("https://jitpack.io")
         maven("https://oss.sonatype.org/content/repositories/snapshots")
     }
@@ -36,10 +36,10 @@ buildscript {
 allprojects {
     repositories {
         mavenLocal()
+        maven("https://dl.bintray.com/ivianuu/maven/")
         google()
         jcenter()
         mavenCentral()
-        maven("https://dl.bintray.com/ivianuu/maven/")
         maven("https://jitpack.io")
         maven("https://oss.sonatype.org/content/repositories/snapshots")
     }

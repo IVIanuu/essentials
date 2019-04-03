@@ -21,14 +21,14 @@ import com.ivianuu.essentials.ui.viewmodel.doOnPostDestroy
 import com.ivianuu.scopes.AbstractScope
 import com.ivianuu.scopes.Scope
 import com.ivianuu.scopes.ScopeOwner
-import com.ivianuu.scopes.cache.ScopeStore
+import com.ivianuu.scopes.common.ScopeCache
 
 val ViewModel.scopeOwner: ScopeOwner
     get() = scopeCache.get(this) as ScopeOwner
 
 val ViewModel.scope: Scope get() = scopeOwner.scope
 
-private val scopeCache = ScopeStore(::ViewModelScope)
+private val scopeCache = ScopeCache(::ViewModelScope)
 
 private class ViewModelScope(viewModel: ViewModel) : AbstractScope(), ScopeOwner {
 

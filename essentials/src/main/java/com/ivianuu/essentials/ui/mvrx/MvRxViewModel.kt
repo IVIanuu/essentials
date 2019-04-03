@@ -20,7 +20,6 @@ import androidx.lifecycle.LifecycleOwner
 import com.ivianuu.closeable.Closeable
 import com.ivianuu.essentials.ui.common.EsViewModel
 import com.ivianuu.essentials.ui.mvrx.lifecycle.LifecycleStateListener
-import com.ivianuu.essentials.util.ext.addCloseableListener
 import com.ivianuu.essentials.util.ext.closeBy
 import com.ivianuu.statestore.Consumer
 import com.ivianuu.statestore.Reducer
@@ -49,7 +48,7 @@ abstract class MvRxViewModel<S>(initialState: S) : EsViewModel() {
     }
 
     protected fun subscribe(consumer: Consumer<S>): Closeable =
-        stateStore.addCloseableListener(consumer).closeBy(scope)
+        stateStore.addStateListener(consumer).closeBy(scope)
 
     fun subscribe(owner: LifecycleOwner, consumer: Consumer<S>): Closeable =
         LifecycleStateListener(
