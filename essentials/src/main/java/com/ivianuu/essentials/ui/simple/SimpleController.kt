@@ -114,12 +114,12 @@ abstract class SimpleController : EsController() {
     }
 
     override fun onDestroyView(view: View) {
-        modelController.cancelPendingModelBuild()
+        optionalModelController?.cancelPendingModelBuild()
         super.onDestroyView(view)
     }
 
     override fun invalidate() {
-        modelController.requestModelBuild()
+        optionalModelController?.requestModelBuild()
     }
 
     protected open fun modelController(): ModelController? = null
