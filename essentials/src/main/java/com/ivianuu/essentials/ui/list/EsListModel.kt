@@ -16,12 +16,7 @@
 
 package com.ivianuu.essentials.ui.list
 
-import android.content.Context
-import com.ivianuu.essentials.util.ContextAware
 import com.ivianuu.list.ListModel
-import com.ivianuu.scopes.ReusableScope
-import com.ivianuu.scopes.Scope
-import com.ivianuu.scopes.ScopeOwner
 
 /**
  * Base list model with holder
@@ -29,26 +24,4 @@ import com.ivianuu.scopes.ScopeOwner
 abstract class EsListModel<H : EsListHolder>(
     id: Any? = null,
     layoutRes: Int = -1
-) : ListModel<H>(id, layoutRes), ContextAware, ScopeOwner {
-
-    override lateinit var providedContext: Context
-
-    override val scope: Scope
-        get() {
-            if (_scope == null) _scope = ReusableScope()
-            return _scope!!
-        }
-
-    private var _scope: ReusableScope? = null
-
-    override fun bind(holder: H) {
-        _scope?.clear()
-        super.bind(holder)
-    }
-
-    override fun unbind(holder: H) {
-        _scope?.clear()
-        super.unbind(holder)
-    }
-
-}
+) : ListModel<H>(id, layoutRes)

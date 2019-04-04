@@ -36,7 +36,7 @@ open class SimpleLoadingModel : SimpleListModel(layoutRes = R.layout.es_item_sim
         if (progressColor != 0 || progressColorRes != 0) {
             val progressColor = when {
                 progressColor != 0 -> progressColor
-                progressColorRes != 0 -> color(progressColorRes)
+                progressColorRes != 0 -> holder.color(progressColorRes)
                 else -> 0
             }
 

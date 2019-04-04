@@ -61,7 +61,7 @@ object Versions {
     const val kPrefs = "0.0.1-dev-6"
     const val kSettings = "0.0.1-dev-4"
     const val list = "0.0.1-dev-19"
-    const val listPrefs = "0.0.1-dev-6"
+    const val listPrefs = "0.0.1-dev-7"
     const val liveEvent = "1e265df911"
     const val mavenGradle = "2.1"
     const val materialComponents = "1.1.0-alpha05"

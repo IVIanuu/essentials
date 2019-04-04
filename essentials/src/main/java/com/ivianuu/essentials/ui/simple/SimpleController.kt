@@ -46,12 +46,10 @@ abstract class SimpleController : EsController() {
     protected open val toolbarBackButton: Boolean get() = router.rootTransaction?.controller != this
     protected open val lightToolbar: Boolean get() = primaryColor().isLight
 
-    val optionalModelController: ModelController? get() = _modelController
+    val optionalModelController: ModelController? by lazy { modelController() }
     val modelController
         get() = optionalModelController
-            ?: error("no epoxy controller instantiated")
-
-    private var _modelController: ModelController? = null
+            ?: error("no model controller instantiated")
 
     val appBar get() = optionalAppBar ?: error("no app bar layout found")
     open val optionalAppBar: AppBarLayout?
@@ -110,21 +108,18 @@ abstract class SimpleController : EsController() {
         }
 
         optionalRecyclerView?.run {
-            _modelController = modelController()?.also {
-                adapter = it.adapter
-            }
+            adapter = optionalModelController?.adapter
             this@SimpleController.layoutManager()?.let { layoutManager = it }
         }
     }
 
     override fun onDestroyView(view: View) {
-        _modelController?.cancelPendingModelBuild()
-        _modelController = null
+        modelController.cancelPendingModelBuild()
         super.onDestroyView(view)
     }
 
     override fun invalidate() {
-        _modelController?.requestModelBuild()
+        modelController.requestModelBuild()
     }
 
     protected open fun modelController(): ModelController? = null
