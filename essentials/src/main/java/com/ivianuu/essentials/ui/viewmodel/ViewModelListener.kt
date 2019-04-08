@@ -31,8 +31,12 @@ interface ViewModelListener {
     fun postDestroy(viewModel: ViewModel) {
     }
 
+    fun onRestoreState(viewModel: ViewModel, savedState: SavedState) {
+    }
+
     fun onSaveState(viewModel: ViewModel, savedState: SavedState) {
     }
+
 }
 
 fun ViewModelListener(
@@ -40,6 +44,7 @@ fun ViewModelListener(
     postInitialize: ((viewModel: ViewModel, savedState: SavedState?) -> Unit)? = null,
     preDestroy: ((viewModel: ViewModel) -> Unit)? = null,
     postDestroy: ((viewModel: ViewModel) -> Unit)? = null,
+    onRestoreState: ((viewModel: ViewModel, savedState: SavedState) -> Unit)? = null,
     onSaveState: ((viewModel: ViewModel, savedState: SavedState) -> Unit)? = null
 ): ViewModelListener = LambdaViewModelListener(
     preInitialize, postInitialize, preDestroy, postDestroy, onSaveState
@@ -61,6 +66,10 @@ fun ViewModel.doOnPostDestroy(
     block: (viewModel: ViewModel) -> Unit
 ): ViewModelListener = addViewModelListener(postDestroy = block)
 
+fun ViewModel.doOnRestoreState(
+    block: (viewModel: ViewModel, savedState: SavedState) -> Unit
+): ViewModelListener = addViewModelListener(onRestoreState = block)
+
 fun ViewModel.doOnSaveState(
     block: (viewModel: ViewModel, savedState: SavedState) -> Unit
 ): ViewModelListener = addViewModelListener(onSaveState = block)
@@ -70,18 +79,20 @@ fun ViewModel.addViewModelListener(
     postInitialize: ((viewModel: ViewModel, savedState: SavedState?) -> Unit)? = null,
     preDestroy: ((viewModel: ViewModel) -> Unit)? = null,
     postDestroy: ((viewModel: ViewModel) -> Unit)? = null,
+    onRestoreState: ((viewModel: ViewModel, savedState: SavedState) -> Unit)? = null,
     onSaveState: ((viewModel: ViewModel, savedState: SavedState) -> Unit)? = null
 ): ViewModelListener = ViewModelListener(
-    preInitialize,
-    postInitialize, preDestroy, postDestroy, onSaveState
-)
-    .also(this::addListener)
+    preInitialize, postInitialize,
+    preDestroy, postDestroy,
+    onRestoreState, onSaveState
+).also(this::addListener)
 
 class LambdaViewModelListener(
     private val preInitialize: ((viewModel: ViewModel, savedState: SavedState?) -> Unit)? = null,
     private val postInitialize: ((viewModel: ViewModel, savedState: SavedState?) -> Unit)? = null,
     private val preDestroy: ((viewModel: ViewModel) -> Unit)? = null,
     private val postDestroy: ((viewModel: ViewModel) -> Unit)? = null,
+    private val onRestoreState: ((viewModel: ViewModel, savedState: SavedState) -> Unit)? = null,
     private val onSaveState: ((viewModel: ViewModel, savedState: SavedState) -> Unit)? = null
 ) : ViewModelListener {
     override fun preInitialize(viewModel: ViewModel, savedState: SavedState?) {
@@ -100,9 +111,15 @@ class LambdaViewModelListener(
         postDestroy?.invoke(viewModel)
     }
 
+    override fun onRestoreState(viewModel: ViewModel, savedState: SavedState) {
+        super.onRestoreState(viewModel, savedState)
+        onRestoreState?.invoke(viewModel, savedState)
+    }
+
     override fun onSaveState(viewModel: ViewModel, savedState: SavedState) {
         onSaveState?.invoke(viewModel, savedState)
     }
+
 }
 
 internal sealed class ViewModelListenerStore {

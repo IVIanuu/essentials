@@ -24,6 +24,9 @@ import com.ivianuu.essentials.util.savedStateOf
  */
 abstract class ViewModel {
 
+    var state: ViewModelState = ViewModelState.UNINITIALIZED
+        private set
+
     private val listeners = mutableSetOf<ViewModelListener>()
 
     private lateinit var listenerStore: ViewModelListenerStore
@@ -35,6 +38,10 @@ abstract class ViewModel {
     }
 
     protected open fun onDestroy() {
+        superCalled = true
+    }
+
+    protected open fun onRestoreState(savedState: SavedState) {
         superCalled = true
     }
 
@@ -55,15 +62,25 @@ abstract class ViewModel {
         savedState: SavedState?
     ) {
         this.listenerStore = listenerStore
+
         notifyListeners { it.preInitialize(this, savedState) }
+        state = ViewModelState.INITIALIZED
         requireSuperCalled { onInitialize(savedState) }
         notifyListeners { it.postInitialize(this, savedState) }
+
+        savedState?.let(this::restoreState)
     }
 
     internal fun destroy() {
         notifyListeners { it.preDestroy(this) }
+        state = ViewModelState.DESTROYED
         requireSuperCalled(this::onDestroy)
         notifyListeners { it.postDestroy(this) }
+    }
+
+    internal fun restoreState(savedState: SavedState) {
+        requireSuperCalled { onRestoreState(savedState) }
+        notifyListeners { it.onRestoreState(this, savedState) }
     }
 
     internal fun saveState(): SavedState {
