@@ -33,6 +33,10 @@ class ViewModelController(private val viewModel: ViewModel) {
         viewModel.initialize(ViewModelListenerStore.Global, savedState)
     }
 
+    fun restoreState(savedState: SavedState) {
+        viewModel.restoreState(savedState)
+    }
+
     fun saveState(): SavedState = viewModel.saveState()
 
     fun destroy() {
@@ -52,6 +56,10 @@ val ViewModel.controller: ViewModelController
 
 fun ViewModel.initialize(savedState: SavedState?) {
     controller.initialize(savedState)
+}
+
+fun ViewModel.restoreState(savedState: SavedState) {
+    controller.restoreState(savedState)
 }
 
 fun ViewModel.saveState(): SavedState = controller.saveState()
