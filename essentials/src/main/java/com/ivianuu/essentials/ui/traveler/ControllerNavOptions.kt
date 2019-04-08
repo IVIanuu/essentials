@@ -16,16 +16,11 @@
 
 package com.ivianuu.essentials.ui.traveler
 
-import com.ivianuu.director.ChangeHandler
-import com.ivianuu.director.DefaultChangeHandler
-import com.ivianuu.director.DirectorPlugins
-import com.ivianuu.director.Transaction
+import com.ivianuu.director.*
 import com.ivianuu.director.common.changehandler.FadeChangeHandler
 import com.ivianuu.director.common.changehandler.HorizontalChangeHandler
 import com.ivianuu.director.common.changehandler.VerticalChangeHandler
 import com.ivianuu.director.common.changehandler.defaultAnimationDuration
-import com.ivianuu.director.popChangeHandler
-import com.ivianuu.director.pushChangeHandler
 
 /**
  * Nav options for controllers
@@ -51,10 +46,10 @@ class ControllerNavOptions {
 
 fun NavOptions(): ControllerNavOptions = ControllerNavOptions()
 
-fun ControllerNavOptions.applyToTransaction(transaction: Transaction): ControllerNavOptions =
+fun ControllerNavOptions.applyToController(controller: Controller): ControllerNavOptions =
     apply {
-    transaction.pushChangeHandler(push())
-    transaction.popChangeHandler(pop())
+        controller.pushChangeHandler(push())
+        controller.popChangeHandler(pop())
 }
 
 fun ControllerNavOptions.handler(

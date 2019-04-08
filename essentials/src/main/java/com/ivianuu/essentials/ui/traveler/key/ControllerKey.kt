@@ -19,10 +19,9 @@ package com.ivianuu.essentials.ui.traveler.key
 import android.os.Bundle
 import android.os.Parcelable
 import com.ivianuu.director.Controller
-import com.ivianuu.director.Transaction
 import com.ivianuu.director.traveler.ControllerKey
 import com.ivianuu.essentials.ui.traveler.ControllerNavOptions
-import com.ivianuu.essentials.ui.traveler.applyToTransaction
+import com.ivianuu.essentials.ui.traveler.applyToController
 import com.ivianuu.essentials.util.ext.unsafeLazy
 import com.ivianuu.stdlibx.safeAsOrElse
 import com.ivianuu.traveler.Command
@@ -38,12 +37,12 @@ abstract class ControllerKey(
         addTo(it.args)
     }
 
-    override fun setupTransaction(
+    override fun setupController(
         command: Command,
         currentController: Controller?,
-        nextController: Controller,
-        transaction: Transaction
+        nextController: Controller
     ) {
+        super.setupController(command, currentController, nextController)
         val data = when (command) {
             is Forward -> command.data
             is Replace -> command.data
@@ -51,7 +50,7 @@ abstract class ControllerKey(
         }
 
         data.safeAsOrElse { defaultNavOptions }
-            ?.applyToTransaction(transaction)
+            ?.applyToController(nextController)
     }
 
 }

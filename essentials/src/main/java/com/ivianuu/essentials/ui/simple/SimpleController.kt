@@ -43,7 +43,7 @@ abstract class SimpleController : EsController() {
     protected open val toolbarTitle: String? get() = null
     protected open val toolbarTitleRes: Int get() = 0
     protected open val toolbarMenuRes: Int get() = 0
-    protected open val toolbarBackButton: Boolean get() = router.rootTransaction?.controller != this
+    protected open val toolbarBackButton: Boolean get() = router.rootController != this
     protected open val lightToolbar: Boolean get() = primaryColor().isLight
 
     val optionalModelController: ModelController? by lazy { modelController() }

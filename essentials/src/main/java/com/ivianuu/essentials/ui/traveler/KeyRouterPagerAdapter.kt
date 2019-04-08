@@ -16,8 +16,11 @@
 
 package com.ivianuu.essentials.ui.traveler
 
-import com.ivianuu.director.*
+import com.ivianuu.director.Router
+import com.ivianuu.director.RouterManager
+import com.ivianuu.director.hasRoot
 import com.ivianuu.director.pager.RouterPagerAdapter
+import com.ivianuu.director.setRoot
 import com.ivianuu.director.traveler.ControllerKey
 
 /**
@@ -33,7 +36,6 @@ open class KeyRouterPagerAdapter(
             router.setRoot(
                 getKey(position)
                     .createController(null)
-                    .toTransaction()
             )
         }
     }
