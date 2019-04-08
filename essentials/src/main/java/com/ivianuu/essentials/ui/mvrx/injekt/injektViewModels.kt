@@ -23,16 +23,19 @@ import com.ivianuu.essentials.ui.mvrx.mvRxViewModel
 import com.ivianuu.essentials.ui.viewmodel.ViewModelManagerOwner
 import com.ivianuu.essentials.ui.viewmodel.defaultViewModelKey
 import com.ivianuu.injekt.InjektTrait
+import com.ivianuu.injekt.ParametersDefinition
 import com.ivianuu.injekt.get
 
 interface InjektMvRxView : InjektTrait, MvRxView
 
 inline fun <reified T : MvRxViewModel<*>> InjektMvRxView.mvRxViewModel(
     noinline from: () -> ViewModelManagerOwner = { this },
-    noinline key: () -> String = { T::class.defaultViewModelKey }
-): Lazy<T> = mvRxViewModel<T>(from, key) { get() }
+    noinline key: () -> String = { T::class.defaultViewModelKey },
+    noinline parameters: ParametersDefinition? = null
+): Lazy<T> = mvRxViewModel<T>(from, key) { get(parameters = parameters) }
 
 inline fun <reified T : MvRxViewModel<*>> InjektMvRxView.getMvRxViewModel(
     from: ViewModelManagerOwner = this,
-    key: String = T::class.defaultViewModelKey
-): T = getMvRxViewModel<T>(from, key) { get() }
+    key: String = T::class.defaultViewModelKey,
+    noinline parameters: ParametersDefinition? = null
+): T = getMvRxViewModel<T>(from, key) { get(parameters = parameters) }
