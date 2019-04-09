@@ -30,7 +30,7 @@ object Build {
 object Publishing {
     const val groupId = "com.ivianuu.essentials"
     const val vcsUrl = "https://github.com/IVIanuu/essentials"
-    const val version = "${Build.versionName}-dev-60"
+    const val version = "${Build.versionName}-dev-61"
 }
 
 object Versions {
@@ -40,7 +40,7 @@ object Versions {
     const val androidxCardView = "1.0.0"
     const val androidxCore = "1.0.1"
     const val androidxLifecycle = "2.0.0"
-    const val androidxWork = "1.0.0"
+    const val androidxWork = "2.0.0"
 
     const val androidxTestCore = "1.0.0"
     const val androidxTestJunit = "1.0.0"
@@ -51,7 +51,7 @@ object Versions {
 
     const val closeable = "0.0.1-dev-2"
     const val constraintLayout = "2.0.0-alpha3"
-    const val coroutines = "1.1.0"
+    const val coroutines = "1.2.0-alpha-2"
     const val director = "0.0.1-dev-24"
     const val glide = "4.8.0"
     const val injekt = "0.0.1-dev-20"
@@ -89,7 +89,9 @@ object Deps {
     const val androidxCoreKtx = "androidx.core:core-ktx:${Versions.androidxCore}"
     const val androidxLifecycleExtensions =
         "androidx.lifecycle:lifecycle-extensions:${Versions.androidxLifecycle}"
-    const val androidxWorkRuntime = "android.arch.work:work-runtime-ktx:${Versions.androidxWork}"
+    const val androidxWork = "androidx.work:work-runtime:${Versions.androidxWork}"
+    const val androidxWorkKtx = "androidx.work:work-runtime-ktx:${Versions.androidxWork}"
+    const val androidxWorkRxJava = "androidx.work:work-rxjava2:${Versions.androidxWork}"
 
     const val androidxTestCore = "androidx.test:core:${Versions.androidxTestCore}"
     const val androidxTestJunit = "androidx.test.ext:junit:${Versions.androidxTestJunit}"
