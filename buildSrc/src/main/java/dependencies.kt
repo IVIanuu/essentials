@@ -51,7 +51,7 @@ object Versions {
 
     const val closeable = "0.0.1-dev-2"
     const val constraintLayout = "2.0.0-alpha3"
-    const val coroutines = "1.2.0-alpha-2"
+    const val coroutines = "1.1.0"
     const val director = "0.0.1-dev-24"
     const val glide = "4.8.0"
     const val injekt = "0.0.1-dev-20"
