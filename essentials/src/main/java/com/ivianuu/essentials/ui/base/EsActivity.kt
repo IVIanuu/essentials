@@ -20,7 +20,7 @@ import android.os.Bundle
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import com.ivianuu.director.Router
-import com.ivianuu.director.fragmenthost.getRouter
+import com.ivianuu.director.fragment.getRouter
 import com.ivianuu.director.hasRoot
 import com.ivianuu.director.traveler.ControllerNavigator
 import com.ivianuu.essentials.R

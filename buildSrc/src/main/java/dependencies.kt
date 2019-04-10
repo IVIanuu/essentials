@@ -30,7 +30,7 @@ object Build {
 object Publishing {
     const val groupId = "com.ivianuu.essentials"
     const val vcsUrl = "https://github.com/IVIanuu/essentials"
-    const val version = "${Build.versionName}-dev-61"
+    const val version = "${Build.versionName}-dev-62"
 }
 
 object Versions {
@@ -52,7 +52,7 @@ object Versions {
     const val closeable = "0.0.1-dev-2"
     const val constraintLayout = "2.0.0-alpha3"
     const val coroutines = "1.1.0"
-    const val director = "0.0.1-dev-24"
+    const val director = "0.0.1-dev-25"
     const val glide = "4.8.0"
     const val injekt = "0.0.1-dev-20"
     const val junit = "4.12"
@@ -122,7 +122,7 @@ object Deps {
         "com.ivianuu.director:director-androidx-lifecycle:${Versions.director}"
     const val directorCommon = "com.ivianuu.director:director-common:${Versions.director}"
     const val directorDialog = "com.ivianuu.director:director-dialog:${Versions.director}"
-    const val directorFragmentHost = "com.ivianuu.director:director-fragmenthost:${Versions.director}"
+    const val directorFragment = "com.ivianuu.director:director-fragment:${Versions.director}"
     const val directorPager =
         "com.ivianuu.director:director-pager:${Versions.director}"
     const val directorRetained = "com.ivianuu.director:director-retained:${Versions.director}"

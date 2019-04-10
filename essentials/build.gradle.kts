@@ -53,7 +53,7 @@ dependencies {
     api(Deps.directorAndroidxLifecycle)
     api(Deps.directorCommon)
     api(Deps.directorDialog)
-    api(Deps.directorFragmentHost)
+    api(Deps.directorFragment)
     api(Deps.directorPager)
     api(Deps.directorScopes)
     api(Deps.directorTraveler)
