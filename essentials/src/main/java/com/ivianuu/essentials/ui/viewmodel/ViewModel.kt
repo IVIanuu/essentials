@@ -68,13 +68,13 @@ abstract class ViewModel {
         requireSuperCalled { onInitialize(savedState) }
         notifyListeners { it.postInitialize(this, savedState) }
 
-        savedState?.let(this::restoreState)
+        savedState?.let { restoreState(it) }
     }
 
     internal fun destroy() {
         notifyListeners { it.preDestroy(this) }
         state = ViewModelState.DESTROYED
-        requireSuperCalled(this::onDestroy)
+        requireSuperCalled { onDestroy() }
         notifyListeners { it.postDestroy(this) }
     }
 

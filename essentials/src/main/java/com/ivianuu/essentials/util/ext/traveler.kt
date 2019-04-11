@@ -37,7 +37,7 @@ inline fun <reified T : Any> Router.results(resultCode: Int): Observable<T> =
 fun <T : Any> Router.results(type: KClass<T>, resultCode: Int): Observable<T> {
     return results
         .filter { it.resultCode == resultCode }
-        .map(Result::result)
+        .map { it.result }
         .ofType(type.java)
 }
 

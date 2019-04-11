@@ -21,13 +21,9 @@ import android.content.pm.ApplicationInfo
 import com.ivianuu.essentials.injection.esModule
 import com.ivianuu.essentials.injection.injectProviderClassMap
 import com.ivianuu.essentials.util.ext.containsFlag
-import com.ivianuu.injekt.Component
-import com.ivianuu.injekt.InjektTrait
-import com.ivianuu.injekt.Module
+import com.ivianuu.injekt.*
 import com.ivianuu.injekt.android.androidLogger
 import com.ivianuu.injekt.android.applicationComponent
-import com.ivianuu.injekt.configureInjekt
-import com.ivianuu.injekt.modules
 import com.ivianuu.scopes.MutableScope
 import com.ivianuu.scopes.Scope
 import com.ivianuu.scopes.ScopeOwner
@@ -77,18 +73,18 @@ abstract class EsApp : Application(), InjektTrait, ScopeOwner {
 
     protected open fun onInitialize() {
         appInitializers
-            .filterKeys(this::shouldInitialize)
+            .filterKeys { shouldInitialize(it) }
             .map { it.value.get() }
-            .forEach(AppInitializer::initialize)
+            .forEach { it.initialize() }
     }
 
     protected open fun shouldInitialize(type: KClass<out AppInitializer>): Boolean = true
 
     protected open fun onStartAppServices() {
         appServices
-            .filterKeys(this::shouldStartAppService)
+            .filterKeys { shouldStartAppService(it) }
             .map { it.value.get() }
-            .forEach(AppService::start)
+            .forEach { it.start() }
     }
 
     protected open fun shouldStartAppService(type: KClass<out AppService>): Boolean = true

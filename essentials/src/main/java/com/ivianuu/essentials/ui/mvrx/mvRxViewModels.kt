@@ -23,7 +23,7 @@ import com.ivianuu.kommon.lifecycle.defaultViewModelKey
 
 inline fun <reified T : MvRxViewModel<*>> MvRxView.mvRxViewModel(
     noinline from: () -> ViewModelManagerOwner = { this },
-    noinline key: () -> String = T::class::defaultViewModelKey,
+    noinline key: () -> String = { T::class.defaultViewModelKey },
     noinline factory: () -> T
 ): Lazy<T> = lifecycleLazy { getMvRxViewModel(from(), key(), factory) }
 

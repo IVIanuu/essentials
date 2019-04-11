@@ -20,15 +20,8 @@ import com.ivianuu.director.Controller
 import com.ivianuu.director.activity
 import com.ivianuu.director.application
 import com.ivianuu.director.parentController
-import com.ivianuu.injekt.Component
-import com.ivianuu.injekt.ComponentDefinition
-import com.ivianuu.injekt.InjektTrait
-import com.ivianuu.injekt.StringQualifier
-import com.ivianuu.injekt.StringScope
+import com.ivianuu.injekt.*
 import com.ivianuu.injekt.common.addConstant
-import com.ivianuu.injekt.component
-import com.ivianuu.injekt.dependencies
-import com.ivianuu.injekt.scopes
 
 object PerController : StringScope("PerController")
 object PerChildController : StringScope("PerChildController")
@@ -46,7 +39,7 @@ inline fun <reified T : Controller> T.controllerComponent(
     scopes(PerController)
     (getParentControllerComponentOrNull()
         ?: getActivityComponentOrNull()
-        ?: getApplicationComponentOrNull())?.let(this::dependencies)
+        ?: getApplicationComponentOrNull())?.let { dependencies(it) }
     addConstant(this@controllerComponent)
     definition.invoke(this)
 }
@@ -61,7 +54,7 @@ inline fun <reified T : Controller> T.childControllerComponent(
     scopes(PerChildController)
     (getParentControllerComponentOrNull()
         ?: getActivityComponentOrNull()
-        ?: getApplicationComponentOrNull())?.let(this::dependencies)
+        ?: getApplicationComponentOrNull())?.let { dependencies(it) }
     addConstant(this@childControllerComponent)
     definition.invoke(this)
 }

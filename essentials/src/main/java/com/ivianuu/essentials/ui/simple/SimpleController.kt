@@ -85,7 +85,7 @@ abstract class SimpleController : EsController() {
 
             if (toolbarMenuRes != 0) {
                 inflateMenu(toolbarMenuRes)
-                setOnMenuItemClickListener(this@SimpleController::onToolbarMenuItemClicked)
+                setOnMenuItemClickListener { this@SimpleController.onToolbarMenuItemClicked(it) }
             }
 
             if (toolbarBackButton) {

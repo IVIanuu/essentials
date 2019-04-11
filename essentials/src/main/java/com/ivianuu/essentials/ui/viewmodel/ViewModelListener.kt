@@ -85,7 +85,7 @@ fun ViewModel.addViewModelListener(
     preInitialize, postInitialize,
     preDestroy, postDestroy,
     onRestoreState, onSaveState
-).also(this::addListener)
+).also { addListener(it) }
 
 class LambdaViewModelListener(
     private val preInitialize: ((viewModel: ViewModel, savedState: SavedState?) -> Unit)? = null,

@@ -72,7 +72,7 @@ abstract class CheckableAppsController : SimpleController() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel.checkedAppsChanged
-            .subscribe(this::onCheckedAppsChanged)
+            .subscribe { onCheckedAppsChanged(it) }
             .disposeBy(destroy)
 
         viewModel.attachCheckedAppsObservable(getCheckedAppsObservable())
@@ -181,7 +181,7 @@ class CheckableAppsViewModel(
     }
 
     fun attachCheckedAppsObservable(observable: Observable<Set<String>>) {
-        observable.subscribe(checkedApps::onNext)
+        observable.subscribe { checkedApps.onNext(it) }
             .disposeBy(checkedAppsScope)
     }
 
@@ -209,7 +209,7 @@ class CheckableAppsViewModel(
                 }
             }
             R.id.es_action_deselect_all -> {
-                pushNewCheckedApps(MutableSet<String>::clear)
+                pushNewCheckedApps { it.clear() }
             }
         }
     }
@@ -218,7 +218,7 @@ class CheckableAppsViewModel(
         checkedApps
             .take(1)
             .map { it.toMutableSet().also(reducer) }
-            .subscribe(_checkedAppsChanged::onNext)
+            .subscribe { _checkedAppsChanged.onNext(it) }
             .disposeBy(scope)
     }
 }

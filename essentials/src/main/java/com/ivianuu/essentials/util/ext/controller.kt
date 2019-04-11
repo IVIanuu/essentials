@@ -16,8 +16,6 @@
 
 package com.ivianuu.essentials.util.ext
 
-import android.app.Activity
-import android.app.Application
 import android.view.View
 import com.ivianuu.director.Controller
 import com.ivianuu.director.Router
@@ -28,7 +26,6 @@ import com.ivianuu.director.scopes.destroyView
 import com.ivianuu.essentials.util.coroutineScope
 import com.ivianuu.kommon.core.app.hideInputMethod
 import com.ivianuu.kommon.core.app.showInputMethod
-import com.ivianuu.kommon.core.content.app
 
 val Controller.coroutineScope get() = destroy.coroutineScope
 val Controller.viewCoroutineScope get() = destroyView.coroutineScope
@@ -48,17 +45,5 @@ fun Controller.showInputMethod(view: View, flags: Int = 0) {
     activity.showInputMethod(view, flags)
 }
 
-inline fun <reified T : Activity> Controller.activity(): T = activity as T
-
 fun Controller.requireParentController(): Controller =
     parentController ?: error("parent Controller is null")
-
-inline fun <reified T : Controller> Controller.parentController(): T = requireParentController() as T
-
-inline fun <reified T : Controller> Controller.parentControllerOrNull(): T? = try {
-    parentController()
-} catch (e: Exception) {
-    null
-}
-
-inline fun <reified T : Application> Controller.app(): T = activity.app()

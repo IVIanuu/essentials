@@ -57,7 +57,7 @@ class NavBarController(
 
     override fun start() {
         prefs.manageNavBar.observable()
-            .subscribe(this::updateEnabledState)
+            .subscribe { updateEnabledState(it) }
             .disposeBy(scope)
     }
 
@@ -89,7 +89,7 @@ class NavBarController(
                         && (!prefs.showNavBarScreenOff.get()
                         || (!keyguardManager.isKeyguardLocked && app.isScreenOn))
             }
-            .subscribe(this::updateNavBarState)
+            .subscribe { updateNavBarState(it) }
             .disposeBy(enabledScope)
 
         // force show on shut downs
@@ -196,7 +196,7 @@ class NavBarController(
 
         }
 
-        e.setCancellable(listener::disable)
+        e.setCancellable { listener.disable() }
 
         listener.enable()
 
