@@ -21,78 +21,78 @@ import com.ivianuu.director.Controller
 
 import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
 import com.ivianuu.essentials.ui.mvrx.withState
-import com.ivianuu.list.ModelController
-import com.ivianuu.list.common.modelController
+import com.ivianuu.list.ItemController
+import com.ivianuu.list.common.itemController
 
-fun <A : MvRxViewModel<B>, B> Any.mvRxModelController(
+fun <A : MvRxViewModel<B>, B> Any.mvRxItemController(
     viewModel1: A,
-    buildModels: ModelController.(state: B) -> Unit
-): ModelController = modelController {
-    if (this@mvRxModelController is Controller && view == null
-    ) return@modelController
-    withState(viewModel1) { buildModels.invoke(this, it) }
+    buildItems: ItemController.(state: B) -> Unit
+): ItemController = itemController {
+    if (this@mvRxItemController is Controller && view == null
+    ) return@itemController
+    withState(viewModel1) { buildItems.invoke(this, it) }
 }
 
-fun <A : MvRxViewModel<B>, B, C : MvRxViewModel<D>, D> Any.simpleModelController(
+fun <A : MvRxViewModel<B>, B, C : MvRxViewModel<D>, D> Any.simpleItemController(
     viewModel1: A,
     viewModel2: C,
-    buildModels: ModelController.(state1: B, state2: D) -> Unit
-): ModelController = modelController {
-    if (this@simpleModelController is Controller && view == null
-    ) return@modelController
+    buildItems: ItemController.(state1: B, state2: D) -> Unit
+): ItemController = itemController {
+    if (this@simpleItemController is Controller && view == null
+    ) return@itemController
     withState(
         viewModel1,
         viewModel2
-    ) { state1, state2 -> buildModels.invoke(this, state1, state2) }
+    ) { state1, state2 -> buildItems.invoke(this, state1, state2) }
 }
 
-fun <A : MvRxViewModel<B>, B, C : MvRxViewModel<D>, D, E : MvRxViewModel<F>, F> Any.simpleModelController(
+fun <A : MvRxViewModel<B>, B, C : MvRxViewModel<D>, D, E : MvRxViewModel<F>, F> Any.simpleItemController(
     viewModel1: A,
     viewModel2: C,
     viewModel3: E,
-    buildModels: ModelController.(state1: B, state2: D, state3: F) -> Unit
-): ModelController = modelController {
-    if (this@simpleModelController is Controller && view == null
-    ) return@modelController
+    buildItems: ItemController.(state1: B, state2: D, state3: F) -> Unit
+): ItemController = itemController {
+    if (this@simpleItemController is Controller && view == null
+    ) return@itemController
     withState(
         viewModel1,
         viewModel2,
         viewModel3
     ) { state1, state2, state3 ->
-        buildModels.invoke(this, state1, state2, state3)
+        buildItems.invoke(this, state1, state2, state3)
     }
 }
 
 fun <A : MvRxViewModel<B>,
         B,
-        C : MvRxViewModel<D>, D, E : MvRxViewModel<F>, F, G : MvRxViewModel<H>, H> Any.simpleModelController(
+        C : MvRxViewModel<D>, D, E : MvRxViewModel<F>, F, G : MvRxViewModel<H>, H> Any.simpleItemController(
     viewModel1: A,
     viewModel2: C,
     viewModel3: E,
     viewModel4: G,
-    buildModels: ModelController.(state1: B, state2: D, state3: F, state4: H) -> Unit
-): ModelController = modelController {
-    if (this@simpleModelController is Controller && view == null
-    ) return@modelController
+    buildItems: ItemController.(state1: B, state2: D, state3: F, state4: H) -> Unit
+): ItemController = itemController {
+    if (this@simpleItemController is Controller && view == null
+    ) return@itemController
     withState(
         viewModel1,
         viewModel2,
         viewModel3,
         viewModel4
     ) { state1, state2, state3, state4 ->
-        buildModels.invoke(this, state1, state2, state3, state4)
+        buildItems.invoke(this, state1, state2, state3, state4)
     }
 }
 
-fun <A : MvRxViewModel<B>, B, C : MvRxViewModel<D>, D, E : MvRxViewModel<F>, F, G : MvRxViewModel<H>, H, I : MvRxViewModel<J>, J> Any.simpleModelController(
+fun <A : MvRxViewModel<B>, B, C : MvRxViewModel<D>, D, E : MvRxViewModel<F>, F, G : MvRxViewModel<H>, H, I : MvRxViewModel<J>, J> Any.simpleItemController(
     viewModel1: A,
     viewModel2: C,
     viewModel3: E,
     viewModel4: G,
     viewModel5: I,
-    buildModels: ModelController.(state1: B, state2: D, state3: F, state4: H, state5: J) -> Unit
-): ModelController = modelController {
-    if (this@simpleModelController is Controller && view == null) return@modelController
+    buildItems: ItemController.(state1: B, state2: D, state3: F, state4: H, state5: J) -> Unit
+): ItemController = itemController {
+    if (this@simpleItemController is Controller && view == null) return@itemController
     withState(
         viewModel1,
         viewModel2,
@@ -100,6 +100,6 @@ fun <A : MvRxViewModel<B>, B, C : MvRxViewModel<D>, D, E : MvRxViewModel<F>, F, 
         viewModel4,
         viewModel5
     ) { state1, state2, state3, state4, state5 ->
-        buildModels.invoke(this, state1, state2, state3, state4, state5)
+        buildItems.invoke(this, state1, state2, state3, state4, state5)
     }
 }

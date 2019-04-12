@@ -25,11 +25,11 @@ import com.ivianuu.director.scopes.destroy
 import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.AppStore
 import com.ivianuu.essentials.apps.glide.AppIcon
-import com.ivianuu.essentials.ui.list.EsListHolder
-import com.ivianuu.essentials.ui.list.SimpleListModel
-import com.ivianuu.essentials.ui.list.SimpleLoadingModel
+import com.ivianuu.essentials.ui.list.EsHolder
+import com.ivianuu.essentials.ui.list.SimpleItem
+import com.ivianuu.essentials.ui.list.SimpleLoadingItem
 import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
-import com.ivianuu.essentials.ui.mvrx.list.mvRxModelController
+import com.ivianuu.essentials.ui.mvrx.list.mvRxItemController
 import com.ivianuu.essentials.ui.mvrx.mvRxViewModel
 import com.ivianuu.essentials.ui.simple.SimpleController
 import com.ivianuu.essentials.util.SavedState
@@ -39,9 +39,8 @@ import com.ivianuu.injekt.annotations.Factory
 import com.ivianuu.injekt.annotations.Param
 import com.ivianuu.injekt.get
 import com.ivianuu.injekt.parametersOf
-
-import com.ivianuu.list.common.onClick
 import com.ivianuu.list.id
+
 import com.ivianuu.rxjavaktx.BehaviorSubject
 import com.ivianuu.rxjavaktx.PublishSubject
 import com.ivianuu.scopes.ReusableScope
@@ -83,17 +82,16 @@ abstract class CheckableAppsController : SimpleController() {
         super.onDestroy()
     }
 
-    override fun modelController() = mvRxModelController(viewModel) { state ->
+    override fun itemController() = mvRxItemController(viewModel) { state ->
         if (state.loading) {
-            SimpleLoadingModel {
+            SimpleLoadingItem {
                 id("loading")
             }
         } else {
             state.apps.forEach { app ->
                 CheckableAppModel().add {
-                    id(app.info.packageName)
                     this.app = app
-                    onClick { _, _ -> viewModel.appClicked(app) }
+                    onClick { viewModel.appClicked(app) }
                 }
             }
         }
@@ -109,14 +107,11 @@ abstract class CheckableAppsController : SimpleController() {
     abstract fun onCheckedAppsChanged(apps: Set<String>)
 }
 
-private class CheckableAppModel : SimpleListModel() {
+private class CheckableAppModel : SimpleItem(layoutRes = R.layout.es_item_checkable_app) {
 
-    var app by requiredProperty<CheckableApp>("app")
+    var app by idProperty<CheckableApp>()
 
-    override val layoutRes: Int
-        get() = R.layout.es_item_checkable_app
-
-    override fun bind(holder: EsListHolder) {
+    override fun bind(holder: EsHolder) {
         super.bind(holder)
         with(holder) {
             Glide.with(icon)

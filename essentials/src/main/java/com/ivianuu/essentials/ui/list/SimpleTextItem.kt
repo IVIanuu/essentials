@@ -17,27 +17,26 @@
 package com.ivianuu.essentials.ui.list
 
 import com.ivianuu.essentials.R
-import com.ivianuu.list.ListModelFactory
-
+import com.ivianuu.list.ItemFactory
 import kotlinx.android.synthetic.main.es_item_simple_text.es_text
 
 /**
  * Simple text model
  */
-open class SimpleTextModel : SimpleListModel(layoutRes = R.layout.es_item_simple_text) {
+open class SimpleTextItem : SimpleItem(layoutRes = R.layout.es_item_simple_text) {
 
-    var text by property("text") { "" }
-    var textRes by property("textRes") { 0 }
+    var text by optionalProperty<String>()
+    var textRes by property { 0 }
 
-    override fun bind(holder: EsListHolder) {
+    override fun bind(holder: EsHolder) {
         super.bind(holder)
         when {
-            text.isNotEmpty() -> holder.es_text.text = text
+            text != null -> holder.es_text.text = text
             textRes != 0 -> holder.es_text.setText(textRes)
             else -> error("you must specify one of text or textRes")
         }
     }
 
-    companion object : ListModelFactory<SimpleTextModel>(::SimpleTextModel)
+    companion object : ItemFactory<SimpleTextItem>(::SimpleTextItem)
 
 }

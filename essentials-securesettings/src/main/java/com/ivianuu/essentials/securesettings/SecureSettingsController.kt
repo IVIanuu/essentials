@@ -29,7 +29,7 @@ import com.ivianuu.essentials.util.ext.goBackWithResult
 import com.ivianuu.essentials.util.ext.sendResult
 import com.ivianuu.essentials.util.ext.toast
 import com.ivianuu.injekt.inject
-import com.ivianuu.list.common.modelController
+import com.ivianuu.list.common.itemController
 import com.ivianuu.listprefs.summary
 import com.ivianuu.listprefs.title
 import com.ivianuu.traveler.navigate
@@ -53,8 +53,8 @@ class SecureSettingsController : PrefsController() {
     private val key by inject<SecureSettingsKey>()
     private val shell by inject<Shell>()
 
-    override fun modelController() = modelController {
-        PreferenceModel {
+    override fun itemController() = itemController {
+        PreferenceItem {
             key = "secure_settings_header"
             summary(
                 if (this@SecureSettingsController.key.showHideNavBarHint) {
@@ -65,24 +65,25 @@ class SecureSettingsController : PrefsController() {
             )
         }
 
-        PreferenceModel {
+        PreferenceItem {
             key = "use_pc"
             title(R.string.es_pref_title_use_pc)
             summary(R.string.es_pref_summary_use_pc)
-            onClick = {
+            onClick {
                 travelerRouter.navigate(
                     SecureSettingsPcInstructionsKey(),
                     NavOptions().handler(VerticalFadeChangeHandler())
                 )
-                true
+
+                return@onClick true
             }
         }
 
-        PreferenceModel {
+        PreferenceItem {
             key = "use_root"
             title(R.string.es_pref_title_use_root)
             summary(R.string.es_pref_summary_use_root)
-            onClick = {
+            onClick {
                 coroutineScope.launch {
                     try {
                         shell.run("pm grant ${activity.packageName} android.permission.WRITE_SECURE_SETTINGS")
@@ -93,7 +94,7 @@ class SecureSettingsController : PrefsController() {
                     }
                 }
 
-                true
+                return@onClick true
             }
         }
     }

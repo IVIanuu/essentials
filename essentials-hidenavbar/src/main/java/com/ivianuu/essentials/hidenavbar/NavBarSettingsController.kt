@@ -28,9 +28,10 @@ import com.ivianuu.essentials.util.ext.fromEnumPref
 import com.ivianuu.essentials.util.ext.fromPref
 import com.ivianuu.essentials.util.ext.results
 import com.ivianuu.injekt.inject
-import com.ivianuu.list.common.modelController
+import com.ivianuu.list.common.itemController
 import com.ivianuu.listprefs.*
 import com.ivianuu.scopes.rx.disposeBy
+import com.ivianuu.stdlibx.cast
 import com.ivianuu.traveler.navigate
 import kotlinx.android.parcel.Parcelize
 
@@ -70,24 +71,25 @@ class NavBarSettingsController : PrefsController() {
             .disposeBy(destroy)
     }
 
-    override fun modelController() = modelController {
+    override fun itemController() = itemController {
         if (key.showMainSwitch) {
-            SwitchPreferenceModel {
+            SwitchPreferenceItem {
                 fromPref(prefs.manageNavBar)
                 sharedPreferences = navBarSharedPrefs
                 title(R.string.es_pref_title_manage_nav_bar)
-                onChange<Boolean> { _, newValue ->
+                onChange { newValue ->
+                    newValue as Boolean
                     if (!newValue || canWriteSecureSettings()) {
-                        true
+                        return@onChange true
                     } else if (newValue) {
                         travelerRouter.navigate(
                             SecureSettingsKey(
                                 RESULT_CODE_MAIN_SWITCH, true
                             )
                         )
-                        false
+                        return@onChange false
                     } else {
-                        true
+                        return@onChange true
                     }
                 }
             }
@@ -96,30 +98,31 @@ class NavBarSettingsController : PrefsController() {
         val mainSwitchEnabled = prefs.manageNavBar.get()
 
         if (key.showNavBarHidden) {
-            SwitchPreferenceModel {
+            SwitchPreferenceItem {
                 fromPref(prefs.navBarHidden)
                 sharedPreferences = navBarSharedPrefs
                 title(R.string.es_pref_title_nav_bar_hidden)
                 summary(R.string.es_pref_summary_nav_bar_hidden)
                 enabled = mainSwitchEnabled
-                onChange<Boolean> { _, newValue ->
+                onChange { newValue ->
+                    newValue as Boolean
                     if (canWriteSecureSettings() || !newValue) {
-                        true
+                        return@onChange true
                     } else if (newValue) {
                         travelerRouter.navigate(
                             SecureSettingsKey(
                                 RESULT_CODE_NAV_BAR_HIDDEN, true
                             )
                         )
-                        false
+                        return@onChange false
                     } else {
-                        true
+                        return@onChange true
                     }
                 }
             }
         }
 
-        SingleItemListPreferenceModel {
+        SingleItemListPreferenceItem {
             fromEnumPref(prefs.rotationMode)
             sharedPreferences = navBarSharedPrefs
             title(R.string.es_pref_title_nav_bar_rotation_mode)
@@ -129,7 +132,7 @@ class NavBarSettingsController : PrefsController() {
             enabled = mainSwitchEnabled
         }
 
-        CheckboxPreferenceModel {
+        CheckboxPreferenceItem {
             fromPref(prefs.showNavBarScreenOff)
             sharedPreferences = navBarSharedPrefs
             title(R.string.es_pref_title_show_nav_bar_screen_off)

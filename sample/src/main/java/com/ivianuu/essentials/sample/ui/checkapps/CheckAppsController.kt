@@ -46,9 +46,6 @@ class CheckAppsController : CheckableAppsController() {
 
     override fun getCheckedAppsObservable(): Observable<Set<String>> =
         pref.observable()
-            .doOnNext {
-                d { "send checked apps $it" }
-            }
 
     override fun onCheckedAppsChanged(apps: Set<String>) {
         pref.set(apps)

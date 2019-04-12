@@ -18,24 +18,24 @@ package com.ivianuu.essentials.util.ext
 
 import com.ivianuu.kprefs.Pref
 import com.ivianuu.kprefs.common.PrefValueHolder
-import com.ivianuu.listprefs.PreferenceModel
+import com.ivianuu.listprefs.PreferenceItem
 import com.ivianuu.listprefs.dependency
 
-fun <T : Any> PreferenceModel.fromPref(pref: Pref<T>) {
+fun <T : Any> PreferenceItem.fromPref(pref: Pref<T>) {
     key = pref.key
     defaultValue = pref.defaultValue
 }
 
-fun <T, S> PreferenceModel.fromEnumPref(pref: Pref<T>) where T : Enum<T>, T : PrefValueHolder<S> {
+fun <T, S> PreferenceItem.fromEnumPref(pref: Pref<T>) where T : Enum<T>, T : PrefValueHolder<S> {
     key = pref.key
     defaultValue = pref.get().value
 }
 
-fun <T : Any> PreferenceModel.dependency(dependency: Pref<T>, value: T) {
+fun <T : Any> PreferenceItem.dependency(dependency: Pref<T>, value: T) {
     dependency(dependency.key, value, dependency.defaultValue)
 }
 
-fun <T, S> PreferenceModel.enumDependency(
+fun <T, S> PreferenceItem.enumDependency(
     dependency: Pref<T>,
     value: T
 ) where T : Enum<T>, T : PrefValueHolder<S> {

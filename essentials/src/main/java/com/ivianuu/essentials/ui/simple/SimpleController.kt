@@ -29,7 +29,7 @@ import com.ivianuu.essentials.ui.base.EsController
 import com.ivianuu.essentials.ui.common.EsRecyclerView
 import com.ivianuu.essentials.util.ext.*
 import com.ivianuu.kommon.core.view.items
-import com.ivianuu.list.ModelController
+import com.ivianuu.list.ItemController
 import com.ivianuu.traveler.goBack
 
 /**
@@ -46,9 +46,9 @@ abstract class SimpleController : EsController() {
     protected open val toolbarBackButton: Boolean get() = router.rootController != this
     protected open val lightToolbar: Boolean get() = primaryColor().isLight
 
-    val optionalModelController: ModelController? by lazy { modelController() }
-    val modelController
-        get() = optionalModelController
+    val optionalItemController: ItemController? by lazy { itemController() }
+    val itemController
+        get() = optionalItemController
             ?: error("no model controller instantiated")
 
     val appBar get() = optionalAppBar ?: error("no app bar layout found")
@@ -108,21 +108,21 @@ abstract class SimpleController : EsController() {
         }
 
         optionalRecyclerView?.run {
-            adapter = optionalModelController?.adapter
+            adapter = optionalItemController?.adapter
             this@SimpleController.layoutManager()?.let { layoutManager = it }
         }
     }
 
     override fun onDestroyView(view: View) {
-        optionalModelController?.cancelPendingModelBuild()
+        optionalItemController?.cancelPendingItemBuild()
         super.onDestroyView(view)
     }
 
     override fun invalidate() {
-        optionalModelController?.requestModelBuild()
+        optionalItemController?.requestItemBuild()
     }
 
-    protected open fun modelController(): ModelController? = null
+    protected open fun itemController(): ItemController? = null
 
     protected open fun layoutManager(): RecyclerView.LayoutManager? = null
 

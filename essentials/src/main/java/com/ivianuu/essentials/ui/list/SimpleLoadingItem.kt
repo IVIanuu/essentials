@@ -19,19 +19,18 @@ package com.ivianuu.essentials.ui.list
 import android.content.res.ColorStateList
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.util.color
-import com.ivianuu.list.ListModelFactory
-
+import com.ivianuu.list.ItemFactory
 import kotlinx.android.synthetic.main.es_item_simple_loading.es_progress_bar
 
 /**
  * Simple loading model
  */
-open class SimpleLoadingModel : SimpleListModel(layoutRes = R.layout.es_item_simple_loading) {
+open class SimpleLoadingItem : SimpleItem(layoutRes = R.layout.es_item_simple_loading) {
 
-    var progressColor by property("progressColor") { 0 }
-    var progressColorRes by property("processColorRes") { 0 }
+    var progressColor by property { 0 }
+    var progressColorRes by property { 0 }
 
-    override fun bind(holder: EsListHolder) {
+    override fun bind(holder: EsHolder) {
         super.bind(holder)
         if (progressColor != 0 || progressColorRes != 0) {
             val progressColor = when {
@@ -49,5 +48,5 @@ open class SimpleLoadingModel : SimpleListModel(layoutRes = R.layout.es_item_sim
         }
     }
 
-    companion object : ListModelFactory<SimpleLoadingModel>(::SimpleLoadingModel)
+    companion object : ItemFactory<SimpleLoadingItem>(::SimpleLoadingItem)
 }

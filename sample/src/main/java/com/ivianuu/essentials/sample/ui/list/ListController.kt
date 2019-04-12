@@ -18,16 +18,17 @@ package com.ivianuu.essentials.sample.ui.list
 
 import android.view.MenuItem
 import com.ivianuu.essentials.sample.R
-import com.ivianuu.essentials.ui.list.EsListHolder
-import com.ivianuu.essentials.ui.list.SimpleListModel
-import com.ivianuu.essentials.ui.list.SimpleLoadingModel
-import com.ivianuu.essentials.ui.list.SimpleTextModel
+import com.ivianuu.essentials.ui.list.EsHolder
+import com.ivianuu.essentials.ui.list.SimpleItem
+import com.ivianuu.essentials.ui.list.SimpleLoadingItem
+import com.ivianuu.essentials.ui.list.SimpleTextItem
 import com.ivianuu.essentials.ui.mvrx.injekt.mvRxViewModel
-import com.ivianuu.essentials.ui.mvrx.list.mvRxModelController
+import com.ivianuu.essentials.ui.mvrx.list.mvRxItemController
 import com.ivianuu.essentials.ui.simple.SimpleController
 import com.ivianuu.essentials.ui.traveler.NavOptions
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
 import com.ivianuu.essentials.ui.traveler.vertical
+import com.ivianuu.list.ItemFactory
 import com.ivianuu.list.id
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.single_line_list_item.title
@@ -42,21 +43,20 @@ class ListController : SimpleController() {
     override val toolbarMenuRes get() = R.menu.controller_list
     override val toolbarTitle get() = "List"
 
-    override fun modelController() = mvRxModelController(viewModel) { state ->
+    override fun itemController() = mvRxItemController(viewModel) { state ->
         if (state.loading) {
-            SimpleLoadingModel {
+            SimpleLoadingItem {
                 id("loading")
             }
         } else {
             if (state.items.isNotEmpty()) {
                 state.items.forEach { title ->
-                    SingleLineListItemModel().add {
-                        id(title)
+                    SingleLineItem().add {
                         this.title = title
                     }
                 }
             } else {
-                SimpleTextModel {
+                SimpleTextItem {
                     id("empty")
                     text = "Hmm empty.."
                 }
@@ -73,16 +73,12 @@ class ListController : SimpleController() {
     }
 }
 
-class SingleLineListItemModel : SimpleListModel() {
+private class SingleLineItem : SimpleItem(layoutRes = R.layout.single_line_list_item) {
 
-    var title by requiredProperty<String>("title")
+    var title by idProperty<String>()
 
-    override val layoutRes: Int
-        get() = R.layout.single_line_list_item
-
-    override fun bind(holder: EsListHolder) {
+    override fun bind(holder: EsHolder) {
         super.bind(holder)
         holder.title.text = title
     }
-
 }

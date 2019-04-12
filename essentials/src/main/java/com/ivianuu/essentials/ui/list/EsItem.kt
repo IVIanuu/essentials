@@ -16,12 +16,19 @@
 
 package com.ivianuu.essentials.ui.list
 
+import com.ivianuu.list.Item
+import com.ivianuu.list.common.clicks
+import com.ivianuu.list.common.longClicks
+
 /**
- * Simple list model with holder
+ * Base list model with holder
  */
-abstract class SimpleListModel(
+abstract class EsItem<H : EsHolder>(
     id: Any? = null,
     layoutRes: Int = -1
-) : EsListModel<EsListHolder>(id, layoutRes) {
-    override fun createHolder(): EsListHolder = EsListHolder()
+) : Item<H>(id, layoutRes) {
+
+    open val onClick by clicks()
+    open val onLongClick by longClicks()
+
 }

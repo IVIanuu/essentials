@@ -16,12 +16,16 @@
 
 package com.ivianuu.essentials.ui.list
 
-import com.ivianuu.list.ListModel
+import android.content.Context
+import com.ivianuu.essentials.util.ContextAware
+import com.ivianuu.list.common.KotlinHolder
 
 /**
- * Base list model with holder
+ * Base list holder
  */
-abstract class EsListModel<H : EsListHolder>(
-    id: Any? = null,
-    layoutRes: Int = -1
-) : ListModel<H>(id, layoutRes)
+open class EsHolder : KotlinHolder(), ContextAware {
+
+    override val providedContext: Context
+        get() = view.context
+
+}

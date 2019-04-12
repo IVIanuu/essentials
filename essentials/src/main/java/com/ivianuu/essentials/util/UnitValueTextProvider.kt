@@ -24,7 +24,7 @@ import com.ivianuu.essentials.util.UnitValueTextProvider.Unit.PERCENTAGE
 import com.ivianuu.essentials.util.UnitValueTextProvider.Unit.PX
 import com.ivianuu.essentials.util.UnitValueTextProvider.Unit.SECONDS
 import com.ivianuu.kommon.core.content.string
-import com.ivianuu.listprefs.SeekBarPreferenceModel
+import com.ivianuu.listprefs.SeekBarPreferenceItem
 
 class UnitValueTextProvider(
     private val context: Context,
@@ -44,6 +44,6 @@ class UnitValueTextProvider(
     }
 }
 
-fun SeekBarPreferenceModel.unitValueTextProvider(unit: UnitValueTextProvider.Unit) {
+fun SeekBarPreferenceItem.unitValueTextProvider(unit: UnitValueTextProvider.Unit) {
     valueTextProvider = UnitValueTextProvider(context, unit)
 }

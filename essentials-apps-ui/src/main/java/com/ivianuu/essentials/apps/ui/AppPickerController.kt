@@ -23,19 +23,18 @@ import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.AppStore
 import com.ivianuu.essentials.apps.glide.AppIcon
 import com.ivianuu.essentials.injection.PerController
-import com.ivianuu.essentials.ui.list.EsListHolder
-import com.ivianuu.essentials.ui.list.SimpleListModel
-import com.ivianuu.essentials.ui.list.SimpleLoadingModel
+import com.ivianuu.essentials.ui.list.EsHolder
+import com.ivianuu.essentials.ui.list.SimpleItem
+import com.ivianuu.essentials.ui.list.SimpleLoadingItem
 import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
 import com.ivianuu.essentials.ui.mvrx.injekt.mvRxViewModel
-import com.ivianuu.essentials.ui.mvrx.list.mvRxModelController
+import com.ivianuu.essentials.ui.mvrx.list.mvRxItemController
 import com.ivianuu.essentials.ui.simple.SimpleController
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
 import com.ivianuu.essentials.util.SavedState
 import com.ivianuu.essentials.util.coroutineScope
 import com.ivianuu.essentials.util.ext.goBackWithResult
 import com.ivianuu.injekt.annotations.Factory
-import com.ivianuu.list.common.onClick
 import com.ivianuu.list.id
 import com.ivianuu.traveler.Router
 import kotlinx.android.parcel.Parcelize
@@ -59,17 +58,16 @@ class AppPickerController : SimpleController() {
 
     private val viewModel by mvRxViewModel<AppPickerViewModel>()
 
-    override fun modelController() = mvRxModelController(viewModel) { state ->
+    override fun itemController() = mvRxItemController(viewModel) { state ->
         if (state.loading) {
-            SimpleLoadingModel {
+            SimpleLoadingItem {
                 id("loading")
             }
         } else {
             state.apps.forEach { app ->
-                AppInfoModel().add {
-                    id(app.packageName)
+                AppInfoItem().add {
                     this.app = app
-                    onClick { _, _ -> viewModel.appClicked(app) }
+                    onClick { viewModel.appClicked(app) }
                 }
             }
         }
@@ -77,14 +75,11 @@ class AppPickerController : SimpleController() {
 
 }
 
-private class AppInfoModel : SimpleListModel() {
+private class AppInfoItem : SimpleItem(layoutRes = R.layout.es_item_app) {
 
-    var app by requiredProperty<AppInfo>("app")
+    var app by idProperty<AppInfo>()
 
-    override val layoutRes: Int
-        get() = R.layout.es_item_app
-
-    override fun bind(holder: EsListHolder) {
+    override fun bind(holder: EsHolder) {
         super.bind(holder)
         with(holder) {
             Glide.with(icon)

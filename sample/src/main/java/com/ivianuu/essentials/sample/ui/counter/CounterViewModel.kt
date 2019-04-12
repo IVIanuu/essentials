@@ -64,13 +64,10 @@ class CounterViewModel(
     }
 
     fun doWorkClicked() {
-        WorkManager.getInstance().enqueue(
-            OneTimeWorkRequestBuilder<MyWorkerOne>().build()
-        )
-
-        WorkManager.getInstance().enqueue(
-            OneTimeWorkRequestBuilder<MyWorkerTwo>().build()
-        )
+        with(WorkManager.getInstance()) {
+            enqueue(OneTimeWorkRequestBuilder<MyWorkerOne>().build())
+            enqueue(OneTimeWorkRequestBuilder<MyWorkerTwo>().build())
+        }
     }
 }
 

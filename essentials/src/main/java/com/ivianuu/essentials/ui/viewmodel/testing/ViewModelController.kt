@@ -27,7 +27,7 @@ import com.ivianuu.essentials.util.SavedState
 /**
  * @author Manuel Wrage (IVIanuu)
  */
-class ViewModelController(private val viewModel: ViewModel) {
+class ViewItemController(private val viewModel: ViewModel) {
 
     fun initialize(savedState: SavedState?) {
         viewModel.initialize(ViewModelListenerStore.Global, savedState)
@@ -45,11 +45,11 @@ class ViewModelController(private val viewModel: ViewModel) {
 
 }
 
-private val controllersByViewModel = mutableMapOf<ViewModel, ViewModelController>()
+private val controllersByViewModel = mutableMapOf<ViewModel, ViewItemController>()
 
-val ViewModel.controller: ViewModelController
+val ViewModel.controller: ViewItemController
     get() = controllersByViewModel.getOrPut(this) {
-        ViewModelController(this).also {
+        ViewItemController(this).also {
             doOnPostDestroy { controllersByViewModel.remove(this) }
         }
     }
