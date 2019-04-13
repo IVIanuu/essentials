@@ -43,7 +43,7 @@ abstract class PrefsController : ListController() {
     override fun onViewCreated(view: View, savedViewState: Bundle?) {
         super.onViewCreated(view, savedViewState)
         if (usePreferenceDividerDecoration) {
-            optionalRecyclerView?.addItemDecoration(PreferenceDividerDecoration(activity))
+            recyclerView.addItemDecoration(PreferenceDividerDecoration(activity))
         }
     }
 
