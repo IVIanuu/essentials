@@ -31,7 +31,7 @@ import com.ivianuu.essentials.ui.list.SimpleLoadingItem
 import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
 import com.ivianuu.essentials.ui.mvrx.list.mvRxItemController
 import com.ivianuu.essentials.ui.mvrx.mvRxViewModel
-import com.ivianuu.essentials.ui.simple.SimpleController
+import com.ivianuu.essentials.ui.simple.ListController
 import com.ivianuu.essentials.util.SavedState
 import com.ivianuu.essentials.util.coroutineScope
 import com.ivianuu.essentials.util.ext.coroutinesIo
@@ -56,7 +56,7 @@ import kotlinx.coroutines.rx2.asSingle
 /**
  * App blacklist
  */
-abstract class CheckableAppsController : SimpleController() {
+abstract class CheckableAppsController : ListController() {
 
     override val toolbarMenuRes
         get() = R.menu.controller_checkable_apps

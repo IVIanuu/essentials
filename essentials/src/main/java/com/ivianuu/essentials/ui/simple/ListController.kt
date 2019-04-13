@@ -20,46 +20,40 @@ import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.ivianuu.essentials.R
-import com.ivianuu.essentials.ui.common.EsRecyclerView
 import com.ivianuu.list.ItemController
+import kotlinx.android.synthetic.main.es_controller_list.es_recycler_view
 
 /**
  * Simple controller
  */
-abstract class SimpleController : ToolbarController() {
+abstract class ListController : ToolbarController() {
 
     override val layoutRes: Int
-        get() = R.layout.es_controller_simple
+        get() = R.layout.es_controller_list
 
-    val optionalItemController: ItemController? by lazy { itemController() }
-    val itemController
-        get() = optionalItemController
-            ?: error("no model controller instantiated")
+    val recyclerView: RecyclerView
+        get() = es_recycler_view
 
-    val recyclerView
-        get() = optionalRecyclerView ?: error("no recycler view found")
-
-    open val optionalRecyclerView: EsRecyclerView?
-        get() = containerView?.findViewById(R.id.es_recycler_view)
+    protected val itemController by lazy { itemController() }
 
     override fun onViewCreated(view: View, savedViewState: Bundle?) {
         super.onViewCreated(view, savedViewState)
-        optionalRecyclerView?.run {
-            adapter = optionalItemController?.adapter
-            this@SimpleController.layoutManager()?.let { layoutManager = it }
+        with(recyclerView) {
+            adapter = itemController.adapter
+            layoutManager()?.let { layoutManager = it }
         }
     }
 
     override fun onDestroyView(view: View) {
-        optionalItemController?.cancelPendingItemBuild()
+        itemController.cancelPendingItemBuild()
         super.onDestroyView(view)
     }
 
     override fun invalidate() {
-        optionalItemController?.requestItemBuild()
+        itemController.requestItemBuild()
     }
 
-    protected open fun itemController(): ItemController? = null
+    protected abstract fun itemController(): ItemController
 
     protected open fun layoutManager(): RecyclerView.LayoutManager? = null
 

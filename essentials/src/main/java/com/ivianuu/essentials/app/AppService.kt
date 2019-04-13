@@ -17,14 +17,8 @@
 package com.ivianuu.essentials.app
 
 import com.ivianuu.essentials.injection.bindIntoClassMap
-import com.ivianuu.injekt.BindingContext
-import com.ivianuu.injekt.Definition
-import com.ivianuu.injekt.Module
-import com.ivianuu.injekt.Qualifier
-import com.ivianuu.injekt.StringQualifier
-import com.ivianuu.injekt.module
+import com.ivianuu.injekt.*
 import com.ivianuu.injekt.multibinding.mapBinding
-import com.ivianuu.injekt.single
 import com.ivianuu.scopes.MutableScope
 import com.ivianuu.scopes.Scope
 import com.ivianuu.scopes.ScopeOwner

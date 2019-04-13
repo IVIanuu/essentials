@@ -20,7 +20,7 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
 import com.ivianuu.director.activity
-import com.ivianuu.essentials.ui.simple.SimpleController
+import com.ivianuu.essentials.ui.simple.ListController
 import com.ivianuu.injekt.inject
 import com.ivianuu.list.ItemController
 import com.ivianuu.list.addTo
@@ -29,7 +29,7 @@ import com.ivianuu.listprefs.*
 /**
  * Prefs controller
  */
-abstract class PrefsController : SimpleController() {
+abstract class PrefsController : ListController() {
 
     open val sharedPreferences by inject<SharedPreferences>()
 

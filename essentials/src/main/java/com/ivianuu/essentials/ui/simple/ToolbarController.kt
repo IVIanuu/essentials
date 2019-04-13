@@ -27,11 +27,19 @@ import com.ivianuu.essentials.ui.base.EsController
 import com.ivianuu.essentials.util.ext.*
 import com.ivianuu.kommon.core.view.items
 import com.ivianuu.traveler.goBack
+import kotlinx.android.synthetic.main.es_app_bar_with_toolbar.es_app_bar
+import kotlinx.android.synthetic.main.es_app_bar_with_toolbar.es_toolbar
 
 /**
  * A controller which hosts a toolbar
  */
 abstract class ToolbarController : EsController() {
+
+    val appBar: AppBarLayout
+        get() = es_app_bar
+
+    val toolbar: Toolbar
+        get() = es_toolbar
 
     protected open val toolbarTitle: String? get() = null
     protected open val toolbarTitleRes: Int get() = 0
@@ -39,20 +47,10 @@ abstract class ToolbarController : EsController() {
     protected open val toolbarBackButton: Boolean get() = router.rootController != this
     protected open val lightToolbar: Boolean get() = getPrimaryColor().isLight
 
-    val appBar get() = optionalAppBar ?: error("no app bar layout found")
-    open val optionalAppBar: AppBarLayout?
-        get() = containerView?.findViewById(R.id.es_app_bar)
-
-    val toolbar
-        get() = optionalToolbar ?: error("no toolbar found")
-
-    open val optionalToolbar: Toolbar?
-        get() = containerView?.findViewById(R.id.es_toolbar)
-
     override fun onViewCreated(view: View, savedViewState: Bundle?) {
         super.onViewCreated(view, savedViewState)
 
-        optionalToolbar?.run {
+        with(toolbar) {
             when {
                 toolbarTitle != null -> title = toolbarTitle
                 toolbarTitleRes != 0 -> setTitle(toolbarTitleRes)

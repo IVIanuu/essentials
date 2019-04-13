@@ -24,11 +24,10 @@ import com.ivianuu.essentials.ui.list.SimpleLoadingItem
 import com.ivianuu.essentials.ui.list.SimpleTextItem
 import com.ivianuu.essentials.ui.mvrx.injekt.mvRxViewModel
 import com.ivianuu.essentials.ui.mvrx.list.mvRxItemController
-import com.ivianuu.essentials.ui.simple.SimpleController
+import com.ivianuu.essentials.ui.simple.ListController
 import com.ivianuu.essentials.ui.traveler.NavOptions
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
 import com.ivianuu.essentials.ui.traveler.vertical
-import com.ivianuu.list.ItemFactory
 import com.ivianuu.list.id
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.single_line_list_item.title
@@ -36,7 +35,7 @@ import kotlinx.android.synthetic.main.single_line_list_item.title
 @Parcelize
 class ListKey : ControllerKey(::ListController, NavOptions().vertical())
 
-class ListController : SimpleController() {
+class ListController : ListController() {
 
     private val viewModel by mvRxViewModel<ListViewModel>()
 

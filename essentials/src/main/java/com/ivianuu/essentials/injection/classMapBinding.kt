@@ -16,21 +16,8 @@
 
 package com.ivianuu.essentials.injection
 
-import com.ivianuu.injekt.BindingContext
-import com.ivianuu.injekt.Component
-import com.ivianuu.injekt.InjektTrait
-import com.ivianuu.injekt.Module
-import com.ivianuu.injekt.ParametersDefinition
-import com.ivianuu.injekt.Provider
-import com.ivianuu.injekt.Qualifier
-import com.ivianuu.injekt.multibinding.MapBinding
-import com.ivianuu.injekt.multibinding.bindIntoMap
-import com.ivianuu.injekt.multibinding.getLazyMap
-import com.ivianuu.injekt.multibinding.getMap
-import com.ivianuu.injekt.multibinding.getProviderMap
-import com.ivianuu.injekt.multibinding.injectLazyMap
-import com.ivianuu.injekt.multibinding.injectMap
-import com.ivianuu.injekt.multibinding.injectProviderMap
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.multibinding.*
 import kotlin.reflect.KClass
 
 inline infix fun <reified T> BindingContext<T>.bindIntoClassMap(mapQualifier: Qualifier): BindingContext<T> =

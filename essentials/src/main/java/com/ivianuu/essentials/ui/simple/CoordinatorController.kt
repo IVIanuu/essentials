@@ -16,20 +16,15 @@
 
 package com.ivianuu.essentials.ui.simple
 
-import androidx.coordinatorlayout.widget.CoordinatorLayout
-import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.base.EsController
+import kotlinx.android.synthetic.main.es_controller_list.es_coordinator_layout
 
 /**
  * A controller which hosts a coordinator layout
  */
 abstract class CoordinatorController : EsController() {
 
-    val coordinatorLayout
-        get() = optionalCoordinatorLayout
-            ?: error("no coordinator layout found")
-
-    open val optionalCoordinatorLayout: CoordinatorLayout?
-        get() = containerView?.findViewById(R.id.es_coordinator_layout)
+    open val coordinatorLayout
+        get() = es_coordinator_layout
 
 }

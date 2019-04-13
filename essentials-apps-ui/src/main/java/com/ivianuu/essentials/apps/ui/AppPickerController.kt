@@ -29,7 +29,7 @@ import com.ivianuu.essentials.ui.list.SimpleLoadingItem
 import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
 import com.ivianuu.essentials.ui.mvrx.injekt.mvRxViewModel
 import com.ivianuu.essentials.ui.mvrx.list.mvRxItemController
-import com.ivianuu.essentials.ui.simple.SimpleController
+import com.ivianuu.essentials.ui.simple.ListController
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
 import com.ivianuu.essentials.util.SavedState
 import com.ivianuu.essentials.util.coroutineScope
@@ -51,7 +51,7 @@ data class AppPickerKey(
 /**
  * App picker controller
  */
-class AppPickerController : SimpleController() {
+class AppPickerController : ListController() {
 
     override val toolbarTitleRes: Int
         get() = R.string.es_title_app_picker

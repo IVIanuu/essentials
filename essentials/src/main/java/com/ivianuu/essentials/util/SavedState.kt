@@ -16,11 +16,7 @@
 
 package com.ivianuu.essentials.util
 
-import android.os.Binder
-import android.os.Build
-import android.os.Bundle
-import android.os.Parcel
-import android.os.Parcelable
+import android.os.*
 import android.util.Size
 import android.util.SizeF
 import android.util.SparseArray
