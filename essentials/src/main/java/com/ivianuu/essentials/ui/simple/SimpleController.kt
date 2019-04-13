@@ -44,7 +44,7 @@ abstract class SimpleController : EsController() {
     protected open val toolbarTitleRes: Int get() = 0
     protected open val toolbarMenuRes: Int get() = 0
     protected open val toolbarBackButton: Boolean get() = router.rootController != this
-    protected open val lightToolbar: Boolean get() = primaryColor().isLight
+    protected open val lightToolbar: Boolean get() = getPrimaryColor().isLight
 
     val optionalItemController: ItemController? by lazy { itemController() }
     val itemController
@@ -93,9 +93,9 @@ abstract class SimpleController : EsController() {
                 setNavigationOnClickListener { travelerRouter.goBack() }
             }
 
-            val titleColor = primaryTextColor(!lightToolbar)
-            val subTitleColor = secondaryTextColor(!lightToolbar)
-            val iconColor = iconColor(!lightToolbar)
+            val titleColor = getPrimaryTextColor(!lightToolbar)
+            val subTitleColor = getSecondaryTextColor(!lightToolbar)
+            val iconColor = getIconColor(!lightToolbar)
 
             setTitleTextColor(titleColor)
             setSubtitleTextColor(subTitleColor)

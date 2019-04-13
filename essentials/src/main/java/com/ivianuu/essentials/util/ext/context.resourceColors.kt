@@ -37,35 +37,35 @@ fun ContextAware.isWindowBackgroundDark(): Boolean =
 
 fun View.isWindowBackgroundDark(): Boolean = context.isWindowBackgroundDark()
 
-fun Context.primaryColor(): Int = colorAttr(R.attr.colorPrimary)
+fun Context.getPrimaryColor(): Int = colorAttr(R.attr.colorPrimary)
 
-fun ContextAware.primaryColor(): Int =
-    providedContext.primaryColor()
+fun ContextAware.getPrimaryColor(): Int =
+    providedContext.getPrimaryColor()
 
-fun View.primaryColor(): Int =
-    context.primaryColor()
+fun View.getPrimaryColor(): Int =
+    context.getPrimaryColor()
 
-fun Context.primaryColorDark(): Int = colorAttr(R.attr.colorPrimaryDark)
+fun Context.getPrimaryColorDark(): Int = colorAttr(R.attr.colorPrimaryDark)
 
-fun ContextAware.primaryColorDark(): Int =
-    providedContext.primaryColorDark()
+fun ContextAware.getPrimaryColorDark(): Int =
+    providedContext.getPrimaryColorDark()
 
-fun View.primaryColorDark(): Int =
-    context.primaryColorDark()
+fun View.getPrimaryColorDark(): Int =
+    context.getPrimaryColorDark()
 
-fun Context.secondaryColor(): Int = colorAttr(R.attr.colorSecondary)
+fun Context.getSecondaryColor(): Int = colorAttr(R.attr.colorSecondary)
 
-fun ContextAware.secondaryColor(): Int =
-    providedContext.secondaryColor()
+fun ContextAware.getSecondaryColor(): Int =
+    providedContext.getSecondaryColor()
 
-fun View.secondaryColor(): Int =
-    context.secondaryColor()
+fun View.getSecondaryColor(): Int =
+    context.getSecondaryColor()
 
-fun Context.cardColor(): Int = cardColor(isWindowBackgroundDark())
+fun Context.getCardColor(): Int = getCardColor(isWindowBackgroundDark())
 
-fun Context.cardColor(color: Int): Int = cardColor(color.isDark)
+fun Context.getCardColor(color: Int): Int = getCardColor(color.isDark)
 
-fun Context.cardColor(dark: Boolean): Int = color(
+fun Context.getCardColor(dark: Boolean): Int = color(
     if (dark) {
         R.color.cardview_dark_background
     } else {
@@ -73,29 +73,29 @@ fun Context.cardColor(dark: Boolean): Int = color(
     }
 )
 
-fun ContextAware.cardColor(): Int =
-    providedContext.cardColor()
+fun ContextAware.getCardColor(): Int =
+    providedContext.getCardColor()
 
-fun ContextAware.cardColor(color: Int): Int =
-    providedContext.cardColor(color)
+fun ContextAware.getCardColor(color: Int): Int =
+    providedContext.getCardColor(color)
 
-fun ContextAware.cardColor(dark: Boolean): Int =
-    providedContext.cardColor(dark)
+fun ContextAware.getCardColor(dark: Boolean): Int =
+    providedContext.getCardColor(dark)
 
-fun View.cardColor(): Int =
-    context.cardColor()
+fun View.getCardColor(): Int =
+    context.getCardColor()
 
-fun View.cardColor(color: Int): Int =
-    context.cardColor(color)
+fun View.getCardColor(color: Int): Int =
+    context.getCardColor(color)
 
-fun View.cardColor(dark: Boolean): Int =
-    context.cardColor(dark)
+fun View.getCardColor(dark: Boolean): Int =
+    context.getCardColor(dark)
 
-fun Context.iconColor(): Int = iconColor(isWindowBackgroundDark())
+fun Context.getIconColor(): Int = getIconColor(isWindowBackgroundDark())
 
-fun Context.iconColor(color: Int): Int = iconColor(color.isDark)
+fun Context.getIconColor(color: Int): Int = getIconColor(color.isDark)
 
-fun Context.iconColor(dark: Boolean): Int = color(
+fun Context.getIconColor(dark: Boolean): Int = color(
     if (dark) {
         R.color.primary_text_default_material_dark
     } else {
@@ -103,29 +103,29 @@ fun Context.iconColor(dark: Boolean): Int = color(
     }
 )
 
-fun ContextAware.iconColor(): Int =
-    providedContext.iconColor()
+fun ContextAware.getIconColor(): Int =
+    providedContext.getIconColor()
 
-fun ContextAware.iconColor(color: Int): Int =
-    providedContext.iconColor(color)
+fun ContextAware.getIconColor(color: Int): Int =
+    providedContext.getIconColor(color)
 
-fun ContextAware.iconColor(dark: Boolean): Int =
-    providedContext.iconColor(dark)
+fun ContextAware.getIconColor(dark: Boolean): Int =
+    providedContext.getIconColor(dark)
 
-fun View.iconColor(): Int =
-    context.iconColor()
+fun View.getIconColor(): Int =
+    context.getIconColor()
 
-fun View.iconColor(color: Int): Int =
-    context.iconColor(color)
+fun View.getIconColor(color: Int): Int =
+    context.getIconColor(color)
 
-fun View.iconColor(dark: Boolean): Int =
-    context.iconColor(dark)
+fun View.getIconColor(dark: Boolean): Int =
+    context.getIconColor(dark)
 
-fun Context.rippleColor(): Int = rippleColor(isWindowBackgroundDark())
+fun Context.getRippleColor(): Int = getRippleColor(isWindowBackgroundDark())
 
-fun Context.rippleColor(color: Int): Int = rippleColor(color.isDark)
+fun Context.getRippleColor(color: Int): Int = getRippleColor(color.isDark)
 
-fun Context.rippleColor(dark: Boolean): Int = color(
+fun Context.getRippleColor(dark: Boolean): Int = color(
     if (dark) {
         R.color.ripple_material_dark
     } else {
@@ -133,28 +133,28 @@ fun Context.rippleColor(dark: Boolean): Int = color(
     }
 )
 
-fun ContextAware.rippleColor(): Int = providedContext.rippleColor()
+fun ContextAware.getRippleColor(): Int = providedContext.getRippleColor()
 
-fun ContextAware.rippleColor(color: Int): Int =
-    providedContext.rippleColor(color)
+fun ContextAware.getRippleColor(color: Int): Int =
+    providedContext.getRippleColor(color)
 
-fun ContextAware.rippleColor(dark: Boolean): Int =
-    providedContext.rippleColor(dark)
+fun ContextAware.getRippleColor(dark: Boolean): Int =
+    providedContext.getRippleColor(dark)
 
-fun View.rippleColor(): Int =
-    context.rippleColor()
+fun View.getRippleColor(): Int =
+    context.getRippleColor()
 
-fun View.rippleColor(color: Int): Int =
-    context.rippleColor(color)
+fun View.getRippleColor(color: Int): Int =
+    context.getRippleColor(color)
 
-fun View.rippleColor(dark: Boolean): Int =
-    context.rippleColor(dark)
+fun View.getRippleColor(dark: Boolean): Int =
+    context.getRippleColor(dark)
 
-fun Context.primaryTextColor(): Int = primaryTextColor(isWindowBackgroundDark())
+fun Context.getPrimaryTextColor(): Int = getPrimaryTextColor(isWindowBackgroundDark())
 
-fun Context.primaryTextColor(color: Int): Int = primaryTextColor(color.isDark)
+fun Context.getPrimaryTextColor(color: Int): Int = getPrimaryTextColor(color.isDark)
 
-fun Context.primaryTextColor(dark: Boolean): Int = color(
+fun Context.getPrimaryTextColor(dark: Boolean): Int = color(
     if (dark) {
         R.color.primary_text_default_material_dark
     } else {
@@ -162,29 +162,30 @@ fun Context.primaryTextColor(dark: Boolean): Int = color(
     }
 )
 
-fun ContextAware.primaryTextColor(): Int =
-    providedContext.primaryTextColor()
+fun ContextAware.getPrimaryTextColor(): Int =
+    providedContext.getPrimaryTextColor()
 
-fun ContextAware.primaryTextColor(color: Int): Int =
-    providedContext.primaryTextColor(color)
+fun ContextAware.getPrimaryTextColor(color: Int): Int =
+    providedContext.getPrimaryTextColor(color)
 
-fun ContextAware.primaryTextColor(dark: Boolean): Int =
-    providedContext.primaryTextColor(dark)
+fun ContextAware.getPrimaryTextColor(dark: Boolean): Int =
+    providedContext.getPrimaryTextColor(dark)
 
-fun View.primaryTextColor(): Int =
-    context.primaryTextColor()
+fun View.getPrimaryTextColor(): Int =
+    context.getPrimaryTextColor()
 
-fun View.primaryTextColor(color: Int): Int =
-    context.primaryTextColor(color)
+fun View.getPrimaryTextColor(color: Int): Int =
+    context.getPrimaryTextColor(color)
 
-fun View.primaryTextColor(dark: Boolean): Int =
-    context.primaryTextColor(dark)
+fun View.getPrimaryTextColor(dark: Boolean): Int =
+    context.getPrimaryTextColor(dark)
 
-fun Context.primaryDisabledTextColor(): Int = primaryDisabledTextColor(isWindowBackgroundDark())
+fun Context.getPrimaryDisabledTextColor(): Int =
+    getPrimaryDisabledTextColor(isWindowBackgroundDark())
 
-fun Context.primaryDisabledTextColor(color: Int): Int = primaryDisabledTextColor(color.isDark)
+fun Context.getPrimaryDisabledTextColor(color: Int): Int = getPrimaryDisabledTextColor(color.isDark)
 
-fun Context.primaryDisabledTextColor(dark: Boolean): Int = color(
+fun Context.getPrimaryDisabledTextColor(dark: Boolean): Int = color(
     if (dark) {
         R.color.primary_text_disabled_material_dark
     } else {
@@ -192,29 +193,29 @@ fun Context.primaryDisabledTextColor(dark: Boolean): Int = color(
     }
 )
 
-fun ContextAware.primaryDisabledTextColor(): Int =
-    providedContext.primaryDisabledTextColor()
+fun ContextAware.getPrimaryDisabledTextColor(): Int =
+    providedContext.getPrimaryDisabledTextColor()
 
-fun ContextAware.primaryDisabledTextColor(color: Int): Int =
-    providedContext.primaryDisabledTextColor(color)
+fun ContextAware.getPrimaryDisabledTextColor(color: Int): Int =
+    providedContext.getPrimaryDisabledTextColor(color)
 
-fun ContextAware.primaryDisabledTextColor(dark: Boolean): Int =
-    providedContext.primaryDisabledTextColor(dark)
+fun ContextAware.getPrimaryDisabledTextColor(dark: Boolean): Int =
+    providedContext.getPrimaryDisabledTextColor(dark)
 
-fun View.primaryDisabledTextColor(): Int =
-    context.primaryDisabledTextColor()
+fun View.getPrimaryDisabledTextColor(): Int =
+    context.getPrimaryDisabledTextColor()
 
-fun View.primaryDisabledTextColor(color: Int): Int =
-    context.primaryDisabledTextColor(color)
+fun View.getPrimaryDisabledTextColor(color: Int): Int =
+    context.getPrimaryDisabledTextColor(color)
 
-fun View.primaryDisabledTextColor(dark: Boolean): Int =
-    context.primaryDisabledTextColor(dark)
+fun View.getPrimaryDisabledTextColor(dark: Boolean): Int =
+    context.getPrimaryDisabledTextColor(dark)
 
-fun Context.secondaryTextColor(): Int = secondaryTextColor(isWindowBackgroundDark())
+fun Context.getSecondaryTextColor(): Int = getSecondaryTextColor(isWindowBackgroundDark())
 
-fun Context.secondaryTextColor(color: Int): Int = secondaryTextColor(color.isDark)
+fun Context.getSecondaryTextColor(color: Int): Int = getSecondaryTextColor(color.isDark)
 
-fun Context.secondaryTextColor(dark: Boolean): Int = color(
+fun Context.getSecondaryTextColor(dark: Boolean): Int = color(
     if (dark) {
         R.color.secondary_text_default_material_dark
     } else {
@@ -222,30 +223,31 @@ fun Context.secondaryTextColor(dark: Boolean): Int = color(
     }
 )
 
-fun ContextAware.secondaryTextColor(): Int =
-    providedContext.secondaryTextColor()
+fun ContextAware.getSecondaryTextColor(): Int =
+    providedContext.getSecondaryTextColor()
 
-fun ContextAware.secondaryTextColor(color: Int): Int =
-    providedContext.secondaryTextColor(color)
+fun ContextAware.getSecondaryTextColor(color: Int): Int =
+    providedContext.getSecondaryTextColor(color)
 
-fun ContextAware.secondaryTextColor(dark: Boolean): Int =
-    providedContext.secondaryTextColor(dark)
+fun ContextAware.getSecondaryTextColor(dark: Boolean): Int =
+    providedContext.getSecondaryTextColor(dark)
 
-fun View.secondaryTextColor(): Int =
-    context.secondaryTextColor()
+fun View.getSecondaryTextColor(): Int =
+    context.getSecondaryTextColor()
 
-fun View.secondaryTextColor(color: Int): Int =
-    context.secondaryTextColor(color)
+fun View.getSecondaryTextColor(color: Int): Int =
+    context.getSecondaryTextColor(color)
 
-fun View.secondaryTextColor(dark: Boolean): Int =
-    context.secondaryTextColor(dark)
+fun View.getSecondaryTextColor(dark: Boolean): Int =
+    context.getSecondaryTextColor(dark)
 
-fun Context.secondaryDisabledTextColor(): Int =
-    secondaryDisabledTextColor(isWindowBackgroundDark())
+fun Context.getSecondaryDisabledTextColor(): Int =
+    getSecondaryDisabledTextColor(isWindowBackgroundDark())
 
-fun Context.secondaryDisabledTextColor(color: Int): Int = secondaryDisabledTextColor(color.isDark)
+fun Context.getSecondaryDisabledTextColor(color: Int): Int =
+    getSecondaryDisabledTextColor(color.isDark)
 
-fun Context.secondaryDisabledTextColor(dark: Boolean): Int = color(
+fun Context.getSecondaryDisabledTextColor(dark: Boolean): Int = color(
     if (dark) {
         R.color.secondary_text_disabled_material_dark
     } else {
@@ -253,20 +255,20 @@ fun Context.secondaryDisabledTextColor(dark: Boolean): Int = color(
     }
 )
 
-fun ContextAware.secondaryDisabledTextColor(): Int =
-    providedContext.secondaryDisabledTextColor()
+fun ContextAware.getSecondaryDisabledTextColor(): Int =
+    providedContext.getSecondaryDisabledTextColor()
 
-fun ContextAware.secondaryDisabledTextColor(color: Int): Int =
-    providedContext.secondaryDisabledTextColor(color)
+fun ContextAware.getSecondaryDisabledTextColor(color: Int): Int =
+    providedContext.getSecondaryDisabledTextColor(color)
 
-fun ContextAware.secondaryDisabledTextColor(dark: Boolean): Int =
-    providedContext.secondaryDisabledTextColor(dark)
+fun ContextAware.getSecondaryDisabledTextColor(dark: Boolean): Int =
+    providedContext.getSecondaryDisabledTextColor(dark)
 
-fun View.secondaryDisabledTextColor(): Int =
-    context.secondaryDisabledTextColor()
+fun View.getSecondaryDisabledTextColor(): Int =
+    context.getSecondaryDisabledTextColor()
 
-fun View.secondaryDisabledTextColor(color: Int): Int =
-    context.secondaryDisabledTextColor(color)
+fun View.getSecondaryDisabledTextColor(color: Int): Int =
+    context.getSecondaryDisabledTextColor(color)
 
-fun View.secondaryDisabledTextColor(dark: Boolean): Int =
-    context.secondaryDisabledTextColor(dark)
+fun View.getSecondaryDisabledTextColor(dark: Boolean): Int =
+    context.getSecondaryDisabledTextColor(dark)
