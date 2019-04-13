@@ -147,7 +147,7 @@ class CheckableAppsViewModel(
 
         Observables
             .combineLatest(
-                coroutineScope.async {
+                coroutineScope.async(coroutinesIo) {
                     if (launchableOnly) {
                         appStore.getLaunchableApps()
                     } else {

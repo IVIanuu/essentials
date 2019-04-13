@@ -30,28 +30,28 @@ object Build {
 object Publishing {
     const val groupId = "com.ivianuu.essentials"
     const val vcsUrl = "https://github.com/IVIanuu/essentials"
-    const val version = "${Build.versionName}-dev-69"
+    const val version = "${Build.versionName}-dev-70"
 }
 
 object Versions {
     const val androidGradlePlugin = "3.3.0"
 
-    const val androidxAppCompat = "1.0.2"
+    const val androidxAppCompat = "1.1.0-alpha04"
     const val androidxCardView = "1.0.0"
-    const val androidxCore = "1.0.1"
-    const val androidxLifecycle = "2.0.0"
-    const val androidxWork = "2.0.0"
+    const val androidxCore = "1.1.0-alpha05"
+    const val androidxLifecycle = "2.1.0-alpha04"
+    const val androidxWork = "2.0.1"
 
-    const val androidxTestCore = "1.0.0"
-    const val androidxTestJunit = "1.0.0"
-    const val androidxTestRules = "1.1.0"
-    const val androidxTestRunner = "1.1.0"
+    const val androidxTestCore = "1.2.0-alpha03"
+    const val androidxTestJunit = "1.1.1-alpha03"
+    const val androidxTestRules = "1.2.0-alpha03"
+    const val androidxTestRunner = "1.2.0-alpha03"
 
     const val bintray = "1.8.4"
 
-    const val closeable = "0.0.1-dev-2"
+    const val closeable = "0.0.1-dev-3"
     const val constraintLayout = "2.0.0-alpha3"
-    const val coroutines = "1.1.0"
+    const val coroutines = "1.2.0"
     const val director = "0.0.1-dev-25"
     const val glide = "4.8.0"
     const val injekt = "0.0.1-dev-20"
@@ -69,7 +69,7 @@ object Versions {
     const val mockitoKotlin = "2.0.0"
     const val roboelectric = "4.0.2"
     const val rxAndroid = "2.1.0"
-    const val rxJava = "2.2.6"
+    const val rxJava = "2.2.8"
     const val rxJavaKtx = "0.0.1-dev-1"
     const val rxKotlin = "2.3.0"
     const val scopes = "0.0.1-dev-4"
