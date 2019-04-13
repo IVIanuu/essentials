@@ -20,7 +20,7 @@ import android.annotation.TargetApi
 import android.os.Build
 import android.service.quicksettings.TileService
 import com.ivianuu.essentials.util.coroutineScope
-import com.ivianuu.essentials.util.ext.unsafeLazy
+
 import com.ivianuu.injekt.Component
 import com.ivianuu.injekt.InjektTrait
 import com.ivianuu.injekt.Module
@@ -30,6 +30,7 @@ import com.ivianuu.scopes.MutableScope
 import com.ivianuu.scopes.ReusableScope
 import com.ivianuu.scopes.Scope
 import com.ivianuu.scopes.ScopeOwner
+import com.ivianuu.stdlibx.unsafeLazy
 
 /**
  * Base tile service

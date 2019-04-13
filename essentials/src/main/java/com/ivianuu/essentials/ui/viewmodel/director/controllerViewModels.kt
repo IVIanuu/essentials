@@ -21,7 +21,7 @@ import com.ivianuu.essentials.ui.viewmodel.ViewModel
 import com.ivianuu.essentials.ui.viewmodel.ViewModelManagerOwner
 import com.ivianuu.essentials.ui.viewmodel.defaultViewModelKey
 import com.ivianuu.essentials.ui.viewmodel.getViewModel
-import com.ivianuu.essentials.util.ext.unsafeLazy
+import com.ivianuu.stdlibx.unsafeLazy
 
 inline fun <reified T : ViewModel> Controller.viewModel(
     crossinline from: () -> ViewModelManagerOwner = { viewModelManagerOwner },

@@ -18,7 +18,7 @@ package com.ivianuu.essentials.data.base
 
 import android.accessibilityservice.AccessibilityService
 import android.view.accessibility.AccessibilityEvent
-import com.ivianuu.essentials.util.ext.unsafeLazy
+
 import com.ivianuu.injekt.InjektTrait
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.android.serviceComponent
@@ -26,6 +26,7 @@ import com.ivianuu.injekt.modules
 import com.ivianuu.scopes.MutableScope
 import com.ivianuu.scopes.Scope
 import com.ivianuu.scopes.ScopeOwner
+import com.ivianuu.stdlibx.unsafeLazy
 
 /**
  * Base accessibility service

@@ -21,7 +21,8 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
-import com.ivianuu.essentials.util.ext.unsafeLazy
+import com.ivianuu.stdlibx.unsafeLazy
+
 import com.ivianuu.traveler.Command
 import com.ivianuu.traveler.android.ActivityKey
 import kotlin.reflect.KClass

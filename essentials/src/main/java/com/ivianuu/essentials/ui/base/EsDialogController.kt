@@ -29,11 +29,12 @@ import com.ivianuu.essentials.ui.viewmodel.ViewModelManager
 import com.ivianuu.essentials.ui.viewmodel.ViewModelManagerOwner
 import com.ivianuu.essentials.ui.viewmodel.director.viewModelManagerOwner
 import com.ivianuu.essentials.util.ContextAware
-import com.ivianuu.essentials.util.ext.unsafeLazy
+
 import com.ivianuu.injekt.InjektTrait
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.inject
 import com.ivianuu.injekt.modules
+import com.ivianuu.stdlibx.unsafeLazy
 import com.ivianuu.traveler.Router
 
 /**

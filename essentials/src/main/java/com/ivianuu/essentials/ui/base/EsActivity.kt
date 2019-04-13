@@ -28,7 +28,7 @@ import com.ivianuu.essentials.ui.mvrx.injekt.InjektMvRxView
 import com.ivianuu.essentials.ui.traveler.key.keyModule
 import com.ivianuu.essentials.ui.viewmodel.ViewModelManager
 import com.ivianuu.essentials.ui.viewmodel.android.viewModelManagerOwner
-import com.ivianuu.essentials.util.ext.unsafeLazy
+
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.android.activityComponent
 import com.ivianuu.injekt.inject
@@ -36,6 +36,7 @@ import com.ivianuu.injekt.modules
 import com.ivianuu.scopes.Scope
 import com.ivianuu.scopes.ScopeOwner
 import com.ivianuu.scopes.android.lifecycle.onDestroy
+import com.ivianuu.stdlibx.unsafeLazy
 import com.ivianuu.traveler.Navigator
 import com.ivianuu.traveler.android.AppNavigator
 import com.ivianuu.traveler.common.ResultNavigator
