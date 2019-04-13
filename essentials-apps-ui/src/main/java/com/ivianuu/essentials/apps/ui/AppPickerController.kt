@@ -77,7 +77,7 @@ class AppPickerController : ListController() {
 
 private class AppInfoItem : SimpleItem(layoutRes = R.layout.es_item_app) {
 
-    var app by idProperty<AppInfo>()
+    var app by idProperty(AppInfo::packageName)
 
     override fun bind(holder: EsHolder) {
         super.bind(holder)

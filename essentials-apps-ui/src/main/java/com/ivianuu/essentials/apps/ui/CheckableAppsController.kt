@@ -109,7 +109,7 @@ abstract class CheckableAppsController : ListController() {
 
 private class CheckableAppModel : SimpleItem(layoutRes = R.layout.es_item_checkable_app) {
 
-    var app by idProperty<CheckableApp>()
+    var app by idProperty<CheckableApp> { it.info.packageName }
 
     override fun bind(holder: EsHolder) {
         super.bind(holder)
