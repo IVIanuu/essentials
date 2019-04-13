@@ -13,14 +13,11 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-<com.google.android.material.appbar.AppBarLayout android:id="@id/es_app_bar"
+<com.google.android.material.appbar.AppBarLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@id/es_app_bar"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:layout_height="wrap_content">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@id/es_toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?actionBarSize" />
+    <include layout="@layout/es_view_toolbar" />
 
 </com.google.android.material.appbar.AppBarLayout>

@@ -15,34 +15,22 @@
   -->
 
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@id/es_coordinator_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?android:colorBackground"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:background="?android:colorBackground">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@id/es_app_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@id/es_toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?actionBarSize" />
+        <include layout="@layout/es_view_toolbar" />
 
-        <com.google.android.material.tabs.TabLayout
-            android:id="@id/es_tab_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+        <include layout="@layout/es_view_tab_layout" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.viewpager.widget.ViewPager
-        android:id="@id/es_view_pager"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+    <include layout="@layout/es_view_view_pager" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

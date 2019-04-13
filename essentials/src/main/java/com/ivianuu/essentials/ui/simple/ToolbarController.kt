@@ -27,8 +27,8 @@ import com.ivianuu.essentials.ui.base.EsController
 import com.ivianuu.essentials.util.ext.*
 import com.ivianuu.kommon.core.view.items
 import com.ivianuu.traveler.goBack
-import kotlinx.android.synthetic.main.es_app_bar_with_toolbar.es_app_bar
-import kotlinx.android.synthetic.main.es_app_bar_with_toolbar.es_toolbar
+import kotlinx.android.synthetic.main.es_view_app_bar_with_toolbar.es_app_bar
+import kotlinx.android.synthetic.main.es_view_toolbar.es_toolbar
 
 /**
  * A controller which hosts a toolbar

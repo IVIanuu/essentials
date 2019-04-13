@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright 2018 Manuel Wrage
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,19 +15,13 @@
   -->
 
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@id/es_coordinator_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?android:colorBackground"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:background="?android:colorBackground">
 
-    <include layout="@layout/es_app_bar_with_toolbar" />
+    <include layout="@layout/es_view_app_bar_with_toolbar" />
 
-    <com.ivianuu.essentials.ui.common.EsRecyclerView
-        android:id="@id/es_recycler_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+    <include layout="@layout/es_view_recycler_view" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
