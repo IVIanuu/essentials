@@ -45,31 +45,8 @@ abstract class TabsController : ToolbarController() {
         super.onViewCreated(view, savedViewState)
         viewPager.adapter = adapter
         tabLayout.setupWithViewPager(viewPager)
-
-        tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-            override fun onTabReselected(tab: TabLayout.Tab) {
-                this@TabsController.onTabReselected(tab)
-            }
-
-            override fun onTabSelected(tab: TabLayout.Tab) {
-                this@TabsController.onTabSelected(tab)
-            }
-
-            override fun onTabUnselected(tab: TabLayout.Tab) {
-                this@TabsController.onTabUnselected(tab)
-            }
-        })
     }
 
     protected abstract fun adapter(): PagerAdapter
-
-    protected open fun onTabReselected(tab: TabLayout.Tab) {
-    }
-
-    protected open fun onTabSelected(tab: TabLayout.Tab) {
-    }
-
-    protected open fun onTabUnselected(tab: TabLayout.Tab) {
-    }
 
 }
