@@ -58,50 +58,50 @@ fun ControllerNavOptions.handler(
 
 fun ControllerNavOptions.fade(
     duration: Long = DirectorPlugins.defaultAnimationDuration,
-    removesFromViewOnPush: Boolean = true
+    removesFromViewOnPush: Boolean = DirectorPlugins.defaultRemovesFromViewOnPush
 ): ControllerNavOptions = fadePush(duration, removesFromViewOnPush)
     .fadePop(duration, removesFromViewOnPush)
 
 fun ControllerNavOptions.fadePush(
     duration: Long = DirectorPlugins.defaultAnimationDuration,
-    removesFromViewOnPush: Boolean = true
+    removesFromViewOnPush: Boolean = DirectorPlugins.defaultRemovesFromViewOnPush
 ): ControllerNavOptions = push(FadeChangeHandler(duration, removesFromViewOnPush))
 
 fun ControllerNavOptions.fadePop(
     duration: Long = DirectorPlugins.defaultAnimationDuration,
-    removesFromViewOnPush: Boolean = true
+    removesFromViewOnPush: Boolean = DirectorPlugins.defaultRemovesFromViewOnPush
 ): ControllerNavOptions = pop(FadeChangeHandler(duration, removesFromViewOnPush))
 
 fun ControllerNavOptions.horizontal(
     duration: Long = DirectorPlugins.defaultAnimationDuration,
-    removesFromViewOnPush: Boolean = true
+    removesFromViewOnPush: Boolean = DirectorPlugins.defaultRemovesFromViewOnPush
 ): ControllerNavOptions = horizontalPush(duration, removesFromViewOnPush)
     .horizontalPop(duration, removesFromViewOnPush)
 
 fun ControllerNavOptions.horizontalPush(
     duration: Long = DirectorPlugins.defaultAnimationDuration,
-    removesFromViewOnPush: Boolean = true
+    removesFromViewOnPush: Boolean = DirectorPlugins.defaultRemovesFromViewOnPush
 ): ControllerNavOptions = push(HorizontalChangeHandler(duration, removesFromViewOnPush))
 
 fun ControllerNavOptions.horizontalPop(
     duration: Long = DirectorPlugins.defaultAnimationDuration,
-    removesFromViewOnPush: Boolean = true
+    removesFromViewOnPush: Boolean = DirectorPlugins.defaultRemovesFromViewOnPush
 ): ControllerNavOptions = pop(HorizontalChangeHandler(duration, removesFromViewOnPush))
 
 fun ControllerNavOptions.vertical(
     duration: Long = DirectorPlugins.defaultAnimationDuration,
-    removesFromViewOnPush: Boolean = true
+    removesFromViewOnPush: Boolean = DirectorPlugins.defaultRemovesFromViewOnPush
 ): ControllerNavOptions = verticalPush(duration, removesFromViewOnPush)
     .verticalPop(duration, removesFromViewOnPush)
 
 fun ControllerNavOptions.verticalPush(
     duration: Long = DirectorPlugins.defaultAnimationDuration,
-    removesFromViewOnPush: Boolean = true
+    removesFromViewOnPush: Boolean = DirectorPlugins.defaultRemovesFromViewOnPush
 ): ControllerNavOptions = push(VerticalChangeHandler(duration, removesFromViewOnPush))
 
 fun ControllerNavOptions.verticalPop(
     duration: Long = DirectorPlugins.defaultAnimationDuration,
-    removesFromViewOnPush: Boolean = true
+    removesFromViewOnPush: Boolean = DirectorPlugins.defaultRemovesFromViewOnPush
 ): ControllerNavOptions = pop(VerticalChangeHandler(duration, removesFromViewOnPush))
 
 fun ControllerNavOptions.dialog(): ControllerNavOptions =
@@ -113,15 +113,19 @@ fun ControllerNavOptions.dialogPush(): ControllerNavOptions =
 fun ControllerNavOptions.dialogPop(): ControllerNavOptions =
     nonePop(false)
 
-fun ControllerNavOptions.nonePop(removesFromViewOnPush: Boolean = true): ControllerNavOptions = pop(
+fun ControllerNavOptions.nonePop(
+    removesFromViewOnPush: Boolean = DirectorPlugins.defaultRemovesFromViewOnPush
+): ControllerNavOptions = pop(
     DefaultChangeHandler(removesFromViewOnPush)
 )
 
 fun ControllerNavOptions.nonePush(
-    removesFromViewOnPush: Boolean = true
+    removesFromViewOnPush: Boolean = DirectorPlugins.defaultRemovesFromViewOnPush
 ): ControllerNavOptions = push(
     DefaultChangeHandler(removesFromViewOnPush)
 )
 
-fun ControllerNavOptions.none(removesFromViewOnPush: Boolean = true): ControllerNavOptions =
+fun ControllerNavOptions.none(
+    removesFromViewOnPush: Boolean = DirectorPlugins.defaultRemovesFromViewOnPush
+): ControllerNavOptions =
     nonePop(removesFromViewOnPush).nonePush(removesFromViewOnPush)
