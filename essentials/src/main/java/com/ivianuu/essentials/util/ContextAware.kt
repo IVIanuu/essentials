@@ -18,7 +18,6 @@ package com.ivianuu.essentials.util
 
 import android.annotation.TargetApi
 import android.app.Activity
-import android.app.Application
 import android.app.Service
 import android.content.*
 import android.content.res.ColorStateList
@@ -238,8 +237,6 @@ fun ContextAware.isAppLaunchable(packageName: String): Boolean =
 
 fun ContextAware.isAppEnabled(packageName: String): Boolean =
     providedContext.isAppEnabled(packageName)
-
-inline fun <reified T : Application> ContextAware.app(): T = providedContext.app()
 
 inline fun <reified T> ContextAware.systemService(): T =
     providedContext.systemService()

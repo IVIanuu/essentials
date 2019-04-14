@@ -18,8 +18,8 @@ package com.ivianuu.essentials.ui.mvrx
 
 import com.ivianuu.essentials.ui.mvrx.lifecycle.lifecycleLazy
 import com.ivianuu.essentials.ui.viewmodel.ViewModelManagerOwner
+import com.ivianuu.essentials.ui.viewmodel.defaultViewModelKey
 import com.ivianuu.essentials.ui.viewmodel.getViewModel
-import com.ivianuu.kommon.lifecycle.defaultViewModelKey
 
 inline fun <reified T : MvRxViewModel<*>> MvRxView.mvRxViewModel(
     noinline from: () -> ViewModelManagerOwner = { this },

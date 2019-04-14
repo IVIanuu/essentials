@@ -21,11 +21,11 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.widget.Toolbar
+import androidx.core.view.children
 import com.google.android.material.appbar.AppBarLayout
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.base.EsController
 import com.ivianuu.essentials.util.ext.*
-import com.ivianuu.kommon.core.view.items
 import com.ivianuu.traveler.goBack
 import kotlinx.android.synthetic.main.es_view_app_bar_with_toolbar.es_app_bar
 import kotlinx.android.synthetic.main.es_view_toolbar.es_toolbar
@@ -75,7 +75,7 @@ abstract class ToolbarController : EsController() {
             navigationIcon?.setColorFilter(iconColor, PorterDuff.Mode.SRC_IN)
             overflowIcon?.setColorFilter(iconColor, PorterDuff.Mode.SRC_IN)
 
-            menu.items
+            menu.children
                 .mapNotNull { it.icon }
                 .forEach { it.setColorFilter(iconColor, PorterDuff.Mode.SRC_IN) }
         }

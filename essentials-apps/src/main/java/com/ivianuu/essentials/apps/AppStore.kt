@@ -30,7 +30,6 @@ class AppStore(private val packageManager: PackageManager) {
 
     suspend fun getInstalledApps(): List<AppInfo> = withContext(coroutinesIo) {
         packageManager.getInstalledApplications(0)
-            .asSequence()
             .map {
                 AppInfo(
                     appName = it.loadLabel(packageManager).toString(),
@@ -47,7 +46,6 @@ class AppStore(private val packageManager: PackageManager) {
             addCategory(Intent.CATEGORY_LAUNCHER)
         }
         packageManager.queryIntentActivities(intent, 0)
-            .asSequence()
             .map {
                 AppInfo(
                     appName = it.loadLabel(packageManager).toString(),
