@@ -31,7 +31,7 @@ import com.ivianuu.timberktx.d
  */
 abstract class MvRxViewModel<S>(initialState: S) : EsViewModel() {
 
-    private val stateStore = StateStore(initialState).closeBy(scope)
+    private val stateStore = StateStore(initialState)
 
     fun peekState(): S = stateStore.peekState()
 
@@ -48,7 +48,7 @@ abstract class MvRxViewModel<S>(initialState: S) : EsViewModel() {
     }
 
     protected fun subscribe(consumer: Consumer<S>): Closeable =
-        stateStore.addStateListener(consumer).closeBy(scope)
+        stateStore.addListener(consumer).closeBy(scope)
 
     fun subscribe(owner: LifecycleOwner, consumer: Consumer<S>): Closeable =
         LifecycleStateListener(

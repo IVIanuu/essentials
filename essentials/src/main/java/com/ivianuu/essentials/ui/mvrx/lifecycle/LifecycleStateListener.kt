@@ -44,15 +44,15 @@ internal class LifecycleStateListener<T>(
         val state = owner.lifecycle.currentState
 
         when {
-            state.isAtLeast(Lifecycle.State.STARTED) -> store.addStateListener(consumer)
+            state.isAtLeast(Lifecycle.State.STARTED) -> store.addListener(consumer)
             state == Lifecycle.State.DESTROYED -> { close() }
-            else -> store.removeStateListener(consumer)
+            else -> store.removeListener(consumer)
         }
     }
 
     override fun close() {
         owner.lifecycle.removeObserver(this)
-        store.removeStateListener(consumer)
+        store.removeListener(consumer)
     }
 
 }
