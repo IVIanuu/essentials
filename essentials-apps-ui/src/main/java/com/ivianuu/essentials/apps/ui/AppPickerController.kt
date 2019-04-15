@@ -22,7 +22,6 @@ import com.bumptech.glide.request.RequestOptions
 import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.AppStore
 import com.ivianuu.essentials.apps.glide.AppIcon
-import com.ivianuu.essentials.injection.PerController
 import com.ivianuu.essentials.ui.list.EsHolder
 import com.ivianuu.essentials.ui.list.SimpleItem
 import com.ivianuu.essentials.ui.list.SimpleLoadingItem
@@ -34,7 +33,9 @@ import com.ivianuu.essentials.ui.traveler.key.ControllerKey
 import com.ivianuu.essentials.util.SavedState
 import com.ivianuu.essentials.util.coroutineScope
 import com.ivianuu.essentials.util.ext.goBackWithResult
-import com.ivianuu.injekt.annotations.Factory
+import com.ivianuu.injekt.factory
+import com.ivianuu.injekt.get
+import com.ivianuu.injekt.module
 import com.ivianuu.list.id
 import com.ivianuu.traveler.Router
 import kotlinx.android.parcel.Parcelize
@@ -52,6 +53,8 @@ data class AppPickerKey(
  * App picker controller
  */
 class AppPickerController : ListController() {
+
+    override fun modules() = listOf(appPickerModule)
 
     override val toolbarTitleRes: Int
         get() = R.string.es_title_app_picker
@@ -96,11 +99,11 @@ private class AppInfoItem : SimpleItem(layoutRes = R.layout.es_item_app) {
     }
 }
 
-/**
- * View model for the [AppPickerController]
- */
-@Factory(PerController::class)
-class AppPickerViewModel(
+private val appPickerModule = module {
+    factory { AppPickerViewModel(get(), get(), get()) }
+}
+
+private class AppPickerViewModel(
     private val key: AppPickerKey,
     private val appStore: AppStore,
     private val router: Router
@@ -124,7 +127,7 @@ class AppPickerViewModel(
     }
 }
 
-data class AppPickerState(
+private data class AppPickerState(
     val apps: List<AppInfo> = emptyList(),
     val loading: Boolean = true
 )

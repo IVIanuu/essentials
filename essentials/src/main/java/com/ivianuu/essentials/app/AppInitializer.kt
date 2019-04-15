@@ -50,8 +50,8 @@ val appInitializerInjectionModule = module {
 }
 
 val esAppInitializersModule = module {
-    bindAppInitializer<RxJavaAppInitializer>()
-    bindAppInitializer<SavedStateAppInitializer>()
-    bindAppInitializer<StateStoreAppInitializer>()
-    bindAppInitializer<TimberAppInitializer>()
+    appInitializer { RxJavaAppInitializer() }
+    appInitializer { SavedStateAppInitializer() }
+    appInitializer { StateStoreAppInitializer() }
+    appInitializer { TimberAppInitializer(get()) }
 }

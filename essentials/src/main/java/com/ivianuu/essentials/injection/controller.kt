@@ -34,7 +34,7 @@ object ForChildController : StringQualifier("ForChildController")
  */
 inline fun <reified T : Controller> T.controllerComponent(
     createEagerInstances: Boolean = true,
-    definition: ComponentDefinition = {}
+    definition: Component.() -> Unit = {}
 ): Component = component(createEagerInstances) {
     scopes(PerController)
     (getParentControllerComponentOrNull()
@@ -49,7 +49,7 @@ inline fun <reified T : Controller> T.controllerComponent(
  */
 inline fun <reified T : Controller> T.childControllerComponent(
     createEagerInstances: Boolean = true,
-    definition: ComponentDefinition = {}
+    definition: Component.() -> Unit = {}
 ): Component = component(createEagerInstances) {
     scopes(PerChildController)
     (getParentControllerComponentOrNull()

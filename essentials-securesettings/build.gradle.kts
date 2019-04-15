@@ -14,9 +14,6 @@
  * limitations under the License.
  */
 
-import org.gradle.jvm.tasks.Jar
-import org.jetbrains.kotlin.gradle.internal.AndroidExtensionsExtension
-
 /*
  * Copyright 2018 Manuel Wrage
  *
@@ -35,16 +32,13 @@ import org.jetbrains.kotlin.gradle.internal.AndroidExtensionsExtension
 plugins {
     id("com.android.library")
     id("kotlin-android")
-    id("kotlin-kapt")
 }
 
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/android-build-lib.gradle")
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-android-ext.gradle")
-apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-kapt.gradle")
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/mvn-publish.gradle")
 
 dependencies {
     api(project(":essentials"))
     api(project(":essentials-shell"))
-    kapt(project(":essentials-compiler"))
 }

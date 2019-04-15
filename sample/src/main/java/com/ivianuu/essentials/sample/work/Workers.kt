@@ -22,21 +22,19 @@ import android.view.WindowManager
 import androidx.work.WorkerParameters
 import com.ivianuu.essentials.hidenavbar.NavBarPrefs
 import com.ivianuu.essentials.work.EsWorker
-import com.ivianuu.essentials.work.bindWorker
-import com.ivianuu.injekt.annotations.Factory
-import com.ivianuu.injekt.annotations.Param
+import com.ivianuu.essentials.work.worker
+import com.ivianuu.injekt.get
 import com.ivianuu.injekt.module
 import com.ivianuu.timberktx.d
 
 val workerModule = module {
-    bindWorker<MyWorkerOne>()
-    bindWorker<MyWorkerTwo>()
+    worker { context, workerParams -> MyWorkerOne(context, workerParams, get(), get()) }
+    worker { context, workerParams -> MyWorkerTwo(context, workerParams, get()) }
 }
 
-@Factory
 class MyWorkerOne(
-    @Param context: Context,
-    @Param workerParams: WorkerParameters,
+    context: Context,
+    workerParams: WorkerParameters,
     windowManager: WindowManager,
     navBarPrefs: NavBarPrefs
 ) : EsWorker(context, workerParams) {
@@ -47,10 +45,9 @@ class MyWorkerOne(
     }
 }
 
-@Factory
 class MyWorkerTwo(
-    @Param context: Context,
-    @Param workerParams: WorkerParameters,
+    context: Context,
+    workerParams: WorkerParameters,
     packageManager: PackageManager
 ) : EsWorker(context, workerParams) {
 

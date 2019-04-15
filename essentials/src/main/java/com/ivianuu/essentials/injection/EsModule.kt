@@ -21,6 +21,7 @@ import com.ivianuu.essentials.app.appServiceInjectionModule
 import com.ivianuu.essentials.app.esAppInitializersModule
 import com.ivianuu.essentials.app.esAppServicesModule
 import com.ivianuu.essentials.ui.traveler.travelerModule
+import com.ivianuu.essentials.util.esUtilModule
 import com.ivianuu.injekt.module
 
 /**
@@ -31,6 +32,7 @@ val esModule = module {
     module(appServiceInjectionModule)
     module(esAppInitializersModule)
     module(esAppServicesModule)
+    module(esUtilModule)
     module(systemServiceModule)
     module(travelerModule)
 }

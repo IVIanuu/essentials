@@ -16,16 +16,13 @@
 
 package com.ivianuu.essentials.sample.ui.list
 
-import com.ivianuu.essentials.injection.PerController
 import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
 import com.ivianuu.essentials.util.SavedState
 import com.ivianuu.essentials.util.coroutineScope
 import com.ivianuu.essentials.util.ext.coroutinesDefault
-import com.ivianuu.injekt.annotations.Factory
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-@Factory(PerController::class)
 class ListViewModel : MvRxViewModel<ListState>(ListState()) {
 
     init {

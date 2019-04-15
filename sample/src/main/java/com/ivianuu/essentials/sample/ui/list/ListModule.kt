@@ -14,18 +14,11 @@
  * limitations under the License.
  */
 
-plugins {
-    id("com.android.library")
-    id("kotlin-android")
-    id("kotlin-android-extensions")
-}
+package com.ivianuu.essentials.sample.ui.list
 
-apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/android-build-lib.gradle")
-apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-android-ext.gradle")
-apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/mvn-publish.gradle")
+import com.ivianuu.injekt.factory
+import com.ivianuu.injekt.module
 
-dependencies {
-    api(project(":essentials"))
-    api(project(":essentials-apps"))
-    api(project(":essentials-apps-glide"))
+val listModule = module {
+    factory { ListViewModel() }
 }

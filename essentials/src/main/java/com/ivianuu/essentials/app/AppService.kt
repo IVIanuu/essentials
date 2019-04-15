@@ -18,6 +18,7 @@ package com.ivianuu.essentials.app
 
 import com.ivianuu.essentials.injection.bindIntoClassMap
 import com.ivianuu.injekt.*
+import com.ivianuu.injekt.android.PerApplication
 import com.ivianuu.injekt.multibinding.mapBinding
 import com.ivianuu.scopes.MutableScope
 import com.ivianuu.scopes.Scope
@@ -43,7 +44,7 @@ inline fun <reified T : AppService> Module.appService(
     override: Boolean = false,
     noinline definition: Definition<T>
 ): BindingContext<T> =
-    single(qualifier, null, override, false, definition) bindIntoClassMap AppServices
+    single(qualifier, PerApplication, override, false, definition) bindIntoClassMap AppServices
 
 inline fun <reified T : AppService> Module.bindAppService(qualifier: Qualifier? = null) {
     bindIntoClassMap<T>(AppServices, implementationQualifier = qualifier)

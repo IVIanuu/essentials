@@ -17,14 +17,15 @@
 package com.ivianuu.essentials.shell
 
 import com.ivianuu.essentials.util.ext.coroutinesIo
-import com.ivianuu.injekt.annotations.Factory
+import com.ivianuu.injekt.factory
+import com.ivianuu.injekt.module
+
 import eu.chainfire.libsuperuser.Shell.SU
 import kotlinx.coroutines.withContext
 
 /**
  * Shell
  */
-@Factory
 class Shell {
 
     suspend fun run(vararg commands: String): List<String> = withContext(coroutinesIo) {
@@ -41,3 +42,7 @@ suspend fun Shell.run(command: String): List<String> = run(command)
 
 suspend fun Shell.run(commands: Iterable<String>): List<String> =
     run(*commands.toList().toTypedArray())
+
+val esShellModule = module {
+    factory { Shell() }
+}

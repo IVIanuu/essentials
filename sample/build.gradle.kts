@@ -17,12 +17,10 @@
 plugins {
     id("com.android.application")
     id("kotlin-android")
-    id("kotlin-kapt")
 }
 
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/android-build-app.gradle")
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-android-ext.gradle")
-apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-kapt.gradle")
 // todo remove once fixed
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/coroutines-fix.gradle")
 
@@ -47,7 +45,6 @@ dependencies {
     implementation(project(":essentials-securesettings"))
     implementation(project(":essentials-shell"))
     implementation(project(":essentials-work"))
-    kapt(project(":essentials-compiler"))
 
     testImplementation(project(":essentials-test"))
 }

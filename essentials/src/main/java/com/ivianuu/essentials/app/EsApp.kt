@@ -58,13 +58,15 @@ abstract class EsApp : Application(), InjektTrait, ScopeOwner {
         onStartAppServices()
     }
 
-    protected open fun onCreateComponent() {
+    protected open fun onConfigureInjekt() {
         configureInjekt {
             if (applicationInfo.flags.containsFlag(ApplicationInfo.FLAG_DEBUGGABLE)) {
                 androidLogger()
             }
         }
+    }
 
+    protected open fun onCreateComponent() {
         _component = applicationComponent {
             modules(esAppModule, esModule)
             modules(this@EsApp.modules())
@@ -94,6 +96,7 @@ abstract class EsApp : Application(), InjektTrait, ScopeOwner {
     private fun createComponentIfNeeded() {
         if (!componentCreated) {
             componentCreated = true
+            onConfigureInjekt()
             onCreateComponent()
         }
     }

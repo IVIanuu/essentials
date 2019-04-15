@@ -14,25 +14,18 @@
  * limitations under the License.
  */
 
-import org.gradle.jvm.tasks.Jar
-import org.jetbrains.kotlin.gradle.internal.AndroidExtensionsExtension
-import java.io.File
-
 plugins {
     id("com.android.library")
     id("kotlin-android")
     id("kotlin-android-extensions")
-    id("kotlin-kapt")
 }
 
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/android-build-lib.gradle")
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-android-ext.gradle")
-apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-kapt.gradle")
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/mvn-publish.gradle")
 
 dependencies {
     api(project(":essentials"))
-    kapt(project(":essentials-compiler"))
     api(Deps.androidxWork)
     api(Deps.androidxWorkKtx)
     api(Deps.androidxWorkRxJava)

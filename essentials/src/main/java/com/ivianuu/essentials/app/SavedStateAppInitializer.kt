@@ -19,12 +19,10 @@ package com.ivianuu.essentials.app
 import com.ivianuu.essentials.util.AndroidSavedStateFactory
 import com.ivianuu.essentials.util.SavedStatePlugins
 import com.ivianuu.essentials.util.savedStateFactory
-import com.ivianuu.injekt.annotations.Factory
 
 /**
  * Sets the [AndroidSavedStateFactory] as default
  */
-@Factory
 class SavedStateAppInitializer : AppInitializer {
 
     override fun initialize() {

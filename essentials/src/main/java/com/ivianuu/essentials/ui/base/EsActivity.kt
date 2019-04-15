@@ -23,12 +23,10 @@ import com.ivianuu.director.Router
 import com.ivianuu.director.fragment.getRouter
 import com.ivianuu.director.hasRoot
 import com.ivianuu.director.traveler.ControllerNavigator
-import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.mvrx.injekt.InjektMvRxView
 import com.ivianuu.essentials.ui.traveler.key.keyModule
 import com.ivianuu.essentials.ui.viewmodel.ViewModelManager
 import com.ivianuu.essentials.ui.viewmodel.android.viewModelManagerOwner
-
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.android.activityComponent
 import com.ivianuu.injekt.inject
@@ -61,14 +59,10 @@ abstract class EsActivity : AppCompatActivity(), InjektMvRxView, ScopeOwner {
 
     val travelerRouter by inject<com.ivianuu.traveler.Router>()
 
-    protected open val layoutRes get() = R.layout.es_activity_default
+    protected open val layoutRes get() = 0
 
     open val containerId
-        get() = if (layoutRes == R.layout.es_activity_default) {
-            R.id.es_container
-        } else {
-            android.R.id.content
-        }
+        get() = android.R.id.content
 
     open val startKey: Any?
         get() = null
@@ -89,7 +83,9 @@ abstract class EsActivity : AppCompatActivity(), InjektMvRxView, ScopeOwner {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(layoutRes)
+        if (layoutRes != 0) {
+            setContentView(layoutRes)
+        }
 
         onInitializeRouter()
     }

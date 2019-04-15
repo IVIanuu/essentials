@@ -26,8 +26,6 @@ import android.view.Surface
 import com.ivianuu.essentials.app.AppService
 import com.ivianuu.essentials.util.BroadcastFactory
 import com.ivianuu.essentials.util.ext.combineLatest
-import com.ivianuu.injekt.android.PerApplication
-import com.ivianuu.injekt.annotations.Single
 import com.ivianuu.kommon.core.app.doOnConfigurationChanged
 import com.ivianuu.kommon.core.content.isScreenOn
 import com.ivianuu.kommon.core.content.rotation
@@ -43,7 +41,6 @@ import io.reactivex.rxkotlin.Observables
 /**
  * Handles the state of the navigation bar
  */
-@Single(PerApplication::class)
 class NavBarController(
     private val app: Application,
     private val broadcastFactory: BroadcastFactory,

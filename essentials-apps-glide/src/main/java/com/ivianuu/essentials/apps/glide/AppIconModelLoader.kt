@@ -26,37 +26,25 @@ import com.bumptech.glide.load.model.ModelLoader
 import com.bumptech.glide.load.model.ModelLoaderFactory
 import com.bumptech.glide.load.model.MultiModelLoaderFactory
 import com.bumptech.glide.signature.ObjectKey
-import com.ivianuu.essentials.util.ext.coroutinesIo
 import com.ivianuu.injekt.Provider
-import com.ivianuu.injekt.annotations.Factory
-import com.ivianuu.injekt.annotations.Param
 import com.ivianuu.injekt.parametersOf
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
 
 data class AppIcon(val packageName: String)
 
 /**
  * Fetches images for [AppIcon]s
  */
-@Factory
 class AppIconFetcher(
-    @Param private val app: AppIcon,
+    private val app: AppIcon,
     private val packageManager: PackageManager
-) :
-    DataFetcher<Drawable> {
-
-    private var job: Job? = null
+) : DataFetcher<Drawable> {
 
     override fun loadData(priority: Priority, callback: DataFetcher.DataCallback<in Drawable>) {
-        job = GlobalScope.launch(coroutinesIo) {
-            val drawable = packageManager.getApplicationIcon(app.packageName)
-            if (drawable != null) {
-                callback.onDataReady(drawable)
-            } else {
-                callback.onLoadFailed(Exception())
-            }
+        val drawable = packageManager.getApplicationIcon(app.packageName)
+        if (drawable != null) {
+            callback.onDataReady(drawable)
+        } else {
+            callback.onLoadFailed(Exception())
         }
     }
 
@@ -64,7 +52,6 @@ class AppIconFetcher(
     }
 
     override fun cancel() {
-        job?.cancel()
     }
 
     override fun getDataClass() = Drawable::class.java
@@ -75,7 +62,6 @@ class AppIconFetcher(
 /**
  * Model loader to load [AppIcon]s
  */
-@Factory
 class AppIconModelLoader(
     private val appIconFetcherProvider: Provider<AppIconFetcher>
 ) : ModelLoader<AppIcon, Drawable> {
@@ -93,7 +79,6 @@ class AppIconModelLoader(
 
 }
 
-@Factory
 class AppIconModelLoaderFactory(
     private val appIconModelLoaderProvider: Provider<AppIconModelLoader>
 ) : ModelLoaderFactory<AppIcon, Drawable> {

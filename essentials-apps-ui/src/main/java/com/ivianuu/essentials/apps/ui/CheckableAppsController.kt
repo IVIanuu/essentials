@@ -35,12 +35,11 @@ import com.ivianuu.essentials.ui.simple.ListController
 import com.ivianuu.essentials.util.SavedState
 import com.ivianuu.essentials.util.coroutineScope
 import com.ivianuu.essentials.util.ext.coroutinesIo
-import com.ivianuu.injekt.annotations.Factory
-import com.ivianuu.injekt.annotations.Param
+import com.ivianuu.injekt.factory
 import com.ivianuu.injekt.get
+import com.ivianuu.injekt.module
 import com.ivianuu.injekt.parametersOf
 import com.ivianuu.list.id
-
 import com.ivianuu.rxjavaktx.BehaviorSubject
 import com.ivianuu.rxjavaktx.PublishSubject
 import com.ivianuu.scopes.ReusableScope
@@ -57,6 +56,8 @@ import kotlinx.coroutines.rx2.asSingle
  * App blacklist
  */
 abstract class CheckableAppsController : ListController() {
+
+    override fun modules() = listOf(checkableAppsModule)
 
     override val toolbarMenuRes
         get() = R.menu.controller_checkable_apps
@@ -127,12 +128,12 @@ private class CheckableAppModel : SimpleItem(layoutRes = R.layout.es_item_checka
 
 }
 
-/**
- * View model for the [CheckableAppsController]
- */
-@Factory
-class CheckableAppsViewModel(
-    @Param private val launchableOnly: Boolean,
+private val checkableAppsModule = module {
+    factory { CheckableAppsViewModel(it[0], get()) }
+}
+
+private class CheckableAppsViewModel(
+    private val launchableOnly: Boolean,
     private val appStore: AppStore
 ) : MvRxViewModel<CheckableAppsState>(CheckableAppsState()) {
 
@@ -218,12 +219,12 @@ class CheckableAppsViewModel(
     }
 }
 
-data class CheckableAppsState(
+private data class CheckableAppsState(
     val apps: List<CheckableApp> = emptyList(),
     val loading: Boolean = true
 )
 
-data class CheckableApp(
+private data class CheckableApp(
     val info: AppInfo,
     val checked: Boolean
 )

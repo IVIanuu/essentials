@@ -20,7 +20,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import com.ivianuu.injekt.annotations.Factory
+
 import com.ivianuu.kommon.core.content.intentFilterOf
 import com.ivianuu.rxjavaktx.observable
 import io.reactivex.Observable
@@ -28,7 +28,6 @@ import io.reactivex.Observable
 /**
  * A factory for broadcast receiver observables
  */
-@Factory
 class BroadcastFactory(private val context: Context) {
 
     fun create(vararg actions: String): Observable<Intent> = create(intentFilterOf(*actions))

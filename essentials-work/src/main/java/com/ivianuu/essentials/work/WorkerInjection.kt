@@ -17,28 +17,13 @@
 package com.ivianuu.essentials.work
 
 import android.content.Context
-import androidx.work.Configuration
-import androidx.work.ListenableWorker
-import androidx.work.WorkManager
-import androidx.work.Worker
-import androidx.work.WorkerFactory
-import androidx.work.WorkerParameters
+import androidx.work.*
 import com.ivianuu.essentials.app.AppInitializer
-import com.ivianuu.essentials.app.bindAppInitializer
-import com.ivianuu.injekt.BindingContext
-import com.ivianuu.injekt.DefinitionContext
-import com.ivianuu.injekt.Module
-import com.ivianuu.injekt.Provider
-import com.ivianuu.injekt.Qualifier
-import com.ivianuu.injekt.StringQualifier
-import com.ivianuu.injekt.annotations.Factory
-import com.ivianuu.injekt.bindType
-import com.ivianuu.injekt.factory
-import com.ivianuu.injekt.module
+import com.ivianuu.essentials.app.appInitializer
+import com.ivianuu.injekt.*
 import com.ivianuu.injekt.multibinding.bindIntoMap
 import com.ivianuu.injekt.multibinding.getProviderMap
 import com.ivianuu.injekt.multibinding.mapBinding
-import com.ivianuu.injekt.parametersOf
 
 /**
  * Uses injekt to instantiate workers
@@ -104,13 +89,12 @@ inline fun <reified T : Worker> Module.bindWorker(qualifier: Qualifier? = null) 
  * Module for the [WorkerAppInitializer]
  */
 val workerInitializerModule = module {
-    bindAppInitializer<WorkerAppInitializer>()
+    appInitializer { WorkerAppInitializer(get(), get()) }
 }
 
 /**
  * Initializes the [WorkManager] with a injected [WorkerFactory]
  */
-@Factory
 class WorkerAppInitializer(
     private val context: Context,
     private val workerFactory: WorkerFactory

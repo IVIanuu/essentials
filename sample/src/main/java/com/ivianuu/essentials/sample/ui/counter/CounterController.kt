@@ -30,6 +30,8 @@ data class CounterKey(val screen: Int) : ControllerKey(::CounterController)
 
 class CounterController : EsController() {
 
+    override fun modules() = listOf(counterModule)
+
     override val layoutRes: Int get() = R.layout.controller_counter
 
     private val viewModel by mvRxViewModel<CounterViewModel>()
