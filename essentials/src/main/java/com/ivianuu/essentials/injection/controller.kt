@@ -18,46 +18,45 @@ package com.ivianuu.essentials.injection
 
 import com.ivianuu.director.Controller
 import com.ivianuu.director.activity
-import com.ivianuu.director.application
 import com.ivianuu.director.parentController
 import com.ivianuu.injekt.*
-import com.ivianuu.injekt.common.addConstant
+import com.ivianuu.injekt.constant.constant
 
-object PerController : StringScope("PerController")
-object PerChildController : StringScope("PerChildController")
+/**
+ * Controller name
+ */
+object ForController
 
-object ForController : StringQualifier("ForController")
-object ForChildController : StringQualifier("ForChildController")
+/**
+ * Child controller name
+ */
+object ForChildController
 
 /**
  * Returns a [Component] with convenient configurations
  */
-inline fun <reified T : Controller> T.controllerComponent(
-    createEagerInstances: Boolean = true,
-    definition: Component.() -> Unit = {}
-): Component = component(createEagerInstances) {
-    scopes(PerController)
-    (getParentControllerComponentOrNull()
-        ?: getActivityComponentOrNull()
-        ?: getApplicationComponentOrNull())?.let { dependencies(it) }
-    addConstant(this@controllerComponent)
-    definition.invoke(this)
+fun <T : Controller> T.controllerComponent(
+    block: (ComponentBuilder.() -> Unit)? = null
+): Component = component {
+    getClosestComponentOrNull()?.let { dependencies(it) }
+    modules(controllerModule())
+    block?.invoke(this)
 }
 
 /**
- * Returns a [Component] with convenient configurations
+ * Returns the closest [Component] or null
  */
-inline fun <reified T : Controller> T.childControllerComponent(
-    createEagerInstances: Boolean = true,
-    definition: Component.() -> Unit = {}
-): Component = component(createEagerInstances) {
-    scopes(PerChildController)
-    (getParentControllerComponentOrNull()
+fun Controller.getClosestComponentOrNull(): Component? {
+    return getParentControllerComponentOrNull()
         ?: getActivityComponentOrNull()
-        ?: getApplicationComponentOrNull())?.let { dependencies(it) }
-    addConstant(this@childControllerComponent)
-    definition.invoke(this)
+        ?: getApplicationComponentOrNull()
 }
+
+/**
+ * Returns the closest [Component]
+ */
+fun Controller.getClosestComponent(): Component =
+    getClosestComponentOrNull() ?: error("No close component found for $this")
 
 /**
  * Returns the [Component] of the parent controller or null
@@ -87,10 +86,18 @@ fun Controller.getActivityComponent(): Component =
  * Returns the [Component] of the application or null
  */
 fun Controller.getApplicationComponentOrNull(): Component? =
-    (application as? InjektTrait)?.component
+    (activity.application as? InjektTrait)?.component
 
 /**
  * Returns the [Component] of the application or throws
  */
 fun Controller.getApplicationComponent(): Component =
     getApplicationComponentOrNull() ?: error("No application component found for $this")
+
+
+/**
+ * Returns a [Module] with convenient bindings
+ */
+fun <T : Controller> T.controllerModule(): Module = module {
+    constant(this@controllerModule)
+}

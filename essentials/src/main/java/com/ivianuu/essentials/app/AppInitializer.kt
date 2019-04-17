@@ -18,9 +18,8 @@ package com.ivianuu.essentials.app
 
 import com.ivianuu.essentials.injection.bindIntoClassMap
 import com.ivianuu.injekt.*
-import com.ivianuu.injekt.multibinding.mapBinding
 
-object AppInitializers : StringQualifier("AppInitializers")
+object AppInitializers
 
 /**
  * Initializes what ever on app start up
@@ -29,24 +28,11 @@ interface AppInitializer {
     fun initialize()
 }
 
-inline fun <reified T : AppInitializer> Module.appInitializer(
-    qualifier: Qualifier? = null,
-    override: Boolean = false,
+inline fun <reified T : AppInitializer> ModuleBuilder.appInitializer(
+    name: Any? = null,
     noinline definition: Definition<T>
-): BindingContext<T> {
-    return factory(
-        qualifier = qualifier,
-        override =  override,
-        definition = definition
-    ) bindIntoClassMap AppInitializers
-}
-
-inline fun <reified T : AppInitializer> Module.bindAppInitializer(qualifier: Qualifier? = null) {
-    bindIntoClassMap<T>(AppInitializers, implementationQualifier = qualifier)
-}
-
-val appInitializerInjectionModule = module {
-    mapBinding(AppInitializers)
+) {
+    factoryBuilder(name, definition) { bindIntoClassMap(AppInitializers) }
 }
 
 val esAppInitializersModule = module {

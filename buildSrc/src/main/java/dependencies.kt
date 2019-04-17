@@ -54,14 +54,14 @@ object Versions {
     const val coroutines = "1.2.0"
     const val director = "0.0.1-dev-25"
     const val glide = "4.8.0"
-    const val injekt = "0.0.1-dev-21"
+    const val injekt = "0.0.1-dev-22"
     const val junit = "4.12"
     const val kommon = "0.0.1-dev-5"
     const val kotlin = "1.3.30"
     const val kPrefs = "0.0.1-dev-6"
     const val kSettings = "0.0.1-dev-4"
-    const val list = "0.0.1-dev-25"
-    const val listPrefs = "0.0.1-dev-10"
+    const val list = "0.0.1-dev-26"
+    const val listPrefs = "0.0.1-dev-11"
     const val liveEvent = "1e265df911"
     const val mavenGradle = "2.1"
     const val materialComponents = "1.1.0-alpha05"
@@ -135,8 +135,6 @@ object Deps {
     const val injekt = "com.ivianuu.injekt:injekt:${Versions.injekt}"
     const val injektAndroid = "com.ivianuu.injekt:injekt-android:${Versions.injekt}"
     const val injektCommon = "com.ivianuu.injekt:injekt-common:${Versions.injekt}"
-    const val injektMultiBinding =
-        "com.ivianuu.injekt:injekt-multibinding:${Versions.injekt}"
 
     const val junit = "junit:junit:${Versions.junit}"
 

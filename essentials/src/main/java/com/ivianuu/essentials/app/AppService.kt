@@ -17,14 +17,15 @@
 package com.ivianuu.essentials.app
 
 import com.ivianuu.essentials.injection.bindIntoClassMap
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.android.PerApplication
-import com.ivianuu.injekt.multibinding.mapBinding
+import com.ivianuu.injekt.Definition
+import com.ivianuu.injekt.ModuleBuilder
+import com.ivianuu.injekt.module
+import com.ivianuu.injekt.singleBuilder
 import com.ivianuu.scopes.MutableScope
 import com.ivianuu.scopes.Scope
 import com.ivianuu.scopes.ScopeOwner
 
-object AppServices : StringQualifier("AppServices")
+object AppServices
 
 /**
  * Will be started on app start up and lives as long as the app lives
@@ -39,19 +40,11 @@ abstract class AppService : ScopeOwner {
 
 }
 
-inline fun <reified T : AppService> Module.appService(
-    qualifier: Qualifier? = null,
-    override: Boolean = false,
+inline fun <reified T : AppService> ModuleBuilder.appService(
+    name: Any? = null,
     noinline definition: Definition<T>
-): BindingContext<T> =
-    single(qualifier, PerApplication, override, false, definition) bindIntoClassMap AppServices
-
-inline fun <reified T : AppService> Module.bindAppService(qualifier: Qualifier? = null) {
-    bindIntoClassMap<T>(AppServices, implementationQualifier = qualifier)
-}
-
-val appServiceInjectionModule = module {
-    mapBinding(AppServices)
+) {
+    singleBuilder(name, definition) { bindIntoClassMap(AppServices) }
 }
 
 val esAppServicesModule = module {

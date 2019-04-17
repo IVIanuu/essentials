@@ -16,82 +16,74 @@
 
 package com.ivianuu.essentials.injection
 
-import com.ivianuu.injekt.*
+import com.ivianuu.injekt.BindingBuilder
+import com.ivianuu.injekt.Component
+import com.ivianuu.injekt.InjektTrait
+import com.ivianuu.injekt.ParametersDefinition
 import com.ivianuu.injekt.multibinding.*
+import com.ivianuu.injekt.provider.Provider
 import kotlin.reflect.KClass
 
-inline infix fun <reified T> BindingContext<T>.bindIntoClassMap(mapQualifier: Qualifier): BindingContext<T> =
-    bindIntoMap(MapBinding(mapQualifier, T::class))
-
-inline fun <reified T> BindingContext<T>.bindIntoClassMap(
-    mapQualifier: Qualifier,
-    override: Boolean = false
-): BindingContext<T> = bindIntoMap(MapBinding(mapQualifier, T::class, override))
-
-inline fun <reified T> Module.bindIntoClassMap(
-    mapQualifier: Qualifier,
-    override: Boolean = false,
-    implementationQualifier: Qualifier? = null
-) {
-    bindIntoMap<T>(mapQualifier, T::class, override, implementationQualifier)
+inline fun <reified T> BindingBuilder<T>.bindIntoClassMap(mapName: Any) {
+    bindIntoMap(mapName, T::class)
 }
 
 fun <T : Any> Component.getClassMap(
-    qualifier: Qualifier,
+    name: Any,
     parameters: ParametersDefinition? = null
-): Map<KClass<out T>, T> = getMap(qualifier, parameters)
+): Map<KClass<out T>, T> = getMap(name, parameters)
 
 fun <T : Any> Component.getLazyClassMap(
-    qualifier: Qualifier,
+    name: Any,
     parameters: ParametersDefinition? = null
-): Map<KClass<out T>, Lazy<T>> = getLazyMap(qualifier, parameters)
+): Map<KClass<out T>, Lazy<T>> = getLazyMap(name, parameters)
 
 fun <T : Any> Component.getProviderClassMap(
-    qualifier: Qualifier,
+    name: Any,
     defaultParameters: ParametersDefinition? = null
-): Map<KClass<out T>, Provider<T>> = getProviderMap(qualifier, defaultParameters)
+): Map<KClass<out T>, Provider<T>> = getProviderMap(name, defaultParameters)
 
 fun <T : Any> Component.injectClassMap(
-    qualifier: Qualifier,
+    name: Any,
     parameters: ParametersDefinition? = null
-): Lazy<Map<KClass<out T>, T>> = injectClassMap(qualifier, parameters)
+): Lazy<Map<KClass<out T>, T>> = injectClassMap(name, parameters)
 
 fun <T : Any> Component.injectLazyClassMap(
-    qualifier: Qualifier,
+    name: Any,
     parameters: ParametersDefinition? = null
-): Lazy<Map<KClass<out T>, Lazy<T>>> = injectLazyMap(qualifier, parameters)
+): Lazy<Map<KClass<out T>, Lazy<T>>> = injectLazyMap(name, parameters)
 
 fun <T : Any> Component.injectProviderClassMap(
-    qualifier: Qualifier,
+    name: Any,
     defaultParameters: ParametersDefinition? = null
-): Lazy<Map<KClass<out T>, Provider<T>>> = injectProviderMap(qualifier, defaultParameters)
+): Lazy<Map<KClass<out T>, Provider<T>>> = injectProviderMap(name, defaultParameters)
 
 fun <T : Any> InjektTrait.getClassMap(
-    qualifier: Qualifier,
+    name: Any,
     parameters: ParametersDefinition? = null
-): Map<KClass<out T>, T> = getMap(qualifier, parameters)
+): Map<KClass<out T>, T> = getMap(name, parameters)
 
 fun <T : Any> InjektTrait.getLazyClassMap(
-    qualifier: Qualifier,
+    name: Any,
     parameters: ParametersDefinition? = null
-): Map<KClass<out T>, Lazy<T>> = getLazyMap(qualifier, parameters)
+): Map<KClass<out T>, Lazy<T>> = getLazyMap(name, parameters)
 
 fun <T : Any> InjektTrait.getProviderClassMap(
-    qualifier: Qualifier,
+    name: Any,
     defaultParameters: ParametersDefinition? = null
-): Map<KClass<out T>, Provider<T>> = getProviderMap(qualifier, defaultParameters)
+): Map<KClass<out T>, Provider<T>> = getProviderMap(name, defaultParameters)
 
 fun <T : Any> InjektTrait.injectClassMap(
-    qualifier: Qualifier,
+    name: Any,
     parameters: ParametersDefinition? = null
-): Lazy<Map<KClass<out T>, T>> = injectMap(qualifier, parameters)
+): Lazy<Map<KClass<out T>, T>> = injectMap(name, parameters)
 
 fun <T : Any> InjektTrait.injectLazyClassMap(
-    qualifier: Qualifier,
+    name: Any,
     parameters: ParametersDefinition? = null
-): Lazy<Map<KClass<out T>, Lazy<T>>> = injectLazyMap(qualifier, parameters)
+): Lazy<Map<KClass<out T>, Lazy<T>>> = injectLazyMap(name, parameters)
 
 fun <T : Any> InjektTrait.injectProviderClassMap(
-    qualifier: Qualifier,
+    name: Any,
     defaultParameters: ParametersDefinition? = null
-): Lazy<Map<KClass<out T>, Provider<T>>> = injectProviderMap(qualifier, defaultParameters)
+): Lazy<Map<KClass<out T>, Provider<T>>> = injectProviderMap(name, defaultParameters)

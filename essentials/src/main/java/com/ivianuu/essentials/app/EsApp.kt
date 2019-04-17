@@ -59,7 +59,7 @@ abstract class EsApp : Application(), InjektTrait, ScopeOwner {
     }
 
     protected open fun onConfigureInjekt() {
-        configureInjekt {
+        injekt {
             if (applicationInfo.flags.containsFlag(ApplicationInfo.FLAG_DEBUGGABLE)) {
                 androidLogger()
             }

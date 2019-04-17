@@ -19,8 +19,8 @@ package com.ivianuu.essentials.apps.glide
 import com.ivianuu.essentials.app.appInitializer
 import com.ivianuu.injekt.factory
 import com.ivianuu.injekt.get
-import com.ivianuu.injekt.getProvider
 import com.ivianuu.injekt.module
+import com.ivianuu.injekt.provider.getProvider
 
 /**
  * Binds dependencies related to this module

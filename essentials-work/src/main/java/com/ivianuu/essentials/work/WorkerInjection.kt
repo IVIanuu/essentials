@@ -23,7 +23,8 @@ import com.ivianuu.essentials.app.appInitializer
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.multibinding.bindIntoMap
 import com.ivianuu.injekt.multibinding.getProviderMap
-import com.ivianuu.injekt.multibinding.mapBinding
+import com.ivianuu.injekt.provider.Provider
+import kotlin.reflect.KClass
 
 /**
  * Uses injekt to instantiate workers
@@ -46,14 +47,16 @@ class InjektWorkerFactory(
 /**
  * The map of [Worker]s used by the [InjektWorkerFactory]
  */
-object WorkerMap : StringQualifier("WorkerMap")
+object WorkerMap
 
 /**
  * Contains the [InjektWorkerFactory]
  */
 val workerInjectionModule = module {
-    mapBinding(WorkerMap)
-    factory { InjektWorkerFactory(getProviderMap(WorkerMap)) } bindType WorkerFactory::class
+    factoryBuilder<InjektWorkerFactory> {
+        definition { InjektWorkerFactory(getProviderMap(WorkerMap)) }
+        bindType<WorkerFactory>()
+    }
 }
 
 /**
@@ -64,25 +67,27 @@ typealias WorkerDefinition<T> = DefinitionContext.(context: Context, workerParam
 /**
  * Defines a [Worker] which will be used in conjunction with the [InjektWorkerFactory]
  */
-inline fun <reified T : Worker> Module.worker(
-    qualifier: Qualifier? = null,
-    override: Boolean = false,
+inline fun <reified T : Worker> ModuleBuilder.worker(
+    name: Any? = null,
     noinline definition: WorkerDefinition<T>
-): BindingContext<T> {
-    return factory(qualifier, null, override) { (context: Context, workerParams: WorkerParameters) ->
-        definition(this, context, workerParams)
-    } bindIntoMap (WorkerMap to T::class.java.name)
+) {
+    worker(T::class, name, definition)
 }
 
 /**
- * Binds a already existing [Worker]
+ * Defines a [Worker] which will be used in conjunction with the [InjektWorkerFactory]
  */
-inline fun <reified T : Worker> Module.bindWorker(qualifier: Qualifier? = null) {
-    bindIntoMap<T>(
-        mapQualifier = WorkerMap,
-        mapKey = T::class.java.name,
-        implementationQualifier = qualifier
-    )
+fun <T : Worker> ModuleBuilder.worker(
+    type: KClass<*>,
+    name: Any? = null,
+    definition: WorkerDefinition<T>
+) {
+    factoryBuilder<T>(type, name) {
+        definition { (context: Context, workerParams: WorkerParameters) ->
+            definition(this, context, workerParams)
+        }
+        bindIntoMap(WorkerMap, type::class.java.name)
+    }
 }
 
 /**

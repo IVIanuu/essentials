@@ -26,8 +26,8 @@ import com.bumptech.glide.load.model.ModelLoader
 import com.bumptech.glide.load.model.ModelLoaderFactory
 import com.bumptech.glide.load.model.MultiModelLoaderFactory
 import com.bumptech.glide.signature.ObjectKey
-import com.ivianuu.injekt.Provider
 import com.ivianuu.injekt.parametersOf
+import com.ivianuu.injekt.provider.Provider
 
 data class AppIcon(val packageName: String)
 
