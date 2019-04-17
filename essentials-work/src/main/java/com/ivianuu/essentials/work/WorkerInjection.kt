@@ -107,9 +107,9 @@ fun <T : Worker> ModuleBuilder.workerBuilder(
 ) {
     factoryBuilder<T>(type, name) {
         definition { (context: Context, workerParams: WorkerParameters) ->
-            definition(this, context, workerParams)
+            definition(context, workerParams)
         }
-        bindIntoMap(WorkerMap, type::class.java.name)
+        bindIntoMap(WorkerMap, type.java.name)
         block()
     }
 }
