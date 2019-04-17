@@ -32,7 +32,18 @@ inline fun <reified T : AppInitializer> ModuleBuilder.appInitializer(
     name: Any? = null,
     noinline definition: Definition<T>
 ) {
-    factoryBuilder(name, definition) { bindIntoClassMap(AppInitializers) }
+    appInitializerBuilder(name, definition) {}
+}
+
+inline fun <reified T : AppInitializer> ModuleBuilder.appInitializerBuilder(
+    name: Any? = null,
+    noinline definition: (Definition<T>)? = null,
+    noinline block: BindingBuilder<T>.() -> Unit
+) {
+    factoryBuilder(name, definition) {
+        bindIntoClassMap(AppInitializers)
+        block()
+    }
 }
 
 val esAppInitializersModule = module {

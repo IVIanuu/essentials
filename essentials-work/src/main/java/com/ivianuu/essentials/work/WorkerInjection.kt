@@ -82,11 +82,35 @@ fun <T : Worker> ModuleBuilder.worker(
     name: Any? = null,
     definition: WorkerDefinition<T>
 ) {
+    workerBuilder(type, name, definition) {}
+}
+
+/**
+ * Defines a [Worker] which will be used in conjunction with the [InjektWorkerFactory]
+ */
+inline fun <reified T : Worker> ModuleBuilder.workerBuilder(
+    name: Any? = null,
+    noinline definition: WorkerDefinition<T>,
+    noinline block: BindingBuilder<T>.() -> Unit
+) {
+    workerBuilder(T::class, name, definition, block)
+}
+
+/**
+ * Defines a [Worker] which will be used in conjunction with the [InjektWorkerFactory]
+ */
+fun <T : Worker> ModuleBuilder.workerBuilder(
+    type: KClass<*>,
+    name: Any? = null,
+    definition: WorkerDefinition<T>,
+    block: BindingBuilder<T>.() -> Unit
+) {
     factoryBuilder<T>(type, name) {
         definition { (context: Context, workerParams: WorkerParameters) ->
             definition(this, context, workerParams)
         }
         bindIntoMap(WorkerMap, type::class.java.name)
+        block()
     }
 }
 

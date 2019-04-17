@@ -17,10 +17,7 @@
 package com.ivianuu.essentials.app
 
 import com.ivianuu.essentials.injection.bindIntoClassMap
-import com.ivianuu.injekt.Definition
-import com.ivianuu.injekt.ModuleBuilder
-import com.ivianuu.injekt.module
-import com.ivianuu.injekt.singleBuilder
+import com.ivianuu.injekt.*
 import com.ivianuu.scopes.MutableScope
 import com.ivianuu.scopes.Scope
 import com.ivianuu.scopes.ScopeOwner
@@ -44,8 +41,18 @@ inline fun <reified T : AppService> ModuleBuilder.appService(
     name: Any? = null,
     noinline definition: Definition<T>
 ) {
-    singleBuilder(name, definition) { bindIntoClassMap(AppServices) }
+    appServiceBuilder(name, definition) {}
 }
 
-val esAppServicesModule = module {
+inline fun <reified T : AppService> ModuleBuilder.appServiceBuilder(
+    name: Any? = null,
+    noinline definition: (Definition<T>)? = null,
+    noinline block: BindingBuilder<T>.() -> Unit
+) {
+    singleBuilder(name, definition) {
+        bindIntoClassMap(AppServices)
+        block()
+    }
 }
+
+val esAppServicesModule = module()
