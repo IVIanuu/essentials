@@ -16,13 +16,15 @@
 
 package com.ivianuu.essentials.app
 
-import com.ivianuu.essentials.injection.bindIntoClassMap
 import com.ivianuu.injekt.*
+import com.ivianuu.injekt.multibinding.MapName
+import com.ivianuu.injekt.multibinding.bindIntoMap
 import com.ivianuu.scopes.MutableScope
 import com.ivianuu.scopes.Scope
 import com.ivianuu.scopes.ScopeOwner
+import kotlin.reflect.KClass
 
-object AppServices
+val appServicesMap = MapName<KClass<out AppService>, AppService>()
 
 /**
  * Will be started on app start up and lives as long as the app lives
@@ -39,18 +41,20 @@ abstract class AppService : ScopeOwner {
 
 inline fun <reified T : AppService> ModuleBuilder.appService(
     name: Any? = null,
+    override: Boolean = false,
     noinline definition: Definition<T>
 ) {
-    appServiceBuilder(name, definition) {}
+    appServiceBuilder(name, override, definition) {}
 }
 
 inline fun <reified T : AppService> ModuleBuilder.appServiceBuilder(
     name: Any? = null,
+    override: Boolean = false,
     noinline definition: (Definition<T>)? = null,
     noinline block: BindingBuilder<T>.() -> Unit
 ) {
-    singleBuilder(name, definition) {
-        bindIntoClassMap(AppServices)
+    singleBuilder(name, override, definition) {
+        bindIntoMap(appServicesMap, T::class)
         block()
     }
 }

@@ -30,11 +30,11 @@ object Build {
 object Publishing {
     const val groupId = "com.ivianuu.essentials"
     const val vcsUrl = "https://github.com/IVIanuu/essentials"
-    const val version = "${Build.versionName}-dev-75"
+    const val version = "${Build.versionName}-dev-76"
 }
 
 object Versions {
-    const val androidGradlePlugin = "3.3.0"
+    const val androidGradlePlugin = "3.4.0"
 
     const val androidxAppCompat = "1.1.0-alpha04"
     const val androidxCardView = "1.0.0"
@@ -54,7 +54,7 @@ object Versions {
     const val coroutines = "1.2.0"
     const val director = "0.0.1-dev-25"
     const val glide = "4.8.0"
-    const val injekt = "0.0.1-dev-23"
+    const val injekt = "0.0.1-dev-24"
     const val junit = "4.12"
     const val kommon = "0.0.1-dev-5"
     const val kotlin = "1.3.30"

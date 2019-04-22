@@ -17,10 +17,12 @@
 package com.ivianuu.essentials.work
 
 import android.content.Context
-import androidx.work.*
-import com.ivianuu.essentials.app.AppInitializer
-import com.ivianuu.essentials.app.appInitializer
+import androidx.work.ListenableWorker
+import androidx.work.Worker
+import androidx.work.WorkerFactory
+import androidx.work.WorkerParameters
 import com.ivianuu.injekt.*
+import com.ivianuu.injekt.multibinding.MapName
 import com.ivianuu.injekt.multibinding.bindIntoMap
 import com.ivianuu.injekt.multibinding.getProviderMap
 import com.ivianuu.injekt.provider.Provider
@@ -47,14 +49,14 @@ class InjektWorkerFactory(
 /**
  * The map of [Worker]s used by the [InjektWorkerFactory]
  */
-object WorkerMap
+val workerMap = MapName<String, Worker>()
 
 /**
  * Contains the [InjektWorkerFactory]
  */
 val workerInjectionModule = module {
     factoryBuilder<InjektWorkerFactory> {
-        definition { InjektWorkerFactory(getProviderMap(WorkerMap)) }
+        definition { InjektWorkerFactory(getProviderMap(workerMap)) }
         bindType<WorkerFactory>()
     }
 }
@@ -69,9 +71,10 @@ typealias WorkerDefinition<T> = DefinitionContext.(context: Context, workerParam
  */
 inline fun <reified T : Worker> ModuleBuilder.worker(
     name: Any? = null,
+    override: Boolean = false,
     noinline definition: WorkerDefinition<T>
 ) {
-    worker(T::class, name, definition)
+    worker(T::class, name, override, definition)
 }
 
 /**
@@ -80,9 +83,10 @@ inline fun <reified T : Worker> ModuleBuilder.worker(
 fun <T : Worker> ModuleBuilder.worker(
     type: KClass<*>,
     name: Any? = null,
+    override: Boolean = false,
     definition: WorkerDefinition<T>
 ) {
-    workerBuilder(type, name, definition) {}
+    workerBuilder(type, name, override, definition) {}
 }
 
 /**
@@ -90,10 +94,11 @@ fun <T : Worker> ModuleBuilder.worker(
  */
 inline fun <reified T : Worker> ModuleBuilder.workerBuilder(
     name: Any? = null,
+    override: Boolean = false,
     noinline definition: WorkerDefinition<T>,
     noinline block: BindingBuilder<T>.() -> Unit
 ) {
-    workerBuilder(T::class, name, definition, block)
+    workerBuilder(T::class, name, override, definition, block)
 }
 
 /**
@@ -102,37 +107,15 @@ inline fun <reified T : Worker> ModuleBuilder.workerBuilder(
 fun <T : Worker> ModuleBuilder.workerBuilder(
     type: KClass<*>,
     name: Any? = null,
+    override: Boolean = false,
     definition: WorkerDefinition<T>,
     block: BindingBuilder<T>.() -> Unit
 ) {
-    factoryBuilder<T>(type, name) {
+    factoryBuilder<T>(type, name, override) {
         definition { (context: Context, workerParams: WorkerParameters) ->
             definition(context, workerParams)
         }
-        bindIntoMap(WorkerMap, type.java.name)
+        bindIntoMap(workerMap, type.java.name)
         block()
-    }
-}
-
-/**
- * Module for the [WorkerAppInitializer]
- */
-val workerInitializerModule = module {
-    appInitializer { WorkerAppInitializer(get(), get()) }
-}
-
-/**
- * Initializes the [WorkManager] with a injected [WorkerFactory]
- */
-class WorkerAppInitializer(
-    private val context: Context,
-    private val workerFactory: WorkerFactory
-) : AppInitializer {
-    override fun initialize() {
-        WorkManager.initialize(
-            context, Configuration.Builder()
-                .setWorkerFactory(workerFactory)
-                .build()
-        )
     }
 }

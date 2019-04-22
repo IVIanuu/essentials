@@ -16,10 +16,12 @@
 
 package com.ivianuu.essentials.app
 
-import com.ivianuu.essentials.injection.bindIntoClassMap
 import com.ivianuu.injekt.*
+import com.ivianuu.injekt.multibinding.MapName
+import com.ivianuu.injekt.multibinding.bindIntoMap
+import kotlin.reflect.KClass
 
-object AppInitializers
+val appInitializersMap = MapName<KClass<out AppInitializer>, AppInitializer>()
 
 /**
  * Initializes what ever on app start up
@@ -30,18 +32,20 @@ interface AppInitializer {
 
 inline fun <reified T : AppInitializer> ModuleBuilder.appInitializer(
     name: Any? = null,
+    override: Boolean = false,
     noinline definition: Definition<T>
 ) {
-    appInitializerBuilder(name, definition) {}
+    appInitializerBuilder(name, override, definition) {}
 }
 
 inline fun <reified T : AppInitializer> ModuleBuilder.appInitializerBuilder(
     name: Any? = null,
+    override: Boolean = false,
     noinline definition: (Definition<T>)? = null,
     noinline block: BindingBuilder<T>.() -> Unit
 ) {
-    factoryBuilder(name, definition) {
-        bindIntoClassMap(AppInitializers)
+    factoryBuilder(name, override, definition) {
+        bindIntoMap(appInitializersMap, T::class)
         block()
     }
 }

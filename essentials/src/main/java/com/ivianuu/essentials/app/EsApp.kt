@@ -19,11 +19,11 @@ package com.ivianuu.essentials.app
 import android.app.Application
 import android.content.pm.ApplicationInfo
 import com.ivianuu.essentials.injection.esModule
-import com.ivianuu.essentials.injection.injectProviderClassMap
 import com.ivianuu.essentials.util.ext.containsFlag
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.android.androidLogger
 import com.ivianuu.injekt.android.applicationComponent
+import com.ivianuu.injekt.multibinding.injectProviderMap
 import com.ivianuu.scopes.MutableScope
 import com.ivianuu.scopes.Scope
 import com.ivianuu.scopes.ScopeOwner
@@ -46,10 +46,8 @@ abstract class EsApp : Application(), InjektTrait, ScopeOwner {
     override val scope: Scope get() = _scope
     private val _scope = MutableScope()
 
-    private val appInitializers
-            by injectProviderClassMap<AppInitializer>(AppInitializers)
-    private val appServices
-            by injectProviderClassMap<AppService>(AppServices)
+    private val appInitializers by injectProviderMap(appInitializersMap)
+    private val appServices by injectProviderMap(appServicesMap)
 
     override fun onCreate() {
         super.onCreate()
