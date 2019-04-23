@@ -18,17 +18,12 @@ package com.ivianuu.essentials.ui.common
 
 import android.app.Activity
 import android.content.Context
-import android.os.Build
-import android.util.SparseArray
-import androidx.core.view.ViewCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.OnLifecycleEvent
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import java.lang.ref.WeakReference
-import java.util.*
 
 internal class ActivityRecyclerPool {
 
@@ -106,43 +101,5 @@ internal fun Context?.isActivityDestroyed(): Boolean {
         return true
     }
 
-    return if (Build.VERSION.SDK_INT >= 17) {
-        isDestroyed
-    } else {
-        // Use this as a proxy for being destroyed on older devices
-        !ViewCompat.isAttachedToWindow(window.decorView)
-    }
-}
-
-private class UnboundedViewPool : RecyclerView.RecycledViewPool() {
-
-    private val scrapHeaps = SparseArray<Queue<ViewHolder>>()
-
-    override fun clear() {
-        scrapHeaps.clear()
-    }
-
-    override fun setMaxRecycledViews(viewType: Int, max: Int) {
-        throw UnsupportedOperationException(
-            "UnboundedViewPool does not support setting a maximum number of recycled views"
-        )
-    }
-
-    override fun getRecycledView(viewType: Int): ViewHolder? {
-        val scrapHeap = scrapHeaps.get(viewType)
-        return scrapHeap?.poll()
-    }
-
-    override fun putRecycledView(viewHolder: ViewHolder) {
-        getScrapHeapForType(viewHolder.itemViewType).add(viewHolder)
-    }
-
-    private fun getScrapHeapForType(viewType: Int): Queue<ViewHolder> {
-        var scrapHeap: Queue<ViewHolder>? = scrapHeaps.get(viewType)
-        if (scrapHeap == null) {
-            scrapHeap = LinkedList()
-            scrapHeaps.put(viewType, scrapHeap)
-        }
-        return scrapHeap
-    }
+    return isDestroyed
 }

@@ -19,7 +19,6 @@ package com.ivianuu.essentials.hidenavbar
 import android.content.SharedPreferences
 import android.os.Bundle
 import com.ivianuu.director.scopes.destroy
-
 import com.ivianuu.essentials.securesettings.SecureSettingsKey
 import com.ivianuu.essentials.securesettings.canWriteSecureSettings
 import com.ivianuu.essentials.ui.prefs.PrefsController
@@ -29,9 +28,11 @@ import com.ivianuu.essentials.util.ext.fromPref
 import com.ivianuu.essentials.util.ext.results
 import com.ivianuu.injekt.inject
 import com.ivianuu.list.common.itemController
-import com.ivianuu.listprefs.*
+import com.ivianuu.listprefs.entries
+import com.ivianuu.listprefs.entryValues
+import com.ivianuu.listprefs.summary
+import com.ivianuu.listprefs.title
 import com.ivianuu.scopes.rx.disposeBy
-import com.ivianuu.stdlibx.cast
 import com.ivianuu.traveler.navigate
 import kotlinx.android.parcel.Parcelize
 
@@ -78,7 +79,6 @@ class NavBarSettingsController : PrefsController() {
                 sharedPreferences = navBarSharedPrefs
                 title(R.string.es_pref_title_manage_nav_bar)
                 onChange { newValue ->
-                    newValue as Boolean
                     if (!newValue || canWriteSecureSettings()) {
                         return@onChange true
                     } else if (newValue) {
@@ -105,7 +105,6 @@ class NavBarSettingsController : PrefsController() {
                 summary(R.string.es_pref_summary_nav_bar_hidden)
                 enabled = mainSwitchEnabled
                 onChange { newValue ->
-                    newValue as Boolean
                     if (canWriteSecureSettings() || !newValue) {
                         return@onChange true
                     } else if (newValue) {

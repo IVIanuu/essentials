@@ -28,7 +28,7 @@ open class EsRecyclerView @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : RecyclerView(context, attrs, defStyleAttr) {
 
-    private var removedAdapter: RecyclerView.Adapter<*>? = null
+    private var removedAdapter: Adapter<*>? = null
 
     var removeAdapterWhenDetachedFromWindow = true
 
@@ -58,7 +58,7 @@ open class EsRecyclerView @JvmOverloads constructor(
         }
     }
 
-    private fun createLayoutManager(): RecyclerView.LayoutManager {
+    private fun createLayoutManager(): LayoutManager {
         val layoutParams = layoutParams
 
         return if (layoutParams.height == RecyclerView.LayoutParams.MATCH_PARENT
@@ -78,13 +78,13 @@ open class EsRecyclerView @JvmOverloads constructor(
         swapAdapter(null, true)
     }
 
-    override fun setAdapter(adapter: RecyclerView.Adapter<*>?) {
+    override fun setAdapter(adapter: Adapter<*>?) {
         super.setAdapter(adapter)
         clearRemovedAdapterAndCancelRunnable()
     }
 
     override fun swapAdapter(
-        adapter: RecyclerView.Adapter<*>?,
+        adapter: Adapter<*>?,
         removeAndRecycleExistingViews: Boolean
     ) {
         super.swapAdapter(adapter, removeAndRecycleExistingViews)
