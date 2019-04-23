@@ -31,11 +31,11 @@ fun <T, S : Any> AbstractPreferenceItem<S>.fromEnumPref(pref: Pref<T>) where T :
     defaultValue = pref.get().value
 }
 
-fun <T : Any> AbstractPreferenceItem<T>.dependency(dependency: Pref<T>, value: T) {
+fun <T : Any> AbstractPreferenceItem<*>.dependency(dependency: Pref<T>, value: T) {
     dependency(dependency.key, value, dependency.defaultValue)
 }
 
-fun <T, S : Any> AbstractPreferenceItem<S>.enumDependency(
+fun <T, S : Any> AbstractPreferenceItem<*>.enumDependency(
     dependency: Pref<T>,
     value: T
 ) where T : Enum<T>, T : PrefValueHolder<S> {
