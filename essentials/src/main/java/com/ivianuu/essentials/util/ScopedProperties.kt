@@ -75,8 +75,7 @@ private class RealProperties : Properties {
 
 }
 
-private val propertiesByScope =
-    ConcurrentHashMap<Scope, Properties>()
+private val propertiesByScope = ConcurrentHashMap<Scope, Properties>()
 
 val Scope.properties: Properties
     get() = propertiesByScope.getOrPut(this) {
