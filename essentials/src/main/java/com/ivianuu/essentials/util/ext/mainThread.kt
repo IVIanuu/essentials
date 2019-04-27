@@ -19,7 +19,7 @@ package com.ivianuu.essentials.util.ext
 import android.os.Handler
 import android.os.Looper
 
-private val mainHandler = Handler(Looper.getMainLooper())
+val mainHandler = Handler(Looper.getMainLooper())
 
 val isMainThread: Boolean get() = Looper.myLooper() == Looper.getMainLooper()
 
