@@ -32,8 +32,7 @@ import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
 import com.ivianuu.essentials.ui.mvrx.list.mvRxItemController
 import com.ivianuu.essentials.ui.mvrx.mvRxViewModel
 import com.ivianuu.essentials.ui.simple.ListController
-import com.ivianuu.essentials.util.SavedState
-import com.ivianuu.essentials.util.coroutineScope
+import com.ivianuu.essentials.util.*
 import com.ivianuu.essentials.util.ext.coroutinesIo
 import com.ivianuu.injekt.factory
 import com.ivianuu.injekt.get
@@ -84,15 +83,18 @@ abstract class CheckableAppsController : ListController() {
     }
 
     override fun itemController() = mvRxItemController(viewModel) { state ->
-        if (state.loading) {
-            SimpleLoadingItem {
-                id("loading")
+        when (state.apps) {
+            is Loading -> {
+                SimpleLoadingItem {
+                    id("loading")
+                }
             }
-        } else {
-            state.apps.forEach { app ->
-                CheckableAppModel().add {
-                    this.app = app
-                    onClick { viewModel.appClicked(app) }
+            is Success -> {
+                state.apps()?.forEach { app ->
+                    CheckableAppModel().add {
+                        this.app = app
+                        onClick { viewModel.appClicked(app) }
+                    }
                 }
             }
         }
@@ -159,21 +161,17 @@ private class CheckableAppsViewModel(
                     .toObservable(),
                 checkedApps
             )
-            .subscribe { (infos, checked) ->
-                setState {
-                    val apps = infos
-                        .map {
-                            CheckableApp(
-                                it,
-                                checked.contains(it.packageName)
-                            )
-                        }
-                        .toList()
-
-                    copy(apps = apps, loading = false)
-                }
+            .map { (infos, checked) ->
+                infos
+                    .map {
+                        CheckableApp(
+                            it,
+                            checked.contains(it.packageName)
+                        )
+                    }
+                    .toList()
             }
-            .disposeBy(scope)
+            .execute { copy(apps = it) }
     }
 
     fun attachCheckedAppsObservable(observable: Observable<Set<String>>) {
@@ -199,8 +197,10 @@ private class CheckableAppsViewModel(
         when (id) {
             R.id.es_action_select_all -> {
                 withState { state ->
-                    pushNewCheckedApps { apps ->
-                        apps.addAll(state.apps.map { it.info.packageName })
+                    if (state.apps is Success<List<CheckableApp>>) {
+                        pushNewCheckedApps { apps ->
+                            apps.addAll(state.apps()?.map { it.info.packageName } ?: emptyList())
+                        }
                     }
                 }
             }
@@ -220,8 +220,7 @@ private class CheckableAppsViewModel(
 }
 
 private data class CheckableAppsState(
-    val apps: List<CheckableApp> = emptyList(),
-    val loading: Boolean = true
+    val apps: Async<List<CheckableApp>> = Uninitialized
 )
 
 private data class CheckableApp(

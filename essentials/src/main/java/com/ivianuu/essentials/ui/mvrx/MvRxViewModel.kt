@@ -18,13 +18,21 @@ package com.ivianuu.essentials.ui.mvrx
 
 import androidx.lifecycle.LifecycleOwner
 import com.ivianuu.closeable.Closeable
+import com.ivianuu.closeable.coroutines.asCloseable
+import com.ivianuu.closeable.rx.asCloseable
 import com.ivianuu.essentials.ui.common.EsViewModel
 import com.ivianuu.essentials.ui.mvrx.lifecycle.LifecycleStateListener
+import com.ivianuu.essentials.util.*
 import com.ivianuu.essentials.util.ext.closeBy
 import com.ivianuu.statestore.Consumer
 import com.ivianuu.statestore.Reducer
 import com.ivianuu.statestore.StateStore
 import com.ivianuu.timberktx.d
+import io.reactivex.Completable
+import io.reactivex.Observable
+import io.reactivex.Single
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.launch
 
 /**
  * State view model
@@ -50,12 +58,48 @@ abstract class MvRxViewModel<S>(initialState: S) : EsViewModel() {
     protected fun subscribe(consumer: Consumer<S>): Closeable =
         stateStore.addListener(consumer).closeBy(scope)
 
-    fun subscribe(owner: LifecycleOwner, consumer: Consumer<S>): Closeable =
-        LifecycleStateListener(
+    fun subscribe(owner: LifecycleOwner, consumer: Consumer<S>): Closeable {
+        return LifecycleStateListener(
             owner,
             stateStore,
             consumer
         )
+    }
+
+    protected fun Completable.execute(
+        reducer: S.(Async<Unit>) -> S
+    ): Closeable = toSingle { Unit }.execute(reducer)
+
+    protected fun <V> Single<V>.execute(
+        reducer: S.(Async<V>) -> S
+    ): Closeable = toObservable().execute(reducer)
+
+    protected fun <V> Observable<V>.execute(
+        reducer: S.(Async<V>) -> S
+    ): Closeable {
+        setState { reducer(Loading()) }
+
+        return this
+            .map { it.asSuccess() as Async<V> }
+            .onErrorReturn { it.asFail() }
+            .subscribe { setState { reducer(it) } }
+            .asCloseable()
+    }
+
+    protected fun <V> Deferred<V>.execute(
+        reducer: S.(Async<V>) -> S
+    ): Closeable {
+        setState { reducer(Loading()) }
+        return coroutineScope.launch {
+            val result = try {
+                await().asSuccess()
+            } catch (e: Exception) {
+                e.asFail<V>()
+            }
+
+            setState { reducer(result) }
+        }.asCloseable()
+    }
 
     override fun toString() = "${javaClass.simpleName} -> ${peekState()}"
 }

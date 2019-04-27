@@ -30,8 +30,7 @@ import com.ivianuu.essentials.ui.mvrx.injekt.mvRxViewModel
 import com.ivianuu.essentials.ui.mvrx.list.mvRxItemController
 import com.ivianuu.essentials.ui.simple.ListController
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
-import com.ivianuu.essentials.util.SavedState
-import com.ivianuu.essentials.util.coroutineScope
+import com.ivianuu.essentials.util.*
 import com.ivianuu.essentials.util.ext.goBackWithResult
 import com.ivianuu.injekt.factory
 import com.ivianuu.injekt.get
@@ -41,7 +40,7 @@ import com.ivianuu.traveler.Router
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.es_item_app.icon
 import kotlinx.android.synthetic.main.es_item_app.title
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.async
 
 @Parcelize
 data class AppPickerKey(
@@ -62,12 +61,12 @@ class AppPickerController : ListController() {
     private val viewModel by mvRxViewModel<AppPickerViewModel>()
 
     override fun itemController() = mvRxItemController(viewModel) { state ->
-        if (state.loading) {
+        if (state.apps is Loading<*>) {
             SimpleLoadingItem {
                 id("loading")
             }
         } else {
-            state.apps.forEach { app ->
+            state.apps()?.forEach { app ->
                 AppInfoItem().add {
                     this.app = app
                     onClick { viewModel.appClicked(app) }
@@ -111,15 +110,13 @@ private class AppPickerViewModel(
 
     override fun onInitialize(savedState: SavedState?) {
         super.onInitialize(savedState)
-        coroutineScope.launch {
-            val apps = if (key.launchableOnly) {
+        coroutineScope.async {
+            if (key.launchableOnly) {
                 appStore.getLaunchableApps()
             } else {
                 appStore.getInstalledApps()
             }
-
-            setState { copy(apps = apps, loading = false) }
-        }
+        }.execute { copy(apps = it) }
     }
 
     fun appClicked(appInfo: AppInfo) {
@@ -127,7 +124,4 @@ private class AppPickerViewModel(
     }
 }
 
-private data class AppPickerState(
-    val apps: List<AppInfo> = emptyList(),
-    val loading: Boolean = true
-)
+private data class AppPickerState(val apps: Async<List<AppInfo>> = Uninitialized)

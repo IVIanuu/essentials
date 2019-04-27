@@ -24,7 +24,6 @@ import com.ivianuu.essentials.ui.traveler.key.ControllerKey
 import com.ivianuu.injekt.get
 import com.ivianuu.kprefs.KPrefs
 import com.ivianuu.kprefs.rx.observable
-import com.ivianuu.timberktx.d
 import io.reactivex.Observable
 import kotlinx.android.parcel.Parcelize
 
