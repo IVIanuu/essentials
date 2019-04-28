@@ -33,7 +33,7 @@ import kotlinx.android.synthetic.main.es_view_toolbar.es_toolbar
 /**
  * A controller which hosts a toolbar
  */
-abstract class ToolbarController : EsController() {
+abstract class ToolbarController : CoordinatorController() {
 
     val appBar: AppBarLayout
         get() = es_app_bar
