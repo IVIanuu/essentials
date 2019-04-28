@@ -19,8 +19,8 @@ package com.ivianuu.essentials.hidenavbar
 import android.content.SharedPreferences
 import android.os.Bundle
 import com.ivianuu.director.scopes.destroy
+import com.ivianuu.essentials.securesettings.SecureSettingsHelper
 import com.ivianuu.essentials.securesettings.SecureSettingsKey
-import com.ivianuu.essentials.securesettings.canWriteSecureSettings
 import com.ivianuu.essentials.ui.prefs.PrefsController
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
 import com.ivianuu.essentials.util.ext.fromEnumPref
@@ -49,6 +49,7 @@ class NavBarSettingsController : PrefsController() {
 
     private val prefs by inject<NavBarPrefs>()
     private val navBarSharedPrefs by inject<SharedPreferences>(NavBar)
+    private val secureSettingsHelper by inject<SecureSettingsHelper>()
 
     override val sharedPreferences: SharedPreferences
         get() = navBarSharedPrefs
@@ -79,7 +80,7 @@ class NavBarSettingsController : PrefsController() {
                 sharedPreferences = navBarSharedPrefs
                 title(R.string.es_pref_title_manage_nav_bar)
                 onChange { newValue ->
-                    if (!newValue || canWriteSecureSettings()) {
+                    if (!newValue || secureSettingsHelper.canWriteSecureSettings()) {
                         return@onChange true
                     } else if (newValue) {
                         travelerRouter.navigate(
@@ -105,7 +106,7 @@ class NavBarSettingsController : PrefsController() {
                 summary(R.string.es_pref_summary_nav_bar_hidden)
                 enabled = mainSwitchEnabled
                 onChange { newValue ->
-                    if (canWriteSecureSettings() || !newValue) {
+                    if (secureSettingsHelper.canWriteSecureSettings() || !newValue) {
                         return@onChange true
                     } else if (newValue) {
                         travelerRouter.navigate(

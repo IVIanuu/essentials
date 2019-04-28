@@ -62,7 +62,6 @@ object Versions {
     const val kSettings = "0.0.1-dev-4"
     const val list = "0.0.1-dev-26"
     const val listPrefs = "0.0.1-dev-12"
-    const val liveEvent = "1e265df911"
     const val mavenGradle = "2.1"
     const val materialComponents = "1.1.0-alpha05"
     const val materialDialogs = "2.0.3"
@@ -172,8 +171,6 @@ object Deps {
     const val listCommon = "com.ivianuu.list:list-common:${Versions.list}"
 
     const val listPrefs = "com.ivianuu.listprefs:listprefs:${Versions.listPrefs}"
-
-    const val liveEvent = "com.github.IVIanuu:liveevent:${Versions.liveEvent}"
 
     const val materialComponents =
         "com.google.android.material:material:${Versions.materialComponents}"

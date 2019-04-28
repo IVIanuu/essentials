@@ -14,6 +14,13 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.util.ext
+package com.ivianuu.essentials.securesettings
 
-inline val currentTimeMillis: Long get() = System.currentTimeMillis()
+import com.ivianuu.injekt.factory
+import com.ivianuu.injekt.get
+import com.ivianuu.injekt.module
+
+val esSecureSettingsModule = module {
+    factory { ClipboardAccessor(get()) }
+    factory { SecureSettingsHelper(get(), get()) }
+}

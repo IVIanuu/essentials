@@ -14,10 +14,15 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.util.ext
+package com.ivianuu.essentials.util
 
-import com.ivianuu.liveevent.LiveEventPlugins
-import com.ivianuu.liveevent.MutableLiveEvent
+import io.reactivex.Scheduler
 
-fun <T> MutableLiveEvent(maxSize: Int = LiveEventPlugins.defaultMaxSize): MutableLiveEvent<T> =
-    MutableLiveEvent(maxSize)
+/**
+ * App schedulers
+ */
+class AppSchedulers(
+    val io: Scheduler,
+    val computation: Scheduler,
+    val main: Scheduler
+)

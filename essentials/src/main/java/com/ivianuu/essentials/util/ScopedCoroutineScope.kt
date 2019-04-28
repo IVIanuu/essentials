@@ -16,11 +16,11 @@
 
 package com.ivianuu.essentials.util
 
-import com.ivianuu.essentials.util.ext.coroutinesMain
 import com.ivianuu.scopes.Scope
 import com.ivianuu.scopes.ScopeOwner
 import com.ivianuu.scopes.coroutines.cancelBy
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlin.coroutines.CoroutineContext
 
@@ -37,6 +37,6 @@ private class ScopedCoroutineScope(scope: Scope) : CoroutineScope {
 
     private val job = Job().cancelBy(scope)
 
-    override val coroutineContext: CoroutineContext = job + coroutinesMain
+    override val coroutineContext: CoroutineContext = job + Dispatchers.Main
 
 }

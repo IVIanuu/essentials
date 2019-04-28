@@ -14,14 +14,12 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.securesettings
+package com.ivianuu.essentials.util
 
-import android.content.Context
-import com.ivianuu.essentials.util.ContextAware
-import com.ivianuu.kommon.core.content.hasPermissions
-
-fun Context.canWriteSecureSettings(): Boolean =
-    hasPermissions(android.Manifest.permission.WRITE_SECURE_SETTINGS)
-
-fun ContextAware.canWriteSecureSettings(): Boolean =
-    providedContext.canWriteSecureSettings()
+/**
+ * Provides the current time
+ */
+class Clock {
+    val currentTimeMillis: Long get() = System.currentTimeMillis()
+    val currentTimeNanos: Long get() = System.nanoTime()
+}

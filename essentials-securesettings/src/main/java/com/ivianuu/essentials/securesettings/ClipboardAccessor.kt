@@ -14,12 +14,17 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.apps
+package com.ivianuu.essentials.securesettings
 
-import com.ivianuu.injekt.factory
-import com.ivianuu.injekt.get
-import com.ivianuu.injekt.module
+import android.content.ClipboardManager
 
-val esAppsModule = module {
-    factory { AppStore(get(), get()) }
+/**
+ * Allows to access the clipboard
+ */
+class ClipboardAccessor(private val clipboardManager: ClipboardManager) {
+    var clipboardText: String
+        get() = clipboardManager.text.toString()
+        set(value) {
+            clipboardManager.text = value
+        }
 }

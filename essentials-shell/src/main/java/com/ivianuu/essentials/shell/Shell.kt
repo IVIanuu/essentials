@@ -16,8 +16,9 @@
 
 package com.ivianuu.essentials.shell
 
-import com.ivianuu.essentials.util.ext.coroutinesIo
+import com.ivianuu.essentials.util.AppDispatchers
 import com.ivianuu.injekt.factory
+import com.ivianuu.injekt.get
 import com.ivianuu.injekt.module
 
 import eu.chainfire.libsuperuser.Shell.SU
@@ -26,13 +27,13 @@ import kotlinx.coroutines.withContext
 /**
  * Shell
  */
-class Shell {
+class Shell(private val dispatchers: AppDispatchers) {
 
-    suspend fun run(vararg commands: String): List<String> = withContext(coroutinesIo) {
+    suspend fun run(vararg commands: String): List<String> = withContext(dispatchers.io) {
         SU.run(commands).toList()
     }
 
-    suspend fun isAvailable(): Boolean = withContext(coroutinesIo) {
+    suspend fun isAvailable(): Boolean = withContext(dispatchers.io) {
         SU.available()
     }
 
@@ -44,5 +45,5 @@ suspend fun Shell.run(commands: Iterable<String>): List<String> =
     run(*commands.toList().toTypedArray())
 
 val esShellModule = module {
-    factory { Shell() }
+    factory { Shell(get()) }
 }

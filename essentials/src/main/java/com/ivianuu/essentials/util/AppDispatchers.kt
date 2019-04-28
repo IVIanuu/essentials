@@ -14,19 +14,15 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.util.ext
+package com.ivianuu.essentials.util
 
-import io.reactivex.Scheduler
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.MainCoroutineDispatcher
 
-val coroutinesDefault: CoroutineDispatcher get() = Dispatchers.Default
-val coroutinesIo: CoroutineDispatcher get() = Dispatchers.IO
-val coroutinesMain: MainCoroutineDispatcher get() = Dispatchers.Main
-
-val rxComputation: Scheduler get() = Schedulers.computation()
-val rxIo: Scheduler get() = Schedulers.io()
-val rxMain: Scheduler get() = AndroidSchedulers.mainThread()
+/**
+ * App coroutine dispatchers
+ */
+data class AppDispatchers(
+    val io: CoroutineDispatcher,
+    val computation: CoroutineDispatcher,
+    val main: CoroutineDispatcher
+)

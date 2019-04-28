@@ -33,7 +33,6 @@ import com.ivianuu.essentials.ui.mvrx.list.mvRxItemController
 import com.ivianuu.essentials.ui.mvrx.mvRxViewModel
 import com.ivianuu.essentials.ui.simple.ListController
 import com.ivianuu.essentials.util.*
-import com.ivianuu.essentials.util.ext.coroutinesIo
 import com.ivianuu.injekt.factory
 import com.ivianuu.injekt.get
 import com.ivianuu.injekt.module
@@ -100,9 +99,16 @@ abstract class CheckableAppsController : ListController() {
         }
     }
 
-    override fun onToolbarMenuItemClicked(item: MenuItem): Boolean {
-        viewModel.menuItemClicked(item.itemId)
-        return true
+    override fun onToolbarMenuItemClicked(item: MenuItem) = when (item.itemId) {
+        R.id.es_action_select_all -> {
+            viewModel.selectAllClicked()
+            true
+        }
+        R.id.es_action_deselect_all -> {
+            viewModel.deselectAllClicked()
+            true
+        }
+        else -> false
     }
 
     abstract fun getCheckedAppsObservable(): Observable<Set<String>>
@@ -131,12 +137,13 @@ private class CheckableAppModel : SimpleItem(layoutRes = R.layout.es_item_checka
 }
 
 private val checkableAppsModule = module {
-    factory { CheckableAppsViewModel(it[0], get()) }
+    factory { CheckableAppsViewModel(it[0], get(), get()) }
 }
 
 private class CheckableAppsViewModel(
     private val launchableOnly: Boolean,
-    private val appStore: AppStore
+    private val appStore: AppStore,
+    private val dispatchers: AppDispatchers
 ) : MvRxViewModel<CheckableAppsState>(CheckableAppsState()) {
 
     val checkedAppsChanged: Observable<Set<String>> get() = _checkedAppsChanged
@@ -150,14 +157,14 @@ private class CheckableAppsViewModel(
 
         Observables
             .combineLatest(
-                coroutineScope.async(coroutinesIo) {
+                coroutineScope.async(dispatchers.io) {
                     if (launchableOnly) {
                         appStore.getLaunchableApps()
                     } else {
                         appStore.getInstalledApps()
                     }
                 }
-                    .asSingle(coroutinesIo)
+                    .asSingle(dispatchers.io)
                     .toObservable(),
                 checkedApps
             )
@@ -193,21 +200,18 @@ private class CheckableAppsViewModel(
         }
     }
 
-    fun menuItemClicked(id: Int) {
-        when (id) {
-            R.id.es_action_select_all -> {
-                withState { state ->
-                    if (state.apps is Success<List<CheckableApp>>) {
-                        pushNewCheckedApps { apps ->
-                            apps.addAll(state.apps()?.map { it.info.packageName } ?: emptyList())
-                        }
-                    }
+    fun selectAllClicked() {
+        withState { state ->
+            if (state.apps is Success<List<CheckableApp>>) {
+                pushNewCheckedApps { apps ->
+                    apps.addAll(state.apps()?.map { it.info.packageName } ?: emptyList())
                 }
             }
-            R.id.es_action_deselect_all -> {
-                pushNewCheckedApps { it.clear() }
-            }
         }
+    }
+
+    fun deselectAllClicked() {
+        pushNewCheckedApps { it.clear() }
     }
 
     private fun pushNewCheckedApps(reducer: (MutableSet<String>) -> Unit) {

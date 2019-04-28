@@ -16,11 +16,10 @@
 
 package com.ivianuu.essentials.securesettings
 
-import android.content.ClipboardManager
 import com.ivianuu.director.activity
 import com.ivianuu.essentials.ui.prefs.PrefsController
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
-import com.ivianuu.essentials.util.ext.toast
+import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.essentials.util.string
 import com.ivianuu.injekt.inject
 import com.ivianuu.list.common.itemController
@@ -38,7 +37,8 @@ class SecureSettingsPcInstructionsKey : ControllerKey(::SecureSettingsPcInstruct
  */
 class SecureSettingsPcInstructionsController : PrefsController() {
 
-    private val clipboardManager by inject<ClipboardManager>()
+    private val clipboardHelper by inject<ClipboardAccessor>()
+    private val toaster by inject<Toaster>()
 
     override val toolbarTitleRes: Int
         get() = R.string.es_title_secure_settings_pc_instructions
@@ -94,9 +94,10 @@ class SecureSettingsPcInstructionsController : PrefsController() {
             title(R.string.es_pref_title_secure_settings_step_4)
             summary = string(R.string.es_pref_summary_secure_settings_step_4, activity.packageName)
             onClick {
-                clipboardManager.text =
-                        "adb shell pm grant ${activity.packageName} android.permission.WRITE_SECURE_SETTINGS"
-                toast(R.string.es_msg_secure_settings_copied_to_clipboard)
+                clipboardHelper.clipboardText =
+                    "adb shell pm grant ${activity.packageName} android.permission.WRITE_SECURE_SETTINGS"
+
+                toaster.toast(R.string.es_msg_secure_settings_copied_to_clipboard)
                 return@onClick true
             }
         }

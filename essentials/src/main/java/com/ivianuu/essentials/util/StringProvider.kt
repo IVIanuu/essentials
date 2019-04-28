@@ -14,12 +14,14 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.apps
+package com.ivianuu.essentials.util
 
-import com.ivianuu.injekt.factory
-import com.ivianuu.injekt.get
-import com.ivianuu.injekt.module
+import android.content.Context
 
-val esAppsModule = module {
-    factory { AppStore(get(), get()) }
+/**
+ * Provides strings
+ */
+class StringProvider(private val context: Context) {
+    fun getString(id: Int): String = context.getString(id)
+    fun getString(id: Int, vararg args: Any?): String = context.getString(id, *args)
 }

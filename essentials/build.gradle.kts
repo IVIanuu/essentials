@@ -87,8 +87,6 @@ dependencies {
     api(Deps.listCommon)
     api(Deps.listPrefs)
 
-    api(Deps.liveEvent)
-
     api(Deps.materialComponents)
 
     api(Deps.materialDialogsCore)

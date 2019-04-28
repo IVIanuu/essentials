@@ -17,17 +17,15 @@
 package com.ivianuu.essentials.securesettings
 
 import android.view.View
-import com.ivianuu.director.activity
-import com.ivianuu.essentials.shell.Shell
 import com.ivianuu.essentials.ui.common.VerticalFadeChangeHandler
 import com.ivianuu.essentials.ui.prefs.PrefsController
 import com.ivianuu.essentials.ui.traveler.NavOptions
 import com.ivianuu.essentials.ui.traveler.handler
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
+import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.essentials.util.ext.coroutineScope
 import com.ivianuu.essentials.util.ext.goBackWithResult
 import com.ivianuu.essentials.util.ext.sendResult
-import com.ivianuu.essentials.util.ext.toast
 import com.ivianuu.injekt.inject
 import com.ivianuu.list.common.itemController
 import com.ivianuu.listprefs.summary
@@ -51,7 +49,8 @@ class SecureSettingsController : PrefsController() {
         get() = R.string.es_title_secure_settings
 
     private val key by inject<SecureSettingsKey>()
-    private val shell by inject<Shell>()
+    private val secureSettingsHelper by inject<SecureSettingsHelper>()
+    private val toaster by inject<Toaster>()
 
     override fun itemController() = itemController {
         PreferenceItem {
@@ -85,12 +84,10 @@ class SecureSettingsController : PrefsController() {
             summary(R.string.es_pref_summary_use_root)
             onClick {
                 coroutineScope.launch {
-                    try {
-                        shell.run("pm grant ${activity.packageName} android.permission.WRITE_SECURE_SETTINGS")
-                        handlePermissionResult(activity.canWriteSecureSettings())
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                        toast(R.string.es_msg_secure_settings_no_root)
+                    if (secureSettingsHelper.grantWriteSecureSettings()) {
+                        handlePermissionResult(true)
+                    } else {
+                        toaster.toast(R.string.es_msg_secure_settings_no_root)
                     }
                 }
 
@@ -101,7 +98,7 @@ class SecureSettingsController : PrefsController() {
 
     override fun onAttach(view: View) {
         super.onAttach(view)
-        if (canWriteSecureSettings()) {
+        if (secureSettingsHelper.canWriteSecureSettings()) {
             handlePermissionResult(true)
         }
     }
@@ -114,10 +111,10 @@ class SecureSettingsController : PrefsController() {
 
     private fun handlePermissionResult(success: Boolean) {
         if (success) {
-            toast(R.string.es_msg_secure_settings_permission_granted)
+            toaster.toast(R.string.es_msg_secure_settings_permission_granted)
             travelerRouter.goBackWithResult(key.resultCode, true)
         } else {
-            toast(R.string.es_msg_secure_settings_permission_denied)
+            toaster.toast(R.string.es_msg_secure_settings_permission_denied)
         }
     }
 }

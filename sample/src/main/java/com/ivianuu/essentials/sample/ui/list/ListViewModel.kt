@@ -19,7 +19,6 @@ package com.ivianuu.essentials.sample.ui.list
 import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
 import com.ivianuu.essentials.util.SavedState
 import com.ivianuu.essentials.util.coroutineScope
-import com.ivianuu.essentials.util.ext.coroutinesDefault
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -53,7 +52,7 @@ class ListViewModel : MvRxViewModel<ListState>(ListState()) {
     }
 
     private fun generateNewState() {
-        coroutineScope.launch(coroutinesDefault) {
+        coroutineScope.launch {
             setState { copy(loading = true) }
             delay(1000)
             val list = generateList()

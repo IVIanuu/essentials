@@ -18,16 +18,19 @@ package com.ivianuu.essentials.apps
 
 import android.content.Intent
 import android.content.pm.PackageManager
-import com.ivianuu.essentials.util.ext.coroutinesIo
+import com.ivianuu.essentials.util.AppDispatchers
 
 import kotlinx.coroutines.withContext
 
 /**
  * Store for [AppInfo]s
  */
-class AppStore(private val packageManager: PackageManager) {
+class AppStore(
+    private val dispatchers: AppDispatchers,
+    private val packageManager: PackageManager
+) {
 
-    suspend fun getInstalledApps(): List<AppInfo> = withContext(coroutinesIo) {
+    suspend fun getInstalledApps(): List<AppInfo> = withContext(dispatchers.io) {
         packageManager.getInstalledApplications(0)
             .map {
                 AppInfo(
@@ -40,7 +43,7 @@ class AppStore(private val packageManager: PackageManager) {
             .toList()
     }
 
-    suspend fun getLaunchableApps(): List<AppInfo> = withContext(coroutinesIo) {
+    suspend fun getLaunchableApps(): List<AppInfo> = withContext(dispatchers.io) {
         val intent = Intent(Intent.ACTION_MAIN).apply {
             addCategory(Intent.CATEGORY_LAUNCHER)
         }
@@ -56,7 +59,7 @@ class AppStore(private val packageManager: PackageManager) {
             .toList()
     }
 
-    suspend fun getAppInfo(packageName: String): AppInfo = withContext(coroutinesIo) {
+    suspend fun getAppInfo(packageName: String): AppInfo = withContext(dispatchers.io) {
         AppInfo(
             packageName,
             packageManager.getApplicationInfo(packageName, 0).loadLabel(packageManager)
