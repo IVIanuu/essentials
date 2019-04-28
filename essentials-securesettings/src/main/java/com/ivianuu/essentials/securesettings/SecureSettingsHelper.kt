@@ -35,7 +35,7 @@ class SecureSettingsHelper(
     suspend fun grantWriteSecureSettings(): Boolean {
         return tryOrElse(false) {
             shell.run("pm grant ${context.packageName} android.permission.WRITE_SECURE_SETTINGS")
-            return@tryOrElse true
+            return@tryOrElse canWriteSecureSettings()
         }
     }
 }
