@@ -61,15 +61,18 @@ class AppPickerController : ListController() {
     private val viewModel by mvRxViewModel<AppPickerViewModel>()
 
     override fun itemController() = mvRxItemController(viewModel) { state ->
-        if (state.apps is Loading<*>) {
-            SimpleLoadingItem {
-                id("loading")
+        when(state.apps) {
+            is Loading -> {
+                SimpleLoadingItem {
+                    id("loading")
+                }
             }
-        } else {
-            state.apps()?.forEach { app ->
-                AppInfoItem().add {
-                    this.app = app
-                    onClick { viewModel.appClicked(app) }
+            is Success -> {
+                state.apps()?.forEach { app ->
+                    AppInfoItem().add {
+                        this.app = app
+                        onClick { viewModel.appClicked(app) }
+                    }
                 }
             }
         }
