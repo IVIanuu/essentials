@@ -18,6 +18,7 @@ package com.ivianuu.essentials.app
 
 import android.app.Application
 import android.content.pm.ApplicationInfo
+import com.ivianuu.essentials.injection._appComponent
 import com.ivianuu.essentials.injection.esModule
 import com.ivianuu.essentials.util.ext.containsFlag
 import com.ivianuu.injekt.*
@@ -37,10 +38,8 @@ abstract class EsApp : Application(), InjektTrait, ScopeOwner {
     override val component: Component
         get() {
             createComponentIfNeeded()
-            return _component
+            return _appComponent
         }
-
-    private lateinit var _component: Component
     private var componentCreated = false
 
     override val scope: Scope get() = _scope
@@ -64,8 +63,8 @@ abstract class EsApp : Application(), InjektTrait, ScopeOwner {
         }
     }
 
-    protected open fun onCreateComponent() {
-        _component = applicationComponent {
+    protected open fun onCreateComponent(): Component {
+        return applicationComponent {
             modules(esAppModule, esModule)
             modules(this@EsApp.modules())
         }
@@ -95,7 +94,7 @@ abstract class EsApp : Application(), InjektTrait, ScopeOwner {
         if (!componentCreated) {
             componentCreated = true
             onConfigureInjekt()
-            onCreateComponent()
+            _appComponent = onCreateComponent()
         }
     }
 }

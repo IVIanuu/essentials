@@ -32,11 +32,8 @@ val Scope.coroutineScope: CoroutineScope
     }
 val ScopeOwner.coroutineScope: CoroutineScope get() = scope.coroutineScope
 
-
 private class ScopedCoroutineScope(scope: Scope) : CoroutineScope {
-
     private val job = Job().cancelBy(scope)
-
     override val coroutineContext: CoroutineContext = job + Dispatchers.Main
 
 }
