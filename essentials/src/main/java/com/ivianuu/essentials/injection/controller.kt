@@ -109,7 +109,7 @@ fun Controller.getActivityComponent(): Component =
  * Returns the [Component] of the application or null
  */
 fun Controller.getApplicationComponentOrNull(): Component? =
-    (activity?.application as? InjektTrait)?.component
+    (activity.application as? InjektTrait)?.component
 
 /**
  * Returns the [Component] of the application or throws
