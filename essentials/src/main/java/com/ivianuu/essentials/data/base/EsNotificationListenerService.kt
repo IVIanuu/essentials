@@ -22,7 +22,7 @@ import com.ivianuu.essentials.util.coroutineScope
 import com.ivianuu.injekt.InjektTrait
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.android.serviceComponent
-import com.ivianuu.injekt.modules
+
 import com.ivianuu.scopes.MutableScope
 import com.ivianuu.scopes.ReusableScope
 import com.ivianuu.scopes.Scope
@@ -36,9 +36,7 @@ abstract class EsNotificationListenerService : NotificationListenerService(), In
     ScopeOwner {
 
     override val component by unsafeLazy {
-        serviceComponent {
-            modules(this@EsNotificationListenerService.modules())
-        }
+        serviceComponent(modules = modules())
     }
 
     override val scope: Scope get() = _scope

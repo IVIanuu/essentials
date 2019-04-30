@@ -27,8 +27,6 @@ import com.ivianuu.essentials.app.AppService
 import com.ivianuu.essentials.util.BroadcastFactory
 import com.ivianuu.essentials.util.ext.combineLatest
 import com.ivianuu.kommon.core.app.doOnConfigurationChanged
-import com.ivianuu.kommon.core.content.isScreenOn
-import com.ivianuu.kommon.core.content.rotation
 import com.ivianuu.kprefs.rx.observable
 import com.ivianuu.rxjavaktx.emptyObservable
 import com.ivianuu.rxjavaktx.observable
@@ -44,10 +42,12 @@ import io.reactivex.rxkotlin.Observables
 class NavBarController(
     private val app: Application,
     private val broadcastFactory: BroadcastFactory,
+    private val displayRotationProvider: DisplayRotationProvider,
     private val keyguardManager: KeyguardManager,
     private val nonSdkInterfacesHelper: NonSdkInterfacesHelper,
     private val prefs: NavBarPrefs,
-    private val overscanHelper: OverscanHelper
+    private val overscanHelper: OverscanHelper,
+    private val screenStateProvider: ScreenStateProvider
 ) : AppService() {
 
     private val enabledScope = ReusableScope()
@@ -84,7 +84,7 @@ class NavBarController(
             .map {
                 prefs.navBarHidden.get()
                         && (!prefs.showNavBarScreenOff.get()
-                        || (!keyguardManager.isKeyguardLocked && app.isScreenOn))
+                        || (!keyguardManager.isKeyguardLocked && screenStateProvider.isScreenOn))
             }
             .subscribe { updateNavBarState(it) }
             .disposeBy(enabledScope)
@@ -119,7 +119,7 @@ class NavBarController(
     }
 
     private fun getNavigationBarHeight(): Int {
-        val name = when (app.rotation) {
+        val name = when (displayRotationProvider.displayRotation) {
             Surface.ROTATION_0, Surface.ROTATION_180 -> "navigation_bar_height"
             else -> "navigation_bar_width"
         }
@@ -131,7 +131,7 @@ class NavBarController(
 
     private fun getOverscanRect(navBarHeight: Int) = when (prefs.rotationMode.get()) {
         NavBarRotationMode.MARSHMALLOW -> {
-            when (app.rotation) {
+            when (displayRotationProvider.displayRotation) {
                 Surface.ROTATION_90 -> Rect(0, 0, 0, navBarHeight)
                 Surface.ROTATION_180 -> Rect(0, navBarHeight, 0, 0)
                 Surface.ROTATION_270 -> Rect(0, navBarHeight, 0, 0)
@@ -139,13 +139,13 @@ class NavBarController(
             }
         }
         NavBarRotationMode.NOUGAT -> {
-            when (app.rotation) {
+            when (displayRotationProvider.displayRotation) {
                 Surface.ROTATION_180 -> Rect(0, navBarHeight, 0, 0)
                 else -> Rect(0, 0, 0, navBarHeight)
             }
         }
         NavBarRotationMode.TABLET -> {
-            when (app.rotation) {
+            when (displayRotationProvider.displayRotation) {
                 Surface.ROTATION_90 -> Rect(navBarHeight, 0, 0, 0)
                 Surface.ROTATION_180 -> Rect(0, navBarHeight, 0, 0)
                 Surface.ROTATION_270 -> Rect(0, 0, navBarHeight, 0)
@@ -178,13 +178,13 @@ class NavBarController(
     }
 
     private fun rotationChanges() = observable<Int> { e ->
-        var currentRotation = app.rotation
+        var currentRotation = displayRotationProvider.displayRotation
 
         val listener = object : OrientationEventListener(
             app, SensorManager.SENSOR_DELAY_NORMAL
         ) {
             override fun onOrientationChanged(orientation: Int) {
-                val rotation = app.rotation
+                val rotation = displayRotationProvider.displayRotation
                 if (rotation != currentRotation) {
                     e.onNext(rotation)
                     currentRotation = rotation
@@ -211,8 +211,8 @@ class NavBarController(
             Intent.ACTION_SCREEN_ON,
             Intent.ACTION_USER_PRESENT
         )
-            .map { app.isScreenOn }
-            .startWith(app.isScreenOn)
+            .map { screenStateProvider.isScreenOff }
+            .startWith(screenStateProvider.isScreenOff)
     }
 
 }

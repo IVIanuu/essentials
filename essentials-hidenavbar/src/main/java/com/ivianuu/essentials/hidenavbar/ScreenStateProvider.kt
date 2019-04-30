@@ -14,21 +14,14 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.injection
+package com.ivianuu.essentials.hidenavbar
 
-import com.ivianuu.essentials.app.esAppInitializersModule
-import com.ivianuu.essentials.app.esAppServicesModule
-import com.ivianuu.essentials.ui.traveler.travelerModule
-import com.ivianuu.essentials.util.esUtilModule
-import com.ivianuu.injekt.module
+import android.os.PowerManager
 
 /**
- * Core modules
+ * Provides the current screen state
  */
-val esModule = module {
-    include(esAppInitializersModule)
-    include(esAppServicesModule)
-    include(esUtilModule)
-    include(systemServiceModule)
-    include(travelerModule)
+class ScreenStateProvider(private val powerManager: PowerManager) {
+    val isScreenOn: Boolean get() = powerManager.isInteractive
+    val isScreenOff: Boolean get() = !isScreenOn
 }

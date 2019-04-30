@@ -30,25 +30,10 @@ interface AppInitializer {
     fun initialize()
 }
 
-inline fun <reified T : AppInitializer> ModuleBuilder.appInitializer(
+inline fun <reified T : AppInitializer> Module.appInitializer(
     name: Any? = null,
-    override: Boolean = false,
     noinline definition: Definition<T>
-) {
-    appInitializerBuilder(name, override, definition) {}
-}
-
-inline fun <reified T : AppInitializer> ModuleBuilder.appInitializerBuilder(
-    name: Any? = null,
-    override: Boolean = false,
-    noinline definition: (Definition<T>)? = null,
-    noinline block: BindingBuilder<T>.() -> Unit
-) {
-    factoryBuilder(name, override, definition) {
-        bindIntoMap(appInitializersMap, T::class)
-        block()
-    }
-}
+): Binding<T> = factory(name, definition) bindIntoMap (appInitializersMap to T::class)
 
 val esAppInitializersModule = module {
     appInitializer { RxJavaAppInitializer() }

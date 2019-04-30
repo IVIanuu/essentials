@@ -33,7 +33,7 @@ const val NAV_BAR_SHARED_PREFS_NAME = "com.ivianuu.essentials.hidenavbar.prefs"
  * Provides nav bar related dependencies
  */
 val esNavBarModule = module {
-    appService { NavBarController(get(), get(), get(), get(), get(), get()) }
+    appService { NavBarController(get(), get(), get(), get(), get(), get(), get(), get()) }
 
     sharedPreferences(NAV_BAR_SHARED_PREFS_NAME, name = NavBar)
     single(NavBar) { KPrefs(get<SharedPreferences>(NavBar)) }
@@ -41,4 +41,5 @@ val esNavBarModule = module {
 
     factory { OverscanHelper() }
     factory { NonSdkInterfacesHelper(get()) }
+    factory { ScreenStateProvider(get()) }
 }

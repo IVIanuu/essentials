@@ -39,24 +39,9 @@ abstract class AppService : ScopeOwner {
 
 }
 
-inline fun <reified T : AppService> ModuleBuilder.appService(
+inline fun <reified T : AppService> Module.appService(
     name: Any? = null,
-    override: Boolean = false,
     noinline definition: Definition<T>
-) {
-    appServiceBuilder(name, override, definition) {}
-}
-
-inline fun <reified T : AppService> ModuleBuilder.appServiceBuilder(
-    name: Any? = null,
-    override: Boolean = false,
-    noinline definition: (Definition<T>)? = null,
-    noinline block: BindingBuilder<T>.() -> Unit
-) {
-    singleBuilder(name, override, definition) {
-        bindIntoMap(appServicesMap, T::class)
-        block()
-    }
-}
+): Binding<T> = single(name, definition) bindIntoMap (appServicesMap to T::class)
 
 val esAppServicesModule = module()

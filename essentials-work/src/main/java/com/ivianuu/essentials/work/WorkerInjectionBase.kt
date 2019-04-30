@@ -26,7 +26,6 @@ import com.ivianuu.injekt.multibinding.MapName
 import com.ivianuu.injekt.multibinding.bindIntoMap
 import com.ivianuu.injekt.multibinding.getProviderMap
 import com.ivianuu.injekt.provider.Provider
-import kotlin.reflect.KClass
 
 /**
  * Uses injekt to instantiate workers
@@ -55,10 +54,7 @@ val workerMap = MapName<String, Worker>()
  * Contains the [InjektWorkerFactory]
  */
 val workerInjectionModule = module {
-    factoryBuilder<InjektWorkerFactory> {
-        definition { InjektWorkerFactory(getProviderMap(workerMap)) }
-        bindType<WorkerFactory>()
-    }
+    factory { InjektWorkerFactory(getProviderMap(workerMap)) } bindType WorkerFactory::class
 }
 
 /**
@@ -69,53 +65,9 @@ typealias WorkerDefinition<T> = DefinitionContext.(context: Context, workerParam
 /**
  * Defines a [Worker] which will be used in conjunction with the [InjektWorkerFactory]
  */
-inline fun <reified T : Worker> ModuleBuilder.worker(
+inline fun <reified T : Worker> Module.worker(
     name: Any? = null,
-    override: Boolean = false,
     noinline definition: WorkerDefinition<T>
-) {
-    worker(T::class, name, override, definition)
-}
-
-/**
- * Defines a [Worker] which will be used in conjunction with the [InjektWorkerFactory]
- */
-fun <T : Worker> ModuleBuilder.worker(
-    type: KClass<*>,
-    name: Any? = null,
-    override: Boolean = false,
-    definition: WorkerDefinition<T>
-) {
-    workerBuilder(type, name, override, definition) {}
-}
-
-/**
- * Defines a [Worker] which will be used in conjunction with the [InjektWorkerFactory]
- */
-inline fun <reified T : Worker> ModuleBuilder.workerBuilder(
-    name: Any? = null,
-    override: Boolean = false,
-    noinline definition: WorkerDefinition<T>,
-    noinline block: BindingBuilder<T>.() -> Unit
-) {
-    workerBuilder(T::class, name, override, definition, block)
-}
-
-/**
- * Defines a [Worker] which will be used in conjunction with the [InjektWorkerFactory]
- */
-fun <T : Worker> ModuleBuilder.workerBuilder(
-    type: KClass<*>,
-    name: Any? = null,
-    override: Boolean = false,
-    definition: WorkerDefinition<T>,
-    block: BindingBuilder<T>.() -> Unit
-) {
-    factoryBuilder<T>(type, name, override) {
-        definition { (context: Context, workerParams: WorkerParameters) ->
-            definition(context, workerParams)
-        }
-        bindIntoMap(workerMap, type.java.name)
-        block()
-    }
-}
+): Binding<T> = factory(name) { (context: Context, workerParams: WorkerParameters) ->
+    definition(context, workerParams)
+} bindIntoMap (workerMap to T::class.java.name)

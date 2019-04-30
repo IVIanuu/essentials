@@ -16,11 +16,21 @@
 
 package com.ivianuu.essentials.injection
 
-import com.ivianuu.director.Controller
-import com.ivianuu.director.activity
-import com.ivianuu.director.parentController
+import com.ivianuu.director.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.constant.constant
+
+private inline fun androidComponent(
+    modules: Iterable<Module>,
+    dependencies: Iterable<Component>,
+    module: () -> Module,
+    dependency: () -> Component?
+): Component {
+    val allModules = modules + listOf(module())
+    val allDependencies = dependencies +
+            (dependency()?.let { listOf(it) } ?: emptyList())
+    return component(allModules, allDependencies)
+}
 
 /**
  * Controller name
@@ -36,12 +46,25 @@ object ForChildController
  * Returns a [Component] with convenient configurations
  */
 fun <T : Controller> T.controllerComponent(
-    block: (ComponentBuilder.() -> Unit)? = null
-): Component = component {
-    getClosestComponentOrNull()?.let { dependencies(it) }
-    modules(controllerModule())
-    block?.invoke(this)
-}
+    modules: Iterable<Module> = emptyList(),
+    dependencies: Iterable<Component> = emptyList()
+): Component = androidComponent(
+    modules, dependencies,
+    { controllerModule() },
+    { getClosestComponentOrNull() }
+)
+
+/**
+ * Returns a [Component] with convenient configurations
+ */
+fun <T : Controller> T.childControllerComponent(
+    modules: Iterable<Module> = emptyList(),
+    dependencies: Iterable<Component> = emptyList()
+): Component = androidComponent(
+    modules, dependencies,
+    { childControllerModule() },
+    { getClosestComponentOrNull() }
+)
 
 /**
  * Returns the closest [Component] or null
@@ -86,7 +109,7 @@ fun Controller.getActivityComponent(): Component =
  * Returns the [Component] of the application or null
  */
 fun Controller.getApplicationComponentOrNull(): Component? =
-    (activity.application as? InjektTrait)?.component
+    (activity?.application as? InjektTrait)?.component
 
 /**
  * Returns the [Component] of the application or throws
@@ -99,5 +122,24 @@ fun Controller.getApplicationComponent(): Component =
  * Returns a [Module] with convenient bindings
  */
 fun <T : Controller> T.controllerModule(): Module = module {
-    constant(this@controllerModule)
+    constant(this@controllerModule).apply {
+        bindType<Controller>()
+        bindAlias<Controller>(ForController)
+    }
+
+    factory { context } bindName ForController
+    factory { resources } bindName ForController
+}
+
+/**
+ * Returns a [Module] with convenient bindings
+ */
+fun <T : Controller> T.childControllerModule(): Module = module {
+    constant(this@childControllerModule).apply {
+        bindType<Controller>()
+        bindAlias<Controller>(ForChildController)
+    }
+
+    factory { context } bindName ForChildController
+    factory { resources } bindName ForChildController
 }

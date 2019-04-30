@@ -33,7 +33,7 @@ import com.ivianuu.essentials.util.ContextAware
 import com.ivianuu.injekt.InjektTrait
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.inject
-import com.ivianuu.injekt.modules
+
 import com.ivianuu.stdlibx.unsafeLazy
 import com.ivianuu.traveler.Router
 
@@ -44,10 +44,9 @@ abstract class EsDialogController : DialogController(), ContextAware, InjektTrai
     ViewModelManagerOwner {
 
     override val component by unsafeLazy {
-        controllerComponent {
-            modules(keyModule(args))
-            modules(this@EsDialogController.modules())
-        }
+        controllerComponent(
+            modules = listOf(keyModule(args)) + modules()
+        )
     }
 
     override val providedContext: Context

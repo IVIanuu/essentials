@@ -23,7 +23,7 @@ import android.os.IBinder
 import com.ivianuu.injekt.InjektTrait
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.android.serviceComponent
-import com.ivianuu.injekt.modules
+
 import com.ivianuu.scopes.MutableScope
 import com.ivianuu.scopes.Scope
 import com.ivianuu.scopes.ScopeOwner
@@ -35,9 +35,7 @@ import com.ivianuu.stdlibx.unsafeLazy
 abstract class EsService : Service(), InjektTrait, ScopeOwner {
 
     override val component by unsafeLazy {
-        serviceComponent {
-            modules(this@EsService.modules())
-        }
+        serviceComponent(modules = modules())
     }
 
     override val scope: Scope get() = _scope

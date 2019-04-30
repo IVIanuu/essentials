@@ -21,13 +21,11 @@ import android.app.Activity
 import android.app.Service
 import android.content.*
 import android.content.res.ColorStateList
-import android.content.res.Configuration
 import android.content.res.TypedArray
 import android.graphics.Bitmap
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
 import android.os.Build
-import android.util.DisplayMetrics
 import android.view.View
 import android.view.animation.Animation
 import androidx.annotation.RequiresApi
@@ -168,47 +166,6 @@ inline fun <reified T : Service> ContextAware.startForegroundServiceCompat(init:
     providedContext.startForegroundServiceCompat<T>(init)
 }
 
-inline val ContextAware.configuration: Configuration
-    get() = providedContext.configuration
-
-inline val ContextAware.displayMetrics: DisplayMetrics
-    get() = providedContext.displayMetrics
-
-inline val ContextAware.rotation: Int
-    get() = providedContext.rotation
-
-inline val ContextAware.isPortrait: Boolean
-    get() = providedContext.isPortrait
-
-inline val ContextAware.isLandscape: Boolean
-    get() = providedContext.isLandscape
-
-inline val ContextAware.screenWidth: Int
-    get() = providedContext.screenWidth
-
-inline val ContextAware.screenHeight: Int
-    get() = providedContext.screenHeight
-
-inline val ContextAware.realScreenWidth: Int
-    get() = providedContext.realScreenWidth
-
-inline val ContextAware.realScreenHeight: Int
-    get() = providedContext.realScreenHeight
-
-inline val ContextAware.isScreenOn: Boolean
-    get() =
-        providedContext.isScreenOn
-
-inline val ContextAware.isScreenOff: Boolean
-    get() =
-        providedContext.isScreenOff
-
-inline val ContextAware.isCharging: Boolean
-    get() = providedContext.isCharging
-
-inline val ContextAware.batteryLevel: Int
-    get() = providedContext.batteryLevel
-
 fun ContextAware.dp(dp: Int): Float = providedContext.dp(dp)
 
 inline fun <reified T> ContextAware.componentName(): ComponentName =
@@ -228,15 +185,6 @@ fun ContextAware.registerReceiver(
 
 fun ContextAware.hasPermissions(vararg permissions: String): Boolean =
     providedContext.hasPermissions(*permissions)
-
-fun ContextAware.isAppInstalled(packageName: String): Boolean =
-    providedContext.isAppInstalled(packageName)
-
-fun ContextAware.isAppLaunchable(packageName: String): Boolean =
-    providedContext.isAppLaunchable(packageName)
-
-fun ContextAware.isAppEnabled(packageName: String): Boolean =
-    providedContext.isAppEnabled(packageName)
 
 inline fun <reified T> ContextAware.systemService(): T =
     providedContext.systemService()

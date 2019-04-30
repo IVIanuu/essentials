@@ -30,7 +30,7 @@ import com.ivianuu.essentials.ui.viewmodel.android.viewModelManagerOwner
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.android.activityComponent
 import com.ivianuu.injekt.inject
-import com.ivianuu.injekt.modules
+
 import com.ivianuu.scopes.Scope
 import com.ivianuu.scopes.ScopeOwner
 import com.ivianuu.scopes.android.lifecycle.onDestroy
@@ -48,10 +48,9 @@ import com.ivianuu.traveler.setRoot
 abstract class EsActivity : AppCompatActivity(), InjektMvRxView, ScopeOwner {
 
     override val component by unsafeLazy {
-        activityComponent {
-            modules(keyModule(intent.extras, false))
-            modules(this@EsActivity.modules())
-        }
+        activityComponent(
+            modules = listOf(keyModule(intent.extras, false)) + modules()
+        )
     }
 
     override val scope: Scope

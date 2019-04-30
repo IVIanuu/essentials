@@ -35,7 +35,7 @@ import com.ivianuu.essentials.util.ContextAware
 import com.ivianuu.essentials.util.InjektTraitContextWrapper
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.inject
-import com.ivianuu.injekt.modules
+
 import com.ivianuu.stdlibx.unsafeLazy
 import com.ivianuu.traveler.Router
 import kotlinx.android.extensions.LayoutContainer
@@ -47,10 +47,9 @@ import kotlinx.android.synthetic.*
 abstract class EsController : Controller(), ContextAware, InjektMvRxView, LayoutContainer {
 
     override val component by unsafeLazy {
-        controllerComponent {
-            modules(keyModule(args))
-            modules(this@EsController.modules())
-        }
+        controllerComponent(
+            modules = listOf(keyModule(args)) + modules()
+        )
     }
 
     override val containerView: View?

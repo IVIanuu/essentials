@@ -22,7 +22,7 @@ import com.ivianuu.essentials.injection._appComponent
 import com.ivianuu.essentials.injection.esModule
 import com.ivianuu.essentials.util.ext.containsFlag
 import com.ivianuu.injekt.*
-import com.ivianuu.injekt.android.androidLogger
+import com.ivianuu.injekt.android.AndroidLogger
 import com.ivianuu.injekt.android.applicationComponent
 import com.ivianuu.injekt.multibinding.injectProviderMap
 import com.ivianuu.scopes.MutableScope
@@ -56,18 +56,15 @@ abstract class EsApp : Application(), InjektTrait, ScopeOwner {
     }
 
     protected open fun onConfigureInjekt() {
-        injekt {
-            if (applicationInfo.flags.containsFlag(ApplicationInfo.FLAG_DEBUGGABLE)) {
-                androidLogger()
-            }
+        if (applicationInfo.flags.containsFlag(ApplicationInfo.FLAG_DEBUGGABLE)) {
+            InjektPlugins.logger = AndroidLogger()
         }
     }
 
     protected open fun onCreateComponent(): Component {
-        return applicationComponent {
-            modules(esAppModule, esModule)
-            modules(this@EsApp.modules())
-        }
+        return applicationComponent(
+            modules = listOf(esAppModule, esModule) + modules()
+        )
     }
 
     protected open fun onInitialize() {
