@@ -18,7 +18,6 @@
 package com.ivianuu.essentials.sample.ui
 
 import android.os.Bundle
-import com.ivianuu.essentials.BuildConfig
 import com.ivianuu.essentials.hidenavbar.NavBarSettingsKey
 import com.ivianuu.essentials.sample.ui.counter.CounterKey
 import com.ivianuu.essentials.ui.base.EsActivity
