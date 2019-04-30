@@ -39,6 +39,7 @@ val esNavBarModule = module {
     single(NavBar) { KPrefs(get<SharedPreferences>(NavBar)) }
     single { NavBarPrefs(get(NavBar)) }
 
+    factory { DisplayRotationProvider(get()) }
     factory { OverscanHelper() }
     factory { NonSdkInterfacesHelper(get()) }
     factory { ScreenStateProvider(get()) }
