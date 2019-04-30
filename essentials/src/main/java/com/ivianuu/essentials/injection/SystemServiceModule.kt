@@ -76,7 +76,7 @@ val systemServiceModule = module {
     getSystemServices()
         .map { it.cast<KClass<Any>>() }
         .forEach { service ->
-            bind(FactoryKind) {
+            bind(FactoryKind, service) {
                 ContextCompat.getSystemService(
                     get(),
                     service.java
