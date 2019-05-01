@@ -27,7 +27,7 @@ import com.ivianuu.essentials.app.AppService
 import com.ivianuu.essentials.util.BroadcastFactory
 import com.ivianuu.essentials.util.ext.combineLatest
 import com.ivianuu.kommon.core.app.doOnConfigurationChanged
-import com.ivianuu.kprefs.rx.observable
+import com.ivianuu.kprefs.rx.asObservable
 import com.ivianuu.rxjavaktx.emptyObservable
 import com.ivianuu.rxjavaktx.observable
 import com.ivianuu.scopes.ReusableScope
@@ -53,7 +53,7 @@ class NavBarController(
     private val enabledScope = ReusableScope()
 
     override fun start() {
-        prefs.manageNavBar.observable()
+        prefs.manageNavBar.asObservable()
             .subscribe { updateEnabledState(it) }
             .disposeBy(scope)
     }
@@ -156,9 +156,9 @@ class NavBarController(
 
     private fun prefChanges(): Observable<Unit> {
         return Observables.combineLatest(
-            prefs.navBarHidden.observable(),
-            prefs.rotationMode.observable(),
-            prefs.showNavBarScreenOff.observable()
+            prefs.navBarHidden.asObservable(),
+            prefs.rotationMode.asObservable(),
+            prefs.showNavBarScreenOff.asObservable()
         ).map { Unit }
     }
 

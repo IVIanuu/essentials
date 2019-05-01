@@ -23,7 +23,8 @@ import com.ivianuu.essentials.ui.traveler.handler
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
 import com.ivianuu.injekt.get
 import com.ivianuu.kprefs.KPrefs
-import com.ivianuu.kprefs.rx.observable
+import com.ivianuu.kprefs.rx.asObservable
+import com.ivianuu.kprefs.stringSet
 import io.reactivex.Observable
 import kotlinx.android.parcel.Parcelize
 
@@ -44,7 +45,7 @@ class CheckAppsController : CheckableAppsController() {
     }
 
     override fun getCheckedAppsObservable(): Observable<Set<String>> =
-        pref.observable()
+        pref.asObservable()
 
     override fun onCheckedAppsChanged(apps: Set<String>) {
         pref.set(apps)

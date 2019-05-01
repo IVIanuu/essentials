@@ -30,7 +30,7 @@ object Build {
 object Publishing {
     const val groupId = "com.ivianuu.essentials"
     const val vcsUrl = "https://github.com/IVIanuu/essentials"
-    const val version = "${Build.versionName}-dev-88"
+    const val version = "${Build.versionName}-dev-89"
 }
 
 object Versions {
@@ -58,8 +58,8 @@ object Versions {
     const val junit = "4.12"
     const val kommon = "0.0.1-dev-7"
     const val kotlin = "1.3.31"
-    const val kPrefs = "0.0.1-dev-6"
-    const val kSettings = "0.0.1-dev-4"
+    const val kPrefs = "0.0.1-dev-8"
+    const val kSettings = "0.0.1-dev-6"
     const val list = "0.0.1-dev-26"
     const val listPrefs = "0.0.1-dev-13"
     const val mavenGradle = "2.1"
@@ -71,9 +71,9 @@ object Versions {
     const val rxJava = "2.2.8"
     const val rxJavaKtx = "0.0.1-dev-1"
     const val rxKotlin = "2.3.0"
-    const val scopes = "0.0.1-dev-5"
+    const val scopes = "0.0.1-dev-7"
     const val superUser = "1.0.0.+"
-    const val stateStore = "0.0.1-dev-5"
+    const val stateStore = "0.0.1-dev-6"
     const val stdlibx = "0.0.1-dev-4"
     const val timber = "4.7.1"
     const val timberKtx = "0.0.1-dev-1"

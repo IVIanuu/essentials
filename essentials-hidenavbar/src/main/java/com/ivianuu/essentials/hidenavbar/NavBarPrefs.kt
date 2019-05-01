@@ -18,6 +18,7 @@ package com.ivianuu.essentials.hidenavbar
 
 import android.os.Build
 import com.ivianuu.kprefs.KPrefs
+import com.ivianuu.kprefs.boolean
 import com.ivianuu.kprefs.common.enumString
 
 /**
