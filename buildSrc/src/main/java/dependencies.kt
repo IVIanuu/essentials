@@ -74,7 +74,7 @@ object Versions {
     const val scopes = "0.0.1-dev-7"
     const val superUser = "1.0.0.+"
     const val stateStore = "0.0.1-dev-6"
-    const val stdlibx = "0.0.1-dev-4"
+    const val stdlibx = "0.0.1-dev-7"
     const val timber = "4.7.1"
     const val timberKtx = "0.0.1-dev-1"
     const val traveler = "0.0.1-dev-4"
