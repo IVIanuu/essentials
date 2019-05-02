@@ -89,56 +89,6 @@ val systemServiceModule = module {
 private fun getSystemServices(): Set<KClass<*>> {
     val systemServices = mutableSetOf<KClass<*>>()
 
-    if (Build.VERSION.SDK_INT >= 23) {
-        systemServices.add(CarrierConfigManager::class)
-        systemServices.add(FingerprintManager::class)
-        systemServices.add(MidiManager::class)
-        systemServices.add(NetworkStatsManager::class)
-    }
-
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-        systemServices.add(HardwarePropertiesManager::class)
-        systemServices.add(SystemHealthManager::class)
-    }
-
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
-        systemServices.add(ShortcutManager::class)
-    }
-
-    if (Build.VERSION.SDK_INT > 22) {
-        systemServices.add(SubscriptionManager::class)
-        systemServices.add(UsageStatsManager::class)
-    }
-    if (Build.VERSION.SDK_INT > 21) {
-        systemServices.add(AppWidgetManager::class)
-        systemServices.add(BatteryManager::class)
-        systemServices.add(CameraManager::class)
-        systemServices.add(JobScheduler::class)
-        systemServices.add(LauncherApps::class)
-        systemServices.add(MediaProjectionManager::class)
-        systemServices.add(MediaSessionManager::class)
-        systemServices.add(RestrictionsManager::class)
-        systemServices.add(TelecomManager::class)
-        systemServices.add(TvInputManager::class)
-    }
-    if (Build.VERSION.SDK_INT > 19) {
-        systemServices.add(AppOpsManager::class)
-        systemServices.add(CaptioningManager::class)
-        systemServices.add(ConsumerIrManager::class)
-        systemServices.add(PrintManager::class)
-    }
-    if (Build.VERSION.SDK_INT > 18) {
-        systemServices.add(BluetoothManager::class)
-    }
-    if (Build.VERSION.SDK_INT > 17) {
-        systemServices.add(DisplayManager::class)
-        systemServices.add(UserManager::class)
-    }
-    if (Build.VERSION.SDK_INT > 16) {
-        systemServices.add(InputManager::class)
-        systemServices.add(MediaRouter::class)
-        systemServices.add(NsdManager::class)
-    }
     systemServices.add(AccessibilityService::class)
     systemServices.add(AccountManager::class)
     systemServices.add(ActivityManager::class)
@@ -168,6 +118,54 @@ private fun getSystemServices(): Set<KClass<*>> {
     systemServices.add(WifiP2pManager::class)
     systemServices.add(WifiManager::class)
     systemServices.add(WindowManager::class)
+
+    if (Build.VERSION.SDK_INT > 16) {
+        systemServices.add(InputManager::class)
+        systemServices.add(MediaRouter::class)
+        systemServices.add(NsdManager::class)
+    }
+    if (Build.VERSION.SDK_INT > 17) {
+        systemServices.add(DisplayManager::class)
+        systemServices.add(UserManager::class)
+    }
+    if (Build.VERSION.SDK_INT > 18) {
+        systemServices.add(BluetoothManager::class)
+    }
+    if (Build.VERSION.SDK_INT > 19) {
+        systemServices.add(AppOpsManager::class)
+        systemServices.add(CaptioningManager::class)
+        systemServices.add(ConsumerIrManager::class)
+        systemServices.add(PrintManager::class)
+    }
+    if (Build.VERSION.SDK_INT > 21) {
+        systemServices.add(AppWidgetManager::class)
+        systemServices.add(BatteryManager::class)
+        systemServices.add(CameraManager::class)
+        systemServices.add(JobScheduler::class)
+        systemServices.add(LauncherApps::class)
+        systemServices.add(MediaProjectionManager::class)
+        systemServices.add(MediaSessionManager::class)
+        systemServices.add(RestrictionsManager::class)
+        systemServices.add(TelecomManager::class)
+        systemServices.add(TvInputManager::class)
+    }
+    if (Build.VERSION.SDK_INT > 22) {
+        systemServices.add(SubscriptionManager::class)
+        systemServices.add(UsageStatsManager::class)
+    }
+    if (Build.VERSION.SDK_INT >= 23) {
+        systemServices.add(CarrierConfigManager::class)
+        systemServices.add(FingerprintManager::class)
+        systemServices.add(MidiManager::class)
+        systemServices.add(NetworkStatsManager::class)
+    }
+    if (Build.VERSION.SDK_INT >= 24) {
+        systemServices.add(HardwarePropertiesManager::class)
+        systemServices.add(SystemHealthManager::class)
+    }
+    if (Build.VERSION.SDK_INT >= 25) {
+        systemServices.add(ShortcutManager::class)
+    }
 
     return systemServices
 }
