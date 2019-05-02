@@ -32,6 +32,7 @@ private inline fun androidComponent(
     return component(allModules, allDependencies)
 }
 
+
 /**
  * Controller name
  */
@@ -109,7 +110,7 @@ fun Controller.getActivityComponent(): Component =
  * Returns the [Component] of the application or null
  */
 fun Controller.getApplicationComponentOrNull(): Component? =
-    (activity.application as? InjektTrait)?.component
+    (activity?.application as? InjektTrait)?.component
 
 /**
  * Returns the [Component] of the application or throws
@@ -122,24 +123,22 @@ fun Controller.getApplicationComponent(): Component =
  * Returns a [Module] with convenient bindings
  */
 fun <T : Controller> T.controllerModule(): Module = module {
-    constant(this@controllerModule).apply {
-        bindType<Controller>()
-        bindAlias<Controller>(ForController)
-    }
-
-    factory { context } bindName ForController
-    factory { resources } bindName ForController
+    include(internalControllerModule(ForController))
 }
 
 /**
  * Returns a [Module] with convenient bindings
  */
 fun <T : Controller> T.childControllerModule(): Module = module {
-    constant(this@childControllerModule).apply {
+    include(internalControllerModule(ForChildController))
+}
+
+private fun <T : Controller> T.internalControllerModule(qualifier: Any) = module {
+    constant(this@internalControllerModule).apply {
         bindType<Controller>()
-        bindAlias<Controller>(ForChildController)
+        bindAlias<Controller>(qualifier)
     }
 
-    factory { context } bindName ForChildController
-    factory { resources } bindName ForChildController
+    factory { context } bindName qualifier
+    factory { resources } bindName qualifier
 }

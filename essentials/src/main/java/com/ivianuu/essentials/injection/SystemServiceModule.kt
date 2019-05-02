@@ -67,6 +67,7 @@ import com.ivianuu.injekt.bind
 import com.ivianuu.injekt.get
 import com.ivianuu.injekt.module
 import com.ivianuu.stdlibx.cast
+import com.ivianuu.stdlibx.set
 import kotlin.reflect.KClass
 
 /**
@@ -86,86 +87,82 @@ val systemServiceModule = module {
 }
 
 @Suppress("DEPRECATION")
-private fun getSystemServices(): Set<KClass<*>> {
-    val systemServices = mutableSetOf<KClass<*>>()
-
-    systemServices.add(AccessibilityService::class)
-    systemServices.add(AccountManager::class)
-    systemServices.add(ActivityManager::class)
-    systemServices.add(AlarmManager::class)
-    systemServices.add(AudioManager::class)
-    systemServices.add(ClipboardManager::class)
-    systemServices.add(ConnectivityManager::class)
-    systemServices.add(DevicePolicyManager::class)
-    systemServices.add(DownloadManager::class)
-    systemServices.add(DropBoxManager::class)
-    systemServices.add(InputMethodManager::class)
-    systemServices.add(KeyguardManager::class)
-    systemServices.add(LayoutInflater::class)
-    systemServices.add(LocationManager::class)
-    systemServices.add(NfcManager::class)
-    systemServices.add(NotificationManager::class)
-    systemServices.add(PowerManager::class)
-    systemServices.add(SearchManager::class)
-    systemServices.add(SensorManager::class)
-    systemServices.add(StorageManager::class)
-    systemServices.add(TelephonyManager::class)
-    systemServices.add(TextServicesManager::class)
-    systemServices.add(UiModeManager::class)
-    systemServices.add(UsbManager::class)
-    systemServices.add(Vibrator::class)
-    systemServices.add(WallpaperManager::class)
-    systemServices.add(WifiP2pManager::class)
-    systemServices.add(WifiManager::class)
-    systemServices.add(WindowManager::class)
+private fun getSystemServices(): Set<KClass<*>> = set {
+    add(AccessibilityService::class)
+    add(AccountManager::class)
+    add(ActivityManager::class)
+    add(AlarmManager::class)
+    add(AudioManager::class)
+    add(ClipboardManager::class)
+    add(ConnectivityManager::class)
+    add(DevicePolicyManager::class)
+    add(DownloadManager::class)
+    add(DropBoxManager::class)
+    add(InputMethodManager::class)
+    add(KeyguardManager::class)
+    add(LayoutInflater::class)
+    add(LocationManager::class)
+    add(NfcManager::class)
+    add(NotificationManager::class)
+    add(PowerManager::class)
+    add(SearchManager::class)
+    add(SensorManager::class)
+    add(StorageManager::class)
+    add(TelephonyManager::class)
+    add(TextServicesManager::class)
+    add(UiModeManager::class)
+    add(UsbManager::class)
+    add(Vibrator::class)
+    add(WallpaperManager::class)
+    add(WifiP2pManager::class)
+    add(WifiManager::class)
+    add(WindowManager::class)
 
     if (Build.VERSION.SDK_INT > 16) {
-        systemServices.add(InputManager::class)
-        systemServices.add(MediaRouter::class)
-        systemServices.add(NsdManager::class)
+        add(InputManager::class)
+        add(MediaRouter::class)
+        add(NsdManager::class)
     }
     if (Build.VERSION.SDK_INT > 17) {
-        systemServices.add(DisplayManager::class)
-        systemServices.add(UserManager::class)
+        add(DisplayManager::class)
+        add(UserManager::class)
     }
     if (Build.VERSION.SDK_INT > 18) {
-        systemServices.add(BluetoothManager::class)
+        add(BluetoothManager::class)
     }
     if (Build.VERSION.SDK_INT > 19) {
-        systemServices.add(AppOpsManager::class)
-        systemServices.add(CaptioningManager::class)
-        systemServices.add(ConsumerIrManager::class)
-        systemServices.add(PrintManager::class)
+        add(AppOpsManager::class)
+        add(CaptioningManager::class)
+        add(ConsumerIrManager::class)
+        add(PrintManager::class)
     }
     if (Build.VERSION.SDK_INT > 21) {
-        systemServices.add(AppWidgetManager::class)
-        systemServices.add(BatteryManager::class)
-        systemServices.add(CameraManager::class)
-        systemServices.add(JobScheduler::class)
-        systemServices.add(LauncherApps::class)
-        systemServices.add(MediaProjectionManager::class)
-        systemServices.add(MediaSessionManager::class)
-        systemServices.add(RestrictionsManager::class)
-        systemServices.add(TelecomManager::class)
-        systemServices.add(TvInputManager::class)
+        add(AppWidgetManager::class)
+        add(BatteryManager::class)
+        add(CameraManager::class)
+        add(JobScheduler::class)
+        add(LauncherApps::class)
+        add(MediaProjectionManager::class)
+        add(MediaSessionManager::class)
+        add(RestrictionsManager::class)
+        add(TelecomManager::class)
+        add(TvInputManager::class)
     }
     if (Build.VERSION.SDK_INT > 22) {
-        systemServices.add(SubscriptionManager::class)
-        systemServices.add(UsageStatsManager::class)
+        add(SubscriptionManager::class)
+        add(UsageStatsManager::class)
     }
     if (Build.VERSION.SDK_INT >= 23) {
-        systemServices.add(CarrierConfigManager::class)
-        systemServices.add(FingerprintManager::class)
-        systemServices.add(MidiManager::class)
-        systemServices.add(NetworkStatsManager::class)
+        add(CarrierConfigManager::class)
+        add(FingerprintManager::class)
+        add(MidiManager::class)
+        add(NetworkStatsManager::class)
     }
     if (Build.VERSION.SDK_INT >= 24) {
-        systemServices.add(HardwarePropertiesManager::class)
-        systemServices.add(SystemHealthManager::class)
+        add(HardwarePropertiesManager::class)
+        add(SystemHealthManager::class)
     }
     if (Build.VERSION.SDK_INT >= 25) {
-        systemServices.add(ShortcutManager::class)
+        add(ShortcutManager::class)
     }
-
-    return systemServices
 }
