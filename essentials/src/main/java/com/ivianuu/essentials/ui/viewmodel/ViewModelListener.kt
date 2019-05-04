@@ -47,7 +47,9 @@ fun ViewModelListener(
     onRestoreState: ((viewModel: ViewModel, savedState: SavedState) -> Unit)? = null,
     onSaveState: ((viewModel: ViewModel, savedState: SavedState) -> Unit)? = null
 ): ViewModelListener = LambdaViewModelListener(
-    preInitialize, postInitialize, preDestroy, postDestroy, onSaveState
+    preInitialize, postInitialize,
+    preDestroy, postDestroy,
+    onRestoreState, onSaveState
 )
 
 fun ViewModel.doOnPreInitialize(
