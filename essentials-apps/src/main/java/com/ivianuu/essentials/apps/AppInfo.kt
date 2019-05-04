@@ -19,7 +19,4 @@ package com.ivianuu.essentials.apps
 /**
  * Simple application info
  */
-data class AppInfo(
-    val packageName: String,
-    val appName: String
-)
+data class AppInfo(val packageName: String, val appName: String)

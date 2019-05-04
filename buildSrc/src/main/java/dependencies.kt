@@ -63,7 +63,7 @@ object Versions {
     const val list = "0.0.1-dev-26"
     const val listPrefs = "0.0.1-dev-13"
     const val mavenGradle = "2.1"
-    const val materialComponents = "1.1.0-alpha05"
+    const val materialComponents = "1.1.0-alpha06"
     const val materialDialogs = "2.0.3"
     const val mockitoKotlin = "2.0.0"
     const val roboelectric = "4.0.2"
