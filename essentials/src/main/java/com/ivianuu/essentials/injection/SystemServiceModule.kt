@@ -66,8 +66,6 @@ import com.ivianuu.injekt.FactoryKind
 import com.ivianuu.injekt.bind
 import com.ivianuu.injekt.get
 import com.ivianuu.injekt.module
-import com.ivianuu.stdlibx.cast
-import com.ivianuu.stdlibx.set
 import kotlin.reflect.KClass
 
 /**
@@ -75,7 +73,7 @@ import kotlin.reflect.KClass
  */
 val systemServiceModule = module {
     getSystemServices()
-        .map { it.cast<KClass<Any>>() }
+        .map { it as KClass<Any> }
         .forEach { service ->
             bind(FactoryKind, service) {
                 ContextCompat.getSystemService(
@@ -87,7 +85,7 @@ val systemServiceModule = module {
 }
 
 @Suppress("DEPRECATION")
-private fun getSystemServices(): Set<KClass<*>> = set {
+private fun getSystemServices(): Set<KClass<*>> = mutableSetOf<KClass<*>>().apply {
     add(AccessibilityService::class)
     add(AccountManager::class)
     add(ActivityManager::class)

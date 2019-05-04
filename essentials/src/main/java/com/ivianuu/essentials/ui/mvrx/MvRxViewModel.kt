@@ -17,21 +17,21 @@
 package com.ivianuu.essentials.ui.mvrx
 
 import androidx.lifecycle.LifecycleOwner
-import com.ivianuu.closeable.Closeable
-import com.ivianuu.closeable.coroutines.asCloseable
-import com.ivianuu.closeable.rx.asCloseable
 import com.ivianuu.essentials.ui.common.EsViewModel
 import com.ivianuu.essentials.ui.mvrx.lifecycle.LifecycleStateListener
 import com.ivianuu.essentials.util.*
-import com.ivianuu.essentials.util.ext.closeBy
+import com.ivianuu.scopes.rx.disposeBy
 import com.ivianuu.statestore.Consumer
 import com.ivianuu.statestore.Reducer
 import com.ivianuu.statestore.StateStore
+import com.ivianuu.statestore.rx.asObservable
 import com.ivianuu.timberktx.d
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single
+import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 /**
@@ -55,10 +55,10 @@ abstract class MvRxViewModel<S>(initialState: S) : EsViewModel() {
         subscribe { d { "new state -> $it" } }
     }
 
-    protected fun subscribe(consumer: Consumer<S>): Closeable =
-        stateStore.addListener(consumer).closeBy(scope)
+    protected fun subscribe(consumer: Consumer<S>): Disposable =
+        stateStore.asObservable().subscribe(consumer).disposeBy(scope)
 
-    fun subscribe(owner: LifecycleOwner, consumer: Consumer<S>): Closeable {
+    fun subscribe(owner: LifecycleOwner, consumer: Consumer<S>): Disposable {
         return LifecycleStateListener(
             owner,
             stateStore,
@@ -68,27 +68,26 @@ abstract class MvRxViewModel<S>(initialState: S) : EsViewModel() {
 
     protected fun Completable.execute(
         reducer: S.(Async<Unit>) -> S
-    ): Closeable = toSingle { Unit }.execute(reducer)
+    ): Disposable = toSingle { Unit }.execute(reducer)
 
     protected fun <V> Single<V>.execute(
         reducer: S.(Async<V>) -> S
-    ): Closeable = toObservable().execute(reducer)
+    ): Disposable = toObservable().execute(reducer)
 
     protected fun <V> Observable<V>.execute(
         reducer: S.(Async<V>) -> S
-    ): Closeable {
+    ): Disposable {
         setState { reducer(Loading()) }
 
         return this
             .map { it.asSuccess() as Async<V> }
             .onErrorReturn { it.asFail() }
             .subscribe { setState { reducer(it) } }
-            .asCloseable()
     }
 
     protected fun <V> Deferred<V>.execute(
         reducer: S.(Async<V>) -> S
-    ): Closeable {
+    ): Job {
         setState { reducer(Loading()) }
         return coroutineScope.launch {
             val result = try {
@@ -98,7 +97,7 @@ abstract class MvRxViewModel<S>(initialState: S) : EsViewModel() {
             }
 
             setState { reducer(result) }
-        }.asCloseable()
+        }
     }
 
     override fun toString() = "${javaClass.simpleName} -> ${peekState()}"

@@ -16,11 +16,11 @@
 
 package com.ivianuu.essentials.util.ext
 
-import com.ivianuu.ktuples.*
 import io.reactivex.Observable
 import io.reactivex.functions.*
 import io.reactivex.rxkotlin.Observables
 import io.reactivex.subjects.BehaviorSubject
+import java.io.Serializable
 
 fun <T : Any> BehaviorSubject<T>.requireValue(): T =
     value ?: error("value is null")
@@ -149,4 +149,96 @@ fun <T1, T2, T3, T4, T5, T6, T7, T8, T9> Observables.combineLatest(
         Function9 { t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6, t7: T7, t8: T8, t9: T9 ->
             Tuple9(t1, t2, t3, t4, t5, t6, t7, t8, t9)
         })
+}
+
+data class Tuple1<out A>(
+    val first: A
+) : Serializable {
+    override fun toString(): String = "($first)"
+}
+
+data class Tuple2<out A, out B>(
+    val first: A,
+    val second: B
+) : Serializable {
+    override fun toString(): String = "($first, $second)"
+}
+
+data class Tuple3<out A, out B, out C>(
+    val first: A,
+    val second: B,
+    val third: C
+) : Serializable {
+    override fun toString(): String = "($first, $second, $third)"
+}
+
+data class Tuple4<out A, out B, out C, out D>(
+    val first: A,
+    val second: B,
+    val third: C,
+    val fourth: D
+) : Serializable {
+    override fun toString(): String = "($first, $second, $third, $fourth)"
+}
+
+data class Tuple5<out A, out B, out C, out D, out E>(
+    val first: A,
+    val second: B,
+    val third: C,
+    val fourth: D,
+    val fifth: E
+) : Serializable {
+    override fun toString(): String = "($first, $second, $third, $fourth, $fifth)"
+}
+
+data class Tuple6<out A, out B, out C, out D, out E, out F>(
+    val first: A,
+    val second: B,
+    val third: C,
+    val fourth: D,
+    val fifth: E,
+    val sixth: F
+) : Serializable {
+    override fun toString(): String = "($first, $second, $third, $fourth, $fifth, $sixth)"
+}
+
+data class Tuple7<out A, out B, out C, out D, out E, out F, out G>(
+    val first: A,
+    val second: B,
+    val third: C,
+    val fourth: D,
+    val fifth: E,
+    val sixth: F,
+    val seventh: G
+) : Serializable {
+    override fun toString(): String = "($first, $second, $third, $fourth, $fifth, $sixth, $seventh)"
+}
+
+data class Tuple8<out A, out B, out C, out D, out E, out F, out G, out H>(
+    val first: A,
+    val second: B,
+    val third: C,
+    val fourth: D,
+    val fifth: E,
+    val sixth: F,
+    val seventh: G,
+    val eighth: H
+) : Serializable {
+    override fun toString(): String =
+        "($first, $second, $third, $fourth, $fifth, $sixth, $seventh, $eighth)"
+}
+
+data class Tuple9<out A, out B, out C, out D, out E, out F, out G, out H, out I>(
+    val first: A,
+    val second: B,
+    val third: C,
+    val fourth: D,
+    val fifth: E,
+    val sixth: F,
+    val seventh: G,
+    val eighth: H,
+    val ninth: I
+) : Serializable {
+    override fun toString(): String =
+        "($first, $second, $third, $fourth, $fifth, $sixth, $seventh, $eighth, $ninth)"
 }

@@ -34,16 +34,11 @@ dependencies {
     api(Deps.androidxAppCompat)
     api(Deps.androidxCardView)
     api(Deps.androidxCoreKtx)
-
-    api(Deps.closeable)
-    api(Deps.closeableCoroutines)
-    api(Deps.closeableRx)
+    api(Deps.androidxLifecycleExtensions)
 
     api(Deps.coroutinesAndroid)
     api(Deps.coroutinesCore)
     api(Deps.coroutinesRxJava)
-
-    api(Deps.androidxLifecycleExtensions)
 
     api(Deps.constraintLayout)
 
@@ -81,8 +76,6 @@ dependencies {
     api(Deps.kSettingsLiveData)
     api(Deps.kSettingsRx)
 
-    api(project(":ktuples"))
-
     api(Deps.list)
     api(Deps.listCommon)
     api(Deps.listPrefs)
@@ -108,8 +101,6 @@ dependencies {
     api(Deps.stateStoreCoroutines)
     api(Deps.stateStoreLiveData)
     api(Deps.stateStoreRx)
-
-    api(Deps.stdlibx)
 
     api(Deps.timber)
     api(Deps.timberKtx)

@@ -48,8 +48,6 @@ object Versions {
     const val androidxTestRunner = "1.2.0-alpha03"
 
     const val bintray = "1.8.4"
-
-    const val closeable = "0.0.1-dev-3"
     const val constraintLayout = "2.0.0-alpha3"
     const val coroutines = "1.2.0"
     const val director = "0.0.1-dev-25"
@@ -74,7 +72,6 @@ object Versions {
     const val scopes = "0.0.1-dev-7"
     const val superUser = "1.0.0.+"
     const val stateStore = "0.0.1-dev-6"
-    const val stdlibx = "0.0.1-dev-7"
     const val timber = "4.7.1"
     const val timberKtx = "0.0.1-dev-1"
     const val traveler = "0.0.1-dev-4"
@@ -99,10 +96,6 @@ object Deps {
 
     const val bintrayGradlePlugin =
         "com.jfrog.bintray.gradle:gradle-bintray-plugin:${Versions.bintray}"
-
-    const val closeable = "com.ivianuu.closeable:closeable:${Versions.closeable}"
-    const val closeableCoroutines = "com.ivianuu.closeable:closeable-coroutines:${Versions.closeable}"
-    const val closeableRx = "com.ivianuu.closeable:closeable-rx:${Versions.closeable}"
 
     const val constraintLayout =
         "androidx.constraintlayout:constraintlayout:${Versions.constraintLayout}"
@@ -209,8 +202,6 @@ object Deps {
     const val stateStoreLiveData =
         "com.ivianuu.statestore:statestore-livedata:${Versions.stateStore}"
     const val stateStoreRx = "com.ivianuu.statestore:statestore-rx:${Versions.stateStore}"
-
-    const val stdlibx = "com.ivianuu.stdlibx:stdlibx:${Versions.stdlibx}"
 
     const val superUser = "eu.chainfire:libsuperuser:${Versions.superUser}"
 

@@ -21,6 +21,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import com.ivianuu.closeable.Closeable
 import com.ivianuu.statestore.StateStore
+import io.reactivex.disposables.Disposable
 
 /**
  * Attaches and detaches the [consumer] to the [store]
@@ -31,10 +32,10 @@ internal class LifecycleStateListener<T>(
     private val owner: LifecycleOwner,
     private val store: StateStore<T>,
     private val consumer: (T) -> Unit
-) : GenericLifecycleObserver, Closeable {
+) : GenericLifecycleObserver, Disposable {
 
-    override var isClosed = false
-        private set
+    private var isDisposed = false
+    override fun isDisposed(): Boolean = isDisposed
 
     init {
         owner.lifecycle.addObserver(this)
@@ -45,12 +46,14 @@ internal class LifecycleStateListener<T>(
 
         when {
             state.isAtLeast(Lifecycle.State.STARTED) -> store.addListener(consumer)
-            state == Lifecycle.State.DESTROYED -> { close() }
+            state == Lifecycle.State.DESTROYED -> {
+                dispose()
+            }
             else -> store.removeListener(consumer)
         }
     }
 
-    override fun close() {
+    override fun dispose() {
         owner.lifecycle.removeObserver(this)
         store.removeListener(consumer)
     }

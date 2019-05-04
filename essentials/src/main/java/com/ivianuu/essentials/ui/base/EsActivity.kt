@@ -34,7 +34,6 @@ import com.ivianuu.injekt.inject
 import com.ivianuu.scopes.Scope
 import com.ivianuu.scopes.ScopeOwner
 import com.ivianuu.scopes.android.lifecycle.onDestroy
-import com.ivianuu.stdlibx.list
 import com.ivianuu.stdlibx.unsafeLazy
 import com.ivianuu.traveler.Navigator
 import com.ivianuu.traveler.android.AppNavigator
@@ -70,7 +69,7 @@ abstract class EsActivity : AppCompatActivity(), InjektMvRxView, ScopeOwner {
     lateinit var router: Router
 
     protected open val navigator: Navigator by unsafeLazy {
-        val navigators = list<ResultNavigator> {
+        val navigators = mutableListOf<ResultNavigator>().apply {
             addAll(navigators())
             add(ControllerNavigator(router))
             add(AppNavigator(this@EsActivity))
