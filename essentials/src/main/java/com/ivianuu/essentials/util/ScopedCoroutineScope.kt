@@ -22,7 +22,6 @@ import com.ivianuu.scopes.coroutines.cancelBy
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlin.coroutines.CoroutineContext
 
 private const val KEY_COROUTINE_SCOPE = "coroutineScope"
 
@@ -34,5 +33,5 @@ val ScopeOwner.coroutineScope: CoroutineScope get() = scope.coroutineScope
 
 private class ScopedCoroutineScope(scope: Scope) : CoroutineScope {
     private val job = Job().cancelBy(scope)
-    override val coroutineContext: CoroutineContext = job + Dispatchers.Main
+    override val coroutineContext = job + Dispatchers.Main
 }

@@ -30,7 +30,7 @@ object Build {
 object Publishing {
     const val groupId = "com.ivianuu.essentials"
     const val vcsUrl = "https://github.com/IVIanuu/essentials"
-    const val version = "${Build.versionName}-dev-90"
+    const val version = "${Build.versionName}-dev-91"
 }
 
 object Versions {
@@ -69,7 +69,7 @@ object Versions {
     const val rxJava = "2.2.8"
     const val rxJavaKtx = "0.0.1-dev-1"
     const val rxKotlin = "2.3.0"
-    const val scopes = "0.0.1-dev-7"
+    const val scopes = "0.0.1-dev-9"
     const val superUser = "1.0.0.+"
     const val stateStore = "0.0.1-dev-6"
     const val timber = "4.7.1"
@@ -188,8 +188,6 @@ object Deps {
 
     const val scopes = "com.ivianuu.scopes:scopes:${Versions.scopes}"
     const val scopesAndroid = "com.ivianuu.scopes:scopes-android:${Versions.scopes}"
-    const val scopesAndroidLifecycle =
-        "com.ivianuu.scopes:scopes-android-lifecycle:${Versions.scopes}"
     const val scopesCommon = "com.ivianuu.scopes:scopes-common:${Versions.scopes}"
     const val scopesCoroutines = "com.ivianuu.scopes:scopes-coroutines:${Versions.scopes}"
     const val scopesRx = "com.ivianuu.scopes:scopes-rx:${Versions.scopes}"

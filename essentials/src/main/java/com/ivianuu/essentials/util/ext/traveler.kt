@@ -24,6 +24,8 @@ import com.ivianuu.traveler.goBack
 import io.reactivex.Observable
 import kotlin.reflect.KClass
 
+// todo remove
+
 private data class Result(
     val resultCode: Int,
     val result: Any
