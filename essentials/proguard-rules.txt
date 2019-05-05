@@ -8,9 +8,3 @@
 
 -keepnames class kotlinx.coroutines.internal.MainDispatcherFactory {}
 -keepnames class kotlinx.coroutines.CoroutineExceptionHandler {}
-
-# Injekt
--keepclassmembers,allowobfuscation class * { @com.ivianuu.injekt.annotations.** *; }
--keep class **__Factory
--if class **__Factory
--keep class <1>

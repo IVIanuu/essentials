@@ -19,14 +19,12 @@ package com.ivianuu.essentials.ui.mvrx.lifecycle
 import androidx.lifecycle.GenericLifecycleObserver
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
-import com.ivianuu.closeable.Closeable
 import com.ivianuu.statestore.StateStore
 import io.reactivex.disposables.Disposable
 
 /**
  * Attaches and detaches the [consumer] to the [store]
  * based on the lifecycle of the [owner]
- * and is also a [Closeable]
  */
 internal class LifecycleStateListener<T>(
     private val owner: LifecycleOwner,
