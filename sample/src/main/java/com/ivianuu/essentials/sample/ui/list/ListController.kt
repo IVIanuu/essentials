@@ -27,6 +27,7 @@ import com.ivianuu.essentials.ui.mvrx.list.mvRxItemController
 import com.ivianuu.essentials.ui.traveler.NavOptions
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
 import com.ivianuu.essentials.ui.traveler.vertical
+import com.ivianuu.essentials.util.ext.andTrue
 import com.ivianuu.list.id
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.single_line_list_item.title
@@ -65,10 +66,7 @@ class ListController : com.ivianuu.essentials.ui.simple.ListController() {
     }
 
     override fun onToolbarMenuItemClicked(item: MenuItem) = when (item.itemId) {
-        R.id.action_refresh -> {
-            viewModel.refreshClicked()
-            true
-        }
+        R.id.action_refresh -> viewModel.refreshClicked().andTrue()
         else -> false
     }
 }

@@ -36,6 +36,7 @@ import kotlinx.coroutines.launch
 abstract class MvRxViewModel<S>(initialState: S) : EsViewModel() {
 
     private val stateStore = MvRxStateStore(initialState)
+        .also { it.disposeBy(scope) }
 
     fun peekState(): S = stateStore.state
 

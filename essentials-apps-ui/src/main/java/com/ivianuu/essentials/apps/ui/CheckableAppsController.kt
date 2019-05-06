@@ -33,6 +33,7 @@ import com.ivianuu.essentials.ui.mvrx.list.mvRxItemController
 import com.ivianuu.essentials.ui.mvrx.mvRxViewModel
 import com.ivianuu.essentials.ui.simple.ListController
 import com.ivianuu.essentials.util.*
+import com.ivianuu.essentials.util.ext.andTrue
 import com.ivianuu.injekt.factory
 import com.ivianuu.injekt.get
 import com.ivianuu.injekt.module
@@ -100,14 +101,8 @@ abstract class CheckableAppsController : ListController() {
     }
 
     override fun onToolbarMenuItemClicked(item: MenuItem) = when (item.itemId) {
-        R.id.es_action_select_all -> {
-            viewModel.selectAllClicked()
-            true
-        }
-        R.id.es_action_deselect_all -> {
-            viewModel.deselectAllClicked()
-            true
-        }
+        R.id.es_action_select_all -> viewModel.selectAllClicked().andTrue()
+        R.id.es_action_deselect_all -> viewModel.deselectAllClicked().andTrue()
         else -> false
     }
 

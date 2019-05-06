@@ -24,7 +24,6 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.view.children
 import com.google.android.material.appbar.AppBarLayout
 import com.ivianuu.essentials.R
-import com.ivianuu.essentials.ui.base.EsController
 import com.ivianuu.essentials.util.ext.*
 import com.ivianuu.traveler.goBack
 import kotlinx.android.synthetic.main.es_view_app_bar_with_toolbar.es_app_bar
@@ -58,7 +57,7 @@ abstract class ToolbarController : CoordinatorController() {
 
             if (toolbarMenuRes != 0) {
                 inflateMenu(toolbarMenuRes)
-                setOnMenuItemClickListener { this@ToolbarController.onToolbarMenuItemClicked(it) }
+                setOnMenuItemClickListener { onToolbarMenuItemClicked(it) }
             }
 
             if (toolbarBackButton) {
