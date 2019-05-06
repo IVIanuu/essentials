@@ -17,7 +17,7 @@
 package com.ivianuu.essentials.ui.mvrx
 
 import androidx.lifecycle.LifecycleOwner
-import com.ivianuu.essentials.ui.common.EsViewModel
+import com.ivianuu.essentials.ui.base.EsViewModel
 import com.ivianuu.essentials.ui.mvrx.lifecycle.LifecycleStateListener
 import com.ivianuu.essentials.util.*
 import com.ivianuu.scopes.rx.disposeBy
