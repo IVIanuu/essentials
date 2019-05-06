@@ -38,6 +38,5 @@ inline fun <reified T : AppInitializer> Module.appInitializer(
 val esAppInitializersModule = module {
     appInitializer { RxJavaAppInitializer() }
     appInitializer { SavedStateAppInitializer() }
-    appInitializer { StateStoreAppInitializer() }
     appInitializer { TimberAppInitializer(get()) }
 }

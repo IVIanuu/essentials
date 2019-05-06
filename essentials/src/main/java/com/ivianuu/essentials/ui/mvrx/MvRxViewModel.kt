@@ -21,10 +21,6 @@ import com.ivianuu.essentials.ui.common.EsViewModel
 import com.ivianuu.essentials.ui.mvrx.lifecycle.LifecycleStateListener
 import com.ivianuu.essentials.util.*
 import com.ivianuu.scopes.rx.disposeBy
-import com.ivianuu.statestore.Consumer
-import com.ivianuu.statestore.Reducer
-import com.ivianuu.statestore.StateStore
-import com.ivianuu.statestore.rx.asObservable
 import com.ivianuu.timberktx.d
 import io.reactivex.Completable
 import io.reactivex.Observable
@@ -39,26 +35,26 @@ import kotlinx.coroutines.launch
  */
 abstract class MvRxViewModel<S>(initialState: S) : EsViewModel() {
 
-    private val stateStore = StateStore(initialState)
+    private val stateStore = MvRxStateStore(initialState)
 
-    fun peekState(): S = stateStore.peekState()
+    fun peekState(): S = stateStore.state
 
-    protected fun withState(consumer: Consumer<S>) {
-        stateStore.withState(consumer)
+    protected fun withState(consumer: (S) -> Unit) {
+        stateStore.get(consumer)
     }
 
-    protected fun setState(reducer: Reducer<S>) {
-        stateStore.setState(reducer)
+    protected fun setState(reducer: S.() -> S) {
+        stateStore.set(reducer)
     }
 
     fun logStateChanges() {
         subscribe { d { "new state -> $it" } }
     }
 
-    protected fun subscribe(consumer: Consumer<S>): Disposable =
-        stateStore.asObservable().subscribe(consumer).disposeBy(scope)
+    protected fun subscribe(consumer: (S) -> Unit): Disposable =
+        stateStore.observable.subscribe(consumer).disposeBy(scope)
 
-    fun subscribe(owner: LifecycleOwner, consumer: Consumer<S>): Disposable {
+    fun subscribe(owner: LifecycleOwner, consumer: (S) -> Unit): Disposable {
         return LifecycleStateListener(
             owner,
             stateStore,

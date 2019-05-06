@@ -18,8 +18,9 @@ package com.ivianuu.essentials.ui.mvrx.lifecycle
 
 import androidx.lifecycle.GenericLifecycleObserver
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
-import com.ivianuu.statestore.StateStore
+import com.ivianuu.essentials.ui.mvrx.MvRxStateStore
 import io.reactivex.disposables.Disposable
 
 /**
@@ -28,12 +29,14 @@ import io.reactivex.disposables.Disposable
  */
 internal class LifecycleStateListener<T>(
     private val owner: LifecycleOwner,
-    private val store: StateStore<T>,
+    private val store: MvRxStateStore<T>,
     private val consumer: (T) -> Unit
-) : GenericLifecycleObserver, Disposable {
+) : LifecycleEventObserver, Disposable {
 
     private var isDisposed = false
     override fun isDisposed(): Boolean = isDisposed
+
+    private var stateDisposable: Disposable? = null
 
     init {
         owner.lifecycle.addObserver(this)
@@ -43,17 +46,22 @@ internal class LifecycleStateListener<T>(
         val state = owner.lifecycle.currentState
 
         when {
-            state.isAtLeast(Lifecycle.State.STARTED) -> store.addListener(consumer)
-            state == Lifecycle.State.DESTROYED -> {
-                dispose()
+            state.isAtLeast(Lifecycle.State.STARTED) -> {
+                if (stateDisposable != null) return
+                stateDisposable = store.observable.subscribe(consumer)
             }
-            else -> store.removeListener(consumer)
+            state == Lifecycle.State.DESTROYED -> dispose()
+            else -> {
+                stateDisposable?.dispose()
+                stateDisposable = null
+            }
         }
     }
 
     override fun dispose() {
         owner.lifecycle.removeObserver(this)
-        store.removeListener(consumer)
+        stateDisposable?.dispose()
+        stateDisposable = null
     }
 
 }

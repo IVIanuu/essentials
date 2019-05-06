@@ -22,7 +22,6 @@ import android.os.Message
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import com.ivianuu.essentials.ui.viewmodel.ViewModelManagerOwner
-import com.ivianuu.statestore.Consumer
 import io.reactivex.disposables.Disposable
 
 private val PENDING_INVALIDATES = HashSet<Int>()
@@ -47,7 +46,7 @@ interface MvRxView : LifecycleOwner, ViewModelManagerOwner {
         }
     }
 
-    fun <S> MvRxViewModel<S>.subscribe(consumer: Consumer<S>): Disposable =
+    fun <S> MvRxViewModel<S>.subscribe(consumer: (S) -> Unit): Disposable =
         subscribe(this@MvRxView, consumer)
 
 }

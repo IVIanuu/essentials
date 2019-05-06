@@ -94,12 +94,6 @@ dependencies {
     api(Deps.scopesCoroutines)
     api(Deps.scopesRx)
 
-    api(Deps.stateStore)
-    api(Deps.stateStoreAndroid)
-    api(Deps.stateStoreCoroutines)
-    api(Deps.stateStoreLiveData)
-    api(Deps.stateStoreRx)
-
     api(Deps.timber)
     api(Deps.timberKtx)
 

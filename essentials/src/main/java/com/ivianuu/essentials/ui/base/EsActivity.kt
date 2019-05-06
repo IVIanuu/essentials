@@ -33,7 +33,7 @@ import com.ivianuu.injekt.inject
 
 import com.ivianuu.scopes.Scope
 import com.ivianuu.scopes.ScopeOwner
-import com.ivianuu.scopes.android.lifecycle.onDestroy
+import com.ivianuu.scopes.android.onDestroy
 import com.ivianuu.stdlibx.unsafeLazy
 import com.ivianuu.traveler.Navigator
 import com.ivianuu.traveler.android.AppNavigator

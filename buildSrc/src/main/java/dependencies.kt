@@ -50,7 +50,7 @@ object Versions {
     const val bintray = "1.8.4"
     const val constraintLayout = "2.0.0-alpha3"
     const val coroutines = "1.2.0"
-    const val director = "0.0.1-dev-25"
+    const val director = "0.0.1-dev-26"
     const val glide = "4.8.0"
     const val injekt = "0.0.1-dev-29"
     const val junit = "4.12"
@@ -71,7 +71,6 @@ object Versions {
     const val rxKotlin = "2.3.0"
     const val scopes = "0.0.1-dev-9"
     const val superUser = "1.0.0.+"
-    const val stateStore = "0.0.1-dev-7" // todo kill
     const val timber = "4.7.1"
     const val timberKtx = "0.0.1-dev-1"
     const val traveler = "0.0.1-dev-4"
@@ -191,15 +190,6 @@ object Deps {
     const val scopesCommon = "com.ivianuu.scopes:scopes-common:${Versions.scopes}"
     const val scopesCoroutines = "com.ivianuu.scopes:scopes-coroutines:${Versions.scopes}"
     const val scopesRx = "com.ivianuu.scopes:scopes-rx:${Versions.scopes}"
-
-    const val stateStore = "com.ivianuu.statestore:statestore:${Versions.stateStore}"
-    const val stateStoreAndroid =
-        "com.ivianuu.statestore:statestore-android:${Versions.stateStore}"
-    const val stateStoreCoroutines =
-        "com.ivianuu.statestore:statestore-coroutines:${Versions.stateStore}"
-    const val stateStoreLiveData =
-        "com.ivianuu.statestore:statestore-livedata:${Versions.stateStore}"
-    const val stateStoreRx = "com.ivianuu.statestore:statestore-rx:${Versions.stateStore}"
 
     const val superUser = "eu.chainfire:libsuperuser:${Versions.superUser}"
 
