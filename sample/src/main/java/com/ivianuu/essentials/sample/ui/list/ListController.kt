@@ -39,7 +39,7 @@ class ListController : com.ivianuu.essentials.ui.simple.ListController() {
 
     override fun modules() = listOf(listModule)
 
-    private val viewModel by mvRxViewModel<ListViewModel>()
+    private val viewModel: ListViewModel by mvRxViewModel()
 
     override val toolbarMenuRes get() = R.menu.controller_list
     override val toolbarTitle get() = "List"

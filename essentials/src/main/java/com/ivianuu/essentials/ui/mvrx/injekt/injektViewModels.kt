@@ -26,16 +26,16 @@ import com.ivianuu.injekt.InjektTrait
 import com.ivianuu.injekt.ParametersDefinition
 import com.ivianuu.injekt.get
 
-interface InjektMvRxView : InjektTrait, MvRxView
-
-inline fun <reified T : MvRxViewModel<*>> InjektMvRxView.mvRxViewModel(
+inline fun <S, reified T : MvRxViewModel<*>> S.mvRxViewModel(
     noinline from: () -> ViewModelManagerOwner = { this },
     noinline key: () -> String = { T::class.defaultViewModelKey },
     noinline parameters: ParametersDefinition? = null
-): Lazy<T> = mvRxViewModel<T>(from, key) { get(parameters = parameters) }
+): Lazy<T> where S : MvRxView, S : InjektTrait =
+    mvRxViewModel<T>(from, key) { get(parameters = parameters) }
 
-inline fun <reified T : MvRxViewModel<*>> InjektMvRxView.getMvRxViewModel(
+inline fun <S, reified T : MvRxViewModel<*>> S.getMvRxViewModel(
     from: ViewModelManagerOwner = this,
     key: String = T::class.defaultViewModelKey,
     noinline parameters: ParametersDefinition? = null
-): T = getMvRxViewModel<T>(from, key) { get(parameters = parameters) }
+): T where S : MvRxView, S : InjektTrait =
+    getMvRxViewModel<T>(from, key) { get(parameters = parameters) }

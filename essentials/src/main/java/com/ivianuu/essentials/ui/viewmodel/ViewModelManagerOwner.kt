@@ -18,7 +18,6 @@ package com.ivianuu.essentials.ui.viewmodel
 
 import com.ivianuu.stdlibx.unsafeLazy
 
-
 /**
  * A component which hosts a [ViewModelManager]
  */

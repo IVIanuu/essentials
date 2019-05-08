@@ -26,18 +26,16 @@ import com.ivianuu.essentials.ui.viewmodel.getViewModel
 import com.ivianuu.injekt.InjektTrait
 import com.ivianuu.injekt.get
 
-inline fun <reified T : ViewModel> Controller.viewModel(
+inline fun <S, reified T : ViewModel> S.viewModel(
     crossinline from: () -> ViewModelManagerOwner = { viewModelManagerOwner },
     crossinline key: () -> String = { T::class.defaultViewModelKey }
-): Lazy<T> {
-    this as InjektTrait
+): Lazy<T> where S : Controller, S : InjektTrait {
     return viewModel(from, key) { get<T>() }
 }
 
-inline fun <reified T : ViewModel> Controller.getViewModel(
+inline fun <S, reified T : ViewModel> S.getViewModel(
     from: ViewModelManagerOwner = viewModelManagerOwner,
     key: String = T::class.defaultViewModelKey
-): T {
-    this as InjektTrait
+): T where S : Controller, S : InjektTrait {
     return from.getViewModel(from, key) { get<T>() }
 }

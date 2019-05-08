@@ -58,7 +58,7 @@ class AppPickerController : ListController() {
     override val toolbarTitleRes: Int
         get() = R.string.es_title_app_picker
 
-    private val viewModel by mvRxViewModel<AppPickerViewModel>()
+    private val viewModel: AppPickerViewModel by mvRxViewModel()
 
     override fun itemController() = mvRxItemController(viewModel) { state ->
         when(state.apps) {

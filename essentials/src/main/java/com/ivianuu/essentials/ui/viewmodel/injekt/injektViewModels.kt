@@ -25,16 +25,16 @@ import com.ivianuu.injekt.InjektTrait
 import com.ivianuu.injekt.ParametersDefinition
 import com.ivianuu.injekt.get
 
-interface InjektViewModelManagerOwner : InjektTrait, ViewModelManagerOwner
-
-inline fun <reified T : ViewModel> InjektViewModelManagerOwner.viewModel(
+inline fun <S, reified T : ViewModel> S.viewModel(
     crossinline from: () -> ViewModelManagerOwner = { this },
     crossinline key: () -> String = { T::class.defaultViewModelKey },
     noinline parameters: ParametersDefinition? = null
-): Lazy<T> = viewModel<T>(from, key) { get(parameters = parameters) }
+): Lazy<T> where S : ViewModelManagerOwner, S : InjektTrait =
+    viewModel<T>(from, key) { get(parameters = parameters) }
 
-inline fun <reified T : ViewModel> InjektViewModelManagerOwner.getViewModel(
+inline fun <S, reified T : ViewModel> S.getViewModel(
     from: ViewModelManagerOwner = this,
     key: String = T::class.defaultViewModelKey,
     noinline parameters: ParametersDefinition? = null
-): T = getViewModel(from, key) { get(parameters = parameters) }
+): T where S : ViewModelManagerOwner, S : InjektTrait =
+    getViewModel(from, key) { get(parameters = parameters) }

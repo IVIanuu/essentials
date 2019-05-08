@@ -34,7 +34,7 @@ class CounterController : EsController() {
 
     override val layoutRes: Int get() = R.layout.controller_counter
 
-    private val viewModel by mvRxViewModel<CounterViewModel>()
+    private val viewModel: CounterViewModel by mvRxViewModel()
 
     override fun onAttach(view: View) {
         super.onAttach(view)

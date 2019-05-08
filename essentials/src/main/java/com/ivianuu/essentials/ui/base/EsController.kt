@@ -27,12 +27,14 @@ import com.ivianuu.director.activity
 import com.ivianuu.director.androidx.lifecycle.lifecycleOwner
 import com.ivianuu.director.context
 import com.ivianuu.essentials.injection.controllerComponent
-import com.ivianuu.essentials.ui.mvrx.injekt.InjektMvRxView
+import com.ivianuu.essentials.ui.mvrx.MvRxView
+
 import com.ivianuu.essentials.ui.traveler.key.keyModule
 import com.ivianuu.essentials.ui.viewmodel.ViewModelManager
 import com.ivianuu.essentials.ui.viewmodel.director.viewModelManagerOwner
 import com.ivianuu.essentials.util.ContextAware
 import com.ivianuu.essentials.util.InjektTraitContextWrapper
+import com.ivianuu.injekt.InjektTrait
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.inject
 
@@ -44,7 +46,7 @@ import kotlinx.android.synthetic.*
 /**
  * Base controller
  */
-abstract class EsController : Controller(), ContextAware, InjektMvRxView, LayoutContainer {
+abstract class EsController : Controller(), ContextAware, InjektTrait, LayoutContainer, MvRxView {
 
     override val component by unsafeLazy {
         controllerComponent(
