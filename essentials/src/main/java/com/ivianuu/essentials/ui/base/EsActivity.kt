@@ -24,18 +24,11 @@ import com.ivianuu.director.fragment.getRouter
 import com.ivianuu.director.hasRoot
 import com.ivianuu.director.traveler.ControllerNavigator
 import com.ivianuu.essentials.ui.mvrx.MvRxView
-
 import com.ivianuu.essentials.ui.traveler.key.keyModule
-import com.ivianuu.essentials.ui.viewmodel.ViewModelManager
-import com.ivianuu.essentials.ui.viewmodel.android.viewModelManagerOwner
 import com.ivianuu.injekt.InjektTrait
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.android.activityComponent
 import com.ivianuu.injekt.inject
-
-import com.ivianuu.scopes.Scope
-import com.ivianuu.scopes.ScopeOwner
-import com.ivianuu.scopes.android.onDestroy
 import com.ivianuu.stdlibx.unsafeLazy
 import com.ivianuu.traveler.Navigator
 import com.ivianuu.traveler.android.AppNavigator
@@ -47,16 +40,13 @@ import com.ivianuu.traveler.setRoot
 /**
  * Base activity
  */
-abstract class EsActivity : AppCompatActivity(), InjektTrait, MvRxView, ScopeOwner {
+abstract class EsActivity : AppCompatActivity(), InjektTrait, MvRxView {
 
     override val component by unsafeLazy {
         activityComponent(
             modules = listOf(keyModule(intent.extras, false)) + modules()
         )
     }
-
-    override val scope: Scope
-        get() = onDestroy
 
     val travelerRouter by inject<com.ivianuu.traveler.Router>()
 
@@ -79,9 +69,6 @@ abstract class EsActivity : AppCompatActivity(), InjektTrait, MvRxView, ScopeOwn
 
         compositeNavigatorOf(navigators)
     }
-
-    override val viewModelManager: ViewModelManager
-        get() = viewModelManagerOwner.viewModelManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

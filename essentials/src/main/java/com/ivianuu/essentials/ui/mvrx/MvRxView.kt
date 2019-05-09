@@ -21,7 +21,7 @@ import android.os.Looper
 import android.os.Message
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
-import com.ivianuu.essentials.ui.viewmodel.ViewModelManagerOwner
+import androidx.lifecycle.ViewModelStoreOwner
 import io.reactivex.disposables.Disposable
 
 private val PENDING_INVALIDATES = HashSet<Int>()
@@ -36,7 +36,7 @@ private val HANDLER = Handler(Looper.getMainLooper(), Handler.Callback { message
     return@Callback true
 })
 
-interface MvRxView : LifecycleOwner, ViewModelManagerOwner {
+interface MvRxView : LifecycleOwner, ViewModelStoreOwner {
 
     fun invalidate()
 

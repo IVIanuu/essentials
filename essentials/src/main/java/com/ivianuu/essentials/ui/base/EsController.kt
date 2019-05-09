@@ -22,16 +22,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.ViewModelStore
 import com.ivianuu.director.Controller
 import com.ivianuu.director.activity
 import com.ivianuu.director.androidx.lifecycle.lifecycleOwner
+import com.ivianuu.director.androidx.lifecycle.viewModelStoreOwner
 import com.ivianuu.director.context
 import com.ivianuu.essentials.injection.controllerComponent
 import com.ivianuu.essentials.ui.mvrx.MvRxView
 
 import com.ivianuu.essentials.ui.traveler.key.keyModule
-import com.ivianuu.essentials.ui.viewmodel.ViewModelManager
-import com.ivianuu.essentials.ui.viewmodel.director.viewModelManagerOwner
 import com.ivianuu.essentials.util.ContextAware
 import com.ivianuu.essentials.util.InjektTraitContextWrapper
 import com.ivianuu.injekt.InjektTrait
@@ -61,16 +61,11 @@ abstract class EsController : Controller(), ContextAware, InjektTrait, LayoutCon
     override val providedContext: Context
         get() = context
 
+    override fun getViewModelStore(): ViewModelStore = viewModelStoreOwner.viewModelStore
+
     val travelerRouter by inject<Router>()
 
     protected open val layoutRes get() = -1
-
-    override val viewModelManager: ViewModelManager
-        get() = viewModelManagerOwner.viewModelManager
-
-    init {
-        viewModelManagerOwner // todo remove this
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,

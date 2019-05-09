@@ -39,7 +39,7 @@ class MyWorkerOne(
     navBarPrefs: NavBarPrefs
 ) : EsWorker(context, workerParams) {
 
-    override fun doWork(): Result {
+    override suspend fun doWork(): Result {
         d { "do work" }
         return Result.success()
     }
@@ -51,7 +51,7 @@ class MyWorkerTwo(
     packageManager: PackageManager
 ) : EsWorker(context, workerParams) {
 
-    override fun doWork(): Result {
+    override suspend fun doWork(): Result {
         d { "do work" }
         return Result.success()
     }

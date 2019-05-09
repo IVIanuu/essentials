@@ -20,14 +20,14 @@ package com.ivianuu.essentials.ui.base
 import android.content.Context
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.ViewModelStore
+import androidx.lifecycle.ViewModelStoreOwner
 import com.ivianuu.director.androidx.lifecycle.lifecycleOwner
+import com.ivianuu.director.androidx.lifecycle.viewModelStoreOwner
 import com.ivianuu.director.context
 import com.ivianuu.director.dialog.DialogController
 import com.ivianuu.essentials.injection.controllerComponent
 import com.ivianuu.essentials.ui.traveler.key.keyModule
-import com.ivianuu.essentials.ui.viewmodel.ViewModelManager
-import com.ivianuu.essentials.ui.viewmodel.ViewModelManagerOwner
-import com.ivianuu.essentials.ui.viewmodel.director.viewModelManagerOwner
 import com.ivianuu.essentials.util.ContextAware
 
 import com.ivianuu.injekt.InjektTrait
@@ -41,7 +41,7 @@ import com.ivianuu.traveler.Router
  * Base dialog controller
  */
 abstract class EsDialogController : DialogController(), ContextAware, InjektTrait, LifecycleOwner,
-    ViewModelManagerOwner {
+    ViewModelStoreOwner {
 
     override val component by unsafeLazy {
         controllerComponent(
@@ -52,14 +52,9 @@ abstract class EsDialogController : DialogController(), ContextAware, InjektTrai
     override val providedContext: Context
         get() = context
 
+    override fun getViewModelStore(): ViewModelStore = viewModelStoreOwner.viewModelStore
+
     val travelerRouter by inject<Router>()
-
-    override val viewModelManager: ViewModelManager
-        get() = viewModelManagerOwner.viewModelManager
-
-    init {
-        viewModelManagerOwner // todo remove this
-    }
 
     override fun getLifecycle(): Lifecycle = lifecycleOwner.lifecycle
 

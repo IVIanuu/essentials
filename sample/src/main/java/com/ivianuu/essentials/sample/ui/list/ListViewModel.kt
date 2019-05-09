@@ -16,35 +16,16 @@
 
 package com.ivianuu.essentials.sample.ui.list
 
+import androidx.lifecycle.viewModelScope
 import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
-import com.ivianuu.essentials.util.SavedState
-import com.ivianuu.essentials.util.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class ListViewModel : MvRxViewModel<ListState>(ListState()) {
+class ListViewModel() : MvRxViewModel<ListState>(ListState()) {
 
     init {
         logStateChanges()
-    }
-
-    override fun onInitialize(savedState: SavedState?) {
-        super.onInitialize(savedState)
-        if (savedState == null) {
-            generateNewState()
-        } else {
-            savedState.get<List<String>>("items")?.let {
-                setState { copy(items = it) }
-            }
-        }
-    }
-
-    override fun onSaveState(savedState: SavedState) {
-        super.onSaveState(savedState)
-        val state = peekState()
-        if (!state.loading) {
-            savedState["items"] = state.items
-        }
+        generateNewState()
     }
 
     fun refreshClicked() {
@@ -52,7 +33,7 @@ class ListViewModel : MvRxViewModel<ListState>(ListState()) {
     }
 
     private fun generateNewState() {
-        coroutineScope.launch {
+        viewModelScope.launch {
             setState { copy(loading = true) }
             delay(1000)
             val list = generateList()

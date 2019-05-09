@@ -17,9 +17,14 @@
 package com.ivianuu.essentials.ui.mvrx
 
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.viewModelScope
 import com.ivianuu.essentials.ui.base.EsViewModel
 import com.ivianuu.essentials.ui.mvrx.lifecycle.LifecycleStateListener
-import com.ivianuu.essentials.util.*
+import com.ivianuu.essentials.util.Async
+import com.ivianuu.essentials.util.Loading
+import com.ivianuu.essentials.util.asFail
+import com.ivianuu.essentials.util.asSuccess
+import com.ivianuu.scopes.android.scope
 import com.ivianuu.scopes.rx.disposeBy
 import com.ivianuu.timberktx.d
 import io.reactivex.Completable
@@ -86,7 +91,7 @@ abstract class MvRxViewModel<S>(initialState: S) : EsViewModel() {
         reducer: S.(Async<V>) -> S
     ): Job {
         setState { reducer(Loading()) }
-        return coroutineScope.launch {
+        return viewModelScope.launch {
             val result = try {
                 await().asSuccess()
             } catch (e: Exception) {

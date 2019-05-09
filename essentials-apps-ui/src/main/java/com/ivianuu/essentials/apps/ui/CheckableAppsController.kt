@@ -18,6 +18,7 @@ package com.ivianuu.essentials.apps.ui
 
 import android.os.Bundle
 import android.view.MenuItem
+import androidx.lifecycle.viewModelScope
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
@@ -42,6 +43,7 @@ import com.ivianuu.list.id
 import com.ivianuu.rxjavaktx.BehaviorSubject
 import com.ivianuu.rxjavaktx.PublishSubject
 import com.ivianuu.scopes.ReusableScope
+import com.ivianuu.scopes.android.scope
 import com.ivianuu.scopes.rx.disposeBy
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.Observables
@@ -147,12 +149,10 @@ private class CheckableAppsViewModel(
     private val checkedAppsScope = ReusableScope()
     private val checkedApps = BehaviorSubject<Set<String>>()
 
-    override fun onInitialize(savedState: SavedState?) {
-        super.onInitialize(savedState)
-
+    init {
         Observables
             .combineLatest(
-                coroutineScope.async(dispatchers.io) {
+                viewModelScope.async(dispatchers.io) {
                     if (launchableOnly) {
                         appStore.getLaunchableApps()
                     } else {

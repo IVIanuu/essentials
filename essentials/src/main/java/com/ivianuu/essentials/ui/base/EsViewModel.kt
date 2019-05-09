@@ -16,17 +16,10 @@
 
 package com.ivianuu.essentials.ui.base
 
-import com.ivianuu.essentials.ui.viewmodel.ViewModel
-import com.ivianuu.essentials.ui.viewmodel.scopes.scopeOwner
-import com.ivianuu.scopes.Scope
+import androidx.lifecycle.ViewModel
 import com.ivianuu.scopes.ScopeOwner
 
 /**
  * A [ViewModel] which is also a [ScopeOwner]
  */
-abstract class EsViewModel : ViewModel(), ScopeOwner {
-
-    override val scope: Scope
-        get() = scopeOwner.scope
-
-}
+abstract class EsViewModel : ViewModel()

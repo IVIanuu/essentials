@@ -31,7 +31,7 @@ import com.ivianuu.injekt.provider.Provider
  * Uses injekt to instantiate workers
  */
 class InjektWorkerFactory(
-    private val workers: Map<String, Provider<Worker>>
+    private val workers: Map<String, Provider<ListenableWorker>>
 ) : WorkerFactory() {
 
     override fun createWorker(
@@ -48,7 +48,7 @@ class InjektWorkerFactory(
 /**
  * The map of [Worker]s used by the [InjektWorkerFactory]
  */
-val workerMap = MapName<String, Worker>()
+val workerMap = MapName<String, ListenableWorker>()
 
 /**
  * Contains the [InjektWorkerFactory]
@@ -65,7 +65,7 @@ typealias WorkerDefinition<T> = DefinitionContext.(context: Context, workerParam
 /**
  * Defines a [Worker] which will be used in conjunction with the [InjektWorkerFactory]
  */
-inline fun <reified T : Worker> Module.worker(
+inline fun <reified T : ListenableWorker> Module.worker(
     name: Any? = null,
     noinline definition: WorkerDefinition<T>
 ): Binding<T> = factory(name) { (context: Context, workerParams: WorkerParameters) ->

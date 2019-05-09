@@ -16,7 +16,6 @@
 
 package com.ivianuu.essentials.ui.mvrx.list
 
-
 import com.ivianuu.director.Controller
 
 import com.ivianuu.essentials.ui.mvrx.MvRxViewModel

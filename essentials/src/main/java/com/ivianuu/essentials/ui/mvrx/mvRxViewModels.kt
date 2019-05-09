@@ -16,22 +16,28 @@
 
 package com.ivianuu.essentials.ui.mvrx
 
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStoreOwner
 import com.ivianuu.essentials.ui.mvrx.lifecycle.lifecycleLazy
-import com.ivianuu.essentials.ui.viewmodel.ViewModelManagerOwner
-import com.ivianuu.essentials.ui.viewmodel.defaultViewModelKey
-import com.ivianuu.essentials.ui.viewmodel.getViewModel
+import com.ivianuu.kommon.lifecycle.defaultViewModelKey
+import com.ivianuu.kommon.lifecycle.viewModelProvider
 
 inline fun <reified T : MvRxViewModel<*>> MvRxView.mvRxViewModel(
-    noinline from: () -> ViewModelManagerOwner = { this },
+    noinline from: () -> ViewModelStoreOwner = { this },
     noinline key: () -> String = { T::class.defaultViewModelKey },
     noinline factory: () -> T
 ): Lazy<T> = lifecycleLazy { getMvRxViewModel(from(), key(), factory) }
 
 inline fun <reified T : MvRxViewModel<*>> MvRxView.getMvRxViewModel(
-    from: ViewModelManagerOwner = this,
+    from: ViewModelStoreOwner = this,
     key: String = T::class.defaultViewModelKey,
     noinline factory: () -> T
-): T = getViewModel(from, key, factory).setupViewModel(this)
+): T {
+    return from.viewModelProvider(object : ViewModelProvider.Factory {
+        override fun <T : ViewModel?> create(modelClass: Class<T>): T = factory() as T
+    }).get(key, T::class.java).setupViewModel(this)
+}
 
 @PublishedApi
 internal fun <T : MvRxViewModel<*>> T.setupViewModel(view: MvRxView): T =

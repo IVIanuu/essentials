@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.apps.ui
 
+import androidx.lifecycle.viewModelScope
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
@@ -30,7 +31,10 @@ import com.ivianuu.essentials.ui.mvrx.injekt.mvRxViewModel
 import com.ivianuu.essentials.ui.mvrx.list.mvRxItemController
 import com.ivianuu.essentials.ui.simple.ListController
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
-import com.ivianuu.essentials.util.*
+import com.ivianuu.essentials.util.Async
+import com.ivianuu.essentials.util.Loading
+import com.ivianuu.essentials.util.Success
+import com.ivianuu.essentials.util.Uninitialized
 import com.ivianuu.essentials.util.ext.goBackWithResult
 import com.ivianuu.injekt.factory
 import com.ivianuu.injekt.get
@@ -111,9 +115,8 @@ private class AppPickerViewModel(
     private val router: Router
 ) : MvRxViewModel<AppPickerState>(AppPickerState()) {
 
-    override fun onInitialize(savedState: SavedState?) {
-        super.onInitialize(savedState)
-        coroutineScope.async {
+    init {
+        viewModelScope.async {
             if (key.launchableOnly) {
                 appStore.getLaunchableApps()
             } else {

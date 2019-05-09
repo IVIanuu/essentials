@@ -31,10 +31,14 @@ android {
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/mvn-publish.gradle")
 
 dependencies {
+    api(Deps.androidxActivity)
     api(Deps.androidxAppCompat)
     api(Deps.androidxCardView)
-    api(Deps.androidxCoreKtx)
-    api(Deps.androidxLifecycleExtensions)
+    api(Deps.androidxCore)
+    api(Deps.androidxFragment)
+    api(Deps.androidxLifecycleLiveData)
+    api(Deps.androidxLifecycleViewModel)
+    api(Deps.androidxLifecycleViewModelSavedState)
 
     api(Deps.coroutinesAndroid)
     api(Deps.coroutinesCore)

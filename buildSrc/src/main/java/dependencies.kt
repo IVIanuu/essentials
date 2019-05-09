@@ -36,10 +36,13 @@ object Publishing {
 object Versions {
     const val androidGradlePlugin = "3.4.0"
 
+    const val androidxActivity = "1.0.0-alpha08"
     const val androidxAppCompat = "1.1.0-alpha04"
     const val androidxCardView = "1.0.0"
     const val androidxCore = "1.1.0-alpha05"
-    const val androidxLifecycle = "2.1.0-alpha04"
+    const val androidxFragment = "1.1.0-alpha08"
+    const val androidxLifecycle = "2.2.0-alpha01"
+    const val androidxLifecycleViewModelSavedState = "1.0.0-alpha01"
     const val androidxWork = "2.0.1"
 
     const val androidxTestCore = "1.2.0-alpha03"
@@ -50,7 +53,7 @@ object Versions {
     const val bintray = "1.8.4"
     const val constraintLayout = "2.0.0-alpha3"
     const val coroutines = "1.2.0"
-    const val director = "0.0.1-dev-26"
+    const val director = "0.0.1-dev-28"
     const val glide = "4.8.0"
     const val injekt = "0.0.1-dev-29"
     const val junit = "4.12"
@@ -69,24 +72,28 @@ object Versions {
     const val rxJava = "2.2.8"
     const val rxJavaKtx = "0.0.1-dev-1" // todo kill
     const val rxKotlin = "2.3.0"
-    const val scopes = "0.0.1-dev-9"
+    const val scopes = "0.0.1-dev-12"
     const val superUser = "1.0.0.+"
     const val timber = "4.7.1"
     const val timberKtx = "0.0.1-dev-1"
-    const val traveler = "0.0.1-dev-4"
+    const val traveler = "0.0.1-dev-5"
 }
 
 object Deps {
     const val androidGradlePlugin = "com.android.tools.build:gradle:${Versions.androidGradlePlugin}"
 
+    const val androidxActivity = "androidx.activity:activity-ktx:${Versions.androidxActivity}"
     const val androidxAppCompat = "androidx.appcompat:appcompat:${Versions.androidxAppCompat}"
     const val androidxCardView = "androidx.cardview:cardview:${Versions.androidxCardView}"
-    const val androidxCoreKtx = "androidx.core:core-ktx:${Versions.androidxCore}"
-    const val androidxLifecycleExtensions =
-        "androidx.lifecycle:lifecycle-extensions:${Versions.androidxLifecycle}"
-    const val androidxWork = "androidx.work:work-runtime:${Versions.androidxWork}"
-    const val androidxWorkKtx = "androidx.work:work-runtime-ktx:${Versions.androidxWork}"
-    const val androidxWorkRxJava = "androidx.work:work-rxjava2:${Versions.androidxWork}"
+    const val androidxCore = "androidx.core:core-ktx:${Versions.androidxCore}"
+    const val androidxFragment = "androidx.fragment:fragment-ktx:${Versions.androidxFragment}"
+    const val androidxLifecycleLiveData =
+        "androidx.lifecycle:lifecycle-livedata-ktx:${Versions.androidxLifecycle}"
+    const val androidxLifecycleViewModel =
+        "androidx.lifecycle:lifecycle-viewmodel-ktx:${Versions.androidxLifecycle}"
+    const val androidxLifecycleViewModelSavedState =
+        "androidx.lifecycle:lifecycle-viewmodel-savedstate:${Versions.androidxLifecycleViewModelSavedState}"
+    const val androidxWork = "androidx.work:work-runtime-ktx:${Versions.androidxWork}"
 
     const val androidxTestCore = "androidx.test:core:${Versions.androidxTestCore}"
     const val androidxTestJunit = "androidx.test.ext:junit:${Versions.androidxTestJunit}"
