@@ -22,16 +22,6 @@ import com.ivianuu.essentials.R
 import com.ivianuu.essentials.util.color
 import kotlinx.android.synthetic.main.es_item_simple_loading.es_progress_bar
 
-fun EpoxyController.SimpleLoading2(
-    id: Any?,
-    progressColor: Int = 0,
-    progressColorRes: Int = 0
-) = model {
-    id(id)
-    layoutRes(R.layout.es_item_simple_loading)
-    state(progressColor, progressColorRes)
-}
-
 /**
  * Simple loading model
  */
