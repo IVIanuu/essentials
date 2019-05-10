@@ -108,24 +108,24 @@ private fun EpoxyController.CheckableApp(
     app: CheckableApp,
     onClick: () -> Unit
 ) = model(
-    id = app.info.packageName,
-    layoutRes = R.layout.es_item_checkable_app, properties = arrayOf(app)
-) {
-    Glide.with(es_checkable_app_icon)
-        .load(AppIcon(app.info.packageName))
-        .apply(
-            RequestOptions()
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true)
-        )
-        .into(es_checkable_app_icon)
+    id = app.info.packageName, layoutRes = R.layout.es_item_checkable_app,
+    state = arrayOf(app), bind = {
+        Glide.with(es_checkable_app_icon)
+            .load(AppIcon(app.info.packageName))
+            .apply(
+                RequestOptions()
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .skipMemoryCache(true)
+            )
+            .into(es_checkable_app_icon)
 
-    es_checkable_app_title.text = app.info.appName
+        es_checkable_app_title.text = app.info.appName
 
-    es_checkable_app_toggle.isChecked = app.isChecked
+        es_checkable_app_toggle.isChecked = app.isChecked
 
-    root.setOnClickListener { onClick() }
-}
+        root.setOnClickListener { onClick() }
+    }
+)
 
 private val checkableAppsModule = module {
     factory { CheckableAppsViewModel(it[0], get(), get()) }

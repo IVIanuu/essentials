@@ -58,7 +58,6 @@ class ListController : com.ivianuu.essentials.ui.simple.ListController() {
 }
 
 private fun EpoxyController.SingleLine(text: String) = model(
-    id = text, layoutRes = R.layout.single_line_list_item
-) {
-    title.text = text
-}
+    id = text, layoutRes = R.layout.single_line_list_item,
+    bind = { title.text = text }
+)

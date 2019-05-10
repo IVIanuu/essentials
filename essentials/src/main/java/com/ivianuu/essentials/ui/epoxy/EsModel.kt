@@ -58,7 +58,7 @@ abstract class EsModel<H : EsHolder>(
 fun EsModel<*>.doOnBind(block: (EsModel<out EsHolder>, EsHolder) -> Unit): ModelListener =
     addModelListener(onBind = block)
 
-fun EsModel<*>.doOnUnind(block: (EsModel<out EsHolder>, EsHolder) -> Unit): ModelListener =
+fun EsModel<*>.doOnUnbind(block: (EsModel<out EsHolder>, EsHolder) -> Unit): ModelListener =
     addModelListener(onUnbind = block)
 
 fun EsModel<*>.addModelListener(

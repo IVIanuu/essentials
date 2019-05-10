@@ -22,30 +22,41 @@ import com.ivianuu.essentials.R
 import com.ivianuu.essentials.util.color
 import kotlinx.android.synthetic.main.es_item_simple_loading.es_progress_bar
 
+fun EpoxyController.SimpleLoading2(
+    id: Any?,
+    progressColor: Int = 0,
+    progressColorRes: Int = 0
+) = model {
+    id(id)
+    layoutRes(R.layout.es_item_simple_loading)
+    state(progressColor, progressColorRes)
+}
+
 /**
  * Simple loading model
  */
 fun EpoxyController.SimpleLoading(
+    id: Any?,
     progressColor: Int = 0,
-    progressColorRes: Int = 0,
-    id: Any? = progressColor + progressColorRes
+    progressColorRes: Int = 0
 ) = model(
     id = id,
     layoutRes = R.layout.es_item_simple_loading,
-    properties = arrayOf(progressColor, progressColorRes)
-) {
-    if (progressColor != 0 || progressColorRes != 0) {
-        val progressColor = when {
-            progressColor != 0 -> progressColor
-            progressColorRes != 0 -> color(progressColorRes)
-            else -> 0
-        }
+    state = arrayOf(progressColor, progressColorRes),
+    bind = {
+        if (progressColor != 0 || progressColorRes != 0) {
+            val finalProgressColor = when {
+                progressColor != 0 -> progressColor
+                progressColorRes != 0 -> color(progressColorRes)
+                else -> 0
+            }
 
-        val colorStateList = ColorStateList.valueOf(progressColor)
-        with(es_progress_bar) {
-            progressBackgroundTintList = colorStateList
-            secondaryProgressTintList = colorStateList
-            indeterminateTintList = colorStateList
+            val colorStateList = ColorStateList.valueOf(finalProgressColor)
+            with(es_progress_bar) {
+                progressBackgroundTintList = colorStateList
+                secondaryProgressTintList = colorStateList
+                indeterminateTintList = colorStateList
+            }
         }
     }
-}
+)

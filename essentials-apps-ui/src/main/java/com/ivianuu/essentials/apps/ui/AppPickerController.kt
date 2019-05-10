@@ -78,22 +78,22 @@ private fun EpoxyController.AppInfo(
     app: AppInfo,
     onClick: () -> Unit
 ) = model(
-    id = app.packageName,
-    layoutRes = R.layout.es_item_app, properties = arrayOf(app)
-) {
-    Glide.with(es_app_icon)
-        .load(AppIcon(app.packageName))
-        .apply(
-            RequestOptions()
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true)
-        )
-        .into(es_app_icon)
+    id = app.packageName, layoutRes = R.layout.es_item_app,
+    state = arrayOf(app), bind = {
+        Glide.with(es_app_icon)
+            .load(AppIcon(app.packageName))
+            .apply(
+                RequestOptions()
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .skipMemoryCache(true)
+            )
+            .into(es_app_icon)
 
-    es_app_title.text = app.appName
+        es_app_title.text = app.appName
 
-    root.setOnClickListener { onClick() }
-}
+        root.setOnClickListener { onClick() }
+    }
+)
 
 private val appPickerModule = module {
     factory { AppPickerViewModel(get(), get(), get()) }

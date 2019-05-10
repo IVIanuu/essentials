@@ -19,30 +19,76 @@ package com.ivianuu.essentials.ui.epoxy
 import com.airbnb.epoxy.EpoxyController
 
 fun EpoxyController.model(
-    id: Any?,
-    layoutRes: Int,
-    properties: Array<Any?>? = null,
+    id: Any? = null,
+    layoutRes: Int = 0,
+    state: Array<Any?>? = null,
     unbind: (EsHolder.() -> Unit)? = null,
-    bind: (EsHolder.() -> Unit)? = null
-): FunModel = FunModel(id, layoutRes, properties, unbind, bind)
+    bind: (EsHolder.() -> Unit)? = null,
+    block: (FunModelBuilder.() -> Unit)? = null
+): FunModel = FunModelBuilder()
+    .apply {
+        id(id)
+        layoutRes(layoutRes)
+        state?.let { state(*it) }
+        bind?.let { bind(it) }
+        unbind?.let { unbind(it) }
+        block?.invoke(this)
+    }
+    .build()
     .also { it.addTo(this) }
 
-class FunModel(
+class FunModelBuilder internal constructor() {
+
+    private var id: Any? = null
+    private var layoutRes: Int = 0
+    private val state = mutableListOf<Any?>()
+    private val bindActions = mutableListOf<EsHolder.() -> Unit>()
+    private val unbindActions = mutableListOf<EsHolder.() -> Unit>()
+
+    fun id(id: Any?) {
+        this.id = id
+    }
+
+    fun layoutRes(layoutRes: Int) {
+        this.layoutRes = layoutRes
+    }
+
+    fun state(vararg state: Any?) {
+        this.state.addAll(state)
+    }
+
+    fun state(state: Iterable<Any?>) {
+        this.state.addAll(state)
+    }
+
+    fun bind(block: EsHolder.() -> Unit) {
+        bindActions.add(block)
+    }
+
+    fun unbind(block: EsHolder.() -> Unit) {
+        unbindActions.add(block)
+    }
+
+    internal fun build(): FunModel = FunModel(id, layoutRes, state, bindActions, unbindActions)
+
+}
+
+class FunModel internal constructor(
     id: Any?,
     private val layoutRes: Int,
-    private val properties: Array<Any?>? = null,
-    private val unbind: (EsHolder.() -> Unit)? = null,
-    private val bind: (EsHolder.() -> Unit)? = null
+    private val state: List<Any?>,
+    private val unbindActions: List<EsHolder.() -> Unit>,
+    private val bindActions: List<EsHolder.() -> Unit>
 ) : SimpleModel(id = id, layoutRes = layoutRes) {
 
     override fun bind(holder: EsHolder) {
         super.bind(holder)
-        bind?.invoke(holder)
+        bindActions.forEach { it(holder) }
     }
 
     override fun unbind(holder: EsHolder) {
         super.unbind(holder)
-        unbind?.invoke(holder)
+        unbindActions.forEach { it(holder) }
     }
 
     override fun equals(other: Any?): Boolean {
@@ -50,19 +96,15 @@ class FunModel(
         if (other !is FunModel) return false
         if (!super.equals(other)) return false
 
-        if (properties != null) {
-            if (other.properties == null) return false
-            if (!properties.contentEquals(other.properties)) return false
-        } else if (other.properties != null) return false
+        if (state != other.state) return false
 
         return true
     }
 
     override fun hashCode(): Int {
         var result = super.hashCode()
-        result = 31 * result + (properties?.contentHashCode() ?: 0)
+        result = 31 * result + state.hashCode()
         return result
     }
-
 
 }

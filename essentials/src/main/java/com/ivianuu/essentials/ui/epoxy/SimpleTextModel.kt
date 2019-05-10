@@ -27,10 +27,15 @@ fun EpoxyController.SimpleText(
     text: String? = null,
     textRes: Int = 0,
     id: Any? = text + textRes
-) = model(id = id, layoutRes = R.layout.es_item_simple_text, properties = arrayOf(text, textRes)) {
-    when {
-        text != null -> es_text.text = text
-        textRes != 0 -> es_text.setText(textRes)
-        else -> error("you must specify one of text or textRes")
+) = model(
+    id = id,
+    layoutRes = R.layout.es_item_simple_text,
+    state = arrayOf(text, textRes),
+    bind = {
+        when {
+            text != null -> es_text.text = text
+            textRes != 0 -> es_text.setText(textRes)
+            else -> error("you must specify one of text or textRes")
+        }
     }
-}
+)
