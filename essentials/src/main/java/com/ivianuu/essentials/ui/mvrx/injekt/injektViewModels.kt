@@ -31,11 +31,11 @@ inline fun <S, reified T : MvRxViewModel<*>> S.mvRxViewModel(
     noinline key: () -> String = { T::class.defaultViewModelKey },
     noinline parameters: ParametersDefinition? = null
 ): Lazy<T> where S : MvRxView, S : InjektTrait =
-    mvRxViewModel<T>(from, key) { get(parameters = parameters) }
+    mvRxViewModel(from, key) { get<T>(parameters = parameters) }
 
 inline fun <S, reified T : MvRxViewModel<*>> S.getMvRxViewModel(
     from: ViewModelStoreOwner = this,
     key: String = T::class.defaultViewModelKey,
     noinline parameters: ParametersDefinition? = null
 ): T where S : MvRxView, S : InjektTrait =
-    getMvRxViewModel<T>(from, key) { get(parameters = parameters) }
+    getMvRxViewModel(from, key) { get(parameters = parameters) }

@@ -65,7 +65,7 @@ class MvRxStateStore<S>(initialState: S) : Disposable {
         flushQueueSubject.observeOn(Schedulers.newThread())
             // We don't want race conditions with setting the state on multiple background threads
             // simultaneously in which two state reducers get the same initial state to reduce.
-            .subscribe({ _ -> flushQueues() }, ::handleError)
+            .subscribe({ flushQueues() }, ::handleError)
             // Ensure that state updates don't get processes after dispose.
             .registerDisposable()
     }
