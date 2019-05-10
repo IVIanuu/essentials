@@ -32,9 +32,9 @@ import com.ivianuu.injekt.android.activityComponent
 import com.ivianuu.injekt.inject
 import com.ivianuu.traveler.Navigator
 import com.ivianuu.traveler.android.AppNavigator
+import com.ivianuu.traveler.android.setNavigator
 import com.ivianuu.traveler.common.ResultNavigator
 import com.ivianuu.traveler.common.compositeNavigatorOf
-import com.ivianuu.traveler.lifecycle.setNavigator
 import com.ivianuu.traveler.setRoot
 
 /**

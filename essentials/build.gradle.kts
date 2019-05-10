@@ -102,5 +102,5 @@ dependencies {
 
     api(Deps.traveler)
     api(Deps.travelerAndroid)
-    api(Deps.travelerLifecycle)
+    api(Deps.travelerCommon)
 }

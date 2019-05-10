@@ -53,7 +53,7 @@ object Versions {
     const val bintray = "1.8.4"
     const val constraintLayout = "2.0.0-beta1"
     const val coroutines = "1.2.0"
-    const val director = "0.0.1-dev-28"
+    const val director = "0.0.1-dev-30"
     const val epoxy = "3.4.2"
     const val epoxyPrefs = "0.0.1-dev-10"
     const val glide = "4.8.0"
@@ -76,7 +76,7 @@ object Versions {
     const val superUser = "1.0.0.+"
     const val timber = "4.7.1"
     const val timberKtx = "0.0.1-dev-1"
-    const val traveler = "0.0.1-dev-5"
+    const val traveler = "0.0.1-dev-6"
 }
 
 object Deps {
@@ -205,6 +205,4 @@ object Deps {
     const val travelerAndroid = "com.ivianuu.traveler:traveler-android:${Versions.traveler}"
     const val travelerCommon =
         "com.ivianuu.traveler:traveler-common:${Versions.traveler}"
-    const val travelerLifecycle =
-        "com.ivianuu.traveler:traveler-lifecycle:${Versions.traveler}"
 }

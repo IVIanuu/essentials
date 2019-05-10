@@ -16,7 +16,6 @@
 
 package com.ivianuu.essentials.ui.mvrx.lifecycle
 
-import androidx.lifecycle.GenericLifecycleObserver
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
