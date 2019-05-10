@@ -26,7 +26,7 @@ import com.ivianuu.injekt.ParametersDefinition
 import com.ivianuu.injekt.get
 import com.ivianuu.kommon.lifecycle.defaultViewModelKey
 
-inline fun <S, reified T : MvRxViewModel<*>> S.mvRxViewModel(
+inline fun <S, reified T : MvRxViewModel<*>> S.injectMvRxViewModel(
     noinline from: () -> ViewModelStoreOwner = { this },
     noinline key: () -> String = { T::class.defaultViewModelKey },
     noinline parameters: ParametersDefinition? = null

@@ -16,17 +16,14 @@
 
 package com.ivianuu.essentials.securesettings
 
-import android.view.View
+import android.os.Bundle
 import com.ivianuu.epoxyprefs.Preference
-import com.ivianuu.essentials.ui.common.VerticalFadeChangeHandler
-import com.ivianuu.essentials.ui.prefs.PrefsController
+import com.ivianuu.essentials.ui.prefs.PrefsFragment
 import com.ivianuu.essentials.ui.traveler.NavOptions
-import com.ivianuu.essentials.ui.traveler.handler
-import com.ivianuu.essentials.ui.traveler.key.ControllerKey
+import com.ivianuu.essentials.ui.traveler.key.FragmentKey
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.essentials.util.ext.coroutineScope
 import com.ivianuu.essentials.util.ext.goBackWithResult
-import com.ivianuu.essentials.util.ext.sendResult
 import com.ivianuu.injekt.inject
 import com.ivianuu.traveler.navigate
 import kotlinx.android.parcel.Parcelize
@@ -36,12 +33,12 @@ import kotlinx.coroutines.launch
 class SecureSettingsKey(
     val resultCode: Int,
     val showHideNavBarHint: Boolean = false
-) : ControllerKey(::SecureSettingsController)
+) : FragmentKey(::SecureSettingsFragment)
 
 /**
  * Asks the user for the secure settings permission
  */
-class SecureSettingsController : PrefsController() {
+class SecureSettingsFragment : PrefsFragment() {
 
     override val toolbarTitleRes: Int
         get() = R.string.es_title_secure_settings
@@ -50,11 +47,18 @@ class SecureSettingsController : PrefsController() {
     private val secureSettingsHelper by inject<SecureSettingsHelper>()
     private val toaster by inject<Toaster>()
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        if (secureSettingsHelper.canWriteSecureSettings()) {
+            handlePermissionResult(true)
+        }
+    }
+
     override fun epoxyController() = epoxyController {
         Preference {
             key("secure_settings_header")
             summaryRes(
-                if (this@SecureSettingsController.key.showHideNavBarHint) {
+                if (this@SecureSettingsFragment.key.showHideNavBarHint) {
                     R.string.es_pref_summary_secure_settings_header_hide_nav_bar
                 } else {
                     R.string.es_pref_summary_secure_settings_header
@@ -67,9 +71,9 @@ class SecureSettingsController : PrefsController() {
             titleRes(R.string.es_pref_title_use_pc)
             summaryRes(R.string.es_pref_summary_use_pc)
             onClick {
-                travelerRouter.navigate(
+                router.navigate(
                     SecureSettingsPcInstructionsKey(),
-                    NavOptions().handler(VerticalFadeChangeHandler())
+                    NavOptions() // todo .handler(VerticalFadeChangeHandler())
                 )
 
                 return@onClick true
@@ -94,23 +98,10 @@ class SecureSettingsController : PrefsController() {
         }
     }
 
-    override fun onAttach(view: View) {
-        super.onAttach(view)
-        if (secureSettingsHelper.canWriteSecureSettings()) {
-            handlePermissionResult(true)
-        }
-    }
-
-    override fun handleBack(): Boolean {
-        // todo should we send a result in this case?
-        travelerRouter.sendResult(key.resultCode, false)
-        return super.handleBack()
-    }
-
     private fun handlePermissionResult(success: Boolean) {
         if (success) {
             toaster.toast(R.string.es_msg_secure_settings_permission_granted)
-            travelerRouter.goBackWithResult(key.resultCode, true)
+            router.goBackWithResult(key.resultCode, true)
         } else {
             toaster.toast(R.string.es_msg_secure_settings_permission_denied)
         }

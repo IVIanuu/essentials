@@ -16,10 +16,10 @@
 
 package com.ivianuu.essentials.util.ext
 
-import com.ivianuu.director.Controller
-import com.ivianuu.director.Router
+import androidx.fragment.app.Fragment
+import com.ivianuu.essentials.util.coroutineScope
+import com.ivianuu.scopes.android.onDestroy
+import com.ivianuu.scopes.android.viewOnDestroy
 
-val Router.topController: Controller? get() = backstack.lastOrNull()
-val Router.rootController: Controller? get() = backstack.firstOrNull()
-operator fun Router.get(index: Int): Controller = backstack[index]
-fun Router.getOrNull(index: Int): Controller? = backstack.getOrNull(index)
+val Fragment.coroutineScope get() = onDestroy.coroutineScope
+val Fragment.viewCoroutineScope get() = viewOnDestroy.coroutineScope

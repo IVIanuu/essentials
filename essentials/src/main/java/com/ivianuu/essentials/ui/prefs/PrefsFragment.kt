@@ -18,21 +18,19 @@ package com.ivianuu.essentials.ui.prefs
 
 import android.os.Bundle
 import android.view.View
-import com.ivianuu.director.activity
-import com.ivianuu.director.context
 import com.ivianuu.epoxyprefs.EpoxyPrefsPlugins
 import com.ivianuu.epoxyprefs.PreferenceDividerDecoration
 import com.ivianuu.epoxyprefs.PreferenceEpoxyController
 import com.ivianuu.epoxyprefs.preferenceEpoxyController
-import com.ivianuu.essentials.ui.simple.ListController
+import com.ivianuu.essentials.ui.simple.ListFragment
 
 /**
- * Prefs controller
+ * Prefs fragment
  */
-abstract class PrefsController : ListController() {
+abstract class PrefsFragment : ListFragment() {
 
     open val preferenceContext by lazy {
-        EpoxyPrefsPlugins.getDefaultContext(context)
+        EpoxyPrefsPlugins.getDefaultContext(requireContext())
     }
 
     protected open val usePreferenceDividerDecoration = true
@@ -42,18 +40,18 @@ abstract class PrefsController : ListController() {
     override fun onViewCreated(view: View, savedViewState: Bundle?) {
         super.onViewCreated(view, savedViewState)
         if (usePreferenceDividerDecoration) {
-            recyclerView.addItemDecoration(PreferenceDividerDecoration(activity))
+            recyclerView.addItemDecoration(PreferenceDividerDecoration(requireContext()))
         }
     }
 
-    override fun onAttach(view: View) {
-        super.onAttach(view)
+    override fun onStart() {
+        super.onStart()
         preferenceContext.addChangeListener(changeListener)
     }
 
-    override fun onDetach(view: View) {
-        super.onDetach(view)
+    override fun onStop() {
         preferenceContext.removeChangeListener(changeListener)
+        super.onStop()
     }
 
     protected fun epoxyController(buildModels: PreferenceEpoxyController.() -> Unit): PreferenceEpoxyController =

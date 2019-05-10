@@ -23,7 +23,6 @@ import com.airbnb.epoxy.EpoxyController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
-import com.ivianuu.director.scopes.destroy
 import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.AppStore
 import com.ivianuu.essentials.apps.glide.AppIcon
@@ -31,8 +30,8 @@ import com.ivianuu.essentials.ui.epoxy.SimpleLoading
 import com.ivianuu.essentials.ui.epoxy.model
 import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
 import com.ivianuu.essentials.ui.mvrx.epoxy.mvRxEpoxyController
-import com.ivianuu.essentials.ui.mvrx.mvRxViewModel
-import com.ivianuu.essentials.ui.simple.ListController
+import com.ivianuu.essentials.ui.mvrx.injekt.injectMvRxViewModel
+import com.ivianuu.essentials.ui.simple.ListFragment
 import com.ivianuu.essentials.util.*
 import com.ivianuu.essentials.util.ext.andTrue
 import com.ivianuu.injekt.factory
@@ -43,6 +42,7 @@ import com.ivianuu.injekt.parametersOf
 import com.ivianuu.rxjavaktx.BehaviorSubject
 import com.ivianuu.rxjavaktx.PublishSubject
 import com.ivianuu.scopes.ReusableScope
+import com.ivianuu.scopes.android.onDestroy
 import com.ivianuu.scopes.android.scope
 import com.ivianuu.scopes.rx.disposeBy
 import io.reactivex.Observable
@@ -56,25 +56,25 @@ import kotlinx.coroutines.rx2.asSingle
 /**
  * App blacklist
  */
-abstract class CheckableAppsController : ListController() {
+abstract class CheckableAppsFragment : ListFragment() {
 
     override fun modules() = listOf(checkableAppsModule)
 
     override val toolbarMenuRes
-        get() = R.menu.controller_checkable_apps
+        get() = R.menu.es_fragment_checkable_apps
 
     protected open val launchableAppsOnly: Boolean
         get() = false
 
-    private val viewModel by mvRxViewModel<CheckableAppsViewModel> {
-        get { parametersOf(launchableAppsOnly) }
+    private val viewModel: CheckableAppsViewModel by injectMvRxViewModel {
+        parametersOf(launchableAppsOnly)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel.checkedAppsChanged
             .subscribe { onCheckedAppsChanged(it) }
-            .disposeBy(destroy)
+            .disposeBy(onDestroy)
 
         viewModel.attachCheckedAppsObservable(getCheckedAppsObservable())
     }
@@ -93,7 +93,7 @@ abstract class CheckableAppsController : ListController() {
         }
     }
 
-    override fun onToolbarMenuItemClicked(item: MenuItem) = when (item.itemId) {
+    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         R.id.es_action_select_all -> viewModel.selectAllClicked().andTrue()
         R.id.es_action_deselect_all -> viewModel.deselectAllClicked().andTrue()
         else -> false
@@ -109,7 +109,7 @@ private fun EpoxyController.CheckableApp(
     onClick: () -> Unit
 ) = model(
     id = app.info.packageName,
-    layoutRes = R.layout.es_item_checkable_app, properties = arrayOf(app)
+    layoutRes = R.layout.es_item_checkable_app, state = arrayOf(app)
 ) {
     Glide.with(es_checkable_app_icon)
         .load(AppIcon(app.info.packageName))

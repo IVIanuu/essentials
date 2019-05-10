@@ -16,11 +16,9 @@
 
 package com.ivianuu.essentials.sample.ui.checkapps
 
-import com.ivianuu.essentials.apps.ui.CheckableAppsController
-import com.ivianuu.essentials.ui.common.VerticalFadeChangeHandler
+import com.ivianuu.essentials.apps.ui.CheckableAppsFragment
 import com.ivianuu.essentials.ui.traveler.NavOptions
-import com.ivianuu.essentials.ui.traveler.handler
-import com.ivianuu.essentials.ui.traveler.key.ControllerKey
+import com.ivianuu.essentials.ui.traveler.key.FragmentKey
 import com.ivianuu.injekt.get
 import com.ivianuu.kprefs.KPrefs
 import com.ivianuu.kprefs.rx.asObservable
@@ -30,12 +28,12 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 class CheckAppsKey :
-    ControllerKey(::CheckAppsController, NavOptions().handler(VerticalFadeChangeHandler()))
+    FragmentKey(::CheckAppsFragment, NavOptions()/*.handler(VerticalFadeChangeHandler())*/) // todo
 
 /**
  * @author Manuel Wrage (IVIanuu)
  */
-class CheckAppsController : CheckableAppsController() {
+class CheckAppsFragment : CheckableAppsFragment() {
 
     override val toolbarTitle: String?
         get() = "Send check apps"

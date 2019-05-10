@@ -17,18 +17,18 @@
 package com.ivianuu.essentials.hidenavbar
 
 import android.os.Bundle
-import com.ivianuu.director.scopes.destroy
 import com.ivianuu.epoxyprefs.CheckboxPreference
 import com.ivianuu.epoxyprefs.PreferenceContext
 import com.ivianuu.epoxyprefs.SingleItemListPreference
 import com.ivianuu.epoxyprefs.SwitchPreference
 import com.ivianuu.essentials.securesettings.SecureSettingsHelper
 import com.ivianuu.essentials.securesettings.SecureSettingsKey
-import com.ivianuu.essentials.ui.prefs.PrefsController
-import com.ivianuu.essentials.ui.traveler.key.ControllerKey
+import com.ivianuu.essentials.ui.prefs.PrefsFragment
+import com.ivianuu.essentials.ui.traveler.key.FragmentKey
 import com.ivianuu.essentials.util.ext.*
 import com.ivianuu.injekt.get
 import com.ivianuu.injekt.inject
+import com.ivianuu.scopes.android.onDestroy
 import com.ivianuu.scopes.rx.disposeBy
 import com.ivianuu.traveler.navigate
 import kotlinx.android.parcel.Parcelize
@@ -37,12 +37,12 @@ import kotlinx.android.parcel.Parcelize
 class NavBarSettingsKey(
     val showMainSwitch: Boolean,
     val showNavBarHidden: Boolean
-) : ControllerKey(::NavBarSettingsController)
+) : FragmentKey(::NavBarSettingsFragment)
 
 /**
  * Nav bar settings
  */
-class NavBarSettingsController : PrefsController() {
+class NavBarSettingsFragment : PrefsFragment() {
 
     private val prefs by inject<NavBarPrefs>()
     private val secureSettingsHelper by inject<SecureSettingsHelper>()
@@ -59,15 +59,15 @@ class NavBarSettingsController : PrefsController() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        travelerRouter.results<Boolean>(RESULT_CODE_MAIN_SWITCH)
+        router.results<Boolean>(RESULT_CODE_MAIN_SWITCH)
             .filter { it }
             .subscribe { prefs.manageNavBar.set(true) }
-            .disposeBy(destroy)
+            .disposeBy(onDestroy)
 
-        travelerRouter.results<Boolean>(RESULT_CODE_NAV_BAR_HIDDEN)
+        router.results<Boolean>(RESULT_CODE_NAV_BAR_HIDDEN)
             .filter { it }
             .subscribe { prefs.navBarHidden.set(true) }
-            .disposeBy(destroy)
+            .disposeBy(onDestroy)
     }
 
     override fun epoxyController() = epoxyController {
@@ -79,7 +79,7 @@ class NavBarSettingsController : PrefsController() {
                     if (!newValue || secureSettingsHelper.canWriteSecureSettings()) {
                         return@onChange true
                     } else if (newValue) {
-                        travelerRouter.navigate(
+                        router.navigate(
                             SecureSettingsKey(
                                 RESULT_CODE_MAIN_SWITCH, true
                             )
@@ -102,7 +102,7 @@ class NavBarSettingsController : PrefsController() {
                     if (secureSettingsHelper.canWriteSecureSettings() || !newValue) {
                         return@onChange true
                     } else if (newValue) {
-                        travelerRouter.navigate(
+                        router.navigate(
                             SecureSettingsKey(
                                 RESULT_CODE_NAV_BAR_HIDDEN, true
                             )

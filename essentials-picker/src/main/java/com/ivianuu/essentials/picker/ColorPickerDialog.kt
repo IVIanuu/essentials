@@ -16,13 +16,12 @@
 
 package com.ivianuu.essentials.picker
 
-import android.app.Dialog
 import android.os.Bundle
 import com.afollestad.materialdialogs.color.colorChooser
-import com.ivianuu.essentials.ui.base.EsDialogController
+import com.ivianuu.essentials.ui.base.EsDialogFragment
 import com.ivianuu.essentials.ui.traveler.NavOptions
 import com.ivianuu.essentials.ui.traveler.dialog
-import com.ivianuu.essentials.ui.traveler.key.ControllerKey
+import com.ivianuu.essentials.ui.traveler.key.FragmentKey
 import com.ivianuu.essentials.util.ext.dialog
 import com.ivianuu.essentials.util.ext.goBackWithResult
 import com.ivianuu.injekt.inject
@@ -35,16 +34,16 @@ data class ColorPickerKey(
     val allowCustomArgb: Boolean = true,
     val showAlphaSelector: Boolean = false,
     val resultCode: Int
-) : ControllerKey(::ColorPickerDialog, NavOptions().dialog())
+) : FragmentKey(::ColorPickerDialog, NavOptions().dialog())
 
 /**
- * Color picker controller
+ * Color picker fragment
  */
-class ColorPickerDialog : EsDialogController() {
+class ColorPickerDialog : EsDialogFragment() {
 
     private val key by inject<ColorPickerKey>()
 
-    override fun onCreateDialog(savedViewState: Bundle?): Dialog = dialog {
+    override fun onCreateDialog(savedViewState: Bundle?) = dialog {
         title(key.titleRes)
         colorChooser(
             colors = PRIMARY_COLORS,
@@ -52,7 +51,7 @@ class ColorPickerDialog : EsDialogController() {
             initialSelection = if (key.preselect != 0) key.preselect else null,
             allowCustomArgb = key.allowCustomArgb,
             showAlphaSelector = key.showAlphaSelector
-        ) { _, color -> travelerRouter.goBackWithResult(key.resultCode, color) }
+        ) { _, color -> router.goBackWithResult(key.resultCode, color) }
         negativeButton(R.string.es_action_cancel)
     }
 

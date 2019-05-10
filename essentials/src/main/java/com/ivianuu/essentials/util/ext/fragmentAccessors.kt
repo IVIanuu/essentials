@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2018 Manuel Wrage
  *
@@ -15,21 +14,6 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.sample.ui
+package androidx.fragment.app
 
-import android.os.Bundle
-import com.ivianuu.essentials.hidenavbar.NavBarSettingsKey
-import com.ivianuu.essentials.sample.ui.counter.CounterKey
-import com.ivianuu.essentials.ui.base.EsActivity
-import com.ivianuu.traveler.navigate
-
-class MainActivity : EsActivity() {
-
-    override val startKey: Any? get() = CounterKey(1)
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        router.navigate(NavBarSettingsKey(true, true))
-    }
-
-}
+val Fragment.isInBackstack: Boolean get() = isInBackStack

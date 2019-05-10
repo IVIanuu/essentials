@@ -16,8 +16,8 @@
 
 package com.ivianuu.essentials.ui.mvrx.epoxy
 
+import androidx.fragment.app.Fragment
 import com.airbnb.epoxy.EpoxyController
-import com.ivianuu.director.Controller
 import com.ivianuu.essentials.ui.epoxy.epoxyController
 
 import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
@@ -27,8 +27,7 @@ fun <A : MvRxViewModel<B>, B> Any.mvRxEpoxyController(
     viewModel1: A,
     buildItems: EpoxyController.(state: B) -> Unit
 ): EpoxyController = epoxyController {
-    if (this@mvRxEpoxyController is Controller && view == null
-    ) return@epoxyController
+    if (this@mvRxEpoxyController is Fragment && view == null) return@epoxyController
     withState(viewModel1) { buildItems.invoke(this, it) }
 }
 
@@ -37,8 +36,7 @@ fun <A : MvRxViewModel<B>, B, C : MvRxViewModel<D>, D> Any.mvRxEpoxyController(
     viewModel2: C,
     buildItems: EpoxyController.(state1: B, state2: D) -> Unit
 ): EpoxyController = epoxyController {
-    if (this@mvRxEpoxyController is Controller && view == null
-    ) return@epoxyController
+    if (this@mvRxEpoxyController is Fragment && view == null) return@epoxyController
     withState(
         viewModel1,
         viewModel2
@@ -51,8 +49,7 @@ fun <A : MvRxViewModel<B>, B, C : MvRxViewModel<D>, D, E : MvRxViewModel<F>, F> 
     viewModel3: E,
     buildItems: EpoxyController.(state1: B, state2: D, state3: F) -> Unit
 ): EpoxyController = epoxyController {
-    if (this@mvRxEpoxyController is Controller && view == null
-    ) return@epoxyController
+    if (this@mvRxEpoxyController is Fragment && view == null) return@epoxyController
     withState(
         viewModel1,
         viewModel2,
@@ -62,17 +59,14 @@ fun <A : MvRxViewModel<B>, B, C : MvRxViewModel<D>, D, E : MvRxViewModel<F>, F> 
     }
 }
 
-fun <A : MvRxViewModel<B>,
-        B,
-        C : MvRxViewModel<D>, D, E : MvRxViewModel<F>, F, G : MvRxViewModel<H>, H> Any.mvRxEpoxyController(
+fun <A : MvRxViewModel<B>, B, C : MvRxViewModel<D>, D, E : MvRxViewModel<F>, F, G : MvRxViewModel<H>, H> Any.mvRxEpoxyController(
     viewModel1: A,
     viewModel2: C,
     viewModel3: E,
     viewModel4: G,
     buildItems: EpoxyController.(state1: B, state2: D, state3: F, state4: H) -> Unit
 ): EpoxyController = epoxyController {
-    if (this@mvRxEpoxyController is Controller && view == null
-    ) return@epoxyController
+    if (this@mvRxEpoxyController is Fragment && view == null) return@epoxyController
     withState(
         viewModel1,
         viewModel2,
@@ -91,7 +85,7 @@ fun <A : MvRxViewModel<B>, B, C : MvRxViewModel<D>, D, E : MvRxViewModel<F>, F, 
     viewModel5: I,
     buildItems: EpoxyController.(state1: B, state2: D, state3: F, state4: H, state5: J) -> Unit
 ): EpoxyController = epoxyController {
-    if (this@mvRxEpoxyController is Controller && view == null) return@epoxyController
+    if (this@mvRxEpoxyController is Fragment && view == null) return@epoxyController
     withState(
         viewModel1,
         viewModel2,

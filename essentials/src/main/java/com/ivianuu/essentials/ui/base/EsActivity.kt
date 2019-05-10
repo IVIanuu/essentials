@@ -17,12 +17,7 @@
 package com.ivianuu.essentials.ui.base
 
 import android.os.Bundle
-import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
-import com.ivianuu.director.Router
-import com.ivianuu.director.fragment.getRouter
-import com.ivianuu.director.hasRoot
-import com.ivianuu.director.traveler.ControllerNavigator
 import com.ivianuu.essentials.ui.mvrx.MvRxView
 import com.ivianuu.essentials.ui.traveler.key.keyModule
 import com.ivianuu.essentials.util.ext.unsafeLazy
@@ -31,7 +26,9 @@ import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.android.activityComponent
 import com.ivianuu.injekt.inject
 import com.ivianuu.traveler.Navigator
+import com.ivianuu.traveler.Router
 import com.ivianuu.traveler.android.AppNavigator
+import com.ivianuu.traveler.android.FragmentNavigator
 import com.ivianuu.traveler.android.setNavigator
 import com.ivianuu.traveler.common.ResultNavigator
 import com.ivianuu.traveler.common.compositeNavigatorOf
@@ -48,7 +45,7 @@ abstract class EsActivity : AppCompatActivity(), InjektTrait, MvRxView {
         )
     }
 
-    val travelerRouter by inject<com.ivianuu.traveler.Router>()
+    val router by inject<Router>()
 
     protected open val layoutRes get() = 0
 
@@ -58,12 +55,10 @@ abstract class EsActivity : AppCompatActivity(), InjektTrait, MvRxView {
     open val startKey: Any?
         get() = null
 
-    lateinit var router: Router
-
     protected open val navigator: Navigator by unsafeLazy {
         val navigators = mutableListOf<ResultNavigator>().apply {
             addAll(navigators())
-            add(ControllerNavigator(router))
+            add(FragmentNavigator(supportFragmentManager, containerId))
             add(AppNavigator(this@EsActivity))
         }
 
@@ -77,7 +72,9 @@ abstract class EsActivity : AppCompatActivity(), InjektTrait, MvRxView {
             setContentView(layoutRes)
         }
 
-        onInitializeRouter()
+        if (savedInstanceState == null) {
+            startKey?.let { router.setRoot(it) }
+        }
     }
 
     override fun onStart() {
@@ -87,23 +84,10 @@ abstract class EsActivity : AppCompatActivity(), InjektTrait, MvRxView {
 
     override fun onResumeFragments() {
         super.onResumeFragments()
-        travelerRouter.setNavigator(this, navigator)
+        router.setNavigator(this, navigator)
     }
 
     override fun invalidate() {
-    }
-
-    override fun onBackPressed() {
-        if (!router.handleBack()) {
-            super.onBackPressed()
-        }
-    }
-
-    protected open fun onInitializeRouter() {
-        router = getRouter(findViewById<ViewGroup>(containerId))
-        if (!router.hasRoot) {
-            startKey?.let { travelerRouter.setRoot(it) }
-        }
     }
 
     protected open fun navigators(): List<ResultNavigator> = emptyList()
