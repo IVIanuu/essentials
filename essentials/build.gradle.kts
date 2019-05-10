@@ -56,6 +56,9 @@ dependencies {
     api(Deps.directorScopes)
     api(Deps.directorTraveler)
 
+    api(Deps.epoxy)
+    api(Deps.epoxyPrefs)
+
     api(Deps.injekt)
     api(Deps.injektAndroid)
     api(Deps.injektCommon)
@@ -79,10 +82,6 @@ dependencies {
     api(Deps.kSettingsCoroutines)
     api(Deps.kSettingsLiveData)
     api(Deps.kSettingsRx)
-
-    api(Deps.list)
-    api(Deps.listCommon)
-    api(Deps.listPrefs)
 
     api(Deps.materialComponents)
 

@@ -39,7 +39,7 @@ object Versions {
     const val androidxActivity = "1.0.0-alpha08"
     const val androidxAppCompat = "1.1.0-alpha04"
     const val androidxCardView = "1.0.0"
-    const val androidxCore = "1.1.0-alpha05"
+    const val androidxCore = "1.2.0-alpha01"
     const val androidxFragment = "1.1.0-alpha08"
     const val androidxLifecycle = "2.2.0-alpha01"
     const val androidxLifecycleViewModelSavedState = "1.0.0-alpha01"
@@ -51,9 +51,11 @@ object Versions {
     const val androidxTestRunner = "1.2.0-alpha03"
 
     const val bintray = "1.8.4"
-    const val constraintLayout = "2.0.0-alpha3"
+    const val constraintLayout = "2.0.0-beta1"
     const val coroutines = "1.2.0"
     const val director = "0.0.1-dev-28"
+    const val epoxy = "3.4.2"
+    const val epoxyPrefs = "0.0.1-dev-10"
     const val glide = "4.8.0"
     const val injekt = "0.0.1-dev-29"
     const val junit = "4.12"
@@ -61,8 +63,6 @@ object Versions {
     const val kotlin = "1.3.31"
     const val kPrefs = "0.0.1-dev-9"
     const val kSettings = "0.0.1-dev-7"
-    const val list = "0.0.1-dev-26"
-    const val listPrefs = "0.0.1-dev-13"
     const val mavenGradle = "2.1"
     const val materialComponents = "1.1.0-alpha06"
     const val materialDialogs = "2.0.3"
@@ -128,6 +128,9 @@ object Deps {
     const val directorTraveler =
         "com.ivianuu.director:director-traveler:${Versions.director}"
 
+    const val epoxy = "com.airbnb.android:epoxy:${Versions.epoxy}"
+    const val epoxyPrefs = "com.ivianuu.epoxyprefs:epoxyprefs:${Versions.epoxyPrefs}"
+
     const val glide = "com.github.bumptech.glide:glide:${Versions.glide}"
 
     const val injekt = "com.ivianuu.injekt:injekt:${Versions.injekt}"
@@ -165,11 +168,6 @@ object Deps {
         "com.ivianuu.ksettings:ksettings-livedata:${Versions.kSettings}"
     const val kSettingsRx =
         "com.ivianuu.ksettings:ksettings-rx:${Versions.kSettings}"
-
-    const val list = "com.ivianuu.list:list:${Versions.list}"
-    const val listCommon = "com.ivianuu.list:list-common:${Versions.list}"
-
-    const val listPrefs = "com.ivianuu.listprefs:listprefs:${Versions.listPrefs}"
 
     const val materialComponents =
         "com.google.android.material:material:${Versions.materialComponents}"

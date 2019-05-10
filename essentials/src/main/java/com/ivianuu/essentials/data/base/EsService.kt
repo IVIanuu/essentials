@@ -19,15 +19,13 @@ package com.ivianuu.essentials.data.base
 import android.app.Service
 import android.content.Intent
 import android.os.IBinder
-
+import com.ivianuu.essentials.util.ext.unsafeLazy
 import com.ivianuu.injekt.InjektTrait
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.android.serviceComponent
-
 import com.ivianuu.scopes.MutableScope
 import com.ivianuu.scopes.Scope
 import com.ivianuu.scopes.ScopeOwner
-import com.ivianuu.stdlibx.unsafeLazy
 
 /**
  * Base service

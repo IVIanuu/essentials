@@ -14,18 +14,16 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.list
+package com.ivianuu.essentials.ui.epoxy
 
-import android.content.Context
-import com.ivianuu.essentials.util.ContextAware
-import com.ivianuu.list.common.KotlinHolder
+import com.airbnb.epoxy.EpoxyAsyncUtil
+import com.airbnb.epoxy.EpoxyController
 
-/**
- * Base list holder
- */
-open class EsHolder : KotlinHolder(), ContextAware {
-
-    override val providedContext: Context
-        get() = view.context
-
+fun epoxyController(buildModels: EpoxyController.() -> Unit): EpoxyController {
+    val handler = EpoxyAsyncUtil.getAsyncBackgroundHandler()
+    return object : EpoxyController(handler, handler) {
+        override fun buildModels() {
+            buildModels.invoke(this)
+        }
+    }
 }

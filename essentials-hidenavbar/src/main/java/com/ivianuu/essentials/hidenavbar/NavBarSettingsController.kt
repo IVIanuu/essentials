@@ -16,22 +16,19 @@
 
 package com.ivianuu.essentials.hidenavbar
 
-import android.content.SharedPreferences
 import android.os.Bundle
 import com.ivianuu.director.scopes.destroy
+import com.ivianuu.epoxyprefs.CheckboxPreference
+import com.ivianuu.epoxyprefs.PreferenceContext
+import com.ivianuu.epoxyprefs.SingleItemListPreference
+import com.ivianuu.epoxyprefs.SwitchPreference
 import com.ivianuu.essentials.securesettings.SecureSettingsHelper
 import com.ivianuu.essentials.securesettings.SecureSettingsKey
 import com.ivianuu.essentials.ui.prefs.PrefsController
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
-import com.ivianuu.essentials.util.ext.fromEnumPref
-import com.ivianuu.essentials.util.ext.fromPref
-import com.ivianuu.essentials.util.ext.results
+import com.ivianuu.essentials.util.ext.*
+import com.ivianuu.injekt.get
 import com.ivianuu.injekt.inject
-import com.ivianuu.list.common.itemController
-import com.ivianuu.listprefs.entries
-import com.ivianuu.listprefs.entryValues
-import com.ivianuu.listprefs.summary
-import com.ivianuu.listprefs.title
 import com.ivianuu.scopes.rx.disposeBy
 import com.ivianuu.traveler.navigate
 import kotlinx.android.parcel.Parcelize
@@ -48,11 +45,11 @@ class NavBarSettingsKey(
 class NavBarSettingsController : PrefsController() {
 
     private val prefs by inject<NavBarPrefs>()
-    private val navBarSharedPrefs by inject<SharedPreferences>(NavBar)
     private val secureSettingsHelper by inject<SecureSettingsHelper>()
 
-    override val sharedPreferences: SharedPreferences
-        get() = navBarSharedPrefs
+    override val preferenceContext by unsafeLazy {
+        PreferenceContext(get(NavBar), false)
+    }
 
     override val toolbarTitleRes: Int
         get() = R.string.es_title_nav_bar_settings
@@ -73,12 +70,11 @@ class NavBarSettingsController : PrefsController() {
             .disposeBy(destroy)
     }
 
-    override fun itemController() = itemController {
+    override fun epoxyController() = epoxyController {
         if (key.showMainSwitch) {
-            SwitchPreferenceItem {
+            SwitchPreference {
                 fromPref(prefs.manageNavBar)
-                sharedPreferences = navBarSharedPrefs
-                title(R.string.es_pref_title_manage_nav_bar)
+                titleRes(R.string.es_pref_title_manage_nav_bar)
                 onChange { newValue ->
                     if (!newValue || secureSettingsHelper.canWriteSecureSettings()) {
                         return@onChange true
@@ -96,15 +92,12 @@ class NavBarSettingsController : PrefsController() {
             }
         }
 
-        val mainSwitchEnabled = prefs.manageNavBar.get()
-
         if (key.showNavBarHidden) {
-            SwitchPreferenceItem {
+            SwitchPreference {
                 fromPref(prefs.navBarHidden)
-                sharedPreferences = navBarSharedPrefs
-                title(R.string.es_pref_title_nav_bar_hidden)
-                summary(R.string.es_pref_summary_nav_bar_hidden)
-                enabled = mainSwitchEnabled
+                titleRes(R.string.es_pref_title_nav_bar_hidden)
+                summaryRes(R.string.es_pref_summary_nav_bar_hidden)
+                dependency(prefs.manageNavBar, true)
                 onChange { newValue ->
                     if (secureSettingsHelper.canWriteSecureSettings() || !newValue) {
                         return@onChange true
@@ -122,22 +115,20 @@ class NavBarSettingsController : PrefsController() {
             }
         }
 
-        SingleItemListPreferenceItem {
+        SingleItemListPreference {
             fromEnumPref(prefs.rotationMode)
-            sharedPreferences = navBarSharedPrefs
-            title(R.string.es_pref_title_nav_bar_rotation_mode)
-            summary(R.string.es_pref_summary_nav_bar_rotation_mode)
-            entries(R.array.es_entries_nav_bar_rotation_mode)
-            entryValues(R.array.es_values_nav_bar_rotation_mode)
-            enabled = mainSwitchEnabled
+            titleRes(R.string.es_pref_title_nav_bar_rotation_mode)
+            summaryRes(R.string.es_pref_summary_nav_bar_rotation_mode)
+            entriesRes(R.array.es_entries_nav_bar_rotation_mode)
+            entryValuesRes(R.array.es_values_nav_bar_rotation_mode)
+            dependency(prefs.manageNavBar, true)
         }
 
-        CheckboxPreferenceItem {
+        CheckboxPreference {
             fromPref(prefs.showNavBarScreenOff)
-            sharedPreferences = navBarSharedPrefs
-            title(R.string.es_pref_title_show_nav_bar_screen_off)
-            summary(R.string.es_pref_summary_show_nav_bar_screen_off)
-            enabled = mainSwitchEnabled
+            titleRes(R.string.es_pref_title_show_nav_bar_screen_off)
+            summaryRes(R.string.es_pref_summary_show_nav_bar_screen_off)
+            dependency(prefs.manageNavBar, true)
         }
 
     }

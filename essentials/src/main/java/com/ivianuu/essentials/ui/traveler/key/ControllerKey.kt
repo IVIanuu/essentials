@@ -22,9 +22,8 @@ import com.ivianuu.director.Controller
 import com.ivianuu.director.traveler.ControllerKey
 import com.ivianuu.essentials.ui.traveler.ControllerNavOptions
 import com.ivianuu.essentials.ui.traveler.applyToController
+import com.ivianuu.essentials.util.ext.unsafeLazy
 
-import com.ivianuu.stdlibx.safeAsOrElse
-import com.ivianuu.stdlibx.unsafeLazy
 import com.ivianuu.traveler.Command
 import com.ivianuu.traveler.Forward
 import com.ivianuu.traveler.Replace
@@ -50,7 +49,7 @@ abstract class ControllerKey(
             else -> null
         }
 
-        data.safeAsOrElse { defaultNavOptions }
+        (data as? ControllerNavOptions ?: defaultNavOptions)
             ?.applyToController(nextController)
     }
 

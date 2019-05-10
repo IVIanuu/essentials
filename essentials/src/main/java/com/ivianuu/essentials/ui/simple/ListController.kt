@@ -19,8 +19,9 @@ package com.ivianuu.essentials.ui.simple
 import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
+import com.airbnb.epoxy.EpoxyController
 import com.ivianuu.essentials.R
-import com.ivianuu.list.ItemController
+
 import kotlinx.android.synthetic.main.es_view_recycler_view.es_recycler_view
 
 /**
@@ -34,26 +35,26 @@ abstract class ListController : ToolbarController() {
     val recyclerView: RecyclerView
         get() = es_recycler_view
 
-    protected val itemController by lazy { itemController() }
+    protected val epoxyController by lazy { epoxyController() }
 
     override fun onViewCreated(view: View, savedViewState: Bundle?) {
         super.onViewCreated(view, savedViewState)
         with(recyclerView) {
-            adapter = itemController.adapter
+            adapter = epoxyController.adapter
             layoutManager()?.let { layoutManager = it }
         }
     }
 
     override fun onDestroyView(view: View) {
-        itemController.cancelPendingItemBuild()
+        epoxyController.cancelPendingModelBuild()
         super.onDestroyView(view)
     }
 
     override fun invalidate() {
-        itemController.requestItemBuild()
+        epoxyController.requestModelBuild()
     }
 
-    protected abstract fun itemController(): ItemController
+    protected abstract fun epoxyController(): EpoxyController
 
     protected open fun layoutManager(): RecyclerView.LayoutManager? = null
 

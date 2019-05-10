@@ -14,21 +14,21 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.list
+package com.ivianuu.essentials.work
 
-import com.ivianuu.list.Item
-import com.ivianuu.list.common.clicks
-import com.ivianuu.list.common.longClicks
+import android.content.Context
+import androidx.work.CoroutineWorker
+import androidx.work.WorkerParameters
+import com.ivianuu.essentials.util.ContextAware
 
 /**
- * Base list model with holder
+ * Base worker
  */
-abstract class EsItem<H : EsHolder>(
-    id: Any? = null,
-    layoutRes: Int = -1
-) : Item<H>(id, layoutRes) {
+abstract class EsWorker(
+    context: Context, workerParams: WorkerParameters
+) : CoroutineWorker(context, workerParams), ContextAware {
 
-    open val onClick by clicks()
-    open val onLongClick by longClicks()
+    override val providedContext: Context
+        get() = applicationContext
 
 }

@@ -14,22 +14,6 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.traveler.key
+package com.ivianuu.essentials.util.ext
 
-import android.app.Activity
-import android.content.Context
-import android.content.Intent
-import androidx.core.app.ShareCompat
-import com.ivianuu.traveler.android.ActivityKey
-
-/**
- * Shares the [text]
- */
-data class ShareKey(val text: String) : ActivityKey {
-    override fun createIntent(context: Context, data: Any?): Intent =
-        ShareCompat.IntentBuilder
-            .from(context as Activity)
-            .setType("text/plain")
-            .setText(text)
-            .createChooserIntent()
-}
+fun <T> unsafeLazy(initializer: () -> T): Lazy<T> = lazy(LazyThreadSafetyMode.NONE, initializer)

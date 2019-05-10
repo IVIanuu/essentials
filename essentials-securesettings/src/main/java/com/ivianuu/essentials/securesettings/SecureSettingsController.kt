@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.securesettings
 
 import android.view.View
+import com.ivianuu.epoxyprefs.Preference
 import com.ivianuu.essentials.ui.common.VerticalFadeChangeHandler
 import com.ivianuu.essentials.ui.prefs.PrefsController
 import com.ivianuu.essentials.ui.traveler.NavOptions
@@ -27,9 +28,6 @@ import com.ivianuu.essentials.util.ext.coroutineScope
 import com.ivianuu.essentials.util.ext.goBackWithResult
 import com.ivianuu.essentials.util.ext.sendResult
 import com.ivianuu.injekt.inject
-import com.ivianuu.list.common.itemController
-import com.ivianuu.listprefs.summary
-import com.ivianuu.listprefs.title
 import com.ivianuu.traveler.navigate
 import kotlinx.android.parcel.Parcelize
 import kotlinx.coroutines.launch
@@ -52,10 +50,10 @@ class SecureSettingsController : PrefsController() {
     private val secureSettingsHelper by inject<SecureSettingsHelper>()
     private val toaster by inject<Toaster>()
 
-    override fun itemController() = itemController {
-        PreferenceItem {
-            key = "secure_settings_header"
-            summary(
+    override fun epoxyController() = epoxyController {
+        Preference {
+            key("secure_settings_header")
+            summaryRes(
                 if (this@SecureSettingsController.key.showHideNavBarHint) {
                     R.string.es_pref_summary_secure_settings_header_hide_nav_bar
                 } else {
@@ -64,10 +62,10 @@ class SecureSettingsController : PrefsController() {
             )
         }
 
-        PreferenceItem {
-            key = "use_pc"
-            title(R.string.es_pref_title_use_pc)
-            summary(R.string.es_pref_summary_use_pc)
+        Preference {
+            key("use_pc")
+            titleRes(R.string.es_pref_title_use_pc)
+            summaryRes(R.string.es_pref_summary_use_pc)
             onClick {
                 travelerRouter.navigate(
                     SecureSettingsPcInstructionsKey(),
@@ -78,10 +76,10 @@ class SecureSettingsController : PrefsController() {
             }
         }
 
-        PreferenceItem {
-            key = "use_root"
-            title(R.string.es_pref_title_use_root)
-            summary(R.string.es_pref_summary_use_root)
+        Preference {
+            key("use_root")
+            titleRes(R.string.es_pref_title_use_root)
+            summaryRes(R.string.es_pref_summary_use_root)
             onClick {
                 coroutineScope.launch {
                     if (secureSettingsHelper.grantWriteSecureSettings()) {

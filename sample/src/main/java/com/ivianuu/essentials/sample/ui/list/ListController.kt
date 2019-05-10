@@ -17,18 +17,17 @@
 package com.ivianuu.essentials.sample.ui.list
 
 import android.view.MenuItem
+import com.airbnb.epoxy.EpoxyController
 import com.ivianuu.essentials.sample.R
-import com.ivianuu.essentials.ui.list.EsHolder
-import com.ivianuu.essentials.ui.list.SimpleItem
-import com.ivianuu.essentials.ui.list.SimpleLoadingItem
-import com.ivianuu.essentials.ui.list.SimpleTextItem
+import com.ivianuu.essentials.ui.epoxy.SimpleLoading
+import com.ivianuu.essentials.ui.epoxy.SimpleText
+import com.ivianuu.essentials.ui.epoxy.model
+import com.ivianuu.essentials.ui.mvrx.epoxy.mvRxEpoxyController
 import com.ivianuu.essentials.ui.mvrx.injekt.mvRxViewModel
-import com.ivianuu.essentials.ui.mvrx.list.mvRxItemController
 import com.ivianuu.essentials.ui.traveler.NavOptions
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
 import com.ivianuu.essentials.ui.traveler.vertical
 import com.ivianuu.essentials.util.ext.andTrue
-import com.ivianuu.list.id
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.single_line_list_item.title
 
@@ -44,24 +43,11 @@ class ListController : com.ivianuu.essentials.ui.simple.ListController() {
     override val toolbarMenuRes get() = R.menu.controller_list
     override val toolbarTitle get() = "List"
 
-    override fun itemController() = mvRxItemController(viewModel) { state ->
-        if (state.loading) {
-            SimpleLoadingItem {
-                id("loading")
-            }
-        } else {
-            if (state.items.isNotEmpty()) {
-                state.items.forEach { title ->
-                    SingleLineItem().add {
-                        this.title = title
-                    }
-                }
-            } else {
-                SimpleTextItem {
-                    id("empty")
-                    text = "Hmm empty.."
-                }
-            }
+    override fun epoxyController() = mvRxEpoxyController(viewModel) { state ->
+        when {
+            state.loading -> SimpleLoading(id = "loading")
+            state.items.isNotEmpty() -> state.items.forEach { SingleLine(it) }
+            else -> SimpleText(text = "Hmm empty", id = "empty")
         }
     }
 
@@ -71,12 +57,8 @@ class ListController : com.ivianuu.essentials.ui.simple.ListController() {
     }
 }
 
-private class SingleLineItem : SimpleItem(layoutRes = R.layout.single_line_list_item) {
-
-    var title by idProperty<String>()
-
-    override fun bind(holder: EsHolder) {
-        super.bind(holder)
-        holder.title.text = title
-    }
+private fun EpoxyController.SingleLine(text: String) = model(
+    id = text, layoutRes = R.layout.single_line_list_item
+) {
+    title.text = text
 }

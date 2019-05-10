@@ -21,7 +21,7 @@ import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class ListViewModel() : MvRxViewModel<ListState>(ListState()) {
+class ListViewModel : MvRxViewModel<ListState>(ListState()) {
 
     init {
         logStateChanges()

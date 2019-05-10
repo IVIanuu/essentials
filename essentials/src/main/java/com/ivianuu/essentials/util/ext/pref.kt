@@ -16,26 +16,26 @@
 
 package com.ivianuu.essentials.util.ext
 
+import com.ivianuu.epoxyprefs.AbstractPreferenceModel
+import com.ivianuu.epoxyprefs.dependency
 import com.ivianuu.kprefs.Pref
 import com.ivianuu.kprefs.common.PrefValueHolder
-import com.ivianuu.listprefs.AbstractPreferenceItem
-import com.ivianuu.listprefs.dependency
 
-fun <T : Any> AbstractPreferenceItem<T>.fromPref(pref: Pref<T>) {
-    key = pref.key
-    defaultValue = pref.defaultValue
+fun <T : Any> AbstractPreferenceModel.Builder<T>.fromPref(pref: Pref<T>) {
+    key(pref.key)
+    defaultValue(pref.defaultValue)
 }
 
-fun <T, S : Any> AbstractPreferenceItem<S>.fromEnumPref(pref: Pref<T>) where T : Enum<T>, T : PrefValueHolder<S> {
-    key = pref.key
-    defaultValue = pref.get().value
+fun <T, S : Any> AbstractPreferenceModel.Builder<S>.fromEnumPref(pref: Pref<T>) where T : Enum<T>, T : PrefValueHolder<S> {
+    key(pref.key)
+    defaultValue(pref.get().value)
 }
 
-fun <T : Any> AbstractPreferenceItem<*>.dependency(dependency: Pref<T>, value: T) {
+fun <T : Any> AbstractPreferenceModel.Builder<*>.dependency(dependency: Pref<T>, value: T) {
     dependency(dependency.key, value, dependency.defaultValue)
 }
 
-fun <T, S : Any> AbstractPreferenceItem<*>.enumDependency(
+fun <T, S : Any> AbstractPreferenceModel.Builder<*>.enumDependency(
     dependency: Pref<T>,
     value: T
 ) where T : Enum<T>, T : PrefValueHolder<S> {

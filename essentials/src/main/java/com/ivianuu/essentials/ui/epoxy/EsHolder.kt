@@ -14,14 +14,30 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.list
+package com.ivianuu.essentials.ui.epoxy
+
+import android.content.Context
+import android.view.View
+import com.airbnb.epoxy.EpoxyHolder
+import com.ivianuu.essentials.util.ContextAware
+import kotlinx.android.extensions.LayoutContainer
 
 /**
- * Simple list model with holder
+ * Base list holder
  */
-abstract class SimpleItem(
-    id: Any? = null,
-    layoutRes: Int = -1
-) : EsItem<EsHolder>(id, layoutRes) {
-    override fun createHolder(): EsHolder = EsHolder()
+open class EsHolder : EpoxyHolder(), ContextAware, LayoutContainer {
+
+    lateinit var root: View
+        private set
+
+    override val providedContext: Context
+        get() = root.context
+
+    override val containerView: View?
+        get() = root
+
+    override fun bindView(itemView: View) {
+        root = itemView
+    }
+
 }

@@ -17,18 +17,18 @@
 package com.ivianuu.essentials.apps.ui
 
 import androidx.lifecycle.viewModelScope
+import com.airbnb.epoxy.EpoxyController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.AppStore
 import com.ivianuu.essentials.apps.glide.AppIcon
-import com.ivianuu.essentials.ui.list.EsHolder
-import com.ivianuu.essentials.ui.list.SimpleItem
-import com.ivianuu.essentials.ui.list.SimpleLoadingItem
+import com.ivianuu.essentials.ui.epoxy.SimpleLoading
+import com.ivianuu.essentials.ui.epoxy.model
 import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
+import com.ivianuu.essentials.ui.mvrx.epoxy.mvRxEpoxyController
 import com.ivianuu.essentials.ui.mvrx.injekt.mvRxViewModel
-import com.ivianuu.essentials.ui.mvrx.list.mvRxItemController
 import com.ivianuu.essentials.ui.simple.ListController
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
 import com.ivianuu.essentials.util.Async
@@ -39,11 +39,10 @@ import com.ivianuu.essentials.util.ext.goBackWithResult
 import com.ivianuu.injekt.factory
 import com.ivianuu.injekt.get
 import com.ivianuu.injekt.module
-import com.ivianuu.list.id
 import com.ivianuu.traveler.Router
 import kotlinx.android.parcel.Parcelize
-import kotlinx.android.synthetic.main.es_item_app.icon
-import kotlinx.android.synthetic.main.es_item_app.title
+import kotlinx.android.synthetic.main.es_item_app.es_app_icon
+import kotlinx.android.synthetic.main.es_item_app.es_app_title
 import kotlinx.coroutines.async
 
 @Parcelize
@@ -64,45 +63,36 @@ class AppPickerController : ListController() {
 
     private val viewModel: AppPickerViewModel by mvRxViewModel()
 
-    override fun itemController() = mvRxItemController(viewModel) { state ->
+    override fun epoxyController() = mvRxEpoxyController(viewModel) { state ->
         when(state.apps) {
-            is Loading -> {
-                SimpleLoadingItem {
-                    id("loading")
-                }
-            }
-            is Success -> {
-                state.apps()?.forEach { app ->
-                    AppInfoItem().add {
-                        this.app = app
-                        onClick { viewModel.appClicked(app) }
-                    }
-                }
+            is Loading -> SimpleLoading(id = "loading")
+            is Success -> state.apps()?.forEach { app ->
+                AppInfo(app = app, onClick = { viewModel.appClicked(app) })
             }
         }
     }
 
 }
 
-private class AppInfoItem : SimpleItem(layoutRes = R.layout.es_item_app) {
+private fun EpoxyController.AppInfo(
+    app: AppInfo,
+    onClick: () -> Unit
+) = model(
+    id = app.packageName,
+    layoutRes = R.layout.es_item_app, properties = arrayOf(app)
+) {
+    Glide.with(es_app_icon)
+        .load(AppIcon(app.packageName))
+        .apply(
+            RequestOptions()
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+        )
+        .into(es_app_icon)
 
-    var app by idProperty<AppInfo> { it.packageName }
+    es_app_title.text = app.appName
 
-    override fun bind(holder: EsHolder) {
-        super.bind(holder)
-        with(holder) {
-            Glide.with(icon)
-                .load(AppIcon(app.packageName))
-                .apply(
-                    RequestOptions()
-                        .diskCacheStrategy(DiskCacheStrategy.NONE)
-                        .skipMemoryCache(true)
-                )
-                .into(icon)
-
-            title.text = app.appName
-        }
-    }
+    root.setOnClickListener { onClick() }
 }
 
 private val appPickerModule = module {

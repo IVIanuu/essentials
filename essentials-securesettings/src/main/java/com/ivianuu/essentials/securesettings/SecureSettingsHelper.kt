@@ -20,7 +20,6 @@ import android.Manifest.permission.WRITE_SECURE_SETTINGS
 import android.content.Context
 import com.ivianuu.essentials.shell.Shell
 import com.ivianuu.kommon.core.content.hasPermissions
-import com.ivianuu.stdlibx.tryOrElse
 
 /**
  * Provides infos about the secure settings access state
@@ -33,9 +32,11 @@ class SecureSettingsHelper(
         context.hasPermissions(WRITE_SECURE_SETTINGS)
 
     suspend fun grantWriteSecureSettings(): Boolean {
-        return tryOrElse(false) {
+        return try {
             shell.run("pm grant ${context.packageName} android.permission.WRITE_SECURE_SETTINGS")
-            return@tryOrElse canWriteSecureSettings()
+            canWriteSecureSettings()
+        } catch (e: Exception) {
+            false
         }
     }
 }

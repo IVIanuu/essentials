@@ -16,29 +16,28 @@
 
 package com.ivianuu.essentials.ui.prefs
 
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
 import com.ivianuu.director.activity
+import com.ivianuu.director.context
+import com.ivianuu.epoxyprefs.EpoxyPrefsPlugins
+import com.ivianuu.epoxyprefs.PreferenceDividerDecoration
+import com.ivianuu.epoxyprefs.PreferenceEpoxyController
+import com.ivianuu.epoxyprefs.preferenceEpoxyController
 import com.ivianuu.essentials.ui.simple.ListController
-import com.ivianuu.injekt.inject
-import com.ivianuu.list.ItemController
-import com.ivianuu.list.addTo
-import com.ivianuu.listprefs.*
 
 /**
  * Prefs controller
  */
 abstract class PrefsController : ListController() {
 
-    open val sharedPreferences by inject<SharedPreferences>()
+    open val preferenceContext by lazy {
+        EpoxyPrefsPlugins.getDefaultContext(context)
+    }
 
     protected open val usePreferenceDividerDecoration = true
 
-    private val sharedPreferenceChangeListener =
-        SharedPreferences.OnSharedPreferenceChangeListener { _, _ ->
-            postInvalidate()
-        }
+    private val changeListener: (String) -> Unit = { postInvalidate() }
 
     override fun onViewCreated(view: View, savedViewState: Bundle?) {
         super.onViewCreated(view, savedViewState)
@@ -49,40 +48,15 @@ abstract class PrefsController : ListController() {
 
     override fun onAttach(view: View) {
         super.onAttach(view)
-        sharedPreferences.registerOnSharedPreferenceChangeListener(sharedPreferenceChangeListener)
+        preferenceContext.addChangeListener(changeListener)
     }
 
     override fun onDetach(view: View) {
         super.onDetach(view)
-        sharedPreferences.unregisterOnSharedPreferenceChangeListener(sharedPreferenceChangeListener)
+        preferenceContext.removeChangeListener(changeListener)
     }
 
-    // todo find a better way for those extensions
+    protected fun epoxyController(buildModels: PreferenceEpoxyController.() -> Unit): PreferenceEpoxyController =
+        preferenceEpoxyController(preferenceContext, buildModels)
 
-    protected fun ItemController.PreferenceItem(init: PreferenceItem.() -> Unit): PreferenceItem =
-        PreferenceItem().apply { context = activity }.apply(init).addTo(this)
-
-    protected fun ItemController.CategoryPreferenceItem(init: CategoryPreferenceItem.() -> Unit): CategoryPreferenceItem =
-        CategoryPreferenceItem().apply { context = activity }.apply(init).addTo(this)
-
-    protected fun ItemController.CheckboxPreferenceItem(init: CheckboxPreferenceItem.() -> Unit): CheckboxPreferenceItem =
-        CheckboxPreferenceItem().apply { context = activity }.apply(init).addTo(this)
-
-    protected fun ItemController.EditTextPreferenceItem(init: EditTextPreferenceItem.() -> Unit): EditTextPreferenceItem =
-        EditTextPreferenceItem().apply { context = activity }.apply(init).addTo(this)
-
-    protected fun ItemController.MultiSelectListPreferenceItem(init: MultiSelectListPreferenceItem.() -> Unit): MultiSelectListPreferenceItem =
-        MultiSelectListPreferenceItem().apply { context = activity }.apply(init).addTo(this)
-
-    protected fun ItemController.RadioButtonPreferenceItem(init: RadioButtonPreferenceItem.() -> Unit): RadioButtonPreferenceItem =
-        RadioButtonPreferenceItem().apply { context = activity }.apply(init).addTo(this)
-
-    protected fun ItemController.SeekBarPreferenceItem(init: SeekBarPreferenceItem.() -> Unit): SeekBarPreferenceItem =
-        SeekBarPreferenceItem().apply { context = activity }.apply(init).addTo(this)
-
-    protected fun ItemController.SingleItemListPreferenceItem(init: SingleItemListPreferenceItem.() -> Unit): SingleItemListPreferenceItem =
-        SingleItemListPreferenceItem().apply { context = activity }.apply(init).addTo(this)
-
-    protected fun ItemController.SwitchPreferenceItem(init: SwitchPreferenceItem.() -> Unit): SwitchPreferenceItem =
-        SwitchPreferenceItem().apply { context = activity }.apply(init).addTo(this)
 }

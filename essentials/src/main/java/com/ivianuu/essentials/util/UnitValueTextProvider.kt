@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.util
 
 import android.content.Context
+import com.ivianuu.epoxyprefs.SeekBarPreferenceModel
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.util.UnitValueTextProvider.Unit.DP
 import com.ivianuu.essentials.util.UnitValueTextProvider.Unit.MILLIS
@@ -24,7 +25,6 @@ import com.ivianuu.essentials.util.UnitValueTextProvider.Unit.PERCENTAGE
 import com.ivianuu.essentials.util.UnitValueTextProvider.Unit.PX
 import com.ivianuu.essentials.util.UnitValueTextProvider.Unit.SECONDS
 import com.ivianuu.kommon.core.content.string
-import com.ivianuu.listprefs.SeekBarPreferenceItem
 
 class UnitValueTextProvider(
     private val context: Context,
@@ -44,6 +44,9 @@ class UnitValueTextProvider(
     }
 }
 
-fun SeekBarPreferenceItem.unitValueTextProvider(unit: UnitValueTextProvider.Unit) {
-    valueTextProvider = UnitValueTextProvider(context, unit)
+fun SeekBarPreferenceModel.Builder.unitValueTextProvider(
+    context: Context,
+    unit: UnitValueTextProvider.Unit
+) {
+    valueTextProvider(UnitValueTextProvider(context, unit))
 }

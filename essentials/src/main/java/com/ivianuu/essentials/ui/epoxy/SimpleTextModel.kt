@@ -14,29 +14,23 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.list
+package com.ivianuu.essentials.ui.epoxy
 
+import com.airbnb.epoxy.EpoxyController
 import com.ivianuu.essentials.R
-import com.ivianuu.list.ItemFactory
 import kotlinx.android.synthetic.main.es_item_simple_text.es_text
 
 /**
  * Simple text model
  */
-open class SimpleTextItem : SimpleItem(layoutRes = R.layout.es_item_simple_text) {
-
-    var text by optionalProperty<String>()
-    var textRes by property { 0 }
-
-    override fun bind(holder: EsHolder) {
-        super.bind(holder)
-        when {
-            text != null -> holder.es_text.text = text
-            textRes != 0 -> holder.es_text.setText(textRes)
-            else -> error("you must specify one of text or textRes")
-        }
+fun EpoxyController.SimpleText(
+    text: String? = null,
+    textRes: Int = 0,
+    id: Any? = text + textRes
+) = model(id = id, layoutRes = R.layout.es_item_simple_text, properties = arrayOf(text, textRes)) {
+    when {
+        text != null -> es_text.text = text
+        textRes != 0 -> es_text.setText(textRes)
+        else -> error("you must specify one of text or textRes")
     }
-
-    companion object : ItemFactory<SimpleTextItem>(::SimpleTextItem)
-
 }

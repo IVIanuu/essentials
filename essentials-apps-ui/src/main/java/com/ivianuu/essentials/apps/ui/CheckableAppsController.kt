@@ -19,6 +19,7 @@ package com.ivianuu.essentials.apps.ui
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.lifecycle.viewModelScope
+import com.airbnb.epoxy.EpoxyController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
@@ -26,11 +27,10 @@ import com.ivianuu.director.scopes.destroy
 import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.AppStore
 import com.ivianuu.essentials.apps.glide.AppIcon
-import com.ivianuu.essentials.ui.list.EsHolder
-import com.ivianuu.essentials.ui.list.SimpleItem
-import com.ivianuu.essentials.ui.list.SimpleLoadingItem
+import com.ivianuu.essentials.ui.epoxy.SimpleLoading
+import com.ivianuu.essentials.ui.epoxy.model
 import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
-import com.ivianuu.essentials.ui.mvrx.list.mvRxItemController
+import com.ivianuu.essentials.ui.mvrx.epoxy.mvRxEpoxyController
 import com.ivianuu.essentials.ui.mvrx.mvRxViewModel
 import com.ivianuu.essentials.ui.simple.ListController
 import com.ivianuu.essentials.util.*
@@ -39,7 +39,7 @@ import com.ivianuu.injekt.factory
 import com.ivianuu.injekt.get
 import com.ivianuu.injekt.module
 import com.ivianuu.injekt.parametersOf
-import com.ivianuu.list.id
+
 import com.ivianuu.rxjavaktx.BehaviorSubject
 import com.ivianuu.rxjavaktx.PublishSubject
 import com.ivianuu.scopes.ReusableScope
@@ -47,9 +47,9 @@ import com.ivianuu.scopes.android.scope
 import com.ivianuu.scopes.rx.disposeBy
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.Observables
-import kotlinx.android.synthetic.main.es_item_checkable_app.checked
-import kotlinx.android.synthetic.main.es_item_checkable_app.icon
-import kotlinx.android.synthetic.main.es_item_checkable_app.title
+import kotlinx.android.synthetic.main.es_item_checkable_app.es_checkable_app_icon
+import kotlinx.android.synthetic.main.es_item_checkable_app.es_checkable_app_title
+import kotlinx.android.synthetic.main.es_item_checkable_app.es_checkable_app_toggle
 import kotlinx.coroutines.async
 import kotlinx.coroutines.rx2.asSingle
 
@@ -84,20 +84,11 @@ abstract class CheckableAppsController : ListController() {
         super.onDestroy()
     }
 
-    override fun itemController() = mvRxItemController(viewModel) { state ->
+    override fun epoxyController() = mvRxEpoxyController(viewModel) { state ->
         when (state.apps) {
-            is Loading -> {
-                SimpleLoadingItem {
-                    id("loading")
-                }
-            }
-            is Success -> {
-                state.apps()?.forEach { app ->
-                    CheckableAppModel().add {
-                        this.app = app
-                        onClick { viewModel.appClicked(app) }
-                    }
-                }
+            is Loading -> SimpleLoading(id = "loading")
+            is Success -> state.apps()?.forEach { app ->
+                CheckableApp(app = app, onClick = { viewModel.appClicked(app) })
             }
         }
     }
@@ -113,24 +104,27 @@ abstract class CheckableAppsController : ListController() {
     abstract fun onCheckedAppsChanged(apps: Set<String>)
 }
 
-private class CheckableAppModel : SimpleItem(layoutRes = R.layout.es_item_checkable_app) {
+private fun EpoxyController.CheckableApp(
+    app: CheckableApp,
+    onClick: () -> Unit
+) = model(
+    id = app.info.packageName,
+    layoutRes = R.layout.es_item_checkable_app, properties = arrayOf(app)
+) {
+    Glide.with(es_checkable_app_icon)
+        .load(AppIcon(app.info.packageName))
+        .apply(
+            RequestOptions()
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+        )
+        .into(es_checkable_app_icon)
 
-    var app by idProperty<CheckableApp> { it.info.packageName }
+    es_checkable_app_title.text = app.info.appName
 
-    override fun bind(holder: EsHolder) {
-        super.bind(holder)
-        with(holder) {
-            Glide.with(icon)
-                .load(AppIcon(app.info.packageName))
-                .apply(RequestOptions().diskCacheStrategy(DiskCacheStrategy.NONE))
-                .into(icon)
+    es_checkable_app_toggle.isChecked = app.isChecked
 
-            title.text = app.info.appName
-
-            checked.isChecked = app.checked
-        }
-    }
-
+    root.setOnClickListener { onClick() }
 }
 
 private val checkableAppsModule = module {
@@ -187,7 +181,7 @@ private class CheckableAppsViewModel(
 
     fun appClicked(app: CheckableApp) {
         pushNewCheckedApps {
-            if (!app.checked) {
+            if (!app.isChecked) {
                 it.add(app.info.packageName)
             } else {
                 it.remove(app.info.packageName)
@@ -224,5 +218,5 @@ private data class CheckableAppsState(
 
 private data class CheckableApp(
     val info: AppInfo,
-    val checked: Boolean
+    val isChecked: Boolean
 )
