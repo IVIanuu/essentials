@@ -18,12 +18,10 @@ package com.ivianuu.essentials.ui.prefs
 
 import android.os.Bundle
 import android.view.View
+import com.airbnb.epoxy.EpoxyController
 import com.ivianuu.director.activity
 import com.ivianuu.director.context
-import com.ivianuu.epoxyprefs.EpoxyPrefsPlugins
-import com.ivianuu.epoxyprefs.PreferenceDividerDecoration
-import com.ivianuu.epoxyprefs.PreferenceEpoxyController
-import com.ivianuu.epoxyprefs.preferenceEpoxyController
+import com.ivianuu.epoxyprefs.*
 import com.ivianuu.essentials.ui.simple.ListController
 
 /**
@@ -59,4 +57,46 @@ abstract class PrefsController : ListController() {
     protected fun epoxyController(buildModels: PreferenceEpoxyController.() -> Unit): PreferenceEpoxyController =
         preferenceEpoxyController(preferenceContext, buildModels)
 
+    fun EpoxyController.Preference(block: PreferenceModel.Builder.() -> Unit): PreferenceModel =
+        PreferenceModel.Builder().injectContext().apply(block).build().also { it.addTo(this) }
+
+    fun EpoxyController.CategoryPreference(block: CategoryPreferenceModel.Builder.() -> Unit): CategoryPreferenceModel =
+        CategoryPreferenceModel.Builder().injectContext().apply(block).build().also { it.addTo(this) }
+
+    fun EpoxyController.CheckboxPreference(block: CheckboxPreferenceModel.Builder.() -> Unit): CheckboxPreferenceModel =
+        CheckboxPreferenceModel.Builder().injectContext().apply(block).build().also { it.addTo(this) }
+
+    fun EpoxyController.EditTextPreference(block: EditTextPreferenceModel.Builder.() -> Unit): EditTextPreferenceModel =
+        EditTextPreferenceModel.Builder().injectContext().apply(block).build().also { it.addTo(this) }
+
+    fun EpoxyController.MultiSelectListPreference(block: MultiSelectListPreferenceModel.Builder.() -> Unit): MultiSelectListPreferenceModel =
+        MultiSelectListPreferenceModel.Builder().injectContext().apply(block).build().also {
+            it.addTo(
+                this
+            )
+        }
+
+    fun EpoxyController.RadioButtonPreference(block: RadioButtonPreferenceModel.Builder.() -> Unit): RadioButtonPreferenceModel =
+        RadioButtonPreferenceModel.Builder().injectContext().apply(block).build().also {
+            it.addTo(
+                this
+            )
+        }
+
+    fun EpoxyController.SeekBarPreference(block: SeekBarPreferenceModel.Builder.() -> Unit): SeekBarPreferenceModel =
+        SeekBarPreferenceModel.Builder().injectContext().apply(block).build().also { it.addTo(this) }
+
+    fun EpoxyController.SingleItemListPreference(block: SingleItemListPreferenceModel.Builder.() -> Unit): SingleItemListPreferenceModel =
+        SingleItemListPreferenceModel.Builder().injectContext().apply(block).build().also {
+            it.addTo(
+                this
+            )
+        }
+
+    fun EpoxyController.SwitchPreference(block: SwitchPreferenceModel.Builder.() -> Unit): SwitchPreferenceModel =
+        SwitchPreferenceModel.Builder().injectContext().apply(block).build().also { it.addTo(this) }
+
+    private fun <T : AbstractPreferenceModel.Builder<*>> T.injectContext() = apply {
+        context(preferenceContext)
+    }
 }
