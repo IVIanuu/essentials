@@ -40,7 +40,7 @@ fun EpoxyController.model(
 class FunModelBuilder internal constructor() {
 
     private var id: Any? = null
-    private var layoutRes: Int = 0
+    private var layoutRes: Int = -1
     private val state = mutableListOf<Any?>()
     private val bindActions = mutableListOf<EsHolder.() -> Unit>()
     private val unbindActions = mutableListOf<EsHolder.() -> Unit>()
@@ -69,12 +69,12 @@ class FunModelBuilder internal constructor() {
         unbindActions.add(block)
     }
 
-    internal fun build(): FunModel = FunModel(id, layoutRes, state, bindActions, unbindActions)
+    internal fun build(): FunModel = FunModel(id, layoutRes, state, unbindActions, bindActions)
 
 }
 
 class FunModel internal constructor(
-    id: Any?,
+    private val id: Any?,
     private val layoutRes: Int,
     private val state: List<Any?>,
     private val unbindActions: List<EsHolder.() -> Unit>,
