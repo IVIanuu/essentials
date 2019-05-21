@@ -16,13 +16,13 @@
 
 package com.ivianuu.essentials.ui.simple
 
-import com.ivianuu.essentials.ui.base.EsFragment
-import kotlinx.android.synthetic.main.es_fragment_list.es_coordinator_layout
+import com.ivianuu.essentials.ui.base.EsController
+import kotlinx.android.synthetic.main.es_controller_list.es_coordinator_layout
 
 /**
- * A fragment which hosts a coordinator layout
+ * A controller which hosts a coordinator layout
  */
-abstract class CoordinatorFragment : EsFragment() {
+abstract class CoordinatorController : EsController() {
 
     open val coordinatorLayout
         get() = es_coordinator_layout
