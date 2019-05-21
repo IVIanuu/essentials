@@ -17,9 +17,8 @@
 package com.ivianuu.essentials.ui.base
 
 import androidx.lifecycle.ViewModel
-import com.ivianuu.scopes.ScopeOwner
 
 /**
- * A [ViewModel] which is also a [ScopeOwner]
+ * Base view model
  */
 abstract class EsViewModel : ViewModel()
