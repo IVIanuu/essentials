@@ -40,7 +40,8 @@ abstract class EsFragment : Fragment(), ContextAware, InjektTrait, MvRxView {
 
     override val component by unsafeLazy {
         fragmentComponent(
-            modules = listOf(keyModule(arguments)) + modules()
+            // todo remove throwIfNotAvailable(false)
+            modules = listOf(keyModule(arguments, false)) + modules()
         )
     }
 

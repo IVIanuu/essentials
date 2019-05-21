@@ -18,16 +18,55 @@ package com.ivianuu.essentials.sample.ui.counter
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.os.bundleOf
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import com.ivianuu.essentials.sample.R
+import com.ivianuu.essentials.ui.anim.FragmentTransition
+import com.ivianuu.essentials.ui.anim.popTransition
+import com.ivianuu.essentials.ui.anim.pushTransition
 import com.ivianuu.essentials.ui.base.EsFragment
 import com.ivianuu.essentials.ui.mvrx.injekt.injectMvRxViewModel
 import com.ivianuu.essentials.ui.mvrx.withState
-import com.ivianuu.essentials.ui.traveler.key.FragmentKey
+import com.ivianuu.essentials.ui.traveler.key.TRAVELER_KEY
+import com.ivianuu.essentials.ui.traveler.key.TRAVELER_KEY_CLASS
+import com.ivianuu.essentials.ui.traveler.key.getKey
+import com.ivianuu.timberktx.d
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.controller_counter.*
 
 @Parcelize
-data class CounterKey(val screen: Int) : FragmentKey(::CounterFragment)
+class TestTransition(val tag: String) : FragmentTransition() {
+    override fun setup(
+        transaction: FragmentTransaction,
+        from: Fragment?,
+        to: Fragment?,
+        isPush: Boolean
+    ) {
+        d { "$tag: setup from $from to $to is push $isPush" }
+    }
+}
+
+@Parcelize
+data class CounterKey(val screen: Int) : com.ivianuu.essentials.ui.traveler.FragmentKey {
+    override fun createFragment(): Fragment {
+        return CounterFragment().also {
+            addTo(it)
+            it.pushTransition = TestTransition("counter $screen push")
+            it.popTransition = TestTransition("counter $screen pop")
+        }
+    }
+
+    private fun addTo(bundle: Bundle) {
+        bundle.putParcelable(TRAVELER_KEY, this)
+        bundle.putString(TRAVELER_KEY_CLASS, javaClass.name)
+    }
+
+    private fun addTo(fragment: Fragment) {
+        if (fragment.arguments == null) fragment.arguments = bundleOf()
+        addTo(fragment.requireArguments())
+    }
+}
 
 class CounterFragment : EsFragment() {
 
@@ -51,4 +90,5 @@ class CounterFragment : EsFragment() {
         withState(viewModel) { count.text = "Screen : ${it.screen}" }
     }
 
+    override fun toString() = "CounterFragment(${getKey<CounterKey>().screen})"
 }

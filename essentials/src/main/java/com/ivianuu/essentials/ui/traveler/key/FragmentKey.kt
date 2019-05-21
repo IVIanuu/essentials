@@ -21,6 +21,8 @@ import android.os.Parcelable
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
+import com.ivianuu.essentials.ui.anim.popTransition
+import com.ivianuu.essentials.ui.anim.pushTransition
 import com.ivianuu.essentials.ui.traveler.FragmentNavOptions
 import com.ivianuu.essentials.util.ext.unsafeLazy
 
@@ -44,14 +46,12 @@ abstract class FragmentKey(
     ) {
         super.setupFragmentTransaction(command, currentFragment, nextFragment, transaction)
 
-        val data = when (command) {
-            is Forward -> command.data
-            is Replace -> command.data
-            else -> null
-        }
+        val isPush = command is Forward || command is Replace
 
-        // todo (data as? FragmentNavOptions ?: defaultNavOptions)
-        // ?.applyToController(nextController)
+        val transition = if (isPush) nextFragment.pushTransition
+        else currentFragment?.popTransition
+
+        transition?.setup(transaction, currentFragment, nextFragment, isPush)
     }
 
 }
