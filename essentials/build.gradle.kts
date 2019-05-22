@@ -79,7 +79,6 @@ dependencies {
 
     api(Deps.rxAndroid)
     api(Deps.rxJava)
-    api(Deps.rxJavaKtx)
     api(Deps.rxKotlin)
 
     api(Deps.scopes)
@@ -88,7 +87,7 @@ dependencies {
     api(Deps.scopesRx)
 
     api(Deps.timber)
-    api(Deps.timberKtx)
+    api(Deps.timberKt)
 
     api(Deps.traveler)
     api(Deps.travelerAndroid)

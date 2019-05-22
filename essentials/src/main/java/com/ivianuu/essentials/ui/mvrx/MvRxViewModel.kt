@@ -18,6 +18,7 @@ package com.ivianuu.essentials.ui.mvrx
 
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.viewModelScope
+import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.base.EsViewModel
 import com.ivianuu.essentials.ui.mvrx.lifecycle.LifecycleStateListener
 import com.ivianuu.essentials.util.Async
@@ -26,7 +27,6 @@ import com.ivianuu.essentials.util.asFail
 import com.ivianuu.essentials.util.asSuccess
 import com.ivianuu.scopes.android.scope
 import com.ivianuu.scopes.rx.disposeBy
-import com.ivianuu.timberktx.d
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single

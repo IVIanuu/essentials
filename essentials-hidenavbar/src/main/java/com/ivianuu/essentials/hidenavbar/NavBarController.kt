@@ -23,16 +23,15 @@ import android.graphics.Rect
 import android.hardware.SensorManager
 import android.view.OrientationEventListener
 import android.view.Surface
+import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.app.AppService
 import com.ivianuu.essentials.util.BroadcastFactory
 import com.ivianuu.essentials.util.ext.combineLatest
+import com.ivianuu.essentials.util.ext.observable
 import com.ivianuu.kommon.core.app.doOnConfigurationChanged
 import com.ivianuu.kprefs.rx.asObservable
-import com.ivianuu.rxjavaktx.emptyObservable
-import com.ivianuu.rxjavaktx.observable
 import com.ivianuu.scopes.ReusableScope
 import com.ivianuu.scopes.rx.disposeBy
-import com.ivianuu.timberktx.d
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.Observables
 
@@ -171,13 +170,13 @@ class NavBarController(
                         .doOnDispose { d { "dispose rotation" } }
                 } else {
                     d { "do not observe rotation while screen is off" }
-                    emptyObservable()
+                    Observable.empty()
                 }
             }
             .map { Unit }
     }
 
-    private fun rotationChanges() = observable<Int> { e ->
+    private fun rotationChanges() = observable<Int> {
         var currentRotation = displayRotationProvider.displayRotation
 
         val listener = object : OrientationEventListener(
@@ -186,23 +185,23 @@ class NavBarController(
             override fun onOrientationChanged(orientation: Int) {
                 val rotation = displayRotationProvider.displayRotation
                 if (rotation != currentRotation) {
-                    e.onNext(rotation)
+                    onNext(rotation)
                     currentRotation = rotation
                 }
             }
 
         }
 
-        e.setCancellable { listener.disable() }
+        setCancellable { listener.disable() }
 
         listener.enable()
 
-        e.onNext(currentRotation)
+        onNext(currentRotation)
     }
 
-    private fun configChanges() = observable<Unit> { e ->
-        val callbacks = app.doOnConfigurationChanged { e.onNext(Unit) }
-        e.setCancellable { app.unregisterComponentCallbacks(callbacks) }
+    private fun configChanges() = observable<Unit> {
+        val callbacks = app.doOnConfigurationChanged { onNext(Unit) }
+        setCancellable { app.unregisterComponentCallbacks(callbacks) }
     }
 
     private fun screenState(): Observable<Boolean> {

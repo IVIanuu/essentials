@@ -17,10 +17,18 @@
 package com.ivianuu.essentials.util.ext
 
 import io.reactivex.Observable
+import io.reactivex.ObservableEmitter
 import io.reactivex.functions.*
 import io.reactivex.rxkotlin.Observables
 import io.reactivex.subjects.BehaviorSubject
+import io.reactivex.subjects.PublishSubject
 import java.io.Serializable
+
+fun <T> observable(block: ObservableEmitter<T>.() -> Unit): Observable<T> = Observable.create(block)
+
+fun <T> BehaviorSubject(): BehaviorSubject<T> = BehaviorSubject.create()
+fun <T> BehaviorSubject(default: T): BehaviorSubject<T> = BehaviorSubject.createDefault(default)
+fun <T> PublishSubject(): PublishSubject<T> = PublishSubject.create()
 
 fun <T : Any> BehaviorSubject<T>.requireValue(): T =
     value ?: error("value is null")

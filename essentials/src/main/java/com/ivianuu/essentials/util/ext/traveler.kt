@@ -16,7 +16,6 @@
 
 package com.ivianuu.essentials.util.ext
 
-import com.ivianuu.rxjavaktx.PublishSubject
 import com.ivianuu.traveler.Router
 import com.ivianuu.traveler.goBack
 import io.reactivex.Observable

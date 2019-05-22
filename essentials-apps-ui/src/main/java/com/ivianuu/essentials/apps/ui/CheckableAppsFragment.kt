@@ -33,14 +33,14 @@ import com.ivianuu.essentials.ui.mvrx.epoxy.mvRxEpoxyController
 import com.ivianuu.essentials.ui.mvrx.mvRxViewModel
 import com.ivianuu.essentials.ui.simple.ListFragment
 import com.ivianuu.essentials.util.*
+import com.ivianuu.essentials.util.ext.BehaviorSubject
+import com.ivianuu.essentials.util.ext.PublishSubject
 import com.ivianuu.essentials.util.ext.andTrue
 import com.ivianuu.injekt.factory
 import com.ivianuu.injekt.get
 import com.ivianuu.injekt.module
 import com.ivianuu.injekt.parametersOf
 
-import com.ivianuu.rxjavaktx.BehaviorSubject
-import com.ivianuu.rxjavaktx.PublishSubject
 import com.ivianuu.scopes.ReusableScope
 import com.ivianuu.scopes.android.onDestroy
 import com.ivianuu.scopes.android.scope

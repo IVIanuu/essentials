@@ -19,7 +19,6 @@ package com.ivianuu.essentials.ui.base
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.ivianuu.essentials.ui.mvrx.MvRxView
-import com.ivianuu.essentials.ui.traveler.EsFragmentNavigator
 import com.ivianuu.essentials.ui.traveler.key.keyModule
 import com.ivianuu.essentials.util.ext.unsafeLazy
 import com.ivianuu.injekt.InjektTrait
@@ -29,10 +28,10 @@ import com.ivianuu.injekt.inject
 import com.ivianuu.traveler.Navigator
 import com.ivianuu.traveler.Router
 import com.ivianuu.traveler.android.AppNavigator
+import com.ivianuu.traveler.android.FragmentNavigator
 import com.ivianuu.traveler.android.setNavigator
 import com.ivianuu.traveler.common.ResultNavigator
 import com.ivianuu.traveler.common.compositeNavigatorOf
-import com.ivianuu.traveler.goBack
 import com.ivianuu.traveler.setRoot
 
 /**
@@ -56,14 +55,10 @@ abstract class EsActivity : AppCompatActivity(), InjektTrait, MvRxView {
     open val startKey: Any?
         get() = null
 
-    private val fragmentNavigator by unsafeLazy {
-        EsFragmentNavigator(supportFragmentManager, containerId)
-    }
-
     protected open val navigator: Navigator by unsafeLazy {
         val navigators = mutableListOf<ResultNavigator>().apply {
             addAll(navigators())
-            add(fragmentNavigator)
+            add(FragmentNavigator(supportFragmentManager, containerId))
             add(AppNavigator(this@EsActivity))
         }
 
@@ -90,14 +85,6 @@ abstract class EsActivity : AppCompatActivity(), InjektTrait, MvRxView {
     override fun onResumeFragments() {
         super.onResumeFragments()
         router.setNavigator(this, navigator)
-    }
-
-    override fun onBackPressed() {
-        if (fragmentNavigator.backstack.size > 1) {
-            router.goBack()
-        } else {
-            super.onBackPressed()
-        }
     }
 
     override fun invalidate() {
