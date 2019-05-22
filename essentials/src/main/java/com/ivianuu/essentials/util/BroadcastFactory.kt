@@ -20,9 +20,9 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import com.ivianuu.essentials.util.ext.observable
 
 import com.ivianuu.kommon.core.content.intentFilterOf
-import com.ivianuu.rxjavaktx.observable
 import io.reactivex.Observable
 
 /**
@@ -32,18 +32,18 @@ class BroadcastFactory(private val context: Context) {
 
     fun create(vararg actions: String): Observable<Intent> = create(intentFilterOf(*actions))
 
-    fun create(intentFilter: IntentFilter) = observable<Intent> { e ->
+    fun create(intentFilter: IntentFilter) = observable<Intent> {
         val broadcastReceiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context, intent: Intent) {
-                if (!e.isDisposed) {
-                    e.onNext(intent)
+                if (!isDisposed) {
+                    onNext(intent)
                 }
             }
         }
 
-        e.setCancellable { context.unregisterReceiver(broadcastReceiver) }
+        setCancellable { context.unregisterReceiver(broadcastReceiver) }
 
-        if (!e.isDisposed) {
+        if (!isDisposed) {
             context.registerReceiver(broadcastReceiver, intentFilter)
         }
     }

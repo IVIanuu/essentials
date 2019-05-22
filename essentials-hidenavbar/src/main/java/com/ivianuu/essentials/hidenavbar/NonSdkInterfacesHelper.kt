@@ -17,10 +17,10 @@
 package com.ivianuu.essentials.hidenavbar
 
 import android.os.Build
+import com.github.ajalt.timberkt.d
 
 import com.ivianuu.ksettings.KSettings
 import com.ivianuu.ksettings.Setting
-import com.ivianuu.timberktx.d
 
 /**
  * Deactivates non sdk interface detection

@@ -20,12 +20,12 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.view.WindowManager
 import androidx.work.WorkerParameters
+import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.hidenavbar.NavBarPrefs
 import com.ivianuu.essentials.work.EsWorker
 import com.ivianuu.essentials.work.worker
 import com.ivianuu.injekt.get
 import com.ivianuu.injekt.module
-import com.ivianuu.timberktx.d
 
 val workerModule = module {
     worker { context, workerParams -> MyWorkerOne(context, workerParams, get(), get()) }

@@ -70,12 +70,11 @@ object Versions {
     const val roboelectric = "4.0.2"
     const val rxAndroid = "2.1.0"
     const val rxJava = "2.2.8"
-    const val rxJavaKtx = "0.0.1-dev-1" // todo kill
     const val rxKotlin = "2.3.0"
     const val scopes = "0.0.1-dev-12"
     const val superUser = "1.0.0.+"
     const val timber = "4.7.1"
-    const val timberKtx = "0.0.1-dev-1"
+    const val timberKt = "1.5.1"
     const val traveler = "0.0.1-dev-6"
 }
 
@@ -187,7 +186,6 @@ object Deps {
 
     const val rxAndroid = "io.reactivex.rxjava2:rxandroid:${Versions.rxAndroid}"
     const val rxJava = "io.reactivex.rxjava2:rxjava:${Versions.rxJava}"
-    const val rxJavaKtx = "com.ivianuu.rxjavaktx:rxjavaktx:${Versions.rxJavaKtx}"
     const val rxKotlin = "io.reactivex.rxjava2:rxkotlin:${Versions.rxKotlin}"
 
     const val scopes = "com.ivianuu.scopes:scopes:${Versions.scopes}"
@@ -199,7 +197,7 @@ object Deps {
     const val superUser = "eu.chainfire:libsuperuser:${Versions.superUser}"
 
     const val timber = "com.jakewharton.timber:timber:${Versions.timber}"
-    const val timberKtx = "com.ivianuu.timberktx:timberktx:${Versions.timberKtx}"
+    const val timberKt = "com.github.ajalt:timberkt:${Versions.timberKt}"
 
     const val traveler = "com.ivianuu.traveler:traveler:${Versions.traveler}"
     const val travelerAndroid = "com.ivianuu.traveler:traveler-android:${Versions.traveler}"
