@@ -46,26 +46,35 @@ abstract class EsDialogFragment : DialogFragment(), ContextAware, InjektTrait, M
 
     val router by inject<Router>()
 
+    private var dismissed = false
+
     override fun onStart() {
         super.onStart()
         invalidate()
     }
 
     override fun dismiss() {
-        router.goBack()
+        dismissInternal()
     }
 
     override fun dismissAllowingStateLoss() {
-        router.goBack()
+        dismissInternal()
     }
 
     override fun onDismiss(dialog: DialogInterface) {
-        router.goBack()
+        dismissInternal()
     }
 
     override fun invalidate() {
     }
 
     protected open fun modules(): List<Module> = emptyList()
+
+    private fun dismissInternal() {
+        if (!dismissed) {
+            dismissed = true
+            router.goBack()
+        }
+    }
 
 }
