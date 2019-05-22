@@ -18,7 +18,6 @@ package com.ivianuu.essentials.util.ext
 
 import android.view.View
 import com.ivianuu.director.Controller
-import com.ivianuu.director.Router
 import com.ivianuu.director.activity
 import com.ivianuu.director.parentController
 import com.ivianuu.director.scopes.destroy
@@ -29,13 +28,6 @@ import com.ivianuu.kommon.core.app.showInputMethod
 
 val Controller.coroutineScope get() = destroy.coroutineScope
 val Controller.viewCoroutineScope get() = destroyView.coroutineScope
-
-val Controller.rootRouter: Router
-    get() {
-        fun Controller.rootController(): Controller =
-            parentController?.rootController() ?: this
-        return rootController().router
-    }
 
 fun Controller.hideInputMethod() {
     activity.hideInputMethod()

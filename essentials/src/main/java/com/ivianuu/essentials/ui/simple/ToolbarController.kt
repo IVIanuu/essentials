@@ -43,7 +43,7 @@ abstract class ToolbarController : CoordinatorController() {
     protected open val toolbarTitle: String? get() = null
     protected open val toolbarTitleRes: Int get() = 0
     protected open val toolbarMenuRes: Int get() = 0
-    protected open val toolbarBackButton: Boolean get() = router.rootController != this
+    protected open val toolbarBackButton: Boolean get() = router.backstack.firstOrNull() != this
     protected open val lightToolbar: Boolean get() = getPrimaryColor().isLight
 
     override fun onViewCreated(view: View, savedViewState: Bundle?) {
