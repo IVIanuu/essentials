@@ -36,12 +36,12 @@ abstract class FragmentKey(
     open fun createFragment(): Fragment = factory().also { addTo(it) }
 }
 
-fun com.ivianuu.essentials.ui.traveler.key.FragmentKey.addTo(fragment: Fragment) {
+fun FragmentKey.addTo(fragment: Fragment) {
     if (fragment.arguments == null) fragment.arguments = bundleOf()
     addTo(fragment.requireArguments())
 }
 
-fun com.ivianuu.essentials.ui.traveler.key.FragmentKey.addTo(bundle: Bundle) {
+fun FragmentKey.addTo(bundle: Bundle) {
     bundle.putParcelable(TRAVELER_KEY, this)
     bundle.putString(TRAVELER_KEY_CLASS, javaClass.name)
 }

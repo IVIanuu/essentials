@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.ui.base
 
 import android.content.Context
+import android.content.DialogInterface
 import androidx.fragment.app.DialogFragment
 import com.ivianuu.essentials.ui.mvrx.MvRxView
 import com.ivianuu.essentials.ui.traveler.key.keyModule
@@ -27,6 +28,7 @@ import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.android.fragmentComponent
 import com.ivianuu.injekt.inject
 import com.ivianuu.traveler.Router
+import com.ivianuu.traveler.goBack
 
 /**
  * Base dialog fragment
@@ -47,6 +49,18 @@ abstract class EsDialogFragment : DialogFragment(), ContextAware, InjektTrait, M
     override fun onStart() {
         super.onStart()
         invalidate()
+    }
+
+    override fun dismiss() {
+        router.goBack()
+    }
+
+    override fun dismissAllowingStateLoss() {
+        router.goBack()
+    }
+
+    override fun onDismiss(dialog: DialogInterface) {
+        router.goBack()
     }
 
     override fun invalidate() {

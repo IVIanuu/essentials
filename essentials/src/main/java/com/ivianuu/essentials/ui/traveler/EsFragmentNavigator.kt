@@ -17,7 +17,10 @@
 package com.ivianuu.essentials.ui.traveler
 
 import android.os.Bundle
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.dismissed
+import androidx.fragment.app.shownByMe
 import com.ivianuu.essentials.ui.traveler.anim.FragmentNavOptions
 import com.ivianuu.essentials.ui.traveler.anim.NoopTransition
 import com.ivianuu.essentials.ui.traveler.key.FragmentKey
@@ -78,6 +81,13 @@ class EsFragmentNavigator(
 
         val fragment = key.createFragment()
         val tag = key.fragmentTag
+        val isDialog = fragment is DialogFragment
+
+        if (isDialog) {
+            fragment as DialogFragment
+            fragment.shownByMe = true
+            fragment.dismissed = false
+        }
 
         val transaction = fm.beginTransaction()
             .disallowAddToBackStack()
@@ -86,12 +96,17 @@ class EsFragmentNavigator(
         val oldKey = backStack.lastOrNull()
         val oldFragment = oldKey?.let { fm.findFragmentByTag(it.fragmentTag)!! }
 
-        if (oldFragment != null) {
+        if (oldFragment != null && !isDialog) {
             transaction.detach(oldFragment)
         }
 
         backStack.add(key)
-        transaction.add(containerId, fragment, tag)
+
+        if (isDialog) {
+            transaction.add(fragment, tag)
+        } else {
+            transaction.add(containerId, fragment, tag)
+        }
 
         val transition = options?.push()
             ?: key.options?.push()
