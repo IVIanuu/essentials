@@ -19,9 +19,9 @@ package com.ivianuu.essentials.ui.simple
 import android.graphics.PorterDuff
 import android.os.Bundle
 import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.children
-import androidx.fragment.app.isInBackstack
 import com.google.android.material.appbar.AppBarLayout
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.util.ext.*
@@ -43,7 +43,13 @@ abstract class ToolbarFragment : CoordinatorFragment() {
     protected open val toolbarTitle: String? get() = null
     protected open val toolbarTitleRes: Int get() = 0
     protected open val toolbarMenuRes: Int get() = 0
-    protected open val toolbarBackButton: Boolean get() = isInBackstack
+    protected open val toolbarBackButton: Boolean
+        get() {
+            // todo this is way to buggy..
+            val view = view ?: return false
+            val parent = view.parent as? ViewGroup ?: return false
+            return parent.indexOfChild(view) != 0
+        }
     protected open val lightToolbar: Boolean get() = getPrimaryColor().isLight
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
