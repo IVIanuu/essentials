@@ -62,9 +62,7 @@ fun <A : MvRxViewModel<B>, B, C : MvRxViewModel<D>, D, E : MvRxViewModel<F>, F> 
     }
 }
 
-fun <A : MvRxViewModel<B>,
-        B,
-        C : MvRxViewModel<D>, D, E : MvRxViewModel<F>, F, G : MvRxViewModel<H>, H> Any.mvRxEpoxyController(
+fun <A : MvRxViewModel<B>, B, C : MvRxViewModel<D>, D, E : MvRxViewModel<F>, F, G : MvRxViewModel<H>, H> Any.mvRxEpoxyController(
     viewModel1: A,
     viewModel2: C,
     viewModel3: E,
