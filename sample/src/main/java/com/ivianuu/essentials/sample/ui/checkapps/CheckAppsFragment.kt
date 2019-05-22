@@ -17,7 +17,8 @@
 package com.ivianuu.essentials.sample.ui.checkapps
 
 import com.ivianuu.essentials.apps.ui.CheckableAppsFragment
-import com.ivianuu.essentials.ui.traveler.NavOptions
+import com.ivianuu.essentials.ui.traveler.anim.NavOptions
+import com.ivianuu.essentials.ui.traveler.anim.fade
 import com.ivianuu.essentials.ui.traveler.key.FragmentKey
 import com.ivianuu.injekt.get
 import com.ivianuu.kprefs.KPrefs
@@ -27,8 +28,7 @@ import io.reactivex.Observable
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-class CheckAppsKey :
-    FragmentKey(::CheckAppsFragment, NavOptions()/*.handler(VerticalFadeChangeHandler())*/) // todo
+object CheckAppsKey : FragmentKey(::CheckAppsFragment, options = NavOptions().fade())
 
 /**
  * @author Manuel Wrage (IVIanuu)

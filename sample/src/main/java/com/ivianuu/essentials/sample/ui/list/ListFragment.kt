@@ -24,15 +24,15 @@ import com.ivianuu.essentials.ui.epoxy.SimpleText
 import com.ivianuu.essentials.ui.epoxy.model
 import com.ivianuu.essentials.ui.mvrx.epoxy.mvRxEpoxyController
 import com.ivianuu.essentials.ui.mvrx.injekt.injectMvRxViewModel
-import com.ivianuu.essentials.ui.traveler.NavOptions
+import com.ivianuu.essentials.ui.traveler.anim.NavOptions
+import com.ivianuu.essentials.ui.traveler.anim.vertical
 import com.ivianuu.essentials.ui.traveler.key.FragmentKey
-import com.ivianuu.essentials.ui.traveler.vertical
 import com.ivianuu.essentials.util.ext.andTrue
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.single_line_list_item.title
 
 @Parcelize
-class ListKey : FragmentKey(::ListFragment, NavOptions().vertical())
+class ListKey : FragmentKey(::ListFragment, options = NavOptions().vertical(3000))
 
 class ListFragment : com.ivianuu.essentials.ui.simple.ListFragment() {
 

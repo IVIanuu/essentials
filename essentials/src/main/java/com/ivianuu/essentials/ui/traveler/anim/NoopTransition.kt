@@ -14,39 +14,23 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.anim
+package com.ivianuu.essentials.ui.traveler.anim
 
-import android.os.Bundle
-import android.os.Parcelable
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
+import com.ivianuu.essentials.util.ext.clearTransitions
 
 /**
  * @author Manuel Wrage (IVIanuu)
  */
-abstract class FragmentTransition : Parcelable {
-    abstract fun setup(
+object NoopTransition : FragmentTransition {
+    override fun setup(
         transaction: FragmentTransaction,
         from: Fragment?,
         to: Fragment?,
         isPush: Boolean
-    )
+    ) {
+        from?.clearTransitions()
+        to?.clearTransitions()
+    }
 }
-
-private const val KEY_PUSH_TRANSITION = "push_transition"
-private const val KEY_POP_TRANSITION = "pop_transition"
-
-var Fragment.pushTransition: FragmentTransition?
-    get() = arguments?.getParcelable(KEY_PUSH_TRANSITION)
-    set(value) {
-        getOrCreateArgs().putParcelable(KEY_PUSH_TRANSITION, value)
-    }
-
-var Fragment.popTransition: FragmentTransition?
-    get() = arguments?.getParcelable(KEY_POP_TRANSITION)
-    set(value) {
-        getOrCreateArgs().putParcelable(KEY_POP_TRANSITION, value)
-    }
-
-private fun Fragment.getOrCreateArgs(): Bundle =
-    arguments ?: Bundle().also { arguments = it }

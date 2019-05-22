@@ -20,8 +20,6 @@ import android.os.Bundle
 import com.afollestad.materialdialogs.input.input
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.base.EsDialogFragment
-import com.ivianuu.essentials.ui.traveler.NavOptions
-import com.ivianuu.essentials.ui.traveler.dialog
 import com.ivianuu.essentials.ui.traveler.key.FragmentKey
 import com.ivianuu.essentials.util.ext.dialog
 import com.ivianuu.essentials.util.ext.goBackWithResult
@@ -37,7 +35,7 @@ data class TextInputKey(
     val prefill: String = "",
     val allowEmptyInput: Boolean = false,
     val resultCode: Int
-) : FragmentKey(::TextInputDialog, NavOptions().dialog())
+) : FragmentKey(::TextInputDialog)
 
 /**
  * Text input dialog

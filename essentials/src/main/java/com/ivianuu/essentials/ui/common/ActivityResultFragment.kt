@@ -20,8 +20,6 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import com.ivianuu.essentials.ui.base.EsFragment
-import com.ivianuu.essentials.ui.traveler.NavOptions
-import com.ivianuu.essentials.ui.traveler.dialog
 import com.ivianuu.essentials.ui.traveler.key.FragmentKey
 import com.ivianuu.essentials.util.ext.goBackWithResult
 import com.ivianuu.injekt.inject
@@ -32,7 +30,7 @@ data class ActivityResultKey(
     val resultCode: Int,
     val intent: Intent,
     val requestCode: Int
-) : FragmentKey(::ActivityResultFragment, NavOptions().dialog())
+) : FragmentKey(::ActivityResultFragment)
 
 /**
  * Activity result fragment

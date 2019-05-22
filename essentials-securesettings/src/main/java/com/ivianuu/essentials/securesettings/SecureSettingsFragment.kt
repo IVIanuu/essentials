@@ -19,7 +19,7 @@ package com.ivianuu.essentials.securesettings
 import android.os.Bundle
 import com.ivianuu.epoxyprefs.Preference
 import com.ivianuu.essentials.ui.prefs.PrefsFragment
-import com.ivianuu.essentials.ui.traveler.NavOptions
+import com.ivianuu.essentials.ui.traveler.anim.NavOptions
 import com.ivianuu.essentials.ui.traveler.key.FragmentKey
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.essentials.util.ext.coroutineScope

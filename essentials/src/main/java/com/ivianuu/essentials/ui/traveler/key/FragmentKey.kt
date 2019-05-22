@@ -20,40 +20,20 @@ import android.os.Bundle
 import android.os.Parcelable
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
-import com.ivianuu.essentials.ui.anim.popTransition
-import com.ivianuu.essentials.ui.anim.pushTransition
-import com.ivianuu.essentials.ui.traveler.FragmentNavOptions
+import com.ivianuu.essentials.ui.traveler.anim.FragmentNavOptions
 import com.ivianuu.essentials.util.ext.unsafeLazy
-
-import com.ivianuu.traveler.Command
-import com.ivianuu.traveler.Forward
-import com.ivianuu.traveler.Replace
-import com.ivianuu.traveler.android.FragmentKey
 
 abstract class FragmentKey(
     val factory: () -> Fragment,
-    open val defaultNavOptions: FragmentNavOptions? = null
-) : FragmentKey, Parcelable {
+    fragmentTag: String? = null,
+    open val options: FragmentNavOptions? = null
+) : Parcelable {
 
-    override fun createFragment(data: Any?): Fragment = factory().also { addTo(it) }
+    private val _fragmentTag = fragmentTag
 
-    override fun setupFragmentTransaction(
-        command: Command,
-        currentFragment: Fragment?,
-        nextFragment: Fragment,
-        transaction: FragmentTransaction
-    ) {
-        super.setupFragmentTransaction(command, currentFragment, nextFragment, transaction)
+    open val fragmentTag: String? get() = _fragmentTag ?: this.toString()
 
-        val isPush = command is Forward || command is Replace
-
-        val transition = if (isPush) nextFragment.pushTransition
-        else currentFragment?.popTransition
-
-        transition?.setup(transaction, currentFragment, nextFragment, isPush)
-    }
-
+    open fun createFragment(): Fragment = factory().also { addTo(it) }
 }
 
 fun com.ivianuu.essentials.ui.traveler.key.FragmentKey.addTo(fragment: Fragment) {

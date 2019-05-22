@@ -23,12 +23,9 @@ import com.ivianuu.essentials.sample.ui.list.ListKey
 import com.ivianuu.essentials.sample.work.MyWorkerOne
 import com.ivianuu.essentials.sample.work.MyWorkerTwo
 import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
-import com.ivianuu.essentials.ui.traveler.NavOptions
-import com.ivianuu.essentials.ui.traveler.horizontal
-import com.ivianuu.traveler.Router
-import com.ivianuu.traveler.goBack
-import com.ivianuu.traveler.navigate
-import com.ivianuu.traveler.popToRoot
+import com.ivianuu.essentials.ui.traveler.anim.NavOptions
+import com.ivianuu.essentials.ui.traveler.anim.horizontal
+import com.ivianuu.traveler.*
 
 class CounterViewModel(
     key: CounterKey,
@@ -45,7 +42,13 @@ class CounterViewModel(
     }
 
     fun screenDownClicked() {
-        router.goBack()
+        withState {
+            if (it.screen == 1) {
+                router.finish()
+            } else {
+                router.goBack()
+            }
+        }
     }
 
     fun rootScreenClicked() {
@@ -57,7 +60,7 @@ class CounterViewModel(
     }
 
     fun checkAppsClicked() {
-        router.navigate(CheckAppsKey())
+        router.navigate(CheckAppsKey)
     }
 
     fun doWorkClicked() {

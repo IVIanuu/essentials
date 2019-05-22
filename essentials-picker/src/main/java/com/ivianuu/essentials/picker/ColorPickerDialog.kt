@@ -19,8 +19,6 @@ package com.ivianuu.essentials.picker
 import android.os.Bundle
 import com.afollestad.materialdialogs.color.colorChooser
 import com.ivianuu.essentials.ui.base.EsDialogFragment
-import com.ivianuu.essentials.ui.traveler.NavOptions
-import com.ivianuu.essentials.ui.traveler.dialog
 import com.ivianuu.essentials.ui.traveler.key.FragmentKey
 import com.ivianuu.essentials.util.ext.dialog
 import com.ivianuu.essentials.util.ext.goBackWithResult
@@ -34,7 +32,7 @@ data class ColorPickerKey(
     val allowCustomArgb: Boolean = true,
     val showAlphaSelector: Boolean = false,
     val resultCode: Int
-) : FragmentKey(::ColorPickerDialog, NavOptions().dialog())
+) : FragmentKey(::ColorPickerDialog)
 
 /**
  * Color picker fragment

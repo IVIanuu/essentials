@@ -20,8 +20,6 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import com.ivianuu.essentials.ui.base.EsFragment
-import com.ivianuu.essentials.ui.traveler.NavOptions
-import com.ivianuu.essentials.ui.traveler.dialog
 import com.ivianuu.essentials.ui.traveler.key.FragmentKey
 import com.ivianuu.essentials.util.ext.goBackWithResult
 import com.ivianuu.injekt.inject
@@ -32,7 +30,7 @@ data class PermissionRequestKey(
     val resultCode: Int,
     val permissions: Set<String>,
     val requestCode: Int
-) : FragmentKey(::PermissionRequestFragment, NavOptions().dialog())
+) : FragmentKey(::PermissionRequestFragment)
 
 /**
  * Permission request fragment

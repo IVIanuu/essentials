@@ -22,13 +22,18 @@ import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.base.EsFragment
 import com.ivianuu.essentials.ui.mvrx.injekt.injectMvRxViewModel
 import com.ivianuu.essentials.ui.mvrx.withState
+import com.ivianuu.essentials.ui.traveler.anim.NavOptions
+import com.ivianuu.essentials.ui.traveler.anim.horizontal
 import com.ivianuu.essentials.ui.traveler.key.FragmentKey
 import com.ivianuu.essentials.ui.traveler.key.getKey
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.controller_counter.*
 
 @Parcelize
-data class CounterKey(val screen: Int) : FragmentKey(::CounterFragment)
+data class CounterKey(val screen: Int) : FragmentKey(
+    ::CounterFragment,
+    options = NavOptions().horizontal()
+)
 
 class CounterFragment : EsFragment() {
 

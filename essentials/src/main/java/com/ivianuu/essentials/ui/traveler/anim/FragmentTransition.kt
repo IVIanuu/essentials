@@ -14,21 +14,19 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.util.ext
+package com.ivianuu.essentials.ui.traveler.anim
 
 import androidx.fragment.app.Fragment
-import com.ivianuu.essentials.util.coroutineScope
-import com.ivianuu.scopes.android.onDestroy
-import com.ivianuu.scopes.android.viewOnDestroy
+import androidx.fragment.app.FragmentTransaction
 
-val Fragment.coroutineScope get() = onDestroy.coroutineScope
-val Fragment.viewCoroutineScope get() = viewOnDestroy.coroutineScope
-
-fun Fragment.clearTransitions() {
-    enterTransition = null
-    exitTransition = null
-    reenterTransition = null
-    returnTransition = null
-    allowEnterTransitionOverlap = true
-    allowReturnTransitionOverlap = true
+/**
+ * @author Manuel Wrage (IVIanuu)
+ */
+interface FragmentTransition {
+    fun setup(
+        transaction: FragmentTransaction,
+        from: Fragment?,
+        to: Fragment?,
+        isPush: Boolean
+    )
 }
