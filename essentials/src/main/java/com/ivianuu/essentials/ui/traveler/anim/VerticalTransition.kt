@@ -20,7 +20,6 @@ import android.transition.Slide
 import android.view.Gravity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
-import com.ivianuu.essentials.util.ext.clearTransitions
 
 class VerticalTransition(private val duration: Long = -1L) : FragmentTransition {
     override fun setup(
@@ -29,9 +28,6 @@ class VerticalTransition(private val duration: Long = -1L) : FragmentTransition 
         to: Fragment?,
         isPush: Boolean
     ) {
-        from?.clearTransitions()
-        to?.clearTransitions()
-
         if (isPush) {
             if (from != null) {
                 from.exitTransition = Stay().also {

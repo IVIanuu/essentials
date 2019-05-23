@@ -45,7 +45,7 @@ abstract class ToolbarFragment : CoordinatorFragment() {
     protected open val toolbarMenuRes: Int get() = 0
     protected open val toolbarBackButton: Boolean
         get() {
-            // todo this is way to buggy..
+            // todo this is way to unreliable..
             val view = view ?: return false
             val parent = view.parent as? ViewGroup ?: return false
             return parent.indexOfChild(view) != 0

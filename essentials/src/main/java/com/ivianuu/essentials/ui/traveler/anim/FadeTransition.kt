@@ -19,7 +19,6 @@ package com.ivianuu.essentials.ui.traveler.anim
 import android.transition.Fade
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
-import com.ivianuu.essentials.util.ext.clearTransitions
 
 /**
  * @author Manuel Wrage (IVIanuu)
@@ -31,9 +30,6 @@ class FadeTransition(private val duration: Long) : FragmentTransition {
         to: Fragment?,
         isPush: Boolean
     ) {
-        from?.clearTransitions()
-        to?.clearTransitions()
-
         if (from != null) {
             from.exitTransition = Fade().also {
                 if (duration != -1L) it.duration = duration
