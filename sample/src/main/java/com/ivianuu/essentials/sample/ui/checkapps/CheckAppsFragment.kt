@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.sample.ui.checkapps
 
+import android.animation.Animator
 import com.ivianuu.essentials.apps.ui.CheckableAppsFragment
 import com.ivianuu.essentials.ui.traveler.anim.NavOptions
 import com.ivianuu.essentials.ui.traveler.anim.fade

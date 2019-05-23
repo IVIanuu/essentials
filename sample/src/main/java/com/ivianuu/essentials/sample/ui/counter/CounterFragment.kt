@@ -30,6 +30,7 @@ import com.ivianuu.essentials.ui.mvrx.injekt.injectMvRxViewModel
 import com.ivianuu.essentials.ui.mvrx.withState
 import com.ivianuu.essentials.ui.traveler.anim.FragmentTransition
 import com.ivianuu.essentials.ui.traveler.anim.NavOptions
+import com.ivianuu.essentials.ui.traveler.anim.horizontal
 import com.ivianuu.essentials.ui.traveler.anim.transition
 import com.ivianuu.essentials.ui.traveler.key.FragmentKey
 import com.ivianuu.kommon.core.transition.transitionSetOf
@@ -40,7 +41,7 @@ import kotlinx.android.synthetic.main.controller_counter.*
 @Parcelize
 data class CounterKey(val screen: Int) : FragmentKey(
     ::CounterFragment,
-    options = NavOptions().transition(CounterTransition())
+    options = NavOptions().horizontal()
 )
 
 class CounterTransition : FragmentTransition {
@@ -55,11 +56,19 @@ class CounterTransition : FragmentTransition {
         transaction.addSharedElement("count")
 
         if (isPush) {
-            from.exitTransition = Slide(Gravity.START)
-            to.enterTransition = Slide(Gravity.END)
+            from.exitTransition = Slide(Gravity.START).also {
+                it.propagation = null
+            }
+            to.enterTransition = Slide(Gravity.END).also {
+                it.propagation = null
+            }
         } else {
-            from.exitTransition = Slide(Gravity.END)
-            to.enterTransition = Slide(Gravity.START)
+            from.exitTransition = Slide(Gravity.END).also {
+                it.propagation = null
+            }
+            to.enterTransition = Slide(Gravity.START).also {
+                it.propagation = null
+            }
         }
 
         from.sharedElementReturnTransition = transitionSetOf(ChangeBounds(), ChangeTransform())

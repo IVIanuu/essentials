@@ -18,8 +18,11 @@ package com.ivianuu.essentials.ui.traveler.anim
 
 import android.transition.Slide
 import android.view.Gravity
+import androidx.core.transition.doOnEnd
+import androidx.core.transition.doOnStart
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
+import com.github.ajalt.timberkt.d
 
 class HorizontalTransition(private val duration: Long = -1L) : FragmentTransition {
     override fun setup(
@@ -32,22 +35,26 @@ class HorizontalTransition(private val duration: Long = -1L) : FragmentTransitio
             if (from != null) {
                 from.exitTransition = Slide(Gravity.START).also {
                     if (duration != -1L) it.duration = duration
+                    it.propagation = null
                 }
             }
             if (to != null) {
                 to.enterTransition = Slide(Gravity.END).also {
                     if (duration != -1L) it.duration = duration
+                    it.propagation = null
                 }
             }
         } else {
             if (from != null) {
                 from.exitTransition = Slide(Gravity.END).also {
                     if (duration != -1L) it.duration = duration
+                    it.propagation = null
                 }
             }
             if (to != null) {
                 to.enterTransition = Slide(Gravity.START).also {
                     if (duration != -1L) it.duration = duration
+                    it.propagation = null
                 }
             }
         }

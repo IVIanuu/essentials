@@ -37,6 +37,7 @@ dependencies {
     api(Deps.androidxCore)
     api(Deps.androidxFragment)
     api(Deps.androidxLifecycleLiveData)
+    api(Deps.androidxLifecycleRuntime)
     api(Deps.androidxLifecycleViewModel)
     api(Deps.androidxLifecycleViewModelSavedState)
 

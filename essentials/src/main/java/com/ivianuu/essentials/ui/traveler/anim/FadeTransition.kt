@@ -33,11 +33,13 @@ class FadeTransition(private val duration: Long) : FragmentTransition {
         if (from != null) {
             from.exitTransition = Fade().also {
                 if (duration != -1L) it.duration = duration
+                it.propagation = null
             }
         }
         if (to != null) {
             to.enterTransition = Fade().also {
                 if (duration != -1L) it.duration = duration
+                it.propagation = null
             }
         }
     }

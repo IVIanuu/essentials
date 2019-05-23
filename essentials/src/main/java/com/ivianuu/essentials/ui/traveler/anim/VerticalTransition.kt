@@ -32,22 +32,26 @@ class VerticalTransition(private val duration: Long = -1L) : FragmentTransition 
             if (from != null) {
                 from.exitTransition = Stay().also {
                     if (duration != -1L) it.duration = duration
+                    it.propagation = null
                 }
             }
             if (to != null) {
                 to.enterTransition = Slide(Gravity.BOTTOM).also {
                     if (duration != -1L) it.duration = duration
+                    it.propagation = null
                 }
             }
         } else {
             if (from != null) {
                 from.exitTransition = Slide(Gravity.BOTTOM).also {
                     if (duration != -1L) it.duration = duration
+                    it.propagation = null
                 }
             }
             if (to != null) {
                 to.enterTransition = Stay().also {
                     if (duration != -1L) it.duration = duration
+                    it.propagation = null
                 }
             }
         }

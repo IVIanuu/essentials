@@ -17,12 +17,12 @@
 package com.ivianuu.essentials.util.ext
 
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.ivianuu.essentials.util.coroutineScope
 import com.ivianuu.scopes.android.onDestroy
 import com.ivianuu.scopes.android.viewOnDestroy
 
-val Fragment.coroutineScope get() = onDestroy.coroutineScope
-val Fragment.viewCoroutineScope get() = viewOnDestroy.coroutineScope
+val Fragment.viewLifecycleScope get() = viewLifecycleOwner.lifecycleScope
 
 fun Fragment.clearTransitions() {
     enterTransition = null

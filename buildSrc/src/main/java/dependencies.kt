@@ -87,6 +87,8 @@ object Deps {
     const val androidxFragment = "androidx.fragment:fragment-ktx:${Versions.androidxFragment}"
     const val androidxLifecycleLiveData =
         "androidx.lifecycle:lifecycle-livedata-ktx:${Versions.androidxLifecycle}"
+    const val androidxLifecycleRuntime =
+        "androidx.lifecycle:lifecycle-runtime-ktx:${Versions.androidxLifecycle}"
     const val androidxLifecycleViewModel =
         "androidx.lifecycle:lifecycle-viewmodel-ktx:${Versions.androidxLifecycle}"
     const val androidxLifecycleViewModelSavedState =

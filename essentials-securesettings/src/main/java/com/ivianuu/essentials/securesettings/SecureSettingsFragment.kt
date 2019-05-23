@@ -17,12 +17,13 @@
 package com.ivianuu.essentials.securesettings
 
 import android.os.Bundle
+import androidx.lifecycle.lifecycleScope
 import com.ivianuu.epoxyprefs.Preference
 import com.ivianuu.essentials.ui.prefs.PrefsFragment
 import com.ivianuu.essentials.ui.traveler.anim.NavOptions
 import com.ivianuu.essentials.ui.traveler.key.FragmentKey
 import com.ivianuu.essentials.util.Toaster
-import com.ivianuu.essentials.util.ext.coroutineScope
+
 import com.ivianuu.essentials.util.ext.goBackWithResult
 import com.ivianuu.injekt.inject
 import com.ivianuu.traveler.navigate
@@ -85,7 +86,7 @@ class SecureSettingsFragment : PrefsFragment() {
             titleRes(R.string.es_pref_title_use_root)
             summaryRes(R.string.es_pref_summary_use_root)
             onClick {
-                coroutineScope.launch {
+                lifecycleScope.launch {
                     if (secureSettingsHelper.grantWriteSecureSettings()) {
                         handlePermissionResult(true)
                     } else {
