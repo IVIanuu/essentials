@@ -19,11 +19,11 @@ package com.ivianuu.essentials.ui.simple
 import android.graphics.PorterDuff
 import android.os.Bundle
 import android.view.View
-import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.children
 import com.google.android.material.appbar.AppBarLayout
 import com.ivianuu.essentials.R
+import com.ivianuu.essentials.ui.base.EsActivity
 import com.ivianuu.essentials.util.ext.*
 import com.ivianuu.traveler.goBack
 import kotlinx.android.synthetic.main.es_fragment_tabs.es_app_bar
@@ -44,12 +44,9 @@ abstract class ToolbarFragment : CoordinatorFragment() {
     protected open val toolbarTitleRes: Int get() = 0
     protected open val toolbarMenuRes: Int get() = 0
     protected open val toolbarBackButton: Boolean
-        get() {
-            // todo this is way to unreliable..
-            val view = view ?: return false
-            val parent = view.parent as? ViewGroup ?: return false
-            return parent.indexOfChild(view) != 0
-        }
+        get() = activity?.safeAs<EsActivity>()?.fragmentNavigator?.backStack
+            ?.firstOrNull()?.fragmentTag != tag
+
     protected open val lightToolbar: Boolean get() = getPrimaryColor().isLight
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

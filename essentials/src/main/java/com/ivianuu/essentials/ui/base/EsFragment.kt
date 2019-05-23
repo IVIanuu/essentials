@@ -22,6 +22,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.ivianuu.essentials.ui.common.BackHandler
 import com.ivianuu.essentials.ui.mvrx.MvRxView
 import com.ivianuu.essentials.ui.traveler.key.keyModule
 import com.ivianuu.essentials.util.ContextAware
@@ -36,7 +37,7 @@ import com.ivianuu.traveler.Router
 /**
  * Base fragment
  */
-abstract class EsFragment : Fragment(), ContextAware, InjektTrait, MvRxView {
+abstract class EsFragment : Fragment(), BackHandler, ContextAware, InjektTrait, MvRxView {
 
     override val component by unsafeLazy {
         fragmentComponent(
@@ -69,6 +70,8 @@ abstract class EsFragment : Fragment(), ContextAware, InjektTrait, MvRxView {
 
     override fun invalidate() {
     }
+
+    override fun handleBack(): Boolean = false
 
     protected open fun modules(): List<Module> = emptyList()
 

@@ -18,6 +18,7 @@ package com.ivianuu.essentials.ui.base
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.ivianuu.essentials.ui.common.BackHandler
 import com.ivianuu.essentials.ui.mvrx.MvRxView
 import com.ivianuu.essentials.ui.traveler.EsFragmentNavigator
 import com.ivianuu.essentials.ui.traveler.key.keyModule
@@ -55,7 +56,7 @@ abstract class EsActivity : AppCompatActivity(), InjektTrait, MvRxView {
     open val startKey: Any?
         get() = null
 
-    private val fragmentNavigator by unsafeLazy {
+    val fragmentNavigator by unsafeLazy {
         EsFragmentNavigator(supportFragmentManager, containerId)
     }
 
@@ -70,9 +71,9 @@ abstract class EsActivity : AppCompatActivity(), InjektTrait, MvRxView {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
         fragmentNavigator.restoreState(savedInstanceState)
+
+        super.onCreate(savedInstanceState)
 
         if (layoutRes != 0) {
             setContentView(layoutRes)
@@ -99,6 +100,13 @@ abstract class EsActivity : AppCompatActivity(), InjektTrait, MvRxView {
     }
 
     override fun onBackPressed() {
+        val topFragment = fragmentNavigator.backStack.lastOrNull()
+            ?.fragmentTag?.let { supportFragmentManager.findFragmentByTag(it) }
+
+        if (topFragment is BackHandler && topFragment.handleBack()) {
+            return
+        }
+
         if (!fragmentNavigator.handleBack()) {
             super.onBackPressed()
         }

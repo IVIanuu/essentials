@@ -37,7 +37,8 @@ class EsFragmentNavigator(
     private val containerId: Int
 ) : ResultNavigator() {
 
-    private val backStack = mutableListOf<FragmentKey>()
+    val backStack: List<FragmentKey> get() = _backStack
+    private val _backStack = mutableListOf<FragmentKey>()
 
     override fun applyCommandWithResult(command: Command): Boolean {
         return when (command) {
@@ -59,15 +60,15 @@ class EsFragmentNavigator(
 
     fun restoreState(savedInstanceState: Bundle?) {
         if (savedInstanceState == null) return
-        backStack.addAll(savedInstanceState.getParcelableArrayList(KEY_BACKSTACK)!!)
+        _backStack.addAll(savedInstanceState.getParcelableArrayList(KEY_BACKSTACK)!!)
     }
 
     fun saveState(outState: Bundle) {
-        outState.putParcelableArrayList(KEY_BACKSTACK, backStack as ArrayList<FragmentKey>)
+        outState.putParcelableArrayList(KEY_BACKSTACK, _backStack as ArrayList<FragmentKey>)
     }
 
     fun handleBack(): Boolean {
-        return if (backStack.size > 1) {
+        return if (_backStack.size > 1) {
             back()
             true
         } else {
@@ -93,14 +94,14 @@ class EsFragmentNavigator(
             .disallowAddToBackStack()
             .setReorderingAllowed(true)
 
-        val oldKey = backStack.lastOrNull()
+        val oldKey = _backStack.lastOrNull()
         val oldFragment = oldKey?.let { fm.findFragmentByTag(it.fragmentTag)!! }
 
         if (oldFragment != null && !isDialog) {
             transaction.detach(oldFragment)
         }
 
-        backStack.add(key)
+        _backStack.add(key)
 
         if (isDialog) {
             transaction.add(fragment, tag)
@@ -128,9 +129,9 @@ class EsFragmentNavigator(
             .disallowAddToBackStack()
             .setReorderingAllowed(true)
 
-        val oldKey = backStack.lastOrNull()
+        val oldKey = _backStack.lastOrNull()
         if (oldKey != null) {
-            backStack.removeAt(backStack.lastIndex)
+            _backStack.removeAt(_backStack.lastIndex)
         }
 
         val oldFragment = oldKey?.let { fm.findFragmentByTag(it.fragmentTag)!! }
@@ -139,7 +140,7 @@ class EsFragmentNavigator(
             transaction.remove(oldFragment)
         }
 
-        backStack.add(key)
+        _backStack.add(key)
         transaction.add(containerId, fragment, tag)
 
         val transition = options?.push()
@@ -152,11 +153,11 @@ class EsFragmentNavigator(
     }
 
     private fun back() {
-        if (backStack.isEmpty()) return
+        if (_backStack.isEmpty()) return
 
-        val oldTopKey = backStack.removeAt(backStack.lastIndex)
+        val oldTopKey = _backStack.removeAt(_backStack.lastIndex)
         val oldTopFragment = fm.findFragmentByTag(oldTopKey.fragmentTag)!!
-        val newTopKey = backStack.lastOrNull()
+        val newTopKey = _backStack.lastOrNull()
         val newTopFragment = newTopKey?.fragmentTag?.let {
             fm.findFragmentByTag(it)
         }
@@ -183,13 +184,13 @@ class EsFragmentNavigator(
     }
 
     private fun backTo(newTopKey: FragmentKey) {
-        check(backStack.contains(newTopKey)) { "Key is not in the backstack $newTopKey" }
-        val oldTopKey = backStack.last()
+        check(_backStack.contains(newTopKey)) { "Key is not in the backstack $newTopKey" }
+        val oldTopKey = _backStack.last()
         if (oldTopKey == newTopKey) return
 
         val newBackStack = mutableListOf<FragmentKey>()
 
-        for (key in backStack) {
+        for (key in _backStack) {
             newBackStack.add(key)
             if (key == newTopKey) break
         }
@@ -198,12 +199,12 @@ class EsFragmentNavigator(
             .disallowAddToBackStack()
             .setReorderingAllowed(true)
 
-        backStack
+        _backStack
             .filterNot { newBackStack.contains(it) }
             .forEach { transaction.remove(fm.findFragmentByTag(it.fragmentTag)!!) }
 
-        backStack.clear()
-        backStack.addAll(newBackStack)
+        _backStack.clear()
+        _backStack.addAll(newBackStack)
 
         val newTopFragment = fm.findFragmentByTag(newBackStack.last().fragmentTag)!!
         val oldTopFragment = fm.findFragmentByTag(oldTopKey.fragmentTag)!!
@@ -222,8 +223,8 @@ class EsFragmentNavigator(
     }
 
     private fun backToRoot() {
-        if (backStack.isNotEmpty()) {
-            backTo(backStack.first())
+        if (_backStack.isNotEmpty()) {
+            backTo(_backStack.first())
         }
     }
 
