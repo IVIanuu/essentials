@@ -24,8 +24,6 @@ import com.ivianuu.essentials.sample.ui.list.ListKey
 import com.ivianuu.essentials.sample.work.MyWorkerOne
 import com.ivianuu.essentials.sample.work.MyWorkerTwo
 import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
-import com.ivianuu.essentials.ui.traveler.anim.NavOptions
-import com.ivianuu.essentials.ui.traveler.anim.horizontal
 import com.ivianuu.traveler.*
 
 class CounterViewModel(
@@ -35,10 +33,7 @@ class CounterViewModel(
 
     fun screenUpClicked() {
         withState {
-            router.navigate(
-                CounterKey(it.screen.inc()),
-                NavOptions().horizontal()
-            )
+            router.navigate(CounterKey(it.screen.inc()))
         }
     }
 

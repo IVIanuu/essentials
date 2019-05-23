@@ -17,23 +17,55 @@
 package com.ivianuu.essentials.sample.ui.counter
 
 import android.os.Bundle
+import android.transition.ChangeBounds
+import android.transition.ChangeTransform
+import android.transition.Slide
+import android.view.Gravity
 import android.view.View
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.base.EsFragment
 import com.ivianuu.essentials.ui.mvrx.injekt.injectMvRxViewModel
 import com.ivianuu.essentials.ui.mvrx.withState
+import com.ivianuu.essentials.ui.traveler.anim.FragmentTransition
 import com.ivianuu.essentials.ui.traveler.anim.NavOptions
-import com.ivianuu.essentials.ui.traveler.anim.horizontal
+import com.ivianuu.essentials.ui.traveler.anim.transition
 import com.ivianuu.essentials.ui.traveler.key.FragmentKey
-import com.ivianuu.essentials.ui.traveler.key.getKey
+import com.ivianuu.kommon.core.transition.transitionSetOf
+import com.ivianuu.kommon.fragment.app.addSharedElement
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.controller_counter.*
 
 @Parcelize
 data class CounterKey(val screen: Int) : FragmentKey(
     ::CounterFragment,
-    options = NavOptions().horizontal()
+    options = NavOptions().transition(CounterTransition())
 )
+
+class CounterTransition : FragmentTransition {
+    override fun setup(
+        transaction: FragmentTransaction,
+        from: Fragment?,
+        to: Fragment?,
+        isPush: Boolean
+    ) {
+        if (from == null || to == null) return
+
+        transaction.addSharedElement("count")
+
+        if (isPush) {
+            from.exitTransition = Slide(Gravity.START)
+            to.enterTransition = Slide(Gravity.END)
+        } else {
+            from.exitTransition = Slide(Gravity.END)
+            to.enterTransition = Slide(Gravity.START)
+        }
+
+        from.sharedElementReturnTransition = transitionSetOf(ChangeBounds(), ChangeTransform())
+        to.sharedElementEnterTransition = transitionSetOf(ChangeBounds(), ChangeTransform())
+    }
+}
 
 class CounterFragment : EsFragment() {
 
@@ -45,6 +77,7 @@ class CounterFragment : EsFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         screen_up.setOnClickListener { viewModel.screenUpClicked() }
         screen_down.setOnClickListener { viewModel.screenDownClicked() }
         root_screen.setOnClickListener { viewModel.rootScreenClicked() }
@@ -57,5 +90,4 @@ class CounterFragment : EsFragment() {
         withState(viewModel) { count.text = "Screen : ${it.screen}" }
     }
 
-    override fun toString() = "CounterFragment(${getKey<CounterKey>().screen})"
 }

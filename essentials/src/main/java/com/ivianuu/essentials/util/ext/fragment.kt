@@ -29,6 +29,8 @@ fun Fragment.clearTransitions() {
     exitTransition = null
     reenterTransition = null
     returnTransition = null
+    sharedElementEnterTransition = null
+    sharedElementReturnTransition = null
     allowEnterTransitionOverlap = true
     allowReturnTransitionOverlap = true
 }

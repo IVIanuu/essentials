@@ -55,6 +55,7 @@ dependencies {
 
     api(Deps.kommonAppCompat)
     api(Deps.kommonCore)
+    api(Deps.kommonFragment)
     api(Deps.kommonLifecycle)
     api(Deps.kommonMaterial)
     api(Deps.kommonRecyclerView)

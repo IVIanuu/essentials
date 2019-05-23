@@ -19,14 +19,15 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
-    android:transitionGroup="true">
+    android:gravity="center">
 
     <TextView
         android:id="@+id/count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="20sp" />
+        android:textSize="20sp"
+        android:textAppearance="?textAppearanceHeadline1"
+        android:transitionName="count" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/screen_up"

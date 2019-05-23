@@ -34,6 +34,7 @@ abstract class FragmentKey(
     open val fragmentTag: String? get() = _fragmentTag ?: this.toString()
 
     open fun createFragment(): Fragment = factory().also { addTo(it) }
+
 }
 
 fun FragmentKey.addTo(fragment: Fragment) {

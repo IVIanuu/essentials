@@ -58,7 +58,7 @@ object Versions {
     const val glide = "4.9.0"
     const val injekt = "0.0.1-dev-29"
     const val junit = "4.12"
-    const val kommon = "0.0.1-dev-10"
+    const val kommon = "0.0.1-dev-12"
     const val kotlin = "1.3.31"
     const val kPrefs = "0.0.1-dev-9"
     const val kSettings = "0.0.1-dev-7"
@@ -125,6 +125,8 @@ object Deps {
     const val kommonAppCompat =
         "com.ivianuu.kommon:kommon-appcompat:${Versions.kommon}"
     const val kommonCore = "com.ivianuu.kommon:kommon-core:${Versions.kommon}"
+    const val kommonFragment =
+        "com.ivianuu.kommon:kommon-fragment:${Versions.kommon}"
     const val kommonLifecycle =
         "com.ivianuu.kommon:kommon-lifecycle:${Versions.kommon}"
     const val kommonMaterial =
