@@ -32,7 +32,7 @@ import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.single_line_list_item.title
 
 @Parcelize
-object ListKey : FragmentKey(::ListFragment, options = NavOptions().vertical(3000))
+object ListKey : FragmentKey(::ListFragment, options = NavOptions().vertical())
 
 class ListFragment : com.ivianuu.essentials.ui.simple.ListFragment() {
 

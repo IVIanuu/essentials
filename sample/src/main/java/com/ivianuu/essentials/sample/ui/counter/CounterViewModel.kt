@@ -18,7 +18,6 @@ package com.ivianuu.essentials.sample.ui.counter
 
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
-import com.ivianuu.essentials.picker.TextInputKey
 import com.ivianuu.essentials.sample.ui.checkapps.CheckAppsKey
 import com.ivianuu.essentials.sample.ui.list.ListKey
 import com.ivianuu.essentials.sample.work.MyWorkerOne
@@ -57,7 +56,6 @@ class CounterViewModel(
 
     fun checkAppsClicked() {
         router.navigate(CheckAppsKey)
-        router.navigate(TextInputKey("Lolo", resultCode = 0))
     }
 
     fun doWorkClicked() {
