@@ -27,7 +27,7 @@ import java.io.Serializable
 fun <T> observable(block: ObservableEmitter<T>.() -> Unit): Observable<T> = Observable.create(block)
 
 fun <T> BehaviorSubject(): BehaviorSubject<T> = BehaviorSubject.create()
-fun <T> BehaviorSubject(default : T): BehaviorSubject<T> = BehaviorSubject.createDefault(default)
+fun <T> BehaviorSubject(default: T): BehaviorSubject<T> = BehaviorSubject.createDefault(default)
 fun <T> PublishSubject(): PublishSubject<T> = PublishSubject.create()
 
 fun <T : Any> BehaviorSubject<T>.requireValue(): T =

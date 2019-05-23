@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2018 Manuel Wrage
  *
@@ -15,19 +14,17 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.sample.ui
+package com.ivianuu.essentials.ui.simple
 
-import android.os.Bundle
-import com.ivianuu.essentials.sample.ui.counter.CounterKey
-import com.ivianuu.essentials.ui.base.EsActivity
+import com.ivianuu.essentials.ui.base.EsFragment
+import kotlinx.android.synthetic.main.es_fragment_list.es_coordinator_layout
 
-class MainActivity : EsActivity() {
+/**
+ * A controller which hosts a coordinator layout
+ */
+abstract class CoordinatorFragment : EsFragment() {
 
-    override val startKey: Any? get() = CounterKey(1)
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        //  router.navigate(NavBarSettingsKey(true, true))
-    }
+    open val coordinatorLayout
+        get() = es_coordinator_layout
 
 }

@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2018 Manuel Wrage
  *
@@ -15,19 +14,16 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.sample.ui
+package androidx.fragment.app
 
-import android.os.Bundle
-import com.ivianuu.essentials.sample.ui.counter.CounterKey
-import com.ivianuu.essentials.ui.base.EsActivity
-
-class MainActivity : EsActivity() {
-
-    override val startKey: Any? get() = CounterKey(1)
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        //  router.navigate(NavBarSettingsKey(true, true))
+var DialogFragment.shownByMe
+    get() = mShownByMe
+    set(value) {
+        mShownByMe = value
     }
 
-}
+var DialogFragment.dismissed
+    get() = mDismissed
+    set(value) {
+        mDismissed = value
+    }

@@ -20,17 +20,17 @@
     <!-- Default activity -->
     <item name="es_container" type="id" />
 
-    <!-- Coordinator controller -->
+    <!-- Coordinator fragment -->
     <item name="es_coordinator_layout" type="id" />
 
-    <!-- Toolbar controller -->
+    <!-- Toolbar fragment -->
     <item name="es_app_bar" type="id" />
     <item name="es_toolbar" type="id" />
 
-    <!-- List controller -->
+    <!-- List fragment -->
     <item name="es_recycler_view" type="id" />
 
-    <!-- Tabs controller -->
+    <!-- Tabs fragment -->
     <item name="es_tab_layout" type="id" />
     <item name="es_view_pager" type="id" />
 

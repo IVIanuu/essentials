@@ -18,7 +18,8 @@
     android:id="@id/es_coordinator_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?android:colorBackground">
+    android:background="?android:colorBackground"
+    android:transitionGroup="true">
 
     <include layout="@layout/es_view_app_bar_with_toolbar" />
 

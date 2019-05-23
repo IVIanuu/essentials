@@ -18,21 +18,21 @@ package com.ivianuu.essentials.ui.simple
 
 import android.graphics.PorterDuff
 import android.os.Bundle
-import android.view.MenuItem
 import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.children
 import com.google.android.material.appbar.AppBarLayout
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.util.ext.*
 import com.ivianuu.traveler.goBack
-import kotlinx.android.synthetic.main.es_view_app_bar_with_toolbar.es_app_bar
+import kotlinx.android.synthetic.main.es_fragment_tabs.es_app_bar
 import kotlinx.android.synthetic.main.es_view_toolbar.es_toolbar
 
 /**
- * A controller which hosts a toolbar
+ * A fragment which hosts a toolbar
  */
-abstract class ToolbarController : CoordinatorController() {
+abstract class ToolbarFragment : CoordinatorFragment() {
 
     val appBar: AppBarLayout
         get() = es_app_bar
@@ -43,11 +43,17 @@ abstract class ToolbarController : CoordinatorController() {
     protected open val toolbarTitle: String? get() = null
     protected open val toolbarTitleRes: Int get() = 0
     protected open val toolbarMenuRes: Int get() = 0
-    protected open val toolbarBackButton: Boolean get() = router.backstack.firstOrNull() != this
+    protected open val toolbarBackButton: Boolean
+        get() {
+            // todo this is way to unreliable..
+            val view = view ?: return false
+            val parent = view.parent as? ViewGroup ?: return false
+            return parent.indexOfChild(view) != 0
+        }
     protected open val lightToolbar: Boolean get() = getPrimaryColor().isLight
 
-    override fun onViewCreated(view: View, savedViewState: Bundle?) {
-        super.onViewCreated(view, savedViewState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         with(toolbar) {
             when {
@@ -57,12 +63,12 @@ abstract class ToolbarController : CoordinatorController() {
 
             if (toolbarMenuRes != 0) {
                 inflateMenu(toolbarMenuRes)
-                setOnMenuItemClickListener { onToolbarMenuItemClicked(it) }
+                setOnMenuItemClickListener { onOptionsItemSelected(it) }
             }
 
             if (toolbarBackButton) {
                 setNavigationIcon(R.drawable.abc_ic_ab_back_material)
-                setNavigationOnClickListener { travelerRouter.goBack() }
+                setNavigationOnClickListener { router.goBack() }
             }
 
             val titleColor = getPrimaryTextColor(!lightToolbar)
@@ -79,7 +85,5 @@ abstract class ToolbarController : CoordinatorController() {
                 .forEach { it.setColorFilter(iconColor, PorterDuff.Mode.SRC_IN) }
         }
     }
-
-    open fun onToolbarMenuItemClicked(item: MenuItem): Boolean = false
 
 }

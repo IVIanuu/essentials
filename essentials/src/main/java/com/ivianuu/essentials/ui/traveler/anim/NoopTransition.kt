@@ -14,18 +14,23 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.simple
+package com.ivianuu.essentials.ui.traveler.anim
 
-import androidx.coordinatorlayout.widget.CoordinatorLayout
-import com.ivianuu.essentials.ui.base.EsController
-import kotlinx.android.synthetic.main.es_controller_list.es_coordinator_layout
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
+import com.ivianuu.essentials.util.ext.clearTransitions
 
 /**
- * A controller which hosts a coordinator layout
+ * @author Manuel Wrage (IVIanuu)
  */
-abstract class CoordinatorController : EsController() {
-
-    open val coordinatorLayout: CoordinatorLayout
-        get() = es_coordinator_layout
-
+object NoopTransition : FragmentTransition {
+    override fun setup(
+        transaction: FragmentTransaction,
+        from: Fragment?,
+        to: Fragment?,
+        isPush: Boolean
+    ) {
+        from?.clearTransitions()
+        to?.clearTransitions()
+    }
 }

@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2018 Manuel Wrage
  *
@@ -15,19 +14,19 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.sample.ui
+package com.ivianuu.essentials.ui.traveler.anim
 
-import android.os.Bundle
-import com.ivianuu.essentials.sample.ui.counter.CounterKey
-import com.ivianuu.essentials.ui.base.EsActivity
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 
-class MainActivity : EsActivity() {
-
-    override val startKey: Any? get() = CounterKey(1)
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        //  router.navigate(NavBarSettingsKey(true, true))
-    }
-
+/**
+ * @author Manuel Wrage (IVIanuu)
+ */
+interface FragmentTransition {
+    fun setup(
+        transaction: FragmentTransaction,
+        from: Fragment?,
+        to: Fragment?,
+        isPush: Boolean
+    )
 }

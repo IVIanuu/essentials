@@ -28,9 +28,9 @@ import com.ivianuu.essentials.ui.epoxy.SimpleLoading
 import com.ivianuu.essentials.ui.epoxy.model
 import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
 import com.ivianuu.essentials.ui.mvrx.epoxy.mvRxEpoxyController
-import com.ivianuu.essentials.ui.mvrx.injekt.mvRxViewModel
-import com.ivianuu.essentials.ui.simple.ListController
-import com.ivianuu.essentials.ui.traveler.key.ControllerKey
+import com.ivianuu.essentials.ui.mvrx.injekt.injectMvRxViewModel
+import com.ivianuu.essentials.ui.simple.ListFragment
+import com.ivianuu.essentials.ui.traveler.key.FragmentKey
 import com.ivianuu.essentials.util.Async
 import com.ivianuu.essentials.util.Loading
 import com.ivianuu.essentials.util.Success
@@ -49,19 +49,19 @@ import kotlinx.coroutines.async
 data class AppPickerKey(
     val resultCode: Int,
     val launchableOnly: Boolean = false
-) : ControllerKey(::AppPickerController)
+) : FragmentKey(::AppPickerController)
 
 /**
  * App picker controller
  */
-class AppPickerController : ListController() {
+class AppPickerController : ListFragment() {
 
     override fun modules() = listOf(appPickerModule)
 
     override val toolbarTitleRes: Int
         get() = R.string.es_title_app_picker
 
-    private val viewModel: AppPickerViewModel by mvRxViewModel()
+    private val viewModel: AppPickerViewModel by injectMvRxViewModel()
 
     override fun epoxyController() = mvRxEpoxyController(viewModel) { state ->
         when(state.apps) {
@@ -78,8 +78,10 @@ private fun EpoxyController.AppInfo(
     app: AppInfo,
     onClick: () -> Unit
 ) = model(
-    id = app.packageName, layoutRes = R.layout.es_item_app,
-    state = arrayOf(app), bind = {
+    id = app.packageName,
+    layoutRes = R.layout.es_item_app,
+    state = arrayOf(app),
+    bind = {
         Glide.with(es_app_icon)
             .load(AppIcon(app.packageName))
             .apply(

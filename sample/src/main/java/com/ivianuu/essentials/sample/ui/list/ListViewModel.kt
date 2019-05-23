@@ -49,6 +49,6 @@ class ListViewModel : MvRxViewModel<ListState>(ListState()) {
 }
 
 data class ListState(
-    val loading: Boolean = false,
+    val loading: Boolean = true,
     val items: List<String> = emptyList()
 )

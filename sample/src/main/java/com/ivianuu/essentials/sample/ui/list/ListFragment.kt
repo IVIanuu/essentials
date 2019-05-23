@@ -23,22 +23,22 @@ import com.ivianuu.essentials.ui.epoxy.SimpleLoading
 import com.ivianuu.essentials.ui.epoxy.SimpleText
 import com.ivianuu.essentials.ui.epoxy.model
 import com.ivianuu.essentials.ui.mvrx.epoxy.mvRxEpoxyController
-import com.ivianuu.essentials.ui.mvrx.injekt.mvRxViewModel
-import com.ivianuu.essentials.ui.traveler.NavOptions
-import com.ivianuu.essentials.ui.traveler.key.ControllerKey
-import com.ivianuu.essentials.ui.traveler.vertical
+import com.ivianuu.essentials.ui.mvrx.injekt.injectMvRxViewModel
+import com.ivianuu.essentials.ui.traveler.anim.NavOptions
+import com.ivianuu.essentials.ui.traveler.anim.vertical
+import com.ivianuu.essentials.ui.traveler.key.FragmentKey
 import com.ivianuu.essentials.util.ext.andTrue
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.single_line_list_item.title
 
 @Parcelize
-class ListKey : ControllerKey(::ListController, NavOptions().vertical())
+object ListKey : FragmentKey(::ListFragment, options = NavOptions().vertical())
 
-class ListController : com.ivianuu.essentials.ui.simple.ListController() {
+class ListFragment : com.ivianuu.essentials.ui.simple.ListFragment() {
 
     override fun modules() = listOf(listModule)
 
-    private val viewModel: ListViewModel by mvRxViewModel()
+    private val viewModel: ListViewModel by injectMvRxViewModel()
 
     override val toolbarMenuRes get() = R.menu.controller_list
     override val toolbarTitle get() = "List"
@@ -51,7 +51,7 @@ class ListController : com.ivianuu.essentials.ui.simple.ListController() {
         }
     }
 
-    override fun onToolbarMenuItemClicked(item: MenuItem) = when (item.itemId) {
+    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         R.id.action_refresh -> viewModel.refreshClicked().andTrue()
         else -> false
     }

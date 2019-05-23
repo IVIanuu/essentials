@@ -16,10 +16,9 @@
 
 package com.ivianuu.essentials.securesettings
 
-import com.ivianuu.director.activity
 import com.ivianuu.epoxyprefs.Preference
-import com.ivianuu.essentials.ui.prefs.PrefsController
-import com.ivianuu.essentials.ui.traveler.key.ControllerKey
+import com.ivianuu.essentials.ui.prefs.PrefsFragment
+import com.ivianuu.essentials.ui.traveler.key.FragmentKey
 import com.ivianuu.essentials.ui.traveler.key.UrlKey
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.essentials.util.string
@@ -28,18 +27,18 @@ import com.ivianuu.traveler.navigate
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-class SecureSettingsPcInstructionsKey : ControllerKey(::SecureSettingsPcInstructionsController)
+class SecureSettingsPcInstructionsKey : FragmentKey(::SecureSettingsPcInstructionsFragment)
 
 /**
  * Asks the user for the secure settings permission
  */
-class SecureSettingsPcInstructionsController : PrefsController() {
-
-    private val clipboardHelper by inject<ClipboardAccessor>()
-    private val toaster by inject<Toaster>()
+class SecureSettingsPcInstructionsFragment : PrefsFragment() {
 
     override val toolbarTitleRes: Int
         get() = R.string.es_title_secure_settings_pc_instructions
+
+    private val clipboardHelper by inject<ClipboardAccessor>()
+    private val toaster by inject<Toaster>()
 
     override fun epoxyController() = epoxyController {
         Preference {
@@ -71,7 +70,7 @@ class SecureSettingsPcInstructionsController : PrefsController() {
             iconRes(R.drawable.es_ic_link)
             summaryRes(R.string.es_pref_summary_secure_settings_link_gadget_hacks)
             onClick {
-                travelerRouter.navigate(UrlKey("https://youtu.be/CDuxcrrWLnY"))
+                router.navigate(UrlKey("https://youtu.be/CDuxcrrWLnY"))
                 return@onClick true
             }
         }
@@ -81,7 +80,7 @@ class SecureSettingsPcInstructionsController : PrefsController() {
             iconRes(R.drawable.es_ic_link)
             summaryRes(R.string.es_pref_summary_secure_settings_link_lifehacker)
             onClick {
-                travelerRouter.navigate(UrlKey("https://lifehacker.com/the-easiest-way-to-install-androids-adb-and-fastboot-to-1586992378"))
+                router.navigate(UrlKey("https://lifehacker.com/the-easiest-way-to-install-androids-adb-and-fastboot-to-1586992378"))
                 return@onClick true
             }
         }
@@ -91,7 +90,7 @@ class SecureSettingsPcInstructionsController : PrefsController() {
             iconRes(R.drawable.es_ic_link)
             summaryRes(R.string.es_pref_summary_secure_settings_link_xda)
             onClick {
-                travelerRouter.navigate(UrlKey("https://www.xda-developers.com/install-adb-windows-macos-linux/"))
+                router.navigate(UrlKey("https://www.xda-developers.com/install-adb-windows-macos-linux/"))
                 return@onClick true
             }
         }
@@ -99,10 +98,15 @@ class SecureSettingsPcInstructionsController : PrefsController() {
         Preference {
             key("secure_settings_step_4")
             titleRes(R.string.es_pref_title_secure_settings_step_4)
-            summary(string(R.string.es_pref_summary_secure_settings_step_4, activity.packageName))
+            summary(
+                string(
+                    R.string.es_pref_summary_secure_settings_step_4,
+                    requireContext().packageName
+                )
+            )
             onClick {
                 clipboardHelper.clipboardText =
-                    "adb shell pm grant ${activity.packageName} android.permission.WRITE_SECURE_SETTINGS"
+                    "adb shell pm grant ${requireContext().packageName} android.permission.WRITE_SECURE_SETTINGS"
 
                 toaster.toast(R.string.es_msg_secure_settings_copied_to_clipboard)
                 return@onClick true

@@ -46,16 +46,6 @@ dependencies {
 
     api(Deps.constraintLayout)
 
-    api(Deps.director)
-    api(Deps.directorActivityCallbacks)
-    api(Deps.directorAndroidxLifecycle)
-    api(Deps.directorCommon)
-    api(Deps.directorDialog)
-    api(Deps.directorFragment)
-    api(Deps.directorPager)
-    api(Deps.directorScopes)
-    api(Deps.directorTraveler)
-
     api(Deps.epoxy)
     api(Deps.epoxyPrefs)
 
@@ -65,6 +55,7 @@ dependencies {
 
     api(Deps.kommonAppCompat)
     api(Deps.kommonCore)
+    api(Deps.kommonFragment)
     api(Deps.kommonLifecycle)
     api(Deps.kommonMaterial)
     api(Deps.kommonRecyclerView)

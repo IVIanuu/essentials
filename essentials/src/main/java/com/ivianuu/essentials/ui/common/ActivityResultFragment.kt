@@ -19,16 +19,8 @@ package com.ivianuu.essentials.ui.common
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import com.ivianuu.director.activity
-import com.ivianuu.director.activitycallbacks.addActivityResultListener
-import com.ivianuu.director.activitycallbacks.startActivityForResult
-import com.ivianuu.essentials.ui.base.EsController
-import com.ivianuu.essentials.ui.traveler.NavOptions
-import com.ivianuu.essentials.ui.traveler.dialog
-import com.ivianuu.essentials.ui.traveler.key.ControllerKey
+import com.ivianuu.essentials.ui.base.EsFragment
+import com.ivianuu.essentials.ui.traveler.key.FragmentKey
 import com.ivianuu.essentials.util.ext.goBackWithResult
 import com.ivianuu.injekt.inject
 import kotlinx.android.parcel.Parcelize
@@ -38,33 +30,27 @@ data class ActivityResultKey(
     val resultCode: Int,
     val intent: Intent,
     val requestCode: Int
-) : ControllerKey(::ActivityResultController, NavOptions().dialog())
+) : FragmentKey(::ActivityResultFragment)
 
 /**
- * Activity result controller
+ * Activity result fragment
  */
-class ActivityResultController : EsController() {
+class ActivityResultFragment : EsFragment() {
 
     private val key by inject<ActivityResultKey>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        addActivityResultListener(key.requestCode) { requestCode, resultCode, data ->
-            travelerRouter.goBackWithResult(
-                key.resultCode,
-                ActivityResult(requestCode, resultCode, data)
-            )
-        }
-
         startActivityForResult(key.intent, key.requestCode)
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup,
-        savedViewState: Bundle?
-    ) = View(activity)
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        router.goBackWithResult(
+            key.resultCode,
+            ActivityResult(requestCode, resultCode, data)
+        )
+    }
 
 }
 

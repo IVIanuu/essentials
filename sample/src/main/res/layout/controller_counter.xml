@@ -25,7 +25,8 @@
         android:id="@+id/count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="20sp" />
+        android:textAppearance="?textAppearanceHeadline6"
+        android:transitionName="count" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/screen_up"

@@ -21,16 +21,15 @@ import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.epoxy.EpoxyController
 import com.ivianuu.essentials.R
-
 import kotlinx.android.synthetic.main.es_view_recycler_view.es_recycler_view
 
 /**
- * Simple controller
+ * Simple fragment
  */
-abstract class ListController : ToolbarController() {
+abstract class ListFragment : ToolbarFragment() {
 
     override val layoutRes: Int
-        get() = R.layout.es_controller_list
+        get() = R.layout.es_fragment_list
 
     val recyclerView: RecyclerView
         get() = es_recycler_view
@@ -45,9 +44,9 @@ abstract class ListController : ToolbarController() {
         }
     }
 
-    override fun onDestroyView(view: View) {
+    override fun onDestroyView() {
         epoxyController.cancelPendingModelBuild()
-        super.onDestroyView(view)
+        super.onDestroyView()
     }
 
     override fun invalidate() {

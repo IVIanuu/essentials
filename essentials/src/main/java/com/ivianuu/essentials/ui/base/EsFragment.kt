@@ -21,14 +21,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.ViewModelStore
-import com.ivianuu.director.Controller
-import com.ivianuu.director.activity
-import com.ivianuu.director.androidx.lifecycle.lifecycleOwner
-import com.ivianuu.director.androidx.lifecycle.viewModelStoreOwner
-import com.ivianuu.director.context
-import com.ivianuu.essentials.injection.controllerComponent
+import androidx.fragment.app.Fragment
 import com.ivianuu.essentials.ui.mvrx.MvRxView
 import com.ivianuu.essentials.ui.traveler.key.keyModule
 import com.ivianuu.essentials.util.ContextAware
@@ -36,71 +29,47 @@ import com.ivianuu.essentials.util.InjektTraitContextWrapper
 import com.ivianuu.essentials.util.ext.unsafeLazy
 import com.ivianuu.injekt.InjektTrait
 import com.ivianuu.injekt.Module
+import com.ivianuu.injekt.android.fragmentComponent
 import com.ivianuu.injekt.inject
 import com.ivianuu.traveler.Router
-import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.*
 
 /**
- * Base controller
+ * Base fragment
  */
-abstract class EsController : Controller(), ContextAware, InjektTrait, LayoutContainer, MvRxView {
+abstract class EsFragment : Fragment(), ContextAware, InjektTrait, MvRxView {
 
     override val component by unsafeLazy {
-        controllerComponent(
-            modules = listOf(keyModule(args)) + modules()
+        fragmentComponent(
+            modules = listOf(keyModule(arguments)) + modules()
         )
     }
 
-    override val containerView: View?
-        get() = _containerView
-    private var _containerView: View? = null
-
     override val providedContext: Context
-        get() = context
+        get() = requireContext()
 
-    override fun getViewModelStore(): ViewModelStore = viewModelStoreOwner.viewModelStore
-
-    val travelerRouter by inject<Router>()
+    val router by inject<Router>()
 
     protected open val layoutRes get() = -1
 
     override fun onCreateView(
         inflater: LayoutInflater,
-        container: ViewGroup,
-        savedViewState: Bundle?
-    ): View {
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         check(layoutRes != -1) { "no layoutRes provided" }
         val injectorInflater =
-            inflater.cloneInContext(InjektTraitContextWrapper(activity, this))
+            inflater.cloneInContext(InjektTraitContextWrapper(requireContext(), this))
         return injectorInflater.inflate(layoutRes, container, false)
-            .also { setContentView(it, savedViewState) }
     }
 
-    override fun onAttach(view: View) {
-        super.onAttach(view)
+    override fun onStart() {
+        super.onStart()
         invalidate()
-    }
-
-    override fun onDestroyView(view: View) {
-        clearFindViewByIdCache()
-        _containerView = null
-        super.onDestroyView(view)
     }
 
     override fun invalidate() {
     }
 
-    override fun getLifecycle(): Lifecycle = lifecycleOwner.lifecycle
-
     protected open fun modules(): List<Module> = emptyList()
-
-    protected fun setContentView(view: View, savedViewState: Bundle?) {
-        _containerView = view
-        onViewCreated(view, savedViewState)
-    }
-
-    protected open fun onViewCreated(view: View, savedViewState: Bundle?) {
-    }
 
 }

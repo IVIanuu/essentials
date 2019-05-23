@@ -16,45 +16,65 @@
 
 package com.ivianuu.essentials.ui.base
 
-
 import android.content.Context
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.ViewModelStore
-import androidx.lifecycle.ViewModelStoreOwner
-import com.ivianuu.director.androidx.lifecycle.lifecycleOwner
-import com.ivianuu.director.androidx.lifecycle.viewModelStoreOwner
-import com.ivianuu.director.context
-import com.ivianuu.director.dialog.DialogController
-import com.ivianuu.essentials.injection.controllerComponent
+import android.content.DialogInterface
+import androidx.fragment.app.DialogFragment
+import com.ivianuu.essentials.ui.mvrx.MvRxView
 import com.ivianuu.essentials.ui.traveler.key.keyModule
 import com.ivianuu.essentials.util.ContextAware
 import com.ivianuu.essentials.util.ext.unsafeLazy
 import com.ivianuu.injekt.InjektTrait
 import com.ivianuu.injekt.Module
+import com.ivianuu.injekt.android.fragmentComponent
 import com.ivianuu.injekt.inject
 import com.ivianuu.traveler.Router
+import com.ivianuu.traveler.goBack
 
 /**
- * Base dialog controller
+ * Base dialog fragment
  */
-abstract class EsDialogController : DialogController(), ContextAware, InjektTrait, LifecycleOwner,
-    ViewModelStoreOwner {
+abstract class EsDialogFragment : DialogFragment(), ContextAware, InjektTrait, MvRxView {
 
     override val component by unsafeLazy {
-        controllerComponent(
-            modules = listOf(keyModule(args)) + modules()
+        fragmentComponent(
+            modules = listOf(keyModule(arguments)) + modules()
         )
     }
 
     override val providedContext: Context
-        get() = context
+        get() = requireContext()
 
-    override fun getViewModelStore(): ViewModelStore = viewModelStoreOwner.viewModelStore
+    val router by inject<Router>()
 
-    val travelerRouter by inject<Router>()
+    private var dismissed = false
 
-    override fun getLifecycle(): Lifecycle = lifecycleOwner.lifecycle
+    override fun onStart() {
+        super.onStart()
+        invalidate()
+    }
+
+    override fun dismiss() {
+        dismissInternal()
+    }
+
+    override fun dismissAllowingStateLoss() {
+        dismissInternal()
+    }
+
+    override fun onDismiss(dialog: DialogInterface) {
+        dismissInternal()
+    }
+
+    override fun invalidate() {
+    }
 
     protected open fun modules(): List<Module> = emptyList()
+
+    private fun dismissInternal() {
+        if (!dismissed) {
+            dismissed = true
+            router.goBack()
+        }
+    }
+
 }
