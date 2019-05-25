@@ -16,21 +16,8 @@
 
 package com.ivianuu.essentials.util.ext
 
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import com.ivianuu.essentials.util.coroutineScope
-import com.ivianuu.scopes.android.onDestroy
-import com.ivianuu.scopes.android.viewOnDestroy
+import com.ivianuu.director.Controller
 
-val Fragment.viewLifecycleScope get() = viewLifecycleOwner.lifecycleScope
-
-fun Fragment.clearTransitions() {
-    enterTransition = null
-    exitTransition = null
-    reenterTransition = null
-    returnTransition = null
-    sharedElementEnterTransition = null
-    sharedElementReturnTransition = null
-    allowEnterTransitionOverlap = true
-    allowReturnTransitionOverlap = true
-}
+val Controller.viewLifecycleScope
+    get() = viewLifecycleOwner.lifecycleScope
