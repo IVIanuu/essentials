@@ -25,7 +25,7 @@
         android:id="@+id/count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?textAppearanceHeadline6"
+        android:textAppearance="?textAppearanceHeadline3"
         android:transitionName="count" />
 
     <com.google.android.material.button.MaterialButton
