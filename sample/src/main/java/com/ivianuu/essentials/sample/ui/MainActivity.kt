@@ -18,8 +18,10 @@
 package com.ivianuu.essentials.sample.ui
 
 import android.os.Bundle
+import com.ivianuu.essentials.hidenavbar.NavBarSettingsKey
 import com.ivianuu.essentials.sample.ui.counter.CounterKey
 import com.ivianuu.essentials.ui.base.EsActivity
+import com.ivianuu.traveler.navigate
 
 class MainActivity : EsActivity() {
 
@@ -27,7 +29,7 @@ class MainActivity : EsActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //  travelerRouter.navigate(NavBarSettingsKey(true, true))
+        travelerRouter.navigate(NavBarSettingsKey(true, true))
     }
 
 }
