@@ -31,7 +31,7 @@ import com.ivianuu.essentials.ui.epoxy.model
 import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
 import com.ivianuu.essentials.ui.mvrx.epoxy.mvRxEpoxyController
 import com.ivianuu.essentials.ui.mvrx.mvRxViewModel
-import com.ivianuu.essentials.ui.simple.ListFragment
+import com.ivianuu.essentials.ui.simple.ListController
 import com.ivianuu.essentials.util.*
 import com.ivianuu.essentials.util.ext.BehaviorSubject
 import com.ivianuu.essentials.util.ext.PublishSubject
@@ -56,7 +56,7 @@ import kotlinx.coroutines.rx2.asSingle
 /**
  * App blacklist
  */
-abstract class CheckableAppsFragment : ListFragment() {
+abstract class CheckableAppsController : ListController() {
 
     override fun modules() = listOf(checkableAppsModule)
 
@@ -93,7 +93,7 @@ abstract class CheckableAppsFragment : ListFragment() {
         }
     }
 
-    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+    override fun onToolbarMenuItemClicked(item: MenuItem) = when (item.itemId) {
         R.id.es_action_select_all -> viewModel.selectAllClicked().andTrue()
         R.id.es_action_deselect_all -> viewModel.deselectAllClicked().andTrue()
         else -> false

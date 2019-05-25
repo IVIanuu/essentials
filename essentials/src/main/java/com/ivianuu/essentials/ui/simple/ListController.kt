@@ -24,9 +24,9 @@ import com.ivianuu.essentials.R
 import kotlinx.android.synthetic.main.es_view_recycler_view.es_recycler_view
 
 /**
- * Simple fragment
+ * Simple controller
  */
-abstract class ListFragment : ToolbarFragment() {
+abstract class ListController : ToolbarController() {
 
     override val layoutRes: Int
         get() = R.layout.es_fragment_list
@@ -44,9 +44,9 @@ abstract class ListFragment : ToolbarFragment() {
         }
     }
 
-    override fun onDestroyView() {
+    override fun onDestroyView(view: View) {
+        super.onDestroyView(view)
         epoxyController.cancelPendingModelBuild()
-        super.onDestroyView()
     }
 
     override fun invalidate() {

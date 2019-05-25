@@ -29,8 +29,8 @@ import com.ivianuu.essentials.ui.epoxy.model
 import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
 import com.ivianuu.essentials.ui.mvrx.epoxy.mvRxEpoxyController
 import com.ivianuu.essentials.ui.mvrx.injekt.injectMvRxViewModel
-import com.ivianuu.essentials.ui.simple.ListFragment
-import com.ivianuu.essentials.ui.traveler.key.FragmentKey
+import com.ivianuu.essentials.ui.simple.ListController
+import com.ivianuu.essentials.ui.traveler.key.ControllerKey
 import com.ivianuu.essentials.util.Async
 import com.ivianuu.essentials.util.Loading
 import com.ivianuu.essentials.util.Success
@@ -49,12 +49,12 @@ import kotlinx.coroutines.async
 data class AppPickerKey(
     val resultCode: Int,
     val launchableOnly: Boolean = false
-) : FragmentKey(::AppPickerController)
+) : ControllerKey(::AppPickerController)
 
 /**
  * App picker controller
  */
-class AppPickerController : ListFragment() {
+class AppPickerController : ListController() {
 
     override fun modules() = listOf(appPickerModule)
 

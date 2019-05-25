@@ -24,18 +24,17 @@ import com.ivianuu.essentials.ui.epoxy.SimpleText
 import com.ivianuu.essentials.ui.epoxy.model
 import com.ivianuu.essentials.ui.mvrx.epoxy.mvRxEpoxyController
 import com.ivianuu.essentials.ui.mvrx.injekt.injectMvRxViewModel
-import com.ivianuu.essentials.ui.traveler.anim.NavOptions
-import com.ivianuu.essentials.ui.traveler.anim.horizontal
-import com.ivianuu.essentials.ui.traveler.anim.vertical
-import com.ivianuu.essentials.ui.traveler.key.FragmentKey
+import com.ivianuu.essentials.ui.traveler.NavOptions
+import com.ivianuu.essentials.ui.traveler.horizontal
+import com.ivianuu.essentials.ui.traveler.key.ControllerKey
 import com.ivianuu.essentials.util.ext.andTrue
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.single_line_list_item.title
 
 @Parcelize
-object ListKey : FragmentKey(::ListFragment, options = NavOptions().horizontal())
+object ListKey : ControllerKey(::ListController, NavOptions().horizontal())
 
-class ListFragment : com.ivianuu.essentials.ui.simple.ListFragment() {
+class ListController : com.ivianuu.essentials.ui.simple.ListController() {
 
     override fun modules() = listOf(listModule)
 
@@ -52,7 +51,7 @@ class ListFragment : com.ivianuu.essentials.ui.simple.ListFragment() {
         }
     }
 
-    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+    override fun onToolbarMenuItemClicked(item: MenuItem) = when (item.itemId) {
         R.id.action_refresh -> viewModel.refreshClicked().andTrue()
         else -> false
     }

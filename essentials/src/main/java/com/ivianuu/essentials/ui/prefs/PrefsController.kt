@@ -22,15 +22,15 @@ import com.ivianuu.epoxyprefs.EpoxyPrefsPlugins
 import com.ivianuu.epoxyprefs.PreferenceDividerDecoration
 import com.ivianuu.epoxyprefs.PreferenceEpoxyController
 import com.ivianuu.epoxyprefs.preferenceEpoxyController
-import com.ivianuu.essentials.ui.simple.ListFragment
+import com.ivianuu.essentials.ui.simple.ListController
 
 /**
- * Prefs fragment
+ * Prefs controller
  */
-abstract class PrefsFragment : ListFragment() {
+abstract class PrefsController : ListController() {
 
     open val preferenceContext by lazy {
-        EpoxyPrefsPlugins.getDefaultContext(requireContext())
+        EpoxyPrefsPlugins.getDefaultContext(activity)
     }
 
     protected open val usePreferenceDividerDecoration = true
@@ -40,17 +40,17 @@ abstract class PrefsFragment : ListFragment() {
     override fun onViewCreated(view: View, savedViewState: Bundle?) {
         super.onViewCreated(view, savedViewState)
         if (usePreferenceDividerDecoration) {
-            recyclerView.addItemDecoration(PreferenceDividerDecoration(requireContext()))
+            recyclerView.addItemDecoration(PreferenceDividerDecoration(activity))
         }
     }
 
-    override fun onStart() {
-        super.onStart()
+    override fun onAttach(view: View) {
+        super.onAttach(view)
         preferenceContext.addChangeListener(changeListener)
     }
 
-    override fun onStop() {
-        super.onStop()
+    override fun onDetach(view: View) {
+        super.onDetach(view)
         preferenceContext.removeChangeListener(changeListener)
     }
 

@@ -18,21 +18,21 @@ package com.ivianuu.essentials.ui.simple
 
 import android.graphics.PorterDuff
 import android.os.Bundle
+import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.children
 import com.google.android.material.appbar.AppBarLayout
 import com.ivianuu.essentials.R
-import com.ivianuu.essentials.ui.base.EsActivity
 import com.ivianuu.essentials.util.ext.*
 import com.ivianuu.traveler.goBack
 import kotlinx.android.synthetic.main.es_fragment_tabs.es_app_bar
 import kotlinx.android.synthetic.main.es_view_toolbar.es_toolbar
 
 /**
- * A fragment which hosts a toolbar
+ * A controller which hosts a toolbar
  */
-abstract class ToolbarFragment : CoordinatorFragment() {
+abstract class ToolbarController : CoordinatorController() {
 
     val appBar: AppBarLayout
         get() = es_app_bar
@@ -44,8 +44,7 @@ abstract class ToolbarFragment : CoordinatorFragment() {
     protected open val toolbarTitleRes: Int get() = 0
     protected open val toolbarMenuRes: Int get() = 0
     protected open val toolbarBackButton: Boolean
-        get() = activity?.safeAs<EsActivity>()?.fragmentNavigator?.backStack
-            ?.firstOrNull()?.fragmentTag != tag
+        get() = router.backstack.firstOrNull() != this
 
     protected open val lightToolbar: Boolean get() = getPrimaryColor().isLight
 
@@ -60,12 +59,12 @@ abstract class ToolbarFragment : CoordinatorFragment() {
 
             if (toolbarMenuRes != 0) {
                 inflateMenu(toolbarMenuRes)
-                setOnMenuItemClickListener { onOptionsItemSelected(it) }
+                setOnMenuItemClickListener { onToolbarMenuItemClicked(it) }
             }
 
             if (toolbarBackButton) {
                 setNavigationIcon(R.drawable.abc_ic_ab_back_material)
-                setNavigationOnClickListener { router.goBack() }
+                setNavigationOnClickListener { travelerRouter.goBack() }
             }
 
             val titleColor = getPrimaryTextColor(!lightToolbar)
@@ -82,5 +81,7 @@ abstract class ToolbarFragment : CoordinatorFragment() {
                 .forEach { it.setColorFilter(iconColor, PorterDuff.Mode.SRC_IN) }
         }
     }
+
+    open fun onToolbarMenuItemClicked(item: MenuItem): Boolean = false
 
 }

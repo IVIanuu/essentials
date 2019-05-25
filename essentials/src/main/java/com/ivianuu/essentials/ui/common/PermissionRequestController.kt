@@ -19,8 +19,13 @@ package com.ivianuu.essentials.ui.common
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import com.ivianuu.essentials.ui.base.EsFragment
-import com.ivianuu.essentials.ui.traveler.key.FragmentKey
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import com.ivianuu.director.activitycallbacks.addPermissionResultListener
+import com.ivianuu.director.activitycallbacks.requestPermissions
+import com.ivianuu.essentials.ui.base.EsController
+import com.ivianuu.essentials.ui.traveler.key.ControllerKey
 import com.ivianuu.essentials.util.ext.goBackWithResult
 import com.ivianuu.injekt.inject
 import kotlinx.android.parcel.Parcelize
@@ -30,21 +35,38 @@ data class PermissionRequestKey(
     val resultCode: Int,
     val permissions: Set<String>,
     val requestCode: Int
-) : FragmentKey(::PermissionRequestFragment)
+) : ControllerKey(::PermissionRequestController)
 
 /**
- * Permission request fragment
+ * Permission request controller
  */
-class PermissionRequestFragment : EsFragment() {
+class PermissionRequestController : EsController() {
 
     private val key by inject<PermissionRequestKey>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            addPermissionResultListener(key.requestCode) { requestCode, permissions, grantResults ->
+                travelerRouter.goBackWithResult(
+                    key.resultCode,
+                    PermissionResult(requestCode, permissions.toSet(), grantResults)
+                )
+            }
             requestPermissions(key.permissions.toTypedArray(), key.requestCode)
-        } else {
-            router.goBackWithResult(
+        }
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup,
+        savedViewState: Bundle?
+    ) = View(activity)
+
+    override fun onAttach(view: View) {
+        super.onAttach(view)
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            travelerRouter.goBackWithResult(
                 key.resultCode, PermissionResult(
                     key.requestCode,
                     key.permissions,
@@ -53,18 +75,6 @@ class PermissionRequestFragment : EsFragment() {
                         .toIntArray()
                 ))
         }
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        router.goBackWithResult(
-            key.resultCode,
-            PermissionResult(requestCode, permissions.toSet(), grantResults)
-        )
     }
 
 }

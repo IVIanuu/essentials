@@ -19,8 +19,10 @@ package com.ivianuu.essentials.ui.common
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import com.ivianuu.essentials.ui.base.EsFragment
-import com.ivianuu.essentials.ui.traveler.key.FragmentKey
+import com.ivianuu.director.activitycallbacks.addActivityResultListener
+import com.ivianuu.director.activitycallbacks.startActivityForResult
+import com.ivianuu.essentials.ui.base.EsController
+import com.ivianuu.essentials.ui.traveler.key.ControllerKey
 import com.ivianuu.essentials.util.ext.goBackWithResult
 import com.ivianuu.injekt.inject
 import kotlinx.android.parcel.Parcelize
@@ -30,26 +32,26 @@ data class ActivityResultKey(
     val resultCode: Int,
     val intent: Intent,
     val requestCode: Int
-) : FragmentKey(::ActivityResultFragment)
+) : ControllerKey(::ActivityResultController)
 
 /**
- * Activity result fragment
+ * Activity result controller
  */
-class ActivityResultFragment : EsFragment() {
+class ActivityResultController : EsController() {
 
     private val key by inject<ActivityResultKey>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        startActivityForResult(key.intent, key.requestCode)
-    }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        router.goBackWithResult(
-            key.resultCode,
-            ActivityResult(requestCode, resultCode, data)
-        )
+        addActivityResultListener(key.requestCode) { requestCode, resultCode, data ->
+            travelerRouter.goBackWithResult(
+                key.resultCode,
+                ActivityResult(requestCode, resultCode, data)
+            )
+        }
+
+        startActivityForResult(key.intent, key.requestCode)
     }
 
 }

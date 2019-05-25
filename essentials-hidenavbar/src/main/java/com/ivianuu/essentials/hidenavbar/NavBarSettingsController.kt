@@ -23,8 +23,8 @@ import com.ivianuu.epoxyprefs.SingleItemListPreference
 import com.ivianuu.epoxyprefs.SwitchPreference
 import com.ivianuu.essentials.securesettings.SecureSettingsHelper
 import com.ivianuu.essentials.securesettings.SecureSettingsKey
-import com.ivianuu.essentials.ui.prefs.PrefsFragment
-import com.ivianuu.essentials.ui.traveler.key.FragmentKey
+import com.ivianuu.essentials.ui.prefs.PrefsController
+import com.ivianuu.essentials.ui.traveler.key.ControllerKey
 import com.ivianuu.essentials.util.ext.*
 import com.ivianuu.injekt.get
 import com.ivianuu.injekt.inject
@@ -37,12 +37,12 @@ import kotlinx.android.parcel.Parcelize
 class NavBarSettingsKey(
     val showMainSwitch: Boolean,
     val showNavBarHidden: Boolean
-) : FragmentKey(::NavBarSettingsFragment)
+) : ControllerKey(::NavBarSettingsController)
 
 /**
  * Nav bar settings
  */
-class NavBarSettingsFragment : PrefsFragment() {
+class NavBarSettingsController : PrefsController() {
 
     private val prefs by inject<NavBarPrefs>()
     private val secureSettingsHelper by inject<SecureSettingsHelper>()
@@ -59,12 +59,12 @@ class NavBarSettingsFragment : PrefsFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        router.results<Boolean>(RESULT_CODE_MAIN_SWITCH)
+        travelerRouter.results<Boolean>(RESULT_CODE_MAIN_SWITCH)
             .filter { it }
             .subscribe { prefs.manageNavBar.set(true) }
             .disposeBy(onDestroy)
 
-        router.results<Boolean>(RESULT_CODE_NAV_BAR_HIDDEN)
+        travelerRouter.results<Boolean>(RESULT_CODE_NAV_BAR_HIDDEN)
             .filter { it }
             .subscribe { prefs.navBarHidden.set(true) }
             .disposeBy(onDestroy)
@@ -79,7 +79,7 @@ class NavBarSettingsFragment : PrefsFragment() {
                     if (!newValue || secureSettingsHelper.canWriteSecureSettings()) {
                         return@onChange true
                     } else if (newValue) {
-                        router.navigate(
+                        travelerRouter.navigate(
                             SecureSettingsKey(
                                 RESULT_CODE_MAIN_SWITCH, true
                             )
@@ -102,7 +102,7 @@ class NavBarSettingsFragment : PrefsFragment() {
                     if (secureSettingsHelper.canWriteSecureSettings() || !newValue) {
                         return@onChange true
                     } else if (newValue) {
-                        router.navigate(
+                        travelerRouter.navigate(
                             SecureSettingsKey(
                                 RESULT_CODE_NAV_BAR_HIDDEN, true
                             )

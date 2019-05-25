@@ -18,8 +18,10 @@ package com.ivianuu.essentials.picker
 
 import android.os.Bundle
 import com.afollestad.materialdialogs.color.colorChooser
-import com.ivianuu.essentials.ui.base.EsDialogFragment
-import com.ivianuu.essentials.ui.traveler.key.FragmentKey
+import com.ivianuu.essentials.ui.base.EsDialogController
+import com.ivianuu.essentials.ui.traveler.NavOptions
+import com.ivianuu.essentials.ui.traveler.dialog
+import com.ivianuu.essentials.ui.traveler.key.ControllerKey
 import com.ivianuu.essentials.util.ext.dialog
 import com.ivianuu.essentials.util.ext.goBackWithResult
 import com.ivianuu.injekt.inject
@@ -32,12 +34,12 @@ data class ColorPickerKey(
     val allowCustomArgb: Boolean = true,
     val showAlphaSelector: Boolean = false,
     val resultCode: Int
-) : FragmentKey(::ColorPickerDialog)
+) : ControllerKey(::ColorPickerDialog, NavOptions().dialog())
 
 /**
- * Color picker fragment
+ * Color picker controller
  */
-class ColorPickerDialog : EsDialogFragment() {
+class ColorPickerDialog : EsDialogController() {
 
     private val key by inject<ColorPickerKey>()
 
@@ -49,7 +51,7 @@ class ColorPickerDialog : EsDialogFragment() {
             initialSelection = if (key.preselect != 0) key.preselect else null,
             allowCustomArgb = key.allowCustomArgb,
             showAlphaSelector = key.showAlphaSelector
-        ) { _, color -> router.goBackWithResult(key.resultCode, color) }
+        ) { _, color -> travelerRouter.goBackWithResult(key.resultCode, color) }
         negativeButton(R.string.es_action_cancel)
     }
 

@@ -53,6 +53,7 @@ object Versions {
     const val bintray = "1.8.4"
     const val constraintLayout = "2.0.0-beta1"
     const val coroutines = "1.2.0"
+    const val director = "0.0.1-dev-31"
     const val epoxy = "3.4.2"
     const val epoxyPrefs = "0.0.1-dev-10"
     const val glide = "4.9.0"
@@ -84,7 +85,6 @@ object Deps {
     const val androidxAppCompat = "androidx.appcompat:appcompat:${Versions.androidxAppCompat}"
     const val androidxCardView = "androidx.cardview:cardview:${Versions.androidxCardView}"
     const val androidxCore = "androidx.core:core-ktx:${Versions.androidxCore}"
-    const val androidxFragment = "androidx.fragment:fragment-ktx:${Versions.androidxFragment}"
     const val androidxLifecycleLiveData =
         "androidx.lifecycle:lifecycle-livedata-ktx:${Versions.androidxLifecycle}"
     const val androidxLifecycleRuntime =
@@ -113,6 +113,15 @@ object Deps {
     const val coroutinesRxJava =
         "org.jetbrains.kotlinx:kotlinx-coroutines-rx2:${Versions.coroutines}"
 
+    const val director = "com.ivianuu.director:director:${Versions.director}"
+    const val directorActivityCallbacks =
+        "com.ivianuu.director:director-activitycallbacks:${Versions.director}"
+    const val directorCommon = "com.ivianuu.director:director-common:${Versions.director}"
+    const val directorFragment = "com.ivianuu.director:director-fragment:${Versions.director}"
+    const val directorScopes = "com.ivianuu.director:director-scopes:${Versions.director}"
+    const val directorTraveler =
+        "com.ivianuu.director:director-traveler:${Versions.director}"
+
     const val epoxy = "com.airbnb.android:epoxy:${Versions.epoxy}"
     const val epoxyPrefs = "com.ivianuu.epoxyprefs:epoxyprefs:${Versions.epoxyPrefs}"
 
@@ -127,8 +136,6 @@ object Deps {
     const val kommonAppCompat =
         "com.ivianuu.kommon:kommon-appcompat:${Versions.kommon}"
     const val kommonCore = "com.ivianuu.kommon:kommon-core:${Versions.kommon}"
-    const val kommonFragment =
-        "com.ivianuu.kommon:kommon-fragment:${Versions.kommon}"
     const val kommonLifecycle =
         "com.ivianuu.kommon:kommon-lifecycle:${Versions.kommon}"
     const val kommonMaterial =

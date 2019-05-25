@@ -51,23 +51,23 @@ abstract class EsApp : Application(), InjektTrait, ScopeOwner {
     override fun onCreate() {
         super.onCreate()
         createComponentIfNeeded()
-        onInitialize()
-        onStartAppServices()
+        invokeInitializers()
+        startAppServices()
     }
 
-    protected open fun onConfigureInjekt() {
+    protected open fun configureInjekt() {
         if (applicationInfo.flags.containsFlag(ApplicationInfo.FLAG_DEBUGGABLE)) {
             InjektPlugins.logger = AndroidLogger()
         }
     }
 
-    protected open fun onCreateComponent(): Component {
+    protected open fun createComponent(): Component {
         return applicationComponent(
             modules = listOf(esAppModule, esModule) + modules()
         )
     }
 
-    protected open fun onInitialize() {
+    protected open fun invokeInitializers() {
         appInitializers
             .filterKeys { shouldInitialize(it) }
             .map { it.value.get() }
@@ -76,7 +76,7 @@ abstract class EsApp : Application(), InjektTrait, ScopeOwner {
 
     protected open fun shouldInitialize(type: KClass<out AppInitializer>): Boolean = true
 
-    protected open fun onStartAppServices() {
+    protected open fun startAppServices() {
         appServices
             .filterKeys { shouldStartAppService(it) }
             .map { it.value.get() }
@@ -90,8 +90,8 @@ abstract class EsApp : Application(), InjektTrait, ScopeOwner {
     private fun createComponentIfNeeded() {
         if (!componentCreated) {
             componentCreated = true
-            onConfigureInjekt()
-            _appComponent = onCreateComponent()
+            configureInjekt()
+            _appComponent = createComponent()
         }
     }
 }

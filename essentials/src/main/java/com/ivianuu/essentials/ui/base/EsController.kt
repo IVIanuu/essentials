@@ -21,8 +21,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
-import com.ivianuu.essentials.ui.common.BackHandler
+import com.ivianuu.director.Controller
+import com.ivianuu.essentials.injection.controllerComponent
 import com.ivianuu.essentials.ui.mvrx.MvRxView
 import com.ivianuu.essentials.ui.traveler.key.keyModule
 import com.ivianuu.essentials.util.ContextAware
@@ -30,49 +30,67 @@ import com.ivianuu.essentials.util.InjektTraitContextWrapper
 import com.ivianuu.essentials.util.ext.unsafeLazy
 import com.ivianuu.injekt.InjektTrait
 import com.ivianuu.injekt.Module
-import com.ivianuu.injekt.android.fragmentComponent
 import com.ivianuu.injekt.inject
 import com.ivianuu.traveler.Router
+import kotlinx.android.extensions.LayoutContainer
+import kotlinx.android.synthetic.*
 
 /**
- * Base fragment
+ * Base controller
  */
-abstract class EsFragment : Fragment(), BackHandler, ContextAware, InjektTrait, MvRxView {
+abstract class EsController : Controller(), ContextAware, InjektTrait, LayoutContainer, MvRxView {
 
     override val component by unsafeLazy {
-        fragmentComponent(
-            modules = listOf(keyModule(arguments)) + modules()
+        controllerComponent(
+            modules = listOf(keyModule(args)) + modules()
         )
     }
 
     override val providedContext: Context
-        get() = requireContext()
+        get() = activity
 
-    val router by inject<Router>()
+    override val containerView: View?
+        get() = _containerView
+    private var _containerView: View? = null
+
+    val travelerRouter by inject<Router>()
 
     protected open val layoutRes get() = -1
 
     override fun onCreateView(
         inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+        container: ViewGroup,
+        savedViewState: Bundle?
+    ): View {
         check(layoutRes != -1) { "no layoutRes provided" }
         val injectorInflater =
-            inflater.cloneInContext(InjektTraitContextWrapper(requireContext(), this))
+            inflater.cloneInContext(InjektTraitContextWrapper(activity, this))
         return injectorInflater.inflate(layoutRes, container, false)
+            .also { setContentView(it, savedViewState) }
     }
 
-    override fun onStart() {
-        super.onStart()
+    override fun onAttach(view: View) {
+        super.onAttach(view)
         invalidate()
+    }
+
+    override fun onDestroyView(view: View) {
+        clearFindViewByIdCache()
+        _containerView = null
+        super.onDestroyView(view)
     }
 
     override fun invalidate() {
     }
 
-    override fun handleBack(): Boolean = false
-
     protected open fun modules(): List<Module> = emptyList()
+
+    protected fun setContentView(view: View, savedViewState: Bundle?) {
+        _containerView = view
+        onViewCreated(view, savedViewState)
+    }
+
+    protected open fun onViewCreated(view: View, savedViewState: Bundle?) {
+    }
 
 }

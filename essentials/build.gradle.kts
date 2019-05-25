@@ -35,7 +35,6 @@ dependencies {
     api(Deps.androidxAppCompat)
     api(Deps.androidxCardView)
     api(Deps.androidxCore)
-    api(Deps.androidxFragment)
     api(Deps.androidxLifecycleLiveData)
     api(Deps.androidxLifecycleRuntime)
     api(Deps.androidxLifecycleViewModel)
@@ -47,6 +46,13 @@ dependencies {
 
     api(Deps.constraintLayout)
 
+    api(Deps.director)
+    api(Deps.directorActivityCallbacks)
+    api(Deps.directorCommon)
+    api(Deps.directorFragment)
+    api(Deps.directorScopes)
+    api(Deps.directorTraveler)
+
     api(Deps.epoxy)
     api(Deps.epoxyPrefs)
 
@@ -56,7 +62,6 @@ dependencies {
 
     api(Deps.kommonAppCompat)
     api(Deps.kommonCore)
-    api(Deps.kommonFragment)
     api(Deps.kommonLifecycle)
     api(Deps.kommonMaterial)
     api(Deps.kommonRecyclerView)

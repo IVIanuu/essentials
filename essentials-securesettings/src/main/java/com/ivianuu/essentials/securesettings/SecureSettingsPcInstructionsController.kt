@@ -17,8 +17,8 @@
 package com.ivianuu.essentials.securesettings
 
 import com.ivianuu.epoxyprefs.Preference
-import com.ivianuu.essentials.ui.prefs.PrefsFragment
-import com.ivianuu.essentials.ui.traveler.key.FragmentKey
+import com.ivianuu.essentials.ui.prefs.PrefsController
+import com.ivianuu.essentials.ui.traveler.key.ControllerKey
 import com.ivianuu.essentials.ui.traveler.key.UrlKey
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.essentials.util.string
@@ -27,12 +27,12 @@ import com.ivianuu.traveler.navigate
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-class SecureSettingsPcInstructionsKey : FragmentKey(::SecureSettingsPcInstructionsFragment)
+class SecureSettingsPcInstructionsKey : ControllerKey(::SecureSettingsPcInstructionsController)
 
 /**
  * Asks the user for the secure settings permission
  */
-class SecureSettingsPcInstructionsFragment : PrefsFragment() {
+class SecureSettingsPcInstructionsController : PrefsController() {
 
     override val toolbarTitleRes: Int
         get() = R.string.es_title_secure_settings_pc_instructions
@@ -70,7 +70,7 @@ class SecureSettingsPcInstructionsFragment : PrefsFragment() {
             iconRes(R.drawable.es_ic_link)
             summaryRes(R.string.es_pref_summary_secure_settings_link_gadget_hacks)
             onClick {
-                router.navigate(UrlKey("https://youtu.be/CDuxcrrWLnY"))
+                travelerRouter.navigate(UrlKey("https://youtu.be/CDuxcrrWLnY"))
                 return@onClick true
             }
         }
@@ -80,7 +80,7 @@ class SecureSettingsPcInstructionsFragment : PrefsFragment() {
             iconRes(R.drawable.es_ic_link)
             summaryRes(R.string.es_pref_summary_secure_settings_link_lifehacker)
             onClick {
-                router.navigate(UrlKey("https://lifehacker.com/the-easiest-way-to-install-androids-adb-and-fastboot-to-1586992378"))
+                travelerRouter.navigate(UrlKey("https://lifehacker.com/the-easiest-way-to-install-androids-adb-and-fastboot-to-1586992378"))
                 return@onClick true
             }
         }
@@ -90,7 +90,7 @@ class SecureSettingsPcInstructionsFragment : PrefsFragment() {
             iconRes(R.drawable.es_ic_link)
             summaryRes(R.string.es_pref_summary_secure_settings_link_xda)
             onClick {
-                router.navigate(UrlKey("https://www.xda-developers.com/install-adb-windows-macos-linux/"))
+                travelerRouter.navigate(UrlKey("https://www.xda-developers.com/install-adb-windows-macos-linux/"))
                 return@onClick true
             }
         }
@@ -101,12 +101,12 @@ class SecureSettingsPcInstructionsFragment : PrefsFragment() {
             summary(
                 string(
                     R.string.es_pref_summary_secure_settings_step_4,
-                    requireContext().packageName
+                    activity.packageName
                 )
             )
             onClick {
                 clipboardHelper.clipboardText =
-                    "adb shell pm grant ${requireContext().packageName} android.permission.WRITE_SECURE_SETTINGS"
+                    "adb shell pm grant ${activity.packageName} android.permission.WRITE_SECURE_SETTINGS"
 
                 toaster.toast(R.string.es_msg_secure_settings_copied_to_clipboard)
                 return@onClick true

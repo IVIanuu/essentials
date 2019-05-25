@@ -19,11 +19,11 @@ package com.ivianuu.essentials.securesettings
 import android.os.Bundle
 import androidx.lifecycle.lifecycleScope
 import com.ivianuu.epoxyprefs.Preference
-import com.ivianuu.essentials.ui.prefs.PrefsFragment
-import com.ivianuu.essentials.ui.traveler.anim.NavOptions
-import com.ivianuu.essentials.ui.traveler.key.FragmentKey
+import com.ivianuu.essentials.ui.common.verticalFade
+import com.ivianuu.essentials.ui.prefs.PrefsController
+import com.ivianuu.essentials.ui.traveler.NavOptions
+import com.ivianuu.essentials.ui.traveler.key.ControllerKey
 import com.ivianuu.essentials.util.Toaster
-
 import com.ivianuu.essentials.util.ext.goBackWithResult
 import com.ivianuu.injekt.inject
 import com.ivianuu.traveler.navigate
@@ -34,12 +34,12 @@ import kotlinx.coroutines.launch
 class SecureSettingsKey(
     val resultCode: Int,
     val showHideNavBarHint: Boolean = false
-) : FragmentKey(::SecureSettingsFragment)
+) : ControllerKey(::SecureSettingsController)
 
 /**
  * Asks the user for the secure settings permission
  */
-class SecureSettingsFragment : PrefsFragment() {
+class SecureSettingsController : PrefsController() {
 
     override val toolbarTitleRes: Int
         get() = R.string.es_title_secure_settings
@@ -59,7 +59,7 @@ class SecureSettingsFragment : PrefsFragment() {
         Preference {
             key("secure_settings_header")
             summaryRes(
-                if (this@SecureSettingsFragment.key.showHideNavBarHint) {
+                if (this@SecureSettingsController.key.showHideNavBarHint) {
                     R.string.es_pref_summary_secure_settings_header_hide_nav_bar
                 } else {
                     R.string.es_pref_summary_secure_settings_header
@@ -72,9 +72,9 @@ class SecureSettingsFragment : PrefsFragment() {
             titleRes(R.string.es_pref_title_use_pc)
             summaryRes(R.string.es_pref_summary_use_pc)
             onClick {
-                router.navigate(
+                travelerRouter.navigate(
                     SecureSettingsPcInstructionsKey(),
-                    NavOptions() // todo .handler(VerticalFadeChangeHandler())
+                    NavOptions().verticalFade()
                 )
 
                 return@onClick true
@@ -102,7 +102,7 @@ class SecureSettingsFragment : PrefsFragment() {
     private fun handlePermissionResult(success: Boolean) {
         if (success) {
             toaster.toast(R.string.es_msg_secure_settings_permission_granted)
-            router.goBackWithResult(key.resultCode, true)
+            travelerRouter.goBackWithResult(key.resultCode, true)
         } else {
             toaster.toast(R.string.es_msg_secure_settings_permission_denied)
         }
