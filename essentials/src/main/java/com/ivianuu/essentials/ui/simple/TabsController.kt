@@ -31,7 +31,7 @@ import kotlinx.android.synthetic.main.es_view_view_pager.es_view_pager
 abstract class TabsController : ToolbarController() {
 
     override val layoutRes: Int
-        get() = R.layout.es_fragment_tabs
+        get() = R.layout.es_controller_tabs
 
     val tabLayout: TabLayout
         get() = es_tab_layout

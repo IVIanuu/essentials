@@ -29,7 +29,7 @@ import kotlinx.android.synthetic.main.es_view_recycler_view.es_recycler_view
 abstract class ListController : ToolbarController() {
 
     override val layoutRes: Int
-        get() = R.layout.es_fragment_list
+        get() = R.layout.es_controller_list
 
     val recyclerView: RecyclerView
         get() = es_recycler_view

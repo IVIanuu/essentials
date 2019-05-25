@@ -17,7 +17,7 @@
 package com.ivianuu.essentials.ui.simple
 
 import com.ivianuu.essentials.ui.base.EsController
-import kotlinx.android.synthetic.main.es_fragment_list.es_coordinator_layout
+import kotlinx.android.synthetic.main.es_controller_list.es_coordinator_layout
 
 /**
  * A controller which hosts a coordinator layout

@@ -61,7 +61,7 @@ abstract class CheckableAppsController : ListController() {
     override fun modules() = listOf(checkableAppsModule)
 
     override val toolbarMenuRes
-        get() = R.menu.es_fragment_checkable_apps
+        get() = R.menu.es_controller_checkable_apps
 
     protected open val launchableAppsOnly: Boolean
         get() = false

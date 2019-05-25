@@ -26,7 +26,7 @@ import com.google.android.material.appbar.AppBarLayout
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.util.ext.*
 import com.ivianuu.traveler.goBack
-import kotlinx.android.synthetic.main.es_fragment_tabs.es_app_bar
+import kotlinx.android.synthetic.main.es_controller_tabs.es_app_bar
 import kotlinx.android.synthetic.main.es_view_toolbar.es_toolbar
 
 /**
