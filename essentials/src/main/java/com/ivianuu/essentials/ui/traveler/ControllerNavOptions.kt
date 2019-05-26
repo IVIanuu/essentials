@@ -46,10 +46,10 @@ class ControllerNavOptions {
 
 fun NavOptions(): ControllerNavOptions = ControllerNavOptions()
 
-fun ControllerNavOptions.applyToController(controller: Controller): ControllerNavOptions =
+fun ControllerNavOptions.applyToTransaction(transaction: RouterTransaction): ControllerNavOptions =
     apply {
-        controller.pushChangeHandler(push())
-        controller.popChangeHandler(pop())
+        transaction.pushChangeHandler(push())
+        transaction.popChangeHandler(pop())
     }
 
 fun ControllerNavOptions.handler(
