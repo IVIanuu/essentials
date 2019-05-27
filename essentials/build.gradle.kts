@@ -49,7 +49,6 @@ dependencies {
     api(Deps.director)
     api(Deps.directorActivityCallbacks)
     api(Deps.directorCommon)
-    api(Deps.directorFragment)
     api(Deps.directorScopes)
     api(Deps.directorTraveler)
 

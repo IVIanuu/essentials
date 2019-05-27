@@ -29,7 +29,9 @@ class MainActivity : EsActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        travelerRouter.navigate(NavBarSettingsKey(true, true))
+        if (savedInstanceState == null) {
+            travelerRouter.navigate(NavBarSettingsKey(true, true))
+        }
     }
 
 }

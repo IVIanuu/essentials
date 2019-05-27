@@ -20,7 +20,8 @@ import android.os.Bundle
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import com.ivianuu.director.Router
-import com.ivianuu.director.fragment.getRouter
+import com.ivianuu.director.RouterManager
+import com.ivianuu.director.getRouter
 import com.ivianuu.director.hasRoot
 import com.ivianuu.director.traveler.ControllerNavigator
 import com.ivianuu.essentials.ui.mvrx.MvRxView
@@ -58,7 +59,10 @@ abstract class EsActivity : AppCompatActivity(), InjektTrait, MvRxView {
     open val startKey: Any?
         get() = null
 
+    lateinit var routerManager: RouterManager
+        private set
     lateinit var router: Router
+        private set
 
     protected open val navigator: Navigator by unsafeLazy {
         val navigators = mutableListOf<ResultNavigator>().apply {
@@ -77,18 +81,42 @@ abstract class EsActivity : AppCompatActivity(), InjektTrait, MvRxView {
             setContentView(layoutRes)
         }
 
-        createRouter()
+        routerManager = createRouterManager(savedInstanceState)
+        router = createRouter()
+
         navigateToStartKeyIfNeeded()
     }
 
     override fun onStart() {
         super.onStart()
+        routerManager.onStart()
         invalidate()
     }
 
     override fun onResumeFragments() {
         super.onResumeFragments()
         travelerRouter.setNavigator(this, navigator)
+    }
+
+    override fun onStop() {
+        routerManager.onStop()
+        super.onStop()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        routerManager.saveInstanceState(outState)
+    }
+
+    override fun onBackPressed() {
+        if (!routerManager.handleBack()) {
+            super.onBackPressed()
+        }
+    }
+
+    override fun onDestroy() {
+        routerManager.onDestroy()
+        super.onDestroy()
     }
 
     override fun invalidate() {
@@ -98,9 +126,13 @@ abstract class EsActivity : AppCompatActivity(), InjektTrait, MvRxView {
 
     protected open fun modules(): List<Module> = emptyList()
 
-    protected open fun createRouter() {
-        router = getRouter(findViewById<ViewGroup>(containerId))
+    protected open fun createRouterManager(savedInstanceState: Bundle?): RouterManager {
+        return RouterManager(this)
+            .also { it.restoreInstanceState(savedInstanceState) }
     }
+
+    protected open fun createRouter(): Router =
+        routerManager.getRouter(findViewById<ViewGroup>(containerId))
 
     protected open fun navigateToStartKeyIfNeeded() {
         if (!router.hasRoot) {
