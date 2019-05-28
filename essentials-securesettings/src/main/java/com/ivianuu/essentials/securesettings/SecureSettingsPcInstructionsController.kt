@@ -19,11 +19,9 @@ package com.ivianuu.essentials.securesettings
 import com.ivianuu.epoxyprefs.Preference
 import com.ivianuu.essentials.ui.prefs.PrefsController
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
-import com.ivianuu.essentials.ui.traveler.key.UrlKey
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.essentials.util.string
 import com.ivianuu.injekt.inject
-import com.ivianuu.traveler.navigate
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
@@ -69,19 +67,15 @@ class SecureSettingsPcInstructionsController : PrefsController() {
             key("secure_settings_link_gadget_hacks")
             iconRes(R.drawable.es_ic_link)
             summaryRes(R.string.es_pref_summary_secure_settings_link_gadget_hacks)
-            onClick {
-                travelerRouter.navigate(UrlKey("https://youtu.be/CDuxcrrWLnY"))
-                return@onClick true
-            }
+            openUrlOnClick { "https://youtu.be/CDuxcrrWLnY" }
         }
 
         Preference {
             key("secure_settings_link_lifehacker")
             iconRes(R.drawable.es_ic_link)
             summaryRes(R.string.es_pref_summary_secure_settings_link_lifehacker)
-            onClick {
-                travelerRouter.navigate(UrlKey("https://lifehacker.com/the-easiest-way-to-install-androids-adb-and-fastboot-to-1586992378"))
-                return@onClick true
+            openUrlOnClick {
+                "https://lifehacker.com/the-easiest-way-to-install-androids-adb-and-fastboot-to-1586992378"
             }
         }
 
@@ -89,9 +83,8 @@ class SecureSettingsPcInstructionsController : PrefsController() {
             key("secure_settings_link_xda")
             iconRes(R.drawable.es_ic_link)
             summaryRes(R.string.es_pref_summary_secure_settings_link_xda)
-            onClick {
-                travelerRouter.navigate(UrlKey("https://www.xda-developers.com/install-adb-windows-macos-linux/"))
-                return@onClick true
+            openUrlOnClick {
+                "https://www.xda-developers.com/install-adb-windows-macos-linux/"
             }
         }
 
