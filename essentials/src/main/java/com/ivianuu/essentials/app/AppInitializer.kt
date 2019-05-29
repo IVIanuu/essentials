@@ -33,7 +33,8 @@ interface AppInitializer {
 inline fun <reified T : AppInitializer> Module.appInitializer(
     name: Any? = null,
     noinline definition: Definition<T>
-): Binding<T> = factory(name, definition) bindIntoMap (appInitializersMap to T::class)
+): Binding<T> =
+    factory(name = name, definition = definition) bindIntoMap (appInitializersMap to T::class)
 
 val esAppInitializersModule = module {
     appInitializer { RxJavaAppInitializer() }

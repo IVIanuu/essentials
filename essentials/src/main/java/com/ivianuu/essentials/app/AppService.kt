@@ -42,6 +42,7 @@ abstract class AppService : ScopeOwner {
 inline fun <reified T : AppService> Module.appService(
     name: Any? = null,
     noinline definition: Definition<T>
-): Binding<T> = single(name, definition) bindIntoMap (appServicesMap to T::class)
+): Binding<T> =
+    single(name = name, definition = definition) bindIntoMap (appServicesMap to T::class)
 
 val esAppServicesModule = module()

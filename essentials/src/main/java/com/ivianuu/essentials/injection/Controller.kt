@@ -16,6 +16,10 @@
 
 package com.ivianuu.essentials.injection
 
+import android.content.Context
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.ViewModelStoreOwner
+import androidx.savedstate.SavedStateRegistryOwner
 import com.ivianuu.director.Controller
 import com.ivianuu.director.resources
 import com.ivianuu.injekt.*
@@ -32,7 +36,6 @@ private inline fun androidComponent(
             (dependency()?.let { listOf(it) } ?: emptyList())
     return component(allModules, allDependencies)
 }
-
 
 /**
  * Controller name
@@ -135,11 +138,21 @@ fun <T : Controller> T.childControllerModule(): Module = module {
 }
 
 private fun <T : Controller> T.internalControllerModule(qualifier: Any) = module {
-    constant(this@internalControllerModule).apply {
+    constant(this@internalControllerModule, override = true).apply {
         bindType<Controller>()
         bindAlias<Controller>(qualifier)
+        bindType<LifecycleOwner>()
+        bindAlias<LifecycleOwner>(qualifier)
+        bindType<ViewModelStoreOwner>()
+        bindAlias<ViewModelStoreOwner>(qualifier)
+        bindType<SavedStateRegistryOwner>()
+        bindAlias<SavedStateRegistryOwner>(qualifier)
     }
 
-    factory { activity } bindName qualifier
-    factory { resources } bindName qualifier
+    factory<Context>(override = true) { activity } bindName qualifier
+    factory(override = true) { resources } bindName qualifier
+    factory(override = true) { lifecycle } bindName qualifier
+    factory(override = true) { viewModelStore } bindName qualifier
+    factory(override = true) { savedStateRegistry } bindName qualifier
+    factory(override = true) { childRouterManager } bindName qualifier
 }
