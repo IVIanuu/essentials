@@ -18,9 +18,11 @@ package com.ivianuu.essentials.sample.ui.list
 
 import androidx.lifecycle.viewModelScope
 import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
+import com.ivianuu.injekt.Factory
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
+@Factory
 class ListViewModel : MvRxViewModel<ListState>(ListState()) {
 
     init {

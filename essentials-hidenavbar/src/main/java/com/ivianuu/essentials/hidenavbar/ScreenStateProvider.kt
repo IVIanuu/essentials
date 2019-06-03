@@ -17,10 +17,12 @@
 package com.ivianuu.essentials.hidenavbar
 
 import android.os.PowerManager
+import com.ivianuu.injekt.Factory
 
 /**
  * Provides the current screen state
  */
+@Factory
 class ScreenStateProvider(private val powerManager: PowerManager) {
     val isScreenOn: Boolean get() = powerManager.isInteractive
     val isScreenOff: Boolean get() = !isScreenOn

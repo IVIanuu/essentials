@@ -23,4 +23,5 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/mv
 
 dependencies {
     api(Deps.kotlinStdLib)
+    api(Deps.injektCompiler)
 }

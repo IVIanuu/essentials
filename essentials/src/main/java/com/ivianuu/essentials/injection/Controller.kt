@@ -16,7 +16,6 @@
 
 package com.ivianuu.essentials.injection
 
-import android.content.Context
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.savedstate.SavedStateRegistryOwner
@@ -26,6 +25,7 @@ import com.ivianuu.injekt.*
 import com.ivianuu.injekt.constant.constant
 
 private inline fun androidComponent(
+    scope: Scope? = null,
     modules: Iterable<Module>,
     dependencies: Iterable<Component>,
     module: () -> Module,
@@ -34,27 +34,50 @@ private inline fun androidComponent(
     val allModules = modules + listOf(module())
     val allDependencies = dependencies +
             (dependency()?.let { listOf(it) } ?: emptyList())
-    return component(allModules, allDependencies)
+    return component(scope, allModules, allDependencies)
+}
+
+/**
+ * Controller scope
+ */
+@ScopeAnnotation(ControllerScope.Companion::class)
+annotation class ControllerScope {
+    companion object : Scope
+}
+
+/**
+ * Child controller scope
+ */
+@ScopeAnnotation(ChildControllerScope.Companion::class)
+annotation class ChildControllerScope {
+    companion object : Scope
 }
 
 /**
  * Controller name
  */
-object ForController
+@Name(ForController.Companion::class)
+annotation class ForController {
+    companion object : Qualifier
+}
 
 /**
  * Child controller name
  */
-object ForChildController
+@Name(ForChildController.Companion::class)
+annotation class ForChildController {
+    companion object : Qualifier
+}
 
 /**
  * Returns a [Component] with convenient configurations
  */
 fun <T : Controller> T.controllerComponent(
+    scope: Scope? = ControllerScope,
     modules: Iterable<Module> = emptyList(),
     dependencies: Iterable<Component> = emptyList()
 ): Component = androidComponent(
-    modules, dependencies,
+    scope, modules, dependencies,
     { controllerModule() },
     { getClosestComponentOrNull() }
 )
@@ -63,10 +86,11 @@ fun <T : Controller> T.controllerComponent(
  * Returns a [Component] with convenient configurations
  */
 fun <T : Controller> T.childControllerComponent(
+    scope: Scope? = ChildControllerScope,
     modules: Iterable<Module> = emptyList(),
     dependencies: Iterable<Component> = emptyList()
 ): Component = androidComponent(
-    modules, dependencies,
+    scope, modules, dependencies,
     { childControllerModule() },
     { getClosestComponentOrNull() }
 )
@@ -114,7 +138,7 @@ fun Controller.getActivityComponent(): Component =
  * Returns the [Component] of the application or null
  */
 fun Controller.getApplicationComponentOrNull(): Component? =
-    (activity.application as? InjektTrait)?.component
+    (activity?.application as? InjektTrait)?.component
 
 /**
  * Returns the [Component] of the application or throws
@@ -137,22 +161,21 @@ fun <T : Controller> T.childControllerModule(): Module = module {
     include(internalControllerModule(ForChildController))
 }
 
-private fun <T : Controller> T.internalControllerModule(qualifier: Any) = module {
+private fun <T : Controller> T.internalControllerModule(name: Qualifier) = module {
     constant(this@internalControllerModule, override = true).apply {
         bindType<Controller>()
-        bindAlias<Controller>(qualifier)
+        bindAlias<Controller>(name)
         bindType<LifecycleOwner>()
-        bindAlias<LifecycleOwner>(qualifier)
+        bindAlias<LifecycleOwner>(name)
         bindType<ViewModelStoreOwner>()
-        bindAlias<ViewModelStoreOwner>(qualifier)
+        bindAlias<ViewModelStoreOwner>(name)
         bindType<SavedStateRegistryOwner>()
-        bindAlias<SavedStateRegistryOwner>(qualifier)
+        bindAlias<SavedStateRegistryOwner>(name)
     }
 
-    factory<Context>(override = true) { activity } bindName qualifier
-    factory(override = true) { resources } bindName qualifier
-    factory(override = true) { lifecycle } bindName qualifier
-    factory(override = true) { viewModelStore } bindName qualifier
-    factory(override = true) { savedStateRegistry } bindName qualifier
-    factory(override = true) { childRouterManager } bindName qualifier
+    factory(override = true) { resources } bindName name
+    factory(override = true) { lifecycle } bindName name
+    factory(override = true) { viewModelStore } bindName name
+    factory(override = true) { savedStateRegistry } bindName name
+    factory(override = true) { childRouterManager } bindName name
 }

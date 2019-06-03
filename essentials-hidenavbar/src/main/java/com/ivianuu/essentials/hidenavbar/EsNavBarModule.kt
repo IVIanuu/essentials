@@ -17,15 +17,15 @@
 package com.ivianuu.essentials.hidenavbar
 
 import android.content.SharedPreferences
-import com.ivianuu.essentials.app.appService
+import com.ivianuu.essentials.app.bindAppService
+import com.ivianuu.injekt.Qualifier
 import com.ivianuu.injekt.android.sharedPreferences
-import com.ivianuu.injekt.factory
 import com.ivianuu.injekt.get
 import com.ivianuu.injekt.module
 import com.ivianuu.injekt.single
 import com.ivianuu.kprefs.KPrefs
 
-object NavBar
+object NavBar : Qualifier
 
 const val NAV_BAR_SHARED_PREFS_NAME = "com.ivianuu.essentials.hidenavbar.prefs"
 
@@ -33,14 +33,8 @@ const val NAV_BAR_SHARED_PREFS_NAME = "com.ivianuu.essentials.hidenavbar.prefs"
  * Provides nav bar related dependencies
  */
 val esNavBarModule = module {
-    appService { NavBarController(get(), get(), get(), get(), get(), get(), get(), get()) }
-
     sharedPreferences(NAV_BAR_SHARED_PREFS_NAME, name = NavBar)
     single(NavBar) { KPrefs(get<SharedPreferences>(NavBar)) }
-    single { NavBarPrefs(get(NavBar)) }
 
-    factory { DisplayRotationProvider(get()) }
-    factory { OverscanHelper() }
-    factory { NonSdkInterfacesHelper(get()) }
-    factory { ScreenStateProvider(get()) }
+    bindAppService<NavBarController>()
 }

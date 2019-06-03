@@ -19,11 +19,13 @@ package com.ivianuu.essentials.securesettings
 import android.Manifest.permission.WRITE_SECURE_SETTINGS
 import android.content.Context
 import com.ivianuu.essentials.shell.Shell
+import com.ivianuu.injekt.Factory
 import com.ivianuu.kommon.core.content.hasPermissions
 
 /**
  * Provides infos about the secure settings access state
  */
+@Factory
 class SecureSettingsHelper(
     private val context: Context,
     private val shell: Shell

@@ -22,16 +22,14 @@ import androidx.work.Worker
 import androidx.work.WorkerFactory
 import androidx.work.WorkerParameters
 import com.ivianuu.injekt.*
-import com.ivianuu.injekt.multibinding.MapName
-import com.ivianuu.injekt.multibinding.bindIntoMap
-import com.ivianuu.injekt.multibinding.getProviderMap
-import com.ivianuu.injekt.provider.Provider
+import com.ivianuu.injekt.bridge.bridge
 
 /**
  * Uses injekt to instantiate workers
  */
+@Factory
 class InjektWorkerFactory(
-    private val workers: Map<String, Provider<ListenableWorker>>
+    @WorkersMap private val workers: Map<String, Provider<ListenableWorker>>
 ) : WorkerFactory() {
 
     override fun createWorker(
@@ -46,15 +44,11 @@ class InjektWorkerFactory(
 }
 
 /**
- * The map of [Worker]s used by the [InjektWorkerFactory]
- */
-val workerMap = MapName<String, ListenableWorker>()
-
-/**
  * Contains the [InjektWorkerFactory]
  */
 val workerInjectionModule = module {
-    factory { InjektWorkerFactory(getProviderMap(workerMap)) } bindType WorkerFactory::class
+    // todo mapBinding<String, ListenableWorker>(WorkersMap)
+    bridge<InjektWorkerFactory>() bindType WorkerFactory::class
 }
 
 /**
@@ -66,8 +60,21 @@ typealias WorkerDefinition<T> = DefinitionContext.(context: Context, workerParam
  * Defines a [Worker] which will be used in conjunction with the [InjektWorkerFactory]
  */
 inline fun <reified T : ListenableWorker> Module.worker(
-    name: Any? = null,
+    name: Qualifier? = null,
     noinline definition: WorkerDefinition<T>
 ): Binding<T> = factory(name) { (context: Context, workerParams: WorkerParameters) ->
     definition(context, workerParams)
-} bindIntoMap (workerMap to T::class.java.name)
+}.bindIntoMap<T, String, ListenableWorker>(key = T::class.java.name, mapName = WorkersMap)
+
+inline fun <reified T : ListenableWorker> Module.bindWorker(
+    name: Qualifier? = null
+) {
+    bridge<T>(name) {
+        bindIntoMap<T, String, ListenableWorker>(key = T::class.java.name, mapName = WorkersMap)
+    }
+}
+
+@Name(WorkersMap.Companion::class)
+annotation class WorkersMap {
+    companion object : Qualifier
+}

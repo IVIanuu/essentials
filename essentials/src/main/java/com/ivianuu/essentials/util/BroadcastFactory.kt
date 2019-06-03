@@ -21,6 +21,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import com.ivianuu.essentials.util.ext.observable
+import com.ivianuu.injekt.Factory
 
 import com.ivianuu.kommon.core.content.intentFilterOf
 import io.reactivex.Observable
@@ -28,6 +29,7 @@ import io.reactivex.Observable
 /**
  * A factory for broadcast receiver observables
  */
+@Factory
 class BroadcastFactory(private val context: Context) {
 
     fun create(vararg actions: String): Observable<Intent> = create(intentFilterOf(*actions))

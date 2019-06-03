@@ -21,10 +21,12 @@ import android.graphics.drawable.Drawable
 import com.bumptech.glide.Glide
 import com.ivianuu.essentials.app.AppInitializer
 
+import com.ivianuu.injekt.Factory
 
 /**
  * Initializes glide
  */
+@Factory
 class AppGlideAppInitializer(
     private val app: Application,
     private val factory: AppIconModelLoaderFactory

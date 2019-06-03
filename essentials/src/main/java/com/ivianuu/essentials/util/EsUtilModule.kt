@@ -16,7 +16,6 @@
 
 package com.ivianuu.essentials.util
 
-import com.ivianuu.injekt.factory
 import com.ivianuu.injekt.get
 import com.ivianuu.injekt.module
 import com.ivianuu.injekt.single
@@ -40,12 +39,4 @@ val esUtilModule = module {
             schedulers.main.asCoroutineDispatcher()
         )
     }
-
-    factory { BroadcastFactory(get()) }
-
-    factory { Clock() }
-
-    factory { StringProvider(get()) }
-
-    factory { Toaster(get(), get()) }
 }

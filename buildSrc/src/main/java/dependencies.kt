@@ -30,11 +30,11 @@ object Build {
 object Publishing {
     const val groupId = "com.ivianuu.essentials"
     const val vcsUrl = "https://github.com/IVIanuu/essentials"
-    const val version = "${Build.versionName}-dev-102"
+    const val version = "${Build.versionName}-dev-106"
 }
 
 object Versions {
-    const val androidGradlePlugin = "3.4.0"
+    const val androidGradlePlugin = "3.4.1"
 
     const val androidxActivity = "1.0.0-alpha08"
     const val androidxAppCompat = "1.1.0-alpha04"
@@ -54,13 +54,13 @@ object Versions {
     const val constraintLayout = "2.0.0-beta1"
     const val coroutines = "1.2.0"
     const val director = "0.0.1-dev-35"
-    const val epoxy = "3.4.2"
+    const val epoxy = "3.5.1"
     const val epoxyPrefs = "0.0.1-dev-13"
     const val glide = "4.9.0"
-    const val injekt = "0.0.1-dev-31"
+    const val injekt = "0.0.1-dev-42"
     const val junit = "4.12"
     const val kommon = "0.0.1-dev-12"
-    const val kotlin = "1.3.31"
+    const val kotlin = "1.3.40-eap-67"
     const val kPrefs = "0.0.1-dev-9"
     const val kSettings = "0.0.1-dev-7"
     const val mavenGradle = "2.1"
@@ -129,6 +129,7 @@ object Deps {
     const val injekt = "com.ivianuu.injekt:injekt:${Versions.injekt}"
     const val injektAndroid = "com.ivianuu.injekt:injekt-android:${Versions.injekt}"
     const val injektCommon = "com.ivianuu.injekt:injekt-common:${Versions.injekt}"
+    const val injektCompiler = "com.ivianuu.injekt:injekt-compiler:${Versions.injekt}"
 
     const val junit = "junit:junit:${Versions.junit}"
 

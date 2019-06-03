@@ -25,9 +25,12 @@ import android.view.OrientationEventListener
 import android.view.Surface
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.app.AppService
+
 import com.ivianuu.essentials.util.BroadcastFactory
 import com.ivianuu.essentials.util.ext.combineLatest
 import com.ivianuu.essentials.util.ext.observable
+import com.ivianuu.injekt.ApplicationScope
+import com.ivianuu.injekt.Single
 import com.ivianuu.kommon.core.app.doOnConfigurationChanged
 import com.ivianuu.kprefs.rx.asObservable
 import com.ivianuu.scopes.ReusableScope
@@ -38,6 +41,7 @@ import io.reactivex.rxkotlin.Observables
 /**
  * Handles the state of the navigation bar
  */
+@Single @ApplicationScope
 class NavBarController(
     private val app: Application,
     private val broadcastFactory: BroadcastFactory,

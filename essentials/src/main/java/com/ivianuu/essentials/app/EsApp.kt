@@ -24,7 +24,6 @@ import com.ivianuu.essentials.util.ext.containsFlag
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.android.AndroidLogger
 import com.ivianuu.injekt.android.applicationComponent
-import com.ivianuu.injekt.multibinding.injectProviderMap
 import com.ivianuu.scopes.MutableScope
 import com.ivianuu.scopes.Scope
 import com.ivianuu.scopes.ScopeOwner
@@ -45,8 +44,10 @@ abstract class EsApp : Application(), InjektTrait, ScopeOwner {
     override val scope: Scope get() = _scope
     private val _scope = MutableScope()
 
-    private val appInitializers by injectProviderMap(appInitializersMap)
-    private val appServices by injectProviderMap(appServicesMap)
+    private val appInitializers by
+    inject<Map<KClass<AppInitializer>, Provider<AppInitializer>>>(AppInitializers)
+    private val appServices by
+    inject<Map<KClass<AppService>, Provider<AppService>>>(AppServices)
 
     override fun onCreate() {
         super.onCreate()

@@ -17,11 +17,8 @@
 package com.ivianuu.essentials.app
 
 import com.ivianuu.injekt.*
-import com.ivianuu.injekt.multibinding.MapName
-import com.ivianuu.injekt.multibinding.bindIntoMap
+import com.ivianuu.injekt.bridge.bridge
 import kotlin.reflect.KClass
-
-val appInitializersMap = MapName<KClass<out AppInitializer>, AppInitializer>()
 
 /**
  * Initializes what ever on app start up
@@ -31,12 +28,27 @@ interface AppInitializer {
 }
 
 inline fun <reified T : AppInitializer> Module.appInitializer(
-    name: Any? = null,
+    name: Qualifier? = null,
     noinline definition: Definition<T>
-): Binding<T> =
-    factory(name = name, definition = definition) bindIntoMap (appInitializersMap to T::class)
+): Binding<T> = factory(name = name, definition = definition).bindAppInitializer()
+
+inline fun <reified T : AppInitializer> Module.bindAppInitializer(
+    name: Qualifier? = null
+) {
+    bridge<T>(name).bindAppInitializer()
+}
+
+@Name(AppInitializers.Companion::class)
+annotation class AppInitializers {
+    companion object : Qualifier
+}
+
+inline fun <reified T : AppInitializer> Binding<T>.bindAppInitializer() =
+    bindIntoMap<T, KClass<out AppInitializer>, AppInitializer>(
+        key = T::class, mapName = AppInitializers
+    )
 
 val esAppInitializersModule = module {
-    appInitializer { RxJavaAppInitializer() }
-    appInitializer { TimberAppInitializer(get()) }
+    bindAppInitializer<RxJavaAppInitializer>()
+    bindAppInitializer<TimberAppInitializer>()
 }

@@ -21,20 +21,21 @@ import androidx.work.Configuration
 import androidx.work.WorkManager
 import androidx.work.WorkerFactory
 import com.ivianuu.essentials.app.AppInitializer
-import com.ivianuu.essentials.app.appInitializer
-import com.ivianuu.injekt.get
+import com.ivianuu.essentials.app.bindAppInitializer
+import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.module
 
 /**
  * Module for the [WorkerAppInitializer]
  */
 val workerInitializerModule = module {
-    appInitializer { WorkerAppInitializer(get(), get()) }
+    bindAppInitializer<WorkerAppInitializer>()
 }
 
 /**
  * Initializes the [WorkManager] with a injected [WorkerFactory]
  */
+@Factory
 class WorkerAppInitializer(
     private val context: Context,
     private val workerFactory: WorkerFactory

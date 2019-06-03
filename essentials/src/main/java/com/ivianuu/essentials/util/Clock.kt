@@ -16,9 +16,12 @@
 
 package com.ivianuu.essentials.util
 
+import com.ivianuu.injekt.Factory
+
 /**
  * Provides the current time
  */
+@Factory
 class Clock {
     val currentTimeMillis: Long get() = System.currentTimeMillis()
     val currentTimeNanos: Long get() = System.nanoTime()

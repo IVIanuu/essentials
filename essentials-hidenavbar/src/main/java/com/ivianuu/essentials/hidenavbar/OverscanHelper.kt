@@ -19,11 +19,12 @@ package com.ivianuu.essentials.hidenavbar
 import android.annotation.SuppressLint
 import android.graphics.Rect
 import android.os.IBinder
-
+import com.ivianuu.injekt.Factory
 
 /**
  * Utils to access overscan with reflection
  */
+@Factory
 @SuppressLint("PrivateApi")
 class OverscanHelper {
 

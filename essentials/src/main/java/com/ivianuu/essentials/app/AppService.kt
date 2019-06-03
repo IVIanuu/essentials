@@ -17,14 +17,11 @@
 package com.ivianuu.essentials.app
 
 import com.ivianuu.injekt.*
-import com.ivianuu.injekt.multibinding.MapName
-import com.ivianuu.injekt.multibinding.bindIntoMap
+import com.ivianuu.injekt.bridge.bridge
 import com.ivianuu.scopes.MutableScope
 import com.ivianuu.scopes.Scope
 import com.ivianuu.scopes.ScopeOwner
 import kotlin.reflect.KClass
-
-val appServicesMap = MapName<KClass<out AppService>, AppService>()
 
 /**
  * Will be started on app start up and lives as long as the app lives
@@ -40,9 +37,25 @@ abstract class AppService : ScopeOwner {
 }
 
 inline fun <reified T : AppService> Module.appService(
-    name: Any? = null,
+    name: Qualifier? = null,
     noinline definition: Definition<T>
-): Binding<T> =
-    single(name = name, definition = definition) bindIntoMap (appServicesMap to T::class)
+): Binding<T> = factory(name = name, definition = definition)
+    .bindAppService()
+
+inline fun <reified T : AppService> Module.bindAppService(
+    name: Qualifier? = null
+) {
+    bridge<T>(name).bindAppService()
+}
+
+inline fun <reified T : AppService> Binding<T>.bindAppService() =
+    bindIntoMap<T, KClass<out AppService>, AppService>(
+        key = T::class, mapName = AppServices
+    )
+
+@Name(AppServices.Companion::class)
+annotation class AppServices {
+    companion object : Qualifier
+}
 
 val esAppServicesModule = module()

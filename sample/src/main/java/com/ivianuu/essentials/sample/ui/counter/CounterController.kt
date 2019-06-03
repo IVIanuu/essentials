@@ -55,8 +55,6 @@ class CounterChangeHandler : SharedElementTransitionChangeHandler() {
 
 class CounterController : EsController() {
 
-    override fun modules() = listOf(counterModule)
-
     override val layoutRes: Int get() = R.layout.controller_counter
 
     private val viewModel: CounterViewModel by injectMvRxViewModel()

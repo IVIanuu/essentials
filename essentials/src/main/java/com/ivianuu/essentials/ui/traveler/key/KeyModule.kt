@@ -18,9 +18,9 @@ package com.ivianuu.essentials.ui.traveler.key
 
 import android.os.Bundle
 import android.os.Parcelable
-import com.ivianuu.injekt.SingleKind
-import com.ivianuu.injekt.bind
 import com.ivianuu.injekt.module
+import com.ivianuu.injekt.single
+import com.ivianuu.injekt.typeOf
 import kotlin.reflect.KClass
 
 /**
@@ -33,7 +33,7 @@ fun keyModule(
     if (bundle != null && bundle.containsKey(TRAVELER_KEY_CLASS) && bundle.containsKey(TRAVELER_KEY)) {
         val className = bundle.getString(TRAVELER_KEY_CLASS)!!
         val type = Class.forName(className).kotlin as KClass<Any>
-        bind(SingleKind, type) { bundle.getParcelable<Parcelable>(TRAVELER_KEY)!! }
+        single(typeOf(type)) { bundle.getParcelable<Parcelable>(TRAVELER_KEY)!! }
     } else if (throwIfNotAvailable) {
         error("No traveler key in bundle $bundle")
     }

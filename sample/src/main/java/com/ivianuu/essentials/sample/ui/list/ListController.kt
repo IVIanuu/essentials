@@ -36,8 +36,6 @@ object ListKey : ControllerKey(::ListController, NavOptions().horizontal())
 
 class ListController : com.ivianuu.essentials.ui.simple.ListController() {
 
-    override fun modules() = listOf(listModule)
-
     private val viewModel: ListViewModel by injectMvRxViewModel()
 
     override val toolbarMenuRes get() = R.menu.controller_list

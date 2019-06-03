@@ -16,11 +16,12 @@
 plugins {
     id("com.android.library")
     id("kotlin-android")
+    id("kotlin-kapt")
 }
 
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/android-build-lib.gradle")
-apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/no-build-config.gradle")
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-android-ext.gradle")
+apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-kapt.gradle")
 
 android {
     defaultConfig {
@@ -54,6 +55,8 @@ dependencies {
 
     api(Deps.epoxy)
     api(Deps.epoxyPrefs)
+
+    kapt(project(":essentials-compiler"))
 
     api(Deps.injekt)
     api(Deps.injektAndroid)
