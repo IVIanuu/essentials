@@ -37,7 +37,9 @@ import com.ivianuu.scopes.ScopeOwner
 abstract class EsTileService : TileService(), InjektTrait, ScopeOwner {
 
     override val component by unsafeLazy {
-        serviceComponent(modules = modules())
+        serviceComponent {
+            modules(this@EsTileService.modules())
+        }
     }
 
     override val scope: Scope get() = _scope

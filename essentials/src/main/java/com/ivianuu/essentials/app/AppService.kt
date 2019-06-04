@@ -16,8 +16,15 @@
 
 package com.ivianuu.essentials.app
 
-import com.ivianuu.injekt.*
+import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.Definition
+import com.ivianuu.injekt.Module
+import com.ivianuu.injekt.Name
+import com.ivianuu.injekt.Qualifier
+import com.ivianuu.injekt.bindIntoMap
 import com.ivianuu.injekt.bridge.bridge
+import com.ivianuu.injekt.factory
+import com.ivianuu.injekt.module
 import com.ivianuu.scopes.MutableScope
 import com.ivianuu.scopes.Scope
 import com.ivianuu.scopes.ScopeOwner
@@ -58,4 +65,5 @@ annotation class AppServices {
     companion object : Qualifier
 }
 
-val esAppServicesModule = module()
+val esAppServicesModule = module {
+}

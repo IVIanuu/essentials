@@ -34,7 +34,9 @@ abstract class EsNotificationListenerService : NotificationListenerService(), In
     ScopeOwner {
 
     override val component by unsafeLazy {
-        serviceComponent(modules = modules())
+        serviceComponent {
+            modules(this@EsNotificationListenerService.modules())
+        }
     }
 
     override val scope: Scope get() = _scope

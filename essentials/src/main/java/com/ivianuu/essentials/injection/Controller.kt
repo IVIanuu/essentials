@@ -21,8 +21,21 @@ import androidx.lifecycle.ViewModelStoreOwner
 import androidx.savedstate.SavedStateRegistryOwner
 import com.ivianuu.director.Controller
 import com.ivianuu.director.resources
-import com.ivianuu.injekt.*
+import com.ivianuu.injekt.Component
+import com.ivianuu.injekt.ComponentBuilder
+import com.ivianuu.injekt.InjektTrait
+import com.ivianuu.injekt.Module
+import com.ivianuu.injekt.Name
+import com.ivianuu.injekt.Qualifier
+import com.ivianuu.injekt.Scope
+import com.ivianuu.injekt.ScopeAnnotation
+import com.ivianuu.injekt.bindAlias
+import com.ivianuu.injekt.bindName
+import com.ivianuu.injekt.bindType
+import com.ivianuu.injekt.component
 import com.ivianuu.injekt.constant.constant
+import com.ivianuu.injekt.factory
+import com.ivianuu.injekt.module
 
 private inline fun androidComponent(
     scope: Scope? = null,
@@ -37,41 +50,34 @@ private inline fun androidComponent(
     return component(scope, allModules, allDependencies)
 }
 
-/**
- * Controller scope
- */
 @ScopeAnnotation(ControllerScope.Companion::class)
 annotation class ControllerScope {
     companion object : Scope
 }
 
-/**
- * Child controller scope
- */
 @ScopeAnnotation(ChildControllerScope.Companion::class)
 annotation class ChildControllerScope {
     companion object : Scope
 }
 
-/**
- * Controller name
- */
 @Name(ForController.Companion::class)
 annotation class ForController {
     companion object : Qualifier
 }
 
-/**
- * Child controller name
- */
 @Name(ForChildController.Companion::class)
 annotation class ForChildController {
     companion object : Qualifier
 }
 
-/**
- * Returns a [Component] with convenient configurations
- */
+fun <T : Controller> T.controllerComponent(block: ComponentBuilder.() -> Unit): Component =
+    component {
+        scope = ControllerScope
+        getClosestComponentOrNull()?.let { dependencies(it) }
+        modules(controllerModule())
+        block()
+    }
+
 fun <T : Controller> T.controllerComponent(
     scope: Scope? = ControllerScope,
     modules: Iterable<Module> = emptyList(),
@@ -82,9 +88,14 @@ fun <T : Controller> T.controllerComponent(
     { getClosestComponentOrNull() }
 )
 
-/**
- * Returns a [Component] with convenient configurations
- */
+fun <T : Controller> T.childControllerComponent(block: ComponentBuilder.() -> Unit): Component =
+    component {
+        scope = ChildControllerScope
+        getClosestComponentOrNull()?.let { dependencies(it) }
+        modules(childControllerModule())
+        block()
+    }
+
 fun <T : Controller> T.childControllerComponent(
     scope: Scope? = ChildControllerScope,
     modules: Iterable<Module> = emptyList(),
@@ -95,68 +106,37 @@ fun <T : Controller> T.childControllerComponent(
     { getClosestComponentOrNull() }
 )
 
-/**
- * Returns the closest [Component] or null
- */
 fun Controller.getClosestComponentOrNull(): Component? {
     return getParentControllerComponentOrNull()
         ?: getActivityComponentOrNull()
         ?: getApplicationComponentOrNull()
 }
 
-/**
- * Returns the closest [Component]
- */
 fun Controller.getClosestComponent(): Component =
     getClosestComponentOrNull() ?: error("No close component found for $this")
 
-/**
- * Returns the [Component] of the parent controller or null
- */
 fun Controller.getParentControllerComponentOrNull(): Component? =
     (parentController as? InjektTrait)?.component
 
-/**
- * Returns the [Component] of the parent controller or throws
- */
 fun Controller.getParentControllerComponent(): Component =
     getParentControllerComponentOrNull() ?: error("No parent controller component found for $this")
 
-/**
- * Returns the [Component] of the activity or null
- */
 fun Controller.getActivityComponentOrNull(): Component? =
     (activity as? InjektTrait)?.component
 
-/**
- * Returns the [Component] of the activity or throws
- */
 fun Controller.getActivityComponent(): Component =
     getActivityComponentOrNull() ?: error("No activity component found for $this")
 
-/**
- * Returns the [Component] of the application or null
- */
 fun Controller.getApplicationComponentOrNull(): Component? =
-    (activity?.application as? InjektTrait)?.component
+    (activity.application as? InjektTrait)?.component
 
-/**
- * Returns the [Component] of the application or throws
- */
 fun Controller.getApplicationComponent(): Component =
     getApplicationComponentOrNull() ?: error("No application component found for $this")
 
-
-/**
- * Returns a [Module] with convenient bindings
- */
 fun <T : Controller> T.controllerModule(): Module = module {
     include(internalControllerModule(ForController))
 }
 
-/**
- * Returns a [Module] with convenient bindings
- */
 fun <T : Controller> T.childControllerModule(): Module = module {
     include(internalControllerModule(ForChildController))
 }

@@ -32,7 +32,9 @@ import com.ivianuu.scopes.ScopeOwner
 abstract class EsAccessibilityService : AccessibilityService(), InjektTrait, ScopeOwner {
 
     override val component by unsafeLazy {
-        serviceComponent(modules = modules())
+        serviceComponent {
+            modules(this@EsAccessibilityService.modules())
+        }
     }
 
     override val scope: Scope get() = _scope

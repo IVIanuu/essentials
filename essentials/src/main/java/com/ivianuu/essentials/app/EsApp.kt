@@ -18,12 +18,18 @@ package com.ivianuu.essentials.app
 
 import android.app.Application
 import android.content.pm.ApplicationInfo
-import com.ivianuu.essentials.injection._appComponent
 import com.ivianuu.essentials.injection.esModule
 import com.ivianuu.essentials.util.ext.containsFlag
-import com.ivianuu.injekt.*
+import com.ivianuu.essentials.util.ext.unsafeLazy
+import com.ivianuu.injekt.Component
+import com.ivianuu.injekt.InjektPlugins
+import com.ivianuu.injekt.InjektTrait
+import com.ivianuu.injekt.Module
+import com.ivianuu.injekt.Provider
 import com.ivianuu.injekt.android.AndroidLogger
 import com.ivianuu.injekt.android.applicationComponent
+import com.ivianuu.injekt.inject
+import com.ivianuu.injekt.logger
 import com.ivianuu.scopes.MutableScope
 import com.ivianuu.scopes.Scope
 import com.ivianuu.scopes.ScopeOwner
@@ -34,12 +40,10 @@ import kotlin.reflect.KClass
  */
 abstract class EsApp : Application(), InjektTrait, ScopeOwner {
 
-    override val component: Component
-        get() {
-            createComponentIfNeeded()
-            return _appComponent
-        }
-    private var componentCreated = false
+    override val component by unsafeLazy {
+        configureInjekt()
+        createComponent()
+    }
 
     override val scope: Scope get() = _scope
     private val _scope = MutableScope()
@@ -51,7 +55,6 @@ abstract class EsApp : Application(), InjektTrait, ScopeOwner {
 
     override fun onCreate() {
         super.onCreate()
-        createComponentIfNeeded()
         invokeInitializers()
         startAppServices()
     }
@@ -88,11 +91,4 @@ abstract class EsApp : Application(), InjektTrait, ScopeOwner {
 
     protected open fun modules(): List<Module> = emptyList()
 
-    private fun createComponentIfNeeded() {
-        if (!componentCreated) {
-            componentCreated = true
-            configureInjekt()
-            _appComponent = createComponent()
-        }
-    }
 }

@@ -33,7 +33,9 @@ import com.ivianuu.scopes.ScopeOwner
 abstract class EsService : Service(), InjektTrait, ScopeOwner {
 
     override val component by unsafeLazy {
-        serviceComponent(modules = modules())
+        serviceComponent {
+            modules(this@EsService.modules())
+        }
     }
 
     override val scope: Scope get() = _scope

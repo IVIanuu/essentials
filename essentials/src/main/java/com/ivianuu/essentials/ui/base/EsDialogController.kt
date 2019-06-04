@@ -36,9 +36,10 @@ abstract class EsDialogController : DialogController(), ContextAware, InjektTrai
     MvRxView {
 
     override val component by unsafeLazy {
-        controllerComponent(
-            modules = listOf(keyModule(args)) + modules()
-        )
+        controllerComponent {
+            modules(keyModule(args))
+            modules(this@EsDialogController.modules())
+        }
     }
 
     override val providedContext: Context

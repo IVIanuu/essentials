@@ -41,9 +41,10 @@ import kotlinx.android.synthetic.*
 abstract class EsController : Controller(), ContextAware, InjektTrait, LayoutContainer, MvRxView {
 
     override val component by unsafeLazy {
-        controllerComponent(
-            modules = listOf(keyModule(args)) + modules()
-        )
+        controllerComponent {
+            modules(keyModule(args))
+            modules(this@EsController.modules())
+        }
     }
 
     override val providedContext: Context
