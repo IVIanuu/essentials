@@ -16,15 +16,16 @@
 
 package com.ivianuu.essentials.ui.mvrx
 
-import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.base.EsViewModel
-import com.ivianuu.essentials.ui.mvrx.lifecycle.LifecycleStateListener
 import com.ivianuu.essentials.util.Async
 import com.ivianuu.essentials.util.Loading
 import com.ivianuu.essentials.util.asFail
 import com.ivianuu.essentials.util.asSuccess
+import com.ivianuu.essentials.util.ext.isMainThread
 import com.ivianuu.scopes.android.scope
 import com.ivianuu.scopes.rx.disposeBy
 import io.reactivex.Completable
@@ -43,7 +44,25 @@ abstract class MvRxViewModel<S>(initialState: S) : EsViewModel() {
     private val stateStore = MvRxStateStore(initialState)
         .also { it.disposeBy(scope) }
 
-    fun peekState(): S = stateStore.state
+    val currentState: S get() = stateStore.state
+    val state: LiveData<S> = object : MutableLiveData<S>() {
+        var disposable: Disposable? = null;
+
+        override fun onActive() {
+            super.onActive()
+
+            // Observable -> LiveData
+            disposable = stateStore.observable.subscribe {
+                if (isMainThread) value = it
+                else postValue(it)
+            }
+        }
+
+        override fun onInactive() {
+            disposable?.dispose();
+            super.onInactive()
+        }
+    }
 
     protected fun withState(consumer: (S) -> Unit) {
         stateStore.get(consumer)
@@ -59,14 +78,6 @@ abstract class MvRxViewModel<S>(initialState: S) : EsViewModel() {
 
     protected fun subscribe(consumer: (S) -> Unit): Disposable =
         stateStore.observable.subscribe(consumer).disposeBy(scope)
-
-    fun subscribe(owner: LifecycleOwner, consumer: (S) -> Unit): Disposable {
-        return LifecycleStateListener(
-            owner,
-            stateStore,
-            consumer
-        )
-    }
 
     protected fun Completable.execute(
         reducer: S.(Async<Unit>) -> S
@@ -102,5 +113,5 @@ abstract class MvRxViewModel<S>(initialState: S) : EsViewModel() {
         }
     }
 
-    override fun toString() = "${javaClass.simpleName} -> ${peekState()}"
+    override fun toString() = "${javaClass.simpleName} -> $currentState"
 }

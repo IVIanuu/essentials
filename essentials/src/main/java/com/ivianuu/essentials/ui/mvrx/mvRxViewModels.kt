@@ -19,7 +19,7 @@ package com.ivianuu.essentials.ui.mvrx
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
-import com.ivianuu.essentials.ui.mvrx.lifecycle.lifecycleLazy
+import androidx.lifecycle.observe
 import com.ivianuu.kommon.lifecycle.defaultViewModelKey
 import com.ivianuu.kommon.lifecycle.viewModelProvider
 
@@ -27,7 +27,7 @@ inline fun <reified T : MvRxViewModel<*>> MvRxView.mvRxViewModel(
     noinline from: () -> ViewModelStoreOwner = { this },
     noinline key: () -> String = { T::class.defaultViewModelKey },
     noinline factory: () -> T
-): Lazy<T> = lifecycleLazy { getMvRxViewModel(from(), key(), factory) }
+): Lazy<T> = LifecycleLazy(this) { getMvRxViewModel(from(), key(), factory) }
 
 inline fun <reified T : MvRxViewModel<*>> MvRxView.getMvRxViewModel(
     from: ViewModelStoreOwner = this,
@@ -41,6 +41,4 @@ inline fun <reified T : MvRxViewModel<*>> MvRxView.getMvRxViewModel(
 
 @PublishedApi
 internal fun <T : MvRxViewModel<*>> T.setupViewModel(view: MvRxView): T =
-    apply {
-        subscribe(view) { view.postInvalidate() }
-    }
+    apply { state.observe(view) { view.postInvalidate() } }

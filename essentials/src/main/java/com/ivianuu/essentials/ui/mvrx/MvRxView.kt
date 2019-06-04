@@ -22,9 +22,8 @@ import android.os.Message
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelStoreOwner
-import io.reactivex.disposables.Disposable
 
-private val PENDING_INVALIDATES = HashSet<Int>()
+private val PENDING_INVALIDATES = mutableSetOf<Int>()
 private val HANDLER = Handler(Looper.getMainLooper(), Handler.Callback { message ->
     val view = message.obj as MvRxView
     PENDING_INVALIDATES.remove(System.identityHashCode(view))
@@ -45,8 +44,5 @@ interface MvRxView : LifecycleOwner, ViewModelStoreOwner {
             HANDLER.sendMessage(Message.obtain(HANDLER, System.identityHashCode(this), this))
         }
     }
-
-    fun <S> MvRxViewModel<S>.subscribe(consumer: (S) -> Unit): Disposable =
-        subscribe(this@MvRxView, consumer)
 
 }

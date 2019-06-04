@@ -14,12 +14,13 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.mvrx.lifecycle
+package com.ivianuu.essentials.ui.mvrx
 
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
 
+@PublishedApi
 internal class LifecycleLazy<T>(
     owner: LifecycleOwner,
     private val event: Lifecycle.Event = Lifecycle.Event.ON_CREATE,
@@ -29,10 +30,7 @@ internal class LifecycleLazy<T>(
     private object UNINITIALIZED_VALUE
 
     private var initializer: (() -> T)? = initializer
-    @Volatile private var _value: Any? =
-        UNINITIALIZED_VALUE
-    // final field is required to enable safe publication of constructed instance
-    private val lock = this
+    private var _value: Any? = UNINITIALIZED_VALUE
 
     init {
         owner.lifecycle.addObserver(object : LifecycleEventObserver {
@@ -45,26 +43,14 @@ internal class LifecycleLazy<T>(
         })
     }
 
-    @Suppress("LocalVariableName")
     override val value: T
         get() {
-            val _v1 = _value
-            if (_v1 !== UNINITIALIZED_VALUE) {
-                @Suppress("UNCHECKED_CAST")
-                return _v1 as T
+            if (_value === UNINITIALIZED_VALUE) {
+                _value = initializer!!()
+                initializer = null
             }
-
-            return synchronized(lock) {
-                val _v2 = _value
-                if (_v2 !== UNINITIALIZED_VALUE) {
-                    @Suppress("UNCHECKED_CAST") (_v2 as T)
-                } else {
-                    val typedValue = initializer!!()
-                    _value = typedValue
-                    initializer = null
-                    typedValue
-                }
-            }
+            @Suppress("UNCHECKED_CAST")
+            return _value as T
         }
 
     override fun isInitialized(): Boolean = _value !== UNINITIALIZED_VALUE
@@ -72,8 +58,3 @@ internal class LifecycleLazy<T>(
     override fun toString(): String =
         if (isInitialized()) value.toString() else "Lazy value not initialized yet."
 }
-
-@PublishedApi
-internal fun <T> LifecycleOwner.lifecycleLazy(
-    initializer: () -> T
-): Lazy<T> = LifecycleLazy(this, initializer = initializer)
