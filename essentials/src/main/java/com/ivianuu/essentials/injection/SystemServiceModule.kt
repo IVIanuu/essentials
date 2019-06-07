@@ -77,7 +77,8 @@ import android.view.accessibility.CaptioningManager
 import android.view.inputmethod.InputMethodManager
 import android.view.textservice.TextServicesManager
 import androidx.core.content.ContextCompat
-import com.ivianuu.injekt.bindWithState
+
+import com.ivianuu.injekt.factoryWithState
 import com.ivianuu.injekt.module
 import com.ivianuu.injekt.typeOf
 import kotlin.reflect.KClass
@@ -89,7 +90,7 @@ val systemServiceModule = module {
     getSystemServices()
         .map { it as KClass<Any> }
         .forEach { service ->
-            bindWithState(typeOf(service)) {
+            factoryWithState(typeOf(service)) {
                 val context = link<Context>()
                 definition {
                     ContextCompat.getSystemService(

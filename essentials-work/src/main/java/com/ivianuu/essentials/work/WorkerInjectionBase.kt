@@ -27,12 +27,13 @@ import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Name
 import com.ivianuu.injekt.Provider
-import com.ivianuu.injekt.bind
 import com.ivianuu.injekt.bindType
+import com.ivianuu.injekt.factory
 import com.ivianuu.injekt.intoMap
 import com.ivianuu.injekt.map
 import com.ivianuu.injekt.module
 import com.ivianuu.injekt.parametersOf
+import com.ivianuu.injekt.typeOf
 import com.ivianuu.injekt.withBinding
 
 /**
@@ -73,7 +74,7 @@ typealias WorkerDefinition<T> = Component.(context: Context, workerParams: Worke
 inline fun <reified T : ListenableWorker> Module.worker(
     name: Any? = null,
     noinline definition: WorkerDefinition<T>
-): BindingContext<T> = bind(name) { (context: Context, workerParams: WorkerParameters) ->
+): BindingContext<T> = factory(name) { (context: Context, workerParams: WorkerParameters) ->
     definition(context, workerParams)
 }.intoMap<T, String, ListenableWorker>(T::class.java.name, WorkersMap)
 
@@ -83,6 +84,16 @@ inline fun <reified T : ListenableWorker> Module.bindWorker(
     withBinding<T>(name) {
         intoMap<T, String, ListenableWorker>(T::class.java.name, WorkersMap)
     }
+}
+
+inline fun <reified T : ListenableWorker> BindingContext<T>.bindWorker(): BindingContext<T> {
+    intoMap(
+        mapKeyType = typeOf<String>(),
+        mapValueType = typeOf<ListenableWorker>(),
+        entryKey = T::class.java.name,
+        mapName = WorkersMap
+    )
+    return this
 }
 
 @Name(WorkersMap.Companion::class)

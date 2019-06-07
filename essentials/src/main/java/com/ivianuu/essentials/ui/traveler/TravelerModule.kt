@@ -16,8 +16,8 @@
 
 package com.ivianuu.essentials.ui.traveler
 
-import com.ivianuu.injekt.bind
 import com.ivianuu.injekt.module
+import com.ivianuu.injekt.single
 import com.ivianuu.traveler.Router
 import com.ivianuu.traveler.android.AndroidRouter
 
@@ -25,5 +25,5 @@ import com.ivianuu.traveler.android.AndroidRouter
  * Provides the global [Router]
  */
 val travelerModule = module {
-    bind<Router>(scoped = true) { AndroidRouter() }
+    single<Router> { AndroidRouter() }
 }

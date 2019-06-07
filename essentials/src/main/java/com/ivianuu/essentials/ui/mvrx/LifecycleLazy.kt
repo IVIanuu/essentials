@@ -27,10 +27,8 @@ internal class LifecycleLazy<T>(
     initializer: () -> T
 ) : Lazy<T> {
 
-    private object UNINITIALIZED_VALUE
-
     private var initializer: (() -> T)? = initializer
-    private var _value: Any? = UNINITIALIZED_VALUE
+    private var _value: Any? = this
 
     init {
         owner.lifecycle.addObserver(object : LifecycleEventObserver {
@@ -45,7 +43,7 @@ internal class LifecycleLazy<T>(
 
     override val value: T
         get() {
-            if (_value === UNINITIALIZED_VALUE) {
+            if (_value === this) {
                 _value = initializer!!()
                 initializer = null
             }
@@ -53,7 +51,7 @@ internal class LifecycleLazy<T>(
             return _value as T
         }
 
-    override fun isInitialized(): Boolean = _value !== UNINITIALIZED_VALUE
+    override fun isInitialized(): Boolean = _value !== this
 
     override fun toString(): String =
         if (isInitialized()) value.toString() else "Lazy value not initialized yet."

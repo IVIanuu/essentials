@@ -20,10 +20,11 @@ import com.ivianuu.injekt.BindingContext
 import com.ivianuu.injekt.Definition
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Name
-import com.ivianuu.injekt.bind
 import com.ivianuu.injekt.intoMap
 import com.ivianuu.injekt.map
 import com.ivianuu.injekt.module
+import com.ivianuu.injekt.single
+import com.ivianuu.injekt.typeOf
 import com.ivianuu.injekt.withBinding
 import com.ivianuu.scopes.MutableScope
 import com.ivianuu.scopes.Scope
@@ -46,7 +47,7 @@ abstract class AppService : ScopeOwner {
 inline fun <reified T : AppService> Module.appService(
     name: Any? = null,
     noinline definition: Definition<T>
-): BindingContext<T> = bind(name = name, definition = definition).bindAppService()
+): BindingContext<T> = single(name = name, definition = definition).bindAppService()
 
 inline fun <reified T : AppService> Module.bindAppService(
     name: Any? = null
@@ -54,8 +55,15 @@ inline fun <reified T : AppService> Module.bindAppService(
     withBinding<T>(name) { bindAppService() }
 }
 
-inline fun <reified T : AppService> BindingContext<T>.bindAppService(): BindingContext<T> =
-    intoMap<T, KClass<out AppService>, AppService>(T::class, AppServices)
+inline fun <reified T : AppService> BindingContext<T>.bindAppService(): BindingContext<T> {
+    intoMap(
+        mapKeyType = typeOf<KClass<out AppService>>(),
+        mapValueType = typeOf<AppService>(),
+        entryKey = T::class,
+        mapName = AppServices
+    )
+    return this
+}
 
 @Name(AppServices.Companion::class)
 annotation class AppServices {
@@ -63,5 +71,5 @@ annotation class AppServices {
 }
 
 val esAppServicesModule = module {
-    map<KClass<out AppService>, AppService>()
+    map<KClass<out AppService>, AppService>(AppServices)
 }

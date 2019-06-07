@@ -29,11 +29,12 @@ import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Name
 import com.ivianuu.injekt.Scope
 import com.ivianuu.injekt.android.ChildViewScope
-import com.ivianuu.injekt.bind
 import com.ivianuu.injekt.bindAlias
 import com.ivianuu.injekt.bindName
 import com.ivianuu.injekt.bindType
 import com.ivianuu.injekt.component
+import com.ivianuu.injekt.factory
+import com.ivianuu.injekt.instance
 import com.ivianuu.injekt.module
 import com.ivianuu.injekt.scopes
 
@@ -105,7 +106,7 @@ fun <T : Controller> T.childControllerModule(): Module = module {
 }
 
 private fun <T : Controller> T.internalControllerModule(name: Any) = module {
-    bind(this@internalControllerModule, override = true).apply {
+    instance(this@internalControllerModule, override = true).apply {
         bindType<Controller>()
         bindAlias<Controller>(name)
         bindType<LifecycleOwner>()
@@ -116,10 +117,10 @@ private fun <T : Controller> T.internalControllerModule(name: Any) = module {
         bindAlias<SavedStateRegistryOwner>(name)
     }
 
-    bind<Context>(override = true) { activity } bindName name
-    bind(override = true) { resources } bindName name
-    bind(override = true) { lifecycle } bindName name
-    bind(override = true) { viewModelStore } bindName name
-    bind(override = true) { savedStateRegistry } bindName name
-    bind(override = true) { childRouterManager } bindName name
+    factory<Context>(override = true) { activity } bindName name
+    factory(override = true) { resources } bindName name
+    factory(override = true) { lifecycle } bindName name
+    factory(override = true) { viewModelStore } bindName name
+    factory(override = true) { savedStateRegistry } bindName name
+    factory(override = true) { childRouterManager } bindName name
 }
