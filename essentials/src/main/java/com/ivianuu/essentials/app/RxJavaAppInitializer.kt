@@ -17,15 +17,14 @@
 package com.ivianuu.essentials.app
 
 import android.os.Looper
-import com.ivianuu.injekt.Factory
-
+import com.ivianuu.injekt.Inject
 import io.reactivex.android.plugins.RxAndroidPlugins
 import io.reactivex.android.schedulers.AndroidSchedulers
 
 /**
  * Enables async main thread schedulers
  */
-@Factory
+@Inject
 class RxJavaAppInitializer : AppInitializer {
 
     override fun initialize() {

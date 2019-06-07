@@ -16,13 +16,11 @@
 
 package com.ivianuu.essentials.app
 
+import android.content.Context
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
-import com.ivianuu.injekt.android.context
-import com.ivianuu.injekt.factory
-import com.ivianuu.injekt.get
+import com.ivianuu.injekt.bindWithState
 import com.ivianuu.injekt.module
-import com.ivianuu.injekt.single
 import com.ivianuu.kprefs.KPrefs
 import com.ivianuu.ksettings.KSettings
 
@@ -30,8 +28,20 @@ import com.ivianuu.ksettings.KSettings
  * Basic app dependencies such as preferences or package manager
  */
 val esAppModule = module {
-    single { PreferenceManager.getDefaultSharedPreferences(get()) }
-    single { KPrefs(get<SharedPreferences>()) }
-    single { KSettings(context()) }
-    factory { context().packageManager!! }
+    bindWithState(scoped = true) {
+        val context = link<Context>()
+        definition { PreferenceManager.getDefaultSharedPreferences(context()) }
+    }
+    bindWithState(scoped = true) {
+        val sharedPrefs = link<SharedPreferences>()
+        definition { KPrefs(sharedPrefs()) }
+    }
+    bindWithState(scoped = true) {
+        val context = link<Context>()
+        definition { KSettings(context()) }
+    }
+    bindWithState {
+        val context = link<Context>()
+        definition { context().packageManager }
+    }
 }

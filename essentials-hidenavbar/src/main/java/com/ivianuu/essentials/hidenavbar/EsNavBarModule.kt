@@ -18,14 +18,13 @@ package com.ivianuu.essentials.hidenavbar
 
 import android.content.SharedPreferences
 import com.ivianuu.essentials.app.bindAppService
-import com.ivianuu.injekt.Qualifier
+
 import com.ivianuu.injekt.android.sharedPreferences
-import com.ivianuu.injekt.get
+import com.ivianuu.injekt.bindWithState
 import com.ivianuu.injekt.module
-import com.ivianuu.injekt.single
 import com.ivianuu.kprefs.KPrefs
 
-object NavBar : Qualifier
+object NavBar
 
 const val NAV_BAR_SHARED_PREFS_NAME = "com.ivianuu.essentials.hidenavbar.prefs"
 
@@ -34,7 +33,11 @@ const val NAV_BAR_SHARED_PREFS_NAME = "com.ivianuu.essentials.hidenavbar.prefs"
  */
 val esNavBarModule = module {
     sharedPreferences(NAV_BAR_SHARED_PREFS_NAME, name = NavBar)
-    single(NavBar) { KPrefs(get<SharedPreferences>(NavBar)) }
+
+    bindWithState(name = NavBar, scoped = true) {
+        val sharedPrefs = link<SharedPreferences>(NavBar)
+        definition { KPrefs(sharedPrefs()) }
+    }
 
     bindAppService<NavBarController>()
 }

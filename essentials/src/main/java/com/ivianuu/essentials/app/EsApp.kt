@@ -66,9 +66,10 @@ abstract class EsApp : Application(), InjektTrait, ScopeOwner {
     }
 
     protected open fun createComponent(): Component {
-        return applicationComponent(
-            modules = listOf(esAppModule, esModule) + modules()
-        )
+        return applicationComponent {
+            modules(esAppModule, esModule)
+            modules(this@EsApp.modules())
+        }
     }
 
     protected open fun invokeInitializers() {

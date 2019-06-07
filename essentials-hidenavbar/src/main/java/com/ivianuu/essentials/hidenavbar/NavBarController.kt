@@ -29,8 +29,8 @@ import com.ivianuu.essentials.app.AppService
 import com.ivianuu.essentials.util.BroadcastFactory
 import com.ivianuu.essentials.util.ext.combineLatest
 import com.ivianuu.essentials.util.ext.observable
-import com.ivianuu.injekt.ApplicationScope
-import com.ivianuu.injekt.Single
+import com.ivianuu.injekt.Inject
+import com.ivianuu.injekt.android.ApplicationScope
 import com.ivianuu.kommon.core.app.doOnConfigurationChanged
 import com.ivianuu.kprefs.rx.asObservable
 import com.ivianuu.scopes.ReusableScope
@@ -41,7 +41,7 @@ import io.reactivex.rxkotlin.Observables
 /**
  * Handles the state of the navigation bar
  */
-@Single @ApplicationScope
+@Inject @ApplicationScope
 class NavBarController(
     private val app: Application,
     private val broadcastFactory: BroadcastFactory,

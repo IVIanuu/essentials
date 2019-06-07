@@ -16,8 +16,15 @@
 
 package com.ivianuu.essentials.app
 
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.bridge.bridge
+import com.ivianuu.injekt.BindingContext
+import com.ivianuu.injekt.Definition
+import com.ivianuu.injekt.Module
+import com.ivianuu.injekt.Name
+import com.ivianuu.injekt.bind
+import com.ivianuu.injekt.intoMap
+import com.ivianuu.injekt.map
+import com.ivianuu.injekt.module
+import com.ivianuu.injekt.withBinding
 import kotlin.reflect.KClass
 
 /**
@@ -28,27 +35,28 @@ interface AppInitializer {
 }
 
 inline fun <reified T : AppInitializer> Module.appInitializer(
-    name: Qualifier? = null,
+    name: Any? = null,
     noinline definition: Definition<T>
-): Binding<T> = factory(name = name, definition = definition).bindAppInitializer()
+): BindingContext<T> = bind(name = name, definition = definition).bindAppInitializer()
 
 inline fun <reified T : AppInitializer> Module.bindAppInitializer(
-    name: Qualifier? = null
+    name: Any? = null
 ) {
-    bridge<T>(name).bindAppInitializer()
+    withBinding<T>(name) { bindAppInitializer() }
 }
 
 @Name(AppInitializers.Companion::class)
 annotation class AppInitializers {
-    companion object : Qualifier
+    companion object
 }
 
-inline fun <reified T : AppInitializer> Binding<T>.bindAppInitializer() =
-    bindIntoMap<T, KClass<out AppInitializer>, AppInitializer>(
-        key = T::class, mapName = AppInitializers
-    )
+inline fun <reified T : AppInitializer> BindingContext<T>.bindAppInitializer(): BindingContext<T> {
+    intoMap<T, KClass<out AppInitializer>, AppInitializer>(T::class, AppInitializers)
+    return this
+}
 
 val esAppInitializersModule = module {
+    map<KClass<out AppInitializer>, AppInitializer>()
     bindAppInitializer<RxJavaAppInitializer>()
     bindAppInitializer<TimberAppInitializer>()
 }

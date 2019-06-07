@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.injection
 
+import android.content.Context
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.savedstate.SavedStateRegistryOwner
@@ -26,85 +27,47 @@ import com.ivianuu.injekt.ComponentBuilder
 import com.ivianuu.injekt.InjektTrait
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Name
-import com.ivianuu.injekt.Qualifier
 import com.ivianuu.injekt.Scope
-import com.ivianuu.injekt.ScopeAnnotation
+import com.ivianuu.injekt.android.ChildViewScope
+import com.ivianuu.injekt.bind
 import com.ivianuu.injekt.bindAlias
 import com.ivianuu.injekt.bindName
 import com.ivianuu.injekt.bindType
 import com.ivianuu.injekt.component
-import com.ivianuu.injekt.constant.constant
-import com.ivianuu.injekt.factory
 import com.ivianuu.injekt.module
+import com.ivianuu.injekt.scopes
 
-private inline fun androidComponent(
-    scope: Scope? = null,
-    modules: Iterable<Module>,
-    dependencies: Iterable<Component>,
-    module: () -> Module,
-    dependency: () -> Component?
-): Component {
-    val allModules = modules + listOf(module())
-    val allDependencies = dependencies +
-            (dependency()?.let { listOf(it) } ?: emptyList())
-    return component(scope, allModules, allDependencies)
-}
+@Scope
+annotation class ControllerScope
 
-@ScopeAnnotation(ControllerScope.Companion::class)
-annotation class ControllerScope {
-    companion object : Scope
-}
-
-@ScopeAnnotation(ChildControllerScope.Companion::class)
-annotation class ChildControllerScope {
-    companion object : Scope
-}
+@Scope
+annotation class ChildControllerScope
 
 @Name(ForController.Companion::class)
 annotation class ForController {
-    companion object : Qualifier
+    companion object
 }
 
 @Name(ForChildController.Companion::class)
 annotation class ForChildController {
-    companion object : Qualifier
+    companion object
 }
 
-fun <T : Controller> T.controllerComponent(block: ComponentBuilder.() -> Unit): Component =
+fun <T : Controller> T.controllerComponent(block: (ComponentBuilder.() -> Unit)? = null): Component =
     component {
-        scope = ControllerScope
+        scopes<ControllerScope>()
         getClosestComponentOrNull()?.let { dependencies(it) }
         modules(controllerModule())
-        block()
+        block?.invoke(this)
     }
 
-fun <T : Controller> T.controllerComponent(
-    scope: Scope? = ControllerScope,
-    modules: Iterable<Module> = emptyList(),
-    dependencies: Iterable<Component> = emptyList()
-): Component = androidComponent(
-    scope, modules, dependencies,
-    { controllerModule() },
-    { getClosestComponentOrNull() }
-)
-
-fun <T : Controller> T.childControllerComponent(block: ComponentBuilder.() -> Unit): Component =
+fun <T : Controller> T.childControllerComponent(block: (ComponentBuilder.() -> Unit)? = null): Component =
     component {
-        scope = ChildControllerScope
+        scopes<ChildViewScope>()
         getClosestComponentOrNull()?.let { dependencies(it) }
         modules(childControllerModule())
-        block()
+        block?.invoke(this)
     }
-
-fun <T : Controller> T.childControllerComponent(
-    scope: Scope? = ChildControllerScope,
-    modules: Iterable<Module> = emptyList(),
-    dependencies: Iterable<Component> = emptyList()
-): Component = androidComponent(
-    scope, modules, dependencies,
-    { childControllerModule() },
-    { getClosestComponentOrNull() }
-)
 
 fun Controller.getClosestComponentOrNull(): Component? {
     return getParentControllerComponentOrNull()
@@ -141,8 +104,8 @@ fun <T : Controller> T.childControllerModule(): Module = module {
     include(internalControllerModule(ForChildController))
 }
 
-private fun <T : Controller> T.internalControllerModule(name: Qualifier) = module {
-    constant(this@internalControllerModule, override = true).apply {
+private fun <T : Controller> T.internalControllerModule(name: Any) = module {
+    bind(this@internalControllerModule, override = true).apply {
         bindType<Controller>()
         bindAlias<Controller>(name)
         bindType<LifecycleOwner>()
@@ -153,9 +116,10 @@ private fun <T : Controller> T.internalControllerModule(name: Qualifier) = modul
         bindAlias<SavedStateRegistryOwner>(name)
     }
 
-    factory(override = true) { resources } bindName name
-    factory(override = true) { lifecycle } bindName name
-    factory(override = true) { viewModelStore } bindName name
-    factory(override = true) { savedStateRegistry } bindName name
-    factory(override = true) { childRouterManager } bindName name
+    bind<Context>(override = true) { activity } bindName name
+    bind(override = true) { resources } bindName name
+    bind(override = true) { lifecycle } bindName name
+    bind(override = true) { viewModelStore } bindName name
+    bind(override = true) { savedStateRegistry } bindName name
+    bind(override = true) { childRouterManager } bindName name
 }

@@ -18,7 +18,8 @@ package com.ivianuu.essentials.hidenavbar
 
 import android.os.Build
 import com.github.ajalt.timberkt.d
-import com.ivianuu.injekt.Factory
+import com.ivianuu.injekt.Inject
+
 
 import com.ivianuu.ksettings.KSettings
 import com.ivianuu.ksettings.Setting
@@ -26,7 +27,7 @@ import com.ivianuu.ksettings.Setting
 /**
  * Deactivates non sdk interface detection
  */
-@Factory
+@Inject
 class NonSdkInterfacesHelper(private val settings: KSettings) {
 
     fun disableNonSdkInterfaceDetection() {

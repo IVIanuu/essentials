@@ -19,12 +19,12 @@ package com.ivianuu.essentials.util
 import android.content.Context
 import android.widget.Toast
 import com.ivianuu.essentials.util.ext.mainThread
-import com.ivianuu.injekt.Factory
+import com.ivianuu.injekt.Inject
 
 /**
  * Shows system toasts
  */
-@Factory
+@Inject
 class Toaster(
     private val context: Context,
     private val stringProvider: StringProvider

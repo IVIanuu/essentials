@@ -16,15 +16,15 @@
 
 package com.ivianuu.essentials.app
 
-import com.ivianuu.injekt.Binding
+import com.ivianuu.injekt.BindingContext
 import com.ivianuu.injekt.Definition
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Name
-import com.ivianuu.injekt.Qualifier
-import com.ivianuu.injekt.bindIntoMap
-import com.ivianuu.injekt.bridge.bridge
-import com.ivianuu.injekt.factory
+import com.ivianuu.injekt.bind
+import com.ivianuu.injekt.intoMap
+import com.ivianuu.injekt.map
 import com.ivianuu.injekt.module
+import com.ivianuu.injekt.withBinding
 import com.ivianuu.scopes.MutableScope
 import com.ivianuu.scopes.Scope
 import com.ivianuu.scopes.ScopeOwner
@@ -44,26 +44,24 @@ abstract class AppService : ScopeOwner {
 }
 
 inline fun <reified T : AppService> Module.appService(
-    name: Qualifier? = null,
+    name: Any? = null,
     noinline definition: Definition<T>
-): Binding<T> = factory(name = name, definition = definition)
-    .bindAppService()
+): BindingContext<T> = bind(name = name, definition = definition).bindAppService()
 
 inline fun <reified T : AppService> Module.bindAppService(
-    name: Qualifier? = null
+    name: Any? = null
 ) {
-    bridge<T>(name).bindAppService()
+    withBinding<T>(name) { bindAppService() }
 }
 
-inline fun <reified T : AppService> Binding<T>.bindAppService() =
-    bindIntoMap<T, KClass<out AppService>, AppService>(
-        key = T::class, mapName = AppServices
-    )
+inline fun <reified T : AppService> BindingContext<T>.bindAppService(): BindingContext<T> =
+    intoMap<T, KClass<out AppService>, AppService>(T::class, AppServices)
 
 @Name(AppServices.Companion::class)
 annotation class AppServices {
-    companion object : Qualifier
+    companion object
 }
 
 val esAppServicesModule = module {
+    map<KClass<out AppService>, AppService>()
 }

@@ -34,7 +34,10 @@ abstract class EsBroadcastReceiver : BroadcastReceiver(), InjektTrait {
     override lateinit var component: Component
 
     override fun onReceive(context: Context, intent: Intent) {
-        component = receiverComponent(context, modules = modules(context))
+        // todo remove type
+        component = receiverComponent(context) {
+            modules(this@EsBroadcastReceiver.modules(context))
+        }
     }
 
     protected open fun modules(context: Context): List<Module> = emptyList()

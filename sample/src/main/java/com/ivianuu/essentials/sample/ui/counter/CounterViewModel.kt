@@ -23,10 +23,14 @@ import com.ivianuu.essentials.sample.ui.list.ListKey
 import com.ivianuu.essentials.sample.work.MyWorkerOne
 import com.ivianuu.essentials.sample.work.MyWorkerTwo
 import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
-import com.ivianuu.injekt.Factory
-import com.ivianuu.traveler.*
+import com.ivianuu.injekt.Inject
+import com.ivianuu.traveler.Router
+import com.ivianuu.traveler.finish
+import com.ivianuu.traveler.goBack
+import com.ivianuu.traveler.navigate
+import com.ivianuu.traveler.popToRoot
 
-@Factory
+@Inject
 class CounterViewModel(
     key: CounterKey,
     private val router: Router

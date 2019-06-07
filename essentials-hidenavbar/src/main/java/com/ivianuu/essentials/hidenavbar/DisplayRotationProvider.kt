@@ -17,12 +17,12 @@
 package com.ivianuu.essentials.hidenavbar
 
 import android.view.WindowManager
-import com.ivianuu.injekt.Factory
+import com.ivianuu.injekt.Inject
 
 /**
  * Provides display rotation info
  */
-@Factory
+@Inject
 class DisplayRotationProvider(private val windowManager: WindowManager) {
     val displayRotation: Int get() = windowManager.defaultDisplay.rotation
 }

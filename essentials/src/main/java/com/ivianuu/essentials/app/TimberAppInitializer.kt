@@ -19,14 +19,15 @@ package com.ivianuu.essentials.app
 import android.app.Application
 import android.content.pm.ApplicationInfo
 import com.ivianuu.essentials.util.ext.containsFlag
-import com.ivianuu.injekt.Factory
+import com.ivianuu.injekt.Inject
+
 
 import timber.log.Timber
 
 /**
  * Initializes timber in debug builds
  */
-@Factory
+@Inject
 class TimberAppInitializer(private val app: Application) : AppInitializer {
 
     override fun initialize() {

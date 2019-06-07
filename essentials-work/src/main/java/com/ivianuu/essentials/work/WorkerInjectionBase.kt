@@ -21,13 +21,24 @@ import androidx.work.ListenableWorker
 import androidx.work.Worker
 import androidx.work.WorkerFactory
 import androidx.work.WorkerParameters
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.bridge.bridge
+import com.ivianuu.injekt.BindingContext
+import com.ivianuu.injekt.Component
+import com.ivianuu.injekt.Inject
+import com.ivianuu.injekt.Module
+import com.ivianuu.injekt.Name
+import com.ivianuu.injekt.Provider
+import com.ivianuu.injekt.bind
+import com.ivianuu.injekt.bindType
+import com.ivianuu.injekt.intoMap
+import com.ivianuu.injekt.map
+import com.ivianuu.injekt.module
+import com.ivianuu.injekt.parametersOf
+import com.ivianuu.injekt.withBinding
 
 /**
  * Uses injekt to instantiate workers
  */
-@Factory
+@Inject
 class InjektWorkerFactory(
     @WorkersMap private val workers: Map<String, Provider<ListenableWorker>>
 ) : WorkerFactory() {
@@ -47,34 +58,34 @@ class InjektWorkerFactory(
  * Contains the [InjektWorkerFactory]
  */
 val workerInjectionModule = module {
-    // todo mapBinding<String, ListenableWorker>(WorkersMap)
-    bridge<InjektWorkerFactory>() bindType WorkerFactory::class
+    map<String, ListenableWorker>()
+    withBinding<InjektWorkerFactory> { bindType<WorkerFactory>() }
 }
 
 /**
  * Defines a [Worker]
  */
-typealias WorkerDefinition<T> = DefinitionContext.(context: Context, workerParams: WorkerParameters) -> T
+typealias WorkerDefinition<T> = Component.(context: Context, workerParams: WorkerParameters) -> T
 
 /**
  * Defines a [Worker] which will be used in conjunction with the [InjektWorkerFactory]
  */
 inline fun <reified T : ListenableWorker> Module.worker(
-    name: Qualifier? = null,
+    name: Any? = null,
     noinline definition: WorkerDefinition<T>
-): Binding<T> = factory(name) { (context: Context, workerParams: WorkerParameters) ->
+): BindingContext<T> = bind(name) { (context: Context, workerParams: WorkerParameters) ->
     definition(context, workerParams)
-}.bindIntoMap<T, String, ListenableWorker>(key = T::class.java.name, mapName = WorkersMap)
+}.intoMap<T, String, ListenableWorker>(T::class.java.name, WorkersMap)
 
 inline fun <reified T : ListenableWorker> Module.bindWorker(
-    name: Qualifier? = null
+    name: Any? = null
 ) {
-    bridge<T>(name) {
-        bindIntoMap<T, String, ListenableWorker>(key = T::class.java.name, mapName = WorkersMap)
+    withBinding<T>(name) {
+        intoMap<T, String, ListenableWorker>(T::class.java.name, WorkersMap)
     }
 }
 
 @Name(WorkersMap.Companion::class)
 annotation class WorkersMap {
-    companion object : Qualifier
+    companion object
 }

@@ -32,15 +32,18 @@ import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
 import com.ivianuu.essentials.ui.mvrx.epoxy.mvRxEpoxyController
 import com.ivianuu.essentials.ui.mvrx.mvRxViewModel
 import com.ivianuu.essentials.ui.simple.ListController
-import com.ivianuu.essentials.util.*
+import com.ivianuu.essentials.util.AppDispatchers
+import com.ivianuu.essentials.util.Async
+import com.ivianuu.essentials.util.Loading
+import com.ivianuu.essentials.util.Success
+import com.ivianuu.essentials.util.Uninitialized
 import com.ivianuu.essentials.util.ext.BehaviorSubject
 import com.ivianuu.essentials.util.ext.PublishSubject
 import com.ivianuu.essentials.util.ext.andTrue
-import com.ivianuu.injekt.factory
+import com.ivianuu.injekt.Inject
+import com.ivianuu.injekt.Param
 import com.ivianuu.injekt.get
-import com.ivianuu.injekt.module
 import com.ivianuu.injekt.parametersOf
-
 import com.ivianuu.scopes.ReusableScope
 import com.ivianuu.scopes.android.onDestroy
 import com.ivianuu.scopes.android.scope
@@ -57,8 +60,6 @@ import kotlinx.coroutines.rx2.asSingle
  * App blacklist
  */
 abstract class CheckableAppsController : ListController() {
-
-    override fun modules() = listOf(checkableAppsModule)
 
     override val toolbarMenuRes
         get() = R.menu.es_controller_checkable_apps
@@ -129,12 +130,9 @@ private fun EpoxyController.CheckableApp(
     }
 )
 
-private val checkableAppsModule = module {
-    factory { CheckableAppsViewModel(it[0], get(), get()) }
-}
-
-private class CheckableAppsViewModel(
-    private val launchableOnly: Boolean,
+@Inject
+internal class CheckableAppsViewModel(
+    @Param private val launchableOnly: Boolean,
     private val appStore: AppStore,
     private val dispatchers: AppDispatchers
 ) : MvRxViewModel<CheckableAppsState>(CheckableAppsState()) {
@@ -214,11 +212,11 @@ private class CheckableAppsViewModel(
     }
 }
 
-private data class CheckableAppsState(
+internal data class CheckableAppsState(
     val apps: Async<List<CheckableApp>> = Uninitialized
 )
 
-private data class CheckableApp(
+internal data class CheckableApp(
     val info: AppInfo,
     val isChecked: Boolean
 )

@@ -60,7 +60,6 @@ dependencies {
 
     api(Deps.injekt)
     api(Deps.injektAndroid)
-    api(Deps.injektCommon)
 
     api(Deps.kommonAppCompat)
     api(Deps.kommonCore)

@@ -26,7 +26,8 @@ import com.bumptech.glide.load.model.ModelLoader
 import com.bumptech.glide.load.model.ModelLoaderFactory
 import com.bumptech.glide.load.model.MultiModelLoaderFactory
 import com.bumptech.glide.signature.ObjectKey
-import com.ivianuu.injekt.Factory
+import com.ivianuu.injekt.Inject
+
 import com.ivianuu.injekt.Param
 import com.ivianuu.injekt.Provider
 import com.ivianuu.injekt.parametersOf
@@ -36,7 +37,7 @@ data class AppIcon(val packageName: String)
 /**
  * Fetches images for [AppIcon]s
  */
-@Factory
+@Inject
 class AppIconFetcher(
     @Param private val app: AppIcon,
     private val packageManager: PackageManager
@@ -65,7 +66,7 @@ class AppIconFetcher(
 /**
  * Model loader to load [AppIcon]s
  */
-@Factory
+@Inject
 class AppIconModelLoader(
     private val appIconFetcherProvider: Provider<AppIconFetcher>
 ) : ModelLoader<AppIcon, Drawable> {
@@ -83,7 +84,7 @@ class AppIconModelLoader(
 
 }
 
-@Factory
+@Inject
 class AppIconModelLoaderFactory(
     private val appIconModelLoaderProvider: Provider<AppIconModelLoader>
 ) : ModelLoaderFactory<AppIcon, Drawable> {

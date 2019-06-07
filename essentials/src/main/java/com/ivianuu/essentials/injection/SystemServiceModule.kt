@@ -18,7 +18,15 @@ package com.ivianuu.essentials.injection
 
 import android.accessibilityservice.AccessibilityService
 import android.accounts.AccountManager
-import android.app.*
+import android.app.ActivityManager
+import android.app.AlarmManager
+import android.app.AppOpsManager
+import android.app.DownloadManager
+import android.app.KeyguardManager
+import android.app.NotificationManager
+import android.app.SearchManager
+import android.app.UiModeManager
+import android.app.WallpaperManager
 import android.app.admin.DevicePolicyManager
 import android.app.job.JobScheduler
 import android.app.usage.NetworkStatsManager
@@ -26,6 +34,7 @@ import android.app.usage.UsageStatsManager
 import android.appwidget.AppWidgetManager
 import android.bluetooth.BluetoothManager
 import android.content.ClipboardManager
+import android.content.Context
 import android.content.RestrictionsManager
 import android.content.pm.LauncherApps
 import android.content.pm.ShortcutManager
@@ -48,7 +57,13 @@ import android.net.nsd.NsdManager
 import android.net.wifi.WifiManager
 import android.net.wifi.p2p.WifiP2pManager
 import android.nfc.NfcManager
-import android.os.*
+import android.os.BatteryManager
+import android.os.Build
+import android.os.DropBoxManager
+import android.os.HardwarePropertiesManager
+import android.os.PowerManager
+import android.os.UserManager
+import android.os.Vibrator
 import android.os.health.SystemHealthManager
 import android.os.storage.StorageManager
 import android.print.PrintManager
@@ -62,8 +77,7 @@ import android.view.accessibility.CaptioningManager
 import android.view.inputmethod.InputMethodManager
 import android.view.textservice.TextServicesManager
 import androidx.core.content.ContextCompat
-import com.ivianuu.injekt.factory
-import com.ivianuu.injekt.get
+import com.ivianuu.injekt.bindWithState
 import com.ivianuu.injekt.module
 import com.ivianuu.injekt.typeOf
 import kotlin.reflect.KClass
@@ -75,11 +89,13 @@ val systemServiceModule = module {
     getSystemServices()
         .map { it as KClass<Any> }
         .forEach { service ->
-            factory(typeOf(service)) {
-                ContextCompat.getSystemService(
-                    get(),
-                    service.java
-                )!!
+            bindWithState(typeOf(service)) {
+                val context = link<Context>()
+                definition {
+                    ContextCompat.getSystemService(
+                        context(), service.java
+                    )
+                }
             }
         }
 }

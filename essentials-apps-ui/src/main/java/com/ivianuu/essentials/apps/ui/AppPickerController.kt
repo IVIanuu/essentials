@@ -36,9 +36,7 @@ import com.ivianuu.essentials.util.Loading
 import com.ivianuu.essentials.util.Success
 import com.ivianuu.essentials.util.Uninitialized
 import com.ivianuu.essentials.util.ext.goBackWithResult
-import com.ivianuu.injekt.factory
-import com.ivianuu.injekt.get
-import com.ivianuu.injekt.module
+import com.ivianuu.injekt.Inject
 import com.ivianuu.traveler.Router
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.es_item_app.es_app_icon
@@ -55,8 +53,6 @@ data class AppPickerKey(
  * App picker controller
  */
 class AppPickerController : ListController() {
-
-    override fun modules() = listOf(appPickerModule)
 
     override val toolbarTitleRes: Int
         get() = R.string.es_title_app_picker
@@ -97,11 +93,8 @@ private fun EpoxyController.AppInfo(
     }
 )
 
-private val appPickerModule = module {
-    factory { AppPickerViewModel(get(), get(), get()) }
-}
-
-private class AppPickerViewModel(
+@Inject
+internal class AppPickerViewModel(
     private val key: AppPickerKey,
     private val appStore: AppStore,
     private val router: Router
@@ -122,4 +115,4 @@ private class AppPickerViewModel(
     }
 }
 
-private data class AppPickerState(val apps: Async<List<AppInfo>> = Uninitialized)
+internal data class AppPickerState(val apps: Async<List<AppInfo>> = Uninitialized)
