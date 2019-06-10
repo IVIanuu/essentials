@@ -37,7 +37,7 @@ const val NAV_BAR_SHARED_PREFS_NAME = "com.ivianuu.essentials.hidenavbar.prefs"
 val esNavBarModule = module {
     sharedPreferences(NAV_BAR_SHARED_PREFS_NAME, name = NavBar)
 
-    single { KPrefs(get<SharedPreferences>(NavBar)) }
+    single(NavBar) { KPrefs(get<SharedPreferences>(NavBar)) }
 
     bindAppService<NavBarController>()
 }

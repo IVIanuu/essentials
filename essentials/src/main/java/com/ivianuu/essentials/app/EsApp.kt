@@ -75,7 +75,10 @@ abstract class EsApp : Application(), InjektTrait, ScopeOwner {
     protected open fun invokeInitializers() {
         appInitializers
             .filterKeys { shouldInitialize(it) }
-            .map { it.value() }
+            .map {
+                println("initalize $it")
+                it.value()
+            }
             .forEach { it.initialize() }
     }
 

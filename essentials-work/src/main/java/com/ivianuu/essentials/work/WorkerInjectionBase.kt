@@ -59,7 +59,7 @@ class InjektWorkerFactory(
  * Contains the [InjektWorkerFactory]
  */
 val workerInjectionModule = module {
-    map<String, ListenableWorker>()
+    map<String, ListenableWorker>(WorkersMap)
     withBinding<InjektWorkerFactory> { bindType<WorkerFactory>() }
 }
 
@@ -76,14 +76,12 @@ inline fun <reified T : ListenableWorker> Module.worker(
     noinline definition: WorkerDefinition<T>
 ): BindingContext<T> = factory(name) { (context: Context, workerParams: WorkerParameters) ->
     definition(context, workerParams)
-}.intoMap<T, String, ListenableWorker>(T::class.java.name, WorkersMap)
+}.bindWorker()
 
 inline fun <reified T : ListenableWorker> Module.bindWorker(
     name: Any? = null
 ) {
-    withBinding<T>(name) {
-        intoMap<T, String, ListenableWorker>(T::class.java.name, WorkersMap)
-    }
+    withBinding<T>(name) { bindWorker() }
 }
 
 inline fun <reified T : ListenableWorker> BindingContext<T>.bindWorker(): BindingContext<T> {
