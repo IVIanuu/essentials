@@ -20,9 +20,11 @@ import android.content.SharedPreferences
 import com.ivianuu.essentials.app.bindAppService
 
 import com.ivianuu.injekt.android.sharedPreferences
+import com.ivianuu.injekt.get
 
 import com.ivianuu.injekt.module
-import com.ivianuu.injekt.singleWithState
+import com.ivianuu.injekt.single
+
 import com.ivianuu.kprefs.KPrefs
 
 object NavBar
@@ -35,10 +37,7 @@ const val NAV_BAR_SHARED_PREFS_NAME = "com.ivianuu.essentials.hidenavbar.prefs"
 val esNavBarModule = module {
     sharedPreferences(NAV_BAR_SHARED_PREFS_NAME, name = NavBar)
 
-    singleWithState(name = NavBar) {
-        val sharedPrefs = link<SharedPreferences>(NavBar)
-        definition { KPrefs(sharedPrefs()) }
-    }
+    single { KPrefs(get<SharedPreferences>(NavBar)) }
 
     bindAppService<NavBarController>()
 }

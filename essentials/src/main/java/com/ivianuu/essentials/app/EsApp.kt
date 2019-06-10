@@ -75,7 +75,7 @@ abstract class EsApp : Application(), InjektTrait, ScopeOwner {
     protected open fun invokeInitializers() {
         appInitializers
             .filterKeys { shouldInitialize(it) }
-            .map { it.value.get() }
+            .map { it.value() }
             .forEach { it.initialize() }
     }
 
@@ -84,7 +84,7 @@ abstract class EsApp : Application(), InjektTrait, ScopeOwner {
     protected open fun startAppServices() {
         appServices
             .filterKeys { shouldStartAppService(it) }
-            .map { it.value.get() }
+            .map { it.value() }
             .forEach { it.start() }
     }
 

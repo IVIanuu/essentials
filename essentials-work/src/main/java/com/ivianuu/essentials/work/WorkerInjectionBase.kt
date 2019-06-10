@@ -22,7 +22,7 @@ import androidx.work.Worker
 import androidx.work.WorkerFactory
 import androidx.work.WorkerParameters
 import com.ivianuu.injekt.BindingContext
-import com.ivianuu.injekt.Component
+import com.ivianuu.injekt.DefinitionContext
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Name
@@ -49,7 +49,7 @@ class InjektWorkerFactory(
         workerClassName: String,
         workerParameters: WorkerParameters
     ): ListenableWorker? {
-        return workers[workerClassName]?.get { parametersOf(appContext, workerParameters) }
+        return workers[workerClassName]?.invoke { parametersOf(appContext, workerParameters) }
             ?: error("Could not find a worker for $workerClassName")
     }
 
@@ -66,7 +66,7 @@ val workerInjectionModule = module {
 /**
  * Defines a [Worker]
  */
-typealias WorkerDefinition<T> = Component.(context: Context, workerParams: WorkerParameters) -> T
+typealias WorkerDefinition<T> = DefinitionContext.(context: Context, workerParams: WorkerParameters) -> T
 
 /**
  * Defines a [Worker] which will be used in conjunction with the [InjektWorkerFactory]

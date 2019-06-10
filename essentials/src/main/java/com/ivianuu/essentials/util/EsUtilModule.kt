@@ -16,9 +16,10 @@
 
 package com.ivianuu.essentials.util
 
+import com.ivianuu.injekt.get
 import com.ivianuu.injekt.module
 import com.ivianuu.injekt.single
-import com.ivianuu.injekt.singleWithState
+
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.rx2.asCoroutineDispatcher
@@ -31,15 +32,12 @@ val esUtilModule = module {
             AndroidSchedulers.mainThread()
         )
     }
-    singleWithState {
-        val schedulersBinding = link<AppSchedulers>()
-        definition {
-            val schedulers = schedulersBinding()
-            AppDispatchers(
-                schedulers.io.asCoroutineDispatcher(),
-                schedulers.computation.asCoroutineDispatcher(),
-                schedulers.main.asCoroutineDispatcher()
-            )
-        }
+    single {
+        val schedulers = get<AppSchedulers>()
+        AppDispatchers(
+            schedulers.io.asCoroutineDispatcher(),
+            schedulers.computation.asCoroutineDispatcher(),
+            schedulers.main.asCoroutineDispatcher()
+        )
     }
 }
