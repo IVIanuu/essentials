@@ -19,6 +19,7 @@ package com.ivianuu.essentials.ui.base
 import android.content.Context
 import android.view.View
 import com.ivianuu.director.common.DialogController
+import com.ivianuu.essentials.injection.childControllerComponent
 import com.ivianuu.essentials.injection.controllerComponent
 import com.ivianuu.essentials.ui.mvrx.MvRxView
 import com.ivianuu.essentials.ui.traveler.key.keyModule
@@ -36,9 +37,16 @@ abstract class EsDialogController : DialogController(), ContextAware, InjektTrai
     MvRxView {
 
     override val component by unsafeLazy {
-        controllerComponent {
-            modules(keyModule(args))
-            modules(this@EsDialogController.modules())
+        if (parentController != null) {
+            childControllerComponent {
+                modules(keyModule(args))
+                modules(this@EsDialogController.modules())
+            }
+        } else {
+            controllerComponent {
+                modules(keyModule(args))
+                modules(this@EsDialogController.modules())
+            }
         }
     }
 

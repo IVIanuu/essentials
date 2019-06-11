@@ -22,6 +22,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.ivianuu.director.Controller
+import com.ivianuu.essentials.injection.childControllerComponent
 import com.ivianuu.essentials.injection.controllerComponent
 import com.ivianuu.essentials.ui.mvrx.MvRxView
 import com.ivianuu.essentials.ui.traveler.key.keyModule
@@ -41,9 +42,16 @@ import kotlinx.android.synthetic.*
 abstract class EsController : Controller(), ContextAware, InjektTrait, LayoutContainer, MvRxView {
 
     override val component by unsafeLazy {
-        controllerComponent {
-            modules(keyModule(args))
-            modules(this@EsController.modules())
+        if (parentController != null) {
+            childControllerComponent {
+                modules(keyModule(args))
+                modules(this@EsController.modules())
+            }
+        } else {
+            controllerComponent {
+                modules(keyModule(args))
+                modules(this@EsController.modules())
+            }
         }
     }
 
