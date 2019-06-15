@@ -19,6 +19,9 @@ package com.ivianuu.essentials.ui.common
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import com.ivianuu.director.activitycallbacks.addActivityResultListener
 import com.ivianuu.director.activitycallbacks.startActivityForResult
 import com.ivianuu.essentials.ui.base.EsController
@@ -53,6 +56,12 @@ class ActivityResultController : EsController() {
 
         startActivityForResult(key.intent, key.requestCode)
     }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup,
+        savedViewState: Bundle?
+    ): View = View(activity) // dummy
 
 }
 

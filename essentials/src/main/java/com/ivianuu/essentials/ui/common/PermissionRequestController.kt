@@ -61,7 +61,7 @@ class PermissionRequestController : EsController() {
         inflater: LayoutInflater,
         container: ViewGroup,
         savedViewState: Bundle?
-    ) = View(activity)
+    ): View = View(activity) // dummy
 
     override fun onAttach(view: View) {
         super.onAttach(view)
