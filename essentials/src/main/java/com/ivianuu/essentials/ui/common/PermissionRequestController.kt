@@ -25,6 +25,8 @@ import android.view.ViewGroup
 import com.ivianuu.director.activitycallbacks.addPermissionResultListener
 import com.ivianuu.director.activitycallbacks.requestPermissions
 import com.ivianuu.essentials.ui.base.EsController
+import com.ivianuu.essentials.ui.traveler.NavOptions
+import com.ivianuu.essentials.ui.traveler.dialog
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
 import com.ivianuu.essentials.util.ext.goBackWithResult
 import com.ivianuu.injekt.inject
@@ -35,7 +37,7 @@ data class PermissionRequestKey(
     val resultCode: Int,
     val permissions: Set<String>,
     val requestCode: Int
-) : ControllerKey(::PermissionRequestController)
+) : ControllerKey(::PermissionRequestController, NavOptions().dialog())
 
 /**
  * Permission request controller

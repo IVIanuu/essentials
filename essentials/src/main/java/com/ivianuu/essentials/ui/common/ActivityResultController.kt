@@ -25,6 +25,8 @@ import android.view.ViewGroup
 import com.ivianuu.director.activitycallbacks.addActivityResultListener
 import com.ivianuu.director.activitycallbacks.startActivityForResult
 import com.ivianuu.essentials.ui.base.EsController
+import com.ivianuu.essentials.ui.traveler.NavOptions
+import com.ivianuu.essentials.ui.traveler.dialog
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
 import com.ivianuu.essentials.util.ext.goBackWithResult
 import com.ivianuu.injekt.inject
@@ -35,7 +37,7 @@ data class ActivityResultKey(
     val resultCode: Int,
     val intent: Intent,
     val requestCode: Int
-) : ControllerKey(::ActivityResultController)
+) : ControllerKey(::ActivityResultController, NavOptions().dialog())
 
 /**
  * Activity result controller
