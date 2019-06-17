@@ -73,7 +73,7 @@ class SecureSettingsController : PrefsController() {
             summaryRes(R.string.es_pref_summary_use_pc)
             onClick {
                 travelerRouter.navigate(
-                    SecureSettingsPcInstructionsKey(),
+                    SecureSettingsPcInstructionsKey,
                     NavOptions().verticalFade()
                 )
 
