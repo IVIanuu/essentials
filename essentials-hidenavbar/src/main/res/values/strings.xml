@@ -15,20 +15,20 @@
   -->
 
 <resources>
-    <string name="es_title_nav_bar_settings">Navigation Bar</string>
+    <string name="es_title_nav_bar_settings">Navigation bar</string>
 
-    <string name="es_pref_title_manage_nav_bar">Main Switch</string>
+    <string name="es_pref_title_manage_nav_bar">Main switch</string>
 
-    <string name="es_pref_title_nav_bar_hidden">Hide Navigation Bar</string>
+    <string name="es_pref_title_nav_bar_hidden">Hide navigation bar</string>
     <string name="es_pref_summary_nav_bar_hidden">Toggle the navigation bar state.</string>
 
-    <string name="es_pref_title_nav_bar_rotation_mode">Rotation Mode</string>
+    <string name="es_pref_title_nav_bar_rotation_mode">Rotation mode</string>
     <string name="es_pref_summary_nav_bar_rotation_mode">Define on which side of the screen the nav bar is located in landscape mode.</string>
     <string name="es_nav_bar_rotation_mode_marshmallow">Marshmallow (Right side of the screen)</string>
     <string name="es_nav_bar_rotation_mode_nougat">Nougat (Bottom of the device)</string>
     <string name="es_nav_bar_rotation_mode_tablet">Tablet (Bottom of the screen)</string>
 
-    <string name="es_pref_title_show_nav_bar_screen_off">Show While Screen Is Off</string>
+    <string name="es_pref_title_show_nav_bar_screen_off">Show while screen is off</string>
     <string name="es_pref_summary_show_nav_bar_screen_off">This will show the navigation bar while the screen is off or locked. Disabling this option leads to display cutouts on the lock screen and wake-up issues on some devices.</string>
 
 </resources>

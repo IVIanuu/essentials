@@ -17,7 +17,7 @@
 <resources>
 
     <!-- Secure settings dialog -->
-    <string name="es_title_secure_settings">Permission Required</string>
+    <string name="es_title_secure_settings">Permission required</string>
     <string name="es_pref_summary_secure_settings_header">The WRITE_SECURE_SETTINGS permission is required to write system settings.</string>
     <string name="es_pref_summary_secure_settings_header_hide_nav_bar">The WRITE_SECURE_SETTINGS permission is required to hide the navigation bar.</string>
     <string name="es_pref_title_use_root">Grant using root</string>
@@ -26,10 +26,10 @@
     <string name="es_pref_summary_use_pc">Connect to a PC to grant the permission with ADB.\nNote that ADB simply is a developers tool and it will not void the warranty unlike root.</string>
 
     <!-- Secure settings instructions -->
-    <string name="es_title_secure_settings_pc_instructions">PC Instructions</string>
+    <string name="es_title_secure_settings_pc_instructions">PC instructions</string>
     <string name="es_pref_summary_secure_settings_pc_instructions_header">Follow the instructions to grant the permission with a PC (Windows, Mac or Linux)</string>
 
-    <string name="es_pref_title_secure_settings_step_1">1 - Activate the Developer Options</string>
+    <string name="es_pref_title_secure_settings_step_1">1 - Activate the developer options</string>
     <string name="es_pref_summary_secure_settings_step_1">Go to Android-Settings -> Phone Info -> Search for Build Number and tap multiple times until the Developer options are active.</string>
 
     <string name="es_pref_title_secure_settings_step_2">2 - Enable USB-Debugging</string>
