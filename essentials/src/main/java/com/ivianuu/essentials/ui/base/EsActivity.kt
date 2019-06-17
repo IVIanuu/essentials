@@ -26,10 +26,12 @@ import com.ivianuu.director.hasRoot
 import com.ivianuu.director.traveler.ControllerNavigator
 import com.ivianuu.essentials.ui.mvrx.MvRxView
 import com.ivianuu.essentials.ui.traveler.key.keyModule
+import com.ivianuu.essentials.ui.twilight.TwilightController
 import com.ivianuu.essentials.util.ext.unsafeLazy
 import com.ivianuu.injekt.InjektTrait
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.android.activityComponent
+import com.ivianuu.injekt.get
 import com.ivianuu.injekt.inject
 import com.ivianuu.traveler.Navigator
 import com.ivianuu.traveler.android.AppNavigator
@@ -75,7 +77,11 @@ abstract class EsActivity : AppCompatActivity(), InjektTrait, MvRxView {
         compositeNavigatorOf(navigators)
     }
 
+    protected open val supportsTwilightMode get() = true
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        if (supportsTwilightMode) get<TwilightController>().configure(this)
+
         super.onCreate(savedInstanceState)
 
         if (layoutRes != 0) {

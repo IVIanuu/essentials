@@ -18,17 +18,17 @@ package com.ivianuu.essentials.sample.ui.counter
 
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
+import com.ivianuu.essentials.hidenavbar.NavBarSettingsKey
 import com.ivianuu.essentials.sample.ui.checkapps.CheckAppsKey
 import com.ivianuu.essentials.sample.ui.list.ListKey
 import com.ivianuu.essentials.sample.work.MyWorkerOne
 import com.ivianuu.essentials.sample.work.MyWorkerTwo
 import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
+import com.ivianuu.essentials.ui.traveler.NavOptions
+import com.ivianuu.essentials.ui.traveler.horizontal
+import com.ivianuu.essentials.ui.twilight.TwilightSettingsKey
 import com.ivianuu.injekt.Inject
-import com.ivianuu.traveler.Router
-import com.ivianuu.traveler.finish
-import com.ivianuu.traveler.goBack
-import com.ivianuu.traveler.navigate
-import com.ivianuu.traveler.popToRoot
+import com.ivianuu.traveler.*
 
 @Inject
 class CounterViewModel(
@@ -69,6 +69,20 @@ class CounterViewModel(
             enqueue(OneTimeWorkRequestBuilder<MyWorkerOne>().build())
             enqueue(OneTimeWorkRequestBuilder<MyWorkerTwo>().build())
         }
+    }
+
+    fun twilightClicked() {
+        router.navigate(
+            TwilightSettingsKey,
+            NavOptions().horizontal()
+        )
+    }
+
+    fun navBarClicked() {
+        router.navigate(
+            NavBarSettingsKey(true, true),
+            NavOptions().horizontal()
+        )
     }
 }
 

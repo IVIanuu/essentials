@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2018 Manuel Wrage
  *
@@ -15,13 +14,24 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.sample.ui
+package com.ivianuu.essentials.ui.twilight
 
-import com.ivianuu.essentials.sample.ui.counter.CounterKey
-import com.ivianuu.essentials.ui.base.EsActivity
+import com.ivianuu.injekt.Inject
+import com.ivianuu.injekt.android.ApplicationScope
+import com.ivianuu.kprefs.KPrefs
+import com.ivianuu.kprefs.common.PrefValueHolder
+import com.ivianuu.kprefs.common.enumString
 
-class MainActivity : EsActivity() {
+@Inject
+@ApplicationScope
+class TwilightPrefs(prefs: KPrefs) {
+    val twilightMode = prefs.enumString("twilight_mode", TwilightMode.SYSTEM)
+}
 
-    override val startKey: Any? get() = CounterKey(1)
-
+enum class TwilightMode(override val value: String) : PrefValueHolder<String> {
+    LIGHT("light"),
+    DARK("dark"),
+    BATTERY("battery"),
+    TIME("time"),
+    SYSTEM("system")
 }

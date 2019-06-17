@@ -27,4 +27,17 @@
     <string name="es_seek_bar_pref_format_px">%d px</string>
     <string name="es_seek_bar_pref_format_seconds">%d seconds</string>
 
+    <string name="es_title_twilight">Night Mode</string>
+
+    <string name="es_twilight_mode_title_light">Never</string>
+    <string name="es_twilight_mode_desc_light">Always use the light theme.</string>
+    <string name="es_twilight_mode_title_dark">Always</string>
+    <string name="es_twilight_mode_desc_dark">Always use the dark theme.</string>
+    <string name="es_twilight_mode_title_time">Time</string>
+    <string name="es_twilight_mode_desc_time">Use the dark theme based on the day time.</string>
+    <string name="es_twilight_mode_title_battery">Battery Saver</string>
+    <string name="es_twilight_mode_desc_battery">Use the dark theme while the battery saver is enabled.</string>
+    <string name="es_twilight_mode_title_system">Follow System</string>
+    <string name="es_twilight_mode_desc_system">Use the system default night mode setting.</string>
+
 </resources>
