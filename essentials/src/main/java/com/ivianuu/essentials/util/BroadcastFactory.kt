@@ -22,8 +22,6 @@ import android.content.Intent
 import android.content.IntentFilter
 import com.ivianuu.essentials.util.ext.observable
 import com.ivianuu.injekt.Inject
-
-
 import com.ivianuu.kommon.core.content.intentFilterOf
 import io.reactivex.Observable
 

@@ -26,7 +26,6 @@ import com.ivianuu.essentials.ui.traveler.key.ControllerKey
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.essentials.util.ext.goBackWithResult
 import com.ivianuu.injekt.inject
-import com.ivianuu.traveler.navigate
 import kotlinx.android.parcel.Parcelize
 import kotlinx.coroutines.launch
 
@@ -71,13 +70,8 @@ class SecureSettingsController : PrefsController() {
             key("use_pc")
             titleRes(R.string.es_pref_title_use_pc)
             summaryRes(R.string.es_pref_summary_use_pc)
-            onClick {
-                travelerRouter.navigate(
-                    SecureSettingsPcInstructionsKey,
-                    NavOptions().verticalFade()
-                )
-
-                return@onClick true
+            navigateOnClickWithOptions {
+                SecureSettingsPcInstructionsKey to NavOptions().verticalFade()
             }
         }
 

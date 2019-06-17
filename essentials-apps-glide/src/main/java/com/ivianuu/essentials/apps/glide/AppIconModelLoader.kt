@@ -27,7 +27,6 @@ import com.bumptech.glide.load.model.ModelLoaderFactory
 import com.bumptech.glide.load.model.MultiModelLoaderFactory
 import com.bumptech.glide.signature.ObjectKey
 import com.ivianuu.injekt.Inject
-
 import com.ivianuu.injekt.Param
 import com.ivianuu.injekt.Provider
 import com.ivianuu.injekt.parametersOf

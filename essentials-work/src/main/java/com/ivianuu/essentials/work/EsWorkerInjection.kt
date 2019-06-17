@@ -23,7 +23,6 @@ import androidx.work.WorkerFactory
 import com.ivianuu.essentials.app.AppInitializer
 import com.ivianuu.essentials.app.bindAppInitializer
 import com.ivianuu.injekt.Inject
-
 import com.ivianuu.injekt.module
 
 /**

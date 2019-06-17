@@ -16,7 +16,6 @@
 
 package com.ivianuu.essentials.data.base
 
-
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -24,7 +23,6 @@ import com.ivianuu.injekt.Component
 import com.ivianuu.injekt.InjektTrait
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.android.receiverComponent
-
 
 /**
  * Base broadcast receiver

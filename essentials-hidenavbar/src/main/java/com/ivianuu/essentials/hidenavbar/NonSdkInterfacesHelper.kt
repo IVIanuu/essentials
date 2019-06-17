@@ -19,8 +19,6 @@ package com.ivianuu.essentials.hidenavbar
 import android.os.Build
 import com.github.ajalt.timberkt.d
 import com.ivianuu.injekt.Inject
-
-
 import com.ivianuu.ksettings.KSettings
 import com.ivianuu.ksettings.Setting
 

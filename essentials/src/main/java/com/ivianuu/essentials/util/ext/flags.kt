@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-
-
 package com.ivianuu.essentials.util.ext
 
 fun Int.addFlag(flag: Int): Int = this or flag

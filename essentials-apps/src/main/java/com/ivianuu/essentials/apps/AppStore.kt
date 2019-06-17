@@ -20,8 +20,6 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import com.ivianuu.essentials.util.AppDispatchers
 import com.ivianuu.injekt.Inject
-
-
 import kotlinx.coroutines.withContext
 
 /**

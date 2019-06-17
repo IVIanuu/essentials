@@ -19,7 +19,6 @@ package com.ivianuu.essentials.util
 import com.ivianuu.injekt.get
 import com.ivianuu.injekt.module
 import com.ivianuu.injekt.single
-
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.rx2.asCoroutineDispatcher

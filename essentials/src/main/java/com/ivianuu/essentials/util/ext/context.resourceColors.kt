@@ -16,7 +16,6 @@
 
 @file:SuppressLint("PrivateResource")
 
-
 // Aliases to other public API.
 
 package com.ivianuu.essentials.util.ext

@@ -20,7 +20,6 @@ import android.Manifest.permission.WRITE_SECURE_SETTINGS
 import android.content.Context
 import com.ivianuu.essentials.shell.Shell
 import com.ivianuu.injekt.Inject
-
 import com.ivianuu.kommon.core.content.hasPermissions
 
 /**

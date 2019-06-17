@@ -20,8 +20,6 @@ import android.app.Application
 import android.content.pm.ApplicationInfo
 import com.ivianuu.essentials.util.ext.containsFlag
 import com.ivianuu.injekt.Inject
-
-
 import timber.log.Timber
 
 /**

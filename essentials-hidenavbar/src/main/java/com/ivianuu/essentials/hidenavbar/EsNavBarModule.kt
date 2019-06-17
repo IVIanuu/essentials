@@ -18,13 +18,10 @@ package com.ivianuu.essentials.hidenavbar
 
 import android.content.SharedPreferences
 import com.ivianuu.essentials.app.bindAppService
-
 import com.ivianuu.injekt.android.sharedPreferences
 import com.ivianuu.injekt.get
-
 import com.ivianuu.injekt.module
 import com.ivianuu.injekt.single
-
 import com.ivianuu.kprefs.KPrefs
 
 object NavBar

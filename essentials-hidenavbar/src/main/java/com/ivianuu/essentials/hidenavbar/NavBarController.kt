@@ -25,7 +25,6 @@ import android.view.OrientationEventListener
 import android.view.Surface
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.app.AppService
-
 import com.ivianuu.essentials.util.BroadcastFactory
 import com.ivianuu.essentials.util.ext.combineLatest
 import com.ivianuu.essentials.util.ext.observable
