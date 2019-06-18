@@ -55,7 +55,7 @@ object Versions {
     const val coroutines = "1.3.0-M1"
     const val director = "0.0.1-dev-35"
     const val epoxy = "3.5.1"
-    const val epoxyPrefs = "0.0.1-dev-13"
+    const val epoxyPrefs = "0.0.1-dev-14"
     const val glide = "4.9.0"
     const val injekt = "0.0.1-dev-61"
     const val junit = "4.12"

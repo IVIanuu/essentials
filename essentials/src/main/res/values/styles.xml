@@ -22,9 +22,4 @@
 
     <style name="Theme.Es.DayNight" parent="Theme.MaterialComponents.DayNight.NoActionBar" />
 
-    <style name="Theme.Es.Dark.Lighter" parent="Theme.MaterialComponents.NoActionBar">
-        <item name="android:colorBackground">@color/es_dark_lighter_color_background</item>
-        <item name="colorSurface">@color/es_dark_lighter_color_surface</item>
-    </style>
-
 </resources>
