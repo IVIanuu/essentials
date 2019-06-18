@@ -55,8 +55,8 @@ class TextInputDialog : EsDialogController() {
         ) { _, input ->
             travelerRouter.goBackWithResult(key.resultCode, input.toString())
         }
-        positiveButton(R.string.es_action_ok)
-        negativeButton(R.string.es_action_cancel) { travelerRouter.goBack() }
+        positiveButton(R.string.es_ok)
+        negativeButton(R.string.es_cancel) { travelerRouter.goBack() }
     }
 
 }

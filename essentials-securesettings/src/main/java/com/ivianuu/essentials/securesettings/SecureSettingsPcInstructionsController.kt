@@ -41,39 +41,39 @@ class SecureSettingsPcInstructionsController : PrefsController() {
     override fun epoxyController() = epoxyController {
         Preference {
             key("secure_settings_header")
-            summaryRes(R.string.es_pref_summary_secure_settings_pc_instructions_header)
+            summaryRes(R.string.es_pref_secure_settings_pc_instructions_header_summary)
         }
 
         Preference {
             key("secure_settings_step_1")
-            titleRes(R.string.es_pref_title_secure_settings_step_1)
-            summaryRes(R.string.es_pref_summary_secure_settings_step_1)
+            titleRes(R.string.es_pref_secure_settings_step_1)
+            summaryRes(R.string.es_pref_secure_settings_step_1_summary)
             isClickable(false)
         }
 
         Preference {
             key("secure_settings_step_two")
-            titleRes(R.string.es_pref_title_secure_settings_step_2)
-            summaryRes(R.string.es_pref_summary_secure_settings_step_2)
+            titleRes(R.string.es_pref_secure_settings_step_2)
+            summaryRes(R.string.es_pref_secure_settings_step_2_summary)
             isClickable(false)
         }
 
         Preference {
             key("secure_settings_step_3")
-            titleRes(R.string.es_pref_title_secure_settings_step_3)
+            titleRes(R.string.es_pref_secure_settings_step_3)
         }
 
         Preference {
             key("secure_settings_link_gadget_hacks")
             iconRes(R.drawable.es_ic_link)
-            summaryRes(R.string.es_pref_summary_secure_settings_link_gadget_hacks)
+            summaryRes(R.string.es_pref_secure_settings_link_gadget_hacks_summary)
             openUrlOnClick { "https://youtu.be/CDuxcrrWLnY" }
         }
 
         Preference {
             key("secure_settings_link_lifehacker")
             iconRes(R.drawable.es_ic_link)
-            summaryRes(R.string.es_pref_summary_secure_settings_link_lifehacker)
+            summaryRes(R.string.es_pref_secure_settings_link_lifehacker_summary)
             openUrlOnClick {
                 "https://lifehacker.com/the-easiest-way-to-install-androids-adb-and-fastboot-to-1586992378"
             }
@@ -82,7 +82,7 @@ class SecureSettingsPcInstructionsController : PrefsController() {
         Preference {
             key("secure_settings_link_xda")
             iconRes(R.drawable.es_ic_link)
-            summaryRes(R.string.es_pref_summary_secure_settings_link_xda)
+            summaryRes(R.string.es_pref_secure_settings_link_xda_summary)
             openUrlOnClick {
                 "https://www.xda-developers.com/install-adb-windows-macos-linux/"
             }
@@ -90,10 +90,10 @@ class SecureSettingsPcInstructionsController : PrefsController() {
 
         Preference {
             key("secure_settings_step_4")
-            titleRes(R.string.es_pref_title_secure_settings_step_4)
+            titleRes(R.string.es_pref_secure_settings_step_4)
             summary(
                 string(
-                    R.string.es_pref_summary_secure_settings_step_4,
+                    R.string.es_pref_secure_settings_step_4_summary,
                     activity.packageName
                 )
             )
@@ -101,7 +101,7 @@ class SecureSettingsPcInstructionsController : PrefsController() {
                 clipboardHelper.clipboardText =
                     "adb shell pm grant ${activity.packageName} android.permission.WRITE_SECURE_SETTINGS"
 
-                toaster.toast(R.string.es_msg_secure_settings_copied_to_clipboard)
+                toaster.toast(R.string.es_secure_settings_copied_to_clipboard)
                 return@onClick true
             }
         }

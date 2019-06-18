@@ -18,35 +18,35 @@
 
     <!-- Secure settings dialog -->
     <string name="es_title_secure_settings">Permission required</string>
-    <string name="es_pref_summary_secure_settings_header">The WRITE_SECURE_SETTINGS permission is required to write system settings</string>
-    <string name="es_pref_summary_secure_settings_header_hide_nav_bar">The WRITE_SECURE_SETTINGS permission is required to hide the navigation bar</string>
-    <string name="es_pref_title_use_root">Grant using root</string>
-    <string name="es_pref_summary_use_root">Use root to grant the permission</string>
-    <string name="es_pref_title_use_pc">Grant using PC</string>
-    <string name="es_pref_summary_use_pc">Connect to a PC to grant the permission with ADB.\nNote that ADB simply is a developers tool and it will not void the warranty unlike root.</string>
+    <string name="es_pref_secure_settings_header_summary">The WRITE_SECURE_SETTINGS permission is required to write system settings</string>
+    <string name="es_pref_secure_settings_header_hide_nav_bar_summary">The WRITE_SECURE_SETTINGS permission is required to hide the navigation bar</string>
+    <string name="es_pref_use_root">Grant using root</string>
+    <string name="es_pref_use_root_summary">Use root to grant the permission</string>
+    <string name="es_pref_use_pc">Grant using PC</string>
+    <string name="es_pref_use_pc_summary">Connect to a PC to grant the permission with ADB.\nNote that ADB simply is a developers tool and it will not void the warranty unlike root.</string>
 
     <!-- Secure settings instructions -->
     <string name="es_title_secure_settings_pc_instructions">PC instructions</string>
-    <string name="es_pref_summary_secure_settings_pc_instructions_header">Follow the instructions to grant the permission with a PC (Windows, Mac or Linux)</string>
+    <string name="es_pref_secure_settings_pc_instructions_header_summary">Follow the instructions to grant the permission with a PC (Windows, Mac or Linux)</string>
 
-    <string name="es_pref_title_secure_settings_step_1">1 - Activate the developer options</string>
-    <string name="es_pref_summary_secure_settings_step_1">Go to Android-Settings -> Phone Info -> Search for Build Number and tap multiple times until the Developer options are active.</string>
+    <string name="es_pref_secure_settings_step_1">1 - Activate the developer options</string>
+    <string name="es_pref_secure_settings_step_1_summary">Go to Android-Settings -> Phone Info -> Search for Build Number and tap multiple times until the Developer options are active.</string>
 
-    <string name="es_pref_title_secure_settings_step_2">2 - Enable USB-Debugging</string>
-    <string name="es_pref_summary_secure_settings_step_2">Go to Android-Settings -> Developer Options -> Enable USB-Debugging</string>
+    <string name="es_pref_secure_settings_step_2">2 - Enable USB-Debugging</string>
+    <string name="es_pref_secure_settings_step_2_summary">Go to Android-Settings -> Developer Options -> Enable USB-Debugging</string>
 
-    <string name="es_pref_title_secure_settings_step_3">3 - Install ADB on your PC</string>
-    <string name="es_pref_summary_secure_settings_link_gadget_hacks">Gadget-Hacks - Run adb commands using Google Chrome</string>
-    <string name="es_pref_summary_secure_settings_link_lifehacker">Lifehacker - The Easiest Way to Install Android ADB</string>
-    <string name="es_pref_summary_secure_settings_link_xda">XDA Developers - How to Install ADB on Windows, macOS and Linux</string>
+    <string name="es_pref_secure_settings_step_3">3 - Install ADB on your PC</string>
+    <string name="es_pref_secure_settings_link_gadget_hacks_summary">Gadget-Hacks - Run adb commands using Google Chrome</string>
+    <string name="es_pref_secure_settings_link_lifehacker_summary">Lifehacker - The Easiest Way to Install Android ADB</string>
+    <string name="es_pref_secure_settings_link_xda_summary">XDA Developers - How to Install ADB on Windows, macOS and Linux</string>
 
-    <string name="es_pref_title_secure_settings_step_4">4 - Execute the ADB Command</string>
-    <string name="es_pref_summary_secure_settings_step_4">adb shell pm grant %s android.permission.WRITE_SECURE_SETTINGS\n\n(click to copy)</string>
+    <string name="es_pref_secure_settings_step_4">4 - Execute the ADB Command</string>
+    <string name="es_pref_secure_settings_step_4_summary">adb shell pm grant %s android.permission.WRITE_SECURE_SETTINGS\n\n(click to copy)</string>
 
-    <string name="es_msg_secure_settings_no_root">Your device is not rooted you have to use your PC to grant permissions</string>
+    <string name="es_secure_settings_no_root">Your device is not rooted you have to use your PC to grant permissions</string>
 
-    <string name="es_msg_secure_settings_permission_denied">Permission denied! Make sure to follow the steps above</string>
-    <string name="es_msg_secure_settings_permission_granted">Permission granted! Where good to go now</string>
-    <string name="es_msg_secure_settings_copied_to_clipboard">Copied to clipboard!</string>
+    <string name="es_secure_settings_permission_denied">Permission denied! Make sure to follow the steps above</string>
+    <string name="es_secure_settings_permission_granted">Permission granted! Where good to go now</string>
+    <string name="es_secure_settings_copied_to_clipboard">Copied to clipboard!</string>
 
 </resources>

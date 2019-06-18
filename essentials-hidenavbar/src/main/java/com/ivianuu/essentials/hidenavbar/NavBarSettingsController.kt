@@ -23,7 +23,9 @@ import com.ivianuu.epoxyprefs.SingleItemListPreference
 import com.ivianuu.epoxyprefs.SwitchPreference
 import com.ivianuu.essentials.securesettings.SecureSettingsHelper
 import com.ivianuu.essentials.securesettings.SecureSettingsKey
+import com.ivianuu.essentials.ui.common.verticalFade
 import com.ivianuu.essentials.ui.prefs.PrefsController
+import com.ivianuu.essentials.ui.traveler.NavOptions
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
 import com.ivianuu.essentials.util.ext.*
 import com.ivianuu.injekt.get
@@ -74,7 +76,7 @@ class NavBarSettingsController : PrefsController() {
         if (key.showMainSwitch) {
             SwitchPreference {
                 fromPref(prefs.manageNavBar)
-                titleRes(R.string.es_pref_title_manage_nav_bar)
+                titleRes(R.string.es_pref_manage_nav_bar)
                 onChange { newValue ->
                     if (!newValue || secureSettingsHelper.canWriteSecureSettings()) {
                         return@onChange true
@@ -82,7 +84,8 @@ class NavBarSettingsController : PrefsController() {
                         travelerRouter.navigate(
                             SecureSettingsKey(
                                 RESULT_CODE_MAIN_SWITCH, true
-                            )
+                            ),
+                            NavOptions().verticalFade()
                         )
                         return@onChange false
                     } else {
@@ -95,8 +98,8 @@ class NavBarSettingsController : PrefsController() {
         if (key.showNavBarHidden) {
             SwitchPreference {
                 fromPref(prefs.navBarHidden)
-                titleRes(R.string.es_pref_title_nav_bar_hidden)
-                summaryRes(R.string.es_pref_summary_nav_bar_hidden)
+                titleRes(R.string.es_pref_nav_bar_hidden)
+                summaryRes(R.string.es_pref_nav_bar_hidden_summary)
                 dependency(prefs.manageNavBar, true)
                 onChange { newValue ->
                     if (secureSettingsHelper.canWriteSecureSettings() || !newValue) {
@@ -105,7 +108,8 @@ class NavBarSettingsController : PrefsController() {
                         travelerRouter.navigate(
                             SecureSettingsKey(
                                 RESULT_CODE_NAV_BAR_HIDDEN, true
-                            )
+                            ),
+                            NavOptions().verticalFade()
                         )
                         return@onChange false
                     } else {
@@ -117,17 +121,17 @@ class NavBarSettingsController : PrefsController() {
 
         SingleItemListPreference {
             fromEnumPref(prefs.rotationMode)
-            titleRes(R.string.es_pref_title_nav_bar_rotation_mode)
-            summaryRes(R.string.es_pref_summary_nav_bar_rotation_mode)
-            entriesRes(R.array.es_entries_nav_bar_rotation_mode)
-            entryValuesRes(R.array.es_values_nav_bar_rotation_mode)
+            titleRes(R.string.es_pref_nav_bar_rotation_mode)
+            summaryRes(R.string.es_pref_nav_bar_rotation_mode_summary)
+            entriesRes(R.array.es_nav_bar_rotation_mode_entries)
+            entryValuesRes(R.array.es_nav_bar_rotation_mode_values)
             dependency(prefs.manageNavBar, true)
         }
 
         CheckboxPreference {
             fromPref(prefs.showNavBarScreenOff)
-            titleRes(R.string.es_pref_title_show_nav_bar_screen_off)
-            summaryRes(R.string.es_pref_summary_show_nav_bar_screen_off)
+            titleRes(R.string.es_pref_show_nav_bar_screen_off)
+            summaryRes(R.string.es_pref_show_nav_bar_screen_off_summary)
             dependency(prefs.manageNavBar, true)
         }
 

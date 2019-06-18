@@ -38,28 +38,28 @@ class TwilightSettingsController : PrefsController() {
     override fun epoxyController() = epoxyController {
         TwilightModePreference(
             mode = TwilightMode.SYSTEM,
-            descRes = R.string.es_twilight_mode_desc_system,
-            titleRes = R.string.es_twilight_mode_title_system
+            descRes = R.string.es_twilight_mode_system_desc,
+            titleRes = R.string.es_twilight_mode_system
         )
         TwilightModePreference(
             mode = TwilightMode.LIGHT,
-            descRes = R.string.es_twilight_mode_desc_light,
-            titleRes = R.string.es_twilight_mode_title_light
+            descRes = R.string.es_twilight_mode_light_desc,
+            titleRes = R.string.es_twilight_mode_light
         )
         TwilightModePreference(
             mode = TwilightMode.DARK,
-            descRes = R.string.es_twilight_mode_desc_dark,
-            titleRes = R.string.es_twilight_mode_title_dark
+            descRes = R.string.es_twilight_mode_dark_desc,
+            titleRes = R.string.es_twilight_mode_dark
         )
         TwilightModePreference(
             mode = TwilightMode.BATTERY,
-            descRes = R.string.es_twilight_mode_desc_battery,
-            titleRes = R.string.es_twilight_mode_title_battery
+            descRes = R.string.es_twilight_mode_battery_desc,
+            titleRes = R.string.es_twilight_mode_battery
         )
         TwilightModePreference(
             mode = TwilightMode.TIME,
-            descRes = R.string.es_twilight_mode_desc_time,
-            titleRes = R.string.es_twilight_mode_title_time
+            descRes = R.string.es_twilight_mode_time_desc,
+            titleRes = R.string.es_twilight_mode_time
         )
     }
 

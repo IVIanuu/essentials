@@ -59,17 +59,17 @@ class SecureSettingsController : PrefsController() {
             key("secure_settings_header")
             summaryRes(
                 if (this@SecureSettingsController.key.showHideNavBarHint) {
-                    R.string.es_pref_summary_secure_settings_header_hide_nav_bar
+                    R.string.es_pref_secure_settings_header_hide_nav_bar_summary
                 } else {
-                    R.string.es_pref_summary_secure_settings_header
+                    R.string.es_pref_secure_settings_header_summary
                 }
             )
         }
 
         Preference {
             key("use_pc")
-            titleRes(R.string.es_pref_title_use_pc)
-            summaryRes(R.string.es_pref_summary_use_pc)
+            titleRes(R.string.es_pref_use_pc)
+            summaryRes(R.string.es_pref_use_pc_summary)
             navigateOnClickWithOptions {
                 SecureSettingsPcInstructionsKey to NavOptions().verticalFade()
             }
@@ -77,14 +77,14 @@ class SecureSettingsController : PrefsController() {
 
         Preference {
             key("use_root")
-            titleRes(R.string.es_pref_title_use_root)
-            summaryRes(R.string.es_pref_summary_use_root)
+            titleRes(R.string.es_pref_use_root)
+            summaryRes(R.string.es_pref_use_root_summary)
             onClick {
                 lifecycleScope.launch {
                     if (secureSettingsHelper.grantWriteSecureSettings()) {
                         handlePermissionResult(true)
                     } else {
-                        toaster.toast(R.string.es_msg_secure_settings_no_root)
+                        toaster.toast(R.string.es_secure_settings_no_root)
                     }
                 }
 
@@ -95,10 +95,10 @@ class SecureSettingsController : PrefsController() {
 
     private fun handlePermissionResult(success: Boolean) {
         if (success) {
-            toaster.toast(R.string.es_msg_secure_settings_permission_granted)
+            toaster.toast(R.string.es_secure_settings_permission_granted)
             travelerRouter.goBackWithResult(key.resultCode, true)
         } else {
-            toaster.toast(R.string.es_msg_secure_settings_permission_denied)
+            toaster.toast(R.string.es_secure_settings_permission_denied)
         }
     }
 }

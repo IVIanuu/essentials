@@ -32,11 +32,7 @@ import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
 import com.ivianuu.essentials.ui.mvrx.epoxy.mvRxEpoxyController
 import com.ivianuu.essentials.ui.mvrx.mvRxViewModel
 import com.ivianuu.essentials.ui.simple.ListController
-import com.ivianuu.essentials.util.AppDispatchers
-import com.ivianuu.essentials.util.Async
-import com.ivianuu.essentials.util.Loading
-import com.ivianuu.essentials.util.Success
-import com.ivianuu.essentials.util.Uninitialized
+import com.ivianuu.essentials.util.*
 import com.ivianuu.essentials.util.ext.BehaviorSubject
 import com.ivianuu.essentials.util.ext.PublishSubject
 import com.ivianuu.essentials.util.ext.andTrue
@@ -50,9 +46,7 @@ import com.ivianuu.scopes.android.scope
 import com.ivianuu.scopes.rx.disposeBy
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.Observables
-import kotlinx.android.synthetic.main.es_item_checkable_app.es_checkable_app_icon
-import kotlinx.android.synthetic.main.es_item_checkable_app.es_checkable_app_title
-import kotlinx.android.synthetic.main.es_item_checkable_app.es_checkable_app_toggle
+import kotlinx.android.synthetic.main.es_item_checkable_app.*
 import kotlinx.coroutines.async
 import kotlinx.coroutines.rx2.asSingle
 
@@ -95,8 +89,8 @@ abstract class CheckableAppsController : ListController() {
     }
 
     override fun onToolbarMenuItemClicked(item: MenuItem) = when (item.itemId) {
-        R.id.es_action_select_all -> viewModel.selectAllClicked().andTrue()
-        R.id.es_action_deselect_all -> viewModel.deselectAllClicked().andTrue()
+        R.id.es_select_all -> viewModel.selectAllClicked().andTrue()
+        R.id.es_deselect_all -> viewModel.deselectAllClicked().andTrue()
         else -> false
     }
 
@@ -124,7 +118,7 @@ private fun EpoxyController.CheckableApp(
 
         es_checkable_app_title.text = app.info.appName
 
-        es_checkable_app_toggle.isChecked = app.isChecked
+        es_checkable_app_checkbox.isChecked = app.isChecked
 
         root.setOnClickListener { onClick() }
     }

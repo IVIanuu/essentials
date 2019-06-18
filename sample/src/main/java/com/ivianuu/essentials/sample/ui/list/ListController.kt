@@ -29,7 +29,7 @@ import com.ivianuu.essentials.ui.traveler.horizontal
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
 import com.ivianuu.essentials.util.ext.andTrue
 import kotlinx.android.parcel.Parcelize
-import kotlinx.android.synthetic.main.single_line_list_item.title
+import kotlinx.android.synthetic.main.single_line_list_item.*
 
 @Parcelize
 object ListKey : ControllerKey(::ListController, NavOptions().horizontal())
@@ -50,7 +50,7 @@ class ListController : com.ivianuu.essentials.ui.simple.ListController() {
     }
 
     override fun onToolbarMenuItemClicked(item: MenuItem) = when (item.itemId) {
-        R.id.action_refresh -> viewModel.refreshClicked().andTrue()
+        R.id.refresh -> viewModel.refreshClicked().andTrue()
         else -> false
     }
 }

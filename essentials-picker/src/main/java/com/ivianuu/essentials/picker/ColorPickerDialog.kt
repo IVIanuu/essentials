@@ -52,7 +52,7 @@ class ColorPickerDialog : EsDialogController() {
             allowCustomArgb = key.allowCustomArgb,
             showAlphaSelector = key.showAlphaSelector
         ) { _, color -> travelerRouter.goBackWithResult(key.resultCode, color) }
-        negativeButton(R.string.es_action_cancel)
+        negativeButton(R.string.es_cancel)
     }
 
 }

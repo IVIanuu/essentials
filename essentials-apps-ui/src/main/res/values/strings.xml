@@ -17,7 +17,7 @@
 <resources>
     <string name="es_title_app_picker">App picker</string>
 
-    <string name="es_action_select_all">Select All</string>
-    <string name="es_action_deselect_all">Deselect All</string>
+    <string name="es_select_all">Select All</string>
+    <string name="es_deselect_all">Deselect All</string>
 
 </resources>

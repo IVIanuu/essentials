@@ -27,14 +27,14 @@
         android:maxLines="1"
         android:textAppearance="?textAppearanceSubtitle1"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/es_checkable_app_toggle"
+        app:layout_constraintEnd_toStartOf="@id/es_checkable_app_checkbox"
         app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toEndOf="@id/es_checkable_app_icon"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="App Name" />
 
     <CheckBox
-        android:id="@+id/es_checkable_app_toggle"
+        android:id="@+id/es_checkable_app_checkbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
