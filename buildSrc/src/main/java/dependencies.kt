@@ -143,7 +143,7 @@ object Deps {
         "com.ivianuu.kommon:kommon-recyclerview:${Versions.kommon}"
     const val kommonViewPager =
         "com.ivianuu.kommon:kommon-viewpager:${Versions.kommon}"
-    
+
     const val kotlinGradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.kotlin}"
     const val kotlinStdLib = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${Versions.kotlin}"
 
@@ -172,7 +172,8 @@ object Deps {
     const val materialDialogsColor =
         "com.afollestad.material-dialogs:color:${Versions.materialDialogs}"
 
-    const val mavenGradlePlugin = "com.github.dcendents:android-maven-gradle-plugin:${Versions.mavenGradle}"
+    const val mavenGradlePlugin =
+        "com.github.dcendents:android-maven-gradle-plugin:${Versions.mavenGradle}"
 
     const val mockitoKotlin = "com.nhaarman.mockitokotlin2:mockito-kotlin:${Versions.mockitoKotlin}"
 

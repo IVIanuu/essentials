@@ -70,8 +70,8 @@ class TwilightSettingsController : PrefsController() {
     ) {
         RadioButtonPreference {
             key(mode.value)
-            summaryRes(descRes)
             titleRes(titleRes)
+            summaryRes(descRes)
             defaultValue(prefs.twilightMode.get() == mode)
             isPersistent(false)
             onClick { prefs.twilightMode.set(mode).andTrue() }

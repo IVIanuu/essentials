@@ -39,8 +39,7 @@ import com.ivianuu.essentials.util.ext.goBackWithResult
 import com.ivianuu.injekt.Inject
 import com.ivianuu.traveler.Router
 import kotlinx.android.parcel.Parcelize
-import kotlinx.android.synthetic.main.es_item_app.es_app_icon
-import kotlinx.android.synthetic.main.es_item_app.es_app_title
+import kotlinx.android.synthetic.main.es_item_app.*
 import kotlinx.coroutines.async
 
 @Parcelize
@@ -60,7 +59,7 @@ class AppPickerController : ListController() {
     private val viewModel: AppPickerViewModel by injectMvRxViewModel()
 
     override fun epoxyController() = mvRxEpoxyController(viewModel) { state ->
-        when(state.apps) {
+        when (state.apps) {
             is Loading -> SimpleLoading(id = "loading")
             is Success -> state.apps()?.forEach { app ->
                 AppInfo(app = app, onClick = { viewModel.appClicked(app) })
