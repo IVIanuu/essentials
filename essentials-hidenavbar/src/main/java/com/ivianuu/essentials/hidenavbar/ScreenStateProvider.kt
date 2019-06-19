@@ -23,7 +23,7 @@ import com.ivianuu.injekt.Inject
  * Provides the current screen state
  */
 @Inject
-class ScreenStateProvider(private val powerManager: PowerManager) {
+internal class ScreenStateProvider(private val powerManager: PowerManager) {
     val isScreenOn: Boolean get() = powerManager.isInteractive
     val isScreenOff: Boolean get() = !isScreenOn
 }

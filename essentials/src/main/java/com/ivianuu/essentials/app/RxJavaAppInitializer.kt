@@ -25,7 +25,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
  * Enables async main thread schedulers
  */
 @Inject
-class RxJavaAppInitializer : AppInitializer {
+internal class RxJavaAppInitializer : AppInitializer {
 
     override fun initialize() {
         val scheduler = AndroidSchedulers.from(Looper.getMainLooper(), true)

@@ -26,7 +26,7 @@ import com.ivianuu.injekt.Inject
  */
 @Inject
 @SuppressLint("PrivateApi")
-class OverscanHelper {
+internal class OverscanHelper {
 
     fun setDisplayOverscan(rect: Rect) {
         setOverscanMethod.invoke(

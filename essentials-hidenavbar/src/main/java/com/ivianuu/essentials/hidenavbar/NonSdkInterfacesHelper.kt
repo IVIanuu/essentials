@@ -26,10 +26,9 @@ import com.ivianuu.ksettings.Setting
  * Deactivates non sdk interface detection
  */
 @Inject
-class NonSdkInterfacesHelper(private val settings: KSettings) {
+internal class NonSdkInterfacesHelper(private val settings: KSettings) {
 
     fun disableNonSdkInterfaceDetection() {
-        // todo use sdk ints once android q increases it
         if (Build.VERSION.CODENAME == "Q") {
             d { "disable non sdk on 29" }
 

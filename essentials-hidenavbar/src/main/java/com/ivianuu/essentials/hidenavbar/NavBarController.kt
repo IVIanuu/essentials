@@ -42,7 +42,7 @@ import io.reactivex.rxkotlin.Observables
  */
 @Inject
 @ApplicationScope
-class NavBarController(
+internal class NavBarController(
     private val app: Application,
     private val broadcastFactory: BroadcastFactory,
     private val displayRotationProvider: DisplayRotationProvider,

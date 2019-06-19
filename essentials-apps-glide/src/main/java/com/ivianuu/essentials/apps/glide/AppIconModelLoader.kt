@@ -37,7 +37,7 @@ data class AppIcon(val packageName: String)
  * Fetches images for [AppIcon]s
  */
 @Inject
-class AppIconFetcher(
+internal class AppIconFetcher(
     @Param private val app: AppIcon,
     private val packageManager: PackageManager
 ) : DataFetcher<Drawable> {
@@ -66,7 +66,7 @@ class AppIconFetcher(
  * Model loader to load [AppIcon]s
  */
 @Inject
-class AppIconModelLoader(
+internal class AppIconModelLoader(
     private val appIconFetcherProvider: Provider<AppIconFetcher>
 ) : ModelLoader<AppIcon, Drawable> {
 
@@ -84,7 +84,7 @@ class AppIconModelLoader(
 }
 
 @Inject
-class AppIconModelLoaderFactory(
+internal class AppIconModelLoaderFactory(
     private val appIconModelLoaderProvider: Provider<AppIconModelLoader>
 ) : ModelLoaderFactory<AppIcon, Drawable> {
 

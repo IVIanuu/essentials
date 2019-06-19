@@ -23,7 +23,7 @@ import com.ivianuu.injekt.Inject
  * Allows to access the clipboard
  */
 @Inject
-class ClipboardAccessor(private val clipboardManager: ClipboardManager) {
+internal class ClipboardAccessor(private val clipboardManager: ClipboardManager) {
     var clipboardText: String
         get() = clipboardManager.text.toString()
         set(value) {

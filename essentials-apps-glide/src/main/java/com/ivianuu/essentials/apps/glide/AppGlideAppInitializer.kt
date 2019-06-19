@@ -26,7 +26,7 @@ import com.ivianuu.injekt.Inject
  * Initializes glide
  */
 @Inject
-class AppGlideAppInitializer(
+internal class AppGlideAppInitializer(
     private val app: Application,
     private val factory: AppIconModelLoaderFactory
 ) : AppInitializer {

@@ -213,7 +213,6 @@ class MvRxStateStore<S>(initialState: S) : Disposable {
 
     private fun handleError(throwable: Throwable) {
         // Throw the root cause to remove all of the rx stacks.
-        // TODO: better error handling
         var e: Throwable? = throwable
         while (e?.cause != null) e = e.cause
         e?.let { throw it }
