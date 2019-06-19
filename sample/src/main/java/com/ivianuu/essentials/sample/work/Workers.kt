@@ -21,7 +21,6 @@ import android.content.pm.PackageManager
 import android.view.WindowManager
 import androidx.work.WorkerParameters
 import com.github.ajalt.timberkt.d
-import com.ivianuu.essentials.hidenavbar.NavBarPrefs
 import com.ivianuu.essentials.work.EsWorker
 import com.ivianuu.essentials.work.bindWorker
 import com.ivianuu.injekt.Inject
@@ -37,8 +36,7 @@ val workerModule = module {
 class MyWorkerOne(
     @Param context: Context,
     @Param workerParams: WorkerParameters,
-    windowManager: WindowManager,
-    navBarPrefs: NavBarPrefs
+    windowManager: WindowManager
 ) : EsWorker(context, workerParams) {
 
     override suspend fun doWork(): Result {

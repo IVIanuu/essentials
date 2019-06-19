@@ -22,11 +22,9 @@ import android.content.Intent
 import android.graphics.Rect
 import android.view.Surface
 import com.github.ajalt.timberkt.d
-import com.ivianuu.essentials.app.AppService
 import com.ivianuu.essentials.util.BroadcastFactory
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.android.ApplicationScope
-import com.ivianuu.kprefs.rx.asObservable
 import com.ivianuu.scopes.ReusableScope
 import com.ivianuu.scopes.rx.disposeBy
 import io.reactivex.Observable
@@ -36,55 +34,38 @@ import io.reactivex.Observable
  */
 @Inject
 @ApplicationScope
-internal class NavBarController(
+class NavBarController internal constructor(
     private val app: Application,
     private val broadcastFactory: BroadcastFactory,
     private val displayRotationProvider: DisplayRotationProvider,
     private val keyguardManager: KeyguardManager,
     private val nonSdkInterfacesHelper: NonSdkInterfacesHelper,
-    private val prefs: NavBarPrefs,
     private val overscanHelper: OverscanHelper,
     private val screenStateProvider: ScreenStateProvider
-) : AppService() {
+) {
 
     private val enabledScope = ReusableScope()
 
-    override fun start() {
-        prefs.manageNavBar.asObservable()
-            .subscribe { updateEnabledState(it) }
-            .disposeBy(scope)
-    }
-
-    private fun updateEnabledState(enabled: Boolean) {
+    fun setNavBarConfig(config: NavBarConfig) {
         enabledScope.clear()
 
-        if (!enabled) {
-            // only force the nav bar to be shown if it was hidden by us
-            if (prefs.wasNavBarHidden.isSet && prefs.wasNavBarHidden.get()) {
-                d { "force show nav bar because it was hidden by us" }
-                // force showing the nav bar
-                updateNavBarState(false)
-            }
-
-            prefs.wasNavBarHidden.delete()
-
+        if (!config.hidden) {
+            setNavBarHiddenInternal(false, config)
             return
         }
 
         Observable.merge(
             listOf(
-                prefChanges().skip(1),
                 displayRotationProvider.observeRotationChanges().skip(1),
                 screenStateProvider.observeScreenStateChanges().skip(1)
             )
         )
             .startWith(Unit)
             .map {
-                prefs.navBarHidden.get()
-                        && (!prefs.showNavBarScreenOff.get()
-                        || (!keyguardManager.isKeyguardLocked && screenStateProvider.isScreenOn))
+                !config.showWhileScreenOff
+                        || (!keyguardManager.isKeyguardLocked && screenStateProvider.isScreenOn)
             }
-            .subscribe { updateNavBarState(it) }
+            .subscribe { setNavBarHiddenInternal(it, config) }
             .disposeBy(enabledScope)
 
         // force show on shut downs
@@ -92,13 +73,13 @@ internal class NavBarController(
             .subscribe {
                 enabledScope.clear()
                 d { "show nav bar because of shutdown" }
-                updateNavBarState(false)
+                setNavBarHiddenInternal(false, config)
             }
             .disposeBy(enabledScope)
     }
 
-    private fun updateNavBarState(hide: Boolean) {
-        d { "update nav bar state: hide $hide" }
+    private fun setNavBarHiddenInternal(hidden: Boolean, config: NavBarConfig) {
+        d { "set nav bar hidden: $hidden" }
         try {
             try {
                 // ensure that we can access non sdk interfaces
@@ -108,9 +89,8 @@ internal class NavBarController(
             }
 
             val navBarHeight = getNavigationBarHeight()
-            val rect = getOverscanRect(if (hide) -navBarHeight else 0)
+            val rect = getOverscanRect(if (hidden) -navBarHeight else 0, config)
             overscanHelper.setDisplayOverscan(rect)
-            prefs.wasNavBarHidden.set(hide)
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -127,7 +107,10 @@ internal class NavBarController(
         } else 0
     }
 
-    private fun getOverscanRect(navBarHeight: Int) = when (prefs.rotationMode.get()) {
+    private fun getOverscanRect(
+        navBarHeight: Int,
+        config: NavBarConfig
+    ) = when (config.rotationMode) {
         NavBarRotationMode.MARSHMALLOW -> {
             when (displayRotationProvider.displayRotation) {
                 Surface.ROTATION_90 -> Rect(0, 0, 0, navBarHeight)
@@ -152,15 +135,4 @@ internal class NavBarController(
         }
     }
 
-    private fun prefChanges(): Observable<Unit> {
-        return Observable.merge(
-            listOf(
-                prefs.navBarHidden.asObservable().skip(1),
-                prefs.rotationMode.asObservable().skip(1),
-                prefs.showNavBarScreenOff.asObservable().skip(1)
-            )
-        )
-            .map { Unit }
-            .startWith(Unit)
-    }
 }

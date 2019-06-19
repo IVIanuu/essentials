@@ -15,12 +15,7 @@
   -->
 
 <resources>
-    <string name="es_title_nav_bar_settings">Navigation bar</string>
-
-    <string name="es_pref_manage_nav_bar">Main switch</string>
-
     <string name="es_pref_nav_bar_hidden">Hide navigation bar</string>
-    <string name="es_pref_nav_bar_hidden_summary">Toggle the navigation bar state</string>
 
     <string name="es_pref_nav_bar_rotation_mode">Rotation mode</string>
     <string name="es_pref_nav_bar_rotation_mode_summary">Define on which side of the screen the nav bar is located in landscape mode</string>

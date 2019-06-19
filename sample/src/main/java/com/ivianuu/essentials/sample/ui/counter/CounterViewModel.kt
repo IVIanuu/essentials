@@ -18,7 +18,8 @@ package com.ivianuu.essentials.sample.ui.counter
 
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
-import com.ivianuu.essentials.hidenavbar.NavBarSettingsKey
+import com.ivianuu.essentials.hidenavbar.NavBarConfig
+import com.ivianuu.essentials.hidenavbar.NavBarController
 import com.ivianuu.essentials.sample.ui.checkapps.CheckAppsKey
 import com.ivianuu.essentials.sample.ui.list.ListKey
 import com.ivianuu.essentials.sample.work.MyWorkerOne
@@ -33,8 +34,11 @@ import com.ivianuu.traveler.*
 @Inject
 class CounterViewModel(
     key: CounterKey,
-    private val router: Router
+    private val router: Router,
+    private val navBarController: NavBarController
 ) : MvRxViewModel<CounterState>(CounterState(key.screen)) {
+
+    private var navBarHidden = false
 
     fun screenUpClicked() {
         withState {
@@ -79,10 +83,8 @@ class CounterViewModel(
     }
 
     fun navBarClicked() {
-        router.navigate(
-            NavBarSettingsKey(true, true),
-            NavOptions().horizontal()
-        )
+        navBarHidden = !navBarHidden
+        navBarController.setNavBarConfig(NavBarConfig(navBarHidden))
     }
 }
 

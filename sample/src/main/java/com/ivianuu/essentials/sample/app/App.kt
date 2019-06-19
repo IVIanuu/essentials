@@ -18,7 +18,6 @@ package com.ivianuu.essentials.sample.app
 
 import com.ivianuu.essentials.app.EsApp
 import com.ivianuu.essentials.apps.glide.esAppsGlideModule
-import com.ivianuu.essentials.hidenavbar.esNavBarModule
 import com.ivianuu.essentials.sample.work.workerModule
 import com.ivianuu.essentials.work.workerInitializerModule
 import com.ivianuu.essentials.work.workerInjectionModule
@@ -27,7 +26,6 @@ class App : EsApp() {
 
     override fun modules() = listOf(
         esAppsGlideModule,
-        esNavBarModule,
         workerInjectionModule,
         workerInitializerModule,
         workerModule
