@@ -56,8 +56,12 @@ class NavBarController internal constructor(
 
         Observable.merge(
             listOf(
-                displayRotationProvider.observeRotationChanges().skip(1),
-                screenStateProvider.observeScreenStateChanges().skip(1)
+                if (config.rotationMode != NavBarRotationMode.NOUGAT)
+                    displayRotationProvider.observeRotationChanges().skip(1)
+                else Observable.never(),
+                if (config.showWhileScreenOff)
+                    screenStateProvider.observeScreenStateChanges().skip(1)
+                else Observable.never()
             )
         )
             .startWith(Unit)
