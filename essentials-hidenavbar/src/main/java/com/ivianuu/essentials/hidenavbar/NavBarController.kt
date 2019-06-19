@@ -106,9 +106,7 @@ class NavBarController internal constructor(
             else -> "navigation_bar_width"
         }
         val id = app.resources.getIdentifier(name, "dimen", "android")
-        return if (id > 0) {
-            app.resources.getDimensionPixelSize(id)
-        } else 0
+        return if (id > 0) app.resources.getDimensionPixelSize(id) else 0
     }
 
     private fun getOverscanRect(
