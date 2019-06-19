@@ -20,17 +20,12 @@ import android.app.Application
 import android.app.KeyguardManager
 import android.content.Intent
 import android.graphics.Rect
-import android.hardware.SensorManager
-import android.view.OrientationEventListener
 import android.view.Surface
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.app.AppService
 import com.ivianuu.essentials.util.BroadcastFactory
-import com.ivianuu.essentials.util.ext.combineLatest
-import com.ivianuu.essentials.util.ext.observable
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.android.ApplicationScope
-import com.ivianuu.kommon.core.app.doOnConfigurationChanged
 import com.ivianuu.kprefs.rx.asObservable
 import com.ivianuu.scopes.ReusableScope
 import com.ivianuu.scopes.rx.disposeBy
@@ -77,13 +72,13 @@ internal class NavBarController(
             return
         }
 
-        Observables
-            .combineLatest(
+        Observable.merge(
+            listOf(
                 prefChanges(),
-                configChanges().startWith(Unit),
-                rotationChangesWhileScreenOn().startWith(Unit),
-                screenState()
+                displayRotationProvider.observeRotationChanges(),
+                screenStateProvider.observeScreenStateChanges()
             )
+        )
             .map {
                 prefs.navBarHidden.get()
                         && (!prefs.showNavBarScreenOff.get()
@@ -164,58 +159,4 @@ internal class NavBarController(
             prefs.showNavBarScreenOff.asObservable()
         ).map { Unit }
     }
-
-    private fun rotationChangesWhileScreenOn(): Observable<Unit> {
-        return screenState()
-            .switchMap {
-                if (it && !keyguardManager.isKeyguardLocked) {
-                    rotationChanges()
-                        .doOnSubscribe { d { "sub for rotation" } }
-                        .doOnDispose { d { "dispose rotation" } }
-                } else {
-                    d { "do not observe rotation while screen is off" }
-                    Observable.empty()
-                }
-            }
-            .map { Unit }
-    }
-
-    private fun rotationChanges() = observable<Int> {
-        var currentRotation = displayRotationProvider.displayRotation
-
-        val listener = object : OrientationEventListener(
-            app, SensorManager.SENSOR_DELAY_NORMAL
-        ) {
-            override fun onOrientationChanged(orientation: Int) {
-                val rotation = displayRotationProvider.displayRotation
-                if (rotation != currentRotation) {
-                    onNext(rotation)
-                    currentRotation = rotation
-                }
-            }
-
-        }
-
-        setCancellable { listener.disable() }
-
-        listener.enable()
-
-        onNext(currentRotation)
-    }
-
-    private fun configChanges() = observable<Unit> {
-        val callbacks = app.doOnConfigurationChanged { onNext(Unit) }
-        setCancellable { app.unregisterComponentCallbacks(callbacks) }
-    }
-
-    private fun screenState(): Observable<Boolean> {
-        return broadcastFactory.create(
-            Intent.ACTION_SCREEN_OFF,
-            Intent.ACTION_SCREEN_ON,
-            Intent.ACTION_USER_PRESENT
-        )
-            .map { screenStateProvider.isScreenOff }
-            .startWith(screenStateProvider.isScreenOff)
-    }
-
 }

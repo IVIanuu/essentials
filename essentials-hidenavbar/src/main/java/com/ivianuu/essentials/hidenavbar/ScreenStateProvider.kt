@@ -16,14 +16,31 @@
 
 package com.ivianuu.essentials.hidenavbar
 
+import android.content.Intent
 import android.os.PowerManager
+import com.ivianuu.essentials.util.BroadcastFactory
 import com.ivianuu.injekt.Inject
+import io.reactivex.Observable
 
 /**
  * Provides the current screen state
  */
 @Inject
-internal class ScreenStateProvider(private val powerManager: PowerManager) {
+internal class ScreenStateProvider(
+    private val broadcastFactory: BroadcastFactory,
+    private val powerManager: PowerManager
+) {
     val isScreenOn: Boolean get() = powerManager.isInteractive
     val isScreenOff: Boolean get() = !isScreenOn
+
+    fun observeScreenStateChanges(): Observable<Boolean> {
+        return broadcastFactory.create(
+            Intent.ACTION_SCREEN_OFF,
+            Intent.ACTION_SCREEN_ON,
+            Intent.ACTION_USER_PRESENT
+        )
+            .map { isScreenOn }
+            .startWith(isScreenOn)
+    }
+
 }
