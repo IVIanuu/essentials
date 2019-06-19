@@ -19,6 +19,8 @@ package com.ivianuu.essentials.hidenavbar
 import android.annotation.SuppressLint
 import android.graphics.Rect
 import android.os.IBinder
+import android.view.Display
+import com.github.ajalt.timberkt.d
 import com.ivianuu.injekt.Inject
 
 /**
@@ -28,10 +30,11 @@ import com.ivianuu.injekt.Inject
 @SuppressLint("PrivateApi")
 internal class OverscanHelper {
 
-    fun setDisplayOverscan(rect: Rect) {
+    fun setOverscan(rect: Rect) {
+        d { "set overscan $rect" }
         setOverscanMethod.invoke(
             windowManagerService,
-            0, rect.left, rect.top, rect.right, rect.bottom
+            Display.DEFAULT_DISPLAY, rect.left, rect.top, rect.right, rect.bottom
         )
     }
 

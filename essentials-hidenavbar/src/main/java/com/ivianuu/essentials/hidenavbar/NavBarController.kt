@@ -50,7 +50,7 @@ class NavBarController internal constructor(
         enabledScope.clear()
 
         if (!config.hidden) {
-            setNavBarHiddenInternal(false, config)
+            setNavBarConfigInternal(false, config)
             return
         }
 
@@ -69,7 +69,7 @@ class NavBarController internal constructor(
                 !config.showWhileScreenOff
                         || (!keyguardManager.isKeyguardLocked && screenStateProvider.isScreenOn)
             }
-            .subscribe { setNavBarHiddenInternal(it, config) }
+            .subscribe { setNavBarConfigInternal(it, config) }
             .disposeBy(enabledScope)
 
         // force show on shut downs
@@ -77,13 +77,13 @@ class NavBarController internal constructor(
             .subscribe {
                 enabledScope.clear()
                 d { "show nav bar because of shutdown" }
-                setNavBarHiddenInternal(false, config)
+                setNavBarConfigInternal(false, config)
             }
             .disposeBy(enabledScope)
     }
 
-    private fun setNavBarHiddenInternal(hidden: Boolean, config: NavBarConfig) {
-        d { "set nav bar hidden: $hidden" }
+    private fun setNavBarConfigInternal(hidden: Boolean, config: NavBarConfig) {
+        d { "set nav bar hidden: $config" }
         try {
             try {
                 // ensure that we can access non sdk interfaces
@@ -94,7 +94,7 @@ class NavBarController internal constructor(
 
             val navBarHeight = getNavigationBarHeight()
             val rect = getOverscanRect(if (hidden) -navBarHeight else 0, config)
-            overscanHelper.setDisplayOverscan(rect)
+            overscanHelper.setOverscan(rect)
         } catch (e: Exception) {
             e.printStackTrace()
         }
