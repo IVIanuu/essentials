@@ -30,7 +30,6 @@ import com.ivianuu.kprefs.rx.asObservable
 import com.ivianuu.scopes.ReusableScope
 import com.ivianuu.scopes.rx.disposeBy
 import io.reactivex.Observable
-import io.reactivex.rxkotlin.Observables
 
 /**
  * Handles the state of the navigation bar
@@ -74,11 +73,12 @@ internal class NavBarController(
 
         Observable.merge(
             listOf(
-                prefChanges(),
-                displayRotationProvider.observeRotationChanges(),
-                screenStateProvider.observeScreenStateChanges()
+                prefChanges().skip(1),
+                displayRotationProvider.observeRotationChanges().skip(1),
+                screenStateProvider.observeScreenStateChanges().skip(1)
             )
         )
+            .startWith(Unit)
             .map {
                 prefs.navBarHidden.get()
                         && (!prefs.showNavBarScreenOff.get()
@@ -153,10 +153,14 @@ internal class NavBarController(
     }
 
     private fun prefChanges(): Observable<Unit> {
-        return Observables.combineLatest(
-            prefs.navBarHidden.asObservable(),
-            prefs.rotationMode.asObservable(),
-            prefs.showNavBarScreenOff.asObservable()
-        ).map { Unit }
+        return Observable.merge(
+            listOf(
+                prefs.navBarHidden.asObservable().skip(1),
+                prefs.rotationMode.asObservable().skip(1),
+                prefs.showNavBarScreenOff.asObservable().skip(1)
+            )
+        )
+            .map { Unit }
+            .startWith(Unit)
     }
 }
