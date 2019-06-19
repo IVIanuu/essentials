@@ -41,16 +41,21 @@ class NavBarController internal constructor(
     private val keyguardManager: KeyguardManager,
     private val nonSdkInterfacesHelper: NonSdkInterfacesHelper,
     private val overscanHelper: OverscanHelper,
+    private val prefs: NavBarPrefs,
     private val screenStateProvider: ScreenStateProvider
 ) {
 
-    private val enabledScope = ReusableScope()
+    private val scope = ReusableScope()
 
     fun setNavBarConfig(config: NavBarConfig) {
-        enabledScope.clear()
+        scope.clear()
 
         if (!config.hidden) {
-            setNavBarConfigInternal(false, config)
+            if (prefs.wasNavBarHidden.isSet && prefs.wasNavBarHidden.get()) {
+                setNavBarConfigInternal(false, config)
+                prefs.wasNavBarHidden.delete()
+            }
+
             return
         }
 
@@ -69,17 +74,20 @@ class NavBarController internal constructor(
                 !config.showWhileScreenOff
                         || (!keyguardManager.isKeyguardLocked && screenStateProvider.isScreenOn)
             }
-            .subscribe { setNavBarConfigInternal(it, config) }
-            .disposeBy(enabledScope)
+            .subscribe {
+                prefs.wasNavBarHidden.set(it)
+                setNavBarConfigInternal(it, config)
+            }
+            .disposeBy(scope)
 
         // force show on shut downs
         broadcastFactory.create(Intent.ACTION_SHUTDOWN)
             .subscribe {
-                enabledScope.clear()
+                scope.clear()
                 d { "show nav bar because of shutdown" }
                 setNavBarConfigInternal(false, config)
             }
-            .disposeBy(enabledScope)
+            .disposeBy(scope)
     }
 
     private fun setNavBarConfigInternal(hidden: Boolean, config: NavBarConfig) {
