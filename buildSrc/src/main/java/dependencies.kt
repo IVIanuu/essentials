@@ -30,7 +30,7 @@ object Build {
 object Publishing {
     const val groupId = "com.ivianuu.essentials"
     const val vcsUrl = "https://github.com/IVIanuu/essentials"
-    const val version = "${Build.versionName}-dev-127"
+    const val version = "${Build.versionName}-dev-129"
 }
 
 object Versions {
@@ -55,7 +55,7 @@ object Versions {
     const val coroutines = "1.3.0-M1"
     const val director = "0.0.1-dev-35"
     const val epoxy = "3.5.1"
-    const val epoxyPrefs = "0.0.1-dev-14"
+    const val epoxyPrefs = "0.0.1-dev-18"
     const val glide = "4.9.0"
     const val injekt = "0.0.1-dev-62"
     const val junit = "4.12"
