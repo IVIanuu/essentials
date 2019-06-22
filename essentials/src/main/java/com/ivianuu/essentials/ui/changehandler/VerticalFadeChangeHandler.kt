@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.common
+package com.ivianuu.essentials.ui.changehandler
 
 import android.animation.Animator
 import android.animation.ObjectAnimator
@@ -27,9 +27,6 @@ import com.ivianuu.director.defaultRemovesFromViewOnPush
 import com.ivianuu.essentials.ui.traveler.ControllerNavOptions
 import com.ivianuu.kommon.core.animation.animatorSetOf
 
-/**
- * Vertical fade change handler
- */
 class VerticalFadeChangeHandler(
     duration: Long = DirectorPlugins.defaultAnimationDuration,
     removesFromViewOnPush: Boolean = DirectorPlugins.defaultRemovesFromViewOnPush
@@ -61,9 +58,19 @@ fun ControllerNavOptions.verticalFade(
 fun ControllerNavOptions.verticalFadePush(
     duration: Long = DirectorPlugins.defaultAnimationDuration,
     removesFromViewOnPush: Boolean = DirectorPlugins.defaultRemovesFromViewOnPush
-): ControllerNavOptions = push(VerticalFadeChangeHandler(duration, removesFromViewOnPush))
+): ControllerNavOptions = push(
+    VerticalFadeChangeHandler(
+        duration,
+        removesFromViewOnPush
+    )
+)
 
 fun ControllerNavOptions.verticalFadePop(
     duration: Long = DirectorPlugins.defaultAnimationDuration,
     removesFromViewOnPush: Boolean = DirectorPlugins.defaultRemovesFromViewOnPush
-): ControllerNavOptions = pop(VerticalFadeChangeHandler(duration, removesFromViewOnPush))
+): ControllerNavOptions = pop(
+    VerticalFadeChangeHandler(
+        duration,
+        removesFromViewOnPush
+    )
+)

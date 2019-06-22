@@ -19,7 +19,7 @@ package com.ivianuu.essentials.securesettings
 import android.os.Bundle
 import androidx.lifecycle.lifecycleScope
 import com.ivianuu.epoxyprefs.Preference
-import com.ivianuu.essentials.ui.common.verticalFade
+import com.ivianuu.essentials.ui.changehandler.verticalFade
 import com.ivianuu.essentials.ui.prefs.PrefsController
 import com.ivianuu.essentials.ui.traveler.NavOptions
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
