@@ -16,34 +16,37 @@
 
 package com.ivianuu.essentials.ui.twilight
 
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import com.ivianuu.essentials.app.AppService
 import com.ivianuu.essentials.util.AppSchedulers
 import com.ivianuu.injekt.Inject
+import com.ivianuu.injekt.android.ApplicationScope
 import com.ivianuu.kprefs.rx.asObservable
-import com.ivianuu.scopes.android.onDestroy
 import com.ivianuu.scopes.rx.disposeBy
 
 @Inject
+@ApplicationScope
 class TwilightController(
     private val twilightPrefs: TwilightPrefs,
     private val schedulers: AppSchedulers
-) {
+) : AppService() {
 
-    fun configure(activity: AppCompatActivity) {
-        activity.delegate.localNightMode = when (twilightPrefs.twilightMode.get()) {
-            TwilightMode.LIGHT -> AppCompatDelegate.MODE_NIGHT_NO
-            TwilightMode.DARK -> AppCompatDelegate.MODE_NIGHT_YES
-            TwilightMode.BATTERY -> AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY
-            TwilightMode.TIME -> AppCompatDelegate.MODE_NIGHT_AUTO_TIME
-            TwilightMode.SYSTEM -> AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
-        }
-
+    override fun start() {
+        super.start()
         twilightPrefs.twilightMode.asObservable()
-            .skip(1)
             .observeOn(schedulers.main)
-            .subscribe { activity.recreate() }
-            .disposeBy(activity.onDestroy)
+            .subscribe { mode ->
+                AppCompatDelegate.setDefaultNightMode(
+                    when (mode) {
+                        TwilightMode.LIGHT -> AppCompatDelegate.MODE_NIGHT_NO
+                        TwilightMode.DARK -> AppCompatDelegate.MODE_NIGHT_YES
+                        TwilightMode.BATTERY -> AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY
+                        TwilightMode.TIME -> AppCompatDelegate.MODE_NIGHT_AUTO_TIME
+                        TwilightMode.SYSTEM -> AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+                    }
+                )
+            }
+            .disposeBy(scope)
     }
 
 }
