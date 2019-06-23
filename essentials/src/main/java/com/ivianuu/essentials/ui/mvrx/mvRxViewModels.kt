@@ -16,10 +16,10 @@
 
 package com.ivianuu.essentials.ui.mvrx
 
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
-import androidx.lifecycle.observe
 import com.ivianuu.kommon.lifecycle.defaultViewModelKey
 import com.ivianuu.kommon.lifecycle.viewModelProvider
 
@@ -41,4 +41,4 @@ inline fun <reified T : MvRxViewModel<*>> MvRxView.getMvRxViewModel(
 
 @PublishedApi
 internal fun <T : MvRxViewModel<*>> T.setupViewModel(view: MvRxView): T =
-    apply { state.observe(view) { view.postInvalidate() } }
+    apply { state.observe(view, Observer { view.postInvalidate() }) }
