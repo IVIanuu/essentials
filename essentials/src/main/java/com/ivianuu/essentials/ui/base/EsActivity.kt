@@ -24,6 +24,11 @@ import com.ivianuu.director.RouterManager
 import com.ivianuu.director.getRouter
 import com.ivianuu.director.hasRoot
 import com.ivianuu.director.traveler.ControllerNavigator
+import com.ivianuu.essentials.service.ActivityServices
+import com.ivianuu.essentials.service.LifecycleServicesManager
+import com.ivianuu.essentials.service.ServiceHost
+import com.ivianuu.essentials.service.serviceHostModule
+import com.ivianuu.essentials.service.services
 import com.ivianuu.essentials.ui.mvrx.MvRxView
 import com.ivianuu.essentials.ui.traveler.key.keyModule
 import com.ivianuu.essentials.util.ext.unsafeLazy
@@ -41,11 +46,16 @@ import com.ivianuu.traveler.setRoot
 /**
  * Base activity
  */
-abstract class EsActivity : AppCompatActivity(), InjektTrait, MvRxView {
+abstract class EsActivity : AppCompatActivity(), InjektTrait, MvRxView, ServiceHost {
 
     override val component by unsafeLazy {
         activityComponent {
-            modules(listOf(keyModule(intent.extras, false)))
+            modules(
+                listOf(
+                    keyModule(intent.extras, false),
+                    serviceHostModule(this@EsActivity)
+                )
+            )
             modules(this@EsActivity.modules())
         }
     }
@@ -75,7 +85,11 @@ abstract class EsActivity : AppCompatActivity(), InjektTrait, MvRxView {
         compositeNavigatorOf(navigators)
     }
 
+    private val services by services(ActivityServices)
+    private val lifecycleServices by inject<LifecycleServicesManager>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        lifecycle.addObserver(lifecycleServices)
         super.onCreate(savedInstanceState)
 
         if (layoutRes != 0) {
@@ -86,6 +100,8 @@ abstract class EsActivity : AppCompatActivity(), InjektTrait, MvRxView {
         router = createRouter()
 
         navigateToStartKeyIfNeeded()
+
+        services.startServices()
     }
 
     override fun onStart() {
@@ -116,6 +132,7 @@ abstract class EsActivity : AppCompatActivity(), InjektTrait, MvRxView {
     }
 
     override fun onDestroy() {
+        services.stopServices()
         routerManager.onDestroy()
         super.onDestroy()
     }

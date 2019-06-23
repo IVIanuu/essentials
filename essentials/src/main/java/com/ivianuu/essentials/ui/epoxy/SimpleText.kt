@@ -18,7 +18,7 @@ package com.ivianuu.essentials.ui.epoxy
 
 import com.airbnb.epoxy.EpoxyController
 import com.ivianuu.essentials.R
-import kotlinx.android.synthetic.main.es_item_simple_text.es_text
+import kotlinx.android.synthetic.main.es_item_simple_text.*
 
 /**
  * Simple text model

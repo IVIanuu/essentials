@@ -17,7 +17,7 @@
 package com.ivianuu.essentials.ui.twilight
 
 import androidx.appcompat.app.AppCompatDelegate
-import com.ivianuu.essentials.app.AppService
+import com.ivianuu.essentials.service.AbstractService
 import com.ivianuu.essentials.util.AppSchedulers
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.android.ApplicationScope
@@ -29,7 +29,7 @@ import com.ivianuu.scopes.rx.disposeBy
 class TwilightController(
     private val twilightPrefs: TwilightPrefs,
     private val schedulers: AppSchedulers
-) : AppService() {
+) : AbstractService() {
 
     override fun start() {
         super.start()
@@ -48,5 +48,4 @@ class TwilightController(
             }
             .disposeBy(scope)
     }
-
 }

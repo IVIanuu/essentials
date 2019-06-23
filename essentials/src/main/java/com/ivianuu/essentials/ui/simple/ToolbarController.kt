@@ -24,10 +24,14 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.view.children
 import com.google.android.material.appbar.AppBarLayout
 import com.ivianuu.essentials.R
-import com.ivianuu.essentials.util.ext.*
+import com.ivianuu.essentials.util.ext.getIconColor
+import com.ivianuu.essentials.util.ext.getPrimaryColor
+import com.ivianuu.essentials.util.ext.getPrimaryTextColor
+import com.ivianuu.essentials.util.ext.getSecondaryTextColor
+import com.ivianuu.essentials.util.ext.isLight
 import com.ivianuu.traveler.goBack
-import kotlinx.android.synthetic.main.es_controller_tabs.es_app_bar
-import kotlinx.android.synthetic.main.es_view_toolbar.es_toolbar
+import kotlinx.android.synthetic.main.es_controller_tabs.*
+import kotlinx.android.synthetic.main.es_view_toolbar.*
 
 /**
  * A controller which hosts a toolbar

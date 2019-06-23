@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Manuel Wrage
+ * Copyright 2019 Manuel Wrage
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,14 +14,6 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.apps.glide
+package com.ivianuu.essentials.service
 
-import com.ivianuu.essentials.service.bindAppService
-import com.ivianuu.injekt.module
-
-/**
- * Binds dependencies related to this module
- */
-val esAppsGlideModule = module {
-    bindAppService<AppGlideAppInitializer>()
-}
+interface ServiceHost

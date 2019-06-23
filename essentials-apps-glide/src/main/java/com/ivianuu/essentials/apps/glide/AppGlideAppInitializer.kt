@@ -19,7 +19,7 @@ package com.ivianuu.essentials.apps.glide
 import android.app.Application
 import android.graphics.drawable.Drawable
 import com.bumptech.glide.Glide
-import com.ivianuu.essentials.app.AppInitializer
+import com.ivianuu.essentials.service.InitializingService
 import com.ivianuu.injekt.Inject
 
 /**
@@ -29,7 +29,7 @@ import com.ivianuu.injekt.Inject
 internal class AppGlideAppInitializer(
     private val app: Application,
     private val factory: AppIconModelLoaderFactory
-) : AppInitializer {
+) : InitializingService() {
 
     override fun initialize() {
         Glide.get(app).registry

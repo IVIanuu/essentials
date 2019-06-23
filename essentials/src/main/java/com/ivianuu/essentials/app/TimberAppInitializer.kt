@@ -18,6 +18,7 @@ package com.ivianuu.essentials.app
 
 import android.app.Application
 import android.content.pm.ApplicationInfo
+import com.ivianuu.essentials.service.InitializingService
 import com.ivianuu.essentials.util.ext.containsFlag
 import com.ivianuu.injekt.Inject
 import timber.log.Timber
@@ -26,7 +27,7 @@ import timber.log.Timber
  * Initializes timber in debug builds
  */
 @Inject
-internal class TimberAppInitializer(private val app: Application) : AppInitializer {
+internal class TimberAppInitializer(private val app: Application) : InitializingService() {
 
     override fun initialize() {
         val isDebuggable = app.applicationInfo.flags.containsFlag(ApplicationInfo.FLAG_DEBUGGABLE)

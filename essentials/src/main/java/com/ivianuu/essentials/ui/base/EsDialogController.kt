@@ -17,10 +17,14 @@
 package com.ivianuu.essentials.ui.base
 
 import android.content.Context
+import android.os.Bundle
 import android.view.View
 import com.ivianuu.director.common.DialogController
 import com.ivianuu.essentials.injection.childControllerComponent
 import com.ivianuu.essentials.injection.controllerComponent
+import com.ivianuu.essentials.service.ControllerServices
+import com.ivianuu.essentials.service.LifecycleServicesManager
+import com.ivianuu.essentials.service.services
 import com.ivianuu.essentials.ui.mvrx.MvRxView
 import com.ivianuu.essentials.ui.traveler.key.keyModule
 import com.ivianuu.essentials.util.ContextAware
@@ -55,12 +59,26 @@ abstract class EsDialogController : DialogController(), ContextAware, InjektTrai
 
     val travelerRouter by inject<Router>()
 
+    private val services by services(ControllerServices)
+    private val lifecycleServices by inject<LifecycleServicesManager>()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        lifecycle.addObserver(lifecycleServices)
+        services.startServices()
+    }
+
     override fun onAttach(view: View) {
         super.onAttach(view)
         invalidate()
     }
 
     override fun invalidate() {
+    }
+
+    override fun onDestroy() {
+        services.stopServices()
+        super.onDestroy()
     }
 
     protected open fun modules(): List<Module> = emptyList()

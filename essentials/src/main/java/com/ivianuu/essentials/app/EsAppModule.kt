@@ -19,6 +19,7 @@ package com.ivianuu.essentials.app
 import android.content.Context
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
+import androidx.lifecycle.ProcessLifecycleOwner
 import com.ivianuu.injekt.factoryWithState
 import com.ivianuu.injekt.get
 import com.ivianuu.injekt.module
@@ -37,4 +38,7 @@ val esAppModule = module {
         val context = link<Context>()
         definition { context().packageManager }
     }
+
+    single { ProcessLifecycleOwner.get() }
+    single { ProcessLifecycleOwner.get().lifecycle }
 }

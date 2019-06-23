@@ -31,7 +31,8 @@ class App : EsApp() {
         esAppsGlideModule,
         workerInjectionModule,
         workerInitializerModule,
-        workerModule
+        workerModule,
+        myServiceModule
     )
 
     override fun onCreate() {

@@ -17,15 +17,13 @@
 package com.ivianuu.essentials.app
 
 import android.os.Looper
+import com.ivianuu.essentials.service.InitializingService
 import com.ivianuu.injekt.Inject
 import io.reactivex.android.plugins.RxAndroidPlugins
 import io.reactivex.android.schedulers.AndroidSchedulers
 
-/**
- * Enables async main thread schedulers
- */
 @Inject
-internal class RxJavaAppInitializer : AppInitializer {
+internal class RxJavaAppInitializer : InitializingService() {
 
     override fun initialize() {
         val scheduler = AndroidSchedulers.from(Looper.getMainLooper(), true)

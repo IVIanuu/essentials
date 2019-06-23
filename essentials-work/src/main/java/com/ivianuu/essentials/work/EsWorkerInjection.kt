@@ -20,8 +20,8 @@ import android.content.Context
 import androidx.work.Configuration
 import androidx.work.WorkManager
 import androidx.work.WorkerFactory
-import com.ivianuu.essentials.app.AppInitializer
-import com.ivianuu.essentials.app.bindAppInitializer
+import com.ivianuu.essentials.service.InitializingService
+import com.ivianuu.essentials.service.bindAppService
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.module
 
@@ -29,7 +29,7 @@ import com.ivianuu.injekt.module
  * Module for the [WorkerAppInitializer]
  */
 val workerInitializerModule = module {
-    bindAppInitializer<WorkerAppInitializer>()
+    bindAppService<WorkerAppInitializer>()
 }
 
 /**
@@ -39,7 +39,7 @@ val workerInitializerModule = module {
 internal class WorkerAppInitializer(
     private val context: Context,
     private val workerFactory: WorkerFactory
-) : AppInitializer {
+) : InitializingService() {
     override fun initialize() {
         WorkManager.initialize(
             context, Configuration.Builder()

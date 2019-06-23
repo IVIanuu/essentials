@@ -24,6 +24,9 @@ import android.view.ViewGroup
 import com.ivianuu.director.Controller
 import com.ivianuu.essentials.injection.childControllerComponent
 import com.ivianuu.essentials.injection.controllerComponent
+import com.ivianuu.essentials.service.ControllerServices
+import com.ivianuu.essentials.service.LifecycleServicesManager
+import com.ivianuu.essentials.service.services
 import com.ivianuu.essentials.ui.mvrx.MvRxView
 import com.ivianuu.essentials.ui.traveler.key.keyModule
 import com.ivianuu.essentials.util.ContextAware
@@ -66,6 +69,15 @@ abstract class EsController : Controller(), ContextAware, InjektTrait, LayoutCon
 
     protected open val layoutRes get() = -1
 
+    private val services by services(ControllerServices)
+    private val lifecycleServices by inject<LifecycleServicesManager>()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        lifecycle.addObserver(lifecycleServices)
+        services.startServices()
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup,
@@ -87,6 +99,11 @@ abstract class EsController : Controller(), ContextAware, InjektTrait, LayoutCon
         clearFindViewByIdCache()
         _containerView = null
         super.onDestroyView(view)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        services.stopServices()
     }
 
     override fun invalidate() {
