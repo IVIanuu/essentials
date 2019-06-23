@@ -22,6 +22,7 @@ import com.ivianuu.epoxyprefs.Preference
 import com.ivianuu.essentials.ui.changehandler.verticalFade
 import com.ivianuu.essentials.ui.prefs.PrefsController
 import com.ivianuu.essentials.ui.traveler.NavOptions
+import com.ivianuu.essentials.ui.traveler.defaultNavOptionsOrElse
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.essentials.util.ext.goBackWithResult
@@ -71,7 +72,9 @@ class SecureSettingsController : PrefsController() {
             titleRes(R.string.es_pref_use_pc)
             summaryRes(R.string.es_pref_use_pc_summary)
             navigateOnClickWithOptions {
-                SecureSettingsPcInstructionsKey to NavOptions().verticalFade()
+                SecureSettingsPcInstructionsKey to defaultNavOptionsOrElse {
+                    NavOptions().verticalFade()
+                }
             }
         }
 

@@ -46,6 +46,14 @@ class ControllerNavOptions {
 
 fun NavOptions(): ControllerNavOptions = ControllerNavOptions()
 
+inline fun defaultNavOptionsOrElse(options: () -> ControllerNavOptions): ControllerNavOptions {
+    val pushHandler = DirectorPlugins.defaultPushHandler
+    val popHandler = DirectorPlugins.defaultPopHandler
+    return if (pushHandler != null || popHandler != null)
+        NavOptions().push(pushHandler).pop(popHandler)
+    else options()
+}
+
 fun ControllerNavOptions.applyToTransaction(transaction: RouterTransaction): ControllerNavOptions =
     apply {
         transaction.pushChangeHandler(push())
