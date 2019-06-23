@@ -22,8 +22,10 @@ import com.ivianuu.essentials.hidenavbar.NavBarConfig
 import com.ivianuu.essentials.hidenavbar.NavBarController
 import com.ivianuu.essentials.sample.ui.checkapps.CheckAppsKey
 import com.ivianuu.essentials.sample.ui.list.ListKey
+import com.ivianuu.essentials.sample.util.SecureSettingsHelper
 import com.ivianuu.essentials.sample.work.MyWorkerOne
 import com.ivianuu.essentials.sample.work.MyWorkerTwo
+import com.ivianuu.essentials.securesettings.SecureSettingsKey
 import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
 import com.ivianuu.essentials.ui.traveler.NavOptions
 import com.ivianuu.essentials.ui.traveler.horizontal
@@ -35,7 +37,8 @@ import com.ivianuu.traveler.*
 class CounterViewModel(
     key: CounterKey,
     private val router: Router,
-    private val navBarController: NavBarController
+    private val navBarController: NavBarController,
+    private val secureSettingsHelper: SecureSettingsHelper
 ) : MvRxViewModel<CounterState>(CounterState(key.screen)) {
 
     private var navBarHidden = false
@@ -83,8 +86,12 @@ class CounterViewModel(
     }
 
     fun navBarClicked() {
-        navBarHidden = !navBarHidden
-        navBarController.setNavBarConfig(NavBarConfig(navBarHidden))
+        if (secureSettingsHelper.canWriteSecureSettings()) {
+            navBarHidden = !navBarHidden
+            navBarController.setNavBarConfig(NavBarConfig(navBarHidden))
+        } else {
+            router.navigate(SecureSettingsKey(1, true))
+        }
     }
 }
 
