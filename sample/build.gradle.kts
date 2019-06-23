@@ -27,6 +27,10 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/coroutines-fix.gradle")
 
 android {
+    defaultConfig {
+        targetSdkVersion(Build.targetSdkSample)
+    }
+
     buildTypes {
         getByName("release") {
             isMinifyEnabled = true

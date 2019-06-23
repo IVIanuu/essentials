@@ -23,6 +23,7 @@ object Build {
     const val compileSdk = 28
     const val minSdk = 21
     const val targetSdk = 28
+    const val targetSdkSample = 27
     const val versionCode = 1
     const val versionName = "0.0.1"
 }
@@ -57,7 +58,7 @@ object Versions {
     const val epoxy = "3.5.1"
     const val epoxyPrefs = "0.0.1-dev-20"
     const val glide = "4.9.0"
-    const val injekt = "0.0.1-dev-62"
+    const val injekt = "0.0.1-dev-64"
     const val junit = "4.12"
     const val kommon = "0.0.1-dev-12"
     const val kotlin = "1.3.40"
