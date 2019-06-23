@@ -16,15 +16,12 @@
 
 package com.ivianuu.essentials.sample.ui.counter
 
-import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.WorkManager
 import com.ivianuu.essentials.hidenavbar.NavBarConfig
 import com.ivianuu.essentials.hidenavbar.NavBarController
 import com.ivianuu.essentials.sample.ui.checkapps.CheckAppsKey
 import com.ivianuu.essentials.sample.ui.list.ListKey
 import com.ivianuu.essentials.sample.util.SecureSettingsHelper
-import com.ivianuu.essentials.sample.work.MyWorkerOne
-import com.ivianuu.essentials.sample.work.MyWorkerTwo
+import com.ivianuu.essentials.sample.work.WorkScheduler
 import com.ivianuu.essentials.securesettings.SecureSettingsKey
 import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
 import com.ivianuu.essentials.ui.traveler.NavOptions
@@ -38,7 +35,8 @@ class CounterViewModel(
     key: CounterKey,
     private val router: Router,
     private val navBarController: NavBarController,
-    private val secureSettingsHelper: SecureSettingsHelper
+    private val secureSettingsHelper: SecureSettingsHelper,
+    private val workScheduler: WorkScheduler
 ) : MvRxViewModel<CounterState>(CounterState(key.screen)) {
 
     private var navBarHidden = false
@@ -72,10 +70,7 @@ class CounterViewModel(
     }
 
     fun doWorkClicked() {
-        with(WorkManager.getInstance()) {
-            enqueue(OneTimeWorkRequestBuilder<MyWorkerOne>().build())
-            enqueue(OneTimeWorkRequestBuilder<MyWorkerTwo>().build())
-        }
+        workScheduler.scheduleWork()
     }
 
     fun twilightClicked() {
