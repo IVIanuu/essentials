@@ -28,16 +28,16 @@ import com.ivianuu.essentials.ui.base.EsController
 import com.ivianuu.essentials.ui.traveler.NavOptions
 import com.ivianuu.essentials.ui.traveler.dialog
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
+import com.ivianuu.essentials.util.ext.ResultKey
 import com.ivianuu.essentials.util.ext.goBackWithResult
 import com.ivianuu.injekt.inject
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class PermissionRequestKey(
-    val resultCode: Int,
     val permissions: Set<String>,
-    val requestCode: Int
-) : ControllerKey(::PermissionRequestController, NavOptions().dialog())
+    override var resultCode: Int
+) : ControllerKey(::PermissionRequestController, NavOptions().dialog()), ResultKey<PermissionResult>
 
 /**
  * Permission request controller
@@ -49,13 +49,13 @@ class PermissionRequestController : EsController() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            addPermissionResultListener(key.requestCode) { requestCode, permissions, grantResults ->
+            addPermissionResultListener(key.resultCode) { requestCode, permissions, grantResults ->
                 travelerRouter.goBackWithResult(
                     key.resultCode,
                     PermissionResult(requestCode, permissions.toSet(), grantResults)
                 )
             }
-            requestPermissions(key.permissions.toTypedArray(), key.requestCode)
+            requestPermissions(key.permissions.toTypedArray(), key.resultCode)
         }
     }
 
@@ -70,7 +70,7 @@ class PermissionRequestController : EsController() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             travelerRouter.goBackWithResult(
                 key.resultCode, PermissionResult(
-                    key.requestCode,
+                    key.resultCode,
                     key.permissions,
                     key.permissions
                         .map { PackageManager.PERMISSION_GRANTED }

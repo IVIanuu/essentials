@@ -25,6 +25,7 @@ import com.ivianuu.essentials.ui.traveler.NavOptions
 import com.ivianuu.essentials.ui.traveler.defaultNavOptionsOrElse
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
 import com.ivianuu.essentials.util.Toaster
+import com.ivianuu.essentials.util.ext.ResultKey
 import com.ivianuu.essentials.util.ext.goBackWithResult
 import com.ivianuu.injekt.inject
 import kotlinx.android.parcel.Parcelize
@@ -32,9 +33,9 @@ import kotlinx.coroutines.launch
 
 @Parcelize
 class SecureSettingsKey(
-    val resultCode: Int,
-    val showHideNavBarHint: Boolean = false
-) : ControllerKey(::SecureSettingsController)
+    val showHideNavBarHint: Boolean = false,
+    override var resultCode: Int
+) : ControllerKey(::SecureSettingsController), ResultKey<Boolean>
 
 /**
  * Asks the user for the secure settings permission

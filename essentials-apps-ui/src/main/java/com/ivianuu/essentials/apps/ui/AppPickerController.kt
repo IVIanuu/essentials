@@ -35,6 +35,7 @@ import com.ivianuu.essentials.util.Async
 import com.ivianuu.essentials.util.Loading
 import com.ivianuu.essentials.util.Success
 import com.ivianuu.essentials.util.Uninitialized
+import com.ivianuu.essentials.util.ext.ResultKey
 import com.ivianuu.essentials.util.ext.goBackWithResult
 import com.ivianuu.injekt.Inject
 import com.ivianuu.traveler.Router
@@ -44,9 +45,9 @@ import kotlinx.coroutines.async
 
 @Parcelize
 data class AppPickerKey(
-    val resultCode: Int,
-    val launchableOnly: Boolean = false
-) : ControllerKey(::AppPickerController)
+    val launchableOnly: Boolean = false,
+    override var resultCode: Int
+) : ControllerKey(::AppPickerController), ResultKey<AppInfo>
 
 /**
  * App picker controller

@@ -23,6 +23,7 @@ import com.ivianuu.essentials.ui.base.EsDialogController
 import com.ivianuu.essentials.ui.traveler.NavOptions
 import com.ivianuu.essentials.ui.traveler.dialog
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
+import com.ivianuu.essentials.util.ext.ResultKey
 import com.ivianuu.essentials.util.ext.dialog
 import com.ivianuu.essentials.util.ext.goBackWithResult
 import com.ivianuu.injekt.get
@@ -36,8 +37,8 @@ data class TextInputKey(
     val inputType: Int = -1,
     val prefill: String = "",
     val allowEmptyInput: Boolean = false,
-    val resultCode: Int
-) : ControllerKey(::TextInputDialog, NavOptions().dialog())
+    override var resultCode: Int
+) : ControllerKey(::TextInputDialog, NavOptions().dialog()), ResultKey<String>
 
 /**
  * Text input dialog

@@ -22,6 +22,7 @@ import com.ivianuu.essentials.ui.base.EsDialogController
 import com.ivianuu.essentials.ui.traveler.NavOptions
 import com.ivianuu.essentials.ui.traveler.dialog
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
+import com.ivianuu.essentials.util.ext.ResultKey
 import com.ivianuu.essentials.util.ext.dialog
 import com.ivianuu.essentials.util.ext.goBackWithResult
 import com.ivianuu.injekt.inject
@@ -33,8 +34,8 @@ data class ColorPickerKey(
     val preselect: Int = 0,
     val allowCustomArgb: Boolean = true,
     val showAlphaSelector: Boolean = false,
-    val resultCode: Int
-) : ControllerKey(::ColorPickerDialog, NavOptions().dialog())
+    override var resultCode: Int
+) : ControllerKey(::ColorPickerDialog, NavOptions().dialog()), ResultKey<Int>
 
 /**
  * Color picker controller

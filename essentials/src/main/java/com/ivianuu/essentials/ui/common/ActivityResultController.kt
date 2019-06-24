@@ -28,16 +28,16 @@ import com.ivianuu.essentials.ui.base.EsController
 import com.ivianuu.essentials.ui.traveler.NavOptions
 import com.ivianuu.essentials.ui.traveler.dialog
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
+import com.ivianuu.essentials.util.ext.ResultKey
 import com.ivianuu.essentials.util.ext.goBackWithResult
 import com.ivianuu.injekt.inject
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class ActivityResultKey(
-    val resultCode: Int,
     val intent: Intent,
-    val requestCode: Int
-) : ControllerKey(::ActivityResultController, NavOptions().dialog())
+    override var resultCode: Int
+) : ControllerKey(::ActivityResultController, NavOptions().dialog()), ResultKey<ActivityResultKey>
 
 /**
  * Activity result controller
@@ -49,14 +49,14 @@ class ActivityResultController : EsController() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        addActivityResultListener(key.requestCode) { requestCode, resultCode, data ->
+        addActivityResultListener(key.resultCode) { requestCode, resultCode, data ->
             travelerRouter.goBackWithResult(
                 key.resultCode,
                 ActivityResult(requestCode, resultCode, data)
             )
         }
 
-        startActivityForResult(key.intent, key.requestCode)
+        startActivityForResult(key.intent, key.resultCode)
     }
 
     override fun onCreateView(
