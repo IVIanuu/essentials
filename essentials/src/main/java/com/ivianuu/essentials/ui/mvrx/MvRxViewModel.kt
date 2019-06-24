@@ -22,7 +22,9 @@ import androidx.lifecycle.viewModelScope
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.base.EsViewModel
 import com.ivianuu.essentials.util.Async
+import com.ivianuu.essentials.util.Fail
 import com.ivianuu.essentials.util.Loading
+import com.ivianuu.essentials.util.Success
 import com.ivianuu.essentials.util.asFail
 import com.ivianuu.essentials.util.asSuccess
 import com.ivianuu.essentials.util.ext.isMainThread
@@ -32,9 +34,13 @@ import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.disposables.Disposable
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import kotlin.coroutines.CoroutineContext
+import kotlin.coroutines.EmptyCoroutineContext
 
 /**
  * State view model
@@ -110,6 +116,23 @@ abstract class MvRxViewModel<S>(initialState: S) : EsViewModel() {
             }
 
             setState { reducer(result) }
+        }
+    }
+
+    fun <V> CoroutineScope.execute(
+        block: suspend () -> V,
+        context: CoroutineContext = EmptyCoroutineContext,
+        start: CoroutineStart = CoroutineStart.DEFAULT,
+        reducer: S.(Async<V>) -> S
+    ) {
+        launch(context, start) {
+            setState { reducer(Loading()) }
+            try {
+                val result = block()
+                setState { reducer(Success(result)) }
+            } catch (e: Exception) {
+                setState { reducer(Fail(e)) }
+            }
         }
     }
 

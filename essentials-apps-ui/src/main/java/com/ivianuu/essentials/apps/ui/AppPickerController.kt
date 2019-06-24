@@ -41,7 +41,6 @@ import com.ivianuu.injekt.Inject
 import com.ivianuu.traveler.Router
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.es_item_app.*
-import kotlinx.coroutines.async
 
 @Parcelize
 data class AppPickerKey(
@@ -101,13 +100,16 @@ internal class AppPickerViewModel(
 ) : MvRxViewModel<AppPickerState>(AppPickerState()) {
 
     init {
-        viewModelScope.async {
-            if (key.launchableOnly) {
-                appStore.getLaunchableApps()
-            } else {
-                appStore.getInstalledApps()
-            }
-        }.execute { copy(apps = it) }
+        viewModelScope.execute(
+            block = {
+                if (key.launchableOnly) {
+                    appStore.getLaunchableApps()
+                } else {
+                    appStore.getInstalledApps()
+                }
+            },
+            reducer = { copy(apps = it) }
+        )
     }
 
     fun appClicked(appInfo: AppInfo) {
