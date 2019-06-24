@@ -28,7 +28,11 @@ import com.ivianuu.essentials.ui.traveler.NavOptions
 import com.ivianuu.essentials.ui.traveler.horizontal
 import com.ivianuu.essentials.ui.twilight.TwilightSettingsKey
 import com.ivianuu.injekt.Inject
-import com.ivianuu.traveler.*
+import com.ivianuu.traveler.Router
+import com.ivianuu.traveler.finish
+import com.ivianuu.traveler.goBack
+import com.ivianuu.traveler.navigate
+import com.ivianuu.traveler.popToRoot
 
 @Inject
 class CounterViewModel(
@@ -85,7 +89,7 @@ class CounterViewModel(
             navBarHidden = !navBarHidden
             navBarController.setNavBarConfig(NavBarConfig(navBarHidden))
         } else {
-            router.navigate(SecureSettingsKey(1, true))
+            router.navigate(SecureSettingsKey(true))
         }
     }
 }

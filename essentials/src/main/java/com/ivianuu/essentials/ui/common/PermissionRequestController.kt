@@ -36,7 +36,7 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 data class PermissionRequestKey(
     val permissions: Set<String>,
-    override var resultCode: Int
+    override var resultCode: Int = 0
 ) : ControllerKey(::PermissionRequestController, NavOptions().dialog()), ResultKey<PermissionResult>
 
 /**

@@ -34,7 +34,7 @@ import kotlinx.coroutines.launch
 @Parcelize
 class SecureSettingsKey(
     val showHideNavBarHint: Boolean = false,
-    override var resultCode: Int
+    override var resultCode: Int = 0
 ) : ControllerKey(::SecureSettingsController), ResultKey<Boolean>
 
 /**

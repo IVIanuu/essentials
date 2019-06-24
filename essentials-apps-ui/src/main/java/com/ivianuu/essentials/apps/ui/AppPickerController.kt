@@ -46,7 +46,7 @@ import kotlinx.coroutines.async
 @Parcelize
 data class AppPickerKey(
     val launchableOnly: Boolean = false,
-    override var resultCode: Int
+    override var resultCode: Int = 0
 ) : ControllerKey(::AppPickerController), ResultKey<AppInfo>
 
 /**

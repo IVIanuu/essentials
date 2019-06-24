@@ -36,8 +36,8 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 data class ActivityResultKey(
     val intent: Intent,
-    override var resultCode: Int
-) : ControllerKey(::ActivityResultController, NavOptions().dialog()), ResultKey<ActivityResultKey>
+    override var resultCode: Int = 0
+) : ControllerKey(::ActivityResultController, NavOptions().dialog()), ResultKey<ActivityResult>
 
 /**
  * Activity result controller

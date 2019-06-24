@@ -34,7 +34,7 @@ data class ColorPickerKey(
     val preselect: Int = 0,
     val allowCustomArgb: Boolean = true,
     val showAlphaSelector: Boolean = false,
-    override var resultCode: Int
+    override var resultCode: Int = 0
 ) : ControllerKey(::ColorPickerDialog, NavOptions().dialog()), ResultKey<Int>
 
 /**
