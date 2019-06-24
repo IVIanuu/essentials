@@ -32,7 +32,7 @@ private data class Result(
 
 private val results = PublishSubject<Result>()
 
-interface ResultKey {
+interface ResultKey<T> {
     var resultCode: Int
 }
 
@@ -42,7 +42,7 @@ private var resultCodes = 0
 internal fun getResultCodes() = ++resultCodes
 
 suspend inline fun <reified T : Any> Router.navigateForResult(
-    key: ResultKey,
+    key: ResultKey<T>,
     resultCode: Int = getResultCodes(),
     data: Any? = null
 ): T {
