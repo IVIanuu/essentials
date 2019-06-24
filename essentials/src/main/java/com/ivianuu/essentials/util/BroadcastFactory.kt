@@ -42,7 +42,12 @@ class BroadcastFactory(private val context: Context) {
             }
         }
 
-        setCancellable { context.unregisterReceiver(broadcastReceiver) }
+        setCancellable {
+            try {
+                context.unregisterReceiver(broadcastReceiver)
+            } catch(e: Exception) {
+            }
+        }
 
         if (!isDisposed) {
             context.registerReceiver(broadcastReceiver, intentFilter)
