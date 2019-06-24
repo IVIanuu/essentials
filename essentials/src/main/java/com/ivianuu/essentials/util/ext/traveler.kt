@@ -32,11 +32,21 @@ private data class Result(
 
 private val results = PublishSubject<Result>()
 
+interface ResultKey {
+    var resultCode: Int
+}
+
+private var resultCodes = 0
+
+@PublishedApi
+internal fun getResultCodes() = ++resultCodes
+
 suspend inline fun <reified T : Any> Router.navigateForResult(
-    resultCode: Int,
-    key: Any,
+    key: ResultKey,
+    resultCode: Int = getResultCodes(),
     data: Any? = null
 ): T {
+    key.resultCode = resultCode
     navigate(key, data)
     return results<T>(resultCode).awaitFirst()
 }
