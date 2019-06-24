@@ -18,7 +18,9 @@ package com.ivianuu.essentials.util.ext
 
 import com.ivianuu.traveler.Router
 import com.ivianuu.traveler.goBack
+import com.ivianuu.traveler.navigate
 import io.reactivex.Observable
+import kotlinx.coroutines.rx2.awaitFirst
 import kotlin.reflect.KClass
 
 // todo remove
@@ -29,6 +31,15 @@ private data class Result(
 )
 
 private val results = PublishSubject<Result>()
+
+suspend inline fun <reified T : Any> Router.navigateForResult(
+    resultCode: Int,
+    key: Any,
+    data: Any? = null
+): T {
+    navigate(key, data)
+    return results<T>(resultCode).awaitFirst()
+}
 
 inline fun <reified T : Any> Router.results(resultCode: Int): Observable<T> =
     results(T::class, resultCode)
