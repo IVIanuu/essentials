@@ -35,7 +35,7 @@ object Publishing {
 }
 
 object Versions {
-    const val androidGradlePlugin = "3.4.1"
+    const val androidGradlePlugin = "3.5.0-beta05"
 
     const val androidxActivity = "1.0.0-alpha08"
     const val androidxAppCompat = "1.1.0-alpha04"
@@ -66,7 +66,7 @@ object Versions {
     const val kSettings = "0.0.1-dev-7"
     const val mavenGradle = "2.1"
     const val materialComponents = "1.1.0-alpha07"
-    const val materialDialogs = "2.0.3"
+    const val materialDialogs = "3.0.2"
     const val mockitoKotlin = "2.0.0"
     const val roboelectric = "4.0.2"
     const val rxAndroid = "2.1.0"
@@ -168,10 +168,18 @@ object Deps {
 
     const val materialDialogsCore =
         "com.afollestad.material-dialogs:core:${Versions.materialDialogs}"
-    const val materialDialogsInput =
-        "com.afollestad.material-dialogs:input:${Versions.materialDialogs}"
+    const val materialDialogsBottomSheets =
+        "com.afollestad.material-dialogs:bottomsheets:${Versions.materialDialogs}"
     const val materialDialogsColor =
         "com.afollestad.material-dialogs:color:${Versions.materialDialogs}"
+    const val materialDialogsDateTime =
+        "com.afollestad.material-dialogs:datetime:${Versions.materialDialogs}"
+    const val materialDialogsFiles =
+        "com.afollestad.material-dialogs:files:${Versions.materialDialogs}"
+    const val materialDialogsInput =
+        "com.afollestad.material-dialogs:input:${Versions.materialDialogs}"
+    const val materialDialogsLifecycle =
+        "com.afollestad.material-dialogs:lifecycle:${Versions.materialDialogs}"
 
     const val mavenGradlePlugin =
         "com.github.dcendents:android-maven-gradle-plugin:${Versions.mavenGradle}"
