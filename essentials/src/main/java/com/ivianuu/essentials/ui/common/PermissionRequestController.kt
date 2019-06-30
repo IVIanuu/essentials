@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.ui.common
 
 import android.content.pm.PackageManager
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -48,15 +47,14 @@ class PermissionRequestController : EsController() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            addPermissionResultListener(key.resultCode) { requestCode, permissions, grantResults ->
-                travelerRouter.goBackWithResult(
-                    key.resultCode,
-                    PermissionResult(requestCode, permissions.toSet(), grantResults)
-                )
-            }
-            requestPermissions(key.permissions.toTypedArray(), key.resultCode)
+
+        addPermissionResultListener(key.resultCode) { requestCode, permissions, grantResults ->
+            travelerRouter.goBackWithResult(
+                key.resultCode,
+                PermissionResult(requestCode, permissions.toSet(), grantResults)
+            )
         }
+        requestPermissions(key.permissions.toTypedArray(), key.resultCode)
     }
 
     override fun onCreateView(
@@ -64,20 +62,6 @@ class PermissionRequestController : EsController() {
         container: ViewGroup,
         savedViewState: Bundle?
     ): View = View(activity) // dummy
-
-    override fun onAttach(view: View) {
-        super.onAttach(view)
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            travelerRouter.goBackWithResult(
-                key.resultCode, PermissionResult(
-                    key.resultCode,
-                    key.permissions,
-                    key.permissions
-                        .map { PackageManager.PERMISSION_GRANTED }
-                        .toIntArray()
-                ))
-        }
-    }
 
 }
 
