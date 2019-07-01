@@ -60,7 +60,7 @@ abstract class MvRxViewModel<S>(initialState: S) : EsViewModel() {
             val newState = reducer(currentState)
             if (currentState != newState) {
                 synchronized(this@MvRxViewModel) { _state = newState }
-                mainThread { _liveData.postValue(newState) }
+                mainThread { _liveData.value = newState }
             }
         }
     }
