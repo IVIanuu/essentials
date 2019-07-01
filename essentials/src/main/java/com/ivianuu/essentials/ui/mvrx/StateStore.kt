@@ -42,7 +42,7 @@ internal class StateStore<S>(
         capacity = Channel.UNLIMITED
     ) {
 
-        val getStateQueue = ArrayDeque<suspend (S) -> Unit>()
+        val getStateQueue = ArrayDeque<(S) -> Unit>()
 
         consumeEach { action ->
             when (action) {
@@ -68,16 +68,16 @@ internal class StateStore<S>(
         }
     }
 
-    fun set(reducer: suspend S.() -> S) {
+    fun set(reducer: S.() -> S) {
         actionsActor.offer(SetStateAction(reducer))
     }
 
-    fun get(block: suspend (S) -> Unit) {
+    fun get(block: (S) -> Unit) {
         actionsActor.offer(GetStateAction(block))
     }
 
 }
 
 internal interface Action<S>
-internal inline class SetStateAction<S>(val reducer: suspend S.() -> S) : Action<S>
-internal inline class GetStateAction<S>(val block: suspend (S) -> Unit) : Action<S>
+internal inline class SetStateAction<S>(val reducer: S.() -> S) : Action<S>
+internal inline class GetStateAction<S>(val block: (S) -> Unit) : Action<S>

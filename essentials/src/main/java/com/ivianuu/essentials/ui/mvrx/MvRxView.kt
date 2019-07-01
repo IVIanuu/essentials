@@ -23,18 +23,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelStoreOwner
 
-private val PENDING_INVALIDATES = mutableSetOf<Int>()
-private val HANDLER = Handler(Looper.getMainLooper(), Handler.Callback { message ->
-    val view = message.obj as MvRxView
-    PENDING_INVALIDATES.remove(System.identityHashCode(view))
-
-    if (view.lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
-        view.invalidate()
-    }
-
-    return@Callback true
-})
-
 interface MvRxView : LifecycleOwner, ViewModelStoreOwner {
 
     fun invalidate()
@@ -46,3 +34,15 @@ interface MvRxView : LifecycleOwner, ViewModelStoreOwner {
     }
 
 }
+
+private val PENDING_INVALIDATES = mutableSetOf<Int>()
+private val HANDLER = Handler(Looper.getMainLooper(), Handler.Callback { message ->
+    val view = message.obj as MvRxView
+    PENDING_INVALIDATES.remove(System.identityHashCode(view))
+
+    if (view.lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
+        view.invalidate()
+    }
+
+    return@Callback true
+})

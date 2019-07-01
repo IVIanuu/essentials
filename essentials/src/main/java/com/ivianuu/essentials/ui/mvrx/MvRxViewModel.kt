@@ -52,11 +52,11 @@ abstract class MvRxViewModel<S>(initialState: S) : EsViewModel() {
     val currentState: S get() = stateStore.currentState
     val state: LiveData<S> get() = stateStore.state
 
-    protected fun withState(block: suspend (S) -> Unit) {
+    protected fun withState(block: (S) -> Unit) {
         stateStore.get(block)
     }
 
-    protected fun setState(reducer: suspend S.() -> S) {
+    protected fun setState(reducer: S.() -> S) {
         stateStore.set(reducer)
     }
 
@@ -74,15 +74,15 @@ abstract class MvRxViewModel<S>(initialState: S) : EsViewModel() {
     }
 
     protected fun Completable.execute(
-        reducer: suspend S.(Async<Unit>) -> S
+        reducer: S.(Async<Unit>) -> S
     ): Disposable = toSingle { Unit }.execute(reducer)
 
     protected fun <V> Single<V>.execute(
-        reducer: suspend S.(Async<V>) -> S
+        reducer: S.(Async<V>) -> S
     ): Disposable = toObservable().execute(reducer)
 
     protected fun <V> Observable<V>.execute(
-        reducer: suspend S.(Async<V>) -> S
+        reducer: S.(Async<V>) -> S
     ): Disposable {
         setState { reducer(Loading()) }
 
@@ -95,7 +95,7 @@ abstract class MvRxViewModel<S>(initialState: S) : EsViewModel() {
     protected fun <V> Deferred<V>.execute(
         context: CoroutineContext = EmptyCoroutineContext,
         start: CoroutineStart = CoroutineStart.DEFAULT,
-        reducer: suspend S.(Async<V>) -> S
+        reducer: S.(Async<V>) -> S
     ): Job = viewModelScope.execute(
         context = context,
         start = start,
@@ -107,7 +107,7 @@ abstract class MvRxViewModel<S>(initialState: S) : EsViewModel() {
         context: CoroutineContext = EmptyCoroutineContext,
         start: CoroutineStart = CoroutineStart.DEFAULT,
         block: suspend () -> V,
-        reducer: suspend S.(Async<V>) -> S
+        reducer: S.(Async<V>) -> S
     ): Job = launch(context, start) {
         setState { reducer(Loading()) }
         try {
