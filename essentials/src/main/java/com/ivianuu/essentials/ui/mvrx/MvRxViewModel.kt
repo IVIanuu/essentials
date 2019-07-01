@@ -47,7 +47,7 @@ import kotlin.coroutines.EmptyCoroutineContext
  */
 abstract class MvRxViewModel<S>(initialState: S) : EsViewModel() {
 
-    private val stateStore = MvRxStateStore(initialState, viewModelScope)
+    private val stateStore = StateStore(initialState, viewModelScope)
 
     val currentState: S get() = stateStore.currentState
     val state: LiveData<S> get() = stateStore.state
@@ -107,7 +107,7 @@ abstract class MvRxViewModel<S>(initialState: S) : EsViewModel() {
         }
     }
 
-    fun <V> CoroutineScope.execute(
+    protected fun <V> CoroutineScope.execute(
         block: suspend () -> V,
         context: CoroutineContext = EmptyCoroutineContext,
         start: CoroutineStart = CoroutineStart.DEFAULT,

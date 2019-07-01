@@ -25,7 +25,7 @@ import kotlinx.coroutines.channels.actor
 import kotlinx.coroutines.channels.consumeEach
 import java.util.*
 
-internal class MvRxStateStore<S>(
+internal class StateStore<S>(
     initialState: S,
     val scope: CoroutineScope
 ) {
@@ -47,9 +47,9 @@ internal class MvRxStateStore<S>(
         consumeEach { action ->
             when (action) {
                 is SetStateAction -> {
-                    val currentState = synchronized(this@MvRxStateStore) { _state }
+                    val currentState = synchronized(this@StateStore) { _state }
                     val newState = action.reducer(currentState)
-                    synchronized(this@MvRxStateStore) { _state = newState }
+                    synchronized(this@StateStore) { _state = newState }
                     _liveData.postValue(newState)
                 }
                 is GetStateAction -> {
@@ -57,7 +57,7 @@ internal class MvRxStateStore<S>(
                 }
             }
 
-            val snapshot = synchronized(this@MvRxStateStore) { _state }
+            val snapshot = synchronized(this@StateStore) { _state }
 
             getStateQueue
                 .takeWhile { channel.isEmpty }
