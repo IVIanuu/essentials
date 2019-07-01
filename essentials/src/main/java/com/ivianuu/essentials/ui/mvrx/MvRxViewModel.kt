@@ -93,34 +93,28 @@ abstract class MvRxViewModel<S>(initialState: S) : EsViewModel() {
     }
 
     protected fun <V> Deferred<V>.execute(
-        reducer: suspend S.(Async<V>) -> S
-    ): Job {
-        setState { reducer(Loading()) }
-        return viewModelScope.launch {
-            val result = try {
-                await().asSuccess()
-            } catch (e: Exception) {
-                e.asFail<V>()
-            }
-
-            setState { reducer(result) }
-        }
-    }
-
-    protected fun <V> CoroutineScope.execute(
-        block: suspend () -> V,
         context: CoroutineContext = EmptyCoroutineContext,
         start: CoroutineStart = CoroutineStart.DEFAULT,
         reducer: suspend S.(Async<V>) -> S
-    ) {
-        launch(context, start) {
-            setState { reducer(Loading()) }
-            try {
-                val result = block()
-                setState { reducer(Success(result)) }
-            } catch (e: Exception) {
-                setState { reducer(Fail(e)) }
-            }
+    ): Job = viewModelScope.execute(
+        context = context,
+        start = start,
+        block = { await() },
+        reducer = reducer
+    )
+
+    protected fun <V> CoroutineScope.execute(
+        context: CoroutineContext = EmptyCoroutineContext,
+        start: CoroutineStart = CoroutineStart.DEFAULT,
+        block: suspend () -> V,
+        reducer: suspend S.(Async<V>) -> S
+    ): Job = launch(context, start) {
+        setState { reducer(Loading()) }
+        try {
+            val result = block()
+            setState { reducer(Success(result)) }
+        } catch (e: Exception) {
+            setState { reducer(Fail(e)) }
         }
     }
 
