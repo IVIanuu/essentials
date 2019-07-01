@@ -24,7 +24,6 @@ import com.ivianuu.injekt.factory
 import com.ivianuu.injekt.intoMap
 import com.ivianuu.injekt.map
 import com.ivianuu.injekt.module
-import com.ivianuu.injekt.typeOf
 import com.ivianuu.injekt.withBinding
 import kotlin.reflect.KClass
 
@@ -52,9 +51,7 @@ annotation class AppInitializers {
 }
 
 inline fun <reified T : AppInitializer> BindingContext<T>.bindAppInitializer(): BindingContext<T> {
-    intoMap(
-        mapKeyType = typeOf<KClass<out AppInitializer>>(),
-        mapValueType = typeOf<AppInitializer>(),
+    intoMap<T, KClass<out AppInitializer>, AppInitializer>(
         entryKey = T::class,
         mapName = AppInitializers
     )

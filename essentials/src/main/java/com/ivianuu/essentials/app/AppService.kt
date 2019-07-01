@@ -25,7 +25,6 @@ import com.ivianuu.injekt.intoMap
 import com.ivianuu.injekt.map
 import com.ivianuu.injekt.module
 import com.ivianuu.injekt.single
-import com.ivianuu.injekt.typeOf
 import com.ivianuu.injekt.withBinding
 import com.ivianuu.scopes.MutableScope
 import com.ivianuu.scopes.Scope
@@ -57,11 +56,8 @@ inline fun <reified T : AppService> Module.bindAppService(
 }
 
 inline fun <reified T : AppService> BindingContext<T>.bindAppService(): BindingContext<T> {
-    intoMap(
-        mapKeyType = typeOf<KClass<out AppService>>(),
-        mapValueType = typeOf<AppService>(),
-        entryKey = T::class,
-        mapName = AppServices
+    intoMap<T, KClass<out AppService>, AppService>(
+        entryKey = T::class, mapName = AppServices
     )
     return this
 }
