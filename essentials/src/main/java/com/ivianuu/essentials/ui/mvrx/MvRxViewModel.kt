@@ -74,15 +74,15 @@ abstract class MvRxViewModel<S>(initialState: S) : EsViewModel() {
     }
 
     protected fun Completable.execute(
-        reducer: S.(Async<Unit>) -> S
+        reducer: suspend S.(Async<Unit>) -> S
     ): Disposable = toSingle { Unit }.execute(reducer)
 
     protected fun <V> Single<V>.execute(
-        reducer: S.(Async<V>) -> S
+        reducer: suspend S.(Async<V>) -> S
     ): Disposable = toObservable().execute(reducer)
 
     protected fun <V> Observable<V>.execute(
-        reducer: S.(Async<V>) -> S
+        reducer: suspend S.(Async<V>) -> S
     ): Disposable {
         setState { reducer(Loading()) }
 
@@ -93,7 +93,7 @@ abstract class MvRxViewModel<S>(initialState: S) : EsViewModel() {
     }
 
     protected fun <V> Deferred<V>.execute(
-        reducer: S.(Async<V>) -> S
+        reducer: suspend S.(Async<V>) -> S
     ): Job {
         setState { reducer(Loading()) }
         return viewModelScope.launch {
@@ -111,7 +111,7 @@ abstract class MvRxViewModel<S>(initialState: S) : EsViewModel() {
         block: suspend () -> V,
         context: CoroutineContext = EmptyCoroutineContext,
         start: CoroutineStart = CoroutineStart.DEFAULT,
-        reducer: S.(Async<V>) -> S
+        reducer: suspend S.(Async<V>) -> S
     ) {
         launch(context, start) {
             setState { reducer(Loading()) }
