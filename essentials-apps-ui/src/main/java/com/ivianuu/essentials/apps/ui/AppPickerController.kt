@@ -97,7 +97,7 @@ private fun EpoxyController.AppInfo(
 internal class AppPickerViewModel(
     private val key: AppPickerKey,
     private val appStore: AppStore,
-    private val dispatchers: AppDispatchers,
+    dispatchers: AppDispatchers,
     private val router: Router
 ) : MvRxViewModel<AppPickerState>(AppPickerState()) {
 

@@ -31,10 +31,10 @@ internal class MvRxStateStore<S>(
 ) {
 
     private val _liveData = MutableLiveData<S>()
-    val liveData: LiveData<S> get() = _liveData
+    val state: LiveData<S> get() = _liveData
 
     private var _state: S = initialState
-    val state: S
+    val currentState: S
         get() = synchronized(this) { _state }
 
     private val actionsActor = scope.actor<Action<S>>(

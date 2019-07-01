@@ -23,7 +23,7 @@ import com.ivianuu.injekt.Inject
 import io.reactivex.Observable
 
 /**
- * Provides the current screen state
+ * Provides the current screen currentState
  */
 @Inject
 internal class ScreenStateProvider(

@@ -49,8 +49,8 @@ abstract class MvRxViewModel<S>(initialState: S) : EsViewModel() {
 
     private val stateStore = MvRxStateStore(initialState, viewModelScope)
 
-    val state: S get() = stateStore.state
-    val liveData: LiveData<S> get() = stateStore.liveData
+    val currentState: S get() = stateStore.currentState
+    val state: LiveData<S> get() = stateStore.state
 
     protected fun withState(block: suspend (S) -> Unit) {
         stateStore.get(block)
@@ -61,12 +61,12 @@ abstract class MvRxViewModel<S>(initialState: S) : EsViewModel() {
     }
 
     fun logStateChanges() {
-        subscribe { d { "new liveData -> $it" } }
+        subscribe { d { "new currentState -> $it" } }
     }
 
     protected fun subscribe(consumer: (S) -> Unit): Disposable {
         return Observable.fromPublisher(
-            stateStore.liveData
+            stateStore.state
                 .toPublisher(scope.lifecycleOwner)
         )
             .subscribe(consumer)
@@ -124,5 +124,5 @@ abstract class MvRxViewModel<S>(initialState: S) : EsViewModel() {
         }
     }
 
-    override fun toString() = "${javaClass.simpleName} -> $state"
+    override fun toString() = "${javaClass.simpleName} -> $currentState"
 }
