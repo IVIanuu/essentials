@@ -32,9 +32,7 @@ import com.ivianuu.essentials.util.ext.mainThread
 import com.ivianuu.essentials.util.lifecycleOwner
 import com.ivianuu.scopes.android.scope
 import com.ivianuu.scopes.rx.disposeBy
-import io.reactivex.Completable
 import io.reactivex.Observable
-import io.reactivex.Single
 import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
@@ -61,8 +59,10 @@ abstract class MvRxViewModel<S>(initialState: S) : EsViewModel() {
         viewModelScope.launch(Dispatchers.Default) {
             val currentState = synchronized(this@MvRxViewModel) { _state }
             val newState = reducer(currentState)
-            synchronized(this@MvRxViewModel) { _state = newState }
-            mainThread { _liveData.postValue(newState) }
+            if (currentState != newState) {
+                synchronized(this@MvRxViewModel) { _state = newState }
+                mainThread { _liveData.postValue(newState) }
+            }
         }
     }
 
@@ -75,14 +75,6 @@ abstract class MvRxViewModel<S>(initialState: S) : EsViewModel() {
             .subscribe(consumer)
             .disposeBy(scope)
     }
-
-    protected fun Completable.execute(
-        reducer: S.(Async<Unit>) -> S
-    ): Disposable = toSingle { Unit }.execute(reducer)
-
-    protected fun <V> Single<V>.execute(
-        reducer: S.(Async<V>) -> S
-    ): Disposable = toObservable().execute(reducer)
 
     protected fun <V> Observable<V>.execute(
         reducer: S.(Async<V>) -> S
