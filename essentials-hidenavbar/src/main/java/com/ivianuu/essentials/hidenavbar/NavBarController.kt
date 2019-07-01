@@ -22,12 +22,16 @@ import android.content.Intent
 import android.graphics.Rect
 import android.view.Surface
 import com.github.ajalt.timberkt.d
+import com.ivianuu.essentials.util.AppDispatchers
+import com.ivianuu.essentials.util.AppSchedulers
 import com.ivianuu.essentials.util.BroadcastFactory
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.android.ApplicationScope
 import com.ivianuu.scopes.ReusableScope
 import com.ivianuu.scopes.rx.disposeBy
 import io.reactivex.Observable
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 /**
  * Handles the state of the navigation bar
@@ -38,10 +42,12 @@ class NavBarController internal constructor(
     private val app: Application,
     private val broadcastFactory: BroadcastFactory,
     private val displayRotationProvider: DisplayRotationProvider,
+    private val dispatchers: AppDispatchers,
     private val keyguardManager: KeyguardManager,
     private val nonSdkInterfacesHelper: NonSdkInterfacesHelper,
     private val overscanHelper: OverscanHelper,
     private val prefs: NavBarPrefs,
+    private val schedulers: AppSchedulers,
     private val screenStateProvider: ScreenStateProvider
 ) {
 
@@ -69,6 +75,7 @@ class NavBarController internal constructor(
                 else Observable.never()
             )
         )
+            .observeOn(schedulers.io)
             .startWith(Unit)
             .map {
                 !config.showWhileScreenOff
@@ -91,20 +98,22 @@ class NavBarController internal constructor(
     }
 
     private fun setNavBarConfigInternal(hidden: Boolean, config: NavBarConfig) {
-        d { "set nav bar hidden: $config" }
-        try {
+        GlobalScope.launch(dispatchers.io) {
+            d { "set nav bar hidden: $config" }
             try {
-                // ensure that we can access non sdk interfaces
-                nonSdkInterfacesHelper.disableNonSdkInterfaceDetection()
+                try {
+                    // ensure that we can access non sdk interfaces
+                    nonSdkInterfacesHelper.disableNonSdkInterfaceDetection()
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+
+                val navBarHeight = getNavigationBarHeight()
+                val rect = getOverscanRect(if (hidden) -navBarHeight else 0, config)
+                overscanHelper.setOverscan(rect)
             } catch (e: Exception) {
                 e.printStackTrace()
             }
-
-            val navBarHeight = getNavigationBarHeight()
-            val rect = getOverscanRect(if (hidden) -navBarHeight else 0, config)
-            overscanHelper.setOverscan(rect)
-        } catch (e: Exception) {
-            e.printStackTrace()
         }
     }
 
