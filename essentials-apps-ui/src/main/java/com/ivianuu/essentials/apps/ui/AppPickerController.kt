@@ -31,6 +31,7 @@ import com.ivianuu.essentials.ui.mvrx.epoxy.mvRxEpoxyController
 import com.ivianuu.essentials.ui.mvrx.injekt.injectMvRxViewModel
 import com.ivianuu.essentials.ui.simple.ListController
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
+import com.ivianuu.essentials.util.AppDispatchers
 import com.ivianuu.essentials.util.Async
 import com.ivianuu.essentials.util.Loading
 import com.ivianuu.essentials.util.Success
@@ -96,11 +97,13 @@ private fun EpoxyController.AppInfo(
 internal class AppPickerViewModel(
     private val key: AppPickerKey,
     private val appStore: AppStore,
+    private val dispatchers: AppDispatchers,
     private val router: Router
 ) : MvRxViewModel<AppPickerState>(AppPickerState()) {
 
     init {
         viewModelScope.execute(
+            context = dispatchers.io,
             block = {
                 if (key.launchableOnly) {
                     appStore.getLaunchableApps()
