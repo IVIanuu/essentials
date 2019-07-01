@@ -20,25 +20,45 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
+import com.ivianuu.essentials.util.ext.unsafeLazy
 import com.ivianuu.kommon.lifecycle.defaultViewModelKey
+import com.ivianuu.kommon.lifecycle.doOnCreate
 import com.ivianuu.kommon.lifecycle.viewModelProvider
+import kotlin.reflect.KClass
 
 inline fun <reified T : MvRxViewModel<*>> MvRxView.mvRxViewModel(
     noinline from: () -> ViewModelStoreOwner = { this },
     noinline key: () -> String = { T::class.defaultViewModelKey },
     noinline factory: () -> T
-): Lazy<T> = LifecycleLazy(this) { getMvRxViewModel(from(), key(), factory) }
+): Lazy<T> = _mvRxViewModel(T::class, from, key, factory)
+
+@PublishedApi
+internal fun <T : MvRxViewModel<*>> MvRxView._mvRxViewModel(
+    type: KClass<T>,
+    from: () -> ViewModelStoreOwner = { this },
+    key: () -> String = { type.defaultViewModelKey },
+    factory: () -> T
+): Lazy<T> = unsafeLazy { _getMvRxViewModel(type, from(), key(), factory) }.also { lazy ->
+    doOnCreate { lazy.value }
+}
 
 inline fun <reified T : MvRxViewModel<*>> MvRxView.getMvRxViewModel(
     from: ViewModelStoreOwner = this,
     key: String = T::class.defaultViewModelKey,
     noinline factory: () -> T
+): T = _getMvRxViewModel(T::class, from, key, factory)
+
+@PublishedApi
+internal fun <T : MvRxViewModel<*>> MvRxView._getMvRxViewModel(
+    type: KClass<T>,
+    from: ViewModelStoreOwner = this,
+    key: String = type.defaultViewModelKey,
+    factory: () -> T
 ): T {
     return from.viewModelProvider(object : ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T = factory() as T
-    }).get(key, T::class.java).setupViewModel(this)
+    }).get(key, type.java).also { vm ->
+        // invalidate this view on each state emission
+        vm.state.observe(this, Observer { postInvalidate() })
+    }
 }
-
-@PublishedApi
-internal fun <T : MvRxViewModel<*>> T.setupViewModel(view: MvRxView): T =
-    apply { state.observe(view, Observer { view.postInvalidate() }) }
