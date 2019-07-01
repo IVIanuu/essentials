@@ -19,8 +19,8 @@ package com.ivianuu.essentials.data.base
 import android.annotation.TargetApi
 import android.os.Build
 import android.service.quicksettings.TileService
-import com.ivianuu.essentials.util.coroutineScope
 import com.ivianuu.essentials.util.ext.unsafeLazy
+import com.ivianuu.essentials.util.lifecycleOwner
 import com.ivianuu.injekt.Component
 import com.ivianuu.injekt.InjektTrait
 import com.ivianuu.injekt.Module
@@ -48,7 +48,7 @@ abstract class EsTileService : TileService(), InjektTrait, ScopeOwner {
     private val _listeningScope = ReusableScope()
     val listeningScope: Scope get() = _listeningScope
 
-    val listeningCoroutineScope get() = listeningScope.coroutineScope
+    val listeningCoroutineScope get() = listeningScope.lifecycleOwner
 
     override fun onDestroy() {
         _scope.close()

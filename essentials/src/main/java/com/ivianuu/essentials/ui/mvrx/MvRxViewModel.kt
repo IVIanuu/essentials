@@ -17,7 +17,7 @@
 package com.ivianuu.essentials.ui.mvrx
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.toPublisher
 import androidx.lifecycle.viewModelScope
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.base.EsViewModel
@@ -27,7 +27,7 @@ import com.ivianuu.essentials.util.Loading
 import com.ivianuu.essentials.util.Success
 import com.ivianuu.essentials.util.asFail
 import com.ivianuu.essentials.util.asSuccess
-import com.ivianuu.essentials.util.ext.isMainThread
+import com.ivianuu.essentials.util.lifecycleOwner
 import com.ivianuu.scopes.android.scope
 import com.ivianuu.scopes.rx.disposeBy
 import io.reactivex.Completable
@@ -47,43 +47,31 @@ import kotlin.coroutines.EmptyCoroutineContext
  */
 abstract class MvRxViewModel<S>(initialState: S) : EsViewModel() {
 
-    private val stateStore = MvRxStateStore(initialState)
-        .also { it.disposeBy(scope) }
+    private val stateStore = MvRxStateStore(initialState, viewModelScope)
 
-    val currentState: S get() = stateStore.state
-    val state: LiveData<S> = object : MutableLiveData<S>() {
-        var disposable: Disposable? = null;
+    val state: S get() = stateStore.state
+    val liveData: LiveData<S> get() = stateStore.liveData
 
-        override fun onActive() {
-            super.onActive()
-
-            // Observable -> LiveData
-            disposable = stateStore.observable.subscribe {
-                if (isMainThread) value = it
-                else postValue(it)
-            }
-        }
-
-        override fun onInactive() {
-            disposable?.dispose();
-            super.onInactive()
-        }
+    protected fun withState(block: suspend (S) -> Unit) {
+        stateStore.get(block)
     }
 
-    protected fun withState(consumer: (S) -> Unit) {
-        stateStore.get(consumer)
-    }
-
-    protected fun setState(reducer: S.() -> S) {
+    protected fun setState(reducer: suspend S.() -> S) {
         stateStore.set(reducer)
     }
 
     fun logStateChanges() {
-        subscribe { d { "new state -> $it" } }
+        subscribe { d { "new liveData -> $it" } }
     }
 
-    protected fun subscribe(consumer: (S) -> Unit): Disposable =
-        stateStore.observable.subscribe(consumer).disposeBy(scope)
+    protected fun subscribe(consumer: (S) -> Unit): Disposable {
+        return Observable.fromPublisher(
+            stateStore.liveData
+                .toPublisher(scope.lifecycleOwner)
+        )
+            .subscribe(consumer)
+            .disposeBy(scope)
+    }
 
     protected fun Completable.execute(
         reducer: S.(Async<Unit>) -> S
@@ -136,5 +124,5 @@ abstract class MvRxViewModel<S>(initialState: S) : EsViewModel() {
         }
     }
 
-    override fun toString() = "${javaClass.simpleName} -> $currentState"
+    override fun toString() = "${javaClass.simpleName} -> $state"
 }

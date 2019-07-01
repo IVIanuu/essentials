@@ -37,6 +37,7 @@ dependencies {
     api(Deps.androidxCardView)
     api(Deps.androidxCore)
     api(Deps.androidxLifecycleLiveData)
+    api(Deps.androidxLifecycleReactiveStreams)
     api(Deps.androidxLifecycleRuntime)
     api(Deps.androidxLifecycleViewModel)
     api(Deps.androidxLifecycleViewModelSavedState)

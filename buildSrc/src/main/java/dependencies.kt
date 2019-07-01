@@ -44,6 +44,7 @@ object Versions {
     const val androidxFragment = "1.1.0-alpha08"
     const val androidxLifecycle = "2.2.0-alpha01"
     const val androidxLifecycleViewModelSavedState = "1.0.0-alpha01"
+
     const val androidxWork = "2.0.1"
 
     const val androidxTestCore = "1.2.0-alpha03"
@@ -88,6 +89,9 @@ object Deps {
     const val androidxCore = "androidx.core:core-ktx:${Versions.androidxCore}"
     const val androidxLifecycleLiveData =
         "androidx.lifecycle:lifecycle-livedata-ktx:${Versions.androidxLifecycle}"
+    const val androidxLifecycleReactiveStreams =
+        "androidx.lifecycle:lifecycle-reactivestreams-ktx:${Versions.androidxLifecycle}"
+
     const val androidxLifecycleRuntime =
         "androidx.lifecycle:lifecycle-runtime-ktx:${Versions.androidxLifecycle}"
     const val androidxLifecycleViewModel =

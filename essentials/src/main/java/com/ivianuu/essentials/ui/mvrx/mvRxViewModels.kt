@@ -41,4 +41,4 @@ inline fun <reified T : MvRxViewModel<*>> MvRxView.getMvRxViewModel(
 
 @PublishedApi
 internal fun <T : MvRxViewModel<*>> T.setupViewModel(view: MvRxView): T =
-    apply { state.observe(view, Observer { view.postInvalidate() }) }
+    apply { liveData.observe(view, Observer { view.postInvalidate() }) }

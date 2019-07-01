@@ -17,8 +17,8 @@
 package com.ivianuu.essentials.data.base
 
 import android.service.notification.NotificationListenerService
-import com.ivianuu.essentials.util.coroutineScope
 import com.ivianuu.essentials.util.ext.unsafeLazy
+import com.ivianuu.essentials.util.lifecycleOwner
 import com.ivianuu.injekt.InjektTrait
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.android.serviceComponent
@@ -45,7 +45,7 @@ abstract class EsNotificationListenerService : NotificationListenerService(), In
     private val _connectedScope = ReusableScope()
     val connectedScope: Scope get() = _connectedScope
 
-    val connectedCoroutineScope get() = connectedScope.coroutineScope
+    val connectedCoroutineScope get() = connectedScope.lifecycleOwner
 
     override fun onDestroy() {
         _scope.close()
