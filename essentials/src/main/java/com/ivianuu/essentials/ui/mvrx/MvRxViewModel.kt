@@ -48,12 +48,11 @@ import kotlin.coroutines.EmptyCoroutineContext
  */
 abstract class MvRxViewModel<S>(initialState: S) : EsViewModel() {
 
-    private val _liveData = MutableLiveData<S>()
+    private val _liveData = MutableLiveData<S>(initialState)
     val liveData: LiveData<S> get() = _liveData
 
     private var _state: S = initialState
-    val state: S
-        get() = synchronized(this) { _state }
+    val state: S get() = synchronized(this) { _state }
 
     protected fun setState(reducer: S.() -> S) {
         viewModelScope.launch(Dispatchers.Default) {
