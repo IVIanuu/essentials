@@ -21,9 +21,15 @@ import android.content.pm.ApplicationInfo
 import com.ivianuu.essentials.injection.esModule
 import com.ivianuu.essentials.util.ext.containsFlag
 import com.ivianuu.essentials.util.ext.unsafeLazy
-import com.ivianuu.injekt.*
+import com.ivianuu.injekt.Component
+import com.ivianuu.injekt.InjektPlugins
+import com.ivianuu.injekt.InjektTrait
+import com.ivianuu.injekt.Module
+import com.ivianuu.injekt.Provider
 import com.ivianuu.injekt.android.AndroidLogger
 import com.ivianuu.injekt.android.applicationComponent
+import com.ivianuu.injekt.inject
+import com.ivianuu.injekt.logger
 import com.ivianuu.scopes.MutableScope
 import com.ivianuu.scopes.Scope
 import com.ivianuu.scopes.ScopeOwner
@@ -39,8 +45,8 @@ abstract class EsApp : Application(), InjektTrait, ScopeOwner {
         createComponent()
     }
 
-    override val scope: Scope get() = _scope
     private val _scope = MutableScope()
+    override val scope: Scope get() = _scope
 
     private val appInitializers by
     inject<Map<KClass<AppInitializer>, Provider<AppInitializer>>>(AppInitializers)

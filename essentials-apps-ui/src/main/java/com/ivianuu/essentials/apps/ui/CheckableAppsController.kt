@@ -32,7 +32,11 @@ import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
 import com.ivianuu.essentials.ui.mvrx.epoxy.mvRxEpoxyController
 import com.ivianuu.essentials.ui.mvrx.mvRxViewModel
 import com.ivianuu.essentials.ui.simple.ListController
-import com.ivianuu.essentials.util.*
+import com.ivianuu.essentials.util.AppDispatchers
+import com.ivianuu.essentials.util.Async
+import com.ivianuu.essentials.util.Loading
+import com.ivianuu.essentials.util.Success
+import com.ivianuu.essentials.util.Uninitialized
 import com.ivianuu.essentials.util.ext.BehaviorSubject
 import com.ivianuu.essentials.util.ext.PublishSubject
 import com.ivianuu.essentials.util.ext.andTrue
@@ -131,8 +135,8 @@ internal class CheckableAppsViewModel(
     private val dispatchers: AppDispatchers
 ) : MvRxViewModel<CheckableAppsState>(CheckableAppsState()) {
 
-    val checkedAppsChanged: Observable<Set<String>> get() = _checkedAppsChanged
     private val _checkedAppsChanged = PublishSubject<Set<String>>()
+    val checkedAppsChanged: Observable<Set<String>> get() = _checkedAppsChanged
 
     private val checkedAppsScope = ReusableScope()
     private val checkedApps = BehaviorSubject<Set<String>>()

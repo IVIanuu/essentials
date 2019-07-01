@@ -38,8 +38,8 @@ abstract class EsService : Service(), InjektTrait, ScopeOwner {
         }
     }
 
-    override val scope: Scope get() = _scope
     private val _scope = MutableScope()
+    override val scope: Scope get() = _scope
 
     override fun onDestroy() {
         _scope.close()

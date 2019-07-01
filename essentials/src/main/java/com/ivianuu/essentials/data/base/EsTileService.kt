@@ -42,11 +42,11 @@ abstract class EsTileService : TileService(), InjektTrait, ScopeOwner {
         }
     }
 
-    override val scope: Scope get() = _scope
     private val _scope = MutableScope()
+    override val scope: Scope get() = _scope
 
-    val listeningScope: Scope get() = _listeningScope
     private val _listeningScope = ReusableScope()
+    val listeningScope: Scope get() = _listeningScope
 
     val listeningCoroutineScope get() = listeningScope.coroutineScope
 

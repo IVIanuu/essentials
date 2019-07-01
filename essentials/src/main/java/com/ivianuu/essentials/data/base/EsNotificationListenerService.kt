@@ -39,11 +39,11 @@ abstract class EsNotificationListenerService : NotificationListenerService(), In
         }
     }
 
-    override val scope: Scope get() = _scope
     private val _scope = MutableScope()
+    override val scope: Scope get() = _scope
 
-    val connectedScope: Scope get() = _connectedScope
     private val _connectedScope = ReusableScope()
+    val connectedScope: Scope get() = _connectedScope
 
     val connectedCoroutineScope get() = connectedScope.coroutineScope
 
