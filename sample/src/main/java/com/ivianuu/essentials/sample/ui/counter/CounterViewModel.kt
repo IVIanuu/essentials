@@ -46,18 +46,14 @@ class CounterViewModel(
     private var navBarHidden = false
 
     fun screenUpClicked() {
-        withState {
-            router.navigate(CounterKey(it.screen.inc()))
-        }
+        router.navigate(CounterKey(state.screen.inc()))
     }
 
     fun screenDownClicked() {
-        withState {
-            if (it.screen == 1) {
-                router.finish()
-            } else {
-                router.goBack()
-            }
+        if (state.screen == 1) {
+            router.finish()
+        } else {
+            router.goBack()
         }
     }
 

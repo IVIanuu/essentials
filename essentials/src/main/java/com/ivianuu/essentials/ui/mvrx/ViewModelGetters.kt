@@ -59,6 +59,6 @@ internal fun <T : MvRxViewModel<*>> MvRxView._getMvRxViewModel(
         override fun <T : ViewModel?> create(modelClass: Class<T>): T = factory() as T
     }).get(key, type.java).also { vm ->
         // invalidate this view on each state emission
-        vm.state.observe(this, Observer { postInvalidate() })
+        vm.liveData.observe(this, Observer { postInvalidate() })
     }
 }

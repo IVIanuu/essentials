@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.ui.mvrx
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.toPublisher
 import androidx.lifecycle.viewModelScope
 import com.github.ajalt.timberkt.d
@@ -27,6 +28,7 @@ import com.ivianuu.essentials.util.Loading
 import com.ivianuu.essentials.util.Success
 import com.ivianuu.essentials.util.asFail
 import com.ivianuu.essentials.util.asSuccess
+import com.ivianuu.essentials.util.ext.mainThread
 import com.ivianuu.essentials.util.lifecycleOwner
 import com.ivianuu.scopes.android.scope
 import com.ivianuu.scopes.rx.disposeBy
@@ -37,6 +39,7 @@ import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
@@ -47,17 +50,20 @@ import kotlin.coroutines.EmptyCoroutineContext
  */
 abstract class MvRxViewModel<S>(initialState: S) : EsViewModel() {
 
-    private val stateStore = StateStore(initialState, viewModelScope)
+    private val _liveData = MutableLiveData<S>()
+    val liveData: LiveData<S> get() = _liveData
 
-    val currentState: S get() = stateStore.currentState
-    val state: LiveData<S> get() = stateStore.state
-
-    protected fun withState(block: (S) -> Unit) {
-        stateStore.get(block)
-    }
+    private var _state: S = initialState
+    val state: S
+        get() = synchronized(this) { _state }
 
     protected fun setState(reducer: S.() -> S) {
-        stateStore.set(reducer)
+        viewModelScope.launch(Dispatchers.Default) {
+            val currentState = synchronized(this@MvRxViewModel) { _state }
+            val newState = reducer(currentState)
+            synchronized(this@MvRxViewModel) { _state = newState }
+            mainThread { _liveData.postValue(newState) }
+        }
     }
 
     fun logStateChanges() {
@@ -65,10 +71,7 @@ abstract class MvRxViewModel<S>(initialState: S) : EsViewModel() {
     }
 
     protected fun subscribe(consumer: (S) -> Unit): Disposable {
-        return Observable.fromPublisher(
-            stateStore.state
-                .toPublisher(scope.lifecycleOwner)
-        )
+        return Observable.fromPublisher(liveData.toPublisher(scope.lifecycleOwner))
             .subscribe(consumer)
             .disposeBy(scope)
     }
@@ -118,5 +121,5 @@ abstract class MvRxViewModel<S>(initialState: S) : EsViewModel() {
         }
     }
 
-    override fun toString() = "${javaClass.simpleName} -> $currentState"
+    override fun toString() = "${javaClass.simpleName} -> $state"
 }

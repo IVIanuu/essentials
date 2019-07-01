@@ -188,11 +188,9 @@ internal class CheckableAppsViewModel(
     }
 
     fun selectAllClicked() {
-        withState { state ->
-            if (state.apps is Success<List<CheckableApp>>) {
-                pushNewCheckedApps { apps ->
-                    apps.addAll(state.apps()?.map { it.info.packageName } ?: emptyList())
-                }
+        state.apps()?.let { allApps ->
+            pushNewCheckedApps { newApps ->
+                newApps.addAll(allApps.map { it.info.packageName })
             }
         }
     }

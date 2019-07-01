@@ -27,7 +27,6 @@ import com.ivianuu.director.common.changehandler.SharedElementTransitionChangeHa
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.base.EsController
 import com.ivianuu.essentials.ui.mvrx.injekt.injectMvRxViewModel
-import com.ivianuu.essentials.ui.mvrx.withState
 import com.ivianuu.essentials.ui.traveler.NavOptions
 import com.ivianuu.essentials.ui.traveler.handler
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
@@ -73,7 +72,7 @@ class CounterController : EsController() {
     }
 
     override fun invalidate() {
-        withState(viewModel) { count.text = "Screen : ${it.screen}" }
+        count.text = "Screen: ${viewModel.state.screen}"
     }
 
 }

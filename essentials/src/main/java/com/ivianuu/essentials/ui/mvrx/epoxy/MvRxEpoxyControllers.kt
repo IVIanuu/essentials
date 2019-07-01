@@ -21,14 +21,14 @@ import com.airbnb.epoxy.EpoxyController
 import com.ivianuu.essentials.ui.epoxy.epoxyController
 import com.ivianuu.essentials.ui.mvrx.MvRxView
 import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
-import com.ivianuu.essentials.ui.mvrx.withState
 
 fun <T : MvRxView, A : MvRxViewModel<B>, B> T.mvRxEpoxyController(
     viewModel1: A,
     buildItems: EpoxyController.(state: B) -> Unit
 ): EpoxyController = epoxyController {
-    if (!lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) return@epoxyController
-    withState(viewModel1) { buildItems.invoke(this, it) }
+    if (lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
+        buildItems.invoke(this, viewModel1.state)
+    }
 }
 
 fun <T : MvRxView, A : MvRxViewModel<B>, B, C : MvRxViewModel<D>, D> T.mvRxEpoxyController(
@@ -36,11 +36,13 @@ fun <T : MvRxView, A : MvRxViewModel<B>, B, C : MvRxViewModel<D>, D> T.mvRxEpoxy
     viewModel2: C,
     buildItems: EpoxyController.(state1: B, state2: D) -> Unit
 ): EpoxyController = epoxyController {
-    if (!lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) return@epoxyController
-    withState(
-        viewModel1,
-        viewModel2
-    ) { state1, state2 -> buildItems.invoke(this, state1, state2) }
+    if (lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
+        buildItems.invoke(
+            this,
+            viewModel1.state,
+            viewModel2.state
+        )
+    }
 }
 
 fun <T : MvRxView, A : MvRxViewModel<B>, B, C : MvRxViewModel<D>, D, E : MvRxViewModel<F>, F> T.mvRxEpoxyController(
@@ -49,13 +51,13 @@ fun <T : MvRxView, A : MvRxViewModel<B>, B, C : MvRxViewModel<D>, D, E : MvRxVie
     viewModel3: E,
     buildItems: EpoxyController.(state1: B, state2: D, state3: F) -> Unit
 ): EpoxyController = epoxyController {
-    if (!lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) return@epoxyController
-    withState(
-        viewModel1,
-        viewModel2,
-        viewModel3
-    ) { state1, state2, state3 ->
-        buildItems.invoke(this, state1, state2, state3)
+    if (lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
+        buildItems.invoke(
+            this,
+            viewModel1.state,
+            viewModel2.state,
+            viewModel3.state
+        )
     }
 }
 
@@ -66,14 +68,14 @@ fun <T : MvRxView, A : MvRxViewModel<B>, B, C : MvRxViewModel<D>, D, E : MvRxVie
     viewModel4: G,
     buildItems: EpoxyController.(state1: B, state2: D, state3: F, state4: H) -> Unit
 ): EpoxyController = epoxyController {
-    if (!lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) return@epoxyController
-    withState(
-        viewModel1,
-        viewModel2,
-        viewModel3,
-        viewModel4
-    ) { state1, state2, state3, state4 ->
-        buildItems.invoke(this, state1, state2, state3, state4)
+    if (lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
+        buildItems.invoke(
+            this,
+            viewModel1.state,
+            viewModel2.state,
+            viewModel3.state,
+            viewModel4.state
+        )
     }
 }
 
@@ -85,14 +87,14 @@ fun <T : MvRxView, A : MvRxViewModel<B>, B, C : MvRxViewModel<D>, D, E : MvRxVie
     viewModel5: I,
     buildItems: EpoxyController.(state1: B, state2: D, state3: F, state4: H, state5: J) -> Unit
 ): EpoxyController = epoxyController {
-    if (!lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) return@epoxyController
-    withState(
-        viewModel1,
-        viewModel2,
-        viewModel3,
-        viewModel4,
-        viewModel5
-    ) { state1, state2, state3, state4, state5 ->
-        buildItems.invoke(this, state1, state2, state3, state4, state5)
+    if (lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
+        buildItems.invoke(
+            this,
+            viewModel1.state,
+            viewModel2.state,
+            viewModel3.state,
+            viewModel4.state,
+            viewModel5.state
+        )
     }
 }
