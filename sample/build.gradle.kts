@@ -21,10 +21,9 @@ plugins {
 }
 
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/android-build-app.gradle")
+apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/java-8-android.gradle")
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-android-ext.gradle")
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-kapt.gradle")
-// todo remove once fixed
-apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/coroutines-fix.gradle")
 
 android {
     defaultConfig {

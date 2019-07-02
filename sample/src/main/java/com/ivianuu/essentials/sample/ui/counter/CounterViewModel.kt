@@ -30,9 +30,9 @@ import com.ivianuu.essentials.ui.twilight.TwilightSettingsKey
 import com.ivianuu.injekt.Inject
 import com.ivianuu.traveler.Router
 import com.ivianuu.traveler.finish
-import com.ivianuu.traveler.goBack
-import com.ivianuu.traveler.navigate
+import com.ivianuu.traveler.pop
 import com.ivianuu.traveler.popToRoot
+import com.ivianuu.traveler.push
 
 @Inject
 class CounterViewModel(
@@ -46,14 +46,14 @@ class CounterViewModel(
     private var navBarHidden = false
 
     fun screenUpClicked() {
-        router.navigate(CounterKey(state.screen.inc()))
+        router.push(CounterKey(state.screen.inc()))
     }
 
     fun screenDownClicked() {
         if (state.screen == 1) {
             router.finish()
         } else {
-            router.goBack()
+            router.pop()
         }
     }
 
@@ -62,11 +62,11 @@ class CounterViewModel(
     }
 
     fun listScreenClicked() {
-        router.navigate(ListKey)
+        router.push(ListKey)
     }
 
     fun checkAppsClicked() {
-        router.navigate(CheckAppsKey)
+        router.push(CheckAppsKey)
     }
 
     fun doWorkClicked() {
@@ -74,7 +74,7 @@ class CounterViewModel(
     }
 
     fun twilightClicked() {
-        router.navigate(
+        router.push(
             TwilightSettingsKey,
             NavOptions().horizontal()
         )
@@ -85,7 +85,7 @@ class CounterViewModel(
             navBarHidden = !navBarHidden
             navBarController.setNavBarConfig(NavBarConfig(navBarHidden))
         } else {
-            router.navigate(SecureSettingsKey(true))
+            router.push(SecureSettingsKey(true))
         }
     }
 }

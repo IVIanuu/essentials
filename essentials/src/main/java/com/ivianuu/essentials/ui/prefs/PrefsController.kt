@@ -22,7 +22,8 @@ import com.ivianuu.epoxyprefs.*
 import com.ivianuu.essentials.ui.simple.ListController
 import com.ivianuu.essentials.ui.traveler.ControllerNavOptions
 import com.ivianuu.essentials.ui.traveler.key.UrlKey
-import com.ivianuu.traveler.navigate
+import com.ivianuu.traveler.push
+
 
 /**
  * Prefs controller
@@ -61,7 +62,7 @@ abstract class PrefsController : ListController() {
         keyProvider: () -> Any
     ) {
         onClick {
-            travelerRouter.navigate(keyProvider())
+            travelerRouter.push(keyProvider())
             return@onClick true
         }
     }
@@ -71,7 +72,7 @@ abstract class PrefsController : ListController() {
     ) {
         onClick {
             val (key, options) = provider()
-            travelerRouter.navigate(key, options)
+            travelerRouter.push(key, options)
             return@onClick true
         }
     }

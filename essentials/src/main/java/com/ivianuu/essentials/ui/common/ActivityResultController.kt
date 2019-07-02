@@ -29,7 +29,7 @@ import com.ivianuu.essentials.ui.traveler.NavOptions
 import com.ivianuu.essentials.ui.traveler.dialog
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
 import com.ivianuu.essentials.util.ext.ResultKey
-import com.ivianuu.essentials.util.ext.goBackWithResult
+import com.ivianuu.essentials.util.ext.popWithResult
 import com.ivianuu.injekt.inject
 import kotlinx.android.parcel.Parcelize
 
@@ -50,7 +50,7 @@ class ActivityResultController : EsController() {
         super.onCreate(savedInstanceState)
 
         addActivityResultListener(key.resultCode) { requestCode, resultCode, data ->
-            travelerRouter.goBackWithResult(
+            travelerRouter.popWithResult(
                 key.resultCode,
                 ActivityResult(requestCode, resultCode, data)
             )

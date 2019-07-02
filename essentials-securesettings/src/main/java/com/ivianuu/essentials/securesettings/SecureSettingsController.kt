@@ -26,7 +26,7 @@ import com.ivianuu.essentials.ui.traveler.defaultNavOptionsOrElse
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.essentials.util.ext.ResultKey
-import com.ivianuu.essentials.util.ext.goBackWithResult
+import com.ivianuu.essentials.util.ext.popWithResult
 import com.ivianuu.injekt.inject
 import kotlinx.android.parcel.Parcelize
 import kotlinx.coroutines.launch
@@ -100,7 +100,7 @@ class SecureSettingsController : PrefsController() {
     private fun handlePermissionResult(success: Boolean) {
         if (success) {
             toaster.toast(R.string.es_secure_settings_permission_granted)
-            travelerRouter.goBackWithResult(key.resultCode, true)
+            travelerRouter.popWithResult(key.resultCode, true)
         } else {
             toaster.toast(R.string.es_secure_settings_permission_denied)
         }

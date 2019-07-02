@@ -25,9 +25,9 @@ import com.ivianuu.essentials.ui.traveler.dialog
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
 import com.ivianuu.essentials.util.ext.ResultKey
 import com.ivianuu.essentials.util.ext.dialog
-import com.ivianuu.essentials.util.ext.goBackWithResult
+import com.ivianuu.essentials.util.ext.popWithResult
 import com.ivianuu.injekt.get
-import com.ivianuu.traveler.goBack
+import com.ivianuu.traveler.pop
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
@@ -54,10 +54,10 @@ class TextInputDialog : EsDialogController() {
             prefill = key.prefill,
             inputType = key.inputType
         ) { _, input ->
-            travelerRouter.goBackWithResult(key.resultCode, input.toString())
+            travelerRouter.popWithResult(key.resultCode, input.toString())
         }
         positiveButton(R.string.es_ok)
-        negativeButton(R.string.es_cancel) { travelerRouter.goBack() }
+        negativeButton(R.string.es_cancel) { travelerRouter.pop() }
     }
 
 }

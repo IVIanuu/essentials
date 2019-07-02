@@ -37,7 +37,7 @@ import com.ivianuu.essentials.util.Loading
 import com.ivianuu.essentials.util.Success
 import com.ivianuu.essentials.util.Uninitialized
 import com.ivianuu.essentials.util.ext.ResultKey
-import com.ivianuu.essentials.util.ext.goBackWithResult
+import com.ivianuu.essentials.util.ext.popWithResult
 import com.ivianuu.injekt.Inject
 import com.ivianuu.traveler.Router
 import kotlinx.android.parcel.Parcelize
@@ -116,7 +116,7 @@ internal class AppPickerViewModel(
     }
 
     fun appClicked(appInfo: AppInfo) {
-        router.goBackWithResult(key.resultCode, appInfo)
+        router.popWithResult(key.resultCode, appInfo)
     }
 }
 

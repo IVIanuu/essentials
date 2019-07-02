@@ -77,7 +77,7 @@ object Versions {
     const val superUser = "1.0.0.+"
     const val timber = "4.7.1"
     const val timberKt = "1.5.1"
-    const val traveler = "0.0.1-dev-6"
+    const val traveler = "0.0.1-dev-7"
 }
 
 object Deps {

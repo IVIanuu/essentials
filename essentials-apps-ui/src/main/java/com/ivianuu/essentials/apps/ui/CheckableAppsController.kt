@@ -33,6 +33,7 @@ import com.ivianuu.essentials.ui.mvrx.epoxy.mvRxEpoxyController
 import com.ivianuu.essentials.ui.mvrx.mvRxViewModel
 import com.ivianuu.essentials.ui.simple.ListController
 import com.ivianuu.essentials.util.AppDispatchers
+import com.ivianuu.essentials.util.AppSchedulers
 import com.ivianuu.essentials.util.Async
 import com.ivianuu.essentials.util.Loading
 import com.ivianuu.essentials.util.Success
@@ -52,7 +53,9 @@ import io.reactivex.Observable
 import io.reactivex.rxkotlin.Observables
 import kotlinx.android.synthetic.main.es_item_checkable_app.*
 import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asSingle
+import kotlinx.coroutines.rx2.awaitFirst
 
 /**
  * App blacklist
@@ -132,7 +135,8 @@ private fun EpoxyController.CheckableApp(
 internal class CheckableAppsViewModel(
     @Param private val launchableOnly: Boolean,
     private val appStore: AppStore,
-    private val dispatchers: AppDispatchers
+    private val dispatchers: AppDispatchers,
+    private val schedulers: AppSchedulers
 ) : MvRxViewModel<CheckableAppsState>(CheckableAppsState()) {
 
     private val _checkedAppsChanged = PublishSubject<Set<String>>()
@@ -155,6 +159,7 @@ internal class CheckableAppsViewModel(
                     .toObservable(),
                 checkedApps
             )
+            .observeOn(schedulers.io)
             .map { (infos, checked) ->
                 infos
                     .map {
@@ -178,33 +183,38 @@ internal class CheckableAppsViewModel(
     }
 
     fun appClicked(app: CheckableApp) {
-        pushNewCheckedApps {
-            if (!app.isChecked) {
-                it.add(app.info.packageName)
-            } else {
-                it.remove(app.info.packageName)
+        viewModelScope.launch(dispatchers.io) {
+            pushNewCheckedApps {
+                if (!app.isChecked) {
+                    it.add(app.info.packageName)
+                } else {
+                    it.remove(app.info.packageName)
+                }
             }
         }
     }
 
     fun selectAllClicked() {
-        state.apps()?.let { allApps ->
-            pushNewCheckedApps { newApps ->
-                newApps.addAll(allApps.map { it.info.packageName })
+        viewModelScope.launch(dispatchers.io) {
+            state.apps()?.let { allApps ->
+                pushNewCheckedApps { newApps ->
+                    newApps.addAll(allApps.map { it.info.packageName })
+                }
             }
         }
     }
 
     fun deselectAllClicked() {
-        pushNewCheckedApps { it.clear() }
+        viewModelScope.launch(dispatchers.io) {
+            pushNewCheckedApps { it.clear() }
+        }
     }
 
-    private fun pushNewCheckedApps(reducer: (MutableSet<String>) -> Unit) {
-        checkedApps
-            .take(1)
-            .map { it.toMutableSet().also(reducer) }
-            .subscribe { _checkedAppsChanged.onNext(it) }
-            .disposeBy(scope)
+    private suspend fun pushNewCheckedApps(reducer: (MutableSet<String>) -> Unit) {
+        checkedApps.awaitFirst()
+            .toMutableSet()
+            .apply(reducer)
+            .let { _checkedAppsChanged.onNext(it) }
     }
 }
 

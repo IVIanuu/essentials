@@ -21,6 +21,7 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import com.ivianuu.director.Router
 import com.ivianuu.director.RouterManager
+import com.ivianuu.director.backstackSize
 import com.ivianuu.director.getRouter
 import com.ivianuu.director.hasRoot
 import com.ivianuu.director.traveler.ControllerNavigator
@@ -36,6 +37,7 @@ import com.ivianuu.traveler.android.AppNavigator
 import com.ivianuu.traveler.android.setNavigator
 import com.ivianuu.traveler.common.ResultNavigator
 import com.ivianuu.traveler.common.compositeNavigatorOf
+import com.ivianuu.traveler.pop
 import com.ivianuu.traveler.setRoot
 
 /**
@@ -110,7 +112,9 @@ abstract class EsActivity : AppCompatActivity(), InjektTrait, MvRxView {
     }
 
     override fun onBackPressed() {
-        if (!routerManager.handleBack()) {
+        if (router.backstackSize > 1) {
+            travelerRouter.pop()
+        } else {
             super.onBackPressed()
         }
     }

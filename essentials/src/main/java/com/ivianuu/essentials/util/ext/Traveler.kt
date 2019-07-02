@@ -17,8 +17,8 @@
 package com.ivianuu.essentials.util.ext
 
 import com.ivianuu.traveler.Router
-import com.ivianuu.traveler.goBack
-import com.ivianuu.traveler.navigate
+import com.ivianuu.traveler.pop
+import com.ivianuu.traveler.push
 import io.reactivex.Observable
 import kotlinx.coroutines.rx2.awaitFirst
 import kotlin.reflect.KClass
@@ -41,13 +41,13 @@ private var resultCodes = 0
 @PublishedApi
 internal fun getResultCodes() = ++resultCodes
 
-suspend inline fun <reified T : Any> Router.navigateForResult(
+suspend inline fun <reified T : Any> Router.pushForResult(
     key: ResultKey<T>,
     resultCode: Int = getResultCodes(),
     data: Any? = null
 ): T {
     key.resultCode = resultCode
-    navigate(key, data)
+    push(key, data)
     return results<T>(resultCode).awaitFirst()
 }
 
@@ -65,7 +65,7 @@ fun Router.sendResult(resultCode: Int, result: Any) {
     results.onNext(Result(resultCode, result))
 }
 
-fun Router.goBackWithResult(resultCode: Int, result: Any) {
-    goBack()
+fun Router.popWithResult(resultCode: Int, result: Any) {
+    pop()
     sendResult(resultCode, result)
 }

@@ -24,7 +24,7 @@ import com.ivianuu.essentials.ui.traveler.dialog
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
 import com.ivianuu.essentials.util.ext.ResultKey
 import com.ivianuu.essentials.util.ext.dialog
-import com.ivianuu.essentials.util.ext.goBackWithResult
+import com.ivianuu.essentials.util.ext.popWithResult
 import com.ivianuu.injekt.inject
 import kotlinx.android.parcel.Parcelize
 
@@ -52,7 +52,7 @@ class ColorPickerDialog : EsDialogController() {
             initialSelection = if (key.preselect != 0) key.preselect else null,
             allowCustomArgb = key.allowCustomArgb,
             showAlphaSelector = key.showAlphaSelector
-        ) { _, color -> travelerRouter.goBackWithResult(key.resultCode, color) }
+        ) { _, color -> travelerRouter.popWithResult(key.resultCode, color) }
         negativeButton(R.string.es_cancel)
     }
 

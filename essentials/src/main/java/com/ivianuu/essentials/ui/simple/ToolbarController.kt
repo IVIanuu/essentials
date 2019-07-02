@@ -25,7 +25,7 @@ import androidx.core.view.children
 import com.google.android.material.appbar.AppBarLayout
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.util.ext.*
-import com.ivianuu.traveler.goBack
+import com.ivianuu.traveler.pop
 import kotlinx.android.synthetic.main.es_controller_tabs.es_app_bar
 import kotlinx.android.synthetic.main.es_view_toolbar.es_toolbar
 
@@ -64,7 +64,7 @@ abstract class ToolbarController : CoordinatorController() {
 
             if (toolbarBackButton) {
                 setNavigationIcon(R.drawable.abc_ic_ab_back_material)
-                setNavigationOnClickListener { travelerRouter.goBack() }
+                setNavigationOnClickListener { travelerRouter.pop() }
             }
 
             val titleColor = getPrimaryTextColor(!lightToolbar)
