@@ -34,7 +34,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 /**
- * Handles the currentState of the navigation bar
+ * Handles the state of the navigation bar
  */
 @Inject
 @ApplicationScope

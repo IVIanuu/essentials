@@ -23,7 +23,7 @@ import com.ivianuu.injekt.Inject
 import com.ivianuu.kommon.core.content.hasPermissions
 
 /**
- * Provides infos about the secure settings access currentState
+ * Provides infos about the secure settings access state
  */
 @Inject
 class SecureSettingsHelper(

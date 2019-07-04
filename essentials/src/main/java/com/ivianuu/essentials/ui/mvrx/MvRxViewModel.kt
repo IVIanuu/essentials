@@ -66,7 +66,7 @@ abstract class MvRxViewModel<S>(initialState: S) : EsViewModel() {
     }
 
     fun logStateChanges() {
-        subscribe { d { "new currentState -> $it" } }
+        subscribe { d { "new state -> $it" } }
     }
 
     protected fun subscribe(consumer: (S) -> Unit): Disposable {
