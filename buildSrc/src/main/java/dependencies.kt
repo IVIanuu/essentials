@@ -31,21 +31,21 @@ object Build {
 object Publishing {
     const val groupId = "com.ivianuu.essentials"
     const val vcsUrl = "https://github.com/IVIanuu/essentials"
-    const val version = "${Build.versionName}-dev-145"
+    const val version = "${Build.versionName}-dev-146"
 }
 
 object Versions {
     const val androidGradlePlugin = "3.5.0-beta05"
 
-    const val androidxActivity = "1.0.0-alpha08"
-    const val androidxAppCompat = "1.1.0-alpha04"
+    const val androidxActivity = "1.0.0-rc01"
+    const val androidxAppCompat = "1.1.0-rc01"
     const val androidxCardView = "1.0.0"
-    const val androidxCore = "1.2.0-alpha01"
-    const val androidxFragment = "1.1.0-alpha08"
-    const val androidxLifecycle = "2.2.0-alpha01"
-    const val androidxLifecycleViewModelSavedState = "1.0.0-alpha01"
+    const val androidxCore = "1.1.0-rc02"
+    const val androidxFragment = "1.1.0-rc01"
+    const val androidxLifecycle = "2.2.0-alpha02"
+    const val androidxLifecycleViewModelSavedState = "1.0.0-alpha02"
 
-    const val androidxWork = "2.0.1"
+    const val androidxWork = "2.1.0-rc01"
 
     const val androidxTestCore = "1.2.0-alpha03"
     const val androidxTestJunit = "1.1.1-alpha03"
@@ -53,8 +53,8 @@ object Versions {
     const val androidxTestRunner = "1.2.0-alpha03"
 
     const val bintray = "1.8.4"
-    const val constraintLayout = "2.0.0-beta1"
-    const val coroutines = "1.3.0-M1"
+    const val constraintLayout = "2.0.0-beta2"
+    const val coroutines = "1.3.0-M2"
     const val director = "0.0.1-dev-35"
     const val epoxy = "3.7.0"
     const val epoxyPrefs = "0.0.1-dev-21"
@@ -67,11 +67,11 @@ object Versions {
     const val kSettings = "0.0.1-dev-7"
     const val mavenGradle = "2.1"
     const val materialComponents = "1.1.0-alpha07"
-    const val materialDialogs = "3.0.2"
+    const val materialDialogs = "3.1.0"
     const val mockitoKotlin = "2.0.0"
     const val roboelectric = "4.0.2"
-    const val rxAndroid = "2.1.0"
-    const val rxJava = "2.2.8"
+    const val rxAndroid = "2.1.1"
+    const val rxJava = "2.2.10"
     const val rxKotlin = "2.3.0"
     const val scopes = "0.0.1-dev-12"
     const val superUser = "1.0.0.+"
