@@ -33,10 +33,10 @@
     <string name="es_twilight_mode_dark">Always</string>
     <string name="es_twilight_mode_dark_desc">Always use the dark theme</string>
     <string name="es_twilight_mode_time">Time</string>
-    <string name="es_twilight_mode_time_desc">Use the dark theme based on the day time</string>
+    <string name="es_twilight_mode_time_desc">Use the dark theme at night</string>
     <string name="es_twilight_mode_battery">Battery saver</string>
     <string name="es_twilight_mode_battery_desc">Use the dark theme while the battery saver is enabled</string>
-    <string name="es_twilight_mode_system">Follow system</string>
+    <string name="es_twilight_mode_system">System</string>
     <string name="es_twilight_mode_system_desc">Use the system default dark mode setting</string>
 
 </resources>

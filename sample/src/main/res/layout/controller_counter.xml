@@ -59,7 +59,7 @@
             android:id="@+id/twilight"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Twilight" />
+            android:text="Dark mode" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/nav_bar"
