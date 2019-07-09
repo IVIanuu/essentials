@@ -16,13 +16,18 @@
 
 package com.ivianuu.essentials.securesettings
 
+import android.os.Bundle
+import androidx.lifecycle.lifecycleScope
 import com.ivianuu.epoxyprefs.Preference
 import com.ivianuu.essentials.ui.prefs.PrefsController
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.essentials.util.string
 import com.ivianuu.injekt.inject
+import com.ivianuu.traveler.pop
 import kotlinx.android.parcel.Parcelize
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Parcelize
 object SecureSettingsPcInstructionsKey : ControllerKey(::SecureSettingsPcInstructionsController)
@@ -36,7 +41,21 @@ class SecureSettingsPcInstructionsController : PrefsController() {
         get() = R.string.es_title_secure_settings_pc_instructions
 
     private val clipboardHelper by inject<ClipboardAccessor>()
+    private val secureSettingsHelper by inject<SecureSettingsHelper>()
     private val toaster by inject<Toaster>()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        lifecycleScope.launch {
+            while (true) {
+                if (secureSettingsHelper.canWriteSecureSettings()) {
+                    travelerRouter.pop()
+                    break
+                }
+                delay(500)
+            }
+        }
+    }
 
     override fun epoxyController() = epoxyController {
         Preference {

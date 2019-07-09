@@ -29,6 +29,7 @@ import com.ivianuu.essentials.util.ext.ResultKey
 import com.ivianuu.essentials.util.ext.popWithResult
 import com.ivianuu.injekt.inject
 import kotlinx.android.parcel.Parcelize
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Parcelize
@@ -51,8 +52,15 @@ class SecureSettingsController : PrefsController() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (secureSettingsHelper.canWriteSecureSettings()) {
-            handlePermissionResult(true)
+
+        lifecycleScope.launch {
+            while (true) {
+                if (secureSettingsHelper.canWriteSecureSettings()) {
+                    handlePermissionResult(true)
+                    break
+                }
+                delay(500)
+            }
         }
     }
 
