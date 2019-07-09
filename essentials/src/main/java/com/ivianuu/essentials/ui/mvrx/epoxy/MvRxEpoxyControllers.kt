@@ -16,8 +16,8 @@
 
 package com.ivianuu.essentials.ui.mvrx.epoxy
 
-import androidx.lifecycle.Lifecycle
 import com.airbnb.epoxy.EpoxyController
+import com.ivianuu.director.Controller
 import com.ivianuu.essentials.ui.epoxy.epoxyController
 import com.ivianuu.essentials.ui.mvrx.MvRxView
 import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
@@ -26,7 +26,7 @@ fun <T : MvRxView, A : MvRxViewModel<B>, B> T.mvRxEpoxyController(
     viewModel1: A,
     buildItems: EpoxyController.(state: B) -> Unit
 ): EpoxyController = epoxyController {
-    if (lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
+    if (this@mvRxEpoxyController is Controller && view != null) {
         buildItems.invoke(this, viewModel1.state)
     }
 }
@@ -36,7 +36,7 @@ fun <T : MvRxView, A : MvRxViewModel<B>, B, C : MvRxViewModel<D>, D> T.mvRxEpoxy
     viewModel2: C,
     buildItems: EpoxyController.(state1: B, state2: D) -> Unit
 ): EpoxyController = epoxyController {
-    if (lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
+    if (this@mvRxEpoxyController is Controller && view != null) {
         buildItems.invoke(
             this,
             viewModel1.state,
@@ -51,7 +51,7 @@ fun <T : MvRxView, A : MvRxViewModel<B>, B, C : MvRxViewModel<D>, D, E : MvRxVie
     viewModel3: E,
     buildItems: EpoxyController.(state1: B, state2: D, state3: F) -> Unit
 ): EpoxyController = epoxyController {
-    if (lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
+    if (this@mvRxEpoxyController is Controller && view != null) {
         buildItems.invoke(
             this,
             viewModel1.state,
@@ -68,7 +68,7 @@ fun <T : MvRxView, A : MvRxViewModel<B>, B, C : MvRxViewModel<D>, D, E : MvRxVie
     viewModel4: G,
     buildItems: EpoxyController.(state1: B, state2: D, state3: F, state4: H) -> Unit
 ): EpoxyController = epoxyController {
-    if (lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
+    if (this@mvRxEpoxyController is Controller && view != null) {
         buildItems.invoke(
             this,
             viewModel1.state,
@@ -87,7 +87,7 @@ fun <T : MvRxView, A : MvRxViewModel<B>, B, C : MvRxViewModel<D>, D, E : MvRxVie
     viewModel5: I,
     buildItems: EpoxyController.(state1: B, state2: D, state3: F, state4: H, state5: J) -> Unit
 ): EpoxyController = epoxyController {
-    if (lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
+    if (this@mvRxEpoxyController is Controller && view != null) {
         buildItems.invoke(
             this,
             viewModel1.state,
