@@ -26,10 +26,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers
  */
 @Inject
 internal class RxJavaAppInitializer : AppInitializer {
-
-    override fun initialize() {
+    init {
         val scheduler = AndroidSchedulers.from(Looper.getMainLooper(), true)
         RxAndroidPlugins.setInitMainThreadSchedulerHandler { scheduler }
     }
-
 }

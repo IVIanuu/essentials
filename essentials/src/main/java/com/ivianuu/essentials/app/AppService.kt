@@ -39,9 +39,6 @@ abstract class AppService : ScopeOwner {
     private val _scope = MutableScope()
     override val scope: Scope get() = _scope
 
-    open fun start() {
-    }
-
 }
 
 inline fun <reified T : AppService> Module.appService(

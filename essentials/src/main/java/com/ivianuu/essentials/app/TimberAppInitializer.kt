@@ -27,12 +27,10 @@ import timber.log.Timber
  */
 @Inject
 internal class TimberAppInitializer(private val app: Application) : AppInitializer {
-
-    override fun initialize() {
+    init {
         val isDebuggable = app.applicationInfo.flags.containsFlag(ApplicationInfo.FLAG_DEBUGGABLE)
         if (isDebuggable) {
             Timber.plant(Timber.DebugTree())
         }
     }
-
 }

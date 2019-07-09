@@ -18,6 +18,7 @@ package com.ivianuu.essentials.app
 
 import android.app.Application
 import android.content.pm.ApplicationInfo
+import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.injection.esModule
 import com.ivianuu.essentials.util.ext.containsFlag
 import com.ivianuu.essentials.util.ext.unsafeLazy
@@ -75,11 +76,10 @@ abstract class EsApp : Application(), InjektTrait, ScopeOwner {
     protected open fun invokeInitializers() {
         appInitializers
             .filterKeys { shouldInitialize(it) }
-            .map {
-                println("initialize $it")
+            .forEach {
+                println("initialize ${it.key.java.name}")
                 it.value()
             }
-            .forEach { it.initialize() }
     }
 
     protected open fun shouldInitialize(type: KClass<out AppInitializer>): Boolean = true
@@ -87,8 +87,10 @@ abstract class EsApp : Application(), InjektTrait, ScopeOwner {
     protected open fun startAppServices() {
         appServices
             .filterKeys { shouldStartAppService(it) }
-            .map { it.value() }
-            .forEach { it.start() }
+            .forEach {
+                d { "start service ${it.key.java.name}" }
+                it.value()
+            }
     }
 
     protected open fun shouldStartAppService(type: KClass<out AppService>): Boolean = true

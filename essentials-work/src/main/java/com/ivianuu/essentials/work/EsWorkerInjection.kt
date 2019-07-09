@@ -40,7 +40,7 @@ internal class WorkerAppInitializer(
     private val context: Context,
     private val workerFactory: WorkerFactory
 ) : AppInitializer {
-    override fun initialize() {
+    init {
         WorkManager.initialize(
             context, Configuration.Builder()
                 .setWorkerFactory(workerFactory)

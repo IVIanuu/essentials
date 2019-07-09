@@ -30,9 +30,7 @@ import kotlin.reflect.KClass
 /**
  * Initializes what ever on app start up
  */
-interface AppInitializer {
-    fun initialize()
-}
+interface AppInitializer
 
 inline fun <reified T : AppInitializer> Module.appInitializer(
     name: Any? = null,

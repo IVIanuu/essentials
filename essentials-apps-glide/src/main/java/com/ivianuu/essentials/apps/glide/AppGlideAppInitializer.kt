@@ -30,8 +30,7 @@ internal class AppGlideAppInitializer(
     private val app: Application,
     private val factory: AppIconModelLoaderFactory
 ) : AppInitializer {
-
-    override fun initialize() {
+    init {
         Glide.get(app).registry
             .append(
                 AppIcon::class.java,
@@ -39,5 +38,4 @@ internal class AppGlideAppInitializer(
                 factory
             )
     }
-
 }

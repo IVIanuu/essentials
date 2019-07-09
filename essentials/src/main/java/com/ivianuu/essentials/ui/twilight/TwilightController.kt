@@ -31,8 +31,7 @@ class TwilightController(
     private val schedulers: AppSchedulers
 ) : AppService() {
 
-    override fun start() {
-        super.start()
+    init {
         twilightPrefs.twilightMode.asObservable()
             .observeOn(schedulers.main)
             .subscribe { mode ->
