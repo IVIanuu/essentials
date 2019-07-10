@@ -14,28 +14,26 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.sample.ui
+package com.ivianuu.essentials.sample.tile
 
-import android.os.Bundle
-import com.github.ajalt.timberkt.d
-import com.ivianuu.essentials.sample.ui.counter.CounterKey
-import com.ivianuu.essentials.ui.base.EsActivity
+import android.graphics.drawable.Icon
+import com.ivianuu.essentials.sample.R
+import com.ivianuu.essentials.tile.BooleanPrefTileService
+import com.ivianuu.essentials.tile.Tile
+import com.ivianuu.essentials.util.unsafeLazy
 import com.ivianuu.injekt.get
 import com.ivianuu.kprefs.KPrefs
 import com.ivianuu.kprefs.boolean
-import com.ivianuu.kprefs.rx.asObservable
-import com.ivianuu.scopes.android.onDestroy
-import com.ivianuu.scopes.rx.disposeBy
 
-class MainActivity : EsActivity() {
+class DummyTileService : BooleanPrefTileService() {
 
-    override val startKey: Any? get() = CounterKey(1)
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        get<KPrefs>().boolean("tile_state").asObservable()
-            .subscribe { d { "tile state changed $it" } }
-            .disposeBy(onDestroy)
+    override val pref by unsafeLazy {
+        get<KPrefs>().boolean("tile_state")
     }
+
+    override fun createTile(state: Boolean): Tile = Tile(
+        Icon.createWithResource(this, R.drawable.es_ic_link),
+        if (state) "Enabled" else "Disabled"
+    )
 
 }
