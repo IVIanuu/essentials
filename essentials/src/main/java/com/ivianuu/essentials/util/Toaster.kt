@@ -18,7 +18,6 @@ package com.ivianuu.essentials.util
 
 import android.content.Context
 import android.widget.Toast
-import com.ivianuu.essentials.util.ext.mainThread
 import com.ivianuu.injekt.Inject
 
 /**

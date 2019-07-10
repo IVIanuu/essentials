@@ -18,7 +18,7 @@ package com.ivianuu.essentials.hidenavbar
 
 import android.content.Intent
 import android.os.PowerManager
-import com.ivianuu.essentials.util.BroadcastFactory
+import com.ivianuu.essentials.messaging.BroadcastFactory
 import com.ivianuu.injekt.Inject
 import io.reactivex.Observable
 

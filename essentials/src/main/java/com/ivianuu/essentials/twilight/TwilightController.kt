@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Manuel Wrage
+ * Copyright 2019 Manuel Wrage
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.twilight
+package com.ivianuu.essentials.twilight
 
 import androidx.appcompat.app.AppCompatDelegate
 import com.ivianuu.essentials.app.AppService
 import com.ivianuu.essentials.util.AppSchedulers
+import com.ivianuu.essentials.util.NoScope
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.android.ApplicationScope
 import com.ivianuu.kprefs.rx.asObservable
@@ -29,7 +30,7 @@ import com.ivianuu.scopes.rx.disposeBy
 class TwilightController(
     private val twilightPrefs: TwilightPrefs,
     private val schedulers: AppSchedulers
-) : AppService() {
+) : AppService {
 
     init {
         twilightPrefs.twilightMode.asObservable()
@@ -45,7 +46,7 @@ class TwilightController(
                     }
                 )
             }
-            .disposeBy(scope)
+            .disposeBy(NoScope)
     }
 
 }

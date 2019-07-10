@@ -14,24 +14,6 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.util.ext
+package com.ivianuu.essentials.util
 
-import android.os.Handler
-import android.os.Looper
-
-val mainHandler = Handler(Looper.getMainLooper())
-
-val isMainThread: Boolean get() = Looper.myLooper() == Looper.getMainLooper()
-
-fun mainThread(block: () -> Unit) {
-    when {
-        isMainThread -> block.invoke()
-        else -> mainHandler.post(block)
-    }
-}
-
-fun requireMainThread() {
-    if (!isMainThread) {
-        error("must be called from the main thread")
-    }
-}
+fun <T> unsafeLazy(initializer: () -> T): Lazy<T> = lazy(LazyThreadSafetyMode.NONE, initializer)

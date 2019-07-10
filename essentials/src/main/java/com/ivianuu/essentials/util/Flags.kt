@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.util.ext
+package com.ivianuu.essentials.util
 
 fun Int.addFlag(flag: Int): Int = this or flag
 fun Int.removeFlag(flag: Int): Int = this and flag.inv()

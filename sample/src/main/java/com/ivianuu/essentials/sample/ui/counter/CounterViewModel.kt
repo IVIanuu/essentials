@@ -26,7 +26,7 @@ import com.ivianuu.essentials.securesettings.SecureSettingsKey
 import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
 import com.ivianuu.essentials.ui.traveler.NavOptions
 import com.ivianuu.essentials.ui.traveler.horizontal
-import com.ivianuu.essentials.ui.twilight.TwilightSettingsKey
+import com.ivianuu.essentials.twilight.TwilightSettingsKey
 import com.ivianuu.injekt.Inject
 import com.ivianuu.traveler.Router
 import com.ivianuu.traveler.finish

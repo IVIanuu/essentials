@@ -28,7 +28,7 @@ import com.ivianuu.essentials.util.Loading
 import com.ivianuu.essentials.util.Success
 import com.ivianuu.essentials.util.asFail
 import com.ivianuu.essentials.util.asSuccess
-import com.ivianuu.essentials.util.ext.mainThread
+import com.ivianuu.essentials.util.mainThread
 import com.ivianuu.essentials.util.lifecycleOwner
 import com.ivianuu.scopes.android.scope
 import com.ivianuu.scopes.rx.disposeBy

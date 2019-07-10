@@ -25,8 +25,8 @@ import com.ivianuu.essentials.ui.traveler.NavOptions
 import com.ivianuu.essentials.ui.traveler.defaultNavOptionsOrElse
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
 import com.ivianuu.essentials.util.Toaster
-import com.ivianuu.essentials.util.ext.ResultKey
-import com.ivianuu.essentials.util.ext.popWithResult
+import com.ivianuu.essentials.ui.traveler.ResultKey
+import com.ivianuu.essentials.ui.traveler.popWithResult
 import com.ivianuu.injekt.inject
 import kotlinx.android.parcel.Parcelize
 import kotlinx.coroutines.delay

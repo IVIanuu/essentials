@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Manuel Wrage
+ * Copyright 2019 Manuel Wrage
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,14 +14,8 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.util.ext
+package com.ivianuu.essentials.util
 
-import com.ivianuu.essentials.util.Tuple4
-import com.ivianuu.essentials.util.Tuple5
-import com.ivianuu.essentials.util.Tuple6
-import com.ivianuu.essentials.util.Tuple7
-import com.ivianuu.essentials.util.Tuple8
-import com.ivianuu.essentials.util.Tuple9
 import io.reactivex.Observable
 import io.reactivex.ObservableEmitter
 import io.reactivex.functions.Function4

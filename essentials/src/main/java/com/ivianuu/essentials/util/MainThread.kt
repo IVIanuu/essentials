@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Manuel Wrage
+ * Copyright 2019 Manuel Wrage
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,6 +14,24 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.util.ext
+package com.ivianuu.essentials.util
 
-fun <T> unsafeLazy(initializer: () -> T): Lazy<T> = lazy(LazyThreadSafetyMode.NONE, initializer)
+import android.os.Handler
+import android.os.Looper
+
+val mainHandler = Handler(Looper.getMainLooper())
+
+val isMainThread: Boolean get() = Looper.myLooper() == Looper.getMainLooper()
+
+fun mainThread(block: () -> Unit) {
+    when {
+        isMainThread -> block.invoke()
+        else -> mainHandler.post(block)
+    }
+}
+
+fun requireMainThread() {
+    if (!isMainThread) {
+        error("must be called from the main thread")
+    }
+}

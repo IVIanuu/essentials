@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.util.ext
+package com.ivianuu.essentials.util
 
 fun Any?.andTrue() = true
 fun Any?.andFalse() = false

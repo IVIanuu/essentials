@@ -24,7 +24,7 @@ import android.view.Surface
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.util.AppDispatchers
 import com.ivianuu.essentials.util.AppSchedulers
-import com.ivianuu.essentials.util.BroadcastFactory
+import com.ivianuu.essentials.messaging.BroadcastFactory
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.android.ApplicationScope
 import com.ivianuu.scopes.ReusableScope

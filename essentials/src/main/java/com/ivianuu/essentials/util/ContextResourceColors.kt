@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Manuel Wrage
+ * Copyright 2019 Manuel Wrage
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,13 +18,12 @@
 
 // Aliases to other public API.
 
-package com.ivianuu.essentials.util.ext
+package com.ivianuu.essentials.util
 
 import android.annotation.SuppressLint
 import android.content.Context
 import android.view.View
 import com.ivianuu.essentials.R
-import com.ivianuu.essentials.util.ContextAware
 import com.ivianuu.kommon.core.content.color
 import com.ivianuu.kommon.core.content.colorAttr
 

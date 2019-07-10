@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.util.ext
+package com.ivianuu.essentials.util
 
 import com.ivianuu.epoxyprefs.AbstractPreferenceModel
 import com.ivianuu.epoxyprefs.dependency

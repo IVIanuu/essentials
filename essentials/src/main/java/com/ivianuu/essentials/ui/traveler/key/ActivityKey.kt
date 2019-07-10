@@ -21,7 +21,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
-import com.ivianuu.essentials.util.ext.unsafeLazy
+import com.ivianuu.essentials.util.unsafeLazy
 import com.ivianuu.traveler.Command
 import com.ivianuu.traveler.android.ActivityKey
 import kotlin.reflect.KClass
@@ -55,4 +55,5 @@ fun <T : Parcelable> Activity.getKeyOrNull(): T? = try {
     null
 }
 
-fun <T : Parcelable> Activity.key(): Lazy<T> = unsafeLazy { getKey<T>() }
+fun <T : Parcelable> Activity.key(): Lazy<T> =
+    unsafeLazy { getKey<T>() }

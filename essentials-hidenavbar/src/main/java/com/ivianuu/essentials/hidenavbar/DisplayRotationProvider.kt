@@ -5,7 +5,7 @@ import android.hardware.SensorManager
 import android.view.OrientationEventListener
 import android.view.WindowManager
 import com.github.ajalt.timberkt.d
-import com.ivianuu.essentials.util.ext.observable
+import com.ivianuu.essentials.util.observable
 import com.ivianuu.injekt.Inject
 import com.ivianuu.kommon.core.app.doOnConfigurationChanged
 import io.reactivex.Observable

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.twilight
+package com.ivianuu.essentials.twilight
 
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.android.ApplicationScope
@@ -25,7 +25,9 @@ import com.ivianuu.kprefs.common.enumString
 @Inject
 @ApplicationScope
 class TwilightPrefs(prefs: KPrefs) {
-    val twilightMode = prefs.enumString("twilight_mode", TwilightMode.SYSTEM)
+    val twilightMode = prefs.enumString("twilight_mode",
+        TwilightMode.SYSTEM
+    )
 }
 
 enum class TwilightMode(override val value: String) : PrefValueHolder<String> {

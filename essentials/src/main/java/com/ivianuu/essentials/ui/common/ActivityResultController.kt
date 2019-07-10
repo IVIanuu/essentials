@@ -28,8 +28,8 @@ import com.ivianuu.essentials.ui.base.EsController
 import com.ivianuu.essentials.ui.traveler.NavOptions
 import com.ivianuu.essentials.ui.traveler.dialog
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
-import com.ivianuu.essentials.util.ext.ResultKey
-import com.ivianuu.essentials.util.ext.popWithResult
+import com.ivianuu.essentials.ui.traveler.ResultKey
+import com.ivianuu.essentials.ui.traveler.popWithResult
 import com.ivianuu.injekt.inject
 import kotlinx.android.parcel.Parcelize
 
@@ -37,7 +37,8 @@ import kotlinx.android.parcel.Parcelize
 data class ActivityResultKey(
     val intent: Intent,
     override var resultCode: Int = 0
-) : ControllerKey(::ActivityResultController, NavOptions().dialog()), ResultKey<ActivityResult>
+) : ControllerKey(::ActivityResultController, NavOptions().dialog()),
+    ResultKey<ActivityResult>
 
 /**
  * Activity result controller

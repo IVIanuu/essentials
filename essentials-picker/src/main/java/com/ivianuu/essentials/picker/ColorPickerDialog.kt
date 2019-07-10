@@ -18,13 +18,13 @@ package com.ivianuu.essentials.picker
 
 import android.os.Bundle
 import com.afollestad.materialdialogs.color.colorChooser
-import com.ivianuu.essentials.ui.base.EsDialogController
+import com.ivianuu.essentials.ui.dialog.EsDialogController
 import com.ivianuu.essentials.ui.traveler.NavOptions
 import com.ivianuu.essentials.ui.traveler.dialog
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
-import com.ivianuu.essentials.util.ext.ResultKey
-import com.ivianuu.essentials.util.ext.dialog
-import com.ivianuu.essentials.util.ext.popWithResult
+import com.ivianuu.essentials.ui.traveler.ResultKey
+import com.ivianuu.essentials.ui.dialog.dialog
+import com.ivianuu.essentials.ui.traveler.popWithResult
 import com.ivianuu.injekt.inject
 import kotlinx.android.parcel.Parcelize
 
@@ -35,7 +35,8 @@ data class ColorPickerKey(
     val allowCustomArgb: Boolean = true,
     val showAlphaSelector: Boolean = false,
     override var resultCode: Int = 0
-) : ControllerKey(::ColorPickerDialog, NavOptions().dialog()), ResultKey<Int>
+) : ControllerKey(::ColorPickerDialog, NavOptions().dialog()),
+    ResultKey<Int>
 
 /**
  * Color picker controller

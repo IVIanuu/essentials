@@ -19,13 +19,13 @@ package com.ivianuu.essentials.picker
 import android.os.Bundle
 import com.afollestad.materialdialogs.input.input
 import com.ivianuu.essentials.R
-import com.ivianuu.essentials.ui.base.EsDialogController
+import com.ivianuu.essentials.ui.dialog.EsDialogController
 import com.ivianuu.essentials.ui.traveler.NavOptions
 import com.ivianuu.essentials.ui.traveler.dialog
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
-import com.ivianuu.essentials.util.ext.ResultKey
-import com.ivianuu.essentials.util.ext.dialog
-import com.ivianuu.essentials.util.ext.popWithResult
+import com.ivianuu.essentials.ui.traveler.ResultKey
+import com.ivianuu.essentials.ui.dialog.dialog
+import com.ivianuu.essentials.ui.traveler.popWithResult
 import com.ivianuu.injekt.get
 import com.ivianuu.traveler.pop
 import kotlinx.android.parcel.Parcelize
@@ -38,7 +38,8 @@ data class TextInputKey(
     val prefill: String = "",
     val allowEmptyInput: Boolean = false,
     override var resultCode: Int = 0
-) : ControllerKey(::TextInputDialog, NavOptions().dialog()), ResultKey<String>
+) : ControllerKey(::TextInputDialog, NavOptions().dialog()),
+    ResultKey<String>
 
 /**
  * Text input dialog

@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Manuel Wrage
+ * Copyright 2019 Manuel Wrage
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.data.base
+package com.ivianuu.essentials.tile
 
 import android.annotation.TargetApi
 import android.os.Build
 import android.service.quicksettings.TileService
-import com.ivianuu.essentials.util.ext.unsafeLazy
+import com.ivianuu.essentials.util.unsafeLazy
 import com.ivianuu.essentials.util.lifecycleOwner
 import com.ivianuu.injekt.Component
 import com.ivianuu.injekt.InjektTrait

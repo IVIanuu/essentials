@@ -16,7 +16,7 @@
 
 package com.ivianuu.essentials.app
 
-import com.ivianuu.essentials.ui.twilight.TwilightController
+import com.ivianuu.essentials.twilight.TwilightController
 import com.ivianuu.injekt.BindingContext
 import com.ivianuu.injekt.Definition
 import com.ivianuu.injekt.Module
@@ -34,12 +34,7 @@ import kotlin.reflect.KClass
 /**
  * Will be started on app start up and lives as long as the app lives
  */
-abstract class AppService : ScopeOwner {
-
-    private val _scope = MutableScope()
-    override val scope: Scope get() = _scope
-
-}
+interface AppService
 
 inline fun <reified T : AppService> Module.appService(
     name: Any? = null,

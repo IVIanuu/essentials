@@ -20,7 +20,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
-import com.ivianuu.essentials.util.ext.unsafeLazy
+import com.ivianuu.essentials.util.unsafeLazy
 import com.ivianuu.kommon.lifecycle.defaultViewModelKey
 import com.ivianuu.kommon.lifecycle.doOnCreate
 import com.ivianuu.kommon.lifecycle.viewModelProvider
@@ -38,7 +38,14 @@ internal fun <T : MvRxViewModel<*>> MvRxView._mvRxViewModel(
     from: () -> ViewModelStoreOwner = { this },
     key: () -> String = { type.defaultViewModelKey },
     factory: () -> T
-): Lazy<T> = unsafeLazy { _getMvRxViewModel(type, from(), key(), factory) }.also { lazy ->
+): Lazy<T> = unsafeLazy {
+    _getMvRxViewModel(
+        type,
+        from(),
+        key(),
+        factory
+    )
+}.also { lazy ->
     doOnCreate { lazy.value }
 }
 

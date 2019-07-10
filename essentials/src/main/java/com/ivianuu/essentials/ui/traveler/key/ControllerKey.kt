@@ -23,7 +23,7 @@ import com.ivianuu.director.RouterTransaction
 import com.ivianuu.director.traveler.ControllerKey
 import com.ivianuu.essentials.ui.traveler.ControllerNavOptions
 import com.ivianuu.essentials.ui.traveler.applyToTransaction
-import com.ivianuu.essentials.util.ext.unsafeLazy
+import com.ivianuu.essentials.util.unsafeLazy
 import com.ivianuu.traveler.Command
 import com.ivianuu.traveler.Forward
 import com.ivianuu.traveler.Replace
@@ -68,4 +68,5 @@ fun <T : Parcelable> Controller.getKeyOrNull(): T? = try {
     null
 }
 
-fun <T : Parcelable> Controller.key(): Lazy<T> = unsafeLazy { getKey<T>() }
+fun <T : Parcelable> Controller.key(): Lazy<T> =
+    unsafeLazy { getKey<T>() }
