@@ -1,4 +1,4 @@
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright 2019 Manuel Wrage
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,16 +14,14 @@
   ~ limitations under the License.
   -->
 
-<manifest package="com.example.essentials.gestures"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<resources>
 
-    <application>
-
-        <activity
-            android:name="com.ivianuu.essentials.gestures.unlock.UnlockScreenActivity"
-            android:excludeFromRecents="true"
-            android:theme="@style/EsTransparent" />
-
-    </application>
-
-</manifest>
+    <style name="EsTransparent" parent="Theme.MaterialComponents">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:backgroundDimEnabled">false</item>
+    </style>
+</resources>

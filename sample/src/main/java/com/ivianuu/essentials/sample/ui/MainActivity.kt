@@ -16,8 +16,12 @@
 
 package com.ivianuu.essentials.sample.ui
 
+import android.content.Intent
 import android.os.Bundle
+import androidx.lifecycle.lifecycleScope
 import com.github.ajalt.timberkt.d
+import com.ivianuu.essentials.gestures.unlock.ScreenUnlocker
+import com.ivianuu.essentials.messaging.BroadcastFactory
 import com.ivianuu.essentials.sample.ui.counter.CounterKey
 import com.ivianuu.essentials.ui.base.EsActivity
 import com.ivianuu.injekt.get
@@ -26,6 +30,8 @@ import com.ivianuu.kprefs.boolean
 import com.ivianuu.kprefs.rx.asObservable
 import com.ivianuu.scopes.android.onDestroy
 import com.ivianuu.scopes.rx.disposeBy
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class MainActivity : EsActivity() {
 
@@ -35,6 +41,15 @@ class MainActivity : EsActivity() {
         super.onCreate(savedInstanceState)
         get<KPrefs>().boolean("tile_state").asObservable()
             .subscribe { d { "tile state changed $it" } }
+            .disposeBy(onDestroy)
+
+        get<BroadcastFactory>().create(Intent.ACTION_SCREEN_OFF)
+            .subscribe {
+                lifecycleScope.launch {
+                    delay(2000)
+                    d { "unlock screen ${get<ScreenUnlocker>().unlockScreen()}" }
+                }
+            }
             .disposeBy(onDestroy)
     }
 

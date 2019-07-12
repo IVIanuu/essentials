@@ -16,15 +16,16 @@
 
 package com.ivianuu.essentials.sample.work
 
+import android.content.Context
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import com.ivianuu.injekt.Inject
 
 @Inject
-class WorkScheduler {
+class WorkScheduler(private val context: Context) {
 
     fun scheduleWork() {
-        with(WorkManager.getInstance()) {
+        with(WorkManager.getInstance(context)) {
             enqueue(OneTimeWorkRequestBuilder<MyWorkerOne>().build())
             enqueue(OneTimeWorkRequestBuilder<MyWorkerTwo>().build())
         }
