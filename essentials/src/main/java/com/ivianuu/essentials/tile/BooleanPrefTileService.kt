@@ -22,7 +22,7 @@ import android.os.Build
 /**
  * Tile which is driven by a boolean pref
  */
-@TargetApi(Build.VERSION_CODES.N)
+@TargetApi(24)
 abstract class BooleanPrefTileService : PrefTileService<Boolean>() {
     override fun onClick() {
         super.onClick()

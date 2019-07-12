@@ -25,7 +25,7 @@ import io.reactivex.Observable
 /**
  * Tile which is driven by a preference
  */
-@TargetApi(Build.VERSION_CODES.N)
+@TargetApi(24)
 abstract class PrefTileService<T> : RxTileService<T>() {
 
     protected abstract val pref: Pref<T>

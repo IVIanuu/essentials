@@ -36,7 +36,7 @@ internal class NonSdkInterfacesHelper(private val settings: KSettings) {
                 "hidden_api_policy", Setting.Type.GLOBAL
             )
             hiddenApiPolicy.set(1)
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+        } else if (Build.VERSION.SDK_INT >= 28) {
             d { "disable non sdk on p" }
 
             val hiddenApiPrePieAppsSetting = settings.int(

@@ -22,7 +22,7 @@ import android.os.Build
 /**
  * Stateful tile service
  */
-@TargetApi(Build.VERSION_CODES.N)
+@TargetApi(24)
 abstract class StateTileService<T> : EsTileService() {
 
     abstract fun createTile(state: T): Tile

@@ -65,7 +65,7 @@ fun ContextAware.drawableAttr(attr: Int, defaultValue: Drawable? = null): Drawab
 fun ContextAware.floatAttr(attr: Int, defaultValue: Float = 0f): Float =
     providedContext.floatAttr(attr, defaultValue)
 
-@TargetApi(Build.VERSION_CODES.O)
+@TargetApi(26)
 fun ContextAware.fontAttr(attr: Int, defaultValue: Typeface? = null): Typeface? =
     providedContext.fontAttr(attr, defaultValue)
 
@@ -148,12 +148,12 @@ inline fun <reified T : Service> ContextAware.startService(init: Intent.() -> Un
     providedContext.startService<T>(init)
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
+@RequiresApi(26)
 inline fun <reified T : Service> ContextAware.startForegroundService() {
     providedContext.startForegroundService<T>()
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
+@RequiresApi(26)
 inline fun <reified T : Service> ContextAware.startForegroundService(init: Intent.() -> Unit) {
     providedContext.startForegroundService<T>(init)
 }

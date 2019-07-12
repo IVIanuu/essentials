@@ -20,7 +20,7 @@ import android.os.Build
 
 data class NavBarConfig(
     val hidden: Boolean,
-    val rotationMode: NavBarRotationMode = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+    val rotationMode: NavBarRotationMode = if (Build.VERSION.SDK_INT >= 24) {
         NavBarRotationMode.NOUGAT
     } else {
         NavBarRotationMode.MARSHMALLOW

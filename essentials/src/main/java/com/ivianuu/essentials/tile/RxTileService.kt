@@ -21,7 +21,7 @@ import android.os.Build
 import com.ivianuu.scopes.rx.disposeBy
 import io.reactivex.Observable
 
-@TargetApi(Build.VERSION_CODES.N)
+@TargetApi(24)
 abstract class RxTileService<T> : StateTileService<T>() {
 
     abstract val observable: Observable<T>

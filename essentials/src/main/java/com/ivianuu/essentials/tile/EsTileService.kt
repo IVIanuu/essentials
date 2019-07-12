@@ -33,7 +33,7 @@ import com.ivianuu.scopes.ScopeOwner
 /**
  * Base tile service
  */
-@TargetApi(Build.VERSION_CODES.N)
+@TargetApi(24)
 abstract class EsTileService : TileService(), InjektTrait, ScopeOwner {
 
     override val component by unsafeLazy {
