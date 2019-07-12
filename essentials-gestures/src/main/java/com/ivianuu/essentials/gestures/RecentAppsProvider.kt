@@ -42,6 +42,7 @@ class RecentAppsProvider : AccessibilityComponent() {
             }
 
     private val _recentApps = BehaviorSubject(emptyList<String>())
+    val recentsApps: Observable<List<String>> get() = _recentApps
 
     override fun onAccessibilityEvent(event: AccessibilityEvent) {
         // were only interested in window state changes

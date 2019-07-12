@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.ivianuu.essentials</groupId>
   <artifactId>essentials-compiler</artifactId>
-  <version>0.0.1-dev-155</version>
+  <version>0.0.1-dev-156</version>
   <dependencies>
     <dependency>
       <groupId>org.jetbrains.kotlin</groupId>
