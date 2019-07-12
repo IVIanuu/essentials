@@ -45,7 +45,7 @@ object Versions {
     const val androidxLifecycle = "2.2.0-alpha02"
     const val androidxLifecycleViewModelSavedState = "1.0.0-alpha02"
 
-    const val androidxWork = "2.1.0-rc01"
+    const val androidxWork = "2.1.0"
 
     const val androidxTestCore = "1.2.0-alpha03"
     const val androidxTestJunit = "1.1.1-alpha03"
