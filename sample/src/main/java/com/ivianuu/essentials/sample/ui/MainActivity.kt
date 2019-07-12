@@ -18,8 +18,10 @@ package com.ivianuu.essentials.sample.ui
 
 import android.content.Intent
 import android.os.Bundle
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import com.github.ajalt.timberkt.d
+import com.ivianuu.essentials.gestures.torch.TorchManager
 import com.ivianuu.essentials.gestures.unlock.ScreenUnlocker
 import com.ivianuu.essentials.messaging.BroadcastFactory
 import com.ivianuu.essentials.sample.ui.counter.CounterKey
@@ -39,6 +41,18 @@ class MainActivity : EsActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        get<TorchManager>().torchState
+            .subscribe { d { "torch state changed $it" } }
+            .disposeBy(onDestroy)
+
+        lifecycleScope.launch {
+            while (lifecycle.currentState != Lifecycle.State.DESTROYED) {
+                delay(1000)
+                get<TorchManager>().toggleTorch()
+            }
+        }
+
         get<KPrefs>().boolean("tile_state").asObservable()
             .subscribe { d { "tile state changed $it" } }
             .disposeBy(onDestroy)

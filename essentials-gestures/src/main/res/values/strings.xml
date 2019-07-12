@@ -1,4 +1,4 @@
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright 2019 Manuel Wrage
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,20 +14,10 @@
   ~ limitations under the License.
   -->
 
-<manifest package="com.example.essentials.gestures"
-    xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-
-    <application>
-
-        <activity
-            android:name="com.ivianuu.essentials.gestures.unlock.UnlockScreenActivity"
-            android:excludeFromRecents="true"
-            android:theme="@style/EsTransparent" />
-
-        <service android:name="com.ivianuu.essentials.gestures.torch.TorchService" />
-
-    </application>
-
-</manifest>
+<resources>
+    <!-- Torch -->
+    <string name="es_notif_channel_torch">Torch</string>
+    <string name="es_notif_title_torch">Torch enabled</string>
+    <string name="es_notif_text_torch">Touch to disable</string>
+    <string name="es_failed_to_toggle_torch">Failed to toggle torch!</string>
+</resources>
