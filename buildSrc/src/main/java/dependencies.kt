@@ -23,7 +23,7 @@ object Build {
     const val compileSdk = 28
     const val minSdk = 23
     const val targetSdk = 28
-    const val targetSdkSample = 27
+    const val targetSdkSample = 29
     const val versionCode = 1
     const val versionName = "0.0.1"
 }
@@ -31,7 +31,7 @@ object Build {
 object Publishing {
     const val groupId = "com.ivianuu.essentials"
     const val vcsUrl = "https://github.com/IVIanuu/essentials"
-    const val version = "${Build.versionName}-dev-154"
+    const val version = "${Build.versionName}-dev-155"
 }
 
 object Versions {
@@ -57,7 +57,7 @@ object Versions {
     const val coroutines = "1.3.0-M2"
     const val director = "0.0.1-dev-35"
     const val epoxy = "3.7.0"
-    const val epoxyPrefs = "0.0.1-dev-22"
+    const val epoxyPrefs = "0.0.1-dev-21"
     const val glide = "4.9.0"
     const val injekt = "0.0.1-dev-66"
     const val junit = "4.12"
@@ -66,7 +66,7 @@ object Versions {
     const val kPrefs = "0.0.1-dev-9"
     const val kSettings = "0.0.1-dev-7"
     const val mavenGradle = "2.1"
-    const val materialComponents = "1.1.0-alpha08"
+    const val materialComponents = "1.1.0-alpha07"
     const val materialDialogs = "3.1.0"
     const val mockitoKotlin = "2.0.0"
     const val roboelectric = "4.0.2"
