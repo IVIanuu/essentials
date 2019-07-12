@@ -9,6 +9,7 @@
       <module fileurl="file://$PROJECT_DIR$/essentials-apps-glide/essentials-apps-glide.iml" filepath="$PROJECT_DIR$/essentials-apps-glide/essentials-apps-glide.iml" />
       <module fileurl="file://$PROJECT_DIR$/essentials-apps-ui/essentials-apps-ui.iml" filepath="$PROJECT_DIR$/essentials-apps-ui/essentials-apps-ui.iml" />
       <module fileurl="file://$PROJECT_DIR$/essentials-compiler/essentials-compiler.iml" filepath="$PROJECT_DIR$/essentials-compiler/essentials-compiler.iml" />
+      <module fileurl="file://$PROJECT_DIR$/essentials-gestures/essentials-gestures.iml" filepath="$PROJECT_DIR$/essentials-gestures/essentials-gestures.iml" />
       <module fileurl="file://$PROJECT_DIR$/essentials-hidenavbar/essentials-hidenavbar.iml" filepath="$PROJECT_DIR$/essentials-hidenavbar/essentials-hidenavbar.iml" />
       <module fileurl="file://$PROJECT_DIR$/essentials-picker/essentials-picker.iml" filepath="$PROJECT_DIR$/essentials-picker/essentials-picker.iml" />
       <module fileurl="file://$PROJECT_DIR$/essentials-securesettings/essentials-securesettings.iml" filepath="$PROJECT_DIR$/essentials-securesettings/essentials-securesettings.iml" />
