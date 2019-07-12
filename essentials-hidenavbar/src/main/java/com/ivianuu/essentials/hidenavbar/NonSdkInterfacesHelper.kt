@@ -29,7 +29,7 @@ import com.ivianuu.ksettings.Setting
 internal class NonSdkInterfacesHelper(private val settings: KSettings) {
 
     fun disableNonSdkInterfaceDetection() {
-        if (Build.VERSION.CODENAME == "Q") {
+        if (Build.VERSION.SDK_INT >= 29) {
             d { "disable non sdk on 29" }
 
             val hiddenApiPolicy = settings.int(
