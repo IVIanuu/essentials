@@ -39,6 +39,7 @@ import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.actor
 import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
@@ -55,7 +56,10 @@ abstract class MvRxViewModel<S>(initialState: S) : EsViewModel() {
     private var _state: S = initialState
     val state: S get() = synchronized(this) { _state }
 
-    private val stateActor = viewModelScope.actor<S.() -> S>(Dispatchers.Default) {
+    private val stateActor = viewModelScope.actor<S.() -> S>(
+        context = Dispatchers.Default,
+        capacity = Channel.UNLIMITED
+    ) {
         for (reducer in this) {
             val currentState = synchronized(this@MvRxViewModel) { _state }
             val newState = reducer(currentState)
