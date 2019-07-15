@@ -93,6 +93,7 @@ abstract class MvRxViewModel<S>(initialState: S) : EsViewModel() {
             .map { it.asSuccess() as Async<V> }
             .onErrorReturn { it.asFail() }
             .subscribe { setState { reducer(it) } }
+            .disposeBy(scope)
     }
 
     protected fun <V> Deferred<V>.execute(
