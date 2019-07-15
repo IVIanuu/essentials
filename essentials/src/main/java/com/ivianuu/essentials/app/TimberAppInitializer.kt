@@ -28,6 +28,8 @@ internal class TimberAppInitializer(
     private val buildInfo: BuildInfo
 ) : AppInitializer {
     init {
-        if (buildInfo.isDebug) Timber.plant(Timber.DebugTree())
+        if (buildInfo.isDebug) {
+            Timber.plant(Timber.DebugTree())
+        }
     }
 }

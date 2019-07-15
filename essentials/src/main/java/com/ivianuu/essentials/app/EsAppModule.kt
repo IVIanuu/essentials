@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.app
 
+import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
 import android.content.pm.ApplicationInfo
@@ -42,6 +43,6 @@ val esAppModule = module {
     }
 
     single {
-        BuildInfo(get<ApplicationInfo>().flags.containsFlag(ApplicationInfo.FLAG_DEBUGGABLE))
+        BuildInfo(get<Application>().applicationInfo.flags.containsFlag(ApplicationInfo.FLAG_DEBUGGABLE))
     }
 }
