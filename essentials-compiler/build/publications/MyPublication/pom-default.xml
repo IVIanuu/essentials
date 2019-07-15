@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.ivianuu.essentials</groupId>
   <artifactId>essentials-compiler</artifactId>
-  <version>0.0.1-dev-158</version>
+  <version>0.0.1-dev-159</version>
   <packaging>pom</packaging>
   <dependencies>
     <dependency>

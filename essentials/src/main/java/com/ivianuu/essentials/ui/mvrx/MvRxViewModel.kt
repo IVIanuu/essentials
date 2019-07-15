@@ -39,8 +39,7 @@ import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.channels.consumeEach
+import kotlinx.coroutines.channels.actor
 import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
@@ -56,23 +55,19 @@ abstract class MvRxViewModel<S>(initialState: S) : EsViewModel() {
     private var _state: S = initialState
     val state: S get() = synchronized(this) { _state }
 
-    private val setStateQueue = Channel<S.() -> S>()
-
-    init {
-        viewModelScope.launch(Dispatchers.Default) {
-            setStateQueue.consumeEach { reducer ->
-                val currentState = synchronized(this@MvRxViewModel) { _state }
-                val newState = reducer(currentState)
-                if (currentState != newState) {
-                    synchronized(this@MvRxViewModel) { _state = newState }
-                    mainThread { _liveData.value = newState }
-                }
+    private val stateActor = viewModelScope.actor<S.() -> S>(Dispatchers.Default) {
+        for (reducer in this) {
+            val currentState = synchronized(this@MvRxViewModel) { _state }
+            val newState = reducer(currentState)
+            if (currentState != newState) {
+                synchronized(this@MvRxViewModel) { _state = newState }
+                mainThread { _liveData.value = newState }
             }
         }
     }
 
     protected fun setState(reducer: S.() -> S) {
-        setStateQueue.offer(reducer)
+        stateActor.offer(reducer)
     }
 
     fun logStateChanges() {
