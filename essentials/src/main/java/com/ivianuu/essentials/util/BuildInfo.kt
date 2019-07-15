@@ -14,20 +14,6 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.app
+package com.ivianuu.essentials.util
 
-import com.ivianuu.essentials.util.BuildInfo
-import com.ivianuu.injekt.Inject
-import timber.log.Timber
-
-/**
- * Initializes timber in debug builds
- */
-@Inject
-internal class TimberAppInitializer(
-    private val buildInfo: BuildInfo
-) : AppInitializer {
-    init {
-        if (buildInfo.isDebug) Timber.plant(Timber.DebugTree())
-    }
-}
+data class BuildInfo(val isDebug: Boolean)
