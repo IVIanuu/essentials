@@ -28,8 +28,8 @@ import com.ivianuu.essentials.util.Loading
 import com.ivianuu.essentials.util.Success
 import com.ivianuu.essentials.util.asFail
 import com.ivianuu.essentials.util.asSuccess
-import com.ivianuu.essentials.util.mainThread
 import com.ivianuu.essentials.util.lifecycleOwner
+import com.ivianuu.essentials.util.mainThread
 import com.ivianuu.scopes.android.scope
 import com.ivianuu.scopes.rx.disposeBy
 import io.reactivex.Observable
@@ -39,6 +39,8 @@ import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.channels.consumeEach
 import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
@@ -54,15 +56,23 @@ abstract class MvRxViewModel<S>(initialState: S) : EsViewModel() {
     private var _state: S = initialState
     val state: S get() = synchronized(this) { _state }
 
-    protected fun setState(reducer: S.() -> S) {
+    private val setStateQueue = Channel<S.() -> S>()
+
+    init {
         viewModelScope.launch(Dispatchers.Default) {
-            val currentState = synchronized(this@MvRxViewModel) { _state }
-            val newState = reducer(currentState)
-            if (currentState != newState) {
-                synchronized(this@MvRxViewModel) { _state = newState }
-                mainThread { _liveData.value = newState }
+            setStateQueue.consumeEach { reducer ->
+                val currentState = synchronized(this@MvRxViewModel) { _state }
+                val newState = reducer(currentState)
+                if (currentState != newState) {
+                    synchronized(this@MvRxViewModel) { _state = newState }
+                    mainThread { _liveData.value = newState }
+                }
             }
         }
+    }
+
+    protected fun setState(reducer: S.() -> S) {
+        setStateQueue.offer(reducer)
     }
 
     fun logStateChanges() {

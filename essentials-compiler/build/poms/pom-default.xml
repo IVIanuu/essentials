@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.ivianuu.essentials</groupId>
   <artifactId>essentials-compiler</artifactId>
-  <version>0.0.1-dev-156</version>
+  <version>0.0.1-dev-158</version>
   <dependencies>
     <dependency>
       <groupId>org.jetbrains.kotlin</groupId>
@@ -15,7 +15,7 @@
     <dependency>
       <groupId>com.ivianuu.injekt</groupId>
       <artifactId>injekt-compiler</artifactId>
-      <version>0.0.1-dev-66</version>
+      <version>0.0.1-dev-67</version>
       <scope>compile</scope>
     </dependency>
   </dependencies>
