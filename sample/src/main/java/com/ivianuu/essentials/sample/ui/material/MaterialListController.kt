@@ -131,8 +131,8 @@ class MaterialListController : ListController() {
         )
 
         EditTextDialogListItem(
-            id = "multi select list",
-            title = "Multi item list",
+            id = "edit text",
+            title = "Edit text",
             onInputCompleted = {
                 d { "lol $it" }
             }

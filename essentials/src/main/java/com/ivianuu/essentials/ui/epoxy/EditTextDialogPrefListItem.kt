@@ -43,8 +43,8 @@ fun EpoxyController.EditTextDialogPrefListItem(
     dialogTitle: String? = title,
     dialogTitleRes: Int = titleRes,
 
-    dialogHint: String? = null,
-    dialogHintRes: Int = 0,
+    hint: String? = null,
+    hintRes: Int = 0,
 
     positiveDialogButtonText: String? = null,
     positiveDialogButtonTextRes: Int = R.string.es_ok,
@@ -71,8 +71,8 @@ fun EpoxyController.EditTextDialogPrefListItem(
     avatarRes = avatarRes,
     dialogTitle = dialogTitle,
     dialogTitleRes = dialogTitleRes,
-    dialogHint = dialogHint,
-    dialogHintRes = dialogHintRes,
+    hint = hint,
+    hintRes = hintRes,
     positiveDialogButtonText = positiveDialogButtonText,
     positiveDialogButtonTextRes = positiveDialogButtonTextRes,
     negativeDialogButtonText = negativeDialogButtonText,
