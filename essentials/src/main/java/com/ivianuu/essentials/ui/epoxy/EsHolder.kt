@@ -36,8 +36,18 @@ open class EsHolder : EpoxyHolder(), ContextAware, LayoutContainer {
     override val containerView: View?
         get() = root
 
+    private var _cachedViews: MutableMap<Int, View>? = null
+
     override fun bindView(itemView: View) {
         root = itemView
     }
 
+    fun <T : View> findView(id: Int): T = if (_cachedViews == null) {
+        _cachedViews = mutableMapOf()
+        val view = root.findViewById<T>(id)
+        _cachedViews!![id] = view
+        view
+    } else {
+        _cachedViews!!.getOrPut(id) { root.findViewById(id) } as T
+    }
 }

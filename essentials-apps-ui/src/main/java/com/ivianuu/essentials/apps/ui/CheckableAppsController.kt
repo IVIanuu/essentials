@@ -25,7 +25,6 @@ import androidx.lifecycle.viewModelScope
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
-import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.AppStore
 import com.ivianuu.essentials.apps.glide.AppIcon
@@ -98,10 +97,9 @@ abstract class CheckableAppsController : ListController() {
                     onChange = { viewModel.appClicked(app) },
                     builderBlock = {
                         bind {
-                            d { "lol on bind $app" }
-                            val avatar = root.findViewById<ImageView>(R.id.es_list_avatar)
+                            val avatar = findView<ImageView>(R.id.es_list_avatar)
                             avatar.isVisible = true
-                            root.findViewById<View>(R.id.es_list_image_frame).isVisible = true
+                            findView<View>(R.id.es_list_image_frame).isVisible = true
                             Glide.with(avatar)
                                 .load(AppIcon(app.info.packageName))
                                 .apply(

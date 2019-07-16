@@ -70,9 +70,9 @@ class AppPickerController : ListController() {
                     onClick = { viewModel.appClicked(app) },
                     builderBlock = {
                         bind {
-                            val avatar = root.findViewById<ImageView>(R.id.es_list_avatar)
+                            val avatar = findView<ImageView>(R.id.es_list_avatar)
                             avatar.isVisible = true
-                            root.findViewById<View>(R.id.es_list_image_frame).isVisible = true
+                            findView<View>(R.id.es_list_image_frame).isVisible = true
                             Glide.with(avatar)
                                 .load(AppIcon(app.packageName))
                                 .apply(
