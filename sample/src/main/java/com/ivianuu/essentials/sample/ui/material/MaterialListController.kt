@@ -18,6 +18,7 @@ package com.ivianuu.essentials.sample.ui.material
 
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.epoxy.CheckboxListItem
+import com.ivianuu.essentials.ui.epoxy.ListDivider
 import com.ivianuu.essentials.ui.epoxy.ListHeader
 import com.ivianuu.essentials.ui.epoxy.ListItem
 import com.ivianuu.essentials.ui.epoxy.RadioButtonListItem
@@ -41,12 +42,14 @@ class MaterialListController : ListController() {
     private var seekBarValue = 50
 
     override fun epoxyController() = epoxyController {
+        ListItem(id = "first", title = "Hello")
+
+        ListDivider(id = "top_divider")
+
         ListItem(
             id = "item_one",
             title = "This is a title",
-            text = "This is a text"/*,
-            onClick = { println("on click") },
-            onLongClick = { println("on long click") }*/
+            text = "This is a text"
         )
 
         ListItem(id = "item_two", title = "This is a title")
