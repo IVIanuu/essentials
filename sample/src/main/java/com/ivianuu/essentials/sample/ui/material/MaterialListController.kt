@@ -21,8 +21,10 @@ import com.ivianuu.essentials.ui.epoxy.CheckboxListItem
 import com.ivianuu.essentials.ui.epoxy.ListDivider
 import com.ivianuu.essentials.ui.epoxy.ListHeader
 import com.ivianuu.essentials.ui.epoxy.ListItem
+import com.ivianuu.essentials.ui.epoxy.MultiSelectListDialogListItem
 import com.ivianuu.essentials.ui.epoxy.RadioButtonListItem
 import com.ivianuu.essentials.ui.epoxy.SeekBarListItem
+import com.ivianuu.essentials.ui.epoxy.SingleItemListDialogListItem
 import com.ivianuu.essentials.ui.epoxy.SwitchListItem
 import com.ivianuu.essentials.ui.epoxy.epoxyController
 import com.ivianuu.essentials.ui.simple.ListController
@@ -40,6 +42,8 @@ class MaterialListController : ListController() {
     private var switchState = true
     private var radioButtonState = true
     private var seekBarValue = 50
+    private var singleItemValue = "B"
+    private var multiSelectValue = setOf("B", "C")
 
     override fun epoxyController() = epoxyController {
         ListItem(id = "first", title = "Hello")
@@ -98,6 +102,30 @@ class MaterialListController : ListController() {
             max = 150,
             inc = 5,
             valueTextProvider = { "$it px" }
+        )
+
+        SingleItemListDialogListItem(
+            id = "single item list",
+            title = "Single item list",
+            entries = arrayOf("A", "B", "C"),
+            entryValues = arrayOf("A", "B", "C"),
+            value = singleItemValue,
+            onSelected = {
+                singleItemValue = it
+                requestModelBuild()
+            }
+        )
+
+        MultiSelectListDialogListItem(
+            id = "multi select list",
+            title = "Multi item list",
+            entries = arrayOf("A", "B", "C"),
+            entryValues = arrayOf("A", "B", "C"),
+            values = multiSelectValue,
+            onSelected = {
+                multiSelectValue = it
+                requestModelBuild()
+            }
         )
 
         ListItem(
