@@ -28,7 +28,7 @@ fun EpoxyController.model(
     state: Array<Any?>? = null,
     unbind: (EsHolder.() -> Unit)? = null,
     bind: (EsHolder.() -> Unit)? = null,
-    block: (FunModelBuilder.() -> Unit)? = null
+    builderBlock: (FunModelBuilder.() -> Unit)? = null
 ): FunModel = FunModelBuilder()
     .apply {
         id(id)
@@ -36,7 +36,7 @@ fun EpoxyController.model(
         state?.let { state(*it) }
         bind?.let { bind(it) }
         unbind?.let { unbind(it) }
-        block?.invoke(this)
+        builderBlock?.invoke(this)
     }
     .build()
     .also { it.addTo(this) }

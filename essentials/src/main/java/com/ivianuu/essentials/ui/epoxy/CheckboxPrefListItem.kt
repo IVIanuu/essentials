@@ -14,14 +14,13 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.epoxy.material
+package com.ivianuu.essentials.ui.epoxy
 
 import android.graphics.drawable.Drawable
 import com.airbnb.epoxy.EpoxyController
-import com.ivianuu.essentials.ui.epoxy.FunModelBuilder
 import com.ivianuu.kprefs.Pref
 
-fun EpoxyController.RadioButtonPrefListItem(
+fun EpoxyController.CheckboxPrefListItem(
     pref: Pref<Boolean>,
 
     id: Any? = pref.key,
@@ -41,7 +40,7 @@ fun EpoxyController.RadioButtonPrefListItem(
     avatarRes: Int = 0,
 
     builderBlock: (FunModelBuilder.() -> Unit)? = null
-) = RadioButtonListItem(
+) = CheckboxListItem(
     id = id,
     value = pref.get(),
     onChange = {

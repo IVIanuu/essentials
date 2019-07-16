@@ -18,7 +18,7 @@ package com.ivianuu.essentials.twilight
 
 import com.airbnb.epoxy.EpoxyController
 import com.ivianuu.essentials.R
-import com.ivianuu.essentials.ui.epoxy.material.RadioButtonListItem
+import com.ivianuu.essentials.ui.epoxy.RadioButtonListItem
 import com.ivianuu.essentials.ui.prefs.PrefsController
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
 import com.ivianuu.injekt.inject

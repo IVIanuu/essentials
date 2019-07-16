@@ -28,8 +28,8 @@ import com.bumptech.glide.request.RequestOptions
 import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.AppStore
 import com.ivianuu.essentials.apps.glide.AppIcon
+import com.ivianuu.essentials.ui.epoxy.CheckboxListItem
 import com.ivianuu.essentials.ui.epoxy.SimpleLoading
-import com.ivianuu.essentials.ui.epoxy.material.CheckboxListItem
 import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
 import com.ivianuu.essentials.ui.mvrx.epoxy.mvRxEpoxyController
 import com.ivianuu.essentials.ui.mvrx.mvRxViewModel

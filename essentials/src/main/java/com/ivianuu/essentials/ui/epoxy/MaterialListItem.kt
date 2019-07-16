@@ -14,14 +14,12 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.epoxy.material
+package com.ivianuu.essentials.ui.epoxy
 
 import android.graphics.drawable.Drawable
 import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyController
 import com.ivianuu.essentials.R
-import com.ivianuu.essentials.ui.epoxy.FunModelBuilder
-import com.ivianuu.essentials.ui.epoxy.model
 import com.ivianuu.essentials.util.andTrue
 import com.ivianuu.kommon.core.view.inflate
 import kotlinx.android.synthetic.main.es_list_item.*

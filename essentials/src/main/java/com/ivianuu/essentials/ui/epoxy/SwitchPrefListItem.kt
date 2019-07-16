@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.epoxy.material
+package com.ivianuu.essentials.ui.epoxy
 
 import android.graphics.drawable.Drawable
 import com.airbnb.epoxy.EpoxyController
-import com.ivianuu.essentials.ui.epoxy.FunModelBuilder
 import com.ivianuu.kprefs.Pref
 
 fun EpoxyController.SwitchPrefListItem(

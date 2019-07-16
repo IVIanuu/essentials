@@ -26,8 +26,8 @@ import com.bumptech.glide.request.RequestOptions
 import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.AppStore
 import com.ivianuu.essentials.apps.glide.AppIcon
+import com.ivianuu.essentials.ui.epoxy.ListItem
 import com.ivianuu.essentials.ui.epoxy.SimpleLoading
-import com.ivianuu.essentials.ui.epoxy.material.ListItem
 import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
 import com.ivianuu.essentials.ui.mvrx.epoxy.mvRxEpoxyController
 import com.ivianuu.essentials.ui.mvrx.injekt.injectMvRxViewModel

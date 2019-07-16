@@ -14,13 +14,11 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.epoxy.material
+package com.ivianuu.essentials.ui.epoxy
 
 import android.graphics.drawable.Drawable
 import android.widget.CompoundButton
 import com.airbnb.epoxy.EpoxyController
-import com.ivianuu.essentials.ui.epoxy.EsHolder
-import com.ivianuu.essentials.ui.epoxy.FunModelBuilder
 
 fun EpoxyController.CompoundButtonListItem(
     id: Any?,

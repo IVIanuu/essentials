@@ -17,11 +17,12 @@
 package com.ivianuu.essentials.sample.ui.material
 
 import com.ivianuu.essentials.sample.R
+import com.ivianuu.essentials.ui.epoxy.CheckboxListItem
+import com.ivianuu.essentials.ui.epoxy.ListHeader
+import com.ivianuu.essentials.ui.epoxy.ListItem
+import com.ivianuu.essentials.ui.epoxy.RadioButtonListItem
+import com.ivianuu.essentials.ui.epoxy.SwitchListItem
 import com.ivianuu.essentials.ui.epoxy.epoxyController
-import com.ivianuu.essentials.ui.epoxy.material.CheckboxListItem
-import com.ivianuu.essentials.ui.epoxy.material.ListItem
-import com.ivianuu.essentials.ui.epoxy.material.RadioButtonListItem
-import com.ivianuu.essentials.ui.epoxy.material.SwitchListItem
 import com.ivianuu.essentials.ui.simple.ListController
 import com.ivianuu.essentials.ui.traveler.NavOptions
 import com.ivianuu.essentials.ui.traveler.fade
@@ -47,6 +48,8 @@ class MaterialListController : ListController() {
         )
 
         ListItem(id = "item_two", title = "This is a title")
+
+        ListHeader(text = "Toggles")
 
         CheckboxListItem(
             id = "check box",

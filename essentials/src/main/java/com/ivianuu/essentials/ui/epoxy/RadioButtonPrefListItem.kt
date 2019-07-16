@@ -14,19 +14,18 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.epoxy.material
+package com.ivianuu.essentials.ui.epoxy
 
 import android.graphics.drawable.Drawable
 import com.airbnb.epoxy.EpoxyController
-import com.ivianuu.essentials.ui.epoxy.EsHolder
-import com.ivianuu.essentials.ui.epoxy.FunModelBuilder
+import com.ivianuu.kprefs.Pref
 
-fun EpoxyController.ToggleableListItem(
-    id: Any?,
+fun EpoxyController.RadioButtonPrefListItem(
+    pref: Pref<Boolean>,
 
-    value: Boolean,
-    render: EsHolder.(Boolean) -> Unit,
-    onChange: ((Boolean) -> Unit)? = null,
+    id: Any? = pref.key,
+
+    onChangePredicate: ((Boolean) -> Boolean)? = null,
 
     title: String? = null,
     titleRes: Int = 0,
@@ -40,11 +39,15 @@ fun EpoxyController.ToggleableListItem(
     avatar: Drawable? = null,
     avatarRes: Int = 0,
 
-    widgetLayoutRes: Int = 0,
-
     builderBlock: (FunModelBuilder.() -> Unit)? = null
-) = ListItem(
+) = RadioButtonListItem(
     id = id,
+    value = pref.get(),
+    onChange = {
+        if (onChangePredicate == null || onChangePredicate(it)) {
+            pref.set(it)
+        }
+    },
     title = title,
     titleRes = titleRes,
     text = text,
@@ -53,11 +56,5 @@ fun EpoxyController.ToggleableListItem(
     iconRes = iconRes,
     avatar = avatar,
     avatarRes = avatarRes,
-    widgetLayoutRes = widgetLayoutRes,
-    onClick = onChange?.let { onChangeNonNull -> { onChangeNonNull(!value) } },
-    builderBlock = {
-        state(value, onChange != null)
-        bind { render(value) }
-        builderBlock?.invoke(this)
-    }
+    builderBlock = builderBlock
 )

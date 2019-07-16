@@ -18,9 +18,9 @@ package com.ivianuu.essentials.sample.ui.list
 
 import android.view.MenuItem
 import com.ivianuu.essentials.sample.R
+import com.ivianuu.essentials.ui.epoxy.ListItem
 import com.ivianuu.essentials.ui.epoxy.SimpleLoading
 import com.ivianuu.essentials.ui.epoxy.SimpleText
-import com.ivianuu.essentials.ui.epoxy.material.ListItem
 import com.ivianuu.essentials.ui.mvrx.epoxy.mvRxEpoxyController
 import com.ivianuu.essentials.ui.mvrx.injekt.injectMvRxViewModel
 import com.ivianuu.essentials.ui.traveler.NavOptions

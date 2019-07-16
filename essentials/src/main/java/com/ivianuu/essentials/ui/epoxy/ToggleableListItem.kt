@@ -14,18 +14,16 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.epoxy.material
+package com.ivianuu.essentials.ui.epoxy
 
 import android.graphics.drawable.Drawable
 import com.airbnb.epoxy.EpoxyController
-import com.ivianuu.essentials.R
-import com.ivianuu.essentials.ui.epoxy.FunModelBuilder
-import kotlinx.android.synthetic.main.es_list_widget_checkbox.*
 
-fun EpoxyController.CheckboxListItem(
+fun EpoxyController.ToggleableListItem(
     id: Any?,
 
     value: Boolean,
+    render: EsHolder.(Boolean) -> Unit,
     onChange: ((Boolean) -> Unit)? = null,
 
     title: String? = null,
@@ -40,11 +38,11 @@ fun EpoxyController.CheckboxListItem(
     avatar: Drawable? = null,
     avatarRes: Int = 0,
 
+    widgetLayoutRes: Int = 0,
+
     builderBlock: (FunModelBuilder.() -> Unit)? = null
-) = CompoundButtonListItem(
+) = ListItem(
     id = id,
-    value = value,
-    onChange = onChange,
     title = title,
     titleRes = titleRes,
     text = text,
@@ -53,7 +51,11 @@ fun EpoxyController.CheckboxListItem(
     iconRes = iconRes,
     avatar = avatar,
     avatarRes = avatarRes,
-    builderBlock = builderBlock,
-    widgetLayoutRes = R.layout.es_list_widget_checkbox,
-    compoundButtonProvider = { es_list_widget_checkbox }
+    widgetLayoutRes = widgetLayoutRes,
+    onClick = onChange?.let { onChangeNonNull -> { onChangeNonNull(!value) } },
+    builderBlock = {
+        state(value, onChange != null)
+        bind { render(value) }
+        builderBlock?.invoke(this)
+    }
 )

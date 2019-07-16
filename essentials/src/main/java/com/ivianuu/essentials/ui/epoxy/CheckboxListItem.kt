@@ -14,19 +14,18 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.epoxy.material
+package com.ivianuu.essentials.ui.epoxy
 
 import android.graphics.drawable.Drawable
 import com.airbnb.epoxy.EpoxyController
-import com.ivianuu.essentials.ui.epoxy.FunModelBuilder
-import com.ivianuu.kprefs.Pref
+import com.ivianuu.essentials.R
+import kotlinx.android.synthetic.main.es_list_widget_checkbox.*
 
-fun EpoxyController.CheckboxPrefListItem(
-    pref: Pref<Boolean>,
+fun EpoxyController.CheckboxListItem(
+    id: Any?,
 
-    id: Any? = pref.key,
-
-    onChangePredicate: ((Boolean) -> Boolean)? = null,
+    value: Boolean,
+    onChange: ((Boolean) -> Unit)? = null,
 
     title: String? = null,
     titleRes: Int = 0,
@@ -41,14 +40,10 @@ fun EpoxyController.CheckboxPrefListItem(
     avatarRes: Int = 0,
 
     builderBlock: (FunModelBuilder.() -> Unit)? = null
-) = CheckboxListItem(
+) = CompoundButtonListItem(
     id = id,
-    value = pref.get(),
-    onChange = {
-        if (onChangePredicate == null || onChangePredicate(it)) {
-            pref.set(it)
-        }
-    },
+    value = value,
+    onChange = onChange,
     title = title,
     titleRes = titleRes,
     text = text,
@@ -57,5 +52,7 @@ fun EpoxyController.CheckboxPrefListItem(
     iconRes = iconRes,
     avatar = avatar,
     avatarRes = avatarRes,
-    builderBlock = builderBlock
+    builderBlock = builderBlock,
+    widgetLayoutRes = R.layout.es_list_widget_checkbox,
+    compoundButtonProvider = { es_list_widget_checkbox }
 )
