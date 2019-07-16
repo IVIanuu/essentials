@@ -56,7 +56,7 @@ fun EpoxyController.EditTextDialogPrefListItem(
 ) = EditTextDialogListItem(
     id = id,
     value = pref.get(),
-    onSelected = {
+    onInputCompleted = {
         if (onSelectedPredicate == null || onSelectedPredicate(it)) {
             pref.set(it)
         }

@@ -25,8 +25,8 @@ import com.ivianuu.essentials.R
 fun EpoxyController.EditTextDialogListItem(
     id: Any?,
 
-    value: String,
-    onSelected: (String) -> Unit,
+    prefill: String? = null,
+    onInputCompleted: (String) -> Unit,
 
     title: String? = null,
     titleRes: Int = 0,
@@ -63,8 +63,8 @@ fun EpoxyController.EditTextDialogListItem(
         input(
             hintRes = dialogHintRes,
             hint = dialogHint,
-            prefill = value
-        ) { _, input -> onSelected(input.toString()) }
+            prefill = prefill
+        ) { _, input -> onInputCompleted(input.toString()) }
 
         dialogBlock?.invoke(this)
 
@@ -79,7 +79,7 @@ fun EpoxyController.EditTextDialogListItem(
     avatar = avatar,
     avatarRes = avatarRes,
     builderBlock = {
-        state(value)
+        state(prefill)
         state(dialogTitle, dialogTitleRes)
         state(negativeDialogButtonText, negativeDialogButtonTextRes)
         state(dialogBlock != null)

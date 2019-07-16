@@ -16,8 +16,10 @@
 
 package com.ivianuu.essentials.sample.ui.material
 
+import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.epoxy.CheckboxListItem
+import com.ivianuu.essentials.ui.epoxy.EditTextDialogListItem
 import com.ivianuu.essentials.ui.epoxy.ListDivider
 import com.ivianuu.essentials.ui.epoxy.ListHeader
 import com.ivianuu.essentials.ui.epoxy.ListItem
@@ -125,6 +127,14 @@ class MaterialListController : ListController() {
             onSelected = {
                 multiSelectValue = it
                 requestModelBuild()
+            }
+        )
+
+        EditTextDialogListItem(
+            id = "multi select list",
+            title = "Multi item list",
+            onInputCompleted = {
+                d { "lol $it" }
             }
         )
 
