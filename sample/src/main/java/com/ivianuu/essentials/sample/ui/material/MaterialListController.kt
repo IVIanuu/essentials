@@ -21,6 +21,7 @@ import com.ivianuu.essentials.ui.epoxy.CheckboxListItem
 import com.ivianuu.essentials.ui.epoxy.ListHeader
 import com.ivianuu.essentials.ui.epoxy.ListItem
 import com.ivianuu.essentials.ui.epoxy.RadioButtonListItem
+import com.ivianuu.essentials.ui.epoxy.SeekBarListItem
 import com.ivianuu.essentials.ui.epoxy.SwitchListItem
 import com.ivianuu.essentials.ui.epoxy.epoxyController
 import com.ivianuu.essentials.ui.simple.ListController
@@ -37,6 +38,7 @@ class MaterialListController : ListController() {
     private var checkBoxState = true
     private var switchState = true
     private var radioButtonState = true
+    private var seekBarValue = 50
 
     override fun epoxyController() = epoxyController {
         ListItem(
@@ -79,6 +81,20 @@ class MaterialListController : ListController() {
                 radioButtonState = it
                 requestModelBuild()
             }
+        )
+
+        ListHeader(text = "More")
+
+        SeekBarListItem(
+            id = "seek bar",
+            title = "Seek bar",
+            text = "default = 50",
+            value = seekBarValue,
+            onChange = { seekBarValue },
+            min = 5,
+            max = 150,
+            inc = 5,
+            valueTextProvider = { "$it px" }
         )
 
         ListItem(

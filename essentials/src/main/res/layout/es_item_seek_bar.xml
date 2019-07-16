@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?><!--
-  ~ Copyright 2019 Manuel Wrage
+  ~ Copyright 2018 Manuel Wrage
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:background="?selectableItemBackground"
-    android:minHeight="48dp">
+    android:minHeight="64dp">
 
     <FrameLayout
         android:id="@+id/es_list_image_frame"
@@ -36,7 +36,7 @@
             android:id="@+id/es_list_icon"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            tools:visibility="visible"
+            tools:visibility="gone"
             android:tint="?colorControlNormal"
             tools:src="@drawable/icon_back_white" />
 
@@ -45,25 +45,22 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginTop="8dp"
-            tools:visibility="gone"
+            tools:visibility="visible"
             android:layout_marginBottom="8dp"
             tools:background="@color/design_default_color_primary" />
 
     </FrameLayout>
 
     <LinearLayout
-        android:id="@+id/es_list_text_container"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:paddingTop="16dp"
-        android:paddingBottom="16dp"
         app:layout_constraintStart_toEndOf="@id/es_list_image_frame"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/es_list_widget_container"
-        app:layout_constraintBottom_toBottomOf="parent">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:paddingTop="16dp"
+        android:paddingBottom="8dp">
 
         <TextView
             android:id="@+id/es_list_title"
@@ -71,6 +68,8 @@
             android:layout_height="wrap_content"
             android:ellipsize="marquee"
             tools:visibility="visible"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
             android:textAppearance="?textAppearanceSubtitle1"
             tools:text="This is a title" />
 
@@ -79,20 +78,52 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             tools:visibility="visible"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
             android:textAppearance="?textAppearanceBody2"
             android:textColor="?android:attr/textColorSecondary"
             tools:text="This is a summary kfkfmksmkmfkfmkfsmmfksmdkdmkdmgkmkbmfkmkmgkfhmkgmnkmgvkmgkmnk" />
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="4dp"
+            android:orientation="horizontal">
+
+            <SeekBar
+                android:id="@+id/es_seekbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:clickable="false"
+                android:focusable="false"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:layout_toStartOf="@id/es_seekbar_value"
+                tools:progress="70" />
+
+            <TextView
+                android:id="@+id/es_seekbar_value"
+                android:layout_marginEnd="8dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minWidth="36dp"
+                android:visibility="gone"
+                android:gravity="end|center_vertical"
+                android:fontFamily="sans-serif-condensed"
+                android:singleLine="true"
+                android:textAppearance="?textAppearanceBody2"
+                android:textColor="?android:textColorSecondary"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:ellipsize="marquee"
+                tools:text="1000%"
+                android:fadingEdge="horizontal" />
+
+        </RelativeLayout>
+
     </LinearLayout>
-
-    <FrameLayout
-        android:id="@+id/es_list_widget_container"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:visibility="visible"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
