@@ -74,20 +74,9 @@ fun EpoxyController.MultiSelectListDialogListItem(
             finalEntryValues = emptyArray()
         }
 
-        when {
-            dialogTitle != null -> title(text = dialogTitle)
-            dialogTitleRes != 0 -> title(res = dialogTitleRes)
-        }
-
-        when {
-            positiveDialogButtonText != null -> positiveButton(text = positiveDialogButtonText)
-            positiveDialogButtonTextRes != 0 -> positiveButton(res = positiveDialogButtonTextRes)
-        }
-
-        when {
-            negativeDialogButtonText != null -> negativeButton(text = negativeDialogButtonText)
-            negativeDialogButtonTextRes != 0 -> negativeButton(res = negativeDialogButtonTextRes)
-        }
+        title(res = dialogTitleRes, text = dialogTitle)
+        positiveButton(res = positiveDialogButtonTextRes, text = positiveDialogButtonText)
+        negativeButton(res = negativeDialogButtonTextRes, text = negativeDialogButtonText)
 
         val selectedIndices = values
             .map { finalEntryValues.indexOf(it) }

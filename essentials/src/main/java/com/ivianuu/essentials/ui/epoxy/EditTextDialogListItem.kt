@@ -18,11 +18,11 @@ package com.ivianuu.essentials.ui.epoxy
 
 import android.graphics.drawable.Drawable
 import com.afollestad.materialdialogs.MaterialDialog
-import com.afollestad.materialdialogs.list.listItemsSingleChoice
+import com.afollestad.materialdialogs.input.input
 import com.airbnb.epoxy.EpoxyController
 import com.ivianuu.essentials.R
 
-fun EpoxyController.SingleItemListDialogListItem(
+fun EpoxyController.EditTextDialogListItem(
     id: Any?,
 
     value: String,
@@ -43,49 +43,28 @@ fun EpoxyController.SingleItemListDialogListItem(
     dialogTitle: String? = title,
     dialogTitleRes: Int = titleRes,
 
+    dialogHint: String? = null,
+    dialogHintRes: Int = 0,
+
+    positiveDialogButtonText: String? = null,
+    positiveDialogButtonTextRes: Int = R.string.es_ok,
     negativeDialogButtonText: String? = null,
     negativeDialogButtonTextRes: Int = R.string.es_cancel,
-
-    entries: Array<String>? = null,
-    entriesRes: Int = 0,
-    entryValues: Array<String>? = null,
-    entryValuesRes: Int = 0,
 
     dialogBlock: (MaterialDialog.() -> Unit)? = null,
     builderBlock: (FunModelBuilder.() -> Unit)? = null
 ) = DialogListItem(
     id = id,
     buildDialog = {
-        var finalEntries = entries
-        if (finalEntries == null && entriesRes != 0) {
-            finalEntries = context.resources.getStringArray(entriesRes)
-        }
-        if (finalEntries == null) {
-            finalEntries = emptyArray()
-        }
-
-        var finalEntryValues = entryValues
-        if (finalEntryValues == null && entryValuesRes != 0) {
-            finalEntryValues = context.resources.getStringArray(entryValuesRes)
-        }
-        if (finalEntryValues == null) {
-            finalEntryValues = emptyArray()
-        }
-
-        val selectedIndex = finalEntryValues.indexOf(value)
-
         title(res = dialogTitleRes, text = dialogTitle)
+        positiveButton(res = positiveDialogButtonTextRes, text = positiveDialogButtonText)
         negativeButton(res = negativeDialogButtonTextRes, text = negativeDialogButtonText)
 
-        listItemsSingleChoice(
-            initialSelection = selectedIndex,
-            items = finalEntries.toList(),
-            waitForPositiveButton = false
-        ) { dialog, position, _ ->
-            val newValue = finalEntryValues.toList()[position]
-            onSelected(newValue)
-            dialog.dismiss()
-        }
+        input(
+            hintRes = dialogHintRes,
+            hint = dialogHint,
+            prefill = value
+        ) { _, input -> onSelected(input.toString()) }
 
         dialogBlock?.invoke(this)
 
@@ -103,8 +82,6 @@ fun EpoxyController.SingleItemListDialogListItem(
         state(value)
         state(dialogTitle, dialogTitleRes)
         state(negativeDialogButtonText, negativeDialogButtonTextRes)
-        state(entries, entriesRes)
-        state(entryValues, entryValuesRes)
         state(dialogBlock != null)
 
         builderBlock?.invoke(this)
