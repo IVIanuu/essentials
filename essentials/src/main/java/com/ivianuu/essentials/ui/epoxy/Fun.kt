@@ -16,7 +16,11 @@
 
 package com.ivianuu.essentials.ui.epoxy
 
+import android.view.View
+import android.view.ViewGroup
 import com.airbnb.epoxy.EpoxyController
+import com.ivianuu.kommon.core.view.inflate
+import kotlin.properties.Delegates
 
 fun EpoxyController.model(
     id: Any? = null,
@@ -40,17 +44,14 @@ fun EpoxyController.model(
 class FunModelBuilder internal constructor() {
 
     private var id: Any? = null
-    private var layoutRes: Int = -1
+    private var buildView: (ViewGroup) -> View by Delegates.notNull()
+    private var viewType = 0
     private val state = mutableListOf<Any?>()
     private val bindActions = mutableListOf<EsHolder.() -> Unit>()
     private val unbindActions = mutableListOf<EsHolder.() -> Unit>()
 
     fun id(id: Any?) {
         this.id = id
-    }
-
-    fun layoutRes(layoutRes: Int) {
-        this.layoutRes = layoutRes
     }
 
     fun state(vararg state: Any?) {
@@ -61,6 +62,15 @@ class FunModelBuilder internal constructor() {
         this.state.addAll(state)
     }
 
+    fun buildView(block: (ViewGroup) -> View) {
+        buildView = block
+    }
+
+    fun layoutRes(layoutRes: Int) {
+        this.viewType = layoutRes
+        buildView { it.inflate(layoutRes) }
+    }
+
     fun bind(block: EsHolder.() -> Unit) {
         bindActions.add(block)
     }
@@ -69,17 +79,25 @@ class FunModelBuilder internal constructor() {
         unbindActions.add(block)
     }
 
-    internal fun build(): FunModel = FunModel(id, layoutRes, state, unbindActions, bindActions)
+    internal fun build(): FunModel = FunModel(
+        id, viewType, state,
+        buildView, unbindActions, bindActions
+    )
 
 }
 
 class FunModel internal constructor(
-    private val id: Any?,
-    private val layoutRes: Int,
+    id: Any?,
+    private val _viewType: Int,
     private val state: List<Any?>,
+    private val buildViewBlock: (ViewGroup) -> View,
     private val unbindActions: List<EsHolder.() -> Unit>,
     private val bindActions: List<EsHolder.() -> Unit>
-) : SimpleModel(id = id, layoutRes = layoutRes) {
+) : SimpleModel(id = id) {
+
+    override fun buildView(parent: ViewGroup): View = buildViewBlock(parent)
+
+    override fun getViewType(): Int = _viewType
 
     override fun bind(holder: EsHolder) {
         super.bind(holder)

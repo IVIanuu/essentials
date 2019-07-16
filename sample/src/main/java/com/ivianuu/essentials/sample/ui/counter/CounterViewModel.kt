@@ -20,13 +20,14 @@ import com.ivianuu.essentials.hidenavbar.NavBarConfig
 import com.ivianuu.essentials.hidenavbar.NavBarController
 import com.ivianuu.essentials.sample.ui.checkapps.CheckAppsKey
 import com.ivianuu.essentials.sample.ui.list.ListKey
+import com.ivianuu.essentials.sample.ui.material.MaterialListKey
 import com.ivianuu.essentials.sample.util.SecureSettingsHelper
 import com.ivianuu.essentials.sample.work.WorkScheduler
 import com.ivianuu.essentials.securesettings.SecureSettingsKey
+import com.ivianuu.essentials.twilight.TwilightSettingsKey
 import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
 import com.ivianuu.essentials.ui.traveler.NavOptions
 import com.ivianuu.essentials.ui.traveler.horizontal
-import com.ivianuu.essentials.twilight.TwilightSettingsKey
 import com.ivianuu.injekt.Inject
 import com.ivianuu.traveler.Router
 import com.ivianuu.traveler.finish
@@ -78,6 +79,10 @@ class CounterViewModel(
             TwilightSettingsKey,
             NavOptions().horizontal()
         )
+    }
+
+    fun materialListClicked() {
+        router.push(MaterialListKey)
     }
 
     fun navBarClicked() {

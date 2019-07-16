@@ -69,6 +69,7 @@ class CounterController : EsController() {
         do_work.setOnClickListener { viewModel.doWorkClicked() }
         nav_bar.setOnClickListener { viewModel.navBarClicked() }
         twilight.setOnClickListener { viewModel.twilightClicked() }
+        md_list.setOnClickListener { viewModel.materialListClicked() }
     }
 
     override fun invalidate() {
