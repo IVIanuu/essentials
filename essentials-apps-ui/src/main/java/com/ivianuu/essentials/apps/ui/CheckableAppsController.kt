@@ -18,16 +18,19 @@ package com.ivianuu.essentials.apps.ui
 
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View
+import android.widget.ImageView
+import androidx.core.view.isVisible
 import androidx.lifecycle.viewModelScope
-import com.airbnb.epoxy.EpoxyController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
+import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.AppStore
 import com.ivianuu.essentials.apps.glide.AppIcon
 import com.ivianuu.essentials.ui.epoxy.SimpleLoading
-import com.ivianuu.essentials.ui.epoxy.model
+import com.ivianuu.essentials.ui.epoxy.material.CheckboxListItem
 import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
 import com.ivianuu.essentials.ui.mvrx.epoxy.mvRxEpoxyController
 import com.ivianuu.essentials.ui.mvrx.mvRxViewModel
@@ -35,11 +38,11 @@ import com.ivianuu.essentials.ui.simple.ListController
 import com.ivianuu.essentials.util.AppDispatchers
 import com.ivianuu.essentials.util.AppSchedulers
 import com.ivianuu.essentials.util.Async
+import com.ivianuu.essentials.util.BehaviorSubject
 import com.ivianuu.essentials.util.Loading
+import com.ivianuu.essentials.util.PublishSubject
 import com.ivianuu.essentials.util.Success
 import com.ivianuu.essentials.util.Uninitialized
-import com.ivianuu.essentials.util.BehaviorSubject
-import com.ivianuu.essentials.util.PublishSubject
 import com.ivianuu.essentials.util.andTrue
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Param
@@ -50,7 +53,6 @@ import com.ivianuu.scopes.android.onDestroy
 import com.ivianuu.scopes.rx.disposeBy
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.Observables
-import kotlinx.android.synthetic.main.es_item_checkable_app.*
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asSingle
@@ -89,7 +91,28 @@ abstract class CheckableAppsController : ListController() {
         when (state.apps) {
             is Loading -> SimpleLoading(id = "loading")
             is Success -> state.apps()?.forEach { app ->
-                CheckableApp(app = app, onClick = { viewModel.appClicked(app) })
+                CheckboxListItem(
+                    id = app.info.packageName,
+                    value = app.isChecked,
+                    title = app.info.appName,
+                    onChange = { viewModel.appClicked(app) },
+                    builderBlock = {
+                        bind {
+                            d { "lol on bind $app" }
+                            val avatar = root.findViewById<ImageView>(R.id.es_list_avatar)
+                            avatar.isVisible = true
+                            root.findViewById<View>(R.id.es_list_image_frame).isVisible = true
+                            Glide.with(avatar)
+                                .load(AppIcon(app.info.packageName))
+                                .apply(
+                                    RequestOptions()
+                                        .diskCacheStrategy(DiskCacheStrategy.NONE)
+                                        .skipMemoryCache(true)
+                                )
+                                .into(avatar)
+                        }
+                    }
+                )
             }
         }
     }
@@ -104,31 +127,6 @@ abstract class CheckableAppsController : ListController() {
 
     abstract fun onCheckedAppsChanged(apps: Set<String>)
 }
-
-private fun EpoxyController.CheckableApp(
-    app: CheckableApp,
-    onClick: () -> Unit
-) = model(
-    id = app.info.packageName,
-    layoutRes = R.layout.es_item_checkable_app,
-    state = arrayOf(app),
-    bind = {
-        Glide.with(es_checkable_app_icon)
-            .load(AppIcon(app.info.packageName))
-            .apply(
-                RequestOptions()
-                    .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .skipMemoryCache(true)
-            )
-            .into(es_checkable_app_icon)
-
-        es_checkable_app_title.text = app.info.appName
-
-        es_checkable_app_checkbox.isChecked = app.isChecked
-
-        root.setOnClickListener { onClick() }
-    }
-)
 
 @Inject
 internal class CheckableAppsViewModel(

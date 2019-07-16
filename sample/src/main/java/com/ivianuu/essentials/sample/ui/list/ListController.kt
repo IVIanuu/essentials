@@ -17,11 +17,10 @@
 package com.ivianuu.essentials.sample.ui.list
 
 import android.view.MenuItem
-import com.airbnb.epoxy.EpoxyController
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.epoxy.SimpleLoading
 import com.ivianuu.essentials.ui.epoxy.SimpleText
-import com.ivianuu.essentials.ui.epoxy.model
+import com.ivianuu.essentials.ui.epoxy.material.ListItem
 import com.ivianuu.essentials.ui.mvrx.epoxy.mvRxEpoxyController
 import com.ivianuu.essentials.ui.mvrx.injekt.injectMvRxViewModel
 import com.ivianuu.essentials.ui.traveler.NavOptions
@@ -29,7 +28,6 @@ import com.ivianuu.essentials.ui.traveler.horizontal
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
 import com.ivianuu.essentials.util.andTrue
 import kotlinx.android.parcel.Parcelize
-import kotlinx.android.synthetic.main.single_line_list_item.*
 
 @Parcelize
 object ListKey : ControllerKey(::ListController, NavOptions().horizontal())
@@ -44,7 +42,7 @@ class ListController : com.ivianuu.essentials.ui.simple.ListController() {
     override fun epoxyController() = mvRxEpoxyController(viewModel) { state ->
         when {
             state.loading -> SimpleLoading(id = "loading")
-            state.items.isNotEmpty() -> state.items.forEach { SingleLine(it) }
+            state.items.isNotEmpty() -> state.items.forEach { ListItem(id = it, title = it) }
             else -> SimpleText(text = "Hmm empty", id = "empty")
         }
     }
@@ -54,8 +52,3 @@ class ListController : com.ivianuu.essentials.ui.simple.ListController() {
         else -> false
     }
 }
-
-private fun EpoxyController.SingleLine(text: String) = model(
-    id = text, layoutRes = R.layout.single_line_list_item,
-    bind = { title.text = text }
-)
