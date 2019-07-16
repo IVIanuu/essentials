@@ -17,11 +17,10 @@
 package com.ivianuu.essentials.twilight
 
 import com.airbnb.epoxy.EpoxyController
-import com.ivianuu.epoxyprefs.RadioButtonPreference
 import com.ivianuu.essentials.R
+import com.ivianuu.essentials.ui.epoxy.material.RadioButtonListItem
 import com.ivianuu.essentials.ui.prefs.PrefsController
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
-import com.ivianuu.essentials.util.andTrue
 import com.ivianuu.injekt.inject
 import kotlinx.android.parcel.Parcelize
 
@@ -68,14 +67,13 @@ class TwilightSettingsController : PrefsController() {
         descRes: Int,
         titleRes: Int
     ) {
-        RadioButtonPreference {
-            key(mode.value)
-            titleRes(titleRes)
-            summaryRes(descRes)
-            defaultValue(prefs.twilightMode.get() == mode)
-            isPersistent(false)
-            onClick { prefs.twilightMode.set(mode).andTrue() }
-        }
+        RadioButtonListItem(
+            id = mode.value,
+            value = prefs.twilightMode.get() == mode,
+            titleRes = titleRes,
+            textRes = descRes,
+            onChange = { prefs.twilightMode.set(mode) }
+        )
     }
 
 }
