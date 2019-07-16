@@ -33,8 +33,7 @@ import com.ivianuu.essentials.ui.traveler.popWithResult
 import com.ivianuu.injekt.inject
 
 data class ActivityResultKey(
-    val intent: Intent,
-    override var resultCode: Int = 0
+    val intent: Intent
 ) : ControllerKey(::ActivityResultController, NavOptions().dialog()),
     ResultKey<ActivityResult>
 
@@ -48,14 +47,16 @@ class ActivityResultController : EsController() {
     override fun onCreate() {
         super.onCreate()
 
-        addActivityResultListener(key.resultCode) { requestCode, resultCode, data ->
+        val resultCode = ResultCodes.nextResultCode()
+
+        addActivityResultListener(resultCode) { requestCode, resultCode, data ->
             travelerRouter.popWithResult(
-                key.resultCode,
+                key,
                 ActivityResult(requestCode, resultCode, data)
             )
         }
 
-        startActivityForResult(key.intent, key.resultCode)
+        startActivityForResult(key.intent, resultCode)
     }
 
     override fun onCreateView(

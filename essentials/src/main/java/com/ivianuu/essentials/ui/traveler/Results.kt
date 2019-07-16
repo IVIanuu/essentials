@@ -20,59 +20,30 @@ import com.ivianuu.essentials.util.PublishSubject
 import com.ivianuu.traveler.Router
 import com.ivianuu.traveler.pop
 import com.ivianuu.traveler.push
-import io.reactivex.Observable
 import kotlinx.coroutines.rx2.awaitFirst
-import kotlin.reflect.KClass
 
-// todo remove
+interface ResultKey<T>
 
-private data class Result(
-    val resultCode: Int,
-    val result: Any
-)
-
-private val results =
-    PublishSubject<Result>()
-
-interface ResultKey<T> {
-    var resultCode: Int
-}
-
-private var resultCodes = 0
-
-@PublishedApi
-internal fun getResultCodes() = ++resultCodes
-
-suspend inline fun <reified T : Any> Router.pushForResult(
+suspend fun <T> Router.pushForResult(
     key: ResultKey<T>,
-    resultCode: Int = getResultCodes(),
     data: Any? = null
 ): T {
-    key.resultCode = resultCode
     push(key, data)
-    return results<T>(resultCode).awaitFirst()
-}
-
-inline fun <reified T : Any> Router.results(resultCode: Int): Observable<T> =
-    results(T::class, resultCode)
-
-fun <T : Any> Router.results(type: KClass<T>, resultCode: Int): Observable<T> {
     return results
-        .filter { it.resultCode == resultCode }
-        .map { it.result }
-        .ofType(type.java)
+        .filter { it.key == key }
+        .awaitFirst()
+        .result as T
 }
 
-fun Router.sendResult(resultCode: Int, result: Any) {
-    results.onNext(
-        Result(
-            resultCode,
-            result
-        )
-    )
-}
-
-fun Router.popWithResult(resultCode: Int, result: Any) {
+fun <T> Router.popWithResult(key: ResultKey<T>, result: T) {
     pop()
-    sendResult(resultCode, result)
+    results.onNext(Result(key, result))
 }
+
+private val results =
+    PublishSubject<Result<out Any?>>()
+
+internal data class Result<T>(
+    val key: ResultKey<T>,
+    val result: T
+)

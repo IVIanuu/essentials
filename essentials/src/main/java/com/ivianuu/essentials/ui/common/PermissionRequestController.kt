@@ -32,8 +32,7 @@ import com.ivianuu.essentials.ui.traveler.popWithResult
 import com.ivianuu.injekt.inject
 
 data class PermissionRequestKey(
-    val permissions: Set<String>,
-    override var resultCode: Int = 0
+    val permissions: Set<String>
 ) : ControllerKey(::PermissionRequestController, NavOptions().dialog()),
     ResultKey<PermissionResult>
 
@@ -47,13 +46,14 @@ class PermissionRequestController : EsController() {
     override fun onCreate() {
         super.onCreate()
 
-        addPermissionResultListener(key.resultCode) { requestCode, permissions, grantResults ->
+        val resultCode = ResultCodes.nextResultCode()
+
+        addPermissionResultListener(resultCode) { requestCode, permissions, grantResults ->
             travelerRouter.popWithResult(
-                key.resultCode,
-                PermissionResult(requestCode, permissions.toSet(), grantResults)
+                key, PermissionResult(requestCode, permissions.toSet(), grantResults)
             )
         }
-        requestPermissions(key.permissions.toTypedArray(), key.resultCode)
+        requestPermissions(key.permissions.toTypedArray(), resultCode)
     }
 
     override fun onCreateView(

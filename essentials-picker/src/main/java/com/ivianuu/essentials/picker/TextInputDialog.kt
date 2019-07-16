@@ -35,8 +35,7 @@ data class TextInputKey(
     val inputHint: String = "",
     val inputType: Int = -1,
     val prefill: String = "",
-    val allowEmptyInput: Boolean = false,
-    override var resultCode: Int = 0
+    val allowEmptyInput: Boolean = false
 ) : ControllerKey(::TextInputDialog, NavOptions().dialog()),
     ResultKey<String>
 
@@ -54,7 +53,7 @@ class TextInputDialog : EsDialogController() {
             prefill = key.prefill,
             inputType = key.inputType
         ) { _, input ->
-            travelerRouter.popWithResult(key.resultCode, input.toString())
+            travelerRouter.popWithResult(key, input.toString())
         }
         positiveButton(R.string.es_ok)
         negativeButton(R.string.es_cancel) { travelerRouter.pop() }

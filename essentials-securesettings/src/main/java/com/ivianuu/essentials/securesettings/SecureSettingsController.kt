@@ -31,8 +31,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class SecureSettingsKey(
-    val showHideNavBarHint: Boolean = false,
-    override var resultCode: Int = 0
+    val showHideNavBarHint: Boolean = false
 ) : ControllerKey(::SecureSettingsController), ResultKey<Boolean>
 
 /**
@@ -105,7 +104,7 @@ class SecureSettingsController : PrefsController() {
     private fun handlePermissionResult(success: Boolean) {
         if (success) {
             toaster.toast(R.string.es_secure_settings_permission_granted)
-            travelerRouter.popWithResult(key.resultCode, true)
+            travelerRouter.popWithResult(key, true)
         } else {
             toaster.toast(R.string.es_secure_settings_permission_denied)
         }

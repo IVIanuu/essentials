@@ -44,8 +44,7 @@ import com.ivianuu.injekt.Inject
 import com.ivianuu.traveler.Router
 
 data class AppPickerKey(
-    val launchableOnly: Boolean = false,
-    override var resultCode: Int = 0
+    val launchableOnly: Boolean = false
 ) : ControllerKey(::AppPickerController), ResultKey<AppInfo>
 
 /**
@@ -111,7 +110,7 @@ internal class AppPickerViewModel(
     }
 
     fun appClicked(appInfo: AppInfo) {
-        router.popWithResult(key.resultCode, appInfo)
+        router.popWithResult(key, appInfo)
     }
 }
 

@@ -32,8 +32,7 @@ data class ColorPickerKey(
     val titleRes: Int = R.string.es_dialog_title_color_picker,
     val preselect: Int = 0,
     val allowCustomArgb: Boolean = true,
-    val showAlphaSelector: Boolean = false,
-    override var resultCode: Int = 0
+    val showAlphaSelector: Boolean = false
 ) : ControllerKey(::ColorPickerDialog, NavOptions().dialog()),
     ResultKey<Int>
 
@@ -52,7 +51,7 @@ class ColorPickerDialog : EsDialogController() {
             initialSelection = if (key.preselect != 0) key.preselect else null,
             allowCustomArgb = key.allowCustomArgb,
             showAlphaSelector = key.showAlphaSelector
-        ) { _, color -> travelerRouter.popWithResult(key.resultCode, color) }
+        ) { _, color -> travelerRouter.popWithResult(key, color) }
         negativeButton(R.string.es_cancel)
     }
 
