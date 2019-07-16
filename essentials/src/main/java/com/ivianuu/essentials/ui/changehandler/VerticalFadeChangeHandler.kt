@@ -47,6 +47,8 @@ class VerticalFadeChangeHandler(
         return animator
     }
 
+    override fun copy() = VerticalFadeChangeHandler(duration, removesFromViewOnPush)
+
 }
 
 fun ControllerNavOptions.verticalFade(

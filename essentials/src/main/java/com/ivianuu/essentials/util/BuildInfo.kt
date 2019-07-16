@@ -16,4 +16,7 @@
 
 package com.ivianuu.essentials.util
 
-data class BuildInfo(val isDebug: Boolean)
+data class BuildInfo(
+    val isDebug: Boolean,
+    val packageName: String
+)

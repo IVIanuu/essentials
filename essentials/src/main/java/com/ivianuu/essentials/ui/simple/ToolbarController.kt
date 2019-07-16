@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.ui.simple
 
 import android.graphics.PorterDuff
-import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.widget.Toolbar
@@ -30,8 +29,8 @@ import com.ivianuu.essentials.util.getPrimaryTextColor
 import com.ivianuu.essentials.util.getSecondaryTextColor
 import com.ivianuu.essentials.util.isLight
 import com.ivianuu.traveler.pop
-import kotlinx.android.synthetic.main.es_controller_tabs.es_app_bar
-import kotlinx.android.synthetic.main.es_view_toolbar.es_toolbar
+import kotlinx.android.synthetic.main.es_controller_tabs.*
+import kotlinx.android.synthetic.main.es_view_toolbar.*
 
 /**
  * A controller which hosts a toolbar
@@ -52,8 +51,8 @@ abstract class ToolbarController : CoordinatorController() {
 
     protected open val lightToolbar: Boolean get() = getPrimaryColor().isLight
 
-    override fun onViewCreated(view: View, savedViewState: Bundle?) {
-        super.onViewCreated(view, savedViewState)
+    override fun onViewCreated(view: View) {
+        super.onViewCreated(view)
 
         with(toolbar) {
             when {

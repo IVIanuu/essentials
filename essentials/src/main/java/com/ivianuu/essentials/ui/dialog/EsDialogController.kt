@@ -19,10 +19,11 @@ package com.ivianuu.essentials.ui.dialog
 import android.content.Context
 import android.view.View
 import com.ivianuu.director.common.DialogController
+import com.ivianuu.director.requireActivity
 import com.ivianuu.essentials.injection.childControllerComponent
 import com.ivianuu.essentials.injection.controllerComponent
 import com.ivianuu.essentials.ui.mvrx.MvRxView
-import com.ivianuu.essentials.ui.traveler.key.keyModule
+import com.ivianuu.essentials.ui.traveler.key.controllerKeyModule
 import com.ivianuu.essentials.util.ContextAware
 import com.ivianuu.essentials.util.unsafeLazy
 import com.ivianuu.injekt.InjektTrait
@@ -39,19 +40,19 @@ abstract class EsDialogController : DialogController(), ContextAware, InjektTrai
     override val component by unsafeLazy {
         if (parentController != null) {
             childControllerComponent {
-                modules(keyModule(args))
+                modules(controllerKeyModule())
                 modules(this@EsDialogController.modules())
             }
         } else {
             controllerComponent {
-                modules(keyModule(args))
+                modules(controllerKeyModule())
                 modules(this@EsDialogController.modules())
             }
         }
     }
 
     override val providedContext: Context
-        get() = activity
+        get() = requireActivity()
 
     val travelerRouter by inject<Router>()
 

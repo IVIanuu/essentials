@@ -16,7 +16,6 @@
 
 package com.ivianuu.essentials.sample.ui.counter
 
-import android.os.Bundle
 import android.transition.ChangeBounds
 import android.transition.ChangeTransform
 import android.transition.Slide
@@ -31,10 +30,8 @@ import com.ivianuu.essentials.ui.traveler.NavOptions
 import com.ivianuu.essentials.ui.traveler.handler
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
 import com.ivianuu.kommon.core.transition.transitionSetOf
-import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.controller_counter.*
 
-@Parcelize
 data class CounterKey(val screen: Int) :
     ControllerKey(::CounterController, NavOptions().handler(CounterChangeHandler()))
 
@@ -50,6 +47,8 @@ class CounterChangeHandler : SharedElementTransitionChangeHandler() {
     override fun configureSharedElements(changeData: ChangeData) {
         addSharedElement("count")
     }
+
+    override fun copy() = CounterChangeHandler()
 }
 
 class CounterController : EsController() {
@@ -58,8 +57,8 @@ class CounterController : EsController() {
 
     private val viewModel: CounterViewModel by injectMvRxViewModel()
 
-    override fun onViewCreated(view: View, savedViewState: Bundle?) {
-        super.onViewCreated(view, savedViewState)
+    override fun onViewCreated(view: View) {
+        super.onViewCreated(view)
 
         screen_up.setOnClickListener { viewModel.screenUpClicked() }
         screen_down.setOnClickListener { viewModel.screenDownClicked() }

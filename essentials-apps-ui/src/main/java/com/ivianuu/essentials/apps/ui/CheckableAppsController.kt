@@ -16,7 +16,6 @@
 
 package com.ivianuu.essentials.apps.ui
 
-import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
@@ -72,8 +71,8 @@ abstract class CheckableAppsController : ListController() {
         get { parametersOf(launchableAppsOnly) }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onCreate() {
+        super.onCreate()
         viewModel.checkedAppsChanged
             .subscribe { onCheckedAppsChanged(it) }
             .disposeBy(onDestroy)

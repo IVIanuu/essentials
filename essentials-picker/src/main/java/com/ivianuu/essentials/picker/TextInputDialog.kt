@@ -16,21 +16,20 @@
 
 package com.ivianuu.essentials.picker
 
-import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.ViewGroup
 import com.afollestad.materialdialogs.input.input
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.dialog.EsDialogController
+import com.ivianuu.essentials.ui.dialog.dialog
 import com.ivianuu.essentials.ui.traveler.NavOptions
+import com.ivianuu.essentials.ui.traveler.ResultKey
 import com.ivianuu.essentials.ui.traveler.dialog
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
-import com.ivianuu.essentials.ui.traveler.ResultKey
-import com.ivianuu.essentials.ui.dialog.dialog
 import com.ivianuu.essentials.ui.traveler.popWithResult
 import com.ivianuu.injekt.get
 import com.ivianuu.traveler.pop
-import kotlinx.android.parcel.Parcelize
 
-@Parcelize
 data class TextInputKey(
     val title: String,
     val inputHint: String = "",
@@ -46,7 +45,7 @@ data class TextInputKey(
  */
 class TextInputDialog : EsDialogController() {
 
-    override fun onCreateDialog(savedViewState: Bundle?) = dialog {
+    override fun onCreateDialog(inflater: LayoutInflater, container: ViewGroup) = dialog {
         val key = get<TextInputKey>()
         noAutoDismiss()
         title(text = key.title)

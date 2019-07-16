@@ -22,9 +22,7 @@ import com.ivianuu.essentials.ui.epoxy.RadioButtonListItem
 import com.ivianuu.essentials.ui.prefs.PrefsController
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
 import com.ivianuu.injekt.inject
-import kotlinx.android.parcel.Parcelize
 
-@Parcelize
 object TwilightSettingsKey : ControllerKey(::TwilightSettingsController)
 
 class TwilightSettingsController : PrefsController() {

@@ -42,9 +42,7 @@ import com.ivianuu.essentials.util.Success
 import com.ivianuu.essentials.util.Uninitialized
 import com.ivianuu.injekt.Inject
 import com.ivianuu.traveler.Router
-import kotlinx.android.parcel.Parcelize
 
-@Parcelize
 data class AppPickerKey(
     val launchableOnly: Boolean = false,
     override var resultCode: Int = 0

@@ -18,22 +18,20 @@ package com.ivianuu.essentials.ui.common
 
 import android.app.Activity
 import android.content.Intent
-import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.ivianuu.director.activitycallbacks.addActivityResultListener
-import com.ivianuu.director.activitycallbacks.startActivityForResult
+import com.ivianuu.director.common.addActivityResultListener
+import com.ivianuu.director.common.startActivityForResult
+import com.ivianuu.director.requireActivity
 import com.ivianuu.essentials.ui.base.EsController
 import com.ivianuu.essentials.ui.traveler.NavOptions
+import com.ivianuu.essentials.ui.traveler.ResultKey
 import com.ivianuu.essentials.ui.traveler.dialog
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
-import com.ivianuu.essentials.ui.traveler.ResultKey
 import com.ivianuu.essentials.ui.traveler.popWithResult
 import com.ivianuu.injekt.inject
-import kotlinx.android.parcel.Parcelize
 
-@Parcelize
 data class ActivityResultKey(
     val intent: Intent,
     override var resultCode: Int = 0
@@ -47,8 +45,8 @@ class ActivityResultController : EsController() {
 
     private val key by inject<ActivityResultKey>()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onCreate() {
+        super.onCreate()
 
         addActivityResultListener(key.resultCode) { requestCode, resultCode, data ->
             travelerRouter.popWithResult(
@@ -62,9 +60,8 @@ class ActivityResultController : EsController() {
 
     override fun onCreateView(
         inflater: LayoutInflater,
-        container: ViewGroup,
-        savedViewState: Bundle?
-    ): View = View(activity) // dummy
+        container: ViewGroup
+    ): View = View(requireActivity()) // dummy
 
 }
 

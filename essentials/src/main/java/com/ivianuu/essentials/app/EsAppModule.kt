@@ -43,6 +43,10 @@ val esAppModule = module {
     }
 
     single {
-        BuildInfo(get<Application>().applicationInfo.flags.containsFlag(ApplicationInfo.FLAG_DEBUGGABLE))
+        val appInfo = get<Application>().applicationInfo
+        BuildInfo(
+            appInfo.flags.containsFlag(ApplicationInfo.FLAG_DEBUGGABLE),
+            appInfo.packageName
+        )
     }
 }

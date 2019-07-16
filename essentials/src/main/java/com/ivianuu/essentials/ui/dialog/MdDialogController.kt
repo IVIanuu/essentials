@@ -14,22 +14,12 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.util
+package com.ivianuu.essentials.ui.dialog
 
-import android.view.View
-import androidx.lifecycle.lifecycleScope
-import com.ivianuu.director.Controller
-import com.ivianuu.director.requireActivity
-import com.ivianuu.kommon.core.app.hideInputMethod
-import com.ivianuu.kommon.core.app.showInputMethod
+import android.view.LayoutInflater
+import android.view.ViewGroup
+import com.afollestad.materialdialogs.MaterialDialog
 
-val Controller.viewLifecycleScope
-    get() = viewLifecycleOwner.lifecycleScope
-
-fun Controller.hideInputMethod() {
-    requireActivity().hideInputMethod()
-}
-
-fun Controller.showInputMethod(view: View, flags: Int = 0) {
-    requireActivity().showInputMethod(view, flags)
+class MdDialogController(private val block: MaterialDialog.() -> Unit) : EsDialogController() {
+    override fun onCreateDialog(inflater: LayoutInflater, container: ViewGroup) = dialog(block)
 }

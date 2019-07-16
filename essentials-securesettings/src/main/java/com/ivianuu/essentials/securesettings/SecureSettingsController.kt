@@ -16,23 +16,20 @@
 
 package com.ivianuu.essentials.securesettings
 
-import android.os.Bundle
 import androidx.lifecycle.lifecycleScope
 import com.ivianuu.epoxyprefs.Preference
 import com.ivianuu.essentials.ui.changehandler.verticalFade
 import com.ivianuu.essentials.ui.prefs.PrefsController
 import com.ivianuu.essentials.ui.traveler.NavOptions
+import com.ivianuu.essentials.ui.traveler.ResultKey
 import com.ivianuu.essentials.ui.traveler.defaultNavOptionsOrElse
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
-import com.ivianuu.essentials.util.Toaster
-import com.ivianuu.essentials.ui.traveler.ResultKey
 import com.ivianuu.essentials.ui.traveler.popWithResult
+import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.inject
-import kotlinx.android.parcel.Parcelize
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-@Parcelize
 class SecureSettingsKey(
     val showHideNavBarHint: Boolean = false,
     override var resultCode: Int = 0
@@ -50,8 +47,8 @@ class SecureSettingsController : PrefsController() {
     private val secureSettingsHelper by inject<SecureSettingsHelper>()
     private val toaster by inject<Toaster>()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onCreate() {
+        super.onCreate()
 
         lifecycleScope.launch {
             while (true) {

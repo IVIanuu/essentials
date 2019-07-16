@@ -16,14 +16,13 @@
 
 package com.ivianuu.essentials.ui.simple
 
-import android.os.Bundle
 import android.view.View
 import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
 import com.ivianuu.essentials.R
-import kotlinx.android.synthetic.main.es_view_tab_layout.es_tab_layout
-import kotlinx.android.synthetic.main.es_view_view_pager.es_view_pager
+import kotlinx.android.synthetic.main.es_view_tab_layout.*
+import kotlinx.android.synthetic.main.es_view_view_pager.*
 
 /**
  * Controller which hosts a tab layout and a view pager
@@ -41,8 +40,8 @@ abstract class TabsController : ToolbarController() {
 
     protected val adapter by lazy { adapter() }
 
-    override fun onViewCreated(view: View, savedViewState: Bundle?) {
-        super.onViewCreated(view, savedViewState)
+    override fun onViewCreated(view: View) {
+        super.onViewCreated(view)
         viewPager.adapter = adapter
         tabLayout.setupWithViewPager(viewPager)
     }

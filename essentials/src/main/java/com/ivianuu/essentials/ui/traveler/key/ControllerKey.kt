@@ -16,8 +16,9 @@
 
 package com.ivianuu.essentials.ui.traveler.key
 
-import android.os.Bundle
-import android.os.Parcelable
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.get
 import com.ivianuu.director.Controller
 import com.ivianuu.director.RouterTransaction
 import com.ivianuu.director.traveler.ControllerKey
@@ -31,10 +32,10 @@ import com.ivianuu.traveler.Replace
 abstract class ControllerKey(
     val factory: () -> Controller,
     open val defaultNavOptions: ControllerNavOptions? = null
-) : ControllerKey, Parcelable {
+) : ControllerKey {
 
     override fun createController(data: Any?): Controller = factory().also {
-        addTo(it.args)
+        addTo(it)
     }
 
     override fun setupTransaction(
@@ -55,18 +56,27 @@ abstract class ControllerKey(
 
 }
 
-fun com.ivianuu.essentials.ui.traveler.key.ControllerKey.addTo(bundle: Bundle) {
-    bundle.putParcelable(TRAVELER_KEY, this)
-    bundle.putString(TRAVELER_KEY_CLASS, javaClass.name)
+fun ControllerKey.addTo(controller: Controller) {
+    ViewModelProvider(controller, ViewModelProvider.NewInstanceFactory())
+        .get<KeyHolder>()
+        .key = this
 }
 
-fun <T : Parcelable> Controller.getKey(): T = args.getParcelable(TRAVELER_KEY)!!
+fun <T> Controller.getKey(): T {
+    return ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())
+        .get<KeyHolder>()
+        .key as T
+}
 
-fun <T : Parcelable> Controller.getKeyOrNull(): T? = try {
+fun <T> Controller.getKeyOrNull(): T? = try {
     getKey()
 } catch (e: Exception) {
     null
 }
 
-fun <T : Parcelable> Controller.key(): Lazy<T> =
+fun <T> Controller.key(): Lazy<T> =
     unsafeLazy { getKey<T>() }
+
+class KeyHolder : ViewModel() {
+    lateinit var key: Any
+}

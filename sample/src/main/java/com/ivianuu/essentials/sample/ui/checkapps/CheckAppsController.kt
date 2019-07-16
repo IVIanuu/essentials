@@ -25,9 +25,7 @@ import com.ivianuu.kprefs.KPrefs
 import com.ivianuu.kprefs.rx.asObservable
 import com.ivianuu.kprefs.stringSet
 import io.reactivex.Observable
-import kotlinx.android.parcel.Parcelize
 
-@Parcelize
 object CheckAppsKey : ControllerKey(::CheckAppsController, NavOptions().fade())
 
 /**

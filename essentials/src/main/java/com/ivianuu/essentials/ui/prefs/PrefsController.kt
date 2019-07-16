@@ -16,9 +16,13 @@
 
 package com.ivianuu.essentials.ui.prefs
 
-import android.os.Bundle
 import android.view.View
-import com.ivianuu.epoxyprefs.*
+import com.ivianuu.director.requireActivity
+import com.ivianuu.epoxyprefs.AbstractPreferenceModel
+import com.ivianuu.epoxyprefs.EpoxyPrefsPlugins
+import com.ivianuu.epoxyprefs.PreferenceDividerDecoration
+import com.ivianuu.epoxyprefs.PreferenceEpoxyController
+import com.ivianuu.epoxyprefs.preferenceEpoxyController
 import com.ivianuu.essentials.ui.simple.ListController
 import com.ivianuu.essentials.ui.traveler.ControllerNavOptions
 import com.ivianuu.essentials.ui.traveler.key.UrlKey
@@ -31,17 +35,17 @@ import com.ivianuu.traveler.push
 abstract class PrefsController : ListController() {
 
     open val preferenceContext by lazy {
-        EpoxyPrefsPlugins.getDefaultContext(activity)
+        EpoxyPrefsPlugins.getDefaultContext(requireActivity().applicationContext)
     }
 
     protected open val usePreferenceDividerDecoration = true
 
     private val changeListener: (String) -> Unit = { postInvalidate() }
 
-    override fun onViewCreated(view: View, savedViewState: Bundle?) {
-        super.onViewCreated(view, savedViewState)
+    override fun onViewCreated(view: View) {
+        super.onViewCreated(view)
         if (usePreferenceDividerDecoration) {
-            recyclerView.addItemDecoration(PreferenceDividerDecoration(activity))
+            recyclerView.addItemDecoration(PreferenceDividerDecoration(requireActivity()))
         }
     }
 

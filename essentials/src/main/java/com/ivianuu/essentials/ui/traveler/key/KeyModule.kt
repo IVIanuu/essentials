@@ -18,6 +18,8 @@ package com.ivianuu.essentials.ui.traveler.key
 
 import android.os.Bundle
 import android.os.Parcelable
+import com.ivianuu.director.Controller
+import com.ivianuu.injekt.instance
 import com.ivianuu.injekt.module
 import com.ivianuu.injekt.single
 import com.ivianuu.injekt.typeOf
@@ -37,4 +39,9 @@ fun keyModule(
     } else if (throwIfNotAvailable) {
         error("No traveler key in bundle $bundle")
     }
+}
+
+fun Controller.controllerKeyModule() = module {
+    val key = getKey<Any>()
+    instance(key, typeOf(key::class))
 }

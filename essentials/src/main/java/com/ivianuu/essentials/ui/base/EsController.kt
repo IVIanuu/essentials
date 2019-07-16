@@ -17,15 +17,15 @@
 package com.ivianuu.essentials.ui.base
 
 import android.content.Context
-import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.ivianuu.director.Controller
+import com.ivianuu.director.requireActivity
 import com.ivianuu.essentials.injection.childControllerComponent
 import com.ivianuu.essentials.injection.controllerComponent
 import com.ivianuu.essentials.ui.mvrx.MvRxView
-import com.ivianuu.essentials.ui.traveler.key.keyModule
+import com.ivianuu.essentials.ui.traveler.key.controllerKeyModule
 import com.ivianuu.essentials.util.ContextAware
 import com.ivianuu.essentials.util.InjektTraitContextWrapper
 import com.ivianuu.essentials.util.unsafeLazy
@@ -44,19 +44,19 @@ abstract class EsController : Controller(), ContextAware, InjektTrait, LayoutCon
     override val component by unsafeLazy {
         if (parentController != null) {
             childControllerComponent {
-                modules(keyModule(args))
+                modules(controllerKeyModule())
                 modules(this@EsController.modules())
             }
         } else {
             controllerComponent {
-                modules(keyModule(args))
+                modules(controllerKeyModule())
                 modules(this@EsController.modules())
             }
         }
     }
 
     override val providedContext: Context
-        get() = activity
+        get() = requireActivity()
 
     override val containerView: View?
         get() = _containerView
@@ -68,14 +68,13 @@ abstract class EsController : Controller(), ContextAware, InjektTrait, LayoutCon
 
     override fun onCreateView(
         inflater: LayoutInflater,
-        container: ViewGroup,
-        savedViewState: Bundle?
+        container: ViewGroup
     ): View {
         check(layoutRes != -1) { "no layoutRes provided" }
         val injectorInflater =
-            inflater.cloneInContext(InjektTraitContextWrapper(activity, this))
+            inflater.cloneInContext(InjektTraitContextWrapper(requireActivity(), this))
         return injectorInflater.inflate(layoutRes, container, false)
-            .also { setContentView(it, savedViewState) }
+            .also { setContentView(it) }
     }
 
     override fun onAttach(view: View) {
@@ -94,12 +93,12 @@ abstract class EsController : Controller(), ContextAware, InjektTrait, LayoutCon
 
     protected open fun modules(): List<Module> = emptyList()
 
-    protected fun setContentView(view: View, savedViewState: Bundle?) {
+    protected fun setContentView(view: View) {
         _containerView = view
-        onViewCreated(view, savedViewState)
+        onViewCreated(view)
     }
 
-    protected open fun onViewCreated(view: View, savedViewState: Bundle?) {
+    protected open fun onViewCreated(view: View) {
     }
 
 }

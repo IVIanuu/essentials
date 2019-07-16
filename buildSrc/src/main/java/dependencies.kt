@@ -55,7 +55,7 @@ object Versions {
     const val bintray = "1.8.4"
     const val constraintLayout = "2.0.0-beta2"
     const val coroutines = "1.3.0-M2"
-    const val director = "0.0.1-dev-35"
+    const val director = "0.0.1-dev-36"
     const val epoxy = "3.7.0"
     const val epoxyPrefs = "0.0.1-dev-21"
     const val glide = "4.9.0"
@@ -119,10 +119,7 @@ object Deps {
         "org.jetbrains.kotlinx:kotlinx-coroutines-rx2:${Versions.coroutines}"
 
     const val director = "com.ivianuu.director:director:${Versions.director}"
-    const val directorActivityCallbacks =
-        "com.ivianuu.director:director-activitycallbacks:${Versions.director}"
     const val directorCommon = "com.ivianuu.director:director-common:${Versions.director}"
-    const val directorScopes = "com.ivianuu.director:director-scopes:${Versions.director}"
     const val directorTraveler =
         "com.ivianuu.director:director-traveler:${Versions.director}"
 

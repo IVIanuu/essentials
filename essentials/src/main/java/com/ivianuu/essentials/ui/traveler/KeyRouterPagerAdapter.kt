@@ -16,17 +16,20 @@
 
 package com.ivianuu.essentials.ui.traveler
 
-import com.ivianuu.director.*
+import com.ivianuu.director.Router
 import com.ivianuu.director.common.RouterPagerAdapter
+import com.ivianuu.director.hasRoot
+import com.ivianuu.director.setRoot
+import com.ivianuu.director.toTransaction
 import com.ivianuu.director.traveler.ControllerKey
 
 /**
  * A [RouterPagerAdapter] which uses [ControllerKey]s
  */
 open class KeyRouterPagerAdapter(
-    routerManager: RouterManager,
-    private val keys: List<ControllerKey>
-) : RouterPagerAdapter(routerManager) {
+    private val keys: List<ControllerKey>,
+    private val routerFactory: () -> Router
+) : RouterPagerAdapter(routerFactory) {
 
     override fun configureRouter(router: Router, position: Int) {
         if (!router.hasRoot) {

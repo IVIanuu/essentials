@@ -17,13 +17,10 @@
 package com.ivianuu.essentials.ui.base
 
 import android.os.Bundle
-import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import com.ivianuu.director.Router
-import com.ivianuu.director.RouterManager
-import com.ivianuu.director.backstackSize
-import com.ivianuu.director.getRouter
 import com.ivianuu.director.hasRoot
+import com.ivianuu.director.router
 import com.ivianuu.director.traveler.ControllerNavigator
 import com.ivianuu.essentials.ui.mvrx.MvRxView
 import com.ivianuu.essentials.ui.traveler.key.keyModule
@@ -62,8 +59,6 @@ abstract class EsActivity : AppCompatActivity(), InjektTrait, MvRxView {
     open val startKey: Any?
         get() = null
 
-    lateinit var routerManager: RouterManager
-        private set
     lateinit var router: Router
         private set
 
@@ -84,7 +79,6 @@ abstract class EsActivity : AppCompatActivity(), InjektTrait, MvRxView {
             setContentView(layoutRes)
         }
 
-        routerManager = createRouterManager(savedInstanceState)
         router = createRouter()
 
         navigateToStartKeyIfNeeded()
@@ -92,7 +86,6 @@ abstract class EsActivity : AppCompatActivity(), InjektTrait, MvRxView {
 
     override fun onStart() {
         super.onStart()
-        routerManager.onStart()
         invalidate()
     }
 
@@ -101,27 +94,12 @@ abstract class EsActivity : AppCompatActivity(), InjektTrait, MvRxView {
         travelerRouter.setNavigator(this, navigator)
     }
 
-    override fun onStop() {
-        routerManager.onStop()
-        super.onStop()
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        routerManager.saveInstanceState(outState)
-    }
-
     override fun onBackPressed() {
-        if (router.backstackSize > 1) {
+        if (router.backstack.size > 1) {
             travelerRouter.pop()
         } else {
             super.onBackPressed()
         }
-    }
-
-    override fun onDestroy() {
-        routerManager.onDestroy()
-        super.onDestroy()
     }
 
     override fun invalidate() {
@@ -131,13 +109,7 @@ abstract class EsActivity : AppCompatActivity(), InjektTrait, MvRxView {
 
     protected open fun modules(): List<Module> = emptyList()
 
-    protected open fun createRouterManager(savedInstanceState: Bundle?): RouterManager {
-        return RouterManager(this)
-            .also { it.restoreInstanceState(savedInstanceState) }
-    }
-
-    protected open fun createRouter(): Router =
-        routerManager.getRouter(findViewById<ViewGroup>(containerId))
+    protected open fun createRouter(): Router = router(containerId)
 
     protected open fun navigateToStartKeyIfNeeded() {
         if (!router.hasRoot) {

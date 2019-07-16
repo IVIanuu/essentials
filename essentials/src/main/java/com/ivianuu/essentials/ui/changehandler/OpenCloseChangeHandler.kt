@@ -105,6 +105,7 @@ class OpenCloseChangeHandler(
         )
     }
 
+    override fun copy() = OpenCloseChangeHandler(duration, removesFromViewOnPush)
 }
 
 fun ControllerNavOptions.openClose(

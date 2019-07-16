@@ -16,20 +16,18 @@
 
 package com.ivianuu.essentials.securesettings
 
-import android.os.Bundle
 import androidx.lifecycle.lifecycleScope
 import com.ivianuu.epoxyprefs.Preference
 import com.ivianuu.essentials.ui.prefs.PrefsController
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
+import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.essentials.util.string
 import com.ivianuu.injekt.inject
 import com.ivianuu.traveler.pop
-import kotlinx.android.parcel.Parcelize
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-@Parcelize
 object SecureSettingsPcInstructionsKey : ControllerKey(::SecureSettingsPcInstructionsController)
 
 /**
@@ -40,12 +38,13 @@ class SecureSettingsPcInstructionsController : PrefsController() {
     override val toolbarTitleRes: Int
         get() = R.string.es_title_secure_settings_pc_instructions
 
+    private val buildInfo by inject<BuildInfo>()
     private val clipboardHelper by inject<ClipboardAccessor>()
     private val secureSettingsHelper by inject<SecureSettingsHelper>()
     private val toaster by inject<Toaster>()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onCreate() {
+        super.onCreate()
         lifecycleScope.launch {
             while (true) {
                 if (secureSettingsHelper.canWriteSecureSettings()) {
@@ -113,12 +112,12 @@ class SecureSettingsPcInstructionsController : PrefsController() {
             summary(
                 string(
                     R.string.es_pref_secure_settings_step_4_summary,
-                    activity.packageName
+                    buildInfo.packageName
                 )
             )
             onClick {
                 clipboardHelper.clipboardText =
-                    "adb shell pm grant ${activity.packageName} android.permission.WRITE_SECURE_SETTINGS"
+                    "adb shell pm grant ${buildInfo.packageName} android.permission.WRITE_SECURE_SETTINGS"
 
                 toaster.toast(R.string.es_secure_settings_copied_to_clipboard)
                 return@onClick true

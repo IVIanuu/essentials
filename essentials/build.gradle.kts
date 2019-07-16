@@ -66,9 +66,7 @@ dependencies {
     api(Deps.constraintLayout)
 
     api(Deps.director)
-    api(Deps.directorActivityCallbacks)
     api(Deps.directorCommon)
-    api(Deps.directorScopes)
     api(Deps.directorTraveler)
 
     api(Deps.epoxy)

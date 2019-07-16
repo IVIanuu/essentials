@@ -16,12 +16,11 @@
 
 package com.ivianuu.essentials.ui.simple
 
-import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.epoxy.EpoxyController
 import com.ivianuu.essentials.R
-import kotlinx.android.synthetic.main.es_view_recycler_view.es_recycler_view
+import kotlinx.android.synthetic.main.es_view_recycler_view.*
 
 /**
  * Simple controller
@@ -36,8 +35,8 @@ abstract class ListController : ToolbarController() {
 
     protected val epoxyController by lazy { epoxyController() }
 
-    override fun onViewCreated(view: View, savedViewState: Bundle?) {
-        super.onViewCreated(view, savedViewState)
+    override fun onViewCreated(view: View) {
+        super.onViewCreated(view)
         with(recyclerView) {
             adapter = epoxyController.adapter
             layoutManager()?.let { layoutManager = it }

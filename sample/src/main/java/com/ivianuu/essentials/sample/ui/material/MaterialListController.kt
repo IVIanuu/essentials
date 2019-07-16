@@ -33,9 +33,7 @@ import com.ivianuu.essentials.ui.simple.ListController
 import com.ivianuu.essentials.ui.traveler.NavOptions
 import com.ivianuu.essentials.ui.traveler.fade
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
-import kotlinx.android.parcel.Parcelize
 
-@Parcelize
 object MaterialListKey : ControllerKey(::MaterialListController, NavOptions().fade())
 
 class MaterialListController : ListController() {

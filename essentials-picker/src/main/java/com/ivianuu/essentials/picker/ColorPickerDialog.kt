@@ -16,19 +16,18 @@
 
 package com.ivianuu.essentials.picker
 
-import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.ViewGroup
 import com.afollestad.materialdialogs.color.colorChooser
 import com.ivianuu.essentials.ui.dialog.EsDialogController
+import com.ivianuu.essentials.ui.dialog.dialog
 import com.ivianuu.essentials.ui.traveler.NavOptions
+import com.ivianuu.essentials.ui.traveler.ResultKey
 import com.ivianuu.essentials.ui.traveler.dialog
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
-import com.ivianuu.essentials.ui.traveler.ResultKey
-import com.ivianuu.essentials.ui.dialog.dialog
 import com.ivianuu.essentials.ui.traveler.popWithResult
 import com.ivianuu.injekt.inject
-import kotlinx.android.parcel.Parcelize
 
-@Parcelize
 data class ColorPickerKey(
     val titleRes: Int = R.string.es_dialog_title_color_picker,
     val preselect: Int = 0,
@@ -45,7 +44,7 @@ class ColorPickerDialog : EsDialogController() {
 
     private val key by inject<ColorPickerKey>()
 
-    override fun onCreateDialog(savedViewState: Bundle?) = dialog {
+    override fun onCreateDialog(inflater: LayoutInflater, container: ViewGroup) = dialog {
         title(key.titleRes)
         colorChooser(
             colors = PRIMARY_COLORS,

@@ -17,22 +17,20 @@
 package com.ivianuu.essentials.ui.common
 
 import android.content.pm.PackageManager
-import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.ivianuu.director.activitycallbacks.addPermissionResultListener
-import com.ivianuu.director.activitycallbacks.requestPermissions
+import com.ivianuu.director.common.addPermissionResultListener
+import com.ivianuu.director.common.requestPermissions
+import com.ivianuu.director.requireActivity
 import com.ivianuu.essentials.ui.base.EsController
 import com.ivianuu.essentials.ui.traveler.NavOptions
+import com.ivianuu.essentials.ui.traveler.ResultKey
 import com.ivianuu.essentials.ui.traveler.dialog
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
-import com.ivianuu.essentials.ui.traveler.ResultKey
 import com.ivianuu.essentials.ui.traveler.popWithResult
 import com.ivianuu.injekt.inject
-import kotlinx.android.parcel.Parcelize
 
-@Parcelize
 data class PermissionRequestKey(
     val permissions: Set<String>,
     override var resultCode: Int = 0
@@ -46,8 +44,8 @@ class PermissionRequestController : EsController() {
 
     private val key by inject<PermissionRequestKey>()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onCreate() {
+        super.onCreate()
 
         addPermissionResultListener(key.resultCode) { requestCode, permissions, grantResults ->
             travelerRouter.popWithResult(
@@ -60,9 +58,8 @@ class PermissionRequestController : EsController() {
 
     override fun onCreateView(
         inflater: LayoutInflater,
-        container: ViewGroup,
-        savedViewState: Bundle?
-    ): View = View(activity) // dummy
+        container: ViewGroup
+    ): View = View(requireActivity()) // dummy
 
 }
 

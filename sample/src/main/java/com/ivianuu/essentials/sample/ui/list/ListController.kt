@@ -27,9 +27,7 @@ import com.ivianuu.essentials.ui.traveler.NavOptions
 import com.ivianuu.essentials.ui.traveler.horizontal
 import com.ivianuu.essentials.ui.traveler.key.ControllerKey
 import com.ivianuu.essentials.util.andTrue
-import kotlinx.android.parcel.Parcelize
 
-@Parcelize
 object ListKey : ControllerKey(::ListController, NavOptions().horizontal())
 
 class ListController : com.ivianuu.essentials.ui.simple.ListController() {
