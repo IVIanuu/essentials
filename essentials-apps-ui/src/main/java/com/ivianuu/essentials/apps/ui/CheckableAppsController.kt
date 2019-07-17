@@ -28,11 +28,11 @@ import com.ivianuu.essentials.apps.AppStore
 import com.ivianuu.essentials.apps.glide.AppIcon
 import com.ivianuu.essentials.ui.epoxy.CheckboxListItem
 import com.ivianuu.essentials.ui.epoxy.SimpleLoading
-import com.ivianuu.essentials.ui.menu.PopupMenu
-import com.ivianuu.essentials.ui.menu.PopupMenuItem
 import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
 import com.ivianuu.essentials.ui.mvrx.epoxy.mvRxEpoxyController
 import com.ivianuu.essentials.ui.mvrx.mvRxViewModel
+import com.ivianuu.essentials.ui.popup.PopupMenu
+import com.ivianuu.essentials.ui.popup.PopupMenuItem
 import com.ivianuu.essentials.ui.simple.ListController
 import com.ivianuu.essentials.util.AppDispatchers
 import com.ivianuu.essentials.util.AppSchedulers

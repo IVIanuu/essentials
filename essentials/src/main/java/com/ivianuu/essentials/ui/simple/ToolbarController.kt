@@ -25,8 +25,8 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.view.children
 import com.google.android.material.appbar.AppBarLayout
 import com.ivianuu.essentials.R
-import com.ivianuu.essentials.ui.menu.PopupMenu
-import com.ivianuu.essentials.ui.menu.show
+import com.ivianuu.essentials.ui.popup.PopupMenu
+import com.ivianuu.essentials.ui.popup.show
 import com.ivianuu.essentials.util.drawable
 import com.ivianuu.essentials.util.getIconColor
 import com.ivianuu.essentials.util.getPrimaryColor

@@ -20,9 +20,9 @@ import android.graphics.drawable.Drawable
 import android.view.Gravity
 import com.airbnb.epoxy.EpoxyController
 import com.ivianuu.essentials.R
-import com.ivianuu.essentials.ui.menu.PopupMenu
-import com.ivianuu.essentials.ui.menu.PopupMenuItem
-import com.ivianuu.essentials.ui.menu.show
+import com.ivianuu.essentials.ui.popup.PopupMenu
+import com.ivianuu.essentials.ui.popup.PopupMenuItem
+import com.ivianuu.essentials.ui.popup.show
 import kotlinx.android.synthetic.main.es_list_widget_menu.*
 
 fun <T> EpoxyController.PopupMenuListItem(

@@ -14,18 +14,26 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.menu
+package com.ivianuu.essentials.ui.popup
 
 import android.view.Gravity
 import android.view.View
 import com.github.ajalt.timberkt.d
+import com.ivianuu.essentials.R
 
 data class PopupMenu<T>(
     val gravity: Int = Gravity.NO_GRAVITY,
-    val style: Int = 0,
+    val style: Int = R.attr.popupMenuStyle,
     val items: List<PopupMenuItem<T>>,
     val onCanceled: (() -> Unit)? = null,
     val onSelected: (T) -> Unit
+)
+
+data class PopupMenuItem<T>(
+    val value: T,
+    val title: String? = null,
+    val titleRes: Int? = null,
+    val onSelected: (() -> Unit)? = null
 )
 
 fun <T> PopupMenu<T>.show(view: View) {

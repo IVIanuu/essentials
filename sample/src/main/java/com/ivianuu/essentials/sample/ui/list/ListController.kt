@@ -19,13 +19,13 @@ package com.ivianuu.essentials.sample.ui.list
 import com.ivianuu.essentials.ui.epoxy.ListItem
 import com.ivianuu.essentials.ui.epoxy.SimpleLoading
 import com.ivianuu.essentials.ui.epoxy.SimpleText
-import com.ivianuu.essentials.ui.menu.PopupMenu
-import com.ivianuu.essentials.ui.menu.PopupMenuItem
 import com.ivianuu.essentials.ui.mvrx.epoxy.mvRxEpoxyController
 import com.ivianuu.essentials.ui.mvrx.injekt.injectMvRxViewModel
 import com.ivianuu.essentials.ui.navigation.director.controllerRoute
 import com.ivianuu.essentials.ui.navigation.director.controllerRouteOptions
 import com.ivianuu.essentials.ui.navigation.director.fade
+import com.ivianuu.essentials.ui.popup.PopupMenu
+import com.ivianuu.essentials.ui.popup.PopupMenuItem
 import com.ivianuu.injekt.Inject
 
 val listRoute = controllerRoute<ListController>(options = controllerRouteOptions().fade())
