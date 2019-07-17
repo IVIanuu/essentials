@@ -52,6 +52,8 @@ fun EpoxyController.SingleItemListDialogListItem(
     entryValues: Array<String>? = null,
     entryValuesRes: Int? = null,
 
+    enabled: Boolean = true,
+
     dialogBlock: (MaterialDialog.() -> Unit)? = null,
     builderBlock: (FunModelBuilder.() -> Unit)? = null
 ) = DialogListItem(
@@ -100,6 +102,7 @@ fun EpoxyController.SingleItemListDialogListItem(
     iconRes = iconRes,
     avatar = avatar,
     avatarRes = avatarRes,
+    enabled = enabled,
     builderBlock = {
         state(value)
         state(dialogTitle, dialogTitleRes)
@@ -141,6 +144,8 @@ fun EpoxyController.SingleItemListDialogListItem(
     entryValues: Array<String>? = null,
     entryValuesRes: Int? = null,
 
+    enabled: Boolean = true,
+
     dialogBlock: (MaterialDialog.() -> Unit)? = null,
     builderBlock: (FunModelBuilder.() -> Unit)? = null
 ) = SingleItemListDialogListItem(
@@ -167,6 +172,7 @@ fun EpoxyController.SingleItemListDialogListItem(
     entriesRes = entriesRes,
     entryValues = entryValues,
     entryValuesRes = entryValuesRes,
+    enabled = enabled,
     dialogBlock = dialogBlock,
     builderBlock = builderBlock
 )

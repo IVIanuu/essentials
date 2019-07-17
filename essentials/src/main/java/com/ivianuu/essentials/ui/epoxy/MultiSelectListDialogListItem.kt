@@ -54,6 +54,8 @@ fun EpoxyController.MultiSelectListDialogListItem(
     entryValues: Array<String>? = null,
     entryValuesRes: Int? = null,
 
+    enabled: Boolean = true,
+
     dialogBlock: (MaterialDialog.() -> Unit)? = null,
     builderBlock: (FunModelBuilder.() -> Unit)? = null
 ) = DialogListItem(
@@ -108,6 +110,7 @@ fun EpoxyController.MultiSelectListDialogListItem(
     iconRes = iconRes,
     avatar = avatar,
     avatarRes = avatarRes,
+    enabled = enabled,
     builderBlock = {
         state(values)
         state(dialogTitle, dialogTitleRes)
@@ -152,6 +155,8 @@ fun EpoxyController.MultiSelectListDialogListItem(
     entryValues: Array<String>? = null,
     entryValuesRes: Int? = null,
 
+    enabled: Boolean = true,
+
     dialogBlock: (MaterialDialog.() -> Unit)? = null,
     builderBlock: (FunModelBuilder.() -> Unit)? = null
 ) = MultiSelectListDialogListItem(
@@ -180,6 +185,7 @@ fun EpoxyController.MultiSelectListDialogListItem(
     entriesRes = entriesRes,
     entryValues = entryValues,
     entryValuesRes = entryValuesRes,
+    enabled = enabled,
     dialogBlock = dialogBlock,
     builderBlock = builderBlock
 )

@@ -40,6 +40,8 @@ fun EpoxyController.SwitchListItem(
     avatar: Drawable? = null,
     avatarRes: Int? = null,
 
+    enabled: Boolean = true,
+
     builderBlock: (FunModelBuilder.() -> Unit)? = null
 ) = CompoundButtonListItem(
     id = id,
@@ -54,6 +56,7 @@ fun EpoxyController.SwitchListItem(
     avatar = avatar,
     avatarRes = avatarRes,
     builderBlock = builderBlock,
+    enabled = enabled,
     widgetLayoutRes = R.layout.es_list_widget_switch,
     compoundButtonProvider = { es_list_widget_switch }
 )

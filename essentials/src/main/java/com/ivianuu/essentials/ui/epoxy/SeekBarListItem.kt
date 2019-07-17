@@ -48,6 +48,8 @@ fun EpoxyController.SeekBarListItem(
     avatar: Drawable? = null,
     avatarRes: Int? = null,
 
+    enabled: Boolean = true,
+
     builderBlock: (FunModelBuilder.() -> Unit)? = null
 ) = ListItem(
     id = id,
@@ -59,6 +61,7 @@ fun EpoxyController.SeekBarListItem(
     iconRes = iconRes,
     avatar = avatar,
     avatarRes = avatarRes,
+    enabled = enabled,
     builderBlock = {
         state(value, onChange != null, max, min, inc, valueTextProvider != null)
 

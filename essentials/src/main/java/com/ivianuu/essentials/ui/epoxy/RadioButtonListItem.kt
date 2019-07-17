@@ -42,6 +42,8 @@ fun EpoxyController.RadioButtonListItem(
     avatar: Drawable? = null,
     avatarRes: Int? = null,
 
+    enabled: Boolean = true,
+
     builderBlock: (FunModelBuilder.() -> Unit)? = null
 ) = CompoundButtonListItem(
     id = id,
@@ -55,6 +57,7 @@ fun EpoxyController.RadioButtonListItem(
     iconRes = iconRes,
     avatar = avatar,
     avatarRes = avatarRes,
+    enabled = enabled,
     builderBlock = builderBlock,
     widgetLayoutRes = R.layout.es_list_widget_radio_button,
     compoundButtonProvider = { es_list_widget_radio_button }
@@ -79,6 +82,8 @@ fun EpoxyController.RadioButtonListItem(
     avatar: Drawable? = null,
     avatarRes: Int? = null,
 
+    enabled: Boolean = true,
+
     builderBlock: (FunModelBuilder.() -> Unit)? = null
 ) = RadioButtonListItem(
     id = id,
@@ -96,5 +101,6 @@ fun EpoxyController.RadioButtonListItem(
     iconRes = iconRes,
     avatar = avatar,
     avatarRes = avatarRes,
+    enabled = enabled,
     builderBlock = builderBlock
 )

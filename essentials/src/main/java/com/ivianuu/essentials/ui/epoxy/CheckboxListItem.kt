@@ -40,6 +40,8 @@ fun EpoxyController.CheckboxListItem(
     avatar: Drawable? = null,
     avatarRes: Int? = null,
 
+    enabled: Boolean = true,
+
     builderBlock: (FunModelBuilder.() -> Unit)? = null
 ) = CompoundButtonListItem(
     id = id,
@@ -54,6 +56,7 @@ fun EpoxyController.CheckboxListItem(
     avatar = avatar,
     avatarRes = avatarRes,
     builderBlock = builderBlock,
+    enabled = enabled,
     widgetLayoutRes = R.layout.es_list_widget_checkbox,
     compoundButtonProvider = { es_list_widget_checkbox }
 )
@@ -77,6 +80,8 @@ fun EpoxyController.CheckboxListItem(
     avatar: Drawable? = null,
     avatarRes: Int? = null,
 
+    enabled: Boolean = true,
+
     builderBlock: (FunModelBuilder.() -> Unit)? = null
 ) = CheckboxListItem(
     id = id,
@@ -94,5 +99,6 @@ fun EpoxyController.CheckboxListItem(
     iconRes = iconRes,
     avatar = avatar,
     avatarRes = avatarRes,
+    enabled = enabled,
     builderBlock = builderBlock
 )

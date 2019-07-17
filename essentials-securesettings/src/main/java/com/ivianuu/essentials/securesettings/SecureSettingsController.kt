@@ -17,8 +17,9 @@
 package com.ivianuu.essentials.securesettings
 
 import androidx.lifecycle.lifecycleScope
-import com.ivianuu.epoxyprefs.Preference
 import com.ivianuu.essentials.ui.changehandler.verticalFade
+import com.ivianuu.essentials.ui.epoxy.ListItem
+import com.ivianuu.essentials.ui.epoxy.epoxyController
 import com.ivianuu.essentials.ui.navigation.director.ControllerRoute
 import com.ivianuu.essentials.ui.navigation.director.controllerRoute
 import com.ivianuu.essentials.ui.navigation.director.copy
@@ -64,35 +65,32 @@ class SecureSettingsController(
     }
 
     override fun epoxyController() = epoxyController {
-        Preference {
-            key("secure_settings_header")
-            summaryRes(
-                if (showHideNavBarHint) {
-                    R.string.es_pref_secure_settings_header_hide_nav_bar_summary
-                } else {
-                    R.string.es_pref_secure_settings_header_summary
-                }
-            )
-        }
+        ListItem(
+            id = "secure_settings_header",
+            textRes = if (showHideNavBarHint) R.string.es_pref_secure_settings_header_hide_nav_bar_summary
+            else R.string.es_pref_secure_settings_header_summary
+        )
 
-        Preference {
-            key("use_pc")
-            titleRes(R.string.es_pref_use_pc)
-            summaryRes(R.string.es_pref_use_pc_summary)
-            navigateOnClick {
-                secureSettingsInstructionsRoute.copy(
-                    options = defaultControllerRouteOptionsOrElse {
-                        ControllerRoute.Options().verticalFade()
-                    }
+        ListItem(
+            id = "use_pc",
+            titleRes = R.string.es_pref_use_pc,
+            textRes = R.string.es_pref_use_pc_summary,
+            onClick = {
+                navigator.push(
+                    secureSettingsInstructionsRoute.copy(
+                        options = defaultControllerRouteOptionsOrElse {
+                            ControllerRoute.Options().verticalFade()
+                        }
+                    )
                 )
             }
-        }
+        )
 
-        Preference {
-            key("use_root")
-            titleRes(R.string.es_pref_use_root)
-            summaryRes(R.string.es_pref_use_root_summary)
-            onClick {
+        ListItem(
+            id = "use_root",
+            titleRes = R.string.es_pref_use_root,
+            textRes = R.string.es_pref_use_root_summary,
+            onClick = {
                 lifecycleScope.launch {
                     if (secureSettingsHelper.grantWriteSecureSettings()) {
                         handlePermissionResult(true)
@@ -100,10 +98,8 @@ class SecureSettingsController(
                         toaster.toast(R.string.es_secure_settings_no_root)
                     }
                 }
-
-                return@onClick true
             }
-        }
+        )
     }
 
     private fun handlePermissionResult(success: Boolean) {

@@ -41,6 +41,8 @@ fun EpoxyController.CompoundButtonListItem(
 
     widgetLayoutRes: Int,
 
+    enabled: Boolean = true,
+
     builderBlock: (FunModelBuilder.() -> Unit)? = null
 ) = ToggleableListItem(
     id = id,
@@ -54,6 +56,7 @@ fun EpoxyController.CompoundButtonListItem(
     iconRes = iconRes,
     avatar = avatar,
     avatarRes = avatarRes,
+    enabled = enabled,
     builderBlock = builderBlock,
     widgetLayoutRes = widgetLayoutRes,
     render = { compoundButtonProvider().isChecked = value }

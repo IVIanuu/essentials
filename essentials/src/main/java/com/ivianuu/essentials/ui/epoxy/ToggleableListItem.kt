@@ -40,6 +40,8 @@ fun EpoxyController.ToggleableListItem(
 
     widgetLayoutRes: Int? = null,
 
+    enabled: Boolean = true,
+
     builderBlock: (FunModelBuilder.() -> Unit)? = null
 ) = ListItem(
     id = id,
@@ -53,6 +55,7 @@ fun EpoxyController.ToggleableListItem(
     avatarRes = avatarRes,
     widgetLayoutRes = widgetLayoutRes,
     onClick = { onChange(!value) },
+    enabled = enabled,
     builderBlock = {
         state(value)
         bind { render(value) }

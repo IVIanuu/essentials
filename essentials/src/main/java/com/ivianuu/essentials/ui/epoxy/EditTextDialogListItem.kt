@@ -53,6 +53,8 @@ fun EpoxyController.EditTextDialogListItem(
     negativeDialogButtonText: String? = null,
     negativeDialogButtonTextRes: Int = R.string.es_cancel,
 
+    enabled: Boolean = true,
+
     dialogBlock: (MaterialDialog.() -> Unit)? = null,
     builderBlock: (FunModelBuilder.() -> Unit)? = null
 ) = DialogListItem(
@@ -80,6 +82,7 @@ fun EpoxyController.EditTextDialogListItem(
     iconRes = iconRes,
     avatar = avatar,
     avatarRes = avatarRes,
+    enabled = enabled,
     builderBlock = {
         state(prefill)
         state(dialogTitle, dialogTitleRes)
@@ -119,6 +122,8 @@ fun EpoxyController.EditTextDialogListItem(
     negativeDialogButtonText: String? = null,
     negativeDialogButtonTextRes: Int = R.string.es_cancel,
 
+    enabled: Boolean = true,
+
     dialogBlock: (MaterialDialog.() -> Unit)? = null,
     builderBlock: (FunModelBuilder.() -> Unit)? = null
 ) = EditTextDialogListItem(
@@ -145,6 +150,7 @@ fun EpoxyController.EditTextDialogListItem(
     positiveDialogButtonTextRes = positiveDialogButtonTextRes,
     negativeDialogButtonText = negativeDialogButtonText,
     negativeDialogButtonTextRes = negativeDialogButtonTextRes,
+    enabled = enabled,
     dialogBlock = dialogBlock,
     builderBlock = builderBlock
 )

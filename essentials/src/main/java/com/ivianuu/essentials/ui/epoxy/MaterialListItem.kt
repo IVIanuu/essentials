@@ -47,6 +47,8 @@ fun EpoxyController.ListItem(
     onClick: (() -> Unit)? = null,
     onLongClick: (() -> Unit)? = null,
 
+    enabled: Boolean = true,
+
     builderBlock: (FunModelBuilder.() -> Unit)? = null
 ) = model {
     id(id)
@@ -56,6 +58,7 @@ fun EpoxyController.ListItem(
     state(icon != null, iconRes)
     state(avatar != null, avatarRes)
     state(onClick != null, onLongClick != null)
+    state(enabled)
     state(builderBlock != null)
     if (state != null) state(*state)
 
@@ -83,6 +86,7 @@ fun EpoxyController.ListItem(
                 es_list_title.isVisible = false
             }
         }
+        es_list_title.isEnabled = enabled
 
         when {
             text != null -> {
@@ -98,6 +102,7 @@ fun EpoxyController.ListItem(
                 es_list_text.isVisible = false
             }
         }
+        es_list_text.isEnabled = enabled
 
         when {
             icon != null -> {
@@ -113,6 +118,7 @@ fun EpoxyController.ListItem(
                 es_list_icon.isVisible = false
             }
         }
+        es_list_icon.isEnabled = enabled
 
         when {
             avatar != null -> {
@@ -128,9 +134,15 @@ fun EpoxyController.ListItem(
                 es_list_avatar.isVisible = false
             }
         }
+        es_list_avatar.isEnabled = enabled
 
         es_list_image_frame.isVisible =
             es_list_icon.isVisible || es_list_avatar.isVisible
+
+        es_list_widget_container.isEnabled = enabled
+        (0 until es_list_widget_container.childCount)
+            .map { es_list_widget_container.getChildAt(it) }
+            .forEach { it.isEnabled = enabled }
 
         if (onClick != null) {
             root.setOnClickListener { onClick() }
@@ -144,7 +156,7 @@ fun EpoxyController.ListItem(
             root.setOnLongClickListener(null)
         }
 
-        root.isEnabled = onClick != null || onLongClick != null
+        root.isEnabled = enabled && (onClick != null || onLongClick != null)
     }
 
     builderBlock?.invoke(this)

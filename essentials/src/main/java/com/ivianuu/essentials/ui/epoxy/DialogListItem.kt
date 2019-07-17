@@ -38,6 +38,8 @@ fun EpoxyController.DialogListItem(
     avatar: Drawable? = null,
     avatarRes: Int? = null,
 
+    enabled: Boolean = true,
+
     builderBlock: (FunModelBuilder.() -> Unit)? = null
 ) = ListItem(
     id = id,
@@ -49,6 +51,7 @@ fun EpoxyController.DialogListItem(
     iconRes = iconRes,
     avatar = avatar,
     avatarRes = avatarRes,
+    enabled = enabled,
     builderBlock = {
         bind {
             root.isEnabled = true
