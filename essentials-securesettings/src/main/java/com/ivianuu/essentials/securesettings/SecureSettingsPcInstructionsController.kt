@@ -16,8 +16,11 @@
 
 package com.ivianuu.essentials.securesettings
 
+import android.content.Intent
+import android.provider.Settings
 import androidx.lifecycle.lifecycleScope
 import com.ivianuu.essentials.ui.epoxy.ClipboardListItem
+import com.ivianuu.essentials.ui.epoxy.IntentListItem
 import com.ivianuu.essentials.ui.epoxy.ListItem
 import com.ivianuu.essentials.ui.epoxy.UrlListItem
 import com.ivianuu.essentials.ui.epoxy.epoxyController
@@ -63,21 +66,24 @@ internal class SecureSettingsPcInstructionsController(
             textRes = R.string.es_pref_secure_settings_pc_instructions_header_summary
         )
 
-        ListItem(
+        IntentListItem(
             id = "secure_settings_step_1",
             titleRes = R.string.es_pref_secure_settings_step_1,
-            textRes = R.string.es_pref_secure_settings_step_1_summary
+            textRes = R.string.es_pref_secure_settings_step_1_summary,
+            intent = { Intent(Settings.ACTION_DEVICE_INFO_SETTINGS) }
         )
 
-        ListItem(
+        IntentListItem(
             id = "secure_settings_step_2",
             titleRes = R.string.es_pref_secure_settings_step_2,
-            textRes = R.string.es_pref_secure_settings_step_2_summary
+            textRes = R.string.es_pref_secure_settings_step_2_summary,
+            intent = { Intent(Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS) }
         )
 
         ListItem(
             id = "secure_settings_step_3",
-            titleRes = R.string.es_pref_secure_settings_step_3
+            titleRes = R.string.es_pref_secure_settings_step_3,
+            textRes = R.string.es_pref_secure_settings_step_3_summary
         )
 
         UrlListItem(

@@ -30,15 +30,16 @@
     <string name="es_pref_secure_settings_pc_instructions_header_summary">Follow the instructions to grant the permission with a PC (Windows, Mac or Linux)</string>
 
     <string name="es_pref_secure_settings_step_1">1 - Activate the developer options</string>
-    <string name="es_pref_secure_settings_step_1_summary">Go to Android-Settings -> Phone Info -> Search for Build Number and tap multiple times until the Developer options are active.</string>
+    <string name="es_pref_secure_settings_step_1_summary">Go to Android-Settings -> Phone Info -> Search for Build Number and tap multiple times until the Developer options are active. Click to open</string>
 
     <string name="es_pref_secure_settings_step_2">2 - Enable USB-Debugging</string>
-    <string name="es_pref_secure_settings_step_2_summary">Go to Android-Settings -> Developer Options -> Enable USB-Debugging</string>
+    <string name="es_pref_secure_settings_step_2_summary">Go to Android-Settings -> Developer Options -> Enable USB-Debugging. Click to open</string>
 
     <string name="es_pref_secure_settings_step_3">3 - Install ADB on your PC</string>
-    <string name="es_pref_secure_settings_link_gadget_hacks_summary">Gadget-Hacks - Run adb commands using Google Chrome</string>
-    <string name="es_pref_secure_settings_link_lifehacker_summary">Lifehacker - The Easiest Way to Install Android ADB</string>
-    <string name="es_pref_secure_settings_link_xda_summary">XDA Developers - How to Install ADB on Windows, macOS and Linux</string>
+    <string name="es_pref_secure_settings_step_3_summary">Use one of the following tutorials to learn more about how to install ADB</string>
+    <string name="es_pref_secure_settings_link_gadget_hacks_summary">Gadget-Hacks (click to open)</string>
+    <string name="es_pref_secure_settings_link_lifehacker_summary">Lifehacker (click to open)</string>
+    <string name="es_pref_secure_settings_link_xda_summary">XDA Developers (click to open)</string>
 
     <string name="es_pref_secure_settings_step_4">4 - Execute the ADB Command</string>
     <string name="es_pref_secure_settings_step_4_summary">adb shell pm grant %s android.permission.WRITE_SECURE_SETTINGS\n\n(click to copy)</string>

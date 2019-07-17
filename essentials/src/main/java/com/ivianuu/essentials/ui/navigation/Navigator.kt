@@ -35,7 +35,7 @@ class Navigator {
 
     @JvmName("pushWithoutResult")
     fun push(route: Route) {
-        push(route)
+        push<Any?>(route)
     }
 
     fun <T> push(route: Route): Deferred<T?> = synchronized(this) {
