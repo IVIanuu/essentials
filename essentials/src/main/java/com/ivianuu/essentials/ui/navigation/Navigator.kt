@@ -39,12 +39,6 @@ class Navigator {
     }
 
     fun push(route: Route): Deferred<Any?> = synchronized(this) {
-        d { "push route $route" }
-        try {
-            error("")
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
         val newBackStack = backStack.toMutableList()
         newBackStack.add(route)
         setBackStack(newBackStack)
@@ -59,12 +53,6 @@ class Navigator {
     fun pop(result: Any? = null) = synchronized(this) {
         val newBackStack = backStack.toMutableList()
         val removedRoute = newBackStack.removeAt(backStack.lastIndex)
-        d { "pop route $removedRoute" }
-        try {
-            error("")
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
         setBackStack(newBackStack)
         resultsByRoute.remove(removedRoute)?.complete(result)
     }
