@@ -20,6 +20,7 @@ import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
 import android.content.pm.ApplicationInfo
+import android.content.pm.PackageManager
 import android.preference.PreferenceManager
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.essentials.util.containsFlag
@@ -44,9 +45,12 @@ val esAppModule = module {
 
     single {
         val appInfo = get<Application>().applicationInfo
+        val packageInfo = get<PackageManager>()
+            .getPackageInfo(appInfo.packageName, 0)
         BuildInfo(
             appInfo.flags.containsFlag(ApplicationInfo.FLAG_DEBUGGABLE),
-            appInfo.packageName
+            appInfo.packageName,
+            packageInfo.longVersionCode.toInt()
         )
     }
 }

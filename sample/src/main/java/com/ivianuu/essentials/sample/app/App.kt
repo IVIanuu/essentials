@@ -20,6 +20,7 @@ import com.ivianuu.director.DirectorPlugins
 import com.ivianuu.director.setDefaultHandler
 import com.ivianuu.essentials.app.EsApp
 import com.ivianuu.essentials.apps.glide.esAppsGlideModule
+import com.ivianuu.essentials.sample.BuildConfig
 import com.ivianuu.essentials.sample.work.workerModule
 import com.ivianuu.essentials.ui.changehandler.OpenCloseChangeHandler
 import com.ivianuu.essentials.work.workerInitializerModule
@@ -37,6 +38,7 @@ class App : EsApp() {
     override fun onCreate() {
         super.onCreate()
         DirectorPlugins.setDefaultHandler(OpenCloseChangeHandler())
+        BuildConfig.BUILD_TYPE
     }
 
 }
