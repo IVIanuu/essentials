@@ -20,24 +20,24 @@ import android.content.res.ColorStateList
 import com.airbnb.epoxy.EpoxyController
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.util.color
-import kotlinx.android.synthetic.main.es_item_simple_loading.es_progress_bar
+import kotlinx.android.synthetic.main.es_item_simple_loading.*
 
 /**
  * Simple loading model
  */
 fun EpoxyController.SimpleLoading(
     id: Any?,
-    progressColor: Int = 0,
-    progressColorRes: Int = 0
+    progressColor: Int? = null,
+    progressColorRes: Int? = null
 ) = model(
     id = id,
     layoutRes = R.layout.es_item_simple_loading,
     state = arrayOf(progressColor, progressColorRes),
     bind = {
-        if (progressColor != 0 || progressColorRes != 0) {
+        if (progressColor != null || progressColorRes != null) {
             val finalProgressColor = when {
-                progressColor != 0 -> progressColor
-                progressColorRes != 0 -> color(progressColorRes)
+                progressColor != null -> progressColor
+                progressColorRes != null -> color(progressColorRes)
                 else -> 0
             }
 

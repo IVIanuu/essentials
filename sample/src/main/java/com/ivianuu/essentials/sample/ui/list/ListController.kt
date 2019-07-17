@@ -23,13 +23,15 @@ import com.ivianuu.essentials.ui.epoxy.SimpleLoading
 import com.ivianuu.essentials.ui.epoxy.SimpleText
 import com.ivianuu.essentials.ui.mvrx.epoxy.mvRxEpoxyController
 import com.ivianuu.essentials.ui.mvrx.injekt.injectMvRxViewModel
-import com.ivianuu.essentials.ui.traveler.NavOptions
-import com.ivianuu.essentials.ui.traveler.horizontal
-import com.ivianuu.essentials.ui.traveler.key.ControllerKey
+import com.ivianuu.essentials.ui.navigation.director.controllerRoute
+import com.ivianuu.essentials.ui.navigation.director.controllerRouteOptions
+import com.ivianuu.essentials.ui.navigation.director.fade
 import com.ivianuu.essentials.util.andTrue
+import com.ivianuu.injekt.Inject
 
-object ListKey : ControllerKey(::ListController, NavOptions().horizontal())
+val listRoute = controllerRoute<ListController>(options = controllerRouteOptions().fade())
 
+@Inject
 class ListController : com.ivianuu.essentials.ui.simple.ListController() {
 
     private val viewModel: ListViewModel by injectMvRxViewModel()

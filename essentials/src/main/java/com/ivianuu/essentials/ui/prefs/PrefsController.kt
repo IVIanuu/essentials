@@ -23,11 +23,8 @@ import com.ivianuu.epoxyprefs.EpoxyPrefsPlugins
 import com.ivianuu.epoxyprefs.PreferenceDividerDecoration
 import com.ivianuu.epoxyprefs.PreferenceEpoxyController
 import com.ivianuu.epoxyprefs.preferenceEpoxyController
+import com.ivianuu.essentials.ui.navigation.director.ControllerRoute
 import com.ivianuu.essentials.ui.simple.ListController
-import com.ivianuu.essentials.ui.traveler.ControllerNavOptions
-import com.ivianuu.essentials.ui.traveler.key.UrlKey
-import com.ivianuu.traveler.push
-
 
 /**
  * Prefs controller
@@ -63,20 +60,10 @@ abstract class PrefsController : ListController() {
         preferenceEpoxyController(preferenceContext, buildModels)
 
     protected fun AbstractPreferenceModel.Builder<*>.navigateOnClick(
-        keyProvider: () -> Any
+        routeProvider: () -> ControllerRoute
     ) {
         onClick {
-            travelerRouter.push(keyProvider())
-            return@onClick true
-        }
-    }
-
-    protected fun AbstractPreferenceModel.Builder<*>.navigateOnClickWithOptions(
-        provider: () -> Pair<Any, ControllerNavOptions>
-    ) {
-        onClick {
-            val (key, options) = provider()
-            travelerRouter.push(key, options)
+            navigator.push(routeProvider())
             return@onClick true
         }
     }
@@ -84,7 +71,8 @@ abstract class PrefsController : ListController() {
     protected fun AbstractPreferenceModel.Builder<*>.openUrlOnClick(
         urlProvider: () -> String
     ) {
-        navigateOnClick { UrlKey(urlProvider()) }
+        error("lol")
+        // todo navigateOnClick { UrlKey(urlProvider()) }
     }
 
 }

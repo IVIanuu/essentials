@@ -14,15 +14,10 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.traveler.key
+package com.ivianuu.essentials.ui.navigation.director
 
-import android.content.Context
-import android.content.Intent
-import com.ivianuu.traveler.android.ActivityKey
+import androidx.lifecycle.ViewModel
 
-/**
- * Key for a simple intent
- */
-class IntentKey(val intent: Intent) : ActivityKey {
-    override fun createIntent(context: Context, data: Any?) = intent
+class ControllerRouteHolder : ViewModel() {
+    var route: ControllerRoute? = null
 }

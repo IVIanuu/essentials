@@ -72,7 +72,6 @@ fun <T : Controller> T.childControllerComponent(block: (ComponentBuilder.() -> U
 
 fun Controller.getClosestComponentOrNull(): Component? {
     return getParentControllerComponentOrNull()
-        ?: getActivityComponentOrNull()
         ?: getApplicationComponentOrNull()
 }
 
@@ -84,12 +83,6 @@ fun Controller.getParentControllerComponentOrNull(): Component? =
 
 fun Controller.getParentControllerComponent(): Component =
     getParentControllerComponentOrNull() ?: error("No parent controller component found for $this")
-
-fun Controller.getActivityComponentOrNull(): Component? =
-    (activity as? InjektTrait)?.component
-
-fun Controller.getActivityComponent(): Component =
-    getActivityComponentOrNull() ?: error("No activity component found for $this")
 
 fun Controller.getApplicationComponentOrNull(): Component? =
     (activity?.application as? InjektTrait)?.component

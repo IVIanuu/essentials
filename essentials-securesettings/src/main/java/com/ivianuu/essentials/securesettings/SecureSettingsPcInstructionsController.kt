@@ -18,37 +18,38 @@ package com.ivianuu.essentials.securesettings
 
 import androidx.lifecycle.lifecycleScope
 import com.ivianuu.epoxyprefs.Preference
+import com.ivianuu.essentials.ui.navigation.director.controllerRoute
 import com.ivianuu.essentials.ui.prefs.PrefsController
-import com.ivianuu.essentials.ui.traveler.key.ControllerKey
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.essentials.util.string
-import com.ivianuu.injekt.inject
-import com.ivianuu.traveler.pop
+import com.ivianuu.injekt.Inject
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-
-object SecureSettingsPcInstructionsKey : ControllerKey(::SecureSettingsPcInstructionsController)
 
 /**
  * Asks the user for the secure settings permission
  */
-class SecureSettingsPcInstructionsController : PrefsController() {
+val secureSettingsInstructionsRoute =
+    controllerRoute<SecureSettingsPcInstructionsController>()
+
+@Inject
+internal class SecureSettingsPcInstructionsController(
+    private val buildInfo: BuildInfo,
+    private val clipboardAccessor: ClipboardAccessor,
+    private val secureSettingsHelper: SecureSettingsHelper,
+    private val toaster: Toaster
+) : PrefsController() {
 
     override val toolbarTitleRes: Int
         get() = R.string.es_title_secure_settings_pc_instructions
-
-    private val buildInfo by inject<BuildInfo>()
-    private val clipboardHelper by inject<ClipboardAccessor>()
-    private val secureSettingsHelper by inject<SecureSettingsHelper>()
-    private val toaster by inject<Toaster>()
 
     override fun onCreate() {
         super.onCreate()
         lifecycleScope.launch {
             while (true) {
                 if (secureSettingsHelper.canWriteSecureSettings()) {
-                    travelerRouter.pop()
+                    navigator.pop()
                     break
                 }
                 delay(500)
@@ -116,7 +117,7 @@ class SecureSettingsPcInstructionsController : PrefsController() {
                 )
             )
             onClick {
-                clipboardHelper.clipboardText =
+                clipboardAccessor.clipboardText =
                     "adb shell pm grant ${buildInfo.packageName} android.permission.WRITE_SECURE_SETTINGS"
 
                 toaster.toast(R.string.es_secure_settings_copied_to_clipboard)

@@ -14,12 +14,15 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.dialog
+package com.ivianuu.essentials.ui.navigation.director
 
-import android.view.LayoutInflater
-import android.view.ViewGroup
-import com.afollestad.materialdialogs.MaterialDialog
+import com.ivianuu.director.Controller
+import com.ivianuu.injekt.factory
+import com.ivianuu.injekt.module
+import com.ivianuu.kommon.lifecycle.getViewModel
 
-class MdDialogController(private val block: MaterialDialog.() -> Unit) : EsDialogController() {
-    override fun onCreateDialog(inflater: LayoutInflater, container: ViewGroup) = dialog(block)
+fun Controller.controllerRouteModule() = module {
+    factory {
+        getViewModel<ControllerRouteHolder>().route!!
+    }
 }

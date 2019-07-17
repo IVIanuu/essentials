@@ -67,12 +67,11 @@ dependencies {
 
     api(Deps.director)
     api(Deps.directorCommon)
-    api(Deps.directorTraveler)
 
     api(Deps.epoxy)
     api(Deps.epoxyPrefs)
 
-    kapt(project(":essentials-compiler"))
+    //kapt(project(":essentials-compiler"))
 
     api(Deps.injekt)
     api(Deps.injektAndroid)
@@ -119,7 +118,4 @@ dependencies {
     api(Deps.timber)
     api(Deps.timberKt)
 
-    api(Deps.traveler)
-    api(Deps.travelerAndroid)
-    api(Deps.travelerCommon)
 }

@@ -14,16 +14,12 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.traveler.key
+package com.ivianuu.essentials.ui.navigation.injekt
 
-import android.content.Context
-import android.content.Intent
-import com.ivianuu.traveler.android.ActivityKey
+import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.injekt.module
+import com.ivianuu.injekt.single
 
-/**
- * Launches the app
- */
-data class AppKey(val packageName: String) : ActivityKey {
-    override fun createIntent(context: Context, data: Any?): Intent =
-        context.packageManager.getLaunchIntentForPackage(packageName)!!
+val esNavigatorModule = module {
+    single { Navigator() }
 }

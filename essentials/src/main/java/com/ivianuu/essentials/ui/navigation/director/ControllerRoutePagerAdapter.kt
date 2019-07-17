@@ -14,34 +14,34 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.traveler
+package com.ivianuu.essentials.ui.navigation.director
 
 import com.ivianuu.director.Router
 import com.ivianuu.director.common.RouterPagerAdapter
 import com.ivianuu.director.hasRoot
 import com.ivianuu.director.setRoot
 import com.ivianuu.director.toTransaction
-import com.ivianuu.director.traveler.ControllerKey
 
 /**
- * A [RouterPagerAdapter] which uses [ControllerKey]s
+ * A [RouterPagerAdapter] which uses [ControllerRoute]s
  */
-open class KeyRouterPagerAdapter(
-    private val keys: List<ControllerKey>,
+open class ControllerRoutePagerAdapter(
+    private val context: ControllerRoute.Context,
+    private val routes: List<ControllerRoute>,
     private val routerFactory: () -> Router
 ) : RouterPagerAdapter(routerFactory) {
 
     override fun configureRouter(router: Router, position: Int) {
         if (!router.hasRoot) {
             router.setRoot(
-                getKey(position)
-                    .createController(null)
+                getRoute(position)
+                    .factory(context)
                     .toTransaction()
             )
         }
     }
 
-    override fun getCount(): Int = keys.size
+    override fun getCount(): Int = routes.size
 
-    protected fun getKey(position: Int): ControllerKey = keys[position]
+    protected fun getRoute(position: Int): ControllerRoute = routes[position]
 }

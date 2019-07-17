@@ -16,43 +16,25 @@
 
 package com.ivianuu.essentials.picker
 
-import android.view.LayoutInflater
-import android.view.ViewGroup
 import com.afollestad.materialdialogs.color.colorChooser
-import com.ivianuu.essentials.ui.dialog.EsDialogController
-import com.ivianuu.essentials.ui.dialog.dialog
-import com.ivianuu.essentials.ui.traveler.NavOptions
-import com.ivianuu.essentials.ui.traveler.ResultKey
-import com.ivianuu.essentials.ui.traveler.dialog
-import com.ivianuu.essentials.ui.traveler.key.ControllerKey
-import com.ivianuu.essentials.ui.traveler.popWithResult
-import com.ivianuu.injekt.inject
+import com.ivianuu.essentials.ui.dialog.dialogRoute
 
-data class ColorPickerKey(
-    val titleRes: Int = R.string.es_dialog_title_color_picker,
-    val preselect: Int = 0,
-    val allowCustomArgb: Boolean = true,
-    val showAlphaSelector: Boolean = false
-) : ControllerKey(::ColorPickerDialog, NavOptions().dialog()),
-    ResultKey<Int>
-
-/**
- * Color picker controller
- */
-class ColorPickerDialog : EsDialogController() {
-
-    private val key by inject<ColorPickerKey>()
-
-    override fun onCreateDialog(inflater: LayoutInflater, container: ViewGroup) = dialog {
-        title(key.titleRes)
-        colorChooser(
-            colors = PRIMARY_COLORS,
-            subColors = PRIMARY_COLORS_SUB,
-            initialSelection = if (key.preselect != 0) key.preselect else null,
-            allowCustomArgb = key.allowCustomArgb,
-            showAlphaSelector = key.showAlphaSelector
-        ) { _, color -> travelerRouter.popWithResult(key, color) }
-        negativeButton(R.string.es_cancel)
+fun colorPickerRoute(
+    title: String? = null,
+    titleRes: Int? = R.string.es_dialog_title_color_picker,
+    preselect: Int? = null,
+    allowCustomArgb: Boolean = true,
+    showAlphaSelector: Boolean = false
+) = dialogRoute { navigator ->
+    title(res = titleRes, text = title)
+    colorChooser(
+        colors = PRIMARY_COLORS,
+        subColors = PRIMARY_COLORS_SUB,
+        initialSelection = preselect,
+        allowCustomArgb = allowCustomArgb,
+        showAlphaSelector = showAlphaSelector
+    ) { _, color ->
+        navigator.pop(color)
     }
-
+    negativeButton(R.string.es_cancel)
 }

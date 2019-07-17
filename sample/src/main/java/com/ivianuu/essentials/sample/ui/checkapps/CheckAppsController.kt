@@ -17,28 +17,26 @@
 package com.ivianuu.essentials.sample.ui.checkapps
 
 import com.ivianuu.essentials.apps.ui.CheckableAppsController
-import com.ivianuu.essentials.ui.traveler.NavOptions
-import com.ivianuu.essentials.ui.traveler.fade
-import com.ivianuu.essentials.ui.traveler.key.ControllerKey
-import com.ivianuu.injekt.get
+import com.ivianuu.essentials.ui.navigation.director.controllerRoute
+import com.ivianuu.essentials.ui.navigation.director.controllerRouteOptions
+import com.ivianuu.essentials.ui.navigation.director.fade
+import com.ivianuu.injekt.Inject
 import com.ivianuu.kprefs.KPrefs
 import com.ivianuu.kprefs.rx.asObservable
 import com.ivianuu.kprefs.stringSet
 import io.reactivex.Observable
 
-object CheckAppsKey : ControllerKey(::CheckAppsController, NavOptions().fade())
+val checkAppsRoute = controllerRoute<CheckAppsController>(
+    options = controllerRouteOptions().fade()
+)
 
-/**
- * @author Manuel Wrage (IVIanuu)
- */
-class CheckAppsController : CheckableAppsController() {
+@Inject
+class CheckAppsController(private val prefs: KPrefs) : CheckableAppsController() {
 
     override val toolbarTitle: String?
         get() = "Send check apps"
 
-    private val pref by lazy {
-        get<KPrefs>().stringSet("apps")
-    }
+    private val pref by lazy { prefs.stringSet("apps") }
 
     override fun getCheckedAppsObservable(): Observable<Set<String>> =
         pref.asObservable()

@@ -31,31 +31,34 @@ import com.ivianuu.essentials.ui.epoxy.SimpleLoading
 import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
 import com.ivianuu.essentials.ui.mvrx.epoxy.mvRxEpoxyController
 import com.ivianuu.essentials.ui.mvrx.injekt.injectMvRxViewModel
+import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.navigation.director.controllerRoute
 import com.ivianuu.essentials.ui.simple.ListController
-import com.ivianuu.essentials.ui.traveler.ResultKey
-import com.ivianuu.essentials.ui.traveler.key.ControllerKey
-import com.ivianuu.essentials.ui.traveler.popWithResult
 import com.ivianuu.essentials.util.AppDispatchers
 import com.ivianuu.essentials.util.Async
 import com.ivianuu.essentials.util.Loading
 import com.ivianuu.essentials.util.Success
 import com.ivianuu.essentials.util.Uninitialized
 import com.ivianuu.injekt.Inject
-import com.ivianuu.traveler.Router
+import com.ivianuu.injekt.Param
+import com.ivianuu.injekt.parametersOf
 
-data class AppPickerKey(
-    val launchableOnly: Boolean = false
-) : ControllerKey(::AppPickerController), ResultKey<AppInfo>
+fun appPickerRouter(
+    launchableOnly: Boolean = false
+) = controllerRoute<AppPickerController> { parametersOf(launchableOnly) }
 
 /**
  * App picker controller
  */
-class AppPickerController : ListController() {
+@Inject
+class AppPickerController(@Param private val launchableOnly: Boolean) : ListController() {
 
     override val toolbarTitleRes: Int
         get() = R.string.es_title_app_picker
 
-    private val viewModel: AppPickerViewModel by injectMvRxViewModel()
+    private val viewModel: AppPickerViewModel by injectMvRxViewModel {
+        parametersOf(launchableOnly)
+    }
 
     override fun epoxyController() = mvRxEpoxyController(viewModel) { state ->
         when (state.apps) {
@@ -89,17 +92,17 @@ class AppPickerController : ListController() {
 
 @Inject
 internal class AppPickerViewModel(
-    private val key: AppPickerKey,
+    @Param private val launchableOnly: Boolean,
     private val appStore: AppStore,
     dispatchers: AppDispatchers,
-    private val router: Router
+    private val navigator: Navigator
 ) : MvRxViewModel<AppPickerState>(AppPickerState()) {
 
     init {
         viewModelScope.execute(
             context = dispatchers.io,
             block = {
-                if (key.launchableOnly) {
+                if (launchableOnly) {
                     appStore.getLaunchableApps()
                 } else {
                     appStore.getInstalledApps()
@@ -109,8 +112,8 @@ internal class AppPickerViewModel(
         )
     }
 
-    fun appClicked(appInfo: AppInfo) {
-        router.popWithResult(key, appInfo)
+    fun appClicked(app: AppInfo) {
+        navigator.pop(app)
     }
 }
 

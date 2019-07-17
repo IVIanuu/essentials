@@ -19,17 +19,37 @@ package com.ivianuu.essentials.util
 import com.ivianuu.scopes.Scope
 import java.util.concurrent.ConcurrentHashMap
 
-interface Properties {
+class Properties {
+
+    private val properties = ConcurrentHashMap<String, Any?>()
 
     val entries: Map<String, Any?>
+        get() = properties
 
-    fun <T> get(key: String): T?
+    fun <T> get(key: String): T? = properties[key] as? T
 
-    fun <T> set(key: String, value: T)
+    fun <T> set(key: String, value: T) {
+        properties[key] = value as Any?
+    }
 
-    fun <T> remove(key: String): T?
+    fun <T> remove(key: String): T? = properties.remove(key) as? T
 
-    fun contains(key: String): Boolean
+    fun contains(key: String) = properties.contains(key)
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as Properties
+
+        if (properties != other.properties) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        return properties.hashCode()
+    }
 
 }
 
@@ -52,27 +72,6 @@ fun <T> Properties.getOrDefault(key: String, defaultValue: () -> T): T {
     }
 
     return value as T
-}
-
-fun Properties(): Properties = RealProperties()
-
-private class RealProperties : Properties {
-
-    private val properties = ConcurrentHashMap<String, Any?>()
-
-    override val entries: Map<String, Any?>
-        get() = properties
-
-    override fun <T> get(key: String): T? = properties[key] as? T
-
-    override fun <T> set(key: String, value: T) {
-        properties[key] = value as Any?
-    }
-
-    override fun <T> remove(key: String): T? = properties.remove(key) as? T
-
-    override fun contains(key: String) = properties.contains(key)
-
 }
 
 private val propertiesByScope = ConcurrentHashMap<Scope, Properties>()

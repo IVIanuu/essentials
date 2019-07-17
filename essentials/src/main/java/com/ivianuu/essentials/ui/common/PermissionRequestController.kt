@@ -24,44 +24,17 @@ import com.ivianuu.director.common.addPermissionResultListener
 import com.ivianuu.director.common.requestPermissions
 import com.ivianuu.director.requireActivity
 import com.ivianuu.essentials.ui.base.EsController
-import com.ivianuu.essentials.ui.traveler.NavOptions
-import com.ivianuu.essentials.ui.traveler.ResultKey
-import com.ivianuu.essentials.ui.traveler.dialog
-import com.ivianuu.essentials.ui.traveler.key.ControllerKey
-import com.ivianuu.essentials.ui.traveler.popWithResult
-import com.ivianuu.injekt.inject
+import com.ivianuu.essentials.ui.navigation.director.ControllerRoute
+import com.ivianuu.essentials.ui.navigation.director.controllerRoute
+import com.ivianuu.essentials.ui.navigation.director.dialog
+import com.ivianuu.injekt.Inject
+import com.ivianuu.injekt.Param
+import com.ivianuu.injekt.parametersOf
 
-data class PermissionRequestKey(
-    val permissions: Set<String>
-) : ControllerKey(::PermissionRequestController, NavOptions().dialog()),
-    ResultKey<PermissionResult>
-
-/**
- * Permission request controller
- */
-class PermissionRequestController : EsController() {
-
-    private val key by inject<PermissionRequestKey>()
-
-    override fun onCreate() {
-        super.onCreate()
-
-        val resultCode = ResultCodes.nextResultCode()
-
-        addPermissionResultListener(resultCode) { requestCode, permissions, grantResults ->
-            travelerRouter.popWithResult(
-                key, PermissionResult(requestCode, permissions.toSet(), grantResults)
-            )
-        }
-        requestPermissions(key.permissions.toTypedArray(), resultCode)
+fun permissionRequestRoute(permissions: Set<String>) =
+    controllerRoute<PermissionRequestController>(options = ControllerRoute.Options().dialog()) {
+        parametersOf(permissions)
     }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup
-    ): View = View(requireActivity()) // dummy
-
-}
 
 class PermissionResult(
     val requestCode: Int,
@@ -88,3 +61,27 @@ class PermissionResult(
 }
 
 val PermissionResult.allGranted: Boolean get() = grantResults.all { it == PackageManager.PERMISSION_GRANTED }
+
+@Inject
+internal class PermissionRequestController(@Param private val permissions: Set<String>) :
+    EsController() {
+
+    override fun onCreate() {
+        super.onCreate()
+
+        val resultCode = ResultCodes.nextResultCode()
+
+        addPermissionResultListener(resultCode) { requestCode, permissions, grantResults ->
+            navigator.pop(
+                PermissionResult(requestCode, permissions.toSet(), grantResults)
+            )
+        }
+        requestPermissions(permissions.toTypedArray(), resultCode)
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup
+    ): View = View(requireActivity()) // dummy
+
+}

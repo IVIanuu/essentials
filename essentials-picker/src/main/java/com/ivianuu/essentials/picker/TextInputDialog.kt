@@ -16,47 +16,29 @@
 
 package com.ivianuu.essentials.picker
 
-import android.view.LayoutInflater
-import android.view.ViewGroup
 import com.afollestad.materialdialogs.input.input
-import com.ivianuu.essentials.R
-import com.ivianuu.essentials.ui.dialog.EsDialogController
-import com.ivianuu.essentials.ui.dialog.dialog
-import com.ivianuu.essentials.ui.traveler.NavOptions
-import com.ivianuu.essentials.ui.traveler.ResultKey
-import com.ivianuu.essentials.ui.traveler.dialog
-import com.ivianuu.essentials.ui.traveler.key.ControllerKey
-import com.ivianuu.essentials.ui.traveler.popWithResult
-import com.ivianuu.injekt.get
-import com.ivianuu.traveler.pop
+import com.ivianuu.essentials.ui.dialog.dialogRoute
 
-data class TextInputKey(
-    val title: String,
-    val inputHint: String = "",
-    val inputType: Int = -1,
-    val prefill: String = "",
-    val allowEmptyInput: Boolean = false
-) : ControllerKey(::TextInputDialog, NavOptions().dialog()),
-    ResultKey<String>
-
-/**
- * Text input dialog
- */
-class TextInputDialog : EsDialogController() {
-
-    override fun onCreateDialog(inflater: LayoutInflater, container: ViewGroup) = dialog {
-        val key = get<TextInputKey>()
-        noAutoDismiss()
-        title(text = key.title)
-        input(
-            hint = key.inputHint,
-            prefill = key.prefill,
-            inputType = key.inputType
-        ) { _, input ->
-            travelerRouter.popWithResult(key, input.toString())
-        }
-        positiveButton(R.string.es_ok)
-        negativeButton(R.string.es_cancel) { travelerRouter.pop() }
-    }
-
+fun textInputRoute(
+    title: String? = null,
+    titleRes: Int? = null,
+    hint: String? = null,
+    hintRes: Int? = null,
+    prefill: String? = null,
+    prefillRes: Int? = null,
+    inputType: Int = -1,
+    allowEmpty: Boolean = false
+) = dialogRoute { navigator ->
+    noAutoDismiss()
+    title(res = titleRes, text = title)
+    input(
+        hint = hint,
+        hintRes = hintRes,
+        prefill = prefill,
+        prefillRes = prefillRes,
+        inputType = inputType,
+        allowEmpty = allowEmpty
+    ) { _, input -> navigator.pop(input.toString()) }
+    positiveButton(R.string.es_ok)
+    negativeButton(R.string.es_cancel) { navigator.pop() }
 }

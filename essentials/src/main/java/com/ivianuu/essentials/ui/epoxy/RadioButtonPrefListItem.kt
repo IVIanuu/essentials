@@ -28,16 +28,16 @@ fun EpoxyController.RadioButtonPrefListItem(
     onChangePredicate: ((Boolean) -> Boolean)? = null,
 
     title: String? = null,
-    titleRes: Int = 0,
+    titleRes: Int? = null,
 
     text: String? = null,
-    textRes: Int = 0,
+    textRes: Int? = null,
 
     icon: Drawable? = null,
-    iconRes: Int = 0,
+    iconRes: Int? = null,
 
     avatar: Drawable? = null,
-    avatarRes: Int = 0,
+    avatarRes: Int? = null,
 
     builderBlock: (FunModelBuilder.() -> Unit)? = null
 ) = RadioButtonListItem(

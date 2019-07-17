@@ -55,7 +55,7 @@ object Versions {
     const val bintray = "1.8.4"
     const val constraintLayout = "2.0.0-beta2"
     const val coroutines = "1.3.0-M2"
-    const val director = "0.0.1-dev-36"
+    const val director = "0.0.1-dev-37"
     const val epoxy = "3.7.0"
     const val epoxyPrefs = "0.0.1-dev-21"
     const val glide = "4.9.0"
@@ -120,8 +120,6 @@ object Deps {
 
     const val director = "com.ivianuu.director:director:${Versions.director}"
     const val directorCommon = "com.ivianuu.director:director-common:${Versions.director}"
-    const val directorTraveler =
-        "com.ivianuu.director:director-traveler:${Versions.director}"
 
     const val epoxy = "com.airbnb.android:epoxy:${Versions.epoxy}"
     const val epoxyPrefs = "com.ivianuu.epoxyprefs:epoxyprefs:${Versions.epoxyPrefs}"
@@ -203,9 +201,4 @@ object Deps {
 
     const val timber = "com.jakewharton.timber:timber:${Versions.timber}"
     const val timberKt = "com.github.ajalt:timberkt:${Versions.timberKt}"
-
-    const val traveler = "com.ivianuu.traveler:traveler:${Versions.traveler}"
-    const val travelerAndroid = "com.ivianuu.traveler:traveler-android:${Versions.traveler}"
-    const val travelerCommon =
-        "com.ivianuu.traveler:traveler-common:${Versions.traveler}"
 }

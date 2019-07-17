@@ -25,46 +25,17 @@ import com.ivianuu.director.common.addActivityResultListener
 import com.ivianuu.director.common.startActivityForResult
 import com.ivianuu.director.requireActivity
 import com.ivianuu.essentials.ui.base.EsController
-import com.ivianuu.essentials.ui.traveler.NavOptions
-import com.ivianuu.essentials.ui.traveler.ResultKey
-import com.ivianuu.essentials.ui.traveler.dialog
-import com.ivianuu.essentials.ui.traveler.key.ControllerKey
-import com.ivianuu.essentials.ui.traveler.popWithResult
-import com.ivianuu.injekt.inject
+import com.ivianuu.essentials.ui.navigation.director.ControllerRoute
+import com.ivianuu.essentials.ui.navigation.director.controllerRoute
+import com.ivianuu.essentials.ui.navigation.director.dialog
+import com.ivianuu.injekt.Inject
+import com.ivianuu.injekt.Param
+import com.ivianuu.injekt.parametersOf
 
-data class ActivityResultKey(
-    val intent: Intent
-) : ControllerKey(::ActivityResultController, NavOptions().dialog()),
-    ResultKey<ActivityResult>
-
-/**
- * Activity result controller
- */
-class ActivityResultController : EsController() {
-
-    private val key by inject<ActivityResultKey>()
-
-    override fun onCreate() {
-        super.onCreate()
-
-        val resultCode = ResultCodes.nextResultCode()
-
-        addActivityResultListener(resultCode) { requestCode, resultCode, data ->
-            travelerRouter.popWithResult(
-                key,
-                ActivityResult(requestCode, resultCode, data)
-            )
-        }
-
-        startActivityForResult(key.intent, resultCode)
+fun activityResultRoute(intent: Intent) =
+    controllerRoute<ActivityResultController>(options = ControllerRoute.Options().dialog()) {
+        parametersOf(intent)
     }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup
-    ): View = View(requireActivity()) // dummy
-
-}
 
 data class ActivityResult(
     val requestCode: Int,
@@ -75,3 +46,25 @@ data class ActivityResult(
 val ActivityResult.isOk: Boolean get() = resultCode == Activity.RESULT_OK
 val ActivityResult.isCanceled: Boolean get() = resultCode == Activity.RESULT_CANCELED
 val ActivityResult.isFirstUser: Boolean get() = resultCode == Activity.RESULT_FIRST_USER
+
+@Inject
+internal class ActivityResultController(@Param private val intent: Intent) : EsController() {
+
+    override fun onCreate() {
+        super.onCreate()
+
+        val resultCode = ResultCodes.nextResultCode()
+
+        addActivityResultListener(resultCode) { requestCode, resultCode, data ->
+            navigator.pop(ActivityResult(requestCode, resultCode, data))
+        }
+
+        startActivityForResult(intent, resultCode)
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup
+    ): View = View(requireActivity()) // dummy
+
+}

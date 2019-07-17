@@ -18,14 +18,14 @@ package com.ivianuu.essentials.ui.epoxy
 
 import com.airbnb.epoxy.EpoxyController
 import com.ivianuu.essentials.R
-import kotlinx.android.synthetic.main.es_item_simple_text.es_text
+import kotlinx.android.synthetic.main.es_item_simple_text.*
 
 /**
  * Simple text model
  */
 fun EpoxyController.SimpleText(
     text: String? = null,
-    textRes: Int = 0,
+    textRes: Int? = null,
     id: Any? = text + textRes
 ) = model(
     id = id,
@@ -34,7 +34,7 @@ fun EpoxyController.SimpleText(
     bind = {
         when {
             text != null -> es_text.text = text
-            textRes != 0 -> es_text.setText(textRes)
+            textRes != null -> es_text.setText(textRes)
             else -> error("you must specify one of text or textRes")
         }
     }

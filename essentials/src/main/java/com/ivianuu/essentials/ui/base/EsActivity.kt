@@ -19,23 +19,17 @@ package com.ivianuu.essentials.ui.base
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.ivianuu.director.Router
-import com.ivianuu.director.hasRoot
 import com.ivianuu.director.router
-import com.ivianuu.director.traveler.ControllerNavigator
 import com.ivianuu.essentials.ui.mvrx.MvRxView
-import com.ivianuu.essentials.ui.traveler.key.keyModule
+import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.navigation.director.ControllerRenderer
+import com.ivianuu.essentials.ui.navigation.director.ControllerRoute
 import com.ivianuu.essentials.util.unsafeLazy
 import com.ivianuu.injekt.InjektTrait
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.android.activityComponent
 import com.ivianuu.injekt.inject
-import com.ivianuu.traveler.Navigator
-import com.ivianuu.traveler.android.AppNavigator
-import com.ivianuu.traveler.android.setNavigator
-import com.ivianuu.traveler.common.ResultNavigator
-import com.ivianuu.traveler.common.compositeNavigatorOf
-import com.ivianuu.traveler.pop
-import com.ivianuu.traveler.setRoot
+import com.ivianuu.scopes.android.onPause
 
 /**
  * Base activity
@@ -43,34 +37,21 @@ import com.ivianuu.traveler.setRoot
 abstract class EsActivity : AppCompatActivity(), InjektTrait, MvRxView {
 
     override val component by unsafeLazy {
-        activityComponent {
-            modules(listOf(keyModule(intent.extras, false)))
-            modules(this@EsActivity.modules())
-        }
+        activityComponent { modules(this@EsActivity.modules()) }
     }
 
-    val travelerRouter by inject<com.ivianuu.traveler.Router>()
+    val navigator by inject<Navigator>()
 
     protected open val layoutRes get() = 0
 
     open val containerId
         get() = android.R.id.content
 
-    open val startKey: Any?
+    open val startRoute: ControllerRoute?
         get() = null
 
     lateinit var router: Router
         private set
-
-    protected open val navigator: Navigator by unsafeLazy {
-        val navigators = mutableListOf<ResultNavigator>().apply {
-            addAll(navigators())
-            add(ControllerNavigator(router))
-            add(AppNavigator(this@EsActivity))
-        }
-
-        compositeNavigatorOf(navigators)
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -81,7 +62,9 @@ abstract class EsActivity : AppCompatActivity(), InjektTrait, MvRxView {
 
         router = createRouter()
 
-        navigateToStartKeyIfNeeded()
+        if (navigator.backStack.isEmpty()) {
+            startRoute?.let { navigator.push(it) }
+        }
     }
 
     override fun onStart() {
@@ -91,12 +74,13 @@ abstract class EsActivity : AppCompatActivity(), InjektTrait, MvRxView {
 
     override fun onResumeFragments() {
         super.onResumeFragments()
-        travelerRouter.setNavigator(this, navigator)
+        ControllerRenderer(this, navigator, router)
+            .renderUntil(onPause)
     }
 
     override fun onBackPressed() {
-        if (router.backstack.size > 1) {
-            travelerRouter.pop()
+        if (navigator.backStack.size > 1) {
+            navigator.pop()
         } else {
             super.onBackPressed()
         }
@@ -105,16 +89,8 @@ abstract class EsActivity : AppCompatActivity(), InjektTrait, MvRxView {
     override fun invalidate() {
     }
 
-    protected open fun navigators(): List<ResultNavigator> = emptyList()
-
     protected open fun modules(): List<Module> = emptyList()
 
     protected open fun createRouter(): Router = router(containerId)
-
-    protected open fun navigateToStartKeyIfNeeded() {
-        if (!router.hasRoot) {
-            startKey?.let { travelerRouter.setRoot(it) }
-        }
-    }
 
 }

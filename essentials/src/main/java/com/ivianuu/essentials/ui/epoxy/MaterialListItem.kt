@@ -31,18 +31,18 @@ fun EpoxyController.ListItem(
     state: Array<Any?>? = null,
 
     title: String? = null,
-    titleRes: Int = 0,
+    titleRes: Int? = null,
 
     text: String? = null,
-    textRes: Int = 0,
+    textRes: Int? = null,
 
     icon: Drawable? = null,
-    iconRes: Int = 0,
+    iconRes: Int? = null,
 
     avatar: Drawable? = null,
-    avatarRes: Int = 0,
+    avatarRes: Int? = null,
 
-    widgetLayoutRes: Int = 0,
+    widgetLayoutRes: Int? = null,
 
     onClick: (() -> Unit)? = null,
     onLongClick: (() -> Unit)? = null,
@@ -61,7 +61,7 @@ fun EpoxyController.ListItem(
 
     buildView {
         val view = it.inflate(R.layout.es_list_item)
-        if (widgetLayoutRes != 0) {
+        if (widgetLayoutRes != null) {
             view.es_list_widget_container.inflate(widgetLayoutRes, true)
         }
 
@@ -74,7 +74,7 @@ fun EpoxyController.ListItem(
                 es_list_title.text = title
                 es_list_title.isVisible = true
             }
-            titleRes != 0 -> {
+            titleRes != null -> {
                 es_list_title.setText(titleRes)
                 es_list_title.isVisible = true
             }
@@ -89,7 +89,7 @@ fun EpoxyController.ListItem(
                 es_list_text.text = text
                 es_list_text.isVisible = true
             }
-            textRes != 0 -> {
+            textRes != null -> {
                 es_list_text.setText(textRes)
                 es_list_text.isVisible = true
             }
@@ -104,7 +104,7 @@ fun EpoxyController.ListItem(
                 es_list_icon.setImageDrawable(icon)
                 es_list_icon.isVisible = true
             }
-            iconRes != 0 -> {
+            iconRes != null -> {
                 es_list_icon.setImageResource(iconRes)
                 es_list_icon.isVisible = true
             }
@@ -119,7 +119,7 @@ fun EpoxyController.ListItem(
                 es_list_avatar.setImageDrawable(avatar)
                 es_list_avatar.isVisible = true
             }
-            avatarRes != 0 -> {
+            avatarRes != null -> {
                 es_list_avatar.setImageResource(avatarRes)
                 es_list_avatar.isVisible = true
             }

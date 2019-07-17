@@ -18,56 +18,50 @@ package com.ivianuu.essentials.sample.ui.counter
 
 import com.ivianuu.essentials.hidenavbar.NavBarConfig
 import com.ivianuu.essentials.hidenavbar.NavBarController
-import com.ivianuu.essentials.sample.ui.checkapps.CheckAppsKey
-import com.ivianuu.essentials.sample.ui.list.ListKey
-import com.ivianuu.essentials.sample.ui.material.MaterialListKey
+import com.ivianuu.essentials.sample.ui.checkapps.checkAppsRoute
+import com.ivianuu.essentials.sample.ui.list.listRoute
+import com.ivianuu.essentials.sample.ui.material.materialListRoute
 import com.ivianuu.essentials.sample.util.SecureSettingsHelper
 import com.ivianuu.essentials.sample.work.WorkScheduler
-import com.ivianuu.essentials.securesettings.SecureSettingsKey
-import com.ivianuu.essentials.twilight.TwilightSettingsKey
+import com.ivianuu.essentials.securesettings.secureSettingsRoute
+import com.ivianuu.essentials.twilight.twilightSettingsRoute
 import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
-import com.ivianuu.essentials.ui.traveler.NavOptions
-import com.ivianuu.essentials.ui.traveler.horizontal
+import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.navigation.director.controllerRouteOptions
+import com.ivianuu.essentials.ui.navigation.director.copy
+import com.ivianuu.essentials.ui.navigation.director.horizontal
 import com.ivianuu.injekt.Inject
-import com.ivianuu.traveler.Router
-import com.ivianuu.traveler.finish
-import com.ivianuu.traveler.pop
-import com.ivianuu.traveler.popToRoot
-import com.ivianuu.traveler.push
+import com.ivianuu.injekt.Param
 
 @Inject
 class CounterViewModel(
-    key: CounterKey,
-    private val router: Router,
+    @Param screen: Int,
+    private val navigator: Navigator,
     private val navBarController: NavBarController,
     private val secureSettingsHelper: SecureSettingsHelper,
     private val workScheduler: WorkScheduler
-) : MvRxViewModel<CounterState>(CounterState(key.screen)) {
+) : MvRxViewModel<CounterState>(CounterState(screen)) {
 
     private var navBarHidden = false
 
     fun screenUpClicked() {
-        router.push(CounterKey(state.screen.inc()))
+        navigator.push(counterRoute(state.screen.inc()))
     }
 
     fun screenDownClicked() {
-        if (state.screen == 1) {
-            router.finish()
-        } else {
-            router.pop()
-        }
+        navigator.pop()
     }
 
     fun rootScreenClicked() {
-        router.popToRoot()
+        // todo router.popToRoot()
     }
 
     fun listScreenClicked() {
-        router.push(ListKey)
+        navigator.push(listRoute)
     }
 
     fun checkAppsClicked() {
-        router.push(CheckAppsKey)
+        navigator.push(checkAppsRoute)
     }
 
     fun doWorkClicked() {
@@ -75,14 +69,15 @@ class CounterViewModel(
     }
 
     fun twilightClicked() {
-        router.push(
-            TwilightSettingsKey,
-            NavOptions().horizontal()
+        navigator.push(
+            twilightSettingsRoute.copy(
+                options = controllerRouteOptions().horizontal()
+            )
         )
     }
 
     fun materialListClicked() {
-        router.push(MaterialListKey)
+        navigator.push(materialListRoute)
     }
 
     fun navBarClicked() {
@@ -90,7 +85,7 @@ class CounterViewModel(
             navBarHidden = !navBarHidden
             navBarController.setNavBarConfig(NavBarConfig(navBarHidden))
         } else {
-            router.push(SecureSettingsKey(true))
+            navigator.push(secureSettingsRoute(true))
         }
     }
 }

@@ -29,19 +29,19 @@ fun EpoxyController.MultiSelectListDialogListItem(
     onSelected: (Set<String>) -> Unit,
 
     title: String? = null,
-    titleRes: Int = 0,
+    titleRes: Int? = null,
 
     text: String? = null,
-    textRes: Int = 0,
+    textRes: Int? = null,
 
     icon: Drawable? = null,
-    iconRes: Int = 0,
+    iconRes: Int? = null,
 
     avatar: Drawable? = null,
-    avatarRes: Int = 0,
+    avatarRes: Int? = null,
 
     dialogTitle: String? = title,
-    dialogTitleRes: Int = titleRes,
+    dialogTitleRes: Int? = titleRes,
 
     positiveDialogButtonText: String? = null,
     positiveDialogButtonTextRes: Int = R.string.es_ok,
@@ -49,9 +49,9 @@ fun EpoxyController.MultiSelectListDialogListItem(
     negativeDialogButtonTextRes: Int = R.string.es_cancel,
 
     entries: Array<String>? = null,
-    entriesRes: Int = 0,
+    entriesRes: Int? = null,
     entryValues: Array<String>? = null,
-    entryValuesRes: Int = 0,
+    entryValuesRes: Int? = null,
 
     dialogBlock: (MaterialDialog.() -> Unit)? = null,
     builderBlock: (FunModelBuilder.() -> Unit)? = null
@@ -59,7 +59,7 @@ fun EpoxyController.MultiSelectListDialogListItem(
     id = id,
     buildDialog = {
         var finalEntries = entries
-        if (finalEntries == null && entriesRes != 0) {
+        if (finalEntries == null && entriesRes != null) {
             finalEntries = context.resources.getStringArray(entriesRes)
         }
         if (finalEntries == null) {
@@ -67,7 +67,7 @@ fun EpoxyController.MultiSelectListDialogListItem(
         }
 
         var finalEntryValues = entryValues
-        if (finalEntryValues == null && entryValuesRes != 0) {
+        if (finalEntryValues == null && entryValuesRes != null) {
             finalEntryValues = context.resources.getStringArray(entryValuesRes)
         }
         if (finalEntryValues == null) {

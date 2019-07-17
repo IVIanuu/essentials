@@ -24,7 +24,7 @@ import com.ivianuu.director.DirectorPlugins
 import com.ivianuu.director.common.changehandler.AnimatorChangeHandler
 import com.ivianuu.director.common.changehandler.defaultAnimationDuration
 import com.ivianuu.director.defaultRemovesFromViewOnPush
-import com.ivianuu.essentials.ui.traveler.ControllerNavOptions
+import com.ivianuu.essentials.ui.navigation.director.ControllerRoute
 import com.ivianuu.kommon.core.animation.animatorSetOf
 
 class VerticalFadeChangeHandler(
@@ -51,26 +51,26 @@ class VerticalFadeChangeHandler(
 
 }
 
-fun ControllerNavOptions.verticalFade(
+fun ControllerRoute.Options.verticalFade(
     duration: Long = DirectorPlugins.defaultAnimationDuration,
     removesFromViewOnPush: Boolean = DirectorPlugins.defaultRemovesFromViewOnPush
-): ControllerNavOptions = verticalFadePush(duration, removesFromViewOnPush)
+): ControllerRoute.Options = verticalFadePush(duration, removesFromViewOnPush)
     .verticalFadePop(duration, removesFromViewOnPush)
 
-fun ControllerNavOptions.verticalFadePush(
+fun ControllerRoute.Options.verticalFadePush(
     duration: Long = DirectorPlugins.defaultAnimationDuration,
     removesFromViewOnPush: Boolean = DirectorPlugins.defaultRemovesFromViewOnPush
-): ControllerNavOptions = push(
+): ControllerRoute.Options = pushHandler(
     VerticalFadeChangeHandler(
         duration,
         removesFromViewOnPush
     )
 )
 
-fun ControllerNavOptions.verticalFadePop(
+fun ControllerRoute.Options.verticalFadePop(
     duration: Long = DirectorPlugins.defaultAnimationDuration,
     removesFromViewOnPush: Boolean = DirectorPlugins.defaultRemovesFromViewOnPush
-): ControllerNavOptions = pop(
+): ControllerRoute.Options = popHandler(
     VerticalFadeChangeHandler(
         duration,
         removesFromViewOnPush

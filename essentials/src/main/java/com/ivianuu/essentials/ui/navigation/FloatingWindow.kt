@@ -14,20 +14,6 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.traveler.key
+package com.ivianuu.essentials.ui.navigation
 
-import android.content.Context
-import android.content.Intent
-import android.provider.Settings
-import androidx.core.net.toUri
-import com.ivianuu.traveler.android.ActivityKey
-
-/**
- * Open s the app info of the app
- */
-data class AppInfoKey(val packageName: String) : ActivityKey {
-    override fun createIntent(context: Context, data: Any?) =
-        Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-            this.data = "package:$packageName".toUri()
-        }
-}
+interface FloatingWindow

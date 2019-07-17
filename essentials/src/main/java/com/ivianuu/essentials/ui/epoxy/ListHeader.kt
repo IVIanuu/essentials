@@ -22,7 +22,7 @@ import kotlinx.android.synthetic.main.es_list_header.*
 
 fun EpoxyController.ListHeader(
     text: String? = null,
-    textRes: Int = 0,
+    textRes: Int? = null,
     id: Any? = text + textRes
 ) = model(
     id = id,
@@ -31,7 +31,7 @@ fun EpoxyController.ListHeader(
     bind = {
         when {
             text != null -> es_list_header_title.text = text
-            textRes != 0 -> es_list_header_title.setText(textRes)
+            textRes != null -> es_list_header_title.setText(textRes)
             else -> error("you must specify one of text or textRes")
         }
     }

@@ -24,7 +24,7 @@ import kotlin.properties.Delegates
 
 fun EpoxyController.model(
     id: Any? = null,
-    layoutRes: Int = 0,
+    layoutRes: Int? = null,
     state: Array<Any?>? = null,
     unbind: (EsHolder.() -> Unit)? = null,
     bind: (EsHolder.() -> Unit)? = null,
@@ -32,7 +32,7 @@ fun EpoxyController.model(
 ): FunModel = FunModelBuilder()
     .apply {
         id(id)
-        layoutRes(layoutRes)
+        layoutRes?.let { layoutRes(it) }
         state?.let { state(*it) }
         bind?.let { bind(it) }
         unbind?.let { unbind(it) }

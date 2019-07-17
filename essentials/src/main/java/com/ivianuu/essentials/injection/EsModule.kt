@@ -18,7 +18,7 @@ package com.ivianuu.essentials.injection
 
 import com.ivianuu.essentials.app.esAppInitializersModule
 import com.ivianuu.essentials.app.esAppServicesModule
-import com.ivianuu.essentials.ui.traveler.travelerModule
+import com.ivianuu.essentials.ui.navigation.injekt.esNavigatorModule
 import com.ivianuu.essentials.util.esUtilModule
 import com.ivianuu.injekt.module
 
@@ -28,7 +28,7 @@ import com.ivianuu.injekt.module
 val esModule = module {
     include(esAppInitializersModule)
     include(esAppServicesModule)
+    include(esNavigatorModule)
     include(esUtilModule)
     include(systemServiceModule)
-    include(travelerModule)
 }

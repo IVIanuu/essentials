@@ -19,18 +19,17 @@ package com.ivianuu.essentials.twilight
 import com.airbnb.epoxy.EpoxyController
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.epoxy.RadioButtonListItem
+import com.ivianuu.essentials.ui.navigation.director.controllerRoute
 import com.ivianuu.essentials.ui.prefs.PrefsController
-import com.ivianuu.essentials.ui.traveler.key.ControllerKey
-import com.ivianuu.injekt.inject
+import com.ivianuu.injekt.Inject
 
-object TwilightSettingsKey : ControllerKey(::TwilightSettingsController)
+val twilightSettingsRoute = controllerRoute<TwilightSettingsController>()
 
-class TwilightSettingsController : PrefsController() {
+@Inject
+class TwilightSettingsController(private val prefs: TwilightPrefs) : PrefsController() {
 
     override val toolbarTitleRes: Int
         get() = R.string.es_title_twilight
-
-    private val prefs by inject<TwilightPrefs>()
 
     override fun epoxyController() = epoxyController {
         TwilightModePreference(

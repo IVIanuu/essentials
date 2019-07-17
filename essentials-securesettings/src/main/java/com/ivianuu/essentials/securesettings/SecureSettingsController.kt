@@ -19,32 +19,35 @@ package com.ivianuu.essentials.securesettings
 import androidx.lifecycle.lifecycleScope
 import com.ivianuu.epoxyprefs.Preference
 import com.ivianuu.essentials.ui.changehandler.verticalFade
+import com.ivianuu.essentials.ui.navigation.director.ControllerRoute
+import com.ivianuu.essentials.ui.navigation.director.controllerRoute
+import com.ivianuu.essentials.ui.navigation.director.copy
+import com.ivianuu.essentials.ui.navigation.director.defaultControllerRouteOptionsOrElse
 import com.ivianuu.essentials.ui.prefs.PrefsController
-import com.ivianuu.essentials.ui.traveler.NavOptions
-import com.ivianuu.essentials.ui.traveler.ResultKey
-import com.ivianuu.essentials.ui.traveler.defaultNavOptionsOrElse
-import com.ivianuu.essentials.ui.traveler.key.ControllerKey
-import com.ivianuu.essentials.ui.traveler.popWithResult
 import com.ivianuu.essentials.util.Toaster
-import com.ivianuu.injekt.inject
+import com.ivianuu.injekt.Inject
+import com.ivianuu.injekt.Param
+import com.ivianuu.injekt.parametersOf
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-
-class SecureSettingsKey(
-    val showHideNavBarHint: Boolean = false
-) : ControllerKey(::SecureSettingsController), ResultKey<Boolean>
 
 /**
  * Asks the user for the secure settings permission
  */
-class SecureSettingsController : PrefsController() {
+fun secureSettingsRoute(showHideNavBarHint: Boolean = false) =
+    controllerRoute<SecureSettingsController> {
+        parametersOf(showHideNavBarHint)
+    }
+
+@Inject
+class SecureSettingsController(
+    @Param private val showHideNavBarHint: Boolean,
+    private val secureSettingsHelper: SecureSettingsHelper,
+    private val toaster: Toaster
+) : PrefsController() {
 
     override val toolbarTitleRes: Int
         get() = R.string.es_title_secure_settings
-
-    private val key by inject<SecureSettingsKey>()
-    private val secureSettingsHelper by inject<SecureSettingsHelper>()
-    private val toaster by inject<Toaster>()
 
     override fun onCreate() {
         super.onCreate()
@@ -64,7 +67,7 @@ class SecureSettingsController : PrefsController() {
         Preference {
             key("secure_settings_header")
             summaryRes(
-                if (this@SecureSettingsController.key.showHideNavBarHint) {
+                if (showHideNavBarHint) {
                     R.string.es_pref_secure_settings_header_hide_nav_bar_summary
                 } else {
                     R.string.es_pref_secure_settings_header_summary
@@ -76,10 +79,12 @@ class SecureSettingsController : PrefsController() {
             key("use_pc")
             titleRes(R.string.es_pref_use_pc)
             summaryRes(R.string.es_pref_use_pc_summary)
-            navigateOnClickWithOptions {
-                SecureSettingsPcInstructionsKey to defaultNavOptionsOrElse {
-                    NavOptions().verticalFade()
-                }
+            navigateOnClick {
+                secureSettingsInstructionsRoute.copy(
+                    options = defaultControllerRouteOptionsOrElse {
+                        ControllerRoute.Options().verticalFade()
+                    }
+                )
             }
         }
 
@@ -104,7 +109,7 @@ class SecureSettingsController : PrefsController() {
     private fun handlePermissionResult(success: Boolean) {
         if (success) {
             toaster.toast(R.string.es_secure_settings_permission_granted)
-            travelerRouter.popWithResult(key, true)
+            navigator.pop(success)
         } else {
             toaster.toast(R.string.es_secure_settings_permission_denied)
         }

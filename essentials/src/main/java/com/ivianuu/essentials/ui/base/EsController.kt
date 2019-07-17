@@ -25,14 +25,14 @@ import com.ivianuu.director.requireActivity
 import com.ivianuu.essentials.injection.childControllerComponent
 import com.ivianuu.essentials.injection.controllerComponent
 import com.ivianuu.essentials.ui.mvrx.MvRxView
-import com.ivianuu.essentials.ui.traveler.key.controllerKeyModule
+import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.navigation.director.controllerRouteModule
 import com.ivianuu.essentials.util.ContextAware
 import com.ivianuu.essentials.util.InjektTraitContextWrapper
 import com.ivianuu.essentials.util.unsafeLazy
 import com.ivianuu.injekt.InjektTrait
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.inject
-import com.ivianuu.traveler.Router
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.*
 
@@ -44,12 +44,12 @@ abstract class EsController : Controller(), ContextAware, InjektTrait, LayoutCon
     override val component by unsafeLazy {
         if (parentController != null) {
             childControllerComponent {
-                modules(controllerKeyModule())
+                modules(controllerRouteModule())
                 modules(this@EsController.modules())
             }
         } else {
             controllerComponent {
-                modules(controllerKeyModule())
+                modules(controllerRouteModule())
                 modules(this@EsController.modules())
             }
         }
@@ -62,7 +62,7 @@ abstract class EsController : Controller(), ContextAware, InjektTrait, LayoutCon
         get() = _containerView
     private var _containerView: View? = null
 
-    val travelerRouter by inject<Router>()
+    val navigator by inject<Navigator>()
 
     protected open val layoutRes get() = -1
 

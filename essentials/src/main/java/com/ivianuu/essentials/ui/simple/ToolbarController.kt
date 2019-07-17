@@ -28,7 +28,6 @@ import com.ivianuu.essentials.util.getPrimaryColor
 import com.ivianuu.essentials.util.getPrimaryTextColor
 import com.ivianuu.essentials.util.getSecondaryTextColor
 import com.ivianuu.essentials.util.isLight
-import com.ivianuu.traveler.pop
 import kotlinx.android.synthetic.main.es_controller_tabs.*
 import kotlinx.android.synthetic.main.es_view_toolbar.*
 
@@ -44,10 +43,10 @@ abstract class ToolbarController : CoordinatorController() {
         get() = es_toolbar
 
     protected open val toolbarTitle: String? get() = null
-    protected open val toolbarTitleRes: Int get() = 0
-    protected open val toolbarMenuRes: Int get() = 0
+    protected open val toolbarTitleRes: Int? get() = null
+    protected open val toolbarMenuRes: Int? get() = null
     protected open val toolbarBackButton: Boolean
-        get() = router.backstack.firstOrNull()?.controller != this
+        get() = router.backStack.firstOrNull()?.controller != this
 
     protected open val lightToolbar: Boolean get() = getPrimaryColor().isLight
 
@@ -57,17 +56,17 @@ abstract class ToolbarController : CoordinatorController() {
         with(toolbar) {
             when {
                 toolbarTitle != null -> title = toolbarTitle
-                toolbarTitleRes != 0 -> setTitle(toolbarTitleRes)
+                toolbarTitleRes != null -> setTitle(toolbarTitleRes!!)
             }
 
-            if (toolbarMenuRes != 0) {
-                inflateMenu(toolbarMenuRes)
+            if (toolbarMenuRes != null) {
+                inflateMenu(toolbarMenuRes!!)
                 setOnMenuItemClickListener { onToolbarMenuItemClicked(it) }
             }
 
             if (toolbarBackButton) {
                 setNavigationIcon(R.drawable.abc_ic_ab_back_material)
-                setNavigationOnClickListener { travelerRouter.pop() }
+                setNavigationOnClickListener { navigator.pop() }
             }
 
             val titleColor = getPrimaryTextColor(!lightToolbar)

@@ -26,14 +26,18 @@ import com.ivianuu.director.common.changehandler.SharedElementTransitionChangeHa
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.base.EsController
 import com.ivianuu.essentials.ui.mvrx.injekt.injectMvRxViewModel
-import com.ivianuu.essentials.ui.traveler.NavOptions
-import com.ivianuu.essentials.ui.traveler.handler
-import com.ivianuu.essentials.ui.traveler.key.ControllerKey
+import com.ivianuu.essentials.ui.navigation.director.controllerRoute
+import com.ivianuu.essentials.ui.navigation.director.controllerRouteOptions
+import com.ivianuu.essentials.ui.navigation.director.handler
+import com.ivianuu.injekt.Inject
+import com.ivianuu.injekt.Param
+import com.ivianuu.injekt.parametersOf
 import com.ivianuu.kommon.core.transition.transitionSetOf
 import kotlinx.android.synthetic.main.controller_counter.*
 
-data class CounterKey(val screen: Int) :
-    ControllerKey(::CounterController, NavOptions().handler(CounterChangeHandler()))
+fun counterRoute(screen: Int) = controllerRoute<CounterController>(
+    options = controllerRouteOptions().handler(CounterChangeHandler())
+) { parametersOf(screen) }
 
 class CounterChangeHandler : SharedElementTransitionChangeHandler() {
 
@@ -51,11 +55,14 @@ class CounterChangeHandler : SharedElementTransitionChangeHandler() {
     override fun copy() = CounterChangeHandler()
 }
 
-class CounterController : EsController() {
+@Inject
+class CounterController(@Param private val screen: Int) : EsController() {
 
     override val layoutRes: Int get() = R.layout.controller_counter
 
-    private val viewModel: CounterViewModel by injectMvRxViewModel()
+    private val viewModel: CounterViewModel by injectMvRxViewModel {
+        parametersOf(screen)
+    }
 
     override fun onViewCreated(view: View) {
         super.onViewCreated(view)

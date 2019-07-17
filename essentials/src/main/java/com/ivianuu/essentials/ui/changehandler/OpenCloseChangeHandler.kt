@@ -25,7 +25,7 @@ import com.ivianuu.director.DirectorPlugins
 import com.ivianuu.director.common.changehandler.AnimatorChangeHandler
 import com.ivianuu.director.common.changehandler.defaultAnimationDuration
 import com.ivianuu.director.defaultRemovesFromViewOnPush
-import com.ivianuu.essentials.ui.traveler.ControllerNavOptions
+import com.ivianuu.essentials.ui.navigation.director.ControllerRoute
 import com.ivianuu.kommon.core.animation.animatorSetOf
 
 class OpenCloseChangeHandler(
@@ -108,26 +108,26 @@ class OpenCloseChangeHandler(
     override fun copy() = OpenCloseChangeHandler(duration, removesFromViewOnPush)
 }
 
-fun ControllerNavOptions.openClose(
+fun ControllerRoute.Options.openClose(
     duration: Long = DirectorPlugins.defaultAnimationDuration,
     removesFromViewOnPush: Boolean = DirectorPlugins.defaultRemovesFromViewOnPush
-): ControllerNavOptions = openClosePush(duration, removesFromViewOnPush)
+): ControllerRoute.Options = openClosePush(duration, removesFromViewOnPush)
     .openClosePop(duration, removesFromViewOnPush)
 
-fun ControllerNavOptions.openClosePush(
+fun ControllerRoute.Options.openClosePush(
     duration: Long = DirectorPlugins.defaultAnimationDuration,
     removesFromViewOnPush: Boolean = DirectorPlugins.defaultRemovesFromViewOnPush
-): ControllerNavOptions = push(
+): ControllerRoute.Options = pushHandler(
     OpenCloseChangeHandler(
         duration,
         removesFromViewOnPush
     )
 )
 
-fun ControllerNavOptions.openClosePop(
+fun ControllerRoute.Options.openClosePop(
     duration: Long = DirectorPlugins.defaultAnimationDuration,
     removesFromViewOnPush: Boolean = DirectorPlugins.defaultRemovesFromViewOnPush
-): ControllerNavOptions = pop(
+): ControllerRoute.Options = popHandler(
     OpenCloseChangeHandler(
         duration,
         removesFromViewOnPush

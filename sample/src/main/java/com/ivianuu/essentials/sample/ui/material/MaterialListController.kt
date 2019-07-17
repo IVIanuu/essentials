@@ -29,13 +29,13 @@ import com.ivianuu.essentials.ui.epoxy.SeekBarListItem
 import com.ivianuu.essentials.ui.epoxy.SingleItemListDialogListItem
 import com.ivianuu.essentials.ui.epoxy.SwitchListItem
 import com.ivianuu.essentials.ui.epoxy.epoxyController
+import com.ivianuu.essentials.ui.navigation.director.controllerRoute
 import com.ivianuu.essentials.ui.simple.ListController
-import com.ivianuu.essentials.ui.traveler.NavOptions
-import com.ivianuu.essentials.ui.traveler.fade
-import com.ivianuu.essentials.ui.traveler.key.ControllerKey
+import com.ivianuu.injekt.Inject
 
-object MaterialListKey : ControllerKey(::MaterialListController, NavOptions().fade())
+val materialListRoute = controllerRoute<MaterialListController>()
 
+@Inject
 class MaterialListController : ListController() {
 
     private var checkBoxState = true

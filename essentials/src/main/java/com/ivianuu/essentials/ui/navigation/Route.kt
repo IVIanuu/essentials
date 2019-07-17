@@ -14,16 +14,6 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.traveler
+package com.ivianuu.essentials.ui.navigation
 
-import com.ivianuu.injekt.module
-import com.ivianuu.injekt.single
-import com.ivianuu.traveler.Router
-import com.ivianuu.traveler.android.AndroidRouter
-
-/**
- * Provides the global [Router]
- */
-val travelerModule = module {
-    single<Router> { AndroidRouter() }
-}
+interface Route
