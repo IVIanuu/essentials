@@ -17,8 +17,8 @@
 package com.ivianuu.essentials.securesettings
 
 import androidx.lifecycle.lifecycleScope
-import com.ivianuu.essentials.ui.common.urlRoute
 import com.ivianuu.essentials.ui.epoxy.ListItem
+import com.ivianuu.essentials.ui.epoxy.UrlListItem
 import com.ivianuu.essentials.ui.epoxy.epoxyController
 import com.ivianuu.essentials.ui.navigation.director.controllerRoute
 import com.ivianuu.essentials.ui.prefs.PrefsController
@@ -82,31 +82,25 @@ internal class SecureSettingsPcInstructionsController(
             titleRes = R.string.es_pref_secure_settings_step_3
         )
 
-        ListItem(
+        UrlListItem(
             id = "secure_settings_link_gadget_hacks",
             iconRes = R.drawable.es_ic_link,
             textRes = R.string.es_pref_secure_settings_link_gadget_hacks_summary,
-            onClick = {
-                navigator.push(urlRoute("https://youtu.be/CDuxcrrWLnY"))
-            }
+            url = { "https://youtu.be/CDuxcrrWLnY" }
         )
 
-        ListItem(
+        UrlListItem(
             id = "secure_settings_link_lifehacker",
             iconRes = R.drawable.es_ic_link,
             textRes = R.string.es_pref_secure_settings_link_lifehacker_summary,
-            onClick = {
-                navigator.push(urlRoute("https://lifehacker.com/the-easiest-way-to-install-androids-adb-and-fastboot-to-1586992378"))
-            }
+            url = { "https://lifehacker.com/the-easiest-way-to-install-androids-adb-and-fastboot-to-1586992378" }
         )
 
-        ListItem(
+        UrlListItem(
             id = "secure_settings_link_xda",
             iconRes = R.drawable.es_ic_link,
             textRes = R.string.es_pref_secure_settings_link_xda_summary,
-            onClick = {
-                navigator.push(urlRoute("https://www.xda-developers.com/install-adb-windows-macos-linux/"))
-            }
+            url = { "https://www.xda-developers.com/install-adb-windows-macos-linux/" }
         )
 
         ListItem(

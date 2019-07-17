@@ -19,6 +19,7 @@ package com.ivianuu.essentials.securesettings
 import androidx.lifecycle.lifecycleScope
 import com.ivianuu.essentials.ui.changehandler.verticalFade
 import com.ivianuu.essentials.ui.epoxy.ListItem
+import com.ivianuu.essentials.ui.epoxy.RouteListItem
 import com.ivianuu.essentials.ui.epoxy.epoxyController
 import com.ivianuu.essentials.ui.navigation.director.ControllerRoute
 import com.ivianuu.essentials.ui.navigation.director.controllerRoute
@@ -71,17 +72,15 @@ class SecureSettingsController(
             else R.string.es_pref_secure_settings_header_summary
         )
 
-        ListItem(
+        RouteListItem(
             id = "use_pc",
             titleRes = R.string.es_pref_use_pc,
             textRes = R.string.es_pref_use_pc_summary,
-            onClick = {
-                navigator.push(
-                    secureSettingsInstructionsRoute.copy(
-                        options = defaultControllerRouteOptionsOrElse {
-                            ControllerRoute.Options().verticalFade()
-                        }
-                    )
+            route = {
+                secureSettingsInstructionsRoute.copy(
+                    options = defaultControllerRouteOptionsOrElse {
+                        ControllerRoute.Options().verticalFade()
+                    }
                 )
             }
         )
