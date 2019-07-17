@@ -47,5 +47,5 @@ dependencies {
     api(project(":essentials"))
     api(project(":essentials-apps"))
     api(project(":essentials-apps-glide"))
-    //kapt(project(":essentials-compiler"))
+    kapt(project(":essentials-compiler"))
 }

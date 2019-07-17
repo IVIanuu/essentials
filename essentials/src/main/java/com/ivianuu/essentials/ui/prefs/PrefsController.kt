@@ -23,6 +23,7 @@ import com.ivianuu.epoxyprefs.EpoxyPrefsPlugins
 import com.ivianuu.epoxyprefs.PreferenceDividerDecoration
 import com.ivianuu.epoxyprefs.PreferenceEpoxyController
 import com.ivianuu.epoxyprefs.preferenceEpoxyController
+import com.ivianuu.essentials.ui.common.urlRoute
 import com.ivianuu.essentials.ui.navigation.director.ControllerRoute
 import com.ivianuu.essentials.ui.simple.ListController
 
@@ -71,8 +72,7 @@ abstract class PrefsController : ListController() {
     protected fun AbstractPreferenceModel.Builder<*>.openUrlOnClick(
         urlProvider: () -> String
     ) {
-        error("lol")
-        // todo navigateOnClick { UrlKey(urlProvider()) }
+        navigateOnClick { urlRoute(urlProvider()) }
     }
 
 }

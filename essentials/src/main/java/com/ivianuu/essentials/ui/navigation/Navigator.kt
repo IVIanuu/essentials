@@ -42,6 +42,9 @@ class Navigator {
         return result
     }
 
+    @JvmName("pushTyped")
+    fun <T> push(route: Route): Deferred<T?> = push(route) as Deferred<T?>
+
     fun pop(result: Any? = null) {
         val newBackStack = backStack.toMutableList()
         val removedRoute = newBackStack.removeAt(backStack.lastIndex)
