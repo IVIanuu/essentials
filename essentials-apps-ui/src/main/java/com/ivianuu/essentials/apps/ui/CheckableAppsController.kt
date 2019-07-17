@@ -16,7 +16,6 @@
 
 package com.ivianuu.essentials.apps.ui
 
-import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
 import androidx.core.view.isVisible
@@ -29,6 +28,8 @@ import com.ivianuu.essentials.apps.AppStore
 import com.ivianuu.essentials.apps.glide.AppIcon
 import com.ivianuu.essentials.ui.epoxy.CheckboxListItem
 import com.ivianuu.essentials.ui.epoxy.SimpleLoading
+import com.ivianuu.essentials.ui.menu.PopupMenu
+import com.ivianuu.essentials.ui.menu.PopupMenuItem
 import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
 import com.ivianuu.essentials.ui.mvrx.epoxy.mvRxEpoxyController
 import com.ivianuu.essentials.ui.mvrx.mvRxViewModel
@@ -41,7 +42,6 @@ import com.ivianuu.essentials.util.Loading
 import com.ivianuu.essentials.util.PublishSubject
 import com.ivianuu.essentials.util.Success
 import com.ivianuu.essentials.util.Uninitialized
-import com.ivianuu.essentials.util.andTrue
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Param
 import com.ivianuu.injekt.get
@@ -61,8 +61,19 @@ import kotlinx.coroutines.rx2.awaitFirst
  */
 abstract class CheckableAppsController : ListController() {
 
-    override val toolbarMenuRes
-        get() = R.menu.es_controller_checkable_apps
+    override val toolbarMenu: PopupMenu<*>?
+        get() = PopupMenu(
+            items = listOf(
+                PopupMenuItem(value = MenuOption.SelectAll, titleRes = R.string.es_select_all),
+                PopupMenuItem(value = MenuOption.DeselectAll, titleRes = R.string.es_deselect_all)
+            ),
+            onSelected = {
+                when (it) {
+                    MenuOption.SelectAll -> viewModel.selectAllClicked()
+                    MenuOption.DeselectAll -> viewModel.deselectAllClicked()
+                }
+            }
+        )
 
     protected open val launchableAppsOnly: Boolean
         get() = false
@@ -114,15 +125,12 @@ abstract class CheckableAppsController : ListController() {
         }
     }
 
-    override fun onToolbarMenuItemClicked(item: MenuItem) = when (item.itemId) {
-        R.id.es_select_all -> viewModel.selectAllClicked().andTrue()
-        R.id.es_deselect_all -> viewModel.deselectAllClicked().andTrue()
-        else -> false
-    }
-
     abstract fun getCheckedAppsObservable(): Observable<Set<String>>
 
     abstract fun onCheckedAppsChanged(apps: Set<String>)
+
+    private enum class MenuOption { SelectAll, DeselectAll }
+
 }
 
 @Inject

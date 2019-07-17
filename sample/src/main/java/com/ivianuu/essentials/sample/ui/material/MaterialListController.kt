@@ -29,8 +29,8 @@ import com.ivianuu.essentials.ui.epoxy.SeekBarListItem
 import com.ivianuu.essentials.ui.epoxy.SingleItemListDialogListItem
 import com.ivianuu.essentials.ui.epoxy.SwitchListItem
 import com.ivianuu.essentials.ui.epoxy.epoxyController
+import com.ivianuu.essentials.ui.menu.PopupMenuItem
 import com.ivianuu.essentials.ui.navigation.director.controllerRoute
-import com.ivianuu.essentials.ui.popup.PopupMenuItem
 import com.ivianuu.essentials.ui.simple.ListController
 import com.ivianuu.injekt.Inject
 

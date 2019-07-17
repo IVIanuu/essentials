@@ -16,17 +16,16 @@
 
 package com.ivianuu.essentials.sample.ui.list
 
-import android.view.MenuItem
-import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.epoxy.ListItem
 import com.ivianuu.essentials.ui.epoxy.SimpleLoading
 import com.ivianuu.essentials.ui.epoxy.SimpleText
+import com.ivianuu.essentials.ui.menu.PopupMenu
+import com.ivianuu.essentials.ui.menu.PopupMenuItem
 import com.ivianuu.essentials.ui.mvrx.epoxy.mvRxEpoxyController
 import com.ivianuu.essentials.ui.mvrx.injekt.injectMvRxViewModel
 import com.ivianuu.essentials.ui.navigation.director.controllerRoute
 import com.ivianuu.essentials.ui.navigation.director.controllerRouteOptions
 import com.ivianuu.essentials.ui.navigation.director.fade
-import com.ivianuu.essentials.util.andTrue
 import com.ivianuu.injekt.Inject
 
 val listRoute = controllerRoute<ListController>(options = controllerRouteOptions().fade())
@@ -34,10 +33,19 @@ val listRoute = controllerRoute<ListController>(options = controllerRouteOptions
 @Inject
 class ListController : com.ivianuu.essentials.ui.simple.ListController() {
 
-    private val viewModel: ListViewModel by injectMvRxViewModel()
-
-    override val toolbarMenuRes get() = R.menu.controller_list
     override val toolbarTitle get() = "List"
+
+    override val toolbarMenu: PopupMenu<*>?
+        get() = PopupMenu<String>(
+            items = listOf(PopupMenuItem(value = "Refresh", title = "Refresh")),
+            onSelected = {
+                when (it) {
+                    "Refresh" -> viewModel.refreshClicked()
+                }
+            }
+        )
+
+    private val viewModel: ListViewModel by injectMvRxViewModel()
 
     override fun epoxyController() = mvRxEpoxyController(viewModel) { state ->
         when {
@@ -47,8 +55,4 @@ class ListController : com.ivianuu.essentials.ui.simple.ListController() {
         }
     }
 
-    override fun onToolbarMenuItemClicked(item: MenuItem) = when (item.itemId) {
-        R.id.refresh -> viewModel.refreshClicked().andTrue()
-        else -> false
-    }
 }

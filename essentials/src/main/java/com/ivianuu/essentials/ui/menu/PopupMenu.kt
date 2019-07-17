@@ -14,26 +14,28 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.popup
+package com.ivianuu.essentials.ui.menu
 
+import android.view.Gravity
 import android.view.View
+import com.github.ajalt.timberkt.d
 
-class PopupMenu<T>(
+data class PopupMenu<T>(
+    val gravity: Int = Gravity.NO_GRAVITY,
+    val style: Int = 0,
     val items: List<PopupMenuItem<T>>,
     val onCanceled: (() -> Unit)? = null,
     val onSelected: (T) -> Unit
 )
 
-data class PopupMenuItem<T>(
-    val value: T,
-    val title: String? = null,
-    val titleRes: Int? = null
-)
-
 fun <T> PopupMenu<T>.show(view: View) {
     var itemSelected = false
 
-    val androidPopupMenu = androidx.appcompat.widget.PopupMenu(view.context, view)
+    d { "show $this" }
+
+    val androidPopupMenu = androidx.appcompat.widget.PopupMenu(
+        view.context, view, gravity, style, 0
+    )
 
     val itemsByMenuItem = items
         .map { it to androidPopupMenu.menu.add("") }
@@ -47,9 +49,11 @@ fun <T> PopupMenu<T>.show(view: View) {
         .associateBy { it.second }
         .mapValues { it.value.first }
 
-    androidPopupMenu.setOnMenuItemClickListener {
+    androidPopupMenu.setOnMenuItemClickListener { androidItem ->
         itemSelected = true
-        onSelected(itemsByMenuItem.getValue(it).value)
+        val item = itemsByMenuItem.getValue(androidItem)
+        item.onSelected?.invoke()
+        onSelected(item.value)
         return@setOnMenuItemClickListener true
     }
 

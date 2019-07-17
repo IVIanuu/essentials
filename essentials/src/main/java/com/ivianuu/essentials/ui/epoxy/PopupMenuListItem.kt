@@ -17,16 +17,18 @@
 package com.ivianuu.essentials.ui.epoxy
 
 import android.graphics.drawable.Drawable
+import android.view.Gravity
 import com.airbnb.epoxy.EpoxyController
 import com.ivianuu.essentials.R
-import com.ivianuu.essentials.ui.popup.PopupMenu
-import com.ivianuu.essentials.ui.popup.PopupMenuItem
-import com.ivianuu.essentials.ui.popup.show
+import com.ivianuu.essentials.ui.menu.PopupMenu
+import com.ivianuu.essentials.ui.menu.PopupMenuItem
+import com.ivianuu.essentials.ui.menu.show
 import kotlinx.android.synthetic.main.es_list_widget_menu.*
 
 fun <T> EpoxyController.PopupMenuListItem(
     id: Any?,
 
+    gravity: Int = Gravity.NO_GRAVITY,
     items: List<PopupMenuItem<T>>,
     onItemSelected: (T) -> Unit,
     onCanceled: (() -> Unit)? = null,
@@ -66,7 +68,7 @@ fun <T> EpoxyController.PopupMenuListItem(
     builderBlock = {
         bind {
             es_list_widget_menu.setOnClickListener {
-                PopupMenu(items, onCanceled, onItemSelected)
+                PopupMenu(0, gravity, items, onCanceled, onItemSelected)
                     .show(it)
             }
         }

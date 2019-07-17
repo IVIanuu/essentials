@@ -17,12 +17,17 @@
 package com.ivianuu.essentials.ui.simple
 
 import android.graphics.PorterDuff
-import android.view.MenuItem
+import android.view.Gravity
 import android.view.View
+import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.children
 import com.google.android.material.appbar.AppBarLayout
 import com.ivianuu.essentials.R
+import com.ivianuu.essentials.ui.menu.PopupMenu
+import com.ivianuu.essentials.ui.menu.show
+import com.ivianuu.essentials.util.drawable
 import com.ivianuu.essentials.util.getIconColor
 import com.ivianuu.essentials.util.getPrimaryColor
 import com.ivianuu.essentials.util.getPrimaryTextColor
@@ -30,6 +35,7 @@ import com.ivianuu.essentials.util.getSecondaryTextColor
 import com.ivianuu.essentials.util.isLight
 import kotlinx.android.synthetic.main.es_controller_tabs.*
 import kotlinx.android.synthetic.main.es_view_toolbar.*
+
 
 /**
  * A controller which hosts a toolbar
@@ -44,7 +50,7 @@ abstract class ToolbarController : CoordinatorController() {
 
     protected open val toolbarTitle: String? get() = null
     protected open val toolbarTitleRes: Int? get() = null
-    protected open val toolbarMenuRes: Int? get() = null
+    protected open val toolbarMenu: PopupMenu<*>? get() = null
     protected open val toolbarBackButton: Boolean
         get() = router.backStack.firstOrNull()?.controller != this
 
@@ -59,9 +65,18 @@ abstract class ToolbarController : CoordinatorController() {
                 toolbarTitleRes != null -> setTitle(toolbarTitleRes!!)
             }
 
-            if (toolbarMenuRes != null) {
-                inflateMenu(toolbarMenuRes!!)
-                setOnMenuItemClickListener { onToolbarMenuItemClicked(it) }
+            val toolbarMenu = toolbarMenu?.copy(
+                style = R.attr.actionOverflowMenuStyle, gravity = Gravity.END
+            )
+
+            if (toolbarMenu != null) {
+                menu.add("dummy")
+                overflowIcon = drawable(R.drawable.abc_ic_menu_overflow_material)
+                val overflow = findView {
+                    it is ImageView && it.drawable == overflowIcon
+                }!!
+
+                overflow.setOnClickListener { toolbarMenu.show(it) }
             }
 
             if (toolbarBackButton) {
@@ -84,6 +99,17 @@ abstract class ToolbarController : CoordinatorController() {
         }
     }
 
-    open fun onToolbarMenuItemClicked(item: MenuItem): Boolean = false
+    private fun View.findView(predicate: (View) -> Boolean): View? {
+        if (predicate(this)) return this
+        if (this !is ViewGroup) return null
+
+        for (i in 0 until childCount) {
+            val child = getChildAt(i)
+            val view = child.findView(predicate)
+            if (view != null) return view
+        }
+
+        return null
+    }
 
 }
