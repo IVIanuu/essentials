@@ -22,8 +22,6 @@ import com.ivianuu.essentials.R
 import com.ivianuu.kprefs.Pref
 import kotlinx.android.synthetic.main.es_list_widget_radio_button.*
 
-// todo radio button group
-
 fun EpoxyController.RadioButtonListItem(
     id: Any?,
 
