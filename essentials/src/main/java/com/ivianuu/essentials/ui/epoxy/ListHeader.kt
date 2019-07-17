@@ -18,15 +18,15 @@ package com.ivianuu.essentials.ui.epoxy
 
 import com.airbnb.epoxy.EpoxyController
 import com.ivianuu.essentials.R
-import kotlinx.android.synthetic.main.es_list_header.*
+import kotlinx.android.synthetic.main.es_list_subheader.*
 
-fun EpoxyController.ListHeader(
+fun EpoxyController.ListSubheader(
     text: String? = null,
     textRes: Int? = null,
     id: Any? = text + textRes
 ) = model(
     id = id,
-    layoutRes = R.layout.es_list_header,
+    layoutRes = R.layout.es_list_subheader,
     state = arrayOf(text, textRes),
     bind = {
         when {

@@ -16,9 +16,7 @@
 
 package com.ivianuu.essentials.apps.ui
 
-import android.view.View
 import android.widget.ImageView
-import androidx.core.view.isVisible
 import androidx.lifecycle.viewModelScope
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -68,11 +66,10 @@ class AppPickerController(@Param private val launchableOnly: Boolean) : ListCont
                     id = app.packageName,
                     title = app.appName,
                     onClick = { viewModel.appClicked(app) },
+                    primaryActionLayoutRes = R.layout.es_list_action_avatar,
                     builderBlock = {
                         bind {
                             val avatar = findView<ImageView>(R.id.es_list_avatar)
-                            avatar.isVisible = true
-                            findView<View>(R.id.es_list_image_frame).isVisible = true
                             Glide.with(avatar)
                                 .load(AppIcon(app.packageName))
                                 .apply(

@@ -16,9 +16,9 @@
 
 package com.ivianuu.essentials.apps.ui
 
-import android.view.View
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.widget.ImageView
-import androidx.core.view.isVisible
 import androidx.lifecycle.viewModelScope
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -105,11 +105,10 @@ abstract class CheckableAppsController : ListController() {
                     value = app.isChecked,
                     title = app.info.appName,
                     onChange = { viewModel.appClicked(app) },
+                    avatar = ColorDrawable(Color.TRANSPARENT),
                     builderBlock = {
                         bind {
                             val avatar = findView<ImageView>(R.id.es_list_avatar)
-                            avatar.isVisible = true
-                            findView<View>(R.id.es_list_image_frame).isVisible = true
                             Glide.with(avatar)
                                 .load(AppIcon(app.info.packageName))
                                 .apply(

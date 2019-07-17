@@ -39,7 +39,7 @@ fun EpoxyController.CompoundButtonListItem(
     avatar: Drawable? = null,
     avatarRes: Int? = null,
 
-    widgetLayoutRes: Int,
+    secondaryActionLayoutRes: Int,
 
     enabled: Boolean = true,
 
@@ -58,6 +58,6 @@ fun EpoxyController.CompoundButtonListItem(
     avatarRes = avatarRes,
     enabled = enabled,
     builderBlock = builderBlock,
-    widgetLayoutRes = widgetLayoutRes,
+    secondaryActionLayoutRes = secondaryActionLayoutRes,
     render = { compoundButtonProvider().isChecked = value }
 )

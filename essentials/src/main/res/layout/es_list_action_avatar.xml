@@ -13,12 +13,13 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-
-<ImageButton android:id="@+id/es_list_widget_menu"
+<ImageView android:id="@+id/es_list_avatar"
     android:layout_width="40dp"
     android:layout_height="40dp"
-    android:layout_marginEnd="8dp"
-    android:background="?selectableItemBackgroundBorderless"
-    android:src="@drawable/abc_ic_menu_overflow_material"
-    android:tint="?colorControlNormal"
+    android:layout_marginStart="16dp"
+    android:layout_marginTop="8dp"
+    tools:visibility="gone"
+    android:layout_marginBottom="8dp"
+    tools:background="@color/design_default_color_primary"
+    xmlns:tools="http://schemas.android.com/tools"
     xmlns:android="http://schemas.android.com/apk/res/android" />

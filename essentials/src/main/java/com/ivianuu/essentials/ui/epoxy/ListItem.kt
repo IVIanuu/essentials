@@ -22,6 +22,8 @@ import com.airbnb.epoxy.EpoxyController
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.util.andTrue
 import com.ivianuu.kommon.core.view.inflate
+import kotlinx.android.synthetic.main.es_list_action_avatar.*
+import kotlinx.android.synthetic.main.es_list_action_icon.*
 import kotlinx.android.synthetic.main.es_list_item.*
 import kotlinx.android.synthetic.main.es_list_item.view.*
 
@@ -42,7 +44,8 @@ fun EpoxyController.ListItem(
     avatar: Drawable? = null,
     avatarRes: Int? = null,
 
-    widgetLayoutRes: Int? = null,
+    primaryActionLayoutRes: Int? = null,
+    secondaryActionLayoutRes: Int? = null,
 
     onClick: (() -> Unit)? = null,
     onLongClick: (() -> Unit)? = null,
@@ -53,10 +56,22 @@ fun EpoxyController.ListItem(
 ) = model {
     id(id)
 
+    val finalPrimaryActionLayoutRes = when {
+        primaryActionLayoutRes != null -> primaryActionLayoutRes
+        avatar != null || avatarRes != null -> R.layout.es_list_action_avatar
+        icon != null || iconRes != null -> R.layout.es_list_action_icon
+        else -> null
+    }
+
+    viewType(
+        R.layout.es_list_item + (finalPrimaryActionLayoutRes ?: 0) + (secondaryActionLayoutRes ?: 0)
+    )
+
     state(title, titleRes)
     state(text, textRes)
     state(icon != null, iconRes)
     state(avatar != null, avatarRes)
+    state(finalPrimaryActionLayoutRes, secondaryActionLayoutRes)
     state(onClick != null, onLongClick != null)
     state(enabled)
     state(builderBlock != null)
@@ -64,16 +79,55 @@ fun EpoxyController.ListItem(
 
     buildView {
         val view = it.inflate(R.layout.es_list_item)
-        if (widgetLayoutRes != null) {
-            view.es_list_widget_container.inflate(widgetLayoutRes, true)
+
+        if (finalPrimaryActionLayoutRes != null) {
+            view.es_list_primary_action_container.inflate(finalPrimaryActionLayoutRes, true)
+        }
+
+        if (secondaryActionLayoutRes != null) {
+            view.es_list_secondary_action_container.inflate(secondaryActionLayoutRes, true)
         }
 
         return@buildView view
     }
 
-    viewType(R.layout.es_list_item + (widgetLayoutRes ?: 0))
-
     bind {
+        if (icon != null || iconRes != null) {
+            when {
+                icon != null -> {
+                    es_list_icon.setImageDrawable(icon)
+                    es_list_icon.isVisible = true
+                }
+                iconRes != null -> {
+                    es_list_icon.setImageResource(iconRes)
+                    es_list_icon.isVisible = true
+                }
+                else -> {
+                    es_list_icon.setImageDrawable(null)
+                    es_list_icon.isVisible = false
+                }
+            }
+            es_list_icon.isEnabled = enabled
+        }
+
+        if (avatar != null || avatarRes != null) {
+            when {
+                avatar != null -> {
+                    es_list_avatar.setImageDrawable(avatar)
+                    es_list_avatar.isVisible = true
+                }
+                avatarRes != null -> {
+                    es_list_avatar.setImageResource(avatarRes)
+                    es_list_avatar.isVisible = true
+                }
+                else -> {
+                    es_list_avatar.setImageDrawable(null)
+                    es_list_avatar.isVisible = false
+                }
+            }
+            es_list_avatar.isEnabled = enabled
+        }
+
         when {
             title != null -> {
                 es_list_title.text = title
@@ -106,52 +160,24 @@ fun EpoxyController.ListItem(
         }
         es_list_text.isEnabled = enabled
 
-        when {
-            icon != null -> {
-                es_list_icon.setImageDrawable(icon)
-                es_list_icon.isVisible = true
-            }
-            iconRes != null -> {
-                es_list_icon.setImageResource(iconRes)
-                es_list_icon.isVisible = true
-            }
-            else -> {
-                es_list_icon.setImageDrawable(null)
-                es_list_icon.isVisible = false
-            }
-        }
-        es_list_icon.isEnabled = enabled
-
-        when {
-            avatar != null -> {
-                es_list_avatar.setImageDrawable(avatar)
-                es_list_avatar.isVisible = true
-            }
-            avatarRes != null -> {
-                es_list_avatar.setImageResource(avatarRes)
-                es_list_avatar.isVisible = true
-            }
-            else -> {
-                es_list_avatar.setImageDrawable(null)
-                es_list_avatar.isVisible = false
-            }
-        }
-        es_list_avatar.isEnabled = enabled
-
-        es_list_image_frame.isVisible =
-            es_list_icon.isVisible || es_list_avatar.isVisible
-
-        if (es_list_widget_container != null) {
-            es_list_widget_container.isEnabled = enabled
-            (0 until es_list_widget_container.childCount)
-                .map { es_list_widget_container.getChildAt(it) }
+        if (es_list_primary_action_container != null) {
+            es_list_primary_action_container.isEnabled = enabled
+            (0 until es_list_primary_action_container.childCount)
+                .map { es_list_primary_action_container.getChildAt(it) }
                 .forEach { it.isEnabled = enabled }
+        }
 
-            if (onClick != null) {
-                root.setOnClickListener { onClick() }
-            } else {
-                root.setOnClickListener(null)
-            }
+        if (es_list_secondary_action_container != null) {
+            es_list_secondary_action_container.isEnabled = enabled
+            (0 until es_list_secondary_action_container.childCount)
+                .map { es_list_secondary_action_container.getChildAt(it) }
+                .forEach { it.isEnabled = enabled }
+        }
+
+        if (onClick != null) {
+            root.setOnClickListener { onClick() }
+        } else {
+            root.setOnClickListener(null)
         }
 
         if (onLongClick != null) {

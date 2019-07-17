@@ -20,7 +20,7 @@ import android.graphics.drawable.Drawable
 import com.airbnb.epoxy.EpoxyController
 import com.ivianuu.essentials.R
 import com.ivianuu.kprefs.Pref
-import kotlinx.android.synthetic.main.es_list_widget_radio_button.*
+import kotlinx.android.synthetic.main.es_list_action_radio_button.*
 
 fun EpoxyController.RadioButtonListItem(
     id: Any?,
@@ -57,7 +57,7 @@ fun EpoxyController.RadioButtonListItem(
     avatarRes = avatarRes,
     enabled = enabled,
     builderBlock = builderBlock,
-    widgetLayoutRes = R.layout.es_list_widget_radio_button,
+    secondaryActionLayoutRes = R.layout.es_list_action_radio_button,
     compoundButtonProvider = { es_list_widget_radio_button }
 )
 

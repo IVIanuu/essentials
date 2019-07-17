@@ -24,6 +24,7 @@ import com.ivianuu.kommon.core.view.inflate
 import com.ivianuu.kommon.core.widget.setOnSeekBarChangeListener
 import com.ivianuu.kprefs.Pref
 import kotlinx.android.synthetic.main.es_item_seek_bar.*
+import kotlinx.android.synthetic.main.es_list_item.view.*
 import java.lang.Math.round
 
 fun EpoxyController.SeekBarListItem(
@@ -65,8 +66,23 @@ fun EpoxyController.SeekBarListItem(
     builderBlock = {
         state(value, onChange != null, max, min, inc, valueTextProvider != null)
 
-        // todo remove this
-        buildView { it.inflate(R.layout.es_item_seek_bar) }
+        val finalPrimaryActionLayoutRes = when {
+            avatar != null || avatarRes != null -> R.layout.es_list_action_avatar
+            icon != null || iconRes != null -> R.layout.es_list_action_icon
+            else -> null
+        }
+
+        viewType(R.layout.es_list_item + (finalPrimaryActionLayoutRes ?: 0))
+
+        buildView {
+            val view = it.inflate(R.layout.es_item_seek_bar)
+
+            if (finalPrimaryActionLayoutRes != null) {
+                view.es_list_primary_action_container.inflate(finalPrimaryActionLayoutRes, true)
+            }
+
+            return@buildView view
+        }
 
         bind {
             var internalValue = value

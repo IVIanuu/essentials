@@ -38,7 +38,7 @@ fun EpoxyController.ToggleableListItem(
     avatar: Drawable? = null,
     avatarRes: Int? = null,
 
-    widgetLayoutRes: Int? = null,
+    secondaryActionLayoutRes: Int? = null,
 
     enabled: Boolean = true,
 
@@ -53,7 +53,7 @@ fun EpoxyController.ToggleableListItem(
     iconRes = iconRes,
     avatar = avatar,
     avatarRes = avatarRes,
-    widgetLayoutRes = widgetLayoutRes,
+    secondaryActionLayoutRes = secondaryActionLayoutRes,
     onClick = { onChange(!value) },
     enabled = enabled,
     builderBlock = {

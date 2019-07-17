@@ -20,7 +20,7 @@ import android.graphics.drawable.Drawable
 import com.airbnb.epoxy.EpoxyController
 import com.ivianuu.essentials.R
 import com.ivianuu.kprefs.Pref
-import kotlinx.android.synthetic.main.es_list_widget_checkbox.*
+import kotlinx.android.synthetic.main.es_list_action_checkbox.*
 
 fun EpoxyController.CheckboxListItem(
     id: Any?,
@@ -57,7 +57,7 @@ fun EpoxyController.CheckboxListItem(
     avatarRes = avatarRes,
     builderBlock = builderBlock,
     enabled = enabled,
-    widgetLayoutRes = R.layout.es_list_widget_checkbox,
+    secondaryActionLayoutRes = R.layout.es_list_action_checkbox,
     compoundButtonProvider = { es_list_widget_checkbox }
 )
 

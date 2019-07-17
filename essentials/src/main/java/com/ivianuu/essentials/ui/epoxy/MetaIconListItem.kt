@@ -19,17 +19,10 @@ package com.ivianuu.essentials.ui.epoxy
 import android.graphics.drawable.Drawable
 import com.airbnb.epoxy.EpoxyController
 import com.ivianuu.essentials.R
-import com.ivianuu.essentials.ui.popup.PopupMenu
-import com.ivianuu.essentials.ui.popup.PopupMenuItem
-import com.ivianuu.essentials.ui.popup.show
 import kotlinx.android.synthetic.main.es_list_action_image_button.*
 
-fun <T> EpoxyController.PopupMenuListItem(
+fun EpoxyController.IconButtonListItem(
     id: Any?,
-
-    items: List<PopupMenuItem<T>>,
-    onItemSelected: (T) -> Unit,
-    onCanceled: (() -> Unit)? = null,
 
     title: String? = null,
     titleRes: Int? = null,
@@ -43,8 +36,9 @@ fun <T> EpoxyController.PopupMenuListItem(
     avatar: Drawable? = null,
     avatarRes: Int? = null,
 
-    menuButtonIcon: Drawable? = null,
-    menuButtonIconRes: Int? = null,
+    buttonIcon: Drawable? = null,
+    buttonIconRes: Int? = null,
+    onButtonClick: () -> Unit,
 
     onClick: (() -> Unit)? = null,
     onLongClick: (() -> Unit)? = null,
@@ -67,19 +61,14 @@ fun <T> EpoxyController.PopupMenuListItem(
     secondaryActionLayoutRes = R.layout.es_list_action_image_button,
     enabled = enabled,
     builderBlock = {
-        state(menuButtonIcon, menuButtonIconRes)
+        state(buttonIcon, buttonIconRes)
 
         bind {
             when {
-                menuButtonIcon != null -> es_list_widget_icon_button.setImageDrawable(menuButtonIcon)
-                menuButtonIconRes != null -> es_list_widget_icon_button.setImageResource(
-                    menuButtonIconRes
-                )
+                buttonIcon != null -> es_list_widget_icon_button.setImageDrawable(buttonIcon)
+                buttonIconRes != null -> es_list_widget_icon_button.setImageResource(buttonIconRes)
             }
-            es_list_widget_icon_button.setOnClickListener {
-                PopupMenu(items = items, onCanceled = onCanceled, onSelected = onItemSelected)
-                    .show(it)
-            }
+            es_list_widget_icon_button.setOnClickListener { onButtonClick() }
         }
 
         builderBlock?.invoke(this)

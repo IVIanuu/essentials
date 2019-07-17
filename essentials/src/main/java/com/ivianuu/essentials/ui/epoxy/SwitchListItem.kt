@@ -20,7 +20,7 @@ import android.graphics.drawable.Drawable
 import com.airbnb.epoxy.EpoxyController
 import com.ivianuu.essentials.R
 import com.ivianuu.kprefs.Pref
-import kotlinx.android.synthetic.main.es_list_widget_switch.*
+import kotlinx.android.synthetic.main.es_list_action_widget_switch.*
 
 fun EpoxyController.SwitchListItem(
     id: Any?,
@@ -57,7 +57,7 @@ fun EpoxyController.SwitchListItem(
     avatarRes = avatarRes,
     builderBlock = builderBlock,
     enabled = enabled,
-    widgetLayoutRes = R.layout.es_list_widget_switch,
+    secondaryActionLayoutRes = R.layout.es_list_action_widget_switch,
     compoundButtonProvider = { es_list_widget_switch }
 )
 

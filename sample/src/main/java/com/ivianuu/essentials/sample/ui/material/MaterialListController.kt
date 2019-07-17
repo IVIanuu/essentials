@@ -20,8 +20,8 @@ import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.epoxy.CheckboxListItem
 import com.ivianuu.essentials.ui.epoxy.EditTextDialogListItem
 import com.ivianuu.essentials.ui.epoxy.ListDivider
-import com.ivianuu.essentials.ui.epoxy.ListHeader
 import com.ivianuu.essentials.ui.epoxy.ListItem
+import com.ivianuu.essentials.ui.epoxy.ListSubheader
 import com.ivianuu.essentials.ui.epoxy.MultiSelectListDialogListItem
 import com.ivianuu.essentials.ui.epoxy.PopupMenuListItem
 import com.ivianuu.essentials.ui.epoxy.RadioButtonListItem
@@ -59,7 +59,7 @@ class MaterialListController : ListController() {
 
         ListItem(id = "item_two", title = "This is a title")
 
-        ListHeader(text = "Toggles")
+        ListSubheader(text = "Toggles")
 
         CheckboxListItem(
             id = "check box",
@@ -91,7 +91,7 @@ class MaterialListController : ListController() {
             }
         )
 
-        ListHeader(text = "More")
+        ListSubheader(text = "More")
 
         SeekBarListItem(
             id = "seek bar",

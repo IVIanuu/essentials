@@ -23,33 +23,13 @@
     android:minHeight="48dp">
 
     <FrameLayout
-        android:id="@+id/es_list_image_frame"
+        android:id="@+id/es_list_primary_action_container"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
         tools:visibility="visible"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
-
-        <ImageView
-            android:id="@+id/es_list_icon"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            tools:visibility="visible"
-            android:tint="?colorControlNormal"
-            tools:src="@drawable/icon_back_white" />
-
-        <ImageView
-            android:id="@+id/es_list_avatar"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginTop="8dp"
-            tools:visibility="gone"
-            android:layout_marginBottom="8dp"
-            tools:background="@color/design_default_color_primary" />
-
-    </FrameLayout>
+        app:layout_constraintBottom_toBottomOf="parent" />
 
     <LinearLayout
         android:id="@+id/es_list_text_container"
@@ -60,9 +40,9 @@
         android:layout_marginEnd="16dp"
         android:paddingTop="16dp"
         android:paddingBottom="16dp"
-        app:layout_constraintStart_toEndOf="@id/es_list_image_frame"
+        app:layout_constraintStart_toEndOf="@id/es_list_primary_action_container"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/es_list_widget_container"
+        app:layout_constraintEnd_toStartOf="@id/es_list_secondary_action_container"
         app:layout_constraintBottom_toBottomOf="parent">
 
         <TextView
@@ -86,7 +66,7 @@
     </LinearLayout>
 
     <FrameLayout
-        android:id="@+id/es_list_widget_container"
+        android:id="@+id/es_list_secondary_action_container"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:visibility="visible"
