@@ -19,11 +19,13 @@ package com.ivianuu.essentials.sample.util
 import android.Manifest
 import android.content.Context
 import com.ivianuu.essentials.shell.Shell
+import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.injekt.Inject
 import com.ivianuu.kommon.core.content.hasPermissions
 
 @Inject
 class SecureSettingsHelper(
+    private val buildInfo: BuildInfo,
     private val context: Context,
     private val shell: Shell
 ) {
@@ -32,7 +34,7 @@ class SecureSettingsHelper(
 
     suspend fun grantWriteSecureSettings(): Boolean {
         return try {
-            shell.run("pm grant ${context.packageName} android.permission.WRITE_SECURE_SETTINGS")
+            shell.run("pm grant ${buildInfo.packageName} android.permission.WRITE_SECURE_SETTINGS")
             canWriteSecureSettings()
         } catch (e: Exception) {
             false
