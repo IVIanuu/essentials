@@ -39,4 +39,6 @@
     <string name="es_twilight_mode_system">System</string>
     <string name="es_twilight_mode_system_desc">Use the system default dark mode setting</string>
 
+    <string name="es_copied_to_clipboard">Copied to clipboard!</string>
+
 </resources>

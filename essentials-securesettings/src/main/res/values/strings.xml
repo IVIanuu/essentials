@@ -47,6 +47,5 @@
 
     <string name="es_secure_settings_permission_denied">Permission denied! Make sure to follow the steps above</string>
     <string name="es_secure_settings_permission_granted">Permission granted! Where good to go now</string>
-    <string name="es_secure_settings_copied_to_clipboard">Copied to clipboard!</string>
 
 </resources>

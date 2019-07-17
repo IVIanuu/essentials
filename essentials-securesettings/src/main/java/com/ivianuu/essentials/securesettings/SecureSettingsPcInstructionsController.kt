@@ -17,13 +17,13 @@
 package com.ivianuu.essentials.securesettings
 
 import androidx.lifecycle.lifecycleScope
+import com.ivianuu.essentials.ui.epoxy.ClipboardListItem
 import com.ivianuu.essentials.ui.epoxy.ListItem
 import com.ivianuu.essentials.ui.epoxy.UrlListItem
 import com.ivianuu.essentials.ui.epoxy.epoxyController
 import com.ivianuu.essentials.ui.navigation.director.controllerRoute
 import com.ivianuu.essentials.ui.prefs.PrefsController
 import com.ivianuu.essentials.util.BuildInfo
-import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.essentials.util.string
 import com.ivianuu.injekt.Inject
 import kotlinx.coroutines.delay
@@ -38,9 +38,7 @@ val secureSettingsInstructionsRoute =
 @Inject
 internal class SecureSettingsPcInstructionsController(
     private val buildInfo: BuildInfo,
-    private val clipboardAccessor: ClipboardAccessor,
-    private val secureSettingsHelper: SecureSettingsHelper,
-    private val toaster: Toaster
+    private val secureSettingsHelper: SecureSettingsHelper
 ) : PrefsController() {
 
     override val toolbarTitleRes: Int
@@ -103,16 +101,13 @@ internal class SecureSettingsPcInstructionsController(
             url = { "https://www.xda-developers.com/install-adb-windows-macos-linux/" }
         )
 
-        ListItem(
+        ClipboardListItem(
             id = "secure_settings_step_4",
             titleRes = R.string.es_pref_secure_settings_step_4,
             text = string(R.string.es_pref_secure_settings_step_4_summary, buildInfo.packageName),
-            onClick = {
-                clipboardAccessor.clipboardText =
-                    "adb shell pm grant ${buildInfo.packageName} android.permission.WRITE_SECURE_SETTINGS"
-                toaster.toast(R.string.es_secure_settings_copied_to_clipboard)
-            }
+            clip = "adb shell pm grant ${buildInfo.packageName} android.permission.WRITE_SECURE_SETTINGS"
         )
+
     }
 
 }
