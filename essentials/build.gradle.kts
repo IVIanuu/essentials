@@ -105,6 +105,8 @@ dependencies {
     api(Deps.materialDialogsInput)
     api(Deps.materialDialogsLifecycle)
 
+    api(Deps.materialPopupMenu)
+
     api(Deps.rxAndroid)
     api(Deps.rxJava)
     api(Deps.rxKotlin)

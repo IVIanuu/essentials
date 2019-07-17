@@ -96,7 +96,7 @@ fun EpoxyController.SeekBarListItem(
                 }
             }
 
-            es_seekbar.isEnabled = onChange != null
+            es_seekbar.isEnabled = enabled && onChange != null
             es_seekbar.max = max - min
             es_seekbar.progress = internalValue - min
             if (onChange != null) {
@@ -137,6 +137,8 @@ fun EpoxyController.SeekBarListItem(
     avatar: Drawable? = null,
     avatarRes: Int? = null,
 
+    enabled: Boolean = true,
+
     builderBlock: (FunModelBuilder.() -> Unit)? = null
 ) = SeekBarListItem(
     id = id,
@@ -158,5 +160,6 @@ fun EpoxyController.SeekBarListItem(
     iconRes = iconRes,
     avatar = avatar,
     avatarRes = avatarRes,
+    enabled = enabled,
     builderBlock = builderBlock
 )

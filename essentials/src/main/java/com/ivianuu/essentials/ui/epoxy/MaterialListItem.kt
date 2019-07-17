@@ -139,15 +139,17 @@ fun EpoxyController.ListItem(
         es_list_image_frame.isVisible =
             es_list_icon.isVisible || es_list_avatar.isVisible
 
-        es_list_widget_container.isEnabled = enabled
-        (0 until es_list_widget_container.childCount)
-            .map { es_list_widget_container.getChildAt(it) }
-            .forEach { it.isEnabled = enabled }
+        if (es_list_widget_container != null) {
+            es_list_widget_container.isEnabled = enabled
+            (0 until es_list_widget_container.childCount)
+                .map { es_list_widget_container.getChildAt(it) }
+                .forEach { it.isEnabled = enabled }
 
-        if (onClick != null) {
-            root.setOnClickListener { onClick() }
-        } else {
-            root.setOnClickListener(null)
+            if (onClick != null) {
+                root.setOnClickListener { onClick() }
+            } else {
+                root.setOnClickListener(null)
+            }
         }
 
         if (onLongClick != null) {
