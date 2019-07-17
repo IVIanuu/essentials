@@ -19,6 +19,7 @@ package com.ivianuu.essentials.ui.navigation.director
 import androidx.fragment.app.FragmentActivity
 import com.ivianuu.director.RouterTransaction
 import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.util.AppSchedulers
 import com.ivianuu.kommon.lifecycle.getViewModel
 import com.ivianuu.scopes.Scope
 import com.ivianuu.scopes.rx.disposeBy
@@ -27,11 +28,13 @@ import io.reactivex.rxkotlin.ofType
 class ControllerRenderer(
     private val activity: FragmentActivity,
     private val navigator: Navigator,
-    private val router: com.ivianuu.director.Router
+    private val router: com.ivianuu.director.Router,
+    private val schedulers: AppSchedulers
 ) {
 
     fun renderUntil(scope: Scope) {
         navigator.observable
+            .observeOn(schedulers.main)
             .ofType<List<ControllerRoute>>()
             .subscribe { applyBackStack(it) }
             .disposeBy(scope)

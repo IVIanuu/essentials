@@ -28,6 +28,7 @@ import com.ivianuu.essentials.util.unsafeLazy
 import com.ivianuu.injekt.InjektTrait
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.android.activityComponent
+import com.ivianuu.injekt.get
 import com.ivianuu.injekt.inject
 import com.ivianuu.scopes.android.onPause
 
@@ -74,7 +75,7 @@ abstract class EsActivity : AppCompatActivity(), InjektTrait, MvRxView {
 
     override fun onResumeFragments() {
         super.onResumeFragments()
-        ControllerRenderer(this, navigator, router)
+        ControllerRenderer(this, navigator, router, get())
             .renderUntil(onPause)
     }
 
