@@ -27,14 +27,16 @@ import androidx.core.net.toUri
 import androidx.lifecycle.lifecycleScope
 import com.ivianuu.director.requireActivity
 import com.ivianuu.essentials.ui.base.EsController
+import com.ivianuu.essentials.ui.navigation.director.ControllerRoute
 import com.ivianuu.essentials.ui.navigation.director.controllerRoute
+import com.ivianuu.essentials.ui.navigation.director.dialog
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Param
 import com.ivianuu.injekt.parametersOf
 import kotlinx.coroutines.launch
 
 fun activityRoute(intentFactory: (Activity) -> Intent) =
-    controllerRoute<ActivityStartingController> {
+    controllerRoute<ActivityStartingController>(options = ControllerRoute.Options().dialog()) {
         parametersOf(intentFactory)
     }
 
