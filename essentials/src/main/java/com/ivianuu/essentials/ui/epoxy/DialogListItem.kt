@@ -19,7 +19,10 @@ package com.ivianuu.essentials.ui.epoxy
 import android.graphics.drawable.Drawable
 import com.afollestad.materialdialogs.MaterialDialog
 import com.airbnb.epoxy.EpoxyController
-import com.ivianuu.essentials.ui.dialog.showDialog
+import com.ivianuu.essentials.ui.dialog.dialogRoute
+import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.injekt.android.getClosestComponent
+import com.ivianuu.injekt.get
 
 fun EpoxyController.DialogListItem(
     id: Any?,
@@ -55,7 +58,10 @@ fun EpoxyController.DialogListItem(
     builderBlock = {
         bind {
             root.isEnabled = true
-            root.setOnClickListener { showDialog(buildDialog) }
+            root.setOnClickListener {
+                it.getClosestComponent().get<Navigator>()
+                    .push(dialogRoute(block = { buildDialog() }))
+            }
         }
 
         builderBlock?.invoke(this)
