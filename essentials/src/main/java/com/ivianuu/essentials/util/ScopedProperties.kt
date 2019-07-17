@@ -34,7 +34,7 @@ class Properties {
 
     fun <T> remove(key: String): T? = properties.remove(key) as? T
 
-    fun contains(key: String) = properties.contains(key)
+    fun contains(key: String): Boolean = properties.containsKey(key)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
