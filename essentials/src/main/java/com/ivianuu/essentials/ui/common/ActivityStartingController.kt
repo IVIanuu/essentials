@@ -33,7 +33,6 @@ import com.ivianuu.essentials.ui.navigation.director.dialog
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Param
 import com.ivianuu.injekt.parametersOf
-import kotlinx.coroutines.launch
 
 fun activityRoute(intentFactory: (Activity) -> Intent) =
     controllerRoute<ActivityStartingController>(options = ControllerRoute.Options().dialog()) {
@@ -67,17 +66,16 @@ internal class ActivityStartingController(
     @Param private val intentFactory: (Activity) -> Intent
 ) : EsController() {
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup
-    ) = View(requireActivity()) // dummy
-
-    override fun onAttach(view: View) {
-        super.onAttach(view)
-        lifecycleScope.launch {
+    init {
+        lifecycleScope.launchWhenResumed {
             requireActivity().startActivity(intentFactory(requireActivity()))
             navigator.pop()
         }
     }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup
+    ) = View(requireActivity()) // dummy
 
 }

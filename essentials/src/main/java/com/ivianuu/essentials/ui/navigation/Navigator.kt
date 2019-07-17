@@ -16,7 +16,6 @@
 
 package com.ivianuu.essentials.ui.navigation
 
-import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.util.BehaviorSubject
 import io.reactivex.Observable
 import kotlinx.coroutines.CompletableDeferred
@@ -34,21 +33,19 @@ class Navigator {
 
     private val resultsByRoute = mutableMapOf<Route, CompletableDeferred<Any?>>()
 
-    init {
-        d { "instantiated" }
+    @JvmName("pushWithoutResult")
+    fun push(route: Route) {
+        push(route)
     }
 
-    fun push(route: Route): Deferred<Any?> = synchronized(this) {
+    fun <T> push(route: Route): Deferred<T?> = synchronized(this) {
         val newBackStack = backStack.toMutableList()
         newBackStack.add(route)
         setBackStack(newBackStack)
         val result = CompletableDeferred<Any?>()
         resultsByRoute[route] = result
-        return@synchronized result
+        return@synchronized result as Deferred<T?>
     }
-
-    @JvmName("pushTyped")
-    fun <T> push(route: Route): Deferred<T?> = push(route) as Deferred<T?>
 
     fun pop(result: Any? = null) = synchronized(this) {
         val newBackStack = backStack.toMutableList()
