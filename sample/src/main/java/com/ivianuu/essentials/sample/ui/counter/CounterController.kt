@@ -36,7 +36,6 @@ import com.ivianuu.kommon.core.transition.transitionSetOf
 import kotlinx.android.synthetic.main.controller_counter.*
 
 fun counterRoute(screen: Int) = controllerRoute<CounterController>(
-    name = screen.toString(),
     options = controllerRouteOptions().handler(CounterChangeHandler())
 ) { parametersOf(screen) }
 

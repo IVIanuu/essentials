@@ -29,8 +29,6 @@ import com.ivianuu.injekt.get
 import com.ivianuu.injekt.typeOf
 
 class ControllerRoute(
-    val type: Type<out Controller>,
-    val name: String? = null,
     val extras: Properties = Properties(),
     val options: Options? = null,
     val factory: (Context) -> Controller
@@ -60,39 +58,20 @@ class ControllerRoute(
 
     }
 
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (javaClass != other?.javaClass) return false
-
-        other as ControllerRoute
-
-        if (type != other.type) return false
-        if (name != other.name) return false
-
-        return true
-    }
-
-    override fun hashCode(): Int {
-        var result = type.hashCode()
-        result = 31 * result + (name?.hashCode() ?: 0)
-        return result
-    }
 }
 
 inline fun <reified T : Controller> controllerRoute(
-    name: String? = null,
     extras: Properties = Properties(),
     options: ControllerRoute.Options? = null,
     noinline parameters: ParametersDefinition? = null
-) = controllerRoute(typeOf<T>(), name, extras, options, parameters)
+) = controllerRoute(typeOf<T>(), extras, options, parameters)
 
 fun <T : Controller> controllerRoute(
     type: Type<T>,
-    name: String? = null,
     extras: Properties = Properties(),
     options: ControllerRoute.Options? = null,
     parameters: ParametersDefinition? = null
-) = controllerRoute(type, name, extras, options) { context ->
+) = controllerRoute(extras, options) { context ->
     val injektTrait = context.parent as? InjektTrait
         ?: context.activity as? InjektTrait
         ?: context.application as? InjektTrait
@@ -102,18 +81,14 @@ fun <T : Controller> controllerRoute(
 }
 
 fun controllerRoute(
-    type: Type<out Controller>,
-    name: String? = null,
     extras: Properties = Properties(),
     options: ControllerRoute.Options? = null,
     factory: (ControllerRoute.Context) -> Controller
-): ControllerRoute = ControllerRoute(type, name, extras, options, factory)
+): ControllerRoute = ControllerRoute(extras, options, factory)
 
 fun ControllerRoute.copy(
-    type: Type<out Controller> = this.type,
-    name: String? = this.name,
     extras: Properties = this.extras,
     options: ControllerRoute.Options? = this.options,
     factory: (ControllerRoute.Context) -> Controller = this.factory
-) = ControllerRoute(type, name, extras, options, factory)
+) = ControllerRoute(extras, options, factory)
 

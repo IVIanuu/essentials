@@ -52,13 +52,6 @@ class Navigator {
         resultsByRoute.remove(removedRoute)?.complete(result)
     }
 
-    fun replaceTop(route: Route) {
-        val newBackStack = backStack.toMutableList()
-        if (newBackStack.isNotEmpty()) newBackStack.removeAt(newBackStack.lastIndex)
-        newBackStack.add(route)
-        setBackStack(newBackStack)
-    }
-
     private fun setBackStack(newBackStack: List<Route>) {
         _backStack.clear()
         _backStack.addAll(newBackStack)

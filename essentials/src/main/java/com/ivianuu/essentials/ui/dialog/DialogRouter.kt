@@ -29,11 +29,10 @@ import com.ivianuu.injekt.Param
 import com.ivianuu.injekt.parametersOf
 
 fun dialogRoute(
-    name: String? = null,
     extras: Properties = Properties(),
     options: ControllerRoute.Options? = ControllerRoute.Options().dialog(),
     block: MaterialDialog.(Navigator) -> Unit
-) = controllerRoute<MdDialogController>(name, extras, options) {
+) = controllerRoute<MdDialogController>(extras, options) {
     parametersOf(block)
 }
 

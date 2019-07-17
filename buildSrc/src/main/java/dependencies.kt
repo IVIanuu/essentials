@@ -31,7 +31,7 @@ object Build {
 object Publishing {
     const val groupId = "com.ivianuu.essentials"
     const val vcsUrl = "https://github.com/IVIanuu/essentials"
-    const val version = "${Build.versionName}-dev-168"
+    const val version = "${Build.versionName}-dev-169"
 }
 
 object Versions {
@@ -77,7 +77,6 @@ object Versions {
     const val superUser = "1.0.0.+"
     const val timber = "4.7.1"
     const val timberKt = "1.5.1"
-    const val traveler = "0.0.1-dev-7"
 }
 
 object Deps {
