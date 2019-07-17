@@ -24,28 +24,28 @@ import kotlinx.coroutines.Deferred
 class Navigator {
 
     private val _backStack = mutableListOf<Route>()
-    val backStack: List<Route> get() = _backStack
+    val backStack: List<Route> get() = synchronized(this) { _backStack }
 
     val observable: Observable<List<Route>>
         get() = subject
 
-    private val subject = BehaviorSubject(backStack)
+    private val subject = BehaviorSubject(emptyList<Route>())
 
     private val resultsByRoute = mutableMapOf<Route, CompletableDeferred<Any?>>()
 
-    fun push(route: Route): Deferred<Any?> {
+    fun push(route: Route): Deferred<Any?> = synchronized(this) {
         val newBackStack = backStack.toMutableList()
         newBackStack.add(route)
         setBackStack(newBackStack)
         val result = CompletableDeferred<Any?>()
         resultsByRoute[route] = result
-        return result
+        return@synchronized result
     }
 
     @JvmName("pushTyped")
     fun <T> push(route: Route): Deferred<T?> = push(route) as Deferred<T?>
 
-    fun pop(result: Any? = null) {
+    fun pop(result: Any? = null) = synchronized(this) {
         val newBackStack = backStack.toMutableList()
         val removedRoute = newBackStack.removeAt(backStack.lastIndex)
         setBackStack(newBackStack)
