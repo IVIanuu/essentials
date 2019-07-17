@@ -21,6 +21,7 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.list.listItemsSingleChoice
 import com.airbnb.epoxy.EpoxyController
 import com.ivianuu.essentials.R
+import com.ivianuu.kprefs.Pref
 
 fun EpoxyController.SingleItemListDialogListItem(
     id: Any?,
@@ -109,4 +110,63 @@ fun EpoxyController.SingleItemListDialogListItem(
 
         builderBlock?.invoke(this)
     }
+)
+
+fun EpoxyController.SingleItemListDialogListItem(
+    pref: Pref<String>,
+    id: Any? = pref.key,
+
+    onSelectedPredicate: ((String) -> Boolean)? = null,
+
+    title: String? = null,
+    titleRes: Int? = null,
+
+    text: String? = null,
+    textRes: Int? = null,
+
+    icon: Drawable? = null,
+    iconRes: Int? = null,
+
+    avatar: Drawable? = null,
+    avatarRes: Int? = null,
+
+    dialogTitle: String? = title,
+    dialogTitleRes: Int? = titleRes,
+
+    negativeDialogButtonText: String? = null,
+    negativeDialogButtonTextRes: Int = R.string.es_cancel,
+
+    entries: Array<String>? = null,
+    entriesRes: Int? = null,
+    entryValues: Array<String>? = null,
+    entryValuesRes: Int? = null,
+
+    dialogBlock: (MaterialDialog.() -> Unit)? = null,
+    builderBlock: (FunModelBuilder.() -> Unit)? = null
+) = SingleItemListDialogListItem(
+    id = id,
+    value = pref.get(),
+    onSelected = {
+        if (onSelectedPredicate == null || onSelectedPredicate(it)) {
+            pref.set(it)
+        }
+    },
+    title = title,
+    titleRes = titleRes,
+    text = text,
+    textRes = textRes,
+    icon = icon,
+    iconRes = iconRes,
+    avatar = avatar,
+    avatarRes = avatarRes,
+    dialogTitle = dialogTitle,
+    dialogTitleRes = dialogTitleRes,
+    negativeDialogButtonText = negativeDialogButtonText,
+    negativeDialogButtonTextRes = negativeDialogButtonTextRes,
+    entries = entries,
+    entriesRes = entriesRes,
+    entryValues = entryValues,
+    entryValuesRes = entryValuesRes,
+    dialogBlock = dialogBlock,
+    builderBlock = builderBlock
 )

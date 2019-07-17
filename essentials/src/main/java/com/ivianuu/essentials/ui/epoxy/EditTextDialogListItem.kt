@@ -21,6 +21,7 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.input.input
 import com.airbnb.epoxy.EpoxyController
 import com.ivianuu.essentials.R
+import com.ivianuu.kprefs.Pref
 
 fun EpoxyController.EditTextDialogListItem(
     id: Any?,
@@ -87,4 +88,63 @@ fun EpoxyController.EditTextDialogListItem(
 
         builderBlock?.invoke(this)
     }
+)
+
+fun EpoxyController.EditTextDialogListItem(
+    pref: Pref<String>,
+    id: Any? = pref.key,
+
+    onSelectedPredicate: ((String) -> Boolean)? = null,
+
+    title: String? = null,
+    titleRes: Int? = null,
+
+    text: String? = null,
+    textRes: Int? = null,
+
+    icon: Drawable? = null,
+    iconRes: Int? = null,
+
+    avatar: Drawable? = null,
+    avatarRes: Int? = null,
+
+    dialogTitle: String? = title,
+    dialogTitleRes: Int? = titleRes,
+
+    hint: String? = null,
+    hintRes: Int? = null,
+
+    positiveDialogButtonText: String? = null,
+    positiveDialogButtonTextRes: Int = R.string.es_ok,
+    negativeDialogButtonText: String? = null,
+    negativeDialogButtonTextRes: Int = R.string.es_cancel,
+
+    dialogBlock: (MaterialDialog.() -> Unit)? = null,
+    builderBlock: (FunModelBuilder.() -> Unit)? = null
+) = EditTextDialogListItem(
+    id = id,
+    prefill = pref.get(),
+    onInputCompleted = {
+        if (onSelectedPredicate == null || onSelectedPredicate(it)) {
+            pref.set(it)
+        }
+    },
+    title = title,
+    titleRes = titleRes,
+    text = text,
+    textRes = textRes,
+    icon = icon,
+    iconRes = iconRes,
+    avatar = avatar,
+    avatarRes = avatarRes,
+    dialogTitle = dialogTitle,
+    dialogTitleRes = dialogTitleRes,
+    hint = hint,
+    hintRes = hintRes,
+    positiveDialogButtonText = positiveDialogButtonText,
+    positiveDialogButtonTextRes = positiveDialogButtonTextRes,
+    negativeDialogButtonText = negativeDialogButtonText,
+    negativeDialogButtonTextRes = negativeDialogButtonTextRes,
+    dialogBlock = dialogBlock,
+    builderBlock = builderBlock
 )

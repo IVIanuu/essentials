@@ -24,7 +24,7 @@ fun EpoxyController.ToggleableListItem(
 
     value: Boolean,
     render: EsHolder.(Boolean) -> Unit,
-    onChange: ((Boolean) -> Unit)? = null,
+    onChange: (Boolean) -> Unit,
 
     title: String? = null,
     titleRes: Int? = null,
@@ -52,9 +52,9 @@ fun EpoxyController.ToggleableListItem(
     avatar = avatar,
     avatarRes = avatarRes,
     widgetLayoutRes = widgetLayoutRes,
-    onClick = onChange?.let { onChangeNonNull -> { onChangeNonNull(!value) } },
+    onClick = { onChange(!value) },
     builderBlock = {
-        state(value, onChange != null)
+        state(value)
         bind { render(value) }
         builderBlock?.invoke(this)
     }

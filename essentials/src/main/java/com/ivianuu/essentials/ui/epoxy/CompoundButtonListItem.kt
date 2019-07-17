@@ -25,7 +25,7 @@ fun EpoxyController.CompoundButtonListItem(
 
     value: Boolean,
     compoundButtonProvider: EsHolder.() -> CompoundButton,
-    onChange: ((Boolean) -> Unit)? = null,
+    onChange: (Boolean) -> Unit,
 
     title: String? = null,
     titleRes: Int? = null,

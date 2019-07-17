@@ -21,6 +21,7 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.list.listItemsMultiChoice
 import com.airbnb.epoxy.EpoxyController
 import com.ivianuu.essentials.R
+import com.ivianuu.kprefs.Pref
 
 fun EpoxyController.MultiSelectListDialogListItem(
     id: Any?,
@@ -117,4 +118,68 @@ fun EpoxyController.MultiSelectListDialogListItem(
 
         builderBlock?.invoke(this)
     }
+)
+
+fun EpoxyController.MultiSelectListDialogListItem(
+    pref: Pref<Set<String>>,
+
+    id: Any? = pref.key,
+
+    onSelectedPredicate: ((Set<String>) -> Boolean)? = null,
+
+    title: String? = null,
+    titleRes: Int? = null,
+
+    text: String? = null,
+    textRes: Int? = null,
+
+    icon: Drawable? = null,
+    iconRes: Int? = null,
+
+    avatar: Drawable? = null,
+    avatarRes: Int? = null,
+
+    dialogTitle: String? = title,
+    dialogTitleRes: Int? = titleRes,
+
+    positiveDialogButtonText: String? = null,
+    positiveDialogButtonTextRes: Int = R.string.es_ok,
+    negativeDialogButtonText: String? = null,
+    negativeDialogButtonTextRes: Int = R.string.es_cancel,
+
+    entries: Array<String>? = null,
+    entriesRes: Int? = null,
+    entryValues: Array<String>? = null,
+    entryValuesRes: Int? = null,
+
+    dialogBlock: (MaterialDialog.() -> Unit)? = null,
+    builderBlock: (FunModelBuilder.() -> Unit)? = null
+) = MultiSelectListDialogListItem(
+    id = id,
+    values = pref.get(),
+    onSelected = {
+        if (onSelectedPredicate == null || onSelectedPredicate(it)) {
+            pref.set(it)
+        }
+    },
+    title = title,
+    titleRes = titleRes,
+    text = text,
+    textRes = textRes,
+    icon = icon,
+    iconRes = iconRes,
+    avatar = avatar,
+    avatarRes = avatarRes,
+    dialogTitle = dialogTitle,
+    dialogTitleRes = dialogTitleRes,
+    positiveDialogButtonText = positiveDialogButtonText,
+    positiveDialogButtonTextRes = positiveDialogButtonTextRes,
+    negativeDialogButtonText = negativeDialogButtonText,
+    negativeDialogButtonTextRes = negativeDialogButtonTextRes,
+    entries = entries,
+    entriesRes = entriesRes,
+    entryValues = entryValues,
+    entryValuesRes = entryValuesRes,
+    dialogBlock = dialogBlock,
+    builderBlock = builderBlock
 )

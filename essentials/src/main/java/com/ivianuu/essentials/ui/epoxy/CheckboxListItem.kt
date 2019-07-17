@@ -19,13 +19,14 @@ package com.ivianuu.essentials.ui.epoxy
 import android.graphics.drawable.Drawable
 import com.airbnb.epoxy.EpoxyController
 import com.ivianuu.essentials.R
+import com.ivianuu.kprefs.Pref
 import kotlinx.android.synthetic.main.es_list_widget_checkbox.*
 
 fun EpoxyController.CheckboxListItem(
     id: Any?,
 
     value: Boolean,
-    onChange: ((Boolean) -> Unit)? = null,
+    onChange: (Boolean) -> Unit,
 
     title: String? = null,
     titleRes: Int? = null,
@@ -55,4 +56,43 @@ fun EpoxyController.CheckboxListItem(
     builderBlock = builderBlock,
     widgetLayoutRes = R.layout.es_list_widget_checkbox,
     compoundButtonProvider = { es_list_widget_checkbox }
+)
+
+fun EpoxyController.CheckboxListItem(
+    pref: Pref<Boolean>,
+
+    id: Any? = pref.key,
+
+    onChangePredicate: ((Boolean) -> Boolean)? = null,
+
+    title: String? = null,
+    titleRes: Int? = null,
+
+    text: String? = null,
+    textRes: Int? = null,
+
+    icon: Drawable? = null,
+    iconRes: Int? = null,
+
+    avatar: Drawable? = null,
+    avatarRes: Int? = null,
+
+    builderBlock: (FunModelBuilder.() -> Unit)? = null
+) = CheckboxListItem(
+    id = id,
+    value = pref.get(),
+    onChange = {
+        if (onChangePredicate == null || onChangePredicate(it)) {
+            pref.set(it)
+        }
+    },
+    title = title,
+    titleRes = titleRes,
+    text = text,
+    textRes = textRes,
+    icon = icon,
+    iconRes = iconRes,
+    avatar = avatar,
+    avatarRes = avatarRes,
+    builderBlock = builderBlock
 )
