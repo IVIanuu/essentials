@@ -67,7 +67,6 @@ object Versions {
     const val mavenGradle = "2.1"
     const val materialComponents = "1.1.0-alpha07"
     const val materialDialogs = "3.1.0"
-    const val materialPopupMenu = "4.0.0"
     const val mockitoKotlin = "2.0.0"
     const val roboelectric = "4.0.2"
     const val rxAndroid = "2.1.1"
@@ -177,8 +176,6 @@ object Deps {
         "com.afollestad.material-dialogs:input:${Versions.materialDialogs}"
     const val materialDialogsLifecycle =
         "com.afollestad.material-dialogs:lifecycle:${Versions.materialDialogs}"
-    const val materialPopupMenu =
-        "com.github.zawadz88.materialpopupmenu:material-popup-menu:${Versions.materialPopupMenu}"
 
     const val mavenGradlePlugin =
         "com.github.dcendents:android-maven-gradle-plugin:${Versions.mavenGradle}"

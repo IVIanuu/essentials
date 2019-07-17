@@ -16,9 +16,7 @@
 
 package com.ivianuu.essentials.ui.popup
 
-import android.graphics.drawable.Drawable
 import android.view.View
-import com.github.zawadz88.materialpopupmenu.popupMenu
 
 class PopupMenu<T>(
     val items: List<PopupMenuItem<T>>,
@@ -29,29 +27,30 @@ class PopupMenu<T>(
 data class PopupMenuItem<T>(
     val value: T,
     val title: String? = null,
-    val titleRes: Int? = null,
-    val icon: Drawable? = null,
-    val iconRes: Int? = null
+    val titleRes: Int? = null
 )
 
 fun <T> PopupMenu<T>.show(view: View) {
     var itemSelected = false
 
-    val androidPopupMenu = popupMenu {
-        section {
-            items.forEach { item ->
-                item {
-                    label = item.title
-                    labelRes = item.titleRes ?: 0
-                    iconDrawable = item.icon
-                    icon = item.iconRes ?: 0
-                    callback = {
-                        itemSelected = true
-                        onSelected(item.value)
-                    }
-                }
+    val androidPopupMenu = androidx.appcompat.widget.PopupMenu(view.context, view)
+
+    val itemsByMenuItem = items
+        .map { it to androidPopupMenu.menu.add("") }
+        .onEach { (item, androidItem) ->
+            when {
+                item.title != null -> androidItem.title = item.title
+                item.titleRes != null -> androidItem.setTitle(item.titleRes)
+                else -> error("no title specified")
             }
         }
+        .associateBy { it.second }
+        .mapValues { it.value.first }
+
+    androidPopupMenu.setOnMenuItemClickListener {
+        itemSelected = true
+        onSelected(itemsByMenuItem.getValue(it).value)
+        return@setOnMenuItemClickListener true
     }
 
     if (onCanceled != null) {
@@ -60,5 +59,5 @@ fun <T> PopupMenu<T>.show(view: View) {
         }
     }
 
-    androidPopupMenu.show(view.context, view)
+    androidPopupMenu.show()
 }
