@@ -64,6 +64,11 @@ abstract class EsDialogController : DialogController(), ContextAware, InjektTrai
     override fun invalidate() {
     }
 
+    override fun dismiss() {
+        dialog?.dismiss()
+        navigator.pop()
+    }
+
     protected open fun modules(): List<Module> = emptyList()
 
 }
