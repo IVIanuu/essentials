@@ -19,7 +19,9 @@ package com.ivianuu.essentials.ui.common
 import android.app.Activity
 import android.content.Intent
 import android.provider.Settings
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.core.app.ShareCompat
 import androidx.core.net.toUri
 import androidx.lifecycle.lifecycleScope
@@ -62,6 +64,11 @@ fun urlRoute(url: String) = activityRoute {
 internal class ActivityStartingController(
     @Param private val intentFactory: (Activity) -> Intent
 ) : EsController() {
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup
+    ) = View(requireActivity()) // dummy
 
     override fun onAttach(view: View) {
         super.onAttach(view)

@@ -24,6 +24,7 @@ import com.ivianuu.essentials.ui.navigation.director.controllerRoute
 import com.ivianuu.essentials.ui.prefs.PrefsController
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.essentials.util.Toaster
+import com.ivianuu.essentials.util.string
 import com.ivianuu.injekt.Inject
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -111,7 +112,7 @@ internal class SecureSettingsPcInstructionsController(
         ListItem(
             id = "secure_settings_step_4",
             titleRes = R.string.es_pref_secure_settings_step_4,
-            textRes = R.string.es_pref_secure_settings_step_4_summary,
+            text = string(R.string.es_pref_secure_settings_step_4_summary, buildInfo.packageName),
             onClick = {
                 clipboardAccessor.clipboardText =
                     "adb shell pm grant ${buildInfo.packageName} android.permission.WRITE_SECURE_SETTINGS"
