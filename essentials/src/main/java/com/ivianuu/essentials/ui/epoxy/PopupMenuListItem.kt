@@ -64,6 +64,8 @@ fun <T> EpoxyController.PopupMenuListItem(
     widgetLayoutRes = R.layout.es_list_widget_menu,
     enabled = enabled,
     builderBlock = {
+        state(items, onCanceled != null)
+
         bind {
             es_list_widget_menu.setOnClickListener {
                 PopupMenu(items = items, onCanceled = onCanceled, onSelected = onItemSelected)
