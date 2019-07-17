@@ -71,6 +71,8 @@ fun EpoxyController.ListItem(
         return@buildView view
     }
 
+    viewType(R.layout.es_list_item + (widgetLayoutRes ?: 0))
+
     bind {
         when {
             title != null -> {

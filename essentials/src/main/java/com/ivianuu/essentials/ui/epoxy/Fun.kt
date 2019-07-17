@@ -62,6 +62,10 @@ class FunModelBuilder internal constructor() {
         this.state.addAll(state)
     }
 
+    fun viewType(viewType: Int) {
+        this.viewType = viewType
+    }
+
     fun buildView(block: (ViewGroup) -> View) {
         buildView = block
     }
