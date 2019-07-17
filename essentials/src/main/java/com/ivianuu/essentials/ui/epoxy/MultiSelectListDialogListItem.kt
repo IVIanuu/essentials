@@ -21,6 +21,7 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.list.listItemsMultiChoice
 import com.airbnb.epoxy.EpoxyController
 import com.ivianuu.essentials.R
+import com.ivianuu.essentials.util.stringArray
 import com.ivianuu.kprefs.Pref
 
 fun EpoxyController.MultiSelectListDialogListItem(
@@ -60,10 +61,10 @@ fun EpoxyController.MultiSelectListDialogListItem(
     builderBlock: (FunModelBuilder.() -> Unit)? = null
 ) = DialogListItem(
     id = id,
-    buildDialog = {
+    buildDialog = { context ->
         var finalEntries = entries
         if (finalEntries == null && entriesRes != null) {
-            finalEntries = context.resources.getStringArray(entriesRes)
+            finalEntries = context.controller.stringArray(entriesRes)
         }
         if (finalEntries == null) {
             finalEntries = emptyArray()
@@ -71,17 +72,23 @@ fun EpoxyController.MultiSelectListDialogListItem(
 
         var finalEntryValues = entryValues
         if (finalEntryValues == null && entryValuesRes != null) {
-            finalEntryValues = context.resources.getStringArray(entryValuesRes)
+            finalEntryValues = context.controller.stringArray(entryValuesRes)
         }
         if (finalEntryValues == null) {
             finalEntryValues = emptyArray()
         }
 
+        if (!context.extras.contains("current_value")) {
+            context.extras.set("current_value", values)
+        }
+
         title(res = dialogTitleRes, text = dialogTitle)
-        positiveButton(res = positiveDialogButtonTextRes, text = positiveDialogButtonText)
+        positiveButton(res = positiveDialogButtonTextRes, text = positiveDialogButtonText) {
+            onSelected(context.extras.get("current_value")!!)
+        }
         negativeButton(res = negativeDialogButtonTextRes, text = negativeDialogButtonText)
 
-        val selectedIndices = values
+        val selectedIndices = context.extras.get<Set<String>>("current_value")!!
             .map { finalEntryValues.indexOf(it) }
             .filter { it != -1 }
             .toIntArray()
@@ -89,13 +96,15 @@ fun EpoxyController.MultiSelectListDialogListItem(
         listItemsMultiChoice(
             items = finalEntries.toList(),
             initialSelection = selectedIndices,
-            allowEmptySelection = true
+            allowEmptySelection = true,
+            waitForPositiveButton = false
         ) { _, positions, _ ->
             val newValue = finalEntryValues.toList()
                 .filterIndexed { index, _ -> positions.contains(index) }
                 .map { it }
                 .toSet()
-            onSelected(newValue)
+
+            context.extras.set("current_value", newValue)
         }
 
         dialogBlock?.invoke(this)
