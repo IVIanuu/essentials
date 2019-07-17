@@ -36,24 +36,9 @@ import com.ivianuu.kommon.core.transition.transitionSetOf
 import kotlinx.android.synthetic.main.controller_counter.*
 
 fun counterRoute(screen: Int) = controllerRoute<CounterController>(
+    name = screen.toString(),
     options = controllerRouteOptions().handler(CounterChangeHandler())
 ) { parametersOf(screen) }
-
-class CounterChangeHandler : SharedElementTransitionChangeHandler() {
-
-    override fun getSharedElementTransition(changeData: ChangeData) =
-        transitionSetOf(ChangeBounds(), ChangeTransform())
-
-    override fun getEnterTransition(changeData: ChangeData) = Slide(Gravity.END)
-
-    override fun getExitTransition(changeData: ChangeData) = Slide(Gravity.START)
-
-    override fun configureSharedElements(changeData: ChangeData) {
-        addSharedElement("count")
-    }
-
-    override fun copy() = CounterChangeHandler()
-}
 
 @Inject
 class CounterController(@Param private val screen: Int) : EsController() {
@@ -82,4 +67,20 @@ class CounterController(@Param private val screen: Int) : EsController() {
         count.text = "Screen: ${viewModel.state.screen}"
     }
 
+}
+
+private class CounterChangeHandler : SharedElementTransitionChangeHandler() {
+
+    override fun getSharedElementTransition(changeData: ChangeData) =
+        transitionSetOf(ChangeBounds(), ChangeTransform())
+
+    override fun getEnterTransition(changeData: ChangeData) = Slide(Gravity.END)
+
+    override fun getExitTransition(changeData: ChangeData) = Slide(Gravity.START)
+
+    override fun configureSharedElements(changeData: ChangeData) {
+        addSharedElement("count")
+    }
+
+    override fun copy() = CounterChangeHandler()
 }
