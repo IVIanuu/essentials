@@ -44,6 +44,7 @@ fun EpoxyController.EditTextDialogListItem(
     dialogTitleRes: Int? = titleRes,
 
     prefill: String? = null,
+    prefillRes: Int? = null,
 
     hint: String? = null,
     hintRes: Int? = null,
@@ -59,16 +60,19 @@ fun EpoxyController.EditTextDialogListItem(
     builderBlock: (FunModelBuilder.() -> Unit)? = null
 ) = DialogListItem(
     id = id,
-    buildDialog = {
+    buildDialog = { context ->
         title(res = dialogTitleRes, text = dialogTitle)
-        positiveButton(res = positiveDialogButtonTextRes, text = positiveDialogButtonText)
+        positiveButton(res = positiveDialogButtonTextRes, text = positiveDialogButtonText) {
+            onInputCompleted(context.extras.get("current_value")!!)
+        }
         negativeButton(res = negativeDialogButtonTextRes, text = negativeDialogButtonText)
 
         input(
             hintRes = hintRes,
             hint = hint ?: "",
-            prefill = prefill
-        ) { _, input -> onInputCompleted(input.toString()) }
+            prefill = prefill,
+            waitForPositiveButton = false
+        ) { _, input -> context.extras.set("current_value", input.toString()) }
 
         dialogBlock?.invoke(this)
 

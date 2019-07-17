@@ -25,7 +25,7 @@ fun colorPickerRoute(
     preselect: Int? = null,
     allowCustomArgb: Boolean = true,
     showAlphaSelector: Boolean = false
-) = dialogRoute { navigator ->
+) = dialogRoute { context ->
     title(res = titleRes, text = title)
     colorChooser(
         colors = PRIMARY_COLORS,
@@ -34,7 +34,7 @@ fun colorPickerRoute(
         allowCustomArgb = allowCustomArgb,
         showAlphaSelector = showAlphaSelector
     ) { _, color ->
-        navigator.pop(color)
+        context.controller.navigator.pop(color)
     }
     negativeButton(R.string.es_cancel)
 }

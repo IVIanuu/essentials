@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.ui.dialog
 
 import android.content.Context
+import android.content.DialogInterface
 import android.view.View
 import com.ivianuu.director.common.DialogController
 import com.ivianuu.director.requireActivity
@@ -62,6 +63,13 @@ abstract class EsDialogController : DialogController(), ContextAware, InjektTrai
     }
 
     override fun invalidate() {
+    }
+
+    override fun onCancel(dialog: DialogInterface) {
+        dismiss()
+    }
+
+    override fun onDismiss(dialog: DialogInterface) {
     }
 
     override fun dismiss() {

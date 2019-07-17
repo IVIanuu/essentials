@@ -19,6 +19,7 @@ package com.ivianuu.essentials.ui.epoxy
 import android.graphics.drawable.Drawable
 import com.afollestad.materialdialogs.MaterialDialog
 import com.airbnb.epoxy.EpoxyController
+import com.ivianuu.essentials.ui.dialog.DialogContext
 import com.ivianuu.essentials.ui.dialog.dialogRoute
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.injekt.android.getClosestComponent
@@ -27,7 +28,7 @@ import com.ivianuu.injekt.get
 fun EpoxyController.DialogListItem(
     id: Any?,
 
-    buildDialog: MaterialDialog.() -> Unit,
+    buildDialog: MaterialDialog.(DialogContext) -> Unit,
 
     title: String? = null,
     titleRes: Int? = null,
@@ -60,7 +61,7 @@ fun EpoxyController.DialogListItem(
             root.isEnabled = true
             root.setOnClickListener {
                 it.getClosestComponent().get<Navigator>()
-                    .push(dialogRoute(block = { buildDialog() }))
+                    .push(dialogRoute(block = buildDialog))
             }
         }
 

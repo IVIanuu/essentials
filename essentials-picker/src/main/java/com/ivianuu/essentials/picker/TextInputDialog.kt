@@ -28,7 +28,7 @@ fun textInputRoute(
     prefillRes: Int? = null,
     inputType: Int = -1,
     allowEmpty: Boolean = false
-) = dialogRoute { navigator ->
+) = dialogRoute { context ->
     noAutoDismiss()
     title(res = titleRes, text = title)
     input(
@@ -38,7 +38,7 @@ fun textInputRoute(
         prefillRes = prefillRes,
         inputType = inputType,
         allowEmpty = allowEmpty
-    ) { _, input -> navigator.pop(input.toString()) }
+    ) { _, input -> context.controller.navigator.pop(input.toString()) }
     positiveButton(R.string.es_ok)
-    negativeButton(R.string.es_cancel) { navigator.pop() }
+    negativeButton(R.string.es_cancel) { context.controller.navigator.pop() }
 }
