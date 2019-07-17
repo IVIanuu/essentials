@@ -22,9 +22,9 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.hardware.camera2.CameraManager
-import android.os.Build
 import androidx.core.app.NotificationCompat
 import com.example.essentials.gestures.R
+import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.essentials.work.EsService
 import com.ivianuu.injekt.inject
@@ -39,6 +39,7 @@ import com.ivianuu.kommon.core.content.systemService
 class TorchService : EsService() {
 
     private val notificationManager by inject<NotificationManager>()
+    private val systemBuildInfo by inject<SystemBuildInfo>()
     private val toaster by inject<Toaster>()
     private val torchManager by inject<TorchManager>()
 
@@ -129,7 +130,7 @@ class TorchService : EsService() {
     }
 
     private fun createNotificationChannel() {
-        if (Build.VERSION.SDK_INT >= 26) {
+        if (systemBuildInfo.sdk >= 26) {
             NotificationChannel(
                 NOTIFICATION_CHANNEL_ID,
                 string(R.string.es_notif_channel_torch),

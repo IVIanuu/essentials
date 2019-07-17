@@ -16,6 +16,10 @@
 
 package com.ivianuu.essentials.util
 
+import android.app.Application
+import android.content.pm.ApplicationInfo
+import android.content.pm.PackageManager
+import android.os.Build
 import com.ivianuu.injekt.get
 import com.ivianuu.injekt.module
 import com.ivianuu.injekt.single
@@ -39,4 +43,16 @@ val esUtilModule = module {
             schedulers.main.asCoroutineDispatcher()
         )
     }
+    single {
+        val appInfo = get<Application>().applicationInfo
+        val packageInfo = get<PackageManager>()
+            .getPackageInfo(appInfo.packageName, 0)
+        BuildInfo(
+            appInfo.flags.containsFlag(ApplicationInfo.FLAG_DEBUGGABLE),
+            appInfo.packageName,
+            packageInfo.longVersionCode.toInt()
+        )
+    }
+    single { DeviceInfo(Build.MODEL, Build.MANUFACTURER) }
+    single { SystemBuildInfo(Build.VERSION.SDK_INT) }
 }

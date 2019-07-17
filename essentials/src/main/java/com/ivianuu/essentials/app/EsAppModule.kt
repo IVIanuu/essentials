@@ -16,14 +16,9 @@
 
 package com.ivianuu.essentials.app
 
-import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
-import android.content.pm.ApplicationInfo
-import android.content.pm.PackageManager
 import android.preference.PreferenceManager
-import com.ivianuu.essentials.util.BuildInfo
-import com.ivianuu.essentials.util.containsFlag
 import com.ivianuu.injekt.factoryWithState
 import com.ivianuu.injekt.get
 import com.ivianuu.injekt.module
@@ -41,16 +36,5 @@ val esAppModule = module {
     factoryWithState {
         val context = link<Context>()
         definition { context().packageManager }
-    }
-
-    single {
-        val appInfo = get<Application>().applicationInfo
-        val packageInfo = get<PackageManager>()
-            .getPackageInfo(appInfo.packageName, 0)
-        BuildInfo(
-            appInfo.flags.containsFlag(ApplicationInfo.FLAG_DEBUGGABLE),
-            appInfo.packageName,
-            packageInfo.longVersionCode.toInt()
-        )
     }
 }

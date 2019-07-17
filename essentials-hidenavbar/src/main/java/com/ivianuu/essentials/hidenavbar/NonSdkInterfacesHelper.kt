@@ -16,8 +16,8 @@
 
 package com.ivianuu.essentials.hidenavbar
 
-import android.os.Build
 import com.github.ajalt.timberkt.d
+import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.injekt.Inject
 import com.ivianuu.ksettings.KSettings
 import com.ivianuu.ksettings.Setting
@@ -26,17 +26,20 @@ import com.ivianuu.ksettings.Setting
  * Deactivates non sdk interface detection
  */
 @Inject
-internal class NonSdkInterfacesHelper(private val settings: KSettings) {
+internal class NonSdkInterfacesHelper(
+    private val settings: KSettings,
+    private val systemBuildInfo: SystemBuildInfo
+) {
 
     fun disableNonSdkInterfaceDetection() {
-        if (Build.VERSION.SDK_INT >= 29) {
+        if (systemBuildInfo.sdk >= 29) {
             d { "disable non sdk on 29" }
 
             val hiddenApiPolicy = settings.int(
                 "hidden_api_policy", Setting.Type.GLOBAL
             )
             hiddenApiPolicy.set(1)
-        } else if (Build.VERSION.SDK_INT >= 28) {
+        } else if (systemBuildInfo.sdk >= 28) {
             d { "disable non sdk on p" }
 
             val hiddenApiPrePieAppsSetting = settings.int(

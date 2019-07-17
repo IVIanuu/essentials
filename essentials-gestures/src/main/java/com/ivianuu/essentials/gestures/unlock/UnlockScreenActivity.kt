@@ -16,14 +16,15 @@
 
 package com.ivianuu.essentials.gestures.unlock
 
+import android.annotation.SuppressLint
 import android.app.KeyguardManager
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.view.WindowManager
 import com.ivianuu.essentials.messaging.BroadcastFactory
 import com.ivianuu.essentials.ui.base.EsActivity
 import com.ivianuu.essentials.util.AppSchedulers
+import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.injekt.inject
 import com.ivianuu.scopes.android.onDestroy
 import com.ivianuu.scopes.rx.disposeBy
@@ -37,11 +38,13 @@ class UnlockScreenActivity : EsActivity() {
     private val keyguardManager by inject<KeyguardManager>()
     private val schedulers by inject<AppSchedulers>()
     private val screenUnlocker by inject<ScreenUnlocker>()
+    private val systemBuildInfo by inject<SystemBuildInfo>()
 
+    @SuppressLint("NewApi")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        if (Build.VERSION.SDK_INT >= 26) {
+        if (systemBuildInfo.sdk >= 26) {
             keyguardManager.requestDismissKeyguard(this, object :
                 KeyguardManager.KeyguardDismissCallback() {
                 override fun onDismissSucceeded() {
