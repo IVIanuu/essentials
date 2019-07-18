@@ -32,7 +32,7 @@ import com.ivianuu.kommon.core.view.inflate
 
 class ListView(
     override val key: Any? = null,
-    private val buildListComponents: BuildContext.() -> Unit
+    private val buildList: BuildContext.() -> Unit
 ) : Widget<RecyclerView>() {
 
     override val viewId: Int
@@ -41,65 +41,65 @@ class ListView(
     override fun bind(view: RecyclerView) {
         super.bind(view)
         val epoxyController =
-            view.properties.get<UiComponentEpoxyController>("epoxy_controller")!!
+            view.properties.get<WidgetEpoxyController>("epoxy_controller")!!
         epoxyController.setData(children)
     }
 
     override fun unbind(view: RecyclerView) {
         super.unbind(view)
         val epoxyController =
-            view.properties.get<UiComponentEpoxyController>("epoxy_controller")!!
+            view.properties.get<WidgetEpoxyController>("epoxy_controller")!!
         epoxyController.cancelPendingModelBuild()
     }
 
     override fun createView(container: ViewGroup): RecyclerView {
         val view = container.inflate<RecyclerView>(R.layout.es_view_recycler_view)
         val epoxyController =
-            UiComponentEpoxyController()
+            WidgetEpoxyController()
         view.adapter = epoxyController.adapter
         view.properties.set("epoxy_controller", epoxyController)
         return view
     }
 
     override fun BuildContext.children() {
-        buildListComponents()
+        buildList()
     }
 
 }
 
-private class UiComponentEpoxyController :
+private class WidgetEpoxyController :
     TypedEpoxyController<List<Widget<*>>>() {
     override fun buildModels(data: List<Widget<*>>?) {
         data?.forEach {
-            add(UiComponentEpoxyModel(it))
+            add(WidgetEpoxyModel(it))
         }
     }
 }
 
-private data class UiComponentEpoxyModel(
-    private val component: Widget<*>
-) : SimpleModel(id = component.type to component.key) {
+private data class WidgetEpoxyModel(
+    private val widget: Widget<*>
+) : SimpleModel(id = widget.type to widget.key) {
 
     override fun bind(holder: EsHolder) {
         super.bind(holder)
-        d { "epoxy bind ${component.javaClass.simpleName}" }
-        component.cast<Widget<View>>().bind(holder.root)
+        d { "epoxy bind ${widget.javaClass.simpleName}" }
+        widget.cast<Widget<View>>().bind(holder.root)
     }
 
     override fun unbind(holder: EsHolder) {
         super.unbind(holder)
-        d { "epoxy unbind ${component.javaClass.simpleName}" }
-        component.cast<Widget<View>>().unbind(holder.root)
+        d { "epoxy unbind ${widget.javaClass.simpleName}" }
+        widget.cast<Widget<View>>().unbind(holder.root)
     }
 
-    override fun getViewType(): Int = component.getViewType()
+    override fun getViewType(): Int = widget.getViewType()
 
     private fun Widget<*>.getViewType(): Int =
         viewId + (children?.map { it.getViewType() }?.sum() ?: 0)
 
     override fun buildView(parent: ViewGroup): View {
-        val view = component.createView(parent)
-        (component as Widget<View>).layout(view)
+        val view = widget.createView(parent)
+        (widget as Widget<View>).layout(view)
         return view
     }
 

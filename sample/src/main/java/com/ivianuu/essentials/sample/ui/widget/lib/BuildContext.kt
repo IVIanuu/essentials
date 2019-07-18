@@ -20,7 +20,7 @@ import com.github.ajalt.timberkt.d
 
 interface BuildContext {
     val widgetContext: WidgetContext
-    fun emit(component: Widget<*>, containerId: Int? = null) {
+    fun emit(widget: Widget<*>, containerId: Int? = null) {
     }
 }
 
@@ -28,14 +28,14 @@ class WidgetBuildContext(
     override val widgetContext: WidgetContext,
     private val thisWidget: Widget<*>
 ) : BuildContext {
-    override fun emit(component: Widget<*>, containerId: Int?) {
+    override fun emit(widget: Widget<*>, containerId: Int?) {
         // todo check duplicate
-        d { "emit ${thisWidget.javaClass.simpleName} -> ${component.javaClass.simpleName}" }
+        d { "emit ${thisWidget.javaClass.simpleName} -> ${widget.javaClass.simpleName}" }
         if (thisWidget.children == null) thisWidget.children = mutableListOf()
-        component.parent = thisWidget
-        component.containerId = containerId
-        component.buildChildren(WidgetBuildContext(widgetContext, component))
-        thisWidget.children!!.add(component)
+        widget.parent = thisWidget
+        widget.containerId = containerId
+        widget.buildChildren(WidgetBuildContext(widgetContext, widget))
+        thisWidget.children!!.add(widget)
     }
 
 }
