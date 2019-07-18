@@ -57,7 +57,7 @@ abstract class ContainerWidget<V : ViewGroup> : Widget<V>() {
         if (newChild != null && oldChild == null) {
             newChild.addIfNeeded(newChild.containerOrElse(view))
         } else if (newChild != null && oldChild != null) {
-            if (newChild.viewType == oldChild.viewType) {
+            if (newChild.viewId == oldChild.viewId) {
                 newChild.addIfNeeded(newChild.containerOrElse(view))
             } else {
                 oldChild.removeIfPossible(newChild.containerOrElse(view))

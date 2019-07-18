@@ -25,8 +25,6 @@ abstract class Widget<V : View> {
 
     abstract val id: Any?
     abstract val viewId: Int
-    open val viewType: Int
-        get() = viewId + (children?.map { it.viewId }?.sum() ?: 0)
 
     var parent: Widget<*>? = null
     var children: MutableList<Widget<*>>? = null

@@ -92,7 +92,10 @@ private data class UiComponentEpoxyModel(
         component.cast<Widget<View>>().unbind(holder.root)
     }
 
-    override fun getViewType(): Int = component.viewType
+    override fun getViewType(): Int = component.getViewType()
+
+    private fun Widget<*>.getViewType(): Int =
+        viewId + (children?.map { it.getViewType() }?.sum() ?: 0)
 
     override fun buildView(parent: ViewGroup): View {
         val view = component.createView(parent)
