@@ -63,6 +63,7 @@ class ListView(
 private class UiComponentEpoxyController :
     TypedEpoxyController<List<UiComponent<*>>>() {
     override fun buildModels(data: List<UiComponent<*>>?) {
+        d { "build models $data" }
         data?.forEach {
             add(UiComponentEpoxyModel(it))
         }

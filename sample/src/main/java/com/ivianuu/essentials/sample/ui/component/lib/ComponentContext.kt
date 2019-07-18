@@ -37,11 +37,9 @@ class ComponentContext(
     fun invalidate() {
         GlobalScope.launch(Dispatchers.IO) {
             val runGeneration: Int
-            val oldRoot: RootComponent?
 
             synchronized(this@ComponentContext) {
                 runGeneration = generationTracker.incrementAndGetNextScheduled()
-                oldRoot = root
             }
 
             val newRoot = RootComponent(rootId)

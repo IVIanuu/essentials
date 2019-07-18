@@ -37,6 +37,11 @@ abstract class ContainerUiComponent<V : ViewGroup> : UiComponent<V>() {
                     layoutChild(view, null, oldChild)
                 }
             }
+
+            children
+                ?.filterIsInstance<UiComponent<View>>()
+                ?.map { it to it.findViewIn(view)!! }
+                ?.forEach { it.first.layout(it.second) }
         }
     }
 
@@ -79,7 +84,6 @@ abstract class ContainerUiComponent<V : ViewGroup> : UiComponent<V>() {
         } else if (newChild == null && oldChild != null) {
             oldChild.removeIfPossible(oldChild.containerOrElse(view))
         }
-
     }
 
     private fun UiComponent<*>.addIfNeeded(container: ViewGroup) {
