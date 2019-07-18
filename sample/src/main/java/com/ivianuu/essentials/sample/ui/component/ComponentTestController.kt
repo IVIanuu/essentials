@@ -21,7 +21,6 @@ import androidx.lifecycle.lifecycleScope
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.sample.ui.component.lib.ComponentContext
-import com.ivianuu.essentials.sample.ui.component.lib.List
 import com.ivianuu.essentials.ui.base.EsController
 import com.ivianuu.essentials.util.cast
 import kotlinx.coroutines.delay

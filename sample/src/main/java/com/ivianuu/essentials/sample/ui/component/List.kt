@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.sample.ui.component.lib
+package com.ivianuu.essentials.sample.ui.component
 
 import android.view.View
 import android.view.ViewGroup
@@ -22,6 +22,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.epoxy.TypedEpoxyController
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.sample.R
+import com.ivianuu.essentials.sample.ui.component.lib.BuildContext
+import com.ivianuu.essentials.sample.ui.component.lib.UiComponent
 import com.ivianuu.essentials.ui.epoxy.EsHolder
 import com.ivianuu.essentials.ui.epoxy.SimpleModel
 import com.ivianuu.kommon.core.view.inflate
@@ -37,8 +39,8 @@ class List(
 
     override fun layoutChildren(
         view: RecyclerView,
-        newChildren: List<UiComponent<*>>?,
-        oldChildren: List<UiComponent<*>>?
+        newChildren: kotlin.collections.List<UiComponent<*>>?,
+        oldChildren: kotlin.collections.List<UiComponent<*>>?
     ) {
         val epoxyController =
             view.tag<UiComponentEpoxyController>(R.id.es_recycler_view)
@@ -47,7 +49,8 @@ class List(
 
     override fun createView(container: ViewGroup): RecyclerView {
         val view = container.inflate<RecyclerView>(R.layout.es_view_recycler_view)
-        val epoxyController = UiComponentEpoxyController()
+        val epoxyController =
+            UiComponentEpoxyController()
         view.adapter = epoxyController.adapter
         view.setTag(R.id.es_recycler_view, epoxyController)
         return view
@@ -59,8 +62,9 @@ class List(
 
 }
 
-private class UiComponentEpoxyController : TypedEpoxyController<List<UiComponent<*>>>() {
-    override fun buildModels(data: List<UiComponent<*>>?) {
+private class UiComponentEpoxyController :
+    TypedEpoxyController<kotlin.collections.List<UiComponent<*>>>() {
+    override fun buildModels(data: kotlin.collections.List<UiComponent<*>>?) {
         data?.forEach {
             add(UiComponentEpoxyModel(it as UiComponent<View>))
         }
