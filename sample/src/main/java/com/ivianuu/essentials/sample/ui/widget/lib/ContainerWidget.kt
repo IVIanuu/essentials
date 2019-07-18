@@ -72,10 +72,17 @@ abstract class ContainerWidget<V : ViewGroup> : Widget<V>() {
         }
     }
 
-    protected open fun onViewAdded(container: ViewGroup, view: View) {
+    protected open fun getChildLayoutParams(
+        container: ViewGroup,
+        view: View
+    ): ViewGroup.LayoutParams = view.layoutParams
+
+    protected open fun addChildView(container: ViewGroup, view: View) {
+        container.addView(view, getChildLayoutParams(container, view))
     }
 
-    protected open fun onViewRemoved(container: ViewGroup, view: View) {
+    protected open fun removeChildView(container: ViewGroup, view: View) {
+        container.removeView(view)
     }
 
     private fun Widget<*>.addIfNeeded(container: ViewGroup) {
@@ -84,8 +91,7 @@ abstract class ContainerWidget<V : ViewGroup> : Widget<V>() {
         if (view == null) {
             view = createView(container)
             view.setWidget(this)
-            container.addView(view)
-            onViewAdded(container, view)
+            addChildView(container, view)
         }
     }
 
@@ -93,8 +99,7 @@ abstract class ContainerWidget<V : ViewGroup> : Widget<V>() {
         val view = container.findViewByWidget(this)
         d { "remove if possible ${javaClass.simpleName} ${view != null}" }
         if (view != null) {
-            container.removeView(view)
-            onViewRemoved(container, view)
+            removeChildView(container, view)
         }
     }
 

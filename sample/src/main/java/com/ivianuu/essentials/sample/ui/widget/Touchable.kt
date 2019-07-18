@@ -23,7 +23,7 @@ import com.ivianuu.essentials.sample.ui.widget.lib.Widget
 
 class Touchable(
     child: Widget<*>,
-    private val onTouch: (MotionEvent) -> Boolean
+    val onTouch: (MotionEvent) -> Boolean
 ) : HeadlessWidget(child) {
 
     override fun bind(view: View) {

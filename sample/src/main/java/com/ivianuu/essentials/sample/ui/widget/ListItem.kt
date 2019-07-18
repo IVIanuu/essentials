@@ -25,17 +25,17 @@ import com.ivianuu.essentials.util.andTrue
 import com.ivianuu.kommon.core.view.inflate
 
 class ListItem(
-    private val title: String? = null,
-    private val titleRes: Int? = null,
+    val title: String? = null,
+    val titleRes: Int? = null,
 
-    private val text: String? = null,
-    private val textRes: Int? = null,
+    val text: String? = null,
+    val textRes: Int? = null,
 
-    private val primaryAction: Widget<*>? = null,
-    private val secondaryAction: Widget<*>? = null,
+    val primaryAction: Widget<*>? = null,
+    val secondaryAction: Widget<*>? = null,
 
-    private val onClick: (() -> Unit)? = null,
-    private val onLongClick: (() -> Unit)? = null,
+    val onClick: (() -> Unit)? = null,
+    val onLongClick: (() -> Unit)? = null,
 
     override val key: Any? = null
 ) : ContainerWidget<ViewGroup>() {

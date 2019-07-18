@@ -33,7 +33,7 @@ import com.ivianuu.kommon.core.view.inflate
 
 class ListView(
     override val key: Any? = null,
-    private val buildList: BuildContext.() -> Unit
+    val buildList: BuildContext.() -> Unit
 ) : Widget<RecyclerView>() {
 
     override fun bind(view: RecyclerView) {

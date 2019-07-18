@@ -22,7 +22,7 @@ import com.ivianuu.essentials.sample.ui.widget.lib.Widget
 
 class Clickable(
     child: Widget<*>,
-    private val onClick: () -> Boolean
+    val onClick: () -> Boolean
 ) : HeadlessWidget(child) {
 
     override fun bind(view: View) {

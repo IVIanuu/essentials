@@ -23,8 +23,8 @@ import com.ivianuu.essentials.sample.ui.widget.lib.Widget
 import com.ivianuu.kommon.core.view.inflate
 
 class AppBarScreen(
-    private val appBar: Widget<*>,
-    private val content: Widget<*>,
+    val appBar: Widget<*>,
+    val content: Widget<*>,
     override val key: Any? = null
 ) : ContainerWidget<ViewGroup>() {
 

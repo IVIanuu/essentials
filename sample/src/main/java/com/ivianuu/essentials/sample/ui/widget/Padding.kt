@@ -23,10 +23,10 @@ import com.ivianuu.essentials.sample.ui.widget.lib.Widget
 class Padding(
     override val key: Any? = null,
     child: Widget<*>,
-    private val left: Int = 0,
-    private val top: Int = 0,
-    private val right: Int = 0,
-    private val bottom: Int = 0
+    val left: Int = 0,
+    val top: Int = 0,
+    val right: Int = 0,
+    val bottom: Int = 0
 ) : HeadlessWidget(child) {
 
     constructor(key: Any? = null, child: Widget<*>, padding: Int) : this(

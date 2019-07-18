@@ -23,8 +23,8 @@ import com.ivianuu.essentials.sample.ui.widget.lib.Widget
 import com.ivianuu.kommon.core.view.inflate
 
 class Checkbox(
-    private val value: Boolean,
-    private val onChange: (Boolean) -> Unit,
+    val value: Boolean,
+    val onChange: (Boolean) -> Unit,
     override val key: Any? = null
 ) : Widget<CheckBox>() {
 
