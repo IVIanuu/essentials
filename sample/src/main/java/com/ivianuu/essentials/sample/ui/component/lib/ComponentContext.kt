@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.sample.ui.component.lib
 
 import android.view.ViewGroup
+import com.github.ajalt.timberkt.d
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -60,7 +61,9 @@ class ComponentContext(
                             rootView = newRoot.createView(rootContainer)
                             rootContainer.addView(rootView)
                         }
+                        d { "layout new root $newRoot" }
                         newRoot.layout(rootContainer)
+                        d { "bind new root $newRoot" }
                         newRoot.bind(rootContainer)
                     }
                 }

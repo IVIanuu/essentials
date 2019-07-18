@@ -60,13 +60,19 @@ abstract class UiComponent<V : View> {
         this.state.addAll(state)
     }
 
+    fun containerOrElse(container: View): ViewGroup =
+        containerId?.let { container.findViewById<ViewGroup>(it) } ?: container as ViewGroup
+
+    fun findViewIn(container: ViewGroup): V? = container.findViewById<V>(viewId)
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other !is UiComponent<*>) return false
 
         if (id != other.id) return false
         if (viewId != other.viewId) return false
-        if (viewType != other.viewType) return false
+        if (children != other.children) return false
+        if (containerId != other.containerId) return false
         if (state != other.state) return false
 
         return true
@@ -75,17 +81,10 @@ abstract class UiComponent<V : View> {
     override fun hashCode(): Int {
         var result = id?.hashCode() ?: 0
         result = 31 * result + viewId
-        result = 31 * result + viewType
+        result = 31 * result + (children?.hashCode() ?: 0)
+        result = 31 * result + (containerId ?: 0)
         result = 31 * result + state.hashCode()
         return result
     }
-
-    fun containerOrElse(container: View): ViewGroup =
-        containerId?.let { container.findViewById<ViewGroup>(it) } ?: container as ViewGroup
-
-    fun findViewIn(container: ViewGroup): V? = container.findViewById<V>(viewId)
-
-    override fun toString(): String =
-        "Component(id=$id, viewId=$viewId, parent=${parent?.javaClass?.name}, children=$children, containerId=$containerId, state=$state)"
 
 }

@@ -45,6 +45,13 @@ class ListView(
         epoxyController.setData(children)
     }
 
+    override fun unbind(view: RecyclerView) {
+        super.unbind(view)
+        val epoxyController =
+            view.properties.get<UiComponentEpoxyController>("epoxy_controller")!!
+        epoxyController.cancelPendingModelBuild()
+    }
+
     override fun createView(container: ViewGroup): RecyclerView {
         val view = container.inflate<RecyclerView>(R.layout.es_view_recycler_view)
         val epoxyController =
@@ -63,7 +70,6 @@ class ListView(
 private class UiComponentEpoxyController :
     TypedEpoxyController<List<UiComponent<*>>>() {
     override fun buildModels(data: List<UiComponent<*>>?) {
-        d { "build models $data" }
         data?.forEach {
             add(UiComponentEpoxyModel(it))
         }

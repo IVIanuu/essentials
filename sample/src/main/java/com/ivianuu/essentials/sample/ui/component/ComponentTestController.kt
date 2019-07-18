@@ -18,6 +18,7 @@ package com.ivianuu.essentials.sample.ui.component
 
 import android.view.View
 import androidx.lifecycle.lifecycleScope
+import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.sample.ui.component.lib.ComponentContext
 import com.ivianuu.essentials.ui.base.EsController
@@ -38,6 +39,7 @@ class ComponentTestController : EsController() {
         rootViewId = R.id.content,
         rootViewProvider = { view.cast() }
     ) {
+        d { "build models" }
         if (loading) {
             emit(Loading(id = "loading"))
         } else {

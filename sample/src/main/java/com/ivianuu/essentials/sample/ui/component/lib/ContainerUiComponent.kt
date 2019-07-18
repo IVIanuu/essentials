@@ -45,26 +45,6 @@ abstract class ContainerUiComponent<V : ViewGroup> : UiComponent<V>() {
         }
     }
 
-    override fun bind(view: V) {
-        super.bind(view)
-        children
-            ?.filterIsInstance<UiComponent<View>>()
-            ?.map { it to it.findViewIn(view)!! }
-            ?.forEach { (child, childView) ->
-                child.bind(childView)
-            }
-    }
-
-    override fun unbind(view: V) {
-        super.unbind(view)
-        children
-            ?.filterIsInstance<UiComponent<View>>()
-            ?.map { it to it.findViewIn(view)!! }
-            ?.forEach { (child, childView) ->
-                child.unbind(childView)
-            }
-    }
-
     private fun layoutChild(
         view: V,
         newChild: UiComponent<*>?,
@@ -99,6 +79,26 @@ abstract class ContainerUiComponent<V : ViewGroup> : UiComponent<V>() {
         if (view != null) {
             container.removeView(view)
         }
+    }
+
+    override fun bind(view: V) {
+        super.bind(view)
+        children
+            ?.filterIsInstance<UiComponent<View>>()
+            ?.map { it to it.findViewIn(view)!! }
+            ?.forEach { (child, childView) ->
+                child.bind(childView)
+            }
+    }
+
+    override fun unbind(view: V) {
+        super.unbind(view)
+        children
+            ?.filterIsInstance<UiComponent<View>>()
+            ?.map { it to it.findViewIn(view)!! }
+            ?.forEach { (child, childView) ->
+                child.unbind(childView)
+            }
     }
 
 }
