@@ -17,23 +17,21 @@
 package com.ivianuu.essentials.sample.ui.component
 
 /**
-class List(
+class ListView(
     override val id: Any?,
     private val buildListComponents: BuildContext.() -> Unit
 ) : UiComponent<RecyclerView>() {
 
-/*override val viewId: Int
+override val viewId: Int
         get() = R.id.es_recycler_view
 
-    override fun layoutChildren(
-        view: RecyclerView,
-        newChildren: kotlin.collections.List<UiComponent<*>>?,
-        oldChildren: kotlin.collections.List<UiComponent<*>>?
-    ) {
+override fun layoutChildren(container: ViewGroup, oldChildren: List<UiComponent<*>>?) {
+super.layoutChildren(container, oldChildren)
+val view = findViewIn(container)!!
         val epoxyController =
             view.tag<UiComponentEpoxyController>(R.id.es_recycler_view)
 
-        val newData = newChildren?.map { newChildrenNode ->
+val newData = children?.map { newChildrenNode ->
             val oldChildrenNode = oldChildren?.firstOrNull {
                 it.id == newChildrenNode.id
             }
@@ -68,7 +66,7 @@ private data class ComponentWithPrev(
 )
 
 private class UiComponentEpoxyController :
-    TypedEpoxyController<kotlin.collections.List<ComponentWithPrev>>() {
+TypedEpoxyController<List<ComponentWithPrev>>() {
     override fun buildModels(data: kotlin.collections.List<ComponentWithPrev>?) {
         data?.forEach {
             add(UiComponentEpoxyModel(it))
@@ -98,64 +96,7 @@ private data class UiComponentEpoxyModel(
     override fun buildView(parent: ViewGroup): View {
         val view = componentWithPrev.component.createView(parent)
 
-        val processedNodes = mutableListOf<UiComponent<*>>()
-
-        componentWithPrev.component.children?.forEach { newChildrenNode ->
-            processedNodes.add(newChildrenNode)
-            val oldChildrenNode = componentWithPrev.prev?.children?.firstOrNull {
-                it.id == newChildrenNode.id
-            }
-            if (oldChildrenNode != null) processedNodes.add(oldChildrenNode)
-            layout(view, newChildrenNode, oldChildrenNode)
-        }
-
-        componentWithPrev.prev?.children?.forEach { oldChildrenNode ->
-            if (!processedNodes.contains(oldChildrenNode)) {
-                layout(view, null, oldChildrenNode)
-            }
-        }
-
         return view
     }
 
-    private fun layout(
-        view: View,
-        newNode: UiComponent<*>?,
-        oldNode: UiComponent<*>?
-    ) {
-        fun UiComponent<*>.containerOrThis() =
-            containerId?.let { view.findViewById<ViewGroup>(it) } ?: view as ViewGroup
-
-        if (newNode != null && oldNode == null) {
-            val newNodeContainer = newNode.containerOrThis()
-            newNode.addIfNeeded(newNodeContainer)
-            newNode.bind(newNodeContainer)
-        } else if (newNode != null && oldNode != null) {
-            val newNodeContainer = newNode.containerOrThis()
-            val oldNodeContainer = oldNode.containerOrThis()
-
-            if (newNode != oldNode) {
-                if (newNode.viewType == oldNode.viewType) {
-                    newNode.addIfNeeded(newNodeContainer)
-                    newNode.bind(newNodeContainer)
-                } else {
-                    newNode.addIfNeeded(newNodeContainer)
-                    newNode.bind(newNodeContainer)
-                    oldNode.unbind(oldNodeContainer)
-                    oldNode.removeIfPossible(oldNodeContainer)
-                }
-            }
-        } else if (newNode == null && oldNode != null) {
-            val oldNodeContainer = oldNode.containerOrThis()
-            oldNode.unbind(oldNodeContainer)
-            oldNode.removeIfPossible(oldNodeContainer)
-        }
-
-        (newNode as? UiComponent<View>)
-            ?.layoutChildren(
-                newNode.containerOrThis().findViewById(newNode.viewId),
-                oldNode?.children
-            )
-    }
-*/
 }*/

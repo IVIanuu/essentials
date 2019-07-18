@@ -17,27 +17,10 @@
 package com.ivianuu.essentials.sample.ui.component.lib
 
 import android.view.View
-import android.view.ViewGroup
-import android.widget.FrameLayout
+import com.ivianuu.essentials.sample.R
+import com.ivianuu.essentials.util.Properties
+import com.ivianuu.kommon.core.view.getTagOrSet
 
-internal class RootComponent(
-    override val id: Any?
-) : ContainerUiComponent<ViewGroup>() {
-
-    override val viewId: Int
-        get() = rootViewId
-
-    override fun createView(container: ViewGroup): ViewGroup {
-        return FrameLayout(container.context).apply {
-            id = viewId
-            layoutParams = ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT
-            )
-        }
-    }
-
-    private companion object {
-        private val rootViewId = View.generateViewId()
-    }
-}
+val View.properties: Properties
+    // todo unique tag
+    get() = getTagOrSet(R.id.epoxy_saved_view_style) { Properties() }

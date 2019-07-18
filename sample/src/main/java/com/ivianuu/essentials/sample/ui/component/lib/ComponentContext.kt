@@ -56,9 +56,14 @@ class ComponentContext(
                     synchronized(this@ComponentContext) {
                         root = newRoot
                         val rootContainer = rootViewProvider()
-                        newRoot.addIfNeeded(rootContainer)
-                        newRoot.layoutRecursive(rootContainer, oldRoot)
-                        newRoot.bindRecursive(rootContainer)
+                        var rootView = rootContainer
+                            .findViewById<ViewGroup>(newRoot.viewId)
+                        if (rootView == null) {
+                            rootView = newRoot.createView(rootContainer)
+                            rootContainer.addView(rootView)
+                        }
+                        newRoot.layout(rootContainer)
+                        newRoot.bind(rootContainer)
                     }
                 }
             }

@@ -16,10 +16,10 @@
 
 package com.ivianuu.essentials.sample.ui.component
 
-import android.view.View
 import android.view.ViewGroup
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.sample.ui.component.lib.BuildContext
+import com.ivianuu.essentials.sample.ui.component.lib.ContainerUiComponent
 import com.ivianuu.essentials.sample.ui.component.lib.UiComponent
 import com.ivianuu.kommon.core.view.inflate
 import kotlinx.android.synthetic.main.text_with_content.view.*
@@ -28,7 +28,7 @@ class TextWithContent(
     override val id: Any?,
     private val text: String,
     private val content: UiComponent<*>
-) : UiComponent<View>() {
+) : ContainerUiComponent<ViewGroup>() {
 
     override val viewId: Int
         get() = R.id.text_with_checkbox
@@ -38,9 +38,9 @@ class TextWithContent(
     }
 
     override fun createView(container: ViewGroup) =
-        container.inflate(R.layout.text_with_content)
+        container.inflate<ViewGroup>(R.layout.text_with_content)
 
-    override fun bind(view: View) {
+    override fun bind(view: ViewGroup) {
         super.bind(view)
         view.text.text = text
     }
