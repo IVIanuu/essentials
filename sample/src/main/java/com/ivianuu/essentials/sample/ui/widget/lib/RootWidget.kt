@@ -16,18 +16,13 @@
 
 package com.ivianuu.essentials.sample.ui.widget.lib
 
-import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 
 internal class RootWidget : ContainerWidget<ViewGroup>() {
 
-    override val viewId: Int
-        get() = rootViewId
-
     override fun createView(container: ViewGroup): ViewGroup {
         return FrameLayout(container.context).apply {
-            id = viewId
             layoutParams = ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT
@@ -35,7 +30,4 @@ internal class RootWidget : ContainerWidget<ViewGroup>() {
         }
     }
 
-    private companion object {
-        private val rootViewId = View.generateViewId()
-    }
 }

@@ -40,9 +40,6 @@ class ListItem(
     override val key: Any? = null
 ) : ContainerWidget<ViewGroup>() {
 
-    override val viewId: Int
-        get() = R.id.es_list_item_container
-
     init {
         state(title, titleRes)
         state(text, textRes)

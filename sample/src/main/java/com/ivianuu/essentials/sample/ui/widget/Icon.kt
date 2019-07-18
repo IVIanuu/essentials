@@ -29,9 +29,6 @@ class Icon(
     override val key: Any? = null
 ) : Widget<ImageView>() {
 
-    override val viewId: Int
-        get() = R.id.es_list_icon
-
     override fun createView(container: ViewGroup): ImageView =
         container.inflate<ImageView>(R.layout.es_list_action_icon)
 

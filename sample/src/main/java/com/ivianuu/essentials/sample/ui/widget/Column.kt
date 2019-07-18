@@ -17,23 +17,29 @@
 package com.ivianuu.essentials.sample.ui.widget
 
 import android.view.ViewGroup
-import com.ivianuu.essentials.sample.R
+import android.widget.LinearLayout
+import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget.lib.ContainerWidget
-import com.ivianuu.essentials.sample.ui.widget.lib.Widget
-import com.ivianuu.kommon.core.view.inflate
 
-class AppBarScreen(
-    private val appBar: Widget<*>,
-    private val content: Widget<*>,
-    override val key: Any? = null
-) : ContainerWidget<ViewGroup>() {
+class Column(
+    override val key: Any? = null,
+    children: BuildContext.() -> Unit
+) : ContainerWidget<LinearLayout>() {
 
-    override fun createView(container: ViewGroup): ViewGroup =
-        container.inflate<ViewGroup>(R.layout.appbar_screen)
+    private val _children = children
+
+    override fun createView(container: ViewGroup): LinearLayout {
+        return LinearLayout(container.context).apply {
+            layoutParams = ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT
+            )
+            orientation = LinearLayout.VERTICAL
+        }
+    }
 
     override fun children() {
-        emit(appBar, R.id.es_app_bar)
-        emit(content, R.id.content_container)
+        _children()
     }
 
 }

@@ -25,8 +25,6 @@ abstract class Widget<V : View> : BuildContext {
     val type: Any = javaClass
     open val key: Any? = null
 
-    abstract val viewId: Int
-
     override var parent: Widget<*>? = null
     var children: MutableList<Widget<*>>? = null
 
@@ -59,8 +57,6 @@ abstract class Widget<V : View> : BuildContext {
     fun containerOrElse(container: View): ViewGroup =
         containerId?.let { container.findViewById<ViewGroup>(it) } ?: container as ViewGroup
 
-    fun findViewIn(container: ViewGroup): V? = container.findViewById<V>(viewId)
-
     fun equalsIdentity(other: Widget<*>): Boolean =
         type == other.type && key == other.key
 
@@ -89,7 +85,6 @@ abstract class Widget<V : View> : BuildContext {
 
         if (type != other.type) return false
         if (key != other.key) return false
-        if (viewId != other.viewId) return false
         if (children != other.children) return false
         if (containerId != other.containerId) return false
         if (state != other.state) return false
@@ -100,7 +95,6 @@ abstract class Widget<V : View> : BuildContext {
     override fun hashCode(): Int {
         var result = type.hashCode()
         result = 31 * result + (key?.hashCode() ?: 0)
-        result = 31 * result + viewId
         result = 31 * result + (children?.hashCode() ?: 0)
         result = 31 * result + (containerId ?: 0)
         result = 31 * result + (state?.hashCode() ?: 0)

@@ -18,7 +18,6 @@ package com.ivianuu.essentials.sample.ui.widget
 
 import android.view.View
 import androidx.lifecycle.lifecycleScope
-import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.sample.ui.widget.lib.WidgetContext
 import com.ivianuu.essentials.ui.base.EsController
@@ -45,11 +44,15 @@ class WidgetTestController : EsController() {
                 content = if (loading) {
                     Loading()
                 } else {
-                    ListView {
+                    Column {
                         var wasCheckBox = false
-
                         (0..2).forEach { index ->
                             emit(
+                                /*Padding(
+                                    key = index,
+                                    padding = if (wasCheckBox) dp(100).toInt() else 0,
+                                    child =
+                                )*/
                                 ListItem(
                                     key = index,
                                     title = "Title $index",
@@ -63,15 +66,16 @@ class WidgetTestController : EsController() {
                                             onChange = { toggle(index) }
                                         )
                                     } else {
-                                        Touchable(
-                                            child = Checkbox(
-                                                value = checkedIndices.contains(index),
-                                                onChange = { toggle(index) }
-                                            ),
+                                        /*Touchable(
+                                            child = ,
                                             onTouch = {
                                                 d { "on touch $it" }
                                                 return@Touchable false
                                             }
+                                        )*/
+                                        Checkbox(
+                                            value = checkedIndices.contains(index),
+                                            onChange = { toggle(index) }
                                         )
                                     },
                                     onClick = { toggle(index) }

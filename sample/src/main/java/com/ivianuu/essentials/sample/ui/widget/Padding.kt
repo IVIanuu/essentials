@@ -16,34 +16,41 @@
 
 package com.ivianuu.essentials.sample.ui.widget
 
-import android.view.ViewGroup
-import android.widget.CheckBox
-import com.ivianuu.essentials.sample.R
+import android.view.View
+import com.ivianuu.essentials.sample.ui.widget.lib.HeadlessWidget
 import com.ivianuu.essentials.sample.ui.widget.lib.Widget
-import com.ivianuu.kommon.core.view.inflate
 
-class Checkbox(
-    private val value: Boolean,
-    private val onChange: (Boolean) -> Unit,
-    override val key: Any? = null
-) : Widget<CheckBox>() {
+class Padding(
+    override val key: Any? = null,
+    child: Widget<*>,
+    private val left: Int = 0,
+    private val top: Int = 0,
+    private val right: Int = 0,
+    private val bottom: Int = 0
+) : HeadlessWidget(child) {
 
-    init {
-        state(value)
-    }
+    constructor(key: Any? = null, child: Widget<*>, padding: Int) : this(
+        key,
+        child,
+        padding,
+        padding,
+        padding,
+        padding
+    )
 
-    override fun createView(container: ViewGroup) =
-        container.inflate<CheckBox>(R.layout.es_list_action_checkbox)
-
-    override fun bind(view: CheckBox) {
+    override fun bind(view: View) {
         super.bind(view)
-        view.isChecked = value
-        view.setOnClickListener { onChange(!value) }
+        view.setPadding(
+            this@Padding.left,
+            this@Padding.top,
+            this@Padding.right,
+            this@Padding.bottom
+        )
     }
 
-    override fun unbind(view: CheckBox) {
+    override fun unbind(view: View) {
         super.unbind(view)
-        view.setOnCheckedChangeListener(null)
+        view.setPadding(0, 0, 0, 0)
     }
 
 }

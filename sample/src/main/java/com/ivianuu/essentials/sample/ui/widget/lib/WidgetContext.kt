@@ -54,7 +54,7 @@ class WidgetContext(
                         root = newRoot
                         val rootContainer = rootViewProvider()
                         var rootView = rootContainer
-                            .findViewById<ViewGroup>(newRoot.viewId)
+                            .findViewByWidget(newRoot)
                         if (rootView == null) {
                             rootView = newRoot.createView(rootContainer)
                             rootContainer.addView(rootView)

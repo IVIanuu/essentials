@@ -48,7 +48,7 @@ abstract class ContainerWidget<V : ViewGroup> : Widget<V>() {
 
             children
                 ?.filterIsInstance<Widget<View>>()
-                ?.map { it to it.findViewIn(view)!! }
+                ?.map { it to view.findViewByWidget(it)!! }
                 ?.forEach { it.first.layout(it.second) }
         }
     }
@@ -61,7 +61,7 @@ abstract class ContainerWidget<V : ViewGroup> : Widget<V>() {
         if (newChild != null && oldChild == null) {
             newChild.addIfNeeded(newChild.containerOrElse(view))
         } else if (newChild != null && oldChild != null) {
-            if (newChild.viewId == oldChild.viewId) {
+            if (newChild.equalsIdentity(oldChild)) {
                 newChild.addIfNeeded(newChild.containerOrElse(view))
             } else {
                 oldChild.removeIfPossible(newChild.containerOrElse(view))
@@ -79,17 +79,18 @@ abstract class ContainerWidget<V : ViewGroup> : Widget<V>() {
     }
 
     private fun Widget<*>.addIfNeeded(container: ViewGroup) {
-        var view = findViewIn(container)
+        var view = container.findViewByWidget(this)
         d { "add if needed ${javaClass.simpleName} ${view == null}" }
         if (view == null) {
             view = createView(container)
+            view.setWidget(this)
             container.addView(view)
             onViewAdded(container, view)
         }
     }
 
     private fun Widget<*>.removeIfPossible(container: ViewGroup) {
-        val view = findViewIn(container)
+        val view = container.findViewByWidget(this)
         d { "remove if possible ${javaClass.simpleName} ${view != null}" }
         if (view != null) {
             container.removeView(view)
@@ -101,7 +102,7 @@ abstract class ContainerWidget<V : ViewGroup> : Widget<V>() {
         super.bind(view)
         children
             ?.filterIsInstance<Widget<View>>()
-            ?.map { it to it.findViewIn(view)!! }
+            ?.map { it to view.findViewByWidget(it)!! }
             ?.forEach { (child, childView) ->
                 child.bind(childView)
             }
@@ -111,7 +112,7 @@ abstract class ContainerWidget<V : ViewGroup> : Widget<V>() {
         super.unbind(view)
         children
             ?.filterIsInstance<Widget<View>>()
-            ?.map { it to it.findViewIn(view)!! }
+            ?.map { it to view.findViewByWidget(it)!! }
             ?.forEach { (child, childView) ->
                 child.unbind(childView)
             }

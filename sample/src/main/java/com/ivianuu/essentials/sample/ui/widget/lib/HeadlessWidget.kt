@@ -27,9 +27,6 @@ abstract class HeadlessWidget(
     override val key: Any?
         get() = child.key
 
-    override val viewId: Int
-        get() = child.viewId
-
     override fun layout(view: View) {
         super.layout(view)
         child.cast<Widget<View>>().layout(view)

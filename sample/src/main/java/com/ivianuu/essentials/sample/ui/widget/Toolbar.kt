@@ -30,9 +30,6 @@ class Toolbar(
     override val key: Any? = null
 ) : Widget<Toolbar>() {
 
-    override val viewId: Int
-        get() = R.id.es_toolbar
-
     override fun createView(container: ViewGroup): Toolbar =
         container.inflate<Toolbar>(R.layout.es_view_toolbar)
 

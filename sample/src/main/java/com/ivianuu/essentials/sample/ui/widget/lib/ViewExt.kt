@@ -17,6 +17,8 @@
 package com.ivianuu.essentials.sample.ui.widget.lib
 
 import android.view.View
+import android.view.ViewGroup
+import androidx.core.view.children
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.util.Properties
 import com.ivianuu.kommon.core.view.getTagOrSet
@@ -24,3 +26,31 @@ import com.ivianuu.kommon.core.view.getTagOrSet
 val View.properties: Properties
     // todo unique tag
     get() = getTagOrSet(R.id.epoxy_saved_view_style) { Properties() }
+
+@JvmName("findViewByWidgetUntyped")
+fun View.findViewByWidget(widget: Widget<*>): View? =
+    findViewByWidget<View>(widget)
+
+fun <T : View> View.findViewByWidget(widget: Widget<*>): T? {
+    val id = widget.type.hashCode() + (widget.key?.hashCode() ?: 0)
+    return findViewByWidgetIdTraversal<T>(id)
+}
+
+private fun <T : View> View.findViewByWidgetIdTraversal(widgetId: Int): T? {
+    if (this.getWidgetId() == widgetId) return this as? T
+
+    if (this is ViewGroup) {
+        for (child in children.iterator()) {
+            val result = child.findViewByWidgetIdTraversal<T>(widgetId)
+            if (result != null) return result
+        }
+    }
+
+    return null
+}
+
+fun View.getWidgetId(): Int? = properties.get("id")
+
+fun View.setWidget(widget: Widget<*>) {
+    properties.set("id", widget.type.hashCode() + (widget.key?.hashCode() ?: 0))
+}

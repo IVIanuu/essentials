@@ -25,6 +25,7 @@ import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget.lib.Widget
 import com.ivianuu.essentials.sample.ui.widget.lib.properties
+import com.ivianuu.essentials.sample.ui.widget.lib.setWidget
 import com.ivianuu.essentials.ui.epoxy.EsHolder
 import com.ivianuu.essentials.ui.epoxy.SimpleModel
 import com.ivianuu.essentials.util.cast
@@ -34,9 +35,6 @@ class ListView(
     override val key: Any? = null,
     private val buildList: BuildContext.() -> Unit
 ) : Widget<RecyclerView>() {
-
-    override val viewId: Int
-        get() = R.id.es_recycler_view
 
     override fun bind(view: RecyclerView) {
         super.bind(view)
@@ -95,10 +93,12 @@ private data class WidgetEpoxyModel(
     override fun getViewType(): Int = widget.getViewType()
 
     private fun Widget<*>.getViewType(): Int =
-        viewId + (children?.map { it.getViewType() }?.sum() ?: 0)
+        (type.hashCode() + (key?.hashCode() ?: 0)) + (children?.map { it.getViewType() }?.sum()
+            ?: 0)
 
     override fun buildView(parent: ViewGroup): View {
         val view = widget.createView(parent)
+        view.setWidget(widget)
         (widget as Widget<View>).layout(view)
         return view
     }

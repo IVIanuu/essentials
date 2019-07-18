@@ -24,9 +24,6 @@ import com.ivianuu.kommon.core.view.inflate
 
 class Loading(override val key: Any? = null) : Widget<View>() {
 
-    override val viewId: Int
-        get() = R.id.es_progress_bar_container
-
     override fun createView(container: ViewGroup) =
         container.inflate(R.layout.es_item_simple_loading)
 
