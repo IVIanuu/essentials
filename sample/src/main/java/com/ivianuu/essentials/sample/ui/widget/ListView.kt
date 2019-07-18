@@ -61,7 +61,7 @@ class ListView(
         return view
     }
 
-    override fun BuildContext.children() {
+    override fun children() {
         buildList()
     }
 

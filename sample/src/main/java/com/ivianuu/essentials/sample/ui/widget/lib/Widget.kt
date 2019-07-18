@@ -20,24 +20,19 @@ import android.view.View
 import android.view.ViewGroup
 import com.github.ajalt.timberkt.d
 
-abstract class Widget<V : View> {
+abstract class Widget<V : View> : BuildContext {
 
     val type: Any = javaClass
     open val key: Any? = null
 
     abstract val viewId: Int
 
-    var parent: Widget<*>? = null
+    override var parent: Widget<*>? = null
     var children: MutableList<Widget<*>>? = null
 
     var containerId: Int? = null
 
     private var state: MutableList<Any?>? = null
-
-    open fun buildChildren(buildContext: BuildContext) {
-        d { "build children ${javaClass.simpleName}" }
-        with(buildContext) { children() }
-    }
 
     open fun layout(view: V) {
         d { "layout ${javaClass.simpleName} -> ${view.javaClass.simpleName}" }
@@ -53,7 +48,7 @@ abstract class Widget<V : View> {
 
     abstract fun createView(container: ViewGroup): V
 
-    open fun BuildContext.children() {
+    open fun children() {
     }
 
     protected fun state(vararg state: Any?) {
@@ -68,6 +63,25 @@ abstract class Widget<V : View> {
 
     fun equalsIdentity(other: Widget<*>): Boolean =
         type == other.type && key == other.key
+
+    override fun invalidate() {
+        var root: BuildContext = this
+        while (root.parent != null) {
+            root = root.parent!!
+        }
+
+        root.invalidate()
+    }
+
+    override fun emit(widget: Widget<*>, containerId: Int?) {
+        // todo check duplicate
+        d { "emit ${javaClass.simpleName} -> ${widget.javaClass.simpleName}" }
+        if (children == null) children = mutableListOf()
+        widget.parent = this
+        widget.containerId = containerId
+        widget.children()
+        children!!.add(widget)
+    }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

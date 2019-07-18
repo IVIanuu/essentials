@@ -19,7 +19,6 @@ package com.ivianuu.essentials.sample.ui.widget
 import android.view.ViewGroup
 import android.widget.TextView
 import com.ivianuu.essentials.sample.R
-import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget.lib.ContainerWidget
 import com.ivianuu.essentials.sample.ui.widget.lib.Widget
 import com.ivianuu.essentials.util.andTrue
@@ -84,7 +83,7 @@ class ListItem(
         view.isEnabled = onClick != null || onLongClick != null
     }
 
-    override fun BuildContext.children() {
+    override fun children() {
         if (primaryAction != null) emit(primaryAction, R.id.es_list_primary_action_container)
         if (secondaryAction != null) emit(secondaryAction, R.id.es_list_secondary_action_container)
     }

@@ -27,13 +27,16 @@ class WidgetContext(
     private val coroutineScope: CoroutineScope,
     private val rootViewProvider: () -> ViewGroup,
     private val buildWidgets: BuildContext.() -> Unit
-) {
+) : BuildContext {
 
-    private var root: RootWidget? = null
+    override val parent: BuildContext?
+        get() = null
+
+    private var root = RootWidget()
 
     private val generationTracker = GenerationTracker()
 
-    fun invalidate() {
+    override fun invalidate() {
         coroutineScope.launch(Dispatchers.Default) {
             val runGeneration: Int
 
@@ -43,9 +46,7 @@ class WidgetContext(
 
             val newRoot = RootWidget()
 
-            with(WidgetBuildContext(this@WidgetContext, newRoot)) {
-                buildWidgets()
-            }
+            with(newRoot) { buildWidgets() }
 
             withContext(Dispatchers.Main) {
                 if (generationTracker.finishGeneration(runGeneration)) {
@@ -66,6 +67,10 @@ class WidgetContext(
                 }
             }
         }
+    }
+
+    override fun emit(widget: Widget<*>, containerId: Int?) {
+        root.emit(widget, containerId)
     }
 
     fun cancelAll() {

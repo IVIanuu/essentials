@@ -18,7 +18,6 @@ package com.ivianuu.essentials.sample.ui.widget
 
 import android.view.ViewGroup
 import com.ivianuu.essentials.sample.R
-import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget.lib.ContainerWidget
 import com.ivianuu.essentials.sample.ui.widget.lib.Widget
 import com.ivianuu.kommon.core.view.inflate
@@ -35,7 +34,7 @@ class AppBarScreen(
     override fun createView(container: ViewGroup): ViewGroup =
         container.inflate<ViewGroup>(R.layout.appbar_screen)
 
-    override fun BuildContext.children() {
+    override fun children() {
         emit(appBar, R.id.es_app_bar)
         emit(content, R.id.content_container)
     }

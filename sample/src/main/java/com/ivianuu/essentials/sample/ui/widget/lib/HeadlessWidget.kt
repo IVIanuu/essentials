@@ -47,7 +47,7 @@ abstract class HeadlessWidget(
 
     override fun createView(container: ViewGroup): View = child.createView(container)
 
-    override fun BuildContext.children() {
+    override fun children() {
         emit(child, containerId)
     }
 

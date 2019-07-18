@@ -46,7 +46,7 @@ class RadioButton(
 
     override fun unbind(view: RadioButton) {
         super.unbind(view)
-        view.setOnCheckedChangeListener(null)
+        view.setOnClickListener(null)
     }
 
 }
