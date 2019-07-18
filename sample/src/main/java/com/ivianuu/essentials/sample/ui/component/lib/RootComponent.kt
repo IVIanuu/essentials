@@ -16,21 +16,18 @@
 
 package com.ivianuu.essentials.sample.ui.component.lib
 
-import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.core.view.ViewCompat
 
-private val rootViewId = ViewCompat.generateViewId()
-
-class RootComponent(
+internal class RootComponent(
     override val id: Any?
-) : UiComponent<View>() {
+) : UiComponent<FrameLayout>() {
 
     override val viewId: Int
         get() = rootViewId
 
-    override fun createView(container: ViewGroup): View {
+    override fun createView(container: ViewGroup): FrameLayout {
         return FrameLayout(container.context).apply {
             id = viewId
             layoutParams = ViewGroup.LayoutParams(
@@ -40,4 +37,7 @@ class RootComponent(
         }
     }
 
+    private companion object {
+        private val rootViewId = ViewCompat.generateViewId()
+    }
 }

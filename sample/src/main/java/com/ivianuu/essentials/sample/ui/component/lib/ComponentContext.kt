@@ -31,14 +31,14 @@ class ComponentContext(
 ) {
 
     private val rootId = "root-${UUID.randomUUID()}"
-    private var root: UiComponent<*>? = null
+    private var root: RootComponent? = null
 
     private val generationTracker = GenerationTracker()
 
     fun invalidate() {
         GlobalScope.launch(Dispatchers.IO) {
             val runGeneration: Int
-            val oldRoot: UiComponent<*>?
+            val oldRoot: RootComponent?
 
             synchronized(this@ComponentContext) {
                 runGeneration = generationTracker.incrementAndGetNextScheduled()
@@ -55,14 +55,15 @@ class ComponentContext(
             d { "prev root $oldRoot" }
             d { "new root $newRoot" }
 
-            val ops = mutableListOf<() -> Unit>()
-            createOps(ops, newRoot, oldRoot)
-
             withContext(Dispatchers.Main) {
                 if (generationTracker.finishGeneration(runGeneration)) {
                     synchronized(this@ComponentContext) {
                         root = newRoot
-                        ops.forEach { it() }
+                        newRoot.addOrUpdate(rootViewProvider())
+                        newRoot._layoutChildren(
+                            rootViewProvider().findViewById(rootViewId),
+                            oldRoot?.children
+                        )
                     }
                 }
             }
@@ -72,63 +73,6 @@ class ComponentContext(
     fun cancelAll() {
         generationTracker.finishMaxGeneration()
     }
-
-    private fun createOps(
-        ops: MutableList<() -> Unit>,
-        newNode: UiComponent<*>?,
-        oldNode: UiComponent<*>?
-    ) {
-        if (newNode != null && oldNode == null) {
-            ops.add {
-                newNode.addOrUpdate(
-                    rootViewProvider().findViewById(newNode.containerId!!)
-                )
-            }
-        } else if (newNode != null && oldNode != null) {
-            if (newNode != oldNode) {
-                if (newNode.viewType == oldNode.viewType) {
-                    ops.add {
-                        newNode.addOrUpdate(
-                            rootViewProvider().findViewById(newNode.containerId!!)
-                        )
-                    }
-                } else {
-                    ops.add {
-                        newNode.addOrUpdate(
-                            rootViewProvider().findViewById(newNode.containerId!!)
-                        )
-                        oldNode.removeIfPossible(
-                            rootViewProvider().findViewById(newNode.containerId!!)
-                        )
-                    }
-                }
-            }
-        } else if (newNode == null && oldNode != null) {
-            ops.add {
-                oldNode.removeIfPossible(
-                    rootViewProvider().findViewById(oldNode.containerId!!)
-                )
-            }
-        }
-
-        val processedNodes = mutableListOf<UiComponent<*>>()
-
-        newNode?.children?.forEach { newChildrenNode ->
-            processedNodes.add(newChildrenNode)
-            val oldChildrenNode = oldNode?.children?.firstOrNull {
-                it.id == newChildrenNode.id
-            }
-            if (oldChildrenNode != null) processedNodes.add(oldChildrenNode)
-            createOps(ops, newChildrenNode, oldChildrenNode)
-        }
-
-        oldNode?.children?.forEach { oldChildrenNode ->
-            if (!processedNodes.contains(oldChildrenNode)) {
-                createOps(ops, null, oldChildrenNode)
-            }
-        }
-    }
-
 
     private class GenerationTracker {
 

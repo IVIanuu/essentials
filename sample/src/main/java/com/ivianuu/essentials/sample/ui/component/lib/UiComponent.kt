@@ -61,6 +61,13 @@ abstract class UiComponent<V : View> {
         with(buildContext) { children() }
     }
 
+    internal fun _layoutChildren(
+        view: V,
+        oldChildren: List<UiComponent<*>>?
+    ) {
+        layoutChildren(view, children, oldChildren)
+    }
+
     protected fun state(vararg state: Any?) {
         this.state.addAll(state)
     }
@@ -75,6 +82,29 @@ abstract class UiComponent<V : View> {
     protected abstract fun createView(container: ViewGroup): V
 
     protected open fun BuildContext.children() {
+    }
+
+    protected open fun layoutChildren(
+        view: V,
+        newChildren: List<UiComponent<*>>?,
+        oldChildren: List<UiComponent<*>>?
+    ) {
+        val processedNodes = mutableListOf<UiComponent<*>>()
+
+        newChildren?.forEach { newChildrenNode ->
+            processedNodes.add(newChildrenNode)
+            val oldChildrenNode = oldChildren?.firstOrNull {
+                it.id == newChildrenNode.id
+            }
+            if (oldChildrenNode != null) processedNodes.add(oldChildrenNode)
+            layout(view, newChildrenNode, oldChildrenNode)
+        }
+
+        oldChildren?.forEach { oldChildrenNode ->
+            if (!processedNodes.contains(oldChildrenNode)) {
+                layout(view, null, oldChildrenNode)
+            }
+        }
     }
 
     override fun equals(other: Any?): Boolean {
@@ -97,5 +127,27 @@ abstract class UiComponent<V : View> {
         return result
     }
 
+    private fun layout(
+        view: V,
+        newNode: UiComponent<*>?,
+        oldNode: UiComponent<*>?
+    ) {
+        if (newNode != null && oldNode == null) {
+            newNode.addOrUpdate(view.findViewById(newNode.containerId!!))
+        } else if (newNode != null && oldNode != null) {
+            if (newNode != oldNode) {
+                if (newNode.viewType == oldNode.viewType) {
+                    newNode.addOrUpdate(view.findViewById(newNode.containerId!!))
+                } else {
+                    newNode.addOrUpdate(view.findViewById(newNode.containerId!!))
+                    oldNode.removeIfPossible(view.findViewById(newNode.containerId!!))
+                }
+            }
+        } else if (newNode == null && oldNode != null) {
+            oldNode.removeIfPossible(view.findViewById(oldNode.containerId!!))
+        }
+
+        newNode?._layoutChildren(view.findViewById(newNode.containerId!!), oldNode?.children)
+    }
 
 }
