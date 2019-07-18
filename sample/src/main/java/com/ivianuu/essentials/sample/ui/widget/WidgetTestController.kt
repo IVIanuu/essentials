@@ -18,6 +18,7 @@ package com.ivianuu.essentials.sample.ui.widget
 
 import android.view.View
 import androidx.lifecycle.lifecycleScope
+import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.sample.ui.widget.lib.WidgetContext
 import com.ivianuu.essentials.ui.base.EsController
@@ -62,9 +63,15 @@ class WidgetTestController : EsController() {
                                             onChange = { toggle(index) }
                                         )
                                     } else {
-                                        Checkbox(
-                                            value = checkedIndices.contains(index),
-                                            onChange = { toggle(index) }
+                                        Touchable(
+                                            child = Checkbox(
+                                                value = checkedIndices.contains(index),
+                                                onChange = { toggle(index) }
+                                            ),
+                                            onTouch = {
+                                                d { "on touch $it" }
+                                                return@Touchable false
+                                            }
                                         )
                                     },
                                     onClick = { toggle(index) }

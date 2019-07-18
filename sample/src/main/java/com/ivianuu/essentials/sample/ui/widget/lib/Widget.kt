@@ -34,7 +34,7 @@ abstract class Widget<V : View> {
 
     private var state: MutableList<Any?>? = null
 
-    fun buildChildren(buildContext: BuildContext) {
+    open fun buildChildren(buildContext: BuildContext) {
         d { "build children ${javaClass.simpleName}" }
         with(buildContext) { children() }
     }
