@@ -16,9 +16,9 @@
 
 package com.ivianuu.essentials.sample.ui.component.lib
 
+import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import androidx.core.view.ViewCompat
 
 internal class RootComponent(
     override val id: Any?
@@ -38,6 +38,6 @@ internal class RootComponent(
     }
 
     private companion object {
-        private val rootViewId = ViewCompat.generateViewId()
+        private val rootViewId = View.generateViewId()
     }
 }

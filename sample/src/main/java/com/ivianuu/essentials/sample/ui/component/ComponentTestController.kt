@@ -18,7 +18,6 @@ package com.ivianuu.essentials.sample.ui.component
 
 import android.view.View
 import androidx.lifecycle.lifecycleScope
-import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.sample.ui.component.lib.ComponentContext
 import com.ivianuu.essentials.ui.base.EsController
@@ -42,8 +41,14 @@ class ComponentTestController : EsController() {
         if (loading) {
             emit(Loading(id = "loading"))
         } else {
-            emit(Checkbox(id = "lol", value = true, onChange = {
-                d { "o" }
+            emit(Checkbox(id = "lol", value = checkedIndices.isEmpty(), onChange = {
+                if (checkedIndices.isEmpty()) {
+                    checkedIndices.add(0)
+                } else {
+                    checkedIndices.clear()
+                }
+
+                componentContext.invalidate()
             }))
             /*emit(List(id = "list") {
                 (0..1).forEach { index ->

@@ -52,33 +52,78 @@ abstract class UiComponent<V : View> {
     }
 
     fun buildChildren(buildContext: BuildContext) {
+        d { "build children ${javaClass.simpleName}" }
         with(buildContext) { children() }
     }
 
-    fun layoutChildren(
+    open fun layout(
+        container: ViewGroup,
+        old: UiComponent<*>?
+    ) {
+        d { "layout ${javaClass.simpleName}" }
+        layoutChildren(container, old?.children)
+    }
+
+    fun layoutRecursive(container: ViewGroup, old: UiComponent<*>?) {
+        layout(container, old)
+        val view = findViewIn(container)!!
+        children?.forEach { newChild ->
+            val oldChild = old?.children?.firstOrNull { it.id == newChild.id }
+            newChild.layoutRecursive(newChild.containerOrElse(view), oldChild)
+        }
+    }
+
+    open fun layoutChildren(
         container: ViewGroup,
         oldChildren: List<UiComponent<*>>?
     ) {
         if (children != null || oldChildren != null) {
-            layoutChildren(findViewIn(container)!!, children, oldChildren)
+            d { "layout children ${javaClass.simpleName} children $children old $oldChildren" }
+
+            children?.forEach { newChild ->
+                val oldChild = oldChildren?.firstOrNull { it.id == newChild.id }
+                layoutChild(container, newChild, oldChild)
+            }
+
+            oldChildren?.forEach { oldChild ->
+                val newChild = children?.firstOrNull { it.id == oldChild.id }
+                if (newChild == null) {
+                    layoutChild(container, null, oldChild)
+                }
+            }
         }
     }
 
+    open fun layoutChild(
+        container: ViewGroup,
+        newChild: UiComponent<*>?,
+        oldChild: UiComponent<*>?
+    ) {
+        d { "layout child ${javaClass.simpleName} new $newChild old $oldChild" }
+
+        val view = findViewIn(container)!!
+
+        if (newChild != null && oldChild == null) {
+            newChild.addIfNeeded(newChild.containerOrElse(view))
+        } else if (newChild != null && oldChild != null) {
+            if (newChild != oldChild) {
+                if (newChild.viewType == oldChild.viewType) {
+                    newChild.addIfNeeded(newChild.containerOrElse(view))
+                } else {
+                    newChild.addIfNeeded(newChild.containerOrElse(view))
+                    oldChild.removeIfPossible(newChild.containerOrElse(view))
+                }
+            }
+        } else if (newChild == null && oldChild != null) {
+            oldChild.removeIfPossible(oldChild.containerOrElse(view))
+        }
+
+    }
+
     fun bindRecursive(container: ViewGroup) {
-        bind(container)
         val view = findViewIn(container)!!
-        children?.forEach { it.bind(it.containerOrElse(view as ViewGroup)) }
-    }
-
-    protected fun state(vararg state: Any?) {
-        this.state.addAll(state)
-    }
-
-    fun rebind(container: ViewGroup) {
-        d { "rebind ${javaClass.simpleName}" }
-        val view = findViewIn(container)!!
-        unbind(view)
         bind(view)
+        children?.forEach { it.bindRecursive(it.containerOrElse(view)) }
     }
 
     fun bind(container: ViewGroup) {
@@ -89,6 +134,13 @@ abstract class UiComponent<V : View> {
     fun unbind(container: ViewGroup) {
         val view = findViewIn(container)!!
         unbind(view)
+    }
+
+    fun rebind(container: ViewGroup) {
+        d { "rebind ${javaClass.simpleName}" }
+        val view = findViewIn(container)!!
+        unbind(view)
+        bind(view)
     }
 
     fun containerContainsThisView(container: ViewGroup): Boolean =
@@ -103,30 +155,11 @@ abstract class UiComponent<V : View> {
 
     abstract fun createView(container: ViewGroup): V
 
-    protected open fun BuildContext.children() {
+    open fun BuildContext.children() {
     }
 
-    protected open fun layoutChildren(
-        view: V,
-        newChildren: List<UiComponent<*>>?,
-        oldChildren: List<UiComponent<*>>?
-    ) {
-        val processedNodes = mutableListOf<UiComponent<*>>()
-
-        newChildren?.forEach { newChildrenNode ->
-            processedNodes.add(newChildrenNode)
-            val oldChildrenNode = oldChildren?.firstOrNull {
-                it.id == newChildrenNode.id
-            }
-            if (oldChildrenNode != null) processedNodes.add(oldChildrenNode)
-            layout(view, newChildrenNode, oldChildrenNode)
-        }
-
-        oldChildren?.forEach { oldChildrenNode ->
-            if (!processedNodes.contains(oldChildrenNode)) {
-                layout(view, null, oldChildrenNode)
-            }
-        }
+    protected fun state(vararg state: Any?) {
+        this.state.addAll(state)
     }
 
     override fun equals(other: Any?): Boolean {
@@ -147,35 +180,6 @@ abstract class UiComponent<V : View> {
         result = 31 * result + viewType
         result = 31 * result + state.hashCode()
         return result
-    }
-
-    private fun layout(
-        view: V,
-        newNode: UiComponent<*>?,
-        oldNode: UiComponent<*>?
-    ) {
-        if (newNode != null && oldNode == null) {
-            newNode.addIfNeeded(newNode.containerOrElse(view))
-        } else if (newNode != null && oldNode != null) {
-            if (newNode != oldNode) {
-                if (newNode.viewType == oldNode.viewType) {
-                    newNode.addIfNeeded(newNode.containerOrElse(view))
-                } else {
-                    newNode.addIfNeeded(newNode.containerOrElse(view))
-                    oldNode.removeIfPossible(newNode.containerOrElse(view))
-                }
-            }
-        } else if (newNode == null && oldNode != null) {
-            oldNode.removeIfPossible(oldNode.containerOrElse(view))
-        }
-
-        if (newNode?.children != null || oldNode?.children != null) {
-            (newNode as? UiComponent<View>)
-                ?.layoutChildren(
-                    containerOrElse(view).findViewById(newNode.viewId),
-                    oldNode?.children
-                )
-        }
     }
 
     fun containerOrElse(container: View): ViewGroup =

@@ -55,11 +55,10 @@ class ComponentContext(
                 if (generationTracker.finishGeneration(runGeneration)) {
                     synchronized(this@ComponentContext) {
                         root = newRoot
-                        newRoot.addIfNeeded(rootViewProvider())
-                        newRoot.layoutChildren(
-                            rootViewProvider().findViewById(rootViewId),
-                            oldRoot?.children
-                        )
+                        val rootContainer = rootViewProvider()
+                        newRoot.addIfNeeded(rootContainer)
+                        newRoot.layoutRecursive(rootContainer, oldRoot)
+                        newRoot.bindRecursive(rootContainer)
                     }
                 }
             }

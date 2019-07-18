@@ -16,25 +16,13 @@
 
 package com.ivianuu.essentials.sample.ui.component
 
-import android.view.View
-import android.view.ViewGroup
-import androidx.recyclerview.widget.RecyclerView
-import com.airbnb.epoxy.TypedEpoxyController
-import com.github.ajalt.timberkt.d
-import com.ivianuu.essentials.sample.R
-import com.ivianuu.essentials.sample.ui.component.lib.BuildContext
-import com.ivianuu.essentials.sample.ui.component.lib.UiComponent
-import com.ivianuu.essentials.ui.epoxy.EsHolder
-import com.ivianuu.essentials.ui.epoxy.SimpleModel
-import com.ivianuu.kommon.core.view.inflate
-import com.ivianuu.kommon.core.view.tag
-
+/**
 class List(
     override val id: Any?,
     private val buildListComponents: BuildContext.() -> Unit
 ) : UiComponent<RecyclerView>() {
 
-    override val viewId: Int
+/*override val viewId: Int
         get() = R.id.es_recycler_view
 
     override fun layoutChildren(
@@ -169,5 +157,5 @@ private data class UiComponentEpoxyModel(
                 oldNode?.children
             )
     }
-
-}
+*/
+}*/
