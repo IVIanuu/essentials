@@ -21,3 +21,18 @@ interface BuildContext {
     fun emit(component: UiComponent<*>, containerId: Int? = null) {
     }
 }
+
+class ComponentBuildContext(
+    override val componentContext: ComponentContext,
+    private val thisComponent: UiComponent<*>
+) : BuildContext {
+    override fun emit(component: UiComponent<*>, containerId: Int?) {
+        // todo check duplicate
+        if (thisComponent.children == null) thisComponent.children = mutableListOf()
+        component.parent = thisComponent
+        component.containerId = containerId
+        component.buildChildren(ComponentBuildContext(componentContext, component))
+        thisComponent.children!!.add(component)
+    }
+
+}

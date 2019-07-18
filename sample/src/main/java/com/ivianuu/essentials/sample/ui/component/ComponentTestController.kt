@@ -41,7 +41,6 @@ class ComponentTestController : EsController() {
         rootViewId = R.id.content,
         rootViewProvider = { view.cast() }
     ) {
-        if (view == null) return@ComponentContext
         if (loading) {
             emit(Loading("loading"), R.id.content)
         } else {

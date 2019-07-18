@@ -31,40 +31,39 @@ class ComponentContext(
 ) {
 
     private val rootId = "root-${UUID.randomUUID()}"
-    private var rootNode: ComponentNode? = null
+    private var root: UiComponent<*>? = null
 
     private val generationTracker = GenerationTracker()
 
     fun invalidate() {
         GlobalScope.launch(Dispatchers.IO) {
             val runGeneration: Int
-            val previousNode: ComponentNode?
+            val oldRoot: UiComponent<*>?
 
-            synchronized(this) {
+            synchronized(this@ComponentContext) {
                 runGeneration = generationTracker.incrementAndGetNextScheduled()
-                previousNode = rootNode
+                oldRoot = root
             }
 
-            val newNode = ComponentNode(
-                component = RootComponent(rootId),
-                containerId = rootViewId,
-                children = null
-            )
+            val newRoot = RootComponent(rootId)
+            newRoot.containerId = rootViewId
 
-            with(ComponentNodeBuildContext(this@ComponentContext, newNode)) {
+            with(ComponentBuildContext(this@ComponentContext, newRoot)) {
                 buildComponents()
             }
 
-            d { "prev node $previousNode" }
-            d { "new node $newNode" }
+            d { "prev root $oldRoot" }
+            d { "new root $newRoot" }
 
             val ops = mutableListOf<() -> Unit>()
-            createOps(ops, newNode, previousNode)
+            createOps(ops, newRoot, oldRoot)
 
             withContext(Dispatchers.Main) {
                 if (generationTracker.finishGeneration(runGeneration)) {
-                    rootNode = newNode
-                    ops.forEach { it() }
+                    synchronized(this@ComponentContext) {
+                        root = newRoot
+                        ops.forEach { it() }
+                    }
                 }
             }
         }
@@ -76,50 +75,48 @@ class ComponentContext(
 
     private fun createOps(
         ops: MutableList<() -> Unit>,
-        newNode: ComponentNode?,
-        oldNode: ComponentNode?
+        newNode: UiComponent<*>?,
+        oldNode: UiComponent<*>?
     ) {
-        if (newNode == oldNode) return
-
         if (newNode != null && oldNode == null) {
             ops.add {
-                newNode.component.addOrUpdate(
+                newNode.addOrUpdate(
                     rootViewProvider().findViewById(newNode.containerId!!)
                 )
             }
         } else if (newNode != null && oldNode != null) {
-            if (newNode.component != oldNode.component) {
-                if (newNode.component.viewType == oldNode.component.viewType) {
+            if (newNode != oldNode) {
+                if (newNode.viewType == oldNode.viewType) {
                     ops.add {
-                        newNode.component.addOrUpdate(
+                        newNode.addOrUpdate(
                             rootViewProvider().findViewById(newNode.containerId!!)
                         )
                     }
                 } else {
                     ops.add {
-                        newNode.component.addOrUpdate(
+                        newNode.addOrUpdate(
                             rootViewProvider().findViewById(newNode.containerId!!)
                         )
-                        oldNode.component.removeIfPossible(
-                            rootViewProvider().findViewById(newNode.containerId)
+                        oldNode.removeIfPossible(
+                            rootViewProvider().findViewById(newNode.containerId!!)
                         )
                     }
                 }
             }
         } else if (newNode == null && oldNode != null) {
             ops.add {
-                oldNode.component.removeIfPossible(
+                oldNode.removeIfPossible(
                     rootViewProvider().findViewById(oldNode.containerId!!)
                 )
             }
         }
 
-        val processedNodes = mutableListOf<ComponentNode>()
+        val processedNodes = mutableListOf<UiComponent<*>>()
 
         newNode?.children?.forEach { newChildrenNode ->
             processedNodes.add(newChildrenNode)
             val oldChildrenNode = oldNode?.children?.firstOrNull {
-                it.component.id == newChildrenNode.component.id
+                it.id == newChildrenNode.id
             }
             if (oldChildrenNode != null) processedNodes.add(oldChildrenNode)
             createOps(ops, newChildrenNode, oldChildrenNode)

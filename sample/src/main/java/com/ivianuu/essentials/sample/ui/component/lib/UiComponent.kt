@@ -26,6 +26,12 @@ abstract class UiComponent<V : View> {
     abstract val viewId: Int
     open val viewType: Int get() = viewId
 
+    var parent: UiComponent<*>? = null
+        set
+    var children: MutableList<UiComponent<*>>? = null
+
+    var containerId: Int? = null
+
     private val state = mutableListOf<Any?>() // todo lazy init
 
     internal fun addOrUpdate(container: ViewGroup) {
@@ -55,13 +61,6 @@ abstract class UiComponent<V : View> {
         with(buildContext) { children() }
     }
 
-    internal fun updateChildrenInternal(
-        newChildren: List<ComponentNode>,
-        oldChildren: List<ComponentNode>
-    ) {
-        updateChildren(newChildren, oldChildren)
-    }
-
     protected fun state(vararg state: Any?) {
         this.state.addAll(state)
     }
@@ -76,13 +75,6 @@ abstract class UiComponent<V : View> {
     protected abstract fun createView(container: ViewGroup): V
 
     protected open fun BuildContext.children() {
-    }
-
-    protected open fun updateChildren(
-        newChildren: List<ComponentNode>,
-        oldChildren: List<ComponentNode>
-    ) {
-
     }
 
     override fun equals(other: Any?): Boolean {
