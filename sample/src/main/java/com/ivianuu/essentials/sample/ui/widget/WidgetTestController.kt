@@ -43,18 +43,10 @@ class WidgetTestController : EsController() {
         if (loading) {
             emit(Loading(id = "loading"))
         } else {
-            /*emit(Checkbox(id = "lol", value = checkedIndices.isEmpty(), onChange = {
-                if (checkedIndices.isEmpty()) {
-                    checkedIndices.add(0)
-                } else {
-                    checkedIndices.clear()
-                }
-
-                widgetContext.invalidate()
-            }))*/
             emit(ListView(id = "list") {
                 var wasCheckBox = false
-                (0..5).forEach { index ->
+
+                (0..100).forEach { index ->
                     emit(
                         ListItem(
                             id = "list $index",
