@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.sample.ui.component.lib
+package com.ivianuu.essentials.sample.ui.widget.lib
 
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 
-internal class RootComponent(
+internal class RootWidget(
     override val id: Any?
-) : ContainerUiComponent<ViewGroup>() {
+) : ContainerWidget<ViewGroup>() {
 
     override val viewId: Int
         get() = rootViewId

@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.sample.ui.component
+package com.ivianuu.essentials.sample.ui.widget
 
 import android.view.ViewGroup
 import android.widget.TextView
 import com.ivianuu.essentials.sample.R
-import com.ivianuu.essentials.sample.ui.component.lib.BuildContext
-import com.ivianuu.essentials.sample.ui.component.lib.ContainerUiComponent
-import com.ivianuu.essentials.sample.ui.component.lib.UiComponent
+import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
+import com.ivianuu.essentials.sample.ui.widget.lib.ContainerWidget
+import com.ivianuu.essentials.sample.ui.widget.lib.Widget
 import com.ivianuu.essentials.util.andTrue
 import com.ivianuu.kommon.core.view.inflate
 
@@ -34,12 +34,12 @@ class ListItem(
     private val text: String? = null,
     private val textRes: Int? = null,
 
-    private val primaryAction: UiComponent<*>? = null,
-    private val secondaryAction: UiComponent<*>? = null,
+    private val primaryAction: Widget<*>? = null,
+    private val secondaryAction: Widget<*>? = null,
 
     private val onClick: (() -> Unit)? = null,
     private val onLongClick: (() -> Unit)? = null
-) : ContainerUiComponent<ViewGroup>() {
+) : ContainerWidget<ViewGroup>() {
 
     override val viewId: Int
         get() = R.id.es_list_item_container

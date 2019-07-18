@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.sample.ui.component.lib
+package com.ivianuu.essentials.sample.ui.widget.lib
 
 import android.view.View
 import android.view.ViewGroup
 
-abstract class ContainerUiComponent<V : ViewGroup> : UiComponent<V>() {
+abstract class ContainerWidget<V : ViewGroup> : Widget<V>() {
 
     override fun layout(view: V) {
         super.layout(view)
-        val oldChildren = view.properties.get<List<UiComponent<*>>>("children")
+        val oldChildren = view.properties.get<List<Widget<*>>>("children")
         view.properties.set("children", children)
         if (children != null || oldChildren != null) {
             children?.forEach { newChild ->
@@ -39,7 +39,7 @@ abstract class ContainerUiComponent<V : ViewGroup> : UiComponent<V>() {
             }
 
             children
-                ?.filterIsInstance<UiComponent<View>>()
+                ?.filterIsInstance<Widget<View>>()
                 ?.map { it to it.findViewIn(view)!! }
                 ?.forEach { it.first.layout(it.second) }
         }
@@ -47,8 +47,8 @@ abstract class ContainerUiComponent<V : ViewGroup> : UiComponent<V>() {
 
     private fun layoutChild(
         view: V,
-        newChild: UiComponent<*>?,
-        oldChild: UiComponent<*>?
+        newChild: Widget<*>?,
+        oldChild: Widget<*>?
     ) {
         if (newChild != null && oldChild == null) {
             newChild.addIfNeeded(newChild.containerOrElse(view))
@@ -66,7 +66,7 @@ abstract class ContainerUiComponent<V : ViewGroup> : UiComponent<V>() {
         }
     }
 
-    private fun UiComponent<*>.addIfNeeded(container: ViewGroup) {
+    private fun Widget<*>.addIfNeeded(container: ViewGroup) {
         var view = findViewIn(container)
         if (view == null) {
             view = createView(container)
@@ -74,7 +74,7 @@ abstract class ContainerUiComponent<V : ViewGroup> : UiComponent<V>() {
         }
     }
 
-    private fun UiComponent<*>.removeIfPossible(container: ViewGroup) {
+    private fun Widget<*>.removeIfPossible(container: ViewGroup) {
         val view = findViewIn(container)
         if (view != null) {
             container.removeView(view)
@@ -84,7 +84,7 @@ abstract class ContainerUiComponent<V : ViewGroup> : UiComponent<V>() {
     override fun bind(view: V) {
         super.bind(view)
         children
-            ?.filterIsInstance<UiComponent<View>>()
+            ?.filterIsInstance<Widget<View>>()
             ?.map { it to it.findViewIn(view)!! }
             ?.forEach { (child, childView) ->
                 child.bind(childView)
@@ -94,7 +94,7 @@ abstract class ContainerUiComponent<V : ViewGroup> : UiComponent<V>() {
     override fun unbind(view: V) {
         super.unbind(view)
         children
-            ?.filterIsInstance<UiComponent<View>>()
+            ?.filterIsInstance<Widget<View>>()
             ?.map { it to it.findViewIn(view)!! }
             ?.forEach { (child, childView) ->
                 child.unbind(childView)

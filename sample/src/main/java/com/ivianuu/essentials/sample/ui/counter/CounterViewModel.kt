@@ -19,9 +19,9 @@ package com.ivianuu.essentials.sample.ui.counter
 import com.ivianuu.essentials.hidenavbar.NavBarConfig
 import com.ivianuu.essentials.hidenavbar.NavBarController
 import com.ivianuu.essentials.sample.ui.checkapps.checkAppsRoute
-import com.ivianuu.essentials.sample.ui.component.ComponentTestController
 import com.ivianuu.essentials.sample.ui.list.listRoute
 import com.ivianuu.essentials.sample.ui.material.materialListRoute
+import com.ivianuu.essentials.sample.ui.widget.WidgetTestController
 import com.ivianuu.essentials.sample.util.SecureSettingsHelper
 import com.ivianuu.essentials.sample.work.WorkScheduler
 import com.ivianuu.essentials.securesettings.secureSettingsRoute
@@ -82,8 +82,8 @@ class CounterViewModel(
         navigator.push(materialListRoute)
     }
 
-    fun componentsClicked() {
-        navigator.push(controllerRoute<ComponentTestController>())
+    fun widgetsClicked() {
+        navigator.push(controllerRoute<WidgetTestController>())
     }
 
     fun navBarClicked() {

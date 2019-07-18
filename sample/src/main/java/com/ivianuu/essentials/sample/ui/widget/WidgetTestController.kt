@@ -14,28 +14,28 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.sample.ui.component
+package com.ivianuu.essentials.sample.ui.widget
 
 import android.view.View
 import androidx.lifecycle.lifecycleScope
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.sample.R
-import com.ivianuu.essentials.sample.ui.component.lib.ComponentContext
+import com.ivianuu.essentials.sample.ui.widget.lib.WidgetContext
 import com.ivianuu.essentials.ui.base.EsController
 import com.ivianuu.essentials.util.cast
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class ComponentTestController : EsController() {
+class WidgetTestController : EsController() {
 
     override val layoutRes: Int
-        get() = R.layout.controller_component
+        get() = R.layout.controller_widget
 
     private var loading = true
 
     private val checkedIndices = mutableSetOf<Int>()
 
-    private val context = ComponentContext(
+    private val context = WidgetContext(
         rootViewId = R.id.content,
         rootViewProvider = { view.cast() }
     ) {
@@ -50,7 +50,7 @@ class ComponentTestController : EsController() {
                     checkedIndices.clear()
                 }
 
-                componentContext.invalidate()
+                widgetContext.invalidate()
             }))*/
             emit(ListView(id = "list") {
                 var wasCheckBox = false

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.sample.ui.component.lib
+package com.ivianuu.essentials.sample.ui.widget.lib
 
 import android.view.ViewGroup
 import com.github.ajalt.timberkt.d
@@ -24,14 +24,14 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.*
 
-class ComponentContext(
+class WidgetContext(
     private val rootViewId: Int,
     private val rootViewProvider: () -> ViewGroup,
-    private val buildComponents: BuildContext.() -> Unit
+    private val buildWidgets: BuildContext.() -> Unit
 ) {
 
     private val rootId = "root-${UUID.randomUUID()}"
-    private var root: RootComponent? = null
+    private var root: RootWidget? = null
 
     private val generationTracker = GenerationTracker()
 
@@ -39,20 +39,20 @@ class ComponentContext(
         GlobalScope.launch(Dispatchers.IO) {
             val runGeneration: Int
 
-            synchronized(this@ComponentContext) {
+            synchronized(this@WidgetContext) {
                 runGeneration = generationTracker.incrementAndGetNextScheduled()
             }
 
-            val newRoot = RootComponent(rootId)
+            val newRoot = RootWidget(rootId)
             newRoot.containerId = rootViewId
 
-            with(ComponentBuildContext(this@ComponentContext, newRoot)) {
-                buildComponents()
+            with(WidgetBuildContext(this@WidgetContext, newRoot)) {
+                buildWidgets()
             }
 
             withContext(Dispatchers.Main) {
                 if (generationTracker.finishGeneration(runGeneration)) {
-                    synchronized(this@ComponentContext) {
+                    synchronized(this@WidgetContext) {
                         root = newRoot
                         val rootContainer = rootViewProvider()
                         var rootView = rootContainer

@@ -14,39 +14,39 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.sample.ui.component
+package com.ivianuu.essentials.sample.ui.widget
 
 import android.view.ViewGroup
-import android.widget.CheckBox
 import com.ivianuu.essentials.sample.R
-import com.ivianuu.essentials.sample.ui.component.lib.UiComponent
+import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
+import com.ivianuu.essentials.sample.ui.widget.lib.ContainerWidget
+import com.ivianuu.essentials.sample.ui.widget.lib.Widget
 import com.ivianuu.kommon.core.view.inflate
+import kotlinx.android.synthetic.main.text_with_content.view.*
 
-class Checkbox(
+class TextWithContent(
     override val id: Any?,
-    private val value: Boolean,
-    private val onChange: (Boolean) -> Unit
-) : UiComponent<CheckBox>() {
+    private val text: String,
+    private val content: Widget<*>
+) : ContainerWidget<ViewGroup>() {
 
     override val viewId: Int
-        get() = R.id.es_list_widget_checkbox
+        get() = R.id.text_with_checkbox
 
     init {
-        state(value)
+        state(text, content)
     }
 
     override fun createView(container: ViewGroup) =
-        container.inflate<CheckBox>(R.layout.es_list_action_checkbox)
+        container.inflate<ViewGroup>(R.layout.text_with_content)
 
-    override fun bind(view: CheckBox) {
+    override fun bind(view: ViewGroup) {
         super.bind(view)
-        view.isChecked = value
-        view.setOnClickListener { onChange(!value) }
+        view.text.text = text
     }
 
-    override fun unbind(view: CheckBox) {
-        super.unbind(view)
-        view.setOnCheckedChangeListener(null)
+    override fun BuildContext.children() {
+        emit(content, R.id.content_container)
     }
 
 }

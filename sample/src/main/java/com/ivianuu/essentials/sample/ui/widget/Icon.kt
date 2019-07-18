@@ -14,39 +14,37 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.sample.ui.component
+package com.ivianuu.essentials.sample.ui.widget
 
+import android.graphics.drawable.Drawable
 import android.view.ViewGroup
-import android.widget.RadioButton
+import android.widget.ImageView
 import com.ivianuu.essentials.sample.R
-import com.ivianuu.essentials.sample.ui.component.lib.UiComponent
+import com.ivianuu.essentials.sample.ui.widget.lib.Widget
 import com.ivianuu.kommon.core.view.inflate
 
-class RadioButton(
+class Icon(
     override val id: Any?,
-    private val value: Boolean,
-    private val onChange: (Boolean) -> Unit
-) : UiComponent<RadioButton>() {
+    val icon: Drawable? = null,
+    val iconRes: Int? = null
+) : Widget<ImageView>() {
 
     override val viewId: Int
-        get() = R.id.es_list_widget_radio_button
+        get() = R.id.es_list_icon
+
+    override fun createView(container: ViewGroup): ImageView =
+        container.inflate<ImageView>(R.layout.es_list_action_icon)
 
     init {
-        state(value)
+        state(icon, iconRes)
     }
 
-    override fun createView(container: ViewGroup) =
-        container.inflate<RadioButton>(R.layout.es_list_action_radio_button)
-
-    override fun bind(view: RadioButton) {
+    override fun bind(view: ImageView) {
         super.bind(view)
-        view.isChecked = value
-        view.setOnClickListener { onChange(!value) }
+        when {
+            icon != null -> view.setImageDrawable(icon)
+            iconRes != null -> view.setImageResource(iconRes)
+            else -> view.setImageDrawable(null)
+        }
     }
-
-    override fun unbind(view: RadioButton) {
-        super.unbind(view)
-        view.setOnCheckedChangeListener(null)
-    }
-
 }

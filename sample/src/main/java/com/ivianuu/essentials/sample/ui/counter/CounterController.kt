@@ -61,7 +61,7 @@ class CounterController(@Param private val screen: Int) : EsController() {
         nav_bar.setOnClickListener { viewModel.navBarClicked() }
         twilight.setOnClickListener { viewModel.twilightClicked() }
         md_list.setOnClickListener { viewModel.materialListClicked() }
-        view.component.setOnClickListener { viewModel.componentsClicked() }
+        view.widgets.setOnClickListener { viewModel.widgetsClicked() }
     }
 
     override fun invalidate() {

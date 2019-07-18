@@ -14,13 +14,20 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.sample.ui.component.lib
+package com.ivianuu.essentials.sample.ui.widget
 
 import android.view.View
+import android.view.ViewGroup
 import com.ivianuu.essentials.sample.R
-import com.ivianuu.essentials.util.Properties
-import com.ivianuu.kommon.core.view.getTagOrSet
+import com.ivianuu.essentials.sample.ui.widget.lib.Widget
+import com.ivianuu.kommon.core.view.inflate
 
-val View.properties: Properties
-    // todo unique tag
-    get() = getTagOrSet(R.id.epoxy_saved_view_style) { Properties() }
+class Loading(override val id: Any?) : Widget<View>() {
+
+    override val viewId: Int
+        get() = R.id.es_progress_bar_container
+
+    override fun createView(container: ViewGroup) =
+        container.inflate(R.layout.es_item_simple_loading)
+
+}

@@ -14,25 +14,25 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.sample.ui.component.lib
+package com.ivianuu.essentials.sample.ui.widget.lib
 
 interface BuildContext {
-    val componentContext: ComponentContext
-    fun emit(component: UiComponent<*>, containerId: Int? = null) {
+    val widgetContext: WidgetContext
+    fun emit(component: Widget<*>, containerId: Int? = null) {
     }
 }
 
-class ComponentBuildContext(
-    override val componentContext: ComponentContext,
-    private val thisComponent: UiComponent<*>
+class WidgetBuildContext(
+    override val widgetContext: WidgetContext,
+    private val thisWidget: Widget<*>
 ) : BuildContext {
-    override fun emit(component: UiComponent<*>, containerId: Int?) {
+    override fun emit(component: Widget<*>, containerId: Int?) {
         // todo check duplicate
-        if (thisComponent.children == null) thisComponent.children = mutableListOf()
-        component.parent = thisComponent
+        if (thisWidget.children == null) thisWidget.children = mutableListOf()
+        component.parent = thisWidget
         component.containerId = containerId
-        component.buildChildren(ComponentBuildContext(componentContext, component))
-        thisComponent.children!!.add(component)
+        component.buildChildren(WidgetBuildContext(widgetContext, component))
+        thisWidget.children!!.add(component)
     }
 
 }

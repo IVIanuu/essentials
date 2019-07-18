@@ -14,37 +14,39 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.sample.ui.component
+package com.ivianuu.essentials.sample.ui.widget
 
-import android.graphics.drawable.Drawable
 import android.view.ViewGroup
-import android.widget.ImageView
+import android.widget.CheckBox
 import com.ivianuu.essentials.sample.R
-import com.ivianuu.essentials.sample.ui.component.lib.UiComponent
+import com.ivianuu.essentials.sample.ui.widget.lib.Widget
 import com.ivianuu.kommon.core.view.inflate
 
-class Icon(
+class Checkbox(
     override val id: Any?,
-    val icon: Drawable? = null,
-    val iconRes: Int? = null
-) : UiComponent<ImageView>() {
+    private val value: Boolean,
+    private val onChange: (Boolean) -> Unit
+) : Widget<CheckBox>() {
 
     override val viewId: Int
-        get() = R.id.es_list_icon
-
-    override fun createView(container: ViewGroup): ImageView =
-        container.inflate<ImageView>(R.layout.es_list_action_icon)
+        get() = R.id.es_list_widget_checkbox
 
     init {
-        state(icon, iconRes)
+        state(value)
     }
 
-    override fun bind(view: ImageView) {
+    override fun createView(container: ViewGroup) =
+        container.inflate<CheckBox>(R.layout.es_list_action_checkbox)
+
+    override fun bind(view: CheckBox) {
         super.bind(view)
-        when {
-            icon != null -> view.setImageDrawable(icon)
-            iconRes != null -> view.setImageResource(iconRes)
-            else -> view.setImageDrawable(null)
-        }
+        view.isChecked = value
+        view.setOnClickListener { onChange(!value) }
     }
+
+    override fun unbind(view: CheckBox) {
+        super.unbind(view)
+        view.setOnCheckedChangeListener(null)
+    }
+
 }

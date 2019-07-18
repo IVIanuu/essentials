@@ -14,21 +14,21 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.sample.ui.component.lib
+package com.ivianuu.essentials.sample.ui.widget.lib
 
 import android.view.View
 import android.view.ViewGroup
 import com.github.ajalt.timberkt.d
 
-abstract class UiComponent<V : View> {
+abstract class Widget<V : View> {
 
     abstract val id: Any?
     abstract val viewId: Int
     open val viewType: Int
         get() = viewId + (children?.map { it.viewId }?.sum() ?: 0)
 
-    var parent: UiComponent<*>? = null
-    var children: MutableList<UiComponent<*>>? = null
+    var parent: Widget<*>? = null
+    var children: MutableList<Widget<*>>? = null
 
     var containerId: Int? = null
 
@@ -67,7 +67,7 @@ abstract class UiComponent<V : View> {
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
-        if (other !is UiComponent<*>) return false
+        if (other !is Widget<*>) return false
 
         if (id != other.id) return false
         if (viewId != other.viewId) return false

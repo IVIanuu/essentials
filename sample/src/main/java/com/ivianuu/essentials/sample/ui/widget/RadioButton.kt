@@ -14,39 +14,39 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.sample.ui.component
+package com.ivianuu.essentials.sample.ui.widget
 
 import android.view.ViewGroup
+import android.widget.RadioButton
 import com.ivianuu.essentials.sample.R
-import com.ivianuu.essentials.sample.ui.component.lib.BuildContext
-import com.ivianuu.essentials.sample.ui.component.lib.ContainerUiComponent
-import com.ivianuu.essentials.sample.ui.component.lib.UiComponent
+import com.ivianuu.essentials.sample.ui.widget.lib.Widget
 import com.ivianuu.kommon.core.view.inflate
-import kotlinx.android.synthetic.main.text_with_content.view.*
 
-class TextWithContent(
+class RadioButton(
     override val id: Any?,
-    private val text: String,
-    private val content: UiComponent<*>
-) : ContainerUiComponent<ViewGroup>() {
+    private val value: Boolean,
+    private val onChange: (Boolean) -> Unit
+) : Widget<RadioButton>() {
 
     override val viewId: Int
-        get() = R.id.text_with_checkbox
+        get() = R.id.es_list_widget_radio_button
 
     init {
-        state(text, content)
+        state(value)
     }
 
     override fun createView(container: ViewGroup) =
-        container.inflate<ViewGroup>(R.layout.text_with_content)
+        container.inflate<RadioButton>(R.layout.es_list_action_radio_button)
 
-    override fun bind(view: ViewGroup) {
+    override fun bind(view: RadioButton) {
         super.bind(view)
-        view.text.text = text
+        view.isChecked = value
+        view.setOnClickListener { onChange(!value) }
     }
 
-    override fun BuildContext.children() {
-        emit(content, R.id.content_container)
+    override fun unbind(view: RadioButton) {
+        super.unbind(view)
+        view.setOnCheckedChangeListener(null)
     }
 
 }

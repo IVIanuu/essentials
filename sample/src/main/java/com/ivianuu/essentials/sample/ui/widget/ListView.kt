@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.sample.ui.component
+package com.ivianuu.essentials.sample.ui.widget
 
 import android.view.View
 import android.view.ViewGroup
@@ -22,9 +22,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.epoxy.TypedEpoxyController
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.sample.R
-import com.ivianuu.essentials.sample.ui.component.lib.BuildContext
-import com.ivianuu.essentials.sample.ui.component.lib.UiComponent
-import com.ivianuu.essentials.sample.ui.component.lib.properties
+import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
+import com.ivianuu.essentials.sample.ui.widget.lib.Widget
+import com.ivianuu.essentials.sample.ui.widget.lib.properties
 import com.ivianuu.essentials.ui.epoxy.EsHolder
 import com.ivianuu.essentials.ui.epoxy.SimpleModel
 import com.ivianuu.essentials.util.cast
@@ -33,7 +33,7 @@ import com.ivianuu.kommon.core.view.inflate
 class ListView(
     override val id: Any?,
     private val buildListComponents: BuildContext.() -> Unit
-) : UiComponent<RecyclerView>() {
+) : Widget<RecyclerView>() {
 
     override val viewId: Int
         get() = R.id.es_recycler_view
@@ -68,8 +68,8 @@ class ListView(
 }
 
 private class UiComponentEpoxyController :
-    TypedEpoxyController<List<UiComponent<*>>>() {
-    override fun buildModels(data: List<UiComponent<*>>?) {
+    TypedEpoxyController<List<Widget<*>>>() {
+    override fun buildModels(data: List<Widget<*>>?) {
         data?.forEach {
             add(UiComponentEpoxyModel(it))
         }
@@ -77,26 +77,26 @@ private class UiComponentEpoxyController :
 }
 
 private data class UiComponentEpoxyModel(
-    private val component: UiComponent<*>
+    private val component: Widget<*>
 ) : SimpleModel(id = component.id) {
 
     override fun bind(holder: EsHolder) {
         super.bind(holder)
         d { "epoxy bind ${component.javaClass.simpleName}" }
-        component.cast<UiComponent<View>>().bind(holder.root)
+        component.cast<Widget<View>>().bind(holder.root)
     }
 
     override fun unbind(holder: EsHolder) {
         super.unbind(holder)
         d { "epoxy unbind ${component.javaClass.simpleName}" }
-        component.cast<UiComponent<View>>().unbind(holder.root)
+        component.cast<Widget<View>>().unbind(holder.root)
     }
 
     override fun getViewType(): Int = component.viewType
 
     override fun buildView(parent: ViewGroup): View {
         val view = component.createView(parent)
-        (component as UiComponent<View>).layout(view)
+        (component as Widget<View>).layout(view)
         return view
     }
 
