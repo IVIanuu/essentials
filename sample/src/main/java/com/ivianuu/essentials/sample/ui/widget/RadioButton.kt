@@ -22,7 +22,7 @@ import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.sample.ui.widget.lib.Widget
 import com.ivianuu.kommon.core.view.inflate
 
-class RadioButton(
+open class RadioButton(
     val value: Boolean,
     val onChange: (Boolean) -> Unit,
     override val key: Any? = null

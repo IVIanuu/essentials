@@ -21,7 +21,7 @@ import android.view.View
 import com.ivianuu.essentials.sample.ui.widget.lib.HeadlessWidget
 import com.ivianuu.essentials.sample.ui.widget.lib.Widget
 
-class Touchable(
+open class Touchable(
     child: Widget<*>,
     val onTouch: (MotionEvent) -> Boolean
 ) : HeadlessWidget(child) {

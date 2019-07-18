@@ -22,7 +22,7 @@ import android.widget.LinearLayout
 import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget.lib.ViewGroupWidget
 
-class Row(
+open class Row(
     override val key: Any? = null,
     children: BuildContext.() -> Unit
 ) : ViewGroupWidget<LinearLayout>() {

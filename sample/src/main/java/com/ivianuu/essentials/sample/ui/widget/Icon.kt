@@ -23,7 +23,7 @@ import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.sample.ui.widget.lib.Widget
 import com.ivianuu.kommon.core.view.inflate
 
-class Icon(
+open class Icon(
     val icon: Drawable? = null,
     val iconRes: Int? = null,
     override val key: Any? = null

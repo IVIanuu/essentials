@@ -24,7 +24,7 @@ import com.ivianuu.essentials.sample.ui.widget.lib.Widget
 import com.ivianuu.essentials.util.andTrue
 import com.ivianuu.kommon.core.view.inflate
 
-class ListItem(
+open class ListItem(
     val title: String? = null,
     val titleRes: Int? = null,
 

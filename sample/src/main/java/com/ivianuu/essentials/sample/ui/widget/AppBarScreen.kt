@@ -22,7 +22,7 @@ import com.ivianuu.essentials.sample.ui.widget.lib.ViewGroupWidget
 import com.ivianuu.essentials.sample.ui.widget.lib.Widget
 import com.ivianuu.kommon.core.view.inflate
 
-class AppBarScreen(
+open class AppBarScreen(
     val appBar: Widget<*>,
     val content: Widget<*>,
     override val key: Any? = null

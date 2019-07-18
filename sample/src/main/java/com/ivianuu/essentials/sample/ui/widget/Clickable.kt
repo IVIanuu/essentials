@@ -20,7 +20,7 @@ import android.view.View
 import com.ivianuu.essentials.sample.ui.widget.lib.HeadlessWidget
 import com.ivianuu.essentials.sample.ui.widget.lib.Widget
 
-class Clickable(
+open class Clickable(
     child: Widget<*>,
     val onClick: () -> Boolean
 ) : HeadlessWidget(child) {

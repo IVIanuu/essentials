@@ -31,7 +31,7 @@ import com.ivianuu.essentials.ui.epoxy.SimpleModel
 import com.ivianuu.essentials.util.cast
 import com.ivianuu.kommon.core.view.inflate
 
-class ListView(
+open class ListView(
     override val key: Any? = null,
     val buildList: BuildContext.() -> Unit
 ) : Widget<RecyclerView>() {

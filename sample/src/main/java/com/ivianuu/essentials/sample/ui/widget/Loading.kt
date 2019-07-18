@@ -22,7 +22,7 @@ import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.sample.ui.widget.lib.Widget
 import com.ivianuu.kommon.core.view.inflate
 
-class Loading(override val key: Any? = null) : Widget<View>() {
+open class Loading(override val key: Any? = null) : Widget<View>() {
 
     override fun createView(container: ViewGroup) =
         container.inflate(R.layout.es_item_simple_loading)

@@ -22,7 +22,7 @@ import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.sample.ui.widget.lib.Widget
 import com.ivianuu.kommon.core.view.inflate
 
-class Toolbar(
+open class Toolbar(
     val title: String? = null,
     val titleRes: Int? = null,
     val subtitle: String? = null,

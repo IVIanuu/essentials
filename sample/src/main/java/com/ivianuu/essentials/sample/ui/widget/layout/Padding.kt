@@ -21,7 +21,7 @@ import android.widget.FrameLayout
 import com.ivianuu.essentials.sample.ui.widget.lib.ViewGroupWidget
 import com.ivianuu.essentials.sample.ui.widget.lib.Widget
 
-class Padding(
+open class Padding(
     override val key: Any? = null,
     val child: Widget<*>,
     val left: Int = 0,
