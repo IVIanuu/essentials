@@ -34,6 +34,7 @@ import com.ivianuu.injekt.Param
 import com.ivianuu.injekt.parametersOf
 import com.ivianuu.kommon.core.transition.transitionSetOf
 import kotlinx.android.synthetic.main.controller_counter.*
+import kotlinx.android.synthetic.main.controller_counter.view.*
 
 fun counterRoute(screen: Int) = controllerRoute<CounterController>(
     options = controllerRouteOptions().handler(CounterChangeHandler())
@@ -60,6 +61,7 @@ class CounterController(@Param private val screen: Int) : EsController() {
         nav_bar.setOnClickListener { viewModel.navBarClicked() }
         twilight.setOnClickListener { viewModel.twilightClicked() }
         md_list.setOnClickListener { viewModel.materialListClicked() }
+        view.component.setOnClickListener { viewModel.componentsClicked() }
     }
 
     override fun invalidate() {
