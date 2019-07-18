@@ -18,14 +18,13 @@ package com.ivianuu.essentials.sample.ui.component
 
 import android.view.View
 import androidx.lifecycle.lifecycleScope
+import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.sample.ui.component.lib.ComponentContext
+import com.ivianuu.essentials.sample.ui.component.lib.List
 import com.ivianuu.essentials.ui.base.EsController
 import com.ivianuu.essentials.util.cast
-import com.ivianuu.essentials.util.coroutineScope
-import com.ivianuu.scopes.android.onPause
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 
 class ComponentTestController : EsController() {
@@ -33,32 +32,41 @@ class ComponentTestController : EsController() {
     override val layoutRes: Int
         get() = R.layout.controller_component
 
-    private var checked = true
     private var loading = true
-    private var textCount = 0
+
+    private val checkedIndices = mutableSetOf<Int>()
 
     private val context = ComponentContext(
         rootViewId = R.id.content,
         rootViewProvider = { view.cast() }
     ) {
         if (loading) {
-            emit(Loading("loading"), R.id.content)
+            emit(Loading(id = "loading"))
         } else {
-            emit(
-                TextWithContent(
-                    id = "text with content",
-                    text = "Current state is $checked count is $textCount",
-                    content = Checkbox(
-                        id = "checkbox",
-                        value = checked,
-                        onChange = {
-                            checked = it
-                            componentContext.invalidate()
-                        }
+            emit(List(id = "list") {
+                (0..5).forEach { index ->
+                    emit(
+                        ListItem(
+                            id = "list $index",
+                            title = "Title $index",
+                            text = "Text $index",
+                            secondaryAction = Checkbox(
+                                id = "checkbox",
+                                value = checkedIndices.contains(index),
+                                onChange = {
+                                    if (checkedIndices.contains(index)) {
+                                        checkedIndices.remove(index)
+                                    } else {
+                                        checkedIndices.add(index)
+                                    }
+                                    componentContext.invalidate()
+                                }
+                            ),
+                            onClick = { d { "on click $index" } }
+                        )
                     )
-                ),
-                R.id.content
-            )
+                }
+            })
         }
     }
 
@@ -73,16 +81,7 @@ class ComponentTestController : EsController() {
 
     override fun onAttach(view: View) {
         super.onAttach(view)
-
         context.invalidate()
-
-        onPause.coroutineScope.launch {
-            while (coroutineContext.isActive) {
-                delay(1000)
-                textCount += 1
-                context.invalidate()
-            }
-        }
     }
 
     override fun onDetach(view: View) {

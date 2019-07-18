@@ -16,18 +16,35 @@
 
 package com.ivianuu.essentials.sample.ui.component
 
-import android.view.View
+import android.graphics.drawable.Drawable
 import android.view.ViewGroup
+import android.widget.ImageView
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.sample.ui.component.lib.UiComponent
 import com.ivianuu.kommon.core.view.inflate
 
-class Loading(override val id: Any?) : UiComponent<View>() {
+class Icon(
+    override val id: Any?,
+    val icon: Drawable? = null,
+    val iconRes: Int? = null
+) : UiComponent<ImageView>() {
 
     override val viewId: Int
-        get() = R.id.es_progress_bar_container
+        get() = R.id.es_list_icon
 
-    override fun createView(container: ViewGroup) =
-        container.inflate(R.layout.es_item_simple_loading)
+    override fun createView(container: ViewGroup): ImageView =
+        container.inflate<ImageView>(R.layout.es_list_action_icon)
 
+    init {
+        state(icon, iconRes)
+    }
+
+    override fun bind(view: ImageView) {
+        super.bind(view)
+        when {
+            icon != null -> view.setImageDrawable(icon)
+            iconRes != null -> view.setImageResource(iconRes)
+            else -> view.setImageDrawable(null)
+        }
+    }
 }

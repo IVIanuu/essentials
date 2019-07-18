@@ -35,7 +35,7 @@ abstract class UiComponent<V : View> {
     private val state = mutableListOf<Any?>() // todo lazy init
 
     internal fun addOrUpdate(container: ViewGroup) {
-        d { "update ${javaClass.simpleName}" }
+        d { "add or update ${javaClass.simpleName}" }
         var view: V? = container.findViewById<V>(viewId)
 
         if (view == null) {
@@ -72,14 +72,14 @@ abstract class UiComponent<V : View> {
         this.state.addAll(state)
     }
 
-    protected open fun bind(view: V) {
+    open fun bind(view: V) {
 
     }
 
-    protected open fun unbind(view: V) {
+    open fun unbind(view: V) {
     }
 
-    protected abstract fun createView(container: ViewGroup): V
+    abstract fun createView(container: ViewGroup): V
 
     protected open fun BuildContext.children() {
     }
@@ -132,22 +132,30 @@ abstract class UiComponent<V : View> {
         newNode: UiComponent<*>?,
         oldNode: UiComponent<*>?
     ) {
+        d { "layout node new $newNode old $oldNode in $view" }
+        fun UiComponent<*>.containerOrThis() =
+            containerId?.let { view.findViewById<ViewGroup>(it) } ?: view as ViewGroup
+
         if (newNode != null && oldNode == null) {
-            newNode.addOrUpdate(view.findViewById(newNode.containerId!!))
+            newNode.addOrUpdate(newNode.containerOrThis())
         } else if (newNode != null && oldNode != null) {
             if (newNode != oldNode) {
                 if (newNode.viewType == oldNode.viewType) {
-                    newNode.addOrUpdate(view.findViewById(newNode.containerId!!))
+                    newNode.addOrUpdate(newNode.containerOrThis())
                 } else {
-                    newNode.addOrUpdate(view.findViewById(newNode.containerId!!))
-                    oldNode.removeIfPossible(view.findViewById(newNode.containerId!!))
+                    newNode.addOrUpdate(newNode.containerOrThis())
+                    oldNode.removeIfPossible(newNode.containerOrThis())
                 }
             }
         } else if (newNode == null && oldNode != null) {
-            oldNode.removeIfPossible(view.findViewById(oldNode.containerId!!))
+            oldNode.removeIfPossible(oldNode.containerOrThis())
         }
 
-        newNode?._layoutChildren(view.findViewById(newNode.containerId!!), oldNode?.children)
+        (newNode as? UiComponent<View>)
+            ?._layoutChildren(containerOrThis().findViewById(newNode.viewId), oldNode?.children)
     }
+
+    override fun toString(): String =
+        "Component(id=$id, viewId=$viewId, parent=${parent?.javaClass?.name}, children=$children, containerId=$containerId, state=$state)"
 
 }
