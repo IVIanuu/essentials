@@ -36,8 +36,7 @@ abstract class UiComponent<V : View> {
 
     fun addIfNeeded(container: ViewGroup) {
         d { "add if needed ${javaClass.simpleName}" }
-        var view: V? = container.findViewById<V>(viewId)
-
+        var view = findViewIn(container)
         if (view == null) {
             view = createView(container)
             container.addView(view)
@@ -45,7 +44,7 @@ abstract class UiComponent<V : View> {
     }
 
     fun removeIfPossible(container: ViewGroup) {
-        val view: V? = container.findViewById<V>(viewId)
+        val view = findViewIn(container)
         d { "remove if possible ${javaClass.simpleName} $view" }
         if (view != null) {
             container.removeView(view)
@@ -57,10 +56,18 @@ abstract class UiComponent<V : View> {
     }
 
     fun layoutChildren(
-        view: V,
+        container: ViewGroup,
         oldChildren: List<UiComponent<*>>?
     ) {
-        layoutChildren(view, children, oldChildren)
+        if (children != null || oldChildren != null) {
+            layoutChildren(findViewIn(container)!!, children, oldChildren)
+        }
+    }
+
+    fun bindRecursive(container: ViewGroup) {
+        bind(container)
+        val view = findViewIn(container)!!
+        children?.forEach { it.bind(it.containerOrElse(view as ViewGroup)) }
     }
 
     protected fun state(vararg state: Any?) {
@@ -69,20 +76,23 @@ abstract class UiComponent<V : View> {
 
     fun rebind(container: ViewGroup) {
         d { "rebind ${javaClass.simpleName}" }
-        val view = container.findViewById<V>(viewId)!!
+        val view = findViewIn(container)!!
         unbind(view)
         bind(view)
     }
 
     fun bind(container: ViewGroup) {
-        val view = container.findViewById<V>(viewId)!!
+        val view = findViewIn(container)!!
         bind(view)
     }
 
     fun unbind(container: ViewGroup) {
-        val view = container.findViewById<V>(viewId)!!
+        val view = findViewIn(container)!!
         unbind(view)
     }
+
+    fun containerContainsThisView(container: ViewGroup): Boolean =
+        findViewIn(container) != null
 
     open fun bind(view: V) {
 
@@ -144,27 +154,34 @@ abstract class UiComponent<V : View> {
         newNode: UiComponent<*>?,
         oldNode: UiComponent<*>?
     ) {
-        fun UiComponent<*>.containerOrThis() =
-            containerId?.let { view.findViewById<ViewGroup>(it) } ?: view as ViewGroup
-
         if (newNode != null && oldNode == null) {
-            newNode.addIfNeeded(newNode.containerOrThis())
+            newNode.addIfNeeded(newNode.containerOrElse(view))
         } else if (newNode != null && oldNode != null) {
             if (newNode != oldNode) {
                 if (newNode.viewType == oldNode.viewType) {
-                    newNode.addIfNeeded(newNode.containerOrThis())
+                    newNode.addIfNeeded(newNode.containerOrElse(view))
                 } else {
-                    newNode.addIfNeeded(newNode.containerOrThis())
-                    oldNode.removeIfPossible(newNode.containerOrThis())
+                    newNode.addIfNeeded(newNode.containerOrElse(view))
+                    oldNode.removeIfPossible(newNode.containerOrElse(view))
                 }
             }
         } else if (newNode == null && oldNode != null) {
-            oldNode.removeIfPossible(oldNode.containerOrThis())
+            oldNode.removeIfPossible(oldNode.containerOrElse(view))
         }
 
-        (newNode as? UiComponent<View>)
-            ?.layoutChildren(containerOrThis().findViewById(newNode.viewId), oldNode?.children)
+        if (newNode?.children != null || oldNode?.children != null) {
+            (newNode as? UiComponent<View>)
+                ?.layoutChildren(
+                    containerOrElse(view).findViewById(newNode.viewId),
+                    oldNode?.children
+                )
+        }
     }
+
+    fun containerOrElse(container: View): ViewGroup =
+        containerId?.let { container.findViewById<ViewGroup>(it) } ?: container as ViewGroup
+
+    private fun findViewIn(container: ViewGroup): V? = container.findViewById<V>(viewId)
 
     override fun toString(): String =
         "Component(id=$id, viewId=$viewId, parent=${parent?.javaClass?.name}, children=$children, containerId=$containerId, state=$state)"
