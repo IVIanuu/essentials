@@ -23,7 +23,9 @@ import com.github.ajalt.timberkt.d
 
 abstract class Widget<V : View> {
 
-    abstract val id: Any?
+    val type: Any = javaClass
+    open val key: Any? = null
+
     abstract val viewId: Int
 
     var parent: Widget<*>? = null
@@ -72,11 +74,15 @@ abstract class Widget<V : View> {
         return container.findViewById<V>(viewId)
     }
 
+    fun equalsIdentity(other: Widget<*>): Boolean =
+        type == other.type && key == other.key
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other !is Widget<*>) return false
 
-        if (id != other.id) return false
+        if (type != other.type) return false
+        if (key != other.key) return false
         if (viewId != other.viewId) return false
         if (children != other.children) return false
         if (containerId != other.containerId) return false
@@ -86,12 +92,14 @@ abstract class Widget<V : View> {
     }
 
     override fun hashCode(): Int {
-        var result = id?.hashCode() ?: 0
+        var result = type.hashCode()
+        result = 31 * result + (key?.hashCode() ?: 0)
         result = 31 * result + viewId
         result = 31 * result + (children?.hashCode() ?: 0)
         result = 31 * result + (containerId ?: 0)
         result = 31 * result + (state?.hashCode() ?: 0)
         return result
     }
+
 
 }

@@ -22,7 +22,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.util.*
 
 class WidgetContext(
     private val coroutineScope: CoroutineScope,
@@ -30,7 +29,6 @@ class WidgetContext(
     private val buildWidgets: BuildContext.() -> Unit
 ) {
 
-    private val rootId = "root-${UUID.randomUUID()}"
     private var root: RootWidget? = null
 
     private val generationTracker = GenerationTracker()
@@ -43,7 +41,7 @@ class WidgetContext(
                 runGeneration = generationTracker.incrementAndGetNextScheduled()
             }
 
-            val newRoot = RootWidget(rootId)
+            val newRoot = RootWidget()
 
             with(WidgetBuildContext(this@WidgetContext, newRoot)) {
                 buildWidgets()

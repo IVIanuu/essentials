@@ -24,9 +24,9 @@ import com.ivianuu.essentials.sample.ui.widget.lib.Widget
 import com.ivianuu.kommon.core.view.inflate
 
 class Icon(
-    override val id: Any?,
     val icon: Drawable? = null,
-    val iconRes: Int? = null
+    val iconRes: Int? = null,
+    override val key: Any? = null
 ) : Widget<ImageView>() {
 
     override val viewId: Int

@@ -23,11 +23,11 @@ import com.ivianuu.essentials.sample.ui.widget.lib.Widget
 import com.ivianuu.kommon.core.view.inflate
 
 class Toolbar(
-    override val id: Any?,
     private val title: String? = null,
     private val titleRes: Int? = null,
     private val subtitle: String? = null,
-    private val subtitleRes: Int? = null
+    private val subtitleRes: Int? = null,
+    override val key: Any? = null
 ) : Widget<Toolbar>() {
 
     override val viewId: Int

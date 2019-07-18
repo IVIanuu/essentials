@@ -40,36 +40,29 @@ class WidgetTestController : EsController() {
     ) {
         emit(
             AppBarScreen(
-                id = "screen",
-                appBar = Toolbar(
-                    id = "toolbar",
-                    title = "Widget screen"
-                ),
+                appBar = Toolbar(title = "Widget screen"),
                 content = if (loading) {
-                    Loading(id = "loading")
+                    Loading()
                 } else {
-                    ListView(id = "list") {
+                    ListView {
                         var wasCheckBox = false
 
                         (0..2).forEach { index ->
                             emit(
                                 ListItem(
-                                    id = "list $index",
+                                    key = index,
                                     title = "Title $index",
                                     text = "Text $index",
                                     primaryAction = Icon(
-                                        id = "icon",
                                         iconRes = R.drawable.es_ic_torch_on
                                     ),
                                     secondaryAction = if (wasCheckBox) {
                                         RadioButton(
-                                            id = "radio",
                                             value = checkedIndices.contains(index),
                                             onChange = { toggle(index) }
                                         )
                                     } else {
                                         Checkbox(
-                                            id = "checkbox",
                                             value = checkedIndices.contains(index),
                                             onChange = { toggle(index) }
                                         )

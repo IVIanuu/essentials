@@ -31,7 +31,7 @@ import com.ivianuu.essentials.util.cast
 import com.ivianuu.kommon.core.view.inflate
 
 class ListView(
-    override val id: Any?,
+    override val key: Any? = null,
     private val buildListComponents: BuildContext.() -> Unit
 ) : Widget<RecyclerView>() {
 
@@ -78,7 +78,7 @@ private class UiComponentEpoxyController :
 
 private data class UiComponentEpoxyModel(
     private val component: Widget<*>
-) : SimpleModel(id = component.id) {
+) : SimpleModel(id = component.type to component.key) {
 
     override fun bind(holder: EsHolder) {
         super.bind(holder)

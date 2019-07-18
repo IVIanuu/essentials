@@ -31,12 +31,16 @@ abstract class ContainerWidget<V : ViewGroup> : Widget<V>() {
 
         if (children != null || oldChildren != null) {
             children?.forEach { newChild ->
-                val oldChild = oldChildren?.firstOrNull { it.id == newChild.id }
+                val oldChild = oldChildren?.firstOrNull {
+                    it.equalsIdentity(newChild)
+                }
                 layoutChild(view, newChild, oldChild)
             }
 
             oldChildren?.forEach { oldChild ->
-                val newChild = children?.firstOrNull { it.id == oldChild.id }
+                val newChild = children?.firstOrNull {
+                    it.equalsIdentity(oldChild)
+                }
                 if (newChild == null) {
                     layoutChild(view, null, oldChild)
                 }

@@ -20,9 +20,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 
-internal class RootWidget(
-    override val id: Any?
-) : ContainerWidget<ViewGroup>() {
+internal class RootWidget : ContainerWidget<ViewGroup>() {
 
     override val viewId: Int
         get() = rootViewId

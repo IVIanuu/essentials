@@ -22,7 +22,7 @@ import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.sample.ui.widget.lib.Widget
 import com.ivianuu.kommon.core.view.inflate
 
-class Loading(override val id: Any?) : Widget<View>() {
+class Loading(override val key: Any? = null) : Widget<View>() {
 
     override val viewId: Int
         get() = R.id.es_progress_bar_container

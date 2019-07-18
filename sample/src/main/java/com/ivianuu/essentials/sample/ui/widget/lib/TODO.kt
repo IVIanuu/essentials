@@ -17,5 +17,4 @@
 package com.ivianuu.essentials.sample.ui.widget.lib
 
 // todo hierarchy scoped data
-// todo auto ids
 // todo on attached on detached from context

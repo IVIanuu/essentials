@@ -23,9 +23,9 @@ import com.ivianuu.essentials.sample.ui.widget.lib.Widget
 import com.ivianuu.kommon.core.view.inflate
 
 class RadioButton(
-    override val id: Any?,
     private val value: Boolean,
-    private val onChange: (Boolean) -> Unit
+    private val onChange: (Boolean) -> Unit,
+    override val key: Any? = null
 ) : Widget<RadioButton>() {
 
     override val viewId: Int

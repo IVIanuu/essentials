@@ -26,8 +26,6 @@ import com.ivianuu.essentials.util.andTrue
 import com.ivianuu.kommon.core.view.inflate
 
 class ListItem(
-    override val id: Any?,
-
     private val title: String? = null,
     private val titleRes: Int? = null,
 
@@ -38,7 +36,9 @@ class ListItem(
     private val secondaryAction: Widget<*>? = null,
 
     private val onClick: (() -> Unit)? = null,
-    private val onLongClick: (() -> Unit)? = null
+    private val onLongClick: (() -> Unit)? = null,
+
+    override val key: Any? = null
 ) : ContainerWidget<ViewGroup>() {
 
     override val viewId: Int
