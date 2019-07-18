@@ -28,11 +28,7 @@ abstract class UiComponent<V : View> {
 
     private val state = mutableListOf<Any?>() // todo lazy init
 
-    fun state(vararg state: Any?) {
-        this.state.addAll(state)
-    }
-
-    fun addOrUpdate(container: ViewGroup) {
+    internal fun addOrUpdate(container: ViewGroup) {
         d { "update ${javaClass.simpleName}" }
         var view: V? = container.findViewById<V>(viewId)
 
@@ -46,7 +42,7 @@ abstract class UiComponent<V : View> {
         }
     }
 
-    fun removeIfPossible(container: ViewGroup) {
+    internal fun removeIfPossible(container: ViewGroup) {
         val view: V? = container.findViewById<V>(viewId)
         d { "remove if possible ${javaClass.simpleName} $view" }
         if (view != null) {
@@ -55,15 +51,19 @@ abstract class UiComponent<V : View> {
         }
     }
 
-    fun buildChildren(buildContext: BuildContext) {
+    internal fun buildChildren(buildContext: BuildContext) {
         with(buildContext) { children() }
     }
 
-    fun updateChildrenInternal(
+    internal fun updateChildrenInternal(
         newChildren: List<ComponentNode>,
         oldChildren: List<ComponentNode>
     ) {
         updateChildren(newChildren, oldChildren)
+    }
+
+    protected fun state(vararg state: Any?) {
+        this.state.addAll(state)
     }
 
     protected open fun bind(view: V) {
