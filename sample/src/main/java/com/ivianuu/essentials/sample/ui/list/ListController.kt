@@ -36,7 +36,7 @@ class ListController : com.ivianuu.essentials.ui.simple.ListController() {
     override val toolbarTitle get() = "List"
 
     override val toolbarMenu: PopupMenu<*>?
-        get() = PopupMenu<String>(
+        get() = PopupMenu(
             items = listOf(PopupMenuItem(value = "Refresh", title = "Refresh")),
             onSelected = {
                 when (it) {

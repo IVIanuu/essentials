@@ -18,7 +18,6 @@ package com.ivianuu.essentials.sample.ui.widget.lib
 
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.children
 import com.github.ajalt.timberkt.d
 
 abstract class Widget<V : View> {
@@ -65,14 +64,7 @@ abstract class Widget<V : View> {
     fun containerOrElse(container: View): ViewGroup =
         containerId?.let { container.findViewById<ViewGroup>(it) } ?: container as ViewGroup
 
-    fun findViewIn(container: ViewGroup): V? {
-        d {
-            "find ${javaClass.simpleName} " +
-                    "in $container " +
-                    "children ${container.children.toList()}"
-        }
-        return container.findViewById<V>(viewId)
-    }
+    fun findViewIn(container: ViewGroup): V? = container.findViewById<V>(viewId)
 
     fun equalsIdentity(other: Widget<*>): Boolean =
         type == other.type && key == other.key
