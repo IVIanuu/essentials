@@ -32,7 +32,7 @@ abstract class Widget<V : View> {
 
     var containerId: Int? = null
 
-    private val state = mutableListOf<Any?>() // todo lazy init
+    private var state: MutableList<Any?>? = null
 
     fun buildChildren(buildContext: BuildContext) {
         d { "build children ${javaClass.simpleName}" }
@@ -57,7 +57,8 @@ abstract class Widget<V : View> {
     }
 
     protected fun state(vararg state: Any?) {
-        this.state.addAll(state)
+        if (this.state == null) this.state = mutableListOf()
+        this.state!!.addAll(state)
     }
 
     fun containerOrElse(container: View): ViewGroup =
@@ -83,7 +84,7 @@ abstract class Widget<V : View> {
         result = 31 * result + viewId
         result = 31 * result + (children?.hashCode() ?: 0)
         result = 31 * result + (containerId ?: 0)
-        result = 31 * result + state.hashCode()
+        result = 31 * result + (state?.hashCode() ?: 0)
         return result
     }
 
