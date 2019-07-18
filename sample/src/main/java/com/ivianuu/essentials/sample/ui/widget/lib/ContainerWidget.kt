@@ -68,12 +68,19 @@ abstract class ContainerWidget<V : ViewGroup> : Widget<V>() {
         }
     }
 
+    protected open fun onViewAdded(container: ViewGroup, view: View) {
+    }
+
+    protected open fun onViewRemoved(container: ViewGroup, view: View) {
+    }
+
     private fun Widget<*>.addIfNeeded(container: ViewGroup) {
         var view = findViewIn(container)
         d { "add if needed ${javaClass.simpleName} ${view == null}" }
         if (view == null) {
             view = createView(container)
             container.addView(view)
+            onViewAdded(container, view)
         }
     }
 
@@ -82,6 +89,7 @@ abstract class ContainerWidget<V : ViewGroup> : Widget<V>() {
         d { "remove if possible ${javaClass.simpleName} ${view != null}" }
         if (view != null) {
             container.removeView(view)
+            onViewRemoved(container, view)
         }
     }
 

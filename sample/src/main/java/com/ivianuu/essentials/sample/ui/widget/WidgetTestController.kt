@@ -18,7 +18,6 @@ package com.ivianuu.essentials.sample.ui.widget
 
 import android.view.View
 import androidx.lifecycle.lifecycleScope
-import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.sample.ui.widget.lib.WidgetContext
 import com.ivianuu.essentials.ui.base.EsController
@@ -35,8 +34,10 @@ class WidgetTestController : EsController() {
 
     private val checkedIndices = mutableSetOf<Int>()
 
-    private val context = WidgetContext(rootViewProvider = { view.cast() }) {
-        d { "build models" }
+    private val context = WidgetContext(
+        lifecycleScope,
+        rootViewProvider = { view.cast() }
+    ) {
         emit(
             AppBarScreen(
                 id = "screen",
@@ -56,6 +57,10 @@ class WidgetTestController : EsController() {
                                     id = "list $index",
                                     title = "Title $index",
                                     text = "Text $index",
+                                    primaryAction = Icon(
+                                        id = "icon",
+                                        iconRes = R.drawable.es_ic_torch_on
+                                    ),
                                     secondaryAction = if (wasCheckBox) {
                                         RadioButton(
                                             id = "radio",

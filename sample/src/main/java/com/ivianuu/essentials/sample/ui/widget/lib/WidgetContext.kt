@@ -18,13 +18,14 @@ package com.ivianuu.essentials.sample.ui.widget.lib
 
 import android.view.ViewGroup
 import com.github.ajalt.timberkt.d
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.*
 
 class WidgetContext(
+    private val coroutineScope: CoroutineScope,
     private val rootViewProvider: () -> ViewGroup,
     private val buildWidgets: BuildContext.() -> Unit
 ) {
@@ -35,7 +36,7 @@ class WidgetContext(
     private val generationTracker = GenerationTracker()
 
     fun invalidate() {
-        GlobalScope.launch(Dispatchers.IO) {
+        coroutineScope.launch(Dispatchers.Default) {
             val runGeneration: Int
 
             synchronized(this@WidgetContext) {
