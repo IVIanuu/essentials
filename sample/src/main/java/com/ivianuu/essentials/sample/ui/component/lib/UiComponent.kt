@@ -132,6 +132,7 @@ abstract class UiComponent<V : View> {
     }
 
     fun unbind(container: ViewGroup) {
+        d { "unbind ${javaClass.simpleName}" }
         val view = findViewIn(container)!!
         unbind(view)
     }
@@ -147,10 +148,11 @@ abstract class UiComponent<V : View> {
         findViewIn(container) != null
 
     open fun bind(view: V) {
-
+        d { "bind ${javaClass.simpleName}" }
     }
 
     open fun unbind(view: V) {
+        d { "unbind ${javaClass.simpleName}" }
     }
 
     abstract fun createView(container: ViewGroup): V
