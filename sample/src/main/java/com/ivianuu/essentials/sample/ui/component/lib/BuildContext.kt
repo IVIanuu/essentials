@@ -18,7 +18,6 @@ package com.ivianuu.essentials.sample.ui.component.lib
 
 interface BuildContext {
     val componentContext: ComponentContext
-
     fun emit(component: UiComponent<*>, containerId: Int? = null) {
     }
 }

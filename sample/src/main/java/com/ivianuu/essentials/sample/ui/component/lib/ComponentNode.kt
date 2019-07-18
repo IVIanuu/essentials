@@ -20,7 +20,10 @@ data class ComponentNode(
     val component: UiComponent<*>,
     val containerId: Int?,
     var children: MutableList<ComponentNode>?
-)
+) {
+    var parent: ComponentNode? = null
+        internal set
+}
 
 class ComponentNodeBuildContext(
     override val componentContext: ComponentContext,
@@ -29,7 +32,9 @@ class ComponentNodeBuildContext(
     override fun emit(component: UiComponent<*>, containerId: Int?) {
         // todo check duplicate
         if (thisNode.children == null) thisNode.children = mutableListOf()
-        val newNode = ComponentNode(component, containerId, null)
+        val newNode = ComponentNode(component, containerId, null).also {
+            it.parent = thisNode
+        }
         component.buildChildren(ComponentNodeBuildContext(componentContext, newNode))
         thisNode.children!!.add(newNode)
     }
