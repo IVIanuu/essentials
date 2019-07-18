@@ -24,44 +24,39 @@ abstract class UiComponent<V : View> {
 
     abstract val id: Any?
     abstract val viewId: Int
-    open val viewType: Int get() = viewId
+    open val viewType: Int
+        get() = viewId + (children?.map { it.viewId }?.sum() ?: 0)
 
     var parent: UiComponent<*>? = null
-        set
     var children: MutableList<UiComponent<*>>? = null
 
     var containerId: Int? = null
 
     private val state = mutableListOf<Any?>() // todo lazy init
 
-    internal fun addOrUpdate(container: ViewGroup) {
-        d { "add or update ${javaClass.simpleName}" }
+    fun addIfNeeded(container: ViewGroup) {
+        d { "add if needed ${javaClass.simpleName}" }
         var view: V? = container.findViewById<V>(viewId)
 
         if (view == null) {
             view = createView(container)
             container.addView(view)
-            bind(view)
-        } else {
-            unbind(view)
-            bind(view)
         }
     }
 
-    internal fun removeIfPossible(container: ViewGroup) {
+    fun removeIfPossible(container: ViewGroup) {
         val view: V? = container.findViewById<V>(viewId)
         d { "remove if possible ${javaClass.simpleName} $view" }
         if (view != null) {
-            unbind(view)
             container.removeView(view)
         }
     }
 
-    internal fun buildChildren(buildContext: BuildContext) {
+    fun buildChildren(buildContext: BuildContext) {
         with(buildContext) { children() }
     }
 
-    internal fun _layoutChildren(
+    fun layoutChildren(
         view: V,
         oldChildren: List<UiComponent<*>>?
     ) {
@@ -70,6 +65,23 @@ abstract class UiComponent<V : View> {
 
     protected fun state(vararg state: Any?) {
         this.state.addAll(state)
+    }
+
+    fun rebind(container: ViewGroup) {
+        d { "rebind ${javaClass.simpleName}" }
+        val view = container.findViewById<V>(viewId)!!
+        unbind(view)
+        bind(view)
+    }
+
+    fun bind(container: ViewGroup) {
+        val view = container.findViewById<V>(viewId)!!
+        bind(view)
+    }
+
+    fun unbind(container: ViewGroup) {
+        val view = container.findViewById<V>(viewId)!!
+        unbind(view)
     }
 
     open fun bind(view: V) {
@@ -132,18 +144,17 @@ abstract class UiComponent<V : View> {
         newNode: UiComponent<*>?,
         oldNode: UiComponent<*>?
     ) {
-        d { "layout node new $newNode old $oldNode in $view" }
         fun UiComponent<*>.containerOrThis() =
             containerId?.let { view.findViewById<ViewGroup>(it) } ?: view as ViewGroup
 
         if (newNode != null && oldNode == null) {
-            newNode.addOrUpdate(newNode.containerOrThis())
+            newNode.addIfNeeded(newNode.containerOrThis())
         } else if (newNode != null && oldNode != null) {
             if (newNode != oldNode) {
                 if (newNode.viewType == oldNode.viewType) {
-                    newNode.addOrUpdate(newNode.containerOrThis())
+                    newNode.addIfNeeded(newNode.containerOrThis())
                 } else {
-                    newNode.addOrUpdate(newNode.containerOrThis())
+                    newNode.addIfNeeded(newNode.containerOrThis())
                     oldNode.removeIfPossible(newNode.containerOrThis())
                 }
             }
@@ -152,7 +163,7 @@ abstract class UiComponent<V : View> {
         }
 
         (newNode as? UiComponent<View>)
-            ?._layoutChildren(containerOrThis().findViewById(newNode.viewId), oldNode?.children)
+            ?.layoutChildren(containerOrThis().findViewById(newNode.viewId), oldNode?.children)
     }
 
     override fun toString(): String =

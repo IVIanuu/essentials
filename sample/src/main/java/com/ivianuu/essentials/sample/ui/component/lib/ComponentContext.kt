@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.sample.ui.component.lib
 
 import android.view.ViewGroup
-import com.github.ajalt.timberkt.d
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -52,15 +51,12 @@ class ComponentContext(
                 buildComponents()
             }
 
-            d { "prev root $oldRoot" }
-            d { "new root $newRoot" }
-
             withContext(Dispatchers.Main) {
                 if (generationTracker.finishGeneration(runGeneration)) {
                     synchronized(this@ComponentContext) {
                         root = newRoot
-                        newRoot.addOrUpdate(rootViewProvider())
-                        newRoot._layoutChildren(
+                        newRoot.addIfNeeded(rootViewProvider())
+                        newRoot.layoutChildren(
                             rootViewProvider().findViewById(rootViewId),
                             oldRoot?.children
                         )

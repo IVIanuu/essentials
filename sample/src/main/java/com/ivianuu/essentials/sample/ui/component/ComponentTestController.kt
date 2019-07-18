@@ -18,7 +18,6 @@ package com.ivianuu.essentials.sample.ui.component
 
 import android.view.View
 import androidx.lifecycle.lifecycleScope
-import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.sample.ui.component.lib.ComponentContext
 import com.ivianuu.essentials.ui.base.EsController
@@ -43,7 +42,7 @@ class ComponentTestController : EsController() {
             emit(Loading(id = "loading"))
         } else {
             emit(List(id = "list") {
-                (0..5).forEach { index ->
+                (0..1).forEach { index ->
                     emit(
                         ListItem(
                             id = "list $index",
@@ -52,16 +51,9 @@ class ComponentTestController : EsController() {
                             secondaryAction = Checkbox(
                                 id = "checkbox",
                                 value = checkedIndices.contains(index),
-                                onChange = {
-                                    if (checkedIndices.contains(index)) {
-                                        checkedIndices.remove(index)
-                                    } else {
-                                        checkedIndices.add(index)
-                                    }
-                                    componentContext.invalidate()
-                                }
+                                onChange = { toggle(index) }
                             ),
-                            onClick = { d { "on click $index" } }
+                            onClick = { toggle(index) }
                         )
                     )
                 }
@@ -86,5 +78,14 @@ class ComponentTestController : EsController() {
     override fun onDetach(view: View) {
         super.onDetach(view)
         context.cancelAll()
+    }
+
+    private fun toggle(index: Int) {
+        if (checkedIndices.contains(index)) {
+            checkedIndices.remove(index)
+        } else {
+            checkedIndices.add(index)
+        }
+        context.invalidate()
     }
 }

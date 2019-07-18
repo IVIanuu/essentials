@@ -44,7 +44,19 @@ class List(
     ) {
         val epoxyController =
             view.tag<UiComponentEpoxyController>(R.id.es_recycler_view)
-        epoxyController.setData(newChildren)
+
+        val newData = newChildren?.map { newChildrenNode ->
+            val oldChildrenNode = oldChildren?.firstOrNull {
+                it.id == newChildrenNode.id
+            }
+
+            ComponentWithPrev(
+                newChildrenNode as UiComponent<View>,
+                oldChildrenNode as? UiComponent<View>
+            )
+        }
+
+        epoxyController.setData(newData)
     }
 
     override fun createView(container: ViewGroup): RecyclerView {
@@ -62,35 +74,100 @@ class List(
 
 }
 
+private data class ComponentWithPrev(
+    val component: UiComponent<View>,
+    val prev: UiComponent<View>?
+)
+
 private class UiComponentEpoxyController :
-    TypedEpoxyController<kotlin.collections.List<UiComponent<*>>>() {
-    override fun buildModels(data: kotlin.collections.List<UiComponent<*>>?) {
+    TypedEpoxyController<kotlin.collections.List<ComponentWithPrev>>() {
+    override fun buildModels(data: kotlin.collections.List<ComponentWithPrev>?) {
         data?.forEach {
-            add(UiComponentEpoxyModel(it as UiComponent<View>))
+            add(UiComponentEpoxyModel(it))
         }
     }
 }
 
 private data class UiComponentEpoxyModel(
-    private val component: UiComponent<View>
-) : SimpleModel(id = component.id) {
+    private val componentWithPrev: ComponentWithPrev
+) : SimpleModel(id = componentWithPrev.component.id) {
 
     override fun bind(holder: EsHolder) {
         super.bind(holder)
-        d { "epoxy bind $component" }
-        component.bind(holder.root)
+        d { "epoxy bind $componentWithPrev" }
+        componentWithPrev.component.bind(holder.root)
     }
 
     override fun unbind(holder: EsHolder) {
         super.unbind(holder)
-        d { "epoxy unbind $component" }
-        component.unbind(holder.root)
+        d { "epoxy unbind ${componentWithPrev.component}" }
+        componentWithPrev.component.unbind(holder.root)
     }
 
-    override fun getViewType(): Int = component.viewType
+    override fun getViewType(): Int =
+        componentWithPrev.component.viewType
 
     override fun buildView(parent: ViewGroup): View {
-        return component.createView(parent)
+        val view = componentWithPrev.component.createView(parent)
+
+        val processedNodes = mutableListOf<UiComponent<*>>()
+
+        componentWithPrev.component.children?.forEach { newChildrenNode ->
+            processedNodes.add(newChildrenNode)
+            val oldChildrenNode = componentWithPrev.prev?.children?.firstOrNull {
+                it.id == newChildrenNode.id
+            }
+            if (oldChildrenNode != null) processedNodes.add(oldChildrenNode)
+            layout(view, newChildrenNode, oldChildrenNode)
+        }
+
+        componentWithPrev.prev?.children?.forEach { oldChildrenNode ->
+            if (!processedNodes.contains(oldChildrenNode)) {
+                layout(view, null, oldChildrenNode)
+            }
+        }
+
+        return view
+    }
+
+    private fun layout(
+        view: View,
+        newNode: UiComponent<*>?,
+        oldNode: UiComponent<*>?
+    ) {
+        fun UiComponent<*>.containerOrThis() =
+            containerId?.let { view.findViewById<ViewGroup>(it) } ?: view as ViewGroup
+
+        if (newNode != null && oldNode == null) {
+            val newNodeContainer = newNode.containerOrThis()
+            newNode.addIfNeeded(newNodeContainer)
+            newNode.bind(newNodeContainer)
+        } else if (newNode != null && oldNode != null) {
+            val newNodeContainer = newNode.containerOrThis()
+            val oldNodeContainer = oldNode.containerOrThis()
+
+            if (newNode != oldNode) {
+                if (newNode.viewType == oldNode.viewType) {
+                    newNode.addIfNeeded(newNodeContainer)
+                    newNode.bind(newNodeContainer)
+                } else {
+                    newNode.addIfNeeded(newNodeContainer)
+                    newNode.bind(newNodeContainer)
+                    oldNode.unbind(oldNodeContainer)
+                    oldNode.removeIfPossible(oldNodeContainer)
+                }
+            }
+        } else if (newNode == null && oldNode != null) {
+            val oldNodeContainer = oldNode.containerOrThis()
+            oldNode.unbind(oldNodeContainer)
+            oldNode.removeIfPossible(oldNodeContainer)
+        }
+
+        (newNode as? UiComponent<View>)
+            ?.layoutChildren(
+                newNode.containerOrThis().findViewById(newNode.viewId),
+                oldNode?.children
+            )
     }
 
 }
