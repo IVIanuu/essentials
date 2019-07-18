@@ -41,7 +41,7 @@ class ComponentTestController : EsController() {
         if (loading) {
             emit(Loading(id = "loading"))
         } else {
-            emit(Checkbox(id = "lol", value = checkedIndices.isEmpty(), onChange = {
+            /*emit(Checkbox(id = "lol", value = checkedIndices.isEmpty(), onChange = {
                 if (checkedIndices.isEmpty()) {
                     checkedIndices.add(0)
                 } else {
@@ -49,24 +49,35 @@ class ComponentTestController : EsController() {
                 }
 
                 componentContext.invalidate()
-            }))
-            /*emit(List(id = "list") {
-                (0..1).forEach { index ->
+            }))*/
+            emit(ListView(id = "list") {
+                var wasCheckBox = false
+                (0..5).forEach { index ->
                     emit(
                         ListItem(
                             id = "list $index",
                             title = "Title $index",
                             text = "Text $index",
-                            secondaryAction = Checkbox(
-                                id = "checkbox",
-                                value = checkedIndices.contains(index),
-                                onChange = { toggle(index) }
-                            ),
+                            secondaryAction = if (wasCheckBox) {
+                                RadioButton(
+                                    id = "radio",
+                                    value = checkedIndices.contains(index),
+                                    onChange = { toggle(index) }
+                                )
+                            } else {
+                                Checkbox(
+                                    id = "checkbox",
+                                    value = checkedIndices.contains(index),
+                                    onChange = { toggle(index) }
+                                )
+                            },
                             onClick = { toggle(index) }
                         )
                     )
+
+                    wasCheckBox = !wasCheckBox
                 }
-            })*/
+            })
         }
     }
 

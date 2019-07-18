@@ -16,33 +16,33 @@
 
 package com.ivianuu.essentials.sample.ui.component
 
-/**
+import android.view.View
+import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
+import com.airbnb.epoxy.TypedEpoxyController
+import com.github.ajalt.timberkt.d
+import com.ivianuu.essentials.sample.R
+import com.ivianuu.essentials.sample.ui.component.lib.BuildContext
+import com.ivianuu.essentials.sample.ui.component.lib.UiComponent
+import com.ivianuu.essentials.sample.ui.component.lib.properties
+import com.ivianuu.essentials.ui.epoxy.EsHolder
+import com.ivianuu.essentials.ui.epoxy.SimpleModel
+import com.ivianuu.essentials.util.cast
+import com.ivianuu.kommon.core.view.inflate
+
 class ListView(
     override val id: Any?,
     private val buildListComponents: BuildContext.() -> Unit
 ) : UiComponent<RecyclerView>() {
 
-override val viewId: Int
+    override val viewId: Int
         get() = R.id.es_recycler_view
 
-override fun layoutChildren(container: ViewGroup, oldChildren: List<UiComponent<*>>?) {
-super.layoutChildren(container, oldChildren)
-val view = findViewIn(container)!!
+    override fun bind(view: RecyclerView) {
+        super.bind(view)
         val epoxyController =
-            view.tag<UiComponentEpoxyController>(R.id.es_recycler_view)
-
-val newData = children?.map { newChildrenNode ->
-            val oldChildrenNode = oldChildren?.firstOrNull {
-                it.id == newChildrenNode.id
-            }
-
-            ComponentWithPrev(
-                newChildrenNode as UiComponent<View>,
-                oldChildrenNode as? UiComponent<View>
-            )
-        }
-
-        epoxyController.setData(newData)
+            view.properties.get<UiComponentEpoxyController>("epoxy_controller")!!
+        epoxyController.setData(children)
     }
 
     override fun createView(container: ViewGroup): RecyclerView {
@@ -50,7 +50,7 @@ val newData = children?.map { newChildrenNode ->
         val epoxyController =
             UiComponentEpoxyController()
         view.adapter = epoxyController.adapter
-        view.setTag(R.id.es_recycler_view, epoxyController)
+        view.properties.set("epoxy_controller", epoxyController)
         return view
     }
 
@@ -60,14 +60,9 @@ val newData = children?.map { newChildrenNode ->
 
 }
 
-private data class ComponentWithPrev(
-    val component: UiComponent<View>,
-    val prev: UiComponent<View>?
-)
-
 private class UiComponentEpoxyController :
-TypedEpoxyController<List<ComponentWithPrev>>() {
-    override fun buildModels(data: kotlin.collections.List<ComponentWithPrev>?) {
+    TypedEpoxyController<List<UiComponent<*>>>() {
+    override fun buildModels(data: List<UiComponent<*>>?) {
         data?.forEach {
             add(UiComponentEpoxyModel(it))
         }
@@ -75,28 +70,27 @@ TypedEpoxyController<List<ComponentWithPrev>>() {
 }
 
 private data class UiComponentEpoxyModel(
-    private val componentWithPrev: ComponentWithPrev
-) : SimpleModel(id = componentWithPrev.component.id) {
+    private val component: UiComponent<*>
+) : SimpleModel(id = component.id) {
 
     override fun bind(holder: EsHolder) {
         super.bind(holder)
-        d { "epoxy bind $componentWithPrev" }
-        componentWithPrev.component.bind(holder.root)
+        d { "epoxy bind ${component.javaClass.simpleName}" }
+        component.cast<UiComponent<View>>().bind(holder.root)
     }
 
     override fun unbind(holder: EsHolder) {
         super.unbind(holder)
-        d { "epoxy unbind ${componentWithPrev.component}" }
-        componentWithPrev.component.unbind(holder.root)
+        d { "epoxy unbind ${component.javaClass.simpleName}" }
+        component.cast<UiComponent<View>>().unbind(holder.root)
     }
 
-    override fun getViewType(): Int =
-        componentWithPrev.component.viewType
+    override fun getViewType(): Int = component.viewType
 
     override fun buildView(parent: ViewGroup): View {
-        val view = componentWithPrev.component.createView(parent)
-
+        val view = component.createView(parent)
+        (component as UiComponent<View>).layout(view)
         return view
     }
 
-}*/
+}

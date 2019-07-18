@@ -16,11 +16,11 @@
 
 package com.ivianuu.essentials.sample.ui.component
 
-import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.sample.ui.component.lib.BuildContext
+import com.ivianuu.essentials.sample.ui.component.lib.ContainerUiComponent
 import com.ivianuu.essentials.sample.ui.component.lib.UiComponent
 import com.ivianuu.essentials.util.andTrue
 import com.ivianuu.kommon.core.view.inflate
@@ -39,7 +39,7 @@ class ListItem(
 
     private val onClick: (() -> Unit)? = null,
     private val onLongClick: (() -> Unit)? = null
-) : UiComponent<View>() {
+) : ContainerUiComponent<ViewGroup>() {
 
     override val viewId: Int
         get() = R.id.es_list_item_container
@@ -50,10 +50,10 @@ class ListItem(
         state(onClick != null, onLongClick != null)
     }
 
-    override fun createView(container: ViewGroup): View =
-        container.inflate(R.layout.es_list_item)
+    override fun createView(container: ViewGroup): ViewGroup =
+        container.inflate<ViewGroup>(R.layout.es_list_item)
 
-    override fun bind(view: View) {
+    override fun bind(view: ViewGroup) {
         super.bind(view)
         val titleView = view.findViewById<TextView>(R.id.es_list_title)
         when {
