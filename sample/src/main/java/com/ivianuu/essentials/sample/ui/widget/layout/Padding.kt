@@ -14,33 +14,30 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.sample.ui.widget
+package com.ivianuu.essentials.sample.ui.widget.layout
 
-import android.view.View
-import com.ivianuu.essentials.sample.ui.widget.lib.HeadlessWidget
+import android.view.ViewGroup
+import android.widget.FrameLayout
+import com.ivianuu.essentials.sample.ui.widget.lib.ViewGroupWidget
 import com.ivianuu.essentials.sample.ui.widget.lib.Widget
 
 class Padding(
     override val key: Any? = null,
-    child: Widget<*>,
+    val child: Widget<*>,
     val left: Int = 0,
     val top: Int = 0,
     val right: Int = 0,
     val bottom: Int = 0
-) : HeadlessWidget(child) {
+) : ViewGroupWidget<FrameLayout>() {
 
-    constructor(key: Any? = null, child: Widget<*>, padding: Int) : this(
-        key,
-        child,
-        padding,
-        padding,
-        padding,
-        padding
-    )
+    constructor(
+        key: Any? = null,
+        child: Widget<*>,
+        padding: Int
+    ) : this(key, child, padding, padding, padding, padding)
 
-    override fun bind(view: View) {
-        super.bind(view)
-        view.setPadding(
+    override fun createView(container: ViewGroup) = FrameLayout(container.context).apply {
+        setPadding(
             this@Padding.left,
             this@Padding.top,
             this@Padding.right,
@@ -48,9 +45,8 @@ class Padding(
         )
     }
 
-    override fun unbind(view: View) {
-        super.unbind(view)
-        view.setPadding(0, 0, 0, 0)
+    override fun children() {
+        emit(child)
     }
 
 }

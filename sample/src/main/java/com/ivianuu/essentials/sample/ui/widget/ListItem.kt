@@ -19,7 +19,7 @@ package com.ivianuu.essentials.sample.ui.widget
 import android.view.ViewGroup
 import android.widget.TextView
 import com.ivianuu.essentials.sample.R
-import com.ivianuu.essentials.sample.ui.widget.lib.ContainerWidget
+import com.ivianuu.essentials.sample.ui.widget.lib.ViewGroupWidget
 import com.ivianuu.essentials.sample.ui.widget.lib.Widget
 import com.ivianuu.essentials.util.andTrue
 import com.ivianuu.kommon.core.view.inflate
@@ -38,7 +38,7 @@ class ListItem(
     val onLongClick: (() -> Unit)? = null,
 
     override val key: Any? = null
-) : ContainerWidget<ViewGroup>() {
+) : ViewGroupWidget<ViewGroup>() {
 
     init {
         state(title, titleRes)

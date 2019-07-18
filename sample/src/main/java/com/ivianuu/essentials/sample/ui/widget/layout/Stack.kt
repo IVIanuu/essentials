@@ -14,27 +14,26 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.sample.ui.widget
+package com.ivianuu.essentials.sample.ui.widget.layout
 
 import android.view.ViewGroup
-import android.widget.LinearLayout
+import android.widget.FrameLayout
 import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
-import com.ivianuu.essentials.sample.ui.widget.lib.ContainerWidget
+import com.ivianuu.essentials.sample.ui.widget.lib.ViewGroupWidget
 
-class Column(
+class Stack(
     override val key: Any? = null,
     children: BuildContext.() -> Unit
-) : ContainerWidget<LinearLayout>() {
+) : ViewGroupWidget<FrameLayout>() {
 
     private val _children = children
 
-    override fun createView(container: ViewGroup): LinearLayout {
-        return LinearLayout(container.context).apply {
+    override fun createView(container: ViewGroup): FrameLayout {
+        return FrameLayout(container.context).apply {
             layoutParams = ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT
             )
-            orientation = LinearLayout.VERTICAL
         }
     }
 

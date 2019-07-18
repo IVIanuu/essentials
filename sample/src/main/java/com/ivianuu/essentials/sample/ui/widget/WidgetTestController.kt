@@ -19,10 +19,14 @@ package com.ivianuu.essentials.sample.ui.widget
 import android.view.View
 import androidx.lifecycle.lifecycleScope
 import com.ivianuu.essentials.sample.R
+import com.ivianuu.essentials.sample.ui.widget.layout.Column
+import com.ivianuu.essentials.sample.ui.widget.layout.Padding
+import com.ivianuu.essentials.sample.ui.widget.layout.Row
 import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget.lib.WidgetContext
 import com.ivianuu.essentials.ui.base.EsController
 import com.ivianuu.essentials.util.cast
+import com.ivianuu.essentials.util.dp
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -58,37 +62,38 @@ class WidgetTestController : EsController() {
         var wasCheckBox = false
         (0..2).forEach { index ->
             emit(
-                /*Padding(
+                Padding(
                     key = index,
-                    padding = if (wasCheckBox) dp(100).toInt() else 0,
-                    child =
-                )*/
-                ListItem(
-                    key = index,
-                    title = "Title $index",
-                    text = "Text $index",
-                    primaryAction = Icon(
-                        iconRes = R.drawable.es_ic_torch_on
-                    ),
-                    secondaryAction = if (wasCheckBox) {
-                        RadioButton(
-                            value = checkedIndices.contains(index),
-                            onChange = { toggle(index) }
-                        )
-                    } else {
-                        /*Touchable(
-                            child = ,
-                            onTouch = {
-                                d { "on touch $it" }
-                                return@Touchable false
-                            }
-                        )*/
-                        Checkbox(
-                            value = checkedIndices.contains(index),
-                            onChange = { toggle(index) }
-                        )
-                    },
-                    onClick = { toggle(index) }
+                    top = dp(8).toInt(),
+                    bottom = dp(8).toInt(),
+                    left = if (wasCheckBox) dp(100).toInt() else 0,
+                    child = ListItem(
+                        key = index,
+                        title = "Title $index",
+                        text = "Text $index",
+                        primaryAction = Icon(
+                            iconRes = R.drawable.es_ic_torch_on
+                        ),
+                        secondaryAction = if (wasCheckBox) {
+                            RadioButton(
+                                value = checkedIndices.contains(index),
+                                onChange = { toggle(index) }
+                            )
+                        } else {
+                            /*Touchable(
+                                child = ,
+                                onTouch = {
+                                    d { "on touch $it" }
+                                    return@Touchable false
+                                }
+                            )*/
+                            Checkbox(
+                                value = checkedIndices.contains(index),
+                                onChange = { toggle(index) }
+                            )
+                        },
+                        onClick = { toggle(index) }
+                    )
                 )
             )
 

@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.sample.ui.widget
+package com.ivianuu.essentials.sample.ui.widget.layout
 
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
-import com.ivianuu.essentials.sample.ui.widget.lib.ContainerWidget
+import com.ivianuu.essentials.sample.ui.widget.lib.ViewGroupWidget
 
-class Row(
+class Column(
     override val key: Any? = null,
     children: BuildContext.() -> Unit
-) : ContainerWidget<LinearLayout>() {
+) : ViewGroupWidget<LinearLayout>() {
 
     private val _children = children
 
@@ -35,7 +35,7 @@ class Row(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT
             )
-            orientation = LinearLayout.HORIZONTAL
+            orientation = LinearLayout.VERTICAL
         }
     }
 

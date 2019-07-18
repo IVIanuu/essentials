@@ -20,7 +20,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.github.ajalt.timberkt.d
 
-abstract class ContainerWidget<V : ViewGroup> : Widget<V>() {
+abstract class ViewGroupWidget<V : ViewGroup> : Widget<V>() {
 
     override fun layout(view: V) {
         super.layout(view)
@@ -75,10 +75,15 @@ abstract class ContainerWidget<V : ViewGroup> : Widget<V>() {
     protected open fun getChildLayoutParams(
         container: ViewGroup,
         view: View
-    ): ViewGroup.LayoutParams = view.layoutParams
+    ): ViewGroup.LayoutParams? = view.layoutParams
 
     protected open fun addChildView(container: ViewGroup, view: View) {
-        container.addView(view, getChildLayoutParams(container, view))
+        val lp = getChildLayoutParams(container, view)
+        if (lp != null) {
+            container.addView(view, lp)
+        } else {
+            container.addView(view)
+        }
     }
 
     protected open fun removeChildView(container: ViewGroup, view: View) {
