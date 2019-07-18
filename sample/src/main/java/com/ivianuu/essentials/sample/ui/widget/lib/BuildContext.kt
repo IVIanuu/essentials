@@ -16,6 +16,8 @@
 
 package com.ivianuu.essentials.sample.ui.widget.lib
 
+import com.github.ajalt.timberkt.d
+
 interface BuildContext {
     val widgetContext: WidgetContext
     fun emit(component: Widget<*>, containerId: Int? = null) {
@@ -28,6 +30,7 @@ class WidgetBuildContext(
 ) : BuildContext {
     override fun emit(component: Widget<*>, containerId: Int?) {
         // todo check duplicate
+        d { "emit ${thisWidget.javaClass.simpleName} -> ${component.javaClass.simpleName}" }
         if (thisWidget.children == null) thisWidget.children = mutableListOf()
         component.parent = thisWidget
         component.containerId = containerId

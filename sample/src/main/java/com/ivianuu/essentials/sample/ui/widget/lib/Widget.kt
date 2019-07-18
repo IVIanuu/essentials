@@ -18,6 +18,7 @@ package com.ivianuu.essentials.sample.ui.widget.lib
 
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.children
 import com.github.ajalt.timberkt.d
 
 abstract class Widget<V : View> {
@@ -40,15 +41,15 @@ abstract class Widget<V : View> {
     }
 
     open fun layout(view: V) {
-        d { "layout ${javaClass.simpleName}" }
+        d { "layout ${javaClass.simpleName} -> ${view.javaClass.simpleName}" }
     }
 
     open fun bind(view: V) {
-        d { "bind ${javaClass.simpleName}" }
+        d { "bind ${javaClass.simpleName} -> ${view.javaClass.simpleName}" }
     }
 
     open fun unbind(view: V) {
-        d { "unbind ${javaClass.simpleName}" }
+        d { "unbind ${javaClass.simpleName} -> ${view.javaClass.simpleName}" }
     }
 
     abstract fun createView(container: ViewGroup): V
@@ -64,7 +65,14 @@ abstract class Widget<V : View> {
     fun containerOrElse(container: View): ViewGroup =
         containerId?.let { container.findViewById<ViewGroup>(it) } ?: container as ViewGroup
 
-    fun findViewIn(container: ViewGroup): V? = container.findViewById<V>(viewId)
+    fun findViewIn(container: ViewGroup): V? {
+        d {
+            "find ${javaClass.simpleName} " +
+                    "in $container " +
+                    "children ${container.children.toList()}"
+        }
+        return container.findViewById<V>(viewId)
+    }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

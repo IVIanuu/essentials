@@ -18,6 +18,7 @@ package com.ivianuu.essentials.sample.ui.widget.lib
 
 import android.view.View
 import android.view.ViewGroup
+import com.github.ajalt.timberkt.d
 
 abstract class ContainerWidget<V : ViewGroup> : Widget<V>() {
 
@@ -25,6 +26,9 @@ abstract class ContainerWidget<V : ViewGroup> : Widget<V>() {
         super.layout(view)
         val oldChildren = view.properties.get<List<Widget<*>>>("children")
         view.properties.set("children", children)
+
+        d { "children $children old children $oldChildren" }
+
         if (children != null || oldChildren != null) {
             children?.forEach { newChild ->
                 val oldChild = oldChildren?.firstOrNull { it.id == newChild.id }
@@ -53,13 +57,11 @@ abstract class ContainerWidget<V : ViewGroup> : Widget<V>() {
         if (newChild != null && oldChild == null) {
             newChild.addIfNeeded(newChild.containerOrElse(view))
         } else if (newChild != null && oldChild != null) {
-            if (newChild != oldChild) {
-                if (newChild.viewType == oldChild.viewType) {
-                    newChild.addIfNeeded(newChild.containerOrElse(view))
-                } else {
-                    newChild.addIfNeeded(newChild.containerOrElse(view))
-                    oldChild.removeIfPossible(newChild.containerOrElse(view))
-                }
+            if (newChild.viewType == oldChild.viewType) {
+                newChild.addIfNeeded(newChild.containerOrElse(view))
+            } else {
+                oldChild.removeIfPossible(newChild.containerOrElse(view))
+                newChild.addIfNeeded(newChild.containerOrElse(view))
             }
         } else if (newChild == null && oldChild != null) {
             oldChild.removeIfPossible(oldChild.containerOrElse(view))
@@ -68,6 +70,7 @@ abstract class ContainerWidget<V : ViewGroup> : Widget<V>() {
 
     private fun Widget<*>.addIfNeeded(container: ViewGroup) {
         var view = findViewIn(container)
+        d { "add if needed ${javaClass.simpleName} ${view == null}" }
         if (view == null) {
             view = createView(container)
             container.addView(view)
@@ -76,6 +79,7 @@ abstract class ContainerWidget<V : ViewGroup> : Widget<V>() {
 
     private fun Widget<*>.removeIfPossible(container: ViewGroup) {
         val view = findViewIn(container)
+        d { "remove if possible ${javaClass.simpleName} ${view != null}" }
         if (view != null) {
             container.removeView(view)
         }

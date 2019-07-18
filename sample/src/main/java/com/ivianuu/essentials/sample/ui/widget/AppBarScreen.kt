@@ -22,30 +22,21 @@ import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget.lib.ContainerWidget
 import com.ivianuu.essentials.sample.ui.widget.lib.Widget
 import com.ivianuu.kommon.core.view.inflate
-import kotlinx.android.synthetic.main.text_with_content.view.*
 
-class TextWithContent(
+class AppBarScreen(
     override val id: Any?,
-    private val text: String,
+    private val appBar: Widget<*>,
     private val content: Widget<*>
 ) : ContainerWidget<ViewGroup>() {
 
     override val viewId: Int
-        get() = R.id.text_with_checkbox
+        get() = R.id.appbar_screen
 
-    init {
-        state(text, content)
-    }
-
-    override fun createView(container: ViewGroup) =
-        container.inflate<ViewGroup>(R.layout.text_with_content)
-
-    override fun bind(view: ViewGroup) {
-        super.bind(view)
-        view.text.text = text
-    }
+    override fun createView(container: ViewGroup): ViewGroup =
+        container.inflate<ViewGroup>(R.layout.appbar_screen)
 
     override fun BuildContext.children() {
+        emit(appBar, R.id.es_app_bar)
         emit(content, R.id.content_container)
     }
 

@@ -35,44 +35,50 @@ class WidgetTestController : EsController() {
 
     private val checkedIndices = mutableSetOf<Int>()
 
-    private val context = WidgetContext(
-        rootViewId = R.id.content,
-        rootViewProvider = { view.cast() }
-    ) {
+    private val context = WidgetContext(rootViewProvider = { view.cast() }) {
         d { "build models" }
-        if (loading) {
-            emit(Loading(id = "loading"))
-        } else {
-            emit(ListView(id = "list") {
-                var wasCheckBox = false
+        emit(
+            AppBarScreen(
+                id = "screen",
+                appBar = Toolbar(
+                    id = "toolbar",
+                    title = "Widget screen"
+                ),
+                content = if (loading) {
+                    Loading(id = "loading")
+                } else {
+                    ListView(id = "list") {
+                        var wasCheckBox = false
 
-                (0..100).forEach { index ->
-                    emit(
-                        ListItem(
-                            id = "list $index",
-                            title = "Title $index",
-                            text = "Text $index",
-                            secondaryAction = if (wasCheckBox) {
-                                RadioButton(
-                                    id = "radio",
-                                    value = checkedIndices.contains(index),
-                                    onChange = { toggle(index) }
+                        (0..2).forEach { index ->
+                            emit(
+                                ListItem(
+                                    id = "list $index",
+                                    title = "Title $index",
+                                    text = "Text $index",
+                                    secondaryAction = if (wasCheckBox) {
+                                        RadioButton(
+                                            id = "radio",
+                                            value = checkedIndices.contains(index),
+                                            onChange = { toggle(index) }
+                                        )
+                                    } else {
+                                        Checkbox(
+                                            id = "checkbox",
+                                            value = checkedIndices.contains(index),
+                                            onChange = { toggle(index) }
+                                        )
+                                    },
+                                    onClick = { toggle(index) }
                                 )
-                            } else {
-                                Checkbox(
-                                    id = "checkbox",
-                                    value = checkedIndices.contains(index),
-                                    onChange = { toggle(index) }
-                                )
-                            },
-                            onClick = { toggle(index) }
-                        )
-                    )
+                            )
 
-                    wasCheckBox = !wasCheckBox
+                            wasCheckBox = !wasCheckBox
+                        }
+                    }
                 }
-            })
-        }
+            )
+        )
     }
 
     override fun onCreate() {

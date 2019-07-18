@@ -25,7 +25,6 @@ import kotlinx.coroutines.withContext
 import java.util.*
 
 class WidgetContext(
-    private val rootViewId: Int,
     private val rootViewProvider: () -> ViewGroup,
     private val buildWidgets: BuildContext.() -> Unit
 ) {
@@ -44,7 +43,6 @@ class WidgetContext(
             }
 
             val newRoot = RootWidget(rootId)
-            newRoot.containerId = rootViewId
 
             with(WidgetBuildContext(this@WidgetContext, newRoot)) {
                 buildWidgets()

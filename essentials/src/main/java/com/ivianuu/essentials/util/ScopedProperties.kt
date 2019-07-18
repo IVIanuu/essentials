@@ -21,7 +21,7 @@ import java.util.concurrent.ConcurrentHashMap
 
 class Properties {
 
-    private val properties = ConcurrentHashMap<String, Any?>()
+    private val properties = mutableMapOf<String, Any?>()
 
     val entries: Map<String, Any?>
         get() = properties
