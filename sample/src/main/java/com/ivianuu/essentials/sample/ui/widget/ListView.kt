@@ -93,8 +93,7 @@ private data class WidgetEpoxyModel(
     override fun getViewType(): Int = widget.getViewType()
 
     private fun Widget<*>.getViewType(): Int =
-        (type.hashCode() + (key?.hashCode() ?: 0)) + (children?.map { it.getViewType() }?.sum()
-            ?: 0)
+        (type.hashCode()) + (children?.map { it.getViewType() }?.sum() ?: 0)
 
     override fun buildView(parent: ViewGroup): View {
         val view = widget.createView(parent)
