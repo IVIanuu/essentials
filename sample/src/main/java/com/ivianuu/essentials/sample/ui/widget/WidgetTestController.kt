@@ -20,6 +20,7 @@ import android.view.View
 import androidx.lifecycle.lifecycleScope
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.sample.R
+import com.ivianuu.essentials.sample.ui.widget.behavior.Alpha
 import com.ivianuu.essentials.sample.ui.widget.behavior.BlockTouches
 import com.ivianuu.essentials.sample.ui.widget.layout.Column
 import com.ivianuu.essentials.sample.ui.widget.layout.Row
@@ -61,12 +62,15 @@ class WidgetTestController : EsController() {
                                     )
                                 )
                                 emit(
-                                    MaterialButton(
-                                        key = "2",
-                                        text = "Button 2",
-                                        onClick = {
-                                            d { "button 2 clicked" }
-                                        }
+                                    Alpha(
+                                        alpha = 0.5f,
+                                        child = MaterialButton(
+                                            key = "2",
+                                            text = "Button 2",
+                                            onClick = {
+                                                d { "button 2 clicked" }
+                                            }
+                                        )
                                     )
                                 )
                                 emit(
