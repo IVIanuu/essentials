@@ -14,26 +14,31 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.sample.ui.widget
+package com.ivianuu.essentials.sample.ui.widget.material
 
 import android.view.ViewGroup
+import android.widget.CheckBox
 import com.ivianuu.essentials.sample.R
-import com.ivianuu.essentials.sample.ui.widget.lib.ViewGroupWidget
 import com.ivianuu.essentials.sample.ui.widget.lib.Widget
 import com.ivianuu.kommon.core.view.inflate
 
-open class AppBarScreen(
-    val appBar: Widget<*>,
-    val content: Widget<*>,
+open class Checkbox(
+    val value: Boolean,
+    val onChange: (Boolean) -> Unit,
     override val key: Any? = null
-) : ViewGroupWidget<ViewGroup>() {
+) : Widget<CheckBox>() {
 
-    override fun createView(container: ViewGroup): ViewGroup =
-        container.inflate<ViewGroup>(R.layout.appbar_screen)
+    init {
+        state(value)
+    }
 
-    override fun buildChildren() {
-        emit(appBar, R.id.es_app_bar)
-        emit(content, R.id.content_container)
+    override fun createView(container: ViewGroup) =
+        container.inflate<CheckBox>(R.layout.es_list_action_checkbox)
+
+    override fun bind(view: CheckBox) {
+        super.bind(view)
+        view.isChecked = value
+        view.setOnClickListener { onChange(!value) }
     }
 
 }

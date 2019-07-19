@@ -14,29 +14,24 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.sample.ui.widget
+package com.ivianuu.essentials.sample.ui.widget.material
 
 import android.view.ViewGroup
-import com.ivianuu.essentials.sample.R
+import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
+import androidx.cardview.widget.CardView
+import com.google.android.material.card.MaterialCardView
 import com.ivianuu.essentials.sample.ui.widget.lib.ViewGroupWidget
 import com.ivianuu.essentials.sample.ui.widget.lib.Widget
-import com.ivianuu.kommon.core.view.inflate
 
-open class Toolbar(
-    val leading: Widget<*>? = null,
-    val title: Widget<*>? = null,
-    val trailing: List<Widget<*>>? = null,
-    override val key: Any? = null
-) : ViewGroupWidget<ViewGroup>() {
+class Card(val child: Widget<*>) : ViewGroupWidget<CardView>() {
 
-    override fun createView(container: ViewGroup): ViewGroup =
-        container.inflate<ViewGroup>(R.layout.view_toolbar)
+    override fun createView(container: ViewGroup): CardView =
+        MaterialCardView(container.context).apply {
+            layoutParams = ViewGroup.LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
+        }
 
     override fun buildChildren() {
         super.buildChildren()
-        if (leading != null) emit(leading, R.id.leading_container)
-        if (title != null) emit(title, R.id.title_container)
-        trailing?.forEach { emit(it, R.id.trailing_container) }
+        emit(child)
     }
-
 }

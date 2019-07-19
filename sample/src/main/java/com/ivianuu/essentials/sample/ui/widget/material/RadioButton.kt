@@ -14,28 +14,28 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.sample.ui.widget
+package com.ivianuu.essentials.sample.ui.widget.material
 
 import android.view.ViewGroup
-import android.widget.CheckBox
+import android.widget.RadioButton
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.sample.ui.widget.lib.Widget
 import com.ivianuu.kommon.core.view.inflate
 
-open class Checkbox(
+open class RadioButton(
     val value: Boolean,
     val onChange: (Boolean) -> Unit,
     override val key: Any? = null
-) : Widget<CheckBox>() {
+) : Widget<RadioButton>() {
 
     init {
         state(value)
     }
 
     override fun createView(container: ViewGroup) =
-        container.inflate<CheckBox>(R.layout.es_list_action_checkbox)
+        container.inflate<RadioButton>(R.layout.es_list_action_radio_button)
 
-    override fun bind(view: CheckBox) {
+    override fun bind(view: RadioButton) {
         super.bind(view)
         view.isChecked = value
         view.setOnClickListener { onChange(!value) }

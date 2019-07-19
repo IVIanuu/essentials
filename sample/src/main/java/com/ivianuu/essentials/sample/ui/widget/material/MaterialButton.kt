@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.sample.ui.widget
+package com.ivianuu.essentials.sample.ui.widget.material
 
 import android.view.ViewGroup
 import com.google.android.material.button.MaterialButton

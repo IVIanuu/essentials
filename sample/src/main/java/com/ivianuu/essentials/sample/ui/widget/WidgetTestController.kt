@@ -29,6 +29,12 @@ import com.ivianuu.essentials.sample.ui.widget.layout.Padding
 import com.ivianuu.essentials.sample.ui.widget.layout.Row
 import com.ivianuu.essentials.sample.ui.widget.layout.Space
 import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
+import com.ivianuu.essentials.sample.ui.widget.material.AppBarScreen
+import com.ivianuu.essentials.sample.ui.widget.material.Card
+import com.ivianuu.essentials.sample.ui.widget.material.Checkbox
+import com.ivianuu.essentials.sample.ui.widget.material.MaterialButton
+import com.ivianuu.essentials.sample.ui.widget.material.RadioButton
+import com.ivianuu.essentials.sample.ui.widget.material.Toolbar
 import com.ivianuu.essentials.util.dp
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -133,14 +139,15 @@ class WidgetTestController : WidgetController() {
                         )
 
                         emit(
-                            Container(
-                                height = dp(300).toInt(),
-                                width = dp(300).toInt(),
-                                gravity = Gravity.CENTER_VERTICAL or Gravity.END,
-                                paddingRight = dp(32).toInt(),
-                                child = MaterialButton(
-                                    text = "Click me",
-                                    onClick = {}
+                            Card(
+                                child = Container(
+                                    height = dp(300).toInt(),
+                                    width = dp(300).toInt(),
+                                    gravity = Gravity.CENTER,
+                                    child = MaterialButton(
+                                        text = "Click me",
+                                        onClick = {}
+                                    )
                                 )
                             )
                         )

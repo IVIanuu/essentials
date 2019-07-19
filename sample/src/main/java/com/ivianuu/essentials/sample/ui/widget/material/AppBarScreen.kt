@@ -14,31 +14,26 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.sample.ui.widget
+package com.ivianuu.essentials.sample.ui.widget.material
 
 import android.view.ViewGroup
-import android.widget.RadioButton
 import com.ivianuu.essentials.sample.R
+import com.ivianuu.essentials.sample.ui.widget.lib.ViewGroupWidget
 import com.ivianuu.essentials.sample.ui.widget.lib.Widget
 import com.ivianuu.kommon.core.view.inflate
 
-open class RadioButton(
-    val value: Boolean,
-    val onChange: (Boolean) -> Unit,
+open class AppBarScreen(
+    val appBar: Widget<*>,
+    val content: Widget<*>,
     override val key: Any? = null
-) : Widget<RadioButton>() {
+) : ViewGroupWidget<ViewGroup>() {
 
-    init {
-        state(value)
-    }
+    override fun createView(container: ViewGroup): ViewGroup =
+        container.inflate<ViewGroup>(R.layout.appbar_screen)
 
-    override fun createView(container: ViewGroup) =
-        container.inflate<RadioButton>(R.layout.es_list_action_radio_button)
-
-    override fun bind(view: RadioButton) {
-        super.bind(view)
-        view.isChecked = value
-        view.setOnClickListener { onChange(!value) }
+    override fun buildChildren() {
+        emit(appBar, R.id.es_app_bar)
+        emit(content, R.id.content_container)
     }
 
 }
