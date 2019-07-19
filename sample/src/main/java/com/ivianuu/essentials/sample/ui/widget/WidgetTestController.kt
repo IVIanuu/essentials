@@ -22,11 +22,13 @@ import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.sample.ui.widget.behavior.Alpha
 import com.ivianuu.essentials.sample.ui.widget.behavior.BlockTouches
+import com.ivianuu.essentials.sample.ui.widget.behavior.Margin
 import com.ivianuu.essentials.sample.ui.widget.layout.Column
 import com.ivianuu.essentials.sample.ui.widget.layout.Row
 import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
 import com.ivianuu.essentials.ui.base.EsController
 import com.ivianuu.essentials.util.cast
+import com.ivianuu.essentials.util.dp
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -53,12 +55,15 @@ class WidgetTestController : EsController() {
                         emit(
                             Row {
                                 emit(
-                                    MaterialButton(
-                                        key = "1",
-                                        text = "Button 1",
-                                        onClick = {
-                                            d { "button 1 clicked" }
-                                        }
+                                    Margin(
+                                        margin = dp(16).toInt(),
+                                        child = MaterialButton(
+                                            key = "1",
+                                            text = "Button 1",
+                                            onClick = {
+                                                d { "button 1 clicked" }
+                                            }
+                                        )
                                     )
                                 )
                                 emit(

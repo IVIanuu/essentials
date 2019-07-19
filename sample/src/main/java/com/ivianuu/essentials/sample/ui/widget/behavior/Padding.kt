@@ -14,34 +14,28 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.sample.ui.widget.layout
+package com.ivianuu.essentials.sample.ui.widget.behavior
 
-import android.view.ViewGroup
-import android.widget.FrameLayout
-import androidx.core.view.updateMargins
-import com.ivianuu.essentials.sample.ui.widget.lib.ViewGroupWidget
+import android.view.View
+import com.ivianuu.essentials.sample.ui.widget.lib.HeadlessWidget
 import com.ivianuu.essentials.sample.ui.widget.lib.Widget
 
 open class Padding(
-    override val key: Any? = null,
-    val child: Widget<*>,
+    child: Widget<*>,
     val left: Int = 0,
     val top: Int = 0,
     val right: Int = 0,
     val bottom: Int = 0
-) : ViewGroupWidget<FrameLayout>() {
+) : HeadlessWidget(child) {
 
     constructor(
-        key: Any? = null,
         child: Widget<*>,
         padding: Int
-    ) : this(key, child, padding, padding, padding, padding)
+    ) : this(child, padding, padding, padding, padding)
 
-    override fun createView(container: ViewGroup) = FrameLayout(container.context).apply {
-        layoutParams = ViewGroup.MarginLayoutParams(
-            ViewGroup.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.MATCH_PARENT
-        ).apply { updateMargins(left, top, right, bottom) }
+    override fun bind(view: View) {
+        super.bind(view)
+        view.setPaddingRelative(left, top, right, bottom)
     }
 
     override fun children() {
