@@ -18,8 +18,10 @@ package com.ivianuu.essentials.sample.ui.widget
 
 import android.view.View
 import androidx.lifecycle.lifecycleScope
+import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.sample.R
-import com.ivianuu.essentials.sample.ui.widget.layout.Stack
+import com.ivianuu.essentials.sample.ui.widget.layout.Column
+import com.ivianuu.essentials.sample.ui.widget.layout.Row
 import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
 import com.ivianuu.essentials.ui.base.EsController
 import com.ivianuu.essentials.util.cast
@@ -44,7 +46,40 @@ class WidgetTestController : EsController() {
                 content = if (loading) {
                     Loading()
                 } else {
-                    Stack { addListItems() }
+                    Column {
+                        addListItems()
+                        emit(
+                            Row {
+                                emit(
+                                    MaterialButton(
+                                        key = "1",
+                                        text = "Button 1",
+                                        onClick = {
+                                            d { "button 1 clicked" }
+                                        }
+                                    )
+                                )
+                                emit(
+                                    MaterialButton(
+                                        key = "2",
+                                        text = "Button 2",
+                                        onClick = {
+                                            d { "button 2 clicked" }
+                                        }
+                                    )
+                                )
+                                emit(
+                                    MaterialButton(
+                                        key = "3",
+                                        text = "Button 3",
+                                        onClick = {
+                                            d { "button 3 clicked" }
+                                        }
+                                    )
+                                )
+                            }
+                        )
+                    }
                 }
             )
         )
