@@ -16,8 +16,6 @@
 
 package com.ivianuu.essentials.sample.ui.widget.layout
 
-import android.view.Gravity
-import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
@@ -25,7 +23,6 @@ import com.ivianuu.essentials.sample.ui.widget.lib.ViewGroupWidget
 
 open class Stack(
     override val key: Any? = null,
-    val gravity: Int = Gravity.START or Gravity.TOP,
     children: BuildContext.() -> Unit
 ) : ViewGroupWidget<FrameLayout>() {
 
@@ -37,12 +34,6 @@ open class Stack(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT
             )
-        }
-    }
-
-    override fun getChildLayoutParams(container: ViewGroup, view: View): ViewGroup.LayoutParams? {
-        return FrameLayout.LayoutParams(0, 0).apply {
-            gravity = this@Stack.gravity
         }
     }
 

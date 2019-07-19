@@ -18,6 +18,7 @@ package com.ivianuu.essentials.sample.ui.widget.layout
 
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import androidx.core.view.updateMargins
 import com.ivianuu.essentials.sample.ui.widget.lib.ViewGroupWidget
 import com.ivianuu.essentials.sample.ui.widget.lib.Widget
 
@@ -37,12 +38,10 @@ open class Padding(
     ) : this(key, child, padding, padding, padding, padding)
 
     override fun createView(container: ViewGroup) = FrameLayout(container.context).apply {
-        setPadding(
-            this@Padding.left,
-            this@Padding.top,
-            this@Padding.right,
-            this@Padding.bottom
-        )
+        layoutParams = ViewGroup.MarginLayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.MATCH_PARENT
+        ).apply { updateMargins(left, top, right, bottom) }
     }
 
     override fun children() {

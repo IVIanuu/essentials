@@ -30,13 +30,7 @@ abstract class ViewGroupWidget<V : ViewGroup> : Widget<V>() {
         d { "children $children old children $oldChildren" }
 
         if (children != null || oldChildren != null) {
-            children?.forEach { newChild ->
-                val oldChild = oldChildren?.firstOrNull {
-                    it.equalsIdentity(newChild)
-                }
-                layoutChild(view, newChild, oldChild)
-            }
-
+            // remove old children
             oldChildren?.forEach { oldChild ->
                 val newChild = children?.firstOrNull {
                     it.equalsIdentity(oldChild)
@@ -46,6 +40,15 @@ abstract class ViewGroupWidget<V : ViewGroup> : Widget<V>() {
                 }
             }
 
+            // add new children
+            children?.forEach { newChild ->
+                val oldChild = oldChildren?.firstOrNull {
+                    it.equalsIdentity(newChild)
+                }
+                layoutChild(view, newChild, oldChild)
+            }
+
+            // layout children
             children
                 ?.filterIsInstance<Widget<View>>()
                 ?.map { it to view.findViewByWidget(it)!! }
@@ -58,19 +61,24 @@ abstract class ViewGroupWidget<V : ViewGroup> : Widget<V>() {
         newChild: Widget<*>?,
         oldChild: Widget<*>?
     ) {
+        d { "${javaClass.simpleName} layout child | new ${newChild?.javaClass?.simpleName} old ${oldChild?.javaClass?.simpleName}" }
         if (newChild != null && oldChild == null) {
+            d { "${javaClass.simpleName} new not null, old null -> add new if needed" }
             newChild.addIfNeeded(view.findContainerForWidget(newChild))
         } else if (newChild != null && oldChild != null) {
-            if (newChild.containerId == oldChild.containerId
-                && newChild.equalsIdentity(oldChild)
+            if (newChild.equalsIdentity(oldChild) &&
+                newChild.containerId == oldChild.containerId
             ) {
+                d { "${javaClass.simpleName} both not null, same container, same identity -> add new if needed" }
                 newChild.addIfNeeded(view.findContainerForWidget(newChild))
             } else {
-                oldChild.removeIfPossible(view.findContainerForWidget(oldChild))
+                d { "${javaClass.simpleName} both not null, not same container or identity -> add new if needed, remove old if possible" }
+                removeChildView(view, oldChild)
                 newChild.addIfNeeded(view.findContainerForWidget(newChild))
             }
         } else if (newChild == null && oldChild != null) {
-            oldChild.removeIfPossible(view.findContainerForWidget(oldChild))
+            d { "${javaClass.simpleName} new null, old not null -> remove old if possible" }
+            removeChildView(view, oldChild)
         }
     }
 
@@ -80,7 +88,6 @@ abstract class ViewGroupWidget<V : ViewGroup> : Widget<V>() {
     ): ViewGroup.LayoutParams? = view.layoutParams
 
     protected open fun addChildView(container: ViewGroup, view: View) {
-        d { "${javaClass.simpleName} add child view to container $container $view" }
         val lp = getChildLayoutParams(container, view)
         if (lp != null) {
             container.addView(view, lp)
@@ -89,9 +96,14 @@ abstract class ViewGroupWidget<V : ViewGroup> : Widget<V>() {
         }
     }
 
-    protected open fun removeChildView(container: ViewGroup, view: View) {
-        d { "${javaClass.simpleName} remove child view from container $container $view" }
-        container.removeView(view)
+    protected open fun removeChildView(
+        view: ViewGroup,
+        widget: Widget<*>
+    ) {
+        val container = view.findContainerForWidget(widget)
+        val childView = container.findViewByWidget(widget)
+        d { "${javaClass.simpleName} remove child ${widget.javaClass.simpleName}" }
+        container.removeView(childView)
     }
 
     private fun Widget<*>.addIfNeeded(container: ViewGroup) {
@@ -104,16 +116,14 @@ abstract class ViewGroupWidget<V : ViewGroup> : Widget<V>() {
         }
     }
 
-    private fun Widget<*>.removeIfPossible(container: ViewGroup) {
-        val view = container.findViewByWidget(this)
-        d { "remove if possible ${javaClass.simpleName} ${view != null}" }
-        if (view != null) {
-            removeChildView(container, view)
-        }
-    }
-
     override fun bind(view: V) {
         super.bind(view)
+        children?.forEach {
+            check(view.findViewByWidget(it) != null) {
+                "${javaClass.simpleName} View for children ${it.javaClass.simpleName} is not added but should be"
+            }
+        }
+
         children
             ?.filterIsInstance<Widget<View>>()
             ?.map { it to view.findViewByWidget(it)!! }
