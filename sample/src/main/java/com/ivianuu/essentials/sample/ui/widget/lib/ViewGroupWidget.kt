@@ -80,6 +80,7 @@ abstract class ViewGroupWidget<V : ViewGroup> : Widget<V>() {
     ): ViewGroup.LayoutParams? = view.layoutParams
 
     protected open fun addChildView(container: ViewGroup, view: View) {
+        d { "${javaClass.simpleName} add child view to container $container $view" }
         val lp = getChildLayoutParams(container, view)
         if (lp != null) {
             container.addView(view, lp)
@@ -89,6 +90,7 @@ abstract class ViewGroupWidget<V : ViewGroup> : Widget<V>() {
     }
 
     protected open fun removeChildView(container: ViewGroup, view: View) {
+        d { "${javaClass.simpleName} remove child view from container $container $view" }
         container.removeView(view)
     }
 

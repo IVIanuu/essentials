@@ -40,7 +40,7 @@ open class Column(
     }
 
     override fun getChildLayoutParams(container: ViewGroup, view: View): ViewGroup.LayoutParams {
-        return LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1f)
+        return LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 1f)
     }
 
     override fun children() {
