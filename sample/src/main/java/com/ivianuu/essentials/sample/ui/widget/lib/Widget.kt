@@ -33,8 +33,22 @@ abstract class Widget<V : View> : BuildContext {
 
     private var state: MutableList<Any?>? = null
 
+    open fun dispatchLayout(view: V) {
+        if (view.laidOutWidget != this) {
+            layout(view)
+            view.laidOutWidget = this
+        }
+    }
+
     open fun layout(view: V) {
         d { "layout ${javaClass.simpleName} -> ${view.javaClass.simpleName}" }
+    }
+
+    open fun dispatchBind(view: V) {
+        if (view.boundWidget != this) {
+            bind(view)
+            view.boundWidget = this
+        }
     }
 
     open fun bind(view: V) {

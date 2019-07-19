@@ -74,7 +74,7 @@ private data class WidgetEpoxyModel(
     override fun bind(holder: EsHolder) {
         super.bind(holder)
         d { "epoxy bind ${widget.javaClass.simpleName}" }
-        widget.cast<Widget<View>>().bind(holder.root)
+        widget.cast<Widget<View>>().dispatchBind(holder.root)
     }
 
     override fun getViewType(): Int = widget.getViewType()
@@ -85,7 +85,7 @@ private data class WidgetEpoxyModel(
     override fun buildView(parent: ViewGroup): View {
         val view = widget.createView(parent)
         view.setWidget(widget)
-        (widget as Widget<View>).layout(view)
+        (widget as Widget<View>).dispatchLayout(view)
         return view
     }
 

@@ -62,6 +62,7 @@ class WidgetTestController : EsController() {
                                             text = "Button 1",
                                             onClick = {
                                                 d { "button 1 clicked" }
+                                                invalidate()
                                             }
                                         )
                                     )

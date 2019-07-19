@@ -35,6 +35,18 @@ fun ViewGroup.findContainerForWidget(widget: Widget<*>): ViewGroup {
     }
 }
 
+var View.boundWidget: Widget<*>?
+    get() = properties.get<Widget<*>>("bound_widget")
+    set(value) {
+        properties.set("bound_widget", value)
+    }
+
+var View.laidOutWidget: Widget<*>?
+    get() = properties.get<Widget<*>>("laid_out_widget")
+    set(value) {
+        properties.set("laid_out_widget", value)
+    }
+
 @JvmName("findViewByWidgetUntyped")
 fun View.findViewByWidget(widget: Widget<*>): View? =
     findViewByWidget<View>(widget)

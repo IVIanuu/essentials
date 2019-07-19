@@ -50,8 +50,8 @@ class RootBuildContext(
             rootView = root.createView(rootContainer)
             rootContainer.addView(rootView)
         }
-        root.layout(rootContainer)
-        root.bind(rootContainer)
+        root.dispatchLayout(rootContainer)
+        root.dispatchBind(rootContainer)
     }
 
     override fun emit(widget: Widget<*>, containerId: Int?) {

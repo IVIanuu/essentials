@@ -52,7 +52,7 @@ abstract class ViewGroupWidget<V : ViewGroup> : Widget<V>() {
             children
                 ?.filterIsInstance<Widget<View>>()
                 ?.map { it to view.findViewByWidget(it)!! }
-                ?.forEach { it.first.layout(it.second) }
+                ?.forEach { it.first.dispatchLayout(it.second) }
         }
     }
 
@@ -118,18 +118,12 @@ abstract class ViewGroupWidget<V : ViewGroup> : Widget<V>() {
 
     override fun bind(view: V) {
         super.bind(view)
-        children?.forEach {
-            check(view.findViewByWidget(it) != null) {
-                "${javaClass.simpleName} View for children ${it.javaClass.simpleName} is not added but should be"
-            }
-        }
 
         children
             ?.filterIsInstance<Widget<View>>()
             ?.map { it to view.findViewByWidget(it)!! }
             ?.forEach { (child, childView) ->
-                child.bind(childView)
+                child.dispatchBind(childView)
             }
     }
-
 }
