@@ -22,6 +22,7 @@ import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.sample.ui.widget.behavior.Alpha
 import com.ivianuu.essentials.sample.ui.widget.behavior.BlockTouches
 import com.ivianuu.essentials.sample.ui.widget.behavior.Margin
+import com.ivianuu.essentials.sample.ui.widget.behavior.Space
 import com.ivianuu.essentials.sample.ui.widget.es.WidgetController
 import com.ivianuu.essentials.sample.ui.widget.layout.Column
 import com.ivianuu.essentials.sample.ui.widget.layout.Row
@@ -52,10 +53,22 @@ class WidgetTestController : WidgetController() {
                         text = "Widget screen",
                         textAppearance = R.style.TextAppearance_MaterialComponents_Headline6
                     ),
-                    leading = Icon(iconRes = R.drawable.icon_back_white),
+                    leading = IconButton(
+                        iconRes = R.drawable.icon_back_white,
+                        onClick = { navigator.pop() }
+                    ),
                     trailing = listOf(
-                        Icon(key = "link", iconRes = R.drawable.es_ic_link),
-                        Icon(key = "torch", iconRes = R.drawable.es_ic_torch_on)
+                        IconButton(
+                            key = "link",
+                            iconRes = R.drawable.es_ic_link,
+                            onClick = { d { "link clicked" } }
+                        ),
+                        Space(width = dp(16).toInt()),
+                        IconButton(
+                            key = "torch",
+                            iconRes = R.drawable.es_ic_torch_on,
+                            onClick = { d { "torch clicked" } }
+                        )
                     )
                 ),
                 content = if (loading) {

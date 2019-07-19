@@ -17,17 +17,17 @@
 package com.ivianuu.essentials.sample.ui.widget.behavior
 
 import android.view.View
-import com.ivianuu.essentials.sample.ui.widget.lib.HeadlessWidget
+import android.view.ViewGroup
 import com.ivianuu.essentials.sample.ui.widget.lib.Widget
 
-open class Clickable(
-    child: Widget<*>,
-    val onClick: () -> Unit
-) : HeadlessWidget(child) {
+class Space(
+    override val key: Any? = null,
+    val width: Int = 0,
+    val height: Int = 0
+) : Widget<View>() {
 
-    override fun bind(view: View) {
-        super.bind(view)
-        view.setOnClickListener { onClick() }
+    override fun createView(container: ViewGroup) = View(container.context).apply {
+        layoutParams = ViewGroup.LayoutParams(this@Space.width, this@Space.height)
     }
 
 }

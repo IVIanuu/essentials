@@ -16,3 +16,22 @@
 
 package com.ivianuu.essentials.sample.ui.widget
 
+import android.graphics.drawable.Drawable
+import com.ivianuu.essentials.sample.ui.widget.behavior.Clickable
+import com.ivianuu.essentials.sample.ui.widget.lib.HeadlessWidget
+
+class IconButton(
+    key: Any? = null,
+    icon: Drawable? = null,
+    iconRes: Int? = null,
+    onClick: () -> Unit
+) : HeadlessWidget(
+    Clickable(
+        child = Icon(
+            icon = icon,
+            iconRes = iconRes,
+            key = key
+        ),
+        onClick = onClick
+    )
+)

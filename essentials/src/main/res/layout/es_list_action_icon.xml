@@ -16,7 +16,6 @@
 <ImageView android:id="@+id/es_list_icon"
     android:layout_width="24dp"
     android:layout_height="24dp"
-    android:layout_marginStart="16dp"
     tools:visibility="visible"
     android:tint="?colorControlNormal"
     tools:src="@drawable/icon_back_white"
