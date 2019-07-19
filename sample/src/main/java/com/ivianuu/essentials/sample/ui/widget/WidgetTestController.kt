@@ -23,7 +23,6 @@ import com.ivianuu.essentials.sample.ui.widget.layout.Column
 import com.ivianuu.essentials.sample.ui.widget.layout.Padding
 import com.ivianuu.essentials.sample.ui.widget.layout.Row
 import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
-import com.ivianuu.essentials.sample.ui.widget.lib.WidgetContext
 import com.ivianuu.essentials.ui.base.EsController
 import com.ivianuu.essentials.util.cast
 import com.ivianuu.essentials.util.dp
@@ -39,8 +38,7 @@ class WidgetTestController : EsController() {
 
     private val checkedIndices = mutableSetOf<Int>()
 
-    private val context = WidgetContext(
-        lifecycleScope,
+    private val buildContext = BuildContext(
         rootViewProvider = { view.cast() }
     ) {
         emit(
@@ -49,10 +47,7 @@ class WidgetTestController : EsController() {
                 content = if (loading) {
                     Loading()
                 } else {
-                    Column {
-                        addListItems()
-                        emit(Row { addListItems() })
-                    }
+                    ListView { addListItems() }
                 }
             )
         )
@@ -106,18 +101,13 @@ class WidgetTestController : EsController() {
         lifecycleScope.launch {
             delay(2000)
             loading = false
-            context.invalidate()
+            buildContext.invalidate()
         }
     }
 
     override fun onAttach(view: View) {
         super.onAttach(view)
-        context.invalidate()
-    }
-
-    override fun onDetach(view: View) {
-        super.onDetach(view)
-        context.cancelAll()
+        buildContext.invalidate()
     }
 
     private fun toggle(index: Int) {
@@ -126,6 +116,6 @@ class WidgetTestController : EsController() {
         } else {
             checkedIndices.add(index)
         }
-        context.invalidate()
+        buildContext.invalidate()
     }
 }

@@ -16,9 +16,51 @@
 
 package com.ivianuu.essentials.sample.ui.widget.lib
 
+import android.view.ViewGroup
+import com.github.ajalt.timberkt.d
+
 interface BuildContext {
     val parent: BuildContext?
 
     fun invalidate()
     fun emit(widget: Widget<*>, containerId: Int? = null)
+}
+
+fun BuildContext(
+    rootViewProvider: () -> ViewGroup,
+    buildWidgets: BuildContext.() -> Unit
+): BuildContext = RootBuildContext(rootViewProvider, buildWidgets)
+
+private class RootBuildContext(
+    private val rootViewProvider: () -> ViewGroup,
+    private val buildWidgets: BuildContext.() -> Unit
+) : BuildContext {
+
+    override val parent: BuildContext?
+        get() = null
+
+    private var root = RootWidget()
+
+    override fun invalidate() {
+        val newRoot = RootWidget()
+        buildWidgets()
+
+        root = newRoot
+        val rootContainer = rootViewProvider()
+        var rootView = rootContainer
+            .findViewByWidget(newRoot)
+        if (rootView == null) {
+            rootView = newRoot.createView(rootContainer)
+            rootContainer.addView(rootView)
+        }
+        d { "layout new root $newRoot" }
+        newRoot.layout(rootContainer)
+        d { "bind new root $newRoot" }
+        newRoot.bind(rootContainer)
+    }
+
+    override fun emit(widget: Widget<*>, containerId: Int?) {
+        root.emit(widget, containerId)
+    }
+
 }
