@@ -19,6 +19,7 @@ package com.ivianuu.essentials.sample.ui.widget.lib
 import android.view.View
 import android.view.ViewGroup
 import com.github.ajalt.timberkt.d
+import com.ivianuu.essentials.util.cast
 
 abstract class Widget<V : View> : BuildContext {
 
@@ -54,12 +55,29 @@ abstract class Widget<V : View> : BuildContext {
         type == other.type && key == other.key
 
     override fun invalidate() {
-        var root: BuildContext = this
-        while (root.parent != null) {
-            root = root.parent!!
+        val parentsStack = mutableListOf<BuildContext>(this)
+        while (parentsStack.last().parent != null) {
+            parentsStack.add(parentsStack.last().parent!!)
         }
 
-        root.invalidate()
+        parentsStack.reverse()
+
+        val rootView = parentsStack.first().cast<RootWidget>()
+            .rootBuildContext.rootViewProvider()
+
+        val view = parentsStack.drop(1).fold<BuildContext, View>(
+            rootView
+        ) { view, context ->
+            view.findViewByWidget(context.cast())!!
+                .also {
+                    d { "fold ${it.javaClass.simpleName} to ${context.javaClass.simpleName}" }
+                }
+        }
+
+        children?.clear()
+        children()
+        layout(view as V)
+        bind(view)
     }
 
     override fun emit(widget: Widget<*>, containerId: Int?) {

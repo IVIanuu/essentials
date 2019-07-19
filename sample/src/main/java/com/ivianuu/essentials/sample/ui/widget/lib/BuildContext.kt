@@ -30,18 +30,18 @@ fun BuildContext(
     buildWidgets: BuildContext.() -> Unit
 ): BuildContext = RootBuildContext(rootViewProvider, buildWidgets)
 
-private class RootBuildContext(
-    private val rootViewProvider: () -> ViewGroup,
+class RootBuildContext(
+    val rootViewProvider: () -> ViewGroup,
     private val buildWidgets: BuildContext.() -> Unit
 ) : BuildContext {
 
     override val parent: BuildContext?
         get() = null
 
-    private var root = RootWidget()
+    private var root = RootWidget(this)
 
     override fun invalidate() {
-        root = RootWidget()
+        root = RootWidget(this)
         buildWidgets()
         val rootContainer = rootViewProvider()
         var rootView = rootContainer
