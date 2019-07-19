@@ -16,12 +16,13 @@
 
 package com.ivianuu.essentials.sample.ui.widget
 
+import android.view.Gravity
 import androidx.lifecycle.lifecycleScope
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.sample.ui.widget.behavior.Alpha
 import com.ivianuu.essentials.sample.ui.widget.behavior.BlockTouches
-import com.ivianuu.essentials.sample.ui.widget.behavior.Margin
+import com.ivianuu.essentials.sample.ui.widget.behavior.Padding
 import com.ivianuu.essentials.sample.ui.widget.behavior.Space
 import com.ivianuu.essentials.sample.ui.widget.es.WidgetController
 import com.ivianuu.essentials.sample.ui.widget.layout.Column
@@ -78,10 +79,10 @@ class WidgetTestController : WidgetController() {
                     Column {
                         addListItems()
                         emit(
-                            Row {
+                            Row(gravity = Gravity.CENTER_HORIZONTAL or Gravity.TOP) {
                                 emit(
-                                    Margin(
-                                        margin = dp(16).toInt(),
+                                    Padding(
+                                        padding = dp(16).toInt(),
                                         child = MaterialButton(
                                             key = "1",
                                             text = "Button 1",
@@ -92,6 +93,7 @@ class WidgetTestController : WidgetController() {
                                         )
                                     )
                                 )
+                                emit(Space(key = "1", width = dp(8).toInt()))
                                 emit(
                                     Alpha(
                                         alpha = 0.5f,
@@ -104,6 +106,7 @@ class WidgetTestController : WidgetController() {
                                         )
                                     )
                                 )
+                                emit(Space(key = "2", width = dp(8).toInt()))
                                 emit(
                                     BlockTouches(
                                         child = MaterialButton(

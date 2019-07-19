@@ -14,24 +14,31 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.sample.ui.widget.behavior
+package com.ivianuu.essentials.sample.ui.widget.layout
 
-import android.view.View
 import android.view.ViewGroup
-import com.ivianuu.essentials.sample.ui.widget.lib.Widget
+import android.widget.LinearLayout
+import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
+import com.ivianuu.essentials.sample.ui.widget.lib.ViewGroupWidget
 
-class Space(
+open class Flex(
+    val orientation: Int,
     override val key: Any? = null,
-    val width: Int = 0,
-    val height: Int = 0
-) : Widget<View>() {
+    val gravity: Int,
+    val buildChildren: BuildContext.() -> Unit
+) : ViewGroupWidget<LinearLayout>() {
 
     init {
-        state(width, height)
+        state(orientation, gravity)
     }
 
-    override fun createView(container: ViewGroup) = View(container.context).apply {
-        layoutParams = ViewGroup.LayoutParams(this@Space.width, this@Space.height)
+    override fun createView(container: ViewGroup) = LinearLayout(container.context).apply {
+        orientation = this@Flex.orientation
+        gravity = this@Flex.gravity
+    }
+
+    override fun buildChildren() {
+        buildChildren.invoke(this)
     }
 
 }

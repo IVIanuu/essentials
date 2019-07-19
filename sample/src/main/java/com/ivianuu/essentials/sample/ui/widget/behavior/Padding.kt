@@ -30,6 +30,10 @@ open class Padding(
     val bottom: Int = 0
 ) : ViewGroupWidget<FrameLayout>() {
 
+    init {
+        state(left, top, right, bottom)
+    }
+
     constructor(
         child: Widget<*>,
         padding: Int
@@ -37,6 +41,12 @@ open class Padding(
 
     override fun createView(container: ViewGroup) = FrameLayout(container.context).apply {
         layoutParams = ViewGroup.LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
+        setPaddingRelative(
+            this@Padding.left,
+            this@Padding.top,
+            this@Padding.right,
+            this@Padding.bottom
+        )
     }
 
     override fun buildChildren() {

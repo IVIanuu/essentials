@@ -25,6 +25,10 @@ class Alpha(
     child: Widget<*>
 ) : HeadlessWidget(child) {
 
+    init {
+        state(alpha)
+    }
+
     override fun bind(view: View) {
         super.bind(view)
         view.alpha = alpha

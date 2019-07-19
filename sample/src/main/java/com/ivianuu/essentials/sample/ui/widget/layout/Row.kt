@@ -16,38 +16,12 @@
 
 package com.ivianuu.essentials.sample.ui.widget.layout
 
-import android.view.View
-import android.view.ViewGroup
+import android.view.Gravity
 import android.widget.LinearLayout
 import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
-import com.ivianuu.essentials.sample.ui.widget.lib.ViewGroupWidget
-import com.ivianuu.essentials.sample.ui.widget.lib.Widget
 
 open class Row(
-    override val key: Any? = null,
-    val buildChildren: BuildContext.() -> Unit
-) : ViewGroupWidget<LinearLayout>() {
-
-    override fun createView(container: ViewGroup): LinearLayout {
-        return LinearLayout(container.context).apply {
-            layoutParams = ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT
-            )
-            orientation = LinearLayout.HORIZONTAL
-        }
-    }
-
-    override fun getChildLayoutParams(
-        container: ViewGroup,
-        view: View,
-        widget: Widget<*>
-    ): ViewGroup.LayoutParams? {
-        return LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1f)
-    }
-
-    override fun buildChildren() {
-        buildChildren.invoke(this)
-    }
-
-}
+    key: Any? = null,
+    gravity: Int = Gravity.START or Gravity.CENTER_VERTICAL,
+    buildChildren: BuildContext.() -> Unit
+) : Flex(LinearLayout.HORIZONTAL, key, gravity, buildChildren)
