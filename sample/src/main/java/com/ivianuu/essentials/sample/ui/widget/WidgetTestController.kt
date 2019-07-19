@@ -46,6 +46,7 @@ class WidgetTestController : WidgetController() {
     }
 
     override fun BuildContext.buildChildren() {
+        d { "build children" }
         emit(
             AppBarScreen(
                 appBar = Toolbar(

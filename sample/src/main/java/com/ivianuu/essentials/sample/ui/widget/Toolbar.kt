@@ -16,33 +16,21 @@
 
 package com.ivianuu.essentials.sample.ui.widget
 
-import android.view.Gravity
 import android.view.ViewGroup
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.sample.ui.widget.lib.ViewGroupWidget
 import com.ivianuu.essentials.sample.ui.widget.lib.Widget
 import com.ivianuu.kommon.core.view.inflate
-import kotlinx.android.synthetic.main.view_toolbar.view.*
 
 open class Toolbar(
     val leading: Widget<*>? = null,
     val title: Widget<*>? = null,
-    val centerTitle: Boolean = false,
     val trailing: List<Widget<*>>? = null,
     override val key: Any? = null
 ) : ViewGroupWidget<ViewGroup>() {
 
     override fun createView(container: ViewGroup): ViewGroup =
         container.inflate<ViewGroup>(R.layout.view_toolbar)
-
-    override fun bind(view: ViewGroup) {
-        super.bind(view)
-        view.title_container.gravity = if (centerTitle) {
-            Gravity.CENTER
-        } else {
-            Gravity.START or Gravity.CENTER_VERTICAL
-        }
-    }
 
     override fun buildChildren() {
         super.buildChildren()

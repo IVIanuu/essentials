@@ -94,7 +94,7 @@ abstract class Widget<V : View> : BuildContext {
     override fun emit(widget: Widget<*>, containerId: Int?) {
         // todo check duplicate
         check(children == null || children!!.none { it.equalsIdentity(widget) }) {
-            "Cannot buildChildren twice please use 'Widget.key' to differentiate"
+            "Cannot add children twice please use 'Widget.key' to differentiate"
         }
         d { "emit ${javaClass.simpleName} -> ${widget.javaClass.simpleName}" }
         if (children == null) children = mutableListOf()

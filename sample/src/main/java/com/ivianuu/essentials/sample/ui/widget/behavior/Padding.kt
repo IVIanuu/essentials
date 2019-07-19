@@ -16,26 +16,27 @@
 
 package com.ivianuu.essentials.sample.ui.widget.behavior
 
-import android.view.View
-import com.ivianuu.essentials.sample.ui.widget.lib.HeadlessWidget
+import android.view.ViewGroup
+import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
+import android.widget.FrameLayout
+import com.ivianuu.essentials.sample.ui.widget.lib.ViewGroupWidget
 import com.ivianuu.essentials.sample.ui.widget.lib.Widget
 
 open class Padding(
-    child: Widget<*>,
+    val child: Widget<*>,
     val left: Int = 0,
     val top: Int = 0,
     val right: Int = 0,
     val bottom: Int = 0
-) : HeadlessWidget(child) {
+) : ViewGroupWidget<FrameLayout>() {
 
     constructor(
         child: Widget<*>,
         padding: Int
     ) : this(child, padding, padding, padding, padding)
 
-    override fun bind(view: View) {
-        super.bind(view)
-        view.setPaddingRelative(left, top, right, bottom)
+    override fun createView(container: ViewGroup) = FrameLayout(container.context).apply {
+        layoutParams = ViewGroup.LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
     }
 
     override fun buildChildren() {
