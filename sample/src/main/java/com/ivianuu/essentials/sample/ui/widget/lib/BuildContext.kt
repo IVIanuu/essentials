@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.sample.ui.widget.lib
 
 import android.view.ViewGroup
-import com.github.ajalt.timberkt.d
 
 interface BuildContext {
     val parent: BuildContext?
@@ -42,21 +41,17 @@ private class RootBuildContext(
     private var root = RootWidget()
 
     override fun invalidate() {
-        val newRoot = RootWidget()
+        root = RootWidget()
         buildWidgets()
-
-        root = newRoot
         val rootContainer = rootViewProvider()
         var rootView = rootContainer
-            .findViewByWidget(newRoot)
+            .findViewByWidget(root)
         if (rootView == null) {
-            rootView = newRoot.createView(rootContainer)
+            rootView = root.createView(rootContainer)
             rootContainer.addView(rootView)
         }
-        d { "layout new root $newRoot" }
-        newRoot.layout(rootContainer)
-        d { "bind new root $newRoot" }
-        newRoot.bind(rootContainer)
+        root.layout(rootContainer)
+        root.bind(rootContainer)
     }
 
     override fun emit(widget: Widget<*>, containerId: Int?) {

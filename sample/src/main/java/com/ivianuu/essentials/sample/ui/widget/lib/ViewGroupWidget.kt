@@ -59,16 +59,18 @@ abstract class ViewGroupWidget<V : ViewGroup> : Widget<V>() {
         oldChild: Widget<*>?
     ) {
         if (newChild != null && oldChild == null) {
-            newChild.addIfNeeded(newChild.containerOrElse(view))
+            newChild.addIfNeeded(view.findContainerForWidget(newChild))
         } else if (newChild != null && oldChild != null) {
-            if (newChild.equalsIdentity(oldChild)) {
-                newChild.addIfNeeded(newChild.containerOrElse(view))
+            if (newChild.containerId == oldChild.containerId
+                && newChild.equalsIdentity(oldChild)
+            ) {
+                newChild.addIfNeeded(view.findContainerForWidget(newChild))
             } else {
-                oldChild.removeIfPossible(newChild.containerOrElse(view))
-                newChild.addIfNeeded(newChild.containerOrElse(view))
+                oldChild.removeIfPossible(view.findContainerForWidget(oldChild))
+                newChild.addIfNeeded(view.findContainerForWidget(newChild))
             }
         } else if (newChild == null && oldChild != null) {
-            oldChild.removeIfPossible(oldChild.containerOrElse(view))
+            oldChild.removeIfPossible(view.findContainerForWidget(oldChild))
         }
     }
 

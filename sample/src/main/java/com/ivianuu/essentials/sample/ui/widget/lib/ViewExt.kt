@@ -27,6 +27,14 @@ val View.properties: Properties
     // todo unique tag
     get() = getTagOrSet(R.id.epoxy_saved_view_style) { Properties() }
 
+fun ViewGroup.findContainerForWidget(widget: Widget<*>): ViewGroup {
+    return if (widget.containerId != null) {
+        findViewById(widget.containerId!!)
+    } else {
+        this as ViewGroup
+    }
+}
+
 @JvmName("findViewByWidgetUntyped")
 fun View.findViewByWidget(widget: Widget<*>): View? =
     findViewByWidget<View>(widget)

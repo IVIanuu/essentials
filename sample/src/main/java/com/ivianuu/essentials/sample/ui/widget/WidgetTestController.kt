@@ -19,7 +19,6 @@ package com.ivianuu.essentials.sample.ui.widget
 import android.view.View
 import androidx.lifecycle.lifecycleScope
 import com.ivianuu.essentials.sample.R
-import com.ivianuu.essentials.sample.ui.widget.layout.ListView
 import com.ivianuu.essentials.sample.ui.widget.layout.Padding
 import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
 import com.ivianuu.essentials.ui.base.EsController
@@ -40,16 +39,17 @@ class WidgetTestController : EsController() {
     private val buildContext = BuildContext(
         rootViewProvider = { view.cast() }
     ) {
+        emit(Loading())
+        /*
         emit(
             AppBarScreen(
                 appBar = Toolbar(title = "Widget screen"),
                 content = if (loading) {
-                    Loading()
                 } else {
                     ListView { addListItems() }
                 }
             )
-        )
+        )*/
     }
 
     private fun BuildContext.addListItems() {
@@ -99,7 +99,7 @@ class WidgetTestController : EsController() {
         super.onCreate()
         lifecycleScope.launch {
             delay(2000)
-            loading = false
+            loading = true
             buildContext.invalidate()
         }
     }

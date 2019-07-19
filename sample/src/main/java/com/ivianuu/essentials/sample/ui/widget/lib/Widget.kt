@@ -50,9 +50,6 @@ abstract class Widget<V : View> : BuildContext {
         this.state!!.addAll(state)
     }
 
-    fun containerOrElse(container: View): ViewGroup =
-        containerId?.let { container.findViewById<ViewGroup>(it) } ?: container as ViewGroup
-
     fun equalsIdentity(other: Widget<*>): Boolean =
         type == other.type && key == other.key
 
