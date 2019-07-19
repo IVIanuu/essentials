@@ -23,10 +23,8 @@ import com.ivianuu.essentials.sample.ui.widget.lib.ViewGroupWidget
 
 open class Stack(
     override val key: Any? = null,
-    children: BuildContext.() -> Unit
+    val buildChildren: BuildContext.() -> Unit
 ) : ViewGroupWidget<FrameLayout>() {
-
-    private val _children = children
 
     override fun createView(container: ViewGroup): FrameLayout {
         return FrameLayout(container.context).apply {
@@ -37,8 +35,8 @@ open class Stack(
         }
     }
 
-    override fun children() {
-        _children()
+    override fun buildChildren() {
+        buildChildren.invoke(this)
     }
 
 }

@@ -32,13 +32,13 @@ fun BuildContext(
 
 class RootBuildContext(
     val view: ViewGroup,
-    private val buildWidgets: BuildContext.() -> Unit
+    buildChildren: BuildContext.() -> Unit
 ) : BuildContext {
 
     override val parent: BuildContext?
         get() = null
 
-    private val root = RootWidget(this)
+    private val root = RootWidget(this, buildChildren)
 
     init {
         val rootView = root.createView(view)
@@ -47,8 +47,7 @@ class RootBuildContext(
     }
 
     override fun invalidate() {
-        root.children?.clear()
-        buildWidgets()
+        root.rebuildChildren()
         root.dispatchLayout(view)
         root.dispatchBind(view)
     }

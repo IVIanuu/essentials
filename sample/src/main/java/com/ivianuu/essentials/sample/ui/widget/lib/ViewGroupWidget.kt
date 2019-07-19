@@ -27,7 +27,7 @@ abstract class ViewGroupWidget<V : ViewGroup> : Widget<V>() {
         val oldChildren = view.childrenWidgets
 
         if (children != oldChildren) {
-            // remove old children
+            // remove old buildChildren
             oldChildren?.forEach { oldChild ->
                 val newChild = children?.firstOrNull {
                     it.equalsIdentity(oldChild)
@@ -37,7 +37,7 @@ abstract class ViewGroupWidget<V : ViewGroup> : Widget<V>() {
                 }
             }
 
-            // add new children
+            // add new buildChildren
             children?.forEach { newChild ->
                 val oldChild = oldChildren?.firstOrNull {
                     it.equalsIdentity(newChild)
@@ -47,7 +47,7 @@ abstract class ViewGroupWidget<V : ViewGroup> : Widget<V>() {
 
             view.childrenWidgets = children
 
-            // layout children
+            // layout buildChildren
             children
                 ?.filterIsInstance<Widget<View>>()
                 ?.map { it to view.findViewByWidget(it)!! }

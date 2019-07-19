@@ -80,7 +80,7 @@ open class ListItem(
         view.isEnabled = onClick != null || onLongClick != null
     }
 
-    override fun children() {
+    override fun buildChildren() {
         if (primaryAction != null) emit(primaryAction, R.id.es_list_primary_action_container)
         if (secondaryAction != null) emit(secondaryAction, R.id.es_list_secondary_action_container)
     }

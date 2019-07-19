@@ -25,10 +25,8 @@ import com.ivianuu.essentials.sample.ui.widget.lib.Widget
 
 open class Row(
     override val key: Any? = null,
-    children: BuildContext.() -> Unit
+    val buildChildren: BuildContext.() -> Unit
 ) : ViewGroupWidget<LinearLayout>() {
-
-    private val _children = children
 
     override fun createView(container: ViewGroup): LinearLayout {
         return LinearLayout(container.context).apply {
@@ -48,8 +46,8 @@ open class Row(
         return LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1f)
     }
 
-    override fun children() {
-        _children()
+    override fun buildChildren() {
+        buildChildren.invoke(this)
     }
 
 }

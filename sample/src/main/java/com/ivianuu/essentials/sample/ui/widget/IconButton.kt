@@ -16,24 +16,3 @@
 
 package com.ivianuu.essentials.sample.ui.widget
 
-import android.view.ViewGroup
-import com.ivianuu.essentials.sample.R
-import com.ivianuu.essentials.sample.ui.widget.lib.ViewGroupWidget
-import com.ivianuu.essentials.sample.ui.widget.lib.Widget
-import com.ivianuu.kommon.core.view.inflate
-
-open class AppBarScreen(
-    val appBar: Widget<*>,
-    val content: Widget<*>,
-    override val key: Any? = null
-) : ViewGroupWidget<ViewGroup>() {
-
-    override fun createView(container: ViewGroup): ViewGroup =
-        container.inflate<ViewGroup>(R.layout.appbar_screen)
-
-    override fun buildChildren() {
-        emit(appBar, R.id.es_app_bar)
-        emit(content, R.id.content_container)
-    }
-
-}

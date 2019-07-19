@@ -44,10 +44,20 @@ class WidgetTestController : WidgetController() {
         }
     }
 
-    override fun BuildContext.buildWidgets() {
+    override fun BuildContext.buildChildren() {
         emit(
             AppBarScreen(
-                appBar = Toolbar(title = "Widget screen"),
+                appBar = Toolbar(
+                    title = Text(
+                        text = "Widget screen",
+                        textAppearance = R.style.TextAppearance_MaterialComponents_Headline6
+                    ),
+                    leading = Icon(iconRes = R.drawable.icon_back_white),
+                    trailing = listOf(
+                        Icon(key = "link", iconRes = R.drawable.es_ic_link),
+                        Icon(key = "torch", iconRes = R.drawable.es_ic_torch_on)
+                    )
+                ),
                 content = if (loading) {
                     Loading()
                 } else {

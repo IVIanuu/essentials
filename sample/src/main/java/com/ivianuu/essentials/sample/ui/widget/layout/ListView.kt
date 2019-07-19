@@ -33,7 +33,7 @@ import com.ivianuu.kommon.core.view.inflate
 
 open class ListView(
     override val key: Any? = null,
-    val buildList: BuildContext.() -> Unit
+    val buildChildren: BuildContext.() -> Unit
 ) : Widget<RecyclerView>() {
 
     override fun bind(view: RecyclerView) {
@@ -52,8 +52,8 @@ open class ListView(
         return view
     }
 
-    override fun children() {
-        buildList()
+    override fun buildChildren() {
+        buildChildren()
     }
 
 }

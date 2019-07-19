@@ -57,7 +57,12 @@ abstract class Widget<V : View> : BuildContext {
 
     abstract fun createView(container: ViewGroup): V
 
-    open fun children() {
+    open fun rebuildChildren() {
+        children?.clear()
+        buildChildren()
+    }
+
+    open fun buildChildren() {
     }
 
     protected fun state(vararg state: Any?) {
@@ -81,9 +86,7 @@ abstract class Widget<V : View> : BuildContext {
         val view = parentsStack.drop(1).fold<BuildContext, View>(
             rootView
         ) { view, context -> view.findViewByWidget(context.cast())!! }
-
-        children?.clear()
-        children()
+        rebuildChildren()
         layout(view as V)
         bind(view)
     }
@@ -91,13 +94,13 @@ abstract class Widget<V : View> : BuildContext {
     override fun emit(widget: Widget<*>, containerId: Int?) {
         // todo check duplicate
         check(children == null || children!!.none { it.equalsIdentity(widget) }) {
-            "Cannot children twice please use 'Widget.key' to differentiate"
+            "Cannot buildChildren twice please use 'Widget.key' to differentiate"
         }
         d { "emit ${javaClass.simpleName} -> ${widget.javaClass.simpleName}" }
         if (children == null) children = mutableListOf()
         widget.parent = this
         widget.containerId = containerId
-        widget.children()
+        widget.rebuildChildren()
         children!!.add(widget)
     }
 

@@ -31,7 +31,7 @@ abstract class WidgetController : EsController() {
 
     override fun onViewCreated(view: View) {
         super.onViewCreated(view)
-        buildContext = BuildContext(view.cast()) { buildWidgets() }
+        buildContext = BuildContext(view.cast()) { buildChildren() }
     }
 
     override fun onDestroyView(view: View) {
@@ -39,5 +39,5 @@ abstract class WidgetController : EsController() {
         super.onDestroyView(view)
     }
 
-    abstract fun BuildContext.buildWidgets()
+    abstract fun BuildContext.buildChildren()
 }

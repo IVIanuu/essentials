@@ -43,7 +43,7 @@ open class Margin(
         }
     }
 
-    override fun children() {
+    override fun buildChildren() {
         emit(child)
     }
 

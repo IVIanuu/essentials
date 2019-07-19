@@ -16,32 +16,39 @@
 
 package com.ivianuu.essentials.sample.ui.widget
 
+import android.view.Gravity
 import android.view.ViewGroup
-import androidx.appcompat.widget.Toolbar
 import com.ivianuu.essentials.sample.R
+import com.ivianuu.essentials.sample.ui.widget.lib.ViewGroupWidget
 import com.ivianuu.essentials.sample.ui.widget.lib.Widget
 import com.ivianuu.kommon.core.view.inflate
+import kotlinx.android.synthetic.main.view_toolbar.view.*
 
 open class Toolbar(
-    val title: String? = null,
-    val titleRes: Int? = null,
-    val subtitle: String? = null,
-    val subtitleRes: Int? = null,
+    val leading: Widget<*>? = null,
+    val title: Widget<*>? = null,
+    val centerTitle: Boolean = false,
+    val trailing: List<Widget<*>>? = null,
     override val key: Any? = null
-) : Widget<Toolbar>() {
+) : ViewGroupWidget<ViewGroup>() {
 
-    override fun createView(container: ViewGroup): Toolbar =
-        container.inflate<Toolbar>(R.layout.es_view_toolbar)
+    override fun createView(container: ViewGroup): ViewGroup =
+        container.inflate<ViewGroup>(R.layout.view_toolbar)
 
-    override fun bind(view: Toolbar) {
+    override fun bind(view: ViewGroup) {
         super.bind(view)
-        when {
-            title != null -> view.title = title
-            titleRes != null -> view.setTitle(titleRes)
-        }
-        when {
-            subtitle != null -> view.subtitle = title
-            subtitleRes != null -> view.setSubtitle(subtitleRes)
+        view.title_container.gravity = if (centerTitle) {
+            Gravity.CENTER
+        } else {
+            Gravity.START or Gravity.CENTER_VERTICAL
         }
     }
+
+    override fun buildChildren() {
+        super.buildChildren()
+        if (leading != null) emit(leading, R.id.leading_container)
+        if (title != null) emit(title, R.id.title_container)
+        trailing?.forEach { emit(it, R.id.trailing_container) }
+    }
+
 }

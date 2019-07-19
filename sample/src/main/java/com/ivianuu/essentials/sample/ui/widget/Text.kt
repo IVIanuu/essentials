@@ -14,32 +14,28 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.sample.ui.widget.behavior
+package com.ivianuu.essentials.sample.ui.widget
 
-import android.view.View
-import com.ivianuu.essentials.sample.ui.widget.lib.HeadlessWidget
+import android.view.ViewGroup
+import android.widget.TextView
 import com.ivianuu.essentials.sample.ui.widget.lib.Widget
 
-open class Padding(
-    child: Widget<*>,
-    val left: Int = 0,
-    val top: Int = 0,
-    val right: Int = 0,
-    val bottom: Int = 0
-) : HeadlessWidget(child) {
+class Text(
+    val text: String? = null,
+    val textRes: Int? = null,
+    val textAppearance: Int? = null
+) : Widget<TextView>() {
 
-    constructor(
-        child: Widget<*>,
-        padding: Int
-    ) : this(child, padding, padding, padding, padding)
-
-    override fun bind(view: View) {
+    override fun bind(view: TextView) {
         super.bind(view)
-        view.setPaddingRelative(left, top, right, bottom)
+        when {
+            text != null -> view.text = text
+            textRes != null -> view.setText(textRes)
+        }
+
+        if (textAppearance != null) view.setTextAppearance(textAppearance)
     }
 
-    override fun buildChildren() {
-        emit(child)
-    }
+    override fun createView(container: ViewGroup) = TextView(container.context)
 
 }

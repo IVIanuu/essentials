@@ -19,7 +19,14 @@ package com.ivianuu.essentials.sample.ui.widget.lib
 import android.view.ViewGroup
 import android.widget.FrameLayout
 
-internal class RootWidget(val rootBuildContext: RootBuildContext) : ViewGroupWidget<ViewGroup>() {
+internal class RootWidget(
+    val rootBuildContext: RootBuildContext,
+    val buildChildren: BuildContext.() -> Unit
+) : ViewGroupWidget<ViewGroup>() {
+
+    override fun buildChildren() {
+        buildChildren.invoke(this)
+    }
 
     override fun createView(container: ViewGroup): ViewGroup {
         return FrameLayout(container.context).apply {
