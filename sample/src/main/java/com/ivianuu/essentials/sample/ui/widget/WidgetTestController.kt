@@ -16,34 +16,35 @@
 
 package com.ivianuu.essentials.sample.ui.widget
 
-import android.view.View
 import androidx.lifecycle.lifecycleScope
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.sample.ui.widget.behavior.Alpha
 import com.ivianuu.essentials.sample.ui.widget.behavior.BlockTouches
 import com.ivianuu.essentials.sample.ui.widget.behavior.Margin
+import com.ivianuu.essentials.sample.ui.widget.es.WidgetController
 import com.ivianuu.essentials.sample.ui.widget.layout.Column
 import com.ivianuu.essentials.sample.ui.widget.layout.Row
 import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
-import com.ivianuu.essentials.ui.base.EsController
-import com.ivianuu.essentials.util.cast
 import com.ivianuu.essentials.util.dp
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class WidgetTestController : EsController() {
-
-    override val layoutRes: Int
-        get() = R.layout.controller_widget
-
+class WidgetTestController : WidgetController() {
     private var loading = true
 
     private val checkedIndices = mutableSetOf<Int>()
 
-    private val buildContext = BuildContext(
-        rootViewProvider = { view.cast() }
-    ) {
+    override fun onCreate() {
+        super.onCreate()
+        lifecycleScope.launch {
+            delay(2000)
+            loading = false
+            buildContext?.invalidate()
+        }
+    }
+
+    override fun BuildContext.buildWidgets() {
         emit(
             AppBarScreen(
                 appBar = Toolbar(title = "Widget screen"),
@@ -128,26 +129,12 @@ class WidgetTestController : EsController() {
         }
     }
 
-    override fun onCreate() {
-        super.onCreate()
-        lifecycleScope.launch {
-            delay(2000)
-            loading = false
-            buildContext.invalidate()
-        }
-    }
-
-    override fun onAttach(view: View) {
-        super.onAttach(view)
-        buildContext.invalidate()
-    }
-
     private fun toggle(index: Int) {
         if (checkedIndices.contains(index)) {
             checkedIndices.remove(index)
         } else {
             checkedIndices.add(index)
         }
-        buildContext.invalidate()
+        buildContext?.invalidate()
     }
 }

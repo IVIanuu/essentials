@@ -76,8 +76,7 @@ abstract class Widget<V : View> : BuildContext {
 
         parentsStack.reverse()
 
-        val rootView = parentsStack.first().cast<RootWidget>()
-            .rootBuildContext.rootViewProvider()
+        val rootView = parentsStack.first().cast<RootWidget>().rootBuildContext.view
 
         val view = parentsStack.drop(1).fold<BuildContext, View>(
             rootView

@@ -26,32 +26,31 @@ interface BuildContext {
 }
 
 fun BuildContext(
-    rootViewProvider: () -> ViewGroup,
+    view: ViewGroup,
     buildWidgets: BuildContext.() -> Unit
-): BuildContext = RootBuildContext(rootViewProvider, buildWidgets)
+): BuildContext = RootBuildContext(view, buildWidgets)
 
 class RootBuildContext(
-    val rootViewProvider: () -> ViewGroup,
+    val view: ViewGroup,
     private val buildWidgets: BuildContext.() -> Unit
 ) : BuildContext {
 
     override val parent: BuildContext?
         get() = null
 
-    private var root = RootWidget(this)
+    private val root = RootWidget(this)
+
+    init {
+        val rootView = root.createView(view)
+        view.addView(rootView)
+        invalidate()
+    }
 
     override fun invalidate() {
-        root = RootWidget(this)
+        root.children?.clear()
         buildWidgets()
-        val rootContainer = rootViewProvider()
-        var rootView = rootContainer
-            .findViewByWidget(root)
-        if (rootView == null) {
-            rootView = root.createView(rootContainer)
-            rootContainer.addView(rootView)
-        }
-        root.dispatchLayout(rootContainer)
-        root.dispatchBind(rootContainer)
+        root.dispatchLayout(view)
+        root.dispatchBind(view)
     }
 
     override fun emit(widget: Widget<*>, containerId: Int?) {
