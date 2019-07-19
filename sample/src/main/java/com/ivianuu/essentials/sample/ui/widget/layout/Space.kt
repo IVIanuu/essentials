@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.sample.ui.widget.behavior
+package com.ivianuu.essentials.sample.ui.widget.layout
 
 import android.view.View
 import android.view.ViewGroup
 import com.ivianuu.essentials.sample.ui.widget.lib.Widget
 
-class Space(
+open class Space(
     override val key: Any? = null,
     val width: Int = 0,
     val height: Int = 0

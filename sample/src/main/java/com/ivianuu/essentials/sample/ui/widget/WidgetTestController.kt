@@ -22,11 +22,12 @@ import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.sample.ui.widget.behavior.Alpha
 import com.ivianuu.essentials.sample.ui.widget.behavior.BlockTouches
-import com.ivianuu.essentials.sample.ui.widget.behavior.Padding
-import com.ivianuu.essentials.sample.ui.widget.behavior.Space
 import com.ivianuu.essentials.sample.ui.widget.es.WidgetController
 import com.ivianuu.essentials.sample.ui.widget.layout.Column
+import com.ivianuu.essentials.sample.ui.widget.layout.Container
+import com.ivianuu.essentials.sample.ui.widget.layout.Padding
 import com.ivianuu.essentials.sample.ui.widget.layout.Row
+import com.ivianuu.essentials.sample.ui.widget.layout.Space
 import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
 import com.ivianuu.essentials.util.dp
 import kotlinx.coroutines.delay
@@ -93,7 +94,12 @@ class WidgetTestController : WidgetController() {
                                         )
                                     )
                                 )
-                                emit(Space(key = "1", width = dp(8).toInt()))
+                                emit(
+                                    Space(
+                                        key = "1",
+                                        width = dp(8).toInt()
+                                    )
+                                )
                                 emit(
                                     Alpha(
                                         alpha = 0.5f,
@@ -106,7 +112,12 @@ class WidgetTestController : WidgetController() {
                                         )
                                     )
                                 )
-                                emit(Space(key = "2", width = dp(8).toInt()))
+                                emit(
+                                    Space(
+                                        key = "2",
+                                        width = dp(8).toInt()
+                                    )
+                                )
                                 emit(
                                     BlockTouches(
                                         child = MaterialButton(
@@ -119,6 +130,17 @@ class WidgetTestController : WidgetController() {
                                     )
                                 )
                             }
+                        )
+
+                        emit(
+                            Container(
+                                height = dp(300).toInt(),
+                                width = dp(300).toInt(),
+                                gravity = Gravity.CENTER,
+                                child = MaterialButton(
+                                    text = "Click me"
+                                )
+                            )
                         )
                     }
                 }

@@ -16,32 +16,28 @@
 
 package com.ivianuu.essentials.sample.ui.widget.layout
 
+import android.view.Gravity
 import android.view.ViewGroup
+import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.LinearLayout
-import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget.lib.ViewGroupWidget
+import com.ivianuu.essentials.sample.ui.widget.lib.Widget
 
-open class Flex(
-    val orientation: Int,
-    override val key: Any? = null,
+open class Align(
+    val child: Widget<*>,
     val gravity: Int,
-    val buildChildren: BuildContext.() -> Unit
+    override val key: Any? = null
 ) : ViewGroupWidget<LinearLayout>() {
-
-    init {
-        state(orientation, gravity)
-    }
 
     override fun bind(view: LinearLayout) {
         super.bind(view)
-        view.orientation = orientation
         view.gravity = gravity
     }
 
-    override fun createView(container: ViewGroup) = LinearLayout(container.context)
-
-    override fun buildChildren() {
-        buildChildren.invoke(this)
+    override fun createView(container: ViewGroup) = LinearLayout(container.context).apply {
+        layoutParams = ViewGroup.LayoutParams(MATCH_PARENT, MATCH_PARENT)
     }
 
 }
+
+open class Center(child: Widget<*>, key: Any? = null) : Align(child, Gravity.CENTER, key)

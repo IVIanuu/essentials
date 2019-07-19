@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.sample.ui.widget.behavior
+package com.ivianuu.essentials.sample.ui.widget.layout
 
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.FrameLayout
+import androidx.core.view.updatePaddingRelative
 import com.ivianuu.essentials.sample.ui.widget.lib.ViewGroupWidget
 import com.ivianuu.essentials.sample.ui.widget.lib.Widget
 
@@ -39,14 +40,17 @@ open class Padding(
         padding: Int
     ) : this(child, padding, padding, padding, padding)
 
+    override fun bind(view: FrameLayout) {
+        super.bind(view)
+        if (view.paddingLeft != left || view.paddingTop != top
+            || view.paddingRight != right || view.paddingBottom != bottom
+        ) {
+            view.updatePaddingRelative(left, top, right, bottom)
+        }
+    }
+
     override fun createView(container: ViewGroup) = FrameLayout(container.context).apply {
         layoutParams = ViewGroup.LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
-        setPaddingRelative(
-            this@Padding.left,
-            this@Padding.top,
-            this@Padding.right,
-            this@Padding.bottom
-        )
     }
 
     override fun buildChildren() {
