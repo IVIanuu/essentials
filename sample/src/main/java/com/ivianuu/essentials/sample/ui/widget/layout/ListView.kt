@@ -69,7 +69,7 @@ private class WidgetEpoxyController :
 
 private data class WidgetEpoxyModel(
     private val widget: Widget<*>
-) : SimpleModel(id = widget.type to widget.key) {
+) : SimpleModel(id = widget::class to widget.key) {
 
     override fun bind(holder: EsHolder) {
         super.bind(holder)
@@ -80,7 +80,7 @@ private data class WidgetEpoxyModel(
     override fun getViewType(): Int = widget.getViewType()
 
     private fun Widget<*>.getViewType(): Int =
-        (type.hashCode()) + (children?.map { it.getViewType() }?.sum() ?: 0)
+        (widget::class.hashCode()) + (children?.map { it.getViewType() }?.sum() ?: 0)
 
     override fun buildView(parent: ViewGroup): View {
         val view = widget.createView(parent)

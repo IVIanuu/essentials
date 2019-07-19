@@ -23,7 +23,6 @@ import com.ivianuu.essentials.util.cast
 
 abstract class Widget<V : View> : BuildContext {
 
-    val type: Any = javaClass
     open val key: Any? = null
 
     override var parent: Widget<*>? = null
@@ -74,7 +73,7 @@ abstract class Widget<V : View> : BuildContext {
     }
 
     fun equalsIdentity(other: Widget<*>): Boolean =
-        type == other.type && key == other.key
+        this::class == other::class && key == other.key
 
     override fun invalidate() {
         val parentsStack = mutableListOf<BuildContext>(this)
@@ -107,7 +106,6 @@ abstract class Widget<V : View> : BuildContext {
         if (this === other) return true
         if (other !is Widget<*>) return false
 
-        if (type != other.type) return false
         if (key != other.key) return false
         if (state != other.state) return false
         if (containerId != other.containerId) return false
@@ -117,8 +115,7 @@ abstract class Widget<V : View> : BuildContext {
     }
 
     override fun hashCode(): Int {
-        var result = type.hashCode()
-        result = 31 * result + (key?.hashCode() ?: 0)
+        var result = (key?.hashCode() ?: 0)
         result = 31 * result + (state?.hashCode() ?: 0)
         result = 31 * result + (containerId ?: 0)
         result = 31 * result + (children?.hashCode() ?: 0)
