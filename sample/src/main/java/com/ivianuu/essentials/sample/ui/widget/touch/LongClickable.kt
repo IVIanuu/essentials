@@ -14,10 +14,21 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.sample.ui.widget.behavior
+package com.ivianuu.essentials.sample.ui.widget.touch
 
+import android.view.View
+import com.ivianuu.essentials.sample.ui.widget.lib.HeadlessWidget
 import com.ivianuu.essentials.sample.ui.widget.lib.Widget
+import com.ivianuu.essentials.util.andTrue
 
-class BlockTouches(
-    child: Widget<*>
-) : Touchable(child, { true })
+open class LongClickable(
+    child: Widget<*>,
+    val onLongClick: () -> Unit
+) : HeadlessWidget(child) {
+
+    override fun bind(view: View) {
+        super.bind(view)
+        view.setOnLongClickListener { onLongClick().andTrue() }
+    }
+
+}

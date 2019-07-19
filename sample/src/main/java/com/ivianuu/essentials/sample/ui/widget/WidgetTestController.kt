@@ -21,7 +21,6 @@ import androidx.lifecycle.lifecycleScope
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.sample.ui.widget.behavior.Alpha
-import com.ivianuu.essentials.sample.ui.widget.behavior.BlockTouches
 import com.ivianuu.essentials.sample.ui.widget.es.WidgetController
 import com.ivianuu.essentials.sample.ui.widget.layout.Column
 import com.ivianuu.essentials.sample.ui.widget.layout.Container
@@ -35,6 +34,7 @@ import com.ivianuu.essentials.sample.ui.widget.material.Checkbox
 import com.ivianuu.essentials.sample.ui.widget.material.MaterialButton
 import com.ivianuu.essentials.sample.ui.widget.material.RadioButton
 import com.ivianuu.essentials.sample.ui.widget.material.Toolbar
+import com.ivianuu.essentials.sample.ui.widget.touch.BlockTouches
 import com.ivianuu.essentials.util.dp
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch

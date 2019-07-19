@@ -14,21 +14,10 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.sample.ui.widget.behavior
+package com.ivianuu.essentials.sample.ui.widget.touch
 
-import android.view.MotionEvent
-import android.view.View
-import com.ivianuu.essentials.sample.ui.widget.lib.HeadlessWidget
 import com.ivianuu.essentials.sample.ui.widget.lib.Widget
 
-open class Touchable(
-    child: Widget<*>,
-    val onTouch: (MotionEvent) -> Boolean
-) : HeadlessWidget(child) {
-
-    override fun bind(view: View) {
-        super.bind(view)
-        view.setOnTouchListener { _, event -> onTouch(event) }
-    }
-
-}
+class BlockTouches(
+    child: Widget<*>
+) : Touchable(child, { true })

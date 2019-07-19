@@ -14,24 +14,21 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.sample.ui.widget
+package com.ivianuu.essentials.sample.ui.widget.touch
 
-import android.graphics.drawable.Drawable
+import android.view.MotionEvent
+import android.view.View
 import com.ivianuu.essentials.sample.ui.widget.lib.HeadlessWidget
-import com.ivianuu.essentials.sample.ui.widget.touch.Clickable
+import com.ivianuu.essentials.sample.ui.widget.lib.Widget
 
-class IconButton(
-    key: Any? = null,
-    icon: Drawable? = null,
-    iconRes: Int? = null,
-    onClick: () -> Unit
-) : HeadlessWidget(
-    Clickable(
-        child = Icon(
-            icon = icon,
-            iconRes = iconRes,
-            key = key
-        ),
-        onClick = onClick
-    )
-)
+open class Touchable(
+    child: Widget<*>,
+    val onTouch: (MotionEvent) -> Boolean
+) : HeadlessWidget(child) {
+
+    override fun bind(view: View) {
+        super.bind(view)
+        view.setOnTouchListener { _, event -> onTouch(event) }
+    }
+
+}

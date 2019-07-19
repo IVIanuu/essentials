@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.sample.ui.widget.behavior
+package com.ivianuu.essentials.sample.ui.widget.touch
 
 import android.view.View
 import com.ivianuu.essentials.sample.ui.widget.lib.HeadlessWidget
