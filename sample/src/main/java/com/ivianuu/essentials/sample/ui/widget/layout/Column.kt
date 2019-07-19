@@ -21,6 +21,7 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget.lib.ViewGroupWidget
+import com.ivianuu.essentials.sample.ui.widget.lib.Widget
 
 open class Column(
     override val key: Any? = null,
@@ -39,7 +40,11 @@ open class Column(
         }
     }
 
-    override fun getChildLayoutParams(container: ViewGroup, view: View): ViewGroup.LayoutParams {
+    override fun getChildLayoutParams(
+        container: ViewGroup,
+        view: View,
+        widget: Widget<*>
+    ): ViewGroup.LayoutParams? {
         return LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 1f)
     }
 

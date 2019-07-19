@@ -31,9 +31,15 @@ fun ViewGroup.findContainerForWidget(widget: Widget<*>): ViewGroup {
     return if (widget.containerId != null) {
         findViewById(widget.containerId!!)
     } else {
-        this as ViewGroup
+        this
     }
 }
+
+var View.childrenWidgets: List<Widget<*>>?
+    get() = properties.get<List<Widget<*>>>("children_widgets")
+    set(value) {
+        properties.set("children_widgets", value)
+    }
 
 var View.boundWidget: Widget<*>?
     get() = properties.get<Widget<*>>("bound_widget")
