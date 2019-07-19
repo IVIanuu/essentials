@@ -37,11 +37,6 @@ abstract class HeadlessWidget(
         child.cast<Widget<View>>().bind(view)
     }
 
-    override fun unbind(view: View) {
-        super.unbind(view)
-        child.cast<Widget<View>>().unbind(view)
-    }
-
     override fun createView(container: ViewGroup): View = child.createView(container)
 
     override fun children() {

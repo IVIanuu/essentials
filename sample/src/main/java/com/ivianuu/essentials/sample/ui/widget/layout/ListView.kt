@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.sample.ui.widget
+package com.ivianuu.essentials.sample.ui.widget.layout
 
 import android.view.View
 import android.view.ViewGroup
@@ -41,13 +41,6 @@ open class ListView(
         val epoxyController =
             view.properties.get<WidgetEpoxyController>("epoxy_controller")!!
         epoxyController.setData(children)
-    }
-
-    override fun unbind(view: RecyclerView) {
-        super.unbind(view)
-        val epoxyController =
-            view.properties.get<WidgetEpoxyController>("epoxy_controller")!!
-        epoxyController.cancelPendingModelBuild()
     }
 
     override fun createView(container: ViewGroup): RecyclerView {
@@ -82,12 +75,6 @@ private data class WidgetEpoxyModel(
         super.bind(holder)
         d { "epoxy bind ${widget.javaClass.simpleName}" }
         widget.cast<Widget<View>>().bind(holder.root)
-    }
-
-    override fun unbind(holder: EsHolder) {
-        super.unbind(holder)
-        d { "epoxy unbind ${widget.javaClass.simpleName}" }
-        widget.cast<Widget<View>>().unbind(holder.root)
     }
 
     override fun getViewType(): Int = widget.getViewType()

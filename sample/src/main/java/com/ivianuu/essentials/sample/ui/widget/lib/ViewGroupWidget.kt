@@ -118,14 +118,4 @@ abstract class ViewGroupWidget<V : ViewGroup> : Widget<V>() {
             }
     }
 
-    override fun unbind(view: V) {
-        super.unbind(view)
-        children
-            ?.filterIsInstance<Widget<View>>()
-            ?.map { it to view.findViewByWidget(it)!! }
-            ?.forEach { (child, childView) ->
-                child.unbind(childView)
-            }
-    }
-
 }

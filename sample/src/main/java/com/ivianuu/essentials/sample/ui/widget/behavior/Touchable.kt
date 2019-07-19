@@ -31,9 +31,4 @@ open class Touchable(
         view.setOnTouchListener { _, event -> onTouch(event) }
     }
 
-    override fun unbind(view: View) {
-        view.setOnTouchListener(null)
-        super.unbind(view)
-    }
-
 }

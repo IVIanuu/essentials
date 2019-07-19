@@ -30,9 +30,4 @@ open class Clickable(
         view.setOnClickListener { onClick() }
     }
 
-    override fun unbind(view: View) {
-        view.setOnClickListener(null)
-        super.unbind(view)
-    }
-
 }

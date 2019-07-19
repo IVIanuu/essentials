@@ -40,10 +40,6 @@ abstract class Widget<V : View> : BuildContext {
         d { "bind ${javaClass.simpleName} -> ${view.javaClass.simpleName}" }
     }
 
-    open fun unbind(view: V) {
-        d { "unbind ${javaClass.simpleName} -> ${view.javaClass.simpleName}" }
-    }
-
     abstract fun createView(container: ViewGroup): V
 
     open fun children() {

@@ -41,9 +41,4 @@ open class Checkbox(
         view.setOnClickListener { onChange(!value) }
     }
 
-    override fun unbind(view: CheckBox) {
-        super.unbind(view)
-        view.setOnCheckedChangeListener(null)
-    }
-
 }
