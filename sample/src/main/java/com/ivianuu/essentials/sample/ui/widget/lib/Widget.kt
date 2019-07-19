@@ -34,7 +34,7 @@ abstract class Widget<V : View> : BuildContext {
     private var state: MutableList<Any?>? = null
 
     open fun dispatchLayout(view: V) {
-        d { "${javaClass.simpleName} dispatch layout ${view.laidOutWidget != this} | this $this laid out ${view.laidOutWidget}\" }" }
+        d { "${javaClass.simpleName} dispatch layout ${view.laidOutWidget != this}" }
         if (view.laidOutWidget != this) {
             layout(view)
             view.laidOutWidget = this
@@ -46,7 +46,7 @@ abstract class Widget<V : View> : BuildContext {
     }
 
     open fun dispatchBind(view: V) {
-        d { "${javaClass.simpleName} dispatch bind ${view.boundWidget != this} | this $this bound ${view.boundWidget}" }
+        d { "${javaClass.simpleName} dispatch bind ${view.boundWidget != this}" }
         if (view.boundWidget != this) {
             bind(view)
             view.boundWidget = this
@@ -60,12 +60,12 @@ abstract class Widget<V : View> : BuildContext {
     abstract fun createView(container: ViewGroup): V
 
     open fun rebuildChildren() {
-        d { "${javaClass.simpleName} rebuild children" }
         children?.clear()
         buildChildren()
     }
 
     open fun buildChildren() {
+        d { "${javaClass.simpleName} build children" }
     }
 
     protected fun state(vararg state: Any?) {
@@ -119,11 +119,10 @@ abstract class Widget<V : View> : BuildContext {
     override fun hashCode(): Int {
         var result = type.hashCode()
         result = 31 * result + (key?.hashCode() ?: 0)
-        result = 31 * result + (children?.hashCode() ?: 0)
-        result = 31 * result + (containerId ?: 0)
         result = 31 * result + (state?.hashCode() ?: 0)
+        result = 31 * result + (containerId ?: 0)
+        result = 31 * result + (children?.hashCode() ?: 0)
         return result
     }
-
 
 }

@@ -57,27 +57,7 @@ class WidgetTestController : WidgetController() {
         d { "build children" }
         emit(
             AppBarScreen(
-                appBar = Toolbar(
-                    title = Text(
-                        text = "Widget screen",
-                        textAppearance = R.style.TextAppearance_MaterialComponents_Headline6
-                    ),
-                    leading = IconButton(
-                        iconRes = R.drawable.icon_back_white,
-                        onClick = { navigator.pop() }
-                    ),
-                    trailing = listOf(
-                        IconButton(
-                            iconRes = R.drawable.es_ic_link,
-                            onClick = { d { "link clicked" } }
-                        ),
-                        Space(width = dp(16).toInt()),
-                        IconButton(
-                            iconRes = R.drawable.es_ic_torch_on,
-                            onClick = { d { "torch clicked" } }
-                        )
-                    )
-                ),
+                appBar = AppBar(),
                 content = if (loading) {
                     Loading()
                 } else {
@@ -144,6 +124,28 @@ class WidgetTestController : WidgetController() {
         )
     }
 
+    private fun AppBar() = Toolbar(
+        title = Text(
+            text = "Widget screen",
+            textAppearance = R.style.TextAppearance_MaterialComponents_Headline6
+        ),
+        leading = IconButton(
+            iconRes = R.drawable.icon_back_white,
+            onClick = { navigator.pop() }
+        ),
+        trailing = listOf(
+            IconButton(
+                iconRes = R.drawable.es_ic_link,
+                onClick = { d { "link clicked" } }
+            ),
+            Space(width = dp(16).toInt()),
+            IconButton(
+                iconRes = R.drawable.es_ic_torch_on,
+                onClick = { d { "torch clicked" } }
+            )
+        )
+    )
+
     private fun BuildContext.addListItems() {
         var wasCheckBox = false
         (0..2).forEach { index ->
@@ -152,8 +154,9 @@ class WidgetTestController : WidgetController() {
                     key = index,
                     title = "Title $index",
                     text = "Text $index",
-                    primaryAction = Icon(
-                        iconRes = R.drawable.es_ic_torch_on
+                    primaryAction = Padding(
+                        left = dp(16).toInt(),
+                        child = Icon(iconRes = R.drawable.es_ic_torch_on)
                     ),
                     secondaryAction = if (wasCheckBox) {
                         RadioButton(

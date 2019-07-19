@@ -63,11 +63,7 @@ var View.widget: Widget<*>?
 fun View.findViewByWidget(widget: Widget<*>): View? =
     findViewByWidget<View>(widget)
 
-fun <T : View> View.findViewByWidget(widget: Widget<*>): T? {
-    return findViewByWidgetTraversal<T>(widget)
-}
-
-private fun <T : View> View.findViewByWidgetTraversal(widget: Widget<*>): T? {
+private fun <T : View> View.findViewByWidget(widget: Widget<*>): T? {
     if (this.widget == widget) return this as? T
 
     if (this is ViewGroup) {

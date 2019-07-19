@@ -94,7 +94,9 @@ abstract class ViewGroupWidget<V : ViewGroup> : Widget<V>() {
     ) {
         val container = view.findContainerForWidget(newWidget)
         var childView = container.findViewByWidget(newWidget)
-        if (childView == null && oldChild != null) container.findContainerForWidget(oldChild)
+        if (childView == null && oldChild != null) {
+            childView = container.findViewByWidget(oldChild)
+        }
         d { "add if needed ${newWidget.javaClass.simpleName} ${childView == null}" }
         if (childView == null) {
             childView = newWidget.createView(container)
