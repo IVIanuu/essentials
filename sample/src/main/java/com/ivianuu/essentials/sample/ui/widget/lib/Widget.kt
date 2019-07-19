@@ -67,12 +67,7 @@ abstract class Widget<V : View> : BuildContext {
 
         val view = parentsStack.drop(1).fold<BuildContext, View>(
             rootView
-        ) { view, context ->
-            view.findViewByWidget(context.cast())!!
-                .also {
-                    d { "fold ${it.javaClass.simpleName} to ${context.javaClass.simpleName}" }
-                }
-        }
+        ) { view, context -> view.findViewByWidget(context.cast())!! }
 
         children?.clear()
         children()
