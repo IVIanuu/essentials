@@ -20,9 +20,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.ivianuu.essentials.util.cast
 
-abstract class HeadlessWidget(
-    val child: Widget<*>
-) : Widget<View>() {
+abstract class HeadlessWidget(val child: Widget<*>) : Widget<View>() {
 
     override val key: Any?
         get() = child.key
