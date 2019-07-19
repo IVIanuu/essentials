@@ -68,13 +68,11 @@ class WidgetTestController : WidgetController() {
                     ),
                     trailing = listOf(
                         IconButton(
-                            key = "link",
                             iconRes = R.drawable.es_ic_link,
                             onClick = { d { "link clicked" } }
                         ),
                         Space(width = dp(16).toInt()),
                         IconButton(
-                            key = "torch",
                             iconRes = R.drawable.es_ic_torch_on,
                             onClick = { d { "torch clicked" } }
                         )
@@ -100,12 +98,7 @@ class WidgetTestController : WidgetController() {
                                         )
                                     )
                                 )
-                                emit(
-                                    Space(
-                                        key = "1",
-                                        width = dp(8).toInt()
-                                    )
-                                )
+                                emit(Space(width = dp(8).toInt()))
                                 emit(
                                     Alpha(
                                         alpha = 0.5f,
@@ -118,16 +111,10 @@ class WidgetTestController : WidgetController() {
                                         )
                                     )
                                 )
-                                emit(
-                                    Space(
-                                        key = "2",
-                                        width = dp(8).toInt()
-                                    )
-                                )
+                                emit(Space(width = dp(8).toInt()))
                                 emit(
                                     BlockTouches(
                                         child = MaterialButton(
-                                            key = "3",
                                             text = "Button 3",
                                             onClick = {
                                                 d { "button 3 clicked" }

@@ -25,6 +25,7 @@ internal class RootWidget(
 ) : ViewGroupWidget<ViewGroup>() {
 
     override fun buildChildren() {
+        super.buildChildren()
         buildChildren.invoke(this)
     }
 

@@ -34,7 +34,7 @@ abstract class Widget<V : View> : BuildContext {
     private var state: MutableList<Any?>? = null
 
     open fun dispatchLayout(view: V) {
-        d { "${javaClass.simpleName} dispatch layout ${view.laidOutWidget != this}" }
+        d { "${javaClass.simpleName} dispatch layout ${view.laidOutWidget != this} | this $this laid out ${view.laidOutWidget}\" }" }
         if (view.laidOutWidget != this) {
             layout(view)
             view.laidOutWidget = this
@@ -46,7 +46,7 @@ abstract class Widget<V : View> : BuildContext {
     }
 
     open fun dispatchBind(view: V) {
-        d { "${javaClass.simpleName} dispatch bind ${view.boundWidget != this}" }
+        d { "${javaClass.simpleName} dispatch bind ${view.boundWidget != this} | this $this bound ${view.boundWidget}" }
         if (view.boundWidget != this) {
             bind(view)
             view.boundWidget = this
@@ -60,6 +60,7 @@ abstract class Widget<V : View> : BuildContext {
     abstract fun createView(container: ViewGroup): V
 
     open fun rebuildChildren() {
+        d { "${javaClass.simpleName} rebuild children" }
         children?.clear()
         buildChildren()
     }
@@ -94,10 +95,6 @@ abstract class Widget<V : View> : BuildContext {
     }
 
     override fun emit(widget: Widget<*>, containerId: Int?) {
-        // todo check duplicate
-        check(children == null || children!!.none { it.equalsIdentity(widget) }) {
-            "Cannot add children twice please use 'Widget.key' to differentiate"
-        }
         d { "emit ${javaClass.simpleName} -> ${widget.javaClass.simpleName}" }
         if (children == null) children = mutableListOf()
         widget.parent = this
@@ -112,9 +109,9 @@ abstract class Widget<V : View> : BuildContext {
 
         if (type != other.type) return false
         if (key != other.key) return false
-        if (children != other.children) return false
-        if (containerId != other.containerId) return false
         if (state != other.state) return false
+        if (containerId != other.containerId) return false
+        if (children != other.children) return false
 
         return true
     }

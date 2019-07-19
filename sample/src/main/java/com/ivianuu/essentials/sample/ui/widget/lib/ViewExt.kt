@@ -53,30 +53,29 @@ var View.laidOutWidget: Widget<*>?
         properties.set("laid_out_widget", value)
     }
 
+var View.widget: Widget<*>?
+    get() = properties.get<Widget<*>>("widget")
+    set(value) {
+        properties.set("widget", value)
+    }
+
 @JvmName("findViewByWidgetUntyped")
 fun View.findViewByWidget(widget: Widget<*>): View? =
     findViewByWidget<View>(widget)
 
 fun <T : View> View.findViewByWidget(widget: Widget<*>): T? {
-    val id = widget.type.hashCode() + (widget.key?.hashCode() ?: 0)
-    return findViewByWidgetIdTraversal<T>(id)
+    return findViewByWidgetTraversal<T>(widget)
 }
 
-private fun <T : View> View.findViewByWidgetIdTraversal(widgetId: Int): T? {
-    if (this.getWidgetId() == widgetId) return this as? T
+private fun <T : View> View.findViewByWidgetTraversal(widget: Widget<*>): T? {
+    if (this.widget == widget) return this as? T
 
     if (this is ViewGroup) {
         for (child in children.iterator()) {
-            val result = child.findViewByWidgetIdTraversal<T>(widgetId)
+            val result = child.findViewByWidget<T>(widget)
             if (result != null) return result
         }
     }
 
     return null
-}
-
-fun View.getWidgetId(): Int? = properties.get("id")
-
-fun View.setWidget(widget: Widget<*>) {
-    properties.set("id", widget.type.hashCode() + (widget.key?.hashCode() ?: 0))
 }

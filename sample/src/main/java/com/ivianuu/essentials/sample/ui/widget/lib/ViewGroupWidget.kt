@@ -45,7 +45,7 @@ abstract class ViewGroupWidget<V : ViewGroup> : Widget<V>() {
                 layoutChild(view, newChild, oldChild)
             }
 
-            view.childrenWidgets = children
+            view.childrenWidgets = children?.toList()
 
             // layout children
             children
@@ -63,17 +63,17 @@ abstract class ViewGroupWidget<V : ViewGroup> : Widget<V>() {
         d { "${javaClass.simpleName} layout child | new ${newChild?.javaClass?.simpleName} old ${oldChild?.javaClass?.simpleName}" }
         if (newChild != null && oldChild == null) {
             d { "${javaClass.simpleName} new not null, old null -> add new if needed" }
-            addChildView(view, newChild)
+            addChildView(view, newChild, null)
         } else if (newChild != null && oldChild != null) {
             if (newChild.equalsIdentity(oldChild) &&
                 newChild.containerId == oldChild.containerId
             ) {
                 d { "${javaClass.simpleName} both not null, same container, same identity -> add" }
-                addChildView(view, newChild)
+                addChildView(view, newChild, oldChild)
             } else {
                 d { "${javaClass.simpleName} both not null, not same container or identity -> add new, remove old" }
                 removeChildView(view, oldChild)
-                addChildView(view, newChild)
+                addChildView(view, newChild, null)
             }
         } else if (newChild == null && oldChild != null) {
             d { "${javaClass.simpleName} new null, old not null -> remove old" }
@@ -87,19 +87,26 @@ abstract class ViewGroupWidget<V : ViewGroup> : Widget<V>() {
         widget: Widget<*>
     ): ViewGroup.LayoutParams? = view.layoutParams
 
-    protected open fun addChildView(view: V, widget: Widget<*>) {
-        val container = view.findContainerForWidget(widget)
-        var childView = container.findViewByWidget(widget)
-        d { "add if needed ${javaClass.simpleName} ${childView == null}" }
+    protected open fun addChildView(
+        view: V,
+        newWidget: Widget<*>,
+        oldChild: Widget<*>?
+    ) {
+        val container = view.findContainerForWidget(newWidget)
+        var childView = container.findViewByWidget(newWidget)
+        if (childView == null && oldChild != null) container.findContainerForWidget(oldChild)
+        d { "add if needed ${newWidget.javaClass.simpleName} ${childView == null}" }
         if (childView == null) {
-            childView = widget.createView(container)
-            childView.setWidget(widget)
-            val lp = getChildLayoutParams(container, childView, widget)
+            childView = newWidget.createView(container)
+            childView.widget = newWidget
+            val lp = getChildLayoutParams(container, childView, newWidget)
             if (lp != null) {
                 container.addView(childView, lp)
             } else {
                 container.addView(childView)
             }
+        } else {
+            childView.widget = newWidget
         }
     }
 

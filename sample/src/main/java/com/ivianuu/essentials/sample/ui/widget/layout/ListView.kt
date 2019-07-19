@@ -25,7 +25,7 @@ import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget.lib.Widget
 import com.ivianuu.essentials.sample.ui.widget.lib.properties
-import com.ivianuu.essentials.sample.ui.widget.lib.setWidget
+import com.ivianuu.essentials.sample.ui.widget.lib.widget
 import com.ivianuu.essentials.ui.epoxy.EsHolder
 import com.ivianuu.essentials.ui.epoxy.SimpleModel
 import com.ivianuu.essentials.util.cast
@@ -84,7 +84,7 @@ private data class WidgetEpoxyModel(
 
     override fun buildView(parent: ViewGroup): View {
         val view = widget.createView(parent)
-        view.setWidget(widget)
+        view.widget = widget
         (widget as Widget<View>).dispatchLayout(view)
         return view
     }
