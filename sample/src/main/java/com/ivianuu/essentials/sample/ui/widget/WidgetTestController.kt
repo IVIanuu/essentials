@@ -136,9 +136,11 @@ class WidgetTestController : WidgetController() {
                             Container(
                                 height = dp(300).toInt(),
                                 width = dp(300).toInt(),
-                                gravity = Gravity.CENTER,
+                                gravity = Gravity.CENTER_VERTICAL or Gravity.END,
+                                paddingRight = dp(32).toInt(),
                                 child = MaterialButton(
-                                    text = "Click me"
+                                    text = "Click me",
+                                    onClick = {}
                                 )
                             )
                         )

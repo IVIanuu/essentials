@@ -16,7 +16,6 @@
 
 package com.ivianuu.essentials.sample.ui.widget.layout
 
-import android.graphics.Color
 import android.view.Gravity
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
@@ -25,7 +24,6 @@ import androidx.core.view.updateLayoutParams
 import androidx.core.view.updatePaddingRelative
 import com.ivianuu.essentials.sample.ui.widget.lib.ViewGroupWidget
 import com.ivianuu.essentials.sample.ui.widget.lib.Widget
-import com.ivianuu.essentials.util.withAlpha
 
 class Container(
     val child: Widget<*>,
@@ -41,7 +39,6 @@ class Container(
 
     override fun bind(view: LinearLayout) {
         super.bind(view)
-        view.setBackgroundColor(Color.RED.withAlpha(0.2f))
         if (view.layoutParams.width != width || view.layoutParams.height != height) {
             view.updateLayoutParams {
                 width = this@Container.width
