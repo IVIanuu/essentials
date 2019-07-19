@@ -112,15 +112,15 @@ class WidgetTestController : EsController() {
                     secondaryAction = if (wasCheckBox) {
                         RadioButton(
                             value = checkedIndices.contains(index),
-                            onChange = { toggle(this, index) }
+                            onChange = { toggle(index) }
                         )
                     } else {
                         Checkbox(
                             value = checkedIndices.contains(index),
-                            onChange = { toggle(this, index) }
+                            onChange = { toggle(index) }
                         )
                     },
-                    onClick = { toggle(this, index) }
+                    onClick = { toggle(index) }
                 )
             )
 
@@ -142,12 +142,12 @@ class WidgetTestController : EsController() {
         buildContext.invalidate()
     }
 
-    private fun toggle(context: BuildContext, index: Int) {
+    private fun toggle(index: Int) {
         if (checkedIndices.contains(index)) {
             checkedIndices.remove(index)
         } else {
             checkedIndices.add(index)
         }
-        context.invalidate()
+        buildContext.invalidate()
     }
 }
