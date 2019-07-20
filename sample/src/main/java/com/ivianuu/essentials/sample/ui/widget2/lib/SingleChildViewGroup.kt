@@ -19,75 +19,57 @@ package com.ivianuu.essentials.sample.ui.widget2.lib
 import android.content.Context
 import android.view.View
 import android.view.ViewGroup
-import com.github.ajalt.timberkt.d
 
-abstract class ViewGroupWidget<V : ViewGroup>(
-    val children: List<Widget>,
+abstract class SingleChildViewGroupWidget<V : ViewGroup>(
+    val child: Widget,
     key: Any? = null
-) : ViewWidget<V>(key) {
-    override fun createElement(): ViewGroupElement<V> = ViewGroupElement(this)
-}
+) : ViewGroupWidget<V>(listOf(child), key)
 
-open class ViewGroupElement<V : ViewGroup>(
-    widget: ViewGroupWidget<V>
-) : ViewElement<V>(widget) {
+open class SingleChildViewGroup<V : ViewGroup>(widget: SingleChildViewGroupWidget<V>) :
+    ViewElement<V>(widget) {
 
-    var children = mutableListOf<Element>()
+    var child: Element? = null
         protected set
 
     override fun mount(context: Context, parent: Element?, slot: Int?) {
         super.mount(context, parent, slot)
-        widget<ViewGroupWidget<V>>().children.forEach {
-            val child = it.createElement()
-            children.add(child)
-            child.mount(context, this, children.lastIndex)
-        }
+        child = widget<SingleChildViewGroupWidget<V>>().createElement()
+        child!!.mount(context, parent, null)
     }
 
     override fun insertChildView(view: View, slot: Int?) {
-        d { "${javaClass.simpleName} insert $view at $slot" }
-        if (slot != null) {
-            requireView().addView(view, slot)
-        } else {
-            requireView().addView(view)
-        }
+        requireView().addView(view)
     }
 
     override fun moveChildView(view: View, slot: Int?) {
-        requireNotNull(slot)
-        d { "${javaClass.simpleName} move $view to $slot" }
-        requireView().removeView(view)
-        requireView().addView(view, slot)
     }
 
     override fun removeChildView(view: View) {
-        d { "${javaClass.simpleName} remove $view" }
         requireView().removeView(view)
     }
 
     override fun attachView() {
         super.attachView()
-        children.forEach { it.attachView() }
+        child!!.attachView()
     }
 
     override fun detachView() {
-        children.forEach { it.detachView() }
+        child!!.detachView()
         super.detachView()
     }
 
     override fun unmount() {
-        children.forEach { it.unmount() }
-        children.clear()
+        child!!.unmount()
+        child = null
         super.unmount()
     }
 
     override fun update(context: Context, newWidget: Widget) {
         super.update(context, newWidget)
-        children = updateChildren(context, children, widget<ViewGroupWidget<V>>().children)
-            .toMutableList()
+        child = updateChild(context, child, newWidget, null)
     }
 
     override fun onEachChild(block: (Element) -> Unit) {
-        children.forEach(block)
+        child?.let(block)
     }
 }
