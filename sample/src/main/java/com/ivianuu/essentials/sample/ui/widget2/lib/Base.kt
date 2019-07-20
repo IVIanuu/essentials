@@ -45,9 +45,26 @@ abstract class Element(widget: Widget) : BuildContext {
 
     var inheritedWidgets: MutableMap<KClass<out InheritedWidget>, InheritedElement>? = null
         protected set
+    var _dependencies: MutableSet<InheritedElement>? = null
+        protected set
 
     var isDirty = false
         protected set
+
+    override fun inheritFromElement(ancestor: InheritedElement): InheritedWidget {
+        if (_dependencies == null) _dependencies = mutableSetOf()
+        _dependencies!!.add(ancestor)
+        ancestor.updateDependencies(this)
+        return ancestor.widget()
+    }
+
+    override fun <T : InheritedWidget> inheritFromWidgetOfExactType(type: KClass<T>): T? {
+        val ancestor = inheritedWidgets?.get(type)
+        if (ancestor != null) {
+            return inheritFromElement(ancestor) as T
+        }
+        return null
+    }
 
     override fun <T : InheritedWidget> ancestorInheritedElementForWidgetOfExactType(type: KClass<T>): T? =
         inheritedWidgets?.get(type)?.widget as? T
@@ -72,6 +89,10 @@ abstract class Element(widget: Widget) : BuildContext {
         }
 
         return null
+    }
+
+    open fun didChangeDependencies() {
+        markNeedsBuild()
     }
 
     open fun mount(context: Context, parent: Element?, slot: Int?) {

@@ -23,6 +23,10 @@ interface BuildContext {
     val widget: Widget
     val owner: BuildOwner?
 
+    fun inheritFromElement(ancestor: InheritedElement): InheritedWidget
+
+    fun <T : InheritedWidget> inheritFromWidgetOfExactType(type: KClass<T>): T?
+
     fun <T : InheritedWidget> ancestorInheritedElementForWidgetOfExactType(
         type: KClass<T>
     ): T?

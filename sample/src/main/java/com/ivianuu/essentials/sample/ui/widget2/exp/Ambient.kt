@@ -42,5 +42,7 @@ class Ambient<T>(
     inner class Provider<T>(
         val value: T,
         child: Widget
-    ) : InheritedWidget(child = child, key = key)
+    ) : InheritedWidget(child = child, key = key) {
+        override fun updateShouldNotify(oldWidget: InheritedWidget): Boolean = true
+    }
 }

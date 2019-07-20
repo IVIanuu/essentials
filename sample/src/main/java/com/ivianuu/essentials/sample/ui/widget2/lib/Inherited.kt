@@ -16,15 +16,40 @@
 
 package com.ivianuu.essentials.sample.ui.widget2.lib
 
+import com.ivianuu.essentials.util.cast
+
 abstract class InheritedWidget(child: Widget, key: Any? = null) : ProxyWidget(child, key) {
     override fun createElement() = InheritedElement(this)
+
+    abstract fun updateShouldNotify(oldWidget: InheritedWidget): Boolean
 }
 
 open class InheritedElement(widget: InheritedWidget) : ProxyElement(widget) {
+
+    protected val dependents = mutableSetOf<Element>()
+
     override fun updateInheritance() {
         val inheritedWidgets =
             parent?.inheritedWidgets ?: mutableMapOf()
         this.inheritedWidgets = inheritedWidgets
         inheritedWidgets[widget<InheritedWidget>()::class] = this
+    }
+
+    open fun updateDependencies(dependent: Element) {
+        dependents.add(dependent)
+    }
+
+    protected open fun notifyDependent(oldWidget: Widget, dependent: Element) {
+        dependent.didChangeDependencies()
+    }
+
+    override fun updated(oldWidget: Widget) {
+        if (widget<InheritedWidget>().updateShouldNotify(oldWidget.cast())) {
+            super.updated(oldWidget)
+        }
+    }
+
+    override fun notifyClients(oldWidget: Widget) {
+        dependents.forEach { notifyDependent(oldWidget, it) }
     }
 }
