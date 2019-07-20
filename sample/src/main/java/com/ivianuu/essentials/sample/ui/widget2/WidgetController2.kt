@@ -24,17 +24,14 @@ import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.LinearLayout
 import android.widget.LinearLayout.VERTICAL
 import android.widget.TextView
-import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.sample.R
+import com.ivianuu.essentials.sample.ui.widget2.exp.Ambient
 import com.ivianuu.essentials.sample.ui.widget2.lib.AndroidBuildOwner
 import com.ivianuu.essentials.sample.ui.widget2.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget2.lib.BuildOwner
-import com.ivianuu.essentials.sample.ui.widget2.lib.InheritedWidget
-import com.ivianuu.essentials.sample.ui.widget2.lib.StatelessWidget
 import com.ivianuu.essentials.sample.ui.widget2.lib.ViewGroupWidget
 import com.ivianuu.essentials.sample.ui.widget2.lib.ViewWidget
 import com.ivianuu.essentials.sample.ui.widget2.lib.Widget
-import com.ivianuu.essentials.sample.ui.widget2.lib.ancestorInheritedElementForWidgetOfExactType
 import com.ivianuu.essentials.ui.base.EsController
 import com.ivianuu.essentials.util.cast
 import com.ivianuu.essentials.util.viewLifecycleScope
@@ -67,13 +64,13 @@ class WidgetController2 : EsController() {
             viewLifecycleScope,
             view.cast()
         ) {
-            d { "call build owner build" }
-            Count(
-                count, Column(
+            CountAmbient.Provider(
+                value = count,
+                child = Column(
                     children = listOf(
-                        MyWrappingWidget("1"),
-                        MyWrappingWidget("2"),
-                        MyWrappingWidget("3")
+                        HelloWorldWidget("1"),
+                        HelloWorldWidget("2"),
+                        HelloWorldWidget("3")
                     )
                 )
             )
@@ -88,9 +85,7 @@ class WidgetController2 : EsController() {
 
 }
 
-class MyWrappingWidget(val tag: String) : StatelessWidget() {
-    override fun build(context: BuildContext): HelloWorldWidget = HelloWorldWidget(tag)
-}
+val CountAmbient = Ambient<Int>()
 
 class HelloWorldWidget(val tag: String) : ViewWidget<TextView>() {
     override fun createView(context: BuildContext, androidContext: Context): TextView {
@@ -100,16 +95,7 @@ class HelloWorldWidget(val tag: String) : ViewWidget<TextView>() {
     }
 
     override fun updateView(context: BuildContext, view: TextView) {
-        view.text = "Tag: $tag value ${Count}"
-    }
-}
-
-class Count(val value: Int, child: Widget) : InheritedWidget(child) {
-
-    companion object {
-        fun of(context: BuildContext): Int =
-            context.ancestorInheritedElementForWidgetOfExactType<Count>()
-                ?.value ?: error("no value")
+        view.text = "Tag: $tag value ${CountAmbient.of(context)}"
     }
 }
 
