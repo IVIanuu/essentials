@@ -177,8 +177,8 @@ open class ViewElement<V : View>(widget: ViewWidget<V>) : Element(widget) {
         }
 
         // We've scanned the whole list.
-        newChildrenBottom = newWidgets.size - 1
-        oldChildrenBottom = oldChildren.size - 1
+        newChildrenBottom = newWidgets.lastIndex
+        oldChildrenBottom = oldChildren.lastIndex
 
         // Update the bottom of the list.
         while ((oldChildrenTop <= oldChildrenBottom) && (newChildrenTop <= newChildrenBottom)) {
