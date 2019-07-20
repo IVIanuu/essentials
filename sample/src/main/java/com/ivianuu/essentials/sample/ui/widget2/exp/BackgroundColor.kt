@@ -14,22 +14,29 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.sample.ui.widget2.layout
+package com.ivianuu.essentials.sample.ui.widget2.exp
 
 import android.content.Context
 import android.view.ViewGroup
-import android.view.ViewGroup.LayoutParams.MATCH_PARENT
-import androidx.core.widget.NestedScrollView
+import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
+import android.widget.FrameLayout
 import com.ivianuu.essentials.sample.ui.widget2.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget2.lib.SingleChildViewGroupWidget
 import com.ivianuu.essentials.sample.ui.widget2.lib.Widget
 
-class VerticalScroller(
+class BackgroundColor(
     child: Widget,
+    val color: Int,
     key: Any? = null
-) : SingleChildViewGroupWidget<NestedScrollView>(child, key) {
+) : SingleChildViewGroupWidget<FrameLayout>(child, key) {
+    override fun updateView(context: BuildContext, view: FrameLayout) {
+        super.updateView(context, view)
+        view.setBackgroundColor(color)
+    }
+
     override fun createView(context: BuildContext, androidContext: Context) =
-        NestedScrollView(androidContext).apply {
-            layoutParams = ViewGroup.LayoutParams(MATCH_PARENT, MATCH_PARENT)
+        FrameLayout(androidContext).apply {
+            layoutParams = ViewGroup.LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
         }
+
 }

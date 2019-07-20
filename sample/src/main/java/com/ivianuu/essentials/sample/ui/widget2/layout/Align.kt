@@ -21,14 +21,14 @@ import android.view.Gravity
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import com.ivianuu.essentials.sample.ui.widget2.lib.BuildContext
-import com.ivianuu.essentials.sample.ui.widget2.lib.ViewGroupWidget
+import com.ivianuu.essentials.sample.ui.widget2.lib.SingleChildViewGroupWidget
 import com.ivianuu.essentials.sample.ui.widget2.lib.Widget
 
 open class Align(
     val gravity: Int,
     child: Widget,
     key: Any? = null
-) : ViewGroupWidget<LinearLayout>(listOf(child), key) {
+) : SingleChildViewGroupWidget<LinearLayout>(child, key) {
 
     override fun updateView(context: BuildContext, view: LinearLayout) {
         super.updateView(context, view)

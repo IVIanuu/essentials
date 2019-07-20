@@ -42,8 +42,5 @@ class Ambient<T>(
     inner class Provider<T>(
         val value: T,
         child: Widget
-    ) : InheritedWidget(child = child, key = key) {
-        private val ambient = this@Ambient
-    }
-
+    ) : InheritedWidget(child = child, key = key)
 }

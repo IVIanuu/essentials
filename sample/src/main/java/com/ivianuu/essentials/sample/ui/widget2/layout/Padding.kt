@@ -21,7 +21,7 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.core.view.updatePaddingRelative
 import com.ivianuu.essentials.sample.ui.widget2.lib.BuildContext
-import com.ivianuu.essentials.sample.ui.widget2.lib.ViewGroupWidget
+import com.ivianuu.essentials.sample.ui.widget2.lib.SingleChildViewGroupWidget
 import com.ivianuu.essentials.sample.ui.widget2.lib.Widget
 
 open class Padding(
@@ -31,7 +31,7 @@ open class Padding(
     val right: Int = 0,
     val bottom: Int = 0,
     key: Any? = null
-) : ViewGroupWidget<FrameLayout>(listOf(child), key) {
+) : SingleChildViewGroupWidget<FrameLayout>(child, key) {
 
     constructor(
         child: Widget,

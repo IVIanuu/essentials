@@ -17,15 +17,13 @@
 package com.ivianuu.essentials.sample.ui.widget2
 
 import android.content.Context
-import android.view.Gravity
 import android.view.View
-import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatTextView
+import com.ivianuu.director.requireActivity
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.sample.ui.widget2.exp.Ambient
 import com.ivianuu.essentials.sample.ui.widget2.layout.Column
-import com.ivianuu.essentials.sample.ui.widget2.layout.Container
 import com.ivianuu.essentials.sample.ui.widget2.layout.ListView
 import com.ivianuu.essentials.sample.ui.widget2.lib.AndroidBuildOwner
 import com.ivianuu.essentials.sample.ui.widget2.lib.BuildContext
@@ -33,7 +31,6 @@ import com.ivianuu.essentials.sample.ui.widget2.lib.BuildOwner
 import com.ivianuu.essentials.sample.ui.widget2.lib.ViewWidget
 import com.ivianuu.essentials.ui.base.EsController
 import com.ivianuu.essentials.util.cast
-import com.ivianuu.essentials.util.dp
 import com.ivianuu.essentials.util.viewLifecycleScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
@@ -68,11 +65,9 @@ class WidgetController2 : EsController() {
                 value = count,
                 child = Column(
                     children = listOf(
-                        Container(
-                            height = dp(300).toInt(),
-                            width = MATCH_PARENT,
-                            gravity = Gravity.CENTER,
-                            child = Text("Hello")
+                        SimpleTextToolbar(
+                            title = "Hello world",
+                            androidContext = requireActivity()
                         ),
                         ListView(
                             children = (1..100).map {

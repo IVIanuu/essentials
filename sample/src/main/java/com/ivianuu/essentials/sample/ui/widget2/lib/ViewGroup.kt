@@ -21,6 +21,11 @@ import android.view.View
 import android.view.ViewGroup
 import com.github.ajalt.timberkt.d
 
+abstract class SingleChildViewGroupWidget<V : ViewGroup>(
+    child: Widget,
+    key: Any? = null
+) : ViewGroupWidget<V>(listOf(child), key)
+
 abstract class ViewGroupWidget<V : ViewGroup>(
     val children: List<Widget>,
     key: Any? = null

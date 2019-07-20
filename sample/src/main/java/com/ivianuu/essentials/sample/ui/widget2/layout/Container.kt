@@ -24,7 +24,7 @@ import android.widget.LinearLayout
 import androidx.core.view.updateLayoutParams
 import androidx.core.view.updatePaddingRelative
 import com.ivianuu.essentials.sample.ui.widget2.lib.BuildContext
-import com.ivianuu.essentials.sample.ui.widget2.lib.ViewGroupWidget
+import com.ivianuu.essentials.sample.ui.widget2.lib.SingleChildViewGroupWidget
 import com.ivianuu.essentials.sample.ui.widget2.lib.Widget
 
 class Container(
@@ -38,7 +38,7 @@ class Container(
     val paddingRight: Int = padding,
     val paddingBottom: Int = padding,
     key: Any? = null
-) : ViewGroupWidget<LinearLayout>(listOf(child), key) {
+) : SingleChildViewGroupWidget<LinearLayout>(child, key) {
 
     override fun updateView(context: BuildContext, view: LinearLayout) {
         super.updateView(context, view)
