@@ -38,7 +38,8 @@ interface BuildContext {
     fun <T : State> ancestorStateOfType(type: KClass<T>): T?
 }
 
-inline fun <reified T : InheritedWidget> BuildContext.inheritFromWidgetOfExactType(): T? =
+inline fun <reified T : InheritedWidget> BuildContext.inheritFromWidgetOfExactType(
+): T? =
     inheritFromWidgetOfExactType(T::class)
 
 inline fun <reified T : InheritedWidget> BuildContext.ancestorInheritedElementForWidgetOfExactType(): T? =
