@@ -17,23 +17,16 @@
 package com.ivianuu.essentials.sample.ui.widget2
 
 import android.content.Context
-import android.graphics.Color
-import android.view.Gravity
 import android.view.View
-import android.view.ViewGroup
-import android.view.ViewGroup.LayoutParams.MATCH_PARENT
-import android.widget.LinearLayout
-import android.widget.LinearLayout.VERTICAL
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatTextView
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.sample.ui.widget2.exp.Ambient
+import com.ivianuu.essentials.sample.ui.widget2.exp.ListView
 import com.ivianuu.essentials.sample.ui.widget2.lib.AndroidBuildOwner
 import com.ivianuu.essentials.sample.ui.widget2.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget2.lib.BuildOwner
-import com.ivianuu.essentials.sample.ui.widget2.lib.ViewGroupWidget
 import com.ivianuu.essentials.sample.ui.widget2.lib.ViewWidget
-import com.ivianuu.essentials.sample.ui.widget2.lib.Widget
 import com.ivianuu.essentials.ui.base.EsController
 import com.ivianuu.essentials.util.cast
 import com.ivianuu.essentials.util.viewLifecycleScope
@@ -55,29 +48,24 @@ class WidgetController2 : EsController() {
 
         viewLifecycleScope.launch {
             delay(100)
-            while (coroutineContext.isActive && !coroutineContext.isActive) {
+            while (coroutineContext.isActive) {
                 delay(1000)
                 count += 1
                 buildOwner?.rebuild()
             }
         }
 
-        var wasMoved = false
+        //var wasMoved = false
 
         buildOwner = AndroidBuildOwner(
             viewLifecycleScope,
             view.cast()
         ) {
-            viewLifecycleScope.launch { delay(1000); buildOwner?.clear() }
             CountAmbient.Provider(
                 value = count,
-                child = Column(
-                    children = mutableListOf<Widget>().apply {
-                        add(OtherWidget("1"))
-                        add(HelloWorldWidget("2"))
-                        add(HelloWorldWidget("3"))
-                        if (wasMoved) reverse()
-                        wasMoved = !wasMoved
+                child = ListView(
+                    children = (1..100).map {
+                        HelloWorldWidget(it.toString())
                     }
                 )
             )
@@ -94,20 +82,7 @@ class WidgetController2 : EsController() {
 
 val CountAmbient = Ambient<Int>()
 
-class OtherWidget(val tag: String) : ViewWidget<TextView>() {
-    override fun createView(context: BuildContext, androidContext: Context): TextView {
-        return TextView(androidContext).apply {
-            setTextAppearance(R.style.TextAppearance_MaterialComponents_Subtitle1)
-            setBackgroundColor(Color.RED)
-        }
-    }
-
-    override fun updateView(context: BuildContext, view: TextView) {
-        view.text = "Tag: $tag value ${CountAmbient.of(context)}"
-    }
-}
-
-class HelloWorldWidget(val tag: String) : ViewWidget<TextView>() {
+class HelloWorldWidget(val tag: String) : ViewWidget<TextView>(key = tag) {
     override fun createView(context: BuildContext, androidContext: Context): TextView {
         return AppCompatTextView(androidContext).apply {
             setTextAppearance(R.style.TextAppearance_MaterialComponents_Headline4)
@@ -117,17 +92,4 @@ class HelloWorldWidget(val tag: String) : ViewWidget<TextView>() {
     override fun updateView(context: BuildContext, view: TextView) {
         view.text = "Tag: $tag value ${CountAmbient.of(context)}"
     }
-}
-
-class Column(children: List<Widget>) : ViewGroupWidget<LinearLayout>(children) {
-
-    override fun createView(
-        context: BuildContext,
-        androidContext: Context
-    ): LinearLayout = LinearLayout(androidContext).apply {
-        layoutParams = ViewGroup.LayoutParams(MATCH_PARENT, MATCH_PARENT)
-        orientation = VERTICAL
-        gravity = Gravity.TOP or Gravity.CENTER_HORIZONTAL
-    }
-
 }

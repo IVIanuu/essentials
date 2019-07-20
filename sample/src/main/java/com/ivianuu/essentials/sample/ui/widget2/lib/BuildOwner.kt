@@ -21,6 +21,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import kotlin.reflect.KClass
 
 interface BuildOwner {
     fun rebuild()
@@ -30,8 +31,11 @@ interface BuildOwner {
 class AndroidBuildOwner(
     private val coroutineScope: CoroutineScope,
     private val view: ViewGroup,
-    private val child: () -> Widget
-) : BuildOwner {
+    private val child: (BuildContext) -> Widget
+) : BuildOwner, BuildContext {
+
+    override fun <T : InheritedWidget> ancestorInheritedElementForWidgetOfExactType(type: KClass<T>): T? =
+        null
 
     private var root: RootElement? = null
 
@@ -61,7 +65,7 @@ class AndroidBuildOwner(
     }
 
     private fun build() {
-        val widget = RootWidget(view, child())
+        val widget = RootWidget(view, child(this))
 
         var root = root
         if (root != null) {
