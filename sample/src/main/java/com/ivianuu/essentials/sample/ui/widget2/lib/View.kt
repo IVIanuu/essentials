@@ -63,7 +63,10 @@ open class ViewElement<V : View>(widget: ViewWidget<V>) : Element(widget) {
 
     override fun detachView() {
         d { "${javaClass.simpleName} remove from $ancestorViewElement view is $view" }
-        ancestorViewElement!!.removeChildView(view!!)
+        if (ancestorViewElement != null) {
+            ancestorViewElement!!.removeChildView(view!!)
+            ancestorViewElement = null
+        }
     }
 
     override fun update(context: Context, newWidget: Widget) {
