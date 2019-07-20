@@ -14,15 +14,17 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.sample.ui.widget2
+package com.ivianuu.essentials.sample.ui.widget2.lib
 
-import kotlin.reflect.KClass
-
-interface BuildContext {
-    fun <T : InheritedWidget> ancestorInheritedElementForWidgetOfExactType(
-        type: KClass<T>
-    ): T?
+abstract class InheritedWidget(child: Widget, key: Any? = null) : ProxyWidget(child, key) {
+    override fun createElement() = InheritedElement(this)
 }
 
-inline fun <reified T : InheritedWidget> BuildContext.ancestorInheritedElementForWidgetOfExactType(): T? =
-    ancestorInheritedElementForWidgetOfExactType(T::class)
+open class InheritedElement(widget: InheritedWidget) : ProxyElement(widget) {
+    override fun updateInheritance() {
+        val inheritedWidgets =
+            parent?.inheritedWidgets ?: mutableMapOf()
+        this.inheritedWidgets = inheritedWidgets
+        inheritedWidgets[widget<InheritedWidget>()::class] = this
+    }
+}

@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.sample.ui.widget2
+package com.ivianuu.essentials.sample.ui.widget2.lib
 
 import android.content.Context
 import com.github.ajalt.timberkt.d
 import kotlin.reflect.KClass
 
-abstract class Widget(open val key: Any? = null) {
+abstract class Widget(val key: Any? = null) {
 
     abstract fun createElement(): Element
 

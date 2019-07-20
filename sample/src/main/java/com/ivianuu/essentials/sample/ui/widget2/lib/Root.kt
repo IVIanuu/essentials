@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.sample.ui.widget2
+package com.ivianuu.essentials.sample.ui.widget2.lib
 
 import android.content.Context
 import android.view.View
@@ -26,7 +26,8 @@ class RootWidget(
     val child: Widget
 ) : ViewWidget<FrameLayout>() {
 
-    override fun createElement() = RootElement(rootView, this)
+    override fun createElement() =
+        RootElement(rootView, this)
 
     override fun createView(context: BuildContext, androidContext: Context): FrameLayout =
         FrameLayout(androidContext)
@@ -46,14 +47,14 @@ class RootElement(
         child.mount(context, this, null)
     }
 
-    override fun insertChild(view: View, slot: Int?) {
+    override fun insertChildView(view: View, slot: Int?) {
         requireView().addView(view)
     }
 
-    override fun moveChild(view: View, slot: Int) {
+    override fun moveChildView(view: View, slot: Int) {
     }
 
-    override fun removeChild(view: View) {
+    override fun removeChildView(view: View) {
         requireView().removeView(view)
     }
 

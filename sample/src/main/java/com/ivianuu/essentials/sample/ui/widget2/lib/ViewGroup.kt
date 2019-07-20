@@ -14,23 +14,26 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.sample.ui.widget2
+package com.ivianuu.essentials.sample.ui.widget2.lib
 
 import android.content.Context
 import android.view.View
 import android.view.ViewGroup
+import com.github.ajalt.timberkt.d
 
 abstract class ViewGroupWidget<V : ViewGroup>(
-    val children: List<Widget>
-) : ViewWidget<V>() {
-    abstract override fun createElement(): ViewGroupElement<V>
+    val children: List<Widget>,
+    key: Any? = null
+) : ViewWidget<V>(key) {
+    override fun createElement(): ViewGroupElement<V> = ViewGroupElement(this)
 }
 
 open class ViewGroupElement<V : ViewGroup>(
     widget: ViewGroupWidget<V>
 ) : ViewElement<V>(widget) {
 
-    private var children = mutableListOf<Element>()
+    var children = mutableListOf<Element>()
+        protected set
 
     override fun mount(context: Context, parent: Element?, slot: Int?) {
         super.mount(context, parent, slot)
@@ -41,20 +44,23 @@ open class ViewGroupElement<V : ViewGroup>(
         }
     }
 
-    override fun insertChild(view: View, slot: Int?) {
+    override fun insertChildView(view: View, slot: Int?) {
+        d { "${javaClass.simpleName} insert $view at $slot" }
         if (slot != null) {
             requireView().addView(view, slot)
         } else {
-            requireView().removeView(view)
+            requireView().addView(view)
         }
     }
 
-    override fun moveChild(view: View, slot: Int) {
+    override fun moveChildView(view: View, slot: Int) {
+        d { "${javaClass.simpleName} move $view to $slot" }
         requireView().removeView(view)
         requireView().addView(view, slot)
     }
 
-    override fun removeChild(view: View) {
+    override fun removeChildView(view: View) {
+        d { "${javaClass.simpleName} remove $view" }
         requireView().removeView(view)
     }
 

@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.sample.ui.widget2
+package com.ivianuu.essentials.sample.ui.widget2.lib
 
 import android.content.Context
 import android.view.View
 
-abstract class ViewWidget<V : View> : Widget() {
-    abstract override fun createElement(): ViewElement<V>
+abstract class ViewWidget<V : View>(key: Any? = null) : Widget(key) {
+    override fun createElement(): ViewElement<V> = ViewElement(this)
 
     abstract fun createView(context: BuildContext, androidContext: Context): V
 
@@ -28,18 +28,24 @@ abstract class ViewWidget<V : View> : Widget() {
     }
 }
 
-abstract class ViewElement<V : View>(widget: ViewWidget<V>) : Element(widget) {
+open class ViewElement<V : View>(widget: ViewWidget<V>) : Element(widget) {
 
     var view: V? = null
         private set
 
     private var ancestorViewElement: ViewElement<*>? = null
 
-    abstract fun insertChild(view: View, slot: Int?)
+    open fun insertChildView(view: View, slot: Int?) {
+        error("unsupported")
+    }
 
-    abstract fun moveChild(view: View, slot: Int)
+    open fun moveChildView(view: View, slot: Int) {
+        error("unsupported")
+    }
 
-    abstract fun removeChild(view: View)
+    open fun removeChildView(view: View) {
+        error("unsupported")
+    }
 
     override fun mount(context: Context, parent: Element?, slot: Int?) {
         super.mount(context, parent, slot)
@@ -50,11 +56,11 @@ abstract class ViewElement<V : View>(widget: ViewWidget<V>) : Element(widget) {
     override fun attachView() {
         val ancestorViewElement = findAncestorViewElement() ?: error("")
         this.ancestorViewElement = ancestorViewElement
-        ancestorViewElement.insertChild(view!!, slot)
+        ancestorViewElement.insertChildView(view!!, slot)
     }
 
     override fun detachView() {
-        ancestorViewElement!!.removeChild(view!!)
+        ancestorViewElement!!.removeChildView(view!!)
     }
 
     override fun update(context: Context, newWidget: Widget) {
@@ -98,8 +104,8 @@ abstract class ViewElement<V : View>(widget: ViewWidget<V>) : Element(widget) {
             val oldChild = oldChildren[oldChildrenTop]
             val newWidget = newWidgets[newChildrenTop]
             if (!newWidget.canUpdate(oldChild.widget)) break
-            val newChild = updateChild(context, oldChild, newWidget, null) // todo slot
-            newChildren[newChildrenTop] = newChild!!
+            val newChild = updateChild(context, oldChild, newWidget, null)!! // todo slot
+            newChildren.add(newChildrenTop, newChild)
             newChildrenTop += 1
             oldChildrenTop += 1
         }
@@ -152,7 +158,7 @@ abstract class ViewElement<V : View>(widget: ViewWidget<V>) : Element(widget) {
             }
 
             val newChild = updateChild(context, oldChild, newWidget, null)!! // todo slot
-            newChildren[newChildrenTop] = newChild
+            newChildren.add(newChildrenTop, newChild)
             previousChild = newChild
             newChildrenTop += 1
         }
@@ -166,7 +172,7 @@ abstract class ViewElement<V : View>(widget: ViewWidget<V>) : Element(widget) {
             val oldChild = oldChildren[oldChildrenTop]
             val newWidget = newWidgets[newChildrenTop]
             val newChild = updateChild(context, oldChild, newWidget, null)!! // todo slot
-            newChildren[newChildrenTop] = newChild
+            newChildren.add(newChildrenTop, newChild)
             previousChild = newChild
             newChildrenTop += 1
             oldChildrenTop += 1

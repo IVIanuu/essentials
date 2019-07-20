@@ -14,13 +14,15 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.sample.ui.widget2
+package com.ivianuu.essentials.sample.ui.widget2.lib
 
-abstract class StatelessWidget : Widget() {
-    override fun createElement(): StatelessElement = StatelessElement(this)
-    abstract fun build(context: BuildContext): Widget
+import kotlin.reflect.KClass
+
+interface BuildContext {
+    fun <T : InheritedWidget> ancestorInheritedElementForWidgetOfExactType(
+        type: KClass<T>
+    ): T?
 }
 
-open class StatelessElement(widget: StatelessWidget) : ComponentElement(widget) {
-    override fun build(): Widget = widget<StatelessWidget>().build(this)
-}
+inline fun <reified T : InheritedWidget> BuildContext.ancestorInheritedElementForWidgetOfExactType(): T? =
+    ancestorInheritedElementForWidgetOfExactType(T::class)

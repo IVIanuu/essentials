@@ -14,15 +14,10 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.sample.ui.widget2
+package com.ivianuu.essentials.sample.ui.widget2.lib
 
-abstract class InheritedWidget(child: Widget) : ProxyWidget(child)
+abstract class ProxyWidget(open val child: Widget, key: Any? = null) : Widget(key)
 
-abstract class InheritedElement(widget: InheritedWidget) : ProxyElement(widget) {
-    override fun updateInheritance() {
-        val inheritedWidgets =
-            parent?.inheritedWidgets ?: mutableMapOf()
-        this.inheritedWidgets = inheritedWidgets
-        inheritedWidgets[widget<InheritedWidget>()::class] = this
-    }
+abstract class ProxyElement(widget: ProxyWidget) : ComponentElement(widget) {
+    override fun build(): Widget = widget<ProxyWidget>().child
 }

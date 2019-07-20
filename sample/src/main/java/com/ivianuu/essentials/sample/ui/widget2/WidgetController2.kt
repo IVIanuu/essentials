@@ -17,10 +17,24 @@
 package com.ivianuu.essentials.sample.ui.widget2
 
 import android.content.Context
+import android.view.Gravity
 import android.view.View
+import android.view.ViewGroup
+import android.view.ViewGroup.LayoutParams.MATCH_PARENT
+import android.widget.LinearLayout
+import android.widget.LinearLayout.VERTICAL
 import android.widget.TextView
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.sample.R
+import com.ivianuu.essentials.sample.ui.widget2.lib.AndroidBuildOwner
+import com.ivianuu.essentials.sample.ui.widget2.lib.BuildContext
+import com.ivianuu.essentials.sample.ui.widget2.lib.BuildOwner
+import com.ivianuu.essentials.sample.ui.widget2.lib.InheritedWidget
+import com.ivianuu.essentials.sample.ui.widget2.lib.StatelessWidget
+import com.ivianuu.essentials.sample.ui.widget2.lib.ViewGroupWidget
+import com.ivianuu.essentials.sample.ui.widget2.lib.ViewWidget
+import com.ivianuu.essentials.sample.ui.widget2.lib.Widget
+import com.ivianuu.essentials.sample.ui.widget2.lib.ancestorInheritedElementForWidgetOfExactType
 import com.ivianuu.essentials.ui.base.EsController
 import com.ivianuu.essentials.util.cast
 import com.ivianuu.essentials.util.viewLifecycleScope
@@ -54,7 +68,15 @@ class WidgetController2 : EsController() {
             view.cast()
         ) {
             d { "call build owner build" }
-            MyDataWidget(count, MyWrappingWidget())
+            Count(
+                count, Column(
+                    children = listOf(
+                        MyWrappingWidget("1"),
+                        MyWrappingWidget("2"),
+                        MyWrappingWidget("3")
+                    )
+                )
+            )
         }
     }
 
@@ -66,18 +88,11 @@ class WidgetController2 : EsController() {
 
 }
 
-class MyWrappingWidget : StatelessWidget() {
-    override fun build(context: BuildContext): HelloWorldWidget {
-        val value = context.ancestorInheritedElementForWidgetOfExactType<MyDataWidget>()
-            ?.data ?: error("no data")
-        d { "build with data $value" }
-        return HelloWorldWidget(value)
-    }
+class MyWrappingWidget(val tag: String) : StatelessWidget() {
+    override fun build(context: BuildContext): HelloWorldWidget = HelloWorldWidget(tag)
 }
 
-class HelloWorldWidget(val count: Int) : ViewWidget<TextView>() {
-    override fun createElement() = HelloWorldElement(this)
-
+class HelloWorldWidget(val tag: String) : ViewWidget<TextView>() {
     override fun createView(context: BuildContext, androidContext: Context): TextView {
         return TextView(androidContext).apply {
             setTextAppearance(R.style.TextAppearance_MaterialComponents_Headline4)
@@ -85,54 +100,28 @@ class HelloWorldWidget(val count: Int) : ViewWidget<TextView>() {
     }
 
     override fun updateView(context: BuildContext, view: TextView) {
-        view.text = "Hello World $count"
-    }
-
-}
-
-class HelloWorldElement(widget: HelloWorldWidget) : ViewElement<TextView>(widget) {
-
-    override fun mount(context: Context, parent: Element?, slot: Int?) {
-        super.mount(context, parent, slot)
-        d { "mount" }
-    }
-
-    override fun attachView() {
-        super.attachView()
-        d { "attach view" }
-    }
-
-    override fun detachView() {
-        d { "detach view" }
-        super.detachView()
-    }
-
-    override fun update(context: Context, newWidget: Widget) {
-        super.update(context, newWidget)
-        d { "update $newWidget" }
-    }
-
-    override fun unmount() {
-        super.unmount()
-        d { "unmount" }
-    }
-
-    override fun insertChild(view: View, slot: Int?) {
-    }
-
-    override fun moveChild(view: View, slot: Int) {
-    }
-
-    override fun removeChild(view: View) {
+        view.text = "Tag: $tag value ${Count}"
     }
 }
 
-class MyDataWidget(
-    val data: Int,
-    child: Widget
-) : InheritedWidget(child) {
-    override fun createElement() = MyDataElement(this)
+class Count(val value: Int, child: Widget) : InheritedWidget(child) {
+
+    companion object {
+        fun of(context: BuildContext): Int =
+            context.ancestorInheritedElementForWidgetOfExactType<Count>()
+                ?.value ?: error("no value")
+    }
 }
 
-class MyDataElement(widget: MyDataWidget) : InheritedElement(widget)
+class Column(children: List<Widget>) : ViewGroupWidget<LinearLayout>(children) {
 
+    override fun createView(
+        context: BuildContext,
+        androidContext: Context
+    ): LinearLayout = LinearLayout(androidContext).apply {
+        layoutParams = ViewGroup.LayoutParams(MATCH_PARENT, MATCH_PARENT)
+        orientation = VERTICAL
+        gravity = Gravity.TOP or Gravity.CENTER_HORIZONTAL
+    }
+
+}

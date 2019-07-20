@@ -14,10 +14,14 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.sample.ui.widget2
+package com.ivianuu.essentials.sample.ui.widget2.lib
 
-abstract class ProxyWidget(open val child: Widget) : Widget()
+abstract class StatelessWidget(key: Any? = null) : Widget(key) {
+    override fun createElement(): StatelessElement =
+        StatelessElement(this)
+    abstract fun build(context: BuildContext): Widget
+}
 
-abstract class ProxyElement(widget: ProxyWidget) : ComponentElement(widget) {
-    override fun build(): Widget = widget<ProxyWidget>().child
+open class StatelessElement(widget: StatelessWidget) : ComponentElement(widget) {
+    override fun build(): Widget = widget<StatelessWidget>().build(this)
 }
