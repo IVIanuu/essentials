@@ -45,8 +45,9 @@ abstract class ComponentElement(widget: Widget) : Element(widget) {
     }
 
     override fun unmount() {
-        super.unmount()
+        child?.unmount()
         child = null
+        super.unmount()
     }
 
     override fun update(context: Context, newWidget: Widget) {

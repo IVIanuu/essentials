@@ -55,7 +55,7 @@ class WidgetController2 : EsController() {
 
         viewLifecycleScope.launch {
             delay(100)
-            while (coroutineContext.isActive) {
+            while (coroutineContext.isActive && !coroutineContext.isActive) {
                 delay(1000)
                 count += 1
                 buildOwner?.rebuild()
@@ -68,6 +68,7 @@ class WidgetController2 : EsController() {
             viewLifecycleScope,
             view.cast()
         ) {
+            viewLifecycleScope.launch { delay(1000); buildOwner?.clear() }
             CountAmbient.Provider(
                 value = count,
                 child = Column(
