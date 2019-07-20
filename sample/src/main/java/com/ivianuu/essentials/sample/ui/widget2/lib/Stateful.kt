@@ -24,7 +24,16 @@ abstract class State {
 
     abstract fun build(context: BuildContext): Widget
 
+    open fun initState() {
+    }
+
     open fun dispose() {
+    }
+
+    open fun didUpdateWidget(oldWidget: Widget) {
+    }
+
+    open fun didChangeDependencies() {
     }
 
     protected open fun setState(block: () -> Unit) {
@@ -52,11 +61,23 @@ open class StatefulElement(widget: StatefulWidget) : ComponentElement(widget) {
 
     override fun build(): Widget = state!!.build(this)
 
+    override fun firstBuild(context: Context) {
+        super.firstBuild(context)
+        state!!.initState()
+    }
+
     override fun update(context: Context, newWidget: Widget) {
         super.update(context, newWidget)
+        val oldWidget = state!!.widget!!
         isDirty = true
         state!!.widget = widget()
+        state!!.didUpdateWidget(oldWidget)
         rebuild(context)
+    }
+
+    override fun didChangeDependencies() {
+        super.didChangeDependencies()
+        state!!.didChangeDependencies()
     }
 
     override fun unmount() {

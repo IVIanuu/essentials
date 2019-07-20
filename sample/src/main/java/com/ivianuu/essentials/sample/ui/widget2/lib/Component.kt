@@ -28,10 +28,7 @@ abstract class ComponentElement(widget: Widget) : Element(widget) {
 
     override fun mount(context: Context, parent: Element?, slot: Int?) {
         super.mount(context, parent, slot)
-        val childWidget = build()
-        val childElement = childWidget.createElement()
-        child = childElement
-        childElement.mount(context, this, null)
+        firstBuild(context)
     }
 
     override fun attachView() {
@@ -56,10 +53,14 @@ abstract class ComponentElement(widget: Widget) : Element(widget) {
         performRebuild(context)
     }
 
+    protected open fun firstBuild(context: Context) {
+        rebuild(context)
+    }
+
     override fun performRebuild(context: Context) {
         d { "${javaClass.simpleName} perform rebuild" }
         val built = build()
-        child = updateChild(context, child, built, slot)
+        child = updateChild(context, child, built, null)
         isDirty = false
     }
 

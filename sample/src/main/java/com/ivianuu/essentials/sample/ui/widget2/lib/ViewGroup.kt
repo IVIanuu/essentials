@@ -37,10 +37,10 @@ open class ViewGroupElement<V : ViewGroup>(
 
     override fun mount(context: Context, parent: Element?, slot: Int?) {
         super.mount(context, parent, slot)
-        widget<ViewGroupWidget<V>>().children.forEach {
-            val child = it.createElement()
+        widget<ViewGroupWidget<V>>().children.forEachIndexed { i, childWidget ->
+            val child = childWidget.createElement()
             children.add(child)
-            child.mount(context, this, children.lastIndex)
+            child.mount(context, this, i)
         }
     }
 
