@@ -32,13 +32,13 @@ abstract class Widget(val key: Any? = null) {
 
 abstract class Element(widget: Widget) : BuildContext {
 
-    var widget: Widget = widget
+    override var widget: Widget = widget
         protected set
     var context: Context? = null
         protected set
     var parent: Element? = null
         protected set
-    var owner: BuildOwner? = null
+    override var owner: BuildOwner? = null
         protected set
     var slot: Int? = null
         protected set
@@ -51,6 +51,28 @@ abstract class Element(widget: Widget) : BuildContext {
 
     override fun <T : InheritedWidget> ancestorInheritedElementForWidgetOfExactType(type: KClass<T>): T? =
         inheritedWidgets?.get(type)?.widget as? T
+
+    override fun <T : Widget> ancestorWidgetOfExactType(type: KClass<T>): T? {
+        var ancestor = parent
+        while (ancestor != null) {
+            if (ancestor.widget::class == type) return ancestor.widget as T
+            ancestor = ancestor.parent
+        }
+
+        return null
+    }
+
+    override fun <T : State> ancestorStateOfType(type: KClass<T>): T? {
+        var ancestor = parent
+        while (ancestor != null) {
+            if (ancestor is StatefulElement &&
+                ancestor.state?.let { it::class } == type
+            ) return ancestor.state as T
+            ancestor = ancestor.parent
+        }
+
+        return null
+    }
 
     open fun mount(context: Context, parent: Element?, slot: Int?) {
         d { "${javaClass.simpleName} mount parent $parent slot $slot" }

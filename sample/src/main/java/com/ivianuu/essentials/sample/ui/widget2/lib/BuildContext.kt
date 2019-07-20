@@ -19,9 +19,19 @@ package com.ivianuu.essentials.sample.ui.widget2.lib
 import kotlin.reflect.KClass
 
 interface BuildContext {
+
+    val widget: Widget
+    val owner: BuildOwner?
+
     fun <T : InheritedWidget> ancestorInheritedElementForWidgetOfExactType(
         type: KClass<T>
     ): T?
+
+    fun <T : Widget> ancestorWidgetOfExactType(
+        type: KClass<T>
+    ): T?
+
+    fun <T : State> ancestorStateOfType(type: KClass<T>): T?
 }
 
 inline fun <reified T : InheritedWidget> BuildContext.ancestorInheritedElementForWidgetOfExactType(): T? =
