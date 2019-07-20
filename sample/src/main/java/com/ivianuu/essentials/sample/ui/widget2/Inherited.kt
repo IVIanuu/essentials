@@ -16,8 +16,6 @@
 
 package com.ivianuu.essentials.sample.ui.widget2
 
-import com.ivianuu.essentials.util.cast
-
 abstract class InheritedWidget(child: Widget) : ProxyWidget(child)
 
 abstract class InheritedElement(widget: InheritedWidget) : ProxyElement(widget) {
@@ -25,6 +23,6 @@ abstract class InheritedElement(widget: InheritedWidget) : ProxyElement(widget) 
         val inheritedWidgets =
             parent?.inheritedWidgets ?: mutableMapOf()
         this.inheritedWidgets = inheritedWidgets
-        inheritedWidgets[widget.cast<InheritedWidget>()::class] = this
+        inheritedWidgets[widget<InheritedWidget>()::class] = this
     }
 }

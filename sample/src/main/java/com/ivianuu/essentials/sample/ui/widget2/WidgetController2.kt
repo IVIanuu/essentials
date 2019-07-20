@@ -120,7 +120,7 @@ class HelloWorldElement(widget: HelloWorldWidget) : ViewElement<TextView>(widget
     override fun insertChild(view: View, slot: Int?) {
     }
 
-    override fun moveChild(view: View, slot: Int?) {
+    override fun moveChild(view: View, slot: Int) {
     }
 
     override fun removeChild(view: View) {
@@ -135,3 +135,4 @@ class MyDataWidget(
 }
 
 class MyDataElement(widget: MyDataWidget) : InheritedElement(widget)
+

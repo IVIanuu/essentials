@@ -20,7 +20,6 @@ import android.content.Context
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import com.ivianuu.essentials.util.cast
 
 class RootWidget(
     val rootView: ViewGroup,
@@ -42,7 +41,7 @@ class RootElement(
 
     override fun mount(context: Context, parent: Element?, slot: Int?) {
         super.mount(context, parent, slot)
-        val child = widget.cast<RootWidget>().child.createElement()
+        val child = widget<RootWidget>().child.createElement()
         this.child = child
         child.mount(context, this, null)
     }
@@ -51,7 +50,7 @@ class RootElement(
         requireView().addView(view)
     }
 
-    override fun moveChild(view: View, slot: Int?) {
+    override fun moveChild(view: View, slot: Int) {
     }
 
     override fun removeChild(view: View) {
@@ -74,8 +73,7 @@ class RootElement(
     }
 
     override fun performRebuild(context: Context) {
-        this.child = updateChild(context, child, widget.cast<RootWidget>().child, null)
+        this.child = updateChild(context, child, widget<RootWidget>().child, null)
     }
 
-    private fun requireView(): FrameLayout = this.view ?: error("not mounted")
 }

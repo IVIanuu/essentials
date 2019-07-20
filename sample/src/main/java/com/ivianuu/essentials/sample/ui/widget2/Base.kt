@@ -140,4 +140,7 @@ abstract class Element(widget: Widget) : BuildContext {
         newChild.mount(context, this, newSlot)
         return newChild
     }
+
+    inline fun <reified T : Widget> widget(): T = widget as T
+
 }

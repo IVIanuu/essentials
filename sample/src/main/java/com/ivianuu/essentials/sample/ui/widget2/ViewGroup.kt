@@ -16,8 +16,67 @@
 
 package com.ivianuu.essentials.sample.ui.widget2
 
+import android.content.Context
+import android.view.View
 import android.view.ViewGroup
 
-abstract class ViewGroupElement<V : ViewGroup>(widget: ViewWidget<V>) : ViewElement<V>(widget) {
+abstract class ViewGroupWidget<V : ViewGroup>(
+    val children: List<Widget>
+) : ViewWidget<V>() {
+    abstract override fun createElement(): ViewGroupElement<V>
+}
 
+open class ViewGroupElement<V : ViewGroup>(
+    widget: ViewGroupWidget<V>
+) : ViewElement<V>(widget) {
+
+    private var children = mutableListOf<Element>()
+
+    override fun mount(context: Context, parent: Element?, slot: Int?) {
+        super.mount(context, parent, slot)
+        widget<ViewGroupWidget<V>>().children.forEach {
+            val child = it.createElement()
+            children.add(child)
+            child.mount(context, this, null)
+        }
+    }
+
+    override fun insertChild(view: View, slot: Int?) {
+        if (slot != null) {
+            requireView().addView(view, slot)
+        } else {
+            requireView().removeView(view)
+        }
+    }
+
+    override fun moveChild(view: View, slot: Int) {
+        requireView().removeView(view)
+        requireView().addView(view, slot)
+    }
+
+    override fun removeChild(view: View) {
+        requireView().removeView(view)
+    }
+
+    override fun attachView() {
+        super.attachView()
+        children.forEach { it.attachView() }
+    }
+
+    override fun detachView() {
+        children.forEach { it.detachView() }
+        super.detachView()
+    }
+
+    override fun unmount() {
+        children.forEach { it.unmount() }
+        children.clear()
+        super.unmount()
+    }
+
+    override fun update(context: Context, newWidget: Widget) {
+        super.update(context, newWidget)
+        children = updateChildren(context, children, widget<ViewGroupWidget<V>>().children)
+            .toMutableList()
+    }
 }
