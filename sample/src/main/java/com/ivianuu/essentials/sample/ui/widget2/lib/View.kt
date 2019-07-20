@@ -69,6 +69,7 @@ open class ViewElement<V : View>(widget: ViewWidget<V>) : Element(widget) {
     override fun update(context: Context, newWidget: Widget) {
         super.update(context, newWidget)
         widget<ViewWidget<V>>().updateView(this, view!!)
+        isDirty = false
     }
 
     override fun updateSlot(newSlot: Int?) {
@@ -92,6 +93,11 @@ open class ViewElement<V : View>(widget: ViewWidget<V>) : Element(widget) {
     }
 
     protected fun requireView(): V = this.view ?: error("not mounted")
+
+    override fun performRebuild(context: Context) {
+        widget<ViewWidget<V>>().updateView(this, view!!)
+        isDirty = false
+    }
 
     protected open fun updateChildren(
         context: Context,

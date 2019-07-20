@@ -25,6 +25,7 @@ import kotlin.reflect.KClass
 
 interface BuildOwner {
     fun rebuild()
+    fun scheduleBuildFor(element: Element)
     fun clear()
 }
 
@@ -41,8 +42,15 @@ class AndroidBuildOwner(
 
     private var buildJob: Job? = null
 
+    private val dirtyElements = mutableListOf<Element>()
+
     init {
-        rebuild()
+        firstFrame()
+    }
+
+    override fun scheduleBuildFor(element: Element) {
+        dirtyElements.add(element)
+        scheduleBuild()
     }
 
     override fun clear() {
@@ -57,25 +65,27 @@ class AndroidBuildOwner(
     }
 
     override fun rebuild() {
+        root!!.markNeedsBuild()
+    }
+
+    private fun scheduleBuild() {
         if (buildJob != null) return
         buildJob = coroutineScope.launch(Dispatchers.Main) {
             buildJob = null
-            build()
+            rebuildDirtyElements()
         }
     }
 
-    private fun build() {
-        val widget = RootWidget(view, child(this))
+    private fun rebuildDirtyElements() {
+        dirtyElements.toList().forEach { it.rebuild(view.context) }
+        dirtyElements.clear()
+    }
 
-        var root = root
-        if (root != null) {
-            root.update(view.context, widget)
-            root.rebuild(view.context)
-        } else {
-            root = widget.createElement()
-            this.root = root
-            root.mount(view.context, null, null)
-            root.attachView()
-        }
+    private fun firstFrame() {
+        val widget = RootWidget(this, view, child)
+        val root = widget.createElement()
+        this.root = root
+        root.mount(view.context, null, null)
+        root.attachView()
     }
 }

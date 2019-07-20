@@ -69,6 +69,7 @@ class ListViewElement(widget: ListView) : ViewElement<RecyclerView>(widget) {
 
     override fun removeChildView(view: View) {
     }
+
 }
 
 private class WidgetEpoxyController(val element: Element) : TypedEpoxyController<List<Widget>>() {

@@ -33,15 +33,20 @@ abstract class Widget(val key: Any? = null) {
 abstract class Element(widget: Widget) : BuildContext {
 
     var widget: Widget = widget
-        private set
+        protected set
     var context: Context? = null
-        private set
+        protected set
     var parent: Element? = null
-        private set
+        protected set
+    var owner: BuildOwner? = null
+        protected set
     var slot: Int? = null
-        private set
+        protected set
 
     var inheritedWidgets: MutableMap<KClass<out InheritedWidget>, InheritedElement>? = null
+        protected set
+
+    var isDirty = false
         protected set
 
     override fun <T : InheritedWidget> ancestorInheritedElementForWidgetOfExactType(type: KClass<T>): T? =
@@ -51,6 +56,7 @@ abstract class Element(widget: Widget) : BuildContext {
         d { "${javaClass.simpleName} mount parent $parent slot $slot" }
         this.context = context
         this.parent = parent
+        this.owner = parent?.owner
         this.slot = slot
         updateInheritance()
     }
@@ -75,12 +81,21 @@ abstract class Element(widget: Widget) : BuildContext {
     }
 
     open fun rebuild(context: Context) {
-        d { "${javaClass.simpleName} rebuild" }
-        performRebuild(context)
+        d { "${javaClass.simpleName} rebuild is dirty $isDirty" }
+        if (isDirty) {
+            performRebuild(context)
+        }
     }
 
     protected open fun performRebuild(context: Context) {
 
+    }
+
+    open fun markNeedsBuild() {
+        if (!isDirty) {
+            isDirty = true
+            owner!!.scheduleBuildFor(this)
+        }
     }
 
     protected open fun updateChild(

@@ -55,8 +55,6 @@ class WidgetController2 : EsController() {
             }
         }
 
-        //var wasMoved = false
-
         buildOwner = AndroidBuildOwner(
             viewLifecycleScope,
             view.cast()

@@ -60,6 +60,7 @@ abstract class ComponentElement(widget: Widget) : Element(widget) {
         d { "${javaClass.simpleName} perform rebuild" }
         val built = build()
         child = updateChild(context, child, built, slot)
+        isDirty = false
     }
 
 }

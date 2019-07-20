@@ -22,18 +22,20 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 
 class RootWidget(
+    val owner: BuildOwner,
     val rootView: ViewGroup,
-    val child: Widget
+    val child: (BuildContext) -> Widget
 ) : ViewWidget<FrameLayout>() {
 
     override fun createElement() =
-        RootElement(rootView, this)
+        RootElement(owner, rootView, this)
 
     override fun createView(context: BuildContext, androidContext: Context): FrameLayout =
         FrameLayout(androidContext)
 }
 
 class RootElement(
+    val _owner: BuildOwner,
     val _rootView: ViewGroup,
     widget: RootWidget
 ) : ViewElement<FrameLayout>(widget) {
@@ -42,7 +44,8 @@ class RootElement(
 
     override fun mount(context: Context, parent: Element?, slot: Int?) {
         super.mount(context, parent, slot)
-        val child = widget<RootWidget>().child.createElement()
+        owner = _owner
+        val child = widget<RootWidget>().child(this).createElement()
         this.child = child
         child.mount(context, this, null)
     }
@@ -75,7 +78,8 @@ class RootElement(
     }
 
     override fun performRebuild(context: Context) {
-        this.child = updateChild(context, child, widget<RootWidget>().child, null)
+        this.child = updateChild(context, child, widget<RootWidget>().child(this), null)
+        isDirty = false
     }
 
     override fun onEachChild(block: (Element) -> Unit) {
