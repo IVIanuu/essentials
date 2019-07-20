@@ -18,6 +18,7 @@ package com.ivianuu.essentials.sample.ui.widget2.lib
 
 import android.content.Context
 import android.view.View
+import com.github.ajalt.timberkt.d
 
 abstract class ViewWidget<V : View>(key: Any? = null) : Widget(key) {
     override fun createElement(): ViewElement<V> = ViewElement(this)
@@ -39,7 +40,7 @@ open class ViewElement<V : View>(widget: ViewWidget<V>) : Element(widget) {
         error("unsupported")
     }
 
-    open fun moveChildView(view: View, slot: Int) {
+    open fun moveChildView(view: View, slot: Int?) {
         error("unsupported")
     }
 
@@ -55,17 +56,24 @@ open class ViewElement<V : View>(widget: ViewWidget<V>) : Element(widget) {
 
     override fun attachView() {
         val ancestorViewElement = findAncestorViewElement() ?: error("")
+        d { "${javaClass.simpleName} attach to $ancestorViewElement view is $view" }
         this.ancestorViewElement = ancestorViewElement
         ancestorViewElement.insertChildView(view!!, slot)
     }
 
     override fun detachView() {
+        d { "${javaClass.simpleName} remove from $ancestorViewElement view is $view" }
         ancestorViewElement!!.removeChildView(view!!)
     }
 
     override fun update(context: Context, newWidget: Widget) {
         super.update(context, newWidget)
         widget<ViewWidget<V>>().updateView(this, view!!)
+    }
+
+    override fun updateSlot(newSlot: Int?) {
+        super.updateSlot(newSlot)
+        ancestorViewElement!!.moveChildView(requireView(), slot)
     }
 
     override fun unmount() {
@@ -97,14 +105,12 @@ open class ViewElement<V : View>(widget: ViewWidget<V>) : Element(widget) {
 
         val newChildren = mutableListOf<Element>()
 
-        var previousChild: Element
-
         // Update the top of the list.
         while ((oldChildrenTop <= oldChildrenBottom) && (newChildrenTop <= newChildrenBottom)) {
             val oldChild = oldChildren[oldChildrenTop]
             val newWidget = newWidgets[newChildrenTop]
             if (!newWidget.canUpdate(oldChild.widget)) break
-            val newChild = updateChild(context, oldChild, newWidget, null)!! // todo slot
+            val newChild = updateChild(context, oldChild, newWidget, newChildrenTop)!!
             newChildren.add(newChildrenTop, newChild)
             newChildrenTop += 1
             oldChildrenTop += 1
@@ -131,7 +137,6 @@ open class ViewElement<V : View>(widget: ViewWidget<V>) : Element(widget) {
                 } else {
                     oldChild.detachView()
                     oldChild.unmount()
-                    // todo deactivateChild(oldChild)
                 }
                 oldChildrenTop += 1
             }
@@ -157,9 +162,8 @@ open class ViewElement<V : View>(widget: ViewWidget<V>) : Element(widget) {
                 }
             }
 
-            val newChild = updateChild(context, oldChild, newWidget, null)!! // todo slot
+            val newChild = updateChild(context, oldChild, newWidget, newChildrenTop)!!
             newChildren.add(newChildrenTop, newChild)
-            previousChild = newChild
             newChildrenTop += 1
         }
 
@@ -171,9 +175,8 @@ open class ViewElement<V : View>(widget: ViewWidget<V>) : Element(widget) {
         while ((oldChildrenTop <= oldChildrenBottom) && (newChildrenTop <= newChildrenBottom)) {
             val oldChild = oldChildren[oldChildrenTop]
             val newWidget = newWidgets[newChildrenTop]
-            val newChild = updateChild(context, oldChild, newWidget, null)!! // todo slot
+            val newChild = updateChild(context, oldChild, newWidget, newChildrenTop)!!
             newChildren.add(newChildrenTop, newChild)
-            previousChild = newChild
             newChildrenTop += 1
             oldChildrenTop += 1
         }

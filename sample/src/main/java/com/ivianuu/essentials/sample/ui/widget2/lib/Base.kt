@@ -48,6 +48,7 @@ abstract class Element(widget: Widget) : BuildContext {
         inheritedWidgets?.get(type)?.widget as? T
 
     open fun mount(context: Context, parent: Element?, slot: Int?) {
+        d { "${javaClass.simpleName} mount parent $parent slot $slot" }
         this.context = context
         this.parent = parent
         this.slot = slot
@@ -55,6 +56,7 @@ abstract class Element(widget: Widget) : BuildContext {
     }
 
     open fun unmount() {
+        d { "${javaClass.simpleName} unmount parent $parent slot $slot" }
         context = null
         parent = null
         slot = null
@@ -68,6 +70,7 @@ abstract class Element(widget: Widget) : BuildContext {
     }
 
     protected open fun updateInheritance() {
+        d { "${javaClass.simpleName} update inheritance ${parent?.inheritedWidgets}" }
         inheritedWidgets = parent?.inheritedWidgets
     }
 
@@ -109,6 +112,9 @@ abstract class Element(widget: Widget) : BuildContext {
                 child.update(context, newWidget)
                 return child
             }
+
+            child.detachView()
+            child.unmount()
         }
 
         return inflateWidget(context, newWidget, newSlot)
@@ -116,16 +122,14 @@ abstract class Element(widget: Widget) : BuildContext {
 
     protected open fun updateSlotForChild(child: Element, newSlot: Int?) {
         d { "${javaClass.simpleName} update slot for child $child $newSlot" }
+        lateinit var block: (Element) -> Unit
 
-        /*assert(_debugLifecycleState == _ElementLifecycle.active);
-        assert(child != null);
-        assert(child._parent == this);
-        void visit(Element element) {
-            element._updateSlot(newSlot);
-            if (element is! RenderObjectElement)
-            element.visitChildren(visit);
+        block = {
+            it.updateSlot(newSlot)
+            if (it !is ViewElement<*>) it.onEachChild(block)
         }
-        visit(child);*/
+
+        block(child)
     }
 
     open fun update(context: Context, newWidget: Widget) {
@@ -133,12 +137,21 @@ abstract class Element(widget: Widget) : BuildContext {
         widget = newWidget
     }
 
+    open fun updateSlot(newSlot: Int?) {
+        d { "${javaClass.simpleName} update slow $newSlot" }
+        slot = newSlot
+    }
+
     protected open fun inflateWidget(context: Context, newWidget: Widget, newSlot: Int?): Element {
         d { "${javaClass.simpleName} inflate widget $newWidget $newSlot" }
 
         val newChild = newWidget.createElement()
         newChild.mount(context, this, newSlot)
+        newChild.attachView()
         return newChild
+    }
+
+    open fun onEachChild(block: (Element) -> Unit) {
     }
 
     inline fun <reified T : Widget> widget(): T = widget as T

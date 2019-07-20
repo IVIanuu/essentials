@@ -40,7 +40,7 @@ open class ViewGroupElement<V : ViewGroup>(
         widget<ViewGroupWidget<V>>().children.forEach {
             val child = it.createElement()
             children.add(child)
-            child.mount(context, this, null)
+            child.mount(context, this, children.lastIndex)
         }
     }
 
@@ -53,7 +53,8 @@ open class ViewGroupElement<V : ViewGroup>(
         }
     }
 
-    override fun moveChildView(view: View, slot: Int) {
+    override fun moveChildView(view: View, slot: Int?) {
+        requireNotNull(slot)
         d { "${javaClass.simpleName} move $view to $slot" }
         requireView().removeView(view)
         requireView().addView(view, slot)
@@ -84,5 +85,9 @@ open class ViewGroupElement<V : ViewGroup>(
         super.update(context, newWidget)
         children = updateChildren(context, children, widget<ViewGroupWidget<V>>().children)
             .toMutableList()
+    }
+
+    override fun onEachChild(block: (Element) -> Unit) {
+        children.forEach(block)
     }
 }

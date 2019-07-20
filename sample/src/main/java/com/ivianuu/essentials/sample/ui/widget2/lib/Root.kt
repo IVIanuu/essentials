@@ -51,7 +51,8 @@ class RootElement(
         requireView().addView(view)
     }
 
-    override fun moveChildView(view: View, slot: Int) {
+    override fun moveChildView(view: View, slot: Int?) {
+        error("unsupported")
     }
 
     override fun removeChildView(view: View) {
@@ -75,6 +76,10 @@ class RootElement(
 
     override fun performRebuild(context: Context) {
         this.child = updateChild(context, child, widget<RootWidget>().child, null)
+    }
+
+    override fun onEachChild(block: (Element) -> Unit) {
+        child?.let { block(it) }
     }
 
 }

@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.sample.ui.widget2
 
 import android.content.Context
+import android.graphics.Color
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
@@ -24,6 +25,7 @@ import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.LinearLayout
 import android.widget.LinearLayout.VERTICAL
 import android.widget.TextView
+import androidx.appcompat.widget.AppCompatTextView
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.sample.ui.widget2.exp.Ambient
 import com.ivianuu.essentials.sample.ui.widget2.lib.AndroidBuildOwner
@@ -60,6 +62,8 @@ class WidgetController2 : EsController() {
             }
         }
 
+        var wasMoved = false
+
         buildOwner = AndroidBuildOwner(
             viewLifecycleScope,
             view.cast()
@@ -67,11 +71,13 @@ class WidgetController2 : EsController() {
             CountAmbient.Provider(
                 value = count,
                 child = Column(
-                    children = listOf(
-                        HelloWorldWidget("1"),
-                        HelloWorldWidget("2"),
-                        HelloWorldWidget("3")
-                    )
+                    children = mutableListOf<Widget>().apply {
+                        add(OtherWidget("1"))
+                        add(HelloWorldWidget("2"))
+                        add(HelloWorldWidget("3"))
+                        if (wasMoved) reverse()
+                        wasMoved = !wasMoved
+                    }
                 )
             )
         }
@@ -87,9 +93,22 @@ class WidgetController2 : EsController() {
 
 val CountAmbient = Ambient<Int>()
 
-class HelloWorldWidget(val tag: String) : ViewWidget<TextView>() {
+class OtherWidget(val tag: String) : ViewWidget<TextView>() {
     override fun createView(context: BuildContext, androidContext: Context): TextView {
         return TextView(androidContext).apply {
+            setTextAppearance(R.style.TextAppearance_MaterialComponents_Subtitle1)
+            setBackgroundColor(Color.RED)
+        }
+    }
+
+    override fun updateView(context: BuildContext, view: TextView) {
+        view.text = "Tag: $tag value ${CountAmbient.of(context)}"
+    }
+}
+
+class HelloWorldWidget(val tag: String) : ViewWidget<TextView>() {
+    override fun createView(context: BuildContext, androidContext: Context): TextView {
+        return AppCompatTextView(androidContext).apply {
             setTextAppearance(R.style.TextAppearance_MaterialComponents_Headline4)
         }
     }
