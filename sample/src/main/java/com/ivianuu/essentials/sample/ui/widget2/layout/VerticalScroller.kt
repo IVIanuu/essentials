@@ -14,31 +14,22 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.sample.ui.widget2.exp
+package com.ivianuu.essentials.sample.ui.widget2.layout
 
 import android.content.Context
-import android.view.Gravity
 import android.view.ViewGroup
-import android.widget.LinearLayout
+import android.view.ViewGroup.LayoutParams.MATCH_PARENT
+import androidx.core.widget.NestedScrollView
 import com.ivianuu.essentials.sample.ui.widget2.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget2.lib.ViewGroupWidget
 import com.ivianuu.essentials.sample.ui.widget2.lib.Widget
 
-class Column(
-    children: List<Widget>,
+class VerticalScroller(
+    child: Widget,
     key: Any? = null
-) : ViewGroupWidget<LinearLayout>(children, key) {
-
-    override fun createView(
-        context: BuildContext,
-        androidContext: Context
-    ): LinearLayout = LinearLayout(androidContext).apply {
-        layoutParams = ViewGroup.LayoutParams(
-            ViewGroup.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.MATCH_PARENT
-        )
-        orientation = LinearLayout.VERTICAL
-        gravity = Gravity.TOP or Gravity.CENTER_HORIZONTAL
-    }
-
+) : ViewGroupWidget<NestedScrollView>(listOf(child), key) {
+    override fun createView(context: BuildContext, androidContext: Context) =
+        NestedScrollView(androidContext).apply {
+            layoutParams = ViewGroup.LayoutParams(MATCH_PARENT, MATCH_PARENT)
+        }
 }

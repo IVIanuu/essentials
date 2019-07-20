@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.sample.ui.widget2.exp
+package com.ivianuu.essentials.sample.ui.widget2.layout
 
 import android.content.Context
 import android.view.View
@@ -40,14 +40,16 @@ class ListView(
     key: Any? = null
 ) : ViewWidget<RecyclerView>(key) {
 
-    override fun createElement() = ListViewElement(this)
+    override fun createElement() =
+        ListViewElement(this)
 
     override fun createView(
         context: BuildContext,
         androidContext: Context
     ) = EpoxyRecyclerView(androidContext).apply {
         layoutParams = ViewGroup.LayoutParams(MATCH_PARENT, MATCH_PARENT)
-        val epoxyController = WidgetEpoxyController(context.cast())
+        val epoxyController =
+            WidgetEpoxyController(context.cast())
         adapter = epoxyController.adapter
         properties.set("epoxy_controller", epoxyController)
     }
@@ -75,7 +77,14 @@ class ListViewElement(widget: ListView) : ViewElement<RecyclerView>(widget) {
 private class WidgetEpoxyController(val element: Element) : TypedEpoxyController<List<Widget>>() {
     override fun buildModels(data: List<Widget>?) {
         d { "build models $data" }
-        data?.forEach { add(WidgetEpoxyModel(element, it)) }
+        data?.forEach {
+            add(
+                WidgetEpoxyModel(
+                    element,
+                    it
+                )
+            )
+        }
     }
 }
 
