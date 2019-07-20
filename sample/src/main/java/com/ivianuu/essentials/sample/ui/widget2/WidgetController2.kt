@@ -37,7 +37,7 @@ class WidgetController2 : EsController() {
         buildOwner = AndroidBuildOwner(
             viewLifecycleScope,
             view.cast(),
-            HelloWorldWidget()
+            MyDataWidget(System.currentTimeMillis().toInt(), MyWrappingWidget())
         )
     }
 
@@ -47,6 +47,15 @@ class WidgetController2 : EsController() {
         super.onDestroyView(view)
     }
 
+}
+
+class MyWrappingWidget : StatelessWidget() {
+    override fun build(context: BuildContext): HelloWorldWidget {
+        val value = context.ancestorInheritedElementForWidgetOfExactType<MyDataWidget>()
+            ?.data ?: error("no data")
+        d { "build with data $value" }
+        return HelloWorldWidget()
+    }
 }
 
 class HelloWorldWidget : ViewWidget<HelloWorldElement, TextView>() {
@@ -93,3 +102,12 @@ class HelloWorldElement(override val widget: ViewWidget<*, TextView>) : ViewElem
     override fun removeChild(view: View) {
     }
 }
+
+class MyDataWidget(
+    val data: Int,
+    child: Widget
+) : InheritedWidget(child) {
+    override fun createElement() = MyDataElement(this)
+}
+
+class MyDataElement(widget: MyDataWidget) : InheritedElement(widget)

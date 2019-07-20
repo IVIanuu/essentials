@@ -16,11 +16,13 @@
 
 package com.ivianuu.essentials.sample.ui.widget2
 
-abstract class StatelessWidget : Widget() {
-    override fun createElement(): StatelessElement = StatelessElement(this)
-    abstract fun build(context: BuildContext): Widget
-}
+abstract class InheritedWidget(child: Widget) : ProxyWidget(child)
 
-open class StatelessElement(override val widget: StatelessWidget) : ComponentElement() {
-    override fun build(): Widget = widget.build(this)
+abstract class InheritedElement(override val widget: InheritedWidget) : ProxyElement(widget) {
+    override fun updateInheritance() {
+        val inheritedWidgets =
+            parent?.inheritedWidgets ?: mutableMapOf()
+        this.inheritedWidgets = inheritedWidgets
+        inheritedWidgets[this.widget::class] = this
+    }
 }

@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.sample.ui.widget2
 
 import android.content.Context
+import kotlin.reflect.KClass
 
 abstract class Widget(open val key: Any? = null) {
 
@@ -38,16 +39,23 @@ abstract class Element : BuildContext {
     var slot: Int? = null
         private set
 
+    var inheritedWidgets: MutableMap<KClass<out InheritedWidget>, InheritedElement>? = null
+
+    override fun <T : InheritedWidget> ancestorInheritedElementForWidgetOfExactType(type: KClass<T>): T? =
+        inheritedWidgets?.get(type)?.widget as? T
+
     open fun mount(context: Context, parent: Element?, slot: Int?) {
         this.context = context
         this.parent = parent
         this.slot = slot
+        updateInheritance()
     }
 
     open fun unmount() {
         context = null
         parent = null
         slot = null
+        inheritedWidgets = null
     }
 
     open fun attachView() {
@@ -56,4 +64,7 @@ abstract class Element : BuildContext {
     open fun detachView() {
     }
 
+    protected open fun updateInheritance() {
+        inheritedWidgets = parent?.inheritedWidgets
+    }
 }

@@ -20,14 +20,32 @@ import android.content.Context
 
 abstract class ComponentElement : Element() {
 
-    var child: Widget? = null
+    var child: Element? = null
         private set
 
     abstract fun build(): Widget
 
     override fun mount(context: Context, parent: Element?, slot: Int?) {
         super.mount(context, parent, slot)
-        child = build()
+        val childWidget = build()
+        val childElement = childWidget.createElement()
+        child = childElement
+        childElement.mount(context, this, null)
+    }
+
+    override fun attachView() {
+        super.attachView()
+        child?.attachView()
+    }
+
+    override fun detachView() {
+        super.detachView()
+        child?.detachView()
+    }
+
+    override fun unmount() {
+        super.unmount()
+        child = null
     }
 
 }

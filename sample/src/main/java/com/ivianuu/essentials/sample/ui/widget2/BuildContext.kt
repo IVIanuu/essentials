@@ -16,4 +16,13 @@
 
 package com.ivianuu.essentials.sample.ui.widget2
 
-interface BuildContext
+import kotlin.reflect.KClass
+
+interface BuildContext {
+    fun <T : InheritedWidget> ancestorInheritedElementForWidgetOfExactType(
+        type: KClass<T>
+    ): T?
+}
+
+inline fun <reified T : InheritedWidget> BuildContext.ancestorInheritedElementForWidgetOfExactType(): T? =
+    ancestorInheritedElementForWidgetOfExactType(T::class)
