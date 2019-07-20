@@ -18,19 +18,19 @@ package com.ivianuu.essentials.sample.ui.widget2
 
 import android.content.Context
 import android.view.View
+import com.ivianuu.essentials.util.cast
 
-abstract class ViewWidget<E : ViewElement<V>, V : View> : Widget() {
+abstract class ViewWidget<V : View> : Widget() {
     abstract override fun createElement(): ViewElement<V>
 
-    abstract fun createView(element: E, context: Context): V
+    abstract fun createView(context: BuildContext, androidContext: Context): V
 
-    open fun updateView(element: E, view: V) {
+    open fun updateView(context: BuildContext, view: V) {
     }
 }
 
-abstract class ViewElement<V : View> : Element() {
+abstract class ViewElement<V : View>(widget: ViewWidget<V>) : Element(widget) {
 
-    abstract override val widget: ViewWidget<*, V>
     var view: V? = null
         private set
 
@@ -44,10 +44,8 @@ abstract class ViewElement<V : View> : Element() {
 
     override fun mount(context: Context, parent: Element?, slot: Int?) {
         super.mount(context, parent, slot)
-        view = (widget as ViewWidget<ViewElement<V>, V>)
-            .createView(this, context)
-        (widget as ViewWidget<ViewElement<V>, V>)
-            .updateView(this, view!!)
+        view = widget.cast<ViewWidget<V>>().createView(this, context)
+        widget.cast<ViewWidget<V>>().updateView(this, view!!)
     }
 
     override fun attachView() {
@@ -58,6 +56,11 @@ abstract class ViewElement<V : View> : Element() {
 
     override fun detachView() {
         ancestorViewElement!!.removeChild(view!!)
+    }
+
+    override fun update(context: Context, newWidget: Widget) {
+        super.update(context, newWidget)
+        widget.cast<ViewWidget<V>>().updateView(this, view!!)
     }
 
     override fun unmount() {

@@ -16,8 +16,10 @@
 
 package com.ivianuu.essentials.sample.ui.widget2
 
+import com.ivianuu.essentials.util.cast
+
 abstract class ProxyWidget(open val child: Widget) : Widget()
 
-abstract class ProxyElement(override val widget: ProxyWidget) : ComponentElement() {
-    override fun build(): Widget = widget.child
+abstract class ProxyElement(widget: ProxyWidget) : ComponentElement(widget) {
+    override fun build(): Widget = widget.cast<ProxyWidget>().child
 }

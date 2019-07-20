@@ -18,6 +18,6 @@ package com.ivianuu.essentials.sample.ui.widget2
 
 import android.view.ViewGroup
 
-abstract class ViewGroupElement<V : ViewGroup> : ViewElement<V>() {
+abstract class ViewGroupElement<V : ViewGroup>(widget: ViewWidget<V>) : ViewElement<V>(widget) {
 
 }

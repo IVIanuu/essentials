@@ -16,11 +16,13 @@
 
 package com.ivianuu.essentials.sample.ui.widget2
 
+import com.ivianuu.essentials.util.cast
+
 abstract class StatelessWidget : Widget() {
     override fun createElement(): StatelessElement = StatelessElement(this)
     abstract fun build(context: BuildContext): Widget
 }
 
-open class StatelessElement(override val widget: StatelessWidget) : ComponentElement() {
-    override fun build(): Widget = widget.build(this)
+open class StatelessElement(widget: StatelessWidget) : ComponentElement(widget) {
+    override fun build(): Widget = widget.cast<StatelessWidget>().build(this)
 }

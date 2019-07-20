@@ -24,6 +24,9 @@ import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.base.EsController
 import com.ivianuu.essentials.util.cast
 import com.ivianuu.essentials.util.viewLifecycleScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
 
 class WidgetController2 : EsController() {
 
@@ -34,11 +37,25 @@ class WidgetController2 : EsController() {
 
     override fun onViewCreated(view: View) {
         super.onViewCreated(view)
+
+        var count = 0
+
+        viewLifecycleScope.launch {
+            delay(100)
+            while (coroutineContext.isActive) {
+                delay(1000)
+                count += 1
+                buildOwner?.rebuild()
+            }
+        }
+
         buildOwner = AndroidBuildOwner(
             viewLifecycleScope,
-            view.cast(),
-            MyDataWidget(System.currentTimeMillis().toInt(), MyWrappingWidget())
-        )
+            view.cast()
+        ) {
+            d { "call build owner build" }
+            MyDataWidget(count, MyWrappingWidget())
+        }
     }
 
     override fun onDestroyView(view: View) {
@@ -54,24 +71,26 @@ class MyWrappingWidget : StatelessWidget() {
         val value = context.ancestorInheritedElementForWidgetOfExactType<MyDataWidget>()
             ?.data ?: error("no data")
         d { "build with data $value" }
-        return HelloWorldWidget()
+        return HelloWorldWidget(value)
     }
 }
 
-class HelloWorldWidget : ViewWidget<HelloWorldElement, TextView>() {
+class HelloWorldWidget(val count: Int) : ViewWidget<TextView>() {
     override fun createElement() = HelloWorldElement(this)
-    override fun createView(element: HelloWorldElement, context: Context) =
-        TextView(context).apply {
+
+    override fun createView(context: BuildContext, androidContext: Context): TextView {
+        return TextView(androidContext).apply {
             setTextAppearance(R.style.TextAppearance_MaterialComponents_Headline4)
         }
-
-    override fun updateView(element: HelloWorldElement, view: TextView) {
-        super.updateView(element, view)
-        view.text = "Hello World"
     }
+
+    override fun updateView(context: BuildContext, view: TextView) {
+        view.text = "Hello World $count"
+    }
+
 }
 
-class HelloWorldElement(override val widget: ViewWidget<*, TextView>) : ViewElement<TextView>() {
+class HelloWorldElement(widget: HelloWorldWidget) : ViewElement<TextView>(widget) {
 
     override fun mount(context: Context, parent: Element?, slot: Int?) {
         super.mount(context, parent, slot)
@@ -86,6 +105,11 @@ class HelloWorldElement(override val widget: ViewWidget<*, TextView>) : ViewElem
     override fun detachView() {
         d { "detach view" }
         super.detachView()
+    }
+
+    override fun update(context: Context, newWidget: Widget) {
+        super.update(context, newWidget)
+        d { "update $newWidget" }
     }
 
     override fun unmount() {

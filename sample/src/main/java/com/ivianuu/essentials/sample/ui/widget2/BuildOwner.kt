@@ -30,11 +30,10 @@ interface BuildOwner {
 class AndroidBuildOwner(
     private val coroutineScope: CoroutineScope,
     private val view: ViewGroup,
-    private val child: Widget
+    private val child: () -> Widget
 ) : BuildOwner {
 
-    private var rootWidget: RootWidget? = null
-    private var rootElement: RootElement? = null
+    private var root: RootElement? = null
 
     private var buildJob: Job? = null
 
@@ -46,13 +45,11 @@ class AndroidBuildOwner(
         buildJob?.cancel()
         buildJob = null
 
-        rootElement?.let {
+        root?.let {
             it.detachView()
             it.unmount()
         }
-        rootElement = null
-
-        rootWidget = null
+        root = null
     }
 
     override fun rebuild() {
@@ -64,18 +61,17 @@ class AndroidBuildOwner(
     }
 
     private fun build() {
-        rootElement?.let {
-            it.detachView()
-            it.unmount()
+        val widget = RootWidget(view, child())
+
+        var root = root
+        if (root != null) {
+            root.update(view.context, widget)
+            root.rebuild(view.context)
+        } else {
+            root = widget.createElement()
+            this.root = root
+            root.mount(view.context, null, null)
+            root.attachView()
         }
-
-        val rootWidget = RootWidget(view, child)
-        this.rootWidget = rootWidget
-
-        val rootElement = rootWidget.createElement()
-        this.rootElement = rootElement
-
-        rootElement.mount(view.context, null, null)
-        rootElement.attachView()
     }
 }

@@ -17,8 +17,9 @@
 package com.ivianuu.essentials.sample.ui.widget2
 
 import android.content.Context
+import com.github.ajalt.timberkt.d
 
-abstract class ComponentElement : Element() {
+abstract class ComponentElement(widget: Widget) : Element(widget) {
 
     var child: Element? = null
         private set
@@ -46,6 +47,18 @@ abstract class ComponentElement : Element() {
     override fun unmount() {
         super.unmount()
         child = null
+    }
+
+    override fun update(context: Context, newWidget: Widget) {
+        super.update(context, newWidget)
+        d { "component ${javaClass.simpleName} update $newWidget" }
+        performRebuild(context)
+    }
+
+    override fun performRebuild(context: Context) {
+        d { "${javaClass.simpleName} perform rebuild" }
+        val built = build()
+        child = updateChild(context, child, built, slot)
     }
 
 }

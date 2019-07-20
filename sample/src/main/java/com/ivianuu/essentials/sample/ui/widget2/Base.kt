@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.sample.ui.widget2
 
 import android.content.Context
+import com.github.ajalt.timberkt.d
 import kotlin.reflect.KClass
 
 abstract class Widget(open val key: Any? = null) {
@@ -24,14 +25,15 @@ abstract class Widget(open val key: Any? = null) {
     abstract fun createElement(): Element
 
     fun canUpdate(other: Widget): Boolean =
-        this::class == other::class && this.key == other.key
+        (this::class == other::class && this.key == other.key)
+            .also { d { "${javaClass.simpleName} can update ${other.javaClass.simpleName} = $it" } }
 
 }
 
-abstract class Element : BuildContext {
+abstract class Element(widget: Widget) : BuildContext {
 
-    abstract val widget: Widget
-
+    var widget: Widget = widget
+        private set
     var context: Context? = null
         private set
     var parent: Element? = null
@@ -40,6 +42,7 @@ abstract class Element : BuildContext {
         private set
 
     var inheritedWidgets: MutableMap<KClass<out InheritedWidget>, InheritedElement>? = null
+        protected set
 
     override fun <T : InheritedWidget> ancestorInheritedElementForWidgetOfExactType(type: KClass<T>): T? =
         inheritedWidgets?.get(type)?.widget as? T
@@ -66,5 +69,75 @@ abstract class Element : BuildContext {
 
     protected open fun updateInheritance() {
         inheritedWidgets = parent?.inheritedWidgets
+    }
+
+    open fun rebuild(context: Context) {
+        d { "${javaClass.simpleName} rebuild" }
+        performRebuild(context)
+    }
+
+    protected open fun performRebuild(context: Context) {
+
+    }
+
+    protected open fun updateChild(
+        context: Context,
+        child: Element?,
+        newWidget: Widget?,
+        newSlot: Int?
+    ): Element? {
+        d { "${javaClass.simpleName} update child $child new $newWidget" }
+
+        if (newWidget == null) {
+            if (child != null) {
+                child.detachView()
+                child.unmount()
+            }
+            return null
+        }
+
+        if (child != null) {
+            if (child.widget == newWidget) {
+                if (child.slot != newSlot) {
+                    updateSlotForChild(child, newSlot)
+                    return child
+                }
+            }
+
+            if (child.widget.canUpdate(newWidget)) {
+                d { "${javaClass.simpleName} call child update ${child.javaClass.simpleName}" }
+                child.update(context, newWidget)
+                return child
+            }
+        }
+
+        return inflateWidget(context, newWidget, newSlot)
+    }
+
+    protected open fun updateSlotForChild(child: Element, newSlot: Int?) {
+        d { "${javaClass.simpleName} update slot for child $child $newSlot" }
+
+        /*assert(_debugLifecycleState == _ElementLifecycle.active);
+        assert(child != null);
+        assert(child._parent == this);
+        void visit(Element element) {
+            element._updateSlot(newSlot);
+            if (element is! RenderObjectElement)
+            element.visitChildren(visit);
+        }
+        visit(child);*/
+    }
+
+    open fun update(context: Context, newWidget: Widget) {
+        d { "${javaClass.simpleName} update $newWidget" }
+        widget = newWidget
+    }
+
+    protected open fun inflateWidget(context: Context, newWidget: Widget, newSlot: Int?): Element {
+        d { "${javaClass.simpleName} inflate widget $newWidget $newSlot" }
+
+        val newChild = newWidget.createElement()
+        newChild.mount(context, this, newSlot)
+        return newChild
     }
 }
