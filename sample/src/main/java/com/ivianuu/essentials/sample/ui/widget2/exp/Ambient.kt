@@ -16,6 +16,8 @@
 
 package com.ivianuu.essentials.sample.ui.widget2.exp
 
+import android.content.Context
+import android.view.ViewGroup
 import com.ivianuu.essentials.sample.ui.widget2.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget2.lib.InheritedWidget
 import com.ivianuu.essentials.sample.ui.widget2.lib.Widget
@@ -46,3 +48,7 @@ class Ambient<T>(valueType: Type<T>) {
             updateShouldNotify?.invoke(oldWidget.cast<Provider<T>>().value, value) ?: true
     }
 }
+
+val AndroidContextAmbient = Ambient<Context>()
+
+val ContainerAmbient = Ambient<ViewGroup>()

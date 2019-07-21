@@ -19,7 +19,7 @@ package com.ivianuu.essentials.sample.ui.widget2.layout
 import android.view.Gravity
 import android.view.ViewGroup
 import android.widget.LinearLayout
-import com.ivianuu.essentials.sample.ui.widget2.exp.AndroidContextContext
+import com.ivianuu.essentials.sample.ui.widget2.exp.AndroidContextAmbient
 import com.ivianuu.essentials.sample.ui.widget2.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget2.lib.SingleChildViewGroupWidget
 import com.ivianuu.essentials.sample.ui.widget2.lib.Widget
@@ -36,7 +36,7 @@ open class Align(
     }
 
     override fun createView(context: BuildContext): LinearLayout =
-        LinearLayout(AndroidContextContext(context)).apply {
+        LinearLayout(AndroidContextAmbient(context)).apply {
             layoutParams = ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT

@@ -14,22 +14,35 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.sample.ui.widget2.layout
+package com.ivianuu.essentials.sample.ui.widget2.exp
 
+import android.view.View
 import android.view.ViewGroup
-import android.view.ViewGroup.LayoutParams.MATCH_PARENT
-import androidx.core.widget.NestedScrollView
-import com.ivianuu.essentials.sample.ui.widget2.exp.AndroidContextAmbient
-import com.ivianuu.essentials.sample.ui.widget2.lib.BuildContext
-import com.ivianuu.essentials.sample.ui.widget2.lib.SingleChildViewGroupWidget
+import androidx.core.view.updateLayoutParams
 import com.ivianuu.essentials.sample.ui.widget2.lib.Widget
 
-class VerticalScroller(
+open class Margin(
+    val left: Int,
+    val top: Int,
+    val right: Int,
+    val bottom: Int,
     child: Widget,
-    key: Any? = null
-) : SingleChildViewGroupWidget<NestedScrollView>(child, key) {
-    override fun createView(context: BuildContext) =
-        NestedScrollView(AndroidContextAmbient(context)).apply {
-            layoutParams = ViewGroup.LayoutParams(MATCH_PARENT, MATCH_PARENT)
+    key: Any?
+) : ViewPropsWidget(child, key) {
+
+    constructor(
+        margin: Int,
+        child: Widget,
+        key: Any? = null
+    ) : this(margin, margin, margin, margin, child, key)
+
+    override fun applyViewProps(view: View) {
+        view.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+            leftMargin = left
+            topMargin = top
+            rightMargin = right
+            bottomMargin = bottom
         }
+    }
+
 }

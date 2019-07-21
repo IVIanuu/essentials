@@ -18,7 +18,7 @@ package com.ivianuu.essentials.sample.ui.widget2.lib
 
 import android.view.View
 import com.github.ajalt.timberkt.d
-import com.ivianuu.essentials.sample.ui.widget2.exp.LayoutParamsWidget
+import com.ivianuu.essentials.sample.ui.widget2.exp.ViewPropsWidget
 
 abstract class ViewWidget<V : View>(key: Any? = null) : Widget(key) {
     override fun createElement(): ViewElement<V> = ViewElement(this)
@@ -78,8 +78,8 @@ open class ViewElement<V : View>(widget: ViewWidget<V>) : Element(widget) {
         isDirty = false
     }
 
-    fun updateLayoutParams(layoutParams: LayoutParamsWidget) {
-        layoutParams.applyLayoutParams(requireView())
+    fun updateViewProps(viewProps: ViewPropsWidget) {
+        viewProps.applyViewProps(requireView())
     }
 
     override fun updateSlot(newSlot: Int?) {

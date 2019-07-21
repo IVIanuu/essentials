@@ -16,6 +16,20 @@
 
 package com.ivianuu.essentials.sample.ui.widget2.exp
 
-import android.view.ViewGroup
+import android.view.View
+import androidx.core.view.updateLayoutParams
+import com.ivianuu.essentials.sample.ui.widget2.lib.Widget
 
-val ContainerAmbient = Ambient<ViewGroup>()
+class Size(
+    val width: Int,
+    val height: Int,
+    child: Widget,
+    key: Any? = null
+) : ViewPropsWidget(child, key) {
+    override fun applyViewProps(view: View) {
+        view.updateLayoutParams {
+            width = this@Size.width
+            height = this@Size.height
+        }
+    }
+}

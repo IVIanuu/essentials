@@ -16,26 +16,25 @@
 
 package com.ivianuu.essentials.sample.ui.widget2.exp
 
-import android.view.ViewGroup
-import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
-import android.widget.FrameLayout
-import com.ivianuu.essentials.sample.ui.widget2.lib.BuildContext
-import com.ivianuu.essentials.sample.ui.widget2.lib.SingleChildViewGroupWidget
+import android.graphics.drawable.Drawable
+import android.view.View
 import com.ivianuu.essentials.sample.ui.widget2.lib.Widget
 
-class BackgroundColor(
+class Background(
+    val color: Int? = null,
+    val drawable: Drawable? = null,
+    val resource: Int? = null,
     child: Widget,
-    val color: Int,
     key: Any? = null
-) : SingleChildViewGroupWidget<FrameLayout>(child, key) {
-    override fun updateView(context: BuildContext, view: FrameLayout) {
-        super.updateView(context, view)
-        view.setBackgroundColor(color)
-    }
+) : ViewPropsWidget(child, key) {
 
-    override fun createView(context: BuildContext) =
-        FrameLayout(AndroidContextContext(context)).apply {
-            layoutParams = ViewGroup.LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
+    override fun applyViewProps(view: View) {
+        when {
+            color != null -> view.setBackgroundColor(color)
+            drawable != null -> view.background = drawable
+            resource != null -> view.setBackgroundResource(resource)
+            else -> view.background = null
         }
+    }
 
 }

@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.sample.ui.widget2.exp
 
 import android.view.View
-import androidx.core.view.updateLayoutParams
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.sample.ui.widget2.lib.Element
 import com.ivianuu.essentials.sample.ui.widget2.lib.ProxyElement
@@ -25,38 +24,28 @@ import com.ivianuu.essentials.sample.ui.widget2.lib.ProxyWidget
 import com.ivianuu.essentials.sample.ui.widget2.lib.ViewElement
 import com.ivianuu.essentials.sample.ui.widget2.lib.Widget
 
-open class LayoutParamsWidget(
+abstract class ViewPropsWidget(
     child: Widget,
-    val height: Int? = null,
-    val width: Int? = null,
     key: Any? = null
 ) : ProxyWidget(child, key) {
 
-    override fun createElement(): LayoutParamsElement = LayoutParamsElement(this)
+    override fun createElement(): ViewPropsElement = ViewPropsElement(this)
 
-    fun applyLayoutParams(view: View) {
-        d { "apply layout params $view" }
-        if (height != null || width != null) {
-            view.updateLayoutParams {
-                this@LayoutParamsWidget.width?.let { width = it }
-                this@LayoutParamsWidget.height?.let { height = it }
-            }
-        }
-    }
+    abstract fun applyViewProps(view: View)
 
 }
 
-open class LayoutParamsElement(widget: LayoutParamsWidget) : ProxyElement(widget) {
+open class ViewPropsElement(widget: ViewPropsWidget) : ProxyElement(widget) {
 
-    fun applyLayoutParams(widget: LayoutParamsWidget) {
-        d { "${javaClass.simpleName} apply layout params $widget" }
+    fun applyViewProps(widget: ViewPropsWidget) {
+        d { "${javaClass.simpleName} apply view props $widget" }
 
         lateinit var applyLayoutParamsToChild: (Element) -> Unit
 
         applyLayoutParamsToChild = { child ->
-            d { "${javaClass.simpleName} apply layout params to child $child" }
+            d { "${javaClass.simpleName} apply view props to child $child" }
             if (child is ViewElement<*>) {
-                child.updateLayoutParams(widget)
+                child.updateViewProps(widget)
             } else {
                 child.onEachChild(applyLayoutParamsToChild)
             }
@@ -66,7 +55,7 @@ open class LayoutParamsElement(widget: LayoutParamsWidget) : ProxyElement(widget
     }
 
     override fun notifyClients(oldWidget: Widget) {
-        applyLayoutParams(widget())
+        applyViewProps(widget())
     }
 
 }
