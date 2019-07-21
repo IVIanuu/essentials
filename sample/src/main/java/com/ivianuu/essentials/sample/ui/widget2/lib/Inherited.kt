@@ -17,8 +17,14 @@
 package com.ivianuu.essentials.sample.ui.widget2.lib
 
 import com.ivianuu.essentials.util.cast
+import com.ivianuu.injekt.Type
+import com.ivianuu.injekt.typeOf
 
-abstract class InheritedWidget(child: Widget, key: Any? = null) : ProxyWidget(child, key) {
+abstract class InheritedWidget(
+    child: Widget,
+    val type: Type<out InheritedWidget>? = null,
+    key: Any? = null
+) : ProxyWidget(child, key) {
     override fun createElement() = InheritedElement(this)
 
     abstract fun updateShouldNotify(oldWidget: InheritedWidget): Boolean
@@ -32,7 +38,14 @@ open class InheritedElement(widget: InheritedWidget) : ProxyElement(widget) {
         val inheritedWidgets =
             parent?.inheritedWidgets ?: mutableMapOf()
         this.inheritedWidgets = inheritedWidgets
-        inheritedWidgets[widget<InheritedWidget>()::class] = this
+
+        val type = if (widget<InheritedWidget>().type != null) {
+            widget<InheritedWidget>().type!!
+        } else {
+            typeOf(this::class)
+        }
+
+        inheritedWidgets[type] = this
     }
 
     open fun updateDependencies(dependent: Element) {

@@ -16,7 +16,8 @@
 
 package com.ivianuu.essentials.sample.ui.widget2.lib
 
-import kotlin.reflect.KClass
+import com.ivianuu.injekt.Type
+import com.ivianuu.injekt.typeOf
 
 interface BuildContext {
 
@@ -25,28 +26,27 @@ interface BuildContext {
 
     fun inheritFromElement(ancestor: InheritedElement): InheritedWidget
 
-    fun <T : InheritedWidget> inheritFromWidgetOfExactType(type: KClass<T>): T?
+    fun <T : InheritedWidget> inheritFromWidgetOfExactType(type: Type<T>): T?
 
     fun <T : InheritedWidget> ancestorInheritedElementForWidgetOfExactType(
-        type: KClass<T>
+        type: Type<T>
     ): T?
 
     fun <T : Widget> ancestorWidgetOfExactType(
-        type: KClass<T>
+        type: Type<T>
     ): T?
 
-    fun <T : State> ancestorStateOfType(type: KClass<T>): T?
+    fun <T : State> ancestorStateOfType(type: Type<T>): T?
 }
 
 inline fun <reified T : InheritedWidget> BuildContext.inheritFromWidgetOfExactType(
-): T? =
-    inheritFromWidgetOfExactType(T::class)
+): T? = inheritFromWidgetOfExactType(typeOf())
 
 inline fun <reified T : InheritedWidget> BuildContext.ancestorInheritedElementForWidgetOfExactType(): T? =
-    ancestorInheritedElementForWidgetOfExactType(T::class)
+    ancestorInheritedElementForWidgetOfExactType(typeOf())
 
 inline fun <reified T : Widget> BuildContext.ancestorWidgetOfExactType(): T? =
-    ancestorWidgetOfExactType(T::class)
+    ancestorWidgetOfExactType(typeOf())
 
 inline fun <reified T : State> BuildContext.ancestorStateOfExactType(): T? =
-    ancestorStateOfType(T::class)
+    ancestorStateOfType(typeOf())

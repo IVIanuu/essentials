@@ -18,7 +18,7 @@ package com.ivianuu.essentials.sample.ui.widget2.lib
 
 import android.content.Context
 import com.github.ajalt.timberkt.d
-import kotlin.reflect.KClass
+import com.ivianuu.injekt.Type
 
 abstract class Widget(val key: Any? = null) {
 
@@ -43,7 +43,7 @@ abstract class Element(widget: Widget) : BuildContext {
     var slot: Int? = null
         protected set
 
-    var inheritedWidgets: MutableMap<KClass<out InheritedWidget>, InheritedElement>? = null
+    var inheritedWidgets: MutableMap<Type<out InheritedWidget>, InheritedElement>? = null
         protected set
     var _dependencies: MutableSet<InheritedElement>? = null
         protected set
@@ -58,7 +58,7 @@ abstract class Element(widget: Widget) : BuildContext {
         return ancestor.widget()
     }
 
-    override fun <T : InheritedWidget> inheritFromWidgetOfExactType(type: KClass<T>): T? {
+    override fun <T : InheritedWidget> inheritFromWidgetOfExactType(type: Type<T>): T? {
         val ancestor = inheritedWidgets?.get(type)
         if (ancestor != null) {
             return inheritFromElement(ancestor) as T
@@ -66,10 +66,10 @@ abstract class Element(widget: Widget) : BuildContext {
         return null
     }
 
-    override fun <T : InheritedWidget> ancestorInheritedElementForWidgetOfExactType(type: KClass<T>): T? =
+    override fun <T : InheritedWidget> ancestorInheritedElementForWidgetOfExactType(type: Type<T>): T? =
         inheritedWidgets?.get(type)?.widget as? T
 
-    override fun <T : Widget> ancestorWidgetOfExactType(type: KClass<T>): T? {
+    override fun <T : Widget> ancestorWidgetOfExactType(type: Type<T>): T? {
         var ancestor = parent
         while (ancestor != null) {
             if (ancestor.widget::class == type) return ancestor.widget as T
@@ -79,7 +79,7 @@ abstract class Element(widget: Widget) : BuildContext {
         return null
     }
 
-    override fun <T : State> ancestorStateOfType(type: KClass<T>): T? {
+    override fun <T : State> ancestorStateOfType(type: Type<T>): T? {
         var ancestor = parent
         while (ancestor != null) {
             if (ancestor is StatefulElement &&

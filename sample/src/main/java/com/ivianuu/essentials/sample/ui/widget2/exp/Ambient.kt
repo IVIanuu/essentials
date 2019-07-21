@@ -19,12 +19,21 @@ package com.ivianuu.essentials.sample.ui.widget2.exp
 import com.ivianuu.essentials.sample.ui.widget2.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget2.lib.InheritedWidget
 import com.ivianuu.essentials.sample.ui.widget2.lib.Widget
-import com.ivianuu.essentials.sample.ui.widget2.lib.ancestorInheritedElementForWidgetOfExactType
+import com.ivianuu.injekt.Type
+import com.ivianuu.injekt.typeOf
+
+inline fun <reified T> Ambient(noinline defaultFactory: (() -> T)? = null): Ambient<T> =
+    Ambient(typeOf(Ambient::class, typeOf<T>()), defaultFactory)
 
 class Ambient<T>(
-    private val key: Any? = null,
+    private val valueType: Type<T>,
     private val defaultFactory: (() -> T)? = null
 ) {
+
+    private val providerType = typeOf<Provider<T>>(
+        Provider::class, valueType
+    )
+
     @Suppress("UNCHECKED_CAST")
     internal val defaultValue by lazy {
         val fn = defaultFactory
@@ -32,17 +41,13 @@ class Ambient<T>(
         else null as T
     }
 
-    override fun hashCode() = key.hashCode()
-    override fun equals(other: Any?) = this === other
-    override fun toString(): String = "Ambient<$key>"
-
     fun of(context: BuildContext): T =
-        context.ancestorInheritedElementForWidgetOfExactType<Provider<T>>()!!.value
+        context.ancestorInheritedElementForWidgetOfExactType(providerType)!!.value
 
     inner class Provider<T>(
         val value: T,
         child: Widget
-    ) : InheritedWidget(child = child, key = key) {
+    ) : InheritedWidget(child = child, type = providerType) {
         override fun updateShouldNotify(oldWidget: InheritedWidget): Boolean = true
     }
 }
