@@ -54,7 +54,7 @@ object Versions {
 
     const val bintray = "1.8.4"
     const val constraintLayout = "2.0.0-beta2"
-    const val coroutines = "1.3.0-M2"
+    const val coroutines = "1.3.0-RC"
     const val director = "0.0.1-dev-37"
     const val epoxy = "3.7.0"
     const val glide = "4.9.0"
