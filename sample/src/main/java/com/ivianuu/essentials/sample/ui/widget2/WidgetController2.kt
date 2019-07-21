@@ -24,7 +24,6 @@ import com.ivianuu.director.requireActivity
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.sample.ui.widget2.exp.Ambient
 import com.ivianuu.essentials.sample.ui.widget2.layout.Column
-import com.ivianuu.essentials.sample.ui.widget2.layout.ListView
 import com.ivianuu.essentials.sample.ui.widget2.lib.AndroidBuildOwner
 import com.ivianuu.essentials.sample.ui.widget2.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget2.lib.BuildOwner
@@ -68,13 +67,10 @@ class WidgetController2 : EsController() {
                         SimpleTextToolbar(
                             title = "Hello world",
                             androidContext = requireActivity()
-                        ),
-                        ListView(
-                            children = (1..100).map {
-                                HelloWorldWidget(it.toString())
-                            }
                         )
-                    )
+                    ) + (1..2).map {
+                        HelloWorldWidget(it.toString())
+                    }
                 )
             )
         }

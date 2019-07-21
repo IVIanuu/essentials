@@ -50,16 +50,16 @@ open class SingleChildViewGroup<V : ViewGroup>(widget: SingleChildViewGroupWidge
 
     override fun attachView() {
         super.attachView()
-        child!!.attachView()
+        child?.attachView()
     }
 
     override fun detachView() {
-        child!!.detachView()
+        child?.detachView()
         super.detachView()
     }
 
     override fun unmount() {
-        child!!.unmount()
+        child?.unmount()
         child = null
         super.unmount()
     }

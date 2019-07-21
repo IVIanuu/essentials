@@ -48,7 +48,7 @@ abstract class Element(widget: Widget) : BuildContext {
     var _dependencies: MutableSet<InheritedElement>? = null
         protected set
 
-    var isDirty = false
+    var isDirty = true
         protected set
 
     override fun inheritFromElement(ancestor: InheritedElement): InheritedWidget {
@@ -205,7 +205,6 @@ abstract class Element(widget: Widget) : BuildContext {
 
         val newChild = newWidget.createElement()
         newChild.mount(context, this, newSlot)
-        newChild.attachView()
         return newChild
     }
 

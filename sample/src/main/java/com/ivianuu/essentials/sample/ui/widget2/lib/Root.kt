@@ -64,16 +64,17 @@ class RootElement(
 
     override fun attachView() {
         _rootView.addView(requireView())
-        child!!.attachView()
+        child?.attachView()
     }
 
     override fun detachView() {
-        child!!.detachView()
+        child?.detachView()
         _rootView.removeView(requireView())
     }
 
     override fun unmount() {
-        child!!.unmount()
+        child?.unmount()
+        child = null
         super.unmount()
     }
 

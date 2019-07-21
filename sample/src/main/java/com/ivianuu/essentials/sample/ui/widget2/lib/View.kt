@@ -51,11 +51,11 @@ open class ViewElement<V : View>(widget: ViewWidget<V>) : Element(widget) {
     override fun mount(context: Context, parent: Element?, slot: Int?) {
         super.mount(context, parent, slot)
         view = widget<ViewWidget<V>>().createView(this, context)
-        widget<ViewWidget<V>>().updateView(this, view!!)
+        attachView()
     }
 
     override fun attachView() {
-        val ancestorViewElement = findAncestorViewElement() ?: error("")
+        val ancestorViewElement = findAncestorViewElement()!!
         d { "${javaClass.simpleName} attach to $ancestorViewElement view is $view" }
         this.ancestorViewElement = ancestorViewElement
         ancestorViewElement.insertChildView(view!!, slot)

@@ -82,6 +82,6 @@ class AndroidBuildOwner(
         val root = widget.createElement()
         this.root = root
         root.mount(view.context, null, null)
-        root.attachView()
+        scheduleBuildFor(root)
     }
 }
