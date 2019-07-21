@@ -22,24 +22,13 @@ import com.ivianuu.essentials.sample.ui.widget2.lib.Widget
 import com.ivianuu.injekt.Type
 import com.ivianuu.injekt.typeOf
 
-inline fun <reified T> Ambient(noinline defaultFactory: (() -> T)? = null): Ambient<T> =
-    Ambient(typeOf(Ambient::class, typeOf<T>()), defaultFactory)
+inline fun <reified T> Ambient(): Ambient<T> = Ambient(typeOf(Ambient::class, typeOf<T>()))
 
-class Ambient<T>(
-    private val valueType: Type<T>,
-    private val defaultFactory: (() -> T)? = null
-) {
+class Ambient<T>(valueType: Type<T>) {
 
     private val providerType = typeOf<Provider<T>>(
         Provider::class, valueType
     )
-
-    @Suppress("UNCHECKED_CAST")
-    internal val defaultValue by lazy {
-        val fn = defaultFactory
-        if (fn != null) fn()
-        else null as T
-    }
 
     fun of(context: BuildContext): T =
         context.ancestorInheritedElementForWidgetOfExactType(providerType)!!.value

@@ -20,7 +20,6 @@ import android.content.Context
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatTextView
-import com.github.ajalt.timberkt.d
 import com.ivianuu.director.requireActivity
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.sample.ui.widget2.exp.Ambient
@@ -93,9 +92,6 @@ val CountAmbient = Ambient<Int>()
 
 class HelloWorldWidget(val tag: String) : ViewWidget<TextView>(key = tag) {
     override fun createView(context: BuildContext, androidContext: Context): TextView {
-        val count = CountAmbient.of(context)
-        val context = AndroidContextAmbient.of(context)
-        d { "context and count $context count $count" }
         return AppCompatTextView(androidContext).apply {
             setTextAppearance(R.style.TextAppearance_MaterialComponents_Headline4)
         }
