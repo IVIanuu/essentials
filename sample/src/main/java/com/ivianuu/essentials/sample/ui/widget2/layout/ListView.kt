@@ -16,7 +16,6 @@
 
 package com.ivianuu.essentials.sample.ui.widget2.layout
 
-import android.content.Context
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
@@ -25,6 +24,7 @@ import com.airbnb.epoxy.EpoxyRecyclerView
 import com.airbnb.epoxy.TypedEpoxyController
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.sample.ui.widget.lib.properties
+import com.ivianuu.essentials.sample.ui.widget2.exp.AndroidContext
 import com.ivianuu.essentials.sample.ui.widget2.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget2.lib.ComponentElement
 import com.ivianuu.essentials.sample.ui.widget2.lib.Element
@@ -44,9 +44,8 @@ class ListView(
         ListViewElement(this)
 
     override fun createView(
-        context: BuildContext,
-        androidContext: Context
-    ) = EpoxyRecyclerView(androidContext).apply {
+        context: BuildContext
+    ) = EpoxyRecyclerView(AndroidContext(context)).apply {
         layoutParams = ViewGroup.LayoutParams(MATCH_PARENT, MATCH_PARENT)
         val epoxyController =
             WidgetEpoxyController(context.cast())
@@ -96,14 +95,14 @@ private data class WidgetEpoxyModel(
     override fun bind(holder: EsHolder) {
         super.bind(holder)
         val element = holder.root.properties.get<Element>("element")!!
-        element.update(holder.providedContext, widget)
+        element.update(widget)
     }
 
     override fun getViewType(): Int = widget::class.hashCode() + (widget.key?.hashCode() ?: 0)
 
     override fun buildView(parent: ViewGroup): View {
         val element = widget.createElement()
-        element.mount(parent.context, this.parent, null)
+        element.mount(this.parent, null)
         element.attachView()
 
         // todo this is hacky

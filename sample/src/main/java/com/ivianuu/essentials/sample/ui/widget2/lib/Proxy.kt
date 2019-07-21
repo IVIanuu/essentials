@@ -16,19 +16,17 @@
 
 package com.ivianuu.essentials.sample.ui.widget2.lib
 
-import android.content.Context
-
 abstract class ProxyWidget(open val child: Widget, key: Any? = null) : Widget(key)
 
 abstract class ProxyElement(widget: ProxyWidget) : ComponentElement(widget) {
     override fun build(): Widget = widget<ProxyWidget>().child
 
-    override fun update(context: Context, newWidget: Widget) {
+    override fun update(newWidget: Widget) {
         val oldWidget = widget
-        super.update(context, newWidget)
+        super.update(newWidget)
         updated(oldWidget)
         isDirty = true
-        rebuild(context)
+        rebuild()
     }
 
     protected open fun updated(oldWidget: Widget) {

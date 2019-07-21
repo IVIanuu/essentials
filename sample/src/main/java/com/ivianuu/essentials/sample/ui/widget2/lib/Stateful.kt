@@ -16,8 +16,6 @@
 
 package com.ivianuu.essentials.sample.ui.widget2.lib
 
-import android.content.Context
-
 abstract class State {
     var element: StatefulElement? = null
     var widget: StatefulWidget? = null
@@ -61,18 +59,18 @@ open class StatefulElement(widget: StatefulWidget) : ComponentElement(widget) {
 
     override fun build(): Widget = state!!.build(this)
 
-    override fun firstBuild(context: Context) {
-        super.firstBuild(context)
+    override fun firstBuild() {
+        super.firstBuild()
         state!!.initState()
     }
 
-    override fun update(context: Context, newWidget: Widget) {
-        super.update(context, newWidget)
+    override fun update(newWidget: Widget) {
+        super.update(newWidget)
         val oldWidget = state!!.widget!!
         isDirty = true
         state!!.widget = widget()
         state!!.didUpdateWidget(oldWidget)
-        rebuild(context)
+        rebuild()
     }
 
     override fun didChangeDependencies() {

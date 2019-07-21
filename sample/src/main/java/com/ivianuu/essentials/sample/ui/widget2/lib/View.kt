@@ -16,14 +16,13 @@
 
 package com.ivianuu.essentials.sample.ui.widget2.lib
 
-import android.content.Context
 import android.view.View
 import com.github.ajalt.timberkt.d
 
 abstract class ViewWidget<V : View>(key: Any? = null) : Widget(key) {
     override fun createElement(): ViewElement<V> = ViewElement(this)
 
-    abstract fun createView(context: BuildContext, androidContext: Context): V
+    abstract fun createView(context: BuildContext): V
 
     open fun updateView(context: BuildContext, view: V) {
     }
@@ -48,9 +47,12 @@ open class ViewElement<V : View>(widget: ViewWidget<V>) : Element(widget) {
         error("unsupported")
     }
 
-    override fun mount(context: Context, parent: Element?, slot: Int?) {
-        super.mount(context, parent, slot)
-        view = widget<ViewWidget<V>>().createView(this, context)
+    override fun mount(
+        parent: Element?,
+        slot: Int?
+    ) {
+        super.mount(parent, slot)
+        view = widget<ViewWidget<V>>().createView(this)
         attachView()
     }
 
@@ -69,8 +71,8 @@ open class ViewElement<V : View>(widget: ViewWidget<V>) : Element(widget) {
         }
     }
 
-    override fun update(context: Context, newWidget: Widget) {
-        super.update(context, newWidget)
+    override fun update(newWidget: Widget) {
+        super.update(newWidget)
         widget<ViewWidget<V>>().updateView(this, view!!)
         isDirty = false
     }
@@ -97,13 +99,12 @@ open class ViewElement<V : View>(widget: ViewWidget<V>) : Element(widget) {
 
     protected fun requireView(): V = this.view ?: error("not mounted")
 
-    override fun performRebuild(context: Context) {
+    override fun performRebuild() {
         widget<ViewWidget<V>>().updateView(this, view!!)
         isDirty = false
     }
 
     protected open fun updateChildren(
-        context: Context,
         oldChildren: List<Element>,
         newWidgets: List<Widget>
     ): List<Element> {
@@ -119,7 +120,7 @@ open class ViewElement<V : View>(widget: ViewWidget<V>) : Element(widget) {
             val oldChild = oldChildren[oldChildrenTop]
             val newWidget = newWidgets[newChildrenTop]
             if (!newWidget.canUpdate(oldChild.widget)) break
-            val newChild = updateChild(context, oldChild, newWidget, newChildrenTop)!!
+            val newChild = updateChild(oldChild, newWidget, newChildrenTop)!!
             newChildren.add(newChildrenTop, newChild)
             newChildrenTop += 1
             oldChildrenTop += 1
@@ -171,7 +172,7 @@ open class ViewElement<V : View>(widget: ViewWidget<V>) : Element(widget) {
                 }
             }
 
-            val newChild = updateChild(context, oldChild, newWidget, newChildrenTop)!!
+            val newChild = updateChild(oldChild, newWidget, newChildrenTop)!!
             newChildren.add(newChildrenTop, newChild)
             newChildrenTop += 1
         }
@@ -184,7 +185,7 @@ open class ViewElement<V : View>(widget: ViewWidget<V>) : Element(widget) {
         while ((oldChildrenTop <= oldChildrenBottom) && (newChildrenTop <= newChildrenBottom)) {
             val oldChild = oldChildren[oldChildrenTop]
             val newWidget = newWidgets[newChildrenTop]
-            val newChild = updateChild(context, oldChild, newWidget, newChildrenTop)!!
+            val newChild = updateChild(oldChild, newWidget, newChildrenTop)!!
             newChildren.add(newChildrenTop, newChild)
             newChildrenTop += 1
             oldChildrenTop += 1

@@ -16,13 +16,13 @@
 
 package com.ivianuu.essentials.sample.ui.widget2.layout
 
-import android.content.Context
 import android.view.Gravity
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.LinearLayout
 import androidx.core.view.updateLayoutParams
 import androidx.core.view.updatePaddingRelative
+import com.ivianuu.essentials.sample.ui.widget2.exp.AndroidContext
 import com.ivianuu.essentials.sample.ui.widget2.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget2.lib.SingleChildViewGroupWidget
 import com.ivianuu.essentials.sample.ui.widget2.lib.Widget
@@ -58,8 +58,8 @@ class Container(
         }
     }
 
-    override fun createView(context: BuildContext, androidContext: Context) =
-        LinearLayout(androidContext).apply {
+    override fun createView(context: BuildContext) =
+        LinearLayout(AndroidContext(context)).apply {
             layoutParams = ViewGroup.LayoutParams(this@Container.width, this@Container.height)
         }
 }

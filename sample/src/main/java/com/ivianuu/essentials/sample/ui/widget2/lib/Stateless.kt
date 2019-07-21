@@ -16,8 +16,6 @@
 
 package com.ivianuu.essentials.sample.ui.widget2.lib
 
-import android.content.Context
-
 abstract class StatelessWidget(key: Any? = null) : Widget(key) {
     override fun createElement(): StatelessElement =
         StatelessElement(this)
@@ -27,9 +25,9 @@ abstract class StatelessWidget(key: Any? = null) : Widget(key) {
 open class StatelessElement(widget: StatelessWidget) : ComponentElement(widget) {
     override fun build(): Widget = widget<StatelessWidget>().build(this)
 
-    override fun update(context: Context, newWidget: Widget) {
-        super.update(context, newWidget)
+    override fun update(newWidget: Widget) {
+        super.update(newWidget)
         isDirty = true
-        rebuild(context)
+        rebuild()
     }
 }

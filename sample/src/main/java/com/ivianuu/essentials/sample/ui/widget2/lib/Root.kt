@@ -16,7 +16,6 @@
 
 package com.ivianuu.essentials.sample.ui.widget2.lib
 
-import android.content.Context
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
@@ -30,8 +29,8 @@ class RootWidget(
     override fun createElement() =
         RootElement(owner, rootView, this)
 
-    override fun createView(context: BuildContext, androidContext: Context): FrameLayout =
-        FrameLayout(androidContext)
+    override fun createView(context: BuildContext): FrameLayout =
+        FrameLayout(rootView.context)
 }
 
 class RootElement(
@@ -42,12 +41,15 @@ class RootElement(
 
     var child: Element? = null
 
-    override fun mount(context: Context, parent: Element?, slot: Int?) {
-        super.mount(context, parent, slot)
+    override fun mount(
+        parent: Element?,
+        slot: Int?
+    ) {
+        super.mount(parent, slot)
         owner = _owner
         val child = widget<RootWidget>().child(this).createElement()
         this.child = child
-        child.mount(context, this, null)
+        child.mount(this, null)
     }
 
     override fun insertChildView(view: View, slot: Int?) {
@@ -78,8 +80,8 @@ class RootElement(
         super.unmount()
     }
 
-    override fun performRebuild(context: Context) {
-        this.child = updateChild(context, child, widget<RootWidget>().child(this), null)
+    override fun performRebuild() {
+        this.child = updateChild(child, widget<RootWidget>().child(this), null)
         isDirty = false
     }
 

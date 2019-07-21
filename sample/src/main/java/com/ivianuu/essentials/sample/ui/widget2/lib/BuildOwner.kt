@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.sample.ui.widget2.lib
 
 import android.view.ViewGroup
+import com.ivianuu.essentials.sample.ui.widget2.exp.AndroidContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -73,15 +74,17 @@ class AndroidBuildOwner(
     }
 
     private fun rebuildDirtyElements() {
-        dirtyElements.toList().forEach { it.rebuild(view.context) }
+        dirtyElements.toList().forEach { it.rebuild() }
         dirtyElements.clear()
     }
 
     private fun firstFrame() {
-        val widget = RootWidget(this, view, child)
+        val widget = RootWidget(this, view) {
+            AndroidContext.Provider(value = view.context, child = child(it))
+        }
         val root = widget.createElement()
         this.root = root
-        root.mount(view.context, null, null)
+        root.mount(null, null)
         scheduleBuildFor(root)
     }
 }

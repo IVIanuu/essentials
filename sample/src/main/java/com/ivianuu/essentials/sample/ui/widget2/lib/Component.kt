@@ -16,7 +16,6 @@
 
 package com.ivianuu.essentials.sample.ui.widget2.lib
 
-import android.content.Context
 import com.github.ajalt.timberkt.d
 
 abstract class ComponentElement(widget: Widget) : Element(widget) {
@@ -26,9 +25,12 @@ abstract class ComponentElement(widget: Widget) : Element(widget) {
 
     abstract fun build(): Widget
 
-    override fun mount(context: Context, parent: Element?, slot: Int?) {
-        super.mount(context, parent, slot)
-        firstBuild(context)
+    override fun mount(
+        parent: Element?,
+        slot: Int?
+    ) {
+        super.mount(parent, slot)
+        firstBuild()
     }
 
     override fun attachView() {
@@ -47,21 +49,21 @@ abstract class ComponentElement(widget: Widget) : Element(widget) {
         super.unmount()
     }
 
-    override fun update(context: Context, newWidget: Widget) {
-        super.update(context, newWidget)
+    override fun update(newWidget: Widget) {
+        super.update(newWidget)
         d { "component ${javaClass.simpleName} update $newWidget" }
-        performRebuild(context)
+        performRebuild()
     }
 
-    protected open fun firstBuild(context: Context) {
-        rebuild(context)
+    protected open fun firstBuild() {
+        rebuild()
     }
 
-    override fun performRebuild(context: Context) {
+    override fun performRebuild() {
         d { "${javaClass.simpleName} perform rebuild" }
         val built = build()
         isDirty = false
-        child = updateChild(context, child, built, slot)
+        child = updateChild(child, built, slot)
     }
 
 }

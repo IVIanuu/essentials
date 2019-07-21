@@ -33,6 +33,8 @@ class Ambient<T>(valueType: Type<T>) {
     fun of(context: BuildContext): T =
         context.ancestorInheritedElementForWidgetOfExactType(providerType)!!.value
 
+    operator fun invoke(context: BuildContext): T = of(context)
+
     inner class Provider<T>(
         val value: T,
         child: Widget

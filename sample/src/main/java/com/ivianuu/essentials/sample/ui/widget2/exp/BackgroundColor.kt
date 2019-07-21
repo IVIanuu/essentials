@@ -16,7 +16,6 @@
 
 package com.ivianuu.essentials.sample.ui.widget2.exp
 
-import android.content.Context
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.FrameLayout
@@ -34,8 +33,8 @@ class BackgroundColor(
         view.setBackgroundColor(color)
     }
 
-    override fun createView(context: BuildContext, androidContext: Context) =
-        FrameLayout(androidContext).apply {
+    override fun createView(context: BuildContext) =
+        FrameLayout(AndroidContext(context)).apply {
             layoutParams = ViewGroup.LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
         }
 

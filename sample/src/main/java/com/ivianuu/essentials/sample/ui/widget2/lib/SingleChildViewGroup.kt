@@ -16,7 +16,6 @@
 
 package com.ivianuu.essentials.sample.ui.widget2.lib
 
-import android.content.Context
 import android.view.View
 import android.view.ViewGroup
 
@@ -31,10 +30,13 @@ open class SingleChildViewGroup<V : ViewGroup>(widget: SingleChildViewGroupWidge
     var child: Element? = null
         protected set
 
-    override fun mount(context: Context, parent: Element?, slot: Int?) {
-        super.mount(context, parent, slot)
+    override fun mount(
+        parent: Element?,
+        slot: Int?
+    ) {
+        super.mount(parent, slot)
         child = widget<SingleChildViewGroupWidget<V>>().createElement()
-        child!!.mount(context, parent, null)
+        child!!.mount(parent, null)
     }
 
     override fun insertChildView(view: View, slot: Int?) {
@@ -64,9 +66,9 @@ open class SingleChildViewGroup<V : ViewGroup>(widget: SingleChildViewGroupWidge
         super.unmount()
     }
 
-    override fun update(context: Context, newWidget: Widget) {
-        super.update(context, newWidget)
-        child = updateChild(context, child, newWidget, null)
+    override fun update(newWidget: Widget) {
+        super.update(newWidget)
+        child = updateChild(child, newWidget, null)
     }
 
     override fun onEachChild(block: (Element) -> Unit) {

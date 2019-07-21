@@ -16,14 +16,13 @@
 
 package com.ivianuu.essentials.sample.ui.widget2
 
-import android.content.Context
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatTextView
 import com.ivianuu.director.requireActivity
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.sample.ui.widget2.exp.Ambient
-import com.ivianuu.essentials.sample.ui.widget2.exp.AndroidContextAmbient
+import com.ivianuu.essentials.sample.ui.widget2.exp.AndroidContext
 import com.ivianuu.essentials.sample.ui.widget2.layout.Column
 import com.ivianuu.essentials.sample.ui.widget2.lib.AndroidBuildOwner
 import com.ivianuu.essentials.sample.ui.widget2.lib.BuildContext
@@ -61,20 +60,17 @@ class WidgetController2 : EsController() {
             viewLifecycleScope,
             view.cast()
         ) {
-            AndroidContextAmbient.Provider(
-                value = requireActivity(),
-                child = CountAmbient.Provider(
-                    value = count,
-                    child = Column(
-                        children = listOf(
-                            SimpleTextToolbar(
-                                title = "Hello world",
-                                androidContext = requireActivity()
-                            )
-                        ) + (1..2).map {
-                            HelloWorldWidget(it.toString())
-                        }
-                    )
+            Count.Provider(
+                value = count,
+                child = Column(
+                    children = listOf(
+                        SimpleTextToolbar(
+                            title = "Hello world",
+                            androidContext = requireActivity()
+                        )
+                    ) + (1..2).map {
+                        HelloWorldWidget(it.toString())
+                    }
                 )
             )
         }
@@ -88,23 +84,23 @@ class WidgetController2 : EsController() {
 
 }
 
-val CountAmbient = Ambient<Int>()
+val Count = Ambient<Int>()
 
 class HelloWorldWidget(val tag: String) : ViewWidget<TextView>(key = tag) {
-    override fun createView(context: BuildContext, androidContext: Context): TextView {
-        return AppCompatTextView(androidContext).apply {
+    override fun createView(context: BuildContext): TextView {
+        return AppCompatTextView(AndroidContext(context)).apply {
             setTextAppearance(R.style.TextAppearance_MaterialComponents_Headline4)
         }
     }
 
     override fun updateView(context: BuildContext, view: TextView) {
-        view.text = "Tag: $tag value ${CountAmbient.of(context)}"
+        view.text = "Tag: $tag value ${Count.of(context)}"
     }
 }
 
 class Text(val text: String) : ViewWidget<TextView>() {
-    override fun createView(context: BuildContext, androidContext: Context): TextView =
-        AppCompatTextView(androidContext)
+    override fun createView(context: BuildContext): TextView =
+        AppCompatTextView(AndroidContext(context))
 
     override fun updateView(context: BuildContext, view: TextView) {
         view.text = text

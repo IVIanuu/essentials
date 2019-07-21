@@ -16,7 +16,6 @@
 
 package com.ivianuu.essentials.sample.ui.widget2.lib
 
-import android.content.Context
 import android.view.View
 import android.view.ViewGroup
 import com.github.ajalt.timberkt.d
@@ -35,12 +34,15 @@ open class ViewGroupElement<V : ViewGroup>(
     var children = mutableListOf<Element>()
         protected set
 
-    override fun mount(context: Context, parent: Element?, slot: Int?) {
-        super.mount(context, parent, slot)
+    override fun mount(
+        parent: Element?,
+        slot: Int?
+    ) {
+        super.mount(parent, slot)
         widget<ViewGroupWidget<V>>().children.forEachIndexed { i, childWidget ->
             val child = childWidget.createElement()
             children.add(child)
-            child.mount(context, this, i)
+            child.mount(this, i)
         }
     }
 
@@ -81,9 +83,9 @@ open class ViewGroupElement<V : ViewGroup>(
         super.unmount()
     }
 
-    override fun update(context: Context, newWidget: Widget) {
-        super.update(context, newWidget)
-        children = updateChildren(context, children, widget<ViewGroupWidget<V>>().children)
+    override fun update(newWidget: Widget) {
+        super.update(newWidget)
+        children = updateChildren(children, widget<ViewGroupWidget<V>>().children)
             .toMutableList()
     }
 

@@ -95,7 +95,7 @@ abstract class Element(widget: Widget) : BuildContext {
         markNeedsBuild()
     }
 
-    open fun mount(context: Context, parent: Element?, slot: Int?) {
+    open fun mount(parent: Element?, slot: Int?) {
         d { "${javaClass.simpleName} mount parent $parent slot $slot" }
         this.context = context
         this.parent = parent
@@ -123,14 +123,14 @@ abstract class Element(widget: Widget) : BuildContext {
         inheritedWidgets = parent?.inheritedWidgets
     }
 
-    open fun rebuild(context: Context) {
+    open fun rebuild() {
         d { "${javaClass.simpleName} rebuild is dirty $isDirty" }
         if (isDirty) {
-            performRebuild(context)
+            performRebuild()
         }
     }
 
-    protected open fun performRebuild(context: Context) {
+    protected open fun performRebuild() {
 
     }
 
@@ -142,7 +142,6 @@ abstract class Element(widget: Widget) : BuildContext {
     }
 
     protected open fun updateChild(
-        context: Context,
         child: Element?,
         newWidget: Widget?,
         newSlot: Int?
@@ -167,7 +166,7 @@ abstract class Element(widget: Widget) : BuildContext {
 
             if (child.widget.canUpdate(newWidget)) {
                 d { "${javaClass.simpleName} call child update ${child.javaClass.simpleName}" }
-                child.update(context, newWidget)
+                child.update(newWidget)
                 return child
             }
 
@@ -175,7 +174,7 @@ abstract class Element(widget: Widget) : BuildContext {
             child.unmount()
         }
 
-        return inflateWidget(context, newWidget, newSlot)
+        return inflateWidget(newWidget, newSlot)
     }
 
     protected open fun updateSlotForChild(child: Element, newSlot: Int?) {
@@ -190,7 +189,7 @@ abstract class Element(widget: Widget) : BuildContext {
         block(child)
     }
 
-    open fun update(context: Context, newWidget: Widget) {
+    open fun update(newWidget: Widget) {
         d { "${javaClass.simpleName} update $newWidget" }
         widget = newWidget
     }
@@ -200,11 +199,14 @@ abstract class Element(widget: Widget) : BuildContext {
         slot = newSlot
     }
 
-    protected open fun inflateWidget(context: Context, newWidget: Widget, newSlot: Int?): Element {
+    protected open fun inflateWidget(
+        newWidget: Widget,
+        newSlot: Int?
+    ): Element {
         d { "${javaClass.simpleName} inflate widget $newWidget $newSlot" }
 
         val newChild = newWidget.createElement()
-        newChild.mount(context, this, newSlot)
+        newChild.mount(this, newSlot)
         return newChild
     }
 
