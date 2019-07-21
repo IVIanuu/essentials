@@ -100,6 +100,7 @@ open class ViewElement<V : View>(widget: ViewWidget<V>) : Element(widget) {
     protected fun requireView(): V = this.view ?: error("not mounted")
 
     override fun performRebuild() {
+        d { "${javaClass.simpleName} perform rebuild" }
         widget<ViewWidget<V>>().updateView(this, view!!)
         isDirty = false
     }

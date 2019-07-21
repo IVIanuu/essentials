@@ -19,6 +19,7 @@ package com.ivianuu.essentials.sample.ui.widget2.lib
 import android.view.View
 import android.view.ViewGroup
 import com.github.ajalt.timberkt.d
+import com.ivianuu.essentials.sample.ui.widget2.exp.ContainerAmbient
 
 abstract class ViewGroupWidget<V : ViewGroup>(
     val children: List<Widget>,
@@ -39,11 +40,13 @@ open class ViewGroupElement<V : ViewGroup>(
         slot: Int?
     ) {
         super.mount(parent, slot)
-        widget<ViewGroupWidget<V>>().children.forEachIndexed { i, childWidget ->
-            val child = childWidget.createElement()
-            children.add(child)
-            child.mount(this, i)
-        }
+        widget<ViewGroupWidget<V>>().children
+            .map { ContainerAmbient.Provider(value = requireView(), child = it) }
+            .forEachIndexed { i, childWidget ->
+                val child = childWidget.createElement()
+                children.add(child)
+                child.mount(this, i)
+            }
     }
 
     override fun insertChildView(view: View, slot: Int?) {
@@ -85,7 +88,8 @@ open class ViewGroupElement<V : ViewGroup>(
 
     override fun update(newWidget: Widget) {
         super.update(newWidget)
-        children = updateChildren(children, widget<ViewGroupWidget<V>>().children)
+        children = updateChildren(children, widget<ViewGroupWidget<V>>().children
+            .map { ContainerAmbient.Provider(value = requireView(), child = it) })
             .toMutableList()
     }
 

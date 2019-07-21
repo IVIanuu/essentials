@@ -19,6 +19,8 @@ package com.ivianuu.essentials.sample.ui.widget2.lib
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import com.github.ajalt.timberkt.d
+import com.ivianuu.essentials.sample.ui.widget2.exp.ContainerAmbient
 
 class RootWidget(
     val owner: BuildOwner,
@@ -47,7 +49,10 @@ class RootElement(
     ) {
         super.mount(parent, slot)
         owner = _owner
-        val child = widget<RootWidget>().child(this).createElement()
+        val child = ContainerAmbient.Provider(
+            value = requireView(),
+            child = widget<RootWidget>().child(this)
+        ).createElement()
         this.child = child
         child.mount(this, null)
     }
@@ -81,7 +86,13 @@ class RootElement(
     }
 
     override fun performRebuild() {
-        this.child = updateChild(child, widget<RootWidget>().child(this), null)
+        d { "${javaClass.simpleName} perform rebuild" }
+        this.child = updateChild(
+            child, ContainerAmbient.Provider(
+                value = requireView(),
+                child = widget<RootWidget>().child(this)
+            ), null
+        )
         isDirty = false
     }
 

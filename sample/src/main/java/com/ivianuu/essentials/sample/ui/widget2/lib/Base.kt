@@ -207,6 +207,7 @@ abstract class Element(widget: Widget) : BuildContext {
 
         val newChild = newWidget.createElement()
         newChild.mount(this, newSlot)
+
         return newChild
     }
 

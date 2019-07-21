@@ -86,6 +86,7 @@ class HelloWorldWidget(val tag: String) : ViewWidget<TextView>(key = tag) {
     override fun createView(context: BuildContext): TextView {
         return AppCompatTextView(AndroidContextContext(context)).apply {
             setTextAppearance(R.style.TextAppearance_MaterialComponents_Headline4)
+            text = "Initial text $tag"
         }
     }
 

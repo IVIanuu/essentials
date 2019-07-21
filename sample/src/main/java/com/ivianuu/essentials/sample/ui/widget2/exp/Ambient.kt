@@ -19,10 +19,11 @@ package com.ivianuu.essentials.sample.ui.widget2.exp
 import com.ivianuu.essentials.sample.ui.widget2.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget2.lib.InheritedWidget
 import com.ivianuu.essentials.sample.ui.widget2.lib.Widget
+import com.ivianuu.essentials.util.cast
 import com.ivianuu.injekt.Type
 import com.ivianuu.injekt.typeOf
 
-inline fun <reified T> Ambient(): Ambient<T> = Ambient(typeOf(Ambient::class, typeOf<T>()))
+inline fun <reified T> Ambient(): Ambient<T> = Ambient(typeOf<T>())
 
 class Ambient<T>(valueType: Type<T>) {
 
@@ -31,14 +32,17 @@ class Ambient<T>(valueType: Type<T>) {
     )
 
     fun of(context: BuildContext): T =
-        context.ancestorInheritedElementForWidgetOfExactType(providerType)!!.value
+        context.ancestorInheritedElementForWidgetOfExactType(providerType)!!.value!!
 
     operator fun invoke(context: BuildContext): T = of(context)
 
     inner class Provider<T>(
         val value: T,
-        child: Widget
-    ) : InheritedWidget(child = child, type = providerType) {
-        override fun updateShouldNotify(oldWidget: InheritedWidget): Boolean = true
+        private val updateShouldNotify: ((T, T) -> Boolean)? = null,
+        child: Widget,
+        key: Any? = null
+    ) : InheritedWidget(child = child, type = providerType, key = key) {
+        override fun updateShouldNotify(oldWidget: InheritedWidget): Boolean =
+            updateShouldNotify?.invoke(oldWidget.cast<Provider<T>>().value, value) ?: true
     }
 }
