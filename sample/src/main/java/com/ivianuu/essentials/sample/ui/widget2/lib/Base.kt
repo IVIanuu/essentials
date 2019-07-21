@@ -96,7 +96,7 @@ abstract class Element(widget: Widget) : BuildContext {
     }
 
     open fun mount(parent: Element?, slot: Int?) {
-        d { "${javaClass.simpleName} mount parent $parent slot $slot" }
+        d { "${javaClass.simpleName} mount parent $parent widget $widget slot $slot" }
         this.context = context
         this.parent = parent
         this.owner = parent?.owner
@@ -105,7 +105,7 @@ abstract class Element(widget: Widget) : BuildContext {
     }
 
     open fun unmount() {
-        d { "${javaClass.simpleName} unmount parent $parent slot $slot" }
+        d { "${javaClass.simpleName} unmount parent $parent widget $widget slot $slot" }
         context = null
         parent = null
         slot = null
@@ -124,7 +124,7 @@ abstract class Element(widget: Widget) : BuildContext {
     }
 
     open fun rebuild() {
-        d { "${javaClass.simpleName} rebuild is dirty $isDirty" }
+        d { "${javaClass.simpleName} rebuild is dirty $isDirty widget $widget" }
         if (isDirty) {
             performRebuild()
         }
@@ -146,7 +146,7 @@ abstract class Element(widget: Widget) : BuildContext {
         newWidget: Widget?,
         newSlot: Int?
     ): Element? {
-        d { "${javaClass.simpleName} update child $child new $newWidget" }
+        d { "${javaClass.simpleName} update child $child new $newWidget new slot $newSlot" }
 
         if (newWidget == null) {
             if (child != null) {
@@ -190,7 +190,7 @@ abstract class Element(widget: Widget) : BuildContext {
     }
 
     open fun update(newWidget: Widget) {
-        d { "${javaClass.simpleName} update $newWidget" }
+        d { "${javaClass.simpleName} update new $newWidget old $widget" }
         widget = newWidget
     }
 
@@ -203,7 +203,7 @@ abstract class Element(widget: Widget) : BuildContext {
         newWidget: Widget,
         newSlot: Int?
     ): Element {
-        d { "${javaClass.simpleName} inflate widget $newWidget $newSlot" }
+        d { "${javaClass.simpleName} inflate $newWidget $newSlot" }
 
         val newChild = newWidget.createElement()
         newChild.mount(this, newSlot)

@@ -51,6 +51,7 @@ open class ViewGroupElement<V : ViewGroup>(
 
     override fun insertChildView(view: View, slot: Int?) {
         d { "${javaClass.simpleName} insert $view at $slot" }
+
         if (slot != null) {
             requireView().addView(view, slot)
         } else {
@@ -96,4 +97,5 @@ open class ViewGroupElement<V : ViewGroup>(
     override fun onEachChild(block: (Element) -> Unit) {
         children.forEach(block)
     }
+
 }

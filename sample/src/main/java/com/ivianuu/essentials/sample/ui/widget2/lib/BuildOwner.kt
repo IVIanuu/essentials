@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.sample.ui.widget2.lib
 
 import android.view.ViewGroup
+import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.sample.ui.widget2.exp.AndroidContextContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -74,6 +75,7 @@ class AndroidBuildOwner(
     }
 
     private fun rebuildDirtyElements() {
+        d { "rebuild dirty elements $dirtyElements" }
         dirtyElements.toList().forEach { it.rebuild() }
         dirtyElements.clear()
     }

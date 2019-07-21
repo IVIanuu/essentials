@@ -86,7 +86,7 @@ class RootElement(
     }
 
     override fun performRebuild() {
-        d { "${javaClass.simpleName} perform rebuild" }
+        d { "${javaClass.simpleName} perform rebuild $widget" }
         this.child = updateChild(
             child, ContainerAmbient.Provider(
                 value = requireView(),

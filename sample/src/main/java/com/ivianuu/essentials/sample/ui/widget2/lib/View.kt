@@ -18,6 +18,7 @@ package com.ivianuu.essentials.sample.ui.widget2.lib
 
 import android.view.View
 import com.github.ajalt.timberkt.d
+import com.ivianuu.essentials.sample.ui.widget2.exp.LayoutParamsWidget
 
 abstract class ViewWidget<V : View>(key: Any? = null) : Widget(key) {
     override fun createElement(): ViewElement<V> = ViewElement(this)
@@ -60,21 +61,25 @@ open class ViewElement<V : View>(widget: ViewWidget<V>) : Element(widget) {
         val ancestorViewElement = findAncestorViewElement()!!
         d { "${javaClass.simpleName} attach to $ancestorViewElement view is $view" }
         this.ancestorViewElement = ancestorViewElement
-        ancestorViewElement.insertChildView(view!!, slot)
+        ancestorViewElement.insertChildView(requireView(), slot)
     }
 
     override fun detachView() {
         d { "${javaClass.simpleName} remove from $ancestorViewElement view is $view" }
         if (ancestorViewElement != null) {
-            ancestorViewElement!!.removeChildView(view!!)
+            ancestorViewElement!!.removeChildView(requireView())
             ancestorViewElement = null
         }
     }
 
     override fun update(newWidget: Widget) {
         super.update(newWidget)
-        widget<ViewWidget<V>>().updateView(this, view!!)
+        widget<ViewWidget<V>>().updateView(this, requireView())
         isDirty = false
+    }
+
+    fun updateLayoutParams(layoutParams: LayoutParamsWidget) {
+        layoutParams.applyLayoutParams(requireView())
     }
 
     override fun updateSlot(newSlot: Int?) {
@@ -100,8 +105,8 @@ open class ViewElement<V : View>(widget: ViewWidget<V>) : Element(widget) {
     protected fun requireView(): V = this.view ?: error("not mounted")
 
     override fun performRebuild() {
-        d { "${javaClass.simpleName} perform rebuild" }
-        widget<ViewWidget<V>>().updateView(this, view!!)
+        d { "${javaClass.simpleName} perform rebuild $widget" }
+        widget<ViewWidget<V>>().updateView(this, requireView())
         isDirty = false
     }
 

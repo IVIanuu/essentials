@@ -16,12 +16,14 @@
 
 package com.ivianuu.essentials.sample.ui.widget2
 
+import android.graphics.Color
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatTextView
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.sample.ui.widget2.exp.Ambient
 import com.ivianuu.essentials.sample.ui.widget2.exp.AndroidContextContext
+import com.ivianuu.essentials.sample.ui.widget2.exp.LayoutParamsWidget
 import com.ivianuu.essentials.sample.ui.widget2.layout.Column
 import com.ivianuu.essentials.sample.ui.widget2.lib.AndroidBuildOwner
 import com.ivianuu.essentials.sample.ui.widget2.lib.BuildContext
@@ -29,10 +31,8 @@ import com.ivianuu.essentials.sample.ui.widget2.lib.BuildOwner
 import com.ivianuu.essentials.sample.ui.widget2.lib.ViewWidget
 import com.ivianuu.essentials.ui.base.EsController
 import com.ivianuu.essentials.util.cast
+import com.ivianuu.essentials.util.dp
 import com.ivianuu.essentials.util.viewLifecycleScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.isActive
-import kotlinx.coroutines.launch
 
 class WidgetController2 : EsController() {
 
@@ -46,14 +46,14 @@ class WidgetController2 : EsController() {
 
         var count = 0
 
-        viewLifecycleScope.launch {
+        /*viewLifecycleScope.launch {
             delay(100)
             while (coroutineContext.isActive) {
                 delay(1000)
                 count += 1
                 buildOwner?.rebuild()
             }
-        }
+        }*/
 
         buildOwner = AndroidBuildOwner(
             viewLifecycleScope,
@@ -63,7 +63,10 @@ class WidgetController2 : EsController() {
                 value = count,
                 child = Column(
                     children = listOf(
-                        SimpleTextToolbar(title = "Hello world")
+                        LayoutParamsWidget(
+                            height = dp(300).toInt(),
+                            child = Colored()
+                        )
                     ) + (1..2).map {
                         HelloWorldWidget(it.toString())
                     }
@@ -81,6 +84,16 @@ class WidgetController2 : EsController() {
 }
 
 val Count = Ambient<Int>()
+
+class Colored : ViewWidget<View>() {
+    override fun createView(context: BuildContext): View =
+        View(AndroidContextContext(context))
+
+    override fun updateView(context: BuildContext, view: View) {
+        super.updateView(context, view)
+        view.setBackgroundColor(Color.RED)
+    }
+}
 
 class HelloWorldWidget(val tag: String) : ViewWidget<TextView>(key = tag) {
     override fun createView(context: BuildContext): TextView {

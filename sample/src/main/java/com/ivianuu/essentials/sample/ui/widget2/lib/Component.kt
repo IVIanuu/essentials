@@ -51,8 +51,7 @@ abstract class ComponentElement(widget: Widget) : Element(widget) {
 
     override fun update(newWidget: Widget) {
         super.update(newWidget)
-        d { "component ${javaClass.simpleName} update $newWidget" }
-        performRebuild()
+        rebuild()
     }
 
     protected open fun firstBuild() {
@@ -60,10 +59,14 @@ abstract class ComponentElement(widget: Widget) : Element(widget) {
     }
 
     override fun performRebuild() {
-        d { "${javaClass.simpleName} perform rebuild" }
         val built = build()
+        d { "${javaClass.simpleName} perform rebuild widget $widget built $built" }
         isDirty = false
         child = updateChild(child, built, slot)
     }
 
+    override fun onEachChild(block: (Element) -> Unit) {
+        super.onEachChild(block)
+        child?.let(block)
+    }
 }
