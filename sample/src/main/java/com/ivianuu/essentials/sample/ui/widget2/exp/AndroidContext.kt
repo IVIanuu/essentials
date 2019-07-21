@@ -18,4 +18,4 @@ package com.ivianuu.essentials.sample.ui.widget2.exp
 
 import android.content.Context
 
-val AndroidContext = Ambient<Context>()
+val AndroidContextContext = Ambient<Context>()

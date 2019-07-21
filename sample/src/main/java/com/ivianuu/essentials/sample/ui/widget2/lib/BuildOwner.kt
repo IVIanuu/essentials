@@ -17,7 +17,7 @@
 package com.ivianuu.essentials.sample.ui.widget2.lib
 
 import android.view.ViewGroup
-import com.ivianuu.essentials.sample.ui.widget2.exp.AndroidContext
+import com.ivianuu.essentials.sample.ui.widget2.exp.AndroidContextContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -80,7 +80,7 @@ class AndroidBuildOwner(
 
     private fun firstFrame() {
         val widget = RootWidget(this, view) {
-            AndroidContext.Provider(value = view.context, child = child(it))
+            AndroidContextContext.Provider(value = view.context, child = child(it))
         }
         val root = widget.createElement()
         this.root = root

@@ -19,7 +19,7 @@ package com.ivianuu.essentials.sample.ui.widget2.layout
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.updateLayoutParams
-import com.ivianuu.essentials.sample.ui.widget2.exp.AndroidContext
+import com.ivianuu.essentials.sample.ui.widget2.exp.AndroidContextContext
 import com.ivianuu.essentials.sample.ui.widget2.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget2.lib.ViewWidget
 
@@ -40,7 +40,7 @@ class Spacer(
     }
 
     override fun createView(context: BuildContext) =
-        View(AndroidContext(context)).apply {
+        View(AndroidContextContext(context)).apply {
             layoutParams = ViewGroup.LayoutParams(this@Spacer.width, this@Spacer.height)
         }
 

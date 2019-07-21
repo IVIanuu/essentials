@@ -22,7 +22,7 @@ import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.LinearLayout
 import androidx.core.view.updateLayoutParams
 import androidx.core.view.updatePaddingRelative
-import com.ivianuu.essentials.sample.ui.widget2.exp.AndroidContext
+import com.ivianuu.essentials.sample.ui.widget2.exp.AndroidContextContext
 import com.ivianuu.essentials.sample.ui.widget2.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget2.lib.SingleChildViewGroupWidget
 import com.ivianuu.essentials.sample.ui.widget2.lib.Widget
@@ -59,7 +59,7 @@ class Container(
     }
 
     override fun createView(context: BuildContext) =
-        LinearLayout(AndroidContext(context)).apply {
+        LinearLayout(AndroidContextContext(context)).apply {
             layoutParams = ViewGroup.LayoutParams(this@Container.width, this@Container.height)
         }
 }

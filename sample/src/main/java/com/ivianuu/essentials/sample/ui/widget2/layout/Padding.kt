@@ -19,7 +19,7 @@ package com.ivianuu.essentials.sample.ui.widget2.layout
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.core.view.updatePaddingRelative
-import com.ivianuu.essentials.sample.ui.widget2.exp.AndroidContext
+import com.ivianuu.essentials.sample.ui.widget2.exp.AndroidContextContext
 import com.ivianuu.essentials.sample.ui.widget2.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget2.lib.SingleChildViewGroupWidget
 import com.ivianuu.essentials.sample.ui.widget2.lib.Widget
@@ -49,7 +49,7 @@ open class Padding(
     }
 
     override fun createView(context: BuildContext) =
-        FrameLayout(AndroidContext(context)).apply {
+        FrameLayout(AndroidContextContext(context)).apply {
             layoutParams = ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT

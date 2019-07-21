@@ -24,7 +24,7 @@ import com.airbnb.epoxy.EpoxyRecyclerView
 import com.airbnb.epoxy.TypedEpoxyController
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.sample.ui.widget.lib.properties
-import com.ivianuu.essentials.sample.ui.widget2.exp.AndroidContext
+import com.ivianuu.essentials.sample.ui.widget2.exp.AndroidContextContext
 import com.ivianuu.essentials.sample.ui.widget2.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget2.lib.ComponentElement
 import com.ivianuu.essentials.sample.ui.widget2.lib.Element
@@ -45,7 +45,7 @@ class ListView(
 
     override fun createView(
         context: BuildContext
-    ) = EpoxyRecyclerView(AndroidContext(context)).apply {
+    ) = EpoxyRecyclerView(AndroidContextContext(context)).apply {
         layoutParams = ViewGroup.LayoutParams(MATCH_PARENT, MATCH_PARENT)
         val epoxyController =
             WidgetEpoxyController(context.cast())

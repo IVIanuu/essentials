@@ -19,7 +19,7 @@ package com.ivianuu.essentials.sample.ui.widget2.layout
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import androidx.core.widget.NestedScrollView
-import com.ivianuu.essentials.sample.ui.widget2.exp.AndroidContext
+import com.ivianuu.essentials.sample.ui.widget2.exp.AndroidContextContext
 import com.ivianuu.essentials.sample.ui.widget2.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget2.lib.SingleChildViewGroupWidget
 import com.ivianuu.essentials.sample.ui.widget2.lib.Widget
@@ -29,7 +29,7 @@ class VerticalScroller(
     key: Any? = null
 ) : SingleChildViewGroupWidget<NestedScrollView>(child, key) {
     override fun createView(context: BuildContext) =
-        NestedScrollView(AndroidContext(context)).apply {
+        NestedScrollView(AndroidContextContext(context)).apply {
             layoutParams = ViewGroup.LayoutParams(MATCH_PARENT, MATCH_PARENT)
         }
 }

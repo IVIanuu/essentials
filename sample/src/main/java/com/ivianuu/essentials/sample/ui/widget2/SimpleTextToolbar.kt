@@ -16,8 +16,8 @@
 
 package com.ivianuu.essentials.sample.ui.widget2
 
-import android.content.Context
 import android.view.Gravity
+import com.ivianuu.essentials.sample.ui.widget2.exp.AndroidContextContext
 import com.ivianuu.essentials.sample.ui.widget2.exp.BackgroundColor
 import com.ivianuu.essentials.sample.ui.widget2.layout.Container
 import com.ivianuu.essentials.sample.ui.widget2.lib.BuildContext
@@ -26,17 +26,14 @@ import com.ivianuu.essentials.sample.ui.widget2.lib.Widget
 import com.ivianuu.essentials.util.getPrimaryColor
 import com.ivianuu.kommon.core.content.dp
 
-class SimpleTextToolbar(
-    val androidContext: Context,
-    val title: String
-) : StatelessWidget() {
+class SimpleTextToolbar(val title: String) : StatelessWidget() {
 
     override fun build(context: BuildContext): Widget {
         return BackgroundColor(
-            color = androidContext.getPrimaryColor(),
+            color = AndroidContextContext(context).getPrimaryColor(),
             child = Container(
                 child = Text(title),
-                height = androidContext.dp(56).toInt(),
+                height = AndroidContextContext(context).dp(56).toInt(),
                 gravity = Gravity.CENTER
             )
         )

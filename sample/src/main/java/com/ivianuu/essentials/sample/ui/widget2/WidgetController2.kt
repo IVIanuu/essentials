@@ -19,10 +19,9 @@ package com.ivianuu.essentials.sample.ui.widget2
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatTextView
-import com.ivianuu.director.requireActivity
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.sample.ui.widget2.exp.Ambient
-import com.ivianuu.essentials.sample.ui.widget2.exp.AndroidContext
+import com.ivianuu.essentials.sample.ui.widget2.exp.AndroidContextContext
 import com.ivianuu.essentials.sample.ui.widget2.layout.Column
 import com.ivianuu.essentials.sample.ui.widget2.lib.AndroidBuildOwner
 import com.ivianuu.essentials.sample.ui.widget2.lib.BuildContext
@@ -64,10 +63,7 @@ class WidgetController2 : EsController() {
                 value = count,
                 child = Column(
                     children = listOf(
-                        SimpleTextToolbar(
-                            title = "Hello world",
-                            androidContext = requireActivity()
-                        )
+                        SimpleTextToolbar(title = "Hello world")
                     ) + (1..2).map {
                         HelloWorldWidget(it.toString())
                     }
@@ -88,7 +84,7 @@ val Count = Ambient<Int>()
 
 class HelloWorldWidget(val tag: String) : ViewWidget<TextView>(key = tag) {
     override fun createView(context: BuildContext): TextView {
-        return AppCompatTextView(AndroidContext(context)).apply {
+        return AppCompatTextView(AndroidContextContext(context)).apply {
             setTextAppearance(R.style.TextAppearance_MaterialComponents_Headline4)
         }
     }
@@ -100,7 +96,7 @@ class HelloWorldWidget(val tag: String) : ViewWidget<TextView>(key = tag) {
 
 class Text(val text: String) : ViewWidget<TextView>() {
     override fun createView(context: BuildContext): TextView =
-        AppCompatTextView(AndroidContext(context))
+        AppCompatTextView(AndroidContextContext(context))
 
     override fun updateView(context: BuildContext, view: TextView) {
         view.text = text

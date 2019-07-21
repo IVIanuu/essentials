@@ -34,7 +34,7 @@ class BackgroundColor(
     }
 
     override fun createView(context: BuildContext) =
-        FrameLayout(AndroidContext(context)).apply {
+        FrameLayout(AndroidContextContext(context)).apply {
             layoutParams = ViewGroup.LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
         }
 
