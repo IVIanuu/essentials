@@ -21,7 +21,7 @@
     android:background="?android:colorBackground">
 
     <com.google.android.material.appbar.AppBarLayout
-        android:id="@id/es_app_bar"
+        android:id="@+id/es_app_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 

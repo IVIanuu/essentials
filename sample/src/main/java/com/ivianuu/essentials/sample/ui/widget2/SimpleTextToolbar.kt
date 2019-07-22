@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.sample.ui.widget2
 
+import android.graphics.drawable.VectorDrawable
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.FrameLayout
 import android.widget.TextView
@@ -50,10 +51,11 @@ class SimpleTextToolbar(val title: String) : StatelessWidget() {
                 )
             )
         )
+
+        VectorDrawable()
     }
 
 }
-
 
 class Text(
     val text: String? = null,

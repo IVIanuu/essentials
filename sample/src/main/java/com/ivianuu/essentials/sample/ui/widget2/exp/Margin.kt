@@ -19,6 +19,7 @@ package com.ivianuu.essentials.sample.ui.widget2.exp
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.updateLayoutParams
+import com.ivianuu.essentials.sample.ui.widget2.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget2.lib.ViewPropsWidget
 import com.ivianuu.essentials.sample.ui.widget2.lib.Widget
 
@@ -37,7 +38,7 @@ open class Margin(
         key: Any? = null
     ) : this(margin, margin, margin, margin, child, key)
 
-    override fun applyViewProps(view: View) {
+    override fun applyViewProps(context: BuildContext, view: View) {
         view.updateLayoutParams<ViewGroup.MarginLayoutParams> {
             leftMargin = left
             topMargin = top
