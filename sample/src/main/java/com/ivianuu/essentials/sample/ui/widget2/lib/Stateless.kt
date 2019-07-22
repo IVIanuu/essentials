@@ -19,7 +19,7 @@ package com.ivianuu.essentials.sample.ui.widget2.lib
 fun StatelessWidget(
     key: Any? = null,
     build: (BuildContext) -> Widget
-): StatelessWidget = object : StatelessWidget() {
+): StatelessWidget = object : StatelessWidget(key) {
     override fun build(context: BuildContext): Widget = build.invoke(context)
 }
 
