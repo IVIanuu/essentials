@@ -40,10 +40,17 @@ class State<T> internal constructor(value: T, private val onChange: (T) -> Unit)
 }
 
 fun <T> HookWidget.useState(init: () -> T): State<T> {
-    return Hook.use(StateHook(init))
+    return Hook.use(StateHook(null, init))
 }
 
-private class StateHook<T>(val init: () -> T) : Hook<State<T>>() {
+fun <T> HookWidget.useState(init: () -> T, vararg keys: Any?): State<T> {
+    return Hook.use(StateHook(keys.toList(), init))
+}
+
+private class StateHook<T>(
+    keys: List<Any?>? = null,
+    val init: () -> T
+) : Hook<State<T>>(keys) {
     override fun createState() = StateHookState<T>()
 }
 
