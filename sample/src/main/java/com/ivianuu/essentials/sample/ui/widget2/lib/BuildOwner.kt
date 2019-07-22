@@ -18,7 +18,6 @@ package com.ivianuu.essentials.sample.ui.widget2.lib
 
 import android.view.ViewGroup
 import com.github.ajalt.timberkt.d
-import com.ivianuu.essentials.sample.ui.widget2.exp.AndroidContextAmbient
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job

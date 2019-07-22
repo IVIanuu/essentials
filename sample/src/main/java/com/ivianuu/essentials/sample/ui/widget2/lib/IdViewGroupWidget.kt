@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.sample.ui.widget2.lib
 
 import android.view.ViewGroup
-import com.ivianuu.essentials.sample.ui.widget2.exp.ContainerAmbient
 
 class IdViewGroupWidget<V : ViewGroup>(
     val id: Int,

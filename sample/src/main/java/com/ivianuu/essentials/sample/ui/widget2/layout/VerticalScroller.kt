@@ -19,7 +19,7 @@ package com.ivianuu.essentials.sample.ui.widget2.layout
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import androidx.core.widget.NestedScrollView
-import com.ivianuu.essentials.sample.ui.widget2.exp.AndroidContextAmbient
+import com.ivianuu.essentials.sample.ui.widget2.lib.AndroidContextAmbient
 import com.ivianuu.essentials.sample.ui.widget2.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget2.lib.SingleChildViewGroupWidget
 import com.ivianuu.essentials.sample.ui.widget2.lib.Widget

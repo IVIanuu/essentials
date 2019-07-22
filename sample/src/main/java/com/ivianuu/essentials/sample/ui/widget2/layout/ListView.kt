@@ -24,7 +24,7 @@ import com.airbnb.epoxy.EpoxyRecyclerView
 import com.airbnb.epoxy.TypedEpoxyController
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.sample.ui.widget.lib.properties
-import com.ivianuu.essentials.sample.ui.widget2.exp.AndroidContextAmbient
+import com.ivianuu.essentials.sample.ui.widget2.lib.AndroidContextAmbient
 import com.ivianuu.essentials.sample.ui.widget2.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget2.lib.ComponentElement
 import com.ivianuu.essentials.sample.ui.widget2.lib.Element

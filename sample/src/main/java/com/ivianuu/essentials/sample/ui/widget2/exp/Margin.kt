@@ -19,6 +19,7 @@ package com.ivianuu.essentials.sample.ui.widget2.exp
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.updateLayoutParams
+import com.ivianuu.essentials.sample.ui.widget2.lib.ViewPropsWidget
 import com.ivianuu.essentials.sample.ui.widget2.lib.Widget
 
 open class Margin(

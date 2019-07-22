@@ -18,6 +18,7 @@ package com.ivianuu.essentials.sample.ui.widget2.exp
 
 import android.graphics.drawable.Drawable
 import android.view.View
+import com.ivianuu.essentials.sample.ui.widget2.lib.ViewPropsWidget
 import com.ivianuu.essentials.sample.ui.widget2.lib.Widget
 
 class Background(

@@ -19,7 +19,7 @@ package com.ivianuu.essentials.sample.ui.widget2
 import android.view.Gravity
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatTextView
-import com.ivianuu.essentials.sample.ui.widget2.exp.AndroidContextAmbient
+import com.ivianuu.essentials.sample.ui.widget2.lib.AndroidContextAmbient
 import com.ivianuu.essentials.sample.ui.widget2.exp.Background
 import com.ivianuu.essentials.sample.ui.widget2.layout.Container
 import com.ivianuu.essentials.sample.ui.widget2.lib.BuildContext

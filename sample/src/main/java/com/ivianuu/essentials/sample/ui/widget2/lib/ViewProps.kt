@@ -14,15 +14,10 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.sample.ui.widget2.exp
+package com.ivianuu.essentials.sample.ui.widget2.lib
 
 import android.view.View
 import com.github.ajalt.timberkt.d
-import com.ivianuu.essentials.sample.ui.widget2.lib.Element
-import com.ivianuu.essentials.sample.ui.widget2.lib.ProxyElement
-import com.ivianuu.essentials.sample.ui.widget2.lib.ProxyWidget
-import com.ivianuu.essentials.sample.ui.widget2.lib.ViewElement
-import com.ivianuu.essentials.sample.ui.widget2.lib.Widget
 
 fun ViewPropsWidget(
     child: Widget,
@@ -39,7 +34,8 @@ abstract class ViewPropsWidget(
     key: Any? = null
 ) : ProxyWidget(child, key) {
 
-    override fun createElement(): ViewPropsElement = ViewPropsElement(this)
+    override fun createElement(): ViewPropsElement =
+        ViewPropsElement(this)
 
     abstract fun applyViewProps(view: View)
 

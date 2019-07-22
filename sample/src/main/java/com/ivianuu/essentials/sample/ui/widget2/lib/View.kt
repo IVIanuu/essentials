@@ -19,8 +19,6 @@ package com.ivianuu.essentials.sample.ui.widget2.lib
 import android.content.Context
 import android.view.View
 import com.github.ajalt.timberkt.d
-import com.ivianuu.essentials.sample.ui.widget2.exp.AndroidContextAmbient
-import com.ivianuu.essentials.sample.ui.widget2.exp.ViewPropsWidget
 import kotlin.reflect.KClass
 
 inline fun <reified V : View> ViewWidget(

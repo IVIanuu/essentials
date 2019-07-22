@@ -19,7 +19,7 @@ package com.ivianuu.essentials.sample.ui.widget2.layout
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.updateLayoutParams
-import com.ivianuu.essentials.sample.ui.widget2.exp.AndroidContextAmbient
+import com.ivianuu.essentials.sample.ui.widget2.lib.AndroidContextAmbient
 import com.ivianuu.essentials.sample.ui.widget2.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget2.lib.ViewWidget
 

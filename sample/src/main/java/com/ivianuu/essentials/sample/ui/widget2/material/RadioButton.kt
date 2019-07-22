@@ -17,7 +17,7 @@
 package com.ivianuu.essentials.sample.ui.widget2.material
 
 import com.google.android.material.radiobutton.MaterialRadioButton
-import com.ivianuu.essentials.sample.ui.widget2.exp.AndroidContextAmbient
+import com.ivianuu.essentials.sample.ui.widget2.lib.AndroidContextAmbient
 import com.ivianuu.essentials.sample.ui.widget2.lib.BuildContext
 
 open class RadioButton(
@@ -27,6 +27,10 @@ open class RadioButton(
 ) : CompoundButton(value, onChange, key) {
 
     override fun createView(context: BuildContext) =
-        MaterialRadioButton(AndroidContextAmbient(context))
+        MaterialRadioButton(
+            AndroidContextAmbient(
+                context
+            )
+        )
 
 }

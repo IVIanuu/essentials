@@ -19,7 +19,6 @@ package com.ivianuu.essentials.sample.ui.widget2.lib
 import android.view.View
 import android.view.ViewGroup
 import com.github.ajalt.timberkt.d
-import com.ivianuu.essentials.sample.ui.widget2.exp.ContainerAmbient
 
 abstract class ViewGroupWidget<V : ViewGroup>(
     val children: List<Widget>,

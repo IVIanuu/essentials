@@ -18,6 +18,7 @@ package com.ivianuu.essentials.sample.ui.widget2.exp
 
 import android.view.View
 import androidx.core.view.updatePaddingRelative
+import com.ivianuu.essentials.sample.ui.widget2.lib.ViewPropsWidget
 import com.ivianuu.essentials.sample.ui.widget2.lib.Widget
 
 open class Padding(

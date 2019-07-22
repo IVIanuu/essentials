@@ -17,7 +17,7 @@
 package com.ivianuu.essentials.sample.ui.widget2.material
 
 import com.google.android.material.checkbox.MaterialCheckBox
-import com.ivianuu.essentials.sample.ui.widget2.exp.AndroidContextAmbient
+import com.ivianuu.essentials.sample.ui.widget2.lib.AndroidContextAmbient
 import com.ivianuu.essentials.sample.ui.widget2.lib.BuildContext
 
 open class Checkbox(

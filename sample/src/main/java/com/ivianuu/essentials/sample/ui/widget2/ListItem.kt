@@ -19,7 +19,7 @@ package com.ivianuu.essentials.sample.ui.widget2
 import android.view.ViewGroup
 import android.widget.TextView
 import com.ivianuu.essentials.sample.R
-import com.ivianuu.essentials.sample.ui.widget2.exp.ContainerAmbient
+import com.ivianuu.essentials.sample.ui.widget2.lib.ContainerAmbient
 import com.ivianuu.essentials.sample.ui.widget2.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget2.lib.IdViewGroupWidget
 import com.ivianuu.essentials.sample.ui.widget2.lib.ViewGroupWidget

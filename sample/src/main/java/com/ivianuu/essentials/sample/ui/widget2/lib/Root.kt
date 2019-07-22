@@ -20,7 +20,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import com.github.ajalt.timberkt.d
-import com.ivianuu.essentials.sample.ui.widget2.exp.ContainerAmbient
 
 class RootWidget(
     val owner: BuildOwner,

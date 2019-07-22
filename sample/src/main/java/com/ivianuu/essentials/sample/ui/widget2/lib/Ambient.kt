@@ -14,18 +14,16 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.sample.ui.widget2.exp
+package com.ivianuu.essentials.sample.ui.widget2.lib
 
 import android.content.Context
 import android.view.ViewGroup
-import com.ivianuu.essentials.sample.ui.widget2.lib.BuildContext
-import com.ivianuu.essentials.sample.ui.widget2.lib.InheritedWidget
-import com.ivianuu.essentials.sample.ui.widget2.lib.Widget
 import com.ivianuu.essentials.util.cast
 import com.ivianuu.injekt.Type
 import com.ivianuu.injekt.typeOf
 
-inline fun <reified T> Ambient(): Ambient<T> = Ambient(typeOf<T>())
+inline fun <reified T> Ambient(): Ambient<T> =
+    Ambient(typeOf<T>())
 
 class Ambient<T>(valueType: Type<T>) {
 
