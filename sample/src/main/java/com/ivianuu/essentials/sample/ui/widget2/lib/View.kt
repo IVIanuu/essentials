@@ -20,6 +20,18 @@ import android.view.View
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.sample.ui.widget2.exp.ViewPropsWidget
 
+fun <V : View> ViewWidget(
+    key: Any? = null,
+    createView: (BuildContext) -> V,
+    updateView: ((BuildContext, V) -> Unit)? = null
+): ViewWidget<V> = object : ViewWidget<V>() {
+    override fun createView(context: BuildContext): V = createView.invoke(context)
+    override fun updateView(context: BuildContext, view: V) {
+        super.updateView(context, view)
+        updateView?.invoke(context, view)
+    }
+}
+
 abstract class ViewWidget<V : View>(key: Any? = null) : Widget(key) {
     override fun createElement(): ViewElement<V> = ViewElement(this)
 

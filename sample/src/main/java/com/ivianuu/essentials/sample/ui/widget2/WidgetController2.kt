@@ -18,7 +18,6 @@ package com.ivianuu.essentials.sample.ui.widget2
 
 import android.graphics.Color
 import android.view.View
-import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatTextView
 import com.ivianuu.essentials.sample.R
@@ -26,7 +25,7 @@ import com.ivianuu.essentials.sample.ui.widget2.exp.Ambient
 import com.ivianuu.essentials.sample.ui.widget2.exp.AndroidContextAmbient
 import com.ivianuu.essentials.sample.ui.widget2.exp.Background
 import com.ivianuu.essentials.sample.ui.widget2.exp.Margin
-import com.ivianuu.essentials.sample.ui.widget2.exp.Size
+import com.ivianuu.essentials.sample.ui.widget2.exp.MatchParent
 import com.ivianuu.essentials.sample.ui.widget2.layout.Column
 import com.ivianuu.essentials.sample.ui.widget2.lib.AndroidBuildOwner
 import com.ivianuu.essentials.sample.ui.widget2.lib.BuildContext
@@ -66,9 +65,7 @@ class WidgetController2 : EsController() {
                 value = count,
                 child = Column(
                     children = listOf(
-                        Size(
-                            width = MATCH_PARENT,
-                            height = dp(300).toInt(),
+                        MatchParent(
                             child = Margin(
                                 margin = dp(100).toInt(),
                                 child = Background(
@@ -95,10 +92,7 @@ class WidgetController2 : EsController() {
 
 val Count = Ambient<Int>()
 
-class JustAView : ViewWidget<View>() {
-    override fun createView(context: BuildContext): View =
-        View(AndroidContextAmbient(context))
-}
+fun JustAView() = ViewWidget(createView = { View(AndroidContextAmbient(it)) })
 
 class HelloWorldWidget(val tag: String) : ViewWidget<TextView>(key = tag) {
     override fun createView(context: BuildContext): TextView {

@@ -17,8 +17,30 @@
 package com.ivianuu.essentials.sample.ui.widget2.exp
 
 import android.view.View
+import android.view.ViewGroup.LayoutParams.MATCH_PARENT
+import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import androidx.core.view.updateLayoutParams
 import com.ivianuu.essentials.sample.ui.widget2.lib.Widget
+
+fun MatchParent(
+    child: Widget,
+    key: Any? = null
+) = Size(
+    width = MATCH_PARENT,
+    height = MATCH_PARENT,
+    child = child,
+    key = key
+)
+
+fun WrapContent(
+    child: Widget,
+    key: Any? = null
+) = Size(
+    width = WRAP_CONTENT,
+    height = WRAP_CONTENT,
+    child = child,
+    key = key
+)
 
 class Size(
     val width: Int,
