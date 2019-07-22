@@ -18,7 +18,7 @@ package com.ivianuu.essentials.sample.ui.widget2.lib
 
 import android.content.Context
 import com.github.ajalt.timberkt.d
-import com.ivianuu.injekt.Type
+import kotlin.reflect.KClass
 
 abstract class Widget(val key: Any? = null) {
 
@@ -43,56 +43,21 @@ abstract class Element(widget: Widget) : BuildContext {
     var slot: Int? = null
         protected set
 
-    var inheritedWidgets: MutableMap<Type<out InheritedWidget>, InheritedElement>? = null
-        protected set
-    var _dependencies: MutableSet<InheritedElement>? = null
-        protected set
-
     var isDirty = true
         protected set
 
-    override fun inheritFromElement(ancestor: InheritedElement): InheritedWidget {
-        if (_dependencies == null) _dependencies = mutableSetOf()
-        _dependencies!!.add(ancestor)
-        ancestor.updateDependencies(this)
-        return ancestor.widget()
-    }
-
-    override fun <T : InheritedWidget> inheritFromWidgetOfExactType(type: Type<T>): T? {
-        val ancestor = inheritedWidgets?.get(type)
-        if (ancestor != null) {
-            return inheritFromElement(ancestor) as T
-        }
-        return null
-    }
-
-    override fun <T : InheritedWidget> ancestorInheritedElementForWidgetOfExactType(type: Type<T>): T? =
-        inheritedWidgets?.get(type)?.widget as? T
-
-    override fun <T : Widget> ancestorWidgetOfExactType(type: Type<T>): T? {
+    override fun <T : Widget> ancestorWidget(
+        type: KClass<T>,
+        key: Any?
+    ): T? {
+        d { "get ancestor widget $type" }
         var ancestor = parent
         while (ancestor != null) {
-            if (ancestor.widget::class == type) return ancestor.widget as T
+            if (ancestor.widget::class == type && ancestor.widget.key == key) return ancestor.widget as T
             ancestor = ancestor.parent
         }
 
         return null
-    }
-
-    override fun <T : State> ancestorStateOfType(type: Type<T>): T? {
-        var ancestor = parent
-        while (ancestor != null) {
-            if (ancestor is StatefulElement &&
-                ancestor.state?.let { it::class } == type
-            ) return ancestor.state as T
-            ancestor = ancestor.parent
-        }
-
-        return null
-    }
-
-    open fun didChangeDependencies() {
-        markNeedsBuild()
     }
 
     open fun mount(parent: Element?, slot: Int?) {
@@ -101,7 +66,6 @@ abstract class Element(widget: Widget) : BuildContext {
         this.parent = parent
         this.owner = parent?.owner
         this.slot = slot
-        updateInheritance()
     }
 
     open fun unmount() {
@@ -109,18 +73,12 @@ abstract class Element(widget: Widget) : BuildContext {
         context = null
         parent = null
         slot = null
-        inheritedWidgets = null
     }
 
     open fun attachView() {
     }
 
     open fun detachView() {
-    }
-
-    protected open fun updateInheritance() {
-        d { "${javaClass.simpleName} update inheritance ${parent?.inheritedWidgets}" }
-        inheritedWidgets = parent?.inheritedWidgets
     }
 
     open fun rebuild() {

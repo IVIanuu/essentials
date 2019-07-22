@@ -33,9 +33,6 @@ abstract class State {
     open fun didUpdateWidget(oldWidget: Widget) {
     }
 
-    open fun didChangeDependencies() {
-    }
-
     open fun setState(block: () -> Unit) {
         block()
         element?.markNeedsBuild()
@@ -78,11 +75,6 @@ open class StatefulElement(widget: StatefulWidget) : ComponentElement(widget) {
         state!!.widget = widget()
         state!!.didUpdateWidget(oldWidget)
         rebuild()
-    }
-
-    override fun didChangeDependencies() {
-        super.didChangeDependencies()
-        state!!.didChangeDependencies()
     }
 
     override fun unmount() {

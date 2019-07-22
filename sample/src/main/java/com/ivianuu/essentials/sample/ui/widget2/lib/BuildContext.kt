@@ -16,37 +16,20 @@
 
 package com.ivianuu.essentials.sample.ui.widget2.lib
 
-import com.ivianuu.injekt.Type
-import com.ivianuu.injekt.typeOf
+import kotlin.reflect.KClass
 
 interface BuildContext {
 
     val widget: Widget
     val owner: BuildOwner?
 
-    fun inheritFromElement(ancestor: InheritedElement): InheritedWidget
-
-    fun <T : InheritedWidget> inheritFromWidgetOfExactType(type: Type<T>): T?
-
-    fun <T : InheritedWidget> ancestorInheritedElementForWidgetOfExactType(
-        type: Type<T>
+    fun <T : Widget> ancestorWidget(
+        type: KClass<T>,
+        key: Any? = null
     ): T?
 
-    fun <T : Widget> ancestorWidgetOfExactType(
-        type: Type<T>
-    ): T?
-
-    fun <T : State> ancestorStateOfType(type: Type<T>): T?
 }
 
-inline fun <reified T : InheritedWidget> BuildContext.inheritFromWidgetOfExactType(
-): T? = inheritFromWidgetOfExactType(typeOf())
-
-inline fun <reified T : InheritedWidget> BuildContext.ancestorInheritedElementForWidgetOfExactType(): T? =
-    ancestorInheritedElementForWidgetOfExactType(typeOf())
-
-inline fun <reified T : Widget> BuildContext.ancestorWidgetOfExactType(): T? =
-    ancestorWidgetOfExactType(typeOf())
-
-inline fun <reified T : State> BuildContext.ancestorStateOfExactType(): T? =
-    ancestorStateOfType(typeOf())
+inline fun <reified T : Widget> BuildContext.ancestorWidget(
+    key: Any? = null
+): T? = ancestorWidget(T::class, key)
