@@ -125,10 +125,10 @@ class WidgetTestController : WidgetController() {
     }
 
     private fun AppBar() = Toolbar(
-        title = Text(
+        /*title = Text(
             text = "Widget screen",
             textAppearance = R.style.TextAppearance_MaterialComponents_Headline6
-        ),
+        ),*/
         leading = IconButton(
             iconRes = R.drawable.icon_back_white,
             onClick = { navigator.pop() }
