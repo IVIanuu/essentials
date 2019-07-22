@@ -14,27 +14,19 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.sample.ui.widget2
+package com.ivianuu.essentials.sample.ui.widget2.material
 
-import android.widget.CheckBox
-import com.google.android.material.checkbox.MaterialCheckBox
+import com.google.android.material.radiobutton.MaterialRadioButton
 import com.ivianuu.essentials.sample.ui.widget2.exp.AndroidContextAmbient
 import com.ivianuu.essentials.sample.ui.widget2.lib.BuildContext
-import com.ivianuu.essentials.sample.ui.widget2.lib.ViewWidget
 
-open class Checkbox(
-    val value: Boolean,
-    val onChange: (Boolean) -> Unit,
+open class RadioButton(
+    value: Boolean,
+    onChange: (Boolean) -> Unit,
     key: Any? = null
-) : ViewWidget<CheckBox>(key) {
+) : CompoundButton(value, onChange, key) {
 
-    override fun createView(context: BuildContext): CheckBox =
-        MaterialCheckBox(AndroidContextAmbient(context))
-
-    override fun updateView(context: BuildContext, view: CheckBox) {
-        super.updateView(context, view)
-        view.isChecked = value
-        view.setOnClickListener { onChange(!value) }
-    }
+    override fun createView(context: BuildContext) =
+        MaterialRadioButton(AndroidContextAmbient(context))
 
 }
