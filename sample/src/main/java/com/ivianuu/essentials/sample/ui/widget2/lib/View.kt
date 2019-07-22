@@ -24,7 +24,7 @@ fun <V : View> ViewWidget(
     key: Any? = null,
     createView: (BuildContext) -> V,
     updateView: ((BuildContext, V) -> Unit)? = null
-): ViewWidget<V> = object : ViewWidget<V>() {
+): ViewWidget<V> = object : ViewWidget<V>(key) {
     override fun createView(context: BuildContext): V = createView.invoke(context)
     override fun updateView(context: BuildContext, view: V) {
         super.updateView(context, view)
