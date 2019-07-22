@@ -27,6 +27,13 @@ class Scale(
     child: Widget,
     key: Any?
 ) : ViewPropsWidget(child, key) {
+
+    constructor(
+        scale: Float,
+        child: Widget,
+        key: Any? = null
+    ) : this(scale, scale, child, key)
+
     override fun applyViewProps(context: BuildContext, view: View) {
         view.scaleX = x
         view.scaleY = y

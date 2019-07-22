@@ -17,24 +17,18 @@
 package com.ivianuu.essentials.sample.ui.widget2.view
 
 import android.view.View
+import android.view.View.GONE
+import android.view.View.INVISIBLE
+import android.view.View.VISIBLE
 import com.ivianuu.essentials.sample.ui.widget2.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget2.lib.ViewPropsWidget
 import com.ivianuu.essentials.sample.ui.widget2.lib.Widget
 
-open class Visible(
-    child: Widget,
-    key: Any? = null
-) : Visibility(View.VISIBLE, child, key)
+fun Visible(child: Widget, key: Any? = null) = Visibility(VISIBLE, child, key)
 
-open class Invisible(
-    child: Widget,
-    key: Any? = null
-) : Visibility(View.INVISIBLE, child, key)
+fun Invisible(child: Widget, key: Any? = null) = Visibility(INVISIBLE, child, key)
 
-open class Gone(
-    child: Widget,
-    key: Any? = null
-) : Visibility(View.GONE, child, key)
+fun Gone(child: Widget, key: Any? = null) = Visibility(GONE, child, key)
 
 open class Visibility(
     val visibility: Int,

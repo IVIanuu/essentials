@@ -18,19 +18,13 @@ package com.ivianuu.essentials.sample.ui.widget2.view
 
 import android.view.View
 import com.ivianuu.essentials.sample.ui.widget2.lib.BuildContext
-import com.ivianuu.essentials.sample.ui.widget2.lib.StatelessWidget
 import com.ivianuu.essentials.sample.ui.widget2.lib.ViewPropsWidget
 import com.ivianuu.essentials.sample.ui.widget2.lib.Widget
 
-open class Disabled(
-    val child: Widget,
+fun Disabled(
+    child: Widget,
     key: Any? = null
-) : StatelessWidget(key) {
-    override fun build(context: BuildContext): Widget =
-        Enabled(false, child)
-}
-
-// todo
+) = Enabled(false, child, key)
 
 open class Enabled(
     val enabled: Boolean = true,

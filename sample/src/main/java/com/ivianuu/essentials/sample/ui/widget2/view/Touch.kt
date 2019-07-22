@@ -22,10 +22,10 @@ import com.ivianuu.essentials.sample.ui.widget2.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget2.lib.ViewPropsWidget
 import com.ivianuu.essentials.sample.ui.widget2.lib.Widget
 
-open class DisableTouch(
+fun DisableTouch(
     child: Widget,
     key: Any? = null
-) : Touchable({ true }, child, key)
+) = Touchable({ true }, child, key)
 
 open class Clickable(
     child: Widget,
