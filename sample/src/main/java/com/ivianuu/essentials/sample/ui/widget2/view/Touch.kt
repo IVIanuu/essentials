@@ -16,29 +16,40 @@
 
 package com.ivianuu.essentials.sample.ui.widget2.view
 
+import android.view.MotionEvent
 import android.view.View
-import androidx.core.view.updatePaddingRelative
 import com.ivianuu.essentials.sample.ui.widget2.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget2.lib.ViewPropsWidget
 import com.ivianuu.essentials.sample.ui.widget2.lib.Widget
 
-open class Padding(
-    val left: Int = 0,
-    val top: Int = 0,
-    val right: Int = 0,
-    val bottom: Int = 0,
+class Clickable(
+    val onClick: () -> Unit,
     child: Widget,
-    key: Any?
+    key: Any? = null
 ) : ViewPropsWidget(child, key) {
 
-    constructor(
-        padding: Int,
-        child: Widget,
-        key: Any? = null
-    ) : this(padding, padding, padding, padding, child, key)
-
     override fun applyViewProps(context: BuildContext, view: View) {
-        view.updatePaddingRelative(left, top, right, bottom)
+        view.setOnClickListener { onClick() }
     }
 
+}
+
+class LongClickable(
+    val onLongClick: () -> Unit,
+    child: Widget,
+    key: Any? = null
+) : ViewPropsWidget(child, key) {
+    override fun applyViewProps(context: BuildContext, view: View) {
+        view.setOnLongClickListener { onLongClick(); true }
+    }
+}
+
+class Touchable(
+    val onTouch: (MotionEvent) -> Boolean,
+    child: Widget,
+    key: Any? = null
+) : ViewPropsWidget(child, key) {
+    override fun applyViewProps(context: BuildContext, view: View) {
+        view.setOnTouchListener { _, event -> onTouch(event) }
+    }
 }

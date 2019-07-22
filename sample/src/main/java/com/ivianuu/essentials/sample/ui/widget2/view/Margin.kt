@@ -24,12 +24,12 @@ import com.ivianuu.essentials.sample.ui.widget2.lib.ViewPropsWidget
 import com.ivianuu.essentials.sample.ui.widget2.lib.Widget
 
 open class Margin(
-    val left: Int,
-    val top: Int,
-    val right: Int,
-    val bottom: Int,
+    val left: Int = 0,
+    val top: Int = 0,
+    val right: Int = 0,
+    val bottom: Int = 0,
     child: Widget,
-    key: Any?
+    key: Any? = null
 ) : ViewPropsWidget(child, key) {
 
     constructor(

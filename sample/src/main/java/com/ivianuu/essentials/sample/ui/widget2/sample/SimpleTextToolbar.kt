@@ -17,19 +17,17 @@
 package com.ivianuu.essentials.sample.ui.widget2.sample
 
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
-import android.widget.TextView
-import androidx.appcompat.widget.AppCompatTextView
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.sample.ui.widget2.layout.FrameLayoutWidget
 import com.ivianuu.essentials.sample.ui.widget2.lib.AndroidContextAmbient
 import com.ivianuu.essentials.sample.ui.widget2.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget2.lib.StatelessWidget
-import com.ivianuu.essentials.sample.ui.widget2.lib.ViewWidget
 import com.ivianuu.essentials.sample.ui.widget2.lib.Widget
 import com.ivianuu.essentials.sample.ui.widget2.view.Background
 import com.ivianuu.essentials.sample.ui.widget2.view.Elevation
 import com.ivianuu.essentials.sample.ui.widget2.view.Gravity
 import com.ivianuu.essentials.sample.ui.widget2.view.Size
+import com.ivianuu.essentials.sample.ui.widget2.view.TextViewWidget
 import com.ivianuu.essentials.sample.ui.widget2.view.WrapContent
 import com.ivianuu.kommon.core.content.colorAttr
 import com.ivianuu.kommon.core.content.dp
@@ -49,7 +47,7 @@ class SimpleTextToolbar(val title: String) : StatelessWidget() {
                             Gravity(
                                 gravity = android.view.Gravity.CENTER,
                                 child = WrapContent(
-                                    child = Text(
+                                    child = TextViewWidget(
                                         text = title,
                                         textAppearance = R.style.TextAppearance_MaterialComponents_Headline6,
                                         textColor = AndroidContextAmbient(context).colorAttr(R.attr.colorOnPrimary)
@@ -63,26 +61,4 @@ class SimpleTextToolbar(val title: String) : StatelessWidget() {
         )
     }
 
-}
-
-class Text(
-    val text: String? = null,
-    val textRes: Int? = null,
-    val textAppearance: Int? = null,
-    val textColor: Int? = null
-) : ViewWidget<TextView>() {
-
-    override fun createView(context: BuildContext): TextView =
-        AppCompatTextView(AndroidContextAmbient(context))
-
-    override fun updateView(context: BuildContext, view: TextView) {
-        when {
-            text != null -> view.text = text
-            textRes != null -> view.setText(textRes)
-            else -> view.text = null
-        }
-
-        if (textAppearance != null) view.setTextAppearance(textAppearance)
-        if (textColor != null) view.setTextColor(textColor)
-    }
 }

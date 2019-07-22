@@ -16,12 +16,17 @@
 
 package com.ivianuu.essentials.sample.ui.widget2.sample
 
+import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.sample.ui.widget2.es.WidgetController
 import com.ivianuu.essentials.sample.ui.widget2.layout.LinearLayoutWidget
 import com.ivianuu.essentials.sample.ui.widget2.layout.ScrollViewWidget
 import com.ivianuu.essentials.sample.ui.widget2.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget2.lib.Widget
+import com.ivianuu.essentials.sample.ui.widget2.material.MaterialButtonWidget
+import com.ivianuu.essentials.sample.ui.widget2.view.Avatar
+import com.ivianuu.essentials.sample.ui.widget2.view.Margin
 import com.ivianuu.essentials.sample.ui.widget2.view.MatchParent
+import com.ivianuu.essentials.util.dp
 
 class WidgetController2 : WidgetController() {
 
@@ -36,8 +41,21 @@ class WidgetController2 : WidgetController() {
                                 children = (1..100).map { i ->
                                     ListItem(
                                         title = "Title $i",
-                                        text = "Text $i",
-                                        onClick = {}
+                                        text = "TextViewWidget $i",
+                                        primaryAction = Margin(
+                                            left = dp(16).toInt(),
+                                            child = Avatar(
+                                                avatarRes = R.drawable.es_ic_torch_on
+                                            )
+                                        ),
+                                        secondaryAction = Margin(
+                                            right = dp(16).toInt(),
+                                            child = MaterialButtonWidget(
+                                                text = "Click me",
+                                                onClick = { }
+                                            )
+                                        ),
+                                        onClick = { }
                                     )
                                 }
                             )

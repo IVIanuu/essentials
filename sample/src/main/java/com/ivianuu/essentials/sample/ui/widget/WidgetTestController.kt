@@ -125,7 +125,7 @@ class WidgetTestController : WidgetController() {
     }
 
     private fun AppBar() = Toolbar(
-        /*title = Text(
+        /*title = TextViewWidget(
             text = "Widget screen",
             textAppearance = R.style.TextAppearance_MaterialComponents_Headline6
         ),*/
@@ -153,7 +153,7 @@ class WidgetTestController : WidgetController() {
                 ListItem(
                     key = index,
                     title = "Title $index",
-                    text = "Text $index",
+                    text = "TextViewWidget $index",
                     primaryAction = Padding(
                         left = dp(16).toInt(),
                         child = Icon(iconRes = R.drawable.es_ic_torch_on)
