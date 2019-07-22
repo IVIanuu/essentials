@@ -90,7 +90,7 @@ private class WidgetEpoxyController(val element: Element) : TypedEpoxyController
 private data class WidgetEpoxyModel(
     private val parent: Element,
     private val widget: Widget
-) : SimpleModel(id = widget.key!!) {
+) : SimpleModel(id = widget.key) {
 
     override fun bind(holder: EsHolder) {
         super.bind(holder)
@@ -98,12 +98,11 @@ private data class WidgetEpoxyModel(
         element.update(widget)
     }
 
-    override fun getViewType(): Int = widget::class.hashCode() + (widget.key?.hashCode() ?: 0)
+    override fun getViewType(): Int = widget::class.hashCode()
 
     override fun buildView(parent: ViewGroup): View {
         val element = widget.createElement()
         element.mount(this.parent, null)
-        element.attachView()
 
         // todo this is hacky
         val view: View = if (element is ViewElement<*>) {

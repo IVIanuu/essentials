@@ -16,80 +16,100 @@
 
 package com.ivianuu.essentials.sample.ui.widget2
 
-import android.view.View
-import android.widget.TextView
-import androidx.appcompat.widget.AppCompatTextView
-import com.ivianuu.essentials.sample.R
-import com.ivianuu.essentials.sample.ui.widget2.exp.AndroidContextAmbient
-import com.ivianuu.essentials.sample.ui.widget2.layout.Column
-import com.ivianuu.essentials.sample.ui.widget2.layout.VerticalScroller
-import com.ivianuu.essentials.sample.ui.widget2.lib.AndroidBuildOwner
+import com.ivianuu.essentials.sample.ui.widget2.exp.WidgetController
+import com.ivianuu.essentials.sample.ui.widget2.layout.ListView
 import com.ivianuu.essentials.sample.ui.widget2.lib.BuildContext
-import com.ivianuu.essentials.sample.ui.widget2.lib.BuildOwner
 import com.ivianuu.essentials.sample.ui.widget2.lib.Element
 import com.ivianuu.essentials.sample.ui.widget2.lib.StatelessWidget
-import com.ivianuu.essentials.sample.ui.widget2.lib.ViewWidget
-import com.ivianuu.essentials.ui.base.EsController
+import com.ivianuu.essentials.sample.ui.widget2.lib.Widget
+import com.ivianuu.essentials.sample.ui.widget2.material.Checkbox
+import com.ivianuu.essentials.sample.ui.widget2.material.RadioButton
+import com.ivianuu.essentials.sample.ui.widget2.material.Switch
 import com.ivianuu.essentials.util.cast
-import com.ivianuu.essentials.util.viewLifecycleScope
 
-class WidgetController2 : EsController() {
+class WidgetController2 : WidgetController() {
 
-    override val layoutRes: Int
-        get() = R.layout.controller_widget
+    enum class ButtonType {
+        CHECKBOX, RADIO, SWITCH;
 
-    private var buildOwner: BuildOwner? = null
-
-    private val selectedIndices = mutableSetOf<Int>()
-
-    override fun onViewCreated(view: View) {
-        super.onViewCreated(view)
-
-        buildOwner = AndroidBuildOwner(
-            viewLifecycleScope,
-            view.cast()
-        ) {
-            VerticalScroller(
-                child = Column(
-                    children = (1..100).map { i ->
-                        StatelessWidget {
-                            ListItem(
-                                title = "Title $i",
-                                text = "Text $i",
-                                secondaryAction = Checkbox(
-                                    value = selectedIndices.contains(i),
-                                    onChange = {}
-                                ),
-                                onClick = {
-                                    if (selectedIndices.contains(i)) {
-                                        selectedIndices.remove(i)
-                                    } else {
-                                        selectedIndices.add(i)
-                                    }
-
-                                    it.cast<Element>().markNeedsBuild()
-                                }
-                            )
-                        }
-                    }
-                )
-            )
+        fun cycle(): ButtonType {
+            return when (this) {
+                CHECKBOX -> RADIO
+                RADIO -> SWITCH
+                SWITCH -> CHECKBOX
+            }
         }
     }
 
-    override fun onDestroyView(view: View) {
-        buildOwner?.clear()
-        buildOwner = null
-        super.onDestroyView(view)
-    }
+    private val selectedIndices = mutableSetOf<Int>()
+    private var lastType: ButtonType? = null
 
-}
+    override fun build(context: BuildContext): Widget {
+        return ListView(
+            children = (1..100).map { i ->
+                StatelessWidget(key = i) {
+                    ListItem(
+                        title = "Title $i",
+                        text = "Text $i",
+                        secondaryAction = when (lastType?.cycle() ?: ButtonType.CHECKBOX) {
+                            ButtonType.CHECKBOX -> {
+                                lastType = ButtonType.CHECKBOX
+                                Checkbox(
+                                    value = selectedIndices.contains(i),
+                                    onChange = {
+                                        if (selectedIndices.contains(i)) {
+                                            selectedIndices.remove(i)
+                                        } else {
+                                            selectedIndices.add(i)
+                                        }
 
-class Text(val text: String) : ViewWidget<TextView>() {
-    override fun createView(context: BuildContext): TextView =
-        AppCompatTextView(AndroidContextAmbient(context))
+                                        it.cast<Element>().markNeedsBuild()
+                                    }
+                                )
+                            }
+                            ButtonType.RADIO -> {
+                                lastType = ButtonType.RADIO
+                                RadioButton(
+                                    value = selectedIndices.contains(i),
+                                    onChange = {
+                                        if (selectedIndices.contains(i)) {
+                                            selectedIndices.remove(i)
+                                        } else {
+                                            selectedIndices.add(i)
+                                        }
 
-    override fun updateView(context: BuildContext, view: TextView) {
-        view.text = text
+                                        it.cast<Element>().markNeedsBuild()
+                                    }
+                                )
+                            }
+                            ButtonType.SWITCH -> {
+                                lastType = ButtonType.SWITCH
+                                Switch(
+                                    value = selectedIndices.contains(i),
+                                    onChange = {
+                                        if (selectedIndices.contains(i)) {
+                                            selectedIndices.remove(i)
+                                        } else {
+                                            selectedIndices.add(i)
+                                        }
+
+                                        it.cast<Element>().markNeedsBuild()
+                                    }
+                                )
+                            }
+                        },
+                        onClick = {
+                            if (selectedIndices.contains(i)) {
+                                selectedIndices.remove(i)
+                            } else {
+                                selectedIndices.add(i)
+                            }
+
+                            it.cast<Element>().markNeedsBuild()
+                        }
+                    )
+                }
+            }
+        )
     }
 }

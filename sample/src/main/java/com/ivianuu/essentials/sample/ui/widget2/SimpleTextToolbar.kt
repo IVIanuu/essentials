@@ -17,11 +17,14 @@
 package com.ivianuu.essentials.sample.ui.widget2
 
 import android.view.Gravity
+import android.widget.TextView
+import androidx.appcompat.widget.AppCompatTextView
 import com.ivianuu.essentials.sample.ui.widget2.exp.AndroidContextAmbient
 import com.ivianuu.essentials.sample.ui.widget2.exp.Background
 import com.ivianuu.essentials.sample.ui.widget2.layout.Container
 import com.ivianuu.essentials.sample.ui.widget2.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget2.lib.StatelessWidget
+import com.ivianuu.essentials.sample.ui.widget2.lib.ViewWidget
 import com.ivianuu.essentials.sample.ui.widget2.lib.Widget
 import com.ivianuu.essentials.util.getPrimaryColor
 import com.ivianuu.kommon.core.content.dp
@@ -39,4 +42,14 @@ class SimpleTextToolbar(val title: String) : StatelessWidget() {
         )
     }
 
+}
+
+
+class Text(val text: String) : ViewWidget<TextView>() {
+    override fun createView(context: BuildContext): TextView =
+        AppCompatTextView(AndroidContextAmbient(context))
+
+    override fun updateView(context: BuildContext, view: TextView) {
+        view.text = text
+    }
 }
