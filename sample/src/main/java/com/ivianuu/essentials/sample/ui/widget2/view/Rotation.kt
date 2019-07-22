@@ -16,45 +16,17 @@
 
 package com.ivianuu.essentials.sample.ui.widget2.view
 
-import android.view.MotionEvent
 import android.view.View
 import com.ivianuu.essentials.sample.ui.widget2.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget2.lib.ViewPropsWidget
 import com.ivianuu.essentials.sample.ui.widget2.lib.Widget
 
-open class DisableTouch(
-    child: Widget,
-    key: Any? = null
-) : Touchable({ true }, child, key)
-
-open class Clickable(
-    child: Widget,
-    key: Any? = null,
-    val onClick: () -> Unit
-) : ViewPropsWidget(child, key) {
-
-    override fun applyViewProps(context: BuildContext, view: View) {
-        view.setOnClickListener { onClick() }
-    }
-
-}
-
-open class LongClickable(
-    val onLongClick: () -> Unit,
+open class Rotation(
+    val rotation: Float,
     child: Widget,
     key: Any? = null
 ) : ViewPropsWidget(child, key) {
     override fun applyViewProps(context: BuildContext, view: View) {
-        view.setOnLongClickListener { onLongClick(); true }
-    }
-}
-
-open class Touchable(
-    val onTouch: (MotionEvent) -> Boolean,
-    child: Widget,
-    key: Any? = null
-) : ViewPropsWidget(child, key) {
-    override fun applyViewProps(context: BuildContext, view: View) {
-        view.setOnTouchListener { _, event -> onTouch(event) }
+        view.rotation = rotation
     }
 }

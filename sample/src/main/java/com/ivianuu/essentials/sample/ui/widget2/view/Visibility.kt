@@ -16,45 +16,32 @@
 
 package com.ivianuu.essentials.sample.ui.widget2.view
 
-import android.view.MotionEvent
 import android.view.View
 import com.ivianuu.essentials.sample.ui.widget2.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget2.lib.ViewPropsWidget
 import com.ivianuu.essentials.sample.ui.widget2.lib.Widget
 
-open class DisableTouch(
+open class Visible(
     child: Widget,
     key: Any? = null
-) : Touchable({ true }, child, key)
+) : Visibility(View.VISIBLE, child, key)
 
-open class Clickable(
-    child: Widget,
-    key: Any? = null,
-    val onClick: () -> Unit
-) : ViewPropsWidget(child, key) {
-
-    override fun applyViewProps(context: BuildContext, view: View) {
-        view.setOnClickListener { onClick() }
-    }
-
-}
-
-open class LongClickable(
-    val onLongClick: () -> Unit,
+open class Invisible(
     child: Widget,
     key: Any? = null
-) : ViewPropsWidget(child, key) {
-    override fun applyViewProps(context: BuildContext, view: View) {
-        view.setOnLongClickListener { onLongClick(); true }
-    }
-}
+) : Visibility(View.INVISIBLE, child, key)
 
-open class Touchable(
-    val onTouch: (MotionEvent) -> Boolean,
+open class Gone(
     child: Widget,
     key: Any? = null
+) : Visibility(View.GONE, child, key)
+
+open class Visibility(
+    val visibility: Int,
+    child: Widget,
+    key: Any?
 ) : ViewPropsWidget(child, key) {
     override fun applyViewProps(context: BuildContext, view: View) {
-        view.setOnTouchListener { _, event -> onTouch(event) }
+        view.visibility = visibility
     }
 }

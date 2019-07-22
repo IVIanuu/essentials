@@ -23,7 +23,9 @@ import com.ivianuu.essentials.sample.ui.widget2.layout.LinearLayoutWidget
 import com.ivianuu.essentials.sample.ui.widget2.layout.ScrollViewWidget
 import com.ivianuu.essentials.sample.ui.widget2.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget2.lib.Widget
+import com.ivianuu.essentials.sample.ui.widget2.material.Checkbox
 import com.ivianuu.essentials.sample.ui.widget2.view.Clickable
+import com.ivianuu.essentials.sample.ui.widget2.view.DisableTouch
 import com.ivianuu.essentials.sample.ui.widget2.view.ImageViewWidget
 import com.ivianuu.essentials.sample.ui.widget2.view.Margin
 import com.ivianuu.essentials.sample.ui.widget2.view.MatchParent
@@ -34,6 +36,8 @@ import com.ivianuu.essentials.util.dp
 
 class WidgetController2 : WidgetController() {
 
+    private val selections = mutableSetOf<Int>()
+
     override fun build(context: BuildContext): Widget {
         return LinearLayoutWidget(
             children = listOf(
@@ -42,15 +46,33 @@ class WidgetController2 : WidgetController() {
                     child = ScrollViewWidget(
                         child = MatchParent(
                             LinearLayoutWidget(
-                                children = (1..100).map { i ->
+                                children = (1..10).map { i ->
                                     ListItem(
                                         title = "Title $i",
                                         text = "TextViewWidget $i",
+                                        primaryAction = Margin(
+                                            left = dp(16).toInt(),
+                                            right = -dp(16).toInt(), // yep
+                                            child = DisableTouch(
+                                                child = Checkbox(
+                                                    value = selections.contains(i),
+                                                    onChange = {}
+                                                )
+                                            )
+                                        ),
                                         secondaryAction = Margin(
                                             right = dp(8).toInt(),
                                             child = MenuButton()
                                         ),
-                                        onClick = { }
+                                        onClick = {
+                                            if (selections.contains(i)) {
+                                                selections.remove(i)
+                                            } else {
+                                                selections.add(i)
+                                            }
+
+                                            buildOwner?.rebuild()
+                                        }
                                     )
                                 }
                             )
