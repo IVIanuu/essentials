@@ -66,56 +66,47 @@ class HookElement(
     widget: HookWidget
 ) : StatefulElement(widget) {
 
-    private var currentHook: List<HookState<*, *>>? = null
+    private val hooks = mutableListOf<HookState<*, *>>()
     private var hookIndex = 0
-    private var hooks: MutableList<HookState<*, *>>? = null
-    private var didFinishBuildOnce = false
 
     override fun build(): Widget {
-        currentHook = hooks?.toList()
         hookIndex = 0
         currentContext = this
         val result = super.build()
         currentContext = null
-        didFinishBuildOnce = true
         return result
     }
 
     override fun updateChild(child: Element?, newWidget: Widget?, newSlot: Int?): Element? {
-        hooks?.reversed()?.forEach { it.didBuild() }
+        hooks.reversed().forEach { it.didBuild() }
         return super.updateChild(child, newWidget, newSlot)
     }
 
     override fun unmount() {
         super.unmount()
-        hooks?.reversed()?.forEach { it.dispose() }
+        hooks.reversed().forEach { it.dispose() }
     }
 
     internal fun <R> use(hook: Hook<R>): R {
         val hookState: HookState<R, Hook<R>>
 
-        // first build
-        if (currentHook == null) {
+        if (hooks.isEmpty()) {
             hookState = createHookState(hook)
-            hooks = mutableListOf()
-            hooks!!.add(hookState)
+            hooks.add(hookState)
         } else {
-            if (!didFinishBuildOnce && currentHook!!.isEmpty()) {
-                hookState = pushHook(hook)
-            } else {
-                when {
-                    currentHook!!.last().hook == hook -> {
-                        hookState = currentHook!!.last() as HookState<R, Hook<R>>
-                    }
-                    currentHook!!.last().hook!!.keys == hook.keys -> {
-                        hookState = currentHook!!.last() as HookState<R, Hook<R>>
-                        val previousHook = hookState.hook
-                        hookState.hook = hook
-                        hookState.didUpdateHook(previousHook)
-                    }
-                    else -> {
-                        hookState = replaceHookAt(hookIndex, hook)
-                    }
+            val prevState = hooks.last()
+            when {
+                prevState.hook == hook -> hookState = prevState as HookState<R, Hook<R>>
+                prevState.hook!!.keys == hook.keys -> {
+                    hookState = prevState as HookState<R, Hook<R>>
+                    val previousHook = hookState.hook
+                    hookState.hook = hook
+                    hookState.didUpdateHook(previousHook)
+                }
+                else -> {
+                    hooks.removeAt(hookIndex).dispose()
+                    hookState = createHookState(hook)
+                    hooks.add(hookIndex, hookState)
                 }
             }
         }
@@ -123,25 +114,6 @@ class HookElement(
         hookIndex++
 
         return hookState.build(this)
-    }
-
-    private fun <R> replaceHookAt(index: Int, hook: Hook<R>): HookState<R, Hook<R>> {
-        hooks!!.removeAt(index).dispose()
-        val hookState = createHookState(hook)
-        hooks!!.add(index, hookState)
-        return hookState
-    }
-
-    private fun <R> insertHookAt(index: Int, hook: Hook<R>): HookState<R, Hook<R>> {
-        val hookState = createHookState(hook)
-        hooks!!.add(index, hookState)
-        return hookState
-    }
-
-    private fun <R> pushHook(hook: Hook<R>): HookState<R, Hook<R>> {
-        val hookState = createHookState(hook)
-        hooks!!.add(hookState)
-        return hookState
     }
 
     private fun <R> createHookState(hook: Hook<R>): HookState<R, Hook<R>> {
@@ -154,7 +126,7 @@ class HookElement(
 
     companion object {
         @SuppressLint("StaticFieldLeak")
-        var currentContext: HookElement? = null
+        internal var currentContext: HookElement? = null
     }
 
 }
