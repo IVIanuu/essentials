@@ -16,9 +16,40 @@
 
 package com.ivianuu.essentials.sample.ui.widget2.lib
 
+import android.content.Context
 import android.view.View
 import android.view.ViewGroup
 import com.github.ajalt.timberkt.d
+import kotlin.reflect.KClass
+
+inline fun <reified V : ViewGroup> ViewGroupWidget(
+    children: List<Widget>,
+    key: Any? = null,
+    noinline updateView: ((BuildContext, V) -> Unit)? = null
+) = ViewGroupWidget(V::class, children, key, updateView)
+
+fun <V : ViewGroup> ViewGroupWidget(
+    type: KClass<V>,
+    children: List<Widget>,
+    key: Any? = null,
+    updateView: ((BuildContext, V) -> Unit)? = null
+) = ViewGroupWidget(children, key, {
+    type.java.getDeclaredConstructor(Context::class.java)
+        .newInstance(AndroidContextAmbient(it))
+}, updateView)
+
+fun <V : ViewGroup> ViewGroupWidget(
+    children: List<Widget>,
+    key: Any? = null,
+    createView: (BuildContext) -> V,
+    updateView: ((BuildContext, V) -> Unit)? = null
+): ViewGroupWidget<V> = object : ViewGroupWidget<V>(children, key) {
+    override fun createView(context: BuildContext): V = createView.invoke(context)
+    override fun updateView(context: BuildContext, view: V) {
+        super.updateView(context, view)
+        updateView?.invoke(context, view)
+    }
+}
 
 abstract class ViewGroupWidget<V : ViewGroup>(
     val children: List<Widget>,

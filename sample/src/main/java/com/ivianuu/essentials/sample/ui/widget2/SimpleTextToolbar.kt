@@ -16,14 +16,17 @@
 
 package com.ivianuu.essentials.sample.ui.widget2
 
-import android.view.Gravity
+import android.view.ViewGroup.LayoutParams.MATCH_PARENT
+import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatTextView
-import com.ivianuu.essentials.sample.ui.widget2.lib.AndroidContextAmbient
 import com.ivianuu.essentials.sample.ui.widget2.exp.Background
-import com.ivianuu.essentials.sample.ui.widget2.layout.Container
+import com.ivianuu.essentials.sample.ui.widget2.exp.Gravity
+import com.ivianuu.essentials.sample.ui.widget2.exp.Size
+import com.ivianuu.essentials.sample.ui.widget2.lib.AndroidContextAmbient
 import com.ivianuu.essentials.sample.ui.widget2.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget2.lib.StatelessWidget
+import com.ivianuu.essentials.sample.ui.widget2.lib.ViewGroupWidget
 import com.ivianuu.essentials.sample.ui.widget2.lib.ViewWidget
 import com.ivianuu.essentials.sample.ui.widget2.lib.Widget
 import com.ivianuu.essentials.util.getPrimaryColor
@@ -32,12 +35,19 @@ import com.ivianuu.kommon.core.content.dp
 class SimpleTextToolbar(val title: String) : StatelessWidget() {
 
     override fun build(context: BuildContext): Widget {
-        return Background(
-            color = AndroidContextAmbient(context).getPrimaryColor(),
-            child = Container(
-                child = Text(title),
-                height = AndroidContextAmbient(context).dp(56).toInt(),
-                gravity = Gravity.CENTER
+        return Size(
+            width = MATCH_PARENT,
+            height = AndroidContextAmbient(context).dp(56).toInt(),
+            child = Background(
+                color = AndroidContextAmbient(context).getPrimaryColor(),
+                child = ViewGroupWidget<FrameLayout>(
+                    children = listOf(
+                        Gravity(
+                            gravity = android.view.Gravity.CENTER,
+                            child = Text(text = title)
+                        )
+                    )
+                )
             )
         )
     }
@@ -45,11 +55,21 @@ class SimpleTextToolbar(val title: String) : StatelessWidget() {
 }
 
 
-class Text(val text: String) : ViewWidget<TextView>() {
+class Text(
+    val text: String? = null,
+    val textRes: Int? = null,
+    val textAppearance: Int? = null
+) : ViewWidget<TextView>() {
     override fun createView(context: BuildContext): TextView =
         AppCompatTextView(AndroidContextAmbient(context))
 
     override fun updateView(context: BuildContext, view: TextView) {
-        view.text = text
+        when {
+            text != null -> view.text = text
+            textRes != null -> view.setText(textRes)
+            else -> view.text = null
+        }
+
+        if (textAppearance != null) view.setTextAppearance(textAppearance)
     }
 }

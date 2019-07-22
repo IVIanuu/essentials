@@ -16,27 +16,27 @@
 
 package com.ivianuu.essentials.sample.ui.widget2.exp
 
-import android.graphics.drawable.Drawable
 import android.view.View
+import android.widget.FrameLayout
+import android.widget.LinearLayout
 import com.ivianuu.essentials.sample.ui.widget2.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget2.lib.ViewPropsWidget
 import com.ivianuu.essentials.sample.ui.widget2.lib.Widget
 
-class Background(
-    val color: Int? = null,
-    val drawable: Drawable? = null,
-    val resource: Int? = null,
+class Gravity(
+    val gravity: Int,
     child: Widget,
     key: Any? = null
 ) : ViewPropsWidget(child, key) {
 
     override fun applyViewProps(context: BuildContext, view: View) {
-        when {
-            color != null -> view.setBackgroundColor(color)
-            drawable != null -> view.background = drawable
-            resource != null -> view.setBackgroundResource(resource)
-            else -> view.background = null
+        val lp = view.layoutParams
+        when (lp) {
+            is FrameLayout.LayoutParams -> lp.gravity = gravity
+            is LinearLayout.LayoutParams -> lp.gravity = gravity
         }
+
+        view.layoutParams = lp
     }
 
 }

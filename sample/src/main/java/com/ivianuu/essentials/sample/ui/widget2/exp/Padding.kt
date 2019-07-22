@@ -18,6 +18,7 @@ package com.ivianuu.essentials.sample.ui.widget2.exp
 
 import android.view.View
 import androidx.core.view.updatePaddingRelative
+import com.ivianuu.essentials.sample.ui.widget2.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget2.lib.ViewPropsWidget
 import com.ivianuu.essentials.sample.ui.widget2.lib.Widget
 
@@ -36,7 +37,7 @@ open class Padding(
         key: Any? = null
     ) : this(padding, padding, padding, padding, child, key)
 
-    override fun applyViewProps(view: View) {
+    override fun applyViewProps(context: BuildContext, view: View) {
         view.updatePaddingRelative(left, top, right, bottom)
     }
 

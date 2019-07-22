@@ -22,10 +22,10 @@ import com.github.ajalt.timberkt.d
 fun ViewPropsWidget(
     child: Widget,
     key: Any? = null,
-    applyViewProps: (View) -> Unit
+    applyViewProps: (BuildContext, View) -> Unit
 ) = object : ViewPropsWidget(child, key) {
-    override fun applyViewProps(view: View) {
-        applyViewProps(view)
+    override fun applyViewProps(context: BuildContext, view: View) {
+        applyViewProps(context, view)
     }
 }
 
@@ -37,7 +37,7 @@ abstract class ViewPropsWidget(
     override fun createElement(): ViewPropsElement =
         ViewPropsElement(this)
 
-    abstract fun applyViewProps(view: View)
+    abstract fun applyViewProps(context: BuildContext, view: View)
 
 }
 

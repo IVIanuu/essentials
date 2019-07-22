@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.sample.ui.widget2
 
 import com.ivianuu.essentials.sample.ui.widget2.exp.WidgetController
+import com.ivianuu.essentials.sample.ui.widget2.layout.Column
 import com.ivianuu.essentials.sample.ui.widget2.layout.LinearLayoutWidget
 import com.ivianuu.essentials.sample.ui.widget2.layout.VerticalScroller
 import com.ivianuu.essentials.sample.ui.widget2.lib.BuildContext
@@ -25,17 +26,22 @@ import com.ivianuu.essentials.sample.ui.widget2.lib.Widget
 class WidgetController2 : WidgetController() {
 
     override fun build(context: BuildContext): Widget {
-        return VerticalScroller(
-            child = LinearLayoutWidget {
-                (1..100).map { i ->
-                    add(
-                        ListItem(
-                            title = "Title $i",
-                            text = "Text $i",
-                            onClick = {}
-                        )
-                    )
-                }
-            })
+        return Column(
+            children = listOf(
+                SimpleTextToolbar(title = "Compose"),
+                VerticalScroller(
+                    child = LinearLayoutWidget {
+                        (1..100).map { i ->
+                            add(
+                                ListItem(
+                                    title = "Title $i",
+                                    text = "Text $i",
+                                    onClick = {}
+                                )
+                            )
+                        }
+                    })
+            )
+        )
     }
 }

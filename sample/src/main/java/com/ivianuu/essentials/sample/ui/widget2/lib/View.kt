@@ -106,7 +106,7 @@ open class ViewElement<V : View>(widget: ViewWidget<V>) : Element(widget) {
     }
 
     fun updateViewProps(viewProps: ViewPropsWidget) {
-        viewProps.applyViewProps(requireView())
+        viewProps.applyViewProps(this, requireView())
     }
 
     override fun updateSlot(newSlot: Int?) {
