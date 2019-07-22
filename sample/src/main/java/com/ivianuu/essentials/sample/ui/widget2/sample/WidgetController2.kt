@@ -19,6 +19,7 @@ package com.ivianuu.essentials.sample.ui.widget2.sample
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.sample.ui.widget2.es.WidgetController
+import com.ivianuu.essentials.sample.ui.widget2.layout.FrameLayoutWidget
 import com.ivianuu.essentials.sample.ui.widget2.layout.LinearLayoutWidget
 import com.ivianuu.essentials.sample.ui.widget2.layout.ScrollViewWidget
 import com.ivianuu.essentials.sample.ui.widget2.lib.BuildContext
@@ -28,31 +29,64 @@ import com.ivianuu.essentials.sample.ui.widget2.material.Checkbox
 import com.ivianuu.essentials.sample.ui.widget2.util.WithParentElement
 import com.ivianuu.essentials.sample.ui.widget2.view.Clickable
 import com.ivianuu.essentials.sample.ui.widget2.view.DisableTouch
+import com.ivianuu.essentials.sample.ui.widget2.view.Gravity
 import com.ivianuu.essentials.sample.ui.widget2.view.ImageViewWidget
 import com.ivianuu.essentials.sample.ui.widget2.view.Margin
 import com.ivianuu.essentials.sample.ui.widget2.view.MatchParent
 import com.ivianuu.essentials.sample.ui.widget2.view.Padding
+import com.ivianuu.essentials.sample.ui.widget2.view.ProgressBarWidget
 import com.ivianuu.essentials.sample.ui.widget2.view.Ripple
 import com.ivianuu.essentials.sample.ui.widget2.view.Size
+import com.ivianuu.essentials.sample.ui.widget2.view.WrapContent
 import com.ivianuu.essentials.util.dp
+import com.ivianuu.essentials.util.viewLifecycleScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class WidgetController2 : WidgetController() {
 
     private val selections = mutableSetOf<Int>()
 
+    private var loading = true
+
     override fun build(context: BuildContext): Widget {
         return LinearLayoutWidget(
             children = listOf(
                 SimpleTextToolbar(title = "Compose"),
-                MatchParent(
-                    child = ScrollViewWidget(
-                        child = MatchParent(
-                            LinearLayoutWidget(
-                                children = (1..10).map { ListItem(it) }
+                WithParentElement { parent ->
+                    if (loading) {
+                        viewLifecycleScope.launch {
+                            delay(2000)
+                            loading = false
+                            parent.markNeedsBuild()
+                        }
+                    }
+
+                    if (loading) {
+                        MatchParent(
+                            child = FrameLayoutWidget(
+                                children = listOf(
+                                    WrapContent(
+                                        child = Gravity(
+                                            gravity = android.view.Gravity.CENTER,
+                                            child = ProgressBarWidget()
+                                        )
+                                    )
+                                )
                             )
                         )
-                    )
-                )
+                    } else {
+                        MatchParent(
+                            child = ScrollViewWidget(
+                                child = MatchParent(
+                                    LinearLayoutWidget(
+                                        children = (1..10).map { ListItem(it) }
+                                    )
+                                )
+                            )
+                        )
+                    }
+                }
             )
         )
     }
