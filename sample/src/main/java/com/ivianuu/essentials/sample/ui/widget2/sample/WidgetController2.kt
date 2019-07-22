@@ -19,6 +19,8 @@ package com.ivianuu.essentials.sample.ui.widget2.sample
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.sample.ui.widget2.es.WidgetController
+import com.ivianuu.essentials.sample.ui.widget2.hooks.HookWidget
+import com.ivianuu.essentials.sample.ui.widget2.hooks.useState
 import com.ivianuu.essentials.sample.ui.widget2.layout.FrameLayoutWidget
 import com.ivianuu.essentials.sample.ui.widget2.layout.LinearLayoutWidget
 import com.ivianuu.essentials.sample.ui.widget2.layout.ScrollViewWidget
@@ -26,6 +28,7 @@ import com.ivianuu.essentials.sample.ui.widget2.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget2.lib.StatelessWidget
 import com.ivianuu.essentials.sample.ui.widget2.lib.Widget
 import com.ivianuu.essentials.sample.ui.widget2.material.Checkbox
+import com.ivianuu.essentials.sample.ui.widget2.material.MaterialButtonWidget
 import com.ivianuu.essentials.sample.ui.widget2.util.WithParentElement
 import com.ivianuu.essentials.sample.ui.widget2.view.Clickable
 import com.ivianuu.essentials.sample.ui.widget2.view.DisableTouch
@@ -80,7 +83,7 @@ class WidgetController2 : WidgetController() {
                             child = ScrollViewWidget(
                                 child = MatchParent(
                                     LinearLayoutWidget(
-                                        children = (1..10).map { ListItem(it) }
+                                        children = listOf(MyCounter()) + (1..10).map { ListItem(it) }
                                     )
                                 )
                             )
@@ -138,6 +141,20 @@ class WidgetController2 : WidgetController() {
                     )
                 )
             )
+        )
+    }
+}
+
+class MyCounter(key: Any? = null) : HookWidget(key) {
+    override fun build(context: BuildContext): Widget {
+        val (count, setCount) = useState { 0 }
+        val (count2, setCount2) = useState { 0 }
+        return MaterialButtonWidget(
+            text = "Count $count count 2 $count2",
+            onClick = {
+                setCount(count + 1)
+                setCount2(count2 - 1)
+            }
         )
     }
 }

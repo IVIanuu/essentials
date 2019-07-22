@@ -20,6 +20,8 @@ abstract class State {
     var element: StatefulElement? = null
     var widget: StatefulWidget? = null
 
+    val context: BuildContext? get() = element
+
     abstract fun build(context: BuildContext): Widget
 
     open fun initState() {
@@ -34,10 +36,15 @@ abstract class State {
     open fun didChangeDependencies() {
     }
 
-    protected open fun setState(block: () -> Unit) {
+    open fun setState(block: () -> Unit) {
         block()
         element?.markNeedsBuild()
     }
+
+    inline fun <reified T : Element> element(): T = element as T
+
+    inline fun <reified T : Widget> widget(): T = widget as T
+
 }
 
 abstract class StatefulWidget(key: Any? = null) : Widget(key) {
