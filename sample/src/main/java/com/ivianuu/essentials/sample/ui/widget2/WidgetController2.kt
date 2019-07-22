@@ -16,24 +16,21 @@
 
 package com.ivianuu.essentials.sample.ui.widget2
 
-import android.graphics.Color
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatTextView
 import com.ivianuu.essentials.sample.R
-import com.ivianuu.essentials.sample.ui.widget2.exp.Ambient
 import com.ivianuu.essentials.sample.ui.widget2.exp.AndroidContextAmbient
-import com.ivianuu.essentials.sample.ui.widget2.exp.Background
-import com.ivianuu.essentials.sample.ui.widget2.exp.Margin
-import com.ivianuu.essentials.sample.ui.widget2.exp.MatchParent
 import com.ivianuu.essentials.sample.ui.widget2.layout.Column
+import com.ivianuu.essentials.sample.ui.widget2.layout.VerticalScroller
 import com.ivianuu.essentials.sample.ui.widget2.lib.AndroidBuildOwner
 import com.ivianuu.essentials.sample.ui.widget2.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget2.lib.BuildOwner
+import com.ivianuu.essentials.sample.ui.widget2.lib.Element
+import com.ivianuu.essentials.sample.ui.widget2.lib.StatelessWidget
 import com.ivianuu.essentials.sample.ui.widget2.lib.ViewWidget
 import com.ivianuu.essentials.ui.base.EsController
 import com.ivianuu.essentials.util.cast
-import com.ivianuu.essentials.util.dp
 import com.ivianuu.essentials.util.viewLifecycleScope
 
 class WidgetController2 : EsController() {
@@ -43,39 +40,37 @@ class WidgetController2 : EsController() {
 
     private var buildOwner: BuildOwner? = null
 
+    private val selectedIndices = mutableSetOf<Int>()
+
     override fun onViewCreated(view: View) {
         super.onViewCreated(view)
-
-        var count = 0
-
-        /*viewLifecycleScope.launch {
-            delay(100)
-            while (coroutineContext.isActive) {
-                delay(1000)
-                count += 1
-                buildOwner?.rebuild()
-            }
-        }*/
 
         buildOwner = AndroidBuildOwner(
             viewLifecycleScope,
             view.cast()
         ) {
-            Count.Provider(
-                value = count,
+            VerticalScroller(
                 child = Column(
-                    children = listOf(
-                        MatchParent(
-                            child = Margin(
-                                margin = dp(100).toInt(),
-                                child = Background(
-                                    color = Color.BLUE,
-                                    child = JustAView()
-                                )
+                    children = (1..100).map { i ->
+                        StatelessWidget {
+                            ListItem(
+                                title = "Title $i",
+                                text = "Text $i",
+                                secondaryAction = Checkbox(
+                                    value = selectedIndices.contains(i),
+                                    onChange = {}
+                                ),
+                                onClick = {
+                                    if (selectedIndices.contains(i)) {
+                                        selectedIndices.remove(i)
+                                    } else {
+                                        selectedIndices.add(i)
+                                    }
+
+                                    it.cast<Element>().markNeedsBuild()
+                                }
                             )
-                        )
-                    ) + (1..2).map {
-                        HelloWorldWidget(it.toString())
+                        }
                     }
                 )
             )
@@ -88,23 +83,6 @@ class WidgetController2 : EsController() {
         super.onDestroyView(view)
     }
 
-}
-
-val Count = Ambient<Int>()
-
-fun JustAView() = ViewWidget(createView = { View(AndroidContextAmbient(it)) })
-
-class HelloWorldWidget(val tag: String) : ViewWidget<TextView>(key = tag) {
-    override fun createView(context: BuildContext): TextView {
-        return AppCompatTextView(AndroidContextAmbient(context)).apply {
-            setTextAppearance(R.style.TextAppearance_MaterialComponents_Headline4)
-            text = "Initial text $tag"
-        }
-    }
-
-    override fun updateView(context: BuildContext, view: TextView) {
-        view.text = "Tag: $tag value ${Count.of(context)}"
-    }
 }
 
 class Text(val text: String) : ViewWidget<TextView>() {

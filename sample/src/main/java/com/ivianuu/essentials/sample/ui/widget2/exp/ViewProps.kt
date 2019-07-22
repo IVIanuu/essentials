@@ -24,6 +24,16 @@ import com.ivianuu.essentials.sample.ui.widget2.lib.ProxyWidget
 import com.ivianuu.essentials.sample.ui.widget2.lib.ViewElement
 import com.ivianuu.essentials.sample.ui.widget2.lib.Widget
 
+fun ViewPropsWidget(
+    child: Widget,
+    key: Any? = null,
+    applyViewProps: (View) -> Unit
+) = object : ViewPropsWidget(child, key) {
+    override fun applyViewProps(view: View) {
+        applyViewProps(view)
+    }
+}
+
 abstract class ViewPropsWidget(
     child: Widget,
     key: Any? = null

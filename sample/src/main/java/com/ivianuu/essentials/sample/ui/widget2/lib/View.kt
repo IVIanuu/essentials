@@ -16,9 +16,26 @@
 
 package com.ivianuu.essentials.sample.ui.widget2.lib
 
+import android.content.Context
 import android.view.View
 import com.github.ajalt.timberkt.d
+import com.ivianuu.essentials.sample.ui.widget2.exp.AndroidContextAmbient
 import com.ivianuu.essentials.sample.ui.widget2.exp.ViewPropsWidget
+import kotlin.reflect.KClass
+
+inline fun <reified V : View> ViewWidget(
+    key: Any? = null,
+    noinline updateView: ((BuildContext, V) -> Unit)? = null
+) = ViewWidget(V::class, key, updateView)
+
+fun <V : View> ViewWidget(
+    type: KClass<V>,
+    key: Any? = null,
+    updateView: ((BuildContext, V) -> Unit)? = null
+) = ViewWidget(key, {
+    type.java.getDeclaredConstructor(Context::class.java)
+        .newInstance(AndroidContextAmbient(it))
+}, updateView)
 
 fun <V : View> ViewWidget(
     key: Any? = null,
