@@ -50,6 +50,13 @@ class Size(
     child: Widget,
     key: Any? = null
 ) : ViewPropsWidget(child, key) {
+
+    constructor(
+        size: Int,
+        child: Widget,
+        key: Any? = null
+    ) : this(size, size, child, key)
+
     override fun applyViewProps(context: BuildContext, view: View) {
         view.updateLayoutParams {
             width = this@Size.width

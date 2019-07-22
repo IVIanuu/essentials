@@ -16,16 +16,20 @@
 
 package com.ivianuu.essentials.sample.ui.widget2.sample
 
+import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.sample.ui.widget2.es.WidgetController
 import com.ivianuu.essentials.sample.ui.widget2.layout.LinearLayoutWidget
 import com.ivianuu.essentials.sample.ui.widget2.layout.ScrollViewWidget
 import com.ivianuu.essentials.sample.ui.widget2.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget2.lib.Widget
-import com.ivianuu.essentials.sample.ui.widget2.material.MaterialButtonWidget
-import com.ivianuu.essentials.sample.ui.widget2.view.Avatar
+import com.ivianuu.essentials.sample.ui.widget2.view.Clickable
+import com.ivianuu.essentials.sample.ui.widget2.view.ImageViewWidget
 import com.ivianuu.essentials.sample.ui.widget2.view.Margin
 import com.ivianuu.essentials.sample.ui.widget2.view.MatchParent
+import com.ivianuu.essentials.sample.ui.widget2.view.Padding
+import com.ivianuu.essentials.sample.ui.widget2.view.Ripple
+import com.ivianuu.essentials.sample.ui.widget2.view.Size
 import com.ivianuu.essentials.util.dp
 
 class WidgetController2 : WidgetController() {
@@ -42,18 +46,9 @@ class WidgetController2 : WidgetController() {
                                     ListItem(
                                         title = "Title $i",
                                         text = "TextViewWidget $i",
-                                        primaryAction = Margin(
-                                            left = dp(16).toInt(),
-                                            child = Avatar(
-                                                avatarRes = R.drawable.es_ic_torch_on
-                                            )
-                                        ),
                                         secondaryAction = Margin(
-                                            right = dp(16).toInt(),
-                                            child = MaterialButtonWidget(
-                                                text = "Click me",
-                                                onClick = { }
-                                            )
+                                            right = dp(8).toInt(),
+                                            child = MenuButton()
                                         ),
                                         onClick = { }
                                     )
@@ -65,4 +60,20 @@ class WidgetController2 : WidgetController() {
             )
         )
     }
+
+    private fun MenuButton() = Size(
+        size = dp(40).toInt(),
+        child = Ripple(
+            unbounded = true,
+            child = Padding(
+                padding = dp(8).toInt(),
+                child = Clickable(
+                    child = ImageViewWidget(
+                        imageRes = R.drawable.abc_ic_menu_overflow_material
+                    ),
+                    onClick = { d { "clicked" } }
+                )
+            )
+        )
+    )
 }

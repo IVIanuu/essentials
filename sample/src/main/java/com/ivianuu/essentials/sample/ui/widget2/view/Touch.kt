@@ -23,9 +23,9 @@ import com.ivianuu.essentials.sample.ui.widget2.lib.ViewPropsWidget
 import com.ivianuu.essentials.sample.ui.widget2.lib.Widget
 
 class Clickable(
-    val onClick: () -> Unit,
     child: Widget,
-    key: Any? = null
+    key: Any? = null,
+    val onClick: () -> Unit
 ) : ViewPropsWidget(child, key) {
 
     override fun applyViewProps(context: BuildContext, view: View) {

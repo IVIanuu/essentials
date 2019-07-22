@@ -23,7 +23,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.epoxy.EpoxyRecyclerView
 import com.airbnb.epoxy.TypedEpoxyController
 import com.github.ajalt.timberkt.d
-import com.ivianuu.essentials.sample.ui.widget.lib.properties
 import com.ivianuu.essentials.sample.ui.widget2.lib.AndroidContextAmbient
 import com.ivianuu.essentials.sample.ui.widget2.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget2.lib.ComponentElement
@@ -34,6 +33,7 @@ import com.ivianuu.essentials.sample.ui.widget2.lib.Widget
 import com.ivianuu.essentials.ui.epoxy.EsHolder
 import com.ivianuu.essentials.ui.epoxy.SimpleModel
 import com.ivianuu.essentials.util.cast
+import com.ivianuu.kommon.core.view.tag
 
 class RecyclerViewWidget(
     val children: List<Widget>,
@@ -50,14 +50,13 @@ class RecyclerViewWidget(
         val epoxyController =
             WidgetEpoxyController(context.cast())
         adapter = epoxyController.adapter
-        properties.set("epoxy_controller", epoxyController)
+        tag = epoxyController
     }
 
     override fun updateView(context: BuildContext, view: RecyclerView) {
         super.updateView(context, view)
         d { "update list view $children" }
-        view.properties.get<WidgetEpoxyController>("epoxy_controller")
-            ?.setData(children)
+        view.tag<WidgetEpoxyController>().setData(children)
         view.layoutManager = layoutManager ?: LinearLayoutManager(AndroidContextAmbient(context))
     }
 }
@@ -91,7 +90,7 @@ private data class WidgetEpoxyModel(
 
     override fun bind(holder: EsHolder) {
         super.bind(holder)
-        val element = holder.root.properties.get<Element>("element")!!
+        val element = holder.root.tag<Element>()
         element.update(widget)
     }
 
@@ -113,7 +112,7 @@ private data class WidgetEpoxyModel(
             (childElement as ViewElement<*>).view!!
         }
 
-        view.properties.set("element", element)
+        view.tag = element
 
         d { "build view with element $element $view" }
 

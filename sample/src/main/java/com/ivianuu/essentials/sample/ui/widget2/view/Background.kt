@@ -18,14 +18,33 @@ package com.ivianuu.essentials.sample.ui.widget2.view
 
 import android.graphics.drawable.Drawable
 import android.view.View
+import com.ivianuu.essentials.sample.R
+import com.ivianuu.essentials.sample.ui.widget2.lib.AndroidContextAmbient
 import com.ivianuu.essentials.sample.ui.widget2.lib.BuildContext
+import com.ivianuu.essentials.sample.ui.widget2.lib.StatelessWidget
 import com.ivianuu.essentials.sample.ui.widget2.lib.ViewPropsWidget
 import com.ivianuu.essentials.sample.ui.widget2.lib.Widget
+import com.ivianuu.kommon.core.content.drawableAttr
 
-class Background(
+class Ripple(
+    val unbounded: Boolean = false,
+    val child: Widget,
+    key: Any? = null
+) : StatelessWidget(key) {
+    override fun build(context: BuildContext): Widget {
+        return Background(
+            attr = if (unbounded) R.attr.selectableItemBackgroundBorderless
+            else R.attr.selectableItemBackground,
+            child = child
+        )
+    }
+}
+
+open class Background(
     val color: Int? = null,
     val drawable: Drawable? = null,
     val resource: Int? = null,
+    val attr: Int? = null,
     child: Widget,
     key: Any? = null
 ) : ViewPropsWidget(child, key) {
@@ -35,6 +54,8 @@ class Background(
             color != null -> view.setBackgroundColor(color)
             drawable != null -> view.background = drawable
             resource != null -> view.setBackgroundResource(resource)
+            attr != null -> view.background = AndroidContextAmbient(context)
+                .drawableAttr(attr)
             else -> view.background = null
         }
     }
