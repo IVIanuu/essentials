@@ -31,7 +31,7 @@ abstract class WidgetController : EsController() {
     override val layoutRes: Int
         get() = R.layout.controller_widget
 
-    private var buildOwner: BuildOwner? = null
+    var buildOwner: BuildOwner? = null
 
     override fun onViewCreated(view: View) {
         super.onViewCreated(view)

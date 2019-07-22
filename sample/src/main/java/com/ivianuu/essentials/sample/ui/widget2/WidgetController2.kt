@@ -19,13 +19,10 @@ package com.ivianuu.essentials.sample.ui.widget2
 import com.ivianuu.essentials.sample.ui.widget2.exp.WidgetController
 import com.ivianuu.essentials.sample.ui.widget2.layout.ListView
 import com.ivianuu.essentials.sample.ui.widget2.lib.BuildContext
-import com.ivianuu.essentials.sample.ui.widget2.lib.Element
-import com.ivianuu.essentials.sample.ui.widget2.lib.StatelessWidget
 import com.ivianuu.essentials.sample.ui.widget2.lib.Widget
 import com.ivianuu.essentials.sample.ui.widget2.material.Checkbox
 import com.ivianuu.essentials.sample.ui.widget2.material.RadioButton
 import com.ivianuu.essentials.sample.ui.widget2.material.Switch
-import com.ivianuu.essentials.util.cast
 
 class WidgetController2 : WidgetController() {
 
@@ -47,68 +44,42 @@ class WidgetController2 : WidgetController() {
     override fun build(context: BuildContext): Widget {
         return ListView(
             children = (1..100).map { i ->
-                StatelessWidget(key = i) {
-                    ListItem(
-                        title = "Title $i",
-                        text = "Text $i",
-                        secondaryAction = when (lastType?.cycle() ?: ButtonType.CHECKBOX) {
-                            ButtonType.CHECKBOX -> {
-                                lastType = ButtonType.CHECKBOX
-                                Checkbox(
-                                    value = selectedIndices.contains(i),
-                                    onChange = {
-                                        if (selectedIndices.contains(i)) {
-                                            selectedIndices.remove(i)
-                                        } else {
-                                            selectedIndices.add(i)
-                                        }
-
-                                        it.cast<Element>().markNeedsBuild()
-                                    }
-                                )
-                            }
-                            ButtonType.RADIO -> {
-                                lastType = ButtonType.RADIO
-                                RadioButton(
-                                    value = selectedIndices.contains(i),
-                                    onChange = {
-                                        if (selectedIndices.contains(i)) {
-                                            selectedIndices.remove(i)
-                                        } else {
-                                            selectedIndices.add(i)
-                                        }
-
-                                        it.cast<Element>().markNeedsBuild()
-                                    }
-                                )
-                            }
-                            ButtonType.SWITCH -> {
-                                lastType = ButtonType.SWITCH
-                                Switch(
-                                    value = selectedIndices.contains(i),
-                                    onChange = {
-                                        if (selectedIndices.contains(i)) {
-                                            selectedIndices.remove(i)
-                                        } else {
-                                            selectedIndices.add(i)
-                                        }
-
-                                        it.cast<Element>().markNeedsBuild()
-                                    }
-                                )
-                            }
-                        },
-                        onClick = {
-                            if (selectedIndices.contains(i)) {
-                                selectedIndices.remove(i)
-                            } else {
-                                selectedIndices.add(i)
-                            }
-
-                            it.cast<Element>().markNeedsBuild()
+                ListItem(
+                    title = "Title $i",
+                    text = "Text $i",
+                    secondaryAction = when (lastType?.cycle() ?: ButtonType.CHECKBOX) {
+                        ButtonType.CHECKBOX -> {
+                            lastType = ButtonType.CHECKBOX
+                            Checkbox(
+                                value = selectedIndices.contains(i),
+                                onChange = {}
+                            )
                         }
-                    )
-                }
+                        ButtonType.RADIO -> {
+                            lastType = ButtonType.RADIO
+                            RadioButton(
+                                value = selectedIndices.contains(i),
+                                onChange = {}
+                            )
+                        }
+                        ButtonType.SWITCH -> {
+                            lastType = ButtonType.SWITCH
+                            Switch(
+                                value = selectedIndices.contains(i),
+                                onChange = {}
+                            )
+                        }
+                    },
+                    onClick = {
+                        if (selectedIndices.contains(i)) {
+                            selectedIndices.remove(i)
+                        } else {
+                            selectedIndices.add(i)
+                        }
+
+                        buildOwner?.rebuild()
+                    }
+                )
             }
         )
     }
