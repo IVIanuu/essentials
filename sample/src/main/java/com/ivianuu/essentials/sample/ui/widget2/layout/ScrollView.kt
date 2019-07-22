@@ -16,30 +16,16 @@
 
 package com.ivianuu.essentials.sample.ui.widget2.layout
 
-import android.view.ViewGroup
-import android.view.ViewGroup.LayoutParams.MATCH_PARENT
-import android.widget.LinearLayout
+import android.widget.ScrollView
 import com.ivianuu.essentials.sample.ui.widget2.lib.AndroidContextAmbient
 import com.ivianuu.essentials.sample.ui.widget2.lib.BuildContext
-import com.ivianuu.essentials.sample.ui.widget2.lib.ViewGroupWidget
+import com.ivianuu.essentials.sample.ui.widget2.lib.SingleChildViewGroupWidget
 import com.ivianuu.essentials.sample.ui.widget2.lib.Widget
 
-open class Flex(
-    val orientation: Int,
-    val gravity: Int,
-    children: List<Widget>,
+class ScrollViewWidget(
+    child: Widget,
     key: Any? = null
-) : ViewGroupWidget<LinearLayout>(children, key) {
-
-    override fun updateView(context: BuildContext, view: LinearLayout) {
-        super.updateView(context, view)
-        view.orientation = orientation
-        view.gravity = gravity
-    }
-
-    override fun createView(context: BuildContext) =
-        LinearLayout(AndroidContextAmbient(context)).apply {
-            layoutParams = ViewGroup.LayoutParams(MATCH_PARENT, MATCH_PARENT)
-        }
-
+) : SingleChildViewGroupWidget<ScrollView>(child, key) {
+    override fun createView(context: BuildContext): ScrollView =
+        ScrollView(AndroidContextAmbient(context))
 }

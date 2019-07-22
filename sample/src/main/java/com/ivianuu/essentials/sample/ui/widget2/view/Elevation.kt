@@ -14,19 +14,21 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.sample.ui.widget2.layout
+package com.ivianuu.essentials.sample.ui.widget2.view
 
-import android.view.Gravity
-import android.widget.LinearLayout
+import android.view.View
+import com.ivianuu.essentials.sample.ui.widget2.lib.BuildContext
+import com.ivianuu.essentials.sample.ui.widget2.lib.ViewPropsWidget
 import com.ivianuu.essentials.sample.ui.widget2.lib.Widget
 
-open class Row(
-    gravity: Int = Gravity.START or Gravity.CENTER_VERTICAL,
-    children: List<Widget>,
+class Elevation(
+    val elevation: Float,
+    child: Widget,
     key: Any? = null
-) : Flex(
-    orientation = LinearLayout.HORIZONTAL,
-    gravity = gravity,
-    children = children,
-    key = key
-)
+) : ViewPropsWidget(child, key) {
+
+    override fun applyViewProps(context: BuildContext, view: View) {
+        view.elevation = elevation
+    }
+
+}

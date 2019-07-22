@@ -16,9 +16,8 @@
 
 package com.ivianuu.essentials.sample.ui.widget2.layout
 
-import android.view.Gravity
 import android.view.View
-import android.widget.LinearLayout
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import com.ivianuu.essentials.sample.ui.widget2.lib.AndroidContextAmbient
 import com.ivianuu.essentials.sample.ui.widget2.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget2.lib.ViewGroupWidget
@@ -26,11 +25,26 @@ import com.ivianuu.essentials.sample.ui.widget2.lib.ViewPropsWidget
 import com.ivianuu.essentials.sample.ui.widget2.lib.Widget
 import com.ivianuu.essentials.util.cast
 
-class LinearLayoutParams(
+class CoordinatorLayoutWidget(
+    children: List<Widget>,
+    key: Any? = null
+) : ViewGroupWidget<CoordinatorLayout>(children, key) {
+
+    constructor(
+        key: Any? = null,
+        children: CoordinatorLayoutBuilder.() -> Unit
+    ) : this(CoordinatorLayoutBuilder().apply(children).children, key)
+
+    override fun createView(context: BuildContext) = CoordinatorLayout(
+        AndroidContextAmbient(context)
+    )
+
+}
+
+class CoordinatorLayoutParams(
     val width: Int? = null,
     val height: Int? = null,
     val gravity: Int? = null,
-    val weight: Float? = null,
     val marginLeft: Int? = null,
     val marginTop: Int? = null,
     val marginRight: Int? = null,
@@ -39,12 +53,11 @@ class LinearLayoutParams(
     key: Any?
 ) : ViewPropsWidget(child, key) {
 
-    override fun applyViewProps(view: View) {
-        val lp = view.layoutParams.cast<LinearLayout.LayoutParams>()
+    override fun applyViewProps(context: BuildContext, view: View) {
+        val lp = view.layoutParams.cast<CoordinatorLayout.LayoutParams>()
         if (width != null) lp.width = width
         if (height != null) lp.height = height
         if (gravity != null) lp.gravity = gravity
-        if (weight != null) lp.weight = weight
         if (marginLeft != null) lp.leftMargin = marginLeft
         if (marginTop != null) lp.topMargin = marginTop
         if (marginRight != null) lp.rightMargin = marginRight
@@ -54,28 +67,30 @@ class LinearLayoutParams(
 
 }
 
-class LinearLayoutBuilder {
+class CoordinatorLayoutBuilder {
 
     val children = mutableListOf<Widget>()
 
     fun add(
         child: Widget,
+
         width: Int? = null,
         height: Int? = null,
-        gravity: Int? = null,
-        weight: Float? = null,
+
         marginLeft: Int? = null,
         marginTop: Int? = null,
         marginRight: Int? = null,
         marginBottom: Int? = null,
+
+        gravity: Int? = null,
+
         key: Any? = null
     ) {
         children.add(
-            LinearLayoutParams(
+            CoordinatorLayoutParams(
                 width,
                 height,
                 gravity,
-                weight,
                 marginLeft,
                 marginTop,
                 marginRight,
@@ -84,38 +99,5 @@ class LinearLayoutBuilder {
                 key
             )
         )
-    }
-}
-
-class LinearLayoutWidget(
-    val orientation: Int = LinearLayout.VERTICAL,
-    val gravity: Int = if (orientation == LinearLayout.VERTICAL) {
-        Gravity.TOP or Gravity.CENTER_HORIZONTAL
-    } else {
-        Gravity.START or Gravity.CENTER_HORIZONTAL
-    },
-    key: Any? = null,
-    children: List<Widget>
-) : ViewGroupWidget<LinearLayout>(children, key) {
-
-    constructor(
-        orientation: Int = LinearLayout.VERTICAL,
-        gravity: Int = if (orientation == LinearLayout.VERTICAL) {
-            Gravity.TOP or Gravity.CENTER_HORIZONTAL
-        } else {
-            Gravity.START or Gravity.CENTER_HORIZONTAL
-        },
-        key: Any? = null,
-        children: LinearLayoutBuilder.() -> Unit
-    ) : this(orientation, gravity, key, LinearLayoutBuilder().apply(children).children)
-
-    override fun createView(context: BuildContext): LinearLayout = LinearLayout(
-        AndroidContextAmbient(context)
-    )
-
-    override fun updateView(context: BuildContext, view: LinearLayout) {
-        super.updateView(context, view)
-        view.orientation = orientation
-        view.gravity = gravity
     }
 }

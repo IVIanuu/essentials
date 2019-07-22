@@ -31,11 +31,9 @@ class Spacer(
 
     override fun updateView(context: BuildContext, view: View) {
         super.updateView(context, view)
-        if (view.layoutParams.width != width || view.layoutParams.height != height) {
-            view.updateLayoutParams {
-                width = this@Spacer.width
-                height = this@Spacer.height
-            }
+        view.updateLayoutParams {
+            width = this@Spacer.width
+            height = this@Spacer.height
         }
     }
 

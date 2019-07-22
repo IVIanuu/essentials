@@ -14,33 +14,36 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.sample.ui.widget2
+package com.ivianuu.essentials.sample.ui.widget2.sample
 
-import com.ivianuu.essentials.sample.ui.widget2.exp.WidgetController
-import com.ivianuu.essentials.sample.ui.widget2.layout.Column
+import com.ivianuu.essentials.sample.ui.widget2.es.WidgetController
 import com.ivianuu.essentials.sample.ui.widget2.layout.LinearLayoutWidget
-import com.ivianuu.essentials.sample.ui.widget2.layout.VerticalScroller
+import com.ivianuu.essentials.sample.ui.widget2.layout.ScrollViewWidget
 import com.ivianuu.essentials.sample.ui.widget2.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget2.lib.Widget
+import com.ivianuu.essentials.sample.ui.widget2.view.MatchParent
 
 class WidgetController2 : WidgetController() {
 
     override fun build(context: BuildContext): Widget {
-        return Column(
+        return LinearLayoutWidget(
             children = listOf(
                 SimpleTextToolbar(title = "Compose"),
-                VerticalScroller(
-                    child = LinearLayoutWidget {
-                        (1..100).map { i ->
-                            add(
-                                ListItem(
-                                    title = "Title $i",
-                                    text = "Text $i",
-                                    onClick = {}
-                                )
+                MatchParent(
+                    child = ScrollViewWidget(
+                        child = MatchParent(
+                            LinearLayoutWidget(
+                                children = (1..100).map { i ->
+                                    ListItem(
+                                        title = "Title $i",
+                                        text = "Text $i",
+                                        onClick = {}
+                                    )
+                                }
                             )
-                        }
-                    })
+                        )
+                    )
+                )
             )
         )
     }

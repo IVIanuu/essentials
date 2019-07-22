@@ -14,23 +14,24 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.sample.ui.widget2
+package com.ivianuu.essentials.sample.ui.widget2.sample
 
-import android.graphics.drawable.VectorDrawable
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
-import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatTextView
-import com.ivianuu.essentials.sample.ui.widget2.exp.Background
-import com.ivianuu.essentials.sample.ui.widget2.exp.Gravity
-import com.ivianuu.essentials.sample.ui.widget2.exp.Size
+import com.ivianuu.essentials.sample.R
+import com.ivianuu.essentials.sample.ui.widget2.layout.FrameLayoutWidget
 import com.ivianuu.essentials.sample.ui.widget2.lib.AndroidContextAmbient
 import com.ivianuu.essentials.sample.ui.widget2.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget2.lib.StatelessWidget
-import com.ivianuu.essentials.sample.ui.widget2.lib.ViewGroupWidget
 import com.ivianuu.essentials.sample.ui.widget2.lib.ViewWidget
 import com.ivianuu.essentials.sample.ui.widget2.lib.Widget
-import com.ivianuu.essentials.util.getPrimaryColor
+import com.ivianuu.essentials.sample.ui.widget2.view.Background
+import com.ivianuu.essentials.sample.ui.widget2.view.Elevation
+import com.ivianuu.essentials.sample.ui.widget2.view.Gravity
+import com.ivianuu.essentials.sample.ui.widget2.view.Size
+import com.ivianuu.essentials.sample.ui.widget2.view.WrapContent
+import com.ivianuu.kommon.core.content.colorAttr
 import com.ivianuu.kommon.core.content.dp
 
 class SimpleTextToolbar(val title: String) : StatelessWidget() {
@@ -40,19 +41,26 @@ class SimpleTextToolbar(val title: String) : StatelessWidget() {
             width = MATCH_PARENT,
             height = AndroidContextAmbient(context).dp(56).toInt(),
             child = Background(
-                color = AndroidContextAmbient(context).getPrimaryColor(),
-                child = ViewGroupWidget<FrameLayout>(
-                    children = listOf(
-                        Gravity(
-                            gravity = android.view.Gravity.CENTER,
-                            child = Text(text = title)
+                color = AndroidContextAmbient(context).colorAttr(R.attr.colorPrimary),
+                child = Elevation(
+                    elevation = AndroidContextAmbient(context).dp(4),
+                    child = FrameLayoutWidget(
+                        children = listOf(
+                            Gravity(
+                                gravity = android.view.Gravity.CENTER,
+                                child = WrapContent(
+                                    child = Text(
+                                        text = title,
+                                        textAppearance = R.style.TextAppearance_MaterialComponents_Headline6,
+                                        textColor = AndroidContextAmbient(context).colorAttr(R.attr.colorOnPrimary)
+                                    )
+                                )
+                            )
                         )
                     )
                 )
             )
         )
-
-        VectorDrawable()
     }
 
 }
@@ -60,8 +68,10 @@ class SimpleTextToolbar(val title: String) : StatelessWidget() {
 class Text(
     val text: String? = null,
     val textRes: Int? = null,
-    val textAppearance: Int? = null
+    val textAppearance: Int? = null,
+    val textColor: Int? = null
 ) : ViewWidget<TextView>() {
+
     override fun createView(context: BuildContext): TextView =
         AppCompatTextView(AndroidContextAmbient(context))
 
@@ -73,5 +83,6 @@ class Text(
         }
 
         if (textAppearance != null) view.setTextAppearance(textAppearance)
+        if (textColor != null) view.setTextColor(textColor)
     }
 }

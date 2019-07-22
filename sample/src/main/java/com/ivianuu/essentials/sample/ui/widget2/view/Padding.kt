@@ -14,29 +14,31 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.sample.ui.widget2.exp
+package com.ivianuu.essentials.sample.ui.widget2.view
 
-import android.graphics.drawable.Drawable
 import android.view.View
+import androidx.core.view.updatePaddingRelative
 import com.ivianuu.essentials.sample.ui.widget2.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget2.lib.ViewPropsWidget
 import com.ivianuu.essentials.sample.ui.widget2.lib.Widget
 
-class Background(
-    val color: Int? = null,
-    val drawable: Drawable? = null,
-    val resource: Int? = null,
+open class Padding(
+    val left: Int,
+    val top: Int,
+    val right: Int,
+    val bottom: Int,
     child: Widget,
-    key: Any? = null
+    key: Any?
 ) : ViewPropsWidget(child, key) {
 
+    constructor(
+        padding: Int,
+        child: Widget,
+        key: Any? = null
+    ) : this(padding, padding, padding, padding, child, key)
+
     override fun applyViewProps(context: BuildContext, view: View) {
-        when {
-            color != null -> view.setBackgroundColor(color)
-            drawable != null -> view.background = drawable
-            resource != null -> view.setBackgroundResource(resource)
-            else -> view.background = null
-        }
+        view.updatePaddingRelative(left, top, right, bottom)
     }
 
 }

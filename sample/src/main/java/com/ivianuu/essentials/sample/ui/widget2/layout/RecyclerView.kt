@@ -18,7 +18,7 @@ package com.ivianuu.essentials.sample.ui.widget2.layout
 
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewGroup.LayoutParams.MATCH_PARENT
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.epoxy.EpoxyRecyclerView
 import com.airbnb.epoxy.TypedEpoxyController
@@ -35,8 +35,9 @@ import com.ivianuu.essentials.ui.epoxy.EsHolder
 import com.ivianuu.essentials.ui.epoxy.SimpleModel
 import com.ivianuu.essentials.util.cast
 
-class RecyclerView(
+class RecyclerViewWidget(
     val children: List<Widget>,
+    val layoutManager: RecyclerView.LayoutManager? = null,
     key: Any? = null
 ) : ViewWidget<RecyclerView>(key) {
 
@@ -46,7 +47,6 @@ class RecyclerView(
     override fun createView(
         context: BuildContext
     ) = EpoxyRecyclerView(AndroidContextAmbient(context)).apply {
-        layoutParams = ViewGroup.LayoutParams(MATCH_PARENT, MATCH_PARENT)
         val epoxyController =
             WidgetEpoxyController(context.cast())
         adapter = epoxyController.adapter
@@ -58,10 +58,11 @@ class RecyclerView(
         d { "update list view $children" }
         view.properties.get<WidgetEpoxyController>("epoxy_controller")
             ?.setData(children)
+        view.layoutManager = layoutManager ?: LinearLayoutManager(AndroidContextAmbient(context))
     }
 }
 
-class RecyclerViewElement(widget: com.ivianuu.essentials.sample.ui.widget2.layout.RecyclerView) :
+class RecyclerViewElement(widget: com.ivianuu.essentials.sample.ui.widget2.layout.RecyclerViewWidget) :
     ViewElement<RecyclerView>(widget) {
     override fun insertChildView(view: View, slot: Int?) {
     }

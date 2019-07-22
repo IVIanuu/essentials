@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.sample.ui.widget2
+package com.ivianuu.essentials.sample.ui.widget2.sample
 
 import android.view.ViewGroup
 import android.widget.TextView
 import com.ivianuu.essentials.sample.R
-import com.ivianuu.essentials.sample.ui.widget2.lib.ContainerAmbient
 import com.ivianuu.essentials.sample.ui.widget2.lib.BuildContext
+import com.ivianuu.essentials.sample.ui.widget2.lib.ContainerAmbient
 import com.ivianuu.essentials.sample.ui.widget2.lib.IdViewGroupWidget
 import com.ivianuu.essentials.sample.ui.widget2.lib.ViewGroupWidget
 import com.ivianuu.essentials.sample.ui.widget2.lib.Widget

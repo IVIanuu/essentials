@@ -14,22 +14,33 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.sample.ui.widget2.layout
+package com.ivianuu.essentials.sample.ui.widget2.view
 
-import android.view.ViewGroup
-import android.view.ViewGroup.LayoutParams.MATCH_PARENT
-import androidx.core.widget.NestedScrollView
-import com.ivianuu.essentials.sample.ui.widget2.lib.AndroidContextAmbient
+import android.view.View
+import android.widget.FrameLayout
+import android.widget.LinearLayout
+import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.sample.ui.widget2.lib.BuildContext
-import com.ivianuu.essentials.sample.ui.widget2.lib.SingleChildViewGroupWidget
+import com.ivianuu.essentials.sample.ui.widget2.lib.ViewPropsWidget
 import com.ivianuu.essentials.sample.ui.widget2.lib.Widget
 
-class VerticalScroller(
+class Gravity(
+    val gravity: Int,
     child: Widget,
     key: Any? = null
-) : SingleChildViewGroupWidget<NestedScrollView>(child, key) {
-    override fun createView(context: BuildContext) =
-        NestedScrollView(AndroidContextAmbient(context)).apply {
-            layoutParams = ViewGroup.LayoutParams(MATCH_PARENT, MATCH_PARENT)
+) : ViewPropsWidget(child, key) {
+
+    override fun applyViewProps(context: BuildContext, view: View) {
+        val lp = view.layoutParams
+        when (lp) {
+            is FrameLayout.LayoutParams -> lp.gravity = gravity
+            is LinearLayout.LayoutParams -> lp.gravity = gravity
+            else -> error("cannot apply gravity for $view parent is ${view.parent}")
         }
+
+        d { "apply gravity $gravity to $view" }
+
+        view.layoutParams = lp
+    }
+
 }

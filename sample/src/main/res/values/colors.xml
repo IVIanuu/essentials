@@ -15,9 +15,9 @@
   -->
 
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorOnPrimary">#ffffff</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorSecondary">#FF4081</color>
-    <color name="colorOnSecondary">#ffffff</color>
+    <color name="primary">#3F51B5</color>
+    <color name="on_primary">#ffffff</color>
+    <color name="primary_dark">#303F9F</color>
+    <color name="secondary">#FF4081</color>
+    <color name="on_secondary">#ffffff</color>
 </resources>
