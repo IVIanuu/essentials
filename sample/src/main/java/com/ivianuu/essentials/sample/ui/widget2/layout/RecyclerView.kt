@@ -35,13 +35,13 @@ import com.ivianuu.essentials.ui.epoxy.EsHolder
 import com.ivianuu.essentials.ui.epoxy.SimpleModel
 import com.ivianuu.essentials.util.cast
 
-class ListView(
+class RecyclerView(
     val children: List<Widget>,
     key: Any? = null
 ) : ViewWidget<RecyclerView>(key) {
 
     override fun createElement() =
-        ListViewElement(this)
+        RecyclerViewElement(this)
 
     override fun createView(
         context: BuildContext
@@ -61,7 +61,8 @@ class ListView(
     }
 }
 
-class ListViewElement(widget: ListView) : ViewElement<RecyclerView>(widget) {
+class RecyclerViewElement(widget: com.ivianuu.essentials.sample.ui.widget2.layout.RecyclerView) :
+    ViewElement<RecyclerView>(widget) {
     override fun insertChildView(view: View, slot: Int?) {
     }
 
@@ -77,12 +78,7 @@ private class WidgetEpoxyController(val element: Element) : TypedEpoxyController
     override fun buildModels(data: List<Widget>?) {
         d { "build models $data" }
         data?.forEach {
-            add(
-                WidgetEpoxyModel(
-                    element,
-                    it
-                )
-            )
+            add(WidgetEpoxyModel(element, it))
         }
     }
 }

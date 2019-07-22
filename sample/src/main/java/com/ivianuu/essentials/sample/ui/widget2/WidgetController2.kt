@@ -17,70 +17,25 @@
 package com.ivianuu.essentials.sample.ui.widget2
 
 import com.ivianuu.essentials.sample.ui.widget2.exp.WidgetController
-import com.ivianuu.essentials.sample.ui.widget2.layout.ListView
+import com.ivianuu.essentials.sample.ui.widget2.layout.LinearLayoutWidget
+import com.ivianuu.essentials.sample.ui.widget2.layout.VerticalScroller
 import com.ivianuu.essentials.sample.ui.widget2.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget2.lib.Widget
-import com.ivianuu.essentials.sample.ui.widget2.material.Checkbox
-import com.ivianuu.essentials.sample.ui.widget2.material.RadioButton
-import com.ivianuu.essentials.sample.ui.widget2.material.Switch
 
 class WidgetController2 : WidgetController() {
 
-    enum class ButtonType {
-        CHECKBOX, RADIO, SWITCH;
-
-        fun cycle(): ButtonType {
-            return when (this) {
-                CHECKBOX -> RADIO
-                RADIO -> SWITCH
-                SWITCH -> CHECKBOX
-            }
-        }
-    }
-
-    private val selectedIndices = mutableSetOf<Int>()
-    private var lastType: ButtonType? = null
-
     override fun build(context: BuildContext): Widget {
-        return ListView(
-            children = (1..100).map { i ->
-                ListItem(
-                    title = "Title $i",
-                    text = "Text $i",
-                    secondaryAction = when (lastType?.cycle() ?: ButtonType.CHECKBOX) {
-                        ButtonType.CHECKBOX -> {
-                            lastType = ButtonType.CHECKBOX
-                            Checkbox(
-                                value = selectedIndices.contains(i),
-                                onChange = {}
-                            )
-                        }
-                        ButtonType.RADIO -> {
-                            lastType = ButtonType.RADIO
-                            RadioButton(
-                                value = selectedIndices.contains(i),
-                                onChange = {}
-                            )
-                        }
-                        ButtonType.SWITCH -> {
-                            lastType = ButtonType.SWITCH
-                            Switch(
-                                value = selectedIndices.contains(i),
-                                onChange = {}
-                            )
-                        }
-                    },
-                    onClick = {
-                        if (selectedIndices.contains(i)) {
-                            selectedIndices.remove(i)
-                        } else {
-                            selectedIndices.add(i)
-                        }
-
-                        buildOwner?.rebuild()
-                    }
-                )
-            }
-        )
+        return VerticalScroller(
+            child = LinearLayoutWidget {
+                (1..100).map { i ->
+                    add(
+                        ListItem(
+                            title = "Title $i",
+                            text = "Text $i",
+                            onClick = {}
+                        )
+                    )
+                }
+            })
     }
 }
