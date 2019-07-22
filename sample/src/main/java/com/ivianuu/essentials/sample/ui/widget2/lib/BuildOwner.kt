@@ -24,7 +24,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 interface BuildOwner {
-    fun rebuild()
     fun scheduleBuildFor(element: Element)
     fun clear()
 }
@@ -59,10 +58,6 @@ class AndroidBuildOwner(
             it.unmount()
         }
         root = null
-    }
-
-    override fun rebuild() {
-        root!!.markNeedsBuild()
     }
 
     private fun scheduleBuild() {

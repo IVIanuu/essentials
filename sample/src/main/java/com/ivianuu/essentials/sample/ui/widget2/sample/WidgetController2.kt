@@ -22,8 +22,10 @@ import com.ivianuu.essentials.sample.ui.widget2.es.WidgetController
 import com.ivianuu.essentials.sample.ui.widget2.layout.LinearLayoutWidget
 import com.ivianuu.essentials.sample.ui.widget2.layout.ScrollViewWidget
 import com.ivianuu.essentials.sample.ui.widget2.lib.BuildContext
+import com.ivianuu.essentials.sample.ui.widget2.lib.StatelessWidget
 import com.ivianuu.essentials.sample.ui.widget2.lib.Widget
 import com.ivianuu.essentials.sample.ui.widget2.material.Checkbox
+import com.ivianuu.essentials.sample.ui.widget2.util.WithParentElement
 import com.ivianuu.essentials.sample.ui.widget2.view.Clickable
 import com.ivianuu.essentials.sample.ui.widget2.view.DisableTouch
 import com.ivianuu.essentials.sample.ui.widget2.view.ImageViewWidget
@@ -46,35 +48,7 @@ class WidgetController2 : WidgetController() {
                     child = ScrollViewWidget(
                         child = MatchParent(
                             LinearLayoutWidget(
-                                children = (1..10).map { i ->
-                                    ListItem(
-                                        title = "Title $i",
-                                        text = "TextViewWidget $i",
-                                        primaryAction = Margin(
-                                            left = dp(16).toInt(),
-                                            right = -dp(16).toInt(), // yep
-                                            child = DisableTouch(
-                                                child = Checkbox(
-                                                    value = selections.contains(i),
-                                                    onChange = {}
-                                                )
-                                            )
-                                        ),
-                                        secondaryAction = Margin(
-                                            right = dp(8).toInt(),
-                                            child = MenuButton()
-                                        ),
-                                        onClick = {
-                                            if (selections.contains(i)) {
-                                                selections.remove(i)
-                                            } else {
-                                                selections.add(i)
-                                            }
-
-                                            buildOwner?.rebuild()
-                                        }
-                                    )
-                                }
+                                children = (1..10).map { ListItem(it) }
                             )
                         )
                     )
@@ -83,19 +57,53 @@ class WidgetController2 : WidgetController() {
         )
     }
 
-    private fun MenuButton() = Size(
-        size = dp(40).toInt(),
-        child = Ripple(
-            unbounded = true,
-            child = Padding(
-                padding = dp(8).toInt(),
-                child = Clickable(
-                    child = ImageViewWidget(
-                        imageRes = R.drawable.abc_ic_menu_overflow_material
-                    ),
-                    onClick = { d { "clicked" } }
+    private fun ListItem(i: Int) = StatelessWidget {
+        WithParentElement { parent ->
+            ListItem(
+                title = "Title $i",
+                text = "Text $i",
+                primaryAction = Margin(
+                    left = dp(16).toInt(),
+                    right = -dp(16).toInt(), // yep
+                    child = DisableTouch(
+                        child = Checkbox(
+                            value = selections.contains(i),
+                            onChange = {}
+                        )
+                    )
+                ),
+                secondaryAction = Margin(
+                    right = dp(8).toInt(),
+                    child = MenuButton()
+                ),
+                onClick = {
+                    if (selections.contains(i)) {
+                        selections.remove(i)
+                    } else {
+                        selections.add(i)
+                    }
+
+                    parent.markNeedsBuild()
+                }
+            )
+        }
+    }
+
+    private fun MenuButton() = StatelessWidget {
+        Size(
+            size = dp(40).toInt(),
+            child = Ripple(
+                unbounded = true,
+                child = Padding(
+                    padding = dp(8).toInt(),
+                    child = Clickable(
+                        child = ImageViewWidget(
+                            imageRes = R.drawable.abc_ic_menu_overflow_material
+                        ),
+                        onClick = { d { "clicked" } }
+                    )
                 )
             )
         )
-    )
+    }
 }
