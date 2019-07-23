@@ -23,8 +23,10 @@ class IdViewGroupWidget<V : ViewGroup>(
     children: List<Widget>,
     key: Any? = null
 ) : ViewGroupWidget<V>(children, key) {
-    override fun createView(context: BuildContext): V =
-        ContainerAmbient(context).findViewById<V>(id).also {
-            ContainerAmbient(context).removeView(it) // todo remove this hack
+    override fun createView(context: BuildContext): V {
+        val container = ContainerAmbient(context)
+        return container.findViewById<V>(id).also {
+            container.removeView(it) // todo remove this hack
         }
+    }
 }

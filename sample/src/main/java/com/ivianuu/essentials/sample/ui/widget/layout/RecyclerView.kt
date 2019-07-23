@@ -61,7 +61,7 @@ class RecyclerViewWidget(
     }
 }
 
-class RecyclerViewElement(widget: com.ivianuu.essentials.sample.ui.widget.layout.RecyclerViewWidget) :
+class RecyclerViewElement(widget: RecyclerViewWidget) :
     ViewElement<RecyclerView>(widget) {
     override fun insertChildView(view: View, slot: Int?) {
     }

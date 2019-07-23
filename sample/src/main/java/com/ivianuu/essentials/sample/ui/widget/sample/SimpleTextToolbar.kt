@@ -35,13 +35,14 @@ import com.ivianuu.kommon.core.content.dp
 class SimpleTextToolbar(val title: String) : StatelessWidget() {
 
     override fun build(context: BuildContext): Widget {
+        val androidContext = AndroidContextAmbient(context)
         return Size(
             width = MATCH_PARENT,
-            height = AndroidContextAmbient(context).dp(56).toInt(),
+            height = androidContext.dp(56).toInt(),
             child = Background(
-                color = AndroidContextAmbient(context).colorAttr(R.attr.colorPrimary),
+                color = androidContext.colorAttr(R.attr.colorPrimary),
                 child = Elevation(
-                    elevation = AndroidContextAmbient(context).dp(4),
+                    elevation = androidContext.dp(4),
                     child = FrameLayoutWidget(
                         children = listOf(
                             Gravity(
@@ -50,7 +51,7 @@ class SimpleTextToolbar(val title: String) : StatelessWidget() {
                                     child = TextViewWidget(
                                         text = title,
                                         textAppearance = R.style.TextAppearance_MaterialComponents_Headline6,
-                                        textColor = AndroidContextAmbient(context).colorAttr(R.attr.colorOnPrimary)
+                                        textColor = androidContext.colorAttr(R.attr.colorOnPrimary)
                                     )
                                 )
                             )

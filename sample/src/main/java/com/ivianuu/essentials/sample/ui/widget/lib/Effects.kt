@@ -19,7 +19,7 @@ package com.ivianuu.essentials.sample.ui.widget.lib
 import com.ivianuu.essentials.util.cast
 import kotlin.reflect.KProperty
 
-data class EffectState<T>(
+internal data class EffectState<T>(
     val inputs: List<Any?>?,
     val result: T
 )
