@@ -28,6 +28,10 @@ interface BuildContext {
         key: Any? = null
     ): T?
 
+    fun <T> cache(calculation: () -> T): T
+
+    fun <T> cache(vararg inputs: Any?, calculation: () -> T): T
+
 }
 
 inline fun <reified T : Widget> BuildContext.ancestorWidget(

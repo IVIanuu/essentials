@@ -46,6 +46,9 @@ abstract class Element(widget: Widget) : BuildContext {
     var isDirty = true
         protected set
 
+    private val effects = mutableListOf<EffectState<*>>()
+    private var effectsIndex = 0
+
     override fun <T : Widget> ancestorWidget(
         type: KClass<T>,
         key: Any?
@@ -58,6 +61,35 @@ abstract class Element(widget: Widget) : BuildContext {
         }
 
         return null
+    }
+
+    override fun <T> cache(calculation: () -> T): T =
+        cacheImpl(null, calculation)
+
+    override fun <T> cache(vararg inputs: Any?, calculation: () -> T): T =
+        cacheImpl(inputs.toList(), calculation)
+
+    private fun <T> cacheImpl(inputs: List<Any?>?, calculation: () -> T): T {
+        val result: T
+
+        val prevState = effects.getOrNull(effectsIndex)
+
+        when {
+            prevState == null -> {
+                result = calculation()
+                effects.add(effectsIndex, EffectState(inputs, result))
+            }
+            prevState.inputs == inputs -> result = prevState.result as T
+            else -> {
+                effects.removeAt(effectsIndex)
+                result = calculation()
+                effects.add(effectsIndex, EffectState(inputs, result))
+            }
+        }
+
+        effectsIndex++
+
+        return result
     }
 
     open fun mount(parent: Element?, slot: Int?) {
@@ -84,6 +116,7 @@ abstract class Element(widget: Widget) : BuildContext {
     open fun rebuild() {
         d { "${javaClass.simpleName} rebuild is dirty $isDirty widget $widget" }
         if (isDirty) {
+            effectsIndex = 0
             performRebuild()
         }
     }

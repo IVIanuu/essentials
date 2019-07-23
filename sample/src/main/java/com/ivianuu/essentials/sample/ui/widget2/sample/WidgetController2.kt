@@ -19,14 +19,13 @@ package com.ivianuu.essentials.sample.ui.widget2.sample
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.sample.ui.widget2.es.WidgetController
-import com.ivianuu.essentials.sample.ui.widget2.hooks.HookWidget
-import com.ivianuu.essentials.sample.ui.widget2.hooks.useState
 import com.ivianuu.essentials.sample.ui.widget2.layout.FrameLayoutWidget
 import com.ivianuu.essentials.sample.ui.widget2.layout.LinearLayoutWidget
 import com.ivianuu.essentials.sample.ui.widget2.layout.ScrollViewWidget
 import com.ivianuu.essentials.sample.ui.widget2.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget2.lib.StatelessWidget
 import com.ivianuu.essentials.sample.ui.widget2.lib.Widget
+import com.ivianuu.essentials.sample.ui.widget2.lib.state
 import com.ivianuu.essentials.sample.ui.widget2.material.Checkbox
 import com.ivianuu.essentials.sample.ui.widget2.material.MaterialButtonWidget
 import com.ivianuu.essentials.sample.ui.widget2.util.WithParentElement
@@ -145,10 +144,10 @@ class WidgetController2 : WidgetController() {
     }
 }
 
-class MyCounter(key: Any? = null) : HookWidget(key) {
+class MyCounter(key: Any? = null) : StatelessWidget(key) {
     override fun build(context: BuildContext): Widget {
-        val (count, setCount) = useState { 0 }
-        val (count2, setCount2) = useState { 0 }
+        val (count, setCount) = state { 0 }.invoke(context)
+        val (count2, setCount2) = state { 0 }.invoke(context)
         return MaterialButtonWidget(
             text = "Count $count count 2 $count2",
             onClick = {
