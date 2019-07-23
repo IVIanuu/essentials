@@ -18,48 +18,31 @@ package com.ivianuu.essentials.sample.ui.widget.sample
 
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.sample.ui.widget.layout.IdViewGroupWidget
+import com.ivianuu.essentials.sample.ui.widget.layout.InflateViewGroupWidget
 import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
-import com.ivianuu.essentials.sample.ui.widget.lib.ContainerAmbient
-import com.ivianuu.essentials.sample.ui.widget.lib.ViewGroupWidget
 import com.ivianuu.essentials.util.andTrue
-import com.ivianuu.kommon.core.view.inflate
 
-open class ListItem(
-    val title: String? = null,
-    val titleRes: Int? = null,
+fun ListItem(
+    title: String? = null,
+    titleRes: Int? = null,
 
-    val text: String? = null,
-    val textRes: Int? = null,
+    text: String? = null,
+    textRes: Int? = null,
 
-    val primaryAction: (BuildContext.() -> Unit)? = null,
-    val secondaryAction: (BuildContext.() -> Unit)? = null,
+    primaryAction: (BuildContext.() -> Unit)? = null,
+    secondaryAction: (BuildContext.() -> Unit)? = null,
 
-    val onClick: (() -> Unit)? = null,
-    val onLongClick: (() -> Unit)? = null,
+    onClick: (() -> Unit)? = null,
+    onLongClick: (() -> Unit)? = null,
 
     key: Any? = null
-) : ViewGroupWidget<ViewGroup>(key, {
-    if (primaryAction != null) {
-        +IdViewGroupWidget<ViewGroup>(
-            R.id.es_list_primary_action_container,
-            children = primaryAction
-        )
-    }
-    if (secondaryAction != null) {
-        +IdViewGroupWidget<ViewGroup>(
-            R.id.es_list_secondary_action_container,
-            children = secondaryAction
-        )
-    }
-}) {
-
-    override fun createView(context: BuildContext): ViewGroup =
-        ContainerAmbient(context).inflate<ViewGroup>(R.layout.es_list_item)
-
-    override fun updateView(context: BuildContext, view: ViewGroup) {
-        super.updateView(context, view)
+) = InflateViewGroupWidget<ConstraintLayout>(
+    layoutRes = R.layout.es_list_item,
+    key = key,
+    updateView = { view ->
         val titleView = view.findViewById<TextView>(R.id.es_list_title)
         when {
             title != null -> titleView.text = title
@@ -87,5 +70,19 @@ open class ListItem(
         }
 
         view.isEnabled = onClick != null || onLongClick != null
+    },
+    children = {
+        if (primaryAction != null) {
+            +IdViewGroupWidget<ViewGroup>(
+                R.id.es_list_primary_action_container,
+                children = primaryAction
+            )
+        }
+        if (secondaryAction != null) {
+            +IdViewGroupWidget<ViewGroup>(
+                R.id.es_list_secondary_action_container,
+                children = secondaryAction
+            )
+        }
     }
-}
+)

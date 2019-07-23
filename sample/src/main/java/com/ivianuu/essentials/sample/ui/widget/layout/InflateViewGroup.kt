@@ -19,17 +19,38 @@ package com.ivianuu.essentials.sample.ui.widget.layout
 import android.view.ViewGroup
 import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget.lib.ContainerAmbient
+import com.ivianuu.essentials.sample.ui.widget.lib.UpdateView
 import com.ivianuu.essentials.sample.ui.widget.lib.ViewGroupWidget
+import com.ivianuu.essentials.sample.ui.widget.lib.Widget
+import com.ivianuu.kommon.core.view.inflate
+import kotlin.reflect.KClass
 
-class IdViewGroupWidget<V : ViewGroup>(
-    val id: Int,
+inline fun <reified V : ViewGroup> InflateViewGroupWidget(
+    layoutRes: Int,
     key: Any? = null,
+    noinline updateView: UpdateView<V>? = null,
+    noinline children: BuildContext.() -> Unit
+) = InflateViewGroupWidget<V>(
+    layoutRes = layoutRes,
+    viewType = V::class,
+    key = key,
+    updateView = updateView,
+    children = children
+)
+
+fun <V : ViewGroup> InflateViewGroupWidget(
+    layoutRes: Int,
+    viewType: KClass<V>,
+    key: Any? = null,
+    updateView: UpdateView<V>? = null,
     children: BuildContext.() -> Unit
-) : ViewGroupWidget<V>(key, children) {
-    override fun createView(context: BuildContext): V {
-        val container = ContainerAmbient(context)
-        return container.findViewById<V>(id).also {
-            container.removeView(it) // todo remove this hack
-        }
-    }
-}
+): Widget = ViewGroupWidget(
+    viewType = viewType,
+    key = key,
+    createView = {
+        val container = +ContainerAmbient
+        container.inflate<V>(layoutRes)
+    },
+    updateView = updateView,
+    children = children
+)
