@@ -20,46 +20,45 @@ import android.view.MotionEvent
 import android.view.View
 import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget.lib.ViewPropsWidget
-import com.ivianuu.essentials.sample.ui.widget.lib.Widget
 
-fun BuildContext.Clickable(
-    child: Widget,
+fun Clickable(
     key: Any? = null,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    child: BuildContext.() -> Unit
 ) = ViewPropsWidget(
-    child = child,
     props = listOf(View.OnClickListener::class),
     key = key,
-    applyViewProps = { it.setOnClickListener { onClick() } }
+    applyViewProps = { it.setOnClickListener { onClick() } },
+    child = child
 )
 
-fun BuildContext.LongClickable(
-    child: Widget,
+fun LongClickable(
     key: Any? = null,
-    onLongClick: () -> Unit
+    onLongClick: () -> Unit,
+    child: BuildContext.() -> Unit
 ) = ViewPropsWidget(
-    child = child,
     props = listOf(View.OnLongClickListener::class),
     key = key,
-    applyViewProps = { it.setOnLongClickListener { onLongClick(); true } }
+    applyViewProps = { it.setOnLongClickListener { onLongClick(); true } },
+    child = child
 )
 
-fun BuildContext.DisableTouch(
-    child: Widget,
-    key: Any? = null
+fun DisableTouch(
+    key: Any? = null,
+    child: BuildContext.() -> Unit
 ) = Touchable(
     onTouch = { true },
-    child = child,
-    key = key
+    key = key,
+    child = child
 )
 
-fun BuildContext.Touchable(
-    child: Widget,
+fun Touchable(
     key: Any? = null,
-    onTouch: (MotionEvent) -> Boolean
+    onTouch: (MotionEvent) -> Boolean,
+    child: BuildContext.() -> Unit
 ) = ViewPropsWidget(
-    child = child,
     props = listOf(View.OnTouchListener::class),
     key = key,
-    applyViewProps = { it.setOnTouchListener { _, event -> onTouch(event) } }
+    applyViewProps = { it.setOnTouchListener { _, event -> onTouch(event) } },
+    child = child
 )

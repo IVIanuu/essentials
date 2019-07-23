@@ -20,7 +20,6 @@ import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.sample.ui.widget.layout.FrameLayout
 import com.ivianuu.essentials.sample.ui.widget.lib.AndroidContextAmbient
-import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget.lib.StatelessWidget
 import com.ivianuu.essentials.sample.ui.widget.view.Background
 import com.ivianuu.essentials.sample.ui.widget.view.Elevation
@@ -31,30 +30,29 @@ import com.ivianuu.essentials.sample.ui.widget.view.WrapContent
 import com.ivianuu.kommon.core.content.colorAttr
 import com.ivianuu.kommon.core.content.dp
 
-fun BuildContext.SimpleTextToolbar(title: String) = StatelessWidget("toolbar") {
+fun SimpleTextToolbar(title: String) = StatelessWidget("toolbar") {
     val androidContext = +AndroidContextAmbient
-    return@StatelessWidget Size(
+
+    +Size(
         width = MATCH_PARENT,
-        height = androidContext.dp(56).toInt(),
-        child = Background(
-            color = androidContext.colorAttr(R.attr.colorPrimary),
-            child = Elevation(
-                elevation = androidContext.dp(4),
-                child = FrameLayout(
-                    children = listOf(
-                        Gravity(
-                            gravity = android.view.Gravity.CENTER,
-                            child = WrapContent(
-                                child = TextView(
-                                    text = title,
-                                    textAppearance = R.style.TextAppearance_MaterialComponents_Headline6,
-                                    textColor = androidContext.colorAttr(R.attr.colorOnPrimary)
-                                )
+        height = androidContext.dp(56).toInt()
+    ) {
+        +Background(
+            color = androidContext.colorAttr(R.attr.colorPrimary)
+        ) {
+            +Elevation(elevation = androidContext.dp(4)) {
+                +FrameLayout {
+                    +Gravity(gravity = android.view.Gravity.CENTER) {
+                        +WrapContent {
+                            +TextView(
+                                text = title,
+                                textAppearance = R.style.TextAppearance_MaterialComponents_Headline6,
+                                textColor = androidContext.colorAttr(R.attr.colorOnPrimary)
                             )
-                        )
-                    )
-                )
-            )
-        )
-    )
+                        }
+                    }
+                }
+            }
+        }
+    }
 }

@@ -24,7 +24,6 @@ import com.ivianuu.essentials.sample.ui.widget.layout.LinearLayout
 import com.ivianuu.essentials.sample.ui.widget.layout.ScrollView
 import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget.lib.StatelessWidget
-import com.ivianuu.essentials.sample.ui.widget.lib.Widget
 import com.ivianuu.essentials.sample.ui.widget.lib.state
 import com.ivianuu.essentials.sample.ui.widget.material.CheckBox
 import com.ivianuu.essentials.sample.ui.widget.view.Clickable
@@ -45,91 +44,90 @@ import kotlinx.coroutines.launch
 
 class WidgetController2 : WidgetController() {
 
-    override fun BuildContext.build(): Widget {
-        return LinearLayout(
-            children = listOf(
-                SimpleTextToolbar(title = "Compose"),
-                StatelessWidget("content") {
-                    val (loading, setLoading) = state { true }(it)
+    override fun BuildContext.build() {
+        +LinearLayout {
+            +SimpleTextToolbar(title = "Compose")
+            +StatelessWidget("content") {
+                val (loading, setLoading) = +state { true }
 
-                    if (loading) {
-                        viewLifecycleScope.launch {
-                            delay(2000)
-                            setLoading(false)
-                        }
-
-                        Loading()
-                    } else {
-
-                        Content()
+                if (loading) {
+                    viewLifecycleScope.launch {
+                        delay(2000)
+                        setLoading(false)
                     }
+
+                    +Loading()
+                } else {
+                    +Content()
                 }
-            )
-        )
+            }
+        }
     }
 
-    private fun BuildContext.Loading() = MatchParent(
-        child = FrameLayout(
-            children = listOf(
-                WrapContent(
-                    child = Gravity(
-                        gravity = android.view.Gravity.CENTER,
-                        child = ProgressBar()
-                    )
-                )
-            )
-        )
-    )
+    private fun Loading() = MatchParent {
+        +FrameLayout {
+            +WrapContent {
+                +Gravity(gravity = android.view.Gravity.CENTER) {
+                    +ProgressBar()
+                }
+            }
+        }
+    }
 
-    private fun BuildContext.Content() = MatchParent(
-        child = ScrollView(
-            child = MatchParent(
-                LinearLayout(
-                    children = (1..10).map { ListItem(it) }
-                )
-            )
-        )
-    )
+    private fun Content() = MatchParent {
+        +ScrollView {
+            +MatchParent {
+                +LinearLayout {
+                    (1..10).forEach {
+                        +ListItem(it)
+                    }
+                }
+            }
+        }
+    }
 
-    private fun BuildContext.ListItem(i: Int) = StatelessWidget("ListItem") {
-        val (checked, setChecked) = state { false }(it)
+    private fun ListItem(i: Int) = StatelessWidget("ListItem") {
+        val (checked, setChecked) = +state { false }
 
-        ListItem(
+        +ListItem(
             title = "Title $i",
             text = "Text $i",
-            primaryAction = Margin(
-                left = dp(16).toInt(),
-                right = -dp(16).toInt(), // yep
-                child = DisableTouch(
-                    child = CheckBox(
-                        value = checked,
-                        onChange = {}
-                    )
-                )
-            ),
-            secondaryAction = Margin(
-                right = dp(8).toInt(),
-                child = MenuButton()
-            ),
+            primaryAction = {
+                +Margin(
+                    left = dp(16).toInt(),
+                    right = -dp(16).toInt() // yep
+                ) {
+                    +DisableTouch {
+                        +CheckBox(
+                            value = checked,
+                            onChange = {}
+                        )
+                    }
+                }
+            },
+            secondaryAction = {
+                +Margin(right = dp(8).toInt()) {
+                    +MenuButton()
+                }
+            },
             onClick = { setChecked(!checked) }
         )
     }
 
-    private fun BuildContext.MenuButton() = StatelessWidget("MenuButton") {
-        Size(
-            size = dp(40).toInt(),
-            child = Ripple(
-                unbounded = true,
-                child = Padding(
-                    padding = dp(8).toInt(),
-                    child = Clickable(
-                        child = ImageView(
-                            imageRes = R.drawable.abc_ic_menu_overflow_material
-                        ),
-                        onClick = { d { "clicked" } }
+    private fun MenuButton() = StatelessWidget("MenuButton") {
+        +Size(size = dp(40).toInt()) {
+            +Ripple(unbounded = true) {
+                +Padding(padding = dp(8).toInt()) {
+                    +Clickable(
+                        onClick = { d { "clicked" } },
+                        child = {
+                            +ImageView(
+                                imageRes = R.drawable.abc_ic_menu_overflow_material
+                            )
+                        }
                     )
-                )
-            )
-        )
+                }
+            }
+        }
     }
 }

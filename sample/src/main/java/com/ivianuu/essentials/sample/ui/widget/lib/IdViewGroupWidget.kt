@@ -20,9 +20,9 @@ import android.view.ViewGroup
 
 class IdViewGroupWidget<V : ViewGroup>(
     val id: Int,
-    children: List<Widget>,
-    key: Any? = null
-) : ViewGroupWidget<V>(children, key) {
+    key: Any? = null,
+    children: BuildContext.() -> Unit
+) : ViewGroupWidget<V>(key, children) {
     override fun createView(context: BuildContext): V {
         val container = ContainerAmbient(context)
         return container.findViewById<V>(id).also {

@@ -18,12 +18,11 @@ package com.ivianuu.essentials.sample.ui.widget.material
 
 import android.graphics.drawable.Drawable
 import com.google.android.material.button.MaterialButton
-import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget.lib.StatelessWidget
 import com.ivianuu.essentials.sample.ui.widget.lib.ViewWidget
 import com.ivianuu.essentials.sample.ui.widget.view.Clickable
 
-fun BuildContext.MaterialButton(
+fun MaterialButton(
     text: String? = null,
     textRes: Int? = null,
     icon: Drawable? = null,
@@ -33,20 +32,22 @@ fun BuildContext.MaterialButton(
 ) = StatelessWidget(id = "md_button", key = key) {
     Clickable(
         onClick = onClick ?: {},
-        child = ViewWidget<MaterialButton> { view ->
-            when {
-                text != null -> view.text = text
-                textRes != null -> view.setText(textRes)
-                else -> view.text = null
-            }
+        child = {
+            +ViewWidget<MaterialButton> { view ->
+                when {
+                    text != null -> view.text = text
+                    textRes != null -> view.setText(textRes)
+                    else -> view.text = null
+                }
 
-            when {
-                icon != null -> view.icon = icon
-                iconRes != null -> view.setIconResource(iconRes)
-                else -> view.icon = null
-            }
+                when {
+                    icon != null -> view.icon = icon
+                    iconRes != null -> view.setIconResource(iconRes)
+                    else -> view.icon = null
+                }
 
-            view.isEnabled = onClick != null
+                view.isEnabled = onClick != null
+            }
         }
     )
 }

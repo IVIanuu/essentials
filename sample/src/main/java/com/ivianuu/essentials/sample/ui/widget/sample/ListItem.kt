@@ -23,7 +23,6 @@ import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget.lib.ContainerAmbient
 import com.ivianuu.essentials.sample.ui.widget.lib.IdViewGroupWidget
 import com.ivianuu.essentials.sample.ui.widget.lib.ViewGroupWidget
-import com.ivianuu.essentials.sample.ui.widget.lib.Widget
 import com.ivianuu.essentials.util.andTrue
 import com.ivianuu.kommon.core.view.inflate
 
@@ -34,26 +33,27 @@ open class ListItem(
     val text: String? = null,
     val textRes: Int? = null,
 
-    val primaryAction: Widget? = null,
-    val secondaryAction: Widget? = null,
+    val primaryAction: (BuildContext.() -> Unit)? = null,
+    val secondaryAction: (BuildContext.() -> Unit)? = null,
 
     val onClick: (() -> Unit)? = null,
     val onLongClick: (() -> Unit)? = null,
 
     key: Any? = null
-) : ViewGroupWidget<ViewGroup>(
-    listOf(
-        IdViewGroupWidget<ViewGroup>(
-            id = R.id.es_list_primary_action_container,
-            children = listOfNotNull(primaryAction)
-        ),
-        IdViewGroupWidget<ViewGroup>(
-            id = R.id.es_list_secondary_action_container,
-            children = listOfNotNull(secondaryAction)
+) : ViewGroupWidget<ViewGroup>(key, {
+    if (primaryAction != null) {
+        +IdViewGroupWidget<ViewGroup>(
+            R.id.es_list_primary_action_container,
+            children = primaryAction
         )
-    ),
-    key
-) {
+    }
+    if (secondaryAction != null) {
+        +IdViewGroupWidget<ViewGroup>(
+            R.id.es_list_secondary_action_container,
+            children = secondaryAction
+        )
+    }
+}) {
 
     override fun createView(context: BuildContext): ViewGroup =
         ContainerAmbient(context).inflate<ViewGroup>(R.layout.es_list_item)

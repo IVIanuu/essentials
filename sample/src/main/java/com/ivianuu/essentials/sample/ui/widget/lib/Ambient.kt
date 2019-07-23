@@ -29,8 +29,8 @@ class Ambient<T> @PublishedApi internal constructor(val key: Any) {
 
     inner class Provider<T>(
         val value: T,
-        child: Widget
-    ) : ProxyWidget(child = child, key = key)
+        child: BuildContext.() -> Unit
+    ) : ProxyWidget(key = key, child = child)
 }
 
 val AndroidContextAmbient = ambientOf<Context>()

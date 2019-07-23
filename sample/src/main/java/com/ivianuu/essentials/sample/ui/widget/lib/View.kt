@@ -24,12 +24,12 @@ import kotlin.reflect.KClass
 typealias CreateView<V> = BuildContext.() -> V
 typealias UpdateView<V> = BuildContext.(V) -> Unit
 
-inline fun <reified V : View> BuildContext.ViewWidget(
+inline fun <reified V : View> ViewWidget(
     key: Any? = null,
     noinline updateView: UpdateView<V>? = null
 ) = ViewWidget(V::class, key, updateView)
 
-fun <V : View> BuildContext.ViewWidget(
+fun <V : View> ViewWidget(
     type: KClass<V>,
     key: Any? = null,
     updateView: UpdateView<V>? = null
@@ -43,7 +43,7 @@ fun <V : View> BuildContext.ViewWidget(
     updateView = updateView
 )
 
-inline fun <reified V : View> BuildContext.ViewWidget(
+inline fun <reified V : View> ViewWidget(
     key: Any? = null,
     noinline createView: CreateView<V>,
     noinline updateView: UpdateView<V>? = null
@@ -54,7 +54,8 @@ inline fun <reified V : View> BuildContext.ViewWidget(
     updateView = updateView
 )
 
-fun <V : View> BuildContext.ViewWidget(
+
+fun <V : View> ViewWidget(
     viewType: KClass<V>,
     key: Any? = null,
     createView: CreateView<V>,
@@ -155,96 +156,6 @@ open class ViewElement<V : View>(widget: ViewWidget<V>) : Element(widget) {
         d { "${javaClass.simpleName} perform rebuild $widget" }
         widget<ViewWidget<V>>().updateView(this, requireView())
         isDirty = false
-    }
-
-    protected open fun updateChildren(
-        oldChildren: List<Element>,
-        newWidgets: List<Widget>
-    ): List<Element> {
-        var newChildrenTop = 0
-        var oldChildrenTop = 0
-        var newChildrenBottom = newWidgets.lastIndex
-        var oldChildrenBottom = oldChildren.lastIndex
-
-        val newChildren = mutableListOf<Element>()
-
-        // Update the top of the list.
-        while ((oldChildrenTop <= oldChildrenBottom) && (newChildrenTop <= newChildrenBottom)) {
-            val oldChild = oldChildren[oldChildrenTop]
-            val newWidget = newWidgets[newChildrenTop]
-            if (!newWidget.canUpdate(oldChild.widget)) break
-            val newChild = updateChild(oldChild, newWidget, newChildrenTop)!!
-            newChildren.add(newChildrenTop, newChild)
-            newChildrenTop += 1
-            oldChildrenTop += 1
-        }
-
-        // Scan the bottom of the list.
-        while ((oldChildrenTop <= oldChildrenBottom) && (newChildrenTop <= newChildrenBottom)) {
-            val oldChild = oldChildren[oldChildrenTop]
-            val newWidget = newWidgets[newChildrenBottom]
-            if (!newWidget.canUpdate(oldChild.widget)) break
-            oldChildrenBottom -= 1
-            newChildrenBottom -= 1
-        }
-
-        // Scan the old children in the middle of the list.
-        val haveOldChildren = oldChildrenTop <= oldChildrenBottom
-        val oldKeyedChildren = mutableMapOf<Any, Element>()
-
-        if (haveOldChildren) {
-            while (oldChildrenTop <= oldChildrenBottom) {
-                val oldChild = oldChildren[oldChildrenTop]
-                if (oldChild.widget.key != null) {
-                    oldKeyedChildren[oldChild.widget.key!!] = oldChild
-                } else {
-                    oldChild.detachView()
-                    oldChild.unmount()
-                }
-                oldChildrenTop += 1
-            }
-        }
-
-        while (newChildrenTop <= newChildrenBottom) {
-            var oldChild: Element? = null
-            val newWidget = newWidgets[newChildrenTop]
-            if (haveOldChildren) {
-                val key = newWidget.key
-                if (key != null) {
-                    oldChild = oldKeyedChildren[key]
-                    if (oldChild != null) {
-                        if (newWidget.canUpdate(oldChild.widget)) {
-                            // we found a match!
-                            // remove it from oldKeyedChildren so we don't unsync it later
-                            oldKeyedChildren.remove(key)
-                        } else {
-                            // Not a match, let's pretend we didn't see it for now.
-                            oldChild = null
-                        }
-                    }
-                }
-            }
-
-            val newChild = updateChild(oldChild, newWidget, newChildrenTop)!!
-            newChildren.add(newChildrenTop, newChild)
-            newChildrenTop += 1
-        }
-
-        // We've scanned the whole list.
-        newChildrenBottom = newWidgets.lastIndex
-        oldChildrenBottom = oldChildren.lastIndex
-
-        // Update the bottom of the list.
-        while ((oldChildrenTop <= oldChildrenBottom) && (newChildrenTop <= newChildrenBottom)) {
-            val oldChild = oldChildren[oldChildrenTop]
-            val newWidget = newWidgets[newChildrenTop]
-            val newChild = updateChild(oldChild, newWidget, newChildrenTop)!!
-            newChildren.add(newChildrenTop, newChild)
-            newChildrenTop += 1
-            oldChildrenTop += 1
-        }
-
-        return newChildren
     }
 
 }

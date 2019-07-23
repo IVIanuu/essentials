@@ -20,10 +20,17 @@ import com.github.ajalt.timberkt.d
 
 abstract class ComponentElement(widget: Widget) : Element(widget) {
 
+    protected abstract fun child()
+
     var child: Element? = null
         private set
 
-    abstract fun build(): Widget
+    private var pendingChild: Widget? = null
+
+    override fun add(child: Widget) {
+        check(pendingChild == null)
+        pendingChild = child
+    }
 
     override fun mount(
         parent: Element?,
@@ -59,8 +66,10 @@ abstract class ComponentElement(widget: Widget) : Element(widget) {
     }
 
     override fun performRebuild() {
-        val built = build()
-        d { "${javaClass.simpleName} perform rebuild widget $widget built $built" }
+        child()
+        d { "${javaClass.simpleName} ${widget.key} perform rebuild widget $widget built $pendingChild" }
+        val built = pendingChild!!
+        pendingChild = null
         isDirty = false
         child = updateChild(child, built, slot)
     }
@@ -69,4 +78,5 @@ abstract class ComponentElement(widget: Widget) : Element(widget) {
         super.onEachChild(block)
         child?.let(block)
     }
+
 }

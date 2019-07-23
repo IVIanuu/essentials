@@ -24,7 +24,7 @@ import com.github.ajalt.timberkt.d
 class RootWidget(
     val owner: BuildOwner,
     val rootView: ViewGroup,
-    val child: (BuildContext) -> Widget
+    val child: BuildContext.() -> Unit
 ) : ViewWidget<FrameLayout>() {
 
     override fun createElement() =
@@ -48,10 +48,9 @@ class RootElement(
     ) {
         super.mount(parent, slot)
         owner = _owner
-        val child = ContainerAmbient.Provider(
-            value = requireView(),
-            child = widget<RootWidget>().child(this)
-        ).createElement()
+        val child = ContainerAmbient.Provider(requireView(), {
+            widget<RootWidget>().child(this)
+        }).createElement()
         this.child = child
         child.mount(this, null)
     }
@@ -89,7 +88,7 @@ class RootElement(
         this.child = updateChild(
             child, ContainerAmbient.Provider(
                 value = requireView(),
-                child = widget<RootWidget>().child(this)
+                child = { widget<RootWidget>().child(this) }
             ), null
         )
         isDirty = false

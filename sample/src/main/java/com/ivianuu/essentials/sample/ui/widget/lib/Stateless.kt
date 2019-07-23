@@ -16,22 +16,29 @@
 
 package com.ivianuu.essentials.sample.ui.widget.lib
 
-fun BuildContext.StatelessWidget(
+fun StatelessWidget(
     id: Any,
     key: Any? = null,
-    build: (BuildContext) -> Widget
-): Widget = object : StatelessWidget(joinKey(id, key)) {
-    override fun build(context: BuildContext): Widget = build.invoke(context)
+    child: BuildContext.() -> Unit
+): Widget = object : StatelessWidget(key = joinKey(id, key)) {
+    override fun BuildContext.child() {
+        child.invoke(this)
+    }
 }
 
 abstract class StatelessWidget(key: Any? = null) : Widget(key) {
     override fun createElement(): StatelessElement =
         StatelessElement(this)
-    abstract fun build(context: BuildContext): Widget
+
+    abstract fun BuildContext.child()
+
+    internal fun _child(context: BuildContext) = with(context) { child() }
 }
 
 open class StatelessElement(widget: StatelessWidget) : ComponentElement(widget) {
-    override fun build(): Widget = widget<StatelessWidget>().build(this)
+    override fun child() {
+        widget<StatelessWidget>()._child(this)
+    }
 
     override fun update(newWidget: Widget) {
         super.update(newWidget)

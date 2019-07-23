@@ -19,14 +19,13 @@ package com.ivianuu.essentials.sample.ui.widget.view
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget.lib.StatelessWidget
-import com.ivianuu.essentials.sample.ui.widget.lib.Widget
 
-fun BuildContext.Ripple(
+fun Ripple(
     unbounded: Boolean = false,
-    child: Widget,
-    key: Any? = null
+    key: Any? = null,
+    child: BuildContext.() -> Unit
 ) = StatelessWidget("Ripple", key) {
-    Background(
+    +Background(
         attr = if (unbounded) R.attr.selectableItemBackgroundBorderless
         else R.attr.selectableItemBackground,
         child = child

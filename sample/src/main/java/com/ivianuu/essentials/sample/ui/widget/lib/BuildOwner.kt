@@ -31,7 +31,7 @@ interface BuildOwner {
 class AndroidBuildOwner(
     private val coroutineScope: CoroutineScope,
     private val view: ViewGroup,
-    private val child: BuildContext.() -> Widget
+    private val child: BuildContext.() -> Unit
 ) : BuildOwner {
 
     private var root: RootElement? = null
@@ -76,7 +76,7 @@ class AndroidBuildOwner(
 
     private fun firstFrame() {
         val widget = RootWidget(this, view) {
-            AndroidContextAmbient.Provider(value = view.context, child = child(it))
+            +AndroidContextAmbient.Provider(value = view.context, child = child)
         }
         val root = widget.createElement()
         this.root = root

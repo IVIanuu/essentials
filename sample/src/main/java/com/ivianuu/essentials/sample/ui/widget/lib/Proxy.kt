@@ -17,14 +17,15 @@
 package com.ivianuu.essentials.sample.ui.widget.lib
 
 abstract class ProxyWidget(
-    open val child: Widget,
-    key: Any? = null
+    key: Any? = null,
+    open val child: BuildContext.() -> Unit
 ) : Widget(key) {
     override fun createElement(): ProxyElement = ProxyElement(this)
 }
 
 open class ProxyElement(widget: ProxyWidget) : ComponentElement(widget) {
-    override fun build(): Widget = widget<ProxyWidget>().child
+
+    override fun child() = widget<ProxyWidget>().child(this)
 
     override fun update(newWidget: Widget) {
         val oldWidget = widget

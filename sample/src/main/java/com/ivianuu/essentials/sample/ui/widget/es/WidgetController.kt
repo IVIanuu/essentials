@@ -21,7 +21,6 @@ import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.sample.ui.widget.lib.AndroidBuildOwner
 import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget.lib.BuildOwner
-import com.ivianuu.essentials.sample.ui.widget.lib.Widget
 import com.ivianuu.essentials.ui.base.EsController
 import com.ivianuu.essentials.util.cast
 import com.ivianuu.essentials.util.viewLifecycleScope
@@ -47,6 +46,6 @@ abstract class WidgetController : EsController() {
         super.onDestroyView(view)
     }
 
-    protected abstract fun BuildContext.build(): Widget
+    protected abstract fun BuildContext.build()
 
 }

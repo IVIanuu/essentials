@@ -22,24 +22,27 @@ import android.widget.LinearLayout
 import android.widget.ScrollView
 import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget.lib.ViewGroupWidget
-import com.ivianuu.essentials.sample.ui.widget.lib.Widget
 
-fun BuildContext.FrameLayout(children: List<Widget>, key: Any? = null) =
-    ViewGroupWidget<FrameLayout>(children = children, key = key)
+fun FrameLayout(key: Any? = null, children: BuildContext.() -> Unit) =
+    ViewGroupWidget<FrameLayout>(key = key, children = children, updateView = null) // todo
 
-fun BuildContext.LinearLayout(
+fun LinearLayout(
     orientation: Int = LinearLayout.VERTICAL,
     gravity: Int = if (orientation == LinearLayout.VERTICAL) {
         Gravity.TOP or Gravity.CENTER_HORIZONTAL
     } else {
         Gravity.START or Gravity.CENTER_HORIZONTAL
     },
-    children: List<Widget>,
-    key: Any? = null
-) = ViewGroupWidget<LinearLayout>(children, key) { view ->
-    view.orientation = orientation
-    view.gravity = gravity
-}
+    key: Any? = null,
+    children: BuildContext.() -> Unit
+) = ViewGroupWidget<LinearLayout>(
+    key = key,
+    updateView = { view ->
+        view.orientation = orientation
+        view.gravity = gravity
+    },
+    children = children
+)
 
-fun BuildContext.ScrollView(child: Widget, key: Any? = null) =
-    ViewGroupWidget<ScrollView>(listOf(child), key)
+fun ScrollView(key: Any? = null, child: BuildContext.() -> Unit) =
+    ViewGroupWidget<ScrollView>(key = key, children = child, updateView = null) // todo

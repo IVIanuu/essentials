@@ -21,14 +21,13 @@ import android.widget.Switch
 import com.google.android.material.checkbox.MaterialCheckBox
 import com.google.android.material.radiobutton.MaterialRadioButton
 import com.ivianuu.essentials.sample.ui.widget.lib.AndroidContextAmbient
-import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget.lib.CreateView
 import com.ivianuu.essentials.sample.ui.widget.lib.ViewWidget
 import com.ivianuu.essentials.sample.ui.widget.lib.Widget
 import com.ivianuu.essentials.sample.ui.widget.view.Clickable
 import kotlin.reflect.KClass
 
-fun BuildContext.CheckBox(
+fun CheckBox(
     value: Boolean,
     onChange: (Boolean) -> Unit,
     key: Any? = null
@@ -40,7 +39,7 @@ fun BuildContext.CheckBox(
     key = key
 )
 
-fun BuildContext.RadioButton(
+fun RadioButton(
     value: Boolean,
     onChange: (Boolean) -> Unit,
     key: Any? = null
@@ -52,7 +51,7 @@ fun BuildContext.RadioButton(
     key = key
 )
 
-fun BuildContext.Switch(
+fun Switch(
     value: Boolean,
     onChange: (Boolean) -> Unit,
     key: Any? = null
@@ -64,18 +63,20 @@ fun BuildContext.Switch(
     key = key
 )
 
-fun <V : CompoundButton> BuildContext.CompoundButton(
+fun <V : CompoundButton> CompoundButton(
     value: Boolean,
     onChange: (Boolean) -> Unit,
     createView: CreateView<V>,
     viewType: KClass<V>,
     key: Any? = null
 ): Widget = Clickable(
-    child = ViewWidget(
-        viewType = viewType,
-        key = key,
-        createView = createView,
-        updateView = { it.isChecked = value }
-    ),
-    onClick = { onChange(!value) }
+    onClick = { onChange(!value) },
+    child = {
+        +ViewWidget(
+            viewType = viewType,
+            key = key,
+            createView = createView,
+            updateView = { it.isChecked = value }
+        )
+    }
 )

@@ -21,6 +21,9 @@ interface BuildContext {
     val widget: Widget
     val owner: BuildOwner?
 
+    fun add(child: Widget)
+    operator fun Widget.unaryPlus() = add(this)
+
     fun <T> getAmbient(key: Ambient<T>): T?
 
     fun <T> cache(calculation: () -> T): T

@@ -24,21 +24,19 @@ import androidx.core.view.updatePaddingRelative
 import com.ivianuu.essentials.sample.ui.widget.lib.AndroidContextAmbient
 import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget.lib.ViewPropsWidget
-import com.ivianuu.essentials.sample.ui.widget.lib.Widget
 import com.ivianuu.kommon.core.content.drawableAttr
 
-fun BuildContext.Alpha(alpha: Float, child: Widget, key: Any? = null) =
+fun Alpha(alpha: Float, key: Any? = null, child: BuildContext.() -> Unit) =
     ViewPropsWidget(value = alpha, prop = View::setAlpha, child = child, key = key)
 
-fun BuildContext.Background(
+fun Background(
     color: Int? = null,
     drawable: Drawable? = null,
     resource: Int? = null,
     attr: Int? = null,
-    child: Widget,
-    key: Any? = null
+    key: Any? = null,
+    child: BuildContext.() -> Unit
 ) = ViewPropsWidget(
-    child = child,
     key = key,
     props = listOf(View::setBackgroundColor, View::setBackground, View::setBackgroundResource),
     applyViewProps = { view ->
@@ -50,86 +48,86 @@ fun BuildContext.Background(
             attr != null -> view.background = context.drawableAttr(attr)
             else -> view.background = null
         }
-    }
+    },
+    child = child
 )
 
-fun BuildContext.Enabled(enabled: Boolean, child: Widget, key: Any? = null) =
-    ViewPropsWidget(value = enabled, prop = View::setEnabled, child = child, key = key)
+fun Enabled(enabled: Boolean, key: Any? = null, child: BuildContext.() -> Unit) =
+    ViewPropsWidget(value = enabled, prop = View::setEnabled, key = key, child = child)
 
-fun BuildContext.Elevation(elevation: Float, child: Widget, key: Any? = null) =
-    ViewPropsWidget(value = elevation, prop = View::setAlpha, child = child, key = key)
+fun Elevation(elevation: Float, key: Any? = null, child: BuildContext.() -> Unit) =
+    ViewPropsWidget(value = elevation, prop = View::setAlpha, key = key, child = child)
 
-fun BuildContext.Focusable(focusable: Boolean, child: Widget, key: Any? = null) =
+fun Focusable(focusable: Boolean, key: Any? = null, child: BuildContext.() -> Unit) =
     ViewPropsWidget<View, Boolean>(
         value = focusable,
         prop = View::setFocusable,
-        child = child,
-        key = key
+        key = key,
+        child = child
     )
 
-fun BuildContext.Id(id: Int, child: Widget, key: Any? = null) =
-    ViewPropsWidget(value = id, prop = View::setId, child = child, key = key)
+fun Id(id: Int, key: Any? = null, child: BuildContext.() -> Unit) =
+    ViewPropsWidget(value = id, prop = View::setId, key = key, child = child)
 
-fun BuildContext.Padding(padding: Int, child: Widget, key: Any? = null) =
-    Padding(padding, padding, padding, padding, child, key)
+fun Padding(padding: Int, key: Any? = null, child: BuildContext.() -> Unit) =
+    Padding(padding, padding, padding, padding, key, child)
 
-fun BuildContext.Padding(
+fun Padding(
     left: Int = 0,
     top: Int = 0,
     right: Int = 0,
     bottom: Int = 0,
-    child: Widget,
-    key: Any? = null
+    key: Any? = null,
+    child: BuildContext.() -> Unit
 ) = ViewPropsWidget(
-    child = child,
     key = key,
     props = listOf(View::setPadding),
-    applyViewProps = { it.updatePaddingRelative(left, top, right, bottom) }
+    applyViewProps = { it.updatePaddingRelative(left, top, right, bottom) },
+    child = child
 )
 
-fun BuildContext.Pivot(
+fun Pivot(
     x: Float,
     y: Float,
-    child: Widget,
-    key: Any? = null
+    key: Any? = null,
+    child: BuildContext.() -> Unit
 ) = ViewPropsWidget(
-    child = child,
     key = key,
     props = listOf(View::setPivotX, View::setPivotY),
-    applyViewProps = { it.pivotX = x; it.pivotY = y }
+    applyViewProps = { it.pivotX = x; it.pivotY = y },
+    child = child
 )
 
-fun BuildContext.Rotation(rotation: Float, child: Widget, key: Any? = null) =
-    ViewPropsWidget(value = rotation, prop = View::setRotation, child = child, key = key)
+fun Rotation(rotation: Float, key: Any? = null, child: BuildContext.() -> Unit) =
+    ViewPropsWidget(value = rotation, prop = View::setRotation, key = key, child = child)
 
-fun BuildContext.Scale(
+fun Scale(
     x: Float,
     y: Float,
-    child: Widget,
-    key: Any? = null
+    key: Any? = null,
+    child: BuildContext.() -> Unit
 ) = ViewPropsWidget(
-    child = child,
     key = key,
     props = listOf(View::setScaleX, View::setScaleY),
-    applyViewProps = { it.scaleX = x; it.scaleY = y }
+    applyViewProps = { it.scaleX = x; it.scaleY = y },
+    child = child
 )
 
-fun BuildContext.MatchParent(child: Widget, key: Any? = null) =
-    Size(size = ViewGroup.LayoutParams.MATCH_PARENT, child = child, key = key)
+fun MatchParent(key: Any? = null, child: BuildContext.() -> Unit) =
+    Size(size = ViewGroup.LayoutParams.MATCH_PARENT, key = key, child = child)
 
-fun BuildContext.WrapContent(child: Widget, key: Any? = null) =
-    Size(size = ViewGroup.LayoutParams.WRAP_CONTENT, child = child, key = key)
+fun WrapContent(key: Any? = null, child: BuildContext.() -> Unit) =
+    Size(size = ViewGroup.LayoutParams.WRAP_CONTENT, key = key, child = child)
 
-fun BuildContext.Size(size: Int, child: Widget, key: Any? = null) =
-    Size(width = size, height = size, child = child, key = key)
+fun Size(size: Int, key: Any? = null, child: BuildContext.() -> Unit) =
+    Size(width = size, height = size, key = key, child = child)
 
-fun BuildContext.Size(
+fun Size(
     width: Int,
     height: Int,
-    child: Widget,
-    key: Any? = null
+    key: Any? = null,
+    child: BuildContext.() -> Unit
 ) = ViewPropsWidget(
-    child = child,
     key = key,
     props = listOf(
         View::setLayoutParams,
@@ -141,24 +139,27 @@ fun BuildContext.Size(
             this.width = width
             this.height = height
         }
-    }
+    },
+    child = child
 )
 
-fun BuildContext.Translation(
+fun Translation(
     x: Float,
     y: Float,
     z: Float,
-    child: Widget,
-    key: Any? = null
+    key: Any? = null,
+    child: BuildContext.() -> Unit
 ) = ViewPropsWidget(
-    child = child,
     key = key,
     props = listOf(View::setTranslationX, View::setTranslationY, View::setTranslationZ),
-    applyViewProps = { it.translationX = x; it.translationY = y; it.translationZ = z }
+    applyViewProps = { it.translationX = x; it.translationY = y; it.translationZ = z },
+    child = child
 )
 
-fun BuildContext.Visible(child: Widget, key: Any? = null) = Visibility(View.VISIBLE, child, key)
-fun BuildContext.Invisible(child: Widget, key: Any? = null) = Visibility(View.INVISIBLE, child, key)
-fun BuildContext.Gone(child: Widget, key: Any? = null) = Visibility(View.GONE, child, key)
-fun BuildContext.Visibility(visibility: Int, child: Widget, key: Any? = null) =
+fun Visible(key: Any? = null, child: BuildContext.() -> Unit) = Visibility(View.VISIBLE, key, child)
+fun Invisible(key: Any? = null, child: BuildContext.() -> Unit) =
+    Visibility(View.INVISIBLE, key, child)
+
+fun Gone(key: Any? = null, child: BuildContext.() -> Unit) = Visibility(View.GONE, key, child)
+fun Visibility(visibility: Int, key: Any? = null, child: BuildContext.() -> Unit) =
     ViewPropsWidget(value = visibility, prop = View::setVisibility, child = child, key = key)

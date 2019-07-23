@@ -17,27 +17,22 @@
 package com.ivianuu.essentials.sample.ui.widget.layout
 
 import android.view.View
-import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget.lib.StatelessWidget
 import com.ivianuu.essentials.sample.ui.widget.lib.ViewWidget
 import com.ivianuu.essentials.sample.ui.widget.view.Size
 
-fun BuildContext.WidthSpacer(width: Int, key: Any? = null) =
+fun WidthSpacer(width: Int, key: Any? = null) =
     Spacer(width = width, key = key)
 
-fun BuildContext.HeightSpacer(height: Int, key: Any? = null) =
+fun HeightSpacer(height: Int, key: Any? = null) =
     Spacer(height = height, key = key)
 
-fun BuildContext.Spacer(size: Int, key: Any? = null) = Spacer(size, size, key)
+fun Spacer(size: Int, key: Any? = null) = Spacer(size, size, key)
 
-fun BuildContext.Spacer(
+fun Spacer(
     width: Int = 0,
     height: Int = 0,
     key: Any? = null
 ) = StatelessWidget(id = "Spacer", key = key) {
-    Size(
-        width = width,
-        height = height,
-        child = ViewWidget<View>()
-    )
+    +Size(width = width, height = height) { +ViewWidget<View>(updateView = null) }
 }

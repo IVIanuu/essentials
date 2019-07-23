@@ -20,23 +20,23 @@ import android.view.View
 import com.github.ajalt.timberkt.d
 import kotlin.reflect.KFunction2
 
-fun <V : View, T> BuildContext.ViewPropsWidget(
+fun <V : View, T> ViewPropsWidget(
     value: T,
     prop: KFunction2<V, T, Any?>,
-    child: Widget,
-    key: Any? = null
+    key: Any? = null,
+    child: BuildContext.() -> Unit
 ) = ViewPropsWidget(
-    child = child,
     key = key,
     props = listOf(prop),
+    child = child,
     applyViewProps = { prop.invoke(it as V, value) }
 )
 
-fun BuildContext.ViewPropsWidget(
-    child: Widget,
+fun ViewPropsWidget(
     key: Any? = null,
     props: List<Any?>,
-    applyViewProps: BuildContext.(View) -> Unit
+    applyViewProps: BuildContext.(View) -> Unit,
+    child: BuildContext.() -> Unit
 ): Widget = object : ViewPropsWidget(child, joinKey(props, key)) {
     override fun applyViewProps(context: BuildContext, view: View) {
         applyViewProps(context, view)
@@ -44,9 +44,9 @@ fun BuildContext.ViewPropsWidget(
 }
 
 abstract class ViewPropsWidget(
-    child: Widget,
+    child: BuildContext.() -> Unit,
     key: Any? = null
-) : ProxyWidget(child, key) {
+) : ProxyWidget(key, child) {
 
     override fun createElement(): ViewPropsElement =
         ViewPropsElement(this)

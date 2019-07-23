@@ -48,6 +48,10 @@ abstract class Element(widget: Widget) : BuildContext {
     private val effects = mutableListOf<EffectState<*>>()
     private var effectsIndex = 0
 
+    override fun add(child: Widget) {
+        error("no child supported")
+    }
+
     override fun <T> getAmbient(key: Ambient<T>): T? {
         var ancestor = parent
         while (ancestor != null) {
@@ -202,5 +206,95 @@ abstract class Element(widget: Widget) : BuildContext {
     }
 
     inline fun <reified T : Widget> widget(): T = widget as T
+
+    protected open fun updateChildren(
+        oldChildren: List<Element>,
+        newWidgets: List<Widget>
+    ): MutableList<Element> {
+        var newChildrenTop = 0
+        var oldChildrenTop = 0
+        var newChildrenBottom = newWidgets.lastIndex
+        var oldChildrenBottom = oldChildren.lastIndex
+
+        val newChildren = mutableListOf<Element>()
+
+        // Update the top of the list.
+        while ((oldChildrenTop <= oldChildrenBottom) && (newChildrenTop <= newChildrenBottom)) {
+            val oldChild = oldChildren[oldChildrenTop]
+            val newWidget = newWidgets[newChildrenTop]
+            if (!newWidget.canUpdate(oldChild.widget)) break
+            val newChild = updateChild(oldChild, newWidget, newChildrenTop)!!
+            newChildren.add(newChildrenTop, newChild)
+            newChildrenTop += 1
+            oldChildrenTop += 1
+        }
+
+        // Scan the bottom of the list.
+        while ((oldChildrenTop <= oldChildrenBottom) && (newChildrenTop <= newChildrenBottom)) {
+            val oldChild = oldChildren[oldChildrenTop]
+            val newWidget = newWidgets[newChildrenBottom]
+            if (!newWidget.canUpdate(oldChild.widget)) break
+            oldChildrenBottom -= 1
+            newChildrenBottom -= 1
+        }
+
+        // Scan the old child in the middle of the list.
+        val haveOldChildren = oldChildrenTop <= oldChildrenBottom
+        val oldKeyedChildren = mutableMapOf<Any, Element>()
+
+        if (haveOldChildren) {
+            while (oldChildrenTop <= oldChildrenBottom) {
+                val oldChild = oldChildren[oldChildrenTop]
+                if (oldChild.widget.key != null) {
+                    oldKeyedChildren[oldChild.widget.key!!] = oldChild
+                } else {
+                    oldChild.detachView()
+                    oldChild.unmount()
+                }
+                oldChildrenTop += 1
+            }
+        }
+
+        while (newChildrenTop <= newChildrenBottom) {
+            var oldChild: Element? = null
+            val newWidget = newWidgets[newChildrenTop]
+            if (haveOldChildren) {
+                val key = newWidget.key
+                if (key != null) {
+                    oldChild = oldKeyedChildren[key]
+                    if (oldChild != null) {
+                        if (newWidget.canUpdate(oldChild.widget)) {
+                            // we found a match!
+                            // remove it from oldKeyedChildren so we don't unsync it later
+                            oldKeyedChildren.remove(key)
+                        } else {
+                            // Not a match, let's pretend we didn't see it for now.
+                            oldChild = null
+                        }
+                    }
+                }
+            }
+
+            val newChild = updateChild(oldChild, newWidget, newChildrenTop)!!
+            newChildren.add(newChildrenTop, newChild)
+            newChildrenTop += 1
+        }
+
+        // We've scanned the whole list.
+        newChildrenBottom = newWidgets.lastIndex
+        oldChildrenBottom = oldChildren.lastIndex
+
+        // Update the bottom of the list.
+        while ((oldChildrenTop <= oldChildrenBottom) && (newChildrenTop <= newChildrenBottom)) {
+            val oldChild = oldChildren[oldChildrenTop]
+            val newWidget = newWidgets[newChildrenTop]
+            val newChild = updateChild(oldChild, newWidget, newChildrenTop)!!
+            newChildren.add(newChildrenTop, newChild)
+            newChildrenTop += 1
+            oldChildrenTop += 1
+        }
+
+        return newChildren
+    }
 
 }

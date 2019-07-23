@@ -23,10 +23,8 @@ import android.widget.LinearLayout
 import androidx.core.view.updateLayoutParams
 import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget.lib.ViewPropsWidget
-import com.ivianuu.essentials.sample.ui.widget.lib.Widget
 
-fun BuildContext.Gravity(gravity: Int, child: Widget, key: Any? = null) = ViewPropsWidget(
-    child = child,
+fun Gravity(gravity: Int, key: Any? = null, child: BuildContext.() -> Unit) = ViewPropsWidget(
     key = key,
     props = listOf(FrameLayout.LayoutParams::gravity, LinearLayout.LayoutParams::gravity),
     applyViewProps = { view ->
@@ -38,42 +36,43 @@ fun BuildContext.Gravity(gravity: Int, child: Widget, key: Any? = null) = ViewPr
         }
 
         view.layoutParams = lp
-    }
+    },
+    child = child
 )
 
-fun BuildContext.Margin(margin: Int, child: Widget, key: Any? = null) =
-    Padding(margin, margin, margin, margin, child, key)
+fun Margin(margin: Int, key: Any? = null, child: BuildContext.() -> Unit) =
+    Margin(margin, margin, margin, margin, key, child)
 
-fun BuildContext.Margin(
+fun Margin(
     left: Int = 0,
     top: Int = 0,
     right: Int = 0,
     bottom: Int = 0,
-    child: Widget,
-    key: Any? = null
+    key: Any? = null,
+    child: BuildContext.() -> Unit
 ) = ViewPropsWidget(
-    child = child,
     key = key,
     props = listOf(View::setLayoutParams, ViewGroup.MarginLayoutParams::setMargins),
     applyViewProps = {
         it.updateLayoutParams<ViewGroup.MarginLayoutParams> {
             setMargins(left, top, right, bottom)
         }
-    }
+    },
+    child = child
 )
 
-fun BuildContext.Weight(
+fun Weight(
     weight: Float,
-    child: Widget,
-    key: Any? = null
+    key: Any? = null,
+    child: BuildContext.() -> Unit
 ) = ViewPropsWidget(
-    child = child,
     key = key,
     props = listOf(LinearLayout.LayoutParams::weight),
     applyViewProps = {
         it.updateLayoutParams<LinearLayout.LayoutParams> {
             this.weight = weight
         }
-    }
+    },
+    child = child
 )
 

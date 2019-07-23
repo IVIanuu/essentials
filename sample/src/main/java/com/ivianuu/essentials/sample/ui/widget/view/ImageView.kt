@@ -25,14 +25,14 @@ import com.ivianuu.essentials.sample.ui.widget.lib.StatelessWidget
 import com.ivianuu.essentials.sample.ui.widget.lib.ViewWidget
 import com.ivianuu.kommon.core.content.dp
 
-fun BuildContext.Icon(
+fun Icon(
     iconDrawable: Drawable? = null,
     iconBitmap: Bitmap? = null,
     iconRes: Int? = null,
     key: Any? = null
 ) = StatelessWidget("Icon") {
     val size = (+AndroidContextAmbient).dp(40).toInt()
-    SizedImageView(
+    +SizedImageView(
         size = size,
         imageDrawable = iconDrawable,
         imageRes = iconRes,
@@ -41,14 +41,14 @@ fun BuildContext.Icon(
     )
 }
 
-fun BuildContext.Avatar(
+fun Avatar(
     avatarDrawable: Drawable? = null,
     avatarBitmap: Bitmap? = null,
     avatarRes: Int? = null,
     key: Any? = null
 ) = StatelessWidget("Avatar") {
     val size = (+AndroidContextAmbient).dp(40).toInt()
-    SizedImageView(
+    +SizedImageView(
         size = size,
         imageDrawable = avatarDrawable,
         imageRes = avatarRes,
@@ -57,22 +57,20 @@ fun BuildContext.Avatar(
     )
 }
 
-fun BuildContext.SizedImageView(
+fun SizedImageView(
     size: Int,
     imageDrawable: Drawable? = null,
     imageBitmap: Bitmap? = null,
     imageRes: Int? = null,
     key: Any? = null
 ) = StatelessWidget(id = "SizedImageView", key = key) {
-    Size(
-        width = size,
-        height = size,
-        child = ImageView(
+    +Size(size) {
+        +ImageView(
             imageDrawable = imageDrawable,
             imageBitmap = imageBitmap,
             imageRes = imageRes
         )
-    )
+    }
 }
 
 fun BuildContext.ImageView(
