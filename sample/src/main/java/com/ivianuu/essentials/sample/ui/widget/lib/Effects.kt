@@ -93,12 +93,15 @@ fun invalidate() = effectOf<() -> Unit> {
 }
 
 interface CommitScope {
-    fun onDispose(block: () -> Unit)
+    fun onDispose(callback: () -> Unit)
 }
 
-fun onActive(block: CommitScope.() -> Unit) = effectOf<Unit> {
-    context.cache { CommitScopeImpl(block) }
+fun onActive(callback: CommitScope.() -> Unit) = effectOf<Unit> {
+    context.cache { CommitScopeImpl(callback) }
 }
+
+fun onDispose(callback: () -> Unit) =
+    onActive { onDispose(callback) }
 
 interface LifecycleObserver {
     fun onActive()
@@ -121,7 +124,7 @@ internal class CommitScopeImpl(
         disposeCallback = null
     }
 
-    override fun onDispose(block: () -> Unit) {
-        disposeCallback = block
+    override fun onDispose(callback: () -> Unit) {
+        disposeCallback = callback
     }
 }
