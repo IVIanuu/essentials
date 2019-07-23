@@ -21,7 +21,7 @@ interface BuildContext {
     val widget: Widget
     val owner: BuildOwner?
 
-    fun <T> ambient(key: Any? = null): T?
+    fun <T> getAmbient(key: Ambient<T>): T?
 
     fun <T> cache(calculation: () -> T): T
 

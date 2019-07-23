@@ -37,6 +37,7 @@ class Effect<T> internal constructor(
     }
 
     operator fun invoke(context: BuildContext) = resolve(context)
+
 }
 
 fun <T> effectOf(block: Effect<T>.() -> T): Effect<T> =

@@ -48,11 +48,11 @@ abstract class Element(widget: Widget) : BuildContext {
     private val effects = mutableListOf<EffectState<*>>()
     private var effectsIndex = 0
 
-    override fun <T> ambient(key: Any?): T? {
+    override fun <T> getAmbient(key: Ambient<T>): T? {
         var ancestor = parent
         while (ancestor != null) {
-            if (ancestor.widget::class == Ambient.Provider::class && ancestor.widget.key == key)
-                return (ancestor.widget as Ambient<T>.Provider<T>).value as T
+            if (ancestor.widget::class == Ambient.Provider::class && ancestor.widget.key == key.key)
+                return (ancestor.widget as Ambient<T>.Provider<T>).value
             ancestor = ancestor.parent
         }
 

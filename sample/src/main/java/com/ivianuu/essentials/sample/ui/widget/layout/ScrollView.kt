@@ -19,13 +19,13 @@ package com.ivianuu.essentials.sample.ui.widget.layout
 import android.widget.ScrollView
 import com.ivianuu.essentials.sample.ui.widget.lib.AndroidContextAmbient
 import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
-import com.ivianuu.essentials.sample.ui.widget.lib.SingleChildViewGroupWidget
+import com.ivianuu.essentials.sample.ui.widget.lib.ViewGroupWidget
 import com.ivianuu.essentials.sample.ui.widget.lib.Widget
 
 class ScrollViewWidget(
     child: Widget,
     key: Any? = null
-) : SingleChildViewGroupWidget<ScrollView>(child, key) {
+) : ViewGroupWidget<ScrollView>(listOf(child), key) {
     override fun createView(context: BuildContext): ScrollView =
         ScrollView(AndroidContextAmbient(context))
 }

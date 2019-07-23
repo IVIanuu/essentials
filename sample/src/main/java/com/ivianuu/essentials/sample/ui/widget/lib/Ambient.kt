@@ -19,13 +19,13 @@ package com.ivianuu.essentials.sample.ui.widget.lib
 import android.content.Context
 import android.view.ViewGroup
 
-inline fun <reified T> Ambient(): Ambient<T> = Ambient(T::class)
+inline fun <reified T> ambientOf(): Ambient<T> = ambientOf(T::class)
 
-class Ambient<T>(val key: Any) {
+fun <T> ambientOf(key: Any): Ambient<T> = Ambient(key)
 
-    fun of(context: BuildContext): T = context.ambient<T>(key)!!
+class Ambient<T> @PublishedApi internal constructor(val key: Any) {
 
-    operator fun invoke(context: BuildContext): T = of(context)
+    operator fun invoke(context: BuildContext): T = context.getAmbient(this)!!
 
     inner class Provider<T>(
         val value: T,
@@ -33,6 +33,6 @@ class Ambient<T>(val key: Any) {
     ) : ProxyWidget(child = child, key = key)
 }
 
-val AndroidContextAmbient = Ambient<Context>()
+val AndroidContextAmbient = ambientOf<Context>()
 
-val ContainerAmbient = Ambient<ViewGroup>()
+val ContainerAmbient = ambientOf<ViewGroup>()
