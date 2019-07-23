@@ -38,7 +38,7 @@ abstract class WidgetController : EsController() {
         buildOwner = AndroidBuildOwner(
             viewLifecycleScope,
             view.cast()
-        ) { build(it) }
+        ) { build() }
     }
 
     override fun onDestroyView(view: View) {
@@ -47,6 +47,6 @@ abstract class WidgetController : EsController() {
         super.onDestroyView(view)
     }
 
-    protected abstract fun build(context: BuildContext): Widget
+    protected abstract fun BuildContext.build(): Widget
 
 }

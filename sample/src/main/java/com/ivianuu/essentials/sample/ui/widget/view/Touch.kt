@@ -22,39 +22,44 @@ import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget.lib.ViewPropsWidget
 import com.ivianuu.essentials.sample.ui.widget.lib.Widget
 
-fun DisableTouch(
-    child: Widget,
-    key: Any? = null
-) = Touchable({ true }, child, key)
-
-open class Clickable(
+fun BuildContext.Clickable(
     child: Widget,
     key: Any? = null,
-    val onClick: () -> Unit
-) : ViewPropsWidget(child, key) {
+    onClick: () -> Unit
+) = ViewPropsWidget(
+    child = child,
+    props = listOf(View.OnClickListener::class),
+    key = key,
+    applyViewProps = { it.setOnClickListener { onClick() } }
+)
 
-    override fun applyViewProps(context: BuildContext, view: View) {
-        view.setOnClickListener { onClick() }
-    }
+fun BuildContext.LongClickable(
+    child: Widget,
+    key: Any? = null,
+    onLongClick: () -> Unit
+) = ViewPropsWidget(
+    child = child,
+    props = listOf(View.OnLongClickListener::class),
+    key = key,
+    applyViewProps = { it.setOnLongClickListener { onLongClick(); true } }
+)
 
-}
-
-open class LongClickable(
-    val onLongClick: () -> Unit,
+fun BuildContext.DisableTouch(
     child: Widget,
     key: Any? = null
-) : ViewPropsWidget(child, key) {
-    override fun applyViewProps(context: BuildContext, view: View) {
-        view.setOnLongClickListener { onLongClick(); true }
-    }
-}
+) = Touchable(
+    onTouch = { true },
+    child = child,
+    key = key
+)
 
-open class Touchable(
-    val onTouch: (MotionEvent) -> Boolean,
+fun BuildContext.Touchable(
     child: Widget,
-    key: Any? = null
-) : ViewPropsWidget(child, key) {
-    override fun applyViewProps(context: BuildContext, view: View) {
-        view.setOnTouchListener { _, event -> onTouch(event) }
-    }
-}
+    key: Any? = null,
+    onTouch: (MotionEvent) -> Boolean
+) = ViewPropsWidget(
+    child = child,
+    props = listOf(View.OnTouchListener::class),
+    key = key,
+    applyViewProps = { it.setOnTouchListener { _, event -> onTouch(event) } }
+)

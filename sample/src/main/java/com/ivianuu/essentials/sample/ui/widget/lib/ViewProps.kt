@@ -18,12 +18,26 @@ package com.ivianuu.essentials.sample.ui.widget.lib
 
 import android.view.View
 import com.github.ajalt.timberkt.d
+import kotlin.reflect.KFunction2
 
-fun ViewPropsWidget(
+fun <V : View, T> BuildContext.ViewPropsWidget(
+    value: T,
+    prop: KFunction2<V, T, Any?>,
+    child: Widget,
+    key: Any? = null
+) = ViewPropsWidget(
+    child = child,
+    key = key,
+    props = listOf(prop),
+    applyViewProps = { prop.invoke(it as V, value) }
+)
+
+fun BuildContext.ViewPropsWidget(
     child: Widget,
     key: Any? = null,
-    applyViewProps: (BuildContext, View) -> Unit
-) = object : ViewPropsWidget(child, key) {
+    props: List<Any?>,
+    applyViewProps: BuildContext.(View) -> Unit
+): Widget = object : ViewPropsWidget(child, joinKey(props, key)) {
     override fun applyViewProps(context: BuildContext, view: View) {
         applyViewProps(context, view)
     }

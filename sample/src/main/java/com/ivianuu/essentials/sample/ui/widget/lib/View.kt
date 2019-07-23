@@ -21,25 +21,45 @@ import android.view.View
 import com.github.ajalt.timberkt.d
 import kotlin.reflect.KClass
 
-inline fun <reified V : View> ViewWidget(
+typealias CreateView<V> = BuildContext.() -> V
+typealias UpdateView<V> = BuildContext.(V) -> Unit
+
+inline fun <reified V : View> BuildContext.ViewWidget(
     key: Any? = null,
-    noinline updateView: ((BuildContext, V) -> Unit)? = null
+    noinline updateView: UpdateView<V>? = null
 ) = ViewWidget(V::class, key, updateView)
 
-fun <V : View> ViewWidget(
+fun <V : View> BuildContext.ViewWidget(
     type: KClass<V>,
     key: Any? = null,
-    updateView: ((BuildContext, V) -> Unit)? = null
-) = ViewWidget(key, {
-    type.java.getDeclaredConstructor(Context::class.java)
-        .newInstance(AndroidContextAmbient(it))
-}, updateView)
+    updateView: UpdateView<V>? = null
+) = ViewWidget(
+    viewType = type,
+    key = key,
+    createView = {
+        type.java.getDeclaredConstructor(Context::class.java)
+            .newInstance((+AndroidContextAmbient))
+    },
+    updateView = updateView
+)
 
-fun <V : View> ViewWidget(
+inline fun <reified V : View> BuildContext.ViewWidget(
     key: Any? = null,
-    createView: (BuildContext) -> V,
-    updateView: ((BuildContext, V) -> Unit)? = null
-): ViewWidget<V> = object : ViewWidget<V>(key) {
+    noinline createView: CreateView<V>,
+    noinline updateView: UpdateView<V>? = null
+) = ViewWidget(
+    viewType = V::class,
+    key = key,
+    createView = createView,
+    updateView = updateView
+)
+
+fun <V : View> BuildContext.ViewWidget(
+    viewType: KClass<V>,
+    key: Any? = null,
+    createView: CreateView<V>,
+    updateView: UpdateView<V>? = null
+): Widget = object : ViewWidget<V>(joinKey(viewType, key)) {
     override fun createView(context: BuildContext): V = createView.invoke(context)
     override fun updateView(context: BuildContext, view: V) {
         super.updateView(context, view)

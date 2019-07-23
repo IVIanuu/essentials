@@ -17,29 +17,27 @@
 package com.ivianuu.essentials.sample.ui.widget.layout
 
 import android.view.View
-import android.view.ViewGroup
-import androidx.core.view.updateLayoutParams
-import com.ivianuu.essentials.sample.ui.widget.lib.AndroidContextAmbient
 import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
+import com.ivianuu.essentials.sample.ui.widget.lib.StatelessWidget
 import com.ivianuu.essentials.sample.ui.widget.lib.ViewWidget
+import com.ivianuu.essentials.sample.ui.widget.view.Size
 
-class Spacer(
-    val width: Int = 0,
-    val height: Int = 0,
+fun BuildContext.WidthSpacer(width: Int, key: Any? = null) =
+    Spacer(width = width, key = key)
+
+fun BuildContext.HeightSpacer(height: Int, key: Any? = null) =
+    Spacer(height = height, key = key)
+
+fun BuildContext.Spacer(size: Int, key: Any? = null) = Spacer(size, size, key)
+
+fun BuildContext.Spacer(
+    width: Int = 0,
+    height: Int = 0,
     key: Any? = null
-) : ViewWidget<View>(key) {
-
-    override fun updateView(context: BuildContext, view: View) {
-        super.updateView(context, view)
-        view.updateLayoutParams {
-            width = this@Spacer.width
-            height = this@Spacer.height
-        }
-    }
-
-    override fun createView(context: BuildContext) =
-        View(AndroidContextAmbient(context)).apply {
-            layoutParams = ViewGroup.LayoutParams(this@Spacer.width, this@Spacer.height)
-        }
-
+) = StatelessWidget(id = "Spacer", key = key) {
+    Size(
+        width = width,
+        height = height,
+        child = ViewWidget<View>()
+    )
 }

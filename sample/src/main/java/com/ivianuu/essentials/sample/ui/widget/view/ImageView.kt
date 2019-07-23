@@ -18,74 +18,73 @@ package com.ivianuu.essentials.sample.ui.widget.view
 
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
-import android.widget.ImageView
 import androidx.appcompat.widget.AppCompatImageView
 import com.ivianuu.essentials.sample.ui.widget.lib.AndroidContextAmbient
 import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget.lib.StatelessWidget
 import com.ivianuu.essentials.sample.ui.widget.lib.ViewWidget
-import com.ivianuu.essentials.sample.ui.widget.lib.Widget
 import com.ivianuu.kommon.core.content.dp
 
-open class Icon(
-    val iconDrawable: Drawable? = null,
-    val iconBitmap: Bitmap? = null,
-    val iconRes: Int? = null, key: Any?
-) : StatelessWidget(key) {
-
-    override fun build(context: BuildContext): Widget {
-        val size = AndroidContextAmbient(context).dp(24).toInt()
-        return Size(
-            width = size,
-            height = size,
-            child = ImageViewWidget(
-                imageDrawable = iconDrawable,
-                imageBitmap = iconBitmap,
-                imageRes = iconRes
-            )
-        )
-    }
-
+fun BuildContext.Icon(
+    iconDrawable: Drawable? = null,
+    iconBitmap: Bitmap? = null,
+    iconRes: Int? = null,
+    key: Any? = null
+) = StatelessWidget("Icon") {
+    val size = (+AndroidContextAmbient).dp(40).toInt()
+    SizedImageView(
+        size = size,
+        imageDrawable = iconDrawable,
+        imageRes = iconRes,
+        imageBitmap = iconBitmap,
+        key = key
+    )
 }
 
-open class Avatar(
-    val avatarDrawable: Drawable? = null,
-    val avatarBitmap: Bitmap? = null,
-    val avatarRes: Int? = null,
+fun BuildContext.Avatar(
+    avatarDrawable: Drawable? = null,
+    avatarBitmap: Bitmap? = null,
+    avatarRes: Int? = null,
     key: Any? = null
-) : StatelessWidget(key) {
-
-    override fun build(context: BuildContext): Widget {
-        val size = AndroidContextAmbient(context).dp(40).toInt()
-        return Size(
-            width = size,
-            height = size,
-            child = ImageViewWidget(
-                imageDrawable = avatarDrawable,
-                imageBitmap = avatarBitmap,
-                imageRes = avatarRes
-            )
-        )
-    }
-
+) = StatelessWidget("Avatar") {
+    val size = (+AndroidContextAmbient).dp(40).toInt()
+    SizedImageView(
+        size = size,
+        imageDrawable = avatarDrawable,
+        imageRes = avatarRes,
+        imageBitmap = avatarBitmap,
+        key = key
+    )
 }
 
-open class ImageViewWidget(
-    val imageDrawable: Drawable? = null,
-    val imageBitmap: Bitmap? = null,
-    val imageRes: Int? = null,
+fun BuildContext.SizedImageView(
+    size: Int,
+    imageDrawable: Drawable? = null,
+    imageBitmap: Bitmap? = null,
+    imageRes: Int? = null,
     key: Any? = null
-) : ViewWidget<ImageView>(key) {
-    override fun createView(context: BuildContext): ImageView =
-        AppCompatImageView(AndroidContextAmbient(context))
+) = StatelessWidget(id = "SizedImageView", key = key) {
+    Size(
+        width = size,
+        height = size,
+        child = ImageView(
+            imageDrawable = imageDrawable,
+            imageBitmap = imageBitmap,
+            imageRes = imageRes
+        )
+    )
+}
 
-    override fun updateView(context: BuildContext, view: ImageView) {
-        super.updateView(context, view)
-        when {
-            imageDrawable != null -> view.setImageDrawable(imageDrawable)
-            imageBitmap != null -> view.setImageBitmap(imageBitmap)
-            imageRes != null -> view.setImageResource(imageRes)
-            else -> view.setImageDrawable(null)
-        }
+fun BuildContext.ImageView(
+    imageDrawable: Drawable? = null,
+    imageBitmap: Bitmap? = null,
+    imageRes: Int? = null,
+    key: Any? = null
+) = ViewWidget<AppCompatImageView>(key) { view ->
+    when {
+        imageDrawable != null -> view.setImageDrawable(imageDrawable)
+        imageBitmap != null -> view.setImageBitmap(imageBitmap)
+        imageRes != null -> view.setImageResource(imageRes)
+        else -> view.setImageDrawable(null)
     }
 }

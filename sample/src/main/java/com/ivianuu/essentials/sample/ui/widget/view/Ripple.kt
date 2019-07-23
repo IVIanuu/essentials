@@ -16,22 +16,19 @@
 
 package com.ivianuu.essentials.sample.ui.widget.view
 
-import android.view.View
+import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
-import com.ivianuu.essentials.sample.ui.widget.lib.ViewPropsWidget
+import com.ivianuu.essentials.sample.ui.widget.lib.StatelessWidget
 import com.ivianuu.essentials.sample.ui.widget.lib.Widget
 
-fun Disabled(
+fun BuildContext.Ripple(
+    unbounded: Boolean = false,
     child: Widget,
     key: Any? = null
-) = Enabled(false, child, key)
-
-open class Enabled(
-    val enabled: Boolean = true,
-    child: Widget,
-    key: Any? = null
-) : ViewPropsWidget(child, key) {
-    override fun applyViewProps(context: BuildContext, view: View) {
-        view.isEnabled = enabled
-    }
+) = StatelessWidget("Ripple", key) {
+    Background(
+        attr = if (unbounded) R.attr.selectableItemBackgroundBorderless
+        else R.attr.selectableItemBackground,
+        child = child
+    )
 }

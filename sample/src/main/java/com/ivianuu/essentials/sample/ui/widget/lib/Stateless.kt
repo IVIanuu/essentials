@@ -16,10 +16,11 @@
 
 package com.ivianuu.essentials.sample.ui.widget.lib
 
-fun StatelessWidget(
+fun BuildContext.StatelessWidget(
+    id: Any,
     key: Any? = null,
     build: (BuildContext) -> Widget
-): StatelessWidget = object : StatelessWidget(key) {
+): Widget = object : StatelessWidget(joinKey(id, key)) {
     override fun build(context: BuildContext): Widget = build.invoke(context)
 }
 

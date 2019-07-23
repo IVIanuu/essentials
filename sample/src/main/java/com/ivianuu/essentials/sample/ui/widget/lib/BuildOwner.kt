@@ -31,7 +31,7 @@ interface BuildOwner {
 class AndroidBuildOwner(
     private val coroutineScope: CoroutineScope,
     private val view: ViewGroup,
-    private val child: (BuildContext) -> Widget
+    private val child: BuildContext.() -> Widget
 ) : BuildOwner {
 
     private var root: RootElement? = null

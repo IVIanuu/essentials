@@ -16,30 +16,22 @@
 
 package com.ivianuu.essentials.sample.ui.widget.view
 
-import android.widget.TextView
 import androidx.appcompat.widget.AppCompatTextView
-import com.ivianuu.essentials.sample.ui.widget.lib.AndroidContextAmbient
 import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget.lib.ViewWidget
 
-class TextViewWidget(
-    val text: String? = null,
-    val textRes: Int? = null,
-    val textAppearance: Int? = null,
-    val textColor: Int? = null
-) : ViewWidget<TextView>() {
-
-    override fun createView(context: BuildContext): TextView =
-        AppCompatTextView(AndroidContextAmbient(context))
-
-    override fun updateView(context: BuildContext, view: TextView) {
-        when {
-            text != null -> view.text = text
-            textRes != null -> view.setText(textRes)
-            else -> view.text = null
-        }
-
-        if (textAppearance != null) view.setTextAppearance(textAppearance)
-        if (textColor != null) view.setTextColor(textColor)
+fun BuildContext.TextView(
+    text: String? = null,
+    textRes: Int? = null,
+    textAppearance: Int? = null,
+    textColor: Int? = null
+) = ViewWidget<AppCompatTextView> { view ->
+    when {
+        text != null -> view.text = text
+        textRes != null -> view.setText(textRes)
+        else -> view.text = null
     }
+
+    if (textAppearance != null) view.setTextAppearance(textAppearance)
+    if (textColor != null) view.setTextColor(textColor)
 }

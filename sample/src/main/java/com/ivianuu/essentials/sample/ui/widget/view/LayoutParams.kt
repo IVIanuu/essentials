@@ -17,20 +17,19 @@
 package com.ivianuu.essentials.sample.ui.widget.view
 
 import android.view.View
+import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.LinearLayout
-import com.github.ajalt.timberkt.d
+import androidx.core.view.updateLayoutParams
 import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget.lib.ViewPropsWidget
 import com.ivianuu.essentials.sample.ui.widget.lib.Widget
 
-class Gravity(
-    val gravity: Int,
-    child: Widget,
-    key: Any? = null
-) : ViewPropsWidget(child, key) {
-
-    override fun applyViewProps(context: BuildContext, view: View) {
+fun BuildContext.Gravity(gravity: Int, child: Widget, key: Any? = null) = ViewPropsWidget(
+    child = child,
+    key = key,
+    props = listOf(FrameLayout.LayoutParams::gravity, LinearLayout.LayoutParams::gravity),
+    applyViewProps = { view ->
         val lp = view.layoutParams
         when (lp) {
             is FrameLayout.LayoutParams -> lp.gravity = gravity
@@ -38,9 +37,43 @@ class Gravity(
             else -> error("cannot apply gravity for $view parent is ${view.parent}")
         }
 
-        d { "apply gravity $gravity to $view" }
-
         view.layoutParams = lp
     }
+)
 
-}
+fun BuildContext.Margin(margin: Int, child: Widget, key: Any? = null) =
+    Padding(margin, margin, margin, margin, child, key)
+
+fun BuildContext.Margin(
+    left: Int = 0,
+    top: Int = 0,
+    right: Int = 0,
+    bottom: Int = 0,
+    child: Widget,
+    key: Any? = null
+) = ViewPropsWidget(
+    child = child,
+    key = key,
+    props = listOf(View::setLayoutParams, ViewGroup.MarginLayoutParams::setMargins),
+    applyViewProps = {
+        it.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+            setMargins(left, top, right, bottom)
+        }
+    }
+)
+
+fun BuildContext.Weight(
+    weight: Float,
+    child: Widget,
+    key: Any? = null
+) = ViewPropsWidget(
+    child = child,
+    key = key,
+    props = listOf(LinearLayout.LayoutParams::weight),
+    applyViewProps = {
+        it.updateLayoutParams<LinearLayout.LayoutParams> {
+            this.weight = weight
+        }
+    }
+)
+

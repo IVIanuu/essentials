@@ -16,16 +16,30 @@
 
 package com.ivianuu.essentials.sample.ui.widget.layout
 
+import android.view.Gravity
+import android.widget.FrameLayout
+import android.widget.LinearLayout
 import android.widget.ScrollView
-import com.ivianuu.essentials.sample.ui.widget.lib.AndroidContextAmbient
 import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget.lib.ViewGroupWidget
 import com.ivianuu.essentials.sample.ui.widget.lib.Widget
 
-class ScrollViewWidget(
-    child: Widget,
+fun BuildContext.FrameLayout(children: List<Widget>, key: Any? = null) =
+    ViewGroupWidget<FrameLayout>(children = children, key = key)
+
+fun BuildContext.LinearLayout(
+    orientation: Int = LinearLayout.VERTICAL,
+    gravity: Int = if (orientation == LinearLayout.VERTICAL) {
+        Gravity.TOP or Gravity.CENTER_HORIZONTAL
+    } else {
+        Gravity.START or Gravity.CENTER_HORIZONTAL
+    },
+    children: List<Widget>,
     key: Any? = null
-) : ViewGroupWidget<ScrollView>(listOf(child), key) {
-    override fun createView(context: BuildContext): ScrollView =
-        ScrollView(AndroidContextAmbient(context))
+) = ViewGroupWidget<LinearLayout>(children, key) { view ->
+    view.orientation = orientation
+    view.gravity = gravity
 }
+
+fun BuildContext.ScrollView(child: Widget, key: Any? = null) =
+    ViewGroupWidget<ScrollView>(listOf(child), key)

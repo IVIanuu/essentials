@@ -18,45 +18,35 @@ package com.ivianuu.essentials.sample.ui.widget.material
 
 import android.graphics.drawable.Drawable
 import com.google.android.material.button.MaterialButton
-import com.ivianuu.essentials.sample.ui.widget.lib.AndroidContextAmbient
 import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
+import com.ivianuu.essentials.sample.ui.widget.lib.StatelessWidget
 import com.ivianuu.essentials.sample.ui.widget.lib.ViewWidget
+import com.ivianuu.essentials.sample.ui.widget.view.Clickable
 
-class MaterialButtonWidget(
-    val text: String? = null,
-    val textRes: Int? = null,
-
-    val icon: Drawable? = null,
-    val iconRes: Int? = null,
-
-    val onClick: (() -> Unit)? = null,
+fun BuildContext.MaterialButton(
+    text: String? = null,
+    textRes: Int? = null,
+    icon: Drawable? = null,
+    iconRes: Int? = null,
+    onClick: (() -> Unit)? = null,
     key: Any? = null
-) : ViewWidget<MaterialButton>(key) {
+) = StatelessWidget(id = "md_button", key = key) {
+    Clickable(
+        onClick = onClick ?: {},
+        child = ViewWidget<MaterialButton> { view ->
+            when {
+                text != null -> view.text = text
+                textRes != null -> view.setText(textRes)
+                else -> view.text = null
+            }
 
-    override fun createView(context: BuildContext): MaterialButton =
-        MaterialButton(AndroidContextAmbient(context))
+            when {
+                icon != null -> view.icon = icon
+                iconRes != null -> view.setIconResource(iconRes)
+                else -> view.icon = null
+            }
 
-    override fun updateView(context: BuildContext, view: MaterialButton) {
-        super.updateView(context, view)
-
-        when {
-            text != null -> view.text = text
-            textRes != null -> view.setText(textRes)
-            else -> view.text = null
+            view.isEnabled = onClick != null
         }
-
-        when {
-            icon != null -> view.icon = icon
-            iconRes != null -> view.setIconResource(iconRes)
-            else -> view.icon = null
-        }
-
-        if (onClick != null) {
-            view.setOnClickListener { onClick!!() }
-        } else {
-            view.setOnClickListener(null)
-        }
-
-        view.isEnabled = onClick != null
-    }
+    )
 }

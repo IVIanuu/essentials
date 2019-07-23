@@ -17,19 +17,65 @@
 package com.ivianuu.essentials.sample.ui.widget.material
 
 import android.widget.CompoundButton
+import android.widget.Switch
+import com.google.android.material.checkbox.MaterialCheckBox
+import com.google.android.material.radiobutton.MaterialRadioButton
+import com.ivianuu.essentials.sample.ui.widget.lib.AndroidContextAmbient
 import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
+import com.ivianuu.essentials.sample.ui.widget.lib.CreateView
 import com.ivianuu.essentials.sample.ui.widget.lib.ViewWidget
+import com.ivianuu.essentials.sample.ui.widget.lib.Widget
+import com.ivianuu.essentials.sample.ui.widget.view.Clickable
+import kotlin.reflect.KClass
 
-abstract class CompoundButton(
-    val value: Boolean,
-    val onChange: (Boolean) -> Unit,
+fun BuildContext.CheckBox(
+    value: Boolean,
+    onChange: (Boolean) -> Unit,
     key: Any? = null
-) : ViewWidget<CompoundButton>(key) {
+) = CompoundButton(
+    value = value,
+    onChange = onChange,
+    createView = { MaterialCheckBox(+AndroidContextAmbient) },
+    viewType = MaterialCheckBox::class,
+    key = key
+)
 
-    override fun updateView(context: BuildContext, view: CompoundButton) {
-        super.updateView(context, view)
-        view.isChecked = value
-        view.setOnClickListener { onChange(!value) }
-    }
+fun BuildContext.RadioButton(
+    value: Boolean,
+    onChange: (Boolean) -> Unit,
+    key: Any? = null
+) = CompoundButton(
+    value = value,
+    onChange = onChange,
+    createView = { MaterialRadioButton(+AndroidContextAmbient) },
+    viewType = MaterialRadioButton::class,
+    key = key
+)
 
-}
+fun BuildContext.Switch(
+    value: Boolean,
+    onChange: (Boolean) -> Unit,
+    key: Any? = null
+) = CompoundButton(
+    value = value,
+    onChange = onChange,
+    createView = { Switch(+AndroidContextAmbient) },
+    viewType = Switch::class,
+    key = key
+)
+
+fun <V : CompoundButton> BuildContext.CompoundButton(
+    value: Boolean,
+    onChange: (Boolean) -> Unit,
+    createView: CreateView<V>,
+    viewType: KClass<V>,
+    key: Any? = null
+): Widget = Clickable(
+    child = ViewWidget(
+        viewType = viewType,
+        key = key,
+        createView = createView,
+        updateView = { it.isChecked = value }
+    ),
+    onClick = { onChange(!value) }
+)

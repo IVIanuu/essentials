@@ -22,28 +22,48 @@ import android.view.ViewGroup
 import com.github.ajalt.timberkt.d
 import kotlin.reflect.KClass
 
-inline fun <reified V : ViewGroup> ViewGroupWidget(
+inline fun <reified V : ViewGroup> BuildContext.ViewGroupWidget(
     children: List<Widget>,
     key: Any? = null,
-    noinline updateView: ((BuildContext, V) -> Unit)? = null
+    noinline updateView: UpdateView<V>? = null
 ) = ViewGroupWidget(V::class, children, key, updateView)
 
-fun <V : ViewGroup> ViewGroupWidget(
+fun <V : ViewGroup> BuildContext.ViewGroupWidget(
     type: KClass<V>,
     children: List<Widget>,
     key: Any? = null,
-    updateView: ((BuildContext, V) -> Unit)? = null
-) = ViewGroupWidget(children, key, {
-    type.java.getDeclaredConstructor(Context::class.java)
-        .newInstance(AndroidContextAmbient(it))
-}, updateView)
+    updateView: UpdateView<V>? = null
+) = ViewGroupWidget(
+    viewType = type,
+    children = children,
+    key = key,
+    createView = {
+        type.java.getDeclaredConstructor(Context::class.java)
+            .newInstance((+AndroidContextAmbient))
+    },
+    updateView = updateView
+)
 
-fun <V : ViewGroup> ViewGroupWidget(
+inline fun <reified V : ViewGroup> BuildContext.ViewGroupWidget(
     children: List<Widget>,
     key: Any? = null,
-    createView: (BuildContext) -> V,
-    updateView: ((BuildContext, V) -> Unit)? = null
-): ViewGroupWidget<V> = object : ViewGroupWidget<V>(children, key) {
+    noinline createView: CreateView<V>,
+    noinline updateView: UpdateView<V>? = null
+) = ViewGroupWidget(
+    viewType = V::class,
+    children = children,
+    key = key,
+    createView = createView,
+    updateView = updateView
+)
+
+fun <V : ViewGroup> BuildContext.ViewGroupWidget(
+    viewType: KClass<V>,
+    children: List<Widget>,
+    key: Any? = null,
+    createView: CreateView<V>,
+    updateView: UpdateView<V>? = null
+): Widget = object : ViewGroupWidget<V>(children = children, key = joinKey(viewType, key)) {
     override fun createView(context: BuildContext): V = createView.invoke(context)
     override fun updateView(context: BuildContext, view: V) {
         super.updateView(context, view)
@@ -71,7 +91,7 @@ open class ViewGroupElement<V : ViewGroup>(
     ) {
         super.mount(parent, slot)
         widget<ViewGroupWidget<V>>().children
-            .map { ContainerAmbient.Provider(value = requireView(), child = it) }
+            .map { ContainerAmbient.Provider(requireView(), child = it) }
             .forEachIndexed { i, childWidget ->
                 val child = childWidget.createElement()
                 children.add(child)

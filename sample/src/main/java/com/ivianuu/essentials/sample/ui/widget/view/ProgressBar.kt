@@ -17,13 +17,7 @@
 package com.ivianuu.essentials.sample.ui.widget.view
 
 import android.widget.ProgressBar
-import com.ivianuu.essentials.sample.ui.widget.lib.AndroidContextAmbient
 import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget.lib.ViewWidget
 
-open class ProgressBarWidget(
-    key: Any? = null
-) : ViewWidget<ProgressBar>(key) {
-    override fun createView(context: BuildContext): ProgressBar =
-        ProgressBar(AndroidContextAmbient(context))
-}
+fun BuildContext.ProgressBar(key: Any? = null) = ViewWidget<ProgressBar>(key = key)

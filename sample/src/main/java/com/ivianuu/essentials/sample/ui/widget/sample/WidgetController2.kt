@@ -19,22 +19,22 @@ package com.ivianuu.essentials.sample.ui.widget.sample
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.sample.ui.widget.es.WidgetController
-import com.ivianuu.essentials.sample.ui.widget.layout.FrameLayoutWidget
-import com.ivianuu.essentials.sample.ui.widget.layout.LinearLayoutWidget
-import com.ivianuu.essentials.sample.ui.widget.layout.ScrollViewWidget
+import com.ivianuu.essentials.sample.ui.widget.layout.FrameLayout
+import com.ivianuu.essentials.sample.ui.widget.layout.LinearLayout
+import com.ivianuu.essentials.sample.ui.widget.layout.ScrollView
 import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget.lib.StatelessWidget
 import com.ivianuu.essentials.sample.ui.widget.lib.Widget
 import com.ivianuu.essentials.sample.ui.widget.lib.state
-import com.ivianuu.essentials.sample.ui.widget.material.Checkbox
+import com.ivianuu.essentials.sample.ui.widget.material.CheckBox
 import com.ivianuu.essentials.sample.ui.widget.view.Clickable
 import com.ivianuu.essentials.sample.ui.widget.view.DisableTouch
 import com.ivianuu.essentials.sample.ui.widget.view.Gravity
-import com.ivianuu.essentials.sample.ui.widget.view.ImageViewWidget
+import com.ivianuu.essentials.sample.ui.widget.view.ImageView
 import com.ivianuu.essentials.sample.ui.widget.view.Margin
 import com.ivianuu.essentials.sample.ui.widget.view.MatchParent
 import com.ivianuu.essentials.sample.ui.widget.view.Padding
-import com.ivianuu.essentials.sample.ui.widget.view.ProgressBarWidget
+import com.ivianuu.essentials.sample.ui.widget.view.ProgressBar
 import com.ivianuu.essentials.sample.ui.widget.view.Ripple
 import com.ivianuu.essentials.sample.ui.widget.view.Size
 import com.ivianuu.essentials.sample.ui.widget.view.WrapContent
@@ -45,11 +45,11 @@ import kotlinx.coroutines.launch
 
 class WidgetController2 : WidgetController() {
 
-    override fun build(context: BuildContext): Widget {
-        return LinearLayoutWidget(
+    override fun BuildContext.build(): Widget {
+        return LinearLayout(
             children = listOf(
                 SimpleTextToolbar(title = "Compose"),
-                StatelessWidget {
+                StatelessWidget("content") {
                     val (loading, setLoading) = state { true }(it)
 
                     if (loading) {
@@ -58,35 +58,40 @@ class WidgetController2 : WidgetController() {
                             setLoading(false)
                         }
 
-                        MatchParent(
-                            child = FrameLayoutWidget(
-                                children = listOf(
-                                    WrapContent(
-                                        child = Gravity(
-                                            gravity = android.view.Gravity.CENTER,
-                                            child = ProgressBarWidget()
-                                        )
-                                    )
-                                )
-                            )
-                        )
+                        Loading()
                     } else {
-                        MatchParent(
-                            child = ScrollViewWidget(
-                                child = MatchParent(
-                                    LinearLayoutWidget(
-                                        children = (1..10).map { ListItem(it) }
-                                    )
-                                )
-                            )
-                        )
+
+                        Content()
                     }
                 }
             )
         )
     }
 
-    private fun ListItem(i: Int) = StatelessWidget {
+    private fun BuildContext.Loading() = MatchParent(
+        child = FrameLayout(
+            children = listOf(
+                WrapContent(
+                    child = Gravity(
+                        gravity = android.view.Gravity.CENTER,
+                        child = ProgressBar()
+                    )
+                )
+            )
+        )
+    )
+
+    private fun BuildContext.Content() = MatchParent(
+        child = ScrollView(
+            child = MatchParent(
+                LinearLayout(
+                    children = (1..10).map { ListItem(it) }
+                )
+            )
+        )
+    )
+
+    private fun BuildContext.ListItem(i: Int) = StatelessWidget("ListItem") {
         val (checked, setChecked) = state { false }(it)
 
         ListItem(
@@ -96,7 +101,7 @@ class WidgetController2 : WidgetController() {
                 left = dp(16).toInt(),
                 right = -dp(16).toInt(), // yep
                 child = DisableTouch(
-                    child = Checkbox(
+                    child = CheckBox(
                         value = checked,
                         onChange = {}
                     )
@@ -110,7 +115,7 @@ class WidgetController2 : WidgetController() {
         )
     }
 
-    private fun MenuButton() = StatelessWidget {
+    private fun BuildContext.MenuButton() = StatelessWidget("MenuButton") {
         Size(
             size = dp(40).toInt(),
             child = Ripple(
@@ -118,7 +123,7 @@ class WidgetController2 : WidgetController() {
                 child = Padding(
                     padding = dp(8).toInt(),
                     child = Clickable(
-                        child = ImageViewWidget(
+                        child = ImageView(
                             imageRes = R.drawable.abc_ic_menu_overflow_material
                         ),
                         onClick = { d { "clicked" } }
