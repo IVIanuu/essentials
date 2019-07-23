@@ -27,7 +27,6 @@ import com.ivianuu.essentials.sample.ui.widget2.lib.StatelessWidget
 import com.ivianuu.essentials.sample.ui.widget2.lib.Widget
 import com.ivianuu.essentials.sample.ui.widget2.lib.state
 import com.ivianuu.essentials.sample.ui.widget2.material.Checkbox
-import com.ivianuu.essentials.sample.ui.widget2.material.MaterialButtonWidget
 import com.ivianuu.essentials.sample.ui.widget2.util.WithParentElement
 import com.ivianuu.essentials.sample.ui.widget2.view.Clickable
 import com.ivianuu.essentials.sample.ui.widget2.view.DisableTouch
@@ -46,8 +45,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class WidgetController2 : WidgetController() {
-
-    private val selections = mutableSetOf<Int>()
 
     private var loading = true
 
@@ -82,7 +79,7 @@ class WidgetController2 : WidgetController() {
                             child = ScrollViewWidget(
                                 child = MatchParent(
                                     LinearLayoutWidget(
-                                        children = listOf(MyCounter()) + (1..10).map { ListItem(it) }
+                                        children = (1..10).map { ListItem(it) }
                                     )
                                 )
                             )
@@ -94,6 +91,8 @@ class WidgetController2 : WidgetController() {
     }
 
     private fun ListItem(i: Int) = StatelessWidget {
+        val (checked, setChecked) = state { false }(it)
+
         WithParentElement { parent ->
             ListItem(
                 title = "Title $i",
@@ -103,7 +102,7 @@ class WidgetController2 : WidgetController() {
                     right = -dp(16).toInt(), // yep
                     child = DisableTouch(
                         child = Checkbox(
-                            value = selections.contains(i),
+                            value = checked,
                             onChange = {}
                         )
                     )
@@ -112,15 +111,7 @@ class WidgetController2 : WidgetController() {
                     right = dp(8).toInt(),
                     child = MenuButton()
                 ),
-                onClick = {
-                    if (selections.contains(i)) {
-                        selections.remove(i)
-                    } else {
-                        selections.add(i)
-                    }
-
-                    parent.markNeedsBuild()
-                }
+                onClick = { setChecked(!checked) }
             )
         }
     }
@@ -140,20 +131,6 @@ class WidgetController2 : WidgetController() {
                     )
                 )
             )
-        )
-    }
-}
-
-class MyCounter(key: Any? = null) : StatelessWidget(key) {
-    override fun build(context: BuildContext): Widget {
-        val (count, setCount) = state { 0 }.invoke(context)
-        val (count2, setCount2) = state { 0 }.invoke(context)
-        return MaterialButtonWidget(
-            text = "Count $count count 2 $count2",
-            onClick = {
-                setCount(count + 1)
-                setCount2(count2 - 1)
-            }
         )
     }
 }
