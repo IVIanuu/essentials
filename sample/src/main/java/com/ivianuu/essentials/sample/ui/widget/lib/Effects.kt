@@ -128,3 +128,10 @@ internal class CommitScopeImpl(
         disposeCallback = callback
     }
 }
+
+inline fun <T> model(crossinline init: () -> T) = memo { init() }
+
+inline fun <T> model(vararg inputs: Any?, crossinline init: () -> T) =
+    memo(*inputs) { init() }
+
+fun <T> ambient(key: Ambient<T>) = effectOf<T> { key(context) }
