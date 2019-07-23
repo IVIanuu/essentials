@@ -19,9 +19,9 @@ package com.ivianuu.essentials.sample.ui.widget.sample
 import android.view.ViewGroup
 import android.widget.TextView
 import com.ivianuu.essentials.sample.R
+import com.ivianuu.essentials.sample.ui.widget.layout.IdViewGroupWidget
 import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget.lib.ContainerAmbient
-import com.ivianuu.essentials.sample.ui.widget.lib.IdViewGroupWidget
 import com.ivianuu.essentials.sample.ui.widget.lib.ViewGroupWidget
 import com.ivianuu.essentials.util.andTrue
 import com.ivianuu.kommon.core.view.inflate

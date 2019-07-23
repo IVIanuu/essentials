@@ -14,9 +14,12 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.sample.ui.widget.lib
+package com.ivianuu.essentials.sample.ui.widget.layout
 
 import android.view.ViewGroup
+import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
+import com.ivianuu.essentials.sample.ui.widget.lib.ContainerAmbient
+import com.ivianuu.essentials.sample.ui.widget.lib.ViewGroupWidget
 
 class IdViewGroupWidget<V : ViewGroup>(
     val id: Int,
