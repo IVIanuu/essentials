@@ -27,7 +27,6 @@ import com.ivianuu.essentials.sample.ui.widget2.lib.StatelessWidget
 import com.ivianuu.essentials.sample.ui.widget2.lib.Widget
 import com.ivianuu.essentials.sample.ui.widget2.lib.state
 import com.ivianuu.essentials.sample.ui.widget2.material.Checkbox
-import com.ivianuu.essentials.sample.ui.widget2.util.WithParentElement
 import com.ivianuu.essentials.sample.ui.widget2.view.Clickable
 import com.ivianuu.essentials.sample.ui.widget2.view.DisableTouch
 import com.ivianuu.essentials.sample.ui.widget2.view.Gravity
@@ -46,22 +45,19 @@ import kotlinx.coroutines.launch
 
 class WidgetController2 : WidgetController() {
 
-    private var loading = true
-
     override fun build(context: BuildContext): Widget {
         return LinearLayoutWidget(
             children = listOf(
                 SimpleTextToolbar(title = "Compose"),
-                WithParentElement { parent ->
+                StatelessWidget {
+                    val (loading, setLoading) = state { true }(it)
+
                     if (loading) {
                         viewLifecycleScope.launch {
                             delay(2000)
-                            loading = false
-                            parent.markNeedsBuild()
+                            setLoading(false)
                         }
-                    }
 
-                    if (loading) {
                         MatchParent(
                             child = FrameLayoutWidget(
                                 children = listOf(
@@ -93,27 +89,25 @@ class WidgetController2 : WidgetController() {
     private fun ListItem(i: Int) = StatelessWidget {
         val (checked, setChecked) = state { false }(it)
 
-        WithParentElement { parent ->
-            ListItem(
-                title = "Title $i",
-                text = "Text $i",
-                primaryAction = Margin(
-                    left = dp(16).toInt(),
-                    right = -dp(16).toInt(), // yep
-                    child = DisableTouch(
-                        child = Checkbox(
-                            value = checked,
-                            onChange = {}
-                        )
+        ListItem(
+            title = "Title $i",
+            text = "Text $i",
+            primaryAction = Margin(
+                left = dp(16).toInt(),
+                right = -dp(16).toInt(), // yep
+                child = DisableTouch(
+                    child = Checkbox(
+                        value = checked,
+                        onChange = {}
                     )
-                ),
-                secondaryAction = Margin(
-                    right = dp(8).toInt(),
-                    child = MenuButton()
-                ),
-                onClick = { setChecked(!checked) }
-            )
-        }
+                )
+            ),
+            secondaryAction = Margin(
+                right = dp(8).toInt(),
+                child = MenuButton()
+            ),
+            onClick = { setChecked(!checked) }
+        )
     }
 
     private fun MenuButton() = StatelessWidget {

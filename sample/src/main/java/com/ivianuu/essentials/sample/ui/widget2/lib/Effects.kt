@@ -49,7 +49,10 @@ fun <T> memo(calculation: () -> T) = effectOf<T> {
 fun <T> memo(vararg inputs: Any?, calculation: () -> T) =
     effectOf<T> { context.cache(*inputs) { calculation() } }
 
-class EState<T> @PublishedApi internal constructor(value: T, private val onChange: (T) -> Unit) {
+class EState<T> @PublishedApi internal constructor(
+    value: T,
+    private val onChange: (T) -> Unit
+) {
 
     var value: T = value
         set(value) {
