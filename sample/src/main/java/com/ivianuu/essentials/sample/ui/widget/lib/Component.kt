@@ -56,11 +56,6 @@ abstract class ComponentElement(widget: Widget) : Element(widget) {
         super.unmount()
     }
 
-    override fun update(newWidget: Widget) {
-        super.update(newWidget)
-        rebuild()
-    }
-
     protected open fun firstBuild() {
         rebuild()
     }
