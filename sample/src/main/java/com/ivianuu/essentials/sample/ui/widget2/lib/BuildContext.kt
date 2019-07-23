@@ -32,6 +32,10 @@ interface BuildContext {
 
     fun <T> cache(vararg inputs: Any?, calculation: () -> T): T
 
+    operator fun <T> Ambient<T>.unaryPlus() = invoke(this@BuildContext)
+
+    operator fun <T> Effect<T>.unaryPlus() = invoke(this@BuildContext)
+
 }
 
 inline fun <reified T : Widget> BuildContext.ancestorWidget(

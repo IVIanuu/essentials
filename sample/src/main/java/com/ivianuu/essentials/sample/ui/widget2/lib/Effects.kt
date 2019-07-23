@@ -49,7 +49,7 @@ fun <T> memo(calculation: () -> T) = effectOf<T> {
 fun <T> memo(vararg inputs: Any?, calculation: () -> T) =
     effectOf<T> { context.cache(*inputs) { calculation() } }
 
-class EState<T> @PublishedApi internal constructor(
+class State<T> @PublishedApi internal constructor(
     value: T,
     private val onChange: (T) -> Unit
 ) {
@@ -71,17 +71,17 @@ class EState<T> @PublishedApi internal constructor(
     }
 }
 
-inline fun <T> state(crossinline init: () -> T) = effectOf<EState<T>> {
+inline fun <T> state(crossinline init: () -> T) = effectOf<State<T>> {
     context.cache {
-        EState(init()) {
+        State(init()) {
             invalidate().invoke(context)()
         }
     }
 }
 
-inline fun <T> state(vararg inputs: Any?, crossinline init: () -> T) = effectOf<EState<T>> {
+inline fun <T> state(vararg inputs: Any?, crossinline init: () -> T) = effectOf<State<T>> {
     context.cache(*inputs) {
-        EState(init()) {
+        State(init()) {
             invalidate().invoke(context)()
         }
     }
