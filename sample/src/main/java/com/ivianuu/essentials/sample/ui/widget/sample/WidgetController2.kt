@@ -24,6 +24,7 @@ import com.ivianuu.essentials.sample.ui.widget.layout.LinearLayout
 import com.ivianuu.essentials.sample.ui.widget.layout.ScrollView
 import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget.lib.StatelessWidget
+import com.ivianuu.essentials.sample.ui.widget.lib.onActive
 import com.ivianuu.essentials.sample.ui.widget.lib.state
 import com.ivianuu.essentials.sample.ui.widget.material.CheckBox
 import com.ivianuu.essentials.sample.ui.widget.view.Clickable
@@ -39,6 +40,10 @@ import com.ivianuu.essentials.sample.ui.widget.view.Size
 import com.ivianuu.essentials.sample.ui.widget.view.WrapContent
 import com.ivianuu.essentials.util.dp
 import com.ivianuu.essentials.util.viewLifecycleScope
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -49,6 +54,29 @@ class WidgetController2 : WidgetController() {
             +SimpleTextToolbar(title = "Compose")
             +StatelessWidget("content") {
                 val (loading, setLoading) = +state { true }
+
+                d { "effect: function enter" }
+
+                val (coroutineScope) = +state {
+                    d { "effect: create coroutine scope" }
+                    CoroutineScope(Job() + Dispatchers.Main)
+                }
+
+                +onActive {
+                    d { "effect: on active" }
+
+                    if (loading) {
+                        coroutineScope.launch {
+                            delay(2000)
+                            setLoading(false)
+                        }
+                    }
+
+                    onDispose {
+                        d { "effect: cancel coroutine scope" }
+                        coroutineScope.cancel()
+                    }
+                }
 
                 if (loading) {
                     viewLifecycleScope.launch {

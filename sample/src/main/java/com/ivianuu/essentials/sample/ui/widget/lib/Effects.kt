@@ -91,3 +91,37 @@ inline fun <T> state(vararg inputs: Any?, crossinline init: () -> T) = effectOf<
 fun invalidate() = effectOf<() -> Unit> {
     return@effectOf { context.cast<Element>().markNeedsBuild() }
 }
+
+interface CommitScope {
+    fun onDispose(block: () -> Unit)
+}
+
+fun onActive(block: CommitScope.() -> Unit) = effectOf<Unit> {
+    context.cache { CommitScopeImpl(block) }
+}
+
+interface LifecycleObserver {
+    fun onActive()
+    fun onDispose()
+}
+
+@PublishedApi
+internal class CommitScopeImpl(
+    internal val onCommit: CommitScope.() -> Unit
+) : CommitScope, LifecycleObserver {
+
+    internal var disposeCallback: (() -> Unit)? = null
+
+    override fun onActive() {
+        onCommit()
+    }
+
+    override fun onDispose() {
+        disposeCallback?.invoke()
+        disposeCallback = null
+    }
+
+    override fun onDispose(block: () -> Unit) {
+        disposeCallback = block
+    }
+}

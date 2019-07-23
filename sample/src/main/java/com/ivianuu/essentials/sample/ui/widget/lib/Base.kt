@@ -45,8 +45,10 @@ abstract class Element(widget: Widget) : BuildContext {
     var isDirty = true
         protected set
 
-    private val effects = mutableListOf<EffectState<*>>()
+    private var effects: MutableList<EffectState<*>>? = null
     private var effectsIndex = 0
+    private var lifecycleObservers: MutableList<LifecycleObserver>? = null
+    private var notifiedActive = false
 
     override fun add(child: Widget) {
         error("no child supported")
@@ -70,20 +72,26 @@ abstract class Element(widget: Widget) : BuildContext {
         cacheImpl(inputs.toList(), calculation)
 
     private fun <T> cacheImpl(inputs: List<Any?>?, calculation: () -> T): T {
+        if (effects == null) effects = mutableListOf()
+
         val result: T
 
-        val prevState = effects.getOrNull(effectsIndex)
+        val prevState = effects!!.getOrNull(effectsIndex)
 
         when {
             prevState == null -> {
                 result = calculation()
-                effects.add(effectsIndex, EffectState(inputs, result))
+                if (result is LifecycleObserver) {
+                    if (lifecycleObservers == null) lifecycleObservers = mutableListOf()
+                    lifecycleObservers!!.add(result)
+                }
+                effects!!.add(effectsIndex, EffectState(inputs, result))
             }
             prevState.inputs == inputs -> result = prevState.result as T
             else -> {
-                effects.removeAt(effectsIndex)
+                effects!!.removeAt(effectsIndex)
                 result = calculation()
-                effects.add(effectsIndex, EffectState(inputs, result))
+                effects!!.add(effectsIndex, EffectState(inputs, result))
             }
         }
 
@@ -102,9 +110,17 @@ abstract class Element(widget: Widget) : BuildContext {
 
     open fun unmount() {
         d { "${javaClass.simpleName} unmount parent $parent widget $widget slot $slot" }
+
+        lifecycleObservers?.forEach { it.onDispose() }
+        lifecycleObservers = null
+
         context = null
         parent = null
         slot = null
+        owner = null
+        isDirty = false
+
+        effects = null
     }
 
     open fun attachView() {
@@ -118,6 +134,10 @@ abstract class Element(widget: Widget) : BuildContext {
         if (isDirty) {
             effectsIndex = 0
             performRebuild()
+            if (!notifiedActive) {
+                notifiedActive = true
+                lifecycleObservers?.forEach { it.onActive() }
+            }
         }
     }
 
