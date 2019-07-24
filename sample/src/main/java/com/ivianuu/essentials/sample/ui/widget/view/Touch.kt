@@ -28,7 +28,7 @@ fun Clickable(
 ) = ViewPropsWidget(
     props = listOf(View.OnClickListener::class),
     key = key,
-    applyViewProps = { it.setOnClickListener { onClick() } },
+    updateViewProps = { it.setOnClickListener { onClick() } },
     child = child
 )
 
@@ -39,7 +39,7 @@ fun LongClickable(
 ) = ViewPropsWidget(
     props = listOf(View.OnLongClickListener::class),
     key = key,
-    applyViewProps = { it.setOnLongClickListener { onLongClick(); true } },
+    updateViewProps = { it.setOnLongClickListener { onLongClick(); true } },
     child = child
 )
 
@@ -59,6 +59,6 @@ fun Touchable(
 ) = ViewPropsWidget(
     props = listOf(View.OnTouchListener::class),
     key = key,
-    applyViewProps = { it.setOnTouchListener { _, event -> onTouch(event) } },
+    updateViewProps = { it.setOnTouchListener { _, event -> onTouch(event) } },
     child = child
 )

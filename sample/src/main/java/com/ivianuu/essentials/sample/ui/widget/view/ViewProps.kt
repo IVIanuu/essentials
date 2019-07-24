@@ -36,7 +36,7 @@ fun Background(
 ) = ViewPropsWidget(
     key = key,
     props = listOf(View::setBackgroundColor, View::setBackground, View::setBackgroundResource),
-    applyViewProps = { view ->
+    updateViewProps = { view ->
         when {
             color != null -> view.setBackgroundColor(color)
             drawable != null -> view.background = drawable
@@ -78,7 +78,7 @@ fun Padding(
 ) = ViewPropsWidget(
     key = key,
     props = listOf(View::setPadding),
-    applyViewProps = { it.updatePaddingRelative(left, top, right, bottom) },
+    updateViewProps = { it.updatePaddingRelative(left, top, right, bottom) },
     child = child
 )
 
@@ -90,7 +90,7 @@ fun Pivot(
 ) = ViewPropsWidget(
     key = key,
     props = listOf(View::setPivotX, View::setPivotY),
-    applyViewProps = { it.pivotX = x; it.pivotY = y },
+    updateViewProps = { it.pivotX = x; it.pivotY = y },
     child = child
 )
 
@@ -105,7 +105,7 @@ fun Scale(
 ) = ViewPropsWidget(
     key = key,
     props = listOf(View::setScaleX, View::setScaleY),
-    applyViewProps = { it.scaleX = x; it.scaleY = y },
+    updateViewProps = { it.scaleX = x; it.scaleY = y },
     child = child
 )
 
@@ -118,7 +118,7 @@ fun Translation(
 ) = ViewPropsWidget(
     key = key,
     props = listOf(View::setTranslationX, View::setTranslationY, View::setTranslationZ),
-    applyViewProps = { it.translationX = x; it.translationY = y; it.translationZ = z },
+    updateViewProps = { it.translationX = x; it.translationY = y; it.translationZ = z },
     child = child
 )
 

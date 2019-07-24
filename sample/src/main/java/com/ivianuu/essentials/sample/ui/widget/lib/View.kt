@@ -112,6 +112,7 @@ open class ViewElement<V : View>(widget: ViewWidget<V>) : Element(widget) {
         d { "${javaClass.simpleName} attach to $ancestorViewElement view is $view" }
         this.ancestorViewElement = ancestorViewElement
         updateLayoutParams()
+        updateViewProps()
         ancestorViewElement.insertChildView(requireView(), slot)
     }
 
@@ -126,6 +127,7 @@ open class ViewElement<V : View>(widget: ViewWidget<V>) : Element(widget) {
     override fun update(newWidget: Widget) {
         super.update(newWidget)
         updateLayoutParams()
+        updateViewProps()
         widget<ViewWidget<V>>().updateView(requireView())
         isDirty = false
     }
@@ -154,17 +156,6 @@ open class ViewElement<V : View>(widget: ViewWidget<V>) : Element(widget) {
         return null
     }
 
-    private fun collectViewProps(): List<ViewPropsElement> {
-        val props = mutableListOf<ViewPropsElement>()
-        var ancestor = parent
-        while (ancestor != null && ancestor !is ViewElement<*>) {
-            if (ancestor is ViewPropsElement) props.add(ancestor)
-            ancestor = ancestor.parent
-        }
-
-        return props.reversed()
-    }
-
     private fun collectLayoutParams(): List<LayoutParamsElement> {
         val params = mutableListOf<LayoutParamsElement>()
         var ancestor = parent
@@ -176,12 +167,6 @@ open class ViewElement<V : View>(widget: ViewWidget<V>) : Element(widget) {
         return params.reversed()
     }
 
-    private fun applyViewProps() {
-        // todo optimize performance
-        // todo add a LayoutParamsWidget and merge all mutations
-        collectViewProps().forEach { it.applyViewProps(requireView()) }
-    }
-
     private fun updateLayoutParams() {
         val view = requireView()
         val lp = view.layoutParams
@@ -191,6 +176,22 @@ open class ViewElement<V : View>(widget: ViewWidget<V>) : Element(widget) {
             it.updateLayoutParams(lp)
         }
         view.layoutParams = lp
+    }
+
+
+    private fun updateViewProps() {
+        collectViewProps().forEach { it.updateViewProps(requireView()) }
+    }
+
+    private fun collectViewProps(): List<ViewPropsElement> {
+        val props = mutableListOf<ViewPropsElement>()
+        var ancestor = parent
+        while (ancestor != null && ancestor !is ViewElement<*>) {
+            if (ancestor is ViewPropsElement) props.add(ancestor)
+            ancestor = ancestor.parent
+        }
+
+        return props.reversed()
     }
 
     protected fun requireView(): V = this.view ?: error("not mounted")

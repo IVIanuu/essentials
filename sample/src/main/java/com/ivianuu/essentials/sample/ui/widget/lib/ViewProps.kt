@@ -28,17 +28,17 @@ fun <V : View, T> ViewPropsWidget(
     key = key,
     props = listOf(prop),
     child = child,
-    applyViewProps = { prop.invoke(it as V, value) }
+    updateViewProps = { prop.invoke(it as V, value) }
 )
 
 fun ViewPropsWidget(
     key: Any? = null,
     props: List<Any?>,
-    applyViewProps: (View) -> Unit,
+    updateViewProps: (View) -> Unit,
     child: BuildContext.() -> Unit
 ): Widget = object : ViewPropsWidget(child, joinKey(props, key)) {
-    override fun applyViewProps(view: View) {
-        applyViewProps.invoke(view)
+    override fun updateViewProps(view: View) {
+        updateViewProps.invoke(view)
     }
 }
 
@@ -50,14 +50,14 @@ abstract class ViewPropsWidget(
     override fun createElement(): ViewPropsElement =
         ViewPropsElement(this)
 
-    abstract fun applyViewProps(view: View)
+    abstract fun updateViewProps(view: View)
 
 }
 
 open class ViewPropsElement(widget: ViewPropsWidget) : ProxyElement(widget) {
 
-    fun applyViewProps(view: View) {
-        widget<ViewPropsWidget>().applyViewProps(view)
+    fun updateViewProps(view: View) {
+        widget<ViewPropsWidget>().updateViewProps(view)
     }
 
 }
