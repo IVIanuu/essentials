@@ -17,10 +17,9 @@
 package com.ivianuu.essentials.sample.ui.widget.view
 
 import androidx.appcompat.widget.AppCompatTextView
-import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget.lib.ViewWidget
 
-fun BuildContext.TextView(
+fun TextView(
     text: String? = null,
     textRes: Int? = null,
     textAppearance: Int? = null,

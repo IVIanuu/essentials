@@ -56,6 +56,7 @@ class RootElement(
     }
 
     override fun insertChildView(view: View, slot: Int?) {
+        d { "insert child view" }
         requireView().addView(view)
     }
 

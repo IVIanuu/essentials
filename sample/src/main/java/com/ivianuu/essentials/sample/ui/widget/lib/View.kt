@@ -18,6 +18,7 @@ package com.ivianuu.essentials.sample.ui.widget.lib
 
 import android.content.Context
 import android.view.View
+import android.view.ViewGroup
 import com.github.ajalt.timberkt.d
 import kotlin.reflect.KClass
 
@@ -109,6 +110,7 @@ open class ViewElement<V : View>(widget: ViewWidget<V>) : Element(widget) {
         val ancestorViewElement = findAncestorViewElement()!!
         d { "${javaClass.simpleName} attach to $ancestorViewElement view is $view" }
         this.ancestorViewElement = ancestorViewElement
+        applyViewProps()
         ancestorViewElement.insertChildView(requireView(), slot)
     }
 
@@ -122,12 +124,13 @@ open class ViewElement<V : View>(widget: ViewWidget<V>) : Element(widget) {
 
     override fun update(newWidget: Widget) {
         super.update(newWidget)
+        applyViewProps()
         widget<ViewWidget<V>>().updateView(this, requireView())
         isDirty = false
     }
 
     fun updateViewProps(viewProps: ViewPropsWidget) {
-        viewProps.applyViewProps(this, requireView())
+        viewProps.applyViewProps(requireView())
     }
 
     override fun updateSlot(newSlot: Int?) {
@@ -150,6 +153,29 @@ open class ViewElement<V : View>(widget: ViewWidget<V>) : Element(widget) {
         return null
     }
 
+    private fun collectViewProps(): List<ViewPropsElement> {
+        val props = mutableListOf<ViewPropsElement>()
+        var ancestor = parent
+        while (ancestor != null && ancestor !is ViewElement<*>) {
+            if (ancestor is ViewPropsElement) props.add(ancestor)
+            ancestor = ancestor.parent
+        }
+
+        return props.reversed()
+    }
+
+    private fun applyViewProps() {
+        // todo optimize performance
+        // todo add a LayoutParamsWidget and merge all mutations
+        // ensure we got some lp
+        if (requireView().layoutParams == null) {
+            requireView().layoutParams =
+                genDefaultLayoutParams.invoke(findAncestorViewElement()!!.view) as? ViewGroup.LayoutParams
+        }
+
+        collectViewProps().forEach { it.applyViewProps(requireView()) }
+    }
+
     protected fun requireView(): V = this.view ?: error("not mounted")
 
     override fun performRebuild() {
@@ -158,4 +184,11 @@ open class ViewElement<V : View>(widget: ViewWidget<V>) : Element(widget) {
         isDirty = false
     }
 
+}
+
+// TODO(lmr): This should be moved to a separate module, but needs to be one that is not IR-compiled
+private val genDefaultLayoutParams by lazy {
+    val method = ViewGroup::class.java.getDeclaredMethod("generateDefaultLayoutParams")
+    method.isAccessible = true
+    method
 }

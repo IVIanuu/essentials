@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.sample.ui.widget.lib
 
 import android.view.View
-import com.github.ajalt.timberkt.d
 import kotlin.reflect.KFunction2
 
 fun <V : View, T> ViewPropsWidget(
@@ -35,11 +34,11 @@ fun <V : View, T> ViewPropsWidget(
 fun ViewPropsWidget(
     key: Any? = null,
     props: List<Any?>,
-    applyViewProps: BuildContext.(View) -> Unit,
+    applyViewProps: (View) -> Unit,
     child: BuildContext.() -> Unit
 ): Widget = object : ViewPropsWidget(child, joinKey(props, key)) {
-    override fun applyViewProps(context: BuildContext, view: View) {
-        applyViewProps(context, view)
+    override fun applyViewProps(view: View) {
+        applyViewProps.invoke(view)
     }
 }
 
@@ -51,31 +50,14 @@ abstract class ViewPropsWidget(
     override fun createElement(): ViewPropsElement =
         ViewPropsElement(this)
 
-    abstract fun applyViewProps(context: BuildContext, view: View)
+    abstract fun applyViewProps(view: View)
 
 }
 
 open class ViewPropsElement(widget: ViewPropsWidget) : ProxyElement(widget) {
 
-    fun applyViewProps(widget: ViewPropsWidget) {
-        d { "${javaClass.simpleName} apply view props $widget" }
-
-        lateinit var applyLayoutParamsToChild: (Element) -> Unit
-
-        applyLayoutParamsToChild = { child ->
-            d { "${javaClass.simpleName} apply view props to child $child" }
-            if (child is ViewElement<*>) {
-                child.updateViewProps(widget)
-            } else {
-                child.onEachChild(applyLayoutParamsToChild)
-            }
-        }
-
-        onEachChild(applyLayoutParamsToChild)
-    }
-
-    override fun notifyClients(oldWidget: Widget) {
-        applyViewProps(widget())
+    fun applyViewProps(view: View) {
+        widget<ViewPropsWidget>().applyViewProps(view)
     }
 
 }

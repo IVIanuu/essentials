@@ -38,7 +38,7 @@ class AndroidBuildOwner(
 
     private var buildJob: Job? = null
 
-    private val dirtyElements = mutableListOf<Element>()
+    private val dirtyElements = mutableSetOf<Element>()
 
     init {
         firstFrame()
@@ -70,8 +70,9 @@ class AndroidBuildOwner(
 
     private fun rebuildDirtyElements() {
         d { "rebuild dirty elements $dirtyElements" }
-        dirtyElements.toList().forEach { it.rebuild() }
+        val elementsToRebuild = dirtyElements.toList()
         dirtyElements.clear()
+        elementsToRebuild.forEach { it.rebuild() }
     }
 
     private fun firstFrame() {

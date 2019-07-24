@@ -21,10 +21,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.updateLayoutParams
 import androidx.core.view.updatePaddingRelative
-import com.ivianuu.essentials.sample.ui.widget.lib.AndroidContextAmbient
 import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget.lib.ViewPropsWidget
-import com.ivianuu.kommon.core.content.drawableAttr
+import com.ivianuu.kommon.core.view.drawableAttr
 
 fun Alpha(alpha: Float, key: Any? = null, child: BuildContext.() -> Unit) =
     ViewPropsWidget(value = alpha, prop = View::setAlpha, child = child, key = key)
@@ -40,12 +39,11 @@ fun Background(
     key = key,
     props = listOf(View::setBackgroundColor, View::setBackground, View::setBackgroundResource),
     applyViewProps = { view ->
-        val context = +AndroidContextAmbient
         when {
             color != null -> view.setBackgroundColor(color)
             drawable != null -> view.background = drawable
             resource != null -> view.setBackgroundResource(resource)
-            attr != null -> view.background = context.drawableAttr(attr)
+            attr != null -> view.background = view.drawableAttr(attr)
             else -> view.background = null
         }
     },
