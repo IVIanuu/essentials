@@ -23,10 +23,7 @@ abstract class Widget(val key: Any? = null) {
 
     abstract fun createElement(): Element
 
-    fun canUpdate(other: Widget): Boolean =
-        (this::class == other::class && this.key == other.key)
-            .also { d { "${javaClass.simpleName} can update ${other.javaClass.simpleName} = $it" } }
-
+    fun canUpdate(other: Widget): Boolean = this::class == other::class && this.key == other.key
 }
 
 abstract class Element(widget: Widget) : BuildContext {
@@ -101,7 +98,7 @@ abstract class Element(widget: Widget) : BuildContext {
     }
 
     open fun mount(parent: Element?, slot: Int?) {
-        d { "${javaClass.simpleName} mount parent $parent widget $widget slot $slot" }
+        d { "${widget.key} mount parent $parent widget $widget slot $slot" }
         this.context = context
         this.parent = parent
         this.owner = parent?.owner
@@ -109,7 +106,7 @@ abstract class Element(widget: Widget) : BuildContext {
     }
 
     open fun unmount() {
-        d { "${javaClass.simpleName} unmount parent $parent widget $widget slot $slot" }
+        d { "${widget.key} unmount parent $parent widget $widget slot $slot" }
 
         lifecycleObservers?.forEach { it.onDispose() }
         lifecycleObservers = null
@@ -130,7 +127,7 @@ abstract class Element(widget: Widget) : BuildContext {
     }
 
     open fun rebuild() {
-        d { "${javaClass.simpleName} rebuild is dirty $isDirty widget $widget" }
+        d { "${widget.key} rebuild is dirty $isDirty" }
         if (isDirty) {
             effectsIndex = 0
             performRebuild()
@@ -157,7 +154,7 @@ abstract class Element(widget: Widget) : BuildContext {
         newWidget: Widget?,
         newSlot: Int?
     ): Element? {
-        d { "${javaClass.simpleName} update child $child new $newWidget new slot $newSlot" }
+        d { "${widget.key} update child $child new ${newWidget?.key} new slot $newSlot" }
 
         if (newWidget == null) {
             if (child != null) {
@@ -176,7 +173,7 @@ abstract class Element(widget: Widget) : BuildContext {
             }
 
             if (child.widget.canUpdate(newWidget)) {
-                d { "${javaClass.simpleName} call child update ${child.javaClass.simpleName}" }
+                d { "${widget.key} call child update ${child.widget.key}" }
                 child.update(newWidget)
                 return child
             }
@@ -189,7 +186,7 @@ abstract class Element(widget: Widget) : BuildContext {
     }
 
     protected open fun updateSlotForChild(child: Element, newSlot: Int?) {
-        d { "${javaClass.simpleName} update slot for child $child $newSlot" }
+        d { "${widget.key} update slot for child $child $newSlot" }
         lateinit var block: (Element) -> Unit
 
         block = {
@@ -201,12 +198,12 @@ abstract class Element(widget: Widget) : BuildContext {
     }
 
     open fun update(newWidget: Widget) {
-        d { "${javaClass.simpleName} update new $newWidget old $widget" }
+        d { "${widget.key} update new $newWidget old $widget" }
         widget = newWidget
     }
 
     open fun updateSlot(newSlot: Int?) {
-        d { "${javaClass.simpleName} update slow $newSlot" }
+        d { "${widget.key} update slow $newSlot" }
         slot = newSlot
     }
 
@@ -214,7 +211,7 @@ abstract class Element(widget: Widget) : BuildContext {
         newWidget: Widget,
         newSlot: Int?
     ): Element {
-        d { "${javaClass.simpleName} inflate $newWidget $newSlot" }
+        d { "${widget.key} inflate $newWidget $newSlot" }
 
         val newChild = newWidget.createElement()
         newChild.mount(this, newSlot)

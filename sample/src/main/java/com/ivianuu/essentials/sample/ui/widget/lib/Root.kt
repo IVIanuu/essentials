@@ -92,7 +92,7 @@ class RootElement(
 
     override fun performRebuild() {
         widget<RootWidget>().child(this)
-        d { "${javaClass.simpleName} ${widget.key} perform rebuild widget $widget built $pendingChild" }
+        d { "${widget.key} perform rebuild built $pendingChild" }
         val built = pendingChild!!
         pendingChild = null
         isDirty = false

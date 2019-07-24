@@ -106,7 +106,7 @@ class WidgetController2 : WidgetController() {
         +ScrollView {
             +MatchParent {
                 +LinearLayout {
-                    (1..10).forEach {
+                    (1..1).forEach {
                         +ListItem(it)
                     }
                 }

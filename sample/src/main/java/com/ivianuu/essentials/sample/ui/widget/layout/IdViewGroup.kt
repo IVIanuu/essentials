@@ -45,11 +45,7 @@ fun <V : ViewGroup> IdViewGroupWidget(
 ): Widget = ViewGroupWidget<V>(
     viewType = viewType,
     key = key,
-    createView = { container ->
-        container.findViewById<V>(id).also {
-            container.removeView(it) // todo remove this hack
-        }
-    },
+    createView = { it.findViewById<V>(id) },
     updateView = updateView,
     children = children
 )

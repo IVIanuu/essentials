@@ -106,7 +106,11 @@ open class ViewGroupElement<V : ViewGroup>(
     }
 
     override fun insertChildView(view: View, slot: Int?) {
-        d { "${javaClass.simpleName} insert $view at $slot" }
+        d { "${widget.key} insert $view at $slot" }
+
+        val thisView = requireView()
+
+        if (view.parent == thisView) return
 
         if (slot != null) {
             requireView().addView(view, slot)
@@ -117,13 +121,13 @@ open class ViewGroupElement<V : ViewGroup>(
 
     override fun moveChildView(view: View, slot: Int?) {
         requireNotNull(slot)
-        d { "${javaClass.simpleName} move $view to $slot" }
+        d { "${widget.key} move $view to $slot" }
         requireView().removeView(view)
         requireView().addView(view, slot)
     }
 
     override fun removeChildView(view: View) {
-        d { "${javaClass.simpleName} remove $view" }
+        d { "${widget.key} remove $view" }
         requireView().removeView(view)
     }
 

@@ -61,12 +61,13 @@ abstract class ComponentElement(widget: Widget) : Element(widget) {
     }
 
     override fun performRebuild() {
+        d { "${widget.key} perform rebuild" }
         child()
-        d { "${javaClass.simpleName} ${widget.key} perform rebuild widget $widget built $pendingChild" }
         val built = pendingChild!!
+        d { "${widget.key} rebuild result is ${pendingChild!!.key}" }
         pendingChild = null
         isDirty = false
-        child = updateChild(child, built, slot)
+        child = updateChild(child, built, null) // todo slot or null?
     }
 
     override fun onEachChild(block: (Element) -> Unit) {

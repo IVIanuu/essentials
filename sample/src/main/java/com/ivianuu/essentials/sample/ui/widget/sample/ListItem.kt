@@ -16,11 +16,9 @@
 
 package com.ivianuu.essentials.sample.ui.widget.sample
 
-import android.view.ViewGroup
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.ivianuu.essentials.sample.R
-import com.ivianuu.essentials.sample.ui.widget.layout.IdViewGroupWidget
 import com.ivianuu.essentials.sample.ui.widget.layout.InflateViewGroupWidget
 import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
 import com.ivianuu.essentials.util.andTrue
@@ -72,7 +70,7 @@ fun ListItem(
         view.isEnabled = onClick != null || onLongClick != null
     },
     children = {
-        if (primaryAction != null) {
+        /*if (primaryAction != null) {
             +IdViewGroupWidget<ViewGroup>(
                 R.id.es_list_primary_action_container,
                 children = primaryAction
@@ -83,6 +81,6 @@ fun ListItem(
                 R.id.es_list_secondary_action_container,
                 children = secondaryAction
             )
-        }
+        }*/
     }
 )

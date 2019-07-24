@@ -109,7 +109,7 @@ open class ViewElement<V : View>(widget: ViewWidget<V>) : Element(widget) {
 
     override fun attachView() {
         val ancestorViewElement = findAncestorViewElement()!!
-        d { "${javaClass.simpleName} attach to $ancestorViewElement view is $view" }
+        d { "${widget.key} attach to $ancestorViewElement view is $view" }
         this.ancestorViewElement = ancestorViewElement
         updateLayoutParams()
         updateViewProps()
@@ -117,7 +117,7 @@ open class ViewElement<V : View>(widget: ViewWidget<V>) : Element(widget) {
     }
 
     override fun detachView() {
-        d { "${javaClass.simpleName} remove from $ancestorViewElement view is $view" }
+        d { "${widget.key} remove from $ancestorViewElement view is $view" }
         if (ancestorViewElement != null) {
             ancestorViewElement!!.removeChildView(requireView())
             ancestorViewElement = null
@@ -197,7 +197,7 @@ open class ViewElement<V : View>(widget: ViewWidget<V>) : Element(widget) {
     protected fun requireView(): V = this.view ?: error("not mounted")
 
     override fun performRebuild() {
-        d { "${javaClass.simpleName} perform rebuild $widget" }
+        d { "${widget.key} perform rebuild" }
         widget<ViewWidget<V>>().updateView(requireView())
         isDirty = false
     }
