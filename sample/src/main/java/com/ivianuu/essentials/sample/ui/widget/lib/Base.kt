@@ -16,7 +16,6 @@
 
 package com.ivianuu.essentials.sample.ui.widget.lib
 
-import android.content.Context
 import com.github.ajalt.timberkt.d
 
 abstract class Widget(val key: Any? = null) {
@@ -29,8 +28,6 @@ abstract class Widget(val key: Any? = null) {
 abstract class Element(widget: Widget) : BuildContext {
 
     override var widget: Widget = widget
-        protected set
-    var context: Context? = null
         protected set
     var parent: Element? = null
         protected set
@@ -115,7 +112,6 @@ abstract class Element(widget: Widget) : BuildContext {
 
     open fun mount(parent: Element?, slot: Int?) {
         d { "${widget.key} mount parent $parent widget $widget slot $slot" }
-        this.context = context
         this.parent = parent
         this.owner = parent?.owner
         this.slot = slot
@@ -127,7 +123,6 @@ abstract class Element(widget: Widget) : BuildContext {
         lifecycleObservers?.forEach { it.onDispose() }
         lifecycleObservers = null
 
-        context = null
         parent = null
         slot = null
         owner = null
