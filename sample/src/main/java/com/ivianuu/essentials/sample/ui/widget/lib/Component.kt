@@ -32,15 +32,8 @@ abstract class ComponentElement(widget: Widget) : Element(widget) {
         pendingChild = child
     }
 
-    override fun mount(
-        parent: Element?,
-        slot: Int?
-    ) {
-        super.mount(parent, slot)
-        firstBuild()
-    }
-
     override fun attachView() {
+        firstBuild()
         super.attachView()
         child?.attachView()
     }

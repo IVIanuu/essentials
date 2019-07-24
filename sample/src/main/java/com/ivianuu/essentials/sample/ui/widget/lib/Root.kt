@@ -75,11 +75,13 @@ class RootElement(
     }
 
     override fun attachView() {
+        isAttached = true
         _rootView.addView(requireView())
         child?.attachView()
     }
 
     override fun detachView() {
+        isAttached = false
         child?.detachView()
         _rootView.removeView(requireView())
     }

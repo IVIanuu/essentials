@@ -115,11 +115,11 @@ open class ViewElement<V : View>(widget: ViewWidget<V>) : Element(widget) {
         super.mount(parent, slot)
         // todo manage ancestor better
         view = widget<ViewWidget<V>>().createView(findContainerView())
-        updateView()
-        attachView()
     }
 
     override fun attachView() {
+        super.attachView()
+        updateView()
         val ancestorViewElement = findAncestorViewElement()!!
         d { "${widget.key} attach to $ancestorViewElement view is $view" }
         this.ancestorViewElement = ancestorViewElement
@@ -127,6 +127,7 @@ open class ViewElement<V : View>(widget: ViewWidget<V>) : Element(widget) {
     }
 
     override fun detachView() {
+        super.detachView()
         d { "${widget.key} remove from $ancestorViewElement view is $view" }
         if (ancestorViewElement != null) {
             ancestorViewElement!!.removeChildView(requireView())
