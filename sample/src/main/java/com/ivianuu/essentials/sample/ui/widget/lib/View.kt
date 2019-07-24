@@ -174,11 +174,18 @@ open class ViewElement<V : View>(widget: ViewWidget<V>) : Element(widget) {
         val view = requireView()
         val lp = view.layoutParams
             ?: genDefaultLayoutParams.invoke(findContainerView()) as ViewGroup.LayoutParams
+        var changed = false
         collectLayoutParams().forEach {
-            d { "${widget.key} update lp $it" }
-            it.updateLayoutParams(lp)
+            if (it.updateLayoutParams(lp)) {
+                changed = true
+            }
         }
-        view.layoutParams = lp
+
+        d { "${widget.key} updated lp has changed ? ${changed || view.layoutParams == null}" }
+
+        if (changed || view.layoutParams == null) {
+            view.layoutParams = lp
+        }
     }
 
 

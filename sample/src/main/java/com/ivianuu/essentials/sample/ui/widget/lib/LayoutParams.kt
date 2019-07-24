@@ -21,12 +21,11 @@ import android.view.ViewGroup
 fun LayoutParamsWidget(
     key: Any? = null,
     props: List<Any?>,
-    updateLayoutParams: (ViewGroup.LayoutParams) -> Unit,
+    updateLayoutParams: (ViewGroup.LayoutParams) -> Boolean,
     child: BuildContext.() -> Unit
 ): Widget = object : LayoutParamsWidget(child, joinKey(props, key)) {
-    override fun updateLayoutParams(layoutParams: ViewGroup.LayoutParams) {
+    override fun updateLayoutParams(layoutParams: ViewGroup.LayoutParams): Boolean =
         updateLayoutParams.invoke(layoutParams)
-    }
 }
 
 abstract class LayoutParamsWidget(
@@ -37,14 +36,11 @@ abstract class LayoutParamsWidget(
     override fun createElement(): LayoutParamsElement =
         LayoutParamsElement(this)
 
-    abstract fun updateLayoutParams(layoutParams: ViewGroup.LayoutParams)
+    abstract fun updateLayoutParams(layoutParams: ViewGroup.LayoutParams): Boolean
 
 }
 
 open class LayoutParamsElement(widget: LayoutParamsWidget) : ProxyElement(widget) {
-
-    fun updateLayoutParams(layoutParams: ViewGroup.LayoutParams) {
+    fun updateLayoutParams(layoutParams: ViewGroup.LayoutParams): Boolean =
         widget<LayoutParamsWidget>().updateLayoutParams(layoutParams)
-    }
-
 }

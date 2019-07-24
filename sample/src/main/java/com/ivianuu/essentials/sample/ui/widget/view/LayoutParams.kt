@@ -43,8 +43,13 @@ fun Size(
         ViewGroup.LayoutParams::height
     ),
     updateLayoutParams = {
-        it.width = width
-        it.height = height
+        if (it.width != width || it.height != height) {
+            it.width = width
+            it.height = height
+            true
+        } else {
+            false
+        }
     },
     child = child
 )
@@ -54,8 +59,22 @@ fun Gravity(gravity: Int, key: Any? = null, child: BuildContext.() -> Unit) = La
     props = listOf(FrameLayout.LayoutParams::gravity, LinearLayout.LayoutParams::gravity),
     updateLayoutParams = { lp ->
         when (lp) {
-            is FrameLayout.LayoutParams -> lp.gravity = gravity
-            is LinearLayout.LayoutParams -> lp.gravity = gravity
+            is FrameLayout.LayoutParams -> {
+                if (lp.gravity != gravity) {
+                    lp.gravity = gravity
+                    true
+                } else {
+                    false
+                }
+            }
+            is LinearLayout.LayoutParams -> {
+                if (lp.gravity != gravity) {
+                    lp.gravity = gravity
+                    true
+                } else {
+                    false
+                }
+            }
             else -> error("cannot apply gravity to $lp")
         }
     },
@@ -77,7 +96,19 @@ fun Margin(
     props = listOf(ViewGroup.MarginLayoutParams::setMargins),
     updateLayoutParams = {
         if (it is ViewGroup.MarginLayoutParams) {
-            it.setMargins(left, top, right, bottom)
+            if (it.leftMargin != left
+                || it.topMargin != top
+                || it.rightMargin != right
+                || it.bottomMargin != bottom
+            ) {
+                it.leftMargin = left
+                it.topMargin = top
+                it.rightMargin = right
+                it.bottomMargin = bottom
+                true
+            } else {
+                false
+            }
         } else {
             error("cannot apply margin to $it")
         }
@@ -94,7 +125,12 @@ fun Weight(
     props = listOf(LinearLayout.LayoutParams::weight),
     updateLayoutParams = {
         if (it is LinearLayout.LayoutParams) {
-            it.weight = weight
+            if (it.weight != weight) {
+                it.weight = weight
+                true
+            } else {
+                false
+            }
         } else {
             error("cannot apply weight to $it")
         }
