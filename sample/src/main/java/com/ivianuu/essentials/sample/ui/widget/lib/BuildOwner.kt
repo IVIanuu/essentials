@@ -41,7 +41,7 @@ class AndroidBuildOwner(
     private val dirtyElements = mutableSetOf<Element>()
 
     init {
-        firstFrame()
+        attachRoot()
     }
 
     override fun scheduleBuildFor(element: Element) {
@@ -75,12 +75,15 @@ class AndroidBuildOwner(
         elementsToRebuild.forEach { it.rebuild() }
     }
 
-    private fun firstFrame() {
+    private fun attachRoot() {
         val widget = RootWidget(this, view) {
-            +AndroidContextAmbient.Provider(value = view.context, child = child)
+            +AndroidContextAmbient.Provider(view.context) {
+                child()
+            }
         }
         val root = widget.createElement()
         this.root = root
         root.mount(null, null)
     }
+
 }

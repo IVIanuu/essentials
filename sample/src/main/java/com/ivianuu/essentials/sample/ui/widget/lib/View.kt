@@ -126,7 +126,6 @@ open class ViewElement<V : View>(widget: ViewWidget<V>) : Element(widget) {
     override fun update(newWidget: Widget) {
         super.update(newWidget)
         updateView()
-        isDirty = false
     }
 
     override fun updateSlot(newSlot: Int?) {
@@ -157,6 +156,7 @@ open class ViewElement<V : View>(widget: ViewWidget<V>) : Element(widget) {
         updateLayoutParams()
         updateViewProps()
         widget<ViewWidget<V>>().updateView(requireView())
+        isDirty = false
     }
 
     private fun collectLayoutParams(): List<LayoutParamsElement> {
@@ -201,8 +201,7 @@ open class ViewElement<V : View>(widget: ViewWidget<V>) : Element(widget) {
 
     override fun performRebuild() {
         d { "${widget.key} perform rebuild" }
-        widget<ViewWidget<V>>().updateView(requireView())
-        isDirty = false
+        updateView()
     }
 
 }
