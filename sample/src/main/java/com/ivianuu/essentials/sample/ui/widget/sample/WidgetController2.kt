@@ -85,7 +85,7 @@ class WidgetController2 : WidgetController() {
 
     private fun Content() = MatchParent {
         +RecyclerView {
-            (1..20).forEach {
+            (1..100).forEach {
                 +ListItem(it)
             }
         }
@@ -95,7 +95,6 @@ class WidgetController2 : WidgetController() {
         val (checked, setChecked) = +state { false }
 
         +ListItem(
-            key = i,
             title = "Title $i",
             text = "Text $i",
             primaryAction = {

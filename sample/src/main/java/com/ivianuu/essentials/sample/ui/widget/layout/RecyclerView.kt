@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.epoxy.EpoxyRecyclerView
 import com.airbnb.epoxy.TypedEpoxyController
+import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget.lib.ComponentElement
 import com.ivianuu.essentials.sample.ui.widget.lib.Element
@@ -95,19 +96,13 @@ private class WidgetEpoxyController : TypedEpoxyController<BuildContext.() -> Un
     override fun buildModels(data: (BuildContext.() -> Unit)?) {
         data?.invoke(parent)
 
-        val widgetsByViewType = parent.insertedWidgets
+        val elementsWithViewType = parent.insertedWidgets
             .map { it.createElement() }
             .onEach { it.mount(parent, null) }
-            .groupBy { it.getViewType() }
-            .mapValues { it.value.first() to it.value.map { it.widget } }
+            .map { it to it.getViewType() }
 
-        widgetsByViewType.forEach {
-            val viewType = it.key
-            val element = it.value.first
-            val widgets = it.value.second
-            widgets.forEach { widget ->
-                add(WidgetEpoxyModel(element, widget, viewType))
-            }
+        elementsWithViewType.forEach { (element, viewType) ->
+            add(WidgetEpoxyModel(element, viewType))
         }
 
         parent.insertedWidgets.clear()
@@ -123,13 +118,28 @@ private class WidgetEpoxyController : TypedEpoxyController<BuildContext.() -> Un
 
 private data class WidgetEpoxyModel(
     private val element: Element,
-    private val widget: Widget,
     private val viewType: Int
-) : SimpleModel(id = widget.key) {
+) : SimpleModel(id = element.widget.key) {
 
     override fun bind(holder: EsHolder) {
         super.bind(holder)
-        element.update(widget)
+
+        val viewsByHash = holder.root.tag<Map<Int, View>>()
+
+        if (element is ViewElement<*>) {
+            (element as ViewElement<View>).view = holder.root
+            element.updateView()
+            d { "update view ${holder.root} for ${element.widget.key}" }
+        }
+
+        element.onEachChildRecursive {
+            if (it is ViewElement<*>) {
+                val view = viewsByHash[it.widget::class.hashCode() + it.widget.key.hashCode()]
+                d { "update view $view for ${it.widget.key}" }
+                (it as ViewElement<View>).view = view
+                it.updateView()
+            }
+        }
     }
 
     override fun getViewType(): Int = viewType
@@ -137,8 +147,8 @@ private data class WidgetEpoxyModel(
     override fun buildView(parent: ViewGroup): View {
         element.createView()
         element.attachView()
-        // todo this is hacky
-        return if (element is ViewElement<*>) {
+
+        val view = if (element is ViewElement<*>) {
             element.view!!
         } else {
             var childElement = element
@@ -148,6 +158,20 @@ private data class WidgetEpoxyModel(
 
             (childElement as ViewElement<*>).view!!
         }
+
+        val viewsByHash = mutableMapOf<Int, View>()
+
+        element.onEachChildRecursive {
+            if (it is ViewElement<*>) {
+                viewsByHash[it.widget::class.hashCode() + it.widget.key.hashCode()] = it.view!!
+            }
+        }
+
+        view.tag = viewsByHash
+
+        d { "views by hash $viewsByHash" }
+
+        return view
     }
 
 }

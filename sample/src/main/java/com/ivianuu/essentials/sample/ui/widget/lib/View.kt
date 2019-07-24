@@ -92,7 +92,6 @@ abstract class ViewWidget<V : View>(key: Any? = null) : Widget(key) {
 open class ViewElement<V : View>(widget: ViewWidget<V>) : Element(widget) {
 
     var view: V? = null
-        private set
 
     private var ancestorViewElement: ViewElement<*>? = null
 
@@ -161,7 +160,8 @@ open class ViewElement<V : View>(widget: ViewWidget<V>) : Element(widget) {
         return null
     }
 
-    protected fun updateView() {
+    fun updateView() {
+        d { "update view ${widget.key}" }
         updateLayoutParams()
         updateViewProps()
         widget<ViewWidget<V>>().updateView(requireView())

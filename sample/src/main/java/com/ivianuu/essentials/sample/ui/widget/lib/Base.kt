@@ -189,6 +189,7 @@ abstract class Element(widget: Widget) : BuildContext {
         if (newWidget == null) {
             if (child != null) {
                 child.detachView()
+                child.destroyView()
                 child.unmount()
             }
             return null
@@ -209,6 +210,7 @@ abstract class Element(widget: Widget) : BuildContext {
             }
 
             child.detachView()
+            child.destroyView()
             child.unmount()
         }
 
@@ -252,6 +254,13 @@ abstract class Element(widget: Widget) : BuildContext {
     }
 
     open fun onEachChild(block: (Element) -> Unit) {
+    }
+
+    fun onEachChildRecursive(block: (Element) -> Unit) {
+        onEachChild {
+            block(it)
+            it.onEachChildRecursive(block)
+        }
     }
 
     inline fun <reified T : Widget> widget(): T = widget as T
@@ -298,6 +307,7 @@ abstract class Element(widget: Widget) : BuildContext {
                     oldKeyedChildren[oldChild.widget.key!!] = oldChild
                 } else {
                     oldChild.detachView()
+                    oldChild.destroyView()
                     oldChild.unmount()
                 }
                 oldChildrenTop += 1
