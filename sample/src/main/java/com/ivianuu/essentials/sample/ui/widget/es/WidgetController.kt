@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.sample.ui.widget.es
 
 import android.view.View
+import com.ivianuu.director.activity
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.sample.ui.widget.lib.AndroidBuildOwner
 import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
@@ -35,12 +36,14 @@ abstract class WidgetController : EsController() {
     override fun onViewCreated(view: View) {
         super.onViewCreated(view)
         buildOwner = AndroidBuildOwner(
-            viewLifecycleScope,
-            view.cast()
+            activity!!,
+            viewLifecycleScope
         ) { build() }
+        buildOwner!!.setContainer(view.cast())
     }
 
     override fun onDestroyView(view: View) {
+        buildOwner?.removeContainer()
         buildOwner?.clear()
         buildOwner = null
         super.onDestroyView(view)

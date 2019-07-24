@@ -132,6 +132,16 @@ open class ViewGroupElement<V : ViewGroup>(
         requireView().removeView(view)
     }
 
+    override fun createView() {
+        super.createView()
+        children.forEach { it.createView() }
+    }
+
+    override fun destroyView() {
+        children.forEach { it.destroyView() }
+        super.destroyView()
+    }
+
     override fun attachView() {
         super.attachView()
         children.forEach { it.attachView() }

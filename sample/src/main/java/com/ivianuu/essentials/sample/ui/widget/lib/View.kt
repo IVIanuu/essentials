@@ -108,13 +108,15 @@ open class ViewElement<V : View>(widget: ViewWidget<V>) : Element(widget) {
         error("unsupported")
     }
 
-    override fun mount(
-        parent: Element?,
-        slot: Int?
-    ) {
-        super.mount(parent, slot)
+    override fun createView() {
+        super.createView()
         // todo manage ancestor better
         view = widget<ViewWidget<V>>().createView(findContainerView())
+    }
+
+    override fun destroyView() {
+        super.destroyView()
+        view = null
     }
 
     override fun attachView() {
@@ -145,11 +147,6 @@ open class ViewElement<V : View>(widget: ViewWidget<V>) : Element(widget) {
         ancestorViewElement!!.moveChildView(requireView(), slot)
     }
 
-    override fun unmount() {
-        super.unmount()
-        view = null
-    }
-
     protected open fun findContainerView(): ViewGroup {
         return findAncestorViewElement()!!.view as ViewGroup
     }
@@ -164,7 +161,7 @@ open class ViewElement<V : View>(widget: ViewWidget<V>) : Element(widget) {
         return null
     }
 
-    private fun updateView() {
+    protected fun updateView() {
         updateLayoutParams()
         updateViewProps()
         widget<ViewWidget<V>>().updateView(requireView())
@@ -216,7 +213,7 @@ open class ViewElement<V : View>(widget: ViewWidget<V>) : Element(widget) {
         return props.reversed()
     }
 
-    protected fun requireView(): V = this.view ?: error("not mounted")
+    protected fun requireView(): V = this.view ?: error("view not created")
 
     override fun performRebuild() {
         d { "${widget.key} perform rebuild" }

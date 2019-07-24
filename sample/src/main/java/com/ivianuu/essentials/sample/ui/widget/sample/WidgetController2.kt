@@ -21,7 +21,7 @@ import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.sample.ui.widget.es.WidgetController
 import com.ivianuu.essentials.sample.ui.widget.layout.FrameLayout
 import com.ivianuu.essentials.sample.ui.widget.layout.LinearLayout
-import com.ivianuu.essentials.sample.ui.widget.layout.ScrollView
+import com.ivianuu.essentials.sample.ui.widget.layout.RecyclerView
 import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget.lib.StatelessWidget
 import com.ivianuu.essentials.sample.ui.widget.lib.onActive
@@ -84,13 +84,9 @@ class WidgetController2 : WidgetController() {
     }
 
     private fun Content() = MatchParent {
-        +ScrollView {
-            +MatchParent {
-                +LinearLayout {
-                    (1..20).forEach {
-                        +ListItem(it)
-                    }
-                }
+        +RecyclerView {
+            (1..20).forEach {
+                +ListItem(it)
             }
         }
     }
@@ -99,6 +95,7 @@ class WidgetController2 : WidgetController() {
         val (checked, setChecked) = +state { false }
 
         +ListItem(
+            key = i,
             title = "Title $i",
             text = "Text $i",
             primaryAction = {

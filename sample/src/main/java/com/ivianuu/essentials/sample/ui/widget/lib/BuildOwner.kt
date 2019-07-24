@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.sample.ui.widget.lib
 
+import android.content.Context
 import android.view.ViewGroup
 import com.github.ajalt.timberkt.d
 import kotlinx.coroutines.CoroutineScope
@@ -26,11 +27,14 @@ import kotlinx.coroutines.launch
 interface BuildOwner {
     fun scheduleBuildFor(element: Element)
     fun clear()
+
+    fun setContainer(container: ViewGroup)
+    fun removeContainer()
 }
 
 class AndroidBuildOwner(
+    private val context: Context,
     private val coroutineScope: CoroutineScope,
-    private val view: ViewGroup,
     private val child: BuildContext.() -> Unit
 ) : BuildOwner {
 
@@ -40,8 +44,26 @@ class AndroidBuildOwner(
 
     private val dirtyElements = mutableSetOf<Element>()
 
+    internal var _container: ViewGroup? = null
+
     init {
-        attachRoot()
+        mountRoot()
+    }
+
+    override fun setContainer(container: ViewGroup) {
+        if (container != _container) {
+            _container = container
+            root!!.createView()
+            root!!.attachView()
+        }
+    }
+
+    override fun removeContainer() {
+        if (_container != null) {
+            root!!.detachView()
+            root!!.destroyView()
+            _container = null
+        }
     }
 
     override fun scheduleBuildFor(element: Element) {
@@ -52,11 +74,8 @@ class AndroidBuildOwner(
     override fun clear() {
         buildJob?.cancel()
         buildJob = null
-
-        root?.let {
-            it.detachView()
-            it.unmount()
-        }
+        removeContainer()
+        root?.unmount()
         root = null
     }
 
@@ -75,16 +94,15 @@ class AndroidBuildOwner(
         elementsToRebuild.forEach { it.rebuild() }
     }
 
-    private fun attachRoot() {
-        val widget = RootWidget(this, view) {
-            +AndroidContextAmbient.Provider(view.context) {
+    private fun mountRoot() {
+        val widget = RootWidget(this) {
+            +AndroidContextAmbient.Provider(context) {
                 child()
             }
         }
         val root = widget.createElement()
         this.root = root
         root.mount(null, null)
-        root.attachView()
     }
 
 }

@@ -43,6 +43,8 @@ abstract class Element(widget: Widget) : BuildContext {
         protected set
     var isAttached = false
         protected set
+    var isViewCreated = false
+        protected set
 
     protected var dependencies: MutableList<Element>? = null
     protected var dependents: MutableList<Element>? = null
@@ -136,6 +138,14 @@ abstract class Element(widget: Widget) : BuildContext {
         dependents = null
         dependencies?.forEach { it.dependents?.remove(this) }
         dependencies = null
+    }
+
+    open fun createView() {
+        isViewCreated = true
+    }
+
+    open fun destroyView() {
+        isViewCreated = false
     }
 
     open fun attachView() {
@@ -235,6 +245,7 @@ abstract class Element(widget: Widget) : BuildContext {
 
         val newChild = newWidget.createElement()
         newChild.mount(this, newSlot)
+        if (isViewCreated) newChild.createView()
         if (isAttached) newChild.attachView()
 
         return newChild

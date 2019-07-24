@@ -21,22 +21,19 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import com.github.ajalt.timberkt.d
 
-class RootWidget(
-    val owner: BuildOwner,
-    val rootView: ViewGroup,
+internal class RootWidget(
+    val owner: AndroidBuildOwner,
     val child: BuildContext.() -> Unit
 ) : ViewWidget<FrameLayout>() {
 
-    override fun createElement() =
-        RootElement(owner, rootView, this)
+    override fun createElement() = RootElement(owner, this)
 
     override fun createView(container: ViewGroup): FrameLayout =
-        FrameLayout(rootView.context)
+        FrameLayout(container.context)
 }
 
-class RootElement(
-    val _owner: BuildOwner,
-    val _rootView: ViewGroup,
+internal class RootElement(
+    val _owner: AndroidBuildOwner,
     widget: RootWidget
 ) : ViewElement<FrameLayout>(widget) {
 
@@ -55,14 +52,12 @@ class RootElement(
         child!!.mount(this, null)
     }
 
-
     override fun add(child: Widget) {
         check(pendingChild == null) { "only one child allowed" }
         pendingChild = child
     }
 
     override fun insertChildView(view: View, slot: Int?) {
-        d { "insert child view" }
         requireView().addView(view)
     }
 
@@ -74,16 +69,26 @@ class RootElement(
         requireView().removeView(view)
     }
 
+    override fun createView() {
+        super.createView()
+        child?.createView()
+    }
+
     override fun attachView() {
         isAttached = true
-        _rootView.addView(requireView())
+        updateView()
+        findContainerView().addView(requireView())
         child?.attachView()
     }
 
     override fun detachView() {
         isAttached = false
-        child?.detachView()
-        _rootView.removeView(requireView())
+        findContainerView().removeView(requireView())
+    }
+
+    override fun destroyView() {
+        child?.destroyView()
+        super.destroyView()
     }
 
     override fun unmount() {
@@ -105,5 +110,5 @@ class RootElement(
         child?.let { block(it) }
     }
 
-    override fun findContainerView(): ViewGroup = _rootView
+    override fun findContainerView(): ViewGroup = _owner._container!!
 }

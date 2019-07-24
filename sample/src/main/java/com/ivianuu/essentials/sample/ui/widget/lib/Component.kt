@@ -32,6 +32,11 @@ abstract class ComponentElement(widget: Widget) : Element(widget) {
         pendingChild = child
     }
 
+    override fun createView() {
+        super.createView()
+        child?.createView()
+    }
+
     override fun attachView() {
         firstBuild()
         super.attachView()
@@ -41,6 +46,11 @@ abstract class ComponentElement(widget: Widget) : Element(widget) {
     override fun detachView() {
         super.detachView()
         child?.detachView()
+    }
+
+    override fun destroyView() {
+        child?.destroyView()
+        super.destroyView()
     }
 
     override fun unmount() {
