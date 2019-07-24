@@ -27,6 +27,11 @@ abstract class ComponentElement(widget: Widget) : Element(widget) {
 
     private var pendingChild: Widget? = null
 
+    override fun mount(parent: Element?, slot: Int?) {
+        super.mount(parent, slot)
+        firstBuild()
+    }
+
     override fun add(child: Widget) {
         check(pendingChild == null) { "only one child allowed" }
         pendingChild = child
@@ -38,7 +43,6 @@ abstract class ComponentElement(widget: Widget) : Element(widget) {
     }
 
     override fun attachView() {
-        firstBuild()
         super.attachView()
         child?.attachView()
     }
@@ -74,7 +78,6 @@ abstract class ComponentElement(widget: Widget) : Element(widget) {
     }
 
     override fun onEachChild(block: (Element) -> Unit) {
-        super.onEachChild(block)
         child?.let(block)
     }
 

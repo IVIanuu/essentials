@@ -98,7 +98,11 @@ private class WidgetEpoxyController : TypedEpoxyController<BuildContext.() -> Un
 
         val elementsWithViewType = parent.insertedWidgets
             .map { it.createElement() }
-            .onEach { it.mount(parent, null) }
+            .apply {
+                forEachIndexed { i, element ->
+                    element.mount(parent, i)
+                }
+            }
             .map { it to it.getViewType() }
 
         elementsWithViewType.forEach { (element, viewType) ->
@@ -119,23 +123,21 @@ private class WidgetEpoxyController : TypedEpoxyController<BuildContext.() -> Un
 private data class WidgetEpoxyModel(
     private val element: Element,
     private val viewType: Int
-) : SimpleModel(id = element.widget.key) {
+) : SimpleModel(id = element.widget) {
 
     override fun bind(holder: EsHolder) {
         super.bind(holder)
 
-        val viewsByHash = holder.root.tag<Map<Int, View>>()
+        val viewsByPosition = holder.root.tag<Map<Position, View>>()
 
-        if (element is ViewElement<*>) {
-            (element as ViewElement<View>).view = holder.root
-            element.updateView()
-            d { "update view ${holder.root} for ${element.widget.key}" }
-        }
+        d { "bind ${element.widget} is mounted ? ${element.parent != null}" }
 
-        element.onEachChildRecursive {
+        element.onEachRecursive {
+            d { "child of ${element.widget} -> $it" }
             if (it is ViewElement<*>) {
-                val view = viewsByHash[it.widget::class.hashCode() + it.widget.key.hashCode()]
-                d { "update view $view for ${it.widget.key}" }
+                val pos = Position(it.depth!!, it.slot)
+                val view = viewsByPosition[pos]
+                d { "child of ${element.widget} view at pos $pos-> $view" }
                 (it as ViewElement<View>).view = view
                 it.updateView()
             }
@@ -159,19 +161,20 @@ private data class WidgetEpoxyModel(
             (childElement as ViewElement<*>).view!!
         }
 
-        val viewsByHash = mutableMapOf<Int, View>()
-
-        element.onEachChildRecursive {
+        val viewsByPosition = mutableMapOf<Position, View>()
+        element.onEachRecursive {
             if (it is ViewElement<*>) {
-                viewsByHash[it.widget::class.hashCode() + it.widget.key.hashCode()] = it.view!!
+                val pos = Position(it.depth!!, it.slot)
+                viewsByPosition[pos] = it.view!!
             }
         }
 
-        view.tag = viewsByHash
+        view.tag = viewsByPosition
 
-        d { "views by hash $viewsByHash" }
+        d { "views by position $viewsByPosition" }
 
         return view
     }
 
+    private data class Position(val depth: Int, val slot: Int?)
 }

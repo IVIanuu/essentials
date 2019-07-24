@@ -16,13 +16,27 @@
 
 package com.ivianuu.essentials.sample.ui.widget.lib
 
+import com.github.ajalt.timberkt.d
+
 fun StatelessWidget(
     id: Any,
     key: Any? = null,
+    meta: String? = null,
     child: BuildContext.() -> Unit
-): Widget = object : StatelessWidget(key = joinKey(id, key)) {
+): Widget = FuncW(id, key, meta, child)
+
+private class FuncW(
+    val id: Any,
+    key: Any? = null,
+    val meta: String? = null,
+    val child: BuildContext.() -> Unit
+) : StatelessWidget(key = joinKey(id, key)) {
     override fun BuildContext.child() {
         child.invoke(this)
+    }
+
+    override fun toString(): String {
+        return "Stateless(id=$id,key=$key,meta=$meta)"
     }
 }
 
@@ -44,5 +58,10 @@ open class StatelessElement(widget: StatelessWidget) : ComponentElement(widget) 
         super.update(newWidget)
         isDirty = true
         rebuild()
+    }
+
+    override fun onEachChild(block: (Element) -> Unit) {
+        d { "on each child ${widget.key} child is $child" }
+        super.onEachChild(block)
     }
 }

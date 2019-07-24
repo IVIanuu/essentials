@@ -38,6 +38,8 @@ abstract class Element(widget: Widget) : BuildContext {
         protected set
     var slot: Int? = null
         protected set
+    var depth: Int? = null
+        protected set
 
     var isDirty = true
         protected set
@@ -118,6 +120,7 @@ abstract class Element(widget: Widget) : BuildContext {
         this.parent = parent
         this.owner = parent?.owner
         this.slot = slot
+        this.depth = (parent?.depth ?: 0) + 1
     }
 
     open fun unmount() {
@@ -256,11 +259,9 @@ abstract class Element(widget: Widget) : BuildContext {
     open fun onEachChild(block: (Element) -> Unit) {
     }
 
-    fun onEachChildRecursive(block: (Element) -> Unit) {
-        onEachChild {
-            block(it)
-            it.onEachChildRecursive(block)
-        }
+    fun onEachRecursive(block: (Element) -> Unit) {
+        block(this)
+        onEachChild { it.onEachRecursive(block) }
     }
 
     inline fun <reified T : Widget> widget(): T = widget as T
