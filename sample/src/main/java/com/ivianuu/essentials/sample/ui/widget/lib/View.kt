@@ -111,7 +111,7 @@ open class ViewElement<V : View>(widget: ViewWidget<V>) : Element(widget) {
         val ancestorViewElement = findAncestorViewElement()!!
         d { "${javaClass.simpleName} attach to $ancestorViewElement view is $view" }
         this.ancestorViewElement = ancestorViewElement
-        applyViewProps()
+        updateLayoutParams()
         ancestorViewElement.insertChildView(requireView(), slot)
     }
 
@@ -125,13 +125,9 @@ open class ViewElement<V : View>(widget: ViewWidget<V>) : Element(widget) {
 
     override fun update(newWidget: Widget) {
         super.update(newWidget)
-        applyViewProps()
+        updateLayoutParams()
         widget<ViewWidget<V>>().updateView(requireView())
         isDirty = false
-    }
-
-    fun updateViewProps(viewProps: ViewPropsWidget) {
-        viewProps.applyViewProps(requireView())
     }
 
     override fun updateSlot(newSlot: Int?) {
@@ -169,16 +165,32 @@ open class ViewElement<V : View>(widget: ViewWidget<V>) : Element(widget) {
         return props.reversed()
     }
 
+    private fun collectLayoutParams(): List<LayoutParamsElement> {
+        val params = mutableListOf<LayoutParamsElement>()
+        var ancestor = parent
+        while (ancestor != null && ancestor !is ViewElement<*>) {
+            if (ancestor is LayoutParamsElement) params.add(ancestor)
+            ancestor = ancestor.parent
+        }
+
+        return params.reversed()
+    }
+
     private fun applyViewProps() {
         // todo optimize performance
         // todo add a LayoutParamsWidget and merge all mutations
-        // ensure we got some lp
-        if (requireView().layoutParams == null) {
-            requireView().layoutParams =
-                genDefaultLayoutParams.invoke(findAncestorViewElement()!!.view) as? ViewGroup.LayoutParams
-        }
-
         collectViewProps().forEach { it.applyViewProps(requireView()) }
+    }
+
+    private fun updateLayoutParams() {
+        val view = requireView()
+        val lp = view.layoutParams
+            ?: genDefaultLayoutParams.invoke(findContainerView()) as ViewGroup.LayoutParams
+        collectLayoutParams().forEach {
+            d { "${widget.key} update lp $it" }
+            it.updateLayoutParams(lp)
+        }
+        view.layoutParams = lp
     }
 
     protected fun requireView(): V = this.view ?: error("not mounted")
@@ -191,7 +203,6 @@ open class ViewElement<V : View>(widget: ViewWidget<V>) : Element(widget) {
 
 }
 
-// TODO(lmr): This should be moved to a separate module, but needs to be one that is not IR-compiled
 private val genDefaultLayoutParams by lazy {
     val method = ViewGroup::class.java.getDeclaredMethod("generateDefaultLayoutParams")
     method.isAccessible = true

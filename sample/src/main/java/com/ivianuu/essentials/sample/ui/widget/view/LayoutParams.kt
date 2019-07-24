@@ -16,26 +16,48 @@
 
 package com.ivianuu.essentials.sample.ui.widget.view
 
-import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.LinearLayout
-import androidx.core.view.updateLayoutParams
 import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
-import com.ivianuu.essentials.sample.ui.widget.lib.ViewPropsWidget
+import com.ivianuu.essentials.sample.ui.widget.lib.LayoutParamsWidget
 
-fun Gravity(gravity: Int, key: Any? = null, child: BuildContext.() -> Unit) = ViewPropsWidget(
+fun MatchParent(key: Any? = null, child: BuildContext.() -> Unit) =
+    Size(size = ViewGroup.LayoutParams.MATCH_PARENT, key = key, child = child)
+
+fun WrapContent(key: Any? = null, child: BuildContext.() -> Unit) =
+    Size(size = ViewGroup.LayoutParams.WRAP_CONTENT, key = key, child = child)
+
+fun Size(size: Int, key: Any? = null, child: BuildContext.() -> Unit) =
+    Size(width = size, height = size, key = key, child = child)
+
+fun Size(
+    width: Int,
+    height: Int,
+    key: Any? = null,
+    child: BuildContext.() -> Unit
+) = LayoutParamsWidget(
+    key = key,
+    props = listOf(
+        ViewGroup.LayoutParams::width,
+        ViewGroup.LayoutParams::height
+    ),
+    updateLayoutParams = {
+        it.width = width
+        it.height = height
+    },
+    child = child
+)
+
+fun Gravity(gravity: Int, key: Any? = null, child: BuildContext.() -> Unit) = LayoutParamsWidget(
     key = key,
     props = listOf(FrameLayout.LayoutParams::gravity, LinearLayout.LayoutParams::gravity),
-    applyViewProps = { view ->
-        val lp = view.layoutParams
+    updateLayoutParams = { lp ->
         when (lp) {
             is FrameLayout.LayoutParams -> lp.gravity = gravity
             is LinearLayout.LayoutParams -> lp.gravity = gravity
-            else -> error("cannot apply gravity for $view parent is ${view.parent}")
+            else -> error("cannot apply gravity to $lp")
         }
-
-        view.layoutParams = lp
     },
     child = child
 )
@@ -50,12 +72,14 @@ fun Margin(
     bottom: Int = 0,
     key: Any? = null,
     child: BuildContext.() -> Unit
-) = ViewPropsWidget(
+) = LayoutParamsWidget(
     key = key,
-    props = listOf(View::setLayoutParams, ViewGroup.MarginLayoutParams::setMargins),
-    applyViewProps = {
-        it.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-            setMargins(left, top, right, bottom)
+    props = listOf(ViewGroup.MarginLayoutParams::setMargins),
+    updateLayoutParams = {
+        if (it is ViewGroup.MarginLayoutParams) {
+            it.setMargins(left, top, right, bottom)
+        } else {
+            error("cannot apply margin to $it")
         }
     },
     child = child
@@ -65,14 +89,15 @@ fun Weight(
     weight: Float,
     key: Any? = null,
     child: BuildContext.() -> Unit
-) = ViewPropsWidget(
+) = LayoutParamsWidget(
     key = key,
     props = listOf(LinearLayout.LayoutParams::weight),
-    applyViewProps = {
-        it.updateLayoutParams<LinearLayout.LayoutParams> {
-            this.weight = weight
+    updateLayoutParams = {
+        if (it is LinearLayout.LayoutParams) {
+            it.weight = weight
+        } else {
+            error("cannot apply weight to $it")
         }
     },
     child = child
 )
-

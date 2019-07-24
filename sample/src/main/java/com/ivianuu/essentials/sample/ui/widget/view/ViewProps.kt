@@ -18,8 +18,6 @@ package com.ivianuu.essentials.sample.ui.widget.view
 
 import android.graphics.drawable.Drawable
 import android.view.View
-import android.view.ViewGroup
-import androidx.core.view.updateLayoutParams
 import androidx.core.view.updatePaddingRelative
 import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget.lib.ViewPropsWidget
@@ -108,36 +106,6 @@ fun Scale(
     key = key,
     props = listOf(View::setScaleX, View::setScaleY),
     applyViewProps = { it.scaleX = x; it.scaleY = y },
-    child = child
-)
-
-fun MatchParent(key: Any? = null, child: BuildContext.() -> Unit) =
-    Size(size = ViewGroup.LayoutParams.MATCH_PARENT, key = key, child = child)
-
-fun WrapContent(key: Any? = null, child: BuildContext.() -> Unit) =
-    Size(size = ViewGroup.LayoutParams.WRAP_CONTENT, key = key, child = child)
-
-fun Size(size: Int, key: Any? = null, child: BuildContext.() -> Unit) =
-    Size(width = size, height = size, key = key, child = child)
-
-fun Size(
-    width: Int,
-    height: Int,
-    key: Any? = null,
-    child: BuildContext.() -> Unit
-) = ViewPropsWidget(
-    key = key,
-    props = listOf(
-        View::setLayoutParams,
-        ViewGroup.LayoutParams::width,
-        ViewGroup.LayoutParams::height
-    ),
-    applyViewProps = {
-        it.updateLayoutParams {
-            this.width = width
-            this.height = height
-        }
-    },
     child = child
 )
 
