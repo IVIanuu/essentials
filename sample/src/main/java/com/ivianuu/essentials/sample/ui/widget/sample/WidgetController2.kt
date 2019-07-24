@@ -37,6 +37,7 @@ import com.ivianuu.essentials.sample.ui.widget.view.Padding
 import com.ivianuu.essentials.sample.ui.widget.view.ProgressBar
 import com.ivianuu.essentials.sample.ui.widget.view.Ripple
 import com.ivianuu.essentials.sample.ui.widget.view.Size
+import com.ivianuu.essentials.sample.ui.widget.view.TextView
 import com.ivianuu.essentials.sample.ui.widget.view.WrapContent
 import com.ivianuu.essentials.util.dp
 import kotlinx.coroutines.GlobalScope
@@ -60,7 +61,7 @@ class WidgetController2 : WidgetController() {
                 val (loading, setLoading) = +state { true }
 
                 +launchOnActive {
-                    delay(2000)
+                    delay(1000)
                     setLoading(false)
                 }
 
@@ -95,9 +96,9 @@ class WidgetController2 : WidgetController() {
         val (checked, setChecked) = +state { false }
 
         +ListItem(
-            title = "Title $i",
-            text = "Text $i",
-            primaryAction = {
+            title = { +TextView(text = "Title $i") },
+            subtitle = { +TextView(text = "Text $i") },
+            leading = {
                 +Margin(
                     left = dp(16).toInt(),
                     right = -dp(16).toInt() // yep
@@ -110,7 +111,7 @@ class WidgetController2 : WidgetController() {
                     }
                 }
             },
-            secondaryAction = {
+            trailing = {
                 +Margin(right = dp(8).toInt()) {
                     +MenuButton()
                 }

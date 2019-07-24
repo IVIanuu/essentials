@@ -38,8 +38,6 @@ abstract class Element(widget: Widget) : BuildContext {
         protected set
     var slot: Int? = null
         protected set
-    var depth: Int? = null
-        protected set
 
     var isDirty = true
         protected set
@@ -61,7 +59,7 @@ abstract class Element(widget: Widget) : BuildContext {
     }
 
     override fun <T> getAmbient(key: Ambient<T>): T? {
-        var ancestor = parent
+        var ancestor: Element? = this
         while (ancestor != null) {
             if (ancestor.widget::class == Ambient.Provider::class && ancestor.widget.key == key.key) {
                 if (ancestor.dependents == null) ancestor.dependents = mutableListOf()
@@ -71,6 +69,7 @@ abstract class Element(widget: Widget) : BuildContext {
                 dependencies!!.add(ancestor)
 
                 val provider = ancestor.widget as Ambient<T>.Provider
+
                 return provider.value
             }
             ancestor = ancestor.parent
@@ -120,7 +119,6 @@ abstract class Element(widget: Widget) : BuildContext {
         this.parent = parent
         this.owner = parent?.owner
         this.slot = slot
-        this.depth = (parent?.depth ?: 0) + 1
     }
 
     open fun unmount() {

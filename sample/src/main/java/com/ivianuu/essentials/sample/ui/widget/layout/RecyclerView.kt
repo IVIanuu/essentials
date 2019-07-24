@@ -128,19 +128,18 @@ private data class WidgetEpoxyModel(
     override fun bind(holder: EsHolder) {
         super.bind(holder)
 
-        val viewsByPosition = holder.root.tag<Map<Position, View>>()
+        val viewsByPosition = holder.root.tag<Map<Int, View>>()
 
-        d { "bind ${element.widget} is mounted ? ${element.parent != null}" }
-
+        var pos = 0
         element.onEachRecursive {
             d { "child of ${element.widget} -> $it" }
             if (it is ViewElement<*>) {
-                val pos = Position(it.depth!!, it.slot)
                 val view = viewsByPosition[pos]
-                d { "child of ${element.widget} view at pos $pos-> $view" }
                 (it as ViewElement<View>).view = view
                 it.updateView()
             }
+
+            pos++
         }
     }
 
@@ -161,20 +160,20 @@ private data class WidgetEpoxyModel(
             (childElement as ViewElement<*>).view!!
         }
 
-        val viewsByPosition = mutableMapOf<Position, View>()
+        val viewsByPosition = mutableMapOf<Int, View>()
+
+        var pos = 0
         element.onEachRecursive {
             if (it is ViewElement<*>) {
-                val pos = Position(it.depth!!, it.slot)
                 viewsByPosition[pos] = it.view!!
             }
+
+            pos++
         }
 
         view.tag = viewsByPosition
 
-        d { "views by position $viewsByPosition" }
-
         return view
     }
 
-    private data class Position(val depth: Int, val slot: Int?)
 }

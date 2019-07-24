@@ -33,22 +33,24 @@ import com.ivianuu.kommon.core.content.dp
 fun SimpleTextToolbar(title: String) = StatelessWidget("toolbar") {
     val androidContext = +AndroidContextAmbient
 
-    +Size(
-        width = MATCH_PARENT,
-        height = androidContext.dp(56).toInt()
-    ) {
-        +Background(
-            color = androidContext.colorAttr(R.attr.colorPrimary)
+    +Elevation(androidContext.dp(4)) {
+        +Size(
+            width = MATCH_PARENT,
+            height = androidContext.dp(56).toInt()
         ) {
-            +Elevation(elevation = androidContext.dp(4)) {
-                +FrameLayout {
-                    +Gravity(gravity = android.view.Gravity.CENTER) {
-                        +WrapContent {
-                            +TextView(
-                                text = title,
-                                textAppearance = R.style.TextAppearance_MaterialComponents_Headline6,
-                                textColor = androidContext.colorAttr(R.attr.colorOnPrimary)
-                            )
+            +Background(
+                color = androidContext.colorAttr(R.attr.colorPrimary)
+            ) {
+                +Elevation(elevation = androidContext.dp(4)) {
+                    +FrameLayout {
+                        +Gravity(gravity = android.view.Gravity.CENTER) {
+                            +WrapContent {
+                                +TextView(
+                                    text = title,
+                                    textAppearance = R.style.TextAppearance_MaterialComponents_Headline6,
+                                    textColor = androidContext.colorAttr(R.attr.colorOnPrimary)
+                                )
+                            }
                         }
                     }
                 }

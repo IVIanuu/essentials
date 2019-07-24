@@ -17,72 +17,73 @@
 package com.ivianuu.essentials.sample.ui.widget.sample
 
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.sample.ui.widget.layout.IdViewGroupWidget
 import com.ivianuu.essentials.sample.ui.widget.layout.InflateViewGroupWidget
 import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
+import com.ivianuu.essentials.sample.ui.widget.lib.Widget
+import com.ivianuu.essentials.sample.ui.widget.view.TextStyleAmbient
 import com.ivianuu.essentials.util.andTrue
 
 fun ListItem(
-    title: String? = null,
-    titleRes: Int? = null,
+    title: (BuildContext.() -> Unit)? = null,
+    subtitle: (BuildContext.() -> Unit)? = null,
 
-    text: String? = null,
-    textRes: Int? = null,
-
-    primaryAction: (BuildContext.() -> Unit)? = null,
-    secondaryAction: (BuildContext.() -> Unit)? = null,
+    leading: (BuildContext.() -> Unit)? = null,
+    trailing: (BuildContext.() -> Unit)? = null,
 
     onClick: (() -> Unit)? = null,
     onLongClick: (() -> Unit)? = null,
 
     key: Any? = null
-) = InflateViewGroupWidget<ConstraintLayout>(
-    layoutRes = R.layout.es_list_item,
-    key = key,
-    updateView = { view ->
-        val titleView = view.findViewById<TextView>(R.id.es_list_title)
-        when {
-            title != null -> titleView.text = title
-            titleRes != null -> titleView.setText(titleRes)
-            else -> titleView.text = null
-        }
+): Widget {
+    return InflateViewGroupWidget<ConstraintLayout>(
+        layoutRes = R.layout.list_item,
+        key = key,
+        updateView = { view ->
+            if (onClick != null) {
+                view.setOnClickListener { onClick!!() }
+            } else {
+                view.setOnClickListener(null)
+            }
 
-        val textView = view.findViewById<TextView>(R.id.es_list_text)
-        when {
-            text != null -> textView.text = text
-            textRes != null -> textView.setText(textRes)
-            else -> textView.text = null
-        }
+            if (onLongClick != null) {
+                view.setOnLongClickListener { onLongClick!!().andTrue() }
+            } else {
+                view.setOnLongClickListener(null)
+            }
 
-        if (onClick != null) {
-            view.setOnClickListener { onClick!!() }
-        } else {
-            view.setOnClickListener(null)
-        }
+            view.isEnabled = onClick != null || onLongClick != null
+        },
+        children = {
+            if (leading != null) {
+                +IdViewGroupWidget<ViewGroup>(
+                    R.id.leading_container,
+                    children = leading
+                )
+            }
+            if (title != null || subtitle != null) {
+                +IdViewGroupWidget<ViewGroup>(R.id.text_container) {
+                    if (title != null) {
+                        +TextStyleAmbient.Provider(R.style.TextAppearance_MaterialComponents_Subtitle1) {
+                            title()
+                        }
+                    }
+                    if (subtitle != null) {
+                        +TextStyleAmbient.Provider(R.style.TextAppearance_MaterialComponents_Body2) {
+                            subtitle()
+                        }
+                    }
+                }
 
-        if (onLongClick != null) {
-            view.setOnLongClickListener { onLongClick!!().andTrue() }
-        } else {
-            view.setOnLongClickListener(null)
+            }
+            if (trailing != null) {
+                +IdViewGroupWidget<ViewGroup>(
+                    R.id.trailing_container,
+                    children = trailing
+                )
+            }
         }
-
-        view.isEnabled = onClick != null || onLongClick != null
-    },
-    children = {
-        if (primaryAction != null) {
-            +IdViewGroupWidget<ViewGroup>(
-                R.id.es_list_primary_action_container,
-                children = primaryAction
-            )
-        }
-        if (secondaryAction != null) {
-            +IdViewGroupWidget<ViewGroup>(
-                R.id.es_list_secondary_action_container,
-                children = secondaryAction
-            )
-        }
-    }
-)
+    )
+}

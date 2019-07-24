@@ -18,13 +18,21 @@ package com.ivianuu.essentials.sample.ui.widget.lib
 
 import android.content.Context
 
-inline fun <reified T> ambientOf(): Ambient<T> = ambientOf(T::class)
+inline fun <reified T> ambientOf(noinline defaultValue: (() -> T)? = null): Ambient<T> =
+    ambientOf(T::class, defaultValue)
 
-fun <T> ambientOf(key: Any): Ambient<T> = Ambient(key)
+fun <T> ambientOf(key: Any, defaultValue: (() -> T)? = null): Ambient<T> =
+    Ambient(key, defaultValue)
 
-class Ambient<T> @PublishedApi internal constructor(val key: Any) {
+class Ambient<T> @PublishedApi internal constructor(
+    val key: Any,
+    private val defaultValue: (() -> T)? = null
+) {
 
-    operator fun invoke(context: BuildContext): T = context.getAmbient(this)!!
+    operator fun invoke(context: BuildContext): T {
+        return context.getAmbient(this)
+            ?: defaultValue?.invoke() as T
+    }
 
     inner class Provider(
         val value: T,
