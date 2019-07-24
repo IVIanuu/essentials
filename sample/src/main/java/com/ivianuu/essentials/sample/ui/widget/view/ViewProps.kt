@@ -65,6 +65,21 @@ fun Focusable(focusable: Boolean, key: Any? = null, child: BuildContext.() -> Un
 fun Id(id: Int, key: Any? = null, child: BuildContext.() -> Unit) =
     ViewPropsWidget(value = id, prop = View::setId, key = key, child = child)
 
+fun MinSize(
+    minWidth: Int = 0,
+    minHeight: Int = 0,
+    key: Any? = null,
+    child: BuildContext.() -> Unit
+) = ViewPropsWidget(
+    key = key,
+    props = listOf(View::setMinimumWidth, View::setMinimumHeight),
+    updateViewProps = {
+        it.minimumWidth = minWidth
+        it.minimumHeight = minHeight
+    },
+    child = child
+)
+
 fun Padding(padding: Int, key: Any? = null, child: BuildContext.() -> Unit) =
     Padding(padding, padding, padding, padding, key, child)
 
@@ -118,7 +133,11 @@ fun Translation(
 ) = ViewPropsWidget(
     key = key,
     props = listOf(View::setTranslationX, View::setTranslationY, View::setTranslationZ),
-    updateViewProps = { it.translationX = x; it.translationY = y; it.translationZ = z },
+    updateViewProps = {
+        it.translationX = x;
+        it.translationY = y;
+        it.translationZ = z
+    },
     child = child
 )
 
