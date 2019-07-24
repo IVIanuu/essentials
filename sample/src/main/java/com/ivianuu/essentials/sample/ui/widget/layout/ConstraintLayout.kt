@@ -16,8 +16,14 @@
 
 package com.ivianuu.essentials.sample.ui.widget.layout
 
+import android.content.Context
+import android.view.View
+import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
+import com.github.ajalt.timberkt.d
+import com.ivianuu.essentials.sample.ui.widget.layout.ConstraintSetBuilder.Connection.BasicConnection
+import com.ivianuu.essentials.sample.ui.widget.layout.ConstraintSetBuilder.Side
 import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget.lib.StatelessWidget
 import com.ivianuu.essentials.sample.ui.widget.lib.ViewGroupWidget
@@ -25,48 +31,205 @@ import com.ivianuu.essentials.sample.ui.widget.lib.Widget
 
 val PARENT_ID = ConstraintLayout.LayoutParams.PARENT_ID
 
+class CustomConstraintLayout(context: Context) : ConstraintLayout(context) {
+
+    override fun addView(child: View?, index: Int, params: ViewGroup.LayoutParams?) {
+        super.addView(child, index, params)
+        d { "add view $child $index $params" }
+    }
+
+    override fun setConstraintSet(set: ConstraintSet?) {
+        super.setConstraintSet(set)
+        d { "set constraint set $set" }
+    }
+
+}
+
 fun ConstraintLayout(children: ConstraintLayoutChildren.() -> Unit): Widget =
     StatelessWidget("ConstraintLayout") {
-        val constraintSet = ConstraintSet()
-        +ViewGroupWidget<ConstraintLayout>(
-            updateView = { constraintSet.applyTo(it) },
+        val constraintSetBuilder = ConstraintSetBuilder()
+        +ViewGroupWidget<CustomConstraintLayout>(
+            updateView = {
+                constraintSetBuilder.applyTo(it)
+            },
             children = {
-                ConstraintLayoutChildren(this, constraintSet)
+                ConstraintLayoutChildren(this, constraintSetBuilder)
                     .apply(children)
             }
         )
 
     }
 
+class ViewConstraintBuilder(
+    private val viewId: Int,
+    private val constraintSetBuilder: ConstraintSetBuilder
+) {
+
+    infix fun Side.to(targetSide: Side) = Pair(this, targetSide)
+
+    infix fun Pair<Side, Side>.of(targetViewId: Int): BasicConnection =
+        constraintSetBuilder.run { (first of viewId) to (second of targetViewId) }
+
+    fun clear() {
+        constraintSetBuilder.clear(viewId)
+    }
+
+    fun clear(sideId: Int) {
+        constraintSetBuilder.clear(viewId, sideId)
+    }
+
+    fun setMargin(sideId: Int, value: Int) {
+        constraintSetBuilder.setMargin(viewId, sideId, value)
+    }
+
+    fun setGoneMargin(sideId: Int, value: Int) {
+        constraintSetBuilder.setGoneMargin(viewId, sideId, value)
+    }
+
+    fun horizontalBias(value: Float) {
+        constraintSetBuilder.setHorizontalBias(viewId, value)
+    }
+
+    fun verticalBias(value: Float) {
+        constraintSetBuilder.setVerticalBias(viewId, value)
+    }
+
+    fun horizontalWeight(value: Float) {
+        constraintSetBuilder.setHorizontalWeight(viewId, value)
+    }
+
+    fun verticalWeight(value: Float) {
+        constraintSetBuilder.setVerticalWeight(viewId, value)
+    }
+
+    fun horizontalChainStyle(value: Int) {
+        constraintSetBuilder.setHorizontalChainStyle(viewId, value)
+    }
+
+    fun verticalChainStyle(value: Int) {
+        constraintSetBuilder.setVerticalChainStyle(viewId, value)
+    }
+
+    fun height(value: Int) {
+        constraintSetBuilder.constrainHeight(viewId, value)
+    }
+
+    fun width(value: Int) {
+        constraintSetBuilder.constrainWidth(viewId, value)
+    }
+
+    fun minWidth(value: Int) {
+        constraintSetBuilder.constrainMinWidth(viewId, value)
+    }
+
+    fun minHeight(value: Int) {
+        constraintSetBuilder.constrainMinHeight(viewId, value)
+    }
+
+    fun maxWidth(value: Int) {
+        constraintSetBuilder.constrainMaxWidth(viewId, value)
+    }
+
+    fun maxHeight(value: Int) {
+        constraintSetBuilder.constrainMaxHeight(viewId, value)
+    }
+
+    fun defaultWidth(value: Int) {
+        constraintSetBuilder.constrainDefaultWidth(viewId, value)
+    }
+
+    fun defaultHeight(value: Int) {
+        constraintSetBuilder.constrainDefaultHeight(viewId, value)
+    }
+
+}
+
+class ConstraintSetBuilder : ConstraintSet() {
+
+    operator fun Int.invoke(init: ViewConstraintBuilder.() -> Unit) {
+        ViewConstraintBuilder(this, this@ConstraintSetBuilder).apply(init)
+    }
+
+    infix fun Side.of(viewId: Int) = when (this) {
+        Side.LEFT -> ViewSide.Left(viewId)
+        Side.RIGHT -> ViewSide.Right(viewId)
+        Side.TOP -> ViewSide.Top(viewId)
+        Side.BOTTOM -> ViewSide.Bottom(viewId)
+        Side.BASELINE -> ViewSide.Baseline(viewId)
+        Side.START -> ViewSide.Start(viewId)
+        Side.END -> ViewSide.End(viewId)
+    }
+
+    infix fun Pair<ViewSide, Side>.of(viewId: Int) = first to (second of viewId)
+
+    infix fun ViewSide.to(targetSide: ViewSide) = BasicConnection(this, targetSide)
+
+    infix fun BasicConnection.margin(margin: Int) = Connection.MarginConnection(from, to, margin)
+
+    fun connect(vararg connections: Connection) {
+        for (connection in connections) {
+            when (connection) {
+                is Connection.MarginConnection -> connect(
+                    connection.from.viewId,
+                    connection.from.sideId,
+                    connection.to.viewId,
+                    connection.to.sideId,
+                    connection.margin
+                )
+                is BasicConnection -> connect(
+                    connection.from.viewId,
+                    connection.from.sideId,
+                    connection.to.viewId,
+                    connection.to.sideId
+                )
+            }
+        }
+    }
+
+    enum class Side {
+        LEFT,
+        RIGHT,
+        TOP,
+        BOTTOM,
+        BASELINE,
+        START,
+        END,
+    }
+
+    sealed class ViewSide(val viewId: Int) {
+        class Left(viewId: Int) : ViewSide(viewId)
+        class Right(viewId: Int) : ViewSide(viewId)
+        class Top(viewId: Int) : ViewSide(viewId)
+        class Bottom(viewId: Int) : ViewSide(viewId)
+        class Baseline(viewId: Int) : ViewSide(viewId)
+        class Start(viewId: Int) : ViewSide(viewId)
+        class End(viewId: Int) : ViewSide(viewId)
+
+        val sideId: Int
+            get() = when (this) {
+                is Left -> LEFT
+                is Right -> RIGHT
+                is Top -> TOP
+                is Bottom -> BOTTOM
+                is Baseline -> BASELINE
+                is Start -> START
+                is End -> END
+            }
+    }
+
+    sealed class Connection(val from: ViewSide, val to: ViewSide) {
+        class BasicConnection(from: ViewSide, to: ViewSide) : Connection(from, to)
+        class MarginConnection(from: ViewSide, to: ViewSide, val margin: Int) : Connection(from, to)
+    }
+}
+
 class ConstraintLayoutChildren(
     private val context: BuildContext,
-    private val constraintSet: ConstraintSet
+    private val constraintSetBuilder: ConstraintSetBuilder
 ) : BuildContext by context {
 
-    fun constraints(block: Constraints.() -> Unit) {
-        Constraints(constraintSet).apply(block)
+    fun constraints(block: ConstraintSetBuilder.() -> Unit) {
+        constraintSetBuilder.apply(block)
     }
 
-    class Constraints(val constraintSet: ConstraintSet) {
-
-        operator fun Int.invoke(block: ChildConstraints.() -> Unit) {
-            ChildConstraints(this, constraintSet).apply(block)
-        }
-
-        class ChildConstraints(
-            val id: Int,
-            val constraintSet: ConstraintSet
-        ) {
-
-            fun horizontalBias(horizontalBias: Float) {
-                constraintSet.setHorizontalBias(id, horizontalBias)
-            }
-
-            fun verticalBias(verticalBias: Float) {
-                constraintSet.setVerticalBias(id, verticalBias)
-            }
-
-        }
-
-    }
 }

@@ -19,7 +19,7 @@ package com.ivianuu.essentials.sample.ui.widget.view
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import androidx.appcompat.widget.AppCompatImageView
-import com.ivianuu.essentials.sample.ui.widget.lib.AndroidContextAmbient
+import com.ivianuu.essentials.sample.ui.widget.lib.ContextAmbient
 import com.ivianuu.essentials.sample.ui.widget.lib.StatelessWidget
 import com.ivianuu.essentials.sample.ui.widget.lib.ViewWidget
 import com.ivianuu.kommon.core.content.dp
@@ -29,7 +29,7 @@ fun Icon(
     iconBitmap: Bitmap? = null,
     iconRes: Int? = null
 ) = StatelessWidget("Icon") {
-    val size = (+AndroidContextAmbient).dp(40).toInt()
+    val size = (+ContextAmbient).dp(40).toInt()
     +SizedImageView(
         size = size,
         imageDrawable = iconDrawable,
@@ -43,7 +43,7 @@ fun Avatar(
     avatarBitmap: Bitmap? = null,
     avatarRes: Int? = null
 ) = StatelessWidget("Avatar") {
-    val size = (+AndroidContextAmbient).dp(40).toInt()
+    val size = (+ContextAmbient).dp(40).toInt()
     +SizedImageView(
         size = size,
         imageDrawable = avatarDrawable,

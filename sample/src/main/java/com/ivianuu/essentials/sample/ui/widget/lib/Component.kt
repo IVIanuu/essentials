@@ -74,7 +74,7 @@ abstract class ComponentElement(widget: Widget) : Element(widget) {
         d { "${widget.key} rebuild result is ${pendingChild!!.key}" }
         pendingChild = null
         isDirty = false
-        child = updateChild(child, built, null) // todo slot or null?
+        child = updateChild(child, built, slot) // todo slot or null?
     }
 
     override fun onEachChild(block: (Element) -> Unit) {

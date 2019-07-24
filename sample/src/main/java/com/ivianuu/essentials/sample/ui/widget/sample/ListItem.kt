@@ -16,20 +16,32 @@
 
 package com.ivianuu.essentials.sample.ui.widget.sample
 
-import android.view.ViewGroup
-import androidx.constraintlayout.widget.ConstraintLayout
+import android.view.View
+import android.view.ViewGroup.LayoutParams.MATCH_PARENT
+import androidx.constraintlayout.widget.ConstraintSet
 import com.ivianuu.essentials.sample.R
-import com.ivianuu.essentials.sample.ui.widget.layout.IdViewGroupWidget
-import com.ivianuu.essentials.sample.ui.widget.layout.InflateViewGroupWidget
+import com.ivianuu.essentials.sample.ui.widget.layout.ConstraintLayout
+import com.ivianuu.essentials.sample.ui.widget.layout.ConstraintSetBuilder.Side.BOTTOM
+import com.ivianuu.essentials.sample.ui.widget.layout.ConstraintSetBuilder.Side.LEFT
+import com.ivianuu.essentials.sample.ui.widget.layout.ConstraintSetBuilder.Side.RIGHT
+import com.ivianuu.essentials.sample.ui.widget.layout.ConstraintSetBuilder.Side.TOP
+import com.ivianuu.essentials.sample.ui.widget.layout.PARENT_ID
+import com.ivianuu.essentials.sample.ui.widget.layout.ViewConstraintBuilder
 import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
+import com.ivianuu.essentials.sample.ui.widget.lib.ContextAmbient
 import com.ivianuu.essentials.sample.ui.widget.lib.StatelessWidget
-import com.ivianuu.essentials.sample.ui.widget.lib.Widget
+import com.ivianuu.essentials.sample.ui.widget.lib.memo
 import com.ivianuu.essentials.sample.ui.widget.view.Clickable
+import com.ivianuu.essentials.sample.ui.widget.view.Id
 import com.ivianuu.essentials.sample.ui.widget.view.LongClickable
+import com.ivianuu.essentials.sample.ui.widget.view.Ripple
+import com.ivianuu.essentials.sample.ui.widget.view.Size
 import com.ivianuu.essentials.sample.ui.widget.view.TextStyleAmbient
-import com.ivianuu.essentials.util.andTrue
+import com.ivianuu.kommon.core.content.dp
 
-fun ListItemConstraint(
+fun viewId() = memo { View.generateViewId() }
+
+fun ListItem(
     title: (BuildContext.() -> Unit)? = null,
     subtitle: (BuildContext.() -> Unit)? = null,
 
@@ -41,66 +53,122 @@ fun ListItemConstraint(
 ) = StatelessWidget("ListItem") {
     +Clickable(onClick = onClick ?: {}) {
         +LongClickable(onLongClick = onLongClick ?: {}) {
-
+            +Ripple {
+                val context = +ContextAmbient
+                +Size(MATCH_PARENT, context.dp(72).toInt()) {
+                    +ListItemContent(
+                        title = title,
+                        subtitle = subtitle,
+                        leading = leading,
+                        trailing = trailing
+                    )
+                }
+            }
         }
     }
 }
 
-fun ListItem(
+private fun ListItemContent(
     title: (BuildContext.() -> Unit)? = null,
     subtitle: (BuildContext.() -> Unit)? = null,
 
     leading: (BuildContext.() -> Unit)? = null,
-    trailing: (BuildContext.() -> Unit)? = null,
+    trailing: (BuildContext.() -> Unit)? = null
+) = ConstraintLayout {
+    val leadingId = +viewId()
+    val trailingId = +viewId()
+    val titleId = +viewId()
+    val subtitleId = +viewId()
 
-    onClick: (() -> Unit)? = null,
-    onLongClick: (() -> Unit)? = null
-): Widget {
-    return InflateViewGroupWidget<ConstraintLayout>(
-        layoutRes = R.layout.list_item,
-        updateView = { view ->
-            if (onClick != null) {
-                view.setOnClickListener { onClick!!() }
-            } else {
-                view.setOnClickListener(null)
-            }
+    if (leading != null) {
+        +Id(id = leadingId, child = leading)
+    }
 
-            if (onLongClick != null) {
-                view.setOnLongClickListener { onLongClick!!().andTrue() }
-            } else {
-                view.setOnLongClickListener(null)
-            }
+    if (title != null) {
+        +TextStyleAmbient.Provider(R.style.TextAppearance_MaterialComponents_Subtitle1) {
+            +Id(id = titleId, child = title)
+        }
+    }
 
-            view.isEnabled = onClick != null || onLongClick != null
-        },
-        children = {
-            if (leading != null) {
-                +IdViewGroupWidget<ViewGroup>(
-                    R.id.leading_container,
-                    children = leading
-                )
-            }
-            if (title != null || subtitle != null) {
-                +IdViewGroupWidget<ViewGroup>(R.id.text_container) {
-                    if (title != null) {
-                        +TextStyleAmbient.Provider(R.style.TextAppearance_MaterialComponents_Subtitle1) {
-                            title()
-                        }
-                    }
-                    if (subtitle != null) {
-                        +TextStyleAmbient.Provider(R.style.TextAppearance_MaterialComponents_Body2) {
-                            subtitle()
-                        }
-                    }
-                }
+    if (subtitle != null) {
+        +TextStyleAmbient.Provider(R.style.TextAppearance_MaterialComponents_Body2) {
+            +Id(id = subtitleId, child = subtitle)
+        }
+    }
 
-            }
-            if (trailing != null) {
-                +IdViewGroupWidget<ViewGroup>(
-                    R.id.trailing_container,
-                    children = trailing
+    if (trailing != null) {
+        +Id(id = trailingId, child = trailing)
+    }
+
+    constraints {
+        // layout leading
+        if (leading != null) {
+            leadingId {
+                connect(
+                    LEFT to LEFT of PARENT_ID,
+                    TOP to TOP of PARENT_ID,
+                    BOTTOM to BOTTOM of PARENT_ID
                 )
             }
         }
-    )
+
+        if (trailing != null) {
+            trailingId {
+                connect(
+                    RIGHT to RIGHT of PARENT_ID,
+                    TOP to TOP of PARENT_ID,
+                    BOTTOM to BOTTOM of PARENT_ID
+                )
+            }
+        }
+
+        fun ViewConstraintBuilder.connectTextToSides() {
+            if (leading != null) {
+                connect(LEFT to RIGHT of leadingId)
+            } else {
+                connect(LEFT to LEFT of PARENT_ID)
+            }
+            if (trailing != null) {
+                connect(RIGHT to LEFT of trailingId)
+            } else {
+                connect(RIGHT to RIGHT of PARENT_ID)
+            }
+        }
+
+        if (title != null) {
+            titleId {
+                connectTextToSides()
+                connect(TOP to TOP of PARENT_ID)
+                if (subtitle != null) {
+                    connect(BOTTOM to TOP of subtitleId)
+                } else {
+                    connect(BOTTOM to BOTTOM of PARENT_ID)
+                }
+            }
+        }
+
+        if (subtitle != null) {
+            subtitleId {
+                connectTextToSides()
+                connect(BOTTOM to BOTTOM of PARENT_ID)
+                if (title != null) {
+                    connect(TOP to BOTTOM of titleId)
+                } else {
+                    connect(TOP to TOP of PARENT_ID)
+                }
+            }
+        }
+
+        if (title != null && subtitle != null) {
+            createVerticalChain(
+                PARENT_ID,
+                ConstraintSet.TOP,
+                PARENT_ID,
+                ConstraintSet.BOTTOM,
+                intArrayOf(titleId, subtitleId),
+                null,
+                ConstraintSet.CHAIN_PACKED
+            )
+        }
+    }
 }

@@ -96,7 +96,7 @@ class AndroidBuildOwner(
 
     private fun mountRoot() {
         val widget = RootWidget(this) {
-            +AndroidContextAmbient.Provider(context) {
+            +ContextAmbient.Provider(context) {
                 child()
             }
         }

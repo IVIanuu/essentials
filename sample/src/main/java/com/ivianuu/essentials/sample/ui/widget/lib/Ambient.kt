@@ -51,4 +51,4 @@ class Ambient<T> @PublishedApi internal constructor(
     }
 }
 
-val AndroidContextAmbient = ambientOf<Context>()
+val ContextAmbient = ambientOf<Context>()

@@ -26,12 +26,10 @@ import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget.lib.StatelessWidget
 import com.ivianuu.essentials.sample.ui.widget.lib.onActive
 import com.ivianuu.essentials.sample.ui.widget.lib.state
-import com.ivianuu.essentials.sample.ui.widget.material.CheckBox
+import com.ivianuu.essentials.sample.ui.widget.material.Switch
 import com.ivianuu.essentials.sample.ui.widget.view.Clickable
-import com.ivianuu.essentials.sample.ui.widget.view.DisableTouch
 import com.ivianuu.essentials.sample.ui.widget.view.Gravity
 import com.ivianuu.essentials.sample.ui.widget.view.ImageView
-import com.ivianuu.essentials.sample.ui.widget.view.Margin
 import com.ivianuu.essentials.sample.ui.widget.view.MatchParent
 import com.ivianuu.essentials.sample.ui.widget.view.Padding
 import com.ivianuu.essentials.sample.ui.widget.view.ProgressBar
@@ -86,7 +84,6 @@ class WidgetController2 : WidgetController() {
 
     private fun Content() = MatchParent {
         +RecyclerView {
-            +ConstraintTest()
             (1..100).forEach {
                 +ListItem(it)
             }
@@ -100,22 +97,13 @@ class WidgetController2 : WidgetController() {
             title = { +TextView(text = "Title $i") },
             subtitle = { +TextView(text = "Text $i") },
             leading = {
-                +Margin(
-                    left = dp(16).toInt(),
-                    right = -dp(16).toInt() // yep
-                ) {
-                    +DisableTouch {
-                        +CheckBox(
-                            value = checked,
-                            onChange = {}
-                        )
-                    }
-                }
+                +Switch(
+                    value = checked,
+                    onChange = {}
+                )
             },
             trailing = {
-                +Margin(right = dp(8).toInt()) {
-                    +MenuButton()
-                }
+                +MenuButton()
             },
             onClick = { setChecked(!checked) }
         )

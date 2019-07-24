@@ -19,7 +19,7 @@ package com.ivianuu.essentials.sample.ui.widget.sample
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.sample.ui.widget.layout.FrameLayout
-import com.ivianuu.essentials.sample.ui.widget.lib.AndroidContextAmbient
+import com.ivianuu.essentials.sample.ui.widget.lib.ContextAmbient
 import com.ivianuu.essentials.sample.ui.widget.lib.StatelessWidget
 import com.ivianuu.essentials.sample.ui.widget.view.Background
 import com.ivianuu.essentials.sample.ui.widget.view.Elevation
@@ -31,24 +31,24 @@ import com.ivianuu.kommon.core.content.colorAttr
 import com.ivianuu.kommon.core.content.dp
 
 fun SimpleTextToolbar(title: String) = StatelessWidget("toolbar") {
-    val androidContext = +AndroidContextAmbient
+    val context = +ContextAmbient
 
-    +Elevation(androidContext.dp(4)) {
+    +Elevation(context.dp(4)) {
         +Size(
             width = MATCH_PARENT,
-            height = androidContext.dp(56).toInt()
+            height = context.dp(56).toInt()
         ) {
             +Background(
-                color = androidContext.colorAttr(R.attr.colorPrimary)
+                color = context.colorAttr(R.attr.colorPrimary)
             ) {
-                +Elevation(elevation = androidContext.dp(4)) {
+                +Elevation(elevation = context.dp(4)) {
                     +FrameLayout {
                         +Gravity(gravity = android.view.Gravity.CENTER) {
                             +WrapContent {
                                 +TextView(
                                     text = title,
                                     textAppearance = R.style.TextAppearance_MaterialComponents_Headline6,
-                                    textColor = androidContext.colorAttr(R.attr.colorOnPrimary)
+                                    textColor = context.colorAttr(R.attr.colorOnPrimary)
                                 )
                             }
                         }
