@@ -38,7 +38,7 @@ fun <V : ViewGroup> ViewGroupWidget(
     key = key,
     createView = {
         type.java.getDeclaredConstructor(Context::class.java)
-            .newInstance((+AndroidContextAmbient))
+            .newInstance((it.context))
     },
     updateView = updateView,
     children = children
@@ -64,10 +64,10 @@ fun <V : ViewGroup> ViewGroupWidget(
     updateView: UpdateView<V>? = null,
     children: BuildContext.() -> Unit
 ): Widget = object : ViewGroupWidget<V>(key = joinKey(viewType, key), children = children) {
-    override fun createView(context: BuildContext): V = createView.invoke(context)
-    override fun updateView(context: BuildContext, view: V) {
-        super.updateView(context, view)
-        updateView?.invoke(context, view)
+    override fun createView(container: ViewGroup): V = createView.invoke(container)
+    override fun updateView(view: V) {
+        super.updateView(view)
+        updateView?.invoke(view)
     }
 }
 
@@ -102,9 +102,7 @@ open class ViewGroupElement<V : ViewGroup>(
     }
 
     override fun add(child: Widget) {
-        pendingWidgets.add(
-            ContainerAmbient.Provider(requireView()) { +child }
-        )
+        pendingWidgets.add(child)
     }
 
     override fun insertChildView(view: View, slot: Int?) {

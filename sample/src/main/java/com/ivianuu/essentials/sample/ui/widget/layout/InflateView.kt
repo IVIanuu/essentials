@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.sample.ui.widget.layout
 
 import android.view.ViewGroup
-import com.ivianuu.essentials.sample.ui.widget.lib.ContainerAmbient
 import com.ivianuu.essentials.sample.ui.widget.lib.UpdateView
 import com.ivianuu.essentials.sample.ui.widget.lib.ViewWidget
 import com.ivianuu.essentials.sample.ui.widget.lib.Widget
@@ -43,9 +42,6 @@ fun <V : ViewGroup> InflateViewWidget(
 ): Widget = ViewWidget(
     viewType = viewType,
     key = key,
-    createView = {
-        val container = +ContainerAmbient
-        container.inflate<V>(layoutRes)
-    },
+    createView = { it.inflate<V>(layoutRes) },
     updateView = updateView
 )

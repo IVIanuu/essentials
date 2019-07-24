@@ -30,7 +30,7 @@ class RootWidget(
     override fun createElement() =
         RootElement(owner, rootView, this)
 
-    override fun createView(context: BuildContext): FrameLayout =
+    override fun createView(container: ViewGroup): FrameLayout =
         FrameLayout(rootView.context)
 }
 
@@ -41,6 +41,7 @@ class RootElement(
 ) : ViewElement<FrameLayout>(widget) {
 
     var child: Element? = null
+    private var pendingChild: Widget? = null
 
     override fun mount(
         parent: Element?,
@@ -48,11 +49,16 @@ class RootElement(
     ) {
         super.mount(parent, slot)
         owner = _owner
-        val child = ContainerAmbient.Provider(requireView(), {
-            widget<RootWidget>().child(this)
-        }).createElement()
-        this.child = child
-        child.mount(this, null)
+        widget<RootWidget>().child(this)
+        this.child = pendingChild!!.createElement()
+        pendingChild = null
+        child!!.mount(this, null)
+    }
+
+
+    override fun add(child: Widget) {
+        check(pendingChild == null) { "only one child allowed" }
+        pendingChild = child
     }
 
     override fun insertChildView(view: View, slot: Int?) {
@@ -85,18 +91,17 @@ class RootElement(
     }
 
     override fun performRebuild() {
-        d { "${javaClass.simpleName} perform rebuild $widget" }
-        this.child = updateChild(
-            child, ContainerAmbient.Provider(
-                value = requireView(),
-                child = { widget<RootWidget>().child(this) }
-            ), null
-        )
+        widget<RootWidget>().child(this)
+        d { "${javaClass.simpleName} ${widget.key} perform rebuild widget $widget built $pendingChild" }
+        val built = pendingChild!!
+        pendingChild = null
         isDirty = false
+        child = updateChild(child, built, slot)
     }
 
     override fun onEachChild(block: (Element) -> Unit) {
         child?.let { block(it) }
     }
 
+    override fun findContainerView(): ViewGroup = _rootView
 }

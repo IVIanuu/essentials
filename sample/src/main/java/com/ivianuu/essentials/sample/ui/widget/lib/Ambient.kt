@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.sample.ui.widget.lib
 
 import android.content.Context
-import android.view.ViewGroup
 
 inline fun <reified T> ambientOf(): Ambient<T> = ambientOf(T::class)
 
@@ -34,5 +33,3 @@ class Ambient<T> @PublishedApi internal constructor(val key: Any) {
 }
 
 val AndroidContextAmbient = ambientOf<Context>()
-
-val ContainerAmbient = ambientOf<ViewGroup>()

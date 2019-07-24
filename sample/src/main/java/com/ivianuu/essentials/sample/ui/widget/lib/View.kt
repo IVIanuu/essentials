@@ -22,8 +22,8 @@ import android.view.ViewGroup
 import com.github.ajalt.timberkt.d
 import kotlin.reflect.KClass
 
-typealias CreateView<V> = BuildContext.() -> V
-typealias UpdateView<V> = BuildContext.(V) -> Unit
+typealias CreateView<V> = (ViewGroup) -> V
+typealias UpdateView<V> = (V) -> Unit
 
 inline fun <reified V : View> ViewWidget(
     key: Any? = null,
@@ -39,7 +39,7 @@ fun <V : View> ViewWidget(
     key = key,
     createView = {
         type.java.getDeclaredConstructor(Context::class.java)
-            .newInstance((+AndroidContextAmbient))
+            .newInstance(it.context)
     },
     updateView = updateView
 )
@@ -62,19 +62,19 @@ fun <V : View> ViewWidget(
     createView: CreateView<V>,
     updateView: UpdateView<V>? = null
 ): Widget = object : ViewWidget<V>(joinKey(viewType, key)) {
-    override fun createView(context: BuildContext): V = createView.invoke(context)
-    override fun updateView(context: BuildContext, view: V) {
-        super.updateView(context, view)
-        updateView?.invoke(context, view)
+    override fun createView(container: ViewGroup): V = createView.invoke(container)
+    override fun updateView(view: V) {
+        super.updateView(view)
+        updateView?.invoke(view)
     }
 }
 
 abstract class ViewWidget<V : View>(key: Any? = null) : Widget(key) {
     override fun createElement(): ViewElement<V> = ViewElement(this)
 
-    abstract fun createView(context: BuildContext): V
+    abstract fun createView(container: ViewGroup): V
 
-    open fun updateView(context: BuildContext, view: V) {
+    open fun updateView(view: V) {
     }
 }
 
@@ -102,7 +102,8 @@ open class ViewElement<V : View>(widget: ViewWidget<V>) : Element(widget) {
         slot: Int?
     ) {
         super.mount(parent, slot)
-        view = widget<ViewWidget<V>>().createView(this)
+        // todo manage ancestor better
+        view = widget<ViewWidget<V>>().createView(findContainerView())
         attachView()
     }
 
@@ -125,7 +126,7 @@ open class ViewElement<V : View>(widget: ViewWidget<V>) : Element(widget) {
     override fun update(newWidget: Widget) {
         super.update(newWidget)
         applyViewProps()
-        widget<ViewWidget<V>>().updateView(this, requireView())
+        widget<ViewWidget<V>>().updateView(requireView())
         isDirty = false
     }
 
@@ -141,6 +142,10 @@ open class ViewElement<V : View>(widget: ViewWidget<V>) : Element(widget) {
     override fun unmount() {
         super.unmount()
         view = null
+    }
+
+    protected open fun findContainerView(): ViewGroup {
+        return findAncestorViewElement()!!.view as ViewGroup
     }
 
     private fun findAncestorViewElement(): ViewElement<*>? {
@@ -180,7 +185,7 @@ open class ViewElement<V : View>(widget: ViewWidget<V>) : Element(widget) {
 
     override fun performRebuild() {
         d { "${javaClass.simpleName} perform rebuild $widget" }
-        widget<ViewWidget<V>>().updateView(this, requireView())
+        widget<ViewWidget<V>>().updateView(requireView())
         isDirty = false
     }
 

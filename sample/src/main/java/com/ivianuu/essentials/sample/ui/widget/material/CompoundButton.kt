@@ -20,7 +20,6 @@ import android.widget.CompoundButton
 import android.widget.Switch
 import com.google.android.material.checkbox.MaterialCheckBox
 import com.google.android.material.radiobutton.MaterialRadioButton
-import com.ivianuu.essentials.sample.ui.widget.lib.AndroidContextAmbient
 import com.ivianuu.essentials.sample.ui.widget.lib.CreateView
 import com.ivianuu.essentials.sample.ui.widget.lib.ViewWidget
 import com.ivianuu.essentials.sample.ui.widget.lib.Widget
@@ -34,7 +33,7 @@ fun CheckBox(
 ) = CompoundButton(
     value = value,
     onChange = onChange,
-    createView = { MaterialCheckBox(+AndroidContextAmbient) },
+    createView = { MaterialCheckBox(it.context) },
     viewType = MaterialCheckBox::class,
     key = key
 )
@@ -46,7 +45,7 @@ fun RadioButton(
 ) = CompoundButton(
     value = value,
     onChange = onChange,
-    createView = { MaterialRadioButton(+AndroidContextAmbient) },
+    createView = { MaterialRadioButton(it.context) },
     viewType = MaterialRadioButton::class,
     key = key
 )
@@ -58,7 +57,7 @@ fun Switch(
 ) = CompoundButton(
     value = value,
     onChange = onChange,
-    createView = { Switch(+AndroidContextAmbient) },
+    createView = { Switch(it.context) },
     viewType = Switch::class,
     key = key
 )

@@ -21,6 +21,7 @@ import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.sample.ui.widget.es.WidgetController
 import com.ivianuu.essentials.sample.ui.widget.layout.FrameLayout
 import com.ivianuu.essentials.sample.ui.widget.layout.LinearLayout
+import com.ivianuu.essentials.sample.ui.widget.layout.ScrollView
 import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget.lib.StatelessWidget
 import com.ivianuu.essentials.sample.ui.widget.lib.onActive
@@ -36,7 +37,6 @@ import com.ivianuu.essentials.sample.ui.widget.view.Padding
 import com.ivianuu.essentials.sample.ui.widget.view.ProgressBar
 import com.ivianuu.essentials.sample.ui.widget.view.Ripple
 import com.ivianuu.essentials.sample.ui.widget.view.Size
-import com.ivianuu.essentials.sample.ui.widget.view.TextView
 import com.ivianuu.essentials.sample.ui.widget.view.WrapContent
 import com.ivianuu.essentials.util.dp
 import kotlinx.coroutines.CoroutineScope
@@ -50,7 +50,7 @@ class WidgetController2 : WidgetController() {
 
     override fun BuildContext.build() {
         +LinearLayout {
-            //+SimpleTextToolbar(title = "Compose")
+            +SimpleTextToolbar(title = "Compose")
             +StatelessWidget("content") {
                 val (loading, setLoading) = +state { true }
 
@@ -102,7 +102,7 @@ class WidgetController2 : WidgetController() {
         }
     }
 
-    private fun Content() = TextView(text = "content")/*MatchParent {
+    private fun Content() = MatchParent {
         +ScrollView {
             +MatchParent {
                 +LinearLayout {
@@ -112,7 +112,7 @@ class WidgetController2 : WidgetController() {
                 }
             }
         }
-    }*/
+    }
 
     private fun ListItem(i: Int) = StatelessWidget("ListItem") {
         val (checked, setChecked) = +state { false }

@@ -28,7 +28,7 @@ abstract class ComponentElement(widget: Widget) : Element(widget) {
     private var pendingChild: Widget? = null
 
     override fun add(child: Widget) {
-        check(pendingChild == null)
+        check(pendingChild == null) { "only one child allowed" }
         pendingChild = child
     }
 

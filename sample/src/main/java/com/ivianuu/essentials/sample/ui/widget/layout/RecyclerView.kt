@@ -23,8 +23,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.epoxy.EpoxyRecyclerView
 import com.airbnb.epoxy.TypedEpoxyController
 import com.github.ajalt.timberkt.d
-import com.ivianuu.essentials.sample.ui.widget.lib.AndroidContextAmbient
-import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget.lib.ComponentElement
 import com.ivianuu.essentials.sample.ui.widget.lib.Element
 import com.ivianuu.essentials.sample.ui.widget.lib.ViewElement
@@ -44,21 +42,22 @@ class RecyclerViewWidget(
     override fun createElement() =
         RecyclerViewElement(this)
 
-    override fun createView(
-        context: BuildContext
-    ) = EpoxyRecyclerView(AndroidContextAmbient(context)).apply {
-        val epoxyController =
-            WidgetEpoxyController(context.cast())
-        adapter = epoxyController.adapter
-        tag = epoxyController
+    override fun createView(container: ViewGroup): RecyclerView {
+        return EpoxyRecyclerView(container.context).apply {
+            val epoxyController =
+                WidgetEpoxyController(context.cast())
+            adapter = epoxyController.adapter
+            tag = epoxyController
+        }
     }
 
-    override fun updateView(context: BuildContext, view: RecyclerView) {
-        super.updateView(context, view)
+    override fun updateView(view: RecyclerView) {
+        super.updateView(view)
         d { "update list view $children" }
         view.tag<WidgetEpoxyController>().setData(children)
-        view.layoutManager = layoutManager ?: LinearLayoutManager(AndroidContextAmbient(context))
+        view.layoutManager = layoutManager ?: LinearLayoutManager(view.context)
     }
+
 }
 
 class RecyclerViewElement(widget: RecyclerViewWidget) :
