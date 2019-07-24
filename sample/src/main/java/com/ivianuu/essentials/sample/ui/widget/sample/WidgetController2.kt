@@ -91,7 +91,7 @@ class WidgetController2 : WidgetController() {
         }
     }
 
-    private fun ListItem(i: Int) = StatelessWidget("ListItem", meta = i.toString()) {
+    private fun ListItem(i: Int) = StatelessWidget("ListItem") {
         val (checked, setChecked) = +state { false }
 
         +ListItem(
