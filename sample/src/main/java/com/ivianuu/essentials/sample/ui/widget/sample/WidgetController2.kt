@@ -86,6 +86,7 @@ class WidgetController2 : WidgetController() {
 
     private fun Content() = MatchParent {
         +RecyclerView {
+            +ConstraintTest()
             (1..100).forEach {
                 +ListItem(it)
             }
