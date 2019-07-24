@@ -104,6 +104,9 @@ open class ViewElement<V : View>(widget: ViewWidget<V>) : Element(widget) {
         super.mount(parent, slot)
         // todo manage ancestor better
         view = widget<ViewWidget<V>>().createView(findContainerView())
+        updateLayoutParams()
+        updateViewProps()
+        widget<ViewWidget<V>>().updateView(requireView())
         attachView()
     }
 
