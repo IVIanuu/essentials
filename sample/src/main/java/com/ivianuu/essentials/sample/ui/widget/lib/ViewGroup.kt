@@ -110,6 +110,7 @@ open class ViewGroupElement<V : ViewGroup>(
 
         val thisView = requireView()
 
+        // used in IdWidget because it's is already attached here
         if (view.parent == thisView) return
 
         if (slot != null) {

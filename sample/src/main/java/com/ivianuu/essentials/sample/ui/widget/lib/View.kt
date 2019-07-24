@@ -104,9 +104,7 @@ open class ViewElement<V : View>(widget: ViewWidget<V>) : Element(widget) {
         super.mount(parent, slot)
         // todo manage ancestor better
         view = widget<ViewWidget<V>>().createView(findContainerView())
-        updateLayoutParams()
-        updateViewProps()
-        widget<ViewWidget<V>>().updateView(requireView())
+        updateView()
         attachView()
     }
 
@@ -114,8 +112,6 @@ open class ViewElement<V : View>(widget: ViewWidget<V>) : Element(widget) {
         val ancestorViewElement = findAncestorViewElement()!!
         d { "${widget.key} attach to $ancestorViewElement view is $view" }
         this.ancestorViewElement = ancestorViewElement
-        updateLayoutParams()
-        updateViewProps()
         ancestorViewElement.insertChildView(requireView(), slot)
     }
 
@@ -129,9 +125,7 @@ open class ViewElement<V : View>(widget: ViewWidget<V>) : Element(widget) {
 
     override fun update(newWidget: Widget) {
         super.update(newWidget)
-        updateLayoutParams()
-        updateViewProps()
-        widget<ViewWidget<V>>().updateView(requireView())
+        updateView()
         isDirty = false
     }
 
@@ -157,6 +151,12 @@ open class ViewElement<V : View>(widget: ViewWidget<V>) : Element(widget) {
         }
 
         return null
+    }
+
+    private fun updateView() {
+        updateLayoutParams()
+        updateViewProps()
+        widget<ViewWidget<V>>().updateView(requireView())
     }
 
     private fun collectLayoutParams(): List<LayoutParamsElement> {

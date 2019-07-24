@@ -54,22 +54,11 @@ class WidgetController2 : WidgetController() {
             +StatelessWidget("content") {
                 val (loading, setLoading) = +state { true }
 
-                d { "effect: function enter" }
-
-                try {
-                    error("hel")
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
-
                 val (coroutineScope) = +state {
-                    d { "effect: create coroutine scope" }
                     CoroutineScope(Job() + Dispatchers.Main)
                 }
 
                 +onActive {
-                    d { "effect: on active" }
-
                     if (loading) {
                         coroutineScope.launch {
                             delay(2000)
@@ -77,10 +66,7 @@ class WidgetController2 : WidgetController() {
                         }
                     }
 
-                    onDispose {
-                        d { "effect: cancel coroutine scope" }
-                        coroutineScope.cancel()
-                    }
+                    onDispose { coroutineScope.cancel() }
                 }
 
                 if (loading) {
@@ -106,7 +92,7 @@ class WidgetController2 : WidgetController() {
         +ScrollView {
             +MatchParent {
                 +LinearLayout {
-                    (1..1).forEach {
+                    (1..20).forEach {
                         +ListItem(it)
                     }
                 }
