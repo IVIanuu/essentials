@@ -39,12 +39,17 @@ import com.ivianuu.essentials.sample.ui.widget.view.Ripple
 import com.ivianuu.essentials.sample.ui.widget.view.Size
 import com.ivianuu.essentials.sample.ui.widget.view.WrapContent
 import com.ivianuu.essentials.util.dp
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.cancel
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+
+fun launchOnActive(block: suspend () -> Unit) = onActive {
+    val job = GlobalScope.launch { block() }
+
+    onDispose {
+        job.cancel()
+    }
+}
 
 class WidgetController2 : WidgetController() {
 
@@ -54,19 +59,9 @@ class WidgetController2 : WidgetController() {
             +StatelessWidget("content") {
                 val (loading, setLoading) = +state { true }
 
-                val (coroutineScope) = +state {
-                    CoroutineScope(Job() + Dispatchers.Main)
-                }
-
-                +onActive {
-                    if (loading) {
-                        coroutineScope.launch {
-                            delay(2000)
-                            setLoading(false)
-                        }
-                    }
-
-                    onDispose { coroutineScope.cancel() }
+                +launchOnActive {
+                    delay(2000)
+                    setLoading(false)
                 }
 
                 if (loading) {

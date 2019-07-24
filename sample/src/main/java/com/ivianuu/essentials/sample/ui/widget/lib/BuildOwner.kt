@@ -69,7 +69,7 @@ class AndroidBuildOwner(
     }
 
     private fun rebuildDirtyElements() {
-        d { "rebuild dirty elements $dirtyElements" }
+        d { "rebuild dirty elements ${dirtyElements.map { it.widget.key }}" }
         val elementsToRebuild = dirtyElements.toList()
         dirtyElements.clear()
         elementsToRebuild.forEach { it.rebuild() }

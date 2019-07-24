@@ -42,6 +42,9 @@ abstract class Element(widget: Widget) : BuildContext {
     var isDirty = true
         protected set
 
+    protected var dependencies: MutableList<Element>? = null
+    protected var dependents: MutableList<Element>? = null
+
     private var effects: MutableList<EffectState<*>>? = null
     private var effectsIndex = 0
     private var lifecycleObservers: MutableList<LifecycleObserver>? = null
@@ -54,8 +57,16 @@ abstract class Element(widget: Widget) : BuildContext {
     override fun <T> getAmbient(key: Ambient<T>): T? {
         var ancestor = parent
         while (ancestor != null) {
-            if (ancestor.widget::class == Ambient.Provider::class && ancestor.widget.key == key.key)
-                return (ancestor.widget as Ambient<T>.Provider<T>).value
+            if (ancestor.widget::class == Ambient.Provider::class && ancestor.widget.key == key.key) {
+                if (ancestor.dependents == null) ancestor.dependents = mutableListOf()
+                ancestor.dependents!!.add(this)
+
+                if (dependencies == null) dependencies = mutableListOf()
+                dependencies!!.add(ancestor)
+
+                val provider = ancestor.widget as Ambient<T>.Provider
+                return provider.value
+            }
             ancestor = ancestor.parent
         }
 
@@ -118,6 +129,11 @@ abstract class Element(widget: Widget) : BuildContext {
         isDirty = false
 
         effects = null
+
+        // todo make api
+        dependents = null
+        dependencies?.forEach { it.dependents?.remove(this) }
+        dependencies = null
     }
 
     open fun attachView() {

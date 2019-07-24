@@ -26,10 +26,21 @@ class Ambient<T> @PublishedApi internal constructor(val key: Any) {
 
     operator fun invoke(context: BuildContext): T = context.getAmbient(this)!!
 
-    inner class Provider<T>(
+    inner class Provider(
         val value: T,
         child: BuildContext.() -> Unit
-    ) : ProxyWidget(key = key, child = child)
+    ) : ProxyWidget(key = key, child = child) {
+
+        override fun createElement(): ProxyElement = Element(this)
+
+        private inner class Element(widget: ProxyWidget) : ProxyElement(widget) {
+            override fun notifyClients(oldWidget: Widget) {
+                super.notifyClients(oldWidget)
+                dependents?.forEach { it.markNeedsBuild() }
+            }
+        }
+
+    }
 }
 
 val AndroidContextAmbient = ambientOf<Context>()
