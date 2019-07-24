@@ -20,7 +20,6 @@ import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import androidx.appcompat.widget.AppCompatImageView
 import com.ivianuu.essentials.sample.ui.widget.lib.AndroidContextAmbient
-import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget.lib.StatelessWidget
 import com.ivianuu.essentials.sample.ui.widget.lib.ViewWidget
 import com.ivianuu.kommon.core.content.dp
@@ -73,7 +72,7 @@ fun SizedImageView(
     }
 }
 
-fun BuildContext.ImageView(
+fun ImageView(
     imageDrawable: Drawable? = null,
     imageBitmap: Bitmap? = null,
     imageRes: Int? = null,
