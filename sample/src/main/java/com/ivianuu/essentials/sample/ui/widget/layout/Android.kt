@@ -23,8 +23,8 @@ import android.widget.ScrollView
 import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget.lib.ViewGroupWidget
 
-fun FrameLayout(key: Any? = null, children: BuildContext.() -> Unit) =
-    ViewGroupWidget<FrameLayout>(key = key, children = children, updateView = null) // todo
+fun FrameLayout(children: BuildContext.() -> Unit) =
+    ViewGroupWidget<FrameLayout>(children = children, updateView = null) // todo
 
 fun LinearLayout(
     orientation: Int = LinearLayout.VERTICAL,
@@ -33,10 +33,8 @@ fun LinearLayout(
     } else {
         Gravity.START or Gravity.CENTER_HORIZONTAL
     },
-    key: Any? = null,
     children: BuildContext.() -> Unit
 ) = ViewGroupWidget<LinearLayout>(
-    key = key,
     updateView = { view ->
         view.orientation = orientation
         view.gravity = gravity
@@ -44,5 +42,5 @@ fun LinearLayout(
     children = children
 )
 
-fun ScrollView(key: Any? = null, child: BuildContext.() -> Unit) =
-    ViewGroupWidget<ScrollView>(key = key, children = child, updateView = null) // todo
+fun ScrollView(child: BuildContext.() -> Unit) =
+    ViewGroupWidget<ScrollView>(children = child, updateView = null) // todo

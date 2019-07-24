@@ -25,22 +25,18 @@ import com.ivianuu.essentials.sample.ui.widget.lib.Widget
 
 val PARENT_ID = ConstraintLayout.LayoutParams.PARENT_ID
 
-fun ConstraintLayout(
-    key: Any? = null,
-    children: ConstraintLayoutChildren.() -> Unit
-): Widget = StatelessWidget("ConstraintLayout") {
-    val constraintSet = ConstraintSet()
+fun ConstraintLayout(children: ConstraintLayoutChildren.() -> Unit): Widget =
+    StatelessWidget("ConstraintLayout") {
+        val constraintSet = ConstraintSet()
+        +ViewGroupWidget<ConstraintLayout>(
+            updateView = { constraintSet.applyTo(it) },
+            children = {
+                ConstraintLayoutChildren(this, constraintSet)
+                    .apply(children)
+            }
+        )
 
-    +ViewGroupWidget<ConstraintLayout>(
-        key = key,
-        updateView = { constraintSet.applyTo(it) },
-        children = {
-            ConstraintLayoutChildren(this, constraintSet)
-                .apply(children)
-        }
-    )
-
-}
+    }
 
 class ConstraintLayoutChildren(
     private val context: BuildContext,

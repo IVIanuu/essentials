@@ -22,22 +22,20 @@ import android.widget.LinearLayout
 import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget.lib.LayoutParamsWidget
 
-fun MatchParent(key: Any? = null, child: BuildContext.() -> Unit) =
-    Size(size = ViewGroup.LayoutParams.MATCH_PARENT, key = key, child = child)
+fun MatchParent(child: BuildContext.() -> Unit) =
+    Size(size = ViewGroup.LayoutParams.MATCH_PARENT, child = child)
 
-fun WrapContent(key: Any? = null, child: BuildContext.() -> Unit) =
-    Size(size = ViewGroup.LayoutParams.WRAP_CONTENT, key = key, child = child)
+fun WrapContent(child: BuildContext.() -> Unit) =
+    Size(size = ViewGroup.LayoutParams.WRAP_CONTENT, child = child)
 
-fun Size(size: Int, key: Any? = null, child: BuildContext.() -> Unit) =
-    Size(width = size, height = size, key = key, child = child)
+fun Size(size: Int, child: BuildContext.() -> Unit) =
+    Size(width = size, height = size, child = child)
 
 fun Size(
     width: Int,
     height: Int,
-    key: Any? = null,
     child: BuildContext.() -> Unit
 ) = LayoutParamsWidget(
-    key = key,
     props = listOf(
         ViewGroup.LayoutParams::width,
         ViewGroup.LayoutParams::height
@@ -54,8 +52,7 @@ fun Size(
     child = child
 )
 
-fun Gravity(gravity: Int, key: Any? = null, child: BuildContext.() -> Unit) = LayoutParamsWidget(
-    key = key,
+fun Gravity(gravity: Int, child: BuildContext.() -> Unit) = LayoutParamsWidget(
     props = listOf(FrameLayout.LayoutParams::gravity, LinearLayout.LayoutParams::gravity),
     updateLayoutParams = { lp ->
         when (lp) {
@@ -81,18 +78,16 @@ fun Gravity(gravity: Int, key: Any? = null, child: BuildContext.() -> Unit) = La
     child = child
 )
 
-fun Margin(margin: Int, key: Any? = null, child: BuildContext.() -> Unit) =
-    Margin(margin, margin, margin, margin, key, child)
+fun Margin(margin: Int, child: BuildContext.() -> Unit) =
+    Margin(margin, margin, margin, margin, child)
 
 fun Margin(
     left: Int = 0,
     top: Int = 0,
     right: Int = 0,
     bottom: Int = 0,
-    key: Any? = null,
     child: BuildContext.() -> Unit
 ) = LayoutParamsWidget(
-    key = key,
     props = listOf(ViewGroup.MarginLayoutParams::setMargins),
     updateLayoutParams = {
         if (it is ViewGroup.MarginLayoutParams) {
@@ -118,10 +113,8 @@ fun Margin(
 
 fun Weight(
     weight: Float,
-    key: Any? = null,
     child: BuildContext.() -> Unit
 ) = LayoutParamsWidget(
-    key = key,
     props = listOf(LinearLayout.LayoutParams::weight),
     updateLayoutParams = {
         if (it is LinearLayout.LayoutParams) {

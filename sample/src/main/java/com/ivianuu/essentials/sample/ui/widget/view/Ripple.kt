@@ -22,9 +22,8 @@ import com.ivianuu.essentials.sample.ui.widget.lib.StatelessWidget
 
 fun Ripple(
     unbounded: Boolean = false,
-    key: Any? = null,
     child: BuildContext.() -> Unit
-) = StatelessWidget("Ripple", key) {
+) = StatelessWidget("Ripple") {
     +Background(
         attr = if (unbounded) R.attr.selectableItemBackgroundBorderless
         else R.attr.selectableItemBackground,

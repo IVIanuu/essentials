@@ -28,52 +28,44 @@ import kotlin.reflect.KClass
 
 fun CheckBox(
     value: Boolean,
-    onChange: (Boolean) -> Unit,
-    key: Any? = null
+    onChange: (Boolean) -> Unit
 ) = CompoundButton(
     value = value,
     onChange = onChange,
     createView = { MaterialCheckBox(it.context) },
-    viewType = MaterialCheckBox::class,
-    key = key
+    viewType = MaterialCheckBox::class
 )
 
 fun RadioButton(
     value: Boolean,
-    onChange: (Boolean) -> Unit,
-    key: Any? = null
+    onChange: (Boolean) -> Unit
 ) = CompoundButton(
     value = value,
     onChange = onChange,
     createView = { MaterialRadioButton(it.context) },
-    viewType = MaterialRadioButton::class,
-    key = key
+    viewType = MaterialRadioButton::class
 )
 
 fun Switch(
     value: Boolean,
-    onChange: (Boolean) -> Unit,
-    key: Any? = null
+    onChange: (Boolean) -> Unit
 ) = CompoundButton(
     value = value,
     onChange = onChange,
     createView = { Switch(it.context) },
-    viewType = Switch::class,
-    key = key
+    viewType = Switch::class
 )
 
 fun <V : CompoundButton> CompoundButton(
     value: Boolean,
     onChange: (Boolean) -> Unit,
     createView: CreateView<V>,
-    viewType: KClass<V>,
-    key: Any? = null
+    viewType: KClass<V>
 ): Widget = Clickable(
     onClick = { onChange(!value) },
     child = {
         +ViewWidget(
             viewType = viewType,
-            key = key,
             createView = createView,
             updateView = { it.isChecked = value }
         )

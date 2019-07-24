@@ -35,15 +35,13 @@ import com.ivianuu.kommon.core.view.tag
 
 fun RecyclerView(
     layoutManager: RecyclerView.LayoutManager? = null,
-    key: Any? = null,
     children: BuildContext.() -> Unit
-): Widget = RecyclerViewWidget(layoutManager, key, children)
+): Widget = RecyclerViewWidget(layoutManager, children)
 
 private class RecyclerViewWidget(
     val layoutManager: RecyclerView.LayoutManager? = null,
-    key: Any? = null,
     val children: BuildContext.() -> Unit
-) : ViewWidget<RecyclerView>(key) {
+) : ViewWidget<RecyclerView>() {
 
     override fun createElement() =
         RecyclerViewElement(this)

@@ -23,12 +23,8 @@ import com.ivianuu.essentials.sample.ui.widget.lib.ViewGroupWidget
 
 fun RelativeLayout(
     gravity: Int = Gravity.START or Gravity.TOP,
-    key: Any? = null,
     children: BuildContext.() -> Unit
 ) = ViewGroupWidget<RelativeLayout>(
-    key = key,
-    updateView = { view ->
-        view.gravity = gravity
-    },
+    updateView = { view -> view.gravity = gravity },
     children = children
 )

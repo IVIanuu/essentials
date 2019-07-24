@@ -22,43 +22,35 @@ import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget.lib.ViewPropsWidget
 
 fun Clickable(
-    key: Any? = null,
     onClick: () -> Unit,
     child: BuildContext.() -> Unit
 ) = ViewPropsWidget(
     props = listOf(View.OnClickListener::class),
-    key = key,
     updateViewProps = { it.setOnClickListener { onClick() } },
     child = child
 )
 
 fun LongClickable(
-    key: Any? = null,
     onLongClick: () -> Unit,
     child: BuildContext.() -> Unit
 ) = ViewPropsWidget(
     props = listOf(View.OnLongClickListener::class),
-    key = key,
     updateViewProps = { it.setOnLongClickListener { onLongClick(); true } },
     child = child
 )
 
 fun DisableTouch(
-    key: Any? = null,
     child: BuildContext.() -> Unit
 ) = Touchable(
     onTouch = { true },
-    key = key,
     child = child
 )
 
 fun Touchable(
-    key: Any? = null,
     onTouch: (MotionEvent) -> Boolean,
     child: BuildContext.() -> Unit
 ) = ViewPropsWidget(
     props = listOf(View.OnTouchListener::class),
-    key = key,
     updateViewProps = { it.setOnTouchListener { _, event -> onTouch(event) } },
     child = child
 )

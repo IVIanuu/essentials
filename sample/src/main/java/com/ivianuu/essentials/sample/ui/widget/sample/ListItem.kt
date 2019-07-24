@@ -22,9 +22,29 @@ import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.sample.ui.widget.layout.IdViewGroupWidget
 import com.ivianuu.essentials.sample.ui.widget.layout.InflateViewGroupWidget
 import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
+import com.ivianuu.essentials.sample.ui.widget.lib.StatelessWidget
 import com.ivianuu.essentials.sample.ui.widget.lib.Widget
+import com.ivianuu.essentials.sample.ui.widget.view.Clickable
+import com.ivianuu.essentials.sample.ui.widget.view.LongClickable
 import com.ivianuu.essentials.sample.ui.widget.view.TextStyleAmbient
 import com.ivianuu.essentials.util.andTrue
+
+fun ListItemConstraint(
+    title: (BuildContext.() -> Unit)? = null,
+    subtitle: (BuildContext.() -> Unit)? = null,
+
+    leading: (BuildContext.() -> Unit)? = null,
+    trailing: (BuildContext.() -> Unit)? = null,
+
+    onClick: (() -> Unit)? = null,
+    onLongClick: (() -> Unit)? = null
+) = StatelessWidget("ListItem") {
+    +Clickable(onClick = onClick ?: {}) {
+        +LongClickable(onLongClick = onLongClick ?: {}) {
+
+        }
+    }
+}
 
 fun ListItem(
     title: (BuildContext.() -> Unit)? = null,
@@ -34,13 +54,10 @@ fun ListItem(
     trailing: (BuildContext.() -> Unit)? = null,
 
     onClick: (() -> Unit)? = null,
-    onLongClick: (() -> Unit)? = null,
-
-    key: Any? = null
+    onLongClick: (() -> Unit)? = null
 ): Widget {
     return InflateViewGroupWidget<ConstraintLayout>(
         layoutRes = R.layout.list_item,
-        key = key,
         updateView = { view ->
             if (onClick != null) {
                 view.setOnClickListener { onClick!!() }

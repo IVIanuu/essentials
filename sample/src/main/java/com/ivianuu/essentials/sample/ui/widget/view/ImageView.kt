@@ -27,32 +27,28 @@ import com.ivianuu.kommon.core.content.dp
 fun Icon(
     iconDrawable: Drawable? = null,
     iconBitmap: Bitmap? = null,
-    iconRes: Int? = null,
-    key: Any? = null
+    iconRes: Int? = null
 ) = StatelessWidget("Icon") {
     val size = (+AndroidContextAmbient).dp(40).toInt()
     +SizedImageView(
         size = size,
         imageDrawable = iconDrawable,
         imageRes = iconRes,
-        imageBitmap = iconBitmap,
-        key = key
+        imageBitmap = iconBitmap
     )
 }
 
 fun Avatar(
     avatarDrawable: Drawable? = null,
     avatarBitmap: Bitmap? = null,
-    avatarRes: Int? = null,
-    key: Any? = null
+    avatarRes: Int? = null
 ) = StatelessWidget("Avatar") {
     val size = (+AndroidContextAmbient).dp(40).toInt()
     +SizedImageView(
         size = size,
         imageDrawable = avatarDrawable,
         imageRes = avatarRes,
-        imageBitmap = avatarBitmap,
-        key = key
+        imageBitmap = avatarBitmap
     )
 }
 
@@ -60,9 +56,8 @@ fun SizedImageView(
     size: Int,
     imageDrawable: Drawable? = null,
     imageBitmap: Bitmap? = null,
-    imageRes: Int? = null,
-    key: Any? = null
-) = StatelessWidget(id = "SizedImageView", key = key) {
+    imageRes: Int? = null
+) = StatelessWidget(id = "SizedImageView") {
     +Size(size) {
         +ImageView(
             imageDrawable = imageDrawable,
@@ -75,9 +70,8 @@ fun SizedImageView(
 fun ImageView(
     imageDrawable: Drawable? = null,
     imageBitmap: Bitmap? = null,
-    imageRes: Int? = null,
-    key: Any? = null
-) = ViewWidget<AppCompatImageView>(key) { view ->
+    imageRes: Int? = null
+) = ViewWidget<AppCompatImageView> { view ->
     when {
         imageDrawable != null -> view.setImageDrawable(imageDrawable)
         imageBitmap != null -> view.setImageBitmap(imageBitmap)

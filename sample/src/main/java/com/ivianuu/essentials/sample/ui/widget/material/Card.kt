@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.sample.ui.widget.layout
+package com.ivianuu.essentials.sample.ui.widget.material
 
 import com.google.android.material.card.MaterialCardView
 import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext

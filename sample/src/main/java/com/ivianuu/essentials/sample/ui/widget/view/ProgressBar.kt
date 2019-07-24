@@ -19,5 +19,5 @@ package com.ivianuu.essentials.sample.ui.widget.view
 import android.widget.ProgressBar
 import com.ivianuu.essentials.sample.ui.widget.lib.ViewWidget
 
-fun ProgressBar(key: Any? = null) =
-    ViewWidget<ProgressBar>(key = key, updateView = null) // todo remove updateView
+fun ProgressBar() =
+    ViewWidget<ProgressBar>(updateView = null) // todo remove updateView

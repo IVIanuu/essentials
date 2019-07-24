@@ -27,9 +27,8 @@ fun MaterialButton(
     textRes: Int? = null,
     icon: Drawable? = null,
     iconRes: Int? = null,
-    onClick: (() -> Unit)? = null,
-    key: Any? = null
-) = StatelessWidget(id = "md_button", key = key) {
+    onClick: (() -> Unit)? = null
+) = StatelessWidget(id = "md_button") {
     Clickable(
         onClick = onClick ?: {},
         child = {

@@ -21,18 +21,17 @@ import com.ivianuu.essentials.sample.ui.widget.lib.StatelessWidget
 import com.ivianuu.essentials.sample.ui.widget.lib.ViewWidget
 import com.ivianuu.essentials.sample.ui.widget.view.Size
 
-fun WidthSpacer(width: Int, key: Any? = null) =
-    Spacer(width = width, key = key)
+fun WidthSpacer(width: Int) = Spacer(width = width)
 
-fun HeightSpacer(height: Int, key: Any? = null) =
-    Spacer(height = height, key = key)
+fun HeightSpacer(height: Int) = Spacer(height = height)
 
-fun Spacer(size: Int, key: Any? = null) = Spacer(size, size, key)
+fun Spacer(size: Int) = Spacer(size, size)
 
 fun Spacer(
     width: Int = 0,
-    height: Int = 0,
-    key: Any? = null
-) = StatelessWidget(id = "Spacer", key = key) {
-    +Size(width = width, height = height) { +ViewWidget<View>(updateView = null) }
+    height: Int = 0
+) = StatelessWidget(id = "Spacer") {
+    +Size(width = width, height = height) {
+        +ViewWidget<View>(updateView = null)
+    }
 }
