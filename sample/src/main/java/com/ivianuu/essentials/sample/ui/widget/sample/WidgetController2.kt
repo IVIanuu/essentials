@@ -16,17 +16,22 @@
 
 package com.ivianuu.essentials.sample.ui.widget.sample
 
+import android.content.Intent
+import android.graphics.Color
+import androidx.core.net.toUri
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.sample.ui.widget.es.WidgetController
 import com.ivianuu.essentials.sample.ui.widget.layout.FrameLayout
 import com.ivianuu.essentials.sample.ui.widget.layout.LinearLayout
-import com.ivianuu.essentials.sample.ui.widget.layout.RecyclerView
 import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
+import com.ivianuu.essentials.sample.ui.widget.lib.ContextAmbient
 import com.ivianuu.essentials.sample.ui.widget.lib.StatelessWidget
+import com.ivianuu.essentials.sample.ui.widget.lib.effectOf
 import com.ivianuu.essentials.sample.ui.widget.lib.onActive
 import com.ivianuu.essentials.sample.ui.widget.lib.state
 import com.ivianuu.essentials.sample.ui.widget.material.Switch
+import com.ivianuu.essentials.sample.ui.widget.view.Background
 import com.ivianuu.essentials.sample.ui.widget.view.Clickable
 import com.ivianuu.essentials.sample.ui.widget.view.Gravity
 import com.ivianuu.essentials.sample.ui.widget.view.ImageView
@@ -83,19 +88,21 @@ class WidgetController2 : WidgetController() {
     }
 
     private fun Content() = MatchParent {
-        +RecyclerView {
-            (1..100).forEach {
-                +ListItem(it)
-            }
-        }
+        +ListItem(0)
     }
 
     private fun ListItem(i: Int) = StatelessWidget("ListItem") {
         val (checked, setChecked) = +state { false }
 
         +ListItem(
-            title = { +TextView(text = "Title $i") },
-            subtitle = { +TextView(text = "Text $i") },
+            title = {
+                +Background(color = Color.BLUE) {
+                    +WrapContent {
+                        +TextView(text = "Title $i")
+                    }
+                }
+            },
+            ///subtitle = { +TextView(text = "Text $i") },
             leading = {
                 +Switch(
                     value = checked,
@@ -105,8 +112,17 @@ class WidgetController2 : WidgetController() {
             trailing = {
                 +MenuButton()
             },
-            onClick = { setChecked(!checked) }
+            onClick = +launchUrlOnClick { "https://www.google.com" }
         )
+    }
+
+    fun launchUrlOnClick(url: () -> String) = effectOf<() -> Unit> {
+        val context = ContextAmbient(context)
+        return@effectOf {
+            context.startActivity(Intent(Intent.ACTION_VIEW).apply {
+                data = url().toUri()
+            })
+        }
     }
 
     private fun MenuButton() = StatelessWidget("MenuButton") {

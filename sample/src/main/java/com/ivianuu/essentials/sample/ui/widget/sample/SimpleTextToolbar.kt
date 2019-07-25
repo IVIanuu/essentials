@@ -18,15 +18,18 @@ package com.ivianuu.essentials.sample.ui.widget.sample
 
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import com.ivianuu.essentials.sample.R
+import com.ivianuu.essentials.sample.ui.widget.builder.TextView
+import com.ivianuu.essentials.sample.ui.widget.builder.layoutGravity
+import com.ivianuu.essentials.sample.ui.widget.builder.text
+import com.ivianuu.essentials.sample.ui.widget.builder.textAppearance
+import com.ivianuu.essentials.sample.ui.widget.builder.textColor
+import com.ivianuu.essentials.sample.ui.widget.builder.wrapContent
 import com.ivianuu.essentials.sample.ui.widget.layout.FrameLayout
 import com.ivianuu.essentials.sample.ui.widget.lib.ContextAmbient
 import com.ivianuu.essentials.sample.ui.widget.lib.StatelessWidget
 import com.ivianuu.essentials.sample.ui.widget.view.Background
 import com.ivianuu.essentials.sample.ui.widget.view.Elevation
-import com.ivianuu.essentials.sample.ui.widget.view.Gravity
 import com.ivianuu.essentials.sample.ui.widget.view.Size
-import com.ivianuu.essentials.sample.ui.widget.view.TextView
-import com.ivianuu.essentials.sample.ui.widget.view.WrapContent
 import com.ivianuu.kommon.core.content.colorAttr
 import com.ivianuu.kommon.core.content.dp
 
@@ -43,14 +46,12 @@ fun SimpleTextToolbar(title: String) = StatelessWidget("toolbar") {
             ) {
                 +Elevation(elevation = context.dp(4)) {
                     +FrameLayout {
-                        +Gravity(gravity = android.view.Gravity.CENTER) {
-                            +WrapContent {
-                                +TextView(
-                                    text = title,
-                                    textAppearance = R.style.TextAppearance_MaterialComponents_Headline6,
-                                    textColor = context.colorAttr(R.attr.colorOnPrimary)
-                                )
-                            }
+                        +TextView {
+                            wrapContent()
+                            layoutGravity(android.view.Gravity.CENTER)
+                            text(title)
+                            textAppearance(R.style.TextAppearance_MaterialComponents_Headline6)
+                            textColor(context.colorAttr(R.attr.colorOnPrimary))
                         }
                     }
                 }

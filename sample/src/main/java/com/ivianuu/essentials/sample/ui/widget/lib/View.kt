@@ -21,8 +21,8 @@ import android.view.View
 import android.view.ViewGroup
 import com.github.ajalt.timberkt.d
 import kotlin.reflect.KClass
-import kotlin.reflect.KFunction2
 
+typealias UpdateLayoutParams = (ViewGroup.LayoutParams) -> Boolean
 typealias CreateView<V> = (ViewGroup) -> V
 typealias UpdateView<V> = (V) -> Unit
 
@@ -54,17 +54,6 @@ inline fun <reified V : View> ViewWidget(
     key = key,
     createView = createView,
     updateView = updateView
-)
-
-
-inline fun <reified V : View> ViewWidgett(
-    vararg params: Pair<KFunction2<V, *, *>, *>
-) = ViewWidget<V>(
-    updateView = { view ->
-        params.forEach { (setter, value) ->
-            (setter as KFunction2<V, Any?, Any?>).invoke(view, value)
-        }
-    }
 )
 
 fun <V : View> ViewWidget(

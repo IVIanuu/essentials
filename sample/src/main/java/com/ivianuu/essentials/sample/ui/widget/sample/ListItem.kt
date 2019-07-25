@@ -138,6 +138,7 @@ private fun ListItemContent(
         if (title != null) {
             titleId {
                 connectTextToSides()
+
                 connect(TOP to TOP of PARENT_ID)
                 if (subtitle != null) {
                     connect(BOTTOM to TOP of subtitleId)

@@ -25,7 +25,7 @@ import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.sample.ui.widget.layout.ConstraintSetBuilder.Connection.BasicConnection
 import com.ivianuu.essentials.sample.ui.widget.layout.ConstraintSetBuilder.Side
 import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
-import com.ivianuu.essentials.sample.ui.widget.lib.StatelessWidget
+import com.ivianuu.essentials.sample.ui.widget.lib.ViewGroupElement
 import com.ivianuu.essentials.sample.ui.widget.lib.ViewGroupWidget
 import com.ivianuu.essentials.sample.ui.widget.lib.Widget
 
@@ -46,19 +46,97 @@ class CustomConstraintLayout(context: Context) : ConstraintLayout(context) {
 }
 
 fun ConstraintLayout(children: ConstraintLayoutChildren.() -> Unit): Widget =
-    StatelessWidget("ConstraintLayout") {
-        val constraintSetBuilder = ConstraintSetBuilder()
-        +ViewGroupWidget<CustomConstraintLayout>(
-            updateView = {
-                constraintSetBuilder.applyTo(it)
-            },
-            children = {
-                ConstraintLayoutChildren(this, constraintSetBuilder)
-                    .apply(children)
-            }
-        )
+    ConstraintLayoutWidget(children = children)
 
+class ConstraintLayoutChildren(
+    private val context: BuildContext,
+    private val constraintSetBuilder: ConstraintSetBuilder
+) : BuildContext by context {
+
+    fun constraints(block: ConstraintSetBuilder.() -> Unit) {
+        constraintSetBuilder.apply(block)
     }
+
+}
+
+class ConstraintSetBuilder : ConstraintSet() {
+
+    operator fun Int.invoke(init: ViewConstraintBuilder.() -> Unit) {
+        ViewConstraintBuilder(this, this@ConstraintSetBuilder).apply(init)
+    }
+
+    infix fun Side.of(viewId: Int) = when (this) {
+        Side.LEFT -> ViewSide.Left(viewId)
+        Side.RIGHT -> ViewSide.Right(viewId)
+        Side.TOP -> ViewSide.Top(viewId)
+        Side.BOTTOM -> ViewSide.Bottom(viewId)
+        Side.BASELINE -> ViewSide.Baseline(viewId)
+        Side.START -> ViewSide.Start(viewId)
+        Side.END -> ViewSide.End(viewId)
+    }
+
+    infix fun Pair<ViewSide, Side>.of(viewId: Int) = first to (second of viewId)
+
+    infix fun ViewSide.to(targetSide: ViewSide) = BasicConnection(this, targetSide)
+
+    infix fun BasicConnection.margin(margin: Int) = Connection.MarginConnection(from, to, margin)
+
+    fun connect(vararg connections: Connection) {
+        for (connection in connections) {
+            when (connection) {
+                is Connection.MarginConnection -> connect(
+                    connection.from.viewId,
+                    connection.from.sideId,
+                    connection.to.viewId,
+                    connection.to.sideId,
+                    connection.margin
+                )
+                is BasicConnection -> connect(
+                    connection.from.viewId,
+                    connection.from.sideId,
+                    connection.to.viewId,
+                    connection.to.sideId
+                )
+            }
+        }
+    }
+
+    enum class Side {
+        LEFT,
+        RIGHT,
+        TOP,
+        BOTTOM,
+        BASELINE,
+        START,
+        END,
+    }
+
+    sealed class ViewSide(val viewId: Int) {
+        class Left(viewId: Int) : ViewSide(viewId)
+        class Right(viewId: Int) : ViewSide(viewId)
+        class Top(viewId: Int) : ViewSide(viewId)
+        class Bottom(viewId: Int) : ViewSide(viewId)
+        class Baseline(viewId: Int) : ViewSide(viewId)
+        class Start(viewId: Int) : ViewSide(viewId)
+        class End(viewId: Int) : ViewSide(viewId)
+
+        val sideId: Int
+            get() = when (this) {
+                is Left -> LEFT
+                is Right -> RIGHT
+                is Top -> TOP
+                is Bottom -> BOTTOM
+                is Baseline -> BASELINE
+                is Start -> START
+                is End -> END
+            }
+    }
+
+    sealed class Connection(val from: ViewSide, val to: ViewSide) {
+        class BasicConnection(from: ViewSide, to: ViewSide) : Connection(from, to)
+        class MarginConnection(from: ViewSide, to: ViewSide, val margin: Int) : Connection(from, to)
+    }
+}
 
 class ViewConstraintBuilder(
     private val viewId: Int,
@@ -144,92 +222,33 @@ class ViewConstraintBuilder(
 
 }
 
-class ConstraintSetBuilder : ConstraintSet() {
+private class ConstraintLayoutWidget(
+    val constraintSet: ConstraintSetBuilder = ConstraintSetBuilder(),
+    children: ConstraintLayoutChildren.() -> Unit
+) : ViewGroupWidget<ConstraintLayout>(children = {
+    ConstraintLayoutChildren(this, constraintSet)
+        .apply(children)
+}) {
 
-    operator fun Int.invoke(init: ViewConstraintBuilder.() -> Unit) {
-        ViewConstraintBuilder(this, this@ConstraintSetBuilder).apply(init)
-    }
+    override fun createElement(): ViewGroupElement<ConstraintLayout> =
+        ConstraintLayoutElement(this)
 
-    infix fun Side.of(viewId: Int) = when (this) {
-        Side.LEFT -> ViewSide.Left(viewId)
-        Side.RIGHT -> ViewSide.Right(viewId)
-        Side.TOP -> ViewSide.Top(viewId)
-        Side.BOTTOM -> ViewSide.Bottom(viewId)
-        Side.BASELINE -> ViewSide.Baseline(viewId)
-        Side.START -> ViewSide.Start(viewId)
-        Side.END -> ViewSide.End(viewId)
-    }
+    override fun createView(container: ViewGroup): ConstraintLayout =
+        CustomConstraintLayout(container.context)
 
-    infix fun Pair<ViewSide, Side>.of(viewId: Int) = first to (second of viewId)
-
-    infix fun ViewSide.to(targetSide: ViewSide) = BasicConnection(this, targetSide)
-
-    infix fun BasicConnection.margin(margin: Int) = Connection.MarginConnection(from, to, margin)
-
-    fun connect(vararg connections: Connection) {
-        for (connection in connections) {
-            when (connection) {
-                is Connection.MarginConnection -> connect(
-                    connection.from.viewId,
-                    connection.from.sideId,
-                    connection.to.viewId,
-                    connection.to.sideId,
-                    connection.margin
-                )
-                is BasicConnection -> connect(
-                    connection.from.viewId,
-                    connection.from.sideId,
-                    connection.to.viewId,
-                    connection.to.sideId
-                )
-            }
-        }
-    }
-
-    enum class Side {
-        LEFT,
-        RIGHT,
-        TOP,
-        BOTTOM,
-        BASELINE,
-        START,
-        END,
-    }
-
-    sealed class ViewSide(val viewId: Int) {
-        class Left(viewId: Int) : ViewSide(viewId)
-        class Right(viewId: Int) : ViewSide(viewId)
-        class Top(viewId: Int) : ViewSide(viewId)
-        class Bottom(viewId: Int) : ViewSide(viewId)
-        class Baseline(viewId: Int) : ViewSide(viewId)
-        class Start(viewId: Int) : ViewSide(viewId)
-        class End(viewId: Int) : ViewSide(viewId)
-
-        val sideId: Int
-            get() = when (this) {
-                is Left -> LEFT
-                is Right -> RIGHT
-                is Top -> TOP
-                is Bottom -> BOTTOM
-                is Baseline -> BASELINE
-                is Start -> START
-                is End -> END
-            }
-    }
-
-    sealed class Connection(val from: ViewSide, val to: ViewSide) {
-        class BasicConnection(from: ViewSide, to: ViewSide) : Connection(from, to)
-        class MarginConnection(from: ViewSide, to: ViewSide, val margin: Int) : Connection(from, to)
+    override fun updateView(view: ConstraintLayout) {
+        super.updateView(view)
+        constraintSet.applyTo(view)
     }
 }
 
-class ConstraintLayoutChildren(
-    private val context: BuildContext,
-    private val constraintSetBuilder: ConstraintSetBuilder
-) : BuildContext by context {
+private class ConstraintLayoutElement(
+    widget: ConstraintLayoutWidget
+) : ViewGroupElement<ConstraintLayout>(widget) {
 
-    fun constraints(block: ConstraintSetBuilder.() -> Unit) {
-        constraintSetBuilder.apply(block)
+    override fun attachView() {
+        super.attachView()
+        widget<ConstraintLayoutWidget>().updateView(requireView())
     }
 
 }
