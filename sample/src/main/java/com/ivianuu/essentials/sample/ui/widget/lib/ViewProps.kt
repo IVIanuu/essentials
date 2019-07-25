@@ -19,24 +19,38 @@ package com.ivianuu.essentials.sample.ui.widget.lib
 import android.view.View
 import kotlin.reflect.KFunction2
 
+inline fun <V : View, T> BuildContext.ViewPropsWidget(
+    value: T,
+    prop: KFunction2<V, T, Any?>,
+    key: Any? = null,
+    noinline child: BuildContext.() -> Unit
+) = ViewPropsWidget(sourceLocationId(), value, prop, key, child)
+
 fun <V : View, T> BuildContext.ViewPropsWidget(
+    id: Any,
     value: T,
     prop: KFunction2<V, T, Any?>,
     key: Any? = null,
     child: BuildContext.() -> Unit
 ) = ViewPropsWidget(
+    id = id,
     key = key,
-    props = listOf(prop),
     child = child,
     updateViewProps = { prop.invoke(it as V, value) }
 )
 
-fun BuildContext.ViewPropsWidget(
+inline fun BuildContext.ViewPropsWidget(
     key: Any? = null,
-    props: List<Any?>,
+    noinline updateViewProps: (View) -> Unit,
+    noinline child: BuildContext.() -> Unit
+) = ViewPropsWidget(sourceLocationId(), key, updateViewProps, child)
+
+fun BuildContext.ViewPropsWidget(
+    id: Any,
+    key: Any? = null,
     updateViewProps: (View) -> Unit,
     child: BuildContext.() -> Unit
-): Widget = object : ViewPropsWidget(child, joinKey(props, key)) {
+): Widget = object : ViewPropsWidget(child, joinKey(id, key)) {
     override fun updateViewProps(view: View) {
         updateViewProps.invoke(view)
     }

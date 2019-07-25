@@ -22,3 +22,9 @@ private data class JoinedKey(
 )
 
 fun joinKey(left: Any?, right: Any?): Any? = JoinedKey(left, right)
+
+
+inline fun sourceLocationId(): String {
+    val element = Throwable().stackTrace.first()
+    return "${element.className}:${element.methodName}:${element.lineNumber}"
+}

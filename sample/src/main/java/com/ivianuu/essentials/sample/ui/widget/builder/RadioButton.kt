@@ -19,7 +19,7 @@ package com.ivianuu.essentials.sample.ui.widget.builder
 import com.google.android.material.radiobutton.MaterialRadioButton
 import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
 
-inline fun BuildContext.RadioButton(block: BuildView<MaterialRadioButton>) =
+fun BuildContext.RadioButton(block: BuildView<MaterialRadioButton>) =
     View<MaterialRadioButton> {
     wrapContent()
     block()

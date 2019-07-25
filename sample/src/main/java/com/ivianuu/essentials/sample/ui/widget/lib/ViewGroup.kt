@@ -23,18 +23,20 @@ import com.github.ajalt.timberkt.d
 import kotlin.reflect.KClass
 
 inline fun <reified V : ViewGroup> BuildContext.ViewGroupWidget(
+    id: Any = sourceLocationId(),
     key: Any? = null,
     noinline updateView: UpdateView<V>? = null,
     noinline children: BuildContext.() -> Unit
-) = ViewGroupWidget(V::class, key, updateView, children)
+) = ViewGroupWidget(V::class, id, key, updateView, children)
 
 fun <V : ViewGroup> BuildContext.ViewGroupWidget(
     type: KClass<V>,
+    id: Any,
     key: Any? = null,
     updateView: UpdateView<V>? = null,
     children: BuildContext.() -> Unit
 ) = ViewGroupWidget(
-    viewType = type,
+    id = id,
     key = key,
     createView = {
         type.java.getDeclaredConstructor(Context::class.java)
@@ -50,7 +52,7 @@ inline fun <reified V : ViewGroup> ViewGroupWidget(
     noinline updateView: UpdateView<V>? = null,
     noinline children: BuildContext.() -> Unit
 ) = ViewGroupWidget<V>(
-    viewType = V::class,
+    id = sourceLocationId(),
     key = key,
     createView = createView,
     updateView = updateView,
@@ -58,12 +60,12 @@ inline fun <reified V : ViewGroup> ViewGroupWidget(
 )
 
 fun <V : ViewGroup> ViewGroupWidget(
-    viewType: KClass<V>,
+    id: Any,
     key: Any? = null,
     createView: CreateView<V>,
     updateView: UpdateView<V>? = null,
     children: BuildContext.() -> Unit
-): Widget = object : ViewGroupWidget<V>(key = joinKey(viewType, key), children = children) {
+): Widget = object : ViewGroupWidget<V>(key = joinKey(id, key), children = children) {
     override fun createView(container: ViewGroup): V = createView.invoke(container)
     override fun updateView(view: V) {
         super.updateView(view)

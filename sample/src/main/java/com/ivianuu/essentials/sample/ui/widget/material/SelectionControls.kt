@@ -24,7 +24,6 @@ import com.ivianuu.essentials.sample.ui.widget.lib.*
 import com.ivianuu.essentials.sample.ui.widget.view.Clickable
 import com.ivianuu.essentials.sample.ui.widget.view.Size
 import com.ivianuu.kommon.core.content.dp
-import kotlin.reflect.KClass
 
 fun BuildContext.CheckBox(
     value: Boolean,
@@ -33,10 +32,10 @@ fun BuildContext.CheckBox(
     val context = +ContextAmbient
     +Size(size = context.dp(48).toInt()) {
         +CompoundButton(
+            id = sourceLocationId(),
             value = value,
             onChange = onChange,
-            createView = { MaterialCheckBox(it.context) },
-            viewType = MaterialCheckBox::class
+            createView = { MaterialCheckBox(it.context) }
         )
     }
 }
@@ -48,10 +47,10 @@ fun BuildContext.RadioButton(
     val context = +ContextAmbient
     +Size(size = context.dp(48).toInt()) {
         +CompoundButton(
+            id = sourceLocationId(),
             value = value,
             onChange = onChange,
-            createView = { MaterialRadioButton(it.context) },
-            viewType = MaterialRadioButton::class
+            createView = { MaterialRadioButton(it.context) }
         )
     }
 }
@@ -63,24 +62,24 @@ fun BuildContext.Switch(
     val context = +ContextAmbient
     +Size(size = context.dp(48).toInt()) {
         +CompoundButton(
+            id = sourceLocationId(),
             value = value,
             onChange = onChange,
-            createView = { Switch(it.context) },
-            viewType = Switch::class
+            createView = { Switch(it.context) }
         )
     }
 }
 
 fun <V : CompoundButton> BuildContext.CompoundButton(
+    id: Any,
     value: Boolean,
     onChange: (Boolean) -> Unit,
-    createView: CreateView<V>,
-    viewType: KClass<V>
+    createView: CreateView<V>
 ): Widget = Clickable(
     onClick = { onChange(!value) },
     child = {
         +ViewWidget(
-            viewType = viewType,
+            id = id,
             createView = createView,
             updateView = { it.isChecked = value }
         )

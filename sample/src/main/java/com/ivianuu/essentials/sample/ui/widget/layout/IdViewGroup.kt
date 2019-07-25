@@ -17,35 +17,31 @@
 package com.ivianuu.essentials.sample.ui.widget.layout
 
 import android.view.ViewGroup
-import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
-import com.ivianuu.essentials.sample.ui.widget.lib.UpdateView
-import com.ivianuu.essentials.sample.ui.widget.lib.ViewGroupWidget
-import com.ivianuu.essentials.sample.ui.widget.lib.Widget
-import kotlin.reflect.KClass
+import com.ivianuu.essentials.sample.ui.widget.lib.*
 
 inline fun <reified V : ViewGroup> BuildContext.IdViewGroupWidget(
-    id: Int,
+    viewId: Int,
     key: Any? = null,
     noinline updateView: UpdateView<V>? = null,
     noinline children: BuildContext.() -> Unit
 ) = IdViewGroupWidget<V>(
-    id = id,
-    viewType = V::class,
+    id = sourceLocationId(),
+    viewId = viewId,
     key = key,
     updateView = updateView,
     children = children
 )
 
 fun <V : ViewGroup> BuildContext.IdViewGroupWidget(
-    id: Int,
-    viewType: KClass<V>,
+    id: Any,
+    viewId: Int,
     key: Any? = null,
     updateView: UpdateView<V>? = null,
     children: BuildContext.() -> Unit
 ): Widget = ViewGroupWidget<V>(
-    viewType = viewType,
+    id = id,
     key = key,
-    createView = { it.findViewById<V>(id) },
+    createView = { it.findViewById<V>(viewId) },
     updateView = updateView,
     children = children
 )

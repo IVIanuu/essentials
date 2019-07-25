@@ -27,16 +27,18 @@ typealias CreateView<V> = (ViewGroup) -> V
 typealias UpdateView<V> = (V) -> Unit
 
 inline fun <reified V : View> BuildContext.ViewWidget(
+    id: Any = sourceLocationId(),
     key: Any? = null,
     noinline updateView: UpdateView<V>? = null
-) = ViewWidget(V::class, key, updateView)
+) = ViewWidget(V::class, id, key, updateView)
 
 fun <V : View> BuildContext.ViewWidget(
     type: KClass<V>,
+    id: Any,
     key: Any? = null,
     updateView: UpdateView<V>? = null
 ) = ViewWidget(
-    viewType = type,
+    id = id,
     key = key,
     createView = {
         type.java.getDeclaredConstructor(Context::class.java)
@@ -50,18 +52,18 @@ inline fun <reified V : View> ViewWidget(
     noinline createView: CreateView<V>,
     noinline updateView: UpdateView<V>? = null
 ) = ViewWidget(
-    viewType = V::class,
+    id = sourceLocationId(),
     key = key,
     createView = createView,
     updateView = updateView
 )
 
 fun <V : View> ViewWidget(
-    viewType: KClass<V>,
+    id: Any,
     key: Any? = null,
     createView: CreateView<V>,
     updateView: UpdateView<V>? = null
-): Widget = object : ViewWidget<V>(joinKey(viewType, key)) {
+): Widget = object : ViewWidget<V>(joinKey(id, key)) {
     override fun createView(container: ViewGroup): V = createView.invoke(container)
     override fun updateView(view: V) {
         super.updateView(view)

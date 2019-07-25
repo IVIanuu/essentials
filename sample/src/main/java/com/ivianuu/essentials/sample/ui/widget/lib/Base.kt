@@ -20,6 +20,10 @@ import com.github.ajalt.timberkt.d
 
 abstract class Widget(val key: Any? = null) {
 
+    init {
+        d { "${javaClass.simpleName} init with key $key" }
+    }
+
     abstract fun createElement(): Element
 
     fun canUpdate(other: Widget): Boolean = this::class == other::class && this.key == other.key

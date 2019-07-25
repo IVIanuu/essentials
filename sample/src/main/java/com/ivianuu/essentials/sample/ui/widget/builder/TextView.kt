@@ -32,7 +32,7 @@ inline fun withTextStyle(res: Int, crossinline block: () -> Unit) = effectOf<Uni
     }
 }
 
-inline fun BuildContext.TextView(block: BuildView<AppCompatTextView>) = View<AppCompatTextView> {
+fun BuildContext.TextView(block: BuildView<AppCompatTextView>) = View<AppCompatTextView> {
     (+TextStyleAmbient)?.let { textAppearance(it) }
     block()
 }

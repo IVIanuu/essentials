@@ -19,4 +19,4 @@ package com.ivianuu.essentials.sample.ui.widget.builder
 import android.widget.FrameLayout
 import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
 
-inline fun BuildContext.FrameLayout(block: BuildViewGroup<FrameLayout>) = ViewGroup(block)
+fun BuildContext.FrameLayout(block: BuildViewGroup<FrameLayout>) = ViewGroup(block)

@@ -19,7 +19,7 @@ package com.ivianuu.essentials.sample.ui.widget.builder
 import com.google.android.material.checkbox.MaterialCheckBox
 import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
 
-inline fun BuildContext.CheckBox(block: BuildView<MaterialCheckBox>) = View<MaterialCheckBox> {
+fun BuildContext.CheckBox(block: BuildView<MaterialCheckBox>) = View<MaterialCheckBox> {
     wrapContent()
     block()
 }

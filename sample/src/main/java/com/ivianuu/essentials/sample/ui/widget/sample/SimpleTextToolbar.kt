@@ -25,7 +25,7 @@ import com.ivianuu.essentials.sample.ui.widget.lib.StatelessWidget
 import com.ivianuu.kommon.core.content.colorAttr
 import com.ivianuu.kommon.core.content.dp
 
-fun BuildContext.SimpleTextToolbar(title: String) = StatelessWidget("toolbar") {
+fun BuildContext.SimpleTextToolbar(title: String) = StatelessWidget {
     val context = +ContextAmbient
 
     +FrameLayout {

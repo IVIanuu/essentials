@@ -60,7 +60,7 @@ class WidgetController2 : WidgetController() {
             orientation(VERTICAL)
             children {
                 +SimpleTextToolbar(title = "Compose")
-                +StatelessWidget("content") {
+                +StatelessWidget {
                     val (loading, setLoading) = +state { true }
 
                     +launchOnActive {
@@ -78,7 +78,7 @@ class WidgetController2 : WidgetController() {
         }
     }
 
-    private fun BuildContext.Loading() = StatelessWidget("Loading") {
+    private fun BuildContext.Loading() = StatelessWidget {
         +FrameLayout {
             matchParent()
             background(color = Color.BLUE)
@@ -90,14 +90,14 @@ class WidgetController2 : WidgetController() {
         }
     }
 
-    private fun BuildContext.Content() = StatelessWidget("Content") {
+    private fun BuildContext.Content() = StatelessWidget {
         +LinearLayout {
             matchParent()
             children { +ListItem(0) }
         }
     }
 
-    private fun BuildContext.ListItem(i: Int) = StatelessWidget("ListItem") {
+    private fun BuildContext.ListItem(i: Int) = StatelessWidget {
         val (checked, setChecked) = +state { false }
 
         +ListItem(
@@ -113,7 +113,7 @@ class WidgetController2 : WidgetController() {
         )
     }
 
-    private fun BuildContext.MenuButton() = StatelessWidget("MenuButton") {
+    private fun BuildContext.MenuButton() = StatelessWidget {
         +ImageView {
             layoutSize(dp(40).toInt())
             padding(dp(8).toInt())

@@ -36,10 +36,6 @@ fun BuildContext.Size(
     height: Int,
     child: BuildContext.() -> Unit
 ) = LayoutParamsWidget(
-    props = listOf(
-        ViewGroup.LayoutParams::width,
-        ViewGroup.LayoutParams::height
-    ),
     updateLayoutParams = {
         if (it.width != width || it.height != height) {
             it.width = width
@@ -53,7 +49,6 @@ fun BuildContext.Size(
 )
 
 fun BuildContext.Gravity(gravity: Int, child: BuildContext.() -> Unit) = LayoutParamsWidget(
-    props = listOf(FrameLayout.LayoutParams::gravity, LinearLayout.LayoutParams::gravity),
     updateLayoutParams = { lp ->
         when (lp) {
             is FrameLayout.LayoutParams -> {
@@ -88,7 +83,6 @@ fun BuildContext.Margin(
     bottom: Int = 0,
     child: BuildContext.() -> Unit
 ) = LayoutParamsWidget(
-    props = listOf(ViewGroup.MarginLayoutParams::setMargins),
     updateLayoutParams = {
         if (it is ViewGroup.MarginLayoutParams) {
             if (it.leftMargin != left
@@ -115,7 +109,6 @@ fun BuildContext.Weight(
     weight: Float,
     child: BuildContext.() -> Unit
 ) = LayoutParamsWidget(
-    props = listOf(LinearLayout.LayoutParams::weight),
     updateLayoutParams = {
         if (it is LinearLayout.LayoutParams) {
             if (it.weight != weight) {

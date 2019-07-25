@@ -17,12 +17,8 @@
 package com.ivianuu.essentials.sample.ui.widget.layout
 
 import android.view.ViewGroup
-import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
-import com.ivianuu.essentials.sample.ui.widget.lib.UpdateView
-import com.ivianuu.essentials.sample.ui.widget.lib.ViewGroupWidget
-import com.ivianuu.essentials.sample.ui.widget.lib.Widget
+import com.ivianuu.essentials.sample.ui.widget.lib.*
 import com.ivianuu.kommon.core.view.inflate
-import kotlin.reflect.KClass
 
 inline fun <reified V : ViewGroup> BuildContext.InflateViewGroupWidget(
     layoutRes: Int,
@@ -30,21 +26,21 @@ inline fun <reified V : ViewGroup> BuildContext.InflateViewGroupWidget(
     noinline updateView: UpdateView<V>? = null,
     noinline children: BuildContext.() -> Unit
 ) = InflateViewGroupWidget<V>(
+    id = sourceLocationId(),
     layoutRes = layoutRes,
-    viewType = V::class,
     key = key,
     updateView = updateView,
     children = children
 )
 
 fun <V : ViewGroup> BuildContext.InflateViewGroupWidget(
+    id: Any,
     layoutRes: Int,
-    viewType: KClass<V>,
     key: Any? = null,
     updateView: UpdateView<V>? = null,
     children: BuildContext.() -> Unit
 ): Widget = ViewGroupWidget(
-    viewType = viewType,
+    id = id,
     key = key,
     createView = { it.inflate<V>(layoutRes) },
     updateView = updateView,

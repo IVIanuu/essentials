@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.sample.ui.widget.view
 
 import android.view.MotionEvent
-import android.view.View
 import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget.lib.ViewPropsWidget
 
@@ -25,7 +24,6 @@ fun BuildContext.Clickable(
     onClick: () -> Unit,
     child: BuildContext.() -> Unit
 ) = ViewPropsWidget(
-    props = listOf(View.OnClickListener::class),
     updateViewProps = { it.setOnClickListener { onClick() } },
     child = child
 )
@@ -34,7 +32,6 @@ fun BuildContext.LongClickable(
     onLongClick: () -> Unit,
     child: BuildContext.() -> Unit
 ) = ViewPropsWidget(
-    props = listOf(View.OnLongClickListener::class),
     updateViewProps = { it.setOnLongClickListener { onLongClick(); true } },
     child = child
 )
@@ -50,7 +47,6 @@ fun BuildContext.Touchable(
     onTouch: (MotionEvent) -> Boolean,
     child: BuildContext.() -> Unit
 ) = ViewPropsWidget(
-    props = listOf(View.OnTouchListener::class),
     updateViewProps = { it.setOnTouchListener { _, event -> onTouch(event) } },
     child = child
 )

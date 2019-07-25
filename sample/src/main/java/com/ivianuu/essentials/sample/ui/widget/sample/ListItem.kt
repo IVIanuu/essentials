@@ -46,7 +46,7 @@ fun BuildContext.ListItem(
 
     onClick: (() -> Unit)? = null,
     onLongClick: (() -> Unit)? = null
-) = StatelessWidget("ListItem") {
+) = StatelessWidget {
     +Clickable(onClick = onClick ?: {}) {
         +LongClickable(onLongClick = onLongClick ?: {}) {
             +Ripple {

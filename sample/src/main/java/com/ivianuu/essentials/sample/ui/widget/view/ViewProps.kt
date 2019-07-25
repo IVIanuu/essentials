@@ -33,7 +33,6 @@ fun BuildContext.Background(
     attr: Int? = null,
     child: BuildContext.() -> Unit
 ) = ViewPropsWidget(
-    props = listOf(View::setBackgroundColor, View::setBackground, View::setBackgroundResource),
     updateViewProps = { view ->
         when {
             color != null -> view.setBackgroundColor(color)
@@ -67,7 +66,6 @@ fun BuildContext.MinSize(
     minHeight: Int = 0,
     child: BuildContext.() -> Unit
 ) = ViewPropsWidget(
-    props = listOf(View::setMinimumWidth, View::setMinimumHeight),
     updateViewProps = {
         it.minimumWidth = minWidth
         it.minimumHeight = minHeight
@@ -85,7 +83,6 @@ fun BuildContext.Padding(
     bottom: Int = 0,
     child: BuildContext.() -> Unit
 ) = ViewPropsWidget(
-    props = listOf(View::setPadding),
     updateViewProps = { it.updatePaddingRelative(left, top, right, bottom) },
     child = child
 )
@@ -95,7 +92,6 @@ fun BuildContext.Pivot(
     y: Float,
     child: BuildContext.() -> Unit
 ) = ViewPropsWidget(
-    props = listOf(View::setPivotX, View::setPivotY),
     updateViewProps = { it.pivotX = x; it.pivotY = y },
     child = child
 )
@@ -108,7 +104,6 @@ fun BuildContext.Scale(
     y: Float,
     child: BuildContext.() -> Unit
 ) = ViewPropsWidget(
-    props = listOf(View::setScaleX, View::setScaleY),
     updateViewProps = { it.scaleX = x; it.scaleY = y },
     child = child
 )
@@ -119,7 +114,6 @@ fun BuildContext.Translation(
     z: Float,
     child: BuildContext.() -> Unit
 ) = ViewPropsWidget(
-    props = listOf(View::setTranslationX, View::setTranslationY, View::setTranslationZ),
     updateViewProps = {
         it.translationX = x;
         it.translationY = y;
