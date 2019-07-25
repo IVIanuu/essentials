@@ -19,12 +19,13 @@ package com.ivianuu.essentials.sample.ui.widget.view
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import androidx.appcompat.widget.AppCompatImageView
+import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget.lib.ContextAmbient
 import com.ivianuu.essentials.sample.ui.widget.lib.StatelessWidget
 import com.ivianuu.essentials.sample.ui.widget.lib.ViewWidget
 import com.ivianuu.kommon.core.content.dp
 
-fun Icon(
+fun BuildContext.Icon(
     iconDrawable: Drawable? = null,
     iconBitmap: Bitmap? = null,
     iconRes: Int? = null
@@ -38,7 +39,7 @@ fun Icon(
     )
 }
 
-fun Avatar(
+fun BuildContext.Avatar(
     avatarDrawable: Drawable? = null,
     avatarBitmap: Bitmap? = null,
     avatarRes: Int? = null
@@ -52,7 +53,7 @@ fun Avatar(
     )
 }
 
-fun SizedImageView(
+fun BuildContext.SizedImageView(
     size: Int,
     imageDrawable: Drawable? = null,
     imageBitmap: Bitmap? = null,
@@ -67,7 +68,7 @@ fun SizedImageView(
     }
 }
 
-fun ImageView(
+fun BuildContext.ImageView(
     imageDrawable: Drawable? = null,
     imageBitmap: Bitmap? = null,
     imageRes: Int? = null

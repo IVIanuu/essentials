@@ -70,7 +70,7 @@ abstract class ComponentElement(widget: Widget) : Element(widget) {
     override fun performRebuild() {
         d { "${widget.key} perform rebuild" }
         child()
-        val built = pendingChild!!
+        val built = pendingChild ?: error("expecting a child $widget ${widget.key}")
         d { "${widget.key} rebuild result is ${pendingChild!!.key}" }
         pendingChild = null
         isDirty = false

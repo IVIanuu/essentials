@@ -20,7 +20,7 @@ import com.google.android.material.card.MaterialCardView
 import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget.lib.ViewGroupWidget
 
-fun CardView(children: BuildContext.() -> Unit) = ViewGroupWidget<MaterialCardView>(
+fun BuildContext.CardView(children: BuildContext.() -> Unit) = ViewGroupWidget<MaterialCardView>(
     children = children,
     updateView = null // todo
 )

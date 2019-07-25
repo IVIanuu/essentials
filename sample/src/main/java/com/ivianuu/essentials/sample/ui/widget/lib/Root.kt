@@ -100,7 +100,7 @@ internal class RootElement(
     override fun performRebuild() {
         widget<RootWidget>().child(this)
         d { "${widget.key} perform rebuild built $pendingChild" }
-        val built = pendingChild!!
+        val built = pendingChild ?: error("expecting a child $widget ${widget.key}")
         pendingChild = null
         isDirty = false
         child = updateChild(child, built, slot)

@@ -17,8 +17,9 @@
 package com.ivianuu.essentials.sample.ui.widget.builder
 
 import android.widget.Switch
+import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
 
-inline fun Switch(block: BuildView<Switch>) = View<Switch> {
+inline fun BuildContext.Switch(block: BuildView<Switch>) = View<Switch> {
     wrapContent()
     block()
 }

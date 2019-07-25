@@ -21,7 +21,7 @@ import android.view.View
 import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget.lib.ViewPropsWidget
 
-fun Clickable(
+fun BuildContext.Clickable(
     onClick: () -> Unit,
     child: BuildContext.() -> Unit
 ) = ViewPropsWidget(
@@ -30,7 +30,7 @@ fun Clickable(
     child = child
 )
 
-fun LongClickable(
+fun BuildContext.LongClickable(
     onLongClick: () -> Unit,
     child: BuildContext.() -> Unit
 ) = ViewPropsWidget(
@@ -39,14 +39,14 @@ fun LongClickable(
     child = child
 )
 
-fun DisableTouch(
+fun BuildContext.DisableTouch(
     child: BuildContext.() -> Unit
 ) = Touchable(
     onTouch = { true },
     child = child
 )
 
-fun Touchable(
+fun BuildContext.Touchable(
     onTouch: (MotionEvent) -> Boolean,
     child: BuildContext.() -> Unit
 ) = ViewPropsWidget(

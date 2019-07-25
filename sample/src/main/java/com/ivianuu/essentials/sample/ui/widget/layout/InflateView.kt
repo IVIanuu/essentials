@@ -17,13 +17,14 @@
 package com.ivianuu.essentials.sample.ui.widget.layout
 
 import android.view.ViewGroup
+import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget.lib.UpdateView
 import com.ivianuu.essentials.sample.ui.widget.lib.ViewWidget
 import com.ivianuu.essentials.sample.ui.widget.lib.Widget
 import com.ivianuu.kommon.core.view.inflate
 import kotlin.reflect.KClass
 
-inline fun <reified V : ViewGroup> InflateViewWidget(
+inline fun <reified V : ViewGroup> BuildContext.InflateViewWidget(
     layoutRes: Int,
     key: Any? = null,
     noinline updateView: UpdateView<V>? = null
@@ -34,7 +35,7 @@ inline fun <reified V : ViewGroup> InflateViewWidget(
     updateView = updateView
 )
 
-fun <V : ViewGroup> InflateViewWidget(
+fun <V : ViewGroup> BuildContext.InflateViewWidget(
     layoutRes: Int,
     viewType: KClass<V>,
     key: Any? = null,

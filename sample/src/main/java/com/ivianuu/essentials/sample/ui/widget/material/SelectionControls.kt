@@ -20,17 +20,13 @@ import android.widget.CompoundButton
 import android.widget.Switch
 import com.google.android.material.checkbox.MaterialCheckBox
 import com.google.android.material.radiobutton.MaterialRadioButton
-import com.ivianuu.essentials.sample.ui.widget.lib.ContextAmbient
-import com.ivianuu.essentials.sample.ui.widget.lib.CreateView
-import com.ivianuu.essentials.sample.ui.widget.lib.StatelessWidget
-import com.ivianuu.essentials.sample.ui.widget.lib.ViewWidget
-import com.ivianuu.essentials.sample.ui.widget.lib.Widget
+import com.ivianuu.essentials.sample.ui.widget.lib.*
 import com.ivianuu.essentials.sample.ui.widget.view.Clickable
 import com.ivianuu.essentials.sample.ui.widget.view.Size
 import com.ivianuu.kommon.core.content.dp
 import kotlin.reflect.KClass
 
-fun CheckBox(
+fun BuildContext.CheckBox(
     value: Boolean,
     onChange: (Boolean) -> Unit
 ) = StatelessWidget("CheckBox") {
@@ -45,7 +41,7 @@ fun CheckBox(
     }
 }
 
-fun RadioButton(
+fun BuildContext.RadioButton(
     value: Boolean,
     onChange: (Boolean) -> Unit
 ) = StatelessWidget("RadioButton") {
@@ -60,7 +56,7 @@ fun RadioButton(
     }
 }
 
-fun Switch(
+fun BuildContext.Switch(
     value: Boolean,
     onChange: (Boolean) -> Unit
 ) = StatelessWidget("Switch") {
@@ -75,7 +71,7 @@ fun Switch(
     }
 }
 
-fun <V : CompoundButton> CompoundButton(
+fun <V : CompoundButton> BuildContext.CompoundButton(
     value: Boolean,
     onChange: (Boolean) -> Unit,
     createView: CreateView<V>,

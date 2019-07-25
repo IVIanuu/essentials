@@ -17,8 +17,9 @@
 package com.ivianuu.essentials.sample.ui.widget.builder
 
 import android.widget.ProgressBar
+import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
 
-inline fun ProgressBar(block: BuildView<ProgressBar>) = View<ProgressBar> {
+inline fun BuildContext.ProgressBar(block: BuildView<ProgressBar>) = View<ProgressBar> {
     wrapContent()
     block()
 }

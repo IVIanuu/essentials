@@ -17,5 +17,6 @@
 package com.ivianuu.essentials.sample.ui.widget.builder
 
 import androidx.constraintlayout.widget.ConstraintLayout
+import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
 
-fun ConstraintLayout(block: BuildViewGroup<ConstraintLayout>) = ViewGroup(block)
+fun BuildContext.ConstraintLayout(block: BuildViewGroup<ConstraintLayout>) = ViewGroup(block)

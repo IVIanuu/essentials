@@ -24,7 +24,7 @@ import com.ivianuu.essentials.sample.ui.widget.lib.Widget
 import com.ivianuu.kommon.core.view.inflate
 import kotlin.reflect.KClass
 
-inline fun <reified V : ViewGroup> InflateViewGroupWidget(
+inline fun <reified V : ViewGroup> BuildContext.InflateViewGroupWidget(
     layoutRes: Int,
     key: Any? = null,
     noinline updateView: UpdateView<V>? = null,
@@ -37,7 +37,7 @@ inline fun <reified V : ViewGroup> InflateViewGroupWidget(
     children = children
 )
 
-fun <V : ViewGroup> InflateViewGroupWidget(
+fun <V : ViewGroup> BuildContext.InflateViewGroupWidget(
     layoutRes: Int,
     viewType: KClass<V>,
     key: Any? = null,

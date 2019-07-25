@@ -20,7 +20,7 @@ import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget.lib.StatelessWidget
 
-fun Ripple(
+fun BuildContext.Ripple(
     unbounded: Boolean = false,
     child: BuildContext.() -> Unit
 ) = StatelessWidget("Ripple") {

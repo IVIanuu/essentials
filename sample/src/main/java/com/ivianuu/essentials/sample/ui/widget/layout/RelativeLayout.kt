@@ -21,7 +21,7 @@ import android.widget.RelativeLayout
 import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget.lib.ViewGroupWidget
 
-fun RelativeLayout(
+fun BuildContext.RelativeLayout(
     gravity: Int = Gravity.START or Gravity.TOP,
     children: BuildContext.() -> Unit
 ) = ViewGroupWidget<RelativeLayout>(

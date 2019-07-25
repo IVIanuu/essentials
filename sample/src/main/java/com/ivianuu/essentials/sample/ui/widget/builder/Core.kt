@@ -19,22 +19,14 @@ package com.ivianuu.essentials.sample.ui.widget.builder
 import android.content.Context
 import android.view.View
 import android.view.ViewGroup
-import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
-import com.ivianuu.essentials.sample.ui.widget.lib.CreateView
-import com.ivianuu.essentials.sample.ui.widget.lib.LayoutParamsWidget
-import com.ivianuu.essentials.sample.ui.widget.lib.StatelessWidget
-import com.ivianuu.essentials.sample.ui.widget.lib.UpdateLayoutParams
-import com.ivianuu.essentials.sample.ui.widget.lib.UpdateView
-import com.ivianuu.essentials.sample.ui.widget.lib.ViewGroupWidget
-import com.ivianuu.essentials.sample.ui.widget.lib.ViewWidget
-import com.ivianuu.essentials.sample.ui.widget.lib.Widget
+import com.ivianuu.essentials.sample.ui.widget.lib.*
 import kotlin.properties.Delegates
 import kotlin.reflect.KClass
 
 typealias BuildView<V> = ViewWidgetBuilder<V>.() -> Unit
 typealias BuildViewGroup<V> = ViewGroupWidgetBuilder<V>.() -> Unit
 
-inline fun <reified V : View> View(block: BuildView<V>): Widget {
+inline fun <reified V : View> BuildContext.View(block: BuildView<V>): Widget {
     return View(V::class) {
         createView {
             V::class.java.getDeclaredConstructor(Context::class.java)
@@ -44,7 +36,7 @@ inline fun <reified V : View> View(block: BuildView<V>): Widget {
     }
 }
 
-inline fun <V : View> View(
+inline fun <V : View> BuildContext.View(
     viewType: KClass<V>,
     block: BuildView<V>
 ): Widget = ViewWidgetBuilder(viewType).apply(block).build()
@@ -67,26 +59,37 @@ open class ViewWidgetBuilder<V : View>(protected val viewType: KClass<V>) {
         updateLayoutParamsBlocks.add(block)
     }
 
-    open fun build(): Widget = StatelessWidget("ViewWidgetBuilder") {
-        +LayoutParamsWidget(
-            props = emptyList(),
-            updateLayoutParams = { lp ->
-                var updated = false
-                updateLayoutParamsBlocks.forEach { updated = it(lp) || updated }
-                updated
-            },
-            child = {
-                +ViewWidget(
-                    viewType = viewType,
-                    createView = createView,
-                    updateView = { v -> updateViewBlocks.forEach { it(v) } }
-                )
-            }
-        )
+    open fun build(): Widget =
+        _Widget<V>(viewType, createView, updateViewBlocks, updateLayoutParamsBlocks)
+
+    private class _Widget<V : View>(
+        private val viewType: KClass<V>,
+        private val createView: CreateView<V>,
+        private val updateViewBlocks: List<UpdateView<V>>,
+        private val updateLayoutParamsBlocks: List<UpdateLayoutParams>
+    ) : StatelessWidget() {
+        override fun BuildContext.child() {
+            +LayoutParamsWidget(
+                props = emptyList(),
+                updateLayoutParams = { lp ->
+                    var updated = false
+                    updateLayoutParamsBlocks.forEach { updated = it(lp) || updated }
+                    updated
+                },
+                child = {
+                    +ViewWidget(
+                        viewType = viewType,
+                        createView = createView,
+                        updateView = { v -> updateViewBlocks.forEach { it(v) } }
+                    )
+                }
+            )
+        }
     }
+
 }
 
-inline fun <reified V : ViewGroup> ViewGroup(block: BuildViewGroup<V>): Widget {
+inline fun <reified V : ViewGroup> BuildContext.ViewGroup(block: BuildViewGroup<V>): Widget {
     return ViewGroup(V::class) {
         createView {
             V::class.java.getDeclaredConstructor(Context::class.java)
@@ -96,7 +99,7 @@ inline fun <reified V : ViewGroup> ViewGroup(block: BuildViewGroup<V>): Widget {
     }
 }
 
-inline fun <V : ViewGroup> ViewGroup(
+inline fun <V : ViewGroup> BuildContext.ViewGroup(
     viewType: KClass<V>,
     block: BuildViewGroup<V>
 ): Widget = ViewGroupWidgetBuilder(viewType).apply(block).build()
@@ -110,22 +113,36 @@ open class ViewGroupWidgetBuilder<V : ViewGroup>(viewType: KClass<V>) :
         children.add(block)
     }
 
-    override fun build(): Widget = StatelessWidget("ViewGroupWidgetBuilder") {
-        +LayoutParamsWidget(
-            props = emptyList(),
-            updateLayoutParams = { lp ->
-                var updated = false
-                updateLayoutParamsBlocks.forEach { updated = it(lp) || updated }
-                updated
-            },
-            child = {
-                +ViewGroupWidget(
-                    viewType = viewType,
-                    createView = createView,
-                    updateView = { v -> updateViewBlocks.forEach { it(v) } },
-                    children = { children.forEach { it() } }
-                )
-            }
-        )
+    override fun build(): Widget =
+        _Widget<V>(viewType, createView, updateViewBlocks, updateLayoutParamsBlocks, children)
+
+    private class _Widget<V : ViewGroup>(
+        private val viewType: KClass<V>,
+        private val createView: CreateView<V>,
+        private val updateViewBlocks: List<UpdateView<V>>,
+        private val updateLayoutParamsBlocks: List<UpdateLayoutParams>,
+        private val children: List<BuildContext.() -> Unit>
+    ) : StatelessWidget() {
+        override fun BuildContext.child() {
+            +LayoutParamsWidget(
+                props = emptyList(),
+                updateLayoutParams = { lp ->
+                    var updated = false
+                    updateLayoutParamsBlocks.forEach { updated = it(lp) || updated }
+                    updated
+                },
+                child = {
+                    +ViewGroupWidget<V>(
+                        viewType = viewType,
+                        createView = createView,
+                        updateView = { v -> updateViewBlocks.forEach { it(v) } },
+                        children = {
+                            children.forEach { it() }
+                        }
+                    )
+                }
+            )
+        }
     }
+
 }

@@ -18,23 +18,14 @@ package com.ivianuu.essentials.sample.ui.widget.sample
 
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import com.ivianuu.essentials.sample.R
-import com.ivianuu.essentials.sample.ui.widget.builder.FrameLayout
-import com.ivianuu.essentials.sample.ui.widget.builder.TextView
-import com.ivianuu.essentials.sample.ui.widget.builder.background
-import com.ivianuu.essentials.sample.ui.widget.builder.elevation
-import com.ivianuu.essentials.sample.ui.widget.builder.layoutGravity
-import com.ivianuu.essentials.sample.ui.widget.builder.layoutHeight
-import com.ivianuu.essentials.sample.ui.widget.builder.layoutWidth
-import com.ivianuu.essentials.sample.ui.widget.builder.text
-import com.ivianuu.essentials.sample.ui.widget.builder.textAppearance
-import com.ivianuu.essentials.sample.ui.widget.builder.textColor
-import com.ivianuu.essentials.sample.ui.widget.builder.wrapContent
+import com.ivianuu.essentials.sample.ui.widget.builder.*
+import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget.lib.ContextAmbient
 import com.ivianuu.essentials.sample.ui.widget.lib.StatelessWidget
 import com.ivianuu.kommon.core.content.colorAttr
 import com.ivianuu.kommon.core.content.dp
 
-fun SimpleTextToolbar(title: String) = StatelessWidget("toolbar") {
+fun BuildContext.SimpleTextToolbar(title: String) = StatelessWidget("toolbar") {
     val context = +ContextAmbient
 
     +FrameLayout {

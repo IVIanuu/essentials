@@ -18,9 +18,13 @@ package com.ivianuu.essentials.sample.ui.widget.sample
 
 import android.view.View
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
+import androidx.constraintlayout.widget.ConstraintSet
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.sample.ui.widget.builder.TextStyleAmbient
 import com.ivianuu.essentials.sample.ui.widget.layout.ConstraintLayout
+import com.ivianuu.essentials.sample.ui.widget.layout.ConstraintSetBuilder.Side.*
+import com.ivianuu.essentials.sample.ui.widget.layout.PARENT_ID
+import com.ivianuu.essentials.sample.ui.widget.layout.ViewConstraintBuilder
 import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget.lib.ContextAmbient
 import com.ivianuu.essentials.sample.ui.widget.lib.StatelessWidget
@@ -33,7 +37,7 @@ import com.ivianuu.kommon.core.content.dp
 
 fun viewId() = memo { View.generateViewId() }
 
-fun ListItem(
+fun BuildContext.ListItem(
     title: (BuildContext.() -> Unit)? = null,
     subtitle: (BuildContext.() -> Unit)? = null,
 
@@ -60,7 +64,7 @@ fun ListItem(
     }
 }
 
-private fun ListItemContent(
+private fun BuildContext.ListItemContent(
     title: (BuildContext.() -> Unit)? = null,
     subtitle: (BuildContext.() -> Unit)? = null,
 
@@ -88,7 +92,12 @@ private fun ListItemContent(
     }
 
 
-    /*constraints {
+    constraints {
+        val leadingId = +viewId()
+        val trailingId = +viewId()
+        val titleId = +viewId()
+        val subtitleId = +viewId()
+
         // layout leading
         if (leading != null) {
             leadingId {
@@ -159,5 +168,5 @@ private fun ListItemContent(
                 ConstraintSet.CHAIN_PACKED
             )
         }
-    }*/
+    }
 }

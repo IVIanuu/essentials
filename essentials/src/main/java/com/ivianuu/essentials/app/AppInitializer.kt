@@ -16,21 +16,29 @@
 
 package com.ivianuu.essentials.app
 
-import com.ivianuu.injekt.BindingContext
-import com.ivianuu.injekt.Definition
-import com.ivianuu.injekt.Module
-import com.ivianuu.injekt.Name
-import com.ivianuu.injekt.factory
-import com.ivianuu.injekt.intoMap
-import com.ivianuu.injekt.map
-import com.ivianuu.injekt.module
-import com.ivianuu.injekt.withBinding
+import com.ivianuu.injekt.*
 import kotlin.reflect.KClass
 
 /**
- * Initializes what ever on app start up
+ * Will be instantiated on app start up
+ * Can be used to initialize global stuff like logging
+ *
+ * class AnalyticsInitializer {
+ *     init {
+ *         Analytics.initialize(Logger())
+ *     }
+ * }
+ *
+ *
+ * Must be bound inside your module like this:
+ *
+ * val analyticsModule = module {
+ *     appInitializer { AnalyticsAppInitializer() }
+ * }
+ *
  */
 interface AppInitializer
+
 
 inline fun <reified T : AppInitializer> Module.appInitializer(
     name: Any? = null,

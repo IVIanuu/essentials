@@ -22,16 +22,16 @@ import android.widget.LinearLayout
 import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget.lib.LayoutParamsWidget
 
-fun MatchParent(child: BuildContext.() -> Unit) =
+fun BuildContext.MatchParent(child: BuildContext.() -> Unit) =
     Size(size = ViewGroup.LayoutParams.MATCH_PARENT, child = child)
 
-fun WrapContent(child: BuildContext.() -> Unit) =
+fun BuildContext.WrapContent(child: BuildContext.() -> Unit) =
     Size(size = ViewGroup.LayoutParams.WRAP_CONTENT, child = child)
 
-fun Size(size: Int, child: BuildContext.() -> Unit) =
+fun BuildContext.Size(size: Int, child: BuildContext.() -> Unit) =
     Size(width = size, height = size, child = child)
 
-fun Size(
+fun BuildContext.Size(
     width: Int,
     height: Int,
     child: BuildContext.() -> Unit
@@ -52,7 +52,7 @@ fun Size(
     child = child
 )
 
-fun Gravity(gravity: Int, child: BuildContext.() -> Unit) = LayoutParamsWidget(
+fun BuildContext.Gravity(gravity: Int, child: BuildContext.() -> Unit) = LayoutParamsWidget(
     props = listOf(FrameLayout.LayoutParams::gravity, LinearLayout.LayoutParams::gravity),
     updateLayoutParams = { lp ->
         when (lp) {
@@ -78,10 +78,10 @@ fun Gravity(gravity: Int, child: BuildContext.() -> Unit) = LayoutParamsWidget(
     child = child
 )
 
-fun Margin(margin: Int, child: BuildContext.() -> Unit) =
+fun BuildContext.Margin(margin: Int, child: BuildContext.() -> Unit) =
     Margin(margin, margin, margin, margin, child)
 
-fun Margin(
+fun BuildContext.Margin(
     left: Int = 0,
     top: Int = 0,
     right: Int = 0,
@@ -111,7 +111,7 @@ fun Margin(
     child = child
 )
 
-fun Weight(
+fun BuildContext.Weight(
     weight: Float,
     child: BuildContext.() -> Unit
 ) = LayoutParamsWidget(

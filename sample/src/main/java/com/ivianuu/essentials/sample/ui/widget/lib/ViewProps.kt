@@ -19,7 +19,7 @@ package com.ivianuu.essentials.sample.ui.widget.lib
 import android.view.View
 import kotlin.reflect.KFunction2
 
-fun <V : View, T> ViewPropsWidget(
+fun <V : View, T> BuildContext.ViewPropsWidget(
     value: T,
     prop: KFunction2<V, T, Any?>,
     key: Any? = null,
@@ -31,7 +31,7 @@ fun <V : View, T> ViewPropsWidget(
     updateViewProps = { prop.invoke(it as V, value) }
 )
 
-fun ViewPropsWidget(
+fun BuildContext.ViewPropsWidget(
     key: Any? = null,
     props: List<Any?>,
     updateViewProps: (View) -> Unit,

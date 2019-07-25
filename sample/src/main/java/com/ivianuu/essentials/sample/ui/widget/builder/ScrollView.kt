@@ -17,5 +17,6 @@
 package com.ivianuu.essentials.sample.ui.widget.builder
 
 import android.widget.ScrollView
+import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
 
-inline fun ScrollView(block: BuildViewGroup<ScrollView>) = ViewGroup(block)
+inline fun BuildContext.ScrollView(block: BuildViewGroup<ScrollView>) = ViewGroup(block)

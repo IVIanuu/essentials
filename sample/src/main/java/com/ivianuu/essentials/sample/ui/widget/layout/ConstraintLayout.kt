@@ -21,13 +21,24 @@ import androidx.constraintlayout.widget.ConstraintSet
 import com.ivianuu.essentials.sample.ui.widget.layout.ConstraintSetBuilder.Connection.BasicConnection
 import com.ivianuu.essentials.sample.ui.widget.layout.ConstraintSetBuilder.Side
 import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
+import com.ivianuu.essentials.sample.ui.widget.lib.StatelessWidget
 import com.ivianuu.essentials.sample.ui.widget.lib.ViewGroupWidget
 import com.ivianuu.essentials.sample.ui.widget.lib.Widget
 
 val PARENT_ID = ConstraintLayout.LayoutParams.PARENT_ID
 
-fun ConstraintLayout(children: BuildContext.() -> Unit): Widget =
-    ViewGroupWidget<ConstraintLayout>(children = children, updateView = null)
+fun BuildContext.ConstraintLayout(children: ConstraintLayoutChildren.() -> Unit): Widget =
+    StatelessWidget("ConstraintLayout") {
+        val constraintSetBuilder = ConstraintSetBuilder()
+        +ViewGroupWidget<ConstraintLayout>(
+            updateView = { constraintSetBuilder.applyTo(it) },
+            children = {
+                ConstraintLayoutChildren(this, constraintSetBuilder)
+                    .apply(children)
+            }
+        )
+
+    }
 
 class ConstraintLayoutChildren(
     private val context: BuildContext,

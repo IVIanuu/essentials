@@ -18,7 +18,7 @@ package com.ivianuu.essentials.sample.ui.widget.lib
 
 import android.view.ViewGroup
 
-fun LayoutParamsWidget(
+fun BuildContext.LayoutParamsWidget(
     key: Any? = null,
     props: List<Any?>,
     updateLayoutParams: (ViewGroup.LayoutParams) -> Boolean,

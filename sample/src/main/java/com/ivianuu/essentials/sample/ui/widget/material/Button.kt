@@ -18,11 +18,12 @@ package com.ivianuu.essentials.sample.ui.widget.material
 
 import android.graphics.drawable.Drawable
 import com.google.android.material.button.MaterialButton
+import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget.lib.StatelessWidget
 import com.ivianuu.essentials.sample.ui.widget.lib.ViewWidget
 import com.ivianuu.essentials.sample.ui.widget.view.Clickable
 
-fun MaterialButton(
+fun BuildContext.MaterialButton(
     text: String? = null,
     textRes: Int? = null,
     icon: Drawable? = null,

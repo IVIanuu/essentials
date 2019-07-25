@@ -23,17 +23,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.epoxy.EpoxyRecyclerView
 import com.airbnb.epoxy.TypedEpoxyController
 import com.github.ajalt.timberkt.d
-import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
-import com.ivianuu.essentials.sample.ui.widget.lib.ComponentElement
-import com.ivianuu.essentials.sample.ui.widget.lib.Element
-import com.ivianuu.essentials.sample.ui.widget.lib.ViewElement
-import com.ivianuu.essentials.sample.ui.widget.lib.ViewWidget
-import com.ivianuu.essentials.sample.ui.widget.lib.Widget
+import com.ivianuu.essentials.sample.ui.widget.lib.*
 import com.ivianuu.essentials.ui.epoxy.EsHolder
 import com.ivianuu.essentials.ui.epoxy.SimpleModel
 import com.ivianuu.kommon.core.view.tag
 
-fun RecyclerView(
+fun BuildContext.RecyclerView(
     layoutManager: RecyclerView.LayoutManager? = null,
     children: BuildContext.() -> Unit
 ): Widget = RecyclerViewWidget(layoutManager, children)

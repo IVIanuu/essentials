@@ -26,12 +26,12 @@ typealias UpdateLayoutParams = (ViewGroup.LayoutParams) -> Boolean
 typealias CreateView<V> = (ViewGroup) -> V
 typealias UpdateView<V> = (V) -> Unit
 
-inline fun <reified V : View> ViewWidget(
+inline fun <reified V : View> BuildContext.ViewWidget(
     key: Any? = null,
     noinline updateView: UpdateView<V>? = null
 ) = ViewWidget(V::class, key, updateView)
 
-fun <V : View> ViewWidget(
+fun <V : View> BuildContext.ViewWidget(
     type: KClass<V>,
     key: Any? = null,
     updateView: UpdateView<V>? = null

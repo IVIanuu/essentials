@@ -23,10 +23,10 @@ import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget.lib.ViewPropsWidget
 import com.ivianuu.kommon.core.view.drawableAttr
 
-fun Alpha(alpha: Float, child: BuildContext.() -> Unit) =
+fun BuildContext.Alpha(alpha: Float, child: BuildContext.() -> Unit) =
     ViewPropsWidget(value = alpha, prop = View::setAlpha, child = child)
 
-fun Background(
+fun BuildContext.Background(
     color: Int? = null,
     drawable: Drawable? = null,
     resource: Int? = null,
@@ -46,23 +46,23 @@ fun Background(
     child = child
 )
 
-fun Enabled(enabled: Boolean, child: BuildContext.() -> Unit) =
+fun BuildContext.Enabled(enabled: Boolean, child: BuildContext.() -> Unit) =
     ViewPropsWidget(value = enabled, prop = View::setEnabled, child = child)
 
-fun Elevation(elevation: Float, child: BuildContext.() -> Unit) =
+fun BuildContext.Elevation(elevation: Float, child: BuildContext.() -> Unit) =
     ViewPropsWidget(value = elevation, prop = View::setAlpha, child = child)
 
-fun Focusable(focusable: Boolean, child: BuildContext.() -> Unit) =
+fun BuildContext.Focusable(focusable: Boolean, child: BuildContext.() -> Unit) =
     ViewPropsWidget<View, Boolean>(
         value = focusable,
         prop = View::setFocusable,
         child = child
     )
 
-fun Id(id: Int, child: BuildContext.() -> Unit) =
+fun BuildContext.Id(id: Int, child: BuildContext.() -> Unit) =
     ViewPropsWidget(value = id, prop = View::setId, child = child)
 
-fun MinSize(
+fun BuildContext.MinSize(
     minWidth: Int = 0,
     minHeight: Int = 0,
     child: BuildContext.() -> Unit
@@ -75,10 +75,10 @@ fun MinSize(
     child = child
 )
 
-fun Padding(padding: Int, child: BuildContext.() -> Unit) =
+fun BuildContext.Padding(padding: Int, child: BuildContext.() -> Unit) =
     Padding(padding, padding, padding, padding, child)
 
-fun Padding(
+fun BuildContext.Padding(
     left: Int = 0,
     top: Int = 0,
     right: Int = 0,
@@ -90,7 +90,7 @@ fun Padding(
     child = child
 )
 
-fun Pivot(
+fun BuildContext.Pivot(
     x: Float,
     y: Float,
     child: BuildContext.() -> Unit
@@ -100,10 +100,10 @@ fun Pivot(
     child = child
 )
 
-fun Rotation(rotation: Float, child: BuildContext.() -> Unit) =
+fun BuildContext.Rotation(rotation: Float, child: BuildContext.() -> Unit) =
     ViewPropsWidget(value = rotation, prop = View::setRotation, child = child)
 
-fun Scale(
+fun BuildContext.Scale(
     x: Float,
     y: Float,
     child: BuildContext.() -> Unit
@@ -113,7 +113,7 @@ fun Scale(
     child = child
 )
 
-fun Translation(
+fun BuildContext.Translation(
     x: Float,
     y: Float,
     z: Float,
@@ -128,10 +128,10 @@ fun Translation(
     child = child
 )
 
-fun Visible(child: BuildContext.() -> Unit) = Visibility(View.VISIBLE, child)
-fun Invisible(child: BuildContext.() -> Unit) =
+fun BuildContext.Visible(child: BuildContext.() -> Unit) = Visibility(View.VISIBLE, child)
+fun BuildContext.Invisible(child: BuildContext.() -> Unit) =
     Visibility(View.INVISIBLE, child)
 
-fun Gone(child: BuildContext.() -> Unit) = Visibility(View.GONE, child)
-fun Visibility(visibility: Int, child: BuildContext.() -> Unit) =
+fun BuildContext.Gone(child: BuildContext.() -> Unit) = Visibility(View.GONE, child)
+fun BuildContext.Visibility(visibility: Int, child: BuildContext.() -> Unit) =
     ViewPropsWidget(value = visibility, prop = View::setVisibility, child = child)

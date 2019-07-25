@@ -23,7 +23,7 @@ import com.ivianuu.essentials.sample.ui.widget.lib.ViewGroupWidget
 import com.ivianuu.essentials.sample.ui.widget.lib.Widget
 import kotlin.reflect.KClass
 
-inline fun <reified V : ViewGroup> IdViewGroupWidget(
+inline fun <reified V : ViewGroup> BuildContext.IdViewGroupWidget(
     id: Int,
     key: Any? = null,
     noinline updateView: UpdateView<V>? = null,
@@ -36,7 +36,7 @@ inline fun <reified V : ViewGroup> IdViewGroupWidget(
     children = children
 )
 
-fun <V : ViewGroup> IdViewGroupWidget(
+fun <V : ViewGroup> BuildContext.IdViewGroupWidget(
     id: Int,
     viewType: KClass<V>,
     key: Any? = null,

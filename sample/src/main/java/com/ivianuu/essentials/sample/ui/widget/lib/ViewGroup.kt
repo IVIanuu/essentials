@@ -22,13 +22,13 @@ import android.view.ViewGroup
 import com.github.ajalt.timberkt.d
 import kotlin.reflect.KClass
 
-inline fun <reified V : ViewGroup> ViewGroupWidget(
+inline fun <reified V : ViewGroup> BuildContext.ViewGroupWidget(
     key: Any? = null,
     noinline updateView: UpdateView<V>? = null,
     noinline children: BuildContext.() -> Unit
 ) = ViewGroupWidget(V::class, key, updateView, children)
 
-fun <V : ViewGroup> ViewGroupWidget(
+fun <V : ViewGroup> BuildContext.ViewGroupWidget(
     type: KClass<V>,
     key: Any? = null,
     updateView: UpdateView<V>? = null,

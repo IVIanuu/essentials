@@ -17,8 +17,9 @@
 package com.ivianuu.essentials.sample.ui.widget.builder
 
 import android.widget.LinearLayout
+import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
 
-fun LinearLayout(block: BuildViewGroup<LinearLayout>) = ViewGroup(block)
+fun BuildContext.LinearLayout(block: BuildViewGroup<LinearLayout>) = ViewGroup(block)
 
 fun <V : LinearLayout> ViewGroupWidgetBuilder<V>.orientation(orientation: Int) {
     updateView { it.orientation = orientation }

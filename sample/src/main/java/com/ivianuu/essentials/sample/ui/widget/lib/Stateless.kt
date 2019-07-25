@@ -16,7 +16,7 @@
 
 package com.ivianuu.essentials.sample.ui.widget.lib
 
-fun StatelessWidget(
+fun BuildContext.StatelessWidget(
     id: Any,
     key: Any? = null,
     child: BuildContext.() -> Unit

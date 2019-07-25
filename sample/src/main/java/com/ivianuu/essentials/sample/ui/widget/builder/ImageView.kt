@@ -20,8 +20,9 @@ import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.widget.ImageView
 import androidx.appcompat.widget.AppCompatImageView
+import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
 
-inline fun ImageView(block: BuildView<AppCompatImageView>) = View(block)
+inline fun BuildContext.ImageView(block: BuildView<AppCompatImageView>) = View(block)
 
 fun <V : ImageView> ViewWidgetBuilder<V>.image(
     drawable: Drawable? = null,
