@@ -18,25 +18,17 @@ package com.ivianuu.essentials.sample.ui.widget.sample
 
 import android.view.View
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
-import androidx.constraintlayout.widget.ConstraintSet
 import com.ivianuu.essentials.sample.R
+import com.ivianuu.essentials.sample.ui.widget.builder.TextStyleAmbient
 import com.ivianuu.essentials.sample.ui.widget.layout.ConstraintLayout
-import com.ivianuu.essentials.sample.ui.widget.layout.ConstraintSetBuilder.Side.BOTTOM
-import com.ivianuu.essentials.sample.ui.widget.layout.ConstraintSetBuilder.Side.LEFT
-import com.ivianuu.essentials.sample.ui.widget.layout.ConstraintSetBuilder.Side.RIGHT
-import com.ivianuu.essentials.sample.ui.widget.layout.ConstraintSetBuilder.Side.TOP
-import com.ivianuu.essentials.sample.ui.widget.layout.PARENT_ID
-import com.ivianuu.essentials.sample.ui.widget.layout.ViewConstraintBuilder
 import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget.lib.ContextAmbient
 import com.ivianuu.essentials.sample.ui.widget.lib.StatelessWidget
 import com.ivianuu.essentials.sample.ui.widget.lib.memo
 import com.ivianuu.essentials.sample.ui.widget.view.Clickable
-import com.ivianuu.essentials.sample.ui.widget.view.Id
 import com.ivianuu.essentials.sample.ui.widget.view.LongClickable
 import com.ivianuu.essentials.sample.ui.widget.view.Ripple
 import com.ivianuu.essentials.sample.ui.widget.view.Size
-import com.ivianuu.essentials.sample.ui.widget.view.TextStyleAmbient
 import com.ivianuu.kommon.core.content.dp
 
 fun viewId() = memo { View.generateViewId() }
@@ -75,32 +67,28 @@ private fun ListItemContent(
     leading: (BuildContext.() -> Unit)? = null,
     trailing: (BuildContext.() -> Unit)? = null
 ) = ConstraintLayout {
-    val leadingId = +viewId()
-    val trailingId = +viewId()
-    val titleId = +viewId()
-    val subtitleId = +viewId()
-
     if (leading != null) {
-        +Id(id = leadingId, child = leading)
+        leading()
     }
 
     if (title != null) {
         +TextStyleAmbient.Provider(R.style.TextAppearance_MaterialComponents_Subtitle1) {
-            +Id(id = titleId, child = title)
+            title()
         }
     }
 
     if (subtitle != null) {
         +TextStyleAmbient.Provider(R.style.TextAppearance_MaterialComponents_Body2) {
-            +Id(id = subtitleId, child = subtitle)
+            subtitle()
         }
     }
 
     if (trailing != null) {
-        +Id(id = trailingId, child = trailing)
+        trailing()
     }
 
-    constraints {
+
+    /*constraints {
         // layout leading
         if (leading != null) {
             leadingId {
@@ -171,5 +159,5 @@ private fun ListItemContent(
                 ConstraintSet.CHAIN_PACKED
             )
         }
-    }
+    }*/
 }

@@ -16,37 +16,18 @@
 
 package com.ivianuu.essentials.sample.ui.widget.layout
 
-import android.content.Context
-import android.view.View
-import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
-import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.sample.ui.widget.layout.ConstraintSetBuilder.Connection.BasicConnection
 import com.ivianuu.essentials.sample.ui.widget.layout.ConstraintSetBuilder.Side
 import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
-import com.ivianuu.essentials.sample.ui.widget.lib.ViewGroupElement
 import com.ivianuu.essentials.sample.ui.widget.lib.ViewGroupWidget
 import com.ivianuu.essentials.sample.ui.widget.lib.Widget
 
 val PARENT_ID = ConstraintLayout.LayoutParams.PARENT_ID
 
-class CustomConstraintLayout(context: Context) : ConstraintLayout(context) {
-
-    override fun addView(child: View?, index: Int, params: ViewGroup.LayoutParams?) {
-        super.addView(child, index, params)
-        d { "add view $child $index $params" }
-    }
-
-    override fun setConstraintSet(set: ConstraintSet?) {
-        super.setConstraintSet(set)
-        d { "set constraint set $set" }
-    }
-
-}
-
-fun ConstraintLayout(children: ConstraintLayoutChildren.() -> Unit): Widget =
-    ConstraintLayoutWidget(children = children)
+fun ConstraintLayout(children: BuildContext.() -> Unit): Widget =
+    ViewGroupWidget<ConstraintLayout>(children = children, updateView = null)
 
 class ConstraintLayoutChildren(
     private val context: BuildContext,
@@ -218,37 +199,6 @@ class ViewConstraintBuilder(
 
     fun defaultHeight(value: Int) {
         constraintSetBuilder.constrainDefaultHeight(viewId, value)
-    }
-
-}
-
-private class ConstraintLayoutWidget(
-    val constraintSet: ConstraintSetBuilder = ConstraintSetBuilder(),
-    children: ConstraintLayoutChildren.() -> Unit
-) : ViewGroupWidget<ConstraintLayout>(children = {
-    ConstraintLayoutChildren(this, constraintSet)
-        .apply(children)
-}) {
-
-    override fun createElement(): ViewGroupElement<ConstraintLayout> =
-        ConstraintLayoutElement(this)
-
-    override fun createView(container: ViewGroup): ConstraintLayout =
-        CustomConstraintLayout(container.context)
-
-    override fun updateView(view: ConstraintLayout) {
-        super.updateView(view)
-        constraintSet.applyTo(view)
-    }
-}
-
-private class ConstraintLayoutElement(
-    widget: ConstraintLayoutWidget
-) : ViewGroupElement<ConstraintLayout>(widget) {
-
-    override fun attachView() {
-        super.attachView()
-        widget<ConstraintLayoutWidget>().updateView(requireView())
     }
 
 }

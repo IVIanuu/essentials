@@ -18,9 +18,24 @@ package com.ivianuu.essentials.sample.ui.widget.builder
 
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatTextView
+import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
+import com.ivianuu.essentials.sample.ui.widget.lib.ambientOf
+import com.ivianuu.essentials.sample.ui.widget.lib.effectOf
 
-inline fun TextView(block: ViewWidgetBuilder<AppCompatTextView>.() -> Unit) =
-    View<AppCompatTextView>(block)
+val TextStyleAmbient = ambientOf<Int?>("TextStyle")
+
+inline fun withTextStyle(res: Int, crossinline block: () -> Unit) = effectOf<Unit> {
+    with(context) {
+        +TextStyleAmbient.Provider(res) {
+            block()
+        }
+    }
+}
+
+inline fun BuildContext.TextView(block: BuildView<AppCompatTextView>) = View<AppCompatTextView> {
+    (+TextStyleAmbient)?.let { textAppearance(it) }
+    block()
+}
 
 fun <V : TextView> ViewWidgetBuilder<V>.text(
     text: String? = null,

@@ -18,43 +18,37 @@ package com.ivianuu.essentials.sample.ui.widget.sample
 
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import com.ivianuu.essentials.sample.R
+import com.ivianuu.essentials.sample.ui.widget.builder.FrameLayout
 import com.ivianuu.essentials.sample.ui.widget.builder.TextView
+import com.ivianuu.essentials.sample.ui.widget.builder.background
+import com.ivianuu.essentials.sample.ui.widget.builder.elevation
 import com.ivianuu.essentials.sample.ui.widget.builder.layoutGravity
+import com.ivianuu.essentials.sample.ui.widget.builder.layoutHeight
+import com.ivianuu.essentials.sample.ui.widget.builder.layoutWidth
 import com.ivianuu.essentials.sample.ui.widget.builder.text
 import com.ivianuu.essentials.sample.ui.widget.builder.textAppearance
 import com.ivianuu.essentials.sample.ui.widget.builder.textColor
 import com.ivianuu.essentials.sample.ui.widget.builder.wrapContent
-import com.ivianuu.essentials.sample.ui.widget.layout.FrameLayout
 import com.ivianuu.essentials.sample.ui.widget.lib.ContextAmbient
 import com.ivianuu.essentials.sample.ui.widget.lib.StatelessWidget
-import com.ivianuu.essentials.sample.ui.widget.view.Background
-import com.ivianuu.essentials.sample.ui.widget.view.Elevation
-import com.ivianuu.essentials.sample.ui.widget.view.Size
 import com.ivianuu.kommon.core.content.colorAttr
 import com.ivianuu.kommon.core.content.dp
 
 fun SimpleTextToolbar(title: String) = StatelessWidget("toolbar") {
     val context = +ContextAmbient
 
-    +Elevation(context.dp(4)) {
-        +Size(
-            width = MATCH_PARENT,
-            height = context.dp(56).toInt()
-        ) {
-            +Background(
-                color = context.colorAttr(R.attr.colorPrimary)
-            ) {
-                +Elevation(elevation = context.dp(4)) {
-                    +FrameLayout {
-                        +TextView {
-                            wrapContent()
-                            layoutGravity(android.view.Gravity.CENTER)
-                            text(title)
-                            textAppearance(R.style.TextAppearance_MaterialComponents_Headline6)
-                            textColor(context.colorAttr(R.attr.colorOnPrimary))
-                        }
-                    }
-                }
+    +FrameLayout {
+        layoutWidth(MATCH_PARENT)
+        layoutHeight(context.dp(56).toInt())
+        background(color = context.colorAttr(R.attr.colorPrimary))
+        elevation(context.dp(4))
+        children {
+            +TextView {
+                wrapContent()
+                layoutGravity(android.view.Gravity.CENTER)
+                text(title)
+                textAppearance(R.style.TextAppearance_MaterialComponents_Headline6)
+                textColor(context.colorAttr(R.attr.colorOnPrimary))
             }
         }
     }

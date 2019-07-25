@@ -16,32 +16,40 @@
 
 package com.ivianuu.essentials.sample.ui.widget.sample
 
-import android.content.Intent
 import android.graphics.Color
-import androidx.core.net.toUri
+import android.view.Gravity.CENTER
+import android.widget.LinearLayout.VERTICAL
+import androidx.constraintlayout.widget.ConstraintLayout
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.sample.R
+import com.ivianuu.essentials.sample.ui.widget.builder.FrameLayout
+import com.ivianuu.essentials.sample.ui.widget.builder.ImageView
+import com.ivianuu.essentials.sample.ui.widget.builder.LinearLayout
+import com.ivianuu.essentials.sample.ui.widget.builder.ProgressBar
+import com.ivianuu.essentials.sample.ui.widget.builder.Switch
+import com.ivianuu.essentials.sample.ui.widget.builder.TextView
+import com.ivianuu.essentials.sample.ui.widget.builder.background
+import com.ivianuu.essentials.sample.ui.widget.builder.id
+import com.ivianuu.essentials.sample.ui.widget.builder.image
+import com.ivianuu.essentials.sample.ui.widget.builder.layoutConstraintBottomToBottom
+import com.ivianuu.essentials.sample.ui.widget.builder.layoutConstraintLeftToLeftOf
+import com.ivianuu.essentials.sample.ui.widget.builder.layoutConstraintRightToRightOf
+import com.ivianuu.essentials.sample.ui.widget.builder.layoutConstraintTopToTopOf
+import com.ivianuu.essentials.sample.ui.widget.builder.layoutGravity
+import com.ivianuu.essentials.sample.ui.widget.builder.layoutSize
+import com.ivianuu.essentials.sample.ui.widget.builder.matchParent
+import com.ivianuu.essentials.sample.ui.widget.builder.onClick
+import com.ivianuu.essentials.sample.ui.widget.builder.orientation
+import com.ivianuu.essentials.sample.ui.widget.builder.padding
+import com.ivianuu.essentials.sample.ui.widget.builder.text
+import com.ivianuu.essentials.sample.ui.widget.builder.value
+import com.ivianuu.essentials.sample.ui.widget.builder.wrapContent
 import com.ivianuu.essentials.sample.ui.widget.es.WidgetController
-import com.ivianuu.essentials.sample.ui.widget.layout.FrameLayout
-import com.ivianuu.essentials.sample.ui.widget.layout.LinearLayout
+import com.ivianuu.essentials.sample.ui.widget.layout.PARENT_ID
 import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
-import com.ivianuu.essentials.sample.ui.widget.lib.ContextAmbient
 import com.ivianuu.essentials.sample.ui.widget.lib.StatelessWidget
-import com.ivianuu.essentials.sample.ui.widget.lib.effectOf
 import com.ivianuu.essentials.sample.ui.widget.lib.onActive
 import com.ivianuu.essentials.sample.ui.widget.lib.state
-import com.ivianuu.essentials.sample.ui.widget.material.Switch
-import com.ivianuu.essentials.sample.ui.widget.view.Background
-import com.ivianuu.essentials.sample.ui.widget.view.Clickable
-import com.ivianuu.essentials.sample.ui.widget.view.Gravity
-import com.ivianuu.essentials.sample.ui.widget.view.ImageView
-import com.ivianuu.essentials.sample.ui.widget.view.MatchParent
-import com.ivianuu.essentials.sample.ui.widget.view.Padding
-import com.ivianuu.essentials.sample.ui.widget.view.ProgressBar
-import com.ivianuu.essentials.sample.ui.widget.view.Ripple
-import com.ivianuu.essentials.sample.ui.widget.view.Size
-import com.ivianuu.essentials.sample.ui.widget.view.TextView
-import com.ivianuu.essentials.sample.ui.widget.view.WrapContent
 import com.ivianuu.essentials.util.dp
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
@@ -59,86 +67,104 @@ class WidgetController2 : WidgetController() {
 
     override fun BuildContext.build() {
         +LinearLayout {
-            +SimpleTextToolbar(title = "Compose")
-            +StatelessWidget("content") {
-                val (loading, setLoading) = +state { true }
+            orientation(VERTICAL)
+            children {
+                +SimpleTextToolbar(title = "Compose")
+                +StatelessWidget("content") {
+                    val (loading, setLoading) = +state { true }
 
-                +launchOnActive {
-                    delay(1000)
-                    setLoading(false)
-                }
+                    +launchOnActive {
+                        delay(1000)
+                        setLoading(false)
+                    }
 
-                if (loading) {
-                    +Loading()
-                } else {
-                    +Content()
-                }
-            }
-        }
-    }
-
-    private fun Loading() = MatchParent {
-        +FrameLayout {
-            +WrapContent {
-                +Gravity(gravity = android.view.Gravity.CENTER) {
-                    +ProgressBar()
+                    if (loading) {
+                        +Loading()
+                    } else {
+                        +Content()
+                    }
                 }
             }
         }
     }
 
-    private fun Content() = MatchParent {
-        +ListItem(0)
+    private fun Loading() = FrameLayout {
+        matchParent()
+        background(color = Color.BLUE)
+        children {
+            +ProgressBar {
+                layoutGravity(CENTER)
+            }
+        }
+    }
+
+    private fun Content() = LinearLayout {
+        matchParent()
+        children { +ListItem(0) }
     }
 
     private fun ListItem(i: Int) = StatelessWidget("ListItem") {
         val (checked, setChecked) = +state { false }
 
+        val leadingId = +viewId()
+        val trailingId = +viewId()
+        val titleId = +viewId()
+        val subtitleId = +viewId()
+
         +ListItem(
             title = {
-                +Background(color = Color.BLUE) {
-                    +WrapContent {
-                        +TextView(text = "Title $i")
+                +TextView {
+                    id(titleId)
+                    wrapContent()
+
+                    layoutConstraintLeftToLeftOf(PARENT_ID)
+                    layoutConstraintRightToRightOf(PARENT_ID)
+                    layoutConstraintTopToTopOf(PARENT_ID)
+                    layoutConstraintBottomToBottom(PARENT_ID)
+
+                    /*
+                    updateLayoutParams {
+                        it as ConstraintLayout.LayoutParams
+
+                        it.leftToLeft = PARENT_ID
+                        it.rightToRight = PARENT_ID
+                        it.topToTop = PARENT_ID
+                        it.bottomToTop = subtitleId
+                        it.verticalChainStyle = ConstraintLayout.LayoutParams.CHAIN_PACKED
+
+                        true
+                    }*/
+                    text("Title $i")
+                }
+            },
+            subtitle = {
+                +TextView {
+                    id(subtitleId)
+                    wrapContent()
+                    text("Text $i")
+                    updateLayoutParams {
+                        it as ConstraintLayout.LayoutParams
+
+                        it.leftToLeft = PARENT_ID
+                        it.rightToRight = PARENT_ID
+                        it.topToBottom = titleId
+                        it.bottomToBottom = PARENT_ID
+                        it.verticalChainStyle = ConstraintLayout.LayoutParams.CHAIN_PACKED
+
+                        true
                     }
                 }
             },
-            ///subtitle = { +TextView(text = "Text $i") },
-            leading = {
-                +Switch(
-                    value = checked,
-                    onChange = {}
-                )
-            },
-            trailing = {
-                +MenuButton()
-            },
-            onClick = +launchUrlOnClick { "https://www.google.com" }
+            leading = { +Switch { value(checked) } },
+            trailing = { +MenuButton() }
         )
     }
 
-    fun launchUrlOnClick(url: () -> String) = effectOf<() -> Unit> {
-        val context = ContextAmbient(context)
-        return@effectOf {
-            context.startActivity(Intent(Intent.ACTION_VIEW).apply {
-                data = url().toUri()
-            })
-        }
-    }
-
-    private fun MenuButton() = StatelessWidget("MenuButton") {
-        +Size(size = dp(40).toInt()) {
-            +Ripple(unbounded = true) {
-                +Padding(padding = dp(8).toInt()) {
-                    +Clickable(
-                        onClick = { d { "clicked" } },
-                        child = {
-                            +ImageView(
-                                imageRes = R.drawable.abc_ic_menu_overflow_material
-                            )
-                        }
-                    )
-                }
-            }
-        }
+    private fun MenuButton() = ImageView {
+        layoutSize(dp(40).toInt())
+        padding(dp(8).toInt())
+        background(attr = R.attr.selectableItemBackgroundBorderless)
+        image(res = R.drawable.abc_ic_menu_overflow_material)
+        onClick { d { "clicked" } }
     }
 }
