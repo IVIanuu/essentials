@@ -29,7 +29,7 @@ fun BuildContext.MaterialButton(
     icon: Drawable? = null,
     iconRes: Int? = null,
     onClick: (() -> Unit)? = null
-) = StatelessWidget(id = "md_button") {
+) = StatelessWidget {
     Clickable(
         onClick = onClick ?: {},
         child = {

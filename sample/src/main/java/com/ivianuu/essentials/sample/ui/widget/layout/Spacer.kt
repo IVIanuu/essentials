@@ -31,7 +31,7 @@ fun BuildContext.Spacer(size: Int) = Spacer(size, size)
 fun BuildContext.Spacer(
     width: Int = 0,
     height: Int = 0
-) = StatelessWidget(id = "Spacer") {
+) = StatelessWidget {
     +Size(width = width, height = height) {
         +ViewWidget<View>(updateView = null)
     }

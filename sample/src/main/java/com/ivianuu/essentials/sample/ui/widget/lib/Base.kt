@@ -62,7 +62,9 @@ abstract class Element(widget: Widget) : BuildContext {
     override fun <T> getAmbient(key: Ambient<T>): T? {
         var ancestor: Element? = this
         while (ancestor != null) {
-            if (ancestor.widget::class == Ambient.Provider::class && ancestor.widget.key == key.key) {
+            if (ancestor.widget is Ambient<*>.Provider
+                && (ancestor.widget as Ambient<T>.Provider).key == key.key
+            ) {
                 if (ancestor.dependents == null) ancestor.dependents = mutableListOf()
                 ancestor.dependents!!.add(this)
 

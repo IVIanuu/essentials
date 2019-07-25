@@ -104,6 +104,10 @@ open class ViewGroupElement<V : ViewGroup>(
     }
 
     override fun add(child: Widget) {
+        check(pendingWidgets.none { it.canUpdate(child) }) {
+            "Cannot add a child with the same key $child"
+        }
+
         pendingWidgets.add(child)
     }
 

@@ -29,7 +29,7 @@ fun BuildContext.Icon(
     iconDrawable: Drawable? = null,
     iconBitmap: Bitmap? = null,
     iconRes: Int? = null
-) = StatelessWidget("Icon") {
+) = StatelessWidget {
     val size = (+ContextAmbient).dp(40).toInt()
     +SizedImageView(
         size = size,
@@ -43,7 +43,7 @@ fun BuildContext.Avatar(
     avatarDrawable: Drawable? = null,
     avatarBitmap: Bitmap? = null,
     avatarRes: Int? = null
-) = StatelessWidget("Avatar") {
+) = StatelessWidget {
     val size = (+ContextAmbient).dp(40).toInt()
     +SizedImageView(
         size = size,
@@ -58,7 +58,7 @@ fun BuildContext.SizedImageView(
     imageDrawable: Drawable? = null,
     imageBitmap: Bitmap? = null,
     imageRes: Int? = null
-) = StatelessWidget(id = "SizedImageView") {
+) = StatelessWidget {
     +Size(size) {
         +ImageView(
             imageDrawable = imageDrawable,

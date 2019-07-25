@@ -28,7 +28,7 @@ import com.ivianuu.kommon.core.content.dp
 fun BuildContext.CheckBox(
     value: Boolean,
     onChange: (Boolean) -> Unit
-) = StatelessWidget("CheckBox") {
+) = StatelessWidget {
     val context = +ContextAmbient
     +Size(size = context.dp(48).toInt()) {
         +CompoundButton(
@@ -43,7 +43,7 @@ fun BuildContext.CheckBox(
 fun BuildContext.RadioButton(
     value: Boolean,
     onChange: (Boolean) -> Unit
-) = StatelessWidget("RadioButton") {
+) = StatelessWidget {
     val context = +ContextAmbient
     +Size(size = context.dp(48).toInt()) {
         +CompoundButton(
@@ -58,7 +58,7 @@ fun BuildContext.RadioButton(
 fun BuildContext.Switch(
     value: Boolean,
     onChange: (Boolean) -> Unit
-) = StatelessWidget("Switch") {
+) = StatelessWidget {
     val context = +ContextAmbient
     +Size(size = context.dp(48).toInt()) {
         +CompoundButton(

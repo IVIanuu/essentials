@@ -28,7 +28,7 @@ import com.ivianuu.essentials.sample.ui.widget.lib.Widget
 val PARENT_ID = ConstraintLayout.LayoutParams.PARENT_ID
 
 fun BuildContext.ConstraintLayout(children: ConstraintLayoutChildren.() -> Unit): Widget =
-    StatelessWidget("ConstraintLayout") {
+    StatelessWidget {
         val constraintSetBuilder = ConstraintSetBuilder()
         +ViewGroupWidget<ConstraintLayout>(
             updateView = { constraintSetBuilder.applyTo(it) },
