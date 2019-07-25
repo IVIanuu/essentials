@@ -63,7 +63,7 @@ abstract class Element(widget: Widget) : BuildContext {
         var ancestor: Element? = this
         while (ancestor != null) {
             if (ancestor.widget is Ambient<*>.Provider
-                && (ancestor.widget as Ambient<T>.Provider).key == key.key
+                && (ancestor.widget as Ambient<T>.Provider).ambientKey == key.key
             ) {
                 if (ancestor.dependents == null) ancestor.dependents = mutableListOf()
                 ancestor.dependents!!.add(this)
