@@ -16,15 +16,7 @@
 
 package com.ivianuu.essentials.sample.ui.widget.lib
 
-private data class JoinedKey(
-    val left: Any?,
-    val right: Any?
-)
-
-fun joinKey(left: Any?, right: Any?): Any? = JoinedKey(left, right)
-
-
-inline fun sourceLocationId(): String {
+inline fun sourceLocation(): String {
     val element = Throwable().stackTrace.first()
     return "${element.className}:${element.methodName}:${element.lineNumber}"
 }

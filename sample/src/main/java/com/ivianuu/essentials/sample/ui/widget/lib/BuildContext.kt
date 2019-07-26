@@ -22,7 +22,7 @@ abstract class BuildContext {
     abstract val owner: BuildOwner?
 
     abstract fun add(id: Any, child: Widget)
-    inline operator fun Widget.unaryPlus() = add(sourceLocationId(), this)
+    inline operator fun Widget.unaryPlus() = add(sourceLocation(), this)
 
     abstract fun <T> getAmbient(key: Ambient<T>): T?
 

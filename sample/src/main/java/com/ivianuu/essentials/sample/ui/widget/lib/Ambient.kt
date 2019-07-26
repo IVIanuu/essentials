@@ -20,7 +20,7 @@ import android.content.Context
 
 inline fun <reified T> ambientOf(
     noinline defaultValue: (() -> T)? = null
-): Ambient<T> = ambientOf(T::class.java.name to sourceLocationId(), defaultValue)
+): Ambient<T> = ambientOf(T::class.java.name to sourceLocation(), defaultValue)
 
 fun <T> ambientOf(key: Any, defaultValue: (() -> T)? = null): Ambient<T> =
     Ambient(key, defaultValue)

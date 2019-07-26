@@ -32,7 +32,7 @@ fun BuildContext.CheckBox(
     val context = +ContextAmbient
     +Size(size = context.dp(48).toInt()) {
         +CompoundButton(
-            id = sourceLocationId(),
+            id = sourceLocation(),
             value = value,
             onChange = onChange,
             createView = { MaterialCheckBox(it.context) }
@@ -47,7 +47,7 @@ fun BuildContext.RadioButton(
     val context = +ContextAmbient
     +Size(size = context.dp(48).toInt()) {
         +CompoundButton(
-            id = sourceLocationId(),
+            id = sourceLocation(),
             value = value,
             onChange = onChange,
             createView = { MaterialRadioButton(it.context) }
@@ -62,7 +62,7 @@ fun BuildContext.Switch(
     val context = +ContextAmbient
     +Size(size = context.dp(48).toInt()) {
         +CompoundButton(
-            id = sourceLocationId(),
+            id = sourceLocation(),
             value = value,
             onChange = onChange,
             createView = { Switch(it.context) }
