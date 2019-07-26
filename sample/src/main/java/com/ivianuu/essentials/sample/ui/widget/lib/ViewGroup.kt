@@ -23,20 +23,17 @@ import com.github.ajalt.timberkt.d
 import kotlin.reflect.KClass
 
 inline fun <reified V : ViewGroup> BuildContext.ViewGroupWidget(
-    id: Any = sourceLocationId(),
     key: Any? = null,
     noinline updateView: UpdateView<V>? = null,
     noinline children: BuildContext.() -> Unit
-) = ViewGroupWidget(V::class, id, key, updateView, children)
+) = ViewGroupWidget(V::class, key, updateView, children)
 
 fun <V : ViewGroup> BuildContext.ViewGroupWidget(
     type: KClass<V>,
-    id: Any,
     key: Any? = null,
     updateView: UpdateView<V>? = null,
     children: BuildContext.() -> Unit
 ) = ViewGroupWidget(
-    id = id,
     key = key,
     createView = {
         type.java.getDeclaredConstructor(Context::class.java)
@@ -46,26 +43,12 @@ fun <V : ViewGroup> BuildContext.ViewGroupWidget(
     children = children
 )
 
-inline fun <reified V : ViewGroup> ViewGroupWidget(
-    key: Any? = null,
-    noinline createView: CreateView<V>,
-    noinline updateView: UpdateView<V>? = null,
-    noinline children: BuildContext.() -> Unit
-) = ViewGroupWidget<V>(
-    id = sourceLocationId(),
-    key = key,
-    createView = createView,
-    updateView = updateView,
-    children = children
-)
-
 fun <V : ViewGroup> ViewGroupWidget(
-    id: Any,
     key: Any? = null,
     createView: CreateView<V>,
     updateView: UpdateView<V>? = null,
     children: BuildContext.() -> Unit
-): Widget = object : ViewGroupWidget<V>(key = joinKey(id, key), children = children) {
+): Widget = object : ViewGroupWidget<V>(key = key, children = children) {
     override fun createView(container: ViewGroup): V = createView.invoke(container)
     override fun updateView(view: V) {
         super.updateView(view)
@@ -112,7 +95,7 @@ open class ViewGroupElement<V : ViewGroup>(
     }
 
     override fun insertChildView(view: View, slot: Int?) {
-        d { "${widget.key} insert $view at $slot" }
+        d { "${widget.id} insert $view at $slot" }
 
         val thisView = requireView()
 
@@ -128,13 +111,13 @@ open class ViewGroupElement<V : ViewGroup>(
 
     override fun moveChildView(view: View, slot: Int?) {
         requireNotNull(slot)
-        d { "${widget.key} move $view to $slot" }
+        d { "${widget.id} move $view to $slot" }
         requireView().removeView(view)
         requireView().addView(view, slot)
     }
 
     override fun removeChildView(view: View) {
-        d { "${widget.key} remove $view" }
+        d { "${widget.id} remove $view" }
         requireView().removeView(view)
     }
 
@@ -164,8 +147,8 @@ open class ViewGroupElement<V : ViewGroup>(
         super.unmount()
     }
 
-    override fun update(newWidget: Widget) {
-        super.update(newWidget)
+    override fun performRebuild() {
+        super.performRebuild()
         widget<ViewGroupWidget<V>>().children(this)
         children = updateChildren(children, pendingWidgets)
         pendingWidgets.clear()

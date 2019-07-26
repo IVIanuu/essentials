@@ -74,9 +74,7 @@ class State<T> @PublishedApi internal constructor(
 
 inline fun <T> state(crossinline init: () -> T) = effectOf<State<T>> {
     context.cache {
-        State(init()) {
-            invalidate().invoke(context)()
-        }
+        State(init()) { invalidate().invoke(context)() }
     }
 }
 

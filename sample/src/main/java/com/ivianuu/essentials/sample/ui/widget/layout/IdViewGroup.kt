@@ -17,29 +17,17 @@
 package com.ivianuu.essentials.sample.ui.widget.layout
 
 import android.view.ViewGroup
-import com.ivianuu.essentials.sample.ui.widget.lib.*
-
-inline fun <reified V : ViewGroup> BuildContext.IdViewGroupWidget(
-    viewId: Int,
-    key: Any? = null,
-    noinline updateView: UpdateView<V>? = null,
-    noinline children: BuildContext.() -> Unit
-) = IdViewGroupWidget<V>(
-    id = sourceLocationId(),
-    viewId = viewId,
-    key = key,
-    updateView = updateView,
-    children = children
-)
+import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
+import com.ivianuu.essentials.sample.ui.widget.lib.UpdateView
+import com.ivianuu.essentials.sample.ui.widget.lib.ViewGroupWidget
+import com.ivianuu.essentials.sample.ui.widget.lib.Widget
 
 fun <V : ViewGroup> BuildContext.IdViewGroupWidget(
-    id: Any,
     viewId: Int,
     key: Any? = null,
     updateView: UpdateView<V>? = null,
     children: BuildContext.() -> Unit
 ): Widget = ViewGroupWidget<V>(
-    id = id,
     key = key,
     createView = { it.findViewById<V>(viewId) },
     updateView = updateView,

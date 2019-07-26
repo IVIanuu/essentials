@@ -27,18 +27,15 @@ typealias CreateView<V> = (ViewGroup) -> V
 typealias UpdateView<V> = (V) -> Unit
 
 inline fun <reified V : View> BuildContext.ViewWidget(
-    id: Any = sourceLocationId(),
     key: Any? = null,
     noinline updateView: UpdateView<V>? = null
-) = ViewWidget(V::class, id, key, updateView)
+) = ViewWidget(V::class, key, updateView)
 
 fun <V : View> BuildContext.ViewWidget(
     type: KClass<V>,
-    id: Any,
     key: Any? = null,
     updateView: UpdateView<V>? = null
 ) = ViewWidget(
-    id = id,
     key = key,
     createView = {
         type.java.getDeclaredConstructor(Context::class.java)
@@ -47,23 +44,11 @@ fun <V : View> BuildContext.ViewWidget(
     updateView = updateView
 )
 
-inline fun <reified V : View> ViewWidget(
-    key: Any? = null,
-    noinline createView: CreateView<V>,
-    noinline updateView: UpdateView<V>? = null
-) = ViewWidget(
-    id = sourceLocationId(),
-    key = key,
-    createView = createView,
-    updateView = updateView
-)
-
 fun <V : View> ViewWidget(
-    id: Any,
     key: Any? = null,
     createView: CreateView<V>,
     updateView: UpdateView<V>? = null
-): Widget = object : ViewWidget<V>(joinKey(id, key)) {
+): Widget = object : ViewWidget<V>(key) {
     override fun createView(container: ViewGroup): V = createView.invoke(container)
     override fun updateView(view: V) {
         super.updateView(view)
@@ -113,14 +98,14 @@ open class ViewElement<V : View>(widget: ViewWidget<V>) : Element(widget) {
         super.attachView()
         updateView()
         val ancestorViewElement = findAncestorViewElement()!!
-        d { "${widget.key} attach to $ancestorViewElement view is $view" }
+        d { "${widget.id} attach to $ancestorViewElement view is $view" }
         this.ancestorViewElement = ancestorViewElement
         ancestorViewElement.insertChildView(requireView(), slot)
     }
 
     override fun detachView() {
         super.detachView()
-        d { "${widget.key} remove from $ancestorViewElement view is $view" }
+        d { "${widget.id} remove from $ancestorViewElement view is $view" }
         if (ancestorViewElement != null) {
             ancestorViewElement!!.removeChildView(requireView())
             ancestorViewElement = null
@@ -152,7 +137,7 @@ open class ViewElement<V : View>(widget: ViewWidget<V>) : Element(widget) {
     }
 
     fun updateView() {
-        d { "update view ${widget.key}" }
+        d { "update view ${widget.id}" }
         updateLayoutParams()
         updateViewProps()
         widget<ViewWidget<V>>().updateView(requireView())
@@ -181,7 +166,7 @@ open class ViewElement<V : View>(widget: ViewWidget<V>) : Element(widget) {
             }
         }
 
-        d { "${widget.key} updated lp has changed ? ${changed || view.layoutParams == null}" }
+        d { "${widget.id} updated lp has changed ? ${changed || view.layoutParams == null}" }
 
         if (changed || view.layoutParams == null) {
             view.layoutParams = lp
@@ -207,7 +192,7 @@ open class ViewElement<V : View>(widget: ViewWidget<V>) : Element(widget) {
     protected fun requireView(): V = this.view ?: error("view not created")
 
     override fun performRebuild() {
-        d { "${widget.key} perform rebuild" }
+        d { "${widget.id} perform rebuild" }
         updateView()
     }
 

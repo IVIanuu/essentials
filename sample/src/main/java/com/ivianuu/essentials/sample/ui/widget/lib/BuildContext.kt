@@ -16,19 +16,19 @@
 
 package com.ivianuu.essentials.sample.ui.widget.lib
 
-interface BuildContext {
+abstract class BuildContext {
 
-    val widget: Widget
-    val owner: BuildOwner?
+    abstract val widget: Widget
+    abstract val owner: BuildOwner?
 
-    fun add(child: Widget)
-    operator fun Widget.unaryPlus() = add(this)
+    abstract fun add(id: Any, child: Widget)
+    inline operator fun Widget.unaryPlus() = add(sourceLocationId(), this)
 
-    fun <T> getAmbient(key: Ambient<T>): T?
+    abstract fun <T> getAmbient(key: Ambient<T>): T?
 
-    fun <T> cache(calculation: () -> T): T
+    abstract fun <T> cache(calculation: () -> T): T
 
-    fun <T> cache(vararg inputs: Any?, calculation: () -> T): T
+    abstract fun <T> cache(vararg inputs: Any?, calculation: () -> T): T
 
     operator fun <T> Ambient<T>.unaryPlus() = invoke(this@BuildContext)
 

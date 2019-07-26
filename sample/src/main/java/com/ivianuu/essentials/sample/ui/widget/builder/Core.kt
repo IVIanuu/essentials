@@ -25,22 +25,19 @@ import kotlin.properties.Delegates
 typealias BuildView<V> = ViewWidgetBuilder<V>.() -> Unit
 typealias BuildViewGroup<V> = ViewGroupWidgetBuilder<V>.() -> Unit
 
-inline fun <reified V : View> BuildContext.View(block: BuildView<V>): Widget {
-    return View<V>(id = sourceLocationId()) {
+inline fun <reified V : View> BuildContext.View(
+    block: BuildView<V>
+): Widget = ViewWidgetBuilder<V>()
+    .apply {
         createView {
             V::class.java.getDeclaredConstructor(Context::class.java)
-                .newInstance(it.context)
+                .newInstance((it.context))
         }
-        block()
     }
-}
+    .apply(block)
+    .build()
 
-inline fun <V : View> BuildContext.View(
-    id: Any = sourceLocationId(),
-    block: BuildView<V>
-): Widget = ViewWidgetBuilder<V>(id).apply(block).build()
-
-open class ViewWidgetBuilder<V : View>(protected val id: Any) {
+open class ViewWidgetBuilder<V : View> {
 
     protected var createView by Delegates.notNull<CreateView<V>>()
     protected val updateViewBlocks = mutableListOf<UpdateView<V>>()
@@ -59,10 +56,9 @@ open class ViewWidgetBuilder<V : View>(protected val id: Any) {
     }
 
     open fun build(): Widget =
-        _Widget<V>(id, createView, updateViewBlocks, updateLayoutParamsBlocks)
+        _Widget<V>(createView, updateViewBlocks, updateLayoutParamsBlocks)
 
     private class _Widget<V : View>(
-        private val id: Any,
         private val createView: CreateView<V>,
         private val updateViewBlocks: List<UpdateView<V>>,
         private val updateLayoutParamsBlocks: List<UpdateLayoutParams>
@@ -76,7 +72,6 @@ open class ViewWidgetBuilder<V : View>(protected val id: Any) {
                 },
                 child = {
                     +ViewWidget<V>(
-                        id = id,
                         createView = createView,
                         updateView = { v -> updateViewBlocks.forEach { it(v) } }
                     )
@@ -88,22 +83,23 @@ open class ViewWidgetBuilder<V : View>(protected val id: Any) {
 }
 
 inline fun <reified V : ViewGroup> BuildContext.ViewGroup(block: BuildViewGroup<V>): Widget {
-    return ViewGroup<V>(id = sourceLocationId()) {
-        createView {
-            V::class.java.getDeclaredConstructor(Context::class.java)
-                .newInstance(it.context)
+    return ViewGroupWidgetBuilder<V>()
+        .apply {
+            createView {
+                V::class.java.getDeclaredConstructor(Context::class.java)
+                    .newInstance(it.context)
+            }
         }
-        block()
-    }
+        .apply(block)
+        .build()
 }
 
 inline fun <V : ViewGroup> BuildContext.ViewGroup(
-    id: Any = sourceLocationId(),
+    dummy: Any? = null,
     block: BuildViewGroup<V>
-): Widget = ViewGroupWidgetBuilder<V>(id).apply(block).build()
+): Widget = ViewGroupWidgetBuilder<V>().apply(block).build()
 
-open class ViewGroupWidgetBuilder<V : ViewGroup>(id: Any) :
-    ViewWidgetBuilder<V>(id) {
+open class ViewGroupWidgetBuilder<V : ViewGroup> : ViewWidgetBuilder<V>() {
 
     private val children = mutableListOf<BuildContext.() -> Unit>()
 
@@ -112,10 +108,9 @@ open class ViewGroupWidgetBuilder<V : ViewGroup>(id: Any) :
     }
 
     override fun build(): Widget =
-        _Widget<V>(id, createView, updateViewBlocks, updateLayoutParamsBlocks, children)
+        _Widget<V>(createView, updateViewBlocks, updateLayoutParamsBlocks, children)
 
     private class _Widget<V : ViewGroup>(
-        private val id: Any,
         private val createView: CreateView<V>,
         private val updateViewBlocks: List<UpdateView<V>>,
         private val updateLayoutParamsBlocks: List<UpdateLayoutParams>,
@@ -130,10 +125,10 @@ open class ViewGroupWidgetBuilder<V : ViewGroup>(id: Any) :
                 },
                 child = {
                     +ViewGroupWidget<V>(
-                        id = id,
                         createView = createView,
                         updateView = { v -> updateViewBlocks.forEach { it(v) } },
                         children = {
+                            println("build view group children")
                             children.forEach { it() }
                         }
                     )

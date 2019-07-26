@@ -37,9 +37,8 @@ class Ambient<T> @PublishedApi internal constructor(
 
     inner class Provider(
         val value: T,
-        val id: Any? = null,
         child: BuildContext.() -> Unit
-    ) : ProxyWidget(key = joinKey(id, key), child = child) {
+    ) : ProxyWidget(child = child) {
 
         val ambientKey: Any get() = this@Ambient.key
 

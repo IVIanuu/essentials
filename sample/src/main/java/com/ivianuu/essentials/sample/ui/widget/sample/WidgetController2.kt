@@ -21,23 +21,13 @@ import android.view.Gravity.CENTER
 import android.widget.LinearLayout.VERTICAL
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.sample.R
-import com.ivianuu.essentials.sample.ui.widget.builder.FrameLayout
-import com.ivianuu.essentials.sample.ui.widget.builder.ImageView
-import com.ivianuu.essentials.sample.ui.widget.builder.LinearLayout
-import com.ivianuu.essentials.sample.ui.widget.builder.ProgressBar
-import com.ivianuu.essentials.sample.ui.widget.builder.background
-import com.ivianuu.essentials.sample.ui.widget.builder.image
-import com.ivianuu.essentials.sample.ui.widget.builder.layoutGravity
-import com.ivianuu.essentials.sample.ui.widget.builder.layoutSize
-import com.ivianuu.essentials.sample.ui.widget.builder.matchParent
-import com.ivianuu.essentials.sample.ui.widget.builder.onClick
-import com.ivianuu.essentials.sample.ui.widget.builder.orientation
-import com.ivianuu.essentials.sample.ui.widget.builder.padding
+import com.ivianuu.essentials.sample.ui.widget.builder.*
 import com.ivianuu.essentials.sample.ui.widget.es.WidgetController
 import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget.lib.StatelessWidget
 import com.ivianuu.essentials.sample.ui.widget.lib.onActive
 import com.ivianuu.essentials.sample.ui.widget.lib.state
+import com.ivianuu.essentials.sample.ui.widget.material.MaterialButton
 import com.ivianuu.essentials.sample.ui.widget.material.Switch
 import com.ivianuu.essentials.sample.ui.widget.view.TextView
 import com.ivianuu.essentials.util.dp
@@ -93,7 +83,15 @@ class WidgetController2 : WidgetController() {
     private fun BuildContext.Content() = StatelessWidget {
         +LinearLayout {
             matchParent()
-            children { +ListItem(0) }
+            gravity(CENTER)
+            orientation(VERTICAL)
+            children {
+                val (count, setCount) = +state { 0 }
+                println("build widget $count")
+                +TextView(text = "Count $count")
+                +MaterialButton(text = "Add", onClick = { setCount(count + 1) })
+                +MaterialButton(text = "Dec", onClick = { setCount(count - 1) })
+            }
         }
     }
 

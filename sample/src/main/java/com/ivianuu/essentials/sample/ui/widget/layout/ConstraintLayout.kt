@@ -20,10 +20,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import com.ivianuu.essentials.sample.ui.widget.layout.ConstraintSetBuilder.Connection.BasicConnection
 import com.ivianuu.essentials.sample.ui.widget.layout.ConstraintSetBuilder.Side
-import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
-import com.ivianuu.essentials.sample.ui.widget.lib.StatelessWidget
-import com.ivianuu.essentials.sample.ui.widget.lib.ViewGroupWidget
-import com.ivianuu.essentials.sample.ui.widget.lib.Widget
+import com.ivianuu.essentials.sample.ui.widget.lib.*
 
 val PARENT_ID = ConstraintLayout.LayoutParams.PARENT_ID
 
@@ -43,7 +40,23 @@ fun BuildContext.ConstraintLayout(children: ConstraintLayoutChildren.() -> Unit)
 class ConstraintLayoutChildren(
     private val context: BuildContext,
     private val constraintSetBuilder: ConstraintSetBuilder
-) : BuildContext by context {
+) : BuildContext() {
+
+    override val owner: BuildOwner?
+        get() = context.owner
+    override val widget: Widget
+        get() = context.widget
+
+    override fun add(id: Any, child: Widget) {
+        context.add(id, child)
+    }
+
+    override fun <T> cache(calculation: () -> T): T = context.cache(calculation)
+
+    override fun <T> cache(vararg inputs: Any?, calculation: () -> T): T =
+        context.cache(inputs = *inputs, calculation = calculation)
+
+    override fun <T> getAmbient(key: Ambient<T>): T? = context.getAmbient(key)
 
     fun constraints(block: ConstraintSetBuilder.() -> Unit) {
         constraintSetBuilder.apply(block)

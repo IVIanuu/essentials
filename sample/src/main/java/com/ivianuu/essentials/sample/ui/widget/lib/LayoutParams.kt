@@ -18,18 +18,11 @@ package com.ivianuu.essentials.sample.ui.widget.lib
 
 import android.view.ViewGroup
 
-inline fun BuildContext.LayoutParamsWidget(
-    key: Any? = null,
-    noinline updateLayoutParams: (ViewGroup.LayoutParams) -> Boolean,
-    noinline child: BuildContext.() -> Unit
-) = LayoutParamsWidget(sourceLocationId(), key, updateLayoutParams, child)
-
 fun BuildContext.LayoutParamsWidget(
-    id: Any,
     key: Any? = null,
     updateLayoutParams: (ViewGroup.LayoutParams) -> Boolean,
     child: BuildContext.() -> Unit
-): Widget = object : LayoutParamsWidget(child, joinKey(id, key)) {
+): Widget = object : LayoutParamsWidget(child, key) {
     override fun updateLayoutParams(layoutParams: ViewGroup.LayoutParams): Boolean =
         updateLayoutParams.invoke(layoutParams)
 }

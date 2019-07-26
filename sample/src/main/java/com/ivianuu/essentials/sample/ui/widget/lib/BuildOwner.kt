@@ -67,6 +67,7 @@ class AndroidBuildOwner(
     }
 
     override fun scheduleBuildFor(element: Element) {
+        println("schedule build for ${element.widget.id}")
         dirtyElements.add(element)
         scheduleBuild()
     }
@@ -88,7 +89,7 @@ class AndroidBuildOwner(
     }
 
     private fun rebuildDirtyElements() {
-        d { "rebuild dirty elements ${dirtyElements.map { it.widget.key }}" }
+        d { "rebuild dirty elements ${dirtyElements.map { it.widget.id }}" }
         val elementsToRebuild = dirtyElements.toList()
         dirtyElements.clear()
         elementsToRebuild.forEach { it.rebuild() }

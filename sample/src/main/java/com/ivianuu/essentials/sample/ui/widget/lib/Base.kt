@@ -20,16 +20,19 @@ import com.github.ajalt.timberkt.d
 
 abstract class Widget(val key: Any? = null) {
 
-    init {
-        d { "${javaClass.simpleName} init with key $key" }
-    }
+    var id: Any? = null
+
 
     abstract fun createElement(): Element
 
-    fun canUpdate(other: Widget): Boolean = this::class == other::class && this.key == other.key
+    fun canUpdate(other: Widget): Boolean = (this.id == other.id && this.key == other.key)
+        .also {
+            println("$id can update ${other.id} ? $it")
+        }
+
 }
 
-abstract class Element(widget: Widget) : BuildContext {
+abstract class Element(widget: Widget) : BuildContext() {
 
     override var widget: Widget = widget
         protected set
@@ -55,8 +58,13 @@ abstract class Element(widget: Widget) : BuildContext {
     private var lifecycleObservers: MutableList<LifecycleObserver>? = null
     private var notifiedActive = false
 
-    override fun add(child: Widget) {
-        error("no child supported")
+    final override fun add(id: Any, child: Widget) {
+        child.id = id
+        add(child)
+    }
+
+    protected open fun add(child: Widget) {
+        error("unsupported")
     }
 
     override fun <T> getAmbient(key: Ambient<T>): T? {
@@ -117,14 +125,14 @@ abstract class Element(widget: Widget) : BuildContext {
     }
 
     open fun mount(parent: Element?, slot: Int?) {
-        d { "${widget.key} mount parent $parent widget $widget slot $slot" }
+        d { "${widget.id} mount parent $parent widget $widget slot $slot" }
         this.parent = parent
         this.owner = parent?.owner
         this.slot = slot
     }
 
     open fun unmount() {
-        d { "${widget.key} unmount parent $parent widget $widget slot $slot" }
+        d { "${widget.id} unmount parent $parent widget $widget slot $slot" }
 
         lifecycleObservers?.forEach { it.onDispose() }
         lifecycleObservers = null
@@ -159,7 +167,7 @@ abstract class Element(widget: Widget) : BuildContext {
     }
 
     open fun rebuild() {
-        d { "${widget.key} rebuild is dirty $isDirty" }
+        d { "${widget.id} rebuild is dirty $isDirty" }
         if (isDirty) {
             effectsIndex = 0
             performRebuild()
@@ -186,7 +194,7 @@ abstract class Element(widget: Widget) : BuildContext {
         newWidget: Widget?,
         newSlot: Int?
     ): Element? {
-        d { "${widget.key} update child $child new ${newWidget?.key} new slot $newSlot" }
+        d { "${widget.id} update child $child new ${newWidget?.key} new slot $newSlot" }
 
         if (newWidget == null) {
             if (child != null) {
@@ -206,7 +214,7 @@ abstract class Element(widget: Widget) : BuildContext {
             }
 
             if (child.widget.canUpdate(newWidget)) {
-                d { "${widget.key} call child update ${child.widget.key}" }
+                d { "${widget.id} call child update ${child.widget.id}" }
                 child.update(newWidget)
                 return child
             }
@@ -220,7 +228,7 @@ abstract class Element(widget: Widget) : BuildContext {
     }
 
     protected open fun updateSlotForChild(child: Element, newSlot: Int?) {
-        d { "${widget.key} update slot for child $child $newSlot" }
+        d { "${widget.id} update slot for child $child $newSlot" }
         lateinit var block: (Element) -> Unit
 
         block = {
@@ -232,12 +240,12 @@ abstract class Element(widget: Widget) : BuildContext {
     }
 
     open fun update(newWidget: Widget) {
-        d { "${widget.key} update new $newWidget old $widget" }
+        d { "${widget.id} update new $newWidget old $widget" }
         widget = newWidget
     }
 
     open fun updateSlot(newSlot: Int?) {
-        d { "${widget.key} update slow $newSlot" }
+        d { "${widget.id} update slow $newSlot" }
         slot = newSlot
     }
 
@@ -245,7 +253,7 @@ abstract class Element(widget: Widget) : BuildContext {
         newWidget: Widget,
         newSlot: Int?
     ): Element {
-        d { "${widget.key} inflate $newWidget $newSlot" }
+        d { "${widget.id} inflate $newWidget $newSlot" }
 
         val newChild = newWidget.createElement()
         newChild.mount(this, newSlot)
@@ -269,6 +277,7 @@ abstract class Element(widget: Widget) : BuildContext {
         oldChildren: List<Element>,
         newWidgets: List<Widget>
     ): MutableList<Element> {
+        d { "${widget.id} update children" }
         var newChildrenTop = 0
         var oldChildrenTop = 0
         var newChildrenBottom = newWidgets.lastIndex

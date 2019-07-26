@@ -79,7 +79,6 @@ fun <V : CompoundButton> BuildContext.CompoundButton(
     onClick = { onChange(!value) },
     child = {
         +ViewWidget(
-            id = id,
             createView = createView,
             updateView = { it.isChecked = value }
         )

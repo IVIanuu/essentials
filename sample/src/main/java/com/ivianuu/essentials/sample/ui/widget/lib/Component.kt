@@ -68,10 +68,10 @@ abstract class ComponentElement(widget: Widget) : Element(widget) {
     }
 
     override fun performRebuild() {
-        d { "${widget.key} perform rebuild" }
+        d { "${widget.id} perform rebuild" }
         child()
-        val built = pendingChild ?: error("expecting a child $widget ${widget.key}")
-        d { "${widget.key} rebuild result is ${pendingChild!!.key}" }
+        val built = pendingChild ?: error("expecting a child $widget ${widget.id}")
+        d { "${widget.id} rebuild result is ${pendingChild!!.key}" }
         pendingChild = null
         isDirty = false
         child = updateChild(child, built, slot) // todo slot or null?
