@@ -42,6 +42,7 @@ dependencies {
     api(Deps.androidxTestJunit)
     api(Deps.androidxTestRules)
     api(Deps.androidxTestRunner)
+    api(Deps.coroutinesTest)
     api(Deps.junit)
     api(Deps.kotlinStdLib)
     api(Deps.mockitoKotlin)

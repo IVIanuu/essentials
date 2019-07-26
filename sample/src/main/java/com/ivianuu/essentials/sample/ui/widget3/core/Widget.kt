@@ -16,16 +16,19 @@
 
 package com.ivianuu.essentials.sample.ui.widget3.core
 
-abstract class Widget(
+open class Widget(
     val key: Any? = null,
     val children: (BuildContext.() -> Unit)? = null
 ) {
     var id: Any? = null
         internal set
 
-    abstract fun createElement(): Element
+    open fun createElement(): Element = Element(this)
 
 }
 
 fun Widget.canUpdate(other: Widget) =
     id == other.id && key == other.key
+
+fun Widget(key: Any? = null, children: BuildContext.() -> Unit) =
+    object : Widget(key, children) {}

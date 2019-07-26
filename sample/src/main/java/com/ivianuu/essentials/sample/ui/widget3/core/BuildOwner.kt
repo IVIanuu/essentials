@@ -16,4 +16,35 @@
 
 package com.ivianuu.essentials.sample.ui.widget3.core
 
-abstract class BuildOwner
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+
+abstract class BuildOwner {
+
+    private var dirtyElements: MutableSet<Element>? = null
+
+    private var buildJob: Job? = null
+
+    fun scheduleBuildFor(element: Element) {
+        if (dirtyElements == null) dirtyElements = mutableSetOf()
+        dirtyElements!!.add(element)
+        scheduleBuild()
+    }
+
+    private fun scheduleBuild() {
+        if (buildJob != null) return
+        buildJob = GlobalScope.launch(Dispatchers.Main) {
+            buildJob = null
+            rebuildDirtyElements()
+        }
+    }
+
+    private fun rebuildDirtyElements() {
+        val elementsToRebuild = dirtyElements!!.toList()
+        dirtyElements = null
+        elementsToRebuild.forEach { it.rebuild() }
+    }
+
+}

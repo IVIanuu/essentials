@@ -1,7 +1,14 @@
 package com.ivianuu.essentials.sample.ui.widget3
 
+import com.ivianuu.essentials.sample.ui.widget3.core.BuildContext
 import junit.framework.Assert.*
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Runnable
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.setMain
 import org.junit.Test
+import kotlin.coroutines.CoroutineContext
 
 class ElementTest {
 
@@ -153,6 +160,26 @@ class ElementTest {
 
         assertEquals(1, parent.children!!.indexOf(elementA))
         assertEquals(0, parent.children!!.indexOf(elementB))
+    }
+
+    @Test
+    fun testRebuild() {
+        Dispatchers.setMain(object : CoroutineDispatcher() {
+            override fun dispatch(context: CoroutineContext, block: Runnable) {
+                block.run()
+            }
+        })
+        var called = 0
+        val children: BuildContext.() -> Unit = { called++ }
+        val element = TestWidget(children = children).createElement()
+
+        element.mount(TestBuildOwner(), null)
+        assertEquals(1, called)
+
+        element.markNeedsBuild()
+        assertEquals(2, called)
+
+        Dispatchers.resetMain()
     }
 
 }

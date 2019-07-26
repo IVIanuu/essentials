@@ -115,6 +115,8 @@ object Deps {
         "org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.coroutines}"
     const val coroutinesRxJava =
         "org.jetbrains.kotlinx:kotlinx-coroutines-rx2:${Versions.coroutines}"
+    const val coroutinesTest =
+        "org.jetbrains.kotlinx:kotlinx-coroutines-test:${Versions.coroutines}"
 
     const val director = "com.ivianuu.director:director:${Versions.director}"
     const val directorCommon = "com.ivianuu.director:director-common:${Versions.director}"
