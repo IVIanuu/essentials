@@ -51,10 +51,10 @@ class ConstraintLayoutChildren(
         context.add(id, child)
     }
 
-    override fun <T> cache(calculation: () -> T): T = context.cache(calculation)
+    override fun <T> cache(id: Any, calculation: () -> T): T = context.cache(id, calculation)
 
-    override fun <T> cache(vararg inputs: Any?, calculation: () -> T): T =
-        context.cache(inputs = *inputs, calculation = calculation)
+    override fun <T> cache(id: Any, vararg inputs: Any?, calculation: () -> T): T =
+        context.cache(id = id, inputs = *inputs, calculation = calculation)
 
     override fun <T> getAmbient(key: Ambient<T>): T? = context.getAmbient(key)
 

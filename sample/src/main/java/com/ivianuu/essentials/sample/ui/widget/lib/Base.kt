@@ -22,7 +22,6 @@ abstract class Widget(val key: Any? = null) {
 
     var id: Any? = null
 
-
     abstract fun createElement(): Element
 
     fun canUpdate(other: Widget): Boolean = (this.id == other.id && this.key == other.key)
@@ -53,8 +52,7 @@ abstract class Element(widget: Widget) : BuildContext() {
     protected var dependencies: MutableList<Element>? = null
     protected var dependents: MutableList<Element>? = null
 
-    private var effects: MutableList<EffectState<*>>? = null
-    private var effectsIndex = 0
+    private var effects: MutableMap<Any, EffectState<*>>? = null
     private var lifecycleObservers: MutableList<LifecycleObserver>? = null
     private var notifiedActive = false
 
@@ -89,18 +87,18 @@ abstract class Element(widget: Widget) : BuildContext() {
         return null
     }
 
-    override fun <T> cache(calculation: () -> T): T =
-        cacheImpl(null, calculation)
+    override fun <T> cache(id: Any, calculation: () -> T): T =
+        cacheImpl(id, null, calculation)
 
-    override fun <T> cache(vararg inputs: Any?, calculation: () -> T): T =
-        cacheImpl(inputs.toList(), calculation)
+    override fun <T> cache(id: Any, vararg inputs: Any?, calculation: () -> T): T =
+        cacheImpl(id, inputs.toList(), calculation)
 
-    private fun <T> cacheImpl(inputs: List<Any?>?, calculation: () -> T): T {
-        if (effects == null) effects = mutableListOf()
+    private fun <T> cacheImpl(id: Any, inputs: List<Any?>?, calculation: () -> T): T {
+        if (effects == null) effects = mutableMapOf()
 
         val result: T
 
-        val prevState = effects!!.getOrNull(effectsIndex)
+        val prevState = effects!!.get(id)
 
         when {
             prevState == null -> {
@@ -109,17 +107,14 @@ abstract class Element(widget: Widget) : BuildContext() {
                     if (lifecycleObservers == null) lifecycleObservers = mutableListOf()
                     lifecycleObservers!!.add(result)
                 }
-                effects!!.add(effectsIndex, EffectState(inputs, result))
+                effects!![id] = EffectState(inputs, result)
             }
             prevState.inputs == inputs -> result = prevState.result as T
             else -> {
-                effects!!.removeAt(effectsIndex)
                 result = calculation()
-                effects!!.add(effectsIndex, EffectState(inputs, result))
+                effects!![id] = EffectState(inputs, result)
             }
         }
-
-        effectsIndex++
 
         return result
     }
@@ -169,7 +164,6 @@ abstract class Element(widget: Widget) : BuildContext() {
     open fun rebuild() {
         d { "${widget.id} rebuild is dirty $isDirty" }
         if (isDirty) {
-            effectsIndex = 0
             performRebuild()
             if (!notifiedActive) {
                 notifiedActive = true

@@ -26,9 +26,14 @@ abstract class BuildContext {
 
     abstract fun <T> getAmbient(key: Ambient<T>): T?
 
-    abstract fun <T> cache(calculation: () -> T): T
+    abstract fun <T> cache(id: Any, calculation: () -> T): T
+    inline fun <T> cache(noinline calculation: () -> T): T =
+        cache(id = sourceLocation(), calculation = calculation)
 
-    abstract fun <T> cache(vararg inputs: Any?, calculation: () -> T): T
+    abstract fun <T> cache(id: Any, vararg inputs: Any?, calculation: () -> T): T
+    inline fun <T> cache(vararg inputs: Any?, noinline calculation: () -> T): T = cache(
+        id = sourceLocation(), inputs = *inputs, calculation = calculation
+    )
 
     operator fun <T> Ambient<T>.unaryPlus() = invoke(this@BuildContext)
 
