@@ -36,6 +36,12 @@ import kotlin.reflect.KClass
  *     appInitializer { AnalyticsAppInitializer() }
  * }
  *
+ * or for existing bindings
+ *
+ * val analyticsModule = module {
+ *     bindAppInitializer<AnalyticsInitializer>()
+ * }
+ *
  */
 interface AppInitializer
 
