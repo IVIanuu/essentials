@@ -16,7 +16,6 @@
 
 package com.ivianuu.essentials.sample.ui.widget.sample
 
-import android.graphics.Color
 import android.view.Gravity.CENTER
 import android.widget.LinearLayout.VERTICAL
 import com.github.ajalt.timberkt.d
@@ -30,6 +29,7 @@ import com.ivianuu.essentials.sample.ui.widget.lib.state
 import com.ivianuu.essentials.sample.ui.widget.material.MaterialButton
 import com.ivianuu.essentials.sample.ui.widget.material.Switch
 import com.ivianuu.essentials.sample.ui.widget.view.TextView
+import com.ivianuu.essentials.sample.ui.widget.view.WrapContent
 import com.ivianuu.essentials.util.dp
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
@@ -50,6 +50,23 @@ class WidgetController2 : WidgetController() {
             orientation(VERTICAL)
             children {
                 +SimpleTextToolbar(title = "Compose")
+
+                // todo find out why this wouldn't work
+                /*
+                val (loading, setLoading) = +state { true }
+
+                    +launchOnActive {
+                        delay(1000)
+                        setLoading(false)
+                    }
+
+                    if (loading) {
+                        +Loading()
+                    } else {
+                        +Content()
+                    }
+                 */
+
                 +StatelessWidget {
                     val (loading, setLoading) = +state { true }
 
@@ -71,7 +88,6 @@ class WidgetController2 : WidgetController() {
     private fun BuildContext.Loading() = StatelessWidget {
         +FrameLayout {
             matchParent()
-            background(color = Color.BLUE)
             children {
                 +ProgressBar {
                     layoutGravity(CENTER)
@@ -88,9 +104,17 @@ class WidgetController2 : WidgetController() {
             children {
                 val (count, setCount) = +state { 0 }
                 println("build widget $count")
-                +TextView(text = "Count $count")
-                +MaterialButton(text = "Add", onClick = { setCount(count + 1) })
-                +MaterialButton(text = "Dec", onClick = { setCount(count - 1) })
+                +WrapContent {
+                    +TextStyleAmbient.Provider(R.style.TextAppearance_MaterialComponents_Headline6) {
+                        +TextView(text = "Count $count")
+                    }
+                }
+                +WrapContent {
+                    +MaterialButton(text = "Add", onClick = { setCount(count + 1) })
+                }
+                +WrapContent {
+                    +MaterialButton(text = "Dec", onClick = { setCount(count - 1) })
+                }
             }
         }
     }
