@@ -65,7 +65,7 @@ abstract class Element(widget: Widget) : BuildContext() {
         error("unsupported")
     }
 
-    override fun <T> getAmbient(key: Ambient<T>): T? {
+    fun <T> getAmbient(key: Ambient<T>): T? {
         var ancestor: Element? = this
         while (ancestor != null) {
             if (ancestor.widget is Ambient<*>.Provider

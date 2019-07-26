@@ -22,11 +22,12 @@ import com.ivianuu.essentials.sample.ui.widget.builder.*
 import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
 import com.ivianuu.essentials.sample.ui.widget.lib.ContextAmbient
 import com.ivianuu.essentials.sample.ui.widget.lib.StatelessWidget
+import com.ivianuu.essentials.sample.ui.widget.lib.ambient
 import com.ivianuu.kommon.core.content.colorAttr
 import com.ivianuu.kommon.core.content.dp
 
 fun BuildContext.SimpleTextToolbar(title: String) = StatelessWidget {
-    val context = +ContextAmbient
+    val context = +ambient(ContextAmbient)
 
     +FrameLayout {
         layoutWidth(MATCH_PARENT)

@@ -29,7 +29,7 @@ fun BuildContext.CheckBox(
     value: Boolean,
     onChange: (Boolean) -> Unit
 ) = StatelessWidget {
-    val context = +ContextAmbient
+    val context = +ambient(ContextAmbient)
     +Size(size = context.dp(48).toInt()) {
         +CompoundButton(
             id = sourceLocation(),
@@ -44,7 +44,7 @@ fun BuildContext.RadioButton(
     value: Boolean,
     onChange: (Boolean) -> Unit
 ) = StatelessWidget {
-    val context = +ContextAmbient
+    val context = +ambient(ContextAmbient)
     +Size(size = context.dp(48).toInt()) {
         +CompoundButton(
             id = sourceLocation(),
@@ -59,7 +59,7 @@ fun BuildContext.Switch(
     value: Boolean,
     onChange: (Boolean) -> Unit
 ) = StatelessWidget {
-    val context = +ContextAmbient
+    val context = +ambient(ContextAmbient)
     +Size(size = context.dp(48).toInt()) {
         +CompoundButton(
             id = sourceLocation(),

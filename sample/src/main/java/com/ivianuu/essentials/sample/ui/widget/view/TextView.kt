@@ -17,10 +17,7 @@
 package com.ivianuu.essentials.sample.ui.widget.view
 
 import androidx.appcompat.widget.AppCompatTextView
-import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
-import com.ivianuu.essentials.sample.ui.widget.lib.ViewWidget
-import com.ivianuu.essentials.sample.ui.widget.lib.ambientOf
-import com.ivianuu.essentials.sample.ui.widget.lib.effectOf
+import com.ivianuu.essentials.sample.ui.widget.lib.*
 
 val TextStyleAmbient = ambientOf<Int?>("TextStyle")
 
@@ -35,7 +32,7 @@ inline fun withTextStyle(res: Int, crossinline block: () -> Unit) = effectOf<Uni
 fun BuildContext.TextView(
     text: String? = null,
     textRes: Int? = null,
-    textAppearance: Int? = +TextStyleAmbient,
+    textAppearance: Int? = +ambient(TextStyleAmbient),
     textColor: Int? = null
 ) = ViewWidget<AppCompatTextView> { view ->
     when {

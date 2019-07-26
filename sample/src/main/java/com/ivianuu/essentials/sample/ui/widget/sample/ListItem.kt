@@ -25,10 +25,7 @@ import com.ivianuu.essentials.sample.ui.widget.layout.ConstraintLayout
 import com.ivianuu.essentials.sample.ui.widget.layout.ConstraintSetBuilder.Side.*
 import com.ivianuu.essentials.sample.ui.widget.layout.PARENT_ID
 import com.ivianuu.essentials.sample.ui.widget.layout.ViewConstraintBuilder
-import com.ivianuu.essentials.sample.ui.widget.lib.BuildContext
-import com.ivianuu.essentials.sample.ui.widget.lib.ContextAmbient
-import com.ivianuu.essentials.sample.ui.widget.lib.StatelessWidget
-import com.ivianuu.essentials.sample.ui.widget.lib.memo
+import com.ivianuu.essentials.sample.ui.widget.lib.*
 import com.ivianuu.essentials.sample.ui.widget.view.Clickable
 import com.ivianuu.essentials.sample.ui.widget.view.LongClickable
 import com.ivianuu.essentials.sample.ui.widget.view.Ripple
@@ -50,7 +47,7 @@ fun BuildContext.ListItem(
     +Clickable(onClick = onClick ?: {}) {
         +LongClickable(onLongClick = onLongClick ?: {}) {
             +Ripple {
-                val context = +ContextAmbient
+                val context = +ambient(ContextAmbient)
                 +Size(MATCH_PARENT, context.dp(72).toInt()) {
                     +ListItemContent(
                         title = title,

@@ -27,13 +27,9 @@ fun <T> ambientOf(key: Any, defaultValue: (() -> T)? = null): Ambient<T> =
 
 class Ambient<T> @PublishedApi internal constructor(
     val key: Any,
-    private val defaultValue: (() -> T)? = null
+    internal val defaultValue: (() -> T)? = null
 ) {
 
-    operator fun invoke(context: BuildContext): T {
-        return context.getAmbient(this)
-            ?: defaultValue?.invoke() as T
-    }
 
     inner class Provider(
         val value: T,

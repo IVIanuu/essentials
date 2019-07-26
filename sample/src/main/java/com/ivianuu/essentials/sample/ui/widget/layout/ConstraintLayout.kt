@@ -56,8 +56,6 @@ class ConstraintLayoutChildren(
     override fun <T> cache(id: Any, vararg inputs: Any?, calculation: () -> T): T =
         context.cache(id = id, inputs = *inputs, calculation = calculation)
 
-    override fun <T> getAmbient(key: Ambient<T>): T? = context.getAmbient(key)
-
     fun constraints(block: ConstraintSetBuilder.() -> Unit) {
         constraintSetBuilder.apply(block)
     }
