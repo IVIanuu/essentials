@@ -69,6 +69,8 @@ dependencies {
 
     api(Deps.kotlinStdLib)
 
+    api(Deps.kotlinFlowExtensions)
+
     api(Deps.kPrefs)
     api(Deps.kPrefsCommon)
     api(Deps.kPrefsCoroutines)

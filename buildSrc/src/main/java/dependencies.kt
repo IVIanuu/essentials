@@ -62,6 +62,7 @@ object Versions {
     const val junit = "4.12"
     const val kommon = "0.0.1-dev-12"
     const val kotlin = "1.3.41"
+    const val kotlinFlowExtensions = "0.0.1"
     const val kPrefs = "0.0.1-dev-9"
     const val kSettings = "0.0.1-dev-7"
     const val mavenGradle = "2.1"
@@ -145,6 +146,9 @@ object Deps {
 
     const val kotlinGradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.kotlin}"
     const val kotlinStdLib = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${Versions.kotlin}"
+
+    const val kotlinFlowExtensions =
+        "com.github.akarnokd:kotlin-flow-extensions:${Versions.kotlinFlowExtensions}"
 
     const val kPrefs = "com.ivianuu.kprefs:kprefs:${Versions.kPrefs}"
     const val kPrefsCommon = "com.ivianuu.kprefs:kprefs-common:${Versions.kPrefs}"
