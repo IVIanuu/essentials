@@ -7,15 +7,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.epoxy.EpoxyRecyclerView
 import com.airbnb.epoxy.TypedEpoxyController
-import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.compose.core.Widget
-import com.ivianuu.essentials.ui.compose.core.WidgetComposition
 import com.ivianuu.essentials.ui.epoxy.EsHolder
 import com.ivianuu.essentials.ui.epoxy.SimpleModel
 import com.ivianuu.kommon.core.view.getTagOrSet
 
-open class RecyclerViewWidget(private val _children: WidgetComposition.() -> Unit) :
-    Widget<RecyclerView>() {
+open class RecyclerViewWidget : Widget<RecyclerView>() {
 
     private val RecyclerView.epoxyController: WidgetEpoxyController
         get() = getTagOrSet {
@@ -58,10 +55,6 @@ open class RecyclerViewWidget(private val _children: WidgetComposition.() -> Uni
         updateModels()
     }
 
-    override fun WidgetComposition.compose() {
-        _children()
-    }
-
     private fun updateModels() {
         views.forEach { it.epoxyController.setData(children) }
     }
@@ -78,7 +71,6 @@ private class WidgetModel(val widget: Widget<*>) :
 
     override fun bind(holder: EsHolder) {
         super.bind(holder)
-        d { "bind $widget to holder $holder" }
         (widget as Widget<View>).updateView(holder.root)
     }
 

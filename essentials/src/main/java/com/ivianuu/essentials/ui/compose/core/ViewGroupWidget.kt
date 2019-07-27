@@ -78,4 +78,5 @@ abstract class ViewGroupWidget<V : ViewGroup> : Widget<V>() {
         super.updateChild(child)
         (child as Widget<View>).updateView(views[children.indexOf(child)])
     }
+
 }

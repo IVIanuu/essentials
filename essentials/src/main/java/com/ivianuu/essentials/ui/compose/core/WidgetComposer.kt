@@ -8,6 +8,7 @@ import androidx.compose.FrameManager
 import androidx.compose.Recomposer
 import androidx.compose.SlotTable
 import androidx.compose.Stack
+import com.github.ajalt.timberkt.d
 
 class WidgetComposer(
     val root: Any,
@@ -62,24 +63,26 @@ internal class WidgetApplyAdapter : ApplyAdapter<WidgetParent> {
 
 }
 
-inline class WidgetComposition(val composer: Composer<Any>) {
+class WidgetComposition(val composer: Composer<Any>) {
 
     @Suppress("NOTHING_TO_INLINE")
     inline operator fun <V> Effect<V>.unaryPlus(): V = resolve(
         this@WidgetComposition.composer, sourceLocation().hashCode()
     )
 
-    inline fun <T : Widget<*>> emit(noinline ctor: () -> T) = emit(sourceLocation(), ctor)
-
-    fun <T : Widget<*>> emit(
-        key: Any,
-        ctor: () -> T
+    inline fun <T : Widget<*>> emit(
+        key: Any = sourceLocation(),
+        ctor: () -> T,
+        update: (T) -> Unit = {},
+        children: WidgetComposition.() -> Unit = {}
     ) {
+        d { "emit $key" }
         with(composer) {
             startNode(key)
             val widget = if (inserting) ctor().also { emitNode(it) }
             else useNode()
-            with(widget as Widget<*>) { compose() }
+            update(widget as T)
+            children()
             endNode()
         }
     }

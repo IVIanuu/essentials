@@ -69,9 +69,6 @@ abstract class Widget<V : View> : WidgetParent {
     protected open fun didRemoveChild(index: Int, child: Widget<*>) {
     }
 
-    open fun WidgetComposition.compose() {
-    }
-
     abstract fun createView(container: ViewGroup): V
 
     open fun updateView(view: V) {
