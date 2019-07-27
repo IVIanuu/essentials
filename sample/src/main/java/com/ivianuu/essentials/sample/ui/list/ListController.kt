@@ -17,10 +17,13 @@
 package com.ivianuu.essentials.sample.ui.list
 
 import android.graphics.Color
+import android.view.Gravity
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.view.updatePadding
+import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.compose.core.ViewGroupWidget
 import com.ivianuu.essentials.ui.compose.core.Widget
 import com.ivianuu.essentials.ui.compose.core.WidgetComposition
@@ -31,6 +34,8 @@ import com.ivianuu.essentials.ui.navigation.director.controllerRoute
 import com.ivianuu.essentials.ui.navigation.director.controllerRouteOptions
 import com.ivianuu.essentials.ui.navigation.director.fade
 import com.ivianuu.injekt.Inject
+import com.ivianuu.kommon.core.view.dp
+import com.ivianuu.kommon.core.view.drawableAttr
 
 val listRoute = controllerRoute<ListController>(options = controllerRouteOptions().fade())
 
@@ -57,7 +62,14 @@ class Column : ViewGroupWidget<LinearLayout>() {
 
 data class Text(var text: String) : Widget<TextView>() {
 
-    override fun createView(container: ViewGroup) = TextView(container.context)
+    override fun createView(container: ViewGroup) = TextView(container.context).apply {
+        layoutParams = ViewGroup.MarginLayoutParams(MATCH_PARENT, dp(48).toInt())
+        gravity = Gravity.START or Gravity.CENTER_VERTICAL
+        setTextAppearance(R.style.TextAppearance_MaterialComponents_Subtitle1)
+        background = drawableAttr(R.attr.selectableItemBackground)
+        updatePadding(left = dp(16).toInt(), right = dp(16).toInt())
+        setOnClickListener {}
+    }
 
     override fun updateView(view: TextView) {
         super.updateView(view)
