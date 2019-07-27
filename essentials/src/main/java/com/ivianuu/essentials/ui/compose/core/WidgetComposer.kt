@@ -3,17 +3,19 @@ package com.ivianuu.essentials.ui.compose.core
 import androidx.compose.Applier
 import androidx.compose.ApplyAdapter
 import androidx.compose.Composer
+import androidx.compose.Effect
 import androidx.compose.FrameManager
 import androidx.compose.Recomposer
 import androidx.compose.SlotTable
 import androidx.compose.Stack
+import com.github.ajalt.timberkt.d
 
 class WidgetComposer(
-    val root: Widget,
+    val root: Any,
     recomposer: Recomposer
-) : Composer<Widget>(
+) : Composer<Any>(
     SlotTable(),
-    Applier(root, WidgetApplyAdapter()),
+    Applier(root, WidgetApplyAdapter() as ApplyAdapter<Any>),
     recomposer
 ) {
 
@@ -23,39 +25,67 @@ class WidgetComposer(
 
 }
 
-internal class WidgetApplyAdapter : ApplyAdapter<Widget> {
+internal class WidgetApplyAdapter : ApplyAdapter<WidgetParent> {
 
     private data class PendingInsert(val index: Int, val instance: Any)
 
     private val pendingInserts = Stack<PendingInsert>()
 
-    override fun Widget.start(instance: Widget) {
+    override fun WidgetParent.start(instance: WidgetParent) {
+
     }
 
-    override fun Widget.insertAt(index: Int, instance: Widget) {
+    override fun WidgetParent.insertAt(index: Int, instance: WidgetParent) {
+        d { "$this insert at $index $instance" }
         pendingInserts.push(PendingInsert(index, instance))
     }
 
-    override fun Widget.move(from: Int, to: Int, count: Int) {
+    override fun WidgetParent.move(from: Int, to: Int, count: Int) {
+        d { "$this move $from $to $count" }
         moveChild(from, to, count)
     }
 
-    override fun Widget.removeAt(index: Int, count: Int) {
+    override fun WidgetParent.removeAt(index: Int, count: Int) {
+        d { "$this remove at $index $count" }
         removeChild(index, count)
     }
 
-    override fun Widget.end(instance: Widget, parent: Widget) {
+    override fun WidgetParent.end(instance: WidgetParent, parent: WidgetParent) {
         if (pendingInserts.isNotEmpty()) {
             val pendingInsert = pendingInserts.peek()
             if (pendingInsert.instance == instance) {
                 val index = pendingInsert.index
                 pendingInserts.pop()
-                insertChild(index, instance)
+                insertChild(index, instance as Widget)
                 return
             }
         }
 
-        parent.updateChild(instance)
+        parent.updateChild(instance as Widget)
+    }
+
+}
+
+inline class WidgetComposition(val composer: Composer<Any>) {
+
+    @Suppress("NOTHING_TO_INLINE")
+    inline operator fun <V> Effect<V>.unaryPlus(): V = resolve(
+        this@WidgetComposition.composer, sourceLocation().hashCode()
+    )
+
+    inline fun <T : Widget> emit(noinline ctor: () -> T) = emit(sourceLocation(), ctor)
+
+    fun <T : Widget> emit(
+        key: Any,
+        ctor: () -> T
+    ) {
+        with(composer) {
+            startNode(key)
+            val widget = if (inserting) ctor().also { emitNode(it) }
+            else useNode()
+            with(widget as Widget) { compose() }
+            endNode()
+        }
     }
 
 }

@@ -32,8 +32,6 @@ abstract class ViewGroupWidget : Widget() {
             val child = childrenByViews[childView]
             child!!.updateView(childView)
         }
-        view.cast<ViewGroup>().removeAllViews()
-        views.remove(view.cast())
     }
 
     override fun destroyView(view: View) {

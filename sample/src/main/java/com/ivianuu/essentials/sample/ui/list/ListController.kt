@@ -24,8 +24,6 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.compose.Ambient
 import androidx.compose.ambient
-import androidx.compose.onActive
-import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.compose.core.ViewGroupWidget
 import com.ivianuu.essentials.ui.compose.core.Widget
 import com.ivianuu.essentials.ui.compose.core.WidgetComposition
@@ -49,7 +47,6 @@ class Column : ViewGroupWidget() {
 
     override fun updateView(view: View) {
         super.updateView(view)
-        d { "update view" }
         if (view.background != null) {
             view.setBackgroundColor(Color.RED)
         }
@@ -57,7 +54,6 @@ class Column : ViewGroupWidget() {
 
     override fun WidgetComposition.compose() {
         val haha = +ambient(TestAmbient)
-        d { "got ambient $haha" }
         emit { Text("Hello") }
         emit { Text("World") }
     }
@@ -75,23 +71,7 @@ class Text(var text: String) : Widget() {
 class ListController : ComposeController() {
 
     override fun WidgetComposition.build() {
-        d { "build" }
-
-        TestAmbient.Provider("hello") {
-            emit { Column() }
-        }
-
-        +onActive {
-            d { "on active" }
-            onDispose {
-                d { "on dispose" }
-            }
-        }
-
-        /*
-        Recompose { invalidate ->
-            d { "in recompose" }
-        }*/
+        emit { Column() }
     }
 
 }
