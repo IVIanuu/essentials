@@ -76,7 +76,10 @@ abstract class ViewGroupWidget<V : ViewGroup> : Widget<V>() {
 
     override fun updateChild(child: Widget<*>) {
         super.updateChild(child)
-        (child as Widget<View>).updateView(views[children.indexOf(child)])
+        val index = children.indexOf(child)
+        views.forEach {
+            (child as Widget<View>).updateView(it.getChildAt(index))
+        }
     }
 
 }

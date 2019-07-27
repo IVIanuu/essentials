@@ -26,7 +26,6 @@ import android.widget.TextView
 import androidx.compose.onActive
 import androidx.compose.state
 import androidx.core.view.updatePadding
-import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.compose.core.ViewGroupWidget
 import com.ivianuu.essentials.ui.compose.core.Widget
@@ -40,6 +39,7 @@ import com.ivianuu.essentials.ui.navigation.director.fade
 import com.ivianuu.injekt.Inject
 import com.ivianuu.kommon.core.view.dp
 import com.ivianuu.kommon.core.view.drawableAttr
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
@@ -89,14 +89,12 @@ class ListController : ComposeController() {
             children = {
                 val countState = +state { 0 }
 
-                d { "compose count is ${countState.value}" }
-
-                onActive {
-                    val job = GlobalScope.launch {
+                +onActive {
+                    val job = GlobalScope.launch(Dispatchers.Main) {
                         while (coroutineContext.isActive) {
+                            delay(1000)
                             countState.value += 1
                         }
-                        delay(1000)
                     }
 
                     onDispose { job.cancel() }
@@ -105,7 +103,7 @@ class ListController : ComposeController() {
                 emit(
                     ctor = { Text() },
                     update = {
-                        it.text = "Count $countState"
+                        it.text = "Count ${countState.value}"
                         it.backgroundColor = Color.BLUE
                     }
                 )
@@ -113,7 +111,7 @@ class ListController : ComposeController() {
                 emit(
                     ctor = { RecyclerViewWidget() },
                     update = {
-                        (1..100).forEach { i ->
+                        (1..10).forEach { i ->
                             emit(
                                 key = sourceLocation() to i,
                                 ctor = { Text() },

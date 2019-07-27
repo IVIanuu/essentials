@@ -18,7 +18,6 @@ package com.ivianuu.essentials.ui.popup
 
 import android.view.Gravity
 import android.view.View
-import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.R
 
 data class PopupMenu<T>(
@@ -38,8 +37,6 @@ data class PopupMenuItem<T>(
 
 fun <T> PopupMenu<T>.show(view: View) {
     var itemSelected = false
-
-    d { "show $this" }
 
     val androidPopupMenu = androidx.appcompat.widget.PopupMenu(
         view.context, view, gravity, style, 0

@@ -31,7 +31,6 @@ internal class WidgetApplyAdapter : ApplyAdapter<WidgetParent> {
     private val pendingInserts = Stack<PendingInsert>()
 
     override fun WidgetParent.start(instance: WidgetParent) {
-
     }
 
     override fun WidgetParent.insertAt(index: Int, instance: WidgetParent) {
@@ -53,7 +52,6 @@ internal class WidgetApplyAdapter : ApplyAdapter<WidgetParent> {
                 val index = pendingInsert.index
                 pendingInserts.pop()
                 insertChild(index, instance as Widget<*>)
-                return
             }
         }
 
