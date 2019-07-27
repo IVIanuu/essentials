@@ -14,8 +14,8 @@ abstract class Widget<V : View> : WidgetParent {
     }
 
     open fun unmount() {
-        this.parent = null
         children.forEach { it.unmount() }
+        this.parent = null
     }
 
     override fun insertChild(index: Int, child: Widget<*>) {

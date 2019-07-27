@@ -70,7 +70,7 @@ private class Root(val view: ViewGroup) : Component(), WidgetParent {
     }
 
     override fun updateChild(child: Widget<*>) {
-        (child!! as Widget<View>).updateView(view.getChildAt(0))
+        (child as Widget<View>).updateView(view.getChildAt(0))
     }
 
 }
