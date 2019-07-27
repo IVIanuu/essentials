@@ -3,13 +3,13 @@ package com.ivianuu.essentials.ui.compose.core
 import android.view.View
 import android.view.ViewGroup
 
-abstract class Widget : WidgetParent {
+abstract class Widget<V : View> : WidgetParent {
 
-    var parent: Widget? = null
+    var parent: Widget<*>? = null
         private set
-    val children = mutableListOf<Widget>()
+    val children = mutableListOf<Widget<*>>()
 
-    open fun mount(parent: Widget?) {
+    open fun mount(parent: Widget<*>?) {
         this.parent = parent
     }
 
@@ -18,7 +18,7 @@ abstract class Widget : WidgetParent {
         children.forEach { it.unmount() }
     }
 
-    override fun insertChild(index: Int, child: Widget) {
+    override fun insertChild(index: Int, child: Widget<*>) {
         willInsertChild(index, child)
         children.add(index, child)
         child.mount(this)
@@ -48,36 +48,36 @@ abstract class Widget : WidgetParent {
         }
     }
 
-    override fun updateChild(child: Widget) {
+    override fun updateChild(child: Widget<*>) {
     }
 
-    protected open fun willInsertChild(index: Int, child: Widget) {
+    protected open fun willInsertChild(index: Int, child: Widget<*>) {
     }
 
-    protected open fun didInsertChild(index: Int, child: Widget) {
+    protected open fun didInsertChild(index: Int, child: Widget<*>) {
     }
 
-    protected open fun willMoveChild(child: Widget, from: Int, to: Int) {
+    protected open fun willMoveChild(child: Widget<*>, from: Int, to: Int) {
     }
 
-    protected open fun didMoveChild(child: Widget, from: Int, to: Int) {
+    protected open fun didMoveChild(child: Widget<*>, from: Int, to: Int) {
     }
 
-    protected open fun willRemoveChild(index: Int, child: Widget) {
+    protected open fun willRemoveChild(index: Int, child: Widget<*>) {
     }
 
-    protected open fun didRemoveChild(index: Int, child: Widget) {
+    protected open fun didRemoveChild(index: Int, child: Widget<*>) {
     }
 
     open fun WidgetComposition.compose() {
     }
 
-    abstract fun createView(container: ViewGroup): View
+    abstract fun createView(container: ViewGroup): V
 
-    open fun updateView(view: View) {
+    open fun updateView(view: V) {
     }
 
-    open fun destroyView(view: View) {
+    open fun destroyView(view: V) {
     }
 
 }

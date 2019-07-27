@@ -39,7 +39,7 @@ private class Root(val view: ViewGroup) : Component(), WidgetParent {
     lateinit var composable: WidgetComposition.() -> Unit
     lateinit var composer: CompositionContext
 
-    private var child: Widget? = null
+    private var child: Widget<*>? = null
 
     @Suppress("PLUGIN_ERROR")
     override fun compose() {
@@ -49,8 +49,9 @@ private class Root(val view: ViewGroup) : Component(), WidgetParent {
         cc.endGroup()
     }
 
-    override fun insertChild(index: Int, child: Widget) {
+    override fun insertChild(index: Int, child: Widget<*>) {
         this.child = child
+        child.mount(null)
         val childView = child.createView(view)
         view.addView(childView)
         updateChild(child)
@@ -63,12 +64,13 @@ private class Root(val view: ViewGroup) : Component(), WidgetParent {
     override fun removeChild(index: Int, count: Int) {
         val childView = view.getChildAt(0)
         view.removeViewAt(index)
-        child!!.destroyView(childView)
+        (child!! as Widget<View>).destroyView(childView)
+        child!!.unmount()
         child = null
     }
 
-    override fun updateChild(child: Widget) {
-        child.updateView(view.getChildAt(0))
+    override fun updateChild(child: Widget<*>) {
+        (child!! as Widget<View>).updateView(view.getChildAt(0))
     }
 
 }

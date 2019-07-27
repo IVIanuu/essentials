@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.sample.ui.list
 
 import android.graphics.Color
-import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.LinearLayout
@@ -31,20 +30,19 @@ import com.ivianuu.essentials.ui.compose.epoxy.RecyclerViewWidget
 import com.ivianuu.essentials.ui.navigation.director.controllerRoute
 import com.ivianuu.essentials.ui.navigation.director.controllerRouteOptions
 import com.ivianuu.essentials.ui.navigation.director.fade
-import com.ivianuu.essentials.util.cast
 import com.ivianuu.injekt.Inject
 
 val listRoute = controllerRoute<ListController>(options = controllerRouteOptions().fade())
 
-class Column : ViewGroupWidget() {
+class Column : ViewGroupWidget<LinearLayout>() {
 
-    override fun createViewGroup(container: ViewGroup): ViewGroup =
+    override fun createViewGroup(container: ViewGroup): LinearLayout =
         LinearLayout(container.context).apply {
             layoutParams = ViewGroup.LayoutParams(MATCH_PARENT, MATCH_PARENT)
             setBackgroundColor(Color.BLUE)
         }
 
-    override fun updateView(view: View) {
+    override fun updateView(view: LinearLayout) {
         super.updateView(view)
         if (view.background != null) {
             view.setBackgroundColor(Color.RED)
@@ -57,13 +55,13 @@ class Column : ViewGroupWidget() {
     }
 }
 
-data class Text(var text: String) : Widget() {
+data class Text(var text: String) : Widget<TextView>() {
 
-    override fun createView(container: ViewGroup): View = TextView(container.context)
+    override fun createView(container: ViewGroup) = TextView(container.context)
 
-    override fun updateView(view: View) {
+    override fun updateView(view: TextView) {
         super.updateView(view)
-        view.cast<TextView>().text = text
+        view.text = text
     }
 
 }

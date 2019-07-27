@@ -52,12 +52,12 @@ internal class WidgetApplyAdapter : ApplyAdapter<WidgetParent> {
             if (pendingInsert.instance == instance) {
                 val index = pendingInsert.index
                 pendingInserts.pop()
-                insertChild(index, instance as Widget)
+                insertChild(index, instance as Widget<*>)
                 return
             }
         }
 
-        parent.updateChild(instance as Widget)
+        parent.updateChild(instance as Widget<*>)
     }
 
 }
@@ -69,9 +69,9 @@ inline class WidgetComposition(val composer: Composer<Any>) {
         this@WidgetComposition.composer, sourceLocation().hashCode()
     )
 
-    inline fun <T : Widget> emit(noinline ctor: () -> T) = emit(sourceLocation(), ctor)
+    inline fun <T : Widget<*>> emit(noinline ctor: () -> T) = emit(sourceLocation(), ctor)
 
-    fun <T : Widget> emit(
+    fun <T : Widget<*>> emit(
         key: Any,
         ctor: () -> T
     ) {
@@ -79,7 +79,7 @@ inline class WidgetComposition(val composer: Composer<Any>) {
             startNode(key)
             val widget = if (inserting) ctor().also { emitNode(it) }
             else useNode()
-            with(widget as Widget) { compose() }
+            with(widget as Widget<*>) { compose() }
             endNode()
         }
     }

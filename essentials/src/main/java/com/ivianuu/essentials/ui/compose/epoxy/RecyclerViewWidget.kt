@@ -14,49 +14,46 @@ import com.ivianuu.essentials.ui.epoxy.EsHolder
 import com.ivianuu.essentials.ui.epoxy.SimpleModel
 import com.ivianuu.kommon.core.view.getTagOrSet
 
-open class RecyclerViewWidget(private val _children: WidgetComposition.() -> Unit) : Widget() {
+open class RecyclerViewWidget(private val _children: WidgetComposition.() -> Unit) :
+    Widget<RecyclerView>() {
 
-    private val View.epoxyController: WidgetEpoxyController
+    private val RecyclerView.epoxyController: WidgetEpoxyController
         get() = getTagOrSet {
             WidgetEpoxyController()
-                .also {
-                    (this as RecyclerView)
-                        .adapter = it.adapter
-                }
+                .also { adapter = it.adapter }
         }
 
-    private val views = mutableSetOf<ViewGroup>()
+    private val views = mutableSetOf<RecyclerView>()
 
-    override fun createView(container: ViewGroup): View =
-        EpoxyRecyclerView(container.context).apply {
-            layoutParams = ViewGroup.LayoutParams(MATCH_PARENT, MATCH_PARENT)
-            layoutManager = LinearLayoutManager(container.context)
-            epoxyController // todo init
-            views.add(this)
-        }
+    override fun createView(container: ViewGroup) = EpoxyRecyclerView(container.context).apply {
+        layoutParams = ViewGroup.LayoutParams(MATCH_PARENT, MATCH_PARENT)
+        layoutManager = LinearLayoutManager(container.context)
+        epoxyController // todo init
+        views.add(this)
+    }
 
-    override fun destroyView(view: View) {
+    override fun destroyView(view: RecyclerView) {
         super.destroyView(view)
         view.epoxyController.cancelPendingModelBuild()
         views.remove(view)
     }
 
-    override fun updateView(view: View) {
+    override fun updateView(view: RecyclerView) {
         super.updateView(view)
         updateModels()
     }
 
-    override fun didInsertChild(index: Int, child: Widget) {
+    override fun didInsertChild(index: Int, child: Widget<*>) {
         super.didInsertChild(index, child)
         updateModels()
     }
 
-    override fun didMoveChild(child: Widget, from: Int, to: Int) {
+    override fun didMoveChild(child: Widget<*>, from: Int, to: Int) {
         super.didMoveChild(child, from, to)
         updateModels()
     }
 
-    override fun willRemoveChild(index: Int, child: Widget) {
+    override fun willRemoveChild(index: Int, child: Widget<*>) {
         super.willRemoveChild(index, child)
         updateModels()
     }
@@ -70,24 +67,24 @@ open class RecyclerViewWidget(private val _children: WidgetComposition.() -> Uni
     }
 }
 
-private class WidgetEpoxyController : TypedEpoxyController<List<Widget>>() {
-    override fun buildModels(data: List<Widget>?) {
+private class WidgetEpoxyController : TypedEpoxyController<List<Widget<*>>>() {
+    override fun buildModels(data: List<Widget<*>>?) {
         data?.forEach { WidgetModel(it).addTo(this) }
     }
 }
 
-private class WidgetModel(val widget: Widget) :
+private class WidgetModel(val widget: Widget<*>) :
     SimpleModel(id = widget) { // todo we need unique ids
 
     override fun bind(holder: EsHolder) {
         super.bind(holder)
         d { "bind $widget to holder $holder" }
-        widget.updateView(holder.root)
+        (widget as Widget<View>).updateView(holder.root)
     }
 
     override fun buildView(parent: ViewGroup): View {
         val view = widget.createView(parent)
-        widget.updateView(view)
+        (widget as Widget<View>).updateView(view)
         return view
     }
 
