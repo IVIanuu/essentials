@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.epoxy.EpoxyRecyclerView
 import com.airbnb.epoxy.TypedEpoxyController
+import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.compose.core.Widget
 import com.ivianuu.essentials.ui.compose.core.WidgetComposition
 import com.ivianuu.essentials.ui.epoxy.EsHolder
@@ -75,10 +76,12 @@ private class WidgetEpoxyController : TypedEpoxyController<List<Widget>>() {
     }
 }
 
-private class WidgetModel(val widget: Widget) : SimpleModel() {
+private class WidgetModel(val widget: Widget) :
+    SimpleModel(id = widget) { // todo we need unique ids
 
     override fun bind(holder: EsHolder) {
         super.bind(holder)
+        d { "bind $widget to holder $holder" }
         widget.updateView(holder.root)
     }
 

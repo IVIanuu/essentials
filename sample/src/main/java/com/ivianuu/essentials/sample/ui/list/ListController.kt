@@ -25,11 +25,13 @@ import android.widget.TextView
 import com.ivianuu.essentials.ui.compose.core.ViewGroupWidget
 import com.ivianuu.essentials.ui.compose.core.Widget
 import com.ivianuu.essentials.ui.compose.core.WidgetComposition
+import com.ivianuu.essentials.ui.compose.core.sourceLocation
 import com.ivianuu.essentials.ui.compose.director.ComposeController
 import com.ivianuu.essentials.ui.compose.epoxy.RecyclerViewWidget
 import com.ivianuu.essentials.ui.navigation.director.controllerRoute
 import com.ivianuu.essentials.ui.navigation.director.controllerRouteOptions
 import com.ivianuu.essentials.ui.navigation.director.fade
+import com.ivianuu.essentials.util.cast
 import com.ivianuu.injekt.Inject
 
 val listRoute = controllerRoute<ListController>(options = controllerRouteOptions().fade())
@@ -57,8 +59,11 @@ class Column : ViewGroupWidget() {
 
 data class Text(var text: String) : Widget() {
 
-    override fun createView(container: ViewGroup): View = TextView(container.context).apply {
-        text = this@Text.text
+    override fun createView(container: ViewGroup): View = TextView(container.context)
+
+    override fun updateView(view: View) {
+        super.updateView(view)
+        view.cast<TextView>().text = text
     }
 
 }
@@ -70,7 +75,7 @@ class ListController : ComposeController() {
         emit {
             RecyclerViewWidget {
                 (1..100).forEach { i ->
-                    emit { Text("Title: $i") }
+                    emit(sourceLocation() to i) { Text("Title: $i") }
                 }
             }
         }
