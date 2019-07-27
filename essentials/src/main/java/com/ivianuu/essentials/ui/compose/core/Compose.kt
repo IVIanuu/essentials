@@ -7,90 +7,76 @@ import androidx.compose.Composer
 import androidx.compose.CompositionContext
 import androidx.compose.currentComposerNonNull
 
-object Compose {
+fun ViewGroup.setViewContent(composable: WidgetComposition.() -> Unit) {
+    var root = getRootComponent() as? Root
+    if (root == null) {
+        removeAllViews()
+        root = Root(this)
+        root.composable = composable
+        setRoot(root)
+        val cc = CompositionContext.prepare(
+            root,
+            null
+        ) { WidgetComposer(root, this) }
+        root.composer = cc
+        root.update()
+    } else {
+        root.composable = composable
+        root.update()
+    }
+}
 
-    internal class Root(val view: ViewGroup) : Component(), WidgetParent {
-        fun update() = composer.compose()
+fun ViewGroup.disposeComposition() {
+    // temporary easy way to call correct lifecycles on everything
+    // need to remove compositionContext from context map as well
+    setViewContent { }
+    setTag(TAG_ROOT_COMPONENT, null)
+}
 
-        lateinit var composable: WidgetComposition.() -> Unit
-        lateinit var composer: CompositionContext
+private class Root(val view: ViewGroup) : Component(), WidgetParent {
+    fun update() = composer.compose()
 
-        private var child: Widget? = null
+    lateinit var composable: WidgetComposition.() -> Unit
+    lateinit var composer: CompositionContext
 
-        @Suppress("PLUGIN_ERROR")
-        override fun compose() {
-            val cc = currentComposerNonNull
-            cc.startGroup(0)
-            with(WidgetComposition(cc as Composer<Any>)) { composable() }
-            cc.endGroup()
-        }
+    private var child: Widget? = null
 
-        override fun insertChild(index: Int, child: Widget) {
-            this.child = child
-            val childView = child.createView(view)
-            view.addView(childView)
-            updateChild(child)
-        }
-
-        override fun moveChild(from: Int, to: Int, count: Int) {
-            error("unsupported")
-        }
-
-        override fun removeChild(index: Int, count: Int) {
-            val childView = view.getChildAt(0)
-            view.removeViewAt(index)
-            child!!.destroyView(childView)
-            child = null
-        }
-
-        override fun updateChild(child: Widget) {
-            child.updateView(view.getChildAt(0))
-        }
-
+    @Suppress("PLUGIN_ERROR")
+    override fun compose() {
+        val cc = currentComposerNonNull
+        cc.startGroup(0)
+        with(WidgetComposition(cc as Composer<Any>)) { composable() }
+        cc.endGroup()
     }
 
-    private val TAG_ROOT_WIDGET = "composeRootComponent".hashCode()
-
-    private fun getRootComponent(view: View): Component? {
-        return view.getTag(TAG_ROOT_WIDGET) as? Component
+    override fun insertChild(index: Int, child: Widget) {
+        this.child = child
+        val childView = child.createView(view)
+        view.addView(childView)
+        updateChild(child)
     }
 
-    private fun setRoot(view: View, component: Component) {
-        view.setTag(TAG_ROOT_WIDGET, component)
+    override fun moveChild(from: Int, to: Int, count: Int) {
+        error("unsupported")
     }
 
-    fun composeInto(
-        container: ViewGroup,
-        composable: WidgetComposition.() -> Unit
-    ) {
-        var root = getRootComponent(container) as? Root
-        if (root == null) {
-            container.removeAllViews()
-            root = Root(container)
-            root.composable = composable
-            setRoot(container, root)
-            val cc = CompositionContext.prepare(
-                root,
-                null
-            ) { WidgetComposer(root, this) }
-            root.composer = cc
-            root.update()
-        } else {
-            root.composable = composable
-            root.update()
-        }
+    override fun removeChild(index: Int, count: Int) {
+        val childView = view.getChildAt(0)
+        view.removeViewAt(index)
+        child!!.destroyView(childView)
+        child = null
     }
 
-    fun disposeComposition(container: ViewGroup) {
-        // temporary easy way to call correct lifecycles on everything
-        // need to remove compositionContext from context map as well
-        composeInto(container) { }
-        container.setTag(TAG_ROOT_WIDGET, null)
+    override fun updateChild(child: Widget) {
+        child.updateView(view.getChildAt(0))
     }
 
 }
 
-fun ViewGroup.setViewContent(composable: WidgetComposition.() -> Unit) =
-    Compose.composeInto(this, composable)
+private val TAG_ROOT_COMPONENT = "composeRootComponent".hashCode()
 
-fun ViewGroup.disposeComposition() = Compose.disposeComposition(this)
+private fun View.getRootComponent(): Component? = getTag(TAG_ROOT_COMPONENT) as? Component
+
+private fun View.setRoot(component: Component) {
+    setTag(TAG_ROOT_COMPONENT, component)
+}
