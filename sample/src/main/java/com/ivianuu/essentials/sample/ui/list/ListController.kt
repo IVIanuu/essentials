@@ -16,43 +16,82 @@
 
 package com.ivianuu.essentials.sample.ui.list
 
-import com.ivianuu.essentials.ui.epoxy.ListItem
-import com.ivianuu.essentials.ui.epoxy.SimpleLoading
-import com.ivianuu.essentials.ui.epoxy.SimpleText
-import com.ivianuu.essentials.ui.mvrx.epoxy.mvRxEpoxyController
-import com.ivianuu.essentials.ui.mvrx.injekt.injectMvRxViewModel
+import android.graphics.Color
+import android.view.View
+import android.view.ViewGroup
+import android.view.ViewGroup.LayoutParams.MATCH_PARENT
+import android.widget.LinearLayout
+import android.widget.TextView
+import androidx.compose.Ambient
+import androidx.compose.ambient
+import androidx.compose.onActive
+import com.github.ajalt.timberkt.d
+import com.ivianuu.essentials.ui.compose.core.ViewGroupWidget
+import com.ivianuu.essentials.ui.compose.core.Widget
+import com.ivianuu.essentials.ui.compose.core.WidgetComposition
+import com.ivianuu.essentials.ui.compose.director.ComposeController
 import com.ivianuu.essentials.ui.navigation.director.controllerRoute
 import com.ivianuu.essentials.ui.navigation.director.controllerRouteOptions
 import com.ivianuu.essentials.ui.navigation.director.fade
-import com.ivianuu.essentials.ui.popup.PopupMenu
-import com.ivianuu.essentials.ui.popup.PopupMenuItem
 import com.ivianuu.injekt.Inject
 
 val listRoute = controllerRoute<ListController>(options = controllerRouteOptions().fade())
 
-@Inject
-class ListController : com.ivianuu.essentials.ui.simple.ListController() {
+val TestAmbient = Ambient.of<String>()
 
-    override val toolbarTitle get() = "List"
+class Column : ViewGroupWidget() {
 
-    override val toolbarMenu: PopupMenu<*>?
-        get() = PopupMenu(
-            items = listOf(PopupMenuItem(value = "Refresh", title = "Refresh")),
-            onSelected = {
-                when (it) {
-                    "Refresh" -> viewModel.refreshClicked()
-                }
-            }
-        )
-
-    private val viewModel: ListViewModel by injectMvRxViewModel()
-
-    override fun epoxyController() = mvRxEpoxyController(viewModel) { state ->
-        when {
-            state.loading -> SimpleLoading(id = "loading")
-            state.items.isNotEmpty() -> state.items.forEach { ListItem(id = it, title = it) }
-            else -> SimpleText(text = "Hmm empty", id = "empty")
+    override fun createViewGroup(container: ViewGroup): ViewGroup =
+        LinearLayout(container.context).apply {
+            layoutParams = ViewGroup.LayoutParams(MATCH_PARENT, MATCH_PARENT)
+            setBackgroundColor(Color.BLUE)
         }
+
+    override fun updateView(view: View) {
+        super.updateView(view)
+        d { "update view" }
+        if (view.background != null) {
+            view.setBackgroundColor(Color.RED)
+        }
+    }
+
+    override fun WidgetComposition.compose() {
+        val haha = +ambient(TestAmbient)
+        d { "got ambient $haha" }
+        emit { Text("Hello") }
+        emit { Text("World") }
+    }
+}
+
+class Text(var text: String) : Widget() {
+
+    override fun createView(container: ViewGroup): View = TextView(container.context).apply {
+        text = this@Text.text
+    }
+
+}
+
+@Inject
+class ListController : ComposeController() {
+
+    override fun WidgetComposition.build() {
+        d { "build" }
+
+        TestAmbient.Provider("hello") {
+            emit { Column() }
+        }
+
+        +onActive {
+            d { "on active" }
+            onDispose {
+                d { "on dispose" }
+            }
+        }
+
+        /*
+        Recompose { invalidate ->
+            d { "in recompose" }
+        }*/
     }
 
 }
