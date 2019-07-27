@@ -8,7 +8,6 @@ import androidx.compose.FrameManager
 import androidx.compose.Recomposer
 import androidx.compose.SlotTable
 import androidx.compose.Stack
-import com.github.ajalt.timberkt.d
 
 class WidgetComposer(
     val root: Any,
@@ -70,19 +69,18 @@ class WidgetComposition(val composer: Composer<Any>) {
         this@WidgetComposition.composer, sourceLocation().hashCode()
     )
 
-    inline fun <T : Widget<*>> emit(
+    fun <T : Widget<*>> emit(
         key: Any = sourceLocation(),
         ctor: () -> T,
-        update: (T) -> Unit = {},
-        children: WidgetComposition.() -> Unit = {}
+        update: ((T) -> Unit)? = null,
+        children: (WidgetComposition.() -> Unit)? = null
     ) {
-        d { "emit $key" }
         with(composer) {
             startNode(key)
             val widget = if (inserting) ctor().also { emitNode(it) }
             else useNode()
-            update(widget as T)
-            children()
+            update?.invoke(widget as T)
+            children?.invoke(this@WidgetComposition)
             endNode()
         }
     }
