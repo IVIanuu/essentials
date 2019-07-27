@@ -2,7 +2,6 @@ package com.ivianuu.essentials.ui.compose.core
 
 import android.view.View
 import android.view.ViewGroup
-import com.github.ajalt.timberkt.d
 
 abstract class Widget : WidgetParent {
 
@@ -20,7 +19,6 @@ abstract class Widget : WidgetParent {
     }
 
     override fun insertChild(index: Int, child: Widget) {
-        d { "insert child $child $index" }
         willInsertChild(index, child)
         children.add(index, child)
         child.mount(this)
@@ -33,7 +31,6 @@ abstract class Widget : WidgetParent {
             val toIndex = if (from > to) to + i else to + count - 2
             val child = children[fromIndex]
 
-            d { "move child $child $fromIndex $toIndex" }
             willMoveChild(child, fromIndex, toIndex)
             children.removeAt(fromIndex)
             children.add(toIndex, child)
@@ -44,7 +41,6 @@ abstract class Widget : WidgetParent {
     override fun removeChild(index: Int, count: Int) {
         for (i in index + count - 1 downTo index) {
             val child = children[i]
-            d { "remove child $child $i" }
             willRemoveChild(i, child)
             children.removeAt(i)
             child.unmount()
@@ -53,7 +49,6 @@ abstract class Widget : WidgetParent {
     }
 
     override fun updateChild(child: Widget) {
-        d { "update child $child" }
     }
 
     protected open fun willInsertChild(index: Int, child: Widget) {
@@ -80,11 +75,9 @@ abstract class Widget : WidgetParent {
     abstract fun createView(container: ViewGroup): View
 
     open fun updateView(view: View) {
-        d { "update view" }
     }
 
     open fun destroyView(view: View) {
-        d { "destroy view" }
     }
 
 }

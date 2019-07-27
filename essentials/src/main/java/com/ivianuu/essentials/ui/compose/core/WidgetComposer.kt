@@ -8,7 +8,6 @@ import androidx.compose.FrameManager
 import androidx.compose.Recomposer
 import androidx.compose.SlotTable
 import androidx.compose.Stack
-import com.github.ajalt.timberkt.d
 
 class WidgetComposer(
     val root: Any,
@@ -36,17 +35,14 @@ internal class WidgetApplyAdapter : ApplyAdapter<WidgetParent> {
     }
 
     override fun WidgetParent.insertAt(index: Int, instance: WidgetParent) {
-        d { "$this insert at $index $instance" }
         pendingInserts.push(PendingInsert(index, instance))
     }
 
     override fun WidgetParent.move(from: Int, to: Int, count: Int) {
-        d { "$this move $from $to $count" }
         moveChild(from, to, count)
     }
 
     override fun WidgetParent.removeAt(index: Int, count: Int) {
-        d { "$this remove at $index $count" }
         removeChild(index, count)
     }
 

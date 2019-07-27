@@ -22,20 +22,17 @@ import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.compose.Ambient
-import androidx.compose.ambient
 import com.ivianuu.essentials.ui.compose.core.ViewGroupWidget
 import com.ivianuu.essentials.ui.compose.core.Widget
 import com.ivianuu.essentials.ui.compose.core.WidgetComposition
 import com.ivianuu.essentials.ui.compose.director.ComposeController
+import com.ivianuu.essentials.ui.compose.epoxy.RecyclerViewWidget
 import com.ivianuu.essentials.ui.navigation.director.controllerRoute
 import com.ivianuu.essentials.ui.navigation.director.controllerRouteOptions
 import com.ivianuu.essentials.ui.navigation.director.fade
 import com.ivianuu.injekt.Inject
 
 val listRoute = controllerRoute<ListController>(options = controllerRouteOptions().fade())
-
-val TestAmbient = Ambient.of<String>()
 
 class Column : ViewGroupWidget() {
 
@@ -53,13 +50,12 @@ class Column : ViewGroupWidget() {
     }
 
     override fun WidgetComposition.compose() {
-        val haha = +ambient(TestAmbient)
         emit { Text("Hello") }
         emit { Text("World") }
     }
 }
 
-class Text(var text: String) : Widget() {
+data class Text(var text: String) : Widget() {
 
     override fun createView(container: ViewGroup): View = TextView(container.context).apply {
         text = this@Text.text
@@ -71,7 +67,13 @@ class Text(var text: String) : Widget() {
 class ListController : ComposeController() {
 
     override fun WidgetComposition.build() {
-        emit { Column() }
+        emit {
+            RecyclerViewWidget {
+                (1..100).forEach { i ->
+                    emit { Text("Title: $i") }
+                }
+            }
+        }
     }
 
 }
