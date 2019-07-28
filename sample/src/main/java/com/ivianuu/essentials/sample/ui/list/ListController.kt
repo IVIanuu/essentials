@@ -32,11 +32,13 @@ import com.ivianuu.essentials.ui.compose.core.Surface
 import com.ivianuu.essentials.ui.compose.group
 import com.ivianuu.essentials.ui.compose.material.Button
 import com.ivianuu.essentials.ui.compose.material.CheckBox
+import com.ivianuu.essentials.ui.compose.material.FloatingActionButton
 import com.ivianuu.essentials.ui.compose.material.RadioButton
 import com.ivianuu.essentials.ui.compose.material.Switch
 import com.ivianuu.essentials.ui.compose.material.border
 import com.ivianuu.essentials.ui.compose.material.rippleColor
 import com.ivianuu.essentials.ui.compose.sourceLocation
+import com.ivianuu.essentials.ui.compose.view.FrameLayout
 import com.ivianuu.essentials.ui.compose.view.Image
 import com.ivianuu.essentials.ui.compose.view.LinearLayout
 import com.ivianuu.essentials.ui.compose.view.LinearLayoutOrientation
@@ -51,6 +53,8 @@ import com.ivianuu.essentials.ui.compose.view.backgroundColor
 import com.ivianuu.essentials.ui.compose.view.elevation
 import com.ivianuu.essentials.ui.compose.view.gravity
 import com.ivianuu.essentials.ui.compose.view.height
+import com.ivianuu.essentials.ui.compose.view.image
+import com.ivianuu.essentials.ui.compose.view.margin
 import com.ivianuu.essentials.ui.compose.view.matchParent
 import com.ivianuu.essentials.ui.compose.view.onClick
 import com.ivianuu.essentials.ui.compose.view.onValueChange
@@ -79,102 +83,115 @@ class ListController : ComposeController() {
                 statusBarColor = (+themeColor { primary }).toArgb().darken()
             }
 
-            LinearLayout {
+            FrameLayout {
                 matchParent()
-                orientation(LinearLayoutOrientation.Vertical)
-                gravity(Alignment.TopCenter)
-                backgroundColor(+themeColor { surface })
 
-                Surface {
-                    AppBar(
-                        leading = {
-                            AppBarIcon(
-                                image = Image(res = R.drawable.abc_ic_ab_back_material),
-                                onClick = { d { "on nav click" } }
-                            )
-                        },
-                        title = {
-                            TextView {
-                                width(Dp.MATCH_PARENT)
-                                height(Dp.WRAP_CONTENT)
-                                text("Compose Sample")
-                                textGravity(Alignment.Center)
-                            }
-                        },
-                        trailing = {
-                            LinearLayout {
-                                wrapContent()
-                                orientation(LinearLayoutOrientation.Horizontal)
+                LinearLayout {
+                    matchParent()
+                    orientation(LinearLayoutOrientation.Vertical)
+                    gravity(Alignment.TopCenter)
+                    backgroundColor(+themeColor { surface })
 
-                                group {
+                    Surface {
+                        AppBar(
+                            leading = {
+                                AppBarIcon(
+                                    image = Image(res = R.drawable.abc_ic_ab_back_material),
+                                    onClick = { d { "on nav click" } }
+                                )
+                            },
+                            title = {
+                                TextView {
+                                    width(Dp.MATCH_PARENT)
+                                    height(Dp.WRAP_CONTENT)
+                                    text("Compose Sample")
+                                    textGravity(Alignment.Center)
+                                }
+                            },
+                            trailing = {
+                                LinearLayout {
+                                    wrapContent()
+                                    orientation(LinearLayoutOrientation.Horizontal)
+
+                                    group {
+                                        AppBarIcon(
+                                            image = Image(res = R.drawable.es_ic_link),
+                                            onClick = { d { "on link click" } }
+                                        )
+                                    }
+                                    WidthSpacer(8.dp)
                                     AppBarIcon(
-                                        image = Image(res = R.drawable.es_ic_link),
-                                        onClick = { d { "on link click" } }
+                                        image = Image(res = R.drawable.es_ic_torch_on),
+                                        onClick = { d { "on torch click" } }
                                     )
                                 }
-                                WidthSpacer(8.dp)
-                                AppBarIcon(
-                                    image = Image(res = R.drawable.es_ic_torch_on),
-                                    onClick = { d { "on torch click" } }
-                                )
                             }
-                        }
-                    )
-
-                    LinearLayout {
-                        width(Dp.MATCH_PARENT)
-                        height(Dp.WRAP_CONTENT)
-                        orientation(LinearLayoutOrientation.Horizontal)
-                        gravity(Alignment.Center)
-
-                        val (checked, setChecked) = +state { true }
-                        CheckBox(checked = checked, onCheckedChange = { setChecked(it) })
-
-                        val (selected, setSelected) = +state { true }
-                        RadioButton(selected = selected, onSelect = { setSelected(!selected) })
-
-                        val (checked2, setChecked2) = +state { true }
-                        Switch(checked = checked2, onCheckedChange = { setChecked2(it) })
-                    }
-
-                    ProgressBar { }
-
-                    val (seekBarValue, setSeekBarValue) = +state { 50 }
-
-                    SeekBar {
-                        verticalMargin(8.dp)
-                        value(seekBarValue)
-                        onValueChange { setSeekBarValue(it) }
-                    }
-
-                    ScrollView {
-                        matchParent()
+                        )
 
                         LinearLayout {
+                            width(Dp.MATCH_PARENT)
+                            height(Dp.WRAP_CONTENT)
+                            orientation(LinearLayoutOrientation.Horizontal)
+                            gravity(Alignment.Center)
+
+                            val (checked, setChecked) = +state { true }
+                            CheckBox(checked = checked, onCheckedChange = { setChecked(it) })
+
+                            val (selected, setSelected) = +state { true }
+                            RadioButton(selected = selected, onSelect = { setSelected(!selected) })
+
+                            val (checked2, setChecked2) = +state { true }
+                            Switch(checked = checked2, onCheckedChange = { setChecked2(it) })
+                        }
+
+                        ProgressBar { }
+
+                        val (seekBarValue, setSeekBarValue) = +state { 50 }
+
+                        SeekBar {
+                            verticalMargin(8.dp)
+                            value(seekBarValue)
+                            onValueChange { setSeekBarValue(it) }
+                        }
+
+                        ScrollView {
                             matchParent()
-                            orientation(LinearLayoutOrientation.Vertical)
-                            gravity(Alignment.TopCenter)
+
+                            LinearLayout {
+                                matchParent()
+                                orientation(LinearLayoutOrientation.Vertical)
+                                gravity(Alignment.TopCenter)
 
 
-                            (1..10).forEach { i ->
-                                Button(sourceLocation() + i) {
-                                    wrapContent()
-                                    border((+themeColor { onSurface }).copy(alpha = 0.12f), 1.dp)
-                                    textColor(+themeColor { primary })
-                                    rippleColor(+themeColor { primary.copy(alpha = 0.24f) })
-                                    elevation(0.dp)
-                                    update { node.stateListAnimator = null }
-                                    backgroundColor(Color.Transparent)
-                                    text("Hello")
-                                    onClick { d { "on click" } }
+                                (1..10).forEach { i ->
+                                    Button(sourceLocation() + i) {
+                                        wrapContent()
+                                        border(
+                                            (+themeColor { onSurface }).copy(alpha = 0.12f),
+                                            1.dp
+                                        )
+                                        textColor(+themeColor { primary })
+                                        rippleColor(+themeColor { primary.copy(alpha = 0.24f) })
+                                        elevation(0.dp)
+                                        update { node.stateListAnimator = null }
+                                        backgroundColor(Color.Transparent)
+                                        text("Hello")
+                                        onClick { d { "on click" } }
+                                    }
                                 }
                             }
                         }
-                    }
 
+                    }
+                }
+
+                FloatingActionButton {
+                    wrapContent()
+                    image(res = R.drawable.icon_back_white)
+                    gravity(Alignment.BottomRight)
+                    margin(16.dp)
                 }
             }
-
         }
     }
 }

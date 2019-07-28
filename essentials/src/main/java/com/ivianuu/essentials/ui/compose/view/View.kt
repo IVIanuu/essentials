@@ -1,7 +1,9 @@
 package com.ivianuu.essentials.ui.compose.view
 
+import android.content.res.ColorStateList
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.view.View
 import androidx.compose.unaryPlus
@@ -18,7 +20,7 @@ fun <T : View> ViewDsl<T>.alpha(alpha: Float) {
     set(alpha) { this.alpha = it }
 }
 
-fun <T : View> ViewDsl<T>.backgroundColor(image: Image) {
+fun <T : View> ViewDsl<T>.background(image: Image) {
     +withContext {
         set(image) {
             when {
@@ -32,7 +34,10 @@ fun <T : View> ViewDsl<T>.backgroundColor(image: Image) {
 }
 
 fun <T : View> ViewDsl<T>.backgroundColor(color: Color) {
-    set(color) { setBackgroundColor(color.toArgb()) }
+    set(color) {
+        if (background == null) background = ColorDrawable(color.toArgb())
+        backgroundTintList = ColorStateList.valueOf(color.toArgb())
+    }
 }
 
 fun <T : View> ViewDsl<T>.background(
@@ -40,7 +45,7 @@ fun <T : View> ViewDsl<T>.background(
     bitmap: Bitmap? = null,
     res: Int? = null
 ) {
-    backgroundColor(Image(drawable, bitmap, res))
+    background(Image(drawable, bitmap, res))
 }
 
 fun <T : View> ViewDsl<T>.elevation(elevation: Dp) {
