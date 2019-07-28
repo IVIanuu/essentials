@@ -31,6 +31,7 @@ import com.ivianuu.essentials.ui.compose.ComposeController
 import com.ivianuu.essentials.ui.compose.core.Surface
 import com.ivianuu.essentials.ui.compose.material.CheckBox
 import com.ivianuu.essentials.ui.compose.material.RadioButton
+import com.ivianuu.essentials.ui.compose.material.Switch
 import com.ivianuu.essentials.ui.compose.sourceLocation
 import com.ivianuu.essentials.ui.compose.view.Button
 import com.ivianuu.essentials.ui.compose.view.Image
@@ -113,6 +114,9 @@ class ListController : ComposeController() {
 
                         val (selected, setSelected) = +state { true }
                         RadioButton(selected = selected, onSelect = { setSelected(!selected) })
+
+                        val (checked2, setChecked2) = +state { true }
+                        Switch(checked = checked2, onCheckedChange = { setChecked2(it) })
                     }
 
 
