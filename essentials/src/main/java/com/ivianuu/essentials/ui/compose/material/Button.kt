@@ -21,8 +21,6 @@ import com.ivianuu.essentials.ui.compose.view.set
 import com.ivianuu.essentials.ui.compose.view.textStyle
 import com.ivianuu.essentials.ui.compose.view.wrapContent
 
-// todo
-
 inline fun ViewComposition.Button(noinline block: ViewDsl<MaterialButton>.() -> Unit) =
     Button(sourceLocation(), block)
 
