@@ -15,11 +15,17 @@ import com.ivianuu.essentials.ui.compose.view.wrapContent
 
 // todo add disabled color
 
+inline fun ViewComposition.CheckBox(
+    checked: Boolean,
+    noinline onCheckedChange: (Boolean) -> Unit
+) = CheckBox(sourceLocation(), checked, onCheckedChange)
+
 fun ViewComposition.CheckBox(
+    key: Any,
     checked: Boolean,
     onCheckedChange: (Boolean) -> Unit
 ) {
-    CheckBox {
+    CheckBox(key) {
         value(checked)
         onChange(onCheckedChange)
     }

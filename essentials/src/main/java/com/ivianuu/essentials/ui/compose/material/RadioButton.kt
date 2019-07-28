@@ -13,11 +13,15 @@ import com.ivianuu.essentials.ui.compose.view.set
 import com.ivianuu.essentials.ui.compose.view.value
 import com.ivianuu.essentials.ui.compose.view.wrapContent
 
+inline fun ViewComposition.RadioButton(selected: Boolean, noinline onSelect: () -> Unit) =
+    RadioButton(sourceLocation(), selected, onSelect)
+
 fun ViewComposition.RadioButton(
+    key: Any,
     selected: Boolean,
     onSelect: () -> Unit
 ) {
-    RadioButton {
+    RadioButton(key) {
         value(selected)
         onChange { onSelect() }
     }

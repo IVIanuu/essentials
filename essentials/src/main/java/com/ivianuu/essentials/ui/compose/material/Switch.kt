@@ -16,7 +16,11 @@ import com.ivianuu.essentials.ui.compose.view.wrapContent
 
 // todo add disabled color
 
+inline fun ViewComposition.Switch(checked: Boolean, noinline onCheckedChange: (Boolean) -> Unit) =
+    Switch(sourceLocation(), checked, onCheckedChange)
+
 fun ViewComposition.Switch(
+    key: Any,
     checked: Boolean,
     onCheckedChange: (Boolean) -> Unit
 ) {
