@@ -18,7 +18,7 @@ fun <T : View> ViewDsl<T>.alpha(alpha: Float) {
     set(alpha) { this.alpha = it }
 }
 
-fun <T : View> ViewDsl<T>.background(image: Image) {
+fun <T : View> ViewDsl<T>.backgroundColor(image: Image) {
     +withContext {
         set(image) {
             when {
@@ -31,7 +31,7 @@ fun <T : View> ViewDsl<T>.background(image: Image) {
     }
 }
 
-fun <T : View> ViewDsl<T>.background(color: Color) {
+fun <T : View> ViewDsl<T>.backgroundColor(color: Color) {
     set(color) { setBackgroundColor(color.toArgb()) }
 }
 
@@ -40,7 +40,7 @@ fun <T : View> ViewDsl<T>.background(
     bitmap: Bitmap? = null,
     res: Int? = null
 ) {
-    background(Image(drawable, bitmap, res))
+    backgroundColor(Image(drawable, bitmap, res))
 }
 
 fun <T : View> ViewDsl<T>.elevation(elevation: Dp) {

@@ -69,6 +69,23 @@ fun <T : View> ViewDsl<T>.constraintBottomToBottomOf(id: Int) {
     }
 }
 
+fun <T : View> ViewDsl<T>.centerIn(id: Int) {
+    centerHorizontalIn(id)
+    centerVerticalIn(id)
+}
+
+fun <T : View> ViewDsl<T>.centerHorizontalIn(id: Int) {
+    constraintLeftToLeftOf(id)
+    constraintRightToRightOf(id)
+    constraintHorizontalBias(0.5f)
+}
+
+fun <T : View> ViewDsl<T>.centerVerticalIn(id: Int) {
+    constraintTopToTopOf(id)
+    constraintBottomToBottomOf(id)
+    constraintVerticalBias(0.5f)
+}
+
 fun <T : View> ViewDsl<T>.constraintHorizontalBias(value: Float) {
     setLayoutParams(value) {
         this as ConstraintLayout.LayoutParams

@@ -1,12 +1,13 @@
 package com.ivianuu.essentials.ui.compose.view
 
 import android.graphics.Bitmap
-import android.graphics.PorterDuff
 import android.graphics.drawable.Drawable
 import android.widget.ImageView
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.compose.ViewComposition
 import androidx.ui.graphics.Color
+import androidx.ui.painting.BlendMode
+import androidx.ui.painting.ColorFilter
 import com.ivianuu.essentials.ui.compose.sourceLocation
 
 inline fun ViewComposition.ImageView(noinline block: ViewDsl<AppCompatImageView>.() -> Unit) =
@@ -40,6 +41,18 @@ fun <T : ImageView> ViewDsl<T>.image(
     image(Image(drawable, bitmap, res))
 }
 
-fun <T : ImageView> ViewDsl<T>.imageColor(color: Color) {
-    set(color) { setColorFilter(color.toArgb(), PorterDuff.Mode.SRC_IN) }
+fun <T : ImageView> ViewDsl<T>.imageColor(
+    color: Color,
+    blendMode: BlendMode = BlendMode.srcIn
+) {
+    colorFilter(ColorFilter(color, blendMode))
+}
+
+fun <T : ImageView> ViewDsl<T>.colorFilter(colorFilter: ColorFilter) {
+    set(colorFilter) {
+        setColorFilter(
+            colorFilter.color.toArgb(),
+            colorFilter.blendMode.toPorterDuffMode()
+        )
+    }
 }
