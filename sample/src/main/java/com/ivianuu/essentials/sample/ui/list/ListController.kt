@@ -19,16 +19,19 @@ package com.ivianuu.essentials.sample.ui.list
 import android.widget.LinearLayout.HORIZONTAL
 import android.widget.LinearLayout.VERTICAL
 import androidx.compose.ViewComposition
+import androidx.compose.state
 import androidx.ui.core.Dp
 import androidx.ui.core.dp
 import androidx.ui.graphics.Color
 import androidx.ui.layout.Alignment
 import androidx.ui.material.MaterialColors
 import androidx.ui.material.MaterialTheme
+import androidx.ui.material.themeColor
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.compose.ComposeController
 import com.ivianuu.essentials.ui.compose.core.Surface
+import com.ivianuu.essentials.ui.compose.material.CheckBox
 import com.ivianuu.essentials.ui.compose.sourceLocation
 import com.ivianuu.essentials.ui.compose.view.*
 import com.ivianuu.essentials.ui.navigation.director.controllerRoute
@@ -45,13 +48,17 @@ class ListController : ComposeController() {
         MaterialTheme(
             colors = MaterialColors(
                 primary = Color.Red,
-                surface = Color.Black
+                secondary = Color.Yellow,
+                surface = Color.Black,
+                onSurface = Color.White
             )
         ) {
+
             LinearLayout {
                 matchParent()
                 orientation(VERTICAL)
                 gravity(Alignment.TopCenter)
+                backgroundColor(+themeColor { surface })
 
                 Surface {
                     AppBar(
@@ -74,10 +81,13 @@ class ListController : ComposeController() {
                                 wrapContent()
                                 orientation(HORIZONTAL)
 
-                                AppBarIcon(
-                                    image = Image(res = R.drawable.es_ic_link),
-                                    onClick = { d { "on link click" } }
-                                )
+                                FrameLayout {
+                                    wrapContent()
+                                    AppBarIcon(
+                                        image = Image(res = R.drawable.es_ic_link),
+                                        onClick = { d { "on link click" } }
+                                    )
+                                }
                                 WidthSpacer(8.dp)
                                 AppBarIcon(
                                     image = Image(res = R.drawable.es_ic_torch_on),
@@ -86,6 +96,9 @@ class ListController : ComposeController() {
                             }
                         }
                     )
+
+                    val (value, setChecked) = +state { true }
+                    CheckBox(value = value, onChange = { setChecked(it) })
 
                     (1..10).forEach { i ->
                         Button(sourceLocation() + i) {
@@ -98,5 +111,4 @@ class ListController : ComposeController() {
             }
         }
     }
-
 }

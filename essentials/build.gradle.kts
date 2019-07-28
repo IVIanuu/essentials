@@ -44,7 +44,6 @@ dependencies {
     api(Deps.androidxLifecycleRuntime)
     api(Deps.androidxLifecycleViewModel)
     api(Deps.androidxLifecycleViewModelSavedState)
-    api(Deps.androidxUiAndroidViewNonIr)
     api(Deps.androidxUiMaterial)
 
     api(Deps.coroutinesAndroid)

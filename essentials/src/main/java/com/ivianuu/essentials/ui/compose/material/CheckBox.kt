@@ -4,7 +4,6 @@ import android.content.res.ColorStateList
 import androidx.compose.ViewComposition
 import androidx.ui.graphics.Color
 import androidx.ui.material.themeColor
-import com.github.ajalt.timberkt.d
 import com.google.android.material.checkbox.MaterialCheckBox
 import com.ivianuu.essentials.ui.compose.sourceLocation
 import com.ivianuu.essentials.ui.compose.view.*
@@ -29,23 +28,23 @@ fun ViewComposition.CheckBox(key: Any, block: ViewDsl<MaterialCheckBox>.() -> Un
     }
 
 fun <T : MaterialCheckBox> ViewDsl<T>.color(color: Color) {
+    val unselectedColor = with(composition) {
+        (+themeColor { onSurface }).copy(alpha = UncheckedBoxOpacity)
+    }
+
     set(color) {
-        with(composition) {
-            buttonTintList = createColorStateList(color)
-                .also {
-                    d { "create color state list $it" }
-                }
-        }
+        buttonTintList = createColorStateList(color, unselectedColor)
     }
 }
 
-private fun ViewComposition.createColorStateList(color: Color): ColorStateList {
-    val unselectedColor = (+themeColor { onSurface }).copy(alpha = UncheckedBoxOpacity)
-
+private fun createColorStateList(
+    activeColor: Color,
+    unselectedColor: Color
+): ColorStateList {
     return ColorStateList(
         ENABLED_CHECKED_STATES,
         intArrayOf(
-            color.toArgb(),
+            activeColor.toArgb(),
             unselectedColor.toArgb()
         )
     )
