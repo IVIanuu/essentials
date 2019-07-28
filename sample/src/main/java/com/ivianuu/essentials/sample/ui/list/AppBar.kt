@@ -10,7 +10,31 @@ import androidx.ui.material.themeColor
 import androidx.ui.material.themeTextStyle
 import com.ivianuu.essentials.ui.compose.core.Surface
 import com.ivianuu.essentials.ui.compose.material.rippleBackground
-import com.ivianuu.essentials.ui.compose.view.*
+import com.ivianuu.essentials.ui.compose.view.ConstraintLayout
+import com.ivianuu.essentials.ui.compose.view.FrameLayout
+import com.ivianuu.essentials.ui.compose.view.Image
+import com.ivianuu.essentials.ui.compose.view.ImageView
+import com.ivianuu.essentials.ui.compose.view.MATCH_PARENT
+import com.ivianuu.essentials.ui.compose.view.PARENT_ID
+import com.ivianuu.essentials.ui.compose.view.WRAP_CONTENT
+import com.ivianuu.essentials.ui.compose.view.backgroundColor
+import com.ivianuu.essentials.ui.compose.view.centerVerticalIn
+import com.ivianuu.essentials.ui.compose.view.constraintLeftToLeftOf
+import com.ivianuu.essentials.ui.compose.view.constraintLeftToRightOf
+import com.ivianuu.essentials.ui.compose.view.constraintRightToLeftOf
+import com.ivianuu.essentials.ui.compose.view.constraintRightToRightOf
+import com.ivianuu.essentials.ui.compose.view.elevation
+import com.ivianuu.essentials.ui.compose.view.height
+import com.ivianuu.essentials.ui.compose.view.id
+import com.ivianuu.essentials.ui.compose.view.image
+import com.ivianuu.essentials.ui.compose.view.imageColor
+import com.ivianuu.essentials.ui.compose.view.margin
+import com.ivianuu.essentials.ui.compose.view.onClick
+import com.ivianuu.essentials.ui.compose.view.padding
+import com.ivianuu.essentials.ui.compose.view.size
+import com.ivianuu.essentials.ui.compose.view.width
+import com.ivianuu.essentials.ui.compose.view.wrapContent
+import com.ivianuu.essentials.ui.compose.viewId
 
 private val leadingId = viewId()
 private val titleId = viewId()

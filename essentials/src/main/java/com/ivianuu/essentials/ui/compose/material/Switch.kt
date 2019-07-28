@@ -24,7 +24,7 @@ fun ViewComposition.Switch(
     checked: Boolean,
     onCheckedChange: (Boolean) -> Unit
 ) {
-    Switch {
+    Switch(key) {
         value(checked)
         onChange(onCheckedChange)
     }

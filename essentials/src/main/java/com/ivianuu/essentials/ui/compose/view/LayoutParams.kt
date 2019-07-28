@@ -54,6 +54,7 @@ fun <T : View> ViewDsl<T>.size(size: Dp) {
     height(size)
 }
 
+// todo the site does not belong to [Dp]
 val Dp.Companion.MATCH_PARENT get() = ViewGroup.LayoutParams.MATCH_PARENT.dp
 val Dp.Companion.WRAP_CONTENT get() = ViewGroup.LayoutParams.WRAP_CONTENT.dp
 

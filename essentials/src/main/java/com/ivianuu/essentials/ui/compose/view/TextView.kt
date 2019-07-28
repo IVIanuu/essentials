@@ -16,6 +16,7 @@ import androidx.ui.text.font.FontStyle
 import androidx.ui.text.font.FontSynthesis
 import androidx.ui.text.font.FontWeight
 import com.ivianuu.essentials.ui.compose.sourceLocation
+import com.ivianuu.essentials.ui.compose.toGravityInt
 import java.util.*
 
 inline fun ViewComposition.TextView(noinline block: ViewDsl<AppCompatTextView>.() -> Unit) =

@@ -19,16 +19,20 @@ package com.ivianuu.essentials.sample.ui.list
 import android.widget.LinearLayout.HORIZONTAL
 import android.widget.LinearLayout.VERTICAL
 import androidx.compose.ViewComposition
+import androidx.compose.ambient
 import androidx.compose.state
 import androidx.ui.core.Dp
 import androidx.ui.core.dp
+import androidx.ui.graphics.Color
 import androidx.ui.layout.Alignment
 import androidx.ui.material.MaterialTheme
+import androidx.ui.material.ripple.CurrentRippleTheme
 import androidx.ui.material.themeColor
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.compose.ComposeController
 import com.ivianuu.essentials.ui.compose.core.Surface
+import com.ivianuu.essentials.ui.compose.group
 import com.ivianuu.essentials.ui.compose.material.CheckBox
 import com.ivianuu.essentials.ui.compose.material.RadioButton
 import com.ivianuu.essentials.ui.compose.material.Switch
@@ -90,10 +94,12 @@ class ListController : ComposeController() {
                                 wrapContent()
                                 orientation(HORIZONTAL)
 
-                                AppBarIcon(
-                                    image = Image(res = R.drawable.es_ic_link),
-                                    onClick = { d { "on link click" } }
-                                )
+                                group {
+                                    AppBarIcon(
+                                        image = Image(res = R.drawable.es_ic_link),
+                                        onClick = { d { "on link click" } }
+                                    )
+                                }
                                 WidthSpacer(8.dp)
                                 AppBarIcon(
                                     image = Image(res = R.drawable.es_ic_torch_on),
@@ -109,14 +115,22 @@ class ListController : ComposeController() {
                         orientation(HORIZONTAL)
                         gravity(Alignment.Center)
 
-                        val (checked, setChecked) = +state { true }
-                        CheckBox(checked = checked, onCheckedChange = { setChecked(it) })
+                        val oldRippleTheme = +ambient(CurrentRippleTheme)
 
-                        val (selected, setSelected) = +state { true }
-                        RadioButton(selected = selected, onSelect = { setSelected(!selected) })
+                        CurrentRippleTheme.Provider(
+                            oldRippleTheme.copy(
+                                colorCallback = { Color.Magenta.copy(alpha = 0.24f) }
+                            )
+                        ) {
+                            val (checked, setChecked) = +state { true }
+                            CheckBox(checked = checked, onCheckedChange = { setChecked(it) })
 
-                        val (checked2, setChecked2) = +state { true }
-                        Switch(checked = checked2, onCheckedChange = { setChecked2(it) })
+                            val (selected, setSelected) = +state { true }
+                            RadioButton(selected = selected, onSelect = { setSelected(!selected) })
+
+                            val (checked2, setChecked2) = +state { true }
+                            Switch(checked = checked2, onCheckedChange = { setChecked2(it) })
+                        }
                     }
 
 

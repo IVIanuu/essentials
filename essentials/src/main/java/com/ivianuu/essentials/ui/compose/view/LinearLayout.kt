@@ -5,6 +5,7 @@ import android.widget.LinearLayout
 import androidx.compose.ViewComposition
 import androidx.ui.layout.Alignment
 import com.ivianuu.essentials.ui.compose.sourceLocation
+import com.ivianuu.essentials.ui.compose.toGravityInt
 
 inline fun ViewComposition.LinearLayout(noinline block: ViewDsl<LinearLayout>.() -> Unit) =
     LinearLayout(sourceLocation(), block)

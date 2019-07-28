@@ -1,4 +1,4 @@
-package com.ivianuu.essentials.ui.compose.view
+package com.ivianuu.essentials.ui.compose
 
 import android.view.Gravity
 import android.view.View
