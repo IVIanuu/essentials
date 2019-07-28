@@ -13,8 +13,17 @@ inline fun ViewComposition.LinearLayout(noinline block: ViewDsl<LinearLayout>.()
 fun ViewComposition.LinearLayout(key: Any, block: ViewDsl<LinearLayout>.() -> Unit) =
     View(key, { LinearLayout(it) }, block)
 
-fun <T : LinearLayout> ViewDsl<T>.orientation(orientation: Int) {
-    set(orientation) { this.orientation = it }
+enum class LinearLayoutOrientation {
+    Horizontal, Vertical;
+
+    fun toOrientationInt() = when (this) {
+        Horizontal -> LinearLayout.HORIZONTAL
+        Vertical -> LinearLayout.VERTICAL
+    }
+}
+
+fun <T : LinearLayout> ViewDsl<T>.orientation(orientation: LinearLayoutOrientation) {
+    set(orientation) { this.orientation = it.toOrientationInt() }
 }
 
 fun <T : LinearLayout> ViewDsl<T>.gravity(gravity: Alignment) {
