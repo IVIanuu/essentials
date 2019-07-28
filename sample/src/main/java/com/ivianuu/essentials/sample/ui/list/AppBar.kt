@@ -3,11 +3,13 @@ package com.ivianuu.essentials.sample.ui.list
 import androidx.compose.ViewComposition
 import androidx.ui.core.CurrentTextStyleProvider
 import androidx.ui.core.Dp
+import androidx.ui.core.currentTextStyle
 import androidx.ui.core.dp
 import androidx.ui.graphics.Color
 import androidx.ui.material.themeColor
 import androidx.ui.material.themeTextStyle
 import com.ivianuu.essentials.sample.R
+import com.ivianuu.essentials.ui.compose.core.Surface
 import com.ivianuu.essentials.ui.compose.core.withContext
 import com.ivianuu.essentials.ui.compose.view.*
 import com.ivianuu.kommon.core.content.drawableAttr
@@ -28,60 +30,62 @@ fun ViewComposition.AppBar(
         background(color)
         elevation(4.dp)
 
-        if (leading != null) {
-            FrameLayout {
-                id(leadingId)
-                wrapContent()
-                alignParentLeft()
-                centerVertical()
-                margin(left = 16.dp)
-
-                leading()
-            }
-        }
-
-        if (title != null) {
-            FrameLayout {
-                id(titleId)
-                height(Dp.WRAP_CONTENT)
-                width(Dp.MATCH_PARENT)
-                margin(left = 16.dp, right = 16.dp)
-                if (leading != null) {
-                    toRightOf(leadingId)
-                } else {
+        Surface(color) {
+            if (leading != null) {
+                FrameLayout {
+                    id(leadingId)
+                    wrapContent()
                     alignParentLeft()
-                }
-                if (trailing != null) {
-                    toLeftOf(trailingId)
-                } else {
-                    alignParentRight()
-                }
-                centerVertical()
+                    centerVertical()
+                    margin(left = 16.dp)
 
-                CurrentTextStyleProvider(value = +themeTextStyle { h6 }) {
-                    title()
+                    leading()
                 }
             }
-        }
 
-        if (trailing != null) {
-            FrameLayout {
-                id(trailingId)
-                wrapContent()
-                alignParentRight()
-                centerVertical()
-                margin(right = 16.dp)
+            if (title != null) {
+                FrameLayout {
+                    id(titleId)
+                    height(Dp.WRAP_CONTENT)
+                    width(Dp.MATCH_PARENT)
+                    margin(left = 16.dp, right = 16.dp)
+                    if (leading != null) {
+                        toRightOf(leadingId)
+                    } else {
+                        alignParentLeft()
+                    }
+                    if (trailing != null) {
+                        toLeftOf(trailingId)
+                    } else {
+                        alignParentRight()
+                    }
+                    centerVertical()
 
-                trailing()
+                    CurrentTextStyleProvider(value = +themeTextStyle { h6 }) {
+                        title()
+                    }
+                }
+            }
+
+            if (trailing != null) {
+                FrameLayout {
+                    id(trailingId)
+                    wrapContent()
+                    alignParentRight()
+                    centerVertical()
+                    margin(right = 16.dp)
+
+                    trailing()
+                }
             }
         }
     }
 }
 
 fun ViewComposition.AppBarIcon(
-        image: Image,
-        color: Color? = null,
-        onClick: () -> Unit
+    image: Image,
+    color: Color? = (+currentTextStyle()).color,
+    onClick: () -> Unit
 ) {
     ImageView {
         size(32.dp)

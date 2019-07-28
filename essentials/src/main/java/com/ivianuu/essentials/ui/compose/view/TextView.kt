@@ -77,3 +77,7 @@ fun <T : TextView> ViewDsl<T>.textAppearance(textAppearance: Int) {
 fun <T : TextView> ViewDsl<T>.textGravity(gravity: Alignment) {
     set(gravity) { setGravity(gravity.toGravityInt()) }
 }
+
+fun <T : TextView> ViewDsl<T>.maxLines(maxLines: Int) {
+    set(maxLines) { setMaxLines(maxLines) }
+}

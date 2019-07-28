@@ -21,7 +21,9 @@ import android.widget.LinearLayout.VERTICAL
 import androidx.compose.ViewComposition
 import androidx.ui.core.Dp
 import androidx.ui.core.dp
+import androidx.ui.graphics.Color
 import androidx.ui.layout.Alignment
+import androidx.ui.material.MaterialColors
 import androidx.ui.material.MaterialTheme
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.sample.R
@@ -54,7 +56,11 @@ val listRoute = controllerRoute<ListController>(options = controllerRouteOptions
 class ListController : ComposeController() {
 
     override fun ViewComposition.build() {
-        MaterialTheme {
+        MaterialTheme(
+            colors = MaterialColors(
+                primary = Color.Red
+            )
+        ) {
             LinearLayout {
                 matchParent()
                 orientation(VERTICAL)
