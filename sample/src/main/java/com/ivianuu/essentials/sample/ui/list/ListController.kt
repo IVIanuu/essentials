@@ -16,112 +16,68 @@
 
 package com.ivianuu.essentials.sample.ui.list
 
-import android.graphics.Color
-import android.view.Gravity
-import android.view.ViewGroup
-import android.view.ViewGroup.LayoutParams.MATCH_PARENT
-import android.widget.LinearLayout
 import android.widget.LinearLayout.VERTICAL
-import android.widget.TextView
-import androidx.compose.onActive
-import androidx.compose.state
-import androidx.core.view.updatePadding
+import androidx.compose.ViewComposition
+import androidx.ui.core.Dp
+import androidx.ui.core.dp
+import androidx.ui.graphics.Color
+import androidx.ui.layout.Alignment
+import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.sample.R
-import com.ivianuu.essentials.ui.compose.core.ViewGroupWidget
-import com.ivianuu.essentials.ui.compose.core.Widget
-import com.ivianuu.essentials.ui.compose.core.WidgetComposition
-import com.ivianuu.essentials.ui.compose.core.sourceLocation
-import com.ivianuu.essentials.ui.compose.director.ComposeController
-import com.ivianuu.essentials.ui.compose.epoxy.RecyclerViewWidget
+import com.ivianuu.essentials.ui.compose.ComposeController
+import com.ivianuu.essentials.ui.compose.sourceLocation
+import com.ivianuu.essentials.ui.compose.view.Button
+import com.ivianuu.essentials.ui.compose.view.FrameLayout
+import com.ivianuu.essentials.ui.compose.view.LinearLayout
+import com.ivianuu.essentials.ui.compose.view.MATCH_PARENT
+import com.ivianuu.essentials.ui.compose.view.TextView
+import com.ivianuu.essentials.ui.compose.view.background
+import com.ivianuu.essentials.ui.compose.view.gravity
+import com.ivianuu.essentials.ui.compose.view.height
+import com.ivianuu.essentials.ui.compose.view.matchParent
+import com.ivianuu.essentials.ui.compose.view.onClick
+import com.ivianuu.essentials.ui.compose.view.orientation
+import com.ivianuu.essentials.ui.compose.view.text
+import com.ivianuu.essentials.ui.compose.view.textAppearance
+import com.ivianuu.essentials.ui.compose.view.width
+import com.ivianuu.essentials.ui.compose.view.wrapContent
 import com.ivianuu.essentials.ui.navigation.director.controllerRoute
 import com.ivianuu.essentials.ui.navigation.director.controllerRouteOptions
 import com.ivianuu.essentials.ui.navigation.director.fade
 import com.ivianuu.injekt.Inject
-import com.ivianuu.kommon.core.view.dp
-import com.ivianuu.kommon.core.view.drawableAttr
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.isActive
-import kotlinx.coroutines.launch
 
 val listRoute = controllerRoute<ListController>(options = controllerRouteOptions().fade())
-
-class Column : ViewGroupWidget<LinearLayout>() {
-
-    override fun createViewGroup(container: ViewGroup): LinearLayout =
-        LinearLayout(container.context).apply {
-            layoutParams = ViewGroup.LayoutParams(MATCH_PARENT, MATCH_PARENT)
-            orientation = VERTICAL
-        }
-
-}
-
-data class Text(
-    var text: String = "",
-    var textAppearance: Int = R.style.TextAppearance_MaterialComponents_Subtitle1,
-    var backgroundColor: Int = 0
-) : Widget<TextView>() {
-
-    override fun createView(container: ViewGroup) = TextView(container.context).apply {
-        layoutParams = ViewGroup.MarginLayoutParams(MATCH_PARENT, dp(48).toInt())
-        gravity = Gravity.START or Gravity.CENTER_VERTICAL
-        background = drawableAttr(R.attr.selectableItemBackground)
-        updatePadding(left = dp(16).toInt(), right = dp(16).toInt())
-        setOnClickListener {}
-    }
-
-    override fun updateView(view: TextView) {
-        super.updateView(view)
-        view.text = text
-        view.setTextAppearance(textAppearance)
-        view.setBackgroundColor(backgroundColor)
-    }
-
-}
 
 @Inject
 class ListController : ComposeController() {
 
-    override fun WidgetComposition.build() {
-        emit(
-            ctor = { Column() },
-            children = {
-                val countState = +state { 0 }
+    override fun ViewComposition.build() {
+        LinearLayout {
+            matchParent()
+            orientation(VERTICAL)
+            gravity(Alignment.TopCenter)
 
-                +onActive {
-                    val job = GlobalScope.launch(Dispatchers.Main) {
-                        while (coroutineContext.isActive) {
-                            delay(1000)
-                            countState.value += 1
-                        }
-                    }
+            FrameLayout {
+                width(Dp.MATCH_PARENT)
+                height(56.dp)
+                background(color = Color.Blue)
 
-                    onDispose { job.cancel() }
+                TextView {
+                    wrapContent()
+                    gravity(Alignment.Center)
+                    text("Compose Sample")
+                    textAppearance(R.style.TextAppearance_MaterialComponents_Headline6)
                 }
-
-                emit(
-                    ctor = { Text() },
-                    update = {
-                        it.text = "Count ${countState.value}"
-                        it.backgroundColor = Color.BLUE
-                    }
-                )
-
-                emit(
-                    ctor = { RecyclerViewWidget() },
-                    update = {
-                        (1..10).forEach { i ->
-                            emit(
-                                key = sourceLocation() to i,
-                                ctor = { Text() },
-                                update = { it.text = "Title $i" }
-                            )
-                        }
-                    }
-                )
             }
-        )
+
+            (1..10).forEach { i ->
+                Button(sourceLocation() + i) {
+                    width(100.dp)
+                    text("Hello")
+                    onClick { d { "on click" } }
+                }
+            }
+        }
     }
 
 }

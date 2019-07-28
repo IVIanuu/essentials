@@ -1,15 +1,16 @@
-package com.ivianuu.essentials.ui.compose.director
+package com.ivianuu.essentials.ui.compose
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.FrameLayout
+import androidx.compose.ViewComposition
+import androidx.compose.composer
+import androidx.compose.disposeComposition
+import androidx.compose.setViewContent
 import com.ivianuu.director.requireActivity
 import com.ivianuu.essentials.ui.base.EsController
-import com.ivianuu.essentials.ui.compose.core.WidgetComposition
-import com.ivianuu.essentials.ui.compose.core.disposeComposition
-import com.ivianuu.essentials.ui.compose.core.setViewContent
 import com.ivianuu.essentials.util.cast
 
 abstract class ComposeController : EsController() {
@@ -22,7 +23,9 @@ abstract class ComposeController : EsController() {
 
     override fun onViewCreated(view: View) {
         super.onViewCreated(view)
-        view.cast<ViewGroup>().setViewContent { build() }
+        view.cast<ViewGroup>().setViewContent {
+            with(composer) { build() }
+        }
     }
 
     override fun onDestroyView(view: View) {
@@ -30,6 +33,6 @@ abstract class ComposeController : EsController() {
         super.onDestroyView(view)
     }
 
-    protected abstract fun WidgetComposition.build()
+    protected abstract fun ViewComposition.build()
 
 }
