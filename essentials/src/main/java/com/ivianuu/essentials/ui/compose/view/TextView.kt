@@ -3,6 +3,7 @@ package com.ivianuu.essentials.ui.compose.view
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.compose.ViewComposition
+import androidx.ui.graphics.Color
 import androidx.ui.layout.Alignment
 import com.ivianuu.essentials.ui.compose.sourceLocation
 
@@ -14,6 +15,10 @@ fun ViewComposition.TextView(key: Any, block: ViewDsl<AppCompatTextView>.() -> U
 
 fun <T : TextView> ViewDsl<T>.text(text: String?) {
     set(text) { this.text = it }
+}
+
+fun <T : TextView> ViewDsl<T>.textColor(color: Color) {
+    set(color) { setTextColor(color.toArgb()) }
 }
 
 // todo replace with Compose text style

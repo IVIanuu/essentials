@@ -61,6 +61,16 @@ allprojects {
         maven("https://oss.sonatype.org/content/repositories/snapshots")
         maven("https://dl.bintray.com/kotlin/kotlin-eap")
     }
+
+    configurations.all {
+        resolutionStrategy {
+            eachDependency {
+                if (requested.group == "org.jetbrains.kotlin") {
+                    useVersion(Versions.kotlin)
+                }
+            }
+        }
+    }
 }
 
 task("clean", Delete::class) {

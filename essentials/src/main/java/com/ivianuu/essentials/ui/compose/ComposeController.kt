@@ -9,12 +9,11 @@ import androidx.compose.ViewComposition
 import androidx.compose.composer
 import androidx.compose.disposeComposition
 import androidx.compose.setViewContent
+import androidx.ui.core.ContextAmbient
 import androidx.ui.core.Density
+import androidx.ui.core.DensityAmbient
 import com.ivianuu.director.requireActivity
 import com.ivianuu.essentials.ui.base.EsController
-import com.ivianuu.essentials.ui.compose.core.ContextAmbient
-import com.ivianuu.essentials.ui.compose.core.DensityAmbient
-import com.ivianuu.essentials.ui.compose.core.ResourcesAmbient
 import com.ivianuu.essentials.util.cast
 
 abstract class ComposeController : EsController() {
@@ -30,10 +29,8 @@ abstract class ComposeController : EsController() {
         view.cast<ViewGroup>().setViewContent {
             with(composer) {
                 ContextAmbient.Provider(requireActivity()) {
-                    ResourcesAmbient.Provider(requireActivity().resources) {
-                        DensityAmbient.Provider(Density(requireActivity())) {
-                            build()
-                        }
+                    DensityAmbient.Provider(Density(requireActivity())) {
+                        build()
                     }
                 }
             }

@@ -6,28 +6,7 @@ import androidx.ui.core.dp
 import androidx.ui.graphics.Color
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.compose.core.withContext
-import com.ivianuu.essentials.ui.compose.view.FrameLayout
-import com.ivianuu.essentials.ui.compose.view.Image
-import com.ivianuu.essentials.ui.compose.view.ImageView
-import com.ivianuu.essentials.ui.compose.view.MATCH_PARENT
-import com.ivianuu.essentials.ui.compose.view.RelativeLayout
-import com.ivianuu.essentials.ui.compose.view.WRAP_CONTENT
-import com.ivianuu.essentials.ui.compose.view.alignParentLeft
-import com.ivianuu.essentials.ui.compose.view.alignParentRight
-import com.ivianuu.essentials.ui.compose.view.background
-import com.ivianuu.essentials.ui.compose.view.centerVertical
-import com.ivianuu.essentials.ui.compose.view.height
-import com.ivianuu.essentials.ui.compose.view.id
-import com.ivianuu.essentials.ui.compose.view.image
-import com.ivianuu.essentials.ui.compose.view.margin
-import com.ivianuu.essentials.ui.compose.view.onClick
-import com.ivianuu.essentials.ui.compose.view.padding
-import com.ivianuu.essentials.ui.compose.view.size
-import com.ivianuu.essentials.ui.compose.view.toLeftOf
-import com.ivianuu.essentials.ui.compose.view.toRightOf
-import com.ivianuu.essentials.ui.compose.view.viewId
-import com.ivianuu.essentials.ui.compose.view.width
-import com.ivianuu.essentials.ui.compose.view.wrapContent
+import com.ivianuu.essentials.ui.compose.view.*
 import com.ivianuu.kommon.core.content.drawableAttr
 
 private val leadingId = viewId()
@@ -43,6 +22,7 @@ fun ViewComposition.AppBar(
         width(Dp.MATCH_PARENT)
         height(56.dp)
         background(color = Color.Blue)
+        elevation(4.dp)
 
         if (leading != null) {
             FrameLayout {
@@ -94,13 +74,15 @@ fun ViewComposition.AppBar(
 }
 
 fun ViewComposition.AppBarIcon(
-    image: Image,
-    onClick: () -> Unit
+        image: Image,
+        color: Color? = null,
+        onClick: () -> Unit
 ) {
     ImageView {
-        size(40.dp)
-        padding(8.dp)
+        size(32.dp)
+        padding(4.dp)
         image(image)
+        color?.let { imageColor(it) }
         +withContext {
             background(drawable = drawableAttr(R.attr.selectableItemBackgroundBorderless))
         }

@@ -59,9 +59,9 @@ class ListController : ComposeController() {
             orientation(VERTICAL)
             gravity(Alignment.TopCenter)
 
-            Toolbar(
+            AppBar(
                 leading = {
-                    ToolbarIcon(
+                    AppBarIcon(
                         image = Image(res = R.drawable.abc_ic_ab_back_material),
                         onClick = { d { "on nav click" } }
                     )
@@ -80,12 +80,12 @@ class ListController : ComposeController() {
                         wrapContent()
                         orientation(HORIZONTAL)
 
-                        ToolbarIcon(
+                        AppBarIcon(
                             image = Image(res = R.drawable.es_ic_link),
                             onClick = { d { "on link click" } }
                         )
                         WidthSpacer(8.dp)
-                        ToolbarIcon(
+                        AppBarIcon(
                             image = Image(res = R.drawable.es_ic_torch_on),
                             onClick = { d { "on torch click" } }
                         )
