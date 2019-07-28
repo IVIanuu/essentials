@@ -1,5 +1,6 @@
 package com.ivianuu.essentials.ui.compose.view
 
+import android.view.View
 import android.widget.LinearLayout
 import androidx.compose.ViewComposition
 import androidx.ui.layout.Alignment
@@ -16,5 +17,12 @@ fun <T : LinearLayout> ViewDsl<T>.orientation(orientation: Int) {
 }
 
 fun <T : LinearLayout> ViewDsl<T>.gravity(gravity: Alignment) {
-    set(gravity) { this.gravity = it.toGravity() }
+    set(gravity) { this.gravity = it.toGravityInt() }
+}
+
+fun <T : View> ViewDsl<T>.weight(weight: Float) {
+    setLayoutParams(weight) {
+        this as LinearLayout.LayoutParams
+        this.weight = it
+    }
 }

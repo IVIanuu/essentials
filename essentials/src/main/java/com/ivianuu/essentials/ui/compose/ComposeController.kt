@@ -9,8 +9,12 @@ import androidx.compose.ViewComposition
 import androidx.compose.composer
 import androidx.compose.disposeComposition
 import androidx.compose.setViewContent
+import androidx.ui.core.Density
 import com.ivianuu.director.requireActivity
 import com.ivianuu.essentials.ui.base.EsController
+import com.ivianuu.essentials.ui.compose.core.ContextAmbient
+import com.ivianuu.essentials.ui.compose.core.DensityAmbient
+import com.ivianuu.essentials.ui.compose.core.ResourcesAmbient
 import com.ivianuu.essentials.util.cast
 
 abstract class ComposeController : EsController() {
@@ -24,7 +28,15 @@ abstract class ComposeController : EsController() {
     override fun onViewCreated(view: View) {
         super.onViewCreated(view)
         view.cast<ViewGroup>().setViewContent {
-            with(composer) { build() }
+            with(composer) {
+                ContextAmbient.Provider(requireActivity()) {
+                    ResourcesAmbient.Provider(requireActivity().resources) {
+                        DensityAmbient.Provider(Density(requireActivity())) {
+                            build()
+                        }
+                    }
+                }
+            }
         }
     }
 

@@ -16,22 +16,23 @@
 
 package com.ivianuu.essentials.sample.ui.list
 
+import android.widget.LinearLayout.HORIZONTAL
 import android.widget.LinearLayout.VERTICAL
 import androidx.compose.ViewComposition
 import androidx.ui.core.Dp
 import androidx.ui.core.dp
-import androidx.ui.graphics.Color
 import androidx.ui.layout.Alignment
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.compose.ComposeController
 import com.ivianuu.essentials.ui.compose.sourceLocation
 import com.ivianuu.essentials.ui.compose.view.Button
-import com.ivianuu.essentials.ui.compose.view.FrameLayout
+import com.ivianuu.essentials.ui.compose.view.Image
 import com.ivianuu.essentials.ui.compose.view.LinearLayout
 import com.ivianuu.essentials.ui.compose.view.MATCH_PARENT
 import com.ivianuu.essentials.ui.compose.view.TextView
-import com.ivianuu.essentials.ui.compose.view.background
+import com.ivianuu.essentials.ui.compose.view.WRAP_CONTENT
+import com.ivianuu.essentials.ui.compose.view.WidthSpacer
 import com.ivianuu.essentials.ui.compose.view.gravity
 import com.ivianuu.essentials.ui.compose.view.height
 import com.ivianuu.essentials.ui.compose.view.matchParent
@@ -39,6 +40,7 @@ import com.ivianuu.essentials.ui.compose.view.onClick
 import com.ivianuu.essentials.ui.compose.view.orientation
 import com.ivianuu.essentials.ui.compose.view.text
 import com.ivianuu.essentials.ui.compose.view.textAppearance
+import com.ivianuu.essentials.ui.compose.view.textGravity
 import com.ivianuu.essentials.ui.compose.view.width
 import com.ivianuu.essentials.ui.compose.view.wrapContent
 import com.ivianuu.essentials.ui.navigation.director.controllerRoute
@@ -57,18 +59,39 @@ class ListController : ComposeController() {
             orientation(VERTICAL)
             gravity(Alignment.TopCenter)
 
-            FrameLayout {
-                width(Dp.MATCH_PARENT)
-                height(56.dp)
-                background(color = Color.Blue)
+            Toolbar(
+                leading = {
+                    ToolbarIcon(
+                        image = Image(res = R.drawable.abc_ic_ab_back_material),
+                        onClick = { d { "on nav click" } }
+                    )
+                },
+                title = {
+                    TextView {
+                        width(Dp.MATCH_PARENT)
+                        height(Dp.WRAP_CONTENT)
+                        text("Compose Sample")
+                        textAppearance(R.style.TextAppearance_MaterialComponents_Headline6)
+                        textGravity(Alignment.Center)
+                    }
+                },
+                trailing = {
+                    LinearLayout {
+                        wrapContent()
+                        orientation(HORIZONTAL)
 
-                TextView {
-                    wrapContent()
-                    gravity(Alignment.Center)
-                    text("Compose Sample")
-                    textAppearance(R.style.TextAppearance_MaterialComponents_Headline6)
+                        ToolbarIcon(
+                            image = Image(res = R.drawable.es_ic_link),
+                            onClick = { d { "on link click" } }
+                        )
+                        WidthSpacer(8.dp)
+                        ToolbarIcon(
+                            image = Image(res = R.drawable.es_ic_torch_on),
+                            onClick = { d { "on torch click" } }
+                        )
+                    }
                 }
-            }
+            )
 
             (1..10).forEach { i ->
                 Button(sourceLocation() + i) {

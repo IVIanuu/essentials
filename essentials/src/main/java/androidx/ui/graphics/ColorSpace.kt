@@ -18,7 +18,7 @@ package androidx.ui.graphics
 import androidx.annotation.AnyThread
 import androidx.annotation.IntRange
 import androidx.annotation.Size
-import androidx.ui.graphics.ColorSpace.Adaptation
+import androidx.ui.graphics.ColorSpace.*
 import androidx.ui.graphics.ColorSpace.Companion.IlluminantD50
 import androidx.ui.graphics.ColorSpace.Companion.IlluminantD65
 import androidx.ui.graphics.ColorSpace.Companion.MaxId
@@ -26,10 +26,7 @@ import androidx.ui.graphics.ColorSpace.Companion.MinId
 import androidx.ui.graphics.ColorSpace.Companion.adapt
 import androidx.ui.graphics.ColorSpace.Companion.connect
 import androidx.ui.graphics.ColorSpace.Companion.get
-import androidx.ui.graphics.ColorSpace.Connector
-import androidx.ui.graphics.ColorSpace.Model
 import androidx.ui.graphics.ColorSpace.Model.Rgb
-import androidx.ui.graphics.ColorSpace.Named
 import androidx.ui.graphics.ColorSpace.Named.Srgb
 import androidx.ui.graphics.ColorSpace.Rgb
 import androidx.ui.graphics.ColorSpace.Rgb.TransferParameters

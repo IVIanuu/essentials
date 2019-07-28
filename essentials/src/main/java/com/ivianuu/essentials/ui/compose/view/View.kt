@@ -1,30 +1,51 @@
 package com.ivianuu.essentials.ui.compose.view
 
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.view.View
+import androidx.compose.unaryPlus
 import androidx.core.view.updatePadding
-import androidx.ui.core.Density
 import androidx.ui.core.Dp
 import androidx.ui.core.dp
-import androidx.ui.core.withDensity
 import androidx.ui.graphics.Color
 import androidx.ui.layout.EdgeInsets
+import com.ivianuu.essentials.ui.compose.core.withContext
+import com.ivianuu.essentials.ui.compose.core.withDensity
+import com.ivianuu.kommon.core.view.drawable
 
 fun <T : View> ViewDsl<T>.alpha(alpha: Float) {
     set(alpha) { this.alpha = it }
 }
 
+fun <T : View> ViewDsl<T>.background(image: Image) {
+    +withContext {
+        set(image) {
+            when {
+                image.drawable != null -> background = image.drawable
+                image.bitmap != null -> background = BitmapDrawable(resources, image.bitmap)
+                image.res != null -> background = drawable(image.res)
+                else -> background = null
+            }
+        }
+    }
+}
+
+fun <T : View> ViewDsl<T>.background(color: Color) {
+    set(color) { setBackgroundColor(color.toArgb()) }
+}
+
 fun <T : View> ViewDsl<T>.background(
     drawable: Drawable? = null,
-    color: Color? = null
+    bitmap: Bitmap? = null,
+    res: Int? = null
 ) {
-    set(drawable) { this.background = it }
-    set(color) { setBackgroundColor(color?.toArgb() ?: 0) }
+    background(Image(drawable, bitmap, res))
 }
 
 fun <T : View> ViewDsl<T>.elevation(elevation: Dp) {
-    set(elevation) {
-        withDensity(Density(context)) {
+    +withDensity {
+        set(elevation) {
             this@set.elevation = elevation.toPx().value
         }
     }
@@ -47,18 +68,14 @@ fun <T : View> ViewDsl<T>.id(id: Int) {
 }
 
 fun <T : View> ViewDsl<T>.minimumWidth(width: Dp) {
-    set(width) {
-        withDensity(Density(context)) {
-            minimumWidth = it.toIntPx().value
-        }
+    +withDensity {
+        set(width) { minimumWidth = it.toIntPx().value }
     }
 }
 
 fun <T : View> ViewDsl<T>.minimumHeight(height: Dp) {
-    set(height) {
-        withDensity(Density(context)) {
-            minimumHeight = it.toIntPx().value
-        }
+    +withDensity {
+        set(height) { minimumHeight = it.toIntPx().value }
     }
 }
 
@@ -75,8 +92,8 @@ fun <T : View> ViewDsl<T>.onLongClick(onLongClick: () -> Unit) {
 }
 
 fun <T : View> ViewDsl<T>.padding(padding: EdgeInsets) {
-    set(padding) { (left, top, right, bottom) ->
-        withDensity(Density(node.context)) {
+    +withDensity {
+        set(padding) { (left, top, right, bottom) ->
             updatePadding(
                 left = left.toIntPx().value,
                 top = top.toIntPx().value,

@@ -2,15 +2,12 @@ package com.ivianuu.essentials.ui.compose.view
 
 import android.view.View
 import android.view.ViewGroup
-import android.widget.FrameLayout
-import android.widget.LinearLayout
+import androidx.compose.unaryPlus
 import androidx.core.view.updateMargins
-import androidx.ui.core.Density
 import androidx.ui.core.Dp
 import androidx.ui.core.dp
-import androidx.ui.core.withDensity
-import androidx.ui.layout.Alignment
 import androidx.ui.layout.EdgeInsets
+import com.ivianuu.essentials.ui.compose.core.withDensity
 
 fun <T : View> ViewDsl<T>.updateLayoutParams(block: ViewGroup.LayoutParams.() -> Unit) {
     node.getLayoutParamsBuilder().add(block)
@@ -29,8 +26,8 @@ inline fun <T : View, reified V> ViewDsl<T>.setLayoutParams(
 }
 
 fun <T : View> ViewDsl<T>.width(width: Dp) {
-    setLayoutParams(width) {
-        withDensity(Density(node.context)) {
+    +withDensity {
+        setLayoutParams(width) {
             this@setLayoutParams.width = when (it) {
                 Dp.MATCH_PARENT -> ViewGroup.LayoutParams.MATCH_PARENT
                 Dp.WRAP_CONTENT -> ViewGroup.LayoutParams.WRAP_CONTENT
@@ -41,8 +38,8 @@ fun <T : View> ViewDsl<T>.width(width: Dp) {
 }
 
 fun <T : View> ViewDsl<T>.height(height: Dp) {
-    setLayoutParams(height) {
-        withDensity(Density(node.context)) {
+    +withDensity {
+        setLayoutParams(height) {
             this@setLayoutParams.height = when (it) {
                 Dp.MATCH_PARENT -> ViewGroup.LayoutParams.MATCH_PARENT
                 Dp.WRAP_CONTENT -> ViewGroup.LayoutParams.WRAP_CONTENT
@@ -69,9 +66,9 @@ fun <T : View> ViewDsl<T>.wrapContent() {
 }
 
 fun <T : View> ViewDsl<T>.margin(margin: EdgeInsets) {
-    setLayoutParams(margin) { (left, top, right, bottom) ->
-        this as ViewGroup.MarginLayoutParams
-        withDensity(Density(node.context)) {
+    +withDensity {
+        setLayoutParams(margin) { (left, top, right, bottom) ->
+            this as ViewGroup.MarginLayoutParams
             updateMargins(
                 left = left.toIntPx().value,
                 top = top.toIntPx().value,
@@ -101,21 +98,4 @@ fun <T : View> ViewDsl<T>.horizontalMargin(margin: Dp) {
 
 fun <T : View> ViewDsl<T>.verticalMargin(margin: Dp) {
     margin(top = margin, bottom = margin)
-}
-
-fun <T : View> ViewDsl<T>.gravity(gravity: Alignment) {
-    setLayoutParams(gravity) {
-        when (this) {
-            is FrameLayout.LayoutParams -> this.gravity = gravity.toGravity()
-            is LinearLayout.LayoutParams -> this.gravity = gravity.toGravity()
-            else -> error("Cannot set gravity on ${this.javaClass.name}")
-        }
-    }
-}
-
-fun <T : View> ViewDsl<T>.weight(weight: Float) {
-    setLayoutParams(weight) {
-        this as LinearLayout.LayoutParams
-        this.weight = it
-    }
 }
