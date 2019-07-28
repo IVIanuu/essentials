@@ -41,6 +41,7 @@ import com.ivianuu.essentials.ui.compose.view.Image
 import com.ivianuu.essentials.ui.compose.view.LinearLayout
 import com.ivianuu.essentials.ui.compose.view.LinearLayoutOrientation
 import com.ivianuu.essentials.ui.compose.view.MATCH_PARENT
+import com.ivianuu.essentials.ui.compose.view.ProgressBar
 import com.ivianuu.essentials.ui.compose.view.ScrollView
 import com.ivianuu.essentials.ui.compose.view.TextView
 import com.ivianuu.essentials.ui.compose.view.WRAP_CONTENT
@@ -132,6 +133,7 @@ class ListController : ComposeController() {
                         Switch(checked = checked2, onCheckedChange = { setChecked2(it) })
                     }
 
+                    ProgressBar { }
 
                     ScrollView {
                         matchParent()
@@ -142,7 +144,7 @@ class ListController : ComposeController() {
                             gravity(Alignment.TopCenter)
 
 
-                            (1..100).forEach { i ->
+                            (1..10).forEach { i ->
                                 Button(sourceLocation() + i) {
                                     wrapContent()
                                     border((+themeColor { onSurface }).copy(alpha = 0.12f), 1.dp)
