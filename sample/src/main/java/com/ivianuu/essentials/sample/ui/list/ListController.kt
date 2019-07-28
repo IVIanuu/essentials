@@ -16,8 +16,6 @@
 
 package com.ivianuu.essentials.sample.ui.list
 
-import android.widget.LinearLayout.HORIZONTAL
-import android.widget.LinearLayout.VERTICAL
 import androidx.compose.ViewComposition
 import androidx.compose.state
 import androidx.ui.core.Dp
@@ -27,6 +25,7 @@ import androidx.ui.layout.Alignment
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.themeColor
 import com.github.ajalt.timberkt.d
+import com.ivianuu.director.requireActivity
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.compose.ComposeController
 import com.ivianuu.essentials.ui.compose.core.Surface
@@ -40,7 +39,9 @@ import com.ivianuu.essentials.ui.compose.material.rippleColor
 import com.ivianuu.essentials.ui.compose.sourceLocation
 import com.ivianuu.essentials.ui.compose.view.Image
 import com.ivianuu.essentials.ui.compose.view.LinearLayout
+import com.ivianuu.essentials.ui.compose.view.LinearLayoutOrientation
 import com.ivianuu.essentials.ui.compose.view.MATCH_PARENT
+import com.ivianuu.essentials.ui.compose.view.ScrollView
 import com.ivianuu.essentials.ui.compose.view.TextView
 import com.ivianuu.essentials.ui.compose.view.WRAP_CONTENT
 import com.ivianuu.essentials.ui.compose.view.WidthSpacer
@@ -59,6 +60,7 @@ import com.ivianuu.essentials.ui.compose.view.wrapContent
 import com.ivianuu.essentials.ui.navigation.director.controllerRoute
 import com.ivianuu.essentials.ui.navigation.director.controllerRouteOptions
 import com.ivianuu.essentials.ui.navigation.director.fade
+import com.ivianuu.essentials.util.darken
 import com.ivianuu.injekt.Inject
 
 val listRoute = controllerRoute<ListController>(options = controllerRouteOptions().fade())
@@ -68,10 +70,13 @@ class ListController : ComposeController() {
 
     override fun ViewComposition.build() {
         MaterialTheme {
+            with(requireActivity().window) {
+                statusBarColor = (+themeColor { primary }).toArgb().darken()
+            }
 
             LinearLayout {
                 matchParent()
-                orientation(VERTICAL)
+                orientation(LinearLayoutOrientation.Vertical)
                 gravity(Alignment.TopCenter)
                 backgroundColor(+themeColor { surface })
 
@@ -94,7 +99,7 @@ class ListController : ComposeController() {
                         trailing = {
                             LinearLayout {
                                 wrapContent()
-                                orientation(HORIZONTAL)
+                                orientation(LinearLayoutOrientation.Horizontal)
 
                                 group {
                                     AppBarIcon(
@@ -114,7 +119,7 @@ class ListController : ComposeController() {
                     LinearLayout {
                         width(Dp.MATCH_PARENT)
                         height(Dp.WRAP_CONTENT)
-                        orientation(HORIZONTAL)
+                        orientation(LinearLayoutOrientation.Horizontal)
                         gravity(Alignment.Center)
 
                         val (checked, setChecked) = +state { true }
@@ -128,21 +133,34 @@ class ListController : ComposeController() {
                     }
 
 
-                    (1..10).forEach { i ->
-                        Button(sourceLocation() + i) {
-                            wrapContent()
-                            border((+themeColor { onSurface }).copy(alpha = 0.12f), 1.dp)
-                            textColor(+themeColor { primary })
-                            rippleColor(+themeColor { primary.copy(alpha = 0.24f) })
-                            elevation(0.dp)
-                            update { node.stateListAnimator = null }
-                            backgroundColor(Color.Transparent)
-                            text("Hello")
-                            onClick { d { "on click" } }
+                    ScrollView {
+                        matchParent()
+
+                        LinearLayout {
+                            matchParent()
+                            orientation(LinearLayoutOrientation.Vertical)
+                            gravity(Alignment.TopCenter)
+
+
+                            (1..100).forEach { i ->
+                                Button(sourceLocation() + i) {
+                                    wrapContent()
+                                    border((+themeColor { onSurface }).copy(alpha = 0.12f), 1.dp)
+                                    textColor(+themeColor { primary })
+                                    rippleColor(+themeColor { primary.copy(alpha = 0.24f) })
+                                    elevation(0.dp)
+                                    update { node.stateListAnimator = null }
+                                    backgroundColor(Color.Transparent)
+                                    text("Hello")
+                                    onClick { d { "on click" } }
+                                }
+                            }
                         }
                     }
+
                 }
             }
+
         }
     }
 }
