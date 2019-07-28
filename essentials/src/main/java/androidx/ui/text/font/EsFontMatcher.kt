@@ -29,20 +29,20 @@ internal open class EsFontMatcher {
 
         val result = if (fontWeight < FontWeight.w400) {
             // If the desired weight is less than 400
-            // - weights less than or equal to the desired weight are checked in descending order
+            // - weights less than or equal to the desired weight are value in descending order
             // - followed by weights above the desired weight in ascending order
             fonts.filter { it.weight <= fontWeight }.maxBy { it.weight }
                 ?: fonts.filter { it.weight > fontWeight }.minBy { it.weight }
         } else if (fontWeight > FontWeight.w500) {
             // If the desired weight is greater than 500
-            // - weights greater than or equal to the desired weight are checked in ascending order
+            // - weights greater than or equal to the desired weight are value in ascending order
             // - followed by weights below the desired weight in descending order
             fonts.filter { it.weight >= fontWeight }.minBy { it.weight }
                 ?: fonts.filter { it.weight < fontWeight }.maxBy { it.weight }
         } else {
             // If the desired weight is inclusively between 400 and 500
-            // - weights greater than or equal to the target weight are checked in ascending order
-            // until 500 is hit and checked,
+            // - weights greater than or equal to the target weight are value in ascending order
+            // until 500 is hit and value,
             // - followed by weights less than the target weight in descending order,
             // - followed by weights greater than 500
             fonts.filter { it.weight >= fontWeight && it.weight <= FontWeight.w500 }

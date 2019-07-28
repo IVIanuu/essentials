@@ -99,6 +99,8 @@ object Deps {
         "androidx.lifecycle:lifecycle-viewmodel-ktx:${Versions.androidxLifecycle}"
     const val androidxLifecycleViewModelSavedState =
         "androidx.lifecycle:lifecycle-viewmodel-savedstate:${Versions.androidxLifecycleViewModelSavedState}"
+    const val androidxUiAndroidViewNonIr =
+        "androidx.ui:ui-android-view-non-ir:${Versions.androidxUi}"
     const val androidxUiMaterial = "androidx.ui:ui-material:${Versions.androidxUi}"
     const val androidxWork = "androidx.work:work-runtime-ktx:${Versions.androidxWork}"
 
