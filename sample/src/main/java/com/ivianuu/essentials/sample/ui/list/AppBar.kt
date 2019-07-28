@@ -40,7 +40,6 @@ fun ViewComposition.AppBar(
             }
         }
 
-        // todo default text style
         if (title != null) {
             FrameLayout {
                 id(titleId)

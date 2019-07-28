@@ -40,7 +40,6 @@ import com.ivianuu.essentials.ui.compose.view.matchParent
 import com.ivianuu.essentials.ui.compose.view.onClick
 import com.ivianuu.essentials.ui.compose.view.orientation
 import com.ivianuu.essentials.ui.compose.view.text
-import com.ivianuu.essentials.ui.compose.view.textAppearance
 import com.ivianuu.essentials.ui.compose.view.textGravity
 import com.ivianuu.essentials.ui.compose.view.width
 import com.ivianuu.essentials.ui.compose.view.wrapContent
@@ -73,7 +72,6 @@ class ListController : ComposeController() {
                             width(Dp.MATCH_PARENT)
                             height(Dp.WRAP_CONTENT)
                             text("Compose Sample")
-                            textAppearance(R.style.TextAppearance_MaterialComponents_Headline6)
                             textGravity(Alignment.Center)
                         }
                     },
