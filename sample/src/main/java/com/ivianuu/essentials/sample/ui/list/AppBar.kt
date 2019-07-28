@@ -30,7 +30,6 @@ import com.ivianuu.essentials.ui.compose.view.image
 import com.ivianuu.essentials.ui.compose.view.imageColor
 import com.ivianuu.essentials.ui.compose.view.margin
 import com.ivianuu.essentials.ui.compose.view.onClick
-import com.ivianuu.essentials.ui.compose.view.padding
 import com.ivianuu.essentials.ui.compose.view.size
 import com.ivianuu.essentials.ui.compose.view.width
 import com.ivianuu.essentials.ui.compose.view.wrapContent
@@ -110,8 +109,7 @@ fun ViewComposition.AppBarIcon(
     onClick: () -> Unit
 ) {
     ImageView {
-        size(32.dp)
-        padding(4.dp)
+        size(24.dp)
         image(image)
         rippleBackground(false)
         color?.let { imageColor(it) }

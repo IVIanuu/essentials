@@ -33,11 +33,11 @@ import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.compose.ComposeController
 import com.ivianuu.essentials.ui.compose.core.Surface
 import com.ivianuu.essentials.ui.compose.group
+import com.ivianuu.essentials.ui.compose.material.Button
 import com.ivianuu.essentials.ui.compose.material.CheckBox
 import com.ivianuu.essentials.ui.compose.material.RadioButton
 import com.ivianuu.essentials.ui.compose.material.Switch
 import com.ivianuu.essentials.ui.compose.sourceLocation
-import com.ivianuu.essentials.ui.compose.view.Button
 import com.ivianuu.essentials.ui.compose.view.Image
 import com.ivianuu.essentials.ui.compose.view.LinearLayout
 import com.ivianuu.essentials.ui.compose.view.MATCH_PARENT
