@@ -12,6 +12,7 @@ inline fun ViewComposition.ProgressBar(noinline block: ViewDsl<ProgressBar>.() -
 
 fun ViewComposition.ProgressBar(key: Any, block: ViewDsl<ProgressBar>.() -> Unit) =
     View(key, { ProgressBar(it) }) {
+        wrapContent()
         progressColor(+themeColor { secondary })
         block()
     }

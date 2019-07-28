@@ -19,6 +19,7 @@ import com.ivianuu.essentials.ui.compose.view.ViewDsl
 import com.ivianuu.essentials.ui.compose.view.backgroundColor
 import com.ivianuu.essentials.ui.compose.view.set
 import com.ivianuu.essentials.ui.compose.view.textStyle
+import com.ivianuu.essentials.ui.compose.view.wrapContent
 
 // todo
 
@@ -27,6 +28,7 @@ inline fun ViewComposition.Button(noinline block: ViewDsl<MaterialButton>.() -> 
 
 fun ViewComposition.Button(key: Any, block: ViewDsl<MaterialButton>.() -> Unit) =
     View(key, { MaterialButton(it) }) {
+        wrapContent()
         textStyle(+themeTextStyle { button })
 
         val primaryColor = +themeColor { primary }

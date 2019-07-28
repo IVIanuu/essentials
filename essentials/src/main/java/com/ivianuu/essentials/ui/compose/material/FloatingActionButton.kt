@@ -12,6 +12,7 @@ import com.ivianuu.essentials.ui.compose.view.ViewDsl
 import com.ivianuu.essentials.ui.compose.view.backgroundColor
 import com.ivianuu.essentials.ui.compose.view.imageColor
 import com.ivianuu.essentials.ui.compose.view.set
+import com.ivianuu.essentials.ui.compose.view.wrapContent
 
 inline fun ViewComposition.FloatingActionButton(noinline block: ViewDsl<FloatingActionButton>.() -> Unit) =
     FloatingActionButton(sourceLocation(), block)
@@ -21,6 +22,8 @@ fun ViewComposition.FloatingActionButton(
     block: ViewDsl<FloatingActionButton>.() -> Unit
 ) =
     View(key, { FloatingActionButton(it) }) {
+        wrapContent()
+
         val secondaryColor = +themeColor { secondary }
         backgroundColor(secondaryColor)
         imageColor(+themeColor { onSecondary })
