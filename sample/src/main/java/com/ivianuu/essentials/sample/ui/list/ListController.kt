@@ -30,8 +30,25 @@ import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.compose.ComposeController
 import com.ivianuu.essentials.ui.compose.core.Surface
 import com.ivianuu.essentials.ui.compose.material.CheckBox
+import com.ivianuu.essentials.ui.compose.material.RadioButton
 import com.ivianuu.essentials.ui.compose.sourceLocation
-import com.ivianuu.essentials.ui.compose.view.*
+import com.ivianuu.essentials.ui.compose.view.Button
+import com.ivianuu.essentials.ui.compose.view.Image
+import com.ivianuu.essentials.ui.compose.view.LinearLayout
+import com.ivianuu.essentials.ui.compose.view.MATCH_PARENT
+import com.ivianuu.essentials.ui.compose.view.TextView
+import com.ivianuu.essentials.ui.compose.view.WRAP_CONTENT
+import com.ivianuu.essentials.ui.compose.view.WidthSpacer
+import com.ivianuu.essentials.ui.compose.view.backgroundColor
+import com.ivianuu.essentials.ui.compose.view.gravity
+import com.ivianuu.essentials.ui.compose.view.height
+import com.ivianuu.essentials.ui.compose.view.matchParent
+import com.ivianuu.essentials.ui.compose.view.onClick
+import com.ivianuu.essentials.ui.compose.view.orientation
+import com.ivianuu.essentials.ui.compose.view.text
+import com.ivianuu.essentials.ui.compose.view.textGravity
+import com.ivianuu.essentials.ui.compose.view.width
+import com.ivianuu.essentials.ui.compose.view.wrapContent
 import com.ivianuu.essentials.ui.navigation.director.controllerRoute
 import com.ivianuu.essentials.ui.navigation.director.controllerRouteOptions
 import com.ivianuu.essentials.ui.navigation.director.fade
@@ -72,13 +89,10 @@ class ListController : ComposeController() {
                                 wrapContent()
                                 orientation(HORIZONTAL)
 
-                                FrameLayout {
-                                    wrapContent()
-                                    AppBarIcon(
-                                        image = Image(res = R.drawable.es_ic_link),
-                                        onClick = { d { "on link click" } }
-                                    )
-                                }
+                                AppBarIcon(
+                                    image = Image(res = R.drawable.es_ic_link),
+                                    onClick = { d { "on link click" } }
+                                )
                                 WidthSpacer(8.dp)
                                 AppBarIcon(
                                     image = Image(res = R.drawable.es_ic_torch_on),
@@ -88,8 +102,19 @@ class ListController : ComposeController() {
                         }
                     )
 
-                    val (value, setChecked) = +state { true }
-                    CheckBox(value = value, onChange = { setChecked(it) })
+                    LinearLayout {
+                        width(Dp.MATCH_PARENT)
+                        height(Dp.WRAP_CONTENT)
+                        orientation(HORIZONTAL)
+                        gravity(Alignment.Center)
+
+                        val (checked, setChecked) = +state { true }
+                        CheckBox(checked = checked, onCheckedChange = { setChecked(it) })
+
+                        val (selected, setSelected) = +state { true }
+                        RadioButton(selected = selected, onSelect = { setSelected(!selected) })
+                    }
+
 
                     (1..10).forEach { i ->
                         Button(sourceLocation() + i) {
