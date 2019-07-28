@@ -43,6 +43,7 @@ import com.ivianuu.essentials.ui.compose.view.LinearLayoutOrientation
 import com.ivianuu.essentials.ui.compose.view.MATCH_PARENT
 import com.ivianuu.essentials.ui.compose.view.ProgressBar
 import com.ivianuu.essentials.ui.compose.view.ScrollView
+import com.ivianuu.essentials.ui.compose.view.SeekBar
 import com.ivianuu.essentials.ui.compose.view.TextView
 import com.ivianuu.essentials.ui.compose.view.WRAP_CONTENT
 import com.ivianuu.essentials.ui.compose.view.WidthSpacer
@@ -52,10 +53,13 @@ import com.ivianuu.essentials.ui.compose.view.gravity
 import com.ivianuu.essentials.ui.compose.view.height
 import com.ivianuu.essentials.ui.compose.view.matchParent
 import com.ivianuu.essentials.ui.compose.view.onClick
+import com.ivianuu.essentials.ui.compose.view.onValueChange
 import com.ivianuu.essentials.ui.compose.view.orientation
 import com.ivianuu.essentials.ui.compose.view.text
 import com.ivianuu.essentials.ui.compose.view.textColor
 import com.ivianuu.essentials.ui.compose.view.textGravity
+import com.ivianuu.essentials.ui.compose.view.value
+import com.ivianuu.essentials.ui.compose.view.verticalMargin
 import com.ivianuu.essentials.ui.compose.view.width
 import com.ivianuu.essentials.ui.compose.view.wrapContent
 import com.ivianuu.essentials.ui.navigation.director.controllerRoute
@@ -134,6 +138,14 @@ class ListController : ComposeController() {
                     }
 
                     ProgressBar { }
+
+                    val (seekBarValue, setSeekBarValue) = +state { 50 }
+
+                    SeekBar {
+                        verticalMargin(8.dp)
+                        value(seekBarValue)
+                        onValueChange { setSeekBarValue(it) }
+                    }
 
                     ScrollView {
                         matchParent()

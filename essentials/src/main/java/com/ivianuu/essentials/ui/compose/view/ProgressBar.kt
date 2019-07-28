@@ -18,8 +18,9 @@ fun ViewComposition.ProgressBar(key: Any, block: ViewDsl<ProgressBar>.() -> Unit
 
 fun <T : ProgressBar> ViewDsl<T>.progressColor(color: Color) {
     set(color) {
-        indeterminateTintList = ColorStateList.valueOf(color.toArgb())
-        progressTintList = ColorStateList.valueOf(color.toArgb())
+        val secondaryColorStateList = ColorStateList.valueOf(color.toArgb())
+        indeterminateTintList = secondaryColorStateList
+        progressTintList = secondaryColorStateList
         progressBackgroundTintList =
             ColorStateList.valueOf(color.copy(alpha = BackgroundOpacity).toArgb())
     }
