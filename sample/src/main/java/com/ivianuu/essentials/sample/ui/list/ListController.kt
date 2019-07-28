@@ -22,9 +22,7 @@ import androidx.compose.ViewComposition
 import androidx.compose.state
 import androidx.ui.core.Dp
 import androidx.ui.core.dp
-import androidx.ui.graphics.Color
 import androidx.ui.layout.Alignment
-import androidx.ui.material.MaterialColors
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.themeColor
 import com.github.ajalt.timberkt.d
@@ -45,14 +43,7 @@ val listRoute = controllerRoute<ListController>(options = controllerRouteOptions
 class ListController : ComposeController() {
 
     override fun ViewComposition.build() {
-        MaterialTheme(
-            colors = MaterialColors(
-                primary = Color.Red,
-                secondary = Color.Yellow,
-                surface = Color.Black,
-                onSurface = Color.White
-            )
-        ) {
+        MaterialTheme {
 
             LinearLayout {
                 matchParent()

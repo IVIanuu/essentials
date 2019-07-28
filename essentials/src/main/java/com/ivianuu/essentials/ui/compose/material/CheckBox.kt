@@ -23,6 +23,8 @@ inline fun ViewComposition.CheckBox(noinline block: ViewDsl<MaterialCheckBox>.()
 
 fun ViewComposition.CheckBox(key: Any, block: ViewDsl<MaterialCheckBox>.() -> Unit) =
     View(key, { MaterialCheckBox(it) }) {
+        wrapContent()
+        rippleBackground(false)
         color(+themeColor { secondary })
         block()
     }
