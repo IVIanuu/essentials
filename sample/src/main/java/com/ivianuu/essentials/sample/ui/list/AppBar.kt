@@ -24,10 +24,10 @@ fun ViewComposition.AppBar(
     title: (ViewComposition.() -> Unit)? = null,
     trailing: (ViewComposition.() -> Unit)? = null
 ) {
-    RelativeLayout {
+    ConstraintLayout {
         width(Dp.MATCH_PARENT)
         height(56.dp)
-        background(color)
+        backgroundColor(color)
         elevation(4.dp)
 
         Surface(color) {
@@ -35,8 +35,8 @@ fun ViewComposition.AppBar(
                 FrameLayout {
                     id(leadingId)
                     wrapContent()
-                    alignParentLeft()
-                    centerVertical()
+                    constraintLeftToLeftOf(PARENT_ID)
+                    centerVerticalIn(PARENT_ID)
                     margin(left = 16.dp)
 
                     leading()
@@ -48,18 +48,18 @@ fun ViewComposition.AppBar(
                     id(titleId)
                     height(Dp.WRAP_CONTENT)
                     width(Dp.MATCH_PARENT)
-                    margin(left = 16.dp, right = 16.dp)
                     if (leading != null) {
-                        toRightOf(leadingId)
+                        constraintLeftToRightOf(leadingId)
                     } else {
-                        alignParentLeft()
+                        constraintLeftToLeftOf(PARENT_ID)
                     }
                     if (trailing != null) {
-                        toLeftOf(trailingId)
+                        constraintRightToLeftOf(trailingId)
                     } else {
-                        alignParentRight()
+                        constraintRightToRightOf(PARENT_ID)
                     }
-                    centerVertical()
+                    centerVerticalIn(PARENT_ID)
+                    margin(left = 16.dp, right = 16.dp)
 
                     CurrentTextStyleProvider(value = +themeTextStyle { h6 }) {
                         title()
@@ -71,8 +71,8 @@ fun ViewComposition.AppBar(
                 FrameLayout {
                     id(trailingId)
                     wrapContent()
-                    alignParentRight()
-                    centerVertical()
+                    constraintRightToRightOf(PARENT_ID)
+                    centerVerticalIn(PARENT_ID)
                     margin(right = 16.dp)
 
                     trailing()

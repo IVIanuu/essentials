@@ -28,6 +28,7 @@ import androidx.ui.material.MaterialTheme
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.compose.ComposeController
+import com.ivianuu.essentials.ui.compose.core.Surface
 import com.ivianuu.essentials.ui.compose.sourceLocation
 import com.ivianuu.essentials.ui.compose.view.*
 import com.ivianuu.essentials.ui.navigation.director.controllerRoute
@@ -47,12 +48,12 @@ class ListController : ComposeController() {
                 surface = Color.Black
             )
         ) {
-            SurfaceFrameLayout {
-                LinearLayout {
-                    matchParent()
-                    orientation(VERTICAL)
-                    gravity(Alignment.TopCenter)
+            LinearLayout {
+                matchParent()
+                orientation(VERTICAL)
+                gravity(Alignment.TopCenter)
 
+                Surface {
                     AppBar(
                         leading = {
                             AppBarIcon(
