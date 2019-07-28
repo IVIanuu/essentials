@@ -19,14 +19,12 @@ package com.ivianuu.essentials.sample.ui.list
 import android.widget.LinearLayout.HORIZONTAL
 import android.widget.LinearLayout.VERTICAL
 import androidx.compose.ViewComposition
-import androidx.compose.ambient
 import androidx.compose.state
 import androidx.ui.core.Dp
 import androidx.ui.core.dp
 import androidx.ui.graphics.Color
 import androidx.ui.layout.Alignment
 import androidx.ui.material.MaterialTheme
-import androidx.ui.material.ripple.CurrentRippleTheme
 import androidx.ui.material.themeColor
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.sample.R
@@ -37,6 +35,8 @@ import com.ivianuu.essentials.ui.compose.material.Button
 import com.ivianuu.essentials.ui.compose.material.CheckBox
 import com.ivianuu.essentials.ui.compose.material.RadioButton
 import com.ivianuu.essentials.ui.compose.material.Switch
+import com.ivianuu.essentials.ui.compose.material.border
+import com.ivianuu.essentials.ui.compose.material.rippleColor
 import com.ivianuu.essentials.ui.compose.sourceLocation
 import com.ivianuu.essentials.ui.compose.view.Image
 import com.ivianuu.essentials.ui.compose.view.LinearLayout
@@ -45,12 +45,14 @@ import com.ivianuu.essentials.ui.compose.view.TextView
 import com.ivianuu.essentials.ui.compose.view.WRAP_CONTENT
 import com.ivianuu.essentials.ui.compose.view.WidthSpacer
 import com.ivianuu.essentials.ui.compose.view.backgroundColor
+import com.ivianuu.essentials.ui.compose.view.elevation
 import com.ivianuu.essentials.ui.compose.view.gravity
 import com.ivianuu.essentials.ui.compose.view.height
 import com.ivianuu.essentials.ui.compose.view.matchParent
 import com.ivianuu.essentials.ui.compose.view.onClick
 import com.ivianuu.essentials.ui.compose.view.orientation
 import com.ivianuu.essentials.ui.compose.view.text
+import com.ivianuu.essentials.ui.compose.view.textColor
 import com.ivianuu.essentials.ui.compose.view.textGravity
 import com.ivianuu.essentials.ui.compose.view.width
 import com.ivianuu.essentials.ui.compose.view.wrapContent
@@ -115,28 +117,26 @@ class ListController : ComposeController() {
                         orientation(HORIZONTAL)
                         gravity(Alignment.Center)
 
-                        val oldRippleTheme = +ambient(CurrentRippleTheme)
+                        val (checked, setChecked) = +state { true }
+                        CheckBox(checked = checked, onCheckedChange = { setChecked(it) })
 
-                        CurrentRippleTheme.Provider(
-                            oldRippleTheme.copy(
-                                colorCallback = { Color.Magenta.copy(alpha = 0.24f) }
-                            )
-                        ) {
-                            val (checked, setChecked) = +state { true }
-                            CheckBox(checked = checked, onCheckedChange = { setChecked(it) })
+                        val (selected, setSelected) = +state { true }
+                        RadioButton(selected = selected, onSelect = { setSelected(!selected) })
 
-                            val (selected, setSelected) = +state { true }
-                            RadioButton(selected = selected, onSelect = { setSelected(!selected) })
-
-                            val (checked2, setChecked2) = +state { true }
-                            Switch(checked = checked2, onCheckedChange = { setChecked2(it) })
-                        }
+                        val (checked2, setChecked2) = +state { true }
+                        Switch(checked = checked2, onCheckedChange = { setChecked2(it) })
                     }
 
 
                     (1..10).forEach { i ->
                         Button(sourceLocation() + i) {
-                            width(100.dp)
+                            wrapContent()
+                            border((+themeColor { onSurface }).copy(alpha = 0.12f), 1.dp)
+                            textColor(+themeColor { primary })
+                            rippleColor(+themeColor { primary.copy(alpha = 0.24f) })
+                            elevation(0.dp)
+                            update { node.stateListAnimator = null }
+                            backgroundColor(Color.Transparent)
                             text("Hello")
                             onClick { d { "on click" } }
                         }
