@@ -28,10 +28,8 @@ abstract class ComposeController : EsController() {
         super.onViewCreated(view)
         view.cast<ViewGroup>().setViewContent {
             with(composer) {
-                ContextAmbient.Provider(requireActivity()) {
-                    DensityAmbient.Provider(Density(requireActivity())) {
-                        build()
-                    }
+                wrapWithDefaults {
+                    build()
                 }
             }
         }
@@ -43,5 +41,13 @@ abstract class ComposeController : EsController() {
     }
 
     protected abstract fun ViewComposition.build()
+
+    protected open fun ViewComposition.wrapWithDefaults(children: ViewComposition.() -> Unit) {
+        ContextAmbient.Provider(requireActivity()) {
+            DensityAmbient.Provider(Density(requireActivity())) {
+                children()
+            }
+        }
+    }
 
 }
