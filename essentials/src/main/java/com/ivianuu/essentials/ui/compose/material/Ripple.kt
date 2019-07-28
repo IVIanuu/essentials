@@ -8,12 +8,12 @@ import androidx.compose.ambient
 import androidx.compose.unaryPlus
 import androidx.ui.graphics.Color
 import androidx.ui.material.ripple.CurrentRippleTheme
-import androidx.ui.material.themeColor
+import com.ivianuu.essentials.ui.compose.core.RippleSurfaceAmbient
 import com.ivianuu.essentials.ui.compose.view.ViewDsl
 import com.ivianuu.essentials.ui.compose.view.set
 
 fun <T : View> ViewDsl<T>.rippleBackground(bounded: Boolean) {
-    val surfaceColor = +themeColor { surface }
+    val surfaceColor = +ambient(RippleSurfaceAmbient)
     val rippleTheme = +ambient(CurrentRippleTheme)
     val rippleColor = rippleTheme.colorCallback(surfaceColor)
     rippleBackground(rippleColor, bounded)

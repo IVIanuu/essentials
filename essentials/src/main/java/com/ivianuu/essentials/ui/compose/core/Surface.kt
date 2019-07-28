@@ -1,5 +1,6 @@
 package com.ivianuu.essentials.ui.compose.core
 
+import androidx.compose.Ambient
 import androidx.compose.ViewComposition
 import androidx.ui.core.CurrentTextStyleProvider
 import androidx.ui.graphics.Color
@@ -11,7 +12,11 @@ fun ViewComposition.Surface(
     color: Color = +themeColor { surface },
     children: ViewComposition.() -> Unit
 ) {
-    CurrentTextStyleProvider(value = TextStyle(color = +textColorForBackground(color))) {
-        children()
+    RippleSurfaceAmbient.Provider(value = color) {
+        CurrentTextStyleProvider(value = TextStyle(color = +textColorForBackground(color))) {
+            children()
+        }
     }
 }
+
+val RippleSurfaceAmbient = Ambient.of<Color>("RippleSurfaceAmbient")

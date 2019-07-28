@@ -8,11 +8,9 @@ import androidx.ui.core.dp
 import androidx.ui.graphics.Color
 import androidx.ui.material.themeColor
 import androidx.ui.material.themeTextStyle
-import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.compose.core.Surface
-import com.ivianuu.essentials.ui.compose.core.withContext
+import com.ivianuu.essentials.ui.compose.material.rippleBackground
 import com.ivianuu.essentials.ui.compose.view.*
-import com.ivianuu.kommon.core.content.drawableAttr
 
 private val leadingId = viewId()
 private val titleId = viewId()
@@ -91,10 +89,8 @@ fun ViewComposition.AppBarIcon(
         size(32.dp)
         padding(4.dp)
         image(image)
+        rippleBackground(false)
         color?.let { imageColor(it) }
-        +withContext {
-            background(drawable = drawableAttr(R.attr.selectableItemBackgroundBorderless))
-        }
         onClick(onClick)
     }
 }
