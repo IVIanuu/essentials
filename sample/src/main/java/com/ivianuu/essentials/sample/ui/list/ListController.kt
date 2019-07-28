@@ -22,6 +22,7 @@ import androidx.compose.ViewComposition
 import androidx.ui.core.Dp
 import androidx.ui.core.dp
 import androidx.ui.layout.Alignment
+import androidx.ui.material.MaterialTheme
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.compose.ComposeController
@@ -54,50 +55,52 @@ val listRoute = controllerRoute<ListController>(options = controllerRouteOptions
 class ListController : ComposeController() {
 
     override fun ViewComposition.build() {
-        LinearLayout {
-            matchParent()
-            orientation(VERTICAL)
-            gravity(Alignment.TopCenter)
+        MaterialTheme {
+            LinearLayout {
+                matchParent()
+                orientation(VERTICAL)
+                gravity(Alignment.TopCenter)
 
-            AppBar(
-                leading = {
-                    AppBarIcon(
-                        image = Image(res = R.drawable.abc_ic_ab_back_material),
-                        onClick = { d { "on nav click" } }
-                    )
-                },
-                title = {
-                    TextView {
-                        width(Dp.MATCH_PARENT)
-                        height(Dp.WRAP_CONTENT)
-                        text("Compose Sample")
-                        textAppearance(R.style.TextAppearance_MaterialComponents_Headline6)
-                        textGravity(Alignment.Center)
-                    }
-                },
-                trailing = {
-                    LinearLayout {
-                        wrapContent()
-                        orientation(HORIZONTAL)
-
+                AppBar(
+                    leading = {
                         AppBarIcon(
-                            image = Image(res = R.drawable.es_ic_link),
-                            onClick = { d { "on link click" } }
+                            image = Image(res = R.drawable.abc_ic_ab_back_material),
+                            onClick = { d { "on nav click" } }
                         )
-                        WidthSpacer(8.dp)
-                        AppBarIcon(
-                            image = Image(res = R.drawable.es_ic_torch_on),
-                            onClick = { d { "on torch click" } }
-                        )
-                    }
-                }
-            )
+                    },
+                    title = {
+                        TextView {
+                            width(Dp.MATCH_PARENT)
+                            height(Dp.WRAP_CONTENT)
+                            text("Compose Sample")
+                            textAppearance(R.style.TextAppearance_MaterialComponents_Headline6)
+                            textGravity(Alignment.Center)
+                        }
+                    },
+                    trailing = {
+                        LinearLayout {
+                            wrapContent()
+                            orientation(HORIZONTAL)
 
-            (1..10).forEach { i ->
-                Button(sourceLocation() + i) {
-                    width(100.dp)
-                    text("Hello")
-                    onClick { d { "on click" } }
+                            AppBarIcon(
+                                image = Image(res = R.drawable.es_ic_link),
+                                onClick = { d { "on link click" } }
+                            )
+                            WidthSpacer(8.dp)
+                            AppBarIcon(
+                                image = Image(res = R.drawable.es_ic_torch_on),
+                                onClick = { d { "on torch click" } }
+                            )
+                        }
+                    }
+                )
+
+                (1..10).forEach { i ->
+                    Button(sourceLocation() + i) {
+                        width(100.dp)
+                        text("Hello")
+                        onClick { d { "on click" } }
+                    }
                 }
             }
         }

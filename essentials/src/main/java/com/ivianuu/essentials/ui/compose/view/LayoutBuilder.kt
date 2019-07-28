@@ -4,7 +4,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.adapters.ViewAdapter
 import androidx.compose.adapters.getOrAddAdapter
-import androidx.compose.adapters.tagKey
 
 class LayoutBuilder : ViewAdapter {
     private var builtLayoutParams: ViewGroup.LayoutParams? = null
@@ -64,3 +63,5 @@ private val genDefaultLayoutParams by lazy {
     method.isAccessible = true
     method
 }
+
+private fun tagKey(key: String): Int = (3 shl 24) or key.hashCode()

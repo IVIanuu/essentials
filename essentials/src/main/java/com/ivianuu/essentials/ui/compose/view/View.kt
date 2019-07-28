@@ -8,10 +8,10 @@ import androidx.compose.unaryPlus
 import androidx.core.view.updatePadding
 import androidx.ui.core.Dp
 import androidx.ui.core.dp
+import androidx.ui.core.withDensity
 import androidx.ui.graphics.Color
 import androidx.ui.layout.EdgeInsets
 import com.ivianuu.essentials.ui.compose.core.withContext
-import com.ivianuu.essentials.ui.compose.core.withDensity
 import com.ivianuu.kommon.core.view.drawable
 
 fun <T : View> ViewDsl<T>.alpha(alpha: Float) {

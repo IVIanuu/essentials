@@ -1,9 +1,12 @@
 package com.ivianuu.essentials.sample.ui.list
 
 import androidx.compose.ViewComposition
+import androidx.ui.core.CurrentTextStyleProvider
 import androidx.ui.core.Dp
 import androidx.ui.core.dp
 import androidx.ui.graphics.Color
+import androidx.ui.material.themeColor
+import androidx.ui.material.themeTextStyle
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.compose.core.withContext
 import com.ivianuu.essentials.ui.compose.view.*
@@ -14,6 +17,7 @@ private val titleId = viewId()
 private val trailingId = viewId()
 
 fun ViewComposition.AppBar(
+    color: Color = +themeColor { primary },
     leading: (ViewComposition.() -> Unit)? = null,
     title: (ViewComposition.() -> Unit)? = null,
     trailing: (ViewComposition.() -> Unit)? = null
@@ -21,7 +25,7 @@ fun ViewComposition.AppBar(
     RelativeLayout {
         width(Dp.MATCH_PARENT)
         height(56.dp)
-        background(color = Color.Blue)
+        background(color)
         elevation(4.dp)
 
         if (leading != null) {
@@ -55,7 +59,9 @@ fun ViewComposition.AppBar(
                 }
                 centerVertical()
 
-                title()
+                CurrentTextStyleProvider(value = +themeTextStyle { h6 }) {
+                    title()
+                }
             }
         }
 

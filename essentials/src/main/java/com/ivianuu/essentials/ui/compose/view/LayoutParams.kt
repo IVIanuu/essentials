@@ -6,8 +6,8 @@ import androidx.compose.unaryPlus
 import androidx.core.view.updateMargins
 import androidx.ui.core.Dp
 import androidx.ui.core.dp
+import androidx.ui.core.withDensity
 import androidx.ui.layout.EdgeInsets
-import com.ivianuu.essentials.ui.compose.core.withDensity
 
 fun <T : View> ViewDsl<T>.updateLayoutParams(block: ViewGroup.LayoutParams.() -> Unit) {
     node.getLayoutParamsBuilder().add(block)
