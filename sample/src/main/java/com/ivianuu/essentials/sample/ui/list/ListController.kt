@@ -18,10 +18,10 @@ package com.ivianuu.essentials.sample.ui.list
 
 import androidx.compose.ViewComposition
 import androidx.compose.state
-import androidx.ui.core.Dp
 import androidx.ui.core.dp
 import androidx.ui.graphics.Color
 import androidx.ui.layout.Alignment
+import androidx.ui.material.MaterialColors
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.themeColor
 import com.github.ajalt.timberkt.d
@@ -32,7 +32,6 @@ import com.ivianuu.essentials.ui.compose.core.Surface
 import com.ivianuu.essentials.ui.compose.group
 import com.ivianuu.essentials.ui.compose.material.Button
 import com.ivianuu.essentials.ui.compose.material.CheckBox
-import com.ivianuu.essentials.ui.compose.material.DarkMaterialColors
 import com.ivianuu.essentials.ui.compose.material.FloatingActionButton
 import com.ivianuu.essentials.ui.compose.material.RadioButton
 import com.ivianuu.essentials.ui.compose.material.Switch
@@ -42,12 +41,12 @@ import com.ivianuu.essentials.ui.compose.view.FrameLayout
 import com.ivianuu.essentials.ui.compose.view.Image
 import com.ivianuu.essentials.ui.compose.view.LinearLayout
 import com.ivianuu.essentials.ui.compose.view.LinearLayoutOrientation
-import com.ivianuu.essentials.ui.compose.view.MATCH_PARENT
+import com.ivianuu.essentials.ui.compose.view.MatchParent
 import com.ivianuu.essentials.ui.compose.view.ProgressBar
 import com.ivianuu.essentials.ui.compose.view.SeekBar
 import com.ivianuu.essentials.ui.compose.view.TextView
-import com.ivianuu.essentials.ui.compose.view.WRAP_CONTENT
 import com.ivianuu.essentials.ui.compose.view.WidthSpacer
+import com.ivianuu.essentials.ui.compose.view.WrapContent
 import com.ivianuu.essentials.ui.compose.view.backgroundColor
 import com.ivianuu.essentials.ui.compose.view.elevation
 import com.ivianuu.essentials.ui.compose.view.gravity
@@ -76,7 +75,7 @@ val listRoute = controllerRoute<ListController>(options = controllerRouteOptions
 class ListController : ComposeController() {
 
     override fun ViewComposition.build() {
-        MaterialTheme(colors = DarkMaterialColors()) {
+        MaterialTheme(colors = MaterialColors()) {
             with(requireActivity().window) {
                 statusBarColor = (+themeColor { primary }).toArgb().darken()
             }
@@ -111,8 +110,8 @@ class ListController : ComposeController() {
             },
             title = {
                 TextView {
-                    width(Dp.MATCH_PARENT)
-                    height(Dp.WRAP_CONTENT)
+                    width(MatchParent)
+                    height(WrapContent)
                     text("Compose Sample")
                     textGravity(Alignment.Center)
                 }
@@ -142,6 +141,7 @@ class ListController : ComposeController() {
         SelectionControls()
         Progress()
         Buttons()
+        ListItems()
     }
 
     private fun ViewComposition.Progress() {
@@ -158,8 +158,8 @@ class ListController : ComposeController() {
 
     private fun ViewComposition.SelectionControls() {
         LinearLayout {
-            width(Dp.MATCH_PARENT)
-            height(Dp.WRAP_CONTENT)
+            width(MatchParent)
+            height(WrapContent)
             orientation(LinearLayoutOrientation.Horizontal)
             gravity(Alignment.Center)
 
@@ -200,6 +200,23 @@ class ListController : ComposeController() {
             backgroundColor(Color.Transparent)
             text("Text button")
         }
+    }
+
+    private fun ViewComposition.ListItems() {
+        val (checked, setChecked) = +state { true }
+        ListItem(
+            leading = {
+                //CheckBox(checked = checked, onCheckedChange = { setChecked(it) })
+                FloatingActionButton { }
+            },
+            title = {
+                TextView {
+                    wrapContent()
+                    text("List item")
+                    backgroundColor(Color.Green)
+                }
+            }
+        )
     }
 
     private fun ViewComposition.Fab() {

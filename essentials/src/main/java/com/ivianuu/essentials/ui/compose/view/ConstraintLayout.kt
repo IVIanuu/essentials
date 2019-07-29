@@ -5,7 +5,7 @@ import androidx.compose.ViewComposition
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.ivianuu.essentials.ui.compose.sourceLocation
 
-val PARENT_ID = ConstraintLayout.LayoutParams.PARENT_ID
+val ParentId = ConstraintLayout.LayoutParams.PARENT_ID
 
 inline fun ViewComposition.ConstraintLayout(noinline block: ViewDsl<ConstraintLayout>.() -> Unit) =
     ConstraintLayout(sourceLocation(), block)

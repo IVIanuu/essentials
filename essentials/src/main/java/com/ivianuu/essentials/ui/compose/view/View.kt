@@ -35,7 +35,7 @@ fun <T : View> ViewDsl<T>.background(image: Image) {
 
 fun <T : View> ViewDsl<T>.backgroundColor(color: Color) {
     set(color) {
-        if (background == null) background = ColorDrawable(color.toArgb())
+        background = ColorDrawable(color.toArgb())
         backgroundTintList = ColorStateList.valueOf(color.toArgb())
     }
 }

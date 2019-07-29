@@ -29,8 +29,8 @@ fun <T : View> ViewDsl<T>.width(width: Dp) {
     +withDensity {
         setLayoutParams(width) {
             this@setLayoutParams.width = when (it) {
-                Dp.MATCH_PARENT -> ViewGroup.LayoutParams.MATCH_PARENT
-                Dp.WRAP_CONTENT -> ViewGroup.LayoutParams.WRAP_CONTENT
+                MatchParent -> ViewGroup.LayoutParams.MATCH_PARENT
+                WrapContent -> ViewGroup.LayoutParams.WRAP_CONTENT
                 else -> it.toIntPx().value
             }
         }
@@ -41,8 +41,8 @@ fun <T : View> ViewDsl<T>.height(height: Dp) {
     +withDensity {
         setLayoutParams(height) {
             this@setLayoutParams.height = when (it) {
-                Dp.MATCH_PARENT -> ViewGroup.LayoutParams.MATCH_PARENT
-                Dp.WRAP_CONTENT -> ViewGroup.LayoutParams.WRAP_CONTENT
+                MatchParent -> ViewGroup.LayoutParams.MATCH_PARENT
+                WrapContent -> ViewGroup.LayoutParams.WRAP_CONTENT
                 else -> it.toIntPx().value
             }
         }
@@ -55,15 +55,15 @@ fun <T : View> ViewDsl<T>.size(size: Dp) {
 }
 
 // todo the site does not belong to [Dp]
-val Dp.Companion.MATCH_PARENT get() = ViewGroup.LayoutParams.MATCH_PARENT.dp
-val Dp.Companion.WRAP_CONTENT get() = ViewGroup.LayoutParams.WRAP_CONTENT.dp
+val MatchParent = ViewGroup.LayoutParams.MATCH_PARENT.dp
+val WrapContent = ViewGroup.LayoutParams.WRAP_CONTENT.dp
 
 fun <T : View> ViewDsl<T>.matchParent() {
-    size(Dp.MATCH_PARENT)
+    size(MatchParent)
 }
 
 fun <T : View> ViewDsl<T>.wrapContent() {
-    size(Dp.WRAP_CONTENT)
+    size(WrapContent)
 }
 
 fun <T : View> ViewDsl<T>.margin(margin: EdgeInsets) {

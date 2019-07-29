@@ -2,7 +2,6 @@ package com.ivianuu.essentials.sample.ui.list
 
 import androidx.compose.ViewComposition
 import androidx.ui.core.CurrentTextStyleProvider
-import androidx.ui.core.Dp
 import androidx.ui.core.currentTextStyle
 import androidx.ui.core.dp
 import androidx.ui.graphics.Color
@@ -14,9 +13,9 @@ import com.ivianuu.essentials.ui.compose.view.ConstraintLayout
 import com.ivianuu.essentials.ui.compose.view.FrameLayout
 import com.ivianuu.essentials.ui.compose.view.Image
 import com.ivianuu.essentials.ui.compose.view.ImageView
-import com.ivianuu.essentials.ui.compose.view.MATCH_PARENT
-import com.ivianuu.essentials.ui.compose.view.PARENT_ID
-import com.ivianuu.essentials.ui.compose.view.WRAP_CONTENT
+import com.ivianuu.essentials.ui.compose.view.MatchParent
+import com.ivianuu.essentials.ui.compose.view.ParentId
+import com.ivianuu.essentials.ui.compose.view.WrapContent
 import com.ivianuu.essentials.ui.compose.view.backgroundColor
 import com.ivianuu.essentials.ui.compose.view.centerVerticalIn
 import com.ivianuu.essentials.ui.compose.view.constraintLeftToLeftOf
@@ -47,7 +46,7 @@ fun ViewComposition.AppBar(
     trailing: (ViewComposition.() -> Unit)? = null
 ) {
     ConstraintLayout {
-        width(Dp.MATCH_PARENT)
+        width(MatchParent)
         height(56.dp)
         backgroundColor(color)
         elevation(4.dp)
@@ -57,8 +56,8 @@ fun ViewComposition.AppBar(
                 FrameLayout {
                     id(leadingId)
                     wrapContent()
-                    constraintLeftToLeftOf(PARENT_ID)
-                    centerVerticalIn(PARENT_ID)
+                    constraintLeftToLeftOf(ParentId)
+                    centerVerticalIn(ParentId)
                     margin(left = 16.dp)
 
                     leading()
@@ -68,19 +67,19 @@ fun ViewComposition.AppBar(
             if (title != null) {
                 FrameLayout {
                     id(titleId)
-                    height(Dp.WRAP_CONTENT)
-                    width(Dp.MATCH_PARENT)
+                    width(MatchParent)
+                    height(WrapContent)
                     if (leading != null) {
                         constraintLeftToRightOf(leadingId)
                     } else {
-                        constraintLeftToLeftOf(PARENT_ID)
+                        constraintLeftToLeftOf(ParentId)
                     }
                     if (trailing != null) {
                         constraintRightToLeftOf(trailingId)
                     } else {
-                        constraintRightToRightOf(PARENT_ID)
+                        constraintRightToRightOf(ParentId)
                     }
-                    centerVerticalIn(PARENT_ID)
+                    centerVerticalIn(ParentId)
                     margin(left = 16.dp, right = 16.dp)
 
                     CurrentTextStyleProvider(value = +themeTextStyle { h6 }) {
@@ -93,8 +92,8 @@ fun ViewComposition.AppBar(
                 FrameLayout {
                     id(trailingId)
                     wrapContent()
-                    constraintRightToRightOf(PARENT_ID)
-                    centerVerticalIn(PARENT_ID)
+                    constraintRightToRightOf(ParentId)
+                    centerVerticalIn(ParentId)
                     margin(right = 16.dp)
 
                     trailing()
