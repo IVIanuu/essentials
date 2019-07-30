@@ -29,6 +29,7 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/mvn-publish.gradle")
 
 dependencies {
+
     api(Deps.androidxActivity)
     api(Deps.androidxAppCompat)
     api(Deps.androidxCardView)
@@ -52,7 +53,7 @@ dependencies {
 
     api(Deps.epoxy)
 
-    //kapt(project(":essentials-compiler"))
+    kapt(project(":essentials-compiler"))
 
     api(Deps.injekt)
     api(Deps.injektAndroid)
