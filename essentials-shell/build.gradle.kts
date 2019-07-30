@@ -31,8 +31,9 @@
  */
 plugins {
     id("com.android.library")
-    id("kotlin-android")
-    id("kotlin-kapt")
+    kotlin("android")
+    kotlin("kapt")
+    id("kotlin-android-extensions")
 }
 
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/android-build-lib.gradle")

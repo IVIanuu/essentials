@@ -30,8 +30,7 @@
  * limitations under the License.
  */
 plugins {
-    id("java-library")
-    id("kotlin")
+    kotlin("jvm")
 }
 
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/java-8.gradle")
