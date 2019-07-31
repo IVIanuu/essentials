@@ -40,12 +40,10 @@ object Versions {
     const val androidxActivity = "1.0.0-rc01"
     const val androidxAppCompat = "1.1.0-rc01"
     const val androidxCardView = "1.0.0"
-    const val androidxCompose = "1.0.0-alpha01"
     const val androidxCore = "1.1.0-rc02"
     const val androidxFragment = "1.1.0-rc01"
     const val androidxLifecycle = "2.2.0-alpha02"
     const val androidxLifecycleViewModelSavedState = "1.0.0-alpha02"
-    const val androidxUi = "1.0.0-alpha01"
     const val androidxWork = "2.1.0-rc01"
 
     const val androidxTestCore = "1.2.0-alpha03"
@@ -86,7 +84,6 @@ object Deps {
     const val androidxActivity = "androidx.activity:activity-ktx:${Versions.androidxActivity}"
     const val androidxAppCompat = "androidx.appcompat:appcompat:${Versions.androidxAppCompat}"
     const val androidxCardView = "androidx.cardview:cardview:${Versions.androidxCardView}"
-    const val androidxComposeRuntime = "androidx.compose:compose-runtime:${Versions.androidxCompose}"
     const val androidxCore = "androidx.core:core-ktx:${Versions.androidxCore}"
     const val androidxLifecycleLiveData =
         "androidx.lifecycle:lifecycle-livedata-ktx:${Versions.androidxLifecycle}"
@@ -99,7 +96,6 @@ object Deps {
         "androidx.lifecycle:lifecycle-viewmodel-ktx:${Versions.androidxLifecycle}"
     const val androidxLifecycleViewModelSavedState =
         "androidx.lifecycle:lifecycle-viewmodel-savedstate:${Versions.androidxLifecycleViewModelSavedState}"
-    const val androidxUiMaterial = "androidx.ui:ui-material:${Versions.androidxUi}"
     const val androidxWork = "androidx.work:work-runtime-ktx:${Versions.androidxWork}"
 
     const val androidxTestCore = "androidx.test:core:${Versions.androidxTestCore}"
