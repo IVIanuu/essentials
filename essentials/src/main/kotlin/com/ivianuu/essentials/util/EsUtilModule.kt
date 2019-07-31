@@ -50,7 +50,7 @@ val esUtilModule = module {
         BuildInfo(
             appInfo.flags.containsFlag(ApplicationInfo.FLAG_DEBUGGABLE),
             appInfo.packageName,
-            packageInfo.longVersionCode.toInt()
+            packageInfo.versionCode
         )
     }
     single { DeviceInfo(Build.MODEL, Build.MANUFACTURER) }

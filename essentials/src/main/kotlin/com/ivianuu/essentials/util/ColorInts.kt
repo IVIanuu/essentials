@@ -21,6 +21,8 @@ import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.round
 
+// todo rewrite using androidx.compose.Color once released
+
 val Int.isDark: Boolean
     get() = !isLight
 
