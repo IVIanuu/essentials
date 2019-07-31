@@ -31,7 +31,7 @@ object Build {
 object Publishing {
     const val groupId = "com.ivianuu.essentials"
     const val vcsUrl = "https://github.com/IVIanuu/essentials"
-    const val version = "${Build.versionName}-dev-174"
+    const val version = "${Build.versionName}-dev175"
 }
 
 object Versions {
@@ -54,16 +54,16 @@ object Versions {
     const val bintray = "1.8.4"
     const val constraintLayout = "2.0.0-beta2"
     const val coroutines = "1.3.0-RC"
-    const val director = "0.0.1-dev-37"
+    const val director = "0.0.1-dev40"
     const val epoxy = "3.7.0"
     const val glide = "4.9.0"
-    const val injekt = "0.0.1-dev-69"
+    const val injekt = "0.0.1-dev70"
     const val junit = "4.12"
-    const val kommon = "0.0.1-dev-12"
+    const val kommon = "0.0.1-dev13" // remove
     const val kotlin = "1.3.41"
     const val kotlinFlowExtensions = "0.0.1"
-    const val kPrefs = "0.0.1-dev-9"
-    const val kSettings = "0.0.1-dev-7"
+    const val kPrefs = "0.0.1-dev10"
+    const val kSettings = "0.0.1-dev8"
     const val mavenGradle = "2.1"
     const val materialComponents = "1.1.0-alpha07"
     const val materialDialogs = "3.1.0"
@@ -72,7 +72,7 @@ object Versions {
     const val rxAndroid = "2.1.1"
     const val rxJava = "2.2.10"
     const val rxKotlin = "2.3.0"
-    const val scopes = "0.0.1-dev-12"
+    const val scopes = "0.0.1-dev13"
     const val superUser = "1.0.0.+"
     const val timber = "4.7.1"
     const val timberKt = "1.5.1"
