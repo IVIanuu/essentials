@@ -3,26 +3,28 @@ package com.ivianuu.essentials.store
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Deferred
 
-class MutexStore<K, V>(private val wrapped: Store<K, V>) : Store<K, V> by wrapped {
+class MutexBox<T>(private val wrapped: Box<T>) : Box<T> by wrapped {
 
-    private val deferredByKey = hashMapOf<K, Deferred<V?>>()
+    private var currentDeferred: Deferred<T>? = null
+    private val deferredLock = Any()
 
-    override suspend fun get(key: K): V? {
-        var deferred = synchronized(deferredByKey) { deferredByKey[key] }
+    override suspend fun get(): T {
+        var deferred = synchronized(deferredLock) { currentDeferred }
         if (deferred == null) {
             deferred = CompletableDeferred()
-            synchronized(deferredByKey) { deferredByKey[key] = deferred }
+            synchronized(deferredLock) { currentDeferred = deferred }
             try {
-                val result = wrapped.get(key)
+                val result = wrapped.get()
                 deferred.complete(result)
             } catch (e: Exception) {
                 deferred.completeExceptionally(e)
             } finally {
                 @Suppress("DeferredResultUnused")
-                synchronized(deferredByKey) { deferredByKey -= key }
+                synchronized(deferredLock) { currentDeferred = null }
             }
         }
 
         return deferred.await()
     }
+
 }
