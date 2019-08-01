@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.tile
 
 import android.annotation.TargetApi
+import com.ivianuu.essentials.util.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -28,7 +29,7 @@ abstract class FlowTileService<T> : StateTileService<T>() {
 
     override fun onStartListening() {
         super.onStartListening()
-        listeningCoroutineScope.launch {
+        listeningScope.coroutineScope.launch {
             flow.collect { setState(it) }
         }
     }

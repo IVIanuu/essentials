@@ -31,7 +31,7 @@ object Build {
 object Publishing {
     const val groupId = "com.ivianuu.essentials"
     const val vcsUrl = "https://github.com/IVIanuu/essentials"
-    const val version = "${Build.versionName}-dev175"
+    const val version = "${Build.versionName}-dev176"
 }
 
 object Versions {
@@ -63,14 +63,14 @@ object Versions {
     const val kommon = "0.0.1-dev13" // remove
     const val kotlin = "1.3.41"
     const val kotlinFlowExtensions = "0.0.2"
-    const val kPrefs = "0.0.1-dev12"
-    const val kSettings = "0.0.1-dev9"
+    const val kPrefs = "0.0.1-dev16"
+    const val kSettings = "0.0.1-dev11"
     const val mavenGradle = "2.1"
     const val materialComponents = "1.1.0-alpha07"
     const val materialDialogs = "3.1.0"
     const val mockitoKotlin = "2.0.0"
     const val roboelectric = "4.0.2"
-    const val scopes = "0.0.1-dev17"
+    const val scopes = "0.0.1-dev26"
     const val superUser = "1.0.0.+"
     const val timber = "4.7.1"
     const val timberKt = "1.5.1"
@@ -185,7 +185,6 @@ object Deps {
 
     const val scopes = "com.ivianuu.scopes:scopes:${Versions.scopes}"
     const val scopesAndroid = "com.ivianuu.scopes:scopes-android:${Versions.scopes}"
-    const val scopesCommon = "com.ivianuu.scopes:scopes-common:${Versions.scopes}"
     const val scopesCoroutines = "com.ivianuu.scopes:scopes-coroutines:${Versions.scopes}"
 
     const val superUser = "eu.chainfire:libsuperuser:${Versions.superUser}"

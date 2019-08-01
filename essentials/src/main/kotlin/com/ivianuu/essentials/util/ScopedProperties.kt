@@ -78,8 +78,7 @@ private val propertiesByScope = ConcurrentHashMap<Scope, Properties>()
 
 val Scope.properties: Properties
     get() = propertiesByScope.getOrPut(this) {
-        check(!isClosed) { "cannot access properties on closed scopes" }
         Properties().also {
-            addListener { propertiesByScope -= this }
+            onClose { propertiesByScope -= this }
         }
     }

@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.util
 
 import com.ivianuu.scopes.Scope
-import com.ivianuu.scopes.ScopeOwner
 import com.ivianuu.scopes.coroutines.cancelBy
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -29,7 +28,6 @@ val Scope.coroutineScope: CoroutineScope
     get() = properties.getOrSet(KEY_COROUTINE_SCOPE) {
         ScopedCoroutineScope(this)
     }
-val ScopeOwner.coroutineScope: CoroutineScope get() = scope.coroutineScope
 
 private class ScopedCoroutineScope(scope: Scope) : CoroutineScope {
     private val job = Job().cancelBy(scope)

@@ -16,16 +16,9 @@
 
 package com.ivianuu.essentials.util
 
-import com.ivianuu.scopes.CloseListener
 import com.ivianuu.scopes.Scope
 
 object NoScope : Scope {
-    override val isClosed: Boolean
-        get() = false
-
-    override fun addListener(listener: CloseListener) {
-    }
-
-    override fun removeListener(listener: CloseListener) {
+    override fun onClose(callback: () -> Unit) {
     }
 }

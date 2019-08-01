@@ -25,12 +25,11 @@ import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.android.serviceComponent
 import com.ivianuu.scopes.MutableScope
 import com.ivianuu.scopes.Scope
-import com.ivianuu.scopes.ScopeOwner
 
 /**
  * Base service
  */
-abstract class EsService : Service(), InjektTrait, ScopeOwner {
+abstract class EsService : Service(), InjektTrait {
 
     override val component by unsafeLazy {
         serviceComponent {
@@ -39,7 +38,7 @@ abstract class EsService : Service(), InjektTrait, ScopeOwner {
     }
 
     private val _scope = MutableScope()
-    override val scope: Scope get() = _scope
+    val scope: Scope get() = _scope
 
     override fun onDestroy() {
         _scope.close()
