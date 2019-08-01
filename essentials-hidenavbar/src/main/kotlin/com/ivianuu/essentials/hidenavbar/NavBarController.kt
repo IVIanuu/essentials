@@ -87,7 +87,7 @@ class NavBarController internal constructor(
                 prefs.wasNavBarHidden.set(it)
                 setNavBarConfigInternal(it, config)
             }
-            .flowOn(dispatchers.computation)
+            .flowOn(dispatchers.default)
             .launchIn(scope.coroutineScope)
 
 
@@ -98,7 +98,7 @@ class NavBarController internal constructor(
                 d { "show nav bar because of shutdown" }
                 setNavBarConfigInternal(false, config)
             }
-            .flowOn(dispatchers.computation)
+            .flowOn(dispatchers.default)
             .launchIn(scope.coroutineScope)
     }
 

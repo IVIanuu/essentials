@@ -58,7 +58,7 @@ abstract class MvRxViewModel<S>(initialState: S) : EsViewModel() {
 
     protected suspend fun setState(reducer: suspend S.() -> S) {
         withContext(Dispatchers.Default) {
-            // todo we need a way to use the AppDispatchers.computation dispatcher
+            // todo we need a way to use the AppDispatchers.default dispatcher
             val currentState = synchronized(stateLock) { _state }
             val newState = reducer(currentState)
             if (currentState != newState) {

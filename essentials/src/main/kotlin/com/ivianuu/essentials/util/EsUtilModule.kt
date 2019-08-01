@@ -28,9 +28,10 @@ import kotlinx.coroutines.Dispatchers
 val esUtilModule = module {
     single {
         AppDispatchers(
-            Dispatchers.IO,
             Dispatchers.Default,
-            Dispatchers.Main
+            Dispatchers.IO,
+            Dispatchers.Main,
+            Dispatchers.Unconfined
         )
     }
     single {
