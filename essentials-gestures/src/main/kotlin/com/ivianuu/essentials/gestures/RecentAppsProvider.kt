@@ -91,7 +91,7 @@ class RecentAppsProvider : AccessibilityComponent() {
 
         // remove the app from the list
         if (index != -1) {
-            recentApps
+            recentApps.removeAt(index)
         }
 
         // add the package to the first position
