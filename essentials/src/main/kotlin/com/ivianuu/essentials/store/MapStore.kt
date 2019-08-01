@@ -34,7 +34,7 @@ class MapStore<K, V>(private val map: ConcurrentHashMap<K, V> = ConcurrentHashMa
 
     override suspend fun get(key: K): V? = map[key]
 
-    override suspend fun contains(key: K): Boolean = map.containsKey(key)
+    override suspend fun contains(key: K): Boolean = key in map
 
     override suspend fun put(key: K, value: V) {
         map[key] = value
@@ -42,7 +42,7 @@ class MapStore<K, V>(private val map: ConcurrentHashMap<K, V> = ConcurrentHashMa
     }
 
     override suspend fun remove(key: K) {
-        map.remove(key)
+        map -= key
         changes.emit(key)
     }
 

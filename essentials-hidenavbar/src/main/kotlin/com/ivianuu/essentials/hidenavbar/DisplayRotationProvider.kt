@@ -21,20 +21,17 @@ import android.hardware.SensorManager
 import android.view.OrientationEventListener
 import android.view.WindowManager
 import com.github.ajalt.timberkt.d
+import com.ivianuu.essentials.util.mergeFlows
 import com.ivianuu.injekt.Inject
 import com.ivianuu.kommon.core.app.doOnConfigurationChanged
 import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.flow.channelFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.switchMap
-import kotlinx.coroutines.launch
 
 @Inject
 internal class DisplayRotationProvider(
@@ -87,14 +84,4 @@ internal class DisplayRotationProvider(
         awaitClose { app.unregisterComponentCallbacks(callbacks) }
     }
 
-}
-
-private fun <T> mergeFlows(vararg flows: Flow<T>): Flow<T> = channelFlow {
-    coroutineScope {
-        for (f in flows) {
-            launch {
-                f.collect { channel.send(it) }
-            }
-        }
-    }
 }

@@ -62,7 +62,7 @@ object Versions {
     const val kommon = "0.0.1-dev13" // remove
     const val kotlin = "1.3.41"
     const val kotlinFlowExtensions = "0.0.2"
-    const val kPrefs = "0.0.1-dev11"
+    const val kPrefs = "0.0.1-dev12"
     const val kSettings = "0.0.1-dev9"
     const val mavenGradle = "2.1"
     const val materialComponents = "1.1.0-alpha07"

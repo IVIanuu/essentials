@@ -19,7 +19,7 @@ class MutexStore<K, V>(private val wrapped: Store<K, V>) : Store<K, V> by wrappe
                 deferred.completeExceptionally(e)
             } finally {
                 @Suppress("DeferredResultUnused")
-                synchronized(deferredByKey) { deferredByKey.remove(key) }
+                synchronized(deferredByKey) { deferredByKey -= key }
             }
         }
 

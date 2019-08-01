@@ -16,6 +16,8 @@
 
 package com.ivianuu.essentials.util
 
+// todo operators?
+
 fun Int.addFlag(flag: Int): Int = this or flag
 fun Int.removeFlag(flag: Int): Int = this and flag.inv()
 fun Int.containsFlag(flag: Int): Boolean = this and flag == flag

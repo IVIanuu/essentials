@@ -76,11 +76,11 @@ class FunModelBuilder internal constructor() {
     }
 
     fun bind(block: EsHolder.() -> Unit) {
-        bindActions.add(block)
+        bindActions += block
     }
 
     fun unbind(block: EsHolder.() -> Unit) {
-        unbindActions.add(block)
+        unbindActions += block
     }
 
     internal fun build(): FunModel = FunModel(

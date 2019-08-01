@@ -62,19 +62,16 @@ fun EpoxyController.EditTextDialogListItem(
 ) = DialogListItem(
     id = id,
     buildDialog = { context ->
-        if ((prefill != null || prefillRes != null) && !context.extras.contains("current_value")) {
-            context.extras.set(
-                "current_value", when {
-                    prefill != null -> prefill
-                    else -> context.controller.string(prefillRes!!)
-                }
-            )
-
+        if ((prefill != null || prefillRes != null) && "current_value" !in context.extras) {
+            context.extras["current_value"] = when {
+                prefill != null -> prefill
+                else -> context.controller.string(prefillRes!!)
+            }
         }
 
         title(res = dialogTitleRes, text = dialogTitle)
         positiveButton(res = positiveDialogButtonTextRes, text = positiveDialogButtonText) {
-            onInputCompleted(context.extras.get("current_value")!!)
+            onInputCompleted(context.extras["current_value"]!!)
         }
         negativeButton(res = negativeDialogButtonTextRes, text = negativeDialogButtonText)
 
@@ -83,7 +80,7 @@ fun EpoxyController.EditTextDialogListItem(
             hint = hint ?: "",
             prefill = prefill,
             waitForPositiveButton = false
-        ) { _, input -> context.extras.set("current_value", input.toString()) }
+        ) { _, input -> context.extras["current_value"] = input.toString() }
 
         dialogBlock?.invoke(this)
 

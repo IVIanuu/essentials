@@ -158,7 +158,7 @@ internal class CheckableAppsViewModel(
                     .map {
                         CheckableApp(
                             it,
-                            checked.contains(it.packageName)
+                            it.packageName in checked
                         )
                     }
                     .toList()
@@ -180,9 +180,9 @@ internal class CheckableAppsViewModel(
         viewModelScope.launch(dispatchers.io) {
             pushNewCheckedApps {
                 if (!app.isChecked) {
-                    it.add(app.info.packageName)
+                    it += app.info.packageName
                 } else {
-                    it.remove(app.info.packageName)
+                    it -= app.info.packageName
                 }
             }
         }
@@ -192,7 +192,7 @@ internal class CheckableAppsViewModel(
         viewModelScope.launch(dispatchers.io) {
             state.apps()?.let { allApps ->
                 pushNewCheckedApps { newApps ->
-                    newApps.addAll(allApps.map { it.info.packageName })
+                    newApps += allApps.map { it.info.packageName }
                 }
             }
         }

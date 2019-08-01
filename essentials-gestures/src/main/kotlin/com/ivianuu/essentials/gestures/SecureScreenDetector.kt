@@ -59,7 +59,7 @@ class SecureScreenDetector : AccessibilityComponent() {
         //val managePermissionsActivity = "com.android.packageinstaller.permission.ui.ManagePermissionsActivity"
         //val grantPermissionsActivity ="com.android.packageinstaller.permission.ui.GrantPermissionsActivity"
 
-        var isOnSecureScreen = packageName.contains("packageinstaller")
+        var isOnSecureScreen = "packageinstaller" in packageName
 
         if (!isOnSecureScreen) {
             isOnSecureScreen = packageName == "com.android.settings"

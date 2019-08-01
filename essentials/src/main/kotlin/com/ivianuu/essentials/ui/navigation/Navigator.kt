@@ -44,7 +44,7 @@ class Navigator {
     suspend fun <T> push(route: Route): T? {
         d { "push $route" }
         val newBackStack = backStack.toMutableList()
-        newBackStack.add(route)
+        newBackStack += route
         setBackStack(newBackStack)
         val deferredResult = CompletableDeferred<Any?>()
         synchronized(resultsByRoute) { resultsByRoute[route] = deferredResult }
@@ -63,7 +63,7 @@ class Navigator {
     private fun setBackStack(newBackStack: List<Route>) {
         synchronized(_backStack) {
             _backStack.clear()
-            _backStack.addAll(newBackStack)
+            _backStack += newBackStack
         }
         GlobalScope.launch { subject.emit(newBackStack) } // todo this is ugly
     }

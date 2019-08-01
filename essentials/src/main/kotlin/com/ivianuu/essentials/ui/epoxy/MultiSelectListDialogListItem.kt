@@ -78,13 +78,13 @@ fun EpoxyController.MultiSelectListDialogListItem(
             finalEntryValues = emptyArray()
         }
 
-        if (!context.extras.contains("current_value")) {
-            context.extras.set("current_value", values)
+        if ("current_value" !in context.extras) {
+            context.extras["current_value"] = values
         }
 
         title(res = dialogTitleRes, text = dialogTitle)
         positiveButton(res = positiveDialogButtonTextRes, text = positiveDialogButtonText) {
-            onSelected(context.extras.get("current_value")!!)
+            onSelected(context.extras["current_value"]!!)
         }
         negativeButton(res = negativeDialogButtonTextRes, text = negativeDialogButtonText)
 
@@ -100,7 +100,7 @@ fun EpoxyController.MultiSelectListDialogListItem(
             waitForPositiveButton = false
         ) { _, positions, _ ->
             val newValue = finalEntryValues.toList()
-                .filterIndexed { index, _ -> positions.contains(index) }
+                .filterIndexed { index, _ -> index in positions }
                 .map { it }
                 .toSet()
 
