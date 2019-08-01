@@ -25,7 +25,7 @@ data class PopupMenu<T>(
     val style: Int = R.attr.popupMenuStyle,
     val items: List<PopupMenuItem<T>>,
     val onCanceled: (() -> Unit)? = null,
-    val onSelected: (T) -> Unit
+    val onSelected: ((T) -> Unit)? = null
 )
 
 data class PopupMenuItem<T>(
@@ -58,7 +58,7 @@ fun <T> PopupMenu<T>.show(view: View) {
         itemSelected = true
         val item = itemsByMenuItem.getValue(androidItem)
         item.onSelected?.invoke()
-        onSelected(item.value)
+        onSelected?.invoke(item.value)
         return@setOnMenuItemClickListener true
     }
 
