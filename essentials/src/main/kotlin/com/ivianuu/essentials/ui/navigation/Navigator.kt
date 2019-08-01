@@ -16,9 +16,9 @@
 
 package com.ivianuu.essentials.ui.navigation
 
+import com.github.ajalt.timberkt.d
 import hu.akarnokd.kotlin.flow.BehaviorSubject
 import kotlinx.coroutines.CompletableDeferred
-import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
@@ -26,7 +26,7 @@ import kotlinx.coroutines.launch
 class Navigator {
 
     private val _backStack = mutableListOf<Route>()
-    val backStack: List<Route> get() = synchronized(this) { _backStack }
+    val backStack: List<Route> get() = synchronized(_backStack) { _backStack }
 
     val flow: Flow<List<Route>>
         get() = subject
@@ -37,29 +37,35 @@ class Navigator {
 
     @JvmName("pushWithoutResult")
     fun push(route: Route) {
-        push<Any?>(route)
+        @Suppress("DeferredResultUnused")
+        GlobalScope.launch { push<Any?>(route) }
     }
 
-    fun <T> push(route: Route): Deferred<T?> = synchronized(this) {
+    suspend fun <T> push(route: Route): T? {
+        d { "push $route" }
         val newBackStack = backStack.toMutableList()
         newBackStack.add(route)
         setBackStack(newBackStack)
-        val result = CompletableDeferred<Any?>()
-        resultsByRoute[route] = result
-        return@synchronized result as Deferred<T?>
+        val deferredResult = CompletableDeferred<Any?>()
+        synchronized(resultsByRoute) { resultsByRoute[route] = deferredResult }
+        return deferredResult.await() as? T
     }
 
-    fun pop(result: Any? = null) = synchronized(this) {
+    fun pop(result: Any? = null) {
+        d { "pop result $result" }
         val newBackStack = backStack.toMutableList()
         val removedRoute = newBackStack.removeAt(backStack.lastIndex)
         setBackStack(newBackStack)
-        resultsByRoute.remove(removedRoute)?.complete(result)
+        val deferredResult = synchronized(resultsByRoute) { resultsByRoute.remove(removedRoute) }
+        deferredResult?.complete(result)
     }
 
     private fun setBackStack(newBackStack: List<Route>) {
-        _backStack.clear()
-        _backStack.addAll(newBackStack)
-        GlobalScope.launch { subject.emit(_backStack) } // todo this is ugly
+        synchronized(_backStack) {
+            _backStack.clear()
+            _backStack.addAll(newBackStack)
+        }
+        GlobalScope.launch { subject.emit(newBackStack) } // todo this is ugly
     }
 
 }

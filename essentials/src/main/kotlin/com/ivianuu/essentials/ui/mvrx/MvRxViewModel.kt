@@ -57,7 +57,7 @@ abstract class MvRxViewModel<S>(initialState: S) : EsViewModel() {
     private var _state: S = initialState
     val state: S get() = synchronized(this) { _state }
 
-    private val stateActor = viewModelScope.actor<S.() -> S>(
+    private val stateActor = viewModelScope.actor<suspend S.() -> S>(
         context = Dispatchers.Default,
         capacity = Channel.UNLIMITED
     ) {
@@ -71,7 +71,7 @@ abstract class MvRxViewModel<S>(initialState: S) : EsViewModel() {
         }
     }
 
-    protected fun setState(reducer: S.() -> S) {
+    protected fun setState(reducer: suspend S.() -> S) {
         stateActor.offer(reducer)
     }
 
