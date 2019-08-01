@@ -6,6 +6,14 @@ import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import kotlin.coroutines.CoroutineContext
+
+fun <T> Flow<T>.flowWith(context: CoroutineContext) = flow {
+    withContext(context) {
+        collect { emit(it) }
+    }
+}
 
 fun <T> flowOf(block: suspend () -> T) = flow { emit(block()) }
 
