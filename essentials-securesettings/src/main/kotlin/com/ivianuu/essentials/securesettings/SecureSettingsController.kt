@@ -57,10 +57,11 @@ class SecureSettingsController(
         lifecycleScope.launch {
             while (true) {
                 if (secureSettingsHelper.canWriteSecureSettings()) {
-                    handlePermissionResult(true)
+                    toaster.toast(R.string.es_secure_settings_permission_granted)
+                    navigator.pop(true)
                     break
                 }
-                delay(500)
+                delay(100)
             }
         }
     }
@@ -91,9 +92,7 @@ class SecureSettingsController(
             textRes = R.string.es_pref_use_root_summary,
             onClick = {
                 lifecycleScope.launch {
-                    if (secureSettingsHelper.grantWriteSecureSettings()) {
-                        handlePermissionResult(true)
-                    } else {
+                    if (!secureSettingsHelper.grantWriteSecureSettingsViaRoot()) {
                         toaster.toast(R.string.es_secure_settings_no_root)
                     }
                 }
@@ -101,12 +100,4 @@ class SecureSettingsController(
         )
     }
 
-    private fun handlePermissionResult(success: Boolean) {
-        if (success) {
-            toaster.toast(R.string.es_secure_settings_permission_granted)
-            navigator.pop(success)
-        } else {
-            toaster.toast(R.string.es_secure_settings_permission_denied)
-        }
-    }
 }

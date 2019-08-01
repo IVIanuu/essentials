@@ -35,7 +35,7 @@ class SecureSettingsHelper(
     fun canWriteSecureSettings(): Boolean =
         context.hasPermissions(WRITE_SECURE_SETTINGS)
 
-    suspend fun grantWriteSecureSettings(): Boolean {
+    suspend fun grantWriteSecureSettingsViaRoot(): Boolean {
         return try {
             shell.run("pm grant ${buildInfo.packageName} android.permission.WRITE_SECURE_SETTINGS")
             canWriteSecureSettings()
