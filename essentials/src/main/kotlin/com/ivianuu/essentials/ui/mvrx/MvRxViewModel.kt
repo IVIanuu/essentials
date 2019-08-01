@@ -102,6 +102,16 @@ abstract class MvRxViewModel<S>(initialState: S) : EsViewModel() {
             .collect { setState { reducer(it) } }
     }
 
+    protected fun <V> Flow<V>.executeIn(scope: CoroutineScope, reducer: S.(Async<V>) -> S): Job {
+        return scope.launch {
+            setState { reducer(Loading()) }
+            this@executeIn
+                .map { it.asSuccess() }
+                .catch { it.asFail<V>() }
+                .collect { setState { reducer(it) } }
+        }
+    }
+
     protected fun <V> CoroutineScope.execute(
         context: CoroutineContext = EmptyCoroutineContext,
         start: CoroutineStart = CoroutineStart.DEFAULT,
