@@ -30,7 +30,8 @@ import com.ivianuu.kprefs.KPrefs
 import com.ivianuu.kprefs.boolean
 import com.ivianuu.kprefs.coroutines.asFlow
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 class MainActivity : EsActivity() {
@@ -41,20 +42,18 @@ class MainActivity : EsActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        lifecycleScope.launch {
-            get<KPrefs>().boolean("tile_state").asFlow()
-                .collect { d { "tile state changed $it" } }
-        }
+        get<KPrefs>().boolean("tile_state").asFlow()
+            .onEach { d { "tile state changed $it" } }
+            .launchIn(lifecycleScope)
 
-        lifecycleScope.launch {
-            get<BroadcastFactory>().create(Intent.ACTION_SCREEN_OFF)
-                .collect {
-                    lifecycleScope.launch {
-                        delay(2000)
-                        d { "unlock screen ${get<ScreenUnlocker>().unlockScreen()}" }
-                    }
+        get<BroadcastFactory>().create(Intent.ACTION_SCREEN_OFF)
+            .onEach {
+                lifecycleScope.launch {
+                    delay(2000)
+                    d { "unlock screen ${get<ScreenUnlocker>().unlockScreen()}" }
                 }
-        }
+            }
+            .launchIn(lifecycleScope)
     }
 
 }

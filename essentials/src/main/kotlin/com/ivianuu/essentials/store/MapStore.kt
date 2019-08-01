@@ -4,17 +4,17 @@ import hu.akarnokd.kotlin.flow.PublishSubject
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import java.util.concurrent.ConcurrentHashMap
 
 fun main() {
     val store = MapStore<String, String>()
 
-    GlobalScope.launch {
-        store.observeAllValues()
-            .collect { println("on change $it") }
-    }
+    store.observeAllValues()
+        .onEach { println("on change $it") }
+        .launchIn(GlobalScope)
 
     val job = GlobalScope.launch {
         delay(100)

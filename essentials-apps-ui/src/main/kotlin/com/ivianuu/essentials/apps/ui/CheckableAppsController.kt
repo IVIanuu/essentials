@@ -50,9 +50,10 @@ import com.ivianuu.scopes.ReusableScope
 import hu.akarnokd.kotlin.flow.BehaviorSubject
 import hu.akarnokd.kotlin.flow.PublishSubject
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combineLatest
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 /**
@@ -84,11 +85,9 @@ abstract class CheckableAppsController : ListController() {
     override fun onCreate() {
         super.onCreate()
 
-        lifecycleScope.launch {
-            viewModel.checkedAppsChanged.collect {
-                onCheckedAppsChanged(it)
-            }
-        }
+        viewModel.checkedAppsChanged
+            .onEach { onCheckedAppsChanged(it) }
+            .launchIn(lifecycleScope)
 
         viewModel.attachCheckedAppsFlow(getCheckedAppsFlow())
     }
@@ -167,9 +166,9 @@ internal class CheckableAppsViewModel(
     }
 
     fun attachCheckedAppsFlow(flow: Flow<Set<String>>) {
-        checkedAppsScope.coroutineScope.launch {
-            flow.collect { checkedApps.emit(it) }
-        }
+        flow
+            .onEach { checkedApps.emit(it) }
+            .launchIn(checkedAppsScope.coroutineScope)
     }
 
     fun detachCheckedAppsObservable() {

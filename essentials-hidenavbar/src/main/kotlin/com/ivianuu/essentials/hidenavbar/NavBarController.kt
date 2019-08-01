@@ -30,10 +30,11 @@ import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.android.ApplicationScope
 import com.ivianuu.scopes.ReusableScope
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.drop
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.onEach
 
 /**
  * Handles the state of the navigation bar
@@ -77,28 +78,28 @@ class NavBarController internal constructor(
         }
 
         // apply config
-        scope.coroutineScope.launch(dispatchers.computation) {
-            mergeFlows(flows)
-                .map {
-                    !config.showWhileScreenOff
-                            || (!keyguardManager.isKeyguardLocked && screenStateProvider.isScreenOn)
-                }
-                .collect {
-                    prefs.wasNavBarHidden.set(it)
-                    setNavBarConfigInternal(it, config)
-                }
-        }
+        mergeFlows(flows)
+            .map {
+                !config.showWhileScreenOff
+                        || (!keyguardManager.isKeyguardLocked && screenStateProvider.isScreenOn)
+            }
+            .onEach {
+                prefs.wasNavBarHidden.set(it)
+                setNavBarConfigInternal(it, config)
+            }
+            .flowOn(dispatchers.computation)
+            .launchIn(scope.coroutineScope)
 
-        // show nav bar on shut downs
-        scope.coroutineScope.launch(dispatchers.computation) {
-            // force show on shut downs
-            broadcastFactory.create(Intent.ACTION_SHUTDOWN)
-                .collect {
-                    scope.clear()
-                    d { "show nav bar because of shutdown" }
-                    setNavBarConfigInternal(false, config)
-                }
-        }
+
+        // force show on shut downs
+        broadcastFactory.create(Intent.ACTION_SHUTDOWN)
+            .onEach {
+                scope.clear()
+                d { "show nav bar because of shutdown" }
+                setNavBarConfigInternal(false, config)
+            }
+            .flowOn(dispatchers.computation)
+            .launchIn(scope.coroutineScope)
     }
 
     private fun setNavBarConfigInternal(hidden: Boolean, config: NavBarConfig) {

@@ -27,9 +27,9 @@ import com.ivianuu.essentials.ui.base.EsActivity
 import com.ivianuu.essentials.util.AppDispatchers
 import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.injekt.inject
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.take
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 /**
@@ -68,20 +68,18 @@ class UnlockScreenActivity : EsActivity() {
             })
         } else {
             window.addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD)
-
-            lifecycleScope.launch {
-                broadcastFactory.create(
-                    Intent.ACTION_SCREEN_OFF,
-                    Intent.ACTION_SCREEN_ON,
-                    Intent.ACTION_USER_PRESENT
-                )
-                    .take(1)
-                    .collect {
-                        withContext(dispatchers.main) {
-                            finishWithResult(it.action == Intent.ACTION_USER_PRESENT)
-                        }
+            broadcastFactory.create(
+                Intent.ACTION_SCREEN_OFF,
+                Intent.ACTION_SCREEN_ON,
+                Intent.ACTION_USER_PRESENT
+            )
+                .take(1)
+                .onEach {
+                    withContext(dispatchers.main) {
+                        finishWithResult(it.action == Intent.ACTION_USER_PRESENT)
                     }
-            }
+                }
+                .launchIn(lifecycleScope)
         }
     }
 

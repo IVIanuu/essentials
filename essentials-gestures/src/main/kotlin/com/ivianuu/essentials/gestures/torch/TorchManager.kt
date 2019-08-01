@@ -24,9 +24,10 @@ import com.ivianuu.injekt.android.ApplicationScope
 import hu.akarnokd.kotlin.flow.BehaviorSubject
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.onStart
 
 /**
  * Provides the torch state
@@ -43,16 +44,11 @@ class TorchManager internal constructor(
         get() = _torchState
 
     init {
-        GlobalScope.launch {
-            try {
-                TorchService.syncState(context)
-            } catch (e: Exception) {
-            }
-
-            broadcastFactory.create(ACTION_TORCH_STATE_CHANGED)
-                .map { it.getBooleanExtra(EXTRA_TORCH_STATE, false) }
-                .collect { _torchState.emit(it) }
-        }
+        broadcastFactory.create(ACTION_TORCH_STATE_CHANGED)
+            .map { it.getBooleanExtra(EXTRA_TORCH_STATE, false) }
+            .onStart { TorchService.syncState(context) }
+            .onEach { _torchState.emit(it) }
+            .launchIn(GlobalScope)
     }
 
     fun toggleTorch() {

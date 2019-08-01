@@ -23,8 +23,9 @@ import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.android.ApplicationScope
 import com.ivianuu.kprefs.coroutines.asFlow
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.withContext
 
 @Inject
@@ -35,22 +36,22 @@ class TwilightController(
 ) : AppService {
 
     init {
-        GlobalScope.launch {
-            twilightPrefs.twilightMode.asFlow()
-                .collect { mode ->
-                    withContext(dispatchers.main) {
-                        AppCompatDelegate.setDefaultNightMode(
-                            when (mode) {
-                                TwilightMode.LIGHT -> AppCompatDelegate.MODE_NIGHT_NO
-                                TwilightMode.DARK -> AppCompatDelegate.MODE_NIGHT_YES
-                                TwilightMode.BATTERY -> AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY
-                                TwilightMode.TIME -> AppCompatDelegate.MODE_NIGHT_AUTO_TIME
-                                TwilightMode.SYSTEM -> AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
-                            }
-                        )
-                    }
+        twilightPrefs.twilightMode.asFlow()
+            .flowOn(dispatchers.computation)
+            .onEach { mode ->
+                withContext(dispatchers.main) {
+                    AppCompatDelegate.setDefaultNightMode(
+                        when (mode) {
+                            TwilightMode.LIGHT -> AppCompatDelegate.MODE_NIGHT_NO
+                            TwilightMode.DARK -> AppCompatDelegate.MODE_NIGHT_YES
+                            TwilightMode.BATTERY -> AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY
+                            TwilightMode.TIME -> AppCompatDelegate.MODE_NIGHT_AUTO_TIME
+                            TwilightMode.SYSTEM -> AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+                        }
+                    )
                 }
-        }
+            }
+            .launchIn(GlobalScope)
     }
 
 }

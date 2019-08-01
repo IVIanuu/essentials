@@ -73,7 +73,7 @@ suspend fun <K, V> Store<K, V>.getOrDefault(key: K, defaultValue: suspend () -> 
 suspend fun <K, V> Store<K, V>.getOrDefaultNullable(key: K, defaultValue: suspend () -> V?): V? =
     if (contains(key)) get(key) else defaultValue()
 
-suspend fun <K, V> Store<K, V>.observeValue(key: K): Flow<V?> {
+fun <K, V> Store<K, V>.observeValue(key: K): Flow<V?> {
     return flow {
         emit(get(key)) // send current value
 
@@ -83,14 +83,14 @@ suspend fun <K, V> Store<K, V>.observeValue(key: K): Flow<V?> {
     }
 }
 
-suspend fun <K, V> Store<K, V>.observeKeys(): Flow<Set<K>> {
+fun <K, V> Store<K, V>.observeKeys(): Flow<Set<K>> {
     return flow {
         emit(keys())
         observeKeyChanges().collect { emit(keys()) }
     }
 }
 
-suspend fun <K, V> Store<K, V>.observeAllValues(): Flow<Map<K, V>> {
+fun <K, V> Store<K, V>.observeAllValues(): Flow<Map<K, V>> {
     return flow {
         emit(getAll())
         observeKeyChanges().collect { emit(getAll()) }
