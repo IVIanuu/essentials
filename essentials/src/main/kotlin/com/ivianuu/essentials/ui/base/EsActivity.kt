@@ -24,6 +24,7 @@ import com.ivianuu.essentials.ui.mvrx.MvRxView
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.director.ControllerRenderer
 import com.ivianuu.essentials.ui.navigation.director.ControllerRoute
+import com.ivianuu.essentials.util.coroutineScope
 import com.ivianuu.essentials.util.unsafeLazy
 import com.ivianuu.injekt.InjektTrait
 import com.ivianuu.injekt.Module
@@ -31,6 +32,7 @@ import com.ivianuu.injekt.android.activityComponent
 import com.ivianuu.injekt.get
 import com.ivianuu.injekt.inject
 import com.ivianuu.scopes.android.onPause
+import kotlinx.coroutines.launch
 
 /**
  * Base activity
@@ -75,8 +77,11 @@ abstract class EsActivity : AppCompatActivity(), InjektTrait, MvRxView {
 
     override fun onResumeFragments() {
         super.onResumeFragments()
-        ControllerRenderer(this, navigator, router, get())
-            .renderUntil(onPause)
+        onPause.coroutineScope.launch {
+            ControllerRenderer(this@EsActivity, get(), navigator, router)
+                .render()
+
+        }
     }
 
     override fun onBackPressed() {

@@ -19,12 +19,19 @@ package com.ivianuu.essentials.gestures
 import android.view.accessibility.AccessibilityEvent
 import android.view.inputmethod.InputMethodManager
 import com.ivianuu.essentials.gestures.accessibility.AccessibilityComponent
-import com.ivianuu.essentials.util.PublishSubject
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.android.ApplicationScope
-import io.reactivex.Observable
+import hu.akarnokd.kotlin.flow.PublishSubject
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.switchMap
+import kotlinx.coroutines.launch
 import java.lang.reflect.Method
-import java.util.concurrent.TimeUnit
 
 /**
  * Provides info about the keyboard state
@@ -37,16 +44,23 @@ class KeyboardVisibilityDetector(
 
     private val softInputChanges = PublishSubject<Unit>()
 
-    val keyboardVisible: Observable<Boolean> = softInputChanges
-        .startWith(Unit)
-        .switchMap {
-            Observable.interval(100, TimeUnit.MILLISECONDS)
-                .startWith(0)
+    val keyboardVisible: Flow<Boolean>
+        get() {
+            return softInputChanges
+                .onStart { emit(Unit) }
+                .switchMap {
+                    flow {
+                        while (true) {
+                            emit(Unit)
+                            delay(100)
+                        }
+                    }
+                }
+                .map { getKeyboardHeight() }
+                .map { it > 0 }
+                .distinctUntilChanged()
+            // todo use Flow.share() once available
         }
-        .map { getKeyboardHeight() }
-        .map { it > 0 }
-        .distinctUntilChanged()
-        .share()
 
     private fun getKeyboardHeight(): Int {
         return try {
@@ -67,7 +81,7 @@ class KeyboardVisibilityDetector(
 
         if (event.className != "android.inputmethodservice.SoftInputWindow") return
 
-        softInputChanges.onNext(Unit)
+        GlobalScope.launch { softInputChanges.emit(Unit) }
     }
 
     private companion object {

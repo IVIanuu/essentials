@@ -16,17 +16,19 @@
 
 package com.ivianuu.essentials.ui.navigation
 
-import com.ivianuu.essentials.util.BehaviorSubject
-import io.reactivex.Observable
+import hu.akarnokd.kotlin.flow.BehaviorSubject
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.launch
 
 class Navigator {
 
     private val _backStack = mutableListOf<Route>()
     val backStack: List<Route> get() = synchronized(this) { _backStack }
 
-    val observable: Observable<List<Route>>
+    val flow: Flow<List<Route>>
         get() = subject
 
     private val subject = BehaviorSubject(emptyList<Route>())
@@ -57,7 +59,7 @@ class Navigator {
     private fun setBackStack(newBackStack: List<Route>) {
         _backStack.clear()
         _backStack.addAll(newBackStack)
-        subject.onNext(_backStack)
+        GlobalScope.launch { subject.emit(_backStack) } // todo this is ugly
     }
 
 }

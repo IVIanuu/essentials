@@ -18,35 +18,39 @@ package com.ivianuu.essentials.twilight
 
 import androidx.appcompat.app.AppCompatDelegate
 import com.ivianuu.essentials.app.AppService
-import com.ivianuu.essentials.util.AppSchedulers
-import com.ivianuu.essentials.util.NoScope
+import com.ivianuu.essentials.util.AppDispatchers
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.android.ApplicationScope
-import com.ivianuu.kprefs.rx.asObservable
-import com.ivianuu.scopes.rx.disposeBy
+import com.ivianuu.kprefs.coroutines.asFlow
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @Inject
 @ApplicationScope
 class TwilightController(
-    private val twilightPrefs: TwilightPrefs,
-    private val schedulers: AppSchedulers
+    private val dispatchers: AppDispatchers,
+    private val twilightPrefs: TwilightPrefs
 ) : AppService {
 
     init {
-        twilightPrefs.twilightMode.asObservable()
-            .observeOn(schedulers.main)
-            .subscribe { mode ->
-                AppCompatDelegate.setDefaultNightMode(
-                    when (mode) {
-                        TwilightMode.LIGHT -> AppCompatDelegate.MODE_NIGHT_NO
-                        TwilightMode.DARK -> AppCompatDelegate.MODE_NIGHT_YES
-                        TwilightMode.BATTERY -> AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY
-                        TwilightMode.TIME -> AppCompatDelegate.MODE_NIGHT_AUTO_TIME
-                        TwilightMode.SYSTEM -> AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+        GlobalScope.launch {
+            twilightPrefs.twilightMode.asFlow()
+                .collect { mode ->
+                    withContext(dispatchers.main) {
+                        AppCompatDelegate.setDefaultNightMode(
+                            when (mode) {
+                                TwilightMode.LIGHT -> AppCompatDelegate.MODE_NIGHT_NO
+                                TwilightMode.DARK -> AppCompatDelegate.MODE_NIGHT_YES
+                                TwilightMode.BATTERY -> AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY
+                                TwilightMode.TIME -> AppCompatDelegate.MODE_NIGHT_AUTO_TIME
+                                TwilightMode.SYSTEM -> AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+                            }
+                        )
                     }
-                )
-            }
-            .disposeBy(NoScope)
+                }
+        }
     }
 
 }

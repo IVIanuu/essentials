@@ -18,7 +18,7 @@ package com.ivianuu.essentials.ui.mvrx
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.toPublisher
+import androidx.lifecycle.Observer
 import androidx.lifecycle.viewModelScope
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.base.EsViewModel
@@ -28,12 +28,7 @@ import com.ivianuu.essentials.util.Loading
 import com.ivianuu.essentials.util.Success
 import com.ivianuu.essentials.util.asFail
 import com.ivianuu.essentials.util.asSuccess
-import com.ivianuu.essentials.util.lifecycleOwner
 import com.ivianuu.essentials.util.mainThread
-import com.ivianuu.scopes.android.scope
-import com.ivianuu.scopes.rx.disposeBy
-import io.reactivex.Observable
-import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Deferred
@@ -41,6 +36,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.actor
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
@@ -78,22 +79,15 @@ abstract class MvRxViewModel<S>(initialState: S) : EsViewModel() {
         subscribe { d { "new state -> $it" } }
     }
 
-    protected fun subscribe(consumer: (S) -> Unit): Disposable {
-        return Observable.fromPublisher(liveData.toPublisher(scope.lifecycleOwner))
-            .subscribe(consumer)
-            .disposeBy(scope)
-    }
-
-    protected fun <V> Observable<V>.execute(
-        reducer: S.(Async<V>) -> S
-    ): Disposable {
-        setState { reducer(Loading()) }
-
-        return this
-            .map { it.asSuccess() as Async<V> }
-            .onErrorReturn { it.asFail() }
-            .subscribe { setState { reducer(it) } }
-            .disposeBy(scope)
+    protected fun subscribe(consumer: suspend (S) -> Unit): Job {
+        return viewModelScope.launch {
+            // todo move out
+            callbackFlow<S> {
+                val observer = Observer<S> { t -> offer(t) }
+                liveData.observeForever(observer)
+                awaitClose { liveData.removeObserver(observer) }
+            }.collect(consumer)
+        }
     }
 
     protected fun <V> Deferred<V>.execute(
@@ -106,6 +100,14 @@ abstract class MvRxViewModel<S>(initialState: S) : EsViewModel() {
         block = { await() },
         reducer = reducer
     )
+
+    protected suspend fun <V> Flow<V>.execute(reducer: S.(Async<V>) -> S) {
+        setState { reducer(Loading()) }
+        return this
+            .map { it.asSuccess() }
+            .catch { it.asFail<V>() }
+            .collect { setState { reducer(it) } }
+    }
 
     protected fun <V> CoroutineScope.execute(
         context: CoroutineContext = EmptyCoroutineContext,

@@ -19,25 +19,25 @@ package com.ivianuu.essentials.ui.navigation.director
 import androidx.fragment.app.FragmentActivity
 import com.ivianuu.director.RouterTransaction
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.util.AppSchedulers
+import com.ivianuu.essentials.util.AppDispatchers
 import com.ivianuu.kommon.lifecycle.getViewModel
-import com.ivianuu.scopes.Scope
-import com.ivianuu.scopes.rx.disposeBy
-import io.reactivex.rxkotlin.ofType
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.withContext
 
 class ControllerRenderer(
     private val activity: FragmentActivity,
+    private val dispatchers: AppDispatchers,
     private val navigator: Navigator,
-    private val router: com.ivianuu.director.Router,
-    private val schedulers: AppSchedulers
+    private val router: com.ivianuu.director.Router
 ) {
 
-    fun renderUntil(scope: Scope) {
-        navigator.observable
-            .observeOn(schedulers.main)
-            .ofType<List<ControllerRoute>>()
-            .subscribe { applyBackStack(it) }
-            .disposeBy(scope)
+    suspend fun render() {
+        navigator.flow
+            .collect { newBackStack ->
+                withContext(dispatchers.main) {
+                    applyBackStack(newBackStack as List<ControllerRoute>)
+                }
+            }
     }
 
     private fun applyBackStack(backStack: List<ControllerRoute>) {

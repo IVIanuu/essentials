@@ -23,24 +23,14 @@ import android.os.Build
 import com.ivianuu.injekt.get
 import com.ivianuu.injekt.module
 import com.ivianuu.injekt.single
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
-import kotlinx.coroutines.rx2.asCoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 
 val esUtilModule = module {
     single {
-        AppSchedulers(
-            Schedulers.io(),
-            Schedulers.computation(),
-            AndroidSchedulers.mainThread()
-        )
-    }
-    single {
-        val schedulers = get<AppSchedulers>()
         AppDispatchers(
-            schedulers.io.asCoroutineDispatcher(),
-            schedulers.computation.asCoroutineDispatcher(),
-            schedulers.main.asCoroutineDispatcher()
+            Dispatchers.IO,
+            Dispatchers.Default,
+            Dispatchers.Main
         )
     }
     single {

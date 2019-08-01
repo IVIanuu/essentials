@@ -28,10 +28,9 @@ import com.ivianuu.essentials.ui.navigation.director.ControllerRoute
 import com.ivianuu.injekt.get
 import com.ivianuu.kprefs.KPrefs
 import com.ivianuu.kprefs.boolean
-import com.ivianuu.kprefs.rx.asObservable
-import com.ivianuu.scopes.android.onDestroy
-import com.ivianuu.scopes.rx.disposeBy
+import com.ivianuu.kprefs.coroutines.asFlow
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class MainActivity : EsActivity() {
@@ -42,18 +41,20 @@ class MainActivity : EsActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        get<KPrefs>().boolean("tile_state").asObservable()
-            .subscribe { d { "tile state changed $it" } }
-            .disposeBy(onDestroy)
+        lifecycleScope.launch {
+            get<KPrefs>().boolean("tile_state").asFlow()
+                .collect { d { "tile state changed $it" } }
+        }
 
-        get<BroadcastFactory>().create(Intent.ACTION_SCREEN_OFF)
-            .subscribe {
-                lifecycleScope.launch {
-                    delay(2000)
-                    d { "unlock screen ${get<ScreenUnlocker>().unlockScreen()}" }
+        lifecycleScope.launch {
+            get<BroadcastFactory>().create(Intent.ACTION_SCREEN_OFF)
+                .collect {
+                    lifecycleScope.launch {
+                        delay(2000)
+                        d { "unlock screen ${get<ScreenUnlocker>().unlockScreen()}" }
+                    }
                 }
-            }
-            .disposeBy(onDestroy)
+        }
     }
 
 }

@@ -21,13 +21,16 @@ import android.app.KeyguardManager
 import android.content.Intent
 import android.os.Bundle
 import android.view.WindowManager
+import androidx.lifecycle.lifecycleScope
 import com.ivianuu.essentials.messaging.BroadcastFactory
 import com.ivianuu.essentials.ui.base.EsActivity
-import com.ivianuu.essentials.util.AppSchedulers
+import com.ivianuu.essentials.util.AppDispatchers
 import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.injekt.inject
-import com.ivianuu.scopes.android.onDestroy
-import com.ivianuu.scopes.rx.disposeBy
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.take
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 /**
  * Requests a screen unlock
@@ -35,8 +38,8 @@ import com.ivianuu.scopes.rx.disposeBy
 class UnlockScreenActivity : EsActivity() {
 
     private val broadcastFactory by inject<BroadcastFactory>()
+    private val dispatchers by inject<AppDispatchers>()
     private val keyguardManager by inject<KeyguardManager>()
-    private val schedulers by inject<AppSchedulers>()
     private val screenUnlocker by inject<ScreenUnlocker>()
     private val systemBuildInfo by inject<SystemBuildInfo>()
 
@@ -66,15 +69,19 @@ class UnlockScreenActivity : EsActivity() {
         } else {
             window.addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD)
 
-            broadcastFactory.create(
-                Intent.ACTION_SCREEN_OFF,
-                Intent.ACTION_SCREEN_ON,
-                Intent.ACTION_USER_PRESENT
-            )
-                .take(1)
-                .observeOn(schedulers.main)
-                .subscribe { finishWithResult(it.action == Intent.ACTION_USER_PRESENT) }
-                .disposeBy(onDestroy)
+            lifecycleScope.launch {
+                broadcastFactory.create(
+                    Intent.ACTION_SCREEN_OFF,
+                    Intent.ACTION_SCREEN_ON,
+                    Intent.ACTION_USER_PRESENT
+                )
+                    .take(1)
+                    .collect {
+                        withContext(dispatchers.main) {
+                            finishWithResult(it.action == Intent.ACTION_USER_PRESENT)
+                        }
+                    }
+            }
         }
     }
 

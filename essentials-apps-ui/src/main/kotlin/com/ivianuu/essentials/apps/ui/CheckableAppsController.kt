@@ -19,6 +19,7 @@ package com.ivianuu.essentials.apps.ui
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.widget.ImageView
+import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -35,26 +36,24 @@ import com.ivianuu.essentials.ui.popup.PopupMenu
 import com.ivianuu.essentials.ui.popup.PopupMenuItem
 import com.ivianuu.essentials.ui.simple.ListController
 import com.ivianuu.essentials.util.AppDispatchers
-import com.ivianuu.essentials.util.AppSchedulers
 import com.ivianuu.essentials.util.Async
-import com.ivianuu.essentials.util.BehaviorSubject
 import com.ivianuu.essentials.util.Loading
-import com.ivianuu.essentials.util.PublishSubject
 import com.ivianuu.essentials.util.Success
 import com.ivianuu.essentials.util.Uninitialized
+import com.ivianuu.essentials.util.coroutineScope
+import com.ivianuu.essentials.util.flowOf
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Param
 import com.ivianuu.injekt.get
 import com.ivianuu.injekt.parametersOf
 import com.ivianuu.scopes.ReusableScope
-import com.ivianuu.scopes.android.onDestroy
-import com.ivianuu.scopes.rx.disposeBy
-import io.reactivex.Observable
-import io.reactivex.rxkotlin.Observables
-import kotlinx.coroutines.async
+import hu.akarnokd.kotlin.flow.BehaviorSubject
+import hu.akarnokd.kotlin.flow.PublishSubject
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.combineLatest
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.rx2.asSingle
-import kotlinx.coroutines.rx2.awaitFirst
 
 /**
  * App blacklist
@@ -84,11 +83,14 @@ abstract class CheckableAppsController : ListController() {
 
     override fun onCreate() {
         super.onCreate()
-        viewModel.checkedAppsChanged
-            .subscribe { onCheckedAppsChanged(it) }
-            .disposeBy(onDestroy)
 
-        viewModel.attachCheckedAppsObservable(getCheckedAppsObservable())
+        lifecycleScope.launch {
+            viewModel.checkedAppsChanged.collect {
+                onCheckedAppsChanged(it)
+            }
+        }
+
+        viewModel.attachCheckedAppsFlow(getCheckedAppsFlow())
     }
 
     override fun onDestroy() {
@@ -124,7 +126,7 @@ abstract class CheckableAppsController : ListController() {
         }
     }
 
-    abstract fun getCheckedAppsObservable(): Observable<Set<String>>
+    abstract fun getCheckedAppsFlow(): Flow<Set<String>>
 
     abstract fun onCheckedAppsChanged(apps: Set<String>)
 
@@ -136,33 +138,23 @@ abstract class CheckableAppsController : ListController() {
 internal class CheckableAppsViewModel(
     @Param private val launchableOnly: Boolean,
     private val appStore: AppStore,
-    private val dispatchers: AppDispatchers,
-    private val schedulers: AppSchedulers
+    private val dispatchers: AppDispatchers
 ) : MvRxViewModel<CheckableAppsState>(CheckableAppsState()) {
 
     private val _checkedAppsChanged = PublishSubject<Set<String>>()
-    val checkedAppsChanged: Observable<Set<String>> get() = _checkedAppsChanged
+    val checkedAppsChanged: Flow<Set<String>> get() = _checkedAppsChanged
 
     private val checkedAppsScope = ReusableScope()
     private val checkedApps = BehaviorSubject<Set<String>>()
 
     init {
-        Observables
-            .combineLatest(
-                viewModelScope.async(dispatchers.io) {
-                    if (launchableOnly) {
-                        appStore.getLaunchableApps()
-                    } else {
-                        appStore.getInstalledApps()
-                    }
-                }
-                    .asSingle(dispatchers.io)
-                    .toObservable(),
-                checkedApps
-            )
-            .observeOn(schedulers.io)
-            .map { (infos, checked) ->
-                infos
+        viewModelScope.launch(dispatchers.io) {
+            val appsFlow = flowOf {
+                if (launchableOnly) appStore.getLaunchableApps() else appStore.getInstalledApps()
+            }
+
+            appsFlow.combineLatest(checkedApps) { apps, checked ->
+                apps
                     .map {
                         CheckableApp(
                             it,
@@ -170,13 +162,14 @@ internal class CheckableAppsViewModel(
                         )
                     }
                     .toList()
-            }
-            .execute { copy(apps = it) }
+            }.execute { copy(apps = it) }
+        }
     }
 
-    fun attachCheckedAppsObservable(observable: Observable<Set<String>>) {
-        observable.subscribe { checkedApps.onNext(it) }
-            .disposeBy(checkedAppsScope)
+    fun attachCheckedAppsFlow(flow: Flow<Set<String>>) {
+        checkedAppsScope.coroutineScope.launch {
+            flow.collect { checkedApps.emit(it) }
+        }
     }
 
     fun detachCheckedAppsObservable() {
@@ -212,10 +205,10 @@ internal class CheckableAppsViewModel(
     }
 
     private suspend fun pushNewCheckedApps(reducer: (MutableSet<String>) -> Unit) {
-        checkedApps.awaitFirst()
+        checkedApps.first()
             .toMutableSet()
             .apply(reducer)
-            .let { _checkedAppsChanged.onNext(it) }
+            .let { _checkedAppsChanged.emit(it) }
     }
 }
 

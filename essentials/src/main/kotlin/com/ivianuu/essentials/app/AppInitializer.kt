@@ -80,6 +80,5 @@ inline fun <reified T : AppInitializer> BindingContext<T>.bindAppInitializer(): 
 
 val esAppInitializersModule = module {
     map<KClass<out AppInitializer>, AppInitializer>(AppInitializers)
-    bindAppInitializer<RxJavaAppInitializer>()
     bindAppInitializer<TimberAppInitializer>()
 }

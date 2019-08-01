@@ -18,18 +18,14 @@ package com.ivianuu.essentials.hidenavbar
 
 import android.app.Application
 import android.app.KeyguardManager
-import android.content.Intent
 import android.graphics.Rect
 import android.view.Surface
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.messaging.BroadcastFactory
 import com.ivianuu.essentials.util.AppDispatchers
-import com.ivianuu.essentials.util.AppSchedulers
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.android.ApplicationScope
 import com.ivianuu.scopes.ReusableScope
-import com.ivianuu.scopes.rx.disposeBy
-import io.reactivex.Observable
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
@@ -47,7 +43,6 @@ class NavBarController internal constructor(
     private val nonSdkInterfacesHelper: NonSdkInterfacesHelper,
     private val overscanHelper: OverscanHelper,
     private val prefs: NavBarPrefs,
-    private val schedulers: AppSchedulers,
     private val screenStateProvider: ScreenStateProvider
 ) {
 
@@ -65,13 +60,13 @@ class NavBarController internal constructor(
             return
         }
 
-        Observable.merge(
+        /*Observable.merge(
             listOf(
                 if (config.rotationMode != NavBarRotationMode.NOUGAT)
                     displayRotationProvider.observeRotationChanges().skip(1)
                 else Observable.never(),
                 if (config.showWhileScreenOff)
-                    screenStateProvider.observeScreenStateChanges().skip(1)
+                    screenStateProvider.observeScreenState().skip(1)
                 else Observable.never()
             )
         )
@@ -94,7 +89,7 @@ class NavBarController internal constructor(
                 d { "show nav bar because of shutdown" }
                 setNavBarConfigInternal(false, config)
             }
-            .disposeBy(scope)
+            .disposeBy(scope)*/
     }
 
     private fun setNavBarConfigInternal(hidden: Boolean, config: NavBarConfig) {

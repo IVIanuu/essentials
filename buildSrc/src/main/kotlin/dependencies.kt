@@ -61,18 +61,15 @@ object Versions {
     const val junit = "4.12"
     const val kommon = "0.0.1-dev13" // remove
     const val kotlin = "1.3.41"
-    const val kotlinFlowExtensions = "0.0.1"
-    const val kPrefs = "0.0.1-dev10"
-    const val kSettings = "0.0.1-dev8"
+    const val kotlinFlowExtensions = "0.0.2"
+    const val kPrefs = "0.0.1-dev11"
+    const val kSettings = "0.0.1-dev9"
     const val mavenGradle = "2.1"
     const val materialComponents = "1.1.0-alpha07"
     const val materialDialogs = "3.1.0"
     const val mockitoKotlin = "2.0.0"
     const val roboelectric = "4.0.2"
-    const val rxAndroid = "2.1.1"
-    const val rxJava = "2.2.10"
-    const val rxKotlin = "2.3.0"
-    const val scopes = "0.0.1-dev13"
+    const val scopes = "0.0.1-dev17"
     const val superUser = "1.0.0.+"
     const val timber = "4.7.1"
     const val timberKt = "1.5.1"
@@ -113,8 +110,6 @@ object Deps {
         "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.coroutines}"
     const val coroutinesCore =
         "org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.coroutines}"
-    const val coroutinesRxJava =
-        "org.jetbrains.kotlinx:kotlinx-coroutines-rx2:${Versions.coroutines}"
     const val coroutinesTest =
         "org.jetbrains.kotlinx:kotlinx-coroutines-test:${Versions.coroutines}"
 
@@ -153,7 +148,6 @@ object Deps {
     const val kPrefsCommon = "com.ivianuu.kprefs:kprefs-common:${Versions.kPrefs}"
     const val kPrefsCoroutines = "com.ivianuu.kprefs:kprefs-coroutines:${Versions.kPrefs}"
     const val kPrefsLiveData = "com.ivianuu.kprefs:kprefs-livedata:${Versions.kPrefs}"
-    const val kPrefsRx = "com.ivianuu.kprefs:kprefs-rx:${Versions.kPrefs}"
 
     const val kSettings =
         "com.ivianuu.ksettings:ksettings:${Versions.kSettings}"
@@ -161,8 +155,6 @@ object Deps {
         "com.ivianuu.ksettings:ksettings-coroutines:${Versions.kSettings}"
     const val kSettingsLiveData =
         "com.ivianuu.ksettings:ksettings-livedata:${Versions.kSettings}"
-    const val kSettingsRx =
-        "com.ivianuu.ksettings:ksettings-rx:${Versions.kSettings}"
 
     const val materialComponents =
         "com.google.android.material:material:${Versions.materialComponents}"
@@ -189,15 +181,10 @@ object Deps {
 
     const val roboelectric = "org.robolectric:robolectric:${Versions.roboelectric}"
 
-    const val rxAndroid = "io.reactivex.rxjava2:rxandroid:${Versions.rxAndroid}"
-    const val rxJava = "io.reactivex.rxjava2:rxjava:${Versions.rxJava}"
-    const val rxKotlin = "io.reactivex.rxjava2:rxkotlin:${Versions.rxKotlin}"
-
     const val scopes = "com.ivianuu.scopes:scopes:${Versions.scopes}"
     const val scopesAndroid = "com.ivianuu.scopes:scopes-android:${Versions.scopes}"
     const val scopesCommon = "com.ivianuu.scopes:scopes-common:${Versions.scopes}"
     const val scopesCoroutines = "com.ivianuu.scopes:scopes-coroutines:${Versions.scopes}"
-    const val scopesRx = "com.ivianuu.scopes:scopes-rx:${Versions.scopes}"
 
     const val superUser = "eu.chainfire:libsuperuser:${Versions.superUser}"
 

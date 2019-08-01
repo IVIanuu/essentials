@@ -19,17 +19,28 @@ package com.ivianuu.essentials.gestures
 import android.view.accessibility.AccessibilityEvent
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.gestures.accessibility.AccessibilityComponent
-import com.ivianuu.essentials.util.BehaviorSubject
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.android.ApplicationScope
-import io.reactivex.Observable
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.channels.Channel.Factory.CONFLATED
+import kotlinx.coroutines.channels.ConflatedBroadcastChannel
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.consumeAsFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
 
 @Inject
 @ApplicationScope
 class SecureScreenDetector : AccessibilityComponent() {
 
-    private val _isOnSecureScreen = BehaviorSubject(false)
-    val isOnSecureScreen: Observable<Boolean> get() = _isOnSecureScreen
+    private val _isOnSecureScreen = ConflatedBroadcastChannel<Boolean>()
+    val isOnSecureScreen: Flow<Boolean>
+        get() {
+            return _isOnSecureScreen.openSubscription()
+                .consumeAsFlow()
+                .distinctUntilChanged()
+        }
+
+    private val channel = Channel<Unit>(CONFLATED)
 
     override fun onAccessibilityEvent(event: AccessibilityEvent) {
         // were only interested in window state changes
@@ -56,10 +67,8 @@ class SecureScreenDetector : AccessibilityComponent() {
         }
 
         // distinct
-        if (_isOnSecureScreen.value != isOnSecureScreen) {
-            d { "on secure screen changed: $isOnSecureScreen" }
-            _isOnSecureScreen.onNext(isOnSecureScreen)
-        }
+        d { "on secure screen changed: $isOnSecureScreen" }
+        _isOnSecureScreen.offer(isOnSecureScreen)
     }
 
 }

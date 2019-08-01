@@ -19,12 +19,14 @@ package com.ivianuu.essentials.gestures.torch
 import android.content.Context
 import android.content.Intent
 import com.ivianuu.essentials.messaging.BroadcastFactory
-import com.ivianuu.essentials.util.BehaviorSubject
-import com.ivianuu.essentials.util.NoScope
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.android.ApplicationScope
-import com.ivianuu.scopes.rx.disposeBy
-import io.reactivex.Observable
+import hu.akarnokd.kotlin.flow.BehaviorSubject
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 
 /**
  * Provides the torch state
@@ -37,18 +39,19 @@ class TorchManager internal constructor(
 ) {
 
     private val _torchState = BehaviorSubject(false)
-    val torchState: Observable<Boolean>
+    val torchState: Flow<Boolean>
         get() = _torchState
 
     init {
-        broadcastFactory.create(ACTION_TORCH_STATE_CHANGED)
-            .map { it.getBooleanExtra(EXTRA_TORCH_STATE, false) }
-            .subscribe { _torchState.onNext(it) }
-            .disposeBy(NoScope)
+        GlobalScope.launch {
+            try {
+                TorchService.syncState(context)
+            } catch (e: Exception) {
+            }
 
-        try {
-            TorchService.syncState(context)
-        } catch (e: Exception) {
+            broadcastFactory.create(ACTION_TORCH_STATE_CHANGED)
+                .map { it.getBooleanExtra(EXTRA_TORCH_STATE, false) }
+                .collect { _torchState.emit(it) }
         }
     }
 
