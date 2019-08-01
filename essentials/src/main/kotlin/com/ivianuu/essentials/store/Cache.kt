@@ -2,7 +2,7 @@ package com.ivianuu.essentials.store
 
 import java.util.concurrent.atomic.AtomicReference
 
-class CacheBox<T>(private val wrapped: Box<T>) : Box<T> by wrapped {
+internal class CacheBox<T>(private val wrapped: Box<T>) : Box<T> by wrapped {
 
     private val cachedValue = AtomicReference<Any?>(this)
 

@@ -3,7 +3,7 @@ package com.ivianuu.essentials.store
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Deferred
 
-class MutexBox<T>(private val wrapped: Box<T>) : Box<T> by wrapped {
+internal class MutexBox<T>(private val wrapped: Box<T>) : Box<T> by wrapped {
 
     private var currentDeferred: Deferred<T>? = null
     private val deferredLock = Any()

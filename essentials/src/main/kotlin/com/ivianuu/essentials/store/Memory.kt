@@ -10,7 +10,7 @@ fun <T> NullableBox(initialValue: T? = null): Box<T?> = MemoryBox(initialValue)
 
 fun <T> MemoryBox(initialValue: T): Box<T> = MemoryBoxImpl(initialValue)
 
-private class MemoryBoxImpl<T>(initialValue: T) : Box<T> {
+internal class MemoryBoxImpl<T>(initialValue: T) : Box<T> {
 
     private val value = AtomicReference(initialValue)
     private val subject = PublishSubject<T>()

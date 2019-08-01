@@ -17,3 +17,16 @@ interface Box<T> {
 }
 
 suspend fun <T> Box<T>.getIfExists(): T? = if (exists()) get() else null
+
+suspend inline fun <T> Box<T>.getOrDefault(defaultValue: () -> T): T =
+    getIfExists() ?: defaultValue()
+
+suspend inline fun <T> Box<T>.getOrSet(defaultValue: () -> T): T {
+    return if (exists()) {
+        get()
+    } else {
+        val value = defaultValue()
+        set(value)
+        value
+    }
+}
