@@ -18,6 +18,13 @@ package com.ivianuu.essentials.ui.prefs
 
 import android.content.SharedPreferences
 import android.view.View
+import com.ivianuu.director.requireActivity
+import com.ivianuu.epoxyprefs.AbstractPreferenceModel
+import com.ivianuu.epoxyprefs.EpoxyPrefsPlugins
+import com.ivianuu.epoxyprefs.PreferenceEpoxyController
+import com.ivianuu.epoxyprefs.preferenceEpoxyController
+import com.ivianuu.essentials.ui.common.urlRoute
+import com.ivianuu.essentials.ui.navigation.director.ControllerRoute
 import com.ivianuu.essentials.ui.simple.ListController
 import com.ivianuu.injekt.inject
 
@@ -25,6 +32,10 @@ import com.ivianuu.injekt.inject
  * Prefs controller
  */
 abstract class PrefsController : ListController() {
+
+    open val preferenceContext by lazy {
+        EpoxyPrefsPlugins.getDefaultContext(requireActivity().applicationContext)
+    }
 
     private val prefs by inject<SharedPreferences>()
 
@@ -40,6 +51,24 @@ abstract class PrefsController : ListController() {
     override fun onDetach(view: View) {
         super.onDetach(view)
         prefs.unregisterOnSharedPreferenceChangeListener(changeListener)
+    }
+
+    protected fun epoxyController(buildModels: PreferenceEpoxyController.() -> Unit): PreferenceEpoxyController =
+        preferenceEpoxyController(preferenceContext, buildModels)
+
+    protected fun AbstractPreferenceModel.Builder<*>.navigateOnClick(
+        routeProvider: () -> ControllerRoute
+    ) {
+        onClick {
+            navigator.push(routeProvider())
+            return@onClick true
+        }
+    }
+
+    protected fun AbstractPreferenceModel.Builder<*>.openUrlOnClick(
+        urlProvider: () -> String
+    ) {
+        navigateOnClick { urlRoute(urlProvider()) }
     }
 
 }

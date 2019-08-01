@@ -47,6 +47,7 @@ dependencies {
     api(Deps.directorCommon)
 
     api(Deps.epoxy)
+    api(Deps.epoxyPrefs)
 
     //kapt(project(":essentials-compiler"))
 

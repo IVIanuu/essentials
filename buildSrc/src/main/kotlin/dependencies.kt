@@ -56,6 +56,7 @@ object Versions {
     const val coroutines = "1.3.0-RC"
     const val director = "0.0.1-dev40"
     const val epoxy = "3.7.0"
+    const val epoxyPrefs = "0.0.1-dev-21"
     const val glide = "4.9.0"
     const val injekt = "0.0.1-dev70"
     const val junit = "4.12"
@@ -117,6 +118,7 @@ object Deps {
     const val directorCommon = "com.ivianuu.director:director-common:${Versions.director}"
 
     const val epoxy = "com.airbnb.android:epoxy:${Versions.epoxy}"
+    const val epoxyPrefs = "com.ivianuu.epoxyprefs:epoxyprefs:${Versions.epoxyPrefs}"
 
     const val glide = "com.github.bumptech.glide:glide:${Versions.glide}"
 
