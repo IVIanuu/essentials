@@ -53,14 +53,15 @@ abstract class MvRxViewModel<S>(initialState: S) : EsViewModel() {
     val liveData: LiveData<S> get() = _liveData
 
     private var _state: S = initialState
-    val state: S get() = synchronized(this) { _state }
+    val state: S get() = synchronized(stateLock) { _state }
+    private val stateLock = Any()
 
     protected suspend fun setState(reducer: suspend S.() -> S) {
         withContext(Dispatchers.Default) {
-            val currentState = synchronized(this@MvRxViewModel) { _state }
+            val currentState = synchronized(stateLock) { _state }
             val newState = reducer(currentState)
             if (currentState != newState) {
-                synchronized(this@MvRxViewModel) { _state = newState }
+                synchronized(stateLock) { _state = newState }
                 withContext(Dispatchers.Main) { _liveData.value = newState }
             }
         }
@@ -116,4 +117,5 @@ abstract class MvRxViewModel<S>(initialState: S) : EsViewModel() {
     }
 
     override fun toString() = "${javaClass.simpleName} -> $state"
+
 }

@@ -8,10 +8,10 @@ class MutexStore<K, V>(private val wrapped: Store<K, V>) : Store<K, V> by wrappe
     private val deferredByKey = hashMapOf<K, Deferred<V?>>()
 
     override suspend fun get(key: K): V? {
-        var deferred = synchronized(this) { deferredByKey[key] }
+        var deferred = synchronized(deferredByKey) { deferredByKey[key] }
         if (deferred == null) {
             deferred = CompletableDeferred()
-            synchronized(this) { deferredByKey[key] = deferred }
+            synchronized(deferredByKey) { deferredByKey[key] = deferred }
             try {
                 val result = wrapped.get(key)
                 deferred.complete(result)
@@ -19,7 +19,7 @@ class MutexStore<K, V>(private val wrapped: Store<K, V>) : Store<K, V> by wrappe
                 deferred.completeExceptionally(e)
             } finally {
                 @Suppress("DeferredResultUnused")
-                synchronized(this@MutexStore) { deferredByKey.remove(key) }
+                synchronized(deferredByKey) { deferredByKey.remove(key) }
             }
         }
 
