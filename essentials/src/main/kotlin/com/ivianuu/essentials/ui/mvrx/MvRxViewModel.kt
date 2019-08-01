@@ -28,14 +28,11 @@ import com.ivianuu.essentials.util.Loading
 import com.ivianuu.essentials.util.Success
 import com.ivianuu.essentials.util.asFail
 import com.ivianuu.essentials.util.asSuccess
-import com.ivianuu.essentials.util.mainThread
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.channels.actor
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -43,6 +40,7 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
 
@@ -57,22 +55,15 @@ abstract class MvRxViewModel<S>(initialState: S) : EsViewModel() {
     private var _state: S = initialState
     val state: S get() = synchronized(this) { _state }
 
-    private val stateActor = viewModelScope.actor<suspend S.() -> S>(
-        context = Dispatchers.Default,
-        capacity = Channel.UNLIMITED
-    ) {
-        for (reducer in this) {
+    protected suspend fun setState(reducer: suspend S.() -> S) {
+        withContext(Dispatchers.Default) {
             val currentState = synchronized(this@MvRxViewModel) { _state }
             val newState = reducer(currentState)
             if (currentState != newState) {
                 synchronized(this@MvRxViewModel) { _state = newState }
-                mainThread { _liveData.value = newState }
+                withContext(Dispatchers.Main) { _liveData.value = newState }
             }
         }
-    }
-
-    protected fun setState(reducer: suspend S.() -> S) {
-        stateActor.offer(reducer)
     }
 
     fun logStateChanges() {
