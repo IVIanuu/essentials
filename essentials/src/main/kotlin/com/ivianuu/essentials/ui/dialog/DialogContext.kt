@@ -25,7 +25,7 @@ data class DialogContext(val controller: EsDialogController) : EffectContext by 
     ContextAware by controller
 
 fun DialogContext.pop(result: Any? = null) {
-    navigator.pop(result)
+    controller.dismiss(result)
 }
 
 val DialogContext.navigator: Navigator get() = controller.navigator

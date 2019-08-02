@@ -21,6 +21,7 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.input.input
 import com.airbnb.epoxy.EpoxyController
 import com.ivianuu.essentials.R
+import com.ivianuu.essentials.ui.dialog.pop
 import com.ivianuu.essentials.ui.effect.state
 import com.ivianuu.essentials.util.string
 import com.ivianuu.kprefs.Pref
@@ -60,7 +61,7 @@ fun EpoxyController.EditTextDialogListItem(
 
     dialogBlock: (MaterialDialog.() -> Unit)? = null,
     builderBlock: (FunModelBuilder.() -> Unit)? = null
-) = DialogListItem(
+) = DialogListItem<String>(
     id = id,
     buildDialog = { context ->
         var currentValue by context.state {
@@ -72,7 +73,7 @@ fun EpoxyController.EditTextDialogListItem(
 
         title(res = dialogTitleRes, text = dialogTitle)
         positiveButton(res = positiveDialogButtonTextRes, text = positiveDialogButtonText) {
-            onInputCompleted(currentValue)
+            context.pop(currentValue)
         }
         negativeButton(res = negativeDialogButtonTextRes, text = negativeDialogButtonText)
 
@@ -87,6 +88,7 @@ fun EpoxyController.EditTextDialogListItem(
 
         show()
     },
+    onDialogResult = { onInputCompleted(it) },
     title = title,
     titleRes = titleRes,
     text = text,

@@ -21,6 +21,8 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.list.listItemsSingleChoice
 import com.airbnb.epoxy.EpoxyController
 import com.ivianuu.essentials.R
+import com.ivianuu.essentials.ui.dialog.pop
+import com.ivianuu.essentials.util.stringArray
 import com.ivianuu.kprefs.Pref
 
 fun EpoxyController.SingleItemListDialogListItem(
@@ -56,12 +58,12 @@ fun EpoxyController.SingleItemListDialogListItem(
 
     dialogBlock: (MaterialDialog.() -> Unit)? = null,
     builderBlock: (FunModelBuilder.() -> Unit)? = null
-) = DialogListItem(
+) = DialogListItem<String>(
     id = id,
-    buildDialog = {
+    buildDialog = { context ->
         var finalEntries = entries
         if (finalEntries == null && entriesRes != null) {
-            finalEntries = context.resources.getStringArray(entriesRes)
+            finalEntries = context.stringArray(entriesRes)
         }
         if (finalEntries == null) {
             finalEntries = emptyArray()
@@ -69,7 +71,7 @@ fun EpoxyController.SingleItemListDialogListItem(
 
         var finalEntryValues = entryValues
         if (finalEntryValues == null && entryValuesRes != null) {
-            finalEntryValues = context.resources.getStringArray(entryValuesRes)
+            finalEntryValues = context.stringArray(entryValuesRes)
         }
         if (finalEntryValues == null) {
             finalEntryValues = emptyArray()
@@ -84,16 +86,16 @@ fun EpoxyController.SingleItemListDialogListItem(
             initialSelection = selectedIndex,
             items = finalEntries.toList(),
             waitForPositiveButton = false
-        ) { dialog, position, _ ->
+        ) { _, position, _ ->
             val newValue = finalEntryValues.toList()[position]
-            onSelected(newValue)
-            dialog.dismiss()
+            context.pop(newValue)
         }
 
         dialogBlock?.invoke(this)
 
         show()
     },
+    onDialogResult = { onSelected(it) },
     title = title,
     titleRes = titleRes,
     text = text,

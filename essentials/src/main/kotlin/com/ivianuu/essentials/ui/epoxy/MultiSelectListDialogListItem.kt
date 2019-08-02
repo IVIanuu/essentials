@@ -21,6 +21,7 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.list.listItemsMultiChoice
 import com.airbnb.epoxy.EpoxyController
 import com.ivianuu.essentials.R
+import com.ivianuu.essentials.ui.dialog.pop
 import com.ivianuu.essentials.ui.effect.state
 import com.ivianuu.essentials.util.stringArray
 import com.ivianuu.kprefs.Pref
@@ -60,7 +61,7 @@ fun EpoxyController.MultiSelectListDialogListItem(
 
     dialogBlock: (MaterialDialog.() -> Unit)? = null,
     builderBlock: (FunModelBuilder.() -> Unit)? = null
-) = DialogListItem(
+) = DialogListItem<Set<String>>(
     id = id,
     buildDialog = { context ->
         var finalEntries = entries
@@ -83,7 +84,7 @@ fun EpoxyController.MultiSelectListDialogListItem(
 
         title(res = dialogTitleRes, text = dialogTitle)
         positiveButton(res = positiveDialogButtonTextRes, text = positiveDialogButtonText) {
-            onSelected(currentValue)
+            context.pop(currentValue)
         }
         negativeButton(res = negativeDialogButtonTextRes, text = negativeDialogButtonText)
 
@@ -108,6 +109,7 @@ fun EpoxyController.MultiSelectListDialogListItem(
 
         show()
     },
+    onDialogResult = { onSelected(it) },
     title = title,
     titleRes = titleRes,
     text = text,

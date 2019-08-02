@@ -21,11 +21,19 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.airbnb.epoxy.EpoxyController
 import com.ivianuu.essentials.ui.dialog.DialogContext
 import com.ivianuu.essentials.ui.dialog.dialogRoute
+import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.util.AppDispatchers
+import com.ivianuu.injekt.android.getClosestComponent
+import com.ivianuu.injekt.get
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
-fun EpoxyController.DialogListItem(
+fun <T : Any> EpoxyController.DialogListItem(
     id: Any?,
 
     buildDialog: MaterialDialog.(DialogContext) -> Unit,
+    onDialogResult: (T) -> Unit,
 
     title: String? = null,
     titleRes: Int? = null,
@@ -42,7 +50,7 @@ fun EpoxyController.DialogListItem(
     enabled: Boolean = true,
 
     builderBlock: (FunModelBuilder.() -> Unit)? = null
-) = RouteListItem(
+) = ListItem(
     id = id,
     title = title,
     titleRes = titleRes,
@@ -53,6 +61,23 @@ fun EpoxyController.DialogListItem(
     avatar = avatar,
     avatarRes = avatarRes,
     enabled = enabled,
-    builderBlock = builderBlock,
-    route = { dialogRoute(block = buildDialog) }
+    builderBlock = {
+        bind {
+            root.isEnabled = true
+            root.setOnClickListener { view ->
+                GlobalScope.launch {
+                    val dispatchers = view.getClosestComponent().get<AppDispatchers>()
+                    val navigator = view.getClosestComponent().get<Navigator>()
+                    val result = navigator.push<T>(dialogRoute(block = buildDialog))
+                    if (result != null) {
+                        withContext(dispatchers.main) {
+                            onDialogResult(result)
+                        }
+                    }
+                }
+            }
+        }
+
+        builderBlock?.invoke(this)
+    }
 )

@@ -35,8 +35,7 @@ import com.ivianuu.injekt.inject
 /**
  * Base dialog controller
  */
-abstract class EsDialogController : DialogController(), ContextAware, InjektTrait,
-    MvRxView {
+abstract class EsDialogController : DialogController(), ContextAware, InjektTrait, MvRxView {
 
     override val component by unsafeLazy {
         if (parentController != null) {
@@ -57,6 +56,8 @@ abstract class EsDialogController : DialogController(), ContextAware, InjektTrai
 
     val navigator by inject<Navigator>()
 
+    private var popped = false
+
     override fun onAttach(view: View) {
         super.onAttach(view)
         invalidate()
@@ -73,8 +74,15 @@ abstract class EsDialogController : DialogController(), ContextAware, InjektTrai
     }
 
     override fun dismiss() {
-        dialog?.dismiss()
-        navigator.pop()
+        dismiss(null)
+    }
+
+    fun dismiss(result: Any?) {
+        if (!popped) {
+            popped = true
+            dialog?.dismiss()
+            navigator.pop(result)
+        }
     }
 
     protected open fun modules(): List<Module> = emptyList()

@@ -45,6 +45,7 @@ class MaterialListController : ListController() {
     private var seekBarValue = 50
     private var singleItemValue = "B"
     private var multiSelectValue = setOf("B", "C")
+    private var inputValue = ""
 
     override fun epoxyController() = epoxyController {
         ListItem(id = "first", title = "Hello")
@@ -132,7 +133,11 @@ class MaterialListController : ListController() {
         EditTextDialogListItem(
             id = "edit text",
             title = "Edit text",
-            onInputCompleted = { d { "input $it" } }
+            prefill = inputValue,
+            onInputCompleted = {
+                inputValue = it
+                requestModelBuild()
+            }
         )
 
         PopupMenuListItem(
