@@ -25,9 +25,10 @@ private class EffectContextImpl : EffectContext {
 
     override fun <T> cache(key: Any, inputs: Array<out Any?>?, block: () -> T): T {
         val state = effectStates[key]
-        return if (state != null && inputs != null && state.inputs != null && state.inputs.contentEquals(
-                inputs
-            )
+
+        return if (state != null && ((inputs != null && state.inputs != null && inputs.contentEquals(
+                state.inputs
+            )) || (inputs == null && state.inputs == null))
         ) {
             state.value as T
         } else {
