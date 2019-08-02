@@ -16,9 +16,6 @@
 
 package com.ivianuu.essentials.ui.mvrx
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
 import androidx.lifecycle.viewModelScope
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.base.EsViewModel
@@ -28,17 +25,18 @@ import com.ivianuu.essentials.util.Loading
 import com.ivianuu.essentials.util.Success
 import com.ivianuu.essentials.util.asFail
 import com.ivianuu.essentials.util.asSuccess
+import hu.akarnokd.kotlin.flow.BehaviorSubject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlin.coroutines.CoroutineContext
@@ -49,8 +47,8 @@ import kotlin.coroutines.EmptyCoroutineContext
  */
 abstract class MvRxViewModel<S>(initialState: S) : EsViewModel() {
 
-    private val _liveData = MutableLiveData<S>(initialState)
-    val liveData: LiveData<S> get() = _liveData
+    private val subject = BehaviorSubject(initialState)
+    val flow: Flow<S> get() = subject
 
     private var _state: S = initialState
     val state: S get() = synchronized(stateLock) { _state }
@@ -63,7 +61,7 @@ abstract class MvRxViewModel<S>(initialState: S) : EsViewModel() {
             val newState = reducer(currentState)
             if (currentState != newState) {
                 synchronized(stateLock) { _state = newState }
-                withContext(Dispatchers.Main) { _liveData.value = newState }
+                subject.emit(newState)
             }
         }
     }
@@ -72,16 +70,8 @@ abstract class MvRxViewModel<S>(initialState: S) : EsViewModel() {
         subscribe { d { "new state -> $it" } }
     }
 
-    protected fun subscribe(consumer: suspend (S) -> Unit): Job {
-        return viewModelScope.launch {
-            // todo move out
-            callbackFlow<S> {
-                val observer = Observer<S> { t -> offer(t) }
-                liveData.observeForever(observer)
-                awaitClose { liveData.removeObserver(observer) }
-            }.collect(consumer)
-        }
-    }
+    protected fun subscribe(consumer: suspend (S) -> Unit): Job =
+        subject.onEach(consumer).launchIn(viewModelScope)
 
     protected fun <V> Deferred<V>.execute(
         context: CoroutineContext = EmptyCoroutineContext,

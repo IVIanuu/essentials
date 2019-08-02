@@ -16,14 +16,16 @@
 
 package com.ivianuu.essentials.ui.mvrx
 
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
+import androidx.lifecycle.lifecycleScope
 import com.ivianuu.essentials.util.unsafeLazy
 import com.ivianuu.kommon.lifecycle.defaultViewModelKey
 import com.ivianuu.kommon.lifecycle.doOnCreate
 import com.ivianuu.kommon.lifecycle.viewModelProvider
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlin.reflect.KClass
 
 inline fun <reified T : MvRxViewModel<*>> MvRxView.mvRxViewModel(
@@ -66,6 +68,6 @@ internal fun <T : MvRxViewModel<*>> MvRxView._getMvRxViewModel(
         override fun <T : ViewModel?> create(modelClass: Class<T>): T = factory() as T
     }).get(key, type.java).also { vm ->
         // invalidate this view on each state emission
-        vm.liveData.observe(this, Observer { postInvalidate() })
+        vm.flow.onEach { postInvalidate() }.launchIn(lifecycleScope)
     }
 }
