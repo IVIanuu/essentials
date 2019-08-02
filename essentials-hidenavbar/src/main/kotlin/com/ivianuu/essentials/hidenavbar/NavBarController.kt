@@ -31,6 +31,7 @@ import com.ivianuu.injekt.android.ApplicationScope
 import com.ivianuu.scopes.ReusableScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.drop
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -75,6 +76,9 @@ class NavBarController internal constructor(
             if (config.showWhileScreenOff) {
                 this += screenStateProvider.observeScreenState().drop(1)
             }
+
+            // just to kickstart the merged flow
+            this += flowOf(Unit)
         }
 
         // apply config
