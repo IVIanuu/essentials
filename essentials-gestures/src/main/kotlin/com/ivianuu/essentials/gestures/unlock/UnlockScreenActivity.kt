@@ -26,11 +26,11 @@ import com.ivianuu.essentials.messaging.BroadcastFactory
 import com.ivianuu.essentials.ui.base.EsActivity
 import com.ivianuu.essentials.util.AppDispatchers
 import com.ivianuu.essentials.util.SystemBuildInfo
-import com.ivianuu.essentials.util.flowWith
 import com.ivianuu.injekt.inject
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.take
+import kotlinx.coroutines.withContext
 
 /**
  * Requests a screen unlock
@@ -74,8 +74,11 @@ class UnlockScreenActivity : EsActivity() {
                 Intent.ACTION_USER_PRESENT
             )
                 .take(1)
-                .flowWith(dispatchers.main)
-                .onEach { finishWithResult(it.action == Intent.ACTION_USER_PRESENT) }
+                .onEach {
+                    withContext(dispatchers.main) {
+                        finishWithResult(it.action == Intent.ACTION_USER_PRESENT)
+                    }
+                }
                 .launchIn(lifecycleScope)
         }
     }

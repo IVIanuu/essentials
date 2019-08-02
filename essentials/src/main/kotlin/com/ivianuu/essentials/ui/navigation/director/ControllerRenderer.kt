@@ -20,9 +20,9 @@ import androidx.fragment.app.FragmentActivity
 import com.ivianuu.director.RouterTransaction
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.util.AppDispatchers
-import com.ivianuu.essentials.util.flowWith
 import com.ivianuu.kommon.lifecycle.getViewModel
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.withContext
 
 class ControllerRenderer(
     private val activity: FragmentActivity,
@@ -33,9 +33,10 @@ class ControllerRenderer(
 
     suspend fun render() {
         navigator.flow
-            .flowWith(dispatchers.main)
             .collect { newBackStack ->
-                applyBackStack(newBackStack as List<ControllerRoute>)
+                withContext(dispatchers.main) {
+                    applyBackStack(newBackStack as List<ControllerRoute>)
+                }
             }
     }
 
