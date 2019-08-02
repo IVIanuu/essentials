@@ -1,6 +1,7 @@
-package com.ivianuu.essentials.store
+package com.ivianuu.essentials.store.android.settings
 
 import android.content.ContentResolver
+import com.ivianuu.essentials.store.Box
 import com.ivianuu.ksettings.Setting
 
 interface SettingBox<T> : Box<T> {

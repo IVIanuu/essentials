@@ -1,6 +1,7 @@
-package com.ivianuu.essentials.store
+package com.ivianuu.essentials.store.android.prefs
 
 import android.content.SharedPreferences
+import com.ivianuu.essentials.store.Box
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.launch
@@ -12,33 +13,24 @@ interface PrefBox<T> : Box<T> {
     val defaultValue: T
 
     interface Adapter<T> {
-        fun read(sharedPreferences: SharedPreferences, key: String): T
-        fun write(editor: SharedPreferences.Editor, key: String, value: T)
+        fun get(sharedPreferences: SharedPreferences, key: String): T
+        fun set(editor: SharedPreferences.Editor, key: String, value: T)
     }
 
 }
-
-internal object StringPrefBoxAdapter : PrefBox.Adapter<String> {
-    override fun read(sharedPreferences: SharedPreferences, key: String): String =
-        sharedPreferences.getString(key, null)!!
-
-    override fun write(editor: SharedPreferences.Editor, key: String, value: String) {
-        editor.putString(key, value)
-    }
-}
-
-fun StringPrefBox(
-    key: String,
-    defaultValue: String = "",
-    sharedPreferences: SharedPreferences
-) = PrefBox(key, defaultValue, sharedPreferences, StringPrefBoxAdapter)
 
 fun <T> PrefBox(
     key: String,
-    defaultValue: T,
     sharedPreferences: SharedPreferences,
-    adapter: PrefBox.Adapter<T>
-): PrefBox<T> = PrefBoxImpl(key, defaultValue, sharedPreferences, adapter)
+    adapter: PrefBox.Adapter<T>,
+    defaultValue: T
+): PrefBox<T> =
+    PrefBoxImpl(
+        key,
+        defaultValue,
+        sharedPreferences,
+        adapter
+    )
 
 internal class PrefBoxImpl<T>(
     override val key: String,
@@ -49,7 +41,7 @@ internal class PrefBoxImpl<T>(
 
     override suspend fun get(): T {
         return if (exists()) {
-            adapter.read(sharedPreferences, key)
+            adapter.get(sharedPreferences, key)
         } else {
             defaultValue
         }
@@ -57,7 +49,7 @@ internal class PrefBoxImpl<T>(
 
     override suspend fun set(value: T) {
         sharedPreferences.edit()
-            .apply { adapter.write(this, key, value) }
+            .apply { adapter.set(this, key, value) }
             .apply()
     }
 
