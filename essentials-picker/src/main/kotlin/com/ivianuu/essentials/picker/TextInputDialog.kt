@@ -18,6 +18,9 @@ package com.ivianuu.essentials.picker
 
 import com.afollestad.materialdialogs.input.input
 import com.ivianuu.essentials.ui.dialog.dialogRoute
+import com.ivianuu.essentials.ui.dialog.pop
+import com.ivianuu.essentials.ui.effect.state
+import com.ivianuu.essentials.util.string
 
 fun textInputRoute(
     title: String? = null,
@@ -29,16 +32,23 @@ fun textInputRoute(
     inputType: Int = -1,
     allowEmpty: Boolean = false
 ) = dialogRoute { context ->
+    var currentValue by context.state {
+        when {
+            prefill != null -> prefill
+            else -> context.string(prefillRes!!)
+        }
+    }
+
     noAutoDismiss()
     title(res = titleRes, text = title)
     input(
         hint = hint,
         hintRes = hintRes,
-        prefill = prefill,
-        prefillRes = prefillRes,
+        prefill = currentValue,
         inputType = inputType,
-        allowEmpty = allowEmpty
-    ) { _, input -> context.controller.navigator.pop(input.toString()) }
-    positiveButton(R.string.es_ok)
-    negativeButton(R.string.es_cancel) { context.controller.navigator.pop() }
+        allowEmpty = allowEmpty,
+        waitForPositiveButton = true
+    ) { _, input -> currentValue = input.toString() }
+    positiveButton(R.string.es_ok) { context.pop(currentValue) }
+    negativeButton(R.string.es_cancel) { context.pop() }
 }

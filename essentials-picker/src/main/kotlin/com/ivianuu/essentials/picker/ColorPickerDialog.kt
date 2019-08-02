@@ -18,6 +18,7 @@ package com.ivianuu.essentials.picker
 
 import com.afollestad.materialdialogs.color.colorChooser
 import com.ivianuu.essentials.ui.dialog.dialogRoute
+import com.ivianuu.essentials.ui.dialog.pop
 
 fun colorPickerRoute(
     title: String? = null,
@@ -33,8 +34,6 @@ fun colorPickerRoute(
         initialSelection = preselect,
         allowCustomArgb = allowCustomArgb,
         showAlphaSelector = showAlphaSelector
-    ) { _, color ->
-        context.controller.navigator.pop(color)
-    }
+    ) { _, color -> context.pop(color) }
     negativeButton(R.string.es_cancel)
 }

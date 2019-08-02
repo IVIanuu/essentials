@@ -17,12 +17,16 @@
 package com.ivianuu.essentials.ui.navigation
 
 import com.github.ajalt.timberkt.d
+import com.ivianuu.injekt.Inject
+import com.ivianuu.injekt.android.ApplicationScope
 import hu.akarnokd.kotlin.flow.BehaviorSubject
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
+@ApplicationScope
+@Inject
 class Navigator {
 
     private val _backStack = mutableListOf<Route>()

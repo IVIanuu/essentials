@@ -16,9 +16,17 @@
 
 package com.ivianuu.essentials.ui.dialog
 
-import com.ivianuu.essentials.util.Properties
+import com.ivianuu.essentials.ui.effect.EffectContext
+import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.util.ContextAware
+import com.ivianuu.injekt.Component
 
-data class DialogContext(
-    val controller: EsDialogController,
-    val extras: Properties
-)
+data class DialogContext(val controller: EsDialogController) : EffectContext by EffectContext(),
+    ContextAware by controller
+
+fun DialogContext.pop(result: Any? = null) {
+    navigator.pop(result)
+}
+
+val DialogContext.navigator: Navigator get() = controller.navigator
+val DialogContext.component: Component get() = controller.component

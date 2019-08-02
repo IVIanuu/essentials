@@ -19,6 +19,7 @@ package com.ivianuu.essentials.ui.dialog
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.afollestad.materialdialogs.MaterialDialog
+import com.ivianuu.director.requireActivity
 import com.ivianuu.essentials.ui.navigation.director.ControllerRoute
 import com.ivianuu.essentials.ui.navigation.director.controllerRoute
 import com.ivianuu.essentials.ui.navigation.director.dialog
@@ -40,9 +41,9 @@ internal class MdDialogController(
     @Param private val block: MaterialDialog.(DialogContext) -> Unit
 ) : EsDialogController() {
 
-    private val context = DialogContext(this, Properties())
+    private val context = DialogContext(this)
 
-    override fun onCreateDialog(inflater: LayoutInflater, container: ViewGroup) = dialog {
-        block(this, this@MdDialogController.context)
-    }
+    override fun onCreateDialog(inflater: LayoutInflater, container: ViewGroup) =
+        MaterialDialog(requireActivity())
+            .apply { block(this, this@MdDialogController.context) }
 }

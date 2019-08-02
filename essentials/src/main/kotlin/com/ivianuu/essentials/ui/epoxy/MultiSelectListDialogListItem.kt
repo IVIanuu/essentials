@@ -21,6 +21,7 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.list.listItemsMultiChoice
 import com.airbnb.epoxy.EpoxyController
 import com.ivianuu.essentials.R
+import com.ivianuu.essentials.ui.effect.state
 import com.ivianuu.essentials.util.stringArray
 import com.ivianuu.kprefs.Pref
 
@@ -78,17 +79,15 @@ fun EpoxyController.MultiSelectListDialogListItem(
             finalEntryValues = emptyArray()
         }
 
-        if ("current_value" !in context.extras) {
-            context.extras["current_value"] = values
-        }
+        var currentValue by context.state { values }
 
         title(res = dialogTitleRes, text = dialogTitle)
         positiveButton(res = positiveDialogButtonTextRes, text = positiveDialogButtonText) {
-            onSelected(context.extras["current_value"]!!)
+            onSelected(currentValue)
         }
         negativeButton(res = negativeDialogButtonTextRes, text = negativeDialogButtonText)
 
-        val selectedIndices = context.extras.get<Set<String>>("current_value")!!
+        val selectedIndices = currentValue
             .map { finalEntryValues.indexOf(it) }
             .filter { it != -1 }
             .toIntArray()
@@ -99,12 +98,10 @@ fun EpoxyController.MultiSelectListDialogListItem(
             allowEmptySelection = true,
             waitForPositiveButton = false
         ) { _, positions, _ ->
-            val newValue = finalEntryValues.toList()
+            currentValue = finalEntryValues.toList()
                 .filterIndexed { index, _ -> index in positions }
                 .map { it }
                 .toSet()
-
-            context.extras["current_value"] = newValue
         }
 
         dialogBlock?.invoke(this)
