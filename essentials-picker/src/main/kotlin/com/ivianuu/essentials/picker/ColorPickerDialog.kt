@@ -19,21 +19,25 @@ package com.ivianuu.essentials.picker
 import com.afollestad.materialdialogs.color.colorChooser
 import com.ivianuu.essentials.ui.dialog.dialogRoute
 import com.ivianuu.essentials.ui.dialog.pop
+import com.ivianuu.essentials.ui.effect.state
 
 fun colorPickerRoute(
     title: String? = null,
     titleRes: Int? = R.string.es_dialog_title_color_picker,
-    preselect: Int? = null,
+    preselect: Int,
     allowCustomArgb: Boolean = true,
     showAlphaSelector: Boolean = false
 ) = dialogRoute { context ->
+    var currentColor by context.state { preselect }
     title(res = titleRes, text = title)
     colorChooser(
         colors = PRIMARY_COLORS,
         subColors = PRIMARY_COLORS_SUB,
-        initialSelection = preselect,
+        initialSelection = currentColor,
         allowCustomArgb = allowCustomArgb,
-        showAlphaSelector = showAlphaSelector
-    ) { _, color -> context.pop(color) }
+        showAlphaSelector = showAlphaSelector,
+        waitForPositiveButton = false
+    ) { _, color -> currentColor = color }
+    positiveButton(R.string.es_ok) { context.pop(currentColor) }
     negativeButton(R.string.es_cancel)
 }
