@@ -104,7 +104,7 @@ fun EpoxyController.MultiSelectListDialogListItem(
                 .map { it }
                 .toSet()
 
-            context.extras.set("current_value", newValue)
+            context.extras["current_value"] = newValue
         }
 
         dialogBlock?.invoke(this)

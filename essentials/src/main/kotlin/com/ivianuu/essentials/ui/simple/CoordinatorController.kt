@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.ui.simple
 
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import com.ivianuu.essentials.ui.base.EsController
 import kotlinx.android.synthetic.main.es_controller_list.*
 
@@ -24,7 +25,7 @@ import kotlinx.android.synthetic.main.es_controller_list.*
  */
 abstract class CoordinatorController : EsController() {
 
-    open val coordinatorLayout
+    open val coordinatorLayout: CoordinatorLayout
         get() = es_coordinator_layout
 
 }
