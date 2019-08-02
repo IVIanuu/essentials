@@ -24,14 +24,17 @@ import android.view.Surface
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.messaging.BroadcastFactory
 import com.ivianuu.essentials.util.AppDispatchers
-import com.ivianuu.essentials.util.AppSchedulers
+import com.ivianuu.essentials.util.coroutineScope
+import com.ivianuu.essentials.util.mergeFlows
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.android.ApplicationScope
 import com.ivianuu.scopes.ReusableScope
-import com.ivianuu.scopes.rx.disposeBy
-import io.reactivex.Observable
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.drop
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 
 /**
  * Handles the state of the navigation bar
@@ -47,7 +50,6 @@ class NavBarController internal constructor(
     private val nonSdkInterfacesHelper: NonSdkInterfacesHelper,
     private val overscanHelper: OverscanHelper,
     private val prefs: NavBarPrefs,
-    private val schedulers: AppSchedulers,
     private val screenStateProvider: ScreenStateProvider
 ) {
 
@@ -65,55 +67,56 @@ class NavBarController internal constructor(
             return
         }
 
-        Observable.merge(
-            listOf(
-                if (config.rotationMode != NavBarRotationMode.NOUGAT)
-                    displayRotationProvider.observeRotationChanges().skip(1)
-                else Observable.never(),
-                if (config.showWhileScreenOff)
-                    screenStateProvider.observeScreenStateChanges().skip(1)
-                else Observable.never()
-            )
-        )
-            .observeOn(schedulers.io)
-            .startWith(Unit)
+        val flows = mutableListOf<Flow<*>>().apply {
+            if (config.rotationMode != NavBarRotationMode.NOUGAT) {
+                this += displayRotationProvider.observeRotationChanges().drop(1)
+            }
+
+            if (config.showWhileScreenOff) {
+                this += screenStateProvider.observeScreenState().drop(1)
+            }
+        }
+
+        // apply config
+        mergeFlows(flows)
             .map {
                 !config.showWhileScreenOff
                         || (!keyguardManager.isKeyguardLocked && screenStateProvider.isScreenOn)
             }
-            .subscribe {
+            .onEach {
                 prefs.wasNavBarHidden.set(it)
                 setNavBarConfigInternal(it, config)
             }
-            .disposeBy(scope)
+            .flowOn(dispatchers.default)
+            .launchIn(scope.coroutineScope)
+
 
         // force show on shut downs
         broadcastFactory.create(Intent.ACTION_SHUTDOWN)
-            .subscribe {
+            .onEach {
                 scope.clear()
                 d { "show nav bar because of shutdown" }
                 setNavBarConfigInternal(false, config)
             }
-            .disposeBy(scope)
+            .flowOn(dispatchers.default)
+            .launchIn(scope.coroutineScope)
     }
 
     private fun setNavBarConfigInternal(hidden: Boolean, config: NavBarConfig) {
-        GlobalScope.launch(dispatchers.io) {
-            d { "set nav bar hidden: $config" }
+        d { "set nav bar hidden: $config" }
+        try {
             try {
-                try {
-                    // ensure that we can access non sdk interfaces
-                    nonSdkInterfacesHelper.disableNonSdkInterfaceDetection()
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
-
-                val navBarHeight = getNavigationBarHeight()
-                val rect = getOverscanRect(if (hidden) -navBarHeight else 0, config)
-                overscanHelper.setOverscan(rect)
+                // ensure that we can access non sdk interfaces
+                nonSdkInterfacesHelper.disableNonSdkInterfaceDetection()
             } catch (e: Exception) {
                 e.printStackTrace()
             }
+
+            val navBarHeight = getNavigationBarHeight()
+            val rect = getOverscanRect(if (hidden) -navBarHeight else 0, config)
+            overscanHelper.setOverscan(rect)
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 

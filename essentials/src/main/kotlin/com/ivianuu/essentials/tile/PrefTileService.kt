@@ -18,18 +18,18 @@ package com.ivianuu.essentials.tile
 
 import android.annotation.TargetApi
 import com.ivianuu.kprefs.Pref
-import com.ivianuu.kprefs.rx.asObservable
-import io.reactivex.Observable
+import com.ivianuu.kprefs.coroutines.asFlow
+import kotlinx.coroutines.flow.Flow
 
 /**
  * Tile which is driven by a preference
  */
 @TargetApi(24)
-abstract class PrefTileService<T> : RxTileService<T>() {
+abstract class PrefTileService<T> : FlowTileService<T>() {
 
     protected abstract val pref: Pref<T>
 
-    final override val observable: Observable<T>
-        get() = pref.asObservable()
+    final override val flow: Flow<T>
+        get() = pref.asFlow()
 
 }

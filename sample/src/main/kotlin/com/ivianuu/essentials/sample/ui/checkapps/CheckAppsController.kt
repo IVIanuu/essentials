@@ -22,9 +22,9 @@ import com.ivianuu.essentials.ui.navigation.director.controllerRouteOptions
 import com.ivianuu.essentials.ui.navigation.director.fade
 import com.ivianuu.injekt.Inject
 import com.ivianuu.kprefs.KPrefs
-import com.ivianuu.kprefs.rx.asObservable
+import com.ivianuu.kprefs.coroutines.asFlow
 import com.ivianuu.kprefs.stringSet
-import io.reactivex.Observable
+import kotlinx.coroutines.flow.Flow
 
 val checkAppsRoute = controllerRoute<CheckAppsController>(
     options = controllerRouteOptions().fade()
@@ -38,8 +38,8 @@ class CheckAppsController(private val prefs: KPrefs) : CheckableAppsController()
 
     private val pref by lazy { prefs.stringSet("apps") }
 
-    override fun getCheckedAppsObservable(): Observable<Set<String>> =
-        pref.asObservable()
+    override fun getCheckedAppsFlow(): Flow<Set<String>> =
+        pref.asFlow()
 
     override fun onCheckedAppsChanged(apps: Set<String>) {
         pref.set(apps)

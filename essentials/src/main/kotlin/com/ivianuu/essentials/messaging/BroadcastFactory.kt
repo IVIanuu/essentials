@@ -20,10 +20,11 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import com.ivianuu.essentials.util.observable
 import com.ivianuu.injekt.Inject
 import com.ivianuu.kommon.core.content.intentFilterOf
-import io.reactivex.Observable
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
 
 /**
  * A factory for broadcast receiver observables
@@ -31,26 +32,23 @@ import io.reactivex.Observable
 @Inject
 class BroadcastFactory(private val context: Context) {
 
-    fun create(vararg actions: String): Observable<Intent> = create(intentFilterOf(*actions))
+    fun create(vararg actions: String): Flow<Intent> = create(intentFilterOf(*actions))
 
-    fun create(intentFilter: IntentFilter) = observable<Intent> {
+    fun create(intentFilter: IntentFilter): Flow<Intent> = callbackFlow {
         val broadcastReceiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context, intent: Intent) {
-                if (!isDisposed) {
-                    onNext(intent)
-                }
+                offer(intent)
             }
         }
 
-        setCancellable {
+        context.registerReceiver(broadcastReceiver, intentFilter)
+
+        awaitClose {
             try {
-                context.unregisterReceiver(broadcastReceiver)
+                context.registerReceiver(broadcastReceiver, intentFilter)
             } catch (e: Exception) {
             }
         }
-
-        if (!isDisposed) {
-            context.registerReceiver(broadcastReceiver, intentFilter)
-        }
     }
+
 }

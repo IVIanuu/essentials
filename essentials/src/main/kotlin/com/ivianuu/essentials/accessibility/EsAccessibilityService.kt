@@ -24,12 +24,11 @@ import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.android.serviceComponent
 import com.ivianuu.scopes.MutableScope
 import com.ivianuu.scopes.Scope
-import com.ivianuu.scopes.ScopeOwner
 
 /**
  * Base accessibility service
  */
-abstract class EsAccessibilityService : AccessibilityService(), InjektTrait, ScopeOwner {
+abstract class EsAccessibilityService : AccessibilityService(), InjektTrait {
 
     override val component by unsafeLazy {
         serviceComponent {
@@ -38,7 +37,7 @@ abstract class EsAccessibilityService : AccessibilityService(), InjektTrait, Sco
     }
 
     private val _scope = MutableScope()
-    override val scope: Scope get() = _scope
+    val scope: Scope get() = _scope
 
     override fun onDestroy() {
         _scope.close()

@@ -28,7 +28,6 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/mvn-publish.gradle")
 
 dependencies {
-
     api(Deps.androidxActivity)
     api(Deps.androidxAppCompat)
     api(Deps.androidxCardView)
@@ -41,7 +40,6 @@ dependencies {
 
     api(Deps.coroutinesAndroid)
     api(Deps.coroutinesCore)
-    api(Deps.coroutinesRxJava)
 
     api(Deps.constraintLayout)
 
@@ -49,8 +47,9 @@ dependencies {
     api(Deps.directorCommon)
 
     api(Deps.epoxy)
+    api(Deps.epoxyPrefs)
 
-    kapt(project(":essentials-compiler"))
+    //kapt(project(":essentials-compiler"))
 
     api(Deps.injekt)
     api(Deps.injektAndroid)
@@ -69,13 +68,9 @@ dependencies {
     api(Deps.kPrefs)
     api(Deps.kPrefsCommon)
     api(Deps.kPrefsCoroutines)
-    api(Deps.kPrefsLiveData)
-    api(Deps.kPrefsRx)
 
     api(Deps.kSettings)
     api(Deps.kSettingsCoroutines)
-    api(Deps.kSettingsLiveData)
-    api(Deps.kSettingsRx)
 
     api(Deps.materialComponents)
 
@@ -87,14 +82,9 @@ dependencies {
     api(Deps.materialDialogsInput)
     api(Deps.materialDialogsLifecycle)
 
-    api(Deps.rxAndroid)
-    api(Deps.rxJava)
-    api(Deps.rxKotlin)
-
     api(Deps.scopes)
     api(Deps.scopesAndroid)
     api(Deps.scopesCoroutines)
-    api(Deps.scopesRx)
 
     api(Deps.timber)
     api(Deps.timberKt)

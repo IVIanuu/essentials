@@ -19,6 +19,8 @@ package com.ivianuu.essentials.util
 import android.content.Context
 import android.widget.Toast
 import com.ivianuu.injekt.Inject
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 /**
  * Shows system toasts
@@ -26,6 +28,7 @@ import com.ivianuu.injekt.Inject
 @Inject
 class Toaster(
     private val context: Context,
+    private val dispatchers: AppDispatchers,
     private val stringProvider: StringProvider
 ) {
 
@@ -45,7 +48,7 @@ class Toaster(
         showToast(stringProvider.getString(msgRes, *args), true)
     }
 
-    private fun showToast(msg: String, long: Boolean) = mainThread {
+    private fun showToast(msg: String, long: Boolean) = GlobalScope.launch(dispatchers.main) {
         Toast.makeText(context, msg, if (long) Toast.LENGTH_LONG else Toast.LENGTH_SHORT)
             .show()
     }

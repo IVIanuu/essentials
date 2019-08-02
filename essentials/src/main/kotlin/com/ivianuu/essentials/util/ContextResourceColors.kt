@@ -16,9 +16,9 @@
 
 @file:SuppressLint("PrivateResource")
 
-// Aliases to other public API.
-
 package com.ivianuu.essentials.util
+
+// todo remove
 
 import android.annotation.SuppressLint
 import android.content.Context

@@ -19,7 +19,6 @@ package com.ivianuu.essentials.twilight
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.epoxy.RadioButtonGroup
 import com.ivianuu.essentials.ui.epoxy.RadioButtonItem
-import com.ivianuu.essentials.ui.epoxy.epoxyController
 import com.ivianuu.essentials.ui.navigation.director.controllerRoute
 import com.ivianuu.essentials.ui.prefs.PrefsController
 import com.ivianuu.injekt.Inject

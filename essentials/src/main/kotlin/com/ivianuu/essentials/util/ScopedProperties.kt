@@ -19,6 +19,8 @@ package com.ivianuu.essentials.util
 import com.ivianuu.scopes.Scope
 import java.util.concurrent.ConcurrentHashMap
 
+// todo operators
+
 class Properties {
 
     private val properties = mutableMapOf<String, Any?>()
@@ -26,15 +28,15 @@ class Properties {
     val entries: Map<String, Any?>
         get() = properties
 
-    fun <T> get(key: String): T? = properties[key] as? T
+    operator fun <T> get(key: String): T? = properties[key] as? T
 
-    fun <T> set(key: String, value: T) {
+    operator fun <T> set(key: String, value: T) {
         properties[key] = value as Any?
     }
 
     fun <T> remove(key: String): T? = properties.remove(key) as? T
 
-    fun contains(key: String): Boolean = properties.containsKey(key)
+    operator fun contains(key: String): Boolean = properties.containsKey(key)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -47,9 +49,7 @@ class Properties {
         return true
     }
 
-    override fun hashCode(): Int {
-        return properties.hashCode()
-    }
+    override fun hashCode(): Int = properties.hashCode()
 
 }
 
@@ -78,8 +78,7 @@ private val propertiesByScope = ConcurrentHashMap<Scope, Properties>()
 
 val Scope.properties: Properties
     get() = propertiesByScope.getOrPut(this) {
-        check(!isClosed) { "cannot access properties on closed scopes" }
         Properties().also {
-            addListener { propertiesByScope.remove(this) }
+            onClose { propertiesByScope -= this }
         }
     }

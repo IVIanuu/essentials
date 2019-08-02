@@ -75,6 +75,8 @@ import com.ivianuu.kommon.core.content.textArrayAttr
 import com.ivianuu.kommon.core.content.textAttr
 import com.ivianuu.kommon.core.content.typedArray
 
+// todo remove
+
 /**
  * Marks a component as context aware
  */

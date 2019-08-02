@@ -46,11 +46,11 @@ abstract class EsModel<H : EsHolder>(
     }
 
     fun addModelListener(listener: ModelListener) {
-        listeners.add(listener)
+        listeners += listener
     }
 
     fun removeModelListener(listener: ModelListener) {
-        listeners.remove(listener)
+        listeners -= listener
     }
 
 }

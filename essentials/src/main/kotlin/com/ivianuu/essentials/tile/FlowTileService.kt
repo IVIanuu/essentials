@@ -14,20 +14,24 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.app
+package com.ivianuu.essentials.tile
 
-import android.os.Looper
-import com.ivianuu.injekt.Inject
-import io.reactivex.android.plugins.RxAndroidPlugins
-import io.reactivex.android.schedulers.AndroidSchedulers
+import android.annotation.TargetApi
+import com.ivianuu.essentials.util.coroutineScope
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
-/**
- * Enables async main thread schedulers
- */
-@Inject
-internal class RxJavaAppInitializer : AppInitializer {
-    init {
-        val scheduler = AndroidSchedulers.from(Looper.getMainLooper(), true)
-        RxAndroidPlugins.setInitMainThreadSchedulerHandler { scheduler }
+@TargetApi(24)
+abstract class FlowTileService<T> : StateTileService<T>() {
+
+    abstract val flow: Flow<T>
+
+    override fun onStartListening() {
+        super.onStartListening()
+        flow
+            .onEach { setState(it) }
+            .launchIn(listeningScope.coroutineScope)
     }
+
 }

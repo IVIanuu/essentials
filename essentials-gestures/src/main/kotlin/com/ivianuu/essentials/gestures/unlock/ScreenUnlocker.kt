@@ -23,9 +23,12 @@ import com.ivianuu.essentials.messaging.BroadcastFactory
 import com.ivianuu.injekt.Inject
 import com.ivianuu.kommon.core.content.newTask
 import com.ivianuu.kommon.core.content.startActivity
-import io.reactivex.Observable
-import kotlinx.coroutines.rx2.awaitFirstOrDefault
-import java.util.concurrent.TimeUnit
+import hu.akarnokd.kotlin.flow.takeUntil
+import kotlinx.coroutines.flow.delayFlow
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.singleOrNull
+import kotlinx.coroutines.flow.take
 
 /**
  * Helper class for unlocking the screen
@@ -43,9 +46,10 @@ class ScreenUnlocker(
 
             return broadcastFactory.create(ACTION_ON_UNLOCK_RESULT)
                 .map { it.getBooleanExtra(EXTRA_SUCCESS, false) }
-                .takeUntil(Observable.just(Unit).delay(5, TimeUnit.SECONDS))
+                .takeUntil(flowOf(Unit).delayFlow(5000))
                 .take(1)
-                .awaitFirstOrDefault(true)
+                .singleOrNull()
+                ?: false
         }
 
         return true

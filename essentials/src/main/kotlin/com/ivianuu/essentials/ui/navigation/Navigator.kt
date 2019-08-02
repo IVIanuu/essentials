@@ -16,17 +16,19 @@
 
 package com.ivianuu.essentials.ui.navigation
 
-import com.ivianuu.essentials.util.BehaviorSubject
-import io.reactivex.Observable
+import com.github.ajalt.timberkt.d
+import hu.akarnokd.kotlin.flow.BehaviorSubject
 import kotlinx.coroutines.CompletableDeferred
-import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.launch
 
 class Navigator {
 
     private val _backStack = mutableListOf<Route>()
-    val backStack: List<Route> get() = synchronized(this) { _backStack }
+    val backStack: List<Route> get() = synchronized(_backStack) { _backStack }
 
-    val observable: Observable<List<Route>>
+    val flow: Flow<List<Route>>
         get() = subject
 
     private val subject = BehaviorSubject(emptyList<Route>())
@@ -35,29 +37,35 @@ class Navigator {
 
     @JvmName("pushWithoutResult")
     fun push(route: Route) {
-        push<Any?>(route)
+        @Suppress("DeferredResultUnused")
+        GlobalScope.launch { push<Any?>(route) }
     }
 
-    fun <T> push(route: Route): Deferred<T?> = synchronized(this) {
+    suspend fun <T> push(route: Route): T? {
+        d { "push $route" }
         val newBackStack = backStack.toMutableList()
-        newBackStack.add(route)
+        newBackStack += route
         setBackStack(newBackStack)
-        val result = CompletableDeferred<Any?>()
-        resultsByRoute[route] = result
-        return@synchronized result as Deferred<T?>
+        val deferredResult = CompletableDeferred<Any?>()
+        synchronized(resultsByRoute) { resultsByRoute[route] = deferredResult }
+        return deferredResult.await() as? T
     }
 
-    fun pop(result: Any? = null) = synchronized(this) {
+    fun pop(result: Any? = null) {
+        d { "pop result $result" }
         val newBackStack = backStack.toMutableList()
         val removedRoute = newBackStack.removeAt(backStack.lastIndex)
         setBackStack(newBackStack)
-        resultsByRoute.remove(removedRoute)?.complete(result)
+        val deferredResult = synchronized(resultsByRoute) { resultsByRoute.remove(removedRoute) }
+        deferredResult?.complete(result)
     }
 
     private fun setBackStack(newBackStack: List<Route>) {
-        _backStack.clear()
-        _backStack.addAll(newBackStack)
-        subject.onNext(_backStack)
+        synchronized(_backStack) {
+            _backStack.clear()
+            _backStack += newBackStack
+        }
+        GlobalScope.launch { subject.emit(newBackStack) } // todo this is ugly
     }
 
 }

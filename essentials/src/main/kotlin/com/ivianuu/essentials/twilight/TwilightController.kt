@@ -18,24 +18,26 @@ package com.ivianuu.essentials.twilight
 
 import androidx.appcompat.app.AppCompatDelegate
 import com.ivianuu.essentials.app.AppService
-import com.ivianuu.essentials.util.AppSchedulers
-import com.ivianuu.essentials.util.NoScope
+import com.ivianuu.essentials.util.AppDispatchers
+import com.ivianuu.essentials.util.flowWith
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.android.ApplicationScope
-import com.ivianuu.kprefs.rx.asObservable
-import com.ivianuu.scopes.rx.disposeBy
+import com.ivianuu.kprefs.coroutines.asFlow
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 @Inject
 @ApplicationScope
 class TwilightController(
-    private val twilightPrefs: TwilightPrefs,
-    private val schedulers: AppSchedulers
+    private val dispatchers: AppDispatchers,
+    private val twilightPrefs: TwilightPrefs
 ) : AppService {
 
     init {
-        twilightPrefs.twilightMode.asObservable()
-            .observeOn(schedulers.main)
-            .subscribe { mode ->
+        twilightPrefs.twilightMode.asFlow()
+            .flowWith(dispatchers.main)
+            .onEach { mode ->
                 AppCompatDelegate.setDefaultNightMode(
                     when (mode) {
                         TwilightMode.LIGHT -> AppCompatDelegate.MODE_NIGHT_NO
@@ -46,7 +48,7 @@ class TwilightController(
                     }
                 )
             }
-            .disposeBy(NoScope)
+            .launchIn(GlobalScope)
     }
 
 }

@@ -20,7 +20,9 @@ import android.content.Intent
 import android.os.PowerManager
 import com.ivianuu.essentials.messaging.BroadcastFactory
 import com.ivianuu.injekt.Inject
-import io.reactivex.Observable
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onStart
 
 /**
  * Provides the current screen state
@@ -33,14 +35,14 @@ internal class ScreenStateProvider(
     val isScreenOn: Boolean get() = powerManager.isInteractive
     val isScreenOff: Boolean get() = !isScreenOn
 
-    fun observeScreenStateChanges(): Observable<Boolean> {
+    fun observeScreenState(): Flow<Boolean> {
         return broadcastFactory.create(
             Intent.ACTION_SCREEN_OFF,
             Intent.ACTION_SCREEN_ON,
             Intent.ACTION_USER_PRESENT
         )
             .map { isScreenOn }
-            .startWith(isScreenOn)
+            .onStart { emit(isScreenOn) }
     }
 
 }

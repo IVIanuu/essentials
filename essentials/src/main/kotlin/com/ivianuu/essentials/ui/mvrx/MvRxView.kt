@@ -38,7 +38,7 @@ interface MvRxView : LifecycleOwner, ViewModelStoreOwner {
 private val PENDING_INVALIDATES = mutableSetOf<Int>()
 private val HANDLER = Handler(Looper.getMainLooper(), Handler.Callback { message ->
     val view = message.obj as MvRxView
-    PENDING_INVALIDATES.remove(System.identityHashCode(view))
+    PENDING_INVALIDATES -= System.identityHashCode(view)
 
     if (view.lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
         view.invalidate()

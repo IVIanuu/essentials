@@ -19,10 +19,13 @@ package com.ivianuu.essentials.gestures
 import android.view.accessibility.AccessibilityEvent
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.gestures.accessibility.AccessibilityComponent
-import com.ivianuu.essentials.util.BehaviorSubject
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.android.ApplicationScope
-import io.reactivex.Observable
+import kotlinx.coroutines.channels.ConflatedBroadcastChannel
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.consumeAsFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 
 /**
  * Recent apps provider
@@ -31,8 +34,8 @@ import io.reactivex.Observable
 @ApplicationScope
 class RecentAppsProvider : AccessibilityComponent() {
 
-    val currentApp: Observable<String>
-        get() = _recentApps
+    val currentApp: Flow<String>
+        get() = recentsApps
             .map {
                 if (it.isNotEmpty()) {
                     it.first()
@@ -41,8 +44,13 @@ class RecentAppsProvider : AccessibilityComponent() {
                 }
             }
 
-    private val _recentApps = BehaviorSubject(emptyList<String>())
-    val recentsApps: Observable<List<String>> get() = _recentApps
+    private val _recentApps = ConflatedBroadcastChannel(emptyList<String>())
+    val recentsApps: Flow<List<String>>
+        get() {
+            return _recentApps.openSubscription()
+                .consumeAsFlow()
+                .distinctUntilChanged()
+        }
 
     override fun onAccessibilityEvent(event: AccessibilityEvent) {
         // were only interested in window state changes
@@ -95,7 +103,7 @@ class RecentAppsProvider : AccessibilityComponent() {
         d { "recent apps changed $result" }
 
         // push
-        _recentApps.onNext(result)
+        _recentApps.offer(result)
     }
 
     private fun getRecentApps() = _recentApps.value!!

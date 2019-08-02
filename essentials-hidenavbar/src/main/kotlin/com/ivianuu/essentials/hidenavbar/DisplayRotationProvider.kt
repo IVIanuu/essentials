@@ -21,10 +21,17 @@ import android.hardware.SensorManager
 import android.view.OrientationEventListener
 import android.view.WindowManager
 import com.github.ajalt.timberkt.d
-import com.ivianuu.essentials.util.observable
+import com.ivianuu.essentials.util.mergeFlows
 import com.ivianuu.injekt.Inject
 import com.ivianuu.kommon.core.app.doOnConfigurationChanged
-import io.reactivex.Observable
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.switchMap
 
 @Inject
 internal class DisplayRotationProvider(
@@ -35,23 +42,23 @@ internal class DisplayRotationProvider(
 
     val displayRotation: Int get() = windowManager.defaultDisplay.rotation
 
-    fun observeRotationChanges(): Observable<Int> {
-        return screenStateProvider.observeScreenStateChanges()
+    fun observeRotationChanges(): Flow<Int> {
+        return screenStateProvider.observeScreenState()
             .switchMap {
                 if (it) {
-                    Observable.merge(listOf(rotationChanges(), configChanges()))
-                        .doOnSubscribe { d { "sub for rotation" } }
-                        .doOnDispose { d { "dispose rotation" } }
+                    mergeFlows(rotationChanges(), configChanges())
+                        .onStart { d { "sub for rotation" } }
+                        .onCompletion { d { "dispose rotation" } }
                 } else {
                     d { "do not observe rotation while screen is off" }
-                    Observable.empty()
+                    emptyFlow()
                 }
             }
             .map { displayRotation }
-            .startWith(displayRotation)
+            .onStart { emit(displayRotation) }
     }
 
-    private fun rotationChanges() = observable<Int> {
+    private fun rotationChanges() = callbackFlow {
         var currentRotation = displayRotation
 
         val listener = object : OrientationEventListener(
@@ -60,23 +67,21 @@ internal class DisplayRotationProvider(
             override fun onOrientationChanged(orientation: Int) {
                 val rotation = displayRotation
                 if (rotation != currentRotation) {
-                    onNext(rotation)
+                    offer(rotation)
                     currentRotation = rotation
                 }
             }
-
         }
 
-        setCancellable { listener.disable() }
-
+        offer(currentRotation)
         listener.enable()
 
-        onNext(currentRotation)
+        awaitClose { listener.disable() }
     }
 
-    private fun configChanges() = observable<Unit> {
-        val callbacks = app.doOnConfigurationChanged { onNext(Unit) }
-        setCancellable { app.unregisterComponentCallbacks(callbacks) }
+    private fun configChanges() = callbackFlow {
+        val callbacks = app.doOnConfigurationChanged { offer(Unit) }
+        awaitClose { app.unregisterComponentCallbacks(callbacks) }
     }
 
 }
