@@ -54,10 +54,6 @@ class MainActivity : EsActivity() {
                 }
             }
             .launchIn(lifecycleScope)
-
-        if (savedInstanceState == null) {
-
-        }
     }
 
 }
