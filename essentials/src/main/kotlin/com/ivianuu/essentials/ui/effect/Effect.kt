@@ -4,6 +4,10 @@ import kotlin.reflect.KProperty
 
 interface EffectContext {
     fun <T> cache(key: Any, inputs: Array<out Any?>?, block: () -> T): T
+
+    fun onDispose(callback: () -> Unit)
+
+    fun dispose()
 }
 
 fun EffectContext(): EffectContext = EffectContextImpl()
@@ -23,6 +27,8 @@ private class EffectContextImpl : EffectContext {
 
     private val effectStates = mutableMapOf<Any, EffectState>()
 
+    private val onDisposeCallbacks = mutableListOf<() -> Unit>()
+
     override fun <T> cache(key: Any, inputs: Array<out Any?>?, block: () -> T): T {
         val state = effectStates[key]
 
@@ -38,6 +44,21 @@ private class EffectContextImpl : EffectContext {
         }
     }
 
+    override fun onDispose(callback: () -> Unit) {
+        onDisposeCallbacks.add(callback)
+    }
+
+    override fun dispose() {
+        effectStates.clear()
+        onDisposeCallbacks.toList().forEach { it() }
+    }
+}
+
+inline fun EffectContext.onActive(
+    key: Any = sourceLocation(),
+    crossinline callback: () -> Unit
+) {
+    memo(key) { callback() }
 }
 
 class State<T> @PublishedApi internal constructor(var value: T) {

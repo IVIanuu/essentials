@@ -29,13 +29,15 @@ import com.ivianuu.kommon.lifecycle.defaultViewModelKey
 inline fun <S, reified T : MvRxViewModel<*>> S.injectMvRxViewModel(
     noinline from: () -> ViewModelStoreOwner = { this },
     noinline key: () -> String = { T::class.defaultViewModelKey },
+    noinline name: () -> Any? = { null },
     noinline parameters: ParametersDefinition? = null
 ): Lazy<T> where S : MvRxView, S : InjektTrait =
-    mvRxViewModel(from, key) { get<T>(parameters = parameters) }
+    mvRxViewModel(from, key) { get(name = name(), parameters = parameters) }
 
 inline fun <S, reified T : MvRxViewModel<*>> S.getMvRxViewModel(
     from: ViewModelStoreOwner = this,
     key: String = T::class.defaultViewModelKey,
+    name: Any? = null,
     noinline parameters: ParametersDefinition? = null
 ): T where S : MvRxView, S : InjektTrait =
-    getMvRxViewModel(from, key) { get(parameters = parameters) }
+    getMvRxViewModel(from, key) { get(name = name, parameters = parameters) }
