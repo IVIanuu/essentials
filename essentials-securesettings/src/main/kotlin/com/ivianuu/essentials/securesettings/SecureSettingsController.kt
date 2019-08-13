@@ -16,45 +16,32 @@
 
 package com.ivianuu.essentials.securesettings
 
-import androidx.lifecycle.lifecycleScope
-import com.ivianuu.essentials.ui.changehandler.verticalFade
-import com.ivianuu.essentials.ui.epoxy.ListItem
-import com.ivianuu.essentials.ui.epoxy.RouteListItem
-import com.ivianuu.essentials.ui.epoxy.epoxyController
-import com.ivianuu.essentials.ui.navigation.director.ControllerRoute
-import com.ivianuu.essentials.ui.navigation.director.controllerRoute
-import com.ivianuu.essentials.ui.navigation.director.copy
-import com.ivianuu.essentials.ui.navigation.director.defaultControllerRouteOptionsOrElse
-import com.ivianuu.essentials.ui.prefs.PrefsController
+import androidx.compose.onActive
+import com.ivianuu.compose.common.RecyclerView
+import com.ivianuu.essentials.ui.compose.AppBar
+import com.ivianuu.essentials.ui.compose.Scaffold
+import com.ivianuu.essentials.ui.compose.coroutines.coroutineScope
+import com.ivianuu.essentials.ui.compose.injekt.inject
+import com.ivianuu.essentials.ui.compose.navigation.Route
+import com.ivianuu.essentials.ui.compose.navigation.navigator
+import com.ivianuu.essentials.ui.prefs.Prefs
 import com.ivianuu.essentials.util.Toaster
-import com.ivianuu.injekt.Inject
-import com.ivianuu.injekt.Param
-import com.ivianuu.injekt.parametersOf
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 /**
  * Asks the user for the secure settings permission
  */
-fun secureSettingsRoute(showHideNavBarHint: Boolean = false) =
-    controllerRoute<SecureSettingsController> {
-        parametersOf(showHideNavBarHint)
-    }
+fun SecureSettingsRoute(
+    showHideNavBarHint: Boolean = false
+) = Route {
+    val coroutineScope = coroutineScope
+    val secureSettingsHelper = inject<SecureSettingsHelper>()
+    val toaster = inject<Toaster>()
+    val navigator = navigator
 
-@Inject
-class SecureSettingsController(
-    @Param private val showHideNavBarHint: Boolean,
-    private val secureSettingsHelper: SecureSettingsHelper,
-    private val toaster: Toaster
-) : PrefsController() {
-
-    override val toolbarTitleRes: Int
-        get() = R.string.es_title_secure_settings
-
-    override fun onCreate() {
-        super.onCreate()
-
-        lifecycleScope.launch {
+    +onActive {
+        coroutineScope.launch {
             while (true) {
                 if (secureSettingsHelper.canWriteSecureSettings()) {
                     toaster.toast(R.string.es_secure_settings_permission_granted)
@@ -66,38 +53,42 @@ class SecureSettingsController(
         }
     }
 
-    override fun epoxyController() = epoxyController {
-        ListItem(
-            id = "secure_settings_header",
-            textRes = if (showHideNavBarHint) R.string.es_pref_secure_settings_header_hide_nav_bar_summary
-            else R.string.es_pref_secure_settings_header_summary
-        )
+    Prefs {
+        Scaffold(
+            appBar = { AppBar(titleRes = R.string.es_title_secure_settings) },
+            content = {
+                RecyclerView {
+                    /*ListItem(
+                        textRes = if (showHideNavBarHint) R.string.es_pref_secure_settings_header_hide_nav_bar_summary
+                        else R.string.es_pref_secure_settings_header_summary
+                    )
 
-        RouteListItem(
-            id = "use_pc",
-            titleRes = R.string.es_pref_use_pc,
-            textRes = R.string.es_pref_use_pc_summary,
-            route = {
-                secureSettingsInstructionsRoute.copy(
-                    options = defaultControllerRouteOptionsOrElse {
-                        ControllerRoute.Options().verticalFade()
-                    }
-                )
-            }
-        )
+                    ListItem(
+                        titleRes = R.string.es_pref_use_pc,
+                        textRes = R.string.es_pref_use_pc_summary,
+                        route = {
+                            secureSettingsInstructionsRoute.copy(
+                                options = defaultControllerRouteOptionsOrElse {
+                                    ControllerRoute.Options().verticalFade()
+                                }
+                            )
+                        }
+                    )
 
-        ListItem(
-            id = "use_root",
-            titleRes = R.string.es_pref_use_root,
-            textRes = R.string.es_pref_use_root_summary,
-            onClick = {
-                lifecycleScope.launch {
-                    if (!secureSettingsHelper.grantWriteSecureSettingsViaRoot()) {
-                        toaster.toast(R.string.es_secure_settings_no_root)
-                    }
+                    ListItem(
+                        id = "use_root",
+                        titleRes = R.string.es_pref_use_root,
+                        textRes = R.string.es_pref_use_root_summary,
+                        onClick = {
+                            lifecycleScope.launch {
+                                if (!secureSettingsHelper.grantWriteSecureSettingsViaRoot()) {
+                                    toaster.toast(R.string.es_secure_settings_no_root)
+                                }
+                            }
+                        }
+                    )*/
                 }
             }
         )
     }
-
 }

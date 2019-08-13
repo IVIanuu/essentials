@@ -16,25 +16,15 @@
 
 package com.ivianuu.essentials.ui.changehandler
 
-import android.animation.Animator
+import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.view.View
-import com.ivianuu.director.ChangeData
-import com.ivianuu.director.DirectorPlugins
-import com.ivianuu.director.common.changehandler.AnimatorChangeHandler
-import com.ivianuu.director.common.changehandler.defaultAnimationDuration
-import com.ivianuu.director.defaultRemovesFromViewOnPush
-import com.ivianuu.essentials.ui.navigation.director.ControllerRoute
-import com.ivianuu.kommon.core.animation.animatorSetOf
+import com.ivianuu.compose.common.changehandler.AnimatorChangeHandler
 
-class VerticalFadeChangeHandler(
-    duration: Long = DirectorPlugins.defaultAnimationDuration,
-    removesFromViewOnPush: Boolean = DirectorPlugins.defaultRemovesFromViewOnPush
-) : AnimatorChangeHandler(duration, removesFromViewOnPush) {
-
-    override fun getAnimator(changeData: ChangeData): Animator {
+fun VerticalFadeChangeHandler(duration: Long = AnimatorChangeHandler.NO_DURATION): AnimatorChangeHandler {
+    return AnimatorChangeHandler(duration) { changeData ->
         val (_, from, to, isPush) = changeData
-        val animator = animatorSetOf()
+        val animator = AnimatorSet()
 
         if (isPush && to != null) {
             animator.play(ObjectAnimator.ofFloat(to, View.ALPHA, 0f, 1f))
@@ -44,35 +34,6 @@ class VerticalFadeChangeHandler(
             animator.play(ObjectAnimator.ofFloat(from, View.TRANSLATION_Y, 0f, from.height * 0.3f))
         }
 
-        return animator
+        return@AnimatorChangeHandler animator
     }
-
-    override fun copy() = VerticalFadeChangeHandler(duration, removesFromViewOnPush)
-
 }
-
-fun ControllerRoute.Options.verticalFade(
-    duration: Long = DirectorPlugins.defaultAnimationDuration,
-    removesFromViewOnPush: Boolean = DirectorPlugins.defaultRemovesFromViewOnPush
-): ControllerRoute.Options = verticalFadePush(duration, removesFromViewOnPush)
-    .verticalFadePop(duration, removesFromViewOnPush)
-
-fun ControllerRoute.Options.verticalFadePush(
-    duration: Long = DirectorPlugins.defaultAnimationDuration,
-    removesFromViewOnPush: Boolean = DirectorPlugins.defaultRemovesFromViewOnPush
-): ControllerRoute.Options = pushHandler(
-    VerticalFadeChangeHandler(
-        duration,
-        removesFromViewOnPush
-    )
-)
-
-fun ControllerRoute.Options.verticalFadePop(
-    duration: Long = DirectorPlugins.defaultAnimationDuration,
-    removesFromViewOnPush: Boolean = DirectorPlugins.defaultRemovesFromViewOnPush
-): ControllerRoute.Options = popHandler(
-    VerticalFadeChangeHandler(
-        duration,
-        removesFromViewOnPush
-    )
-)

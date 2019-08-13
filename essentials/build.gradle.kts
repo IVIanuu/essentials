@@ -39,16 +39,13 @@ dependencies {
     api(Deps.androidxLifecycleViewModel)
     api(Deps.androidxLifecycleViewModelSavedState)
 
+    api(Deps.compose)
+    api(Deps.composeCommon)
+
     api(Deps.coroutinesAndroid)
     api(Deps.coroutinesCore)
 
     api(Deps.constraintLayout)
-
-    api(Deps.director)
-    api(Deps.directorCommon)
-
-    api(Deps.epoxy)
-    api(Deps.epoxyPrefs)
 
     //kapt(project(":essentials-compiler"))
 

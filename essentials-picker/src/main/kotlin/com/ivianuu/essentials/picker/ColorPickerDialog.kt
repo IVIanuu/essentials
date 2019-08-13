@@ -16,28 +16,32 @@
 
 package com.ivianuu.essentials.picker
 
+import androidx.compose.state
 import com.afollestad.materialdialogs.color.colorChooser
-import com.ivianuu.essentials.ui.dialog.dialogRoute
-import com.ivianuu.essentials.ui.dialog.pop
-import com.ivianuu.essentials.ui.effect.state
+import com.ivianuu.compose.ComponentComposition
+import com.ivianuu.essentials.ui.compose.navigation.navigator
+import com.ivianuu.essentials.ui.dialog.DialogRoute
 
-fun colorPickerRoute(
+fun ComponentComposition.ColorPickerRoute(
     title: String? = null,
     titleRes: Int? = R.string.es_dialog_title_color_picker,
     preselect: Int,
     allowCustomArgb: Boolean = true,
     showAlphaSelector: Boolean = false
-) = dialogRoute { context ->
-    var currentColor by context.state { preselect }
-    title(res = titleRes, text = title)
-    colorChooser(
-        colors = PRIMARY_COLORS,
-        subColors = PRIMARY_COLORS_SUB,
-        initialSelection = currentColor,
-        allowCustomArgb = allowCustomArgb,
-        showAlphaSelector = showAlphaSelector,
-        waitForPositiveButton = false
-    ) { _, color -> currentColor = color }
-    positiveButton(R.string.es_ok) { context.pop(currentColor) }
-    negativeButton(R.string.es_cancel)
+) = DialogRoute {
+    val (currentColor, setCurrentColor) = +state { preselect }
+    val navigator = navigator
+    buildDialog {
+        title(res = titleRes, text = title)
+        colorChooser(
+            colors = PRIMARY_COLORS,
+            subColors = PRIMARY_COLORS_SUB,
+            initialSelection = currentColor,
+            allowCustomArgb = allowCustomArgb,
+            showAlphaSelector = showAlphaSelector,
+            waitForPositiveButton = false
+        ) { _, color -> setCurrentColor(color) }
+        positiveButton(R.string.es_ok) { navigator.pop(currentColor) }
+        negativeButton(R.string.es_cancel)
+    }
 }

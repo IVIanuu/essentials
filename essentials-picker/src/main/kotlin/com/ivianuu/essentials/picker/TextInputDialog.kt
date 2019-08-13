@@ -16,13 +16,13 @@
 
 package com.ivianuu.essentials.picker
 
+import androidx.compose.state
 import com.afollestad.materialdialogs.input.input
-import com.ivianuu.essentials.ui.dialog.dialogRoute
-import com.ivianuu.essentials.ui.dialog.pop
-import com.ivianuu.essentials.ui.effect.state
-import com.ivianuu.essentials.util.string
+import com.ivianuu.compose.ComponentComposition
+import com.ivianuu.essentials.ui.compose.navigation.navigator
+import com.ivianuu.essentials.ui.dialog.DialogRoute
 
-fun textInputRoute(
+fun ComponentComposition.TextInputRoute(
     title: String? = null,
     titleRes: Int? = null,
     hint: String? = null,
@@ -31,24 +31,27 @@ fun textInputRoute(
     prefillRes: Int? = null,
     inputType: Int = -1,
     allowEmpty: Boolean = false
-) = dialogRoute { context ->
-    var currentValue by context.state {
+) = DialogRoute {
+    val navigator = navigator
+    val (currentValue, setCurrentValue) = +state {
         when {
             prefill != null -> prefill
-            else -> context.string(prefillRes!!)
+            else -> null // todo context.string(prefillRes!!)
         }
     }
 
-    noAutoDismiss()
-    title(res = titleRes, text = title)
-    input(
-        hint = hint,
-        hintRes = hintRes,
-        prefill = currentValue,
-        inputType = inputType,
-        allowEmpty = allowEmpty,
-        waitForPositiveButton = true
-    ) { _, input -> currentValue = input.toString() }
-    positiveButton(R.string.es_ok) { context.pop(currentValue) }
-    negativeButton(R.string.es_cancel) { context.pop() }
+    buildDialog {
+        noAutoDismiss()
+        title(res = titleRes, text = title)
+        input(
+            hint = hint,
+            hintRes = hintRes,
+            prefill = currentValue,
+            inputType = inputType,
+            allowEmpty = allowEmpty,
+            waitForPositiveButton = true
+        ) { _, input -> setCurrentValue(input.toString()) }
+        positiveButton(R.string.es_ok) { navigator.pop(currentValue) }
+        negativeButton(R.string.es_cancel) { navigator.pop() }
+    }
 }

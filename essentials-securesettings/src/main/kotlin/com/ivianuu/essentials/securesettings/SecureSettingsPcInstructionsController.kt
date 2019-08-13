@@ -16,40 +16,27 @@
 
 package com.ivianuu.essentials.securesettings
 
-import android.content.Intent
-import android.provider.Settings
-import androidx.lifecycle.lifecycleScope
-import com.ivianuu.essentials.ui.epoxy.ClipboardListItem
-import com.ivianuu.essentials.ui.epoxy.IntentListItem
-import com.ivianuu.essentials.ui.epoxy.ListItem
-import com.ivianuu.essentials.ui.epoxy.UrlListItem
-import com.ivianuu.essentials.ui.epoxy.epoxyController
-import com.ivianuu.essentials.ui.navigation.director.controllerRoute
-import com.ivianuu.essentials.ui.prefs.PrefsController
-import com.ivianuu.essentials.util.BuildInfo
-import com.ivianuu.essentials.util.string
-import com.ivianuu.injekt.Inject
+import androidx.compose.onActive
+import com.ivianuu.compose.common.RecyclerView
+import com.ivianuu.essentials.ui.compose.AppBar
+import com.ivianuu.essentials.ui.compose.Scaffold
+import com.ivianuu.essentials.ui.compose.coroutines.coroutineScope
+import com.ivianuu.essentials.ui.compose.injekt.inject
+import com.ivianuu.essentials.ui.compose.navigation.Route
+import com.ivianuu.essentials.ui.compose.navigation.navigator
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 /**
  * Asks the user for the secure settings permission
  */
-val secureSettingsInstructionsRoute =
-    controllerRoute<SecureSettingsPcInstructionsController>()
+fun SecureSettingsInstructionsRoute() = Route {
+    val coroutineScope = coroutineScope
+    val secureSettingsHelper = inject<SecureSettingsHelper>()
+    val navigator = navigator
 
-@Inject
-internal class SecureSettingsPcInstructionsController(
-    private val buildInfo: BuildInfo,
-    private val secureSettingsHelper: SecureSettingsHelper
-) : PrefsController() {
-
-    override val toolbarTitleRes: Int
-        get() = R.string.es_title_secure_settings_pc_instructions
-
-    override fun onCreate() {
-        super.onCreate()
-        lifecycleScope.launch {
+    +onActive {
+        coroutineScope.launch {
             while (true) {
                 if (secureSettingsHelper.canWriteSecureSettings()) {
                     navigator.pop()
@@ -60,60 +47,64 @@ internal class SecureSettingsPcInstructionsController(
         }
     }
 
-    override fun epoxyController() = epoxyController {
-        ListItem(
-            id = "secure_settings_header",
-            textRes = R.string.es_pref_secure_settings_pc_instructions_header_summary
-        )
+    Scaffold(
+        appBar = { AppBar(titleRes = R.string.es_title_secure_settings_pc_instructions) },
+        content = {
+            RecyclerView {
+                /*ListItem(
+                    id = "secure_settings_header",
+                    textRes = R.string.es_pref_secure_settings_pc_instructions_header_summary
+                )
 
-        IntentListItem(
-            id = "secure_settings_step_1",
-            titleRes = R.string.es_pref_secure_settings_step_1,
-            textRes = R.string.es_pref_secure_settings_step_1_summary,
-            intent = { Intent(Settings.ACTION_DEVICE_INFO_SETTINGS) }
-        )
+                IntentListItem(
+                    id = "secure_settings_step_1",
+                    titleRes = R.string.es_pref_secure_settings_step_1,
+                    textRes = R.string.es_pref_secure_settings_step_1_summary,
+                    intent = { Intent(Settings.ACTION_DEVICE_INFO_SETTINGS) }
+                )
 
-        IntentListItem(
-            id = "secure_settings_step_2",
-            titleRes = R.string.es_pref_secure_settings_step_2,
-            textRes = R.string.es_pref_secure_settings_step_2_summary,
-            intent = { Intent(Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS) }
-        )
+                IntentListItem(
+                    id = "secure_settings_step_2",
+                    titleRes = R.string.es_pref_secure_settings_step_2,
+                    textRes = R.string.es_pref_secure_settings_step_2_summary,
+                    intent = { Intent(Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS) }
+                )
 
-        ListItem(
-            id = "secure_settings_step_3",
-            titleRes = R.string.es_pref_secure_settings_step_3,
-            textRes = R.string.es_pref_secure_settings_step_3_summary
-        )
+                ListItem(
+                    id = "secure_settings_step_3",
+                    titleRes = R.string.es_pref_secure_settings_step_3,
+                    textRes = R.string.es_pref_secure_settings_step_3_summary
+                )
 
-        UrlListItem(
-            id = "secure_settings_link_gadget_hacks",
-            iconRes = R.drawable.es_ic_link,
-            textRes = R.string.es_pref_secure_settings_link_gadget_hacks_summary,
-            url = { "https://youtu.be/CDuxcrrWLnY" }
-        )
+                UrlListItem(
+                    id = "secure_settings_link_gadget_hacks",
+                    iconRes = R.drawable.es_ic_link,
+                    textRes = R.string.es_pref_secure_settings_link_gadget_hacks_summary,
+                    url = { "https://youtu.be/CDuxcrrWLnY" }
+                )
 
-        UrlListItem(
-            id = "secure_settings_link_lifehacker",
-            iconRes = R.drawable.es_ic_link,
-            textRes = R.string.es_pref_secure_settings_link_lifehacker_summary,
-            url = { "https://lifehacker.com/the-easiest-way-to-install-androids-adb-and-fastboot-to-1586992378" }
-        )
+                UrlListItem(
+                    id = "secure_settings_link_lifehacker",
+                    iconRes = R.drawable.es_ic_link,
+                    textRes = R.string.es_pref_secure_settings_link_lifehacker_summary,
+                    url = { "https://lifehacker.com/the-easiest-way-to-install-androids-adb-and-fastboot-to-1586992378" }
+                )
 
-        UrlListItem(
-            id = "secure_settings_link_xda",
-            iconRes = R.drawable.es_ic_link,
-            textRes = R.string.es_pref_secure_settings_link_xda_summary,
-            url = { "https://www.xda-developers.com/install-adb-windows-macos-linux/" }
-        )
+                UrlListItem(
+                    id = "secure_settings_link_xda",
+                    iconRes = R.drawable.es_ic_link,
+                    textRes = R.string.es_pref_secure_settings_link_xda_summary,
+                    url = { "https://www.xda-developers.com/install-adb-windows-macos-linux/" }
+                )
 
-        ClipboardListItem(
-            id = "secure_settings_step_4",
-            titleRes = R.string.es_pref_secure_settings_step_4,
-            text = string(R.string.es_pref_secure_settings_step_4_summary, buildInfo.packageName),
-            clip = "adb shell pm grant ${buildInfo.packageName} android.permission.WRITE_SECURE_SETTINGS"
-        )
-
-    }
-
+                ClipboardListItem(
+                    id = "secure_settings_step_4",
+                    titleRes = R.string.es_pref_secure_settings_step_4,
+                    text = string(R.string.es_pref_secure_settings_step_4_summary, buildInfo.packageName),
+                    clip = "adb shell pm grant ${buildInfo.packageName} android.permission.WRITE_SECURE_SETTINGS"
+                )
+*/
+            }
+        }
+    )
 }

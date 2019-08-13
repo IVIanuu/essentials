@@ -18,48 +18,29 @@ package com.ivianuu.essentials.ui.base
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.ivianuu.director.router
-import com.ivianuu.essentials.ui.mvrx.MvRxView
-import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.director.ControllerRenderer
-import com.ivianuu.essentials.ui.navigation.director.ControllerRoute
-import com.ivianuu.essentials.util.coroutineScope
+import com.ivianuu.compose.ComponentComposition
+import com.ivianuu.compose.setContent
+import com.ivianuu.essentials.ui.compose.injekt.ComponentAmbient
 import com.ivianuu.essentials.util.unsafeLazy
 import com.ivianuu.injekt.InjektTrait
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.android.activityComponent
-import com.ivianuu.injekt.factory
-import com.ivianuu.injekt.inject
-import com.ivianuu.injekt.module
-import com.ivianuu.scopes.android.onPause
-import kotlinx.coroutines.launch
-
-private fun esActivityModule(esActivity: EsActivity) = module {
-    factory { esActivity.router(esActivity.containerId) }
-}
 
 /**
  * Base activity
  */
-abstract class EsActivity : AppCompatActivity(), InjektTrait, MvRxView {
+abstract class EsActivity : AppCompatActivity(), InjektTrait {
 
     override val component by unsafeLazy {
         activityComponent {
-            modules(esActivityModule(this@EsActivity))
             modules(this@EsActivity.modules())
         }
     }
-
-    val navigator by inject<Navigator>()
-    private val controllerRenderer by inject<ControllerRenderer>()
 
     protected open val layoutRes get() = 0
 
     open val containerId
         get() = android.R.id.content
-
-    open val startRoute: ControllerRoute?
-        get() = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,34 +49,16 @@ abstract class EsActivity : AppCompatActivity(), InjektTrait, MvRxView {
             setContentView(layoutRes)
         }
 
-        if (navigator.backStack.isEmpty()) {
-            startRoute?.let { navigator.push(it) }
+        // todo leaks
+        setContent(findViewById(containerId)) {
+            ComponentAmbient.Provider(component) {
+                compose()
+            }
         }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        invalidate()
-    }
-
-    override fun onResumeFragments() {
-        super.onResumeFragments()
-        onPause.coroutineScope.launch {
-            controllerRenderer.render()
-        }
-    }
-
-    override fun onBackPressed() {
-        if (navigator.backStack.size > 1) {
-            navigator.pop()
-        } else {
-            super.onBackPressed()
-        }
-    }
-
-    override fun invalidate() {
     }
 
     protected open fun modules(): List<Module> = emptyList()
+
+    protected abstract fun ComponentComposition.compose()
 
 }

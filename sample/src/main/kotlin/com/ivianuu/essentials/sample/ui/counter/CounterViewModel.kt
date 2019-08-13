@@ -18,25 +18,19 @@ package com.ivianuu.essentials.sample.ui.counter
 
 import com.ivianuu.essentials.hidenavbar.NavBarConfig
 import com.ivianuu.essentials.hidenavbar.NavBarController
-import com.ivianuu.essentials.sample.ui.checkapps.checkAppsRoute
-import com.ivianuu.essentials.sample.ui.list.listRoute
-import com.ivianuu.essentials.sample.ui.material.materialListRoute
-import com.ivianuu.essentials.sample.util.SecureSettingsHelper
 import com.ivianuu.essentials.sample.work.WorkScheduler
-import com.ivianuu.essentials.securesettings.secureSettingsRoute
-import com.ivianuu.essentials.twilight.twilightSettingsRoute
+import com.ivianuu.essentials.securesettings.SecureSettingsHelper
+import com.ivianuu.essentials.securesettings.SecureSettingsRoute
+import com.ivianuu.essentials.twilight.TwilightSettingsRoute
+import com.ivianuu.essentials.ui.compose.navigation.Navigator
 import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
-import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.director.controllerRouteOptions
-import com.ivianuu.essentials.ui.navigation.director.copy
-import com.ivianuu.essentials.ui.navigation.director.horizontal
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Param
 
 @Inject
 class CounterViewModel(
     @Param screen: Int,
-    private val navigator: Navigator,
+    @Param private val navigator: Navigator,
     private val navBarController: NavBarController,
     private val secureSettingsHelper: SecureSettingsHelper,
     private val workScheduler: WorkScheduler
@@ -45,7 +39,7 @@ class CounterViewModel(
     private var navBarHidden = false
 
     fun screenUpClicked() {
-        navigator.push(counterRoute(state.screen.inc()))
+        //navigator.push(counterRoute())
     }
 
     fun screenDownClicked() {
@@ -57,11 +51,11 @@ class CounterViewModel(
     }
 
     fun listScreenClicked() {
-        navigator.push(listRoute)
+        //navigator.push(listRoute)
     }
 
     fun checkAppsClicked() {
-        navigator.push(checkAppsRoute)
+        //navigator.push(checkAppsRoute)
     }
 
     fun doWorkClicked() {
@@ -69,15 +63,11 @@ class CounterViewModel(
     }
 
     fun twilightClicked() {
-        navigator.push(
-            twilightSettingsRoute.copy(
-                options = controllerRouteOptions().horizontal()
-            )
-        )
+        navigator.push(TwilightSettingsRoute())
     }
 
     fun materialListClicked() {
-        navigator.push(materialListRoute)
+        //navigator.push(materialListRoute)
     }
 
     fun navBarClicked() {
@@ -85,7 +75,7 @@ class CounterViewModel(
             navBarHidden = !navBarHidden
             navBarController.setNavBarConfig(NavBarConfig(navBarHidden))
         } else {
-            navigator.push(secureSettingsRoute(true))
+            navigator.push(SecureSettingsRoute(true))
         }
     }
 }

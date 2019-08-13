@@ -18,6 +18,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <include layout="@layout/es_view_toolbar" />
+    <include layout="@layout/es_app_bar" />
 
 </com.google.android.material.appbar.AppBarLayout>

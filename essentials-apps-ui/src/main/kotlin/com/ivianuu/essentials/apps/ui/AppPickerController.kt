@@ -16,22 +16,19 @@
 
 package com.ivianuu.essentials.apps.ui
 
-import android.widget.ImageView
 import androidx.lifecycle.viewModelScope
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.request.RequestOptions
+import com.ivianuu.compose.ComponentComposition
 import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.AppStore
-import com.ivianuu.essentials.apps.glide.AppIcon
-import com.ivianuu.essentials.ui.epoxy.ListItem
-import com.ivianuu.essentials.ui.epoxy.SimpleLoading
+import com.ivianuu.essentials.ui.compose.AppBar
+import com.ivianuu.essentials.ui.compose.ListItem
+import com.ivianuu.essentials.ui.compose.Scaffold
+import com.ivianuu.essentials.ui.compose.SimpleLoading
+import com.ivianuu.essentials.ui.compose.navigation.Navigator
+import com.ivianuu.essentials.ui.compose.navigation.Route
+import com.ivianuu.essentials.ui.compose.navigation.navigator
 import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
-import com.ivianuu.essentials.ui.mvrx.epoxy.mvRxEpoxyController
-import com.ivianuu.essentials.ui.mvrx.injekt.injectMvRxViewModel
-import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.director.controllerRoute
-import com.ivianuu.essentials.ui.simple.ListController
+import com.ivianuu.essentials.ui.mvrx.injectMvRxViewModel
 import com.ivianuu.essentials.util.AppDispatchers
 import com.ivianuu.essentials.util.Async
 import com.ivianuu.essentials.util.Loading
@@ -41,50 +38,39 @@ import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Param
 import com.ivianuu.injekt.parametersOf
 
-fun appPickerRouter(
-    launchableOnly: Boolean = false
-) = controllerRoute<AppPickerController> { parametersOf(launchableOnly) }
+fun ComponentComposition.AppPickerRoute(launchableOnly: Boolean = false) = Route {
+    Scaffold(
+        appBar = { AppBar(titleRes = R.string.es_title_app_picker) },
+        content = {
+            val (state, viewModel) = injectMvRxViewModel(AppPickerViewModel::class) {
+                parametersOf(launchableOnly, navigator)
+            }
 
-/**
- * App picker controller
- */
-@Inject
-class AppPickerController(@Param private val launchableOnly: Boolean) : ListController() {
-
-    override val toolbarTitleRes: Int
-        get() = R.string.es_title_app_picker
-
-    private val viewModel: AppPickerViewModel by injectMvRxViewModel {
-        parametersOf(launchableOnly)
-    }
-
-    override fun epoxyController() = mvRxEpoxyController(viewModel) { state ->
-        when (state.apps) {
-            is Loading -> SimpleLoading(id = "loading")
-            is Success -> state.apps()?.forEach { app ->
-                ListItem(
-                    id = app.packageName,
-                    title = app.appName,
-                    onClick = { viewModel.appClicked(app) },
-                    primaryActionLayoutRes = R.layout.es_list_action_avatar,
-                    builderBlock = {
-                        bind {
-                            val avatar = findView<ImageView>(R.id.es_list_avatar)
-                            Glide.with(avatar)
-                                .load(AppIcon(app.packageName))
-                                .apply(
-                                    RequestOptions()
-                                        .diskCacheStrategy(DiskCacheStrategy.NONE)
-                                        .skipMemoryCache(true)
-                                )
-                                .into(avatar)
+            when (state.apps) {
+                is Loading -> SimpleLoading()
+                is Success -> state.apps()?.forEach { app ->
+                    ListItem(
+                        title = app.appName,
+                        onClick = { viewModel.appClicked(app) },
+                        leadingAction = {
+                            /*val coroutineScope = coroutineScope
+                            Avatar()
+                               val avatar = findView<ImageView>(R.id.es_list_avatar)
+                                Glide.with(avatar)
+                                    .load(AppIcon(app.packageName))
+                                    .apply(
+                                        RequestOptions()
+                                            .diskCacheStrategy(DiskCacheStrategy.NONE)
+                                            .skipMemoryCache(true)
+                                    )
+                                    .into(avatar)
+                             */
                         }
-                    }
-                )
+                    )
+                }
             }
         }
-    }
-
+    )
 }
 
 @Inject
@@ -92,7 +78,7 @@ internal class AppPickerViewModel(
     @Param private val launchableOnly: Boolean,
     private val appStore: AppStore,
     dispatchers: AppDispatchers,
-    private val navigator: Navigator
+    @Param private val navigator: Navigator
 ) : MvRxViewModel<AppPickerState>(AppPickerState()) {
 
     init {

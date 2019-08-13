@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.sample.ui.checkapps
 
+/**
 import com.ivianuu.essentials.apps.ui.CheckableAppsController
 import com.ivianuu.essentials.ui.navigation.director.controllerRoute
 import com.ivianuu.essentials.ui.navigation.director.controllerRouteOptions
@@ -27,22 +28,22 @@ import com.ivianuu.kprefs.stringSet
 import kotlinx.coroutines.flow.Flow
 
 val checkAppsRoute = controllerRoute<CheckAppsController>(
-    options = controllerRouteOptions().fade()
+options = controllerRouteOptions().fade()
 )
 
 @Inject
 class CheckAppsController(private val prefs: KPrefs) : CheckableAppsController() {
 
-    override val toolbarTitle: String?
-        get() = "Send check apps"
+override val toolbarTitle: String?
+get() = "Send check apps"
 
-    private val pref by lazy { prefs.stringSet("apps") }
+private val pref by lazy { prefs.stringSet("apps") }
 
-    override fun getCheckedAppsFlow(): Flow<Set<String>> =
-        pref.asFlow()
+override fun getCheckedAppsFlow(): Flow<Set<String>> =
+pref.asFlow()
 
-    override fun onCheckedAppsChanged(apps: Set<String>) {
-        pref.set(apps)
-    }
-
+override fun onCheckedAppsChanged(apps: Set<String>) {
+pref.set(apps)
 }
+
+}*/

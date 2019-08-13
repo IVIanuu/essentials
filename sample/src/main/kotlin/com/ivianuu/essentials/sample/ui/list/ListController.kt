@@ -16,9 +16,10 @@
 
 package com.ivianuu.essentials.sample.ui.list
 
-import com.ivianuu.essentials.ui.epoxy.ListItem
-import com.ivianuu.essentials.ui.epoxy.SimpleLoading
-import com.ivianuu.essentials.ui.epoxy.SimpleText
+/**
+import com.ivianuu.essentials.ui.compose.ListItem
+import com.ivianuu.essentials.ui.compose.SimpleLoading
+import com.ivianuu.essentials.ui.compose.SimpleText
 import com.ivianuu.essentials.ui.mvrx.epoxy.mvRxEpoxyController
 import com.ivianuu.essentials.ui.mvrx.injekt.injectMvRxViewModel
 import com.ivianuu.essentials.ui.navigation.director.controllerRoute
@@ -55,4 +56,4 @@ class ListController : com.ivianuu.essentials.ui.simple.ListController() {
         }
     }
 
-}
+}*/

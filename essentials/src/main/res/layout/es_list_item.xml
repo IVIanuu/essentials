@@ -24,7 +24,7 @@
     android:minHeight="48dp">
 
     <FrameLayout
-        android:id="@+id/es_list_primary_action_container"
+        android:id="@+id/es_list_leading_action"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:visibility="visible"
@@ -41,9 +41,9 @@
         android:layout_marginEnd="16dp"
         android:paddingTop="16dp"
         android:paddingBottom="16dp"
-        app:layout_constraintStart_toEndOf="@id/es_list_primary_action_container"
+        app:layout_constraintStart_toEndOf="@id/es_list_leading_action"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/es_list_secondary_action_container"
+        app:layout_constraintEnd_toStartOf="@id/es_list_trailing_action"
         app:layout_constraintBottom_toBottomOf="parent">
 
         <TextView
@@ -67,7 +67,7 @@
     </LinearLayout>
 
     <FrameLayout
-        android:id="@+id/es_list_secondary_action_container"
+        android:id="@+id/es_list_trailing_action"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:visibility="visible"

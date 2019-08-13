@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.ui.common
 
+/**
 import android.app.Activity
 import android.content.Intent
 import android.provider.Settings
@@ -26,7 +27,6 @@ import androidx.core.app.ShareCompat
 import androidx.core.net.toUri
 import androidx.lifecycle.lifecycleScope
 import com.ivianuu.director.requireActivity
-import com.ivianuu.essentials.ui.base.EsController
 import com.ivianuu.essentials.ui.navigation.director.ControllerRoute
 import com.ivianuu.essentials.ui.navigation.director.controllerRoute
 import com.ivianuu.essentials.ui.navigation.director.dialog
@@ -35,47 +35,47 @@ import com.ivianuu.injekt.Param
 import com.ivianuu.injekt.parametersOf
 
 fun activityRoute(intentFactory: (Activity) -> Intent) =
-    controllerRoute<ActivityStartingController>(options = ControllerRoute.Options().dialog()) {
-        parametersOf(intentFactory)
-    }
+controllerRoute<ActivityStartingController>(options = ControllerRoute.Options().dialog()) {
+parametersOf(intentFactory)
+}
 
 fun appInfoRoute(packageName: String) = activityRoute {
-    Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-        this.data = "package:$packageName".toUri()
-    }
+Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+this.data = "package:$packageName".toUri()
+}
 }
 
 fun appRoute(packageName: String) = activityRoute {
-    it.packageManager.getLaunchIntentForPackage(packageName)!!
+it.packageManager.getLaunchIntentForPackage(packageName)!!
 }
 
 fun shareRoute(text: String) = activityRoute {
-    ShareCompat.IntentBuilder
-        .from(it)
-        .setType("text/plain")
-        .setText(text)
-        .createChooserIntent()
+ShareCompat.IntentBuilder
+.from(it)
+.setType("text/plain")
+.setText(text)
+.createChooserIntent()
 }
 
 fun urlRoute(url: String) = activityRoute {
-    Intent(Intent.ACTION_VIEW).apply { this.data = url.toUri() }
+Intent(Intent.ACTION_VIEW).apply { this.data = url.toUri() }
 }
 
 @Inject
 internal class ActivityStartingController(
-    @Param private val intentFactory: (Activity) -> Intent
+@Param private val intentFactory: (Activity) -> Intent
 ) : EsController() {
 
-    init {
-        lifecycleScope.launchWhenResumed {
-            requireActivity().startActivity(intentFactory(requireActivity()))
-            navigator.pop()
-        }
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup
-    ) = View(requireActivity()) // dummy
-
+init {
+lifecycleScope.launchWhenResumed {
+requireActivity().startActivity(intentFactory(requireActivity()))
+navigator.pop()
 }
+}
+
+override fun onCreateView(
+inflater: LayoutInflater,
+container: ViewGroup
+) = View(requireActivity()) // dummy
+
+}*/

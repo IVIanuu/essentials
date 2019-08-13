@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.ui.common
 
+/**
 import android.app.Activity
 import android.content.Intent
 import android.view.LayoutInflater
@@ -24,7 +25,6 @@ import android.view.ViewGroup
 import com.ivianuu.director.common.addActivityResultListener
 import com.ivianuu.director.common.startActivityForResult
 import com.ivianuu.director.requireActivity
-import com.ivianuu.essentials.ui.base.EsController
 import com.ivianuu.essentials.ui.navigation.director.ControllerRoute
 import com.ivianuu.essentials.ui.navigation.director.controllerRoute
 import com.ivianuu.essentials.ui.navigation.director.dialog
@@ -33,14 +33,14 @@ import com.ivianuu.injekt.Param
 import com.ivianuu.injekt.parametersOf
 
 fun activityResultRoute(intent: Intent) =
-    controllerRoute<ActivityResultController>(options = ControllerRoute.Options().dialog()) {
-        parametersOf(intent)
-    }
+controllerRoute<ActivityResultController>(options = ControllerRoute.Options().dialog()) {
+parametersOf(intent)
+}
 
 data class ActivityResult(
-    val requestCode: Int,
-    val resultCode: Int,
-    val data: Intent?
+val requestCode: Int,
+val resultCode: Int,
+val data: Intent?
 )
 
 val ActivityResult.isOk: Boolean get() = resultCode == Activity.RESULT_OK
@@ -50,21 +50,21 @@ val ActivityResult.isFirstUser: Boolean get() = resultCode == Activity.RESULT_FI
 @Inject
 internal class ActivityResultController(@Param private val intent: Intent) : EsController() {
 
-    override fun onCreate() {
-        super.onCreate()
+override fun onCreate() {
+super.onCreate()
 
-        val resultCode = ResultCodes.nextResultCode()
+val resultCode = ResultCodes.nextResultCode()
 
-        addActivityResultListener(resultCode) { requestCode, resultCode, data ->
-            navigator.pop(ActivityResult(requestCode, resultCode, data))
-        }
-
-        startActivityForResult(intent, resultCode)
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup
-    ): View = View(requireActivity()) // dummy
-
+addActivityResultListener(resultCode) { requestCode, resultCode, data ->
+navigator.pop(ActivityResult(requestCode, resultCode, data))
 }
+
+startActivityForResult(intent, resultCode)
+}
+
+override fun onCreateView(
+inflater: LayoutInflater,
+container: ViewGroup
+): View = View(requireActivity()) // dummy
+
+}*/

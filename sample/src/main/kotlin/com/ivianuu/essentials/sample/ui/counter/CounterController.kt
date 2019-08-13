@@ -16,70 +16,35 @@
 
 package com.ivianuu.essentials.sample.ui.counter
 
-import android.transition.ChangeBounds
-import android.transition.ChangeTransform
-import android.transition.Slide
-import android.view.Gravity
-import android.view.View
-import com.ivianuu.director.ChangeData
-import com.ivianuu.director.common.changehandler.SharedElementTransitionChangeHandler
+/**
+import com.ivianuu.compose.ComponentComposition
 import com.ivianuu.essentials.sample.R
-import com.ivianuu.essentials.ui.base.EsController
-import com.ivianuu.essentials.ui.mvrx.injekt.injectMvRxViewModel
-import com.ivianuu.essentials.ui.navigation.director.controllerRoute
-import com.ivianuu.essentials.ui.navigation.director.controllerRouteOptions
-import com.ivianuu.essentials.ui.navigation.director.handler
-import com.ivianuu.injekt.Inject
-import com.ivianuu.injekt.Param
-import com.ivianuu.injekt.parametersOf
-import com.ivianuu.kommon.core.transition.transitionSetOf
+import com.ivianuu.essentials.sample.ui.test.ControllerContext
+import com.ivianuu.essentials.sample.ui.test.MviAction
+import com.ivianuu.essentials.sample.ui.test.MviState
+import com.ivianuu.essentials.sample.ui.test.Reducer
+import com.ivianuu.essentials.sample.ui.test.StateStore
+import com.ivianuu.essentials.sample.ui.test.mvRxControllerRoute
+import com.ivianuu.essentials.sample.ui.test.stateStore
 import kotlinx.android.synthetic.main.controller_counter.*
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 
-fun counterRoute(screen: Int) = controllerRoute<CounterController>(
-    options = controllerRouteOptions().handler(CounterChangeHandler())
-) { parametersOf(screen) }
-
-@Inject
-class CounterController(@Param private val screen: Int) : EsController() {
-
-    override val layoutRes: Int get() = R.layout.controller_counter
-
-    private val viewModel: CounterViewModel by injectMvRxViewModel {
-        parametersOf(screen)
-    }
-
-    override fun onViewCreated(view: View) {
-        super.onViewCreated(view)
-
-        screen_up.setOnClickListener { viewModel.screenUpClicked() }
-        screen_down.setOnClickListener { viewModel.screenDownClicked() }
-        root_screen.setOnClickListener { viewModel.rootScreenClicked() }
-        list_screen.setOnClickListener { viewModel.listScreenClicked() }
-        check_apps.setOnClickListener { viewModel.checkAppsClicked() }
-        do_work.setOnClickListener { viewModel.doWorkClicked() }
-        nav_bar.setOnClickListener { viewModel.navBarClicked() }
-        twilight.setOnClickListener { viewModel.twilightClicked() }
-        md_list.setOnClickListener { viewModel.materialListClicked() }
-    }
-
-    override fun invalidate() {
-        count.text = "Screen: ${viewModel.state.screen}"
-    }
-
+fun ComponentComposition.counterRoute() = mvRxControllerRoute(R.layout.controller_counter) {
+val (state, dispatch) = stateStore(initialState = CountState(0), reducer = countReducer)
+screen_up.setOnClickListener { dispatch(CountAction.Inc) }
+screen_down.setOnClickListener { dispatch(CountAction.Dec) }
+count_text.text = "Count: ${state.count}"
 }
 
-private class CounterChangeHandler : SharedElementTransitionChangeHandler() {
+private data class CountState(val count: Int) : MviState
 
-    override fun getSharedElementTransition(changeData: ChangeData) =
-        transitionSetOf(ChangeBounds(), ChangeTransform())
+private enum class CountAction : MviAction { Inc, Dec }
 
-    override fun getEnterTransition(changeData: ChangeData) = Slide(Gravity.END)
-
-    override fun getExitTransition(changeData: ChangeData) = Slide(Gravity.START)
-
-    override fun configureSharedElements(changeData: ChangeData) {
-        addSharedElement("count")
+private val countReducer: Reducer<CountState, CountAction> = { action ->
+when(action) {
+CountAction.Inc -> copy(count = count + 1)
+CountAction.Dec -> copy(count = count - 1)
     }
-
-    override fun copy() = CounterChangeHandler()
-}
+}*/
