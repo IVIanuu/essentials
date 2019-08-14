@@ -1,4 +1,4 @@
-package com.ivianuu.essentials.sample.ui.permission
+package com.ivianuu.essentials.sample.ui
 
 import android.Manifest
 import com.github.ajalt.timberkt.d
@@ -14,10 +14,7 @@ fun PermissionRoute() = Route(isFloating = true) {
     launchOnActive {
         val granted = navigator.push<PermissionResult>(
             PermissionRoute(Manifest.permission.CAMERA)
-        )
-            ?.allGranted ?: false
-        d {
-            "permissions granted ? $granted"
-        }
+        )?.allGranted ?: false
+        d { "permissions granted ? $granted" }
     }
 }

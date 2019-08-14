@@ -1,10 +1,10 @@
-package com.ivianuu.essentials.sample.ui.home
+package com.ivianuu.essentials.sample.ui
 
 import com.ivianuu.compose.ComponentComposition
 import com.ivianuu.compose.common.RecyclerView
 import com.ivianuu.compose.common.Route
 import com.ivianuu.compose.common.navigator
-import com.ivianuu.essentials.sample.ui.permission.PermissionRoute
+import com.ivianuu.essentials.apps.ui.AppPickerRoute
 import com.ivianuu.essentials.twilight.TwilightSettingsRoute
 import com.ivianuu.essentials.ui.compose.AppBar
 import com.ivianuu.essentials.ui.compose.ListItem
@@ -40,6 +40,14 @@ private enum class HomeItem(
     val title: String,
     val route: () -> Route
 ) {
+    AppBlacklist(
+        title = "App Blacklist",
+        route = { AppBlacklistRoute() }
+    ),
+    AppPicker(
+        title = "App Picker",
+        route = { AppPickerRoute() }
+    ),
     Twilight(
         title = "Twilight",
         route = { TwilightSettingsRoute() }

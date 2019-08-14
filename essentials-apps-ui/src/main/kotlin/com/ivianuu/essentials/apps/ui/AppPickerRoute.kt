@@ -16,13 +16,22 @@
 
 package com.ivianuu.essentials.apps.ui
 
+import android.widget.ImageView
 import androidx.lifecycle.viewModelScope
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.request.RequestOptions
+import com.github.ajalt.timberkt.d
 import com.ivianuu.compose.ComponentComposition
+import com.ivianuu.compose.View
 import com.ivianuu.compose.common.Navigator
+import com.ivianuu.compose.common.RecyclerView
 import com.ivianuu.compose.common.Route
 import com.ivianuu.compose.common.navigator
+import com.ivianuu.compose.layoutRes
 import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.AppStore
+import com.ivianuu.essentials.apps.glide.AppIcon
 import com.ivianuu.essentials.ui.compose.AppBar
 import com.ivianuu.essentials.ui.compose.ListItem
 import com.ivianuu.essentials.ui.compose.Scaffold
@@ -38,7 +47,7 @@ import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Param
 import com.ivianuu.injekt.parametersOf
 
-fun ComponentComposition.AppPickerRoute(launchableOnly: Boolean = false) = Route {
+fun AppPickerRoute(launchableOnly: Boolean = false) = Route {
     Scaffold(
         appBar = { AppBar(titleRes = R.string.es_title_app_picker) },
         content = {
@@ -47,27 +56,43 @@ fun ComponentComposition.AppPickerRoute(launchableOnly: Boolean = false) = Route
                 parametersOf(launchableOnly, navigator)
             }
 
+            d { "app picker render with state ${state.apps.invoke()?.map { it.appName }}" }
+
             when (state.apps) {
                 is Loading -> SimpleLoading()
-                is Success -> state.apps()?.forEach { app ->
-                    ListItem(
-                        title = app.appName,
-                        onClick = { viewModel.appClicked(app) },
-                        leadingAction = {
-                            /*val coroutineScope = coroutineScope
-                            Avatar()
-                               val avatar = findView<ImageView>(R.id.es_list_avatar)
-                                Glide.with(avatar)
-                                    .load(AppIcon(app.packageName))
-                                    .apply(
-                                        RequestOptions()
-                                            .diskCacheStrategy(DiskCacheStrategy.NONE)
-                                            .skipMemoryCache(true)
-                                    )
-                                    .into(avatar)
-                             */
+                is Success -> {
+                    RecyclerView {
+                        state.apps()?.forEach { app ->
+                            App(app = app, onClick = {
+                                viewModel.appClicked(app)
+                            })
                         }
-                    )
+                    }
+                }
+            }
+        }
+    )
+}
+
+private fun ComponentComposition.App(
+    app: AppInfo,
+    onClick: () -> Unit
+) {
+    ListItem(
+        title = app.appName,
+        onClick = onClick,
+        leadingAction = {
+            View<ImageView> {
+                layoutRes(R.layout.es_avatar)
+                bindView {
+                    Glide.with(this)
+                        .load(AppIcon(app.packageName))
+                        .apply(
+                            RequestOptions()
+                                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                                .skipMemoryCache(true)
+                        )
+                        .into(this)
                 }
             }
         }

@@ -27,7 +27,6 @@ import com.ivianuu.compose.View
 import com.ivianuu.compose.common.Navigator
 import com.ivianuu.essentials.gestures.unlock.ScreenUnlocker
 import com.ivianuu.essentials.messaging.BroadcastFactory
-import com.ivianuu.essentials.sample.ui.home.HomeRoute
 import com.ivianuu.essentials.ui.base.EsActivity
 import com.ivianuu.injekt.get
 import com.ivianuu.kprefs.KPrefs
