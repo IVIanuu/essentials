@@ -19,7 +19,6 @@ package com.ivianuu.essentials.twilight
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.android.ApplicationScope
 import com.ivianuu.kprefs.KPrefs
-import com.ivianuu.kprefs.common.PrefValueHolder
 import com.ivianuu.kprefs.common.enumString
 
 @Inject
@@ -28,12 +27,4 @@ class TwilightPrefs(prefs: KPrefs) {
     val twilightMode = prefs.enumString("twilight_mode",
         TwilightMode.SYSTEM
     )
-}
-
-enum class TwilightMode(override val value: String) : PrefValueHolder<String> {
-    LIGHT("light"),
-    DARK("dark"),
-    BATTERY("battery"),
-    TIME("time"),
-    SYSTEM("system")
 }

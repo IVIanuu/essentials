@@ -16,7 +16,5 @@
 
 package com.ivianuu.essentials.ui.common
 
-internal object ResultCodes {
-    private var currentCode = 0
-    fun nextResultCode() = ++currentCode
-}
+private var currentCode = 0
+internal fun nextResultCode() = ++currentCode

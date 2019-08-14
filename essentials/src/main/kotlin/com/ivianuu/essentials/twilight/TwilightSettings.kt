@@ -16,7 +16,6 @@
 
 package com.ivianuu.essentials.twilight
 
-import com.github.ajalt.timberkt.d
 import com.ivianuu.compose.ComponentComposition
 import com.ivianuu.compose.common.RecyclerView
 import com.ivianuu.compose.common.Route
@@ -30,7 +29,6 @@ import com.ivianuu.essentials.ui.prefs.Prefs
 
 fun TwilightSettingsRoute() = Route {
     Prefs {
-        d { "rebuild prefs" }
         Scaffold(
             appBar = { AppBar(titleRes = R.string.es_title_twilight) },
             content = {

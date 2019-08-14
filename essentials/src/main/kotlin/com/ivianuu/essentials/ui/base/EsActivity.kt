@@ -49,7 +49,6 @@ abstract class EsActivity : AppCompatActivity(), InjektTrait {
             setContentView(layoutRes)
         }
 
-        // todo leaks
         setContent(findViewById(containerId)) {
             ComponentAmbient.Provider(component) {
                 compose()

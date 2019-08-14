@@ -10,7 +10,8 @@ import com.ivianuu.essentials.R
 
 fun ComponentComposition.Scaffold(
     appBar: (ComponentComposition.() -> Unit)? = null,
-    content: (ComponentComposition.() -> Unit)? = null
+    content: (ComponentComposition.() -> Unit)? = null,
+    floatingActionButton: (ComponentComposition.() -> Unit)? = null
 ) {
     View<LinearLayout> {
         layoutRes(R.layout.es_scaffold)
@@ -22,5 +23,7 @@ fun ComponentComposition.Scaffold(
             byId(R.id.es_content)
             content?.invoke(this@Scaffold)
         }
+
+        floatingActionButton?.invoke(this@Scaffold)
     }
 }

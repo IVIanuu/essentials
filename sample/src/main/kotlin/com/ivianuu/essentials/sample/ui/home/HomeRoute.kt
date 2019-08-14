@@ -4,6 +4,7 @@ import com.ivianuu.compose.ComponentComposition
 import com.ivianuu.compose.common.RecyclerView
 import com.ivianuu.compose.common.Route
 import com.ivianuu.compose.common.navigator
+import com.ivianuu.essentials.sample.ui.permission.PermissionRoute
 import com.ivianuu.essentials.twilight.TwilightSettingsRoute
 import com.ivianuu.essentials.ui.compose.AppBar
 import com.ivianuu.essentials.ui.compose.ListItem
@@ -42,5 +43,9 @@ private enum class HomeItem(
     Twilight(
         title = "Twilight",
         route = { TwilightSettingsRoute() }
+    ),
+    Permission(
+        title = "Permission",
+        route = { PermissionRoute() }
     )
 }

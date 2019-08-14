@@ -1,0 +1,61 @@
+/*
+ * Copyright 2019 Manuel Wrage
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.ivianuu.essentials.ui.common
+
+import android.app.Activity
+import android.content.Intent
+import android.provider.Settings
+import androidx.core.app.ShareCompat
+import androidx.core.net.toUri
+import com.ivianuu.compose.ActivityAmbient
+import com.ivianuu.compose.ambient
+import com.ivianuu.compose.common.Route
+import com.ivianuu.compose.common.navigator
+import com.ivianuu.compose.onActive
+
+// todo Route + Navigator is the wrong api for this case
+
+fun ActivityRoute(intentFactory: (Activity) -> Intent) = Route(isFloating = true) {
+    val activity = ambient(ActivityAmbient)
+    val navigator = navigator
+    onActive {
+        activity.startActivity(intentFactory(activity))
+        navigator.pop()
+    }
+}
+
+fun AppInfoRoute(packageName: String) = ActivityRoute {
+    Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+        this.data = "package:$packageName".toUri()
+    }
+}
+
+fun AppRoute(packageName: String) = ActivityRoute {
+    it.packageManager.getLaunchIntentForPackage(packageName)!!
+}
+
+fun ShareRoute(text: String) = ActivityRoute {
+    ShareCompat.IntentBuilder
+        .from(it)
+        .setType("text/plain")
+        .setText(text)
+        .createChooserIntent()
+}
+
+fun UrlRoute(url: String) = ActivityRoute {
+    Intent(Intent.ACTION_VIEW).apply { this.data = url.toUri() }
+}

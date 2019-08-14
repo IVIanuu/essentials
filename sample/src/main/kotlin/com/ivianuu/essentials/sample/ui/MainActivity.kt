@@ -22,12 +22,9 @@ import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.FrameLayout
 import androidx.lifecycle.lifecycleScope
 import com.github.ajalt.timberkt.d
-import com.ivianuu.compose.ChangeHandlers
 import com.ivianuu.compose.ComponentComposition
 import com.ivianuu.compose.View
 import com.ivianuu.compose.common.Navigator
-import com.ivianuu.compose.common.changehandler.HorizontalChangeHandler
-import com.ivianuu.compose.memo
 import com.ivianuu.essentials.gestures.unlock.ScreenUnlocker
 import com.ivianuu.essentials.messaging.BroadcastFactory
 import com.ivianuu.essentials.sample.ui.home.HomeRoute
@@ -69,9 +66,7 @@ class MainActivity : EsActivity() {
                 }
             }
 
-            ChangeHandlers(memo { HorizontalChangeHandler() }) {
-                Navigator { HomeRoute() }
-            }
+            Navigator { HomeRoute() }
         }
     }
 
