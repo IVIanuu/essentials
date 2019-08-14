@@ -18,9 +18,9 @@ package com.ivianuu.essentials.ui.mvrx
 
 import com.ivianuu.compose.ComponentComposition
 import com.ivianuu.compose.ambient
+import com.ivianuu.compose.coroutineScope
 import com.ivianuu.compose.onActive
 import com.ivianuu.compose.state
-import com.ivianuu.essentials.ui.compose.coroutines.coroutineScope
 import com.ivianuu.essentials.ui.compose.injekt.ComponentAmbient
 import com.ivianuu.essentials.ui.compose.viewmodel.viewModel
 import com.ivianuu.injekt.ParametersDefinition

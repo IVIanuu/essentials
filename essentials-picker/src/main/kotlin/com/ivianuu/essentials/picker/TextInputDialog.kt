@@ -16,11 +16,14 @@
 
 package com.ivianuu.essentials.picker
 
-import androidx.compose.state
 import com.afollestad.materialdialogs.input.input
 import com.ivianuu.compose.ComponentComposition
-import com.ivianuu.essentials.ui.compose.navigation.navigator
+import com.ivianuu.compose.ContextAmbient
+import com.ivianuu.compose.ambient
+import com.ivianuu.compose.common.navigator
+import com.ivianuu.compose.state
 import com.ivianuu.essentials.ui.dialog.DialogRoute
+import com.ivianuu.kommon.core.content.string
 
 fun ComponentComposition.TextInputRoute(
     title: String? = null,
@@ -33,10 +36,11 @@ fun ComponentComposition.TextInputRoute(
     allowEmpty: Boolean = false
 ) = DialogRoute {
     val navigator = navigator
-    val (currentValue, setCurrentValue) = +state {
+    val context = ambient(ContextAmbient)
+    val (currentValue, setCurrentValue) = state {
         when {
             prefill != null -> prefill
-            else -> null // todo context.string(prefillRes!!)
+            else -> context.string(prefillRes!!)
         }
     }
 

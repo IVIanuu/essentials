@@ -18,15 +18,15 @@ package com.ivianuu.essentials.apps.ui
 
 import androidx.lifecycle.viewModelScope
 import com.ivianuu.compose.ComponentComposition
+import com.ivianuu.compose.common.Navigator
+import com.ivianuu.compose.common.Route
+import com.ivianuu.compose.common.navigator
 import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.AppStore
 import com.ivianuu.essentials.ui.compose.AppBar
 import com.ivianuu.essentials.ui.compose.ListItem
 import com.ivianuu.essentials.ui.compose.Scaffold
 import com.ivianuu.essentials.ui.compose.SimpleLoading
-import com.ivianuu.essentials.ui.compose.navigation.Navigator
-import com.ivianuu.essentials.ui.compose.navigation.Route
-import com.ivianuu.essentials.ui.compose.navigation.navigator
 import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
 import com.ivianuu.essentials.ui.mvrx.injectMvRxViewModel
 import com.ivianuu.essentials.util.AppDispatchers
@@ -42,6 +42,7 @@ fun ComponentComposition.AppPickerRoute(launchableOnly: Boolean = false) = Route
     Scaffold(
         appBar = { AppBar(titleRes = R.string.es_title_app_picker) },
         content = {
+            val navigator = navigator
             val (state, viewModel) = injectMvRxViewModel(AppPickerViewModel::class) {
                 parametersOf(launchableOnly, navigator)
             }

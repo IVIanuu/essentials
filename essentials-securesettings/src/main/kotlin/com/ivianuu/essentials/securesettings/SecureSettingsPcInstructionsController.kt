@@ -16,34 +16,29 @@
 
 package com.ivianuu.essentials.securesettings
 
-import androidx.compose.onActive
 import com.ivianuu.compose.common.RecyclerView
+import com.ivianuu.compose.common.Route
+import com.ivianuu.compose.common.navigator
+import com.ivianuu.compose.launchOnActive
 import com.ivianuu.essentials.ui.compose.AppBar
 import com.ivianuu.essentials.ui.compose.Scaffold
-import com.ivianuu.essentials.ui.compose.coroutines.coroutineScope
 import com.ivianuu.essentials.ui.compose.injekt.inject
-import com.ivianuu.essentials.ui.compose.navigation.Route
-import com.ivianuu.essentials.ui.compose.navigation.navigator
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 /**
  * Asks the user for the secure settings permission
  */
 fun SecureSettingsInstructionsRoute() = Route {
-    val coroutineScope = coroutineScope
     val secureSettingsHelper = inject<SecureSettingsHelper>()
     val navigator = navigator
 
-    +onActive {
-        coroutineScope.launch {
-            while (true) {
-                if (secureSettingsHelper.canWriteSecureSettings()) {
-                    navigator.pop()
-                    break
-                }
-                delay(500)
+    launchOnActive {
+        while (true) {
+            if (secureSettingsHelper.canWriteSecureSettings()) {
+                navigator.pop()
+                break
             }
+            delay(500)
         }
     }
 

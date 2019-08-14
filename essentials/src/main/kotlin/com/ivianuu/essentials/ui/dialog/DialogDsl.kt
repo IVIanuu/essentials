@@ -1,14 +1,14 @@
 package com.ivianuu.essentials.ui.dialog
 
 import android.view.View
-import androidx.compose.memo
 import com.afollestad.materialdialogs.MaterialDialog
 import com.ivianuu.compose.ComponentComposition
 import com.ivianuu.compose.View
-import com.ivianuu.essentials.ui.compose.navigation.Route
+import com.ivianuu.compose.common.Route
+import com.ivianuu.compose.memo
 
 fun ComponentComposition.Dialog(block: DialogDsl.() -> Unit) {
-    val dialogHolder = +memo { Holder<MaterialDialog?>(null) }
+    val dialogHolder = memo { Holder<MaterialDialog?>(null) }
 
     View<View> {
         val dsl = DialogDsl().apply(block)
@@ -25,7 +25,7 @@ fun ComponentComposition.Dialog(block: DialogDsl.() -> Unit) {
     }
 }
 
-fun ComponentComposition.DialogRoute(block: DialogDsl.() -> Unit) = Route(
+fun DialogRoute(block: DialogDsl.() -> Unit) = Route(
     isFloating = true
 ) {
     Dialog(block)

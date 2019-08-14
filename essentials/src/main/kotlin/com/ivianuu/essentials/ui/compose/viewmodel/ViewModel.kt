@@ -10,8 +10,8 @@ import kotlin.reflect.KClass
 
 val ComponentComposition.viewModelStore: ViewModelStore
     get() {
-        val viewModelStore = this.memo { ViewModelStore() }
-        this.onDispose { viewModelStore.clear() } // todo clear only once
+        val viewModelStore = memo { ViewModelStore() }
+        onDispose { viewModelStore.clear() }
         return viewModelStore
     }
 

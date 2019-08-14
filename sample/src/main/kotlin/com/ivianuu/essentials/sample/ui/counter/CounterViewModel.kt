@@ -16,13 +16,13 @@
 
 package com.ivianuu.essentials.sample.ui.counter
 
+import com.ivianuu.compose.common.Navigator
 import com.ivianuu.essentials.hidenavbar.NavBarConfig
 import com.ivianuu.essentials.hidenavbar.NavBarController
 import com.ivianuu.essentials.sample.work.WorkScheduler
 import com.ivianuu.essentials.securesettings.SecureSettingsHelper
 import com.ivianuu.essentials.securesettings.SecureSettingsRoute
 import com.ivianuu.essentials.twilight.TwilightSettingsRoute
-import com.ivianuu.essentials.ui.compose.navigation.Navigator
 import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Param

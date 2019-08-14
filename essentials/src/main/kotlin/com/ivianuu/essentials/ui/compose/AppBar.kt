@@ -25,9 +25,9 @@ import androidx.core.view.children
 import com.google.android.material.appbar.MaterialToolbar
 import com.ivianuu.compose.ComponentComposition
 import com.ivianuu.compose.View
+import com.ivianuu.compose.common.navigator
 import com.ivianuu.compose.layoutRes
 import com.ivianuu.essentials.R
-import com.ivianuu.essentials.ui.compose.navigation.navigator
 import com.ivianuu.essentials.ui.popup.PopupMenu
 import com.ivianuu.essentials.ui.popup.show
 import com.ivianuu.essentials.util.getIconColor

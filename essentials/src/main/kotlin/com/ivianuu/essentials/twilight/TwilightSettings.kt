@@ -19,13 +19,13 @@ package com.ivianuu.essentials.twilight
 import com.github.ajalt.timberkt.d
 import com.ivianuu.compose.ComponentComposition
 import com.ivianuu.compose.common.RecyclerView
+import com.ivianuu.compose.common.Route
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.compose.AppBar
 import com.ivianuu.essentials.ui.compose.ListItem
 import com.ivianuu.essentials.ui.compose.RadioButton
 import com.ivianuu.essentials.ui.compose.Scaffold
 import com.ivianuu.essentials.ui.compose.injekt.inject
-import com.ivianuu.essentials.ui.compose.navigation.Route
 import com.ivianuu.essentials.ui.prefs.Prefs
 
 fun TwilightSettingsRoute() = Route {

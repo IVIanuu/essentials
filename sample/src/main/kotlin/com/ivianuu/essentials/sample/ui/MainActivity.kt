@@ -24,11 +24,11 @@ import androidx.lifecycle.lifecycleScope
 import com.github.ajalt.timberkt.d
 import com.ivianuu.compose.ComponentComposition
 import com.ivianuu.compose.View
+import com.ivianuu.compose.common.Navigator
 import com.ivianuu.essentials.gestures.unlock.ScreenUnlocker
 import com.ivianuu.essentials.messaging.BroadcastFactory
 import com.ivianuu.essentials.twilight.TwilightSettingsRoute
 import com.ivianuu.essentials.ui.base.EsActivity
-import com.ivianuu.essentials.ui.compose.navigation.Navigator
 import com.ivianuu.injekt.get
 import com.ivianuu.kprefs.KPrefs
 import com.ivianuu.kprefs.boolean

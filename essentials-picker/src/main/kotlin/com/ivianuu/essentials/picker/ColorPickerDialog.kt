@@ -16,10 +16,10 @@
 
 package com.ivianuu.essentials.picker
 
-import androidx.compose.state
 import com.afollestad.materialdialogs.color.colorChooser
 import com.ivianuu.compose.ComponentComposition
-import com.ivianuu.essentials.ui.compose.navigation.navigator
+import com.ivianuu.compose.common.navigator
+import com.ivianuu.compose.state
 import com.ivianuu.essentials.ui.dialog.DialogRoute
 
 fun ComponentComposition.ColorPickerRoute(
@@ -29,7 +29,7 @@ fun ComponentComposition.ColorPickerRoute(
     allowCustomArgb: Boolean = true,
     showAlphaSelector: Boolean = false
 ) = DialogRoute {
-    val (currentColor, setCurrentColor) = +state { preselect }
+    val (currentColor, setCurrentColor) = state { preselect }
     val navigator = navigator
     buildDialog {
         title(res = titleRes, text = title)

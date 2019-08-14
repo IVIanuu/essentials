@@ -16,18 +16,16 @@
 
 package com.ivianuu.essentials.securesettings
 
-import androidx.compose.onActive
 import com.ivianuu.compose.common.RecyclerView
+import com.ivianuu.compose.common.Route
+import com.ivianuu.compose.common.navigator
+import com.ivianuu.compose.launchOnActive
 import com.ivianuu.essentials.ui.compose.AppBar
 import com.ivianuu.essentials.ui.compose.Scaffold
-import com.ivianuu.essentials.ui.compose.coroutines.coroutineScope
 import com.ivianuu.essentials.ui.compose.injekt.inject
-import com.ivianuu.essentials.ui.compose.navigation.Route
-import com.ivianuu.essentials.ui.compose.navigation.navigator
 import com.ivianuu.essentials.ui.prefs.Prefs
 import com.ivianuu.essentials.util.Toaster
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 /**
  * Asks the user for the secure settings permission
@@ -35,21 +33,18 @@ import kotlinx.coroutines.launch
 fun SecureSettingsRoute(
     showHideNavBarHint: Boolean = false
 ) = Route {
-    val coroutineScope = coroutineScope
     val secureSettingsHelper = inject<SecureSettingsHelper>()
     val toaster = inject<Toaster>()
     val navigator = navigator
 
-    +onActive {
-        coroutineScope.launch {
-            while (true) {
-                if (secureSettingsHelper.canWriteSecureSettings()) {
-                    toaster.toast(R.string.es_secure_settings_permission_granted)
-                    navigator.pop(true)
-                    break
-                }
-                delay(100)
+    launchOnActive {
+        while (true) {
+            if (secureSettingsHelper.canWriteSecureSettings()) {
+                toaster.toast(R.string.es_secure_settings_permission_granted)
+                navigator.pop(true)
+                break
             }
+            delay(100)
         }
     }
 
