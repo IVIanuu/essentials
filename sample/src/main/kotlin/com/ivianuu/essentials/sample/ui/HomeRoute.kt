@@ -30,10 +30,7 @@ private fun ComponentComposition.HomeItem(
     item: HomeItem,
     onClick: () -> Unit
 ) {
-    ListItem(
-        title = item.title,
-        onClick = onClick
-    )
+    ListItem(title = item.title, onClick = onClick)
 }
 
 private enum class HomeItem(
@@ -47,6 +44,10 @@ private enum class HomeItem(
     AppPicker(
         title = "App Picker",
         route = { AppPickerRoute() }
+    ),
+    Counter(
+        title = "Counter",
+        route = { CounterRoute() }
     ),
     Twilight(
         title = "Twilight",
