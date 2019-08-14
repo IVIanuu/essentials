@@ -20,8 +20,8 @@
     android:layout_height="match_parent"
     android:background="?android:colorBackground">
 
-    <include layout="@layout/es_view_app_bar_with_toolbar" />
+    <include layout="@layout/es_app_bar_with_toolbar" />
 
-    <include layout="@layout/es_view_recycler_view" />
+    <include layout="@layout/es_recycler_view" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

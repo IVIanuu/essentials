@@ -27,10 +27,10 @@
 
         <include layout="@layout/es_app_bar" />
 
-        <include layout="@layout/es_view_tab_layout" />
+        <include layout="@layout/es_tab_layout" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <include layout="@layout/es_view_view_pager" />
+    <include layout="@layout/es_view_pager" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
