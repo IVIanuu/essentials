@@ -19,6 +19,7 @@ package com.ivianuu.essentials.twilight
 import com.ivianuu.compose.ComponentComposition
 import com.ivianuu.compose.common.RecyclerView
 import com.ivianuu.compose.common.Route
+import com.ivianuu.compose.key
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.compose.AppBar
 import com.ivianuu.essentials.ui.compose.ListItem
@@ -74,8 +75,7 @@ private inline fun ComponentComposition.TwilightModeItem(
     textRes: Int
 ) {
     val prefs = inject<TwilightPrefs>()
-
-    group {
+    key(key = mode) {
         ListItem(
             titleRes = titleRes,
             textRes = textRes,

@@ -24,9 +24,10 @@ import android.widget.ImageView
 import androidx.core.view.children
 import com.google.android.material.appbar.MaterialToolbar
 import com.ivianuu.compose.ComponentComposition
-import com.ivianuu.compose.View
+import com.ivianuu.compose.ViewByLayoutRes
 import com.ivianuu.compose.common.navigator
-import com.ivianuu.compose.layoutRes
+import com.ivianuu.compose.set
+import com.ivianuu.compose.setBy
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.popup.PopupMenu
 import com.ivianuu.essentials.ui.popup.show
@@ -46,15 +47,14 @@ fun ComponentComposition.AppBar(
     val finalShowBackButton = showBackButton ?: (navigator.backStack.size > 1)
     val light = false //getPrimaryColor().isLight // todo
 
-    View<MaterialToolbar> {
-        layoutRes(R.layout.es_app_bar)
-
-        bindView {
+    ViewByLayoutRes<MaterialToolbar>(layoutRes = R.layout.es_app_bar) {
+        setBy(title, titleRes) {
             when {
                 title != null -> this.title = title
                 titleRes != null -> setTitle(titleRes)
             }
-
+        }
+        set(menu) {
             val finalMenu = menu?.copy(
                 style = R.attr.actionOverflowMenuStyle, gravity = Gravity.END
             )
@@ -67,13 +67,22 @@ fun ComponentComposition.AppBar(
                 }!!
 
                 overflow.setOnClickListener { finalMenu.show(it) }
+            } else {
+                this.menu.clear()
+                overflowIcon = null
             }
-
-            if (finalShowBackButton) {
+        }
+        set(finalShowBackButton) {
+            if (it) {
                 setNavigationIcon(R.drawable.abc_ic_ab_back_material)
                 setNavigationOnClickListener { navigator.pop() }
+            } else {
+                navigationIcon = null
+                setNavigationOnClickListener(null)
             }
+        }
 
+        set(light) {
             val titleColor = getPrimaryTextColor(!light)
             val subTitleColor = getSecondaryTextColor(!light)
             val iconColor = getIconColor(!light)

@@ -25,6 +25,7 @@ import com.github.ajalt.timberkt.d
 import com.ivianuu.compose.ComponentComposition
 import com.ivianuu.compose.View
 import com.ivianuu.compose.common.Navigator
+import com.ivianuu.compose.init
 import com.ivianuu.essentials.gestures.unlock.ScreenUnlocker
 import com.ivianuu.essentials.messaging.BroadcastFactory
 import com.ivianuu.essentials.ui.base.EsActivity
@@ -58,7 +59,7 @@ class MainActivity : EsActivity() {
 
     override fun ComponentComposition.compose() {
         View<FrameLayout> {
-            bindView {
+            init {
                 layoutParams = layoutParams.apply {
                     width = MATCH_PARENT
                     height = MATCH_PARENT

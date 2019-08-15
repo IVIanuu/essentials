@@ -21,10 +21,14 @@ import androidx.lifecycle.viewModelScope
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
+import com.ivianuu.compose.ChangeHandlers
 import com.ivianuu.compose.ComponentComposition
-import com.ivianuu.compose.View
+import com.ivianuu.compose.ViewByLayoutRes
 import com.ivianuu.compose.common.RecyclerView
-import com.ivianuu.compose.layoutRes
+import com.ivianuu.compose.common.changehandler.FadeChangeHandler
+import com.ivianuu.compose.key
+import com.ivianuu.compose.memo
+import com.ivianuu.compose.set
 import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.AppStore
 import com.ivianuu.essentials.apps.glide.AppIcon
@@ -46,6 +50,7 @@ import com.ivianuu.essentials.util.flowOf
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Param
 import com.ivianuu.injekt.parametersOf
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combineLatest
 import kotlinx.coroutines.flow.first
@@ -86,40 +91,56 @@ fun ComponentComposition.CheckableApps(
             )
         },
         content = {
-            RecyclerView {
+            ChangeHandlers(handler = memo { FadeChangeHandler() }) {
                 when (state.apps) {
                     is Loading -> SimpleLoading()
-                    is Success -> state.apps()?.forEach { app ->
-                        ListItem(
-                            title = app.info.appName,
-                            leadingAction = {
-                                View<ImageView> {
-                                    layoutRes(R.layout.es_avatar)
-                                    bindView {
-                                        Glide.with(this)
-                                            .load(AppIcon(app.info.packageName))
-                                            .apply(
-                                                RequestOptions()
-                                                    .diskCacheStrategy(DiskCacheStrategy.NONE)
-                                                    .skipMemoryCache(true)
-                                            )
-                                            .into(this)
-                                    }
+                    is Success -> {
+                        ChangeHandlers(handler = null) {
+                            RecyclerView {
+                                state.apps()?.forEach { app ->
+                                    CheckableApp(app = app, onClick = {
+                                        viewModel.appClicked(app)
+                                    })
                                 }
-                            },
-                            trailingAction = {
-                                CheckBox(
-                                    value = app.isChecked,
-                                    onChange = {}
-                                )
-                            },
-                            onClick = { viewModel.appClicked(app) }
-                        )
+                            }
+                        }
                     }
                 }
             }
         }
     )
+}
+
+private fun ComponentComposition.CheckableApp(
+    app: CheckableApp,
+    onClick: () -> Unit
+) {
+    key(key = app.info.packageName) {
+        ListItem(
+            title = app.info.appName,
+            leadingAction = {
+                ViewByLayoutRes<ImageView>(layoutRes = R.layout.es_avatar) {
+                    set(app.info.packageName) {
+                        Glide.with(this)
+                            .load(AppIcon(it))
+                            .apply(
+                                RequestOptions()
+                                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                                    .skipMemoryCache(true)
+                            )
+                            .into(this)
+                    }
+                }
+            },
+            trailingAction = {
+                CheckBox(
+                    value = app.isChecked,
+                    onChange = {}
+                )
+            },
+            onClick = onClick
+        )
+    }
 }
 
 private enum class MenuOption { SelectAll, DeselectAll }
@@ -136,6 +157,7 @@ internal class CheckableAppsViewModel(
     init {
         viewModelScope.launch(dispatchers.io) {
             val appsFlow = flowOf {
+                delay(1000)
                 if (launchableOnly) appStore.getLaunchableApps() else appStore.getInstalledApps()
             }
 

@@ -4,6 +4,7 @@ import com.ivianuu.compose.ComponentComposition
 import com.ivianuu.compose.common.RecyclerView
 import com.ivianuu.compose.common.Route
 import com.ivianuu.compose.common.navigator
+import com.ivianuu.compose.key
 import com.ivianuu.essentials.apps.ui.AppPickerRoute
 import com.ivianuu.essentials.twilight.TwilightSettingsRoute
 import com.ivianuu.essentials.ui.compose.AppBar
@@ -30,7 +31,9 @@ private fun ComponentComposition.HomeItem(
     item: HomeItem,
     onClick: () -> Unit
 ) {
-    ListItem(title = item.title, onClick = onClick)
+    key(key = item) {
+        ListItem(title = item.title, onClick = onClick)
+    }
 }
 
 private enum class HomeItem(

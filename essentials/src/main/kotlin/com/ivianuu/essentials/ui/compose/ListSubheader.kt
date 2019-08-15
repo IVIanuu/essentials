@@ -18,8 +18,8 @@ package com.ivianuu.essentials.ui.compose
 
 import android.view.View
 import com.ivianuu.compose.ComponentComposition
-import com.ivianuu.compose.View
-import com.ivianuu.compose.layoutRes
+import com.ivianuu.compose.ViewByLayoutRes
+import com.ivianuu.compose.setBy
 import com.ivianuu.essentials.R
 import kotlinx.android.synthetic.main.es_list_subheader.view.*
 
@@ -27,9 +27,8 @@ inline fun ComponentComposition.ListSubheader(
     text: String? = null,
     textRes: Int? = null
 ) {
-    View<View> {
-        layoutRes(R.layout.es_list_subheader)
-        bindView {
+    ViewByLayoutRes<View>(layoutRes = R.layout.es_list_subheader) {
+        setBy(text, textRes) {
             when {
                 text != null -> es_list_header_title.text = text
                 textRes != null -> es_list_header_title.setText(textRes)

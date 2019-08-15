@@ -19,8 +19,8 @@ package com.ivianuu.essentials.ui.compose
 import android.content.res.ColorStateList
 import android.view.View
 import com.ivianuu.compose.ComponentComposition
-import com.ivianuu.compose.View
-import com.ivianuu.compose.layoutRes
+import com.ivianuu.compose.ViewByLayoutRes
+import com.ivianuu.compose.setBy
 import com.ivianuu.essentials.R
 import com.ivianuu.kommon.core.view.color
 import kotlinx.android.synthetic.main.es_simple_loading.view.*
@@ -32,9 +32,8 @@ fun ComponentComposition.SimpleLoading(
     progressColor: Int? = null,
     progressColorRes: Int? = null
 ) {
-    View<View> {
-        layoutRes(R.layout.es_simple_loading)
-        bindView {
+    ViewByLayoutRes<View>(layoutRes = R.layout.es_simple_loading) {
+        setBy(progressColor, progressColorRes) {
             if (progressColor != null || progressColorRes != null) {
                 with(es_progress_bar) {
                     val finalProgressColor = when {

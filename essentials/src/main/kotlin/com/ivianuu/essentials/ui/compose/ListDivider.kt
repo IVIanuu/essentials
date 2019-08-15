@@ -18,10 +18,11 @@ package com.ivianuu.essentials.ui.compose
 
 import android.view.View
 import com.ivianuu.compose.ComponentComposition
-import com.ivianuu.compose.View
-import com.ivianuu.compose.layoutRes
+import com.ivianuu.compose.ViewByLayoutRes
 import com.ivianuu.essentials.R
 
 inline fun ComponentComposition.ListDivider() {
-    View<View> { layoutRes(R.layout.es_list_divider) }
+    // todo remove braces once possible
+    ViewByLayoutRes<View>(layoutRes = R.layout.es_list_divider) {
+    }
 }

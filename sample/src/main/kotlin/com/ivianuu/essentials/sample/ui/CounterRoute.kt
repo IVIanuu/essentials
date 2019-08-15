@@ -1,9 +1,9 @@
 package com.ivianuu.essentials.sample.ui
 
 import android.view.View
-import com.ivianuu.compose.View
+import com.ivianuu.compose.ViewByLayoutRes
 import com.ivianuu.compose.common.Route
-import com.ivianuu.compose.layoutRes
+import com.ivianuu.compose.set
 import com.ivianuu.compose.state
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.compose.AppBar
@@ -15,10 +15,8 @@ fun CounterRoute() = Route {
         appBar = { AppBar(title = "Counter") },
         content = {
             val (count, setCount) = state { 0 }
-            View<View> {
-                layoutRes(R.layout.counter)
-
-                bindView {
+            ViewByLayoutRes<View>(layoutRes = R.layout.counter) {
+                set(count) {
                     count_text.text = "Count: $count"
                     increment.setOnClickListener { setCount(count + 1) }
                     decrement.setOnClickListener { setCount(count - 1) }

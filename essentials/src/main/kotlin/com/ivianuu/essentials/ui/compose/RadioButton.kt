@@ -18,20 +18,18 @@ package com.ivianuu.essentials.ui.compose
 
 import com.google.android.material.radiobutton.MaterialRadioButton
 import com.ivianuu.compose.ComponentComposition
-import com.ivianuu.compose.View
-import com.ivianuu.compose.layoutRes
+import com.ivianuu.compose.ViewByLayoutRes
+import com.ivianuu.compose.init
+import com.ivianuu.compose.set
 import com.ivianuu.essentials.R
 
 fun ComponentComposition.RadioButton(
     value: Boolean,
     onClick: () -> Unit
 ) {
-    View<MaterialRadioButton> {
-        layoutRes(R.layout.es_radio_button)
-        bindView {
-            isChecked = value
-            setOnClickListener { onClick() }
-        }
+    ViewByLayoutRes<MaterialRadioButton>(layoutRes = R.layout.es_radio_button) {
+        set(value) { isChecked = it }
+        init { setOnClickListener { onClick() } }
     }
 }
 

@@ -21,14 +21,17 @@ import androidx.lifecycle.viewModelScope
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
-import com.github.ajalt.timberkt.d
+import com.ivianuu.compose.ChangeHandlers
 import com.ivianuu.compose.ComponentComposition
-import com.ivianuu.compose.View
+import com.ivianuu.compose.ViewByLayoutRes
 import com.ivianuu.compose.common.Navigator
 import com.ivianuu.compose.common.RecyclerView
 import com.ivianuu.compose.common.Route
+import com.ivianuu.compose.common.changehandler.FadeChangeHandler
 import com.ivianuu.compose.common.navigator
-import com.ivianuu.compose.layoutRes
+import com.ivianuu.compose.key
+import com.ivianuu.compose.memo
+import com.ivianuu.compose.set
 import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.AppStore
 import com.ivianuu.essentials.apps.glide.AppIcon
@@ -56,16 +59,16 @@ fun AppPickerRoute(launchableOnly: Boolean = false) = Route {
                 parametersOf(launchableOnly, navigator)
             }
 
-            d { "app picker render with state ${state.apps.invoke()?.map { it.appName }}" }
-
-            when (state.apps) {
-                is Loading -> SimpleLoading()
-                is Success -> {
-                    RecyclerView {
-                        state.apps()?.forEach { app ->
-                            App(app = app, onClick = {
-                                viewModel.appClicked(app)
-                            })
+            ChangeHandlers(handler = memo { FadeChangeHandler() }) {
+                when (state.apps) {
+                    is Loading -> SimpleLoading()
+                    is Success -> {
+                        RecyclerView {
+                            state.apps()?.forEach { app ->
+                                App(app = app, onClick = {
+                                    viewModel.appClicked(app)
+                                })
+                            }
                         }
                     }
                 }
@@ -78,25 +81,26 @@ private fun ComponentComposition.App(
     app: AppInfo,
     onClick: () -> Unit
 ) {
-    ListItem(
-        title = app.appName,
-        onClick = onClick,
-        leadingAction = {
-            View<ImageView> {
-                layoutRes(R.layout.es_avatar)
-                bindView {
-                    Glide.with(this)
-                        .load(AppIcon(app.packageName))
-                        .apply(
-                            RequestOptions()
-                                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                                .skipMemoryCache(true)
-                        )
-                        .into(this)
+    key(app.packageName) {
+        ListItem(
+            title = app.appName,
+            onClick = onClick,
+            leadingAction = {
+                ViewByLayoutRes<ImageView>(layoutRes = R.layout.es_avatar) {
+                    set(app.packageName) {
+                        Glide.with(this)
+                            .load(AppIcon(it))
+                            .apply(
+                                RequestOptions()
+                                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                                    .skipMemoryCache(true)
+                            )
+                            .into(this)
+                    }
                 }
             }
-        }
-    )
+        )
+    }
 }
 
 @Inject

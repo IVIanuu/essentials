@@ -18,8 +18,8 @@ package com.ivianuu.essentials.ui.compose
 
 import com.google.android.material.checkbox.MaterialCheckBox
 import com.ivianuu.compose.ComponentComposition
-import com.ivianuu.compose.View
-import com.ivianuu.compose.layoutRes
+import com.ivianuu.compose.ViewByLayoutRes
+import com.ivianuu.compose.set
 import com.ivianuu.essentials.R
 import com.ivianuu.kprefs.Pref
 
@@ -31,9 +31,8 @@ fun ComponentComposition.CheckBox(
     value: Boolean,
     onChange: (Boolean) -> Unit
 ) {
-    View<MaterialCheckBox> {
-        layoutRes(R.layout.es_checkbox)
-        bindView {
+    ViewByLayoutRes<MaterialCheckBox>(layoutRes = R.layout.es_checkbox) {
+        set(value) {
             isChecked = value
             setOnClickListener { onChange(!value) }
         }

@@ -18,8 +18,8 @@ package com.ivianuu.essentials.ui.compose
 
 import androidx.appcompat.widget.SwitchCompat
 import com.ivianuu.compose.ComponentComposition
-import com.ivianuu.compose.View
-import com.ivianuu.compose.layoutRes
+import com.ivianuu.compose.ViewByLayoutRes
+import com.ivianuu.compose.set
 import com.ivianuu.essentials.R
 import com.ivianuu.kprefs.Pref
 
@@ -31,10 +31,9 @@ fun ComponentComposition.Switch(
     value: Boolean,
     onChange: (Boolean) -> Unit
 ) {
-    View<SwitchCompat> {
-        layoutRes(R.layout.es_switch)
-        bindView {
-            isChecked = value
+    ViewByLayoutRes<SwitchCompat>(layoutRes = R.layout.es_switch) {
+        set(value) {
+            isChecked = it
             setOnClickListener { onChange(!value) }
         }
     }

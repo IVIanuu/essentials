@@ -19,9 +19,11 @@ package com.ivianuu.essentials.ui.compose
 import android.view.View
 import androidx.core.view.isVisible
 import com.ivianuu.compose.ComponentComposition
-import com.ivianuu.compose.View
-import com.ivianuu.compose.byId
-import com.ivianuu.compose.layoutRes
+import com.ivianuu.compose.ViewById
+import com.ivianuu.compose.ViewByLayoutRes
+import com.ivianuu.compose.set
+import com.ivianuu.compose.setBy
+import com.ivianuu.compose.update
 import com.ivianuu.essentials.R
 import kotlinx.android.synthetic.main.es_list_item.view.*
 
@@ -40,10 +42,8 @@ fun ComponentComposition.ListItem(
 
     enabled: Boolean = true
 ) {
-    View<View> {
-        layoutRes(R.layout.es_list_item)
-
-        bindView {
+    ViewByLayoutRes<View>(layoutRes = R.layout.es_list_item) {
+        setBy(title, titleRes) {
             when {
                 title != null -> {
                     es_list_title.text = title
@@ -58,8 +58,8 @@ fun ComponentComposition.ListItem(
                     es_list_title.isVisible = false
                 }
             }
-            es_list_title.isEnabled = enabled
-
+        }
+        setBy(text, textRes) {
             when {
                 text != null -> {
                     es_list_text.text = text
@@ -74,6 +74,24 @@ fun ComponentComposition.ListItem(
                     es_list_text.isVisible = false
                 }
             }
+        }
+
+        update {
+            if (onClick != null) {
+                setOnClickListener { onClick() }
+            } else {
+                setOnClickListener(null)
+            }
+
+            if (onLongClick != null) {
+                setOnLongClickListener { onLongClick(); true }
+            } else {
+                setOnLongClickListener(null)
+            }
+        }
+
+        set(enabled) { enabled ->
+            es_list_title.isEnabled = enabled
             es_list_text.isEnabled = enabled
 
             if (es_list_leading_action != null) {
@@ -90,31 +108,17 @@ fun ComponentComposition.ListItem(
                     .forEach { it.isEnabled = enabled }
             }
 
-            if (onClick != null) {
-                setOnClickListener { onClick() }
-            } else {
-                setOnClickListener(null)
-            }
-
-            if (onLongClick != null) {
-                setOnLongClickListener { onLongClick(); true }
-            } else {
-                setOnLongClickListener(null)
-            }
-
-            isEnabled = enabled && (onClick != null || onLongClick != null)
+            isEnabled = enabled
         }
 
         if (leadingAction != null) {
-            View<View> {
-                byId(R.id.es_list_leading_action)
+            ViewById<View>(id = R.id.es_list_leading_action) {
                 leadingAction()
             }
         }
 
         if (trailingAction != null) {
-            View<View> {
-                byId(R.id.es_list_trailing_action)
+            ViewById<View>(id = R.id.es_list_trailing_action) {
                 trailingAction()
             }
         }

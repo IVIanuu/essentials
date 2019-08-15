@@ -18,15 +18,11 @@ package com.ivianuu.essentials.ui.mvrx
 
 import com.ivianuu.compose.ComponentComposition
 import com.ivianuu.compose.ambient
-import com.ivianuu.compose.coroutineScope
-import com.ivianuu.compose.onActive
-import com.ivianuu.compose.state
+import com.ivianuu.compose.common.flow
 import com.ivianuu.essentials.ui.compose.injekt.ComponentAmbient
 import com.ivianuu.essentials.ui.compose.viewmodel.viewModel
 import com.ivianuu.injekt.ParametersDefinition
 import com.ivianuu.injekt.get
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlin.reflect.KClass
 
 inline fun <reified VM : MvRxViewModel<S>, reified S> ComponentComposition.mvRxViewModel(
@@ -34,15 +30,8 @@ inline fun <reified VM : MvRxViewModel<S>, reified S> ComponentComposition.mvRxV
     noinline factory: () -> VM
 ): Pair<S, VM> {
     val viewModel = viewModel(type, factory)
-    val state = state { viewModel.state }
-    val coroutineScope = coroutineScope
-    onActive {
-        viewModel.flow
-            .onEach { state.value = it }
-            .launchIn(coroutineScope)
-    }
-
-    return state.value to viewModel
+    val state = flow(viewModel.state, viewModel.flow)
+    return state to viewModel
 }
 
 inline fun <reified VM : MvRxViewModel<S>, reified S> ComponentComposition.injectMvRxViewModel(
