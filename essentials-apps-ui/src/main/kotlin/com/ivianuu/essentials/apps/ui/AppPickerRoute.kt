@@ -16,14 +16,9 @@
 
 package com.ivianuu.essentials.apps.ui
 
-import android.widget.ImageView
 import androidx.lifecycle.viewModelScope
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.request.RequestOptions
 import com.ivianuu.compose.ChangeHandlers
 import com.ivianuu.compose.ComponentComposition
-import com.ivianuu.compose.ViewByLayoutRes
 import com.ivianuu.compose.common.Navigator
 import com.ivianuu.compose.common.RecyclerView
 import com.ivianuu.compose.common.Route
@@ -31,10 +26,8 @@ import com.ivianuu.compose.common.changehandler.FadeChangeHandler
 import com.ivianuu.compose.common.navigator
 import com.ivianuu.compose.key
 import com.ivianuu.compose.memo
-import com.ivianuu.compose.set
 import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.AppStore
-import com.ivianuu.essentials.apps.glide.AppIcon
 import com.ivianuu.essentials.ui.compose.AppBar
 import com.ivianuu.essentials.ui.compose.ListItem
 import com.ivianuu.essentials.ui.compose.Scaffold
@@ -85,20 +78,7 @@ private fun ComponentComposition.App(
         ListItem(
             title = app.appName,
             onClick = onClick,
-            leadingAction = {
-                ViewByLayoutRes<ImageView>(layoutRes = R.layout.es_avatar) {
-                    set(app.packageName) {
-                        Glide.with(this)
-                            .load(AppIcon(it))
-                            .apply(
-                                RequestOptions()
-                                    .diskCacheStrategy(DiskCacheStrategy.NONE)
-                                    .skipMemoryCache(true)
-                            )
-                            .into(this)
-                    }
-                }
-            }
+            leadingAction = { AppIcon(app.packageName) }
         )
     }
 }

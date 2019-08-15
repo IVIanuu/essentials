@@ -16,22 +16,15 @@
 
 package com.ivianuu.essentials.apps.ui
 
-import android.widget.ImageView
 import androidx.lifecycle.viewModelScope
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.request.RequestOptions
 import com.ivianuu.compose.ChangeHandlers
 import com.ivianuu.compose.ComponentComposition
-import com.ivianuu.compose.ViewByLayoutRes
 import com.ivianuu.compose.common.RecyclerView
 import com.ivianuu.compose.common.changehandler.FadeChangeHandler
 import com.ivianuu.compose.key
 import com.ivianuu.compose.memo
-import com.ivianuu.compose.set
 import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.AppStore
-import com.ivianuu.essentials.apps.glide.AppIcon
 import com.ivianuu.essentials.ui.compose.AppBar
 import com.ivianuu.essentials.ui.compose.CheckBox
 import com.ivianuu.essentials.ui.compose.ListItem
@@ -50,7 +43,6 @@ import com.ivianuu.essentials.util.flowOf
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Param
 import com.ivianuu.injekt.parametersOf
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combineLatest
 import kotlinx.coroutines.flow.first
@@ -118,20 +110,7 @@ private fun ComponentComposition.CheckableApp(
     key(key = app.info.packageName) {
         ListItem(
             title = app.info.appName,
-            leadingAction = {
-                ViewByLayoutRes<ImageView>(layoutRes = R.layout.es_avatar) {
-                    set(app.info.packageName) {
-                        Glide.with(this)
-                            .load(AppIcon(it))
-                            .apply(
-                                RequestOptions()
-                                    .diskCacheStrategy(DiskCacheStrategy.NONE)
-                                    .skipMemoryCache(true)
-                            )
-                            .into(this)
-                    }
-                }
-            },
+            leadingAction = { AppIcon(packageName = app.info.packageName) },
             trailingAction = {
                 CheckBox(
                     value = app.isChecked,
@@ -157,7 +136,6 @@ internal class CheckableAppsViewModel(
     init {
         viewModelScope.launch(dispatchers.io) {
             val appsFlow = flowOf {
-                delay(1000)
                 if (launchableOnly) appStore.getLaunchableApps() else appStore.getInstalledApps()
             }
 

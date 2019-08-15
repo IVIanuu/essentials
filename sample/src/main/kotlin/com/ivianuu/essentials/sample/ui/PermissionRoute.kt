@@ -16,5 +16,6 @@ fun PermissionRoute() = Route(isFloating = true) {
             PermissionRoute(Manifest.permission.CAMERA)
         )?.allGranted ?: false
         d { "permissions granted ? $granted" }
+        navigator.pop()
     }
 }
