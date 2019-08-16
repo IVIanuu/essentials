@@ -18,6 +18,7 @@ plugins {
     id("com.android.library")
     kotlin("android")
     kotlin("kapt")
+    id("com.ivianuu.compose")
 }
 
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/android-build-lib.gradle")
@@ -47,7 +48,7 @@ dependencies {
 
     api(Deps.constraintLayout)
 
-    //kapt(project(":essentials-compiler"))
+    kapt(project(":essentials-compiler"))
 
     api(Deps.injekt)
     api(Deps.injektAndroid)

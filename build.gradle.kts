@@ -29,6 +29,7 @@ buildscript {
     dependencies {
         classpath(Deps.androidGradlePlugin)
         classpath(Deps.bintrayGradlePlugin)
+        classpath(Deps.composeGradlePlugin)
         classpath(Deps.kotlinGradlePlugin)
         classpath(Deps.mavenGradlePlugin)
     }

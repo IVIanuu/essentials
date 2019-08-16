@@ -52,7 +52,7 @@ object Versions {
     const val androidxTestRunner = "1.2.0-alpha03"
 
     const val bintray = "1.8.4"
-    const val compose = "0.0.1-dev21"
+    const val compose = "0.0.1-dev33"
     const val constraintLayout = "2.0.0-beta2"
     const val coroutines = "1.3.0-RC"
     const val glide = "4.9.0"
@@ -104,6 +104,7 @@ object Deps {
 
     const val compose = "com.ivianuu.compose:compose:${Versions.compose}"
     const val composeCommon = "com.ivianuu.compose:compose-common:${Versions.compose}"
+    const val composeGradlePlugin = "com.ivianuu.compose:compose-gradle-plugin:${Versions.compose}"
 
     const val constraintLayout =
         "androidx.constraintlayout:constraintlayout:${Versions.constraintLayout}"

@@ -19,6 +19,7 @@ plugins {
     kotlin("android")
     kotlin("kapt")
     id("kotlin-android-extensions")
+    id("com.ivianuu.compose")
 }
 
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/android-build-app.gradle")
@@ -48,7 +49,7 @@ dependencies {
     implementation(project(":essentials-shell"))
     implementation(project(":essentials-work"))
 
-    //kapt(project(":essentials-compiler"))
+    kapt(project(":essentials-compiler"))
 
     testImplementation(project(":essentials-test"))
 }
