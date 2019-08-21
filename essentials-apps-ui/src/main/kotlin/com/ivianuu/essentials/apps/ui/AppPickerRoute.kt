@@ -19,16 +19,18 @@ package com.ivianuu.essentials.apps.ui
 import androidx.lifecycle.viewModelScope
 import com.ivianuu.compose.ChangeHandlers
 import com.ivianuu.compose.ComponentComposition
+import com.ivianuu.compose.ambient
 import com.ivianuu.compose.common.Navigator
+import com.ivianuu.compose.common.NavigatorAmbient
 import com.ivianuu.compose.common.RecyclerView
 import com.ivianuu.compose.common.Route
 import com.ivianuu.compose.common.changehandler.FadeChangeHandler
-import com.ivianuu.compose.common.navigator
 import com.ivianuu.compose.key
 import com.ivianuu.compose.memo
 import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.AppStore
 import com.ivianuu.essentials.ui.compose.AppBar
+import com.ivianuu.essentials.ui.compose.CheckBox
 import com.ivianuu.essentials.ui.compose.ListItem
 import com.ivianuu.essentials.ui.compose.Scaffold
 import com.ivianuu.essentials.ui.compose.SimpleLoading
@@ -47,7 +49,7 @@ fun AppPickerRoute(launchableOnly: Boolean = false) = Route {
     Scaffold(
         appBar = { AppBar(titleRes = R.string.es_title_app_picker) },
         content = {
-            val navigator = navigator
+            val navigator = ambient(NavigatorAmbient)
             val (state, viewModel) = injectMvRxViewModel(AppPickerViewModel::class) {
                 parametersOf(launchableOnly, navigator)
             }
@@ -78,7 +80,10 @@ private fun ComponentComposition.App(
         ListItem(
             title = app.appName,
             onClick = onClick,
-            leadingAction = { AppIcon(app.packageName) }
+            leadingAction = { AppIcon(app.packageName) },
+            trailingAction = {
+                CheckBox(false, {})
+            }
         )
     }
 }

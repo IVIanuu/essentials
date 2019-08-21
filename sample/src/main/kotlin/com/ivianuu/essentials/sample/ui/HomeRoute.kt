@@ -1,9 +1,10 @@
 package com.ivianuu.essentials.sample.ui
 
 import com.ivianuu.compose.ComponentComposition
+import com.ivianuu.compose.ambient
+import com.ivianuu.compose.common.NavigatorAmbient
 import com.ivianuu.compose.common.RecyclerView
 import com.ivianuu.compose.common.Route
-import com.ivianuu.compose.common.navigator
 import com.ivianuu.compose.key
 import com.ivianuu.essentials.apps.ui.AppPickerRoute
 import com.ivianuu.essentials.twilight.TwilightSettingsRoute
@@ -16,7 +17,7 @@ fun HomeRoute() = Route {
         appBar = { AppBar(title = "Home") },
         content = {
             RecyclerView {
-                val navigator = navigator
+                val navigator = ambient(NavigatorAmbient)
                 HomeItem.values().forEach { item ->
                     HomeItem(item = item, onClick = {
                         navigator.push(item.route())

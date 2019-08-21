@@ -23,7 +23,6 @@ import com.ivianuu.compose.ViewById
 import com.ivianuu.compose.ViewByLayoutRes
 import com.ivianuu.compose.set
 import com.ivianuu.compose.setBy
-import com.ivianuu.compose.update
 import com.ivianuu.essentials.R
 import kotlinx.android.synthetic.main.es_list_item.view.*
 
@@ -76,13 +75,15 @@ fun ComponentComposition.ListItem(
             }
         }
 
-        update {
+        set(onClick) {
             if (onClick != null) {
                 setOnClickListener { onClick() }
             } else {
                 setOnClickListener(null)
             }
+        }
 
+        set(onLongClick) {
             if (onLongClick != null) {
                 setOnLongClickListener { onLongClick(); true }
             } else {
@@ -111,16 +112,12 @@ fun ComponentComposition.ListItem(
             isEnabled = enabled
         }
 
-        if (leadingAction != null) {
-            ViewById<View>(id = R.id.es_list_leading_action) {
-                leadingAction()
-            }
+        ViewById<View>(id = R.id.es_list_leading_action) {
+            leadingAction?.invoke(composition)
         }
 
-        if (trailingAction != null) {
-            ViewById<View>(id = R.id.es_list_trailing_action) {
-                trailingAction()
-            }
+        ViewById<View>(id = R.id.es_list_trailing_action) {
+            trailingAction?.invoke(composition)
         }
     }
 }

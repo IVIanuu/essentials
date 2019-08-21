@@ -16,10 +16,11 @@
 
 package com.ivianuu.essentials.securesettings
 
+import com.ivianuu.compose.ambient
+import com.ivianuu.compose.common.NavigatorAmbient
 import com.ivianuu.compose.common.RecyclerView
 import com.ivianuu.compose.common.Route
 import com.ivianuu.compose.common.launchOnActive
-import com.ivianuu.compose.common.navigator
 import com.ivianuu.essentials.ui.compose.AppBar
 import com.ivianuu.essentials.ui.compose.Scaffold
 import com.ivianuu.essentials.ui.compose.injekt.inject
@@ -30,7 +31,7 @@ import kotlinx.coroutines.delay
  */
 fun SecureSettingsInstructionsRoute() = Route {
     val secureSettingsHelper = inject<SecureSettingsHelper>()
-    val navigator = navigator
+    val navigator = ambient(NavigatorAmbient)
 
     launchOnActive {
         while (true) {

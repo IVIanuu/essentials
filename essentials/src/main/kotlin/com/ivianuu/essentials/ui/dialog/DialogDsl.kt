@@ -6,21 +6,20 @@ import com.ivianuu.compose.ComponentComposition
 import com.ivianuu.compose.View
 import com.ivianuu.compose.common.Route
 import com.ivianuu.compose.memo
-import com.ivianuu.compose.onBindView
-import com.ivianuu.compose.onUnbindView
+import com.ivianuu.compose.onDestroyView
+import com.ivianuu.compose.update
 
 fun ComponentComposition.Dialog(block: DialogDsl.() -> Unit) {
     val dialogHolder = memo { Holder<MaterialDialog?>(null) }
 
     View<View> {
         val dsl = DialogDsl().apply(block)
-
-        onBindView {
-            dialogHolder.value = MaterialDialog(it.context)
+        update {
+            dialogHolder.value = MaterialDialog(context)
                 .apply { dsl.buildDialog?.invoke(this) }
                 .also { it.show() }
         }
-        onUnbindView {
+        onDestroyView {
             dialogHolder.value?.dismiss()
             dialogHolder.value = null
         }

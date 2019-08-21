@@ -66,7 +66,10 @@ class MainActivity : EsActivity() {
                 }
             }
 
-            Navigator { HomeRoute() }
+            // todo lol
+            with(composition) {
+                Navigator { HomeRoute() }
+            }
         }
     }
 

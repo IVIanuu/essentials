@@ -20,7 +20,7 @@ import com.afollestad.materialdialogs.input.input
 import com.ivianuu.compose.ComponentComposition
 import com.ivianuu.compose.ContextAmbient
 import com.ivianuu.compose.ambient
-import com.ivianuu.compose.common.navigator
+import com.ivianuu.compose.common.NavigatorAmbient
 import com.ivianuu.compose.state
 import com.ivianuu.essentials.ui.dialog.DialogRoute
 import com.ivianuu.kommon.core.content.string
@@ -35,7 +35,7 @@ fun ComponentComposition.TextInputRoute(
     inputType: Int = -1,
     allowEmpty: Boolean = false
 ) = DialogRoute {
-    val navigator = navigator
+    val navigator = ambient(NavigatorAmbient)
     val context = ambient(ContextAmbient)
     val (currentValue, setCurrentValue) = state {
         when {

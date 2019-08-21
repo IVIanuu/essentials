@@ -23,15 +23,15 @@ import androidx.core.app.ShareCompat
 import androidx.core.net.toUri
 import com.ivianuu.compose.ActivityAmbient
 import com.ivianuu.compose.ambient
+import com.ivianuu.compose.common.NavigatorAmbient
 import com.ivianuu.compose.common.Route
-import com.ivianuu.compose.common.navigator
 import com.ivianuu.compose.onActive
 
 // todo Route + Navigator is the wrong api for this case
 
 fun ActivityRoute(intentFactory: (Activity) -> Intent) = Route(isFloating = true) {
     val activity = ambient(ActivityAmbient)
-    val navigator = navigator
+    val navigator = ambient(NavigatorAmbient)
     onActive {
         activity.startActivity(intentFactory(activity))
         navigator.pop()

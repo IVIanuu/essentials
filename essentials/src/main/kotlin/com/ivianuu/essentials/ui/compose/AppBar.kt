@@ -25,7 +25,9 @@ import androidx.core.view.children
 import com.google.android.material.appbar.MaterialToolbar
 import com.ivianuu.compose.ComponentComposition
 import com.ivianuu.compose.ViewByLayoutRes
-import com.ivianuu.compose.common.navigator
+import com.ivianuu.compose.ambient
+import com.ivianuu.compose.common.NavigatorAmbient
+import com.ivianuu.compose.common.RouteAmbient
 import com.ivianuu.compose.set
 import com.ivianuu.compose.setBy
 import com.ivianuu.essentials.R
@@ -43,8 +45,14 @@ fun ComponentComposition.AppBar(
     showBackButton: Boolean? = null,
     light: Boolean? = null
 ) {
-    val navigator = navigator
-    val finalShowBackButton = showBackButton ?: (navigator.backStack.size > 1)
+    val navigator = ambient(NavigatorAmbient)
+
+    var finalShowBackButton = showBackButton
+    if (finalShowBackButton == null) {
+        val route = ambient(RouteAmbient)
+        finalShowBackButton = navigator.backStack.indexOf(route) > 0
+    }
+
     val light = false //getPrimaryColor().isLight // todo
 
     ViewByLayoutRes<MaterialToolbar>(layoutRes = R.layout.es_app_bar) {

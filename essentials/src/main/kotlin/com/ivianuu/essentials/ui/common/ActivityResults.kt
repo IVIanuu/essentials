@@ -6,15 +6,15 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import com.ivianuu.compose.ActivityAmbient
 import com.ivianuu.compose.ambient
+import com.ivianuu.compose.common.NavigatorAmbient
 import com.ivianuu.compose.common.Route
-import com.ivianuu.compose.common.navigator
 import com.ivianuu.compose.onActive
 
 // todo Route + Navigator is the wrong api for this case
 
 fun ActivityResultRoute(intent: Intent) = Route(isFloating = true) {
     val activity = ambient(ActivityAmbient) as FragmentActivity
-    val navigator = navigator
+    val navigator = ambient(NavigatorAmbient)
     onActive {
         ActivityResultFragment.get(activity).startForResult(intent) {
             navigator.pop(it)
