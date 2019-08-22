@@ -6,7 +6,7 @@ import com.ivianuu.compose.ComponentComposition
 import com.ivianuu.compose.View
 import com.ivianuu.compose.common.Route
 import com.ivianuu.compose.memo
-import com.ivianuu.compose.onDestroyView
+import com.ivianuu.compose.onUnbindView
 import com.ivianuu.compose.update
 
 fun ComponentComposition.Dialog(block: DialogDsl.() -> Unit) {
@@ -19,7 +19,7 @@ fun ComponentComposition.Dialog(block: DialogDsl.() -> Unit) {
                 .apply { dsl.buildDialog?.invoke(this) }
                 .also { it.show() }
         }
-        onDestroyView {
+        onUnbindView {
             dialogHolder.value?.dismiss()
             dialogHolder.value = null
         }

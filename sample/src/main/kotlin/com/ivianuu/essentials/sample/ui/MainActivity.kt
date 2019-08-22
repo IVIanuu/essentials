@@ -26,6 +26,7 @@ import com.ivianuu.compose.ComponentComposition
 import com.ivianuu.compose.View
 import com.ivianuu.compose.common.Navigator
 import com.ivianuu.compose.init
+import com.ivianuu.compose.internal.loggingEnabled
 import com.ivianuu.essentials.gestures.unlock.ScreenUnlocker
 import com.ivianuu.essentials.messaging.BroadcastFactory
 import com.ivianuu.essentials.ui.base.EsActivity
@@ -42,6 +43,8 @@ class MainActivity : EsActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        loggingEnabled = false
 
         get<KPrefs>().boolean("tile_state").asFlow()
             .onEach { d { "tile state changed $it" } }

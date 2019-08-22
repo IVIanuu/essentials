@@ -14,7 +14,7 @@ fun AppBlacklistRoute() = Route {
     val prefs = inject<KPrefs>()
     val checkedAppsPref = memo { prefs.stringSet("apps") }
 
-    ChangeHandlers(handler = memo { HorizontalChangeHandler() }) {
+    ChangeHandlers(handler = HorizontalChangeHandler()) {
         CheckableApps(
             title = "App Blacklist",
             launchableOnly = true,

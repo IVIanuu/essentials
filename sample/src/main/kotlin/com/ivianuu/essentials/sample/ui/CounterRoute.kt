@@ -14,8 +14,9 @@ fun CounterRoute() = Route {
     Scaffold(
         appBar = { AppBar(title = "Counter") },
         content = {
-            val (count, setCount) = state { 0 }
             ViewByLayoutRes<View>(layoutRes = R.layout.counter) {
+                val (count, setCount) = state { 0 }
+
                 set(count) {
                     count_text.text = "Count: $count"
                     increment.setOnClickListener { setCount(count + 1) }

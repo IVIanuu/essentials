@@ -22,7 +22,6 @@ import com.ivianuu.compose.ComponentComposition
 import com.ivianuu.compose.common.RecyclerView
 import com.ivianuu.compose.common.changehandler.FadeChangeHandler
 import com.ivianuu.compose.key
-import com.ivianuu.compose.memo
 import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.AppStore
 import com.ivianuu.essentials.ui.compose.AppBar
@@ -83,7 +82,7 @@ fun ComponentComposition.CheckableApps(
             )
         },
         content = {
-            ChangeHandlers(handler = memo { FadeChangeHandler() }) {
+            ChangeHandlers(handler = FadeChangeHandler()) {
                 when (state.apps) {
                     is Loading -> SimpleLoading()
                     is Success -> {

@@ -25,12 +25,11 @@ import com.ivianuu.compose.common.NavigatorAmbient
 import com.ivianuu.compose.common.RecyclerView
 import com.ivianuu.compose.common.Route
 import com.ivianuu.compose.common.changehandler.FadeChangeHandler
+import com.ivianuu.compose.common.changehandler.HorizontalChangeHandler
 import com.ivianuu.compose.key
-import com.ivianuu.compose.memo
 import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.AppStore
 import com.ivianuu.essentials.ui.compose.AppBar
-import com.ivianuu.essentials.ui.compose.CheckBox
 import com.ivianuu.essentials.ui.compose.ListItem
 import com.ivianuu.essentials.ui.compose.Scaffold
 import com.ivianuu.essentials.ui.compose.SimpleLoading
@@ -46,30 +45,32 @@ import com.ivianuu.injekt.Param
 import com.ivianuu.injekt.parametersOf
 
 fun AppPickerRoute(launchableOnly: Boolean = false) = Route {
-    Scaffold(
-        appBar = { AppBar(titleRes = R.string.es_title_app_picker) },
-        content = {
-            val navigator = ambient(NavigatorAmbient)
-            val (state, viewModel) = injectMvRxViewModel(AppPickerViewModel::class) {
-                parametersOf(launchableOnly, navigator)
-            }
+    ChangeHandlers(handler = HorizontalChangeHandler()) {
+        Scaffold(
+            appBar = { AppBar(titleRes = R.string.es_title_app_picker) },
+            content = {
+                val navigator = ambient(NavigatorAmbient)
+                val (state, viewModel) = injectMvRxViewModel(AppPickerViewModel::class) {
+                    parametersOf(launchableOnly, navigator)
+                }
 
-            ChangeHandlers(handler = memo { FadeChangeHandler() }) {
-                when (state.apps) {
-                    is Loading -> SimpleLoading()
-                    is Success -> {
-                        RecyclerView {
-                            state.apps()?.forEach { app ->
-                                App(app = app, onClick = {
-                                    viewModel.appClicked(app)
-                                })
+                ChangeHandlers(handler = FadeChangeHandler()) {
+                    when (state.apps) {
+                        is Loading -> SimpleLoading()
+                        is Success -> {
+                            RecyclerView {
+                                state.apps()?.forEach { app ->
+                                    App(app = app, onClick = {
+                                        viewModel.appClicked(app)
+                                    })
+                                }
                             }
                         }
                     }
                 }
             }
-        }
-    )
+        )
+    }
 }
 
 private fun ComponentComposition.App(
@@ -80,10 +81,7 @@ private fun ComponentComposition.App(
         ListItem(
             title = app.appName,
             onClick = onClick,
-            leadingAction = { AppIcon(app.packageName) },
-            trailingAction = {
-                CheckBox(false, {})
-            }
+            leadingAction = { AppIcon(app.packageName) }
         )
     }
 }
