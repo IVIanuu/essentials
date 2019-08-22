@@ -23,9 +23,10 @@ import android.view.animation.DecelerateInterpolator
 import com.ivianuu.compose.ComponentChangeHandler
 import com.ivianuu.compose.common.changehandler.AnimatorChangeHandler
 import com.ivianuu.kommon.core.animation.animatorSetOf
+import kotlin.time.Duration
 
 fun OpenCloseChangeHandler(
-    duration: Long = AnimatorChangeHandler.NO_DURATION
+    duration: Duration = AnimatorChangeHandler.NO_DURATION
 ): ComponentChangeHandler {
     return AnimatorChangeHandler(duration) { changeData ->
         val animator = AnimatorSet()

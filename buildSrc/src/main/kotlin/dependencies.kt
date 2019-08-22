@@ -52,14 +52,14 @@ object Versions {
     const val androidxTestRunner = "1.2.0-alpha03"
 
     const val bintray = "1.8.4"
-    const val compose = "0.0.1-dev36"
+    const val compose = "0.0.1-dev37"
     const val constraintLayout = "2.0.0-beta2"
     const val coroutines = "1.3.0-RC"
     const val glide = "4.9.0"
     const val injekt = "0.0.1-dev70"
     const val junit = "4.12"
     const val kommon = "0.0.1-dev13" // remove
-    const val kotlin = "1.3.41"
+    const val kotlin = "1.3.50"
     const val kotlinFlowExtensions = "0.0.2"
     const val kPrefs = "0.0.1-dev16"
     const val kSettings = "0.0.1-dev11"

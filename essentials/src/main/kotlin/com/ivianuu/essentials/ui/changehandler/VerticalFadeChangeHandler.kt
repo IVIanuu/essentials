@@ -20,8 +20,9 @@ import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.view.View
 import com.ivianuu.compose.common.changehandler.AnimatorChangeHandler
+import kotlin.time.Duration
 
-fun VerticalFadeChangeHandler(duration: Long = AnimatorChangeHandler.NO_DURATION): AnimatorChangeHandler {
+fun VerticalFadeChangeHandler(duration: Duration = AnimatorChangeHandler.NO_DURATION): AnimatorChangeHandler {
     return AnimatorChangeHandler(duration) { changeData ->
         val (_, from, to, isPush) = changeData
         val animator = AnimatorSet()

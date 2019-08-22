@@ -17,12 +17,15 @@
 package com.ivianuu.essentials.util
 
 import com.ivianuu.injekt.Inject
+import kotlin.time.Duration
+import kotlin.time.milliseconds
+import kotlin.time.nanoseconds
 
 /**
  * Provides the current time
  */
 @Inject
 class Clock {
-    val currentTimeMillis: Long get() = System.currentTimeMillis()
-    val currentTimeNanos: Long get() = System.nanoTime()
+    val currentTimeMillis: Duration get() = System.currentTimeMillis().milliseconds
+    val currentTimeNanos: Duration get() = System.nanoTime().nanoseconds
 }

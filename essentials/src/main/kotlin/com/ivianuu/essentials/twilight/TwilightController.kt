@@ -16,8 +16,9 @@
 
 package com.ivianuu.essentials.twilight
 
-import androidx.appcompat.app.AppCompatDelegate
+import androidx.appcompat.app.AppCompatDelegate.*
 import com.ivianuu.essentials.app.AppService
+import com.ivianuu.essentials.twilight.TwilightMode.*
 import com.ivianuu.essentials.util.AppDispatchers
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.android.ApplicationScope
@@ -38,13 +39,13 @@ class TwilightController(
         twilightPrefs.twilightMode.asFlow()
             .onEach { mode ->
                 withContext(dispatchers.main) {
-                    AppCompatDelegate.setDefaultNightMode(
+                    setDefaultNightMode(
                         when (mode) {
-                            TwilightMode.LIGHT -> AppCompatDelegate.MODE_NIGHT_NO
-                            TwilightMode.DARK -> AppCompatDelegate.MODE_NIGHT_YES
-                            TwilightMode.BATTERY -> AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY
-                            TwilightMode.TIME -> AppCompatDelegate.MODE_NIGHT_AUTO_TIME
-                            TwilightMode.SYSTEM -> AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+                            LIGHT -> MODE_NIGHT_NO
+                            DARK -> MODE_NIGHT_YES
+                            BATTERY -> MODE_NIGHT_AUTO_BATTERY
+                            TIME -> MODE_NIGHT_AUTO_TIME
+                            SYSTEM -> MODE_NIGHT_FOLLOW_SYSTEM
                         }
                     )
                 }
