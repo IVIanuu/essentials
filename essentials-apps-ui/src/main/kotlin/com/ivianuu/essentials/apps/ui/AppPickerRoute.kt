@@ -25,7 +25,6 @@ import com.ivianuu.compose.common.NavigatorAmbient
 import com.ivianuu.compose.common.RecyclerView
 import com.ivianuu.compose.common.Route
 import com.ivianuu.compose.common.changehandler.FadeChangeHandler
-import com.ivianuu.compose.common.changehandler.HorizontalChangeHandler
 import com.ivianuu.compose.key
 import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.AppStore
@@ -45,32 +44,30 @@ import com.ivianuu.injekt.Param
 import com.ivianuu.injekt.parametersOf
 
 fun AppPickerRoute(launchableOnly: Boolean = false) = Route {
-    ChangeHandlers(handler = HorizontalChangeHandler()) {
-        Scaffold(
-            appBar = { AppBar(titleRes = R.string.es_title_app_picker) },
-            content = {
-                val navigator = ambient(NavigatorAmbient)
-                val (state, viewModel) = injectMvRxViewModel(AppPickerViewModel::class) {
-                    parametersOf(launchableOnly, navigator)
-                }
+    Scaffold(
+        appBar = { AppBar(titleRes = R.string.es_title_app_picker) },
+        content = {
+            val navigator = ambient(NavigatorAmbient)
+            val (state, viewModel) = injectMvRxViewModel(AppPickerViewModel::class) {
+                parametersOf(launchableOnly, navigator)
+            }
 
-                ChangeHandlers(handler = FadeChangeHandler()) {
-                    when (state.apps) {
-                        is Loading -> SimpleLoading()
-                        is Success -> {
-                            RecyclerView {
-                                state.apps()?.forEach { app ->
-                                    App(app = app, onClick = {
-                                        viewModel.appClicked(app)
-                                    })
-                                }
+            ChangeHandlers(handler = FadeChangeHandler()) {
+                when (state.apps) {
+                    is Loading -> SimpleLoading()
+                    is Success -> {
+                        RecyclerView {
+                            state.apps()?.forEach { app ->
+                                App(app = app, onClick = {
+                                    viewModel.appClicked(app)
+                                })
                             }
                         }
                     }
                 }
             }
-        )
-    }
+        }
+    )
 }
 
 private fun ComponentComposition.App(

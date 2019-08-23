@@ -24,6 +24,7 @@ import android.widget.ImageView
 import androidx.core.view.children
 import com.google.android.material.appbar.MaterialToolbar
 import com.ivianuu.compose.ComponentComposition
+import com.ivianuu.compose.ContextAmbient
 import com.ivianuu.compose.ViewByLayoutRes
 import com.ivianuu.compose.ambient
 import com.ivianuu.compose.common.NavigatorAmbient
@@ -34,8 +35,10 @@ import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.popup.PopupMenu
 import com.ivianuu.essentials.ui.popup.show
 import com.ivianuu.essentials.util.getIconColor
+import com.ivianuu.essentials.util.getPrimaryColor
 import com.ivianuu.essentials.util.getPrimaryTextColor
 import com.ivianuu.essentials.util.getSecondaryTextColor
+import com.ivianuu.essentials.util.isLight
 import com.ivianuu.kommon.core.view.drawable
 
 fun ComponentComposition.AppBar(
@@ -43,7 +46,7 @@ fun ComponentComposition.AppBar(
     titleRes: Int? = null,
     menu: PopupMenu<*>? = null,
     showBackButton: Boolean? = null,
-    light: Boolean? = null
+    light: Boolean = ambient(ContextAmbient).getPrimaryColor().isLight
 ) {
     val navigator = ambient(NavigatorAmbient)
 
@@ -52,8 +55,6 @@ fun ComponentComposition.AppBar(
         val route = ambient(RouteAmbient)
         finalShowBackButton = navigator.backStack.indexOf(route) > 0
     }
-
-    val light = false //getPrimaryColor().isLight // todo
 
     ViewByLayoutRes<MaterialToolbar>(layoutRes = R.layout.es_app_bar) {
         setBy(title, titleRes) {

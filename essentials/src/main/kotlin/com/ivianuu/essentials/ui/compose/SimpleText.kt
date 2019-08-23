@@ -16,25 +16,27 @@
 
 package com.ivianuu.essentials.ui.compose
 
-/**
-import com.airbnb.epoxy.EpoxyController
+import android.widget.TextView
+import com.ivianuu.compose.ComponentComposition
+import com.ivianuu.compose.ViewByLayoutRes
+import com.ivianuu.compose.setBy
+import com.ivianuu.essentials.R
+import kotlinx.android.synthetic.main.es_item_simple_text.view.*
 
 /**
  * Simple text model
-*/
+ */
 fun ComponentComposition.SimpleText(
-text: String? = null,
-textRes: Int? = null,
-id: Any? = text + textRes
-) = model(
-id = id,
-layoutRes = R.layout.es_item_simple_text,
-state = arrayOf(text, textRes),
-bind = {
-when {
-text != null -> es_text.text = text
-textRes != null -> es_text.setText(textRes)
-else -> error("you must specify one of text or textRes")
+    text: String? = null,
+    textRes: Int? = null
+) {
+    ViewByLayoutRes<TextView>(layoutRes = R.layout.es_item_simple_text) {
+        setBy(text, textRes) {
+            when {
+                text != null -> es_text.text = text
+                textRes != null -> es_text.setText(textRes)
+                else -> error("you must specify one of text or textRes")
+            }
+        }
+    }
 }
-}
-)*/
