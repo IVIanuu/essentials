@@ -22,7 +22,5 @@ import com.ivianuu.compose.ViewByLayoutRes
 import com.ivianuu.essentials.R
 
 inline fun ComponentComposition.ListDivider() {
-    // todo remove braces once possible
-    ViewByLayoutRes<View>(layoutRes = R.layout.es_list_divider) {
-    }
+    ViewByLayoutRes<View>(layoutRes = R.layout.es_list_divider)
 }
