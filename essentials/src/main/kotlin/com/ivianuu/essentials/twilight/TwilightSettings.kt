@@ -22,9 +22,11 @@ import com.ivianuu.compose.common.Route
 import com.ivianuu.compose.key
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.compose.AppBar
+import com.ivianuu.essentials.ui.compose.CheckBox
 import com.ivianuu.essentials.ui.compose.ListItem
 import com.ivianuu.essentials.ui.compose.RadioButton
 import com.ivianuu.essentials.ui.compose.Scaffold
+import com.ivianuu.essentials.ui.compose.Text
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.prefs.Prefs
 
@@ -77,8 +79,11 @@ private inline fun ComponentComposition.TwilightModeItem(
     val prefs = inject<TwilightPrefs>()
     key(key = mode) {
         ListItem(
-            titleRes = titleRes,
-            textRes = textRes,
+            title = { Text(textRes = titleRes) },
+            text = {
+                Text(textRes = textRes)
+                //CheckBox(value = true) {}
+            },
             trailingAction = {
                 RadioButton(
                     value = prefs.twilightMode.get() == mode,

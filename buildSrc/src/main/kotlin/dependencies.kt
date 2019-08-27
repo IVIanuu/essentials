@@ -52,7 +52,7 @@ object Versions {
     const val androidxTestRunner = "1.2.0-alpha03"
 
     const val bintray = "1.8.4"
-    const val compose = "0.0.1-dev39"
+    const val compose = "0.0.1-dev44"
     const val constraintLayout = "2.0.0-beta2"
     const val coroutines = "1.3.0-RC"
     const val glide = "4.9.0"

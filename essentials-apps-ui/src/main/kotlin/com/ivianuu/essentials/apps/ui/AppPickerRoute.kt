@@ -32,6 +32,7 @@ import com.ivianuu.essentials.ui.compose.AppBar
 import com.ivianuu.essentials.ui.compose.ListItem
 import com.ivianuu.essentials.ui.compose.Scaffold
 import com.ivianuu.essentials.ui.compose.SimpleLoading
+import com.ivianuu.essentials.ui.compose.Text
 import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
 import com.ivianuu.essentials.ui.mvrx.injectMvRxViewModel
 import com.ivianuu.essentials.util.AppDispatchers
@@ -76,7 +77,7 @@ private fun ComponentComposition.App(
 ) {
     key(app.packageName) {
         ListItem(
-            title = app.appName,
+            title = { Text(text = app.appName) },
             onClick = onClick,
             leadingAction = { AppIcon(app.packageName) }
         )

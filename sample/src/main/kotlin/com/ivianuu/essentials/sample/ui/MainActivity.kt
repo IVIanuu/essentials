@@ -44,8 +44,6 @@ class MainActivity : EsActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        loggingEnabled = false
-
         get<KPrefs>().boolean("tile_state").asFlow()
             .onEach { d { "tile state changed $it" } }
             .launchIn(lifecycleScope)
@@ -69,10 +67,7 @@ class MainActivity : EsActivity() {
                 }
             }
 
-            // todo lol
-            with(composition) {
-                Navigator { HomeRoute() }
-            }
+            Navigator { HomeRoute() }
         }
     }
 

@@ -17,21 +17,23 @@
 package com.ivianuu.essentials.ui.compose
 
 import android.view.View
+import androidx.core.view.children
 import androidx.core.view.isVisible
 import com.ivianuu.compose.ComponentComposition
+import com.ivianuu.compose.ContextAmbient
 import com.ivianuu.compose.ViewById
 import com.ivianuu.compose.ViewByLayoutRes
+import com.ivianuu.compose.ambient
+import com.ivianuu.compose.key
 import com.ivianuu.compose.set
 import com.ivianuu.compose.setBy
 import com.ivianuu.essentials.R
+import com.ivianuu.essentials.util.getSecondaryTextColor
 import kotlinx.android.synthetic.main.es_list_item.view.*
 
 fun ComponentComposition.ListItem(
-    title: String? = null,
-    titleRes: Int? = null,
-
-    text: String? = null,
-    textRes: Int? = null,
+    title: (ComponentComposition.() -> Unit)? = null,
+    text: (ComponentComposition.() -> Unit)? = null,
 
     leadingAction: (ComponentComposition.() -> Unit)? = null,
     trailingAction: (ComponentComposition.() -> Unit)? = null,
@@ -42,39 +44,6 @@ fun ComponentComposition.ListItem(
     enabled: Boolean = true
 ) {
     ViewByLayoutRes<View>(layoutRes = R.layout.es_list_item) {
-        setBy(title, titleRes) {
-            when {
-                title != null -> {
-                    es_list_title.text = title
-                    es_list_title.isVisible = true
-                }
-                titleRes != null -> {
-                    es_list_title.setText(titleRes)
-                    es_list_title.isVisible = true
-                }
-                else -> {
-                    es_list_title.text = null
-                    es_list_title.isVisible = false
-                }
-            }
-        }
-        setBy(text, textRes) {
-            when {
-                text != null -> {
-                    es_list_text.text = text
-                    es_list_text.isVisible = true
-                }
-                textRes != null -> {
-                    es_list_text.setText(textRes)
-                    es_list_text.isVisible = true
-                }
-                else -> {
-                    es_list_text.text = null
-                    es_list_text.isVisible = false
-                }
-            }
-        }
-
         set(onClick) {
             if (onClick != null) {
                 setOnClickListener { onClick() }
@@ -92,24 +61,43 @@ fun ComponentComposition.ListItem(
         }
 
         set(enabled) { enabled ->
-            es_list_title.isEnabled = enabled
-            es_list_text.isEnabled = enabled
-
-            if (es_list_leading_action != null) {
-                es_list_leading_action.isEnabled = enabled
-                (0 until es_list_leading_action.childCount)
-                    .map { es_list_leading_action.getChildAt(it) }
-                    .forEach { it.isEnabled = enabled }
+            es_list_text_container.isEnabled = enabled
+            es_list_text_container.children.forEach {
+                it.isEnabled = enabled
             }
 
-            if (es_list_trailing_action != null) {
-                es_list_trailing_action.isEnabled = enabled
-                (0 until es_list_trailing_action.childCount)
-                    .map { es_list_trailing_action.getChildAt(it) }
-                    .forEach { it.isEnabled = enabled }
+            es_list_leading_action.isEnabled = enabled
+            es_list_leading_action.children.forEach {
+                it.isEnabled = enabled
+            }
+
+            es_list_trailing_action.isEnabled = enabled
+            es_list_leading_action.children.forEach {
+                it.isEnabled = enabled
             }
 
             isEnabled = enabled
+        }
+
+        ViewById<View>(id = R.id.es_list_text_container) {
+            if (title != null) {
+                key(key = "title") {
+                    TextStyle(textAppearance = R.style.TextAppearance_MaterialComponents_Subtitle1) {
+                        title()
+                    }
+                }
+            }
+
+            if (text != null) {
+                key(key = "text") {
+                    TextStyle(
+                        textAppearance = R.style.TextAppearance_AppCompat_Body2,
+                        textColor = ambient(ContextAmbient).getSecondaryTextColor()
+                    ) {
+                        text()
+                    }
+                }
+            }
         }
 
         ViewById<View>(id = R.id.es_list_leading_action) {

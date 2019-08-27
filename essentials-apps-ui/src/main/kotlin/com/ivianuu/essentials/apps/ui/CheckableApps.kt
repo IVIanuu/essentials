@@ -29,6 +29,7 @@ import com.ivianuu.essentials.ui.compose.CheckBox
 import com.ivianuu.essentials.ui.compose.ListItem
 import com.ivianuu.essentials.ui.compose.Scaffold
 import com.ivianuu.essentials.ui.compose.SimpleLoading
+import com.ivianuu.essentials.ui.compose.Text
 import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
 import com.ivianuu.essentials.ui.mvrx.injectMvRxViewModel
 import com.ivianuu.essentials.ui.popup.PopupMenu
@@ -108,7 +109,7 @@ private fun ComponentComposition.CheckableApp(
 ) {
     key(key = app.info.packageName) {
         ListItem(
-            title = app.info.appName,
+            title = { Text(text = app.info.appName) },
             leadingAction = { AppIcon(packageName = app.info.packageName) },
             trailingAction = {
                 CheckBox(

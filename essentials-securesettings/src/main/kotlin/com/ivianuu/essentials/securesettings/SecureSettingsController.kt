@@ -27,6 +27,7 @@ import com.ivianuu.essentials.ui.changehandler.VerticalFadeChangeHandler
 import com.ivianuu.essentials.ui.compose.AppBar
 import com.ivianuu.essentials.ui.compose.ListItem
 import com.ivianuu.essentials.ui.compose.Scaffold
+import com.ivianuu.essentials.ui.compose.Text
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.compose.navigateOnClick
 import com.ivianuu.essentials.ui.prefs.Prefs
@@ -61,13 +62,17 @@ fun SecureSettingsRoute(
             content = {
                 RecyclerView {
                     ListItem(
-                        textRes = if (showHideNavBarHint) R.string.es_pref_secure_settings_header_hide_nav_bar_summary
-                        else R.string.es_pref_secure_settings_header_summary
+                        text = {
+                            Text(
+                                textRes = if (showHideNavBarHint) R.string.es_pref_secure_settings_header_hide_nav_bar_summary
+                                else R.string.es_pref_secure_settings_header_summary
+                            )
+                        }
                     )
 
                     ListItem(
-                        titleRes = R.string.es_pref_use_pc,
-                        textRes = R.string.es_pref_use_pc_summary,
+                        title = { Text(textRes = R.string.es_pref_use_pc) },
+                        text = { Text(textRes = R.string.es_pref_use_pc_summary) },
                         onClick = navigateOnClick {
                             SecureSettingsInstructionsRoute()
                                 .withHandlers(handler = VerticalFadeChangeHandler())
@@ -77,8 +82,8 @@ fun SecureSettingsRoute(
                     val coroutineScope = coroutineScope
 
                     ListItem(
-                        titleRes = R.string.es_pref_use_root,
-                        textRes = R.string.es_pref_use_root_summary,
+                        title = { Text(textRes = R.string.es_pref_use_root) },
+                        text = { Text(textRes = R.string.es_pref_use_root_summary) },
                         onClick = {
                             coroutineScope.launch {
                                 if (!secureSettingsHelper.grantWriteSecureSettingsViaRoot()) {

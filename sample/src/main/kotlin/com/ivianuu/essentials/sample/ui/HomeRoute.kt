@@ -11,6 +11,7 @@ import com.ivianuu.essentials.twilight.TwilightSettingsRoute
 import com.ivianuu.essentials.ui.compose.AppBar
 import com.ivianuu.essentials.ui.compose.ListItem
 import com.ivianuu.essentials.ui.compose.Scaffold
+import com.ivianuu.essentials.ui.compose.Text
 
 fun HomeRoute() = Route {
     Scaffold(
@@ -33,7 +34,10 @@ private fun ComponentComposition.HomeItem(
     onClick: () -> Unit
 ) {
     key(key = item) {
-        ListItem(title = item.title, onClick = onClick)
+        ListItem(
+            title = { Text(text = item.title) },
+            onClick = onClick
+        )
     }
 }
 

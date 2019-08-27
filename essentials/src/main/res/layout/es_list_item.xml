@@ -42,27 +42,7 @@
         android:paddingBottom="16dp"
         android:layout_toEndOf="@id/es_list_leading_action"
         android:layout_centerVertical="true"
-        android:layout_toStartOf="@id/es_list_trailing_action">
-
-        <TextView
-            android:id="@+id/es_list_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ellipsize="marquee"
-            tools:visibility="visible"
-            android:textAppearance="?textAppearanceSubtitle1"
-            tools:text="This is a title" />
-
-        <TextView
-            android:id="@+id/es_list_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            tools:visibility="visible"
-            android:textAppearance="?textAppearanceBody2"
-            android:textColor="?android:attr/textColorSecondary"
-            tools:text="This is a summary kfkfmksmkmfkfmkfsmmfksmdkdmkdmgkmkbmfkmkmgkfhmkgmnkmgvkmgkmnk" />
-
-    </LinearLayout>
+        android:layout_toStartOf="@id/es_list_trailing_action"/>
 
     <FrameLayout
         android:id="@+id/es_list_trailing_action"
