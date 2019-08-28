@@ -6,17 +6,16 @@ import com.ivianuu.compose.ComponentComposition
 import com.ivianuu.compose.View
 import com.ivianuu.compose.common.Route
 import com.ivianuu.compose.memo
+import com.ivianuu.compose.onBindView
 import com.ivianuu.compose.onUnbindView
-import com.ivianuu.compose.update
 
-fun ComponentComposition.Dialog(block: DialogDsl.() -> Unit) {
+fun ComponentComposition.Dialog(block: MaterialDialog.() -> Unit) {
     val dialogHolder = memo { Holder<MaterialDialog?>(null) }
 
     View<View> {
-        val dsl = DialogDsl().apply(block)
-        update {
-            dialogHolder.value = MaterialDialog(context)
-                .apply { dsl.buildDialog?.invoke(this) }
+        onBindView {
+            dialogHolder.value = MaterialDialog(it.context)
+                .apply(block)
                 .also { it.show() }
         }
         onUnbindView {
@@ -26,20 +25,10 @@ fun ComponentComposition.Dialog(block: DialogDsl.() -> Unit) {
     }
 }
 
-fun DialogRoute(block: DialogDsl.() -> Unit) = Route(
+fun DialogRoute(block: ComponentComposition.() -> Unit) = Route(
     isFloating = true
 ) {
-    Dialog(block)
+    block()
 }
 
 private class Holder<T>(var value: T)
-
-class DialogDsl {
-
-    internal var buildDialog: (MaterialDialog.() -> Unit)? = null
-
-    fun buildDialog(block: MaterialDialog.() -> Unit) {
-        buildDialog = block
-    }
-
-}

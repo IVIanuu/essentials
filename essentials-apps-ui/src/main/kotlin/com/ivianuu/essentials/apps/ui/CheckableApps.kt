@@ -21,7 +21,6 @@ import com.ivianuu.compose.ChangeHandlers
 import com.ivianuu.compose.ComponentComposition
 import com.ivianuu.compose.common.RecyclerView
 import com.ivianuu.compose.common.changehandler.FadeChangeHandler
-import com.ivianuu.compose.key
 import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.AppStore
 import com.ivianuu.essentials.ui.compose.AppBar
@@ -107,19 +106,17 @@ private fun ComponentComposition.CheckableApp(
     app: CheckableApp,
     onClick: () -> Unit
 ) {
-    key(key = app.info.packageName) {
-        ListItem(
-            title = { Text(text = app.info.appName) },
-            leadingAction = { AppIcon(packageName = app.info.packageName) },
-            trailingAction = {
-                CheckBox(
-                    value = app.isChecked,
-                    onChange = {}
-                )
-            },
-            onClick = onClick
-        )
-    }
+    ListItem(
+        title = { Text(text = app.info.appName) },
+        leading = { AppIcon(packageName = app.info.packageName) },
+        trailing = {
+            CheckBox(
+                value = app.isChecked,
+                onChange = {}
+            )
+        },
+        onClick = onClick
+    )
 }
 
 private enum class MenuOption { SelectAll, DeselectAll }

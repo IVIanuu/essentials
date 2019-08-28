@@ -6,11 +6,12 @@ import com.ivianuu.compose.common.Route
 import com.ivianuu.compose.set
 import com.ivianuu.compose.state
 import com.ivianuu.essentials.sample.R
+import com.ivianuu.essentials.ui.changehandler.OpenCloseChangeHandler
 import com.ivianuu.essentials.ui.compose.AppBar
 import com.ivianuu.essentials.ui.compose.Scaffold
 import kotlinx.android.synthetic.main.counter.view.*
 
-fun CounterRoute() = Route {
+fun CounterRoute() = Route(handler = OpenCloseChangeHandler()) {
     Scaffold(
         appBar = { AppBar(title = "Counter") },
         content = {

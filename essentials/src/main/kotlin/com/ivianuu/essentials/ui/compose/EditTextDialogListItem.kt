@@ -16,155 +16,44 @@
 
 package com.ivianuu.essentials.ui.compose
 
-/**
-import android.graphics.drawable.Drawable
-import com.afollestad.materialdialogs.MaterialDialog
-import com.airbnb.epoxy.EpoxyController
-import com.ivianuu.essentials.ui.dialog.pop
-import com.ivianuu.essentials.ui.effect.state
-import com.ivianuu.essentials.util.string
-import com.ivianuu.kprefs.Pref
+import com.afollestad.materialdialogs.input.input
+import com.ivianuu.compose.ComponentComposition
+import com.ivianuu.compose.ContextAmbient
+import com.ivianuu.compose.ambient
+import com.ivianuu.compose.state
+import com.ivianuu.essentials.R
+import com.ivianuu.essentials.ui.dialog.Dialog
+import com.ivianuu.kommon.core.content.string
 
-fun ComponentComposition.EditTextDialogListItem(
-id: Any?,
+fun ComponentComposition.TextInputDialog(
+    title: String? = null,
+    titleRes: Int? = null,
+    prefill: String? = null,
+    prefillRes: Int? = null,
+    hint: String? = null,
+    hintRes: Int? = null,
+    onInputCompleted: (String) -> Unit
+) {
+    val context = ambient(ContextAmbient)
+    val (currentValue, setCurrentValue) = state {
+        when {
+            prefill != null -> prefill
+            else -> context.string(prefillRes!!)
+        }
+    }
 
-onInputCompleted: (String) -> Unit,
+    Dialog {
+        title(res = titleRes, text = title)
+        positiveButton(res = R.string.es_ok) {
+            onInputCompleted(currentValue)
+        }
+        negativeButton(res = R.string.es_cancel)
 
-title: String? = null,
-titleRes: Int? = null,
-
-text: String? = null,
-textRes: Int? = null,
-
-icon: Drawable? = null,
-iconRes: Int? = null,
-
-avatar: Drawable? = null,
-avatarRes: Int? = null,
-
-dialogTitle: String? = title,
-dialogTitleRes: Int? = titleRes,
-
-prefill: String? = null,
-prefillRes: Int? = null,
-
-hint: String? = null,
-hintRes: Int? = null,
-
-positiveDialogButtonText: String? = null,
-positiveDialogButtonTextRes: Int = R.string.es_ok,
-negativeDialogButtonText: String? = null,
-negativeDialogButtonTextRes: Int = R.string.es_cancel,
-
-enabled: Boolean = true,
-
-dialogBlock: (MaterialDialog.() -> Unit)? = null,
-builderBlock: (FunModelBuilder.() -> Unit)? = null
-) = DialogListItem<String>(
-id = id,
-buildDialog = { context ->
-var currentValue by context.state {
-when {
-prefill != null -> prefill
-else -> context.string(prefillRes!!)
+        input(
+            hintRes = hintRes,
+            hint = hint ?: "",
+            prefill = prefill,
+            waitForPositiveButton = false
+        ) { _, input -> setCurrentValue(input.toString()) }
+    }
 }
-}
-
-title(res = dialogTitleRes, text = dialogTitle)
-positiveButton(res = positiveDialogButtonTextRes, text = positiveDialogButtonText) {
-context.pop(currentValue)
-}
-negativeButton(res = negativeDialogButtonTextRes, text = negativeDialogButtonText)
-
-input(
-hintRes = hintRes,
-hint = hint ?: "",
-prefill = prefill,
-waitForPositiveButton = false
-) { _, input -> currentValue = input.toString() }
-
-dialogBlock?.invoke(this)
-
-show()
-},
-onDialogResult = { onInputCompleted(it) },
-title = title,
-titleRes = titleRes,
-text = text,
-textRes = textRes,
-icon = icon,
-iconRes = iconRes,
-avatar = avatar,
-avatarRes = avatarRes,
-enabled = enabled,
-builderBlock = {
-state(prefill)
-state(dialogTitle, dialogTitleRes)
-state(negativeDialogButtonText, negativeDialogButtonTextRes)
-state(dialogBlock != null)
-
-builderBlock?.invoke(this)
-}
-)
-
-fun ComponentComposition.EditTextDialogListItem(
-pref: Pref<String>,
-id: Any? = pref.key,
-
-onSelectedPredicate: ((String) -> Boolean)? = null,
-
-title: String? = null,
-titleRes: Int? = null,
-
-text: String? = null,
-textRes: Int? = null,
-
-icon: Drawable? = null,
-iconRes: Int? = null,
-
-avatar: Drawable? = null,
-avatarRes: Int? = null,
-
-dialogTitle: String? = title,
-dialogTitleRes: Int? = titleRes,
-
-hint: String? = null,
-hintRes: Int? = null,
-
-positiveDialogButtonText: String? = null,
-positiveDialogButtonTextRes: Int = R.string.es_ok,
-negativeDialogButtonText: String? = null,
-negativeDialogButtonTextRes: Int = R.string.es_cancel,
-
-enabled: Boolean = true,
-
-dialogBlock: (MaterialDialog.() -> Unit)? = null,
-builderBlock: (FunModelBuilder.() -> Unit)? = null
-) = EditTextDialogListItem(
-id = id,
-prefill = pref.get(),
-onInputCompleted = {
-if (onSelectedPredicate == null || onSelectedPredicate(it)) {
-pref.set(it)
-}
-},
-title = title,
-titleRes = titleRes,
-text = text,
-textRes = textRes,
-icon = icon,
-iconRes = iconRes,
-avatar = avatar,
-avatarRes = avatarRes,
-dialogTitle = dialogTitle,
-dialogTitleRes = dialogTitleRes,
-hint = hint,
-hintRes = hintRes,
-positiveDialogButtonText = positiveDialogButtonText,
-positiveDialogButtonTextRes = positiveDialogButtonTextRes,
-negativeDialogButtonText = negativeDialogButtonText,
-negativeDialogButtonTextRes = negativeDialogButtonTextRes,
-enabled = enabled,
-dialogBlock = dialogBlock,
-builderBlock = builderBlock
-)*/

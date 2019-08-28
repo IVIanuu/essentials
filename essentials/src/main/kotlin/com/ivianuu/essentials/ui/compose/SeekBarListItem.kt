@@ -16,26 +16,27 @@
 
 package com.ivianuu.essentials.ui.compose
 
-import android.graphics.drawable.Drawable
 import android.view.View
+import androidx.core.view.children
 import androidx.core.view.isVisible
 import com.ivianuu.compose.ComponentComposition
+import com.ivianuu.compose.ContextAmbient
+import com.ivianuu.compose.ViewById
 import com.ivianuu.compose.ViewByLayoutRes
+import com.ivianuu.compose.ambient
 import com.ivianuu.compose.onBindView
+import com.ivianuu.compose.set
 import com.ivianuu.essentials.R
+import com.ivianuu.essentials.util.getSecondaryTextColor
 import com.ivianuu.kommon.core.widget.setOnSeekBarChangeListener
 import com.ivianuu.kprefs.Pref
 import kotlinx.android.synthetic.main.es_list_item_seek_bar.view.*
 import java.lang.Math.round
 
 fun ComponentComposition.SeekBarListItem(
-    title: String? = null,
-    titleRes: Int? = null,
-
-    text: String? = null,
-    textRes: Int? = null,
-
-    leadingAction: (ComponentComposition.() -> Unit)? = null,
+    title: (ComponentComposition.() -> Unit)? = null,
+    text: (ComponentComposition.() -> Unit)? = null,
+    leading: (ComponentComposition.() -> Unit)? = null,
 
     value: Int,
     onChange: ((Int) -> Unit)? = null,
@@ -44,15 +45,44 @@ fun ComponentComposition.SeekBarListItem(
     inc: Int = 1,
     valueTextProvider: ((Int) -> String)? = { it.toString() },
 
-    icon: Drawable? = null,
-    iconRes: Int? = null,
-
-    avatar: Drawable? = null,
-    avatarRes: Int? = null,
-
     enabled: Boolean = true
 ) {
     ViewByLayoutRes<View>(layoutRes = R.layout.es_list_item_seek_bar) {
+        set(enabled) { enabled ->
+            es_list_text_container.isEnabled = enabled
+            es_list_text_container.children.forEach {
+                it.isEnabled = enabled
+            }
+
+            es_list_leading.isEnabled = enabled
+            es_list_leading.children.forEach {
+                it.isEnabled = enabled
+            }
+
+            isEnabled = enabled
+        }
+
+        ViewById<View>(id = R.id.es_list_text_container) {
+            if (title != null) {
+                TextStyle(textAppearance = R.style.TextAppearance_MaterialComponents_Subtitle1) {
+                    title()
+                }
+            }
+
+            if (text != null) {
+                TextStyle(
+                    textAppearance = R.style.TextAppearance_AppCompat_Body2,
+                    textColor = ambient(ContextAmbient).getSecondaryTextColor()
+                ) {
+                    text()
+                }
+            }
+        }
+
+        ViewById<View>(id = R.id.es_list_leading) {
+            leading?.invoke(composition)
+        }
+
         onBindView {
             var internalValue = value
 
@@ -98,53 +128,35 @@ fun ComponentComposition.SeekBarListItem(
     }
 }
 
-/**
 fun ComponentComposition.SeekBarListItem(
+    title: (ComponentComposition.() -> Unit)? = null,
+    text: (ComponentComposition.() -> Unit)? = null,
+    leading: (ComponentComposition.() -> Unit)? = null,
+
     pref: Pref<Int>,
-
-    id: Any? = pref.key,
-
     onChangePredicate: ((Int) -> Boolean)? = null,
+
     max: Int = 100,
     min: Int = 0,
     inc: Int = 1,
     valueTextProvider: ((Int) -> String)? = { it.toString() },
 
-    title: String? = null,
-    titleRes: Int? = null,
-
-    text: String? = null,
-    textRes: Int? = null,
-
-    icon: Drawable? = null,
-    iconRes: Int? = null,
-
-    avatar: Drawable? = null,
-    avatarRes: Int? = null,
-
-    enabled: Boolean = true,
-
-    builderBlock: (FunModelBuilder.() -> Unit)? = null
-) = SeekBarListItem(
-    id = id,
-    value = pref.get(),
-    onChange = {
-        if (onChangePredicate == null || onChangePredicate(it)) {
-            pref.set(it)
-        }
-    },
-    max = max,
-    min = min,
-    inc = inc,
-    valueTextProvider = valueTextProvider,
-    title = title,
-    titleRes = titleRes,
-    text = text,
-    textRes = textRes,
-    icon = icon,
-    iconRes = iconRes,
-    avatar = avatar,
-    avatarRes = avatarRes,
-    enabled = enabled,
-    builderBlock = builderBlock
-)*/
+    enabled: Boolean = true
+) {
+    SeekBarListItem(
+        title = title,
+        text = text,
+        leading = leading,
+        value = pref.get(),
+        onChange = {
+            if (onChangePredicate?.invoke(it) ?: true) {
+                pref.set(it)
+            }
+        },
+        max = max,
+        min = min,
+        inc = inc,
+        valueTextProvider = valueTextProvider,
+        enabled = enabled
+    )
+}

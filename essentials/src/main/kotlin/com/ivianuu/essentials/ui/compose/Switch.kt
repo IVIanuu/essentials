@@ -21,17 +21,6 @@ import com.ivianuu.essentials.R
 import com.ivianuu.kprefs.Pref
 
 fun ComponentComposition.Switch(
-    pref: Pref<Boolean>,
-    onChangePredicate: ((Boolean) -> Boolean)? = null
-) {
-    CompoundButton(
-        layoutRes = R.layout.es_switch,
-        pref = pref,
-        onChangePredicate = onChangePredicate
-    )
-}
-
-fun ComponentComposition.Switch(
     value: Boolean,
     onChange: (Boolean) -> Unit
 ) {
@@ -39,5 +28,16 @@ fun ComponentComposition.Switch(
         layoutRes = R.layout.es_switch,
         value = value,
         onChange = onChange
+    )
+}
+
+fun ComponentComposition.Switch(
+    pref: Pref<Boolean>,
+    onChangePredicate: ((Boolean) -> Boolean)? = null
+) {
+    CompoundButton(
+        layoutRes = R.layout.es_switch,
+        pref = pref,
+        onChangePredicate = onChangePredicate
     )
 }

@@ -17,15 +17,15 @@
 package com.ivianuu.essentials.picker
 
 import com.afollestad.materialdialogs.input.input
-import com.ivianuu.compose.ComponentComposition
 import com.ivianuu.compose.ContextAmbient
 import com.ivianuu.compose.ambient
 import com.ivianuu.compose.common.NavigatorAmbient
 import com.ivianuu.compose.state
+import com.ivianuu.essentials.ui.dialog.Dialog
 import com.ivianuu.essentials.ui.dialog.DialogRoute
 import com.ivianuu.kommon.core.content.string
 
-fun ComponentComposition.TextInputRoute(
+fun TextInputRoute(
     title: String? = null,
     titleRes: Int? = null,
     hint: String? = null,
@@ -44,7 +44,7 @@ fun ComponentComposition.TextInputRoute(
         }
     }
 
-    buildDialog {
+    Dialog {
         noAutoDismiss()
         title(res = titleRes, text = title)
         input(

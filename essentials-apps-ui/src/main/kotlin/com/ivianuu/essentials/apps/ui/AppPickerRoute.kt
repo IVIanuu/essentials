@@ -25,7 +25,6 @@ import com.ivianuu.compose.common.NavigatorAmbient
 import com.ivianuu.compose.common.RecyclerView
 import com.ivianuu.compose.common.Route
 import com.ivianuu.compose.common.changehandler.FadeChangeHandler
-import com.ivianuu.compose.key
 import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.AppStore
 import com.ivianuu.essentials.ui.compose.AppBar
@@ -75,13 +74,11 @@ private fun ComponentComposition.App(
     app: AppInfo,
     onClick: () -> Unit
 ) {
-    key(app.packageName) {
-        ListItem(
-            title = { Text(text = app.appName) },
-            onClick = onClick,
-            leadingAction = { AppIcon(app.packageName) }
-        )
-    }
+    ListItem(
+        title = { Text(text = app.appName) },
+        onClick = onClick,
+        leading = { AppIcon(app.packageName) }
+    )
 }
 
 @Inject

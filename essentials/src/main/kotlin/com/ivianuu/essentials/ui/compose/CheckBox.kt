@@ -21,17 +21,6 @@ import com.ivianuu.essentials.R
 import com.ivianuu.kprefs.Pref
 
 fun ComponentComposition.CheckBox(
-    pref: Pref<Boolean>,
-    onChangePredicate: ((Boolean) -> Boolean)? = null
-) {
-    CompoundButton(
-        layoutRes = R.layout.es_checkbox,
-        pref = pref,
-        onChangePredicate = onChangePredicate
-    )
-}
-
-fun ComponentComposition.CheckBox(
     value: Boolean,
     onChange: (Boolean) -> Unit
 ) {
@@ -39,5 +28,16 @@ fun ComponentComposition.CheckBox(
         layoutRes = R.layout.es_checkbox,
         value = value,
         onChange = onChange
+    )
+}
+
+fun ComponentComposition.CheckBox(
+    pref: Pref<Boolean>,
+    onChangePredicate: ((Boolean) -> Boolean)? = null
+) {
+    CompoundButton(
+        layoutRes = R.layout.es_checkbox,
+        pref = pref,
+        onChangePredicate = onChangePredicate
     )
 }

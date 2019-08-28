@@ -80,7 +80,6 @@ fun SecureSettingsRoute(
                     )
 
                     val coroutineScope = coroutineScope
-
                     ListItem(
                         title = { Text(textRes = R.string.es_pref_use_root) },
                         text = { Text(textRes = R.string.es_pref_use_root_summary) },

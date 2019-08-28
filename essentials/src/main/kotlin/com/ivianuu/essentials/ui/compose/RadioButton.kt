@@ -21,17 +21,6 @@ import com.ivianuu.essentials.R
 import com.ivianuu.kprefs.Pref
 
 fun ComponentComposition.RadioButton(
-    pref: Pref<Boolean>,
-    onChangePredicate: ((Boolean) -> Boolean)? = null
-) {
-    CompoundButton(
-        layoutRes = R.layout.es_radio_button,
-        pref = pref,
-        onChangePredicate = onChangePredicate
-    )
-}
-
-fun ComponentComposition.RadioButton(
     value: Boolean,
     onChange: (Boolean) -> Unit
 ) {
@@ -39,6 +28,17 @@ fun ComponentComposition.RadioButton(
         layoutRes = R.layout.es_radio_button,
         value = value,
         onChange = onChange
+    )
+}
+
+fun ComponentComposition.RadioButton(
+    pref: Pref<Boolean>,
+    onChangePredicate: ((Boolean) -> Boolean)? = null
+) {
+    CompoundButton(
+        layoutRes = R.layout.es_radio_button,
+        pref = pref,
+        onChangePredicate = onChangePredicate
     )
 }
 

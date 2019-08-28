@@ -18,25 +18,23 @@ package com.ivianuu.essentials.ui.compose
 
 import android.view.View
 import androidx.core.view.children
-import androidx.core.view.isVisible
 import com.ivianuu.compose.ComponentComposition
 import com.ivianuu.compose.ContextAmbient
 import com.ivianuu.compose.ViewById
 import com.ivianuu.compose.ViewByLayoutRes
 import com.ivianuu.compose.ambient
-import com.ivianuu.compose.key
 import com.ivianuu.compose.set
-import com.ivianuu.compose.setBy
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.util.getSecondaryTextColor
 import kotlinx.android.synthetic.main.es_list_item.view.*
 
 fun ComponentComposition.ListItem(
+    key: Any? = null,
     title: (ComponentComposition.() -> Unit)? = null,
     text: (ComponentComposition.() -> Unit)? = null,
 
-    leadingAction: (ComponentComposition.() -> Unit)? = null,
-    trailingAction: (ComponentComposition.() -> Unit)? = null,
+    leading: (ComponentComposition.() -> Unit)? = null,
+    trailing: (ComponentComposition.() -> Unit)? = null,
 
     onClick: (() -> Unit)? = null,
     onLongClick: (() -> Unit)? = null,
@@ -66,13 +64,13 @@ fun ComponentComposition.ListItem(
                 it.isEnabled = enabled
             }
 
-            es_list_leading_action.isEnabled = enabled
-            es_list_leading_action.children.forEach {
+            es_list_leading.isEnabled = enabled
+            es_list_leading.children.forEach {
                 it.isEnabled = enabled
             }
 
-            es_list_trailing_action.isEnabled = enabled
-            es_list_leading_action.children.forEach {
+            es_list_trailing.isEnabled = enabled
+            es_list_trailing.children.forEach {
                 it.isEnabled = enabled
             }
 
@@ -81,31 +79,27 @@ fun ComponentComposition.ListItem(
 
         ViewById<View>(id = R.id.es_list_text_container) {
             if (title != null) {
-                key(key = "title") {
-                    TextStyle(textAppearance = R.style.TextAppearance_MaterialComponents_Subtitle1) {
-                        title()
-                    }
+                TextStyle(textAppearance = R.style.TextAppearance_MaterialComponents_Subtitle1) {
+                    title()
                 }
             }
 
             if (text != null) {
-                key(key = "text") {
-                    TextStyle(
-                        textAppearance = R.style.TextAppearance_AppCompat_Body2,
-                        textColor = ambient(ContextAmbient).getSecondaryTextColor()
-                    ) {
-                        text()
-                    }
+                TextStyle(
+                    textAppearance = R.style.TextAppearance_AppCompat_Body2,
+                    textColor = ambient(ContextAmbient).getSecondaryTextColor()
+                ) {
+                    text()
                 }
             }
         }
 
-        ViewById<View>(id = R.id.es_list_leading_action) {
-            leadingAction?.invoke(composition)
+        ViewById<View>(id = R.id.es_list_leading) {
+            leading?.invoke(composition)
         }
 
-        ViewById<View>(id = R.id.es_list_trailing_action) {
-            trailingAction?.invoke(composition)
+        ViewById<View>(id = R.id.es_list_trailing) {
+            trailing?.invoke(composition)
         }
     }
 }

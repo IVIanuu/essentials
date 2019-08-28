@@ -132,43 +132,43 @@ fun ContextAware.textArrayAttr(
     defaultValue: Array<CharSequence>? = null
 ): Array<CharSequence>? = providedContext.textArrayAttr(attr, defaultValue)
 
-fun ContextAware.anim(resId: Int): Animation = providedContext.anim(resId)
+fun ContextAware.anim(res: Int): Animation = providedContext.anim(res)
 
-fun ContextAware.intArray(resId: Int): IntArray = providedContext.intArray(resId)
+fun ContextAware.intArray(res: Int): IntArray = providedContext.intArray(res)
 
-fun ContextAware.stringArray(resId: Int): Array<String> = providedContext.stringArray(resId)
+fun ContextAware.stringArray(res: Int): Array<String> = providedContext.stringArray(res)
 
-fun ContextAware.textArray(resId: Int): Array<CharSequence> = providedContext.textArray(resId)
+fun ContextAware.textArray(res: Int): Array<CharSequence> = providedContext.textArray(res)
 
-fun ContextAware.typedArray(resId: Int): TypedArray = providedContext.typedArray(resId)
+fun ContextAware.typedArray(res: Int): TypedArray = providedContext.typedArray(res)
 
-fun ContextAware.bool(resId: Int): Boolean = providedContext.bool(resId)
+fun ContextAware.bool(res: Int): Boolean = providedContext.bool(res)
 
-fun ContextAware.dimen(resId: Int): Float = providedContext.dimen(resId)
+fun ContextAware.dimen(res: Int): Float = providedContext.dimen(res)
 
-fun ContextAware.dimenPx(resId: Int): Int = providedContext.dimenPx(resId)
+fun ContextAware.dimenPx(res: Int): Int = providedContext.dimenPx(res)
 
-fun ContextAware.dimenPxOffset(resId: Int): Int = providedContext.dimenPxOffset(resId)
+fun ContextAware.dimenPxOffset(res: Int): Int = providedContext.dimenPxOffset(res)
 
-fun ContextAware.float(resId: Int): Float = providedContext.float(resId)
+fun ContextAware.float(res: Int): Float = providedContext.float(res)
 
-fun ContextAware.int(resId: Int): Int = providedContext.int(resId)
+fun ContextAware.int(res: Int): Int = providedContext.int(res)
 
-fun ContextAware.bitmap(resId: Int): Bitmap = providedContext.bitmap(resId)
+fun ContextAware.bitmap(res: Int): Bitmap = providedContext.bitmap(res)
 
-fun ContextAware.color(resId: Int): Int = providedContext.color(resId)
+fun ContextAware.color(res: Int): Int = providedContext.color(res)
 
-fun ContextAware.colorStateList(resId: Int): ColorStateList =
-    providedContext.colorStateList(resId)
+fun ContextAware.colorStateList(res: Int): ColorStateList =
+    providedContext.colorStateList(res)
 
-fun ContextAware.drawable(resId: Int): Drawable = providedContext.drawable(resId)
+fun ContextAware.drawable(res: Int): Drawable = providedContext.drawable(res)
 
-fun ContextAware.font(resId: Int): Typeface = providedContext.font(resId)
+fun ContextAware.font(res: Int): Typeface = providedContext.font(res)
 
-fun ContextAware.string(resId: Int): String = providedContext.string(resId)
+fun ContextAware.string(res: Int): String = providedContext.string(res)
 
-fun ContextAware.string(resId: Int, vararg args: Any): String =
-    providedContext.string(resId, *args)
+fun ContextAware.string(res: Int, vararg args: Any): String =
+    providedContext.string(res, *args)
 
 inline fun <reified T> ContextAware.intent(): Intent = providedContext.intent<T>()
 

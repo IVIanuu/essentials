@@ -23,7 +23,7 @@
     android:minHeight="48dp">
 
     <FrameLayout
-        android:id="@+id/es_list_leading_action"
+        android:id="@+id/es_list_leading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:visibility="visible"
@@ -40,12 +40,12 @@
         android:layout_marginEnd="16dp"
         android:paddingTop="16dp"
         android:paddingBottom="16dp"
-        android:layout_toEndOf="@id/es_list_leading_action"
+        android:layout_toEndOf="@id/es_list_leading"
         android:layout_centerVertical="true"
-        android:layout_toStartOf="@id/es_list_trailing_action"/>
+        android:layout_toStartOf="@id/es_list_trailing" />
 
     <FrameLayout
-        android:id="@+id/es_list_trailing_action"
+        android:id="@+id/es_list_trailing"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingEnd="16dp"

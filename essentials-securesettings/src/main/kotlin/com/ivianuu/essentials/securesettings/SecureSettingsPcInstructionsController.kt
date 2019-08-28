@@ -16,14 +16,24 @@
 
 package com.ivianuu.essentials.securesettings
 
+import android.content.Intent
+import android.provider.Settings
+import com.ivianuu.compose.ComponentComposition
 import com.ivianuu.compose.ambient
 import com.ivianuu.compose.common.NavigatorAmbient
 import com.ivianuu.compose.common.RecyclerView
 import com.ivianuu.compose.common.Route
 import com.ivianuu.compose.common.launchOnActive
 import com.ivianuu.essentials.ui.compose.AppBar
+import com.ivianuu.essentials.ui.compose.Icon
+import com.ivianuu.essentials.ui.compose.ListItem
 import com.ivianuu.essentials.ui.compose.Scaffold
+import com.ivianuu.essentials.ui.compose.Text
+import com.ivianuu.essentials.ui.compose.copyToClipboardOnClick
 import com.ivianuu.essentials.ui.compose.injekt.inject
+import com.ivianuu.essentials.ui.compose.openUrlOnClick
+import com.ivianuu.essentials.ui.compose.sendIntentOnClick
+import com.ivianuu.essentials.util.BuildInfo
 import kotlinx.coroutines.delay
 
 /**
@@ -47,59 +57,55 @@ fun SecureSettingsInstructionsRoute() = Route {
         appBar = { AppBar(titleRes = R.string.es_title_secure_settings_pc_instructions) },
         content = {
             RecyclerView {
-                /*ListItem(
-                    id = "secure_settings_header",
-                    textRes = R.string.es_pref_secure_settings_pc_instructions_header_summary
-                )
+                ListItem(text = { Text(textRes = R.string.es_pref_secure_settings_pc_instructions_header_summary) })
 
-                IntentListItem(
-                    id = "secure_settings_step_1",
-                    titleRes = R.string.es_pref_secure_settings_step_1,
-                    textRes = R.string.es_pref_secure_settings_step_1_summary,
-                    intent = { Intent(Settings.ACTION_DEVICE_INFO_SETTINGS) }
-                )
-
-                IntentListItem(
-                    id = "secure_settings_step_2",
-                    titleRes = R.string.es_pref_secure_settings_step_2,
-                    textRes = R.string.es_pref_secure_settings_step_2_summary,
-                    intent = { Intent(Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS) }
+                ListItem(
+                    title = { Text(textRes = R.string.es_pref_secure_settings_step_1) },
+                    text = { Text(textRes = R.string.es_pref_secure_settings_step_1_summary) },
+                    onClick = sendIntentOnClick { Intent(Settings.ACTION_DEVICE_INFO_SETTINGS) }
                 )
 
                 ListItem(
-                    id = "secure_settings_step_3",
-                    titleRes = R.string.es_pref_secure_settings_step_3,
-                    textRes = R.string.es_pref_secure_settings_step_3_summary
+                    title = { Text(textRes = R.string.es_pref_secure_settings_step_2) },
+                    text = { Text(textRes = R.string.es_pref_secure_settings_step_2_summary) },
+                    onClick = sendIntentOnClick { Intent(Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS) }
                 )
 
-                UrlListItem(
-                    id = "secure_settings_link_gadget_hacks",
-                    iconRes = R.drawable.es_ic_link,
-                    textRes = R.string.es_pref_secure_settings_link_gadget_hacks_summary,
-                    url = { "https://youtu.be/CDuxcrrWLnY" }
+                ListItem(
+                    title = { Text(textRes = R.string.es_pref_secure_settings_step_3) },
+                    text = { Text(textRes = R.string.es_pref_secure_settings_step_3_summary) }
                 )
 
-                UrlListItem(
-                    id = "secure_settings_link_lifehacker",
-                    iconRes = R.drawable.es_ic_link,
-                    textRes = R.string.es_pref_secure_settings_link_lifehacker_summary,
-                    url = { "https://lifehacker.com/the-easiest-way-to-install-androids-adb-and-fastboot-to-1586992378" }
+                fun ComponentComposition.LinkIcon() {
+                    Icon(imageRes = R.drawable.es_ic_link)
+                }
+
+                ListItem(
+                    leading = { LinkIcon() },
+                    text = { Text(textRes = R.string.es_pref_secure_settings_link_gadget_hacks_summary) },
+                    onClick = openUrlOnClick { "https://youtu.be/CDuxcrrWLnY" }
                 )
 
-                UrlListItem(
-                    id = "secure_settings_link_xda",
-                    iconRes = R.drawable.es_ic_link,
-                    textRes = R.string.es_pref_secure_settings_link_xda_summary,
-                    url = { "https://www.xda-developers.com/install-adb-windows-macos-linux/" }
+                ListItem(
+                    leading = { LinkIcon() },
+                    text = { Text(textRes = R.string.es_pref_secure_settings_link_lifehacker_summary) },
+                    onClick = openUrlOnClick { "https://lifehacker.com/the-easiest-way-to-install-androids-adb-and-fastboot-to-1586992378" }
                 )
 
-                ClipboardListItem(
-                    id = "secure_settings_step_4",
-                    titleRes = R.string.es_pref_secure_settings_step_4,
-                    text = string(R.string.es_pref_secure_settings_step_4_summary, buildInfo.packageName),
-                    clip = "adb shell pm grant ${buildInfo.packageName} android.permission.WRITE_SECURE_SETTINGS"
+                ListItem(
+                    leading = { LinkIcon() },
+                    text = { Text(textRes = R.string.es_pref_secure_settings_link_xda_summary) },
+                    onClick = openUrlOnClick { "https://www.xda-developers.com/install-adb-windows-macos-linux/" }
                 )
-*/
+
+                val buildInfo = inject<BuildInfo>()
+                ListItem(
+                    title = { Text(textRes = R.string.es_pref_secure_settings_step_4) },
+                    text = { Text(textRes = R.string.es_pref_secure_settings_step_4_summary) },
+                    onClick = copyToClipboardOnClick {
+                        "adb shell pm grant ${buildInfo.packageName} android.permission.WRITE_SECURE_SETTINGS"
+                    }
+                )
             }
         }
     )

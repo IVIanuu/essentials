@@ -8,6 +8,19 @@ import com.ivianuu.kprefs.Pref
 
 fun ComponentComposition.CompoundButton(
     layoutRes: Int,
+    value: Boolean,
+    onChange: (Boolean) -> Unit
+) {
+    ViewByLayoutRes<CompoundButton>(layoutRes = layoutRes) {
+        set(value) {
+            isChecked = value
+            setOnClickListener { onChange(!value) }
+        }
+    }
+}
+
+fun ComponentComposition.CompoundButton(
+    layoutRes: Int,
     pref: Pref<Boolean>,
     onChangePredicate: ((Boolean) -> Boolean)? = null
 ) {
@@ -20,17 +33,4 @@ fun ComponentComposition.CompoundButton(
             }
         }
     )
-}
-
-fun ComponentComposition.CompoundButton(
-    layoutRes: Int,
-    value: Boolean,
-    onChange: (Boolean) -> Unit
-) {
-    ViewByLayoutRes<CompoundButton>(layoutRes = layoutRes) {
-        set(value) {
-            isChecked = value
-            setOnClickListener { onChange(!value) }
-        }
-    }
 }

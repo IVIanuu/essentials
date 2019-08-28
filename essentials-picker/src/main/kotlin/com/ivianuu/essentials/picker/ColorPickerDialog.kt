@@ -17,13 +17,13 @@
 package com.ivianuu.essentials.picker
 
 import com.afollestad.materialdialogs.color.colorChooser
-import com.ivianuu.compose.ComponentComposition
 import com.ivianuu.compose.ambient
 import com.ivianuu.compose.common.NavigatorAmbient
 import com.ivianuu.compose.state
+import com.ivianuu.essentials.ui.dialog.Dialog
 import com.ivianuu.essentials.ui.dialog.DialogRoute
 
-fun ComponentComposition.ColorPickerRoute(
+fun ColorPickerRoute(
     title: String? = null,
     titleRes: Int? = R.string.es_dialog_title_color_picker,
     preselect: Int,
@@ -32,7 +32,7 @@ fun ComponentComposition.ColorPickerRoute(
 ) = DialogRoute {
     val (currentColor, setCurrentColor) = state { preselect }
     val navigator = ambient(NavigatorAmbient)
-    buildDialog {
+    Dialog {
         title(res = titleRes, text = title)
         colorChooser(
             colors = PRIMARY_COLORS,

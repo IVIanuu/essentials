@@ -46,20 +46,24 @@ private enum class HomeItem(
     val route: () -> Route
 ) {
     AppBlacklist(
-        title = "App Blacklist",
+        title = "App blacklist",
         route = { AppBlacklistRoute() }
     ),
     AppPicker(
-        title = "App Picker",
-        route = { AppPickerRoute() }
+        title = "App picker",
+        route = { AppPickerRoute().withHandlers(com.ivianuu.compose.common.changehandler.FadeChangeHandler()) }
     ),
     Counter(
         title = "Counter",
         route = { CounterRoute() }
     ),
+    NavBar(
+        title = "Nav bar",
+        route = { NavBarRoute() }
+    ),
     Twilight(
         title = "Twilight",
-        route = { TwilightSettingsRoute() }
+        route = { TwilightSettingsRoute().withHandlers(com.ivianuu.compose.common.changehandler.HorizontalChangeHandler()) }
     ),
     Permission(
         title = "Permission",
