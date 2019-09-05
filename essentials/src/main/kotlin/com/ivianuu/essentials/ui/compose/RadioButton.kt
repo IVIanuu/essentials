@@ -42,6 +42,30 @@ fun ComponentComposition.RadioButton(
     )
 }
 
+fun ComponentComposition.RadioButtonPreference(
+    pref: Pref<Boolean>,
+    onChangePredicate: ((Boolean) -> Boolean)? = null,
+    title: (ComponentComposition.() -> Unit)? = null,
+    text: (ComponentComposition.() -> Unit)? = null,
+    leading: (ComponentComposition.() -> Unit)? = null,
+    enabled: Boolean = true
+) {
+    val value = pref.get()
+    ListItem(
+        title = title,
+        text = text,
+        leading = leading,
+        enabled = enabled,
+        trailing = { RadioButton(pref = pref, onChangePredicate = onChangePredicate) },
+        onClick = {
+            val newValue = !value
+            if (onChangePredicate?.invoke(newValue) ?: true) {
+                pref.set(newValue)
+            }
+        }
+    )
+}
+
 /**
 
 data class RadioButtonItem<T>(

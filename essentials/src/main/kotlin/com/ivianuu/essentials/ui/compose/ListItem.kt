@@ -29,7 +29,6 @@ import com.ivianuu.essentials.util.getSecondaryTextColor
 import kotlinx.android.synthetic.main.es_list_item.view.*
 
 fun ComponentComposition.ListItem(
-    key: Any? = null,
     title: (ComponentComposition.() -> Unit)? = null,
     text: (ComponentComposition.() -> Unit)? = null,
 

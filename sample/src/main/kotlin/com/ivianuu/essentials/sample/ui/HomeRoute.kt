@@ -61,6 +61,10 @@ private enum class HomeItem(
         title = "Nav bar",
         route = { NavBarRoute() }
     ),
+    Prefs(
+        title = "Prefs",
+        route = { PrefsRoute() }
+    ),
     Twilight(
         title = "Twilight",
         route = { TwilightSettingsRoute().withHandlers(com.ivianuu.compose.common.changehandler.HorizontalChangeHandler()) }

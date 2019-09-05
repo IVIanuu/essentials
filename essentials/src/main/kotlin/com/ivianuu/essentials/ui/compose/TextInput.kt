@@ -24,8 +24,9 @@ import com.ivianuu.compose.state
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.dialog.Dialog
 import com.ivianuu.kommon.core.content.string
+import com.ivianuu.kprefs.Pref
 
-fun ComponentComposition.TextInputDialog(
+fun ComponentComposition.TextInputDialogRoute(
     title: String? = null,
     titleRes: Int? = null,
     prefill: String? = null,
@@ -57,3 +58,26 @@ fun ComponentComposition.TextInputDialog(
         ) { _, input -> setCurrentValue(input.toString()) }
     }
 }
+
+/*
+fun ComponentComposition.TextInputDialogRoute(
+    title: String? = null,
+    titleRes: Int? = null,
+    hint: String? = null,
+    hintRes: Int? = null,
+    pref: Pref<String>,
+    onChangePredicate: ((String) -> Boolean)? = null
+) {
+    TextInputDialog(
+        title = title,
+        titleRes = titleRes,
+        hint = hint,
+        hintRes = hintRes,
+        prefill = pref.get(),
+        onInputCompleted = {
+            if (onChangePredicate?.invoke(it) ?: true) {
+                pref.set(it)
+            }
+        }
+    )
+}*/

@@ -21,6 +21,6 @@ import com.ivianuu.compose.ComponentComposition
 import com.ivianuu.compose.ViewByLayoutRes
 import com.ivianuu.essentials.R
 
-inline fun ComponentComposition.ListDivider() {
+fun ComponentComposition.ListDivider() {
     ViewByLayoutRes<View>(layoutRes = R.layout.es_list_divider)
 }

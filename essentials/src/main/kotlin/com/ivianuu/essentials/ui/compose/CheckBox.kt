@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.ui.compose
 
 import com.ivianuu.compose.ComponentComposition
+import com.ivianuu.compose.internal.log
 import com.ivianuu.essentials.R
 import com.ivianuu.kprefs.Pref
 
@@ -39,5 +40,29 @@ fun ComponentComposition.CheckBox(
         layoutRes = R.layout.es_checkbox,
         pref = pref,
         onChangePredicate = onChangePredicate
+    )
+}
+
+fun ComponentComposition.CheckBoxPreference(
+    pref: Pref<Boolean>,
+    onChangePredicate: ((Boolean) -> Boolean)? = null,
+    title: (ComponentComposition.() -> Unit)? = null,
+    text: (ComponentComposition.() -> Unit)? = null,
+    leading: (ComponentComposition.() -> Unit)? = null,
+    enabled: Boolean = true
+) {
+    val value = pref.get()
+    ListItem(
+        title = title,
+        text = text,
+        leading = leading,
+        enabled = enabled,
+        trailing = { CheckBox(pref = pref, onChangePredicate = onChangePredicate) },
+        onClick = {
+            val newValue = !value
+            if (onChangePredicate?.invoke(newValue) ?: true) {
+                pref.set(newValue)
+            }
+        }
     )
 }

@@ -23,7 +23,7 @@ import com.ivianuu.compose.setBy
 import com.ivianuu.essentials.R
 import kotlinx.android.synthetic.main.es_list_subheader.view.*
 
-inline fun ComponentComposition.ListSubheader(
+fun ComponentComposition.ListSubheader(
     text: String? = null,
     textRes: Int? = null
 ) {

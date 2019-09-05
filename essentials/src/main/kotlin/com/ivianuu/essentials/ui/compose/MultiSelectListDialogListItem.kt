@@ -16,182 +16,62 @@
 
 package com.ivianuu.essentials.ui.compose
 
-/**
-import android.graphics.drawable.Drawable
-import com.afollestad.materialdialogs.MaterialDialog
-import com.airbnb.epoxy.EpoxyController
-import com.ivianuu.essentials.ui.dialog.pop
-import com.ivianuu.essentials.ui.effect.state
+import com.afollestad.materialdialogs.list.listItemsMultiChoice
+import com.ivianuu.compose.ComponentComposition
+import com.ivianuu.compose.state
+import com.ivianuu.essentials.R
+import com.ivianuu.essentials.ui.dialog.Dialog
 import com.ivianuu.kprefs.Pref
 
-fun ComponentComposition.MultiSelectListDialogListItem(
-id: Any?,
+fun <T> ComponentComposition.MultiSelectListDialog(
+    title: String? = null,
+    titleRes: Int? = null,
+    items: Array<Pair<String, T>>,
+    selectedItems: Set<T>,
+    onItemsSelected: (Set<T>) -> Unit
+) {
+    val (currentItems, setCurrentItems) = state { selectedItems.toSet() }
 
-values: Set<String>,
-onSelected: (Set<String>) -> Unit,
+    val selectedIndices = currentItems
+        .map { item -> items.indexOfFirst { it.second == item } }
+        .toIntArray()
 
-title: String? = null,
-titleRes: Int? = null,
+    Dialog {
+        title(res = titleRes, text = title)
+        positiveButton(res = R.string.es_ok) { onItemsSelected(currentItems) }
+        negativeButton(res = R.string.es_cancel)
 
-text: String? = null,
-textRes: Int? = null,
-
-icon: Drawable? = null,
-iconRes: Int? = null,
-
-avatar: Drawable? = null,
-avatarRes: Int? = null,
-
-dialogTitle: String? = title,
-dialogTitleRes: Int? = titleRes,
-
-positiveDialogButtonText: String? = null,
-positiveDialogButtonTextRes: Int = R.string.es_ok,
-negativeDialogButtonText: String? = null,
-negativeDialogButtonTextRes: Int = R.string.es_cancel,
-
-entries: Array<String>? = null,
-entriesRes: Int? = null,
-entryValues: Array<String>? = null,
-entryValuesRes: Int? = null,
-
-enabled: Boolean = true,
-
-dialogBlock: (MaterialDialog.() -> Unit)? = null,
-builderBlock: (FunModelBuilder.() -> Unit)? = null
-) = DialogListItem<Set<String>>(
-id = id,
-buildDialog = { context ->
-var finalEntries = entries
-if (finalEntries == null && entriesRes != null) {
-finalEntries = context.controller.stringArray(entriesRes)
-}
-if (finalEntries == null) {
-finalEntries = emptyArray()
+        listItemsMultiChoice(
+            items = items.map { it.first },
+            initialSelection = selectedIndices,
+            allowEmptySelection = true,
+            waitForPositiveButton = false
+        ) { _, positions, _ ->
+            setCurrentItems(
+                positions
+                    .map { index -> items[index].second }
+                    .toSet()
+            )
+        }
+    }
 }
 
-var finalEntryValues = entryValues
-if (finalEntryValues == null && entryValuesRes != null) {
-finalEntryValues = context.controller.stringArray(entryValuesRes)
+fun <T> ComponentComposition.MultiSelectListDialog(
+    title: String? = null,
+    titleRes: Int? = null,
+    pref: Pref<Set<T>>,
+    items: Array<Pair<String, T>>,
+    onChangePredicate: ((Set<T>) -> Boolean)? = null
+) {
+    MultiSelectListDialog(
+        title = title,
+        titleRes = titleRes,
+        items = items,
+        selectedItems = pref.get(),
+        onItemsSelected = {
+            if (onChangePredicate?.invoke(it) ?: true) {
+                pref.set(it)
+            }
+        }
+    )
 }
-if (finalEntryValues == null) {
-finalEntryValues = emptyArray()
-}
-
-var currentValue by context.state { values }
-
-title(res = dialogTitleRes, text = dialogTitle)
-positiveButton(res = positiveDialogButtonTextRes, text = positiveDialogButtonText) {
-context.pop(currentValue)
-}
-negativeButton(res = negativeDialogButtonTextRes, text = negativeDialogButtonText)
-
-val selectedIndices = currentValue
-.map { finalEntryValues.indexOf(it) }
-.filter { it != -1 }
-.toIntArray()
-
-listItemsMultiChoice(
-items = finalEntries.toList(),
-initialSelection = selectedIndices,
-allowEmptySelection = true,
-waitForPositiveButton = false
-) { _, positions, _ ->
-currentValue = finalEntryValues.toList()
-.filterIndexed { index, _ -> index in positions }
-.map { it }
-.toSet()
-}
-
-dialogBlock?.invoke(this)
-
-show()
-},
-onDialogResult = { onSelected(it) },
-title = title,
-titleRes = titleRes,
-text = text,
-textRes = textRes,
-icon = icon,
-iconRes = iconRes,
-avatar = avatar,
-avatarRes = avatarRes,
-enabled = enabled,
-builderBlock = {
-state(values)
-state(dialogTitle, dialogTitleRes)
-state(negativeDialogButtonText, negativeDialogButtonTextRes)
-state(entries, entriesRes)
-state(entryValues, entryValuesRes)
-state(dialogBlock != null)
-
-builderBlock?.invoke(this)
-}
-)
-
-fun ComponentComposition.MultiSelectListDialogListItem(
-pref: Pref<Set<String>>,
-
-id: Any? = pref.key,
-
-onSelectedPredicate: ((Set<String>) -> Boolean)? = null,
-
-title: String? = null,
-titleRes: Int? = null,
-
-text: String? = null,
-textRes: Int? = null,
-
-icon: Drawable? = null,
-iconRes: Int? = null,
-
-avatar: Drawable? = null,
-avatarRes: Int? = null,
-
-dialogTitle: String? = title,
-dialogTitleRes: Int? = titleRes,
-
-positiveDialogButtonText: String? = null,
-positiveDialogButtonTextRes: Int = R.string.es_ok,
-negativeDialogButtonText: String? = null,
-negativeDialogButtonTextRes: Int = R.string.es_cancel,
-
-entries: Array<String>? = null,
-entriesRes: Int? = null,
-entryValues: Array<String>? = null,
-entryValuesRes: Int? = null,
-
-enabled: Boolean = true,
-
-dialogBlock: (MaterialDialog.() -> Unit)? = null,
-builderBlock: (FunModelBuilder.() -> Unit)? = null
-) = MultiSelectListDialogListItem(
-id = id,
-values = pref.get(),
-onSelected = {
-if (onSelectedPredicate == null || onSelectedPredicate(it)) {
-pref.set(it)
-}
-},
-title = title,
-titleRes = titleRes,
-text = text,
-textRes = textRes,
-icon = icon,
-iconRes = iconRes,
-avatar = avatar,
-avatarRes = avatarRes,
-dialogTitle = dialogTitle,
-dialogTitleRes = dialogTitleRes,
-positiveDialogButtonText = positiveDialogButtonText,
-positiveDialogButtonTextRes = positiveDialogButtonTextRes,
-negativeDialogButtonText = negativeDialogButtonText,
-negativeDialogButtonTextRes = negativeDialogButtonTextRes,
-entries = entries,
-entriesRes = entriesRes,
-entryValues = entryValues,
-entryValuesRes = entryValuesRes,
-enabled = enabled,
-dialogBlock = dialogBlock,
-builderBlock = builderBlock
-)*/

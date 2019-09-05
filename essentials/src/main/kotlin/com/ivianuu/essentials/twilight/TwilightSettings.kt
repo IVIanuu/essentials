@@ -36,32 +36,32 @@ fun TwilightSettingsRoute() = Route {
                 RecyclerView {
                     TwilightModeItem(
                         mode = TwilightMode.SYSTEM,
-                        titleRes = R.string.es_twilight_mode_system,
-                        textRes = R.string.es_twilight_mode_system_desc
+                        title = R.string.es_twilight_mode_system,
+                        desc = R.string.es_twilight_mode_system_desc
                     )
 
                     TwilightModeItem(
                         mode = TwilightMode.LIGHT,
-                        titleRes = R.string.es_twilight_mode_light,
-                        textRes = R.string.es_twilight_mode_light_desc
+                        title = R.string.es_twilight_mode_light,
+                        desc = R.string.es_twilight_mode_light_desc
                     )
 
                     TwilightModeItem(
                         mode = TwilightMode.DARK,
-                        titleRes = R.string.es_twilight_mode_dark,
-                        textRes = R.string.es_twilight_mode_dark_desc
+                        title = R.string.es_twilight_mode_dark,
+                        desc = R.string.es_twilight_mode_dark_desc
                     )
 
                     TwilightModeItem(
                         mode = TwilightMode.BATTERY,
-                        titleRes = R.string.es_twilight_mode_battery,
-                        textRes = R.string.es_twilight_mode_battery_desc
+                        title = R.string.es_twilight_mode_battery,
+                        desc = R.string.es_twilight_mode_battery_desc
                     )
 
                     TwilightModeItem(
                         mode = TwilightMode.TIME,
-                        titleRes = R.string.es_twilight_mode_time,
-                        textRes = R.string.es_twilight_mode_time_desc
+                        title = R.string.es_twilight_mode_time,
+                        desc = R.string.es_twilight_mode_time_desc
                     )
                 }
             }
@@ -69,19 +69,16 @@ fun TwilightSettingsRoute() = Route {
     }
 }
 
-private inline fun ComponentComposition.TwilightModeItem(
+private fun ComponentComposition.TwilightModeItem(
     mode: TwilightMode,
-    titleRes: Int,
-    textRes: Int
+    title: Int,
+    desc: Int
 ) {
     val prefs = inject<TwilightPrefs>()
 
     ListItem(
-        title = { Text(textRes = titleRes) },
-        text = {
-            Text(textRes = textRes)
-            //CheckBox(value = true) {}
-        },
+        title = { Text(textRes = title) },
+        text = { Text(textRes = desc) },
         trailing = {
             RadioButton(
                 value = prefs.twilightMode.get() == mode,
