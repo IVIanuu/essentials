@@ -41,6 +41,7 @@ object Versions {
     const val androidxAppCompat = "1.1.0-rc01"
     const val androidxCardView = "1.0.0"
     const val androidxCore = "1.1.0-rc02"
+    const val androidxConstraintLayout = "2.0.0-beta2"
     const val androidxFragment = "1.1.0-rc01"
     const val androidxLifecycle = "2.2.0-alpha02"
     const val androidxLifecycleViewModelSavedState = "1.0.0-alpha02"
@@ -52,7 +53,6 @@ object Versions {
     const val androidxTestRunner = "1.2.0-alpha03"
 
     const val bintray = "1.8.4"
-    const val constraintLayout = "2.0.0-beta2"
     const val coroutines = "1.3.0-RC"
     const val director = "0.0.1-dev40"
     const val epoxy = "3.7.0"
@@ -80,6 +80,8 @@ object Deps {
     const val androidGradlePlugin = "com.android.tools.build:gradle:${Versions.androidGradlePlugin}"
 
     const val androidxActivity = "androidx.activity:activity-ktx:${Versions.androidxActivity}"
+    const val androidxConstraintLayout =
+        "androidx.constraintlayout:constraintlayout:${Versions.androidxConstraintLayout}"
     const val androidxAppCompat = "androidx.appcompat:appcompat:${Versions.androidxAppCompat}"
     const val androidxCardView = "androidx.cardview:cardview:${Versions.androidxCardView}"
     const val androidxCore = "androidx.core:core-ktx:${Versions.androidxCore}"
@@ -103,9 +105,6 @@ object Deps {
 
     const val bintrayGradlePlugin =
         "com.jfrog.bintray.gradle:gradle-bintray-plugin:${Versions.bintray}"
-
-    const val constraintLayout =
-        "androidx.constraintlayout:constraintlayout:${Versions.constraintLayout}"
 
     const val coroutinesAndroid =
         "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.coroutines}"

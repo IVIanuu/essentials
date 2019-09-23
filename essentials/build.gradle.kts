@@ -42,7 +42,7 @@ dependencies {
     api(Deps.coroutinesAndroid)
     api(Deps.coroutinesCore)
 
-    api(Deps.constraintLayout)
+    api(Deps.androidxConstraintLayout)
 
     api(Deps.director)
     api(Deps.directorCommon)
