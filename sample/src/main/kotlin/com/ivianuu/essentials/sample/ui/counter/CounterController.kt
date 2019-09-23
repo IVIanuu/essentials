@@ -16,40 +16,16 @@
 
 package com.ivianuu.essentials.sample.ui.counter
 
-import android.transition.ChangeBounds
-import android.transition.ChangeTransform
-import android.transition.Slide
-import android.view.Gravity
-import android.view.View
-import com.ivianuu.director.ChangeData
-import com.ivianuu.director.common.changehandler.SharedElementTransitionChangeHandler
 import com.ivianuu.essentials.sample.R
-import com.ivianuu.essentials.ui.base.EsController
-import com.ivianuu.essentials.ui.mvrx.injekt.injectMvRxViewModel
-import com.ivianuu.essentials.ui.navigation.director.controllerRoute
-import com.ivianuu.essentials.ui.navigation.director.controllerRouteOptions
-import com.ivianuu.essentials.ui.navigation.director.handler
-import com.ivianuu.injekt.Inject
-import com.ivianuu.injekt.Param
+import com.ivianuu.essentials.ui.director.controllerRoute
+import com.ivianuu.essentials.ui.director.mvrxViewModel
 import com.ivianuu.injekt.parametersOf
-import com.ivianuu.kommon.core.transition.transitionSetOf
 import kotlinx.android.synthetic.main.controller_counter.*
 
-fun counterRoute(screen: Int) = controllerRoute<CounterController>(
-        options = controllerRouteOptions().handler(CounterChangeHandler())
-) { parametersOf(screen) }
-
-@Inject
-class CounterController(@Param private val screen: Int) : EsController() {
-
-        override val layoutRes: Int get() = R.layout.controller_counter
-
-        private val viewModel: CounterViewModel by injectMvRxViewModel {
-                parametersOf(screen)
-        }
-
-        override fun onViewCreated(view: View) {
-                super.onViewCreated(view)
+fun counterRoute(screen: Int) = controllerRoute(
+        layoutRes = R.layout.controller_counter,
+        render = {
+                val viewModel = mvrxViewModel<CounterViewModel> { parametersOf(screen) }
 
                 screen_up.setOnClickListener { viewModel.screenUpClicked() }
                 screen_down.setOnClickListener { viewModel.screenDownClicked() }
@@ -60,26 +36,7 @@ class CounterController(@Param private val screen: Int) : EsController() {
                 nav_bar.setOnClickListener { viewModel.navBarClicked() }
                 twilight.setOnClickListener { viewModel.twilightClicked() }
                 md_list.setOnClickListener { viewModel.materialListClicked() }
-        }
 
-        override fun invalidate() {
                 count.text = "Screen: ${viewModel.state.screen}"
         }
-
-}
-
-private class CounterChangeHandler : SharedElementTransitionChangeHandler() {
-
-        override fun getSharedElementTransition(changeData: ChangeData) =
-                transitionSetOf(ChangeBounds(), ChangeTransform())
-
-        override fun getEnterTransition(changeData: ChangeData) = Slide(Gravity.END)
-
-        override fun getExitTransition(changeData: ChangeData) = Slide(Gravity.START)
-
-        override fun configureSharedElements(changeData: ChangeData) {
-                addSharedElement("count")
-        }
-
-        override fun copy() = CounterChangeHandler()
-}
+)

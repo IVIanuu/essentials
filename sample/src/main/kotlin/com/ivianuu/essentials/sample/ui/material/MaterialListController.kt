@@ -17,18 +17,7 @@
 package com.ivianuu.essentials.sample.ui.material
 
 import com.github.ajalt.timberkt.d
-import com.ivianuu.essentials.ui.epoxy.CheckboxListItem
-import com.ivianuu.essentials.ui.epoxy.EditTextDialogListItem
-import com.ivianuu.essentials.ui.epoxy.ListDivider
-import com.ivianuu.essentials.ui.epoxy.ListItem
-import com.ivianuu.essentials.ui.epoxy.ListSubheader
-import com.ivianuu.essentials.ui.epoxy.MultiSelectListDialogListItem
-import com.ivianuu.essentials.ui.epoxy.PopupMenuListItem
-import com.ivianuu.essentials.ui.epoxy.RadioButtonListItem
-import com.ivianuu.essentials.ui.epoxy.SeekBarListItem
-import com.ivianuu.essentials.ui.epoxy.SingleItemListDialogListItem
-import com.ivianuu.essentials.ui.epoxy.SwitchListItem
-import com.ivianuu.essentials.ui.epoxy.epoxyController
+import com.ivianuu.essentials.ui.epoxy.*
 import com.ivianuu.essentials.ui.navigation.director.controllerRoute
 import com.ivianuu.essentials.ui.popup.PopupMenuItem
 import com.ivianuu.essentials.ui.simple.ListController
