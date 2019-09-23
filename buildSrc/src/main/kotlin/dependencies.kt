@@ -35,7 +35,7 @@ object Publishing {
 }
 
 object Versions {
-    const val androidGradlePlugin = "3.5.0-rc01"
+    const val androidGradlePlugin = "3.5.0"
 
     const val androidxActivity = "1.0.0-rc01"
     const val androidxAppCompat = "1.1.0-rc01"
