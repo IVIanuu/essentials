@@ -50,7 +50,6 @@ import com.ivianuu.scopes.ReusableScope
 import hu.akarnokd.kotlin.flow.BehaviorSubject
 import hu.akarnokd.kotlin.flow.PublishSubject
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.combineLatest
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -152,7 +151,7 @@ internal class CheckableAppsViewModel(
                 if (launchableOnly) appStore.getLaunchableApps() else appStore.getInstalledApps()
             }
 
-            appsFlow.combineLatest(checkedApps) { apps, checked ->
+            appsFlow.combine(checkedApps) { apps, checked ->
                 apps
                     .map {
                         CheckableApp(
