@@ -21,7 +21,7 @@ import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.util.ContextAware
 import com.ivianuu.injekt.Component
 
-data class DialogContext(val controller: EsDialogController) : EffectContext by EffectContext(),
+class DialogContext(val controller: EsDialogController) : EffectContext by EffectContext(),
     ContextAware by controller
 
 fun DialogContext.pop(result: Any? = null) {

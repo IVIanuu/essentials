@@ -24,26 +24,24 @@ import com.ivianuu.essentials.ui.navigation.director.ControllerRoute
 import com.ivianuu.essentials.ui.navigation.director.controllerRoute
 import com.ivianuu.essentials.ui.navigation.director.dialog
 import com.ivianuu.essentials.util.Properties
-import com.ivianuu.injekt.Inject
-import com.ivianuu.injekt.Param
-import com.ivianuu.injekt.parametersOf
 
 fun dialogRoute(
     extras: Properties = Properties(),
     options: ControllerRoute.Options? = ControllerRoute.Options().dialog(),
-    block: MaterialDialog.(DialogContext) -> Unit
-) = controllerRoute<MdDialogController>(extras, options) {
-    parametersOf(block)
+    buildDialog: MaterialDialog.(DialogContext) -> Unit
+): ControllerRoute {
+    return controllerRoute(
+        extras = extras,
+        options = options,
+        factory = { MdDialogController(buildDialog) }
+    )
 }
 
-@Inject
-internal class MdDialogController(
-    @Param private val block: MaterialDialog.(DialogContext) -> Unit
+private class MdDialogController(
+    private val buildDialog: MaterialDialog.(DialogContext) -> Unit
 ) : EsDialogController() {
-
     private val context = DialogContext(this)
-
     override fun onCreateDialog(inflater: LayoutInflater, container: ViewGroup) =
         MaterialDialog(requireActivity())
-            .apply { block(this, this@MdDialogController.context) }
+            .apply { buildDialog(this, this@MdDialogController.context) }
 }
