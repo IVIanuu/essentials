@@ -68,7 +68,7 @@ fun <T : Any> EpoxyController.DialogListItem(
                 GlobalScope.launch {
                     val dispatchers = view.getClosestComponent().get<AppDispatchers>()
                     val navigator = view.getClosestComponent().get<Navigator>()
-                    val result = navigator.push<T>(dialogRoute(block = buildDialog))
+                    val result = navigator.push<T>(dialogRoute(buildDialog = buildDialog))
                     if (result != null) {
                         withContext(dispatchers.main) {
                             onDialogResult(result)
