@@ -1,5 +1,8 @@
 package com.ivianuu.essentials.ui.effect
 
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlin.reflect.KProperty
 
 interface EffectContext {
@@ -78,6 +81,12 @@ inline fun <T> EffectContext.state(
     vararg inputs: Any?,
     crossinline init: () -> T
 ) = memo(key = key, inputs = *inputs, calculation = { State(init()) })
+
+fun EffectContext.coroutineScope(): CoroutineScope {
+    val coroutineScope = memo { CoroutineScope(Dispatchers.Main + Job()) }
+    onDispose { coroutineScope.coroutineContext[Job.Key]?.cancel() }
+    return coroutineScope
+}
 
 inline fun sourceLocation(): String {
     val element = Throwable().stackTrace.first()

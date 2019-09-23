@@ -32,6 +32,7 @@
         android:supportsRtl="true"
         android:theme="@style/Sample"
         tools:ignore="GoogleAppIndexingWarning">
+
         <activity android:name=".ui.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
