@@ -17,26 +17,19 @@ fun HomeRoute() = Route {
     Scaffold(
         appBar = { AppBar(title = "Home") },
         content = {
-            RecyclerView {
-                val navigator = ambient(NavigatorAmbient)
-                HomeItem.values().forEach { item ->
-                    HomeItem(item = item, onClick = {
-                        navigator.push(item.route())
-                    })
-                }
+            RecyclerView(items = HomeItem.values()) { _, item ->
+                HomeItem(item = item)
             }
         }
     )
 }
 
-private fun ComponentComposition.HomeItem(
-    item: HomeItem,
-    onClick: () -> Unit
-) {
+private fun ComponentComposition.HomeItem(item: HomeItem) {
+    val navigator = ambient(NavigatorAmbient)
     key(key = item) {
         ListItem(
             title = { Text(text = item.title) },
-            onClick = onClick
+            onClick = { navigator.push(item.route()) }
         )
     }
 }
