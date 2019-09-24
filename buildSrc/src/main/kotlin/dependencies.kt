@@ -31,16 +31,17 @@ object Build {
 object Publishing {
     const val groupId = "com.ivianuu.essentials"
     const val vcsUrl = "https://github.com/IVIanuu/essentials"
-    const val version = "${Build.versionName}-dev179"
+    const val version = "${Build.versionName}-dev178"
 }
 
 object Versions {
-    const val androidGradlePlugin = "3.5.0-rc01"
+    const val androidGradlePlugin = "3.5.0"
 
     const val androidxActivity = "1.0.0-rc01"
     const val androidxAppCompat = "1.1.0-rc01"
     const val androidxCardView = "1.0.0"
     const val androidxCore = "1.1.0-rc02"
+    const val androidxConstraintLayout = "2.0.0-beta2"
     const val androidxFragment = "1.1.0-rc01"
     const val androidxLifecycle = "2.2.0-alpha02"
     const val androidxLifecycleViewModelSavedState = "1.0.0-alpha02"
@@ -52,14 +53,16 @@ object Versions {
     const val androidxTestRunner = "1.2.0-alpha03"
 
     const val bintray = "1.8.4"
-    const val compose = "0.0.1-dev45"
-    const val constraintLayout = "2.0.0-beta2"
+    const val compose = "0.0.1-dev46"
     const val coroutines = "1.3.0-RC"
+    const val director = "0.0.1-dev40"
+    const val epoxy = "3.7.0"
+    const val epoxyPrefs = "0.0.1-dev-21"
     const val glide = "4.9.0"
     const val injekt = "0.0.1-dev70"
     const val junit = "4.12"
     const val kommon = "0.0.1-dev13" // remove
-    const val kotlin = "1.3.50"
+    const val kotlin = "1.3.41"
     const val kotlinFlowExtensions = "0.0.2"
     const val kPrefs = "0.0.1-dev16"
     const val kSettings = "0.0.1-dev11"
@@ -78,6 +81,8 @@ object Deps {
     const val androidGradlePlugin = "com.android.tools.build:gradle:${Versions.androidGradlePlugin}"
 
     const val androidxActivity = "androidx.activity:activity-ktx:${Versions.androidxActivity}"
+    const val androidxConstraintLayout =
+        "androidx.constraintlayout:constraintlayout:${Versions.androidxConstraintLayout}"
     const val androidxAppCompat = "androidx.appcompat:appcompat:${Versions.androidxAppCompat}"
     const val androidxCardView = "androidx.cardview:cardview:${Versions.androidxCardView}"
     const val androidxCore = "androidx.core:core-ktx:${Versions.androidxCore}"
@@ -106,15 +111,18 @@ object Deps {
     const val composeCommon = "com.ivianuu.compose:compose-common:${Versions.compose}"
     const val composeGradlePlugin = "com.ivianuu.compose:compose-gradle-plugin:${Versions.compose}"
 
-    const val constraintLayout =
-        "androidx.constraintlayout:constraintlayout:${Versions.constraintLayout}"
-
     const val coroutinesAndroid =
         "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.coroutines}"
     const val coroutinesCore =
         "org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.coroutines}"
     const val coroutinesTest =
         "org.jetbrains.kotlinx:kotlinx-coroutines-test:${Versions.coroutines}"
+
+    const val director = "com.ivianuu.director:director:${Versions.director}"
+    const val directorCommon = "com.ivianuu.director:director-common:${Versions.director}"
+
+    const val epoxy = "com.airbnb.android:epoxy:${Versions.epoxy}"
+    const val epoxyPrefs = "com.ivianuu.epoxyprefs:epoxyprefs:${Versions.epoxyPrefs}"
 
     const val glide = "com.github.bumptech.glide:glide:${Versions.glide}"
 

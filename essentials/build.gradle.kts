@@ -46,7 +46,7 @@ dependencies {
     api(Deps.coroutinesAndroid)
     api(Deps.coroutinesCore)
 
-    api(Deps.constraintLayout)
+    api(Deps.androidxConstraintLayout)
 
     kapt(project(":essentials-compiler"))
 
