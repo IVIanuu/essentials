@@ -25,13 +25,7 @@ import com.ivianuu.essentials.util.mergeFlows
 import com.ivianuu.injekt.Inject
 import com.ivianuu.kommon.core.app.doOnConfigurationChanged
 import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.flow.emptyFlow
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onCompletion
-import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.flow.switchMap
+import kotlinx.coroutines.flow.*
 
 @Inject
 internal class DisplayRotationProvider(
@@ -44,7 +38,7 @@ internal class DisplayRotationProvider(
 
     fun observeRotationChanges(): Flow<Int> {
         return screenStateProvider.observeScreenState()
-            .switchMap {
+            .flatMapLatest {
                 if (it) {
                     mergeFlows(rotationChanges(), configChanges())
                         .onStart { d { "sub for rotation" } }
