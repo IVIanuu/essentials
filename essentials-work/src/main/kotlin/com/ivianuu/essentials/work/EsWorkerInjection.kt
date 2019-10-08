@@ -37,8 +37,8 @@ val workerInitializerModule = module {
  */
 @Inject
 internal class WorkerAppInitializer(
-    private val context: Context,
-    private val workerFactory: WorkerFactory
+    context: Context,
+    workerFactory: WorkerFactory
 ) : AppInitializer {
     init {
         WorkManager.initialize(

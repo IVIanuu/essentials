@@ -64,7 +64,7 @@ abstract class EsController : Controller(), ContextAware, InjektTrait, LayoutCon
 
     val navigator by inject<Navigator>()
 
-    protected open val layoutRes get() = -1
+    protected open val layoutRes: Int get() = -1
 
     override fun onCreateView(
         inflater: LayoutInflater,

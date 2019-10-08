@@ -21,8 +21,6 @@ import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.gestures.accessibility.AccessibilityComponent
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.android.ApplicationScope
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.channels.Channel.Factory.CONFLATED
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.consumeAsFlow
@@ -39,8 +37,6 @@ class SecureScreenDetector : AccessibilityComponent() {
                 .consumeAsFlow()
                 .distinctUntilChanged()
         }
-
-    private val channel = Channel<Unit>(CONFLATED)
 
     override fun onAccessibilityEvent(event: AccessibilityEvent) {
         // were only interested in window state changes

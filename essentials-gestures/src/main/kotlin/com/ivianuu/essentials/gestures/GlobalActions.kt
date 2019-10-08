@@ -27,7 +27,7 @@ import com.ivianuu.injekt.android.ApplicationScope
 @ApplicationScope
 class GlobalActions : AccessibilityComponent() {
 
-    fun performAction(action: Int) =
+    fun performAction(action: Int): Boolean =
         service?.performGlobalAction(action) ?: false
 
 }
