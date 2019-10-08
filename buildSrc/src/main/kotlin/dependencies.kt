@@ -35,12 +35,11 @@ object Publishing {
 }
 
 object Versions {
-    const val androidGradlePlugin = "3.5.0-rc01"
+    const val androidGradlePlugin = "3.5.1"
 
     const val androidxActivity = "1.0.0-rc01"
     const val androidxAppCompat = "1.1.0-rc01"
     const val androidxCardView = "1.0.0"
-    const val androidxCompose = "0.1.0-dev01"
     const val androidxCore = "1.1.0-rc02"
     const val androidxConstraintLayout = "2.0.0-beta2"
     const val androidxFragment = "1.1.0-rc01"
