@@ -35,13 +35,7 @@ import com.ivianuu.essentials.ui.mvrx.mvRxViewModel
 import com.ivianuu.essentials.ui.popup.PopupMenu
 import com.ivianuu.essentials.ui.popup.PopupMenuItem
 import com.ivianuu.essentials.ui.simple.ListController
-import com.ivianuu.essentials.util.AppDispatchers
-import com.ivianuu.essentials.util.Async
-import com.ivianuu.essentials.util.Loading
-import com.ivianuu.essentials.util.Success
-import com.ivianuu.essentials.util.Uninitialized
-import com.ivianuu.essentials.util.coroutineScope
-import com.ivianuu.essentials.util.flowOf
+import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Param
 import com.ivianuu.injekt.get
@@ -49,11 +43,7 @@ import com.ivianuu.injekt.parametersOf
 import com.ivianuu.scopes.ReusableScope
 import hu.akarnokd.kotlin.flow.BehaviorSubject
 import hu.akarnokd.kotlin.flow.PublishSubject
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.combineLatest
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 /**
@@ -152,7 +142,7 @@ internal class CheckableAppsViewModel(
                 if (launchableOnly) appStore.getLaunchableApps() else appStore.getInstalledApps()
             }
 
-            appsFlow.combineLatest(checkedApps) { apps, checked ->
+            appsFlow.combine(checkedApps) { apps, checked ->
                 apps
                     .map {
                         CheckableApp(

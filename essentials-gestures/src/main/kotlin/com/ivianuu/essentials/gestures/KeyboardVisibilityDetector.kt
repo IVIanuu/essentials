@@ -24,12 +24,7 @@ import com.ivianuu.injekt.android.ApplicationScope
 import hu.akarnokd.kotlin.flow.PublishSubject
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.flow.switchMap
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import java.lang.reflect.Method
 
@@ -48,12 +43,11 @@ class KeyboardVisibilityDetector(
         get() {
             return softInputChanges
                 .onStart { emit(Unit) }
-                .switchMap {
-                    flow {
-                        while (true) {
-                            emit(Unit)
-                            delay(100)
-                        }
+                // todo check if this works
+                .transformLatest {
+                    while (true) {
+                        emit(Unit)
+                        delay(100)
                     }
                 }
                 .map { getKeyboardHeight() }
