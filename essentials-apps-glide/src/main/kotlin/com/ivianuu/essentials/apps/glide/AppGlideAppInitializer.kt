@@ -27,8 +27,8 @@ import com.ivianuu.injekt.Inject
  */
 @Inject
 internal class AppGlideAppInitializer(
-    private val app: Application,
-    private val factory: AppIconModelLoaderFactory
+    app: Application,
+    factory: AppIconModelLoaderFactory
 ) : AppInitializer {
     init {
         Glide.get(app).registry

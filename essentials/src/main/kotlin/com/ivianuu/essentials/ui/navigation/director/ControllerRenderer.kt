@@ -62,7 +62,7 @@ class ControllerRenderer(
                     route.options?.applyToTransaction(transaction)
                 }
 
-                transaction!!
+                transaction
             }
 
         router.setBackStack(
