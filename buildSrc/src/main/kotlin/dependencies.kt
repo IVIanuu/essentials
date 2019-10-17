@@ -40,12 +40,13 @@ object Versions {
     const val androidxActivity = "1.0.0-rc01"
     const val androidxAppCompat = "1.1.0-rc01"
     const val androidxCardView = "1.0.0"
-    const val androidxCore = "1.1.0-rc02"
+    const val androidxCompose = "0.1.0-dev02"
     const val androidxConstraintLayout = "2.0.0-beta2"
+    const val androidxCore = "1.1.0-rc02"
     const val androidxFragment = "1.1.0-rc01"
     const val androidxLifecycle = "2.2.0-alpha02"
     const val androidxLifecycleViewModelSavedState = "1.0.0-alpha02"
-    const val androidxUi = "0.1.0-dev01"
+    const val androidxUi = "0.1.0-dev02"
     const val androidxWork = "2.1.0-rc01"
 
     const val androidxTestCore = "1.2.0-alpha03"
@@ -62,7 +63,7 @@ object Versions {
     const val injekt = "0.0.1-dev70"
     const val junit = "4.12"
     const val kommon = "0.0.1-dev13" // remove
-    const val kotlin = "1.3.50"
+    const val kotlin = "1.3.60-withExperimentalGoogleExtensions-20191016"
     const val kotlinFlowExtensions = "0.0.2"
     const val kPrefs = "0.0.1-dev16"
     const val kSettings = "0.0.1-dev11"
@@ -81,6 +82,7 @@ object Deps {
     const val androidGradlePlugin = "com.android.tools.build:gradle:${Versions.androidGradlePlugin}"
 
     const val androidxActivity = "androidx.activity:activity-ktx:${Versions.androidxActivity}"
+    const val androidxCompose = "androidx.compose:compose-compiler:0.1.0-dev02"
     const val androidxConstraintLayout =
         "androidx.constraintlayout:constraintlayout:${Versions.androidxConstraintLayout}"
     const val androidxAppCompat = "androidx.appcompat:appcompat:${Versions.androidxAppCompat}"

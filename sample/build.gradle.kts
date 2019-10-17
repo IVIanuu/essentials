@@ -15,6 +15,7 @@
  */
 
 plugins {
+    id("AndroidXUiPlugin")
     id("com.android.application")
     kotlin("android")
     kotlin("kapt")
@@ -36,6 +37,7 @@ android {
 }
 
 dependencies {
+    kotlinPlugin("androidx.compose:compose-compiler:0.1.0-dev02")
     implementation(project(":essentials"))
     implementation(project(":essentials-apps"))
     implementation(project(":essentials-apps-glide"))

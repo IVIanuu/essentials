@@ -15,9 +15,22 @@
  */
 
 repositories {
+    mavenLocal()
+    maven("https://dl.bintray.com/ivianuu/maven/")
+    google()
     jcenter()
+    mavenCentral()
+    maven("https://jitpack.io")
+    maven("https://oss.sonatype.org/content/repositories/snapshots")
+    maven("https://dl.bintray.com/kotlin/kotlin-eap")
 }
 
 plugins {
     `kotlin-dsl`
+}
+
+dependencies {
+    implementation("com.android.tools.build:gradle:3.5.1")
+    implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.3.60-withExperimentalGoogleExtensions-20191016")
+    implementation(gradleApi())
 }

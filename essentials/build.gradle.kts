@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 /*
  * Copyright 2019 Manuel Wrage
  *
@@ -15,6 +17,7 @@
  */
 
 plugins {
+    id("AndroidXUiPlugin")
     id("com.android.library")
     kotlin("android")
     kotlin("kapt")
@@ -29,6 +32,8 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/mvn-publish.gradle")
 
 dependencies {
+    kotlinPlugin("androidx.compose:compose-compiler:0.1.0-dev02")
+
     api(Deps.androidxActivity)
     api(Deps.androidxAppCompat)
     api(Deps.androidxCardView)
@@ -91,4 +96,10 @@ dependencies {
     api(Deps.timber)
     api(Deps.timberKt)
 
+}
+
+tasks.withType<KotlinCompile>().configureEach {
+    kotlinOptions {
+        useIR = true
+    }
 }
