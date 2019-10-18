@@ -28,15 +28,15 @@ class UnitValueTextProvider(
 ) : (Int) -> String {
 
     override fun invoke(value: Int) = when (unit) {
-        DP -> context.string(R.string.es_seek_bar_pref_format_dp, value)
-        MILLIS -> context.string(R.string.es_seek_bar_pref_format_millis, value)
-        PERCENTAGE -> context.string(R.string.es_seek_bar_pref_format_percentage, value)
-        PX -> context.string(R.string.es_seek_bar_pref_format_px, value)
-        SECONDS -> context.string(R.string.es_seek_bar_pref_format_seconds, value)
+        Dp -> context.string(R.string.es_seek_bar_pref_format_dp, value)
+        Millis -> context.string(R.string.es_seek_bar_pref_format_millis, value)
+        Percentage -> context.string(R.string.es_seek_bar_pref_format_percentage, value)
+        Px -> context.string(R.string.es_seek_bar_pref_format_px, value)
+        Seconds -> context.string(R.string.es_seek_bar_pref_format_seconds, value)
     }
 
     enum class Unit {
-        DP, MILLIS, PERCENTAGE, PX, SECONDS
+        Dp, Millis, Percentage, Px, Seconds
     }
 }
 

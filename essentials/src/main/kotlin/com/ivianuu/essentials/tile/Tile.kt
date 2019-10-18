@@ -25,9 +25,9 @@ data class Tile(
     val icon: Icon? = null,
     val label: String? = null,
     val description: String? = null,
-    val state: State = State.ACTIVE
+    val state: State = State.Active
 ) {
     enum class State {
-        UNAVAILABLE, ACTIVE, INACTIVE
+        Unavailable, Active, Inactive
     }
 }

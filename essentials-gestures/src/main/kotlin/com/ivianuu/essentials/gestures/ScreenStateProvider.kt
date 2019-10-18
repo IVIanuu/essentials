@@ -48,17 +48,17 @@ class ScreenStateProvider(
     private fun getCurrentScreenState(): ScreenState {
         return if (powerManager.isInteractive) {
             if (keyguardManager.isKeyguardLocked) {
-                ScreenState.LOCKED
+                ScreenState.Locked
             } else {
-                ScreenState.ON
+                ScreenState.On
             }
         } else {
-            ScreenState.OFF
+            ScreenState.Off
         }
     }
 
 }
 
 enum class ScreenState {
-    OFF, LOCKED, ON
+    Off, Locked, On
 }

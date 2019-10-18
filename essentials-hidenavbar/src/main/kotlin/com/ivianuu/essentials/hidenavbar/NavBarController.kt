@@ -29,13 +29,7 @@ import com.ivianuu.essentials.util.mergeFlows
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.android.ApplicationScope
 import com.ivianuu.scopes.ReusableScope
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.drop
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.*
 
 /**
  * Handles the state of the navigation bar
@@ -69,7 +63,7 @@ class NavBarController internal constructor(
         }
 
         val flows = mutableListOf<Flow<*>>().apply {
-            if (config.rotationMode != NavBarRotationMode.NOUGAT) {
+            if (config.rotationMode != NavBarRotationMode.Nougat) {
                 this += displayRotationProvider.observeRotationChanges().drop(1)
             }
 
@@ -137,7 +131,7 @@ class NavBarController internal constructor(
         navBarHeight: Int,
         config: NavBarConfig
     ) = when (config.rotationMode) {
-        NavBarRotationMode.MARSHMALLOW -> {
+        NavBarRotationMode.Marshmallow -> {
             when (displayRotationProvider.displayRotation) {
                 Surface.ROTATION_90 -> Rect(0, 0, 0, navBarHeight)
                 Surface.ROTATION_180 -> Rect(0, navBarHeight, 0, 0)
@@ -145,13 +139,13 @@ class NavBarController internal constructor(
                 else -> Rect(0, 0, 0, navBarHeight)
             }
         }
-        NavBarRotationMode.NOUGAT -> {
+        NavBarRotationMode.Nougat -> {
             when (displayRotationProvider.displayRotation) {
                 Surface.ROTATION_180 -> Rect(0, navBarHeight, 0, 0)
                 else -> Rect(0, 0, 0, navBarHeight)
             }
         }
-        NavBarRotationMode.TABLET -> {
+        NavBarRotationMode.Tablet -> {
             when (displayRotationProvider.displayRotation) {
                 Surface.ROTATION_90 -> Rect(navBarHeight, 0, 0, 0)
                 Surface.ROTATION_180 -> Rect(0, navBarHeight, 0, 0)

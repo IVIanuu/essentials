@@ -34,9 +34,9 @@ abstract class StateTileService<T> : EsTileService() {
         val qsTile = qsTile ?: return
 
         qsTile.state = when (tile.state) {
-            Tile.State.ACTIVE -> android.service.quicksettings.Tile.STATE_ACTIVE
-            Tile.State.INACTIVE -> android.service.quicksettings.Tile.STATE_INACTIVE
-            Tile.State.UNAVAILABLE -> android.service.quicksettings.Tile.STATE_UNAVAILABLE
+            Tile.State.Active -> android.service.quicksettings.Tile.STATE_ACTIVE
+            Tile.State.Inactive -> android.service.quicksettings.Tile.STATE_INACTIVE
+            Tile.State.Unavailable -> android.service.quicksettings.Tile.STATE_UNAVAILABLE
         }
         qsTile.icon = tile.icon
         qsTile.label = tile.label
