@@ -16,11 +16,12 @@
 
 package com.ivianuu.essentials.twilight
 
+import com.airbnb.epoxy.EpoxyController
+import com.ivianuu.epoxyprefs.RadioButtonPreference
 import com.ivianuu.essentials.R
-import com.ivianuu.essentials.ui.epoxy.RadioButtonGroup
-import com.ivianuu.essentials.ui.epoxy.RadioButtonItem
 import com.ivianuu.essentials.ui.navigation.director.controllerRoute
 import com.ivianuu.essentials.ui.prefs.PrefsController
+import com.ivianuu.essentials.util.andTrue
 import com.ivianuu.injekt.Inject
 
 val twilightSettingsRoute = controllerRoute<TwilightSettingsController>()
@@ -32,36 +33,46 @@ class TwilightSettingsController(private val prefs: TwilightPrefs) : PrefsContro
         get() = R.string.es_title_twilight
 
     override fun epoxyController() = epoxyController {
-        RadioButtonGroup(
-            pref = prefs.twilightMode,
-            items = listOf(
-                RadioButtonItem(
-                    value = TwilightMode.SYSTEM,
-                    titleRes = R.string.es_twilight_mode_system,
-                    textRes = R.string.es_twilight_mode_system_desc
-                ),
-                RadioButtonItem(
-                    value = TwilightMode.LIGHT,
-                    titleRes = R.string.es_twilight_mode_light,
-                    textRes = R.string.es_twilight_mode_light_desc
-                ),
-                RadioButtonItem(
-                    value = TwilightMode.DARK,
-                    titleRes = R.string.es_twilight_mode_dark,
-                    textRes = R.string.es_twilight_mode_dark_desc
-                ),
-                RadioButtonItem(
-                    value = TwilightMode.BATTERY,
-                    titleRes = R.string.es_twilight_mode_battery,
-                    textRes = R.string.es_twilight_mode_battery_desc
-                ),
-                RadioButtonItem(
-                    value = TwilightMode.TIME,
-                    titleRes = R.string.es_twilight_mode_time,
-                    textRes = R.string.es_twilight_mode_time_desc
-                )
-            )
+        TwilightModePreference(
+            mode = TwilightMode.SYSTEM,
+            descRes = R.string.es_twilight_mode_system_desc,
+            titleRes = R.string.es_twilight_mode_system
         )
+        TwilightModePreference(
+            mode = TwilightMode.LIGHT,
+            descRes = R.string.es_twilight_mode_light_desc,
+            titleRes = R.string.es_twilight_mode_light
+        )
+        TwilightModePreference(
+            mode = TwilightMode.DARK,
+            descRes = R.string.es_twilight_mode_dark_desc,
+            titleRes = R.string.es_twilight_mode_dark
+        )
+        TwilightModePreference(
+            mode = TwilightMode.BATTERY,
+            descRes = R.string.es_twilight_mode_battery_desc,
+            titleRes = R.string.es_twilight_mode_battery
+        )
+        TwilightModePreference(
+            mode = TwilightMode.TIME,
+            descRes = R.string.es_twilight_mode_time_desc,
+            titleRes = R.string.es_twilight_mode_time
+        )
+    }
+
+    private fun EpoxyController.TwilightModePreference(
+        mode: TwilightMode,
+        descRes: Int,
+        titleRes: Int
+    ) {
+        RadioButtonPreference {
+            key(mode.value)
+            titleRes(titleRes)
+            summaryRes(descRes)
+            defaultValue(prefs.twilightMode.get() == mode)
+            isPersistent(false)
+            onClick { prefs.twilightMode.set(mode).andTrue() }
+        }
     }
 
 }

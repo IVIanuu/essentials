@@ -16,19 +16,17 @@
 
 package com.ivianuu.essentials.apps.ui
 
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
-import android.widget.ImageView
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
+import com.airbnb.epoxy.EpoxyController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.AppStore
 import com.ivianuu.essentials.apps.glide.AppIcon
-import com.ivianuu.essentials.ui.epoxy.CheckboxListItem
 import com.ivianuu.essentials.ui.epoxy.SimpleLoading
+import com.ivianuu.essentials.ui.epoxy.model
 import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
 import com.ivianuu.essentials.ui.mvrx.epoxy.mvRxEpoxyController
 import com.ivianuu.essentials.ui.mvrx.mvRxViewModel
@@ -43,6 +41,7 @@ import com.ivianuu.injekt.parametersOf
 import com.ivianuu.scopes.ReusableScope
 import hu.akarnokd.kotlin.flow.BehaviorSubject
 import hu.akarnokd.kotlin.flow.PublishSubject
+import kotlinx.android.synthetic.main.es_item_checkable_app.*
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
@@ -91,26 +90,7 @@ abstract class CheckableAppsController : ListController() {
         when (state.apps) {
             is Loading -> SimpleLoading(id = "loading")
             is Success -> state.apps()?.forEach { app ->
-                CheckboxListItem(
-                    id = app.info.packageName,
-                    value = app.isChecked,
-                    title = app.info.appName,
-                    onChange = { viewModel.appClicked(app) },
-                    avatar = ColorDrawable(Color.TRANSPARENT),
-                    builderBlock = {
-                        bind {
-                            val avatar = findView<ImageView>(R.id.es_list_avatar)
-                            Glide.with(avatar)
-                                .load(AppIcon(app.info.packageName))
-                                .apply(
-                                    RequestOptions()
-                                        .diskCacheStrategy(DiskCacheStrategy.NONE)
-                                        .skipMemoryCache(true)
-                                )
-                                .into(avatar)
-                        }
-                    }
-                )
+                CheckableApp(app = app, onClick = { viewModel.appClicked(app) })
             }
         }
     }
@@ -122,6 +102,31 @@ abstract class CheckableAppsController : ListController() {
     private enum class MenuOption { SelectAll, DeselectAll }
 
 }
+
+private fun EpoxyController.CheckableApp(
+    app: CheckableApp,
+    onClick: () -> Unit
+) = model(
+    id = app.info.packageName,
+    layoutRes = R.layout.es_item_checkable_app,
+    state = arrayOf(app),
+    bind = {
+        Glide.with(es_checkable_app_icon)
+            .load(AppIcon(app.info.packageName))
+            .apply(
+                RequestOptions()
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .skipMemoryCache(true)
+            )
+            .into(es_checkable_app_icon)
+
+        es_checkable_app_title.text = app.info.appName
+
+        es_checkable_app_checkbox.isChecked = app.isChecked
+
+        root.setOnClickListener { onClick() }
+    }
+)
 
 @Inject
 internal class CheckableAppsViewModel(

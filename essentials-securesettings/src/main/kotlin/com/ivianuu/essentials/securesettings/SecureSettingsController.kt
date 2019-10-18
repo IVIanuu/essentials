@@ -17,14 +17,8 @@
 package com.ivianuu.essentials.securesettings
 
 import androidx.lifecycle.lifecycleScope
-import com.ivianuu.essentials.ui.changehandler.verticalFade
-import com.ivianuu.essentials.ui.epoxy.ListItem
-import com.ivianuu.essentials.ui.epoxy.RouteListItem
-import com.ivianuu.essentials.ui.epoxy.epoxyController
-import com.ivianuu.essentials.ui.navigation.director.ControllerRoute
-import com.ivianuu.essentials.ui.navigation.director.controllerRoute
-import com.ivianuu.essentials.ui.navigation.director.copy
-import com.ivianuu.essentials.ui.navigation.director.defaultControllerRouteOptionsOrElse
+import com.ivianuu.epoxyprefs.Preference
+import com.ivianuu.essentials.ui.navigation.director.*
 import com.ivianuu.essentials.ui.prefs.PrefsController
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Inject
@@ -67,37 +61,55 @@ class SecureSettingsController(
     }
 
     override fun epoxyController() = epoxyController {
-        ListItem(
-            id = "secure_settings_header",
-            textRes = if (showHideNavBarHint) R.string.es_pref_secure_settings_header_hide_nav_bar_summary
-            else R.string.es_pref_secure_settings_header_summary
-        )
+        Preference {
+            key("secure_settings_header")
+            summaryRes(
+                if (showHideNavBarHint) {
+                    R.string.es_pref_secure_settings_header_hide_nav_bar_summary
+                } else {
+                    R.string.es_pref_secure_settings_header_summary
+                }
+            )
+        }
 
-        RouteListItem(
-            id = "use_pc",
-            titleRes = R.string.es_pref_use_pc,
-            textRes = R.string.es_pref_use_pc_summary,
-            route = {
+        Preference {
+            key("use_pc")
+            titleRes(R.string.es_pref_use_pc)
+            summaryRes(R.string.es_pref_use_pc_summary)
+            navigateOnClick {
                 secureSettingsInstructionsRoute.copy(
                     options = defaultControllerRouteOptionsOrElse {
-                        ControllerRoute.Options().verticalFade()
+                        controllerRouteOptions().horizontal()
                     }
                 )
             }
-        )
+        }
 
-        ListItem(
-            id = "use_root",
-            titleRes = R.string.es_pref_use_root,
-            textRes = R.string.es_pref_use_root_summary,
-            onClick = {
+        Preference {
+            key("use_root")
+            titleRes(R.string.es_pref_use_root)
+            summaryRes(R.string.es_pref_use_root_summary)
+            onClick {
                 lifecycleScope.launch {
-                    if (!secureSettingsHelper.grantWriteSecureSettingsViaRoot()) {
+                    if (secureSettingsHelper.grantWriteSecureSettingsViaRoot()) {
+                        handlePermissionResult(true)
+                    } else {
                         toaster.toast(R.string.es_secure_settings_no_root)
                     }
                 }
+
+                return@onClick true
             }
-        )
+        }
+    }
+
+    private fun handlePermissionResult(success: Boolean) {
+        if (success) {
+            toaster.toast(R.string.es_secure_settings_permission_granted)
+            navigator.pop(true)
+        } else {
+            toaster.toast(R.string.es_secure_settings_permission_denied)
+        }
     }
 
 }

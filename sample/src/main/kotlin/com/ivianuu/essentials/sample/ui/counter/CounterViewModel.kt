@@ -20,7 +20,6 @@ import com.ivianuu.essentials.hidenavbar.NavBarConfig
 import com.ivianuu.essentials.hidenavbar.NavBarController
 import com.ivianuu.essentials.sample.ui.checkapps.checkAppsRoute
 import com.ivianuu.essentials.sample.ui.list.listRoute
-import com.ivianuu.essentials.sample.ui.material.materialListRoute
 import com.ivianuu.essentials.sample.util.SecureSettingsHelper
 import com.ivianuu.essentials.sample.work.WorkScheduler
 import com.ivianuu.essentials.securesettings.secureSettingsRoute
@@ -74,10 +73,6 @@ class CounterViewModel(
                 options = controllerRouteOptions().horizontal()
             )
         )
-    }
-
-    fun materialListClicked() {
-        navigator.push(materialListRoute)
     }
 
     fun navBarClicked() {

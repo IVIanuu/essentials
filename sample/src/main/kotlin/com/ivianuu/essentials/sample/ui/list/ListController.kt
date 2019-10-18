@@ -16,9 +16,11 @@
 
 package com.ivianuu.essentials.sample.ui.list
 
-import com.ivianuu.essentials.ui.epoxy.ListItem
+import com.airbnb.epoxy.EpoxyController
+import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.epoxy.SimpleLoading
 import com.ivianuu.essentials.ui.epoxy.SimpleText
+import com.ivianuu.essentials.ui.epoxy.model
 import com.ivianuu.essentials.ui.mvrx.epoxy.mvRxEpoxyController
 import com.ivianuu.essentials.ui.mvrx.injekt.injectMvRxViewModel
 import com.ivianuu.essentials.ui.navigation.director.controllerRoute
@@ -27,6 +29,7 @@ import com.ivianuu.essentials.ui.navigation.director.fade
 import com.ivianuu.essentials.ui.popup.PopupMenu
 import com.ivianuu.essentials.ui.popup.PopupMenuItem
 import com.ivianuu.injekt.Inject
+import kotlinx.android.synthetic.main.single_line_list_item.*
 
 val listRoute = controllerRoute<ListController>(options = controllerRouteOptions().fade())
 
@@ -50,9 +53,14 @@ class ListController : com.ivianuu.essentials.ui.simple.ListController() {
     override fun epoxyController() = mvRxEpoxyController(viewModel) { state ->
         when {
             state.loading -> SimpleLoading(id = "loading")
-            state.items.isNotEmpty() -> state.items.forEach { ListItem(id = it, title = it) }
+            state.items.isNotEmpty() -> state.items.forEach { SingleLine(it) }
             else -> SimpleText(text = "Hmm empty", id = "empty")
         }
     }
 
 }
+
+private fun EpoxyController.SingleLine(text: String) = model(
+    id = text, layoutRes = R.layout.single_line_list_item,
+    bind = { title.text = text }
+)
