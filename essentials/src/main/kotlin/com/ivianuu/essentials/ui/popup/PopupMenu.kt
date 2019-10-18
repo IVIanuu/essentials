@@ -28,11 +28,35 @@ data class PopupMenu<T>(
     val onSelected: ((T) -> Unit)? = null
 )
 
+fun PopupMenu(
+    gravity: Int = Gravity.NO_GRAVITY,
+    style: Int = R.attr.popupMenuStyle,
+    items: List<PopupMenuItem<*>>,
+    onCanceled: (() -> Unit)? = null
+): PopupMenu<*> = PopupMenu(
+    gravity = gravity,
+    style = style,
+    items = items as List<PopupMenuItem<Any?>>,
+    onCanceled = onCanceled,
+    onSelected = {}
+)
+
 data class PopupMenuItem<T>(
     val value: T,
     val title: String? = null,
     val titleRes: Int? = null,
     val onSelected: (() -> Unit)? = null
+)
+
+fun PopupMenuItem(
+    title: String? = null,
+    titleRes: Int? = null,
+    onSelected: (() -> Unit)? = null
+): PopupMenuItem<*> = PopupMenuItem(
+    value = Unit,
+    title = title,
+    titleRes = titleRes,
+    onSelected = onSelected
 )
 
 fun <T> PopupMenu<T>.show(view: View) {

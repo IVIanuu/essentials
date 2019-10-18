@@ -40,12 +40,11 @@ class ListController : com.ivianuu.essentials.ui.simple.ListController() {
 
     override val toolbarMenu: PopupMenu<*>?
         get() = PopupMenu(
-            items = listOf(PopupMenuItem(value = "Refresh", title = "Refresh")),
-            onSelected = {
-                when (it) {
-                    "Refresh" -> viewModel.refreshClicked()
-                }
-            }
+            items = listOf(
+                PopupMenuItem(title = "Refresh", onSelected = {
+                    viewModel.refreshClicked()
+                })
+            )
         )
 
     private val viewModel: ListViewModel by injectMvRxViewModel()

@@ -53,15 +53,13 @@ abstract class CheckableAppsController : ListController() {
     override val toolbarMenu: PopupMenu<*>?
         get() = PopupMenu(
             items = listOf(
-                PopupMenuItem(value = MenuOption.SelectAll, titleRes = R.string.es_select_all),
-                PopupMenuItem(value = MenuOption.DeselectAll, titleRes = R.string.es_deselect_all)
-            ),
-            onSelected = {
-                when (it) {
-                    MenuOption.SelectAll -> viewModel.selectAllClicked()
-                    MenuOption.DeselectAll -> viewModel.deselectAllClicked()
-                }
-            }
+                PopupMenuItem(titleRes = R.string.es_select_all, onSelected = {
+                    viewModel.selectAllClicked()
+                }),
+                PopupMenuItem(titleRes = R.string.es_deselect_all, onSelected = {
+                    viewModel.deselectAllClicked()
+                })
+            )
         )
 
     protected open val launchableAppsOnly: Boolean
@@ -98,8 +96,6 @@ abstract class CheckableAppsController : ListController() {
     abstract fun getCheckedAppsFlow(): Flow<Set<String>>
 
     abstract fun onCheckedAppsChanged(apps: Set<String>)
-
-    private enum class MenuOption { SelectAll, DeselectAll }
 
 }
 
