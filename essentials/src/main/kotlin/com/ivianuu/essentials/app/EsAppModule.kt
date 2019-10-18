@@ -19,7 +19,7 @@ package com.ivianuu.essentials.app
 import android.content.Context
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
-import com.ivianuu.injekt.factoryWithState
+import com.ivianuu.injekt.factory
 import com.ivianuu.injekt.get
 import com.ivianuu.injekt.module
 import com.ivianuu.injekt.single
@@ -33,8 +33,5 @@ val esAppModule = module {
     single { PreferenceManager.getDefaultSharedPreferences(get()) }
     single { KPrefs(get<SharedPreferences>()) }
     single { KSettings(get<Context>()) }
-    factoryWithState {
-        val context = link<Context>()
-        definition { context().packageManager }
-    }
+    factory { get<Context>().packageManager }
 }

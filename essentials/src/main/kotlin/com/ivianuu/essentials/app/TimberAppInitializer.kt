@@ -24,9 +24,7 @@ import timber.log.Timber
  * Initializes timber in debug builds
  */
 @Inject
-internal class TimberAppInitializer(
-    private val buildInfo: BuildInfo
-) : AppInitializer {
+internal class TimberAppInitializer(buildInfo: BuildInfo) : AppInitializer {
     init {
         if (buildInfo.isDebug) {
             Timber.plant(Timber.DebugTree())
