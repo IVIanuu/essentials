@@ -16,17 +16,14 @@
 
 package com.ivianuu.essentials.securesettings
 
-import android.view.View
 import androidx.lifecycle.lifecycleScope
 import com.ivianuu.epoxyprefs.Preference
 import com.ivianuu.essentials.ui.navigation.director.*
 import com.ivianuu.essentials.ui.prefs.PrefsController
 import com.ivianuu.essentials.util.Toaster
-import com.ivianuu.essentials.util.coroutineScope
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Param
 import com.ivianuu.injekt.parametersOf
-import com.ivianuu.scopes.android.onPause
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -48,9 +45,9 @@ class SecureSettingsController(
     override val toolbarTitleRes: Int
         get() = R.string.es_title_secure_settings
 
-    override fun onAttach(view: View) {
-        super.onAttach(view)
-        onPause.coroutineScope.launch {
+    override fun onCreate() {
+        super.onCreate()
+        lifecycleScope.launch {
             while (true) {
                 if (secureSettingsHelper.canWriteSecureSettings()) {
                     toaster.toast(R.string.es_secure_settings_permission_granted)
@@ -108,7 +105,6 @@ class SecureSettingsController(
     private fun handlePermissionResult(success: Boolean) {
         if (success) {
             toaster.toast(R.string.es_secure_settings_permission_granted)
-            navigator.pop(true)
         } else {
             toaster.toast(R.string.es_secure_settings_permission_denied)
         }
