@@ -19,24 +19,32 @@ package com.ivianuu.essentials.gestures
 import android.view.accessibility.AccessibilityEvent
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.gestures.accessibility.AccessibilityComponent
+import com.ivianuu.essentials.util.coroutineScope
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.android.ApplicationScope
-import kotlinx.coroutines.channels.ConflatedBroadcastChannel
+import com.ivianuu.scopes.MutableScope
+import hu.akarnokd.kotlin.flow.BehaviorSubject
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.consumeAsFlow
-import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.launch
 
 @Inject
 @ApplicationScope
 class SecureScreenDetector : AccessibilityComponent() {
 
-    private val _isOnSecureScreen = ConflatedBroadcastChannel<Boolean>()
+    private val _isOnSecureScreen = BehaviorSubject(false)
     val isOnSecureScreen: Flow<Boolean>
-        get() {
-            return _isOnSecureScreen.openSubscription()
-                .consumeAsFlow()
-                .distinctUntilChanged()
-        }
+        get() = _isOnSecureScreen
+
+    private var wasOnSecureScreen = false
+
+    private var notifyingJob: Job? = null
+    private val scope = MutableScope()
+
+    override fun onServiceDisconnected() {
+        super.onServiceDisconnected()
+        scope.close()
+    }
 
     override fun onAccessibilityEvent(event: AccessibilityEvent) {
         // were only interested in window state changes
@@ -64,7 +72,13 @@ class SecureScreenDetector : AccessibilityComponent() {
 
         // distinct
         d { "on secure screen changed: $isOnSecureScreen" }
-        _isOnSecureScreen.offer(isOnSecureScreen)
+        if (isOnSecureScreen != wasOnSecureScreen) {
+            wasOnSecureScreen = isOnSecureScreen
+            notifyingJob?.cancel()
+            notifyingJob = scope.coroutineScope.launch {
+                _isOnSecureScreen.emit(isOnSecureScreen)
+            }
+        }
     }
 
 }

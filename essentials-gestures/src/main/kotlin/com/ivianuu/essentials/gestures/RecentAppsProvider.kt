@@ -19,13 +19,15 @@ package com.ivianuu.essentials.gestures
 import android.view.accessibility.AccessibilityEvent
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.gestures.accessibility.AccessibilityComponent
+import com.ivianuu.essentials.util.coroutineScope
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.android.ApplicationScope
-import kotlinx.coroutines.channels.ConflatedBroadcastChannel
+import com.ivianuu.scopes.MutableScope
+import hu.akarnokd.kotlin.flow.BehaviorSubject
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.consumeAsFlow
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 
 /**
  * Recent apps provider
@@ -44,13 +46,18 @@ class RecentAppsProvider : AccessibilityComponent() {
                 }
             }
 
-    private val _recentApps = ConflatedBroadcastChannel(emptyList<String>())
+    private val _recentApps = BehaviorSubject(emptyList<String>())
     val recentsApps: Flow<List<String>>
-        get() {
-            return _recentApps.openSubscription()
-                .consumeAsFlow()
-                .distinctUntilChanged()
-        }
+        get() = _recentApps
+    private var recentAppsList = mutableListOf<String>()
+
+    private var notifyingJob: Job? = null
+    private val scope = MutableScope()
+
+    override fun onServiceDisconnected() {
+        super.onServiceDisconnected()
+        scope.close()
+    }
 
     override fun onAccessibilityEvent(event: AccessibilityEvent) {
         // were only interested in window state changes
@@ -81,7 +88,7 @@ class RecentAppsProvider : AccessibilityComponent() {
 
     private fun handlePackage(packageName: String) {
 
-        val recentApps = getRecentApps().toMutableList()
+        val recentApps = recentAppsList.toMutableList()
         val index = recentApps.indexOf(packageName)
 
         // app has not changed
@@ -99,14 +106,17 @@ class RecentAppsProvider : AccessibilityComponent() {
 
         // make sure that were not getting bigger than the limit
         val result = recentApps.chunked(LIMIT).first()
+        recentAppsList.clear()
+        recentAppsList.addAll(result)
 
         d { "recent apps changed $result" }
 
         // push
-        _recentApps.offer(result)
+        notifyingJob?.cancel()
+        notifyingJob = scope.coroutineScope.launch {
+            _recentApps.emit(result)
+        }
     }
-
-    private fun getRecentApps() = _recentApps.value!!
 
     companion object {
         const val PACKAGE_UNKNOWN = ""
