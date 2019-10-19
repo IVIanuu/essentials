@@ -4,6 +4,12 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
+// todo better name
+fun <T> flowNever(): Flow<T> = flow {
+    while (true) {
+    }
+}
+
 fun <T> flowOf(block: suspend () -> T) = flow { emit(block()) }
 
 fun <T1, T2> combine(flow: Flow<T1>, flow2: Flow<T2>): Flow<Pair<T1, T2>> {
