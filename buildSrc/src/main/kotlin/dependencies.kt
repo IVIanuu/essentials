@@ -22,8 +22,8 @@ object Build {
 
     const val compileSdk = 29
     const val minSdk = 23
-    const val targetSdk = 28
-    const val targetSdkSample = 29
+    const val targetSdk = 29
+    const val targetSdkSample = 27
     const val versionCode = 1
     const val versionName = "0.0.1"
 }
