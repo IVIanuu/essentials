@@ -1,8 +1,6 @@
 package com.ivianuu.essentials.util
 
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
 
 // todo better name
 fun <T> flowNever(): Flow<T> = flow {
@@ -33,32 +31,15 @@ fun <T1, T2, T3> combine(
     )
 }
 
-fun <T> merge(vararg flows: Flow<T>): Flow<T> = channelFlow {
-    coroutineScope {
-        for (f in flows) {
-            launch {
-                f.collect { offer(it) }
-            }
-        }
-    }
+fun <T> merge(vararg flows: Flow<T>): Flow<T> =
+    flowOf(*flows).flattenMerge(concurrency = flows.size)
+
+fun <T> merge(flows: Iterable<Flow<T>>): Flow<T> {
+    val flowsList = flows.toList()
+    return flowsList.asFlow().flattenMerge(concurrency = flowsList.size)
 }
 
-fun <T> merge(flows: Iterable<Flow<T>>): Flow<T> = channelFlow {
-    coroutineScope {
-        for (f in flows) {
-            launch {
-                f.collect { offer(it) }
-            }
-        }
-    }
-}
-
-fun <T> merge(flows: Sequence<Flow<T>>): Flow<T> = channelFlow {
-    coroutineScope {
-        for (f in flows) {
-            launch {
-                f.collect { offer(it) }
-            }
-        }
-    }
+fun <T> merge(flows: Sequence<Flow<T>>): Flow<T> {
+    val flowsList = flows.toList()
+    return flowsList.asFlow().flattenMerge(concurrency = flowsList.size)
 }
