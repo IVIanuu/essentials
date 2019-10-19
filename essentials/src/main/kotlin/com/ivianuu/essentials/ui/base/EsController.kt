@@ -26,7 +26,6 @@ import com.ivianuu.essentials.injection.childControllerComponent
 import com.ivianuu.essentials.injection.controllerComponent
 import com.ivianuu.essentials.ui.mvrx.MvRxView
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.director.controllerRouteModule
 import com.ivianuu.essentials.util.ContextAware
 import com.ivianuu.essentials.util.InjektTraitContextWrapper
 import com.ivianuu.essentials.util.unsafeLazy
@@ -44,12 +43,10 @@ abstract class EsController : Controller(), ContextAware, InjektTrait, LayoutCon
     override val component by unsafeLazy {
         if (parentController != null) {
             childControllerComponent {
-                modules(controllerRouteModule())
                 modules(this@EsController.modules())
             }
         } else {
             controllerComponent {
-                modules(controllerRouteModule())
                 modules(this@EsController.modules())
             }
         }
