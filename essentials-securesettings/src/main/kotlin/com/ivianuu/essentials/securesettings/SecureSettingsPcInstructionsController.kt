@@ -16,14 +16,16 @@
 
 package com.ivianuu.essentials.securesettings
 
-import androidx.lifecycle.lifecycleScope
+import android.view.View
 import com.ivianuu.epoxyprefs.Preference
 import com.ivianuu.essentials.ui.navigation.director.controllerRoute
 import com.ivianuu.essentials.ui.prefs.PrefsController
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.essentials.util.Toaster
+import com.ivianuu.essentials.util.coroutineScope
 import com.ivianuu.essentials.util.string
 import com.ivianuu.injekt.Inject
+import com.ivianuu.scopes.android.onPause
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -44,9 +46,9 @@ internal class SecureSettingsPcInstructionsController(
     override val toolbarTitleRes: Int
         get() = R.string.es_title_secure_settings_pc_instructions
 
-    override fun onCreate() {
-        super.onCreate()
-        lifecycleScope.launch {
+    override fun onAttach(view: View) {
+        super.onAttach(view)
+        onPause.coroutineScope.launch {
             while (true) {
                 if (secureSettingsHelper.canWriteSecureSettings()) {
                     navigator.pop()
