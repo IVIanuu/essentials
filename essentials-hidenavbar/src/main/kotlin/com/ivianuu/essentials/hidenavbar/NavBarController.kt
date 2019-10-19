@@ -25,7 +25,7 @@ import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.messaging.BroadcastFactory
 import com.ivianuu.essentials.util.AppDispatchers
 import com.ivianuu.essentials.util.coroutineScope
-import com.ivianuu.essentials.util.mergeFlows
+import com.ivianuu.essentials.util.merge
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.android.ApplicationScope
 import com.ivianuu.scopes.ReusableScope
@@ -76,7 +76,7 @@ class NavBarController internal constructor(
         }
 
         // apply config
-        mergeFlows(flows)
+        merge(flows)
             .map {
                 !config.showWhileScreenOff
                         || (!keyguardManager.isKeyguardLocked && screenStateProvider.isScreenOn)
