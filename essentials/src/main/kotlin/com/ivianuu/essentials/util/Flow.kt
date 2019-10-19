@@ -1,10 +1,12 @@
 package com.ivianuu.essentials.util
 
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 
 // todo better name
 fun <T> flowNever(): Flow<T> = flow {
     while (true) {
+        delay(Long.MAX_VALUE)
     }
 }
 
