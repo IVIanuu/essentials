@@ -26,14 +26,14 @@ import com.ivianuu.kprefs.common.enumString
 @ApplicationScope
 class TwilightPrefs(prefs: KPrefs) {
     val twilightMode = prefs.enumString("twilight_mode",
-        TwilightMode.SYSTEM
+        TwilightMode.System
     )
 }
 
 enum class TwilightMode(override val value: String) : PrefValueHolder<String> {
-    LIGHT("light"),
-    DARK("dark"),
-    BATTERY("battery"),
-    TIME("time"),
-    SYSTEM("system")
+    Light("light"),
+    Dark("dark"),
+    Battery("battery"),
+    Time("time"),
+    System("system")
 }

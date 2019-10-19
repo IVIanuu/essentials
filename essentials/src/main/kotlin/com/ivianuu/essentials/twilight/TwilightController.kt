@@ -40,11 +40,11 @@ class TwilightController(
                 withContext(dispatchers.main) {
                     AppCompatDelegate.setDefaultNightMode(
                         when (mode) {
-                            TwilightMode.LIGHT -> AppCompatDelegate.MODE_NIGHT_NO
-                            TwilightMode.DARK -> AppCompatDelegate.MODE_NIGHT_YES
-                            TwilightMode.BATTERY -> AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY
-                            TwilightMode.TIME -> AppCompatDelegate.MODE_NIGHT_AUTO_TIME
-                            TwilightMode.SYSTEM -> AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+                            TwilightMode.Light -> AppCompatDelegate.MODE_NIGHT_NO
+                            TwilightMode.Dark -> AppCompatDelegate.MODE_NIGHT_YES
+                            TwilightMode.Battery -> AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY
+                            TwilightMode.Time -> AppCompatDelegate.MODE_NIGHT_AUTO_TIME
+                            TwilightMode.System -> AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
                         }
                     )
                 }

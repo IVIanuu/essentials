@@ -34,27 +34,27 @@ class TwilightSettingsController(private val prefs: TwilightPrefs) : PrefsContro
 
     override fun epoxyController() = epoxyController {
         TwilightModePreference(
-            mode = TwilightMode.SYSTEM,
+            mode = TwilightMode.System,
             descRes = R.string.es_twilight_mode_system_desc,
             titleRes = R.string.es_twilight_mode_system
         )
         TwilightModePreference(
-            mode = TwilightMode.LIGHT,
+            mode = TwilightMode.Light,
             descRes = R.string.es_twilight_mode_light_desc,
             titleRes = R.string.es_twilight_mode_light
         )
         TwilightModePreference(
-            mode = TwilightMode.DARK,
+            mode = TwilightMode.Dark,
             descRes = R.string.es_twilight_mode_dark_desc,
             titleRes = R.string.es_twilight_mode_dark
         )
         TwilightModePreference(
-            mode = TwilightMode.BATTERY,
+            mode = TwilightMode.Battery,
             descRes = R.string.es_twilight_mode_battery_desc,
             titleRes = R.string.es_twilight_mode_battery
         )
         TwilightModePreference(
-            mode = TwilightMode.TIME,
+            mode = TwilightMode.Time,
             descRes = R.string.es_twilight_mode_time_desc,
             titleRes = R.string.es_twilight_mode_time
         )
