@@ -24,12 +24,15 @@ import coil.fetch.DrawableResult
 import coil.fetch.FetchResult
 import coil.fetch.Fetcher
 import coil.size.Size
+import com.ivianuu.essentials.util.AppDispatchers
 import com.ivianuu.injekt.Inject
+import kotlinx.coroutines.withContext
 
 data class AppIcon(val packageName: String)
 
 @Inject
 internal class AppIconFetcher(
+    private val dispatchers: AppDispatchers,
     private val packageManager: PackageManager
 ) : Fetcher<AppIcon> {
 
@@ -40,9 +43,9 @@ internal class AppIconFetcher(
         data: AppIcon,
         size: Size,
         options: Options
-    ): FetchResult {
+    ): FetchResult = withContext(dispatchers.io) {
         val drawable = packageManager.getApplicationIcon(data.packageName)
-        return DrawableResult(drawable, false, DataSource.NETWORK)
+        return@withContext DrawableResult(drawable, false, DataSource.NETWORK)
     }
 
 }

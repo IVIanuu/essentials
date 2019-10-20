@@ -19,9 +19,7 @@ val esCoilModule = module {
         ImageLoader(get()) {
             componentRegistry {
                 get<Set<Decoder>>(Decoders)
-                    .forEach {
-                        add(it)
-                    }
+                    .forEach { add(it) }
 
                 get<Set<FetcherBinding<*>>>(Fetchers)
                     .forEach { binding ->
