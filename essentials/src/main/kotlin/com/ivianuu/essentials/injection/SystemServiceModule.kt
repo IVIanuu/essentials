@@ -73,7 +73,6 @@ import kotlin.reflect.KClass
  */
 val systemServiceModule = module {
     getSystemServices()
-        .map { it as KClass<Any> }
         .forEach { service ->
             factory(typeOf(service)) {
                 ContextCompat.getSystemService(get(), service.java)
@@ -82,7 +81,7 @@ val systemServiceModule = module {
 }
 
 @Suppress("DEPRECATION")
-private fun getSystemServices(): Set<KClass<*>> = mutableSetOf<KClass<*>>().apply {
+private fun getSystemServices(): Set<KClass<*>> = mutableSetOf<KClass<out Any>>().apply {
     this += AccessibilityService::class
     this += AccountManager::class
     this += ActivityManager::class
