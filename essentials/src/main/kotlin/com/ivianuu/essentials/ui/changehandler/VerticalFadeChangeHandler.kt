@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.ui.changehandler
 
 import android.animation.Animator
+import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.view.View
 import com.ivianuu.director.ChangeData
@@ -25,7 +26,6 @@ import com.ivianuu.director.common.changehandler.AnimatorChangeHandler
 import com.ivianuu.director.common.changehandler.defaultAnimationDuration
 import com.ivianuu.director.defaultRemovesFromViewOnPush
 import com.ivianuu.essentials.ui.navigation.director.ControllerRoute
-import com.ivianuu.kommon.core.animation.animatorSetOf
 
 class VerticalFadeChangeHandler(
     duration: Long = DirectorPlugins.defaultAnimationDuration,
@@ -34,7 +34,7 @@ class VerticalFadeChangeHandler(
 
     override fun getAnimator(changeData: ChangeData): Animator {
         val (_, from, to, isPush) = changeData
-        val animator = animatorSetOf()
+        val animator = AnimatorSet()
 
         if (isPush && to != null) {
             animator.play(ObjectAnimator.ofFloat(to, View.ALPHA, 0f, 1f))

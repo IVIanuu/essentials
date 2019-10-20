@@ -17,14 +17,13 @@
 package com.ivianuu.essentials.securesettings
 
 import androidx.lifecycle.lifecycleScope
-import com.ivianuu.director.requireActivity
 import com.ivianuu.epoxyprefs.Preference
 import com.ivianuu.essentials.ui.navigation.director.controllerRoute
 import com.ivianuu.essentials.ui.prefs.PrefsController
 import com.ivianuu.essentials.util.BuildInfo
+import com.ivianuu.essentials.util.StringProvider
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Inject
-import com.ivianuu.kommon.core.content.string
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -39,6 +38,7 @@ internal class SecureSettingsPcInstructionsController(
     private val buildInfo: BuildInfo,
     private val clipboardAccessor: ClipboardAccessor,
     private val secureSettingsHelper: SecureSettingsHelper,
+    private val stringProvider: StringProvider,
     private val toaster: Toaster
 ) : PrefsController() {
 
@@ -113,7 +113,7 @@ internal class SecureSettingsPcInstructionsController(
             key("secure_settings_step_4")
             titleRes(R.string.es_pref_secure_settings_step_4)
             summary(
-                requireActivity().string(
+                stringProvider.getString(
                     R.string.es_pref_secure_settings_step_4_summary,
                     buildInfo.packageName
                 )

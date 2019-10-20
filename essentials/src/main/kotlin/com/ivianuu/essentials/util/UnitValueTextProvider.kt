@@ -20,7 +20,6 @@ import android.content.Context
 import com.ivianuu.epoxyprefs.SeekBarPreferenceModel
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.util.UnitValueTextProvider.Unit.*
-import com.ivianuu.kommon.core.content.string
 
 class UnitValueTextProvider(
     private val context: Context,

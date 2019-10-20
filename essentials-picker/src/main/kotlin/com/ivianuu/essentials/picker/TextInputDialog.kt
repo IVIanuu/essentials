@@ -21,7 +21,7 @@ import com.ivianuu.director.requireActivity
 import com.ivianuu.essentials.ui.dialog.dialogRoute
 import com.ivianuu.essentials.ui.dialog.pop
 import com.ivianuu.essentials.ui.effect.state
-import com.ivianuu.kommon.core.content.string
+import com.ivianuu.essentials.util.string
 
 fun textInputRoute(
     title: String? = null,

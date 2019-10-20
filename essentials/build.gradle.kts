@@ -55,13 +55,6 @@ dependencies {
     api(Deps.injekt)
     api(Deps.injektAndroid)
 
-    api(Deps.kommonAppCompat)
-    api(Deps.kommonCore)
-    api(Deps.kommonLifecycle)
-    api(Deps.kommonMaterial)
-    api(Deps.kommonRecyclerView)
-    api(Deps.kommonViewPager)
-
     api(Deps.kotlinStdLib)
 
     api(Deps.kotlinFlowExtensions)

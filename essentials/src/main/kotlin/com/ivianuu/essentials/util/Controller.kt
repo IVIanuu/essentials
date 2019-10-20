@@ -16,20 +16,8 @@
 
 package com.ivianuu.essentials.util
 
-import android.view.View
 import androidx.lifecycle.lifecycleScope
 import com.ivianuu.director.Controller
-import com.ivianuu.director.requireActivity
-import com.ivianuu.kommon.core.app.hideInputMethod
-import com.ivianuu.kommon.core.app.showInputMethod
 
 val Controller.viewLifecycleScope
     get() = viewLifecycleOwner.lifecycleScope
-
-fun Controller.hideInputMethod() {
-    requireActivity().hideInputMethod()
-}
-
-fun Controller.showInputMethod(view: View, flags: Int = 0) {
-    requireActivity().showInputMethod(view, flags)
-}

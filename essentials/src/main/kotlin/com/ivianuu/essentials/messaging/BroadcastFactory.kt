@@ -21,7 +21,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import com.ivianuu.injekt.Inject
-import com.ivianuu.kommon.core.content.intentFilterOf
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 
@@ -31,7 +30,11 @@ import kotlinx.coroutines.flow.callbackFlow
 @Inject
 class BroadcastFactory(private val context: Context) {
 
-    fun create(vararg actions: String): Flow<Intent> = create(intentFilterOf(*actions))
+    fun create(vararg actions: String): Flow<Intent> = create(
+        IntentFilter().apply {
+            actions.forEach { addAction(it) }
+        }
+    )
 
     fun create(intentFilter: IntentFilter): Flow<Intent> = callbackFlow {
         val broadcastReceiver = object : BroadcastReceiver() {

@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.ui.changehandler
 
 import android.animation.Animator
+import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.view.View
 import android.view.animation.DecelerateInterpolator
@@ -26,7 +27,6 @@ import com.ivianuu.director.common.changehandler.AnimatorChangeHandler
 import com.ivianuu.director.common.changehandler.defaultAnimationDuration
 import com.ivianuu.director.defaultRemovesFromViewOnPush
 import com.ivianuu.essentials.ui.navigation.director.ControllerRoute
-import com.ivianuu.kommon.core.animation.animatorSetOf
 
 class OpenCloseChangeHandler(
     duration: Long = DirectorPlugins.defaultAnimationDuration,
@@ -34,7 +34,7 @@ class OpenCloseChangeHandler(
 ) : AnimatorChangeHandler(duration, removesFromViewOnPush) {
 
     override fun getAnimator(changeData: ChangeData): Animator {
-        val animator = animatorSetOf()
+        val animator = AnimatorSet()
 
         if (changeData.isPush) {
             if (changeData.from != null) {
@@ -86,23 +86,29 @@ class OpenCloseChangeHandler(
             endScale: Float,
             startAlpha: Float,
             endAlpha: Float
-        ) = animatorSetOf(
-            ObjectAnimator.ofFloat(
-                view,
-                View.SCALE_X,
-                startScale, endScale
-            ).apply { interpolator = DECELERATE_QUINT },
-            ObjectAnimator.ofFloat(
-                view,
-                View.SCALE_Y,
-                startScale, endScale
-            ).apply { interpolator = DECELERATE_QUINT },
-            ObjectAnimator.ofFloat(
-                view,
-                View.ALPHA,
-                startAlpha, endAlpha
-            ).apply { interpolator = DECELERATE_CUBIC }
-        )
+        ) = AnimatorSet().apply {
+            play(
+                ObjectAnimator.ofFloat(
+                    view,
+                    View.SCALE_X,
+                    startScale, endScale
+                ).apply { interpolator = DECELERATE_QUINT }
+            )
+            play(
+                ObjectAnimator.ofFloat(
+                    view,
+                    View.SCALE_Y,
+                    startScale, endScale
+                ).apply { interpolator = DECELERATE_QUINT }
+            )
+            play(
+                ObjectAnimator.ofFloat(
+                    view,
+                    View.ALPHA,
+                    startAlpha, endAlpha
+                ).apply { interpolator = DECELERATE_CUBIC }
+            )
+        }
     }
 
     override fun copy() = OpenCloseChangeHandler(duration, removesFromViewOnPush)

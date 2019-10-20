@@ -24,22 +24,21 @@ import android.content.Intent
 import android.hardware.camera2.CameraManager
 import androidx.core.app.NotificationCompat
 import com.example.essentials.gestures.R
+import com.ivianuu.essentials.util.StringProvider
 import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.essentials.work.EsService
 import com.ivianuu.injekt.inject
-import com.ivianuu.kommon.core.content.intent
-import com.ivianuu.kommon.core.content.startService
-import com.ivianuu.kommon.core.content.string
-import com.ivianuu.kommon.core.content.systemService
 
 /**
  * Handles the torch
  */
 class TorchService : EsService() {
 
+    private val cameraManager by inject<CameraManager>()
     private val notificationManager by inject<NotificationManager>()
     private val systemBuildInfo by inject<SystemBuildInfo>()
+    private val stringProvider by inject<StringProvider>()
     private val toaster by inject<Toaster>()
     private val torchManager by inject<TorchManager>()
 
@@ -60,7 +59,6 @@ class TorchService : EsService() {
 
     private fun toggleTorch() {
         tryAndToast {
-            val cameraManager = systemService<CameraManager>()
             cameraManager.registerTorchCallback(object : CameraManager.TorchCallback() {
                 override fun onTorchModeChanged(cameraId: String, enabled: Boolean) {
                     tryAndToast {
@@ -83,7 +81,6 @@ class TorchService : EsService() {
 
     private fun syncState() {
         tryAndToast {
-            val cameraManager = systemService<CameraManager>()
             cameraManager.registerTorchCallback(object : CameraManager.TorchCallback() {
                 override fun onTorchModeChanged(cameraId: String, enabled: Boolean) {
                     cameraManager.unregisterTorchCallback(this)
@@ -100,7 +97,7 @@ class TorchService : EsService() {
 
     private fun updateState(enabled: Boolean) {
         if (enabled) {
-            val contentIntent = intent<TorchService> {
+            val contentIntent = Intent(this, TorchService::class.java).apply {
                 action = ACTION_TOGGLE_TORCH
             }
 
@@ -114,8 +111,8 @@ class TorchService : EsService() {
                 NOTIFICATION_CHANNEL_ID
             )
                 .setAutoCancel(true)
-                .setContentTitle(string(R.string.es_notif_title_torch))
-                .setContentText(string(R.string.es_notif_text_torch))
+                .setContentTitle(stringProvider.getString(R.string.es_notif_title_torch))
+                .setContentText(stringProvider.getString(R.string.es_notif_text_torch))
                 .setSmallIcon(R.drawable.es_ic_torch_on)
                 .setContentIntent(contentPendingIntent)
                 .build()
@@ -133,7 +130,7 @@ class TorchService : EsService() {
         if (systemBuildInfo.sdk >= 26) {
             NotificationChannel(
                 NOTIFICATION_CHANNEL_ID,
-                string(R.string.es_notif_channel_torch),
+                stringProvider.getString(R.string.es_notif_channel_torch),
                 NotificationManager.IMPORTANCE_LOW
             ).let {
                 notificationManager.createNotificationChannel(it)
@@ -158,15 +155,19 @@ class TorchService : EsService() {
         private const val NOTIFICATION_ID = 3
 
         internal fun toggleTorch(context: Context) {
-            context.startService<TorchService> {
-                action = ACTION_TOGGLE_TORCH
-            }
+            context.startService(
+                Intent(context, TorchService::class.java).apply {
+                    action = ACTION_TOGGLE_TORCH
+                }
+            )
         }
 
         internal fun syncState(context: Context) {
-            context.startService<TorchService>() {
-                action = ACTION_SYNC_STATE
-            }
+            context.startService(
+                Intent(context, TorchService::class.java).apply {
+                    action = ACTION_SYNC_STATE
+                }
+            )
         }
     }
 }

@@ -16,14 +16,10 @@
 
 package com.ivianuu.essentials.ui.mvrx
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelStoreOwner
-import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.*
+import com.ivianuu.essentials.util.defaultViewModelKey
 import com.ivianuu.essentials.util.unsafeLazy
-import com.ivianuu.kommon.lifecycle.defaultViewModelKey
-import com.ivianuu.kommon.lifecycle.doOnCreate
-import com.ivianuu.kommon.lifecycle.viewModelProvider
+import com.ivianuu.essentials.util.viewModelProvider
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlin.reflect.KClass
@@ -48,7 +44,13 @@ internal fun <T : MvRxViewModel<*>> MvRxView._mvRxViewModel(
         factory
     )
 }.also { lazy ->
-    doOnCreate { lazy.value }
+    lifecycle.addObserver(object : LifecycleEventObserver {
+        override fun onStateChanged(source: LifecycleOwner, event: Lifecycle.Event) {
+            if (lifecycle.currentState.isAtLeast(Lifecycle.State.CREATED)) {
+                lazy.value
+            }
+        }
+    })
 }
 
 inline fun <reified T : MvRxViewModel<*>> MvRxView.getMvRxViewModel(
@@ -68,6 +70,8 @@ internal fun <T : MvRxViewModel<*>> MvRxView._getMvRxViewModel(
         override fun <T : ViewModel?> create(modelClass: Class<T>): T = factory() as T
     }).get(key, type.java).also { vm ->
         // invalidate this view on each state emission
-        vm.flow.onEach { postInvalidate() }.launchIn(lifecycleScope)
+        vm.flow
+            .onEach { postInvalidate() }
+            .launchIn(lifecycleScope)
     }
 }

@@ -29,7 +29,6 @@ import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.popup.PopupMenu
 import com.ivianuu.essentials.ui.popup.show
 import com.ivianuu.essentials.util.*
-import com.ivianuu.kommon.core.content.drawable
 import kotlinx.android.synthetic.main.es_controller_tabs.*
 import kotlinx.android.synthetic.main.es_view_toolbar.*
 

@@ -19,7 +19,6 @@ package com.ivianuu.essentials.ui.epoxy
 import android.content.res.ColorStateList
 import com.airbnb.epoxy.EpoxyController
 import com.ivianuu.essentials.R
-import com.ivianuu.kommon.core.view.color
 import kotlinx.android.synthetic.main.es_item_simple_loading.*
 
 /**
@@ -37,7 +36,7 @@ fun EpoxyController.SimpleLoading(
         if (progressColor != null || progressColorRes != null) {
             val finalProgressColor = when {
                 progressColor != null -> progressColor
-                progressColorRes != null -> es_progress_bar.color(progressColorRes)
+                progressColorRes != null -> es_progress_bar.context.getColor(progressColorRes)
                 else -> 0
             }
 

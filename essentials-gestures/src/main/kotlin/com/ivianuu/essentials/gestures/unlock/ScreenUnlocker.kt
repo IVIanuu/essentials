@@ -21,14 +21,8 @@ import android.content.Context
 import android.content.Intent
 import com.ivianuu.essentials.messaging.BroadcastFactory
 import com.ivianuu.injekt.Inject
-import com.ivianuu.kommon.core.content.newTask
-import com.ivianuu.kommon.core.content.startActivity
 import hu.akarnokd.kotlin.flow.takeUntil
-import kotlinx.coroutines.flow.delayFlow
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.singleOrNull
-import kotlinx.coroutines.flow.take
+import kotlinx.coroutines.flow.*
 
 /**
  * Helper class for unlocking the screen
@@ -42,7 +36,11 @@ class ScreenUnlocker(
 
     suspend fun unlockScreen(): Boolean {
         if (keyguardManager.isKeyguardLocked) {
-            context.startActivity<UnlockScreenActivity> { newTask() }
+            context.startActivity(
+                Intent(context, UnlockScreenActivity::class.java)
+                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            )
+
 
             return broadcastFactory.create(ACTION_ON_UNLOCK_RESULT)
                 .map { it.getBooleanExtra(EXTRA_SUCCESS, false) }

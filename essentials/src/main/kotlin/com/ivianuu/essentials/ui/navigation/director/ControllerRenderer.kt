@@ -20,8 +20,8 @@ import androidx.fragment.app.FragmentActivity
 import com.ivianuu.director.RouterTransaction
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.util.AppDispatchers
+import com.ivianuu.essentials.util.getViewModel
 import com.ivianuu.injekt.Inject
-import com.ivianuu.kommon.lifecycle.getViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.withContext
 

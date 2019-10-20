@@ -60,7 +60,6 @@ object Versions {
     const val glide = "4.9.0"
     const val injekt = "0.0.1-dev71"
     const val junit = "4.12"
-    const val kommon = "0.0.1-dev13" // todo remove
     const val kotlin = "1.3.50"
     const val kotlinFlowExtensions = "0.0.2"
     const val kPrefs = "0.0.1-dev17" // todo remove
@@ -126,18 +125,6 @@ object Deps {
     const val injektCompiler = "com.ivianuu.injekt:injekt-compiler:${Versions.injekt}"
 
     const val junit = "junit:junit:${Versions.junit}"
-
-    const val kommonAppCompat =
-        "com.ivianuu.kommon:kommon-appcompat:${Versions.kommon}"
-    const val kommonCore = "com.ivianuu.kommon:kommon-core:${Versions.kommon}"
-    const val kommonLifecycle =
-        "com.ivianuu.kommon:kommon-lifecycle:${Versions.kommon}"
-    const val kommonMaterial =
-        "com.ivianuu.kommon:kommon-material:${Versions.kommon}"
-    const val kommonRecyclerView =
-        "com.ivianuu.kommon:kommon-recyclerview:${Versions.kommon}"
-    const val kommonViewPager =
-        "com.ivianuu.kommon:kommon-viewpager:${Versions.kommon}"
 
     const val kotlinGradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.kotlin}"
     const val kotlinStdLib = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${Versions.kotlin}"

@@ -16,10 +16,10 @@
 
 package com.ivianuu.essentials.ui.epoxy
 
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.airbnb.epoxy.EpoxyController
-import com.ivianuu.kommon.core.view.inflate
 import kotlin.properties.Delegates
 
 fun EpoxyController.model(
@@ -72,7 +72,10 @@ class FunModelBuilder internal constructor() {
 
     fun layoutRes(layoutRes: Int) {
         this.viewType = layoutRes
-        buildView { it.inflate(layoutRes) }
+        buildView { container ->
+            LayoutInflater.from(container.context)
+                .inflate(layoutRes, container, false)
+        }
     }
 
     fun bind(block: EsHolder.() -> Unit) {

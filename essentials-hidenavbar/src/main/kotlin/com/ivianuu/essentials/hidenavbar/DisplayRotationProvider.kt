@@ -17,13 +17,14 @@
 package com.ivianuu.essentials.hidenavbar
 
 import android.app.Application
+import android.content.ComponentCallbacks2
+import android.content.res.Configuration
 import android.hardware.SensorManager
 import android.view.OrientationEventListener
 import android.view.WindowManager
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.util.merge
 import com.ivianuu.injekt.Inject
-import com.ivianuu.kommon.core.app.doOnConfigurationChanged
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.*
 
@@ -73,8 +74,19 @@ internal class DisplayRotationProvider(
         awaitClose { listener.disable() }
     }
 
-    private fun configChanges() = callbackFlow {
-        val callbacks = app.doOnConfigurationChanged { offer(Unit) }
+    private fun configChanges() = callbackFlow<Unit> {
+        val callbacks = object : ComponentCallbacks2 {
+            override fun onConfigurationChanged(newConfig: Configuration) {
+                offer(Unit)
+            }
+
+            override fun onLowMemory() {
+            }
+
+            override fun onTrimMemory(level: Int) {
+            }
+        }
+        app.registerComponentCallbacks(callbacks)
         awaitClose { app.unregisterComponentCallbacks(callbacks) }
     }
 

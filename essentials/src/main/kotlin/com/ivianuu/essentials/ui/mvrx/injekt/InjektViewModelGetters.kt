@@ -21,10 +21,10 @@ import com.ivianuu.essentials.ui.mvrx.MvRxView
 import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
 import com.ivianuu.essentials.ui.mvrx.getMvRxViewModel
 import com.ivianuu.essentials.ui.mvrx.mvRxViewModel
+import com.ivianuu.essentials.util.defaultViewModelKey
 import com.ivianuu.injekt.InjektTrait
 import com.ivianuu.injekt.ParametersDefinition
 import com.ivianuu.injekt.get
-import com.ivianuu.kommon.lifecycle.defaultViewModelKey
 
 inline fun <S, reified T : MvRxViewModel<*>> S.injectMvRxViewModel(
     noinline from: () -> ViewModelStoreOwner = { this },
