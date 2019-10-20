@@ -29,7 +29,7 @@ abstract class EsModel<H : EsHolder>(
     private val listeners = mutableListOf<ModelListener>()
 
     init {
-        id(id.hashCode()) // todo
+        id(id.hashCode())
         layout(layoutRes)
     }
 

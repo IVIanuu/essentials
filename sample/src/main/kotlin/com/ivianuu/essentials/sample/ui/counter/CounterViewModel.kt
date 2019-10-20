@@ -51,10 +51,6 @@ class CounterViewModel(
         navigator.pop()
     }
 
-    fun rootScreenClicked() {
-        // todo router.popToRoot()
-    }
-
     fun listScreenClicked() {
         navigator.push(listRoute)
     }

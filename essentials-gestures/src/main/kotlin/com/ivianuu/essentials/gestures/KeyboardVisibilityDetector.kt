@@ -43,7 +43,6 @@ class KeyboardVisibilityDetector(
         get() {
             return softInputChanges
                 .onStart { emit(Unit) }
-                // todo check if this works
                 .transformLatest {
                     while (true) {
                         emit(Unit)

@@ -46,7 +46,6 @@ class CounterController(@Param private val screen: Int) : EsController() {
 
         screen_up.setOnClickListener { viewModel.screenUpClicked() }
         screen_down.setOnClickListener { viewModel.screenDownClicked() }
-        root_screen.setOnClickListener { viewModel.rootScreenClicked() }
         list_screen.setOnClickListener { viewModel.listScreenClicked() }
         check_apps.setOnClickListener { viewModel.checkAppsClicked() }
         do_work.setOnClickListener { viewModel.doWorkClicked() }

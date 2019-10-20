@@ -69,7 +69,7 @@ class Navigator {
             _backStack.clear()
             _backStack += newBackStack
         }
-        GlobalScope.launch { subject.emit(newBackStack) } // todo this is ugly
+        GlobalScope.launch { subject.emit(newBackStack) }
     }
 
 }

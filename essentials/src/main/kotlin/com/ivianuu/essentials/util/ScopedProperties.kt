@@ -19,8 +19,6 @@ package com.ivianuu.essentials.util
 import com.ivianuu.scopes.Scope
 import java.util.concurrent.ConcurrentHashMap
 
-// todo operators
-
 class Properties {
 
     private val properties = mutableMapOf<String, Any?>()
