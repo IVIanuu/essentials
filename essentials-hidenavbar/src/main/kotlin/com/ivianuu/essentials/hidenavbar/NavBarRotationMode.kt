@@ -21,6 +21,11 @@ import com.ivianuu.kprefs.common.PrefValueHolder
 /**
  * Nav bar rotation behavior
  */
-enum class NavBarRotationMode(override val value: String) : PrefValueHolder<String> {
-    Marshmallow("marshmallow"), Nougat("nougat"), Tablet("tablet")
+enum class NavBarRotationMode(
+    override val value: String,
+    val titleRes: Int
+) : PrefValueHolder<String> {
+    Marshmallow("marshmallow", R.string.es_nav_bar_rotation_mode_marshmallow),
+    Nougat("nougat", R.string.es_nav_bar_rotation_mode_nougat),
+    Tablet("tablet", R.string.es_nav_bar_rotation_mode_tablet)
 }
