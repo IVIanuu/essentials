@@ -22,6 +22,7 @@ import android.content.Intent
 import com.ivianuu.essentials.messaging.BroadcastFactory
 import com.ivianuu.injekt.Inject
 import hu.akarnokd.kotlin.flow.takeUntil
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 
 /**
@@ -41,10 +42,9 @@ class ScreenUnlocker(
                     .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             )
 
-
             return broadcastFactory.create(ACTION_ON_UNLOCK_RESULT)
                 .map { it.getBooleanExtra(EXTRA_SUCCESS, false) }
-                .takeUntil(flowOf(Unit).delayFlow(5000))
+                .takeUntil(flowOf(Unit).onStart { delay(5000) })
                 .take(1)
                 .singleOrNull()
                 ?: false

@@ -43,11 +43,11 @@ internal class AppIconFetcher(
 ) : DataFetcher<Drawable> {
 
     override fun loadData(priority: Priority, callback: DataFetcher.DataCallback<in Drawable>) {
-        val drawable = packageManager.getApplicationIcon(app.packageName)
-        if (drawable != null) {
+        try {
+            val drawable = packageManager.getApplicationIcon(app.packageName)
             callback.onDataReady(drawable)
-        } else {
-            callback.onLoadFailed(Exception())
+        } catch (e: Exception) {
+            callback.onLoadFailed(e)
         }
     }
 

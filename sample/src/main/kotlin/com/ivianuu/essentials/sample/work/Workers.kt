@@ -17,8 +17,6 @@
 package com.ivianuu.essentials.sample.work
 
 import android.content.Context
-import android.content.pm.PackageManager
-import android.view.WindowManager
 import androidx.work.WorkerParameters
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.work.EsWorker
@@ -35,8 +33,7 @@ val workerModule = module {
 @Inject
 class MyWorkerOne(
     @Param context: Context,
-    @Param workerParams: WorkerParameters,
-    windowManager: WindowManager
+    @Param workerParams: WorkerParameters
 ) : EsWorker(context, workerParams) {
 
     override suspend fun doWork(): Result {
@@ -48,8 +45,7 @@ class MyWorkerOne(
 @Inject
 class MyWorkerTwo(
     @Param context: Context,
-    @Param workerParams: WorkerParameters,
-    packageManager: PackageManager
+    @Param workerParams: WorkerParameters
 ) : EsWorker(context, workerParams) {
 
     override suspend fun doWork(): Result {
