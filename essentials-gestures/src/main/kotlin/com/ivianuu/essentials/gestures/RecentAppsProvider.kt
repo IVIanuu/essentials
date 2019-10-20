@@ -36,15 +36,9 @@ import kotlinx.coroutines.launch
 @ApplicationScope
 class RecentAppsProvider : AccessibilityComponent() {
 
-    val currentApp: Flow<String>
+    val currentApp: Flow<String?>
         get() = recentsApps
-            .map {
-                if (it.isNotEmpty()) {
-                    it.first()
-                } else {
-                    PACKAGE_UNKNOWN
-                }
-            }
+            .map { it.firstOrNull() }
 
     private val _recentApps = BehaviorSubject(emptyList<String>())
     val recentsApps: Flow<List<String>>
@@ -119,8 +113,6 @@ class RecentAppsProvider : AccessibilityComponent() {
     }
 
     companion object {
-        const val PACKAGE_UNKNOWN = ""
-
         private const val LIMIT = 10
     }
 }
