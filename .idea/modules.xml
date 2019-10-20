@@ -5,7 +5,8 @@
       <module fileurl="file://$PROJECT_DIR$/buildSrc/buildSrc.iml" filepath="$PROJECT_DIR$/buildSrc/buildSrc.iml" />
       <module fileurl="file://$PROJECT_DIR$/essentials.iml" filepath="$PROJECT_DIR$/essentials.iml" />
       <module fileurl="file://$PROJECT_DIR$/essentials-apps/essentials-apps.iml" filepath="$PROJECT_DIR$/essentials-apps/essentials-apps.iml" />
-      <module fileurl="file://$PROJECT_DIR$/essentials-apps-glide/essentials-apps-glide.iml" filepath="$PROJECT_DIR$/essentials-apps-glide/essentials-apps-glide.iml" />
+      <module fileurl="file://$PROJECT_DIR$/essentials-apps-coil/essentials-apps-coil.iml" filepath="$PROJECT_DIR$/essentials-apps-coil/essentials-apps-coil.iml" />
+      <module fileurl="file://$PROJECT_DIR$/essentials-apps-coil/essentials-apps-glide.iml" filepath="$PROJECT_DIR$/essentials-apps-coil/essentials-apps-glide.iml" />
       <module fileurl="file://$PROJECT_DIR$/essentials-apps-ui/essentials-apps-ui.iml" filepath="$PROJECT_DIR$/essentials-apps-ui/essentials-apps-ui.iml" />
       <module fileurl="file://$PROJECT_DIR$/essentials-compiler/essentials-compiler.iml" filepath="$PROJECT_DIR$/essentials-compiler/essentials-compiler.iml" />
       <module fileurl="file://$PROJECT_DIR$/essentials/essentials-essentials.iml" filepath="$PROJECT_DIR$/essentials/essentials-essentials.iml" />
