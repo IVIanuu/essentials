@@ -16,17 +16,13 @@
 
 package com.ivianuu.essentials.ui.dialog
 
-import android.content.Context
 import android.content.DialogInterface
 import android.view.View
 import com.ivianuu.director.common.DialogController
-import com.ivianuu.director.requireActivity
 import com.ivianuu.essentials.injection.childControllerComponent
 import com.ivianuu.essentials.injection.controllerComponent
 import com.ivianuu.essentials.ui.mvrx.MvRxView
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.director.controllerRouteModule
-import com.ivianuu.essentials.util.ContextAware
 import com.ivianuu.essentials.util.unsafeLazy
 import com.ivianuu.injekt.InjektTrait
 import com.ivianuu.injekt.Module
@@ -35,24 +31,19 @@ import com.ivianuu.injekt.inject
 /**
  * Base dialog controller
  */
-abstract class EsDialogController : DialogController(), ContextAware, InjektTrait, MvRxView {
+abstract class EsDialogController : DialogController(), InjektTrait, MvRxView {
 
     override val component by unsafeLazy {
         if (parentController != null) {
             childControllerComponent {
-                modules(controllerRouteModule())
                 modules(this@EsDialogController.modules())
             }
         } else {
             controllerComponent {
-                modules(controllerRouteModule())
                 modules(this@EsDialogController.modules())
             }
         }
     }
-
-    override val providedContext: Context
-        get() = requireActivity()
 
     val navigator by inject<Navigator>()
 

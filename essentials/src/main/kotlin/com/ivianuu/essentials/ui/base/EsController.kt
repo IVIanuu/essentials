@@ -16,7 +16,6 @@
 
 package com.ivianuu.essentials.ui.base
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,7 +25,6 @@ import com.ivianuu.essentials.injection.childControllerComponent
 import com.ivianuu.essentials.injection.controllerComponent
 import com.ivianuu.essentials.ui.mvrx.MvRxView
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.util.ContextAware
 import com.ivianuu.essentials.util.InjektTraitContextWrapper
 import com.ivianuu.essentials.util.unsafeLazy
 import com.ivianuu.injekt.InjektTrait
@@ -38,7 +36,7 @@ import kotlinx.android.synthetic.*
 /**
  * Base controller
  */
-abstract class EsController : Controller(), ContextAware, InjektTrait, LayoutContainer, MvRxView {
+abstract class EsController : Controller(), InjektTrait, LayoutContainer, MvRxView {
 
     override val component by unsafeLazy {
         if (parentController != null) {
@@ -51,9 +49,6 @@ abstract class EsController : Controller(), ContextAware, InjektTrait, LayoutCon
             }
         }
     }
-
-    override val providedContext: Context
-        get() = requireActivity()
 
     override val containerView: View?
         get() = _containerView

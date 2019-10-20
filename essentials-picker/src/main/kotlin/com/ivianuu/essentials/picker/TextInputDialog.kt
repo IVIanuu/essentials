@@ -17,10 +17,11 @@
 package com.ivianuu.essentials.picker
 
 import com.afollestad.materialdialogs.input.input
+import com.ivianuu.director.requireActivity
 import com.ivianuu.essentials.ui.dialog.dialogRoute
 import com.ivianuu.essentials.ui.dialog.pop
 import com.ivianuu.essentials.ui.effect.state
-import com.ivianuu.essentials.util.string
+import com.ivianuu.kommon.core.content.string
 
 fun textInputRoute(
     title: String? = null,
@@ -35,7 +36,7 @@ fun textInputRoute(
     var currentValue by context.state {
         when {
             prefill != null -> prefill
-            else -> context.string(prefillRes!!)
+            else -> context.controller.requireActivity().string(prefillRes!!)
         }
     }
 

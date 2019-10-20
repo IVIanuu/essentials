@@ -24,15 +24,12 @@ import android.widget.ImageView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.children
 import com.google.android.material.appbar.AppBarLayout
+import com.ivianuu.director.requireActivity
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.popup.PopupMenu
 import com.ivianuu.essentials.ui.popup.show
-import com.ivianuu.essentials.util.drawable
-import com.ivianuu.essentials.util.getIconColor
-import com.ivianuu.essentials.util.getPrimaryColor
-import com.ivianuu.essentials.util.getPrimaryTextColor
-import com.ivianuu.essentials.util.getSecondaryTextColor
-import com.ivianuu.essentials.util.isLight
+import com.ivianuu.essentials.util.*
+import com.ivianuu.kommon.core.content.drawable
 import kotlinx.android.synthetic.main.es_controller_tabs.*
 import kotlinx.android.synthetic.main.es_view_toolbar.*
 
@@ -54,7 +51,8 @@ abstract class ToolbarController : CoordinatorController() {
     protected open val toolbarBackButton: Boolean
         get() = router.backStack.firstOrNull()?.controller != this
 
-    protected open val lightToolbar: Boolean get() = getPrimaryColor().isLight
+    protected open val lightToolbar: Boolean
+        get() = requireActivity().getPrimaryColor().isLight
 
     override fun onViewCreated(view: View) {
         super.onViewCreated(view)
@@ -71,7 +69,7 @@ abstract class ToolbarController : CoordinatorController() {
 
             if (toolbarMenu != null) {
                 menu.add("dummy")
-                overflowIcon = drawable(R.drawable.abc_ic_menu_overflow_material)
+                overflowIcon = requireActivity().drawable(R.drawable.abc_ic_menu_overflow_material)
                 val overflow = findView {
                     it is ImageView && it.drawable == overflowIcon
                 }!!
@@ -84,9 +82,9 @@ abstract class ToolbarController : CoordinatorController() {
                 setNavigationOnClickListener { navigator.pop() }
             }
 
-            val titleColor = getPrimaryTextColor(!lightToolbar)
-            val subTitleColor = getSecondaryTextColor(!lightToolbar)
-            val iconColor = getIconColor(!lightToolbar)
+            val titleColor = requireActivity().getPrimaryTextColor(!lightToolbar)
+            val subTitleColor = requireActivity().getSecondaryTextColor(!lightToolbar)
+            val iconColor = requireActivity().getIconColor(!lightToolbar)
 
             setTitleTextColor(titleColor)
             setSubtitleTextColor(subTitleColor)

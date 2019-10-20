@@ -19,16 +19,10 @@ package com.ivianuu.essentials.work
 import android.content.Context
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
-import com.ivianuu.essentials.util.ContextAware
 
 /**
  * Base worker
  */
 abstract class EsWorker(
     context: Context, workerParams: WorkerParameters
-) : CoroutineWorker(context, workerParams), ContextAware {
-
-    override val providedContext: Context
-        get() = applicationContext
-
-}
+) : CoroutineWorker(context, workerParams)

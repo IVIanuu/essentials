@@ -16,22 +16,17 @@
 
 package com.ivianuu.essentials.ui.epoxy
 
-import android.content.Context
 import android.view.View
 import com.airbnb.epoxy.EpoxyHolder
-import com.ivianuu.essentials.util.ContextAware
 import kotlinx.android.extensions.LayoutContainer
 
 /**
  * Base list holder
  */
-open class EsHolder : EpoxyHolder(), ContextAware, LayoutContainer {
+open class EsHolder : EpoxyHolder(), LayoutContainer {
 
     lateinit var root: View
         private set
-
-    override val providedContext: Context
-        get() = root.context
 
     override val containerView: View?
         get() = root

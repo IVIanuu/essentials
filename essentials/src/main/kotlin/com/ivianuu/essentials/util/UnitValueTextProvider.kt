@@ -40,9 +40,6 @@ class UnitValueTextProvider(
     }
 }
 
-fun ContextAware.UnitValueTextProvider(unit: UnitValueTextProvider.Unit) =
-    UnitValueTextProvider(providedContext, unit)
-
 fun SeekBarPreferenceModel.Builder.unitValueTextProvider(
     context: Context,
     unit: UnitValueTextProvider.Unit
