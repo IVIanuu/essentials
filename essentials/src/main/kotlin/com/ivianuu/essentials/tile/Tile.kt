@@ -24,7 +24,9 @@ import android.graphics.drawable.Icon
 data class Tile(
     val icon: Icon? = null,
     val label: String? = null,
+    val labelRes: Int? = null,
     val description: String? = null,
+    val descriptionRes: Int? = null,
     val state: State = State.Active
 ) {
     enum class State {

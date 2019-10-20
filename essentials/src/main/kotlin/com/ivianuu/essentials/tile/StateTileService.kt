@@ -17,12 +17,16 @@
 package com.ivianuu.essentials.tile
 
 import android.annotation.TargetApi
+import com.ivianuu.essentials.util.StringProvider
+import com.ivianuu.injekt.inject
 
 /**
  * Stateful tile service
  */
 @TargetApi(24)
 abstract class StateTileService<T> : EsTileService() {
+
+    private val stringProvider by inject<StringProvider>()
 
     abstract fun createTile(state: T): Tile
 
@@ -39,8 +43,16 @@ abstract class StateTileService<T> : EsTileService() {
             Tile.State.Unavailable -> android.service.quicksettings.Tile.STATE_UNAVAILABLE
         }
         qsTile.icon = tile.icon
-        qsTile.label = tile.label
-        qsTile.contentDescription = tile.description
+        qsTile.label = when {
+            tile.label != null -> tile.label
+            tile.labelRes != null -> stringProvider.getString(tile.labelRes)
+            else -> null
+        }
+        qsTile.contentDescription = when {
+            tile.description != null -> tile.description
+            tile.descriptionRes != null -> stringProvider.getString(tile.descriptionRes)
+            else -> null
+        }
         qsTile.updateTile()
     }
 
