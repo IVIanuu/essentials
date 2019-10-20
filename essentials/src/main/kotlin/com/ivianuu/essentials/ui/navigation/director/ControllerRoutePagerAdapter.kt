@@ -28,7 +28,7 @@ import com.ivianuu.director.toTransaction
 open class ControllerRoutePagerAdapter(
     private val context: ControllerRoute.Context,
     private val routes: List<ControllerRoute>,
-    private val routerFactory: () -> Router
+    routerFactory: () -> Router
 ) : RouterPagerAdapter(routerFactory) {
 
     override fun configureRouter(router: Router, position: Int) {
