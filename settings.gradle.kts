@@ -17,7 +17,7 @@
 include(
     ":essentials",
     ":essentials-apps",
-    ":essentials-apps-glide",
+    ":essentials-apps-coil",
     ":essentials-apps-ui",
     ":essentials-compiler",
     ":essentials-gestures",

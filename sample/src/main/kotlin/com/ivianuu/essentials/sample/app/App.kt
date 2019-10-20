@@ -19,7 +19,7 @@ package com.ivianuu.essentials.sample.app
 import com.ivianuu.director.DirectorPlugins
 import com.ivianuu.director.setDefaultHandler
 import com.ivianuu.essentials.app.EsApp
-import com.ivianuu.essentials.apps.glide.esAppsGlideModule
+import com.ivianuu.essentials.apps.coil.esAppsCoilModule
 import com.ivianuu.essentials.sample.work.workerModule
 import com.ivianuu.essentials.ui.changehandler.OpenCloseChangeHandler
 import com.ivianuu.essentials.work.workerInitializerModule
@@ -28,7 +28,7 @@ import com.ivianuu.essentials.work.workerInjectionModule
 class App : EsApp() {
 
     override fun modules() = listOf(
-        esAppsGlideModule,
+        esAppsCoilModule,
         workerInjectionModule,
         workerInitializerModule,
         workerModule

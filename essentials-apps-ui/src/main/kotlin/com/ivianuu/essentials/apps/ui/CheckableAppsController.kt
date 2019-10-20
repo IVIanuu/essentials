@@ -18,13 +18,12 @@ package com.ivianuu.essentials.apps.ui
 
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
+import coil.ImageLoader
+import coil.api.loadAny
 import com.airbnb.epoxy.EpoxyController
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.request.RequestOptions
 import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.AppStore
-import com.ivianuu.essentials.apps.glide.AppIcon
+import com.ivianuu.essentials.apps.coil.AppIcon
 import com.ivianuu.essentials.ui.epoxy.SimpleLoading
 import com.ivianuu.essentials.ui.epoxy.model
 import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
@@ -34,10 +33,7 @@ import com.ivianuu.essentials.ui.popup.PopupMenu
 import com.ivianuu.essentials.ui.popup.PopupMenuItem
 import com.ivianuu.essentials.ui.simple.ListController
 import com.ivianuu.essentials.util.*
-import com.ivianuu.injekt.Inject
-import com.ivianuu.injekt.Param
-import com.ivianuu.injekt.get
-import com.ivianuu.injekt.parametersOf
+import com.ivianuu.injekt.*
 import com.ivianuu.scopes.ReusableScope
 import hu.akarnokd.kotlin.flow.BehaviorSubject
 import hu.akarnokd.kotlin.flow.PublishSubject
@@ -65,6 +61,8 @@ abstract class CheckableAppsController : ListController() {
     protected open val launchableAppsOnly: Boolean
         get() = false
 
+    private val imageLoader by inject<ImageLoader>()
+
     private val viewModel by mvRxViewModel<CheckableAppsViewModel> {
         get { parametersOf(launchableAppsOnly) }
     }
@@ -88,7 +86,11 @@ abstract class CheckableAppsController : ListController() {
         when (state.apps) {
             is Loading -> SimpleLoading(id = "loading")
             is Success -> state.apps()?.forEach { app ->
-                CheckableApp(app = app, onClick = { viewModel.appClicked(app) })
+                CheckableApp(
+                    app = app,
+                    imageLoader = imageLoader,
+                    onClick = { viewModel.appClicked(app) }
+                )
             }
         }
     }
@@ -101,25 +103,16 @@ abstract class CheckableAppsController : ListController() {
 
 private fun EpoxyController.CheckableApp(
     app: CheckableApp,
+    imageLoader: ImageLoader,
     onClick: () -> Unit
 ) = model(
     id = app.info.packageName,
     layoutRes = R.layout.es_item_checkable_app,
     state = arrayOf(app),
     bind = {
-        Glide.with(es_checkable_app_icon)
-            .load(AppIcon(app.info.packageName))
-            .apply(
-                RequestOptions()
-                    .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .skipMemoryCache(true)
-            )
-            .into(es_checkable_app_icon)
-
+        es_checkable_app_icon.loadAny(AppIcon(app.info.packageName), imageLoader)
         es_checkable_app_title.text = app.info.appName
-
         es_checkable_app_checkbox.isChecked = app.isChecked
-
         root.setOnClickListener { onClick() }
     }
 )

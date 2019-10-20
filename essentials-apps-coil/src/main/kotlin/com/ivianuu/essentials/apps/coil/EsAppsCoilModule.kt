@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.apps.glide
+package com.ivianuu.essentials.apps.coil
 
-import com.ivianuu.essentials.app.bindAppInitializer
+import com.ivianuu.essentials.ui.coil.bindFetcher
 import com.ivianuu.injekt.module
 
 /**
  * Binds dependencies related to this module
  */
-val esAppsGlideModule = module {
-    bindAppInitializer<AppGlideAppInitializer>()
+val esAppsCoilModule = module {
+    bindFetcher<AppIconFetcher, AppIcon>(AppIcon::class)
 }

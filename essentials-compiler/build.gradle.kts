@@ -16,7 +16,7 @@
  */
 plugins {
     kotlin("jvm")
-    kotlin("kapt")
+    //kotlin("kapt")
 }
 
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-compiler-args.gradle")

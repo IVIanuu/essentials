@@ -17,7 +17,7 @@
 plugins {
     id("com.android.application")
     kotlin("android")
-    kotlin("kapt")
+    //kotlin("kapt")
     id("kotlin-android-extensions")
 }
 
@@ -38,7 +38,7 @@ android {
 dependencies {
     implementation(project(":essentials"))
     implementation(project(":essentials-apps"))
-    implementation(project(":essentials-apps-glide"))
+    implementation(project(":essentials-apps-coil"))
     implementation(project(":essentials-apps-ui"))
     implementation(project(":essentials-gestures"))
     implementation(project(":essentials-hidenavbar"))
@@ -48,7 +48,7 @@ dependencies {
     implementation(project(":essentials-shell"))
     implementation(project(":essentials-work"))
 
-    kapt(project(":essentials-compiler"))
+    //kapt(project(":essentials-compiler"))
 
     testImplementation(project(":essentials-test"))
 }

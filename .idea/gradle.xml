@@ -5,7 +5,6 @@
     <option name="linkedExternalProjectsSettings">
       <GradleProjectSettings>
         <option name="delegatedBuild" value="false" />
-        <option name="testRunner" value="PLATFORM" />
         <option name="distributionType" value="DEFAULT_WRAPPED" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
         <option name="modules">
@@ -14,7 +13,7 @@
             <option value="$PROJECT_DIR$/buildSrc" />
             <option value="$PROJECT_DIR$/essentials" />
             <option value="$PROJECT_DIR$/essentials-apps" />
-            <option value="$PROJECT_DIR$/essentials-apps-glide" />
+            <option value="$PROJECT_DIR$/essentials-apps-coil" />
             <option value="$PROJECT_DIR$/essentials-apps-ui" />
             <option value="$PROJECT_DIR$/essentials-compiler" />
             <option value="$PROJECT_DIR$/essentials-gestures" />
@@ -28,6 +27,7 @@
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />
+        <option name="testRunner" value="PLATFORM" />
       </GradleProjectSettings>
     </option>
   </component>

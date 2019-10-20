@@ -16,15 +16,7 @@
 
 package com.ivianuu.essentials.app
 
-import com.ivianuu.injekt.BindingContext
-import com.ivianuu.injekt.Definition
-import com.ivianuu.injekt.Module
-import com.ivianuu.injekt.Name
-import com.ivianuu.injekt.factory
-import com.ivianuu.injekt.intoMap
-import com.ivianuu.injekt.map
-import com.ivianuu.injekt.module
-import com.ivianuu.injekt.withBinding
+import com.ivianuu.injekt.*
 import kotlin.reflect.KClass
 
 /**
@@ -53,6 +45,10 @@ import kotlin.reflect.KClass
  */
 interface AppInitializer
 
+@Name(AppInitializers.Companion::class)
+annotation class AppInitializers {
+    companion object
+}
 
 inline fun <reified T : AppInitializer> Module.appInitializer(
     name: Any? = null,
@@ -63,11 +59,6 @@ inline fun <reified T : AppInitializer> Module.bindAppInitializer(
     name: Any? = null
 ) {
     withBinding<T>(name) { bindAppInitializer() }
-}
-
-@Name(AppInitializers.Companion::class)
-annotation class AppInitializers {
-    companion object
 }
 
 inline fun <reified T : AppInitializer> BindingContext<T>.bindAppInitializer(): BindingContext<T> {
