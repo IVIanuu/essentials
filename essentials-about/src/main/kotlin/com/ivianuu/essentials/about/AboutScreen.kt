@@ -11,13 +11,17 @@ import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Param
 import com.ivianuu.injekt.parametersOf
 
-fun aboutRoute(privacyPolicyUrl: String? = null) = controllerRoute<AboutController> {
-    parametersOf(privacyPolicyUrl)
+fun aboutRoute(
+    hasDebugPackageName: Boolean = true,
+    privacyPolicyUrl: String? = null
+) = controllerRoute<AboutController> {
+    parametersOf(hasDebugPackageName, privacyPolicyUrl)
 }
 
 @Inject
 internal class AboutController(
     private val buildInfo: BuildInfo,
+    @Param private val hasDebugPackageName: Boolean,
     @Param private val privacyPolicyUrl: String?
 ) : PrefsController() {
 
@@ -28,6 +32,7 @@ internal class AboutController(
         AboutSection(
             buildInfo,
             navigator,
+            hasDebugPackageName,
             privacyPolicyUrl
         )
     }
@@ -37,6 +42,7 @@ internal class AboutController(
 fun EpoxyController.AboutSection(
     buildInfo: BuildInfo,
     navigator: Navigator,
+    hasDebugPackageName: Boolean = buildInfo.isDebug,
     privacyPolicyUrl: String? = null
 ) {
     Preference {
@@ -44,8 +50,13 @@ fun EpoxyController.AboutSection(
         titleRes(R.string.about_rate)
         summaryRes(R.string.about_rate_summary)
         onClick {
+            val packageName = if (hasDebugPackageName && buildInfo.isDebug) {
+                buildInfo.packageName.removeSuffix(".debug")
+            } else {
+                buildInfo.packageName
+            }
             navigator.push(
-                urlRoute("https://play.google.com/store/apps/details?id=${buildInfo.packageName}")
+                urlRoute("https://play.google.com/store/apps/details?id=$packageName")
             )
             return@onClick true
         }
