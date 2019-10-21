@@ -78,7 +78,7 @@ inline fun <reified T : ListenableWorker> Module.bindWorker(
 
 inline fun <reified T : ListenableWorker> BindingContext<T>.bindWorker(): BindingContext<T> {
     intoMap(
-        mapKeyType = typeOf<String>(),
+        mapKeyType = typeOf(),
         mapValueType = typeOf<ListenableWorker>(),
         entryKey = T::class.java.name,
         mapName = WorkersMap

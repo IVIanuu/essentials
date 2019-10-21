@@ -36,7 +36,8 @@ val listRoute = controllerRoute<ListController>(options = controllerRouteOptions
 @Inject
 class ListController : com.ivianuu.essentials.ui.simple.ListController() {
 
-    override val toolbarTitle get() = "List"
+    override val toolbarTitle: String
+        get() = "List"
 
     override val toolbarMenu: PopupMenu<*>?
         get() = PopupMenu(

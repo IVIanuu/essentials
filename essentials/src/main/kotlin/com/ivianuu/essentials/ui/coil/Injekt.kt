@@ -77,19 +77,18 @@ inline fun <reified F : Fetcher<T>, reified T : Any> Module.fetcher(
     type: KClass<T>,
     name: Any? = null,
     noinline definition: Definition<F>
-): BindingContext<F> = factory(name = name, definition = definition).bindFetcher<F, T>(type)
+): BindingContext<F> = factory(name = name, definition = definition).bindFetcher(type)
 
 inline fun <reified F : Fetcher<T>, reified T : Any> Module.bindFetcher(
     type: KClass<T>,
     name: Any? = null
 ) {
-    withBinding<F>(name) { bindFetcher<F, T>(type) }
+    withBinding<F>(name) { bindFetcher(type) }
 }
 
 inline fun <reified F : Fetcher<T>, reified T : Any> BindingContext<F>.bindFetcher(type: KClass<T>): BindingContext<F> {
-    module.factory<FetcherBinding<T>> {
-        FetcherBinding<T>(fetcher = get<F>(), type = type).also {
-        }
+    module.factory {
+        FetcherBinding(fetcher = get<F>(), type = type)
     }.also { bbc ->
         module.set<FetcherBinding<*>>(Fetchers) {
             add(bbc.key, false)
@@ -115,18 +114,18 @@ inline fun <reified M : Mapper<T, *>, reified T : Any> Module.mapper(
     type: KClass<T>,
     name: Any? = null,
     noinline definition: Definition<M>
-): BindingContext<M> = factory(name = name, definition = definition).bindMapper<M, T>(type)
+): BindingContext<M> = factory(name = name, definition = definition).bindMapper(type)
 
 inline fun <reified M : Mapper<T, *>, reified T : Any> Module.bindMapper(
     type: KClass<T>,
     name: Any? = null
 ) {
-    withBinding<M>(name) { bindMapper<M, T>(type) }
+    withBinding<M>(name) { bindMapper(type) }
 }
 
 inline fun <reified M : Mapper<T, *>, reified T : Any> BindingContext<M>.bindMapper(type: KClass<T>): BindingContext<M> {
-    module.factory<MapperBinding<T>> {
-        MapperBinding<T>(mapper = get<M>(), type = type)
+    module.factory {
+        MapperBinding(mapper = get<M>(), type = type)
     }.also { bbc ->
         module.set<MapperBinding<*>>(Mappers) {
             add(bbc.key, false)
@@ -153,20 +152,20 @@ inline fun <reified M : MeasuredMapper<T, *>, reified T : Any> Module.measuredMa
     type: KClass<T>,
     name: Any? = null,
     noinline definition: Definition<M>
-): BindingContext<M> = factory(name = name, definition = definition).bindMeasuredMapper<M, T>(type)
+): BindingContext<M> = factory(name = name, definition = definition).bindMeasuredMapper(type)
 
 inline fun <reified M : MeasuredMapper<T, *>, reified T : Any> Module.bindMeasuredMapper(
     type: KClass<T>,
     name: Any? = null
 ) {
-    withBinding<M>(name) { bindMeasuredMapper<M, T>(type) }
+    withBinding<M>(name) { bindMeasuredMapper(type) }
 }
 
 inline fun <reified M : MeasuredMapper<T, *>, reified T : Any> BindingContext<M>.bindMeasuredMapper(
     type: KClass<T>
 ): BindingContext<M> {
-    module.factory<MeasuredMapperBinding<T>> {
-        MeasuredMapperBinding<T>(mapper = get<M>(), type = type)
+    module.factory {
+        MeasuredMapperBinding(mapper = get<M>(), type = type)
     }.also { bbc ->
         module.set<MeasuredMapperBinding<*>>(MeasuredMappers) {
             add(bbc.key, false)

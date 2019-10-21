@@ -31,7 +31,7 @@ import kotlinx.coroutines.withContext
 @ApplicationScope
 class TwilightController(
     private val dispatchers: AppDispatchers,
-    private val twilightPrefs: TwilightPrefs
+    twilightPrefs: TwilightPrefs
 ) : AppService {
 
     init {
