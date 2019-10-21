@@ -12,6 +12,7 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/buildSrc" />
             <option value="$PROJECT_DIR$/essentials" />
+            <option value="$PROJECT_DIR$/essentials-about" />
             <option value="$PROJECT_DIR$/essentials-apps" />
             <option value="$PROJECT_DIR$/essentials-apps-coil" />
             <option value="$PROJECT_DIR$/essentials-apps-ui" />

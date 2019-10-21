@@ -37,6 +37,7 @@ android {
 
 dependencies {
     implementation(project(":essentials"))
+    implementation(project(":essentials-about"))
     implementation(project(":essentials-apps"))
     implementation(project(":essentials-apps-coil"))
     implementation(project(":essentials-apps-ui"))

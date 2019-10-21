@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.sample.ui.counter
 
+import com.ivianuu.essentials.about.aboutRoute
 import com.ivianuu.essentials.hidenavbar.NavBarConfig
 import com.ivianuu.essentials.hidenavbar.NavBarController
 import com.ivianuu.essentials.sample.ui.checkapps.checkAppsRoute
@@ -24,6 +25,7 @@ import com.ivianuu.essentials.sample.work.WorkScheduler
 import com.ivianuu.essentials.securesettings.SecureSettingsHelper
 import com.ivianuu.essentials.securesettings.secureSettingsRoute
 import com.ivianuu.essentials.twilight.twilightSettingsRoute
+import com.ivianuu.essentials.ui.changehandler.verticalFade
 import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.director.controllerRouteOptions
@@ -78,6 +80,14 @@ class CounterViewModel(
         } else {
             navigator.push(secureSettingsRoute(true))
         }
+    }
+
+    fun aboutClicked() {
+        navigator.push(
+            aboutRoute("https://www.google.com").copy(
+                options = controllerRouteOptions().verticalFade()
+            )
+        )
     }
 }
 
