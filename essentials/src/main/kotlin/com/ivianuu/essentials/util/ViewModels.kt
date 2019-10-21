@@ -5,6 +5,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import kotlin.reflect.KClass
 
+// todo remove
+
 val KClass<out ViewModel>.defaultViewModelKey
     get() = "androidx.lifecycle.ViewModelProvider.DefaultKey:" + java.canonicalName
 
