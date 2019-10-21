@@ -37,11 +37,11 @@ import kotlinx.coroutines.withContext
  */
 class UnlockScreenActivity : EsActivity() {
 
-    private val broadcastFactory by inject<BroadcastFactory>()
-    private val dispatchers by inject<AppDispatchers>()
-    private val keyguardManager by inject<KeyguardManager>()
-    private val screenUnlocker by inject<ScreenUnlocker>()
-    private val systemBuildInfo by inject<SystemBuildInfo>()
+    private val broadcastFactory: BroadcastFactory by inject()
+    private val dispatchers: AppDispatchers by inject()
+    private val keyguardManager: KeyguardManager by inject()
+    private val screenUnlocker: ScreenUnlocker by inject()
+    private val systemBuildInfo: SystemBuildInfo by inject()
 
     @SuppressLint("NewApi")
     override fun onCreate(savedInstanceState: Bundle?) {

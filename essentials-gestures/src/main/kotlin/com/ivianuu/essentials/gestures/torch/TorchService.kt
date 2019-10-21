@@ -35,12 +35,12 @@ import com.ivianuu.injekt.inject
  */
 class TorchService : EsService() {
 
-    private val cameraManager by inject<CameraManager>()
-    private val notificationManager by inject<NotificationManager>()
-    private val systemBuildInfo by inject<SystemBuildInfo>()
-    private val stringProvider by inject<StringProvider>()
-    private val toaster by inject<Toaster>()
-    private val torchManager by inject<TorchManager>()
+    private val cameraManager: CameraManager by inject()
+    private val notificationManager: NotificationManager by inject()
+    private val systemBuildInfo: SystemBuildInfo by inject()
+    private val stringProvider: StringProvider by inject()
+    private val toaster: Toaster by inject()
+    private val torchManager: TorchManager by inject()
 
     override fun onCreate() {
         super.onCreate()

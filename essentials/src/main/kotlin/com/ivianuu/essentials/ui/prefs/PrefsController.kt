@@ -37,7 +37,7 @@ abstract class PrefsController : ListController() {
         EpoxyPrefsPlugins.getDefaultContext(requireActivity().applicationContext)
     }
 
-    private val prefs by inject<SharedPreferences>()
+    private val prefs: SharedPreferences by inject()
 
     private val changeListener = SharedPreferences.OnSharedPreferenceChangeListener { _, _ ->
         postInvalidate()

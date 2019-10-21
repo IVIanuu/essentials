@@ -51,7 +51,7 @@ class AppPickerController(@Param private val launchableOnly: Boolean) : ListCont
     override val toolbarTitleRes: Int
         get() = R.string.es_title_app_picker
 
-    private val imageLoader by inject<ImageLoader>()
+    private val imageLoader: ImageLoader by inject()
 
     private val viewModel: AppPickerViewModel by injectMvRxViewModel {
         parametersOf(launchableOnly)

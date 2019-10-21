@@ -26,7 +26,7 @@ import com.ivianuu.injekt.inject
 @TargetApi(24)
 abstract class StateTileService<T> : EsTileService() {
 
-    private val stringProvider by inject<StringProvider>()
+    private val stringProvider: StringProvider by inject()
 
     abstract fun createTile(state: T): Tile
 

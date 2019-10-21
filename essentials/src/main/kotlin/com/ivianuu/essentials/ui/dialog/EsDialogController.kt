@@ -45,7 +45,7 @@ abstract class EsDialogController : DialogController(), InjektTrait, MvRxView {
         }
     }
 
-    val navigator by inject<Navigator>()
+    val navigator: Navigator by inject()
 
     private var popped = false
 

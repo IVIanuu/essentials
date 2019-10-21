@@ -61,9 +61,9 @@ abstract class CheckableAppsController : ListController() {
     protected open val launchableAppsOnly: Boolean
         get() = false
 
-    private val imageLoader by inject<ImageLoader>()
+    private val imageLoader: ImageLoader by inject()
 
-    private val viewModel by mvRxViewModel<CheckableAppsViewModel> {
+    private val viewModel: CheckableAppsViewModel by mvRxViewModel {
         get { parametersOf(launchableAppsOnly) }
     }
 

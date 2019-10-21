@@ -54,7 +54,7 @@ abstract class EsController : Controller(), InjektTrait, LayoutContainer, MvRxVi
         get() = _containerView
     private var _containerView: View? = null
 
-    val navigator by inject<Navigator>()
+    val navigator: Navigator by inject()
 
     protected open val layoutRes: Int get() = -1
 

@@ -46,8 +46,8 @@ abstract class EsActivity : AppCompatActivity(), InjektTrait, MvRxView {
         }
     }
 
-    val navigator by inject<Navigator>()
-    private val controllerRenderer by inject<ControllerRenderer>()
+    val navigator: Navigator by inject()
+    private val controllerRenderer: ControllerRenderer by inject()
 
     protected open val layoutRes: Int get() = 0
 
