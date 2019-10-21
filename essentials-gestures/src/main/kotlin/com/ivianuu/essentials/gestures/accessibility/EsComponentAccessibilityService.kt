@@ -20,10 +20,11 @@ import android.view.accessibility.AccessibilityEvent
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.accessibility.EsAccessibilityService
 import com.ivianuu.essentials.gestures.esGesturesModule
+import com.ivianuu.injekt.inject
 
 abstract class EsComponentAccessibilityService : EsAccessibilityService() {
 
-    private val components: AccessibilityComponent> by inject<Set()
+    private val components: Set<AccessibilityComponent> by inject()
 
     override fun modules() = super.modules() + listOf(esGesturesModule)
 
