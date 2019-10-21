@@ -17,7 +17,7 @@
 plugins {
     id("com.android.application")
     kotlin("android")
-    //kotlin("kapt")
+    kotlin("kapt")
     id("kotlin-android-extensions")
 }
 
@@ -48,7 +48,7 @@ dependencies {
     implementation(project(":essentials-shell"))
     implementation(project(":essentials-work"))
 
-    //kapt(project(":essentials-compiler"))
+    kapt(project(":essentials-compiler"))
 
     testImplementation(project(":essentials-test"))
 }

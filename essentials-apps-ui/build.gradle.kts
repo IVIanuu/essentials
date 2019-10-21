@@ -17,7 +17,7 @@
 plugins {
     id("com.android.library")
     kotlin("android")
-    //kotlin("kapt")
+    kotlin("kapt")
     id("kotlin-android-extensions")
 }
 
@@ -33,5 +33,5 @@ dependencies {
     api(project(":essentials"))
     api(project(":essentials-apps"))
     api(project(":essentials-apps-coil"))
-    //kapt(project(":essentials-compiler"))
+    kapt(project(":essentials-compiler"))
 }

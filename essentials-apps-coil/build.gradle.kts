@@ -17,7 +17,7 @@
 plugins {
     id("com.android.library")
     kotlin("android")
-    //kotlin("kapt")
+    kotlin("kapt")
 }
 
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/android-build-lib.gradle")
@@ -30,6 +30,6 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/mv
 
 dependencies {
     api(project(":essentials"))
-    //kapt(project(":essentials-compiler"))
+    kapt(project(":essentials-compiler"))
     api(Deps.coil)
 }

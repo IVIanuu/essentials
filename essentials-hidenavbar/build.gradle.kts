@@ -17,7 +17,7 @@
 plugins {
     id("com.android.library")
     kotlin("android")
-    //kotlin("kapt")
+    kotlin("kapt")
     id("kotlin-android-extensions")
 }
 
@@ -32,5 +32,5 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/mv
 dependencies {
     api(project(":essentials"))
     api(project(":essentials-securesettings"))
-    //kapt(project(":essentials-compiler"))
+    kapt(project(":essentials-compiler"))
 }

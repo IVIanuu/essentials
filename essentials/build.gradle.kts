@@ -17,7 +17,7 @@
 plugins {
     id("com.android.library")
     kotlin("android")
-    //kotlin("kapt")
+    kotlin("kapt")
 }
 
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/android-build-lib.gradle")
@@ -52,7 +52,7 @@ dependencies {
     api(Deps.epoxy)
     api(Deps.epoxyPrefs)
 
-    //kapt(project(":essentials-compiler"))
+    kapt(project(":essentials-compiler"))
 
     api(Deps.injekt)
     api(Deps.injektAndroid)
