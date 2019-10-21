@@ -20,11 +20,14 @@ import com.airbnb.epoxy.EpoxyController
 import com.ivianuu.epoxyprefs.RadioButtonPreference
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.navigation.director.controllerRoute
+import com.ivianuu.essentials.ui.navigation.director.defaultControllerRouteOptionsOrNull
 import com.ivianuu.essentials.ui.prefs.PrefsController
 import com.ivianuu.essentials.util.andTrue
 import com.ivianuu.injekt.Inject
 
-val twilightSettingsRoute = controllerRoute<TwilightSettingsController>()
+val twilightSettingsRoute = controllerRoute<TwilightSettingsController>(
+    options = defaultControllerRouteOptionsOrNull()
+)
 
 @Inject
 class TwilightSettingsController(private val prefs: TwilightPrefs) : PrefsController() {

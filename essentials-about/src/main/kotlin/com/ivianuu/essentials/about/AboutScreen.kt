@@ -6,6 +6,7 @@ import com.ivianuu.epoxyprefs.Preference
 import com.ivianuu.essentials.ui.common.urlRoute
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.director.controllerRoute
+import com.ivianuu.essentials.ui.navigation.director.defaultControllerRouteOptionsOrNull
 import com.ivianuu.essentials.ui.prefs.PrefsController
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.injekt.Inject
@@ -15,7 +16,9 @@ import com.ivianuu.injekt.parametersOf
 fun aboutRoute(
     hasDebugPackageName: Boolean = true,
     privacyPolicyUrl: String? = null
-) = controllerRoute<AboutController> {
+) = controllerRoute<AboutController>(
+    options = defaultControllerRouteOptionsOrNull()
+) {
     parametersOf(hasDebugPackageName, privacyPolicyUrl)
 }
 

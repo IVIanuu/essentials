@@ -19,6 +19,7 @@ package com.ivianuu.essentials.securesettings
 import androidx.lifecycle.lifecycleScope
 import com.ivianuu.epoxyprefs.Preference
 import com.ivianuu.essentials.ui.navigation.director.controllerRoute
+import com.ivianuu.essentials.ui.navigation.director.defaultControllerRouteOptionsOrNull
 import com.ivianuu.essentials.ui.prefs.PrefsController
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.essentials.util.StringProvider
@@ -31,7 +32,9 @@ import kotlinx.coroutines.launch
  * Asks the user for the secure settings permission
  */
 val secureSettingsInstructionsRoute =
-    controllerRoute<SecureSettingsPcInstructionsController>()
+    controllerRoute<SecureSettingsPcInstructionsController>(
+        options = defaultControllerRouteOptionsOrNull()
+    )
 
 @Inject
 internal class SecureSettingsPcInstructionsController(

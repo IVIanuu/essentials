@@ -30,6 +30,7 @@ import com.ivianuu.essentials.ui.mvrx.epoxy.mvRxEpoxyController
 import com.ivianuu.essentials.ui.mvrx.injekt.injectMvRxViewModel
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.director.controllerRoute
+import com.ivianuu.essentials.ui.navigation.director.defaultControllerRouteOptionsOrNull
 import com.ivianuu.essentials.ui.simple.ListController
 import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.Inject
@@ -40,7 +41,9 @@ import kotlinx.android.synthetic.main.es_item_app.*
 
 fun appPickerRoute(
     launchableOnly: Boolean = false
-) = controllerRoute<AppPickerController> { parametersOf(launchableOnly) }
+) = controllerRoute<AppPickerController>(options = defaultControllerRouteOptionsOrNull()) {
+    parametersOf(launchableOnly)
+}
 
 /**
  * App picker controller

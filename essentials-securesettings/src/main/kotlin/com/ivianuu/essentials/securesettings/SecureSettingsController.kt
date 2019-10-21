@@ -31,7 +31,9 @@ import kotlinx.coroutines.launch
  * Asks the user for the secure settings permission
  */
 fun secureSettingsRoute(showHideNavBarHint: Boolean = false) =
-    controllerRoute<SecureSettingsController> {
+    controllerRoute<SecureSettingsController>(
+        options = defaultControllerRouteOptionsOrNull()
+    ) {
         parametersOf(showHideNavBarHint)
     }
 
