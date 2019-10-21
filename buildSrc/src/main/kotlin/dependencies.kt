@@ -34,147 +34,119 @@ object Publishing {
     const val version = "${Build.versionName}-dev191"
 }
 
-object Versions {
-    const val androidGradlePlugin = "3.5.1"
-
-    const val androidxActivity = "1.0.0"
-    const val androidxAppCompat = "1.1.0"
-    const val androidxCardView = "1.0.0"
-    const val androidxCore = "1.1.0"
-    const val androidxConstraintLayout = "2.0.0-beta2"
-    const val androidxFragment = "1.1.0"
-    const val androidxLifecycle = "2.2.0-alpha05"
-    const val androidxLifecycleViewModelSavedState = "1.0.0-alpha05"
-    const val androidxWork = "2.1.0"
-
-    const val androidxTestCore = "1.2.0"
-    const val androidxTestJunit = "1.1.1"
-    const val androidxTestRules = "1.2.0"
-    const val androidxTestRunner = "1.2.0"
-
-    const val bintray = "1.8.4"
-    const val coil = "0.7.0"
-    const val coroutines = "1.3.2"
-    const val director = "0.0.1-dev40"
-    const val epoxy = "3.8.0"
-    const val epoxyPrefs = "0.0.1-dev-21"
-    const val injekt = "0.0.1-dev71"
-    const val junit = "4.12"
-    const val kotlin = "1.3.50"
-    const val kotlinFlowExtensions = "0.0.2"
-    const val kPrefs = "0.0.1-dev17" // todo remove
-    const val kSettings = "0.0.1-dev12" // todo remove
-    const val mavenGradle = "2.1"
-    const val materialComponents = "1.1.0-beta01"
-    const val materialDialogs = "3.1.0"
-    const val mockitoKotlin = "2.0.0"
-    const val roboelectric = "4.0.2"
-    const val scopes = "0.0.1-dev26"
-    const val superUser = "1.0.0.+"
-    const val timber = "4.7.1"
-    const val timberKt = "1.5.1"
-}
-
 object Deps {
-    const val androidGradlePlugin = "com.android.tools.build:gradle:${Versions.androidGradlePlugin}"
+    const val androidGradlePlugin = "com.android.tools.build:gradle:3.5.1"
 
-    const val androidxActivity = "androidx.activity:activity-ktx:${Versions.androidxActivity}"
-    const val androidxConstraintLayout =
-        "androidx.constraintlayout:constraintlayout:${Versions.androidxConstraintLayout}"
-    const val androidxAppCompat = "androidx.appcompat:appcompat:${Versions.androidxAppCompat}"
-    const val androidxCardView = "androidx.cardview:cardview:${Versions.androidxCardView}"
-    const val androidxCore = "androidx.core:core-ktx:${Versions.androidxCore}"
-    const val androidxLifecycleLiveData =
-        "androidx.lifecycle:lifecycle-livedata-ktx:${Versions.androidxLifecycle}"
-    const val androidxLifecycleReactiveStreams =
-        "androidx.lifecycle:lifecycle-reactivestreams-ktx:${Versions.androidxLifecycle}"
+    object AndroidX {
+        const val activity = "androidx.activity:activity-ktx:1.0.0"
+        const val appCompat = "androidx.appcompat:appcompat:1.1.0"
+        const val cardView = "androidx.cardview:cardview:1.0.0"
+        const val constraintLayout = "androidx.constraintlayout:constraintlayout:2.0.0-beta2"
+        const val core = "androidx.core:core-ktx:1.1.0"
 
-    const val androidxLifecycleRuntime =
-        "androidx.lifecycle:lifecycle-runtime-ktx:${Versions.androidxLifecycle}"
-    const val androidxLifecycleViewModel =
-        "androidx.lifecycle:lifecycle-viewmodel-ktx:${Versions.androidxLifecycle}"
-    const val androidxLifecycleViewModelSavedState =
-        "androidx.lifecycle:lifecycle-viewmodel-savedstate:${Versions.androidxLifecycleViewModelSavedState}"
-    const val androidxWork = "androidx.work:work-runtime-ktx:${Versions.androidxWork}"
+        object Lifecycle {
+            private const val version = "2.2.0-alpha05"
+            const val runtime = "androidx.lifecycle:lifecycle-runtime-ktx:$version"
+            const val liveData = "androidx.lifecycle:lifecycle-livedata-ktx:$version"
+            const val reactiveStreams = "androidx.lifecycle:lifecycle-reactivestreams-ktx:$version"
 
-    const val androidxTestCore = "androidx.test:core:${Versions.androidxTestCore}"
-    const val androidxTestJunit = "androidx.test.ext:junit:${Versions.androidxTestJunit}"
-    const val androidxTestRules = "androidx.test:rules:${Versions.androidxTestRules}"
-    const val androidxTestRunner = "androidx.test:runner:${Versions.androidxTestRunner}"
+            object ViewModel {
+                const val viewModel = "androidx.lifecycle:lifecycle-viewmodel-ktx:$version"
+                const val savedState = "androidx.lifecycle:lifecycle-viewmodel-savedstate:1.0.0-alpha05"
+            }
+        }
 
-    const val bintrayGradlePlugin =
-        "com.jfrog.bintray.gradle:gradle-bintray-plugin:${Versions.bintray}"
+        object Test {
+            const val core = "androidx.test:core:1.2.0"
+            const val junit = "androidx.test.ext:junit:1.1.1"
+            const val rules = "androidx.test:rules:1.2.0"
+            const val runner = "androidx.test:runner:1.2.0"
+        }
 
-    const val coil = "io.coil-kt:coil:${Versions.coil}"
+        const val work = "androidx.work:work-runtime-ktx:2.1.0"
+    }
 
-    const val coroutinesAndroid =
-        "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.coroutines}"
-    const val coroutinesCore =
-        "org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.coroutines}"
-    const val coroutinesTest =
-        "org.jetbrains.kotlinx:kotlinx-coroutines-test:${Versions.coroutines}"
+    const val bintrayGradlePlugin = "com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4"
 
-    const val director = "com.ivianuu.director:director:${Versions.director}"
-    const val directorCommon = "com.ivianuu.director:director-common:${Versions.director}"
+    const val coil = "io.coil-kt:coil:0.7.0"
 
-    const val epoxy = "com.airbnb.android:epoxy:${Versions.epoxy}"
-    const val epoxyPrefs = "com.ivianuu.epoxyprefs:epoxyprefs:${Versions.epoxyPrefs}"
+    object Coroutines {
+        private const val version = "1.3.2"
+        const val android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:$version"
+        const val core = "org.jetbrains.kotlinx:kotlinx-coroutines-core:$version"
+        const val test = "org.jetbrains.kotlinx:kotlinx-coroutines-test:$version"
+    }
 
-    const val injekt = "com.ivianuu.injekt:injekt:${Versions.injekt}"
-    const val injektAndroid = "com.ivianuu.injekt:injekt-android:${Versions.injekt}"
-    const val injektCompiler = "com.ivianuu.injekt:injekt-compiler:${Versions.injekt}"
+    object Director {
+        private const val version = "0.0.1-dev40"
+        const val director = "com.ivianuu.director:director:$version"
+        const val common = "com.ivianuu.director:director-common:$version"
+    }
 
-    const val junit = "junit:junit:${Versions.junit}"
+    const val epoxy = "com.airbnb.android:epoxy:3.8.0"
 
-    const val kotlinGradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.kotlin}"
-    const val kotlinStdLib = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${Versions.kotlin}"
+    const val epoxyPrefs = "com.ivianuu.epoxyprefs:epoxyprefs:0.0.1-dev-21"
 
-    const val kotlinFlowExtensions =
-        "com.github.akarnokd:kotlin-flow-extensions:${Versions.kotlinFlowExtensions}"
+    object Injekt {
+        private const val version = "0.0.1-dev71"
+        const val injekt = "com.ivianuu.injekt:injekt:$version"
+        const val android = "com.ivianuu.injekt:injekt-android:$version"
+        const val compiler = "com.ivianuu.injekt:injekt-compiler:$version"
+    }
 
-    const val kPrefs = "com.ivianuu.kprefs:kprefs:${Versions.kPrefs}"
-    const val kPrefsCommon = "com.ivianuu.kprefs:kprefs-common:${Versions.kPrefs}"
-    const val kPrefsCoroutines = "com.ivianuu.kprefs:kprefs-coroutines:${Versions.kPrefs}"
-    const val kPrefsLiveData = "com.ivianuu.kprefs:kprefs-livedata:${Versions.kPrefs}"
+    const val junit = "junit:junit:4.12"
 
-    const val kSettings =
-        "com.ivianuu.ksettings:ksettings:${Versions.kSettings}"
-    const val kSettingsCoroutines =
-        "com.ivianuu.ksettings:ksettings-coroutines:${Versions.kSettings}"
-    const val kSettingsLiveData =
-        "com.ivianuu.ksettings:ksettings-livedata:${Versions.kSettings}"
+    object Kotlin {
+        private const val version = "1.3.50"
+        const val gradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$version"
+        const val stdlib = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$version"
+    }
 
-    const val materialComponents =
-        "com.google.android.material:material:${Versions.materialComponents}"
+    const val kotlinFlowExtensions = "com.github.akarnokd:kotlin-flow-extensions:0.0.2"
 
-    const val materialDialogsCore =
-        "com.afollestad.material-dialogs:core:${Versions.materialDialogs}"
-    const val materialDialogsBottomSheets =
-        "com.afollestad.material-dialogs:bottomsheets:${Versions.materialDialogs}"
-    const val materialDialogsColor =
-        "com.afollestad.material-dialogs:color:${Versions.materialDialogs}"
-    const val materialDialogsDateTime =
-        "com.afollestad.material-dialogs:datetime:${Versions.materialDialogs}"
-    const val materialDialogsFiles =
-        "com.afollestad.material-dialogs:files:${Versions.materialDialogs}"
-    const val materialDialogsInput =
-        "com.afollestad.material-dialogs:input:${Versions.materialDialogs}"
-    const val materialDialogsLifecycle =
-        "com.afollestad.material-dialogs:lifecycle:${Versions.materialDialogs}"
+    // todo remove
+    object KPrefs {
+        private const val version = "0.0.1-dev17"
+        const val kPrefs = "com.ivianuu.kprefs:kprefs:$version"
+        const val common = "com.ivianuu.kprefs:kprefs-common:$version"
+        const val coroutines = "com.ivianuu.kprefs:kprefs-coroutines:$version"
+    }
 
-    const val mavenGradlePlugin =
-        "com.github.dcendents:android-maven-gradle-plugin:${Versions.mavenGradle}"
+    // todo remove
+    object KSettings {
+        private const val version = "0.0.1-dev12"
+        const val kSettings = "com.ivianuu.ksettings:ksettings:$version"
+        const val coroutines = "com.ivianuu.ksettings:ksettings-coroutines:$version"
+    }
 
-    const val mockitoKotlin = "com.nhaarman.mockitokotlin2:mockito-kotlin:${Versions.mockitoKotlin}"
+    const val materialComponents = "com.google.android.material:material:1.1.0-beta01"
 
-    const val roboelectric = "org.robolectric:robolectric:${Versions.roboelectric}"
+    object MaterialDialogs {
+        private const val version = "3.1.0"
+        const val core = "com.afollestad.material-dialogs:core:$version"
+        const val bottomSheets = "com.afollestad.material-dialogs:bottomsheets:$version"
+        const val color = "com.afollestad.material-dialogs:color:$version"
+        const val dateTime = "com.afollestad.material-dialogs:datetime:$version"
+        const val files = "com.afollestad.material-dialogs:files:$version"
+        const val input = "com.afollestad.material-dialogs:input:$version"
+        const val lifecycle = "com.afollestad.material-dialogs:lifecycle:$version"
+    }
 
-    const val scopes = "com.ivianuu.scopes:scopes:${Versions.scopes}"
-    const val scopesAndroid = "com.ivianuu.scopes:scopes-android:${Versions.scopes}"
-    const val scopesCoroutines = "com.ivianuu.scopes:scopes-coroutines:${Versions.scopes}"
+    const val mavenGradlePlugin = "com.github.dcendents:android-maven-gradle-plugin:2.1"
 
-    const val superUser = "eu.chainfire:libsuperuser:${Versions.superUser}"
+    const val mockitoKotlin = "com.nhaarman.mockitokotlin2:mockito-kotlin:2.0.0"
 
-    const val timber = "com.jakewharton.timber:timber:${Versions.timber}"
-    const val timberKt = "com.github.ajalt:timberkt:${Versions.timberKt}"
+    const val roboelectric = "org.robolectric:robolectric:4.0.2"
+
+    object Scopes {
+        private const val version = "0.0.1-dev26"
+        const val scopes = "com.ivianuu.scopes:scopes:$version"
+        const val android = "com.ivianuu.scopes:scopes-android:$version"
+        const val coroutines = "com.ivianuu.scopes:scopes-coroutines:$version"
+    }
+
+    const val superUser = "eu.chainfire:libsuperuser:1.0.0.+"
+
+    const val timberKt = "com.github.ajalt:timberkt:1.5.1"
+
 }

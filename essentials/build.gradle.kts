@@ -29,60 +29,59 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/mvn-publish.gradle")
 
 dependencies {
-    api(Deps.androidxActivity)
-    api(Deps.androidxAppCompat)
-    api(Deps.androidxCardView)
-    api(Deps.androidxCore)
-    api(Deps.androidxLifecycleLiveData)
-    api(Deps.androidxLifecycleReactiveStreams)
-    api(Deps.androidxLifecycleRuntime)
-    api(Deps.androidxLifecycleViewModel)
-    api(Deps.androidxLifecycleViewModelSavedState)
+    api(Deps.AndroidX.activity)
+    api(Deps.AndroidX.appCompat)
+    api(Deps.AndroidX.cardView)
+    api(Deps.AndroidX.constraintLayout)
+    api(Deps.AndroidX.core)
+    api(Deps.AndroidX.Lifecycle.liveData)
+    api(Deps.AndroidX.Lifecycle.reactiveStreams)
+    api(Deps.AndroidX.Lifecycle.runtime)
+    api(Deps.AndroidX.Lifecycle.ViewModel.viewModel)
+    api(Deps.AndroidX.Lifecycle.ViewModel.savedState)
 
-    api(Deps.coroutinesAndroid)
-    api(Deps.coroutinesCore)
-
-    api(Deps.androidxConstraintLayout)
+    api(Deps.Coroutines.android)
+    api(Deps.Coroutines.core)
 
     api(Deps.coil)
 
-    api(Deps.director)
-    api(Deps.directorCommon)
+    api(Deps.Director.director)
+    api(Deps.Director.common)
 
     api(Deps.epoxy)
+
     api(Deps.epoxyPrefs)
 
     kapt(project(":essentials-compiler"))
 
-    api(Deps.injekt)
-    api(Deps.injektAndroid)
+    api(Deps.Injekt.injekt)
+    api(Deps.Injekt.android)
 
-    api(Deps.kotlinStdLib)
+    api(Deps.Kotlin.stdlib)
 
     api(Deps.kotlinFlowExtensions)
 
-    api(Deps.kPrefs)
-    api(Deps.kPrefsCommon)
-    api(Deps.kPrefsCoroutines)
+    api(Deps.KPrefs.kPrefs)
+    api(Deps.KPrefs.common)
+    api(Deps.KPrefs.coroutines)
 
-    api(Deps.kSettings)
-    api(Deps.kSettingsCoroutines)
+    api(Deps.KSettings.kSettings)
+    api(Deps.KSettings.coroutines)
 
     api(Deps.materialComponents)
 
-    api(Deps.materialDialogsCore)
-    api(Deps.materialDialogsBottomSheets)
-    api(Deps.materialDialogsColor)
-    api(Deps.materialDialogsDateTime)
-    api(Deps.materialDialogsFiles)
-    api(Deps.materialDialogsInput)
-    api(Deps.materialDialogsLifecycle)
+    api(Deps.MaterialDialogs.bottomSheets)
+    api(Deps.MaterialDialogs.color)
+    api(Deps.MaterialDialogs.core)
+    api(Deps.MaterialDialogs.dateTime)
+    api(Deps.MaterialDialogs.files)
+    api(Deps.MaterialDialogs.input)
+    api(Deps.MaterialDialogs.lifecycle)
 
-    api(Deps.scopes)
-    api(Deps.scopesAndroid)
-    api(Deps.scopesCoroutines)
+    api(Deps.Scopes.scopes)
+    api(Deps.Scopes.android)
+    api(Deps.Scopes.coroutines)
 
-    api(Deps.timber)
     api(Deps.timberKt)
 
 }

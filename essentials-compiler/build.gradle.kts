@@ -24,6 +24,6 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/ja
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/mvn-publish.gradle")
 
 dependencies {
-    api(Deps.kotlinStdLib)
-    api(Deps.injektCompiler)
+    api(Deps.Kotlin.stdlib)
+    api(Deps.Injekt.compiler)
 }
