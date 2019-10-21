@@ -1,6 +1,7 @@
 package com.ivianuu.essentials.about
 
 import com.airbnb.epoxy.EpoxyController
+import com.ivianuu.epoxyprefs.CategoryPreference
 import com.ivianuu.epoxyprefs.Preference
 import com.ivianuu.essentials.ui.common.urlRoute
 import com.ivianuu.essentials.ui.navigation.Navigator
@@ -30,10 +31,11 @@ internal class AboutController(
 
     override fun epoxyController() = epoxyController {
         AboutSection(
-            buildInfo,
-            navigator,
-            hasDebugPackageName,
-            privacyPolicyUrl
+            buildInfo = buildInfo,
+            navigator = navigator,
+            hasDebugPackageName = hasDebugPackageName,
+            showHeader = false,
+            privacyPolicyUrl = privacyPolicyUrl
         )
     }
 
@@ -42,9 +44,17 @@ internal class AboutController(
 fun EpoxyController.AboutSection(
     buildInfo: BuildInfo,
     navigator: Navigator,
+    showHeader: Boolean = false,
     hasDebugPackageName: Boolean = buildInfo.isDebug,
     privacyPolicyUrl: String? = null
 ) {
+    if (showHeader) {
+        CategoryPreference {
+            key("about_header")
+            titleRes(R.string.about_title)
+        }
+    }
+
     Preference {
         key("about_rate")
         titleRes(R.string.about_rate)
