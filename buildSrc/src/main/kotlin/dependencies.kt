@@ -64,7 +64,7 @@ object Deps {
         }
 
         object Ui {
-            private const val version = "0.1.0-dev02"
+            private const val version = "0.0.1-dev01"
             const val material = "androidx.ui:ui-material:$version"
         }
 
