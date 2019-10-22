@@ -19,10 +19,11 @@ package com.ivianuu.essentials.ui.navigation
 import com.github.ajalt.timberkt.d
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.android.ApplicationScope
-import hu.akarnokd.kotlin.flow.BehaviorSubject
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.launch
 
 @ApplicationScope
@@ -33,9 +34,9 @@ class Navigator {
     val backStack: List<Route> get() = synchronized(_backStack) { _backStack }
 
     val flow: Flow<List<Route>>
-        get() = subject
+        get() = channel.openSubscription().consumeAsFlow()
 
-    private val subject = BehaviorSubject(emptyList<Route>())
+    private val channel = ConflatedBroadcastChannel(emptyList<Route>())
 
     private val resultsByRoute = mutableMapOf<Route, CompletableDeferred<Any?>>()
 
@@ -69,7 +70,7 @@ class Navigator {
             _backStack.clear()
             _backStack += newBackStack
         }
-        GlobalScope.launch { subject.emit(newBackStack) }
+        channel.offer(newBackStack)
     }
 
 }

@@ -1,8 +1,9 @@
 package com.ivianuu.essentials.store
 
-import hu.akarnokd.kotlin.flow.PublishSubject
+import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.flow.flow
 import java.io.*
 
@@ -20,7 +21,7 @@ internal class DiskBoxImpl<T>(
     private val serializer: DiskBox.Serializer<T>
 ) : DiskBox<T> {
 
-    private val subject = PublishSubject<T>()
+    private val channel = BroadcastChannel<T>(1)
 
     init {
         check(!file.isDirectory)
@@ -45,7 +46,7 @@ internal class DiskBoxImpl<T>(
             throw IOException("Couldn't write to file $file $serialized", e)
         }
 
-        subject.emit(value)
+        channel.offer(value)
     }
 
     override suspend fun get(): T {
@@ -78,6 +79,8 @@ internal class DiskBoxImpl<T>(
 
     override fun asFlow(): Flow<T> = flow {
         emit(get())
-        subject.collect { emit(get()) }
+        channel.openSubscription()
+            .consumeAsFlow()
+            .collect { emit(it) }
     }
 }

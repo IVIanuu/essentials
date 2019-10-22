@@ -21,13 +21,9 @@ import android.content.Intent
 import com.ivianuu.essentials.messaging.BroadcastFactory
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.android.ApplicationScope
-import hu.akarnokd.kotlin.flow.BehaviorSubject
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.channels.ConflatedBroadcastChannel
+import kotlinx.coroutines.flow.*
 
 /**
  * Provides the torch state
@@ -39,15 +35,15 @@ class TorchManager internal constructor(
     private val context: Context
 ) {
 
-    private val _torchState = BehaviorSubject(false)
+    private val _torchState = ConflatedBroadcastChannel(false)
     val torchState: Flow<Boolean>
-        get() = _torchState
+        get() = _torchState.openSubscription().consumeAsFlow()
 
     init {
         broadcastFactory.create(ACTION_TORCH_STATE_CHANGED)
             .map { it.getBooleanExtra(EXTRA_TORCH_STATE, false) }
             .onStart { TorchService.syncState(context) }
-            .onEach { _torchState.emit(it) }
+            .onEach { _torchState.offer(it) }
             .launchIn(GlobalScope)
     }
 

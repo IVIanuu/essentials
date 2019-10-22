@@ -1,8 +1,9 @@
 package com.ivianuu.essentials.store
 
-import hu.akarnokd.kotlin.flow.PublishSubject
+import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.flow.flow
 import java.util.concurrent.atomic.AtomicReference
 
@@ -13,11 +14,11 @@ fun <T> MemoryBox(initialValue: T): Box<T> = MemoryBoxImpl(initialValue)
 internal class MemoryBoxImpl<T>(initialValue: T) : Box<T> {
 
     private val value = AtomicReference(initialValue)
-    private val subject = PublishSubject<T>()
+    private val channel = BroadcastChannel<T>(1)
 
     override suspend fun set(value: T) {
         this.value.set(value)
-        subject.emit(value)
+        channel.offer(value)
     }
 
     override suspend fun get(): T = value.get()
@@ -29,7 +30,9 @@ internal class MemoryBoxImpl<T>(initialValue: T) : Box<T> {
 
     override fun asFlow(): Flow<T> = flow {
         emit(get())
-        subject.collect { emit(it) }
+        channel.openSubscription()
+            .consumeAsFlow()
+            .collect { emit(it) }
     }
 
 }

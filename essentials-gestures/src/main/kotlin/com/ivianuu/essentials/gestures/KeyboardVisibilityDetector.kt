@@ -21,11 +21,9 @@ import android.view.inputmethod.InputMethodManager
 import com.ivianuu.essentials.gestures.accessibility.AccessibilityComponent
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.android.ApplicationScope
-import hu.akarnokd.kotlin.flow.PublishSubject
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
 import java.lang.reflect.Method
 
 /**
@@ -37,11 +35,13 @@ class KeyboardVisibilityDetector(
     private val inputMethodManager: InputMethodManager
 ) : AccessibilityComponent() {
 
-    private val softInputChanges = PublishSubject<Unit>()
+    private val softInputChanges = BroadcastChannel<Unit>(1)
 
     val keyboardVisible: Flow<Boolean>
         get() {
             return softInputChanges
+                .openSubscription()
+                .consumeAsFlow()
                 .onStart { emit(Unit) }
                 .transformLatest {
                     while (true) {
@@ -74,7 +74,7 @@ class KeyboardVisibilityDetector(
 
         if (event.className != "android.inputmethodservice.SoftInputWindow") return
 
-        GlobalScope.launch { softInputChanges.emit(Unit) }
+        softInputChanges.offer(Unit)
     }
 
     private companion object {

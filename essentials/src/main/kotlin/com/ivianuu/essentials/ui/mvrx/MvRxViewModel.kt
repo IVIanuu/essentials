@@ -19,26 +19,10 @@ package com.ivianuu.essentials.ui.mvrx
 import androidx.lifecycle.viewModelScope
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.base.EsViewModel
-import com.ivianuu.essentials.util.Async
-import com.ivianuu.essentials.util.Fail
-import com.ivianuu.essentials.util.Loading
-import com.ivianuu.essentials.util.Success
-import com.ivianuu.essentials.util.asFail
-import com.ivianuu.essentials.util.asSuccess
-import hu.akarnokd.kotlin.flow.BehaviorSubject
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.CoroutineStart
-import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import com.ivianuu.essentials.util.*
+import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.ConflatedBroadcastChannel
+import kotlinx.coroutines.flow.*
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
 
@@ -47,8 +31,9 @@ import kotlin.coroutines.EmptyCoroutineContext
  */
 abstract class MvRxViewModel<S>(initialState: S) : EsViewModel() {
 
-    private val subject = BehaviorSubject(initialState)
-    val flow: Flow<S> get() = subject
+    private val channel = ConflatedBroadcastChannel(initialState)
+    val flow: Flow<S>
+        get() = channel.openSubscription().consumeAsFlow()
 
     private var _state: S = initialState
     val state: S get() = synchronized(stateLock) { _state }
@@ -61,7 +46,7 @@ abstract class MvRxViewModel<S>(initialState: S) : EsViewModel() {
             val newState = reducer(currentState)
             if (currentState != newState) {
                 synchronized(stateLock) { _state = newState }
-                subject.emit(newState)
+                channel.offer(newState)
             }
         }
     }
@@ -71,7 +56,7 @@ abstract class MvRxViewModel<S>(initialState: S) : EsViewModel() {
     }
 
     protected fun subscribe(consumer: suspend (S) -> Unit): Job =
-        subject.onEach(consumer).launchIn(viewModelScope)
+        flow.onEach(consumer).launchIn(viewModelScope)
 
     protected fun <V> Deferred<V>.execute(
         context: CoroutineContext = EmptyCoroutineContext,
