@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.sample.ui.checkapps
+package com.ivianuu.essentials.sample.ui
 
 import com.ivianuu.essentials.apps.ui.CheckableAppsController
 import com.ivianuu.essentials.ui.navigation.director.controllerRoute

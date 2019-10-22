@@ -80,7 +80,9 @@ private fun AppInfo(
     ListItem(
         text = { Text(app.appName) },
         icon = {
-            CoilImageAny(data = AppIcon(app.packageName)) { Avatar(it) }
+            CoilImageAny(data = AppIcon(app.packageName)) {
+                Avatar(it)
+            }
         },
         onClick = onClick
     )

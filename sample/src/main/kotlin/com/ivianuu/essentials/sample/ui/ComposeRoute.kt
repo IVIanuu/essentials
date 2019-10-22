@@ -1,4 +1,4 @@
-package com.ivianuu.essentials.sample.ui.compose
+package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.unaryPlus
 import androidx.ui.core.Text
