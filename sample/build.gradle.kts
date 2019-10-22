@@ -51,7 +51,7 @@ dependencies {
     implementation(project(":essentials-shell"))
     implementation(project(":essentials-work"))
 
-    kapt(project(":essentials-compiler"))
+    //kapt(project(":essentials-compiler"))
 
     testImplementation(project(":essentials-test"))
 }

@@ -16,58 +16,109 @@
 
 package com.ivianuu.essentials.sample.ui.counter
 
-import android.view.View
-import com.ivianuu.essentials.sample.R
-import com.ivianuu.essentials.ui.base.EsController
-import com.ivianuu.essentials.ui.mvrx.injekt.injectMvRxViewModel
-import com.ivianuu.essentials.ui.navigation.director.controllerRoute
-import com.ivianuu.essentials.ui.navigation.director.controllerRouteOptions
-import com.ivianuu.essentials.ui.navigation.director.horizontal
-import com.ivianuu.injekt.Inject
-import com.ivianuu.injekt.Param
+import androidx.compose.unaryPlus
+import androidx.ui.core.Text
+import androidx.ui.core.dp
+import androidx.ui.foundation.VerticalScroller
+import androidx.ui.layout.Column
+import androidx.ui.layout.CrossAxisAlignment
+import androidx.ui.layout.HeightSpacer
+import androidx.ui.layout.LayoutSize
+import androidx.ui.material.Button
+import androidx.ui.material.themeTextStyle
+import com.ivianuu.essentials.ui.compose.composeControllerRoute
+import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
+import com.ivianuu.essentials.ui.compose.material.Scaffold
+import com.ivianuu.essentials.ui.compose.mvrx.mvRxViewModel
 import com.ivianuu.injekt.parametersOf
-import kotlinx.android.synthetic.main.controller_counter.about
-import kotlinx.android.synthetic.main.controller_counter.app_picker
-import kotlinx.android.synthetic.main.controller_counter.check_apps
-import kotlinx.android.synthetic.main.controller_counter.compose
-import kotlinx.android.synthetic.main.controller_counter.count
-import kotlinx.android.synthetic.main.controller_counter.do_work
-import kotlinx.android.synthetic.main.controller_counter.list_screen
-import kotlinx.android.synthetic.main.controller_counter.nav_bar
-import kotlinx.android.synthetic.main.controller_counter.screen_down
-import kotlinx.android.synthetic.main.controller_counter.screen_up
-import kotlinx.android.synthetic.main.controller_counter.twilight
 
-fun counterRoute(screen: Int) = controllerRoute<CounterController>(
-    options = controllerRouteOptions().horizontal()
-) { parametersOf(screen) }
+fun counterRoute(screen: Int) = composeControllerRoute {
+    Scaffold(
+        appBar = { EsTopAppBar("Counter") },
+        content = {
+            VerticalScroller {
+                Column(
+                    crossAxisSize = LayoutSize.Expand,
+                    crossAxisAlignment = CrossAxisAlignment.Center
+                ) {
+                    val viewModel = +mvRxViewModel<CounterViewModel> {
+                        parametersOf(screen)
+                    }
 
-@Inject
-class CounterController(@Param private val screen: Int) : EsController() {
+                    Text(
+                        text = "Screen: $screen",
+                        style = +themeTextStyle { h3 }
+                    )
 
-    override val layoutRes: Int get() = R.layout.controller_counter
+                    Button(
+                        text = "Screen up",
+                        onClick = { viewModel.screenUpClicked() }
+                    )
 
-    private val viewModel: CounterViewModel by injectMvRxViewModel {
-        parametersOf(screen)
-    }
+                    HeightSpacer(8.dp)
 
-    override fun onViewCreated(view: View) {
-        super.onViewCreated(view)
+                    Button(
+                        text = "Screen down",
+                        onClick = { viewModel.screenDownClicked() }
+                    )
 
-        screen_up.setOnClickListener { viewModel.screenUpClicked() }
-        screen_down.setOnClickListener { viewModel.screenDownClicked() }
-        list_screen.setOnClickListener { viewModel.listScreenClicked() }
-        app_picker.setOnClickListener { viewModel.appPickerClicked() }
-        check_apps.setOnClickListener { viewModel.checkAppsClicked() }
-        do_work.setOnClickListener { viewModel.doWorkClicked() }
-        nav_bar.setOnClickListener { viewModel.navBarClicked() }
-        twilight.setOnClickListener { viewModel.twilightClicked() }
-        compose.setOnClickListener { viewModel.composeClicked() }
-        about.setOnClickListener { viewModel.aboutClicked() }
-    }
+                    HeightSpacer(8.dp)
 
-    override fun invalidate() {
-        count.text = "Screen: ${viewModel.state.screen}"
-    }
+                    Button(
+                        text = "List screen",
+                        onClick = { viewModel.listScreenClicked() }
+                    )
 
+                    HeightSpacer(8.dp)
+
+                    Button(
+                        text = "App picker",
+                        onClick = { viewModel.appPickerClicked() }
+                    )
+
+                    HeightSpacer(8.dp)
+
+                    Button(
+                        text = "Check apps",
+                        onClick = { viewModel.checkAppsClicked() }
+                    )
+
+                    HeightSpacer(8.dp)
+
+                    Button(
+                        text = "Do work",
+                        onClick = { viewModel.doWorkClicked() }
+                    )
+
+                    HeightSpacer(8.dp)
+
+                    Button(
+                        text = "Nav bar",
+                        onClick = { viewModel.navBarClicked() }
+                    )
+
+                    HeightSpacer(8.dp)
+
+                    Button(
+                        text = "Twilight",
+                        onClick = { viewModel.twilightClicked() }
+                    )
+
+                    HeightSpacer(8.dp)
+
+                    Button(
+                        text = "Compose",
+                        onClick = { viewModel.composeClicked() }
+                    )
+
+                    HeightSpacer(8.dp)
+
+                    Button(
+                        text = "About",
+                        onClick = { viewModel.aboutClicked() }
+                    )
+                }
+            }
+        }
+    )
 }
