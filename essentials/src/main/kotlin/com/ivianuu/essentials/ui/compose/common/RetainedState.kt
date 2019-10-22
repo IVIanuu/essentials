@@ -12,13 +12,11 @@ import androidx.compose.frames.writable
 import androidx.compose.memo
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.compose.core.ActivityAmbient
 import com.ivianuu.essentials.util.getViewModel
 import kotlin.reflect.KProperty
 
 fun <T> retainedState(key: Any, init: () -> T) = effectOf<RetainedState<T>> {
-    d { "composing running hey" }
     val activity = +ambient(ActivityAmbient) as ComponentActivity
     val viewModel: RetainedStateViewModel = activity.getViewModel(
         factory = RetainedStateViewModel,
@@ -107,22 +105,7 @@ class RetainedState<T> @PublishedApi internal constructor(
 
 @PublishedApi
 internal class RetainedStateViewModel : ViewModel() {
-
     var value: Any? = this
-        set(value) {
-            field = value
-            d { "retained view model update $value" }
-        }
-
-    init {
-        d { "retained view model init" }
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        d { "retained view model cleared" }
-    }
-
     companion object : ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T =
             RetainedStateViewModel() as T

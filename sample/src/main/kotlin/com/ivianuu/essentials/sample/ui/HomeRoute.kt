@@ -53,10 +53,6 @@ enum class HomeItem(
         title = "Counter",
         route = { counterRoute }
     ),
-    List(
-        title = "List",
-        route = { listRoute }
-    ),
     AppPicker(
         title = "App Picker",
         route = { appPickerRoute(true) }

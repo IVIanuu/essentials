@@ -7,6 +7,7 @@ import com.ivianuu.essentials.ui.compose.composeControllerRoute
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
+import com.ivianuu.essentials.ui.compose.material.Subheader
 import com.ivianuu.essentials.ui.compose.prefs.Checkbox
 import com.ivianuu.essentials.ui.compose.prefs.PrefsScreen
 import com.ivianuu.kprefs.KPrefs
@@ -17,6 +18,10 @@ val composeRoute = composeControllerRoute {
         appBar = { EsTopAppBar(title = "Compose") },
         prefs = {
             (0..20).forEach { i ->
+                if (i == 5 || i == 10 || i == 15) {
+                    Subheader("Header: $i")
+                }
+
                 val pref = (+inject<KPrefs>()).boolean("dummy_compose_$i")
                 composable(key = i, inputs = arrayOf(pref.get())) {
                     ListItem(
