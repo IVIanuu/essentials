@@ -19,15 +19,14 @@ package com.ivianuu.essentials.gestures
 import android.view.accessibility.AccessibilityEvent
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.gestures.accessibility.AccessibilityComponent
-import com.ivianuu.essentials.util.coroutineScope
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.android.ApplicationScope
 import com.ivianuu.scopes.MutableScope
-import hu.akarnokd.kotlin.flow.BehaviorSubject
-import kotlinx.coroutines.Job
+import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.consumeAsFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.launch
 
 /**
  * Recent apps provider
@@ -40,12 +39,14 @@ class RecentAppsProvider : AccessibilityComponent() {
         get() = recentsApps
             .map { it.firstOrNull() }
 
-    private val _recentApps = BehaviorSubject(emptyList<String>())
+    private val _recentApps = ConflatedBroadcastChannel(emptyList<String>())
     val recentsApps: Flow<List<String>>
-        get() = _recentApps
+        get() = _recentApps.openSubscription()
+            .consumeAsFlow()
+            .distinctUntilChanged()
+
     private var recentAppsList = mutableListOf<String>()
 
-    private var notifyingJob: Job? = null
     private val scope = MutableScope()
 
     override fun onServiceDisconnected() {
@@ -106,10 +107,7 @@ class RecentAppsProvider : AccessibilityComponent() {
         d { "recent apps changed $result" }
 
         // push
-        notifyingJob?.cancel()
-        notifyingJob = scope.coroutineScope.launch {
-            _recentApps.emit(result)
-        }
+        _recentApps.offer(result)
     }
 
     companion object {
