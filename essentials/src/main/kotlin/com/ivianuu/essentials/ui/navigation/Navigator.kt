@@ -65,6 +65,25 @@ class Navigator {
         deferredResult?.complete(result)
     }
 
+    @JvmName("replaceWithoutResult")
+    fun replace(route: Route) {
+        @Suppress("DeferredResultUnused")
+        GlobalScope.launch { replace<Any?>(route) }
+    }
+
+    suspend fun <T> replace(route: Route): T? {
+        d { "replace $route" }
+        val newBackStack = backStack.toMutableList()
+        if (newBackStack.isNotEmpty()) {
+            newBackStack.removeAt(newBackStack.lastIndex)
+        }
+        newBackStack += route
+        setBackStack(newBackStack)
+        val deferredResult = CompletableDeferred<Any?>()
+        synchronized(resultsByRoute) { resultsByRoute[route] = deferredResult }
+        return deferredResult.await() as? T
+    }
+
     private fun setBackStack(newBackStack: List<Route>) {
         synchronized(_backStack) {
             _backStack.clear()
