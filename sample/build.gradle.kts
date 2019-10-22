@@ -36,6 +36,8 @@ android {
 }
 
 dependencies {
+    implementation(Deps.AndroidX.Ui.material)
+
     implementation(project(":essentials"))
     implementation(project(":essentials-about"))
     implementation(project(":essentials-apps"))
