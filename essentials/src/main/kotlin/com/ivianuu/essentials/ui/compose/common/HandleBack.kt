@@ -1,4 +1,4 @@
-package com.ivianuu.essentials.ui.compose
+package com.ivianuu.essentials.ui.compose.common
 
 import android.app.Activity
 import androidx.activity.OnBackPressedCallback
