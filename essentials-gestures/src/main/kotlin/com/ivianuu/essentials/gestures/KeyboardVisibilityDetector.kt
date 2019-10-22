@@ -40,8 +40,7 @@ class KeyboardVisibilityDetector(
     val keyboardVisible: Flow<Boolean>
         get() {
             return softInputChanges
-                .openSubscription()
-                .consumeAsFlow()
+                .asFlow()
                 .onStart { emit(Unit) }
                 .transformLatest {
                     while (true) {

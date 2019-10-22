@@ -24,7 +24,7 @@ import com.ivianuu.injekt.android.ApplicationScope
 import com.ivianuu.scopes.MutableScope
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.consumeAsFlow
+import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 
@@ -41,9 +41,7 @@ class RecentAppsProvider : AccessibilityComponent() {
 
     private val _recentApps = ConflatedBroadcastChannel(emptyList<String>())
     val recentsApps: Flow<List<String>>
-        get() = _recentApps.openSubscription()
-            .consumeAsFlow()
-            .distinctUntilChanged()
+        get() = _recentApps.asFlow().distinctUntilChanged()
 
     private var recentAppsList = mutableListOf<String>()
 

@@ -23,7 +23,7 @@ import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.consumeAsFlow
+import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.launch
 
 @ApplicationScope
@@ -34,7 +34,7 @@ class Navigator {
     val backStack: List<Route> get() = synchronized(_backStack) { _backStack }
 
     val flow: Flow<List<Route>>
-        get() = channel.openSubscription().consumeAsFlow()
+        get() = channel.asFlow()
 
     private val channel = ConflatedBroadcastChannel(emptyList<Route>())
 

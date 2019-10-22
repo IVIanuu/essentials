@@ -126,7 +126,7 @@ internal class CheckableAppsViewModel(
 
     private val _checkedAppsChanged = BroadcastChannel<Set<String>>(1)
     val checkedAppsChanged: Flow<Set<String>>
-        get() = _checkedAppsChanged.openSubscription().consumeAsFlow()
+        get() = _checkedAppsChanged.asFlow()
 
     private val checkedAppsScope = ReusableScope()
     private val checkedApps = BroadcastChannel<Set<String>>(Channel.CONFLATED)
@@ -137,7 +137,7 @@ internal class CheckableAppsViewModel(
                 if (launchableOnly) appStore.getLaunchableApps() else appStore.getInstalledApps()
             }
 
-            appsFlow.combine(checkedApps.openSubscription().consumeAsFlow()) { apps, checked ->
+            appsFlow.combine(checkedApps.asFlow()) { apps, checked ->
                 apps
                     .map {
                         CheckableApp(
@@ -189,8 +189,8 @@ internal class CheckableAppsViewModel(
     }
 
     private suspend fun pushNewCheckedApps(reducer: (MutableSet<String>) -> Unit) {
-        checkedApps.openSubscription()
-            .consumeAsFlow()
+        checkedApps
+            .asFlow()
             .first()
             .toMutableSet()
             .apply(reducer)

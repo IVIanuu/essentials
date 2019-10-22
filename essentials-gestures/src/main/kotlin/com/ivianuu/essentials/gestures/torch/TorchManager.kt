@@ -37,7 +37,7 @@ class TorchManager internal constructor(
 
     private val _torchState = ConflatedBroadcastChannel(false)
     val torchState: Flow<Boolean>
-        get() = _torchState.openSubscription().consumeAsFlow()
+        get() = _torchState.asFlow()
 
     init {
         broadcastFactory.create(ACTION_TORCH_STATE_CHANGED)

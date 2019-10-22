@@ -23,7 +23,7 @@ import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.android.ApplicationScope
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.consumeAsFlow
+import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 
 @Inject
@@ -32,11 +32,7 @@ class SecureScreenDetector : AccessibilityComponent() {
 
     private val _isOnSecureScreen = ConflatedBroadcastChannel<Boolean>()
     val isOnSecureScreen: Flow<Boolean>
-        get() {
-            return _isOnSecureScreen.openSubscription()
-                .consumeAsFlow()
-                .distinctUntilChanged()
-        }
+        get() = _isOnSecureScreen.asFlow().distinctUntilChanged()
 
     override fun onAccessibilityEvent(event: AccessibilityEvent) {
         // were only interested in window state changes

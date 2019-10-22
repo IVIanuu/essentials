@@ -33,7 +33,7 @@ abstract class MvRxViewModel<S>(initialState: S) : EsViewModel() {
 
     private val channel = ConflatedBroadcastChannel(initialState)
     val flow: Flow<S>
-        get() = channel.openSubscription().consumeAsFlow()
+        get() = channel.asFlow()
 
     private var _state: S = initialState
     val state: S get() = synchronized(stateLock) { _state }

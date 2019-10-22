@@ -2,8 +2,8 @@ package com.ivianuu.essentials.store
 
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.flow.flow
 import java.util.concurrent.atomic.AtomicReference
 
@@ -30,8 +30,8 @@ internal class MemoryBoxImpl<T>(initialValue: T) : Box<T> {
 
     override fun asFlow(): Flow<T> = flow {
         emit(get())
-        channel.openSubscription()
-            .consumeAsFlow()
+        channel
+            .asFlow()
             .collect { emit(it) }
     }
 
