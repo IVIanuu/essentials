@@ -4,6 +4,9 @@ import androidx.compose.unaryPlus
 import androidx.ui.core.Opacity
 import androidx.ui.material.Divider
 import androidx.ui.material.ListItem
+import com.ivianuu.essentials.about.aboutRoute
+import com.ivianuu.essentials.apps.ui.appPickerRoute
+import com.ivianuu.essentials.twilight.twilightSettingsRoute
 import com.ivianuu.essentials.ui.compose.common.ListScreen
 import com.ivianuu.essentials.ui.compose.composeControllerRoute
 import com.ivianuu.essentials.ui.compose.core.composable
@@ -46,13 +49,17 @@ enum class HomeItem(
     val title: String,
     val route: () -> Route
 ) {
+    Counter(
+        title = "Counter",
+        route = { counterRoute }
+    ),
     List(
         title = "List",
         route = { listRoute }
     ),
     AppPicker(
         title = "App Picker",
-        route = { com.ivianuu.essentials.apps.ui.appPickerRoute(true) }
+        route = { appPickerRoute(true) }
     ),
     CheckApps(
         title = "Check Apps",
@@ -60,7 +67,7 @@ enum class HomeItem(
     ),
     Twilight(
         title = "Twilight",
-        route = { com.ivianuu.essentials.twilight.twilightSettingsRoute }
+        route = { twilightSettingsRoute }
     ),
     Compose(
         title = "Compose",
@@ -68,6 +75,6 @@ enum class HomeItem(
     ),
     About(
         title = "About",
-        route = { com.ivianuu.essentials.about.aboutRoute() }
+        route = { aboutRoute() }
     )
 }
