@@ -22,9 +22,15 @@ import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.injection.esModule
 import com.ivianuu.essentials.util.containsFlag
 import com.ivianuu.essentials.util.unsafeLazy
-import com.ivianuu.injekt.*
+import com.ivianuu.injekt.Component
+import com.ivianuu.injekt.InjektPlugins
+import com.ivianuu.injekt.InjektTrait
+import com.ivianuu.injekt.Module
+import com.ivianuu.injekt.Provider
 import com.ivianuu.injekt.android.AndroidLogger
 import com.ivianuu.injekt.android.applicationComponent
+import com.ivianuu.injekt.inject
+import com.ivianuu.injekt.logger
 import kotlin.reflect.KClass
 
 /**

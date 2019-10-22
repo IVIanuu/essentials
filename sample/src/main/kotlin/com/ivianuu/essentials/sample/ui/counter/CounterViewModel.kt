@@ -16,7 +16,10 @@
 
 package com.ivianuu.essentials.sample.ui.counter
 
+import androidx.lifecycle.viewModelScope
 import com.ivianuu.essentials.about.aboutRoute
+import com.ivianuu.essentials.apps.AppInfo
+import com.ivianuu.essentials.apps.ui.appPickerRoute
 import com.ivianuu.essentials.hidenavbar.NavBarConfig
 import com.ivianuu.essentials.hidenavbar.NavBarController
 import com.ivianuu.essentials.sample.ui.checkapps.checkAppsRoute
@@ -32,8 +35,10 @@ import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.director.controllerRouteOptions
 import com.ivianuu.essentials.ui.navigation.director.copy
 import com.ivianuu.essentials.ui.navigation.director.horizontal
+import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Param
+import kotlinx.coroutines.launch
 
 @Inject
 class CounterViewModel(
@@ -41,6 +46,7 @@ class CounterViewModel(
     private val navigator: Navigator,
     private val navBarController: NavBarController,
     private val secureSettingsHelper: SecureSettingsHelper,
+    private val toaster: Toaster,
     private val workScheduler: WorkScheduler
 ) : MvRxViewModel<CounterState>(CounterState(screen)) {
 
@@ -60,6 +66,15 @@ class CounterViewModel(
 
     fun checkAppsClicked() {
         navigator.push(checkAppsRoute)
+    }
+
+    fun appPickerClicked() {
+        viewModelScope.launch {
+            val app = navigator.push<AppInfo>(appPickerRoute(launchableOnly = true))
+            if (app != null) {
+                toaster.toast("App picked ${app.appName}")
+            }
+        }
     }
 
     fun doWorkClicked() {

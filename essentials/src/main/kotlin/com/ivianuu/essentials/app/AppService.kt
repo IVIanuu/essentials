@@ -17,7 +17,15 @@
 package com.ivianuu.essentials.app
 
 import com.ivianuu.essentials.twilight.TwilightController
-import com.ivianuu.injekt.*
+import com.ivianuu.injekt.BindingContext
+import com.ivianuu.injekt.Definition
+import com.ivianuu.injekt.Module
+import com.ivianuu.injekt.Name
+import com.ivianuu.injekt.intoMap
+import com.ivianuu.injekt.map
+import com.ivianuu.injekt.module
+import com.ivianuu.injekt.single
+import com.ivianuu.injekt.withBinding
 import kotlin.reflect.KClass
 
 /**

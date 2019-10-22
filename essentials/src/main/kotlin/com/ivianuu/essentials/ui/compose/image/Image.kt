@@ -1,6 +1,7 @@
-package com.ivianuu.essentials.ui.compose.core
+package com.ivianuu.essentials.ui.compose.image
 
 import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.ambient
@@ -8,9 +9,13 @@ import androidx.compose.effectOf
 import androidx.compose.unaryPlus
 import androidx.core.graphics.drawable.toBitmap
 import androidx.ui.core.ContextAmbient
-import androidx.ui.graphics.*
+import androidx.ui.graphics.Color
+import androidx.ui.graphics.Image
+import androidx.ui.graphics.ImageConfig
+import androidx.ui.graphics.NativeImage
 import androidx.ui.graphics.colorspace.ColorSpace
 import androidx.ui.graphics.colorspace.ColorSpaces
+import androidx.ui.graphics.toArgb
 import androidx.ui.material.surface.CurrentBackground
 import androidx.ui.material.textColorForBackground
 import com.ivianuu.essentials.util.drawable
@@ -27,7 +32,11 @@ fun drawableImageResource(
     return@effectOf BitmapImage(drawable.toBitmap())
 }
 
-class BitmapImage(val bitmap: Bitmap) : Image {
+fun Drawable.toImage() = toBitmap().toImage()
+
+fun Bitmap.toImage() = BitmapImage(this)
+
+class BitmapImage internal constructor(val bitmap: Bitmap) : Image {
 
     override val width: Int
         get() = bitmap.width

@@ -10,7 +10,7 @@ import androidx.ui.material.TopAppBar
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.compose.core.RouteAmbient
 import com.ivianuu.essentials.ui.compose.core.composable
-import com.ivianuu.essentials.ui.compose.core.drawableImageResource
+import com.ivianuu.essentials.ui.compose.image.drawableImageResource
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.navigation.Navigator
 

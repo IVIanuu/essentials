@@ -28,9 +28,14 @@ import com.ivianuu.director.requireActivity
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.popup.PopupMenu
 import com.ivianuu.essentials.ui.popup.show
-import com.ivianuu.essentials.util.*
-import kotlinx.android.synthetic.main.es_controller_tabs.*
-import kotlinx.android.synthetic.main.es_view_toolbar.*
+import com.ivianuu.essentials.util.drawable
+import com.ivianuu.essentials.util.getIconColor
+import com.ivianuu.essentials.util.getPrimaryColor
+import com.ivianuu.essentials.util.getPrimaryTextColor
+import com.ivianuu.essentials.util.getSecondaryTextColor
+import com.ivianuu.essentials.util.isLight
+import kotlinx.android.synthetic.main.es_controller_tabs.es_app_bar
+import kotlinx.android.synthetic.main.es_view_toolbar.es_toolbar
 
 
 /**

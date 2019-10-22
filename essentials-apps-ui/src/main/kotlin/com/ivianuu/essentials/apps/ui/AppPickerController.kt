@@ -16,79 +16,75 @@
 
 package com.ivianuu.essentials.apps.ui
 
+import androidx.compose.Composable
+import androidx.compose.unaryPlus
 import androidx.lifecycle.viewModelScope
-import coil.ImageLoader
-import coil.api.loadAny
-import com.airbnb.epoxy.EpoxyController
+import androidx.ui.core.Text
+import androidx.ui.layout.Center
+import androidx.ui.material.CircularProgressIndicator
+import androidx.ui.material.ListItem
+import androidx.ui.res.stringResource
 import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.AppStore
 import com.ivianuu.essentials.apps.coil.AppIcon
-import com.ivianuu.essentials.ui.epoxy.SimpleLoading
-import com.ivianuu.essentials.ui.epoxy.model
+import com.ivianuu.essentials.ui.compose.common.ListScreen
+import com.ivianuu.essentials.ui.compose.composeControllerRoute
+import com.ivianuu.essentials.ui.compose.core.composable
+import com.ivianuu.essentials.ui.compose.image.Avatar
+import com.ivianuu.essentials.ui.compose.image.CoilImageAny
+import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
+import com.ivianuu.essentials.ui.compose.mvrx.mvRxViewModel
 import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
-import com.ivianuu.essentials.ui.mvrx.epoxy.mvRxEpoxyController
-import com.ivianuu.essentials.ui.mvrx.injekt.injectMvRxViewModel
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.director.controllerRoute
-import com.ivianuu.essentials.ui.navigation.director.defaultControllerRouteOptionsOrNull
-import com.ivianuu.essentials.ui.simple.ListController
-import com.ivianuu.essentials.util.*
+import com.ivianuu.essentials.util.AppDispatchers
+import com.ivianuu.essentials.util.Async
+import com.ivianuu.essentials.util.Loading
+import com.ivianuu.essentials.util.Success
+import com.ivianuu.essentials.util.Uninitialized
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Param
-import com.ivianuu.injekt.inject
 import com.ivianuu.injekt.parametersOf
-import kotlinx.android.synthetic.main.es_item_app.*
 
 fun appPickerRoute(
     launchableOnly: Boolean = false
-) = controllerRoute<AppPickerController>(options = defaultControllerRouteOptionsOrNull()) {
-    parametersOf(launchableOnly)
-}
+) = composeControllerRoute {
+    ListScreen(
+        appBar = { EsTopAppBar(+stringResource(R.string.es_title_app_picker)) },
+        listContent = {
+            val viewModel = +mvRxViewModel<AppPickerViewModel> {
+                parametersOf(launchableOnly)
+            }
 
-/**
- * App picker controller
- */
-@Inject
-class AppPickerController(@Param private val launchableOnly: Boolean) : ListController() {
-
-    override val toolbarTitleRes: Int
-        get() = R.string.es_title_app_picker
-
-    private val imageLoader: ImageLoader by inject()
-
-    private val viewModel: AppPickerViewModel by injectMvRxViewModel {
-        parametersOf(launchableOnly)
-    }
-
-    override fun epoxyController() = mvRxEpoxyController(viewModel) { state ->
-        when (state.apps) {
-            is Loading -> SimpleLoading(id = "loading")
-            is Success -> state.apps()?.forEach { app ->
-                AppInfo(
-                    app = app,
-                    imageLoader = imageLoader,
-                    onClick = { viewModel.appClicked(app) }
-                )
+            when (viewModel.state.apps) {
+                is Loading -> {
+                    Center {
+                        CircularProgressIndicator()
+                    }
+                }
+                is Success -> viewModel.state.apps()?.forEach { app ->
+                    AppInfo(
+                        app = app,
+                        onClick = { viewModel.appClicked(app) }
+                    )
+                }
             }
         }
-    }
-
+    )
 }
 
-private fun EpoxyController.AppInfo(
+@Composable
+private fun AppInfo(
     app: AppInfo,
-    imageLoader: ImageLoader,
     onClick: () -> Unit
-) = model(
-    id = app.packageName,
-    layoutRes = R.layout.es_item_app,
-    state = arrayOf(app),
-    bind = {
-        es_app_icon.loadAny(AppIcon(app.packageName), imageLoader)
-        es_app_title.text = app.appName
-        root.setOnClickListener { onClick() }
-    }
-)
+) = composable(app.packageName) {
+    ListItem(
+        text = { Text(app.appName) },
+        icon = {
+            CoilImageAny(data = AppIcon(app.packageName)) { Avatar(it) }
+        },
+        onClick = onClick
+    )
+}
 
 @Inject
 internal class AppPickerViewModel(

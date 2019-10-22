@@ -16,11 +16,19 @@
 
 package com.ivianuu.essentials.ui.navigation.director
 
-import com.ivianuu.director.*
+import com.ivianuu.director.ControllerChangeHandler
+import com.ivianuu.director.DefaultChangeHandler
+import com.ivianuu.director.DirectorPlugins
+import com.ivianuu.director.RouterTransaction
 import com.ivianuu.director.common.changehandler.FadeChangeHandler
 import com.ivianuu.director.common.changehandler.HorizontalChangeHandler
 import com.ivianuu.director.common.changehandler.VerticalChangeHandler
 import com.ivianuu.director.common.changehandler.defaultAnimationDuration
+import com.ivianuu.director.defaultPopHandler
+import com.ivianuu.director.defaultPushHandler
+import com.ivianuu.director.defaultRemovesFromViewOnPush
+import com.ivianuu.director.popChangeHandler
+import com.ivianuu.director.pushChangeHandler
 
 fun controllerRouteOptions(): ControllerRoute.Options = ControllerRoute.Options()
 

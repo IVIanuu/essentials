@@ -6,7 +6,17 @@ import coil.decode.Decoder
 import coil.fetch.Fetcher
 import coil.map.Mapper
 import coil.map.MeasuredMapper
-import com.ivianuu.injekt.*
+import com.ivianuu.injekt.BindingContext
+import com.ivianuu.injekt.Definition
+import com.ivianuu.injekt.Module
+import com.ivianuu.injekt.Name
+import com.ivianuu.injekt.factory
+import com.ivianuu.injekt.get
+import com.ivianuu.injekt.intoSet
+import com.ivianuu.injekt.module
+import com.ivianuu.injekt.set
+import com.ivianuu.injekt.single
+import com.ivianuu.injekt.withBinding
 import kotlin.reflect.KClass
 
 val esCoilModule = module {

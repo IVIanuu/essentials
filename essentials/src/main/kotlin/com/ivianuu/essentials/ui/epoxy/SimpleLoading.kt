@@ -19,7 +19,7 @@ package com.ivianuu.essentials.ui.epoxy
 import android.content.res.ColorStateList
 import com.airbnb.epoxy.EpoxyController
 import com.ivianuu.essentials.R
-import kotlinx.android.synthetic.main.es_item_simple_loading.*
+import kotlinx.android.synthetic.main.es_item_simple_loading.es_progress_bar
 
 /**
  * Simple loading model

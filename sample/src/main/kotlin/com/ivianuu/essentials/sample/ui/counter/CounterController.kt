@@ -26,7 +26,17 @@ import com.ivianuu.essentials.ui.navigation.director.horizontal
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Param
 import com.ivianuu.injekt.parametersOf
-import kotlinx.android.synthetic.main.controller_counter.*
+import kotlinx.android.synthetic.main.controller_counter.about
+import kotlinx.android.synthetic.main.controller_counter.app_picker
+import kotlinx.android.synthetic.main.controller_counter.check_apps
+import kotlinx.android.synthetic.main.controller_counter.compose
+import kotlinx.android.synthetic.main.controller_counter.count
+import kotlinx.android.synthetic.main.controller_counter.do_work
+import kotlinx.android.synthetic.main.controller_counter.list_screen
+import kotlinx.android.synthetic.main.controller_counter.nav_bar
+import kotlinx.android.synthetic.main.controller_counter.screen_down
+import kotlinx.android.synthetic.main.controller_counter.screen_up
+import kotlinx.android.synthetic.main.controller_counter.twilight
 
 fun counterRoute(screen: Int) = controllerRoute<CounterController>(
     options = controllerRouteOptions().horizontal()
@@ -47,6 +57,7 @@ class CounterController(@Param private val screen: Int) : EsController() {
         screen_up.setOnClickListener { viewModel.screenUpClicked() }
         screen_down.setOnClickListener { viewModel.screenDownClicked() }
         list_screen.setOnClickListener { viewModel.listScreenClicked() }
+        app_picker.setOnClickListener { viewModel.appPickerClicked() }
         check_apps.setOnClickListener { viewModel.checkAppsClicked() }
         do_work.setOnClickListener { viewModel.doWorkClicked() }
         nav_bar.setOnClickListener { viewModel.navBarClicked() }

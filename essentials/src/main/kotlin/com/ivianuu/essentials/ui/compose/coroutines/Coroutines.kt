@@ -1,12 +1,21 @@
 package com.ivianuu.essentials.ui.compose.coroutines
 
-import androidx.compose.*
-import kotlinx.coroutines.*
+import androidx.compose.effectOf
+import androidx.compose.memo
+import androidx.compose.onActive
+import androidx.compose.onCommit
+import androidx.compose.onDispose
+import androidx.compose.onPreCommit
+import androidx.compose.state
+import com.github.ajalt.timberkt.d
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
-import kotlin.coroutines.EmptyCoroutineContext
 
 fun coroutineScope(context: () -> CoroutineContext = { Dispatchers.Main }) =
     effectOf<CoroutineScope> {
@@ -16,98 +25,77 @@ fun coroutineScope(context: () -> CoroutineContext = { Dispatchers.Main }) =
     }
 
 fun launchOnActive(
-    context: CoroutineContext = EmptyCoroutineContext,
-    start: CoroutineStart = CoroutineStart.DEFAULT,
     block: suspend CoroutineScope.() -> Unit
 ) = effectOf<Unit> {
     val coroutineScope = +coroutineScope()
-    +com.ivianuu.essentials.ui.compose.core.onActive {
-        coroutineScope.launch(
-            context,
-            start,
-            block
-        )
+    +onActive {
+        coroutineScope.launch(block = block)
     }
 }
 
 fun launchOnActive(
     vararg inputs: Any?,
-    context: CoroutineContext = EmptyCoroutineContext,
-    start: CoroutineStart = CoroutineStart.DEFAULT,
     block: suspend CoroutineScope.() -> Unit
 ) = effectOf<Unit> {
     val coroutineScope = +coroutineScope()
     +com.ivianuu.essentials.ui.compose.core.onActive(*inputs) {
-        coroutineScope.launch(
-            context,
-            start,
-            block
-        )
+        coroutineScope.launch(block = block)
     }
 }
 
 fun launchOnPreCommit(
-    context: CoroutineContext = EmptyCoroutineContext,
-    start: CoroutineStart = CoroutineStart.DEFAULT,
     block: suspend CoroutineScope.() -> Unit
 ) = effectOf<Unit> {
     val coroutineScope = +coroutineScope()
-    +onPreCommit { coroutineScope.launch(context, start, block) }
+    +onPreCommit { coroutineScope.launch(block = block) }
 }
 
 fun launchOnPreCommit(
     vararg inputs: Any?,
-    context: CoroutineContext = EmptyCoroutineContext,
-    start: CoroutineStart = CoroutineStart.DEFAULT,
     block: suspend CoroutineScope.() -> Unit
 ) = effectOf<Unit> {
     val coroutineScope = +coroutineScope()
-    +onPreCommit(*inputs) { coroutineScope.launch(context, start, block) }
+    +onPreCommit(*inputs) { coroutineScope.launch(block = block) }
 }
 
 fun launchOnCommit(
-    context: CoroutineContext = EmptyCoroutineContext,
-    start: CoroutineStart = CoroutineStart.DEFAULT,
     block: suspend CoroutineScope.() -> Unit
 ) = effectOf<Unit> {
     val coroutineScope = +coroutineScope()
-    +onCommit { coroutineScope.launch(context, start, block) }
+    +onCommit { coroutineScope.launch(block = block) }
 }
 
 fun launchOnCommit(
     vararg inputs: Any?,
-    context: CoroutineContext = EmptyCoroutineContext,
-    start: CoroutineStart = CoroutineStart.DEFAULT,
     block: suspend CoroutineScope.() -> Unit
 ) = effectOf<Unit> {
     val coroutineScope = +coroutineScope()
-    +onCommit(*inputs) { coroutineScope.launch(context, start, block) }
+    +onCommit(*inputs) { coroutineScope.launch(block = block) }
 }
 
 @BuilderInference
-fun <T> load(
-    context: CoroutineContext = EmptyCoroutineContext,
-    start: CoroutineStart = CoroutineStart.DEFAULT,
-    block: suspend CoroutineScope.() -> T
-) = effectOf<T?> {
+fun <T> load(block: suspend CoroutineScope.() -> T) = effectOf<T?> {
     +load(
         placeholder = null,
-        context = context,
-        start = start,
         block = block
     )
 }
 
 fun <T> load(
     placeholder: T,
-    context: CoroutineContext = EmptyCoroutineContext,
-    start: CoroutineStart = CoroutineStart.DEFAULT,
     block: suspend CoroutineScope.() -> T
 ) = effectOf<T> {
-    val state = +state { placeholder }
-    launchOnActive(context = context, start = start) {
+    d { "load run" }
+    val state = +state {
+        d { "load init state" }
+        placeholder
+    }
+
+    +launchOnActive {
+        d { "load launched" }
         state.value = block()
     }
+
     return@effectOf state.value
 }
 

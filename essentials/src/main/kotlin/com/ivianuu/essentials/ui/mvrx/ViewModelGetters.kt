@@ -16,7 +16,13 @@
 
 package com.ivianuu.essentials.ui.mvrx
 
-import androidx.lifecycle.*
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStoreOwner
+import androidx.lifecycle.lifecycleScope
 import com.ivianuu.essentials.util.defaultViewModelKey
 import com.ivianuu.essentials.util.unsafeLazy
 import com.ivianuu.essentials.util.viewModelProvider

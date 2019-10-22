@@ -3,7 +3,12 @@ package com.ivianuu.essentials.ui.compose
 import androidx.activity.ComponentActivity
 import androidx.compose.ambient
 import androidx.compose.effectOf
-import androidx.compose.frames.*
+import androidx.compose.frames.AbstractRecord
+import androidx.compose.frames.Framed
+import androidx.compose.frames.Record
+import androidx.compose.frames._created
+import androidx.compose.frames.readable
+import androidx.compose.frames.writable
 import androidx.compose.memo
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
