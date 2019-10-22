@@ -84,7 +84,7 @@ class CounterViewModel(
 
     fun aboutClicked() {
         navigator.push(
-            aboutRoute("https://www.google.com").copy(
+            aboutRoute(privacyPolicyUrl = "https://www.google.com").copy(
                 options = controllerRouteOptions().verticalFade()
             )
         )
