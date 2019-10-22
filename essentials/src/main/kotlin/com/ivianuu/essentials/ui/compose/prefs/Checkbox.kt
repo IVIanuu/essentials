@@ -1,4 +1,4 @@
-package com.ivianuu.essentials.ui.compose.material
+package com.ivianuu.essentials.ui.compose.prefs
 
 import androidx.compose.unaryPlus
 import androidx.ui.graphics.Color

@@ -25,6 +25,7 @@ import com.ivianuu.essentials.injection.childControllerComponent
 import com.ivianuu.essentials.injection.controllerComponent
 import com.ivianuu.essentials.ui.mvrx.MvRxView
 import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.navigation.Route
 import com.ivianuu.essentials.util.InjektTraitContextWrapper
 import com.ivianuu.essentials.util.unsafeLazy
 import com.ivianuu.injekt.InjektTrait
@@ -55,6 +56,8 @@ abstract class EsController : Controller(), InjektTrait, LayoutContainer, MvRxVi
     private var _containerView: View? = null
 
     val navigator: Navigator by inject()
+
+    var route: Route? = null
 
     protected open val layoutRes: Int get() = -1
 

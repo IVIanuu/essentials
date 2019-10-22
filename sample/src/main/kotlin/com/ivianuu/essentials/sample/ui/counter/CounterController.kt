@@ -51,6 +51,7 @@ class CounterController(@Param private val screen: Int) : EsController() {
         do_work.setOnClickListener { viewModel.doWorkClicked() }
         nav_bar.setOnClickListener { viewModel.navBarClicked() }
         twilight.setOnClickListener { viewModel.twilightClicked() }
+        compose.setOnClickListener { viewModel.composeClicked() }
         about.setOnClickListener { viewModel.aboutClicked() }
     }
 

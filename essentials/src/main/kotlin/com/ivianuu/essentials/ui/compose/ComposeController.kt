@@ -10,7 +10,9 @@ import com.ivianuu.director.requireActivity
 import com.ivianuu.essentials.ui.base.EsController
 import com.ivianuu.essentials.ui.compose.core.ActivityAmbient
 import com.ivianuu.essentials.ui.compose.core.ControllerAmbient
+import com.ivianuu.essentials.ui.compose.core.RouteAmbient
 import com.ivianuu.essentials.ui.compose.injekt.ComponentAmbient
+import com.ivianuu.essentials.ui.compose.material.ResourceMaterialTheme
 import com.ivianuu.essentials.util.cast
 
 /**
@@ -40,10 +42,14 @@ abstract class ComposeController : EsController() {
 
     @Composable
     protected open fun composeWithAmbients() {
-        ActivityAmbient.Provider(value = requireActivity()) {
-            ControllerAmbient.Provider(value = this) {
-                ComponentAmbient.Provider(value = component) {
-                    compose()
+        ResourceMaterialTheme {
+            ActivityAmbient.Provider(value = requireActivity()) {
+                RouteAmbient.Provider(value = route!!) {
+                    ControllerAmbient.Provider(value = this) {
+                        ComponentAmbient.Provider(value = component) {
+                            compose()
+                        }
+                    }
                 }
             }
         }

@@ -20,6 +20,7 @@ import com.ivianuu.essentials.about.aboutRoute
 import com.ivianuu.essentials.hidenavbar.NavBarConfig
 import com.ivianuu.essentials.hidenavbar.NavBarController
 import com.ivianuu.essentials.sample.ui.checkapps.checkAppsRoute
+import com.ivianuu.essentials.sample.ui.compose.composeRoute
 import com.ivianuu.essentials.sample.ui.list.listRoute
 import com.ivianuu.essentials.sample.work.WorkScheduler
 import com.ivianuu.essentials.securesettings.SecureSettingsHelper
@@ -80,6 +81,14 @@ class CounterViewModel(
         } else {
             navigator.push(secureSettingsRoute(true))
         }
+    }
+
+    fun composeClicked() {
+        navigator.push(
+            composeRoute.copy(
+                options = controllerRouteOptions().verticalFade()
+            )
+        )
     }
 
     fun aboutClicked() {

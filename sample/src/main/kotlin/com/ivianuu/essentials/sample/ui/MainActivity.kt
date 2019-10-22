@@ -22,7 +22,7 @@ import androidx.lifecycle.lifecycleScope
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.gestures.unlock.ScreenUnlocker
 import com.ivianuu.essentials.messaging.BroadcastFactory
-import com.ivianuu.essentials.sample.ui.compose.composeRoute
+import com.ivianuu.essentials.sample.ui.counter.counterRoute
 import com.ivianuu.essentials.ui.base.EsActivity
 import com.ivianuu.essentials.ui.navigation.director.ControllerRoute
 import com.ivianuu.injekt.get
@@ -37,7 +37,7 @@ import kotlinx.coroutines.launch
 class MainActivity : EsActivity() {
 
     override val startRoute: ControllerRoute?
-        get() = composeRoute
+        get() = counterRoute(1)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -1,4 +1,4 @@
-package com.ivianuu.essentials.ui.compose
+package com.ivianuu.essentials.ui.compose.prefs
 
 import android.content.SharedPreferences
 import androidx.compose.Observe
