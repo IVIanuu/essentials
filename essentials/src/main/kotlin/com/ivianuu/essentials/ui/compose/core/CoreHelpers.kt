@@ -12,7 +12,7 @@ inline fun composable(
 ) {
     with(composer.composer) {
         startGroup(key)
-        if (inserting || changed(inputs?.contentHashCode())) {
+        if (inserting || inputs == null || changed(inputs.contentHashCode())) {
             startGroup(invocation)
             block()
             endGroup()
@@ -21,4 +21,8 @@ inline fun composable(
         }
         endGroup()
     }
+}
+
+inline fun staticComposable(key: Any, block: () -> Unit) {
+    composable(key = key, inputs = arrayOf(), block = block)
 }

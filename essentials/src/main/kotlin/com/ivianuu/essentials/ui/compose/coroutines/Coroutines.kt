@@ -3,7 +3,8 @@ package com.ivianuu.essentials.ui.compose.coroutines
 import androidx.compose.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
 
@@ -110,9 +111,7 @@ fun <T> load(
     return@effectOf state.value
 }
 
-fun <T> flow(flow: Flow<T>) = effectOf<T?> {
-    return@effectOf +flow(null, flow)
-}
+fun <T> flow(flow: Flow<T>) = flow(null, flow)
 
 fun <T> flow(
     placeholder: T,
@@ -120,10 +119,10 @@ fun <T> flow(
 ) = effectOf<T> {
     val state = +state { placeholder }
     val coroutineScope = +coroutineScope()
-    +com.ivianuu.essentials.ui.compose.core.onActive {
-        coroutineScope.launch {
-            flow.collect { state.value = it }
-        }
+    +onActive {
+        flow
+            .onEach { state.value = it }
+            .launchIn(coroutineScope)
     }
     return@effectOf state.value
 }
