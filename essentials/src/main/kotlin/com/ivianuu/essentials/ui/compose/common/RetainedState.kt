@@ -10,6 +10,7 @@ import androidx.compose.frames._created
 import androidx.compose.frames.readable
 import androidx.compose.frames.writable
 import androidx.compose.memo
+import androidx.compose.onDispose
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.ivianuu.essentials.ui.compose.core.ActivityAmbient
@@ -22,6 +23,12 @@ fun <T> retainedState(key: Any, init: () -> T) = effectOf<RetainedState<T>> {
         factory = RetainedStateViewModel,
         key = "RetainedState:${key.hashCode()}"
     )
+
+    +onDispose {
+        if (!activity.isChangingConfigurations) {
+            viewModel.value = viewModel
+        }
+    }
 
     return@effectOf +memo {
         RetainedState(

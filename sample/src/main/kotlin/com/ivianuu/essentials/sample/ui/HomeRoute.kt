@@ -3,7 +3,9 @@ package com.ivianuu.essentials.sample.ui
 import androidx.compose.state
 import androidx.compose.unaryPlus
 import androidx.ui.core.Opacity
+import androidx.ui.core.Text
 import androidx.ui.core.dp
+import androidx.ui.layout.Column
 import androidx.ui.layout.Container
 import androidx.ui.layout.Padding
 import androidx.ui.material.Divider
@@ -31,19 +33,23 @@ val homeRoute = composeControllerRoute {
             ) {
                 Padding(16.dp) {
                     val sliderValue = +state { 80 }
-                    Slider(
-                        value = sliderValue.value,
-                        onChanged = {
-                            d { "on changed $it" }
-                            sliderValue.value = it
-                        },
-                        onChangeStart = {
-                            d { "on change start $it" }
-                        },
-                        onChangeEnd = {
-                            d { "on change end $it" }
-                        }
-                    )
+                    Column {
+                        Text("Current value: ${sliderValue.value}")
+
+                        Slider(
+                            value = sliderValue.value,
+                            onChanged = {
+                                d { "on changed $it" }
+                                sliderValue.value = it
+                            },
+                            onChangeStart = {
+                                d { "on change start $it" }
+                            },
+                            onChangeEnd = {
+                                d { "on change end $it" }
+                            }
+                        )
+                    }
                 }
             }
 
