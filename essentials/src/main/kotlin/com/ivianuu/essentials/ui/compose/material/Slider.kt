@@ -14,7 +14,6 @@ import androidx.ui.core.gesture.PressGestureDetector
 import androidx.ui.core.gesture.RawDragGestureDetector
 import androidx.ui.engine.geometry.Offset
 import androidx.ui.engine.geometry.Rect
-import androidx.ui.foundation.ColoredRect
 import androidx.ui.graphics.Color
 import androidx.ui.graphics.Paint
 import androidx.ui.layout.Container
@@ -104,9 +103,8 @@ fun Slider(
                     notifyChangeEnd()
                 }
             ) {
-                Container(height = 100.dp, expanded = true) {
+                Container(height = 48.dp, expanded = true) {
                     Stack {
-                        ColoredRect(Color.Black.copy(alpha = 0.1f))
                         DrawSlider(animValue.value, color)
                     }
                 }
@@ -128,19 +126,19 @@ private fun DrawSlider(
         // draw bar
         paint.color = color.copy(alpha = 0.12f)
         canvas.drawRect(
-            Rect(0f, centerY - 5, parentSize.width.value, centerY + 5),
+            Rect(0f, centerY - 4, parentSize.width.value, centerY + 4),
             paint
         )
 
         paint.color = color
         canvas.drawRect(
-            Rect(0f, centerY - 5, constraintX, centerY + 5),
+            Rect(0f, centerY - 4, constraintX, centerY + 4),
             paint
         )
 
         // draw ticker
         canvas.drawCircle(
-            Offset(constraintX, centerY), 40f, paint
+            Offset(constraintX, centerY), 24f, paint
         )
     }
 }
