@@ -7,7 +7,6 @@ import androidx.compose.onCommit
 import androidx.compose.onDispose
 import androidx.compose.onPreCommit
 import androidx.compose.state
-import com.github.ajalt.timberkt.d
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -85,17 +84,8 @@ fun <T> load(
     placeholder: T,
     block: suspend CoroutineScope.() -> T
 ) = effectOf<T> {
-    d { "load run" }
-    val state = +state {
-        d { "load init state" }
-        placeholder
-    }
-
-    +launchOnActive {
-        d { "load launched" }
-        state.value = block()
-    }
-
+    val state = +state { placeholder }
+    +launchOnActive { state.value = block() }
     return@effectOf state.value
 }
 
