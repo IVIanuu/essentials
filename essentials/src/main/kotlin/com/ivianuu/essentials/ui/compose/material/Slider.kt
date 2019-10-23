@@ -1,19 +1,21 @@
 package com.ivianuu.essentials.ui.compose.material
 
-import androidx.animation.PhysicsBuilder
 import androidx.animation.TweenBuilder
 import androidx.compose.Composable
 import androidx.compose.ambient
 import androidx.compose.memo
+import androidx.compose.state
 import androidx.compose.unaryPlus
 import androidx.ui.animation.animatedFloat
 import androidx.ui.core.Draw
 import androidx.ui.core.PxPosition
 import androidx.ui.core.WithConstraints
+import androidx.ui.core.ambientDensity
 import androidx.ui.core.dp
 import androidx.ui.core.gesture.DragObserver
 import androidx.ui.core.gesture.PressGestureDetector
 import androidx.ui.core.gesture.RawDragGestureDetector
+import androidx.ui.core.withDensity
 import androidx.ui.engine.geometry.Offset
 import androidx.ui.engine.geometry.Rect
 import androidx.ui.graphics.Color
@@ -36,15 +38,15 @@ fun Slider(
     color: Color = +themeColor { secondary }
 ) = composable("Slider") {
     WithConstraints { constraints ->
-        val handleAnim =
-            +animatedFloat(lerp(unlerp(value.toFloat(), min, max), 0, constraints.maxWidth.value))
-        val rippleAnim =
-            +animatedFloat(0f)
+        val (internalValue, setInternalValue) = +state {
+            lerp(unlerp(value.toFloat(), min, max), 0, constraints.maxWidth.value)
+        }
+        val rippleAnim = +animatedFloat(0f)
 
         fun notifyChangeStart() {
             onChangeStart?.invoke(
                 lerp(
-                    unlerp(handleAnim.targetValue, 0, constraints.maxWidth.value),
+                    unlerp(internalValue, 0, constraints.maxWidth.value),
                     min,
                     max
                 ).toInt().coerceIn(min, max)
@@ -55,7 +57,7 @@ fun Slider(
 
         fun notifyChange() {
             val newValue = lerp(
-                unlerp(handleAnim.value, 0, constraints.maxWidth.value),
+                unlerp(internalValue, 0, constraints.maxWidth.value),
                 min,
                 max
             ).toInt().coerceIn(min, max)
@@ -68,7 +70,7 @@ fun Slider(
         fun notifyChangeEnd() {
             onChangeEnd?.invoke(
                 lerp(
-                    unlerp(handleAnim.targetValue, 0, constraints.maxWidth.value),
+                    unlerp(internalValue, 0, constraints.maxWidth.value),
                     min,
                     max
                 ).toInt().coerceIn(min, max)
@@ -81,14 +83,14 @@ fun Slider(
             override fun onStart(downPosition: PxPosition) {
                 super.onStart(downPosition)
                 rippleAnim.animateTo(
-                    targetValue = 0.12f,
-                    anim = TweenBuilder<Float>().apply { duration = 200 }
+                    targetValue = 1f,
+                    anim = TweenBuilder<Float>().apply { duration = 250 }
                 )
                 notifyChangeStart()
             }
 
             override fun onDrag(dragDistance: PxPosition): PxPosition {
-                handleAnim.snapTo(handleAnim.targetValue + dragDistance.x.value)
+                setInternalValue(internalValue + dragDistance.x.value)
                 notifyChange()
                 return dragDistance
             }
@@ -97,7 +99,7 @@ fun Slider(
                 super.onStop(velocity)
                 rippleAnim.animateTo(
                     targetValue = 0f,
-                    anim = TweenBuilder<Float>().apply { duration = 200 }
+                    anim = TweenBuilder<Float>().apply { duration = 250 }
                 )
                 notifyChangeEnd()
             }
@@ -105,20 +107,14 @@ fun Slider(
             PressGestureDetector(
                 onPress = { position ->
                     notifyChangeStart()
-
-                    handleAnim.animateTo(
-                        position.x.value,
-                        PhysicsBuilder(dampingRatio = 1.0f, stiffness = 1500f)
-                    )
-
+                    setInternalValue(position.x.value)
                     notifyChange()
-
                     notifyChangeEnd()
                 }
             ) {
-                Container(height = 48.dp, expanded = true) {
+                Container(height = 60.dp, expanded = true) {
                     Stack {
-                        DrawSlider(handleAnim.value, rippleAnim.value, color)
+                        DrawSlider(internalValue, rippleAnim.value, color)
                     }
                 }
             }
@@ -129,11 +125,14 @@ fun Slider(
 @Composable
 private fun DrawSlider(
     x: Float,
-    rippleAlpha: Float,
+    rippleValue: Float,
     color: Color
 ) = composable("DrawSlider") {
     val paint = +memo { Paint() }
     val rippleColor = (+(+ambient(CurrentRippleTheme)).defaultColor).copy(alpha = 0.12f)
+    val barHeight = withDensity(+ambientDensity()) { BarHeight.toPx() }.value
+    val sliderRadius = withDensity(+ambientDensity()) { SliderRadius.toPx() }.value
+
     Draw { canvas, parentSize ->
         val centerY = parentSize.height.value / 2
         val constraintX = x.coerceIn(0f, parentSize.width.value)
@@ -141,30 +140,33 @@ private fun DrawSlider(
         // bar
         paint.color = color.copy(alpha = 0.12f)
         canvas.drawRect(
-            Rect(0f, centerY - 4, parentSize.width.value, centerY + 4),
+            Rect(0f, centerY - barHeight / 2, parentSize.width.value, centerY + barHeight),
             paint
         )
 
         // progress bar
         paint.color = color
         canvas.drawRect(
-            Rect(0f, centerY - 4, constraintX, centerY + 4),
+            Rect(0f, centerY - barHeight, constraintX, centerY + barHeight),
             paint
         )
 
         // ripple
-        paint.color = rippleColor.copy(alpha = rippleAlpha)
+        paint.color = rippleColor.copy(alpha = 0.12f * rippleValue)
         canvas.drawCircle(
-            Offset(constraintX, centerY), 48f, paint
+            Offset(constraintX, centerY), sliderRadius * 2.5f * rippleValue, paint
         )
 
-        // handle
+        // indicator
         paint.color = color
         canvas.drawCircle(
-            Offset(constraintX, centerY), 24f, paint
+            Offset(constraintX, centerY), sliderRadius, paint
         )
     }
 }
+
+private val BarHeight = 1.5.dp
+private val SliderRadius = 6.dp
 
 private data class NotifiedValue(var value: Int)
 
