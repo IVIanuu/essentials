@@ -4,33 +4,12 @@ import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.os.Build
 import androidx.annotation.RequiresApi
-import androidx.compose.ambient
-import androidx.compose.effectOf
-import androidx.compose.unaryPlus
 import androidx.core.graphics.drawable.toBitmap
-import androidx.ui.core.ContextAmbient
-import androidx.ui.graphics.Color
 import androidx.ui.graphics.Image
 import androidx.ui.graphics.ImageConfig
 import androidx.ui.graphics.NativeImage
 import androidx.ui.graphics.colorspace.ColorSpace
 import androidx.ui.graphics.colorspace.ColorSpaces
-import androidx.ui.graphics.toArgb
-import androidx.ui.material.surface.CurrentBackground
-import androidx.ui.material.textColorForBackground
-import com.ivianuu.essentials.util.drawable
-
-fun drawableImageResource(
-    resId: Int,
-    color: Color? = (+textColorForBackground(+ambient(CurrentBackground)))
-) = effectOf<Image> {
-    val context = +ambient(ContextAmbient)
-    val drawable = context.drawable(resId)
-    if (color != null) {
-        drawable.setTint(color.toArgb())
-    }
-    return@effectOf BitmapImage(drawable.toBitmap())
-}
 
 fun Drawable.toImage() = toBitmap().toImage()
 

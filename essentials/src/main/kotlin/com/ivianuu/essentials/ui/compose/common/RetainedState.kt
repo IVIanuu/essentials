@@ -26,17 +26,18 @@ fun <T> retainedState(key: Any, init: () -> T) = effectOf<RetainedState<T>> {
 
     +onDispose {
         if (!activity.isChangingConfigurations) {
-            viewModel.value = viewModel
+            viewModel.values.remove(key)
         }
     }
 
     return@effectOf +memo {
         RetainedState(
-            if (viewModel.value != viewModel) {
-                viewModel.value as T
+            if (viewModel.values.containsKey(key)) {
+                viewModel.values[key] as T
             } else {
                 init()
             },
+            key,
             viewModel
         )
     }
@@ -44,6 +45,7 @@ fun <T> retainedState(key: Any, init: () -> T) = effectOf<RetainedState<T>> {
 
 class RetainedState<T> @PublishedApi internal constructor(
     value: T,
+    private val key: Any,
     private val viewModel: RetainedStateViewModel
 ) : Framed {
     /* NOTE(lmr): When this module is compiled with IR, we will need to remove the below Framed implementation */
@@ -52,7 +54,7 @@ class RetainedState<T> @PublishedApi internal constructor(
     var value: T
         get() = next.readable(this).value
         set(value) {
-            viewModel.value = value
+            viewModel.values[key] = value
             next.writable(this).value = value
         }
 
@@ -60,7 +62,7 @@ class RetainedState<T> @PublishedApi internal constructor(
         StateRecord(value)
 
     init {
-        viewModel.value = value
+        viewModel.values[key] = value
         _created(this)
     }
 
@@ -112,7 +114,7 @@ class RetainedState<T> @PublishedApi internal constructor(
 
 @PublishedApi
 internal class RetainedStateViewModel : ViewModel() {
-    var value: Any? = this
+    val values = mutableMapOf<Any, Any?>()
     companion object : ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T =
             RetainedStateViewModel() as T

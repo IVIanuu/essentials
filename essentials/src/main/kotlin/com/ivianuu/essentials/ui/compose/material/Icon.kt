@@ -1,4 +1,4 @@
-package com.ivianuu.essentials.ui.compose.image
+package com.ivianuu.essentials.ui.compose.material
 
 import androidx.compose.Composable
 import androidx.ui.core.dp
@@ -9,14 +9,16 @@ import androidx.ui.layout.Container
 import com.ivianuu.essentials.ui.compose.core.composable
 
 @Composable
-fun Avatar(
+fun Icon(
     image: Image,
-    tint: Color? = null
-) = composable("Avatar") {
+    tint: Color?
+) = composable("Icon") {
     Container(
-        width = 40.dp,
-        height = 40.dp
+        width = IconSize,
+        height = IconSize
     ) {
         DrawImage(image = image, tint = tint)
     }
 }
+
+private val IconSize = 24.dp

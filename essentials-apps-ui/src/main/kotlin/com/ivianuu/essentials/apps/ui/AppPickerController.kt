@@ -30,8 +30,8 @@ import com.ivianuu.essentials.apps.coil.AppIcon
 import com.ivianuu.essentials.ui.compose.common.ListScreen
 import com.ivianuu.essentials.ui.compose.composeControllerRoute
 import com.ivianuu.essentials.ui.compose.core.composable
-import com.ivianuu.essentials.ui.compose.image.Avatar
 import com.ivianuu.essentials.ui.compose.image.CoilImageAny
+import com.ivianuu.essentials.ui.compose.material.Avatar
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
 import com.ivianuu.essentials.ui.compose.mvrx.mvRxViewModel
 import com.ivianuu.essentials.ui.mvrx.MvRxViewModel

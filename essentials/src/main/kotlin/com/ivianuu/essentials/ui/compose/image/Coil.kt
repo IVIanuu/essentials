@@ -4,7 +4,6 @@ import androidx.compose.Composable
 import androidx.compose.Observe
 import androidx.compose.effectOf
 import androidx.compose.unaryPlus
-import androidx.ui.graphics.Color
 import androidx.ui.graphics.Image
 import coil.ImageLoader
 import coil.api.getAny
@@ -12,6 +11,7 @@ import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.coroutines.load
 import com.ivianuu.essentials.ui.compose.injekt.inject
+import com.ivianuu.essentials.ui.compose.resources.drawableResource
 
 fun loadCoilImageAny(
     placeholder: Image,
@@ -32,7 +32,7 @@ fun CoilImageAny(
     val wasPlaceholderNull = placeholder == null
     // todo better default placeholder
     val placeholder =
-        placeholder ?: +drawableImageResource(R.drawable.transparent_rect, Color.Transparent)
+        placeholder ?: +drawableResource(R.drawable.transparent_rect) // todo
     Observe {
         val loadedImage = +loadCoilImageAny(
             placeholder = placeholder,
