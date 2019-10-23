@@ -25,6 +25,7 @@ import androidx.ui.layout.Stack
 import androidx.ui.material.ripple.CurrentRippleTheme
 import androidx.ui.material.themeColor
 import com.ivianuu.essentials.ui.compose.core.composable
+import java.lang.Math.round
 
 @Composable
 fun Slider(
@@ -34,7 +35,7 @@ fun Slider(
     onChangeEnd: ((Int) -> Unit)? = null,
     min: Int = 0,
     max: Int = 100,
-    divisions: Int = 1,
+    divisions: Int? = null,
     color: Color = +themeColor { secondary }
 ) = composable("Slider") {
     WithConstraints { constraints ->
@@ -45,10 +46,13 @@ fun Slider(
 
         fun notifyChangeStart() {
             onChangeStart?.invoke(
-                lerp(
-                    unlerp(internalValue, 0, constraints.maxWidth.value),
-                    min,
-                    max
+                discretize(
+                    lerp(
+                        unlerp(internalValue, 0, constraints.maxWidth.value),
+                        min,
+                        max
+                    ),
+                    divisions
                 ).toInt().coerceIn(min, max)
             )
         }
@@ -56,10 +60,13 @@ fun Slider(
         val notifiedChangeValue = +memo { NotifiedValue(value) }
 
         fun notifyChange() {
-            val newValue = lerp(
-                unlerp(internalValue, 0, constraints.maxWidth.value),
-                min,
-                max
+            val newValue = discretize(
+                lerp(
+                    unlerp(internalValue, 0, constraints.maxWidth.value),
+                    min,
+                    max
+                ),
+                divisions
             ).toInt().coerceIn(min, max)
             if (notifiedChangeValue.value != newValue) {
                 notifiedChangeValue.value = newValue
@@ -69,10 +76,13 @@ fun Slider(
 
         fun notifyChangeEnd() {
             onChangeEnd?.invoke(
-                lerp(
-                    unlerp(internalValue, 0, constraints.maxWidth.value),
-                    min,
-                    max
+                discretize(
+                    lerp(
+                        unlerp(internalValue, 0, constraints.maxWidth.value),
+                        min,
+                        max
+                    ),
+                    divisions
                 ).toInt().coerceIn(min, max)
             )
         }
@@ -182,3 +192,13 @@ private fun lerp(
     max: Int
 ): Float = (value * (max - min) + min)
 
+private fun discretize(
+    value: Float,
+    divisions: Int?
+): Float {
+    return if (divisions != null) {
+        return (round((value / divisions).toDouble()) * divisions).toFloat()
+    } else {
+        value
+    }
+}

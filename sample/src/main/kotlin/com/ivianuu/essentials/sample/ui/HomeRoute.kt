@@ -38,6 +38,7 @@ val homeRoute = composeControllerRoute {
 
                         Slider(
                             value = sliderValue.value,
+                            divisions = 5,
                             onChanged = {
                                 d { "on changed $it" }
                                 sliderValue.value = it
