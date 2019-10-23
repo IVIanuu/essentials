@@ -117,14 +117,29 @@ fun Slider(
             PressGestureDetector(
                 onPress = { position ->
                     notifyChangeStart()
-                    setInternalValue(position.x.value)
+                    setInternalValue(
+                        discretize(
+                            position.x.value,
+                            divisions
+                        )
+                    )
                     notifyChange()
                     notifyChangeEnd()
                 }
             ) {
                 Container(height = 60.dp, expanded = true) {
                     Stack {
-                        DrawSlider(internalValue, rippleAnim.value, color)
+                        val positionDivisions: Int? = if (divisions != null) {
+                            val unlerped = unlerp(divisions.toFloat(), min, max)
+                            lerp(unlerped, 0, constraints.maxWidth.value).toInt()
+                        } else {
+                            null
+                        }
+                        DrawSlider(
+                            discretize(internalValue, positionDivisions),
+                            rippleAnim.value,
+                            color
+                        )
                     }
                 }
             }
@@ -162,7 +177,7 @@ private fun DrawSlider(
         )
 
         // ripple
-        paint.color = rippleColor.copy(alpha = 0.12f * rippleValue)
+        paint.color = rippleColor.copy(alpha = rippleColor.alpha * rippleValue)
         canvas.drawCircle(
             Offset(constraintX, centerY), sliderRadius * 2.5f * rippleValue, paint
         )
