@@ -19,7 +19,6 @@ package com.ivianuu.essentials.ui.base
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.ivianuu.director.router
-import com.ivianuu.essentials.ui.compose.injekt.composeModule
 import com.ivianuu.essentials.ui.mvrx.MvRxView
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.director.ControllerRenderer
@@ -47,7 +46,6 @@ abstract class EsActivity : AppCompatActivity(), InjektTrait, MvRxView {
     override val component by unsafeLazy {
         activityComponent {
             modules(esActivityModule(this@EsActivity))
-            modules(composeModule)
             modules(this@EsActivity.modules())
         }
     }
