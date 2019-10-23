@@ -8,7 +8,6 @@ import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
 import com.ivianuu.essentials.ui.compose.material.Subheader
-import com.ivianuu.essentials.ui.compose.prefs.Checkbox
 import com.ivianuu.essentials.ui.compose.prefs.PrefsScreen
 import com.ivianuu.kprefs.KPrefs
 import com.ivianuu.kprefs.boolean
@@ -27,7 +26,7 @@ val composeRoute = composeControllerRoute {
                     ListItem(
                         text = { Text("Hello $i") },
                         secondaryText = { Text("What's up $i") },
-                        trailing = { Checkbox(pref = pref) },
+                        //trailing = { Checkbox(pref = pref) },
                         onClick = { pref.set(!pref.get()) }
                     )
                 }
