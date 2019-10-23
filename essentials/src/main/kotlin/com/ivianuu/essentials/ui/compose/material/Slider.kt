@@ -2,7 +2,6 @@ package com.ivianuu.essentials.ui.compose.material
 
 import androidx.animation.TweenBuilder
 import androidx.compose.Composable
-import androidx.compose.ambient
 import androidx.compose.memo
 import androidx.compose.state
 import androidx.compose.unaryPlus
@@ -23,9 +22,8 @@ import androidx.ui.graphics.Color
 import androidx.ui.graphics.Paint
 import androidx.ui.layout.Container
 import androidx.ui.layout.Stack
-import androidx.ui.material.ripple.CurrentRippleTheme
+import androidx.ui.lerp
 import androidx.ui.material.themeColor
-import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.compose.core.composable
 
 @Composable
@@ -41,34 +39,41 @@ fun Slider(
 ) = composable("Slider") {
     WithConstraints { constraints ->
         val (internalValue, setInternalValue) = +state {
-            lerp(unlerp(value.toFloat(), min, max), 0, constraints.maxWidth.value).toInt()
+            val fraction = unlerp(value.toFloat(), max.toFloat(), min.toFloat())
+            lerp(0f, constraints.maxWidth.value.toFloat(), fraction)
         }
-        val rippleAnim = +animatedFloat(0f)
+
+        val overlayAnim = +animatedFloat(0f)
+
+        fun getCurrentFraction(): Float =
+            unlerp(internalValue, constraints.maxWidth.value.toFloat(), 0f)
+                .coerceIn(0f, 1f)
+
+        fun getCurrentUserValue(): Int {
+            return lerp(min, max, getCurrentFraction())
+                .coerceIn(min, max)
+                .let { value ->
+                    discretize(value, divisions?.let { divisions ->
+                        max / divisions
+                    })
+                }
+        }
 
         fun notifyChangeStart() {
-            val unlerped1 = unlerp(internalValue.toFloat(), 0, constraints.maxWidth.value)
-            val lerped = lerp(unlerped1, min, max).toInt()
-            val sliderValue = discretize(lerped, divisions?.let { max / it })
-            onChangeStart?.invoke(sliderValue)
+            onChangeStart?.invoke(getCurrentUserValue())
         }
 
         val notifiedChangeValue = +memo { NotifiedValue(value) }
-
         fun notifyChange() {
-            val unlerped1 = unlerp(internalValue.toFloat(), 0, constraints.maxWidth.value)
-            val lerped = lerp(unlerped1, min, max).toInt()
-            val sliderValue = discretize(lerped, divisions?.let { max / it })
-            if (notifiedChangeValue.value != sliderValue) {
-                notifiedChangeValue.value = sliderValue
-                onChanged?.invoke(sliderValue)
+            val currentValue = getCurrentUserValue()
+            if (notifiedChangeValue.value != currentValue) {
+                notifiedChangeValue.value = currentValue
+                onChanged?.invoke(currentValue)
             }
         }
 
         fun notifyChangeEnd() {
-            val unlerped1 = unlerp(internalValue.toFloat(), 0, constraints.maxWidth.value)
-            val lerped = lerp(unlerped1, min, max).toInt()
-            val sliderValue = discretize(lerped, divisions?.let { max / it })
-            onChangeEnd?.invoke(sliderValue)
+            onChangeEnd?.invoke(getCurrentUserValue())
         }
 
         notifyChange()
@@ -77,17 +82,18 @@ fun Slider(
             override fun onStart(downPosition: PxPosition) {
                 super.onStart(downPosition)
                 if (onChanged != null) {
-                    rippleAnim.animateTo(
+                    overlayAnim.animateTo(
                         targetValue = 1f,
                         anim = TweenBuilder<Float>().apply { duration = 250 }
                     )
+
                     notifyChangeStart()
                 }
             }
 
             override fun onDrag(dragDistance: PxPosition): PxPosition {
                 if (onChanged != null) {
-                    setInternalValue((internalValue + dragDistance.x.value).toInt())
+                    setInternalValue(internalValue + dragDistance.x.value)
                     notifyChange()
                 }
                 return dragDistance
@@ -96,10 +102,11 @@ fun Slider(
             override fun onStop(velocity: PxPosition) {
                 super.onStop(velocity)
                 if (onChanged != null) {
-                    rippleAnim.animateTo(
+                    overlayAnim.animateTo(
                         targetValue = 0f,
                         anim = TweenBuilder<Float>().apply { duration = 250 }
                     )
+
                     notifyChangeEnd()
                 }
             }
@@ -108,20 +115,18 @@ fun Slider(
                 onPress = { position ->
                     if (onChanged != null) {
                         notifyChangeStart()
-                        setInternalValue(position.x.value.toInt())
+                        setInternalValue(position.x.value)
                         notifyChange()
                         notifyChangeEnd()
                     }
                 }
             ) {
-                Container(height = 60.dp, expanded = true) {
+                Container(height = ContainerHeight, expanded = true) {
+                    //ColoredRect(Color.Red.copy(alpha = 0.1f))
                     Stack {
-                        val discrete = discretize(
-                            internalValue,
-                            divisions?.let { constraints.maxWidth.value / it }).toFloat()
                         DrawSlider(
-                            discrete,
-                            rippleAnim.value,
+                            getCurrentFraction(),
+                            overlayAnim.value,
                             color,
                             divisions,
                             onChanged != null
@@ -135,104 +140,120 @@ fun Slider(
 
 @Composable
 private fun DrawSlider(
-    x: Float,
-    rippleValue: Float,
+    fraction: Float,
+    overlayFraction: Float,
     color: Color,
     divisions: Int?,
     enabled: Boolean
 ) = composable("DrawSlider") {
     val paint = +memo { Paint() }
-    val rippleColor = (+(+ambient(CurrentRippleTheme)).defaultColor).copy(alpha = 0.12f)
-    val barHeight = withDensity(+ambientDensity()) { BarHeight.toPx() }.value
-    var sliderRadius = withDensity(+ambientDensity()) { SliderRadius.toPx() }.value
-    if (!enabled) {
-        sliderRadius *= 0.75f
-    }
-    val sliderMargin = sliderRadius * 1.5f
+    val trackHeight = withDensity(+ambientDensity()) { TrackHeight.toPx() }.value
+
+    val thumbRadius = withDensity(+ambientDensity()) {
+        if (enabled) ThumbRadius.toPx() else DisabledThumbRadius.toPx()
+    }.value
+    val thumbRippleRadius = withDensity(+ambientDensity()) { OverlayRadius.toPx() }.value
+    val thumbOutlineRadius = withDensity(+ambientDensity()) { ThumbOutlineRadius.toPx() }.value
     val surfaceColor = +themeColor { surface }
 
     Opacity(opacity = if (enabled) 1f else 0.5f) {
         Draw { canvas, parentSize ->
             val centerY = parentSize.height.value / 2
-            val constraintX = x.coerceIn(0f, parentSize.width.value)
+            val startX = thumbRippleRadius
+            val endX = parentSize.width.value - thumbRippleRadius
+            val currentX = lerp(0f, endX, fraction)
+                .let { tmp ->
+                    if (divisions != null) {
+                        discretize(tmp.toInt(), endX.toInt() / divisions).toFloat()
+                            .coerceIn(startX, endX)
+                    } else {
+                        tmp
+                    }
+                }
 
-            // bar 1
-            paint.color = color.copy(alpha = 0.12f)
+            // track
+            paint.color =
+                color.copy(alpha = if (enabled) InactiveTrackAlpha else DisabledInactiveTrackAlpha)
             canvas.drawRect(
-                Rect(0f, centerY - barHeight / 2, constraintX - sliderMargin, centerY + barHeight),
+                Rect(startX, centerY - trackHeight / 2, endX, centerY + trackHeight / 2),
                 paint
             )
 
-            // progress bar
-            paint.color = color
+            // active track
+            paint.color =
+                color.copy(alpha = if (enabled) ActiveTrackAlpha else DisabledActiveTrackAlpha)
             canvas.drawRect(
-                Rect(0f, centerY - barHeight / 2, constraintX - sliderMargin, centerY + barHeight),
+                Rect(startX, centerY - trackHeight / 2, currentX, centerY + trackHeight / 2),
                 paint
             )
 
-            // bar 2
-            paint.color = color.copy(alpha = 0.12f)
-            canvas.drawRect(
-                Rect(
-                    constraintX + sliderMargin,
-                    centerY - barHeight / 2,
-                    parentSize.width.value,
-                    centerY + barHeight
-                ),
-                paint
-            )
-
-            // divisions
+            // tick marks
             if (divisions != null) {
                 (0..divisions).forEach { division ->
-                    val step = parentSize.width.value / divisions
-                    val divisionX = (step * division)
-                    if (divisionX < x) {
-                        paint.color = surfaceColor.copy(alpha = 0.36f)
+                    val step = endX / divisions
+                    val tickMarkX = (step * division)
+                    if (tickMarkX <= currentX) {
+                        paint.color = surfaceColor.copy(
+                            alpha = if (enabled) ActiveTickMarkAlpha else DisabledActiveTickMarkAlpha
+                        )
                     } else {
-                        paint.color = color.copy(alpha = 0.24f)
+                        paint.color = color.copy(
+                            alpha = if (enabled) InactiveTickMarkAlpha else DisabledInactiveTickMarkAlpha
+                        )
                     }
                     canvas.drawCircle(
-                        Offset(divisionX, centerY),
-                        barHeight,
+                        Offset(tickMarkX, centerY),
+                        trackHeight / 2,
                         paint
                     )
                 }
             }
 
-            // ripple
-            if (rippleValue > 0f) {
-                paint.color = rippleColor.copy(alpha = rippleColor.alpha * rippleValue)
+            // overlay
+            if (overlayFraction > 0f) {
+                paint.color = color.copy(alpha = OverlayAlpha * overlayFraction)
                 canvas.drawCircle(
-                    Offset(constraintX, centerY), sliderRadius * 2.5f * rippleValue, paint
+                    Offset(currentX, centerY), thumbRippleRadius * overlayFraction, paint
                 )
             }
 
-            // indicator
-            paint.color = color
-            canvas.drawCircle(
-                Offset(constraintX, centerY), sliderRadius, paint
-            )
+            // disabled outline
+            if (!enabled) {
+                paint.color = surfaceColor
+                canvas.drawCircle(Offset(currentX, centerY), thumbOutlineRadius, paint)
+            }
+
+            // thumb
+            paint.color = color.copy(alpha = if (enabled) ThumbAlpha else DisabledThumbAlpha)
+            canvas.drawCircle(Offset(currentX, centerY), thumbRadius, paint)
         }
     }
 }
 
-private val BarHeight = 1.5.dp
-private val SliderRadius = 6.dp
+private val ContainerHeight = 32.dp
+private val TrackHeight = 2.dp
+private val ThumbRadius = 6.dp
+private val DisabledThumbRadius = 4.dp
+private val OverlayRadius = 16.dp
+private val ThumbOutlineRadius = 6.dp
 
+private const val ActiveTrackAlpha = 1f
+private const val InactiveTrackAlpha = 0.24f
+private const val DisabledActiveTrackAlpha = 0.32f
+private const val DisabledInactiveTrackAlpha = 0.12f
+private const val ActiveTickMarkAlpha = 0.54f
+private const val InactiveTickMarkAlpha = 0.54f
+private const val DisabledActiveTickMarkAlpha = 0.12f
+private const val DisabledInactiveTickMarkAlpha = 0.12f
+private const val ThumbAlpha = 1f
+private const val DisabledThumbAlpha = 0.32f
+private const val OverlayAlpha = 0.12f
+
+// todo delete
 private data class NotifiedValue(var value: Int)
 
-private fun unlerp(
-    value: Float,
-    min: Int,
-    max: Int
-): Float = (value - min) / (max - min)
-
-private fun lerp(
-    value: Float,
-    min: Int,
-    max: Int
-): Float = (value * (max - min) + min)
+private fun unlerp(value: Float, max: Float, min: Float): Float =
+    if (max > min) (value - min) / (max - min) else 0f
 
 private fun discretize(
     value: Int,
@@ -241,7 +262,5 @@ private fun discretize(
     if (decimals == null) return value
     val a = value / decimals * decimals
     val b = a + decimals
-    val result = if (value - a > b - value) b else a
-    d { "discretize: input $value, deci $decimals, a $a, b $b, result $result" }
-    return result
+    return if (value - a > b - value) b else a
 }

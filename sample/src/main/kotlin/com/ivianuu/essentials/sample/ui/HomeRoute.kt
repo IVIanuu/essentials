@@ -8,6 +8,7 @@ import androidx.ui.core.dp
 import androidx.ui.layout.Column
 import androidx.ui.layout.Container
 import androidx.ui.layout.Padding
+import androidx.ui.material.Button
 import androidx.ui.material.Divider
 import androidx.ui.material.ListItem
 import com.github.ajalt.timberkt.d
@@ -32,23 +33,34 @@ val homeRoute = composeControllerRoute {
                 expanded = true
             ) {
                 Padding(16.dp) {
-                    val sliderValue = +state { 80 }
+                    val sliderValue = +state { 60 }
+                    val sliderEnabled = +state { true }
                     Column {
                         Text("Current value: ${sliderValue.value}")
 
                         Slider(
                             value = sliderValue.value,
-                            divisions = 10,
-                            onChanged = {
-                                d { "on changed $it" }
-                                sliderValue.value = it
+                            divisions = 5,
+                            onChanged = if (sliderEnabled.value) {
+                                { value: Int ->
+                                    d { "on changed $value" }
+                                    sliderValue.value = value
+                                }
+                            } else {
+                                null
                             },
-                            //onChanged = null,
                             onChangeStart = {
                                 d { "on change start $it" }
                             },
                             onChangeEnd = {
                                 d { "on change end $it" }
+                            }
+                        )
+
+                        Button(
+                            text = if (sliderEnabled.value) "Disable" else "Enable",
+                            onClick = {
+                                sliderEnabled.value = !sliderEnabled.value
                             }
                         )
                     }
