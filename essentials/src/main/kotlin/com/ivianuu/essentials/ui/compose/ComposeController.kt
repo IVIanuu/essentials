@@ -45,15 +45,15 @@ abstract class ComposeController : EsController() {
 
     @Composable
     protected open fun composeWithAmbients() {
-        val materialThemeProvider = +inject<MaterialThemeProvider>()
-        MaterialTheme(
-            colors = +materialThemeProvider.colors,
-            typography = +materialThemeProvider.typography
-        ) {
-            ActivityAmbient.Provider(value = requireActivity()) {
-                RouteAmbient.Provider(value = route!!) {
-                    ControllerAmbient.Provider(value = this) {
-                        ComponentAmbient.Provider(value = component) {
+        ActivityAmbient.Provider(value = requireActivity()) {
+            RouteAmbient.Provider(value = route!!) {
+                ControllerAmbient.Provider(value = this) {
+                    ComponentAmbient.Provider(value = component) {
+                        val materialThemeProvider = +inject<MaterialThemeProvider>()
+                        MaterialTheme(
+                            colors = +materialThemeProvider.colors,
+                            typography = +materialThemeProvider.typography
+                        ) {
                             compose()
                         }
                     }
