@@ -1,8 +1,13 @@
 package com.ivianuu.essentials.ui.compose.material
 
+import androidx.animation.TweenBuilder
 import androidx.compose.Composable
+import androidx.compose.onActive
+import androidx.compose.unaryPlus
+import androidx.ui.animation.animatedFloat
 import androidx.ui.core.Alignment
 import androidx.ui.core.Dp
+import androidx.ui.core.Opacity
 import androidx.ui.core.WithDensity
 import androidx.ui.core.dp
 import androidx.ui.core.gesture.PressGestureDetector
@@ -71,37 +76,59 @@ fun Scaffold.showPopup(
 ) {
     showOverlay { dismiss ->
         composable("Popup") {
-            PressGestureDetector(
-                onPress = {
-                    // dismiss on outside touches
-                    dismiss()
-                }
-            ) {
-                WithDensity {
-                    Wrap(alignment = alignment) {
-                        val padding = when (alignment) {
-                            Alignment.TopLeft -> EdgeInsets(left = offsetX, top = offsetY)
-                            Alignment.TopCenter -> EdgeInsets(top = offsetY)
-                            Alignment.TopRight -> EdgeInsets(right = offsetX, top = offsetY)
-                            Alignment.CenterLeft -> EdgeInsets(left = offsetX)
-                            Alignment.Center -> EdgeInsets()
-                            Alignment.CenterRight -> EdgeInsets(right = offsetX)
-                            Alignment.BottomLeft -> EdgeInsets(left = offsetX, bottom = offsetY)
-                            Alignment.BottomCenter -> EdgeInsets(bottom = offsetY)
-                            Alignment.BottomRight -> EdgeInsets(right = offsetX, bottom = offsetY)
-                        }
-                        Padding(padding = padding) {
-                            Padding(4.dp) {
-                                PressGestureDetector {
-                                    Card(
-                                        elevation = 8.dp,
-                                        shape = RoundedCornerShape(4.dp),
-                                        children = {
-                                            content {
-                                                dismiss()
+            val alphaAnim = +animatedFloat(0f)
+
+            +onActive {
+                alphaAnim.animateTo(
+                    targetValue = 1f,
+                    anim = TweenBuilder<Float>().apply { duration = 300 }
+                )
+            }
+
+            val dismissAfterAnim = {
+                alphaAnim.animateTo(
+                    targetValue = 0f,
+                    anim = TweenBuilder<Float>().apply { duration = 300 },
+                    onEnd = { _, _ -> dismiss() }
+                )
+            }
+
+            Opacity(opacity = alphaAnim.value) {
+                PressGestureDetector(
+                    onPress = {
+                        // dismiss on outside touches
+                        dismissAfterAnim()
+                    }
+                ) {
+                    WithDensity {
+                        Wrap(alignment = alignment) {
+                            val padding = when (alignment) {
+                                Alignment.TopLeft -> EdgeInsets(left = offsetX, top = offsetY)
+                                Alignment.TopCenter -> EdgeInsets(top = offsetY)
+                                Alignment.TopRight -> EdgeInsets(right = offsetX, top = offsetY)
+                                Alignment.CenterLeft -> EdgeInsets(left = offsetX)
+                                Alignment.Center -> EdgeInsets()
+                                Alignment.CenterRight -> EdgeInsets(right = offsetX)
+                                Alignment.BottomLeft -> EdgeInsets(left = offsetX, bottom = offsetY)
+                                Alignment.BottomCenter -> EdgeInsets(bottom = offsetY)
+                                Alignment.BottomRight -> EdgeInsets(
+                                    right = offsetX,
+                                    bottom = offsetY
+                                )
+                            }
+                            Padding(padding = padding) {
+                                Padding(4.dp) {
+                                    PressGestureDetector {
+                                        Card(
+                                            elevation = 8.dp,
+                                            shape = RoundedCornerShape(4.dp),
+                                            children = {
+                                                content {
+                                                    dismissAfterAnim()
+                                                }
                                             }
-                                        }
-                                    )
+                                        )
+                                    }
                                 }
                             }
                         }
