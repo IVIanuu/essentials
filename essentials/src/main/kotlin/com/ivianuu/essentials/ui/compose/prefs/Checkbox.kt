@@ -1,5 +1,6 @@
 package com.ivianuu.essentials.ui.compose.prefs
 
+import androidx.compose.Composable
 import androidx.compose.unaryPlus
 import androidx.ui.graphics.Color
 import androidx.ui.material.Checkbox
@@ -7,6 +8,7 @@ import androidx.ui.material.themeColor
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.kprefs.Pref
 
+@Composable
 fun Checkbox(
     pref: Pref<Boolean>,
     color: Color = +themeColor { secondary }

@@ -14,6 +14,7 @@ import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.util.colorAttr
 
+@Composable
 fun ResourceMaterialTheme(
     children: @Composable() () -> Unit
 ) = composable("ResourceMaterialTheme") {

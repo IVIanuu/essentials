@@ -1,6 +1,7 @@
 package com.ivianuu.essentials.ui.compose.prefs
 
 import android.content.SharedPreferences
+import androidx.compose.Composable
 import androidx.compose.Observe
 import androidx.compose.unaryPlus
 import com.ivianuu.essentials.ui.compose.core.composable
@@ -14,6 +15,7 @@ import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.map
 import java.util.*
 
+@Composable
 fun Prefs(children: () -> Unit) = composable("Prefs") {
     Observe {
         val sharedPreferencesChanges = +inject<SharedPreferencesChanges>()

@@ -23,6 +23,7 @@ fun loadCoilImageAny(
     }
 }
 
+@Composable
 fun CoilImageAny(
     data: Any,
     placeholder: Image? = null,

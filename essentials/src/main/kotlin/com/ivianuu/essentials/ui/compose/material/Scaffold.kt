@@ -14,6 +14,7 @@ import androidx.ui.layout.Stack
 import androidx.ui.material.surface.Surface
 import com.ivianuu.essentials.ui.compose.core.composable
 
+@Composable
 fun Scaffold(
     appBar: @Composable() () -> Unit,
     content: @Composable() () -> Unit,

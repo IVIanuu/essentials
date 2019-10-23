@@ -14,10 +14,12 @@ import com.ivianuu.essentials.ui.compose.image.drawableImageResource
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.navigation.Navigator
 
-fun EsTopAppBar(title: String) {
+@Composable
+fun EsTopAppBar(title: String) = composable("EsTopAppBar2") {
     EsTopAppBar(title = { Text(title) })
 }
 
+@Composable
 fun EsTopAppBar(
     title: @Composable() () -> Unit
 ) = composable("EsTopAppBar") {
@@ -37,6 +39,7 @@ fun EsTopAppBar(
     )
 }
 
+@Composable
 fun EsNavigationIcon(
     icon: Image = +drawableImageResource(R.drawable.abc_ic_ab_back_material)
 ) = composable("EsNavigationIcon") {

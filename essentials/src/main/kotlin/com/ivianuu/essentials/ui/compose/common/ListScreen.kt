@@ -6,6 +6,7 @@ import androidx.ui.layout.Column
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.material.Scaffold
 
+@Composable
 fun ListScreen(
     appBar: (@Composable() () -> Unit)? = null,
     listContent: @Composable() () -> Unit
