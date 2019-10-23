@@ -16,11 +16,13 @@ import com.ivianuu.essentials.util.colorAttr
 
 @Composable
 fun ResourceMaterialTheme(
+    colors: MaterialColors = +resourceMaterialColors(),
+    typography: MaterialTypography = +resourceMaterialTypography(),
     children: @Composable() () -> Unit
 ) = composable("ResourceMaterialTheme") {
     MaterialTheme(
-        colors = +resourceMaterialColors(),
-        typography = +resourceMaterialTypography()
+        colors = colors,
+        typography = typography
     ) {
         children()
     }
@@ -66,6 +68,5 @@ fun resourceMaterialTypography() = effectOf<MaterialTypography> {
 fun resourceTextStyle(attr: Int) = effectOf<TextStyle> {
     error("not implemented")
     val context = +ambient(ContextAmbient)
-
     TextStyle()
 }

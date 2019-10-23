@@ -5,7 +5,7 @@ import androidx.compose.Composable
 import androidx.compose.Observe
 import androidx.compose.unaryPlus
 import com.ivianuu.essentials.ui.compose.core.composable
-import com.ivianuu.essentials.ui.compose.coroutines.flow
+import com.ivianuu.essentials.ui.compose.coroutines.collect
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.android.ApplicationScope
@@ -19,7 +19,7 @@ import java.util.*
 fun Prefs(children: () -> Unit) = composable("Prefs") {
     Observe {
         val sharedPreferencesChanges = +inject<SharedPreferencesChanges>()
-        +flow(sharedPreferencesChanges.changes.map { UUID.randomUUID().toString() })
+        +collect(sharedPreferencesChanges.changes.map { UUID.randomUUID().toString() })
         children()
     }
 }

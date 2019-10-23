@@ -89,9 +89,9 @@ fun <T> load(
     return@effectOf state.value
 }
 
-fun <T> flow(flow: Flow<T>) = flow(null, flow)
+fun <T> collect(flow: Flow<T>) = collect(null, flow)
 
-fun <T> flow(
+fun <T> collect(
     placeholder: T,
     flow: Flow<T>
 ) = effectOf<T> {

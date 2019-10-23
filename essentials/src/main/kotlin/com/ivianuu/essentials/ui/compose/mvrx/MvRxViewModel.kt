@@ -4,7 +4,7 @@ import androidx.compose.effectOf
 import androidx.compose.unaryPlus
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
-import com.ivianuu.essentials.ui.compose.coroutines.flow
+import com.ivianuu.essentials.ui.compose.coroutines.collect
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.compose.viewmodel.viewModel
 import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
@@ -17,9 +17,7 @@ inline fun <reified T : MvRxViewModel<*>> mvRxViewModel(
     key: String = T::class.defaultViewModelKey
 ) = effectOf<T> {
     val viewModel = +viewModel<T>(from, factory, key)
-
     // recompose on changes
-    +flow(viewModel.flow.drop(1))
-
+    +collect(viewModel.flow.drop(1))
     return@effectOf viewModel
 }

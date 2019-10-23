@@ -38,7 +38,7 @@ val homeRoute = composeControllerRoute {
                 })
 
                 if (index != HomeItem.values().lastIndex) {
-
+                    HomeDivider()
                 }
             }
         }
@@ -111,6 +111,11 @@ enum class HomeItem(
         title = "Compose",
         color = Color.Magenta,
         route = { composeRoute }
+    ),
+    Timer(
+        title = "Timer",
+        color = Color.Cyan,
+        route = { com.ivianuu.essentials.sample.ui.timerRoute }
     ),
     About(
         title = "About",
