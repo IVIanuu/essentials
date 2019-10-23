@@ -2,54 +2,112 @@ package com.ivianuu.essentials.ui.compose.material
 
 import androidx.compose.Composable
 import androidx.ui.core.Alignment
+import androidx.ui.core.Dp
+import androidx.ui.core.WithDensity
 import androidx.ui.core.dp
+import androidx.ui.core.gesture.PressGestureDetector
+import androidx.ui.foundation.Clickable
 import androidx.ui.foundation.shape.corner.RoundedCornerShape
+import androidx.ui.layout.Column
+import androidx.ui.layout.ConstrainedBox
+import androidx.ui.layout.DpConstraints
+import androidx.ui.layout.EdgeInsets
+import androidx.ui.layout.Padding
 import androidx.ui.layout.Wrap
+import androidx.ui.material.ripple.Ripple
 import androidx.ui.material.surface.Card
 import com.ivianuu.essentials.ui.compose.core.composable
 
-@Composable
-fun Popup(
-    alignment: Alignment,
-    content: @Composable() () -> Unit
-) = composable("Popup") {
-    Wrap(alignment) {
-        Card(
-            elevation = 8.dp,
-            shape = RoundedCornerShape(4.dp),
-            children = content
-        )
+fun <T> Scaffold.showPopup(
+    alignment: Alignment = Alignment.TopLeft,
+    offsetX: Dp = 0.dp,
+    offsetY: Dp = 0.dp,
+    items: List<T>,
+    item: @Composable() (T) -> Unit,
+    onSelected: (T) -> Unit
+) {
+    showPopup(
+        alignment = alignment,
+        offsetX = offsetX,
+        offsetY = offsetY
+    ) { dismiss ->
+        Padding(top = 8.dp, bottom = 8.dp) {
+            Column {
+                items.forEach { value ->
+                    Ripple(bounded = true) {
+                        Clickable(
+                            onClick = {
+                                onSelected(value)
+                                dismiss()
+                            },
+                            children = {
+                                ConstrainedBox(
+                                    constraints = DpConstraints(
+                                        minWidth = 200.dp,
+                                        minHeight = 48.dp
+                                    )
+                                ) {
+                                    Wrap(Alignment.CenterLeft) {
+                                        Padding(left = 16.dp, right = 16.dp) {
+                                            item(value)
+                                        }
+                                    }
+                                }
+
+                            }
+                        )
+                    }
+                }
+            }
+        }
     }
 }
 
-/**
-scaffold.showOverlay { dismissOverlay ->
-Padding(4.dp) {
-Popup(
-alignment = Alignment.TopRight,
-content = {
-ConstrainedBox(
-constraints = DpConstraints(
-minWidth = 200.dp,
-minHeight = 100.dp
-)
+fun Scaffold.showPopup(
+    alignment: Alignment = Alignment.TopLeft,
+    offsetX: Dp = 0.dp,
+    offsetY: Dp = 0.dp,
+    content: @Composable() (dismiss: () -> Unit) -> Unit
 ) {
-Padding(8.dp) {
-Column(
-crossAxisAlignment = CrossAxisAlignment.Center
-) {
-Text("Item 1")
-HeightSpacer(8.dp)
-Text("Item 2")
+    showOverlay { dismiss ->
+        composable("Popup") {
+            PressGestureDetector(
+                onPress = {
+                    // dismiss on outside touches
+                    dismiss()
+                }
+            ) {
+                WithDensity {
+                    Wrap(alignment = alignment) {
+                        val padding = when (alignment) {
+                            Alignment.TopLeft -> EdgeInsets(left = offsetX, top = offsetY)
+                            Alignment.TopCenter -> EdgeInsets(top = offsetY)
+                            Alignment.TopRight -> EdgeInsets(right = offsetX, top = offsetY)
+                            Alignment.CenterLeft -> EdgeInsets(left = offsetX)
+                            Alignment.Center -> EdgeInsets()
+                            Alignment.CenterRight -> EdgeInsets(right = offsetX)
+                            Alignment.BottomLeft -> EdgeInsets(left = offsetX, bottom = offsetY)
+                            Alignment.BottomCenter -> EdgeInsets(bottom = offsetY)
+                            Alignment.BottomRight -> EdgeInsets(right = offsetX, bottom = offsetY)
+                        }
+                        Padding(padding = padding) {
+                            Padding(4.dp) {
+                                PressGestureDetector {
+                                    Card(
+                                        elevation = 8.dp,
+                                        shape = RoundedCornerShape(4.dp),
+                                        children = {
+                                            content {
+                                                dismiss()
+                                            }
+                                        }
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
-}
-}
-}
-)
-}
-
-+launchOnActive {
-delay(3000)
-dismissOverlay()
-}
-}*/
