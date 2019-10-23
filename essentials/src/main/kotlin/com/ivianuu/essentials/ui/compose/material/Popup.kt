@@ -28,8 +28,8 @@ fun <T> Scaffold.showPopup(
     offsetX: Dp = 0.dp,
     offsetY: Dp = 0.dp,
     items: List<T>,
-    item: @Composable() (T) -> Unit,
-    onSelected: (T) -> Unit
+    onSelected: (T) -> Unit,
+    item: @Composable() (T) -> Unit
 ) {
     showPopup(
         alignment = alignment,
@@ -39,32 +39,44 @@ fun <T> Scaffold.showPopup(
         Padding(top = 8.dp, bottom = 8.dp) {
             Column {
                 items.forEach { value ->
-                    Ripple(bounded = true) {
-                        Clickable(
-                            onClick = {
-                                onSelected(value)
-                                dismiss()
-                            },
-                            children = {
-                                ConstrainedBox(
-                                    constraints = DpConstraints(
-                                        minWidth = 200.dp,
-                                        minHeight = 48.dp
-                                    )
-                                ) {
-                                    Wrap(Alignment.CenterLeft) {
-                                        Padding(left = 16.dp, right = 16.dp) {
-                                            item(value)
-                                        }
-                                    }
-                                }
-
-                            }
-                        )
-                    }
+                    PopupMenuItem(
+                        content = { item(value) },
+                        onClick = {
+                            onSelected(value)
+                            dismiss()
+                        }
+                    )
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun PopupMenuItem(
+    content: () -> Unit,
+    onClick: () -> Unit
+) = composable("PopupMenuItem") {
+    Ripple(bounded = true) {
+        Clickable(
+            onClick = onClick,
+            children = {
+                ConstrainedBox(
+                    constraints = DpConstraints(
+                        minWidth = 200.dp,
+                        minHeight = 48.dp,
+                        maxHeight = 48.dp
+                    )
+                ) {
+                    Wrap(Alignment.CenterLeft) {
+                        Padding(left = 16.dp, right = 16.dp) {
+                            content()
+                        }
+                    }
+                }
+
+            }
+        )
     }
 }
 
