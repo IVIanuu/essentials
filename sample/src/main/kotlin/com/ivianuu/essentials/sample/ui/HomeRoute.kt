@@ -1,17 +1,9 @@
 package com.ivianuu.essentials.sample.ui
 
-import android.content.Context
-import android.content.res.Configuration
-import android.util.DisplayMetrics
-import android.view.WindowManager
 import androidx.compose.Composable
-import androidx.compose.ambient
 import androidx.compose.memo
 import androidx.compose.unaryPlus
-import androidx.ui.core.Alignment
 import androidx.ui.core.Draw
-import androidx.ui.core.LayoutCoordinates
-import androidx.ui.core.OnPositioned
 import androidx.ui.core.Opacity
 import androidx.ui.core.PxSize
 import androidx.ui.core.Text
@@ -24,26 +16,18 @@ import androidx.ui.layout.Container
 import androidx.ui.layout.Padding
 import androidx.ui.material.Divider
 import androidx.ui.material.ListItem
-import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.about.aboutRoute
 import com.ivianuu.essentials.apps.ui.appPickerRoute
-import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.twilight.twilightSettingsRoute
 import com.ivianuu.essentials.ui.compose.common.ListScreen
 import com.ivianuu.essentials.ui.compose.composeControllerRoute
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.injekt.inject
-import com.ivianuu.essentials.ui.compose.material.EsAppBarIcon
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
-import com.ivianuu.essentials.ui.compose.material.ScaffoldAmbient
-import com.ivianuu.essentials.ui.compose.material.showPopup
-import com.ivianuu.essentials.ui.compose.resources.drawableResource
+import com.ivianuu.essentials.ui.compose.material.PopupMenuAppBarIcon
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.Route
 import com.ivianuu.essentials.util.Toaster
-import com.ivianuu.injekt.Inject
-
-data class CoordinatesHolder(var coordinates: LayoutCoordinates?)
 
 val homeRoute = composeControllerRoute {
     ListScreen(
@@ -51,41 +35,18 @@ val homeRoute = composeControllerRoute {
             EsTopAppBar(
                 title = { Text("Home") },
                 trailing = {
-                    val scaffold = +ambient(ScaffoldAmbient)
                     val toaster = +inject<Toaster>()
 
-                    Container {
-                        val coordinates = +memo { CoordinatesHolder(null) }
-                        OnPositioned { coordinates.coordinates = it }
-
-                        EsAppBarIcon(
-                            image = +drawableResource(R.drawable.abc_ic_menu_overflow_material),
-                            onClick = {
-                                val localToGlobal = coordinates.coordinates!!
-                                    .localToGlobal(scaffold.coordinates!!.position)
-                                coordinates.coordinates!!.size
-                                var rootCoordinates = coordinates.coordinates!!
-                                while (rootCoordinates.parentCoordinates != null) {
-                                    rootCoordinates = rootCoordinates.parentCoordinates!!
-                                }
-
-                                d { "local to global ${localToGlobal.x.value}, ${localToGlobal.y.value} size ${coordinates.coordinates!!.size.height}" }
-
-                                scaffold.showPopup(
-                                    alignment = Alignment.TopRight,
-                                    offsetX = 4.dp,
-                                    offsetY = 4.dp,
-                                    items = listOf(
-                                        "Option 1",
-                                        "Option 2",
-                                        "Option 3"
-                                    ),
-                                    item = { Text(text = it) },
-                                    onSelected = { toaster.toast("Clicked $it") }
-                                )
-                            }
-                        )
-                    }
+                    PopupMenuAppBarIcon(
+                        items = listOf(
+                            "Option 1",
+                            "Option 2",
+                            "Option 3"
+                        ),
+                        item = { Text(text = it) },
+                        onCancel = { toaster.toast("Cancelled") },
+                        onSelected = { toaster.toast("Selected $it") }
+                    )
                 }
             )
         },
@@ -174,36 +135,11 @@ enum class HomeItem(
     Timer(
         title = "Timer",
         color = Color.Cyan,
-        route = { com.ivianuu.essentials.sample.ui.timerRoute }
+        route = { timerRoute }
     ),
     About(
         title = "About",
         color = Color.Yellow,
         route = { aboutRoute() }
     )
-}
-
-@Inject
-class DisplayInfo(
-    private val context: Context,
-    private val windowManager: WindowManager
-) {
-    val isLandscape: Boolean
-        get() = context.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
-    val screenWidth: Int
-        get() {
-            windowManager.defaultDisplay.getRealMetrics(metrics)
-            return metrics.widthPixels
-        }
-    val screenHeight: Int
-        get() {
-            windowManager.defaultDisplay.getRealMetrics(metrics)
-            return metrics.heightPixels
-        }
-    /*val screenRotation: Rotation
-        get() = Rotation.values().first { it.rotationInt == windowManager.defaultDisplay.rotation }*/
-
-    private companion object {
-        private val metrics = DisplayMetrics()
-    }
 }

@@ -27,7 +27,6 @@ import androidx.ui.layout.Padding
 import androidx.ui.layout.Wrap
 import androidx.ui.material.ripple.Ripple
 import androidx.ui.material.surface.Card
-import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.resources.drawableResource
@@ -172,6 +171,8 @@ private class CoordinatesHolder(var coordinates: LayoutCoordinates?)
 @Composable
 fun <T> PopupMenuTrigger(
     alignment: Alignment = Alignment.Center,
+    offsetX: Dp = 0.dp,
+    offsetY: Dp = 0.dp,
     onCancel: (() -> Unit)? = null,
     items: List<T>,
     onSelected: (T) -> Unit,
@@ -211,7 +212,7 @@ fun <T> PopupMenuTrigger(
                     scaffoldCoordinates.size.height.div(2)
                 ).toDp().value
 
-                val popupAlignment = if (isLeft) {
+                val realAlignment = if (isLeft) {
                     if (isTop) {
                         Alignment.TopLeft
                     } else {
@@ -225,7 +226,7 @@ fun <T> PopupMenuTrigger(
                     }
                 }
 
-                var (offsetX, offsetY) = when (alignment) {
+                var (realOffsetX, realOffsetY) = when (alignment) {
                     Alignment.TopLeft -> left to top
                     Alignment.TopCenter -> centerX to top
                     Alignment.TopRight -> right to top
@@ -238,26 +239,49 @@ fun <T> PopupMenuTrigger(
                 }
 
                 if (!isLeft) {
-                    offsetX = scaffoldCoordinates.size.width.toDp().minus(offsetX)
+                    realOffsetX = scaffoldCoordinates.size.width.toDp().minus(realOffsetX)
                 }
                 if (!isTop) {
-                    offsetY = scaffoldCoordinates.size.height.toDp().minus(offsetY)
+                    realOffsetY = scaffoldCoordinates.size.height.toDp().minus(realOffsetY)
                 }
 
-                d {
-                    "show popup\n" +
-                            "is left $isLeft it top $isTop\n" +
-                            "popup alignment $popupAlignment\n " +
-                            "user alignment $alignment\n" +
-                            "width $width, height $height\n" +
-                            "left $left, top $top, right $right, bottom $bottom\n" +
-                            "offset x $offsetX, y $offsetY"
+                when (alignment) {
+                    Alignment.TopLeft -> {
+                        realOffsetX = realOffsetX.plus(offsetX)
+                        realOffsetY = realOffsetY.plus(offsetY)
+                    }
+                    Alignment.TopCenter -> {
+                        realOffsetY = realOffsetY.plus(offsetY)
+                    }
+                    Alignment.TopRight -> {
+                        realOffsetX = realOffsetX.minus(offsetX)
+                        realOffsetY = realOffsetY.plus(offsetY)
+                    }
+                    Alignment.CenterLeft -> {
+                        realOffsetX = realOffsetX.plus(offsetX)
+                    }
+                    Alignment.Center -> {
+                    }
+                    Alignment.CenterRight -> {
+                        realOffsetX = realOffsetX.minus(offsetX)
+                    }
+                    Alignment.BottomLeft -> {
+                        realOffsetX = realOffsetX.plus(offsetX)
+                        realOffsetY = realOffsetY.minus(offsetY)
+                    }
+                    Alignment.BottomCenter -> {
+                        realOffsetY = realOffsetY.minus(offsetY)
+                    }
+                    Alignment.BottomRight -> {
+                        realOffsetX = realOffsetX.minus(offsetX)
+                        realOffsetY = realOffsetY.minus(offsetY)
+                    }
                 }
 
                 scaffold.showPopupMenu(
-                    alignment = popupAlignment,
-                    offsetX = offsetX,
-                    offsetY = offsetY,
+                    alignment = realAlignment,
+                    offsetX = realOffsetX,
+                    offsetY = realOffsetY,
                     items = items,
                     item = item,
                     onCancel = onCancel,
@@ -270,9 +294,9 @@ fun <T> PopupMenuTrigger(
 
 @Composable
 fun <T> PopupMenuButton(
-    //offsetX: Dp = 0.dp,
-    //offsetY: Dp = 0.dp,
     alignment: Alignment = Alignment.Center,
+    offsetX: Dp = 0.dp,
+    offsetY: Dp = 0.dp,
     onCancel: (() -> Unit)? = null,
     items: List<T>,
     onSelected: (T) -> Unit,
@@ -281,6 +305,8 @@ fun <T> PopupMenuButton(
 ) = composable("PopupMenuButton") {
     PopupMenuTrigger(
         alignment = alignment,
+        offsetX = offsetX,
+        offsetY = offsetY,
         onCancel = onCancel,
         items = items,
         onSelected = onSelected,

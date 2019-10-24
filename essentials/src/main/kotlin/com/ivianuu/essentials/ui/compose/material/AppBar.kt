@@ -3,6 +3,7 @@ package com.ivianuu.essentials.ui.compose.material
 import androidx.compose.Composable
 import androidx.compose.ambient
 import androidx.compose.unaryPlus
+import androidx.ui.core.Alignment
 import androidx.ui.core.Text
 import androidx.ui.core.dp
 import androidx.ui.foundation.Clickable
@@ -59,6 +60,28 @@ fun EsNavigationIcon(
         image = image,
         onClick = { navigator.pop() }
     )
+}
+
+@Composable
+fun <T> PopupMenuAppBarIcon(
+    onCancel: (() -> Unit)? = null,
+    items: List<T>,
+    onSelected: (T) -> Unit,
+    item: @Composable() (T) -> Unit,
+    icon: Image = +drawableResource(R.drawable.abc_ic_menu_overflow_material)
+) = composable("MenuAppBarIcon") {
+    PopupMenuTrigger(
+        alignment = Alignment.TopRight,
+        onCancel = onCancel,
+        items = items,
+        onSelected = onSelected,
+        item = item
+    ) { showPopup ->
+        EsAppBarIcon(
+            image = icon,
+            onClick = showPopup
+        )
+    }
 }
 
 @Composable
