@@ -3,7 +3,6 @@ package com.ivianuu.essentials.ui.compose.material
 import androidx.animation.TweenBuilder
 import androidx.compose.Composable
 import androidx.compose.ambient
-import androidx.compose.memo
 import androidx.compose.onActive
 import androidx.compose.unaryPlus
 import androidx.ui.animation.animatedFloat
@@ -29,6 +28,7 @@ import androidx.ui.material.ripple.Ripple
 import androidx.ui.material.surface.Card
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.compose.core.composable
+import com.ivianuu.essentials.ui.compose.core.ref
 import com.ivianuu.essentials.ui.compose.resources.drawableResource
 
 // todo proper material open animation
@@ -167,8 +167,6 @@ fun <T> Scaffold.showPopupMenu(
     }
 }
 
-private class CoordinatesHolder(var coordinates: LayoutCoordinates?)
-
 // todo better name?
 @Composable
 fun <T> PopupMenuTrigger(
@@ -184,13 +182,13 @@ fun <T> PopupMenuTrigger(
     Wrap {
         WithDensity {
             // cache coordinates
-            val coordinatesHolder = +memo { CoordinatesHolder(null) }
-            OnPositioned { coordinatesHolder.coordinates = it }
+            val (coordinates, setCoordinates) = +ref<LayoutCoordinates?> { null }
+            OnPositioned(setCoordinates)
 
             val scaffold = +ambient(ScaffoldAmbient)
 
             child {
-                val coordinates = coordinatesHolder.coordinates!!
+                coordinates!!
                 val scaffoldCoordinates = scaffold.coordinates!!
 
                 val globalPosition = coordinates.positionInRoot

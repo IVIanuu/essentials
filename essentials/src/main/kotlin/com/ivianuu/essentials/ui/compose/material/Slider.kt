@@ -25,6 +25,7 @@ import androidx.ui.layout.Stack
 import androidx.ui.lerp
 import androidx.ui.material.themeColor
 import com.ivianuu.essentials.ui.compose.core.composable
+import com.ivianuu.essentials.ui.compose.core.ref
 
 @Composable
 fun Slider(
@@ -63,7 +64,7 @@ fun Slider(
             onChangeStart?.invoke(getCurrentUserValue())
         }
 
-        val notifiedChangeValue = +memo { NotifiedValue(value) }
+        val notifiedChangeValue = +ref { value }
         fun notifyChange() {
             val currentValue = getCurrentUserValue()
             if (notifiedChangeValue.value != currentValue) {
@@ -248,9 +249,6 @@ private const val DisabledInactiveTickMarkAlpha = 0.12f
 private const val ThumbAlpha = 1f
 private const val DisabledThumbAlpha = 0.32f
 private const val OverlayAlpha = 0.12f
-
-// todo delete
-private data class NotifiedValue(var value: Int)
 
 private fun unlerp(value: Float, max: Float, min: Float): Float =
     if (max > min) (value - min) / (max - min) else 0f
