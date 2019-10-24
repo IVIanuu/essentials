@@ -25,8 +25,12 @@ import com.ivianuu.essentials.ui.navigation.director.ControllerRenderer
 import com.ivianuu.essentials.ui.navigation.director.ControllerRoute
 import com.ivianuu.essentials.util.coroutineScope
 import com.ivianuu.essentials.util.unsafeLazy
-import com.ivianuu.injekt.*
+import com.ivianuu.injekt.InjektTrait
+import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.android.activityComponent
+import com.ivianuu.injekt.factory
+import com.ivianuu.injekt.inject
+import com.ivianuu.injekt.module
 import com.ivianuu.scopes.android.onPause
 import kotlinx.coroutines.launch
 

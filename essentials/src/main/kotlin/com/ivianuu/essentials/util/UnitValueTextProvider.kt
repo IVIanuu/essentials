@@ -19,7 +19,11 @@ package com.ivianuu.essentials.util
 import android.content.Context
 import com.ivianuu.epoxyprefs.SeekBarPreferenceModel
 import com.ivianuu.essentials.R
-import com.ivianuu.essentials.util.UnitValueTextProvider.Unit.*
+import com.ivianuu.essentials.util.UnitValueTextProvider.Unit.Dp
+import com.ivianuu.essentials.util.UnitValueTextProvider.Unit.Millis
+import com.ivianuu.essentials.util.UnitValueTextProvider.Unit.Percentage
+import com.ivianuu.essentials.util.UnitValueTextProvider.Unit.Px
+import com.ivianuu.essentials.util.UnitValueTextProvider.Unit.Seconds
 
 class UnitValueTextProvider(
     private val context: Context,

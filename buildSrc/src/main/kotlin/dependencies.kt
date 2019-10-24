@@ -63,6 +63,11 @@ object Deps {
             const val runner = "androidx.test:runner:1.2.0"
         }
 
+        object Ui {
+            private const val version = "0.0.1-dev01"
+            const val material = "androidx.ui:ui-material:$version"
+        }
+
         const val work = "androidx.work:work-runtime-ktx:2.1.0"
     }
 

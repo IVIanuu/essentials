@@ -51,7 +51,6 @@ class KeyboardVisibilityDetector(
                 .map { getKeyboardHeight() }
                 .map { it > 0 }
                 .distinctUntilChanged()
-            // todo use Flow.share() once available
         }
 
     private fun getKeyboardHeight(): Int {

@@ -18,6 +18,7 @@ package com.ivianuu.essentials.ui.navigation.director
 
 import androidx.fragment.app.FragmentActivity
 import com.ivianuu.director.RouterTransaction
+import com.ivianuu.essentials.ui.base.EsController
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.util.AppDispatchers
 import com.ivianuu.essentials.util.getViewModel
@@ -56,7 +57,9 @@ class ControllerRenderer(
                     val context = ControllerRoute.Context(
                         router.parent, activity, activity.application
                     )
-                    transaction = RouterTransaction(route.factory(context))
+                    val controller = route.factory(context)
+                    if (controller is EsController) controller.route = route
+                    transaction = RouterTransaction(controller)
                     transaction.controller.getViewModel<ControllerRouteHolder>()
                         .route = route
                     route.options?.applyToTransaction(transaction)
