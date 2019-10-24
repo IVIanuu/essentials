@@ -66,10 +66,13 @@ val prefsRoute = composeControllerRoute(
                 dependencies = dependencies
             )
 
+            PreferenceSubheader(text = "Dialogs", dependencies = dependencies)
+
             TextInputPreference(
                 pref = prefs.string("text_input"),
                 title = { Text("Text input") },
-                summary = { Text("This is a text input preference") }
+                summary = { Text("This is a text input preference") },
+                dependencies = dependencies
             )
 
             MultiSelectListPreference(
@@ -80,7 +83,8 @@ val prefsRoute = composeControllerRoute(
                     MultiSelectListPreference.Item("A"),
                     MultiSelectListPreference.Item("B"),
                     MultiSelectListPreference.Item("C")
-                )
+                ),
+                dependencies = dependencies
             )
 
             SingleItemListPreference(
@@ -91,7 +95,8 @@ val prefsRoute = composeControllerRoute(
                     SingleItemListPreference.Item("A"),
                     SingleItemListPreference.Item("B"),
                     SingleItemListPreference.Item("C")
-                )
+                ),
+                dependencies = dependencies
             )
         }
     )

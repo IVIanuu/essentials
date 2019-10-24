@@ -8,7 +8,7 @@ import com.ivianuu.essentials.ui.compose.material.Subheader
 fun PreferenceSubheader(
     text: String,
     dependencies: List<Dependency<*>>? = null
-) = composable("PreferenceSubheader", inputs = arrayOf(text)) {
+) = composable("PreferenceSubheader") {
     Dependencies(dependencies) {
         Subheader(text)
     }
