@@ -6,7 +6,6 @@ import androidx.ui.material.ListItem
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.kprefs.Pref
 
-fun List<Dependency<*>>?.checkAll() = this?.all { it.check() } ?: true
 
 @Composable
 fun <T> Preference(
@@ -21,7 +20,11 @@ fun <T> Preference(
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null
 ) = composable("Preference") {
-    val finalEnabled = enabled && dependencies?.all { it.check() } ?: true
+    val finalEnabled = enabled && dependencies?.checkAll() ?: true
+
+    Dependencies(dependencies) {
+
+    }
 
     Opacity(if (finalEnabled) 1f else 0.5f) {
         ListItem(
