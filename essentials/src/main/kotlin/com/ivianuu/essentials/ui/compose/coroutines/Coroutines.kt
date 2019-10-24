@@ -25,9 +25,7 @@ fun coroutineScope(context: Effect<CoroutineContext> = coroutineContext()) =
         return@effectOf coroutineScope
     }
 
-fun coroutineContext() = effectOf<CoroutineContext> {
-    +ambient(CoroutineContextAmbient)
-}
+fun coroutineContext() = ambient(CoroutineContextAmbient)
 
 fun launchOnActive(
     block: suspend CoroutineScope.() -> Unit
@@ -79,12 +77,10 @@ fun launchOnCommit(
 }
 
 @BuilderInference
-fun <T> load(block: suspend CoroutineScope.() -> T) = effectOf<T?> {
-    +load(
-        placeholder = null,
-        block = block
-    )
-}
+fun <T> load(block: suspend CoroutineScope.() -> T) = load(
+    placeholder = null,
+    block = block
+)
 
 fun <T> load(
     placeholder: T,
