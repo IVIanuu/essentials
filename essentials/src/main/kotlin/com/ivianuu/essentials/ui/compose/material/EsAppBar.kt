@@ -29,6 +29,7 @@ fun EsTopAppBar(title: String) = composable("EsTopAppBar2") {
 @Composable
 fun EsTopAppBar(
     title: @Composable() () -> Unit,
+    leading: (@Composable() () -> Unit)? = null,
     trailing: (@Composable() () -> Unit)? = null
 ) = composable("EsTopAppBar") {
     val navigator = +inject<Navigator>()
@@ -41,9 +42,9 @@ fun EsTopAppBar(
             null
         }
 
-    TopAppBar<@Composable() () -> Unit>(
+    TopAppBar(
         title = title,
-        navigationIcon = navigationIconComposable,
+        navigationIcon = leading ?: navigationIconComposable,
         actionData = listOfNotNull(trailing),
         action = { it() }
     )
