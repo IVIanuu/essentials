@@ -68,7 +68,7 @@ fun AboutSection(
     AboutItem(
         titleRes = R.string.about_reddit,
         descRes = R.string.about_reddit_desc,
-        route = { urlRoute("https://www.reddit.com/r/manuelwrageapps\"") }
+        route = { urlRoute("https://www.reddit.com/r/manuelwrageapps") }
     )
 
     AboutItem(
