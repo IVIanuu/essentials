@@ -33,7 +33,7 @@ fun MultiSelectListPreference(
         dialogIcon = dialogIcon,
         dialogPositiveButtonText = dialogPositiveButtonText,
         dialogNegativeButtonText = dialogNegativeButtonText,
-        buildDialog = {
+        buildDialog = { dismiss ->
             val currentValues = pref.get()
 
             val selectedIndices = currentValues

@@ -15,7 +15,7 @@ import com.ivianuu.kprefs.Pref
 @Composable
 fun <T> DialogPreference(
     pref: Pref<T>,
-    buildDialog: MaterialDialog.() -> Unit,
+    buildDialog: MaterialDialog.(dismissDialog: () -> Unit) -> Unit,
     dialogTitle: String? = null,
     dialogMessage: String? = null,
     dialogIcon: Drawable? = null,
@@ -44,7 +44,7 @@ fun <T> DialogPreference(
                     if (dialogIcon != null) icon(drawable = dialogIcon)
                     if (dialogPositiveButtonText != null) positiveButton(text = dialogPositiveButtonText)
                     if (dialogNegativeButtonText != null) negativeButton(text = dialogNegativeButtonText)
-                    buildDialog()
+                    buildDialog { navigator.pop() }
                 }
             )
         },

@@ -32,7 +32,7 @@ fun SingleItemListPreference(
         dialogIcon = dialogIcon,
         dialogPositiveButtonText = null,
         dialogNegativeButtonText = dialogNegativeButtonText,
-        buildDialog = {
+        buildDialog = { dismiss ->
             val currentValue = pref.get()
             val selectedIndex = entries.indexOfFirst { it.value == currentValue }
 
@@ -40,13 +40,13 @@ fun SingleItemListPreference(
                 initialSelection = selectedIndex,
                 items = entries.map { it.title },
                 waitForPositiveButton = false
-            ) { dialog, position, _ ->
+            ) { _, position, _ ->
                 val newValue = entries[position].value
                 if (onChange?.invoke(newValue) != false) {
                     pref.set(newValue)
                 }
 
-                dialog.dismiss()
+                dismiss()
             }
         },
         title = title,

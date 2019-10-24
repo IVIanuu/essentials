@@ -36,7 +36,7 @@ fun TextInputPreference(
         dialogIcon = dialogIcon,
         dialogPositiveButtonText = dialogPositiveButtonText,
         dialogNegativeButtonText = dialogNegativeButtonText,
-        buildDialog = {
+        buildDialog = { dismiss ->
             input(
                 hint = dialogHint,
                 prefill = pref.get(),
