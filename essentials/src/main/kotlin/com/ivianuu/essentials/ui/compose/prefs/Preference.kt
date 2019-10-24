@@ -22,10 +22,6 @@ fun <T> Preference(
 ) = composable("Preference") {
     val finalEnabled = enabled && dependencies?.checkAll() ?: true
 
-    Dependencies(dependencies) {
-
-    }
-
     Opacity(if (finalEnabled) 1f else 0.5f) {
         ListItem(
             text = title,

@@ -12,11 +12,13 @@ import com.ivianuu.essentials.ui.compose.prefs.PrefsScreen
 import com.ivianuu.essentials.ui.compose.prefs.RadioButtonPreference
 import com.ivianuu.essentials.ui.compose.prefs.SliderPreference
 import com.ivianuu.essentials.ui.compose.prefs.SwitchPreference
+import com.ivianuu.essentials.ui.compose.prefs.TextInputPreference
 import com.ivianuu.essentials.ui.navigation.director.controllerRouteOptions
 import com.ivianuu.essentials.ui.navigation.director.vertical
 import com.ivianuu.kprefs.KPrefs
 import com.ivianuu.kprefs.boolean
 import com.ivianuu.kprefs.int
+import com.ivianuu.kprefs.string
 
 val prefsRoute = composeControllerRoute(
     options = controllerRouteOptions().vertical()
@@ -57,8 +59,14 @@ val prefsRoute = composeControllerRoute(
             SliderPreference(
                 pref = prefs.int("slider"),
                 title = { Text("Slider") },
-                summary = { Text("This is a slider pref") },
+                summary = { Text("This is a slider preference") },
                 dependencies = dependencies
+            )
+
+            TextInputPreference(
+                pref = prefs.string("text_input"),
+                title = { Text("Text input") },
+                summary = { Text("This is a text input preference") }
             )
         }
     )
