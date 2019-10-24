@@ -128,9 +128,9 @@ enum class HomeItem(
         route = { twilightSettingsRoute }
     ),
     Compose(
-        title = "Compose",
+        title = "Prefs",
         color = Color.Magenta,
-        route = { composeRoute }
+        route = { prefsRoute }
     ),
     Timer(
         title = "Timer",

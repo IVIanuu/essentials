@@ -1,8 +1,6 @@
 package com.ivianuu.essentials.ui.compose.prefs
 
 import androidx.compose.Composable
-import androidx.compose.ambient
-import androidx.compose.unaryPlus
 import androidx.ui.material.Checkbox
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.kprefs.Pref
@@ -10,30 +8,40 @@ import com.ivianuu.kprefs.Pref
 @Composable
 fun CheckboxPreference(
     pref: Pref<Boolean>,
-    text: @Composable() (() -> Unit),
-    icon: @Composable() (() -> Unit)? = null,
-    secondaryText: @Composable() (() -> Unit)? = null,
-    singleLineSecondaryText: Boolean = true,
-    overlineText: @Composable() (() -> Unit)? = null
+    title: @Composable() (() -> Unit),
+    summary: @Composable() (() -> Unit)? = null,
+    singleLineSummary: Boolean = true,
+    leading: @Composable() (() -> Unit)? = null,
+    onChange: ((Boolean) -> Boolean)? = null,
+    enabled: Boolean = true,
+    dependencies: List<Dependency<*>>? = null
 ) = composable("CheckboxPreference") {
-    val dependencies = +ambient(DependenciesAmbient)
+    fun valueChanged(newValue: Boolean) {
+        if (onChange?.invoke(newValue) != false) {
+            pref.set(newValue)
+        }
+    }
 
     Preference(
-        text = text,
-        icon = icon,
-        secondaryText = secondaryText,
-        singleLineSecondaryText = singleLineSecondaryText,
-        overlineText = overlineText,
+        pref = pref,
+        title = title,
+        summary = summary,
+        singleLineSummary = singleLineSummary,
+        leading = leading,
         trailing = {
+            val onCheckedChange: ((Boolean) -> Unit)? = if (dependencies.checkAll()) {
+                { valueChanged(it) }
+            } else {
+                null
+            }
             Checkbox(
                 checked = pref.get(),
-                onCheckedChange = if (dependencies.allOk()) {
-                    { newValue: Boolean -> pref.set(newValue) }
-                } else {
-                    null
-                }
+                onCheckedChange = onCheckedChange
             )
         },
-        onClick = { pref.set(!pref.get()) }
+        onClick = { valueChanged(!pref.get()) },
+        onChange = onChange,
+        enabled = enabled,
+        dependencies = dependencies
     )
 }

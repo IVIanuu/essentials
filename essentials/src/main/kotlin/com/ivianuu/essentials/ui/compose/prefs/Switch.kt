@@ -2,41 +2,49 @@ package com.ivianuu.essentials.ui.compose.prefs
 
 import androidx.compose.Composable
 import androidx.compose.unaryPlus
-import androidx.ui.graphics.Color
-import androidx.ui.material.ListItem
 import androidx.ui.material.Switch
 import androidx.ui.material.themeColor
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.kprefs.Pref
 
 @Composable
-fun Switch(
-    pref: Pref<Boolean>,
-    color: Color = +themeColor { secondary }
-) = composable("PrefSwitch") {
-    Switch(
-        checked = pref.get(),
-        onCheckedChange = { pref.set(it) },
-        color = color
-    )
-}
-
-@Composable
 fun SwitchPreference(
     pref: Pref<Boolean>,
-    text: @Composable() (() -> Unit),
-    icon: @Composable() (() -> Unit)? = null,
-    secondaryText: @Composable() (() -> Unit)? = null,
-    singleLineSecondaryText: Boolean = true,
-    overlineText: @Composable() (() -> Unit)? = null
+    title: @Composable() (() -> Unit),
+    summary: @Composable() (() -> Unit)? = null,
+    singleLineSummary: Boolean = true,
+    leading: @Composable() (() -> Unit)? = null,
+    onChange: ((Boolean) -> Boolean)? = null,
+    enabled: Boolean = true,
+    dependencies: List<Dependency<*>>? = null
 ) = composable("SwitchPreference") {
-    ListItem(
-        text = text,
-        icon = icon,
-        secondaryText = secondaryText,
-        singleLineSecondaryText = singleLineSecondaryText,
-        overlineText = overlineText,
-        trailing = { Switch(pref = pref) },
-        onClick = { pref.set(!pref.get()) }
+    fun valueChanged(newValue: Boolean) {
+        if (onChange?.invoke(newValue) != false) {
+            pref.set(newValue)
+        }
+    }
+
+    Preference(
+        pref = pref,
+        title = title,
+        summary = summary,
+        singleLineSummary = singleLineSummary,
+        leading = leading,
+        trailing = {
+            val onCheckedChange: ((Boolean) -> Unit)? = if (dependencies.checkAll()) {
+                { valueChanged(it) }
+            } else {
+                null
+            }
+            Switch(
+                color = +themeColor { secondary },
+                checked = pref.get(),
+                onCheckedChange = onCheckedChange
+            )
+        },
+        onClick = { valueChanged(!pref.get()) },
+        onChange = onChange,
+        enabled = enabled,
+        dependencies = dependencies
     )
 }
