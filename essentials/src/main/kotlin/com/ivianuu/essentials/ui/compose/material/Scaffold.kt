@@ -7,6 +7,8 @@ import androidx.compose.memo
 import androidx.compose.state
 import androidx.compose.unaryPlus
 import androidx.ui.core.Alignment
+import androidx.ui.core.LayoutCoordinates
+import androidx.ui.core.OnPositioned
 import androidx.ui.core.dp
 import androidx.ui.layout.FlexColumn
 import androidx.ui.layout.Padding
@@ -22,6 +24,8 @@ fun Scaffold(
 ) = composable("Scaffold") {
     val overlays = +state { emptyList<Overlay>() }
     val scaffold = +memo { Scaffold(overlays) }
+
+    OnPositioned { scaffold.coordinates = it }
 
     ScaffoldAmbient.Provider(value = scaffold) {
         Stack {
@@ -68,6 +72,8 @@ internal data class Overlay(val composable: @Composable() (() -> Unit) -> Unit)
 class Scaffold internal constructor(
     private val overlays: State<List<Overlay>>
 ) {
+
+    var coordinates: LayoutCoordinates? = null
 
     fun showOverlay(block: (() -> Unit) -> Unit) {
         val newOverlays = overlays.value.toMutableList()

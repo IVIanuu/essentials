@@ -23,19 +23,85 @@ import androidx.ui.material.ripple.Ripple
 import androidx.ui.material.surface.Card
 import com.ivianuu.essentials.ui.compose.core.composable
 
-fun <T> Scaffold.showPopup(
+@Composable
+fun Popup(
+    onCancel: () -> Unit,
+    alignment: Alignment = Alignment.TopLeft,
+    offsetX: Dp = 0.dp,
+    offsetY: Dp = 0.dp,
+    content: @Composable() () -> Unit
+) = composable("Popup") {
+    val alphaAnim = +animatedFloat(0f)
+
+    +onActive {
+        alphaAnim.animateTo(
+            targetValue = 1f,
+            anim = TweenBuilder<Float>().apply { duration = 300 }
+        )
+    }
+
+    val dismissAfterAnim = {
+        alphaAnim.animateTo(
+            targetValue = 0f,
+            anim = TweenBuilder<Float>().apply { duration = 300 },
+            onEnd = { _, _ -> onCancel() }
+        )
+    }
+
+    Opacity(opacity = alphaAnim.value) {
+        PressGestureDetector(
+            onPress = {
+                // dismiss on outside touches
+                dismissAfterAnim()
+            }
+        ) {
+            WithDensity {
+                Wrap(alignment = alignment) {
+                    val padding = when (alignment) {
+                        Alignment.TopLeft -> EdgeInsets(left = offsetX, top = offsetY)
+                        Alignment.TopCenter -> EdgeInsets(top = offsetY)
+                        Alignment.TopRight -> EdgeInsets(right = offsetX, top = offsetY)
+                        Alignment.CenterLeft -> EdgeInsets(left = offsetX)
+                        Alignment.Center -> EdgeInsets()
+                        Alignment.CenterRight -> EdgeInsets(right = offsetX)
+                        Alignment.BottomLeft -> EdgeInsets(left = offsetX, bottom = offsetY)
+                        Alignment.BottomCenter -> EdgeInsets(bottom = offsetY)
+                        Alignment.BottomRight -> EdgeInsets(
+                            right = offsetX,
+                            bottom = offsetY
+                        )
+                    }
+                    Padding(padding = padding) {
+                        PressGestureDetector {
+                            Card(
+                                elevation = 8.dp,
+                                shape = RoundedCornerShape(4.dp),
+                                children = content
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun <T> PopupMenu(
+    onCancel: () -> Unit,
     alignment: Alignment = Alignment.TopLeft,
     offsetX: Dp = 0.dp,
     offsetY: Dp = 0.dp,
     items: List<T>,
     onSelected: (T) -> Unit,
     item: @Composable() (T) -> Unit
-) {
-    showPopup(
+) = composable("PopupMenu") {
+    Popup(
+        onCancel = onCancel,
         alignment = alignment,
         offsetX = offsetX,
         offsetY = offsetY
-    ) { dismiss ->
+    ) {
         Padding(top = 8.dp, bottom = 8.dp) {
             Column {
                 items.forEach { value ->
@@ -43,7 +109,6 @@ fun <T> Scaffold.showPopup(
                         content = { item(value) },
                         onClick = {
                             onSelected(value)
-                            dismiss()
                         }
                     )
                 }
@@ -52,6 +117,7 @@ fun <T> Scaffold.showPopup(
     }
 }
 
+// todo public
 @Composable
 private fun PopupMenuItem(
     content: () -> Unit,
@@ -80,73 +146,56 @@ private fun PopupMenuItem(
     }
 }
 
+fun <T> Scaffold.showPopup(
+    alignment: Alignment = Alignment.TopLeft,
+    offsetX: Dp = 0.dp,
+    offsetY: Dp = 0.dp,
+    onCancel: (() -> Unit)? = null,
+    items: List<T>,
+    onSelected: (T) -> Unit,
+    item: @Composable() (T) -> Unit
+) {
+    showOverlay { dismiss ->
+        PopupMenu(
+            onCancel = {
+                dismiss()
+                onCancel?.invoke()
+            },
+            alignment = alignment,
+            offsetX = offsetX,
+            offsetY = offsetY,
+            items = items,
+            onSelected = {
+                onSelected(it)
+                dismiss()
+            },
+            item = item
+        )
+    }
+}
+
 fun Scaffold.showPopup(
     alignment: Alignment = Alignment.TopLeft,
     offsetX: Dp = 0.dp,
     offsetY: Dp = 0.dp,
+    onCancel: (() -> Unit)? = null,
     content: @Composable() (dismiss: () -> Unit) -> Unit
 ) {
     showOverlay { dismiss ->
-        composable("Popup") {
-            val alphaAnim = +animatedFloat(0f)
-
-            +onActive {
-                alphaAnim.animateTo(
-                    targetValue = 1f,
-                    anim = TweenBuilder<Float>().apply { duration = 300 }
-                )
-            }
-
-            val dismissAfterAnim = {
-                alphaAnim.animateTo(
-                    targetValue = 0f,
-                    anim = TweenBuilder<Float>().apply { duration = 300 },
-                    onEnd = { _, _ -> dismiss() }
-                )
-            }
-
-            Opacity(opacity = alphaAnim.value) {
-                PressGestureDetector(
-                    onPress = {
-                        // dismiss on outside touches
-                        dismissAfterAnim()
-                    }
-                ) {
-                    WithDensity {
-                        Wrap(alignment = alignment) {
-                            val padding = when (alignment) {
-                                Alignment.TopLeft -> EdgeInsets(left = offsetX, top = offsetY)
-                                Alignment.TopCenter -> EdgeInsets(top = offsetY)
-                                Alignment.TopRight -> EdgeInsets(right = offsetX, top = offsetY)
-                                Alignment.CenterLeft -> EdgeInsets(left = offsetX)
-                                Alignment.Center -> EdgeInsets()
-                                Alignment.CenterRight -> EdgeInsets(right = offsetX)
-                                Alignment.BottomLeft -> EdgeInsets(left = offsetX, bottom = offsetY)
-                                Alignment.BottomCenter -> EdgeInsets(bottom = offsetY)
-                                Alignment.BottomRight -> EdgeInsets(
-                                    right = offsetX,
-                                    bottom = offsetY
-                                )
-                            }
-                            Padding(padding = padding) {
-                                Padding(4.dp) {
-                                    PressGestureDetector {
-                                        Card(
-                                            elevation = 8.dp,
-                                            shape = RoundedCornerShape(4.dp),
-                                            children = {
-                                                content {
-                                                    dismissAfterAnim()
-                                                }
-                                            }
-                                        )
-                                    }
-                                }
-                            }
-                        }
-                    }
+        val internalOnCancel = {
+            dismiss()
+            onCancel?.invoke()
+        }
+        Popup(
+            onCancel = { internalOnCancel() },
+            alignment = alignment,
+            offsetX = offsetX,
+            offsetY = offsetY,
+            content = {
+                content {
+                    internalOnCancel()
                 }
             }
-        }
+        )
     }
 }
