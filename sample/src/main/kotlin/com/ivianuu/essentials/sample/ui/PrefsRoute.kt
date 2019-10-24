@@ -7,9 +7,11 @@ import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
 import com.ivianuu.essentials.ui.compose.prefs.CheckboxPreference
 import com.ivianuu.essentials.ui.compose.prefs.Dependency
+import com.ivianuu.essentials.ui.compose.prefs.MultiSelectListPreference
 import com.ivianuu.essentials.ui.compose.prefs.PreferenceSubheader
 import com.ivianuu.essentials.ui.compose.prefs.PrefsScreen
 import com.ivianuu.essentials.ui.compose.prefs.RadioButtonPreference
+import com.ivianuu.essentials.ui.compose.prefs.SingleItemListPreference
 import com.ivianuu.essentials.ui.compose.prefs.SliderPreference
 import com.ivianuu.essentials.ui.compose.prefs.SwitchPreference
 import com.ivianuu.essentials.ui.compose.prefs.TextInputPreference
@@ -19,6 +21,7 @@ import com.ivianuu.kprefs.KPrefs
 import com.ivianuu.kprefs.boolean
 import com.ivianuu.kprefs.int
 import com.ivianuu.kprefs.string
+import com.ivianuu.kprefs.stringSet
 
 val prefsRoute = composeControllerRoute(
     options = controllerRouteOptions().vertical()
@@ -67,6 +70,28 @@ val prefsRoute = composeControllerRoute(
                 pref = prefs.string("text_input"),
                 title = { Text("Text input") },
                 summary = { Text("This is a text input preference") }
+            )
+
+            MultiSelectListPreference(
+                pref = prefs.stringSet("multi_select_list", setOf("A", "B")),
+                title = { Text("Multi select list") },
+                summary = { Text("This is a multi select list preference") },
+                entries = listOf(
+                    MultiSelectListPreference.Item("A"),
+                    MultiSelectListPreference.Item("B"),
+                    MultiSelectListPreference.Item("C")
+                )
+            )
+
+            SingleItemListPreference(
+                pref = prefs.string("single_item_list", "C"),
+                title = { Text("Single item list") },
+                summary = { Text("This is a single item list preference") },
+                entries = listOf(
+                    SingleItemListPreference.Item("A"),
+                    SingleItemListPreference.Item("B"),
+                    SingleItemListPreference.Item("C")
+                )
             )
         }
     )
