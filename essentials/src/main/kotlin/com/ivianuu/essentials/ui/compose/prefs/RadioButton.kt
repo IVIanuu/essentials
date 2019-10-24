@@ -15,7 +15,7 @@ fun RadioButtonPreference(
     onChange: ((Boolean) -> Boolean)? = null,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null
-) = composable("RadioButtonPreference") {
+) = composable("RadioButtonPreference:${pref.key}") {
     fun valueChanged(newValue: Boolean) {
         if (onChange?.invoke(newValue) != false) {
             pref.set(newValue)

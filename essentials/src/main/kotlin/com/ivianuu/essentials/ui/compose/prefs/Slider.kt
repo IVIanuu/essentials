@@ -31,7 +31,7 @@ fun SliderPreference(
     onChange: ((Int) -> Boolean)? = null,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null
-) = composable("SliderPreference") {
+) = composable("SliderPreference:${pref.key}") {
     fun valueChanged(newValue: Int) {
         if (onChange?.invoke(newValue) != false) {
             pref.set(newValue)

@@ -19,7 +19,7 @@ fun <T> Preference(
     onChange: ((T) -> Boolean)? = null,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null
-) = composable("Preference") {
+) = composable("Preference:${pref.key}") {
     val finalEnabled = enabled && dependencies?.checkAll() ?: true
 
     Opacity(if (finalEnabled) 1f else 0.5f) {

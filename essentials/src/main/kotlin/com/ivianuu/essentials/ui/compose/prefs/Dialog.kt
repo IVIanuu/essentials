@@ -28,7 +28,7 @@ fun <T> DialogPreference(
     onChange: ((T) -> Boolean)? = null,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null
-) = composable("TextInputPreference") {
+) = composable("DialogPreference:${pref.key}") {
     val navigator = +inject<Navigator>()
     Preference(
         pref = pref,

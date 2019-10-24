@@ -15,7 +15,7 @@ fun CheckboxPreference(
     onChange: ((Boolean) -> Boolean)? = null,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null
-) = composable("CheckboxPreference") {
+) = composable("CheckboxPreference:${pref.key}") {
     fun valueChanged(newValue: Boolean) {
         if (onChange?.invoke(newValue) != false) {
             pref.set(newValue)

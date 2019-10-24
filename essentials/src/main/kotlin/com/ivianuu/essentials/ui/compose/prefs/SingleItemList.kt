@@ -24,7 +24,7 @@ fun SingleItemListPreference(
     onChange: ((String) -> Boolean)? = null,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null
-) = composable("MultiSelectListPreference") {
+) = composable("SingleItemListPreference:${pref.key}") {
     DialogPreference(
         pref = pref,
         dialogTitle = dialogTitle,

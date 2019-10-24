@@ -17,7 +17,7 @@ fun SwitchPreference(
     onChange: ((Boolean) -> Boolean)? = null,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null
-) = composable("SwitchPreference") {
+) = composable("SwitchPreference:${pref.key}") {
     fun valueChanged(newValue: Boolean) {
         if (onChange?.invoke(newValue) != false) {
             pref.set(newValue)

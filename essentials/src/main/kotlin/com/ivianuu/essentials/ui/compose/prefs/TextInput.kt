@@ -28,7 +28,7 @@ fun TextInputPreference(
     onChange: ((String) -> Boolean)? = null,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null
-) = composable("TextInputPreference") {
+) = composable("TextInputPreference:${pref.key}") {
     DialogPreference(
         pref = pref,
         dialogTitle = dialogTitle,

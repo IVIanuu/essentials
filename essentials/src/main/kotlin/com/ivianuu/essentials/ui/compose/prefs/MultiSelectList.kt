@@ -25,7 +25,7 @@ fun MultiSelectListPreference(
     onChange: ((Set<String>) -> Boolean)? = null,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null
-) = composable("MultiSelectListPreference") {
+) = composable("MultiSelectListPreference:${pref.key}") {
     DialogPreference(
         pref = pref,
         dialogTitle = dialogTitle,
