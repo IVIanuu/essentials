@@ -1,6 +1,7 @@
 package com.ivianuu.essentials.ui.compose.prefs
 
 import android.graphics.drawable.Drawable
+import android.text.InputType
 import androidx.compose.Composable
 import androidx.compose.unaryPlus
 import androidx.ui.res.stringResource
@@ -18,6 +19,8 @@ fun TextInputPreference(
     dialogIcon: Drawable? = null,
     dialogPositiveButtonText: String? = +stringResource(R.string.es_ok),
     dialogNegativeButtonText: String? = +stringResource(R.string.es_cancel),
+    inputType: Int = InputType.TYPE_CLASS_TEXT,
+    allowEmptyInput: Boolean = true,
     title: @Composable() (() -> Unit),
     summary: @Composable() (() -> Unit)? = null,
     singleLineSummary: Boolean = true,
@@ -36,7 +39,9 @@ fun TextInputPreference(
         buildDialog = {
             input(
                 hint = dialogHint,
-                prefill = pref.get()
+                prefill = pref.get(),
+                inputType = inputType,
+                allowEmpty = allowEmptyInput
             ) { _, input ->
                 if (onChange?.invoke(input.toString()) != false) {
                     pref.set(input.toString())
