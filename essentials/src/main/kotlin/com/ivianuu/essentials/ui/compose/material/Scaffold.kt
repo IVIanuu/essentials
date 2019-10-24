@@ -10,7 +10,6 @@ import androidx.ui.core.Alignment
 import androidx.ui.core.LayoutCoordinates
 import androidx.ui.core.OnPositioned
 import androidx.ui.core.dp
-import androidx.ui.layout.Container
 import androidx.ui.layout.FlexColumn
 import androidx.ui.layout.Padding
 import androidx.ui.layout.Stack
@@ -27,41 +26,39 @@ fun Scaffold(
     val scaffold = +memo { Scaffold(overlays) }
 
     ScaffoldAmbient.Provider(value = scaffold) {
-        Container {
+        Stack {
             OnPositioned { scaffold.coordinates = it }
 
-            Stack {
-                FlexColumn {
-                    inflexible {
-                        Surface(elevation = 4.dp) {
-                            appBar()
-                        }
-                    }
-
-                    flexible(1f) {
-                        Surface {
-                            content()
-                        }
+            FlexColumn {
+                inflexible {
+                    Surface(elevation = 4.dp) {
+                        appBar()
                     }
                 }
 
-                if (fabConfiguration != null) {
-                    aligned(
-                        when (fabConfiguration.position) {
-                            Scaffold.FabPosition.Center -> Alignment.BottomCenter
-                            Scaffold.FabPosition.End -> Alignment.BottomRight
-                        }
-                    ) {
-                        Padding(padding = 16.dp) {
-                            fabConfiguration.fab()
-                        }
+                flexible(1f) {
+                    Surface {
+                        content()
                     }
                 }
+            }
 
-                overlays.value.forEach { overlay ->
-                    overlay.composable {
-                        scaffold.hideOverlay(overlay)
+            if (fabConfiguration != null) {
+                aligned(
+                    when (fabConfiguration.position) {
+                        Scaffold.FabPosition.Center -> Alignment.BottomCenter
+                        Scaffold.FabPosition.End -> Alignment.BottomRight
                     }
+                ) {
+                    Padding(padding = 16.dp) {
+                        fabConfiguration.fab()
+                    }
+                }
+            }
+
+            overlays.value.forEach { overlay ->
+                overlay.composable {
+                    scaffold.removeOverlay(overlay)
                 }
             }
         }
@@ -78,13 +75,13 @@ class Scaffold internal constructor(
 
     var coordinates: LayoutCoordinates? = null
 
-    fun showOverlay(block: (() -> Unit) -> Unit) {
+    fun addOverlay(block: (() -> Unit) -> Unit) {
         val newOverlays = overlays.value.toMutableList()
         newOverlays += Overlay(block)
         overlays.value = newOverlays
     }
 
-    internal fun hideOverlay(overlay: Overlay) {
+    internal fun removeOverlay(overlay: Overlay) {
         val newOverlays = overlays.value.toMutableList()
         newOverlays -= overlay
         overlays.value = newOverlays
