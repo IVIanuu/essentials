@@ -16,7 +16,6 @@ fun SingleItemListPreference(
     dialogTitle: String? = null,
     dialogMessage: String? = null,
     dialogIcon: Drawable? = null,
-    dialogPositiveButtonText: String? = +stringResource(R.string.es_ok),
     dialogNegativeButtonText: String? = +stringResource(R.string.es_cancel),
     title: @Composable() (() -> Unit),
     summary: @Composable() (() -> Unit)? = null,
@@ -31,7 +30,7 @@ fun SingleItemListPreference(
         dialogTitle = dialogTitle,
         dialogMessage = dialogMessage,
         dialogIcon = dialogIcon,
-        dialogPositiveButtonText = dialogPositiveButtonText,
+        dialogPositiveButtonText = null,
         dialogNegativeButtonText = dialogNegativeButtonText,
         buildDialog = {
             val currentValue = pref.get()
