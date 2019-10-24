@@ -9,7 +9,6 @@ import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.compose.viewmodel.viewModel
 import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
 import com.ivianuu.essentials.util.defaultViewModelKey
-import kotlinx.coroutines.flow.drop
 
 inline fun <reified T : MvRxViewModel<*>> mvRxViewModel(
     from: ViewModelStoreOwner = +inject<ViewModelStoreOwner>(),
@@ -18,6 +17,6 @@ inline fun <reified T : MvRxViewModel<*>> mvRxViewModel(
 ) = effectOf<T> {
     val viewModel = +viewModel<T>(from, factory, key)
     // recompose on changes
-    +collect(viewModel.flow.drop(1))
+    +collect(viewModel.flow)
     return@effectOf viewModel
 }

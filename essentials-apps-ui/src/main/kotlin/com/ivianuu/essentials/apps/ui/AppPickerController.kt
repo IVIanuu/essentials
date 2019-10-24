@@ -20,19 +20,21 @@ import androidx.compose.Composable
 import androidx.compose.unaryPlus
 import androidx.lifecycle.viewModelScope
 import androidx.ui.core.Text
+import androidx.ui.foundation.VerticalScroller
 import androidx.ui.layout.Center
+import androidx.ui.layout.Column
 import androidx.ui.material.CircularProgressIndicator
 import androidx.ui.material.ListItem
 import androidx.ui.res.stringResource
 import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.AppStore
 import com.ivianuu.essentials.apps.coil.AppIcon
-import com.ivianuu.essentials.ui.compose.common.ListScreen
 import com.ivianuu.essentials.ui.compose.composeControllerRoute
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.image.CoilImageAny
 import com.ivianuu.essentials.ui.compose.material.Avatar
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
+import com.ivianuu.essentials.ui.compose.material.Scaffold
 import com.ivianuu.essentials.ui.compose.mvrx.mvRxViewModel
 import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
 import com.ivianuu.essentials.ui.navigation.Navigator
@@ -48,24 +50,34 @@ import com.ivianuu.injekt.parametersOf
 fun appPickerRoute(
     launchableOnly: Boolean = false
 ) = composeControllerRoute {
-    ListScreen(
+    Scaffold(
         appBar = { EsTopAppBar(+stringResource(R.string.es_title_app_picker)) },
-        listContent = {
+        content = {
             val viewModel = +mvRxViewModel<AppPickerViewModel> {
                 parametersOf(launchableOnly)
             }
 
             when (viewModel.state.apps) {
                 is Loading -> {
-                    Center {
-                        CircularProgressIndicator()
+                    composable("loading") {
+                        Center {
+                            CircularProgressIndicator()
+                        }
                     }
                 }
-                is Success -> viewModel.state.apps()?.forEach { app ->
-                    AppInfo(
-                        app = app,
-                        onClick = { viewModel.appClicked(app) }
-                    )
+                is Success -> {
+                    composable("content") {
+                        VerticalScroller {
+                            Column {
+                                viewModel.state.apps()?.forEach { app ->
+                                    AppInfo(
+                                        app = app,
+                                        onClick = { viewModel.appClicked(app) }
+                                    )
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }

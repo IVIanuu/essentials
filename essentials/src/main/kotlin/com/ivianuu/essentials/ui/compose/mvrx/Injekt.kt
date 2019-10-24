@@ -20,7 +20,7 @@ inline fun <reified T : MvRxViewModel<*>> mvRxViewModel(
     noinline parameters: ParametersDefinition? = null
 ) = effectOf<T> {
     val component = +ambient(ComponentAmbient)
-    val createViewModel: () -> T = { component.get<T>(name, parameters) }
+    val createViewModel: () -> T = { component.get(name, parameters) }
     return@effectOf +mvRxViewModel<T>(
         from = from,
         key = key,
