@@ -22,7 +22,6 @@ import androidx.ui.material.ListItem
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.kprefs.Pref
 
-
 @Composable
 fun <T> Preference(
     pref: Pref<T>,
