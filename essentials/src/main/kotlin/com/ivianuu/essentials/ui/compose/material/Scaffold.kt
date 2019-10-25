@@ -10,7 +10,6 @@ import androidx.ui.core.Alignment
 import androidx.ui.core.LayoutCoordinates
 import androidx.ui.core.OnPositioned
 import androidx.ui.core.dp
-import androidx.ui.graphics.Color
 import androidx.ui.layout.Column
 import androidx.ui.layout.Container
 import androidx.ui.layout.Padding
@@ -38,8 +37,11 @@ fun Scaffold(
                     }
                 }
 
-                Container(modifier = Flexible(1f)) {
-                    Surface(color = Color.Red) {
+                Container(
+                    alignment = Alignment.TopLeft,
+                    modifier = Flexible(1f)
+                ) {
+                    Surface {
                         content()
                     }
                 }
