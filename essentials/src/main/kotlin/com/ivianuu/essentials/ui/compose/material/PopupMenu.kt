@@ -182,13 +182,13 @@ fun <T> PopupMenuTrigger(
     Wrap {
         WithDensity {
             // cache coordinates
-            val (coordinates, setCoordinates) = +ref<LayoutCoordinates?> { null }
-            OnPositioned(setCoordinates)
+            val coordinatesRef = +ref<LayoutCoordinates?> { null }
+            OnPositioned { coordinatesRef.value = it }
 
             val scaffold = +ambient(ScaffoldAmbient)
 
             child {
-                coordinates!!
+                val coordinates = coordinatesRef.value!!
                 val scaffoldCoordinates = scaffold.coordinates!!
 
                 val globalPosition = coordinates.positionInRoot
