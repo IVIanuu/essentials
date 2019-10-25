@@ -18,8 +18,16 @@ package com.ivianuu.essentials.ui.compose.core
 
 import androidx.compose.composer
 
-@PublishedApi
-internal val invocation = Any()
+inline fun composable(
+    key: Any,
+    block: () -> Unit
+) {
+    with(composer.composer) {
+        startGroup(key)
+        block()
+        endGroup()
+    }
+}
 
 inline fun <V1> composable(
     key: Any,
@@ -79,3 +87,6 @@ inline fun composable(
 inline fun staticComposable(key: Any, block: () -> Unit) {
     composable(key = key, v1 = Unit, block = block)
 }
+
+@PublishedApi
+internal val invocation = Any()
