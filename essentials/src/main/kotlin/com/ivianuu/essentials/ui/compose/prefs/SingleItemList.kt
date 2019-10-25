@@ -33,9 +33,8 @@ fun SingleItemListPreference(
     dialogMessage: String? = null,
     dialogIcon: Drawable? = null,
     dialogNegativeButtonText: String? = +stringResource(R.string.es_cancel),
-    title: @Composable() (() -> Unit),
+    title: @Composable() () -> Unit,
     summary: @Composable() (() -> Unit)? = null,
-    singleLineSummary: Boolean = true,
     leading: @Composable() (() -> Unit)? = null,
     onChange: ((String) -> Boolean)? = null,
     enabled: Boolean = true,
@@ -43,11 +42,6 @@ fun SingleItemListPreference(
 ) = composable("SingleItemListPreference:${pref.key}") {
     DialogPreference(
         pref = pref,
-        dialogTitle = dialogTitle,
-        dialogMessage = dialogMessage,
-        dialogIcon = dialogIcon,
-        dialogPositiveButtonText = null,
-        dialogNegativeButtonText = dialogNegativeButtonText,
         buildDialog = { dismiss ->
             val currentValue = pref.get()
             val selectedIndex = entries.indexOfFirst { it.value == currentValue }
@@ -65,9 +59,13 @@ fun SingleItemListPreference(
                 dismiss()
             }
         },
+        dialogTitle = dialogTitle,
+        dialogMessage = dialogMessage,
+        dialogIcon = dialogIcon,
+        dialogPositiveButtonText = null,
+        dialogNegativeButtonText = dialogNegativeButtonText,
         title = title,
         summary = summary,
-        singleLineSummary = singleLineSummary,
         leading = leading,
         onChange = onChange,
         enabled = enabled,

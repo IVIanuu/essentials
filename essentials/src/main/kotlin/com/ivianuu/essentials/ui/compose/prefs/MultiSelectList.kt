@@ -34,9 +34,8 @@ fun MultiSelectListPreference(
     dialogIcon: Drawable? = null,
     dialogPositiveButtonText: String? = +stringResource(R.string.es_ok),
     dialogNegativeButtonText: String? = +stringResource(R.string.es_cancel),
-    title: @Composable() (() -> Unit),
+    title: @Composable() () -> Unit,
     summary: @Composable() (() -> Unit)? = null,
-    singleLineSummary: Boolean = true,
     leading: @Composable() (() -> Unit)? = null,
     onChange: ((Set<String>) -> Boolean)? = null,
     enabled: Boolean = true,
@@ -44,11 +43,6 @@ fun MultiSelectListPreference(
 ) = composable("MultiSelectListPreference:${pref.key}") {
     DialogPreference(
         pref = pref,
-        dialogTitle = dialogTitle,
-        dialogMessage = dialogMessage,
-        dialogIcon = dialogIcon,
-        dialogPositiveButtonText = dialogPositiveButtonText,
-        dialogNegativeButtonText = dialogNegativeButtonText,
         buildDialog = { dismiss ->
             val currentValues = pref.get()
 
@@ -72,9 +66,13 @@ fun MultiSelectListPreference(
                 }
             }
         },
+        dialogTitle = dialogTitle,
+        dialogMessage = dialogMessage,
+        dialogIcon = dialogIcon,
+        dialogPositiveButtonText = dialogPositiveButtonText,
+        dialogNegativeButtonText = dialogNegativeButtonText,
         title = title,
         summary = summary,
-        singleLineSummary = singleLineSummary,
         leading = leading,
         onChange = onChange,
         enabled = enabled,

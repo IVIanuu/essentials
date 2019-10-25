@@ -26,9 +26,8 @@ import com.ivianuu.kprefs.Pref
 @Composable
 fun SwitchPreference(
     pref: Pref<Boolean>,
-    title: @Composable() (() -> Unit),
+    title: @Composable() () -> Unit,
     summary: @Composable() (() -> Unit)? = null,
-    singleLineSummary: Boolean = true,
     leading: @Composable() (() -> Unit)? = null,
     onChange: ((Boolean) -> Boolean)? = null,
     enabled: Boolean = true,
@@ -44,7 +43,6 @@ fun SwitchPreference(
         pref = pref,
         title = title,
         summary = summary,
-        singleLineSummary = singleLineSummary,
         leading = leading,
         trailing = {
             val onCheckedChange: ((Boolean) -> Unit)? = if (dependencies.checkAll()) {

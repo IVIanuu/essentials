@@ -41,11 +41,14 @@ fun SliderPreference(
     min: Int = 0,
     max: Int = 100,
     divisions: Int? = null,
-    title: @Composable() (() -> Unit),
+    title: @Composable() () -> Unit,
     summary: @Composable() (() -> Unit)? = null,
-    singleLineSummary: Boolean = true,
     leading: @Composable() (() -> Unit)? = null,
-    valueText: @Composable() ((Int) -> Unit)? = { SimpleSliderValueText(it) },
+    valueText: @Composable() ((Int) -> Unit)? = {
+        SimpleSliderValueText(
+            it
+        )
+    },
     onChange: ((Int) -> Boolean)? = null,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null
@@ -65,7 +68,6 @@ fun SliderPreference(
                     pref = pref,
                     title = title,
                     summary = summary,
-                    singleLineSummary = singleLineSummary,
                     leading = leading,
                     onChange = onChange,
                     enabled = enabled,

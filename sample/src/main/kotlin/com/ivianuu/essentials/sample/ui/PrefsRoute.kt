@@ -52,6 +52,11 @@ val prefsRoute = composeControllerRoute(
                 title = { Text("Switch") }
             )
 
+            SwitchPreference(
+                pref = prefs.boolean("switch__"),
+                title = { Text("Switch FKmlemglkmgesgmslgemkslegmgesklm gemkgsmlmglkmkl sglke eg gs lkegs elkgsgesl gskegklgeslkgelkeglkeglks sgelkgse ge eggek lamgklesmklmegklmskemgles lmegslkmsgkle") }
+            )
+
             val dependencies = listOf(
                 Dependency(
                     pref = prefs.boolean("switch"),
@@ -64,7 +69,7 @@ val prefsRoute = composeControllerRoute(
             CheckboxPreference(
                 pref = prefs.boolean("checkbox"),
                 title = { Text("Checkbox") },
-                summary = { Text("This is a checkbox preference") },
+                summary = { Text("This is a checkbox preference jdmjfmkjsenfknksjnkjnskdjfnkjdnxkjndjkngkjndkjkg fkmsalkmflmfkmfmlkalk aemesvmlmacmvapw pakv,opo,vwapo,mvpo,apv,wpowv,opvw,pov,wa  pvawovpowlvpoloapvlopvwlopvlowvpebf lafmlmfwlkmkwalmwkflalw") },
                 dependencies = dependencies
             )
 
@@ -93,25 +98,25 @@ val prefsRoute = composeControllerRoute(
 
             MultiSelectListPreference(
                 pref = prefs.stringSet("multi_select_list", setOf("A", "B")),
-                title = { Text("Multi select list") },
-                summary = { Text("This is a multi select list preference") },
                 entries = listOf(
                     MultiSelectListPreference.Item("A"),
                     MultiSelectListPreference.Item("B"),
                     MultiSelectListPreference.Item("C")
                 ),
+                title = { Text("Multi select list") },
+                summary = { Text("This is a multi select list preference") },
                 dependencies = dependencies
             )
 
             SingleItemListPreference(
                 pref = prefs.string("single_item_list", "C"),
-                title = { Text("Single item list") },
-                summary = { Text("This is a single item list preference") },
                 entries = listOf(
                     SingleItemListPreference.Item("A"),
                     SingleItemListPreference.Item("B"),
                     SingleItemListPreference.Item("C")
                 ),
+                title = { Text("Single item list") },
+                summary = { Text("This is a single item list preference") },
                 dependencies = dependencies
             )
         }

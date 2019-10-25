@@ -37,9 +37,8 @@ fun TextInputPreference(
     dialogNegativeButtonText: String? = +stringResource(R.string.es_cancel),
     inputType: Int = InputType.TYPE_CLASS_TEXT,
     allowEmptyInput: Boolean = true,
-    title: @Composable() (() -> Unit),
+    title: @Composable() () -> Unit,
     summary: @Composable() (() -> Unit)? = null,
-    singleLineSummary: Boolean = true,
     leading: @Composable() (() -> Unit)? = null,
     onChange: ((String) -> Boolean)? = null,
     enabled: Boolean = true,
@@ -47,11 +46,6 @@ fun TextInputPreference(
 ) = composable("TextInputPreference:${pref.key}") {
     DialogPreference(
         pref = pref,
-        dialogTitle = dialogTitle,
-        dialogMessage = dialogMessage,
-        dialogIcon = dialogIcon,
-        dialogPositiveButtonText = dialogPositiveButtonText,
-        dialogNegativeButtonText = dialogNegativeButtonText,
         buildDialog = { dismiss ->
             input(
                 hint = dialogHint,
@@ -64,9 +58,13 @@ fun TextInputPreference(
                 }
             }
         },
+        dialogTitle = dialogTitle,
+        dialogMessage = dialogMessage,
+        dialogIcon = dialogIcon,
+        dialogPositiveButtonText = dialogPositiveButtonText,
+        dialogNegativeButtonText = dialogNegativeButtonText,
         title = title,
         summary = summary,
-        singleLineSummary = singleLineSummary,
         leading = leading,
         onChange = onChange,
         enabled = enabled,

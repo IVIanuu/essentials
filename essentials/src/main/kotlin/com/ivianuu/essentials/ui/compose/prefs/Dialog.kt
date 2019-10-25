@@ -37,9 +37,8 @@ fun <T> DialogPreference(
     dialogIcon: Drawable? = null,
     dialogPositiveButtonText: String? = +stringResource(R.string.es_ok),
     dialogNegativeButtonText: String? = +stringResource(R.string.es_cancel),
-    title: @Composable() (() -> Unit),
+    title: @Composable() () -> Unit,
     summary: @Composable() (() -> Unit)? = null,
-    singleLineSummary: Boolean = true,
     leading: @Composable() (() -> Unit)? = null,
     onChange: ((T) -> Boolean)? = null,
     enabled: Boolean = true,
@@ -50,7 +49,6 @@ fun <T> DialogPreference(
         pref = pref,
         title = title,
         summary = summary,
-        singleLineSummary = singleLineSummary,
         leading = leading,
         onClick = {
             navigator.push(
