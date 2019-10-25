@@ -20,12 +20,12 @@ import com.ivianuu.essentials.about.aboutRoute
 import com.ivianuu.essentials.apps.ui.appPickerRoute
 import com.ivianuu.essentials.twilight.twilightSettingsRoute
 import com.ivianuu.essentials.ui.compose.common.ListScreen
+import com.ivianuu.essentials.ui.compose.common.navigateOnClick
 import com.ivianuu.essentials.ui.compose.composeControllerRoute
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
 import com.ivianuu.essentials.ui.compose.material.PopupMenuAppBarIcon
-import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.Route
 import com.ivianuu.essentials.util.Toaster
 
@@ -51,12 +51,8 @@ val homeRoute = composeControllerRoute {
             )
         },
         listContent = {
-            val navigator = +inject<Navigator>()
             HomeItem.values().forEachIndexed { index, item ->
-                HomeItem(item = item, onClick = {
-                    navigator.push(item.route())
-                })
-
+                HomeItem(item = item, onClick = +navigateOnClick(item.route))
                 if (index != HomeItem.values().lastIndex) {
                     HomeDivider()
                 }
