@@ -20,7 +20,8 @@ import kotlin.coroutines.CoroutineContext
 
 fun coroutineScope(context: Effect<CoroutineContext> = coroutineContext()) =
     effectOf<CoroutineScope> {
-        val coroutineScope = +memo { CoroutineScope(context = +context + Job()) }
+        val coroutineContext = +context
+        val coroutineScope = +memo { CoroutineScope(context = coroutineContext + Job()) }
         +onDispose { coroutineScope.coroutineContext[Job]!!.cancel() }
         return@effectOf coroutineScope
     }

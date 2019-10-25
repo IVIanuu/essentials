@@ -10,12 +10,10 @@ import androidx.ui.core.Draw
 import androidx.ui.core.Opacity
 import androidx.ui.core.PxPosition
 import androidx.ui.core.WithConstraints
-import androidx.ui.core.ambientDensity
 import androidx.ui.core.dp
 import androidx.ui.core.gesture.DragObserver
 import androidx.ui.core.gesture.PressGestureDetector
 import androidx.ui.core.gesture.RawDragGestureDetector
-import androidx.ui.core.withDensity
 import androidx.ui.engine.geometry.Offset
 import androidx.ui.engine.geometry.Rect
 import androidx.ui.graphics.Color
@@ -129,6 +127,7 @@ fun Slider(
                             getCurrentFraction(),
                             overlayAnim.value,
                             color,
+                            +themeColor { surface },
                             divisions,
                             onChanged != null
                         )
@@ -144,24 +143,19 @@ private fun DrawSlider(
     fraction: Float,
     overlayFraction: Float,
     color: Color,
+    surfaceColor: Color,
     divisions: Int?,
     enabled: Boolean
 ) = composable("DrawSlider") {
     val paint = +memo { Paint() }
-    val trackHeight = withDensity(+ambientDensity()) { TrackHeight.toPx() }.value
-
-    val thumbRadius = withDensity(+ambientDensity()) {
-        if (enabled) ThumbRadius.toPx() else DisabledThumbRadius.toPx()
-    }.value
-    val thumbRippleRadius = withDensity(+ambientDensity()) { OverlayRadius.toPx() }.value
-    val thumbOutlineRadius = withDensity(+ambientDensity()) { ThumbOutlineRadius.toPx() }.value
-    val surfaceColor = +themeColor { surface }
 
     Opacity(opacity = if (enabled) 1f else 0.5f) {
         Draw { canvas, parentSize ->
+            val thumbOverlayRadius = OverlayRadius.toPx().value
+
             val centerY = parentSize.height.value / 2
-            val startX = thumbRippleRadius
-            val endX = parentSize.width.value - thumbRippleRadius
+            val startX = thumbOverlayRadius
+            val endX = parentSize.width.value - thumbOverlayRadius
             val currentX = lerp(0f, endX, fraction)
                 .let { tmp ->
                     if (divisions != null) {
@@ -171,6 +165,9 @@ private fun DrawSlider(
                         tmp
                     }
                 }
+
+
+            val trackHeight = TrackHeight.toPx().value
 
             // track
             paint.color =
@@ -214,17 +211,19 @@ private fun DrawSlider(
             if (overlayFraction > 0f) {
                 paint.color = color.copy(alpha = OverlayAlpha * overlayFraction)
                 canvas.drawCircle(
-                    Offset(currentX, centerY), thumbRippleRadius * overlayFraction, paint
+                    Offset(currentX, centerY), thumbOverlayRadius * overlayFraction, paint
                 )
             }
 
             // disabled outline
             if (!enabled) {
                 paint.color = surfaceColor
-                canvas.drawCircle(Offset(currentX, centerY), thumbOutlineRadius, paint)
+                canvas.drawCircle(Offset(currentX, centerY), ThumbOutlineRadius.toPx().value, paint)
             }
 
             // thumb
+            val thumbRadius =
+                if (enabled) ThumbRadius.toPx().value else DisabledThumbRadius.toPx().value
             paint.color = color.copy(alpha = if (enabled) ThumbAlpha else DisabledThumbAlpha)
             canvas.drawCircle(Offset(currentX, centerY), thumbRadius, paint)
         }
