@@ -10,7 +10,9 @@ import androidx.ui.core.Alignment
 import androidx.ui.core.LayoutCoordinates
 import androidx.ui.core.OnPositioned
 import androidx.ui.core.dp
-import androidx.ui.layout.FlexColumn
+import androidx.ui.graphics.Color
+import androidx.ui.layout.Column
+import androidx.ui.layout.Container
 import androidx.ui.layout.Padding
 import androidx.ui.layout.Stack
 import androidx.ui.material.surface.Surface
@@ -29,15 +31,15 @@ fun Scaffold(
         Stack {
             OnPositioned { scaffold.coordinates = it }
 
-            FlexColumn {
-                inflexible {
+            Column {
+                Container(modifier = Inflexible) {
                     Surface(elevation = 4.dp) {
                         appBar()
                     }
                 }
 
-                flexible(1f) {
-                    Surface {
+                Container(modifier = Flexible(1f)) {
+                    Surface(color = Color.Red) {
                         content()
                     }
                 }

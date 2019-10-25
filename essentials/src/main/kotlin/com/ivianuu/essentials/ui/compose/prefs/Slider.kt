@@ -4,13 +4,15 @@ import androidx.compose.Composable
 import androidx.compose.state
 import androidx.compose.unaryPlus
 import androidx.ui.core.Alignment
+import androidx.ui.core.Opacity
 import androidx.ui.core.Text
 import androidx.ui.core.dp
-import androidx.ui.layout.ConstrainedBox
+import androidx.ui.layout.Container
 import androidx.ui.layout.CrossAxisAlignment
 import androidx.ui.layout.DpConstraints
-import androidx.ui.layout.FlexRow
+import androidx.ui.layout.EdgeInsets
 import androidx.ui.layout.Padding
+import androidx.ui.layout.Row
 import androidx.ui.layout.Stack
 import androidx.ui.material.themeTextStyle
 import com.ivianuu.essentials.ui.compose.core.composable
@@ -32,6 +34,8 @@ fun SliderPreference(
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null
 ) = composable("SliderPreference:${pref.key}") {
+    val finalEnabled = enabled && dependencies?.checkAll() ?: true
+
     fun valueChanged(newValue: Int) {
         if (onChange?.invoke(newValue) != false) {
             pref.set(newValue)
@@ -55,7 +59,7 @@ fun SliderPreference(
         }
 
         aligned(Alignment.BottomCenter) {
-            FlexRow(
+            Row(
                 crossAxisAlignment = CrossAxisAlignment.Center
             ) {
                 val internalValue = +state { pref.get() }
@@ -70,7 +74,7 @@ fun SliderPreference(
                     null
                 }
 
-                flexible(1f) {
+                Container(modifier = Flexible(1f)) {
                     Slider(
                         value = pref.get(),
                         min = min,
@@ -82,15 +86,15 @@ fun SliderPreference(
                 }
 
                 if (valueText != null) {
-                    inflexible {
-                        Padding(right = 8.dp) {
-                            ConstrainedBox(
-                                constraints = DpConstraints(
-                                    minWidth = 36.dp
-                                )
-                            ) {
-                                valueText(internalValue.value)
-                            }
+                    Container(
+                        modifier = Inflexible,
+                        constraints = DpConstraints(
+                            minWidth = 36.dp
+                        ),
+                        padding = EdgeInsets(right = 8.dp)
+                    ) {
+                        Opacity(if (finalEnabled) 1f else 0.5f) {
+                            valueText(internalValue.value)
                         }
                     }
                 }

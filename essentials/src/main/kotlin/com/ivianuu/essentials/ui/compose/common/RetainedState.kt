@@ -19,10 +19,12 @@ import kotlin.reflect.KProperty
 
 fun <T> retainedState(key: Any, init: () -> T) = effectOf<RetainedState<T>> {
     val activity = +ambient(ActivityAmbient) as ComponentActivity
-    val viewModel: RetainedStateViewModel = activity.getViewModel(
-        factory = RetainedStateViewModel,
-        key = "RetainedState:${key.hashCode()}"
-    )
+    val viewModel = +memo {
+        activity.getViewModel<RetainedStateViewModel>(
+            factory = RetainedStateViewModel,
+            key = "RetainedState:${key.hashCode()}"
+        )
+    }
 
     +onDispose {
         if (!activity.isChangingConfigurations) {

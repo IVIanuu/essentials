@@ -3,6 +3,7 @@ package com.ivianuu.essentials.ui.compose.material
 import androidx.compose.Composable
 import androidx.compose.ambient
 import androidx.compose.effectOf
+import androidx.compose.memo
 import androidx.compose.unaryPlus
 import androidx.ui.core.ContextAmbient
 import androidx.ui.graphics.Color
@@ -30,24 +31,26 @@ fun ResourceMaterialTheme(
 
 fun resourceMaterialColors() = effectOf<MaterialColors> {
     val context = +ambient(ContextAmbient)
-    MaterialColors(
-        primary = Color(context.colorAttr(R.attr.colorPrimary)),
-        primaryVariant = Color(context.colorAttr(R.attr.colorPrimaryVariant)),
-        secondary = Color(context.colorAttr(R.attr.colorSecondary)),
-        secondaryVariant = Color(context.colorAttr(R.attr.colorSecondaryVariant)),
-        background = Color(context.colorAttr(android.R.attr.colorBackground)),
-        surface = Color(context.colorAttr(R.attr.colorSurface)),
-        error = Color(context.colorAttr(R.attr.colorError)),
-        onPrimary = Color(context.colorAttr(R.attr.colorOnPrimary)),
-        onSecondary = Color(context.colorAttr(R.attr.colorOnSecondary)),
-        onBackground = Color(context.colorAttr(R.attr.colorOnBackground)),
-        onSurface = Color(context.colorAttr(R.attr.colorOnSurface)),
-        onError = Color(context.colorAttr(R.attr.colorOnError))
-    )
+    +memo {
+        MaterialColors(
+            primary = Color(context.colorAttr(R.attr.colorPrimary)),
+            primaryVariant = Color(context.colorAttr(R.attr.colorPrimaryVariant)),
+            secondary = Color(context.colorAttr(R.attr.colorSecondary)),
+            secondaryVariant = Color(context.colorAttr(R.attr.colorSecondaryVariant)),
+            background = Color(context.colorAttr(android.R.attr.colorBackground)),
+            surface = Color(context.colorAttr(R.attr.colorSurface)),
+            error = Color(context.colorAttr(R.attr.colorError)),
+            onPrimary = Color(context.colorAttr(R.attr.colorOnPrimary)),
+            onSecondary = Color(context.colorAttr(R.attr.colorOnSecondary)),
+            onBackground = Color(context.colorAttr(R.attr.colorOnBackground)),
+            onSurface = Color(context.colorAttr(R.attr.colorOnSurface)),
+            onError = Color(context.colorAttr(R.attr.colorOnError))
+        )
+    }
 }
 
 fun resourceMaterialTypography() = effectOf<MaterialTypography> {
-    MaterialTypography()
+    +memo { MaterialTypography() }
     /*MaterialTypography(
         h1 = +resourceTextStyle(R.attr.textAppearanceHeadline1),
         h2 = +resourceTextStyle(R.attr.textAppearanceHeadline2),

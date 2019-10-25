@@ -2,6 +2,7 @@ package com.ivianuu.essentials.ui.compose.resources
 
 import androidx.compose.ambient
 import androidx.compose.effectOf
+import androidx.compose.memo
 import androidx.core.graphics.drawable.toBitmap
 import androidx.ui.core.ContextAmbient
 import androidx.ui.graphics.Color
@@ -12,18 +13,19 @@ import com.ivianuu.essentials.util.drawable
 
 fun colorResource(resId: Int) = effectOf<Color> {
     val context = +ambient(ContextAmbient)
-    Color(context.getColor(resId))
+    +memo { Color(context.getColor(resId)) }
 }
 
 fun drawableResource(resId: Int) = effectOf<Image> {
     val context = +ambient(ContextAmbient)
-    val drawable = context.drawable(resId)
-    return@effectOf BitmapImage(drawable.toBitmap())
+    return@effectOf +memo { BitmapImage(context.drawable(resId).toBitmap()) }
 }
 
 fun drawableResource(resId: Int, tint: Color? = null) = effectOf<Image> {
     val context = +ambient(ContextAmbient)
-    val drawable = context.drawable(resId).mutate()
-    if (tint != null) drawable.setTint(tint.toArgb())
-    return@effectOf BitmapImage(drawable.toBitmap())
+    return@effectOf +memo {
+        val drawable = context.drawable(resId).mutate()
+        if (tint != null) drawable.setTint(tint.toArgb())
+        BitmapImage(drawable.toBitmap())
+    }
 }

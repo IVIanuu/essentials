@@ -17,10 +17,22 @@ fun ViewModelStoreOwner.viewModelProvider(
 inline fun <reified T : ViewModel> ViewModelStoreOwner.getViewModel(
     factory: ViewModelProvider.Factory = ViewModelProvider.NewInstanceFactory(),
     key: String = T::class.defaultViewModelKey
-): T = viewModelProvider(factory).get(key, T::class.java)
+): T = getViewModel(T::class, factory, key)
+
+fun <T : ViewModel> ViewModelStoreOwner.getViewModel(
+    type: KClass<T>,
+    factory: ViewModelProvider.Factory = ViewModelProvider.NewInstanceFactory(),
+    key: String = type.defaultViewModelKey
+): T = viewModelProvider(factory).get(key, type.java)
 
 inline fun <reified T : ViewModel> ViewModelStoreOwner.viewModel(
-    crossinline keyProvider: () -> String = { T::class.defaultViewModelKey },
-    crossinline factoryProvider: () -> ViewModelProvider.Factory = { ViewModelProvider.NewInstanceFactory() }
+    noinline keyProvider: () -> String = { T::class.defaultViewModelKey },
+    noinline factoryProvider: () -> ViewModelProvider.Factory = { ViewModelProvider.NewInstanceFactory() }
+): Lazy<ViewModel> = viewModel(T::class, keyProvider, factoryProvider)
+
+fun <T : ViewModel> ViewModelStoreOwner.viewModel(
+    type: KClass<T>,
+    keyProvider: () -> String = { type.defaultViewModelKey },
+    factoryProvider: () -> ViewModelProvider.Factory = { ViewModelProvider.NewInstanceFactory() }
 ): Lazy<ViewModel> =
-    lazy(LazyThreadSafetyMode.NONE) { getViewModel<T>(factoryProvider(), keyProvider()) }
+    lazy(LazyThreadSafetyMode.NONE) { getViewModel(type, factoryProvider(), keyProvider()) }
