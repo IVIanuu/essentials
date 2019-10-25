@@ -224,7 +224,7 @@ private fun DrawSlider(
             val centerY = parentSize.height.value / 2
             val startX = thumbOverlayRadius
             val endX = parentSize.width.value - thumbOverlayRadius
-            val currentX = lerp(0f, endX, fraction)
+            val currentX = lerp(0f, parentSize.width.value, fraction)
                 .let { tmp ->
                     if (divisions != null) {
                         discretize(tmp.toInt(), endX.toInt() / divisions).toFloat()
