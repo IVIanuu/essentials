@@ -29,7 +29,7 @@ import androidx.ui.material.themeTextStyle
 import com.ivianuu.essentials.ui.compose.core.composable
 
 @Composable
-fun Subheader(text: String) = composable("Subheader", inputs = arrayOf(text)) {
+fun Subheader(text: String) = composable("Subheader", text) {
     Subheader { Text(text) }
 }
 
