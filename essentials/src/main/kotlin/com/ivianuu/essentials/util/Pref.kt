@@ -2,8 +2,11 @@ package com.ivianuu.essentials.util
 
 import com.ivianuu.epoxyprefs.AbstractPreferenceModel
 import com.ivianuu.epoxyprefs.dependency
+import com.ivianuu.kprefs.ChangeListener
 import com.ivianuu.kprefs.Pref
 import com.ivianuu.kprefs.common.PrefValueHolder
+import com.ivianuu.kprefs.common.valueFor
+import kotlin.reflect.KClass
 
 fun <T : Any> AbstractPreferenceModel.Builder<T>.fromPref(pref: Pref<T>) {
     key(pref.key)
@@ -24,4 +27,44 @@ fun <T, S : Any> AbstractPreferenceModel.Builder<*>.enumDependency(
     value: T
 ) where T : Enum<T>, T : PrefValueHolder<S> {
     dependency(dependency.key, value.value, dependency.defaultValue.value)
+}
+
+inline fun <reified T, S> Pref<T>.unwrap(): Pref<S> where T : Enum<T>, T : PrefValueHolder<S> =
+    unwrap(type = T::class)
+
+fun <T, S> Pref<T>.unwrap(
+    type: KClass<T>
+): Pref<S> where T : Enum<T>, T : PrefValueHolder<S> {
+    val wrapped = this
+    return object : Pref<S> {
+        override val defaultValue: S
+            get() = wrapped.defaultValue.value
+        override val isSet: Boolean
+            get() = wrapped.isSet
+        override val key: String
+            get() = wrapped.key
+
+        private val listenerMap = mutableMapOf<ChangeListener<S>, ChangeListener<T>>()
+
+        override fun get(): S = wrapped.get().value
+
+        override fun set(value: S) {
+            wrapped.set(type.valueFor(value, wrapped.defaultValue))
+        }
+
+        override fun delete() {
+            wrapped.delete()
+        }
+
+        override fun addListener(listener: ChangeListener<S>) {
+            wrapped.addListener(listenerMap.getOrPut(listener) {
+                { listener(it.value) }
+            })
+        }
+
+        override fun removeListener(listener: ChangeListener<S>) {
+            listenerMap.remove(listener)?.let { wrapped.removeListener(it) }
+        }
+
+    }
 }
