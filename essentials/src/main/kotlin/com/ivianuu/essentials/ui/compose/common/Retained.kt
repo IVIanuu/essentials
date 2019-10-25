@@ -33,6 +33,10 @@ import com.ivianuu.essentials.ui.compose.core.ActivityAmbient
 import com.ivianuu.essentials.util.getViewModel
 import kotlin.reflect.KProperty
 
+fun <T> retained(key: Any, init: () -> T) = effectOf<T> {
+    (+retainedState(key, init)).value
+}
+
 fun <T> retainedState(key: Any, init: () -> T) = effectOf<RetainedState<T>> {
     val activity = +ambient(ActivityAmbient) as ComponentActivity
     val viewModel = +memo {
