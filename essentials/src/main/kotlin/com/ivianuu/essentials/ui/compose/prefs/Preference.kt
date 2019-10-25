@@ -27,7 +27,6 @@ import androidx.ui.graphics.Color
 import androidx.ui.layout.Column
 import androidx.ui.layout.ConstrainedBox
 import androidx.ui.layout.Container
-import androidx.ui.layout.CrossAxisAlignment
 import androidx.ui.layout.DpConstraints
 import androidx.ui.layout.EdgeInsets
 import androidx.ui.layout.MainAxisAlignment
@@ -78,52 +77,15 @@ private fun PreferenceLayout(
     val styledSummary = applyTextStyle(SummaryTextStyle, summary)
 
     val item = @Composable {
-        if (styledSummary != null) {
-            TitleAndSummary.Compose(
-                leading,
-                styledTitle,
-                styledSummary,
-                trailing
-            )
+        val minHeight = if (summary != null) {
+            if (leading == null) TitleAndSummaryMinHeight else TitleAndSummaryMinHeightWithIcon
         } else {
-            TitleOnly.Compose(leading, styledTitle, trailing)
+            if (leading == null) TitleOnlyMinHeight else TitleOnlyMinHeightWithIcon
         }
-    }
 
-    if (onClick != null) {
-        val rippleColor = (+themeColor { onSurface }).copy(alpha = RippleOpacity)
-        Ripple(bounded = true, color = rippleColor) {
-            Clickable(onClick = onClick, children = item)
-        }
-    } else {
-        item()
-    }
-}
-
-private object TitleOnly {
-    // List item related constants.
-    private val MinHeight = 48.dp
-    private val MinHeightWithIcon = 56.dp
-    // Icon related constants.
-    private val IconMinPaddedWidth = 40.dp
-    private val IconLeftPadding = 16.dp
-    private val IconVerticalPadding = 8.dp
-    // Content related constants.
-    private val ContentLeftPadding = 16.dp
-    private val ContentRightPadding = 16.dp
-    private val ContentVerticalPadding = 8.dp
-    // Trailing related constants.
-    private val TrailingRightPadding = 16.dp
-
-    @Composable
-    fun Compose(
-        leading: @Composable() (() -> Unit)?,
-        text: @Composable() (() -> Unit),
-        trailing: @Composable() (() -> Unit)?
-    ) = composable("TitleOnly") {
-        val minHeight = if (leading == null) MinHeight else MinHeightWithIcon
         ConstrainedBox(constraints = DpConstraints(minHeight = minHeight)) {
-            Row(crossAxisAlignment = CrossAxisAlignment.Center) {
+            Row {
+                // leading
                 if (leading != null) {
                     Container(
                         modifier = Inflexible,
@@ -139,72 +101,8 @@ private object TitleOnly {
                         children = leading
                     )
                 }
-                Container(
-                    modifier = Flexible(1f),
-                    alignment = Alignment.CenterLeft,
-                    padding = EdgeInsets(
-                        left = ContentLeftPadding,
-                        top = ContentVerticalPadding,
-                        right = ContentRightPadding,
-                        bottom = ContentVerticalPadding
-                    ),
-                    children = text
-                )
-                if (trailing != null) {
-                    Container(
-                        modifier = Inflexible,
-                        padding = EdgeInsets(right = TrailingRightPadding),
-                        constraints = DpConstraints(minHeight = minHeight),
-                        children = trailing
-                    )
-                }
-            }
-        }
-    }
-}
 
-private object TitleAndSummary {
-    // List item related constants.
-    private val MinHeight = 64.dp
-    private val MinHeightWithIcon = 72.dp
-    // Icon related constants.
-    private val IconMinPaddedWidth = 40.dp
-    private val IconLeftPadding = 16.dp
-    private val IconVerticalPadding = 16.dp
-    // Content related constants.
-    private val ContentLeftPadding = 16.dp
-    private val ContentRightPadding = 16.dp
-    private val ContentVerticalPadding = 8.dp
-    // Trailing related constants.
-    private val TrailingRightPadding = 16.dp
-
-    @Composable
-    fun Compose(
-        leading: @Composable() (() -> Unit)?,
-        title: @Composable() (() -> Unit),
-        summary: @Composable() () -> Unit,
-        trailing: @Composable() (() -> Unit)?
-    ) {
-        val minHeight = if (leading == null) MinHeight else MinHeightWithIcon
-        ConstrainedBox(constraints = DpConstraints(minHeight = minHeight)) {
-            Row(crossAxisAlignment = CrossAxisAlignment.Start) {
-                if (leading != null) {
-                    Container(
-                        modifier = Inflexible,
-                        alignment = Alignment.TopLeft,
-                        constraints = DpConstraints(
-                            minHeight = minHeight,
-                            minWidth = IconLeftPadding + IconMinPaddedWidth
-                        ),
-                        padding = EdgeInsets(
-                            left = IconLeftPadding,
-                            top = IconVerticalPadding,
-                            bottom = IconVerticalPadding
-                        ),
-                        children = leading
-                    )
-                }
-
+                // content
                 Container(
                     modifier = Flexible(1f),
                     alignment = Alignment.CenterLeft,
@@ -216,11 +114,12 @@ private object TitleAndSummary {
                     )
                 ) {
                     Column(mainAxisAlignment = MainAxisAlignment.Center) {
-                        title()
-                        summary()
+                        styledTitle()
+                        styledSummary?.invoke()
                     }
                 }
 
+                // trailing
                 if (trailing != null) {
                     Container(
                         modifier = Inflexible,
@@ -232,7 +131,29 @@ private object TitleAndSummary {
             }
         }
     }
+
+    if (onClick != null) {
+        val rippleColor = (+themeColor { onSurface }).copy(alpha = RippleOpacity)
+        Ripple(bounded = true, color = rippleColor) {
+            Clickable(onClick = onClick, children = item)
+        }
+    } else {
+        item()
+    }
 }
+
+private val TitleOnlyMinHeight = 48.dp
+private val TitleOnlyMinHeightWithIcon = 56.dp
+private val TitleAndSummaryMinHeight = 64.dp
+private val TitleAndSummaryMinHeightWithIcon = 72.dp
+
+private val IconMinPaddedWidth = 40.dp
+private val IconLeftPadding = 16.dp
+private val IconVerticalPadding = 8.dp
+private val ContentLeftPadding = 16.dp
+private val ContentRightPadding = 16.dp
+private val ContentVerticalPadding = 8.dp
+private val TrailingRightPadding = 16.dp
 
 private data class PreferenceTextStyle(
     val style: MaterialTypography.() -> TextStyle,
