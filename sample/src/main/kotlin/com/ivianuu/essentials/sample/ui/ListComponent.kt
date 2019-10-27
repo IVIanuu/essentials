@@ -46,9 +46,7 @@ import androidx.ui.foundation.animation.FlingConfig
 import androidx.ui.lerp
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.compose.core.composable
-import com.ivianuu.essentials.ui.compose.core.ref
 import kotlin.math.absoluteValue
-import kotlin.math.max
 
 @Composable
 fun <T> List(
@@ -82,14 +80,20 @@ fun List(
 ) = composable("List") {
     val scrollerPositionState = +state { 0.px }
     val scrollerPosition = +memo { ScrollerPosition(scrollerPositionState) }
+    val maxPosition = +state { Px.Infinity }
 
+    d { "bounds ${-maxPosition.value.value}" }
+    //scrollerPosition.controller.setBounds(-maxPosition.value.value, 0f)
     PressGestureDetector(onPress = {
         scrollerPosition.controller.onDrag(scrollerPosition.value.value.value)
     }) {
         TouchSlopDragGestureDetector(
             dragObserver = object : DragObserver {
                 override fun onDrag(dragDistance: PxPosition): PxPosition {
-                    scrollerPosition.controller.onDrag(scrollerPosition.value.value.value + dragDistance.y.value)
+                    val newValue = (scrollerPosition.value.value.value + dragDistance.y.value)
+                        .coerceIn(-maxPosition.value.value, 0f)
+                    d { "on drag $newValue" }
+                    scrollerPosition.controller.onDrag(newValue)
                     // todo horizontal
                     return dragDistance
                 }
@@ -101,6 +105,12 @@ fun List(
         ) {
             ListLayout(
                 scrollerPosition = scrollerPosition,
+                maxPosition = maxPosition.value,
+                onMaxPositionChanged = {
+                    if (maxPosition.value != it) {
+                        maxPosition.value = it
+                    }
+                },
                 isVertical = isVertical,
                 children = children
             )
@@ -111,23 +121,21 @@ fun List(
 @Composable
 private fun ListLayout(
     scrollerPosition: ScrollerPosition,
+    maxPosition: Px,
+    onMaxPositionChanged: (Px) -> Unit,
     isVertical: Boolean,
     children: () -> Unit
 ) = composable("ListLayout") {
-    val childMap = +memo(children) {
+    val childMap = +memo {
         d { "new child map" }
         mutableMapOf<Measurable, ListChild>()
     }
-    val maxPositionRef = +ref { Px.Infinity }
 
     Layout(children) { measurables, constraints ->
         val scrollerPosition = scrollerPosition.value.value
-            .coerceIn((-maxPositionRef.value.value).px, 0f.px)
+            .coerceIn(-maxPosition, 0f.px)
 
-        val currentOffset = scrollerPosition.value.absoluteValue.px
-
-        d { "scroller position $scrollerPosition" }
-        d { "max pos ${maxPositionRef.value}" }
+        val scrollerPositionAbs = scrollerPosition.value.absoluteValue.px
 
         val childConstraints = Constraints(
             maxHeight = if (isVertical) IntPx.Infinity else constraints.maxHeight,
@@ -138,22 +146,23 @@ private fun ListLayout(
 
         val offsetSize = if (isVertical) constraints.maxHeight else constraints.maxWidth
 
-        var lowerMeasureBound = currentOffset.round() - offsetSize
+        var lowerMeasureBound = scrollerPositionAbs.round() - offsetSize
         if (lowerMeasureBound < 0.ipx) {
             lowerMeasureBound = 0.ipx
         }
 
-        val upperMeasureBound = currentOffset.round() + offsetSize
+        // todo horizontal
+        val upperMeasureBound = scrollerPositionAbs.round() + constraints.maxHeight + offsetSize
 
         d { "lower bound $lowerMeasureBound upper bound $upperMeasureBound" }
 
         val currentChild = childMap.values.firstOrNull { child ->
             if (isVertical) {
-                child.position.y <= currentOffset
-                        && child.position.y + child.placeable.height >= currentOffset
+                child.position.y <= scrollerPositionAbs
+                        && child.position.y + child.placeable.height >= scrollerPositionAbs
             } else {
-                child.position.x <= currentOffset
-                        && child.position.x + child.placeable.width >= currentOffset
+                child.position.x <= scrollerPositionAbs
+                        && child.position.x + child.placeable.width >= scrollerPositionAbs
             }
         }
         val minChild = childMap.values.minBy {
@@ -164,11 +173,14 @@ private fun ListLayout(
         }
 
         if (maxChild != null) {
-            maxPositionRef.value =
-                (maxChild.position.y.toPx() + maxChild.placeable.height) - offsetSize
+            // todo horizontal
+            val newMaxPosition =
+                (maxChild.position.y.toPx() + maxChild.placeable.height) - constraints.maxHeight
+            d { "$maxChild new max pos $newMaxPosition old $maxPosition" }
+            onMaxPositionChanged(newMaxPosition)
         }
 
-        d { "max child ${maxChild?.position?.y} scroller position $scrollerPosition offset $currentOffset max pos ref $maxPositionRef" }
+        d { "max child ${maxChild?.position?.y} scroller position $scrollerPosition abs $scrollerPositionAbs max pos $maxPosition" }
 
         d { "current $currentChild min child $minChild max child $maxChild" }
 
@@ -262,24 +274,9 @@ private fun ListLayout(
 
         d { "all children ${childMap.map { it.value.index }.sorted()}" }
 
-        if (childMap.any { it.value.index == measurables.lastIndex }) {
-            val overallSize = if (isVertical) {
-                childMap.values.sumBy { it.placeable.height.value }
-            } else {
-                childMap.values.sumBy { it.placeable.width.value }
-            }.px
-
-            if (maxPositionRef.value == Px.Infinity) {
-                maxPositionRef.value = overallSize
-            } else {
-                maxPositionRef.value = max(maxPositionRef.value.value, overallSize.value).px
-            }
-        } else {
-            maxPositionRef.value = Px.Infinity
-        }
-
         layout(width = constraints.maxWidth, height = constraints.maxHeight) {
             childMap.values
+                .filter { it.position.y >= lowerMeasureBound && it.position.y <= upperMeasureBound }
                 .sortedBy { if (isVertical) it.position.y.value else it.position.x.value }
                 .forEach { child ->
                     val position = PxPosition(
