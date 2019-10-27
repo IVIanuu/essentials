@@ -119,6 +119,11 @@ enum class HomeItem(
     val color: Color,
     val route: () -> Route
 ) {
+    List(
+        title = "List",
+        color = Color.Blue,
+        route = { listRoute }
+    ),
     Counter(
         title = "Counter",
         color = Color.Red,
