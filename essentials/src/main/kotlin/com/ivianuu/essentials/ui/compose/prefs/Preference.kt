@@ -27,6 +27,7 @@ import androidx.ui.graphics.Color
 import androidx.ui.layout.Column
 import androidx.ui.layout.ConstrainedBox
 import androidx.ui.layout.Container
+import androidx.ui.layout.CrossAxisAlignment
 import androidx.ui.layout.DpConstraints
 import androidx.ui.layout.EdgeInsets
 import androidx.ui.layout.MainAxisAlignment
@@ -84,7 +85,7 @@ private fun PreferenceLayout(
         }
 
         ConstrainedBox(constraints = DpConstraints(minHeight = minHeight)) {
-            Row {
+            Row(crossAxisAlignment = CrossAxisAlignment.Center) {
                 // leading
                 if (leading != null) {
                     Container(
@@ -113,7 +114,9 @@ private fun PreferenceLayout(
                         bottom = ContentVerticalPadding
                     )
                 ) {
-                    Column(mainAxisAlignment = MainAxisAlignment.Center) {
+                    Column(
+                        mainAxisAlignment = MainAxisAlignment.Center
+                    ) {
                         styledTitle()
                         styledSummary?.invoke()
                     }
@@ -173,7 +176,6 @@ private fun applyTextStyle(
     }
 }
 
-// Material spec values.
 private const val PrimaryTextOpacity = 0.87f
 private const val SecondaryTextOpacity = 0.6f
 private const val RippleOpacity = 0.16f
