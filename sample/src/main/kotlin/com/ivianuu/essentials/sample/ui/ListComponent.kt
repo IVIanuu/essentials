@@ -33,12 +33,14 @@ import androidx.ui.core.Measurable
 import androidx.ui.core.Placeable
 import androidx.ui.core.Px
 import androidx.ui.core.PxPosition
+import androidx.ui.core.coerceIn
 import androidx.ui.core.gesture.DragObserver
 import androidx.ui.core.gesture.PressGestureDetector
 import androidx.ui.core.gesture.TouchSlopDragGestureDetector
 import androidx.ui.core.ipx
 import androidx.ui.core.px
 import androidx.ui.core.round
+import androidx.ui.core.toPx
 import androidx.ui.foundation.animation.AnimatedFloatDragController
 import androidx.ui.foundation.animation.FlingConfig
 import androidx.ui.lerp
@@ -120,7 +122,7 @@ private fun ListLayout(
 
     Layout(children) { measurables, constraints ->
         val scrollerPosition = scrollerPosition.value.value
-        //.coerceIn((-maxPositionRef.value.value).px, 0f.px)
+            .coerceIn((-maxPositionRef.value.value).px, 0f.px)
 
         val currentOffset = scrollerPosition.value.absoluteValue.px
 
@@ -160,6 +162,13 @@ private fun ListLayout(
         val maxChild = childMap.values.maxBy {
             if (isVertical) it.position.y.value else it.position.x.value
         }
+
+        if (maxChild != null) {
+            maxPositionRef.value =
+                (maxChild.position.y.toPx() + maxChild.placeable.height) - offsetSize
+        }
+
+        d { "max child ${maxChild?.position?.y} scroller position $scrollerPosition offset $currentOffset max pos ref $maxPositionRef" }
 
         d { "current $currentChild min child $minChild max child $maxChild" }
 
