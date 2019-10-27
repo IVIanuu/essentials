@@ -21,6 +21,7 @@ import androidx.ui.core.Text
 import com.ivianuu.essentials.ui.compose.composeControllerRoute
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
+import com.ivianuu.essentials.ui.compose.prefs.CheckboxPreference
 import com.ivianuu.essentials.ui.compose.prefs.Dependency
 import com.ivianuu.essentials.ui.compose.prefs.MultiSelectListPreference
 import com.ivianuu.essentials.ui.compose.prefs.PreferenceSubheader
@@ -59,6 +60,13 @@ val prefsRoute = composeControllerRoute(
             )
 
             PreferenceSubheader(text = "Category", dependencies = dependencies)
+
+            CheckboxPreference(
+                pref = prefs.boolean("checkbox"),
+                title = { Text("Checkbox") },
+                summary = { Text("This is a checkbox preference") },
+                dependencies = dependencies
+            )
 
             RadioButtonPreference(
                 pref = prefs.boolean("radio_button"),
