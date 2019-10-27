@@ -20,6 +20,15 @@ import androidx.compose.memo
 
 fun <T> ref(init: () -> T) = memo { Ref(init()) }
 
+fun <T, V1> refFor(v1: V1, init: () -> T) =
+    memo(v1) { Ref(init()) }
+
+fun <T, V1, V2> refFor(
+    v1: V1,
+    v2: V2,
+    init: () -> T
+) = memo(v1, v2) { Ref(init()) }
+
 fun <T> refFor(vararg inputs: Any?, init: () -> T) =
     memo(*inputs) { Ref(init()) }
 
