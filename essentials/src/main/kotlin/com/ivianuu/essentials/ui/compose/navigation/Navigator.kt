@@ -18,10 +18,13 @@ package com.ivianuu.essentials.ui.compose.navigation
 
 import androidx.compose.Ambient
 import androidx.compose.Composable
+import androidx.compose.Observe
 import androidx.compose.Recompose
 import androidx.compose.memo
 import androidx.compose.unaryPlus
-import androidx.ui.layout.Stack
+import androidx.ui.core.Layout
+import androidx.ui.core.ParentData
+import androidx.ui.core.ipx
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.compose.common.handleBack
 import com.ivianuu.essentials.ui.compose.common.retainedState
@@ -40,26 +43,28 @@ fun Navigator(
     key: String? = null,
     startRoute: () -> Route
 ) = composable("Navigator") {
-    Recompose { recompose ->
-        val navigatorState = +retainedState("Navigator${key.orEmpty()}") { NavigatorState() }
-        val coroutineScope = +coroutineScope()
-        val appDispatchers = +inject<AppDispatchers>()
-        val navigator = +memo {
-            Navigator(coroutineScope, appDispatchers, navigatorState.value, startRoute())
-        }
-
-        navigator.recompose = recompose
-
-        d { "navigator fun $handleBack ${navigator.backStack.size}" }
-
-        if (handleBack && navigator.backStack.size > 1) {
-            composable("handleBack") {
-                +handleBack { navigator.pop() }
+    Observe {
+        Recompose { recompose ->
+            val navigatorState = +retainedState("Navigator${key.orEmpty()}") { NavigatorState() }
+            val coroutineScope = +coroutineScope()
+            val appDispatchers = +inject<AppDispatchers>()
+            val navigator = +memo {
+                Navigator(coroutineScope, appDispatchers, navigatorState.value, startRoute())
             }
-        }
 
-        NavigatorAmbient.Provider(navigator) {
-            navigator.compose()
+            navigator.recompose = recompose
+
+            d { "navigator fun $handleBack ${navigator.backStack.size}" }
+
+            if (handleBack && navigator.backStack.size > 1) {
+                composable("handleBack") {
+                    +handleBack { navigator.pop() }
+                }
+            }
+
+            NavigatorAmbient.Provider(navigator) {
+                navigator.compose()
+            }
         }
     }
 }
@@ -134,11 +139,19 @@ class Navigator internal constructor(
 
     @Composable
     fun compose() = composable("NavigatorContent") {
-        Stack {
-            backStack.takeLast(1).forEach { route ->
-                composable(route.key) {
-                    route.compose()
-                }
+        NavigatorLayout {
+            backStack
+                .filter { it.isVisible() || it.keepState }
+                .forEach { route ->
+                    composable(route.key) {
+                        Observe {
+                            RouteAmbient.Provider(route) {
+                                ParentData(NavigatorParentData(route.isVisible())) {
+                                    route.compose()
+                                }
+                            }
+                        }
+                    }
             }
         }
     }
@@ -149,19 +162,45 @@ class Navigator internal constructor(
             recompose()
         }
     }
+
+    private fun Route.isVisible(): Boolean = this in getVisibleRoutes()
+
+    private fun getVisibleRoutes(): List<Route> {
+        val visibleRoutes = mutableListOf<Route>()
+
+        for (route in state.backStack.reversed()) {
+            visibleRoutes += route
+            if (!route.isFloating) break
+        }
+
+        return visibleRoutes
+    }
 }
 
 val NavigatorAmbient = Ambient.of<Navigator>()
 
 interface Route {
     val key: Any
+    val keepState: Boolean
+    val isFloating: Boolean
     @Composable
     fun compose()
 }
 
-fun Route(key: Any, compose: @Composable() () -> Unit): Route = object : Route {
+val RouteAmbient = Ambient.of<Route>()
+
+fun Route(
+    key: Any,
+    keepState: Boolean = false,
+    isFloating: Boolean = false,
+    compose: @Composable() () -> Unit
+): Route = object : Route {
     override val key: Any
         get() = key
+    override val keepState: Boolean
+        get() = keepState
+    override val isFloating: Boolean
+        get() = isFloating
 
     override fun compose() {
         compose.invoke()
@@ -171,3 +210,27 @@ fun Route(key: Any, compose: @Composable() () -> Unit): Route = object : Route {
 internal data class NavigatorState(
     var backStack: List<Route> = emptyList()
 )
+
+@Composable
+private fun NavigatorLayout(
+    children: @Composable() () -> Unit
+) = composable("NavigatorLayout") {
+    Layout(children) { measureables, constraints ->
+        // force children to fill the whole space
+        val childConstraints = constraints.copy(
+            minWidth = constraints.maxWidth,
+            minHeight = constraints.maxHeight
+        )
+
+        // get only visible routes
+        val placeables = measureables
+            .filter { (it.parentData as NavigatorParentData).isVisible }
+            .map { it.measure(childConstraints) }
+
+        layout(constraints.maxWidth, constraints.maxHeight) {
+            placeables.forEach { it.place(0.ipx, 0.ipx) }
+        }
+    }
+}
+
+private data class NavigatorParentData(val isVisible: Boolean)
