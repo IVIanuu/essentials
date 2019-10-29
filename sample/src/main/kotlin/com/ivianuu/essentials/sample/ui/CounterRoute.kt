@@ -43,6 +43,7 @@ val counterRoute = composeControllerRoute {
                         crossAxisAlignment = CrossAxisAlignment.Center
                     ) {
                         val (count, setCount) = +retainedState("count") { 1 }
+
                         Text(
                             text = "Count: $count",
                             style = +themeTextStyle { h3 }
