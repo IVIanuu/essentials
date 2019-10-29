@@ -50,6 +50,8 @@ abstract class EsActivity : AppCompatActivity(), InjektTrait, MvRxView {
         }
     }
 
+    var handleBack = true
+
     val navigator: Navigator by inject()
     private val controllerRenderer: ControllerRenderer by inject()
 
@@ -86,7 +88,7 @@ abstract class EsActivity : AppCompatActivity(), InjektTrait, MvRxView {
     }
 
     override fun onBackPressed() {
-        if (navigator.backStack.size > 1) {
+        if (handleBack && navigator.backStack.size > 1) {
             navigator.pop()
         } else {
             super.onBackPressed()

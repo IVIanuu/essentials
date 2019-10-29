@@ -121,8 +121,13 @@ enum class HomeItem(
 ) {
     Counter(
         title = "Counter",
-        color = Color.Red,
+        color = Color.Yellow,
         route = { counterRoute }
+    ),
+    Navigation(
+        title = "Navigation",
+        color = Color.Red,
+        route = { com.ivianuu.essentials.sample.ui.navigationRoute }
     ),
     AppPicker(
         title = "App Picker",

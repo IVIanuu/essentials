@@ -26,9 +26,13 @@ import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.compose.common.handleBack
 import com.ivianuu.essentials.ui.compose.common.retainedState
 import com.ivianuu.essentials.ui.compose.core.composable
+import com.ivianuu.essentials.ui.compose.coroutines.coroutineScope
+import com.ivianuu.essentials.ui.compose.injekt.inject
+import com.ivianuu.essentials.util.AppDispatchers
 import kotlinx.coroutines.CompletableDeferred
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @Composable
 fun Navigator(
@@ -38,11 +42,18 @@ fun Navigator(
 ) = composable("Navigator") {
     Recompose { recompose ->
         val navigatorState = +retainedState("Navigator${key.orEmpty()}") { NavigatorState() }
-        val navigator = +memo { Navigator(navigatorState.value, startRoute()) }
+        val coroutineScope = +coroutineScope()
+        val appDispatchers = +inject<AppDispatchers>()
+        val navigator = +memo {
+            Navigator(coroutineScope, appDispatchers, navigatorState.value, startRoute())
+        }
+
         navigator.recompose = recompose
 
+        d { "navigator fun $handleBack ${navigator.backStack.size}" }
+
         if (handleBack && navigator.backStack.size > 1) {
-            +memo(navigator.backStack.size) {
+            composable("handleBack") {
                 +handleBack { navigator.pop() }
             }
         }
@@ -54,6 +65,8 @@ fun Navigator(
 }
 
 class Navigator internal constructor(
+    private val coroutineScope: CoroutineScope,
+    private val dispatchers: AppDispatchers,
     private val state: NavigatorState,
     startRoute: Route
 ) {
@@ -74,7 +87,7 @@ class Navigator internal constructor(
     @JvmName("pushWithoutResult")
     fun push(route: Route) {
         @Suppress("DeferredResultUnused")
-        GlobalScope.launch { push<Any?>(route) }
+        coroutineScope.launch { push<Any?>(route) }
     }
 
     suspend fun <T> push(route: Route): T? {
@@ -88,6 +101,10 @@ class Navigator internal constructor(
     }
 
     fun pop(result: Any? = null) {
+        coroutineScope.launch { popInternal(result) }
+    }
+
+    private suspend fun popInternal(result: Any?) {
         d { "pop result $result" }
         val newBackStack = backStack.toMutableList()
         val removedRoute = newBackStack.removeAt(backStack.lastIndex)
@@ -99,7 +116,7 @@ class Navigator internal constructor(
     @JvmName("replaceWithoutResult")
     fun replace(route: Route) {
         @Suppress("DeferredResultUnused")
-        GlobalScope.launch { replace<Any?>(route) }
+        coroutineScope.launch { replace<Any?>(route) }
     }
 
     suspend fun <T> replace(route: Route): T? {
@@ -118,7 +135,7 @@ class Navigator internal constructor(
     @Composable
     fun compose() = composable("NavigatorContent") {
         Stack {
-            backStack.forEach { route ->
+            backStack.takeLast(1).forEach { route ->
                 composable(route.key) {
                     route.compose()
                 }
@@ -126,8 +143,8 @@ class Navigator internal constructor(
         }
     }
 
-    private fun setBackStack(newBackStack: List<Route>) {
-        synchronized(state) {
+    private suspend fun setBackStack(newBackStack: List<Route>) {
+        withContext(dispatchers.main) {
             state.backStack = newBackStack
             recompose()
         }
@@ -138,7 +155,6 @@ val NavigatorAmbient = Ambient.of<Navigator>()
 
 interface Route {
     val key: Any
-
     @Composable
     fun compose()
 }
