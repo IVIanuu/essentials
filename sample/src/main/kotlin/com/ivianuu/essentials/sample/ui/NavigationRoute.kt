@@ -35,7 +35,7 @@ val navigationRoute = composeControllerRoute {
     Navigator { CounterRoute(1) }
 }
 
-private fun CounterRoute(count: Int): Route = Route(count, isFloating = true) {
+private fun CounterRoute(count: Int): Route = Route(count) {
     Column(
         mainAxisAlignment = MainAxisAlignment.Center,
         crossAxisAlignment = CrossAxisAlignment.Center
