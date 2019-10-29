@@ -22,7 +22,6 @@ import androidx.activity.OnBackPressedDispatcherOwner
 import androidx.compose.ambient
 import androidx.compose.onActive
 import androidx.compose.unaryPlus
-import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.base.EsActivity
 import com.ivianuu.essentials.ui.compose.core.ActivityAmbient
 
@@ -30,7 +29,6 @@ fun handleBack(
     activity: Activity = +ambient(ActivityAmbient),
     callback: () -> Unit
 ) = onActive {
-    d { "handle back on active" }
     val backPressedDispatcher =
         (activity as OnBackPressedDispatcherOwner).onBackPressedDispatcher
 
@@ -38,7 +36,6 @@ fun handleBack(
 
     val onBackPressedCallback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
-            d { "on back" }
             callback()
         }
     }
@@ -46,7 +43,6 @@ fun handleBack(
     backPressedDispatcher.addCallback(onBackPressedCallback)
 
     onDispose {
-        d { "back on dispose" }
         onBackPressedCallback.remove()
         (activity as? EsActivity)?.handleBack = true
     }

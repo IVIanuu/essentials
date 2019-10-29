@@ -54,8 +54,6 @@ fun Navigator(
 
             navigator.recompose = recompose
 
-            d { "navigator fun $handleBack ${navigator.backStack.size}" }
-
             if (handleBack && navigator.backStack.size > 1) {
                 composable("handleBack") {
                     +handleBack { navigator.pop() }
@@ -138,7 +136,7 @@ class Navigator internal constructor(
     }
 
     @Composable
-    fun compose() = composable("NavigatorContent") {
+    internal fun compose() = composable("NavigatorContent") {
         NavigatorLayout {
             backStack
                 .filter { it.isVisible() || it.keepState }
