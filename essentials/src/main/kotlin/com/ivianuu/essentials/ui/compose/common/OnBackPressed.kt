@@ -24,7 +24,7 @@ import androidx.compose.onActive
 import androidx.compose.unaryPlus
 import com.ivianuu.essentials.ui.compose.core.ActivityAmbient
 
-fun handleBack(
+fun onBackPressed(
     activity: Activity = +ambient(ActivityAmbient),
     callback: () -> Unit
 ) = onActive {

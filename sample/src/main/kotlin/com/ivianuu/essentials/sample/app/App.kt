@@ -20,7 +20,6 @@ import com.ivianuu.director.DirectorPlugins
 import com.ivianuu.director.setDefaultHandler
 import com.ivianuu.essentials.app.EsApp
 import com.ivianuu.essentials.apps.coil.esAppsCoilModule
-import com.ivianuu.essentials.sample.work.workerModule
 import com.ivianuu.essentials.ui.changehandler.OpenCloseChangeHandler
 import com.ivianuu.essentials.work.workerInitializerModule
 import com.ivianuu.essentials.work.workerInjectionModule
@@ -30,8 +29,7 @@ class App : EsApp() {
     override fun modules() = listOf(
         esAppsCoilModule,
         workerInjectionModule,
-        workerInitializerModule,
-        workerModule
+        workerInitializerModule
     )
 
     override fun onCreate() {

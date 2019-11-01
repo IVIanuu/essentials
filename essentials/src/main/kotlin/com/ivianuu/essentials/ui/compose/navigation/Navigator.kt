@@ -26,7 +26,7 @@ import androidx.ui.core.Layout
 import androidx.ui.core.ParentData
 import androidx.ui.core.ipx
 import com.github.ajalt.timberkt.d
-import com.ivianuu.essentials.ui.compose.common.handleBack
+import com.ivianuu.essentials.ui.compose.common.onBackPressed
 import com.ivianuu.essentials.ui.compose.common.retainedState
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.coroutines.coroutineScope
@@ -36,6 +36,8 @@ import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+
+// todo transition support
 
 @Composable
 fun Navigator(
@@ -55,8 +57,8 @@ fun Navigator(
             navigator.recompose = recompose
 
             if (handleBack && navigator.backStack.size > 1) {
-                composable("handleBack") {
-                    +handleBack { navigator.pop() }
+                composable("onBackPressed") {
+                    +onBackPressed { navigator.pop() }
                 }
             }
 
