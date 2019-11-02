@@ -53,16 +53,6 @@ fun launchOnActive(
     }
 }
 
-fun launchOnActive(
-    vararg inputs: Any?,
-    block: suspend CoroutineScope.() -> Unit
-) = effectOf<Unit> {
-    val coroutineScope = +coroutineScope()
-    +com.ivianuu.essentials.ui.compose.core.onActive(*inputs) {
-        coroutineScope.launch(block = block)
-    }
-}
-
 fun launchOnPreCommit(
     block: suspend CoroutineScope.() -> Unit
 ) = effectOf<Unit> {
