@@ -44,7 +44,10 @@ class BroadcastFactory(private val context: Context) {
             }
         }
 
-        context.registerReceiver(broadcastReceiver, intentFilter)
+        try {
+            context.registerReceiver(broadcastReceiver, intentFilter)
+        } catch (e: Exception) {
+        }
 
         awaitClose {
             try {
