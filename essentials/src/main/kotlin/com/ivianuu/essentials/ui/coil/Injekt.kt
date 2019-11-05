@@ -97,10 +97,8 @@ data class FetcherBinding<T : Any>(
     val type: KClass<T>
 )
 
-// todo remove type arg once fixed
-
 inline fun <reified F : Fetcher<T>, reified T : Any> Module.fetcher(
-    type: KClass<T>,
+    type: KClass<T>, // todo remove type arg once fixed
     name: Any? = null,
     noinline definition: Definition<F>
 ): BindingContext<F> = factory(name = name, definition = definition).bindFetcher(type)
@@ -134,10 +132,8 @@ data class MapperBinding<T : Any>(
     val type: KClass<T>
 )
 
-// todo remove type arg once fixed
-
 inline fun <reified M : Mapper<T, *>, reified T : Any> Module.mapper(
-    type: KClass<T>,
+    type: KClass<T>, // todo remove type arg once fixed
     name: Any? = null,
     noinline definition: Definition<M>
 ): BindingContext<M> = factory(name = name, definition = definition).bindMapper(type)
@@ -172,10 +168,8 @@ data class MeasuredMapperBinding<T : Any>(
     val type: KClass<T>
 )
 
-// todo remove type arg once fixed
-
 inline fun <reified M : MeasuredMapper<T, *>, reified T : Any> Module.measuredMapper(
-    type: KClass<T>,
+    type: KClass<T>, // todo remove type arg once fixed
     name: Any? = null,
     noinline definition: Definition<M>
 ): BindingContext<M> = factory(name = name, definition = definition).bindMeasuredMapper(type)
