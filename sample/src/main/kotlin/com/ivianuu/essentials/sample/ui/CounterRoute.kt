@@ -55,6 +55,13 @@ val counterRoute = composeControllerRoute {
                             text = "Inc",
                             onClick = { setCount(count + 1) }
                         )
+
+                        HeightSpacer(8.dp)
+
+                        FloatingActionButton(
+                            text = "dec",
+                            onClick = { setCount(count - 1) }
+                        )
                     }
                 }
             }

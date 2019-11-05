@@ -36,14 +36,7 @@ val timerRoute = composeControllerRoute(
         appBar = { EsTopAppBar(title = "Timer") },
         content = {
             Center {
-                val value = +collect(flow<Int> {
-                    var i = 0
-                    while (true) {
-                        ++i
-                        emit(i)
-                        delay(1000)
-                    }
-                })
+                val value = +collect(timerFlow())
 
                 Text(
                     text = "Value: $value",
@@ -52,4 +45,13 @@ val timerRoute = composeControllerRoute(
             }
         }
     )
+}
+
+private fun timerFlow() = flow {
+    var i = 0
+    while (true) {
+        ++i
+        emit(i)
+        delay(1000)
+    }
 }
