@@ -89,3 +89,21 @@ fun resourceTextStyle(attr: Int) = effectOf<TextStyle> {
     val context = +ambient(ContextAmbient)
     TextStyle()
 }
+
+inline fun MaterialTypography.editEach(edit: TextStyle.() -> TextStyle): MaterialTypography {
+    return MaterialTypography(
+        h1 = edit(h1),
+        h2 = edit(h2),
+        h3 = edit(h3),
+        h4 = edit(h4),
+        h5 = edit(h5),
+        h6 = edit(h6),
+        subtitle1 = edit(subtitle1),
+        subtitle2 = edit(subtitle2),
+        body1 = edit(body1),
+        body2 = edit(body2),
+        button = edit(button),
+        caption = edit(caption),
+        overline = edit(overline)
+    )
+}
