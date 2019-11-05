@@ -27,6 +27,7 @@ dependencies {
     api(Deps.AndroidX.Test.junit)
     api(Deps.AndroidX.Test.rules)
     api(Deps.AndroidX.Test.runner)
+    api(Deps.AndroidX.Ui.test)
     api(Deps.Coroutines.test)
     api(Deps.junit)
     api(Deps.Kotlin.stdlib)

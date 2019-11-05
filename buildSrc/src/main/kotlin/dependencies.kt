@@ -64,8 +64,21 @@ object Deps {
         }
 
         object Ui {
-            private const val version = "0.0.1-dev01"
+            private const val version = "0.0.1-dev02"
+            const val androidText = "androidx.ui:ui-android-text:$version"
+            const val androidView = "androidx.ui:ui-android-view:$version"
+            const val androidViewNonIr = "androidx.ui:ui-android-view-non-ir:$version"
+            const val animation = "androidx.ui:ui-animation:$version"
+            const val core = "androidx.ui:ui-core:$version"
+            const val foundation = "androidx.ui:ui-foundation:$version"
+            const val framework = "androidx.ui:ui-framework:$version"
+            const val layout = "androidx.ui:ui-layout:$version"
             const val material = "androidx.ui:ui-material:$version"
+            const val platform = "androidx.ui:ui-platform:$version"
+            const val test = "androidx.ui:ui-test:$version"
+            const val text = "androidx.ui:ui-text:$version"
+            const val tooling = "androidx.ui:ui-tooling:$version"
+            const val vector = "androidx.ui:ui-vector:$version"
         }
 
         const val work = "androidx.work:work-runtime-ktx:2.1.0"
