@@ -27,10 +27,10 @@ import androidx.ui.layout.MainAxisAlignment
 import androidx.ui.layout.Wrap
 import androidx.ui.material.FloatingActionButton
 import androidx.ui.material.themeTextStyle
-import com.ivianuu.essentials.ui.compose.common.retainedState
 import com.ivianuu.essentials.ui.compose.composeControllerRoute
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
 import com.ivianuu.essentials.ui.compose.material.Scaffold
+import com.ivianuu.essentials.ui.compose.mvi.stateStore
 
 val counterRoute = composeControllerRoute {
     Scaffold(
@@ -42,10 +42,10 @@ val counterRoute = composeControllerRoute {
                         mainAxisAlignment = MainAxisAlignment.Center,
                         crossAxisAlignment = CrossAxisAlignment.Center
                     ) {
-                        val (count, setCount) = +retainedState("count") { 1 }
+                        val (state, dispatch) = +counterStateStore()
 
                         Text(
-                            text = "Count: $count",
+                            text = "Count: $state",
                             style = +themeTextStyle { h3 }
                         )
 
@@ -53,14 +53,14 @@ val counterRoute = composeControllerRoute {
 
                         FloatingActionButton(
                             text = "Inc",
-                            onClick = { setCount(count + 1) }
+                            onClick = { dispatch(CounterAction.Inc) }
                         )
 
                         HeightSpacer(8.dp)
 
                         FloatingActionButton(
                             text = "dec",
-                            onClick = { setCount(count - 1) }
+                            onClick = { dispatch(CounterAction.Dec) }
                         )
                     }
                 }
@@ -68,3 +68,15 @@ val counterRoute = composeControllerRoute {
         }
     )
 }
+
+private fun counterStateStore() = stateStore<Int, CounterAction>(
+    initialState = { 1 },
+    reducer = { currentState, action ->
+        when (action) {
+            CounterAction.Inc -> currentState + 1
+            CounterAction.Dec -> currentState - 1
+        }
+    }
+)
+
+private enum class CounterAction { Inc, Dec }

@@ -20,13 +20,13 @@ import androidx.compose.Composable
 import androidx.compose.unaryPlus
 import androidx.ui.material.ListItem
 import androidx.ui.res.stringResource
+import com.ivianuu.essentials.ui.compose.common.ListScreen
 import com.ivianuu.essentials.ui.compose.common.openUrlOnClick
 import com.ivianuu.essentials.ui.compose.composeControllerRoute
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
 import com.ivianuu.essentials.ui.compose.material.Subheader
-import com.ivianuu.essentials.ui.compose.prefs.PrefsScreen
 import com.ivianuu.essentials.ui.navigation.director.defaultControllerRouteOptionsOrNull
 import com.ivianuu.essentials.util.BuildInfo
 
@@ -36,9 +36,9 @@ fun aboutRoute(
 ) = composeControllerRoute(
     options = defaultControllerRouteOptionsOrNull()
 ) {
-    PrefsScreen(
+    ListScreen(
         appBar = { EsTopAppBar(+stringResource(R.string.about_title)) },
-        prefs = {
+        listContent = {
             AboutSection(
                 hasDebugPackageName = hasDebugPackageName,
                 showHeader = false,
