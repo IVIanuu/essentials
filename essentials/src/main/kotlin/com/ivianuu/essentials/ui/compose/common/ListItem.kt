@@ -42,17 +42,17 @@ import com.ivianuu.essentials.ui.compose.core.composable
 @Composable
 fun SimpleListItem(
     title: @Composable() (() -> Unit),
-    summary: @Composable() (() -> Unit)? = null,
+    subtitle: @Composable() (() -> Unit)? = null,
     leading: @Composable() (() -> Unit)? = null,
     trailing: @Composable() (() -> Unit)? = null,
     onClick: (() -> Unit)? = null
 ) = composable("SimpleListItem") {
     val styledTitle = applyTextStyle(TitleTextStyle, title)!!
-    val styledSummary = applyTextStyle(SummaryTextStyle, summary)
+    val styledSubtitle = applyTextStyle(SubtitleTextStyle, subtitle)
 
     val item = @Composable {
-        val minHeight = if (summary != null) {
-            if (leading == null) TitleAndSummaryMinHeight else TitleAndSummaryMinHeightWithIcon
+        val minHeight = if (subtitle != null) {
+            if (leading == null) TitleAndSubtitleMinHeight else TitleAndSubtitleMinHeightWithIcon
         } else {
             if (leading == null) TitleOnlyMinHeight else TitleOnlyMinHeightWithIcon
         }
@@ -91,7 +91,7 @@ fun SimpleListItem(
                         mainAxisAlignment = MainAxisAlignment.Center
                     ) {
                         styledTitle()
-                        styledSummary?.invoke()
+                        styledSubtitle?.invoke()
                     }
                 }
 
@@ -120,8 +120,8 @@ fun SimpleListItem(
 
 private val TitleOnlyMinHeight = 48.dp
 private val TitleOnlyMinHeightWithIcon = 56.dp
-private val TitleAndSummaryMinHeight = 64.dp
-private val TitleAndSummaryMinHeightWithIcon = 72.dp
+private val TitleAndSubtitleMinHeight = 64.dp
+private val TitleAndSubtitleMinHeightWithIcon = 72.dp
 
 private val IconMinPaddedWidth = 40.dp
 private val IconLeftPadding = 16.dp
@@ -153,4 +153,4 @@ private const val PrimaryTextOpacity = 0.87f
 private const val SecondaryTextOpacity = 0.6f
 private const val RippleOpacity = 0.16f
 private val TitleTextStyle = ListItemTextStyle({ subtitle1 }, { onSurface }, PrimaryTextOpacity)
-private val SummaryTextStyle = ListItemTextStyle({ body2 }, { onSurface }, SecondaryTextOpacity)
+private val SubtitleTextStyle = ListItemTextStyle({ body2 }, { onSurface }, SecondaryTextOpacity)

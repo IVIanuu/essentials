@@ -39,7 +39,7 @@ fun <T> Preference(
     Opacity(if (finalEnabled) 1f else 0.5f) {
         SimpleListItem(
             title = title,
-            summary = summary,
+            subtitle = summary,
             leading = leading,
             trailing = trailing,
             onClick = if (finalEnabled) onClick else null
