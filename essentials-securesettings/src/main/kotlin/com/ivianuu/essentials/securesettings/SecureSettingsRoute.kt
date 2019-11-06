@@ -27,17 +27,14 @@ import com.ivianuu.essentials.ui.compose.common.SimpleListItem
 import com.ivianuu.essentials.ui.compose.common.navigateOnClick
 import com.ivianuu.essentials.ui.compose.composeControllerRoute
 import com.ivianuu.essentials.ui.compose.coroutines.coroutineScope
-import com.ivianuu.essentials.ui.compose.coroutines.launchOnActive
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
-import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.director.controllerRouteOptions
 import com.ivianuu.essentials.ui.navigation.director.copy
 import com.ivianuu.essentials.ui.navigation.director.defaultControllerRouteOptionsOrElse
 import com.ivianuu.essentials.ui.navigation.director.defaultControllerRouteOptionsOrNull
 import com.ivianuu.essentials.ui.navigation.director.horizontal
 import com.ivianuu.essentials.util.Toaster
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 /**
@@ -47,22 +44,7 @@ fun secureSettingsRoute(showHideNavBarHint: Boolean = false) =
     composeControllerRoute(
         options = defaultControllerRouteOptionsOrNull()
     ) {
-        val navigator = +inject<Navigator>()
-        val secureSettingsHelper = +inject<SecureSettingsHelper>()
-        val toaster = +inject<Toaster>()
-
-        // we check the permission periodically to automatically pop this screen
-        // once we got the permission
-        +launchOnActive {
-            while (true) {
-                if (secureSettingsHelper.canWriteSecureSettings()) {
-                    toaster.toast(R.string.es_secure_settings_permission_granted)
-                    navigator.pop(true)
-                    break
-                }
-                delay(500)
-            }
-        }
+        +popNavigatorOnceSecureSettingsGranted()
 
         ListScreen(
             appBar = { EsTopAppBar(+stringResource(R.string.es_title_secure_settings)) },
@@ -93,6 +75,8 @@ fun secureSettingsRoute(showHideNavBarHint: Boolean = false) =
                 )
 
                 val coroutineScope = +coroutineScope()
+                val secureSettingsHelper = +inject<SecureSettingsHelper>()
+                val toaster = +inject<Toaster>()
                 SimpleListItem(
                     title = { Text(+stringResource(R.string.es_pref_use_root)) },
                     subtitle = { Text(+stringResource(R.string.es_pref_use_root_summary)) },
