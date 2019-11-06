@@ -17,8 +17,8 @@
 package com.ivianuu.essentials.ui.compose.prefs
 
 import androidx.compose.Composable
-import androidx.ui.material.Checkbox
 import com.ivianuu.essentials.ui.compose.core.composable
+import com.ivianuu.essentials.ui.compose.material.EsCheckbox
 import com.ivianuu.kprefs.Pref
 
 @Composable
@@ -48,7 +48,7 @@ fun CheckboxPreference(
             } else {
                 null
             }
-            Checkbox(
+            EsCheckbox(
                 checked = pref.get(),
                 onCheckedChange = onCheckedChange
             )
