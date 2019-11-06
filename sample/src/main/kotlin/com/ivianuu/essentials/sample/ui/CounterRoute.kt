@@ -19,12 +19,11 @@ package com.ivianuu.essentials.sample.ui
 import androidx.compose.unaryPlus
 import androidx.ui.core.Text
 import androidx.ui.core.dp
+import androidx.ui.layout.Center
 import androidx.ui.layout.Column
-import androidx.ui.layout.Container
 import androidx.ui.layout.CrossAxisAlignment
 import androidx.ui.layout.HeightSpacer
 import androidx.ui.layout.MainAxisAlignment
-import androidx.ui.layout.Wrap
 import androidx.ui.material.FloatingActionButton
 import androidx.ui.material.themeTextStyle
 import com.ivianuu.essentials.ui.compose.composeControllerRoute
@@ -36,33 +35,31 @@ val counterRoute = composeControllerRoute {
     Scaffold(
         appBar = { EsTopAppBar("Counter") },
         content = {
-            Container(expanded = true) {
-                Wrap {
-                    Column(
-                        mainAxisAlignment = MainAxisAlignment.Center,
-                        crossAxisAlignment = CrossAxisAlignment.Center
-                    ) {
-                        val (state, dispatch) = +counterStateStore()
+            Center {
+                Column(
+                    mainAxisAlignment = MainAxisAlignment.Center,
+                    crossAxisAlignment = CrossAxisAlignment.Center
+                ) {
+                    val (state, dispatch) = +counterStateStore()
 
-                        Text(
-                            text = "Count: $state",
-                            style = +themeTextStyle { h3 }
-                        )
+                    Text(
+                        text = "Count: $state",
+                        style = +themeTextStyle { h3 }
+                    )
 
-                        HeightSpacer(8.dp)
+                    HeightSpacer(8.dp)
 
-                        FloatingActionButton(
-                            text = "Inc",
-                            onClick = { dispatch(CounterAction.Inc) }
-                        )
+                    FloatingActionButton(
+                        text = "Inc",
+                        onClick = { dispatch(CounterAction.Inc) }
+                    )
 
-                        HeightSpacer(8.dp)
+                    HeightSpacer(8.dp)
 
-                        FloatingActionButton(
-                            text = "dec",
-                            onClick = { dispatch(CounterAction.Dec) }
-                        )
-                    }
+                    FloatingActionButton(
+                        text = "dec",
+                        onClick = { dispatch(CounterAction.Dec) }
+                    )
                 }
             }
         }

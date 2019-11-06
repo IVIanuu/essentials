@@ -20,6 +20,7 @@ import androidx.compose.ambient
 import androidx.compose.unaryPlus
 import androidx.ui.core.Text
 import androidx.ui.core.dp
+import androidx.ui.layout.Center
 import androidx.ui.layout.Column
 import androidx.ui.layout.CrossAxisAlignment
 import androidx.ui.layout.HeightSpacer
@@ -27,6 +28,8 @@ import androidx.ui.layout.MainAxisAlignment
 import androidx.ui.material.Button
 import androidx.ui.material.themeTextStyle
 import com.ivianuu.essentials.ui.compose.composeControllerRoute
+import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
+import com.ivianuu.essentials.ui.compose.material.Scaffold
 import com.ivianuu.essentials.ui.compose.navigation.Navigator
 import com.ivianuu.essentials.ui.compose.navigation.NavigatorAmbient
 import com.ivianuu.essentials.ui.compose.navigation.Route
@@ -36,29 +39,36 @@ val navigationRoute = composeControllerRoute {
 }
 
 private fun CounterRoute(count: Int): Route = Route(count) {
-    Column(
-        mainAxisAlignment = MainAxisAlignment.Center,
-        crossAxisAlignment = CrossAxisAlignment.Center
-    ) {
-        val navigator = +ambient(NavigatorAmbient)
+    Scaffold(
+        appBar = { EsTopAppBar("Nav") },
+        content = {
+            Center {
+                Column(
+                    mainAxisAlignment = MainAxisAlignment.Center,
+                    crossAxisAlignment = CrossAxisAlignment.Center
+                ) {
+                    val navigator = +ambient(NavigatorAmbient)
 
-        Text(
-            "Count: $count",
-            style = +themeTextStyle { h1 }
-        )
+                    Text(
+                        "Count: $count",
+                        style = +themeTextStyle { h1 }
+                    )
 
-        HeightSpacer(8.dp)
+                    HeightSpacer(8.dp)
 
-        Button(
-            text = "Next",
-            onClick = { navigator.push(CounterRoute(count + 1)) }
-        )
+                    Button(
+                        text = "Next",
+                        onClick = { navigator.push(CounterRoute(count + 1)) }
+                    )
 
-        HeightSpacer(8.dp)
+                    HeightSpacer(8.dp)
 
-        Button(
-            text = "Previous",
-            onClick = { navigator.pop() }
-        )
-    }
+                    Button(
+                        text = "Previous",
+                        onClick = { navigator.pop() }
+                    )
+                }
+            }
+        }
+    )
 }
