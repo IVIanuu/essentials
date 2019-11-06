@@ -40,7 +40,7 @@ fun <V1> composable(
     with(composer.composer) {
         wrapInRestartScope(key) {
             startGroup(key)
-            if (inserting || changed(v1)) {
+            if (changed(v1) || inserting) {
                 startGroup(invocation)
                 block()
                 endGroup()
@@ -61,7 +61,7 @@ fun <V1, V2> composable(
     with(composer.composer) {
         wrapInRestartScope(key) {
             startGroup(key)
-            if (inserting || changed(v1) || changed(v2)) {
+            if (changed(v1) || changed(v2) || inserting) {
                 startGroup(invocation)
                 block()
                 endGroup()
@@ -81,7 +81,7 @@ fun composable(
     with(composer.composer) {
         wrapInRestartScope(key) {
             startGroup(key)
-            if (inserting || changed(inputs.contentHashCode())) {
+            if (changed(inputs.contentHashCode()) || inserting) {
                 startGroup(invocation)
                 block()
                 endGroup()
@@ -94,7 +94,19 @@ fun composable(
 }
 
 fun staticComposable(key: Any, block: () -> Unit) {
-    composable(key = key, v1 = Unit, block = block)
+    with(composer.composer) {
+        wrapInRestartScope(key) {
+            startGroup(key)
+            if (inserting) {
+                startGroup(invocation)
+                block()
+                endGroup()
+            } else {
+                skipCurrentGroup()
+            }
+            endGroup()
+        }
+    }
 }
 
 private fun Composer<*>.wrapInRestartScope(key: Any, block: () -> Unit) {
