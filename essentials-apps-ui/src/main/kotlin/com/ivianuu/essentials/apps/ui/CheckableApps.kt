@@ -28,7 +28,6 @@ import androidx.ui.material.Checkbox
 import androidx.ui.material.CircularProgressIndicator
 import androidx.ui.material.ListItem
 import androidx.ui.res.stringResource
-import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.AppStore
 import com.ivianuu.essentials.apps.coil.AppIcon
@@ -80,28 +79,26 @@ fun CheckableAppsScreen(
 
     Scaffold(
         appBar = {
-            staticComposable("appBar") {
-                EsTopAppBar(
-                    title = { Text(appBarTitle) },
-                    trailing = {
-                        PopupMenuAppBarIcon(
-                            items = AppBarOptions.values().toList(),
-                            item = { Text(+stringResource(it.titleRes)) },
-                            onSelected = {
-                                when (it) {
-                                    AppBarOptions.SelectAll -> viewModel.selectAllClicked()
-                                    AppBarOptions.DeselectAll -> viewModel.deselectAllClicked()
-                                }
+            EsTopAppBar(
+                title = { Text(appBarTitle) },
+                trailing = {
+                    PopupMenuAppBarIcon(
+                        items = AppBarOptions.values().toList(),
+                        item = { Text(+stringResource(it.titleRes)) },
+                        onSelected = {
+                            when (it) {
+                                AppBarOptions.SelectAll -> viewModel.selectAllClicked()
+                                AppBarOptions.DeselectAll -> viewModel.deselectAllClicked()
                             }
-                        )
-                    }
-                )
-            }
+                        }
+                    )
+                }
+            )
         },
         content = {
             when (viewModel.state.apps) {
                 is Loading -> {
-                    composable("loading") {
+                    staticComposable("loading") {
                         Center {
                             CircularProgressIndicator()
                         }
@@ -130,9 +127,7 @@ fun CheckableAppsScreen(
 private fun CheckableApp(
     app: CheckableApp,
     onClick: () -> Unit
-) = composable(app.info.packageName, app) {
-    d { "compose app $app" }
-
+) = composable(app.info.packageName, app.isChecked) {
     ListItem(
         text = { Text(app.info.appName) },
         icon = {
