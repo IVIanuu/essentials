@@ -68,12 +68,12 @@ inline fun <V1, V2> composable(
 
 inline fun composable(
     key: Any,
-    vararg inputs: Array<Any?>,
+    vararg inputs: Any?,
     block: () -> Unit
 ) {
     with(composer.composer) {
         startGroup(key)
-        if (inserting || inputs.any { changed(it) }) {
+        if (inserting || changed(inputs.contentHashCode())) {
             startGroup(invocation)
             block()
             endGroup()
