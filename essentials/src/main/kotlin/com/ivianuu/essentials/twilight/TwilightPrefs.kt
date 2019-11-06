@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.twilight
 
+import com.ivianuu.essentials.R
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.android.ApplicationScope
 import com.ivianuu.kprefs.KPrefs
@@ -30,10 +31,34 @@ class TwilightPrefs(prefs: KPrefs) {
     )
 }
 
-enum class TwilightMode(override val value: String) : PrefValueHolder<String> {
-    Light("light"),
-    Dark("dark"),
-    Battery("battery"),
-    Time("time"),
-    System("system")
+enum class TwilightMode(
+    override val value: String,
+    val titleRes: Int,
+    val descRes: Int
+) : PrefValueHolder<String> {
+    Light(
+        value = "light",
+        titleRes = R.string.es_twilight_mode_light,
+        descRes = R.string.es_twilight_mode_light_desc
+    ),
+    Dark(
+        value = "dark",
+        titleRes = R.string.es_twilight_mode_dark,
+        descRes = R.string.es_twilight_mode_dark_desc
+    ),
+    Battery(
+        value = "battery",
+        titleRes = R.string.es_twilight_mode_battery,
+        descRes = R.string.es_twilight_mode_battery_desc
+    ),
+    Time(
+        value = "time",
+        titleRes = R.string.es_twilight_mode_time,
+        descRes = R.string.es_twilight_mode_time_desc
+    ),
+    System(
+        value = "system",
+        titleRes = R.string.es_twilight_mode_system,
+        descRes = R.string.es_twilight_mode_system_desc
+    )
 }
