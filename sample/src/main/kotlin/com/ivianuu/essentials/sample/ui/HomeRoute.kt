@@ -127,15 +127,15 @@ enum class HomeItem(
     Navigation(
         title = "Navigation",
         color = Color.Red,
-        route = { com.ivianuu.essentials.sample.ui.navigationRoute }
+        route = { navigationRoute }
     ),
     AppPicker(
-        title = "App Picker",
+        title = "App picker",
         color = Color.Blue,
         route = { appPickerRoute(true) }
     ),
     CheckApps(
-        title = "Check Apps",
+        title = "Check apps",
         color = Color.Green,
         route = { checkAppsRoute }
     ),
@@ -153,6 +153,11 @@ enum class HomeItem(
         title = "Timer",
         color = Color.Cyan,
         route = { timerRoute }
+    ),
+    SecureSettings(
+        title = "Nav bar",
+        color = Color.Green,
+        route = { com.ivianuu.essentials.sample.ui.navBarRoute }
     ),
     About(
         title = "About",
