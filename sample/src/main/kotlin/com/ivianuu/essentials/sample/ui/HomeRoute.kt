@@ -31,11 +31,11 @@ import androidx.ui.graphics.Paint
 import androidx.ui.layout.Container
 import androidx.ui.layout.Padding
 import androidx.ui.material.Divider
-import androidx.ui.material.ListItem
 import com.ivianuu.essentials.about.aboutRoute
 import com.ivianuu.essentials.apps.ui.appPickerRoute
 import com.ivianuu.essentials.twilight.twilightSettingsRoute
 import com.ivianuu.essentials.ui.compose.common.ListScreen
+import com.ivianuu.essentials.ui.compose.common.SimpleListItem
 import com.ivianuu.essentials.ui.compose.common.navigateOnClick
 import com.ivianuu.essentials.ui.compose.composeControllerRoute
 import com.ivianuu.essentials.ui.compose.core.composable
@@ -82,9 +82,9 @@ private fun HomeItem(
     item: HomeItem,
     onClick: () -> Unit
 ) = composable(item) {
-    ListItem(
-        text = { Text(item.title) },
-        icon = { ColorAvatar(item.color) },
+    SimpleListItem(
+        title = { Text(item.title) },
+        leading = { ColorAvatar(item.color) },
         onClick = onClick
     )
 }

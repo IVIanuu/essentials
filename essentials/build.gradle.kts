@@ -66,7 +66,7 @@ dependencies {
 
     api(Deps.epoxyPrefs)
 
-    kapt(project(":essentials-compiler"))
+    //kapt(project(":essentials-compiler"))
 
     api(Deps.Injekt.injekt)
     api(Deps.Injekt.android)

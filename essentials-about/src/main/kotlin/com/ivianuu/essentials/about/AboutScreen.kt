@@ -18,9 +18,10 @@ package com.ivianuu.essentials.about
 
 import androidx.compose.Composable
 import androidx.compose.unaryPlus
-import androidx.ui.material.ListItem
+import androidx.ui.core.Text
 import androidx.ui.res.stringResource
 import com.ivianuu.essentials.ui.compose.common.ListScreen
+import com.ivianuu.essentials.ui.compose.common.SimpleListItem
 import com.ivianuu.essentials.ui.compose.common.openUrlOnClick
 import com.ivianuu.essentials.ui.compose.composeControllerRoute
 import com.ivianuu.essentials.ui.compose.core.composable
@@ -111,9 +112,9 @@ fun AboutItem(
     descRes: Int? = null,
     url: () -> String
 ) = composable(titleRes + (descRes ?: 0)) {
-    ListItem(
-        text = +stringResource(titleRes),
-        secondaryText = descRes?.let { +stringResource(it) },
+    SimpleListItem(
+        title = { Text(+stringResource(titleRes)) },
+        subtitle = descRes?.let { { Text(+stringResource(it)) } },
         onClick = +openUrlOnClick(url)
     )
 }

@@ -26,11 +26,11 @@ import androidx.ui.layout.Center
 import androidx.ui.layout.Column
 import androidx.ui.material.Checkbox
 import androidx.ui.material.CircularProgressIndicator
-import androidx.ui.material.ListItem
 import androidx.ui.res.stringResource
 import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.AppStore
 import com.ivianuu.essentials.apps.coil.AppIcon
+import com.ivianuu.essentials.ui.compose.common.SimpleListItem
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.staticComposable
 import com.ivianuu.essentials.ui.compose.image.CoilImageAny
@@ -128,9 +128,9 @@ private fun CheckableApp(
     app: CheckableApp,
     onClick: () -> Unit
 ) = composable(app.info.packageName, app.isChecked) {
-    ListItem(
-        text = { Text(app.info.appName) },
-        icon = {
+    SimpleListItem(
+        title = { Text(app.info.appName) },
+        leading = {
             CoilImageAny(data = AppIcon(app.info.packageName)) {
                 Avatar(it)
             }

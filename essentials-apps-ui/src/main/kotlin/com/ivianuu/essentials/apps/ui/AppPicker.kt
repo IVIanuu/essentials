@@ -24,11 +24,11 @@ import androidx.ui.foundation.VerticalScroller
 import androidx.ui.layout.Center
 import androidx.ui.layout.Column
 import androidx.ui.material.CircularProgressIndicator
-import androidx.ui.material.ListItem
 import androidx.ui.res.stringResource
 import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.AppStore
 import com.ivianuu.essentials.apps.coil.AppIcon
+import com.ivianuu.essentials.ui.compose.common.SimpleListItem
 import com.ivianuu.essentials.ui.compose.composeControllerRoute
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.image.CoilImageAny
@@ -89,9 +89,9 @@ private fun AppInfo(
     app: AppInfo,
     onClick: () -> Unit
 ) = composable(app.packageName) {
-    ListItem(
-        text = { Text(app.appName) },
-        icon = {
+    SimpleListItem(
+        title = { Text(app.appName) },
+        leading = {
             CoilImageAny(data = AppIcon(app.packageName)) {
                 Avatar(it)
             }
