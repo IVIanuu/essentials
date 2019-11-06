@@ -16,33 +16,26 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import com.ivianuu.essentials.apps.ui.CheckableAppsController
-import com.ivianuu.essentials.ui.navigation.director.controllerRoute
+import androidx.compose.memo
+import androidx.compose.unaryPlus
+import com.ivianuu.essentials.apps.ui.CheckableAppsScreen
+import com.ivianuu.essentials.ui.compose.composeControllerRoute
+import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.navigation.director.controllerRouteOptions
 import com.ivianuu.essentials.ui.navigation.director.fade
-import com.ivianuu.injekt.Inject
 import com.ivianuu.kprefs.KPrefs
 import com.ivianuu.kprefs.coroutines.asFlow
 import com.ivianuu.kprefs.stringSet
-import kotlinx.coroutines.flow.Flow
 
-val checkAppsRoute = controllerRoute<CheckAppsController>(
+val checkAppsRoute = composeControllerRoute(
     options = controllerRouteOptions().fade()
-)
-
-@Inject
-class CheckAppsController(private val prefs: KPrefs) : CheckableAppsController() {
-
-    override val toolbarTitle: String?
-        get() = "Send check apps"
-
-    private val pref by lazy { prefs.stringSet("apps") }
-
-    override fun getCheckedAppsFlow(): Flow<Set<String>> =
-        pref.asFlow()
-
-    override fun onCheckedAppsChanged(apps: Set<String>) {
-        pref.set(apps)
-    }
-
+) {
+    val prefs = +inject<KPrefs>()
+    val pref = +memo { prefs.stringSet("apps") }
+    CheckableAppsScreen(
+        checkedAppsFlow = pref.asFlow(),
+        onCheckedAppsChanged = pref::set,
+        appBarTitle = "Send check apps",
+        launchableOnly = true
+    )
 }
