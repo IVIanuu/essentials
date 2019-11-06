@@ -172,17 +172,17 @@ private val CheckStrokeAnimationDuration = 100
 
 private fun generateTransitionDefinition(color: Color, unselectedColor: Color) =
     transitionDefinition<Boolean> {
-        state(true) {
-            this[CheckFractionProp] = 1f
-            this[InnerRadiusFractionProp] = 1f
-            this[CenterGravitationForCheck] = 0f
-            this[BoxColorProp] = color
-        }
         state(false) {
             this[CheckFractionProp] = 0f
             this[InnerRadiusFractionProp] = 0f
             this[CenterGravitationForCheck] = 1f
             this[BoxColorProp] = unselectedColor
+        }
+        state(true) {
+            this[CheckFractionProp] = 1f
+            this[InnerRadiusFractionProp] = 1f
+            this[CenterGravitationForCheck] = 0f
+            this[BoxColorProp] = color
         }
         transition(fromState = false, toState = true) {
             boxTransitionFromUnchecked()
