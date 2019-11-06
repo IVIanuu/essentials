@@ -48,7 +48,7 @@ import com.ivianuu.injekt.Param
 import com.ivianuu.injekt.parametersOf
 
 fun appPickerRoute(
-    launchableOnly: Boolean = false
+    launchableOnly: Boolean
 ) = composeControllerRoute {
     Scaffold(
         appBar = { EsTopAppBar(+stringResource(R.string.es_title_app_picker)) },
