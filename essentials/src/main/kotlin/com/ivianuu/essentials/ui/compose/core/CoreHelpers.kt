@@ -26,7 +26,9 @@ fun composable(
     with(composer.composer) {
         wrapInRestartScope(key) {
             startGroup(key)
+            startGroup(invocation)
             block()
+            endGroup()
             endGroup()
         }
     }
