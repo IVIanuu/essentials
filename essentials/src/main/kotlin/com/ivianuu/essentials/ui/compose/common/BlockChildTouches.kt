@@ -32,9 +32,9 @@ fun BlockChildTouches(
     val consumedIds = +memo { mutableSetOf<Int>() }
     PointerInputWrapper(
         pointerInputHandler = { changes, pass, _ ->
-            if (pass == PointerEventPass.InitialDown
+            if (block && (pass == PointerEventPass.InitialDown
                 || pass == PointerEventPass.PreDown
-                || pass == PointerEventPass.PostDown
+                        || pass == PointerEventPass.PostDown)
             ) {
                 changes.map { change ->
                     if (change.changedToDown()) {
