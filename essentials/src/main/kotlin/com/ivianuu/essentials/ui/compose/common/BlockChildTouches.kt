@@ -20,7 +20,6 @@ import androidx.compose.Composable
 import androidx.compose.memo
 import androidx.compose.unaryPlus
 import androidx.ui.core.PointerEventPass
-import androidx.ui.core.PointerInputChange
 import androidx.ui.core.changedToDown
 import androidx.ui.core.consumeDownChange
 import com.ivianuu.essentials.ui.compose.core.composable
@@ -30,7 +29,7 @@ fun BlockChildTouches(
     block: Boolean = true,
     children: @Composable() () -> Unit
 ) = composable("BlockChildTouches") {
-    val consumedChanges = +memo { mutableSetOf<PointerInputChange>() }
+    val consumedIds = +memo { mutableSetOf<Int>() }
     PointerInputWrapper(
         pointerInputHandler = { changes, pass, _ ->
             if (pass == PointerEventPass.InitialDown
@@ -40,7 +39,7 @@ fun BlockChildTouches(
                 changes.map { change ->
                     if (change.changedToDown()) {
                         change.consumeDownChange().also { consumedChange ->
-                            consumedChanges += consumedChange
+                            consumedIds += consumedChange.id
                         }
                     } else {
                         change
@@ -48,9 +47,9 @@ fun BlockChildTouches(
                 }
             } else {
                 changes.map { change ->
-                    if (change in consumedChanges) {
+                    if (change.id in consumedIds) {
                         change.copy(consumed = change.consumed.copy(downChange = false))
-                            .also { consumedChanges -= change }
+                            .also { consumedIds -= change.id }
                     } else {
                         change
                     }
