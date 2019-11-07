@@ -34,7 +34,7 @@ val twilightSettingsRoute = composeControllerRoute(
     options = defaultControllerRouteOptionsOrNull()
 ) {
     PrefsScreen(
-        appBar = { EsTopAppBar(title = +stringResource(R.string.es_title_twilight)) },
+        topAppBar = { EsTopAppBar(title = +stringResource(R.string.es_title_twilight)) },
         prefs = {
             val prefs = +inject<TwilightPrefs>()
             TwilightMode.values().forEach { mode ->

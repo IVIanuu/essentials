@@ -35,7 +35,7 @@ object Publishing {
 }
 
 object Deps {
-    const val androidGradlePlugin = "com.android.tools.build:gradle:3.5.1"
+    const val androidGradlePlugin = "com.android.tools.build:gradle:3.5.2"
 
     object AndroidX {
         const val activity = "androidx.activity:activity-ktx:1.0.0"

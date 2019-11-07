@@ -33,9 +33,10 @@ import com.ivianuu.essentials.ui.compose.common.SimpleListItem
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.staticComposable
 import com.ivianuu.essentials.ui.compose.image.CoilImageAny
-import com.ivianuu.essentials.ui.compose.material.Avatar
+import com.ivianuu.essentials.ui.compose.material.AvatarIconStyle
 import com.ivianuu.essentials.ui.compose.material.EsCheckbox
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
+import com.ivianuu.essentials.ui.compose.material.Icon
 import com.ivianuu.essentials.ui.compose.material.PopupMenuAppBarIcon
 import com.ivianuu.essentials.ui.compose.material.Scaffold
 import com.ivianuu.essentials.ui.compose.mvrx.mvRxViewModel
@@ -132,7 +133,7 @@ private fun CheckableApp(
         title = { Text(app.info.appName) },
         leading = {
             CoilImageAny(data = AppIcon(app.info.packageName)) {
-                Avatar(it)
+                Icon(image = it, style = AvatarIconStyle())
             }
         },
         trailing = {
