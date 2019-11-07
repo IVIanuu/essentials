@@ -21,7 +21,6 @@ import androidx.compose.unaryPlus
 import androidx.ui.core.Text
 import androidx.ui.foundation.ColoredRect
 import androidx.ui.graphics.Color
-import androidx.ui.layout.Center
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.compose.composeControllerRoute
@@ -43,20 +42,8 @@ val bottomNavigationRoute = composeControllerRoute(
     Scaffold(
         topAppBar = { EsTopAppBar("Bottom navigation") },
         content = {
-            Center {
-                when (BottomNavigationItem.values()[selectedIndex]) {
-                    BottomNavigationItem.Home -> {
-                        ColoredRect(Color.Red)
-                    }
-                    BottomNavigationItem.Mails -> {
-                        ColoredRect(Color.Blue)
-
-                    }
-                    BottomNavigationItem.Search -> {
-                        ColoredRect(Color.Green)
-                    }
-                }
-            }
+            val item = BottomNavigationItem.values()[selectedIndex]
+            ColoredRect(item.color)
         },
         bottomBar = {
             BottomNavigationBar(
@@ -75,18 +62,32 @@ val bottomNavigationRoute = composeControllerRoute(
 
 private enum class BottomNavigationItem(
     val title: String,
-    val iconRes: Int
+    val iconRes: Int,
+    val color: Color
 ) {
     Home(
         "Home",
-        R.drawable.ic_home
+        R.drawable.ic_home,
+        Color.Yellow
     ),
     Mails(
         "Mails",
-        R.drawable.ic_email
+        R.drawable.ic_email,
+        Color.Red
     ),
     Search(
         "Search",
-        R.drawable.ic_search
+        R.drawable.ic_search,
+        Color.Blue
+    ),
+    Schedule(
+        "Schedule",
+        R.drawable.ic_view_agenda,
+        Color.Cyan
+    ),
+    Settings(
+        "Settings",
+        R.drawable.ic_settings,
+        Color.Green
     )
 }
