@@ -31,28 +31,29 @@ object Build {
 object Publishing {
     const val groupId = "com.ivianuu.essentials"
     const val vcsUrl = "https://github.com/IVIanuu/essentials"
-    const val version = "${Build.versionName}-dev206"
+    const val version = "${Build.versionName}-dev207"
 }
 
 object Deps {
     const val androidGradlePlugin = "com.android.tools.build:gradle:3.5.2"
 
     object AndroidX {
-        const val activity = "androidx.activity:activity-ktx:1.0.0"
+        const val activity = "androidx.activity:activity-ktx:1.1.0-rc02"
         const val appCompat = "androidx.appcompat:appcompat:1.1.0"
         const val cardView = "androidx.cardview:cardview:1.0.0"
         const val constraintLayout = "androidx.constraintlayout:constraintlayout:2.0.0-beta2"
-        const val core = "androidx.core:core-ktx:1.1.0"
+        const val core = "androidx.core:core-ktx:1.2.0-beta02"
 
         object Lifecycle {
-            private const val version = "2.2.0-alpha05"
+            private const val version = "2.2.0-rc02"
             const val runtime = "androidx.lifecycle:lifecycle-runtime-ktx:$version"
             const val liveData = "androidx.lifecycle:lifecycle-livedata-ktx:$version"
             const val reactiveStreams = "androidx.lifecycle:lifecycle-reactivestreams-ktx:$version"
 
             object ViewModel {
                 const val viewModel = "androidx.lifecycle:lifecycle-viewmodel-ktx:$version"
-                const val savedState = "androidx.lifecycle:lifecycle-viewmodel-savedstate:1.0.0-alpha05"
+                const val savedState =
+                    "androidx.lifecycle:lifecycle-viewmodel-savedstate:1.0.0-rc02"
             }
         }
 
