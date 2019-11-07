@@ -51,7 +51,8 @@ val bottomNavigationRoute = composeControllerRoute(
                 selectedIndex = selectedIndex
             ) { index, item ->
                 BottomNavigationBarItem(
-                    onClick = { setSelectedIndex(index) },
+                    selected = index == selectedIndex,
+                    onSelected = { setSelectedIndex(index) },
                     icon = { Icon(+drawableResource(item.iconRes)) },
                     title = { Text(item.title) }
                 )

@@ -41,7 +41,6 @@ import androidx.ui.material.surface.Surface
 import androidx.ui.material.textColorForBackground
 import androidx.ui.material.themeColor
 import androidx.ui.material.themeTextStyle
-import com.ivianuu.essentials.ui.compose.common.SelectionHintAmbient
 import com.ivianuu.essentials.ui.compose.core.composable
 
 @Composable
@@ -74,10 +73,8 @@ fun <T> BottomNavigationBar(
 
                     items.forEachIndexed { index, item ->
                         composable(index) {
-                            SelectionHintAmbient.Provider(index == selectedIndex) {
-                                ConstrainedBox(constraints = itemConstraints) {
-                                    item(index, item)
-                                }
+                            ConstrainedBox(constraints = itemConstraints) {
+                                item(index, item)
                             }
                         }
                     }
@@ -89,11 +86,12 @@ fun <T> BottomNavigationBar(
 
 @Composable
 fun BottomNavigationBarItem(
-    onClick: (() -> Unit)? = null,
+    selected: Boolean,
+    onSelected: (() -> Unit)? = null,
     icon: @Composable() () -> Unit,
     title: @Composable() () -> Unit
 ) = composable("BottomNavigationBarItem") {
-    BottomNavigationBarItem(onClick = onClick) {
+    BottomNavigationBarItem(selected = selected, onSelected = onSelected) {
         Column(
             mainAxisAlignment = MainAxisAlignment.Center,
             crossAxisAlignment = CrossAxisAlignment.Center
@@ -106,11 +104,12 @@ fun BottomNavigationBarItem(
 
 @Composable
 fun BottomNavigationBarItem(
-    onClick: (() -> Unit)? = null,
+    selected: Boolean,
+    onSelected: (() -> Unit)? = null,
     content: @Composable() () -> Unit
 ) = composable("BottomNavigationBarItem") {
     Ripple(false, radius = BottomNavigationBarItemRippleRadius) {
-        Clickable(onClick = onClick) {
+        Clickable(onClick = onSelected) {
             Container(
                 padding = EdgeInsets(
                     left = BottomNavigationBarItemPaddingSide,
@@ -119,7 +118,6 @@ fun BottomNavigationBarItem(
                     bottom = BottomNavigationBarItemPaddingBottom
                 )
             ) {
-                val selected = +ambient(SelectionHintAmbient)
                 val backgroundColor = +ambient(CurrentBackground)
                 val textStyle = (+themeTextStyle { caption }).copy(
                     color = (+textColorForBackground(backgroundColor))!!.copy(

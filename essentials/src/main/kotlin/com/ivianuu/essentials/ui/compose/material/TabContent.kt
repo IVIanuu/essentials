@@ -20,7 +20,6 @@ import androidx.compose.Composable
 import androidx.compose.unaryPlus
 import androidx.ui.core.Layout
 import androidx.ui.core.ipx
-import com.ivianuu.essentials.ui.compose.common.SelectionHintAmbient
 import com.ivianuu.essentials.ui.compose.core.composable
 
 @Composable
@@ -62,9 +61,7 @@ private fun <T> DraggableTabContent(
     Layout({
         items.forEachIndexed { index, item ->
             composable(index) {
-                SelectionHintAmbient.Provider(index == selectedIndex) {
-                    item(index, item)
-                }
+                item(index, item)
             }
         }
     }) { measureables, constraints ->
