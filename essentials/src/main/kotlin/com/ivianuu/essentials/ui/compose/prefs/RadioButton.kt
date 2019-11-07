@@ -18,6 +18,7 @@ package com.ivianuu.essentials.ui.compose.prefs
 
 import androidx.compose.Composable
 import androidx.ui.material.RadioButton
+import com.ivianuu.essentials.ui.compose.common.BlockChildTouches
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.kprefs.Pref
 
@@ -43,15 +44,12 @@ fun RadioButtonPreference(
         summary = summary,
         leading = leading,
         trailing = {
-            val onSelect: (() -> Unit)? = if (dependencies.checkAll()) {
-                { valueChanged(!pref.get()) }
-            } else {
-                null
+            BlockChildTouches {
+                RadioButton(
+                    selected = pref.get(),
+                    onSelect = {}
+                )
             }
-            RadioButton(
-                selected = pref.get(),
-                onSelect = onSelect
-            )
         },
         onClick = { valueChanged(!pref.get()) },
         onChange = onChange,

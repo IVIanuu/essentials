@@ -20,6 +20,7 @@ import androidx.compose.Composable
 import androidx.compose.unaryPlus
 import androidx.ui.material.Switch
 import androidx.ui.material.themeColor
+import com.ivianuu.essentials.ui.compose.common.BlockChildTouches
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.kprefs.Pref
 
@@ -45,16 +46,13 @@ fun SwitchPreference(
         summary = summary,
         leading = leading,
         trailing = {
-            val onCheckedChange: ((Boolean) -> Unit)? = if (dependencies.checkAll()) {
-                { valueChanged(it) }
-            } else {
-                null
+            BlockChildTouches {
+                Switch(
+                    color = +themeColor { secondary },
+                    checked = pref.get(),
+                    onCheckedChange = {}
+                )
             }
-            Switch(
-                color = +themeColor { secondary },
-                checked = pref.get(),
-                onCheckedChange = onCheckedChange
-            )
         },
         onClick = { valueChanged(!pref.get()) },
         onChange = onChange,

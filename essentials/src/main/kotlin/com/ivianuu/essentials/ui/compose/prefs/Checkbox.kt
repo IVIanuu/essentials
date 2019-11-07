@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.ui.compose.prefs
 
 import androidx.compose.Composable
+import com.ivianuu.essentials.ui.compose.common.BlockChildTouches
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.material.EsCheckbox
 import com.ivianuu.kprefs.Pref
@@ -43,15 +44,12 @@ fun CheckboxPreference(
         summary = summary,
         leading = leading,
         trailing = {
-            val onCheckedChange: ((Boolean) -> Unit)? = if (dependencies.checkAll()) {
-                { valueChanged(it) }
-            } else {
-                null
+            BlockChildTouches {
+                EsCheckbox(
+                    checked = pref.get(),
+                    onCheckedChange = {}
+                )
             }
-            EsCheckbox(
-                checked = pref.get(),
-                onCheckedChange = onCheckedChange
-            )
         },
         onClick = { valueChanged(!pref.get()) },
         onChange = onChange,

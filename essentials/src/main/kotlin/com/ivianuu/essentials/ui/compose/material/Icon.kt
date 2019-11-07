@@ -28,7 +28,6 @@ import androidx.ui.foundation.DrawImage
 import androidx.ui.graphics.Color
 import androidx.ui.graphics.Image
 import androidx.ui.layout.Container
-import androidx.ui.layout.EdgeInsets
 import androidx.ui.material.ripple.Ripple
 import com.ivianuu.essentials.ui.compose.common.Size
 import com.ivianuu.essentials.ui.compose.core.composable
@@ -84,33 +83,26 @@ private val AvatarSize = 40.dp
 @Composable
 fun IconButton(
     image: Image,
-    padding: EdgeInsets = EdgeInsets(all = DefaultIconButtonPadding),
     onClick: (() -> Unit)? = null
-) = composable("ImageButton") {
-    IconButton(
-        padding = padding,
-        onClick = onClick
-    ) {
+) = composable("IconButton") {
+    IconButton(onClick = onClick) {
         Icon(image = image)
     }
 }
 
 @Composable
 fun IconButton(
-    padding: EdgeInsets = EdgeInsets(all = DefaultIconButtonPadding),
     onClick: (() -> Unit)? = null,
     icon: @Composable() () -> Unit
-) = composable("ImageButton") {
+) = composable("IconButton") {
     Ripple(
         bounded = false,
         enabled = onClick != null
     ) {
         Clickable(onClick = onClick) {
-            Container(padding = padding) {
+            Container {
                 icon()
             }
         }
     }
 }
-
-private val DefaultIconButtonPadding = 8.dp

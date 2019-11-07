@@ -64,7 +64,7 @@ private class EffectContextImpl : EffectContext {
     }
 
     override fun onDispose(callback: () -> Unit) {
-        onDisposeCallbacks.add(callback)
+        onDisposeCallbacks += callback
     }
 
     override fun dispose() {
