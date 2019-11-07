@@ -31,7 +31,6 @@ import androidx.ui.layout.Container
 import androidx.ui.layout.Padding
 import androidx.ui.layout.Stack
 import androidx.ui.material.DrawerState
-import androidx.ui.material.surface.Surface
 import com.ivianuu.essentials.ui.compose.core.composable
 
 @Composable
@@ -75,7 +74,7 @@ fun Scaffold(
                             alignment = Alignment.TopLeft,
                             modifier = Flexible(1f)
                         ) {
-                            Surface {
+                            EsSurface {
                                 body()
                             }
                         }

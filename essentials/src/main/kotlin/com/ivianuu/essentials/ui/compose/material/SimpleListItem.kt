@@ -14,15 +14,17 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.compose.common
+package com.ivianuu.essentials.ui.compose.material
 
 import androidx.compose.Composable
+import androidx.compose.ambient
 import androidx.compose.unaryPlus
 import androidx.ui.core.Alignment
 import androidx.ui.core.CurrentTextStyleProvider
 import androidx.ui.core.dp
 import androidx.ui.foundation.Clickable
 import androidx.ui.graphics.Color
+import androidx.ui.graphics.toArgb
 import androidx.ui.layout.Column
 import androidx.ui.layout.ConstrainedBox
 import androidx.ui.layout.Container
@@ -34,10 +36,12 @@ import androidx.ui.layout.Row
 import androidx.ui.material.MaterialColors
 import androidx.ui.material.MaterialTypography
 import androidx.ui.material.ripple.Ripple
+import androidx.ui.material.surface.CurrentBackground
 import androidx.ui.material.themeColor
 import androidx.ui.material.themeTextStyle
 import androidx.ui.text.TextStyle
 import com.ivianuu.essentials.ui.compose.core.composable
+import com.ivianuu.essentials.util.isDark
 
 @Composable
 fun SimpleListItem(
@@ -47,8 +51,16 @@ fun SimpleListItem(
     trailing: @Composable() (() -> Unit)? = null,
     onClick: (() -> Unit)? = null
 ) = composable("SimpleListItem") {
-    val styledTitle = applyTextStyle(TitleTextStyle, title)!!
-    val styledSubtitle = applyTextStyle(SubtitleTextStyle, subtitle)
+    val styledTitle = applyTextStyle(
+        TitleTextStyle,
+        title
+    )!!
+    val styledSubtitle = applyTextStyle(
+        SubtitleTextStyle,
+        subtitle
+    )
+    val styledLeading = applyIconStyle(leading)
+    val styledTrailing = applyIconStyle(trailing)
 
     val item = @Composable {
         val minHeight = if (subtitle != null) {
@@ -60,7 +72,7 @@ fun SimpleListItem(
         ConstrainedBox(constraints = DpConstraints(minHeight = minHeight)) {
             Row(crossAxisAlignment = CrossAxisAlignment.Center) {
                 // leading
-                if (leading != null) {
+                if (styledLeading != null) {
                     Container(
                         modifier = Inflexible,
                         alignment = Alignment.CenterLeft,
@@ -72,7 +84,7 @@ fun SimpleListItem(
                             top = IconVerticalPadding,
                             bottom = IconVerticalPadding
                         ),
-                        children = leading
+                        children = styledLeading
                     )
                 }
 
@@ -96,12 +108,12 @@ fun SimpleListItem(
                 }
 
                 // trailing
-                if (trailing != null) {
+                if (styledTrailing != null) {
                     Container(
                         modifier = Inflexible,
                         padding = EdgeInsets(right = TrailingRightPadding),
                         constraints = DpConstraints(minHeight = minHeight),
-                        children = trailing
+                        children = styledTrailing
                     )
                 }
             }
@@ -149,8 +161,35 @@ private fun applyTextStyle(
     }
 }
 
+private fun applyIconStyle(
+    children: @Composable() (() -> Unit)?
+): @Composable() (() -> Unit)? {
+    if (children == null) return null
+    return {
+        val iconAlpha =
+            if ((+ambient(CurrentBackground)).toArgb().isDark) IconOpacityDark else IconOpacity
+        val iconColor = ((+currentIconStyle()).color ?: +colorForCurrentBackground())
+            .copy(alpha = iconAlpha)
+        val appliedIconStyle = (+currentIconStyle()).copy(color = iconColor)
+        CurrentIconStyleProvider(appliedIconStyle, children)
+    }
+}
+
 private const val PrimaryTextOpacity = 0.87f
 private const val SecondaryTextOpacity = 0.6f
 private const val RippleOpacity = 0.16f
-private val TitleTextStyle = ListItemTextStyle({ subtitle1 }, { onSurface }, PrimaryTextOpacity)
-private val SubtitleTextStyle = ListItemTextStyle({ body2 }, { onSurface }, SecondaryTextOpacity)
+private const val IconOpacity = 0.87f
+private const val IconOpacityDark = 0.87f
+
+private val TitleTextStyle =
+    ListItemTextStyle(
+        { subtitle1 },
+        { onSurface },
+        PrimaryTextOpacity
+    )
+private val SubtitleTextStyle =
+    ListItemTextStyle(
+        { body2 },
+        { onSurface },
+        SecondaryTextOpacity
+    )

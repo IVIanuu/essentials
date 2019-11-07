@@ -29,7 +29,6 @@ import androidx.ui.res.stringResource
 import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.AppStore
 import com.ivianuu.essentials.apps.coil.AppIcon
-import com.ivianuu.essentials.ui.compose.common.SimpleListItem
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.staticComposable
 import com.ivianuu.essentials.ui.compose.image.CoilImageAny
@@ -39,6 +38,7 @@ import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
 import com.ivianuu.essentials.ui.compose.material.Icon
 import com.ivianuu.essentials.ui.compose.material.PopupMenuButton
 import com.ivianuu.essentials.ui.compose.material.Scaffold
+import com.ivianuu.essentials.ui.compose.material.SimpleListItem
 import com.ivianuu.essentials.ui.compose.mvrx.mvRxViewModel
 import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
 import com.ivianuu.essentials.util.AppDispatchers

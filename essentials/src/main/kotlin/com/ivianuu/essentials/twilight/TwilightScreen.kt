@@ -22,11 +22,11 @@ import androidx.ui.core.Text
 import androidx.ui.material.RadioButton
 import androidx.ui.res.stringResource
 import com.ivianuu.essentials.R
-import com.ivianuu.essentials.ui.compose.common.SimpleListItem
 import com.ivianuu.essentials.ui.compose.composeControllerRoute
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
+import com.ivianuu.essentials.ui.compose.material.SimpleListItem
 import com.ivianuu.essentials.ui.compose.prefs.PrefsScreen
 import com.ivianuu.essentials.ui.navigation.director.defaultControllerRouteOptionsOrNull
 

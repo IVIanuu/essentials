@@ -42,7 +42,6 @@ import androidx.ui.layout.EdgeInsets
 import androidx.ui.layout.MainAxisAlignment
 import androidx.ui.layout.Row
 import androidx.ui.material.ripple.Ripple
-import androidx.ui.material.surface.Surface
 import androidx.ui.material.themeColor
 import androidx.ui.material.themeTextStyle
 import com.ivianuu.essentials.ui.compose.core.composable
@@ -68,7 +67,7 @@ fun <T> BottomNavigationBar(
     color: Color = +themeColor { primary },
     item: @Composable() (Int, T) -> Unit
 ) = composable("BottomNavigationBar") {
-    Surface(color = color, elevation = BottomNavigationBarElevation) {
+    EsSurface(color = color, elevation = BottomNavigationBarElevation) {
         Container(height = BottomNavigationBarHeight, expanded = true) {
             WithConstraints { thisConstraints ->
                 Row(
@@ -144,7 +143,7 @@ fun BottomNavigationBarItem(
                     val tint = (+colorForCurrentBackground()).copy(
                         alpha = if (selected) 1f else 0.6f
                     )
-                    val iconStyle = (+ambient(CurrentIconStyleAmbient)).copy(color = tint)
+                    val iconStyle = (+currentIconStyle()).copy(color = tint)
                     Icon(image = icon, style = iconStyle)
 
                     val textStyle = (+themeTextStyle { caption }).copy(color = tint)

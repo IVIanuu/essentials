@@ -21,19 +21,25 @@ import androidx.compose.ambient
 import androidx.compose.effectOf
 import androidx.compose.unaryPlus
 import androidx.ui.core.Text
+import androidx.ui.core.dp
+import androidx.ui.graphics.Color
 import androidx.ui.material.TopAppBar
+import androidx.ui.material.themeColor
+import com.ivianuu.essentials.ui.compose.common.Size
 import com.ivianuu.essentials.ui.compose.core.RouteAmbient
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.navigation.Navigator
 
 @Composable
-fun EsTopAppBar(title: String) = composable("EsTopAppBar2") {
-    EsTopAppBar(title = { Text(title) })
+fun EsTopAppBar(title: String, color: Color = +themeColor { primary }) =
+    composable("EsTopAppBar2") {
+        EsTopAppBar(title = { Text(title) }, color = color)
 }
 
 @Composable
 fun EsTopAppBar(
+    color: Color = +themeColor { primary },
     title: @Composable() () -> Unit,
     leading: (@Composable() () -> Unit)? = +autoTopAppBarLeadingIcon(),
     trailing: (@Composable() () -> Unit)? = null
@@ -42,14 +48,14 @@ fun EsTopAppBar(
         title = title,
         navigationIcon = leading?.let {
             {
-                CurrentIconStyleAmbient.Provider(+appBarIconStyle()) {
+                CurrentIconStyleProvider(+appBarIconStyle(color)) {
                     it()
                 }
             }
         },
         actionData = listOfNotNull(trailing),
         action = {
-            CurrentIconStyleAmbient.Provider(+appBarIconStyle()) {
+            CurrentIconStyleProvider(+appBarIconStyle(color)) {
                 it()
             }
         }
@@ -71,6 +77,11 @@ private fun autoTopAppBarLeadingIcon() = effectOf<(@Composable() () -> Unit)?> {
     }
 }
 
-fun appBarIconStyle() = effectOf<IconStyle> {
-    IconStyle(color = +colorForCurrentBackground())
+fun appBarIconStyle(color: Color) = effectOf<IconStyle> {
+    IconStyle(
+        size = Size(AppBarIconSize),
+        color = +colorForBackground(color)
+    )
 }
+
+private val AppBarIconSize = 24.dp

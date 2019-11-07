@@ -30,37 +30,52 @@ import androidx.ui.graphics.Image
 import androidx.ui.layout.Container
 import androidx.ui.layout.EdgeInsets
 import androidx.ui.material.ripple.Ripple
+import com.ivianuu.essentials.ui.compose.common.Size
 import com.ivianuu.essentials.ui.compose.core.composable
 
 @Composable
 fun Icon(
     image: Image,
-    style: IconStyle = +ambient(CurrentIconStyleAmbient),
-    size: Size = style.size,
-    color: Color? = style.color
+    style: IconStyle = +currentIconStyle()
 ) = composable("Icon") {
     Container(
-        width = size.width,
-        height = size.height
+        width = style.size.width,
+        height = style.size.height
     ) {
-        DrawImage(image = image, tint = color)
+        DrawImage(image = image, tint = style.color)
     }
 }
 
 data class IconStyle(
-    val size: Size = Size(DefaultIconSize, DefaultIconSize),
+    val size: Size = Size(DefaultIconSize),
     val color: Color? = null
-)
+) {
+    fun merge(other: IconStyle? = null): IconStyle {
+        if (other == null) return this
 
-val CurrentIconStyleAmbient = Ambient.of { IconStyle() }
-
-fun <T> iconStyleValue(
-    choosingBlock: IconStyle.() -> T
-) = effectOf<T> {
-    (+ambient(CurrentIconStyleAmbient)).choosingBlock()
+        return IconStyle(
+            size = other.size,
+            color = other.color ?: this.color
+        )
+    }
 }
 
 private val DefaultIconSize = 24.dp
+
+private val CurrentIconStyleAmbient = Ambient.of { IconStyle() }
+
+@Composable
+fun CurrentIconStyleProvider(
+    value: IconStyle,
+    children: @Composable() () -> Unit
+) = composable("CurrentIconStyleProvider") {
+    val style = +ambient(CurrentIconStyleAmbient)
+    val mergedStyle = style.merge(value)
+    CurrentIconStyleAmbient.Provider(value = mergedStyle, children = children)
+}
+
+fun currentIconStyle() =
+    effectOf<IconStyle> { +ambient(CurrentIconStyleAmbient) }
 
 fun AvatarIconStyle() = IconStyle(size = Size(AvatarSize, AvatarSize), color = null)
 
@@ -69,25 +84,27 @@ private val AvatarSize = 40.dp
 @Composable
 fun IconButton(
     image: Image,
-    padding: EdgeInsets = DefaultIconButtonPadding,
+    padding: EdgeInsets = EdgeInsets(all = DefaultIconButtonPadding),
     onClick: (() -> Unit)? = null
 ) = composable("ImageButton") {
-    Ripple(bounded = false, enabled = onClick != null) {
-        Clickable(onClick = onClick) {
-            Container(padding = padding) {
-                Icon(image = image)
-            }
-        }
+    IconButton(
+        padding = padding,
+        onClick = onClick
+    ) {
+        Icon(image = image)
     }
 }
 
 @Composable
 fun IconButton(
-    padding: EdgeInsets = DefaultIconButtonPadding,
+    padding: EdgeInsets = EdgeInsets(all = DefaultIconButtonPadding),
     onClick: (() -> Unit)? = null,
     icon: @Composable() () -> Unit
 ) = composable("ImageButton") {
-    Ripple(bounded = false, enabled = onClick != null) {
+    Ripple(
+        bounded = false,
+        enabled = onClick != null
+    ) {
         Clickable(onClick = onClick) {
             Container(padding = padding) {
                 icon()
@@ -96,4 +113,4 @@ fun IconButton(
     }
 }
 
-private val DefaultIconButtonPadding = EdgeInsets(all = 8.dp)
+private val DefaultIconButtonPadding = 8.dp

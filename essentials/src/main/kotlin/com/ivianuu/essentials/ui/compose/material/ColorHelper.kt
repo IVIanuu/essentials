@@ -30,12 +30,12 @@ fun colorForCurrentBackground() = effectOf<Color> {
 
 fun colorForBackground(color: Color) = effectOf<Color> {
     var result = with(+ambient(Colors)) {
-        when (background) {
+        when (color) {
             primary -> onPrimary
             primaryVariant -> onPrimary
             secondary -> onSecondary
             secondaryVariant -> onSecondary
-            this.background -> onBackground
+            background -> onBackground
             surface -> onSurface
             error -> onError
             else -> null

@@ -18,8 +18,8 @@ package com.ivianuu.essentials.ui.compose.prefs
 
 import androidx.compose.Composable
 import androidx.ui.core.Opacity
-import com.ivianuu.essentials.ui.compose.common.SimpleListItem
 import com.ivianuu.essentials.ui.compose.core.composable
+import com.ivianuu.essentials.ui.compose.material.SimpleListItem
 import com.ivianuu.kprefs.Pref
 
 @Composable
