@@ -47,7 +47,7 @@ val navBarRoute = composeControllerRoute(
 ) {
     Scaffold(
         topAppBar = { EsTopAppBar(title = "Nav bar settings") },
-        content = {
+        body = {
             Center {
                 Column(
                     mainAxisAlignment = MainAxisAlignment.Center,

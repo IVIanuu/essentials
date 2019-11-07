@@ -39,7 +39,7 @@ fun aboutRoute(
 ) {
     ListScreen(
         topAppBar = { EsTopAppBar(+stringResource(R.string.about_title)) },
-        listContent = {
+        listBody = {
             AboutSection(
                 hasDebugPackageName = hasDebugPackageName,
                 showHeader = false,

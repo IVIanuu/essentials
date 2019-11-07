@@ -66,7 +66,7 @@ val homeRoute = composeControllerRoute {
                 }
             )
         },
-        listContent = {
+        listBody = {
             HomeItem.values().forEachIndexed { index, item ->
                 HomeItem(item = item, onClick = +navigateOnClick(item.route))
                 if (index != HomeItem.values().lastIndex) {
@@ -163,6 +163,11 @@ enum class HomeItem(
         title = "Bottom navigation",
         color = Color.Red,
         route = { bottomNavigationRoute }
+    ),
+    Drawer(
+        title = "Drawer",
+        color = Color.Blue,
+        route = { drawerRoute }
     ),
     About(
         title = "About",

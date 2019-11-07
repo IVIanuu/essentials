@@ -41,7 +41,7 @@ val bottomNavigationRoute = composeControllerRoute(
 
     Scaffold(
         topAppBar = { EsTopAppBar("Bottom navigation") },
-        content = {
+        body = {
             val item = BottomNavigationItem.values()[selectedIndex]
             ColoredRect(item.color)
         },

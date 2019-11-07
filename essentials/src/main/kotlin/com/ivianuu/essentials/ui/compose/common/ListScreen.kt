@@ -25,20 +25,18 @@ import com.ivianuu.essentials.ui.compose.material.Scaffold
 @Composable
 fun ListScreen(
     topAppBar: (@Composable() () -> Unit)? = null,
-    bottomBar: (@Composable() () -> Unit)? = null,
     fabConfiguration: Scaffold.FabConfiguration? = null,
-    listContent: @Composable() () -> Unit
+    listBody: @Composable() () -> Unit
 ) = composable("ListScreen") {
     Scaffold(
         topAppBar = topAppBar,
-        content = {
+        body = {
             VerticalScroller {
                 Column {
-                    listContent()
+                    listBody()
                 }
             }
         },
-        bottomBar = bottomBar,
         fabConfiguration = fabConfiguration
     )
 }

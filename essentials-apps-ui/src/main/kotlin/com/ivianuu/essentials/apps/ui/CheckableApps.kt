@@ -96,7 +96,7 @@ fun CheckableAppsScreen(
                 }
             )
         },
-        content = {
+        body = {
             when (viewModel.state.apps) {
                 is Loading -> {
                     staticComposable("loading") {

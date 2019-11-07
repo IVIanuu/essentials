@@ -53,7 +53,7 @@ fun appPickerRoute(
 ) = composeControllerRoute {
     Scaffold(
         topAppBar = { EsTopAppBar(+stringResource(R.string.es_title_app_picker)) },
-        content = {
+        body = {
             val viewModel = +mvRxViewModel<AppPickerViewModel> {
                 parametersOf(launchableOnly)
             }

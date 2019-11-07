@@ -41,7 +41,7 @@ val navigationRoute = composeControllerRoute {
 private fun CounterRoute(count: Int): Route = Route(count) {
     Scaffold(
         topAppBar = { EsTopAppBar("Nav") },
-        content = {
+        body = {
             Center {
                 Column(
                     mainAxisAlignment = MainAxisAlignment.Center,

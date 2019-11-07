@@ -18,6 +18,7 @@ package com.ivianuu.essentials.ui.compose.material
 
 import androidx.compose.Composable
 import androidx.compose.ambient
+import androidx.compose.effectOf
 import androidx.compose.unaryPlus
 import androidx.ui.core.Alignment
 import androidx.ui.core.Text
@@ -40,29 +41,50 @@ fun EsTopAppBar(title: String) = composable("EsTopAppBar2") {
 @Composable
 fun EsTopAppBar(
     title: @Composable() () -> Unit,
-    leading: (@Composable() () -> Unit)? = null,
+    leading: (@Composable() () -> Unit)? = +autoTopAppBarLeadingIcon(),
     trailing: (@Composable() () -> Unit)? = null
 ) = composable("EsTopAppBar") {
-    val navigator = +inject<Navigator>()
-    val route = +ambient(RouteAmbient)
-
-    val navigationIconComposable: @Composable (() -> Unit)? =
-        if (leading != null || navigator.backStack.indexOf(route) > 0) {
-            { EsNavigationIcon() }
-        } else {
-            null
-        }
-
     TopAppBar(
         title = title,
-        navigationIcon = navigationIconComposable,
+        navigationIcon = leading,
         actionData = listOfNotNull(trailing),
         action = { it() }
     )
 }
 
+private fun autoTopAppBarLeadingIcon() = effectOf<(@Composable() () -> Unit)?> {
+    val scaffold = +ambient(ScaffoldAmbient)
+    val navigator = +inject<Navigator>()
+    val route = +ambient(RouteAmbient)
+
+    if (scaffold.hasDrawer) {
+        { DrawerAppBarIcon() }
+    } else if (navigator.backStack.indexOf(route) > 0) {
+        { BackAppBarIcon() }
+    } else {
+        null
+    }
+}
+
 @Composable
-fun EsNavigationIcon(
+fun DrawerAppBarIcon(
+    icon: Image = +drawableResource(
+        R.drawable.es_ic_menu, +iconColorForBackground(
+            +ambient(
+                CurrentBackground
+            )
+        )
+    )
+) = composable("DrawerAppBarIcon") {
+    val scaffold = +ambient(ScaffoldAmbient)
+    AppBarIcon(
+        icon = icon,
+        onClick = { scaffold.openDrawer() }
+    )
+}
+
+@Composable
+fun BackAppBarIcon(
     icon: Image = +drawableResource(
         R.drawable.abc_ic_ab_back_material, +iconColorForBackground(
             +ambient(
@@ -70,7 +92,7 @@ fun EsNavigationIcon(
             )
         )
     )
-) = composable("EsNavigationIcon") {
+) = composable("BackAppBarIcon") {
     val navigator = +inject<Navigator>()
     AppBarIcon(
         icon = icon,

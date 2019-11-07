@@ -30,63 +30,104 @@ import androidx.ui.layout.Column
 import androidx.ui.layout.Container
 import androidx.ui.layout.Padding
 import androidx.ui.layout.Stack
+import androidx.ui.material.DrawerState
 import androidx.ui.material.surface.Surface
 import com.ivianuu.essentials.ui.compose.core.composable
 
 @Composable
 fun Scaffold(
+    drawer: (@Composable() (
+        drawerState: DrawerState,
+        onDrawerStateChanged: (DrawerState) -> Unit,
+        body: @Composable() () -> Unit
+    ) -> Unit
+    )? = null,
     topAppBar: (@Composable() () -> Unit)? = null,
-    content: @Composable() () -> Unit,
+    body: (@Composable() () -> Unit)? = null,
     bottomBar: (@Composable() () -> Unit)? = null,
     fabConfiguration: Scaffold.FabConfiguration? = null
 ) = composable("Scaffold") {
     val overlays = +state { emptyList<Overlay>() }
-    val scaffold = +memo { Scaffold(overlays) }
+    val drawerState = +state { DrawerState.Closed }
+    val scaffold = +memo { Scaffold(overlays, drawerState) }
+
+    // update state
+    scaffold.hasTopAppBar = topAppBar != null
+    scaffold.hasDrawer = drawer != null
+    scaffold.hasBody = body != null
+    scaffold.hasBottomBar = bottomBar != null
+    scaffold.hasFab = fabConfiguration != null
 
     ScaffoldAmbient.Provider(value = scaffold) {
         Stack {
             OnPositioned { scaffold.coordinates = it }
 
-            Column {
-                if (topAppBar != null) {
-                    Container(modifier = Inflexible) {
-                        topAppBar()
+            val finalBody: @Composable() () -> Unit = {
+                Column {
+                    if (topAppBar != null) {
+                        Container(modifier = Inflexible) {
+                            topAppBar()
+                        }
+                    }
+
+                    if (body != null) {
+                        Container(
+                            alignment = Alignment.TopLeft,
+                            modifier = Flexible(1f)
+                        ) {
+                            Surface {
+                                body()
+                            }
+                        }
+                    }
+
+                    if (bottomBar != null) {
+                        Container(modifier = Inflexible) {
+                            bottomBar()
+                        }
                     }
                 }
 
-                Container(
-                    alignment = Alignment.TopLeft,
-                    modifier = Flexible(1f)
-                ) {
-                    Surface {
-                        content()
+                if (fabConfiguration != null) {
+                    aligned(
+                        when (fabConfiguration.position) {
+                            Scaffold.FabPosition.Center -> Alignment.BottomCenter
+                            Scaffold.FabPosition.End -> Alignment.BottomRight
+                        }
+                    ) {
+                        Padding(padding = 16.dp) {
+                            fabConfiguration.fab()
+                        }
                     }
                 }
 
-                if (bottomBar != null) {
-                    Container(modifier = Inflexible) {
-                        bottomBar()
+                // show overlays
+                overlays.value
+                    .filter { it.inBody }
+                    .forEach { overlay ->
+                        overlay.composable {
+                            scaffold.removeOverlay(overlay)
+                        }
                     }
-                }
             }
 
-            if (fabConfiguration != null) {
-                aligned(
-                    when (fabConfiguration.position) {
-                        Scaffold.FabPosition.Center -> Alignment.BottomCenter
-                        Scaffold.FabPosition.End -> Alignment.BottomRight
-                    }
-                ) {
-                    Padding(padding = 16.dp) {
-                        fabConfiguration.fab()
-                    }
-                }
+            if (drawer != null) {
+                drawer(
+                    drawerState.value,
+                    { drawerState.value = it },
+                    finalBody
+                )
+            } else {
+                finalBody()
             }
 
-            overlays.value.forEach { overlay ->
-                overlay.composable {
-                    scaffold.removeOverlay(overlay)
-                }
+            // show overlays
+            overlays.value
+                .filterNot { it.inBody }
+                .forEach { overlay ->
+                    overlay.composable {
+                        scaffold.removeOverlay(overlay)
+                    }
             }
         }
     }
@@ -94,17 +135,53 @@ fun Scaffold(
 
 val ScaffoldAmbient = Ambient.of<Scaffold>()
 
-internal data class Overlay(val composable: @Composable() (() -> Unit) -> Unit)
+internal data class Overlay(
+    val composable: @Composable() (() -> Unit) -> Unit,
+    val inBody: Boolean
+)
 
 class Scaffold internal constructor(
-    private val overlays: State<List<Overlay>>
+    private val overlays: State<List<Overlay>>,
+    private val _drawerState: State<DrawerState>
 ) {
 
-    var coordinates: LayoutCoordinates? = null
+    var hasTopAppBar = false
+        internal set
+    var hasDrawer = false
+        internal set
+    var hasBody = false
+        internal set
+    var hasBottomBar = false
+        internal set
+    var hasFab = false
+        internal set
 
-    fun addOverlay(block: (() -> Unit) -> Unit) {
+    var coordinates: LayoutCoordinates? = null
+        internal set
+
+    var drawerState by _drawerState
+
+    fun toggleDrawer() {
+        if (drawerState != DrawerState.Opened) {
+            openDrawer()
+        } else {
+            closeDrawer()
+        }
+    }
+
+    fun openDrawer() {
+        check(hasDrawer)
+        drawerState = DrawerState.Opened
+    }
+
+    fun closeDrawer() {
+        check(hasDrawer)
+        drawerState = DrawerState.Closed
+    }
+
+    fun addOverlay(inBody: Boolean = true, block: (() -> Unit) -> Unit) {
         val newOverlays = overlays.value.toMutableList()
-        newOverlays += Overlay(block)
+        newOverlays += Overlay(block, inBody)
         overlays.value = newOverlays
     }
 

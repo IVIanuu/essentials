@@ -48,7 +48,7 @@ fun secureSettingsRoute(showHideNavBarHint: Boolean = false) =
 
         ListScreen(
             topAppBar = { EsTopAppBar(+stringResource(R.string.es_title_secure_settings)) },
-            listContent = {
+            listBody = {
                 Padding(padding = 16.dp) {
                     Text(
                         text = +stringResource(

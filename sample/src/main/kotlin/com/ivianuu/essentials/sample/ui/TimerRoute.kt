@@ -34,7 +34,7 @@ val timerRoute = composeControllerRoute(
 ) {
     Scaffold(
         topAppBar = { EsTopAppBar(title = "Timer") },
-        content = {
+        body = {
             Center {
                 val value = +collect(timerFlow())
 
