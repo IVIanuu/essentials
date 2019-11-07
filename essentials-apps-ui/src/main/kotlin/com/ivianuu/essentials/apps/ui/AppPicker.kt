@@ -51,7 +51,7 @@ fun appPickerRoute(
     launchableOnly: Boolean
 ) = composeControllerRoute {
     Scaffold(
-        appBar = { EsTopAppBar(+stringResource(R.string.es_title_app_picker)) },
+        topAppBar = { EsTopAppBar(+stringResource(R.string.es_title_app_picker)) },
         content = {
             val viewModel = +mvRxViewModel<AppPickerViewModel> {
                 parametersOf(launchableOnly)

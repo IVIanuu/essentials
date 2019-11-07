@@ -19,13 +19,21 @@ package com.ivianuu.essentials.ui.compose.prefs
 import androidx.compose.Composable
 import com.ivianuu.essentials.ui.compose.common.ListScreen
 import com.ivianuu.essentials.ui.compose.core.composable
+import com.ivianuu.essentials.ui.compose.material.Scaffold
 
 @Composable
 fun PrefsScreen(
-    appBar: (@Composable() () -> Unit)? = null,
+    topAppBar: (@Composable() () -> Unit)? = null,
+    bottomAppBar: (@Composable() () -> Unit)? = null,
+    fabConfiguration: Scaffold.FabConfiguration? = null,
     prefs: @Composable() () -> Unit
 ) = composable("PrefsScreen") {
     Prefs {
-        ListScreen(appBar, prefs)
+        ListScreen(
+            topAppBar = topAppBar,
+            bottomAppBar = bottomAppBar,
+            fabConfiguration = fabConfiguration,
+            listContent = prefs
+        )
     }
 }

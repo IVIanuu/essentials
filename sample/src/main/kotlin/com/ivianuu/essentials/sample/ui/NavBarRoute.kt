@@ -46,7 +46,7 @@ val navBarRoute = composeControllerRoute(
     options = controllerRouteOptions().fade()
 ) {
     Scaffold(
-        appBar = { EsTopAppBar(title = "Nav bar settings") },
+        topAppBar = { EsTopAppBar(title = "Nav bar settings") },
         content = {
             Center {
                 Column(

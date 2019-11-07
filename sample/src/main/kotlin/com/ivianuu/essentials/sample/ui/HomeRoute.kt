@@ -47,7 +47,7 @@ import com.ivianuu.essentials.util.Toaster
 
 val homeRoute = composeControllerRoute {
     ListScreen(
-        appBar = {
+        topAppBar = {
             EsTopAppBar(
                 title = { Text("Home") },
                 trailing = {

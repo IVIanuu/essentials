@@ -47,7 +47,7 @@ fun secureSettingsRoute(showHideNavBarHint: Boolean = false) =
         +popNavigatorOnceSecureSettingsGranted()
 
         ListScreen(
-            appBar = { EsTopAppBar(+stringResource(R.string.es_title_secure_settings)) },
+            topAppBar = { EsTopAppBar(+stringResource(R.string.es_title_secure_settings)) },
             listContent = {
                 Padding(padding = 16.dp) {
                     Text(

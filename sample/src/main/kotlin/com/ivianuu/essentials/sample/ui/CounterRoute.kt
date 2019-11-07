@@ -33,7 +33,7 @@ import com.ivianuu.essentials.ui.compose.mvi.stateStore
 
 val counterRoute = composeControllerRoute {
     Scaffold(
-        appBar = { EsTopAppBar("Counter") },
+        topAppBar = { EsTopAppBar("Counter") },
         content = {
             Center {
                 Column(

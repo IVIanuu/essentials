@@ -78,7 +78,7 @@ fun CheckableAppsScreen(
     }
 
     Scaffold(
-        appBar = {
+        topAppBar = {
             EsTopAppBar(
                 title = { Text(appBarTitle) },
                 trailing = {

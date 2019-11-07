@@ -38,7 +38,7 @@ fun aboutRoute(
     options = defaultControllerRouteOptionsOrNull()
 ) {
     ListScreen(
-        appBar = { EsTopAppBar(+stringResource(R.string.about_title)) },
+        topAppBar = { EsTopAppBar(+stringResource(R.string.about_title)) },
         listContent = {
             AboutSection(
                 hasDebugPackageName = hasDebugPackageName,
