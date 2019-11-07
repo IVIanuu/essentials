@@ -31,8 +31,10 @@ import com.ivianuu.essentials.ui.compose.prefs.SingleItemListPreference
 import com.ivianuu.essentials.ui.compose.prefs.SliderPreference
 import com.ivianuu.essentials.ui.compose.prefs.SwitchPreference
 import com.ivianuu.essentials.ui.compose.prefs.TextInputPreference
+import com.ivianuu.essentials.ui.compose.prefs.unitValueTextProvider
 import com.ivianuu.essentials.ui.navigation.director.controllerRouteOptions
 import com.ivianuu.essentials.ui.navigation.director.vertical
+import com.ivianuu.essentials.util.UnitValueTextProvider
 import com.ivianuu.kprefs.KPrefs
 import com.ivianuu.kprefs.boolean
 import com.ivianuu.kprefs.int
@@ -79,6 +81,7 @@ val prefsRoute = composeControllerRoute(
                 pref = prefs.int("slider"),
                 title = { Text("Slider") },
                 summary = { Text("This is a slider preference") },
+                valueText = +unitValueTextProvider(UnitValueTextProvider.Unit.Dp),
                 dependencies = dependencies
             )
 

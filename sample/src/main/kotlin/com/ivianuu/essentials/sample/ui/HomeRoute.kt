@@ -174,6 +174,11 @@ enum class HomeItem(
         color = Color.Yellow,
         route = { tabsRoute }
     ),
+    TextInput(
+        title = "Text input",
+        color = Color.Magenta,
+        route = { textInputRoute }
+    ),
     About(
         title = "About",
         color = Color.Yellow,
