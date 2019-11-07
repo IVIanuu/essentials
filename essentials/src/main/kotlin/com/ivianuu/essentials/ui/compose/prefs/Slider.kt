@@ -17,9 +17,12 @@
 package com.ivianuu.essentials.ui.compose.prefs
 
 import androidx.compose.Composable
+import androidx.compose.ambient
+import androidx.compose.effectOf
 import androidx.compose.state
 import androidx.compose.unaryPlus
 import androidx.ui.core.Alignment
+import androidx.ui.core.ContextAmbient
 import androidx.ui.core.Opacity
 import androidx.ui.core.Text
 import androidx.ui.core.dp
@@ -33,6 +36,7 @@ import androidx.ui.layout.Stack
 import androidx.ui.material.themeTextStyle
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.material.Slider
+import com.ivianuu.essentials.util.UnitValueTextProvider
 import com.ivianuu.kprefs.Pref
 
 @Composable
@@ -128,4 +132,19 @@ fun SimpleSliderValueText(value: Int) = composable("SimpleSliderValueText") {
         style = +themeTextStyle { body2 },
         maxLines = 1
     )
+}
+
+fun unitValueTextProvider(
+    unit: UnitValueTextProvider.Unit
+) = effectOf<(@Composable() (Int) -> Unit)> {
+    val textProvider = UnitValueTextProvider(
+        +ambient(ContextAmbient), unit
+    )
+    return@effectOf {
+        Text(
+            text = textProvider(it),
+            style = +themeTextStyle { body2 },
+            maxLines = 1
+        )
+    }
 }
