@@ -78,13 +78,13 @@ val secureSettingsInstructionsRoute =
                 )
 
                 SimpleListItem(
-                    leading = { Icon(+drawableResource(R.drawable.es_ic_link, null)) },
+                    leading = { Icon(+drawableResource(R.drawable.es_ic_link)) },
                     title = { Text(+stringResource(R.string.es_pref_secure_settings_link_gadget_hacks_summary)) },
                     onClick = +openUrlOnClick { "https://youtu.be/CDuxcrrWLnY" }
                 )
 
                 SimpleListItem(
-                    leading = { Icon(+drawableResource(R.drawable.es_ic_link, null)) },
+                    leading = { Icon(+drawableResource(R.drawable.es_ic_link)) },
                     title = { Text(+stringResource(R.string.es_pref_secure_settings_link_lifehacker_summary)) },
                     onClick = +openUrlOnClick {
                         "https://lifehacker.com/the-easiest-way-to-install-androids-adb-and-fastboot-to-1586992378"
@@ -92,7 +92,7 @@ val secureSettingsInstructionsRoute =
                 )
 
                 SimpleListItem(
-                    leading = { Icon(+drawableResource(R.drawable.es_ic_link, null)) },
+                    leading = { Icon(+drawableResource(R.drawable.es_ic_link)) },
                     title = { Text(+stringResource(R.string.es_pref_secure_settings_link_xda_summary)) },
                     onClick = +openUrlOnClick {
                         "https://www.xda-developers.com/install-adb-windows-macos-linux/"

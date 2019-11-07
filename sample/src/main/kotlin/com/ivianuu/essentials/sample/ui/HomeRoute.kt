@@ -41,7 +41,7 @@ import com.ivianuu.essentials.ui.compose.composeControllerRoute
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
-import com.ivianuu.essentials.ui.compose.material.PopupMenuAppBarIcon
+import com.ivianuu.essentials.ui.compose.material.PopupMenuButton
 import com.ivianuu.essentials.ui.navigation.Route
 import com.ivianuu.essentials.util.Toaster
 
@@ -53,16 +53,17 @@ val homeRoute = composeControllerRoute {
                 trailing = {
                     val toaster = +inject<Toaster>()
 
-                    PopupMenuAppBarIcon(
+                    PopupMenuButton(
                         items = listOf(
                             "Option 1",
                             "Option 2",
                             "Option 3"
                         ),
-                        item = { Text(text = it) },
                         onCancel = { toaster.toast("Cancelled") },
                         onSelected = { toaster.toast("Selected $it") }
-                    )
+                    ) {
+                        Text(text = it)
+                    }
                 }
             )
         },

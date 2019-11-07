@@ -33,7 +33,6 @@ import androidx.ui.core.gesture.PressGestureDetector
 import androidx.ui.core.positionInRoot
 import androidx.ui.foundation.Clickable
 import androidx.ui.foundation.shape.corner.RoundedCornerShape
-import androidx.ui.graphics.Image
 import androidx.ui.layout.Column
 import androidx.ui.layout.ConstrainedBox
 import androidx.ui.layout.DpConstraints
@@ -42,10 +41,8 @@ import androidx.ui.layout.Padding
 import androidx.ui.layout.Wrap
 import androidx.ui.material.ripple.Ripple
 import androidx.ui.material.surface.Card
-import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.ref
-import com.ivianuu.essentials.ui.compose.resources.drawableResource
 
 // todo proper material open animation
 
@@ -305,32 +302,5 @@ fun <T> PopupMenuTrigger(
                 )
             }
         }
-    }
-}
-
-@Composable
-fun <T> PopupMenuButton(
-    alignment: Alignment = Alignment.Center,
-    offsetX: Dp = 0.dp,
-    offsetY: Dp = 0.dp,
-    onCancel: (() -> Unit)? = null,
-    items: List<T>,
-    onSelected: (T) -> Unit,
-    item: @Composable() (T) -> Unit,
-    icon: Image = +drawableResource(R.drawable.abc_ic_menu_overflow_material)
-) = composable("PopupMenuButton") {
-    PopupMenuTrigger(
-        alignment = alignment,
-        offsetX = offsetX,
-        offsetY = offsetY,
-        onCancel = onCancel,
-        items = items,
-        onSelected = onSelected,
-        item = item
-    ) { showPopup ->
-        ImageButton(
-            image = icon,
-            onClick = showPopup
-        )
     }
 }

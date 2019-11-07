@@ -21,7 +21,20 @@ import androidx.work.ListenableWorker
 import androidx.work.Worker
 import androidx.work.WorkerFactory
 import androidx.work.WorkerParameters
-import com.ivianuu.injekt.*
+import com.ivianuu.injekt.BindingContext
+import com.ivianuu.injekt.DefinitionContext
+import com.ivianuu.injekt.Inject
+import com.ivianuu.injekt.Module
+import com.ivianuu.injekt.Name
+import com.ivianuu.injekt.Provider
+import com.ivianuu.injekt.bindType
+import com.ivianuu.injekt.factory
+import com.ivianuu.injekt.intoMap
+import com.ivianuu.injekt.map
+import com.ivianuu.injekt.module
+import com.ivianuu.injekt.parametersOf
+import com.ivianuu.injekt.typeOf
+import com.ivianuu.injekt.withBinding
 
 /**
  * Uses injekt to instantiate workers

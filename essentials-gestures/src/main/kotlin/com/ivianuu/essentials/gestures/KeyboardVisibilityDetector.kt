@@ -23,7 +23,12 @@ import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.android.ApplicationScope
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.transformLatest
 import java.lang.reflect.Method
 
 /**

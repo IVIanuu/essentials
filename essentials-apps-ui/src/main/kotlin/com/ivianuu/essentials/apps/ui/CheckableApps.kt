@@ -37,7 +37,7 @@ import com.ivianuu.essentials.ui.compose.material.AvatarIconStyle
 import com.ivianuu.essentials.ui.compose.material.EsCheckbox
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
 import com.ivianuu.essentials.ui.compose.material.Icon
-import com.ivianuu.essentials.ui.compose.material.PopupMenuAppBarIcon
+import com.ivianuu.essentials.ui.compose.material.PopupMenuButton
 import com.ivianuu.essentials.ui.compose.material.Scaffold
 import com.ivianuu.essentials.ui.compose.mvrx.mvRxViewModel
 import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
@@ -83,16 +83,17 @@ fun CheckableAppsScreen(
             EsTopAppBar(
                 title = { Text(appBarTitle) },
                 trailing = {
-                    PopupMenuAppBarIcon(
+                    PopupMenuButton(
                         items = AppBarOptions.values().toList(),
-                        item = { Text(+stringResource(it.titleRes)) },
                         onSelected = {
                             when (it) {
                                 AppBarOptions.SelectAll -> viewModel.selectAllClicked()
                                 AppBarOptions.DeselectAll -> viewModel.deselectAllClicked()
                             }
                         }
-                    )
+                    ) {
+                        Text(+stringResource(it.titleRes))
+                    }
                 }
             )
         },

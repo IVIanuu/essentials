@@ -23,11 +23,13 @@ import androidx.compose.effectOf
 import androidx.compose.unaryPlus
 import androidx.ui.core.Size
 import androidx.ui.core.dp
+import androidx.ui.foundation.Clickable
 import androidx.ui.foundation.DrawImage
 import androidx.ui.graphics.Color
 import androidx.ui.graphics.Image
 import androidx.ui.layout.Container
-import androidx.ui.material.textColorForBackground
+import androidx.ui.layout.EdgeInsets
+import androidx.ui.material.ripple.Ripple
 import com.ivianuu.essentials.ui.compose.core.composable
 
 @Composable
@@ -35,19 +37,19 @@ fun Icon(
     image: Image,
     style: IconStyle = +ambient(CurrentIconStyleAmbient),
     size: Size = style.size,
-    tint: Color? = style.tint
+    color: Color? = style.color
 ) = composable("Icon") {
     Container(
         width = size.width,
         height = size.height
     ) {
-        DrawImage(image = image, tint = tint)
+        DrawImage(image = image, tint = color)
     }
 }
 
 data class IconStyle(
     val size: Size = Size(DefaultIconSize, DefaultIconSize),
-    val tint: Color? = null
+    val color: Color? = null
 )
 
 val CurrentIconStyleAmbient = Ambient.of { IconStyle() }
@@ -60,8 +62,38 @@ fun <T> iconStyleValue(
 
 private val DefaultIconSize = 24.dp
 
-fun AvatarIconStyle() = IconStyle(size = Size(AvatarSize, AvatarSize), tint = null)
+fun AvatarIconStyle() = IconStyle(size = Size(AvatarSize, AvatarSize), color = null)
 
 private val AvatarSize = 40.dp
 
-fun iconColorForBackground(background: Color) = textColorForBackground(background)
+@Composable
+fun IconButton(
+    image: Image,
+    padding: EdgeInsets = DefaultIconButtonPadding,
+    onClick: (() -> Unit)? = null
+) = composable("ImageButton") {
+    Ripple(bounded = false, enabled = onClick != null) {
+        Clickable(onClick = onClick) {
+            Container(padding = padding) {
+                Icon(image = image)
+            }
+        }
+    }
+}
+
+@Composable
+fun IconButton(
+    padding: EdgeInsets = DefaultIconButtonPadding,
+    onClick: (() -> Unit)? = null,
+    icon: @Composable() () -> Unit
+) = composable("ImageButton") {
+    Ripple(bounded = false, enabled = onClick != null) {
+        Clickable(onClick = onClick) {
+            Container(padding = padding) {
+                icon()
+            }
+        }
+    }
+}
+
+private val DefaultIconButtonPadding = EdgeInsets(all = 8.dp)

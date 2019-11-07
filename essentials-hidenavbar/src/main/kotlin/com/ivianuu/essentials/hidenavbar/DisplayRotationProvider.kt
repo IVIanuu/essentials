@@ -26,7 +26,13 @@ import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.util.merge
 import com.ivianuu.injekt.Inject
 import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.onStart
 
 @Inject
 internal class DisplayRotationProvider(

@@ -20,17 +20,11 @@ import androidx.compose.Composable
 import androidx.compose.ambient
 import androidx.compose.effectOf
 import androidx.compose.unaryPlus
-import androidx.ui.core.Alignment
 import androidx.ui.core.Text
-import androidx.ui.graphics.Image
-import androidx.ui.material.AppBarIcon
 import androidx.ui.material.TopAppBar
-import androidx.ui.material.surface.CurrentBackground
-import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.compose.core.RouteAmbient
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.injekt.inject
-import com.ivianuu.essentials.ui.compose.resources.drawableResource
 import com.ivianuu.essentials.ui.navigation.Navigator
 
 @Composable
@@ -46,9 +40,19 @@ fun EsTopAppBar(
 ) = composable("EsTopAppBar") {
     TopAppBar(
         title = title,
-        navigationIcon = leading,
+        navigationIcon = leading?.let {
+            {
+                CurrentIconStyleAmbient.Provider(+appBarIconStyle()) {
+                    it()
+                }
+            }
+        },
         actionData = listOfNotNull(trailing),
-        action = { it() }
+        action = {
+            CurrentIconStyleAmbient.Provider(+appBarIconStyle()) {
+                it()
+            }
+        }
     )
 }
 
@@ -56,74 +60,17 @@ private fun autoTopAppBarLeadingIcon() = effectOf<(@Composable() () -> Unit)?> {
     val scaffold = +ambient(ScaffoldAmbient)
     val navigator = +inject<Navigator>()
     val route = +ambient(RouteAmbient)
-
-    if (scaffold.hasDrawer) {
-        { DrawerAppBarIcon() }
-    } else if (navigator.backStack.indexOf(route) > 0) {
-        { BackAppBarIcon() }
-    } else {
-        null
+    when {
+        scaffold.hasDrawer -> {
+            { DrawerButton() }
+        }
+        navigator.backStack.indexOf(route) > 0 -> {
+            { BackButton() }
+        }
+        else -> null
     }
 }
 
-@Composable
-fun DrawerAppBarIcon(
-    icon: Image = +drawableResource(
-        R.drawable.es_ic_menu, +iconColorForBackground(
-            +ambient(
-                CurrentBackground
-            )
-        )
-    )
-) = composable("DrawerAppBarIcon") {
-    val scaffold = +ambient(ScaffoldAmbient)
-    AppBarIcon(
-        icon = icon,
-        onClick = { scaffold.openDrawer() }
-    )
-}
-
-@Composable
-fun BackAppBarIcon(
-    icon: Image = +drawableResource(
-        R.drawable.abc_ic_ab_back_material, +iconColorForBackground(
-            +ambient(
-                CurrentBackground
-            )
-        )
-    )
-) = composable("BackAppBarIcon") {
-    val navigator = +inject<Navigator>()
-    AppBarIcon(
-        icon = icon,
-        onClick = { navigator.pop() }
-    )
-}
-
-@Composable
-fun <T> PopupMenuAppBarIcon(
-    onCancel: (() -> Unit)? = null,
-    items: List<T>,
-    onSelected: (T) -> Unit,
-    item: @Composable() (T) -> Unit,
-    icon: Image = +drawableResource(
-        R.drawable.abc_ic_menu_overflow_material, +iconColorForBackground(
-            +ambient(
-                CurrentBackground
-            )
-        )
-    )
-) = composable("MenuAppBarIcon") {
-    PopupMenuTrigger(
-        alignment = Alignment.TopRight,
-        onCancel = onCancel,
-        items = items,
-        onSelected = onSelected,
-        item = item
-    ) { showPopup ->
-        AppBarIcon(
-            icon = icon,
-            onClick = showPopup
-        )
-    }
+fun appBarIconStyle() = effectOf<IconStyle> {
+    IconStyle(color = +colorForCurrentBackground())
 }

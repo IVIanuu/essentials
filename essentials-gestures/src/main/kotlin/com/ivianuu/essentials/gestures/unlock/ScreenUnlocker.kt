@@ -23,7 +23,11 @@ import com.ivianuu.essentials.messaging.BroadcastFactory
 import com.ivianuu.injekt.Inject
 import hu.akarnokd.kotlin.flow.takeUntil
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.singleOrNull
+import kotlinx.coroutines.flow.take
 
 /**
  * Helper class for unlocking the screen

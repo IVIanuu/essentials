@@ -73,7 +73,7 @@ abstract class ToolbarController : CoordinatorController() {
 
             if (toolbarMenu != null) {
                 menu.add("dummy")
-                overflowIcon = requireActivity().drawable(R.drawable.abc_ic_menu_overflow_material)
+                overflowIcon = requireActivity().drawable(R.drawable.es_ic_more_vert)
                 val overflow = findView {
                     it is ImageView && it.drawable == overflowIcon
                 }!!
@@ -82,7 +82,7 @@ abstract class ToolbarController : CoordinatorController() {
             }
 
             if (toolbarBackButton) {
-                setNavigationIcon(R.drawable.abc_ic_ab_back_material)
+                setNavigationIcon(R.drawable.es_ic_arrow_back)
                 setNavigationOnClickListener { navigator.pop() }
             }
 
