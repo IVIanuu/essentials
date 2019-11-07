@@ -24,14 +24,14 @@ import com.ivianuu.essentials.ui.compose.material.Scaffold
 @Composable
 fun PrefsScreen(
     topAppBar: (@Composable() () -> Unit)? = null,
-    bottomAppBar: (@Composable() () -> Unit)? = null,
+    bottomBar: (@Composable() () -> Unit)? = null,
     fabConfiguration: Scaffold.FabConfiguration? = null,
     prefs: @Composable() () -> Unit
 ) = composable("PrefsScreen") {
     Prefs {
         ListScreen(
             topAppBar = topAppBar,
-            bottomAppBar = bottomAppBar,
+            bottomBar = bottomBar,
             fabConfiguration = fabConfiguration,
             listContent = prefs
         )

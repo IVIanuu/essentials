@@ -25,7 +25,7 @@ import com.ivianuu.essentials.ui.compose.material.Scaffold
 @Composable
 fun ListScreen(
     topAppBar: (@Composable() () -> Unit)? = null,
-    bottomAppBar: (@Composable() () -> Unit)? = null,
+    bottomBar: (@Composable() () -> Unit)? = null,
     fabConfiguration: Scaffold.FabConfiguration? = null,
     listContent: @Composable() () -> Unit
 ) = composable("ListScreen") {
@@ -38,7 +38,7 @@ fun ListScreen(
                 }
             }
         },
-        bottomBar = bottomAppBar,
+        bottomBar = bottomBar,
         fabConfiguration = fabConfiguration
     )
 }

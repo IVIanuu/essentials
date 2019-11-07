@@ -157,7 +157,12 @@ enum class HomeItem(
     SecureSettings(
         title = "Nav bar",
         color = Color.Green,
-        route = { com.ivianuu.essentials.sample.ui.navBarRoute }
+        route = { navBarRoute }
+    ),
+    BottomNavigation(
+        title = "Bottom navigation",
+        color = Color.Red,
+        route = { bottomNavigationRoute }
     ),
     About(
         title = "About",
