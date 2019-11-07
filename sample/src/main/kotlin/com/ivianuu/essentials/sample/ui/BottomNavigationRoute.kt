@@ -16,18 +16,16 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import androidx.compose.state
 import androidx.compose.unaryPlus
-import androidx.ui.core.Text
 import androidx.ui.foundation.ColoredRect
 import androidx.ui.graphics.Color
-import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.compose.composeControllerRoute
 import com.ivianuu.essentials.ui.compose.material.BottomNavigationBar
 import com.ivianuu.essentials.ui.compose.material.BottomNavigationBarItem
+import com.ivianuu.essentials.ui.compose.material.BottomNavigationContent
+import com.ivianuu.essentials.ui.compose.material.BottomNavigationController
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
-import com.ivianuu.essentials.ui.compose.material.Icon
 import com.ivianuu.essentials.ui.compose.material.Scaffold
 import com.ivianuu.essentials.ui.compose.resources.drawableResource
 import com.ivianuu.essentials.ui.navigation.director.controllerRouteOptions
@@ -36,32 +34,29 @@ import com.ivianuu.essentials.ui.navigation.director.fade
 val bottomNavigationRoute = composeControllerRoute(
     options = controllerRouteOptions().fade()
 ) {
-    val (selectedIndex, setSelectedIndex) = +state { 0 }
-    d { "compose with selected index $selectedIndex" }
-
-    Scaffold(
-        topAppBar = { EsTopAppBar("Bottom navigation") },
-        body = {
-            val item = BottomNavigationItem.values()[selectedIndex]
-            ColoredRect(item.color)
-        },
-        bottomBar = {
-            BottomNavigationBar(
-                BottomNavigationItem.values().toList(),
-                selectedIndex = selectedIndex
-            ) { index, item ->
-                BottomNavigationBarItem(
-                    selected = index == selectedIndex,
-                    onSelected = { setSelectedIndex(index) },
-                    icon = { Icon(+drawableResource(item.iconRes)) },
-                    title = { Text(item.title) }
-                )
+    BottomNavigationController(
+        items = BottomNavItem.values().toList()
+    ) {
+        Scaffold(
+            topAppBar = { EsTopAppBar("Bottom navigation") },
+            body = {
+                BottomNavigationContent<BottomNavItem> { _, item ->
+                    ColoredRect(item.color)
+                }
+            },
+            bottomBar = {
+                BottomNavigationBar<BottomNavItem> { _, item ->
+                    BottomNavigationBarItem(
+                        icon = +drawableResource(item.iconRes),
+                        text = item.title
+                    )
+                }
             }
-        }
-    )
+        )
+    }
 }
 
-private enum class BottomNavigationItem(
+private enum class BottomNavItem(
     val title: String,
     val iconRes: Int,
     val color: Color

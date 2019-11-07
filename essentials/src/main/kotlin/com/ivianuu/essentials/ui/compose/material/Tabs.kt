@@ -49,6 +49,7 @@ class TabController<T>(
     _selectedIndex: State<Int>
 ) {
     var selectedIndex by _selectedIndex
+    val selectedItem: T get() = items[selectedIndex]
 }
 
 private val TabControllerAmbient = Ambient.of<TabController<*>>()
