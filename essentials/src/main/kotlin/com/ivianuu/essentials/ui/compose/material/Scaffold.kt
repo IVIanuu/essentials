@@ -37,7 +37,7 @@ import com.ivianuu.essentials.ui.compose.core.composable
 fun Scaffold(
     topAppBar: (@Composable() () -> Unit)? = null,
     content: @Composable() () -> Unit,
-    bottomAppBar: (@Composable() () -> Unit)? = null,
+    bottomBar: (@Composable() () -> Unit)? = null,
     fabConfiguration: Scaffold.FabConfiguration? = null
 ) = composable("Scaffold") {
     val overlays = +state { emptyList<Overlay>() }
@@ -63,9 +63,9 @@ fun Scaffold(
                     }
                 }
 
-                if (bottomAppBar != null) {
+                if (bottomBar != null) {
                     Container(modifier = Inflexible) {
-                        bottomAppBar()
+                        bottomBar()
                     }
                 }
             }

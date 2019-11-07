@@ -38,7 +38,7 @@ fun ListScreen(
                 }
             }
         },
-        bottomAppBar = bottomAppBar,
+        bottomBar = bottomAppBar,
         fabConfiguration = fabConfiguration
     )
 }

@@ -43,7 +43,7 @@ val prefsRoute = composeControllerRoute(
     options = controllerRouteOptions().vertical()
 ) {
     PrefsScreen(
-        appBar = { EsTopAppBar(title = "Prefs") },
+        topAppBar = { EsTopAppBar(title = "Prefs") },
         prefs = {
             val prefs = +inject<KPrefs>()
 
