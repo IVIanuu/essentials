@@ -36,6 +36,11 @@ enum class TwilightMode(
     val titleRes: Int,
     val descRes: Int
 ) : PrefValueHolder<String> {
+    System(
+        value = "system",
+        titleRes = R.string.es_twilight_mode_system,
+        descRes = R.string.es_twilight_mode_system_desc
+    ),
     Light(
         value = "light",
         titleRes = R.string.es_twilight_mode_light,
@@ -55,10 +60,5 @@ enum class TwilightMode(
         value = "time",
         titleRes = R.string.es_twilight_mode_time,
         descRes = R.string.es_twilight_mode_time_desc
-    ),
-    System(
-        value = "system",
-        titleRes = R.string.es_twilight_mode_system,
-        descRes = R.string.es_twilight_mode_system_desc
     )
 }
