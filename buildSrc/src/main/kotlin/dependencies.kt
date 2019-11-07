@@ -143,12 +143,8 @@ object Deps {
     object MaterialDialogs {
         private const val version = "3.1.0"
         const val core = "com.afollestad.material-dialogs:core:$version"
-        const val bottomSheets = "com.afollestad.material-dialogs:bottomsheets:$version"
         const val color = "com.afollestad.material-dialogs:color:$version"
-        const val dateTime = "com.afollestad.material-dialogs:datetime:$version"
-        const val files = "com.afollestad.material-dialogs:files:$version"
         const val input = "com.afollestad.material-dialogs:input:$version"
-        const val lifecycle = "com.afollestad.material-dialogs:lifecycle:$version"
     }
 
     const val mavenGradlePlugin = "com.github.dcendents:android-maven-gradle-plugin:2.1"

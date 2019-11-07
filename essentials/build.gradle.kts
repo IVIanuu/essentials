@@ -84,13 +84,9 @@ dependencies {
 
     api(Deps.materialComponents)
 
-    api(Deps.MaterialDialogs.bottomSheets)
     api(Deps.MaterialDialogs.color)
     api(Deps.MaterialDialogs.core)
-    api(Deps.MaterialDialogs.dateTime)
-    api(Deps.MaterialDialogs.files)
     api(Deps.MaterialDialogs.input)
-    api(Deps.MaterialDialogs.lifecycle)
 
     api(Deps.Scopes.scopes)
     api(Deps.Scopes.android)
