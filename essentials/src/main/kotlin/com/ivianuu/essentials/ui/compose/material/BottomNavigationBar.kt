@@ -41,14 +41,15 @@ import androidx.ui.material.surface.Surface
 import androidx.ui.material.textColorForBackground
 import androidx.ui.material.themeColor
 import androidx.ui.material.themeTextStyle
+import com.ivianuu.essentials.ui.compose.common.SelectionHintAmbient
 import com.ivianuu.essentials.ui.compose.core.composable
 
 @Composable
-fun BottomNavigationBar(
-    length: Int,
+fun <T> BottomNavigationBar(
+    items: List<T>,
     selectedIndex: Int,
     color: Color = +themeColor { primary },
-    item: @Composable() (index: Int, selected: Boolean) -> Unit
+    item: @Composable() (Int, T) -> Unit
 ) = composable("BottomNavigationBar") {
     Surface(color = color, elevation = BottomNavigationBarElevation) {
         Container(height = BottomNavigationBarHeight, expanded = true) {
@@ -57,7 +58,7 @@ fun BottomNavigationBar(
                     mainAxisAlignment = MainAxisAlignment.Center,
                     crossAxisAlignment = CrossAxisAlignment.Center
                 ) {
-                    val itemWidth = (thisConstraints.maxWidth / length)
+                    val itemWidth = (thisConstraints.maxWidth / items.size)
                     val density = +ambientDensity()
                     val itemConstraints = withDensity(density) {
                         DpConstraints(
@@ -71,10 +72,12 @@ fun BottomNavigationBar(
                         )
                     }
 
-                    (0..length).forEach { i ->
-                        composable(i) {
-                            ConstrainedBox(constraints = itemConstraints) {
-                                item(i, i == selectedIndex)
+                    items.forEachIndexed { index, item ->
+                        composable(index) {
+                            SelectionHintAmbient.Provider(index == selectedIndex) {
+                                ConstrainedBox(constraints = itemConstraints) {
+                                    item(index, item)
+                                }
                             }
                         }
                     }
@@ -86,12 +89,11 @@ fun BottomNavigationBar(
 
 @Composable
 fun BottomNavigationBarItem(
-    selected: Boolean,
     onClick: (() -> Unit)? = null,
     icon: @Composable() () -> Unit,
     title: @Composable() () -> Unit
 ) = composable("BottomNavigationBarItem") {
-    BottomNavigationBarItem(selected = selected, onClick = onClick) {
+    BottomNavigationBarItem(onClick = onClick) {
         Column(
             mainAxisAlignment = MainAxisAlignment.Center,
             crossAxisAlignment = CrossAxisAlignment.Center
@@ -104,7 +106,6 @@ fun BottomNavigationBarItem(
 
 @Composable
 fun BottomNavigationBarItem(
-    selected: Boolean,
     onClick: (() -> Unit)? = null,
     content: @Composable() () -> Unit
 ) = composable("BottomNavigationBarItem") {
@@ -118,6 +119,7 @@ fun BottomNavigationBarItem(
                     bottom = BottomNavigationBarItemPaddingBottom
                 )
             ) {
+                val selected = +ambient(SelectionHintAmbient)
                 val backgroundColor = +ambient(CurrentBackground)
                 val textStyle = (+themeTextStyle { caption }).copy(
                     color = (+textColorForBackground(backgroundColor))!!.copy(

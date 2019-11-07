@@ -19,6 +19,8 @@ package com.ivianuu.essentials.sample.ui
 import androidx.compose.state
 import androidx.compose.unaryPlus
 import androidx.ui.core.Text
+import androidx.ui.foundation.ColoredRect
+import androidx.ui.graphics.Color
 import androidx.ui.layout.Center
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.sample.R
@@ -42,21 +44,49 @@ val bottomNavigationRoute = composeControllerRoute(
         topAppBar = { EsTopAppBar("Bottom navigation") },
         content = {
             Center {
-                Text("Selected $selectedIndex")
+                when (BottomNavigationItem.values()[selectedIndex]) {
+                    BottomNavigationItem.Home -> {
+                        ColoredRect(Color.Red)
+                    }
+                    BottomNavigationItem.Mails -> {
+                        ColoredRect(Color.Blue)
+
+                    }
+                    BottomNavigationItem.Search -> {
+                        ColoredRect(Color.Green)
+                    }
+                }
             }
         },
         bottomBar = {
             BottomNavigationBar(
-                length = 3,
+                BottomNavigationItem.values().toList(),
                 selectedIndex = selectedIndex
-            ) { index, selected ->
+            ) { index, item ->
                 BottomNavigationBarItem(
-                    selected = selected,
                     onClick = { setSelectedIndex(index) },
-                    icon = { Icon(+drawableResource(R.drawable.es_ic_link)) },
-                    title = { Text("Index: $index") }
+                    icon = { Icon(+drawableResource(item.iconRes)) },
+                    title = { Text(item.title) }
                 )
             }
         }
+    )
+}
+
+private enum class BottomNavigationItem(
+    val title: String,
+    val iconRes: Int
+) {
+    Home(
+        "Home",
+        R.drawable.ic_home
+    ),
+    Mails(
+        "Mails",
+        R.drawable.ic_email
+    ),
+    Search(
+        "Search",
+        R.drawable.ic_search
     )
 }
