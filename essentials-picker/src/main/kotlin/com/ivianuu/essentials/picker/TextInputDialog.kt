@@ -36,7 +36,8 @@ fun textInputRoute(
     var currentValue by context.state {
         when {
             prefill != null -> prefill
-            else -> context.controller.requireActivity().string(prefillRes!!)
+            prefillRes != null -> context.controller.requireActivity().string(prefillRes!!)
+            else -> ""
         }
     }
 
