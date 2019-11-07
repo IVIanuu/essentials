@@ -16,10 +16,13 @@
 
 package com.ivianuu.essentials.securesettings
 
+import androidx.compose.ambient
 import androidx.compose.unaryPlus
 import androidx.ui.core.Text
 import androidx.ui.core.dp
 import androidx.ui.layout.Padding
+import androidx.ui.material.surface.CurrentBackground
+import androidx.ui.material.textColorForBackground
 import androidx.ui.material.themeTextStyle
 import androidx.ui.res.stringResource
 import com.ivianuu.essentials.ui.compose.common.ListScreen
@@ -50,6 +53,12 @@ fun secureSettingsRoute(showHideNavBarHint: Boolean = false) =
             topAppBar = { EsTopAppBar(+stringResource(R.string.es_title_secure_settings)) },
             listBody = {
                 Padding(padding = 16.dp) {
+                    val textColor = (+textColorForBackground(
+                        +ambient(
+                            CurrentBackground
+                        )
+                    ))!!.copy(alpha = 0.6f)
+
                     Text(
                         text = +stringResource(
                             if (showHideNavBarHint) {
@@ -58,7 +67,7 @@ fun secureSettingsRoute(showHideNavBarHint: Boolean = false) =
                                 R.string.es_pref_secure_settings_header_summary
                             }
                         ),
-                        style = +themeTextStyle { h6 }
+                        style = (+themeTextStyle { body2 }).copy(color = textColor)
                     )
                 }
 
