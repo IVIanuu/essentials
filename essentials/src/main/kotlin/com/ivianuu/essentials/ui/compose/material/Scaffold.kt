@@ -42,13 +42,13 @@ fun Scaffold(
         body: @Composable() () -> Unit
     ) -> Unit
     )? = null,
+    drawerState: State<DrawerState> = +state { DrawerState.Closed },
     topAppBar: (@Composable() () -> Unit)? = null,
     body: (@Composable() () -> Unit)? = null,
     bottomBar: (@Composable() () -> Unit)? = null,
     fabConfiguration: Scaffold.FabConfiguration? = null
 ) = composable("Scaffold") {
     val overlays = +state { emptyList<Overlay>() }
-    val drawerState = +state { DrawerState.Closed }
     val scaffold = +memo { Scaffold(overlays, drawerState) }
 
     // update state
