@@ -46,7 +46,7 @@ fun BottomNavigationBar(
     Surface(color = color, elevation = BottomNavigationBarElevation) {
         Container(height = BottomNavigationBarHeight) {
             Row {
-                (0..selectedIndex).forEach { i ->
+                (0..length).forEach { i ->
                     item(i, i == selectedIndex)
                 }
             }
