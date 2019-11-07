@@ -169,6 +169,11 @@ enum class HomeItem(
         color = Color.Blue,
         route = { drawerRoute }
     ),
+    Tabs(
+        title = "Tabs",
+        color = Color.Yellow,
+        route = { tabsRoute }
+    ),
     About(
         title = "About",
         color = Color.Yellow,

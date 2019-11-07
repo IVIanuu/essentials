@@ -142,7 +142,7 @@ internal data class Overlay(
 
 class Scaffold internal constructor(
     private val overlays: State<List<Overlay>>,
-    private val _drawerState: State<DrawerState>
+    _drawerState: State<DrawerState>
 ) {
 
     var hasTopAppBar = false
