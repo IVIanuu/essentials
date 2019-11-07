@@ -16,25 +16,52 @@
 
 package com.ivianuu.essentials.ui.compose.material
 
+import androidx.compose.Ambient
 import androidx.compose.Composable
+import androidx.compose.ambient
+import androidx.compose.effectOf
+import androidx.compose.unaryPlus
+import androidx.ui.core.Size
 import androidx.ui.core.dp
 import androidx.ui.foundation.DrawImage
 import androidx.ui.graphics.Color
 import androidx.ui.graphics.Image
 import androidx.ui.layout.Container
+import androidx.ui.material.textColorForBackground
 import com.ivianuu.essentials.ui.compose.core.composable
 
 @Composable
 fun Icon(
     image: Image,
-    tint: Color?
+    style: IconStyle = +ambient(CurrentIconStyleAmbient),
+    size: Size = style.size,
+    tint: Color? = style.tint
 ) = composable("Icon") {
     Container(
-        width = IconSize,
-        height = IconSize
+        width = size.width,
+        height = size.height
     ) {
         DrawImage(image = image, tint = tint)
     }
 }
 
-private val IconSize = 24.dp
+data class IconStyle(
+    val size: Size = Size(DefaultIconSize, DefaultIconSize),
+    val tint: Color? = null
+)
+
+val CurrentIconStyleAmbient = Ambient.of { IconStyle() }
+
+fun <T> iconStyleValue(
+    choosingBlock: IconStyle.() -> T
+) = effectOf<T> {
+    (+ambient(CurrentIconStyleAmbient)).choosingBlock()
+}
+
+private val DefaultIconSize = 24.dp
+
+fun AvatarIconStyle() = IconStyle(size = Size(AvatarSize, AvatarSize), tint = null)
+
+private val AvatarSize = 40.dp
+
+fun iconColorForBackground(background: Color) = textColorForBackground(background)

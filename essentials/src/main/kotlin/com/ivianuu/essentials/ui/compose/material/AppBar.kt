@@ -28,7 +28,6 @@ import androidx.ui.material.surface.CurrentBackground
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.compose.core.RouteAmbient
 import com.ivianuu.essentials.ui.compose.core.composable
-import com.ivianuu.essentials.ui.compose.image.iconColorForBackground
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.compose.resources.drawableResource
 import com.ivianuu.essentials.ui.navigation.Navigator
@@ -48,7 +47,7 @@ fun EsTopAppBar(
     val route = +ambient(RouteAmbient)
 
     val navigationIconComposable: @Composable (() -> Unit)? =
-        if (navigator.backStack.indexOf(route) > 0) {
+        if (leading != null || navigator.backStack.indexOf(route) > 0) {
             { EsNavigationIcon() }
         } else {
             null
@@ -56,7 +55,7 @@ fun EsTopAppBar(
 
     TopAppBar(
         title = title,
-        navigationIcon = leading ?: navigationIconComposable,
+        navigationIcon = navigationIconComposable,
         actionData = listOfNotNull(trailing),
         action = { it() }
     )
