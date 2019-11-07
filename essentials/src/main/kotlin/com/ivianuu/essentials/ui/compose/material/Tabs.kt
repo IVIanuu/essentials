@@ -16,58 +16,80 @@
 
 package com.ivianuu.essentials.ui.compose.material
 
+import androidx.compose.Ambient
 import androidx.compose.Composable
-import androidx.ui.core.Layout
-import androidx.ui.core.ipx
-import com.ivianuu.essentials.ui.compose.common.SelectionHintAmbient
+import androidx.compose.State
+import androidx.compose.ambient
+import androidx.compose.effectOf
+import androidx.compose.memo
+import androidx.compose.state
+import androidx.compose.unaryPlus
+import androidx.ui.graphics.Image
+import androidx.ui.material.Tab
+import androidx.ui.material.TabRow
 import com.ivianuu.essentials.ui.compose.core.composable
 
-@Composable
-fun <T> TabContent(
+fun <T> TabController(
     items: List<T>,
-    selectedIndex: Int,
-    item: @Composable() (Int, T) -> Unit
-) = composable("TabContent") {
-    SimpleTabContent(items, selectedIndex, item)
+    initialIndex: Int = 0,
+    children: @Composable() () -> Unit
+) {
+    val selectedIndex = +state { initialIndex }
+    val tabController = +memo { TabController(items, selectedIndex) }
+    tabController.items = items
+    TabControllerAmbient.Provider(tabController, children)
 }
 
-@Composable
-private fun <T> SimpleTabContent(
-    items: List<T>,
-    selectedIndex: Int,
-    item: @Composable() (Int, T) -> Unit
-) = composable("SimpleTabContent") {
-    item(selectedIndex, items[selectedIndex])
+fun <T> ambientTabController() = effectOf<TabController<T>> {
+    +ambient(TabControllerAmbient) as TabController<T>
 }
 
+class TabController<T>(
+    var items: List<T>,
+    _selectedIndex: State<Int>
+) {
+    var selectedIndex by _selectedIndex
+}
+
+private val TabControllerAmbient = Ambient.of<TabController<*>>()
+
 @Composable
-private fun <T> DraggableTabContent(
-    items: List<T>,
-    selectedIndex: Int,
-    item: @Composable() (Int, T) -> Unit
-) = composable("DraggableTabContent") {
-    Layout({
-        items.forEachIndexed { index, item ->
-            composable(index) {
-                SelectionHintAmbient.Provider(index == selectedIndex) {
-                    item(index, item)
-                }
+fun <T> TabRow(
+    tabController: TabController<T> = +ambientTabController<T>(),
+    scrollable: Boolean = false,
+    indicatorContainer: @Composable() (tabPositions: List<TabRow.TabPosition>) -> Unit = { tabPositions ->
+        TabRow.IndicatorContainer(tabPositions, tabController.selectedIndex) {
+            TabRow.Indicator()
+        }
+    },
+    tab: @Composable() (Int, T) -> Unit
+) = composable("TabRow") {
+    TabRow(
+        items = tabController.items,
+        selectedIndex = tabController.selectedIndex,
+        scrollable = scrollable,
+        indicatorContainer = indicatorContainer,
+        tab = { index, item ->
+            TabIndexAmbient.Provider(index) {
+                tab(index, item)
             }
         }
-    }) { measureables, constraints ->
-        val childConstraints = constraints.copy(
-            minWidth = constraints.maxWidth,
-            minHeight = constraints.maxHeight
-        )
+    )
+}
 
-        val placeables = measureables.map { it.measure(childConstraints) }
+val TabIndexAmbient = Ambient.of<Int>()
 
-        layout(constraints.maxWidth, constraints.maxHeight) {
-            var offset = -(constraints.maxWidth * selectedIndex)
-            placeables.forEach {
-                it.place(offset, 0.ipx)
-                offset += constraints.maxWidth
-            }
-        }
-    }
+@Composable
+fun Tab(
+    text: String? = null,
+    icon: Image? = null
+) = composable("Tab") {
+    val tabController = +ambientTabController<Any?>()
+    val tabIndex = +ambient(TabIndexAmbient)
+    Tab(
+        text = text,
+        icon = icon,
+        selected = tabController.selectedIndex == tabIndex,
+        onSelected = { tabController.selectedIndex = tabIndex }
+    )
 }

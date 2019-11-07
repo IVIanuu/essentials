@@ -16,49 +16,39 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import androidx.compose.state
-import androidx.compose.unaryPlus
 import androidx.ui.foundation.ColoredRect
 import androidx.ui.graphics.Color
 import androidx.ui.layout.Column
-import androidx.ui.material.Tab
-import androidx.ui.material.TabRow
 import com.ivianuu.essentials.ui.compose.composeControllerRoute
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
 import com.ivianuu.essentials.ui.compose.material.Scaffold
+import com.ivianuu.essentials.ui.compose.material.Tab
 import com.ivianuu.essentials.ui.compose.material.TabContent
+import com.ivianuu.essentials.ui.compose.material.TabController
+import com.ivianuu.essentials.ui.compose.material.TabRow
 import com.ivianuu.essentials.ui.navigation.director.controllerRouteOptions
 import com.ivianuu.essentials.ui.navigation.director.vertical
 
 val tabsRoute = composeControllerRoute(
     options = controllerRouteOptions().vertical()
 ) {
-    val (selectedIndex, setSelectedIndex) = +state { 0 }
     val items = listOf(Color.Blue, Color.Red, Color.Yellow, Color.Green, Color.Cyan)
 
-    Scaffold(
-        topAppBar = {
-            Column {
-                EsTopAppBar("Tabs")
-                TabRow(
-                    items = items,
-                    selectedIndex = selectedIndex,
-                    tab = { index, item ->
-                        Tab(text = "Item: $index", selected = index == selectedIndex, onSelected = {
-                            setSelectedIndex(index)
-                        })
+    TabController(items = items) {
+        Scaffold(
+            topAppBar = {
+                Column {
+                    EsTopAppBar("Tabs")
+                    TabRow<Color> { index, item ->
+                        Tab(text = "Item: $index")
                     }
-                )
-            }
-        },
-        body = {
-            TabContent(
-                items = items,
-                selectedIndex = selectedIndex,
-                item = { index, item ->
+                }
+            },
+            body = {
+                TabContent<Color> { _, item ->
                     ColoredRect(color = item)
                 }
-            )
-        }
-    )
+            }
+        )
+    }
 }
