@@ -32,6 +32,7 @@ import androidx.ui.layout.Padding
 import androidx.ui.layout.Stack
 import androidx.ui.material.DrawerState
 import com.ivianuu.essentials.ui.compose.core.composable
+import com.ivianuu.essentials.ui.compose.dialog.DialogManager
 
 @Composable
 fun Scaffold(
@@ -58,74 +59,76 @@ fun Scaffold(
     scaffold.hasFab = fabConfiguration != null
 
     ScaffoldAmbient.Provider(value = scaffold) {
-        Stack {
-            OnPositioned { scaffold.coordinates = it }
+        DialogManager {
+            Stack {
+                OnPositioned { scaffold.coordinates = it }
 
-            val finalBody: @Composable() () -> Unit = {
-                Column {
-                    if (topAppBar != null) {
-                        Container(modifier = Inflexible) {
-                            topAppBar()
+                val finalBody: @Composable() () -> Unit = {
+                    Column {
+                        if (topAppBar != null) {
+                            Container(modifier = Inflexible) {
+                                topAppBar()
+                            }
                         }
-                    }
 
-                    if (body != null) {
-                        Container(
-                            alignment = Alignment.TopLeft,
-                            modifier = Flexible(1f)
-                        ) {
-                            EsSurface {
-                                body()
+                        if (body != null) {
+                            Container(
+                                alignment = Alignment.TopLeft,
+                                modifier = Flexible(1f)
+                            ) {
+                                EsSurface {
+                                    body()
+                                }
+                            }
+                        }
+
+                        if (bottomBar != null) {
+                            Container(modifier = Inflexible) {
+                                bottomBar()
                             }
                         }
                     }
 
-                    if (bottomBar != null) {
-                        Container(modifier = Inflexible) {
-                            bottomBar()
+                    if (fabConfiguration != null) {
+                        aligned(
+                            when (fabConfiguration.position) {
+                                Scaffold.FabPosition.Center -> Alignment.BottomCenter
+                                Scaffold.FabPosition.End -> Alignment.BottomRight
+                            }
+                        ) {
+                            Padding(padding = 16.dp) {
+                                fabConfiguration.fab()
+                            }
                         }
                     }
+
+                    // show overlays
+                    overlays.value
+                        .filter { it.inBody }
+                        .forEach { overlay ->
+                            overlay.composable {
+                                scaffold.removeOverlay(overlay)
+                            }
+                        }
                 }
 
-                if (fabConfiguration != null) {
-                    aligned(
-                        when (fabConfiguration.position) {
-                            Scaffold.FabPosition.Center -> Alignment.BottomCenter
-                            Scaffold.FabPosition.End -> Alignment.BottomRight
-                        }
-                    ) {
-                        Padding(padding = 16.dp) {
-                            fabConfiguration.fab()
-                        }
-                    }
+                if (drawer != null) {
+                    drawer(
+                        drawerState.value,
+                        { drawerState.value = it },
+                        finalBody
+                    )
+                } else {
+                    finalBody()
                 }
 
                 // show overlays
                 overlays.value
-                    .filter { it.inBody }
+                    .filterNot { it.inBody }
                     .forEach { overlay ->
                         overlay.composable {
                             scaffold.removeOverlay(overlay)
                         }
-                    }
-            }
-
-            if (drawer != null) {
-                drawer(
-                    drawerState.value,
-                    { drawerState.value = it },
-                    finalBody
-                )
-            } else {
-                finalBody()
-            }
-
-            // show overlays
-            overlays.value
-                .filterNot { it.inBody }
-                .forEach { overlay ->
-                    overlay.composable {
-                        scaffold.removeOverlay(overlay)
                     }
             }
         }
