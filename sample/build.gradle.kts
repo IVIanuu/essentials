@@ -29,15 +29,7 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-kapt.gradle")
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-source-sets-android.gradle")
 
-android {
-    defaultConfig {
-        targetSdkVersion(Build.targetSdkSample)
-    }
-}
-
 dependencies {
-    implementation(Deps.AndroidX.Ui.material)
-
     implementation(project(":essentials"))
     implementation(project(":essentials-about"))
     implementation(project(":essentials-apps"))
@@ -50,8 +42,6 @@ dependencies {
     implementation(project(":essentials-securesettings"))
     implementation(project(":essentials-shell"))
     implementation(project(":essentials-work"))
-
     kapt(project(":essentials-compiler"))
-
     testImplementation(project(":essentials-test"))
 }

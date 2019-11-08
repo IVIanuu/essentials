@@ -17,11 +17,9 @@
 package com.ivianuu.essentials.ui.compose.material
 
 import androidx.compose.Composable
-import androidx.compose.ambient
 import androidx.compose.unaryPlus
 import androidx.ui.core.Alignment
 import androidx.ui.core.CurrentTextStyleProvider
-import androidx.ui.core.PxPosition
 import androidx.ui.core.dp
 import androidx.ui.core.gesture.PressGestureDetector
 import androidx.ui.foundation.shape.corner.RoundedCornerShape
@@ -42,32 +40,25 @@ import androidx.ui.material.Divider
 import androidx.ui.material.TextButtonStyle
 import androidx.ui.material.surface.Card
 import androidx.ui.material.themeTextStyle
-import com.ivianuu.essentials.ui.compose.common.onBackPressed
 import com.ivianuu.essentials.ui.compose.core.composable
-import com.ivianuu.essentials.ui.compose.dialog.DismissDialogAmbient
+import com.ivianuu.essentials.ui.compose.dialog.Dialog
+import com.ivianuu.essentials.ui.compose.dialog.dismissDialog
 
 // todo remove hardcoded values
 
+@Composable
 fun AlertDialog(
     dismissOnOutsideTouch: Boolean = true,
     dismissOnBackClick: Boolean = true,
     showDividers: Boolean = false,
+    applyContentPadding: Boolean = true,
     title: (@Composable() () -> Unit)? = null,
     content: (@Composable() () -> Unit)? = null,
     buttons: (@Composable() () -> Unit)? = null
-) {
-    val dismissDialog = +ambient(DismissDialogAmbient)
-
-    if (dismissOnBackClick) {
-        composable("back clicks") {
-            +onBackPressed(callback = dismissDialog)
-        }
-    }
-
-    PressGestureDetector(
-        onPress = if (dismissOnOutsideTouch) {
-            { _: PxPosition -> dismissDialog() }
-        } else null
+) = composable("AlertDialog") {
+    Dialog(
+        dismissOnOutsideTouch = dismissOnOutsideTouch,
+        dismissOnBackClick = dismissOnBackClick
     ) {
         Wrap(alignment = Alignment.Center) {
             Padding(
@@ -118,8 +109,8 @@ fun AlertDialog(
                                         modifier = ExpandedWidth,
                                         alignment = Alignment.TopLeft,
                                         padding = EdgeInsets(
-                                            left = 24.dp,
-                                            right = 24.dp
+                                            left = if (applyContentPadding) 24.dp else 0.dp,
+                                            right = if (applyContentPadding) 24.dp else 0.dp
                                         )
                                     ) {
                                         CurrentTextStyleProvider(
@@ -131,15 +122,15 @@ fun AlertDialog(
                                         }
                                     }
 
-                                    if (buttons != null && showDividers) DialogDivider()
-
                                     if (buttons == null) {
                                         HeightSpacer(24.dp)
                                     }
                                 }
 
                                 if (buttons != null) {
-                                    if (content != null || title != null) {
+                                    if (content != null && showDividers) {
+                                        DialogDivider()
+                                    } else if (content != null || title != null) {
                                         HeightSpacer(28.dp)
                                     }
 
@@ -176,7 +167,7 @@ fun DialogButton(
     dismissDialogOnClick: Boolean = true,
     onClick: (() -> Unit)? = null
 ) = composable("DialogButton") {
-    val dismissDialog = +ambient(DismissDialogAmbient)
+    val dismissDialog = +dismissDialog()
     Button(
         text = text.toUpperCase(), // todo find a better way for uppercase
         onClick = onClick?.let { nonNullOnClick ->
@@ -187,6 +178,11 @@ fun DialogButton(
         },
         style = TextButtonStyle()
     )
+}
+
+@Composable
+fun DialogCloseButton(text: String) = composable("DialogCloseButton") {
+    DialogButton(text = text, dismissDialogOnClick = true, onClick = {})
 }
 
 @Composable

@@ -28,19 +28,24 @@ import androidx.ui.foundation.VerticalScroller
 import androidx.ui.layout.Column
 import androidx.ui.layout.Container
 import androidx.ui.layout.CrossAxisAlignment
+import androidx.ui.layout.EdgeInsets
 import androidx.ui.layout.ExpandedWidth
 import androidx.ui.layout.HeightSpacer
 import androidx.ui.layout.MainAxisAlignment
 import androidx.ui.layout.Row
+import androidx.ui.layout.WidthSpacer
 import androidx.ui.material.Button
 import androidx.ui.material.RadioButton
+import androidx.ui.material.ripple.Ripple
 import androidx.ui.material.themeTextStyle
 import com.ivianuu.essentials.ui.compose.common.BlockChildTouches
 import com.ivianuu.essentials.ui.compose.composeControllerRoute
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.dialog.DialogManagerAmbient
+import com.ivianuu.essentials.ui.compose.dialog.DismissDialogAmbient
 import com.ivianuu.essentials.ui.compose.material.AlertDialog
 import com.ivianuu.essentials.ui.compose.material.DialogButton
+import com.ivianuu.essentials.ui.compose.material.DialogCloseButton
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
 import com.ivianuu.essentials.ui.compose.material.Scaffold
 import com.ivianuu.essentials.ui.compose.material.SimpleListItem
@@ -133,12 +138,13 @@ val dialogsRoute = composeControllerRoute(
                         )
                     }
 
-
-                    val items = listOf(1, 2, 3, 4, 5)
-                    val selectedItem = +state { 1 }
                     DialogLauncherButton(
                         text = "Single choice list"
                     ) {
+                        val items = listOf(1, 2, 3, 4, 5)
+                        val selectedItem = +state { 1 }
+                        val dismissDialog = +ambient(DismissDialogAmbient)
+
                         SingleChoiceListDialog(
                             title = { Text("List") },
                             items = items,
@@ -147,11 +153,14 @@ val dialogsRoute = composeControllerRoute(
                                 SingleChoiceListDialogItem(
                                     title = "Item: $item",
                                     selected = selected,
-                                    onSelect = { selectedItem.value = item }
+                                    onSelect = {
+                                        selectedItem.value = item
+                                        dismissDialog()
+                                    }
                                 )
                             },
                             buttons = {
-                                DialogButton(text = "Close", onClick = {})
+                                DialogCloseButton(text = "Cancel")
                             }
                         )
                     }
@@ -174,6 +183,7 @@ fun <T> SingleChoiceListDialog(
     ListDialog(
         dismissOnOutsideTouch = dismissOnOutsideTouch,
         dismissOnBackClick = dismissOnBackClick,
+        applyContentPadding = false,
         title = title,
         buttons = buttons,
         listContent = {
@@ -190,32 +200,34 @@ fun SingleChoiceListDialogItem(
     selected: Boolean,
     onSelect: () -> Unit
 ) = composable("SingleChoiceListDialogItem") {
-    Clickable(onClick = onSelect) {
-        Container(
-            modifier = ExpandedWidth,
-            height = 48.dp,
-            alignment = Alignment.CenterLeft
-        ) {
-            Row(
-                mainAxisAlignment = MainAxisAlignment.End,
-                crossAxisAlignment = CrossAxisAlignment.Center
+    Ripple(bounded = true) {
+        Clickable(onClick = onSelect) {
+            Container(
+                modifier = ExpandedWidth,
+                height = 48.dp,
+                padding = EdgeInsets(
+                    left = 24.dp,
+                    right = 24.dp
+                ),
+                alignment = Alignment.CenterLeft
             ) {
-                Container(
-                    modifier = Flexible(1f)
+                Row(
+                    mainAxisAlignment = MainAxisAlignment.End,
+                    crossAxisAlignment = CrossAxisAlignment.Center
                 ) {
-                    Text(
-                        text = title,
-                        style = +themeTextStyle { subtitle1 }
-                    )
-                }
-
-                Container(modifier = Inflexible) {
                     BlockChildTouches {
                         RadioButton(
                             selected = selected,
                             onSelect = {}
                         )
                     }
+
+                    WidthSpacer(24.dp)
+
+                    Text(
+                        text = title,
+                        style = +themeTextStyle { subtitle1 }
+                    )
                 }
             }
         }
@@ -226,6 +238,7 @@ fun SingleChoiceListDialogItem(
 fun ListDialog(
     dismissOnOutsideTouch: Boolean = true,
     dismissOnBackClick: Boolean = true,
+    applyContentPadding: Boolean = true,
     title: (@Composable() () -> Unit)? = null,
     listContent: @Composable() () -> Unit,
     buttons: (@Composable() () -> Unit)? = null
@@ -235,8 +248,12 @@ fun ListDialog(
         dismissOnBackClick = dismissOnBackClick,
         title = title,
         showDividers = true,
+        applyContentPadding = applyContentPadding,
         content = {
-            Container(modifier = ExpandedWidth, height = 300.dp) {
+            Container(
+                modifier = ExpandedWidth,
+                alignment = Alignment.TopLeft
+            ) {
                 VerticalScroller {
                     Column {
                         listContent()

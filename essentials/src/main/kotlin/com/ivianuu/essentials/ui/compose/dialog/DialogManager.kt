@@ -19,13 +19,40 @@ package com.ivianuu.essentials.ui.compose.dialog
 import androidx.compose.Ambient
 import androidx.compose.Composable
 import androidx.compose.ambient
+import androidx.compose.effectOf
 import androidx.compose.memo
 import androidx.compose.unaryPlus
+import androidx.ui.core.PxPosition
+import androidx.ui.core.gesture.PressGestureDetector
 import androidx.ui.foundation.ColoredRect
 import androidx.ui.graphics.Color
+import com.ivianuu.essentials.ui.compose.common.onBackPressed
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.material.Scaffold
 import com.ivianuu.essentials.ui.compose.material.ScaffoldAmbient
+
+@Composable
+fun Dialog(
+    dismissOnOutsideTouch: Boolean = true,
+    dismissOnBackClick: Boolean = true,
+    body: @Composable() () -> Unit
+) = composable("Dialog") {
+    val dismissDialog = +ambient(DismissDialogAmbient)
+
+    if (dismissOnBackClick) {
+        composable("back clicks") {
+            +onBackPressed(callback = dismissDialog)
+        }
+    }
+
+    PressGestureDetector(
+        onPress = if (dismissOnOutsideTouch) {
+            { _: PxPosition -> dismissDialog() }
+        } else null
+    ) {
+        body()
+    }
+}
 
 fun DialogManager(children: @Composable() () -> Unit) {
     val scaffold = +ambient(ScaffoldAmbient)
@@ -34,6 +61,8 @@ fun DialogManager(children: @Composable() () -> Unit) {
 }
 
 val DismissDialogAmbient = Ambient.of<() -> Unit>()
+
+fun dismissDialog() = effectOf<() -> Unit> { +ambient(DismissDialogAmbient) }
 
 class DialogManager internal constructor(private val scaffold: Scaffold) {
 
