@@ -23,11 +23,16 @@ import androidx.compose.unaryPlus
 import androidx.ui.core.Text
 import androidx.ui.core.dp
 import androidx.ui.foundation.VerticalScroller
+import androidx.ui.graphics.Color
 import androidx.ui.layout.Column
 import androidx.ui.layout.CrossAxisAlignment
 import androidx.ui.layout.HeightSpacer
 import androidx.ui.layout.MainAxisAlignment
 import androidx.ui.material.Button
+import androidx.ui.material.themeColor
+import com.ivianuu.essentials.picker.ColorPickerDialog
+import com.ivianuu.essentials.picker.PRIMARY_COLORS
+import com.ivianuu.essentials.picker.PRIMARY_COLORS_SUB
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.compose.composeControllerRoute
 import com.ivianuu.essentials.ui.compose.core.composable
@@ -55,7 +60,7 @@ val dialogsRoute = composeControllerRoute(
             VerticalScroller {
                 Column(
                     mainAxisAlignment = MainAxisAlignment.Center,
-                    crossAxisAlignment = CrossAxisAlignment.Start
+                    crossAxisAlignment = CrossAxisAlignment.Center
                 ) {
                     DialogLauncherButton(
                         text = "Simple"
@@ -63,14 +68,8 @@ val dialogsRoute = composeControllerRoute(
                         AlertDialog(
                             title = { Text("Simple") },
                             content = { Text("This is a message") },
-                            buttons = {
-                                DialogButton(
-                                    text = "OK",
-                                    onClick = {})
-                                DialogButton(
-                                    text = "Cancel",
-                                    onClick = {})
-                            }
+                            positiveButton = { DialogCloseButton("OK") },
+                            negativeButton = { DialogCloseButton("Cancel") }
                         )
                     }
 
@@ -89,7 +88,7 @@ val dialogsRoute = composeControllerRoute(
                         AlertDialog(
                             title = { Text("With icon") },
                             icon = { Icon(+drawableResource(R.drawable.ic_settings)) },
-                            buttons = { DialogCloseButton("OK") }
+                            positiveButton = { DialogCloseButton("OK") }
                         )
                     }
 
@@ -105,15 +104,8 @@ val dialogsRoute = composeControllerRoute(
                         text = "Buttons only"
                     ) {
                         AlertDialog(
-                            buttons = {
-                                DialogButton(
-                                    text = "OK",
-                                    onClick = {})
-
-                                DialogButton(
-                                    text = "Cancel",
-                                    onClick = {})
-                            }
+                            positiveButton = { DialogCloseButton("OK") },
+                            negativeButton = { DialogCloseButton("Cancel") }
                         )
                     }
 
@@ -123,11 +115,7 @@ val dialogsRoute = composeControllerRoute(
                         AlertDialog(
                             dismissOnOutsideTouch = false,
                             title = { Text("Not cancelable") },
-                            buttons = {
-                                DialogButton(
-                                    text = "Close",
-                                    onClick = {})
-                            }
+                            negativeButton = { DialogCloseButton("Close") }
                         )
                     }
 
@@ -146,11 +134,7 @@ val dialogsRoute = composeControllerRoute(
                                     )
                                 }
                             },
-                            buttons = {
-                                DialogButton(
-                                    text = "Close",
-                                    onClick = {})
-                            }
+                            negativeButton = { DialogCloseButton("Close") }
                         )
                     }
 
@@ -168,11 +152,13 @@ val dialogsRoute = composeControllerRoute(
                             onSelect = setTmpSelectedItem,
                             dismissOnSelect = false,
                             item = { Text("Item: $it") },
-                            buttons = {
-                                DialogCloseButton(text = "Cancel")
+                            positiveButton = {
                                 DialogButton(text = "OK", onClick = {
                                     setSelectedSingleChoiceItem(tmpSelectedItem)
                                 })
+                            },
+                            negativeButton = {
+                                DialogCloseButton(text = "Cancel")
                             }
                         )
                     }
@@ -190,12 +176,29 @@ val dialogsRoute = composeControllerRoute(
                             selectedItems = tmpSelectedItems,
                             onSelectionsChanged = setTmpSelectedItems,
                             item = { Text(it) },
-                            buttons = {
-                                DialogCloseButton(text = "Cancel")
+                            positiveButton = {
                                 DialogButton(text = "OK", onClick = {
                                     setSelectedMultiChoiceItems(tmpSelectedItems)
                                 })
+                            },
+                            negativeButton = {
+                                DialogCloseButton(text = "Cancel")
                             }
+                        )
+                    }
+
+                    val primaryColor = +themeColor { primary }
+                    val (currentColor, setCurrentColor) = +state { primaryColor }
+                    DialogLauncherButton(text = "Color Picker") {
+                        ColorPickerDialog(
+                            title = { Text("Color Picker") },
+                            colors = PRIMARY_COLORS.map { Color(it) }.toList() + PRIMARY_COLORS_SUB.flatMap { it.toList() }.map {
+                                Color(
+                                    it
+                                )
+                            },
+                            initialColor = currentColor,
+                            onColorSelected = setCurrentColor
                         )
                     }
                 }

@@ -29,16 +29,19 @@ fun <T> MultiChoiceListDialog(
     item: @Composable() (T) -> Unit,
     dismissOnOutsideTouch: Boolean = true,
     dismissOnBackClick: Boolean = true,
+    buttonLayout: AlertDialogButtonLayout = AlertDialogButtonLayout.SideBySide,
     icon: @Composable() (() -> Unit)? = null,
     title: (@Composable() () -> Unit)? = null,
-    buttons: (@Composable() () -> Unit)? = null
+    positiveButton: (@Composable() () -> Unit)? = null,
+    negativeButton: (@Composable() () -> Unit)? = null,
+    neutralButton: (@Composable() () -> Unit)? = null
 ) = composable("MultiChoiceListDialog") {
     ListDialog(
         dismissOnOutsideTouch = dismissOnOutsideTouch,
         dismissOnBackClick = dismissOnBackClick,
         icon = icon,
         title = title,
-        buttons = buttons,
+        buttonLayout = buttonLayout,
         listContent = {
             items.forEachIndexed { index, item ->
                 composable(index) {
@@ -60,7 +63,10 @@ fun <T> MultiChoiceListDialog(
                     )
                 }
             }
-        }
+        },
+        positiveButton = positiveButton,
+        negativeButton = negativeButton,
+        neutralButton = neutralButton
     )
 }
 

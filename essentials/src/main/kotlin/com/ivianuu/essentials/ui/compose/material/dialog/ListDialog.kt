@@ -36,10 +36,13 @@ import com.ivianuu.essentials.ui.compose.core.composable
 fun ListDialog(
     dismissOnOutsideTouch: Boolean = true,
     dismissOnBackClick: Boolean = true,
+    buttonLayout: AlertDialogButtonLayout = AlertDialogButtonLayout.SideBySide,
     icon: @Composable() (() -> Unit)? = null,
     title: (@Composable() () -> Unit)? = null,
     listContent: @Composable() () -> Unit,
-    buttons: (@Composable() () -> Unit)? = null
+    positiveButton: (@Composable() () -> Unit)? = null,
+    negativeButton: (@Composable() () -> Unit)? = null,
+    neutralButton: (@Composable() () -> Unit)? = null
 ) = composable("ListDialog") {
     AlertDialog(
         dismissOnOutsideTouch = dismissOnOutsideTouch,
@@ -48,6 +51,7 @@ fun ListDialog(
         title = title,
         showDividers = true,
         applyContentPadding = false,
+        buttonLayout = buttonLayout,
         content = {
             VerticalScroller {
                 Column {
@@ -55,7 +59,9 @@ fun ListDialog(
                 }
             }
         },
-        buttons = buttons
+        positiveButton = positiveButton,
+        negativeButton = negativeButton,
+        neutralButton = neutralButton
     )
 }
 

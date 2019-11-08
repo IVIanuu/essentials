@@ -29,10 +29,12 @@ import androidx.ui.core.gesture.PressGestureDetector
 import androidx.ui.core.ipx
 import androidx.ui.foundation.shape.corner.RoundedCornerShape
 import androidx.ui.layout.Center
+import androidx.ui.layout.Column
 import androidx.ui.layout.ConstrainedBox
 import androidx.ui.layout.Container
 import androidx.ui.layout.CrossAxisAlignment
 import androidx.ui.layout.DpConstraints
+import androidx.ui.layout.EdgeInsets
 import androidx.ui.layout.MainAxisAlignment
 import androidx.ui.layout.Padding
 import androidx.ui.layout.Row
@@ -49,7 +51,6 @@ import com.ivianuu.essentials.ui.compose.material.colorForCurrentBackground
 
 // todo remove hardcoded values
 // todo add more styleable attributes such as corner radius
-// todo add stack buttons mode
 
 @Composable
 fun AlertDialog(
@@ -57,10 +58,13 @@ fun AlertDialog(
     dismissOnBackClick: Boolean = true,
     showDividers: Boolean = false,
     applyContentPadding: Boolean = true,
+    buttonLayout: AlertDialogButtonLayout = AlertDialogButtonLayout.SideBySide,
     icon: (@Composable() () -> Unit)? = null,
     title: (@Composable() () -> Unit)? = null,
     content: (@Composable() () -> Unit)? = null,
-    buttons: (@Composable() () -> Unit)? = null
+    positiveButton: (@Composable() () -> Unit)? = null,
+    negativeButton: (@Composable() () -> Unit)? = null,
+    neutralButton: (@Composable() () -> Unit)? = null
 ) = composable("AlertDialog") {
     Dialog(
         dismissOnOutsideTouch = dismissOnOutsideTouch,
@@ -70,13 +74,21 @@ fun AlertDialog(
             DialogBody(
                 showDividers = showDividers,
                 applyContentPadding = applyContentPadding,
+                buttonLayout = buttonLayout,
                 icon = icon,
                 title = title,
                 content = content,
-                buttons = buttons
+                positiveButton = positiveButton,
+                negativeButton = negativeButton,
+                neutralButton = neutralButton
             )
         }
     }
+}
+
+enum class AlertDialogButtonLayout {
+    SideBySide,
+    Stacked
 }
 
 @Composable
@@ -91,7 +103,12 @@ private fun DialogFrame(
             bottom = 32.dp
         ) {
             PressGestureDetector {
-                ConstrainedBox(constraints = DpConstraints(minWidth = 280.dp)) {
+                ConstrainedBox(
+                    constraints = DpConstraints(
+                        minWidth = 280.dp,
+                        maxWidth = 356.dp
+                    )
+                ) {
                     Card(
                         shape = RoundedCornerShape(size = 8.dp),
                         elevation = 24.dp
@@ -106,12 +123,15 @@ private fun DialogFrame(
 
 @Composable
 private fun DialogBody(
-    showDividers: Boolean = false,
-    applyContentPadding: Boolean = true,
-    icon: @Composable() (() -> Unit)? = null,
-    title: (@Composable() () -> Unit)? = null,
-    content: (@Composable() () -> Unit)? = null,
-    buttons: (@Composable() () -> Unit)? = null
+    showDividers: Boolean,
+    applyContentPadding: Boolean,
+    buttonLayout: AlertDialogButtonLayout,
+    icon: @Composable() (() -> Unit)?,
+    title: (@Composable() () -> Unit)?,
+    content: (@Composable() () -> Unit)?,
+    positiveButton: (@Composable() () -> Unit)?,
+    negativeButton: (@Composable() () -> Unit)?,
+    neutralButton: (@Composable() () -> Unit)?
 ) = composable("DialogBody") {
     val header: (@Composable() () -> Unit)? = if (icon != null || title != null) {
         {
@@ -154,54 +174,49 @@ private fun DialogBody(
         null
     }
 
+    val finalContent = if (content != null) {
+        {
+            CurrentTextStyleProvider(
+                (+themeTextStyle { subtitle1 }).copy(
+                    color = (+colorForCurrentBackground()).copy(alpha = SecondaryTextAlpha)
+                )
+            ) {
+                content()
+            }
+        }
+    } else {
+        null
+    }
+
+    val buttons = if (positiveButton != null || negativeButton != null || neutralButton != null) {
+        {
+            DialogButtons(
+                layout = buttonLayout,
+                positiveButton = positiveButton,
+                negativeButton = negativeButton,
+                neutralButton = neutralButton
+            )
+        }
+    } else {
+        null
+    }
+
     DialogContentLayout(
         showDividers = showDividers,
         applyContentPadding = applyContentPadding,
         header = header,
-        content = content?.let {
-            {
-                CurrentTextStyleProvider(
-                    (+themeTextStyle { subtitle1 }).copy(
-                        color = (+colorForCurrentBackground()).copy(alpha = SecondaryTextAlpha)
-                    )
-                ) {
-                    content()
-                }
-            }
-        },
-        buttons = buttons?.let {
-            {
-                Container(
-                    expanded = true,
-                    alignment = Alignment.CenterRight,
-                    height = 52.dp
-                ) {
-                    Padding(padding = 8.dp) {
-                        Row(
-                            mainAxisAlignment = MainAxisAlignment.End,
-                            crossAxisAlignment = CrossAxisAlignment.Center
-                        ) {
-                            buttons()
-                        }
-                    }
-                }
-            }
-        }
+        content = finalContent,
+        buttons = buttons
     )
 }
 
 @Composable
-private fun DialogDivider() = composable("DialogDivider") {
-    Divider(color = (+colorForCurrentBackground()).copy(alpha = 0.12f))
-}
-
-@Composable
-fun DialogContentLayout(
-    showDividers: Boolean = false,
-    applyContentPadding: Boolean = true,
-    header: @Composable() (() -> Unit)? = null,
-    content: @Composable() (() -> Unit)? = null,
-    buttons: @Composable() (() -> Unit)? = null
+private fun DialogContentLayout(
+    showDividers: Boolean,
+    applyContentPadding: Boolean,
+    header: @Composable() (() -> Unit)?,
+    content: @Composable() (() -> Unit)?,
+    buttons: @Composable() (() -> Unit)?
 ) = composable("DialogContentLayout") {
     val children: @Composable() () -> Unit = {
         if (header != null) {
@@ -307,6 +322,50 @@ fun DialogContentLayout(
             }
         }
     }
+}
+
+@Composable
+private fun DialogButtons(
+    layout: AlertDialogButtonLayout,
+    positiveButton: (@Composable() () -> Unit)?,
+    negativeButton: (@Composable() () -> Unit)?,
+    neutralButton: (@Composable() () -> Unit)?
+) = composable("DialogButtons") {
+    when (layout) {
+        AlertDialogButtonLayout.SideBySide -> {
+            Container(
+                expanded = true,
+                alignment = Alignment.CenterRight,
+                height = 52.dp,
+                padding = EdgeInsets(all = 8.dp)
+            ) {
+                Row(
+                    mainAxisAlignment = MainAxisAlignment.End,
+                    crossAxisAlignment = CrossAxisAlignment.Center
+                ) {
+                    neutralButton?.invoke()
+                    negativeButton?.invoke()
+                    positiveButton?.invoke()
+                }
+            }
+        }
+        AlertDialogButtonLayout.Stacked -> {
+            Container(
+                padding = EdgeInsets(all = 8.dp)
+            ) {
+                Column {
+                    neutralButton?.invoke()
+                    negativeButton?.invoke()
+                    positiveButton?.invoke()
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun DialogDivider() = composable("DialogDivider") {
+    Divider(color = (+colorForCurrentBackground()).copy(alpha = 0.12f))
 }
 
 private enum class DialogContentLayoutType {
