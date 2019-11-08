@@ -63,99 +63,125 @@ fun AlertDialog(
         dismissOnBackClick = dismissOnBackClick
     ) {
         Wrap(alignment = Alignment.Center) {
-            Padding(
-                left = 32.dp,
-                top = 72.dp,
-                right = 32.dp,
-                bottom = 72.dp
+            DialogFrame {
+                DialogBody(
+                    showDividers = showDividers,
+                    applyContentPadding = applyContentPadding,
+                    title = title,
+                    content = content,
+                    buttons = buttons
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun DialogFrame(
+    children: @Composable() () -> Unit
+) = composable("DialogFrame") {
+    Padding(
+        left = 32.dp,
+        top = 72.dp,
+        right = 32.dp,
+        bottom = 72.dp
+    ) {
+        PressGestureDetector {
+            ConstrainedBox(
+                constraints = DpConstraints(
+                    minWidth = 280.dp
+                )
             ) {
-                PressGestureDetector {
-                    ConstrainedBox(
-                        constraints = DpConstraints(
-                            minWidth = 280.dp
-                        )
+                Card(
+                    shape = RoundedCornerShape(size = 8.dp),
+                    elevation = 24.dp
+                ) {
+                    children()
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun DialogBody(
+    showDividers: Boolean = false,
+    applyContentPadding: Boolean = true,
+    title: (@Composable() () -> Unit)? = null,
+    content: (@Composable() () -> Unit)? = null,
+    buttons: (@Composable() () -> Unit)? = null
+) = composable("DialogBody") {
+    Column {
+        if (title != null) {
+            Container(
+                modifier = ExpandedWidth wraps Inflexible,
+                alignment = Alignment.CenterLeft,
+                padding = EdgeInsets(
+                    top = 24.dp,
+                    left = 24.dp,
+                    right = 24.dp
+                )
+            ) {
+                CurrentTextStyleProvider(
+                    +themeTextStyle { h6 }
+                ) {
+                    title()
+                }
+            }
+
+            if (content == null && buttons == null) {
+                HeightSpacer(24.dp)
+            }
+        }
+
+        if (content != null) {
+            HeightSpacer(24.dp)
+
+            if (title != null && showDividers) DialogDivider()
+
+            Container(
+                modifier = ExpandedWidth,
+                alignment = Alignment.TopLeft,
+                padding = EdgeInsets(
+                    left = if (applyContentPadding) 24.dp else 0.dp,
+                    right = if (applyContentPadding) 24.dp else 0.dp
+                )
+            ) {
+                CurrentTextStyleProvider(
+                    (+themeTextStyle { subtitle1 }).copy(
+                        color = (+colorForCurrentBackground()).copy(alpha = SecondaryTextAlpha)
+                    )
+                ) {
+                    content()
+                }
+            }
+
+            if (buttons == null) {
+                HeightSpacer(24.dp)
+            }
+        }
+
+        if (buttons != null) {
+            if (content != null && showDividers) {
+                DialogDivider()
+            } else if (content != null || title != null) {
+                HeightSpacer(28.dp)
+            }
+
+            Container(
+                modifier = Inflexible,
+                expanded = true,
+                alignment = Alignment.CenterRight,
+                constraints = DpConstraints(
+                    minHeight = 52.dp
+                )
+            ) {
+                Padding(padding = 8.dp) {
+                    Row(
+                        mainAxisAlignment = MainAxisAlignment.End,
+                        crossAxisAlignment = CrossAxisAlignment.Center
                     ) {
-                        Card(
-                            shape = RoundedCornerShape(size = 8.dp),
-                            elevation = 24.dp
-                        ) {
-                            Column {
-                                if (title != null) {
-                                    Container(
-                                        modifier = ExpandedWidth wraps Inflexible,
-                                        alignment = Alignment.CenterLeft,
-                                        padding = EdgeInsets(
-                                            top = 24.dp,
-                                            left = 24.dp,
-                                            right = 24.dp
-                                        )
-                                    ) {
-                                        CurrentTextStyleProvider(
-                                            +themeTextStyle { h6 }
-                                        ) {
-                                            title()
-                                        }
-                                    }
-
-                                    if (content == null && buttons == null) {
-                                        HeightSpacer(24.dp)
-                                    }
-                                }
-
-                                if (content != null) {
-                                    HeightSpacer(24.dp)
-
-                                    if (title != null && showDividers) DialogDivider()
-
-                                    Container(
-                                        modifier = ExpandedWidth,
-                                        alignment = Alignment.TopLeft,
-                                        padding = EdgeInsets(
-                                            left = if (applyContentPadding) 24.dp else 0.dp,
-                                            right = if (applyContentPadding) 24.dp else 0.dp
-                                        )
-                                    ) {
-                                        CurrentTextStyleProvider(
-                                            (+themeTextStyle { subtitle1 }).copy(
-                                                color = (+colorForCurrentBackground()).copy(alpha = SecondaryTextAlpha)
-                                            )
-                                        ) {
-                                            content()
-                                        }
-                                    }
-
-                                    if (buttons == null) {
-                                        HeightSpacer(24.dp)
-                                    }
-                                }
-
-                                if (buttons != null) {
-                                    if (content != null && showDividers) {
-                                        DialogDivider()
-                                    } else if (content != null || title != null) {
-                                        HeightSpacer(28.dp)
-                                    }
-
-                                    Container(
-                                        modifier = Inflexible,
-                                        expanded = true,
-                                        alignment = Alignment.CenterRight,
-                                        constraints = DpConstraints(
-                                            minHeight = 52.dp
-                                        )
-                                    ) {
-                                        Padding(padding = 8.dp) {
-                                            Row(
-                                                mainAxisAlignment = MainAxisAlignment.End,
-                                                crossAxisAlignment = CrossAxisAlignment.Center
-                                            ) {
-                                                buttons()
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
+                        buttons()
                     }
                 }
             }
