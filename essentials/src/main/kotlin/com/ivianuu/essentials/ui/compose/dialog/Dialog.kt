@@ -79,6 +79,5 @@ fun Dialog(
                 }
             }
         }
-        child()
     }
 }
