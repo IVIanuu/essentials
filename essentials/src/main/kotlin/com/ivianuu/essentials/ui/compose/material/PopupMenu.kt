@@ -210,9 +210,14 @@ fun <T> popupMenuRoute(
 ) {
     val navigator = +inject<Navigator>()
 
+    val dismissedHolder = +ref { false }
+
     val dismiss: (Boolean) -> Unit = { cancelled ->
-        navigator.pop()
-        if (cancelled) onCancel?.invoke()
+        if (!dismissedHolder.value) {
+            dismissedHolder.value = true
+            navigator.pop()
+            if (cancelled) onCancel?.invoke()
+        }
     }
 
     PressGestureDetector(
