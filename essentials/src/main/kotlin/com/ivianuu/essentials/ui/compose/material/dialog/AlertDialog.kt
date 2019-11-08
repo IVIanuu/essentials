@@ -358,9 +358,9 @@ private fun DialogButtons(
                     mainAxisAlignment = MainAxisAlignment.Center,
                     crossAxisAlignment = CrossAxisAlignment.Center
                 ) {
-                    neutralButton?.invoke()
                     positiveButton?.invoke()
                     negativeButton?.invoke()
+                    neutralButton?.invoke()
                 }
             }
         }
