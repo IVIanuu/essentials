@@ -112,8 +112,6 @@ object Deps {
         const val compiler = "com.ivianuu.injekt:injekt-compiler:$version"
     }
 
-    const val insetter = "dev.chrisbanes:insetter-ktx:0.2.0"
-
     const val junit = "junit:junit:4.12"
 
     object Kotlin {
