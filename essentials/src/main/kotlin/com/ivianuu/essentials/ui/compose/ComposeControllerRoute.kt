@@ -16,20 +16,39 @@
 
 package com.ivianuu.essentials.ui.compose
 
+import android.view.View
 import androidx.compose.Composable
+import androidx.lifecycle.lifecycleScope
+import com.ivianuu.director.requireActivity
 import com.ivianuu.essentials.ui.navigation.director.ControllerRoute
 import com.ivianuu.essentials.ui.navigation.director.controllerRoute
+import kotlinx.coroutines.launch
 
 fun composeControllerRoute(
+    popOnConfigurationChange: Boolean = false,
     options: ControllerRoute.Options? = null,
     compose: @Composable() () -> Unit
 ) = controllerRoute(
     options = options,
-    factory = {
-        object : ComposeController() {
-            override fun compose() {
-                compose.invoke()
+    factory = { ComposeRouteController(popOnConfigurationChange, compose) }
+)
+
+private class ComposeRouteController(
+    private val popOnConfigurationChange: Boolean,
+    private val _compose: @Composable() () -> Unit
+) : ComposeController() {
+
+    override fun compose() {
+        _compose()
+    }
+
+    override fun onDetach(view: View) {
+        super.onDetach(view)
+        lifecycleScope.launch {
+            if (requireActivity().isChangingConfigurations && popOnConfigurationChange) {
+                navigator.pop()
             }
         }
     }
-)
+
+}

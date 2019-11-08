@@ -51,7 +51,7 @@ fun BackButton(
 
 @Composable
 fun <T> PopupMenuButton(
-    alignment: Alignment = Alignment.Center,
+    alignment: Alignment = Alignment.TopLeft,
     image: Image = +drawableResource(R.drawable.es_ic_more_vert),
     onCancel: (() -> Unit)? = null,
     items: List<T>,
