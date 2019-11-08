@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.compose.material
+package com.ivianuu.essentials.ui.compose.material.dialog
 
 import androidx.compose.Composable
 import androidx.compose.unaryPlus
@@ -43,6 +43,8 @@ import androidx.ui.material.themeTextStyle
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.dialog.Dialog
 import com.ivianuu.essentials.ui.compose.dialog.dismissDialog
+import com.ivianuu.essentials.ui.compose.material.SecondaryTextAlpha
+import com.ivianuu.essentials.ui.compose.material.colorForCurrentBackground
 
 // todo remove hardcoded values
 
@@ -182,7 +184,10 @@ fun DialogButton(
 
 @Composable
 fun DialogCloseButton(text: String) = composable("DialogCloseButton") {
-    DialogButton(text = text, dismissDialogOnClick = true, onClick = {})
+    DialogButton(
+        text = text,
+        dismissDialogOnClick = true,
+        onClick = {})
 }
 
 @Composable

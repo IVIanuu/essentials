@@ -20,35 +20,27 @@ import androidx.compose.Composable
 import androidx.compose.ambient
 import androidx.compose.state
 import androidx.compose.unaryPlus
-import androidx.ui.core.Alignment
 import androidx.ui.core.Text
 import androidx.ui.core.dp
-import androidx.ui.foundation.Clickable
 import androidx.ui.foundation.VerticalScroller
 import androidx.ui.layout.Column
-import androidx.ui.layout.Container
 import androidx.ui.layout.CrossAxisAlignment
-import androidx.ui.layout.EdgeInsets
-import androidx.ui.layout.ExpandedWidth
 import androidx.ui.layout.HeightSpacer
 import androidx.ui.layout.MainAxisAlignment
-import androidx.ui.layout.Row
-import androidx.ui.layout.WidthSpacer
 import androidx.ui.material.Button
-import androidx.ui.material.RadioButton
-import androidx.ui.material.ripple.Ripple
-import androidx.ui.material.themeTextStyle
-import com.ivianuu.essentials.ui.compose.common.BlockChildTouches
 import com.ivianuu.essentials.ui.compose.composeControllerRoute
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.dialog.DialogManagerAmbient
 import com.ivianuu.essentials.ui.compose.dialog.DismissDialogAmbient
-import com.ivianuu.essentials.ui.compose.material.AlertDialog
-import com.ivianuu.essentials.ui.compose.material.DialogButton
-import com.ivianuu.essentials.ui.compose.material.DialogCloseButton
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
 import com.ivianuu.essentials.ui.compose.material.Scaffold
 import com.ivianuu.essentials.ui.compose.material.SimpleListItem
+import com.ivianuu.essentials.ui.compose.material.dialog.AlertDialog
+import com.ivianuu.essentials.ui.compose.material.dialog.DialogButton
+import com.ivianuu.essentials.ui.compose.material.dialog.DialogCloseButton
+import com.ivianuu.essentials.ui.compose.material.dialog.ListDialog
+import com.ivianuu.essentials.ui.compose.material.dialog.SingleChoiceDialogListItem
+import com.ivianuu.essentials.ui.compose.material.dialog.SingleChoiceListDialog
 import com.ivianuu.essentials.ui.navigation.director.controllerRouteOptions
 import com.ivianuu.essentials.ui.navigation.director.fade
 
@@ -70,8 +62,12 @@ val dialogsRoute = composeControllerRoute(
                             title = { Text("Simple") },
                             content = { Text("This is a message") },
                             buttons = {
-                                DialogButton(text = "OK", onClick = {})
-                                DialogButton(text = "Cancel", onClick = {})
+                                DialogButton(
+                                    text = "OK",
+                                    onClick = {})
+                                DialogButton(
+                                    text = "Cancel",
+                                    onClick = {})
                             }
                         )
                     }
@@ -98,9 +94,13 @@ val dialogsRoute = composeControllerRoute(
                     ) {
                         AlertDialog(
                             buttons = {
-                                DialogButton(text = "OK", onClick = {})
+                                DialogButton(
+                                    text = "OK",
+                                    onClick = {})
 
-                                DialogButton(text = "Cancel", onClick = {})
+                                DialogButton(
+                                    text = "Cancel",
+                                    onClick = {})
                             }
                         )
                     }
@@ -112,7 +112,9 @@ val dialogsRoute = composeControllerRoute(
                             dismissOnOutsideTouch = false,
                             title = { Text("Not cancelable") },
                             buttons = {
-                                DialogButton(text = "Close", onClick = {})
+                                DialogButton(
+                                    text = "Close",
+                                    onClick = {})
                             }
                         )
                     }
@@ -133,7 +135,9 @@ val dialogsRoute = composeControllerRoute(
                                 }
                             },
                             buttons = {
-                                DialogButton(text = "Close", onClick = {})
+                                DialogButton(
+                                    text = "Close",
+                                    onClick = {})
                             }
                         )
                     }
@@ -150,8 +154,8 @@ val dialogsRoute = composeControllerRoute(
                             items = items,
                             selectedIndex = items.indexOf(selectedItem.value),
                             item = { _, selected, item ->
-                                SingleChoiceListDialogItem(
-                                    title = "Item: $item",
+                                SingleChoiceDialogListItem(
+                                    title = { Text("Item: $item") },
                                     selected = selected,
                                     onSelect = {
                                         selectedItem.value = item
@@ -160,108 +164,15 @@ val dialogsRoute = composeControllerRoute(
                                 )
                             },
                             buttons = {
-                                DialogCloseButton(text = "Cancel")
+                                DialogCloseButton(
+                                    text = "Cancel"
+                                )
                             }
                         )
                     }
                 }
             }
         }
-    )
-}
-
-@Composable
-fun <T> SingleChoiceListDialog(
-    dismissOnOutsideTouch: Boolean = true,
-    dismissOnBackClick: Boolean = true,
-    title: (@Composable() () -> Unit)? = null,
-    buttons: (@Composable() () -> Unit)? = null,
-    items: List<T>,
-    selectedIndex: Int,
-    item: @Composable() (Int, Boolean, T) -> Unit
-) = composable("SingleChoiceListDialog") {
-    ListDialog(
-        dismissOnOutsideTouch = dismissOnOutsideTouch,
-        dismissOnBackClick = dismissOnBackClick,
-        applyContentPadding = false,
-        title = title,
-        buttons = buttons,
-        listContent = {
-            items.forEachIndexed { index, item ->
-                item(index, index == selectedIndex, item)
-            }
-        }
-    )
-}
-
-@Composable
-fun SingleChoiceListDialogItem(
-    title: String,
-    selected: Boolean,
-    onSelect: () -> Unit
-) = composable("SingleChoiceListDialogItem") {
-    Ripple(bounded = true) {
-        Clickable(onClick = onSelect) {
-            Container(
-                modifier = ExpandedWidth,
-                height = 48.dp,
-                padding = EdgeInsets(
-                    left = 24.dp,
-                    right = 24.dp
-                ),
-                alignment = Alignment.CenterLeft
-            ) {
-                Row(
-                    mainAxisAlignment = MainAxisAlignment.End,
-                    crossAxisAlignment = CrossAxisAlignment.Center
-                ) {
-                    BlockChildTouches {
-                        RadioButton(
-                            selected = selected,
-                            onSelect = {}
-                        )
-                    }
-
-                    WidthSpacer(24.dp)
-
-                    Text(
-                        text = title,
-                        style = +themeTextStyle { subtitle1 }
-                    )
-                }
-            }
-        }
-    }
-}
-
-@Composable
-fun ListDialog(
-    dismissOnOutsideTouch: Boolean = true,
-    dismissOnBackClick: Boolean = true,
-    applyContentPadding: Boolean = true,
-    title: (@Composable() () -> Unit)? = null,
-    listContent: @Composable() () -> Unit,
-    buttons: (@Composable() () -> Unit)? = null
-) = composable("ListDialog") {
-    AlertDialog(
-        dismissOnOutsideTouch = dismissOnOutsideTouch,
-        dismissOnBackClick = dismissOnBackClick,
-        title = title,
-        showDividers = true,
-        applyContentPadding = applyContentPadding,
-        content = {
-            Container(
-                modifier = ExpandedWidth,
-                alignment = Alignment.TopLeft
-            ) {
-                VerticalScroller {
-                    Column {
-                        listContent()
-                    }
-                }
-            }
-        },
-        buttons = buttons
     )
 }
 
