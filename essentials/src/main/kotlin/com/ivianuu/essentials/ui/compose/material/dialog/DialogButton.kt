@@ -20,6 +20,7 @@ import androidx.compose.Composable
 import androidx.compose.unaryPlus
 import androidx.ui.core.Opacity
 import androidx.ui.material.Button
+import androidx.ui.material.ButtonStyle
 import androidx.ui.material.TextButtonStyle
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.dialog.dismissDialog
@@ -28,6 +29,7 @@ import com.ivianuu.essentials.ui.compose.dialog.dismissDialog
 fun DialogButton(
     text: String,
     dismissDialogOnClick: Boolean = true,
+    style: ButtonStyle = TextButtonStyle(),
     onClick: (() -> Unit)? = null
 ) = composable("DialogButton") {
     val dismissDialog = +dismissDialog()
@@ -40,15 +42,20 @@ fun DialogButton(
                     if (dismissDialogOnClick) dismissDialog()
                 }
             },
-            style = TextButtonStyle()
+            style = style
         )
     }
 }
 
 @Composable
-fun DialogCloseButton(text: String) = composable("DialogCloseButton") {
+fun DialogCloseButton(
+    text: String,
+    style: ButtonStyle = TextButtonStyle()
+) = composable("DialogCloseButton") {
     DialogButton(
         text = text,
         dismissDialogOnClick = true,
-        onClick = {})
+        style = style,
+        onClick = {}
+    )
 }
