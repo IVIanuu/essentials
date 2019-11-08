@@ -34,6 +34,8 @@ import androidx.ui.material.DrawerState
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.dialog.DialogManager
 
+// todo move overlays to another component
+
 @Composable
 fun Scaffold(
     drawer: (@Composable() (

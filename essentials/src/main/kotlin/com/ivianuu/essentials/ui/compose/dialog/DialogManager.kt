@@ -28,6 +28,8 @@ import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.material.Scaffold
 import com.ivianuu.essentials.ui.compose.material.ScaffoldAmbient
 
+// todo use windows/layers once available
+
 fun DialogManager(children: @Composable() () -> Unit) {
     val scaffold = +ambient(ScaffoldAmbient)
     val dialogManager = +memo { DialogManager(scaffold) }
