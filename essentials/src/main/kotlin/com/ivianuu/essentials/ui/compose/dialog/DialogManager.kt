@@ -36,6 +36,7 @@ fun DialogManager(children: @Composable() () -> Unit) {
 
 val DismissDialogAmbient = Ambient.of<() -> Unit>()
 
+// todo move to dialog state once available
 fun dismissDialog() = effectOf<() -> Unit> { +ambient(DismissDialogAmbient) }
 
 class DialogManager internal constructor(private val scaffold: Scaffold) {
