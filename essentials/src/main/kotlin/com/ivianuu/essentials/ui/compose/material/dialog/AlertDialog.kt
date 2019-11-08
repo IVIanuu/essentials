@@ -48,6 +48,7 @@ import com.ivianuu.essentials.ui.compose.material.SecondaryTextAlpha
 import com.ivianuu.essentials.ui.compose.material.colorForCurrentBackground
 
 // todo remove hardcoded values
+// todo add more styleable attributes such as corner radius
 
 @Composable
 fun AlertDialog(
