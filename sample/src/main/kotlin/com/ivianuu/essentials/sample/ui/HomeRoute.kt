@@ -92,8 +92,6 @@ private fun HomeItem(
         title = { Text(item.title) },
         leading = { ColorAvatar(item.color) },
         trailing = {
-            val iconStyle = +currentIconStyle()
-            d { "home item icon style $iconStyle" }
             PopupMenuButton(
                 items = listOf(1, 2, 3),
                 onSelected = {}
