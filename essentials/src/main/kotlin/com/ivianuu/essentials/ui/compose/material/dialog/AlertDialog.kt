@@ -20,18 +20,20 @@ import androidx.compose.Composable
 import androidx.compose.unaryPlus
 import androidx.ui.core.Alignment
 import androidx.ui.core.CurrentTextStyleProvider
+import androidx.ui.core.Layout
+import androidx.ui.core.Measurable
+import androidx.ui.core.ParentData
+import androidx.ui.core.Placeable
 import androidx.ui.core.dp
 import androidx.ui.core.gesture.PressGestureDetector
+import androidx.ui.core.ipx
 import androidx.ui.foundation.shape.corner.RoundedCornerShape
 import androidx.ui.layout.Center
-import androidx.ui.layout.Column
 import androidx.ui.layout.ConstrainedBox
 import androidx.ui.layout.Container
 import androidx.ui.layout.CrossAxisAlignment
 import androidx.ui.layout.DpConstraints
 import androidx.ui.layout.EdgeInsets
-import androidx.ui.layout.ExpandedWidth
-import androidx.ui.layout.HeightSpacer
 import androidx.ui.layout.MainAxisAlignment
 import androidx.ui.layout.Padding
 import androidx.ui.layout.Row
@@ -40,6 +42,7 @@ import androidx.ui.material.Divider
 import androidx.ui.material.TextButtonStyle
 import androidx.ui.material.surface.Card
 import androidx.ui.material.themeTextStyle
+import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.dialog.Dialog
 import com.ivianuu.essentials.ui.compose.dialog.dismissDialog
@@ -100,27 +103,24 @@ private fun DialogFrame(
 }
 
 @Composable
-private fun DialogBody(
+fun DialogContentLayout(
     showDividers: Boolean = false,
     applyContentPadding: Boolean = true,
-    title: (@Composable() () -> Unit)? = null,
-    content: (@Composable() () -> Unit)? = null,
-    buttons: (@Composable() () -> Unit)? = null
-) = composable("DialogBody") {
-    Column {
+    title: @Composable() (() -> Unit)? = null,
+    content: @Composable() (() -> Unit)? = null,
+    buttons: @Composable() (() -> Unit)? = null
+) = composable("DialogContentLayout") {
+    val children: @Composable() () -> Unit = {
         if (title != null) {
-            Container(
-                modifier = ExpandedWidth,
-                alignment = Alignment.CenterLeft,
-                padding = EdgeInsets(
-                    top = 24.dp,
-                    left = 24.dp,
-                    right = 24.dp,
-                    bottom = if (content == null && buttons == null) 24.dp else 0.dp
-                )
-            ) {
-                CurrentTextStyleProvider(
-                    +themeTextStyle { h6 }
+            ParentData(DialogContentLayoutType.Title) {
+                Padding(
+                    // todo clean use all
+                    padding = EdgeInsets(
+                        top = 24.dp,
+                        left = 24.dp,
+                        right = 24.dp,
+                        bottom = 24.dp
+                    )
                 ) {
                     title()
                 }
@@ -128,20 +128,122 @@ private fun DialogBody(
         }
 
         if (content != null) {
-            HeightSpacer(24.dp)
-
             if (title != null && showDividers) {
-                DialogDivider()
+                ParentData(DialogContentLayoutType.TopDivider) {
+                    DialogDivider()
+                }
             }
 
-            Container(
-                modifier = ExpandedWidth,
-                alignment = Alignment.TopLeft,
-                padding = EdgeInsets(
+            ParentData(DialogContentLayoutType.Content) {
+                Padding(
                     left = if (applyContentPadding) 24.dp else 0.dp,
-                    right = if (applyContentPadding) 24.dp else 0.dp
+                    right = if (applyContentPadding) 24.dp else 0.dp,
+                    bottom = if (buttons == null) 24.dp else 0.dp
+                ) {
+                    content()
+                }
+            }
+        }
+
+        if (buttons != null) {
+            if (content != null && showDividers) {
+                ParentData(DialogContentLayoutType.BottomDivider) {
+                    DialogDivider()
+                }
+            }
+
+            ParentData(DialogContentLayoutType.Buttons) {
+                if (!showDividers && content != null || title != null) {
+                    Padding(top = 28.dp) {
+                        buttons()
+                    }
+                } else {
+                    buttons()
+                }
+            }
+        }
+    }
+
+    Layout(children = children) { measureables, constraints ->
+        var childConstraints = constraints.copy(
+            minWidth = constraints.maxWidth,
+            minHeight = 0.ipx
+        )
+
+        val titleMeasureable =
+            measureables.firstOrNull { it.parentData == DialogContentLayoutType.Title }
+        val topDividerMeasureable =
+            measureables.firstOrNull { it.parentData == DialogContentLayoutType.TopDivider }
+        val contentMeasureable =
+            measureables.firstOrNull { it.parentData == DialogContentLayoutType.Content }
+        val bottomDividerMeasureable =
+            measureables.firstOrNull { it.parentData == DialogContentLayoutType.BottomDivider }
+        val buttonsMeasureable =
+            measureables.firstOrNull { it.parentData == DialogContentLayoutType.Buttons }
+
+        fun measureFixed(measureable: Measurable?): Placeable? {
+            return if (measureable != null) {
+                val placeable = measureable.measure(childConstraints)
+                childConstraints = childConstraints.copy(
+                    maxHeight = childConstraints.maxHeight - placeable.height
                 )
-            ) {
+                placeable
+            } else {
+                null
+            }
+        }
+
+        val titlePlaceable = measureFixed(titleMeasureable)
+        val topDividerPlaceable = measureFixed(topDividerMeasureable)
+        val bottomDividerPlaceable = measureFixed(bottomDividerMeasureable)
+        val buttonsPlaceable = measureFixed(buttonsMeasureable)
+        val contentPlaceable = measureFixed(contentMeasureable)
+
+        val placeables = listOfNotNull(
+            titlePlaceable,
+            topDividerPlaceable,
+            contentPlaceable,
+            bottomDividerPlaceable,
+            buttonsPlaceable
+        )
+        val height = placeables.map { it.height }.sumBy { it.value }.ipx
+
+        layout(width = constraints.maxWidth, height = height) {
+            var offsetY = 0.ipx
+            placeables.forEach {
+                it.place(0.ipx, offsetY)
+                offsetY += it.height
+            }
+        }
+    }
+}
+
+private enum class DialogContentLayoutType {
+    Title, TopDivider, Content, BottomDivider, Buttons
+}
+
+@Composable
+private fun DialogBody(
+    showDividers: Boolean = false,
+    applyContentPadding: Boolean = true,
+    title: (@Composable() () -> Unit)? = null,
+    content: (@Composable() () -> Unit)? = null,
+    buttons: (@Composable() () -> Unit)? = null
+) = composable("DialogBody") {
+    DialogContentLayout(
+        showDividers = showDividers,
+        applyContentPadding = applyContentPadding,
+        title = title?.let {
+            {
+                CurrentTextStyleProvider(
+                    +themeTextStyle { h6 }
+                ) {
+                    title()
+                }
+            }
+        },
+        content = content?.let {
+            {
                 CurrentTextStyleProvider(
                     (+themeTextStyle { subtitle1 }).copy(
                         color = (+colorForCurrentBackground()).copy(alpha = SecondaryTextAlpha)
@@ -150,32 +252,42 @@ private fun DialogBody(
                     content()
                 }
             }
-
-            if (buttons == null) {
-                HeightSpacer(24.dp)
-            }
-        }
-
-        if (buttons != null) {
-            if (content != null && showDividers) {
-                DialogDivider()
-            } else if (content != null || title != null) {
-                HeightSpacer(28.dp)
-            }
-
-            Container(
-                expanded = true,
-                alignment = Alignment.CenterRight,
-                height = 52.dp
-            ) {
-                Padding(padding = 8.dp) {
-                    Row(
-                        mainAxisAlignment = MainAxisAlignment.End,
-                        crossAxisAlignment = CrossAxisAlignment.Center
-                    ) {
-                        buttons()
+        },
+        buttons = buttons?.let {
+            {
+                Container(
+                    expanded = true,
+                    alignment = Alignment.CenterRight,
+                    height = 52.dp
+                ) {
+                    Padding(padding = 8.dp) {
+                        Row(
+                            mainAxisAlignment = MainAxisAlignment.End,
+                            crossAxisAlignment = CrossAxisAlignment.Center
+                        ) {
+                            buttons()
+                        }
                     }
                 }
+            }
+        }
+    )
+}
+
+@Composable
+fun ConstraintsLoggerLayout(
+    tag: String,
+    child: @Composable() () -> Unit
+) {
+    Layout(child) { measureables, constraints ->
+        d { "$tag constraints $constraints" }
+        val measureable = measureables.firstOrNull()
+        if (measureable == null) {
+            layout(0.ipx, 0.ipx) {}
+        } else {
+            val placeable = measureable.measure(constraints)
+            layout(placeable.width, placeable.height) {
+                placeable.place(0.ipx, 0.ipx)
             }
         }
     }

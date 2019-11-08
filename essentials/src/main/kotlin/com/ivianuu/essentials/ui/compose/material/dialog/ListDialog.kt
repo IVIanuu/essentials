@@ -48,13 +48,17 @@ fun ListDialog(
         showDividers = true,
         applyContentPadding = applyContentPadding,
         content = {
-            Container(
-                modifier = ExpandedWidth,
-                alignment = Alignment.TopLeft
-            ) {
-                VerticalScroller {
-                    Column {
-                        listContent()
+            ConstraintsLoggerLayout("content") {
+                Container(
+                    modifier = ExpandedWidth,
+                    alignment = Alignment.TopLeft
+                ) {
+                    ConstraintsLoggerLayout("container") {
+                        VerticalScroller {
+                            Column {
+                                listContent()
+                            }
+                        }
                     }
                 }
             }
