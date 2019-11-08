@@ -33,6 +33,7 @@ import androidx.ui.material.themeColor
 import com.ivianuu.essentials.picker.ColorPickerDialog
 import com.ivianuu.essentials.picker.PRIMARY_COLORS
 import com.ivianuu.essentials.picker.PRIMARY_COLORS_SUB
+import com.ivianuu.essentials.picker.TextInputDialog
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.compose.composeControllerRoute
 import com.ivianuu.essentials.ui.compose.core.composable
@@ -238,6 +239,23 @@ val dialogsRoute = composeControllerRoute(
                             },
                             initialColor = currentColor,
                             onColorSelected = setCurrentColor
+                        )
+                    }
+
+                    val (textInputValue, setTextInputValue) = +state { "" }
+                    DialogLauncherButton(text = "Text input") {
+                        val (tmpTextInputValue, setTmpTextInputValue) = +state { textInputValue }
+                        TextInputDialog(
+                            title = { Text("Text input") },
+                            value = tmpTextInputValue,
+                            onValueChange = setTmpTextInputValue,
+                            hint = "Hint..",
+                            positiveButton = {
+                                DialogButton(text = "OK", onClick = {
+                                    setTextInputValue(tmpTextInputValue)
+                                })
+                            },
+                            negativeButton = { DialogCloseButton(text = "Cancel") }
                         )
                     }
                 }
