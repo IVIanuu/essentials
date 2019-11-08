@@ -35,13 +35,15 @@ import com.ivianuu.essentials.ui.compose.core.composable
 @Composable
 fun Icon(
     image: Image,
-    style: IconStyle = +currentIconStyle()
+    style: IconStyle = +currentIconStyle(),
+    size: Size = style.size,
+    color: Color? = style.color
 ) = composable("Icon") {
     Container(
-        width = style.size.width,
-        height = style.size.height
+        width = size.width,
+        height = size.height
     ) {
-        DrawImage(image = image, tint = style.color)
+        DrawImage(image = image, tint = color)
     }
 }
 
