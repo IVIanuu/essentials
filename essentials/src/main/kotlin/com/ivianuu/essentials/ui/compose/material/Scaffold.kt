@@ -32,8 +32,7 @@ import androidx.ui.layout.Padding
 import androidx.ui.layout.Stack
 import androidx.ui.material.DrawerState
 import com.ivianuu.essentials.ui.compose.core.composable
-
-// todo remove overlays
+import com.ivianuu.essentials.ui.compose.layout.WithModifier
 
 @Composable
 fun Scaffold(
@@ -49,8 +48,7 @@ fun Scaffold(
     bottomBar: (@Composable() () -> Unit)? = null,
     fabConfiguration: Scaffold.FabConfiguration? = null
 ) = composable("Scaffold") {
-    val overlays = +state { emptyList<Overlay>() }
-    val scaffold = +memo { Scaffold(overlays, drawerState) }
+    val scaffold = +memo { Scaffold(drawerState) }
 
     // update state
     scaffold.hasTopAppBar = topAppBar != null
@@ -66,7 +64,7 @@ fun Scaffold(
             val finalBody: @Composable() () -> Unit = {
                 Column {
                     if (topAppBar != null) {
-                        Container(modifier = Inflexible) {
+                        WithModifier(modifier = Inflexible) {
                             topAppBar()
                         }
                     }
@@ -83,7 +81,7 @@ fun Scaffold(
                     }
 
                     if (bottomBar != null) {
-                        Container(modifier = Inflexible) {
+                        WithModifier(modifier = Inflexible) {
                             bottomBar()
                         }
                     }
@@ -101,13 +99,6 @@ fun Scaffold(
                         }
                     }
                 }
-
-                overlays.value
-                    .forEach { overlay ->
-                        overlay.composable {
-                            scaffold.removeOverlay(overlay)
-                        }
-                    }
             }
 
             if (drawer != null) {
@@ -129,10 +120,7 @@ internal data class Overlay(
     val composable: @Composable() (() -> Unit) -> Unit
 )
 
-class Scaffold internal constructor(
-    private val overlays: State<List<Overlay>>,
-    _drawerState: State<DrawerState>
-) {
+class Scaffold internal constructor(_drawerState: State<DrawerState>) {
 
     var hasTopAppBar = false
         internal set
@@ -166,18 +154,6 @@ class Scaffold internal constructor(
     fun closeDrawer() {
         check(hasDrawer)
         drawerState = DrawerState.Closed
-    }
-
-    fun addOverlay(block: (() -> Unit) -> Unit) {
-        val newOverlays = overlays.value.toMutableList()
-        newOverlays += Overlay(block)
-        overlays.value = newOverlays
-    }
-
-    internal fun removeOverlay(overlay: Overlay) {
-        val newOverlays = overlays.value.toMutableList()
-        newOverlays -= overlay
-        overlays.value = newOverlays
     }
 
     data class FabConfiguration(

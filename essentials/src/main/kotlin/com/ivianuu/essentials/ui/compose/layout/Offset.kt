@@ -20,18 +20,17 @@ import androidx.compose.Composable
 import androidx.ui.core.IntPx
 import androidx.ui.core.Layout
 import androidx.ui.core.Px
-import androidx.ui.core.RepaintBoundary
 import androidx.ui.core.min
 import androidx.ui.core.px
+import com.ivianuu.essentials.ui.compose.core.composable
 
-fun WithOffset(
+@Composable
+fun Offset(
     xOffset: Px? = null,
     yOffset: Px? = null,
     child: @Composable() () -> Unit
-) {
-    Layout(children = {
-        RepaintBoundary(children = child)
-    }) { measurables, constraints ->
+) = composable("Offset") {
+    Layout(children = child) { measurables, constraints ->
         if (measurables.size > 1) {
             throw IllegalStateException("Only one child is allowed")
         }

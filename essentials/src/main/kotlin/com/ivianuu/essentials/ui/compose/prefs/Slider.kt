@@ -35,6 +35,7 @@ import androidx.ui.layout.Row
 import androidx.ui.layout.Stack
 import androidx.ui.material.themeTextStyle
 import com.ivianuu.essentials.ui.compose.core.composable
+import com.ivianuu.essentials.ui.compose.layout.WithModifier
 import com.ivianuu.essentials.ui.compose.material.Slider
 import com.ivianuu.essentials.util.UnitValueTextProvider
 import com.ivianuu.kprefs.Pref
@@ -96,7 +97,7 @@ fun SliderPreference(
                     null
                 }
 
-                Container(modifier = Flexible(1f)) {
+                WithModifier(modifier = Flexible(1f)) {
                     Slider(
                         value = pref.get(),
                         min = min,
