@@ -20,7 +20,6 @@ import android.os.Bundle
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import com.github.ajalt.timberkt.d
 import com.ivianuu.director.Router
 import com.ivianuu.director.router
 import com.ivianuu.essentials.ui.mvrx.MvRxView
@@ -66,7 +65,6 @@ abstract class EsActivity : AppCompatActivity(), InjektTrait, MvRxView {
 
     private val onBackPressedCallback = object : OnBackPressedCallback(false) {
         override fun handleOnBackPressed() {
-            d { "hello" }
             navigator.pop()
         }
     }
@@ -88,10 +86,7 @@ abstract class EsActivity : AppCompatActivity(), InjektTrait, MvRxView {
         onBackPressedDispatcher.addCallback(onBackPressedCallback)
 
         navigator.flow
-            .onEach {
-                d { "backstack changed $it" }
-                onBackPressedCallback.isEnabled = it.size > 1
-            }
+            .onEach { onBackPressedCallback.isEnabled = it.size > 1 }
             .launchIn(lifecycleScope)
     }
 
