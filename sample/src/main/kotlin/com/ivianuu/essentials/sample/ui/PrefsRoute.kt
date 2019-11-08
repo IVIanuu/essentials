@@ -23,11 +23,11 @@ import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
 import com.ivianuu.essentials.ui.compose.prefs.CheckboxPreference
 import com.ivianuu.essentials.ui.compose.prefs.Dependency
-import com.ivianuu.essentials.ui.compose.prefs.MultiSelectListPreference
+import com.ivianuu.essentials.ui.compose.prefs.MultiChoiceListPreference
 import com.ivianuu.essentials.ui.compose.prefs.PreferenceSubheader
 import com.ivianuu.essentials.ui.compose.prefs.PrefsScreen
 import com.ivianuu.essentials.ui.compose.prefs.RadioButtonPreference
-import com.ivianuu.essentials.ui.compose.prefs.SingleItemListPreference
+import com.ivianuu.essentials.ui.compose.prefs.SingleChoiceListPreference
 import com.ivianuu.essentials.ui.compose.prefs.SliderPreference
 import com.ivianuu.essentials.ui.compose.prefs.SwitchPreference
 import com.ivianuu.essentials.ui.compose.prefs.TextInputPreference
@@ -91,27 +91,28 @@ val prefsRoute = composeControllerRoute(
                 pref = prefs.string("text_input"),
                 title = { Text("Text input") },
                 summary = { Text("This is a text input preference") },
+                allowEmpty = false,
                 dependencies = dependencies
             )
 
-            MultiSelectListPreference(
+            MultiChoiceListPreference(
                 pref = prefs.stringSet("multi_select_list", setOf("A", "B")),
-                entries = listOf(
-                    MultiSelectListPreference.Item("A"),
-                    MultiSelectListPreference.Item("B"),
-                    MultiSelectListPreference.Item("C")
+                items = listOf(
+                    MultiChoiceListPreference.Item("A"),
+                    MultiChoiceListPreference.Item("B"),
+                    MultiChoiceListPreference.Item("C")
                 ),
                 title = { Text("Multi select list") },
                 summary = { Text("This is a multi select list preference") },
                 dependencies = dependencies
             )
 
-            SingleItemListPreference(
+            SingleChoiceListPreference(
                 pref = prefs.string("single_item_list", "C"),
-                entries = listOf(
-                    SingleItemListPreference.Item("A"),
-                    SingleItemListPreference.Item("B"),
-                    SingleItemListPreference.Item("C")
+                items = listOf(
+                    SingleChoiceListPreference.Item("A"),
+                    SingleChoiceListPreference.Item("B"),
+                    SingleChoiceListPreference.Item("C")
                 ),
                 title = { Text("Single item list") },
                 summary = { Text("This is a single item list preference") },

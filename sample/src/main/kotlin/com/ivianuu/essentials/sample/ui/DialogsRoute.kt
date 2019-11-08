@@ -28,19 +28,19 @@ import androidx.ui.layout.HeightSpacer
 import androidx.ui.layout.MainAxisAlignment
 import androidx.ui.material.Button
 import androidx.ui.material.themeColor
-import com.ivianuu.essentials.picker.ColorPickerDialog
-import com.ivianuu.essentials.picker.TextInputDialog
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.compose.composeControllerRoute
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.dialog.AlertDialogButtonLayout
+import com.ivianuu.essentials.ui.compose.dialog.ColorPickerDialog
 import com.ivianuu.essentials.ui.compose.dialog.DialogButton
 import com.ivianuu.essentials.ui.compose.dialog.DialogCloseButton
 import com.ivianuu.essentials.ui.compose.dialog.ListDialog
 import com.ivianuu.essentials.ui.compose.dialog.MaterialDialog
 import com.ivianuu.essentials.ui.compose.dialog.MultiChoiceListDialog
 import com.ivianuu.essentials.ui.compose.dialog.SingleChoiceListDialog
-import com.ivianuu.essentials.ui.compose.dialog.composeDialogRoute
+import com.ivianuu.essentials.ui.compose.dialog.TextInputDialog
+import com.ivianuu.essentials.ui.compose.dialog.dialogRoute
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
 import com.ivianuu.essentials.ui.compose.material.Icon
@@ -337,7 +337,7 @@ private fun DialogLauncherButton(
     Button(
         text = text,
         onClick = {
-            navigator.push(composeDialogRoute(dismissible = dismissible, dialog = dialog))
+            navigator.push(dialogRoute(dismissible = dismissible, dialog = dialog))
         }
     )
 

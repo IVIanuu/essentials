@@ -139,13 +139,6 @@ object Deps {
 
     const val materialComponents = "com.google.android.material:material:1.1.0-beta01"
 
-    object MaterialDialogs {
-        private const val version = "3.1.0"
-        const val core = "com.afollestad.material-dialogs:core:$version"
-        const val color = "com.afollestad.material-dialogs:color:$version"
-        const val input = "com.afollestad.material-dialogs:input:$version"
-    }
-
     const val mavenGradlePlugin = "com.github.dcendents:android-maven-gradle-plugin:2.1"
 
     const val mockitoKotlin = "com.nhaarman.mockitokotlin2:mockito-kotlin:2.0.0"

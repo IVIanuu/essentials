@@ -19,62 +19,73 @@ package com.ivianuu.essentials.ui.compose.prefs
 import androidx.compose.Composable
 import androidx.compose.state
 import androidx.compose.unaryPlus
-import androidx.ui.input.KeyboardType
+import androidx.ui.core.Text
 import androidx.ui.res.stringResource
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.dialog.DialogButton
 import com.ivianuu.essentials.ui.compose.dialog.DialogCloseButton
-import com.ivianuu.essentials.ui.compose.dialog.TextInputDialog
+import com.ivianuu.essentials.ui.compose.dialog.MultiChoiceListDialog
 import com.ivianuu.kprefs.Pref
 
+// todo improve api
+
 @Composable
-fun TextInputPreference(
-    pref: Pref<String>,
-    dialogHint: String? = null,
-    dialogKeyboardType: KeyboardType = KeyboardType.Text,
-    allowEmpty: Boolean = true,
+fun MultiChoiceListPreference(
+    pref: Pref<Set<String>>,
+    items: List<MultiChoiceListPreference.Item>,
     title: @Composable() () -> Unit,
     summary: @Composable() (() -> Unit)? = null,
     leading: @Composable() (() -> Unit)? = null,
-    onChange: ((String) -> Boolean)? = null,
+    onChange: ((Set<String>) -> Boolean)? = null,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
-    dialogTitle: @Composable() (() -> Unit)? = title
-) = composable("TextInputPreference:${pref.key}") {
+    dialogTitle: (@Composable() () -> Unit)? = title
+) = composable("MultiChoiceListPreference:${pref.key}") {
     DialogPreference(
         pref = pref,
-        dialog = { dismiss ->
-            val (currentValue, setCurrentValue) = +state { pref.get() }
-
-            TextInputDialog(
-                value = currentValue,
-                onValueChange = setCurrentValue,
-                title = dialogTitle,
-                hint = dialogHint,
-                keyboardType = dialogKeyboardType,
-                positiveButton = {
-                    DialogButton(
-                        text = +stringResource(R.string.es_ok),
-                        onClick = if (allowEmpty || currentValue.isNotEmpty()) {
-                            {
-                                if (onChange?.invoke(currentValue) != false) {
-                                    pref.set(currentValue)
-                                }
-                            }
-                        } else {
-                            null
-                        }
-                    )
-                },
-                negativeButton = { DialogCloseButton(+stringResource(R.string.es_cancel)) }
-            )
-        },
         title = title,
         summary = summary,
         leading = leading,
         onChange = onChange,
         enabled = enabled,
-        dependencies = dependencies
+        dependencies = dependencies,
+        dialog = { dismiss ->
+            val (selectedItems, setSelectedItems) = +state {
+                pref.get().toList()
+                    .map { value ->
+                        items.first { it.value == value }
+                    }
+            }
+
+            MultiChoiceListDialog(
+                items = items,
+                selectedItems = selectedItems,
+                onSelectionsChanged = setSelectedItems,
+                item = { Text(it.title) },
+                title = dialogTitle,
+                positiveButton = {
+                    DialogButton(
+                        text = +stringResource(R.string.es_ok),
+                        onClick = {
+                            val newValue = selectedItems.map { it.value }.toSet()
+                            if (onChange?.invoke(newValue) != false) {
+                                pref.set(newValue)
+                            }
+                        }
+                    )
+                },
+                negativeButton = { DialogCloseButton(+stringResource(R.string.es_cancel)) }
+            )
+        }
     )
+}
+
+object MultiChoiceListPreference {
+    data class Item(
+        val title: String,
+        val value: String
+    ) {
+        constructor(value: String) : this(value, value)
+    }
 }

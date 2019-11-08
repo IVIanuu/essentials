@@ -38,7 +38,6 @@ dependencies {
     implementation(project(":essentials-gestures"))
     implementation(project(":essentials-hidenavbar"))
     implementation(project(":essentials-shell"))
-    implementation(project(":essentials-picker"))
     implementation(project(":essentials-securesettings"))
     implementation(project(":essentials-shell"))
     implementation(project(":essentials-work"))

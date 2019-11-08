@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.picker
+package com.ivianuu.essentials.ui.compose.dialog
 
 import androidx.compose.Composable
 import androidx.compose.Effect
@@ -49,10 +49,10 @@ import androidx.ui.material.TextButtonStyle
 import androidx.ui.material.Typography
 import androidx.ui.material.ripple.Ripple
 import androidx.ui.material.themeTextStyle
+import androidx.ui.res.stringResource
+import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.compose.core.composable
-import com.ivianuu.essentials.ui.compose.dialog.DialogButton
-import com.ivianuu.essentials.ui.compose.dialog.DialogCloseButton
-import com.ivianuu.essentials.ui.compose.dialog.MaterialDialog
+import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.compose.layout.Expand
 import com.ivianuu.essentials.ui.compose.layout.TightColumn
 import com.ivianuu.essentials.ui.compose.layout.WidthFitSquare
@@ -63,12 +63,29 @@ import com.ivianuu.essentials.ui.compose.material.TabController
 import com.ivianuu.essentials.ui.compose.material.TabRow
 import com.ivianuu.essentials.ui.compose.material.colorForBackground
 import com.ivianuu.essentials.ui.compose.material.colorForCurrentBackground
+import com.ivianuu.essentials.ui.navigation.Navigator
+
+fun colorPickerRoute(
+    initialColor: Color,
+    allowCustomArgb: Boolean = true,
+    showAlphaSelector: Boolean = false,
+    title: (@Composable() () -> Unit)? = { Text(+stringResource(R.string.es_dialog_title_color_picker)) }
+) = dialogRoute {
+    val navigator = +inject<Navigator>()
+    ColorPickerDialog(
+        initialColor = initialColor,
+        onColorSelected = { navigator.pop(it) },
+        allowCustomArgb = allowCustomArgb,
+        showAlphaSelector = showAlphaSelector,
+        title = title
+    )
+}
 
 @Composable
 fun ColorPickerDialog(
     colors: List<Color> = PrimaryMaterialColors,
-    onColorSelected: (Color) -> Unit,
     initialColor: Color,
+    onColorSelected: (Color) -> Unit,
     allowCustomArgb: Boolean = true,
     showAlphaSelector: Boolean = false,
     icon: (@Composable() () -> Unit)? = null,
@@ -156,7 +173,10 @@ private fun ColorPickerContent(
             left = 24.dp,
             right = 24.dp
         ) {
-            ColorGrid(colors = colors, onColorSelected = onColorChanged)
+            ColorGrid(
+                colors = colors,
+                onColorSelected = onColorChanged
+            )
         }
     }
 }
@@ -177,9 +197,11 @@ private fun ColorGrid(
                     tableRow {
                         rowColors.forEach { color ->
                             composable(color) {
-                                ColorGridItem(color = color, onClick = {
-                                    onColorSelected(color)
-                                })
+                                ColorGridItem(
+                                    color = color,
+                                    onClick = {
+                                        onColorSelected(color)
+                                    })
                             }
                         }
                     }

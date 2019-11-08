@@ -7,7 +7,6 @@ include(
     ":essentials-compiler",
     ":essentials-gestures",
     ":essentials-hidenavbar",
-    ":essentials-picker",
     ":essentials-securesettings",
     ":essentials-shell",
     ":essentials-test",

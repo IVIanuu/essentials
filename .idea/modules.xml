@@ -13,7 +13,6 @@
       <module fileurl="file://$PROJECT_DIR$/essentials/essentials-essentials.iml" filepath="$PROJECT_DIR$/essentials/essentials-essentials.iml" />
       <module fileurl="file://$PROJECT_DIR$/essentials-gestures/essentials-gestures.iml" filepath="$PROJECT_DIR$/essentials-gestures/essentials-gestures.iml" />
       <module fileurl="file://$PROJECT_DIR$/essentials-hidenavbar/essentials-hidenavbar.iml" filepath="$PROJECT_DIR$/essentials-hidenavbar/essentials-hidenavbar.iml" />
-      <module fileurl="file://$PROJECT_DIR$/essentials-picker/essentials-picker.iml" filepath="$PROJECT_DIR$/essentials-picker/essentials-picker.iml" />
       <module fileurl="file://$PROJECT_DIR$/essentials-securesettings/essentials-securesettings.iml" filepath="$PROJECT_DIR$/essentials-securesettings/essentials-securesettings.iml" />
       <module fileurl="file://$PROJECT_DIR$/essentials-shell/essentials-shell.iml" filepath="$PROJECT_DIR$/essentials-shell/essentials-shell.iml" />
       <module fileurl="file://$PROJECT_DIR$/essentials-test/essentials-test.iml" filepath="$PROJECT_DIR$/essentials-test/essentials-test.iml" />

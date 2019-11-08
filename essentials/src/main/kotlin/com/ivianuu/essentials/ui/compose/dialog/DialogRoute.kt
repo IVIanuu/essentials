@@ -32,7 +32,7 @@ import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.director.controllerRouteOptions
 import com.ivianuu.essentials.ui.navigation.director.fade
 
-fun composeDialogRoute(
+fun dialogRoute(
     dismissible: Boolean = true,
     dialog: @Composable() () -> Unit
 ) = composeControllerRoute(

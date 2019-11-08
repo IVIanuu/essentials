@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.picker
+package com.ivianuu.essentials.ui.compose.dialog
 
 import androidx.compose.Composable
 import androidx.compose.onActive
+import androidx.compose.state
 import androidx.compose.unaryPlus
 import androidx.ui.core.Opacity
 import androidx.ui.core.Text
@@ -25,18 +26,55 @@ import androidx.ui.core.TextField
 import androidx.ui.input.KeyboardType
 import androidx.ui.layout.Stack
 import androidx.ui.material.themeTextStyle
+import androidx.ui.res.stringResource
+import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.compose.common.hideKeyboard
 import com.ivianuu.essentials.ui.compose.common.showKeyboard
 import com.ivianuu.essentials.ui.compose.core.composable
-import com.ivianuu.essentials.ui.compose.dialog.AlertDialogButtonLayout
-import com.ivianuu.essentials.ui.compose.dialog.MaterialDialog
+import com.ivianuu.essentials.ui.compose.injekt.inject
+import com.ivianuu.essentials.ui.navigation.Navigator
+
+fun textInputRoute(
+    initialValue: String = "",
+    hint: String? = null,
+    keyboardType: KeyboardType = KeyboardType.Text,
+    title: (@Composable() () -> Unit)? = null,
+    allowEmpty: Boolean = true
+) = dialogRoute {
+    val navigator = +inject<Navigator>()
+
+    val (currentValue, setCurrentValue) = +state { initialValue }
+
+    TextInputDialog(
+        value = initialValue,
+        onValueChange = setCurrentValue,
+        hint = hint,
+        keyboardType = keyboardType,
+        title = title,
+        positiveButton = {
+            DialogButton(
+                text = +stringResource(R.string.es_ok),
+                onClick = if (allowEmpty || currentValue.isNotEmpty()) {
+                    {
+                        navigator.pop(currentValue)
+                    }
+                } else {
+                    null
+                }
+            )
+        },
+        negativeButton = {
+            DialogCloseButton(+stringResource(R.string.es_cancel))
+        }
+    )
+}
 
 @Composable
 fun TextInputDialog(
     value: String,
-    hint: String,
     onValueChange: (String) -> Unit,
-    type: KeyboardType = KeyboardType.Text,
+    hint: String? = null,
+    keyboardType: KeyboardType = KeyboardType.Text,
     buttonLayout: AlertDialogButtonLayout = AlertDialogButtonLayout.SideBySide,
     icon: @Composable() (() -> Unit)? = null,
     title: (@Composable() () -> Unit)? = null,
@@ -53,7 +91,7 @@ fun TextInputDialog(
         title = title,
         content = {
             Stack {
-                if (value.isEmpty()) {
+                if (value.isEmpty() && hint != null) {
                     Opacity(0.5f) {
                         Text(
                             text = hint,
@@ -64,7 +102,7 @@ fun TextInputDialog(
                     value = value,
                     onValueChange = onValueChange,
                     focusIdentifier = TextInputDialogInputId,
-                    keyboardType = type,
+                    keyboardType = keyboardType,
                     textStyle = +themeTextStyle { subtitle1 }
                 )
             }
