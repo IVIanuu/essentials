@@ -34,7 +34,6 @@ fun <T> SingleChoiceListDialog(
     ListDialog(
         dismissOnOutsideTouch = dismissOnOutsideTouch,
         dismissOnBackClick = dismissOnBackClick,
-        applyContentPadding = false,
         title = title,
         buttons = buttons,
         listContent = {

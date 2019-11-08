@@ -33,7 +33,6 @@ import androidx.ui.layout.ConstrainedBox
 import androidx.ui.layout.Container
 import androidx.ui.layout.CrossAxisAlignment
 import androidx.ui.layout.DpConstraints
-import androidx.ui.layout.EdgeInsets
 import androidx.ui.layout.MainAxisAlignment
 import androidx.ui.layout.Padding
 import androidx.ui.layout.Row
@@ -42,7 +41,6 @@ import androidx.ui.material.Divider
 import androidx.ui.material.TextButtonStyle
 import androidx.ui.material.surface.Card
 import androidx.ui.material.themeTextStyle
-import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.dialog.Dialog
 import com.ivianuu.essentials.ui.compose.dialog.dismissDialog
@@ -113,15 +111,7 @@ fun DialogContentLayout(
     val children: @Composable() () -> Unit = {
         if (title != null) {
             ParentData(DialogContentLayoutType.Title) {
-                Padding(
-                    // todo clean use all
-                    padding = EdgeInsets(
-                        top = 24.dp,
-                        left = 24.dp,
-                        right = 24.dp,
-                        bottom = 24.dp
-                    )
-                ) {
+                Padding(padding = 24.dp) {
                     title()
                 }
             }
@@ -153,7 +143,7 @@ fun DialogContentLayout(
             }
 
             ParentData(DialogContentLayoutType.Buttons) {
-                if (!showDividers && content != null || title != null) {
+                if (!showDividers && (content != null || title != null)) {
                     Padding(top = 28.dp) {
                         buttons()
                     }
@@ -272,25 +262,6 @@ private fun DialogBody(
             }
         }
     )
-}
-
-@Composable
-fun ConstraintsLoggerLayout(
-    tag: String,
-    child: @Composable() () -> Unit
-) {
-    Layout(child) { measureables, constraints ->
-        d { "$tag constraints $constraints" }
-        val measureable = measureables.firstOrNull()
-        if (measureable == null) {
-            layout(0.ipx, 0.ipx) {}
-        } else {
-            val placeable = measureable.measure(constraints)
-            layout(placeable.width, placeable.height) {
-                placeable.place(0.ipx, 0.ipx)
-            }
-        }
-    }
 }
 
 @Composable

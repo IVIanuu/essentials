@@ -36,7 +36,6 @@ import com.ivianuu.essentials.ui.compose.core.composable
 fun ListDialog(
     dismissOnOutsideTouch: Boolean = true,
     dismissOnBackClick: Boolean = true,
-    applyContentPadding: Boolean = true,
     title: (@Composable() () -> Unit)? = null,
     listContent: @Composable() () -> Unit,
     buttons: (@Composable() () -> Unit)? = null
@@ -46,20 +45,11 @@ fun ListDialog(
         dismissOnBackClick = dismissOnBackClick,
         title = title,
         showDividers = true,
-        applyContentPadding = applyContentPadding,
+        applyContentPadding = false,
         content = {
-            ConstraintsLoggerLayout("content") {
-                Container(
-                    modifier = ExpandedWidth,
-                    alignment = Alignment.TopLeft
-                ) {
-                    ConstraintsLoggerLayout("container") {
-                        VerticalScroller {
-                            Column {
-                                listContent()
-                            }
-                        }
-                    }
+            VerticalScroller {
+                Column {
+                    listContent()
                 }
             }
         },
