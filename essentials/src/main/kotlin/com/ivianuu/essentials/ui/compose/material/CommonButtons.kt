@@ -20,8 +20,6 @@ import androidx.compose.Composable
 import androidx.compose.ambient
 import androidx.compose.unaryPlus
 import androidx.ui.core.Alignment
-import androidx.ui.core.Dp
-import androidx.ui.core.dp
 import androidx.ui.graphics.Image
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.compose.core.composable
@@ -53,9 +51,7 @@ fun BackButton(
 
 @Composable
 fun <T> PopupMenuButton(
-    alignment: Alignment = Alignment.TopLeft,
-    offsetX: Dp = 0.dp,
-    offsetY: Dp = 0.dp,
+    alignment: Alignment = Alignment.Center,
     image: Image = +drawableResource(R.drawable.es_ic_more_vert),
     onCancel: (() -> Unit)? = null,
     items: List<T>,
@@ -64,8 +60,6 @@ fun <T> PopupMenuButton(
 ) = composable("PopupMenuButton") {
     PopupMenuTrigger(
         alignment = alignment,
-        offsetX = offsetX,
-        offsetY = offsetY,
         onCancel = onCancel,
         items = items,
         onSelected = onSelected,
