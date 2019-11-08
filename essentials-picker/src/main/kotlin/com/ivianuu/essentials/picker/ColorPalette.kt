@@ -18,7 +18,7 @@ package com.ivianuu.essentials.picker
 
 import android.graphics.Color.parseColor
 
-internal val PRIMARY_COLORS = intArrayOf(
+val PRIMARY_COLORS = intArrayOf(
     parseColor("#F44336"), parseColor("#E91E63"), parseColor("#9C27B0"),
     parseColor("#673AB7"), parseColor("#3F51B5"), parseColor("#2196F3"),
     parseColor("#03A9F4"), parseColor("#00BCD4"), parseColor("#009688"),
@@ -28,7 +28,7 @@ internal val PRIMARY_COLORS = intArrayOf(
     parseColor("#607D8B")
 )
 
-internal val PRIMARY_COLORS_SUB = arrayOf(
+val PRIMARY_COLORS_SUB = arrayOf(
     intArrayOf(
         parseColor("#FFEBEE"), parseColor("#FFCDD2"), parseColor("#EF9A9A"),
         parseColor("#E57373"), parseColor("#EF5350"), parseColor("#F44336"),
