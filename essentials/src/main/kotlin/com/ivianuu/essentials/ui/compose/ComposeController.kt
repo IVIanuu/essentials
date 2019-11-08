@@ -22,12 +22,16 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.compose.Composable
 import androidx.compose.unaryPlus
+import androidx.core.view.children
+import androidx.ui.core.AndroidComposeView
 import androidx.ui.core.setContent
 import androidx.ui.material.MaterialTheme
 import com.ivianuu.director.requireActivity
 import com.ivianuu.essentials.ui.base.EsController
 import com.ivianuu.essentials.ui.compose.core.ActivityAmbient
 import com.ivianuu.essentials.ui.compose.core.ControllerAmbient
+import com.ivianuu.essentials.ui.compose.core.InsetsManager
+import com.ivianuu.essentials.ui.compose.core.InsetsManagerAmbient
 import com.ivianuu.essentials.ui.compose.core.RouteAmbient
 import com.ivianuu.essentials.ui.compose.injekt.ComponentAmbient
 import com.ivianuu.essentials.ui.compose.injekt.MaterialThemeProvider
@@ -50,7 +54,11 @@ abstract class ComposeController : EsController() {
 
     override fun onViewCreated(view: View) {
         super.onViewCreated(view)
-        view.cast<ViewGroup>().setContent { composeWithAmbients() }
+        view.cast<ViewGroup>().setContent {
+            val composeView = view.cast<ViewGroup>().children.first() as AndroidComposeView
+            composeView.fitsSystemWindows = true
+            composeWithAmbients(composeView)
+        }
     }
 
     override fun onDestroyView(view: View) {
@@ -60,17 +68,20 @@ abstract class ComposeController : EsController() {
     }
 
     @Composable
-    protected open fun composeWithAmbients() {
+    protected open fun composeWithAmbients(view: AndroidComposeView) {
         ActivityAmbient.Provider(value = requireActivity()) {
-            RouteAmbient.Provider(value = route!!) {
-                ControllerAmbient.Provider(value = this) {
-                    ComponentAmbient.Provider(value = component) {
-                        val materialThemeProvider = +inject<MaterialThemeProvider>()
-                        MaterialTheme(
-                            colors = +materialThemeProvider.colors,
-                            typography = +materialThemeProvider.typography
-                        ) {
-                            compose()
+            val insetsManager = InsetsManager(view)
+            InsetsManagerAmbient.Provider(value = insetsManager) {
+                RouteAmbient.Provider(value = route!!) {
+                    ControllerAmbient.Provider(value = this) {
+                        ComponentAmbient.Provider(value = component) {
+                            val materialThemeProvider = +inject<MaterialThemeProvider>()
+                            MaterialTheme(
+                                colors = +materialThemeProvider.colors,
+                                typography = +materialThemeProvider.typography
+                            ) {
+                                compose()
+                            }
                         }
                     }
                 }
