@@ -17,7 +17,11 @@
 package com.ivianuu.essentials.ui.base
 
 import android.os.Bundle
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
+import com.github.ajalt.timberkt.d
+import com.ivianuu.director.Router
 import com.ivianuu.director.router
 import com.ivianuu.essentials.ui.mvrx.MvRxView
 import com.ivianuu.essentials.ui.navigation.Navigator
@@ -28,15 +32,14 @@ import com.ivianuu.essentials.util.unsafeLazy
 import com.ivianuu.injekt.InjektTrait
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.android.activityComponent
-import com.ivianuu.injekt.factory
+import com.ivianuu.injekt.get
 import com.ivianuu.injekt.inject
 import com.ivianuu.injekt.module
+import com.ivianuu.injekt.single
 import com.ivianuu.scopes.android.onPause
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-
-private fun esActivityModule(esActivity: EsActivity) = module {
-    factory { esActivity.router(esActivity.containerId) }
-}
 
 /**
  * Base activity
@@ -50,8 +53,6 @@ abstract class EsActivity : AppCompatActivity(), InjektTrait, MvRxView {
         }
     }
 
-    var handleBack = true
-
     val navigator: Navigator by inject()
     private val controllerRenderer: ControllerRenderer by inject()
 
@@ -63,8 +64,18 @@ abstract class EsActivity : AppCompatActivity(), InjektTrait, MvRxView {
     open val startRoute: ControllerRoute?
         get() = null
 
+    private val onBackPressedCallback = object : OnBackPressedCallback(false) {
+        override fun handleOnBackPressed() {
+            d { "hello" }
+            navigator.pop()
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // force router init
+        get<Router>()
 
         if (layoutRes != 0) {
             setContentView(layoutRes)
@@ -73,6 +84,15 @@ abstract class EsActivity : AppCompatActivity(), InjektTrait, MvRxView {
         if (navigator.backStack.isEmpty()) {
             startRoute?.let { navigator.push(it) }
         }
+
+        onBackPressedDispatcher.addCallback(onBackPressedCallback)
+
+        navigator.flow
+            .onEach {
+                d { "backstack changed $it" }
+                onBackPressedCallback.isEnabled = it.size > 1
+            }
+            .launchIn(lifecycleScope)
     }
 
     override fun onStart() {
@@ -87,17 +107,13 @@ abstract class EsActivity : AppCompatActivity(), InjektTrait, MvRxView {
         }
     }
 
-    override fun onBackPressed() {
-        if (handleBack && navigator.backStack.size > 1) {
-            navigator.pop()
-        } else {
-            super.onBackPressed()
-        }
-    }
-
     override fun invalidate() {
     }
 
     protected open fun modules(): List<Module> = emptyList()
 
+}
+
+private fun esActivityModule(esActivity: EsActivity) = module {
+    single { esActivity.router(esActivity.containerId) }
 }

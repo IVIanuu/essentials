@@ -29,7 +29,6 @@ abstract class ComposeActivity : EsActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        handleBack = false
         setContent { compose() }
     }
 
