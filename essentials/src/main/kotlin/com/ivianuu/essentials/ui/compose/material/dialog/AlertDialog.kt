@@ -37,14 +37,11 @@ import androidx.ui.layout.MainAxisAlignment
 import androidx.ui.layout.Padding
 import androidx.ui.layout.Row
 import androidx.ui.layout.WidthSpacer
-import androidx.ui.material.Button
 import androidx.ui.material.Divider
-import androidx.ui.material.TextButtonStyle
 import androidx.ui.material.surface.Card
 import androidx.ui.material.themeTextStyle
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.dialog.Dialog
-import com.ivianuu.essentials.ui.compose.dialog.dismissDialog
 import com.ivianuu.essentials.ui.compose.material.CurrentIconStyleProvider
 import com.ivianuu.essentials.ui.compose.material.IconStyle
 import com.ivianuu.essentials.ui.compose.material.SecondaryTextAlpha
@@ -105,6 +102,97 @@ private fun DialogFrame(
             }
         }
     }
+}
+
+@Composable
+private fun DialogBody(
+    showDividers: Boolean = false,
+    applyContentPadding: Boolean = true,
+    icon: @Composable() (() -> Unit)? = null,
+    title: (@Composable() () -> Unit)? = null,
+    content: (@Composable() () -> Unit)? = null,
+    buttons: (@Composable() () -> Unit)? = null
+) = composable("DialogBody") {
+    val header: (@Composable() () -> Unit)? = if (icon != null || title != null) {
+        {
+            val styledTitle = title?.let {
+                {
+                    CurrentTextStyleProvider(
+                        +themeTextStyle { h6 }
+                    ) {
+                        title()
+                    }
+                }
+            }
+
+            val styledIcon = icon?.let {
+                {
+                    CurrentIconStyleProvider(
+                        IconStyle(color = +colorForCurrentBackground())
+                    ) {
+                        icon()
+                    }
+                }
+            }
+
+            if (styledIcon != null && styledTitle != null) {
+                Row(
+                    mainAxisAlignment = MainAxisAlignment.Start,
+                    crossAxisAlignment = CrossAxisAlignment.Center
+                ) {
+                    styledIcon()
+                    WidthSpacer(16.dp)
+                    styledTitle()
+                }
+            } else if (styledIcon != null) {
+                styledIcon()
+            } else if (styledTitle != null) {
+                styledTitle()
+            }
+        }
+    } else {
+        null
+    }
+
+    DialogContentLayout(
+        showDividers = showDividers,
+        applyContentPadding = applyContentPadding,
+        header = header,
+        content = content?.let {
+            {
+                CurrentTextStyleProvider(
+                    (+themeTextStyle { subtitle1 }).copy(
+                        color = (+colorForCurrentBackground()).copy(alpha = SecondaryTextAlpha)
+                    )
+                ) {
+                    content()
+                }
+            }
+        },
+        buttons = buttons?.let {
+            {
+                Container(
+                    expanded = true,
+                    alignment = Alignment.CenterRight,
+                    height = 52.dp
+                ) {
+                    Padding(padding = 8.dp) {
+                        Row(
+                            mainAxisAlignment = MainAxisAlignment.End,
+                            crossAxisAlignment = CrossAxisAlignment.Center
+                        ) {
+                            buttons()
+                        }
+                    }
+                }
+            }
+        }
+    )
+}
+
+@Composable
+private fun DialogDivider() = composable("DialogDivider") {
+    Divider(color = (+colorForCurrentBackground()).copy(alpha = 0.12f))
 }
 
 @Composable
@@ -223,122 +311,4 @@ fun DialogContentLayout(
 
 private enum class DialogContentLayoutType {
     Header, TopDivider, Content, BottomDivider, Buttons
-}
-
-@Composable
-private fun DialogBody(
-    showDividers: Boolean = false,
-    applyContentPadding: Boolean = true,
-    icon: @Composable() (() -> Unit)? = null,
-    title: (@Composable() () -> Unit)? = null,
-    content: (@Composable() () -> Unit)? = null,
-    buttons: (@Composable() () -> Unit)? = null
-) = composable("DialogBody") {
-    val header: (@Composable() () -> Unit)? = if (icon != null || title != null) {
-        {
-            val styledTitle = title?.let {
-                {
-                    CurrentTextStyleProvider(
-                        +themeTextStyle { h6 }
-                    ) {
-                        title()
-                    }
-                }
-            }
-
-            val styledIcon = icon?.let {
-                {
-                    CurrentIconStyleProvider(
-                        IconStyle(color = +colorForCurrentBackground())
-                    ) {
-                        icon()
-                    }
-                }
-            }
-
-            if (styledIcon != null && styledTitle != null) {
-                Row(
-                    mainAxisAlignment = MainAxisAlignment.Start,
-                    crossAxisAlignment = CrossAxisAlignment.Center
-                ) {
-                    styledIcon()
-                    WidthSpacer(16.dp)
-                    styledTitle()
-                }
-            } else if (styledIcon != null) {
-                styledIcon()
-            } else if (styledTitle != null) {
-                styledTitle()
-            }
-        }
-    } else {
-        null
-    }
-
-    DialogContentLayout(
-        showDividers = showDividers,
-        applyContentPadding = applyContentPadding,
-        header = header,
-        content = content?.let {
-            {
-                CurrentTextStyleProvider(
-                    (+themeTextStyle { subtitle1 }).copy(
-                        color = (+colorForCurrentBackground()).copy(alpha = SecondaryTextAlpha)
-                    )
-                ) {
-                    content()
-                }
-            }
-        },
-        buttons = buttons?.let {
-            {
-                Container(
-                    expanded = true,
-                    alignment = Alignment.CenterRight,
-                    height = 52.dp
-                ) {
-                    Padding(padding = 8.dp) {
-                        Row(
-                            mainAxisAlignment = MainAxisAlignment.End,
-                            crossAxisAlignment = CrossAxisAlignment.Center
-                        ) {
-                            buttons()
-                        }
-                    }
-                }
-            }
-        }
-    )
-}
-
-@Composable
-fun DialogButton(
-    text: String,
-    dismissDialogOnClick: Boolean = true,
-    onClick: (() -> Unit)? = null
-) = composable("DialogButton") {
-    val dismissDialog = +dismissDialog()
-    Button(
-        text = text.toUpperCase(), // todo find a better way for uppercase
-        onClick = onClick?.let {
-            {
-                onClick()
-                if (dismissDialogOnClick) dismissDialog()
-            }
-        },
-        style = TextButtonStyle()
-    )
-}
-
-@Composable
-fun DialogCloseButton(text: String) = composable("DialogCloseButton") {
-    DialogButton(
-        text = text,
-        dismissDialogOnClick = true,
-        onClick = {})
-}
-
-@Composable
-private fun DialogDivider() = composable("DialogDivider") {
-    Divider(color = (+colorForCurrentBackground()).copy(alpha = 0.12f))
 }
