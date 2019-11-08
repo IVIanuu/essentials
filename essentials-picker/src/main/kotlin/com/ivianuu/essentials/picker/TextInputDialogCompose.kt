@@ -35,7 +35,6 @@ fun TextInputDialog(
     value: String,
     hint: String,
     onValueChange: (String) -> Unit,
-    allowEmpty: Boolean = false,
     dismissOnOutsideTouch: Boolean = true,
     dismissOnBackClick: Boolean = true,
     buttonLayout: AlertDialogButtonLayout = AlertDialogButtonLayout.SideBySide,
