@@ -21,15 +21,8 @@ import androidx.compose.Composable
 import androidx.compose.ambient
 import androidx.compose.memo
 import androidx.compose.unaryPlus
-import androidx.ui.core.Alignment
-import androidx.ui.core.dp
-import androidx.ui.core.gesture.PressGestureDetector
 import androidx.ui.foundation.ColoredRect
-import androidx.ui.foundation.shape.corner.RoundedCornerShape
 import androidx.ui.graphics.Color
-import androidx.ui.layout.Padding
-import androidx.ui.layout.Wrap
-import androidx.ui.material.surface.Card
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.material.Scaffold
 import com.ivianuu.essentials.ui.compose.material.ScaffoldAmbient
@@ -39,6 +32,8 @@ fun DialogManager(children: @Composable() () -> Unit) {
     val dialogManager = +memo { DialogManager(scaffold) }
     DialogManagerAmbient.Provider(value = dialogManager, children = children)
 }
+
+val DismissDialogAmbient = Ambient.of<() -> Unit>()
 
 class DialogManager internal constructor(private val scaffold: Scaffold) {
 
@@ -59,20 +54,8 @@ class DialogManager internal constructor(private val scaffold: Scaffold) {
                 updateScrimState()
             }
 
-            PressGestureDetector(
-                onPress = { dismissDialog() }
-            ) {
-                Wrap(alignment = Alignment.Center) {
-                    Padding(padding = DialogPadding) {
-                        PressGestureDetector {
-                            Card(shape = RoundedCornerShape(size = DialogCornerRadius)) {
-                                Padding(padding = DialogContentPadding) {
-                                    content(dismissDialog)
-                                }
-                            }
-                        }
-                    }
-                }
+            DismissDialogAmbient.Provider(dismissDialog) {
+                content(dismissDialog)
             }
         }
     }
@@ -95,9 +78,5 @@ val DialogManagerAmbient = Ambient.of<DialogManager>()
 
 @Composable
 private fun DialogScrim() = composable("DialogScrim") {
-    ColoredRect(Color.Black.copy(alpha = 0.7f))
+    ColoredRect(Color.Black.copy(alpha = 0.6f))
 }
-
-private val DialogCornerRadius = 8.dp
-private val DialogPadding = 72.dp
-private val DialogContentPadding = 16.dp
