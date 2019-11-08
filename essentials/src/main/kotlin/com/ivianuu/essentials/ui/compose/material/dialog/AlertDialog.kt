@@ -351,9 +351,13 @@ private fun DialogButtons(
         }
         AlertDialogButtonLayout.Stacked -> {
             Container(
-                padding = EdgeInsets(all = 8.dp)
+                padding = EdgeInsets(all = 8.dp),
+                alignment = Alignment.CenterRight
             ) {
-                Column {
+                Column(
+                    mainAxisAlignment = MainAxisAlignment.Center,
+                    crossAxisAlignment = CrossAxisAlignment.Center
+                ) {
                     neutralButton?.invoke()
                     negativeButton?.invoke()
                     positiveButton?.invoke()

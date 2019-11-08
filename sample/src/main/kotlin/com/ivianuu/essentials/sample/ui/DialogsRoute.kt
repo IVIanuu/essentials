@@ -42,6 +42,7 @@ import com.ivianuu.essentials.ui.compose.material.Icon
 import com.ivianuu.essentials.ui.compose.material.Scaffold
 import com.ivianuu.essentials.ui.compose.material.SimpleListItem
 import com.ivianuu.essentials.ui.compose.material.dialog.AlertDialog
+import com.ivianuu.essentials.ui.compose.material.dialog.AlertDialogButtonLayout
 import com.ivianuu.essentials.ui.compose.material.dialog.DialogButton
 import com.ivianuu.essentials.ui.compose.material.dialog.DialogCloseButton
 import com.ivianuu.essentials.ui.compose.material.dialog.ListDialog
@@ -70,6 +71,18 @@ val dialogsRoute = composeControllerRoute(
                             content = { Text("This is a message") },
                             positiveButton = { DialogCloseButton("OK") },
                             negativeButton = { DialogCloseButton("Cancel") }
+                        )
+                    }
+
+                    DialogLauncherButton(
+                        text = "Simple with neutral"
+                    ) {
+                        AlertDialog(
+                            title = { Text("Simple") },
+                            content = { Text("This is a message") },
+                            positiveButton = { DialogCloseButton("Positive") },
+                            negativeButton = { DialogCloseButton("Negative") },
+                            neutralButton = { DialogCloseButton("Neutral") }
                         )
                     }
 
@@ -106,6 +119,31 @@ val dialogsRoute = composeControllerRoute(
                         AlertDialog(
                             positiveButton = { DialogCloseButton("OK") },
                             negativeButton = { DialogCloseButton("Cancel") }
+                        )
+                    }
+
+                    DialogLauncherButton(
+                        text = "Stacked buttons"
+                    ) {
+                        AlertDialog(
+                            title = { Text("Stacked buttons") },
+                            content = { Text("Shows stacked buttons") },
+                            buttonLayout = AlertDialogButtonLayout.Stacked,
+                            positiveButton = { DialogCloseButton("OK") },
+                            negativeButton = { DialogCloseButton("Cancel") }
+                        )
+                    }
+
+                    DialogLauncherButton(
+                        text = "Stacked buttons with neutral"
+                    ) {
+                        AlertDialog(
+                            title = { Text("Stacked buttons") },
+                            content = { Text("Shows stacked buttons") },
+                            buttonLayout = AlertDialogButtonLayout.Stacked,
+                            positiveButton = { DialogCloseButton("Positive") },
+                            negativeButton = { DialogCloseButton("Negative") },
+                            neutralButton = { DialogCloseButton("Neutral") }
                         )
                     }
 
