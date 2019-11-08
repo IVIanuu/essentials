@@ -42,7 +42,7 @@ class DialogManager internal constructor(private val scaffold: Scaffold) {
     private var removeScrim: (() -> Unit)? = null
 
     fun showDialog(
-        content: @Composable() (() -> Unit) -> Unit
+        dialog: @Composable() (() -> Unit) -> Unit
     ) {
         ++visibleDialogs
         updateScrimState()
@@ -55,7 +55,7 @@ class DialogManager internal constructor(private val scaffold: Scaffold) {
             }
 
             DismissDialogAmbient.Provider(dismissDialog) {
-                content(dismissDialog)
+                dialog(dismissDialog)
             }
         }
     }

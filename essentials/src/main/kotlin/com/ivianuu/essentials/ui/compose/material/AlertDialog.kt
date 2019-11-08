@@ -21,6 +21,7 @@ import androidx.compose.ambient
 import androidx.compose.unaryPlus
 import androidx.ui.core.Alignment
 import androidx.ui.core.CurrentTextStyleProvider
+import androidx.ui.core.PxPosition
 import androidx.ui.core.dp
 import androidx.ui.core.gesture.PressGestureDetector
 import androidx.ui.foundation.shape.corner.RoundedCornerShape
@@ -43,7 +44,10 @@ import androidx.ui.material.themeTextStyle
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.dialog.DismissDialogAmbient
 
+// todo remove hardcoded values
+
 fun AlertDialog(
+    dismissOnOutsideTouch: Boolean = true,
     title: (@Composable() () -> Unit)? = null,
     content: (@Composable() () -> Unit)? = null,
     buttons: (@Composable() () -> Unit)? = null
@@ -51,7 +55,9 @@ fun AlertDialog(
     val dismissDialog = +ambient(DismissDialogAmbient)
 
     PressGestureDetector(
-        onPress = { dismissDialog() }
+        onPress = if (dismissOnOutsideTouch) {
+            { _: PxPosition -> dismissDialog() }
+        } else null
     ) {
         Wrap(alignment = Alignment.Center) {
             Padding(padding = DialogPadding) {
@@ -61,7 +67,10 @@ fun AlertDialog(
                             minWidth = 280.dp
                         )
                     ) {
-                        Card(shape = RoundedCornerShape(size = DialogCornerRadius)) {
+                        Card(
+                            shape = RoundedCornerShape(size = DialogCornerRadius),
+                            elevation = 24.dp
+                        ) {
                             Column {
                                 if (title != null) {
                                     Container(
@@ -104,10 +113,16 @@ fun AlertDialog(
                                             content()
                                         }
                                     }
+
+                                    if (buttons == null) {
+                                        HeightSpacer(24.dp)
+                                    }
                                 }
 
                                 if (buttons != null) {
-                                    HeightSpacer(28.dp)
+                                    if (content != null || title != null) {
+                                        HeightSpacer(28.dp)
+                                    }
 
                                     Container(
                                         expanded = true,
@@ -138,11 +153,18 @@ fun AlertDialog(
 @Composable
 fun DialogButton(
     text: String,
-    onClick: () -> Unit
+    dismissDialogOnClick: Boolean = true,
+    onClick: (() -> Unit)? = null
 ) = composable("DialogButton") {
+    val dismissDialog = +ambient(DismissDialogAmbient)
     Button(
         text = text,
-        onClick = onClick,
+        onClick = onClick?.let { nonNullOnClick ->
+            {
+                nonNullOnClick()
+                if (dismissDialogOnClick) dismissDialog()
+            }
+        },
         style = TextButtonStyle()
     )
 }
