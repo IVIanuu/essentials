@@ -47,6 +47,7 @@ dependencies {
     api(Deps.AndroidX.Ui.core)
     api(Deps.AndroidX.Ui.foundation)
     api(Deps.AndroidX.Ui.framework)
+    api(Deps.insetter)
     api(Deps.AndroidX.Ui.layout)
     api(Deps.AndroidX.Ui.material)
     api(Deps.AndroidX.Ui.platform)
