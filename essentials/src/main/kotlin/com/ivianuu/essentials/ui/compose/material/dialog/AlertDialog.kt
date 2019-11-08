@@ -36,6 +36,7 @@ import androidx.ui.layout.DpConstraints
 import androidx.ui.layout.MainAxisAlignment
 import androidx.ui.layout.Padding
 import androidx.ui.layout.Row
+import androidx.ui.layout.WidthSpacer
 import androidx.ui.material.Button
 import androidx.ui.material.Divider
 import androidx.ui.material.TextButtonStyle
@@ -44,11 +45,14 @@ import androidx.ui.material.themeTextStyle
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.dialog.Dialog
 import com.ivianuu.essentials.ui.compose.dialog.dismissDialog
+import com.ivianuu.essentials.ui.compose.material.CurrentIconStyleProvider
+import com.ivianuu.essentials.ui.compose.material.IconStyle
 import com.ivianuu.essentials.ui.compose.material.SecondaryTextAlpha
 import com.ivianuu.essentials.ui.compose.material.colorForCurrentBackground
 
 // todo remove hardcoded values
 // todo add more styleable attributes such as corner radius
+// todo add stack buttons mode
 
 @Composable
 fun AlertDialog(
@@ -56,6 +60,7 @@ fun AlertDialog(
     dismissOnBackClick: Boolean = true,
     showDividers: Boolean = false,
     applyContentPadding: Boolean = true,
+    icon: (@Composable() () -> Unit)? = null,
     title: (@Composable() () -> Unit)? = null,
     content: (@Composable() () -> Unit)? = null,
     buttons: (@Composable() () -> Unit)? = null
@@ -68,6 +73,7 @@ fun AlertDialog(
             DialogBody(
                 showDividers = showDividers,
                 applyContentPadding = applyContentPadding,
+                icon = icon,
                 title = title,
                 content = content,
                 buttons = buttons
@@ -105,26 +111,26 @@ private fun DialogFrame(
 fun DialogContentLayout(
     showDividers: Boolean = false,
     applyContentPadding: Boolean = true,
-    title: @Composable() (() -> Unit)? = null,
+    header: @Composable() (() -> Unit)? = null,
     content: @Composable() (() -> Unit)? = null,
     buttons: @Composable() (() -> Unit)? = null
 ) = composable("DialogContentLayout") {
     val children: @Composable() () -> Unit = {
-        if (title != null) {
-            ParentData(DialogContentLayoutType.Title) {
+        if (header != null) {
+            ParentData(DialogContentLayoutType.Header) {
                 Padding(
                     left = 24.dp,
                     top = 24.dp,
                     right = 24.dp,
                     bottom = if (buttons != null && content == null) 28.dp else 24.dp
                 ) {
-                    title()
+                    header()
                 }
             }
         }
 
         if (content != null) {
-            if (title != null && showDividers) {
+            if (header != null && showDividers) {
                 ParentData(DialogContentLayoutType.TopDivider) {
                     DialogDivider()
                 }
@@ -132,7 +138,7 @@ fun DialogContentLayout(
 
             ParentData(DialogContentLayoutType.Content) {
                 Padding(
-                    top = if (title == null) 24.dp else 0.dp,
+                    top = if (header == null) 24.dp else 0.dp,
                     left = if (applyContentPadding) 24.dp else 0.dp,
                     right = if (applyContentPadding) 24.dp else 0.dp,
                     bottom = if (buttons == null) 24.dp else 0.dp
@@ -167,8 +173,8 @@ fun DialogContentLayout(
             minHeight = 0.ipx
         )
 
-        val titleMeasureable =
-            measureables.firstOrNull { it.parentData == DialogContentLayoutType.Title }
+        val headerMeasureable =
+            measureables.firstOrNull { it.parentData == DialogContentLayoutType.Header }
         val topDividerMeasureable =
             measureables.firstOrNull { it.parentData == DialogContentLayoutType.TopDivider }
         val contentMeasureable =
@@ -190,14 +196,14 @@ fun DialogContentLayout(
             }
         }
 
-        val titlePlaceable = measureFixed(titleMeasureable)
+        val headerPlaceable = measureFixed(headerMeasureable)
         val topDividerPlaceable = measureFixed(topDividerMeasureable)
         val bottomDividerPlaceable = measureFixed(bottomDividerMeasureable)
         val buttonsPlaceable = measureFixed(buttonsMeasureable)
         val contentPlaceable = measureFixed(contentMeasureable)
 
         val placeables = listOfNotNull(
-            titlePlaceable,
+            headerPlaceable,
             topDividerPlaceable,
             contentPlaceable,
             bottomDividerPlaceable,
@@ -216,29 +222,63 @@ fun DialogContentLayout(
 }
 
 private enum class DialogContentLayoutType {
-    Title, TopDivider, Content, BottomDivider, Buttons
+    Header, TopDivider, Content, BottomDivider, Buttons
 }
 
 @Composable
 private fun DialogBody(
     showDividers: Boolean = false,
     applyContentPadding: Boolean = true,
+    icon: @Composable() (() -> Unit)? = null,
     title: (@Composable() () -> Unit)? = null,
     content: (@Composable() () -> Unit)? = null,
     buttons: (@Composable() () -> Unit)? = null
 ) = composable("DialogBody") {
+    val header: (@Composable() () -> Unit)? = if (icon != null || title != null) {
+        {
+            val styledTitle = title?.let {
+                {
+                    CurrentTextStyleProvider(
+                        +themeTextStyle { h6 }
+                    ) {
+                        title()
+                    }
+                }
+            }
+
+            val styledIcon = icon?.let {
+                {
+                    CurrentIconStyleProvider(
+                        IconStyle(color = +colorForCurrentBackground())
+                    ) {
+                        icon()
+                    }
+                }
+            }
+
+            if (styledIcon != null && styledTitle != null) {
+                Row(
+                    mainAxisAlignment = MainAxisAlignment.Start,
+                    crossAxisAlignment = CrossAxisAlignment.Center
+                ) {
+                    styledIcon()
+                    WidthSpacer(16.dp)
+                    styledTitle()
+                }
+            } else if (styledIcon != null) {
+                styledIcon()
+            } else if (styledTitle != null) {
+                styledTitle()
+            }
+        }
+    } else {
+        null
+    }
+
     DialogContentLayout(
         showDividers = showDividers,
         applyContentPadding = applyContentPadding,
-        title = title?.let {
-            {
-                CurrentTextStyleProvider(
-                    +themeTextStyle { h6 }
-                ) {
-                    title()
-                }
-            }
-        },
+        header = header,
         content = content?.let {
             {
                 CurrentTextStyleProvider(

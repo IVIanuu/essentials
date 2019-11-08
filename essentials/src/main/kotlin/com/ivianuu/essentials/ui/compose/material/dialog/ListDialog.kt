@@ -36,6 +36,7 @@ import com.ivianuu.essentials.ui.compose.core.composable
 fun ListDialog(
     dismissOnOutsideTouch: Boolean = true,
     dismissOnBackClick: Boolean = true,
+    icon: @Composable() (() -> Unit)? = null,
     title: (@Composable() () -> Unit)? = null,
     listContent: @Composable() () -> Unit,
     buttons: (@Composable() () -> Unit)? = null
@@ -43,6 +44,7 @@ fun ListDialog(
     AlertDialog(
         dismissOnOutsideTouch = dismissOnOutsideTouch,
         dismissOnBackClick = dismissOnBackClick,
+        icon = icon,
         title = title,
         showDividers = true,
         applyContentPadding = false,

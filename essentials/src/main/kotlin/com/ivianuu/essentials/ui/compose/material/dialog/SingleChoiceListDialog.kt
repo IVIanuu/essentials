@@ -25,6 +25,7 @@ import com.ivianuu.essentials.ui.compose.core.composable
 fun <T> SingleChoiceListDialog(
     dismissOnOutsideTouch: Boolean = true,
     dismissOnBackClick: Boolean = true,
+    icon: @Composable() (() -> Unit)? = null,
     title: (@Composable() () -> Unit)? = null,
     buttons: (@Composable() () -> Unit)? = null,
     items: List<T>,
@@ -34,6 +35,7 @@ fun <T> SingleChoiceListDialog(
     ListDialog(
         dismissOnOutsideTouch = dismissOnOutsideTouch,
         dismissOnBackClick = dismissOnBackClick,
+        icon = icon,
         title = title,
         buttons = buttons,
         listContent = {

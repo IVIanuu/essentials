@@ -28,11 +28,13 @@ import androidx.ui.layout.CrossAxisAlignment
 import androidx.ui.layout.HeightSpacer
 import androidx.ui.layout.MainAxisAlignment
 import androidx.ui.material.Button
+import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.compose.composeControllerRoute
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.dialog.DialogManagerAmbient
 import com.ivianuu.essentials.ui.compose.dialog.DismissDialogAmbient
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
+import com.ivianuu.essentials.ui.compose.material.Icon
 import com.ivianuu.essentials.ui.compose.material.Scaffold
 import com.ivianuu.essentials.ui.compose.material.SimpleListItem
 import com.ivianuu.essentials.ui.compose.material.dialog.AlertDialog
@@ -41,6 +43,7 @@ import com.ivianuu.essentials.ui.compose.material.dialog.DialogCloseButton
 import com.ivianuu.essentials.ui.compose.material.dialog.ListDialog
 import com.ivianuu.essentials.ui.compose.material.dialog.SingleChoiceDialogListItem
 import com.ivianuu.essentials.ui.compose.material.dialog.SingleChoiceListDialog
+import com.ivianuu.essentials.ui.compose.resources.drawableResource
 import com.ivianuu.essentials.ui.navigation.director.controllerRouteOptions
 import com.ivianuu.essentials.ui.navigation.director.fade
 
@@ -78,6 +81,16 @@ val dialogsRoute = composeControllerRoute(
                     ) {
                         AlertDialog(
                             title = { Text("Title only") }
+                        )
+                    }
+
+                    DialogLauncherButton(
+                        text = "With icon"
+                    ) {
+                        AlertDialog(
+                            title = { Text("With icon") },
+                            icon = { Icon(+drawableResource(R.drawable.ic_settings)) },
+                            buttons = { DialogCloseButton("OK") }
                         )
                     }
 
