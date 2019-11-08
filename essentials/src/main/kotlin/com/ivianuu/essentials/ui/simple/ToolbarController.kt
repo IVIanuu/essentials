@@ -17,17 +17,16 @@
 package com.ivianuu.essentials.ui.simple
 
 import android.graphics.PorterDuff
-import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.appcompat.widget.Toolbar
+import androidx.compose.Composable
 import androidx.core.view.children
 import com.google.android.material.appbar.AppBarLayout
 import com.ivianuu.director.requireActivity
 import com.ivianuu.essentials.R
-import com.ivianuu.essentials.ui.popup.PopupMenu
-import com.ivianuu.essentials.ui.popup.show
+import com.ivianuu.essentials.ui.compose.material.popupMenuRoute
 import com.ivianuu.essentials.util.drawable
 import com.ivianuu.essentials.util.getIconColor
 import com.ivianuu.essentials.util.getPrimaryColor
@@ -36,7 +35,6 @@ import com.ivianuu.essentials.util.getSecondaryTextColor
 import com.ivianuu.essentials.util.isLight
 import kotlinx.android.synthetic.main.es_controller_tabs.es_app_bar
 import kotlinx.android.synthetic.main.es_view_toolbar.es_toolbar
-
 
 /**
  * A controller which hosts a toolbar
@@ -51,7 +49,7 @@ abstract class ToolbarController : CoordinatorController() {
 
     protected open val toolbarTitle: String? get() = null
     protected open val toolbarTitleRes: Int? get() = null
-    protected open val toolbarMenu: PopupMenu<*>? get() = null
+    protected open val toolbarMenuConfig: ToolbarMenuConfig<out Any?>? get() = null
     protected open val toolbarBackButton: Boolean
         get() = router.backStack.firstOrNull()?.controller != this
 
@@ -67,18 +65,26 @@ abstract class ToolbarController : CoordinatorController() {
                 toolbarTitleRes != null -> setTitle(toolbarTitleRes!!)
             }
 
-            val toolbarMenu = toolbarMenu?.copy(
-                style = R.attr.actionOverflowMenuStyle, gravity = Gravity.END
-            )
+            val toolbarMenuConfig = toolbarMenuConfig as? ToolbarMenuConfig<Any?>
 
-            if (toolbarMenu != null) {
+            if (toolbarMenuConfig != null) {
                 menu.add("dummy")
                 overflowIcon = requireActivity().drawable(R.drawable.es_ic_more_vert)
                 val overflow = findView {
                     it is ImageView && it.drawable == overflowIcon
                 }!!
 
-                overflow.setOnClickListener { toolbarMenu.show(it) }
+                overflow.setOnClickListener {
+                    navigator.push(
+                        popupMenuRoute(
+                            view = overflow,
+                            items = toolbarMenuConfig.items,
+                            onSelected = toolbarMenuConfig.onSelected,
+                            onCancel = toolbarMenuConfig.onCancel,
+                            item = toolbarMenuConfig.item
+                        )
+                    )
+                }
             }
 
             if (toolbarBackButton) {
@@ -113,5 +119,12 @@ abstract class ToolbarController : CoordinatorController() {
 
         return null
     }
+
+    data class ToolbarMenuConfig<T>(
+        val items: List<T>,
+        val onSelected: (T) -> Unit,
+        val onCancel: (() -> Unit)? = null,
+        val item: @Composable() (T) -> Unit
+    )
 
 }
