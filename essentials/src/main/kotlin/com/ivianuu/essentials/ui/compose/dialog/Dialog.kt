@@ -24,6 +24,7 @@ import androidx.ui.core.gesture.PressGestureDetector
 import com.ivianuu.essentials.ui.compose.common.onBackPressed
 import com.ivianuu.essentials.ui.compose.core.composable
 
+// todo callbacks like onShow, onDismiss, onCancel etc
 // todo add DialogState + ambient to control dialog state from descendents
 
 @Composable
