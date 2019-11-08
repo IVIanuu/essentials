@@ -85,70 +85,84 @@ fun ColorPickerDialog(
         title = title,
         applyContentPadding = false,
         positiveButton = {
-            DialogButton(
+            ColoredDialogButton(
                 text = "OK",
-                style = TextButtonStyle(contentColor = currentColor)
-            ) {
-                onColorSelected(currentColor)
-            }
+                color = currentColor,
+                onClick = { onColorSelected(currentColor) }
+            )
         },
-        negativeButton = {
-            DialogCloseButton(text = "Cancel")
-        },
+        negativeButton = { DialogCloseButton(text = "Cancel") },
         content = {
-            if (allowCustomArgb) {
-                TabController(items = ColorPickerPage.values().toList()) {
-                    TightColumn {
-                        val currentColors = +ambient(Colors)
+            ColorPickerContent(
+                colors = colors,
+                allowCustomArgb = allowCustomArgb,
+                showAlphaSelector = showAlphaSelector,
+                color = currentColor,
+                onColorChanged = setCurrentColor
+            )
+        }
+    )
+}
 
-                        MaterialTheme(
-                            colors = currentColors.copy(
-                                primary = currentColors.surface,
-                                onPrimary = currentColors.onSurface
-                            ),
-                            typography = +ambient(Typography)
-                        ) {
-                            TabRow<ColorPickerPage> { _, page ->
-                                Tab(text = page.title)
-                            }
-                        }
+@Composable
+private fun ColorPickerContent(
+    colors: List<Color>,
+    allowCustomArgb: Boolean,
+    showAlphaSelector: Boolean,
+    color: Color,
+    onColorChanged: (Color) -> Unit
+) = composable("ColorPickerContent") {
+    if (allowCustomArgb) {
+        TabController(items = ColorPickerPage.values().toList()) {
+            TightColumn {
+                val currentColors = +ambient(Colors)
 
-                        Padding(
-                            left = 24.dp,
-                            right = 24.dp
-                        ) {
-                            TabContent<ColorPickerPage> { _, page ->
-                                Container(height = 300.dp) {
-                                    when (page) {
-                                        ColorPickerPage.Colors -> {
-                                            ColorGrid(
-                                                colors = colors,
-                                                onColorSelected = setCurrentColor
-                                            )
-                                        }
-                                        ColorPickerPage.Editor -> {
-                                            ColorEditor(
-                                                color = currentColor,
-                                                onColorChanged = setCurrentColor,
-                                                showAlphaSelector = showAlphaSelector
-                                            )
-                                        }
-                                    }
+                MaterialTheme(
+                    colors = currentColors.copy(
+                        primary = currentColors.surface,
+                        onPrimary = currentColors.onSurface
+                    ),
+                    typography = +ambient(Typography)
+                ) {
+                    TabRow<ColorPickerPage> { _, page ->
+                        Tab(text = page.title)
+                    }
+                }
+
+                Padding(
+                    left = 24.dp,
+                    right = 24.dp
+                ) {
+                    TabContent<ColorPickerPage> { _, page ->
+                        Container(height = 300.dp) {
+                            when (page) {
+                                ColorPickerPage.Colors -> {
+                                    ColorGrid(
+                                        colors = colors,
+                                        onColorSelected = onColorChanged
+                                    )
+                                }
+                                ColorPickerPage.Editor -> {
+                                    ColorEditor(
+                                        color = color,
+                                        onColorChanged = onColorChanged,
+                                        showAlphaSelector = showAlphaSelector
+                                    )
                                 }
                             }
                         }
                     }
                 }
-            } else {
-                Padding(
-                    left = 24.dp,
-                    right = 24.dp
-                ) {
-                    ColorGrid(colors = colors, onColorSelected = setCurrentColor)
-                }
             }
         }
-    )
+    } else {
+        Padding(
+            left = 24.dp,
+            right = 24.dp
+        ) {
+            ColorGrid(colors = colors, onColorSelected = onColorChanged)
+        }
+    }
 }
 
 @Composable
@@ -244,7 +258,19 @@ private fun ColorEditor(
     }
 }
 
-// todo enum
+@Composable
+private fun ColoredDialogButton(
+    text: String,
+    color: Color,
+    onClick: () -> Unit
+) = composable("ColoredDialogButton") {
+    DialogButton(
+        text = text,
+        style = TextButtonStyle(contentColor = color),
+        onClick = onClick
+    )
+}
+
 @Composable
 private fun ColorComponentItem(
     component: ColorComponent,

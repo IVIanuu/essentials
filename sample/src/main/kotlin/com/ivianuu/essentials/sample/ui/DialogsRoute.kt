@@ -230,6 +230,7 @@ val dialogsRoute = composeControllerRoute(
                     DialogLauncherButton(text = "Color Picker") {
                         ColorPickerDialog(
                             title = { Text("Color Picker") },
+                            showAlphaSelector = true,
                             colors = PRIMARY_COLORS.map { Color(it) }.toList() + PRIMARY_COLORS_SUB.flatMap { it.toList() }.map {
                                 Color(
                                     it
