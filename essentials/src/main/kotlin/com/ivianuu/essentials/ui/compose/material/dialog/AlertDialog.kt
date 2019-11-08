@@ -23,6 +23,7 @@ import androidx.ui.core.CurrentTextStyleProvider
 import androidx.ui.core.dp
 import androidx.ui.core.gesture.PressGestureDetector
 import androidx.ui.foundation.shape.corner.RoundedCornerShape
+import androidx.ui.layout.Center
 import androidx.ui.layout.Column
 import androidx.ui.layout.ConstrainedBox
 import androidx.ui.layout.Container
@@ -34,7 +35,6 @@ import androidx.ui.layout.HeightSpacer
 import androidx.ui.layout.MainAxisAlignment
 import androidx.ui.layout.Padding
 import androidx.ui.layout.Row
-import androidx.ui.layout.Wrap
 import androidx.ui.material.Button
 import androidx.ui.material.Divider
 import androidx.ui.material.TextButtonStyle
@@ -62,16 +62,14 @@ fun AlertDialog(
         dismissOnOutsideTouch = dismissOnOutsideTouch,
         dismissOnBackClick = dismissOnBackClick
     ) {
-        Wrap(alignment = Alignment.Center) {
-            DialogFrame {
-                DialogBody(
-                    showDividers = showDividers,
-                    applyContentPadding = applyContentPadding,
-                    title = title,
-                    content = content,
-                    buttons = buttons
-                )
-            }
+        DialogFrame {
+            DialogBody(
+                showDividers = showDividers,
+                applyContentPadding = applyContentPadding,
+                title = title,
+                content = content,
+                buttons = buttons
+            )
         }
     }
 }
@@ -80,23 +78,21 @@ fun AlertDialog(
 private fun DialogFrame(
     children: @Composable() () -> Unit
 ) = composable("DialogFrame") {
-    Padding(
-        left = 32.dp,
-        top = 72.dp,
-        right = 32.dp,
-        bottom = 72.dp
-    ) {
-        PressGestureDetector {
-            ConstrainedBox(
-                constraints = DpConstraints(
-                    minWidth = 280.dp
-                )
-            ) {
-                Card(
-                    shape = RoundedCornerShape(size = 8.dp),
-                    elevation = 24.dp
-                ) {
-                    children()
+    Center {
+        Padding(
+            left = 32.dp,
+            top = 32.dp,
+            right = 32.dp,
+            bottom = 32.dp
+        ) {
+            PressGestureDetector {
+                ConstrainedBox(constraints = DpConstraints(minWidth = 280.dp)) {
+                    Card(
+                        shape = RoundedCornerShape(size = 8.dp),
+                        elevation = 24.dp
+                    ) {
+                        children()
+                    }
                 }
             }
         }
@@ -114,12 +110,13 @@ private fun DialogBody(
     Column {
         if (title != null) {
             Container(
-                modifier = ExpandedWidth wraps Inflexible,
+                modifier = ExpandedWidth,
                 alignment = Alignment.CenterLeft,
                 padding = EdgeInsets(
                     top = 24.dp,
                     left = 24.dp,
-                    right = 24.dp
+                    right = 24.dp,
+                    bottom = if (content == null && buttons == null) 24.dp else 0.dp
                 )
             ) {
                 CurrentTextStyleProvider(
@@ -128,16 +125,14 @@ private fun DialogBody(
                     title()
                 }
             }
-
-            if (content == null && buttons == null) {
-                HeightSpacer(24.dp)
-            }
         }
 
         if (content != null) {
             HeightSpacer(24.dp)
 
-            if (title != null && showDividers) DialogDivider()
+            if (title != null && showDividers) {
+                DialogDivider()
+            }
 
             Container(
                 modifier = ExpandedWidth,
@@ -169,12 +164,9 @@ private fun DialogBody(
             }
 
             Container(
-                modifier = Inflexible,
                 expanded = true,
                 alignment = Alignment.CenterRight,
-                constraints = DpConstraints(
-                    minHeight = 52.dp
-                )
+                height = 52.dp
             ) {
                 Padding(padding = 8.dp) {
                     Row(
