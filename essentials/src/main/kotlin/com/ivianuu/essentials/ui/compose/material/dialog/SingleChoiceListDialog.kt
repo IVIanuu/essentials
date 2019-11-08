@@ -18,7 +18,6 @@ package com.ivianuu.essentials.ui.compose.material.dialog
 
 import androidx.compose.Composable
 import androidx.compose.unaryPlus
-import androidx.ui.core.Text
 import androidx.ui.material.RadioButton
 import com.ivianuu.essentials.ui.compose.common.BlockChildTouches
 import com.ivianuu.essentials.ui.compose.core.composable
@@ -26,11 +25,13 @@ import com.ivianuu.essentials.ui.compose.dialog.dismissDialog
 
 @Composable
 fun <T> SingleChoiceListDialog(
-    items: List<Pair<T, String>>,
+    items: List<T>,
     selectedItem: T,
     onSelect: ((T) -> Unit)? = null,
+    item: @Composable() (T) -> Unit,
     dismissOnOutsideTouch: Boolean = true,
     dismissOnBackClick: Boolean = true,
+    dismissOnSelect: Boolean = true,
     icon: @Composable() (() -> Unit)? = null,
     title: (@Composable() () -> Unit)? = null,
     buttons: (@Composable() () -> Unit)? = null
@@ -43,15 +44,15 @@ fun <T> SingleChoiceListDialog(
         title = title,
         buttons = buttons,
         listContent = {
-            items.forEachIndexed { index, (item, title) ->
+            items.forEachIndexed { index, item ->
                 composable(index) {
                     SingleChoiceDialogListItem(
-                        title = title,
+                        title = { item(item) },
                         selected = item == selectedItem,
                         onSelect = onSelect?.let {
                             {
                                 onSelect(item)
-                                dismissDialog()
+                                //dismissDialog()
                             }
                         }
                     )
@@ -63,9 +64,9 @@ fun <T> SingleChoiceListDialog(
 
 @Composable
 private fun SingleChoiceDialogListItem(
-    title: String,
     selected: Boolean,
-    onSelect: (() -> Unit)? = null
+    onSelect: (() -> Unit)? = null,
+    title: @Composable() () -> Unit
 ) = composable("SingleChoiceDialogListItem") {
     SimpleDialogListItem(
         leading = {
@@ -76,7 +77,7 @@ private fun SingleChoiceDialogListItem(
                 )
             }
         },
-        title = { Text(title) },
+        title = title,
         onClick = onSelect
     )
 }

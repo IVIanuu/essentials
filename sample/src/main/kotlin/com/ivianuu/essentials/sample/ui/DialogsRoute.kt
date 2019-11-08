@@ -158,12 +158,21 @@ val dialogsRoute = composeControllerRoute(
                     DialogLauncherButton(
                         text = "Single choice list"
                     ) {
+                        val (tmpSelectedItem, tmpSetSelectedItem) = +state { selectedItem }
+
                         SingleChoiceListDialog(
                             title = { Text("List") },
-                            items = items.map { it to "Item: $it" },
-                            selectedItem = selectedItem,
-                            onSelect = setSelectedItem,
-                            buttons = { DialogCloseButton(text = "Cancel") }
+                            items = items,
+                            selectedItem = tmpSelectedItem,
+                            onSelect = tmpSetSelectedItem,
+                            dismissOnSelect = false,
+                            item = { Text("Item: $it") },
+                            buttons = {
+                                DialogCloseButton(text = "Cancel")
+                                DialogButton(text = "OK", onClick = {
+                                    setSelectedItem(tmpSelectedItem)
+                                })
+                            }
                         )
                     }
                 }
