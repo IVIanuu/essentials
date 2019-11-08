@@ -32,7 +32,6 @@ import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.compose.composeControllerRoute
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.dialog.DialogManagerAmbient
-import com.ivianuu.essentials.ui.compose.dialog.DismissDialogAmbient
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
 import com.ivianuu.essentials.ui.compose.material.Icon
 import com.ivianuu.essentials.ui.compose.material.Scaffold
@@ -41,7 +40,6 @@ import com.ivianuu.essentials.ui.compose.material.dialog.AlertDialog
 import com.ivianuu.essentials.ui.compose.material.dialog.DialogButton
 import com.ivianuu.essentials.ui.compose.material.dialog.DialogCloseButton
 import com.ivianuu.essentials.ui.compose.material.dialog.ListDialog
-import com.ivianuu.essentials.ui.compose.material.dialog.SingleChoiceDialogListItem
 import com.ivianuu.essentials.ui.compose.material.dialog.SingleChoiceListDialog
 import com.ivianuu.essentials.ui.compose.resources.drawableResource
 import com.ivianuu.essentials.ui.navigation.director.controllerRouteOptions
@@ -155,32 +153,17 @@ val dialogsRoute = composeControllerRoute(
                         )
                     }
 
+                    val items = listOf(1, 2, 3, 4, 5)
+                    val (selectedItem, setSelectedItem) = +state { 1 }
                     DialogLauncherButton(
                         text = "Single choice list"
                     ) {
-                        val items = listOf(1, 2, 3, 4, 5)
-                        val selectedItem = +state { 1 }
-                        val dismissDialog = +ambient(DismissDialogAmbient)
-
                         SingleChoiceListDialog(
                             title = { Text("List") },
-                            items = items,
-                            selectedIndex = items.indexOf(selectedItem.value),
-                            item = { _, selected, item ->
-                                SingleChoiceDialogListItem(
-                                    title = { Text("Item: $item") },
-                                    selected = selected,
-                                    onSelect = {
-                                        selectedItem.value = item
-                                        dismissDialog()
-                                    }
-                                )
-                            },
-                            buttons = {
-                                DialogCloseButton(
-                                    text = "Cancel"
-                                )
-                            }
+                            items = items.map { it to "Item: $it" },
+                            selectedItem = selectedItem,
+                            onSelect = setSelectedItem,
+                            buttons = { DialogCloseButton(text = "Cancel") }
                         )
                     }
                 }

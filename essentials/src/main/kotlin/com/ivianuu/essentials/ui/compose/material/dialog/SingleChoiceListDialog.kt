@@ -17,21 +17,25 @@
 package com.ivianuu.essentials.ui.compose.material.dialog
 
 import androidx.compose.Composable
+import androidx.compose.unaryPlus
+import androidx.ui.core.Text
 import androidx.ui.material.RadioButton
 import com.ivianuu.essentials.ui.compose.common.BlockChildTouches
 import com.ivianuu.essentials.ui.compose.core.composable
+import com.ivianuu.essentials.ui.compose.dialog.dismissDialog
 
 @Composable
 fun <T> SingleChoiceListDialog(
+    items: List<Pair<T, String>>,
+    selectedItem: T,
+    onSelect: ((T) -> Unit)? = null,
     dismissOnOutsideTouch: Boolean = true,
     dismissOnBackClick: Boolean = true,
     icon: @Composable() (() -> Unit)? = null,
     title: (@Composable() () -> Unit)? = null,
-    buttons: (@Composable() () -> Unit)? = null,
-    items: List<T>,
-    selectedIndex: Int,
-    item: @Composable() (Int, Boolean, T) -> Unit
+    buttons: (@Composable() () -> Unit)? = null
 ) = composable("SingleChoiceListDialog") {
+    val dismissDialog = +dismissDialog()
     ListDialog(
         dismissOnOutsideTouch = dismissOnOutsideTouch,
         dismissOnBackClick = dismissOnBackClick,
@@ -39,18 +43,29 @@ fun <T> SingleChoiceListDialog(
         title = title,
         buttons = buttons,
         listContent = {
-            items.forEachIndexed { index, item ->
-                item(index, index == selectedIndex, item)
+            items.forEachIndexed { index, (item, title) ->
+                composable(index) {
+                    SingleChoiceDialogListItem(
+                        title = title,
+                        selected = item == selectedItem,
+                        onSelect = onSelect?.let {
+                            {
+                                onSelect(item)
+                                dismissDialog()
+                            }
+                        }
+                    )
+                }
             }
         }
     )
 }
 
 @Composable
-fun SingleChoiceDialogListItem(
-    title: @Composable() () -> Unit,
+private fun SingleChoiceDialogListItem(
+    title: String,
     selected: Boolean,
-    onSelect: () -> Unit
+    onSelect: (() -> Unit)? = null
 ) = composable("SingleChoiceDialogListItem") {
     SimpleDialogListItem(
         leading = {
@@ -61,7 +76,7 @@ fun SingleChoiceDialogListItem(
                 )
             }
         },
-        title = title,
+        title = { Text(title) },
         onClick = onSelect
     )
 }
