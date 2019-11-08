@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.compose.material.dialog
+package com.ivianuu.essentials.ui.compose.dialog
 
 import androidx.compose.Composable
 import androidx.compose.unaryPlus
@@ -37,7 +37,6 @@ import androidx.ui.layout.WidthSpacer
 import androidx.ui.material.Divider
 import androidx.ui.material.themeTextStyle
 import com.ivianuu.essentials.ui.compose.core.composable
-import com.ivianuu.essentials.ui.compose.dialog.Dialog
 import com.ivianuu.essentials.ui.compose.material.CurrentIconStyleProvider
 import com.ivianuu.essentials.ui.compose.material.IconStyle
 import com.ivianuu.essentials.ui.compose.material.SecondaryTextAlpha
@@ -47,7 +46,7 @@ import com.ivianuu.essentials.ui.compose.material.colorForCurrentBackground
 // todo add more styleable attributes such as corner radius
 
 @Composable
-fun AlertDialog(
+fun MaterialDialog(
     dismissOnOutsideTouch: Boolean = true,
     dismissOnBackClick: Boolean = true,
     showDividers: Boolean = false,
@@ -59,7 +58,7 @@ fun AlertDialog(
     positiveButton: (@Composable() () -> Unit)? = null,
     negativeButton: (@Composable() () -> Unit)? = null,
     neutralButton: (@Composable() () -> Unit)? = null
-) = composable("AlertDialog") {
+) = composable("MaterialDialog") {
     Dialog(
         dismissOnOutsideTouch = dismissOnOutsideTouch,
         dismissOnBackClick = dismissOnBackClick

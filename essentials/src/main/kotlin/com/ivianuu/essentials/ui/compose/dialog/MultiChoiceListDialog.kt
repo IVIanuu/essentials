@@ -14,32 +14,28 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.compose.material.dialog
+package com.ivianuu.essentials.ui.compose.dialog
 
 import androidx.compose.Composable
-import androidx.compose.unaryPlus
-import androidx.ui.material.RadioButton
+import androidx.ui.material.Checkbox
 import com.ivianuu.essentials.ui.compose.common.BlockChildTouches
 import com.ivianuu.essentials.ui.compose.core.composable
-import com.ivianuu.essentials.ui.compose.dialog.dismissDialog
 
 @Composable
-fun <T> SingleChoiceListDialog(
+fun <T> MultiChoiceListDialog(
     items: List<T>,
-    selectedItem: T,
-    onSelect: ((T) -> Unit)? = null,
+    selectedItems: List<T>,
+    onSelectionsChanged: ((List<T>) -> Unit)? = null,
     item: @Composable() (T) -> Unit,
     dismissOnOutsideTouch: Boolean = true,
     dismissOnBackClick: Boolean = true,
-    dismissOnSelect: Boolean = true,
     buttonLayout: AlertDialogButtonLayout = AlertDialogButtonLayout.SideBySide,
     icon: @Composable() (() -> Unit)? = null,
     title: (@Composable() () -> Unit)? = null,
     positiveButton: (@Composable() () -> Unit)? = null,
     negativeButton: (@Composable() () -> Unit)? = null,
     neutralButton: (@Composable() () -> Unit)? = null
-) = composable("SingleChoiceListDialog") {
-    val dismissDialog = +dismissDialog()
+) = composable("MultiChoiceListDialog") {
     ListDialog(
         dismissOnOutsideTouch = dismissOnOutsideTouch,
         dismissOnBackClick = dismissOnBackClick,
@@ -49,13 +45,19 @@ fun <T> SingleChoiceListDialog(
         listContent = {
             items.forEachIndexed { index, item ->
                 composable(index) {
-                    SingleChoiceDialogListItem(
+                    MultiChoiceDialogListItem(
                         title = { item(item) },
-                        selected = item == selectedItem,
-                        onSelect = onSelect?.let {
+                        checked = item in selectedItems,
+                        onCheckedChange = onSelectionsChanged?.let {
                             {
-                                onSelect(item)
-                                //dismissDialog()
+                                val newSelectedItems = selectedItems.toMutableList()
+                                if (it) {
+                                    newSelectedItems += item
+                                } else {
+                                    newSelectedItems -= item
+                                }
+
+                                onSelectionsChanged(newSelectedItems)
                             }
                         }
                     )
@@ -69,21 +71,23 @@ fun <T> SingleChoiceListDialog(
 }
 
 @Composable
-private fun SingleChoiceDialogListItem(
-    selected: Boolean,
-    onSelect: (() -> Unit)? = null,
+private fun MultiChoiceDialogListItem(
+    checked: Boolean,
+    onCheckedChange: ((Boolean) -> Unit)? = null,
     title: @Composable() () -> Unit
-) = composable("SingleChoiceDialogListItem") {
+) = composable("MultiChoiceDialogListItem") {
     SimpleDialogListItem(
         leading = {
             BlockChildTouches {
-                RadioButton(
-                    selected = selected,
-                    onSelect = {}
+                Checkbox(
+                    checked = checked,
+                    onCheckedChange = {}
                 )
             }
         },
         title = title,
-        onClick = onSelect
+        onClick = onCheckedChange?.let {
+            { onCheckedChange(!checked) }
+        }
     )
 }

@@ -27,7 +27,8 @@ import androidx.ui.layout.Center
 import androidx.ui.layout.ConstrainedBox
 import androidx.ui.layout.DpConstraints
 import androidx.ui.layout.Padding
-import androidx.ui.material.surface.Card
+import androidx.ui.material.surface.Surface
+import androidx.ui.material.themeColor
 import com.ivianuu.essentials.ui.compose.common.onBackPressed
 import com.ivianuu.essentials.ui.compose.core.composable
 
@@ -38,7 +39,7 @@ import com.ivianuu.essentials.ui.compose.core.composable
 fun Dialog(
     dismissOnOutsideTouch: Boolean = true,
     dismissOnBackClick: Boolean = true,
-    body: @Composable() () -> Unit
+    child: @Composable() () -> Unit
 ) = composable("Dialog") {
     val dismissDialog = +ambient(DismissDialogAmbient)
 
@@ -67,16 +68,17 @@ fun Dialog(
                             maxWidth = 356.dp
                         )
                     ) {
-                        Card(
-                            shape = RoundedCornerShape(size = 4.dp),
-                            elevation = 24.dp
+                        Surface(
+                            color = +themeColor { surface },
+                            elevation = 24.dp,
+                            shape = RoundedCornerShape(size = 4.dp)
                         ) {
-                            body()
+                            child()
                         }
                     }
                 }
             }
         }
-        body()
+        child()
     }
 }

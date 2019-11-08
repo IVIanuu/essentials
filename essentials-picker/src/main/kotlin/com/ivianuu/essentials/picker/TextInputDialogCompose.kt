@@ -28,8 +28,8 @@ import androidx.ui.material.themeTextStyle
 import com.ivianuu.essentials.ui.compose.common.hideKeyboard
 import com.ivianuu.essentials.ui.compose.common.showKeyboard
 import com.ivianuu.essentials.ui.compose.core.composable
-import com.ivianuu.essentials.ui.compose.material.dialog.AlertDialog
-import com.ivianuu.essentials.ui.compose.material.dialog.AlertDialogButtonLayout
+import com.ivianuu.essentials.ui.compose.dialog.AlertDialogButtonLayout
+import com.ivianuu.essentials.ui.compose.dialog.MaterialDialog
 
 @Composable
 fun TextInputDialog(
@@ -49,7 +49,7 @@ fun TextInputDialog(
     val showKeyboard = +showKeyboard(TextInputDialogInputId)
     val hideKeyboard = +hideKeyboard()
 
-    AlertDialog(
+    MaterialDialog(
         dismissOnOutsideTouch = dismissOnOutsideTouch,
         dismissOnBackClick = dismissOnBackClick,
         buttonLayout = buttonLayout,

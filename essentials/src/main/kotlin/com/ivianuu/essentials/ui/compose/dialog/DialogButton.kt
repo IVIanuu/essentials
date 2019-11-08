@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.compose.material.dialog
+package com.ivianuu.essentials.ui.compose.dialog
 
 import androidx.compose.Composable
 import androidx.compose.unaryPlus
@@ -23,7 +23,6 @@ import androidx.ui.material.Button
 import androidx.ui.material.ButtonStyle
 import androidx.ui.material.TextButtonStyle
 import com.ivianuu.essentials.ui.compose.core.composable
-import com.ivianuu.essentials.ui.compose.dialog.dismissDialog
 
 @Composable
 fun DialogButton(

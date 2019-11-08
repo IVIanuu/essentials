@@ -18,6 +18,143 @@ package com.ivianuu.essentials.picker
 
 import android.graphics.Color.parseColor
 
+fun Color(colorString: String): androidx.ui.graphics.Color =
+    androidx.ui.graphics.Color(parseColor(colorString))
+
+val PrimaryMaterialColors = listOf(
+    Color("#F44336"),
+    Color("#FFEBEE"), Color("#FFCDD2"), Color("#EF9A9A"),
+    Color("#E57373"), Color("#EF5350"), Color("#F44336"),
+    Color("#E53935"), Color("#D32F2F"), Color("#C62828"),
+    Color("#B71C1C"),
+
+    Color("#E91E63"),
+    Color("#FCE4EC"), Color("#F8BBD0"), Color("#F48FB1"),
+    Color("#F06292"), Color("#EC407A"), Color("#E91E63"),
+    Color("#D81B60"), Color("#C2185B"), Color("#AD1457"),
+    Color("#880E4F"),
+
+
+    Color("#9C27B0"),
+    Color("#F3E5F5"), Color("#E1BEE7"), Color("#CE93D8"),
+    Color("#BA68C8"), Color("#AB47BC"), Color("#9C27B0"),
+    Color("#8E24AA"), Color("#7B1FA2"), Color("#6A1B9A"),
+    Color("#4A148C"),
+
+
+    Color("#673AB7"),
+    Color("#EDE7F6"), Color("#D1C4E9"), Color("#B39DDB"),
+    Color("#9575CD"), Color("#7E57C2"), Color("#673AB7"),
+    Color("#5E35B1"), Color("#512DA8"), Color("#4527A0"),
+    Color("#311B92"),
+
+
+    Color("#3F51B5"),
+    Color("#E8EAF6"), Color("#C5CAE9"), Color("#9FA8DA"),
+    Color("#7986CB"), Color("#5C6BC0"), Color("#3F51B5"),
+    Color("#3949AB"), Color("#303F9F"), Color("#283593"),
+    Color("#1A237E"),
+
+
+    Color("#2196F3"),
+    Color("#E3F2FD"), Color("#BBDEFB"), Color("#90CAF9"),
+    Color("#64B5F6"), Color("#42A5F5"), Color("#2196F3"),
+    Color("#1E88E5"), Color("#1976D2"), Color("#1565C0"),
+    Color("#0D47A1"),
+
+
+    Color("#03A9F4"),
+    Color("#E1F5FE"), Color("#B3E5FC"), Color("#81D4FA"),
+    Color("#4FC3F7"), Color("#29B6F6"), Color("#03A9F4"),
+    Color("#039BE5"), Color("#0288D1"), Color("#0277BD"),
+    Color("#01579B"),
+
+
+    Color("#00BCD4"),
+    Color("#E0F7FA"), Color("#B2EBF2"), Color("#80DEEA"),
+    Color("#4DD0E1"), Color("#26C6DA"), Color("#00BCD4"),
+    Color("#00ACC1"), Color("#0097A7"), Color("#00838F"),
+    Color("#006064"),
+
+
+    Color("#009688"),
+    Color("#E0F2F1"), Color("#B2DFDB"), Color("#80CBC4"),
+    Color("#4DB6AC"), Color("#26A69A"), Color("#009688"),
+    Color("#00897B"), Color("#00796B"), Color("#00695C"),
+    Color("#004D40"),
+
+
+    Color("#4CAF50"),
+    Color("#E8F5E9"), Color("#C8E6C9"), Color("#A5D6A7"),
+    Color("#81C784"), Color("#66BB6A"), Color("#4CAF50"),
+    Color("#43A047"), Color("#388E3C"), Color("#2E7D32"),
+    Color("#1B5E20"),
+
+    Color("#8BC34A"),
+    Color("#F1F8E9"), Color("#DCEDC8"), Color("#C5E1A5"),
+    Color("#AED581"), Color("#9CCC65"), Color("#8BC34A"),
+    Color("#7CB342"), Color("#689F38"), Color("#558B2F"),
+    Color("#33691E"),
+
+
+    Color("#CDDC39"),
+    Color("#F9FBE7"), Color("#F0F4C3"), Color("#E6EE9C"),
+    Color("#DCE775"), Color("#D4E157"), Color("#CDDC39"),
+    Color("#C0CA33"), Color("#AFB42B"), Color("#9E9D24"),
+    Color("#827717"),
+
+
+    Color("#FFEB3B"),
+    Color("#FFFDE7"), Color("#FFF9C4"), Color("#FFF59D"),
+    Color("#FFF176"), Color("#FFEE58"), Color("#FFEB3B"),
+    Color("#FDD835"), Color("#FBC02D"), Color("#F9A825"),
+    Color("#F57F17"),
+
+
+    Color("#FFC107"),
+    Color("#FFF8E1"), Color("#FFECB3"), Color("#FFE082"),
+    Color("#FFD54F"), Color("#FFCA28"), Color("#FFC107"),
+    Color("#FFB300"), Color("#FFA000"), Color("#FF8F00"),
+    Color("#FF6F00"),
+
+
+    Color("#FF9800"),
+    Color("#FFF3E0"), Color("#FFE0B2"), Color("#FFCC80"),
+    Color("#FFB74D"), Color("#FFA726"), Color("#FF9800"),
+    Color("#FB8C00"), Color("#F57C00"), Color("#EF6C00"),
+    Color("#E65100"),
+
+
+    Color("#FF5722"),
+    Color("#FBE9E7"), Color("#FFCCBC"), Color("#FFAB91"),
+    Color("#FF8A65"), Color("#FF7043"), Color("#FF5722"),
+    Color("#F4511E"), Color("#E64A19"), Color("#D84315"),
+    Color("#BF360C"),
+
+
+    Color("#795548"),
+    Color("#EFEBE9"), Color("#D7CCC8"), Color("#BCAAA4"),
+    Color("#A1887F"), Color("#8D6E63"), Color("#795548"),
+    Color("#6D4C41"), Color("#5D4037"), Color("#4E342E"),
+    Color("#3E2723"),
+
+
+    Color("#9E9E9E"),
+    Color("#FAFAFA"), Color("#F5F5F5"), Color("#EEEEEE"),
+    Color("#E0E0E0"), Color("#BDBDBD"), Color("#9E9E9E"),
+    Color("#757575"), Color("#616161"), Color("#424242"),
+    Color("#212121"),
+
+
+    Color("#607D8B"),
+    Color("#ECEFF1"), Color("#CFD8DC"), Color("#B0BEC5"),
+    Color("#90A4AE"), Color("#78909C"), Color("#607D8B"),
+    Color("#546E7A"), Color("#455A64"), Color("#37474F"),
+    Color("#263238")
+)
+
+// todo
+
 val PRIMARY_COLORS = intArrayOf(
     parseColor("#F44336"), parseColor("#E91E63"), parseColor("#9C27B0"),
     parseColor("#673AB7"), parseColor("#3F51B5"), parseColor("#2196F3"),

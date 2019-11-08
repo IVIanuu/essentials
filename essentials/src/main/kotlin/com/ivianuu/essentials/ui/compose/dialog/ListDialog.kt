@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.compose.material.dialog
+package com.ivianuu.essentials.ui.compose.dialog
 
 import androidx.compose.Composable
 import androidx.ui.core.Alignment
@@ -44,7 +44,7 @@ fun ListDialog(
     negativeButton: (@Composable() () -> Unit)? = null,
     neutralButton: (@Composable() () -> Unit)? = null
 ) = composable("ListDialog") {
-    AlertDialog(
+    MaterialDialog(
         dismissOnOutsideTouch = dismissOnOutsideTouch,
         dismissOnBackClick = dismissOnBackClick,
         icon = icon,

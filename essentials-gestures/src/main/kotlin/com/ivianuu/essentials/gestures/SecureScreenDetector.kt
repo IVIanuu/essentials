@@ -55,7 +55,7 @@ class SecureScreenDetector : AccessibilityComponent() {
 
         if (!isOnSecureScreen) {
             isOnSecureScreen = packageName == "com.android.settings"
-                    && className == "android.app.AlertDialog"
+                    && className == "android.app.MaterialDialog"
         }
 
         // distinct

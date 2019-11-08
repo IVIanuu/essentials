@@ -23,7 +23,6 @@ import androidx.compose.unaryPlus
 import androidx.ui.core.Text
 import androidx.ui.core.dp
 import androidx.ui.foundation.VerticalScroller
-import androidx.ui.graphics.Color
 import androidx.ui.layout.Column
 import androidx.ui.layout.CrossAxisAlignment
 import androidx.ui.layout.HeightSpacer
@@ -31,24 +30,22 @@ import androidx.ui.layout.MainAxisAlignment
 import androidx.ui.material.Button
 import androidx.ui.material.themeColor
 import com.ivianuu.essentials.picker.ColorPickerDialog
-import com.ivianuu.essentials.picker.PRIMARY_COLORS
-import com.ivianuu.essentials.picker.PRIMARY_COLORS_SUB
 import com.ivianuu.essentials.picker.TextInputDialog
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.compose.composeControllerRoute
 import com.ivianuu.essentials.ui.compose.core.composable
+import com.ivianuu.essentials.ui.compose.dialog.AlertDialogButtonLayout
+import com.ivianuu.essentials.ui.compose.dialog.DialogButton
+import com.ivianuu.essentials.ui.compose.dialog.DialogCloseButton
 import com.ivianuu.essentials.ui.compose.dialog.DialogManagerAmbient
+import com.ivianuu.essentials.ui.compose.dialog.ListDialog
+import com.ivianuu.essentials.ui.compose.dialog.MaterialDialog
+import com.ivianuu.essentials.ui.compose.dialog.MultiChoiceListDialog
+import com.ivianuu.essentials.ui.compose.dialog.SingleChoiceListDialog
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
 import com.ivianuu.essentials.ui.compose.material.Icon
 import com.ivianuu.essentials.ui.compose.material.Scaffold
 import com.ivianuu.essentials.ui.compose.material.SimpleListItem
-import com.ivianuu.essentials.ui.compose.material.dialog.AlertDialog
-import com.ivianuu.essentials.ui.compose.material.dialog.AlertDialogButtonLayout
-import com.ivianuu.essentials.ui.compose.material.dialog.DialogButton
-import com.ivianuu.essentials.ui.compose.material.dialog.DialogCloseButton
-import com.ivianuu.essentials.ui.compose.material.dialog.ListDialog
-import com.ivianuu.essentials.ui.compose.material.dialog.MultiChoiceListDialog
-import com.ivianuu.essentials.ui.compose.material.dialog.SingleChoiceListDialog
 import com.ivianuu.essentials.ui.compose.resources.drawableResource
 import com.ivianuu.essentials.ui.navigation.director.controllerRouteOptions
 import com.ivianuu.essentials.ui.navigation.director.fade
@@ -67,23 +64,43 @@ val dialogsRoute = composeControllerRoute(
                     DialogLauncherButton(
                         text = "Simple"
                     ) {
-                        AlertDialog(
+                        MaterialDialog(
                             title = { Text("Simple") },
                             content = { Text("This is a message") },
-                            positiveButton = { DialogCloseButton("OK") },
-                            negativeButton = { DialogCloseButton("Cancel") }
+                            positiveButton = {
+                                DialogCloseButton(
+                                    "OK"
+                                )
+                            },
+                            negativeButton = {
+                                DialogCloseButton(
+                                    "Cancel"
+                                )
+                            }
                         )
                     }
 
                     DialogLauncherButton(
                         text = "Simple with neutral"
                     ) {
-                        AlertDialog(
+                        MaterialDialog(
                             title = { Text("Simple") },
                             content = { Text("This is a message") },
-                            positiveButton = { DialogCloseButton("Positive") },
-                            negativeButton = { DialogCloseButton("Negative") },
-                            neutralButton = { DialogCloseButton("Neutral") }
+                            positiveButton = {
+                                DialogCloseButton(
+                                    "Positive"
+                                )
+                            },
+                            negativeButton = {
+                                DialogCloseButton(
+                                    "Negative"
+                                )
+                            },
+                            neutralButton = {
+                                DialogCloseButton(
+                                    "Neutral"
+                                )
+                            }
                         )
                     }
 
@@ -91,7 +108,7 @@ val dialogsRoute = composeControllerRoute(
                     DialogLauncherButton(
                         text = "Title only"
                     ) {
-                        AlertDialog(
+                        MaterialDialog(
                             title = { Text("Title only") }
                         )
                     }
@@ -99,17 +116,21 @@ val dialogsRoute = composeControllerRoute(
                     DialogLauncherButton(
                         text = "With icon"
                     ) {
-                        AlertDialog(
+                        MaterialDialog(
                             title = { Text("With icon") },
                             icon = { Icon(+drawableResource(R.drawable.ic_settings)) },
-                            positiveButton = { DialogCloseButton("OK") }
+                            positiveButton = {
+                                DialogCloseButton(
+                                    "OK"
+                                )
+                            }
                         )
                     }
 
                     DialogLauncherButton(
                         text = "Message only"
                     ) {
-                        AlertDialog(
+                        MaterialDialog(
                             content = { Text("Message only") }
                         )
                     }
@@ -117,44 +138,76 @@ val dialogsRoute = composeControllerRoute(
                     DialogLauncherButton(
                         text = "Buttons only"
                     ) {
-                        AlertDialog(
-                            positiveButton = { DialogCloseButton("OK") },
-                            negativeButton = { DialogCloseButton("Cancel") }
+                        MaterialDialog(
+                            positiveButton = {
+                                DialogCloseButton(
+                                    "OK"
+                                )
+                            },
+                            negativeButton = {
+                                DialogCloseButton(
+                                    "Cancel"
+                                )
+                            }
                         )
                     }
 
                     DialogLauncherButton(
                         text = "Stacked buttons"
                     ) {
-                        AlertDialog(
+                        MaterialDialog(
                             title = { Text("Stacked buttons") },
                             content = { Text("Shows stacked buttons") },
                             buttonLayout = AlertDialogButtonLayout.Stacked,
-                            positiveButton = { DialogCloseButton("OK") },
-                            negativeButton = { DialogCloseButton("Cancel") }
+                            positiveButton = {
+                                DialogCloseButton(
+                                    "OK"
+                                )
+                            },
+                            negativeButton = {
+                                DialogCloseButton(
+                                    "Cancel"
+                                )
+                            }
                         )
                     }
 
                     DialogLauncherButton(
                         text = "Stacked buttons with neutral"
                     ) {
-                        AlertDialog(
+                        MaterialDialog(
                             title = { Text("Stacked buttons") },
                             content = { Text("Shows stacked buttons") },
                             buttonLayout = AlertDialogButtonLayout.Stacked,
-                            positiveButton = { DialogCloseButton("Positive") },
-                            negativeButton = { DialogCloseButton("Negative") },
-                            neutralButton = { DialogCloseButton("Neutral") }
+                            positiveButton = {
+                                DialogCloseButton(
+                                    "Positive"
+                                )
+                            },
+                            negativeButton = {
+                                DialogCloseButton(
+                                    "Negative"
+                                )
+                            },
+                            neutralButton = {
+                                DialogCloseButton(
+                                    "Neutral"
+                                )
+                            }
                         )
                     }
 
                     DialogLauncherButton(
                         text = "Not cancelable"
                     ) {
-                        AlertDialog(
+                        MaterialDialog(
                             dismissOnOutsideTouch = false,
                             title = { Text("Not cancelable") },
-                            negativeButton = { DialogCloseButton("Close") }
+                            negativeButton = {
+                                DialogCloseButton(
+                                    "Close"
+                                )
+                            }
                         )
                     }
 
@@ -173,7 +226,11 @@ val dialogsRoute = composeControllerRoute(
                                     )
                                 }
                             },
-                            negativeButton = { DialogCloseButton("Close") }
+                            negativeButton = {
+                                DialogCloseButton(
+                                    "Close"
+                                )
+                            }
                         )
                     }
 
@@ -192,9 +249,11 @@ val dialogsRoute = composeControllerRoute(
                             dismissOnSelect = false,
                             item = { Text("Item: $it") },
                             positiveButton = {
-                                DialogButton(text = "OK", onClick = {
-                                    setSelectedSingleChoiceItem(tmpSelectedItem)
-                                })
+                                DialogButton(
+                                    text = "OK",
+                                    onClick = {
+                                        setSelectedSingleChoiceItem(tmpSelectedItem)
+                                    })
                             },
                             negativeButton = {
                                 DialogCloseButton(text = "Cancel")
@@ -216,9 +275,11 @@ val dialogsRoute = composeControllerRoute(
                             onSelectionsChanged = setTmpSelectedItems,
                             item = { Text(it) },
                             positiveButton = {
-                                DialogButton(text = "OK", onClick = {
-                                    setSelectedMultiChoiceItems(tmpSelectedItems)
-                                })
+                                DialogButton(
+                                    text = "OK",
+                                    onClick = {
+                                        setSelectedMultiChoiceItems(tmpSelectedItems)
+                                    })
                             },
                             negativeButton = {
                                 DialogCloseButton(text = "Cancel")
@@ -232,11 +293,6 @@ val dialogsRoute = composeControllerRoute(
                         ColorPickerDialog(
                             title = { Text("Color Picker") },
                             showAlphaSelector = true,
-                            colors = PRIMARY_COLORS.map { Color(it) }.toList() + PRIMARY_COLORS_SUB.flatMap { it.toList() }.map {
-                                Color(
-                                    it
-                                )
-                            },
                             initialColor = currentColor,
                             onColorSelected = setCurrentColor
                         )
@@ -251,11 +307,17 @@ val dialogsRoute = composeControllerRoute(
                             onValueChange = setTmpTextInputValue,
                             hint = "Hint..",
                             positiveButton = {
-                                DialogButton(text = "OK", onClick = {
-                                    setTextInputValue(tmpTextInputValue)
-                                })
+                                DialogButton(
+                                    text = "OK",
+                                    onClick = {
+                                        setTextInputValue(tmpTextInputValue)
+                                    })
                             },
-                            negativeButton = { DialogCloseButton(text = "Cancel") }
+                            negativeButton = {
+                                DialogCloseButton(
+                                    text = "Cancel"
+                                )
+                            }
                         )
                     }
                 }

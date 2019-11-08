@@ -50,6 +50,9 @@ import androidx.ui.material.Typography
 import androidx.ui.material.ripple.Ripple
 import androidx.ui.material.themeTextStyle
 import com.ivianuu.essentials.ui.compose.core.composable
+import com.ivianuu.essentials.ui.compose.dialog.DialogButton
+import com.ivianuu.essentials.ui.compose.dialog.DialogCloseButton
+import com.ivianuu.essentials.ui.compose.dialog.MaterialDialog
 import com.ivianuu.essentials.ui.compose.layout.Expand
 import com.ivianuu.essentials.ui.compose.layout.TightColumn
 import com.ivianuu.essentials.ui.compose.layout.WidthFitSquare
@@ -60,13 +63,10 @@ import com.ivianuu.essentials.ui.compose.material.TabController
 import com.ivianuu.essentials.ui.compose.material.TabRow
 import com.ivianuu.essentials.ui.compose.material.colorForBackground
 import com.ivianuu.essentials.ui.compose.material.colorForCurrentBackground
-import com.ivianuu.essentials.ui.compose.material.dialog.AlertDialog
-import com.ivianuu.essentials.ui.compose.material.dialog.DialogButton
-import com.ivianuu.essentials.ui.compose.material.dialog.DialogCloseButton
 
 @Composable
 fun ColorPickerDialog(
-    colors: List<Color>,
+    colors: List<Color> = PrimaryMaterialColors,
     onColorSelected: (Color) -> Unit,
     initialColor: Color,
     allowCustomArgb: Boolean = true,
@@ -78,7 +78,7 @@ fun ColorPickerDialog(
 ) = composable("ColorPickerDialog") {
     val (currentColor, setCurrentColor) = +state { initialColor }
 
-    AlertDialog(
+    MaterialDialog(
         dismissOnOutsideTouch = dismissOnOutsideTouch,
         dismissOnBackClick = dismissOnBackClick,
         icon = icon,
