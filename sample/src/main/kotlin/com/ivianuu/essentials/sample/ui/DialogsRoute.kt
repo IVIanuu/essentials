@@ -40,6 +40,7 @@ import com.ivianuu.essentials.ui.compose.material.dialog.AlertDialog
 import com.ivianuu.essentials.ui.compose.material.dialog.DialogButton
 import com.ivianuu.essentials.ui.compose.material.dialog.DialogCloseButton
 import com.ivianuu.essentials.ui.compose.material.dialog.ListDialog
+import com.ivianuu.essentials.ui.compose.material.dialog.MultiChoiceListDialog
 import com.ivianuu.essentials.ui.compose.material.dialog.SingleChoiceListDialog
 import com.ivianuu.essentials.ui.compose.resources.drawableResource
 import com.ivianuu.essentials.ui.navigation.director.controllerRouteOptions
@@ -153,24 +154,46 @@ val dialogsRoute = composeControllerRoute(
                         )
                     }
 
-                    val items = listOf(1, 2, 3, 4, 5)
-                    val (selectedItem, setSelectedItem) = +state { 1 }
+                    val singleChoiceItems = listOf(1, 2, 3, 4, 5)
+                    val (selectedSingleChoiceItem, setSelectedSingleChoiceItem) = +state { 1 }
                     DialogLauncherButton(
                         text = "Single choice list"
                     ) {
-                        val (tmpSelectedItem, tmpSetSelectedItem) = +state { selectedItem }
+                        val (tmpSelectedItem, setTmpSelectedItem) = +state { selectedSingleChoiceItem }
 
                         SingleChoiceListDialog(
-                            title = { Text("List") },
-                            items = items,
+                            title = { Text("Single choice") },
+                            items = singleChoiceItems,
                             selectedItem = tmpSelectedItem,
-                            onSelect = tmpSetSelectedItem,
+                            onSelect = setTmpSelectedItem,
                             dismissOnSelect = false,
                             item = { Text("Item: $it") },
                             buttons = {
                                 DialogCloseButton(text = "Cancel")
                                 DialogButton(text = "OK", onClick = {
-                                    setSelectedItem(tmpSelectedItem)
+                                    setSelectedSingleChoiceItem(tmpSelectedItem)
+                                })
+                            }
+                        )
+                    }
+
+                    val multiChoiceItems = listOf("A", "B", "C")
+                    val (selectedMultiChoiceItems, setSelectedMultiChoiceItems) = +state { multiChoiceItems }
+                    DialogLauncherButton(
+                        text = "Multi choice list"
+                    ) {
+                        val (tmpSelectedItems, setTmpSelectedItems) = +state { selectedMultiChoiceItems }
+
+                        MultiChoiceListDialog(
+                            title = { Text("Multi choice") },
+                            items = multiChoiceItems,
+                            selectedItems = tmpSelectedItems,
+                            onSelectionsChanged = setTmpSelectedItems,
+                            item = { Text(it) },
+                            buttons = {
+                                DialogCloseButton(text = "Cancel")
+                                DialogButton(text = "OK", onClick = {
+                                    setSelectedMultiChoiceItems(tmpSelectedItems)
                                 })
                             }
                         )
