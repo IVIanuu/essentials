@@ -41,6 +41,7 @@ import androidx.ui.material.Button
 import androidx.ui.material.TextButtonStyle
 import androidx.ui.material.surface.Card
 import androidx.ui.material.themeTextStyle
+import com.ivianuu.essentials.ui.compose.common.onBackPressed
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.dialog.DismissDialogAmbient
 
@@ -48,11 +49,18 @@ import com.ivianuu.essentials.ui.compose.dialog.DismissDialogAmbient
 
 fun AlertDialog(
     dismissOnOutsideTouch: Boolean = true,
+    dismissOnBackClick: Boolean = true,
     title: (@Composable() () -> Unit)? = null,
     content: (@Composable() () -> Unit)? = null,
     buttons: (@Composable() () -> Unit)? = null
 ) {
     val dismissDialog = +ambient(DismissDialogAmbient)
+
+    if (dismissOnBackClick) {
+        composable("back clicks") {
+            +onBackPressed(callback = dismissDialog)
+        }
+    }
 
     PressGestureDetector(
         onPress = if (dismissOnOutsideTouch) {
