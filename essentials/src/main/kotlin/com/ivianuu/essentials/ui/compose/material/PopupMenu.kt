@@ -24,10 +24,10 @@ import androidx.ui.core.IntPxPosition
 import androidx.ui.core.Layout
 import androidx.ui.core.LayoutCoordinates
 import androidx.ui.core.OnPositioned
+import androidx.ui.core.PxPosition
 import androidx.ui.core.dp
 import androidx.ui.core.gesture.PressGestureDetector
-import androidx.ui.core.globalPosition
-import androidx.ui.core.ipx
+import androidx.ui.core.round
 import androidx.ui.foundation.Clickable
 import androidx.ui.foundation.shape.corner.RoundedCornerShape
 import androidx.ui.layout.Column
@@ -37,6 +37,7 @@ import androidx.ui.layout.Padding
 import androidx.ui.layout.Wrap
 import androidx.ui.material.ripple.Ripple
 import androidx.ui.material.surface.Card
+import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.compose.composeControllerRoute
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.ref
@@ -102,7 +103,7 @@ private fun PopupMenuItem(
 // todo better name?
 @Composable
 fun <T> PopupMenuTrigger(
-    alignment: Alignment = Alignment.Center,
+    alignment: Alignment = Alignment.TopLeft,
     items: List<T>,
     onSelected: (T) -> Unit,
     onCancel: (() -> Unit)? = null,
@@ -111,47 +112,50 @@ fun <T> PopupMenuTrigger(
 ) = composable("PopupMenuTrigger") {
     val navigator = +inject<Navigator>()
 
-    val coordinatesHolder = +ref<LayoutCoordinates?> { null }
-    OnPositioned { coordinatesHolder.value = it }
+    Wrap {
+        val coordinatesHolder = +ref<LayoutCoordinates?> { null }
+        OnPositioned { coordinatesHolder.value = it }
 
-    val showPopup = {
-        val coordinates = coordinatesHolder.value!!
+        val showPopup = {
+            val coordinates = coordinatesHolder.value!!
 
-        val width = coordinates.size.width.value.toInt().ipx
-        val height = coordinates.size.height.value.toInt().ipx
-        val halfWidth = width / 2
-        val halfHeight = height / 2
-        val left = coordinates.globalPosition.x.value.toInt().ipx
-        val top = coordinates.globalPosition.y.value.toInt().ipx
-        val right = left + width
-        val bottom = top + height
-        val centerX = left + halfWidth
-        val centerY = top + halfHeight
+            val width = coordinates.size.width.round()
+            val height = coordinates.size.height.round()
+            val halfWidth = width / 2
+            val halfHeight = height / 2
+            val globalPosition = coordinates.localToRoot(PxPosition.Origin)
+            val left = globalPosition.x.round()
+            val top = globalPosition.y.round()
+            val right = left + width
+            val bottom = top + height
+            val centerX = left + halfWidth
+            val centerY = top + halfHeight
 
-        val position = when (alignment) {
-            Alignment.TopLeft -> IntPxPosition(left, top)
-            Alignment.TopCenter -> IntPxPosition(centerX, top)
-            Alignment.TopRight -> IntPxPosition(right, top)
-            Alignment.CenterLeft -> IntPxPosition(left, centerY)
-            Alignment.Center -> IntPxPosition(centerX, centerY)
-            Alignment.CenterRight -> IntPxPosition(right, centerY)
-            Alignment.BottomLeft -> IntPxPosition(left, bottom)
-            Alignment.BottomCenter -> IntPxPosition(centerX, bottom)
-            Alignment.BottomRight -> IntPxPosition(right, bottom)
+            val position = when (alignment) {
+                Alignment.TopLeft -> IntPxPosition(left, top)
+                Alignment.TopCenter -> IntPxPosition(centerX, top)
+                Alignment.TopRight -> IntPxPosition(right, top)
+                Alignment.CenterLeft -> IntPxPosition(left, centerY)
+                Alignment.Center -> IntPxPosition(centerX, centerY)
+                Alignment.CenterRight -> IntPxPosition(right, centerY)
+                Alignment.BottomLeft -> IntPxPosition(left, bottom)
+                Alignment.BottomCenter -> IntPxPosition(centerX, bottom)
+                Alignment.BottomRight -> IntPxPosition(right, bottom)
+            }
+
+            navigator.push(
+                popupMenuRoute(
+                    onCancel = onCancel,
+                    position = position,
+                    items = items,
+                    item = item,
+                    onSelected = onSelected
+                )
+            )
         }
 
-        navigator.push(
-            popupMenuRoute(
-                onCancel = onCancel,
-                position = position,
-                items = items,
-                item = item,
-                onSelected = onSelected
-            )
-        )
+        child(showPopup)
     }
-
-    child(showPopup)
 }
 
 fun <T> popupMenuRoute(
@@ -163,6 +167,8 @@ fun <T> popupMenuRoute(
 ) = composeControllerRoute(
     options = controllerRouteOptions().fade(removesFromViewOnPush = false)
 ) {
+    d { "popup menu show ${position.x} ${position.y}" }
+
     val navigator = +inject<Navigator>()
 
     val dismiss: (Boolean) -> Unit = { cancelled ->
@@ -194,6 +200,7 @@ private fun PopupMenuLayout(
     child: @Composable() () -> Unit
 ) = composable("PopupMenuLayout") {
     Layout(children = child) { measureables, constraints ->
+        d { "constraints ${constraints.minWidth} ${constraints.maxWidth} ${constraints.minHeight} ${constraints.maxHeight}" }
         val childConstraints = constraints.copy(
             minWidth = IntPx.Zero,
             minHeight = IntPx.Zero
