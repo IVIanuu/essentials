@@ -25,22 +25,16 @@ import androidx.ui.core.Measurable
 import androidx.ui.core.ParentData
 import androidx.ui.core.Placeable
 import androidx.ui.core.dp
-import androidx.ui.core.gesture.PressGestureDetector
 import androidx.ui.core.ipx
-import androidx.ui.foundation.shape.corner.RoundedCornerShape
-import androidx.ui.layout.Center
 import androidx.ui.layout.Column
-import androidx.ui.layout.ConstrainedBox
 import androidx.ui.layout.Container
 import androidx.ui.layout.CrossAxisAlignment
-import androidx.ui.layout.DpConstraints
 import androidx.ui.layout.EdgeInsets
 import androidx.ui.layout.MainAxisAlignment
 import androidx.ui.layout.Padding
 import androidx.ui.layout.Row
 import androidx.ui.layout.WidthSpacer
 import androidx.ui.material.Divider
-import androidx.ui.material.surface.Card
 import androidx.ui.material.themeTextStyle
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.dialog.Dialog
@@ -70,55 +64,23 @@ fun AlertDialog(
         dismissOnOutsideTouch = dismissOnOutsideTouch,
         dismissOnBackClick = dismissOnBackClick
     ) {
-        DialogFrame {
-            DialogBody(
-                showDividers = showDividers,
-                applyContentPadding = applyContentPadding,
-                buttonLayout = buttonLayout,
-                icon = icon,
-                title = title,
-                content = content,
-                positiveButton = positiveButton,
-                negativeButton = negativeButton,
-                neutralButton = neutralButton
-            )
-        }
+        DialogBody(
+            showDividers = showDividers,
+            applyContentPadding = applyContentPadding,
+            buttonLayout = buttonLayout,
+            icon = icon,
+            title = title,
+            content = content,
+            positiveButton = positiveButton,
+            negativeButton = negativeButton,
+            neutralButton = neutralButton
+        )
     }
 }
 
 enum class AlertDialogButtonLayout {
     SideBySide,
     Stacked
-}
-
-@Composable
-private fun DialogFrame(
-    children: @Composable() () -> Unit
-) = composable("DialogFrame") {
-    Center {
-        Padding(
-            left = 32.dp,
-            top = 32.dp,
-            right = 32.dp,
-            bottom = 32.dp
-        ) {
-            PressGestureDetector {
-                ConstrainedBox(
-                    constraints = DpConstraints(
-                        minWidth = 280.dp,
-                        maxWidth = 356.dp
-                    )
-                ) {
-                    Card(
-                        shape = RoundedCornerShape(size = 8.dp),
-                        elevation = 24.dp
-                    ) {
-                        children()
-                    }
-                }
-            }
-        }
-    }
 }
 
 @Composable
