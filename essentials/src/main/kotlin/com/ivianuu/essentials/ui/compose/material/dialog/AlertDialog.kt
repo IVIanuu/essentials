@@ -280,9 +280,9 @@ fun DialogButton(
     val dismissDialog = +dismissDialog()
     Button(
         text = text.toUpperCase(), // todo find a better way for uppercase
-        onClick = onClick?.let { nonNullOnClick ->
+        onClick = onClick?.let {
             {
-                nonNullOnClick()
+                onClick()
                 if (dismissDialogOnClick) dismissDialog()
             }
         },

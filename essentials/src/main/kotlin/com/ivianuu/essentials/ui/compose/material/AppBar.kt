@@ -49,7 +49,7 @@ fun EsTopAppBar(
         navigationIcon = leading?.let {
             {
                 CurrentIconStyleProvider(+appBarIconStyle(color)) {
-                    it()
+                    leading()
                 }
             }
         },

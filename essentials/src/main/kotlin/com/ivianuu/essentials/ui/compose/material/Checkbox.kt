@@ -51,7 +51,7 @@ fun EsCheckbox(
 ) = composable("EsCheckbox") {
     Wrap {
         Ripple(bounded = false) {
-            Clickable(onClick = onCheckedChange?.let { { it(!checked) } }) {
+            Clickable(onClick = onCheckedChange?.let { { onCheckedChange(!checked) } }) {
                 Padding(padding = CheckboxDefaultPadding) {
                     Container(width = CheckboxSize, height = CheckboxSize) {
                         DrawCheckbox(checked = checked, activeColor = color)
