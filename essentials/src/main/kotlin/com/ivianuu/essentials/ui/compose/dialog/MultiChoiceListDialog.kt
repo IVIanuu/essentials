@@ -27,8 +27,6 @@ fun <T> MultiChoiceListDialog(
     selectedItems: List<T>,
     onSelectionsChanged: ((List<T>) -> Unit)? = null,
     item: @Composable() (T) -> Unit,
-    dismissOnOutsideTouch: Boolean = true,
-    dismissOnBackClick: Boolean = true,
     buttonLayout: AlertDialogButtonLayout = AlertDialogButtonLayout.SideBySide,
     icon: @Composable() (() -> Unit)? = null,
     title: (@Composable() () -> Unit)? = null,
@@ -37,8 +35,6 @@ fun <T> MultiChoiceListDialog(
     neutralButton: (@Composable() () -> Unit)? = null
 ) = composable("MultiChoiceListDialog") {
     ListDialog(
-        dismissOnOutsideTouch = dismissOnOutsideTouch,
-        dismissOnBackClick = dismissOnBackClick,
         icon = icon,
         title = title,
         buttonLayout = buttonLayout,

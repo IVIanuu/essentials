@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.Composable
-import androidx.compose.ambient
 import androidx.compose.state
 import androidx.compose.unaryPlus
 import androidx.ui.core.Text
@@ -37,16 +36,18 @@ import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.dialog.AlertDialogButtonLayout
 import com.ivianuu.essentials.ui.compose.dialog.DialogButton
 import com.ivianuu.essentials.ui.compose.dialog.DialogCloseButton
-import com.ivianuu.essentials.ui.compose.dialog.DialogManagerAmbient
 import com.ivianuu.essentials.ui.compose.dialog.ListDialog
 import com.ivianuu.essentials.ui.compose.dialog.MaterialDialog
 import com.ivianuu.essentials.ui.compose.dialog.MultiChoiceListDialog
 import com.ivianuu.essentials.ui.compose.dialog.SingleChoiceListDialog
+import com.ivianuu.essentials.ui.compose.dialog.composeDialogRoute
+import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
 import com.ivianuu.essentials.ui.compose.material.Icon
 import com.ivianuu.essentials.ui.compose.material.Scaffold
 import com.ivianuu.essentials.ui.compose.material.SimpleListItem
 import com.ivianuu.essentials.ui.compose.resources.drawableResource
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.director.controllerRouteOptions
 import com.ivianuu.essentials.ui.navigation.director.fade
 
@@ -198,10 +199,10 @@ val dialogsRoute = composeControllerRoute(
                     }
 
                     DialogLauncherButton(
+                        dismissible = false,
                         text = "Not cancelable"
                     ) {
                         MaterialDialog(
-                            dismissOnOutsideTouch = false,
                             title = { Text("Not cancelable") },
                             negativeButton = {
                                 DialogCloseButton(
@@ -329,13 +330,14 @@ val dialogsRoute = composeControllerRoute(
 @Composable
 private fun DialogLauncherButton(
     text: String,
+    dismissible: Boolean = true,
     dialog: @Composable() () -> Unit
 ) = composable("DialogLauncherButton") {
-    val dialogManager = +ambient(DialogManagerAmbient)
+    val navigator = +inject<Navigator>()
     Button(
         text = text,
         onClick = {
-            dialogManager.showDialog { dialog() }
+            navigator.push(composeDialogRoute(dismissible = dismissible, dialog = dialog))
         }
     )
 

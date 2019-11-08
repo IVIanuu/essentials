@@ -17,31 +17,50 @@
 package com.ivianuu.essentials.ui.compose.dialog
 
 import androidx.compose.Composable
-import androidx.compose.ambient
 import androidx.compose.unaryPlus
+import androidx.ui.core.PxPosition
+import androidx.ui.core.gesture.PressGestureDetector
+import androidx.ui.foundation.ColoredRect
+import androidx.ui.graphics.Color
+import androidx.ui.layout.Center
+import androidx.ui.layout.Stack
+import com.ivianuu.essentials.ui.compose.common.onBackPressed
 import com.ivianuu.essentials.ui.compose.composeControllerRoute
+import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.injekt.inject
-import com.ivianuu.essentials.ui.compose.material.Scaffold
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.director.controllerRouteOptions
-import com.ivianuu.essentials.ui.navigation.director.dialog
+import com.ivianuu.essentials.ui.navigation.director.fade
 
 fun composeDialogRoute(
-    dialog: @Composable() (() -> Unit) -> Unit
-) = composeControllerRoute(options = controllerRouteOptions().dialog()) {
-    Scaffold(
-        body = {
-            val dialogManager = +ambient(DialogManagerAmbient)
-            dialogManager.showDialog { dismissDialog ->
-                val navigator = +inject<Navigator>()
-                val realDismissDialog = {
-                    dismissDialog()
-                    navigator.pop()
-                }
-                DismissDialogAmbient.Provider(realDismissDialog) {
-                    dialog(realDismissDialog)
-                }
+    dismissible: Boolean = true,
+    dialog: @Composable() () -> Unit
+) = composeControllerRoute(
+    options = controllerRouteOptions().fade(
+        removesFromViewOnPush = false
+    )
+) {
+    val navigator = +inject<Navigator>()
+    if (!dismissible) {
+        composable("ignore back") {
+            +onBackPressed { }
+        }
+    }
+    PressGestureDetector(
+        onPress = if (dismissible) {
+            { _: PxPosition -> navigator.pop() }
+        } else null
+    ) {
+        Stack {
+            DialogScrim()
+            Center {
+                dialog()
             }
         }
-    )
+    }
+}
+
+@Composable
+private fun DialogScrim() = composable("DialogScrim") {
+    ColoredRect(Color.Black.copy(alpha = 0.6f))
 }

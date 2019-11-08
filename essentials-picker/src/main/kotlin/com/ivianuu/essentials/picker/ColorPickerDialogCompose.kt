@@ -71,16 +71,12 @@ fun ColorPickerDialog(
     initialColor: Color,
     allowCustomArgb: Boolean = true,
     showAlphaSelector: Boolean = false,
-    dismissOnOutsideTouch: Boolean = true,
-    dismissOnBackClick: Boolean = true,
     icon: (@Composable() () -> Unit)? = null,
     title: (@Composable() () -> Unit)? = null
 ) = composable("ColorPickerDialog") {
     val (currentColor, setCurrentColor) = +state { initialColor }
 
     MaterialDialog(
-        dismissOnOutsideTouch = dismissOnOutsideTouch,
-        dismissOnBackClick = dismissOnBackClick,
         icon = icon,
         title = title,
         applyContentPadding = false,

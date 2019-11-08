@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.ui.compose.dialog
 
 import androidx.compose.Composable
-import androidx.compose.unaryPlus
 import androidx.ui.material.RadioButton
 import com.ivianuu.essentials.ui.compose.common.BlockChildTouches
 import com.ivianuu.essentials.ui.compose.core.composable
@@ -28,9 +27,7 @@ fun <T> SingleChoiceListDialog(
     selectedItem: T,
     onSelect: ((T) -> Unit)? = null,
     item: @Composable() (T) -> Unit,
-    dismissOnOutsideTouch: Boolean = true,
-    dismissOnBackClick: Boolean = true,
-    dismissOnSelect: Boolean = true,
+    dismissOnSelect: Boolean = true, // todo
     buttonLayout: AlertDialogButtonLayout = AlertDialogButtonLayout.SideBySide,
     icon: @Composable() (() -> Unit)? = null,
     title: (@Composable() () -> Unit)? = null,
@@ -38,10 +35,7 @@ fun <T> SingleChoiceListDialog(
     negativeButton: (@Composable() () -> Unit)? = null,
     neutralButton: (@Composable() () -> Unit)? = null
 ) = composable("SingleChoiceListDialog") {
-    val dismissDialog = +dismissDialog()
     ListDialog(
-        dismissOnOutsideTouch = dismissOnOutsideTouch,
-        dismissOnBackClick = dismissOnBackClick,
         icon = icon,
         title = title,
         buttonLayout = buttonLayout,
@@ -54,7 +48,6 @@ fun <T> SingleChoiceListDialog(
                         onSelect = onSelect?.let {
                             {
                                 onSelect(item)
-                                //dismissDialog()
                             }
                         }
                     )

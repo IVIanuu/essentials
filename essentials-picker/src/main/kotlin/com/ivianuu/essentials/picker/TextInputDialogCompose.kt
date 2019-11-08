@@ -37,8 +37,6 @@ fun TextInputDialog(
     hint: String,
     onValueChange: (String) -> Unit,
     type: KeyboardType = KeyboardType.Text,
-    dismissOnOutsideTouch: Boolean = true,
-    dismissOnBackClick: Boolean = true,
     buttonLayout: AlertDialogButtonLayout = AlertDialogButtonLayout.SideBySide,
     icon: @Composable() (() -> Unit)? = null,
     title: (@Composable() () -> Unit)? = null,
@@ -50,8 +48,6 @@ fun TextInputDialog(
     val hideKeyboard = +hideKeyboard()
 
     MaterialDialog(
-        dismissOnOutsideTouch = dismissOnOutsideTouch,
-        dismissOnBackClick = dismissOnBackClick,
         buttonLayout = buttonLayout,
         icon = icon,
         title = title,

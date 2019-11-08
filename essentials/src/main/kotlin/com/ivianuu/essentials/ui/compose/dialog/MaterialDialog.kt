@@ -47,8 +47,6 @@ import com.ivianuu.essentials.ui.compose.material.colorForCurrentBackground
 
 @Composable
 fun MaterialDialog(
-    dismissOnOutsideTouch: Boolean = true,
-    dismissOnBackClick: Boolean = true,
     showDividers: Boolean = false,
     applyContentPadding: Boolean = true,
     buttonLayout: AlertDialogButtonLayout = AlertDialogButtonLayout.SideBySide,
@@ -59,10 +57,7 @@ fun MaterialDialog(
     negativeButton: (@Composable() () -> Unit)? = null,
     neutralButton: (@Composable() () -> Unit)? = null
 ) = composable("MaterialDialog") {
-    Dialog(
-        dismissOnOutsideTouch = dismissOnOutsideTouch,
-        dismissOnBackClick = dismissOnBackClick
-    ) {
+    Dialog {
         DialogBody(
             showDividers = showDividers,
             applyContentPadding = applyContentPadding,
