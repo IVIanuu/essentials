@@ -38,6 +38,7 @@ import androidx.ui.layout.Padding
 import androidx.ui.layout.Row
 import androidx.ui.layout.Wrap
 import androidx.ui.material.Button
+import androidx.ui.material.Divider
 import androidx.ui.material.TextButtonStyle
 import androidx.ui.material.surface.Card
 import androidx.ui.material.themeTextStyle
@@ -50,6 +51,7 @@ import com.ivianuu.essentials.ui.compose.dialog.DismissDialogAmbient
 fun AlertDialog(
     dismissOnOutsideTouch: Boolean = true,
     dismissOnBackClick: Boolean = true,
+    showDividers: Boolean = false,
     title: (@Composable() () -> Unit)? = null,
     content: (@Composable() () -> Unit)? = null,
     buttons: (@Composable() () -> Unit)? = null
@@ -68,7 +70,12 @@ fun AlertDialog(
         } else null
     ) {
         Wrap(alignment = Alignment.Center) {
-            Padding(padding = DialogPadding) {
+            Padding(
+                left = 32.dp,
+                top = 72.dp,
+                right = 32.dp,
+                bottom = 72.dp
+            ) {
                 PressGestureDetector {
                     ConstrainedBox(
                         constraints = DpConstraints(
@@ -76,13 +83,13 @@ fun AlertDialog(
                         )
                     ) {
                         Card(
-                            shape = RoundedCornerShape(size = DialogCornerRadius),
+                            shape = RoundedCornerShape(size = 8.dp),
                             elevation = 24.dp
                         ) {
                             Column {
                                 if (title != null) {
                                     Container(
-                                        modifier = ExpandedWidth,
+                                        modifier = ExpandedWidth wraps Inflexible,
                                         alignment = Alignment.CenterLeft,
                                         padding = EdgeInsets(
                                             top = 24.dp,
@@ -105,6 +112,8 @@ fun AlertDialog(
                                 if (content != null) {
                                     HeightSpacer(24.dp)
 
+                                    if (title != null && showDividers) DialogDivider()
+
                                     Container(
                                         modifier = ExpandedWidth,
                                         alignment = Alignment.TopLeft,
@@ -122,6 +131,8 @@ fun AlertDialog(
                                         }
                                     }
 
+                                    if (buttons != null && showDividers) DialogDivider()
+
                                     if (buttons == null) {
                                         HeightSpacer(24.dp)
                                     }
@@ -133,6 +144,7 @@ fun AlertDialog(
                                     }
 
                                     Container(
+                                        modifier = Inflexible,
                                         expanded = true,
                                         alignment = Alignment.CenterRight,
                                         constraints = DpConstraints(
@@ -166,7 +178,7 @@ fun DialogButton(
 ) = composable("DialogButton") {
     val dismissDialog = +ambient(DismissDialogAmbient)
     Button(
-        text = text,
+        text = text.toUpperCase(), // todo find a better way for uppercase
         onClick = onClick?.let { nonNullOnClick ->
             {
                 nonNullOnClick()
@@ -177,6 +189,7 @@ fun DialogButton(
     )
 }
 
-private val DialogCornerRadius = 8.dp
-private val DialogPadding = 32.dp
-private val DialogMinWidth = 280.dp
+@Composable
+private fun DialogDivider() = composable("DialogDivider") {
+    Divider(color = (+colorForCurrentBackground()).copy(alpha = 0.12f))
+}

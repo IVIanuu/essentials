@@ -23,7 +23,9 @@ import androidx.ui.core.Text
 import androidx.ui.core.dp
 import androidx.ui.foundation.VerticalScroller
 import androidx.ui.layout.Column
+import androidx.ui.layout.CrossAxisAlignment
 import androidx.ui.layout.HeightSpacer
+import androidx.ui.layout.MainAxisAlignment
 import androidx.ui.material.Button
 import com.ivianuu.essentials.ui.compose.composeControllerRoute
 import com.ivianuu.essentials.ui.compose.core.composable
@@ -32,6 +34,7 @@ import com.ivianuu.essentials.ui.compose.material.AlertDialog
 import com.ivianuu.essentials.ui.compose.material.DialogButton
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
 import com.ivianuu.essentials.ui.compose.material.Scaffold
+import com.ivianuu.essentials.ui.compose.material.SimpleListItem
 import com.ivianuu.essentials.ui.navigation.director.controllerRouteOptions
 import com.ivianuu.essentials.ui.navigation.director.fade
 
@@ -42,7 +45,24 @@ val dialogsRoute = composeControllerRoute(
         topAppBar = { EsTopAppBar("Dialogs") },
         body = {
             VerticalScroller {
-                Column {
+                Column(
+                    mainAxisAlignment = MainAxisAlignment.Center,
+                    crossAxisAlignment = CrossAxisAlignment.Start
+                ) {
+                    DialogLauncherButton(
+                        text = "Simple"
+                    ) {
+                        AlertDialog(
+                            title = { Text("Simple") },
+                            content = { Text("This is a message") },
+                            buttons = {
+                                DialogButton(text = "OK", onClick = {})
+                                DialogButton(text = "Cancel", onClick = {})
+                            }
+                        )
+                    }
+
+
                     DialogLauncherButton(
                         text = "Title only"
                     ) {
@@ -82,9 +102,54 @@ val dialogsRoute = composeControllerRoute(
                             }
                         )
                     }
+
+                    DialogLauncherButton(
+                        text = "List"
+                    ) {
+                        ListDialog(
+                            dismissOnOutsideTouch = false,
+                            title = { Text("List") },
+                            listContent = {
+                                (1..100).forEach {
+                                    SimpleListItem(
+                                        title = { Text("Item: $it") }
+                                    )
+                                }
+                            },
+                            buttons = {
+                                DialogButton(text = "Close", onClick = {})
+                            }
+                        )
+                    }
                 }
             }
         }
+    )
+}
+
+@Composable
+fun ListDialog(
+    dismissOnOutsideTouch: Boolean = true,
+    dismissOnBackClick: Boolean = true,
+    title: (@Composable() () -> Unit)? = null,
+    listContent: @Composable() () -> Unit,
+    buttons: (@Composable() () -> Unit)? = null
+) = composable("ListDialog") {
+    AlertDialog(
+        dismissOnOutsideTouch = dismissOnOutsideTouch,
+        dismissOnBackClick = dismissOnBackClick,
+        title = title,
+        showDividers = true,
+        content = {
+            Column {
+                VerticalScroller {
+                    Column {
+                        listContent()
+                    }
+                }
+            }
+        },
+        buttons = buttons
     )
 }
 
