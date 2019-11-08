@@ -18,6 +18,7 @@ package com.ivianuu.essentials.ui.compose.material.dialog
 
 import androidx.compose.Composable
 import androidx.compose.unaryPlus
+import androidx.ui.core.Opacity
 import androidx.ui.material.Button
 import androidx.ui.material.TextButtonStyle
 import com.ivianuu.essentials.ui.compose.core.composable
@@ -30,16 +31,18 @@ fun DialogButton(
     onClick: (() -> Unit)? = null
 ) = composable("DialogButton") {
     val dismissDialog = +dismissDialog()
-    Button(
-        text = text.toUpperCase(), // todo find a better way for uppercase
-        onClick = onClick?.let {
-            {
-                onClick()
-                if (dismissDialogOnClick) dismissDialog()
-            }
-        },
-        style = TextButtonStyle()
-    )
+    Opacity(opacity = if (onClick != null) 1f else 0.5f) {
+        Button(
+            text = text.toUpperCase(), // todo find a better way for uppercase
+            onClick = onClick?.let {
+                {
+                    onClick()
+                    if (dismissDialogOnClick) dismissDialog()
+                }
+            },
+            style = TextButtonStyle()
+        )
+    }
 }
 
 @Composable
