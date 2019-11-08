@@ -22,9 +22,9 @@ import androidx.compose.Observe
 import androidx.compose.Recompose
 import androidx.compose.memo
 import androidx.compose.unaryPlus
+import androidx.ui.core.IntPx
 import androidx.ui.core.Layout
 import androidx.ui.core.ParentData
-import androidx.ui.core.ipx
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.compose.common.onBackPressed
 import com.ivianuu.essentials.ui.compose.common.retainedState
@@ -228,7 +228,7 @@ private fun NavigatorLayout(
             .map { it.measure(childConstraints) }
 
         layout(constraints.maxWidth, constraints.maxHeight) {
-            placeables.forEach { it.place(0.ipx, 0.ipx) }
+            placeables.forEach { it.place(IntPx.Zero, IntPx.Zero) }
         }
     }
 }

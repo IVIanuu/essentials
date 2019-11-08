@@ -23,8 +23,6 @@ import androidx.compose.memo
 import androidx.compose.state
 import androidx.compose.unaryPlus
 import androidx.ui.core.Alignment
-import androidx.ui.core.LayoutCoordinates
-import androidx.ui.core.OnPositioned
 import androidx.ui.core.dp
 import androidx.ui.layout.Column
 import androidx.ui.layout.Container
@@ -59,8 +57,6 @@ fun Scaffold(
 
     ScaffoldAmbient.Provider(value = scaffold) {
         Stack {
-            OnPositioned { scaffold.coordinates = it }
-
             val finalBody: @Composable() () -> Unit = {
                 Column {
                     if (topAppBar != null) {
@@ -116,10 +112,6 @@ fun Scaffold(
 
 val ScaffoldAmbient = Ambient.of<Scaffold>()
 
-internal data class Overlay(
-    val composable: @Composable() (() -> Unit) -> Unit
-)
-
 class Scaffold internal constructor(_drawerState: State<DrawerState>) {
 
     var hasTopAppBar = false
@@ -131,9 +123,6 @@ class Scaffold internal constructor(_drawerState: State<DrawerState>) {
     var hasBottomBar = false
         internal set
     var hasFab = false
-        internal set
-
-    var coordinates: LayoutCoordinates? = null
         internal set
 
     var drawerState by _drawerState

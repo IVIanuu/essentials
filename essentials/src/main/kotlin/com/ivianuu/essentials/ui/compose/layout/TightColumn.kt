@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.ui.compose.layout
 
 import androidx.compose.Composable
+import androidx.ui.core.IntPx
 import androidx.ui.core.Layout
 import androidx.ui.core.ipx
 import com.ivianuu.essentials.ui.compose.core.composable
@@ -39,9 +40,9 @@ fun TightColumn(
         val height = placeables.sumBy { it.height.value }.ipx
 
         layout(width = constraints.maxWidth, height = height) {
-            var offsetY = 0.ipx
+            var offsetY = IntPx.Zero
             placeables.forEach {
-                it.place(0.ipx, offsetY)
+                it.place(IntPx.Zero, offsetY)
                 offsetY += it.height
             }
         }

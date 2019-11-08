@@ -26,8 +26,8 @@ import com.ivianuu.essentials.ui.compose.core.composable
 
 @Composable
 fun Offset(
-    xOffset: Px? = null,
-    yOffset: Px? = null,
+    offsetX: Px? = null,
+    offsetY: Px? = null,
     child: @Composable() () -> Unit
 ) = composable("Offset") {
     Layout(children = child) { measurables, constraints ->
@@ -46,8 +46,8 @@ fun Offset(
             height = min(placeable.height, constraints.maxHeight)
         }
         layout(width, height) {
-            val offX = xOffset?.value?.px ?: 0.px
-            val offY = yOffset?.value?.px ?: 0.px
+            val offX = offsetX?.value?.px ?: 0.px
+            val offY = offsetY?.value?.px ?: 0.px
             placeable?.place(offX, offY)
         }
     }

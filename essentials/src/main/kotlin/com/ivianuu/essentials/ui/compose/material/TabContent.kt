@@ -18,8 +18,8 @@ package com.ivianuu.essentials.ui.compose.material
 
 import androidx.compose.Composable
 import androidx.compose.unaryPlus
+import androidx.ui.core.IntPx
 import androidx.ui.core.Layout
-import androidx.ui.core.ipx
 import com.ivianuu.essentials.ui.compose.core.composable
 
 @Composable
@@ -75,7 +75,7 @@ private fun <T> DraggableTabContent(
         layout(constraints.maxWidth, constraints.maxHeight) {
             var offset = -(constraints.maxWidth * selectedIndex)
             placeables.forEach {
-                it.place(offset, 0.ipx)
+                it.place(offset, IntPx.Zero)
                 offset += constraints.maxWidth
             }
         }

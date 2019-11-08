@@ -17,9 +17,9 @@
 package com.ivianuu.essentials.ui.compose.layout
 
 import androidx.compose.Composable
+import androidx.ui.core.IntPx
 import androidx.ui.core.Layout
 import androidx.ui.core.Modifier
-import androidx.ui.core.ipx
 import com.ivianuu.essentials.ui.compose.core.composable
 
 // todo name
@@ -33,7 +33,7 @@ fun WithModifier(
         val placeable = measureables.firstOrNull()?.measure(constraints)
         if (placeable != null) {
             layout(placeable.width, placeable.height) {
-                placeable.place(0.ipx, 0.ipx)
+                placeable.place(IntPx.Zero, IntPx.Zero)
             }
         } else {
             layout(constraints.minWidth, constraints.minHeight) {}

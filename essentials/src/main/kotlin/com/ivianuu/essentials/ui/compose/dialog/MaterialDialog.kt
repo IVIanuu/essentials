@@ -20,6 +20,7 @@ import androidx.compose.Composable
 import androidx.compose.unaryPlus
 import androidx.ui.core.Alignment
 import androidx.ui.core.CurrentTextStyleProvider
+import androidx.ui.core.IntPx
 import androidx.ui.core.Layout
 import androidx.ui.core.Measurable
 import androidx.ui.core.ParentData
@@ -229,7 +230,7 @@ private fun DialogContentLayout(
     Layout(children = children) { measureables, constraints ->
         var childConstraints = constraints.copy(
             minWidth = constraints.maxWidth,
-            minHeight = 0.ipx
+            minHeight = IntPx.Zero
         )
 
         val headerMeasureable =
@@ -271,9 +272,9 @@ private fun DialogContentLayout(
         val height = placeables.map { it.height }.sumBy { it.value }.ipx
 
         layout(width = constraints.maxWidth, height = height) {
-            var offsetY = 0.ipx
+            var offsetY = IntPx.Zero
             placeables.forEach {
-                it.place(0.ipx, offsetY)
+                it.place(IntPx.Zero, offsetY)
                 offsetY += it.height
             }
         }

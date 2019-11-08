@@ -53,7 +53,7 @@ fun BackButton(
 
 @Composable
 fun <T> PopupMenuButton(
-    alignment: Alignment = Alignment.Center,
+    alignment: Alignment = Alignment.TopLeft,
     offsetX: Dp = 0.dp,
     offsetY: Dp = 0.dp,
     image: Image = +drawableResource(R.drawable.es_ic_more_vert),
