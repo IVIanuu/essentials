@@ -22,6 +22,7 @@ import androidx.compose.unaryPlus
 import androidx.ui.core.Opacity
 import androidx.ui.core.Text
 import androidx.ui.core.TextField
+import androidx.ui.input.KeyboardType
 import androidx.ui.layout.Stack
 import androidx.ui.material.themeTextStyle
 import com.ivianuu.essentials.ui.compose.common.hideKeyboard
@@ -35,6 +36,7 @@ fun TextInputDialog(
     value: String,
     hint: String,
     onValueChange: (String) -> Unit,
+    type: KeyboardType = KeyboardType.Text,
     dismissOnOutsideTouch: Boolean = true,
     dismissOnBackClick: Boolean = true,
     buttonLayout: AlertDialogButtonLayout = AlertDialogButtonLayout.SideBySide,
@@ -66,6 +68,7 @@ fun TextInputDialog(
                     value = value,
                     onValueChange = onValueChange,
                     focusIdentifier = TextInputDialogInputId,
+                    keyboardType = type,
                     textStyle = +themeTextStyle { subtitle1 }
                 )
             }
