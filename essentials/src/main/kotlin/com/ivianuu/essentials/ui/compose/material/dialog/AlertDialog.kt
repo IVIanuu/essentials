@@ -111,7 +111,12 @@ fun DialogContentLayout(
     val children: @Composable() () -> Unit = {
         if (title != null) {
             ParentData(DialogContentLayoutType.Title) {
-                Padding(padding = 24.dp) {
+                Padding(
+                    left = 24.dp,
+                    top = 24.dp,
+                    right = 24.dp,
+                    bottom = if (buttons != null && content == null) 28.dp else 24.dp
+                ) {
                     title()
                 }
             }
@@ -126,6 +131,7 @@ fun DialogContentLayout(
 
             ParentData(DialogContentLayoutType.Content) {
                 Padding(
+                    top = if (title == null) 24.dp else 0.dp,
                     left = if (applyContentPadding) 24.dp else 0.dp,
                     right = if (applyContentPadding) 24.dp else 0.dp,
                     bottom = if (buttons == null) 24.dp else 0.dp
@@ -143,7 +149,7 @@ fun DialogContentLayout(
             }
 
             ParentData(DialogContentLayoutType.Buttons) {
-                if (!showDividers && (content != null || title != null)) {
+                if (!showDividers && content != null) {
                     Padding(top = 28.dp) {
                         buttons()
                     }
