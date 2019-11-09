@@ -26,7 +26,6 @@ import androidx.ui.core.ambientDensity
 import androidx.ui.core.setContent
 import androidx.ui.foundation.isSystemInDarkTheme
 import androidx.ui.material.MaterialTheme
-import com.github.ajalt.timberkt.d
 import com.ivianuu.director.requireActivity
 import com.ivianuu.essentials.ui.base.EsController
 import com.ivianuu.essentials.ui.compose.core.ActivityAmbient
@@ -83,8 +82,6 @@ abstract class ComposeController : EsController() {
                 density = +ambientDensity(),
                 darkMode = +isSystemInDarkTheme()
             )
-
-            d { "media query changed $mediaQuery" }
 
             MediaQueryProvider(mediaQuery) {
                 RouteAmbient.Provider(value = route!!) {
