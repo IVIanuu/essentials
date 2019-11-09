@@ -45,14 +45,21 @@ class AndroidComposeViewContainer @JvmOverloads constructor(
     val viewportMetrics: Flow<ViewportMetrics> get() = _viewportMetrics.asFlow()
     private val _viewportMetrics = ConflatedBroadcastChannel(ViewportMetrics())
 
+    override fun onAttachedToWindow() {
+        super.onAttachedToWindow()
+        requestApplyInsets()
+    }
+
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
         withDensity(Density(context)) {
-            _viewportMetrics.offer(
-                _viewportMetrics.value.copy(
-                    size = Size(w.ipx.toDp(), h.ipx.toDp())
-                )
+            val viewportMetrics = _viewportMetrics.value.copy(
+                size = Size(w.ipx.toDp(), h.ipx.toDp())
             )
+
+            if (_viewportMetrics.value != viewportMetrics) {
+                _viewportMetrics.offer(viewportMetrics)
+            }
         }
     }
 
@@ -67,39 +74,28 @@ class AndroidComposeViewContainer @JvmOverloads constructor(
         }
 
         withDensity(Density(context)) {
-            val physicalPadding = EdgeInsets(
+            val viewPadding = EdgeInsets(
                 left = if (zeroSides === ZeroSides.Left || zeroSides === ZeroSides.Both) 0.dp else insets.systemWindowInsetLeft.ipx.toDp(),
                 top = if (statusBarHidden) 0.dp else insets.systemWindowInsetTop.ipx.toDp(),
                 right = if (zeroSides === ZeroSides.Right || zeroSides === ZeroSides.Both) 0.dp else insets.systemWindowInsetRight.ipx.toDp(),
-                bottom = 0.dp
+                bottom = if (navigationBarHidden) 0.dp else insets.systemWindowInsetBottom.ipx.toDp()
             )
 
-            val physicalViewInsets = EdgeInsets(
+            val viewInsets = EdgeInsets(
                 left = 0.dp,
                 top = 0.dp,
                 right = 0.dp,
                 bottom = if (navigationBarHidden) calculateBottomKeyboardInset(insets).ipx.toDp() else insets.systemWindowInsetBottom.ipx.toDp()
             )
 
-            val systemGestureInsets = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                EdgeInsets(
-                    left = insets.systemGestureInsets.left.ipx.toDp(),
-                    top = insets.systemGestureInsets.top.ipx.toDp(),
-                    right = insets.systemGestureInsets.right.ipx.toDp(),
-                    bottom = insets.systemGestureInsets.bottom.ipx.toDp()
-                )
-            } else {
-                EdgeInsets()
-            }
-
-            val viewportMetrics = ViewportMetrics(
-                size = _viewportMetrics.value.size,
-                viewPadding = physicalPadding,
-                viewInsets = physicalViewInsets,
-                systemGestureInsets = systemGestureInsets
+            val viewportMetrics = _viewportMetrics.value.copy(
+                viewPadding = viewPadding,
+                viewInsets = viewInsets
             )
 
-            _viewportMetrics.offer(viewportMetrics)
+            if (_viewportMetrics.value != viewportMetrics) {
+                _viewportMetrics.offer(viewportMetrics)
+            }
         }
 
         return super.onApplyWindowInsets(insets)
@@ -132,11 +128,22 @@ class AndroidComposeViewContainer @JvmOverloads constructor(
         return ZeroSides.None
     }
 
+    private fun getNavigationBarHeight(): Int {
+        val activity = context as Activity
+        val rotation = activity.windowManager.defaultDisplay.rotation
+
+        val name = when (rotation) {
+            Surface.ROTATION_0, Surface.ROTATION_180 -> "navigation_bar_height"
+            else -> "navigation_bar_width"
+        }
+        val id = resources.getIdentifier(name, "dimen", "android")
+        return if (id > 0) resources.getDimensionPixelSize(id) else 0
+    }
+
     data class ViewportMetrics(
         val size: Size = Size(0.dp, 0.dp),
         val viewPadding: EdgeInsets = EdgeInsets(),
-        val viewInsets: EdgeInsets = EdgeInsets(),
-        val systemGestureInsets: EdgeInsets = EdgeInsets()
+        val viewInsets: EdgeInsets = EdgeInsets()
     )
 
 }
