@@ -18,7 +18,6 @@ package com.ivianuu.essentials.ui.compose.layout
 
 import androidx.compose.Composable
 import androidx.ui.core.IntPx
-import androidx.ui.core.Layout
 import com.ivianuu.essentials.ui.compose.core.composable
 
 // todo better name
@@ -38,19 +37,22 @@ fun FitSquare(
     type: FitSquareType,
     child: @Composable() () -> Unit
 ) = composable("FitSquare") {
-    Layout(children = child) { measureables, constraints ->
+    SingleChildLayout(child = child) { measureable, constraints ->
         val size = when (type) {
             FitSquareType.ByWidth -> constraints.maxWidth
             FitSquareType.ByHeight -> constraints.maxHeight
         }
 
-        val childConstraints = constraints.copy(
-            maxWidth = size,
-            maxHeight = size
-        )
+        val placeable = if (measureable == null) {
+            null
+        } else {
+            val childConstraints = constraints.copy(
+                maxWidth = size,
+                maxHeight = size
+            )
 
-        val measureable = measureables.firstOrNull()
-        val placeable = measureable?.measure(childConstraints)
+            measureable.measure(childConstraints)
+        }
 
         layout(width = size, height = size) {
             placeable?.place(IntPx.Zero, IntPx.Zero)

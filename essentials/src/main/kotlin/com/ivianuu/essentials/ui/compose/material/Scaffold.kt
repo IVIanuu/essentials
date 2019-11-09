@@ -161,19 +161,19 @@ private fun ScaffoldBodyAndBarsLayout(
 ) = composable("ScaffoldBodyAndBarsLayout") {
     val children: @Composable() () -> Unit = {
         if (topAppBar != null) {
-            ParentData(ScaffoldBodyBarsChild.TopAppBar) {
+            ParentData(ScaffoldBodySlot.TopAppBar) {
                 topAppBar()
             }
         }
 
         if (body != null) {
-            ParentData(ScaffoldBodyBarsChild.Body) {
+            ParentData(ScaffoldBodySlot.Body) {
                 body()
             }
         }
 
         if (bottomBar != null) {
-            ParentData(ScaffoldBodyBarsChild.BottomBar) {
+            ParentData(ScaffoldBodySlot.BottomBar) {
                 bottomBar()
             }
         }
@@ -184,13 +184,13 @@ private fun ScaffoldBodyAndBarsLayout(
         val height = constraints.maxHeight
 
         val topAppBarMeasureable = measureables.firstOrNull {
-            it.parentData == ScaffoldBodyBarsChild.TopAppBar
+            it.parentData == ScaffoldBodySlot.TopAppBar
         }
         val bodyMeasureable = measureables.firstOrNull {
-            it.parentData == ScaffoldBodyBarsChild.Body
+            it.parentData == ScaffoldBodySlot.Body
         }
         val bottomBarMeasureable = measureables.firstOrNull {
-            it.parentData == ScaffoldBodyBarsChild.BottomBar
+            it.parentData == ScaffoldBodySlot.BottomBar
         }
 
         var childConstraints = constraints.copy(
@@ -264,4 +264,4 @@ private fun ScaffoldBodyAndBarsLayout(
     }
 }
 
-private enum class ScaffoldBodyBarsChild { TopAppBar, Body, BottomBar }
+private enum class ScaffoldBodySlot { TopAppBar, Body, BottomBar }

@@ -22,7 +22,6 @@ import androidx.compose.unaryPlus
 import androidx.ui.core.Alignment
 import androidx.ui.core.IntPx
 import androidx.ui.core.IntPxPosition
-import androidx.ui.core.Layout
 import androidx.ui.core.LayoutCoordinates
 import androidx.ui.core.OnPositioned
 import androidx.ui.core.PxPosition
@@ -43,6 +42,7 @@ import com.ivianuu.essentials.ui.compose.composeControllerRoute
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.ref
 import com.ivianuu.essentials.ui.compose.injekt.inject
+import com.ivianuu.essentials.ui.compose.layout.NonNullSingleChildLayout
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.director.ControllerRoute
 import com.ivianuu.essentials.ui.navigation.director.controllerRouteOptions
@@ -243,14 +243,13 @@ private fun PopupMenuLayout(
     position: IntPxPosition,
     child: @Composable() () -> Unit
 ) = composable("PopupMenuLayout") {
-    Layout(children = child) { measureables, constraints ->
+    NonNullSingleChildLayout(child = child) { measureable, constraints ->
         val childConstraints = constraints.copy(
             minWidth = IntPx.Zero,
             minHeight = IntPx.Zero
         )
 
-        val measurable = measureables.first()
-        val placeable = measurable.measure(childConstraints)
+        val placeable = measureable.measure(childConstraints)
 
         val x = if (position.x < constraints.maxWidth / 2) {
             position.x

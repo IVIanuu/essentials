@@ -18,8 +18,8 @@ package com.ivianuu.essentials.ui.compose.animation
 
 import androidx.compose.Composable
 import androidx.ui.core.IntPx
-import androidx.ui.core.Layout
 import com.ivianuu.essentials.ui.compose.core.composable
+import com.ivianuu.essentials.ui.compose.layout.SingleChildLayout
 
 @Composable
 fun FractionalTranslation(
@@ -27,10 +27,13 @@ fun FractionalTranslation(
     offsetY: Float,
     child: @Composable() () -> Unit
 ) = composable("FractionalTranslation") {
-    Layout(children = child) { measureables, constraints ->
-        val placeable = measureables.first().measure(constraints)
-        layout(placeable.width, placeable.height) {
-            placeable.place(placeable.width * offsetX, placeable.height * offsetY)
+    SingleChildLayout(child = child) { measureable, constraints ->
+        val placeable = measureable?.measure(constraints)
+        layout(
+            placeable?.width ?: constraints.minWidth,
+            placeable?.height ?: constraints.minHeight
+        ) {
+            placeable?.place(placeable.width * offsetX, placeable.height * offsetY)
         }
     }
 }
@@ -41,10 +44,13 @@ fun Translation(
     offsetY: IntPx,
     child: @Composable() () -> Unit
 ) = composable("Translation") {
-    Layout(children = child) { measureables, constraints ->
-        val placeable = measureables.first().measure(constraints)
-        layout(placeable.width, placeable.height) {
-            placeable.place(offsetX, offsetY)
+    SingleChildLayout(child = child) { measureable, constraints ->
+        val placeable = measureable?.measure(constraints)
+        layout(
+            placeable?.width ?: constraints.minWidth,
+            placeable?.height ?: constraints.minHeight
+        ) {
+            placeable?.place(offsetX, offsetY)
         }
     }
 }

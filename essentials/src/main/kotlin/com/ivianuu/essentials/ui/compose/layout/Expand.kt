@@ -18,7 +18,6 @@ package com.ivianuu.essentials.ui.compose.layout
 
 import androidx.compose.Composable
 import androidx.ui.core.IntPx
-import androidx.ui.core.Layout
 import com.ivianuu.essentials.ui.compose.core.composable
 
 @Composable
@@ -37,8 +36,7 @@ fun Expand(
     expandHeight: Boolean = true,
     child: @Composable() () -> Unit
 ) = composable("Expand") {
-    Layout(children = child) { measureables, constraints ->
-        val measureable = measureables.firstOrNull()
+    SingleChildLayout(child = child) { measureable, constraints ->
         val placeable = measureable?.measure(
             constraints.copy(
                 minWidth = if (expandWidth) constraints.maxWidth else constraints.minWidth,

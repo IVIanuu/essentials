@@ -18,7 +18,6 @@ package com.ivianuu.essentials.ui.compose.layout
 
 import androidx.compose.Composable
 import androidx.ui.core.IntPx
-import androidx.ui.core.Layout
 import androidx.ui.core.Modifier
 import com.ivianuu.essentials.ui.compose.core.composable
 
@@ -29,14 +28,13 @@ fun WithModifier(
     modifier: Modifier,
     child: @Composable() () -> Unit
 ) = composable("WithModifier") {
-    Layout(children = child, modifier = modifier) { measureables, constraints ->
-        val placeable = measureables.firstOrNull()?.measure(constraints)
-        if (placeable != null) {
-            layout(placeable.width, placeable.height) {
-                placeable.place(IntPx.Zero, IntPx.Zero)
-            }
-        } else {
-            layout(constraints.minWidth, constraints.minHeight) {}
+    SingleChildLayout(child = child, modifier = modifier) { measureable, constraints ->
+        val placeable = measureable?.measure(constraints)
+        layout(
+            placeable?.width ?: constraints.minWidth,
+            placeable?.height ?: constraints.minHeight
+        ) {
+            placeable?.place(IntPx.Zero, IntPx.Zero)
         }
     }
 }

@@ -177,7 +177,7 @@ private fun DialogContentLayout(
 ) = composable("DialogContentLayout") {
     val children: @Composable() () -> Unit = {
         if (header != null) {
-            ParentData(DialogContentLayoutType.Header) {
+            ParentData(DialogContentSlot.Header) {
                 Padding(
                     left = 24.dp,
                     top = 24.dp,
@@ -191,12 +191,12 @@ private fun DialogContentLayout(
 
         if (content != null) {
             if (header != null && showDividers) {
-                ParentData(DialogContentLayoutType.TopDivider) {
+                ParentData(DialogContentSlot.TopDivider) {
                     DialogDivider()
                 }
             }
 
-            ParentData(DialogContentLayoutType.Content) {
+            ParentData(DialogContentSlot.Content) {
                 Padding(
                     top = if (header == null) 24.dp else 0.dp,
                     left = if (applyContentPadding) 24.dp else 0.dp,
@@ -210,12 +210,12 @@ private fun DialogContentLayout(
 
         if (buttons != null) {
             if (content != null && showDividers) {
-                ParentData(DialogContentLayoutType.BottomDivider) {
+                ParentData(DialogContentSlot.BottomDivider) {
                     DialogDivider()
                 }
             }
 
-            ParentData(DialogContentLayoutType.Buttons) {
+            ParentData(DialogContentSlot.Buttons) {
                 if (!showDividers && content != null) {
                     Padding(top = 28.dp) {
                         buttons()
@@ -234,15 +234,15 @@ private fun DialogContentLayout(
         )
 
         val headerMeasureable =
-            measureables.firstOrNull { it.parentData == DialogContentLayoutType.Header }
+            measureables.firstOrNull { it.parentData == DialogContentSlot.Header }
         val topDividerMeasureable =
-            measureables.firstOrNull { it.parentData == DialogContentLayoutType.TopDivider }
+            measureables.firstOrNull { it.parentData == DialogContentSlot.TopDivider }
         val contentMeasureable =
-            measureables.firstOrNull { it.parentData == DialogContentLayoutType.Content }
+            measureables.firstOrNull { it.parentData == DialogContentSlot.Content }
         val bottomDividerMeasureable =
-            measureables.firstOrNull { it.parentData == DialogContentLayoutType.BottomDivider }
+            measureables.firstOrNull { it.parentData == DialogContentSlot.BottomDivider }
         val buttonsMeasureable =
-            measureables.firstOrNull { it.parentData == DialogContentLayoutType.Buttons }
+            measureables.firstOrNull { it.parentData == DialogContentSlot.Buttons }
 
         fun measureFixed(measureable: Measurable?): Placeable? {
             return if (measureable != null) {
@@ -329,6 +329,6 @@ private fun DialogDivider() = composable("DialogDivider") {
     Divider(color = (+colorForCurrentBackground()).copy(alpha = 0.12f))
 }
 
-private enum class DialogContentLayoutType {
+private enum class DialogContentSlot {
     Header, TopDivider, Content, BottomDivider, Buttons
 }

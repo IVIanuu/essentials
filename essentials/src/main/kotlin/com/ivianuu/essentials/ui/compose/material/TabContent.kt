@@ -18,8 +18,6 @@ package com.ivianuu.essentials.ui.compose.material
 
 import androidx.compose.Composable
 import androidx.compose.unaryPlus
-import androidx.ui.core.IntPx
-import androidx.ui.core.Layout
 import com.ivianuu.essentials.ui.compose.core.composable
 
 @Composable
@@ -38,46 +36,7 @@ fun <T> TabContent(
     selectedIndex: Int,
     item: @Composable() (Int, T) -> Unit
 ) = composable("TabContent") {
-    SimpleTabContent(items, selectedIndex, item)
-}
-
-@Composable
-private fun <T> SimpleTabContent(
-    items: List<T>,
-    selectedIndex: Int,
-    item: @Composable() (Int, T) -> Unit
-) = composable("SimpleTabContent") {
     TabIndexAmbient.Provider(selectedIndex) {
         item(selectedIndex, items[selectedIndex])
-    }
-}
-
-@Composable
-private fun <T> DraggableTabContent(
-    items: List<T>,
-    selectedIndex: Int,
-    item: @Composable() (Int, T) -> Unit
-) = composable("DraggableTabContent") {
-    Layout({
-        items.forEachIndexed { index, item ->
-            composable(index) {
-                item(index, item)
-            }
-        }
-    }) { measureables, constraints ->
-        val childConstraints = constraints.copy(
-            minWidth = constraints.maxWidth,
-            minHeight = constraints.maxHeight
-        )
-
-        val placeables = measureables.map { it.measure(childConstraints) }
-
-        layout(constraints.maxWidth, constraints.maxHeight) {
-            var offset = -(constraints.maxWidth * selectedIndex)
-            placeables.forEach {
-                it.place(offset, IntPx.Zero)
-                offset += constraints.maxWidth
-            }
-        }
     }
 }

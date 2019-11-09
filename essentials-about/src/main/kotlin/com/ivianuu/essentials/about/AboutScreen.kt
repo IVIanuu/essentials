@@ -19,6 +19,7 @@ package com.ivianuu.essentials.about
 import androidx.compose.Composable
 import androidx.compose.unaryPlus
 import androidx.ui.core.Text
+import androidx.ui.material.FloatingActionButton
 import androidx.ui.res.stringResource
 import com.ivianuu.essentials.ui.compose.common.ScrollableList
 import com.ivianuu.essentials.ui.compose.common.openUrlOnClick
@@ -40,6 +41,10 @@ fun aboutRoute(
 ) {
     Scaffold(
         topAppBar = { EsTopAppBar(+stringResource(R.string.about_title)) },
+        fabConfiguration = Scaffold.FabConfiguration(
+            position = Scaffold.FabPosition.End,
+            fab = { FloatingActionButton(text = "Helo") }
+        ),
         body = {
             ScrollableList {
                 AboutSection(

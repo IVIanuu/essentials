@@ -28,12 +28,22 @@ import com.ivianuu.essentials.ui.compose.core.composable
 fun SingleChildLayout(
     child: @Composable() () -> Unit,
     modifier: Modifier = Modifier.None,
-    measureBlock: SingleChildMeasureBlock
+    measureBlock: MeasureScope.(Measurable?, Constraints) -> MeasureScope.LayoutResult
 ) = composable("SingleChildLayout") {
     Layout(children = child, modifier = modifier) { measureables, constraints ->
-        check(measureables.size <= 1)
+        check(measureables.size <= 1) { "Allows only 1 child" }
         measureBlock(measureables.firstOrNull(), constraints)
     }
 }
 
-typealias SingleChildMeasureBlock = MeasureScope.(Measurable?, Constraints) -> MeasureScope.LayoutResult
+@Composable
+fun NonNullSingleChildLayout(
+    child: @Composable() () -> Unit,
+    modifier: Modifier = Modifier.None,
+    measureBlock: MeasureScope.(Measurable, Constraints) -> MeasureScope.LayoutResult
+) = composable("NonSingleChildLayout") {
+    Layout(children = child, modifier = modifier) { measureables, constraints ->
+        check(measureables.size == 1) { "Requires exactly 1 child" }
+        measureBlock(measureables.first(), constraints)
+    }
+}
