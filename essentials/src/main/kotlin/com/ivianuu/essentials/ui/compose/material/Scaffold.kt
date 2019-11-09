@@ -24,6 +24,7 @@ import androidx.compose.state
 import androidx.compose.unaryPlus
 import androidx.ui.core.Alignment
 import androidx.ui.core.dp
+import androidx.ui.layout.Align
 import androidx.ui.layout.Column
 import androidx.ui.layout.Container
 import androidx.ui.layout.Padding
@@ -55,56 +56,61 @@ fun Scaffold(
     scaffold.hasBottomBar = bottomBar != null
     scaffold.hasFab = fabConfiguration != null
 
-    ScaffoldAmbient.Provider(value = scaffold) {
-        Stack {
-            val finalBody: @Composable() () -> Unit = {
-                Column {
-                    if (topAppBar != null) {
-                        WithModifier(modifier = Inflexible) {
-                            topAppBar()
-                        }
-                    }
-
-                    if (body != null) {
-                        Container(
-                            alignment = Alignment.TopLeft,
-                            modifier = Flexible(1f)
-                        ) {
-                            EsSurface {
-                                body()
-                            }
-                        }
-                    }
-
-                    if (bottomBar != null) {
-                        WithModifier(modifier = Inflexible) {
-                            bottomBar()
-                        }
-                    }
+    val finalBody: @Composable() () -> Unit = {
+        Column {
+            if (topAppBar != null) {
+                WithModifier(modifier = Inflexible) {
+                    topAppBar()
                 }
+            }
 
-                if (fabConfiguration != null) {
-                    aligned(
-                        when (fabConfiguration.position) {
-                            Scaffold.FabPosition.Center -> Alignment.BottomCenter
-                            Scaffold.FabPosition.End -> Alignment.BottomRight
-                        }
-                    ) {
-                        Padding(padding = 16.dp) {
-                            fabConfiguration.fab()
-                        }
+            if (body != null) {
+                Container(
+                    alignment = Alignment.TopLeft,
+                    modifier = Flexible(1f)
+                ) {
+                    EsSurface {
+                        body()
                     }
                 }
             }
 
+            if (bottomBar != null) {
+                WithModifier(modifier = Inflexible) {
+                    bottomBar()
+                }
+            }
+        }
+
+        if (fabConfiguration != null) {
+            Align(
+                when (fabConfiguration.position) {
+                    Scaffold.FabPosition.Center -> Alignment.BottomCenter
+                    Scaffold.FabPosition.End -> Alignment.BottomRight
+                }
+            ) {
+                Padding(padding = 16.dp) {
+                    fabConfiguration.fab()
+                }
+            }
+        }
+    }
+
+
+    ScaffoldAmbient.Provider(value = scaffold) {
+        Stack {
             if (drawer != null) {
-                drawer(
-                    drawerState.value,
-                    { drawerState.value = it },
-                    finalBody
-                )
+                expanded {
+                    drawer(
+                        drawerState.value,
+                        { drawerState.value = it },
+                        finalBody
+                    )
+                }
             } else {
-                finalBody()
+                expanded {
+                    finalBody()
+                }
             }
         }
     }
