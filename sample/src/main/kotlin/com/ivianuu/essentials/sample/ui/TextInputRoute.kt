@@ -129,15 +129,12 @@ val textInputRoute = composeControllerRoute(
                 }
             }
         },
-        fabConfiguration = Scaffold.FabConfiguration(
-            position = Scaffold.FabPosition.End,
-            fab = {
-                FloatingActionButton(
-                    text = "Toggle search",
-                    onClick = { setSearchVisible(!searchVisible) }
-                )
-            }
-        )
+        fab = {
+            FloatingActionButton(
+                text = "Toggle search",
+                onClick = { setSearchVisible(!searchVisible) }
+            )
+        }
     )
 }
 

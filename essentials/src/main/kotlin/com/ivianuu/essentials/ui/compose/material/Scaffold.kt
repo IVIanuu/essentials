@@ -46,8 +46,9 @@ fun Scaffold(
     topAppBar: (@Composable() () -> Unit)? = null,
     body: (@Composable() () -> Unit)? = null,
     bottomBar: (@Composable() () -> Unit)? = null,
-    bodyLayoutMode: Scaffold.BodyLayoutMode = Scaffold.BodyLayoutMode.Wrap,
-    fabConfiguration: Scaffold.FabConfiguration? = null
+    fab: (@Composable() () -> Unit)? = null,
+    fabPosition: Scaffold.FabPosition = Scaffold.FabPosition.End,
+    bodyLayoutMode: Scaffold.BodyLayoutMode = Scaffold.BodyLayoutMode.Wrap
 ) = composable("Scaffold") {
     val scaffold = +memo { Scaffold(drawerState) }
 
@@ -56,7 +57,7 @@ fun Scaffold(
     scaffold.hasDrawer = drawer != null
     scaffold.hasBody = body != null
     scaffold.hasBottomBar = bottomBar != null
-    scaffold.hasFab = fabConfiguration != null
+    scaffold.hasFab = fab != null
 
     val finalLayout: @Composable() () -> Unit = {
         Stack {
@@ -69,15 +70,15 @@ fun Scaffold(
                 )
             }
 
-            if (fabConfiguration != null) {
+            if (fab != null) {
                 aligned(
-                    alignment = when (fabConfiguration.position) {
+                    alignment = when (fabPosition) {
                         Scaffold.FabPosition.Center -> Alignment.BottomCenter
                         Scaffold.FabPosition.End -> Alignment.BottomRight
                     }
                 ) {
                     Padding(padding = 16.dp) {
-                        fabConfiguration.fab()
+                        fab()
                     }
                 }
             }
@@ -137,16 +138,11 @@ class Scaffold internal constructor(_drawerState: State<DrawerState>) {
         drawerState = DrawerState.Closed
     }
 
-    data class FabConfiguration(
-        val position: FabPosition,
-        val fab: @Composable() () -> Unit
-    )
+    enum class BodyLayoutMode { ExtendTop, ExtendBottom, ExtendBoth, Wrap }
 
     enum class FabPosition {
         Center, End
     }
-
-    enum class BodyLayoutMode { ExtendTop, ExtendBottom, ExtendBoth, Wrap }
 
 }
 
