@@ -19,7 +19,8 @@ package com.ivianuu.essentials.ui.compose.navigation
 import androidx.compose.Ambient
 import androidx.compose.Composable
 import androidx.compose.Observe
-import androidx.compose.Recompose
+import androidx.compose.frames.ModelList
+import androidx.compose.frames.modelListOf
 import androidx.compose.memo
 import androidx.compose.unaryPlus
 import androidx.ui.core.IntPx
@@ -27,7 +28,7 @@ import androidx.ui.core.Layout
 import androidx.ui.core.ParentData
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.compose.common.onBackPressed
-import com.ivianuu.essentials.ui.compose.common.retainedState
+import com.ivianuu.essentials.ui.compose.common.retained
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.coroutines.coroutineScope
 import com.ivianuu.essentials.ui.compose.injekt.inject
@@ -45,47 +46,39 @@ fun Navigator(
     key: String? = null,
     startRoute: () -> Route
 ) = composable("Navigator") {
-    Observe {
-        Recompose { recompose ->
-            val navigatorState = +retainedState("Navigator${key.orEmpty()}") { NavigatorState() }
-            val coroutineScope = +coroutineScope()
-            val appDispatchers = +inject<AppDispatchers>()
-            val navigator = +memo {
-                Navigator(coroutineScope, appDispatchers, navigatorState.value, startRoute())
-            }
+    val backStack = +memo { modelListOf<Route>() }
+    val coroutineScope = +coroutineScope()
+    val appDispatchers = +inject<AppDispatchers>()
+    val navigator = +retained("Navigator:${key.orEmpty()}") {
+        Navigator(coroutineScope, appDispatchers, backStack, startRoute())
+    }
 
-            navigator.recompose = recompose
-
-            if (handleBack && navigator.backStack.size > 1) {
-                composable("onBackPressed") {
-                    +onBackPressed { navigator.pop() }
-                }
-            }
-
-            NavigatorAmbient.Provider(navigator) {
-                navigator.compose()
-            }
+    if (handleBack && navigator.backStack.size > 1) {
+        composable("onBackPressed") {
+            +onBackPressed { navigator.pop() }
         }
+    }
+
+    NavigatorAmbient.Provider(navigator) {
+        navigator.compose()
     }
 }
 
 class Navigator internal constructor(
     private val coroutineScope: CoroutineScope,
     private val dispatchers: AppDispatchers,
-    private val state: NavigatorState,
+    private val _backStack: ModelList<Route>,
     startRoute: Route
 ) {
 
     val backStack: List<Route>
-        get() = state.backStack
-
-    internal lateinit var recompose: () -> Unit
+        get() = _backStack
 
     private val resultsByRoute = mutableMapOf<Route, CompletableDeferred<Any?>>()
 
     init {
-        if (state.backStack.isEmpty()) {
-            state.backStack += startRoute
+        if (_backStack.isEmpty()) {
+            _backStack += startRoute
         }
     }
 
@@ -158,8 +151,8 @@ class Navigator internal constructor(
 
     private suspend fun setBackStack(newBackStack: List<Route>) {
         withContext(dispatchers.main) {
-            state.backStack = newBackStack
-            recompose()
+            _backStack.clear()
+            _backStack += newBackStack
         }
     }
 
@@ -168,7 +161,7 @@ class Navigator internal constructor(
     private fun getVisibleRoutes(): List<Route> {
         val visibleRoutes = mutableListOf<Route>()
 
-        for (route in state.backStack.reversed()) {
+        for (route in _backStack.reversed()) {
             visibleRoutes += route
             if (!route.isFloating) break
         }
@@ -206,10 +199,6 @@ fun Route(
         compose.invoke()
     }
 }
-
-internal data class NavigatorState(
-    var backStack: List<Route> = emptyList()
-)
 
 @Composable
 private fun NavigatorLayout(
