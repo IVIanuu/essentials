@@ -16,7 +16,9 @@
 
 package com.ivianuu.essentials.ui.base
 
+import android.graphics.Color
 import android.os.Bundle
+import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -56,6 +58,7 @@ abstract class EsActivity : AppCompatActivity(), InjektTrait, MvRxView {
     private val controllerRenderer: ControllerRenderer by inject()
 
     protected open val layoutRes: Int get() = 0
+    protected open val drawEdgeToEdge: Boolean get() = true
 
     open val containerId: Int
         get() = android.R.id.content
@@ -72,8 +75,13 @@ abstract class EsActivity : AppCompatActivity(), InjektTrait, MvRxView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // force router init
-        get<Router>()
+        if (drawEdgeToEdge) {
+            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
+                    View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
+                    View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+            window.statusBarColor = Color.TRANSPARENT
+            window.navigationBarColor = Color.TRANSPARENT
+        }
 
         if (layoutRes != 0) {
             setContentView(layoutRes)
@@ -82,6 +90,9 @@ abstract class EsActivity : AppCompatActivity(), InjektTrait, MvRxView {
         if (navigator.backStack.isEmpty()) {
             startRoute?.let { navigator.push(it) }
         }
+
+        // force router init
+        get<Router>()
 
         onBackPressedDispatcher.addCallback(onBackPressedCallback)
 
