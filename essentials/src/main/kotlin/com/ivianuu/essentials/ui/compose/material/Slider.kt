@@ -252,7 +252,7 @@ private fun DrawSlider(
 
 
             val trackHeight =
-                com.ivianuu.essentials.ui.compose.material.slider2.TrackHeight.toPx().value
+                TrackHeight.toPx().value
 
             // track
             paint.color =
@@ -308,7 +308,7 @@ private fun DrawSlider(
 
             // thumb
             val thumbRadius =
-                if (isEnabled) com.ivianuu.essentials.ui.compose.material.slider2.ThumbRadius.toPx().value else DisabledThumbRadius.toPx().value
+                if (isEnabled) ThumbRadius.toPx().value else DisabledThumbRadius.toPx().value
             paint.color = color.copy(alpha = if (isEnabled) ThumbAlpha else DisabledThumbAlpha)
             canvas.drawCircle(Offset(currentX, centerY), thumbRadius, paint)
         }

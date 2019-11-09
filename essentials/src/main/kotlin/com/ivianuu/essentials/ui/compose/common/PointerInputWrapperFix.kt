@@ -20,6 +20,8 @@ import androidx.compose.Composable
 import androidx.ui.core.PointerInputHandler
 import com.ivianuu.essentials.ui.compose.core.composable
 
+// todo remove once fixed
+
 @Composable
 fun PointerInputWrapper(
     pointerInputHandler: PointerInputHandler = { event, _, _ -> event },
