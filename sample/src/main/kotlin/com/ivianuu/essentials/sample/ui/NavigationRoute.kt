@@ -30,12 +30,12 @@ import androidx.ui.material.themeTextStyle
 import com.ivianuu.essentials.ui.compose.composeControllerRoute
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
 import com.ivianuu.essentials.ui.compose.material.Scaffold
-import com.ivianuu.essentials.ui.compose.navigation.Navigator
+import com.ivianuu.essentials.ui.compose.navigation.ComposeNavigator
 import com.ivianuu.essentials.ui.compose.navigation.NavigatorAmbient
 import com.ivianuu.essentials.ui.compose.navigation.Route
 
 val navigationRoute = composeControllerRoute {
-    Navigator { CounterRoute(1) }
+    ComposeNavigator { CounterRoute(1) }
 }
 
 private fun CounterRoute(count: Int): Route = Route {

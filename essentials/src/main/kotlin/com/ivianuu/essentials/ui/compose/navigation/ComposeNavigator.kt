@@ -32,17 +32,18 @@ import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
+// todo rename to Navigator once becomes standard
 // todo transition support
 
 @Composable
-fun Navigator(
+fun ComposeNavigator(
     handleBack: Boolean = true,
     key: String? = null,
     startRoute: () -> Route
-) = composable("Navigator") {
+) = composable("ComposeNavigator") {
     val coroutineScope = +coroutineScope()
-    val navigator = +retained("Navigator:${key.orEmpty()}") {
-        Navigator(Overlay(), coroutineScope, modelListOf(), startRoute())
+    val navigator = +retained("ComposeNavigator:${key.orEmpty()}") {
+        ComposeNavigator(Overlay(), coroutineScope, modelListOf(), startRoute())
     }
 
     navigator.coroutineScope = coroutineScope
@@ -56,7 +57,7 @@ fun Navigator(
     navigator.content()
 }
 
-class Navigator internal constructor(
+class ComposeNavigator internal constructor(
     private val overlay: Overlay,
     internal var coroutineScope: CoroutineScope,
     private val _backStack: ModelList<Route>,
@@ -153,4 +154,4 @@ class Navigator internal constructor(
     }
 }
 
-val NavigatorAmbient = Ambient.of<Navigator>()
+val NavigatorAmbient = Ambient.of<ComposeNavigator>()
