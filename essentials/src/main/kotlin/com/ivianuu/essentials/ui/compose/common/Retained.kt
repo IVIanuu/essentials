@@ -16,8 +16,6 @@
 
 package com.ivianuu.essentials.ui.compose.common
 
-import androidx.activity.ComponentActivity
-import androidx.compose.ambient
 import androidx.compose.effectOf
 import androidx.compose.frames.AbstractRecord
 import androidx.compose.frames.Framed
@@ -28,8 +26,7 @@ import androidx.compose.frames.writable
 import androidx.compose.memo
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.ivianuu.essentials.ui.compose.core.ActivityAmbient
-import com.ivianuu.essentials.util.getViewModel
+import com.ivianuu.essentials.ui.compose.viewmodel.viewModel
 import kotlin.reflect.KProperty
 
 fun <T> retained(
@@ -43,13 +40,10 @@ fun <T> retainedState(
     key: Any,
     init: () -> T
 ) = effectOf<RetainedState<T>> {
-    val activity = +ambient(ActivityAmbient) as ComponentActivity
-    val viewModel = +memo {
-        activity.getViewModel<RetainedStateViewModel>(
-            factory = RetainedStateViewModel.Factory,
-            key = "RetainedState:${key.hashCode()}"
-        )
-    }
+    val viewModel = +viewModel<RetainedStateViewModel>(
+        key = "RetainedState:${key.hashCode()}",
+        factory = RetainedStateViewModel.Factory
+    )
 
     return@effectOf +memo {
         RetainedState(
