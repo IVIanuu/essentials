@@ -17,26 +17,35 @@
 package com.ivianuu.essentials.ui.compose.common
 
 import androidx.compose.Composable
+import androidx.ui.foundation.HorizontalScroller
 import androidx.ui.foundation.VerticalScroller
 import androidx.ui.layout.Column
+import androidx.ui.layout.Row
 import com.ivianuu.essentials.ui.compose.core.composable
-import com.ivianuu.essentials.ui.compose.material.Scaffold
+
+enum class ScrollDirection {
+    Vertical, Horizontal
+}
 
 @Composable
-fun ListScreen(
-    topAppBar: (@Composable() () -> Unit)? = null,
-    fabConfiguration: Scaffold.FabConfiguration? = null,
-    listBody: @Composable() () -> Unit
-) = composable("ListScreen") {
-    Scaffold(
-        topAppBar = topAppBar,
-        body = {
+fun ScrollableList(
+    direction: ScrollDirection = ScrollDirection.Vertical,
+    children: @Composable() () -> Unit
+) = composable("ScrollableList") {
+    when (direction) {
+        ScrollDirection.Vertical -> {
             VerticalScroller {
                 Column {
-                    listBody()
+                    children()
                 }
             }
-        },
-        fabConfiguration = fabConfiguration
-    )
+        }
+        ScrollDirection.Horizontal -> {
+            HorizontalScroller {
+                Row {
+                    children()
+                }
+            }
+        }
+    }
 }
