@@ -17,11 +17,13 @@
 package com.ivianuu.essentials.ui.compose.common
 
 import androidx.compose.Composable
+import androidx.ui.core.Dp
 import androidx.ui.foundation.HorizontalScroller
 import androidx.ui.foundation.VerticalScroller
 import androidx.ui.layout.Column
 import androidx.ui.layout.Row
 import com.ivianuu.essentials.ui.compose.core.composable
+import com.ivianuu.essentials.ui.compose.layout.SizedBox
 
 @Composable
 fun <T> ScrollableList(
@@ -48,16 +50,20 @@ fun ScrollableList(
 ) = composable("ScrollableList") {
     when (direction) {
         ScrollDirection.Vertical -> {
-            VerticalScroller {
-                Column {
-                    children()
+            SizedBox(height = Dp.Infinity) {
+                VerticalScroller {
+                    Column {
+                        children()
+                    }
                 }
             }
         }
         ScrollDirection.Horizontal -> {
-            HorizontalScroller {
-                Row {
-                    children()
+            SizedBox(width = Dp.Infinity) {
+                HorizontalScroller {
+                    Row {
+                        children()
+                    }
                 }
             }
         }
