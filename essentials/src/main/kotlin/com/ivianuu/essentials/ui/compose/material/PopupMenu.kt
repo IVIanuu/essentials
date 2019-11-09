@@ -48,6 +48,9 @@ import com.ivianuu.essentials.ui.navigation.director.ControllerRoute
 import com.ivianuu.essentials.ui.navigation.director.controllerRouteOptions
 import com.ivianuu.essentials.ui.navigation.director.fade
 
+// todo move core logic to a Popup component
+// todo add selectable items
+
 @Composable
 fun <T> PopupMenu(
     items: List<T>,
