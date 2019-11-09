@@ -66,6 +66,8 @@ abstract class ComposeController : EsController() {
         view.setContent { }
     }
 
+    // todo move this to somewhere else
+
     @Composable
     protected open fun composeWithAmbients(view: AndroidComposeViewContainer) {
         ActivityAmbient.Provider(value = requireActivity()) {
