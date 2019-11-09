@@ -68,7 +68,8 @@ val homeRoute = composeControllerRoute {
             )
         },
         body = {
-            ScrollableList(HomeItem.values().toList()) { index, item ->
+            val items = +memo { HomeItem.values().toList().sortedBy { it.name } }
+            ScrollableList(items = items) { index, item ->
                 HomeItem(item = item, onClick = +navigateOnClick(item.route))
                 if (index != HomeItem.values().lastIndex) {
                     HomeDivider()
@@ -128,79 +129,79 @@ enum class HomeItem(
     val color: Color,
     val route: () -> Route
 ) {
-    Counter(
-        title = "Counter",
+    About(
+        title = "About",
         color = Color.Yellow,
-        route = { counterRoute }
-    ),
-    Navigation(
-        title = "Navigation",
-        color = Color.Red,
-        route = { navigationRoute }
+        route = { aboutRoute() }
     ),
     AppPicker(
         title = "App picker",
         color = Color.Blue,
         route = { appPickerRoute(true) }
     ),
-    CheckApps(
-        title = "Check apps",
-        color = Color.Green,
-        route = { checkAppsRoute }
-    ),
-    Twilight(
-        title = "Twilight",
-        color = Color.Gray,
-        route = { twilightSettingsRoute }
-    ),
-    Compose(
-        title = "Prefs",
-        color = Color.Magenta,
-        route = { prefsRoute }
-    ),
-    Timer(
-        title = "Timer",
-        color = Color.Cyan,
-        route = { timerRoute }
-    ),
-    SecureSettings(
-        title = "Nav bar",
-        color = Color.Green,
-        route = { navBarRoute }
-    ),
     BottomNavigation(
         title = "Bottom navigation",
         color = Color.Red,
         route = { bottomNavigationRoute }
     ),
-    Drawer(
-        title = "Drawer",
-        color = Color.Blue,
-        route = { drawerRoute }
-    ),
-    Tabs(
-        title = "Tabs",
-        color = Color.Yellow,
-        route = { tabsRoute }
-    ),
-    Scaffold(
-        title = "Scaffold",
+    CheckApps(
+        title = "Check apps",
         color = Color.Green,
-        route = { com.ivianuu.essentials.sample.ui.scaffoldRoute }
+        route = { checkAppsRoute }
     ),
-    TextInput(
-        title = "Text input",
-        color = Color.Magenta,
-        route = { textInputRoute }
+    Counter(
+        title = "Counter",
+        color = Color.Yellow,
+        route = { counterRoute }
     ),
     Dialogs(
         title = "Dialogs",
         color = Color.Gray,
         route = { dialogsRoute }
     ),
-    About(
-        title = "About",
+    Drawer(
+        title = "Drawer",
+        color = Color.Blue,
+        route = { drawerRoute }
+    ),
+    NavBar(
+        title = "Nav bar",
+        color = Color.Green,
+        route = { navBarRoute }
+    ),
+    Navigation(
+        title = "Navigation",
+        color = Color.Red,
+        route = { navigationRoute }
+    ),
+    Prefs(
+        title = "Prefs",
+        color = Color.Magenta,
+        route = { prefsRoute }
+    ),
+    Scaffold(
+        title = "Scaffold",
+        color = Color.Green,
+        route = { scaffoldRoute }
+    ),
+    Tabs(
+        title = "Tabs",
         color = Color.Yellow,
-        route = { aboutRoute() }
+        route = { tabsRoute }
+    ),
+    TextInput(
+        title = "Text input",
+        color = Color.Magenta,
+        route = { textInputRoute }
+    ),
+    Timer(
+        title = "Timer",
+        color = Color.Cyan,
+        route = { timerRoute }
+    ),
+    Twilight(
+        title = "Twilight",
+        color = Color.Gray,
+        route = { twilightSettingsRoute }
     )
 }
