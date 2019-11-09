@@ -18,11 +18,32 @@ package com.ivianuu.essentials.ui.compose.navigation
 
 import androidx.compose.Ambient
 import androidx.compose.Composable
+import androidx.compose.Observe
+import androidx.compose.Recompose
+import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.compose.common.OverlayEntry
+import com.ivianuu.essentials.ui.compose.core.staticComposable
+
+data class TransitionProperties(
+    val direction: TransitionDirection,
+    val onComplete: () -> Unit
+)
+
+enum class TransitionDirection {
+    Enter, Exit
+}
+
+typealias RouteTransition = @Composable() (TransitionProperties?, @Composable() () -> Unit) -> Unit
+
+val DefaultRouteTransition: RouteTransition = { props, children ->
+    props?.onComplete?.invoke()
+    children()
+}
 
 open class Route(
     opaque: Boolean = false,
     keepState: Boolean = false,
+    val transition: RouteTransition = DefaultRouteTransition,
     val compose: @Composable() () -> Unit
 ) {
 
@@ -33,15 +54,65 @@ open class Route(
     )
 
     var navigator: Navigator? = null
+        private set
+
+    private var recompose: (() -> Unit)? = null
+    private var state = State.Initialized
+        set(value) {
+            field = value
+            d { "state changed $value" }
+        }
 
     @Composable
     open fun compose() {
-        RouteAmbient.Provider(this) {
-            compose.invoke()
+        staticComposable("route content") {
+            Recompose {
+                d { "in recompose" }
+                this.recompose = it
+
+                val children: @Composable() () -> Unit = {
+                    staticComposable("content") {
+                        d { "children composable" }
+                        RouteAmbient.Provider(this) {
+                            compose.invoke()
+                        }
+                    }
+                }
+
+                val onComplete = {
+                    when (state) {
+                        State.Pushed -> {
+                            attach()
+                        }
+                        State.Popped -> {
+                            finalize()
+                        }
+                    }
+                }
+
+                val props = when (state) {
+                    State.Pushed -> TransitionProperties(
+                        direction = TransitionDirection.Enter,
+                        onComplete = onComplete
+                    )
+                    State.Popped -> TransitionProperties(
+                        direction = TransitionDirection.Exit,
+                        onComplete = onComplete
+                    )
+                    else -> null
+                }
+
+                Observe {
+                    d { "in transition" }
+                    transition(props, children)
+                }
+            }
         }
     }
 
     open fun onPush(navigator: Navigator, index: Int) {
+        state = State.Pushed
+
         this.navigator = navigator
 
         if (overlayEntry in navigator.overlay.entries) {
@@ -52,10 +123,25 @@ open class Route(
     }
 
     open fun onPop() {
-        navigator!!.overlay.remove(overlayEntry)
-        this.navigator = null
+        state = State.Popped
+        recompose!!()
     }
 
+    private fun attach() {
+        state = State.Attached
+        recompose!!()
+    }
+
+    private fun finalize() {
+        state = State.Destroyed
+        navigator!!.overlay.remove(overlayEntry)
+        this.navigator = null
+        this.recompose = null
+    }
+
+    private enum class State {
+        Initialized, Pushed, Attached, Popped, Destroyed
+    }
 }
 
 val RouteAmbient = Ambient.of<Route>()
