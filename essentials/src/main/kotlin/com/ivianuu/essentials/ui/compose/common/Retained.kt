@@ -26,30 +26,29 @@ import androidx.compose.frames._created
 import androidx.compose.frames.readable
 import androidx.compose.frames.writable
 import androidx.compose.memo
-import androidx.compose.onDispose
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.ivianuu.essentials.ui.compose.core.ActivityAmbient
 import com.ivianuu.essentials.util.getViewModel
 import kotlin.reflect.KProperty
 
-fun <T> retained(key: Any, init: () -> T) = effectOf<T> {
+fun <T> retained(
+    key: Any,
+    init: () -> T
+) = effectOf<T> {
     (+retainedState(key, init)).value
 }
 
-fun <T> retainedState(key: Any, init: () -> T) = effectOf<RetainedState<T>> {
+fun <T> retainedState(
+    key: Any,
+    init: () -> T
+) = effectOf<RetainedState<T>> {
     val activity = +ambient(ActivityAmbient) as ComponentActivity
     val viewModel = +memo {
         activity.getViewModel<RetainedStateViewModel>(
-            factory = RetainedStateViewModel,
+            factory = RetainedStateViewModel.Factory,
             key = "RetainedState:${key.hashCode()}"
         )
-    }
-
-    +onDispose {
-        if (!activity.isChangingConfigurations) {
-            viewModel.values.remove(key)
-        }
     }
 
     return@effectOf +memo {
@@ -65,6 +64,7 @@ fun <T> retainedState(key: Any, init: () -> T) = effectOf<RetainedState<T>> {
     }
 }
 
+// todo replace with @Model once possible
 class RetainedState<T> @PublishedApi internal constructor(
     value: T,
     private val key: Any,
@@ -132,12 +132,17 @@ class RetainedState<T> @PublishedApi internal constructor(
     operator fun setValue(thisObj: Any?, property: KProperty<*>, next: T) {
         value = next
     }
+
+    fun removeValue() {
+        viewModel.values.remove(key)
+    }
 }
 
 @PublishedApi
 internal class RetainedStateViewModel : ViewModel() {
     val values = mutableMapOf<Any, Any?>()
-    companion object : ViewModelProvider.Factory {
+
+    companion object Factory : ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T =
             RetainedStateViewModel() as T
     }
