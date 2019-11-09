@@ -26,6 +26,16 @@ import androidx.ui.core.ipx
 import com.ivianuu.essentials.ui.compose.core.composable
 
 @Composable
+fun Expand(child: @Composable() () -> Unit) = composable("Expand") {
+    SizedBox(size = Dp.Infinity, child = child)
+}
+
+@Composable
+fun Shrink(child: @Composable() () -> Unit) = composable("Shrink") {
+    SizedBox(size = 0.dp, child = child)
+}
+
+@Composable
 fun SizedBox(
     size: Dp,
     child: @Composable() () -> Unit
