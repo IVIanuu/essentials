@@ -150,8 +150,6 @@ class Scaffold internal constructor(_drawerState: State<DrawerState>) {
 
 }
 
-// todo rename
-
 @Composable
 private fun ScaffoldBodyAndBarsLayout(
     topAppBar: @Composable() (() -> Unit)?,
