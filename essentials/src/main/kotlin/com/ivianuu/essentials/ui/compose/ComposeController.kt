@@ -42,7 +42,7 @@ import com.ivianuu.essentials.ui.compose.injekt.MaterialThemeProvider
 import com.ivianuu.essentials.ui.compose.injekt.inject
 
 /**
- * Controller which uses compose to display it's ui
+ * Controller which uses content to display it's ui
  */
 abstract class ComposeController : EsController() {
 
@@ -97,7 +97,7 @@ abstract class ComposeController : EsController() {
                 MaterialTheme(
                     colors = +materialThemeProvider.colors,
                     typography = +materialThemeProvider.typography,
-                    children = this::compose
+                    children = this::content
                 )
             }
         }
@@ -105,5 +105,5 @@ abstract class ComposeController : EsController() {
     }
 
     @Composable
-    protected abstract fun compose()
+    protected abstract fun content()
 }

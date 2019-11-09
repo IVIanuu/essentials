@@ -53,7 +53,7 @@ fun Navigator(
         }
     }
 
-    navigator.compose()
+    navigator.content()
 }
 
 class Navigator internal constructor(
@@ -126,9 +126,9 @@ class Navigator internal constructor(
     }
 
     @Composable
-    internal fun compose() {
+    internal fun content() {
         NavigatorAmbient.Provider(this) {
-            overlay.compose()
+            overlay.content()
         }
     }
 
@@ -137,7 +137,7 @@ class Navigator internal constructor(
             OverlayEntry(
                 opaque = route.opaque,
                 keepState = route.keepState,
-                compose = route.compose
+                content = route.content
             )
         }
 

@@ -22,13 +22,13 @@ import androidx.compose.Composable
 open class Route(
     val opaque: Boolean = false,
     val keepState: Boolean = false,
-    val compose: @Composable() () -> Unit
+    val content: @Composable() () -> Unit
 ) {
 
     @Composable
-    open fun compose() {
+    open fun content() {
         RouteAmbient.Provider(this) {
-            compose.invoke()
+            content.invoke()
         }
     }
 

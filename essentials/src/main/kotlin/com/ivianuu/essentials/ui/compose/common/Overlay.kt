@@ -51,7 +51,7 @@ class Overlay(initialEntries: List<OverlayEntry> = emptyList()) {
     }
 
     @Composable
-    fun compose() {
+    fun content() {
         OverlayAmbient.Provider(value = this) {
             OverlayLayout(entries = _entries)
         }
@@ -61,7 +61,7 @@ class Overlay(initialEntries: List<OverlayEntry> = emptyList()) {
 data class OverlayEntry(
     val opaque: Boolean = false,
     val keepState: Boolean = false,
-    val compose: @Composable() () -> Unit
+    val content: @Composable() () -> Unit
 ) {
     val id = UUID.randomUUID().toString()
 }
@@ -87,7 +87,7 @@ private fun OverlayLayout(
                 Observe {
                     composable(it.entry.id) {
                         ParentData(data = it) {
-                            it.entry.compose()
+                            it.entry.content()
                         }
                     }
                 }

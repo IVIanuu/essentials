@@ -38,7 +38,7 @@ private class ComposeRouteController(
     private val _compose: @Composable() () -> Unit
 ) : ComposeController() {
 
-    override fun compose() {
+    override fun content() {
         _compose()
     }
 
