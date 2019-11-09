@@ -23,15 +23,16 @@ import androidx.compose.memo
 import androidx.compose.state
 import androidx.compose.unaryPlus
 import androidx.ui.core.Alignment
+import androidx.ui.core.Constraints
+import androidx.ui.core.IntPx
+import androidx.ui.core.Layout
+import androidx.ui.core.ParentData
 import androidx.ui.core.dp
 import androidx.ui.layout.Align
-import androidx.ui.layout.Column
-import androidx.ui.layout.Container
 import androidx.ui.layout.Padding
-import androidx.ui.layout.Stack
 import androidx.ui.material.DrawerState
 import com.ivianuu.essentials.ui.compose.core.composable
-import com.ivianuu.essentials.ui.compose.layout.WithModifier
+import com.ivianuu.essentials.ui.compose.layout.Expand
 
 @Composable
 fun Scaffold(
@@ -45,6 +46,7 @@ fun Scaffold(
     topAppBar: (@Composable() () -> Unit)? = null,
     body: (@Composable() () -> Unit)? = null,
     bottomBar: (@Composable() () -> Unit)? = null,
+    bodyLayoutMode: Scaffold.BodyLayoutMode = Scaffold.BodyLayoutMode.Wrap,
     fabConfiguration: Scaffold.FabConfiguration? = null
 ) = composable("Scaffold") {
     val scaffold = +memo { Scaffold(drawerState) }
@@ -56,41 +58,25 @@ fun Scaffold(
     scaffold.hasBottomBar = bottomBar != null
     scaffold.hasFab = fabConfiguration != null
 
-    val finalBody: @Composable() () -> Unit = {
-        Column {
-            if (topAppBar != null) {
-                WithModifier(modifier = Inflexible) {
-                    topAppBar()
-                }
-            }
+    val finalLayout: @Composable() () -> Unit = {
+        EsSurface {
+            ScaffoldBodyAndBarsLayout(
+                topAppBar = topAppBar,
+                body = body,
+                bottomBar = bottomBar,
+                bodyLayoutMode = bodyLayoutMode
+            )
 
-            if (body != null) {
-                Container(
-                    alignment = Alignment.TopLeft,
-                    modifier = Flexible(1f)
-                ) {
-                    EsSurface {
-                        body()
+            if (fabConfiguration != null) {
+                Align(
+                    when (fabConfiguration.position) {
+                        Scaffold.FabPosition.Center -> Alignment.BottomCenter
+                        Scaffold.FabPosition.End -> Alignment.BottomRight
                     }
-                }
-            }
-
-            if (bottomBar != null) {
-                WithModifier(modifier = Inflexible) {
-                    bottomBar()
-                }
-            }
-        }
-
-        if (fabConfiguration != null) {
-            Align(
-                when (fabConfiguration.position) {
-                    Scaffold.FabPosition.Center -> Alignment.BottomCenter
-                    Scaffold.FabPosition.End -> Alignment.BottomRight
-                }
-            ) {
-                Padding(padding = 16.dp) {
-                    fabConfiguration.fab()
+                ) {
+                    Padding(padding = 16.dp) {
+                        fabConfiguration.fab()
+                    }
                 }
             }
         }
@@ -98,19 +84,15 @@ fun Scaffold(
 
 
     ScaffoldAmbient.Provider(value = scaffold) {
-        Stack {
+        Expand {
             if (drawer != null) {
-                expanded {
-                    drawer(
-                        drawerState.value,
-                        { drawerState.value = it },
-                        finalBody
-                    )
-                }
+                drawer(
+                    drawerState.value,
+                    { drawerState.value = it },
+                    finalLayout
+                )
             } else {
-                expanded {
-                    finalBody()
-                }
+                finalLayout()
             }
         }
     }
@@ -159,4 +141,123 @@ class Scaffold internal constructor(_drawerState: State<DrawerState>) {
     enum class FabPosition {
         Center, End
     }
+
+    enum class BodyLayoutMode { ExtendTop, ExtendBottom, ExtendBoth, Wrap }
+
 }
+
+// todo rename
+
+@Composable
+private fun ScaffoldBodyAndBarsLayout(
+    topAppBar: @Composable() (() -> Unit)?,
+    body: @Composable() (() -> Unit)?,
+    bottomBar: @Composable() (() -> Unit)?,
+    bodyLayoutMode: Scaffold.BodyLayoutMode
+) = composable("ScaffoldBodyAndBarsLayout") {
+    val children: @Composable() () -> Unit = {
+        if (topAppBar != null) {
+            ParentData(ScaffoldBodyBarsChild.TopAppBar) {
+                topAppBar()
+            }
+        }
+
+        if (body != null) {
+            ParentData(ScaffoldBodyBarsChild.Body) {
+                body()
+            }
+        }
+
+        if (bottomBar != null) {
+            ParentData(ScaffoldBodyBarsChild.BottomBar) {
+                bottomBar()
+            }
+        }
+    }
+
+    Layout(children = children) { measureables, constraints ->
+        val width = constraints.maxWidth
+        val height = constraints.maxHeight
+
+        val topAppBarMeasureable = measureables.firstOrNull {
+            it.parentData == ScaffoldBodyBarsChild.TopAppBar
+        }
+        val bodyMeasureable = measureables.firstOrNull {
+            it.parentData == ScaffoldBodyBarsChild.Body
+        }
+        val bottomBarMeasureable = measureables.firstOrNull {
+            it.parentData == ScaffoldBodyBarsChild.BottomBar
+        }
+
+        var childConstraints = constraints.copy(
+            minWidth = width,
+            maxWidth = width,
+            minHeight = IntPx.Zero
+        )
+
+        val topAppBarPlaceable = topAppBarMeasureable
+            ?.measure(childConstraints)
+            ?.also { placeable ->
+                childConstraints =
+                    childConstraints.copy(maxHeight = childConstraints.maxHeight - placeable.height)
+            }
+        val topAppBarTop = if (topAppBarPlaceable != null) IntPx.Zero else null
+        val topAppBarBottom =
+            if (topAppBarPlaceable != null) topAppBarTop!! + topAppBarPlaceable.height else null
+
+        val bottomBarPlaceable = bottomBarMeasureable?.measure(childConstraints)
+        val bottomBarBottom = if (bottomBarPlaceable != null) height else null
+        val bottomBarTop =
+            if (bottomBarPlaceable != null) bottomBarBottom!! - bottomBarPlaceable.height else null
+
+        val bodyTop: IntPx?
+        val bodyBottom: IntPx?
+
+        if (bodyMeasureable == null) {
+            bodyTop = null
+            bodyBottom = null
+        } else {
+            when (bodyLayoutMode) {
+                Scaffold.BodyLayoutMode.ExtendBoth -> {
+                    bodyTop = topAppBarTop
+                    bodyBottom = bottomBarBottom
+                }
+                Scaffold.BodyLayoutMode.ExtendTop -> {
+                    bodyTop = topAppBarTop
+                    bodyBottom = if (bottomBar != null) bottomBarTop!! else height
+                }
+                Scaffold.BodyLayoutMode.ExtendBottom -> {
+                    bodyTop = if (topAppBar != null) topAppBarBottom!! else IntPx.Zero
+                    bodyBottom = bottomBarBottom
+                }
+                Scaffold.BodyLayoutMode.Wrap -> {
+                    bodyTop = if (topAppBar != null) topAppBarBottom!! else IntPx.Zero
+                    bodyBottom = if (bottomBar != null) bottomBarTop!! else height
+                }
+            }
+        }
+
+        val bodyHeight = if (body != null) bodyBottom!! - bodyTop!! else null
+
+        val bodyPlaceable = if (body == null) {
+            null
+        } else {
+            val bodyConstraints = Constraints(
+                minWidth = width,
+                maxWidth = width,
+                minHeight = bodyHeight!!,
+                maxHeight = bodyHeight
+            )
+
+            bodyMeasureable!!.measure(bodyConstraints)
+        }
+
+        layout(constraints.maxWidth, constraints.maxHeight) {
+            bodyPlaceable?.place(IntPx.Zero, bodyTop!!)
+            bottomBarPlaceable?.place(IntPx.Zero, bottomBarTop!!)
+            topAppBarPlaceable?.place(IntPx.Zero, topAppBarTop!!)
+        }
+    }
+}
+
+private enum class ScaffoldBodyBarsChild { TopAppBar, Body, BottomBar }
