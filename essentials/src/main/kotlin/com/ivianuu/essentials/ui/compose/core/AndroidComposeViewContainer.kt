@@ -94,8 +94,8 @@ class AndroidComposeViewContainer @JvmOverloads constructor(
 
             val viewportMetrics = ViewportMetrics(
                 size = _viewportMetrics.value.size,
-                physicalPadding = physicalPadding,
-                physicalViewInsets = physicalViewInsets,
+                viewPadding = physicalPadding,
+                viewInsets = physicalViewInsets,
                 systemGestureInsets = systemGestureInsets
             )
 
@@ -134,8 +134,8 @@ class AndroidComposeViewContainer @JvmOverloads constructor(
 
     data class ViewportMetrics(
         val size: Size = Size(0.dp, 0.dp),
-        val physicalPadding: EdgeInsets = EdgeInsets(),
-        val physicalViewInsets: EdgeInsets = EdgeInsets(),
+        val viewPadding: EdgeInsets = EdgeInsets(),
+        val viewInsets: EdgeInsets = EdgeInsets(),
         val systemGestureInsets: EdgeInsets = EdgeInsets()
     )
 

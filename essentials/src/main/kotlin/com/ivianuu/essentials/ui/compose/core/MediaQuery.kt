@@ -30,7 +30,6 @@ import androidx.ui.layout.EdgeInsets
 
 data class MediaQuery(
     val size: Size = Size(0.dp, 0.dp),
-    val padding: EdgeInsets = EdgeInsets(),
     val viewPadding: EdgeInsets = EdgeInsets(),
     val viewInsets: EdgeInsets,
     val density: Density = Density(0f, 0f),

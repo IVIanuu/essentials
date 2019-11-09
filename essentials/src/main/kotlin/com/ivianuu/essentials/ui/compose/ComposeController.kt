@@ -25,7 +25,6 @@ import androidx.compose.unaryPlus
 import androidx.ui.core.ambientDensity
 import androidx.ui.core.setContent
 import androidx.ui.foundation.isSystemInDarkTheme
-import androidx.ui.layout.EdgeInsets
 import androidx.ui.material.MaterialTheme
 import com.github.ajalt.timberkt.d
 import com.ivianuu.director.requireActivity
@@ -79,9 +78,8 @@ abstract class ComposeController : EsController() {
 
             val mediaQuery = MediaQuery(
                 size = viewportMetrics.size,
-                padding = +memo { EdgeInsets() },
-                viewPadding = viewportMetrics.physicalPadding,
-                viewInsets = viewportMetrics.physicalViewInsets,
+                viewPadding = viewportMetrics.viewPadding,
+                viewInsets = viewportMetrics.viewInsets,
                 density = +ambientDensity(),
                 darkMode = +isSystemInDarkTheme()
             )
