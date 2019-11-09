@@ -58,6 +58,8 @@ fun <T> retainedState(
     }
 }
 
+// todo add retainedStateFor
+
 // todo replace with @Model once possible
 class RetainedState<T> @PublishedApi internal constructor(
     value: T,
