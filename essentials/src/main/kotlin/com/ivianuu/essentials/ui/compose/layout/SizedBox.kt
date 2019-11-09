@@ -55,10 +55,7 @@ fun SizedBox(
             val realHeight = height.toIntPx().coerceIn(constraints.minHeight, constraints.maxHeight)
             val placeable =
                 measureable?.measure(Constraints(maxWidth = realWidth, maxHeight = realHeight))
-
-            layout(realWidth, realHeight) {
-                placeable?.place(0.ipx, 0.ipx)
-            }
+            layout(realWidth, realHeight) { placeable?.place(0.ipx, 0.ipx) }
         }
     }
 }
