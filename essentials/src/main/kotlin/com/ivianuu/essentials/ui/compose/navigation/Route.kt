@@ -18,42 +18,18 @@ package com.ivianuu.essentials.ui.compose.navigation
 
 import androidx.compose.Ambient
 import androidx.compose.Composable
-import com.ivianuu.essentials.ui.compose.common.OverlayEntry
 
 open class Route(
-    opaque: Boolean = false,
-    keepState: Boolean = false,
+    val opaque: Boolean = false,
+    val keepState: Boolean = false,
     val compose: @Composable() () -> Unit
 ) {
-
-    val overlayEntry = OverlayEntry(
-        opaque = opaque,
-        keepState = keepState,
-        compose = { compose() }
-    )
-
-    var navigator: Navigator? = null
 
     @Composable
     open fun compose() {
         RouteAmbient.Provider(this) {
             compose.invoke()
         }
-    }
-
-    open fun onPush(navigator: Navigator, index: Int) {
-        this.navigator = navigator
-
-        if (overlayEntry in navigator.overlay.entries) {
-            navigator.overlay.remove(overlayEntry)
-        }
-
-        navigator.overlay.add(index, overlayEntry)
-    }
-
-    open fun onPop() {
-        navigator!!.overlay.remove(overlayEntry)
-        this.navigator = null
     }
 
 }

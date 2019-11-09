@@ -23,6 +23,7 @@ import androidx.compose.frames.modelListOf
 import androidx.compose.unaryPlus
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.compose.common.Overlay
+import com.ivianuu.essentials.ui.compose.common.OverlayEntry
 import com.ivianuu.essentials.ui.compose.common.onBackPressed
 import com.ivianuu.essentials.ui.compose.common.retained
 import com.ivianuu.essentials.ui.compose.core.composable
@@ -56,7 +57,7 @@ fun Navigator(
 }
 
 class Navigator internal constructor(
-    val overlay: Overlay,
+    private val overlay: Overlay,
     internal var coroutineScope: CoroutineScope,
     private val _backStack: ModelList<Route>,
     startRoute: Route
@@ -66,6 +67,7 @@ class Navigator internal constructor(
         get() = _backStack
 
     private val resultsByRoute = mutableMapOf<Route, CompletableDeferred<Any?>>()
+    private val overlayEntryByRoute = mutableMapOf<Route, OverlayEntry>()
 
     init {
         if (_backStack.isEmpty()) {
@@ -82,7 +84,7 @@ class Navigator internal constructor(
     suspend fun <T> push(route: Route): T? {
         d { "push $route" }
         _backStack += route
-        route.onPush(this, _backStack.lastIndex)
+        addOverlayEntry(route, _backStack.lastIndex)
         val deferredResult = CompletableDeferred<Any?>()
         synchronized(resultsByRoute) { resultsByRoute[route] = deferredResult }
         return deferredResult.await() as? T
@@ -95,7 +97,7 @@ class Navigator internal constructor(
     private suspend fun popInternal(result: Any?) {
         d { "pop result $result" }
         val removedRoute = _backStack.removeAt(backStack.lastIndex)
-        removedRoute.onPop()
+        removeOverlayEntry(removedRoute)
         val deferredResult = synchronized(resultsByRoute) { resultsByRoute.remove(removedRoute) }
         deferredResult?.complete(result)
     }
@@ -111,11 +113,11 @@ class Navigator internal constructor(
 
         if (_backStack.isNotEmpty()) {
             val removedRoute = _backStack.removeAt(_backStack.lastIndex)
-            removedRoute.onPop()
+            removeOverlayEntry(removedRoute)
         }
 
         _backStack += route
-        route.onPush(this, _backStack.lastIndex)
+        addOverlayEntry(route, _backStack.lastIndex)
 
         val deferredResult = CompletableDeferred<Any?>()
         synchronized(resultsByRoute) { resultsByRoute[route] = deferredResult }
@@ -130,6 +132,25 @@ class Navigator internal constructor(
         }
     }
 
+    private fun addOverlayEntry(route: Route, index: Int) {
+        val overlayEntry = overlayEntryByRoute.getOrPut(route) {
+            OverlayEntry(
+                opaque = route.opaque,
+                keepState = route.keepState,
+                compose = route.compose
+            )
+        }
+
+        if (overlayEntry in overlay.entries) {
+            overlay.remove(overlayEntry)
+        }
+
+        overlay.add(index, overlayEntry)
+    }
+
+    private fun removeOverlayEntry(route: Route) {
+        overlayEntryByRoute.remove(route)?.let { overlay.remove(it) }
+    }
 }
 
 val NavigatorAmbient = Ambient.of<Navigator>()
