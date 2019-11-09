@@ -33,6 +33,8 @@ open class Route(
         compose = { compose() }
     )
 
+    var navigator: Navigator? = null
+
     @Composable
     open fun compose() {
         d { "compose route" }
@@ -40,6 +42,22 @@ open class Route(
             compose.invoke()
         }
     }
+
+    open fun onPush(navigator: Navigator, index: Int) {
+        this.navigator = navigator
+
+        if (overlayEntry in navigator.overlay.entries) {
+            navigator.overlay.remove(overlayEntry)
+        }
+
+        navigator.overlay.add(index, overlayEntry)
+    }
+
+    open fun onPop() {
+        navigator!!.overlay.remove(overlayEntry)
+        this.navigator = null
+    }
+
 }
 
 val RouteAmbient = Ambient.of<Route>()

@@ -33,7 +33,6 @@ import com.ivianuu.essentials.util.AppDispatchers
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 // todo transition support
 
@@ -60,7 +59,7 @@ fun Navigator(
 }
 
 class Navigator internal constructor(
-    private val overlay: Overlay,
+    val overlay: Overlay,
     private val coroutineScope: CoroutineScope,
     private val dispatchers: AppDispatchers,
     private val _backStack: ModelList<Route>,
@@ -87,7 +86,7 @@ class Navigator internal constructor(
     suspend fun <T> push(route: Route): T? {
         d { "push $route" }
         _backStack += route
-        moveRouteOverlayToTop(route)
+        route.onPush(this, _backStack.lastIndex)
         val deferredResult = CompletableDeferred<Any?>()
         synchronized(resultsByRoute) { resultsByRoute[route] = deferredResult }
         return deferredResult.await() as? T
@@ -100,7 +99,7 @@ class Navigator internal constructor(
     private suspend fun popInternal(result: Any?) {
         d { "pop result $result" }
         val removedRoute = _backStack.removeAt(backStack.lastIndex)
-        removeRouteOverlay(removedRoute)
+        removedRoute.onPop()
         val deferredResult = synchronized(resultsByRoute) { resultsByRoute.remove(removedRoute) }
         deferredResult?.complete(result)
     }
@@ -116,11 +115,11 @@ class Navigator internal constructor(
 
         if (_backStack.isNotEmpty()) {
             val removedRoute = _backStack.removeAt(_backStack.lastIndex)
-            removeRouteOverlay(removedRoute)
+            removedRoute.onPop()
         }
 
         _backStack += route
-        moveRouteOverlayToTop(route)
+        route.onPush(this, _backStack.lastIndex)
 
         val deferredResult = CompletableDeferred<Any?>()
         synchronized(resultsByRoute) { resultsByRoute[route] = deferredResult }
@@ -135,19 +134,6 @@ class Navigator internal constructor(
         }
     }
 
-    private suspend fun moveRouteOverlayToTop(route: Route) = withContext(dispatchers.main) {
-        // if the route was already add it remove it temporarily
-        if (route.overlayEntry in overlay.entries) {
-            overlay.remove(route.overlayEntry)
-        }
-
-        // add the route overlay entry
-        overlay.add(route.overlayEntry)
-    }
-
-    private suspend fun removeRouteOverlay(route: Route) = withContext(dispatchers.main) {
-        overlay.remove(route.overlayEntry)
-    }
 }
 
 val NavigatorAmbient = Ambient.of<Navigator>()
