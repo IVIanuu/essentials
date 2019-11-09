@@ -29,6 +29,7 @@ import androidx.ui.core.Layout
 import androidx.ui.core.ParentData
 import androidx.ui.core.dp
 import androidx.ui.layout.Align
+import androidx.ui.layout.Container
 import androidx.ui.layout.Padding
 import androidx.ui.material.DrawerState
 import com.ivianuu.essentials.ui.compose.core.composable
@@ -60,22 +61,24 @@ fun Scaffold(
 
     val finalLayout: @Composable() () -> Unit = {
         EsSurface {
-            ScaffoldBodyAndBarsLayout(
-                topAppBar = topAppBar,
-                body = body,
-                bottomBar = bottomBar,
-                bodyLayoutMode = bodyLayoutMode
-            )
+            Container(expanded = true) {
+                ScaffoldBodyAndBarsLayout(
+                    topAppBar = topAppBar,
+                    body = body,
+                    bottomBar = bottomBar,
+                    bodyLayoutMode = bodyLayoutMode
+                )
 
-            if (fabConfiguration != null) {
-                Align(
-                    when (fabConfiguration.position) {
-                        Scaffold.FabPosition.Center -> Alignment.BottomCenter
-                        Scaffold.FabPosition.End -> Alignment.BottomRight
-                    }
-                ) {
-                    Padding(padding = 16.dp) {
-                        fabConfiguration.fab()
+                if (fabConfiguration != null) {
+                    Align(
+                        when (fabConfiguration.position) {
+                            Scaffold.FabPosition.Center -> Alignment.BottomCenter
+                            Scaffold.FabPosition.End -> Alignment.BottomRight
+                        }
+                    ) {
+                        Padding(padding = 16.dp) {
+                            fabConfiguration.fab()
+                        }
                     }
                 }
             }
@@ -219,27 +222,27 @@ private fun ScaffoldBodyAndBarsLayout(
         } else {
             when (bodyLayoutMode) {
                 Scaffold.BodyLayoutMode.ExtendBoth -> {
-                    bodyTop = topAppBarTop
-                    bodyBottom = bottomBarBottom
+                    bodyTop = topAppBarTop!!
+                    bodyBottom = bottomBarBottom!!
                 }
                 Scaffold.BodyLayoutMode.ExtendTop -> {
-                    bodyTop = topAppBarTop
-                    bodyBottom = if (bottomBar != null) bottomBarTop!! else height
+                    bodyTop = topAppBarTop!!
+                    bodyBottom = if (bottomBarMeasureable != null) bottomBarTop!! else height
                 }
                 Scaffold.BodyLayoutMode.ExtendBottom -> {
-                    bodyTop = if (topAppBar != null) topAppBarBottom!! else IntPx.Zero
-                    bodyBottom = bottomBarBottom
+                    bodyTop = if (topAppBarMeasureable != null) topAppBarBottom!! else IntPx.Zero
+                    bodyBottom = bottomBarBottom!!
                 }
                 Scaffold.BodyLayoutMode.Wrap -> {
-                    bodyTop = if (topAppBar != null) topAppBarBottom!! else IntPx.Zero
-                    bodyBottom = if (bottomBar != null) bottomBarTop!! else height
+                    bodyTop = if (topAppBarMeasureable != null) topAppBarBottom!! else IntPx.Zero
+                    bodyBottom = if (bottomBarMeasureable != null) bottomBarTop!! else height
                 }
             }
         }
 
-        val bodyHeight = if (body != null) bodyBottom!! - bodyTop!! else null
+        val bodyHeight = if (bodyMeasureable != null) bodyBottom!! - bodyTop!! else null
 
-        val bodyPlaceable = if (body == null) {
+        val bodyPlaceable = if (bodyMeasureable == null) {
             null
         } else {
             val bodyConstraints = Constraints(
@@ -249,7 +252,7 @@ private fun ScaffoldBodyAndBarsLayout(
                 maxHeight = bodyHeight
             )
 
-            bodyMeasureable!!.measure(bodyConstraints)
+            bodyMeasureable.measure(bodyConstraints)
         }
 
         layout(constraints.maxWidth, constraints.maxHeight) {

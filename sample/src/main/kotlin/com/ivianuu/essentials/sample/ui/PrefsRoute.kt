@@ -18,14 +18,16 @@ package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.unaryPlus
 import androidx.ui.core.Text
+import com.ivianuu.essentials.ui.compose.common.ScrollableList
 import com.ivianuu.essentials.ui.compose.composeControllerRoute
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
+import com.ivianuu.essentials.ui.compose.material.Scaffold
 import com.ivianuu.essentials.ui.compose.prefs.CheckboxPreference
 import com.ivianuu.essentials.ui.compose.prefs.Dependency
 import com.ivianuu.essentials.ui.compose.prefs.MultiChoiceListPreference
 import com.ivianuu.essentials.ui.compose.prefs.PreferenceSubheader
-import com.ivianuu.essentials.ui.compose.prefs.PrefsScreen
+import com.ivianuu.essentials.ui.compose.prefs.Prefs
 import com.ivianuu.essentials.ui.compose.prefs.RadioButtonPreference
 import com.ivianuu.essentials.ui.compose.prefs.SingleChoiceListPreference
 import com.ivianuu.essentials.ui.compose.prefs.SliderPreference
@@ -44,80 +46,84 @@ import com.ivianuu.kprefs.stringSet
 val prefsRoute = composeControllerRoute(
     options = controllerRouteOptions().vertical()
 ) {
-    PrefsScreen(
+    Scaffold(
         topAppBar = { EsTopAppBar(title = "Prefs") },
-        prefs = {
-            val prefs = +inject<KPrefs>()
+        body = {
+            Prefs {
+                ScrollableList {
+                    val prefs = +inject<KPrefs>()
 
-            SwitchPreference(
-                pref = prefs.boolean("switch"),
-                title = { Text("Switch") }
-            )
+                    SwitchPreference(
+                        pref = prefs.boolean("switch"),
+                        title = { Text("Switch") }
+                    )
 
-            val dependencies = listOf(
-                Dependency(
-                    pref = prefs.boolean("switch"),
-                    value = true
-                )
-            )
+                    val dependencies = listOf(
+                        Dependency(
+                            pref = prefs.boolean("switch"),
+                            value = true
+                        )
+                    )
 
-            PreferenceSubheader(text = "Category", dependencies = dependencies)
+                    PreferenceSubheader(text = "Category", dependencies = dependencies)
 
-            CheckboxPreference(
-                pref = prefs.boolean("checkbox"),
-                title = { Text("Checkbox") },
-                summary = { Text("This is a checkbox preference") },
-                dependencies = dependencies
-            )
+                    CheckboxPreference(
+                        pref = prefs.boolean("checkbox"),
+                        title = { Text("Checkbox") },
+                        summary = { Text("This is a checkbox preference") },
+                        dependencies = dependencies
+                    )
 
-            RadioButtonPreference(
-                pref = prefs.boolean("radio_button"),
-                title = { Text("Radio Button") },
-                summary = { Text("This is a radio button preference") },
-                dependencies = dependencies
-            )
+                    RadioButtonPreference(
+                        pref = prefs.boolean("radio_button"),
+                        title = { Text("Radio Button") },
+                        summary = { Text("This is a radio button preference") },
+                        dependencies = dependencies
+                    )
 
-            SliderPreference(
-                pref = prefs.int("slider"),
-                title = { Text("Slider") },
-                summary = { Text("This is a slider preference") },
-                valueText = +unitValueTextProvider(UnitValueTextProvider.Unit.Dp),
-                dependencies = dependencies
-            )
+                    SliderPreference(
+                        pref = prefs.int("slider"),
+                        title = { Text("Slider") },
+                        summary = { Text("This is a slider preference") },
+                        valueText = +unitValueTextProvider(UnitValueTextProvider.Unit.Dp),
+                        dependencies = dependencies
+                    )
 
-            PreferenceSubheader(text = "Dialogs", dependencies = dependencies)
+                    PreferenceSubheader(text = "Dialogs", dependencies = dependencies)
 
-            TextInputPreference(
-                pref = prefs.string("text_input"),
-                title = { Text("Text input") },
-                summary = { Text("This is a text input preference") },
-                allowEmpty = false,
-                dependencies = dependencies
-            )
+                    TextInputPreference(
+                        pref = prefs.string("text_input"),
+                        title = { Text("Text input") },
+                        summary = { Text("This is a text input preference") },
+                        allowEmpty = false,
+                        dependencies = dependencies
+                    )
 
-            MultiChoiceListPreference(
-                pref = prefs.stringSet("multi_select_list", setOf("A", "B")),
-                items = listOf(
-                    MultiChoiceListPreference.Item("A"),
-                    MultiChoiceListPreference.Item("B"),
-                    MultiChoiceListPreference.Item("C")
-                ),
-                title = { Text("Multi select list") },
-                summary = { Text("This is a multi select list preference") },
-                dependencies = dependencies
-            )
+                    MultiChoiceListPreference(
+                        pref = prefs.stringSet("multi_select_list", setOf("A", "B")),
+                        items = listOf(
+                            MultiChoiceListPreference.Item("A"),
+                            MultiChoiceListPreference.Item("B"),
+                            MultiChoiceListPreference.Item("C")
+                        ),
+                        title = { Text("Multi select list") },
+                        summary = { Text("This is a multi select list preference") },
+                        dependencies = dependencies
+                    )
 
-            SingleChoiceListPreference(
-                pref = prefs.string("single_item_list", "C"),
-                items = listOf(
-                    SingleChoiceListPreference.Item("A"),
-                    SingleChoiceListPreference.Item("B"),
-                    SingleChoiceListPreference.Item("C")
-                ),
-                title = { Text("Single item list") },
-                summary = { Text("This is a single item list preference") },
-                dependencies = dependencies
-            )
+                    SingleChoiceListPreference(
+                        pref = prefs.string("single_item_list", "C"),
+                        items = listOf(
+                            SingleChoiceListPreference.Item("A"),
+                            SingleChoiceListPreference.Item("B"),
+                            SingleChoiceListPreference.Item("C")
+                        ),
+                        title = { Text("Single item list") },
+                        summary = { Text("This is a single item list preference") },
+                        dependencies = dependencies
+                    )
+                }
+            }
         }
     )
 }
