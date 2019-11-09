@@ -61,7 +61,10 @@ fun Scaffold(
 
     val finalLayout: @Composable() () -> Unit = {
         EsSurface {
-            Container(expanded = true) {
+            Container(
+                expanded = true,
+                alignment = Alignment.TopLeft
+            ) {
                 ScaffoldBodyAndBarsLayout(
                     topAppBar = topAppBar,
                     body = body,
