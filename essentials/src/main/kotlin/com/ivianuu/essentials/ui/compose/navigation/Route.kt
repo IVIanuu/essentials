@@ -18,7 +18,6 @@ package com.ivianuu.essentials.ui.compose.navigation
 
 import androidx.compose.Ambient
 import androidx.compose.Composable
-import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.compose.common.OverlayEntry
 
 open class Route(
@@ -37,7 +36,6 @@ open class Route(
 
     @Composable
     open fun compose() {
-        d { "compose route" }
         RouteAmbient.Provider(this) {
             compose.invoke()
         }

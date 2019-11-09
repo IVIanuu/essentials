@@ -31,7 +31,6 @@ import androidx.ui.graphics.Paint
 import androidx.ui.layout.Container
 import androidx.ui.layout.Padding
 import androidx.ui.material.Divider
-import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.about.aboutRoute
 import com.ivianuu.essentials.apps.ui.appPickerRoute
 import com.ivianuu.essentials.twilight.twilightSettingsRoute
@@ -43,7 +42,6 @@ import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
 import com.ivianuu.essentials.ui.compose.material.PopupMenuButton
 import com.ivianuu.essentials.ui.compose.material.SimpleListItem
-import com.ivianuu.essentials.ui.compose.material.currentIconStyle
 import com.ivianuu.essentials.ui.navigation.Route
 import com.ivianuu.essentials.util.Toaster
 
@@ -54,10 +52,6 @@ val homeRoute = composeControllerRoute {
                 title = { Text("Home") },
                 trailing = {
                     val toaster = +inject<Toaster>()
-
-                    val iconStyle = +currentIconStyle()
-                    d { "app bar icon style $iconStyle" }
-
                     PopupMenuButton(
                         items = listOf(
                             "Option 1",

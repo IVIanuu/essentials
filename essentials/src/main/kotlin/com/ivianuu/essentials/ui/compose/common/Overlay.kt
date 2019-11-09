@@ -23,7 +23,6 @@ import androidx.compose.frames.modelListOf
 import androidx.ui.core.IntPx
 import androidx.ui.core.Layout
 import androidx.ui.core.ParentData
-import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.compose.core.composable
 import java.util.*
 
@@ -73,8 +72,6 @@ val OverlayAmbient = Ambient.of<Overlay>()
 private fun OverlayLayout(
     entries: List<OverlayEntry>
 ) = composable("OverlayLayout") {
-    d { "compose overlays ${entries.size}" }
-
     Layout({
         val visibleEntries = entries.filterVisible()
 
