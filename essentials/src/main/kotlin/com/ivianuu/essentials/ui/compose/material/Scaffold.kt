@@ -28,9 +28,8 @@ import androidx.ui.core.IntPx
 import androidx.ui.core.Layout
 import androidx.ui.core.ParentData
 import androidx.ui.core.dp
-import androidx.ui.layout.Align
-import androidx.ui.layout.Container
 import androidx.ui.layout.Padding
+import androidx.ui.layout.Stack
 import androidx.ui.material.DrawerState
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.layout.Expand
@@ -60,28 +59,25 @@ fun Scaffold(
     scaffold.hasFab = fabConfiguration != null
 
     val finalLayout: @Composable() () -> Unit = {
-        EsSurface {
-            Container(
-                expanded = true,
-                alignment = Alignment.TopLeft
-            ) {
+        Stack {
+            expanded {
                 ScaffoldBodyAndBarsLayout(
                     topAppBar = topAppBar,
                     body = body,
                     bottomBar = bottomBar,
                     bodyLayoutMode = bodyLayoutMode
                 )
+            }
 
-                if (fabConfiguration != null) {
-                    Align(
-                        when (fabConfiguration.position) {
-                            Scaffold.FabPosition.Center -> Alignment.BottomCenter
-                            Scaffold.FabPosition.End -> Alignment.BottomRight
-                        }
-                    ) {
-                        Padding(padding = 16.dp) {
-                            fabConfiguration.fab()
-                        }
+            if (fabConfiguration != null) {
+                aligned(
+                    alignment = when (fabConfiguration.position) {
+                        Scaffold.FabPosition.Center -> Alignment.BottomCenter
+                        Scaffold.FabPosition.End -> Alignment.BottomRight
+                    }
+                ) {
+                    Padding(padding = 16.dp) {
+                        fabConfiguration.fab()
                     }
                 }
             }
@@ -89,16 +85,18 @@ fun Scaffold(
     }
 
 
-    ScaffoldAmbient.Provider(value = scaffold) {
-        Expand {
-            if (drawer != null) {
-                drawer(
-                    drawerState.value,
-                    { drawerState.value = it },
-                    finalLayout
-                )
-            } else {
-                finalLayout()
+    EsSurface {
+        ScaffoldAmbient.Provider(value = scaffold) {
+            Expand {
+                if (drawer != null) {
+                    drawer(
+                        drawerState.value,
+                        { drawerState.value = it },
+                        finalLayout
+                    )
+                } else {
+                    finalLayout()
+                }
             }
         }
     }
