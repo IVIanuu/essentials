@@ -31,9 +31,6 @@ fun Offset(
     child: @Composable() () -> Unit
 ) = composable("Offset") {
     Layout(children = child) { measurables, constraints ->
-        if (measurables.size > 1) {
-            throw IllegalStateException("Only one child is allowed")
-        }
         val childMeasurable = measurables.firstOrNull()
         val placeable = childMeasurable?.measure(constraints)
         val width: IntPx

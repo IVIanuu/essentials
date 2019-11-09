@@ -18,15 +18,13 @@ package com.ivianuu.essentials.ui.compose.navigation
 
 import androidx.compose.Ambient
 import androidx.compose.Composable
-import androidx.compose.Observe
 import androidx.compose.frames.ModelList
 import androidx.compose.frames.modelListOf
 import androidx.compose.memo
 import androidx.compose.unaryPlus
-import androidx.ui.core.IntPx
-import androidx.ui.core.Layout
-import androidx.ui.core.ParentData
 import com.github.ajalt.timberkt.d
+import com.ivianuu.essentials.ui.compose.common.Overlay
+import com.ivianuu.essentials.ui.compose.common.OverlayEntry
 import com.ivianuu.essentials.ui.compose.common.onBackPressed
 import com.ivianuu.essentials.ui.compose.common.retained
 import com.ivianuu.essentials.ui.compose.core.composable
@@ -46,11 +44,11 @@ fun Navigator(
     key: String? = null,
     startRoute: () -> Route
 ) = composable("Navigator") {
-    val backStack = +memo { modelListOf<Route>() }
+    val overlay = +memo { Overlay() }
     val coroutineScope = +coroutineScope()
     val appDispatchers = +inject<AppDispatchers>()
     val navigator = +retained("Navigator:${key.orEmpty()}") {
-        Navigator(coroutineScope, appDispatchers, backStack, startRoute())
+        Navigator(overlay, coroutineScope, appDispatchers, modelListOf(), startRoute())
     }
 
     if (handleBack && navigator.backStack.size > 1) {
@@ -59,12 +57,11 @@ fun Navigator(
         }
     }
 
-    NavigatorAmbient.Provider(navigator) {
-        navigator.compose()
-    }
+    navigator.compose()
 }
 
 class Navigator internal constructor(
+    private val overlay: Overlay,
     private val coroutineScope: CoroutineScope,
     private val dispatchers: AppDispatchers,
     private val _backStack: ModelList<Route>,
@@ -78,7 +75,7 @@ class Navigator internal constructor(
 
     init {
         if (_backStack.isEmpty()) {
-            _backStack += startRoute
+            push(startRoute)
         }
     }
 
@@ -90,9 +87,8 @@ class Navigator internal constructor(
 
     suspend fun <T> push(route: Route): T? {
         d { "push $route" }
-        val newBackStack = backStack.toMutableList()
-        newBackStack += route
-        setBackStack(newBackStack)
+        _backStack += route
+        moveRouteOverlayToTop(route)
         val deferredResult = CompletableDeferred<Any?>()
         synchronized(resultsByRoute) { resultsByRoute[route] = deferredResult }
         return deferredResult.await() as? T
@@ -104,9 +100,8 @@ class Navigator internal constructor(
 
     private suspend fun popInternal(result: Any?) {
         d { "pop result $result" }
-        val newBackStack = backStack.toMutableList()
-        val removedRoute = newBackStack.removeAt(backStack.lastIndex)
-        setBackStack(newBackStack)
+        val removedRoute = _backStack.removeAt(backStack.lastIndex)
+        removeRouteOverlay(removedRoute)
         val deferredResult = synchronized(resultsByRoute) { resultsByRoute.remove(removedRoute) }
         deferredResult?.complete(result)
     }
@@ -119,107 +114,64 @@ class Navigator internal constructor(
 
     suspend fun <T> replace(route: Route): T? {
         d { "replace $route" }
-        val newBackStack = backStack.toMutableList()
-        if (newBackStack.isNotEmpty()) {
-            newBackStack.removeAt(newBackStack.lastIndex)
+
+        if (_backStack.isNotEmpty()) {
+            val removedRoute = _backStack.removeAt(_backStack.lastIndex)
+            removeRouteOverlay(removedRoute)
         }
-        newBackStack += route
-        setBackStack(newBackStack)
+
+        _backStack += route
+        moveRouteOverlayToTop(route)
+
         val deferredResult = CompletableDeferred<Any?>()
         synchronized(resultsByRoute) { resultsByRoute[route] = deferredResult }
+
         return deferredResult.await() as? T
     }
 
     @Composable
-    internal fun compose() = composable("NavigatorContent") {
-        NavigatorLayout {
-            backStack
-                .filter { it.isVisible() || it.keepState }
-                .forEach { route ->
-                    composable(route.key) {
-                        Observe {
-                            RouteAmbient.Provider(route) {
-                                ParentData(NavigatorParentData(route.isVisible())) {
-                                    route.compose()
-                                }
-                            }
-                        }
-                    }
-            }
+    internal fun compose() {
+        NavigatorAmbient.Provider(this) {
+            overlay.compose()
         }
     }
 
-    private suspend fun setBackStack(newBackStack: List<Route>) {
-        withContext(dispatchers.main) {
-            _backStack.clear()
-            _backStack += newBackStack
+    private suspend fun moveRouteOverlayToTop(route: Route) = withContext(dispatchers.main) {
+        // if the route was already add it remove it temporarily
+        if (route.overlayEntry in overlay.entries) {
+            overlay.remove(route.overlayEntry)
         }
+
+        // add the route overlay entry
+        overlay.add(route.overlayEntry)
     }
 
-    private fun Route.isVisible(): Boolean = this in getVisibleRoutes()
-
-    private fun getVisibleRoutes(): List<Route> {
-        val visibleRoutes = mutableListOf<Route>()
-
-        for (route in _backStack.reversed()) {
-            visibleRoutes += route
-            if (!route.isFloating) break
-        }
-
-        return visibleRoutes
+    private suspend fun removeRouteOverlay(route: Route) = withContext(dispatchers.main) {
+        overlay.remove(route.overlayEntry)
     }
 }
 
 val NavigatorAmbient = Ambient.of<Navigator>()
 
-interface Route {
-    val key: Any
-    val keepState: Boolean
-    val isFloating: Boolean
-    @Composable
-    fun compose()
-}
-
-val RouteAmbient = Ambient.of<Route>()
-
-fun Route(
-    key: Any,
+open class Route(
+    opaque: Boolean = false,
     keepState: Boolean = false,
-    isFloating: Boolean = false,
-    compose: @Composable() () -> Unit
-): Route = object : Route {
-    override val key: Any
-        get() = key
-    override val keepState: Boolean
-        get() = keepState
-    override val isFloating: Boolean
-        get() = isFloating
+    val compose: @Composable() () -> Unit
+) {
 
-    override fun compose() {
-        compose.invoke()
-    }
-}
+    val overlayEntry = OverlayEntry(
+        opaque = opaque,
+        keepState = keepState,
+        compose = { compose() }
+    )
 
-@Composable
-private fun NavigatorLayout(
-    children: @Composable() () -> Unit
-) = composable("NavigatorLayout") {
-    Layout(children) { measureables, constraints ->
-        // force children to fill the whole space
-        val childConstraints = constraints.copy(
-            minWidth = constraints.maxWidth,
-            minHeight = constraints.maxHeight
-        )
-
-        // get only visible routes
-        val placeables = measureables
-            .filter { (it.parentData as NavigatorParentData).isVisible }
-            .map { it.measure(childConstraints) }
-
-        layout(constraints.maxWidth, constraints.maxHeight) {
-            placeables.forEach { it.place(IntPx.Zero, IntPx.Zero) }
+    @Composable
+    open fun compose() {
+        d { "compose route" }
+        RouteAmbient.Provider(this) {
+            compose.invoke()
         }
     }
 }
 
-private data class NavigatorParentData(val isVisible: Boolean)
+val RouteAmbient = Ambient.of<Route>()

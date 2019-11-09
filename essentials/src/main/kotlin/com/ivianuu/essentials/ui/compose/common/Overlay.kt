@@ -18,24 +18,26 @@ package com.ivianuu.essentials.ui.compose.common
 
 import androidx.compose.Ambient
 import androidx.compose.Composable
-import androidx.compose.frames.ModelList
+import androidx.compose.Observe
+import androidx.compose.frames.modelListOf
 import androidx.ui.core.IntPx
 import androidx.ui.core.Layout
+import androidx.ui.core.ParentData
+import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.compose.core.composable
+import java.util.*
 
-@Composable
-fun Overlay(
-    initialEntries: List<OverlayEntry>
-) = composable("Overlay") {
+class Overlay(initialEntries: List<OverlayEntry> = emptyList()) {
 
-}
-
-class Overlay internal constructor(
-    private val _entries: ModelList<OverlayEntry>
-) {
-
+    private val _entries = modelListOf<OverlayEntry>()
     val entries: List<OverlayEntry>
         get() = _entries
+
+    init {
+        if (_entries.isEmpty()) {
+            _entries += initialEntries
+        }
+    }
 
     fun add(entry: OverlayEntry) {
         _entries.add(entry)
@@ -49,21 +51,51 @@ class Overlay internal constructor(
         _entries.remove(entry)
     }
 
+    @Composable
+    fun compose() {
+        OverlayAmbient.Provider(value = this) {
+            OverlayLayout(entries = _entries)
+        }
+    }
 }
 
 data class OverlayEntry(
-    val isFloating: Boolean,
-    val keepState: Boolean,
+    val opaque: Boolean = false,
+    val keepState: Boolean = false,
     val compose: @Composable() () -> Unit
-)
+) {
+    val id = UUID.randomUUID().toString()
+}
 
 val OverlayAmbient = Ambient.of<Overlay>()
 
 @Composable
-private fun NavigatorLayout(
-    children: @Composable() () -> Unit
-) = composable("NavigatorLayout") {
-    Layout(children) { measureables, constraints ->
+private fun OverlayLayout(
+    entries: List<OverlayEntry>
+) = composable("OverlayLayout") {
+    d { "compose overlays ${entries.size}" }
+
+    Layout({
+        val visibleEntries = entries.filterVisible()
+
+        entries
+            .filter { it in visibleEntries || it.keepState }
+            .map {
+                OverlayEntryParentData(
+                    isVisible = it in visibleEntries,
+                    entry = it
+                )
+            }
+            .forEach {
+                Observe {
+                    composable(it.entry.id) {
+                        ParentData(data = it) {
+                            it.entry.compose()
+                        }
+                    }
+                }
+            }
+    }) { measureables, constraints ->
         // force children to fill the whole space
         val childConstraints = constraints.copy(
             minWidth = constraints.maxWidth,
@@ -72,7 +104,7 @@ private fun NavigatorLayout(
 
         // get only visible routes
         val placeables = measureables
-            .filter { (it.parentData as NavigatorParentData).isVisible }
+            .filter { (it.parentData as OverlayEntryParentData).isVisible }
             .map { it.measure(childConstraints) }
 
         layout(constraints.maxWidth, constraints.maxHeight) {
@@ -81,4 +113,18 @@ private fun NavigatorLayout(
     }
 }
 
-private data class NavigatorParentData(val isVisible: Boolean)
+private data class OverlayEntryParentData(
+    val isVisible: Boolean,
+    val entry: OverlayEntry
+)
+
+private fun List<OverlayEntry>.filterVisible(): List<OverlayEntry> {
+    val visibleEntries = mutableListOf<OverlayEntry>()
+
+    for (entry in reversed()) {
+        visibleEntries += entry
+        if (!entry.opaque) break
+    }
+
+    return visibleEntries
+}

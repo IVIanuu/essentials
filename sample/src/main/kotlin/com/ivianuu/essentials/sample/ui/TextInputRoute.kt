@@ -30,7 +30,6 @@ import androidx.ui.foundation.VerticalScroller
 import androidx.ui.layout.Center
 import androidx.ui.layout.Column
 import androidx.ui.layout.Container
-import androidx.ui.layout.Stack
 import androidx.ui.material.FloatingActionButton
 import androidx.ui.material.themeTextStyle
 import com.github.ajalt.timberkt.d
@@ -71,21 +70,19 @@ val textInputRoute = composeControllerRoute(
                             alignment = Alignment.CenterLeft
                         ) {
                             Clickable(onClick = { showKeyboard() }) {
-                                Stack {
-                                    if (inputValue.isEmpty()) {
-                                        Opacity(0.5f) {
-                                            Text(
-                                                text = "Search..",
-                                                style = +themeTextStyle { subtitle1 })
-                                        }
+                                if (inputValue.isEmpty()) {
+                                    Opacity(0.5f) {
+                                        Text(
+                                            text = "Search..",
+                                            style = +themeTextStyle { subtitle1 })
                                     }
-                                    TextField(
-                                        value = inputValue,
-                                        onValueChange = setInputValue,
-                                        focusIdentifier = "id",
-                                        textStyle = +themeTextStyle { subtitle1 }
-                                    )
                                 }
+                                TextField(
+                                    value = inputValue,
+                                    onValueChange = setInputValue,
+                                    focusIdentifier = "id",
+                                    textStyle = +themeTextStyle { subtitle1 }
+                                )
                             }
                         }
 

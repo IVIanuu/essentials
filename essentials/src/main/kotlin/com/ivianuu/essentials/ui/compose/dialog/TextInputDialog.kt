@@ -24,7 +24,6 @@ import androidx.ui.core.Opacity
 import androidx.ui.core.Text
 import androidx.ui.core.TextField
 import androidx.ui.input.KeyboardType
-import androidx.ui.layout.Stack
 import androidx.ui.material.themeTextStyle
 import androidx.ui.res.stringResource
 import com.ivianuu.essentials.R
@@ -90,22 +89,20 @@ fun TextInputDialog(
         icon = icon,
         title = title,
         content = {
-            Stack {
-                if (value.isEmpty() && hint != null) {
-                    Opacity(0.5f) {
-                        Text(
-                            text = hint,
-                            style = +themeTextStyle { subtitle1 })
-                    }
+            if (value.isEmpty() && hint != null) {
+                Opacity(0.5f) {
+                    Text(
+                        text = hint,
+                        style = +themeTextStyle { subtitle1 })
                 }
-                TextField(
-                    value = value,
-                    onValueChange = onValueChange,
-                    focusIdentifier = TextInputDialogInputId,
-                    keyboardType = keyboardType,
-                    textStyle = +themeTextStyle { subtitle1 }
-                )
             }
+            TextField(
+                value = value,
+                onValueChange = onValueChange,
+                focusIdentifier = TextInputDialogInputId,
+                keyboardType = keyboardType,
+                textStyle = +themeTextStyle { subtitle1 }
+            )
 
             +onActive {
                 showKeyboard()

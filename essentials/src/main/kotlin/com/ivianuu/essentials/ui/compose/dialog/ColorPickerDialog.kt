@@ -41,7 +41,6 @@ import androidx.ui.layout.CrossAxisAlignment
 import androidx.ui.layout.ExpandedWidth
 import androidx.ui.layout.FlexRow
 import androidx.ui.layout.Padding
-import androidx.ui.layout.Stack
 import androidx.ui.layout.Table
 import androidx.ui.material.Colors
 import androidx.ui.material.MaterialTheme
@@ -249,15 +248,13 @@ private fun ColorEditor(
             modifier = ExpandedWidth
         ) {
             // todo use surface once fixed
-            Stack {
-                ColoredRect(color)
-                Text(
-                    text = color.toString(),
-                    style = (+themeTextStyle { subtitle1 }).copy(
-                        color = +colorForBackground(color)
-                    )
+            ColoredRect(color)
+            Text(
+                text = color.toString(),
+                style = (+themeTextStyle { subtitle1 }).copy(
+                    color = +colorForBackground(color)
                 )
-            }
+            )
         }
 
         ColorComponent.values()
