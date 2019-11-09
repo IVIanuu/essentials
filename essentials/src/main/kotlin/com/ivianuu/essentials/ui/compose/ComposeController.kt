@@ -28,6 +28,8 @@ import androidx.ui.foundation.isSystemInDarkTheme
 import androidx.ui.material.MaterialTheme
 import com.ivianuu.director.requireActivity
 import com.ivianuu.essentials.ui.base.EsController
+import com.ivianuu.essentials.ui.compose.common.MultiAmbientProvider
+import com.ivianuu.essentials.ui.compose.common.with
 import com.ivianuu.essentials.ui.compose.core.ActivityAmbient
 import com.ivianuu.essentials.ui.compose.core.AndroidComposeViewContainer
 import com.ivianuu.essentials.ui.compose.core.ControllerAmbient
@@ -70,7 +72,12 @@ abstract class ComposeController : EsController() {
 
     @Composable
     protected open fun composeWithAmbients(view: AndroidComposeViewContainer) {
-        ActivityAmbient.Provider(value = requireActivity()) {
+        MultiAmbientProvider(
+            ActivityAmbient with requireActivity(),
+            RouteAmbient with route!!,
+            ControllerAmbient with this,
+            ComponentAmbient with component
+        ) {
             val viewportMetrics =
                 +collect(
                     +memo { AndroidComposeViewContainer.ViewportMetrics() },
@@ -85,22 +92,16 @@ abstract class ComposeController : EsController() {
                 darkMode = +isSystemInDarkTheme()
             )
 
-            MediaQueryProvider(mediaQuery) {
-                RouteAmbient.Provider(value = route!!) {
-                    ControllerAmbient.Provider(value = this) {
-                        ComponentAmbient.Provider(value = component) {
-                            val materialThemeProvider = +inject<MaterialThemeProvider>()
-                            MaterialTheme(
-                                colors = +materialThemeProvider.colors,
-                                typography = +materialThemeProvider.typography
-                            ) {
-                                compose()
-                            }
-                        }
-                    }
-                }
+            MediaQueryProvider(value = mediaQuery) {
+                val materialThemeProvider = +inject<MaterialThemeProvider>()
+                MaterialTheme(
+                    colors = +materialThemeProvider.colors,
+                    typography = +materialThemeProvider.typography,
+                    children = this::compose
+                )
             }
         }
+
     }
 
     @Composable
