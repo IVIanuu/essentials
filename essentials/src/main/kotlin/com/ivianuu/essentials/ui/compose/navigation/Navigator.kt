@@ -24,7 +24,6 @@ import androidx.compose.memo
 import androidx.compose.unaryPlus
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.compose.common.Overlay
-import com.ivianuu.essentials.ui.compose.common.OverlayEntry
 import com.ivianuu.essentials.ui.compose.common.onBackPressed
 import com.ivianuu.essentials.ui.compose.common.retained
 import com.ivianuu.essentials.ui.compose.core.composable
@@ -152,26 +151,3 @@ class Navigator internal constructor(
 }
 
 val NavigatorAmbient = Ambient.of<Navigator>()
-
-open class Route(
-    opaque: Boolean = false,
-    keepState: Boolean = false,
-    val compose: @Composable() () -> Unit
-) {
-
-    val overlayEntry = OverlayEntry(
-        opaque = opaque,
-        keepState = keepState,
-        compose = { compose() }
-    )
-
-    @Composable
-    open fun compose() {
-        d { "compose route" }
-        RouteAmbient.Provider(this) {
-            compose.invoke()
-        }
-    }
-}
-
-val RouteAmbient = Ambient.of<Route>()
