@@ -23,8 +23,22 @@ import androidx.ui.layout.Column
 import androidx.ui.layout.Row
 import com.ivianuu.essentials.ui.compose.core.composable
 
-enum class ScrollDirection {
-    Vertical, Horizontal
+@Composable
+fun <T> ScrollableList(
+    items: List<T>,
+    item: @Composable() (Int, T) -> Unit
+) = composable("ScrollableList") {
+    ScrollableList(items.size) { item(it, items[it]) }
+}
+
+@Composable
+fun ScrollableList(
+    size: Int,
+    item: @Composable() (Int) -> Unit
+) = composable("ScrollableList") {
+    ScrollableList {
+        (0 until size).forEach { item(it) }
+    }
 }
 
 @Composable
@@ -48,4 +62,8 @@ fun ScrollableList(
             }
         }
     }
+}
+
+enum class ScrollDirection {
+    Vertical, Horizontal
 }

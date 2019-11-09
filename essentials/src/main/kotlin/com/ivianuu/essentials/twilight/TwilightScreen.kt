@@ -22,30 +22,34 @@ import androidx.ui.core.Text
 import androidx.ui.material.RadioButton
 import androidx.ui.res.stringResource
 import com.ivianuu.essentials.R
+import com.ivianuu.essentials.ui.compose.common.ScrollableList
 import com.ivianuu.essentials.ui.compose.composeControllerRoute
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
+import com.ivianuu.essentials.ui.compose.material.Scaffold
 import com.ivianuu.essentials.ui.compose.material.SimpleListItem
-import com.ivianuu.essentials.ui.compose.prefs.PrefsScreen
+import com.ivianuu.essentials.ui.compose.prefs.Prefs
 import com.ivianuu.essentials.ui.navigation.director.defaultControllerRouteOptionsOrNull
 
 val twilightSettingsRoute = composeControllerRoute(
     options = defaultControllerRouteOptionsOrNull()
 ) {
-    PrefsScreen(
-        topAppBar = { EsTopAppBar(title = +stringResource(R.string.es_title_twilight)) },
-        prefs = {
-            val prefs = +inject<TwilightPrefs>()
-            TwilightMode.values().forEach { mode ->
-                TwilightModeItem(
-                    mode = mode,
-                    isSelected = prefs.twilightMode.get() == mode,
-                    onClick = { prefs.twilightMode.set(mode) }
-                )
+    Prefs {
+        Scaffold(
+            topAppBar = { EsTopAppBar(title = +stringResource(R.string.es_title_twilight)) },
+            body = {
+                val prefs = +inject<TwilightPrefs>()
+                ScrollableList(TwilightMode.values().toList()) { _, mode ->
+                    TwilightModeItem(
+                        mode = mode,
+                        isSelected = prefs.twilightMode.get() == mode,
+                        onClick = { prefs.twilightMode.set(mode) }
+                    )
+                }
             }
-        }
-    )
+        )
+    }
 }
 
 @Composable
