@@ -183,6 +183,11 @@ enum class HomeItem(
         color = Color.Yellow,
         route = { tabsRoute }
     ),
+    Scaffold(
+        title = "Scaffold",
+        color = Color.Green,
+        route = { com.ivianuu.essentials.sample.ui.scaffoldRoute }
+    ),
     TextInput(
         title = "Text input",
         color = Color.Magenta,
