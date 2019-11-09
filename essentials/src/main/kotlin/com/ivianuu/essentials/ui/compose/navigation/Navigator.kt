@@ -20,7 +20,6 @@ import androidx.compose.Ambient
 import androidx.compose.Composable
 import androidx.compose.frames.ModelList
 import androidx.compose.frames.modelListOf
-import androidx.compose.memo
 import androidx.compose.unaryPlus
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.compose.common.Overlay
@@ -28,8 +27,6 @@ import com.ivianuu.essentials.ui.compose.common.onBackPressed
 import com.ivianuu.essentials.ui.compose.common.retained
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.coroutines.coroutineScope
-import com.ivianuu.essentials.ui.compose.injekt.inject
-import com.ivianuu.essentials.util.AppDispatchers
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -42,12 +39,12 @@ fun Navigator(
     key: String? = null,
     startRoute: () -> Route
 ) = composable("Navigator") {
-    val overlay = +memo { Overlay() }
     val coroutineScope = +coroutineScope()
-    val appDispatchers = +inject<AppDispatchers>()
     val navigator = +retained("Navigator:${key.orEmpty()}") {
-        Navigator(overlay, coroutineScope, appDispatchers, modelListOf(), startRoute())
+        Navigator(Overlay(), coroutineScope, modelListOf(), startRoute())
     }
+
+    navigator.coroutineScope = coroutineScope
 
     if (handleBack && navigator.backStack.size > 1) {
         composable("onBackPressed") {
@@ -60,8 +57,7 @@ fun Navigator(
 
 class Navigator internal constructor(
     val overlay: Overlay,
-    private val coroutineScope: CoroutineScope,
-    private val dispatchers: AppDispatchers,
+    internal var coroutineScope: CoroutineScope,
     private val _backStack: ModelList<Route>,
     startRoute: Route
 ) {
