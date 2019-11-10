@@ -24,6 +24,7 @@ import androidx.ui.core.Constraints
 import androidx.ui.core.IntPx
 import androidx.ui.core.Layout
 import androidx.ui.core.Px
+import androidx.ui.core.RepaintBoundary
 import androidx.ui.core.WithConstraints
 import androidx.ui.foundation.animation.AnchorsFlingConfig
 import com.ivianuu.essentials.ui.compose.core.Axis
@@ -33,6 +34,8 @@ import com.ivianuu.essentials.ui.compose.core.composable
 
 // todo is this a good name?
 // todo use page instead of item for name
+// todo listeners
+// todo add pageSnapping option
 
 @Composable
 fun <T> Pager(
@@ -75,7 +78,9 @@ fun Pager(
             }
             PagerLayout(direction = direction, pageSize = pageSize) {
                 (0 until position.pageCount).forEach { index ->
-                    item(index)
+                    RepaintBoundary {
+                        item(index)
+                    }
                 }
             }
         }
