@@ -16,45 +16,35 @@
 
 package com.ivianuu.essentials.ui.compose.common
 
-import androidx.animation.AnimatedFloat
-import androidx.animation.AnimationEndReason
 import androidx.animation.PhysicsBuilder
-import androidx.animation.ValueHolder
 import androidx.compose.Composable
 import androidx.compose.memo
 import androidx.compose.unaryPlus
+import androidx.ui.core.Constraints
 import androidx.ui.core.IntPx
-import androidx.ui.core.ipx
+import androidx.ui.core.Layout
+import androidx.ui.core.Px
+import androidx.ui.core.WithConstraints
 import androidx.ui.foundation.animation.AnchorsFlingConfig
-import androidx.ui.foundation.animation.fling
-import androidx.ui.foundation.gestures.DragDirection
-import androidx.ui.foundation.gestures.DragValueController
-import androidx.ui.foundation.gestures.Draggable
-import androidx.ui.layout.Column
-import androidx.ui.layout.Expanded
-import androidx.ui.layout.Row
-import androidx.ui.lerp
-import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.compose.core.Axis
 import com.ivianuu.essentials.ui.compose.core.composable
-import com.ivianuu.essentials.ui.compose.layout.Expand
-import com.ivianuu.essentials.ui.compose.layout.SingleChildLayout
 import kotlin.math.absoluteValue
+
+// todo remove once original is useable
 
 // todo is this a good name?
 // todo use page instead of item for name
-// todo base on scroller
 
 @Composable
 fun <T> Pager(
     items: List<T>,
-    state: PagerState = +memo { PagerState(items.size) },
+    position: PagerPosition = +memo { PagerPosition(items.size) },
     onPageChanged: ((Int) -> Unit)? = null,
     direction: Axis = Axis.Horizontal,
     item: @Composable() (Int, T) -> Unit
 ) = composable("Pager") {
     Pager(
-        state = state,
+        position = position,
         onPageChanged = onPageChanged,
         direction = direction
     ) {
@@ -64,183 +54,146 @@ fun <T> Pager(
 
 @Composable
 fun Pager(
-    state: PagerState,
+    position: PagerPosition,
     onPageChanged: ((Int) -> Unit)? = null,
     direction: Axis = Axis.Horizontal,
     item: @Composable() (Int) -> Unit
 ) = composable("Pager") {
-    state.onPageChanged = onPageChanged
+    position.onPageChanged = onPageChanged
 
-    Draggable(
-        dragDirection = when (direction) {
-            Axis.Vertical -> DragDirection.Vertical
-            Axis.Horizontal -> DragDirection.Horizontal
-        },
-        minValue = -state.maxScrollPosition,
-        maxValue = 0f,
-        valueController = state.controller
-    ) {
-        PagerLayout(
-            state = state,
-            direction = direction
+    WithConstraints { constraints ->
+        Scroller(
+            scrollerPosition = position.scrollerPosition,
+            onScrollPositionChanged = position.onScrollerPositionChanged,
+            direction = direction,
+            isScrollable = true // todo make toggleable
         ) {
-            val children: @Composable() () -> Unit = {
-                (0 until state.pageCount).forEach { index ->
-                    Expand {
-                        item(index)
-                    }
-                }
+            val pageSize = when (direction) {
+                Axis.Vertical -> constraints.maxHeight
+                Axis.Horizontal -> constraints.maxWidth
             }
-            when (direction) {
-                Axis.Vertical -> {
-                    Column(modifier = Expanded) {
-                        children()
-                    }
-                }
-                Axis.Horizontal -> {
-                    Row(modifier = Expanded) {
-                        children()
-                    }
+            PagerLayout(direction = direction, pageSize = pageSize) {
+                (0 until position.pageCount).forEach { index ->
+                    item(index)
                 }
             }
         }
     }
 }
 
-// todo rename to PagerController
 // todo add onScrollPositionChanged
-class PagerState(val pageCount: Int) {
+class PagerPosition(
+    val pageCount: Int,
+    val scrollerPosition: ScrollerPosition = ScrollerPosition()
+) {
 
-    internal var currentScrollPosition: Float by framed(0f)
-    var maxScrollPosition: Float by framed(Float.MAX_VALUE)
-        internal set
-
-    val currentPage: Int get() = (currentScrollPosition.absoluteValue / pageSize).toInt()
-    private val targetPage: Int get() = (anim.targetValue.absoluteValue / pageSize).toInt()
-
-    internal var pageSize = 0f
+    val currentPage: Int
+        get() =
+            (scrollerPosition.value.value.absoluteValue / pageSize.value).toInt()
 
     internal var onPageChanged: ((Int) -> Unit)? = null
-    internal var notifiedPage = 0
 
-    private val anim = AnimatedFloat(PagePositionValueHolder(0f) {
-        currentScrollPosition = it
-    })
+    private var pageSize = Px.Zero
+    val onScrollerPositionChanged: (Px, Px) -> Unit = { position, maxPosition ->
+        pageSize = maxPosition / (pageCount - 1)
+        scrollerPosition.value = position
+    }
 
-    internal val controller = object : DragValueController {
-
-        override val currentValue
-            get() = currentScrollPosition
-
-        override fun setBounds(min: Float, max: Float) {
-            anim.setBounds(min, max)
-        }
-
-        override fun onDrag(target: Float) {
-            anim.snapTo(target)
-        }
-
-        override fun onDragEnd(velocity: Float, onValueSettled: (Float) -> Unit) {
+    init {
+        scrollerPosition.flingConfigFactory = {
             //val lowerAnchor = -(pageSize * currentPage)
             //val upperAnchor = -(pageSize * (min(pageCount, currentPage + 1)))
-            val flingConfig = AnchorsFlingConfig(
-                anchors = (0 until pageCount).map { -(it * pageSize) },
+            AnchorsFlingConfig(
+                anchors = (0 until pageCount).map { -(pageSize * it).value },
                 animationBuilder = PhysicsBuilder(
                     stiffness = 300f
                 )
             )
-            val config = flingConfig.copy(
-                onAnimationEnd = { endReason, value, finalVelocity ->
-                    if (endReason != AnimationEndReason.Interrupted) onValueSettled(value)
-                    notifyChangeIfNeeded()
-                })
-            anim.fling(config, velocity)
         }
     }
 
+    // todo matching animation overload
     fun animateToPage(page: Int) {
-        val finalPage = coercePage(page)
-        if (currentPage != finalPage && targetPage != finalPage) {
-            anim.animateTo(positionFromPage(finalPage), onEnd = { _, _ ->
-                notifyChangeIfNeeded()
-            })
-        }
+        scrollerPosition.smoothScrollTo(positionFromPage(coercePage(page)))
     }
 
     fun snapToPage(page: Int) {
-        anim.snapTo(positionFromPage(coercePage(page)))
-        notifyChangeIfNeeded()
+        scrollerPosition.scrollTo(positionFromPage(coercePage(page)))
     }
 
-    // todo nextPage, previousPage
+    fun nextPage() {
+        animateToPage(currentPage + 1)
+    }
+
+    fun previousPage() {
+        animateToPage(currentPage - 1)
+    }
 
     private fun coercePage(page: Int) = page.coerceIn(0, pageCount)
 
     private fun positionFromPage(page: Int) = -(pageSize * page)
 
+    //internal var notifiedPage = 0
     private fun notifyChangeIfNeeded() {
-        if (!anim.isRunning && notifiedPage != currentPage) {
+        /*if (!anim.isRunning && notifiedPage != currentPage) {
             d { "notify page changed $currentPage" }
             notifiedPage = currentPage
             onPageChanged?.invoke(currentPage)
-        }
+        }*/
+        // todo
     }
 
 }
 
 @Composable
 private fun PagerLayout(
-    state: PagerState,
     direction: Axis,
-    child: @Composable() () -> Unit
-) = composable("PagerLayout") {
-    SingleChildLayout(child = child) { measurable, constraints ->
-        val placeable = measurable?.measure(
-            constraints.copy(
-                minWidth = constraints.maxWidth,
-                minHeight = constraints.maxHeight
+    pageSize: IntPx,
+    children: @Composable() () -> Unit
+) = composable("Pagerlayout") {
+    Layout(children = children) { measureables, constraints ->
+        val childConstraints = when (direction) {
+            Axis.Vertical -> Constraints.tightConstraints(
+                width = constraints.maxWidth,
+                height = pageSize
             )
-        )
+            Axis.Horizontal -> Constraints.tightConstraints(
+                width = pageSize,
+                height = constraints.maxHeight
+            )
+        }
 
-        layout(constraints.maxWidth, constraints.maxHeight) {
-            state.pageSize = constraints.maxWidth.value.toFloat()
+        val placeables = measureables.map {
+            it.measure(childConstraints)
+        }
 
-            val newMaxSize = constraints.maxWidth.value.toFloat() * (state.pageCount - 1)
-            if (state.maxScrollPosition != newMaxSize) {
-                state.maxScrollPosition = newMaxSize
+        val width: IntPx
+        val height: IntPx
+        when (direction) {
+            Axis.Vertical -> {
+                width = constraints.maxWidth
+                height = pageSize * measureables.size
             }
+            Axis.Horizontal -> {
+                width = pageSize * measureables.size
+                height = constraints.maxHeight
+            }
+        }
 
-            if (placeable != null) {
-                val x: IntPx
-                val y: IntPx
-
-
+        layout(width, height) {
+            var offset = IntPx.Zero
+            placeables.forEach { placeable ->
                 when (direction) {
                     Axis.Vertical -> {
-                        x = IntPx.Zero
-                        y = state.currentScrollPosition.toInt().ipx
+                        placeable.place(IntPx.Zero, offset)
+                        offset += placeable.height
                     }
                     Axis.Horizontal -> {
-                        x = state.currentScrollPosition.toInt().ipx
-                        y = IntPx.Zero
+                        placeable.place(offset, IntPx.Zero)
+                        offset += placeable.width
                     }
                 }
-
-                placeable.place(x, y)
             }
         }
     }
-}
-
-private class PagePositionValueHolder(
-    var current: Float,
-    val onValueChanged: (Float) -> Unit
-) : ValueHolder<Float> {
-    override val interpolator: (start: Float, end: Float, fraction: Float) -> Float = ::lerp
-    override var value: Float
-        get() = current
-        set(value) {
-            current = value
-            onValueChanged(value)
-        }
 }

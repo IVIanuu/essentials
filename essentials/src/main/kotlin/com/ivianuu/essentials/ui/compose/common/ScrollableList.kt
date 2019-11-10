@@ -18,8 +18,6 @@ package com.ivianuu.essentials.ui.compose.common
 
 import androidx.compose.Composable
 import androidx.ui.core.Dp
-import androidx.ui.foundation.HorizontalScroller
-import androidx.ui.foundation.VerticalScroller
 import androidx.ui.layout.Column
 import androidx.ui.layout.Row
 import com.ivianuu.essentials.ui.compose.core.Axis
@@ -55,7 +53,7 @@ fun ScrollableList(
     when (direction) {
         Axis.Vertical -> {
             SizedBox(height = Dp.Infinity) {
-                VerticalScroller {
+                Scroller(direction = direction) {
                     Column {
                         children()
                     }
@@ -64,7 +62,7 @@ fun ScrollableList(
         }
         Axis.Horizontal -> {
             SizedBox(width = Dp.Infinity) {
-                HorizontalScroller {
+                Scroller(direction = direction) {
                     Row {
                         children()
                     }
