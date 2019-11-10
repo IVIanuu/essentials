@@ -18,7 +18,7 @@ package com.ivianuu.essentials.ui.compose.prefs
 
 import androidx.compose.Composable
 import androidx.ui.material.RadioButton
-import com.ivianuu.essentials.ui.compose.common.BlockChildTouches
+import com.ivianuu.essentials.ui.compose.common.AbsorbPointer
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.kprefs.Pref
 
@@ -44,7 +44,7 @@ fun RadioButtonPreference(
         summary = summary,
         leading = leading,
         trailing = {
-            BlockChildTouches {
+            AbsorbPointer {
                 RadioButton(
                     selected = pref.get(),
                     onSelect = {}

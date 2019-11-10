@@ -20,7 +20,7 @@ import androidx.compose.Composable
 import androidx.compose.unaryPlus
 import androidx.ui.material.Switch
 import androidx.ui.material.themeColor
-import com.ivianuu.essentials.ui.compose.common.BlockChildTouches
+import com.ivianuu.essentials.ui.compose.common.AbsorbPointer
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.kprefs.Pref
 
@@ -46,7 +46,7 @@ fun SwitchPreference(
         summary = summary,
         leading = leading,
         trailing = {
-            BlockChildTouches {
+            AbsorbPointer {
                 Switch(
                     color = +themeColor { secondary },
                     checked = pref.get(),

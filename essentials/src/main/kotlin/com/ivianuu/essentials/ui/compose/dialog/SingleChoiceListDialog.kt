@@ -18,7 +18,7 @@ package com.ivianuu.essentials.ui.compose.dialog
 
 import androidx.compose.Composable
 import androidx.ui.material.RadioButton
-import com.ivianuu.essentials.ui.compose.common.BlockChildTouches
+import com.ivianuu.essentials.ui.compose.common.AbsorbPointer
 import com.ivianuu.essentials.ui.compose.core.composable
 
 @Composable
@@ -68,7 +68,7 @@ private fun SingleChoiceDialogListItem(
 ) = composable("SingleChoiceDialogListItem") {
     SimpleDialogListItem(
         leading = {
-            BlockChildTouches {
+            AbsorbPointer {
                 RadioButton(
                     selected = selected,
                     onSelect = {}

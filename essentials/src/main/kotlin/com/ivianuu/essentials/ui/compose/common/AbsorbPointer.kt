@@ -25,10 +25,10 @@ import androidx.ui.core.consumeDownChange
 import com.ivianuu.essentials.ui.compose.core.composable
 
 @Composable
-fun BlockChildTouches(
+fun AbsorbPointer(
     block: Boolean = true,
     children: @Composable() () -> Unit
-) = composable("BlockChildTouches") {
+) = composable("AbsorbPointer") {
     val consumedIds = +memo { mutableSetOf<Int>() }
     PointerInputWrapper(
         pointerInputHandler = { changes, pass, _ ->

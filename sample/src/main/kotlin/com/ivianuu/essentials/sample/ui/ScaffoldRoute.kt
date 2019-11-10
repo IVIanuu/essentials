@@ -29,7 +29,7 @@ import androidx.ui.material.FloatingActionButton
 import androidx.ui.material.surface.Surface
 import androidx.ui.material.themeColor
 import androidx.ui.material.themeTextStyle
-import com.ivianuu.essentials.ui.compose.common.BlockChildTouches
+import com.ivianuu.essentials.ui.compose.common.AbsorbPointer
 import com.ivianuu.essentials.ui.compose.common.ScrollableList
 import com.ivianuu.essentials.ui.compose.composeControllerRoute
 import com.ivianuu.essentials.ui.compose.core.composable
@@ -121,7 +121,7 @@ val scaffoldRoute = composeControllerRoute {
                 SimpleListItem(
                     title = { Text("Show bottom bar") },
                     trailing = {
-                        BlockChildTouches {
+                        AbsorbPointer {
                             EsCheckbox(checked = showBottomBar, onCheckedChange = {})
                         }
                     },
@@ -132,7 +132,7 @@ val scaffoldRoute = composeControllerRoute {
                 SimpleListItem(
                     title = { Text("Show fab") },
                     trailing = {
-                        BlockChildTouches {
+                        AbsorbPointer {
                             EsCheckbox(checked = showFab, onCheckedChange = {})
                         }
                     },
