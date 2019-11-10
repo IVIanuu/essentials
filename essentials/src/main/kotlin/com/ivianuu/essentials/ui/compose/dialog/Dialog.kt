@@ -21,7 +21,6 @@ import androidx.compose.unaryPlus
 import androidx.ui.core.dp
 import androidx.ui.core.gesture.PressGestureDetector
 import androidx.ui.foundation.shape.corner.RoundedCornerShape
-import androidx.ui.layout.Center
 import androidx.ui.layout.ConstrainedBox
 import androidx.ui.layout.DpConstraints
 import androidx.ui.layout.Padding
@@ -34,27 +33,25 @@ import com.ivianuu.essentials.ui.compose.core.composable
 
 @Composable
 fun Dialog(child: @Composable() () -> Unit) = composable("Dialog") {
-    Center {
-        Padding(
-            left = 32.dp,
-            top = 32.dp,
-            right = 32.dp,
-            bottom = 32.dp
-        ) {
-            PressGestureDetector {
-                ConstrainedBox(
-                    constraints = DpConstraints(
-                        minWidth = 280.dp,
-                        maxWidth = 356.dp
-                    )
+    Padding(
+        left = 32.dp,
+        top = 32.dp,
+        right = 32.dp,
+        bottom = 32.dp
+    ) {
+        PressGestureDetector {
+            ConstrainedBox(
+                constraints = DpConstraints(
+                    minWidth = 280.dp,
+                    maxWidth = 356.dp
+                )
+            ) {
+                Surface(
+                    color = +themeColor { surface },
+                    elevation = 24.dp,
+                    shape = RoundedCornerShape(size = 4.dp)
                 ) {
-                    Surface(
-                        color = +themeColor { surface },
-                        elevation = 24.dp,
-                        shape = RoundedCornerShape(size = 4.dp)
-                    ) {
-                        child()
-                    }
+                    child()
                 }
             }
         }
