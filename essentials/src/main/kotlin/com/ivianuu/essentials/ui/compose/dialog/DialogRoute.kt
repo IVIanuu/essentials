@@ -23,6 +23,7 @@ import androidx.ui.core.gesture.PressGestureDetector
 import androidx.ui.foundation.ColoredRect
 import androidx.ui.graphics.Color
 import androidx.ui.layout.Center
+import com.ivianuu.essentials.ui.compose.common.SafeArea
 import com.ivianuu.essentials.ui.compose.common.onBackPressed
 import com.ivianuu.essentials.ui.compose.composeControllerRoute
 import com.ivianuu.essentials.ui.compose.core.composable
@@ -52,7 +53,9 @@ fun dialogRoute(
     ) {
         DialogScrim()
         Center {
-            dialog()
+            SafeArea {
+                dialog()
+            }
         }
     }
 }
