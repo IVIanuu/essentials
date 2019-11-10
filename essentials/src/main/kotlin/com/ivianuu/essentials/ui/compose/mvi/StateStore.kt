@@ -33,7 +33,7 @@ fun <S, A> stateStore(
     initialState: () -> S,
     reducer: (currentState: S, action: A) -> S
 ): Effect<StateStore<S, A>> = effectOf {
-    val stateHolder = +retainedState(key, initialState)
+    val stateHolder = +retainedState(key, false, initialState)
     return@effectOf object : StateStore<S, A> {
         override val state: S
             get() = stateHolder.value
