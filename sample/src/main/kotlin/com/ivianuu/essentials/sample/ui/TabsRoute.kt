@@ -34,7 +34,7 @@ import com.ivianuu.essentials.ui.navigation.director.vertical
 val tabsRoute = composeControllerRoute(
     options = controllerRouteOptions().vertical()
 ) {
-    val items = listOf(Color.Blue, Color.Red, Color.Yellow, Color.Green, Color.Cyan)
+    val items = listOf(Color.Blue, Color.Red, Color.Magenta, Color.Green, Color.Cyan)
 
     TabController(items = items) {
         Scaffold(

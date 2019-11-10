@@ -28,7 +28,6 @@ import androidx.ui.core.WithConstraints
 import androidx.ui.foundation.animation.AnchorsFlingConfig
 import com.ivianuu.essentials.ui.compose.core.Axis
 import com.ivianuu.essentials.ui.compose.core.composable
-import kotlin.math.absoluteValue
 
 // todo remove once original is useable
 
@@ -64,7 +63,9 @@ fun Pager(
     WithConstraints { constraints ->
         Scroller(
             scrollerPosition = position.scrollerPosition,
+            onScrollStarted = position.onScrollStarted,
             onScrollPositionChanged = position.onScrollerPositionChanged,
+            onScrollEnded = position.onScrollEnded,
             direction = direction,
             isScrollable = true // todo make toggleable
         ) {
@@ -88,37 +89,45 @@ class PagerPosition(
 ) {
 
     val currentPage: Int
-        get() =
-            (scrollerPosition.value.value.absoluteValue / pageSize.value).toInt()
+        get() = pageFromPosition(scrollerPosition.value)
+
+    private var initialPosition = Px.Zero
+    private val initialPage: Int get() = pageFromPosition(initialPosition)
 
     internal var onPageChanged: ((Int) -> Unit)? = null
 
     private var pageSize = Px.Zero
-    val onScrollerPositionChanged: (Px, Px) -> Unit = { position, maxPosition ->
+
+    internal val onScrollStarted: (Px) -> Unit = {
+        initialPosition = it
+    }
+    internal val onScrollerPositionChanged: (Px, Px) -> Unit = { position, maxPosition ->
         pageSize = maxPosition / (pageCount - 1)
         scrollerPosition.value = position
     }
+    internal val onScrollEnded: (Px, Px) -> Unit = { velocity, position ->
+    }
 
     init {
-        scrollerPosition.flingConfigFactory = {
-            //val lowerAnchor = -(pageSize * currentPage)
-            //val upperAnchor = -(pageSize * (min(pageCount, currentPage + 1)))
+        scrollerPosition.flingConfigFactory = { velocity ->
+            val targetPage = if (velocity > Px.Zero) coercePage(initialPage - 1)
+            else coercePage(initialPage + 1)
+
+            val anchors = listOf(pageStartPositionFromPage(targetPage).value)
             AnchorsFlingConfig(
-                anchors = (0 until pageCount).map { -(pageSize * it).value },
-                animationBuilder = PhysicsBuilder(
-                    stiffness = 300f
-                )
+                anchors = anchors,
+                animationBuilder = PhysicsBuilder(stiffness = 50f)
             )
         }
     }
 
     // todo matching animation overload
     fun animateToPage(page: Int) {
-        scrollerPosition.smoothScrollTo(positionFromPage(coercePage(page)))
+        scrollerPosition.smoothScrollTo(pageStartPositionFromPage(coercePage(page)))
     }
 
     fun snapToPage(page: Int) {
-        scrollerPosition.scrollTo(positionFromPage(coercePage(page)))
+        scrollerPosition.scrollTo(pageStartPositionFromPage(coercePage(page)))
     }
 
     fun nextPage() {
@@ -129,9 +138,10 @@ class PagerPosition(
         animateToPage(currentPage - 1)
     }
 
-    private fun coercePage(page: Int) = page.coerceIn(0, pageCount)
+    private fun coercePage(page: Int) = page.coerceIn(0, pageCount - 1)
 
-    private fun positionFromPage(page: Int) = -(pageSize * page)
+    private fun pageStartPositionFromPage(page: Int) = -(pageSize * page)
+    private fun pageFromPosition(position: Px): Int = ((position + pageSize / 2) / pageSize).toInt()
 
     //internal var notifiedPage = 0
     private fun notifyChangeIfNeeded() {
