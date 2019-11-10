@@ -113,10 +113,12 @@ class PagerState(val pageCount: Int) {
         currentScrollPosition = it
     })
 
-    private var _controller = PagerDragController(anim) { onSettled() }
+    private var _controller = PagerDragController(anim) { update() }
 
     fun goTo(page: Int) {
-        anim.animateTo(-(pageSize * page), onEnd = { _, _ -> onSettled() })
+        anim.animateTo(-(pageSize * page), onEnd = { _, _ ->
+            update()
+        })
     }
 
     private fun updateFlingConfig() {
@@ -131,13 +133,15 @@ class PagerState(val pageCount: Int) {
         )
     }
 
-    private fun onSettled() {
-        if (notifiedPage != currentPage) {
+    private fun update() {
+        if (!anim.isRunning && notifiedPage != currentPage) {
             notifiedPage = currentPage
             onPageChanged?.invoke(currentPage)
         }
+
         updateFlingConfig()
     }
+
 }
 
 @Composable
@@ -210,8 +214,7 @@ private class PagerDragController(
         val flingConfig = flingConfig
         if (flingConfig != null && enabled) {
             val config = flingConfig.copy(
-                onAnimationEnd =
-                { endReason: AnimationEndReason, value: Float, finalVelocity: Float ->
+                onAnimationEnd = { endReason, value, finalVelocity ->
                     if (endReason != AnimationEndReason.Interrupted) onValueSettled(value)
                     flingConfig.onAnimationEnd?.invoke(endReason, value, finalVelocity)
                     onFlingEnd()
