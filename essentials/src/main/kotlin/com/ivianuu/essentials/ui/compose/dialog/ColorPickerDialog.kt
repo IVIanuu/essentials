@@ -57,8 +57,8 @@ import com.ivianuu.essentials.ui.compose.layout.TightColumn
 import com.ivianuu.essentials.ui.compose.layout.WidthFitSquare
 import com.ivianuu.essentials.ui.compose.material.Slider
 import com.ivianuu.essentials.ui.compose.material.Tab
-import com.ivianuu.essentials.ui.compose.material.TabContent
 import com.ivianuu.essentials.ui.compose.material.TabController
+import com.ivianuu.essentials.ui.compose.material.TabPager
 import com.ivianuu.essentials.ui.compose.material.TabRow
 import com.ivianuu.essentials.ui.compose.material.colorForBackground
 import com.ivianuu.essentials.ui.compose.material.colorForCurrentBackground
@@ -145,7 +145,7 @@ private fun ColorPickerContent(
                     left = 24.dp,
                     right = 24.dp
                 ) {
-                    TabContent<ColorPickerPage> { _, page ->
+                    TabPager<ColorPickerPage> { _, page ->
                         Container(height = 300.dp) {
                             when (page) {
                                 ColorPickerPage.Colors -> {

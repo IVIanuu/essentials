@@ -18,25 +18,21 @@ package com.ivianuu.essentials.ui.compose.material
 
 import androidx.compose.Composable
 import androidx.compose.unaryPlus
+import com.ivianuu.essentials.ui.compose.common.Pager
+import com.ivianuu.essentials.ui.compose.core.Axis
 import com.ivianuu.essentials.ui.compose.core.composable
 
 @Composable
-fun <T> TabContent(
+fun <T> TabPager(
     tabController: TabController<T> = +ambientTabController<T>(),
     item: @Composable() (Int, T) -> Unit
-) = TabContent(
-    items = tabController.items,
-    selectedIndex = tabController.selectedIndex,
-    item = item
-)
-
-@Composable
-fun <T> TabContent(
-    items: List<T>,
-    selectedIndex: Int,
-    item: @Composable() (Int, T) -> Unit
-) = composable("TabContent") {
-    TabIndexAmbient.Provider(selectedIndex) {
-        item(selectedIndex, items[selectedIndex])
+) = composable("TabPager") {
+    TabIndexAmbient.Provider(tabController.selectedIndex) {
+        Pager(
+            items = tabController.items,
+            currentPage = tabController.selectedIndex,
+            direction = Axis.Horizontal,
+            item = item
+        )
     }
 }
