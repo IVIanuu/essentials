@@ -75,7 +75,6 @@ class FramedValue<T>(value: T) : Framed {
 
     operator fun component2(): (T) -> Unit = { value = it }
 
-
     operator fun getValue(thisObj: Any?, property: KProperty<*>): T = value
 
     operator fun setValue(thisObj: Any?, property: KProperty<*>, next: T) {
