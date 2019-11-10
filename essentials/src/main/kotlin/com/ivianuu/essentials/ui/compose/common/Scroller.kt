@@ -26,7 +26,6 @@ import androidx.compose.state
 import androidx.compose.unaryPlus
 import androidx.ui.core.Clip
 import androidx.ui.core.IntPx
-import androidx.ui.core.Layout
 import androidx.ui.core.Px
 import androidx.ui.core.RepaintBoundary
 import androidx.ui.core.gesture.PressGestureDetector
@@ -34,14 +33,18 @@ import androidx.ui.core.min
 import androidx.ui.core.px
 import androidx.ui.core.round
 import androidx.ui.core.toPx
-import androidx.ui.foundation.animation.AnimatedFloatDragController
 import androidx.ui.foundation.animation.FlingConfig
+import androidx.ui.foundation.animation.fling
 import androidx.ui.foundation.gestures.DragDirection
+import androidx.ui.foundation.gestures.DragValueController
 import androidx.ui.foundation.gestures.Draggable
 import androidx.ui.foundation.shape.RectangleShape
 import androidx.ui.layout.Container
 import androidx.ui.lerp
 import com.ivianuu.essentials.ui.compose.core.Axis
+import com.ivianuu.essentials.ui.compose.layout.SingleChildLayout
+
+// todo remove once original is useable
 
 // todo use @Model once possible
 class ScrollerPosition {
@@ -49,13 +52,26 @@ class ScrollerPosition {
     var value: Px by framed(Px.Zero)
         internal set
 
-    internal var onValueChanged: ((Px) -> Unit)? = null
+    var flingConfigFactory: () -> FlingConfig? by framed {
+        FlingConfig(
+            decayAnimation = ExponentialDecay(
+                frictionMultiplier = ScrollerDefaultFriction,
+                absVelocityThreshold = ScrollerVelocityThreshold
+            )
+        )
+    }
+
+    internal var onValueChanged: ((Float) -> Unit)? = null
+
+    private val anim = AnimatedFloat(ScrollPositionValueHolder(0f) {
+        onValueChanged?.invoke(-it)
+    })
 
     fun smoothScrollTo(
         value: Px,
         onEnd: (endReason: AnimationEndReason, finishValue: Float) -> Unit = { _, _ -> }
     ) {
-        controller.animatedFloat.animateTo(-value.value, onEnd)
+        anim.animateTo(-value.value, onEnd)
     }
 
     fun smoothScrollBy(
@@ -73,32 +89,49 @@ class ScrollerPosition {
         scrollTo(this.value + value)
     }
 
-    // TODO (malkov/tianliu): Open this for customization
-    private val flingConfig = FlingConfig(
-        decayAnimation = ExponentialDecay(
-            frictionMultiplier = ScrollerDefaultFriction,
-            absVelocityThreshold = ScrollerVelocityThreshold
-        )
-    )
+    internal val controller = object : DragValueController {
+        override val currentValue: Float
+            get() = anim.value
 
-    internal val controller =
-        ScrollerDragValueController({ onValueChanged?.invoke(-it.px) }, flingConfig)
+        override fun onDrag(target: Float) {
+            anim.snapTo(target)
+        }
+
+        override fun onDragEnd(velocity: Float, onValueSettled: (Float) -> Unit) {
+            val flingConfig = flingConfigFactory()
+            if (flingConfig != null) {
+                val config = flingConfig.copy(
+                    onAnimationEnd =
+                    { endReason: AnimationEndReason, value: Float, finalVelocity: Float ->
+                        if (endReason != AnimationEndReason.Interrupted) onValueSettled(value)
+                        flingConfig.onAnimationEnd?.invoke(endReason, value, finalVelocity)
+                    })
+                anim.fling(config, velocity)
+            } else {
+                onValueSettled(anim.value)
+            }
+        }
+
+        override fun setBounds(min: Float, max: Float) {
+            anim.setBounds(min, max)
+        }
+    }
 
 }
 
 @Composable
 fun Scroller(
     scrollerPosition: ScrollerPosition = +memo { ScrollerPosition() },
+    // todo what to do with the onChangedThing?
     onScrollPositionChanged: (position: Px, maxPosition: Px) -> Unit = { position, _ ->
         scrollerPosition.value = position
     },
     direction: Axis = Axis.Vertical,
-    isScrollable: Boolean,
+    isScrollable: Boolean = true, // todo implement
     child: @Composable() () -> Unit
 ) {
     val maxPosition = +state { Px.Infinity }
-    scrollerPosition.controller.enabled = isScrollable
-    scrollerPosition.onValueChanged = { onScrollPositionChanged(it, maxPosition.value) }
+    scrollerPosition.onValueChanged = { onScrollPositionChanged(it.px, maxPosition.value) }
     PressGestureDetector(onPress = { scrollerPosition.scrollTo(scrollerPosition.value) }) {
         Draggable(
             dragDirection = when (direction) {
@@ -131,16 +164,13 @@ private fun ScrollerLayout(
     direction: Axis,
     child: @Composable() () -> Unit
 ) {
-    Layout(children = {
+    SingleChildLayout(child = {
         Clip(RectangleShape) {
             Container {
                 RepaintBoundary(children = child)
             }
         }
-    }) { measurables, constraints ->
-        if (measurables.size > 1) {
-            throw IllegalStateException("Only one child is allowed in a VerticalScroller")
-        }
+    }) { measurable, constraints ->
         val childConstraints = constraints.copy(
             maxHeight = when (direction) {
                 Axis.Vertical -> IntPx.Infinity
@@ -151,8 +181,7 @@ private fun ScrollerLayout(
                 Axis.Horizontal -> IntPx.Infinity
             }
         )
-        val childMeasurable = measurables.firstOrNull()
-        val placeable = childMeasurable?.measure(childConstraints)
+        val placeable = measurable?.measure(childConstraints)
         val width: IntPx
         val height: IntPx
         if (placeable == null) {
@@ -186,14 +215,6 @@ private fun ScrollerLayout(
         }
     }
 }
-
-private fun ScrollerDragValueController(
-    onValueChanged: (Float) -> Unit,
-    flingConfig: FlingConfig? = null
-) = AnimatedFloatDragController(
-    AnimatedFloat(ScrollPositionValueHolder(0f, onValueChanged)),
-    flingConfig
-)
 
 private class ScrollPositionValueHolder(
     var current: Float,
