@@ -105,7 +105,7 @@ fun <T> TabPager(
     val state = +memo { PagerState(tabController.items.size) }
 
     +onCommit(tabController.selectedIndex) {
-        state.goTo(tabController.selectedIndex)
+        state.animateToPage(tabController.selectedIndex)
     }
 
     TabIndexAmbient.Provider(tabController.selectedIndex) {

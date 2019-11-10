@@ -49,7 +49,7 @@ val tabsRoute = composeControllerRoute(
             body = {
                 TabPager<Color> { index, item ->
                     Surface(color = item) {
-                        Container {
+                        Container(expanded = true) {
                             Text("Index: $index")
                         }
                     }
