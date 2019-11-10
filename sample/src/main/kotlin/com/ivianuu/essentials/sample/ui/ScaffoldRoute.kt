@@ -72,7 +72,7 @@ val scaffoldRoute = composeControllerRoute {
         bottomBar = if (showBottomBar) ({
             composable("bottom bar") {
                 val alpha = +memo(bodyLayoutMode) {
-                    if (bodyLayoutMode == Scaffold.BodyLayoutMode.ExtendTop
+                    if (bodyLayoutMode == Scaffold.BodyLayoutMode.ExtendBottom
                         || bodyLayoutMode == Scaffold.BodyLayoutMode.ExtendBoth
                     ) 0.5f else 1f
                 }
@@ -97,13 +97,6 @@ val scaffoldRoute = composeControllerRoute {
         bodyLayoutMode = bodyLayoutMode,
         body = {
             ScrollableList {
-                if (bodyLayoutMode == Scaffold.BodyLayoutMode.ExtendTop
-                    || bodyLayoutMode == Scaffold.BodyLayoutMode.ExtendBoth
-                ) {
-                    Container(height = 56.dp, expanded = true, alignment = Alignment.CenterRight) {
-                        Text("Draws behind the app bar")
-                    }
-                }
                 Subheader("Body")
                 SimpleListItem(
                     title = { Text("Body layout mode") },
