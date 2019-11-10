@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.ui.compose.common
 
 import androidx.animation.AnimatedFloat
+import androidx.animation.AnimationEndReason
 import androidx.animation.ValueHolder
 import androidx.compose.Composable
 import androidx.compose.memo
@@ -25,11 +26,12 @@ import androidx.ui.core.IntPx
 import androidx.ui.core.Layout
 import androidx.ui.core.ipx
 import androidx.ui.foundation.animation.AnchorsFlingConfig
-import androidx.ui.foundation.animation.AnimatedFloatDragController
+import androidx.ui.foundation.animation.FlingConfig
+import androidx.ui.foundation.animation.fling
 import androidx.ui.foundation.gestures.DragDirection
+import androidx.ui.foundation.gestures.DragValueController
 import androidx.ui.foundation.gestures.Draggable
 import androidx.ui.lerp
-import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.compose.core.Axis
 import com.ivianuu.essentials.ui.compose.core.composable
 
@@ -54,46 +56,6 @@ fun <T> Pager(
     }
 }
 
-// todo use @Model once available
-class PagerState(val pageCount: Int) {
-    internal var currentScrollPosition: Float by framed(0f)
-
-    private var _maxPosition: Float by framed(Float.MAX_VALUE)
-    var maxPosition: Float
-        get() = _maxPosition
-        set(value) {
-            _maxPosition = value
-            controller = createController()
-        }
-
-    internal val pageSize: Float get() = _maxPosition / pageCount
-
-    internal var controller: AnimatedFloatDragController = createController()
-        private set
-
-    fun goTo(page: Int) {
-        controller.animatedFloat.animateTo(pageSize * page)
-    }
-
-    private fun createController(): AnimatedFloatDragController {
-        val pageSize = _maxPosition / pageCount
-        val anchors = (0 until pageCount).map { -(it * pageSize) }
-
-        d { "create controller anchors $anchors" }
-
-        return AnimatedFloatDragController(
-            animatedFloat = AnimatedFloat(
-                valueHolder = PagePositionValueHolder(currentScrollPosition) {
-                    currentScrollPosition = it
-                }
-            ),
-            flingConfig = AnchorsFlingConfig(
-                anchors = anchors
-            )
-        )
-    }
-}
-
 @Composable
 fun Pager(
     state: PagerState,
@@ -110,9 +72,60 @@ fun Pager(
         valueController = state.controller
     ) {
         PagerLayout(
-            state,
-            direction = direction,
-            item = item
+            state = state,
+            direction = direction
+        ) {
+            (0 until state.pageCount).forEach(item)
+        }
+    }
+}
+
+// todo use @Model once available
+// todo rename to PagerController
+class PagerState(val pageCount: Int) {
+
+    internal var currentScrollPosition: Float by framed(0f)
+
+    private var _maxPosition: Float by framed(Float.MAX_VALUE)
+    var maxPosition: Float
+        get() = _maxPosition
+        set(value) {
+            _maxPosition = value
+            updateFlingConfig()
+        }
+
+    internal var pageSize = 0f
+        set(value) {
+            field = value
+            updateFlingConfig()
+        }
+
+    internal val controller: DragValueController
+        get() = _controller
+
+    private val anim = AnimatedFloat(PagePositionValueHolder(0f) {
+        currentScrollPosition = it
+    })
+
+    private var _controller = PagerDragController(anim) {
+        updateFlingConfig()
+    }
+
+    fun goTo(page: Int) {
+        anim.animateTo(-(pageSize * page), onEnd = { _, _ ->
+            updateFlingConfig()
+        })
+    }
+
+    private fun updateFlingConfig() {
+        val allAnchors = (0 until pageCount).map { -(it * pageSize) }
+
+        val anchors = mutableListOf<Float>()
+        allAnchors.lastOrNull { it >= currentScrollPosition }?.let { anchors += it }
+        allAnchors.firstOrNull { it <= currentScrollPosition }?.let { anchors += it }
+
+        _controller.flingConfig = AnchorsFlingConfig(
+            anchors = anchors
         )
     }
 }
@@ -121,11 +134,10 @@ fun Pager(
 private fun PagerLayout(
     state: PagerState,
     direction: Axis,
-    item: @Composable() (Int) -> Unit
+    children: @Composable() () -> Unit
 ) = composable("PagerLayout") {
-    Layout({
-        (0 until state.pageCount).forEach(item)
-    }) { measureables, constraints ->
+    Layout(children = children) { measureables, constraints ->
+
         val childConstraints = constraints.copy(
             minWidth = constraints.maxWidth,
             minHeight = constraints.maxHeight
@@ -135,10 +147,12 @@ private fun PagerLayout(
         }
 
         layout(constraints.maxWidth, constraints.maxHeight) {
-            val newMaxSize = constraints.maxWidth.value.toFloat() * state.pageCount
+            val newMaxSize = constraints.maxWidth.value.toFloat() * (state.pageCount - 1)
             if (state.maxPosition != newMaxSize) {
                 state.maxPosition = newMaxSize
             }
+
+            state.pageSize = constraints.maxWidth.value.toFloat()
 
             var offset = IntPx.Zero
             placeables.forEachIndexed { index, placeable ->
@@ -161,6 +175,41 @@ private fun PagerLayout(
                     }
                 }
             }
+        }
+    }
+}
+
+private class PagerDragController(
+    val animatedFloat: AnimatedFloat,
+    val onFlingEnd: () -> Unit
+) : DragValueController {
+
+    var enabled: Boolean = true
+    var flingConfig: FlingConfig? = null
+
+    override val currentValue
+        get() = animatedFloat.value
+
+    override fun setBounds(min: Float, max: Float) = animatedFloat.setBounds(min, max)
+
+    override fun onDrag(target: Float) {
+        if (enabled) animatedFloat.snapTo(target)
+    }
+
+    override fun onDragEnd(velocity: Float, onValueSettled: (Float) -> Unit) {
+        val flingConfig = flingConfig
+        if (flingConfig != null && enabled) {
+            val config = flingConfig.copy(
+                onAnimationEnd =
+                { endReason: AnimationEndReason, value: Float, finalVelocity: Float ->
+                    if (endReason != AnimationEndReason.Interrupted) onValueSettled(value)
+                    flingConfig.onAnimationEnd?.invoke(endReason, value, finalVelocity)
+                    onFlingEnd()
+                })
+            animatedFloat.fling(config, velocity)
+        } else {
+            onValueSettled(animatedFloat.value)
+            onFlingEnd()
         }
     }
 }
