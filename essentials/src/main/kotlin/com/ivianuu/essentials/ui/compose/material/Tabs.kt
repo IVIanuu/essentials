@@ -22,6 +22,7 @@ import androidx.compose.State
 import androidx.compose.ambient
 import androidx.compose.effectOf
 import androidx.compose.memo
+import androidx.compose.onCommit
 import androidx.compose.state
 import androidx.compose.unaryPlus
 import androidx.ui.graphics.Image
@@ -103,10 +104,15 @@ fun <T> TabPager(
     tabController: TabController<T> = +ambientTabController<T>(),
     item: @Composable() (Int, T) -> Unit
 ) = composable("TabPager") {
-    val position = +memo { PagerState(tabController.items.size) }
-    position.goTo(tabController.selectedIndex)
+    val state = +memo { PagerState(tabController.items.size) }
+
+    +onCommit(tabController.selectedIndex) {
+        state.goTo(tabController.selectedIndex)
+    }
+
     TabIndexAmbient.Provider(tabController.selectedIndex) {
         Pager(
+            state = state,
             items = tabController.items,
             direction = Axis.Horizontal,
             item = item
