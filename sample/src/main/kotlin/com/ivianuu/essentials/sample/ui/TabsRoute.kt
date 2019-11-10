@@ -16,15 +16,17 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import androidx.ui.foundation.ColoredRect
+import androidx.ui.core.Text
 import androidx.ui.graphics.Color
 import androidx.ui.layout.Column
+import androidx.ui.layout.Container
+import androidx.ui.material.surface.Surface
 import com.ivianuu.essentials.ui.compose.composeControllerRoute
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
 import com.ivianuu.essentials.ui.compose.material.Scaffold
 import com.ivianuu.essentials.ui.compose.material.Tab
-import com.ivianuu.essentials.ui.compose.material.TabContent
 import com.ivianuu.essentials.ui.compose.material.TabController
+import com.ivianuu.essentials.ui.compose.material.TabPager
 import com.ivianuu.essentials.ui.compose.material.TabRow
 import com.ivianuu.essentials.ui.navigation.director.controllerRouteOptions
 import com.ivianuu.essentials.ui.navigation.director.vertical
@@ -32,7 +34,7 @@ import com.ivianuu.essentials.ui.navigation.director.vertical
 val tabsRoute = composeControllerRoute(
     options = controllerRouteOptions().vertical()
 ) {
-    val items = listOf(Color.Blue, Color.Red, Color.Yellow, Color.Green, Color.Cyan)
+    val items = listOf(Color.Blue, Color.Red, Color.Magenta, Color.Green, Color.Cyan)
 
     TabController(items = items) {
         Scaffold(
@@ -45,8 +47,12 @@ val tabsRoute = composeControllerRoute(
                 }
             },
             body = {
-                TabContent<Color> { _, item ->
-                    ColoredRect(color = item)
+                TabPager<Color> { index, item ->
+                    Surface(color = item) {
+                        Container(expanded = true) {
+                            Text("Index: $index")
+                        }
+                    }
                 }
             }
         )

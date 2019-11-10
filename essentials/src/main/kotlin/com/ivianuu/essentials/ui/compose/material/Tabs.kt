@@ -18,15 +18,18 @@ package com.ivianuu.essentials.ui.compose.material
 
 import androidx.compose.Ambient
 import androidx.compose.Composable
-import androidx.compose.State
 import androidx.compose.ambient
 import androidx.compose.effectOf
 import androidx.compose.memo
-import androidx.compose.state
+import androidx.compose.onCommit
 import androidx.compose.unaryPlus
 import androidx.ui.graphics.Image
 import androidx.ui.material.Tab
 import androidx.ui.material.TabRow
+import com.ivianuu.essentials.ui.compose.common.Pager
+import com.ivianuu.essentials.ui.compose.common.PagerPosition
+import com.ivianuu.essentials.ui.compose.common.framed
+import com.ivianuu.essentials.ui.compose.core.Axis
 import com.ivianuu.essentials.ui.compose.core.composable
 
 fun <T> TabController(
@@ -34,8 +37,7 @@ fun <T> TabController(
     initialIndex: Int = 0,
     children: @Composable() () -> Unit
 ) {
-    val selectedIndex = +state { initialIndex }
-    val tabController = +memo { TabController(items, selectedIndex) }
+    val tabController = +memo { TabController(items, initialIndex) }
     tabController.items = items
     TabControllerAmbient.Provider(tabController, children)
 }
@@ -46,9 +48,9 @@ fun <T> ambientTabController() = effectOf<TabController<T>> {
 
 class TabController<T>(
     var items: List<T>,
-    _selectedIndex: State<Int>
+    initialIndex: Int
 ) {
-    var selectedIndex by _selectedIndex
+    var selectedIndex by framed(initialIndex)
     val selectedItem: T get() = items[selectedIndex]
 }
 
@@ -93,4 +95,26 @@ fun Tab(
         selected = tabController.selectedIndex == tabIndex,
         onSelected = { tabController.selectedIndex = tabIndex }
     )
+}
+
+@Composable
+fun <T> TabPager(
+    tabController: TabController<T> = +ambientTabController<T>(),
+    item: @Composable() (Int, T) -> Unit
+) = composable("TabPager") {
+    val position = +memo { PagerPosition(tabController.items.size) }
+
+    +onCommit(tabController.selectedIndex) {
+        position.animateToPage(tabController.selectedIndex)
+    }
+
+    TabIndexAmbient.Provider(tabController.selectedIndex) {
+        Pager(
+            position = position,
+            items = tabController.items,
+            onPageChanged = { tabController.selectedIndex = it },
+            direction = Axis.Horizontal,
+            item = item
+        )
+    }
 }
