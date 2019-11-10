@@ -34,6 +34,7 @@ import androidx.ui.foundation.gestures.Draggable
 import androidx.ui.lerp
 import com.ivianuu.essentials.ui.compose.core.Axis
 import com.ivianuu.essentials.ui.compose.core.composable
+import kotlin.math.absoluteValue
 
 // todo is this a good name?
 
@@ -45,11 +46,13 @@ import com.ivianuu.essentials.ui.compose.core.composable
 fun <T> Pager(
     items: List<T>,
     state: PagerState = +memo { PagerState(items.size) },
+    onPageChanged: ((Int) -> Unit)? = null,
     direction: Axis = Axis.Vertical,
     item: @Composable() (Int, T) -> Unit
 ) = composable("Pager") {
     Pager(
         state = state,
+        onPageChanged = onPageChanged,
         direction = direction
     ) {
         item(it, items[it])
@@ -59,9 +62,12 @@ fun <T> Pager(
 @Composable
 fun Pager(
     state: PagerState,
+    onPageChanged: ((Int) -> Unit)? = null,
     direction: Axis = Axis.Vertical,
     item: @Composable() (Int) -> Unit
 ) = composable("Pager") {
+    state.onPageChanged = onPageChanged
+
     Draggable(
         dragDirection = when (direction) {
             Axis.Vertical -> DragDirection.Vertical
@@ -85,6 +91,7 @@ fun Pager(
 class PagerState(val pageCount: Int) {
 
     internal var currentScrollPosition: Float by framed(0f)
+    val currentPage: Int get() = (currentScrollPosition.absoluteValue / pageSize).toInt()
 
     private var _maxPosition: Float by framed(Float.MAX_VALUE)
     var maxPosition: Float
@@ -95,26 +102,21 @@ class PagerState(val pageCount: Int) {
         }
 
     internal var pageSize = 0f
-        set(value) {
-            field = value
-            updateFlingConfig()
-        }
 
     internal val controller: DragValueController
         get() = _controller
+
+    internal var onPageChanged: ((Int) -> Unit)? = null
+    internal var notifiedPage = 0
 
     private val anim = AnimatedFloat(PagePositionValueHolder(0f) {
         currentScrollPosition = it
     })
 
-    private var _controller = PagerDragController(anim) {
-        updateFlingConfig()
-    }
+    private var _controller = PagerDragController(anim) { onSettled() }
 
     fun goTo(page: Int) {
-        anim.animateTo(-(pageSize * page), onEnd = { _, _ ->
-            updateFlingConfig()
-        })
+        anim.animateTo(-(pageSize * page), onEnd = { _, _ -> onSettled() })
     }
 
     private fun updateFlingConfig() {
@@ -127,6 +129,14 @@ class PagerState(val pageCount: Int) {
         _controller.flingConfig = AnchorsFlingConfig(
             anchors = anchors
         )
+    }
+
+    private fun onSettled() {
+        if (notifiedPage != currentPage) {
+            notifiedPage = currentPage
+            onPageChanged?.invoke(currentPage)
+        }
+        updateFlingConfig()
     }
 }
 
@@ -147,12 +157,12 @@ private fun PagerLayout(
         }
 
         layout(constraints.maxWidth, constraints.maxHeight) {
+            state.pageSize = constraints.maxWidth.value.toFloat()
+
             val newMaxSize = constraints.maxWidth.value.toFloat() * (state.pageCount - 1)
             if (state.maxPosition != newMaxSize) {
                 state.maxPosition = newMaxSize
             }
-
-            state.pageSize = constraints.maxWidth.value.toFloat()
 
             var offset = IntPx.Zero
             placeables.forEachIndexed { index, placeable ->
