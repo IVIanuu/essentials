@@ -27,6 +27,7 @@ import androidx.ui.core.dp
 import androidx.ui.layout.EdgeInsets
 
 // todo find a better name
+// todo add padding field
 
 data class MediaQuery(
     val size: Size = Size(0.dp, 0.dp),
