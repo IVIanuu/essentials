@@ -22,34 +22,37 @@ import androidx.ui.foundation.HorizontalScroller
 import androidx.ui.foundation.VerticalScroller
 import androidx.ui.layout.Column
 import androidx.ui.layout.Row
+import com.ivianuu.essentials.ui.compose.core.Axis
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.layout.SizedBox
 
 @Composable
 fun <T> ScrollableList(
     items: List<T>,
+    direction: Axis = Axis.Vertical,
     item: @Composable() (Int, T) -> Unit
 ) = composable("ScrollableList") {
-    ScrollableList(items.size) { item(it, items[it]) }
+    ScrollableList(size = items.size, direction = direction) { item(it, items[it]) }
 }
 
 @Composable
 fun ScrollableList(
     size: Int,
+    direction: Axis = Axis.Vertical,
     item: @Composable() (Int) -> Unit
 ) = composable("ScrollableList") {
-    ScrollableList {
+    ScrollableList(direction = direction) {
         (0 until size).forEach { item(it) }
     }
 }
 
 @Composable
 fun ScrollableList(
-    direction: ScrollDirection = ScrollDirection.Vertical,
+    direction: Axis = Axis.Vertical,
     children: @Composable() () -> Unit
 ) = composable("ScrollableList") {
     when (direction) {
-        ScrollDirection.Vertical -> {
+        Axis.Vertical -> {
             SizedBox(height = Dp.Infinity) {
                 VerticalScroller {
                     Column {
@@ -58,7 +61,7 @@ fun ScrollableList(
                 }
             }
         }
-        ScrollDirection.Horizontal -> {
+        Axis.Horizontal -> {
             SizedBox(width = Dp.Infinity) {
                 HorizontalScroller {
                     Row {
@@ -68,8 +71,4 @@ fun ScrollableList(
             }
         }
     }
-}
-
-enum class ScrollDirection {
-    Vertical, Horizontal
 }
