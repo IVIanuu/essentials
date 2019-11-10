@@ -27,6 +27,8 @@ import kotlin.reflect.KProperty
 
 // todo remove once we can use @Model
 
+fun <T> framed(initialValue: T) = FramedValue(initialValue)
+
 class FramedValue<T>(value: T) : Framed {
     /* NOTE(lmr): When this module is compiled with IR, we will need to remove the below Framed implementation */
 

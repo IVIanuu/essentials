@@ -27,6 +27,9 @@ import androidx.compose.unaryPlus
 import androidx.ui.graphics.Image
 import androidx.ui.material.Tab
 import androidx.ui.material.TabRow
+import com.ivianuu.essentials.ui.compose.common.Pager
+import com.ivianuu.essentials.ui.compose.common.PagerState
+import com.ivianuu.essentials.ui.compose.core.Axis
 import com.ivianuu.essentials.ui.compose.core.composable
 
 fun <T> TabController(
@@ -93,4 +96,20 @@ fun Tab(
         selected = tabController.selectedIndex == tabIndex,
         onSelected = { tabController.selectedIndex = tabIndex }
     )
+}
+
+@Composable
+fun <T> TabPager(
+    tabController: TabController<T> = +ambientTabController<T>(),
+    item: @Composable() (Int, T) -> Unit
+) = composable("TabPager") {
+    val position = +memo { PagerState(tabController.items.size) }
+    position.goTo(tabController.selectedIndex)
+    TabIndexAmbient.Provider(tabController.selectedIndex) {
+        Pager(
+            items = tabController.items,
+            direction = Axis.Horizontal,
+            item = item
+        )
+    }
 }
