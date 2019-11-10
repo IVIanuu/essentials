@@ -16,26 +16,126 @@
 
 package com.ivianuu.essentials.sample.ui
 
+import androidx.compose.memo
 import androidx.compose.state
 import androidx.compose.unaryPlus
+import androidx.ui.core.Alignment
+import androidx.ui.core.Opacity
 import androidx.ui.core.Text
+import androidx.ui.core.dp
+import androidx.ui.layout.Container
+import androidx.ui.layout.EdgeInsets
 import androidx.ui.material.FloatingActionButton
+import androidx.ui.material.surface.Surface
+import androidx.ui.material.themeColor
+import androidx.ui.material.themeTextStyle
 import com.ivianuu.essentials.ui.compose.common.BlockChildTouches
 import com.ivianuu.essentials.ui.compose.common.ScrollableList
 import com.ivianuu.essentials.ui.compose.composeControllerRoute
+import com.ivianuu.essentials.ui.compose.core.composable
+import com.ivianuu.essentials.ui.compose.dialog.SingleChoiceListDialog
+import com.ivianuu.essentials.ui.compose.dialog.dialogRoute
+import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.compose.material.EsCheckbox
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
 import com.ivianuu.essentials.ui.compose.material.Scaffold
 import com.ivianuu.essentials.ui.compose.material.SimpleListItem
+import com.ivianuu.essentials.ui.compose.material.Subheader
+import com.ivianuu.essentials.ui.navigation.Navigator
 
 val scaffoldRoute = composeControllerRoute {
+    val navigator = +inject<Navigator>()
+
+    val (bodyLayoutMode, setBodyLayout) = +state { Scaffold.BodyLayoutMode.Wrap }
+
+    val (showBottomBar, setShowBottomBar) = +state { false }
+
     val (showFab, setShowFab) = +state { false }
     val (fabPosition, setFabPosition) = +state { Scaffold.FabPosition.End }
 
     Scaffold(
-        topAppBar = { EsTopAppBar("Scaffold") },
+        topAppBar = {
+            val alpha = +memo(bodyLayoutMode) {
+                if (bodyLayoutMode == Scaffold.BodyLayoutMode.ExtendTop
+                    || bodyLayoutMode == Scaffold.BodyLayoutMode.ExtendBoth
+                ) 0.5f else 1f
+            }
+
+            val color = (+themeColor { primary }).copy(alpha = alpha)
+
+            EsTopAppBar(title = "Scaffold", color = color)
+        },
+        fabPosition = fabPosition,
+        fab = if (showFab) ({
+            FloatingActionButton("Click me")
+        }) else null,
+        bottomBar = if (showBottomBar) ({
+            composable("bottom bar") {
+                val alpha = +memo(bodyLayoutMode) {
+                    if (bodyLayoutMode == Scaffold.BodyLayoutMode.ExtendTop
+                        || bodyLayoutMode == Scaffold.BodyLayoutMode.ExtendBoth
+                    ) 0.5f else 1f
+                }
+
+                val color = (+themeColor { primary }).copy(alpha = alpha)
+
+                Surface(color = color) {
+                    Container(
+                        height = 56.dp,
+                        expanded = true,
+                        alignment = Alignment.CenterLeft,
+                        padding = EdgeInsets(16.dp)
+                    ) {
+                        Text(
+                            text = "Bottom bar",
+                            style = +themeTextStyle { h6 }
+                        )
+                    }
+                }
+            }
+        }) else null,
+        bodyLayoutMode = bodyLayoutMode,
         body = {
             ScrollableList {
+                if (bodyLayoutMode == Scaffold.BodyLayoutMode.ExtendTop
+                    || bodyLayoutMode == Scaffold.BodyLayoutMode.ExtendBoth
+                ) {
+                    Container(height = 56.dp, expanded = true, alignment = Alignment.CenterRight) {
+                        Text("Draws behind the app bar")
+                    }
+                }
+                Subheader("Body")
+                SimpleListItem(
+                    title = { Text("Body layout mode") },
+                    onClick = {
+                        navigator.push(
+                            dialogRoute {
+                                SingleChoiceListDialog(
+                                    items = Scaffold.BodyLayoutMode.values().toList(),
+                                    selectedItem = bodyLayoutMode,
+                                    onSelect = {
+                                        setBodyLayout(it)
+                                        navigator.pop()
+                                    },
+                                    item = { Text(it.name) }
+                                )
+                            }
+                        )
+                    }
+                )
+
+                Subheader("Bottom bar")
+                SimpleListItem(
+                    title = { Text("Show bottom bar") },
+                    trailing = {
+                        BlockChildTouches {
+                            EsCheckbox(checked = showBottomBar, onCheckedChange = {})
+                        }
+                    },
+                    onClick = { setShowBottomBar(!showBottomBar) }
+                )
+
+                Subheader("Fab")
                 SimpleListItem(
                     title = { Text("Show fab") },
                     trailing = {
@@ -45,11 +145,27 @@ val scaffoldRoute = composeControllerRoute {
                     },
                     onClick = { setShowFab(!showFab) }
                 )
+                Opacity(if (showFab) 1f else 0.5f) {
+                    SimpleListItem(
+                        title = { Text("Fab location") },
+                        onClick = if (showFab) ({
+                            navigator.push(
+                                dialogRoute {
+                                    SingleChoiceListDialog(
+                                        items = Scaffold.FabPosition.values().toList(),
+                                        selectedItem = fabPosition,
+                                        onSelect = {
+                                            setFabPosition(it)
+                                            navigator.pop()
+                                        },
+                                        item = { Text(it.name) }
+                                    )
+                                }
+                            )
+                        }) else null
+                    )
+                }
             }
-        },
-        fabPosition = fabPosition,
-        fab = if (showFab) ({
-            FloatingActionButton("Click me")
-        }) else null
+        }
     )
 }

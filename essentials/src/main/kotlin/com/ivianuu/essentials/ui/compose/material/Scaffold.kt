@@ -22,16 +22,14 @@ import androidx.compose.State
 import androidx.compose.memo
 import androidx.compose.state
 import androidx.compose.unaryPlus
-import androidx.ui.core.Alignment
 import androidx.ui.core.Constraints
 import androidx.ui.core.IntPx
 import androidx.ui.core.Layout
 import androidx.ui.core.ParentData
 import androidx.ui.core.dp
-import androidx.ui.layout.Padding
-import androidx.ui.layout.Stack
 import androidx.ui.material.DrawerState
 import com.ivianuu.essentials.ui.compose.core.composable
+import com.ivianuu.essentials.ui.compose.core.withDensity
 import com.ivianuu.essentials.ui.compose.layout.Expand
 
 @Composable
@@ -59,30 +57,15 @@ fun Scaffold(
     scaffold.hasBottomBar = bottomBar != null
     scaffold.hasFab = fab != null
 
-    val finalLayout: @Composable() () -> Unit = {
-        Stack {
-            expanded {
-                ScaffoldBodyAndBarsLayout(
-                    topAppBar = topAppBar,
-                    body = body,
-                    bottomBar = bottomBar,
-                    bodyLayoutMode = bodyLayoutMode
-                )
-            }
-
-            if (fab != null) {
-                aligned(
-                    alignment = when (fabPosition) {
-                        Scaffold.FabPosition.Center -> Alignment.BottomCenter
-                        Scaffold.FabPosition.End -> Alignment.BottomRight
-                    }
-                ) {
-                    Padding(padding = 16.dp) {
-                        fab()
-                    }
-                }
-            }
-        }
+    val scaffoldLayout: @Composable() () -> Unit = {
+        ScaffoldLayout(
+            topAppBar = topAppBar,
+            body = body,
+            bottomBar = bottomBar,
+            fab = fab,
+            bodyLayoutMode = bodyLayoutMode,
+            fabPosition = fabPosition
+        )
     }
 
 
@@ -93,10 +76,10 @@ fun Scaffold(
                     drawer(
                         drawerState.value,
                         { drawerState.value = it },
-                        finalLayout
+                        scaffoldLayout
                     )
                 } else {
-                    finalLayout()
+                    scaffoldLayout()
                 }
             }
         }
@@ -147,63 +130,76 @@ class Scaffold internal constructor(_drawerState: State<DrawerState>) {
 }
 
 @Composable
-private fun ScaffoldBodyAndBarsLayout(
+private fun ScaffoldLayout(
     topAppBar: @Composable() (() -> Unit)?,
     body: @Composable() (() -> Unit)?,
+    bodyLayoutMode: Scaffold.BodyLayoutMode,
     bottomBar: @Composable() (() -> Unit)?,
-    bodyLayoutMode: Scaffold.BodyLayoutMode
-) = composable("ScaffoldBodyAndBarsLayout") {
+    fab: @Composable() (() -> Unit)?,
+    fabPosition: Scaffold.FabPosition
+) = composable("ScaffoldLayout") {
     val children: @Composable() () -> Unit = {
         if (topAppBar != null) {
-            ParentData(ScaffoldBodySlot.TopAppBar) {
+            ParentData(ScaffoldLayoutSlot.TopAppBar) {
                 topAppBar()
             }
         }
 
         if (body != null) {
-            ParentData(ScaffoldBodySlot.Body) {
+            ParentData(ScaffoldLayoutSlot.Body) {
                 body()
             }
         }
 
         if (bottomBar != null) {
-            ParentData(ScaffoldBodySlot.BottomBar) {
+            ParentData(ScaffoldLayoutSlot.BottomBar) {
                 bottomBar()
             }
         }
+
+        if (fab != null) {
+            ParentData(ScaffoldLayoutSlot.Fab) {
+                fab()
+            }
+        }
     }
+
+    val fabPadding = +withDensity { 16.dp.toIntPx() }
 
     Layout(children = children) { measureables, constraints ->
         val width = constraints.maxWidth
         val height = constraints.maxHeight
 
         val topAppBarMeasureable = measureables.firstOrNull {
-            it.parentData == ScaffoldBodySlot.TopAppBar
+            it.parentData == ScaffoldLayoutSlot.TopAppBar
         }
         val bodyMeasureable = measureables.firstOrNull {
-            it.parentData == ScaffoldBodySlot.Body
+            it.parentData == ScaffoldLayoutSlot.Body
         }
         val bottomBarMeasureable = measureables.firstOrNull {
-            it.parentData == ScaffoldBodySlot.BottomBar
+            it.parentData == ScaffoldLayoutSlot.BottomBar
+        }
+        val fabMeasureable = measureables.firstOrNull {
+            it.parentData == ScaffoldLayoutSlot.Fab
         }
 
-        var childConstraints = constraints.copy(
+        var barConstraints = constraints.copy(
             minWidth = width,
             maxWidth = width,
             minHeight = IntPx.Zero
         )
 
         val topAppBarPlaceable = topAppBarMeasureable
-            ?.measure(childConstraints)
+            ?.measure(barConstraints)
             ?.also { placeable ->
-                childConstraints =
-                    childConstraints.copy(maxHeight = childConstraints.maxHeight - placeable.height)
+                barConstraints =
+                    barConstraints.copy(maxHeight = barConstraints.maxHeight - placeable.height)
             }
         val topAppBarTop = if (topAppBarPlaceable != null) IntPx.Zero else null
         val topAppBarBottom =
             if (topAppBarPlaceable != null) topAppBarTop!! + topAppBarPlaceable.height else null
 
-        val bottomBarPlaceable = bottomBarMeasureable?.measure(childConstraints)
+        val bottomBarPlaceable = bottomBarMeasureable?.measure(barConstraints)
         val bottomBarBottom = if (bottomBarPlaceable != null) height else null
         val bottomBarTop =
             if (bottomBarPlaceable != null) bottomBarBottom!! - bottomBarPlaceable.height else null
@@ -250,12 +246,26 @@ private fun ScaffoldBodyAndBarsLayout(
             bodyMeasureable.measure(bodyConstraints)
         }
 
+        val fabPlaceable = fabMeasureable?.measure(constraints)
+
+        val fabTop = if (fabPlaceable != null) {
+            if (bottomBarMeasureable != null) bottomBarTop!! - fabPlaceable.height - fabPadding
+            else height - fabPlaceable.height - fabPadding
+        } else null
+        val fabLeft = if (fabPlaceable != null) {
+            when (fabPosition) {
+                Scaffold.FabPosition.Center -> width / 2 - fabPlaceable.width / 2
+                Scaffold.FabPosition.End -> width - fabPlaceable.width - fabPadding
+            }
+        } else null
+
         layout(constraints.maxWidth, constraints.maxHeight) {
             bodyPlaceable?.place(IntPx.Zero, bodyTop!!)
+            fabPlaceable?.place(fabLeft!!, fabTop!!)
             bottomBarPlaceable?.place(IntPx.Zero, bottomBarTop!!)
             topAppBarPlaceable?.place(IntPx.Zero, topAppBarTop!!)
         }
     }
 }
 
-private enum class ScaffoldBodySlot { TopAppBar, Body, BottomBar }
+private enum class ScaffoldLayoutSlot { TopAppBar, Body, BottomBar, Fab }
