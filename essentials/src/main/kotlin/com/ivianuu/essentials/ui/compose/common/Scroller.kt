@@ -19,11 +19,17 @@ package com.ivianuu.essentials.ui.compose.common
 import androidx.compose.Composable
 import androidx.compose.memo
 import androidx.compose.unaryPlus
-import androidx.ui.core.Dp
-import androidx.ui.core.WithDensity
-import androidx.ui.core.dp
+import androidx.ui.core.Clip
+import androidx.ui.core.IntPx
+import androidx.ui.core.Px
+import androidx.ui.core.RepaintBoundary
+import androidx.ui.core.min
+import androidx.ui.core.round
+import androidx.ui.core.toPx
+import androidx.ui.foundation.shape.RectangleShape
+import androidx.ui.layout.Container
 import com.ivianuu.essentials.ui.compose.core.Axis
-import com.ivianuu.essentials.ui.compose.layout.Offset
+import com.ivianuu.essentials.ui.compose.layout.SingleChildLayout
 
 @Composable
 fun Scroller(
@@ -39,26 +45,67 @@ fun Scroller(
         reverse = reverse,
         enabled = enabled
     ) {
-        WithDensity {
-            val offsetX: Dp
-            val offsetY: Dp
+        ScrollerLayout(
+            position = position,
+            direction = direction,
+            child = child
+        )
+    }
+}
 
-            when (direction) {
-                Axis.Vertical -> {
-                    offsetX = 0.dp
-                    offsetY = position.value.toDp()
-                }
-                Axis.Horizontal -> {
-                    offsetX = position.value.toDp()
-                    offsetY = 0.dp
-                }
+@Composable
+private fun ScrollerLayout(
+    position: ScrollPosition,
+    direction: Axis,
+    child: @Composable() () -> Unit
+) {
+    SingleChildLayout(child = {
+        Clip(RectangleShape) {
+            Container {
+                RepaintBoundary(children = child)
+            }
+        }
+    }) { measurable, constraints ->
+        val childConstraints = constraints.copy(
+            maxHeight = when (direction) {
+                Axis.Vertical -> IntPx.Infinity
+                Axis.Horizontal -> constraints.maxHeight
+            },
+            maxWidth = when (direction) {
+                Axis.Vertical -> constraints.maxWidth
+                Axis.Horizontal -> IntPx.Infinity
+            }
+        )
+        val placeable = measurable?.measure(childConstraints)
+
+        val width: IntPx
+        val height: IntPx
+        if (placeable == null) {
+            width = constraints.minWidth
+            height = constraints.minHeight
+        } else {
+            width = min(placeable.width, constraints.maxWidth)
+            height = min(placeable.height, constraints.maxHeight)
+        }
+
+        layout(width, height) {
+            val newMaxOffset = -when (direction) {
+                Axis.Vertical -> (placeable?.height?.toPx() ?: Px.Zero) - height.toPx()
+                Axis.Horizontal -> (placeable?.width?.toPx() ?: Px.Zero) - (width.toPx())
+            }
+            if (position.minOffset != newMaxOffset) {
+                position.minOffset = newMaxOffset
             }
 
-            Offset(
-                offsetX = offsetX,
-                offsetY = offsetY,
-                child = child
-            )
+            val offsetX = when (direction) {
+                Axis.Vertical -> IntPx.Zero
+                Axis.Horizontal -> position.currentOffset.round()
+            }
+            val offsetY = when (direction) {
+                Axis.Vertical -> position.currentOffset.round()
+                Axis.Horizontal -> IntPx.Zero
+            }
+            placeable?.place(offsetX, offsetY)
         }
     }
 }

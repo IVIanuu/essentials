@@ -25,37 +25,37 @@ import androidx.ui.core.Px
 import androidx.ui.core.gesture.PressGestureDetector
 import androidx.ui.core.px
 import androidx.ui.foundation.animation.FlingConfig
+import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.compose.core.Axis
 
 // todo remove once original is useable
 // todo reversed option
-// todo rename position and value to offset
 
 // todo use @Model once possible
 class ScrollPosition(
-    initial: Px = Px.Zero,
-    min: Px = Px.Zero,
-    max: Px = Px.Infinity
+    initialOffset: Px = Px.Zero,
+    minOffset: Px = -Px.Infinity,
+    maxOffset: Px = Px.Zero
 ) {
 
-    internal val holder = AnimatedValueHolder(-initial.value)
+    internal val holder = AnimatedValueHolder(initialOffset.value)
 
-    val value: Px
-        get() = -holder.value.px
+    val currentOffset: Px
+        get() = holder.value.px
 
-    private var _minPosition: Px by framed(min)
-    var minPosition: Px
-        get() = _minPosition
+    private var _minOffset: Px by framed(minOffset)
+    var minOffset: Px
+        get() = _minOffset
         set(value) {
-            _minPosition = value
+            _minOffset = value
             updateBounds()
         }
 
-    private var _maxPosition: Px by framed(max)
-    var maxPosition: Px
-        get() = _maxPosition
+    private var _maxOffset: Px by framed(maxOffset)
+    var maxOffset: Px
+        get() = _maxOffset
         set(value) {
-            _maxPosition = value
+            _maxOffset = value
             updateBounds()
         }
 
@@ -68,30 +68,34 @@ class ScrollPosition(
         )
     )
 
+    init {
+        updateBounds()
+    }
+
     fun smoothScrollTo(
-        value: Px,
+        offset: Px,
         onEnd: (endReason: AnimationEndReason, finishValue: Float) -> Unit = { _, _ -> }
     ) {
-        holder.animatedFloat.animateTo(-value.value, onEnd)
+        holder.animatedFloat.animateTo(offset.value, onEnd)
     }
 
     fun smoothScrollBy(
         value: Px,
         onEnd: (endReason: AnimationEndReason, finishValue: Float) -> Unit = { _, _ -> }
     ) {
-        smoothScrollTo(this.value + value, onEnd)
+        smoothScrollTo(currentOffset + value, onEnd)
     }
 
-    fun scrollTo(value: Px) {
-        holder.animatedFloat.snapTo(-value.value)
+    fun scrollTo(offset: Px) {
+        holder.animatedFloat.snapTo(offset.value)
     }
 
     fun scrollBy(value: Px) {
-        scrollTo(this.value + value)
+        scrollTo(currentOffset + value)
     }
 
     private fun updateBounds() {
-        holder.setBounds(_minPosition.value, _maxPosition.value)
+        holder.setBounds(_minOffset.value, _maxOffset.value)
     }
 }
 
@@ -104,21 +108,31 @@ fun Scrollable(
     enabled: Boolean = true,
     child: @Composable() (ScrollPosition) -> Unit
 ) {
-    PressGestureDetector(onPress = { position.scrollTo(position.value) }) {
+    PressGestureDetector(onPress = { position.scrollTo(position.currentOffset) }) {
         Draggable(
             dragDirection = when (direction) {
                 Axis.Vertical -> DragDirection.Vertical
                 Axis.Horizontal -> DragDirection.Horizontal
             },
             dragValue = position.holder,
-            onDragStarted = { onScrollEvent?.invoke(ScrollEvent.Start, position) },
-            onDragValueChangeRequested = {
-                position.holder.animatedFloat.snapTo(it)
-                onScrollEvent?.invoke(ScrollEvent.Drag, position)
+            onDragStarted = {
+                if (onScrollEvent != null) {
+                    onScrollEvent(ScrollEvent.PreStart(position.currentOffset), position)
+                    onScrollEvent(ScrollEvent.Start(position.currentOffset), position)
+                }
+            },
+            onDragValueChangeRequested = { newOffset ->
+                d { "on drag $newOffset" }
+                val newOffsetPx = newOffset.px
+                onScrollEvent?.invoke(ScrollEvent.PreDrag(newOffsetPx), position)
+                position.holder.animatedFloat.snapTo(newOffset)
+                onScrollEvent?.invoke(ScrollEvent.Drag(newOffsetPx), position)
             },
             onDragStopped = {
+                val velocityPx = it.px
+                onScrollEvent?.invoke(ScrollEvent.PreEnd(velocityPx), position)
                 position.holder.fling(position.flingConfig, it)
-                onScrollEvent?.invoke(ScrollEvent.End, position)
+                onScrollEvent?.invoke(ScrollEvent.End(velocityPx), position)
             },
             enabled = enabled,
             children = { child(position) }
@@ -126,8 +140,14 @@ fun Scrollable(
     }
 }
 
-enum class ScrollEvent {
-    Start, Drag, End // todo better names
+sealed class ScrollEvent {
+    data class PreStart(val offset: Px) : ScrollEvent()
+    data class Start(val offset: Px) : ScrollEvent()
+    data class PreDrag(val offset: Px) : ScrollEvent()
+    data class Drag(val offset: Px) : ScrollEvent()
+    data class PreEnd(val velocity: Px) : ScrollEvent()
+    data class End(val velocity: Px) : ScrollEvent()
+    // todo overscroll
 }
 
 private val ScrollerDefaultFriction = 0.35f

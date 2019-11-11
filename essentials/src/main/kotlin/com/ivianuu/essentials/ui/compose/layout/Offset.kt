@@ -19,6 +19,7 @@ package com.ivianuu.essentials.ui.compose.layout
 import androidx.compose.Composable
 import androidx.ui.core.Dp
 import androidx.ui.core.IntPx
+import androidx.ui.core.RepaintBoundary
 import androidx.ui.core.WithDensity
 import androidx.ui.core.min
 import androidx.ui.core.px
@@ -31,7 +32,9 @@ fun Offset(
     child: @Composable() () -> Unit
 ) = composable("Offset") {
     WithDensity {
-        SingleChildLayout(child = child) { measurable, constraints ->
+        SingleChildLayout(child = {
+            RepaintBoundary(children = child)
+        }) { measurable, constraints ->
             val placeable = measurable?.measure(constraints)
             val width: IntPx
             val height: IntPx
