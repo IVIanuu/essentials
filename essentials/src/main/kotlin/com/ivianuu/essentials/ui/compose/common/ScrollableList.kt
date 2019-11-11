@@ -28,6 +28,7 @@ import androidx.ui.core.IntPx
 import androidx.ui.core.Layout
 import androidx.ui.core.LayoutNode
 import androidx.ui.core.Measurable
+import androidx.ui.core.ParentData
 import androidx.ui.core.Placeable
 import androidx.ui.core.Px
 import androidx.ui.core.RepaintBoundary
@@ -143,8 +144,10 @@ fun ScrollableList(
             ) {
                 state.itemRange.forEach { index ->
                     composable(index) {
-                        RepaintBoundary {
-                            item(index)
+                        ParentData(index) {
+                            RepaintBoundary {
+                                item(index)
+                            }
                         }
                     }
                 }
@@ -160,6 +163,7 @@ private fun ScrollableListLayout(
     onViewportSizeChanged: (Px) -> Unit,
     children: @Composable() () -> Unit
 ) = composable("ScrollableListLayout") {
+    offset()
     d { "invoke composable" }
     val cachedPlaceables = mutableMapOf<Measurable, Placeable>()
     Layout(children = children) { measureables, constraints ->
@@ -173,7 +177,7 @@ private fun ScrollableListLayout(
 
         val thisLayoutNode = (this as LayoutNode.InnerMeasureScope).layoutNode
         thisLayoutNode.layoutChildren.forEachIndexed { index, layoutNode ->
-            d { "child at $index needs relayout ${layoutNode.needsRelayout} needs remeasure ${layoutNode.needsRemeasure}" }
+            d { "child at $index real index ${layoutNode.parentData} needs relayout ${layoutNode.needsRelayout} needs remeasure ${layoutNode.needsRemeasure}" }
         }
 
         var performedMeasureCount = 0
@@ -191,12 +195,7 @@ private fun ScrollableListLayout(
                     measureable.measure(childConstraints)
                 }
             }
-        }
-
-        try {
-            error("")
-        } catch (e: Exception) {
-            e.printStackTrace()
+            //measureable.measure(childConstraints)
         }
 
         d { "measured $performedMeasureCount children" }
@@ -267,7 +266,7 @@ private class ScrollableListState {
         if (items.isNotEmpty()) {
             val firstVisibleItem = items.first { it.hitTest(scrollPosition) }
 
-            val firstLayoutIndex = max(0, firstVisibleItem.index - 1)
+            val firstLayoutIndex = max(0, firstVisibleItem.index)
 
             val lastVisiblePosition = min(scrollPosition + viewportSize, items.last().trailing)
             val lastVisibleItem = items.last { it.hitTest(lastVisiblePosition) }
@@ -278,7 +277,7 @@ private class ScrollableListState {
             offset = scrollPosition - sizeUntilFirstLayoutIndex
 
             d {
-                "scroller pos $scrollPosition offset $offset\n" +
+                "\nscroller pos $scrollPosition size until first layout $sizeUntilFirstLayoutIndex offset $offset\n" +
                         "visible range ${firstVisibleItem.index..lastVisibleItem.index}\n" +
                         "layout range ${firstLayoutIndex..lastLayoutIndex}\n" +
                         "total size $count"

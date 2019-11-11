@@ -16,21 +16,7 @@
 
 package com.ivianuu.essentials.ui.compose.common
 
-import androidx.animation.PhysicsBuilder
-import androidx.compose.Composable
-import androidx.compose.memo
-import androidx.compose.state
-import androidx.compose.unaryPlus
-import androidx.ui.core.Constraints
-import androidx.ui.core.IntPx
-import androidx.ui.core.Layout
-import androidx.ui.core.OnPositioned
-import androidx.ui.core.Px
-import androidx.ui.core.RepaintBoundary
-import androidx.ui.core.round
-import androidx.ui.foundation.animation.AnchorsFlingConfig
-import com.ivianuu.essentials.ui.compose.core.Axis
-import com.ivianuu.essentials.ui.compose.core.composable
+/**
 
 // todo remove once original is useable
 
@@ -111,17 +97,10 @@ class PagerPosition(
 
     internal var onPageChanged: ((Int) -> Unit)? = null
 
-    private var pageSize = Px.Zero
+var pageSize: Px = Px.Zero
+internal set
 
-    internal val onScrollStarted: (Px) -> Unit = {
-        initialPosition = it
-    }
-    internal val onScrollerPositionChanged: (Px, Px, Px) -> Unit = { position, maxPosition, _ ->
-        pageSize = maxPosition / (pageCount - 1)
-        scrollerPosition.value = position
-    }
-    internal val onScrollEnded: (Px, Px) -> Unit = { velocity, position ->
-    }
+    private var pageSize = Px.Zero
 
     init {
         scrollerPosition.flingConfigFactory = { velocity ->
@@ -221,4 +200,4 @@ private fun PagerLayout(
             }
         }
     }
-}
+}*/
