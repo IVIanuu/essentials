@@ -42,6 +42,7 @@ import kotlin.math.max
 import kotlin.math.min
 
 // todo direction
+// todo listener?
 
 @Composable
 fun ScrollableList(
