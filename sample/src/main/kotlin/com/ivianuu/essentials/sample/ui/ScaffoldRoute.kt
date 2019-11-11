@@ -46,6 +46,8 @@ import com.ivianuu.essentials.ui.navigation.Navigator
 val scaffoldRoute = composeControllerRoute {
     val navigator = +inject<Navigator>()
 
+    val (showTopBar, setShowTopBar) = +state { true }
+
     val (bodyLayoutMode, setBodyLayout) = +state { Scaffold.BodyLayoutMode.Wrap }
 
     val (showBottomBar, setShowBottomBar) = +state { false }
@@ -54,17 +56,19 @@ val scaffoldRoute = composeControllerRoute {
     val (fabPosition, setFabPosition) = +state { Scaffold.FabPosition.End }
 
     Scaffold(
-        topAppBar = {
-            val alpha = +memo(bodyLayoutMode) {
-                if (bodyLayoutMode == Scaffold.BodyLayoutMode.ExtendTop
-                    || bodyLayoutMode == Scaffold.BodyLayoutMode.ExtendBoth
-                ) 0.5f else 1f
+        topAppBar = if (showTopBar) ({
+            composable("top bar") {
+                val alpha = +memo(bodyLayoutMode) {
+                    if (bodyLayoutMode == Scaffold.BodyLayoutMode.ExtendTop
+                        || bodyLayoutMode == Scaffold.BodyLayoutMode.ExtendBoth
+                    ) 0.5f else 1f
+                }
+
+                val color = (+themeColor { primary }).copy(alpha = alpha)
+
+                EsTopAppBar(title = "Scaffold", color = color)
             }
-
-            val color = (+themeColor { primary }).copy(alpha = alpha)
-
-            EsTopAppBar(title = "Scaffold", color = color)
-        },
+        }) else null,
         fabPosition = fabPosition,
         fab = if (showFab) ({
             FloatingActionButton("Click me")
@@ -97,6 +101,17 @@ val scaffoldRoute = composeControllerRoute {
         bodyLayoutMode = bodyLayoutMode,
         body = {
             ScrollableList {
+                Subheader("Top bar")
+                SimpleListItem(
+                    title = { Text("Show top bar") },
+                    trailing = {
+                        AbsorbPointer {
+                            EsCheckbox(checked = showTopBar, onCheckedChange = {})
+                        }
+                    },
+                    onClick = { setShowTopBar(!showTopBar) }
+                )
+
                 Subheader("Body")
                 SimpleListItem(
                     title = { Text("Body layout mode") },
