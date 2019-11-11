@@ -25,7 +25,6 @@ import androidx.ui.core.Px
 import androidx.ui.core.gesture.PressGestureDetector
 import androidx.ui.core.px
 import androidx.ui.foundation.animation.FlingConfig
-import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.compose.core.Axis
 
 // todo remove once original is useable
@@ -122,10 +121,11 @@ fun Scrollable(
                 }
             },
             onDragValueChangeRequested = { newOffset ->
-                d { "on drag $newOffset" }
-                val newOffsetPx = newOffset.px
+                val finalNewOffset =
+                    newOffset.coerceIn(position.minOffset.value, position.maxOffset.value)
+                val newOffsetPx = finalNewOffset.px
                 onScrollEvent?.invoke(ScrollEvent.PreDrag(newOffsetPx), position)
-                position.holder.animatedFloat.snapTo(newOffset)
+                position.holder.animatedFloat.snapTo(finalNewOffset)
                 onScrollEvent?.invoke(ScrollEvent.Drag(newOffsetPx), position)
             },
             onDragStopped = {
