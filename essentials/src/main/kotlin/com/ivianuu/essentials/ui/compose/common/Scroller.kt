@@ -107,6 +107,7 @@ fun Scroller(
                 Axis.Horizontal -> DragDirection.Horizontal
             },
             dragValue = scrollerPosition.holder,
+            onDragStarted = { onScrollStarted?.invoke(scrollerPosition.value) },
             onDragValueChangeRequested = {
                 scrollerPosition.holder.animatedFloat.snapTo(it)
                 onScrollPositionChanged?.invoke(

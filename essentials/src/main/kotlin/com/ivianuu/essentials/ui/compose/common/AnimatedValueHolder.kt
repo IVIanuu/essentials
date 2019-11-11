@@ -27,9 +27,16 @@ import androidx.ui.lerp
 
 // todo remove once in compose
 
-class AnimatedValueHolder(initial: Float) : ValueHolder<Float> {
+class AnimatedValueHolder(
+    initial: Float,
+    private val onValueChanged: ((Float) -> Unit)? = null
+) : ValueHolder<Float> {
 
-    private val holder = ListeneableValueHolder(initial, { value = it })
+    private val holder = ListeneableValueHolder(initial) {
+        value = it
+        onValueChanged?.invoke(it)
+    }
+
     val animatedFloat = AnimatedFloat(holder)
 
     fun setBounds(min: Float = Float.NEGATIVE_INFINITY, max: Float = Float.POSITIVE_INFINITY) {
