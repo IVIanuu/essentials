@@ -38,6 +38,7 @@ import com.ivianuu.essentials.ui.compose.core.Axis
 import com.ivianuu.essentials.ui.compose.layout.SingleChildLayout
 
 // todo remove once original is useable
+// todo reversed option
 
 // todo use @Model once possible
 class ScrollerPosition(initial: Px = Px.Zero) {
