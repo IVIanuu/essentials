@@ -26,6 +26,9 @@ import androidx.compose.unaryPlus
 import androidx.ui.core.Dp
 import androidx.ui.core.IntPx
 import androidx.ui.core.Layout
+import androidx.ui.core.LayoutNode
+import androidx.ui.core.Measurable
+import androidx.ui.core.Placeable
 import androidx.ui.core.Px
 import androidx.ui.core.RepaintBoundary
 import androidx.ui.core.ambientDensity
@@ -108,14 +111,18 @@ fun ScrollableList(
     item: (Int) -> Unit
 ) = composable("ScrollableList") {
     val state = +memo { ScrollableListState() }
-    state.count = count
+    +memo(count) { state.count = count }
     val density = +ambientDensity()
-    state.itemSizeProvider = {
-        withDensity(density) {
-            itemSizeProvider(it).toPx()
+
+    +memo(itemSizeProvider) {
+        state.itemSizeProvider = { index: Int ->
+            withDensity(density) {
+                itemSizeProvider(index).toPx()
+            }
         }
     }
-    state.update()
+
+    +memo(count, itemSizeProvider) { state.update() }
 
     PressGestureDetector(onPress = {
         state.controller.onDrag(it.y.value)
@@ -127,7 +134,7 @@ fun ScrollableList(
             valueController = state.controller
         ) {
             ScrollableListLayout(
-                state.offset,
+                { state.offset },
                 state.viewportSize,
                 {
                     state.viewportSize = it
@@ -148,27 +155,65 @@ fun ScrollableList(
 
 @Composable
 private fun ScrollableListLayout(
-    offset: Px,
+    offset: () -> Px,
     viewportSize: Px,
     onViewportSizeChanged: (Px) -> Unit,
     children: @Composable() () -> Unit
 ) = composable("ScrollableListLayout") {
+    d { "invoke composable" }
+    val cachedPlaceables = mutableMapOf<Measurable, Placeable>()
     Layout(children = children) { measureables, constraints ->
+        d { "invoke measure" }
+
         val childConstraints = constraints.copy(
             minWidth = IntPx.Zero,
             minHeight = IntPx.Zero,
             maxHeight = IntPx.Infinity
         )
 
-        val placeables = measureables.map { measureable ->
-            measureable.measure(childConstraints)
+        val thisLayoutNode = (this as LayoutNode.InnerMeasureScope).layoutNode
+        thisLayoutNode.layoutChildren.forEachIndexed { index, layoutNode ->
+            d { "child at $index needs relayout ${layoutNode.needsRelayout} needs remeasure ${layoutNode.needsRemeasure}" }
         }
 
+        var performedMeasureCount = 0
+
+        val placeables = measureables.map { measureable ->
+            val layoutNode = measureable as LayoutNode
+            if (layoutNode.needsRemeasure) {
+                ++performedMeasureCount
+                val placeable = measureable.measure(childConstraints)
+                cachedPlaceables[measureable] = placeable
+                placeable
+            } else {
+                cachedPlaceables.getOrPut(measureable) {
+                    ++performedMeasureCount
+                    measureable.measure(childConstraints)
+                }
+            }
+        }
+
+        try {
+            error("")
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
+        d { "measured $performedMeasureCount children" }
+
+        cachedPlaceables.filterKeys { it !in measureables }
+            .forEach {
+                cachedPlaceables.remove(it.key)
+            }
+
         layout(constraints.maxWidth, constraints.maxHeight) {
+            d { "invoke layout" }
+
             if (viewportSize != constraints.maxHeight.toPx()) {
+                d { "viewport size changed" }
                 onViewportSizeChanged(constraints.maxHeight.toPx())
             }
-            var offset = -offset
+            var offset = -offset()
             placeables.forEach { placeable ->
                 placeable.place(Px.Zero, offset)
                 offset += placeable.height
@@ -257,10 +302,13 @@ private class ScrollableListState {
             .fold(Px.Zero) { acc, current -> acc + current }
     }
 
-    private val anim = AnimatedFloat(ScrollPositionValueHolder2(0f) {
-        //onValueChanged?.invoke(-it.px)
-        onScrollPositionChanged(-it.px)
-    })
+    private val anim = AnimatedFloat(
+        ScrollPositionValueHolder2(
+            0f
+        ) {
+            //onValueChanged?.invoke(-it.px)
+            onScrollPositionChanged(-it.px)
+        })
 
     val controller = object : DragValueController {
         override val currentValue: Float

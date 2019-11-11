@@ -24,6 +24,7 @@ import com.ivianuu.essentials.ui.compose.common.ScrollableList
 import com.ivianuu.essentials.ui.compose.common.openUrlOnClick
 import com.ivianuu.essentials.ui.compose.composeControllerRoute
 import com.ivianuu.essentials.ui.compose.core.composable
+import com.ivianuu.essentials.ui.compose.core.staticComposable
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
 import com.ivianuu.essentials.ui.compose.material.Scaffold
@@ -114,7 +115,7 @@ fun AboutItem(
     titleRes: Int,
     descRes: Int? = null,
     url: () -> String
-) = composable(titleRes + (descRes ?: 0)) {
+) = staticComposable(titleRes + (descRes ?: 0)) {
     SimpleListItem(
         title = { Text(+stringResource(titleRes)) },
         subtitle = descRes?.let { { Text(+stringResource(it)) } },

@@ -42,7 +42,11 @@ import com.ivianuu.essentials.ui.compose.core.composable
 @Composable
 fun <T> Pager(
     items: List<T>,
-    position: PagerPosition = +memo { PagerPosition(items.size) },
+    position: PagerPosition = +memo {
+        PagerPosition(
+            items.size
+        )
+    },
     onPageChanged: ((Int) -> Unit)? = null,
     direction: Axis = Axis.Horizontal,
     item: @Composable() (Int, T) -> Unit
@@ -80,7 +84,10 @@ fun Pager(
                 Axis.Horizontal -> it.size.width
             }
         }
-        PagerLayout(direction = direction, pageSize = pageSize.value.round()) {
+        PagerLayout(
+            direction = direction,
+            pageSize = pageSize.value.round()
+        ) {
             (0 until position.pageCount).forEach { index ->
                 RepaintBoundary {
                     item(index)

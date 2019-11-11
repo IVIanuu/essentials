@@ -30,6 +30,7 @@ import com.ivianuu.essentials.apps.coil.AppIcon
 import com.ivianuu.essentials.ui.compose.common.ScrollableList
 import com.ivianuu.essentials.ui.compose.composeControllerRoute
 import com.ivianuu.essentials.ui.compose.core.composable
+import com.ivianuu.essentials.ui.compose.core.staticComposable
 import com.ivianuu.essentials.ui.compose.image.CoilImageAny
 import com.ivianuu.essentials.ui.compose.material.AvatarIconStyle
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
@@ -88,7 +89,7 @@ fun appPickerRoute(
 private fun AppInfo(
     app: AppInfo,
     onClick: () -> Unit
-) = composable(app.packageName) {
+) = staticComposable(app.packageName) {
     SimpleListItem(
         title = { Text(app.appName) },
         leading = {

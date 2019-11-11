@@ -64,9 +64,12 @@ class ScrollerPosition {
     internal var onScrollStarted: ((Px) -> Unit)? = null
     internal var onScrollEnded: ((Px, Px) -> Unit)? = null
 
-    private val anim = AnimatedFloat(ScrollPositionValueHolder(0f) {
-        onValueChanged?.invoke(-it.px)
-    })
+    private val anim = AnimatedFloat(
+        ScrollPositionValueHolder(
+            0f
+        ) {
+            onValueChanged?.invoke(-it.px)
+        })
 
     private var dragging = false
 

@@ -28,6 +28,7 @@ import androidx.ui.engine.geometry.Offset
 import androidx.ui.graphics.Canvas
 import androidx.ui.graphics.Color
 import androidx.ui.graphics.Paint
+import androidx.ui.layout.Column
 import androidx.ui.layout.Container
 import androidx.ui.layout.Padding
 import androidx.ui.material.Divider
@@ -38,6 +39,7 @@ import com.ivianuu.essentials.ui.compose.common.ScrollableList
 import com.ivianuu.essentials.ui.compose.common.navigateOnClick
 import com.ivianuu.essentials.ui.compose.composeControllerRoute
 import com.ivianuu.essentials.ui.compose.core.composable
+import com.ivianuu.essentials.ui.compose.core.staticComposable
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
 import com.ivianuu.essentials.ui.compose.material.PopupMenuButton
@@ -73,9 +75,11 @@ val homeRoute = composeControllerRoute {
                 items = items,
                 itemSizeProvider = { if (it != items.lastIndex) 57.dp else 56.dp }
             ) { index, item ->
-                HomeItem(item = item, onClick = +navigateOnClick(item.route))
-                if (index != items.lastIndex) {
-                    HomeDivider()
+                Column {
+                    HomeItem(item = item, onClick = +navigateOnClick(item.route))
+                    if (index != items.lastIndex) {
+                        HomeDivider()
+                    }
                 }
             }
         }
@@ -103,7 +107,7 @@ private fun HomeItem(
 }
 
 @Composable
-private fun ColorAvatar(color: Color) = composable("ColorAvatar") {
+private fun ColorAvatar(color: Color) = staticComposable("ColorAvatar") {
     Container(width = 40.dp, height = 40.dp) {
         val paint = +memo {
             Paint().apply { this.color = color }
@@ -119,7 +123,7 @@ private fun ColorAvatar(color: Color) = composable("ColorAvatar") {
 }
 
 @Composable
-private fun HomeDivider() = composable("HomeDivider") {
+private fun HomeDivider() = staticComposable("HomeDivider") {
     Padding(left = 72.dp) {
         Opacity(0.12f) {
             Divider()
