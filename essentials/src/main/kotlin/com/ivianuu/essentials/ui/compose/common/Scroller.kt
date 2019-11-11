@@ -93,7 +93,7 @@ fun Scroller(
     onScrollPositionChanged: ((position: Px, maxPosition: Px, viewportSize: Px) -> Unit)? = null,
     onScrollStopped: ((velocity: Px, position: Px) -> Unit)? = null,
     direction: Axis = Axis.Vertical,
-    isScrollable: Boolean = true, // todo implement
+    isScrollable: Boolean = true,
     maxScrollPosition: Px? = null,
     child: @Composable() () -> Unit
 ) {
