@@ -28,7 +28,6 @@ import androidx.ui.core.Clip
 import androidx.ui.core.IntPx
 import androidx.ui.core.Px
 import androidx.ui.core.RepaintBoundary
-import androidx.ui.core.gesture.PressGestureDetector
 import androidx.ui.core.min
 import androidx.ui.core.px
 import androidx.ui.core.round
@@ -134,47 +133,63 @@ fun Scroller(
     scrollerPosition: ScrollerPosition = +memo { ScrollerPosition() },
     // todo what to do with the onChangedThing?
     onScrollStarted: ((position: Px) -> Unit)? = null,
-    onScrollPositionChanged: (position: Px, maxPosition: Px) -> Unit = { position, _ ->
+    onScrollPositionChanged: (position: Px, maxPosition: Px, viewportSize: Px) -> Unit = { position, _, _ ->
         scrollerPosition.value = position
     },
     onScrollEnded: ((velocity: Px, position: Px) -> Unit)? = null,
     direction: Axis = Axis.Vertical,
     isScrollable: Boolean = true, // todo implement
+    maxScrollPosition: Px? = null,
     child: @Composable() () -> Unit
 ) {
-    val maxPosition = +state { Px.Infinity }
-    scrollerPosition.onValueChanged = { onScrollPositionChanged(it, maxPosition.value) }
+    val maxScrollPositionState = +state { maxScrollPosition ?: Px.Infinity }
+    val viewportSize = +state { Px.Zero }
+
+    scrollerPosition.onValueChanged =
+        { onScrollPositionChanged(it, maxScrollPositionState.value, viewportSize.value) }
     scrollerPosition.onScrollStarted = onScrollStarted
     scrollerPosition.onScrollEnded = onScrollEnded
-    PressGestureDetector(onPress = { scrollerPosition.scrollTo(scrollerPosition.value) }) {
+
+    //PressGestureDetector(onPress = { scrollerPosition.scrollTo(scrollerPosition.value) }) {
         Draggable(
             dragDirection = when (direction) {
                 Axis.Vertical -> DragDirection.Vertical
                 Axis.Horizontal -> DragDirection.Horizontal
             },
-            minValue = -maxPosition.value.value,
+            minValue = -maxScrollPositionState.value.value,
             maxValue = 0f,
             valueController = scrollerPosition.controller
         ) {
             ScrollerLayout(
                 scrollerPosition = scrollerPosition,
-                maxPosition = maxPosition.value,
-                onMaxPositionChanged = {
-                    maxPosition.value = it
-                    onScrollPositionChanged(scrollerPosition.value, it)
+                maxPosition = maxScrollPositionState.value,
+                updateMaxPosition = maxScrollPosition == null,
+                viewportSize = viewportSize.value,
+                onDimensionsChanged = { newMaxScrollPosition, newViewportSize ->
+                    if (maxScrollPosition == null) {
+                        maxScrollPositionState.value = newMaxScrollPosition
+                    }
+                    viewportSize.value = newViewportSize
+                    onScrollPositionChanged(
+                        scrollerPosition.value,
+                        newMaxScrollPosition,
+                        newViewportSize
+                    )
                 },
                 direction = direction,
                 child = child
             )
         }
-    }
+    //}
 }
 
 @Composable
 private fun ScrollerLayout(
     scrollerPosition: ScrollerPosition,
     maxPosition: Px,
-    onMaxPositionChanged: (Px) -> Unit,
+    updateMaxPosition: Boolean,
+    viewportSize: Px,
+    onDimensionsChanged: (Px, Px) -> Unit,
     direction: Axis,
     child: @Composable() () -> Unit
 ) {
@@ -210,12 +225,19 @@ private fun ScrollerLayout(
             val childWidth = placeable?.width?.toPx() ?: 0.px
             val scrollHeight = childHeight - height.toPx()
             val scrollWidth = childWidth - width.toPx()
-            val side = when (direction) {
-                Axis.Vertical -> scrollHeight
-                Axis.Horizontal -> scrollWidth
-            }
-            if (side != maxPosition) {
-                onMaxPositionChanged(side)
+
+            val side = if (updateMaxPosition) {
+                when (direction) {
+                    Axis.Vertical -> scrollHeight
+                    Axis.Horizontal -> scrollWidth
+                }
+            } else maxPosition
+            val newViewportSize = when (direction) {
+                Axis.Vertical -> height
+                Axis.Horizontal -> width
+            }.toPx()
+            if (side != maxPosition || newViewportSize != viewportSize) {
+                onDimensionsChanged(side, newViewportSize)
             }
             val xOffset = when (direction) {
                 Axis.Vertical -> IntPx.Zero

@@ -19,13 +19,15 @@ package com.ivianuu.essentials.ui.compose.common
 import androidx.animation.PhysicsBuilder
 import androidx.compose.Composable
 import androidx.compose.memo
+import androidx.compose.state
 import androidx.compose.unaryPlus
 import androidx.ui.core.Constraints
 import androidx.ui.core.IntPx
 import androidx.ui.core.Layout
+import androidx.ui.core.OnPositioned
 import androidx.ui.core.Px
 import androidx.ui.core.RepaintBoundary
-import androidx.ui.core.WithConstraints
+import androidx.ui.core.round
 import androidx.ui.foundation.animation.AnchorsFlingConfig
 import com.ivianuu.essentials.ui.compose.core.Axis
 import com.ivianuu.essentials.ui.compose.core.composable
@@ -63,24 +65,25 @@ fun Pager(
 ) = composable("Pager") {
     position.onPageChanged = onPageChanged
 
-    WithConstraints { constraints ->
-        Scroller(
-            scrollerPosition = position.scrollerPosition,
-            onScrollStarted = position.onScrollStarted,
-            onScrollPositionChanged = position.onScrollerPositionChanged,
-            onScrollEnded = position.onScrollEnded,
-            direction = direction,
-            isScrollable = true // todo make toggleable
-        ) {
-            val pageSize = when (direction) {
-                Axis.Vertical -> constraints.maxHeight
-                Axis.Horizontal -> constraints.maxWidth
+    Scroller(
+        scrollerPosition = position.scrollerPosition,
+        onScrollStarted = position.onScrollStarted,
+        onScrollPositionChanged = position.onScrollerPositionChanged,
+        onScrollEnded = position.onScrollEnded,
+        direction = direction,
+        isScrollable = true // todo make toggleable
+    ) {
+        val pageSize = +state { Px.Zero }
+        OnPositioned {
+            pageSize.value = when (direction) {
+                Axis.Vertical -> it.size.height
+                Axis.Horizontal -> it.size.width
             }
-            PagerLayout(direction = direction, pageSize = pageSize) {
-                (0 until position.pageCount).forEach { index ->
-                    RepaintBoundary {
-                        item(index)
-                    }
+        }
+        PagerLayout(direction = direction, pageSize = pageSize.value.round()) {
+            (0 until position.pageCount).forEach { index ->
+                RepaintBoundary {
+                    item(index)
                 }
             }
         }
@@ -106,7 +109,7 @@ class PagerPosition(
     internal val onScrollStarted: (Px) -> Unit = {
         initialPosition = it
     }
-    internal val onScrollerPositionChanged: (Px, Px) -> Unit = { position, maxPosition ->
+    internal val onScrollerPositionChanged: (Px, Px, Px) -> Unit = { position, maxPosition, _ ->
         pageSize = maxPosition / (pageCount - 1)
         scrollerPosition.value = position
     }

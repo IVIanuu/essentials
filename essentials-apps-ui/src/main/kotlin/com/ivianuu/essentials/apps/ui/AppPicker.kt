@@ -20,14 +20,14 @@ import androidx.compose.Composable
 import androidx.compose.unaryPlus
 import androidx.lifecycle.viewModelScope
 import androidx.ui.core.Text
-import androidx.ui.foundation.VerticalScroller
+import androidx.ui.core.dp
 import androidx.ui.layout.Center
-import androidx.ui.layout.Column
 import androidx.ui.material.CircularProgressIndicator
 import androidx.ui.res.stringResource
 import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.AppStore
 import com.ivianuu.essentials.apps.coil.AppIcon
+import com.ivianuu.essentials.ui.compose.common.ScrollableList2
 import com.ivianuu.essentials.ui.compose.composeControllerRoute
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.image.CoilImageAny
@@ -68,15 +68,14 @@ fun appPickerRoute(
                 }
                 is Success -> {
                     composable("content") {
-                        VerticalScroller {
-                            Column {
-                                viewModel.state.apps()?.forEach { app ->
-                                    AppInfo(
-                                        app = app,
-                                        onClick = { viewModel.appClicked(app) }
-                                    )
-                                }
-                            }
+                        ScrollableList2(
+                            items = viewModel.state.apps() ?: emptyList(),
+                            itemSize = 56.dp
+                        ) { _, app ->
+                            AppInfo(
+                                app = app,
+                                onClick = { viewModel.appClicked(app) }
+                            )
                         }
                     }
                 }
