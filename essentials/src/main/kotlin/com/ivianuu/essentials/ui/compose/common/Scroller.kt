@@ -100,6 +100,22 @@ fun Scroller(
     val maxScrollPositionState = +state { maxScrollPosition ?: Px.Infinity }
     val viewportSize = +state { Px.Zero }
 
+    fun updateMaxScrollPosition(maxScrollPosition: Px) {
+        scrollerPosition.holder.setBounds(-maxScrollPosition.value, 0f)
+        scrollerPosition.maxPosition = maxScrollPosition
+        onScrollPositionChanged?.invoke(
+            scrollerPosition.value,
+            maxScrollPosition,
+            scrollerPosition.viewportSize
+        )
+    }
+
+    +memo(maxScrollPosition) {
+        if (maxScrollPosition != null) {
+            updateMaxScrollPosition(maxScrollPosition)
+        }
+    }
+
     PressGestureDetector(onPress = { scrollerPosition.scrollTo(scrollerPosition.value) }) {
         Draggable(
             dragDirection = when (direction) {
@@ -128,16 +144,16 @@ fun Scroller(
                 updateMaxPosition = maxScrollPosition == null,
                 viewportSize = viewportSize.value,
                 onDimensionsChanged = { newMaxScrollPosition, newViewportSize ->
-                    if (maxScrollPosition == null) {
-                        scrollerPosition.holder.setBounds(-newMaxScrollPosition.value, 0f)
-                        maxScrollPositionState.value = newMaxScrollPosition
-                    }
                     viewportSize.value = newViewportSize
-                    onScrollPositionChanged?.invoke(
-                        scrollerPosition.value,
-                        newMaxScrollPosition,
-                        newViewportSize
-                    )
+                    if (maxScrollPosition == null) {
+                        updateMaxScrollPosition(newMaxScrollPosition)
+                    } else {
+                        onScrollPositionChanged?.invoke(
+                            scrollerPosition.value,
+                            newMaxScrollPosition,
+                            newViewportSize
+                        )
+                    }
                 },
                 direction = direction,
                 child = child
