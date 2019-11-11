@@ -25,6 +25,7 @@ import androidx.ui.core.Layout
 import androidx.ui.core.Px
 import androidx.ui.core.RepaintBoundary
 import androidx.ui.core.ambientDensity
+import androidx.ui.core.max
 import androidx.ui.core.min
 import androidx.ui.core.toPx
 import androidx.ui.core.withDensity
@@ -182,8 +183,8 @@ private class ScrollableListState(val position: ScrollPosition) {
 
             val firstLayoutIndex = max(0, firstVisibleItem.index)
 
-            val lastVisiblePosition = min(scrollOffset + viewportSize, items.last().trailing)
-            val lastVisibleItem = items.first { it.hitTest(lastVisiblePosition) }
+            val lastVisiblePosition = max(scrollOffset - viewportSize, items.last().trailing)
+            val lastVisibleItem = items.last { it.hitTest(lastVisiblePosition) }
 
             val lastLayoutIndex = min(count - 1, lastVisibleItem.index + 1)
 
