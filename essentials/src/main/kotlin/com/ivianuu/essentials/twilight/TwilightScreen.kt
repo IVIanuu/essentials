@@ -19,6 +19,7 @@ package com.ivianuu.essentials.twilight
 import androidx.compose.Composable
 import androidx.compose.unaryPlus
 import androidx.ui.core.Text
+import androidx.ui.core.dp
 import androidx.ui.material.RadioButton
 import androidx.ui.res.stringResource
 import com.ivianuu.essentials.R
@@ -40,7 +41,10 @@ val twilightSettingsRoute = composeControllerRoute(
             topAppBar = { EsTopAppBar(title = +stringResource(R.string.es_title_twilight)) },
             body = {
                 val prefs = +inject<TwilightPrefs>()
-                ScrollableList(TwilightMode.values().toList()) { _, mode ->
+                ScrollableList(
+                    items = TwilightMode.values().toList(),
+                    itemSize = 48.dp
+                ) { _, mode ->
                     TwilightModeItem(
                         mode = mode,
                         isSelected = prefs.twilightMode.get() == mode,

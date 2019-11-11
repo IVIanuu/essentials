@@ -28,7 +28,7 @@ import androidx.ui.res.stringResource
 import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.AppStore
 import com.ivianuu.essentials.apps.coil.AppIcon
-import com.ivianuu.essentials.ui.compose.common.ScrollableList2
+import com.ivianuu.essentials.ui.compose.common.ScrollableList
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.staticComposable
 import com.ivianuu.essentials.ui.compose.image.CoilImageAny
@@ -108,9 +108,9 @@ fun CheckableAppsScreen(
                 }
                 is Success -> {
                     composable("apps") {
-                        ScrollableList2(
+                        ScrollableList(
                             items = viewModel.state.apps() ?: emptyList(),
-                            itemSize = 56.dp
+                            itemSizeProvider = { 56.dp }
                         ) { _, app ->
                             CheckableApp(
                                 app = app,

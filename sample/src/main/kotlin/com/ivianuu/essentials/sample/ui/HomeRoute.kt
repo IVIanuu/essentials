@@ -69,9 +69,12 @@ val homeRoute = composeControllerRoute {
         },
         body = {
             val items = +memo { HomeItem.values().toList().sortedBy { it.name } }
-            ScrollableList(items = items) { index, item ->
+            ScrollableList(
+                items = items,
+                itemSizeProvider = { if (it != items.lastIndex) 57.dp else 56.dp }
+            ) { index, item ->
                 HomeItem(item = item, onClick = +navigateOnClick(item.route))
-                if (index != HomeItem.values().lastIndex) {
+                if (index != items.lastIndex) {
                     HomeDivider()
                 }
             }
