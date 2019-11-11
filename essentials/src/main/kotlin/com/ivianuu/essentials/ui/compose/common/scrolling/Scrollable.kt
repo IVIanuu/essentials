@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.compose.common
+package com.ivianuu.essentials.ui.compose.common.scrolling
 
 import androidx.animation.AnimationEndReason
 import androidx.animation.ExponentialDecay
@@ -25,6 +25,10 @@ import androidx.ui.core.Px
 import androidx.ui.core.gesture.PressGestureDetector
 import androidx.ui.core.px
 import androidx.ui.foundation.animation.FlingConfig
+import com.ivianuu.essentials.ui.compose.common.AnimatedValueHolder
+import com.ivianuu.essentials.ui.compose.common.DragDirection
+import com.ivianuu.essentials.ui.compose.common.Draggable
+import com.ivianuu.essentials.ui.compose.common.framed
 import com.ivianuu.essentials.ui.compose.core.Axis
 
 // todo remove once original is useable
@@ -37,7 +41,8 @@ class ScrollPosition(
     maxOffset: Px = Px.Zero
 ) {
 
-    internal val holder = AnimatedValueHolder(initialOffset.value)
+    internal val holder =
+        AnimatedValueHolder(initialOffset.value)
 
     val currentOffset: Px
         get() = holder.value.px
@@ -116,23 +121,47 @@ fun Scrollable(
             dragValue = position.holder,
             onDragStarted = {
                 if (onScrollEvent != null) {
-                    onScrollEvent(ScrollEvent.PreStart(position.currentOffset), position)
-                    onScrollEvent(ScrollEvent.Start(position.currentOffset), position)
+                    onScrollEvent(
+                        ScrollEvent.PreStart(
+                            position.currentOffset
+                        ), position
+                    )
+                    onScrollEvent(
+                        ScrollEvent.Start(
+                            position.currentOffset
+                        ), position
+                    )
                 }
             },
             onDragValueChangeRequested = { newOffset ->
                 val finalNewOffset =
                     newOffset.coerceIn(position.minOffset.value, position.maxOffset.value)
                 val newOffsetPx = finalNewOffset.px
-                onScrollEvent?.invoke(ScrollEvent.PreDrag(newOffsetPx), position)
+                onScrollEvent?.invoke(
+                    ScrollEvent.PreDrag(
+                        newOffsetPx
+                    ), position
+                )
                 position.holder.animatedFloat.snapTo(finalNewOffset)
-                onScrollEvent?.invoke(ScrollEvent.Drag(newOffsetPx), position)
+                onScrollEvent?.invoke(
+                    ScrollEvent.Drag(
+                        newOffsetPx
+                    ), position
+                )
             },
             onDragStopped = {
                 val velocityPx = it.px
-                onScrollEvent?.invoke(ScrollEvent.PreEnd(velocityPx), position)
+                onScrollEvent?.invoke(
+                    ScrollEvent.PreEnd(
+                        velocityPx
+                    ), position
+                )
                 position.holder.fling(position.flingConfig, it)
-                onScrollEvent?.invoke(ScrollEvent.End(velocityPx), position)
+                onScrollEvent?.invoke(
+                    ScrollEvent.End(
+                        velocityPx
+                    ), position
+                )
             },
             enabled = enabled,
             children = { child(position) }

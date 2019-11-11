@@ -25,8 +25,8 @@ import androidx.ui.material.surface.CurrentBackground
 import androidx.ui.material.textColorForBackground
 import androidx.ui.material.themeTextStyle
 import androidx.ui.res.stringResource
-import com.ivianuu.essentials.ui.compose.common.ScrollableList
 import com.ivianuu.essentials.ui.compose.common.navigateOnClick
+import com.ivianuu.essentials.ui.compose.common.scrolling.ScrollableList
 import com.ivianuu.essentials.ui.compose.composeControllerRoute
 import com.ivianuu.essentials.ui.compose.coroutines.coroutineScope
 import com.ivianuu.essentials.ui.compose.injekt.inject

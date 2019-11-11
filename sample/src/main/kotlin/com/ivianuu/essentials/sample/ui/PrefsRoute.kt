@@ -18,7 +18,7 @@ package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.unaryPlus
 import androidx.ui.core.Text
-import com.ivianuu.essentials.ui.compose.common.ScrollableList
+import com.ivianuu.essentials.ui.compose.common.scrolling.ScrollableList
 import com.ivianuu.essentials.ui.compose.composeControllerRoute
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar

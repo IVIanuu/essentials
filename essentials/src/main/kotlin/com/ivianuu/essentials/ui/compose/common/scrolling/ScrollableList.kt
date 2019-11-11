@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.compose.common
+package com.ivianuu.essentials.ui.compose.common.scrolling
 
 import androidx.compose.Composable
 import androidx.compose.memo
@@ -31,6 +31,7 @@ import androidx.ui.core.toPx
 import androidx.ui.core.withDensity
 import androidx.ui.layout.Column
 import com.github.ajalt.timberkt.d
+import com.ivianuu.essentials.ui.compose.common.framed
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.layout.SizedBox
 import kotlin.math.max
@@ -102,7 +103,8 @@ fun ScrollableList(
     }*/
 
     Scrollable { position ->
-        val state = +memo { ScrollableListState(position) }
+        val state =
+            +memo { ScrollableListState(position) }
         +memo(count) { state.count = count }
         val density = +ambientDensity()
         +memo(itemSizeProvider) {

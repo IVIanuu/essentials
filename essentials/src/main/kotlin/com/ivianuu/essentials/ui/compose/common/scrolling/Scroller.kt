@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.compose.common
+package com.ivianuu.essentials.ui.compose.common.scrolling
 
 import androidx.compose.Composable
 import androidx.compose.memo
