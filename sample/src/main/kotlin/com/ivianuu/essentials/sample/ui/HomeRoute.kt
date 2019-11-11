@@ -75,10 +75,12 @@ val homeRoute = composeControllerRoute {
                 items = items,
                 itemSizeProvider = { if (it != items.lastIndex) 57.dp else 56.dp }
             ) { index, item ->
-                Column {
-                    HomeItem(item = item, onClick = +navigateOnClick(item.route))
-                    if (index != items.lastIndex) {
-                        HomeDivider()
+                staticComposable(item) {
+                    Column {
+                        HomeItem(item = item, onClick = +navigateOnClick(item.route))
+                        if (index != items.lastIndex) {
+                            HomeDivider()
+                        }
                     }
                 }
             }
