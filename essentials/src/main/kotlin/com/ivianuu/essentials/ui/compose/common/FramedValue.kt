@@ -27,9 +27,9 @@ import kotlin.reflect.KProperty
 
 // todo remove once we can use @Model
 
-fun <T> framed(initialValue: T) = FramedValue(initialValue)
+fun <T> framed(initial: T) = FramedValue(initial)
 
-class FramedValue<T>(value: T) : Framed {
+class FramedValue<T>(initial: T) : Framed {
     /* NOTE(lmr): When this module is compiled with IR, we will need to remove the below Framed implementation */
 
     @Suppress("UNCHECKED_CAST")
@@ -40,7 +40,7 @@ class FramedValue<T>(value: T) : Framed {
         }
 
     private var next: StateRecord<T> =
-        StateRecord(value)
+        StateRecord(initial)
 
     init {
         _created(this)
