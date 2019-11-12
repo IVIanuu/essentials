@@ -37,6 +37,7 @@ import com.ivianuu.essentials.ui.compose.common.hideKeyboard
 import com.ivianuu.essentials.ui.compose.common.showKeyboard
 import com.ivianuu.essentials.ui.compose.composeControllerRoute
 import com.ivianuu.essentials.ui.compose.core.composable
+import com.ivianuu.essentials.ui.compose.core.ref
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
 import com.ivianuu.essentials.ui.compose.material.Scaffold
 import com.ivianuu.essentials.ui.compose.material.SimpleListItem
@@ -97,11 +98,14 @@ val textInputRoute = composeControllerRoute(
             if (items.isNotEmpty()) {
                 composable("results") {
                     val scrollerPosition = +memo(items) { ScrollerPosition() }
+                    val lastScrollPosition = +ref { scrollerPosition.value }
 
-                    /*hideKeyboard()
-                    if (searchVisible && inputValue.isEmpty()) {
-                        setSearchVisible(false)
-                    }*/
+                    if (scrollerPosition.value != lastScrollPosition.value) {
+                        hideKeyboard()
+                        if (searchVisible && inputValue.isEmpty()) {
+                            setSearchVisible(false)
+                        }
+                    }
 
                     VerticalScroller(scrollerPosition = scrollerPosition) {
                         Column {
