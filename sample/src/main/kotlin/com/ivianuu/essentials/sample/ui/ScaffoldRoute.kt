@@ -20,7 +20,6 @@ import androidx.compose.memo
 import androidx.compose.state
 import androidx.compose.unaryPlus
 import androidx.ui.core.Alignment
-import androidx.ui.core.Opacity
 import androidx.ui.core.Text
 import androidx.ui.core.dp
 import androidx.ui.layout.Container
@@ -47,6 +46,7 @@ val scaffoldRoute = composeControllerRoute {
     val navigator = +inject<Navigator>()
 
     val (showTopBar, setShowTopBar) = +state { true }
+    val (centerTitle, setCenterTitle) = +state { false }
 
     val (bodyLayoutMode, setBodyLayout) = +state { Scaffold.BodyLayoutMode.Wrap }
 
@@ -66,7 +66,7 @@ val scaffoldRoute = composeControllerRoute {
 
                 val color = (+themeColor { primary }).copy(alpha = alpha)
 
-                EsTopAppBar(title = "Scaffold", color = color)
+                EsTopAppBar(title = "Scaffold", centerTitle = centerTitle, color = color)
             }
         }) else null,
         fabPosition = fabPosition,
@@ -111,6 +111,15 @@ val scaffoldRoute = composeControllerRoute {
                     },
                     onClick = { setShowTopBar(!showTopBar) }
                 )
+                SimpleListItem(
+                    title = { Text("Center title") },
+                    trailing = {
+                        AbsorbPointer {
+                            EsCheckbox(checked = centerTitle, onCheckedChange = {})
+                        }
+                    },
+                    onClick = { setCenterTitle(!centerTitle) }
+                )
 
                 Subheader("Body")
                 SimpleListItem(
@@ -153,26 +162,24 @@ val scaffoldRoute = composeControllerRoute {
                     },
                     onClick = { setShowFab(!showFab) }
                 )
-                Opacity(if (showFab) 1f else 0.5f) {
-                    SimpleListItem(
-                        title = { Text("Fab location") },
-                        onClick = if (showFab) ({
-                            navigator.push(
-                                dialogRoute {
-                                    SingleChoiceListDialog(
-                                        items = Scaffold.FabPosition.values().toList(),
-                                        selectedItem = fabPosition,
-                                        onSelect = {
-                                            setFabPosition(it)
-                                            navigator.pop()
-                                        },
-                                        item = { Text(it.name) }
-                                    )
-                                }
-                            )
-                        }) else null
-                    )
-                }
+                SimpleListItem(
+                    title = { Text("Fab location") },
+                    onClick = if (showFab) ({
+                        navigator.push(
+                            dialogRoute {
+                                SingleChoiceListDialog(
+                                    items = Scaffold.FabPosition.values().toList(),
+                                    selectedItem = fabPosition,
+                                    onSelect = {
+                                        setFabPosition(it)
+                                        navigator.pop()
+                                    },
+                                    item = { Text(it.name) }
+                                )
+                            }
+                        )
+                    }) else null
+                )
             }
         }
     )
