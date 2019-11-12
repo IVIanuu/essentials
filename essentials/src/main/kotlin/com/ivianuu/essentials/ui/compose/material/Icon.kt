@@ -29,7 +29,6 @@ import androidx.ui.graphics.Color
 import androidx.ui.graphics.Image
 import androidx.ui.layout.Container
 import androidx.ui.material.ripple.Ripple
-import com.ivianuu.essentials.ui.compose.common.Size
 import com.ivianuu.essentials.ui.compose.core.composable
 
 @Composable
@@ -48,7 +47,7 @@ fun Icon(
 }
 
 data class IconStyle(
-    val size: Size = Size(DefaultIconSize),
+    val size: Size = Size(DefaultIconSize, DefaultIconSize),
     val color: Color? = null
 ) {
     fun merge(other: IconStyle? = null): IconStyle {
