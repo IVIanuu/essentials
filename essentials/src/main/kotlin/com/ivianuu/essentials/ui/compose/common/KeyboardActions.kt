@@ -22,6 +22,8 @@ import androidx.ui.core.FocusManagerAmbient
 import com.ivianuu.essentials.ui.compose.core.ActivityAmbient
 import com.ivianuu.essentials.util.hideInputMethod
 
+// todo refactor api
+
 fun showKeyboard(id: String) = effectOf<() -> Unit> {
     val showKeyboard = +showKeyboard()
     return@effectOf { showKeyboard(id) }
