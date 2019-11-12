@@ -96,12 +96,6 @@ fun ScrollableList(
     itemSizeProvider: (Int) -> Dp,
     item: (Int) -> Unit
 ) = composable("ScrollableList") {
-    /*Scroller {
-        Column {
-            (0 until count).forEach(item)
-        }
-    }*/
-
     Scrollable { position ->
         val state =
             +memo { ScrollableListState(position) }
@@ -126,10 +120,12 @@ fun ScrollableList(
                 state.update()
             }
         ) {
-            state.itemRange.forEach { index ->
-                composable(index) {
-                    RepaintBoundary {
-                        item(index)
+            if (state.itemRange != emptyItemRange) {
+                state.itemRange.forEach { index ->
+                    composable(index) {
+                        RepaintBoundary {
+                            item(index)
+                        }
                     }
                 }
             }
@@ -143,7 +139,7 @@ private class ScrollableListState(val position: ScrollPosition) {
     var itemSizeProvider: (Int) -> Px by framed { error("") }
 
     private val items = mutableListOf<ItemBounds>()
-    var itemRange by framed(0..0)
+    var itemRange by framed(emptyItemRange)
 
     var contentOffset by framed(Px.Zero)
 
@@ -156,23 +152,25 @@ private class ScrollableListState(val position: ScrollPosition) {
     fun update() {
         items.clear()
 
-        var offset = Px.Zero
+        if (count != 0) {
+            var offset = Px.Zero
 
-        (0 until count)
-            .map(itemSizeProvider)
-            .forEachIndexed { index, size ->
-                items += ItemBounds(
-                    index = index,
-                    size = size,
-                    leading = offset - size,
-                    trailing = offset
-                )
-                offset -= size
+            (0 until count)
+                .map(itemSizeProvider)
+                .forEachIndexed { index, size ->
+                    items += ItemBounds(
+                        index = index,
+                        size = size,
+                        leading = offset - size,
+                        trailing = offset
+                    )
+                    offset -= size
+                }
+
+            val newMinValue = min(Px.Zero, offset + viewportSize)
+            if (position.minValue != newMinValue) {
+                position.minValue = newMinValue
             }
-
-        val newMinValue = min(Px.Zero, offset + viewportSize)
-        if (position.minValue != newMinValue) {
-            position.minValue = newMinValue
         }
 
         onScrollPositionChanged()
@@ -180,7 +178,7 @@ private class ScrollableListState(val position: ScrollPosition) {
 
     fun onScrollPositionChanged() {
         val scrollPosition = position.value
-        if (items.isNotEmpty()) {
+        if (count != 0) {
             val firstVisibleItem = items.last { it.hitTest(scrollPosition) }
 
             val firstLayoutIndex = max(0, firstVisibleItem.index)
@@ -204,8 +202,8 @@ private class ScrollableListState(val position: ScrollPosition) {
                 itemRange = firstLayoutIndex..lastLayoutIndex
             }
         } else {
-            if (itemRange.first != 0 || itemRange.last != 0) {
-                itemRange = 0..0
+            if (itemRange != emptyItemRange) {
+                itemRange = emptyItemRange
             }
         }
     }
@@ -217,6 +215,8 @@ private class ScrollableListState(val position: ScrollPosition) {
     }
 
 }
+
+private val emptyItemRange = -2..-1
 
 private data class ItemBounds(
     val index: Int,
