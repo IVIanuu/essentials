@@ -31,7 +31,6 @@ import androidx.ui.core.dp
 import androidx.ui.engine.geometry.Offset
 import androidx.ui.foundation.Clickable
 import androidx.ui.foundation.ColoredRect
-import androidx.ui.foundation.VerticalScroller
 import androidx.ui.graphics.Canvas
 import androidx.ui.graphics.Color
 import androidx.ui.graphics.Paint
@@ -50,6 +49,7 @@ import androidx.ui.material.ripple.Ripple
 import androidx.ui.material.themeTextStyle
 import androidx.ui.res.stringResource
 import com.ivianuu.essentials.R
+import com.ivianuu.essentials.ui.compose.common.scrolling.Scroller
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.compose.layout.Expand
@@ -186,7 +186,7 @@ private fun ColorGrid(
     colors: List<Color>,
     onColorSelected: (Color) -> Unit
 ) = composable("ColorGrid") {
-    VerticalScroller {
+    Scroller {
         Padding(padding = 4.dp) {
             Table(
                 columns = 4,

@@ -21,7 +21,6 @@ import androidx.compose.state
 import androidx.compose.unaryPlus
 import androidx.ui.core.Text
 import androidx.ui.core.dp
-import androidx.ui.foundation.VerticalScroller
 import androidx.ui.layout.Column
 import androidx.ui.layout.CrossAxisAlignment
 import androidx.ui.layout.HeightSpacer
@@ -29,6 +28,7 @@ import androidx.ui.layout.MainAxisAlignment
 import androidx.ui.material.Button
 import androidx.ui.material.themeColor
 import com.ivianuu.essentials.sample.R
+import com.ivianuu.essentials.ui.compose.common.scrolling.Scroller
 import com.ivianuu.essentials.ui.compose.composeControllerRoute
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.dialog.AlertDialogButtonLayout
@@ -57,7 +57,7 @@ val dialogsRoute = composeControllerRoute(
     Scaffold(
         topAppBar = { EsTopAppBar("Dialogs") },
         body = {
-            VerticalScroller {
+            Scroller {
                 Column(
                     mainAxisAlignment = MainAxisAlignment.Center,
                     crossAxisAlignment = CrossAxisAlignment.Center

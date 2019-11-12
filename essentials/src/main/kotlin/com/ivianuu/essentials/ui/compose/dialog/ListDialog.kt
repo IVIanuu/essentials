@@ -20,7 +20,6 @@ import androidx.compose.Composable
 import androidx.ui.core.Alignment
 import androidx.ui.core.dp
 import androidx.ui.foundation.Clickable
-import androidx.ui.foundation.VerticalScroller
 import androidx.ui.layout.Column
 import androidx.ui.layout.Container
 import androidx.ui.layout.CrossAxisAlignment
@@ -30,6 +29,7 @@ import androidx.ui.layout.MainAxisAlignment
 import androidx.ui.layout.Row
 import androidx.ui.layout.WidthSpacer
 import androidx.ui.material.ripple.Ripple
+import com.ivianuu.essentials.ui.compose.common.scrolling.Scroller
 import com.ivianuu.essentials.ui.compose.core.composable
 
 @Composable
@@ -49,7 +49,7 @@ fun ListDialog(
         applyContentPadding = false,
         buttonLayout = buttonLayout,
         content = {
-            VerticalScroller {
+            Scroller {
                 Column {
                     listContent()
                 }

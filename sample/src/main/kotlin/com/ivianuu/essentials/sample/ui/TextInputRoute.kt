@@ -25,8 +25,6 @@ import androidx.ui.core.Opacity
 import androidx.ui.core.Text
 import androidx.ui.core.TextField
 import androidx.ui.foundation.Clickable
-import androidx.ui.foundation.ScrollerPosition
-import androidx.ui.foundation.VerticalScroller
 import androidx.ui.layout.Center
 import androidx.ui.layout.Column
 import androidx.ui.layout.Container
@@ -34,6 +32,8 @@ import androidx.ui.material.FloatingActionButton
 import androidx.ui.material.themeTextStyle
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.compose.common.hideKeyboard
+import com.ivianuu.essentials.ui.compose.common.scrolling.ScrollPosition
+import com.ivianuu.essentials.ui.compose.common.scrolling.Scroller
 import com.ivianuu.essentials.ui.compose.common.showKeyboard
 import com.ivianuu.essentials.ui.compose.composeControllerRoute
 import com.ivianuu.essentials.ui.compose.core.composable
@@ -97,17 +97,17 @@ val textInputRoute = composeControllerRoute(
         body = {
             if (items.isNotEmpty()) {
                 composable("results") {
-                    val scrollerPosition = +memo(items) { ScrollerPosition() }
-                    val lastScrollPosition = +ref { scrollerPosition.value }
+                    val scrollPosition = +memo(items) { ScrollPosition() }
+                    val lastScrollPosition = +ref { scrollPosition.currentOffset }
 
-                    if (scrollerPosition.value != lastScrollPosition.value) {
+                    if (scrollPosition.currentOffset != lastScrollPosition.value) {
                         hideKeyboard()
                         if (searchVisible && inputValue.isEmpty()) {
                             setSearchVisible(false)
                         }
                     }
 
-                    VerticalScroller(scrollerPosition = scrollerPosition) {
+                    Scroller(position = scrollPosition) {
                         Column {
                             items.forEach {
                                 SimpleListItem(
