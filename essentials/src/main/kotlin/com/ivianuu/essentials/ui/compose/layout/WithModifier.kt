@@ -21,8 +21,6 @@ import androidx.ui.core.IntPx
 import androidx.ui.core.Modifier
 import com.ivianuu.essentials.ui.compose.core.composable
 
-// todo name
-
 @Composable
 fun WithModifier(
     modifier: Modifier,
