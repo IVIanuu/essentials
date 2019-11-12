@@ -384,7 +384,7 @@ private fun SliderFlingConfig(
     )
 }
 
-private val ThumbRadius = 10.dp
+private val ThumbRadius = 6.dp
 private val TrackHeight = 4.dp
 private val SliderHeight = 48.dp
 private val InactiveTrackColorAlpha = 0.24f
