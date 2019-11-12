@@ -97,18 +97,13 @@ val textInputRoute = composeControllerRoute(
             if (items.isNotEmpty()) {
                 composable("results") {
                     val scrollerPosition = +memo(items) { ScrollerPosition() }
-                    VerticalScroller(
-                        scrollerPosition = scrollerPosition,
-                        onScrollPositionChanged = { position, _ ->
-                            if (position != scrollerPosition.value) {
-                                scrollerPosition.value = position
-                                hideKeyboard()
-                                if (searchVisible && inputValue.isEmpty()) {
-                                    setSearchVisible(false)
-                                }
-                            }
-                        }
-                    ) {
+
+                    /*hideKeyboard()
+                    if (searchVisible && inputValue.isEmpty()) {
+                        setSearchVisible(false)
+                    }*/
+
+                    VerticalScroller(scrollerPosition = scrollerPosition) {
                         Column {
                             items.forEach {
                                 SimpleListItem(

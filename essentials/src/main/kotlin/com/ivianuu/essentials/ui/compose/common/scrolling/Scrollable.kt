@@ -24,14 +24,13 @@ import androidx.compose.unaryPlus
 import androidx.ui.core.Px
 import androidx.ui.core.gesture.PressGestureDetector
 import androidx.ui.core.px
+import androidx.ui.foundation.animation.AnimatedValueHolder
 import androidx.ui.foundation.animation.FlingConfig
-import com.ivianuu.essentials.ui.compose.common.AnimatedValueHolder
-import com.ivianuu.essentials.ui.compose.common.DragDirection
-import com.ivianuu.essentials.ui.compose.common.Draggable
+import androidx.ui.foundation.gestures.DragDirection
+import androidx.ui.foundation.gestures.Draggable
 import com.ivianuu.essentials.ui.compose.common.framed
 import com.ivianuu.essentials.ui.compose.core.Axis
 
-// todo remove once original is useable
 // todo reversed option
 
 // todo use @Model once possible
