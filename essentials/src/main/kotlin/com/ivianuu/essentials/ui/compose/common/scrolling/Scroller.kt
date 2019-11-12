@@ -89,23 +89,23 @@ private fun ScrollerLayout(
         }
 
         layout(width, height) {
-            val newMaxOffset = -when (direction) {
+            val newMinValue = -when (direction) {
                 Axis.Vertical -> (placeable?.height?.toPx() ?: Px.Zero) - height.toPx()
                 Axis.Horizontal -> (placeable?.width?.toPx() ?: Px.Zero) - (width.toPx())
             }
-            if (position.minOffset != newMaxOffset) {
-                position.minOffset = newMaxOffset
+            if (position.minValue != newMinValue) {
+                position.minValue = newMinValue
             }
 
-            val offsetX = when (direction) {
+            val childX = when (direction) {
                 Axis.Vertical -> IntPx.Zero
-                Axis.Horizontal -> position.currentOffset.round()
+                Axis.Horizontal -> position.value.round()
             }
-            val offsetY = when (direction) {
-                Axis.Vertical -> position.currentOffset.round()
+            val childY = when (direction) {
+                Axis.Vertical -> position.value.round()
                 Axis.Horizontal -> IntPx.Zero
             }
-            placeable?.place(offsetX, offsetY)
+            placeable?.place(childX, childY)
         }
     }
 }

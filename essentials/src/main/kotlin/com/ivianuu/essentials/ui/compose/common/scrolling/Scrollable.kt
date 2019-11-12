@@ -31,34 +31,35 @@ import androidx.ui.foundation.gestures.Draggable
 import com.ivianuu.essentials.ui.compose.common.framed
 import com.ivianuu.essentials.ui.compose.core.Axis
 
+// todo refactor scroll event handling
 // todo reversed option
 
 // todo use @Model once possible
 class ScrollPosition(
-    initialOffset: Px = Px.Zero,
-    minOffset: Px = -Px.Infinity,
-    maxOffset: Px = Px.Zero
+    initial: Px = Px.Zero,
+    minValue: Px = -Px.Infinity,
+    maxValue: Px = Px.Zero
 ) {
 
     internal val holder =
-        AnimatedValueHolder(initialOffset.value)
+        AnimatedValueHolder(initial.value)
 
-    val currentOffset: Px
+    val value: Px
         get() = holder.value.px
 
-    private var _minOffset: Px by framed(minOffset)
-    var minOffset: Px
-        get() = _minOffset
+    private var _minValue: Px by framed(minValue)
+    var minValue: Px
+        get() = _minValue
         set(value) {
-            _minOffset = value
+            _minValue = value
             updateBounds()
         }
 
-    private var _maxOffset: Px by framed(maxOffset)
-    var maxOffset: Px
-        get() = _maxOffset
+    private var _maxValue: Px by framed(maxValue)
+    var maxValue: Px
+        get() = _maxValue
         set(value) {
-            _maxOffset = value
+            _maxValue = value
             updateBounds()
         }
 
@@ -76,32 +77,32 @@ class ScrollPosition(
     }
 
     fun smoothScrollTo(
-        offset: Px,
+        value: Px,
         onEnd: (endReason: AnimationEndReason, finishValue: Float) -> Unit = { _, _ -> }
     ) {
-        holder.animatedFloat.animateTo(offset.value, onEnd)
+        holder.animatedFloat.animateTo(value.value, onEnd)
     }
 
     fun smoothScrollBy(
         value: Px,
         onEnd: (endReason: AnimationEndReason, finishValue: Float) -> Unit = { _, _ -> }
     ) {
-        smoothScrollTo(currentOffset + value, onEnd)
+        smoothScrollTo(this.value + value, onEnd)
     }
 
-    fun scrollTo(offset: Px) {
-        holder.animatedFloat.snapTo(offset.value)
+    fun scrollTo(value: Px) {
+        holder.animatedFloat.snapTo(value.value)
     }
 
     fun scrollBy(value: Px) {
-        scrollTo(currentOffset + value)
+        scrollTo(this.value + value)
     }
 
     private fun updateBounds() {
-        check(_minOffset <= _maxOffset) {
-            "Min offset $_minOffset cannot be greater than max offset $_maxOffset"
+        check(_minValue <= _maxValue) {
+            "Min value $_minValue cannot be greater than max value $_maxValue"
         }
-        holder.setBounds(_minOffset.value, _maxOffset.value)
+        holder.setBounds(_minValue.value, _maxValue.value)
     }
 }
 
@@ -114,7 +115,7 @@ fun Scrollable(
     enabled: Boolean = true,
     child: @Composable() (ScrollPosition) -> Unit
 ) {
-    PressGestureDetector(onPress = { position.scrollTo(position.currentOffset) }) {
+    PressGestureDetector(onPress = { position.scrollTo(position.value) }) {
         Draggable(
             dragDirection = when (direction) {
                 Axis.Vertical -> DragDirection.Vertical
@@ -125,29 +126,28 @@ fun Scrollable(
                 if (onScrollEvent != null) {
                     onScrollEvent(
                         ScrollEvent.PreStart(
-                            position.currentOffset
+                            position.value
                         ), position
                     )
                     onScrollEvent(
                         ScrollEvent.Start(
-                            position.currentOffset
+                            position.value
                         ), position
                     )
                 }
             },
-            onDragValueChangeRequested = { newOffset ->
-                val finalNewOffset =
-                    newOffset.coerceIn(position.minOffset.value, position.maxOffset.value)
-                val newOffsetPx = finalNewOffset.px
+            onDragValueChangeRequested = { newValue ->
+                val finalNewValue =
+                    newValue.coerceIn(position.minValue.value, position.maxValue.value)
                 onScrollEvent?.invoke(
                     ScrollEvent.PreDrag(
-                        newOffsetPx
+                        newValue.px
                     ), position
                 )
-                position.holder.animatedFloat.snapTo(finalNewOffset)
+                position.holder.animatedFloat.snapTo(finalNewValue)
                 onScrollEvent?.invoke(
                     ScrollEvent.Drag(
-                        newOffsetPx
+                        newValue.px
                     ), position
                 )
             },
@@ -172,10 +172,10 @@ fun Scrollable(
 }
 
 sealed class ScrollEvent {
-    data class PreStart(val offset: Px) : ScrollEvent()
-    data class Start(val offset: Px) : ScrollEvent()
-    data class PreDrag(val offset: Px) : ScrollEvent()
-    data class Drag(val offset: Px) : ScrollEvent()
+    data class PreStart(val value: Px) : ScrollEvent()
+    data class Start(val value: Px) : ScrollEvent()
+    data class PreDrag(val value: Px) : ScrollEvent()
+    data class Drag(val value: Px) : ScrollEvent()
     data class PreEnd(val velocity: Px) : ScrollEvent()
     data class End(val velocity: Px) : ScrollEvent()
     // todo overscroll

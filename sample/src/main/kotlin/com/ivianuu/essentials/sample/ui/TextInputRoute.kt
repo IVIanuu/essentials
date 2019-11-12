@@ -98,9 +98,9 @@ val textInputRoute = composeControllerRoute(
             if (items.isNotEmpty()) {
                 composable("results") {
                     val scrollPosition = +memo(items) { ScrollPosition() }
-                    val lastScrollPosition = +ref { scrollPosition.currentOffset }
+                    val lastScrollPosition = +ref { scrollPosition.value }
 
-                    if (scrollPosition.currentOffset != lastScrollPosition.value) {
+                    if (scrollPosition.value != lastScrollPosition.value) {
                         hideKeyboard()
                         if (searchVisible && inputValue.isEmpty()) {
                             setSearchVisible(false)

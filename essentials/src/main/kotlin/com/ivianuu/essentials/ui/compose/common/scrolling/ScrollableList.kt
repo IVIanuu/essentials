@@ -116,7 +116,7 @@ fun ScrollableList(
         }
 
         +memo(count, itemSizeProvider) { state.update() }
-        +memo(position.currentOffset) { state.update() }
+        +memo(position.value) { state.update() }
 
         ScrollableListLayout(
             state.contentOffset,
@@ -170,31 +170,31 @@ private class ScrollableListState(val position: ScrollPosition) {
                 offset -= size
             }
 
-        val newMinOffset = min(Px.Zero, offset + viewportSize)
-        if (position.minOffset != newMinOffset) {
-            position.minOffset = newMinOffset
+        val newMinValue = min(Px.Zero, offset + viewportSize)
+        if (position.minValue != newMinValue) {
+            position.minValue = newMinValue
         }
 
-        onScrollOffsetChanged()
+        onScrollPositionChanged()
     }
 
-    fun onScrollOffsetChanged() {
-        val scrollOffset = position.currentOffset
+    fun onScrollPositionChanged() {
+        val scrollPosition = position.value
         if (items.isNotEmpty()) {
-            val firstVisibleItem = items.last { it.hitTest(scrollOffset) }
+            val firstVisibleItem = items.last { it.hitTest(scrollPosition) }
 
             val firstLayoutIndex = max(0, firstVisibleItem.index)
 
-            val lastVisiblePosition = max(scrollOffset - viewportSize, items.last().trailing)
+            val lastVisiblePosition = max(scrollPosition - viewportSize, items.last().trailing)
             val lastVisibleItem = items.last { it.hitTest(lastVisiblePosition) }
 
             val lastLayoutIndex = min(count - 1, lastVisibleItem.index + 1)
 
             val sizeUntilFirstLayoutIndex = computeItemSize(0, firstLayoutIndex)
-            contentOffset = scrollOffset + sizeUntilFirstLayoutIndex
+            contentOffset = scrollPosition + sizeUntilFirstLayoutIndex
 
             d {
-                "\nscroll offset $scrollOffset size until first layout $sizeUntilFirstLayoutIndex contentOffset $contentOffset\n" +
+                "\nscroll offset $scrollPosition size until first layout $sizeUntilFirstLayoutIndex contentOffset $contentOffset\n" +
                         "visible range ${firstVisibleItem.index..lastVisibleItem.index}\n" +
                         "layout range ${firstLayoutIndex..lastLayoutIndex}\n" +
                         "total size $count"
