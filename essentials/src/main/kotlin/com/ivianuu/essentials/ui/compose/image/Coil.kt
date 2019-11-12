@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.ui.compose.image
 
 import androidx.compose.Composable
-import androidx.compose.Observe
 import androidx.compose.effectOf
 import androidx.compose.unaryPlus
 import androidx.ui.graphics.Image
@@ -47,14 +46,12 @@ fun CoilImageAny(
     // todo better default placeholder
     val placeholder =
         placeholder ?: Image(1, 1)
-    Observe {
-        val loadedImage = +loadCoilImageAny(
-            placeholder = placeholder,
-            data = data
-        )
+    val loadedImage = +loadCoilImageAny(
+        placeholder = placeholder,
+        data = data
+    )
 
-        if (!wasPlaceholderNull || loadedImage != placeholder) {
-            image(loadedImage)
-        }
+    if (!wasPlaceholderNull || loadedImage != placeholder) {
+        image(loadedImage)
     }
 }
