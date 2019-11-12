@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.compose.common
+package com.ivianuu.essentials.ui.compose.core
 
-import androidx.ui.core.Dp
-import androidx.ui.core.Size
-
-fun Size(size: Dp) = Size(width = size, height = size)
+enum class Orientation {
+    Portrait, Landscape
+}

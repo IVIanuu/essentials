@@ -40,10 +40,6 @@ data class MediaQuery(
         get() = if (size.width > size.height) Orientation.Landscape else Orientation.Portrait
 }
 
-enum class Orientation {
-    Portrait, Landscape
-}
-
 @Composable
 fun WithMediaQuery(
     children: @Composable() (MediaQuery) -> Unit
