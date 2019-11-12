@@ -74,6 +74,4 @@ fun <T : Parcelable> parceledState(
 }
 
 @PublishedApi
-internal class ParceledStateViewModel(
-    val handle: SavedStateHandle
-) : ViewModel()
+internal class ParceledStateViewModel(val handle: SavedStateHandle) : ViewModel()
