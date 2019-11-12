@@ -20,16 +20,18 @@ import androidx.compose.Composable
 import androidx.compose.ambient
 import androidx.compose.effectOf
 import androidx.compose.unaryPlus
+import androidx.ui.core.Size
 import androidx.ui.core.Text
 import androidx.ui.core.dp
 import androidx.ui.graphics.Color
 import androidx.ui.material.TopAppBar
 import androidx.ui.material.themeColor
-import com.ivianuu.essentials.ui.compose.common.Size
 import com.ivianuu.essentials.ui.compose.core.RouteAmbient
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.navigation.Navigator
+
+// todo added centerTitle
 
 @Composable
 fun EsTopAppBar(title: String, color: Color = +themeColor { primary }) =
@@ -80,7 +82,7 @@ private fun autoTopAppBarLeadingIcon() = effectOf<(@Composable() () -> Unit)?> {
 
 fun appBarIconStyle(color: Color) = effectOf<IconStyle> {
     IconStyle(
-        size = Size(AppBarIconSize),
+        size = Size(AppBarIconSize, AppBarIconSize),
         color = +colorForBackground(color)
     )
 }
