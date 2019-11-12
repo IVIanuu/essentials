@@ -21,6 +21,8 @@ import androidx.ui.core.DensityScope
 import androidx.ui.core.ambientDensity
 import androidx.ui.core.withDensity
 
+// todo remove once public in compose
+
 fun <R> withDensity(block: DensityScope.() -> R) = effectOf<R> {
     withDensity(+ambientDensity(), block)
 }
