@@ -210,8 +210,8 @@ private class ScrollableListState(val position: ScrollPosition) {
         }
     }
 
-    private fun computeItemSize(start: Int, end: Int): Px {
-        return (start until end)
+    private fun computeItemSize(startIndex: Int, endIndex: Int): Px {
+        return (startIndex until endIndex)
             .map(itemSizeProvider)
             .fold(Px.Zero) { acc, current -> acc + current }
     }
@@ -224,13 +224,14 @@ private data class ItemBounds(
     val leading: Px,
     val trailing: Px = leading + size
 ) {
+    // todo avoid alloc
     fun hitTest(scrollPosition: Px): Boolean =
         scrollPosition.value in leading.value..trailing.value
 }
 
 @Composable
 private fun ScrollableListLayout(
-    offset: Px,
+    contentOffset: Px,
     viewportSize: Px,
     onViewportSizeChanged: (Px) -> Unit,
     children: @Composable() () -> Unit
@@ -250,7 +251,7 @@ private fun ScrollableListLayout(
             if (viewportSize != constraints.maxHeight.toPx()) {
                 onViewportSizeChanged(constraints.maxHeight.toPx())
             }
-            var offset = offset
+            var offset = contentOffset
             placeables.forEach { placeable ->
                 placeable.place(Px.Zero, offset)
                 offset += placeable.height
