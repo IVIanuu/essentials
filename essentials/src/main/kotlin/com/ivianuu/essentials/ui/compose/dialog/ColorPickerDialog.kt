@@ -56,6 +56,7 @@ import com.ivianuu.essentials.ui.compose.layout.Expand
 import com.ivianuu.essentials.ui.compose.layout.TightColumn
 import com.ivianuu.essentials.ui.compose.layout.WidthFitSquare
 import com.ivianuu.essentials.ui.compose.material.Slider
+import com.ivianuu.essentials.ui.compose.material.SliderPosition
 import com.ivianuu.essentials.ui.compose.material.Tab
 import com.ivianuu.essentials.ui.compose.material.TabController
 import com.ivianuu.essentials.ui.compose.material.TabPager
@@ -307,11 +308,16 @@ private fun ColorComponentItem(
             }
 
             flexible(1f) {
+                val position = +memo {
+                    SliderPosition(initial = value)
+                }
+
                 Slider(
-                    value = (255 * value).toInt(),
-                    min = 0,
-                    max = 255,
-                    onChanged = { onChanged(it / 255f) },
+                    position = position,
+                    onValueChange = {
+                        position.value = it
+                        onChanged(it)
+                    },
                     color = +component.color
                 )
             }

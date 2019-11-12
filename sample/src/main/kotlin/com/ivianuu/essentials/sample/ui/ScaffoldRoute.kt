@@ -66,7 +66,7 @@ val scaffoldRoute = composeControllerRoute {
 
                 val color = (+themeColor { primary }).copy(alpha = alpha)
 
-                EsTopAppBar(title = "Scaffold", centerTitle = centerTitle, color = color)
+                EsTopAppBar(title = "Scaffold", color = color)
             }
         }) else null,
         fabPosition = fabPosition,

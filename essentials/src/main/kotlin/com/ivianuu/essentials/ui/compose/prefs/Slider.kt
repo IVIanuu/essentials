@@ -19,6 +19,7 @@ package com.ivianuu.essentials.ui.compose.prefs
 import androidx.compose.Composable
 import androidx.compose.ambient
 import androidx.compose.effectOf
+import androidx.compose.memo
 import androidx.compose.state
 import androidx.compose.unaryPlus
 import androidx.ui.core.Alignment
@@ -32,27 +33,26 @@ import androidx.ui.layout.DpConstraints
 import androidx.ui.layout.EdgeInsets
 import androidx.ui.layout.Padding
 import androidx.ui.layout.Row
+import androidx.ui.layout.Spacing
 import androidx.ui.layout.Stack
 import androidx.ui.material.themeTextStyle
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.layout.WithModifier
 import com.ivianuu.essentials.ui.compose.material.Slider
+import com.ivianuu.essentials.ui.compose.material.SliderPosition
 import com.ivianuu.essentials.util.UnitValueTextProvider
 import com.ivianuu.kprefs.Pref
 
 @Composable
 fun SliderPreference(
     pref: Pref<Int>,
-    min: Int = 0,
-    max: Int = 100,
-    divisions: Int? = null,
+    valueRange: IntRange = 0..100,
+    steps: Int? = null,
     title: @Composable() () -> Unit,
     summary: @Composable() (() -> Unit)? = null,
     leading: @Composable() (() -> Unit)? = null,
     valueText: @Composable() ((Int) -> Unit)? = {
-        SimpleSliderValueText(
-            it
-        )
+        SimpleSliderValueText(it)
     },
     onChange: ((Int) -> Boolean)? = null,
     enabled: Boolean = true,
@@ -68,7 +68,7 @@ fun SliderPreference(
 
     Stack {
         aligned(Alignment.BottomCenter) {
-            Padding(bottom = 16.dp) {
+            Padding(bottom = 32.dp) {
                 Preference(
                     pref = pref,
                     title = title,
@@ -97,14 +97,31 @@ fun SliderPreference(
                     null
                 }
 
-                WithModifier(modifier = Flexible(1f)) {
+                WithModifier(modifier = Flexible(1f) wraps Spacing(left = 8.dp)) {
+                    val position = +memo(valueRange, steps) {
+                        val initialValue = pref.get().toFloat()
+                        val floatRange = valueRange.first.toFloat()..valueRange.last.toFloat()
+                        if (steps != null) {
+                            SliderPosition(
+                                initial = initialValue,
+                                valueRange = floatRange,
+                                steps = steps
+                            )
+                        } else {
+                            SliderPosition(
+                                initial = initialValue,
+                                valueRange = floatRange
+                            )
+                        }
+                    }
+
                     Slider(
-                        value = pref.get(),
-                        min = min,
-                        max = max,
-                        divisions = divisions,
-                        onChanged = onChanged,
-                        onChangeEnd = { valueChanged(it) }
+                        position = position,
+                        onValueChange = {
+                            position.value = it
+                            onChanged?.invoke(it.toInt())
+                        },
+                        onValueChangeEnd = { valueChanged(position.value.toInt()) }
                     )
                 }
 
@@ -112,7 +129,7 @@ fun SliderPreference(
                     Container(
                         modifier = Inflexible,
                         constraints = DpConstraints(
-                            minWidth = 36.dp
+                            minWidth = 72.dp
                         ),
                         padding = EdgeInsets(right = 8.dp)
                     ) {
