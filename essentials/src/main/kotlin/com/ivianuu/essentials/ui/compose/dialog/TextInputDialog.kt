@@ -34,7 +34,7 @@ import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.navigation.Navigator
 
 fun textInputRoute(
-    initialValue: String = "",
+    initial: String = "",
     hint: String? = null,
     keyboardType: KeyboardType = KeyboardType.Text,
     title: (@Composable() () -> Unit)? = null,
@@ -42,10 +42,10 @@ fun textInputRoute(
 ) = dialogRoute {
     val navigator = +inject<Navigator>()
 
-    val (currentValue, setCurrentValue) = +state { initialValue }
+    val (currentValue, setCurrentValue) = +state { initial }
 
     TextInputDialog(
-        value = initialValue,
+        value = initial,
         onValueChange = setCurrentValue,
         hint = hint,
         keyboardType = keyboardType,

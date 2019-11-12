@@ -99,17 +99,17 @@ fun SliderPreference(
 
                 WithModifier(modifier = Flexible(1f) wraps Spacing(left = 8.dp)) {
                     val position = +memo(valueRange, steps) {
-                        val initialValue = pref.get().toFloat()
+                        val initial = pref.get().toFloat()
                         val floatRange = valueRange.first.toFloat()..valueRange.last.toFloat()
                         if (steps != null) {
                             SliderPosition(
-                                initial = initialValue,
+                                initial = initial,
                                 valueRange = floatRange,
                                 steps = steps
                             )
                         } else {
                             SliderPosition(
-                                initial = initialValue,
+                                initial = initial,
                                 valueRange = floatRange
                             )
                         }
