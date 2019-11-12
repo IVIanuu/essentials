@@ -17,6 +17,8 @@
 package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.Composable
+import androidx.compose.Effect
+import androidx.compose.effectOf
 import androidx.compose.memo
 import androidx.compose.unaryPlus
 import androidx.ui.core.Draw
@@ -34,6 +36,7 @@ import androidx.ui.layout.Padding
 import androidx.ui.material.Divider
 import com.ivianuu.essentials.about.aboutRoute
 import com.ivianuu.essentials.apps.ui.appPickerRoute
+import com.ivianuu.essentials.apps.ui.intentAppFilter
 import com.ivianuu.essentials.twilight.twilightSettingsRoute
 import com.ivianuu.essentials.ui.compose.common.navigateOnClick
 import com.ivianuu.essentials.ui.compose.common.scrolling.ScrollableList
@@ -47,6 +50,7 @@ import com.ivianuu.essentials.ui.compose.material.Scaffold
 import com.ivianuu.essentials.ui.compose.material.SimpleListItem
 import com.ivianuu.essentials.ui.navigation.Route
 import com.ivianuu.essentials.util.Toaster
+
 
 val homeRoute = composeControllerRoute {
     Scaffold(
@@ -77,7 +81,8 @@ val homeRoute = composeControllerRoute {
             ) { index, item ->
                 staticComposable(item) {
                     Column {
-                        HomeItem(item = item, onClick = +navigateOnClick(item.route))
+                        val route = +item.route
+                        HomeItem(item = item, onClick = +navigateOnClick { route })
                         if (index != items.lastIndex) {
                             HomeDivider()
                         }
@@ -136,81 +141,87 @@ private fun HomeDivider() = staticComposable("HomeDivider") {
 enum class HomeItem(
     val title: String,
     val color: Color,
-    val route: () -> Route
+    val route: Effect<Route>
 ) {
     About(
         title = "About",
         color = Color.Yellow,
-        route = { aboutRoute() }
+        route = effectOf { aboutRoute() }
     ),
     AppPicker(
         title = "App picker",
         color = Color.Blue,
-        route = { appPickerRoute(true) }
+        route = effectOf {
+            appPickerRoute(
+                appFilter = +intentAppFilter(
+                    android.content.Intent(android.provider.MediaStore.INTENT_ACTION_MUSIC_PLAYER)
+                )
+            )
+        }
     ),
     BottomNavigation(
         title = "Bottom navigation",
         color = Color.Red,
-        route = { bottomNavigationRoute }
+        route = effectOf { bottomNavigationRoute }
     ),
     CheckApps(
         title = "Check apps",
         color = Color.Green,
-        route = { checkAppsRoute }
+        route = effectOf { checkAppsRoute }
     ),
     Counter(
         title = "Counter",
         color = Color.Yellow,
-        route = { counterRoute }
+        route = effectOf { counterRoute }
     ),
     Dialogs(
         title = "Dialogs",
         color = Color.Gray,
-        route = { dialogsRoute }
+        route = effectOf { dialogsRoute }
     ),
     Drawer(
         title = "Drawer",
         color = Color.Blue,
-        route = { drawerRoute }
+        route = effectOf { drawerRoute }
     ),
     NavBar(
         title = "Nav bar",
         color = Color.Green,
-        route = { navBarRoute }
+        route = effectOf { navBarRoute }
     ),
     Navigation(
         title = "Navigation",
         color = Color.Red,
-        route = { navigationRoute }
+        route = effectOf { navigationRoute }
     ),
     Prefs(
         title = "Prefs",
         color = Color.Magenta,
-        route = { prefsRoute }
+        route = effectOf { prefsRoute }
     ),
     Scaffold(
         title = "Scaffold",
         color = Color.Green,
-        route = { scaffoldRoute }
+        route = effectOf { scaffoldRoute }
     ),
     Tabs(
         title = "Tabs",
         color = Color.Yellow,
-        route = { tabsRoute }
+        route = effectOf { tabsRoute }
     ),
     TextInput(
         title = "Text input",
         color = Color.Magenta,
-        route = { textInputRoute }
+        route = effectOf { textInputRoute }
     ),
     Timer(
         title = "Timer",
         color = Color.Cyan,
-        route = { timerRoute }
+        route = effectOf { timerRoute }
     ),
     Twilight(
         title = "Twilight",
         color = Color.Gray,
-        route = { twilightSettingsRoute }
+        route = effectOf { twilightSettingsRoute }
     )
 }

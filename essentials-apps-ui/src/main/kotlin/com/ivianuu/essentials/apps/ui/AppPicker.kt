@@ -50,13 +50,16 @@ import com.ivianuu.injekt.Param
 import com.ivianuu.injekt.parametersOf
 
 fun appPickerRoute(
-    launchableOnly: Boolean
+    title: String? = null,
+    appFilter: AppFilter = DefaultAppFilter
 ) = composeControllerRoute {
     Scaffold(
-        topAppBar = { EsTopAppBar(+stringResource(R.string.es_title_app_picker)) },
+        topAppBar = {
+            EsTopAppBar(title ?: +stringResource(R.string.es_title_app_picker))
+        },
         body = {
             val viewModel = +mvRxViewModel<AppPickerViewModel> {
-                parametersOf(launchableOnly)
+                parametersOf(appFilter)
             }
 
             when (viewModel.state.apps) {
@@ -103,7 +106,7 @@ private fun AppInfo(
 
 @Inject
 internal class AppPickerViewModel(
-    @Param private val launchableOnly: Boolean,
+    @Param private val appFilter: AppFilter,
     private val appStore: AppStore,
     dispatchers: AppDispatchers,
     private val navigator: Navigator
@@ -113,11 +116,8 @@ internal class AppPickerViewModel(
         viewModelScope.execute(
             context = dispatchers.io,
             block = {
-                if (launchableOnly) {
-                    appStore.getLaunchableApps()
-                } else {
-                    appStore.getInstalledApps()
-                }
+                appStore.getInstalledApps()
+                    .filter(appFilter)
             },
             reducer = { copy(apps = it) }
         )

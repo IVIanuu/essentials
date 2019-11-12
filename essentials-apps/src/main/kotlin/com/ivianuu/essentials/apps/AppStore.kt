@@ -16,7 +16,6 @@
 
 package com.ivianuu.essentials.apps
 
-import android.content.Intent
 import android.content.pm.PackageManager
 import com.ivianuu.essentials.util.AppDispatchers
 import com.ivianuu.injekt.Inject
@@ -44,21 +43,6 @@ class AppStore(
             .toList()
     }
 
-    suspend fun getLaunchableApps(): List<AppInfo> = withContext(dispatchers.io) {
-        val intent = Intent(Intent.ACTION_MAIN).apply {
-            addCategory(Intent.CATEGORY_LAUNCHER)
-        }
-        packageManager.queryIntentActivities(intent, 0)
-            .map {
-                AppInfo(
-                    appName = it.loadLabel(packageManager).toString(),
-                    packageName = it.activityInfo.packageName
-                )
-            }
-            .distinctBy { it.packageName }
-            .sortedBy { it.appName.toLowerCase() }
-            .toList()
-    }
 
     suspend fun getAppInfo(packageName: String): AppInfo = withContext(dispatchers.io) {
         AppInfo(

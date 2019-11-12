@@ -67,10 +67,10 @@ fun CheckableAppsScreen(
     checkedAppsFlow: Flow<Set<String>>,
     onCheckedAppsChanged: (Set<String>) -> Unit,
     appBarTitle: String,
-    launchableOnly: Boolean
+    appFilter: AppFilter = DefaultAppFilter
 ) = composable("CheckableAppsScreen") {
     val viewModel = +mvRxViewModel<CheckableAppsViewModel> {
-        parametersOf(launchableOnly)
+        parametersOf(appFilter)
     }
 
     +onActive {
@@ -148,7 +148,7 @@ private fun CheckableApp(
 
 @Inject
 internal class CheckableAppsViewModel(
-    @Param private val launchableOnly: Boolean,
+    @Param private val appFilter: AppFilter,
     private val appStore: AppStore,
     private val dispatchers: AppDispatchers
 ) : MvRxViewModel<CheckableAppsState>(CheckableAppsState()) {
@@ -161,7 +161,7 @@ internal class CheckableAppsViewModel(
     init {
         viewModelScope.launch(dispatchers.io) {
             val appsFlow = flowOf {
-                if (launchableOnly) appStore.getLaunchableApps() else appStore.getInstalledApps()
+                appStore.getInstalledApps().filter(appFilter)
             }
 
             appsFlow.combine(checkedApps.asFlow()) { apps, checked ->
