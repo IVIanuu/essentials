@@ -99,6 +99,9 @@ class ScrollPosition(
     }
 
     private fun updateBounds() {
+        check(_minOffset <= _maxOffset) {
+            "Min offset $_minOffset cannot be greater than max offset $_maxOffset"
+        }
         holder.setBounds(_minOffset.value, _maxOffset.value)
     }
 }
