@@ -57,7 +57,10 @@ fun FractionallySizedBox(
 
         layout(size.width, size.height) {
             if (size.width != placeable.width || size.height != placeable.height) {
-                placeable.place(alignment.align(size))
+                val position = alignment.align(
+                    IntPxSize(size.width - placeable.width, size.height - placeable.height)
+                )
+                placeable.place(position.x, position.y)
             } else {
                 placeable.place(IntPx.Zero, IntPx.Zero)
             }
