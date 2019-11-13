@@ -95,7 +95,7 @@ private fun ScrollerLayout(
                 Axis.Horizontal -> (placeable?.width?.toPx() ?: Px.Zero) - (width.toPx())
             }
             if (position.minValue != newMinValue) {
-                position.minValue = newMinValue
+                position.updateBounds(newMinValue, Px.Zero)
             }
 
             val childX = when (direction) {

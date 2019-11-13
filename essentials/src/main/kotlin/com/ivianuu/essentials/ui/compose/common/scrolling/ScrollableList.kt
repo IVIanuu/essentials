@@ -169,7 +169,7 @@ private class ScrollableListState(val position: ScrollPosition) {
 
             val newMinValue = min(Px.Zero, offset + viewportSize)
             if (position.minValue != newMinValue) {
-                position.minValue = newMinValue
+                position.updateBounds(newMinValue, position.maxValue)
             }
         }
 

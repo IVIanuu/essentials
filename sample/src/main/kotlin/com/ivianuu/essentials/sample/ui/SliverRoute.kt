@@ -41,15 +41,15 @@ val sliverRoute = composeControllerRoute {
     Scrollable(
         position = position
     ) {
-        Viewport(position = position, center = "app bar", anchor = 0f) {
+        Viewport(position = position) {
             AppBarSliver()
-            Sliver("items") { constraints ->
-                val itemCount = 20
+            Sliver { constraints ->
+                val itemCount = 30
                 val itemSize = 48.dp
                 content(
                     geometry = SliverGeometry(
-                        //          scrollSize = itemSize.toPx() * (itemCount - 1),
-                        //        paintSize = itemSize.toPx() * (itemCount - 1)
+                        scrollSize = itemSize.toPx() * (itemCount - 1),
+                        paintSize = itemSize.toPx() * (itemCount - 1)
                     )
                 ) {
                     Column {
@@ -64,12 +64,12 @@ val sliverRoute = composeControllerRoute {
 }
 
 
-private fun SliverChildren.AppBarSliver() = Sliver("app bar") { constraints ->
+private fun SliverChildren.AppBarSliver() = Sliver { constraints ->
     d { "app bar with constraints $constraints" }
     content(
         geometry = SliverGeometry(
-            //scrollSize = 300.dp.toPx(),
-            //paintSize = 300.dp.toPx()
+            scrollSize = 300.dp.toPx(),
+            paintSize = 300.dp.toPx()
         )
     ) {
         Surface(color = (+themeColor { primary }).copy(alpha = 0.5f)) {

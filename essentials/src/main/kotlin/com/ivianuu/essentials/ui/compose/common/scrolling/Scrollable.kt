@@ -48,20 +48,10 @@ class ScrollPosition(
         get() = holder.value.px
 
     private var _minValue: Px by framed(minValue)
-    var minValue: Px
-        get() = _minValue
-        set(value) {
-            _minValue = value
-            updateBounds()
-        }
+    val minValue: Px get() = _minValue
 
     private var _maxValue: Px by framed(maxValue)
-    var maxValue: Px
-        get() = _maxValue
-        set(value) {
-            _maxValue = value
-            updateBounds()
-        }
+    val maxValue: Px get() = _maxValue
 
     var flingConfig: FlingConfig by framed(
         FlingConfig(
@@ -75,7 +65,7 @@ class ScrollPosition(
     var direction by framed(ScrollDirection.Idle)
 
     init {
-        updateBounds()
+        updateBounds(_minValue, _maxValue)
     }
 
     fun smoothScrollTo(
@@ -104,11 +94,13 @@ class ScrollPosition(
         scrollBy(value) // todo check this
     }
 
-    private fun updateBounds() {
-        check(_minValue <= _maxValue) {
-            "Min value $_minValue cannot be greater than max value $_maxValue"
+    fun updateBounds(minValue: Px, maxValue: Px) {
+        check(minValue <= maxValue) {
+            "Min value $minValue cannot be greater than max value $maxValue"
         }
-        holder.setBounds(_minValue.value, _maxValue.value)
+        _minValue = minValue
+        _maxValue = maxValue
+        holder.setBounds(minValue.value, maxValue.value)
     }
 }
 
