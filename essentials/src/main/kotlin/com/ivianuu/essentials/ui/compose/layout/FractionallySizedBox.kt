@@ -19,7 +19,6 @@ package com.ivianuu.essentials.ui.compose.layout
 import androidx.compose.Composable
 import androidx.ui.core.Alignment
 import androidx.ui.core.Constraints
-import androidx.ui.core.IntPx
 import androidx.ui.core.IntPxSize
 import androidx.ui.core.constrain
 import com.ivianuu.essentials.ui.compose.core.composable
@@ -56,14 +55,10 @@ fun FractionallySizedBox(
         val size = constraints.constrain(IntPxSize(placeable.width, placeable.height))
 
         layout(size.width, size.height) {
-            if (size.width != placeable.width || size.height != placeable.height) {
-                val position = alignment.align(
-                    IntPxSize(size.width - placeable.width, size.height - placeable.height)
-                )
-                placeable.place(position.x, position.y)
-            } else {
-                placeable.place(IntPx.Zero, IntPx.Zero)
-            }
+            val position = alignment.align(
+                IntPxSize(size.width - placeable.width, size.height - placeable.height)
+            )
+            placeable.place(position.x, position.y)
         }
     }
 }
