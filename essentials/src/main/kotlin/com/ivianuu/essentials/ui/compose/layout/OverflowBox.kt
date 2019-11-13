@@ -20,6 +20,7 @@ import androidx.compose.Composable
 import androidx.ui.core.Alignment
 import androidx.ui.core.Dp
 import androidx.ui.core.IntPxSize
+import androidx.ui.core.RepaintBoundary
 import androidx.ui.core.dp
 import androidx.ui.layout.Constraints
 import androidx.ui.layout.DpConstraints
@@ -52,18 +53,19 @@ fun OverflowBox(
     alignment: Alignment = Alignment.Center,
     child: @Composable() () -> Unit
 ) = composable("OverflowBox") {
-    SingleChildLayout(child = child) { measurable, realConstraints ->
+    SingleChildLayout(child = {
+        RepaintBoundary(children = child)
+    }) { measurable, incomingConstraints ->
         val childConstraints = Constraints(constraints)
         val placeable = measurable?.measure(childConstraints)
-        layout(realConstraints.maxWidth, realConstraints.maxHeight) {
+        layout(incomingConstraints.maxWidth, incomingConstraints.maxHeight) {
             if (placeable != null) {
                 val position = alignment.align(
                     IntPxSize(
-                        realConstraints.maxWidth - placeable.width,
-                        realConstraints.maxHeight - placeable.height
+                        incomingConstraints.maxWidth - placeable.width,
+                        incomingConstraints.maxHeight - placeable.height
                     )
                 )
-
                 placeable.place(position)
             }
         }
