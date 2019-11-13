@@ -25,9 +25,12 @@ import androidx.compose.state
 import androidx.compose.unaryPlus
 import androidx.ui.core.Alignment
 import androidx.ui.core.Draw
+import androidx.ui.core.IntPx
+import androidx.ui.core.Layout
 import androidx.ui.core.PxSize
 import androidx.ui.core.Text
 import androidx.ui.core.dp
+import androidx.ui.core.ipx
 import androidx.ui.engine.geometry.Offset
 import androidx.ui.foundation.Clickable
 import androidx.ui.foundation.ColoredRect
@@ -53,7 +56,6 @@ import com.ivianuu.essentials.ui.compose.common.scrolling.Scroller
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.compose.layout.Expand
-import com.ivianuu.essentials.ui.compose.layout.TightColumn
 import com.ivianuu.essentials.ui.compose.layout.WidthFitSquare
 import com.ivianuu.essentials.ui.compose.material.Slider
 import com.ivianuu.essentials.ui.compose.material.SliderPosition
@@ -374,4 +376,29 @@ private enum class ColorPickerPage(
     val title: String
 ) {
     Colors("Colors"), Editor("Color Editor")
+}
+
+@Composable
+private fun TightColumn(
+    children: @Composable() () -> Unit
+) = composable("TightColumn") {
+    Layout(children = children) { measureables, constraints ->
+        var childConstraints = constraints
+        val placeables = measureables.map {
+            val placeable = it.measure(childConstraints)
+            childConstraints =
+                childConstraints.copy(maxHeight = childConstraints.maxHeight - placeable.height)
+            placeable
+        }
+
+        val height = placeables.sumBy { it.height.value }.ipx
+
+        layout(width = constraints.maxWidth, height = height) {
+            var offsetY = IntPx.Zero
+            placeables.forEach {
+                it.place(IntPx.Zero, offsetY)
+                offsetY += it.height
+            }
+        }
+    }
 }
