@@ -16,12 +16,13 @@
 
 package com.ivianuu.essentials.ui.compose.core
 
+import androidx.compose.Composable
 import androidx.compose.Composer
 import androidx.compose.composer
 
 fun composable(
     key: Any,
-    block: () -> Unit
+    block: @Composable() () -> Unit
 ) {
     with(composer.composer) {
         wrapInRestartScope(key) {
@@ -37,7 +38,7 @@ fun composable(
 fun <V1> composable(
     key: Any,
     v1: V1,
-    block: () -> Unit
+    block: @Composable() () -> Unit
 ) {
     with(composer.composer) {
         wrapInRestartScope(key) {
@@ -58,7 +59,7 @@ fun <V1, V2> composable(
     key: Any,
     v1: V1,
     v2: V2,
-    block: () -> Unit
+    block: @Composable() () -> Unit
 ) {
     with(composer.composer) {
         wrapInRestartScope(key) {
@@ -78,7 +79,7 @@ fun <V1, V2> composable(
 fun composable(
     key: Any,
     vararg inputs: Any?,
-    block: () -> Unit
+    block: @Composable() () -> Unit
 ) {
     with(composer.composer) {
         wrapInRestartScope(key) {
@@ -95,7 +96,7 @@ fun composable(
     }
 }
 
-fun staticComposable(key: Any, block: () -> Unit) {
+fun staticComposable(key: Any, block: @Composable() () -> Unit) {
     with(composer.composer) {
         wrapInRestartScope(key) {
             startGroup(key)
@@ -111,7 +112,7 @@ fun staticComposable(key: Any, block: () -> Unit) {
     }
 }
 
-private fun Composer<*>.wrapInRestartScope(key: Any, block: () -> Unit) {
+private fun Composer<*>.wrapInRestartScope(key: Any, block: @Composable() () -> Unit) {
     startRestartGroup(key)
     block()
     endRestartGroup()?.updateScope { wrapInRestartScope(key, block) }
