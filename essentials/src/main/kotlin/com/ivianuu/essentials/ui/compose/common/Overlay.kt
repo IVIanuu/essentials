@@ -23,6 +23,7 @@ import androidx.compose.frames.modelListOf
 import androidx.ui.core.IntPx
 import androidx.ui.core.Layout
 import androidx.ui.core.ParentData
+import androidx.ui.core.tightMax
 import com.ivianuu.essentials.ui.compose.core.composable
 import java.util.*
 
@@ -53,7 +54,27 @@ class Overlay(initialEntries: List<OverlayEntry> = emptyList()) {
     @Composable
     fun content() {
         OverlayAmbient.Provider(value = this) {
-            OverlayLayout(entries = _entries)
+            OverlayLayout {
+                val visibleEntries = entries.filterVisible()
+
+                entries
+                    .filter { it in visibleEntries || it.keepState }
+                    .map {
+                        OverlayEntryParentData(
+                            isVisible = it in visibleEntries,
+                            entry = it
+                        )
+                    }
+                    .forEach {
+                        Observe {
+                            composable(it.entry.id) {
+                                ParentData(data = it) {
+                                    it.entry.content()
+                                }
+                            }
+                        }
+                    }
+            }
         }
     }
 }
@@ -70,34 +91,11 @@ val OverlayAmbient = Ambient.of<Overlay>()
 
 @Composable
 private fun OverlayLayout(
-    entries: List<OverlayEntry>
+    children: @Composable() () -> Unit
 ) = composable("OverlayLayout") {
-    Layout(children = {
-        val visibleEntries = entries.filterVisible()
-
-        entries
-            .filter { it in visibleEntries || it.keepState }
-            .map {
-                OverlayEntryParentData(
-                    isVisible = it in visibleEntries,
-                    entry = it
-                )
-            }
-            .forEach {
-                Observe {
-                    composable(it.entry.id) {
-                        ParentData(data = it) {
-                            it.entry.content()
-                        }
-                    }
-                }
-            }
-    }) { measureables, constraints ->
+    Layout(children = children) { measureables, constraints ->
         // force children to fill the whole space
-        val childConstraints = constraints.copy(
-            minWidth = constraints.maxWidth,
-            minHeight = constraints.maxHeight
-        )
+        val childConstraints = constraints.tightMax()
 
         // get only visible routes
         val placeables = measureables
