@@ -34,9 +34,9 @@ import com.ivianuu.essentials.ui.navigation.Navigator
 // todo added centerTitle
 
 @Composable
-fun EsTopAppBar(title: String, color: Color = +themeColor { primary }) =
+fun EsTopAppBar(title: String) =
     composable("EsTopAppBar") {
-        EsTopAppBar(title = { Text(title) }, color = color)
+        EsTopAppBar(title = { Text(title) })
 }
 
 @Composable
