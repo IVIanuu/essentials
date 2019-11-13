@@ -72,7 +72,7 @@ val OverlayAmbient = Ambient.of<Overlay>()
 private fun OverlayLayout(
     entries: List<OverlayEntry>
 ) = composable("OverlayLayout") {
-    Layout({
+    Layout(children = {
         val visibleEntries = entries.filterVisible()
 
         entries
