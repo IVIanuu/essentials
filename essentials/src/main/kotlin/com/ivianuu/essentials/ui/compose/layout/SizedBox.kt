@@ -21,9 +21,9 @@ import androidx.compose.unaryPlus
 import androidx.ui.core.Constraints
 import androidx.ui.core.Dp
 import androidx.ui.core.IntPx
-import androidx.ui.core.IntPxSize
-import androidx.ui.core.constrain
 import androidx.ui.core.dp
+import androidx.ui.core.enforce
+import androidx.ui.core.isFinite
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.withDensity
 
@@ -53,12 +53,23 @@ fun SizedBox(
 ) = composable("SizedBox") {
     val widthPx = +withDensity { width?.toIntPx() }
     val heightPx = +withDensity { height?.toIntPx() }
-    SingleChildLayout(child = child) { measureable, constraints ->
-        val size = constraints.constrain(
-            IntPxSize(widthPx ?: constraints.minWidth, heightPx ?: constraints.minHeight)
-        )
-        val placeable =
-            measureable?.measure(Constraints.tightConstraints(size.width, size.height))
-        layout(size.width, size.height) { placeable?.place(IntPx.Zero, IntPx.Zero) }
+    SingleChildLayout(child = child) { measureable, incomingConstraints ->
+        if (measureable == null) return@SingleChildLayout layout(
+            incomingConstraints.minWidth,
+            incomingConstraints.minHeight
+        ) {}
+
+        val constraints = Constraints.tightConstraints(
+            width = if (widthPx?.isFinite() == true) widthPx else incomingConstraints.maxWidth,
+            height = if (heightPx?.isFinite() == true) heightPx else incomingConstraints.maxHeight
+        ).enforce(incomingConstraints)
+
+        val placeable = measureable.measure(constraints)
+        layout(constraints.maxWidth, constraints.maxHeight) {
+            placeable.place(
+                IntPx.Zero,
+                IntPx.Zero
+            )
+        }
     }
 }
