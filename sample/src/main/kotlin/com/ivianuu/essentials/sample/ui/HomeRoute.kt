@@ -169,6 +169,11 @@ enum class HomeItem(
         color = Color.Green,
         route = effectOf { checkAppsRoute }
     ),
+    Chips(
+        title = "Chips",
+        color = Color.Cyan,
+        route = effectOf { chipsRoute }
+    ),
     Counter(
         title = "Counter",
         color = Color.Yellow,
