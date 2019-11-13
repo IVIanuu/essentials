@@ -72,6 +72,8 @@ class ScrollPosition(
         )
     )
 
+    var direction by framed(ScrollDirection.Idle)
+
     init {
         updateBounds()
     }
@@ -96,6 +98,10 @@ class ScrollPosition(
 
     fun scrollBy(value: Px) {
         scrollTo(this.value + value)
+    }
+
+    fun correctBy(value: Px) {
+        scrollBy(value) // todo check this
     }
 
     private fun updateBounds() {
@@ -139,6 +145,8 @@ fun Scrollable(
             onDragValueChangeRequested = { newValue ->
                 val finalNewValue =
                     newValue.coerceIn(position.minValue.value, position.maxValue.value)
+                position.direction =
+                    if (finalNewValue > position.value.value) ScrollDirection.Forward else ScrollDirection.Reverse
                 onScrollEvent?.invoke(
                     ScrollEvent.PreDrag(
                         newValue.px
@@ -183,3 +191,9 @@ sealed class ScrollEvent {
 
 private val ScrollerDefaultFriction = 0.35f
 private val ScrollerVelocityThreshold = 1000f
+
+enum class ScrollDirection {
+    Idle,
+    Forward,
+    Reverse
+}
