@@ -31,7 +31,7 @@ fun SingleChildLayout(
     measureBlock: MeasureScope.(Measurable?, Constraints) -> MeasureScope.LayoutResult
 ) = composable("SingleChildLayout") {
     Layout(children = child, modifier = modifier) { measureables, constraints ->
-        check(measureables.size <= 1) { "Allows only 1 child" }
+        check(measureables.size <= 1) { "Only 1 child allowed" }
         measureBlock(measureables.firstOrNull(), constraints)
     }
 }
