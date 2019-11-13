@@ -20,27 +20,15 @@ import androidx.compose.Composable
 import androidx.ui.core.IntPx
 import com.ivianuu.essentials.ui.compose.core.composable
 
-// todo better name
-
 @Composable
-fun WidthFitSquare(child: @Composable() () -> Unit) = composable("WidthFitSquare") {
-    FitSquare(type = FitSquareType.ByWidth, child = child)
-}
-
-@Composable
-fun HeightFitSquare(child: @Composable() () -> Unit) = composable("HeightFitSquare") {
-    FitSquare(type = FitSquareType.ByHeight, child = child)
-}
-
-@Composable
-fun FitSquare(
-    type: FitSquareType,
+fun SquaredBox(
+    fit: SquaredBoxFit,
     child: @Composable() () -> Unit
-) = composable("FitSquare") {
+) = composable("SquaredBox") {
     SingleChildLayout(child = child) { measureable, constraints ->
-        val size = when (type) {
-            FitSquareType.ByWidth -> constraints.maxWidth
-            FitSquareType.ByHeight -> constraints.maxHeight
+        val size = when (fit) {
+            SquaredBoxFit.MatchWidth -> constraints.maxWidth
+            SquaredBoxFit.MatchHeight -> constraints.maxHeight
         }
 
         val placeable = if (measureable == null) {
@@ -60,6 +48,6 @@ fun FitSquare(
     }
 }
 
-enum class FitSquareType {
-    ByWidth, ByHeight
+enum class SquaredBoxFit {
+    MatchWidth, MatchHeight
 }

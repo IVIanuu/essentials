@@ -56,7 +56,8 @@ import com.ivianuu.essentials.ui.compose.common.scrolling.Scroller
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.compose.layout.Expand
-import com.ivianuu.essentials.ui.compose.layout.WidthFitSquare
+import com.ivianuu.essentials.ui.compose.layout.SquaredBox
+import com.ivianuu.essentials.ui.compose.layout.SquaredBoxFit
 import com.ivianuu.essentials.ui.compose.material.Slider
 import com.ivianuu.essentials.ui.compose.material.SliderPosition
 import com.ivianuu.essentials.ui.compose.material.Tab
@@ -221,7 +222,7 @@ private fun ColorGridItem(
     Padding(padding = 4.dp) {
         Ripple(bounded = false) {
             Clickable(onClick = onClick) {
-                WidthFitSquare {
+                SquaredBox(fit = SquaredBoxFit.MatchWidth) {
                     val paint = +memo { Paint() }
                     paint.color = color
                     Expand {
