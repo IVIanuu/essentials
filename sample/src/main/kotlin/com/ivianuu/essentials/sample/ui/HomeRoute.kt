@@ -30,33 +30,67 @@ import androidx.ui.engine.geometry.Offset
 import androidx.ui.graphics.Canvas
 import androidx.ui.graphics.Color
 import androidx.ui.graphics.Paint
+import androidx.ui.layout.Column
 import androidx.ui.layout.Container
 import androidx.ui.layout.Padding
 import androidx.ui.material.Divider
-import androidx.ui.material.TopAppBar
 import com.ivianuu.essentials.about.aboutRoute
 import com.ivianuu.essentials.apps.ui.appPickerRoute
 import com.ivianuu.essentials.apps.ui.intentAppFilter
 import com.ivianuu.essentials.twilight.twilightSettingsRoute
+import com.ivianuu.essentials.ui.compose.common.navigateOnClick
+import com.ivianuu.essentials.ui.compose.common.scrolling.ScrollableList
 import com.ivianuu.essentials.ui.compose.composeControllerRoute
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.staticComposable
-import com.ivianuu.essentials.ui.compose.layout.FractionallySizedBox
-import com.ivianuu.essentials.ui.compose.layout.OverflowBox
+import com.ivianuu.essentials.ui.compose.injekt.inject
+import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
 import com.ivianuu.essentials.ui.compose.material.PopupMenuButton
+import com.ivianuu.essentials.ui.compose.material.Scaffold
 import com.ivianuu.essentials.ui.compose.material.SimpleListItem
 import com.ivianuu.essentials.ui.navigation.Route
+import com.ivianuu.essentials.util.Toaster
 
 
 val homeRoute = composeControllerRoute {
-    FractionallySizedBox(
-        widthFactor = 0.5f,
-        heightFactor = 0.5f
-    ) {
-        OverflowBox {
-            TopAppBar(title = { Text("Hello") })
+    Scaffold(
+        topAppBar = {
+            EsTopAppBar(
+                title = { Text("Home") },
+                trailing = {
+                    val toaster = +inject<Toaster>()
+                    PopupMenuButton(
+                        items = listOf(
+                            "Option 1",
+                            "Option 2",
+                            "Option 3"
+                        ),
+                        onCancel = { toaster.toast("Cancelled") },
+                        onSelected = { toaster.toast("Selected $it") }
+                    ) {
+                        Text(text = it)
+                    }
+                }
+            )
+        },
+        body = {
+            val items = +memo { HomeItem.values().toList().sortedBy { it.name } }
+            ScrollableList(
+                items = items,
+                itemSizeProvider = { if (it != items.lastIndex) 57.dp else 56.dp }
+            ) { index, item ->
+                staticComposable(item) {
+                    Column {
+                        val route = +item.route
+                        HomeItem(item = item, onClick = +navigateOnClick { route })
+                        if (index != items.lastIndex) {
+                            HomeDivider()
+                        }
+                    }
+                }
+            }
         }
-    }
+    )
 }
 
 @Composable

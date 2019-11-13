@@ -66,7 +66,7 @@ val scaffoldRoute = composeControllerRoute {
 
                 val color = (+themeColor { primary }).copy(alpha = alpha)
 
-                EsTopAppBar(title = "Scaffold", color = color)
+                EsTopAppBar(title = { Text("Scaffold") }, color = color)
             }
         }) else null,
         fabPosition = fabPosition,
@@ -164,7 +164,7 @@ val scaffoldRoute = composeControllerRoute {
                 )
                 SimpleListItem(
                     title = { Text("Fab location") },
-                    onClick = if (showFab) ({
+                    onClick = {
                         navigator.push(
                             dialogRoute {
                                 SingleChoiceListDialog(
@@ -178,7 +178,7 @@ val scaffoldRoute = composeControllerRoute {
                                 )
                             }
                         )
-                    }) else null
+                    }
                 )
             }
         }
