@@ -17,12 +17,10 @@
 package com.ivianuu.essentials.ui.compose.layout
 
 import androidx.compose.Composable
-import androidx.ui.core.Constraints
 import androidx.ui.core.Dp
-import androidx.ui.core.WithDensity
-import androidx.ui.core.coerceIn
 import androidx.ui.core.dp
-import androidx.ui.core.ipx
+import androidx.ui.layout.ConstrainedBox
+import androidx.ui.layout.DpConstraints
 import com.ivianuu.essentials.ui.compose.core.composable
 
 @Composable
@@ -45,17 +43,17 @@ fun SizedBox(
 
 @Composable
 fun SizedBox(
-    width: Dp = 0.dp,
-    height: Dp = 0.dp,
+    width: Dp? = null,
+    height: Dp? = null,
     child: @Composable() () -> Unit
 ) = composable("SizedBox") {
-    WithDensity {
-        SingleChildLayout(child = child) { measureable, constraints ->
-            val realWidth = width.toIntPx().coerceIn(constraints.minWidth, constraints.maxWidth)
-            val realHeight = height.toIntPx().coerceIn(constraints.minHeight, constraints.maxHeight)
-            val placeable =
-                measureable?.measure(Constraints(maxWidth = realWidth, maxHeight = realHeight))
-            layout(realWidth, realHeight) { placeable?.place(0.ipx, 0.ipx) }
-        }
-    }
+    ConstrainedBox(
+        constraints = DpConstraints(
+            minWidth = width ?: 0.dp,
+            maxWidth = width ?: Dp.Infinity,
+            minHeight = height ?: 0.dp,
+            maxHeight = height ?: Dp.Infinity
+        ),
+        children = child
+    )
 }
