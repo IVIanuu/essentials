@@ -17,11 +17,15 @@
 package com.ivianuu.essentials.ui.compose.layout
 
 import androidx.compose.Composable
+import androidx.compose.unaryPlus
+import androidx.ui.core.Constraints
 import androidx.ui.core.Dp
+import androidx.ui.core.IntPx
+import androidx.ui.core.IntPxSize
+import androidx.ui.core.constrain
 import androidx.ui.core.dp
-import androidx.ui.layout.ConstrainedBox
-import androidx.ui.layout.DpConstraints
 import com.ivianuu.essentials.ui.compose.core.composable
+import com.ivianuu.essentials.ui.compose.core.withDensity
 
 @Composable
 fun Expand(child: @Composable() () -> Unit) = composable("Expand") {
@@ -47,13 +51,14 @@ fun SizedBox(
     height: Dp? = null,
     child: @Composable() () -> Unit
 ) = composable("SizedBox") {
-    ConstrainedBox(
-        constraints = DpConstraints(
-            minWidth = width ?: 0.dp,
-            maxWidth = width ?: Dp.Infinity,
-            minHeight = height ?: 0.dp,
-            maxHeight = height ?: Dp.Infinity
-        ),
-        children = child
-    )
+    val widthPx = +withDensity { width?.toIntPx() }
+    val heightPx = +withDensity { height?.toIntPx() }
+    SingleChildLayout(child = child) { measureable, constraints ->
+        val size = constraints.constrain(
+            IntPxSize(widthPx ?: constraints.minWidth, heightPx ?: constraints.minHeight)
+        )
+        val placeable =
+            measureable?.measure(Constraints.tightConstraints(size.width, size.height))
+        layout(size.width, size.height) { placeable?.place(IntPx.Zero, IntPx.Zero) }
+    }
 }
