@@ -96,15 +96,20 @@ fun SliverChildren.SliverList(
     var paintSize = Px.Zero
     itemRange.forEach { paintSize += itemSizeProvider(it).toPx() }
 
-    val totalScrollSize = items.map { it.size }.fold(Px.Zero) { acc, px -> acc + px }
+    var totalScrollSize = Px.Zero
+    items
+        .drop(1) // todo this works but might be a bug?
+        .forEach { totalScrollSize += it.size }
+
+    val scrollSmoothness = firstChild.leading - scrollOffset
 
     d { "item range $itemRange first $firstChild last $lastChild constraints $constraints paint size $paintSize" }
 
     content(
         geometry = SliverGeometry(
-            scrollSize = totalScrollSize,
+            scrollSize = totalScrollSize + scrollSmoothness,
             paintSize = paintSize,
-            paintOrigin = firstChild.leading - scrollOffset
+            paintOrigin = scrollSmoothness
         )
     ) {
         Column {
