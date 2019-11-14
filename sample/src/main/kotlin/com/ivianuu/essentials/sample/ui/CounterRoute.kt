@@ -25,7 +25,7 @@ import androidx.ui.layout.CrossAxisAlignment
 import androidx.ui.layout.HeightSpacer
 import androidx.ui.layout.MainAxisAlignment
 import androidx.ui.material.FloatingActionButton
-import androidx.ui.material.themeTextStyle
+import androidx.ui.material.MaterialTheme
 import com.ivianuu.essentials.ui.compose.composeControllerRoute
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
 import com.ivianuu.essentials.ui.compose.material.Scaffold
@@ -44,7 +44,7 @@ val counterRoute = composeControllerRoute {
 
                     Text(
                         text = "Count: $state",
-                        style = +themeTextStyle { h3 }
+                        style = (+MaterialTheme.typography()).h3
                     )
 
                     HeightSpacer(8.dp)

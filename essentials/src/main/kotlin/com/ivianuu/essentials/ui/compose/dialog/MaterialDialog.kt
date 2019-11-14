@@ -36,7 +36,7 @@ import androidx.ui.layout.Padding
 import androidx.ui.layout.Row
 import androidx.ui.layout.WidthSpacer
 import androidx.ui.material.Divider
-import androidx.ui.material.themeTextStyle
+import androidx.ui.material.MaterialTheme
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.material.CurrentIconStyleProvider
 import com.ivianuu.essentials.ui.compose.material.IconStyle
@@ -95,7 +95,7 @@ private fun DialogBody(
             val styledTitle = title?.let {
                 {
                     CurrentTextStyleProvider(
-                        +themeTextStyle { h6 }
+                        (+MaterialTheme.typography()).h6
                     ) {
                         title()
                     }
@@ -134,7 +134,7 @@ private fun DialogBody(
     val finalContent = if (content != null) {
         {
             CurrentTextStyleProvider(
-                (+themeTextStyle { subtitle1 }).copy(
+                ((+MaterialTheme.typography()).subtitle1).copy(
                     color = (+colorForCurrentBackground()).copy(alpha = SecondaryTextAlpha)
                 )
             ) {

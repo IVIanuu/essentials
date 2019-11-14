@@ -21,9 +21,9 @@ import androidx.compose.unaryPlus
 import androidx.ui.core.Text
 import androidx.ui.core.dp
 import androidx.ui.layout.Padding
+import androidx.ui.material.MaterialTheme
 import androidx.ui.material.surface.CurrentBackground
 import androidx.ui.material.textColorForBackground
-import androidx.ui.material.themeTextStyle
 import androidx.ui.res.stringResource
 import com.ivianuu.essentials.ui.compose.common.navigateOnClick
 import com.ivianuu.essentials.ui.compose.common.scrolling.ScrollableList
@@ -69,7 +69,7 @@ fun secureSettingsRoute(showHideNavBarHint: Boolean = false) =
                                     R.string.es_pref_secure_settings_header_summary
                                 }
                             ),
-                            style = (+themeTextStyle { body2 }).copy(color = textColor)
+                            style = ((+MaterialTheme.typography()).body2).copy(color = textColor)
                         )
                     }
 

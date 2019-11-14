@@ -29,7 +29,7 @@ import androidx.ui.layout.Center
 import androidx.ui.layout.Column
 import androidx.ui.layout.Container
 import androidx.ui.material.FloatingActionButton
-import androidx.ui.material.themeTextStyle
+import androidx.ui.material.MaterialTheme
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.compose.common.hideKeyboard
 import com.ivianuu.essentials.ui.compose.common.scrolling.ScrollPosition
@@ -75,14 +75,15 @@ val textInputRoute = composeControllerRoute(
                                     Opacity(0.5f) {
                                         Text(
                                             text = "Search..",
-                                            style = +themeTextStyle { subtitle1 })
+                                            style = (+MaterialTheme.typography()).subtitle1
+                                        )
                                     }
                                 }
                                 TextField(
                                     value = inputValue,
                                     onValueChange = setInputValue,
                                     focusIdentifier = "id",
-                                    textStyle = +themeTextStyle { subtitle1 }
+                                    textStyle = (+MaterialTheme.typography()).subtitle1
                                 )
                             }
                         }

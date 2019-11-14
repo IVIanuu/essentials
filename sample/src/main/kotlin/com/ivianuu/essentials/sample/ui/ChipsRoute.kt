@@ -28,14 +28,14 @@ import androidx.ui.foundation.shape.corner.RoundedCornerShape
 import androidx.ui.layout.Container
 import androidx.ui.layout.EdgeInsets
 import androidx.ui.layout.Padding
+import androidx.ui.material.MaterialTheme
 import androidx.ui.material.ripple.CurrentRippleTheme
 import androidx.ui.material.ripple.Ripple
 import androidx.ui.material.ripple.RippleTheme
 import androidx.ui.material.surface.Surface
-import androidx.ui.material.themeTextStyle
 import com.ivianuu.essentials.ui.compose.composeControllerRoute
 import com.ivianuu.essentials.ui.compose.core.composable
-import com.ivianuu.essentials.ui.compose.dialog.PrimaryMaterialColors
+import com.ivianuu.essentials.ui.compose.dialog.PrimaryColors
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.compose.layout.FlutterWrap
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
@@ -62,7 +62,7 @@ val chipsRoute = composeControllerRoute {
 @Composable
 private fun Chip(name: String) = composable("Chip:$name") {
     val toaster = +inject<Toaster>()
-    val color = +memo { PrimaryMaterialColors.toList().shuffled().first() }
+    val color = +memo { PrimaryColors.toList().shuffled().first() }
     Surface(color = color, shape = RoundedCornerShape(16.dp)) {
         Container(
             height = 32.dp,
@@ -85,7 +85,7 @@ private fun Chip(name: String) = composable("Chip:$name") {
                     }) {
                         Text(
                             text = name,
-                            style = (+themeTextStyle { body2 }).copy(
+                            style = ((+MaterialTheme.typography()).body2).copy(
                                 color = +colorForCurrentBackground()
                             )
                         )

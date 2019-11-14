@@ -20,8 +20,8 @@ import androidx.compose.unaryPlus
 import androidx.ui.core.Text
 import androidx.ui.graphics.Color
 import androidx.ui.layout.Center
+import androidx.ui.material.MaterialTheme
 import androidx.ui.material.ModalDrawerLayout
-import androidx.ui.material.themeTextStyle
 import com.ivianuu.essentials.ui.compose.composeControllerRoute
 import com.ivianuu.essentials.ui.compose.material.EsSurface
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
@@ -44,7 +44,7 @@ val drawerRoute = composeControllerRoute(
                         Center {
                             Text(
                                 text = "Drawer",
-                                style = +themeTextStyle { h4 }
+                                style = (+MaterialTheme.typography()).h4
                             )
                         }
                     }
@@ -56,7 +56,7 @@ val drawerRoute = composeControllerRoute(
                 Center {
                     Text(
                         text = "Body",
-                        style = +themeTextStyle { h4 }
+                        style = (+MaterialTheme.typography()).h4
                     )
                 }
             }

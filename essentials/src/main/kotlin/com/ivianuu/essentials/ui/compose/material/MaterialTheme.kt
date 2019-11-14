@@ -23,9 +23,9 @@ import androidx.compose.memo
 import androidx.compose.unaryPlus
 import androidx.ui.core.ContextAmbient
 import androidx.ui.graphics.Color
-import androidx.ui.material.MaterialColors
+import androidx.ui.material.ColorPalette
 import androidx.ui.material.MaterialTheme
-import androidx.ui.material.MaterialTypography
+import androidx.ui.material.Typography
 import androidx.ui.text.TextStyle
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.compose.core.composable
@@ -33,8 +33,8 @@ import com.ivianuu.essentials.util.colorAttr
 
 @Composable
 fun ResourceMaterialTheme(
-    colors: MaterialColors = +resourceMaterialColors(),
-    typography: MaterialTypography = +resourceMaterialTypography(),
+    colors: ColorPalette = +resourceColors(),
+    typography: Typography = +resourceTypography(),
     children: @Composable() () -> Unit
 ) = composable("ResourceMaterialTheme") {
     MaterialTheme(
@@ -45,10 +45,10 @@ fun ResourceMaterialTheme(
     }
 }
 
-fun resourceMaterialColors() = effectOf<MaterialColors> {
+fun resourceColors() = effectOf<ColorPalette> {
     val context = +ambient(ContextAmbient)
     +memo {
-        MaterialColors(
+        ColorPalette(
             primary = Color(context.colorAttr(R.attr.colorPrimary)),
             primaryVariant = Color(context.colorAttr(R.attr.colorPrimaryVariant)),
             secondary = Color(context.colorAttr(R.attr.colorSecondary)),
@@ -65,9 +65,9 @@ fun resourceMaterialColors() = effectOf<MaterialColors> {
     }
 }
 
-fun resourceMaterialTypography() = effectOf<MaterialTypography> {
-    +memo { MaterialTypography() }
-    /*MaterialTypography(
+fun resourceTypography() = effectOf<Typography> {
+    +memo { Typography() }
+    /*Typography(
         h1 = +resourceTextStyle(R.attr.textAppearanceHeadline1),
         h2 = +resourceTextStyle(R.attr.textAppearanceHeadline2),
         h3 = +resourceTextStyle(R.attr.textAppearanceHeadline3),
@@ -90,8 +90,8 @@ fun resourceTextStyle(attr: Int) = effectOf<TextStyle> {
     TextStyle()
 }
 
-inline fun MaterialTypography.editEach(edit: TextStyle.() -> TextStyle): MaterialTypography {
-    return MaterialTypography(
+inline fun Typography.editEach(edit: TextStyle.() -> TextStyle): Typography {
+    return Typography(
         h1 = edit(h1),
         h2 = edit(h2),
         h3 = edit(h3),
@@ -107,3 +107,31 @@ inline fun MaterialTypography.editEach(edit: TextStyle.() -> TextStyle): Materia
         overline = edit(overline)
     )
 }
+
+fun ColorPalette.copy(
+    primary: Color = this.primary,
+    primaryVariant: Color = this.primaryVariant,
+    secondary: Color = this.secondary,
+    secondaryVariant: Color = this.secondaryVariant,
+    background: Color = this.background,
+    surface: Color = this.surface,
+    error: Color = this.error,
+    onPrimary: Color = this.onPrimary,
+    onSecondary: Color = this.onSecondary,
+    onBackground: Color = this.onBackground,
+    onSurface: Color = this.onSurface,
+    onError: Color = this.onError
+) = ColorPalette(
+    primary = primary,
+    primaryVariant = primaryVariant,
+    secondary = secondary,
+    secondaryVariant = secondaryVariant,
+    background = background,
+    surface = surface,
+    error = error,
+    onPrimary = onPrimary,
+    onSecondary = onSecondary,
+    onBackground = onBackground,
+    onSurface = onSurface,
+    onError = onError
+)

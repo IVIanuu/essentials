@@ -35,11 +35,11 @@ import androidx.ui.layout.Padding
 import androidx.ui.layout.Row
 import androidx.ui.layout.Spacing
 import androidx.ui.layout.Stack
-import androidx.ui.material.themeTextStyle
+import androidx.ui.material.MaterialTheme
+import androidx.ui.material.Slider
+import androidx.ui.material.SliderPosition
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.layout.WithModifier
-import com.ivianuu.essentials.ui.compose.material.Slider
-import com.ivianuu.essentials.ui.compose.material.SliderPosition
 import com.ivianuu.essentials.util.UnitValueTextProvider
 import com.ivianuu.kprefs.Pref
 
@@ -147,7 +147,7 @@ fun SliderPreference(
 fun SimpleSliderValueText(value: Int) = composable("SimpleSliderValueText") {
     Text(
         text = value.toString(),
-        style = +themeTextStyle { body2 },
+        style = (+MaterialTheme.typography()).body2,
         maxLines = 1
     )
 }
@@ -161,7 +161,7 @@ fun unitValueTextProvider(
     return@effectOf {
         Text(
             text = textProvider(it),
-            style = +themeTextStyle { body2 },
+            style = (+MaterialTheme.typography()).body2,
             maxLines = 1
         )
     }

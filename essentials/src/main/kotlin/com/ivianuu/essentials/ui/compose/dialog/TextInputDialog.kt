@@ -24,7 +24,7 @@ import androidx.ui.core.Opacity
 import androidx.ui.core.Text
 import androidx.ui.core.TextField
 import androidx.ui.input.KeyboardType
-import androidx.ui.material.themeTextStyle
+import androidx.ui.material.MaterialTheme
 import androidx.ui.res.stringResource
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.compose.common.hideKeyboard
@@ -93,7 +93,8 @@ fun TextInputDialog(
                 Opacity(0.5f) {
                     Text(
                         text = hint,
-                        style = +themeTextStyle { subtitle1 })
+                        style = (+MaterialTheme.typography()).subtitle1
+                    )
                 }
             }
             TextField(
@@ -101,7 +102,7 @@ fun TextInputDialog(
                 onValueChange = onValueChange,
                 focusIdentifier = TextInputDialogInputId,
                 keyboardType = keyboardType,
-                textStyle = +themeTextStyle { subtitle1 }
+                textStyle = (+MaterialTheme.typography()).subtitle1
             )
 
             +onActive {

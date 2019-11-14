@@ -25,9 +25,8 @@ import androidx.ui.core.dp
 import androidx.ui.layout.Container
 import androidx.ui.layout.EdgeInsets
 import androidx.ui.material.FloatingActionButton
+import androidx.ui.material.MaterialTheme
 import androidx.ui.material.surface.Surface
-import androidx.ui.material.themeColor
-import androidx.ui.material.themeTextStyle
 import com.ivianuu.essentials.ui.compose.common.AbsorbPointer
 import com.ivianuu.essentials.ui.compose.common.scrolling.ScrollableList
 import com.ivianuu.essentials.ui.compose.composeControllerRoute
@@ -64,7 +63,7 @@ val scaffoldRoute = composeControllerRoute {
                     ) 0.5f else 1f
                 }
 
-                val color = (+themeColor { primary }).copy(alpha = alpha)
+                val color = ((+MaterialTheme.colors()).primary).copy(alpha = alpha)
 
                 EsTopAppBar(title = { Text("Scaffold") }, color = color)
             }
@@ -81,7 +80,7 @@ val scaffoldRoute = composeControllerRoute {
                     ) 0.5f else 1f
                 }
 
-                val color = (+themeColor { primary }).copy(alpha = alpha)
+                val color = ((+MaterialTheme.colors()).primary).copy(alpha = alpha)
 
                 Surface(color = color) {
                     Container(
@@ -92,7 +91,7 @@ val scaffoldRoute = composeControllerRoute {
                     ) {
                         Text(
                             text = "Bottom bar",
-                            style = +themeTextStyle { h6 }
+                            style = (+MaterialTheme.typography()).h6
                         )
                     }
                 }

@@ -18,7 +18,6 @@ package com.ivianuu.essentials.ui.compose.dialog
 
 import androidx.compose.Composable
 import androidx.compose.Effect
-import androidx.compose.ambient
 import androidx.compose.effectOf
 import androidx.compose.memo
 import androidx.compose.state
@@ -44,12 +43,11 @@ import androidx.ui.layout.ExpandedWidth
 import androidx.ui.layout.FlexRow
 import androidx.ui.layout.Padding
 import androidx.ui.layout.Table
-import androidx.ui.material.Colors
 import androidx.ui.material.MaterialTheme
+import androidx.ui.material.Slider
+import androidx.ui.material.SliderPosition
 import androidx.ui.material.TextButtonStyle
-import androidx.ui.material.Typography
 import androidx.ui.material.ripple.Ripple
-import androidx.ui.material.themeTextStyle
 import androidx.ui.res.stringResource
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.compose.common.scrolling.Scroller
@@ -58,14 +56,13 @@ import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.compose.layout.Expand
 import com.ivianuu.essentials.ui.compose.layout.SquaredBox
 import com.ivianuu.essentials.ui.compose.layout.SquaredBoxFit
-import com.ivianuu.essentials.ui.compose.material.Slider
-import com.ivianuu.essentials.ui.compose.material.SliderPosition
 import com.ivianuu.essentials.ui.compose.material.Tab
 import com.ivianuu.essentials.ui.compose.material.TabController
 import com.ivianuu.essentials.ui.compose.material.TabPager
 import com.ivianuu.essentials.ui.compose.material.TabRow
 import com.ivianuu.essentials.ui.compose.material.colorForBackground
 import com.ivianuu.essentials.ui.compose.material.colorForCurrentBackground
+import com.ivianuu.essentials.ui.compose.material.copy
 import com.ivianuu.essentials.ui.navigation.Navigator
 
 fun colorPickerRoute(
@@ -86,7 +83,7 @@ fun colorPickerRoute(
 
 @Composable
 fun ColorPickerDialog(
-    colors: List<Color> = PrimaryMaterialColors,
+    colors: List<Color> = PrimaryColors,
     initialColor: Color,
     onColorSelected: (Color) -> Unit,
     allowCustomArgb: Boolean = true,
@@ -131,14 +128,14 @@ private fun ColorPickerContent(
     if (allowCustomArgb) {
         TabController(items = ColorPickerPage.values().toList()) {
             TightColumn {
-                val currentColors = +ambient(Colors)
+                val currentColors = +MaterialTheme.colors()
 
                 MaterialTheme(
                     colors = currentColors.copy(
                         primary = currentColors.surface,
                         onPrimary = currentColors.onSurface
                     ),
-                    typography = +ambient(Typography)
+                    typography = +MaterialTheme.typography()
                 ) {
                     TabRow<ColorPickerPage> { _, page ->
                         Tab(text = page.title)
@@ -255,7 +252,7 @@ private fun ColorEditor(
             ColoredRect(color)
             Text(
                 text = color.toString(),
-                style = (+themeTextStyle { subtitle1 }).copy(
+                style = ((+MaterialTheme.typography()).subtitle1).copy(
                     color = +colorForBackground(color)
                 )
             )
@@ -306,7 +303,7 @@ private fun ColorComponentItem(
             inflexible {
                 Text(
                     text = component.title,
-                    style = +themeTextStyle { subtitle1 }
+                    style = (+MaterialTheme.typography()).subtitle1
                 )
             }
 
@@ -328,7 +325,7 @@ private fun ColorComponentItem(
             inflexible {
                 Text(
                     text = (255 * value).toInt().toString(),
-                    style = +themeTextStyle { subtitle1 }
+                    style = (+MaterialTheme.typography()).subtitle1
                 )
             }
         }

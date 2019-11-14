@@ -26,7 +26,7 @@ import androidx.ui.layout.CrossAxisAlignment
 import androidx.ui.layout.HeightSpacer
 import androidx.ui.layout.MainAxisAlignment
 import androidx.ui.material.Button
-import androidx.ui.material.themeTextStyle
+import androidx.ui.material.MaterialTheme
 import com.ivianuu.essentials.ui.compose.composeControllerRoute
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
 import com.ivianuu.essentials.ui.compose.material.Scaffold
@@ -51,7 +51,7 @@ private fun CounterRoute(count: Int): Route = Route {
 
                     Text(
                         "Count: $count",
-                        style = +themeTextStyle { h1 }
+                        style = (+MaterialTheme.typography()).h1
                     )
 
                     HeightSpacer(8.dp)

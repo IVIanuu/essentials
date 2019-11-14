@@ -20,7 +20,7 @@ import androidx.compose.ambient
 import androidx.compose.effectOf
 import androidx.ui.graphics.Color
 import androidx.ui.graphics.toArgb
-import androidx.ui.material.Colors
+import androidx.ui.material.MaterialTheme
 import androidx.ui.material.surface.CurrentBackground
 import com.ivianuu.essentials.util.isDark
 
@@ -29,7 +29,7 @@ fun colorForCurrentBackground() = effectOf<Color> {
 }
 
 fun colorForBackground(color: Color) = effectOf<Color> {
-    var result = with(+ambient(Colors)) {
+    var result = with(+MaterialTheme.colors()) {
         when (color) {
             primary -> onPrimary
             primaryVariant -> onPrimary

@@ -24,14 +24,14 @@ import androidx.ui.engine.geometry.Shape
 import androidx.ui.foundation.shape.RectangleShape
 import androidx.ui.foundation.shape.border.Border
 import androidx.ui.graphics.Color
+import androidx.ui.material.MaterialTheme
 import androidx.ui.material.surface.Surface
-import androidx.ui.material.themeColor
 import com.ivianuu.essentials.ui.compose.core.composable
 
 @Composable
 fun EsSurface(
     shape: Shape = RectangleShape,
-    color: Color = +themeColor { surface },
+    color: Color = (+MaterialTheme.colors()).surface,
     border: Border? = null,
     elevation: Dp = 0.dp,
     children: @Composable() () -> Unit

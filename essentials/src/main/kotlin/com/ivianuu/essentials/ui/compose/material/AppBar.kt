@@ -24,8 +24,8 @@ import androidx.ui.core.Size
 import androidx.ui.core.Text
 import androidx.ui.core.dp
 import androidx.ui.graphics.Color
+import androidx.ui.material.MaterialTheme
 import androidx.ui.material.TopAppBar
-import androidx.ui.material.themeColor
 import com.ivianuu.essentials.ui.compose.core.RouteAmbient
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.injekt.inject
@@ -41,7 +41,7 @@ fun EsTopAppBar(title: String) =
 
 @Composable
 fun EsTopAppBar(
-    color: Color = +themeColor { primary },
+    color: Color = (+MaterialTheme.colors()).primary,
     title: @Composable() () -> Unit,
     leading: (@Composable() () -> Unit)? = +autoTopAppBarLeadingIcon(),
     trailing: (@Composable() () -> Unit)? = null

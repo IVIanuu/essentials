@@ -21,7 +21,7 @@ import android.graphics.Color.parseColor
 fun Color(colorString: String): androidx.ui.graphics.Color =
     androidx.ui.graphics.Color(parseColor(colorString))
 
-val PrimaryMaterialColors = listOf(
+val PrimaryColors = listOf(
     Color("#F44336"),
     Color("#FFEBEE"),
     Color("#FFCDD2"),

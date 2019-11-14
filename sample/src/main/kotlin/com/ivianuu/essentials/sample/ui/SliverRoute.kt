@@ -29,9 +29,8 @@ import androidx.ui.core.max
 import androidx.ui.core.min
 import androidx.ui.layout.Container
 import androidx.ui.layout.EdgeInsets
+import androidx.ui.material.MaterialTheme
 import androidx.ui.material.surface.Surface
-import androidx.ui.material.themeColor
-import androidx.ui.material.themeTextStyle
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.compose.common.scrolling.sliver.SliverChildren
 import com.ivianuu.essentials.ui.compose.common.scrolling.sliver.SliverGeometry
@@ -84,7 +83,7 @@ private fun SliverChildren.AppBarSliver() = Sliver { constraints ->
 
     content(geometry = geometry) {
         NonNullSingleChildLayout(child = {
-            Surface(color = (+themeColor { primary }).copy(alpha = 0.5f)) {
+            Surface(color = ((+MaterialTheme.colors()).primary).copy(alpha = 0.5f)) {
                 Container(
                     height = paintSize.toDp(),
                     alignment = Alignment.BottomLeft,
@@ -92,7 +91,7 @@ private fun SliverChildren.AppBarSliver() = Sliver { constraints ->
                 ) {
                     Text(
                         text = "Hello",
-                        style = +themeTextStyle { h6 }
+                        style = (+MaterialTheme.typography()).h6
                     )
                 }
             }

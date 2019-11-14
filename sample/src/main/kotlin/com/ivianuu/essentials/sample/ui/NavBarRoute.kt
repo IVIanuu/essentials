@@ -29,7 +29,7 @@ import androidx.ui.layout.CrossAxisAlignment
 import androidx.ui.layout.ExpandedWidth
 import androidx.ui.layout.MainAxisAlignment
 import androidx.ui.material.Button
-import androidx.ui.material.themeTextStyle
+import androidx.ui.material.MaterialTheme
 import com.ivianuu.essentials.hidenavbar.NavBarConfig
 import com.ivianuu.essentials.hidenavbar.NavBarController
 import com.ivianuu.essentials.securesettings.SecureSettingsHelper
@@ -84,7 +84,7 @@ val navBarRoute = composeControllerRoute(
                             } else {
                                 "Unknown nav bar state"
                             },
-                            style = +themeTextStyle { h3 }
+                            style = (+MaterialTheme.typography()).h3
                         )
                     }
 

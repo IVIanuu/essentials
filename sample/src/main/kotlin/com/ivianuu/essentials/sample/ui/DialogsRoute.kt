@@ -26,7 +26,7 @@ import androidx.ui.layout.CrossAxisAlignment
 import androidx.ui.layout.HeightSpacer
 import androidx.ui.layout.MainAxisAlignment
 import androidx.ui.material.Button
-import androidx.ui.material.themeColor
+import androidx.ui.material.MaterialTheme
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.compose.common.scrolling.Scroller
 import com.ivianuu.essentials.ui.compose.composeControllerRoute
@@ -288,7 +288,7 @@ val dialogsRoute = composeControllerRoute(
                         )
                     }
 
-                    val primaryColor = +themeColor { primary }
+                    val primaryColor = (+MaterialTheme.colors()).primary
                     val (currentColor, setCurrentColor) = +state { primaryColor }
                     DialogLauncherButton(text = "Color Picker") {
                         ColorPickerDialog(

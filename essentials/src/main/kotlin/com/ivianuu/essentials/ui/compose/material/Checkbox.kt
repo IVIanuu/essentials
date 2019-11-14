@@ -39,8 +39,8 @@ import androidx.ui.graphics.StrokeCap
 import androidx.ui.layout.Container
 import androidx.ui.layout.Padding
 import androidx.ui.layout.Wrap
+import androidx.ui.material.MaterialTheme
 import androidx.ui.material.ripple.Ripple
-import androidx.ui.material.themeColor
 import com.ivianuu.essentials.ui.compose.core.composable
 
 // todo remove once original is useable
@@ -49,7 +49,7 @@ import com.ivianuu.essentials.ui.compose.core.composable
 fun EsCheckbox(
     checked: Boolean,
     onCheckedChange: ((Boolean) -> Unit)?,
-    color: Color = +themeColor { secondary }
+    color: Color = (+MaterialTheme.colors()).secondary
 ) = composable("EsCheckbox") {
     Wrap {
         Ripple(bounded = false) {
@@ -66,7 +66,7 @@ fun EsCheckbox(
 
 @Composable
 private fun DrawCheckbox(checked: Boolean, activeColor: Color) = composable("DrawCheckbox") {
-    val unselectedColor = (+themeColor { onSurface }).copy(alpha = UncheckedBoxOpacity)
+    val unselectedColor = ((+MaterialTheme.colors()).onSurface).copy(alpha = UncheckedBoxOpacity)
     val definition = +memo(activeColor, unselectedColor) {
         generateTransitionDefinition(activeColor, unselectedColor)
     }

@@ -24,8 +24,8 @@ import androidx.ui.foundation.shape.corner.RoundedCornerShape
 import androidx.ui.layout.ConstrainedBox
 import androidx.ui.layout.DpConstraints
 import androidx.ui.layout.Padding
+import androidx.ui.material.MaterialTheme
 import androidx.ui.material.surface.Surface
-import androidx.ui.material.themeColor
 import com.ivianuu.essentials.ui.compose.core.composable
 
 // todo callbacks like onShow, onDismiss, onCancel etc
@@ -47,7 +47,7 @@ fun Dialog(child: @Composable() () -> Unit) = composable("Dialog") {
                 )
             ) {
                 Surface(
-                    color = +themeColor { surface },
+                    color = (+MaterialTheme.colors()).surface,
                     elevation = 24.dp,
                     shape = RoundedCornerShape(size = 4.dp)
                 ) {
