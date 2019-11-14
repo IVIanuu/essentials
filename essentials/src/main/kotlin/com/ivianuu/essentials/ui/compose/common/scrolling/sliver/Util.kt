@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.ui.compose.common.scrolling.sliver
 
 import androidx.ui.core.Direction
+import com.ivianuu.essentials.ui.compose.common.scrolling.ScrollDirection
 
 enum class GrowthDirection {
     Forward, Reverse

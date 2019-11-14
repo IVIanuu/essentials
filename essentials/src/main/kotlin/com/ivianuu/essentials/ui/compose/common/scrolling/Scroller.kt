@@ -17,96 +17,14 @@
 package com.ivianuu.essentials.ui.compose.common.scrolling
 
 import androidx.compose.Composable
-import androidx.compose.memo
-import androidx.compose.unaryPlus
-import androidx.ui.core.Alignment
-import androidx.ui.core.Clip
-import androidx.ui.core.IntPx
-import androidx.ui.core.Px
-import androidx.ui.core.RepaintBoundary
-import androidx.ui.core.min
-import androidx.ui.core.round
-import androidx.ui.core.toPx
-import androidx.ui.foundation.shape.RectangleShape
-import androidx.ui.layout.Container
-import com.ivianuu.essentials.ui.compose.core.Axis
-import com.ivianuu.essentials.ui.compose.layout.SingleChildLayout
+import com.ivianuu.essentials.ui.compose.common.scrolling.sliver.SingleChildSliver
+import com.ivianuu.essentials.ui.compose.common.scrolling.sliver.SliverScroller
+
+// todo customization
 
 @Composable
-fun Scroller(
-    position: ScrollPosition = +memo { ScrollPosition() },
-    direction: Axis = Axis.Vertical,
-    enabled: Boolean = true,
-    reverse: Boolean = false,
-    child: @Composable() () -> Unit
-) {
-    Scrollable(
-        position = position,
-        direction = direction,
-        reverse = reverse,
-        enabled = enabled
-    ) {
-        ScrollerLayout(
-            position = position,
-            direction = direction,
-            child = child
-        )
-    }
-}
-
-@Composable
-private fun ScrollerLayout(
-    position: ScrollPosition,
-    direction: Axis,
-    child: @Composable() () -> Unit
-) {
-    SingleChildLayout(child = {
-        Clip(RectangleShape) {
-            Container(alignment = Alignment.TopLeft) {
-                RepaintBoundary(children = child)
-            }
-        }
-    }) { measurable, constraints ->
-        val childConstraints = constraints.copy(
-            maxHeight = when (direction) {
-                Axis.Vertical -> IntPx.Infinity
-                Axis.Horizontal -> constraints.maxHeight
-            },
-            maxWidth = when (direction) {
-                Axis.Vertical -> constraints.maxWidth
-                Axis.Horizontal -> IntPx.Infinity
-            }
-        )
-        val placeable = measurable?.measure(childConstraints)
-
-        val width: IntPx
-        val height: IntPx
-        if (placeable == null) {
-            width = constraints.minWidth
-            height = constraints.minHeight
-        } else {
-            width = min(placeable.width, constraints.maxWidth)
-            height = min(placeable.height, constraints.maxHeight)
-        }
-
-        layout(width, height) {
-            val newMinValue = -when (direction) {
-                Axis.Vertical -> (placeable?.height?.toPx() ?: Px.Zero) - height.toPx()
-                Axis.Horizontal -> (placeable?.width?.toPx() ?: Px.Zero) - (width.toPx())
-            }
-            if (position.minValue != newMinValue) {
-                position.updateBounds(newMinValue, Px.Zero)
-            }
-
-            val childX = when (direction) {
-                Axis.Vertical -> IntPx.Zero
-                Axis.Horizontal -> position.value.round()
-            }
-            val childY = when (direction) {
-                Axis.Vertical -> position.value.round()
-                Axis.Horizontal -> IntPx.Zero
-            }
-            placeable?.place(childX, childY)
-        }
+fun Scroller(child: @Composable() () -> Unit) {
+    SliverScroller {
+        SingleChildSliver(child)
     }
 }

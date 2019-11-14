@@ -17,8 +17,6 @@
 package com.ivianuu.essentials.ui.compose.common.scrolling.sliver
 
 import androidx.compose.Composable
-import androidx.compose.memo
-import androidx.compose.unaryPlus
 import androidx.ui.core.Dp
 import androidx.ui.core.ParentData
 import androidx.ui.core.Px
@@ -66,22 +64,20 @@ fun SliverChildren.SliverList(
 ) = Sliver { constraints ->
     if (count == 0) return@Sliver content(SliverGeometry()) {}
 
-    val items = +memo(count, itemSizeProvider) {
-        var offset = Px.Zero
-        (0 until count)
-            .map(itemSizeProvider)
-            .map { it.toPx() }
-            .mapIndexed { index, size ->
-                val thisOffset = offset
-                offset += size
-                ItemBounds(
-                    index = index,
-                    size = size,
-                    leading = thisOffset,
-                    trailing = offset
-                )
-            }
-    }
+    val items = mutableListOf<ItemBounds>()
+    var offset = Px.Zero
+    (0 until count)
+        .map(itemSizeProvider)
+        .map { it.toPx() }
+        .mapIndexed { index, size ->
+            items += ItemBounds(
+                index = index,
+                size = size,
+                leading = offset,
+                trailing = offset + size
+            )
+            offset += size
+        }
 
     var totalScrollSize = Px.Zero
     items.forEach { totalScrollSize += it.size }

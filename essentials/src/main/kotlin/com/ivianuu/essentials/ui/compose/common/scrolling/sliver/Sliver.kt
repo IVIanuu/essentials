@@ -37,14 +37,15 @@ import androidx.ui.core.px
 import androidx.ui.core.round
 import androidx.ui.core.toPx
 import com.github.ajalt.timberkt.d
+import com.ivianuu.essentials.ui.compose.common.scrolling.ScrollDirection
+import com.ivianuu.essentials.ui.compose.common.scrolling.ScrollPosition
 import com.ivianuu.essentials.ui.compose.core.composable
 
 // todo add visual overlow
 
-
 @Composable
 fun Viewport(
-    position: SliverScrollPosition,
+    position: ScrollPosition,
     center: Any? = null,
     mainAxisDirection: Direction = Direction.DOWN,
     crossAxisDirection: Direction = Direction.RIGHT,

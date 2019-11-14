@@ -107,7 +107,8 @@ val textInputRoute = composeControllerRoute(
                         }
                     }
 
-                    Scroller(position = scrollPosition) {
+                    // todo
+                    Scroller/*(position = scrollPosition)*/ {
                         Column {
                             items.forEach {
                                 SimpleListItem(

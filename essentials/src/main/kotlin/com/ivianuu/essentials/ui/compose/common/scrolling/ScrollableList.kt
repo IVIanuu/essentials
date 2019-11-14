@@ -24,8 +24,7 @@ import com.ivianuu.essentials.ui.compose.common.scrolling.sliver.SliverScroller
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.layout.SizedBox
 
-// todo direction
-// todo listener?
+// todo customization
 
 @Composable
 fun ScrollableList(
