@@ -329,9 +329,11 @@ private class ViewportState {
             )
 
             childrenComposables += {
-                ParentData(data = parentData) {
-                    RepaintBoundary {
-                        childContent()
+                composable(index) {
+                    ParentData(data = parentData) {
+                        RepaintBoundary {
+                            childContent()
+                        }
                     }
                 }
             }
