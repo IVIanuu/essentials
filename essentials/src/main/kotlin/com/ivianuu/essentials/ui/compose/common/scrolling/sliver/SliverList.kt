@@ -17,6 +17,8 @@
 package com.ivianuu.essentials.ui.compose.common.scrolling.sliver
 
 import androidx.compose.Composable
+import androidx.compose.memo
+import androidx.compose.unaryPlus
 import androidx.ui.core.Dp
 import androidx.ui.core.ParentData
 import androidx.ui.core.Px
@@ -65,19 +67,21 @@ fun SliverChildren.SliverList(
 
     var offset = Px.Zero
 
-    val items = (0 until count)
-        .map(itemSizeProvider)
-        .map { it.toPx() }
-        .mapIndexed { index, size ->
-            val thisOffset = offset
-            offset += size
-            ItemBounds(
-                index = index,
-                size = size,
-                leading = thisOffset,
-                trailing = offset
-            )
-        }
+    val items = +memo(count, itemSizeProvider) {
+        (0 until count)
+            .map(itemSizeProvider)
+            .map { it.toPx() }
+            .mapIndexed { index, size ->
+                val thisOffset = offset
+                offset += size
+                ItemBounds(
+                    index = index,
+                    size = size,
+                    leading = thisOffset,
+                    trailing = offset
+                )
+            }
+    }
 
     val scrollOffset = max(constraints.scrollPosition, Px.Zero)
 
@@ -87,7 +91,7 @@ fun SliverChildren.SliverList(
     val lastChild = items.first {
         it.hitTest(
             min(
-                scrollOffset + constraints.remainingCacheSpace,
+                scrollOffset + constraints.remainingPaintSpace,
                 items.last().trailing
             )
         )
