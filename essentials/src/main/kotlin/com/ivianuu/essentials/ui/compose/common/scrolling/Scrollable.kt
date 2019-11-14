@@ -43,8 +43,8 @@ import com.ivianuu.essentials.ui.compose.core.Axis
 // todo use @Model once possible
 class ScrollPosition(
     initial: Px = Px.Zero,
-    minValue: Px = -Px.Infinity,
-    maxValue: Px = Px.Zero
+    minValue: Px = Px.Zero,
+    maxValue: Px = Px.Infinity
 ) {
 
     internal val holder =
@@ -107,6 +107,7 @@ class ScrollPosition(
         _minValue = minValue
         _maxValue = maxValue
         holder.setBounds(minValue.value, maxValue.value)
+        d { "update bounds $minValue $maxValue" }
     }
 }
 

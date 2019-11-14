@@ -24,11 +24,13 @@ import androidx.ui.core.Clip
 import androidx.ui.core.IntPx
 import androidx.ui.core.Px
 import androidx.ui.core.RepaintBoundary
+import androidx.ui.core.max
 import androidx.ui.core.min
 import androidx.ui.core.round
 import androidx.ui.core.toPx
 import androidx.ui.foundation.shape.RectangleShape
 import androidx.ui.layout.Container
+import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.compose.core.Axis
 import com.ivianuu.essentials.ui.compose.layout.SingleChildLayout
 
@@ -90,12 +92,21 @@ private fun ScrollerLayout(
         }
 
         layout(width, height) {
-            val newMaxValue = -when (direction) {
-                Axis.Vertical -> (placeable?.height?.toPx() ?: Px.Zero) - height.toPx()
-                Axis.Horizontal -> (placeable?.width?.toPx() ?: Px.Zero) - (width.toPx())
+            val newMaxValue = when (direction) {
+                Axis.Vertical -> max(
+                    Px.Zero,
+                    (placeable?.height?.toPx() ?: Px.Zero) - height.toPx()
+                )
+                Axis.Horizontal -> max(
+                    Px.Zero,
+                    (placeable?.width?.toPx() ?: Px.Zero) - (width.toPx())
+                )
             }
+
+            d { "placeable height ${placeable?.height}" }
+
             if (position.maxValue != newMaxValue) {
-                position.updateBounds(-Px.Zero, newMaxValue)
+                position.updateBounds(Px.Zero, newMaxValue)
             }
 
             val childX = when (direction) {
