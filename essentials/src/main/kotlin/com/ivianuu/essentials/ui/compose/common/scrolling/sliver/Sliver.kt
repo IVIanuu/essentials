@@ -90,18 +90,6 @@ fun Viewport(
         remainingCacheSpace: Px,
         cacheOrigin: Px
     ): Px {
-        d {
-            "layout child sequence " +
-                    "scroll position $scrollPosition " +
-                    "overlap $overlap " +
-                    "layout offset $layoutOffset " +
-                    "remainingPaintSpace $remainingPaintSpace " +
-                    "main axis $mainAxisSize " +
-                    "cross axis $crossAxisSize " +
-                    "growth $growthDirection " +
-                    "remaining cache $remainingCacheSpace " +
-                    "cache origin $cacheOrigin"
-        }
         var scrollPosition = scrollPosition
         var layoutOffset = layoutOffset
         var remainingCacheSpace = remainingCacheSpace
@@ -113,15 +101,27 @@ fun Viewport(
         var maxPaintOffset = layoutOffset + overlap
         var precedingScrollSpace = Px.Zero
 
-        d { "adjusted user scroll direction $adjustedUserScrollDirection" }
+        d {
+            "layout child sequence:\n" +
+                    "scroll position $scrollPosition\n" +
+                    "overlap $overlap\n" +
+                    "layout offset $layoutOffset\n" +
+                    "initial layout offset $initialLayoutOffset\n" +
+                    "adjusted user scroll direction $adjustedUserScrollDirection\n" +
+                    "max paint offset $maxPaintOffset\n" +
+                    "remainingPaintSpace $remainingPaintSpace\n" +
+                    "main axis $mainAxisSize\n" +
+                    "cross axis $crossAxisSize\n" +
+                    "growth $growthDirection\n" +
+                    "remaining cache $remainingCacheSpace\n" +
+                    "cache origin $cacheOrigin"
+        }
 
         var child: SliverChild? = child
         while (child != null) {
             val sliverScrollPosition = if (scrollPosition <= Px.Zero) Px.Zero else scrollPosition
             val correctedCacheOrigin = max(cacheOrigin, -sliverScrollPosition)
             val cacheSpaceCorrection = cacheOrigin - correctedCacheOrigin
-
-            d { "layout child pos $sliverScrollPosition orig $scrollPosition" }
 
             val (geometry, childContent) = child.measureBlock(
                 measureScope, SliverConstraints(
@@ -152,8 +152,6 @@ fun Viewport(
                 -scrollPosition + initialLayoutOffset
             }
 
-            d { "effective layout offset $effectiveLayoutOffset child layout offset $childLayoutOffset" }
-
             maxPaintOffset = max(effectiveLayoutOffset + geometry.paintSize, maxPaintOffset)
             scrollPosition -= geometry.scrollSize
             precedingScrollSpace += geometry.scrollSize
@@ -163,28 +161,19 @@ fun Viewport(
                 cacheOrigin = min(correctedCacheOrigin + geometry.cacheSize, Px.Zero)
             }
 
-            d {
-                "max paint offset $maxPaintOffset " +
-                        "scroll position $scrollPosition " +
-                        "preceding scroll space $precedingScrollSpace " +
-                        "layout offset $layoutOffset " +
-                        "remaining cache space $remainingCacheSpace " +
-                        "cache origin $cacheOrigin"
-            }
+            val parentData = SliverParentData(
+                computeAbsolutePaintOffset(
+                    geometry = geometry,
+                    layoutOffset = childLayoutOffset,
+                    viewportHeight = mainAxisSize,
+                    viewportWidth = crossAxisSize,
+                    mainAxisDirection = mainAxisDirection,
+                    growthDirection = growthDirection
+                ),
+                geometry
+            )
 
             childrenBlocks += {
-                val parentData = SliverParentData(
-                    computeAbsolutePaintOffset(
-                        geometry = geometry,
-                        layoutOffset = childLayoutOffset,
-                        viewportHeight = mainAxisSize,
-                        viewportWidth = crossAxisSize,
-                        mainAxisDirection = mainAxisDirection,
-                        growthDirection = growthDirection
-                    ),
-                    geometry
-                )
-                d { "parent data is ${parentData.position.x} ${parentData.position.y} ${parentData.geometry}" }
                 // todo
                 ParentData(data = parentData) {
                     RepaintBoundary {
@@ -196,6 +185,23 @@ fun Viewport(
             when (growthDirection) {
                 GrowthDirection.Forward -> maxScrollPosition += geometry.scrollSize
                 GrowthDirection.Reverse -> minScrollPosition -= geometry.scrollSize
+            }
+
+            d {
+                "layout child finished\n" +
+                        "geometry $geometry\n" +
+                        "position ${parentData.position.x} ${parentData.position.y}\n" +
+                        "sliver scroll position $sliverScrollPosition\n" +
+                        "effective layout offset $effectiveLayoutOffset\n" +
+                        "child layout offset $childLayoutOffset\n" +
+                        "max paint offset $maxPaintOffset\n" +
+                        "scroll position $scrollPosition\n" +
+                        "preceding scroll space $precedingScrollSpace\n" +
+                        "layout offset $layoutOffset\n" +
+                        "remaining cache space $remainingCacheSpace\n" +
+                        "cache origin $cacheOrigin\n" +
+                        "min scroll $minScrollPosition\n" +
+                        "max scroll $maxScrollPosition"
             }
 
             child = advance(child)
@@ -214,8 +220,6 @@ fun Viewport(
         val forwardDirectionRemainingPaintSpace =
             (mainAxisSize - centerOffset).coerceIn(Px.Zero, mainAxisSize)
 
-        d { "attempt layout center offset $centerOffset paint space r $reverseDirectionRemainingPaintSpace paint space f $forwardDirectionRemainingPaintSpace " }
-
         val cacheSize = defaultCacheSize // todo customize
 
         val fullCacheSpace = mainAxisSize + (cacheSize * 2)
@@ -224,6 +228,19 @@ fun Viewport(
             centerCacheOffset.coerceIn(Px.Zero, fullCacheSpace)
         val forwardDirectionRemainingCacheSpace =
             (fullCacheSpace - centerCacheOffset).coerceIn(Px.Zero, fullCacheSpace)
+
+        d {
+            "attempt layout:\n" +
+                    "center offset$centerOffset\n" +
+                    "remaining paint space reverse \n" +
+                    "$reverseDirectionRemainingPaintSpace\n" +
+                    "remaining paint space forward $forwardDirectionRemainingPaintSpace\n" +
+                    "cache size $cacheSize\n" +
+                    "full cache space $fullCacheSpace\n" +
+                    "center cache offset $centerCacheOffset\n" +
+                    "remaining cache space reverse $reverseDirectionRemainingCacheSpace\n" +
+                    "remaining cache space forward $forwardDirectionRemainingCacheSpace"
+        }
 
         val centerChild =
             if (center != null) sliverChildren.first { it.key == center } else sliverChildren.firstOrNull()
@@ -268,8 +285,6 @@ fun Viewport(
         return Px.Zero
     }
 
-    d { "scroll position ${-position.value} direction ${position.direction}" }
-
     if (mainAxisSize != (-1).px && crossAxisSize != (-1).px) {
         if (sliverChildren.isNotEmpty()) {
             var correction = Px.Zero
@@ -298,7 +313,6 @@ fun Viewport(
             check(count < 10)
         } else {
             if (Px.Zero != position.maxValue || Px.Zero != position.minValue) {
-                d { "disable scroll" }
                 position.updateBounds(Px.Zero, Px.Zero)
             }
 
