@@ -17,25 +17,12 @@
 package com.ivianuu.essentials.ui.compose.common.scrolling
 
 import androidx.compose.Composable
-import androidx.compose.memo
-import androidx.compose.unaryPlus
 import androidx.ui.core.Dp
-import androidx.ui.core.IntPx
-import androidx.ui.core.Layout
-import androidx.ui.core.Px
-import androidx.ui.core.RepaintBoundary
-import androidx.ui.core.ambientDensity
-import androidx.ui.core.max
-import androidx.ui.core.min
-import androidx.ui.core.toPx
-import androidx.ui.core.withDensity
 import androidx.ui.layout.Column
-import com.github.ajalt.timberkt.d
-import com.ivianuu.essentials.ui.compose.common.framed
+import com.ivianuu.essentials.ui.compose.common.scrolling.sliver.SliverList
+import com.ivianuu.essentials.ui.compose.common.scrolling.sliver.SliverScroller
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.layout.SizedBox
-import kotlin.math.max
-import kotlin.math.min
 
 // todo direction
 // todo listener?
@@ -96,166 +83,11 @@ fun ScrollableList(
     itemSizeProvider: (Int) -> Dp,
     item: (Int) -> Unit
 ) = composable("ScrollableList") {
-    Scrollable { position ->
-        val state =
-            +memo { ScrollableListState(position) }
-        +memo(count) { state.count = count }
-        val density = +ambientDensity()
-        +memo(itemSizeProvider) {
-            state.itemSizeProvider = { index: Int ->
-                withDensity(density) {
-                    itemSizeProvider(index).toPx()
-                }
-            }
-        }
-
-        +memo(count, itemSizeProvider) { state.update() }
-        +memo(position.value) { state.update() }
-
-        ScrollableListLayout(
-            state.contentOffset,
-            state.viewportSize,
-            {
-                state.viewportSize = it
-                state.update()
-            }
-        ) {
-            if (state.itemRange != emptyItemRange) {
-                state.itemRange.forEach { index ->
-                    composable(index) {
-                        RepaintBoundary {
-                            item(index)
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-
-private class ScrollableListState(val position: ScrollPosition) {
-
-    var count by framed(0)
-    var itemSizeProvider: (Int) -> Px by framed { error("") }
-
-    private val items = mutableListOf<ItemBounds>()
-    var itemRange by framed(emptyItemRange)
-
-    var contentOffset by framed(Px.Zero)
-
-    var viewportSize = Px.Zero
-        set(value) {
-            field = value
-            update()
-        }
-
-    fun update() {
-        items.clear()
-
-        if (count != 0) {
-            var offset = Px.Zero
-
-            (0 until count)
-                .map(itemSizeProvider)
-                .forEachIndexed { index, size ->
-                    items += ItemBounds(
-                        index = index,
-                        size = size,
-                        leading = offset - size,
-                        trailing = offset
-                    )
-                    offset -= size
-                }
-
-            val newMinValue = min(Px.Zero, offset + viewportSize)
-            if (position.minValue != newMinValue) {
-                position.updateBounds(newMinValue, position.maxValue)
-            }
-        }
-
-        onScrollPositionChanged()
-    }
-
-    fun onScrollPositionChanged() {
-        val scrollPosition = position.value
-        if (count != 0) {
-            val firstVisibleItem = items.last { it.hitTest(scrollPosition) }
-
-            val firstLayoutIndex = max(0, firstVisibleItem.index)
-
-            val lastVisiblePosition = max(scrollPosition - viewportSize, items.last().trailing)
-            val lastVisibleItem = items.last { it.hitTest(lastVisiblePosition) }
-
-            val lastLayoutIndex = min(count - 1, lastVisibleItem.index + 1)
-
-            val sizeUntilFirstLayoutIndex = computeItemSize(0, firstLayoutIndex)
-            contentOffset = scrollPosition + sizeUntilFirstLayoutIndex
-
-            d {
-                "\nscroll offset $scrollPosition size until first layout $sizeUntilFirstLayoutIndex contentOffset $contentOffset\n" +
-                        "visible range ${firstVisibleItem.index..lastVisibleItem.index}\n" +
-                        "layout range ${firstLayoutIndex..lastLayoutIndex}\n" +
-                        "total size $count"
-            }
-
-            if (itemRange.first != firstLayoutIndex || itemRange.last != lastLayoutIndex) {
-                itemRange = firstLayoutIndex..lastLayoutIndex
-            }
-        } else {
-            if (itemRange != emptyItemRange) {
-                itemRange = emptyItemRange
-            }
-        }
-    }
-
-    private fun computeItemSize(startIndex: Int, endIndex: Int): Px {
-        return (startIndex until endIndex)
-            .map(itemSizeProvider)
-            .fold(Px.Zero) { acc, current -> acc + current }
-    }
-
-}
-
-private val emptyItemRange = -2..-1
-
-private data class ItemBounds(
-    val index: Int,
-    val size: Px,
-    val leading: Px,
-    val trailing: Px = leading + size
-) {
-    // todo avoid alloc
-    fun hitTest(scrollPosition: Px): Boolean =
-        scrollPosition.value in leading.value..trailing.value
-}
-
-@Composable
-private fun ScrollableListLayout(
-    contentOffset: Px,
-    viewportSize: Px,
-    onViewportSizeChanged: (Px) -> Unit,
-    children: @Composable() () -> Unit
-) = composable("ScrollableListLayout") {
-    Layout(children = children) { measureables, constraints ->
-        val childConstraints = constraints.copy(
-            minWidth = IntPx.Zero,
-            minHeight = IntPx.Zero,
-            maxHeight = IntPx.Infinity
+    SliverScroller {
+        SliverList(
+            count = count,
+            itemSizeProvider = itemSizeProvider,
+            item = item
         )
-
-        val placeables = measureables.map { measureable ->
-            measureable.measure(childConstraints)
-        }
-
-        layout(constraints.maxWidth, constraints.maxHeight) {
-            if (viewportSize != constraints.maxHeight.toPx()) {
-                onViewportSizeChanged(constraints.maxHeight.toPx())
-            }
-            var offset = contentOffset
-            placeables.forEach { placeable ->
-                placeable.place(Px.Zero, offset)
-                offset += placeable.height
-            }
-        }
     }
 }
