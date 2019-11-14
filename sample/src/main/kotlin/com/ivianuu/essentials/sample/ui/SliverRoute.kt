@@ -19,8 +19,10 @@ package com.ivianuu.essentials.sample.ui
 import androidx.compose.memo
 import androidx.compose.unaryPlus
 import androidx.ui.core.Alignment
+import androidx.ui.core.Px
 import androidx.ui.core.Text
 import androidx.ui.core.dp
+import androidx.ui.core.max
 import androidx.ui.layout.Column
 import androidx.ui.layout.Container
 import androidx.ui.layout.EdgeInsets
@@ -28,33 +30,37 @@ import androidx.ui.material.surface.Surface
 import androidx.ui.material.themeColor
 import androidx.ui.material.themeTextStyle
 import com.github.ajalt.timberkt.d
-import com.ivianuu.essentials.ui.compose.common.scrolling.ScrollPosition
-import com.ivianuu.essentials.ui.compose.common.scrolling.Scrollable
 import com.ivianuu.essentials.ui.compose.common.scrolling.sliver.SliverChildren
 import com.ivianuu.essentials.ui.compose.common.scrolling.sliver.SliverGeometry
+import com.ivianuu.essentials.ui.compose.common.scrolling.sliver.SliverScrollPosition
+import com.ivianuu.essentials.ui.compose.common.scrolling.sliver.SliverScrollable
 import com.ivianuu.essentials.ui.compose.common.scrolling.sliver.Viewport
 import com.ivianuu.essentials.ui.compose.composeControllerRoute
+import com.ivianuu.essentials.ui.compose.core.staticComposable
 import com.ivianuu.essentials.ui.compose.material.SimpleListItem
 
 val sliverRoute = composeControllerRoute {
-    val position = +memo { ScrollPosition() }
-    Scrollable(
+    val position = +memo { SliverScrollPosition() }
+    SliverScrollable(
         position = position
     ) {
         Viewport(position = position) {
-            AppBarSliver()
+            //AppBarSliver()
             Sliver { constraints ->
-                val itemCount = 30
+                val itemCount = 70
                 val itemSize = 48.dp
                 content(
                     geometry = SliverGeometry(
                         scrollSize = itemSize.toPx() * (itemCount - 1),
-                        paintSize = itemSize.toPx() * (itemCount - 1)
+                        paintSize = itemSize.toPx() * (itemCount - 1),
+                        paintOrigin = -constraints.scrollPosition
                     )
                 ) {
                     Column {
                         (0 until itemCount).forEach { index ->
-                            SimpleListItem(title = { Text("Item $index") })
+                            staticComposable(index) {
+                                SimpleListItem(title = { Text("Item $index") })
+                            }
                         }
                     }
                 }
@@ -66,10 +72,11 @@ val sliverRoute = composeControllerRoute {
 
 private fun SliverChildren.AppBarSliver() = Sliver { constraints ->
     d { "app bar with constraints $constraints" }
+    val appBarSize = 300.dp.toPx()
     content(
         geometry = SliverGeometry(
-            scrollSize = 300.dp.toPx(),
-            paintSize = 300.dp.toPx()
+            scrollSize = appBarSize,
+            paintSize = max(Px.Zero, appBarSize - constraints.scrollPosition)
         )
     ) {
         Surface(color = (+themeColor { primary }).copy(alpha = 0.5f)) {

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.compose.common.scrolling
+package com.ivianuu.essentials.ui.compose.common.scrolling.sliver
 
 import androidx.animation.AnimationEndReason
 import androidx.animation.ExponentialDecay
@@ -35,11 +35,13 @@ import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.compose.common.framed
 import com.ivianuu.essentials.ui.compose.core.Axis
 
+// todo maybe merge with original
+
 // todo refactor scroll event handling
 // todo reversed option
 
 // todo use @Model once possible
-class ScrollPosition(
+class SliverScrollPosition(
     initial: Px = Px.Zero,
     minValue: Px = -Px.Infinity,
     maxValue: Px = Px.Zero
@@ -109,13 +111,13 @@ class ScrollPosition(
 }
 
 @Composable
-fun Scrollable(
-    position: ScrollPosition = +memo { ScrollPosition() },
-    onScrollEvent: ((ScrollEvent, ScrollPosition) -> Unit)? = null,
+fun SliverScrollable(
+    position: SliverScrollPosition = +memo { SliverScrollPosition() },
+    onScrollEvent: ((ScrollEvent, SliverScrollPosition) -> Unit)? = null,
     direction: Axis = Axis.Vertical,
     reverse: Boolean = false,
     enabled: Boolean = true,
-    child: @Composable() (ScrollPosition) -> Unit
+    child: @Composable() (SliverScrollPosition) -> Unit
 ) {
     PressGestureDetector(onPress = { position.scrollTo(position.value) }) {
         TouchSlopDragGestureDetector(

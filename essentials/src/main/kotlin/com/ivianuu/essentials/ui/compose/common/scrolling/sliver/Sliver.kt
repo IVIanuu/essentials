@@ -37,8 +37,6 @@ import androidx.ui.core.px
 import androidx.ui.core.round
 import androidx.ui.core.toPx
 import com.github.ajalt.timberkt.d
-import com.ivianuu.essentials.ui.compose.common.scrolling.ScrollDirection
-import com.ivianuu.essentials.ui.compose.common.scrolling.ScrollPosition
 import com.ivianuu.essentials.ui.compose.core.composable
 
 // todo add visual overlow
@@ -46,7 +44,7 @@ import com.ivianuu.essentials.ui.compose.core.composable
 
 @Composable
 fun Viewport(
-    position: ScrollPosition,
+    position: SliverScrollPosition,
     center: Any? = null,
     mainAxisDirection: Direction = Direction.DOWN,
     crossAxisDirection: Direction = Direction.LEFT,
@@ -77,6 +75,7 @@ fun Viewport(
 
     var minScrollPosition = Px.Zero
     var maxScrollPosition = Px.Zero
+    var hasVisualOverflow = false
 
     fun layoutChildSequence(
         child: SliverChild,
@@ -113,6 +112,8 @@ fun Viewport(
             applyGrowthDirectionToScrollDirection(position.direction, growthDirection)
         var maxPaintOffset = layoutOffset + overlap
         var precedingScrollSpace = Px.Zero
+
+        d { "adjusted user scroll direction $adjustedUserScrollDirection" }
 
         var child: SliverChild? = child
         while (child != null) {
@@ -151,7 +152,7 @@ fun Viewport(
                 -scrollPosition + initialLayoutOffset
             }
 
-            d { "effective layout offset $effectiveLayoutOffset child layout offset $childLayoutOffset scroll $scrollPosition initial $initialLayoutOffset" }
+            d { "effective layout offset $effectiveLayoutOffset child layout offset $childLayoutOffset" }
 
             maxPaintOffset = max(effectiveLayoutOffset + geometry.paintSize, maxPaintOffset)
             scrollPosition -= geometry.scrollSize
@@ -162,21 +163,30 @@ fun Viewport(
                 cacheOrigin = min(correctedCacheOrigin + geometry.cacheSize, Px.Zero)
             }
 
+            d {
+                "max paint offset $maxPaintOffset " +
+                        "scroll position $scrollPosition " +
+                        "preceding scroll space $precedingScrollSpace " +
+                        "layout offset $layoutOffset " +
+                        "remaining cache space $remainingCacheSpace " +
+                        "cache origin $cacheOrigin"
+            }
+
             childrenBlocks += {
+                val parentData = SliverParentData(
+                    computeAbsolutePaintOffset(
+                        geometry = geometry,
+                        layoutOffset = childLayoutOffset,
+                        viewportHeight = mainAxisSize,
+                        viewportWidth = crossAxisSize,
+                        mainAxisDirection = mainAxisDirection,
+                        growthDirection = growthDirection
+                    ),
+                    geometry
+                )
+                d { "parent data is ${parentData.position.x} ${parentData.position.y} ${parentData.geometry}" }
                 // todo
-                ParentData(
-                    SliverParentData(
-                        computeAbsolutePaintOffset(
-                            geometry = geometry,
-                            layoutOffset = childLayoutOffset,
-                            viewportHeight = mainAxisSize,
-                            viewportWidth = crossAxisSize,
-                            mainAxisDirection = mainAxisDirection,
-                            growthDirection = growthDirection
-                        ),
-                        geometry
-                    )
-                ) {
+                ParentData(data = parentData) {
                     RepaintBoundary {
                         content()
                     }
@@ -187,7 +197,6 @@ fun Viewport(
                 GrowthDirection.Forward -> maxScrollPosition += geometry.scrollSize
                 GrowthDirection.Reverse -> minScrollPosition -= geometry.scrollSize
             }
-            d { "${child!!.key} added ot min max $minScrollPosition $maxScrollPosition" }
 
             child = advance(child)
         }
@@ -196,6 +205,10 @@ fun Viewport(
     }
 
     fun attemptLayout(mainAxisSize: Px, crossAxisSize: Px, correctedOffset: Px): Px {
+        minScrollPosition = Px.Zero
+        maxScrollPosition = Px.Zero
+        hasVisualOverflow = false
+
         val centerOffset = mainAxisSize * anchor - correctedOffset
         val reverseDirectionRemainingPaintSpace = centerOffset.coerceIn(Px.Zero, mainAxisSize)
         val forwardDirectionRemainingPaintSpace =
@@ -255,6 +268,8 @@ fun Viewport(
         return Px.Zero
     }
 
+    d { "scroll position ${-position.value} direction ${position.direction}" }
+
     if (mainAxisSize != (-1).px && crossAxisSize != (-1).px) {
         if (sliverChildren.isNotEmpty()) {
             var correction = Px.Zero
@@ -269,9 +284,8 @@ fun Viewport(
                 if (correction != Px.Zero) {
                     position.correctBy(correction)
                 } else {
-                    val newMinValue = min(Px.Zero, minScrollPosition - mainAxisSize * (1f - anchor))
-                    val newMaxValue = max(Px.Zero, maxScrollPosition + mainAxisSize * anchor)
-                    d { "min scroll pos $minScrollPosition main axis $mainAxisSize anchor $anchor max scroll $maxScrollPosition" }
+                    val newMinValue = min(Px.Zero, minScrollPosition + mainAxisSize * anchor)
+                    val newMaxValue = max(Px.Zero, maxScrollPosition - mainAxisSize * (1f - anchor))
                     if (newMinValue != position.minValue || newMaxValue != position.maxValue) {
                         position.updateBounds(newMinValue, newMaxValue)
                         d { "update min max to ${position.minValue} ${position.maxValue}" }
