@@ -34,6 +34,7 @@ import androidx.ui.layout.Column
 import androidx.ui.layout.Container
 import androidx.ui.layout.Padding
 import androidx.ui.material.Divider
+import androidx.ui.material.MaterialTheme
 import com.ivianuu.essentials.about.aboutRoute
 import com.ivianuu.essentials.apps.ui.appPickerRoute
 import com.ivianuu.essentials.apps.ui.intentAppFilter
@@ -133,7 +134,7 @@ private fun ColorAvatar(color: Color) = staticComposable("ColorAvatar") {
 private fun HomeDivider() = staticComposable("HomeDivider") {
     Padding(left = 72.dp) {
         Opacity(0.12f) {
-            Divider()
+            Divider(color = ((+MaterialTheme.colors()).onSurface))
         }
     }
 }

@@ -50,7 +50,7 @@ val chipsRoute = composeControllerRoute {
         body = {
             Padding(padding = 8.dp) {
                 FlutterWrap(spacing = 8.dp, runSpacing = 8.dp) {
-                    Names.forEach {
+                    Names.shuffled().forEach {
                         Chip(it)
                     }
                 }
@@ -99,6 +99,7 @@ private fun Chip(name: String) = composable("Chip:$name") {
 private val Names = listOf(
     "Hans Dieter Josef",
     "Alex Meier",
+    "Kim Jong Hun Ching Chang Chong Meier Richard Anderson",
     "Claude Hardy",
     "Wilhelm Richards",
     "Gustova Da Costa",
@@ -106,5 +107,6 @@ private val Names = listOf(
     "Michael Clark",
     "Yusuf Grimes",
     "Mustafa Müller",
-    "Diego Ribas Da Cunha"
+    "Diego Ribas Da Cunha",
+    "Jan"
 )
