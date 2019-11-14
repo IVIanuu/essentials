@@ -36,7 +36,7 @@ import kotlinx.coroutines.launch
 class MainActivity : EsActivity() {
 
     override val startRoute: ControllerRoute?
-        get() = sliverRoute
+        get() = homeRoute
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

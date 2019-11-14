@@ -21,17 +21,13 @@ import androidx.animation.ExponentialDecay
 import androidx.compose.Composable
 import androidx.compose.memo
 import androidx.compose.unaryPlus
-import androidx.ui.core.Direction
 import androidx.ui.core.Px
-import androidx.ui.core.PxPosition
-import androidx.ui.core.coerceIn
-import androidx.ui.core.gesture.DragObserver
 import androidx.ui.core.gesture.PressGestureDetector
-import androidx.ui.core.gesture.TouchSlopDragGestureDetector
 import androidx.ui.core.px
 import androidx.ui.foundation.animation.AnimatedValueHolder
 import androidx.ui.foundation.animation.FlingConfig
-import com.github.ajalt.timberkt.d
+import androidx.ui.foundation.gestures.DragDirection
+import androidx.ui.foundation.gestures.Draggable
 import com.ivianuu.essentials.ui.compose.common.framed
 import com.ivianuu.essentials.ui.compose.core.Axis
 
@@ -118,112 +114,59 @@ fun Scrollable(
     child: @Composable() (ScrollPosition) -> Unit
 ) {
     PressGestureDetector(onPress = { position.scrollTo(position.value) }) {
-        TouchSlopDragGestureDetector(
-            dragObserver = object : DragObserver {
-
-                override fun onStart(downPosition: PxPosition) {
-                    if (!enabled) return
-                    if (onScrollEvent != null) {
-                        onScrollEvent(
-                            ScrollEvent.PreStart(
-                                position.value
-                            ), position
-                        )
-                        onScrollEvent(
-                            ScrollEvent.Start(
-                                position.value
-                            ), position
-                        )
-                    }
-                }
-
-                override fun onDrag(dragDistance: PxPosition): PxPosition {
-                    if (!enabled) return PxPosition.Origin
-                    val oldValue = position.value
-                    val distance = -when (direction) {
-                        Axis.Horizontal -> dragDistance.x
-                        Axis.Vertical -> dragDistance.y
-                    }
-                    val newValue =
-                        (oldValue + distance).coerceIn(position.minValue, position.maxValue)
-
-                    // todo clean
-                    val scrollDirection = when (direction) {
-                        Axis.Horizontal -> {
-                            if (dragDistance.x <= Px.Zero) ScrollDirection.Forward else ScrollDirection.Reverse
-                        }
-                        Axis.Vertical -> {
-                            if (dragDistance.y <= Px.Zero) ScrollDirection.Forward else ScrollDirection.Reverse
-                        }
-                    }
-
-                    val consumed = -(newValue - oldValue)
-                    d { "orig distance ${dragDistance.x} ${dragDistance.y} old vaue $oldValue -> distance $distance -> new value $newValue direction $scrollDirection consumed $consumed" }
-                    position.direction = scrollDirection
-                    position.holder.animatedFloat.snapTo(newValue.value)
-
-                    return when (direction) {
-                        Axis.Horizontal -> PxPosition(
-                            x = consumed,
-                            y = Px.Zero
-                        )
-                        Axis.Vertical -> PxPosition(
-                            x = Px.Zero,
-                            y = consumed
-                        )
-                    }
-
-                    /*
-                    val consumed = dragValue.value - oldValue
-                    val fractionConsumed = if (projected == 0f) 0f else consumed / projected
-                    return PxPosition(
-                        dragDirection.xProjection(dragDistance.x).px * fractionConsumed,
-                        dragDirection.yProjection(dragDistance.y).px * fractionConsumed
-                    )
-                    position.direction =
-                        if (finalNewValue < position.value.value) ScrollDirection.Forward else ScrollDirection.Reverse
-                    onScrollEvent?.invoke(
-                        ScrollEvent.PreDrag(
-                            newValue.px
+        Draggable(
+            dragDirection = when (direction) {
+                Axis.Vertical -> DragDirection.Vertical
+                Axis.Horizontal -> DragDirection.Horizontal
+            },
+            dragValue = position.holder,
+            onDragStarted = {
+                if (onScrollEvent != null) {
+                    onScrollEvent(
+                        ScrollEvent.PreStart(
+                            position.value
                         ), position
                     )
-                    position.holder.animatedFloat.snapTo(finalNewValue)
-                    onScrollEvent?.invoke(
-                        ScrollEvent.Drag(
-                            newValue.px
-                        ), position
-                    )*/
-                }
-
-                override fun onStop(velocity: PxPosition) {
-                    if (!enabled) return
-                    val finalVelocity = -when (direction) {
-                        Axis.Horizontal -> velocity.x
-                        Axis.Vertical -> velocity.y
-                    }
-                    onScrollEvent?.invoke(
-                        ScrollEvent.PreEnd(
-                            finalVelocity
-                        ), position
-                    )
-                    position.holder.fling(position.flingConfig, finalVelocity.value)
-                    onScrollEvent?.invoke(
-                        ScrollEvent.End(
-                            finalVelocity
+                    onScrollEvent(
+                        ScrollEvent.Start(
+                            position.value
                         ), position
                     )
                 }
             },
-            canDrag = { dragDirection ->
-                if (!enabled) return@TouchSlopDragGestureDetector false
-                return@TouchSlopDragGestureDetector when (direction) {
-                    Axis.Horizontal -> dragDirection == Direction.LEFT || dragDirection == Direction.RIGHT
-                    Axis.Vertical -> dragDirection == Direction.UP || dragDirection == Direction.DOWN
-                }
+            onDragValueChangeRequested = { newValue ->
+                val finalNewValue =
+                    newValue.coerceIn(position.minValue.value, position.maxValue.value)
+                position.direction =
+                    if (finalNewValue > position.value.value) ScrollDirection.Forward else ScrollDirection.Reverse
+                onScrollEvent?.invoke(
+                    ScrollEvent.PreDrag(
+                        newValue.px
+                    ), position
+                )
+                position.holder.animatedFloat.snapTo(finalNewValue)
+                onScrollEvent?.invoke(
+                    ScrollEvent.Drag(
+                        newValue.px
+                    ), position
+                )
             },
-            children = {
-                child(position)
-            }
+            onDragStopped = {
+                val velocityPx = it.px
+                onScrollEvent?.invoke(
+                    ScrollEvent.PreEnd(
+                        velocityPx
+                    ), position
+                )
+                position.holder.fling(position.flingConfig, it)
+                onScrollEvent?.invoke(
+                    ScrollEvent.End(
+                        velocityPx
+                    ), position
+                )
+            },
+            enabled = enabled,
+            children = { child(position) }
         )
     }
 }

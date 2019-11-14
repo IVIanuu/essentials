@@ -16,14 +16,12 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import androidx.compose.memo
 import androidx.compose.unaryPlus
 import androidx.ui.core.Alignment
 import androidx.ui.core.Px
 import androidx.ui.core.Text
 import androidx.ui.core.dp
 import androidx.ui.core.max
-import androidx.ui.layout.Column
 import androidx.ui.layout.Container
 import androidx.ui.layout.EdgeInsets
 import androidx.ui.material.surface.Surface
@@ -32,40 +30,18 @@ import androidx.ui.material.themeTextStyle
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.compose.common.scrolling.sliver.SliverChildren
 import com.ivianuu.essentials.ui.compose.common.scrolling.sliver.SliverGeometry
-import com.ivianuu.essentials.ui.compose.common.scrolling.sliver.SliverScrollPosition
-import com.ivianuu.essentials.ui.compose.common.scrolling.sliver.SliverScrollable
-import com.ivianuu.essentials.ui.compose.common.scrolling.sliver.Viewport
+import com.ivianuu.essentials.ui.compose.common.scrolling.sliver.SliverList
+import com.ivianuu.essentials.ui.compose.common.scrolling.sliver.SliverScroller
 import com.ivianuu.essentials.ui.compose.composeControllerRoute
-import com.ivianuu.essentials.ui.compose.core.staticComposable
 import com.ivianuu.essentials.ui.compose.material.SimpleListItem
 
 val sliverRoute = composeControllerRoute {
-    val position = +memo { SliverScrollPosition() }
-    SliverScrollable(
-        position = position
-    ) {
-        Viewport(position = position) {
-            //AppBarSliver()
-            Sliver { constraints ->
-                val itemCount = 70
-                val itemSize = 48.dp
-                content(
-                    geometry = SliverGeometry(
-                        scrollSize = itemSize.toPx() * (itemCount - 1),
-                        paintSize = itemSize.toPx() * (itemCount - 1),
-                        paintOrigin = -constraints.scrollPosition
-                    )
-                ) {
-                    Column {
-                        (0 until itemCount).forEach { index ->
-                            staticComposable(index) {
-                                SimpleListItem(title = { Text("Item $index") })
-                            }
-                        }
-                    }
-                }
-            }
-        }
+    SliverScroller {
+        SliverList(
+            itemCount = 100,
+            itemSize = 48.dp,
+            item = { SimpleListItem(title = { Text("Item ${it + 1}") }) }
+        )
     }
 }
 
