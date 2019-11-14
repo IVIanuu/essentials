@@ -23,8 +23,8 @@ import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.compose.composeControllerRoute
 import com.ivianuu.essentials.ui.compose.material.BottomNavigationBar
 import com.ivianuu.essentials.ui.compose.material.BottomNavigationBarItem
-import com.ivianuu.essentials.ui.compose.material.BottomNavigationContent
 import com.ivianuu.essentials.ui.compose.material.BottomNavigationController
+import com.ivianuu.essentials.ui.compose.material.BottomNavigationSwapper
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
 import com.ivianuu.essentials.ui.compose.material.Scaffold
 import com.ivianuu.essentials.ui.compose.resources.drawableResource
@@ -40,7 +40,7 @@ val bottomNavigationRoute = composeControllerRoute(
         Scaffold(
             topAppBar = { EsTopAppBar("Bottom navigation") },
             body = {
-                BottomNavigationContent<BottomNavItem> { _, item ->
+                BottomNavigationSwapper<BottomNavItem>(keepState = true) { _, item ->
                     ColoredRect(item.color)
                 }
             },

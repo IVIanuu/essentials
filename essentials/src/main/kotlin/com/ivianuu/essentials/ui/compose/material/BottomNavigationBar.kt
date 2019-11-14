@@ -43,6 +43,8 @@ import androidx.ui.material.MaterialTheme
 import androidx.ui.material.ripple.Ripple
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.withDensity
+import com.ivianuu.essentials.ui.compose.layout.Swapper
+import com.ivianuu.essentials.ui.compose.layout.SwapperController
 
 @Composable
 fun <T> BottomNavigationBar(
@@ -152,11 +154,28 @@ fun BottomNavigationBarItem(
 }
 
 @Composable
-fun <T> BottomNavigationContent(
+fun <T> BottomNavigationSwapper(
+    keepState: Boolean = false,
     content: @Composable() (Int, T) -> Unit
-) = composable("BottomNavigationContent") {
+) = composable("BottomNavigationSwapper") {
     val bottomNavigationController = +ambientBottomNavigationController<T>()
-    content(bottomNavigationController.selectedIndex, bottomNavigationController.selectedItem)
+    val swapperController = +memo {
+        SwapperController(
+            initial = bottomNavigationController.selectedItem,
+            keepState = keepState
+        )
+    }
+
+    +memo(bottomNavigationController.selectedItem) {
+        swapperController.current = bottomNavigationController.selectedItem
+    }
+
+    Swapper(controller = swapperController) {
+        content(
+            bottomNavigationController.selectedIndex,
+            bottomNavigationController.selectedItem
+        )
+    }
 }
 
 private val BottomNavigationBarHeight = 56.dp
