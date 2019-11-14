@@ -38,7 +38,7 @@ import com.ivianuu.essentials.ui.compose.material.SimpleListItem
 val sliverRoute = composeControllerRoute {
     SliverScroller {
         SliverList(
-            itemCount = 100,
+            count = 100,
             itemSize = 48.dp,
             item = { SimpleListItem(title = { Text("Item ${it + 1}") }) }
         )

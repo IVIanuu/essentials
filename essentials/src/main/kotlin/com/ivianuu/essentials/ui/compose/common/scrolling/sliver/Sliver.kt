@@ -109,7 +109,7 @@ fun Viewport(
 
         val initialLayoutOffset = layoutOffset
         val adjustedUserScrollDirection =
-            applyGrowthDirectionToScrollDirection(position.direction, growthDirection)
+            position.direction.applyGrowthDirection(growthDirection)
         var maxPaintOffset = layoutOffset + overlap
         var precedingScrollSpace = Px.Zero
 
@@ -318,42 +318,7 @@ fun Viewport(
     }
 }
 
-private fun applyGrowthDirectionToScrollDirection(
-    scrollDirection: ScrollDirection,
-    growthDirection: GrowthDirection
-): ScrollDirection {
-    return when (growthDirection) {
-        GrowthDirection.Forward -> scrollDirection
-        GrowthDirection.Reverse -> flipScrollDirection(scrollDirection)
-    }
-}
 
-private fun applyGrowthDirectionToAxisDirection(
-    axisDirection: Direction,
-    growthDirection: GrowthDirection
-): Direction {
-    return when (growthDirection) {
-        GrowthDirection.Forward -> axisDirection
-        GrowthDirection.Reverse -> flipAxisDirection(axisDirection)
-    }
-}
-
-private fun flipAxisDirection(axisDirection: Direction): Direction {
-    return when (axisDirection) {
-        Direction.UP -> Direction.DOWN
-        Direction.RIGHT -> Direction.LEFT
-        Direction.DOWN -> Direction.UP
-        Direction.LEFT -> Direction.RIGHT
-    }
-}
-
-private fun flipScrollDirection(direction: ScrollDirection): ScrollDirection {
-    return when (direction) {
-        ScrollDirection.Idle -> ScrollDirection.Idle
-        ScrollDirection.Forward -> ScrollDirection.Reverse
-        ScrollDirection.Reverse -> ScrollDirection.Forward
-    }
-}
 
 
 private fun computeAbsolutePaintOffset(
@@ -363,13 +328,11 @@ private fun computeAbsolutePaintOffset(
     viewportWidth: Px,
     mainAxisDirection: Direction,
     growthDirection: GrowthDirection
-): PxPosition {
-    return when (applyGrowthDirectionToAxisDirection(mainAxisDirection, growthDirection)) {
-        Direction.UP -> PxPosition(Px.Zero, viewportHeight - (layoutOffset + geometry.paintSize))
-        Direction.RIGHT -> PxPosition(layoutOffset, Px.Zero)
-        Direction.DOWN -> PxPosition(Px.Zero, layoutOffset)
-        Direction.LEFT -> PxPosition(viewportWidth - (layoutOffset + geometry.paintSize), Px.Zero)
-    }
+): PxPosition = when (mainAxisDirection.applyGrowthDirection(growthDirection)) {
+    Direction.UP -> PxPosition(Px.Zero, viewportHeight - (layoutOffset + geometry.paintSize))
+    Direction.RIGHT -> PxPosition(layoutOffset, Px.Zero)
+    Direction.DOWN -> PxPosition(Px.Zero, layoutOffset)
+    Direction.LEFT -> PxPosition(viewportWidth - (layoutOffset + geometry.paintSize), Px.Zero)
 }
 
 private val defaultCacheSize = 250.px
@@ -465,9 +428,6 @@ data class SliverGeometry(
     val cacheSize: Px = layoutSize
 )
 
-enum class GrowthDirection {
-    Forward, Reverse
-}
 
 internal data class SliverChild(
     val key: Any?,

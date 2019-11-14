@@ -18,11 +18,13 @@ package com.ivianuu.essentials.ui.compose.common.scrolling.sliver
 
 import androidx.compose.Composable
 import androidx.ui.core.Dp
+import androidx.ui.core.ParentData
 import androidx.ui.core.Px
 import androidx.ui.core.max
 import androidx.ui.core.min
-import androidx.ui.layout.Column
+import androidx.ui.core.round
 import com.github.ajalt.timberkt.d
+import com.ivianuu.essentials.ui.compose.core.composable
 
 fun <T> SliverChildren.SliverList(
     items: List<T>,
@@ -39,31 +41,31 @@ fun <T> SliverChildren.SliverList(
     itemSizeProvider: (Int) -> Dp,
     item: @Composable() (Int, T) -> Unit
 ) = SliverList(
-    itemCount = items.size,
+    count = items.size,
     itemSizeProvider = itemSizeProvider,
     item = { item(it, items[it]) }
 )
 
 fun SliverChildren.SliverList(
-    itemCount: Int,
+    count: Int,
     itemSize: Dp,
     item: @Composable() (Int) -> Unit
 ) = SliverList(
-    itemCount = itemCount,
+    count = count,
     itemSizeProvider = { itemSize },
     item = item
 )
 
 fun SliverChildren.SliverList(
-    itemCount: Int,
+    count: Int,
     itemSizeProvider: (Int) -> Dp,
     item: @Composable() (Int) -> Unit
 ) = Sliver { constraints ->
-    if (itemCount == 0) return@Sliver content(SliverGeometry()) {}
+    if (count == 0) return@Sliver content(SliverGeometry()) {}
 
     var offset = Px.Zero
 
-    val items = (0 until itemCount)
+    val items = (0 until count)
         .map(itemSizeProvider)
         .map { it.toPx() }
         .mapIndexed { index, size ->
@@ -98,22 +100,31 @@ fun SliverChildren.SliverList(
 
     var totalScrollSize = Px.Zero
     items
-        .drop(1) // todo this works but might be a bug?
         .forEach { totalScrollSize += it.size }
-
-    val scrollSmoothness = firstChild.leading - scrollOffset
 
     d { "item range $itemRange first $firstChild last $lastChild constraints $constraints paint size $paintSize" }
 
-    content(
-        geometry = SliverGeometry(
-            scrollSize = totalScrollSize + scrollSmoothness,
-            paintSize = paintSize,
-            paintOrigin = scrollSmoothness
-        )
-    ) {
-        Column {
-            itemRange.forEach(item)
+    val geometry = SliverGeometry(
+        scrollSize = totalScrollSize,
+        paintSize = paintSize
+    )
+
+    content(geometry = geometry) {
+        SliverChildLayout(constraints = constraints, geometry = geometry) {
+            itemRange
+                .map { items[it] }
+                .forEach { item ->
+                    composable(item.index) {
+                        ParentData(
+                            SliverChildParentData(
+                                size = item.size.round(),
+                                layoutOffset = item.leading
+                            )
+                        ) {
+                            item(item.index)
+                        }
+                    }
+                }
         }
     }
 }
