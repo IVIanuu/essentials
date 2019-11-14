@@ -25,6 +25,7 @@ import androidx.ui.core.Placeable
 import androidx.ui.core.Px
 import androidx.ui.core.PxPosition
 import androidx.ui.core.px
+import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.compose.core.composable
 
 @Composable
@@ -115,6 +116,8 @@ fun SliverChildLayout(
                         y = childOffset.y + (mainAxisUnit.y.value * paintSize.value).px
                     )
                 }
+
+                d { "child at $index main axis delta $mainAxisDelta child offset $childOffset paint size $paintSize remaining ${constraints.remainingPaintSpace}" }
 
                 // If the child's visible interval (mainAxisDelta, mainAxisDelta + paintExtentOf(child))
                 // does not intersect the paint extent interval (0, constraints.remainingPaintExtent), it's hidden.

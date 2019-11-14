@@ -79,7 +79,7 @@ fun SliverChildren.SliverList(
             )
         }
 
-    val scrollOffset = max(constraints.scrollPosition - constraints.cacheOrigin, Px.Zero)
+    val scrollOffset = max(constraints.scrollPosition, Px.Zero)
 
     d { "scroll offset $scrollOffset" }
 
