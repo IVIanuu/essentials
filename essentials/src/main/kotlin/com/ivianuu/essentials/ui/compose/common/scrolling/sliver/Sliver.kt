@@ -123,7 +123,7 @@ fun Viewport(
 
             d { "layout child pos $sliverScrollPosition orig $scrollPosition" }
 
-            val (geometry, content) = child.measureBlock(
+            val (geometry, childContent) = child.measureBlock(
                 measureScope, SliverConstraints(
                     mainAxisDirection = mainAxisDirection,
                     growthDirection = growthDirection,
@@ -188,7 +188,7 @@ fun Viewport(
                 // todo
                 ParentData(data = parentData) {
                     RepaintBoundary {
-                        content()
+                        childContent()
                     }
                 }
             }
@@ -477,15 +477,15 @@ internal data class SliverChild(
 class SliverMeasureScope(override val density: Density) : DensityScope {
     fun content(
         geometry: SliverGeometry,
-        content: @Composable() () -> Unit
-    ): SliverMeasureResult = SliverMeasureResult(geometry, content)
+        child: @Composable() () -> Unit
+    ): SliverMeasureResult = SliverMeasureResult(geometry, child)
 }
 
 typealias SliverMeasureBlock = SliverMeasureScope.(constraints: SliverConstraints) -> SliverMeasureResult
 
 data class SliverMeasureResult internal constructor(
     val geometry: SliverGeometry,
-    val content: @Composable() () -> Unit
+    val child: @Composable() () -> Unit
 )
 
 private data class SliverParentData(

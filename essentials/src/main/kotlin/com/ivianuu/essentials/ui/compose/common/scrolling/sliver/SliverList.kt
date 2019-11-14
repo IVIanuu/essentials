@@ -19,6 +19,8 @@ package com.ivianuu.essentials.ui.compose.common.scrolling.sliver
 import androidx.compose.Composable
 import androidx.ui.core.Dp
 import androidx.ui.core.Px
+import androidx.ui.core.max
+import androidx.ui.core.min
 import androidx.ui.layout.Column
 import com.github.ajalt.timberkt.d
 
@@ -57,23 +59,67 @@ fun SliverChildren.SliverList(
     itemSizeProvider: (Int) -> Dp,
     item: @Composable() (Int) -> Unit
 ) = Sliver { constraints ->
-    var totalItemSize = Px.Zero
-    (0 until itemCount)
+    if (itemCount == 0) return@Sliver content(SliverGeometry()) {}
+
+    var offset = Px.Zero
+
+    val items = (0 until itemCount)
         .map(itemSizeProvider)
         .map { it.toPx() }
-        .forEach { totalItemSize += it }
+        .mapIndexed { index, size ->
+            val thisOffset = offset
+            offset += size
+            ItemBounds(
+                index = index,
+                size = size,
+                leading = thisOffset,
+                trailing = offset
+            )
+        }
+
+    val scrollOffset = max(constraints.scrollPosition - constraints.cacheOrigin, Px.Zero)
+
+    d { "scroll offset $scrollOffset" }
+
+    val firstChild = items.first { it.hitTest(max(scrollOffset, Px.Zero)) }
+    val lastChild = items.first {
+        it.hitTest(
+            min(
+                scrollOffset + constraints.remainingCacheSpace,
+                items.last().trailing
+            )
+        )
+    }
+
+    val itemRange = firstChild.index..lastChild.index
+
+    var paintSize = Px.Zero
+    itemRange.forEach { paintSize += itemSizeProvider(it).toPx() }
+
+    val totalScrollSize = items.map { it.size }.fold(Px.Zero) { acc, px -> acc + px }
+
+    d { "item range $itemRange first $firstChild last $lastChild constraints $constraints paint size $paintSize" }
 
     content(
         geometry = SliverGeometry(
-            scrollSize = totalItemSize,
-            paintSize = totalItemSize,
-            paintOrigin = -constraints.scrollPosition
+            scrollSize = totalScrollSize,
+            paintSize = paintSize,
+            paintOrigin = firstChild.leading - scrollOffset
         )
     ) {
         Column {
-            (0 until itemCount)
-                .onEach { d { "sliver item -> $it" } }
-                .forEach(item)
+            itemRange.forEach(item)
         }
     }
+}
+
+private data class ItemBounds(
+    val index: Int,
+    val size: Px,
+    val leading: Px,
+    val trailing: Px = leading + size
+) {
+    // todo avoid alloc
+    fun hitTest(scrollPosition: Px): Boolean =
+        scrollPosition.value in leading.value..trailing.value
 }
