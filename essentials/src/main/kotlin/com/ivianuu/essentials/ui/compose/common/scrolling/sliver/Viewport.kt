@@ -54,9 +54,7 @@ fun Viewport(
     val density = +ambientDensity()
     val measureScope = +memo(density) { SliverMeasureScope(density) }
     state.measureScope = measureScope
-    state.children = +memo(children) {
-        SliverChildren().apply(children).children
-    }
+    state.children = SliverChildren().apply(children).children
     state.position = position
     state.center = center
     state.mainAxisDirection = mainAxisDirection

@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.ui.compose.common.scrolling.sliver
 
 import androidx.compose.Composable
-import androidx.ui.core.Dp
 import androidx.ui.core.ParentData
 import androidx.ui.core.Px
 import androidx.ui.core.coerceIn
@@ -29,17 +28,17 @@ import com.ivianuu.essentials.ui.compose.core.composable
 
 fun <T> SliverChildren.SliverList(
     items: List<T>,
-    itemSize: Dp,
+    itemSize: Px,
     item: @Composable() (Int, T) -> Unit
 ) = SliverList(
     items = items,
-    itemSizeProvider = { itemSize },
+    itemSizeProvider = { _, _ -> itemSize },
     item = item
 )
 
 fun <T> SliverChildren.SliverList(
     items: List<T>,
-    itemSizeProvider: (Int) -> Dp,
+    itemSizeProvider: (Int, SliverConstraints) -> Px,
     item: @Composable() (Int, T) -> Unit
 ) = SliverList(
     count = items.size,
@@ -49,17 +48,17 @@ fun <T> SliverChildren.SliverList(
 
 fun SliverChildren.SliverList(
     count: Int,
-    itemSize: Dp,
+    itemSize: Px,
     item: @Composable() (Int) -> Unit
 ) = SliverList(
     count = count,
-    itemSizeProvider = { itemSize },
+    itemSizeProvider = { _, _ -> itemSize },
     item = item
 )
 
 fun SliverChildren.SliverList(
     count: Int,
-    itemSizeProvider: (Int) -> Dp,
+    itemSizeProvider: (Int, SliverConstraints) -> Px,
     item: @Composable() (Int) -> Unit
 ) = Sliver { constraints ->
     if (count == 0) return@Sliver content(SliverGeometry()) {}
@@ -67,8 +66,7 @@ fun SliverChildren.SliverList(
     val items = mutableListOf<ItemBounds>()
     var offset = Px.Zero
     (0 until count)
-        .map(itemSizeProvider)
-        .map { it.toPx() }
+        .map { itemSizeProvider(it, constraints) }
         .mapIndexed { index, size ->
             items += ItemBounds(
                 index = index,

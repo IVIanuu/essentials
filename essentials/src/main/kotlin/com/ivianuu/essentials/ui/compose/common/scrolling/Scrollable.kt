@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.ui.compose.common.scrolling
 
+import androidx.animation.AnimationBuilder
 import androidx.animation.AnimationEndReason
 import androidx.animation.ExponentialDecay
 import androidx.compose.Composable
@@ -59,14 +60,14 @@ class ScrollPosition(
     private var _maxValue: Px by framed(maxValue)
     val maxValue: Px get() = _maxValue
 
-    var flingConfig: FlingConfig by framed(
+    var flingConfigFactory: (Px) -> FlingConfig by framed {
         FlingConfig(
             decayAnimation = ExponentialDecay(
                 frictionMultiplier = ScrollerDefaultFriction,
                 absVelocityThreshold = ScrollerVelocityThreshold
             )
         )
-    )
+    }
 
     var direction by framed(ScrollDirection.Idle)
 
@@ -76,16 +77,18 @@ class ScrollPosition(
 
     fun smoothScrollTo(
         value: Px,
+        anim: AnimationBuilder<Float>,
         onEnd: (endReason: AnimationEndReason, finishValue: Float) -> Unit = { _, _ -> }
     ) {
-        holder.animatedFloat.animateTo(value.value, onEnd)
+        holder.animatedFloat.animateTo(value.value, anim, onEnd)
     }
 
     fun smoothScrollBy(
         value: Px,
+        anim: AnimationBuilder<Float>,
         onEnd: (endReason: AnimationEndReason, finishValue: Float) -> Unit = { _, _ -> }
     ) {
-        smoothScrollTo(this.value + value, onEnd)
+        smoothScrollTo(this.value + value, anim, onEnd)
     }
 
     fun scrollTo(value: Px) {
@@ -175,44 +178,26 @@ fun Scrollable(
                             y = consumed
                         )
                     }
-
-                    /*
-                    val consumed = dragValue.value - oldValue
-                    val fractionConsumed = if (projected == 0f) 0f else consumed / projected
-                    return PxPosition(
-                        dragDirection.xProjection(dragDistance.x).px * fractionConsumed,
-                        dragDirection.yProjection(dragDistance.y).px * fractionConsumed
-                    )
-                    position.direction =
-                        if (finalNewValue < position.value.value) ScrollDirection.Forward else ScrollDirection.Reverse
-                    onScrollEvent?.invoke(
-                        ScrollEvent.PreDrag(
-                            newValue.px
-                        ), position
-                    )
-                    position.holder.animatedFloat.snapTo(finalNewValue)
-                    onScrollEvent?.invoke(
-                        ScrollEvent.Drag(
-                            newValue.px
-                        ), position
-                    )*/
                 }
 
                 override fun onStop(velocity: PxPosition) {
                     if (!enabled) return
-                    val finalVelocity = -when (direction) {
+                    val mainAxisVelocity = -when (direction) {
                         Axis.Horizontal -> velocity.x
                         Axis.Vertical -> velocity.y
                     }
                     onScrollEvent?.invoke(
                         ScrollEvent.PreEnd(
-                            finalVelocity
+                            mainAxisVelocity
                         ), position
                     )
-                    position.holder.fling(position.flingConfig, finalVelocity.value)
+                    position.holder.fling(
+                        position.flingConfigFactory(mainAxisVelocity),
+                        mainAxisVelocity.value
+                    )
                     onScrollEvent?.invoke(
                         ScrollEvent.End(
-                            finalVelocity
+                            mainAxisVelocity
                         ), position
                     )
                 }

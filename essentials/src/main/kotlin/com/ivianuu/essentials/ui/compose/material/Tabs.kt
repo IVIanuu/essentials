@@ -25,7 +25,10 @@ import androidx.compose.unaryPlus
 import androidx.ui.graphics.Image
 import androidx.ui.material.Tab
 import androidx.ui.material.TabRow
+import com.ivianuu.essentials.ui.compose.common.Pager
+import com.ivianuu.essentials.ui.compose.common.PagerPosition
 import com.ivianuu.essentials.ui.compose.common.framed
+import com.ivianuu.essentials.ui.compose.core.Axis
 import com.ivianuu.essentials.ui.compose.core.composable
 
 fun <T> TabController(
@@ -98,19 +101,22 @@ fun <T> TabPager(
     tabController: TabController<T> = +ambientTabController<T>(),
     item: @Composable() (Int, T) -> Unit
 ) = composable("TabPager") {
-    /*val position = +memo { PagerPosition(tabController.items.size) }
+    val position = +memo { PagerPosition(tabController.items.size) }
 
-    +onCommit(tabController.selectedIndex) {
+    // todo better solution
+    +memo(tabController.selectedIndex) {
         position.animateToPage(tabController.selectedIndex)
+    }
+    +memo(position.current) {
+        tabController.selectedIndex = position.current
     }
 
     TabIndexAmbient.Provider(tabController.selectedIndex) {
         Pager(
             position = position,
             items = tabController.items,
-            onPageChanged = { tabController.selectedIndex = it },
             direction = Axis.Horizontal,
             item = item
         )
-    }*/
+    }
 }

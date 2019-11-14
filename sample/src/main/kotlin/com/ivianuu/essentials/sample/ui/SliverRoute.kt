@@ -38,6 +38,7 @@ import com.ivianuu.essentials.ui.compose.common.scrolling.sliver.SliverList
 import com.ivianuu.essentials.ui.compose.common.scrolling.sliver.SliverScroller
 import com.ivianuu.essentials.ui.compose.common.scrolling.sliver.applyGrowthDirection
 import com.ivianuu.essentials.ui.compose.composeControllerRoute
+import com.ivianuu.essentials.ui.compose.core.withDensity
 import com.ivianuu.essentials.ui.compose.layout.NonNullSingleChildLayout
 import com.ivianuu.essentials.ui.compose.material.SimpleListItem
 
@@ -54,7 +55,7 @@ val sliverRoute = composeControllerRoute {
     SliverScroller {
         SliverList(
             items = indices,
-            itemSize = 48.dp,
+            itemSize = +withDensity { 48.dp.toPx() },
             item = { _, item ->
                 SimpleListItem(
                     title = { Text("Item $item") },

@@ -17,7 +17,10 @@
 package com.ivianuu.essentials.ui.compose.common.scrolling
 
 import androidx.compose.Composable
+import androidx.compose.unaryPlus
 import androidx.ui.core.Dp
+import androidx.ui.core.ambientDensity
+import androidx.ui.core.withDensity
 import androidx.ui.layout.Column
 import com.ivianuu.essentials.ui.compose.common.scrolling.sliver.SliverList
 import com.ivianuu.essentials.ui.compose.common.scrolling.sliver.SliverScroller
@@ -25,6 +28,9 @@ import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.layout.SizedBox
 
 // todo customization
+// todo enabled
+// todo reverse
+// todo direction
 
 @Composable
 fun ScrollableList(
@@ -82,10 +88,16 @@ fun ScrollableList(
     itemSizeProvider: (Int) -> Dp,
     item: (Int) -> Unit
 ) = composable("ScrollableList") {
+    val density = +ambientDensity()
+
     SliverScroller {
         SliverList(
             count = count,
-            itemSizeProvider = itemSizeProvider,
+            itemSizeProvider = { index, _ ->
+                withDensity(density) {
+                    itemSizeProvider(index).toPx()
+                }
+            },
             item = item
         )
     }
