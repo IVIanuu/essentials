@@ -20,14 +20,13 @@ import androidx.compose.Composable
 import androidx.compose.memo
 import androidx.compose.state
 import androidx.compose.unaryPlus
-import androidx.ui.core.Density
-import androidx.ui.core.DensityScope
 import androidx.ui.core.Direction
 import androidx.ui.core.Layout
 import androidx.ui.core.ParentData
 import androidx.ui.core.Placeable
 import androidx.ui.core.Px
 import androidx.ui.core.PxPosition
+import androidx.ui.core.PxSize
 import androidx.ui.core.RepaintBoundary
 import androidx.ui.core.ambientDensity
 import androidx.ui.core.coerceIn
@@ -35,9 +34,7 @@ import androidx.ui.core.max
 import androidx.ui.core.min
 import androidx.ui.core.px
 import androidx.ui.core.round
-import androidx.ui.core.toPx
 import com.github.ajalt.timberkt.d
-import com.ivianuu.essentials.ui.compose.common.scrolling.ScrollDirection
 import com.ivianuu.essentials.ui.compose.common.scrolling.ScrollPosition
 import com.ivianuu.essentials.ui.compose.core.composable
 
@@ -52,23 +49,175 @@ fun Viewport(
     anchor: Float = 0f,
     children: SliverChildren.() -> Unit
 ) = composable("SliverLayout") {
-    val sliverChildren = +memo(children) {
-        SliverChildren().apply(children).children
-    }
-
-    val (mainAxisSize, setMainAxisSize) = +state { (-1).px }
-    val (crossAxisSize, setCrossAxisSize) = +state { (-1).px }
+    val state = +memo { ViewportState() }
 
     val density = +ambientDensity()
     val measureScope = +memo(density) { SliverMeasureScope(density) }
+    state.measureScope = measureScope
+    state.children = +memo(children) {
+        SliverChildren().apply(children).children
+    }
+    state.position = position
+    state.center = center
+    state.mainAxisDirection = mainAxisDirection
+    state.crossAxisDirection = crossAxisDirection
+    state.anchor = anchor
+    val (viewportSize, setViewportSize) = +state { PxSize.Zero }
+    state.viewportSize = viewportSize
 
-    val childrenBlocks = mutableListOf<@Composable() () -> Unit>()
+    state.performLayout()
 
-    var minScrollPosition = Px.Zero
-    var maxScrollPosition = Px.Zero
-    var hasVisualOverflow = false
+    ViewportLayout(
+        size = viewportSize,
+        onSizeChanged = setViewportSize
+    ) {
+        state.childrenComposables.forEach { it() }
+    }
+}
 
-    fun layoutChildSequence(
+private class ViewportState {
+
+    lateinit var measureScope: SliverMeasureScope
+    var children = emptyList<SliverChild>()
+    lateinit var position: ScrollPosition
+    var center: Any? = null
+    var mainAxisDirection = Direction.DOWN
+    var crossAxisDirection = Direction.RIGHT
+    var anchor = 0f
+    var viewportSize = PxSize.Zero
+
+    val mainAxisSize: Px
+        get() {
+            return when (mainAxisDirection) {
+                Direction.LEFT, Direction.RIGHT -> viewportSize.width
+                Direction.UP, Direction.DOWN -> viewportSize.height
+            }
+        }
+    val crossAxisSize: Px
+        get() {
+            return when (mainAxisDirection) {
+                Direction.LEFT, Direction.RIGHT -> viewportSize.height
+                Direction.UP, Direction.DOWN -> viewportSize.width
+            }
+        }
+
+    private var minScrollPosition = Px.Zero
+    private var maxScrollPosition = Px.Zero
+    private var hasVisualOverflow = false
+
+    val childrenComposables = mutableListOf<@Composable() () -> Unit>()
+
+    fun performLayout() {
+        if (viewportSize != PxSize.Zero) {
+            if (children.isNotEmpty()) {
+                var correction = Px.Zero
+                val centerOffsetAdjustment = Px.Zero // todo implement
+                var count = 0
+                do {
+                    correction = attemptLayout(
+                        mainAxisSize,
+                        crossAxisSize,
+                        position.value + centerOffsetAdjustment
+                    )
+                    if (correction != Px.Zero) {
+                        position.correctBy(correction)
+                    } else {
+                        val newMinValue = min(Px.Zero, minScrollPosition + mainAxisSize * anchor)
+                        val newMaxValue =
+                            max(Px.Zero, maxScrollPosition - mainAxisSize * (1f - anchor))
+                        if (newMinValue != position.minValue || newMaxValue != position.maxValue) {
+                            position.updateBounds(newMinValue, newMaxValue)
+                            d { "update min max to ${position.minValue} ${position.maxValue}" }
+                        }
+                        break
+                    }
+
+                    count += 1;
+                } while (count < 10)
+                check(count < 10)
+            } else {
+                if (Px.Zero != position.maxValue || Px.Zero != position.minValue) {
+                    position.updateBounds(Px.Zero, Px.Zero)
+                }
+
+            }
+        }
+    }
+
+    private fun attemptLayout(mainAxisSize: Px, crossAxisSize: Px, correctedOffset: Px): Px {
+        minScrollPosition = Px.Zero
+        maxScrollPosition = Px.Zero
+        hasVisualOverflow = false
+        childrenComposables.clear()
+
+        val centerOffset = mainAxisSize * anchor - correctedOffset
+        val reverseDirectionRemainingPaintSpace = centerOffset.coerceIn(Px.Zero, mainAxisSize)
+        val forwardDirectionRemainingPaintSpace =
+            (mainAxisSize - centerOffset).coerceIn(Px.Zero, mainAxisSize)
+
+        val cacheSize = defaultCacheSize // todo customize
+
+        val fullCacheSpace = mainAxisSize + (cacheSize * 2)
+        val centerCacheOffset = centerOffset + cacheSize
+        val reverseDirectionRemainingCacheSpace =
+            centerCacheOffset.coerceIn(Px.Zero, fullCacheSpace)
+        val forwardDirectionRemainingCacheSpace =
+            (fullCacheSpace - centerCacheOffset).coerceIn(Px.Zero, fullCacheSpace)
+
+        d {
+            "attempt layout:\n" +
+                    "center offset $centerOffset\n" +
+                    "remaining paint space reverse $reverseDirectionRemainingPaintSpace\n" +
+                    "remaining paint space forward $forwardDirectionRemainingPaintSpace\n" +
+                    "cache size $cacheSize\n" +
+                    "full cache space $fullCacheSpace\n" +
+                    "center cache offset $centerCacheOffset\n" +
+                    "remaining cache space reverse $reverseDirectionRemainingCacheSpace\n" +
+                    "remaining cache space forward $forwardDirectionRemainingCacheSpace"
+        }
+
+        val centerChild =
+            if (center != null) children.first { it.key == center } else children.firstOrNull()
+        val centerChildIndex = children.indexOf(centerChild)
+
+        if (centerChildIndex > 0) {
+            val result = layoutChildSequence(
+                initialIndex = centerChildIndex - 1,
+                scrollPosition = max(mainAxisSize, centerOffset) - mainAxisSize,
+                overlap = Px.Zero,
+                layoutOffset = forwardDirectionRemainingPaintSpace,
+                remainingPaintSpace = reverseDirectionRemainingPaintSpace,
+                mainAxisSize = mainAxisSize,
+                crossAxisSize = crossAxisSize,
+                growthDirection = GrowthDirection.Reverse,
+                remainingCacheSpace = reverseDirectionRemainingCacheSpace,
+                cacheOrigin = (mainAxisSize - centerOffset).coerceIn(-cacheSize, Px.Zero)
+            )
+            if (result != Px.Zero) return result
+        }
+
+        if (centerChild != null) {
+            return layoutChildSequence(
+                initialIndex = centerChildIndex,
+                scrollPosition = max(Px.Zero, -centerOffset),
+                overlap = if (centerChildIndex <= 0) min(
+                    Px.Zero,
+                    -centerOffset
+                ) else Px.Zero,
+                layoutOffset = if (centerOffset > mainAxisSize) centerOffset else reverseDirectionRemainingPaintSpace,
+                remainingPaintSpace = forwardDirectionRemainingPaintSpace,
+                mainAxisSize = mainAxisSize,
+                crossAxisSize = crossAxisSize,
+                growthDirection = GrowthDirection.Forward,
+                remainingCacheSpace = forwardDirectionRemainingCacheSpace,
+                cacheOrigin = centerOffset.coerceIn(-cacheSize, Px.Zero)
+            )
+        }
+
+        return Px.Zero
+    }
+
+    private fun layoutChildSequence(
         initialIndex: Int,
         scrollPosition: Px,
         overlap: Px,
@@ -109,7 +258,7 @@ fun Viewport(
         }
 
         var index = initialIndex
-        var child: SliverChild? = sliverChildren.getOrNull(index)
+        var child: SliverChild? = children.getOrNull(index)
         while (child != null) {
             val sliverScrollPosition = if (scrollPosition <= Px.Zero) Px.Zero else scrollPosition
             val correctedCacheOrigin = max(cacheOrigin, -sliverScrollPosition)
@@ -167,7 +316,7 @@ fun Viewport(
                 cacheOrigin = min(correctedCacheOrigin + geometry.cacheSize, Px.Zero)
             }
 
-            val parentData = SliverParentData(
+            val parentData = ViewportParentData(
                 computeAbsolutePaintOffset(
                     geometry = geometry,
                     layoutOffset = childLayoutOffset,
@@ -179,7 +328,7 @@ fun Viewport(
                 geometry
             )
 
-            childrenBlocks += {
+            childrenComposables += {
                 ParentData(data = parentData) {
                     RepaintBoundary {
                         childContent()
@@ -215,172 +364,53 @@ fun Viewport(
                 GrowthDirection.Reverse -> index - 1
             }
 
-            child = sliverChildren.getOrNull(index)
+            child = children.getOrNull(index)
         }
 
         return Px.Zero
     }
 
-    fun attemptLayout(mainAxisSize: Px, crossAxisSize: Px, correctedOffset: Px): Px {
-        minScrollPosition = Px.Zero
-        maxScrollPosition = Px.Zero
-        hasVisualOverflow = false
-
-        val centerOffset = mainAxisSize * anchor - correctedOffset
-        val reverseDirectionRemainingPaintSpace = centerOffset.coerceIn(Px.Zero, mainAxisSize)
-        val forwardDirectionRemainingPaintSpace =
-            (mainAxisSize - centerOffset).coerceIn(Px.Zero, mainAxisSize)
-
-        val cacheSize = defaultCacheSize // todo customize
-
-        val fullCacheSpace = mainAxisSize + (cacheSize * 2)
-        val centerCacheOffset = centerOffset + cacheSize
-        val reverseDirectionRemainingCacheSpace =
-            centerCacheOffset.coerceIn(Px.Zero, fullCacheSpace)
-        val forwardDirectionRemainingCacheSpace =
-            (fullCacheSpace - centerCacheOffset).coerceIn(Px.Zero, fullCacheSpace)
-
-        d {
-            "attempt layout:\n" +
-                    "center offset $centerOffset\n" +
-                    "remaining paint space reverse $reverseDirectionRemainingPaintSpace\n" +
-                    "remaining paint space forward $forwardDirectionRemainingPaintSpace\n" +
-                    "cache size $cacheSize\n" +
-                    "full cache space $fullCacheSpace\n" +
-                    "center cache offset $centerCacheOffset\n" +
-                    "remaining cache space reverse $reverseDirectionRemainingCacheSpace\n" +
-                    "remaining cache space forward $forwardDirectionRemainingCacheSpace"
-        }
-
-        val centerChild =
-            if (center != null) sliverChildren.first { it.key == center } else sliverChildren.firstOrNull()
-        val centerChildIndex = sliverChildren.indexOf(centerChild)
-
-        if (centerChildIndex > 0) {
-            val result = layoutChildSequence(
-                initialIndex = centerChildIndex - 1,
-                scrollPosition = max(mainAxisSize, centerOffset) - mainAxisSize,
-                overlap = Px.Zero,
-                layoutOffset = forwardDirectionRemainingPaintSpace,
-                remainingPaintSpace = reverseDirectionRemainingPaintSpace,
-                mainAxisSize = mainAxisSize,
-                crossAxisSize = crossAxisSize,
-                growthDirection = GrowthDirection.Reverse,
-                remainingCacheSpace = reverseDirectionRemainingCacheSpace,
-                cacheOrigin = (mainAxisSize - centerOffset).coerceIn(-cacheSize, Px.Zero)
-            )
-            if (result != Px.Zero) return result
-        }
-
-        if (centerChild != null) {
-            return layoutChildSequence(
-                initialIndex = centerChildIndex,
-                scrollPosition = max(Px.Zero, -centerOffset),
-                overlap = if (centerChildIndex <= 0) min(
-                    Px.Zero,
-                    -centerOffset
-                ) else Px.Zero,
-                layoutOffset = if (centerOffset > mainAxisSize) centerOffset else reverseDirectionRemainingPaintSpace,
-                remainingPaintSpace = forwardDirectionRemainingPaintSpace,
-                mainAxisSize = mainAxisSize,
-                crossAxisSize = crossAxisSize,
-                growthDirection = GrowthDirection.Forward,
-                remainingCacheSpace = forwardDirectionRemainingCacheSpace,
-                cacheOrigin = centerOffset.coerceIn(-cacheSize, Px.Zero)
-            )
-        }
-
-        return Px.Zero
+    private fun SliverGeometry.checkGeometry() {
+        check(scrollSize >= Px.Zero)
+        check(paintSize >= Px.Zero)
+        check(layoutSize >= Px.Zero)
+        check(cacheSize >= Px.Zero)
+        check(layoutSize <= paintSize)
+        check(paintSize <= maxPaintSize)
     }
 
-    if (mainAxisSize != (-1).px && crossAxisSize != (-1).px) {
-        if (sliverChildren.isNotEmpty()) {
-            var correction = Px.Zero
-            val centerOffsetAdjustment = Px.Zero // todo implement
-            var count = 0
-            do {
-                correction = attemptLayout(
-                    mainAxisSize,
-                    crossAxisSize,
-                    position.value + centerOffsetAdjustment
-                )
-                if (correction != Px.Zero) {
-                    position.correctBy(correction)
-                } else {
-                    val newMinValue = min(Px.Zero, minScrollPosition + mainAxisSize * anchor)
-                    val newMaxValue = max(Px.Zero, maxScrollPosition - mainAxisSize * (1f - anchor))
-                    if (newMinValue != position.minValue || newMaxValue != position.maxValue) {
-                        position.updateBounds(newMinValue, newMaxValue)
-                        d { "update min max to ${position.minValue} ${position.maxValue}" }
-                    }
-                    break
-                }
 
-                count += 1;
-            } while (count < 10)
-            check(count < 10)
-        } else {
-            if (Px.Zero != position.maxValue || Px.Zero != position.minValue) {
-                position.updateBounds(Px.Zero, Px.Zero)
-            }
-
-        }
+    private fun computeAbsolutePaintOffset(
+        geometry: SliverGeometry,
+        layoutOffset: Px,
+        viewportHeight: Px,
+        viewportWidth: Px,
+        mainAxisDirection: Direction,
+        growthDirection: GrowthDirection
+    ): PxPosition = when (mainAxisDirection.applyGrowthDirection(growthDirection)) {
+        Direction.UP -> PxPosition(Px.Zero, viewportHeight - (layoutOffset + geometry.paintSize))
+        Direction.RIGHT -> PxPosition(layoutOffset, Px.Zero)
+        Direction.DOWN -> PxPosition(Px.Zero, layoutOffset)
+        Direction.LEFT -> PxPosition(viewportWidth - (layoutOffset + geometry.paintSize), Px.Zero)
     }
 
-    ViewportLayout(
-        mainAxisDirection = mainAxisDirection,
-        mainAxisSize = mainAxisSize,
-        crossAxisSize = crossAxisSize,
-        onSizeChanged = { newMainAxisSize, newCrossAxisSize ->
-            setMainAxisSize(newMainAxisSize)
-            setCrossAxisSize(newCrossAxisSize)
-        }
-    ) {
-        childrenBlocks.forEach { it() }
-    }
-}
-
-private fun SliverGeometry.checkGeometry() {
-    check(scrollSize >= Px.Zero)
-    check(paintSize >= Px.Zero)
-    check(layoutSize >= Px.Zero)
-    check(cacheSize >= Px.Zero)
-    check(layoutSize <= paintSize)
-    check(paintSize <= maxPaintSize)
-}
-
-
-private fun computeAbsolutePaintOffset(
-    geometry: SliverGeometry,
-    layoutOffset: Px,
-    viewportHeight: Px,
-    viewportWidth: Px,
-    mainAxisDirection: Direction,
-    growthDirection: GrowthDirection
-): PxPosition = when (mainAxisDirection.applyGrowthDirection(growthDirection)) {
-    Direction.UP -> PxPosition(Px.Zero, viewportHeight - (layoutOffset + geometry.paintSize))
-    Direction.RIGHT -> PxPosition(layoutOffset, Px.Zero)
-    Direction.DOWN -> PxPosition(Px.Zero, layoutOffset)
-    Direction.LEFT -> PxPosition(viewportWidth - (layoutOffset + geometry.paintSize), Px.Zero)
 }
 
 private val defaultCacheSize = 250.px
 
 @Composable
 private fun ViewportLayout(
-    mainAxisDirection: Direction,
-    mainAxisSize: Px,
-    crossAxisSize: Px,
-    onSizeChanged: (Px, Px) -> Unit,
+    size: PxSize,
+    onSizeChanged: (PxSize) -> Unit,
     children: @Composable() () -> Unit
 ) = composable("ViewportLayout") {
     Layout(children = children) { measureables, constraints ->
         val placeables = mutableListOf<Placeable>()
-        val parentDatas = mutableListOf<SliverParentData>()
+        val parentDatas = mutableListOf<ViewportParentData>()
 
         for (i in measureables.indices) {
             val measureable = measureables[i]
-            val parentData = measureable.parentData as SliverParentData
+            val parentData = measureable.parentData as ViewportParentData
             val childConstraints = constraints.copy(
                 minWidth = constraints.maxWidth, // todo check
                 minHeight = parentData.geometry.scrollSize.round(),
@@ -394,18 +424,8 @@ private fun ViewportLayout(
         }
 
         layout(constraints.maxWidth, constraints.maxHeight) {
-            val newMainAxisSize = when (mainAxisDirection) {
-                Direction.LEFT, Direction.RIGHT -> constraints.maxWidth.toPx()
-                Direction.UP, Direction.DOWN -> constraints.maxHeight.toPx()
-            }
-            val newCrossAxisSize = when (mainAxisDirection) {
-                Direction.LEFT, Direction.RIGHT -> constraints.maxHeight.toPx()
-                Direction.UP, Direction.DOWN -> constraints.maxWidth.toPx()
-            }
-
-            if (newMainAxisSize != mainAxisSize || newCrossAxisSize != crossAxisSize) {
-                onSizeChanged(newMainAxisSize, newCrossAxisSize)
-            }
+            val newSize = PxSize(constraints.maxWidth, constraints.maxHeight)
+            if (size != newSize) onSizeChanged(newSize)
 
             for (i in placeables.indices) {
                 val placeable = placeables[i]
@@ -419,65 +439,13 @@ private fun ViewportLayout(
     }
 }
 
-class SliverChildren {
-
-    internal val children = mutableListOf<SliverChild>()
-
-    fun Sliver(key: Any? = null, measureBlock: SliverMeasureBlock) {
-        children += SliverChild(key, measureBlock)
-    }
-
-}
-
-data class SliverConstraints(
-    val mainAxisDirection: Direction,
-    val growthDirection: GrowthDirection,
-    val userScrollDirection: ScrollDirection,
-    val scrollPosition: Px,
-    val precedingScrollSpace: Px,
-    val overlap: Px,
-    val remainingPaintSpace: Px,
-    val crossAxisSpace: Px,
-    val crossAxisDirection: Direction,
-    val viewportMainAxisSpace: Px,
-    val remainingCacheSpace: Px,
-    val cacheOrigin: Px
-)
-
-data class SliverGeometry(
-    val scrollSize: Px = Px.Zero,
-    val paintSize: Px = Px.Zero,
-    val paintOrigin: Px = Px.Zero,
-    val layoutSize: Px = paintSize,
-    val maxPaintSize: Px = Px.Zero,
-    val maxScrollObstructionSize: Px = Px.Zero,
-    val visible: Boolean = paintSize > Px.Zero,
-    val hasVisualOverflow: Boolean = false,
-    val scrollOffsetCorrection: Px = Px.Zero,
-    val cacheSize: Px = layoutSize
-)
-
 
 internal data class SliverChild(
     val key: Any?,
     val measureBlock: SliverMeasureBlock
 )
 
-class SliverMeasureScope(override val density: Density) : DensityScope {
-    fun content(
-        geometry: SliverGeometry,
-        child: @Composable() () -> Unit
-    ): SliverMeasureResult = SliverMeasureResult(geometry, child)
-}
-
-typealias SliverMeasureBlock = SliverMeasureScope.(constraints: SliverConstraints) -> SliverMeasureResult
-
-data class SliverMeasureResult internal constructor(
-    val geometry: SliverGeometry,
-    val child: @Composable() () -> Unit
-)
-
-private data class SliverParentData(
+private data class ViewportParentData(
     val position: PxPosition,
     val geometry: SliverGeometry
 )

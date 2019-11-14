@@ -50,11 +50,9 @@ val sliverRoute = composeControllerRoute {
         }
     }
 
-    indices.size
+    indices.size // required to properly update the sliver list
 
-    SliverScroller(
-
-    ) {
+    SliverScroller {
         SliverList(
             items = indices,
             itemSize = 48.dp,
