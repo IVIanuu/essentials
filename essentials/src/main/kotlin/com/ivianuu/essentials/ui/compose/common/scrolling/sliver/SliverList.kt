@@ -100,11 +100,10 @@ fun SliverChildren.SliverList(
     val itemRange = firstChild.index..lastChild.index
 
     var paintSize = Px.Zero
-    itemRange.forEach { paintSize += itemSizeProvider(it).toPx() }
+    itemRange.forEach { paintSize += items[it].size }
 
     var totalScrollSize = Px.Zero
-    items
-        .forEach { totalScrollSize += it.size }
+    items.forEach { totalScrollSize += it.size }
 
     d { "item range $itemRange first $firstChild last $lastChild constraints $constraints paint size $paintSize" }
 
@@ -139,7 +138,6 @@ private data class ItemBounds(
     val leading: Px,
     val trailing: Px = leading + size
 ) {
-    // todo avoid alloc
     fun hitTest(scrollPosition: Px): Boolean =
-        scrollPosition.value in leading.value..trailing.value
+        scrollPosition >= leading && scrollPosition <= trailing
 }
