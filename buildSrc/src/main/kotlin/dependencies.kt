@@ -40,7 +40,7 @@ object Deps {
         const val activity = "androidx.activity:activity-ktx:1.1.0-rc02"
         const val appCompat = "androidx.appcompat:appcompat:1.1.0"
         const val cardView = "androidx.cardview:cardview:1.0.0"
-        const val constraintLayout = "androidx.constraintlayout:constraintlayout:2.0.0-beta2"
+        const val constraintLayout = "androidx.constraintlayout:constraintlayout:2.0.0-beta3"
         const val core = "androidx.core:core-ktx:1.2.0-beta02"
 
         object Lifecycle {
