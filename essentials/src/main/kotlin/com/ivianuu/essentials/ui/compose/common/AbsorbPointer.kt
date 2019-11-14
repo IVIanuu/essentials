@@ -26,13 +26,13 @@ import com.ivianuu.essentials.ui.compose.core.composable
 
 @Composable
 fun AbsorbPointer(
-    block: Boolean = true,
+    absorb: Boolean = true,
     children: @Composable() () -> Unit
 ) = composable("AbsorbPointer") {
     val consumedIds = +memo { mutableSetOf<Int>() }
     PointerInputWrapper(
         pointerInputHandler = { changes, pass, _ ->
-            if (block && (pass == PointerEventPass.InitialDown
+            if (absorb && (pass == PointerEventPass.InitialDown
                 || pass == PointerEventPass.PreDown
                         || pass == PointerEventPass.PostDown)
             ) {

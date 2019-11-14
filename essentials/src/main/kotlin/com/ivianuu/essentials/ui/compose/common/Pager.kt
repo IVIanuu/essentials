@@ -26,6 +26,7 @@ import androidx.ui.core.PxPosition
 import androidx.ui.core.px
 import androidx.ui.core.toPx
 import androidx.ui.foundation.animation.AnchorsFlingConfig
+import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.compose.common.scrolling.ScrollPosition
 import com.ivianuu.essentials.ui.compose.common.scrolling.Scrollable
 import com.ivianuu.essentials.ui.compose.common.scrolling.sliver.SliverList
@@ -62,6 +63,8 @@ fun Pager(
     reverse: Boolean = false,
     item: @Composable() (Int) -> Unit
 ) = composable("Pager") {
+    position.scrollPositionChanged()
+
     PagerLayout(
         direction = direction,
         viewportSize = position.viewportSize,
@@ -108,8 +111,9 @@ class PagerPosition(
 
     private var _initialPage: Int? = initialPage
 
+    private var _current by framed(0)
     val current: Int
-        get() = pageFromPosition(scrollPosition.value)
+        get() = _current
 
     init {
         scrollPosition.flingConfigFactory = { velocity ->
@@ -123,6 +127,14 @@ class PagerPosition(
                     stiffness = 3500f
                 )
             )
+        }
+    }
+
+    internal fun scrollPositionChanged() {
+        val newPage = pageFromPosition(scrollPosition.value)
+        d { "position ${scrollPosition.value} page $newPage" }
+        if (_current != newPage) {
+            _current = newPage
         }
     }
 
