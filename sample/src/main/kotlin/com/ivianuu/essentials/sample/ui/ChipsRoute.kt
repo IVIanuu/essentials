@@ -17,29 +17,38 @@
 package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.Composable
+import androidx.compose.ambient
+import androidx.compose.effectOf
 import androidx.compose.memo
 import androidx.compose.unaryPlus
 import androidx.ui.core.Text
 import androidx.ui.core.dp
+import androidx.ui.foundation.Clickable
 import androidx.ui.foundation.shape.corner.RoundedCornerShape
 import androidx.ui.layout.Container
 import androidx.ui.layout.EdgeInsets
+import androidx.ui.layout.Padding
+import androidx.ui.material.ripple.CurrentRippleTheme
+import androidx.ui.material.ripple.Ripple
+import androidx.ui.material.ripple.RippleTheme
 import androidx.ui.material.surface.Surface
 import androidx.ui.material.themeTextStyle
-import com.ivianuu.essentials.ui.compose.common.scrolling.Scroller
 import com.ivianuu.essentials.ui.compose.composeControllerRoute
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.dialog.PrimaryMaterialColors
+import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.compose.layout.FlutterWrap
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
 import com.ivianuu.essentials.ui.compose.material.Scaffold
+import com.ivianuu.essentials.ui.compose.material.colorForBackground
 import com.ivianuu.essentials.ui.compose.material.colorForCurrentBackground
+import com.ivianuu.essentials.util.Toaster
 
 val chipsRoute = composeControllerRoute {
     Scaffold(
         topAppBar = { EsTopAppBar("Chips") },
         body = {
-            Scroller {
+            Padding(padding = 8.dp) {
                 FlutterWrap(spacing = 8.dp, runSpacing = 8.dp) {
                     Names.forEach {
                         Chip(it)
@@ -52,6 +61,7 @@ val chipsRoute = composeControllerRoute {
 
 @Composable
 private fun Chip(name: String) = composable("Chip:$name") {
+    val toaster = +inject<Toaster>()
     val color = +memo { PrimaryMaterialColors.toList().shuffled().first() }
     Surface(color = color, shape = RoundedCornerShape(16.dp)) {
         Container(
@@ -61,12 +71,27 @@ private fun Chip(name: String) = composable("Chip:$name") {
                 right = 12.dp
             )
         ) {
-            Text(
-                text = name,
-                style = (+themeTextStyle { body2 }).copy(
-                    color = +colorForCurrentBackground()
+            val currentRippleTheme = +ambient(CurrentRippleTheme)
+            CurrentRippleTheme.Provider(
+                RippleTheme(
+                    factory = currentRippleTheme.factory,
+                    defaultColor = colorForBackground(color),
+                    opacity = effectOf { 0.5f }
                 )
-            )
+            ) {
+                Ripple(bounded = false) {
+                    Clickable(onClick = {
+                        toaster.toast("Clicked $name")
+                    }) {
+                        Text(
+                            text = name,
+                            style = (+themeTextStyle { body2 }).copy(
+                                color = +colorForCurrentBackground()
+                            )
+                        )
+                    }
+                }
+            }
         }
     }
 }
@@ -80,5 +105,6 @@ private val Names = listOf(
     "Lisa Wray",
     "Michael Clark",
     "Yusuf Grimes",
-    "Mustafa Müller"
+    "Mustafa Müller",
+    "Diego Ribas Da Cunha"
 )
