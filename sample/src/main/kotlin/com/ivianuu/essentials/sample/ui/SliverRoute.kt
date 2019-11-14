@@ -22,6 +22,7 @@ import androidx.compose.unaryPlus
 import androidx.ui.core.Alignment
 import androidx.ui.core.Direction
 import androidx.ui.core.Px
+import androidx.ui.core.PxPosition
 import androidx.ui.core.Text
 import androidx.ui.core.dp
 import androidx.ui.core.max
@@ -118,7 +119,7 @@ private fun SliverChildren.AppBarSliver() = Sliver { constraints ->
                         }
                     }
 
-                    placeable.place(Px.Zero, Px.Zero)
+                    placeable.place(PxPosition.Origin)
                 }
             }
         }

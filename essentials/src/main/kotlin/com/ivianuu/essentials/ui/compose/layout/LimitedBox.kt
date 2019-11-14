@@ -19,7 +19,7 @@ package com.ivianuu.essentials.ui.compose.layout
 import androidx.compose.Composable
 import androidx.compose.unaryPlus
 import androidx.ui.core.Dp
-import androidx.ui.core.IntPx
+import androidx.ui.core.PxPosition
 import androidx.ui.core.hasBoundedHeight
 import androidx.ui.core.hasBoundedWidth
 import com.ivianuu.essentials.ui.compose.core.composable
@@ -43,7 +43,7 @@ fun LimitedBox(
         val placeable = measureable?.measure(limitedConstraints)
 
         layout(limitedConstraints.maxWidth, limitedConstraints.maxHeight) {
-            placeable?.place(IntPx.Zero, IntPx.Zero)
+            placeable?.place(PxPosition.Origin)
         }
     }
 }

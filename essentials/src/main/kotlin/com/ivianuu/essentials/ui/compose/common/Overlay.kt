@@ -20,9 +20,9 @@ import androidx.compose.Ambient
 import androidx.compose.Composable
 import androidx.compose.Observe
 import androidx.compose.frames.modelListOf
-import androidx.ui.core.IntPx
 import androidx.ui.core.Layout
 import androidx.ui.core.ParentData
+import androidx.ui.core.PxPosition
 import androidx.ui.core.tightMax
 import com.ivianuu.essentials.ui.compose.core.composable
 import java.util.*
@@ -103,7 +103,7 @@ private fun OverlayLayout(
             .map { it.measure(childConstraints) }
 
         layout(constraints.maxWidth, constraints.maxHeight) {
-            placeables.forEach { it.place(IntPx.Zero, IntPx.Zero) }
+            placeables.forEach { it.place(PxPosition.Origin) }
         }
     }
 }

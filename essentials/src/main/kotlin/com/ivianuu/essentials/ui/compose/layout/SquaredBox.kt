@@ -17,7 +17,7 @@
 package com.ivianuu.essentials.ui.compose.layout
 
 import androidx.compose.Composable
-import androidx.ui.core.IntPx
+import androidx.ui.core.PxPosition
 import com.ivianuu.essentials.ui.compose.core.composable
 
 @Composable
@@ -43,7 +43,7 @@ fun SquaredBox(
         }
 
         layout(width = size, height = size) {
-            placeable?.place(IntPx.Zero, IntPx.Zero)
+            placeable?.place(PxPosition.Origin)
         }
     }
 }
