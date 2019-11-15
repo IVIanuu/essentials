@@ -17,14 +17,10 @@
 package com.ivianuu.essentials.ui.compose.common.scrolling.sliver
 
 import androidx.compose.Composable
-import androidx.ui.core.ParentData
 import androidx.ui.core.Px
-import androidx.ui.core.coerceIn
-import androidx.ui.core.max
-import androidx.ui.core.min
-import androidx.ui.core.round
+import androidx.ui.core.px
+import androidx.ui.core.toPx
 import com.github.ajalt.timberkt.d
-import com.ivianuu.essentials.ui.compose.core.composable
 
 fun <T> SliverChildren.SliverList(
     items: List<T>,
@@ -60,105 +56,36 @@ fun SliverChildren.SliverList(
     count: Int,
     itemSizeProvider: (Int, SliverConstraints) -> Px,
     item: @Composable() (Int) -> Unit
-) = Sliver { constraints ->
-    if (count == 0) return@Sliver content(SliverGeometry()) {}
-
-    val items = mutableListOf<ItemBounds>()
-    var offset = Px.Zero
-    (0 until count)
-        .map { itemSizeProvider(it, constraints) }
-        .mapIndexed { index, size ->
-            items += ItemBounds(
-                index = index,
-                size = size,
-                leading = offset,
-                trailing = offset + size
-            )
-            offset += size
-        }
-
-    var totalScrollSize = Px.Zero
-    items.forEach { totalScrollSize += it.size }
-
-    val scrollOffset = max(constraints.scrollPosition, Px.Zero)
-
-    val itemRange: IntRange? = if (scrollOffset <= totalScrollSize) {
-        val firstChild = items.first { it.hitTest(scrollOffset) }
-        val lastChild = items.first {
-            it.hitTest(
-                min(
-                    scrollOffset + constraints.remainingPaintSpace,
-                    items.last().trailing
-                )
-            )
-        }
-
-        firstChild.index..lastChild.index
-    } else {
-        null
-    }
-
-    val paintSize = if (itemRange != null) {
-        calculatePaintSize(
-            constraints,
-            from = items[itemRange.first].leading,
-            to = items[itemRange.last].trailing
-        )
-    } else Px.Zero
-
-    d {
-        "layout\n" +
-                "scroll offset $scrollOffset" +
-                "item range $itemRange\n" +
-                "constraints $constraints" +
-                "\npaint size $paintSize"
-    }
-
-    val geometry = SliverGeometry(
-        scrollSize = totalScrollSize,
-        paintSize = paintSize,
-        maxPaintSize = totalScrollSize
-    )
-
-    content(geometry = geometry) {
-        SliverChildLayout(constraints = constraints, geometry = geometry) {
-            itemRange
-                ?.map { items[it] }
-                ?.forEach { item ->
-                    composable(item.index) {
-                        ParentData(
-                            SliverChildParentData(
-                                size = item.size.round(),
-                                layoutOffset = item.leading
-                            )
-                        ) {
-                            item(item.index)
-                        }
-                    }
-                }
-        }
-    }
-}
-
-private fun calculatePaintSize(
-    constraints: SliverConstraints,
-    from: Px,
-    to: Px
-): Px {
-    val a = constraints.scrollPosition
-    val b = constraints.scrollPosition + constraints.remainingPaintSpace
-    return (to.coerceIn(a, b) - from.coerceIn(a, b)).coerceIn(
-        Px.Zero,
-        constraints.remainingPaintSpace
-    )
-}
-
-private data class ItemBounds(
-    val index: Int,
-    val size: Px,
-    val leading: Px,
-    val trailing: Px = leading + size
 ) {
-    fun hitTest(scrollPosition: Px): Boolean =
-        scrollPosition >= leading && scrollPosition <= trailing
+    Sliver(children = {
+        (0 until count).forEach { item(it) }
+    }) { measureables, constraints ->
+        if (count == 0) return@Sliver layout(SliverGeometry()) {}
+
+        d { "measuring $constraints" }
+
+        val childConstraints = constraints.asConstraints()
+
+        var offset = Px.Zero
+        val placeables = measureables.map {
+            val placeable = it.measure(childConstraints)
+            val result = placeable to offset
+            offset += result.first.height.toPx()
+            result
+        }
+        val totalScrollSize = placeables.sumBy { it.first.height.value }.px
+
+        val geometry = SliverGeometry(
+            scrollSize = totalScrollSize,
+            paintSize = totalScrollSize,
+            maxPaintSize = totalScrollSize
+        )
+
+        layout(geometry = geometry) {
+            placeables.forEach { (placeable, offset) ->
+                d { "place $placeable with offset $offset scroll ${constraints.scrollPosition}" }
+                placeable.place(Px.Zero, offset - constraints.scrollPosition)
+            }
+        }
+    }
 }
