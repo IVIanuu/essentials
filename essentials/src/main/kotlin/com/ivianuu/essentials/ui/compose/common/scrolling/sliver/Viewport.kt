@@ -439,12 +439,6 @@ private fun ViewportLayout(
     }
 }
 
-
-internal data class SliverChild(
-    val key: Any?,
-    val measureBlock: SliverMeasureBlock
-)
-
 private data class ViewportParentData(
     val position: PxPosition,
     val geometry: SliverGeometry

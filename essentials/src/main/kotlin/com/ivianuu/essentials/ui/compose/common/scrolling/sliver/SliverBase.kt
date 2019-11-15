@@ -33,6 +33,11 @@ class SliverChildren {
 
 }
 
+internal data class SliverChild(
+    val key: Any?,
+    val measureBlock: SliverMeasureBlock
+)
+
 data class SliverConstraints(
     val mainAxisDirection: Direction,
     val growthDirection: GrowthDirection,
