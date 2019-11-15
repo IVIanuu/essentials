@@ -49,7 +49,9 @@ fun Viewport(
     crossAxisDirection: Direction = Direction.RIGHT,
     anchor: Float = 0f,
     children: SliverChildren.() -> Unit
-) = composable("SliverLayout") {
+) = composable("Viewport") {
+    d { "compose viewport" }
+
     val state = +memo { ViewportState() }
 
     val sliverChildren = SliverChildren().apply(children).children
@@ -425,7 +427,7 @@ private fun ViewportLayout(
     state: ViewportState,
     children: @Composable() () -> Unit
 ) = composable("ViewportLayout") {
-    d { "viewport invoke" }
+    d { "compose viewport layout" }
     Layout(children = children) { measureables, constraints ->
         d { "viewport measureing $measureables" }
         val sliverMeasureables = measureables.map { measureable ->
