@@ -61,7 +61,7 @@ fun SliverChildren.SliverList(
     itemSizeProvider: (Int, SliverConstraints) -> Px,
     item: @Composable() (Int) -> Unit
 ) = Sliver { constraints ->
-    if (count == 0) return@Sliver content(SliverGeometry()) {}
+    if (count == 0) return@Sliver SliverGeometry()
 
     val items = mutableListOf<ItemBounds>()
     var offset = Px.Zero
@@ -120,24 +120,24 @@ fun SliverChildren.SliverList(
         maxPaintSize = totalScrollSize
     )
 
-    content(geometry = geometry) {
-        SliverChildLayout(constraints = constraints, geometry = geometry) {
-            itemRange
-                ?.map { items[it] }
-                ?.forEach { item ->
-                    composable(item.index) {
-                        ParentData(
-                            SliverChildParentData(
-                                size = item.size.round(),
-                                layoutOffset = item.leading
-                            )
-                        ) {
-                            item(item.index)
-                        }
+    SliverChildLayout(constraints = constraints, geometry = geometry) {
+        itemRange
+            ?.map { items[it] }
+            ?.forEach { item ->
+                composable(item.index) {
+                    ParentData(
+                        SliverChildParentData(
+                            size = item.size.round(),
+                            layoutOffset = item.leading
+                        )
+                    ) {
+                        item(item.index)
                     }
                 }
-        }
+            }
     }
+
+    return@Sliver geometry
 }
 
 private fun calculatePaintSize(

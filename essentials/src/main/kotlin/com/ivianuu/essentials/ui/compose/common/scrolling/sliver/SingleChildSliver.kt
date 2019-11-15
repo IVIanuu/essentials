@@ -39,35 +39,35 @@ fun SliverChildren.SingleChildSliver(
         maxPaintSize = if (childSize == unknownSize) Px.Zero else childSize
     )
 
-    content(geometry = geometry) {
-        NonNullSingleChildLayout(child = child) { measurable, incomingConstraints ->
-            if (childSize == unknownSize) {
-                val unconstrainedPlaceable = measurable.measure(Constraints())
-                setChildSize(
-                    when (constraints.mainAxisDirection) {
-                        Direction.LEFT, Direction.RIGHT -> unconstrainedPlaceable.width.toPx()
-                        Direction.UP, Direction.DOWN -> unconstrainedPlaceable.height.toPx()
-                    }
-                )
-                layout(IntPx.Zero, IntPx.Zero) {}
-            } else {
-                val placeable = measurable.measure(incomingConstraints)
-
-                val newChildSize = when (constraints.mainAxisDirection) {
-                    Direction.LEFT, Direction.RIGHT -> placeable.width.toPx()
-                    Direction.UP, Direction.DOWN -> placeable.height.toPx()
+    NonNullSingleChildLayout(child = child) { measurable, incomingConstraints ->
+        if (childSize == unknownSize) {
+            val unconstrainedPlaceable = measurable.measure(Constraints())
+            setChildSize(
+                when (constraints.mainAxisDirection) {
+                    Direction.LEFT, Direction.RIGHT -> unconstrainedPlaceable.width.toPx()
+                    Direction.UP, Direction.DOWN -> unconstrainedPlaceable.height.toPx()
                 }
+            )
+            layout(IntPx.Zero, IntPx.Zero) {}
+        } else {
+            val placeable = measurable.measure(incomingConstraints)
 
-                if (childSize != newChildSize) {
-                    setChildSize(newChildSize)
-                }
+            val newChildSize = when (constraints.mainAxisDirection) {
+                Direction.LEFT, Direction.RIGHT -> placeable.width.toPx()
+                Direction.UP, Direction.DOWN -> placeable.height.toPx()
+            }
 
-                layout(placeable.width, placeable.height) {
-                    placeable.place(PxPosition.Origin)
-                }
+            if (childSize != newChildSize) {
+                setChildSize(newChildSize)
+            }
+
+            layout(placeable.width, placeable.height) {
+                placeable.place(PxPosition.Origin)
             }
         }
     }
+
+    return@Sliver geometry
 }
 
 private val unknownSize = (-1).px
