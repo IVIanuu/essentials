@@ -64,7 +64,7 @@ fun Viewport(
     val density = +ambientDensity()
     val measureScope = +memo(density) { SliverMeasureScope(density) }
     state.measureScope = measureScope
-    state.children = SliverChildren().apply(children).children
+    state.children = SliverChildren().apply(children)._children
     state.position = position
     state.center = center
     state.mainAxisDirection = mainAxisDirection
@@ -290,7 +290,7 @@ private class ViewportState {
                     Px.Zero,
                     remainingPaintSpace - layoutOffset + initialLayoutOffset
                 ),
-                crossAxisSpace = crossAxisSize,
+                viewportCrossAxisSpace = crossAxisSize,
                 crossAxisDirection = crossAxisDirection,
                 viewportMainAxisSpace = mainAxisSize,
                 remainingCacheSpace = max(Px.Zero, remainingCacheSpace + cacheSpaceCorrection),
@@ -303,9 +303,14 @@ private class ViewportState {
                 composable(index) {
                     ParentData(data = parentData) {
                         RepaintBoundary {
-                            child!!.measureBlock(
-                                constraints
-                            ) { geometry = it }
+                            SliverLayout(
+                                key = index,
+                                measureBlock = child!!.measureBlock,
+                                measureScope = measureScope,
+                                constraints = constraints,
+                                children = child!!.children,
+                                onResult = { geometry = it }
+                            )
                         }
                     }
                 }

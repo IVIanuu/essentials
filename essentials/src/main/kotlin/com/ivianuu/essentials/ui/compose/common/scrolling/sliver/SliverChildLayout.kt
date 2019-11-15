@@ -64,7 +64,7 @@ fun SliverChildLayout(
             parentDatas += parentData
         }
 
-        layout(constraints.crossAxisSpace.round(), geometry.paintSize.round()) {
+        layout(constraints.viewportCrossAxisSpace.round(), geometry.paintSize.round()) {
             val mainAxisUnit: PxPosition
             val crossAxisUnit: PxPosition
             val originOffset: PxPosition

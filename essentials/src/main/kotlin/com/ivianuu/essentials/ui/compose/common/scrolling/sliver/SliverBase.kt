@@ -20,21 +20,32 @@ import androidx.compose.Composable
 import androidx.ui.core.Density
 import androidx.ui.core.DensityScope
 import androidx.ui.core.Direction
+import androidx.ui.core.IntPx
+import androidx.ui.core.Layout
+import androidx.ui.core.LayoutNode
+import androidx.ui.core.Placeable
 import androidx.ui.core.Px
+import androidx.ui.core.round
 import com.ivianuu.essentials.ui.compose.common.scrolling.ScrollDirection
+import com.ivianuu.essentials.ui.compose.core.composable
 
 class SliverChildren {
 
-    internal val children = mutableListOf<SliverChild>()
+    internal val _children = mutableListOf<SliverChild>()
 
-    fun Sliver(key: Any? = null, measureBlock: SliverMeasureBlock) {
-        children += SliverChild(key, measureBlock)
+    fun Sliver(
+        key: Any? = null,
+        children: @Composable() () -> Unit,
+        measureBlock: SliverMeasureBlock
+    ) {
+        _children += SliverChild(key, children, measureBlock)
     }
 
 }
 
 data class SliverChild(
     val key: Any?,
+    val children: @Composable() () -> Unit,
     val measureBlock: SliverMeasureBlock
 )
 
@@ -46,7 +57,7 @@ data class SliverConstraints(
     val precedingScrollSpace: Px,
     val overlap: Px,
     val remainingPaintSpace: Px,
-    val crossAxisSpace: Px,
+    val viewportCrossAxisSpace: Px,
     val crossAxisDirection: Direction,
     val viewportMainAxisSpace: Px,
     val remainingCacheSpace: Px,
@@ -66,6 +77,50 @@ data class SliverGeometry(
     val cacheSize: Px = layoutSize
 )
 
-class SliverMeasureScope(override val density: Density) : DensityScope
+class SliverMeasureScope(
+    override val density: Density
+) : DensityScope {
+    lateinit var layoutNode: LayoutNode
+    fun layout(
+        geometry: SliverGeometry,
+        placementBlock: Placeable.PlacementScope.() -> Unit
+    ): SliverLayoutResult = SliverLayoutResult(geometry, placementBlock)
+}
 
-typealias SliverMeasureBlock = @Composable() (SliverConstraints, (SliverGeometry) -> Unit) -> Unit
+class SliverLayoutResult(
+    val geometry: SliverGeometry,
+    val placementBlock: Placeable.PlacementScope.() -> Unit
+)
+
+typealias SliverMeasureBlock = SliverMeasureScope.(SliverConstraints) -> SliverLayoutResult
+
+@Composable
+internal fun SliverLayout(
+    key: Any,
+    measureScope: SliverMeasureScope,
+    constraints: SliverConstraints,
+    children: @Composable() () -> Unit,
+    onResult: (SliverGeometry) -> Unit,
+    measureBlock: SliverMeasureBlock
+) = composable(key) {
+    Layout(children = children) { _, _ ->
+        measureScope.layoutNode = (this as LayoutNode.InnerMeasureScope).layoutNode
+        val result = measureBlock(measureScope, constraints)
+        onResult(result.geometry)
+        val width: IntPx
+        val height: IntPx
+
+        when (constraints.mainAxisDirection) {
+            Direction.LEFT, Direction.RIGHT -> {
+                width = constraints.viewportMainAxisSpace.round()
+                height = constraints.viewportCrossAxisSpace.round()
+            }
+            Direction.DOWN, Direction.UP -> {
+                width = constraints.viewportCrossAxisSpace.round()
+                height = constraints.viewportMainAxisSpace.round()
+            }
+        }
+
+        layout(width = width, height = height, placementBlock = result.placementBlock)
+    }
+}
