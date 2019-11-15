@@ -35,23 +35,14 @@ import com.github.ajalt.timberkt.d
 
 // todo rename item arg
 
-private data class ListPlaceable(
-    val placeable: Placeable,
-    val parentData: ListParentData
-)
-
-private data class ListParentData(
-    var layoutOffset: Px = Px.Zero
-)
-
 fun SliverChildren.SliverList2(
     count: Int,
     item: @Composable() (Int) -> Unit
 ) {
     Sliver(children = {
-        (0 until count).forEach { item ->
-            ParentData(+memo { ListParentData() }) {
-                item(item)
+        (0 until count).forEach { index ->
+            ParentData(+memo { ListParentData(index) }) {
+                item(index)
             }
         }
     }) { measureables, constraints ->
@@ -68,9 +59,7 @@ fun SliverChildren.SliverList2(
         fun firstChild(): ListPlaceable? = placeables.firstOrNull()
         fun lastChild(): ListPlaceable? = placeables.lastOrNull()
 
-        fun getChild(after: ListPlaceable, constraints: Constraints): ListPlaceable? {
-            val index = placeables.indexOf(after) + 1
-            d { "insert and layout child $index" }
+        fun getMeasuredChild(index: Int, constraints: Constraints): ListPlaceable? {
             placeables.getOrNull(index)?.let { return it }
             val child = measureables.getOrNull(index)
             if (child != null) {
@@ -81,111 +70,22 @@ fun SliverChildren.SliverList2(
             return null
         }
 
-        fun insertAndLayoutLeadingChild(constraints: Constraints): ListPlaceable? {
-            val firstChild = firstChild()
-            val index = if (firstChild != null) {
-                placeables.indexOf(firstChild) - 1 // todo?
-            } else 0
-            placeables.getOrNull(index)?.let { return it }
-            d { "insert and layout leading child $index" }
-            val child = measureables.getOrNull(index)
-            if (child != null) {
-                val placeable = child.measure(constraints)
-                return ListPlaceable(placeable, child.parentData as ListParentData)
-                    .also { placeables += it }
-            }
-            return null
-        }
-
-        fun ListPlaceable.paintSize(): Px = when (constraints.mainAxisDirection) {
-            Direction.LEFT, Direction.RIGHT -> placeable.width.toPx()
-            Direction.UP, Direction.DOWN -> placeable.height.toPx()
-        }
-
-        fun Placeable.PlacementScope.place(geometry: SliverGeometry) {
-            val mainAxisUnit: PxPosition
-            val crossAxisUnit: PxPosition
-            val originOffset: PxPosition
-            val addSize: Boolean
-
-            when (constraints.mainAxisDirection.applyGrowthDirection(constraints.growthDirection)) {
-                Direction.LEFT -> {
-                    mainAxisUnit = PxPosition((-1).px, Px.Zero)
-                    crossAxisUnit = PxPosition(Px.Zero, 1.px)
-                    originOffset = PxPosition(geometry.paintSize, Px.Zero)
-                    addSize = true
-                }
-                Direction.UP -> {
-                    mainAxisUnit = PxPosition(Px.Zero, (-1).px)
-                    crossAxisUnit = PxPosition(1.px, Px.Zero)
-                    originOffset = PxPosition(Px.Zero, geometry.paintSize)
-                    addSize = true
-                }
-                Direction.RIGHT -> {
-                    mainAxisUnit = PxPosition(1.px, Px.Zero)
-                    crossAxisUnit = PxPosition(Px.Zero, 1.px)
-                    originOffset = PxPosition.Origin
-                    addSize = false
-                }
-                Direction.DOWN -> {
-                    mainAxisUnit = PxPosition(Px.Zero, 1.px)
-                    crossAxisUnit = PxPosition(1.px, Px.Zero)
-                    originOffset = PxPosition.Origin
-                    addSize = false
-                }
-            }
-
-            for (child in placeables) {
-                val mainAxisDelta = child.parentData.layoutOffset - constraints.scrollPosition
-                val crossAxisDelta = Px.Zero
-                var childOffset = PxPosition(
-                    x = (originOffset.x.value + mainAxisUnit.x.value * mainAxisDelta.value + crossAxisUnit.x.value * crossAxisDelta.value).px,
-                    y = (originOffset.y.value + mainAxisUnit.y.value * mainAxisDelta.value + crossAxisUnit.y.value * crossAxisDelta.value).px
-                )
-
-                val paintSize = when (constraints.mainAxisDirection) {
-                    Direction.LEFT, Direction.RIGHT -> child.placeable.width
-                    Direction.UP, Direction.DOWN -> child.placeable.height
-                }
-
-                if (addSize) {
-                    childOffset = PxPosition(
-                        x = childOffset.x + (mainAxisUnit.x.value * paintSize.value).px,
-                        y = childOffset.y + (mainAxisUnit.y.value * paintSize.value).px
-                    )
-                }
-
-                //d { "child at $index main axis delta $mainAxisDelta child offset $childOffset paint size $paintSize remaining ${constraints.remainingPaintSpace}" }
-
-                if (mainAxisDelta < constraints.remainingPaintSpace && mainAxisDelta + paintSize > Px.Zero) {
-                    child.placeable.place(childOffset.x.round(), childOffset.y.round())
-                }
-            }
-        }
-
-        var leadingChildWithLayout: ListPlaceable? = null
-        var trailingChildWithLayout: ListPlaceable? = null
-        var earliestUsefulChild: ListPlaceable? = measureables.first().let { measurable ->
-            ListPlaceable(
-                measurable.measure(childConstraints),
-                measurable.parentData as ListParentData
-            ).also {
-                placeables += it
-            }
-        }
+        var leadingChild: ListPlaceable? = null
+        var trailingChild: ListPlaceable? = null
+        var earliestUsefulChild: ListPlaceable? = getMeasuredChild(0, childConstraints)
 
         var earlistLayoutOffset = earliestUsefulChild!!.parentData.layoutOffset
-        d { "earliest useful child $earliestUsefulChild layout offset $earlistLayoutOffset" }
         while (earlistLayoutOffset > scrollPosition) {
             d { "layout top earliest layout offset $earlistLayoutOffset scroll pos $scrollPosition" }
-            earliestUsefulChild = insertAndLayoutLeadingChild(childConstraints)
+            earliestUsefulChild =
+                getMeasuredChild(placeables.indexOf(firstChild()) - 1, childConstraints)
             if (earliestUsefulChild == null) {
                 firstChild()!!.parentData.layoutOffset = Px.Zero
                 if (scrollPosition == Px.Zero) {
                     earliestUsefulChild = firstChild()
-                    leadingChildWithLayout = earliestUsefulChild
-                    if (trailingChildWithLayout == null)
-                        trailingChildWithLayout = earliestUsefulChild
+                    leadingChild = earliestUsefulChild
+                    if (trailingChild == null)
+                        trailingChild = earliestUsefulChild
                     break
                 } else {
                     d { "request correction ${-scrollPosition}" }
@@ -193,55 +93,49 @@ fun SliverChildren.SliverList2(
                 }
             }
 
-            val firstChildLayoutOffset = earlistLayoutOffset - firstChild()!!.paintSize()
+            val firstChildLayoutOffset = earlistLayoutOffset - firstChild()!!.paintSize(constraints)
 
             val childParentData = earliestUsefulChild
             childParentData.parentData.layoutOffset = firstChildLayoutOffset
-            leadingChildWithLayout = earliestUsefulChild
-            if (trailingChildWithLayout == null)
-                trailingChildWithLayout = earliestUsefulChild
+            leadingChild = earliestUsefulChild
+            if (trailingChild == null)
+                trailingChild = earliestUsefulChild
 
             earlistLayoutOffset = earliestUsefulChild.parentData.layoutOffset
         }
 
         earliestUsefulChild!!
 
-        if (leadingChildWithLayout == null) {
-            // todo earliestUsefulChild.measure(childConstraints)
-            leadingChildWithLayout = earliestUsefulChild
-            trailingChildWithLayout = earliestUsefulChild
+        if (leadingChild == null) {
+            leadingChild = earliestUsefulChild
+            trailingChild = earliestUsefulChild
         }
 
         var inLayoutRange = true
-        var child: ListPlaceable? = getChild(earliestUsefulChild, childConstraints)
+        var child: ListPlaceable? = earliestUsefulChild
         var index = placeables.indexOf(child!!)
-        var endScrollPosition = child.parentData.layoutOffset + child.paintSize()
+        var endScrollPosition = child.parentData.layoutOffset + child.paintSize(constraints)
+
+        d { "child $child index $index end scroll position $endScrollPosition" }
 
         fun advance(): Boolean {
-            if (child == trailingChildWithLayout) inLayoutRange = false
-            child = getChild(child!!, childConstraints)
+            if (child == trailingChild) inLayoutRange = false
+            child = getMeasuredChild(placeables.indexOf(child!!) + 1, childConstraints)
             if (child == null) inLayoutRange = false
             index += 1
-            /*d {
-                "advance trailing with index ${trailingChildWithLayout?.sliverChildParentData?.index} " +
-                        "current child index ${child?.sliverChildParentData?.index} " +
-                        "in layout range $inLayoutRange " +
-                        "child $child " +
-                        "index $index " +
-                        "end scroll position $endScrollPosition"
-            }*/
             if (!inLayoutRange) {
                 if (child == null || placeables.indexOf(child!!) != index) {
-                    child = getChild(trailingChildWithLayout!!, childConstraints)
+                    child =
+                        getMeasuredChild(placeables.indexOf(trailingChild!!) + 1, childConstraints)
                     if (child == null) {
                         d { "run out of children" }
                         return false
                     }
                 }
-                trailingChildWithLayout = child
+                trailingChild = child
             }
             child!!.parentData.layoutOffset = endScrollPosition
-            endScrollPosition += child!!.paintSize()
+            endScrollPosition += child!!.paintSize(constraints)
             return true
         }
 
@@ -249,7 +143,7 @@ fun SliverChildren.SliverList2(
             d { "end scroll position $endScrollPosition is lesser than scroll position $scrollPosition" }
             if (!advance()) {
                 val size =
-                    lastChild()!!.parentData.layoutOffset + lastChild()!!.paintSize()
+                    lastChild()!!.parentData.layoutOffset + lastChild()!!.paintSize(constraints)
                 d { "cannot advance more size is $size" }
                 val geometry = SliverGeometry(
                     scrollSize = size,
@@ -257,13 +151,14 @@ fun SliverChildren.SliverList2(
                     maxPaintSize = size
                 )
 
-                return@Sliver layout(geometry) { place(geometry) }
+                return@Sliver layout(geometry) { place(placeables, geometry, constraints) }
             }
         }
 
         while (endScrollPosition < targetEndScrollPosition) {
             d { "end scroll position $endScrollPosition is lesser than target end scroll position $targetEndScrollPosition" }
             if (!advance()) {
+                d { "reached end" }
                 reachedEnd = true
                 break
             }
@@ -274,6 +169,8 @@ fun SliverChildren.SliverList2(
         } else {
             Px.Infinity // todo
         }
+
+        d { "estimated max scroll position $estimatedMaxScrollPosition" }
 
         val paintSize = calculatePaintSize(
             constraints = constraints,
@@ -298,10 +195,25 @@ fun SliverChildren.SliverList2(
             hasVisualOverflow = endScrollPosition > targetEndScrollOffsetForPaint || constraints.scrollPosition > Px.Zero
         )
 
-        layout(geometry) { place(geometry) }
-
+        layout(geometry) { place(placeables, geometry, constraints) }
     }
 }
+
+private data class ListPlaceable(
+    val placeable: Placeable,
+    val parentData: ListParentData
+)
+
+private data class ListParentData(
+    val index: Int,
+    var layoutOffset: Px = Px.Zero
+)
+
+private fun ListPlaceable.paintSize(constraints: SliverConstraints): Px =
+    when (constraints.mainAxisDirection) {
+        Direction.LEFT, Direction.RIGHT -> placeable.width.toPx()
+        Direction.UP, Direction.DOWN -> placeable.height.toPx()
+    }
 
 private fun calculatePaintSize(
     constraints: SliverConstraints,
@@ -327,4 +239,68 @@ private fun calculateCacheSize(
         Px.Zero,
         constraints.remainingCacheSpace
     )
+}
+
+private fun Placeable.PlacementScope.place(
+    placeables: List<ListPlaceable>,
+    geometry: SliverGeometry,
+    constraints: SliverConstraints
+) {
+    val mainAxisUnit: PxPosition
+    val crossAxisUnit: PxPosition
+    val originOffset: PxPosition
+    val addSize: Boolean
+
+    when (constraints.mainAxisDirection.applyGrowthDirection(constraints.growthDirection)) {
+        Direction.LEFT -> {
+            mainAxisUnit = PxPosition((-1).px, Px.Zero)
+            crossAxisUnit = PxPosition(Px.Zero, 1.px)
+            originOffset = PxPosition(geometry.paintSize, Px.Zero)
+            addSize = true
+        }
+        Direction.UP -> {
+            mainAxisUnit = PxPosition(Px.Zero, (-1).px)
+            crossAxisUnit = PxPosition(1.px, Px.Zero)
+            originOffset = PxPosition(Px.Zero, geometry.paintSize)
+            addSize = true
+        }
+        Direction.RIGHT -> {
+            mainAxisUnit = PxPosition(1.px, Px.Zero)
+            crossAxisUnit = PxPosition(Px.Zero, 1.px)
+            originOffset = PxPosition.Origin
+            addSize = false
+        }
+        Direction.DOWN -> {
+            mainAxisUnit = PxPosition(Px.Zero, 1.px)
+            crossAxisUnit = PxPosition(1.px, Px.Zero)
+            originOffset = PxPosition.Origin
+            addSize = false
+        }
+    }
+
+    for (child in placeables) {
+        val mainAxisDelta = child.parentData.layoutOffset - constraints.scrollPosition
+        val crossAxisDelta = Px.Zero
+        var childOffset = PxPosition(
+            x = (originOffset.x.value + mainAxisUnit.x.value * mainAxisDelta.value + crossAxisUnit.x.value * crossAxisDelta.value).px,
+            y = (originOffset.y.value + mainAxisUnit.y.value * mainAxisDelta.value + crossAxisUnit.y.value * crossAxisDelta.value).px
+        )
+
+        val paintSize = when (constraints.mainAxisDirection) {
+            Direction.LEFT, Direction.RIGHT -> child.placeable.width
+            Direction.UP, Direction.DOWN -> child.placeable.height
+        }
+
+        if (addSize) {
+            childOffset = PxPosition(
+                x = childOffset.x + (mainAxisUnit.x.value * paintSize.value).px,
+                y = childOffset.y + (mainAxisUnit.y.value * paintSize.value).px
+            )
+        }
+
+        if (mainAxisDelta < constraints.remainingPaintSpace && mainAxisDelta + paintSize > Px.Zero) {
+            child.placeable.place(childOffset.x.round(), childOffset.y.round())
+            d { "place child ${child.parentData.index} to x ${childOffset.x.round()} y ${childOffset.y.round()}" }
+        }
+    }
 }
