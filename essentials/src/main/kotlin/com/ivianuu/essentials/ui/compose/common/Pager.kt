@@ -23,6 +23,7 @@ import androidx.compose.unaryPlus
 import androidx.ui.core.Direction
 import androidx.ui.core.Px
 import androidx.ui.core.PxPosition
+import androidx.ui.core.WithDensity
 import androidx.ui.core.px
 import androidx.ui.core.toPx
 import androidx.ui.foundation.animation.AnchorsFlingConfig
@@ -81,11 +82,13 @@ fun Pager(
                     Axis.Vertical -> if (reverse) Direction.UP else Direction.DOWN
                 }
             ) {
-                SliverList(
-                    count = position.pageCount,
-                    itemSizeProvider = { _, constraints -> constraints.viewportMainAxisSpace },
-                    item = item
-                )
+                WithDensity {
+                    SliverList(
+                        count = position.pageCount,
+                        itemSizeProvider = { position.viewportSize.toDp() },
+                        item = item
+                    )
+                }
             }
         }
     }
