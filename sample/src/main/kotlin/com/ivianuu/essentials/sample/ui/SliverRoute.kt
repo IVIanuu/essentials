@@ -24,7 +24,6 @@ import androidx.ui.core.dp
 import com.ivianuu.essentials.ui.compose.common.scrolling.sliver.SliverList
 import com.ivianuu.essentials.ui.compose.common.scrolling.sliver.SliverScroller
 import com.ivianuu.essentials.ui.compose.composeControllerRoute
-import com.ivianuu.essentials.ui.compose.core.withDensity
 import com.ivianuu.essentials.ui.compose.material.SimpleListItem
 
 
@@ -39,12 +38,12 @@ val sliverRoute = composeControllerRoute {
 
     SliverScroller {
         SliverList(
-            items = indices,
-            itemSize = +withDensity { 48.dp.toPx() },
-            item = { _, item ->
+            count = indices.size,
+            itemSizeProvider = { 48.dp },
+            item = { index ->
                 SimpleListItem(
-                    title = { Text("Item $item") },
-                    onClick = { indices -= item }
+                    title = { Text("Item $index") },
+                    onClick = { indices -= index }
                 )
             }
         )
