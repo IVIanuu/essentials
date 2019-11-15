@@ -16,21 +16,10 @@
 
 package com.ivianuu.essentials.ui.compose.common.scrolling.sliver
 
-import androidx.compose.Composable
-import androidx.compose.state
-import androidx.compose.unaryPlus
-import androidx.ui.core.Constraints
-import androidx.ui.core.Direction
-import androidx.ui.core.IntPx
-import androidx.ui.core.Px
-import androidx.ui.core.PxPosition
-import androidx.ui.core.px
-import androidx.ui.core.toPx
-import com.ivianuu.essentials.ui.compose.layout.NonNullSingleChildLayout
-
+/**
 fun SliverChildren.SingleChildSliver(
     child: @Composable() () -> Unit
-) = Sliver { constraints ->
+) = Sliver { constraints, _ ->
     val (childSize, setChildSize) = +state { unknownSize }
 
     val geometry = SliverGeometry(
@@ -70,4 +59,4 @@ fun SliverChildren.SingleChildSliver(
     return@Sliver geometry
 }
 
-private val unknownSize = (-1).px
+private val unknownSize = (-1).px*/

@@ -25,6 +25,7 @@ import androidx.ui.core.Placeable
 import androidx.ui.core.Px
 import androidx.ui.core.PxPosition
 import androidx.ui.core.px
+import androidx.ui.core.round
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.compose.core.composable
 
@@ -37,6 +38,8 @@ fun SliverChildLayout(
     Layout(children = children) { measureables, incomingConstraints ->
         val placeables = mutableListOf<Placeable>()
         val parentDatas = mutableListOf<SliverChildParentData>()
+
+        d { "sliver child incoming constraints $incomingConstraints" }
 
         for (index in measureables.indices) {
             val measureable = measureables[index]
@@ -61,7 +64,7 @@ fun SliverChildLayout(
             parentDatas += parentData
         }
 
-        layout(incomingConstraints.minWidth, incomingConstraints.minHeight) {
+        layout(constraints.crossAxisSpace.round(), geometry.paintSize.round()) {
             val mainAxisUnit: PxPosition
             val crossAxisUnit: PxPosition
             val originOffset: PxPosition

@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.ui.compose.common.scrolling.sliver
 
+import androidx.compose.Composable
 import androidx.ui.core.Density
 import androidx.ui.core.DensityScope
 import androidx.ui.core.Direction
@@ -32,7 +33,7 @@ class SliverChildren {
 
 }
 
-internal data class SliverChild(
+data class SliverChild(
     val key: Any?,
     val measureBlock: SliverMeasureBlock
 )
@@ -67,4 +68,4 @@ data class SliverGeometry(
 
 class SliverMeasureScope(override val density: Density) : DensityScope
 
-typealias SliverMeasureBlock = SliverMeasureScope.(constraints: SliverConstraints) -> SliverGeometry
+typealias SliverMeasureBlock = @Composable() (SliverConstraints, (SliverGeometry) -> Unit) -> Unit

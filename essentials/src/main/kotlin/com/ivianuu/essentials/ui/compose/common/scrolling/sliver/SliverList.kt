@@ -17,14 +17,22 @@
 package com.ivianuu.essentials.ui.compose.common.scrolling.sliver
 
 import androidx.compose.Composable
+import androidx.compose.ambient
+import androidx.compose.compositionReference
+import androidx.compose.unaryPlus
+import androidx.ui.core.ContextAmbient
+import androidx.ui.core.Layout
+import androidx.ui.core.LayoutNode
 import androidx.ui.core.ParentData
 import androidx.ui.core.Px
 import androidx.ui.core.coerceIn
+import androidx.ui.core.ipx
 import androidx.ui.core.max
 import androidx.ui.core.min
 import androidx.ui.core.round
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.compose.core.composable
+import com.ivianuu.essentials.ui.compose.core.subcompose
 
 fun <T> SliverChildren.SliverList(
     items: List<T>,
@@ -60,84 +68,111 @@ fun SliverChildren.SliverList(
     count: Int,
     itemSizeProvider: (Int, SliverConstraints) -> Px,
     item: @Composable() (Int) -> Unit
-) = Sliver { constraints ->
-    if (count == 0) return@Sliver SliverGeometry()
+) {
+    val context = +ambient(ContextAmbient)
+    val compositionReference = +compositionReference()
 
-    val items = mutableListOf<ItemBounds>()
-    var offset = Px.Zero
-    (0 until count)
-        .map { itemSizeProvider(it, constraints) }
-        .mapIndexed { index, size ->
-            items += ItemBounds(
-                index = index,
-                size = size,
-                leading = offset,
-                trailing = offset + size
-            )
-            offset += size
+    Sliver { constraints, onGeometry ->
+        if (count == 0) {
+            onGeometry(SliverGeometry())
+            return@Sliver
         }
 
-    var totalScrollSize = Px.Zero
-    items.forEach { totalScrollSize += it.size }
+        Layout({}) { _, ic ->
+            d { "sliver list incoming constraints $ic" }
 
-    val scrollOffset = max(constraints.scrollPosition, Px.Zero)
+            val items = mutableListOf<ItemBounds>()
+            var offset = Px.Zero
+            (0 until count)
+                .map { itemSizeProvider(it, constraints) }
+                .mapIndexed { index, size ->
+                    items += ItemBounds(
+                        index = index,
+                        size = size,
+                        leading = offset,
+                        trailing = offset + size
+                    )
+                    offset += size
+                }
 
-    val itemRange: IntRange? = if (scrollOffset <= totalScrollSize) {
-        val firstChild = items.first { it.hitTest(scrollOffset) }
-        val lastChild = items.first {
-            it.hitTest(
-                min(
-                    scrollOffset + constraints.remainingPaintSpace,
-                    items.last().trailing
-                )
-            )
-        }
+            var totalScrollSize = Px.Zero
+            items.forEach { totalScrollSize += it.size }
 
-        firstChild.index..lastChild.index
-    } else {
-        null
-    }
+            val scrollOffset = max(constraints.scrollPosition, Px.Zero)
 
-    val paintSize = if (itemRange != null) {
-        calculatePaintSize(
-            constraints,
-            from = items[itemRange.first].leading,
-            to = items[itemRange.last].trailing
-        )
-    } else Px.Zero
-
-    d {
-        "layout\n" +
-                "scroll offset $scrollOffset" +
-                "item range $itemRange\n" +
-                "constraints $constraints" +
-                "\npaint size $paintSize"
-    }
-
-    val geometry = SliverGeometry(
-        scrollSize = totalScrollSize,
-        paintSize = paintSize,
-        maxPaintSize = totalScrollSize
-    )
-
-    SliverChildLayout(constraints = constraints, geometry = geometry) {
-        itemRange
-            ?.map { items[it] }
-            ?.forEach { item ->
-                composable(item.index) {
-                    ParentData(
-                        SliverChildParentData(
-                            size = item.size.round(),
-                            layoutOffset = item.leading
+            val itemRange: IntRange? = if (scrollOffset <= totalScrollSize) {
+                val firstChild = items.first { it.hitTest(scrollOffset) }
+                val lastChild = items.first {
+                    it.hitTest(
+                        min(
+                            scrollOffset + constraints.remainingPaintSpace,
+                            items.last().trailing
                         )
-                    ) {
-                        item(item.index)
-                    }
+                    )
+                }
+
+                firstChild.index..lastChild.index
+            } else {
+                null
+            }
+
+            val paintSize = if (itemRange != null) {
+                calculatePaintSize(
+                    constraints,
+                    from = items[itemRange.first].leading,
+                    to = items[itemRange.last].trailing
+                )
+            } else Px.Zero
+
+            d {
+                "layout\n" +
+                        "scroll offset $scrollOffset" +
+                        "item range $itemRange\n" +
+                        "constraints $constraints" +
+                        "\npaint size $paintSize"
+            }
+
+            val geometry = SliverGeometry(
+                scrollSize = totalScrollSize,
+                paintSize = paintSize,
+                maxPaintSize = totalScrollSize
+            )
+
+            onGeometry(geometry)
+
+            val layoutNode = (this as LayoutNode.InnerMeasureScope).layoutNode
+
+            subcompose(context, layoutNode, compositionReference) {
+                SliverChildLayout(constraints = constraints, geometry = geometry) {
+                    itemRange
+                        ?.map { items[it] }
+                        ?.forEach { item ->
+                            composable(item.index) {
+                                ParentData(
+                                    SliverChildParentData(
+                                        size = item.size.round(),
+                                        layoutOffset = item.leading
+                                    )
+                                ) {
+                                    item(item.index)
+                                }
+                            }
+                        }
                 }
             }
+            val child = layoutNode.layoutChildren.last()
+            child.measure(
+                androidx.ui.core.Constraints(
+                    minWidth = constraints.crossAxisSpace.round(),
+                    maxWidth = constraints.crossAxisSpace.round()
+                )
+            )
+            d { "child wh ${child.width} ${child.height}" }
+            layout(child.width, child.height) {
+                child.place(0.ipx, 0.ipx)
+            }
+        }
     }
-
-    return@Sliver geometry
 }
 
 private fun calculatePaintSize(

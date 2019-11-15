@@ -19,12 +19,11 @@ package com.ivianuu.essentials.ui.compose.common.scrolling.sliver
 import android.content.Context
 import androidx.compose.Composable
 import androidx.compose.CompositionReference
-import androidx.compose.Emittable
 import androidx.compose.ambient
 import androidx.compose.compositionReference
 import androidx.compose.memo
-import androidx.compose.state
 import androidx.compose.unaryPlus
+import androidx.ui.core.Constraints
 import androidx.ui.core.ContextAmbient
 import androidx.ui.core.Direction
 import androidx.ui.core.Layout
@@ -58,6 +57,8 @@ fun Viewport(
 ) = composable("SliverLayout") {
     val state = +memo { ViewportState() }
 
+    d { "viewport function" }
+
     state.compositionReference = +compositionReference()
     state.context = +ambient(ContextAmbient)
     val density = +ambientDensity()
@@ -69,22 +70,13 @@ fun Viewport(
     state.mainAxisDirection = mainAxisDirection
     state.crossAxisDirection = crossAxisDirection
     state.anchor = anchor
-    val (viewportSize, setViewportSize) = +state { PxSize.Zero }
-    state.viewportSize = viewportSize
 
-    ViewportLayout(
-        state = state,
-        size = viewportSize,
-        onLayoutNodeChanged = { state.emittable = it },
-        onSizeChanged = setViewportSize
-    ) {
-        //state.childrenComposables.forEach { it() }
-    }
+    ViewportLayout(state = state)
 }
 
 private class ViewportState {
 
-    lateinit var emittable: Emittable
+    lateinit var layoutNode: LayoutNode
     lateinit var compositionReference: CompositionReference
     lateinit var context: Context
     lateinit var measureScope: SliverMeasureScope
@@ -307,16 +299,20 @@ private class ViewportState {
 
             lateinit var geometry: SliverGeometry
             val parentData = ViewportParentData()
-            subcompose(context, emittable, compositionReference, index) {
+            subcompose(context, layoutNode, compositionReference, index) {
                 composable(index) {
                     ParentData(data = parentData) {
                         RepaintBoundary {
-                            geometry = child!!.measureBlock(measureScope, constraints)
-                            geometry.checkGeometry()
+                            child!!.measureBlock(
+                                constraints
+                            ) { geometry = it }
                         }
                     }
                 }
             }
+
+            layoutNode.layoutChildren.last().measure(Constraints())
+            geometry.checkGeometry()
 
             if (geometry.scrollOffsetCorrection != Px.Zero) return geometry.scrollOffsetCorrection
 
@@ -409,15 +405,14 @@ private class ViewportState {
 private val defaultCacheSize = 250.px
 
 @Composable
-private fun ViewportLayout(
-    state: ViewportState,
-    size: PxSize,
-    onSizeChanged: (PxSize) -> Unit,
-    onLayoutNodeChanged: (LayoutNode) -> Unit,
-    layoutChildren: @Composable() () -> Unit
-) = composable("ViewportLayout") {
+private fun ViewportLayout(state: ViewportState) = composable("ViewportLayout") {
+    d { "viewport layout compose" }
     Layout(children = {}) { measureables, constraints ->
+        d { "viewport layout measure" }
         val layoutNode = (this as LayoutNode.InnerMeasureScope).layoutNode
+        state.layoutNode = layoutNode
+        state.viewportSize = PxSize(constraints.maxWidth, constraints.maxHeight)
+
         d { "before layout ${layoutNode.layoutChildren}" }
         state.performLayout()
         d { "after layout ${layoutNode.layoutChildren}" }
@@ -433,18 +428,13 @@ private fun ViewportLayout(
                 maxHeight = parentData.geometry.scrollSize.round()
             )
 
-            child.measure(childConstraints)
+            //child.measure(childConstraints)
 
             children += child
         }
 
         layout(constraints.maxWidth, constraints.maxHeight) {
-            val newSize = PxSize(constraints.maxWidth, constraints.maxHeight)
-            if (size != newSize) {
-                onLayoutNodeChanged(layoutNode)
-                onSizeChanged(newSize)
-            }
-
+            d { "viewport layout layout" }
             for (i in children.indices) {
                 val child = children[i]
                 val parentData = child.parentData as ViewportParentData
