@@ -83,7 +83,6 @@ fun Pager(
             ) {
                 SliverList(
                     count = position.pageCount,
-                    itemSizeProvider = { _, constraints -> constraints.viewportMainAxisSpace },
                     item = item
                 )
             }

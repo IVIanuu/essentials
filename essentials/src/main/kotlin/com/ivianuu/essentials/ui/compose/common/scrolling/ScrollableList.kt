@@ -20,7 +20,6 @@ import androidx.compose.Composable
 import androidx.compose.unaryPlus
 import androidx.ui.core.Dp
 import androidx.ui.core.ambientDensity
-import androidx.ui.core.withDensity
 import androidx.ui.layout.Column
 import com.ivianuu.essentials.ui.compose.common.scrolling.sliver.SliverList
 import com.ivianuu.essentials.ui.compose.common.scrolling.sliver.SliverScroller
@@ -93,11 +92,6 @@ fun ScrollableList(
     SliverScroller {
         SliverList(
             count = count,
-            itemSizeProvider = { index, _ ->
-                withDensity(density) {
-                    itemSizeProvider(index).toPx()
-                }
-            },
             item = item
         )
     }

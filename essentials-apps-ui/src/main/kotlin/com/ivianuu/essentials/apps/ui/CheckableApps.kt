@@ -109,13 +109,14 @@ fun CheckableAppsScreen(
                 is Success -> {
                     composable("apps") {
                         ScrollableList(
-                            items = viewModel.state.apps() ?: emptyList(),
+                            count = 100,
                             itemSizeProvider = { 56.dp }
-                        ) { _, app ->
-                            CheckableApp(
+                        ) { index ->
+                            /*CheckableApp(
                                 app = app,
                                 onClick = { viewModel.appClicked(app) }
-                            )
+                            )*/
+                            SimpleListItem(title = { Text("Item $index") })
                         }
                     }
                 }

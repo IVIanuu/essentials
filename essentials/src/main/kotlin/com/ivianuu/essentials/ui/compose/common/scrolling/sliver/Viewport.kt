@@ -21,6 +21,7 @@ import androidx.compose.memo
 import androidx.compose.state
 import androidx.compose.unaryPlus
 import androidx.ui.core.Direction
+import androidx.ui.core.IntPx
 import androidx.ui.core.Layout
 import androidx.ui.core.ParentData
 import androidx.ui.core.Placeable
@@ -413,7 +414,7 @@ private fun ViewportLayout(
             val parentData = measureable.parentData as ViewportParentData
             val childConstraints = constraints.copy(
                 minWidth = constraints.maxWidth, // todo check
-                minHeight = parentData.geometry.scrollSize.round(),
+                minHeight = IntPx.Zero,
                 maxHeight = parentData.geometry.scrollSize.round()
             )
 
