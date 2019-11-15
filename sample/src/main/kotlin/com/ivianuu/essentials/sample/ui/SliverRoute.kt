@@ -19,13 +19,7 @@ package com.ivianuu.essentials.sample.ui
 import androidx.compose.frames.modelListOf
 import androidx.compose.memo
 import androidx.compose.unaryPlus
-import androidx.ui.core.Text
-import androidx.ui.core.dp
-import com.ivianuu.essentials.ui.compose.common.scrolling.sliver.SliverList
-import com.ivianuu.essentials.ui.compose.common.scrolling.sliver.SliverScroller
 import com.ivianuu.essentials.ui.compose.composeControllerRoute
-import com.ivianuu.essentials.ui.compose.core.withDensity
-import com.ivianuu.essentials.ui.compose.material.SimpleListItem
 
 
 val sliverRoute = composeControllerRoute {
@@ -37,7 +31,7 @@ val sliverRoute = composeControllerRoute {
 
     indices.size // required to properly update the sliver list
 
-    SliverScroller {
+    /*SliverScroller {
         SliverList(
             items = indices,
             itemSize = +withDensity { 48.dp.toPx() },
@@ -48,7 +42,7 @@ val sliverRoute = composeControllerRoute {
                 )
             }
         )
-    }
+    }*/
 }
 
 /**

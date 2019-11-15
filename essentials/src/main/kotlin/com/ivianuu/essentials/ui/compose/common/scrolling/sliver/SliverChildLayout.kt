@@ -16,19 +16,10 @@
 
 package com.ivianuu.essentials.ui.compose.common.scrolling.sliver
 
-import androidx.compose.Composable
-import androidx.ui.core.Constraints
-import androidx.ui.core.Direction
-import androidx.ui.core.IntPx
-import androidx.ui.core.Layout
-import androidx.ui.core.Placeable
+import androidx.ui.core.LayoutNode
 import androidx.ui.core.Px
-import androidx.ui.core.PxPosition
-import androidx.ui.core.px
-import androidx.ui.core.round
-import com.github.ajalt.timberkt.d
-import com.ivianuu.essentials.ui.compose.core.composable
 
+/*
 @Composable
 fun SliverChildLayout(
     constraints: SliverConstraints,
@@ -130,9 +121,13 @@ fun SliverChildLayout(
             }
         }
     }
-}
+}*/
+
+
 
 data class SliverChildParentData(
-    val size: IntPx,
-    val layoutOffset: Px
-)
+    override var index: Int,
+    var layoutOffset: Px = Px.Zero
+) : IndexedParentData
+
+val LayoutNode.sliverChildParentData: SliverChildParentData get() = parentData as SliverChildParentData

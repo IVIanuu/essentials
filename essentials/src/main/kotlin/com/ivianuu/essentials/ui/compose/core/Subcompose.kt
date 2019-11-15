@@ -23,6 +23,7 @@ import androidx.compose.CompositionContext
 import androidx.compose.CompositionReference
 import androidx.compose.Context
 import androidx.compose.Emittable
+import androidx.compose.Recomposer
 import com.github.ajalt.timberkt.d
 
 fun getSubcompositions(container: Emittable): List<CompositionContext> =
@@ -55,13 +56,14 @@ fun subcompose(
 }
 
 fun disposeSubcomposition(
+    context: Context,
     container: Emittable,
+    parent: CompositionReference,
     tag: Any?
 ) {
-    subcompositions.remove(SubcompositionKey(container, tag))?.let {
-        it.composable = {}
-        it.compose()
-    }
+    val key = SubcompositionKey(container, tag)
+    subcompose(context, container, parent, tag) {}
+    subcompositions.remove(key)
 }
 
 private class SubcompositionRoot : Component() {
@@ -69,6 +71,7 @@ private class SubcompositionRoot : Component() {
         val wasComposing = ComposerAccessor.isComposing(context.composer)
         ComposerAccessor.setComposing(context.composer, true)
         context.compose()
+        Recomposer.current().recomposeSync();
         ComposerAccessor.setComposing(context.composer, wasComposing)
     }
 
