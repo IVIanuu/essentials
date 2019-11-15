@@ -99,7 +99,11 @@ data class SliverGeometry(
     val hasVisualOverflow: Boolean = false,
     val scrollOffsetCorrection: Px = Px.Zero,
     val cacheSize: Px = layoutSize
-)
+) {
+    companion object {
+        val Zero = SliverGeometry()
+    }
+}
 
 class SliverMeasureScope(override val density: Density) : DensityScope {
     fun layout(
