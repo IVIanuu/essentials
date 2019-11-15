@@ -17,9 +17,7 @@
 package com.ivianuu.essentials.ui.compose.common.scrolling
 
 import androidx.compose.Composable
-import androidx.compose.unaryPlus
 import androidx.ui.core.Dp
-import androidx.ui.core.ambientDensity
 import androidx.ui.layout.Column
 import com.ivianuu.essentials.ui.compose.common.scrolling.sliver.SliverList
 import com.ivianuu.essentials.ui.compose.common.scrolling.sliver.SliverScroller
@@ -87,8 +85,6 @@ fun ScrollableList(
     itemSizeProvider: (Int) -> Dp,
     item: (Int) -> Unit
 ) = composable("ScrollableList") {
-    val density = +ambientDensity()
-
     SliverScroller {
         SliverList(
             count = count,
