@@ -30,7 +30,6 @@ import androidx.ui.core.Measurable
 import androidx.ui.core.Placeable
 import androidx.ui.core.Px
 import androidx.ui.core.round
-import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.compose.common.scrolling.ScrollDirection
 import com.ivianuu.essentials.ui.compose.core.composable
 
@@ -129,10 +128,8 @@ fun SliverLayout(
     children: @Composable() () -> Unit,
     measureBlock: SliverMeasureBlock
 ) = composable("SliverLayout") {
-    d { "sliver layout invoke" }
     val state = +ambient(ViewportStateAmbient)
     Layout(children = children) { measureables, _ ->
-        d { "sliver layout measureing" }
         val constraints = state.constraints!!
         val measureScope = state.measureScope
         val (geometry, placementBlock) =
@@ -155,10 +152,8 @@ fun SliverLayout(
 
         layout(
             width = width.round(),
-            height = height.round()
-        ) {
-            d { "sliver layout placing" }
-            placementBlock()
-        }
+            height = height.round(),
+            placementBlock = placementBlock
+        )
     }
 }

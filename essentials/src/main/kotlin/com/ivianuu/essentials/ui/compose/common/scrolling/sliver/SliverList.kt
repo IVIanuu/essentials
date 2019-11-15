@@ -19,11 +19,13 @@ package com.ivianuu.essentials.ui.compose.common.scrolling.sliver
 import androidx.compose.Composable
 import androidx.compose.memo
 import androidx.compose.unaryPlus
+import androidx.ui.core.Direction
 import androidx.ui.core.Dp
 import androidx.ui.core.Measurable
 import androidx.ui.core.ParentData
 import androidx.ui.core.Placeable
 import androidx.ui.core.Px
+import androidx.ui.core.PxPosition
 import androidx.ui.core.max
 import androidx.ui.core.min
 import androidx.ui.core.px
@@ -128,7 +130,6 @@ fun SliverChildren.SliverList(
             currentOffset = leading
             currentIndex -= 1
         }
-        d { "to fill $toFill" }
 
         // down
         toFill = constraints.remainingCacheSpace
@@ -193,7 +194,7 @@ fun SliverChildren.SliverList(
             SliverGeometry(
                 scrollSize = state.trailingItem.trailing,
                 paintSize = constraints.remainingPaintSpace,
-                maxPaintSize = state.trailingItem.trailing
+                maxPaintSize = constraints.remainingPaintSpace
             )
         } else {
             SliverGeometry(
@@ -206,8 +207,61 @@ fun SliverChildren.SliverList(
         state.onCompose()
 
         layout(geometry) {
+            val mainAxisUnit: PxPosition
+            val crossAxisUnit: PxPosition
+            val originOffset: PxPosition
+            val addSize: Boolean
+
+            when (constraints.mainAxisDirection.applyGrowthDirection(constraints.growthDirection)) {
+                Direction.LEFT -> {
+                    mainAxisUnit = PxPosition((-1).px, Px.Zero)
+                    crossAxisUnit = PxPosition(Px.Zero, 1.px)
+                    originOffset = PxPosition(geometry.paintSize, Px.Zero)
+                    addSize = true
+                }
+                Direction.UP -> {
+                    mainAxisUnit = PxPosition(Px.Zero, (-1).px)
+                    crossAxisUnit = PxPosition(1.px, Px.Zero)
+                    originOffset = PxPosition(Px.Zero, geometry.paintSize)
+                    addSize = true
+                }
+                Direction.RIGHT -> {
+                    mainAxisUnit = PxPosition(1.px, Px.Zero)
+                    crossAxisUnit = PxPosition(Px.Zero, 1.px)
+                    originOffset = PxPosition.Origin
+                    addSize = false
+                }
+                Direction.DOWN -> {
+                    mainAxisUnit = PxPosition(Px.Zero, 1.px)
+                    crossAxisUnit = PxPosition(1.px, Px.Zero)
+                    originOffset = PxPosition.Origin
+                    addSize = false
+                }
+            }
+
             layoutItems.forEach { item ->
-                item.placeable.place(Px.Zero, item.leading - constraints.scrollPosition)
+                val mainAxisDelta = item.leading - constraints.scrollPosition
+                val crossAxisDelta = Px.Zero
+                var childOffset = PxPosition(
+                    x = (originOffset.x.value + mainAxisUnit.x.value * mainAxisDelta.value + crossAxisUnit.x.value * crossAxisDelta.value).px,
+                    y = (originOffset.y.value + mainAxisUnit.y.value * mainAxisDelta.value + crossAxisUnit.y.value * crossAxisDelta.value).px
+                )
+
+                val paintSize = when (constraints.mainAxisDirection) {
+                    Direction.LEFT, Direction.RIGHT -> item.placeable.width
+                    Direction.UP, Direction.DOWN -> item.placeable.height
+                }
+
+                if (addSize) {
+                    childOffset = PxPosition(
+                        x = childOffset.x + (mainAxisUnit.x.value * paintSize.value).px,
+                        y = childOffset.y + (mainAxisUnit.y.value * paintSize.value).px
+                    )
+                }
+
+                if (mainAxisDelta < constraints.remainingPaintSpace && mainAxisDelta + paintSize > Px.Zero) {
+                    item.placeable.place(childOffset)
+                }
             }
         }
     }
@@ -238,7 +292,6 @@ private class SliverListState {
         }
 
         if (newItemRange != itemRange) {
-            d { "on compose item range = $newItemRange" }
             itemRange = newItemRange
         }
     }
@@ -259,9 +312,6 @@ private data class ItemInfo(
 
     fun hitTest(position: Px) =
         (position >= leading && position <= trailing)
-            .also {
-                d { "hit test $this $position = $it" }
-            }
 
     companion object {
         val Unknown = ItemInfo(-1, Px.Zero, Px.Zero)

@@ -50,8 +50,6 @@ fun Viewport(
     anchor: Float = 0f,
     children: SliverChildren.() -> Unit
 ) = composable("Viewport") {
-    d { "compose viewport" }
-
     val state = +memo { ViewportState() }
 
     val sliverChildren = SliverChildren().apply(children).children
@@ -111,10 +109,6 @@ internal class ViewportState {
     private var minScrollPosition = Px.Zero
     private var maxScrollPosition = Px.Zero
     private var hasVisualOverflow = false
-
-    init {
-        d { "viewport state init" }
-    }
 
     fun performLayout(
         children: List<SliverMeasureable>,
@@ -320,12 +314,11 @@ internal class ViewportState {
             )
 
             this.constraints = constraints
-            d { "pre measure $child at $index constraints ${this.constraints} geo ${this.geometry}" }
+            // use the scroll position to force a remeasure
             val dummyConstraints = Constraints(minWidth = scrollPosition.round())
             val placeable = child.measurable.measure(dummyConstraints)
             val geometry = this.geometry!!
             this.constraints = null
-            d { "post measure $child at $index constraints ${this.constraints} geo ${geometry}" }
             geometry.checkGeometry()
 
             if (geometry.scrollOffsetCorrection != Px.Zero) return geometry.scrollOffsetCorrection
@@ -356,7 +349,6 @@ internal class ViewportState {
             )
 
             placementBlocks += {
-                d { "run placement block for $position" }
                 placeable.place(position)
             }
 
@@ -427,9 +419,7 @@ private fun ViewportLayout(
     state: ViewportState,
     children: @Composable() () -> Unit
 ) = composable("ViewportLayout") {
-    d { "compose viewport layout" }
     Layout(children = children) { measureables, constraints ->
-        d { "viewport measureing $measureables" }
         val sliverMeasureables = measureables.map { measureable ->
             val parentData = measureable.parentData as SliverParentData
             SliverMeasureable(
@@ -441,7 +431,6 @@ private fun ViewportLayout(
         state.viewportSize = PxSize(constraints.maxWidth, constraints.maxHeight)
         state.performLayout(children = sliverMeasureables, placementBlocks = placementBlocks)
         layout(constraints.maxWidth, constraints.maxHeight) {
-            d { "viewport placing" }
             placementBlocks.forEach { it() }
         }
     }
