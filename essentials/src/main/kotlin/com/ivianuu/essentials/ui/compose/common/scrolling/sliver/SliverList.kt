@@ -259,9 +259,9 @@ fun SliverChildren.SliverList(
                     )
                 }
 
-                if (mainAxisDelta < constraints.remainingPaintSpace && mainAxisDelta + paintSize > Px.Zero) {
+                //if (mainAxisDelta < constraints.remainingPaintSpace && mainAxisDelta + paintSize > Px.Zero) {
                     item.placeable.place(childOffset)
-                }
+                //}
             }
         }
     }
