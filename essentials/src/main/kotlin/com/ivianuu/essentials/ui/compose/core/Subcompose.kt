@@ -18,18 +18,22 @@ package com.ivianuu.essentials.ui.compose.core
 
 import androidx.compose.Component
 import androidx.compose.Composable
+import androidx.compose.Composer
 import androidx.compose.ComposerAccessor
-import androidx.compose.CompositionContext
 import androidx.compose.CompositionReference
 import androidx.compose.Context
 import androidx.compose.Emittable
+import androidx.compose.FrameManager
 import androidx.compose.Recomposer
+import androidx.compose.ViewComposer
+import androidx.compose.runWithCurrent
+import androidx.compose.trace
 import com.github.ajalt.timberkt.d
 
-fun getSubcompositions(container: Emittable): List<CompositionContext> =
+fun getSubcompositions(container: Emittable): List<Composer<*>> =
     subcompositions
         .filterKeys { it.emittable == container }
-        .map { it.value.context }
+        .map { it.value.composer }
         .toList()
 
 fun subcompose(
@@ -38,21 +42,24 @@ fun subcompose(
     parent: CompositionReference,
     tag: Any? = null,
     composable: @Composable() () -> Unit
-): CompositionContext {
+): Composer<*> {
     val key = SubcompositionKey(container, tag)
     var root = subcompositions[key]
+    val wasInit = root == null
 
     if (root == null) {
         root = SubcompositionRoot()
-        root.context = CompositionContext.prepare(context, container, root, parent)
+        root.composer = ViewComposer(container, context, Recomposer.current()).apply {
+            ComposerAccessor.setParentReference(this, parent)
+            parent.registerComposer(this)
+        }
         subcompositions[key] = root
-        d { "sub compositions $subcompositions" }
     }
 
     root.composable = composable
-    root.update()
+    if (wasInit) root.init() else root.update()
 
-    return root.context
+    return root.composer
 }
 
 fun disposeSubcomposition(
@@ -61,29 +68,59 @@ fun disposeSubcomposition(
     parent: CompositionReference,
     tag: Any?
 ) {
+    d { "dispose composition start" }
     val key = SubcompositionKey(container, tag)
     subcompose(context, container, parent, tag) {}
     subcompositions.remove(key)
+    d { "dispose composition end" }
 }
 
 private class SubcompositionRoot : Component() {
     fun update() {
-        val wasComposing = ComposerAccessor.isComposing(context.composer)
-        ComposerAccessor.setComposing(context.composer, true)
-        context.compose()
-        Recomposer.current().recomposeSync();
-        ComposerAccessor.setComposing(context.composer, wasComposing)
+        d { "update start" }
+        composer.runWithCurrent {
+            composer.recompose()
+            composer.applyChanges()
+        }
+        d { "update end" }
+    }
+
+    fun init() {
+        d { "init start" }
+        composer.runWithCurrent {
+            val composerWasComposing = ComposerAccessor.isComposing(composer)
+            try {
+                ComposerAccessor.setComposing(composer, true)
+                trace("Compose:recompose") {
+                    composer.startRoot()
+                    composer.startGroup("invocation")
+                    this()
+                    composer.endGroup()
+                    composer.endRoot()
+                }
+            } finally {
+                ComposerAccessor.setComposing(composer, composerWasComposing)
+            }
+            // TODO(b/143755743)
+            composer.applyChanges()
+            if (!composerWasComposing) {
+                FrameManager.nextFrame()
+            }
+        }
+        d { "init end" }
     }
 
     lateinit var composable: @Composable() () -> Unit
-    lateinit var context: CompositionContext
+    lateinit var composer: Composer<*>
     @Suppress("PLUGIN_ERROR")
     override fun compose() {
+        d { "root composing start" }
         with(ComposerAccessor.currentComposerNonNull()) {
             startGroup(0)
             composable()
             endGroup()
         }
+        d { "root composing end" }
     }
 }
 

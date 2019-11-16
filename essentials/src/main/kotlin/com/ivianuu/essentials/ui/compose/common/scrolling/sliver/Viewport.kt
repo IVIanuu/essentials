@@ -305,7 +305,7 @@ private class ViewportState {
             }
 
             constraintsMap[index] = constraints
-            childLayoutNode.measure(Constraints())
+            childLayoutNode.measure(Constraints(minWidth = scrollPosition.round()))
             constraintsMap.remove(index)
             val geometry = geometryMap.remove(index)!!
             geometry.checkGeometry()

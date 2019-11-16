@@ -85,7 +85,7 @@ class ChildManager(
             layoutNodeRef.value!!.layoutChildren.firstOrNull { it.indexedParentData.index == index }
         if (result == null) {
             check(index !in children.keys) {
-                "child not in layout children but in children -> ${children.keys} layout childre -> ${layoutNodeRef.value!!.layoutChildren.map { it.indexedParentData.index }}"
+                "child not in layout children but in children -> ${children.keys} layout children -> ${layoutNodeRef.value!!.layoutChildren.map { it.indexedParentData.index }}"
             }
         }
         return result

@@ -31,4 +31,7 @@ public class ComposerAccessor {
         composer.setComposing$compose_runtime_release(value);
     }
 
+    public static void setParentReference(Composer composer, CompositionReference reference) {
+        composer.setParentReference$compose_runtime_release(reference);
+    }
 }
