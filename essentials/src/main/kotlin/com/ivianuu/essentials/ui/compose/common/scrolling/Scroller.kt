@@ -39,13 +39,11 @@ fun Scroller(
     position: ScrollPosition = +memo { ScrollPosition() },
     direction: Axis = Axis.Vertical,
     enabled: Boolean = true,
-    reverse: Boolean = false,
     child: @Composable() () -> Unit
 ) {
     Scrollable(
         position = position,
         direction = direction,
-        reverse = reverse,
         enabled = enabled
     ) {
         ScrollerLayout(

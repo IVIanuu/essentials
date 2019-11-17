@@ -16,6 +16,13 @@
 
 package com.ivianuu.essentials.ui.compose.core
 
+import androidx.ui.core.Direction
+
 enum class Axis {
     Horizontal, Vertical
+}
+
+fun Direction.toAxis() = when (this) {
+    Direction.LEFT, Direction.RIGHT -> Axis.Horizontal
+    Direction.UP, Direction.DOWN -> Axis.Vertical
 }
