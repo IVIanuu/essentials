@@ -17,12 +17,13 @@
 package com.ivianuu.essentials.ui.compose.common.scrolling.sliver
 
 import androidx.compose.Composable
+import androidx.compose.LayoutNodeAccessor
 import androidx.compose.memo
 import androidx.compose.unaryPlus
 import androidx.ui.core.Constraints
 import androidx.ui.core.Direction
 import androidx.ui.core.Layout
-import androidx.ui.core.Measurable
+import androidx.ui.core.LayoutNode
 import androidx.ui.core.ParentData
 import androidx.ui.core.Placeable
 import androidx.ui.core.Px
@@ -108,7 +109,7 @@ internal class ViewportState {
     private var hasVisualOverflow = false
 
     fun performLayout(
-        children: List<SliverMeasureable>,
+        children: List<SliverLayoutNode>,
         placementBlocks: MutableList<Placeable.PlacementScope.() -> Unit>
     ) {
         if (viewportSize != PxSize.Zero) {
@@ -149,7 +150,7 @@ internal class ViewportState {
     }
 
     private fun attemptLayout(
-        children: List<SliverMeasureable>,
+        children: List<SliverLayoutNode>,
         placementBlocks: MutableList<Placeable.PlacementScope.() -> Unit>,
         mainAxisSize: Px,
         crossAxisSize: Px,
@@ -231,7 +232,7 @@ internal class ViewportState {
     }
 
     private fun layoutChildSequence(
-        children: List<SliverMeasureable>,
+        children: List<SliverLayoutNode>,
         placementBlocks: MutableList<Placeable.PlacementScope.() -> Unit>,
         initialIndex: Int,
         scrollPosition: Px,
@@ -273,7 +274,7 @@ internal class ViewportState {
         }
 
         var index = initialIndex
-        var child: SliverMeasureable? = children.getOrNull(index)
+        var child: SliverLayoutNode? = children.getOrNull(index)
         while (child != null) {
             val sliverScrollPosition = if (scrollPosition <= Px.Zero) Px.Zero else scrollPosition
             val correctedCacheOrigin = max(cacheOrigin, -sliverScrollPosition)
@@ -311,9 +312,8 @@ internal class ViewportState {
             )
 
             this.constraints = constraints
-            // use the scroll position to force a remeasure
-            val dummyConstraints = Constraints(minWidth = scrollPosition.round())
-            val placeable = child.measurable.measure(dummyConstraints)
+            LayoutNodeAccessor.setNeedsRemeasure(child.layoutNode, true)
+            child.layoutNode.measure(dummyConstraints)
             val geometry = this.geometry!!
             this.constraints = null
             geometry.checkGeometry()
@@ -345,8 +345,9 @@ internal class ViewportState {
                 growthDirection = growthDirection
             )
 
+            val finalChild = child
             placementBlocks += {
-                placeable.place(position)
+                finalChild.layoutNode.place(position.x.round(), position.y.round())
             }
 
             when (growthDirection) {
@@ -409,6 +410,7 @@ internal class ViewportState {
 
 }
 
+private val dummyConstraints = Constraints()
 private val defaultCacheSize = 250.px
 
 @Composable
@@ -417,11 +419,12 @@ private fun ViewportLayout(
     children: @Composable() () -> Unit
 ) = composable("ViewportLayout") {
     Layout(children = children) { measureables, constraints ->
-        val sliverMeasureables = measureables.map { measureable ->
-            val parentData = measureable.parentData as SliverParentData
-            SliverMeasureable(
+        val layoutNode = (this as LayoutNode.InnerMeasureScope).layoutNode
+        val sliverMeasureables = layoutNode.layoutChildren.map { child ->
+            val parentData = child.parentData as SliverParentData
+            SliverLayoutNode(
                 key = parentData.key,
-                measurable = measureable
+                layoutNode = child
             )
         }
         val placementBlocks = mutableListOf<Placeable.PlacementScope.() -> Unit>()
@@ -433,9 +436,9 @@ private fun ViewportLayout(
     }
 }
 
-internal data class SliverMeasureable(
+internal data class SliverLayoutNode(
     val key: Any?,
-    val measurable: Measurable
+    val layoutNode: LayoutNode
 )
 
 private data class SliverParentData(val key: Any?)

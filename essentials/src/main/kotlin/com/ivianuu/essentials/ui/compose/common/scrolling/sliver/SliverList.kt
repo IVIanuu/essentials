@@ -291,7 +291,7 @@ private class SliverListState {
             val first = max(0, leadingItem.index - 50)
             val last = min(count, leadingItem.index + 50)
             first until last
-        }
+        } //(0 until count)
 
         if (newItemRange != itemRange) {
             itemRange = newItemRange
