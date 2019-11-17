@@ -56,7 +56,7 @@ fun SliverChildren.SliverList(
 ) {
     val state = +memo { SliverListState() }
     state.count = count
-    state.onCompose()
+    +memo(count) { state.onCompose() }
 
     Sliver(
         children = {
