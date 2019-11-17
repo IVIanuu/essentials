@@ -26,9 +26,11 @@ import androidx.ui.core.DensityScope
 import androidx.ui.core.Direction
 import androidx.ui.core.IntPx
 import androidx.ui.core.Layout
+import androidx.ui.core.LayoutNode
 import androidx.ui.core.Measurable
 import androidx.ui.core.Placeable
 import androidx.ui.core.Px
+import androidx.ui.core.ambientDensity
 import androidx.ui.core.round
 import com.ivianuu.essentials.ui.compose.common.scrolling.ScrollDirection
 import com.ivianuu.essentials.ui.compose.core.Axis
@@ -106,7 +108,10 @@ data class SliverGeometry(
     }
 }
 
-class SliverMeasureScope(override val density: Density) : DensityScope {
+class SliverMeasureScope(
+    override val density: Density,
+    val layoutNode: LayoutNode
+) : DensityScope {
     fun layout(
         geometry: SliverGeometry,
         placementBlock: Placeable.PlacementScope.() -> Unit
@@ -131,9 +136,11 @@ fun SliverLayout(
     measureBlock: SliverMeasureBlock
 ) = composable("SliverLayout") {
     val state = +ambient(ViewportStateAmbient)
+    val density = +ambientDensity()
     Layout(children = children) { measureables, _ ->
         val constraints = state.constraints!!
-        val measureScope = state.measureScope
+        val measureScope =
+            SliverMeasureScope(density, (this as LayoutNode.InnerMeasureScope).layoutNode)
         val (geometry, placementBlock) =
             measureBlock(measureScope, measureables, constraints)
 

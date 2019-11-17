@@ -29,7 +29,6 @@ import androidx.ui.core.Px
 import androidx.ui.core.PxPosition
 import androidx.ui.core.PxSize
 import androidx.ui.core.RepaintBoundary
-import androidx.ui.core.ambientDensity
 import androidx.ui.core.coerceIn
 import androidx.ui.core.max
 import androidx.ui.core.min
@@ -56,9 +55,6 @@ fun Viewport(
 
     val sliverChildren = SliverChildren().apply(children).children
 
-    val density = +ambientDensity()
-    val measureScope = +memo(density) { SliverMeasureScope(density) }
-    state.measureScope = measureScope
     state.position = position
     state.center = center
     state.mainAxisDirection = mainAxisDirection
@@ -82,7 +78,6 @@ fun Viewport(
 
 internal class ViewportState {
 
-    lateinit var measureScope: SliverMeasureScope
     lateinit var position: ScrollPosition
     var center: Any? = null
     var mainAxisDirection = Direction.DOWN
