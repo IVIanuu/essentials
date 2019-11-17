@@ -20,7 +20,6 @@ import android.content.Context
 import androidx.compose.Composable
 import androidx.compose.CompositionReference
 import androidx.compose.Observe
-import androidx.compose.Recompose
 import androidx.compose.ambient
 import androidx.compose.compositionReference
 import androidx.compose.memo
@@ -157,26 +156,9 @@ class ChildManager(
         composable: @Composable() () -> Unit
     ) {
         composable(key) {
-            d { "run outer $key" }
-            val iteration = +ref { 0 }
-            composable("inner", iteration.value) {
-                d { "run inner $key" }
-                Recompose { recompose ->
-                    var recomposeToUse: (() -> Unit)? = null
-                    Observe {
-                        if (recomposeToUse != null) {
-                            d { "observed key $key" }
-                            ++iteration.value
-                            recomposeToUse?.invoke()
-                        }
-                        composable()
-                    }
-
-                    recomposeToUse = recompose
-                }
-            }
+            composable()
         }
     }
 }
 
-data class ChildManagerParentData(val key: Any, val data: Any? = null)
+data class ChildManagerParentData(val key: Any, var data: Any? = null)

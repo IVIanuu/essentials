@@ -49,7 +49,7 @@ fun <T> SliverChildren.SliverList(
     item = { item(it, items[it]) }
 )
 
-fun SliverChildren.SliverList(
+fun SliverChildren.SliverList2(
     count: Int,
     itemSizeProvider: (Int) -> Dp,
     item: @Composable() (Int) -> Unit
