@@ -43,7 +43,7 @@ val twilightSettingsRoute = composeControllerRoute(
                 val prefs = +inject<TwilightPrefs>()
                 ScrollableList(
                     items = TwilightMode.values().toList(),
-                    itemSize = 48.dp
+                    itemSize = 64.dp
                 ) { _, mode ->
                     TwilightModeItem(
                         mode = mode,
