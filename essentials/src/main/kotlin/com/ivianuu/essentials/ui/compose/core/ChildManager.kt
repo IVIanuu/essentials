@@ -20,8 +20,8 @@ import android.content.Context
 import androidx.compose.Composable
 import androidx.compose.CompositionReference
 import androidx.compose.Observe
+import androidx.compose.Recompose
 import androidx.compose.ambient
-import androidx.compose.composer
 import androidx.compose.compositionReference
 import androidx.compose.memo
 import androidx.compose.onPreCommit
@@ -36,7 +36,6 @@ import kotlin.math.max
 fun ChildManager(
     body: @Composable() (ChildManager) -> Unit
 ) = composable("ChildManager") {
-    d { "invoke child manager" }
     val context = +ambient(ContextAmbient)
     var reference: CompositionReference? = null
     val childManagerRef = +ref<ChildManager?> { null }
@@ -89,17 +88,7 @@ class ChildManager(
         children[key] = finalComposable
         childrenToIterate.add(index, key to finalComposable)
         d { "add at $index children to iterate $childrenToIterate" }
-        subcompose {
-            childrenToIterate.forEachIndexed { currentIndex, (key, composable) ->
-                childComposable(
-                    key = key,
-                    skip = currentIndex != index,
-                    composable = composable
-                )
-            }
-        }
-
-        setDefaultComposable()
+        compose()
         sortChildren()
     }
 
@@ -118,52 +107,35 @@ class ChildManager(
     fun remove(key: Any) {
         d { "remove key $key" }
         children.remove(key)
-        subcompose {
-            children.forEach { (key, composable) ->
-                childComposable(
-                    key = key,
-                    skip = true,
-                    composable = composable
-                )
-            }
-        }
-        setDefaultComposable()
+        compose()
         sortChildren()
     }
 
     fun removeAll(keys: List<Any>) {
         keys.forEach { children.remove(it) }
-        subcompose {
-            children.forEach { (key, composable) ->
-                childComposable(
-                    key = key,
-                    skip = true,
-                    composable = composable
-                )
-            }
-        }
-        setDefaultComposable()
+        compose()
         sortChildren()
     }
 
     fun clear() {
         children.clear()
-        subcompose {}
+        compose()
     }
 
     fun recompose() {
-        d { "recompose" }
-        setDefaultComposable()
+        recomposeSubcomposition(layoutNode!!, "tag")
     }
 
     fun dispose() {
         disposeSubcomposition(context, layoutNode!!, compositionReference, "tag")
     }
 
-    private fun subcompose(
-        block: @Composable() () -> Unit
-    ) {
-        subcompose(context, layoutNode!!, compositionReference, "tag", block)
+    private fun compose() {
+        subcompose(context, layoutNode!!, compositionReference, "tag") {
+            children.forEach { (key, composable) ->
+                childComposable(key, composable)
+            }
+        }
     }
 
     private fun sortChildren() {
@@ -179,38 +151,32 @@ class ChildManager(
         d { "children post sort $children" }
     }
 
-    private fun setDefaultComposable() {
-        setSubcompositionComposable(layoutNode!!, "tag") {
-            children.forEach { (key, composable) ->
-                childComposable(
-                    key = key,
-                    skip = false,
-                    composable = composable
-                )
-            }
-        }
-    }
-
+    @Composable
     private fun childComposable(
         key: Any,
-        skip: Boolean,
         composable: @Composable() () -> Unit
     ) {
-        with(composer.composer) {
-            d { "child composable $key skip $skip" }
-            startGroup(key)
-            if (inserting || !skip) {
-                startGroup(invocation)
-                composable()
-                endGroup()
-            } else {
-                skipCurrentGroup()
+        composable(key) {
+            d { "run outer $key" }
+            val iteration = +ref { 0 }
+            composable("inner", iteration.value) {
+                d { "run inner $key" }
+                Recompose { recompose ->
+                    var recomposeToUse: (() -> Unit)? = null
+                    Observe {
+                        if (recomposeToUse != null) {
+                            d { "observed key $key" }
+                            ++iteration.value
+                            recomposeToUse?.invoke()
+                        }
+                        composable()
+                    }
+
+                    recomposeToUse = recompose
+                }
             }
-            endGroup()
         }
     }
 }
 
 data class ChildManagerParentData(val key: Any, val data: Any? = null)
-
-private val invocation = Any()
