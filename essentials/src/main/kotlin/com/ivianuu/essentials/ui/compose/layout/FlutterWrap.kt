@@ -22,10 +22,10 @@ import androidx.ui.core.Constraints
 import androidx.ui.core.Dp
 import androidx.ui.core.IntPx
 import androidx.ui.core.Layout
+import androidx.ui.core.LayoutDirection
 import androidx.ui.core.Placeable
 import androidx.ui.core.dp
 import androidx.ui.core.max
-import androidx.ui.text.style.TextDirection
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.compose.core.Axis
 import com.ivianuu.essentials.ui.compose.core.VerticalDirection
@@ -43,7 +43,7 @@ fun FlutterWrap(
     runAlignment: MainAxisAlignment = MainAxisAlignment.Start,
     runSpacing: Dp = 0.dp,
     crossAxisAlignment: CrossAxisAlignment = CrossAxisAlignment.Start,
-    textDirection: TextDirection = TextDirection.Ltr,
+    horizontalDirection: LayoutDirection = LayoutDirection.Ltr,
     verticalDirection: VerticalDirection = VerticalDirection.Down,
     children: @Composable() () -> Unit
 ) = composable("FlutterWrap") {
@@ -71,7 +71,7 @@ fun FlutterWrap(
                 )
 
                 maxMainAxisSize = constraints.maxWidth
-                flipMainAxis = textDirection == TextDirection.Rtl
+                flipMainAxis = horizontalDirection == LayoutDirection.Rtl
                 flipCrossAxis = verticalDirection == VerticalDirection.Up
             }
             Axis.Vertical -> {
@@ -84,7 +84,7 @@ fun FlutterWrap(
 
                 maxMainAxisSize = constraints.maxHeight
                 flipMainAxis = verticalDirection == VerticalDirection.Up
-                flipCrossAxis = textDirection == TextDirection.Rtl
+                flipCrossAxis = horizontalDirection == LayoutDirection.Rtl
             }
         }
 
