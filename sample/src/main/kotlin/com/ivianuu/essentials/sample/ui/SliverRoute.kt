@@ -46,7 +46,7 @@ import com.ivianuu.essentials.ui.compose.material.SimpleListItem
 val sliverRoute = composeControllerRoute {
     val indices = +memo {
         modelListOf<Int>().apply {
-            (1..100).forEach { this += it }
+            (1..100_000).forEach { this += it }
         }
     }
 

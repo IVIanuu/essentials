@@ -60,82 +60,87 @@ fun SliverChildren.SliverList(
     count: Int,
     itemSizeProvider: (Int, SliverConstraints) -> Px,
     item: @Composable() (Int) -> Unit
-) = Sliver { constraints ->
-    if (count == 0) return@Sliver content(SliverGeometry()) {}
+) {
+    Sliver { constraints ->
+        if (count == 0) return@Sliver content(SliverGeometry()) {}
 
-    val items = mutableListOf<ItemBounds>()
-    var offset = Px.Zero
-    (0 until count)
-        .map { itemSizeProvider(it, constraints) }
-        .mapIndexed { index, size ->
-            items += ItemBounds(
-                index = index,
-                size = size,
-                leading = offset,
-                trailing = offset + size
-            )
-            offset += size
-        }
-
-    var totalScrollSize = Px.Zero
-    items.forEach { totalScrollSize += it.size }
-
-    val scrollOffset = max(constraints.scrollPosition, Px.Zero)
-
-    val itemRange: IntRange? = if (scrollOffset <= totalScrollSize) {
-        val firstChild = items.first { it.hitTest(scrollOffset) }
-        val lastChild = items.first {
-            it.hitTest(
-                min(
-                    scrollOffset + constraints.remainingPaintSpace,
-                    items.last().trailing
+        // todo cache this
+        val items = mutableListOf<ItemBounds>()
+        var offset = Px.Zero
+        (0 until count)
+            .map { itemSizeProvider(it, constraints) }
+            .mapIndexed { index, size ->
+                items += ItemBounds(
+                    index = index,
+                    size = size,
+                    leading = offset,
+                    trailing = offset + size
                 )
-            )
+                offset += size
+            }
+
+        // todo remove this
+        var totalScrollSize = Px.Zero
+        items.forEach { totalScrollSize += it.size }
+
+        val scrollOffset = max(constraints.scrollPosition, Px.Zero)
+
+        val itemRange: IntRange? = if (scrollOffset <= totalScrollSize) {
+            val firstChild = items.first { it.hitTest(scrollOffset) }
+            val lastChild = items.first {
+                it.hitTest(
+                    min(
+                        scrollOffset + constraints.remainingPaintSpace,
+                        items.last().trailing
+                    )
+                )
+            }
+
+            firstChild.index..lastChild.index
+        } else {
+            null
         }
 
-        firstChild.index..lastChild.index
-    } else {
-        null
-    }
+        val paintSize = if (itemRange != null) {
+            calculatePaintSize(
+                constraints,
+                from = items[itemRange.first].leading,
+                to = items[itemRange.last].trailing
+            )
+        } else Px.Zero
 
-    val paintSize = if (itemRange != null) {
-        calculatePaintSize(
-            constraints,
-            from = items[itemRange.first].leading,
-            to = items[itemRange.last].trailing
+        d {
+            "layout\n" +
+                    "scroll offset $scrollOffset" +
+                    "item range $itemRange\n" +
+                    "constraints $constraints" +
+                    "\npaint size $paintSize"
+        }
+
+        // todo return infinitely while last item is not laid out
+        val geometry = SliverGeometry(
+            scrollSize = totalScrollSize,
+            paintSize = paintSize,
+            maxPaintSize = paintSize
         )
-    } else Px.Zero
 
-    d {
-        "layout\n" +
-                "scroll offset $scrollOffset" +
-                "item range $itemRange\n" +
-                "constraints $constraints" +
-                "\npaint size $paintSize"
-    }
-
-    val geometry = SliverGeometry(
-        scrollSize = totalScrollSize,
-        paintSize = paintSize,
-        maxPaintSize = totalScrollSize
-    )
-
-    content(geometry = geometry) {
-        SliverChildLayout(constraints = constraints, geometry = geometry) {
-            itemRange
-                ?.map { items[it] }
-                ?.forEach { item ->
-                    composable(item.index) {
-                        ParentData(
-                            SliverChildParentData(
-                                size = item.size.round(),
-                                layoutOffset = item.leading
-                            )
-                        ) {
-                            item(item.index)
+        content(geometry = geometry) {
+            SliverChildLayout(constraints = constraints, geometry = geometry) {
+                itemRange
+                    ?.map { items[it] }
+                    ?.forEach { item ->
+                        composable(item.index) {
+                            ParentData(
+                                SliverChildParentData(
+                                    size = item.size.round(),
+                                    layoutOffset = item.leading
+                                )
+                            ) {
+                                item(item.index)
+                            }
                         }
                     }
-                }
+            }
         }
     }
 }
