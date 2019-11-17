@@ -36,13 +36,14 @@ import com.ivianuu.essentials.ui.compose.core.ControllerAmbient
 import com.ivianuu.essentials.ui.compose.core.MediaQuery
 import com.ivianuu.essentials.ui.compose.core.MediaQueryProvider
 import com.ivianuu.essentials.ui.compose.core.RouteAmbient
+import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.coroutines.collect
 import com.ivianuu.essentials.ui.compose.injekt.ComponentAmbient
 import com.ivianuu.essentials.ui.compose.injekt.MaterialThemeProvider
 import com.ivianuu.essentials.ui.compose.injekt.inject
 
 /**
- * Controller which uses content to display it's ui
+ * Controller which uses compose to display it's ui
  */
 abstract class ComposeController : EsController() {
 
@@ -58,7 +59,7 @@ abstract class ComposeController : EsController() {
     override fun onViewCreated(view: View) {
         super.onViewCreated(view)
         view as AndroidComposeViewContainer
-        view.setContent { composeWithAmbients(view) }
+        view.setContent { ComposeWithAmbients(view) }
     }
 
     override fun onDestroyView(view: View) {
@@ -69,9 +70,9 @@ abstract class ComposeController : EsController() {
     }
 
     // todo move this to somewhere else
-
     @Composable
-    protected open fun composeWithAmbients(view: AndroidComposeViewContainer) {
+    protected open fun ComposeWithAmbients(view: AndroidComposeViewContainer) =
+        composable("ComposeWithAmbients") {
         MultiAmbientProvider(
             ActivityAmbient with requireActivity(),
             RouteAmbient with route!!,
@@ -96,12 +97,14 @@ abstract class ComposeController : EsController() {
                 val materialThemeProvider = +inject<MaterialThemeProvider>()
                 MaterialTheme(
                     colors = +materialThemeProvider.colors,
-                    typography = +materialThemeProvider.typography,
-                    children = this::content
-                )
+                    typography = +materialThemeProvider.typography
+                ) {
+                    composable("content") {
+                        content()
+                    }
+                }
             }
         }
-
     }
 
     @Composable
