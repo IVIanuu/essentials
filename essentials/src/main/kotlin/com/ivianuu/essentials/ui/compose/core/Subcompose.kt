@@ -43,9 +43,9 @@ fun recomposeAll(container: Emittable) {
 fun recomposeSubcomposition(
     container: Emittable,
     tag: Any
-) {
+): Boolean {
     val key = SubcompositionKey(container, tag)
-    subcompositions[key]!!.update()
+    return subcompositions[key]!!.recompose()
 }
 
 fun setSubcompositionComposable(
@@ -102,6 +102,21 @@ class Subcomposition(private val tag: Any) {
 
     lateinit var composable: @Composable() () -> Unit
     lateinit var composer: Composer<*>
+
+    fun recompose(): Boolean {
+        if (ComposerAccessor.isComposing(composer)) return false
+        return composer.runWithCurrent {
+            val hadChanges: Boolean
+            try {
+                ComposerAccessor.setComposing(composer, true)
+                hadChanges = composer.recompose()
+                composer.applyChanges()
+            } finally {
+                ComposerAccessor.setComposing(composer, false)
+            }
+            hadChanges
+        }
+    }
 
     fun update() {
         d { "update start $tag" }

@@ -31,15 +31,12 @@ import androidx.ui.layout.MainAxisAlignment
 import androidx.ui.layout.Row
 import androidx.ui.material.Button
 import com.github.ajalt.timberkt.d
-import com.ivianuu.essentials.ui.compose.common.scrolling.Scroller
 import com.ivianuu.essentials.ui.compose.composeControllerRoute
-import com.ivianuu.essentials.ui.compose.core.childManager
+import com.ivianuu.essentials.ui.compose.core.ChildManager
 import com.ivianuu.essentials.ui.compose.material.SimpleListItem
 
 val homeRoute = composeControllerRoute {
-    Scroller {
-        val childManager = +childManager()
-
+    ChildManager { childManager ->
         val indices = +memo { mutableListOf<Int>() }
 
         d { "invoke home route" }
@@ -74,7 +71,7 @@ val homeRoute = composeControllerRoute {
         }
 
         fun clearChildren() {
-            childManager.clear()
+            childManager.removeAll(indices)
             indices.clear()
         }
 

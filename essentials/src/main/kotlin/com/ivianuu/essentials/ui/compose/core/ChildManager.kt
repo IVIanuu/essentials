@@ -19,14 +19,12 @@ package com.ivianuu.essentials.ui.compose.core
 import android.content.Context
 import androidx.compose.Composable
 import androidx.compose.CompositionReference
-import androidx.compose.Recomposer
-import androidx.compose.RecomposerAccessor
+import androidx.compose.Observe
 import androidx.compose.ambient
 import androidx.compose.composer
 import androidx.compose.compositionReference
-import androidx.compose.effectOf
 import androidx.compose.memo
-import androidx.compose.onDispose
+import androidx.compose.onPreCommit
 import androidx.compose.unaryPlus
 import androidx.ui.core.ContextAmbient
 import androidx.ui.core.LayoutNode
@@ -34,38 +32,34 @@ import androidx.ui.core.ParentData
 import com.github.ajalt.timberkt.d
 import kotlin.math.max
 
-fun childManager() = effectOf<ChildManager> {
+@Composable
+fun ChildManager(
+    body: @Composable() (ChildManager) -> Unit
+) = composable("ChildManager") {
+    d { "invoke child manager" }
     val context = +ambient(ContextAmbient)
-    val compositionReference = +compositionReference()
+    var reference: CompositionReference? = null
+    val childManagerRef = +ref<ChildManager?> { null }
 
-    lateinit var childManager: ChildManager
-    val reference = object : CompositionReference by compositionReference {
-        override fun invalidate(sync: Boolean) {
-            val composer = getSubcompositions(childManager.layoutNode!!).first().composer
-            if (sync) {
-                RecomposerAccessor.recomposeSync(Recomposer.current(), composer)
-            } else {
-                RecomposerAccessor.scheduleRecompose(Recomposer.current(), composer)
+    Observe {
+        d { "invoke observe" }
+        reference = +compositionReference()
+        childManagerRef.value?.recompose()
+        +onPreCommit(true) {
+            onDispose {
+                childManagerRef.value!!.dispose()
             }
         }
     }
 
-    childManager = +memo {
+    childManagerRef.value = +memo {
         ChildManager(
             context = context,
-            compositionReference = reference
+            compositionReference = reference!!
         )
     }
 
-    // dispose
-    +onDispose { childManager.dispose() }
-
-    /*// compose
-    if (childManager.layoutNode != null) {
-        childManager.recompose()
-    }*/
-
-    return@effectOf childManager
+    body(childManagerRef.value!!)
 }
 
 class ChildManager(
@@ -87,10 +81,9 @@ class ChildManager(
 
     fun add(index: Int, key: Any, composable: @Composable() () -> Unit) {
         val finalComposable: @Composable() () -> Unit = {
-            ParentData(
-                data = +memo { ChildManagerParentData(key) },
-                children = composable
-            )
+            ParentData(data = +memo { ChildManagerParentData(key) }) {
+                composable()
+            }
         }
         val childrenToIterate = children.toList().toMutableList()
         children[key] = finalComposable
@@ -139,7 +132,7 @@ class ChildManager(
     }
 
     fun removeAll(keys: List<Any>) {
-        children.remove(keys)
+        keys.forEach { children.remove(it) }
         subcompose {
             children.forEach { (key, composable) ->
                 childComposable(
@@ -159,8 +152,8 @@ class ChildManager(
     }
 
     fun recompose() {
+        d { "recompose" }
         setDefaultComposable()
-        recomposeSubcomposition(layoutNode!!, "tag")
     }
 
     fun dispose() {
