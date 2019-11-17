@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.ui.compose.material
 
 import androidx.compose.Composable
+import androidx.compose.Observe
 import androidx.compose.ambient
 import androidx.compose.unaryPlus
 import androidx.ui.core.Alignment
@@ -120,9 +121,11 @@ fun SimpleListItem(
     }
 
     if (onClick != null) {
-        val rippleColor = ((+MaterialTheme.colors()).onSurface).copy(alpha = RippleOpacity)
-        Ripple(bounded = true, color = rippleColor) {
-            Clickable(onClick = onClick, children = item)
+        Observe {
+            val rippleColor = ((+MaterialTheme.colors()).onSurface).copy(alpha = RippleOpacity)
+            Ripple(bounded = true, color = rippleColor) {
+                Clickable(onClick = onClick, children = item)
+            }
         }
     } else {
         item()

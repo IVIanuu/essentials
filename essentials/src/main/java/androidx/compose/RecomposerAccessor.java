@@ -17,22 +17,14 @@
 package androidx.compose;
 
 @SuppressWarnings("KotlinInternalInJava")
-public class ComposerAccessor {
+public class RecomposerAccessor {
 
-    public static Composer currentComposerNonNull() {
-        return ViewComposerKt.getCurrentComposerNonNull();
+    public static void scheduleRecompose(Recomposer recomposer, Composer composer) {
+        recomposer.scheduleRecompose$compose_runtime_release(composer);
     }
 
-    public static boolean isComposing(Composer composer) {
-        return composer.isComposing$compose_runtime_release();
-    }
-
-    public static void setComposing(Composer composer, boolean value) {
-        composer.setComposing$compose_runtime_release(value);
-    }
-
-    public static void setParentReference(Composer composer, CompositionReference reference) {
-        composer.setParentReference$compose_runtime_release(reference);
+    public static void recomposeSync(Recomposer recomposer, Composer composer) {
+        recomposer.recomposeSync$compose_runtime_release(composer);
     }
 
 }
