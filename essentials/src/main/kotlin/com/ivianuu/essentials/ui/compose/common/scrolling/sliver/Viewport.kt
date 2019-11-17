@@ -37,7 +37,9 @@ import androidx.ui.core.px
 import androidx.ui.core.round
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.compose.common.scrolling.ScrollPosition
+import com.ivianuu.essentials.ui.compose.core.Axis
 import com.ivianuu.essentials.ui.compose.core.composable
+import com.ivianuu.essentials.ui.compose.core.toAxis
 
 // todo add visual overlow
 
@@ -93,16 +95,16 @@ internal class ViewportState {
 
     val mainAxisSize: Px
         get() {
-            return when (mainAxisDirection) {
-                Direction.LEFT, Direction.RIGHT -> viewportSize.width
-                Direction.UP, Direction.DOWN -> viewportSize.height
+            return when (mainAxisDirection.toAxis()) {
+                Axis.Horizontal -> viewportSize.width
+                Axis.Vertical -> viewportSize.height
             }
         }
     val crossAxisSize: Px
         get() {
-            return when (mainAxisDirection) {
-                Direction.LEFT, Direction.RIGHT -> viewportSize.height
-                Direction.UP, Direction.DOWN -> viewportSize.width
+            return when (mainAxisDirection.toAxis()) {
+                Axis.Horizontal -> viewportSize.height
+                Axis.Vertical -> viewportSize.width
             }
         }
 

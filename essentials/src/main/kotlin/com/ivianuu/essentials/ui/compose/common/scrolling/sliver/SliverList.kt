@@ -32,7 +32,9 @@ import androidx.ui.core.px
 import androidx.ui.core.toPx
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.compose.common.framed
+import com.ivianuu.essentials.ui.compose.core.Axis
 import com.ivianuu.essentials.ui.compose.core.composable
+import com.ivianuu.essentials.ui.compose.core.toAxis
 import kotlin.math.absoluteValue
 import kotlin.math.max
 import kotlin.math.min
@@ -247,9 +249,9 @@ fun SliverChildren.SliverList(
                     y = (originOffset.y.value + mainAxisUnit.y.value * mainAxisDelta.value + crossAxisUnit.y.value * crossAxisDelta.value).px
                 )
 
-                val paintSize = when (constraints.mainAxisDirection) {
-                    Direction.LEFT, Direction.RIGHT -> item.placeable.width
-                    Direction.UP, Direction.DOWN -> item.placeable.height
+                val paintSize = when (constraints.mainAxisDirection.toAxis()) {
+                    Axis.Horizontal -> item.placeable.width
+                    Axis.Vertical -> item.placeable.height
                 }
 
                 if (addSize) {

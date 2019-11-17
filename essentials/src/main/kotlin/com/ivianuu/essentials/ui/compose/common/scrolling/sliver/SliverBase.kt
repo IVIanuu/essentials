@@ -31,7 +31,9 @@ import androidx.ui.core.Placeable
 import androidx.ui.core.Px
 import androidx.ui.core.round
 import com.ivianuu.essentials.ui.compose.common.scrolling.ScrollDirection
+import com.ivianuu.essentials.ui.compose.core.Axis
 import com.ivianuu.essentials.ui.compose.core.composable
+import com.ivianuu.essentials.ui.compose.core.toAxis
 
 class SliverChildren {
 
@@ -72,14 +74,14 @@ data class SliverConstraints(
     val cacheOrigin: Px
 )
 
-fun SliverConstraints.asConstraints() = when (mainAxisDirection) {
-    Direction.LEFT, Direction.RIGHT -> Constraints(
+fun SliverConstraints.asConstraints() = when (mainAxisDirection.toAxis()) {
+    Axis.Horizontal -> Constraints(
         minWidth = IntPx.Zero,
         maxWidth = IntPx.Infinity,
         minHeight = crossAxisSpace.round(),
         maxHeight = crossAxisSpace.round()
     )
-    Direction.UP, Direction.DOWN -> Constraints(
+    Axis.Vertical -> Constraints(
         minWidth = crossAxisSpace.round(),
         maxWidth = crossAxisSpace.round(),
         minHeight = IntPx.Zero,
@@ -137,12 +139,12 @@ fun SliverLayout(
 
         val width: Px
         val height: Px
-        when (constraints.mainAxisDirection) {
-            Direction.LEFT, Direction.RIGHT -> {
+        when (constraints.mainAxisDirection.toAxis()) {
+            Axis.Horizontal -> {
                 width = geometry.paintSize // todo
                 height = constraints.crossAxisSpace
             }
-            Direction.UP, Direction.DOWN -> {
+            Axis.Vertical -> {
                 width = constraints.crossAxisSpace
                 height = geometry.paintSize // todo
             }
