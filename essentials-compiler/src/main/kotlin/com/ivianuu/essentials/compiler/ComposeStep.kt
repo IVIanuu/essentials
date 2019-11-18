@@ -24,10 +24,10 @@ import com.ivianuu.processingx.getPackage
 import com.ivianuu.processingx.hasAnnotation
 import com.ivianuu.processingx.javaToKotlinType
 import com.ivianuu.processingx.steps.ProcessingStep
-import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.CodeBlock
 import com.squareup.kotlinpoet.FileSpec
 import com.squareup.kotlinpoet.FunSpec
+import com.squareup.kotlinpoet.TypeName
 import com.squareup.kotlinpoet.asTypeName
 import javax.lang.model.element.Element
 import javax.lang.model.element.ExecutableElement
@@ -62,7 +62,8 @@ class ComposeStep : ProcessingStep() {
         val parameters = element.parameters
             .map { param ->
                 ComposableParamDescriptor(
-                    typeName = param.asType().asTypeName().javaToKotlinType() as ClassName,
+                    type = param.asType().toString(),
+                    typeName = param.asType().asTypeName().javaToKotlinType(),
                     parameterName = param.simpleName.toString(),
                     isPivotal = param.hasAnnotation<Pivotal>()
                 )
@@ -71,7 +72,7 @@ class ComposeStep : ProcessingStep() {
         val composableKey = (packageName +
                 className +
                 composableName +
-                parameters.joinToString("") { it.parameterName + it.typeName.canonicalName })
+                parameters.joinToString("") { it.parameterName + it.type })
             .hashCode()
 
         return ComposableDescriptor(
@@ -120,10 +121,14 @@ class ComposeGenerator(private val descriptor: ComposableDescriptor) {
 
                     addStatement("startRestartGroup(key)")
 
-                    if (descriptor.parameters.size == 1) {
-                        beginControlFlow("if (changed(${descriptor.parameters.first().parameterName}) || inserting)")
-                    } else {
-                        beginControlFlow("if (changed(listOf(${descriptor.parameters.joinToString(",") { it.parameterName }})) || inserting)")
+                    when {
+                        descriptor.parameters.isEmpty() -> beginControlFlow("if (inserting)")
+                        descriptor.parameters.size == 1 -> beginControlFlow("if (changed(${descriptor.parameters.first().parameterName}) || inserting)")
+                        else -> beginControlFlow(
+                            "if (changed(listOf(${descriptor.parameters.joinToString(
+                                ","
+                            ) { it.parameterName }})) || inserting)"
+                        )
                     }
                     addStatement("startGroup(key)")
                     addStatement(
@@ -159,7 +164,8 @@ data class ComposableDescriptor(
 )
 
 data class ComposableParamDescriptor(
-    val typeName: ClassName,
+    val type: String,
+    val typeName: TypeName,
     val parameterName: String,
     val isPivotal: Boolean
 )
