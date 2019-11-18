@@ -120,8 +120,7 @@ fun SimpleListItem(
     }
 
     if (onClick != null) {
-        val rippleColor = ((+MaterialTheme.colors()).onSurface).copy(alpha = RippleOpacity)
-        Ripple(bounded = true, color = rippleColor) {
+        Ripple(bounded = true) {
             Clickable(onClick = onClick, children = item)
         }
     } else {
