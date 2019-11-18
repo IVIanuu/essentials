@@ -143,8 +143,6 @@ object Deps {
 
     const val mockitoKotlin = "com.nhaarman.mockitokotlin2:mockito-kotlin:2.0.0"
 
-    const val processingX = "com.ivianuu.processingx:processingx:0.0.1-dev4"
-
     const val roboelectric = "org.robolectric:robolectric:4.0.2"
 
     object Scopes {

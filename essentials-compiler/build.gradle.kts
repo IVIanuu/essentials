@@ -26,6 +26,4 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/mv
 dependencies {
     implementation(Deps.Kotlin.stdlib)
     implementation(Deps.Injekt.compiler)
-    implementation(Deps.processingX)
-    kapt(Deps.processingX)
 }
