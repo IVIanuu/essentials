@@ -31,3 +31,4 @@
 #
 
 com.ivianuu.injekt.compiler.InjektProcessor
+com.ivianuu.essentials.compiler.EssentialsCompiler
