@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.mvrx.epoxy
+package com.ivianuu.essentials.ui.epoxy
 
 import com.airbnb.epoxy.EpoxyController
 import com.ivianuu.director.Controller
-import com.ivianuu.essentials.ui.epoxy.epoxyController
 import com.ivianuu.essentials.ui.mvrx.MvRxView
 import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
 
