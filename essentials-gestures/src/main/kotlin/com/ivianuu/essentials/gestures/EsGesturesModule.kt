@@ -18,7 +18,6 @@ package com.ivianuu.essentials.gestures
 
 import com.ivianuu.essentials.gestures.accessibility.AccessibilityComponent
 import com.ivianuu.injekt.module
-import com.ivianuu.injekt.set
 
 val esGesturesModule = module {
     set<AccessibilityComponent> {

@@ -26,13 +26,8 @@ import com.ivianuu.injekt.BindingContext
 import com.ivianuu.injekt.Definition
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Name
-import com.ivianuu.injekt.factory
 import com.ivianuu.injekt.get
-import com.ivianuu.injekt.intoSet
 import com.ivianuu.injekt.module
-import com.ivianuu.injekt.set
-import com.ivianuu.injekt.single
-import com.ivianuu.injekt.withBinding
 import kotlin.reflect.KClass
 
 val esCoilModule = module {
@@ -83,7 +78,7 @@ inline fun <reified T : Decoder> Module.bindDecoder(
 }
 
 inline fun <reified T : Decoder> BindingContext<T>.bindDecoder(): BindingContext<T> {
-    intoSet<T, Decoder>(Decoders)
+    intoSet<Decoder>(setName = Decoders)
     return this
 }
 
@@ -178,7 +173,7 @@ inline fun <reified M : MeasuredMapper<T, *>, reified T : Any> Module.bindMeasur
     type: KClass<T>,
     name: Any? = null
 ) {
-    withBinding<M>(name) { bindMeasuredMapper(type) }
+    withBinding<M>(name = name) { bindMeasuredMapper(type) }
 }
 
 inline fun <reified M : MeasuredMapper<T, *>, reified T : Any> BindingContext<M>.bindMeasuredMapper(

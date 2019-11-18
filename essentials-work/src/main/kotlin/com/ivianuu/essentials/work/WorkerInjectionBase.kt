@@ -27,14 +27,8 @@ import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Name
 import com.ivianuu.injekt.Provider
-import com.ivianuu.injekt.bindType
-import com.ivianuu.injekt.factory
-import com.ivianuu.injekt.intoMap
-import com.ivianuu.injekt.map
 import com.ivianuu.injekt.module
 import com.ivianuu.injekt.parametersOf
-import com.ivianuu.injekt.typeOf
-import com.ivianuu.injekt.withBinding
 
 /**
  * Uses injekt to instantiate workers
@@ -90,9 +84,7 @@ inline fun <reified T : ListenableWorker> Module.bindWorker(
 }
 
 inline fun <reified T : ListenableWorker> BindingContext<T>.bindWorker(): BindingContext<T> {
-    intoMap(
-        mapKeyType = typeOf(),
-        mapValueType = typeOf<ListenableWorker>(),
+    intoMap<String, ListenableWorker>(
         entryKey = T::class.java.name,
         mapName = WorkersMap
     )

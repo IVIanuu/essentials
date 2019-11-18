@@ -37,7 +37,6 @@ import com.ivianuu.injekt.android.activityComponent
 import com.ivianuu.injekt.get
 import com.ivianuu.injekt.inject
 import com.ivianuu.injekt.module
-import com.ivianuu.injekt.single
 import com.ivianuu.scopes.android.onPause
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach

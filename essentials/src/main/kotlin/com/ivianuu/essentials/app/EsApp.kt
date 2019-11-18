@@ -30,7 +30,6 @@ import com.ivianuu.injekt.Provider
 import com.ivianuu.injekt.android.AndroidLogger
 import com.ivianuu.injekt.android.applicationComponent
 import com.ivianuu.injekt.inject
-import com.ivianuu.injekt.logger
 import kotlin.reflect.KClass
 
 /**

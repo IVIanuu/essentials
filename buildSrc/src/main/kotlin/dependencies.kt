@@ -106,7 +106,7 @@ object Deps {
     const val epoxyPrefs = "com.ivianuu.epoxyprefs:epoxyprefs:0.0.1-dev-21"
 
     object Injekt {
-        private const val version = "0.0.1-dev71"
+        private const val version = "0.0.1-dev73"
         const val injekt = "com.ivianuu.injekt:injekt:$version"
         const val android = "com.ivianuu.injekt:injekt-android:$version"
         const val compiler = "com.ivianuu.injekt:injekt-compiler:$version"
