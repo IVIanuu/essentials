@@ -1,1 +1,2 @@
 com.ivianuu.injekt.compiler.InjektProcessor,ISOLATING
+com.ivianuu.essentials.compiler.EssentialsProcessor,ISOLATING

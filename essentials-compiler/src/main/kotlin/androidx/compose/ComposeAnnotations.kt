@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2019 Manuel Wrage
  *
@@ -14,18 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-plugins {
-    kotlin("jvm")
-    kotlin("kapt")
-}
 
-apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-compiler-args.gradle")
-apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/java-8.gradle")
-apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/mvn-publish.gradle")
+package androidx.compose
 
-dependencies {
-    implementation(Deps.Kotlin.stdlib)
-    implementation(Deps.Injekt.compiler)
-    implementation(Deps.processingX)
-    kapt(Deps.processingX)
-}
+annotation class Composable
+annotation class Pivotal
