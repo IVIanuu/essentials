@@ -97,7 +97,7 @@ val homeRoute = composeControllerRoute {
 private fun HomeItem(
     item: HomeItem,
     onClick: () -> Unit
-) = composable(item) {
+) = composable {
     SimpleListItem(
         title = { Text(item.title) },
         leading = { ColorAvatar(item.color) },

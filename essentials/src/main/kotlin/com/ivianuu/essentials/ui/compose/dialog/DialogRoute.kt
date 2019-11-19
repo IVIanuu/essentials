@@ -41,9 +41,7 @@ fun dialogRoute(
 ) {
     val navigator = inject<Navigator>()
     if (!dismissible) {
-        composable {
-            onBackPressed { }
-        }
+        onBackPressed { }
     }
     PressGestureDetector(
         onPress = if (dismissible) {

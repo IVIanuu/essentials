@@ -34,6 +34,7 @@ import androidx.ui.core.round
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.compose.common.scrolling.ScrollPosition
 import com.ivianuu.essentials.ui.compose.core.composable
+import com.ivianuu.essentials.ui.compose.core.composableWithKey
 import com.ivianuu.essentials.ui.compose.core.invoke
 import com.ivianuu.essentials.ui.compose.core.memo
 import com.ivianuu.essentials.ui.compose.core.state
@@ -327,7 +328,7 @@ private class ViewportState {
             )
 
             childrenComposables += {
-                composable(index) {
+                composableWithKey(index) {
                     ParentData(data = parentData) {
                         RepaintBoundary {
                             childContent()

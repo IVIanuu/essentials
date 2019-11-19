@@ -20,8 +20,9 @@ import androidx.compose.Composable
 import androidx.ui.graphics.Image
 import coil.ImageLoader
 import coil.api.getAny
-import com.ivianuu.essentials.ui.compose.core.composable
+import com.ivianuu.essentials.ui.compose.core.composableWithKey
 import com.ivianuu.essentials.ui.compose.core.effect
+import com.ivianuu.essentials.ui.compose.core.memo
 import com.ivianuu.essentials.ui.compose.coroutines.load
 import com.ivianuu.essentials.ui.compose.injekt.inject
 
@@ -40,11 +41,10 @@ fun CoilImageAny(
     data: Any,
     placeholder: Image? = null,
     image: @Composable() (Image) -> Unit
-) = composable(data) {
+) = composableWithKey(data) {
     val wasPlaceholderNull = placeholder == null
     // todo better default placeholder
-    val placeholder =
-        placeholder ?: Image(1, 1)
+    val placeholder = memo(placeholder) { placeholder ?: Image(1, 1) }
     val loadedImage = loadCoilImageAny(
         placeholder = placeholder,
         data = data

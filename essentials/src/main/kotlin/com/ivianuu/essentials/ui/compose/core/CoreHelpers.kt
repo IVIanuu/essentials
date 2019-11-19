@@ -17,7 +17,6 @@ import androidx.compose.Composable
 import androidx.compose.Composer
 import androidx.compose.Effect
 import androidx.compose.composer
-import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.util.sourceLocation
 
 inline fun composable(noinline block: @Composable() () -> Unit) =
@@ -141,7 +140,6 @@ fun <T> effectWithKey(
     key: Any,
     block: @Composable() () -> T
 ): T {
-    d { "do effect " }
     with(composer.composer) {
         startGroup(key)
         val result = block()

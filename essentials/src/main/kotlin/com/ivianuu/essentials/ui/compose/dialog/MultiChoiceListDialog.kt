@@ -20,6 +20,7 @@ import androidx.compose.Composable
 import androidx.ui.material.Checkbox
 import com.ivianuu.essentials.ui.compose.common.AbsorbPointer
 import com.ivianuu.essentials.ui.compose.core.composable
+import com.ivianuu.essentials.ui.compose.core.composableWithKey
 
 @Composable
 fun <T> MultiChoiceListDialog(
@@ -40,7 +41,7 @@ fun <T> MultiChoiceListDialog(
         buttonLayout = buttonLayout,
         listContent = {
             items.forEachIndexed { index, item ->
-                composable(index) {
+                composableWithKey(index) {
                     MultiChoiceDialogListItem(
                         title = { item(item) },
                         checked = item in selectedItems,

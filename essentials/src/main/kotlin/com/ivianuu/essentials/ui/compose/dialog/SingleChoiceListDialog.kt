@@ -20,6 +20,7 @@ import androidx.compose.Composable
 import androidx.ui.material.RadioButton
 import com.ivianuu.essentials.ui.compose.common.AbsorbPointer
 import com.ivianuu.essentials.ui.compose.core.composable
+import com.ivianuu.essentials.ui.compose.core.composableWithKey
 
 @Composable
 fun <T> SingleChoiceListDialog(
@@ -41,7 +42,7 @@ fun <T> SingleChoiceListDialog(
         buttonLayout = buttonLayout,
         listContent = {
             items.forEachIndexed { index, item ->
-                composable(index) {
+                composableWithKey(index) {
                     SingleChoiceDialogListItem(
                         title = { item(item) },
                         selected = item == selectedItem,
