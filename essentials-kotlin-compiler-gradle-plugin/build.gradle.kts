@@ -13,7 +13,8 @@ gradlePlugin {
     plugins {
         create("essentialsPlugin") {
             id = "com.ivianuu.essentials.kotlin.compiler"
-            implementationClass = "EssentialsPlugin"
+            implementationClass =
+                "com.ivianuu.essentials.kotlin.compiler.gradle.EssentialsGradlePlugin"
         }
     }
 }

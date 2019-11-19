@@ -9,10 +9,10 @@ import org.jetbrains.kotlin.gradle.plugin.SubpluginArtifact
 import org.jetbrains.kotlin.gradle.plugin.SubpluginOption
 
 @AutoService(KotlinGradleSubplugin::class)
-open class EssentialsSubplugin : KotlinGradleSubplugin<AbstractCompile> {
+open class EssentialsGradleSubplugin : KotlinGradleSubplugin<AbstractCompile> {
 
     override fun isApplicable(project: Project, task: AbstractCompile) =
-        project.plugins.hasPlugin(EssentialsPlugin::class.java)
+        project.plugins.hasPlugin(EssentialsGradlePlugin::class.java)
 
     override fun apply(
         project: Project,
