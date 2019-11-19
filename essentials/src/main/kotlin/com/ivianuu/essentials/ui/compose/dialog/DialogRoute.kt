@@ -26,6 +26,7 @@ import com.ivianuu.essentials.ui.compose.common.SafeArea
 import com.ivianuu.essentials.ui.compose.common.onBackPressed
 import com.ivianuu.essentials.ui.compose.composeControllerRoute
 import com.ivianuu.essentials.ui.compose.core.composable
+import com.ivianuu.essentials.ui.compose.core.invokeAsComposable
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.director.controllerRouteOptions
@@ -51,7 +52,7 @@ fun dialogRoute(
         DialogScrim()
         Center {
             SafeArea {
-                dialog()
+                dialog.invokeAsComposable()
             }
         }
     }

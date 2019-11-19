@@ -38,10 +38,9 @@ fun ResourceMaterialTheme(
 ) = composable {
     MaterialTheme(
         colors = colors,
-        typography = typography
-    ) {
-        children()
-    }
+        typography = typography,
+        children = children
+    )
 }
 
 fun resourceColors(): ColorPalette = effect {

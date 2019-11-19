@@ -18,6 +18,7 @@ package com.ivianuu.essentials.ui.compose.navigation
 
 import androidx.compose.Ambient
 import androidx.compose.Composable
+import com.ivianuu.essentials.ui.compose.core.invokeAsComposable
 
 open class Route(
     val opaque: Boolean = false,
@@ -28,7 +29,7 @@ open class Route(
     @Composable
     open fun content() {
         RouteAmbient.Provider(this) {
-            content.invoke()
+            content.invokeAsComposable()
         }
     }
 

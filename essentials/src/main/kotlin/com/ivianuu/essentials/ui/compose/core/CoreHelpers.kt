@@ -131,6 +131,46 @@ fun Composer<*>.wrapInRestartScope(key: Any, block: @Composable() () -> Unit) {
 
 private val invocation = Any()
 
+inline fun (@Composable() () -> Unit).invokeAsComposable() = composable(this)
+
+inline fun <V1> (@Composable() (V1) -> Unit).invokeAsComposable(v1: V1) = composable(v1 = v1) {
+    this(v1)
+}
+
+inline fun <V1, V2> (@Composable() (V1, V2) -> Unit).invokeAsComposable(
+    v1: V1,
+    v2: V2
+) = composable(v1, v2) {
+    this(v1, v2)
+}
+
+inline fun <V1, V2, V3> (@Composable() (V1, V2, V3) -> Unit).invokeAsComposable(
+    v1: V1,
+    v2: V2,
+    v3: V3
+) = composable(v1, v2, v3) {
+    this(v1, v2, v3)
+}
+
+inline fun <V1, V2, V3, V4> (@Composable() (V1, V2, V3, V4) -> Unit).invokeAsComposable(
+    v1: V1,
+    v2: V2,
+    v3: V3,
+    v4: V4
+) = composable(v1, v2, v3, v4) {
+    this(v1, v2, v3, v4)
+}
+
+inline fun <V1, V2, V3, V4, V5> (@Composable() (V1, V2, V3, V4, V5) -> Unit).invokeAsComposable(
+    v1: V1,
+    v2: V2,
+    v3: V3,
+    v4: V4,
+    v5: V5
+) = composable(v1, v2, v3, v4, v5) {
+    this(v1, v2, v3, v4, v5)
+}
+
 @BuilderInference
 inline fun <T> effect(noinline block: @Composable() () -> T): T =
     effectWithKey(key = sourceLocation(), block = block)

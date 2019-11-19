@@ -38,6 +38,7 @@ import androidx.ui.material.Divider
 import androidx.ui.material.MaterialTheme
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.invoke
+import com.ivianuu.essentials.ui.compose.core.invokeAsComposable
 import com.ivianuu.essentials.ui.compose.material.CurrentIconStyleProvider
 import com.ivianuu.essentials.ui.compose.material.IconStyle
 import com.ivianuu.essentials.ui.compose.material.SecondaryTextAlpha
@@ -97,7 +98,7 @@ private fun DialogBody(
                     CurrentTextStyleProvider(
                         MaterialTheme.typography()().h6
                     ) {
-                        title()
+                        title.invokeAsComposable()
                     }
                 }
             }
@@ -107,7 +108,7 @@ private fun DialogBody(
                     CurrentIconStyleProvider(
                         IconStyle(color = colorForCurrentBackground())
                     ) {
-                        icon()
+                        icon.invokeAsComposable()
                     }
                 }
             }
@@ -117,14 +118,14 @@ private fun DialogBody(
                     mainAxisAlignment = MainAxisAlignment.Start,
                     crossAxisAlignment = CrossAxisAlignment.Center
                 ) {
-                    styledIcon()
+                    styledIcon.invokeAsComposable()
                     WidthSpacer(16.dp)
-                    styledTitle()
+                    styledTitle.invokeAsComposable()
                 }
             } else if (styledIcon != null) {
-                styledIcon()
+                styledIcon.invokeAsComposable()
             } else if (styledTitle != null) {
-                styledTitle()
+                styledTitle.invokeAsComposable()
             }
         }
     } else {
@@ -138,7 +139,7 @@ private fun DialogBody(
                     color = colorForCurrentBackground().copy(alpha = SecondaryTextAlpha)
                 )
             ) {
-                content()
+                content.invokeAsComposable()
             }
         }
     } else {
@@ -184,7 +185,7 @@ private fun DialogContentLayout(
                     right = 24.dp,
                     bottom = if (buttons != null && content == null) 28.dp else 24.dp
                 ) {
-                    header()
+                    header.invokeAsComposable()
                 }
             }
         }
@@ -203,7 +204,7 @@ private fun DialogContentLayout(
                     right = if (applyContentPadding) 24.dp else 0.dp,
                     bottom = if (buttons == null) 24.dp else 0.dp
                 ) {
-                    content()
+                    content.invokeAsComposable()
                 }
             }
         }
@@ -218,10 +219,10 @@ private fun DialogContentLayout(
             ParentData(DialogContentSlot.Buttons) {
                 if (!showDividers && content != null) {
                     Padding(top = 28.dp) {
-                        buttons()
+                        buttons.invokeAsComposable()
                     }
                 } else {
-                    buttons()
+                    buttons.invokeAsComposable()
                 }
             }
         }
@@ -300,9 +301,9 @@ private fun DialogButtons(
                     mainAxisAlignment = MainAxisAlignment.End,
                     crossAxisAlignment = CrossAxisAlignment.Center
                 ) {
-                    neutralButton?.invoke()
-                    negativeButton?.invoke()
-                    positiveButton?.invoke()
+                    neutralButton?.invokeAsComposable()
+                    negativeButton?.invokeAsComposable()
+                    positiveButton?.invokeAsComposable()
                 }
             }
         }
@@ -315,9 +316,9 @@ private fun DialogButtons(
                     mainAxisAlignment = MainAxisAlignment.Center,
                     crossAxisAlignment = CrossAxisAlignment.Center
                 ) {
-                    positiveButton?.invoke()
-                    negativeButton?.invoke()
-                    neutralButton?.invoke()
+                    positiveButton?.invokeAsComposable()
+                    negativeButton?.invokeAsComposable()
+                    neutralButton?.invokeAsComposable()
                 }
             }
         }

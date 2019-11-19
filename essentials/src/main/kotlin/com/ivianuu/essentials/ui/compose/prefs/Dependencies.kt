@@ -19,6 +19,7 @@ package com.ivianuu.essentials.ui.compose.prefs
 import androidx.compose.Composable
 import androidx.ui.core.Opacity
 import com.ivianuu.essentials.ui.compose.core.composable
+import com.ivianuu.essentials.ui.compose.core.invokeAsComposable
 import com.ivianuu.kprefs.Pref
 
 data class Dependency<T : Any>(
@@ -37,6 +38,6 @@ fun Dependencies(
 ) = composable {
     val dependenciesOk = dependencies.checkAll()
     Opacity(if (dependenciesOk) 1f else 0.5f) {
-        child(dependenciesOk)
+        child.invokeAsComposable(dependenciesOk)
     }
 }

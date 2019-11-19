@@ -24,6 +24,7 @@ import androidx.ui.core.max
 import androidx.ui.core.min
 import androidx.ui.core.round
 import com.github.ajalt.timberkt.d
+import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.composableWithKey
 
 fun <T> SliverChildren.SliverList(
@@ -127,15 +128,17 @@ fun SliverChildren.SliverList(
         SliverChildLayout(constraints = constraints, geometry = geometry) {
             itemRange
                 ?.map { items[it] }
-                ?.forEach { item ->
-                    composableWithKey(item.index) {
+                ?.forEach { itemBounds ->
+                    composableWithKey(itemBounds.index) {
                         ParentData(
                             SliverChildParentData(
-                                size = item.size.round(),
-                                layoutOffset = item.leading
+                                size = itemBounds.size.round(),
+                                layoutOffset = itemBounds.leading
                             )
                         ) {
-                            item(item.index)
+                            composable {
+                                item(itemBounds.index)
+                            }
                         }
                     }
                 }

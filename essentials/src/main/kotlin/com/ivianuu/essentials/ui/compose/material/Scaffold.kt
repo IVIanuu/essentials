@@ -27,6 +27,7 @@ import androidx.ui.core.dp
 import androidx.ui.core.looseMin
 import androidx.ui.material.DrawerState
 import com.ivianuu.essentials.ui.compose.core.composable
+import com.ivianuu.essentials.ui.compose.core.invokeAsComposable
 import com.ivianuu.essentials.ui.compose.core.memo
 import com.ivianuu.essentials.ui.compose.core.state
 import com.ivianuu.essentials.ui.compose.core.withDensity
@@ -142,25 +143,25 @@ private fun ScaffoldLayout(
     val children: @Composable() () -> Unit = {
         if (topAppBar != null) {
             ParentData(ScaffoldLayoutSlot.TopAppBar) {
-                topAppBar()
+                topAppBar.invokeAsComposable()
             }
         }
 
         if (body != null) {
             ParentData(ScaffoldLayoutSlot.Body) {
-                body()
+                body.invokeAsComposable()
             }
         }
 
         if (bottomBar != null) {
             ParentData(ScaffoldLayoutSlot.BottomBar) {
-                bottomBar()
+                bottomBar.invokeAsComposable()
             }
         }
 
         if (fab != null) {
             ParentData(ScaffoldLayoutSlot.Fab) {
-                fab()
+                fab.invokeAsComposable()
             }
         }
     }

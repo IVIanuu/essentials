@@ -20,6 +20,7 @@ import android.view.View
 import androidx.compose.Composable
 import androidx.lifecycle.lifecycleScope
 import com.ivianuu.director.requireActivity
+import com.ivianuu.essentials.ui.compose.core.invokeAsComposable
 import com.ivianuu.essentials.ui.navigation.director.ControllerRoute
 import com.ivianuu.essentials.ui.navigation.director.controllerRoute
 import kotlinx.coroutines.launch
@@ -39,7 +40,7 @@ private class ComposeRouteController(
 ) : ComposeController() {
 
     override fun content() {
-        _compose()
+        _compose.invokeAsComposable()
     }
 
     override fun onDetach(view: View) {

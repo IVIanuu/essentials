@@ -28,7 +28,9 @@ import com.ivianuu.essentials.ui.compose.common.framed
 import com.ivianuu.essentials.ui.compose.core.Axis
 import com.ivianuu.essentials.ui.compose.core.ambient
 import com.ivianuu.essentials.ui.compose.core.composable
+import com.ivianuu.essentials.ui.compose.core.composableWithKey
 import com.ivianuu.essentials.ui.compose.core.effect
+import com.ivianuu.essentials.ui.compose.core.invokeAsComposable
 import com.ivianuu.essentials.ui.compose.core.memo
 
 fun <T> TabController(
@@ -72,8 +74,10 @@ fun <T> TabRow(
         scrollable = scrollable,
         indicatorContainer = indicatorContainer,
         tab = { index, item ->
-            TabIndexAmbient.Provider(index) {
-                tab(index, item)
+            composableWithKey(item as Any) {
+                TabIndexAmbient.Provider(index) {
+                    tab.invokeAsComposable(index, item)
+                }
             }
         }
     )

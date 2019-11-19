@@ -31,6 +31,7 @@ import androidx.ui.layout.WidthSpacer
 import androidx.ui.material.ripple.Ripple
 import com.ivianuu.essentials.ui.compose.common.scrolling.Scroller
 import com.ivianuu.essentials.ui.compose.core.composable
+import com.ivianuu.essentials.ui.compose.core.invokeAsComposable
 
 @Composable
 fun ListDialog(
@@ -51,7 +52,7 @@ fun ListDialog(
         content = {
             Scroller {
                 Column {
-                    listContent()
+                    listContent.invokeAsComposable()
                 }
             }
         },
@@ -83,12 +84,12 @@ fun SimpleDialogListItem(
                     crossAxisAlignment = CrossAxisAlignment.Center
                 ) {
                     if (leading != null) {
-                        leading()
+                        leading.invokeAsComposable()
 
                         WidthSpacer(24.dp)
                     }
 
-                    title()
+                    title.invokeAsComposable()
                 }
             }
         }

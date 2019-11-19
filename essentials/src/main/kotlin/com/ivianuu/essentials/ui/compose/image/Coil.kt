@@ -22,6 +22,7 @@ import coil.ImageLoader
 import coil.api.getAny
 import com.ivianuu.essentials.ui.compose.core.composableWithKey
 import com.ivianuu.essentials.ui.compose.core.effect
+import com.ivianuu.essentials.ui.compose.core.invokeAsComposable
 import com.ivianuu.essentials.ui.compose.core.memo
 import com.ivianuu.essentials.ui.compose.coroutines.load
 import com.ivianuu.essentials.ui.compose.injekt.inject
@@ -51,6 +52,6 @@ fun CoilImageAny(
     )
 
     if (!wasPlaceholderNull || loadedImage != placeholder) {
-        image(loadedImage)
+        image.invokeAsComposable(loadedImage)
     }
 }

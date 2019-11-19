@@ -31,6 +31,7 @@ import com.ivianuu.essentials.ui.compose.common.scrolling.sliver.SliverList
 import com.ivianuu.essentials.ui.compose.common.scrolling.sliver.Viewport
 import com.ivianuu.essentials.ui.compose.core.Axis
 import com.ivianuu.essentials.ui.compose.core.composable
+import com.ivianuu.essentials.ui.compose.core.invokeAsComposable
 import com.ivianuu.essentials.ui.compose.core.memo
 import com.ivianuu.essentials.ui.compose.layout.NonNullSingleChildLayout
 import kotlin.math.roundToInt
@@ -51,7 +52,7 @@ fun <T> Pager(
         direction = direction,
         reverse = reverse
     ) {
-        item(it, items[it])
+        item.invokeAsComposable(it, items[it])
     }
 }
 

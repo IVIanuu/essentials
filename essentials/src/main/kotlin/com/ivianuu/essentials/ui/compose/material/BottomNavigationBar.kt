@@ -40,6 +40,7 @@ import com.ivianuu.essentials.ui.compose.core.ambient
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.effect
 import com.ivianuu.essentials.ui.compose.core.invoke
+import com.ivianuu.essentials.ui.compose.core.invokeAsComposable
 import com.ivianuu.essentials.ui.compose.core.memo
 import com.ivianuu.essentials.ui.compose.core.state
 import com.ivianuu.essentials.ui.compose.core.withDensity
@@ -87,11 +88,11 @@ fun <T> BottomNavigationBar(
                         )
                     }
 
-                    items.forEachIndexed { index, item ->
+                    items.forEachIndexed { index, _item ->
                         composable(index) {
                             ConstrainedBox(constraints = itemConstraints) {
                                 BottomNavigationItemIndexAmbient.Provider(index) {
-                                    item(index, item)
+                                    item.invokeAsComposable(index, _item)
                                 }
                             }
                         }
@@ -171,7 +172,7 @@ fun <T> BottomNavigationSwapper(
     }
 
     Swapper(controller = swapperController) {
-        content(
+        content.invokeAsComposable(
             bottomNavigationController.selectedIndex,
             bottomNavigationController.selectedItem
         )

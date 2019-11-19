@@ -43,9 +43,7 @@ fun Subheader(text: @Composable() () -> Unit) = composable {
             val textStyle = MaterialTheme.typography()().body2.copy(
                 color = MaterialTheme.colors()().secondary
             )
-            CurrentTextStyleProvider(value = textStyle) {
-                text()
-            }
+            CurrentTextStyleProvider(value = textStyle, children = text)
         }
     }
 }

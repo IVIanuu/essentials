@@ -36,6 +36,7 @@ import com.ivianuu.essentials.ui.compose.common.scrolling.ScrollPosition
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.composableWithKey
 import com.ivianuu.essentials.ui.compose.core.invoke
+import com.ivianuu.essentials.ui.compose.core.invokeAsComposable
 import com.ivianuu.essentials.ui.compose.core.memo
 import com.ivianuu.essentials.ui.compose.core.state
 
@@ -331,7 +332,7 @@ private class ViewportState {
                 composableWithKey(index) {
                     ParentData(data = parentData) {
                         RepaintBoundary {
-                            childContent()
+                            childContent.invokeAsComposable()
                         }
                     }
                 }

@@ -25,6 +25,8 @@ import androidx.ui.core.ParentData
 import androidx.ui.core.PxPosition
 import androidx.ui.core.tightMax
 import com.ivianuu.essentials.ui.compose.core.composable
+import com.ivianuu.essentials.ui.compose.core.composableWithKey
+import com.ivianuu.essentials.ui.compose.core.invokeAsComposable
 import java.util.*
 
 class Overlay(initialEntries: List<OverlayEntry> = emptyList()) {
@@ -67,9 +69,9 @@ class Overlay(initialEntries: List<OverlayEntry> = emptyList()) {
                     }
                     .forEach {
                         Observe {
-                            composable(it.entry.id) {
+                            composableWithKey(it.entry.id) {
                                 ParentData(data = it) {
-                                    it.entry.content()
+                                    it.entry.content.invokeAsComposable()
                                 }
                             }
                         }

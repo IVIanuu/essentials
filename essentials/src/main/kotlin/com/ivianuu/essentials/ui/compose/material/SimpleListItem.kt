@@ -40,6 +40,7 @@ import androidx.ui.text.TextStyle
 import com.ivianuu.essentials.ui.compose.core.ambient
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.invoke
+import com.ivianuu.essentials.ui.compose.core.invokeAsComposable
 import com.ivianuu.essentials.util.isDark
 
 @Composable
@@ -101,8 +102,8 @@ fun SimpleListItem(
                     Column(
                         mainAxisAlignment = MainAxisAlignment.Center
                     ) {
-                        styledTitle()
-                        styledSubtitle?.invoke()
+                        styledTitle.invokeAsComposable()
+                        styledSubtitle?.invokeAsComposable()
                     }
                 }
 

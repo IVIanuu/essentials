@@ -25,6 +25,7 @@ import com.ivianuu.essentials.ui.compose.common.scrolling.sliver.SliverList
 import com.ivianuu.essentials.ui.compose.common.scrolling.sliver.SliverScroller
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.invoke
+import com.ivianuu.essentials.ui.compose.core.invokeAsComposable
 import com.ivianuu.essentials.ui.compose.layout.SizedBox
 
 // todo customization
@@ -54,7 +55,7 @@ fun <T> ScrollableList(
     ScrollableList(
         count = items.size,
         itemSizeProvider = { itemSize }
-    ) { item(it, items[it]) }
+    ) { item.invokeAsComposable(it, items[it]) }
 }
 
 @Composable
@@ -79,7 +80,7 @@ fun <T> ScrollableList(
     ScrollableList(
         count = items.size,
         itemSizeProvider = itemSizeProvider
-    ) { item(it, items[it]) }
+    ) { item.invokeAsComposable(it, items[it]) }
 }
 
 @Composable

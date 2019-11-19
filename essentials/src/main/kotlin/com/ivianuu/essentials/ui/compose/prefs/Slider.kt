@@ -38,6 +38,7 @@ import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.composableWithKey
 import com.ivianuu.essentials.ui.compose.core.effect
 import com.ivianuu.essentials.ui.compose.core.invoke
+import com.ivianuu.essentials.ui.compose.core.invokeAsComposable
 import com.ivianuu.essentials.ui.compose.core.memo
 import com.ivianuu.essentials.ui.compose.core.state
 import com.ivianuu.essentials.ui.compose.layout.WithModifier
@@ -135,7 +136,7 @@ fun SliderPreference(
                         padding = EdgeInsets(right = 8.dp)
                     ) {
                         Opacity(if (finalEnabled) 1f else 0.5f) {
-                            valueText(internalValue.value)
+                            valueText.invokeAsComposable(internalValue.value)
                         }
                     }
                 }

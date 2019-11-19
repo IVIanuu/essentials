@@ -28,6 +28,7 @@ import com.ivianuu.essentials.ui.compose.core.ambient
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.effect
 import com.ivianuu.essentials.ui.compose.core.invoke
+import com.ivianuu.essentials.ui.compose.core.invokeAsComposable
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.navigation.Navigator
 
@@ -52,14 +53,14 @@ fun EsTopAppBar(
         navigationIcon = leading?.let {
             {
                 CurrentIconStyleProvider(appBarIconStyle(color)) {
-                    leading()
+                    leading.invokeAsComposable()
                 }
             }
         },
         actionData = listOfNotNull(trailing),
         action = {
             CurrentIconStyleProvider(appBarIconStyle(color)) {
-                it()
+                it.invokeAsComposable()
             }
         }
     )

@@ -41,7 +41,7 @@ data class MediaQuery(
 fun WithMediaQuery(
     children: @Composable() (MediaQuery) -> Unit
 ) = composable {
-    children(ambientMediaQuery())
+    children.invokeAsComposable(ambientMediaQuery())
 }
 
 fun ambientMediaQuery(): MediaQuery = effect { ambient(MediaQueryAmbient) }

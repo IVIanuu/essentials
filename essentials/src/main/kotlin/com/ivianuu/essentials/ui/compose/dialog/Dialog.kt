@@ -27,6 +27,7 @@ import androidx.ui.material.MaterialTheme
 import androidx.ui.material.surface.Surface
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.invoke
+import com.ivianuu.essentials.ui.compose.core.invokeAsComposable
 
 // todo callbacks like onShow, onDismiss, onCancel etc
 // todo add DialogState + ambient to control dialog state from descendents
@@ -51,7 +52,7 @@ fun Dialog(child: @Composable() () -> Unit) = composable {
                     elevation = 24.dp,
                     shape = RoundedCornerShape(size = 4.dp)
                 ) {
-                    child()
+                    child.invokeAsComposable()
                 }
             }
         }
