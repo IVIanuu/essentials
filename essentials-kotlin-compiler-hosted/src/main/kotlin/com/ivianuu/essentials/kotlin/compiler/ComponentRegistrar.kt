@@ -23,7 +23,7 @@ import org.jetbrains.kotlin.compiler.plugin.ComponentRegistrar
 import org.jetbrains.kotlin.config.CompilerConfiguration
 
 @AutoService(ComponentRegistrar::class)
-class ComposeComponentRegistrar : ComponentRegistrar {
+class EssentialsComponentRegistrar : ComponentRegistrar {
     override fun registerProjectComponents(
         project: MockProject,
         configuration: CompilerConfiguration
