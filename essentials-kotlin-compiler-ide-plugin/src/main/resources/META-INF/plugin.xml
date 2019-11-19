@@ -15,8 +15,8 @@
   -->
 
 <idea-plugin url="https://github.com/IVIanuu/compose">
-    <name>Compose x</name>
-    <id>com.ivianuu.compose</id>
+    <name>Essentials Kotlin Compiler Plugin</name>
+    <id>com.ivianuu.essentials</id>
     <version>1.0</version>
     <vendor email="ivianuu@gmail.com" url="https://github.com/IVIanuu/">IVIanuu</vendor>
 
@@ -26,6 +26,8 @@
     <depends>org.jetbrains.kotlin</depends>
 
     <extensions defaultExtensionNs="org.jetbrains.kotlin">
+        <expressionCodegenExtension
+            implementation="com.ivianuu.essentials.kotlin.compiler.ComposableExpressionCodegenExtension" />
         <classBuilderFactoryInterceptorExtension
             implementation="com.ivianuu.essentials.kotlin.compiler.SourceLocationClassBuilderInterceptorExtension" />
     </extensions>
