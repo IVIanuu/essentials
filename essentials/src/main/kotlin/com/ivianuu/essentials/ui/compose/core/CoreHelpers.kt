@@ -72,7 +72,7 @@ fun <V1, V2> composableWithKey(
 ) {
     with(composer.composer) {
         wrapInRestartScope(key) {
-            if (changed(v1) || changed(v2) || inserting) {
+            if ((changed(v1) || changed(v2)) || inserting) {
                 startGroup(invocation)
                 block()
                 endGroup()
