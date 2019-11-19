@@ -101,6 +101,7 @@ private class SourceLocationClassBuilder(val delegateClassBuilder: ClassBuilder)
                 descriptor: String?,
                 isInterface: Boolean
             ) {
+                // todo limit to owner 'com.ivianuu.essentials.util'
                 if (opcode == 184 && name == "sourceLocation") {
                     InstructionAdapter(this).apply {
                         aconst("${origin.descriptor!!.fqNameSafe}:$lineNumber")
