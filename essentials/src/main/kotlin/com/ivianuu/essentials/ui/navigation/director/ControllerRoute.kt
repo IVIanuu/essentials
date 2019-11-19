@@ -25,7 +25,6 @@ import com.ivianuu.essentials.util.Properties
 import com.ivianuu.injekt.InjektTrait
 import com.ivianuu.injekt.ParametersDefinition
 import com.ivianuu.injekt.Type
-import com.ivianuu.injekt.get
 import com.ivianuu.injekt.typeOf
 
 class ControllerRoute(
@@ -77,7 +76,7 @@ fun <T : Controller> controllerRoute(
         ?: context.application as? InjektTrait
         ?: error("couldn't find injekt trait")
 
-    injektTrait.get(type, parameters = parameters)
+    injektTrait.component.get(type = type, parameters = parameters)
 }
 
 fun controllerRoute(
