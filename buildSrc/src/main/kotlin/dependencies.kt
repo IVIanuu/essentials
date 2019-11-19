@@ -30,7 +30,7 @@ object Build {
 object Publishing {
     const val groupId = "com.ivianuu.essentials"
     const val vcsUrl = "https://github.com/IVIanuu/essentials"
-    const val version = "${Build.versionName}-dev207"
+    const val version = "${Build.versionName}-dev208"
 }
 
 object Deps {
@@ -84,7 +84,12 @@ object Deps {
         const val work = "androidx.work:work-runtime-ktx:2.1.0"
     }
 
+    const val autoService = "com.google.auto.service:auto-service:1.0-rc6"
+
     const val bintrayGradlePlugin = "com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4"
+
+    const val buildConfigGradlePlugin =
+        "gradle.plugin.de.fuerstenau:BuildConfigPlugin:1.1.8"
 
     const val coil = "io.coil-kt:coil:0.7.0"
 
@@ -112,11 +117,15 @@ object Deps {
         const val compiler = "com.ivianuu.injekt:injekt-compiler:$version"
     }
 
+    const val jarJarGradlePlugin = "org.anarres.jarjar:jarjar-gradle:1.0.1"
+
     const val junit = "junit:junit:4.12"
 
     object Kotlin {
         private const val version = "1.3.50"
+        const val compiler = "org.jetbrains.kotlin:kotlin-compiler:$version"
         const val gradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$version"
+        const val gradlePluginApi = "org.jetbrains.kotlin:kotlin-gradle-plugin-api:$version"
         const val stdlib = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$version"
     }
 

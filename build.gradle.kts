@@ -24,11 +24,14 @@ buildscript {
         maven("https://jitpack.io")
         maven("https://oss.sonatype.org/content/repositories/snapshots")
         maven("https://dl.bintray.com/kotlin/kotlin-eap")
+        maven("https://plugins.gradle.org/m2")
     }
 
     dependencies {
         classpath(Deps.androidGradlePlugin)
+        classpath(Deps.buildConfigGradlePlugin)
         classpath(Deps.bintrayGradlePlugin)
+        classpath(Deps.jarJarGradlePlugin)
         classpath(Deps.Kotlin.gradlePlugin)
         classpath(Deps.mavenGradlePlugin)
     }
