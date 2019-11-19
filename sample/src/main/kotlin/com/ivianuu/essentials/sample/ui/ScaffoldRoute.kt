@@ -56,7 +56,7 @@ val scaffoldRoute = composeControllerRoute {
 
     Scaffold(
         topAppBar = if (showTopBar) ({
-            composable("top bar") {
+            composable {
                 val alpha = memo(bodyLayoutMode) {
                     if (bodyLayoutMode == Scaffold.BodyLayoutMode.ExtendTop
                         || bodyLayoutMode == Scaffold.BodyLayoutMode.ExtendBoth
@@ -73,7 +73,7 @@ val scaffoldRoute = composeControllerRoute {
             FloatingActionButton("Click me")
         }) else null,
         bottomBar = if (showBottomBar) ({
-            composable("bottom bar") {
+            composable {
                 val alpha = memo(bodyLayoutMode) {
                     if (bodyLayoutMode == Scaffold.BodyLayoutMode.ExtendBottom
                         || bodyLayoutMode == Scaffold.BodyLayoutMode.ExtendBoth

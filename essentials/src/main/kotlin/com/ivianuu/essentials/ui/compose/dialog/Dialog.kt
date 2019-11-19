@@ -32,7 +32,7 @@ import com.ivianuu.essentials.ui.compose.core.invoke
 // todo add DialogState + ambient to control dialog state from descendents
 
 @Composable
-fun Dialog(child: @Composable() () -> Unit) = composable("Dialog") {
+fun Dialog(child: @Composable() () -> Unit) = composable {
     Padding(
         left = 32.dp,
         top = 32.dp,

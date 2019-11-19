@@ -50,7 +50,7 @@ import com.ivianuu.essentials.ui.compose.layout.SwapperController
 fun <T> BottomNavigationBar(
     color: Color = MaterialTheme.colors()().primary,
     item: @Composable() (Int, T) -> Unit
-) = composable("BottomNavigationBar") {
+) = composable {
     val bottomNavigationController = ambientBottomNavigationController<T>()
     BottomNavigationBar(
         items = bottomNavigationController.items,
@@ -66,7 +66,7 @@ fun <T> BottomNavigationBar(
     selectedIndex: Int,
     color: Color = MaterialTheme.colors()().primary,
     item: @Composable() (Int, T) -> Unit
-) = composable("BottomNavigationBar") {
+) = composable {
     EsSurface(color = color, elevation = BottomNavigationBarElevation) {
         Container(height = BottomNavigationBarHeight, expanded = true) {
             WithConstraints { thisConstraints ->
@@ -106,7 +106,7 @@ fun <T> BottomNavigationBar(
 fun BottomNavigationBarItem(
     text: String,
     icon: Image
-) = composable("BottomNavigationBarItem") {
+) = composable {
     val bottomNavigationController = ambientBottomNavigationController<Any?>()
     val index = ambient(BottomNavigationItemIndexAmbient)
 
@@ -124,7 +124,7 @@ fun BottomNavigationBarItem(
     onSelected: (() -> Unit)? = null,
     text: String,
     icon: Image
-) = composable("BottomNavigationBarItem") {
+) = composable {
     Ripple(false, radius = BottomNavigationBarItemRippleRadius) {
         Clickable(onClick = onSelected) {
             Container(
@@ -157,7 +157,7 @@ fun BottomNavigationBarItem(
 fun <T> BottomNavigationSwapper(
     keepState: Boolean = false,
     content: @Composable() (Int, T) -> Unit
-) = composable("BottomNavigationSwapper") {
+) = composable {
     val bottomNavigationController = ambientBottomNavigationController<T>()
     val swapperController = memo {
         SwapperController(

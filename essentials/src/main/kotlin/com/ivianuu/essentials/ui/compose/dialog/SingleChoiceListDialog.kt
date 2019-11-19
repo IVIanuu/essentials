@@ -34,7 +34,7 @@ fun <T> SingleChoiceListDialog(
     positiveButton: (@Composable() () -> Unit)? = null,
     negativeButton: (@Composable() () -> Unit)? = null,
     neutralButton: (@Composable() () -> Unit)? = null
-) = composable("SingleChoiceListDialog") {
+) = composable {
     ListDialog(
         icon = icon,
         title = title,
@@ -65,7 +65,7 @@ private fun SingleChoiceDialogListItem(
     selected: Boolean,
     onSelect: (() -> Unit)? = null,
     title: @Composable() () -> Unit
-) = composable("SingleChoiceDialogListItem") {
+) = composable {
     SimpleDialogListItem(
         leading = {
             AbsorbPointer {

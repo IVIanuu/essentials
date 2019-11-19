@@ -29,7 +29,7 @@ fun FractionallySizedBox(
     heightFactor: Float? = null,
     alignment: Alignment = Alignment.Center,
     child: @Composable() () -> Unit
-) = composable("FractionallySizedBox") {
+) = composable {
     SingleChildLayout(child = child) { measurable, constraints ->
         if (measurable == null) return@SingleChildLayout layout(
             constraints.minWidth, constraints.minHeight

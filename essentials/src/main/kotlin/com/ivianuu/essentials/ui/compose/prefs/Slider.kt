@@ -35,6 +35,7 @@ import androidx.ui.material.Slider
 import androidx.ui.material.SliderPosition
 import com.ivianuu.essentials.ui.compose.core.ambient
 import com.ivianuu.essentials.ui.compose.core.composable
+import com.ivianuu.essentials.ui.compose.core.composableWithKey
 import com.ivianuu.essentials.ui.compose.core.effect
 import com.ivianuu.essentials.ui.compose.core.invoke
 import com.ivianuu.essentials.ui.compose.core.memo
@@ -57,7 +58,7 @@ fun SliderPreference(
     onChange: ((Int) -> Boolean)? = null,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null
-) = composable("SliderPreference:${pref.key}") {
+) = composableWithKey("SliderPreference:${pref.key}") {
     val finalEnabled = enabled && dependencies?.checkAll() ?: true
 
     fun valueChanged(newValue: Int) {
@@ -144,7 +145,7 @@ fun SliderPreference(
 }
 
 @Composable
-fun SimpleSliderValueText(value: Int) = composable("SimpleSliderValueText") {
+fun SimpleSliderValueText(value: Int) = composable {
     Text(
         text = value.toString(),
         style = MaterialTheme.typography()().body2,

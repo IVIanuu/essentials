@@ -27,6 +27,6 @@ fun PointerInputWrapper(
     pointerInputHandler: PointerInputHandler = { event, _, _ -> event },
     cancelHandler: () -> Unit = {},
     children: @Composable() () -> Unit
-) = composable("PointerInputWrapper") {
+) = composable {
     androidx.ui.core.PointerInputWrapper(pointerInputHandler, cancelHandler, children)
 }

@@ -72,7 +72,7 @@ abstract class ComposeController : EsController() {
     // todo move this to somewhere else
     @Composable
     protected open fun ComposeWithAmbients(view: AndroidComposeViewContainer) =
-        composable("ComposeWithAmbients") {
+        composable {
         MultiAmbientProvider(
             ActivityAmbient with requireActivity(),
             RouteAmbient with route!!,
@@ -99,7 +99,7 @@ abstract class ComposeController : EsController() {
                     colors = materialThemeProvider.colors(),
                     typography = materialThemeProvider.typography()
                 ) {
-                    composable("content") {
+                    composable {
                         content()
                     }
                 }

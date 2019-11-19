@@ -19,7 +19,7 @@ package com.ivianuu.essentials.ui.compose.prefs
 import androidx.compose.Composable
 import androidx.ui.material.RadioButton
 import com.ivianuu.essentials.ui.compose.common.AbsorbPointer
-import com.ivianuu.essentials.ui.compose.core.composable
+import com.ivianuu.essentials.ui.compose.core.composableWithKey
 import com.ivianuu.kprefs.Pref
 
 @Composable
@@ -31,7 +31,7 @@ fun RadioButtonPreference(
     onChange: ((Boolean) -> Boolean)? = null,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null
-) = composable("RadioButtonPreference:${pref.key}") {
+) = composableWithKey("RadioButtonPreference:${pref.key}") {
     fun valueChanged(newValue: Boolean) {
         if (onChange?.invoke(newValue) != false) {
             pref.set(newValue)

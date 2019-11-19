@@ -34,7 +34,7 @@ fun List<Dependency<*>>?.checkAll(): Boolean = this?.all { it.check() } ?: true
 fun Dependencies(
     dependencies: List<Dependency<*>>? = null,
     child: @Composable() (dependenciesOk: Boolean) -> Unit
-) = composable("Dependencies") {
+) = composable {
     val dependenciesOk = dependencies.checkAll()
     Opacity(if (dependenciesOk) 1f else 0.5f) {
         child(dependenciesOk)

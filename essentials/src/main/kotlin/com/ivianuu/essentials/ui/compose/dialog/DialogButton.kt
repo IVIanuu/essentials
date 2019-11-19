@@ -31,7 +31,7 @@ fun DialogButton(
     dismissDialogOnClick: Boolean = true,
     style: ButtonStyle = TextButtonStyle(),
     onClick: (() -> Unit)? = null
-) = composable("DialogButton") {
+) = composable {
     val navigator = inject<Navigator>()
     Opacity(opacity = if (onClick != null) 1f else 0.5f) {
         Button(
@@ -51,7 +51,7 @@ fun DialogButton(
 fun DialogCloseButton(
     text: String,
     style: ButtonStyle = TextButtonStyle()
-) = composable("DialogCloseButton") {
+) = composable {
     DialogButton(
         text = text,
         dismissDialogOnClick = true,

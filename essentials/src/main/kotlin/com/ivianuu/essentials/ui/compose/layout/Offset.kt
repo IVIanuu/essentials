@@ -30,7 +30,7 @@ fun Offset(
     offsetX: Dp? = null,
     offsetY: Dp? = null,
     child: @Composable() () -> Unit
-) = composable("Offset") {
+) = composable {
     WithDensity {
         SingleChildLayout(child = {
             RepaintBoundary(children = child)

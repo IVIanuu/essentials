@@ -57,7 +57,7 @@ fun MaterialDialog(
     positiveButton: (@Composable() () -> Unit)? = null,
     negativeButton: (@Composable() () -> Unit)? = null,
     neutralButton: (@Composable() () -> Unit)? = null
-) = composable("MaterialDialog") {
+) = composable {
     Dialog {
         DialogBody(
             showDividers = showDividers,
@@ -89,7 +89,7 @@ private fun DialogBody(
     positiveButton: (@Composable() () -> Unit)?,
     negativeButton: (@Composable() () -> Unit)?,
     neutralButton: (@Composable() () -> Unit)?
-) = composable("DialogBody") {
+) = composable {
     val header: (@Composable() () -> Unit)? = if (icon != null || title != null) {
         {
             val styledTitle = title?.let {
@@ -174,7 +174,7 @@ private fun DialogContentLayout(
     header: @Composable() (() -> Unit)?,
     content: @Composable() (() -> Unit)?,
     buttons: @Composable() (() -> Unit)?
-) = composable("DialogContentLayout") {
+) = composable {
     val children: @Composable() () -> Unit = {
         if (header != null) {
             ParentData(DialogContentSlot.Header) {
@@ -287,7 +287,7 @@ private fun DialogButtons(
     positiveButton: (@Composable() () -> Unit)?,
     negativeButton: (@Composable() () -> Unit)?,
     neutralButton: (@Composable() () -> Unit)?
-) = composable("DialogButtons") {
+) = composable {
     when (layout) {
         AlertDialogButtonLayout.SideBySide -> {
             Container(
@@ -325,7 +325,7 @@ private fun DialogButtons(
 }
 
 @Composable
-private fun DialogDivider() = composable("DialogDivider") {
+private fun DialogDivider() = composable {
     Divider(color = colorForCurrentBackground().copy(alpha = 0.12f))
 }
 

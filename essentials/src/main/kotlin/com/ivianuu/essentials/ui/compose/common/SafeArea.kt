@@ -33,7 +33,7 @@ fun SafeArea(
     bottom: Boolean = true,
     minimum: EdgeInsets? = null,
     children: @Composable() () -> Unit
-) = composable("SafeArea") {
+) = composable {
     WithMediaQuery { mediaQuery ->
         val leftPadding = safeAreaValue(
             left,

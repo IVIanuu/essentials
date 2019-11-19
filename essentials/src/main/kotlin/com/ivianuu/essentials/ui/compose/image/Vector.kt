@@ -29,7 +29,7 @@ import com.ivianuu.essentials.ui.compose.core.invoke
 fun VectorImage(
     resId: Int,
     tint: Color = Color.Transparent
-) = composable("VectorImage") {
+) = composable {
     val vector = vectorResource(resId)()
     WithDensity {
         Container(

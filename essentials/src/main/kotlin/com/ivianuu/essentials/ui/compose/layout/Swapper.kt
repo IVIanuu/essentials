@@ -26,7 +26,7 @@ import com.ivianuu.essentials.ui.compose.core.composable
 fun <T> Swapper(
     controller: SwapperController<T>,
     child: (T) -> Unit
-) = composable("Swapper") {
+) = composable {
     val children: @Composable() () -> Unit = {
         composable(controller.current as Any) {
             child(controller.current)

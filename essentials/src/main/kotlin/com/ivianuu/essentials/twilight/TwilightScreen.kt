@@ -23,7 +23,7 @@ import androidx.ui.material.RadioButton
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.compose.common.scrolling.ScrollableList
 import com.ivianuu.essentials.ui.compose.composeControllerRoute
-import com.ivianuu.essentials.ui.compose.core.composable
+import com.ivianuu.essentials.ui.compose.core.composableWithKey
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
 import com.ivianuu.essentials.ui.compose.material.Scaffold
@@ -60,7 +60,7 @@ private fun TwilightModeItem(
     mode: TwilightMode,
     isSelected: Boolean,
     onClick: () -> Unit
-) = composable(mode.value, isSelected) {
+) = composableWithKey(mode.value, isSelected) {
     SimpleListItem(
         title = { Text(stringResource(mode.titleRes)) },
         subtitle = { Text(stringResource(mode.descRes)) },

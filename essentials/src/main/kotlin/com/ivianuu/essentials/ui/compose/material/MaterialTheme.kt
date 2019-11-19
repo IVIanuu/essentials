@@ -35,7 +35,7 @@ fun ResourceMaterialTheme(
     colors: ColorPalette = resourceColors(),
     typography: Typography = resourceTypography(),
     children: @Composable() () -> Unit
-) = composable("ResourceMaterialTheme") {
+) = composable {
     MaterialTheme(
         colors = colors,
         typography = typography

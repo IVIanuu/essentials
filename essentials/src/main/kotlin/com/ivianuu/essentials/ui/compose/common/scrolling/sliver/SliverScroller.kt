@@ -26,7 +26,7 @@ import com.ivianuu.essentials.ui.compose.core.memo
 fun SliverScroller(
     position: ScrollPosition = memo { ScrollPosition() },
     children: SliverChildren.() -> Unit
-) = composable("SliverScroller") {
+) = composable {
     Scrollable(position = position) {
         Viewport(position = position, children = children)
     }

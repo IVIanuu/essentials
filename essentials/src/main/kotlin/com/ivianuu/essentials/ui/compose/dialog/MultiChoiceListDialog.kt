@@ -33,7 +33,7 @@ fun <T> MultiChoiceListDialog(
     positiveButton: (@Composable() () -> Unit)? = null,
     negativeButton: (@Composable() () -> Unit)? = null,
     neutralButton: (@Composable() () -> Unit)? = null
-) = composable("MultiChoiceListDialog") {
+) = composable {
     ListDialog(
         icon = icon,
         title = title,
@@ -71,7 +71,7 @@ private fun MultiChoiceDialogListItem(
     checked: Boolean,
     onCheckedChange: ((Boolean) -> Unit)? = null,
     title: @Composable() () -> Unit
-) = composable("MultiChoiceDialogListItem") {
+) = composable {
     SimpleDialogListItem(
         leading = {
             AbsorbPointer {

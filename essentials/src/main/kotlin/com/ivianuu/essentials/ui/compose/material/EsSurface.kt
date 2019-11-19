@@ -35,7 +35,7 @@ fun EsSurface(
     border: Border? = null,
     elevation: Dp = 0.dp,
     children: @Composable() () -> Unit
-) = composable("EsSurface") {
+) = composable {
     Surface(
         shape = shape,
         color = color,

@@ -45,7 +45,7 @@ fun <T> Pager(
     direction: Axis = Axis.Horizontal,
     reverse: Boolean = false,
     item: @Composable() (Int, T) -> Unit
-) = composable("Pager") {
+) = composable {
     Pager(
         position = position,
         direction = direction,
@@ -61,7 +61,7 @@ fun Pager(
     direction: Axis = Axis.Horizontal,
     reverse: Boolean = false,
     item: @Composable() (Int) -> Unit
-) = composable("Pager") {
+) = composable {
     position.scrollPositionChanged()
 
     PagerLayout(
@@ -155,7 +155,7 @@ private fun PagerLayout(
     viewportSize: Px,
     onViewportSizeChanged: (Px) -> Unit,
     child: @Composable() () -> Unit
-) = composable("PagerLayout") {
+) = composable {
     NonNullSingleChildLayout(child) { measurable, constraints ->
         val placeable = measurable.measure(constraints)
         layout(placeable.width, placeable.height) {

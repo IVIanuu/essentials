@@ -29,7 +29,7 @@ import com.ivianuu.essentials.ui.navigation.Navigator
 @Composable
 fun DrawerButton(
     image: Image = drawableResource(R.drawable.es_ic_menu)
-) = composable("DrawerButton") {
+) = composable {
     val scaffold = ambient(ScaffoldAmbient)
     IconButton(
         image = image,
@@ -40,7 +40,7 @@ fun DrawerButton(
 @Composable
 fun BackButton(
     image: Image = drawableResource(R.drawable.es_ic_arrow_back)
-) = composable("BackButton") {
+) = composable {
     val navigator = inject<Navigator>()
     IconButton(
         image = image,
@@ -56,7 +56,7 @@ fun <T> PopupMenuButton(
     items: List<T>,
     onSelected: (T) -> Unit,
     item: @Composable() (T) -> Unit
-) = composable("PopupMenuButton") {
+) = composable {
     PopupMenuTrigger(
         alignment = alignment,
         onCancel = onCancel,

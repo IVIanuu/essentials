@@ -28,12 +28,12 @@ import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.invoke
 
 @Composable
-fun Subheader(text: String) = composable("Subheader", text) {
+fun Subheader(text: String) = composable(text) {
     Subheader { Text(text) }
 }
 
 @Composable
-fun Subheader(text: @Composable() () -> Unit) = composable("Subheader") {
+fun Subheader(text: @Composable() () -> Unit) = composable {
     Container(
         height = 48.dp,
         expanded = true,

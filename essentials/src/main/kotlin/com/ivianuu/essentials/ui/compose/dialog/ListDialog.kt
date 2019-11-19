@@ -41,7 +41,7 @@ fun ListDialog(
     positiveButton: (@Composable() () -> Unit)? = null,
     negativeButton: (@Composable() () -> Unit)? = null,
     neutralButton: (@Composable() () -> Unit)? = null
-) = composable("ListDialog") {
+) = composable {
     MaterialDialog(
         icon = icon,
         title = title,
@@ -66,7 +66,7 @@ fun SimpleDialogListItem(
     leading: (@Composable() () -> Unit)? = null,
     title: @Composable() () -> Unit,
     onClick: (() -> Unit)? = null
-) = composable("SimpleDialogListItem") {
+) = composable {
     Ripple(bounded = true) {
         Clickable(onClick = onClick) {
             Container(

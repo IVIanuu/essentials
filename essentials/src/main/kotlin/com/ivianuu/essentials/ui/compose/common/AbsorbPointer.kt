@@ -27,7 +27,7 @@ import com.ivianuu.essentials.ui.compose.core.memo
 fun AbsorbPointer(
     absorb: Boolean = true,
     children: @Composable() () -> Unit
-) = composable("AbsorbPointer") {
+) = composable {
     val consumedIds = memo { mutableSetOf<Int>() }
     PointerInputWrapper(
         pointerInputHandler = { changes, pass, _ ->

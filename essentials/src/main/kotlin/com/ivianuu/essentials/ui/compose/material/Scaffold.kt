@@ -47,7 +47,7 @@ fun Scaffold(
     fab: (@Composable() () -> Unit)? = null,
     fabPosition: Scaffold.FabPosition = Scaffold.FabPosition.End,
     bodyLayoutMode: Scaffold.BodyLayoutMode = Scaffold.BodyLayoutMode.Wrap
-) = composable("Scaffold") {
+) = composable {
     val scaffold = memo { Scaffold(drawerState) }
 
     // update state
@@ -138,7 +138,7 @@ private fun ScaffoldLayout(
     bottomBar: @Composable() (() -> Unit)?,
     fab: @Composable() (() -> Unit)?,
     fabPosition: Scaffold.FabPosition
-) = composable("ScaffoldLayout") {
+) = composable {
     val children: @Composable() () -> Unit = {
         if (topAppBar != null) {
             ParentData(ScaffoldLayoutSlot.TopAppBar) {

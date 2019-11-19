@@ -80,7 +80,7 @@ fun TextInputDialog(
     positiveButton: (@Composable() () -> Unit)? = null,
     negativeButton: (@Composable() () -> Unit)? = null,
     neutralButton: (@Composable() () -> Unit)? = null
-) = composable("TextInputDialog") {
+) = composable {
     val showKeyboard = showKeyboard(TextInputDialogInputId)
     val hideKeyboard = hideKeyboard()
 

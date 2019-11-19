@@ -65,7 +65,7 @@ fun <T> TabRow(
         }
     },
     tab: @Composable() (Int, T) -> Unit
-) = composable("TabRow") {
+) = composable {
     TabRow(
         items = tabController.items,
         selectedIndex = tabController.selectedIndex,
@@ -85,7 +85,7 @@ val TabIndexAmbient = Ambient.of<Int>()
 fun Tab(
     text: String? = null,
     icon: Image? = null
-) = composable("Tab") {
+) = composable {
     val tabController = ambientTabController<Any?>()
     val tabIndex = ambient(TabIndexAmbient)
     Tab(
@@ -100,7 +100,7 @@ fun Tab(
 fun <T> TabPager(
     tabController: TabController<T> = ambientTabController<T>(),
     item: @Composable() (Int, T) -> Unit
-) = composable("TabPager") {
+) = composable {
     val position = memo { PagerPosition(tabController.items.size) }
     val state = memo { TabPagerState<T>() }
 

@@ -29,7 +29,7 @@ fun SingleChildLayout(
     child: @Composable() () -> Unit,
     modifier: Modifier = Modifier.None,
     measureBlock: MeasureScope.(Measurable?, Constraints) -> MeasureScope.LayoutResult
-) = composable("SingleChildLayout") {
+) = composable {
     Layout(children = child, modifier = modifier) { measureables, constraints ->
         check(measureables.size <= 1) { "Only 1 child allowed" }
         measureBlock(measureables.firstOrNull(), constraints)
@@ -41,7 +41,7 @@ fun NonNullSingleChildLayout(
     child: @Composable() () -> Unit,
     modifier: Modifier = Modifier.None,
     measureBlock: MeasureScope.(Measurable, Constraints) -> MeasureScope.LayoutResult
-) = composable("NonSingleChildLayout") {
+) = composable {
     Layout(children = child, modifier = modifier) { measureables, constraints ->
         check(measureables.size == 1) { "Requires exactly 1 child" }
         measureBlock(measureables.first(), constraints)

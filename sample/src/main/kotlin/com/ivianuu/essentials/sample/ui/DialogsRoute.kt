@@ -332,7 +332,7 @@ private fun DialogLauncherButton(
     text: String,
     dismissible: Boolean = true,
     dialog: @Composable() () -> Unit
-) = composable("DialogLauncherButton") {
+) = composable {
     val navigator = inject<Navigator>()
     Button(
         text = text,

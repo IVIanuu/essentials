@@ -55,7 +55,7 @@ fun <T> PopupMenu(
     items: List<T>,
     onSelected: (T) -> Unit,
     item: @Composable() (T) -> Unit
-) = composable("PopupMenu") {
+) = composable {
     Card(
         elevation = 8.dp,
         shape = RoundedCornerShape(4.dp)
@@ -80,7 +80,7 @@ fun <T> PopupMenu(
 private fun PopupMenuItem(
     content: () -> Unit,
     onClick: () -> Unit
-) = composable("PopupMenuItem") {
+) = composable {
     Ripple(bounded = true) {
         Clickable(
             onClick = onClick,
@@ -113,7 +113,7 @@ fun <T> PopupMenuTrigger(
     onCancel: (() -> Unit)? = null,
     item: @Composable() (T) -> Unit,
     child: @Composable() (showPopup: () -> Unit) -> Unit
-) = composable("PopupMenuTrigger") {
+) = composable {
     val navigator = inject<Navigator>()
 
     Wrap {
@@ -244,7 +244,7 @@ fun <T> popupMenuRoute(
 private fun PopupMenuLayout(
     position: IntPxPosition,
     child: @Composable() () -> Unit
-) = composable("PopupMenuLayout") {
+) = composable {
     NonNullSingleChildLayout(child = child) { measureable, constraints ->
         val childConstraints = constraints.copy(
             minWidth = IntPx.Zero,

@@ -25,7 +25,7 @@ import com.ivianuu.essentials.ui.compose.core.composable
 fun WithModifier(
     modifier: Modifier,
     child: @Composable() () -> Unit
-) = composable("WithModifier") {
+) = composable {
     SingleChildLayout(child = child, modifier = modifier) { measureable, constraints ->
         val placeable = measureable?.measure(constraints)
         layout(

@@ -42,6 +42,7 @@ import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.invoke
 import com.ivianuu.essentials.ui.compose.core.memo
 import com.ivianuu.essentials.ui.compose.core.staticComposable
+import com.ivianuu.essentials.ui.compose.core.staticComposableWithKey
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
 import com.ivianuu.essentials.ui.compose.material.PopupMenuButton
@@ -78,7 +79,7 @@ val homeRoute = composeControllerRoute {
                 items = items,
                 itemSizeProvider = { if (it != items.lastIndex) 57.dp else 56.dp }
             ) { index, item ->
-                staticComposable(item) {
+                staticComposableWithKey(item) {
                     Column {
                         val route = item.route()
                         HomeItem(item = item, onClick = navigateOnClick { route })
@@ -113,7 +114,7 @@ private fun HomeItem(
 }
 
 @Composable
-private fun ColorAvatar(color: Color) = staticComposable("ColorAvatar") {
+private fun ColorAvatar(color: Color) = staticComposable {
     Container(width = 40.dp, height = 40.dp) {
         val paint = memo {
             Paint().apply { this.color = color }
@@ -129,7 +130,7 @@ private fun ColorAvatar(color: Color) = staticComposable("ColorAvatar") {
 }
 
 @Composable
-private fun HomeDivider() = staticComposable("HomeDivider") {
+private fun HomeDivider() = staticComposable {
     Padding(left = 72.dp) {
         Opacity(0.12f) {
             Divider(color = (MaterialTheme.colors()().onSurface))

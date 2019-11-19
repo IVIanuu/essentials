@@ -41,7 +41,7 @@ fun dialogRoute(
 ) {
     val navigator = inject<Navigator>()
     if (!dismissible) {
-        composable("ignore back") {
+        composable {
             onBackPressed { }
         }
     }
@@ -60,6 +60,6 @@ fun dialogRoute(
 }
 
 @Composable
-private fun DialogScrim() = composable("DialogScrim") {
+private fun DialogScrim() = composable {
     ColoredRect(Color.Black.copy(alpha = 0.6f))
 }

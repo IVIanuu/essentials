@@ -28,7 +28,7 @@ import com.ivianuu.essentials.apps.coil.AppIcon
 import com.ivianuu.essentials.ui.compose.common.scrolling.ScrollableList
 import com.ivianuu.essentials.ui.compose.composeControllerRoute
 import com.ivianuu.essentials.ui.compose.core.composable
-import com.ivianuu.essentials.ui.compose.core.staticComposable
+import com.ivianuu.essentials.ui.compose.core.staticComposableWithKey
 import com.ivianuu.essentials.ui.compose.image.CoilImageAny
 import com.ivianuu.essentials.ui.compose.material.AvatarIconStyle
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
@@ -63,14 +63,14 @@ fun appPickerRoute(
 
             when (viewModel.state.apps) {
                 is Loading -> {
-                    composable("loading") {
+                    composable {
                         Center {
                             CircularProgressIndicator()
                         }
                     }
                 }
                 is Success -> {
-                    composable("content") {
+                    composable {
                         ScrollableList(
                             items = viewModel.state.apps() ?: emptyList(),
                             itemSizeProvider = { 56.dp }
@@ -91,7 +91,7 @@ fun appPickerRoute(
 private fun AppInfo(
     app: AppInfo,
     onClick: () -> Unit
-) = staticComposable(app.packageName) {
+) = staticComposableWithKey(app.packageName) {
     SimpleListItem(
         title = { Text(app.appName) },
         leading = {

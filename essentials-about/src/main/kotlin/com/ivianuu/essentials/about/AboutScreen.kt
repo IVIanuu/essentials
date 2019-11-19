@@ -22,7 +22,7 @@ import com.ivianuu.essentials.ui.compose.common.openUrlOnClick
 import com.ivianuu.essentials.ui.compose.common.scrolling.ScrollableList
 import com.ivianuu.essentials.ui.compose.composeControllerRoute
 import com.ivianuu.essentials.ui.compose.core.composable
-import com.ivianuu.essentials.ui.compose.core.staticComposable
+import com.ivianuu.essentials.ui.compose.core.staticComposableWithKey
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
 import com.ivianuu.essentials.ui.compose.material.Scaffold
@@ -54,11 +54,11 @@ fun aboutRoute(
 
 @Composable
 fun AboutSection(
-    buildInfo: BuildInfo = inject<BuildInfo>(),
+    buildInfo: BuildInfo = inject(),
     showHeader: Boolean = false,
     hasDebugPackageName: Boolean = buildInfo.isDebug,
     privacyPolicyUrl: String? = null
-) = composable("AboutSection") {
+) = composable {
     if (showHeader) {
         Subheader(stringResource(R.string.about_title))
     }
@@ -114,7 +114,7 @@ fun AboutItem(
     titleRes: Int,
     descRes: Int? = null,
     url: () -> String
-) = staticComposable(titleRes + (descRes ?: 0)) {
+) = staticComposableWithKey(titleRes) {
     SimpleListItem(
         title = { Text(stringResource(titleRes)) },
         subtitle = descRes?.let { { Text(stringResource(it)) } },

@@ -36,7 +36,7 @@ fun Icon(
     style: IconStyle = currentIconStyle(),
     size: Size = style.size,
     color: Color? = style.color
-) = composable("Icon") {
+) = composable {
     Container(
         width = size.width,
         height = size.height
@@ -67,7 +67,7 @@ private val CurrentIconStyleAmbient = Ambient.of { IconStyle() }
 fun CurrentIconStyleProvider(
     value: IconStyle,
     children: @Composable() () -> Unit
-) = composable("CurrentIconStyleProvider") {
+) = composable {
     val style = ambient(CurrentIconStyleAmbient)
     val mergedStyle = style.merge(value)
     CurrentIconStyleAmbient.Provider(value = mergedStyle, children = children)
@@ -83,7 +83,7 @@ private val AvatarSize = 40.dp
 fun IconButton(
     image: Image,
     onClick: (() -> Unit)? = null
-) = composable("IconButton") {
+) = composable {
     IconButton(onClick = onClick) {
         Icon(image = image)
     }
@@ -93,7 +93,7 @@ fun IconButton(
 fun IconButton(
     onClick: (() -> Unit)? = null,
     icon: @Composable() () -> Unit
-) = composable("IconButton") {
+) = composable {
     Ripple(
         bounded = false,
         enabled = onClick != null

@@ -48,7 +48,7 @@ fun Viewport(
     crossAxisDirection: Direction = Direction.RIGHT,
     anchor: Float = 0f,
     children: SliverChildren.() -> Unit
-) = composable("SliverLayout") {
+) = composable {
     val state = memo { ViewportState() }
 
     val density = ambientDensity()()
@@ -403,7 +403,7 @@ private fun ViewportLayout(
     size: PxSize,
     onSizeChanged: (PxSize) -> Unit,
     children: @Composable() () -> Unit
-) = composable("ViewportLayout") {
+) = composable {
     Layout(children = children) { measureables, constraints ->
         val placeables = mutableListOf<Placeable>()
         val parentDatas = mutableListOf<ViewportParentData>()

@@ -39,7 +39,7 @@ fun ComposeNavigator(
     handleBack: Boolean = true,
     key: String? = null,
     startRoute: () -> Route
-) = composable("ComposeNavigator") {
+) = composable {
     val coroutineScope = coroutineScope()
     val navigator = retained("ComposeNavigator:${key.orEmpty()}") {
         ComposeNavigator(Overlay(), coroutineScope, modelListOf(), startRoute())
@@ -48,7 +48,7 @@ fun ComposeNavigator(
     navigator.coroutineScope = coroutineScope
 
     if (handleBack && navigator.backStack.size > 1) {
-        composable("onBackPressed") {
+        composable {
             onBackPressed { navigator.pop() }
         }
     }

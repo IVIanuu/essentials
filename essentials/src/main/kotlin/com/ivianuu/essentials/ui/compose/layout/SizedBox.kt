@@ -27,12 +27,12 @@ import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.withDensity
 
 @Composable
-fun Expand(child: @Composable() () -> Unit) = composable("Expand") {
+fun Expand(child: @Composable() () -> Unit) = composable {
     SizedBox(size = Dp.Infinity, child = child)
 }
 
 @Composable
-fun Shrink(child: @Composable() () -> Unit) = composable("Shrink") {
+fun Shrink(child: @Composable() () -> Unit) = composable {
     SizedBox(size = 0.dp, child = child)
 }
 
@@ -40,7 +40,7 @@ fun Shrink(child: @Composable() () -> Unit) = composable("Shrink") {
 fun SizedBox(
     size: Dp,
     child: @Composable() () -> Unit
-) = composable("SizedBox") {
+) = composable {
     SizedBox(width = size, height = size, child = child)
 }
 
@@ -49,7 +49,7 @@ fun SizedBox(
     width: Dp? = null,
     height: Dp? = null,
     child: @Composable() () -> Unit
-) = composable("SizedBox") {
+) = composable {
     val widthPx = withDensity { width?.toIntPx() }
     val heightPx = withDensity { height?.toIntPx() }
     SingleChildLayout(child = child) { measureable, incomingConstraints ->

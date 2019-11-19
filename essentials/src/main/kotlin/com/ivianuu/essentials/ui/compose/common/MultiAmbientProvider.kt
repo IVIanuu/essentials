@@ -24,7 +24,7 @@ import com.ivianuu.essentials.ui.compose.core.composable
 fun MultiAmbientProvider(
     vararg pairs: AmbientWithValue<*>,
     children: @Composable() () -> Unit
-) = composable("MultiAmbientProvider") {
+) = composable {
     pairs
         .map { pair ->
             { children: @Composable() () -> Unit ->
@@ -46,7 +46,7 @@ data class AmbientWithValue<T>(
     @Composable
     fun Provider(
         children: @Composable() () -> Unit
-    ) = composable("AmbientWithValueProvider") {
+    ) = composable {
         ambient.Provider(value = value, children = children)
     }
 }

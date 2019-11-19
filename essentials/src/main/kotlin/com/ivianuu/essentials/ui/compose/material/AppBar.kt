@@ -35,7 +35,7 @@ import com.ivianuu.essentials.ui.navigation.Navigator
 
 @Composable
 fun EsTopAppBar(title: String) =
-    composable("EsTopAppBar") {
+    composable {
         EsTopAppBar(title = { Text(title) })
 }
 
@@ -45,7 +45,7 @@ fun EsTopAppBar(
     title: @Composable() () -> Unit,
     leading: (@Composable() () -> Unit)? = autoTopAppBarLeadingIcon(),
     trailing: (@Composable() () -> Unit)? = null
-) = composable("EsTopAppBar") {
+) = composable {
     TopAppBar(
         color = color,
         title = title,

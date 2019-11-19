@@ -29,7 +29,7 @@ fun LimitedBox(
     maxWidth: Dp = Dp.Infinity,
     maxHeight: Dp = Dp.Infinity,
     child: @Composable() () -> Unit
-) = composable("LimitedBox") {
+) = composable {
     val maxWidthPx = withDensity { maxWidth.toIntPx() }
     val maxHeightPx = withDensity { maxHeight.toIntPx() }
 

@@ -45,7 +45,7 @@ fun FlutterWrap(
     horizontalDirection: LayoutDirection = LayoutDirection.Ltr,
     verticalDirection: VerticalDirection = VerticalDirection.Down,
     children: @Composable() () -> Unit
-) = composable("FlutterWrap") {
+) = composable {
     val spacingPx = withDensity { spacing.toIntPx() }
     val runSpacingPx = withDensity { runSpacing.toIntPx() }
 

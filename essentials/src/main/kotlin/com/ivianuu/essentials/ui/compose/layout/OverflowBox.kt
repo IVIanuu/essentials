@@ -34,7 +34,7 @@ fun OverflowBox(
     maxHeight: Dp = Dp.Infinity,
     alignment: Alignment = Alignment.Center,
     child: @Composable() () -> Unit
-) = composable("OverflowBox") {
+) = composable {
     OverflowBox(
         constraints = DpConstraints(
             minWidth = minWidth,
@@ -52,7 +52,7 @@ fun OverflowBox(
     constraints: DpConstraints,
     alignment: Alignment = Alignment.Center,
     child: @Composable() () -> Unit
-) = composable("OverflowBox") {
+) = composable {
     SingleChildLayout(child = {
         RepaintBoundary(children = child)
     }) { measurable, incomingConstraints ->

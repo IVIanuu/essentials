@@ -33,7 +33,7 @@ fun SliverChildLayout(
     constraints: SliverConstraints,
     geometry: SliverGeometry,
     children: @Composable() () -> Unit
-) = composable("SliverChildLayout") {
+) = composable {
     Layout(children = children) { measureables, incomingConstraints ->
         val placeables = mutableListOf<Placeable>()
         val parentDatas = mutableListOf<SliverChildParentData>()

@@ -18,7 +18,7 @@ package com.ivianuu.essentials.ui.compose.prefs
 
 import androidx.compose.Composable
 import androidx.ui.core.Opacity
-import com.ivianuu.essentials.ui.compose.core.composable
+import com.ivianuu.essentials.ui.compose.core.composableWithKey
 import com.ivianuu.essentials.ui.compose.material.SimpleListItem
 import com.ivianuu.kprefs.Pref
 
@@ -33,7 +33,7 @@ fun <T> Preference(
     onChange: ((T) -> Boolean)? = null,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null
-) = composable("Preference:${pref.key}") {
+) = composableWithKey("Preference:${pref.key}") {
     val finalEnabled = enabled && dependencies?.checkAll() ?: true
 
     Opacity(if (finalEnabled) 1f else 0.5f) {

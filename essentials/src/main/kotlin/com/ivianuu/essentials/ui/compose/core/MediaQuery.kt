@@ -40,7 +40,7 @@ data class MediaQuery(
 @Composable
 fun WithMediaQuery(
     children: @Composable() (MediaQuery) -> Unit
-) = composable("WithMediaQuery") {
+) = composable {
     children(ambientMediaQuery())
 }
 
@@ -50,7 +50,7 @@ fun ambientMediaQuery(): MediaQuery = effect { ambient(MediaQueryAmbient) }
 fun MediaQueryProvider(
     value: MediaQuery,
     children: @Composable() () -> Unit
-) = composable("MediaQueryProvider") {
+) = composable {
     MediaQueryAmbient.Provider(value = value, children = children)
 }
 

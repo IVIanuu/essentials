@@ -27,6 +27,7 @@ import com.ivianuu.essentials.apps.AppStore
 import com.ivianuu.essentials.apps.coil.AppIcon
 import com.ivianuu.essentials.ui.compose.common.scrolling.ScrollableList
 import com.ivianuu.essentials.ui.compose.core.composable
+import com.ivianuu.essentials.ui.compose.core.composableWithKey
 import com.ivianuu.essentials.ui.compose.core.onActive
 import com.ivianuu.essentials.ui.compose.core.staticComposable
 import com.ivianuu.essentials.ui.compose.image.CoilImageAny
@@ -67,7 +68,7 @@ fun CheckableAppsScreen(
     onCheckedAppsChanged: (Set<String>) -> Unit,
     appBarTitle: String,
     appFilter: AppFilter = DefaultAppFilter
-) = composable("CheckableAppsScreen") {
+) = composable {
     val viewModel = mvRxViewModel<CheckableAppsViewModel> {
         parametersOf(appFilter)
     }
@@ -99,14 +100,14 @@ fun CheckableAppsScreen(
         body = {
             when (viewModel.state.apps) {
                 is Loading -> {
-                    staticComposable("loading") {
+                    staticComposable {
                         Center {
                             CircularProgressIndicator()
                         }
                     }
                 }
                 is Success -> {
-                    composable("apps") {
+                    composable {
                         ScrollableList(
                             items = viewModel.state.apps() ?: emptyList(),
                             itemSizeProvider = { 56.dp }
@@ -127,7 +128,7 @@ fun CheckableAppsScreen(
 private fun CheckableApp(
     app: CheckableApp,
     onClick: () -> Unit
-) = composable(app.info.packageName, app.isChecked) {
+) = composableWithKey(app.info.packageName, app.isChecked) {
     SimpleListItem(
         title = { Text(app.info.appName) },
         leading = {

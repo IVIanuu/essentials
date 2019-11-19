@@ -20,7 +20,7 @@ import androidx.compose.Composable
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.Switch
 import com.ivianuu.essentials.ui.compose.common.AbsorbPointer
-import com.ivianuu.essentials.ui.compose.core.composable
+import com.ivianuu.essentials.ui.compose.core.composableWithKey
 import com.ivianuu.essentials.ui.compose.core.invoke
 import com.ivianuu.kprefs.Pref
 
@@ -33,7 +33,7 @@ fun SwitchPreference(
     onChange: ((Boolean) -> Boolean)? = null,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null
-) = composable("SwitchPreference:${pref.key}") {
+) = composableWithKey("SwitchPreference:${pref.key}") {
     fun valueChanged(newValue: Boolean) {
         if (onChange?.invoke(newValue) != false) {
             pref.set(newValue)

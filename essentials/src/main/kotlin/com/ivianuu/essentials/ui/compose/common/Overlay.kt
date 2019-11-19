@@ -92,7 +92,7 @@ val OverlayAmbient = Ambient.of<Overlay>()
 @Composable
 private fun OverlayLayout(
     children: @Composable() () -> Unit
-) = composable("OverlayLayout") {
+) = composable {
     Layout(children = children) { measureables, constraints ->
         // force children to fill the whole space
         val childConstraints = constraints.tightMax()

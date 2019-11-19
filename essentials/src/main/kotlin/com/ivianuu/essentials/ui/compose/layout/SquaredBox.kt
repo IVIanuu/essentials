@@ -24,7 +24,7 @@ import com.ivianuu.essentials.ui.compose.core.composable
 fun SquaredBox(
     fit: SquaredBoxFit,
     child: @Composable() () -> Unit
-) = composable("SquaredBox") {
+) = composable {
     SingleChildLayout(child = child) { measureable, constraints ->
         val size = when (fit) {
             SquaredBoxFit.MatchWidth -> constraints.maxWidth

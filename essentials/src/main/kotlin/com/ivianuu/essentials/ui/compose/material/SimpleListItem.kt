@@ -49,7 +49,7 @@ fun SimpleListItem(
     leading: @Composable() (() -> Unit)? = null,
     trailing: @Composable() (() -> Unit)? = null,
     onClick: (() -> Unit)? = null
-) = composable("SimpleListItem") {
+) = composable {
     val styledTitle = applyTextStyle(
         TitleTextStyle,
         title

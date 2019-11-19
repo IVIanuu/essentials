@@ -29,7 +29,7 @@ import com.ivianuu.essentials.ui.compose.core.memo
 fun RippleColorProvider(
     color: Color,
     children: @Composable() () -> Unit
-) = composable("RippleColor") {
+) = composable {
     val theme = memo(color) {
         RippleTheme(
             factory = DefaultRippleEffectFactory,

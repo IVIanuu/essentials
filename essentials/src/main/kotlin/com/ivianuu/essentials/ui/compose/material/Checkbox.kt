@@ -50,7 +50,7 @@ fun EsCheckbox(
     checked: Boolean,
     onCheckedChange: ((Boolean) -> Unit)?,
     color: Color = MaterialTheme.colors()().secondary
-) = composable("EsCheckbox") {
+) = composable {
     Wrap {
         Ripple(bounded = false) {
             Clickable(onClick = onCheckedChange?.let { { onCheckedChange(!checked) } }) {
@@ -65,7 +65,7 @@ fun EsCheckbox(
 }
 
 @Composable
-private fun DrawCheckbox(checked: Boolean, activeColor: Color) = composable("DrawCheckbox") {
+private fun DrawCheckbox(checked: Boolean, activeColor: Color) = composable {
     val unselectedColor = MaterialTheme.colors()().onSurface.copy(alpha = UncheckedBoxOpacity)
     val definition = memo(activeColor, unselectedColor) {
         generateTransitionDefinition(activeColor, unselectedColor)
@@ -83,7 +83,7 @@ private fun DrawCheckbox(checked: Boolean, activeColor: Color) = composable("Dra
 }
 
 @Composable
-private fun DrawBox(color: Color, innerRadiusFraction: Float) = composable("DrawBox") {
+private fun DrawBox(color: Color, innerRadiusFraction: Float) = composable {
     Draw { canvas, parentSize ->
         val paint = Paint()
         paint.strokeWidth = StrokeWidth.toPx().value
@@ -119,7 +119,7 @@ private fun DrawBox(color: Color, innerRadiusFraction: Float) = composable("Draw
 private fun DrawCheck(
     checkFraction: Float,
     crossCenterGravitation: Float
-) = composable("DrawCheck") {
+) = composable {
     Draw { canvas, parentSize ->
         val paint = Paint()
         paint.isAntiAlias = true

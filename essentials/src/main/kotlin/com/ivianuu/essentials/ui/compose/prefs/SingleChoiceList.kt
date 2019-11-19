@@ -19,7 +19,7 @@ package com.ivianuu.essentials.ui.compose.prefs
 import androidx.compose.Composable
 import androidx.ui.core.Text
 import com.ivianuu.essentials.R
-import com.ivianuu.essentials.ui.compose.core.composable
+import com.ivianuu.essentials.ui.compose.core.composableWithKey
 import com.ivianuu.essentials.ui.compose.core.state
 import com.ivianuu.essentials.ui.compose.dialog.DialogButton
 import com.ivianuu.essentials.ui.compose.dialog.DialogCloseButton
@@ -38,7 +38,7 @@ fun SingleChoiceListPreference(
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
     dialogTitle: (@Composable() () -> Unit)? = title
-) = composable("SingleChoiceListPreference:${pref.key}") {
+) = composableWithKey("SingleChoiceListPreference:${pref.key}") {
     DialogPreference(
         pref = pref,
         title = title,

@@ -88,7 +88,7 @@ fun ColorPickerDialog(
     showAlphaSelector: Boolean = false,
     icon: (@Composable() () -> Unit)? = null,
     title: (@Composable() () -> Unit)? = null
-) = composable("ColorPickerDialog") {
+) = composable {
     val (currentColor, setCurrentColor) = state { initialColor }
 
     MaterialDialog(
@@ -122,7 +122,7 @@ private fun ColorPickerContent(
     showAlphaSelector: Boolean,
     color: Color,
     onColorChanged: (Color) -> Unit
-) = composable("ColorPickerContent") {
+) = composable {
     if (allowCustomArgb) {
         TabController(items = ColorPickerPage.values().toList()) {
             TightColumn {
@@ -183,7 +183,7 @@ private fun ColorPickerContent(
 private fun ColorGrid(
     colors: List<Color>,
     onColorSelected: (Color) -> Unit
-) = composable("ColorGrid") {
+) = composable {
     Scroller {
         Padding(padding = 4.dp) {
             Table(
@@ -213,7 +213,7 @@ private fun ColorGrid(
 private fun ColorGridItem(
     color: Color,
     onClick: () -> Unit
-) = composable("ColorGridItem") {
+) = composable {
     Padding(padding = 4.dp) {
         Ripple(bounded = false) {
             Clickable(onClick = onClick) {
@@ -240,7 +240,7 @@ private fun ColorEditor(
     color: Color,
     onColorChanged: (Color) -> Unit,
     showAlphaSelector: Boolean
-) = composable("ColorEditor") {
+) = composable {
     Column {
         Container(
             height = 72.dp,
@@ -277,7 +277,7 @@ private fun ColoredDialogButton(
     text: String,
     color: Color,
     onClick: () -> Unit
-) = composable("ColoredDialogButton") {
+) = composable {
     DialogButton(
         text = text,
         style = TextButtonStyle(contentColor = color),
@@ -290,7 +290,7 @@ private fun ColorComponentItem(
     component: ColorComponent,
     value: Float,
     onChanged: (Float) -> Unit
-) = composable("ColorEditorItem") {
+) = composable {
     Container(
         height = 48.dp,
         modifier = ExpandedWidth
@@ -377,7 +377,7 @@ private enum class ColorPickerPage(
 @Composable
 private fun TightColumn(
     children: @Composable() () -> Unit
-) = composable("TightColumn") {
+) = composable {
     Layout(children = children) { measureables, constraints ->
         var childConstraints = constraints
         val placeables = measureables.map {

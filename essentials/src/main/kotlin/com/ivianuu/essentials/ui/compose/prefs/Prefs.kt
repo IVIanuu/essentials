@@ -30,7 +30,7 @@ import kotlinx.coroutines.flow.map
 import java.util.*
 
 @Composable
-fun Prefs(children: () -> Unit) = composable("Prefs") {
+fun Prefs(children: () -> Unit) = composable {
     val sharedPreferencesChanges = inject<SharedPreferencesChanges>()
     collect(sharedPreferencesChanges.changes.map { UUID.randomUUID().toString() })
     children()

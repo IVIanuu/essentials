@@ -97,7 +97,7 @@ val textInputRoute = composeControllerRoute(
         },
         body = {
             if (items.isNotEmpty()) {
-                composable("results") {
+                composable {
                     val scrollPosition = memo(items) { ScrollPosition() }
                     val lastScrollPosition = ref { scrollPosition.value }
 
@@ -123,7 +123,7 @@ val textInputRoute = composeControllerRoute(
                     }
                 }
             } else {
-                composable("empty") {
+                composable {
                     Center {
                         Text("No results")
                     }
