@@ -22,14 +22,21 @@ import androidx.compose.effectOf
 import androidx.compose.memo
 import com.ivianuu.injekt.Component
 import com.ivianuu.injekt.ParametersDefinition
-import com.ivianuu.injekt.get
+import com.ivianuu.injekt.Type
+import com.ivianuu.injekt.typeOf
 
 val ComponentAmbient = Ambient.of<Component> { error("No component found") }
 
 inline fun <reified T> inject(
     name: Any? = null,
     noinline parameters: ParametersDefinition? = null
+) = inject(type = typeOf<T>(), name = name, parameters = parameters)
+
+fun <T> inject(
+    type: Type<T>,
+    name: Any? = null,
+    parameters: ParametersDefinition? = null
 ) = effectOf<T> {
     val component = +ambient(ComponentAmbient)
-    return@effectOf +memo { component.get<T>(name, parameters) }
+    return@effectOf +memo { component.get(type = type, name = name, parameters = parameters) }
 }
