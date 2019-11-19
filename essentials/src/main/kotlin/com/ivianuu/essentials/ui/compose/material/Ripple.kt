@@ -18,20 +18,19 @@ package com.ivianuu.essentials.ui.compose.material
 
 import androidx.compose.Composable
 import androidx.compose.effectOf
-import androidx.compose.memo
-import androidx.compose.unaryPlus
 import androidx.ui.graphics.Color
 import androidx.ui.material.ripple.CurrentRippleTheme
 import androidx.ui.material.ripple.DefaultRippleEffectFactory
 import androidx.ui.material.ripple.RippleTheme
 import com.ivianuu.essentials.ui.compose.core.composable
+import com.ivianuu.essentials.ui.compose.core.memo
 
 @Composable
 fun RippleColorProvider(
     color: Color,
     children: @Composable() () -> Unit
 ) = composable("RippleColor") {
-    val theme = +memo(color) {
+    val theme = memo(color) {
         RippleTheme(
             factory = DefaultRippleEffectFactory,
             defaultColor = effectOf { color },

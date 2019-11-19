@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.ui.compose.dialog
 
 import androidx.compose.Composable
-import androidx.compose.unaryPlus
 import androidx.ui.core.PxPosition
 import androidx.ui.core.gesture.PressGestureDetector
 import androidx.ui.foundation.ColoredRect
@@ -40,10 +39,10 @@ fun dialogRoute(
         removesFromViewOnPush = false
     )
 ) {
-    val navigator = +inject<Navigator>()
+    val navigator = inject<Navigator>()
     if (!dismissible) {
         composable("ignore back") {
-            +onBackPressed { }
+            onBackPressed { }
         }
     }
     PressGestureDetector(

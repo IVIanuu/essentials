@@ -20,8 +20,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.Composable
-import androidx.compose.memo
-import androidx.compose.unaryPlus
 import androidx.ui.core.ambientDensity
 import androidx.ui.core.setContent
 import androidx.ui.foundation.isSystemInDarkTheme
@@ -37,6 +35,8 @@ import com.ivianuu.essentials.ui.compose.core.MediaQuery
 import com.ivianuu.essentials.ui.compose.core.MediaQueryProvider
 import com.ivianuu.essentials.ui.compose.core.RouteAmbient
 import com.ivianuu.essentials.ui.compose.core.composable
+import com.ivianuu.essentials.ui.compose.core.invoke
+import com.ivianuu.essentials.ui.compose.core.memo
 import com.ivianuu.essentials.ui.compose.coroutines.collect
 import com.ivianuu.essentials.ui.compose.injekt.ComponentAmbient
 import com.ivianuu.essentials.ui.compose.injekt.MaterialThemeProvider
@@ -80,8 +80,8 @@ abstract class ComposeController : EsController() {
             ComponentAmbient with component
         ) {
             val viewportMetrics =
-                +collect(
-                    +memo { AndroidComposeViewContainer.ViewportMetrics() },
+                collect(
+                    memo { AndroidComposeViewContainer.ViewportMetrics() },
                     view.viewportMetrics
                 )
 
@@ -89,15 +89,15 @@ abstract class ComposeController : EsController() {
                 size = viewportMetrics.size,
                 viewPadding = viewportMetrics.viewPadding,
                 viewInsets = viewportMetrics.viewInsets,
-                density = +ambientDensity(),
-                darkMode = +isSystemInDarkTheme()
+                density = ambientDensity()(),
+                darkMode = isSystemInDarkTheme()()
             )
 
             MediaQueryProvider(value = mediaQuery) {
-                val materialThemeProvider = +inject<MaterialThemeProvider>()
+                val materialThemeProvider = inject<MaterialThemeProvider>()
                 MaterialTheme(
-                    colors = +materialThemeProvider.colors,
-                    typography = +materialThemeProvider.typography
+                    colors = materialThemeProvider.colors(),
+                    typography = materialThemeProvider.typography()
                 ) {
                     composable("content") {
                         content()

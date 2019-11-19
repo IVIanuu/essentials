@@ -16,10 +16,6 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import androidx.compose.memo
-import androidx.compose.onActive
-import androidx.compose.state
-import androidx.compose.unaryPlus
 import androidx.ui.core.Alignment
 import androidx.ui.core.Opacity
 import androidx.ui.core.Text
@@ -37,7 +33,11 @@ import com.ivianuu.essentials.ui.compose.common.scrolling.Scroller
 import com.ivianuu.essentials.ui.compose.common.showKeyboard
 import com.ivianuu.essentials.ui.compose.composeControllerRoute
 import com.ivianuu.essentials.ui.compose.core.composable
+import com.ivianuu.essentials.ui.compose.core.invoke
+import com.ivianuu.essentials.ui.compose.core.memo
+import com.ivianuu.essentials.ui.compose.core.onActive
 import com.ivianuu.essentials.ui.compose.core.ref
+import com.ivianuu.essentials.ui.compose.core.state
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
 import com.ivianuu.essentials.ui.compose.material.Scaffold
 import com.ivianuu.essentials.ui.compose.material.SimpleListItem
@@ -47,8 +47,8 @@ import com.ivianuu.essentials.ui.navigation.director.vertical
 val textInputRoute = composeControllerRoute(
     options = controllerRouteOptions().vertical()
 ) {
-    val (searchVisible, setSearchVisible) = +state { false }
-    val (inputValue, setInputValue) = +state { "" }
+    val (searchVisible, setSearchVisible) = state { false }
+    val (inputValue, setInputValue) = state { "" }
 
     if (!searchVisible) {
         setInputValue("")
@@ -58,8 +58,8 @@ val textInputRoute = composeControllerRoute(
         inputValue.isEmpty() || inputValue in it.toLowerCase().trim()
     }
 
-    val hideKeyboard = +hideKeyboard()
-    val showKeyboard = +showKeyboard("id")
+    val hideKeyboard = hideKeyboard()
+    val showKeyboard = showKeyboard("id")
 
     Scaffold(
         topAppBar = {
@@ -75,7 +75,7 @@ val textInputRoute = composeControllerRoute(
                                     Opacity(0.5f) {
                                         Text(
                                             text = "Search..",
-                                            style = (+MaterialTheme.typography()).subtitle1
+                                            style = MaterialTheme.typography()().subtitle1
                                         )
                                     }
                                 }
@@ -83,12 +83,12 @@ val textInputRoute = composeControllerRoute(
                                     value = inputValue,
                                     onValueChange = setInputValue,
                                     focusIdentifier = "id",
-                                    textStyle = (+MaterialTheme.typography()).subtitle1
+                                    textStyle = MaterialTheme.typography()().subtitle1
                                 )
                             }
                         }
 
-                        +onActive { showKeyboard() }
+                        onActive { showKeyboard() }
                     } else {
                         Text("Text input")
                     }
@@ -98,8 +98,8 @@ val textInputRoute = composeControllerRoute(
         body = {
             if (items.isNotEmpty()) {
                 composable("results") {
-                    val scrollPosition = +memo(items) { ScrollPosition() }
-                    val lastScrollPosition = +ref { scrollPosition.value }
+                    val scrollPosition = memo(items) { ScrollPosition() }
+                    val lastScrollPosition = ref { scrollPosition.value }
 
                     if (scrollPosition.value != lastScrollPosition.value) {
                         hideKeyboard()

@@ -17,11 +17,6 @@
 package com.ivianuu.essentials.ui.compose.prefs
 
 import androidx.compose.Composable
-import androidx.compose.ambient
-import androidx.compose.effectOf
-import androidx.compose.memo
-import androidx.compose.state
-import androidx.compose.unaryPlus
 import androidx.ui.core.Alignment
 import androidx.ui.core.ContextAmbient
 import androidx.ui.core.Opacity
@@ -38,7 +33,12 @@ import androidx.ui.layout.Stack
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.Slider
 import androidx.ui.material.SliderPosition
+import com.ivianuu.essentials.ui.compose.core.ambient
 import com.ivianuu.essentials.ui.compose.core.composable
+import com.ivianuu.essentials.ui.compose.core.effect
+import com.ivianuu.essentials.ui.compose.core.invoke
+import com.ivianuu.essentials.ui.compose.core.memo
+import com.ivianuu.essentials.ui.compose.core.state
 import com.ivianuu.essentials.ui.compose.layout.WithModifier
 import com.ivianuu.essentials.util.UnitValueTextProvider
 import com.ivianuu.kprefs.Pref
@@ -85,7 +85,7 @@ fun SliderPreference(
             Row(
                 crossAxisAlignment = CrossAxisAlignment.Center
             ) {
-                val internalValue = +state { pref.get() }
+                val internalValue = state { pref.get() }
 
                 val onChanged: ((Int) -> Unit)? = if (dependencies.checkAll()) {
                     { newValue ->
@@ -98,7 +98,7 @@ fun SliderPreference(
                 }
 
                 WithModifier(modifier = Flexible(1f) wraps Spacing(left = 8.dp)) {
-                    val position = +memo(valueRange, steps) {
+                    val position = memo(valueRange, steps) {
                         val initial = pref.get().toFloat()
                         val floatRange = valueRange.first.toFloat()..valueRange.last.toFloat()
                         if (steps != null) {
@@ -147,21 +147,21 @@ fun SliderPreference(
 fun SimpleSliderValueText(value: Int) = composable("SimpleSliderValueText") {
     Text(
         text = value.toString(),
-        style = (+MaterialTheme.typography()).body2,
+        style = MaterialTheme.typography()().body2,
         maxLines = 1
     )
 }
 
 fun unitValueTextProvider(
     unit: UnitValueTextProvider.Unit
-) = effectOf<(@Composable() (Int) -> Unit)> {
+): @Composable() (Int) -> Unit = effect {
     val textProvider = UnitValueTextProvider(
-        +ambient(ContextAmbient), unit
+        ambient(ContextAmbient), unit
     )
-    return@effectOf {
+    return@effect {
         Text(
             text = textProvider(it),
-            style = (+MaterialTheme.typography()).body2,
+            style = MaterialTheme.typography()().body2,
             maxLines = 1
         )
     }

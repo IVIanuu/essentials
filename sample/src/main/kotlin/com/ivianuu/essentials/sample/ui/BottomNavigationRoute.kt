@@ -16,7 +16,6 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import androidx.compose.unaryPlus
 import androidx.ui.foundation.ColoredRect
 import androidx.ui.graphics.Color
 import com.ivianuu.essentials.sample.R
@@ -47,7 +46,7 @@ val bottomNavigationRoute = composeControllerRoute(
             bottomBar = {
                 BottomNavigationBar<BottomNavItem> { _, item ->
                     BottomNavigationBarItem(
-                        icon = +drawableResource(item.iconRes),
+                        icon = drawableResource(item.iconRes),
                         text = item.title
                     )
                 }

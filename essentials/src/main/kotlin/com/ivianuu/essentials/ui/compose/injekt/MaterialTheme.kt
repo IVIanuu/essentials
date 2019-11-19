@@ -16,7 +16,7 @@
 
 package com.ivianuu.essentials.ui.compose.injekt
 
-import androidx.compose.Effect
+import androidx.compose.Composable
 import androidx.ui.material.ColorPalette
 import androidx.ui.material.Typography
 import com.ivianuu.essentials.ui.compose.material.resourceColors
@@ -26,13 +26,13 @@ import com.ivianuu.injekt.module
 val composeModule = module {
     factory {
         MaterialThemeProvider(
-            colors = resourceColors(),
-            typography = resourceTypography()
+            colors = { resourceColors() },
+            typography = { resourceTypography() }
         )
     }
 }
 
 data class MaterialThemeProvider(
-    val colors: Effect<ColorPalette>,
-    val typography: Effect<Typography>
+    val colors: @Composable() () -> ColorPalette,
+    val typography: @Composable() () -> Typography
 )

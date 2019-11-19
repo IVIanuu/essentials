@@ -19,13 +19,12 @@ package com.ivianuu.essentials.ui.compose.common
 import android.app.Activity
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.OnBackPressedDispatcherOwner
-import androidx.compose.ambient
-import androidx.compose.onActive
-import androidx.compose.unaryPlus
 import com.ivianuu.essentials.ui.compose.core.ActivityAmbient
+import com.ivianuu.essentials.ui.compose.core.ambient
+import com.ivianuu.essentials.ui.compose.core.onActive
 
 fun onBackPressed(
-    activity: Activity = +ambient(ActivityAmbient),
+    activity: Activity = ambient(ActivityAmbient),
     callback: () -> Unit
 ) = onActive {
     val backPressedDispatcher =

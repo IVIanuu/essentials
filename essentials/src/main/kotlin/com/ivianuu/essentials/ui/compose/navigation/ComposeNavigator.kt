@@ -20,7 +20,6 @@ import androidx.compose.Ambient
 import androidx.compose.Composable
 import androidx.compose.frames.ModelList
 import androidx.compose.frames.modelListOf
-import androidx.compose.unaryPlus
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.compose.common.Overlay
 import com.ivianuu.essentials.ui.compose.common.OverlayEntry
@@ -41,8 +40,8 @@ fun ComposeNavigator(
     key: String? = null,
     startRoute: () -> Route
 ) = composable("ComposeNavigator") {
-    val coroutineScope = +coroutineScope()
-    val navigator = +retained("ComposeNavigator:${key.orEmpty()}") {
+    val coroutineScope = coroutineScope()
+    val navigator = retained("ComposeNavigator:${key.orEmpty()}") {
         ComposeNavigator(Overlay(), coroutineScope, modelListOf(), startRoute())
     }
 
@@ -50,7 +49,7 @@ fun ComposeNavigator(
 
     if (handleBack && navigator.backStack.size > 1) {
         composable("onBackPressed") {
-            +onBackPressed { navigator.pop() }
+            onBackPressed { navigator.pop() }
         }
     }
 

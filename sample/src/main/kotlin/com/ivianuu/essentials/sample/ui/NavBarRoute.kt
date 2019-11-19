@@ -16,10 +16,6 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import androidx.compose.onCommit
-import androidx.compose.onDispose
-import androidx.compose.state
-import androidx.compose.unaryPlus
 import androidx.ui.core.Alignment
 import androidx.ui.core.Text
 import androidx.ui.layout.Center
@@ -35,6 +31,10 @@ import com.ivianuu.essentials.hidenavbar.NavBarController
 import com.ivianuu.essentials.securesettings.SecureSettingsHelper
 import com.ivianuu.essentials.securesettings.secureSettingsRoute
 import com.ivianuu.essentials.ui.compose.composeControllerRoute
+import com.ivianuu.essentials.ui.compose.core.invoke
+import com.ivianuu.essentials.ui.compose.core.onCommit
+import com.ivianuu.essentials.ui.compose.core.onDispose
+import com.ivianuu.essentials.ui.compose.core.state
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
 import com.ivianuu.essentials.ui.compose.material.Scaffold
@@ -53,7 +53,7 @@ val navBarRoute = composeControllerRoute(
                     mainAxisAlignment = MainAxisAlignment.Center,
                     crossAxisAlignment = CrossAxisAlignment.Center
                 ) {
-                    val navBarController = +inject<NavBarController>()
+                    val navBarController = inject<NavBarController>()
 
                     fun updateNavBarState(navBarHidden: Boolean) {
                         navBarController.setNavBarConfig(
@@ -61,14 +61,14 @@ val navBarRoute = composeControllerRoute(
                         )
                     }
 
-                    val hideNavBar = +state { false }
+                    val hideNavBar = state { false }
 
-                    +onCommit(hideNavBar.value) { updateNavBarState(hideNavBar.value) }
+                    onCommit(hideNavBar.value) { updateNavBarState(hideNavBar.value) }
 
                     // reshow nav bar when exiting the screen
-                    +onDispose { updateNavBarState(false) }
+                    onDispose { updateNavBarState(false) }
 
-                    val secureSettingsHelper = +inject<SecureSettingsHelper>()
+                    val secureSettingsHelper = inject<SecureSettingsHelper>()
 
                     Container(
                         modifier = ExpandedWidth,
@@ -84,11 +84,11 @@ val navBarRoute = composeControllerRoute(
                             } else {
                                 "Unknown nav bar state"
                             },
-                            style = (+MaterialTheme.typography()).h3
+                            style = MaterialTheme.typography()().h3
                         )
                     }
 
-                    val navigator = +inject<Navigator>()
+                    val navigator = inject<Navigator>()
 
                     Button(
                         "Toggle nav bar",

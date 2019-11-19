@@ -18,9 +18,6 @@ package com.ivianuu.essentials.ui.compose.material
 
 import androidx.compose.Ambient
 import androidx.compose.Composable
-import androidx.compose.ambient
-import androidx.compose.effectOf
-import androidx.compose.unaryPlus
 import androidx.ui.core.Size
 import androidx.ui.core.dp
 import androidx.ui.foundation.Clickable
@@ -29,12 +26,14 @@ import androidx.ui.graphics.Color
 import androidx.ui.graphics.Image
 import androidx.ui.layout.Container
 import androidx.ui.material.ripple.Ripple
+import com.ivianuu.essentials.ui.compose.core.ambient
 import com.ivianuu.essentials.ui.compose.core.composable
+import com.ivianuu.essentials.ui.compose.core.effect
 
 @Composable
 fun Icon(
     image: Image,
-    style: IconStyle = +currentIconStyle(),
+    style: IconStyle = currentIconStyle(),
     size: Size = style.size,
     color: Color? = style.color
 ) = composable("Icon") {
@@ -69,13 +68,12 @@ fun CurrentIconStyleProvider(
     value: IconStyle,
     children: @Composable() () -> Unit
 ) = composable("CurrentIconStyleProvider") {
-    val style = +ambient(CurrentIconStyleAmbient)
+    val style = ambient(CurrentIconStyleAmbient)
     val mergedStyle = style.merge(value)
     CurrentIconStyleAmbient.Provider(value = mergedStyle, children = children)
 }
 
-fun currentIconStyle() =
-    effectOf<IconStyle> { +ambient(CurrentIconStyleAmbient) }
+fun currentIconStyle(): IconStyle = effect { ambient(CurrentIconStyleAmbient) }
 
 fun AvatarIconStyle() = IconStyle(size = Size(AvatarSize, AvatarSize), color = null)
 

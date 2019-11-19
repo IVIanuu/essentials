@@ -18,8 +18,6 @@ package com.ivianuu.essentials.ui.compose.common
 
 import androidx.animation.PhysicsBuilder
 import androidx.compose.Composable
-import androidx.compose.memo
-import androidx.compose.unaryPlus
 import androidx.ui.core.Direction
 import androidx.ui.core.Px
 import androidx.ui.core.PxPosition
@@ -33,6 +31,7 @@ import com.ivianuu.essentials.ui.compose.common.scrolling.sliver.SliverList
 import com.ivianuu.essentials.ui.compose.common.scrolling.sliver.Viewport
 import com.ivianuu.essentials.ui.compose.core.Axis
 import com.ivianuu.essentials.ui.compose.core.composable
+import com.ivianuu.essentials.ui.compose.core.memo
 import com.ivianuu.essentials.ui.compose.layout.NonNullSingleChildLayout
 import kotlin.math.roundToInt
 
@@ -42,7 +41,7 @@ import kotlin.math.roundToInt
 @Composable
 fun <T> Pager(
     items: List<T>,
-    position: PagerPosition = +memo { PagerPosition(items.size) },
+    position: PagerPosition = memo { PagerPosition(items.size) },
     direction: Axis = Axis.Horizontal,
     reverse: Boolean = false,
     item: @Composable() (Int, T) -> Unit

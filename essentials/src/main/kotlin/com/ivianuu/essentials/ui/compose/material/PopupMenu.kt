@@ -18,7 +18,6 @@ package com.ivianuu.essentials.ui.compose.material
 
 import androidx.compose.Composable
 import androidx.compose.View
-import androidx.compose.unaryPlus
 import androidx.ui.core.Alignment
 import androidx.ui.core.IntPx
 import androidx.ui.core.IntPxPosition
@@ -115,10 +114,10 @@ fun <T> PopupMenuTrigger(
     item: @Composable() (T) -> Unit,
     child: @Composable() (showPopup: () -> Unit) -> Unit
 ) = composable("PopupMenuTrigger") {
-    val navigator = +inject<Navigator>()
+    val navigator = inject<Navigator>()
 
     Wrap {
-        val coordinatesHolder = +ref<LayoutCoordinates?> { null }
+        val coordinatesHolder = ref<LayoutCoordinates?> { null }
         OnPositioned { coordinatesHolder.value = it }
 
         val showPopup = {
@@ -211,9 +210,9 @@ fun <T> popupMenuRoute(
     popOnConfigurationChange = true,
     options = controllerRouteOptions().fade(removesFromViewOnPush = false)
 ) {
-    val navigator = +inject<Navigator>()
+    val navigator = inject<Navigator>()
 
-    val dismissedHolder = +ref { false }
+    val dismissedHolder = ref { false }
 
     val dismiss: (Boolean) -> Unit = { cancelled ->
         if (!dismissedHolder.value) {

@@ -18,9 +18,6 @@ package com.ivianuu.essentials.ui.compose.core
 
 import androidx.compose.Ambient
 import androidx.compose.Composable
-import androidx.compose.ambient
-import androidx.compose.effectOf
-import androidx.compose.unaryPlus
 import androidx.ui.core.Density
 import androidx.ui.core.Size
 import androidx.ui.core.dp
@@ -44,12 +41,10 @@ data class MediaQuery(
 fun WithMediaQuery(
     children: @Composable() (MediaQuery) -> Unit
 ) = composable("WithMediaQuery") {
-    children(+ambientMediaQuery())
+    children(ambientMediaQuery())
 }
 
-fun ambientMediaQuery() = effectOf<MediaQuery> {
-    +ambient(MediaQueryAmbient)
-}
+fun ambientMediaQuery(): MediaQuery = effect { ambient(MediaQueryAmbient) }
 
 @Composable
 fun MediaQueryProvider(

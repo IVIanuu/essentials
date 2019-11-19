@@ -17,11 +17,10 @@
 package com.ivianuu.essentials.ui.compose.material
 
 import androidx.compose.Composable
-import androidx.compose.ambient
-import androidx.compose.unaryPlus
 import androidx.ui.core.Alignment
 import androidx.ui.graphics.Image
 import com.ivianuu.essentials.R
+import com.ivianuu.essentials.ui.compose.core.ambient
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.compose.resources.drawableResource
@@ -29,9 +28,9 @@ import com.ivianuu.essentials.ui.navigation.Navigator
 
 @Composable
 fun DrawerButton(
-    image: Image = +drawableResource(R.drawable.es_ic_menu)
+    image: Image = drawableResource(R.drawable.es_ic_menu)
 ) = composable("DrawerButton") {
-    val scaffold = +ambient(ScaffoldAmbient)
+    val scaffold = ambient(ScaffoldAmbient)
     IconButton(
         image = image,
         onClick = { scaffold.toggleDrawer() }
@@ -40,9 +39,9 @@ fun DrawerButton(
 
 @Composable
 fun BackButton(
-    image: Image = +drawableResource(R.drawable.es_ic_arrow_back)
+    image: Image = drawableResource(R.drawable.es_ic_arrow_back)
 ) = composable("BackButton") {
-    val navigator = +inject<Navigator>()
+    val navigator = inject<Navigator>()
     IconButton(
         image = image,
         onClick = { navigator.pop() }
@@ -52,7 +51,7 @@ fun BackButton(
 @Composable
 fun <T> PopupMenuButton(
     alignment: Alignment = Alignment.TopLeft,
-    image: Image = +drawableResource(R.drawable.es_ic_more_vert),
+    image: Image = drawableResource(R.drawable.es_ic_more_vert),
     onCancel: (() -> Unit)? = null,
     items: List<T>,
     onSelected: (T) -> Unit,

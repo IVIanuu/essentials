@@ -16,7 +16,6 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import androidx.compose.unaryPlus
 import androidx.ui.core.Text
 import androidx.ui.core.dp
 import androidx.ui.layout.Center
@@ -27,6 +26,7 @@ import androidx.ui.layout.MainAxisAlignment
 import androidx.ui.material.FloatingActionButton
 import androidx.ui.material.MaterialTheme
 import com.ivianuu.essentials.ui.compose.composeControllerRoute
+import com.ivianuu.essentials.ui.compose.core.invoke
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
 import com.ivianuu.essentials.ui.compose.material.Scaffold
 import com.ivianuu.essentials.ui.compose.mvi.stateStore
@@ -40,11 +40,11 @@ val counterRoute = composeControllerRoute {
                     mainAxisAlignment = MainAxisAlignment.Center,
                     crossAxisAlignment = CrossAxisAlignment.Center
                 ) {
-                    val (state, dispatch) = +counterStateStore()
+                    val (state, dispatch) = counterStateStore()
 
                     Text(
                         text = "Count: $state",
-                        style = (+MaterialTheme.typography()).h3
+                        style = MaterialTheme.typography()().h3
                     )
 
                     HeightSpacer(8.dp)

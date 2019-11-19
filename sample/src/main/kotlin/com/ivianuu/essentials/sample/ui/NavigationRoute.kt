@@ -16,8 +16,6 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import androidx.compose.ambient
-import androidx.compose.unaryPlus
 import androidx.ui.core.Text
 import androidx.ui.core.dp
 import androidx.ui.layout.Center
@@ -28,6 +26,8 @@ import androidx.ui.layout.MainAxisAlignment
 import androidx.ui.material.Button
 import androidx.ui.material.MaterialTheme
 import com.ivianuu.essentials.ui.compose.composeControllerRoute
+import com.ivianuu.essentials.ui.compose.core.ambient
+import com.ivianuu.essentials.ui.compose.core.invoke
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
 import com.ivianuu.essentials.ui.compose.material.Scaffold
 import com.ivianuu.essentials.ui.compose.navigation.ComposeNavigator
@@ -47,11 +47,11 @@ private fun CounterRoute(count: Int): Route = Route {
                     mainAxisAlignment = MainAxisAlignment.Center,
                     crossAxisAlignment = CrossAxisAlignment.Center
                 ) {
-                    val navigator = +ambient(NavigatorAmbient)
+                    val navigator = ambient(NavigatorAmbient)
 
                     Text(
                         "Count: $count",
-                        style = (+MaterialTheme.typography()).h1
+                        style = MaterialTheme.typography()().h1
                     )
 
                     HeightSpacer(8.dp)

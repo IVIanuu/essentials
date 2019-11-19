@@ -17,21 +17,20 @@
 package com.ivianuu.essentials.ui.compose.image
 
 import androidx.compose.Composable
-import androidx.compose.effectOf
-import androidx.compose.unaryPlus
 import androidx.ui.graphics.Image
 import coil.ImageLoader
 import coil.api.getAny
 import com.ivianuu.essentials.ui.compose.core.composable
+import com.ivianuu.essentials.ui.compose.core.effect
 import com.ivianuu.essentials.ui.compose.coroutines.load
 import com.ivianuu.essentials.ui.compose.injekt.inject
 
 fun loadCoilImageAny(
     placeholder: Image,
     data: Any
-) = effectOf<Image> {
-    val imageLoader = +inject<ImageLoader>()
-    return@effectOf +load(placeholder = placeholder) {
+): Image = effect {
+    val imageLoader = inject<ImageLoader>()
+    return@effect load(placeholder = placeholder) {
         return@load imageLoader.getAny(data).toImage()
     }
 }
@@ -46,7 +45,7 @@ fun CoilImageAny(
     // todo better default placeholder
     val placeholder =
         placeholder ?: Image(1, 1)
-    val loadedImage = +loadCoilImageAny(
+    val loadedImage = loadCoilImageAny(
         placeholder = placeholder,
         data = data
     )

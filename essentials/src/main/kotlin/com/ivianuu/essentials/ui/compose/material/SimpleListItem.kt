@@ -17,8 +17,6 @@
 package com.ivianuu.essentials.ui.compose.material
 
 import androidx.compose.Composable
-import androidx.compose.ambient
-import androidx.compose.unaryPlus
 import androidx.ui.core.Alignment
 import androidx.ui.core.CurrentTextStyleProvider
 import androidx.ui.core.dp
@@ -39,7 +37,9 @@ import androidx.ui.material.Typography
 import androidx.ui.material.ripple.Ripple
 import androidx.ui.material.surface.CurrentBackground
 import androidx.ui.text.TextStyle
+import com.ivianuu.essentials.ui.compose.core.ambient
 import com.ivianuu.essentials.ui.compose.core.composable
+import com.ivianuu.essentials.ui.compose.core.invoke
 import com.ivianuu.essentials.util.isDark
 
 @Composable
@@ -153,8 +153,8 @@ private fun applyTextStyle(
 ): @Composable() (() -> Unit)? {
     if (children == null) return null
     return {
-        val colors = +MaterialTheme.colors()
-        val typography = +MaterialTheme.typography()
+        val colors = MaterialTheme.colors()()
+        val typography = MaterialTheme.typography()()
         val textColor = textStyle.color(colors).copy(alpha = textStyle.opacity)
         val appliedTextStyle = textStyle.style(typography).copy(color = textColor)
         CurrentTextStyleProvider(appliedTextStyle, children)
@@ -167,10 +167,10 @@ private fun applyIconStyle(
     if (children == null) return null
     return {
         val iconAlpha =
-            if ((+ambient(CurrentBackground)).toArgb().isDark) IconOpacityDark else IconOpacity
-        val iconColor = ((+currentIconStyle()).color ?: +colorForCurrentBackground())
+            if (ambient(CurrentBackground).toArgb().isDark) IconOpacityDark else IconOpacity
+        val iconColor = currentIconStyle().color ?: colorForCurrentBackground()
             .copy(alpha = iconAlpha)
-        val appliedIconStyle = (+currentIconStyle()).copy(color = iconColor)
+        val appliedIconStyle = currentIconStyle().copy(color = iconColor)
         CurrentIconStyleProvider(appliedIconStyle, children)
     }
 }

@@ -17,9 +17,6 @@
 package com.ivianuu.essentials.ui.compose.material
 
 import androidx.compose.Composable
-import androidx.compose.ambient
-import androidx.compose.effectOf
-import androidx.compose.unaryPlus
 import androidx.ui.core.Size
 import androidx.ui.core.Text
 import androidx.ui.core.dp
@@ -27,7 +24,10 @@ import androidx.ui.graphics.Color
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.compose.core.RouteAmbient
+import com.ivianuu.essentials.ui.compose.core.ambient
 import com.ivianuu.essentials.ui.compose.core.composable
+import com.ivianuu.essentials.ui.compose.core.effect
+import com.ivianuu.essentials.ui.compose.core.invoke
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.navigation.Navigator
 
@@ -41,9 +41,9 @@ fun EsTopAppBar(title: String) =
 
 @Composable
 fun EsTopAppBar(
-    color: Color = (+MaterialTheme.colors()).primary,
+    color: Color = MaterialTheme.colors()().primary,
     title: @Composable() () -> Unit,
-    leading: (@Composable() () -> Unit)? = +autoTopAppBarLeadingIcon(),
+    leading: (@Composable() () -> Unit)? = autoTopAppBarLeadingIcon(),
     trailing: (@Composable() () -> Unit)? = null
 ) = composable("EsTopAppBar") {
     TopAppBar(
@@ -51,25 +51,25 @@ fun EsTopAppBar(
         title = title,
         navigationIcon = leading?.let {
             {
-                CurrentIconStyleProvider(+appBarIconStyle(color)) {
+                CurrentIconStyleProvider(appBarIconStyle(color)) {
                     leading()
                 }
             }
         },
         actionData = listOfNotNull(trailing),
         action = {
-            CurrentIconStyleProvider(+appBarIconStyle(color)) {
+            CurrentIconStyleProvider(appBarIconStyle(color)) {
                 it()
             }
         }
     )
 }
 
-private fun autoTopAppBarLeadingIcon() = effectOf<(@Composable() () -> Unit)?> {
-    val scaffold = +ambient(ScaffoldAmbient)
-    val navigator = +inject<Navigator>()
-    val route = +ambient(RouteAmbient)
-    when {
+private fun autoTopAppBarLeadingIcon(): (@Composable() () -> Unit)? = effect {
+    val scaffold = ambient(ScaffoldAmbient)
+    val navigator = inject<Navigator>()
+    val route = ambient(RouteAmbient)
+    return@effect when {
         scaffold.hasDrawer -> {
             { DrawerButton() }
         }
@@ -80,10 +80,10 @@ private fun autoTopAppBarLeadingIcon() = effectOf<(@Composable() () -> Unit)?> {
     }
 }
 
-fun appBarIconStyle(color: Color) = effectOf<IconStyle> {
+fun appBarIconStyle(color: Color): IconStyle = effect {
     IconStyle(
         size = Size(AppBarIconSize, AppBarIconSize),
-        color = +colorForBackground(color)
+        color = colorForBackground(color)
     )
 }
 

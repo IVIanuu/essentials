@@ -17,13 +17,11 @@
 package com.ivianuu.essentials.apps.ui
 
 import androidx.compose.Composable
-import androidx.compose.unaryPlus
 import androidx.lifecycle.viewModelScope
 import androidx.ui.core.Text
 import androidx.ui.core.dp
 import androidx.ui.layout.Center
 import androidx.ui.material.CircularProgressIndicator
-import androidx.ui.res.stringResource
 import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.AppStore
 import com.ivianuu.essentials.apps.coil.AppIcon
@@ -38,6 +36,7 @@ import com.ivianuu.essentials.ui.compose.material.Icon
 import com.ivianuu.essentials.ui.compose.material.Scaffold
 import com.ivianuu.essentials.ui.compose.material.SimpleListItem
 import com.ivianuu.essentials.ui.compose.mvrx.mvRxViewModel
+import com.ivianuu.essentials.ui.compose.resources.stringResource
 import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.util.AppDispatchers
@@ -55,10 +54,10 @@ fun appPickerRoute(
 ) = composeControllerRoute {
     Scaffold(
         topAppBar = {
-            EsTopAppBar(title ?: +stringResource(R.string.es_title_app_picker))
+            EsTopAppBar(title ?: stringResource(R.string.es_title_app_picker))
         },
         body = {
-            val viewModel = +mvRxViewModel<AppPickerViewModel> {
+            val viewModel = mvRxViewModel<AppPickerViewModel> {
                 parametersOf(appFilter)
             }
 

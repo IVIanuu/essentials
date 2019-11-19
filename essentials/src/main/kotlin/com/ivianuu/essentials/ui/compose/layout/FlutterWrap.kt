@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.ui.compose.layout
 
 import androidx.compose.Composable
-import androidx.compose.unaryPlus
 import androidx.ui.core.Constraints
 import androidx.ui.core.Dp
 import androidx.ui.core.IntPx
@@ -47,8 +46,8 @@ fun FlutterWrap(
     verticalDirection: VerticalDirection = VerticalDirection.Down,
     children: @Composable() () -> Unit
 ) = composable("FlutterWrap") {
-    val spacingPx = +withDensity { spacing.toIntPx() }
-    val runSpacingPx = +withDensity { runSpacing.toIntPx() }
+    val spacingPx = withDensity { spacing.toIntPx() }
+    val runSpacingPx = withDensity { runSpacing.toIntPx() }
 
     Layout(children = children) { measureables, constraints ->
         if (measureables.isEmpty()) return@Layout layout(

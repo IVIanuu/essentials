@@ -16,16 +16,16 @@
 
 package com.ivianuu.essentials.ui.compose.coroutines
 
-import androidx.compose.Effect
-import androidx.compose.ambient
-import androidx.compose.effectOf
-import androidx.compose.memo
-import androidx.compose.onActive
-import androidx.compose.onCommit
-import androidx.compose.onDispose
-import androidx.compose.onPreCommit
-import androidx.compose.state
+import androidx.compose.Composable
 import androidx.ui.core.CoroutineContextAmbient
+import com.ivianuu.essentials.ui.compose.core.ambient
+import com.ivianuu.essentials.ui.compose.core.effect
+import com.ivianuu.essentials.ui.compose.core.memo
+import com.ivianuu.essentials.ui.compose.core.onActive
+import com.ivianuu.essentials.ui.compose.core.onCommit
+import com.ivianuu.essentials.ui.compose.core.onDispose
+import com.ivianuu.essentials.ui.compose.core.onPreCommit
+import com.ivianuu.essentials.ui.compose.core.state
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
@@ -34,53 +34,53 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 
-fun coroutineScope(context: Effect<CoroutineContext> = coroutineContext()) =
-    effectOf<CoroutineScope> {
-        val coroutineContext = +context
-        val coroutineScope = +memo { CoroutineScope(context = coroutineContext + Job()) }
-        +onDispose { coroutineScope.coroutineContext[Job]!!.cancel() }
-        return@effectOf coroutineScope
+fun coroutineScope(context: @Composable() () -> CoroutineContext = { coroutineContext() }): CoroutineScope =
+    effect {
+        val coroutineContext = context()
+        val coroutineScope = memo { CoroutineScope(context = coroutineContext + Job()) }
+        onDispose { coroutineScope.coroutineContext[Job]!!.cancel() }
+        return@effect coroutineScope
     }
 
 fun coroutineContext() = ambient(CoroutineContextAmbient)
 
 fun launchOnActive(
     block: suspend CoroutineScope.() -> Unit
-) = effectOf<Unit> {
-    val coroutineScope = +coroutineScope()
-    +onActive {
+) = effect {
+    val coroutineScope = coroutineScope()
+    onActive {
         coroutineScope.launch(block = block)
     }
 }
 
 fun launchOnPreCommit(
     block: suspend CoroutineScope.() -> Unit
-) = effectOf<Unit> {
-    val coroutineScope = +coroutineScope()
-    +onPreCommit { coroutineScope.launch(block = block) }
+) = effect {
+    val coroutineScope = coroutineScope()
+    onPreCommit { coroutineScope.launch(block = block) }
 }
 
 fun launchOnPreCommit(
     vararg inputs: Any?,
     block: suspend CoroutineScope.() -> Unit
-) = effectOf<Unit> {
-    val coroutineScope = +coroutineScope()
-    +onPreCommit(*inputs) { coroutineScope.launch(block = block) }
+) = effect {
+    val coroutineScope = coroutineScope()
+    onPreCommit(*inputs) { coroutineScope.launch(block = block) }
 }
 
 fun launchOnCommit(
     block: suspend CoroutineScope.() -> Unit
-) = effectOf<Unit> {
-    val coroutineScope = +coroutineScope()
-    +onCommit { coroutineScope.launch(block = block) }
+) = effect {
+    val coroutineScope = coroutineScope()
+    onCommit { coroutineScope.launch(block = block) }
 }
 
 fun launchOnCommit(
     vararg inputs: Any?,
     block: suspend CoroutineScope.() -> Unit
-) = effectOf<Unit> {
-    val coroutineScope = +coroutineScope()
-    +onCommit(*inputs) { coroutineScope.launch(block = block) }
+) = effect {
+    val coroutineScope = coroutineScope()
+    onCommit(*inputs) { coroutineScope.launch(block = block) }
 }
 
 @BuilderInference
@@ -92,10 +92,10 @@ fun <T> load(block: suspend CoroutineScope.() -> T) = load(
 fun <T> load(
     placeholder: T,
     block: suspend CoroutineScope.() -> T
-) = effectOf<T> {
-    val state = +state { placeholder }
-    +launchOnActive { state.value = block() }
-    return@effectOf state.value
+): T = effect {
+    val state = state { placeholder }
+    launchOnActive { state.value = block() }
+    return@effect state.value
 }
 
 fun <T> collect(flow: Flow<T>) = collect(null, flow)
@@ -103,13 +103,13 @@ fun <T> collect(flow: Flow<T>) = collect(null, flow)
 fun <T> collect(
     placeholder: T,
     flow: Flow<T>
-) = effectOf<T> {
-    val state = +state { placeholder }
-    val coroutineScope = +coroutineScope()
-    +onActive {
+): T = effect {
+    val state = state { placeholder }
+    val coroutineScope = coroutineScope()
+    onActive {
         flow
             .onEach { state.value = it }
             .launchIn(coroutineScope)
     }
-    return@effectOf state.value
+    return@effect state.value
 }

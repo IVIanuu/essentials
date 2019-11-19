@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.ui.compose.prefs
 
 import androidx.compose.Composable
-import androidx.compose.unaryPlus
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.dialog.dialogRoute
 import com.ivianuu.essentials.ui.compose.injekt.inject
@@ -35,7 +34,7 @@ fun <T> DialogPreference(
     dependencies: List<Dependency<*>>? = null,
     dialog: @Composable() (() -> Unit) -> Unit
 ) = composable("DialogPreference:${pref.key}") {
-    val navigator = +inject<Navigator>()
+    val navigator = inject<Navigator>()
     Preference(
         pref = pref,
         title = title,

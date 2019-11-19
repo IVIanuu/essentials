@@ -16,21 +16,21 @@
 
 package com.ivianuu.essentials.securesettings
 
-import androidx.compose.effectOf
+import com.ivianuu.essentials.ui.compose.core.effect
 import com.ivianuu.essentials.ui.compose.coroutines.launchOnActive
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.util.Toaster
 import kotlinx.coroutines.delay
 
-internal fun popNavigatorOnceSecureSettingsGranted() = effectOf<Unit> {
-    val navigator = +inject<Navigator>()
-    val secureSettingsHelper = +inject<SecureSettingsHelper>()
-    val toaster = +inject<Toaster>()
+internal fun popNavigatorOnceSecureSettingsGranted() = effect {
+    val navigator = inject<Navigator>()
+    val secureSettingsHelper = inject<SecureSettingsHelper>()
+    val toaster = inject<Toaster>()
 
     // we check the permission periodically to automatically pop this screen
     // once we got the permission
-    +launchOnActive {
+    launchOnActive {
         while (true) {
             if (secureSettingsHelper.canWriteSecureSettings()) {
                 toaster.toast(R.string.es_secure_settings_permission_granted)

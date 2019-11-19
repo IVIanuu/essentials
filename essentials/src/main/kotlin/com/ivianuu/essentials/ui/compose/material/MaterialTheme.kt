@@ -17,10 +17,6 @@
 package com.ivianuu.essentials.ui.compose.material
 
 import androidx.compose.Composable
-import androidx.compose.ambient
-import androidx.compose.effectOf
-import androidx.compose.memo
-import androidx.compose.unaryPlus
 import androidx.ui.core.ContextAmbient
 import androidx.ui.graphics.Color
 import androidx.ui.material.ColorPalette
@@ -28,13 +24,16 @@ import androidx.ui.material.MaterialTheme
 import androidx.ui.material.Typography
 import androidx.ui.text.TextStyle
 import com.ivianuu.essentials.R
+import com.ivianuu.essentials.ui.compose.core.ambient
 import com.ivianuu.essentials.ui.compose.core.composable
+import com.ivianuu.essentials.ui.compose.core.effect
+import com.ivianuu.essentials.ui.compose.core.memo
 import com.ivianuu.essentials.util.colorAttr
 
 @Composable
 fun ResourceMaterialTheme(
-    colors: ColorPalette = +resourceColors(),
-    typography: Typography = +resourceTypography(),
+    colors: ColorPalette = resourceColors(),
+    typography: Typography = resourceTypography(),
     children: @Composable() () -> Unit
 ) = composable("ResourceMaterialTheme") {
     MaterialTheme(
@@ -45,9 +44,9 @@ fun ResourceMaterialTheme(
     }
 }
 
-fun resourceColors() = effectOf<ColorPalette> {
-    val context = +ambient(ContextAmbient)
-    +memo {
+fun resourceColors(): ColorPalette = effect {
+    val context = ambient(ContextAmbient)
+    memo {
         ColorPalette(
             primary = Color(context.colorAttr(R.attr.colorPrimary)),
             primaryVariant = Color(context.colorAttr(R.attr.colorPrimaryVariant)),
@@ -65,8 +64,8 @@ fun resourceColors() = effectOf<ColorPalette> {
     }
 }
 
-fun resourceTypography() = effectOf<Typography> {
-    +memo { Typography() }
+fun resourceTypography(): Typography = effect {
+    memo { Typography() }
     /*Typography(
         h1 = +resourceTextStyle(R.attr.textAppearanceHeadline1),
         h2 = +resourceTextStyle(R.attr.textAppearanceHeadline2),
@@ -84,9 +83,9 @@ fun resourceTypography() = effectOf<Typography> {
     )*/
 }
 
-fun resourceTextStyle(attr: Int) = effectOf<TextStyle> {
+fun resourceTextStyle(attr: Int): TextStyle = effect {
     error("not implemented")
-    val context = +ambient(ContextAmbient)
+    val context = ambient(ContextAmbient)
     TextStyle()
 }
 

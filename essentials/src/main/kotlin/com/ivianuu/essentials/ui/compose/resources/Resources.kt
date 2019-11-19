@@ -16,16 +16,39 @@
 
 package com.ivianuu.essentials.ui.compose.resources
 
-import androidx.compose.ambient
-import androidx.compose.effectOf
-import androidx.compose.memo
 import androidx.core.graphics.drawable.toBitmap
 import androidx.ui.core.ContextAmbient
 import androidx.ui.graphics.Image
+import com.ivianuu.essentials.ui.compose.core.ambient
+import com.ivianuu.essentials.ui.compose.core.effect
+import com.ivianuu.essentials.ui.compose.core.invoke
+import com.ivianuu.essentials.ui.compose.core.memo
 import com.ivianuu.essentials.ui.compose.image.BitmapImage
 import com.ivianuu.essentials.util.drawable
 
-fun drawableResource(resId: Int) = effectOf<Image> {
-    val context = +ambient(ContextAmbient)
-    return@effectOf +memo { BitmapImage(context.drawable(resId).toBitmap()) }
+fun colorResource(id: Int) = androidx.ui.res.colorResource(id)()
+
+fun drawableResource(resId: Int): Image = effect {
+    val context = ambient(ContextAmbient)
+    return@effect memo { BitmapImage(context.drawable(resId).toBitmap()) }
 }
+
+fun stringResource(id: Int) = androidx.ui.res.stringResource(id = id)()
+
+fun stringResource(id: Int, vararg formatArgs: Any) =
+    androidx.ui.res.stringResource(id = id, formatArgs = *formatArgs)()
+
+fun stringArrayResource(id: Int) =
+    androidx.ui.res.stringArrayResource(id = id)()
+
+fun integerResource(id: Int) =
+    androidx.ui.res.integerResource(id)()
+
+fun integerArrayResource(id: Int) =
+    androidx.ui.res.integerArrayResource(id)()
+
+fun booleanResource(id: Int) =
+    androidx.ui.res.booleanResource(id)()
+
+fun dimensionResource(id: Int) =
+    androidx.ui.res.dimensionResource(id)()

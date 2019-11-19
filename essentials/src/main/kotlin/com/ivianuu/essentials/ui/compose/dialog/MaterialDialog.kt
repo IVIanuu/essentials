@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.ui.compose.dialog
 
 import androidx.compose.Composable
-import androidx.compose.unaryPlus
 import androidx.ui.core.Alignment
 import androidx.ui.core.CurrentTextStyleProvider
 import androidx.ui.core.IntPx
@@ -38,6 +37,7 @@ import androidx.ui.layout.WidthSpacer
 import androidx.ui.material.Divider
 import androidx.ui.material.MaterialTheme
 import com.ivianuu.essentials.ui.compose.core.composable
+import com.ivianuu.essentials.ui.compose.core.invoke
 import com.ivianuu.essentials.ui.compose.material.CurrentIconStyleProvider
 import com.ivianuu.essentials.ui.compose.material.IconStyle
 import com.ivianuu.essentials.ui.compose.material.SecondaryTextAlpha
@@ -95,7 +95,7 @@ private fun DialogBody(
             val styledTitle = title?.let {
                 {
                     CurrentTextStyleProvider(
-                        (+MaterialTheme.typography()).h6
+                        MaterialTheme.typography()().h6
                     ) {
                         title()
                     }
@@ -105,7 +105,7 @@ private fun DialogBody(
             val styledIcon = icon?.let {
                 {
                     CurrentIconStyleProvider(
-                        IconStyle(color = +colorForCurrentBackground())
+                        IconStyle(color = colorForCurrentBackground())
                     ) {
                         icon()
                     }
@@ -134,8 +134,8 @@ private fun DialogBody(
     val finalContent = if (content != null) {
         {
             CurrentTextStyleProvider(
-                ((+MaterialTheme.typography()).subtitle1).copy(
-                    color = (+colorForCurrentBackground()).copy(alpha = SecondaryTextAlpha)
+                MaterialTheme.typography()().subtitle1.copy(
+                    color = colorForCurrentBackground().copy(alpha = SecondaryTextAlpha)
                 )
             ) {
                 content()
@@ -326,7 +326,7 @@ private fun DialogButtons(
 
 @Composable
 private fun DialogDivider() = composable("DialogDivider") {
-    Divider(color = (+colorForCurrentBackground()).copy(alpha = 0.12f))
+    Divider(color = colorForCurrentBackground().copy(alpha = 0.12f))
 }
 
 private enum class DialogContentSlot {

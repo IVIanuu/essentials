@@ -16,6 +16,7 @@
 
 plugins {
     id("com.android.library")
+    id("com.ivianuu.essentials.kotlin.compiler")
     kotlin("android")
     kotlin("kapt")
     id("kotlin-android-extensions")

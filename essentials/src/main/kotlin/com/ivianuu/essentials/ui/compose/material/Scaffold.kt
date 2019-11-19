@@ -19,9 +19,6 @@ package com.ivianuu.essentials.ui.compose.material
 import androidx.compose.Ambient
 import androidx.compose.Composable
 import androidx.compose.State
-import androidx.compose.memo
-import androidx.compose.state
-import androidx.compose.unaryPlus
 import androidx.ui.core.Constraints
 import androidx.ui.core.IntPx
 import androidx.ui.core.Layout
@@ -30,6 +27,8 @@ import androidx.ui.core.dp
 import androidx.ui.core.looseMin
 import androidx.ui.material.DrawerState
 import com.ivianuu.essentials.ui.compose.core.composable
+import com.ivianuu.essentials.ui.compose.core.memo
+import com.ivianuu.essentials.ui.compose.core.state
 import com.ivianuu.essentials.ui.compose.core.withDensity
 import com.ivianuu.essentials.ui.compose.layout.Expand
 
@@ -41,7 +40,7 @@ fun Scaffold(
         body: @Composable() () -> Unit
     ) -> Unit
     )? = null,
-    drawerState: State<DrawerState> = +state { DrawerState.Closed },
+    drawerState: State<DrawerState> = state { DrawerState.Closed },
     topAppBar: (@Composable() () -> Unit)? = null,
     body: (@Composable() () -> Unit)? = null,
     bottomBar: (@Composable() () -> Unit)? = null,
@@ -49,7 +48,7 @@ fun Scaffold(
     fabPosition: Scaffold.FabPosition = Scaffold.FabPosition.End,
     bodyLayoutMode: Scaffold.BodyLayoutMode = Scaffold.BodyLayoutMode.Wrap
 ) = composable("Scaffold") {
-    val scaffold = +memo { Scaffold(drawerState) }
+    val scaffold = memo { Scaffold(drawerState) }
 
     // update state
     scaffold.hasTopAppBar = topAppBar != null
@@ -102,6 +101,7 @@ class Scaffold internal constructor(_drawerState: State<DrawerState>) {
     var hasFab = false
         internal set
 
+    // todo use by framed()
     var drawerState by _drawerState
 
     fun toggleDrawer() {
@@ -165,7 +165,7 @@ private fun ScaffoldLayout(
         }
     }
 
-    val fabPadding = +withDensity { 16.dp.toIntPx() }
+    val fabPadding = withDensity { 16.dp.toIntPx() }
 
     Layout(children = children) { measureables, incomingConstraints ->
         val width = incomingConstraints.maxWidth

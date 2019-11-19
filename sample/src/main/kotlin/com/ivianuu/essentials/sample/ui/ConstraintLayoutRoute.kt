@@ -16,10 +16,10 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import androidx.compose.unaryPlus
 import androidx.ui.core.Text
 import androidx.ui.material.MaterialTheme
 import com.ivianuu.essentials.ui.compose.composeControllerRoute
+import com.ivianuu.essentials.ui.compose.core.invoke
 import com.ivianuu.essentials.ui.compose.layout.ConstraintLayout
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
 import com.ivianuu.essentials.ui.compose.material.Scaffold
@@ -32,7 +32,7 @@ val constraintLayoutRoute = composeControllerRoute {
                 id("title") {
                     Text(
                         text = "Hello Constraint Layout",
-                        style = (+MaterialTheme.typography()).h6
+                        style = MaterialTheme.typography()().h6
                     )
                 }
 

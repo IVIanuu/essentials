@@ -17,9 +17,7 @@
 package com.ivianuu.essentials.about
 
 import androidx.compose.Composable
-import androidx.compose.unaryPlus
 import androidx.ui.core.Text
-import androidx.ui.res.stringResource
 import com.ivianuu.essentials.ui.compose.common.openUrlOnClick
 import com.ivianuu.essentials.ui.compose.common.scrolling.ScrollableList
 import com.ivianuu.essentials.ui.compose.composeControllerRoute
@@ -30,6 +28,7 @@ import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
 import com.ivianuu.essentials.ui.compose.material.Scaffold
 import com.ivianuu.essentials.ui.compose.material.SimpleListItem
 import com.ivianuu.essentials.ui.compose.material.Subheader
+import com.ivianuu.essentials.ui.compose.resources.stringResource
 import com.ivianuu.essentials.ui.navigation.director.defaultControllerRouteOptionsOrNull
 import com.ivianuu.essentials.util.BuildInfo
 
@@ -40,7 +39,7 @@ fun aboutRoute(
     options = defaultControllerRouteOptionsOrNull()
 ) {
     Scaffold(
-        topAppBar = { EsTopAppBar(+stringResource(R.string.about_title)) },
+        topAppBar = { EsTopAppBar(stringResource(R.string.about_title)) },
         body = {
             ScrollableList {
                 AboutSection(
@@ -55,13 +54,13 @@ fun aboutRoute(
 
 @Composable
 fun AboutSection(
-    buildInfo: BuildInfo = +inject<BuildInfo>(),
+    buildInfo: BuildInfo = inject<BuildInfo>(),
     showHeader: Boolean = false,
     hasDebugPackageName: Boolean = buildInfo.isDebug,
     privacyPolicyUrl: String? = null
 ) = composable("AboutSection") {
     if (showHeader) {
-        Subheader(+stringResource(R.string.about_title))
+        Subheader(stringResource(R.string.about_title))
     }
 
     AboutItem(
@@ -117,8 +116,8 @@ fun AboutItem(
     url: () -> String
 ) = staticComposable(titleRes + (descRes ?: 0)) {
     SimpleListItem(
-        title = { Text(+stringResource(titleRes)) },
-        subtitle = descRes?.let { { Text(+stringResource(it)) } },
-        onClick = +openUrlOnClick(url)
+        title = { Text(stringResource(titleRes)) },
+        subtitle = descRes?.let { { Text(stringResource(it)) } },
+        onClick = openUrlOnClick(url)
     )
 }

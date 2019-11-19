@@ -16,9 +16,6 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import androidx.compose.memo
-import androidx.compose.state
-import androidx.compose.unaryPlus
 import androidx.ui.core.Alignment
 import androidx.ui.core.Text
 import androidx.ui.core.dp
@@ -31,6 +28,9 @@ import com.ivianuu.essentials.ui.compose.common.AbsorbPointer
 import com.ivianuu.essentials.ui.compose.common.scrolling.ScrollableList
 import com.ivianuu.essentials.ui.compose.composeControllerRoute
 import com.ivianuu.essentials.ui.compose.core.composable
+import com.ivianuu.essentials.ui.compose.core.invoke
+import com.ivianuu.essentials.ui.compose.core.memo
+import com.ivianuu.essentials.ui.compose.core.state
 import com.ivianuu.essentials.ui.compose.dialog.SingleChoiceListDialog
 import com.ivianuu.essentials.ui.compose.dialog.dialogRoute
 import com.ivianuu.essentials.ui.compose.injekt.inject
@@ -42,28 +42,28 @@ import com.ivianuu.essentials.ui.compose.material.Subheader
 import com.ivianuu.essentials.ui.navigation.Navigator
 
 val scaffoldRoute = composeControllerRoute {
-    val navigator = +inject<Navigator>()
+    val navigator = inject<Navigator>()
 
-    val (showTopBar, setShowTopBar) = +state { true }
-    val (centerTitle, setCenterTitle) = +state { false }
+    val (showTopBar, setShowTopBar) = state { true }
+    val (centerTitle, setCenterTitle) = state { false }
 
-    val (bodyLayoutMode, setBodyLayout) = +state { Scaffold.BodyLayoutMode.Wrap }
+    val (bodyLayoutMode, setBodyLayout) = state { Scaffold.BodyLayoutMode.Wrap }
 
-    val (showBottomBar, setShowBottomBar) = +state { false }
+    val (showBottomBar, setShowBottomBar) = state { false }
 
-    val (showFab, setShowFab) = +state { false }
-    val (fabPosition, setFabPosition) = +state { Scaffold.FabPosition.End }
+    val (showFab, setShowFab) = state { false }
+    val (fabPosition, setFabPosition) = state { Scaffold.FabPosition.End }
 
     Scaffold(
         topAppBar = if (showTopBar) ({
             composable("top bar") {
-                val alpha = +memo(bodyLayoutMode) {
+                val alpha = memo(bodyLayoutMode) {
                     if (bodyLayoutMode == Scaffold.BodyLayoutMode.ExtendTop
                         || bodyLayoutMode == Scaffold.BodyLayoutMode.ExtendBoth
                     ) 0.5f else 1f
                 }
 
-                val color = ((+MaterialTheme.colors()).primary).copy(alpha = alpha)
+                val color = MaterialTheme.colors()().primary.copy(alpha = alpha)
 
                 EsTopAppBar(title = { Text("Scaffold") }, color = color)
             }
@@ -74,13 +74,13 @@ val scaffoldRoute = composeControllerRoute {
         }) else null,
         bottomBar = if (showBottomBar) ({
             composable("bottom bar") {
-                val alpha = +memo(bodyLayoutMode) {
+                val alpha = memo(bodyLayoutMode) {
                     if (bodyLayoutMode == Scaffold.BodyLayoutMode.ExtendBottom
                         || bodyLayoutMode == Scaffold.BodyLayoutMode.ExtendBoth
                     ) 0.5f else 1f
                 }
 
-                val color = ((+MaterialTheme.colors()).primary).copy(alpha = alpha)
+                val color = MaterialTheme.colors()().primary.copy(alpha = alpha)
 
                 Surface(color = color) {
                     Container(
@@ -91,7 +91,7 @@ val scaffoldRoute = composeControllerRoute {
                     ) {
                         Text(
                             text = "Bottom bar",
-                            style = (+MaterialTheme.typography()).h6
+                            style = MaterialTheme.typography()().h6
                         )
                     }
                 }

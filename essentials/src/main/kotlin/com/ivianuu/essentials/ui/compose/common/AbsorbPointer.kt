@@ -17,19 +17,18 @@
 package com.ivianuu.essentials.ui.compose.common
 
 import androidx.compose.Composable
-import androidx.compose.memo
-import androidx.compose.unaryPlus
 import androidx.ui.core.PointerEventPass
 import androidx.ui.core.changedToDown
 import androidx.ui.core.consumeDownChange
 import com.ivianuu.essentials.ui.compose.core.composable
+import com.ivianuu.essentials.ui.compose.core.memo
 
 @Composable
 fun AbsorbPointer(
     absorb: Boolean = true,
     children: @Composable() () -> Unit
 ) = composable("AbsorbPointer") {
-    val consumedIds = +memo { mutableSetOf<Int>() }
+    val consumedIds = memo { mutableSetOf<Int>() }
     PointerInputWrapper(
         pointerInputHandler = { changes, pass, _ ->
             if (absorb && (pass == PointerEventPass.InitialDown

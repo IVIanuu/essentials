@@ -18,10 +18,6 @@ package com.ivianuu.essentials.ui.compose.material
 
 import androidx.compose.Ambient
 import androidx.compose.Composable
-import androidx.compose.ambient
-import androidx.compose.effectOf
-import androidx.compose.memo
-import androidx.compose.unaryPlus
 import androidx.ui.graphics.Image
 import androidx.ui.material.Tab
 import androidx.ui.material.TabRow
@@ -30,20 +26,23 @@ import com.ivianuu.essentials.ui.compose.common.Pager
 import com.ivianuu.essentials.ui.compose.common.PagerPosition
 import com.ivianuu.essentials.ui.compose.common.framed
 import com.ivianuu.essentials.ui.compose.core.Axis
+import com.ivianuu.essentials.ui.compose.core.ambient
 import com.ivianuu.essentials.ui.compose.core.composable
+import com.ivianuu.essentials.ui.compose.core.effect
+import com.ivianuu.essentials.ui.compose.core.memo
 
 fun <T> TabController(
     items: List<T>,
     initialIndex: Int = 0,
     children: @Composable() () -> Unit
 ) {
-    val tabController = +memo { TabController(items, initialIndex) }
+    val tabController = memo { TabController(items, initialIndex) }
     tabController.items = items
     TabControllerAmbient.Provider(tabController, children)
 }
 
-fun <T> ambientTabController() = effectOf<TabController<T>> {
-    +ambient(TabControllerAmbient) as TabController<T>
+fun <T> ambientTabController(): TabController<T> = effect {
+    ambient(TabControllerAmbient) as TabController<T>
 }
 
 class TabController<T>(
@@ -58,7 +57,7 @@ private val TabControllerAmbient = Ambient.of<TabController<*>>()
 
 @Composable
 fun <T> TabRow(
-    tabController: TabController<T> = +ambientTabController<T>(),
+    tabController: TabController<T> = ambientTabController<T>(),
     scrollable: Boolean = false,
     indicatorContainer: @Composable() (tabPositions: List<TabRow.TabPosition>) -> Unit = { tabPositions ->
         TabRow.IndicatorContainer(tabPositions, tabController.selectedIndex) {
@@ -87,8 +86,8 @@ fun Tab(
     text: String? = null,
     icon: Image? = null
 ) = composable("Tab") {
-    val tabController = +ambientTabController<Any?>()
-    val tabIndex = +ambient(TabIndexAmbient)
+    val tabController = ambientTabController<Any?>()
+    val tabIndex = ambient(TabIndexAmbient)
     Tab(
         text = text,
         icon = icon,
@@ -99,11 +98,11 @@ fun Tab(
 
 @Composable
 fun <T> TabPager(
-    tabController: TabController<T> = +ambientTabController<T>(),
+    tabController: TabController<T> = ambientTabController<T>(),
     item: @Composable() (Int, T) -> Unit
 ) = composable("TabPager") {
-    val position = +memo { PagerPosition(tabController.items.size) }
-    val state = +memo { TabPagerState<T>() }
+    val position = memo { PagerPosition(tabController.items.size) }
+    val state = memo { TabPagerState<T>() }
 
     state.tabController = tabController
     state.position = position

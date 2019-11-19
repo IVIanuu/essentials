@@ -17,15 +17,14 @@
 package com.ivianuu.essentials.ui.compose.prefs
 
 import androidx.compose.Composable
-import androidx.compose.state
-import androidx.compose.unaryPlus
 import androidx.ui.input.KeyboardType
-import androidx.ui.res.stringResource
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.compose.core.composable
+import com.ivianuu.essentials.ui.compose.core.state
 import com.ivianuu.essentials.ui.compose.dialog.DialogButton
 import com.ivianuu.essentials.ui.compose.dialog.DialogCloseButton
 import com.ivianuu.essentials.ui.compose.dialog.TextInputDialog
+import com.ivianuu.essentials.ui.compose.resources.stringResource
 import com.ivianuu.kprefs.Pref
 
 @Composable
@@ -45,7 +44,7 @@ fun TextInputPreference(
     DialogPreference(
         pref = pref,
         dialog = { dismiss ->
-            val (currentValue, setCurrentValue) = +state { pref.get() }
+            val (currentValue, setCurrentValue) = state { pref.get() }
 
             TextInputDialog(
                 value = currentValue,
@@ -55,7 +54,7 @@ fun TextInputPreference(
                 keyboardType = dialogKeyboardType,
                 positiveButton = {
                     DialogButton(
-                        text = +stringResource(R.string.es_ok),
+                        text = stringResource(R.string.es_ok),
                         onClick = if (allowEmpty || currentValue.isNotEmpty()) {
                             {
                                 if (onChange?.invoke(currentValue) != false) {
@@ -67,7 +66,7 @@ fun TextInputPreference(
                         }
                     )
                 },
-                negativeButton = { DialogCloseButton(+stringResource(R.string.es_cancel)) }
+                negativeButton = { DialogCloseButton(stringResource(R.string.es_cancel)) }
             )
         },
         title = title,

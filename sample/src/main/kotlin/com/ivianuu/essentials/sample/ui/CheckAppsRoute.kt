@@ -16,11 +16,10 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import androidx.compose.memo
-import androidx.compose.unaryPlus
 import com.ivianuu.essentials.apps.ui.CheckableAppsScreen
 import com.ivianuu.essentials.apps.ui.launchableOnlyAppFilter
 import com.ivianuu.essentials.ui.compose.composeControllerRoute
+import com.ivianuu.essentials.ui.compose.core.memo
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.navigation.director.controllerRouteOptions
 import com.ivianuu.essentials.ui.navigation.director.fade
@@ -31,12 +30,12 @@ import com.ivianuu.kprefs.stringSet
 val checkAppsRoute = composeControllerRoute(
     options = controllerRouteOptions().fade()
 ) {
-    val prefs = +inject<KPrefs>()
-    val pref = +memo { prefs.stringSet("apps") }
+    val prefs = inject<KPrefs>()
+    val pref = memo { prefs.stringSet("apps") }
     CheckableAppsScreen(
         checkedAppsFlow = pref.asFlow(),
         onCheckedAppsChanged = pref::set,
         appBarTitle = "Send check apps",
-        appFilter = +launchableOnlyAppFilter()
+        appFilter = launchableOnlyAppFilter()
     )
 }

@@ -16,13 +16,12 @@
 
 package com.ivianuu.essentials.ui.compose.core
 
-import androidx.compose.effectOf
 import androidx.ui.core.DensityScope
 import androidx.ui.core.ambientDensity
 import androidx.ui.core.withDensity
 
 // todo remove once public in compose
 
-fun <R> withDensity(block: DensityScope.() -> R) = effectOf<R> {
-    withDensity(+ambientDensity(), block)
+fun <R> withDensity(block: DensityScope.() -> R): R = effect {
+    withDensity(ambientDensity()(), block)
 }

@@ -17,20 +17,20 @@
 package com.ivianuu.essentials.ui.compose.dialog
 
 import androidx.compose.Composable
-import androidx.compose.onActive
-import androidx.compose.state
-import androidx.compose.unaryPlus
 import androidx.ui.core.Opacity
 import androidx.ui.core.Text
 import androidx.ui.core.TextField
 import androidx.ui.input.KeyboardType
 import androidx.ui.material.MaterialTheme
-import androidx.ui.res.stringResource
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.compose.common.hideKeyboard
 import com.ivianuu.essentials.ui.compose.common.showKeyboard
 import com.ivianuu.essentials.ui.compose.core.composable
+import com.ivianuu.essentials.ui.compose.core.invoke
+import com.ivianuu.essentials.ui.compose.core.onActive
+import com.ivianuu.essentials.ui.compose.core.state
 import com.ivianuu.essentials.ui.compose.injekt.inject
+import com.ivianuu.essentials.ui.compose.resources.stringResource
 import com.ivianuu.essentials.ui.navigation.Navigator
 
 fun textInputRoute(
@@ -40,9 +40,9 @@ fun textInputRoute(
     title: (@Composable() () -> Unit)? = null,
     allowEmpty: Boolean = true
 ) = dialogRoute {
-    val navigator = +inject<Navigator>()
+    val navigator = inject<Navigator>()
 
-    val (currentValue, setCurrentValue) = +state { initial }
+    val (currentValue, setCurrentValue) = state { initial }
 
     TextInputDialog(
         value = initial,
@@ -52,7 +52,7 @@ fun textInputRoute(
         title = title,
         positiveButton = {
             DialogButton(
-                text = +stringResource(R.string.es_ok),
+                text = stringResource(R.string.es_ok),
                 onClick = if (allowEmpty || currentValue.isNotEmpty()) {
                     {
                         navigator.pop(currentValue)
@@ -63,7 +63,7 @@ fun textInputRoute(
             )
         },
         negativeButton = {
-            DialogCloseButton(+stringResource(R.string.es_cancel))
+            DialogCloseButton(stringResource(R.string.es_cancel))
         }
     )
 }
@@ -81,8 +81,8 @@ fun TextInputDialog(
     negativeButton: (@Composable() () -> Unit)? = null,
     neutralButton: (@Composable() () -> Unit)? = null
 ) = composable("TextInputDialog") {
-    val showKeyboard = +showKeyboard(TextInputDialogInputId)
-    val hideKeyboard = +hideKeyboard()
+    val showKeyboard = showKeyboard(TextInputDialogInputId)
+    val hideKeyboard = hideKeyboard()
 
     MaterialDialog(
         buttonLayout = buttonLayout,
@@ -93,7 +93,7 @@ fun TextInputDialog(
                 Opacity(0.5f) {
                     Text(
                         text = hint,
-                        style = (+MaterialTheme.typography()).subtitle1
+                        style = MaterialTheme.typography()().subtitle1
                     )
                 }
             }
@@ -102,10 +102,10 @@ fun TextInputDialog(
                 onValueChange = onValueChange,
                 focusIdentifier = TextInputDialogInputId,
                 keyboardType = keyboardType,
-                textStyle = (+MaterialTheme.typography()).subtitle1
+                textStyle = MaterialTheme.typography()().subtitle1
             )
 
-            +onActive {
+            onActive {
                 showKeyboard()
                 onDispose {
                     hideKeyboard()

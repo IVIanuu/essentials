@@ -17,11 +17,11 @@
 package com.ivianuu.essentials.ui.compose.prefs
 
 import androidx.compose.Composable
-import androidx.compose.unaryPlus
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.Switch
 import com.ivianuu.essentials.ui.compose.common.AbsorbPointer
 import com.ivianuu.essentials.ui.compose.core.composable
+import com.ivianuu.essentials.ui.compose.core.invoke
 import com.ivianuu.kprefs.Pref
 
 @Composable
@@ -48,7 +48,7 @@ fun SwitchPreference(
         trailing = {
             AbsorbPointer {
                 Switch(
-                    color = (+MaterialTheme.colors()).secondary,
+                    color = MaterialTheme.colors()().secondary,
                     checked = pref.get(),
                     onCheckedChange = {}
                 )

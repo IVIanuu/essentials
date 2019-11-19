@@ -16,8 +16,6 @@
 
 package com.ivianuu.essentials.ui.compose.core
 
-import androidx.compose.memo
-
 fun <T> ref(init: () -> T) = memo { Ref(init()) }
 
 fun <T, V1> refFor(v1: V1, init: () -> T) =
@@ -32,4 +30,4 @@ fun <T, V1, V2> refFor(
 fun <T> refFor(vararg inputs: Any?, init: () -> T) =
     memo(*inputs) { Ref(init()) }
 
-class Ref<T>(var value: T)
+data class Ref<T>(var value: T)

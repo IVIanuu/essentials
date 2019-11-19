@@ -17,9 +17,9 @@
 package com.ivianuu.essentials.ui.compose.injekt
 
 import androidx.compose.Ambient
-import androidx.compose.ambient
-import androidx.compose.effectOf
-import androidx.compose.memo
+import com.ivianuu.essentials.ui.compose.core.ambient
+import com.ivianuu.essentials.ui.compose.core.effect
+import com.ivianuu.essentials.ui.compose.core.memo
 import com.ivianuu.injekt.Component
 import com.ivianuu.injekt.ParametersDefinition
 import com.ivianuu.injekt.Type
@@ -36,7 +36,7 @@ fun <T> inject(
     type: Type<T>,
     name: Any? = null,
     parameters: ParametersDefinition? = null
-) = effectOf<T> {
-    val component = +ambient(ComponentAmbient)
-    return@effectOf +memo { component.get(type = type, name = name, parameters = parameters) }
+): T = effect {
+    val component = ambient(ComponentAmbient)
+    return@effect memo { component.get(type = type, name = name, parameters = parameters) }
 }

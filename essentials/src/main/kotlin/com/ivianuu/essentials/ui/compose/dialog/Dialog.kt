@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.ui.compose.dialog
 
 import androidx.compose.Composable
-import androidx.compose.unaryPlus
 import androidx.ui.core.dp
 import androidx.ui.core.gesture.PressGestureDetector
 import androidx.ui.foundation.shape.corner.RoundedCornerShape
@@ -27,6 +26,7 @@ import androidx.ui.layout.Padding
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.surface.Surface
 import com.ivianuu.essentials.ui.compose.core.composable
+import com.ivianuu.essentials.ui.compose.core.invoke
 
 // todo callbacks like onShow, onDismiss, onCancel etc
 // todo add DialogState + ambient to control dialog state from descendents
@@ -47,7 +47,7 @@ fun Dialog(child: @Composable() () -> Unit) = composable("Dialog") {
                 )
             ) {
                 Surface(
-                    color = (+MaterialTheme.colors()).surface,
+                    color = MaterialTheme.colors()().surface,
                     elevation = 24.dp,
                     shape = RoundedCornerShape(size = 4.dp)
                 ) {

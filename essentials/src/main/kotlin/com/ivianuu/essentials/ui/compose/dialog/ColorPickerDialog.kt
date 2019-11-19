@@ -17,11 +17,6 @@
 package com.ivianuu.essentials.ui.compose.dialog
 
 import androidx.compose.Composable
-import androidx.compose.Effect
-import androidx.compose.effectOf
-import androidx.compose.memo
-import androidx.compose.state
-import androidx.compose.unaryPlus
 import androidx.ui.core.Alignment
 import androidx.ui.core.Draw
 import androidx.ui.core.IntPx
@@ -48,10 +43,12 @@ import androidx.ui.material.Slider
 import androidx.ui.material.SliderPosition
 import androidx.ui.material.TextButtonStyle
 import androidx.ui.material.ripple.Ripple
-import androidx.ui.res.stringResource
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.compose.common.scrolling.Scroller
 import com.ivianuu.essentials.ui.compose.core.composable
+import com.ivianuu.essentials.ui.compose.core.invoke
+import com.ivianuu.essentials.ui.compose.core.memo
+import com.ivianuu.essentials.ui.compose.core.state
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.compose.layout.Expand
 import com.ivianuu.essentials.ui.compose.layout.SquaredBox
@@ -63,15 +60,16 @@ import com.ivianuu.essentials.ui.compose.material.TabRow
 import com.ivianuu.essentials.ui.compose.material.colorForBackground
 import com.ivianuu.essentials.ui.compose.material.colorForCurrentBackground
 import com.ivianuu.essentials.ui.compose.material.copy
+import com.ivianuu.essentials.ui.compose.resources.stringResource
 import com.ivianuu.essentials.ui.navigation.Navigator
 
 fun colorPickerRoute(
     initialColor: Color,
     allowCustomArgb: Boolean = true,
     showAlphaSelector: Boolean = false,
-    title: (@Composable() () -> Unit)? = { Text(+stringResource(R.string.es_dialog_title_color_picker)) }
+    title: (@Composable() () -> Unit)? = { Text(stringResource(R.string.es_dialog_title_color_picker)) }
 ) = dialogRoute {
-    val navigator = +inject<Navigator>()
+    val navigator = inject<Navigator>()
     ColorPickerDialog(
         initialColor = initialColor,
         onColorSelected = { navigator.pop(it) },
@@ -91,7 +89,7 @@ fun ColorPickerDialog(
     icon: (@Composable() () -> Unit)? = null,
     title: (@Composable() () -> Unit)? = null
 ) = composable("ColorPickerDialog") {
-    val (currentColor, setCurrentColor) = +state { initialColor }
+    val (currentColor, setCurrentColor) = state { initialColor }
 
     MaterialDialog(
         icon = icon,
@@ -128,14 +126,14 @@ private fun ColorPickerContent(
     if (allowCustomArgb) {
         TabController(items = ColorPickerPage.values().toList()) {
             TightColumn {
-                val currentColors = +MaterialTheme.colors()
+                val currentColors = MaterialTheme.colors()()
 
                 MaterialTheme(
                     colors = currentColors.copy(
                         primary = currentColors.surface,
                         onPrimary = currentColors.onSurface
                     ),
-                    typography = +MaterialTheme.typography()
+                    typography = MaterialTheme.typography()()
                 ) {
                     TabRow<ColorPickerPage> { _, page ->
                         Tab(text = page.title)
@@ -220,7 +218,7 @@ private fun ColorGridItem(
         Ripple(bounded = false) {
             Clickable(onClick = onClick) {
                 SquaredBox(fit = SquaredBoxFit.MatchWidth) {
-                    val paint = +memo { Paint() }
+                    val paint = memo { Paint() }
                     paint.color = color
                     Expand {
                         Draw { canvas: Canvas, parentSize: PxSize ->
@@ -252,8 +250,8 @@ private fun ColorEditor(
             ColoredRect(color)
             Text(
                 text = color.toString(),
-                style = ((+MaterialTheme.typography()).subtitle1).copy(
-                    color = +colorForBackground(color)
+                style = MaterialTheme.typography()().subtitle1.copy(
+                    color = colorForBackground(color)
                 )
             )
         }
@@ -303,12 +301,12 @@ private fun ColorComponentItem(
             inflexible {
                 Text(
                     text = component.title,
-                    style = (+MaterialTheme.typography()).subtitle1
+                    style = MaterialTheme.typography()().subtitle1
                 )
             }
 
             flexible(1f) {
-                val position = +memo {
+                val position = memo {
                     SliderPosition(initial = value)
                 }
 
@@ -318,14 +316,14 @@ private fun ColorComponentItem(
                         position.value = it
                         onChanged(it)
                     },
-                    color = +component.color
+                    color = component.color()
                 )
             }
 
             inflexible {
                 Text(
                     text = (255 * value).toInt().toString(),
-                    style = (+MaterialTheme.typography()).subtitle1
+                    style = MaterialTheme.typography()().subtitle1
                 )
             }
         }
@@ -334,32 +332,32 @@ private fun ColorComponentItem(
 
 private enum class ColorComponent(
     val title: String,
-    val color: Effect<Color>
+    val color: @Composable() () -> Color
 ) {
     Alpha(
         title = "A",
-        color = effectOf { +colorForCurrentBackground() }
+        color = { colorForCurrentBackground() }
     ) {
         override fun read(color: Color) = color.alpha
         override fun apply(color: Color, value: Float) = color.copy(alpha = value)
     },
     Red(
         title = "R",
-        color = effectOf { Color.Red }
+        color = { Color.Red }
     ) {
         override fun read(color: Color) = color.red
         override fun apply(color: Color, value: Float) = color.copy(red = value)
     },
     Green(
         title = "G",
-        color = effectOf { Color.Green }
+        color = { Color.Green }
     ) {
         override fun read(color: Color) = color.green
         override fun apply(color: Color, value: Float) = color.copy(green = value)
     },
     Blue(
         title = "B",
-        color = effectOf { Color.Blue }
+        color = { Color.Blue }
     ) {
         override fun read(color: Color) = color.blue
         override fun apply(color: Color, value: Float) = color.copy(blue = value)

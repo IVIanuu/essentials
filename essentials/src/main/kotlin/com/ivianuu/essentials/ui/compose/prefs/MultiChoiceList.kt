@@ -17,15 +17,14 @@
 package com.ivianuu.essentials.ui.compose.prefs
 
 import androidx.compose.Composable
-import androidx.compose.state
-import androidx.compose.unaryPlus
 import androidx.ui.core.Text
-import androidx.ui.res.stringResource
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.compose.core.composable
+import com.ivianuu.essentials.ui.compose.core.state
 import com.ivianuu.essentials.ui.compose.dialog.DialogButton
 import com.ivianuu.essentials.ui.compose.dialog.DialogCloseButton
 import com.ivianuu.essentials.ui.compose.dialog.MultiChoiceListDialog
+import com.ivianuu.essentials.ui.compose.resources.stringResource
 import com.ivianuu.kprefs.Pref
 
 // todo improve api
@@ -51,7 +50,7 @@ fun MultiChoiceListPreference(
         enabled = enabled,
         dependencies = dependencies,
         dialog = { dismiss ->
-            val (selectedItems, setSelectedItems) = +state {
+            val (selectedItems, setSelectedItems) = state {
                 pref.get().toList()
                     .map { value ->
                         items.first { it.value == value }
@@ -66,7 +65,7 @@ fun MultiChoiceListPreference(
                 title = dialogTitle,
                 positiveButton = {
                     DialogButton(
-                        text = +stringResource(R.string.es_ok),
+                        text = stringResource(R.string.es_ok),
                         onClick = {
                             val newValue = selectedItems.map { it.value }.toSet()
                             if (onChange?.invoke(newValue) != false) {
@@ -75,7 +74,7 @@ fun MultiChoiceListPreference(
                         }
                     )
                 },
-                negativeButton = { DialogCloseButton(+stringResource(R.string.es_cancel)) }
+                negativeButton = { DialogCloseButton(stringResource(R.string.es_cancel)) }
             )
         }
     )

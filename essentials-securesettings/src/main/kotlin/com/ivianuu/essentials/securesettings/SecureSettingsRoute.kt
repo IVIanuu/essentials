@@ -16,23 +16,21 @@
 
 package com.ivianuu.essentials.securesettings
 
-import androidx.compose.ambient
-import androidx.compose.unaryPlus
 import androidx.ui.core.Text
 import androidx.ui.core.dp
 import androidx.ui.layout.Padding
 import androidx.ui.material.MaterialTheme
-import androidx.ui.material.surface.CurrentBackground
-import androidx.ui.material.textColorForBackground
-import androidx.ui.res.stringResource
 import com.ivianuu.essentials.ui.compose.common.navigateOnClick
 import com.ivianuu.essentials.ui.compose.common.scrolling.ScrollableList
 import com.ivianuu.essentials.ui.compose.composeControllerRoute
+import com.ivianuu.essentials.ui.compose.core.invoke
 import com.ivianuu.essentials.ui.compose.coroutines.coroutineScope
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
 import com.ivianuu.essentials.ui.compose.material.Scaffold
 import com.ivianuu.essentials.ui.compose.material.SimpleListItem
+import com.ivianuu.essentials.ui.compose.material.colorForCurrentBackground
+import com.ivianuu.essentials.ui.compose.resources.stringResource
 import com.ivianuu.essentials.ui.navigation.director.controllerRouteOptions
 import com.ivianuu.essentials.ui.navigation.director.copy
 import com.ivianuu.essentials.ui.navigation.director.defaultControllerRouteOptionsOrElse
@@ -48,35 +46,31 @@ fun secureSettingsRoute(showHideNavBarHint: Boolean = false) =
     composeControllerRoute(
         options = defaultControllerRouteOptionsOrNull()
     ) {
-        +popNavigatorOnceSecureSettingsGranted()
+        popNavigatorOnceSecureSettingsGranted()
 
         Scaffold(
-            topAppBar = { EsTopAppBar(+stringResource(R.string.es_title_secure_settings)) },
+            topAppBar = { EsTopAppBar(stringResource(R.string.es_title_secure_settings)) },
             body = {
                 ScrollableList {
                     Padding(padding = 16.dp) {
-                        val textColor = (+textColorForBackground(
-                            +ambient(
-                                CurrentBackground
-                            )
-                        ))!!.copy(alpha = 0.6f)
+                        val textColor = colorForCurrentBackground().copy(alpha = 0.6f)
 
                         Text(
-                            text = +stringResource(
+                            text = stringResource(
                                 if (showHideNavBarHint) {
                                     R.string.es_pref_secure_settings_header_hide_nav_bar_summary
                                 } else {
                                     R.string.es_pref_secure_settings_header_summary
                                 }
                             ),
-                            style = ((+MaterialTheme.typography()).body2).copy(color = textColor)
+                            style = MaterialTheme.typography()().body2.copy(color = textColor)
                         )
                     }
 
                     SimpleListItem(
-                        title = { Text(+stringResource(R.string.es_pref_use_pc)) },
-                        subtitle = { Text(+stringResource(R.string.es_pref_use_pc_summary)) },
-                        onClick = +navigateOnClick {
+                        title = { Text(stringResource(R.string.es_pref_use_pc)) },
+                        subtitle = { Text(stringResource(R.string.es_pref_use_pc_summary)) },
+                        onClick = navigateOnClick {
                             secureSettingsInstructionsRoute.copy(
                                 options = defaultControllerRouteOptionsOrElse {
                                     controllerRouteOptions().horizontal()
@@ -85,12 +79,12 @@ fun secureSettingsRoute(showHideNavBarHint: Boolean = false) =
                         }
                     )
 
-                    val coroutineScope = +coroutineScope()
-                    val secureSettingsHelper = +inject<SecureSettingsHelper>()
-                    val toaster = +inject<Toaster>()
+                    val coroutineScope = coroutineScope()
+                    val secureSettingsHelper = inject<SecureSettingsHelper>()
+                    val toaster = inject<Toaster>()
                     SimpleListItem(
-                        title = { Text(+stringResource(R.string.es_pref_use_root)) },
-                        subtitle = { Text(+stringResource(R.string.es_pref_use_root_summary)) },
+                        title = { Text(stringResource(R.string.es_pref_use_root)) },
+                        subtitle = { Text(stringResource(R.string.es_pref_use_root_summary)) },
                         onClick = {
                             coroutineScope.launch {
                                 if (secureSettingsHelper.grantWriteSecureSettingsViaRoot()) {

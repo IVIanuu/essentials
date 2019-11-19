@@ -17,9 +17,6 @@
 package com.ivianuu.essentials.ui.compose.common.scrolling.sliver
 
 import androidx.compose.Composable
-import androidx.compose.memo
-import androidx.compose.state
-import androidx.compose.unaryPlus
 import androidx.ui.core.Direction
 import androidx.ui.core.Layout
 import androidx.ui.core.ParentData
@@ -37,6 +34,9 @@ import androidx.ui.core.round
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.compose.common.scrolling.ScrollPosition
 import com.ivianuu.essentials.ui.compose.core.composable
+import com.ivianuu.essentials.ui.compose.core.invoke
+import com.ivianuu.essentials.ui.compose.core.memo
+import com.ivianuu.essentials.ui.compose.core.state
 
 // todo add visual overlow
 
@@ -49,10 +49,10 @@ fun Viewport(
     anchor: Float = 0f,
     children: SliverChildren.() -> Unit
 ) = composable("SliverLayout") {
-    val state = +memo { ViewportState() }
+    val state = memo { ViewportState() }
 
-    val density = +ambientDensity()
-    val measureScope = +memo(density) { SliverMeasureScope(density) }
+    val density = ambientDensity()()
+    val measureScope = memo(density) { SliverMeasureScope(density) }
     state.measureScope = measureScope
     state.children = SliverChildren().apply(children).children
     state.position = position
@@ -60,7 +60,7 @@ fun Viewport(
     state.mainAxisDirection = mainAxisDirection
     state.crossAxisDirection = crossAxisDirection
     state.anchor = anchor
-    val (viewportSize, setViewportSize) = +state { PxSize.Zero }
+    val (viewportSize, setViewportSize) = state { PxSize.Zero }
     state.viewportSize = viewportSize
 
     state.performLayout()

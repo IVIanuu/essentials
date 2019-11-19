@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.ui.compose.material
 
 import androidx.compose.Composable
-import androidx.compose.unaryPlus
 import androidx.ui.core.Dp
 import androidx.ui.core.dp
 import androidx.ui.engine.geometry.Shape
@@ -27,11 +26,12 @@ import androidx.ui.graphics.Color
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.surface.Surface
 import com.ivianuu.essentials.ui.compose.core.composable
+import com.ivianuu.essentials.ui.compose.core.invoke
 
 @Composable
 fun EsSurface(
     shape: Shape = RectangleShape,
-    color: Color = (+MaterialTheme.colors()).surface,
+    color: Color = MaterialTheme.colors()().surface,
     border: Border? = null,
     elevation: Dp = 0.dp,
     children: @Composable() () -> Unit
@@ -43,7 +43,7 @@ fun EsSurface(
         elevation = elevation
     ) {
         CurrentIconStyleProvider(
-            value = IconStyle(color = +colorForCurrentBackground()),
+            value = IconStyle(color = colorForCurrentBackground()),
             children = children
         )
     }

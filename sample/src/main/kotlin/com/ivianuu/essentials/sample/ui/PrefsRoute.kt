@@ -16,7 +16,6 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import androidx.compose.unaryPlus
 import androidx.ui.core.Text
 import com.ivianuu.essentials.ui.compose.common.scrolling.ScrollableList
 import com.ivianuu.essentials.ui.compose.composeControllerRoute
@@ -51,7 +50,7 @@ val prefsRoute = composeControllerRoute(
         body = {
             Prefs {
                 ScrollableList {
-                    val prefs = +inject<KPrefs>()
+                    val prefs = inject<KPrefs>()
 
                     SwitchPreference(
                         pref = prefs.boolean("switch"),
@@ -85,7 +84,7 @@ val prefsRoute = composeControllerRoute(
                         pref = prefs.int("slider"),
                         title = { Text("Slider") },
                         summary = { Text("This is a slider preference") },
-                        valueText = +unitValueTextProvider(UnitValueTextProvider.Unit.Dp),
+                        valueText = unitValueTextProvider(UnitValueTextProvider.Unit.Dp),
                         dependencies = dependencies
                     )
 

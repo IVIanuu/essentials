@@ -17,31 +17,49 @@
 package com.ivianuu.essentials.ui.compose.common
 
 import androidx.compose.State
-import androidx.compose.effectOf
-import androidx.compose.onDispose
-import androidx.compose.state
 import androidx.lifecycle.ViewModel
-import com.ivianuu.essentials.ui.compose.core.composable
+import com.ivianuu.essentials.ui.compose.core.effect
+import com.ivianuu.essentials.ui.compose.core.onDispose
+import com.ivianuu.essentials.ui.compose.core.state
 import com.ivianuu.essentials.ui.compose.viewmodel.viewModel
+import com.ivianuu.essentials.util.sourceLocation
+
+inline fun <T> retained(
+    keepAcrossCompositions: Boolean = false,
+    noinline init: () -> T
+) = retained(
+    key = sourceLocation(),
+    keepAcrossCompositions = keepAcrossCompositions,
+    init = init
+)
 
 fun <T> retained(
     key: Any,
     keepAcrossCompositions: Boolean = false,
     init: () -> T
-) = effectOf<T> {
-    (+retainedState(key, keepAcrossCompositions, init)).value
+): T = effect {
+    retainedState(key, keepAcrossCompositions, init).value
 }
+
+inline fun <T> retainedState(
+    keepAcrossCompositions: Boolean = false,
+    noinline init: () -> T
+) = retainedState(
+    key = sourceLocation(),
+    keepAcrossCompositions = keepAcrossCompositions,
+    init = init
+)
 
 fun <T> retainedState(
     key: Any,
     keepAcrossCompositions: Boolean = false,
     init: () -> T
-) = effectOf<State<T>> {
-    val viewModel = +viewModel<RetainedStateViewModel>(
+): State<T> = effect {
+    val viewModel = viewModel<RetainedStateViewModel>(
         key = "RetainedState:${key.hashCode()}"
     )
 
-    val state = +state {
+    val state = state {
         if (viewModel.values.containsKey(key)) {
             viewModel.values[key] as T
         } else {
@@ -50,16 +68,14 @@ fun <T> retainedState(
     }
 
     if (!keepAcrossCompositions) {
-        composable("clear value") {
-            +onDispose {
-                viewModel.values.remove(key)
-            }
+        onDispose {
+            viewModel.values.remove(key)
         }
     }
 
     viewModel.values[key] = state.value
 
-    return@effectOf state
+    return@effect state
 }
 
 @PublishedApi

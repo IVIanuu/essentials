@@ -18,8 +18,9 @@ package com.ivianuu.essentials.apps.ui
 
 import android.content.Intent
 import android.content.pm.PackageManager
-import androidx.compose.effectOf
+import androidx.compose.Composable
 import com.ivianuu.essentials.apps.AppInfo
+import com.ivianuu.essentials.ui.compose.core.effect
 import com.ivianuu.essentials.ui.compose.injekt.inject
 
 typealias AppFilter = (AppInfo) -> Boolean
@@ -33,18 +34,20 @@ class CachingAppFilter(private val appFilter: AppFilter) : AppFilter {
     }
 }
 
-fun launchableOnlyAppFilter() = effectOf<AppFilter> {
-    val packageManager = +inject<PackageManager>()
-    return@effectOf CachingAppFilter { app ->
+@Composable
+fun launchableOnlyAppFilter(): AppFilter = effect {
+    val packageManager = inject<PackageManager>()
+    return@effect CachingAppFilter { app ->
         packageManager.getLaunchIntentForPackage(app.packageName) != null
     }
 }
 
-fun intentAppFilter(intent: Intent) = effectOf<AppFilter> {
-    val packageManager = +inject<PackageManager>()
+@Composable
+fun intentAppFilter(intent: Intent): AppFilter = effect {
+    val packageManager = inject<PackageManager>()
     val mediaApps by lazy {
         packageManager.queryIntentActivities(intent, 0)
             .map { it.activityInfo.applicationInfo.packageName }
     }
-    return@effectOf CachingAppFilter { it.packageName in mediaApps }
+    return@effect CachingAppFilter { it.packageName in mediaApps }
 }

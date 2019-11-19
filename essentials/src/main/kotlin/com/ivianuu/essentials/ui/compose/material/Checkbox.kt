@@ -20,8 +20,6 @@ import androidx.animation.FloatPropKey
 import androidx.animation.TransitionSpec
 import androidx.animation.transitionDefinition
 import androidx.compose.Composable
-import androidx.compose.memo
-import androidx.compose.unaryPlus
 import androidx.ui.animation.ColorPropKey
 import androidx.ui.animation.Transition
 import androidx.ui.core.Draw
@@ -42,6 +40,8 @@ import androidx.ui.layout.Wrap
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.ripple.Ripple
 import com.ivianuu.essentials.ui.compose.core.composable
+import com.ivianuu.essentials.ui.compose.core.invoke
+import com.ivianuu.essentials.ui.compose.core.memo
 
 // todo remove once original is useable
 
@@ -49,7 +49,7 @@ import com.ivianuu.essentials.ui.compose.core.composable
 fun EsCheckbox(
     checked: Boolean,
     onCheckedChange: ((Boolean) -> Unit)?,
-    color: Color = (+MaterialTheme.colors()).secondary
+    color: Color = MaterialTheme.colors()().secondary
 ) = composable("EsCheckbox") {
     Wrap {
         Ripple(bounded = false) {
@@ -66,8 +66,8 @@ fun EsCheckbox(
 
 @Composable
 private fun DrawCheckbox(checked: Boolean, activeColor: Color) = composable("DrawCheckbox") {
-    val unselectedColor = ((+MaterialTheme.colors()).onSurface).copy(alpha = UncheckedBoxOpacity)
-    val definition = +memo(activeColor, unselectedColor) {
+    val unselectedColor = MaterialTheme.colors()().onSurface.copy(alpha = UncheckedBoxOpacity)
+    val definition = memo(activeColor, unselectedColor) {
         generateTransitionDefinition(activeColor, unselectedColor)
     }
     Transition(definition = definition, toState = checked) { state ->

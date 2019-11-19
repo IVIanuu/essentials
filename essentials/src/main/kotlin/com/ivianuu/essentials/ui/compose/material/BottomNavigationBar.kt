@@ -19,11 +19,6 @@ package com.ivianuu.essentials.ui.compose.material
 import androidx.compose.Ambient
 import androidx.compose.Composable
 import androidx.compose.State
-import androidx.compose.ambient
-import androidx.compose.effectOf
-import androidx.compose.memo
-import androidx.compose.state
-import androidx.compose.unaryPlus
 import androidx.ui.core.Text
 import androidx.ui.core.WithConstraints
 import androidx.ui.core.coerceIn
@@ -41,17 +36,22 @@ import androidx.ui.layout.MainAxisAlignment
 import androidx.ui.layout.Row
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.ripple.Ripple
+import com.ivianuu.essentials.ui.compose.core.ambient
 import com.ivianuu.essentials.ui.compose.core.composable
+import com.ivianuu.essentials.ui.compose.core.effect
+import com.ivianuu.essentials.ui.compose.core.invoke
+import com.ivianuu.essentials.ui.compose.core.memo
+import com.ivianuu.essentials.ui.compose.core.state
 import com.ivianuu.essentials.ui.compose.core.withDensity
 import com.ivianuu.essentials.ui.compose.layout.Swapper
 import com.ivianuu.essentials.ui.compose.layout.SwapperController
 
 @Composable
 fun <T> BottomNavigationBar(
-    color: Color = (+MaterialTheme.colors()).primary,
+    color: Color = MaterialTheme.colors()().primary,
     item: @Composable() (Int, T) -> Unit
 ) = composable("BottomNavigationBar") {
-    val bottomNavigationController = +ambientBottomNavigationController<T>()
+    val bottomNavigationController = ambientBottomNavigationController<T>()
     BottomNavigationBar(
         items = bottomNavigationController.items,
         selectedIndex = bottomNavigationController.selectedIndex,
@@ -64,7 +64,7 @@ fun <T> BottomNavigationBar(
 fun <T> BottomNavigationBar(
     items: List<T>,
     selectedIndex: Int,
-    color: Color = (+MaterialTheme.colors()).primary,
+    color: Color = MaterialTheme.colors()().primary,
     item: @Composable() (Int, T) -> Unit
 ) = composable("BottomNavigationBar") {
     EsSurface(color = color, elevation = BottomNavigationBarElevation) {
@@ -75,7 +75,7 @@ fun <T> BottomNavigationBar(
                     crossAxisAlignment = CrossAxisAlignment.Center
                 ) {
                     val itemWidth = (thisConstraints.maxWidth / items.size)
-                    val itemConstraints = +withDensity {
+                    val itemConstraints = withDensity {
                         DpConstraints(
                             minWidth = BottomNavigationBarItemMinWidth,
                             maxWidth = itemWidth.toDp().coerceIn(
@@ -107,8 +107,8 @@ fun BottomNavigationBarItem(
     text: String,
     icon: Image
 ) = composable("BottomNavigationBarItem") {
-    val bottomNavigationController = +ambientBottomNavigationController<Any?>()
-    val index = +ambient(BottomNavigationItemIndexAmbient)
+    val bottomNavigationController = ambientBottomNavigationController<Any?>()
+    val index = ambient(BottomNavigationItemIndexAmbient)
 
     BottomNavigationBarItem(
         selected = bottomNavigationController.selectedIndex == index,
@@ -139,13 +139,13 @@ fun BottomNavigationBarItem(
                     mainAxisAlignment = MainAxisAlignment.Center,
                     crossAxisAlignment = CrossAxisAlignment.Center
                 ) {
-                    val tint = (+colorForCurrentBackground()).copy(
+                    val tint = colorForCurrentBackground().copy(
                         alpha = if (selected) 1f else 0.6f
                     )
-                    val iconStyle = (+currentIconStyle()).copy(color = tint)
+                    val iconStyle = currentIconStyle().copy(color = tint)
                     Icon(image = icon, style = iconStyle)
 
-                    val textStyle = ((+MaterialTheme.typography()).caption).copy(color = tint)
+                    val textStyle = MaterialTheme.typography()().caption.copy(color = tint)
                     Text(text = text, style = textStyle)
                 }
             }
@@ -158,15 +158,15 @@ fun <T> BottomNavigationSwapper(
     keepState: Boolean = false,
     content: @Composable() (Int, T) -> Unit
 ) = composable("BottomNavigationSwapper") {
-    val bottomNavigationController = +ambientBottomNavigationController<T>()
-    val swapperController = +memo {
+    val bottomNavigationController = ambientBottomNavigationController<T>()
+    val swapperController = memo {
         SwapperController(
             initial = bottomNavigationController.selectedItem,
             keepState = keepState
         )
     }
 
-    +memo(bottomNavigationController.selectedItem) {
+    memo(bottomNavigationController.selectedItem) {
         swapperController.current = bottomNavigationController.selectedItem
     }
 
@@ -193,14 +193,14 @@ fun <T> BottomNavigationController(
     initialIndex: Int = 0,
     children: @Composable() () -> Unit
 ) {
-    val selectedIndex = +state { initialIndex }
-    val bottomNavigationController = +memo { BottomNavigationController(items, selectedIndex) }
+    val selectedIndex = state { initialIndex }
+    val bottomNavigationController = memo { BottomNavigationController(items, selectedIndex) }
     bottomNavigationController.items = items
     BottomNavigationControllerAmbient.Provider(bottomNavigationController, children)
 }
 
-fun <T> ambientBottomNavigationController() = effectOf<BottomNavigationController<T>> {
-    +ambient(BottomNavigationControllerAmbient) as BottomNavigationController<T>
+fun <T> ambientBottomNavigationController(): BottomNavigationController<T> = effect {
+    ambient(BottomNavigationControllerAmbient) as BottomNavigationController<T>
 }
 
 class BottomNavigationController<T>(

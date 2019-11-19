@@ -17,10 +17,6 @@
 package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.Composable
-import androidx.compose.Effect
-import androidx.compose.effectOf
-import androidx.compose.memo
-import androidx.compose.unaryPlus
 import androidx.ui.core.Draw
 import androidx.ui.core.Opacity
 import androidx.ui.core.PxSize
@@ -43,6 +39,8 @@ import com.ivianuu.essentials.ui.compose.common.navigateOnClick
 import com.ivianuu.essentials.ui.compose.common.scrolling.ScrollableList
 import com.ivianuu.essentials.ui.compose.composeControllerRoute
 import com.ivianuu.essentials.ui.compose.core.composable
+import com.ivianuu.essentials.ui.compose.core.invoke
+import com.ivianuu.essentials.ui.compose.core.memo
 import com.ivianuu.essentials.ui.compose.core.staticComposable
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
@@ -59,7 +57,7 @@ val homeRoute = composeControllerRoute {
             EsTopAppBar(
                 title = { Text("Home") },
                 trailing = {
-                    val toaster = +inject<Toaster>()
+                    val toaster = inject<Toaster>()
                     PopupMenuButton(
                         items = listOf(
                             "Option 1",
@@ -75,15 +73,15 @@ val homeRoute = composeControllerRoute {
             )
         },
         body = {
-            val items = +memo { HomeItem.values().toList().sortedBy { it.name } }
+            val items = memo { HomeItem.values().toList().sortedBy { it.name } }
             ScrollableList(
                 items = items,
                 itemSizeProvider = { if (it != items.lastIndex) 57.dp else 56.dp }
             ) { index, item ->
                 staticComposable(item) {
                     Column {
-                        val route = +item.route
-                        HomeItem(item = item, onClick = +navigateOnClick { route })
+                        val route = item.route()
+                        HomeItem(item = item, onClick = navigateOnClick { route })
                         if (index != items.lastIndex) {
                             HomeDivider()
                         }
@@ -117,7 +115,7 @@ private fun HomeItem(
 @Composable
 private fun ColorAvatar(color: Color) = staticComposable("ColorAvatar") {
     Container(width = 40.dp, height = 40.dp) {
-        val paint = +memo {
+        val paint = memo {
             Paint().apply { this.color = color }
         }
         Draw { canvas: Canvas, parentSize: PxSize ->
@@ -134,7 +132,7 @@ private fun ColorAvatar(color: Color) = staticComposable("ColorAvatar") {
 private fun HomeDivider() = staticComposable("HomeDivider") {
     Padding(left = 72.dp) {
         Opacity(0.12f) {
-            Divider(color = ((+MaterialTheme.colors()).onSurface))
+            Divider(color = (MaterialTheme.colors()().onSurface))
         }
     }
 }
@@ -142,19 +140,19 @@ private fun HomeDivider() = staticComposable("HomeDivider") {
 enum class HomeItem(
     val title: String,
     val color: Color,
-    val route: Effect<Route>
+    val route: @Composable() () -> Route
 ) {
     About(
         title = "About",
         color = Color.Yellow,
-        route = effectOf { aboutRoute() }
+        route = { aboutRoute() }
     ),
     AppPicker(
         title = "App picker",
         color = Color.Blue,
-        route = effectOf {
+        route = {
             appPickerRoute(
-                appFilter = +intentAppFilter(
+                appFilter = intentAppFilter(
                     android.content.Intent(android.provider.MediaStore.INTENT_ACTION_MUSIC_PLAYER)
                 )
             )
@@ -163,76 +161,76 @@ enum class HomeItem(
     BottomNavigation(
         title = "Bottom navigation",
         color = Color.Red,
-        route = effectOf { bottomNavigationRoute }
+        route = { bottomNavigationRoute }
     ),
     CheckApps(
         title = "Check apps",
         color = Color.Green,
-        route = effectOf { checkAppsRoute }
+        route = { checkAppsRoute }
     ),
     Chips(
         title = "Chips",
         color = Color.Cyan,
-        route = effectOf { chipsRoute }
+        route = { chipsRoute }
     ),
     Counter(
         title = "Counter",
         color = Color.Yellow,
-        route = effectOf { counterRoute }
+        route = { counterRoute }
     ),
     Dialogs(
         title = "Dialogs",
         color = Color.Gray,
-        route = effectOf { dialogsRoute }
+        route = { dialogsRoute }
     ),
     Drawer(
         title = "Drawer",
         color = Color.Blue,
-        route = effectOf { drawerRoute }
+        route = { drawerRoute }
     ),
     NavBar(
         title = "Nav bar",
         color = Color.Green,
-        route = effectOf { navBarRoute }
+        route = { navBarRoute }
     ),
     Navigation(
         title = "Navigation",
         color = Color.Red,
-        route = effectOf { navigationRoute }
+        route = { navigationRoute }
     ),
     Prefs(
         title = "Prefs",
         color = Color.Magenta,
-        route = effectOf { prefsRoute }
+        route = { prefsRoute }
     ),
     Scaffold(
         title = "Scaffold",
         color = Color.Green,
-        route = effectOf { scaffoldRoute }
+        route = { scaffoldRoute }
     ),
     Sliver(
         title = "Sliver",
         color = Color.Cyan,
-        route = effectOf { sliverRoute }
+        route = { sliverRoute }
     ),
     Tabs(
         title = "Tabs",
         color = Color.Yellow,
-        route = effectOf { tabsRoute }
+        route = { tabsRoute }
     ),
     TextInput(
         title = "Text input",
         color = Color.Magenta,
-        route = effectOf { textInputRoute }
+        route = { textInputRoute }
     ),
     Timer(
         title = "Timer",
         color = Color.Cyan,
-        route = effectOf { timerRoute }
+        route = { timerRoute }
     ),
     Twilight(
         title = "Twilight",
         color = Color.Gray,
-        route = effectOf { twilightSettingsRoute }
+        route = { twilightSettingsRoute }
     )
 }

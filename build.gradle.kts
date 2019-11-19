@@ -31,6 +31,7 @@ buildscript {
         classpath(Deps.androidGradlePlugin)
         classpath(Deps.buildConfigGradlePlugin)
         classpath(Deps.bintrayGradlePlugin)
+        classpath(Deps.essentialsKotlinCompilerGradlePlugin)
         classpath(Deps.jarJarGradlePlugin)
         classpath(Deps.Kotlin.gradlePlugin)
         classpath(Deps.mavenGradlePlugin)

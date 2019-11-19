@@ -17,8 +17,6 @@
 package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.frames.modelListOf
-import androidx.compose.memo
-import androidx.compose.unaryPlus
 import androidx.ui.core.Alignment
 import androidx.ui.core.Direction
 import androidx.ui.core.Px
@@ -38,13 +36,15 @@ import com.ivianuu.essentials.ui.compose.common.scrolling.sliver.SliverList
 import com.ivianuu.essentials.ui.compose.common.scrolling.sliver.SliverScroller
 import com.ivianuu.essentials.ui.compose.common.scrolling.sliver.applyGrowthDirection
 import com.ivianuu.essentials.ui.compose.composeControllerRoute
+import com.ivianuu.essentials.ui.compose.core.invoke
+import com.ivianuu.essentials.ui.compose.core.memo
 import com.ivianuu.essentials.ui.compose.core.withDensity
 import com.ivianuu.essentials.ui.compose.layout.NonNullSingleChildLayout
 import com.ivianuu.essentials.ui.compose.material.SimpleListItem
 
 
 val sliverRoute = composeControllerRoute {
-    val indices = +memo {
+    val indices = memo {
         modelListOf<Int>().apply {
             (1..1000).forEach { this += it }
         }
@@ -55,7 +55,7 @@ val sliverRoute = composeControllerRoute {
     SliverScroller {
         SliverList(
             items = indices,
-            itemSize = +withDensity { 48.dp.toPx() },
+            itemSize = withDensity { 48.dp.toPx() },
             item = { _, item ->
                 SimpleListItem(
                     title = { Text("Item $item") },
@@ -84,7 +84,7 @@ private fun SliverChildren.AppBarSliver() = Sliver { constraints ->
 
     content(geometry = geometry) {
         NonNullSingleChildLayout(child = {
-            Surface(color = ((+MaterialTheme.colors()).primary).copy(alpha = 0.5f)) {
+            Surface(color = MaterialTheme.colors()().primary.copy(alpha = 0.5f)) {
                 Container(
                     height = paintSize.toDp(),
                     alignment = Alignment.BottomLeft,
@@ -92,7 +92,7 @@ private fun SliverChildren.AppBarSliver() = Sliver { constraints ->
                 ) {
                     Text(
                         text = "Hello",
-                        style = (+MaterialTheme.typography()).h6
+                        style = MaterialTheme.typography()().h6
                     )
                 }
             }

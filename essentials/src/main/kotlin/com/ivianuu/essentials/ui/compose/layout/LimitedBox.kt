@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.ui.compose.layout
 
 import androidx.compose.Composable
-import androidx.compose.unaryPlus
 import androidx.ui.core.Dp
 import androidx.ui.core.PxPosition
 import androidx.ui.core.hasBoundedHeight
@@ -31,8 +30,8 @@ fun LimitedBox(
     maxHeight: Dp = Dp.Infinity,
     child: @Composable() () -> Unit
 ) = composable("LimitedBox") {
-    val maxWidthPx = +withDensity { maxWidth.toIntPx() }
-    val maxHeightPx = +withDensity { maxHeight.toIntPx() }
+    val maxWidthPx = withDensity { maxWidth.toIntPx() }
+    val maxHeightPx = withDensity { maxHeight.toIntPx() }
 
     SingleChildLayout(child = child) { measureable, constraints ->
         val limitedConstraints = constraints.copy(

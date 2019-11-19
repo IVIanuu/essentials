@@ -17,8 +17,6 @@
 package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.Composable
-import androidx.compose.state
-import androidx.compose.unaryPlus
 import androidx.ui.core.Text
 import androidx.ui.core.dp
 import androidx.ui.layout.Column
@@ -31,6 +29,8 @@ import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.compose.common.scrolling.Scroller
 import com.ivianuu.essentials.ui.compose.composeControllerRoute
 import com.ivianuu.essentials.ui.compose.core.composable
+import com.ivianuu.essentials.ui.compose.core.invoke
+import com.ivianuu.essentials.ui.compose.core.state
 import com.ivianuu.essentials.ui.compose.dialog.AlertDialogButtonLayout
 import com.ivianuu.essentials.ui.compose.dialog.ColorPickerDialog
 import com.ivianuu.essentials.ui.compose.dialog.DialogButton
@@ -119,7 +119,7 @@ val dialogsRoute = composeControllerRoute(
                     ) {
                         MaterialDialog(
                             title = { Text("With icon") },
-                            icon = { Icon(+drawableResource(R.drawable.ic_settings)) },
+                            icon = { Icon(drawableResource(R.drawable.ic_settings)) },
                             positiveButton = {
                                 DialogCloseButton(
                                     "OK"
@@ -236,11 +236,11 @@ val dialogsRoute = composeControllerRoute(
                     }
 
                     val singleChoiceItems = listOf(1, 2, 3, 4, 5)
-                    val (selectedSingleChoiceItem, setSelectedSingleChoiceItem) = +state { 1 }
+                    val (selectedSingleChoiceItem, setSelectedSingleChoiceItem) = state { 1 }
                     DialogLauncherButton(
                         text = "Single choice list"
                     ) {
-                        val (tmpSelectedItem, setTmpSelectedItem) = +state { selectedSingleChoiceItem }
+                        val (tmpSelectedItem, setTmpSelectedItem) = state { selectedSingleChoiceItem }
 
                         SingleChoiceListDialog(
                             title = { Text("Single choice") },
@@ -263,11 +263,11 @@ val dialogsRoute = composeControllerRoute(
                     }
 
                     val multiChoiceItems = listOf("A", "B", "C")
-                    val (selectedMultiChoiceItems, setSelectedMultiChoiceItems) = +state { multiChoiceItems }
+                    val (selectedMultiChoiceItems, setSelectedMultiChoiceItems) = state { multiChoiceItems }
                     DialogLauncherButton(
                         text = "Multi choice list"
                     ) {
-                        val (tmpSelectedItems, setTmpSelectedItems) = +state { selectedMultiChoiceItems }
+                        val (tmpSelectedItems, setTmpSelectedItems) = state { selectedMultiChoiceItems }
 
                         MultiChoiceListDialog(
                             title = { Text("Multi choice") },
@@ -288,8 +288,8 @@ val dialogsRoute = composeControllerRoute(
                         )
                     }
 
-                    val primaryColor = (+MaterialTheme.colors()).primary
-                    val (currentColor, setCurrentColor) = +state { primaryColor }
+                    val primaryColor = MaterialTheme.colors()().primary
+                    val (currentColor, setCurrentColor) = state { primaryColor }
                     DialogLauncherButton(text = "Color Picker") {
                         ColorPickerDialog(
                             title = { Text("Color Picker") },
@@ -299,9 +299,9 @@ val dialogsRoute = composeControllerRoute(
                         )
                     }
 
-                    val (textInputValue, setTextInputValue) = +state { "" }
+                    val (textInputValue, setTextInputValue) = state { "" }
                     DialogLauncherButton(text = "Text input") {
-                        val (tmpTextInputValue, setTmpTextInputValue) = +state { textInputValue }
+                        val (tmpTextInputValue, setTmpTextInputValue) = state { textInputValue }
                         TextInputDialog(
                             title = { Text("Text input") },
                             value = tmpTextInputValue,
@@ -333,7 +333,7 @@ private fun DialogLauncherButton(
     dismissible: Boolean = true,
     dialog: @Composable() () -> Unit
 ) = composable("DialogLauncherButton") {
-    val navigator = +inject<Navigator>()
+    val navigator = inject<Navigator>()
     Button(
         text = text,
         onClick = {

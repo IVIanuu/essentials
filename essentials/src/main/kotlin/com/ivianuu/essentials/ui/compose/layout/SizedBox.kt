@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.ui.compose.layout
 
 import androidx.compose.Composable
-import androidx.compose.unaryPlus
 import androidx.ui.core.Constraints
 import androidx.ui.core.Dp
 import androidx.ui.core.IntPx
@@ -51,8 +50,8 @@ fun SizedBox(
     height: Dp? = null,
     child: @Composable() () -> Unit
 ) = composable("SizedBox") {
-    val widthPx = +withDensity { width?.toIntPx() }
-    val heightPx = +withDensity { height?.toIntPx() }
+    val widthPx = withDensity { width?.toIntPx() }
+    val heightPx = withDensity { height?.toIntPx() }
     SingleChildLayout(child = child) { measureable, incomingConstraints ->
         if (measureable == null) return@SingleChildLayout layout(
             incomingConstraints.minWidth,
