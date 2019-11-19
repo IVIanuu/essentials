@@ -53,9 +53,8 @@ fun aboutRoute(
     )
 }
 
-@JvmOverloads
 @Composable
-fun _AboutSection(
+fun AboutSection(
     buildInfo: BuildInfo = +inject<BuildInfo>(),
     showHeader: Boolean = false,
     hasDebugPackageName: Boolean = buildInfo.isDebug,

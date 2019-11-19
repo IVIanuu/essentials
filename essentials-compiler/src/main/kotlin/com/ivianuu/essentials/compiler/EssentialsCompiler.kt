@@ -16,8 +16,9 @@
 
 package com.ivianuu.essentials.compiler
 
+import com.ivianuu.processingx.steps.ProcessingStep
 import com.ivianuu.processingx.steps.StepProcessor
 
 class EssentialsCompiler : StepProcessor() {
-    override fun initSteps() = setOf(ComposeStep())
+    override fun initSteps() = emptySet<ProcessingStep>()//setOf(ComposeStep())
 }
