@@ -18,17 +18,18 @@ package com.ivianuu.essentials.kotlin.compiler
 
 import org.jetbrains.kotlin.codegen.CallBasedArgumentGenerator
 import org.jetbrains.kotlin.codegen.CallableMethod
+import org.jetbrains.kotlin.codegen.SamCodegenUtil
 import org.jetbrains.kotlin.codegen.StackValue
 import org.jetbrains.kotlin.codegen.extensions.ExpressionCodegenExtension
+import org.jetbrains.kotlin.codegen.generateCallReceiver
 import org.jetbrains.kotlin.descriptors.FunctionDescriptor
 import org.jetbrains.kotlin.name.FqName
+import org.jetbrains.kotlin.resolve.calls.callResolverUtil.getSuperCallExpression
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.jetbrains.kotlin.types.KotlinType
 import org.jetbrains.org.objectweb.asm.Label
 import org.jetbrains.org.objectweb.asm.Type
 import org.jetbrains.org.objectweb.asm.commons.InstructionAdapter
-
-val COMPOSABLE_ANNOTATION = FqName("androidx.compose.Composable")
 
 class ComposableExpressionCodegenExtension : ExpressionCodegenExtension {
 
@@ -48,9 +49,10 @@ class ComposableExpressionCodegenExtension : ExpressionCodegenExtension {
 
         if (resolvedCall.resultingDescriptor !is FunctionDescriptor) return null
 
+        val superCallTarget = getSuperCallExpression(resolvedCall.call)
         val callable = c.typeMapper.mapToCallableMethod(
-            resolvedCall.resultingDescriptor as FunctionDescriptor,
-            false,
+            SamCodegenUtil.resolveSamAdapter(resolvedCall.resultingDescriptor as FunctionDescriptor),
+            superCallTarget != null,
             null,
             resolvedCall
         )
@@ -64,8 +66,10 @@ class ComposableExpressionCodegenExtension : ExpressionCodegenExtension {
         )
 
         return ComposableStackValue(
-            c,
-            argumentGenerator, resolvedCall, callable
+            c = c,
+            argumentGenerator = argumentGenerator,
+            resolvedCall = resolvedCall,
+            callable = callable
         )
     }
 
@@ -76,6 +80,7 @@ class ComposableExpressionCodegenExtension : ExpressionCodegenExtension {
         private val callable: CallableMethod
     ) : StackValue(Type.VOID_TYPE) {
         override fun putSelector(type: Type, kotlinType: KotlinType?, v: InstructionAdapter) {
+            // store the composer
             val composerType = Type.getType("Landroidx/compose/ViewComposer;")
             val composerStoreIndex = c.codegen.frameMap.enterTemp(composerType)
             v.invokestatic(
@@ -119,15 +124,15 @@ class ComposableExpressionCodegenExtension : ExpressionCodegenExtension {
                 .sortedBy { it.index }
 
             val typeByParam = parameters.associateWith {
-                c.typeMapper.mapType(it)
+                callable.getValueParameters()[it.index].asmType
             }
             val storeIndexByParam = parameters.associateWith {
                 c.codegen.frameMap.enterTemp(typeByParam.getValue(it))
             }
 
             // store each argument
-            parameters.reversed().forEach {
-                v.store(storeIndexByParam.getValue(it), typeByParam.getValue(it))
+            parameters.reversed().forEachIndexed { index, descriptor ->
+                v.store(storeIndexByParam.getValue(descriptor), typeByParam.getValue(descriptor))
             }
 
             val invokeLabel = Label()
@@ -137,47 +142,7 @@ class ComposableExpressionCodegenExtension : ExpressionCodegenExtension {
             parameters.forEach {
                 v.load(composerStoreIndex, composerType)
                 v.load(storeIndexByParam.getValue(it), typeByParam.getValue(it))
-                when (typeByParam.getValue(it)) {
-                    Type.INT_TYPE -> {
-                        v.invokestatic(
-                            "java/lang/Integer",
-                            "valueOf",
-                            "(I)Ljava/lang/Integer",
-                            false
-                        )
-                    }
-                    Type.BOOLEAN_TYPE -> {
-                        v.invokestatic(
-                            "java/lang/Boolean",
-                            "valueOf",
-                            "(Z)Ljava/lang/Boolean",
-                            false
-                        )
-                    }
-                    Type.CHAR_TYPE -> {
-                        v.invokestatic(
-                            "java/lang/Character",
-                            "valueOf",
-                            "(C)Ljava/lang/Character",
-                            false
-                        )
-                    }
-                    Type.SHORT_TYPE -> {
-                        v.invokestatic("java/lang/Short", "valueOf", "(S)Ljava/lang/Short", false)
-                    }
-                    Type.LONG_TYPE -> {
-                        v.invokestatic("java/lang/Long", "valueOf", "(J)Ljava/lang/Long", false)
-                    }
-                    Type.BYTE_TYPE -> {
-                        v.invokestatic("java/lang/Byte", "valueOf", "(B)Ljava/lang/Byte", false)
-                    }
-                    Type.FLOAT_TYPE -> {
-                        v.invokestatic("java/lang/Float", "valueOf", "(F)Ljava/lang/Float", false)
-                    }
-                    Type.DOUBLE_TYPE -> {
-                        v.invokestatic("java/lang/Double", "valueOf", "(D)Ljava/lang/Double", false)
-                    }
-                }
+                v.ensureBoxed(typeByParam.getValue(it))
                 v.invokevirtual(
                     "androidx/compose/ViewComposer",
                     "changed",
@@ -209,16 +174,23 @@ class ComposableExpressionCodegenExtension : ExpressionCodegenExtension {
                 false
             )
 
-            // invoke composable
-            parameters.forEach {
-                v.load(storeIndexByParam.getValue(it), typeByParam.getValue(it))
-                c.codegen.frameMap.leaveTemp(typeByParam.getValue(it))
+            if (resolvedCall.dispatchReceiver != null || resolvedCall.extensionReceiver != null) {
+                c.codegen.generateCallReceiver(resolvedCall).put(v)
+            }
+
+            println("parameters ${parameters.map { it.name to it.type }} callable ${callable.getValueParameters().map { it.asmType }}")
+
+            // push parameters
+            parameters.forEachIndexed { index, descriptor ->
+                v.load(storeIndexByParam.getValue(descriptor), typeByParam.getValue(descriptor))
+                c.codegen.frameMap.leaveTemp(typeByParam.getValue(descriptor))
             }
             callable.genInvokeInstruction(v)
 
             // end invocation
             v.load(composerStoreIndex, composerType)
             v.invokevirtual("androidx.composer.ViewComposer", "endGroup", "()V", false)
+            v.goTo(endLabel)
 
             // skip current group
             v.mark(skipLabel)
@@ -232,6 +204,52 @@ class ComposableExpressionCodegenExtension : ExpressionCodegenExtension {
 
             c.codegen.frameMap.leaveTemp(composerType)
         }
+
+        private fun InstructionAdapter.ensureBoxed(type: Type) {
+            when (type) {
+                Type.INT_TYPE -> {
+                    invokestatic(
+                        "java/lang/Integer",
+                        "valueOf",
+                        "(I)Ljava/lang/Integer",
+                        false
+                    )
+                }
+                Type.BOOLEAN_TYPE -> {
+                    invokestatic(
+                        "java/lang/Boolean",
+                        "valueOf",
+                        "(Z)Ljava/lang/Boolean",
+                        false
+                    )
+                }
+                Type.CHAR_TYPE -> {
+                    invokestatic(
+                        "java/lang/Character",
+                        "valueOf",
+                        "(C)Ljava/lang/Character",
+                        false
+                    )
+                }
+                Type.SHORT_TYPE -> {
+                    invokestatic("java/lang/Short", "valueOf", "(S)Ljava/lang/Short", false)
+                }
+                Type.LONG_TYPE -> {
+                    invokestatic("java/lang/Long", "valueOf", "(J)Ljava/lang/Long", false)
+                }
+                Type.BYTE_TYPE -> {
+                    invokestatic("java/lang/Byte", "valueOf", "(B)Ljava/lang/Byte", false)
+                }
+                Type.FLOAT_TYPE -> {
+                    invokestatic("java/lang/Float", "valueOf", "(F)Ljava/lang/Float", false)
+                }
+                Type.DOUBLE_TYPE -> {
+                    invokestatic("java/lang/Double", "valueOf", "(D)Ljava/lang/Double", false)
+                }
+            }
+        }
     }
 
 }
+
+private val COMPOSABLE_ANNOTATION = FqName("androidx.compose.Composable")
