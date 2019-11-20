@@ -30,7 +30,7 @@ object Build {
 object Publishing {
     const val groupId = "com.ivianuu.essentials"
     const val vcsUrl = "https://github.com/IVIanuu/essentials"
-    const val version = "${Build.versionName}-dev217"
+    const val version = "${Build.versionName}-dev236"
 }
 
 object Deps {
@@ -111,7 +111,7 @@ object Deps {
     const val epoxyPrefs = "com.ivianuu.epoxyprefs:epoxyprefs:0.0.1-dev-21"
 
     const val essentialsKotlinCompilerGradlePlugin =
-        "com.ivianuu.essentials:essentials-kotlin-compiler-gradle-plugin:0.0.1-dev217"
+        "com.ivianuu.essentials:essentials-kotlin-compiler-gradle-plugin:0.0.1-dev210"
 
     object Injekt {
         private const val version = "0.0.1-dev73"

@@ -23,8 +23,9 @@ import org.jetbrains.kotlin.codegen.StackValue
 import org.jetbrains.kotlin.codegen.extensions.ExpressionCodegenExtension
 import org.jetbrains.kotlin.codegen.generateCallReceiver
 import org.jetbrains.kotlin.descriptors.FunctionDescriptor
-import org.jetbrains.kotlin.name.FqName
+import org.jetbrains.kotlin.descriptors.ValueParameterDescriptor
 import org.jetbrains.kotlin.resolve.calls.callResolverUtil.getSuperCallExpression
+import org.jetbrains.kotlin.resolve.calls.model.DefaultValueArgument
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.jetbrains.kotlin.types.KotlinType
 import org.jetbrains.kotlin.types.typeUtil.isUnit
@@ -32,10 +33,13 @@ import org.jetbrains.org.objectweb.asm.Label
 import org.jetbrains.org.objectweb.asm.Type
 import org.jetbrains.org.objectweb.asm.commons.InstructionAdapter
 
-class ComposableExpressionCodegenExtension : ExpressionCodegenExtension {
+// todo intercept composable lambda calls
 
-    override val shouldGenerateClassSyntheticPartsInLightClassesMode: Boolean
-        get() = true
+// todo wrap in start restart scope
+// todo add pivotal support
+// todo move source location gen to this class
+
+class ComposableExpressionCodegenExtension : ExpressionCodegenExtension {
 
     override fun applyFunction(
         receiver: StackValue,
@@ -44,12 +48,8 @@ class ComposableExpressionCodegenExtension : ExpressionCodegenExtension {
     ): StackValue? {
         val candidate = resolvedCall.candidateDescriptor
 
-        if (!candidate.annotations.hasAnnotation(COMPOSABLE_ANNOTATION)) {
-            return null
-        }
-
+        if (!candidate.annotations.hasAnnotation(COMPOSABLE_ANNOTATION)) return null
         if (resolvedCall.resultingDescriptor !is FunctionDescriptor) return null
-
         if (resolvedCall.resultingDescriptor.returnType?.isUnit() != true) return null
 
         val superCallTarget = getSuperCallExpression(resolvedCall.call)
@@ -61,6 +61,7 @@ class ComposableExpressionCodegenExtension : ExpressionCodegenExtension {
         )
 
         val callGenerator = c.codegen.defaultCallGenerator
+
         val descriptor = resolvedCall.resultingDescriptor
 
         val argumentGenerator = CallBasedArgumentGenerator(
@@ -85,6 +86,13 @@ class ComposableExpressionCodegenExtension : ExpressionCodegenExtension {
         private val callable: CallableMethod
     ) : StackValue(c.typeMapper.mapType(resolvedCall.candidateDescriptor.returnType!!)) {
 
+        data class ParameterDescriptor(
+            val descriptor: ValueParameterDescriptor,
+            val type: Type,
+            val storeIndex: Int,
+            val isDefault: Boolean
+        )
+
         override fun putSelector(type: Type, kotlinType: KotlinType?, v: InstructionAdapter) {
             val invokeLabel = Label()
             val skipLabel = Label()
@@ -93,18 +101,7 @@ class ComposableExpressionCodegenExtension : ExpressionCodegenExtension {
             // store the composer
             val composerType = Type.getType("Landroidx/compose/ViewComposer;")
             val composerStoreIndex = c.codegen.frameMap.enterTemp(composerType)
-            v.invokestatic(
-                "androidx/compose/ViewComposerKt",
-                "getComposer",
-                "()Landroidx/compose/ViewComposition;",
-                false
-            )
-            v.invokevirtual(
-                "androidx/compose/ViewComposition",
-                "getComposer",
-                "()Landroidx/compose/ViewComposer;",
-                false
-            )
+            v.getComposer()
             v.store(composerStoreIndex, composerType)
 
             // start group
@@ -129,34 +126,37 @@ class ComposableExpressionCodegenExtension : ExpressionCodegenExtension {
             )
 
             val parameters = resolvedCall.valueArguments.toList()
-                .map { it.first }
-                .sortedBy { it.index }
-
-            val typeByParam = parameters.associateWith {
-                callable.getValueParameters()[it.index].asmType
-            }
-            val storeIndexByParam = parameters.associateWith {
-                c.codegen.frameMap.enterTemp(typeByParam.getValue(it))
-            }
+                .sortedBy { it.first.index }
+                .map { (descriptor, valueArgument) ->
+                    val asmType = callable.getValueParameters()[descriptor.index].asmType
+                    ParameterDescriptor(
+                        descriptor = descriptor,
+                        type = asmType,
+                        storeIndex = c.codegen.frameMap.enterTemp(asmType),
+                        isDefault = valueArgument is DefaultValueArgument
+                    )
+                }
 
             // store each argument
-            parameters.reversed().forEachIndexed { index, descriptor ->
-                v.store(storeIndexByParam.getValue(descriptor), typeByParam.getValue(descriptor))
-            }
+            parameters.reversed()
+                .forEach { param ->
+                    v.store(param.storeIndex, param.type)
+                }
 
-            // todo filter default args
-            parameters.forEach {
-                v.load(composerStoreIndex, composerType)
-                v.load(storeIndexByParam.getValue(it), typeByParam.getValue(it))
-                v.ensureBoxed(typeByParam.getValue(it))
-                v.invokevirtual(
-                    "androidx/compose/ViewComposer",
-                    "changed",
-                    "(Ljava/lang/Object;)Z",
-                    false
-                )
-                v.ifne(invokeLabel)
-            }
+            parameters
+                .filterNot { it.isDefault }
+                .forEach { param ->
+                    v.load(composerStoreIndex, composerType)
+                    v.load(param.storeIndex, param.type)
+                    v.ensureBoxed(param.type)
+                    v.invokevirtual(
+                        "androidx/compose/ViewComposer",
+                        "changed",
+                        "(Ljava/lang/Object;)Z",
+                        false
+                    )
+                    v.ifne(invokeLabel)
+                }
 
             if (parameters.isNotEmpty()) {
                 v.load(composerStoreIndex, composerType)
@@ -186,9 +186,9 @@ class ComposableExpressionCodegenExtension : ExpressionCodegenExtension {
             }
 
             // push parameters
-            parameters.forEachIndexed { index, descriptor ->
-                v.load(storeIndexByParam.getValue(descriptor), typeByParam.getValue(descriptor))
-                c.codegen.frameMap.leaveTemp(typeByParam.getValue(descriptor))
+            parameters.forEach { param ->
+                v.load(param.storeIndex, param.type)
+                c.codegen.frameMap.leaveTemp(param.type)
             }
 
             val defaultMaskWasGenerated: Boolean =
@@ -264,5 +264,3 @@ class ComposableExpressionCodegenExtension : ExpressionCodegenExtension {
     }
 
 }
-
-private val COMPOSABLE_ANNOTATION = FqName("androidx.compose.Composable")
