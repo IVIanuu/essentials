@@ -27,6 +27,7 @@ import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.resolve.calls.callResolverUtil.getSuperCallExpression
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.jetbrains.kotlin.types.KotlinType
+import org.jetbrains.kotlin.types.typeUtil.isUnit
 import org.jetbrains.org.objectweb.asm.Label
 import org.jetbrains.org.objectweb.asm.Type
 import org.jetbrains.org.objectweb.asm.commons.InstructionAdapter
@@ -49,6 +50,8 @@ class ComposableExpressionCodegenExtension : ExpressionCodegenExtension {
 
         if (resolvedCall.resultingDescriptor !is FunctionDescriptor) return null
 
+        if (resolvedCall.resultingDescriptor.returnType?.isUnit() != true) return null
+
         val superCallTarget = getSuperCallExpression(resolvedCall.call)
         val callable = c.typeMapper.mapToCallableMethod(
             SamCodegenUtil.resolveSamAdapter(resolvedCall.resultingDescriptor as FunctionDescriptor),
@@ -61,7 +64,9 @@ class ComposableExpressionCodegenExtension : ExpressionCodegenExtension {
         val descriptor = resolvedCall.resultingDescriptor
 
         val argumentGenerator = CallBasedArgumentGenerator(
-            c.codegen, callGenerator, descriptor.valueParameters,
+            c.codegen,
+            callGenerator,
+            descriptor.valueParameters,
             callable.valueParameterTypes
         )
 
@@ -78,21 +83,26 @@ class ComposableExpressionCodegenExtension : ExpressionCodegenExtension {
         private val argumentGenerator: CallBasedArgumentGenerator,
         private val resolvedCall: ResolvedCall<*>,
         private val callable: CallableMethod
-    ) : StackValue(Type.VOID_TYPE) {
+    ) : StackValue(c.typeMapper.mapType(resolvedCall.candidateDescriptor.returnType!!)) {
+
         override fun putSelector(type: Type, kotlinType: KotlinType?, v: InstructionAdapter) {
+            val invokeLabel = Label()
+            val skipLabel = Label()
+            val endLabel = Label()
+
             // store the composer
             val composerType = Type.getType("Landroidx/compose/ViewComposer;")
             val composerStoreIndex = c.codegen.frameMap.enterTemp(composerType)
             v.invokestatic(
-                "androidx/compose.ViewComposerKt",
+                "androidx/compose/ViewComposerKt",
                 "getComposer",
-                "()Landroidx/compose/ViewComposition",
+                "()Landroidx/compose/ViewComposition;",
                 false
             )
             v.invokevirtual(
-                "androidx.compose.ViewComposition",
+                "androidx/compose/ViewComposition",
                 "getComposer",
-                "()Landroidx/compose/ViewComposer",
+                "()Landroidx/compose/ViewComposer;",
                 false
             )
             v.store(composerStoreIndex, composerType)
@@ -102,18 +112,17 @@ class ComposableExpressionCodegenExtension : ExpressionCodegenExtension {
             v.invokestatic(
                 "com/ivianuu/essentials/util/SourceLocationKt",
                 "sourceLocation",
-                "()Ljava/lang/Object",
+                "()Ljava/lang/Object;",
                 false
             )
             v.invokevirtual(
-                "androidx.composer.ViewComposer",
+                "androidx/compose/ViewComposer",
                 "startGroup",
                 "(Ljava/lang/Object;)V",
                 false
             )
 
-            // load arguments on top of the stack
-            argumentGenerator.generate(
+            val defaultArgs = argumentGenerator.generate(
                 resolvedCall.valueArgumentsByIndex!!,
                 resolvedCall.valueArguments.values.toList(),
                 resolvedCall.resultingDescriptor
@@ -135,10 +144,7 @@ class ComposableExpressionCodegenExtension : ExpressionCodegenExtension {
                 v.store(storeIndexByParam.getValue(descriptor), typeByParam.getValue(descriptor))
             }
 
-            val invokeLabel = Label()
-            val skipLabel = Label()
-            val endLabel = Label()
-
+            // todo filter default args
             parameters.forEach {
                 v.load(composerStoreIndex, composerType)
                 v.load(storeIndexByParam.getValue(it), typeByParam.getValue(it))
@@ -164,43 +170,50 @@ class ComposableExpressionCodegenExtension : ExpressionCodegenExtension {
             v.invokestatic(
                 "androidx/compose/ViewComposerCommonKt",
                 "getInvocation",
-                "()Ljava/lang/Object",
+                "()Ljava/lang/Object;",
                 false
             )
             v.invokevirtual(
-                "androidx.composer.ViewComposer",
+                "androidx/compose/ViewComposer",
                 "startGroup",
                 "(Ljava/lang/Object;)V",
                 false
             )
 
+            // push receiver
             if (resolvedCall.dispatchReceiver != null || resolvedCall.extensionReceiver != null) {
                 c.codegen.generateCallReceiver(resolvedCall).put(v)
             }
-
-            println("parameters ${parameters.map { it.name to it.type }} callable ${callable.getValueParameters().map { it.asmType }}")
 
             // push parameters
             parameters.forEachIndexed { index, descriptor ->
                 v.load(storeIndexByParam.getValue(descriptor), typeByParam.getValue(descriptor))
                 c.codegen.frameMap.leaveTemp(typeByParam.getValue(descriptor))
             }
-            callable.genInvokeInstruction(v)
+
+            val defaultMaskWasGenerated: Boolean =
+                defaultArgs.generateOnStackIfNeeded(c.codegen.defaultCallGenerator, false)
+
+            if (!defaultMaskWasGenerated) {
+                callable.genInvokeInstruction(v)
+            } else {
+                callable.genInvokeDefaultInstruction(v)
+            }
 
             // end invocation
             v.load(composerStoreIndex, composerType)
-            v.invokevirtual("androidx.composer.ViewComposer", "endGroup", "()V", false)
+            v.invokevirtual("androidx/compose/ViewComposer", "endGroup", "()V", false)
             v.goTo(endLabel)
 
             // skip current group
             v.mark(skipLabel)
             v.load(composerStoreIndex, composerType)
-            v.invokevirtual("androidx.composer.ViewComposer", "skipCurrentGroup", "()V", false)
+            v.invokevirtual("androidx/compose/ViewComposer", "skipCurrentGroup", "()V", false)
 
             // end group
             v.mark(endLabel)
             v.load(composerStoreIndex, composerType)
-            v.invokevirtual("androidx.composer.ViewComposer", "endGroup", "()V", false)
+            v.invokevirtual("androidx/compose/ViewComposer", "endGroup", "()V", false)
 
             c.codegen.frameMap.leaveTemp(composerType)
         }
@@ -211,7 +224,7 @@ class ComposableExpressionCodegenExtension : ExpressionCodegenExtension {
                     invokestatic(
                         "java/lang/Integer",
                         "valueOf",
-                        "(I)Ljava/lang/Integer",
+                        "(I)Ljava/lang/Integer;",
                         false
                     )
                 }
@@ -219,7 +232,7 @@ class ComposableExpressionCodegenExtension : ExpressionCodegenExtension {
                     invokestatic(
                         "java/lang/Boolean",
                         "valueOf",
-                        "(Z)Ljava/lang/Boolean",
+                        "(Z)Ljava/lang/Boolean;",
                         false
                     )
                 }
@@ -227,24 +240,24 @@ class ComposableExpressionCodegenExtension : ExpressionCodegenExtension {
                     invokestatic(
                         "java/lang/Character",
                         "valueOf",
-                        "(C)Ljava/lang/Character",
+                        "(C)Ljava/lang/Character;",
                         false
                     )
                 }
                 Type.SHORT_TYPE -> {
-                    invokestatic("java/lang/Short", "valueOf", "(S)Ljava/lang/Short", false)
+                    invokestatic("java/lang/Short", "valueOf", "(S)Ljava/lang/Short;", false)
                 }
                 Type.LONG_TYPE -> {
-                    invokestatic("java/lang/Long", "valueOf", "(J)Ljava/lang/Long", false)
+                    invokestatic("java/lang/Long", "valueOf", "(J)Ljava/lang/Long;", false)
                 }
                 Type.BYTE_TYPE -> {
-                    invokestatic("java/lang/Byte", "valueOf", "(B)Ljava/lang/Byte", false)
+                    invokestatic("java/lang/Byte", "valueOf", "(B)Ljava/lang/Byte;", false)
                 }
                 Type.FLOAT_TYPE -> {
-                    invokestatic("java/lang/Float", "valueOf", "(F)Ljava/lang/Float", false)
+                    invokestatic("java/lang/Float", "valueOf", "(F)Ljava/lang/Float;", false)
                 }
                 Type.DOUBLE_TYPE -> {
-                    invokestatic("java/lang/Double", "valueOf", "(D)Ljava/lang/Double", false)
+                    invokestatic("java/lang/Double", "valueOf", "(D)Ljava/lang/Double;", false)
                 }
             }
         }
