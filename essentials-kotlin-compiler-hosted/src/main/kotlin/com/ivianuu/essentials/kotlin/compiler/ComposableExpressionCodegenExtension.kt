@@ -59,6 +59,7 @@ import java.io.File
 
 // todo intercept composable lambda calls
 // todo wrap in start restart scope
+// todo accessed functions
 
 class ComposableExpressionCodegenExtension : ExpressionCodegenExtension {
 
@@ -223,7 +224,7 @@ private class ComposableStackValue(
             // check changes
             parameters
                 .filter { !it.isDefault }
-                .forEach { param ->
+                .forEachIndexed { index, param ->
                     v.load(composerStoreIndex, composerType)
                     v.load(param.storeIndex, param.type)
                     v.ensureBoxed(param.type)
@@ -233,8 +234,9 @@ private class ComposableStackValue(
                         "(Ljava/lang/Object;)Z",
                         false
                     )
-                    v.ifne(invokeLabel)
+                    if (index != 0) v.or(Type.INT_TYPE)
                 }
+            v.ifne(invokeLabel)
 
             v.load(composerStoreIndex, composerType)
             v.invokevirtual("androidx/compose/ViewComposer", "getInserting", "()Z", false)
