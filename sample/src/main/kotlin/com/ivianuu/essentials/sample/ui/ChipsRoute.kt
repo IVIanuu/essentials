@@ -56,7 +56,7 @@ val chipsRoute = composeControllerRoute {
 }
 
 @Composable
-private fun Chip(name: String) = composableWithKey("Chip:$name") {
+/*private*/ fun Chip(name: String) = composableWithKey("Chip:$name") {
     val toaster = inject<Toaster>()
     val color = memo { PrimaryColors.toList().shuffled().first() }
     Surface(color = color, shape = RoundedCornerShape(16.dp)) {

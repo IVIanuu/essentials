@@ -12,6 +12,9 @@
       <module fileurl="file://$PROJECT_DIR$/essentials-compiler/essentials-compiler.iml" filepath="$PROJECT_DIR$/essentials-compiler/essentials-compiler.iml" />
       <module fileurl="file://$PROJECT_DIR$/essentials/essentials-essentials.iml" filepath="$PROJECT_DIR$/essentials/essentials-essentials.iml" />
       <module fileurl="file://$PROJECT_DIR$/essentials-kotlin-compiler/essentials-essentials-kotlin-compiler.iml" filepath="$PROJECT_DIR$/essentials-kotlin-compiler/essentials-essentials-kotlin-compiler.iml" />
+      <module fileurl="file://$PROJECT_DIR$/essentials-kotlin-compiler-gradle-plugin/essentials-essentials-kotlin-compiler-gradle-plugin.iml" filepath="$PROJECT_DIR$/essentials-kotlin-compiler-gradle-plugin/essentials-essentials-kotlin-compiler-gradle-plugin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/essentials-kotlin-compiler-hosted/essentials-essentials-kotlin-compiler-hosted.iml" filepath="$PROJECT_DIR$/essentials-kotlin-compiler-hosted/essentials-essentials-kotlin-compiler-hosted.iml" />
+      <module fileurl="file://$PROJECT_DIR$/essentials-kotlin-compiler-ide-plugin/essentials-essentials-kotlin-compiler-ide-plugin.iml" filepath="$PROJECT_DIR$/essentials-kotlin-compiler-ide-plugin/essentials-essentials-kotlin-compiler-ide-plugin.iml" />
       <module fileurl="file://$PROJECT_DIR$/essentials-gestures/essentials-gestures.iml" filepath="$PROJECT_DIR$/essentials-gestures/essentials-gestures.iml" />
       <module fileurl="file://$PROJECT_DIR$/essentials-hidenavbar/essentials-hidenavbar.iml" filepath="$PROJECT_DIR$/essentials-hidenavbar/essentials-hidenavbar.iml" />
       <module fileurl="file://$PROJECT_DIR$/essentials-kotlin-compiler_/essentials-kotlin-compiler.iml" filepath="$PROJECT_DIR$/essentials-kotlin-compiler_/essentials-kotlin-compiler.iml" />
@@ -23,6 +26,7 @@
       <module fileurl="file://$PROJECT_DIR$/essentials-test/essentials-test.iml" filepath="$PROJECT_DIR$/essentials-test/essentials-test.iml" />
       <module fileurl="file://$PROJECT_DIR$/essentials-work/essentials-work.iml" filepath="$PROJECT_DIR$/essentials-work/essentials-work.iml" />
       <module fileurl="file://$PROJECT_DIR$/sample/sample.iml" filepath="$PROJECT_DIR$/sample/sample.iml" />
+      <module fileurl="file://$PROJECT_DIR$/essentials-kotlin-compiler/studio-projects-essentials-essentials-kotlin-compiler.iml" filepath="$PROJECT_DIR$/essentials-kotlin-compiler/studio-projects-essentials-essentials-kotlin-compiler.iml" />
     </modules>
   </component>
 </project>

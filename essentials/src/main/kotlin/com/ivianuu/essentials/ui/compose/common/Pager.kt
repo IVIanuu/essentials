@@ -151,7 +151,7 @@ class PagerPosition(
 }
 
 @Composable
-private fun PagerLayout(
+/*private*/ fun PagerLayout(
     direction: Axis,
     viewportSize: Px,
     onViewportSizeChanged: (Px) -> Unit,

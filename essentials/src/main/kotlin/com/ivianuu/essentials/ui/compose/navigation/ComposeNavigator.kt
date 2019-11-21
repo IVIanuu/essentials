@@ -126,7 +126,7 @@ class ComposeNavigator internal constructor(
     }
 
     @Composable
-    internal fun content() {
+/*internal*/ fun content() {
         NavigatorAmbient.Provider(this) {
             overlay.content()
         }

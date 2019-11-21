@@ -19,8 +19,10 @@ package com.ivianuu.essentials.ui.compose.prefs
 import androidx.compose.Composable
 import com.ivianuu.essentials.ui.compose.common.AbsorbPointer
 import com.ivianuu.essentials.ui.compose.core.composableWithKey
+import com.ivianuu.essentials.ui.compose.coroutines.collect
 import com.ivianuu.essentials.ui.compose.material.EsCheckbox
 import com.ivianuu.kprefs.Pref
+import com.ivianuu.kprefs.coroutines.asFlow
 
 @Composable
 fun CheckboxPreference(
@@ -34,6 +36,7 @@ fun CheckboxPreference(
 ) = composableWithKey("CheckboxPreference:${pref.key}") {
     fun valueChanged(newValue: Boolean) {
         if (onChange?.invoke(newValue) != false) {
+            println("pref set $newValue")
             pref.set(newValue)
         }
     }
@@ -45,8 +48,10 @@ fun CheckboxPreference(
         leading = leading,
         trailing = {
             AbsorbPointer {
+                val value = collect(pref.get(), pref.asFlow())
+                println("invoke $value")
                 EsCheckbox(
-                    checked = pref.get(),
+                    checked = value,
                     onCheckedChange = {}
                 )
             }

@@ -111,5 +111,6 @@ fun <T> collect(
             .onEach { state.value = it }
             .launchIn(coroutineScope)
     }
+
     return@effect state.value
 }

@@ -236,7 +236,7 @@ private class ComposableStackValue(
                     )
                     if (index != 0) v.or(Type.INT_TYPE)
                 }
-            if (parameters.isNotEmpty()) {
+            if (parameters.any { !it.isDefault }) {
                 v.ifne(invokeLabel)
             }
 

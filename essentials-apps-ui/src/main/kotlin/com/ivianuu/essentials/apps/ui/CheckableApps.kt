@@ -125,7 +125,7 @@ fun CheckableAppsScreen(
 }
 
 @Composable
-private fun CheckableApp(
+/*private*/ fun CheckableApp(
     app: CheckableApp,
     onClick: () -> Unit
 ) = composableWithKey(app.info.packageName, app.isChecked) {
@@ -240,7 +240,7 @@ internal data class CheckableAppsState(
     val apps: Async<List<CheckableApp>> = Uninitialized
 )
 
-internal data class CheckableApp(
+/*internal*/ data class CheckableApp(
     val info: AppInfo,
     val isChecked: Boolean
 )

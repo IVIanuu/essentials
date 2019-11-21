@@ -62,7 +62,7 @@ fun <T> SingleChoiceListDialog(
 }
 
 @Composable
-private fun SingleChoiceDialogListItem(
+/*private*/ fun SingleChoiceDialogListItem(
     selected: Boolean,
     onSelect: (() -> Unit)? = null,
     title: @Composable() () -> Unit
