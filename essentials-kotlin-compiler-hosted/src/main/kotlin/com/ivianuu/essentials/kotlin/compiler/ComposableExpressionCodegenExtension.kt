@@ -103,7 +103,8 @@ class ComposableExpressionCodegenExtension : ExpressionCodegenExtension {
         val resultingDescriptor = resolvedCall.resultingDescriptor
 
         val thisDescriptor = c.codegen.context.functionDescriptor
-        if (!thisDescriptor.annotations.hasAnnotation(COMPOSABLE_ANNOTATION)) return null
+        // todo if (!thisDescriptor.annotations.hasAnnotation(COMPOSABLE_ANNOTATION)) return null
+
         // todo writeUpdateScope(thisDescriptor, c)
 
         if (resultingDescriptor !is FunctionDescriptor) return null
@@ -176,6 +177,7 @@ private class ComposableStackValue(
             resolvedCall.valueArguments.values.toList(),
             resolvedCall.resultingDescriptor
         )
+
         parameters.reversed()
             .forEach { param ->
                 v.store(param.storeIndex, param.type)
@@ -213,11 +215,14 @@ private class ComposableStackValue(
             false
         )
 
-        val isSkippable = !isEffect && parameters.all { it.stable || it.isDefault }
+        val isSkippable = !isEffect && parameters
+            .filter { !it.isDefault }
+            .all { it.stable }
 
         if (isSkippable) {
+            // check changes
             parameters
-                .filterNot { it.isDefault }
+                .filter { !it.isDefault }
                 .forEach { param ->
                     v.load(composerStoreIndex, composerType)
                     v.load(param.storeIndex, param.type)
@@ -231,11 +236,9 @@ private class ComposableStackValue(
                     v.ifne(invokeLabel)
                 }
 
-            if (parameters.isNotEmpty()) {
-                v.load(composerStoreIndex, composerType)
-                v.invokevirtual("androidx/compose/ViewComposer", "getInserting", "()Z", false)
-                v.ifeq(skipLabel)
-            }
+            v.load(composerStoreIndex, composerType)
+            v.invokevirtual("androidx/compose/ViewComposer", "getInserting", "()Z", false)
+            v.ifeq(skipLabel)
 
             // start invocation
             v.mark(invokeLabel)
@@ -268,10 +271,10 @@ private class ComposableStackValue(
         val defaultMaskWasGenerated: Boolean =
             defaultArgs.generateOnStackIfNeeded(c.codegen.defaultCallGenerator, false)
 
-        if (!defaultMaskWasGenerated) {
-            callable.genInvokeInstruction(v)
-        } else {
+        if (defaultMaskWasGenerated) {
             callable.genInvokeDefaultInstruction(v)
+        } else {
+            callable.genInvokeInstruction(v)
         }
 
         if (isSkippable) {
@@ -284,10 +287,11 @@ private class ComposableStackValue(
             v.mark(skipLabel)
             v.load(composerStoreIndex, composerType)
             v.invokevirtual("androidx/compose/ViewComposer", "skipCurrentGroup", "()V", false)
+
+            v.mark(endLabel)
         }
 
         // end group
-        v.mark(endLabel)
         v.load(composerStoreIndex, composerType)
         v.invokevirtual("androidx/compose/ViewComposer", "endGroup", "()V", false)
 
