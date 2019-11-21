@@ -61,7 +61,7 @@ import java.io.File
 
 // todo wrap in start restart scope
 
-// todo move source location gen to this class
+// todo effect support
 
 class ComposableExpressionCodegenExtension : ExpressionCodegenExtension {
 
@@ -73,11 +73,42 @@ class ComposableExpressionCodegenExtension : ExpressionCodegenExtension {
         resolvedCall: ResolvedCall<*>,
         c: ExpressionCodegenExtension.Context
     ): StackValue? {
+        return handleSourceLocation(resolvedCall, c)
+            ?: handleComposable(resolvedCall, c)
+    }
+
+    private fun handleSourceLocation(
+        resolvedCall: ResolvedCall<*>,
+        c: ExpressionCodegenExtension.Context
+    ): StackValue? {
+        val resultingDescriptor = resolvedCall.resultingDescriptor
+
+        // replace calls to source location with the actual source location
+        return if (resultingDescriptor.fqNameSafe.asString() == "androidx.compose.sourceLocation"
+            && resultingDescriptor.returnType == resultingDescriptor.builtIns.intType
+        ) {
+            object : StackValue(c.typeMapper.mapType(resultingDescriptor.returnType!!)) {
+                override fun putSelector(
+                    type: Type,
+                    kotlinType: KotlinType?,
+                    v: InstructionAdapter
+                ) {
+                    v.iconst(c.codegen.context.functionDescriptor.fqNameSafe.hashCode() xor c.codegen.lastLineNumber)
+                }
+            }
+        } else null
+    }
+
+    private fun handleComposable(
+        resolvedCall: ResolvedCall<*>,
+        c: ExpressionCodegenExtension.Context
+    ): StackValue? {
+        val resultingDescriptor = resolvedCall.resultingDescriptor
+
         val thisDescriptor = c.codegen.context.functionDescriptor
         if (!thisDescriptor.annotations.hasAnnotation(COMPOSABLE_ANNOTATION)) return null
         // todo writeUpdateScope(thisDescriptor, c)
 
-        val resultingDescriptor = resolvedCall.resultingDescriptor
         if (resultingDescriptor !is FunctionDescriptor) return null
         if (!resultingDescriptor.annotations.hasAnnotation(COMPOSABLE_ANNOTATION)) return null
         if (resultingDescriptor.returnType?.isUnit() != true) return null
@@ -106,7 +137,6 @@ class ComposableExpressionCodegenExtension : ExpressionCodegenExtension {
             callable = callable
         )
     }
-
 }
 
 private class ComposableStackValue(
@@ -164,12 +194,8 @@ private class ComposableStackValue(
         // start group
         v.load(composerStoreIndex, composerType)
 
-        v.invokestatic(
-            "com/ivianuu/essentials/util/SourceLocationKt",
-            "sourceLocation",
-            "()Ljava/lang/Object;",
-            false
-        )
+        v.iconst(c.codegen.context.functionDescriptor.fqNameSafe.hashCode() xor c.codegen.lastLineNumber)
+        v.ensureBoxed(Type.INT_TYPE)
 
         val pivotals = parameters.filter { it.pivotal }
         pivotals

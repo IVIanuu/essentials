@@ -18,7 +18,6 @@ package com.ivianuu.essentials.kotlin.compiler
 
 import com.google.auto.service.AutoService
 import com.intellij.mock.MockProject
-import org.jetbrains.kotlin.codegen.extensions.ClassBuilderInterceptorExtension
 import org.jetbrains.kotlin.codegen.extensions.ExpressionCodegenExtension
 import org.jetbrains.kotlin.compiler.plugin.ComponentRegistrar
 import org.jetbrains.kotlin.config.CompilerConfiguration
@@ -29,10 +28,6 @@ class EssentialsComponentRegistrar : ComponentRegistrar {
         project: MockProject,
         configuration: CompilerConfiguration
     ) {
-        ClassBuilderInterceptorExtension.registerExtension(
-            project,
-            SourceLocationClassBuilderInterceptorExtension()
-        )
         ExpressionCodegenExtension.registerExtension(
             project,
             ComposableExpressionCodegenExtension()

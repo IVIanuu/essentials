@@ -28,6 +28,5 @@
     <extensions defaultExtensionNs="org.jetbrains.kotlin">
         <expressionCodegenExtension
             implementation="com.ivianuu.essentials.kotlin.compiler.ComposableExpressionCodegenExtension" />
-        <classBuilderFactoryInterceptorExtension implementation="com.ivianuu.essentials.kotlin.compiler.SourceLocationClassBuilderInterceptorExtension" />
     </extensions>
 </idea-plugin>
