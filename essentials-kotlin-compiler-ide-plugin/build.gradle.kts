@@ -9,7 +9,7 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt
 intellij {
     pluginName = "essentials"
     //version = "2019.2"
-    setPlugins("org.jetbrains.kotlin:1.3.41-release-IJ2019.2-1")
+    setPlugins("org.jetbrains.kotlin:1.3.60-release-IJ2019.3-1")
 }
 
 dependencies {
