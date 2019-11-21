@@ -121,7 +121,8 @@ private class ComposableStackValue(
         val type: Type,
         val storeIndex: Int,
         val isDefault: Boolean,
-        val pivotal: Boolean
+        val pivotal: Boolean,
+        val stable: Boolean
     )
 
     override fun putSelector(type: Type, kotlinType: KotlinType?, v: InstructionAdapter) {
@@ -144,7 +145,8 @@ private class ComposableStackValue(
                     type = asmType,
                     storeIndex = c.codegen.frameMap.enterTemp(asmType),
                     isDefault = valueArgument is DefaultValueArgument,
-                    pivotal = descriptor.annotations.hasAnnotation(PIVOTAL_ANNOTATION)
+                    pivotal = descriptor.annotations.hasAnnotation(PIVOTAL_ANNOTATION),
+                    stable = descriptor.type.isStable()
                 )
             }
 
@@ -195,42 +197,46 @@ private class ComposableStackValue(
             false
         )
 
-        parameters
-            .filterNot { it.isDefault }
-            .forEach { param ->
+        val isSkippable = parameters.all { it.stable || it.isDefault }
+
+        if (isSkippable) {
+            parameters
+                .filterNot { it.isDefault }
+                .forEach { param ->
+                    v.load(composerStoreIndex, composerType)
+                    v.load(param.storeIndex, param.type)
+                    v.ensureBoxed(param.type)
+                    v.invokevirtual(
+                        "androidx/compose/ViewComposer",
+                        "changed",
+                        "(Ljava/lang/Object;)Z",
+                        false
+                    )
+                    v.ifne(invokeLabel)
+                }
+
+            if (parameters.isNotEmpty()) {
                 v.load(composerStoreIndex, composerType)
-                v.load(param.storeIndex, param.type)
-                v.ensureBoxed(param.type)
-                v.invokevirtual(
-                    "androidx/compose/ViewComposer",
-                    "changed",
-                    "(Ljava/lang/Object;)Z",
-                    false
-                )
-                v.ifne(invokeLabel)
+                v.invokevirtual("androidx/compose/ViewComposer", "getInserting", "()Z", false)
+                v.ifeq(skipLabel)
             }
 
-        if (parameters.isNotEmpty()) {
+            // start invocation
+            v.mark(invokeLabel)
             v.load(composerStoreIndex, composerType)
-            v.invokevirtual("androidx/compose/ViewComposer", "getInserting", "()Z", false)
-            v.ifeq(skipLabel)
+            v.invokestatic(
+                "androidx/compose/ViewComposerCommonKt",
+                "getInvocation",
+                "()Ljava/lang/Object;",
+                false
+            )
+            v.invokevirtual(
+                "androidx/compose/ViewComposer",
+                "startGroup",
+                "(Ljava/lang/Object;)V",
+                false
+            )
         }
-
-        // start invocation
-        v.mark(invokeLabel)
-        v.load(composerStoreIndex, composerType)
-        v.invokestatic(
-            "androidx/compose/ViewComposerCommonKt",
-            "getInvocation",
-            "()Ljava/lang/Object;",
-            false
-        )
-        v.invokevirtual(
-            "androidx/compose/ViewComposer",
-            "startGroup",
-            "(Ljava/lang/Object;)V",
-            false
-        )
 
         // push receiver
         if (resolvedCall.dispatchReceiver != null || resolvedCall.extensionReceiver != null) {
@@ -252,15 +258,17 @@ private class ComposableStackValue(
             callable.genInvokeDefaultInstruction(v)
         }
 
-        // end invocation
-        v.load(composerStoreIndex, composerType)
-        v.invokevirtual("androidx/compose/ViewComposer", "endGroup", "()V", false)
-        v.goTo(endLabel)
+        if (isSkippable) {
+            // end invocation
+            v.load(composerStoreIndex, composerType)
+            v.invokevirtual("androidx/compose/ViewComposer", "endGroup", "()V", false)
+            v.goTo(endLabel)
 
-        // skip current group
-        v.mark(skipLabel)
-        v.load(composerStoreIndex, composerType)
-        v.invokevirtual("androidx/compose/ViewComposer", "skipCurrentGroup", "()V", false)
+            // skip current group
+            v.mark(skipLabel)
+            v.load(composerStoreIndex, composerType)
+            v.invokevirtual("androidx/compose/ViewComposer", "skipCurrentGroup", "()V", false)
+        }
 
         // end group
         v.mark(endLabel)
