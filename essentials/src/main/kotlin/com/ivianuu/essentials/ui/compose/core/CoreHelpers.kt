@@ -28,9 +28,9 @@ fun composableWithKey(
 ) {
     with(composer.composer) {
         wrapInRestartScope(key) {
-            //startGroup(invocation)
+            startGroup(invocation)
             block()
-            //endGroup()
+            endGroup()
         }
     }
 }
@@ -47,13 +47,13 @@ fun <V1> composableWithKey(
 ) {
     with(composer.composer) {
         wrapInRestartScope(key) {
-            //if (changed(v1) || inserting) {
-            //    startGroup(invocation)
+            if (changed(v1) || inserting) {
+                startGroup(invocation)
                 block()
-            //    endGroup()
-            //} else {
-            //   skipCurrentGroup()
-            //}
+                endGroup()
+            } else {
+                skipCurrentGroup()
+            }
         }
     }
 }
@@ -72,13 +72,13 @@ fun <V1, V2> composableWithKey(
 ) {
     with(composer.composer) {
         wrapInRestartScope(key) {
-            //if ((changed(v1) || changed(v2)) || inserting) {
-            //    startGroup(invocation)
+            if ((changed(v1) or changed(v2)) || inserting) {
+                startGroup(invocation)
                 block()
-            //    endGroup()
-            //} else {
-            //     skipCurrentGroup()
-            // }
+                endGroup()
+            } else {
+                skipCurrentGroup()
+            }
         }
     }
 }
@@ -95,13 +95,13 @@ fun composableWithKey(
 ) {
     with(composer.composer) {
         wrapInRestartScope(key) {
-            // if (changed(inputs.contentHashCode()) || inserting) {
-            //     startGroup(invocation)
+            if (changed(inputs.contentHashCode()) || inserting) {
+                startGroup(invocation)
                 block()
-            //    endGroup()
-            // } else {
-            //   skipCurrentGroup()
-            // }
+                endGroup()
+            } else {
+                skipCurrentGroup()
+            }
         }
     }
 }
@@ -112,13 +112,13 @@ inline fun staticComposable(noinline block: @Composable() () -> Unit) =
 fun staticComposableWithKey(key: Any, block: @Composable() () -> Unit) {
     with(composer.composer) {
         wrapInRestartScope(key) {
-            //if (inserting) {
-            //    startGroup(invocation)
+            if (inserting) {
+                startGroup(invocation)
                 block()
-            //    endGroup()
-            //} else {
-            //  skipCurrentGroup()
-            //}
+                endGroup()
+            } else {
+                skipCurrentGroup()
+            }
         }
     }
 }
