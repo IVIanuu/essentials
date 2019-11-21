@@ -236,7 +236,9 @@ private class ComposableStackValue(
                     )
                     if (index != 0) v.or(Type.INT_TYPE)
                 }
-            v.ifne(invokeLabel)
+            if (parameters.isNotEmpty()) {
+                v.ifne(invokeLabel)
+            }
 
             v.load(composerStoreIndex, composerType)
             v.invokevirtual("androidx/compose/ViewComposer", "getInserting", "()Z", false)
