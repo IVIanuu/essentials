@@ -36,7 +36,6 @@ fun CheckboxPreference(
 ) = composableWithKey("CheckboxPreference:${pref.key}") {
     fun valueChanged(newValue: Boolean) {
         if (onChange?.invoke(newValue) != false) {
-            println("pref set $newValue")
             pref.set(newValue)
         }
     }
@@ -49,7 +48,6 @@ fun CheckboxPreference(
         trailing = {
             AbsorbPointer {
                 val value = collect(pref.get(), pref.asFlow())
-                println("invoke $value")
                 EsCheckbox(
                     checked = value,
                     onCheckedChange = {}
