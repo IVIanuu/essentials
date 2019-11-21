@@ -58,10 +58,7 @@ import org.jetbrains.org.objectweb.asm.commons.InstructionAdapter
 import java.io.File
 
 // todo intercept composable lambda calls
-
 // todo wrap in start restart scope
-
-// todo effect support
 
 class ComposableExpressionCodegenExtension : ExpressionCodegenExtension {
 
@@ -110,8 +107,8 @@ class ComposableExpressionCodegenExtension : ExpressionCodegenExtension {
         // todo writeUpdateScope(thisDescriptor, c)
 
         if (resultingDescriptor !is FunctionDescriptor) return null
+        if (resultingDescriptor.returnType == null) return null
         if (!resultingDescriptor.annotations.hasAnnotation(COMPOSABLE_ANNOTATION)) return null
-        if (resultingDescriptor.returnType?.isUnit() != true) return null
 
         val superCallTarget = getSuperCallExpression(resolvedCall.call)
         val callable = c.typeMapper.mapToCallableMethod(
@@ -134,7 +131,8 @@ class ComposableExpressionCodegenExtension : ExpressionCodegenExtension {
             c = c,
             argumentGenerator = argumentGenerator,
             resolvedCall = resolvedCall,
-            callable = callable
+            callable = callable,
+            isEffect = !resultingDescriptor.returnType!!.isUnit()
         )
     }
 }
@@ -143,17 +141,9 @@ private class ComposableStackValue(
     private val c: ExpressionCodegenExtension.Context,
     private val argumentGenerator: CallBasedArgumentGenerator,
     private val resolvedCall: ResolvedCall<*>,
-    private val callable: CallableMethod
+    private val callable: CallableMethod,
+    private val isEffect: Boolean
 ) : StackValue(c.typeMapper.mapType(resolvedCall.candidateDescriptor.returnType!!)) {
-
-    private data class ParameterDescriptor(
-        val descriptor: ValueParameterDescriptor,
-        val type: Type,
-        val storeIndex: Int,
-        val isDefault: Boolean,
-        val pivotal: Boolean,
-        val stable: Boolean
-    )
 
     override fun putSelector(type: Type, kotlinType: KotlinType?, v: InstructionAdapter) {
         val invokeLabel = Label()
@@ -223,7 +213,7 @@ private class ComposableStackValue(
             false
         )
 
-        val isSkippable = parameters.all { it.stable || it.isDefault }
+        val isSkippable = !isEffect && parameters.all { it.stable || it.isDefault }
 
         if (isSkippable) {
             parameters
@@ -304,6 +294,15 @@ private class ComposableStackValue(
         c.codegen.frameMap.leaveTemp(composerType)
     }
 }
+
+private data class ParameterDescriptor(
+    val descriptor: ValueParameterDescriptor,
+    val type: Type,
+    val storeIndex: Int,
+    val isDefault: Boolean,
+    val pivotal: Boolean,
+    val stable: Boolean
+)
 
 private fun InstructionAdapter.ensureBoxed(type: Type) {
     when (type) {
