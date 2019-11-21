@@ -23,7 +23,7 @@ import android.content.Context
 import android.content.Intent
 import android.hardware.camera2.CameraManager
 import androidx.core.app.NotificationCompat
-import com.example.essentials.gestures.R
+import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.util.StringProvider
 import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.essentials.util.Toaster
