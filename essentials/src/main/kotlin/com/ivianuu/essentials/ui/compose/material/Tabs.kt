@@ -29,7 +29,6 @@ import com.ivianuu.essentials.ui.compose.core.Axis
 import com.ivianuu.essentials.ui.compose.core.ambient
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.composableWithKey
-import com.ivianuu.essentials.ui.compose.core.effect
 import com.ivianuu.essentials.ui.compose.core.invokeAsComposable
 import com.ivianuu.essentials.ui.compose.core.memo
 
@@ -43,9 +42,9 @@ fun <T> TabController(
     TabControllerAmbient.Provider(tabController, children)
 }
 
-fun <T> ambientTabController(): TabController<T> = effect {
+@Composable
+fun <T> ambientTabController(): TabController<T> =
     ambient(TabControllerAmbient) as TabController<T>
-}
 
 class TabController<T>(
     var items: List<T>,

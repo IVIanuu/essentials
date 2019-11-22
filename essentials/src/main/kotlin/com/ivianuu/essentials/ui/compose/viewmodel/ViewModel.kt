@@ -16,25 +16,27 @@
 
 package com.ivianuu.essentials.ui.compose.viewmodel
 
+import androidx.compose.Composable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
-import com.ivianuu.essentials.ui.compose.core.effect
 import com.ivianuu.essentials.ui.compose.core.memo
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.util.defaultViewModelKey
 import com.ivianuu.essentials.util.getViewModel
 import kotlin.reflect.KClass
 
+@Composable
 inline fun <reified T : ViewModel> viewModel(
-    from: ViewModelStoreOwner = inject<ViewModelStoreOwner>(),
+    from: ViewModelStoreOwner = inject(),
     factory: ViewModelProvider.Factory = memo { ViewModelProvider.NewInstanceFactory() },
     key: String = memo { T::class.defaultViewModelKey }
 ) = viewModel(T::class, from, factory, key)
 
+@Composable
 fun <T : ViewModel> viewModel(
     type: KClass<T>,
-    from: ViewModelStoreOwner = inject<ViewModelStoreOwner>(),
+    from: ViewModelStoreOwner = inject(),
     factory: ViewModelProvider.Factory = memo { ViewModelProvider.NewInstanceFactory() },
     key: String = memo { type.defaultViewModelKey }
-): T = effect { memo { from.getViewModel(type, factory, key) } }
+): T = memo { from.getViewModel(type, factory, key) }

@@ -18,6 +18,7 @@ package com.ivianuu.essentials.ui.compose.core
 
 import androidx.compose.Ambient
 import androidx.compose.Composable
+import androidx.compose.Immutable
 import androidx.ui.core.Density
 import androidx.ui.core.Size
 import androidx.ui.core.dp
@@ -26,6 +27,7 @@ import androidx.ui.layout.EdgeInsets
 // todo find a better name
 // todo add padding field
 
+@Immutable
 data class MediaQuery(
     val size: Size = Size(0.dp, 0.dp),
     val viewPadding: EdgeInsets = EdgeInsets(),
@@ -44,7 +46,8 @@ fun WithMediaQuery(
     children.invokeAsComposable(ambientMediaQuery())
 }
 
-fun ambientMediaQuery(): MediaQuery = effect { ambient(MediaQueryAmbient) }
+@Composable
+fun ambientMediaQuery(): MediaQuery = ambient(MediaQueryAmbient)
 
 @Composable
 fun MediaQueryProvider(

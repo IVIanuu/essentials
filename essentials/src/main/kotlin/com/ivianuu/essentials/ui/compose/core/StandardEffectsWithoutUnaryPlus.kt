@@ -18,121 +18,149 @@ package com.ivianuu.essentials.ui.compose.core
 
 import androidx.compose.Ambient
 import androidx.compose.CommitScope
+import androidx.compose.Composable
 
-inline fun <T, V1> key(
+@Composable
+fun <T, V1> key(
     v1: V1,
-    noinline block: () -> T
+    block: () -> T
 ) = androidx.compose.key<T, V1>(v1 = v1, block = { block() })()
 
-inline fun <T, V1, V2> key(
+@Composable
+fun <T, V1, V2> key(
     v1: V1,
     v2: V2,
-    noinline block: () -> T
+    block: () -> T
 ) = androidx.compose.key<T, V1, V2>(v1 = v1, v2 = v2, block = { block() })()
 
-inline fun <T> key(
+@Composable
+fun <T> key(
     vararg inputs: Any?,
-    noinline block: () -> T
+    block: () -> T
 ) = androidx.compose.key<T>(inputs = *inputs, block = { block() })()
 
-inline fun <T> memo(noinline calculation: () -> T) =
+@Composable
+fun <T> memo(calculation: () -> T) =
     androidx.compose.memo(calculation = calculation)()
 
-inline fun <T, V1> memo(
+@Composable
+fun <T, V1> memo(
     v1: V1,
-    noinline calculation: () -> T
+    calculation: () -> T
 ) = androidx.compose.memo(v1 = v1, calculation = calculation)()
 
-inline fun <T, V1, V2> memo(
+@Composable
+fun <T, V1, V2> memo(
     v1: V1,
     v2: V2,
-    noinline calculation: () -> T
+    calculation: () -> T
 ) = androidx.compose.memo(v1 = v1, v2 = v2, calculation = calculation)()
 
-inline fun <T> memo(
+@Composable
+fun <T> memo(
     vararg inputs: Any?,
-    noinline calculation: () -> T
+    calculation: () -> T
 ) = androidx.compose.memo(inputs = *inputs, calculation = calculation)()
 
-inline fun onActive(noinline callback: CommitScope.() -> Unit) =
+@Composable
+fun onActive(callback: CommitScope.() -> Unit) =
     androidx.compose.onActive(callback = callback)()
 
-inline fun onDispose(noinline callback: () -> Unit) =
+@Composable
+fun onDispose(callback: () -> Unit) =
     androidx.compose.onDispose(callback = callback)()
 
-inline fun onCommit(noinline callback: CommitScope.() -> Unit) =
+@Composable
+fun onCommit(callback: CommitScope.() -> Unit) =
     androidx.compose.onCommit(callback = callback)()
 
-inline fun <V1> onCommit(
+@Composable
+fun <V1> onCommit(
     v1: V1,
-    noinline callback: CommitScope.() -> Unit
+    callback: CommitScope.() -> Unit
 ) = androidx.compose.onCommit(v1 = v1, callback = callback)()
 
-inline fun <V1, V2> onCommit(
+@Composable
+fun <V1, V2> onCommit(
     v1: V1,
     v2: V2,
-    noinline callback: CommitScope.() -> Unit
+    callback: CommitScope.() -> Unit
 ) = androidx.compose.onCommit(v1 = v1, v2 = v2, callback = callback)()
 
-inline fun onCommit(
+@Composable
+fun onCommit(
     vararg inputs: Any?,
-    noinline callback: CommitScope.() -> Unit
+    callback: CommitScope.() -> Unit
 ) = androidx.compose.onCommit(inputs = *inputs, callback = callback)()
 
-inline fun onPreCommit(noinline callback: CommitScope.() -> Unit) =
+@Composable
+fun onPreCommit(callback: CommitScope.() -> Unit) =
     androidx.compose.onPreCommit(callback = callback)()
 
-inline fun <V1> onPreCommit(
+@Composable
+fun <V1> onPreCommit(
     v1: V1,
-    noinline callback: CommitScope.() -> Unit
+    callback: CommitScope.() -> Unit
 ) = androidx.compose.onPreCommit(callback = callback)()
 
-inline fun <V1, V2> onPreCommit(
+@Composable
+fun <V1, V2> onPreCommit(
     v1: V1,
     v2: V2,
-    noinline callback: CommitScope.() -> Unit
+    callback: CommitScope.() -> Unit
 ) = androidx.compose.onPreCommit(v1 = v1, v2 = v2, callback = callback)()
 
-inline fun onPreCommit(
+@Composable
+fun onPreCommit(
     vararg inputs: Any?,
-    noinline callback: CommitScope.() -> Unit
+    callback: CommitScope.() -> Unit
 ) = androidx.compose.onPreCommit(inputs = *inputs, callback = callback)()
 
-inline fun <T> state(noinline init: () -> T) = androidx.compose.state(init = init)()
+@Composable
+fun <T> state(init: () -> T) = androidx.compose.state(init = init)()
 
-inline fun <T, V1> stateFor(v1: V1, noinline init: () -> T) =
+@Composable
+fun <T, V1> stateFor(v1: V1, init: () -> T) =
     androidx.compose.stateFor(v1 = v1, init = init)()
 
-inline fun <T, V1, V2> stateFor(
+@Composable
+fun <T, V1, V2> stateFor(
     v1: V1,
     v2: V2,
-    noinline init: () -> T
+    init: () -> T
 ) = androidx.compose.stateFor(v1 = v1, v2 = v2, init = init)()
 
-inline fun <T> stateFor(vararg inputs: Any?, noinline init: () -> T) =
+@Composable
+fun <T> stateFor(vararg inputs: Any?, init: () -> T) =
     androidx.compose.stateFor(inputs = *inputs, init = init)()
 
+@Composable
+fun <T> model(init: () -> T) = androidx.compose.model(init = init)()
 
-inline fun <T> model(noinline init: () -> T) = androidx.compose.model(init = init)()
-
-inline fun <T, V1> modelFor(
+@Composable
+fun <T, V1> modelFor(
     v1: V1,
-    noinline init: () -> T
+    init: () -> T
 ) = androidx.compose.modelFor(v1 = v1, init = init)()
 
-inline fun <T, V1, V2> modelFor(
+@Composable
+fun <T, V1, V2> modelFor(
     v1: V1,
     v2: V2,
-    noinline init: () -> T
+    init: () -> T
 ) = androidx.compose.modelFor(v1 = v1, v2 = v2, init = init)()
 
-inline fun <T> modelFor(
+@Composable
+fun <T> modelFor(
     vararg inputs: Any?,
-    noinline init: () -> T
+    init: () -> T
 ) = androidx.compose.modelFor(inputs = *inputs, init = init)()
 
-inline fun <T> ambient(key: Ambient<T>) = androidx.compose.ambient(key = key)()
+@Composable
+fun <T> ambient(key: Ambient<T>): T = androidx.compose.ambient(key = key)()
 
-inline val invalidate get() = androidx.compose.invalidate()
+/*@Composable*/
+val invalidate get() = androidx.compose.invalidate()
 
-inline fun compositionReference() = androidx.compose.compositionReference()()
+@Composable
+fun compositionReference() = androidx.compose.compositionReference()()

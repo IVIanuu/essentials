@@ -38,7 +38,6 @@ import androidx.ui.material.MaterialTheme
 import androidx.ui.material.ripple.Ripple
 import com.ivianuu.essentials.ui.compose.core.ambient
 import com.ivianuu.essentials.ui.compose.core.composable
-import com.ivianuu.essentials.ui.compose.core.effect
 import com.ivianuu.essentials.ui.compose.core.invoke
 import com.ivianuu.essentials.ui.compose.core.invokeAsComposable
 import com.ivianuu.essentials.ui.compose.core.memo
@@ -200,9 +199,9 @@ fun <T> BottomNavigationController(
     BottomNavigationControllerAmbient.Provider(bottomNavigationController, children)
 }
 
-fun <T> ambientBottomNavigationController(): BottomNavigationController<T> = effect {
+@Composable
+fun <T> ambientBottomNavigationController(): BottomNavigationController<T> =
     ambient(BottomNavigationControllerAmbient) as BottomNavigationController<T>
-}
 
 class BottomNavigationController<T>(
     var items: List<T>,

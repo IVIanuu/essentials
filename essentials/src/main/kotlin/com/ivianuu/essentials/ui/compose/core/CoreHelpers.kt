@@ -17,10 +17,10 @@ import androidx.compose.Composable
 import androidx.compose.Composer
 import androidx.compose.Effect
 import androidx.compose.composer
-import com.ivianuu.essentials.util.sourceLocation
+import androidx.compose.sourceLocation
 
 inline fun composable(noinline block: @Composable() () -> Unit) =
-    composableWithKey(key = sourceLocation(), block = block)
+    composableWithKey(key = Integer.valueOf(sourceLocation()), block = block)
 
 fun composableWithKey(
     key: Any,
@@ -38,7 +38,7 @@ fun composableWithKey(
 inline fun <V1> composable(
     v1: V1,
     noinline block: @Composable() () -> Unit
-) = composableWithKey(key = sourceLocation(), v1 = v1, block = block)
+) = composableWithKey(key = Integer.valueOf(sourceLocation()), v1 = v1, block = block)
 
 fun <V1> composableWithKey(
     key: Any,
@@ -62,7 +62,7 @@ inline fun <V1, V2> composable(
     v1: V1,
     v2: V2,
     noinline block: @Composable() () -> Unit
-) = composableWithKey(key = sourceLocation(), v1 = v1, v2 = v2, block = block)
+) = composableWithKey(key = Integer.valueOf(sourceLocation()), v1 = v1, v2 = v2, block = block)
 
 fun <V1, V2> composableWithKey(
     key: Any,
@@ -86,7 +86,7 @@ fun <V1, V2> composableWithKey(
 inline fun composable(
     vararg inputs: Any?,
     noinline block: @Composable() () -> Unit
-) = composableWithKey(key = sourceLocation(), inputs = *inputs, block = block)
+) = composableWithKey(key = Integer.valueOf(sourceLocation()), inputs = *inputs, block = block)
 
 fun composableWithKey(
     key: Any,
@@ -107,7 +107,7 @@ fun composableWithKey(
 }
 
 inline fun staticComposable(noinline block: @Composable() () -> Unit) =
-    staticComposableWithKey(key = sourceLocation(), block = block)
+    staticComposableWithKey(key = Integer.valueOf(sourceLocation()), block = block)
 
 fun staticComposableWithKey(key: Any, block: @Composable() () -> Unit) {
     with(composer.composer) {
@@ -171,24 +171,7 @@ inline fun <V1, V2, V3, V4, V5> (@Composable() (V1, V2, V3, V4, V5) -> Unit).inv
     this(v1, v2, v3, v4, v5)
 }
 
-@BuilderInference
-inline fun <T> effect(noinline block: @Composable() () -> T): T =
-    effectWithKey(key = sourceLocation(), block = block)
-
-@BuilderInference
-fun <T> effectWithKey(
-    key: Any,
-    block: @Composable() () -> T
-): T {
-    with(composer.composer) {
-        startGroup(key)
-        val result = block()
-        endGroup()
-        return result
-    }
-}
-
-inline operator fun <T> Effect<T>.invoke(): T = invoke(key = sourceLocation())
+inline operator fun <T> Effect<T>.invoke(): T = invoke(key = Integer.valueOf(sourceLocation()))
 
 operator fun <T> Effect<T>.invoke(key: Any): T =
     resolve(androidx.compose.composer.composer, key.hashCode())

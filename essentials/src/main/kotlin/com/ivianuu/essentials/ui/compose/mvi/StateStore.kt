@@ -16,9 +16,9 @@
 
 package com.ivianuu.essentials.ui.compose.mvi
 
+import androidx.compose.Composable
+import androidx.compose.sourceLocation
 import com.ivianuu.essentials.ui.compose.common.retainedState
-import com.ivianuu.essentials.ui.compose.core.effect
-
 interface StateStore<S, A> {
     val state: S
     fun dispatch(action: A)
@@ -27,13 +27,24 @@ interface StateStore<S, A> {
     operator fun component2(): (A) -> Unit = this::dispatch
 }
 
+@Composable
+inline fun <S, A> stateStore(
+    noinline initialState: () -> S,
+    noinline reducer: (currentState: S, action: A) -> S
+): StateStore<S, A> = stateStore(
+    key = Integer.valueOf(sourceLocation()),
+    initialState = initialState,
+    reducer = reducer
+)
+
+@Composable
 fun <S, A> stateStore(
     key: Any = "StateStore",
     initialState: () -> S,
     reducer: (currentState: S, action: A) -> S
-): StateStore<S, A> = effect {
+): StateStore<S, A> {
     val stateHolder = retainedState(key, false, initialState)
-    return@effect object : StateStore<S, A> {
+    return object : StateStore<S, A> {
         override val state: S
             get() = stateHolder.value
 

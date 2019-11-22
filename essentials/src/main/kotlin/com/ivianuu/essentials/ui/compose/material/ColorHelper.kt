@@ -16,20 +16,20 @@
 
 package com.ivianuu.essentials.ui.compose.material
 
+import androidx.compose.Composable
 import androidx.ui.graphics.Color
 import androidx.ui.graphics.toArgb
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.surface.CurrentBackground
 import com.ivianuu.essentials.ui.compose.core.ambient
-import com.ivianuu.essentials.ui.compose.core.effect
 import com.ivianuu.essentials.ui.compose.core.invoke
 import com.ivianuu.essentials.util.isDark
 
-fun colorForCurrentBackground(): Color = effect {
-    colorForBackground(ambient(CurrentBackground))
-}
+@Composable
+fun colorForCurrentBackground(): Color = colorForBackground(ambient(CurrentBackground))
 
-fun colorForBackground(color: Color): Color = effect {
+@Composable
+fun colorForBackground(color: Color): Color {
     var result = with(MaterialTheme.colors()()) {
         when (color) {
             primary -> onPrimary
@@ -45,7 +45,7 @@ fun colorForBackground(color: Color): Color = effect {
     if (result == null) {
         result = if (color.toArgb().isDark) OnDarkColor else OnLightColor
     }
-    return@effect result
+    return result
 }
 
 val PrimaryTextAlpha = 0.87f

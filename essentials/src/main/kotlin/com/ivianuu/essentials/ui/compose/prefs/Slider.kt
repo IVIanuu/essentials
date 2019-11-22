@@ -36,7 +36,6 @@ import androidx.ui.material.SliderPosition
 import com.ivianuu.essentials.ui.compose.core.ambient
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.composableWithKey
-import com.ivianuu.essentials.ui.compose.core.effect
 import com.ivianuu.essentials.ui.compose.core.invoke
 import com.ivianuu.essentials.ui.compose.core.invokeAsComposable
 import com.ivianuu.essentials.ui.compose.core.memo
@@ -154,13 +153,14 @@ fun SimpleSliderValueText(value: Int) = composable {
     )
 }
 
-fun unitValueTextProvider(
+@Composable
+fun UnitValueTextProvider(
     unit: UnitValueTextProvider.Unit
-): @Composable() (Int) -> Unit = effect {
+): @Composable() (Int) -> Unit {
     val textProvider = UnitValueTextProvider(
         ambient(ContextAmbient), unit
     )
-    return@effect {
+    return {
         Text(
             text = textProvider(it),
             style = MaterialTheme.typography()().body2,

@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.apps.coil
 
 import android.content.pm.PackageManager
+import androidx.compose.Immutable
 import coil.bitmappool.BitmapPool
 import coil.decode.DataSource
 import coil.decode.Options
@@ -28,6 +29,7 @@ import com.ivianuu.essentials.util.AppDispatchers
 import com.ivianuu.injekt.Inject
 import kotlinx.coroutines.withContext
 
+@Immutable
 data class AppIcon(val packageName: String)
 
 @Inject

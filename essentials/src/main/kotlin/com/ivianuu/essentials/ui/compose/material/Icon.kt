@@ -28,7 +28,6 @@ import androidx.ui.layout.Container
 import androidx.ui.material.ripple.Ripple
 import com.ivianuu.essentials.ui.compose.core.ambient
 import com.ivianuu.essentials.ui.compose.core.composable
-import com.ivianuu.essentials.ui.compose.core.effect
 import com.ivianuu.essentials.ui.compose.core.invokeAsComposable
 
 @Composable
@@ -74,7 +73,8 @@ fun CurrentIconStyleProvider(
     CurrentIconStyleAmbient.Provider(value = mergedStyle, children = children)
 }
 
-fun currentIconStyle(): IconStyle = effect { ambient(CurrentIconStyleAmbient) }
+@Composable
+fun currentIconStyle(): IconStyle = ambient(CurrentIconStyleAmbient)
 
 fun AvatarIconStyle() = IconStyle(size = Size(AvatarSize, AvatarSize), color = null)
 
