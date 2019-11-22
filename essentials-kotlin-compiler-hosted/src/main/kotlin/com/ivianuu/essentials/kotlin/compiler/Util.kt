@@ -18,18 +18,10 @@ package com.ivianuu.essentials.kotlin.compiler
 
 import org.jetbrains.kotlin.builtins.KotlinBuiltIns
 import org.jetbrains.kotlin.builtins.isFunctionType
-import org.jetbrains.kotlin.descriptors.ClassKind
-import org.jetbrains.kotlin.descriptors.FunctionDescriptor
-import org.jetbrains.kotlin.descriptors.Modality
-import org.jetbrains.kotlin.descriptors.SourceElement
 import org.jetbrains.kotlin.descriptors.annotations.AnnotationDescriptor
 import org.jetbrains.kotlin.descriptors.annotations.Annotations
-import org.jetbrains.kotlin.descriptors.impl.ClassDescriptorImpl
 import org.jetbrains.kotlin.name.FqName
-import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.resolve.descriptorUtil.annotationClass
-import org.jetbrains.kotlin.resolve.descriptorUtil.builtIns
-import org.jetbrains.kotlin.storage.StorageManager
 import org.jetbrains.kotlin.types.KotlinType
 import org.jetbrains.kotlin.types.TypeUtils.NO_EXPECTED_TYPE
 import org.jetbrains.kotlin.types.TypeUtils.UNIT_EXPECTED_TYPE
@@ -86,18 +78,3 @@ fun InstructionAdapter.getComposer() {
         false
     )
 }
-
-
-class ComposableUpdateScopeClassDescriptor(
-    composable: FunctionDescriptor,
-    storageManager: StorageManager
-) : ClassDescriptorImpl(
-    composable.containingDeclaration,
-    Name.identifier(composable.name.toString() + "__UpdateScope"), // todo more unuique
-    Modality.FINAL,
-    ClassKind.CLASS,
-    mutableListOf(composable.builtIns.getFunction(0).defaultType) as MutableCollection<KotlinType>,
-    SourceElement.NO_SOURCE,
-    false,
-    storageManager
-)

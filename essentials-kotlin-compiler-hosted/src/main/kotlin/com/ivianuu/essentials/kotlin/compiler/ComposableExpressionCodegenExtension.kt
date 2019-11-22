@@ -17,49 +17,26 @@
 package com.ivianuu.essentials.kotlin.compiler
 
 import org.jetbrains.kotlin.codegen.CallBasedArgumentGenerator
+import org.jetbrains.kotlin.codegen.CallGenerator
 import org.jetbrains.kotlin.codegen.CallableMethod
-import org.jetbrains.kotlin.codegen.ExpressionCodegen
-import org.jetbrains.kotlin.codegen.FunctionCodegen
-import org.jetbrains.kotlin.codegen.FunctionGenerationStrategy
-import org.jetbrains.kotlin.codegen.OwnerKind
-import org.jetbrains.kotlin.codegen.SamCodegenUtil
 import org.jetbrains.kotlin.codegen.StackValue
-import org.jetbrains.kotlin.codegen.context.ClassContext
 import org.jetbrains.kotlin.codegen.extensions.ExpressionCodegenExtension
 import org.jetbrains.kotlin.codegen.generateCallReceiver
-import org.jetbrains.kotlin.descriptors.CallableMemberDescriptor
-import org.jetbrains.kotlin.descriptors.FunctionDescriptor
-import org.jetbrains.kotlin.descriptors.Modality
-import org.jetbrains.kotlin.descriptors.SourceElement
 import org.jetbrains.kotlin.descriptors.ValueParameterDescriptor
-import org.jetbrains.kotlin.descriptors.Visibilities
-import org.jetbrains.kotlin.descriptors.annotations.Annotations
-import org.jetbrains.kotlin.descriptors.impl.SimpleFunctionDescriptorImpl
-import org.jetbrains.kotlin.load.kotlin.computeJvmDescriptor
-import org.jetbrains.kotlin.name.Name
-import org.jetbrains.kotlin.resolve.DescriptorFactory
-import org.jetbrains.kotlin.resolve.calls.callResolverUtil.getSuperCallExpression
 import org.jetbrains.kotlin.resolve.calls.model.DefaultValueArgument
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.jetbrains.kotlin.resolve.descriptorUtil.builtIns
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
-import org.jetbrains.kotlin.resolve.jvm.diagnostics.JvmDeclarationOrigin
-import org.jetbrains.kotlin.resolve.jvm.diagnostics.JvmDeclarationOriginKind
-import org.jetbrains.kotlin.resolve.jvm.jvmSignature.JvmMethodSignature
-import org.jetbrains.kotlin.resolve.scopes.MemberScopeImpl
-import org.jetbrains.kotlin.storage.LockBasedStorageManager
 import org.jetbrains.kotlin.types.KotlinType
 import org.jetbrains.kotlin.types.typeUtil.isUnit
-import org.jetbrains.kotlin.utils.Printer
 import org.jetbrains.org.objectweb.asm.Label
-import org.jetbrains.org.objectweb.asm.Opcodes
 import org.jetbrains.org.objectweb.asm.Type
 import org.jetbrains.org.objectweb.asm.commons.InstructionAdapter
-import java.io.File
 
 // todo intercept composable lambda calls
 // todo wrap in start restart scope
 // todo accessed functions
+// todo property support
 
 class ComposableExpressionCodegenExtension : ExpressionCodegenExtension {
 
@@ -101,45 +78,57 @@ class ComposableExpressionCodegenExtension : ExpressionCodegenExtension {
         resolvedCall: ResolvedCall<*>,
         c: ExpressionCodegenExtension.Context
     ): StackValue? {
-        val resultingDescriptor = resolvedCall.resultingDescriptor
+        var functionDescriptor =
+            accessibleFunctionDescriptor(c.codegen, resolvedCall) ?: return null
 
-        val thisDescriptor = c.codegen.context.functionDescriptor
+        // todo val thisDescriptor = c.codegen.context.functionDescriptor
         // todo if (!thisDescriptor.annotations.hasAnnotation(COMPOSABLE_ANNOTATION)) return null
 
-        // todo writeUpdateScope(thisDescriptor, c)
+        if (functionDescriptor.returnType == null) return null
+        if (!functionDescriptor.annotations.hasAnnotation(COMPOSABLE_ANNOTATION)) return null
 
-        if (resultingDescriptor !is FunctionDescriptor) return null
-        if (resultingDescriptor.returnType == null) return null
-        if (!resultingDescriptor.annotations.hasAnnotation(COMPOSABLE_ANNOTATION)) return null
+        val superCallTarget = c.codegen.getSuperCallTarget(resolvedCall.call)
 
-        val superCallTarget = getSuperCallExpression(resolvedCall.call)
-        val callable = c.typeMapper.mapToCallableMethod(
-            SamCodegenUtil.resolveSamAdapter(resultingDescriptor),
+        functionDescriptor = c.codegen.context.getAccessorForSuperCallIfNeeded(
+            functionDescriptor,
+            superCallTarget,
+            c.codegen.state
+        )
+
+        val callable = resolveToCallable(
+            c.codegen,
+            c.typeMapper,
+            functionDescriptor,
             superCallTarget != null,
-            null,
             resolvedCall
         )
 
-        val callGenerator = c.codegen.defaultCallGenerator
+        val callGenerator = getOrCreateCallGenerator(
+            c.codegen,
+            c.typeMapper,
+            resolvedCall
+        )
 
         val argumentGenerator = CallBasedArgumentGenerator(
             c.codegen,
             callGenerator,
-            resultingDescriptor.valueParameters,
+            functionDescriptor.valueParameters,
             callable.valueParameterTypes
         )
 
         return ComposableStackValue(
+            callGenerator = callGenerator,
             c = c,
             argumentGenerator = argumentGenerator,
             resolvedCall = resolvedCall,
-            callable = callable,
-            isEffect = !resultingDescriptor.returnType!!.isUnit()
+            callable = callable as CallableMethod,
+            isEffect = !functionDescriptor.returnType!!.isUnit()
         )
     }
 }
 
 private class ComposableStackValue(
+    private val callGenerator: CallGenerator,
     private val c: ExpressionCodegenExtension.Context,
     private val argumentGenerator: CallBasedArgumentGenerator,
     private val resolvedCall: ResolvedCall<*>,
@@ -273,7 +262,7 @@ private class ComposableStackValue(
         }
 
         val defaultMaskWasGenerated: Boolean =
-            defaultArgs.generateOnStackIfNeeded(c.codegen.defaultCallGenerator, false)
+            defaultArgs.generateOnStackIfNeeded(callGenerator, false)
 
         if (defaultMaskWasGenerated) {
             callable.genInvokeDefaultInstruction(v)
@@ -354,162 +343,4 @@ private fun InstructionAdapter.ensureBoxed(type: Type) {
             invokestatic("java/lang/Double", "valueOf", "(D)Ljava/lang/Double;", false)
         }
     }
-}
-
-private fun writeUpdateScope(
-    composable: FunctionDescriptor,
-    c: ExpressionCodegenExtension.Context
-) {
-    val updateScopeDescriptor = ComposableUpdateScopeClassDescriptor(
-        composable = composable,
-        storageManager = LockBasedStorageManager.NO_LOCKS
-    ).apply {
-        initialize(
-            object : MemberScopeImpl() {
-                override fun printScopeStructure(p: Printer) {
-
-                }
-            },
-            mutableSetOf(),
-            null
-        )
-    }
-
-    val classBuilderForUpdateScope = c.codegen.state.factory.newVisitor(
-        JvmDeclarationOrigin(JvmDeclarationOriginKind.OTHER, null, updateScopeDescriptor),
-        c.typeMapper.mapType(updateScopeDescriptor),
-        mutableListOf<File>()
-    )
-
-    val classContextForUpdateScope = ClassContext(
-        c.typeMapper,
-        updateScopeDescriptor,
-        OwnerKind.IMPLEMENTATION,
-        c.codegen.context.parentContext,
-        null
-    )
-
-    /*val codegenForUpdateScope = ImplementationBodyCodegen(
-        null, classContextForUpdateScope, classBuilderForUpdateScope, c.codegen.state, c.codegen.parentCodegen, false)
-*/
-    classBuilderForUpdateScope.defineClass(
-        null,
-        Opcodes.V1_6, Opcodes.ACC_PUBLIC or Opcodes.ACC_STATIC or Opcodes.ACC_FINAL,
-        c.typeMapper.mapType(updateScopeDescriptor).internalName,
-        null,
-        "java/lang/Object",
-        emptyArray()
-    )
-
-    val functionCodegen = FunctionCodegen(
-        classContextForUpdateScope,
-        classBuilderForUpdateScope,
-        c.codegen.parentCodegen.state,
-        c.codegen.parentCodegen
-    )
-
-    writeUpdateScopeConstructor(
-        c = c,
-        composable = composable,
-        codegen = functionCodegen,
-        updateScopeClass = updateScopeDescriptor,
-        asmType = c.typeMapper.mapType(updateScopeDescriptor)
-    )
-
-    writeUpdateScopeInvoke(
-        c = c,
-        composable = composable,
-        codegen = functionCodegen,
-        updateScopeClass = updateScopeDescriptor,
-        asmType = c.typeMapper.mapType(updateScopeDescriptor)
-    )
-
-    classBuilderForUpdateScope.done()
-}
-
-private fun writeUpdateScopeConstructor(
-    c: ExpressionCodegenExtension.Context,
-    composable: FunctionDescriptor,
-    codegen: FunctionCodegen,
-    updateScopeClass: ComposableUpdateScopeClassDescriptor,
-    asmType: Type
-) {
-    DescriptorFactory.createPrimaryConstructorForObject(updateScopeClass, updateScopeClass.source)
-        .apply {
-            initialize(
-                composable.valueParameters,
-                Visibilities.PUBLIC
-            )
-
-            returnType = updateScopeClass.defaultType
-        }
-        .write(codegen) {
-            v.load(0, asmType)
-            v.invokespecial("java/lang/Object", "<init>", "()V", false)
-            composable.valueParameters.forEachIndexed { index, param ->
-                v.load(0, asmType)
-                v.load(index + 1, c.typeMapper.mapType(param.type))
-                v.putfield(
-                    asmType.internalName,
-                    param.name.toString(),
-                    c.typeMapper.mapType(param.type).descriptor
-                )
-            }
-            v.areturn(Type.VOID_TYPE)
-        }
-}
-
-private fun writeUpdateScopeInvoke(
-    c: ExpressionCodegenExtension.Context,
-    composable: FunctionDescriptor,
-    codegen: FunctionCodegen,
-    updateScopeClass: ComposableUpdateScopeClassDescriptor,
-    asmType: Type
-) {
-    val descriptor = object : SimpleFunctionDescriptorImpl(
-        updateScopeClass,
-        null,
-        Annotations.EMPTY,
-        Name.identifier("invoke"),
-        CallableMemberDescriptor.Kind.DECLARATION,
-        SourceElement.NO_SOURCE
-    ) {}
-    descriptor.initialize(
-        null,
-        null,
-        mutableListOf(),
-        mutableListOf(),
-        composable.builtIns.unitType,
-        Modality.FINAL,
-        Visibilities.PUBLIC,
-        null
-    )
-
-    descriptor.write(codegen) {
-        composable.valueParameters.forEachIndexed { index, param ->
-            v.load(0, asmType)
-            v.getfield(
-                asmType.internalName,
-                param.name.toString(),
-                c.typeMapper.mapType(param.type).descriptor
-            )
-        }
-
-        val type = composable.containingDeclaration.fqNameSafe.asString().replace(".", "/")
-
-        v.invokestatic(type, composable.name.toString(), composable.computeJvmDescriptor(), false)
-        v.areturn(Type.VOID_TYPE)
-    }
-}
-
-private fun FunctionDescriptor.write(codegen: FunctionCodegen, code: ExpressionCodegen.() -> Unit) {
-    val declarationOrigin = JvmDeclarationOrigin(JvmDeclarationOriginKind.OTHER, null, this)
-    codegen.generateMethod(
-        declarationOrigin,
-        this,
-        object : FunctionGenerationStrategy.CodegenBased(codegen.state) {
-            override fun doGenerateBody(e: ExpressionCodegen, signature: JvmMethodSignature) {
-                e.code()
-            }
-        })
 }
