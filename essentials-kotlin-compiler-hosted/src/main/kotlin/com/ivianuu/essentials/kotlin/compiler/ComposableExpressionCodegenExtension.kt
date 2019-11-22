@@ -26,7 +26,6 @@ import org.jetbrains.kotlin.descriptors.ValueParameterDescriptor
 import org.jetbrains.kotlin.resolve.calls.model.DefaultValueArgument
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedValueArgument
-import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
 import org.jetbrains.kotlin.resolve.inline.InlineUtil
 import org.jetbrains.kotlin.types.KotlinType
 import org.jetbrains.kotlin.types.typeUtil.isUnit
@@ -165,7 +164,12 @@ private class ComposableStackValue(
         // start group
         v.load(composerStoreIndex, composerType)
 
-        v.iconst(c.codegen.context.functionDescriptor.fqNameSafe.hashCode() xor c.codegen.lastLineNumber)
+        v.invokestatic(
+            "androidx/compose/sourceLocationKt",
+            "sourceLocation",
+            "()I",
+            false
+        )
         v.ensureBoxed(Type.INT_TYPE)
 
         val pivotals = parameters.filter { it.pivotal }
