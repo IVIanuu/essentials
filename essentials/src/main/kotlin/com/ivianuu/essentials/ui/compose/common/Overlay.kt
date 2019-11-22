@@ -92,7 +92,7 @@ data class OverlayEntry(
 val OverlayAmbient = Ambient.of<Overlay>()
 
 @Composable
-/*private*/ fun OverlayLayout(
+private fun OverlayLayout(
     children: @Composable() () -> Unit
 ) = composable {
     Layout(children = children) { measureables, constraints ->

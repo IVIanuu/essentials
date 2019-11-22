@@ -132,7 +132,7 @@ class Scaffold internal constructor(_drawerState: State<DrawerState>) {
 }
 
 @Composable
-/*private*/ fun ScaffoldLayout(
+private fun ScaffoldLayout(
     topAppBar: @Composable() (() -> Unit)?,
     body: @Composable() (() -> Unit)?,
     bodyLayoutMode: Scaffold.BodyLayoutMode,

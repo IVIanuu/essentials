@@ -401,7 +401,7 @@ private class ViewportState {
 private val defaultCacheSize = 250.px
 
 @Composable
-/*private*/ fun ViewportLayout(
+private fun ViewportLayout(
     size: PxSize,
     onSizeChanged: (PxSize) -> Unit,
     children: @Composable() () -> Unit

@@ -68,7 +68,7 @@ fun <T> MultiChoiceListDialog(
 }
 
 @Composable
-/*private*/ fun MultiChoiceDialogListItem(
+private fun MultiChoiceDialogListItem(
     checked: Boolean,
     onCheckedChange: ((Boolean) -> Unit)? = null,
     title: @Composable() () -> Unit

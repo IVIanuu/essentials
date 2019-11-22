@@ -54,7 +54,7 @@ fun Scroller(
 }
 
 @Composable
-/*private*/ fun ScrollerLayout(
+private fun ScrollerLayout(
     position: ScrollPosition,
     direction: Axis,
     child: @Composable() () -> Unit

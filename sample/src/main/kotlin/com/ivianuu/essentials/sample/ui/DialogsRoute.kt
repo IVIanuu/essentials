@@ -328,7 +328,7 @@ val dialogsRoute = composeControllerRoute(
 }
 
 @Composable
-/*private*/ fun DialogLauncherButton(
+private fun DialogLauncherButton(
     text: String,
     dismissible: Boolean = true,
     dialog: @Composable() () -> Unit

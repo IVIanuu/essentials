@@ -29,11 +29,9 @@ import org.jetbrains.kotlin.resolve.inline.InlineUtil
 import org.jetbrains.kotlin.types.typeUtil.isUnit
 import org.jetbrains.org.objectweb.asm.Label
 import org.jetbrains.org.objectweb.asm.Type
-import org.jetbrains.org.objectweb.asm.commons.InstructionAdapter
 
 // todo intercept composable lambda calls
 // todo wrap in start restart scope
-// todo accessed functions
 // todo property support
 
 class ComposableExpressionCodegenExtension : ExpressionCodegenExtension {
@@ -151,19 +149,20 @@ class ComposableExpressionCodegenExtension : ExpressionCodegenExtension {
                 "()I",
                 false
             )
-            v.ensureBoxed(Type.INT_TYPE)
+            val objectType = Type.getType("Ljava/lang/Object;")
+
+            StackValue.coerce(Type.INT_TYPE, objectType, v)
 
             val pivotals = parameters.filter { it.pivotal }
             pivotals
                 .forEachIndexed { _, param ->
-                    val objectType = Type.getType("Ljava/lang/Object;")
                     val tmpIndex = c.codegen.frameMap.enterTemp(objectType)
                     v.store(tmpIndex, objectType)
                     v.load(composerStoreIndex, composerType)
                     v.load(tmpIndex, objectType)
                     c.codegen.frameMap.leaveTemp(objectType)
                     v.load(param.storeIndex, param.type)
-                    v.ensureBoxed(param.type)
+                    StackValue.coerce(param.type, objectType, v)
                     v.invokevirtual(
                         "androidx/compose/ViewComposer",
                         "joinKey",
@@ -190,7 +189,7 @@ class ComposableExpressionCodegenExtension : ExpressionCodegenExtension {
                     .forEachIndexed { index, param ->
                         v.load(composerStoreIndex, composerType)
                         v.load(param.storeIndex, param.type)
-                        v.ensureBoxed(param.type)
+                        StackValue.coerce(param.type, objectType, v)
                         v.invokevirtual(
                             "androidx/compose/ViewComposer",
                             "changed",
@@ -273,47 +272,3 @@ private data class ParameterDescriptor(
     val pivotal: Boolean,
     val stable: Boolean
 )
-
-private fun InstructionAdapter.ensureBoxed(type: Type) {
-    when (type) {
-        Type.INT_TYPE -> {
-            invokestatic(
-                "java/lang/Integer",
-                "valueOf",
-                "(I)Ljava/lang/Integer;",
-                false
-            )
-        }
-        Type.BOOLEAN_TYPE -> {
-            invokestatic(
-                "java/lang/Boolean",
-                "valueOf",
-                "(Z)Ljava/lang/Boolean;",
-                false
-            )
-        }
-        Type.CHAR_TYPE -> {
-            invokestatic(
-                "java/lang/Character",
-                "valueOf",
-                "(C)Ljava/lang/Character;",
-                false
-            )
-        }
-        Type.SHORT_TYPE -> {
-            invokestatic("java/lang/Short", "valueOf", "(S)Ljava/lang/Short;", false)
-        }
-        Type.LONG_TYPE -> {
-            invokestatic("java/lang/Long", "valueOf", "(J)Ljava/lang/Long;", false)
-        }
-        Type.BYTE_TYPE -> {
-            invokestatic("java/lang/Byte", "valueOf", "(B)Ljava/lang/Byte;", false)
-        }
-        Type.FLOAT_TYPE -> {
-            invokestatic("java/lang/Float", "valueOf", "(F)Ljava/lang/Float;", false)
-        }
-        Type.DOUBLE_TYPE -> {
-            invokestatic("java/lang/Double", "valueOf", "(D)Ljava/lang/Double;", false)
-        }
-    }
-}

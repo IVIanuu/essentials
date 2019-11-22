@@ -24,7 +24,7 @@ import com.ivianuu.essentials.util.Toaster
 import kotlinx.coroutines.delay
 
 @Composable
-/*internal*/ fun popNavigatorOnceSecureSettingsGranted() {
+internal fun popNavigatorOnceSecureSettingsGranted() {
     val navigator = inject<Navigator>()
     val secureSettingsHelper = inject<SecureSettingsHelper>()
     val toaster = inject<Toaster>()

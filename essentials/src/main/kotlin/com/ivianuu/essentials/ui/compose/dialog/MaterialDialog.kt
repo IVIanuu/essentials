@@ -80,7 +80,7 @@ enum class AlertDialogButtonLayout {
 }
 
 @Composable
-/*private*/ fun DialogBody(
+private fun DialogBody(
     showDividers: Boolean,
     applyContentPadding: Boolean,
     buttonLayout: AlertDialogButtonLayout,
@@ -169,7 +169,7 @@ enum class AlertDialogButtonLayout {
 }
 
 @Composable
-/*private*/ fun DialogContentLayout(
+private fun DialogContentLayout(
     showDividers: Boolean,
     applyContentPadding: Boolean,
     header: @Composable() (() -> Unit)?,
@@ -283,7 +283,7 @@ enum class AlertDialogButtonLayout {
 }
 
 @Composable
-/*private*/ fun DialogButtons(
+private fun DialogButtons(
     layout: AlertDialogButtonLayout,
     positiveButton: (@Composable() () -> Unit)?,
     negativeButton: (@Composable() () -> Unit)?,
@@ -326,7 +326,7 @@ enum class AlertDialogButtonLayout {
 }
 
 @Composable
-/*private*/ fun DialogDivider() = composable {
+private fun DialogDivider() = composable {
     Divider(color = colorForCurrentBackground().copy(alpha = 0.12f))
 }
 

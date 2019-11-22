@@ -56,7 +56,7 @@ val twilightSettingsRoute = composeControllerRoute(
 }
 
 @Composable
-/*private*/ fun TwilightModeItem(
+private fun TwilightModeItem(
     mode: TwilightMode,
     isSelected: Boolean,
     onClick: () -> Unit

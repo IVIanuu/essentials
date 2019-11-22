@@ -81,7 +81,7 @@ fun <T> PopupMenu(
 
 // todo public
 @Composable
-/*private*/ fun PopupMenuItem(
+private fun PopupMenuItem(
     content: () -> Unit,
     onClick: () -> Unit
 ) = composable {
@@ -245,7 +245,7 @@ fun <T> popupMenuRoute(
 }
 
 @Composable
-/*private*/ fun PopupMenuLayout(
+private fun PopupMenuLayout(
     position: IntPxPosition,
     child: @Composable() () -> Unit
 ) = composable {

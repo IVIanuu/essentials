@@ -116,7 +116,7 @@ fun ColorPickerDialog(
 }
 
 @Composable
-/*private*/ fun ColorPickerContent(
+private fun ColorPickerContent(
     colors: List<Color>,
     allowCustomArgb: Boolean,
     showAlphaSelector: Boolean,
@@ -180,7 +180,7 @@ fun ColorPickerDialog(
 }
 
 @Composable
-/*private*/ fun ColorGrid(
+private fun ColorGrid(
     colors: List<Color>,
     onColorSelected: (Color) -> Unit
 ) = composable {
@@ -210,7 +210,7 @@ fun ColorPickerDialog(
 }
 
 @Composable
-/*private*/ fun ColorGridItem(
+private fun ColorGridItem(
     color: Color,
     onClick: () -> Unit
 ) = composable {
@@ -236,7 +236,7 @@ fun ColorPickerDialog(
 }
 
 @Composable
-/*private*/ fun ColorEditor(
+private fun ColorEditor(
     color: Color,
     onColorChanged: (Color) -> Unit,
     showAlphaSelector: Boolean
@@ -273,7 +273,7 @@ fun ColorPickerDialog(
 }
 
 @Composable
-/*private*/ fun ColoredDialogButton(
+private fun ColoredDialogButton(
     text: String,
     color: Color,
     onClick: () -> Unit
@@ -286,7 +286,7 @@ fun ColorPickerDialog(
 }
 
 @Composable
-/*private*/ fun ColorComponentItem(
+private fun ColorComponentItem(
     component: ColorComponent,
     value: Float,
     onChanged: (Float) -> Unit
@@ -330,7 +330,7 @@ fun ColorPickerDialog(
     }
 }
 
-/*private*/ enum class ColorComponent(
+private enum class ColorComponent(
     val title: String,
     val color: @Composable() () -> Color
 ) {
@@ -375,7 +375,7 @@ private enum class ColorPickerPage(
 }
 
 @Composable
-/*private*/ fun TightColumn(
+private fun TightColumn(
     children: @Composable() () -> Unit
 ) = composable {
     Layout(children = children) { measureables, constraints ->

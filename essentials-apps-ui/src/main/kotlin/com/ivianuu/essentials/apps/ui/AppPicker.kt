@@ -88,7 +88,7 @@ fun appPickerRoute(
 }
 
 @Composable
-/*private*/ fun AppInfo(
+private fun AppInfo(
     app: AppInfo,
     onClick: () -> Unit
 ) = staticComposableWithKey(app.packageName) {

@@ -59,6 +59,6 @@ fun dialogRoute(
 }
 
 @Composable
-/*private*/ fun DialogScrim() = composable {
+private fun DialogScrim() = composable {
     ColoredRect(Color.Black.copy(alpha = 0.6f))
 }

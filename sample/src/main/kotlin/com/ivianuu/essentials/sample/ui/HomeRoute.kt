@@ -94,7 +94,7 @@ val homeRoute = composeControllerRoute {
 }
 
 @Composable
-/*private*/ fun HomeItem(
+private fun HomeItem(
     item: HomeItem,
     onClick: () -> Unit
 ) = composable {
@@ -114,7 +114,7 @@ val homeRoute = composeControllerRoute {
 }
 
 @Composable
-/*private*/ fun ColorAvatar(color: Color) = staticComposable {
+private fun ColorAvatar(color: Color) = staticComposable {
     Container(width = 40.dp, height = 40.dp) {
         val paint = memo {
             Paint().apply { this.color = color }
@@ -130,7 +130,7 @@ val homeRoute = composeControllerRoute {
 }
 
 @Composable
-/*private*/ fun HomeDivider() = staticComposable {
+private fun HomeDivider() = staticComposable {
     Padding(left = 72.dp) {
         Opacity(0.12f) {
             Divider(color = (MaterialTheme.colors()().onSurface))
