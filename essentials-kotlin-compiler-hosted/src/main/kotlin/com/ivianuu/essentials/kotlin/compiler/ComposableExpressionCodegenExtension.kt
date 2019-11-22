@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.kotlin.compiler
 
 import org.jetbrains.kotlin.codegen.CallBasedArgumentGenerator
-import org.jetbrains.kotlin.codegen.CallGenerator
 import org.jetbrains.kotlin.codegen.CallableMethod
 import org.jetbrains.kotlin.codegen.StackValue
 import org.jetbrains.kotlin.codegen.extensions.ExpressionCodegenExtension
@@ -27,7 +26,6 @@ import org.jetbrains.kotlin.resolve.calls.model.DefaultValueArgument
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedValueArgument
 import org.jetbrains.kotlin.resolve.inline.InlineUtil
-import org.jetbrains.kotlin.types.KotlinType
 import org.jetbrains.kotlin.types.typeUtil.isUnit
 import org.jetbrains.org.objectweb.asm.Label
 import org.jetbrains.org.objectweb.asm.Type
@@ -36,7 +34,7 @@ import org.jetbrains.org.objectweb.asm.commons.InstructionAdapter
 // todo intercept composable lambda calls
 // todo wrap in start restart scope
 // todo accessed functions
-// todo fix keys in inline funs
+// todo property support
 
 class ComposableExpressionCodegenExtension : ExpressionCodegenExtension {
 
@@ -47,7 +45,7 @@ class ComposableExpressionCodegenExtension : ExpressionCodegenExtension {
         receiver: StackValue,
         resolvedCall: ResolvedCall<*>,
         c: ExpressionCodegenExtension.Context
-    ): StackValue? = apply(receiver, resolvedCall, c)
+    ): StackValue? = null // todo apply(receiver, resolvedCall, c)
 
     override fun applyFunction(
         receiver: StackValue,
@@ -84,7 +82,7 @@ class ComposableExpressionCodegenExtension : ExpressionCodegenExtension {
             functionDescriptor,
             superCallTarget != null,
             resolvedCall
-        )
+        ) as CallableMethod
 
         val callGenerator = getOrCreateCallGenerator(
             c.codegen,
@@ -99,190 +97,171 @@ class ComposableExpressionCodegenExtension : ExpressionCodegenExtension {
             callable.valueParameterTypes
         )
 
-        return ComposableStackValue(
-            callGenerator = callGenerator,
-            c = c,
-            argumentGenerator = argumentGenerator,
-            resolvedCall = resolvedCall,
-            callable = callable as CallableMethod,
-            isEffect = !functionDescriptor.returnType!!.isUnit()
-        )
-    }
+        val isEffect = !functionDescriptor.returnType!!.isUnit()
 
-}
+        return StackValue.functionCall(
+            callable.returnType,
+            functionDescriptor.original.returnType
+        ) { v ->
+            val invokeLabel = Label()
+            val skipLabel = Label()
+            val endLabel = Label()
 
-private class ComposableStackValue(
-    private val callGenerator: CallGenerator,
-    private val c: ExpressionCodegenExtension.Context,
-    private val argumentGenerator: CallBasedArgumentGenerator,
-    private val resolvedCall: ResolvedCall<*>,
-    private val callable: CallableMethod,
-    private val isEffect: Boolean
-) : StackValue(c.typeMapper.mapType(resolvedCall.candidateDescriptor.returnType!!)) {
+            // store the composer
+            val composerType = Type.getType("Landroidx/compose/ViewComposer;")
+            val composerStoreIndex = c.codegen.frameMap.enterTemp(composerType)
+            v.getComposer()
+            v.store(composerStoreIndex, composerType)
 
-    override fun putSelector(type: Type, kotlinType: KotlinType?, v: InstructionAdapter) {
-        val invokeLabel = Label()
-        val skipLabel = Label()
-        val endLabel = Label()
+            callGenerator.processAndPutHiddenParameters(false)
 
-        // store the composer
-        val composerType = Type.getType("Landroidx/compose/ViewComposer;")
-        val composerStoreIndex = c.codegen.frameMap.enterTemp(composerType)
-        v.getComposer()
-        v.store(composerStoreIndex, composerType)
+            val parameters = resolvedCall.valueArguments.toList()
+                .sortedBy { it.first.index }
+                .map { (descriptor, valueArgument) ->
+                    val asmType = callable.getValueParameters()[descriptor.index].asmType
+                    ParameterDescriptor(
+                        descriptor = descriptor,
+                        argument = valueArgument,
+                        type = asmType,
+                        storeIndex = c.codegen.frameMap.enterTemp(asmType),
+                        isDefault = valueArgument is DefaultValueArgument,
+                        pivotal = descriptor.annotations.hasAnnotation(PIVOTAL_ANNOTATION),
+                        stable = descriptor.type.isStable()
+                    )
+                }
 
-        callGenerator.processAndPutHiddenParameters(false)
+            // load and store params
+            val defaultArgs = argumentGenerator.generate(
+                resolvedCall.valueArgumentsByIndex!!,
+                resolvedCall.valueArguments.values.toList(),
+                resolvedCall.resultingDescriptor
+            )
 
-        val parameters = resolvedCall.valueArguments.toList()
-            .sortedBy { it.first.index }
-            .map { (descriptor, valueArgument) ->
-                val asmType = callable.getValueParameters()[descriptor.index].asmType
-                ParameterDescriptor(
-                    descriptor = descriptor,
-                    argument = valueArgument,
-                    type = asmType,
-                    storeIndex = c.codegen.frameMap.enterTemp(asmType),
-                    isDefault = valueArgument is DefaultValueArgument,
-                    pivotal = descriptor.annotations.hasAnnotation(PIVOTAL_ANNOTATION),
-                    stable = descriptor.type.isStable()
-                )
-            }
+            parameters.reversed()
+                .forEach { param ->
+                    v.store(param.storeIndex, param.type)
+                }
 
-        // load and store params
-        val defaultArgs = argumentGenerator.generate(
-            resolvedCall.valueArgumentsByIndex!!,
-            resolvedCall.valueArguments.values.toList(),
-            resolvedCall.resultingDescriptor
-        )
+            // start group
+            v.load(composerStoreIndex, composerType)
 
-        parameters.reversed()
-            .forEach { param ->
-                println("store $param")
-                v.store(param.storeIndex, param.type)
-            }
+            v.invokestatic(
+                "androidx/compose/sourceLocationKt",
+                "sourceLocation",
+                "()I",
+                false
+            )
+            v.ensureBoxed(Type.INT_TYPE)
 
-        // start group
-        v.load(composerStoreIndex, composerType)
-
-        v.invokestatic(
-            "androidx/compose/sourceLocationKt",
-            "sourceLocation",
-            "()I",
-            false
-        )
-        v.ensureBoxed(Type.INT_TYPE)
-
-        val pivotals = parameters.filter { it.pivotal }
-        pivotals
-            .forEachIndexed { _, param ->
-                val objectType = Type.getType("Ljava/lang/Object;")
-                val tmpIndex = c.codegen.frameMap.enterTemp(objectType)
-                v.store(tmpIndex, objectType)
-                v.load(composerStoreIndex, composerType)
-                v.load(tmpIndex, objectType)
-                c.codegen.frameMap.leaveTemp(objectType)
-                v.load(param.storeIndex, param.type)
-                v.ensureBoxed(param.type)
-                v.invokevirtual(
-                    "androidx/compose/ViewComposer",
-                    "joinKey",
-                    "(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;",
-                    false
-                )
-            }
-
-        v.invokevirtual(
-            "androidx/compose/ViewComposer",
-            "startGroup",
-            "(Ljava/lang/Object;)V",
-            false
-        )
-
-        val isSkippable = !isEffect && parameters
-            .filter { !it.isDefault }
-            .all { it.stable }
-
-        if (isSkippable) {
-            // check changes
-            parameters
-                .filter { !it.isDefault }
-                .forEachIndexed { index, param ->
+            val pivotals = parameters.filter { it.pivotal }
+            pivotals
+                .forEachIndexed { _, param ->
+                    val objectType = Type.getType("Ljava/lang/Object;")
+                    val tmpIndex = c.codegen.frameMap.enterTemp(objectType)
+                    v.store(tmpIndex, objectType)
                     v.load(composerStoreIndex, composerType)
+                    v.load(tmpIndex, objectType)
+                    c.codegen.frameMap.leaveTemp(objectType)
                     v.load(param.storeIndex, param.type)
                     v.ensureBoxed(param.type)
                     v.invokevirtual(
                         "androidx/compose/ViewComposer",
-                        "changed",
-                        "(Ljava/lang/Object;)Z",
+                        "joinKey",
+                        "(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;",
                         false
                     )
-                    if (index != 0) v.or(Type.INT_TYPE)
                 }
-            if (parameters.any { !it.isDefault }) {
-                v.ifne(invokeLabel)
-            }
 
-            v.load(composerStoreIndex, composerType)
-            v.invokevirtual("androidx/compose/ViewComposer", "getInserting", "()Z", false)
-            v.ifeq(skipLabel)
-
-            // start invocation
-            v.mark(invokeLabel)
-            v.load(composerStoreIndex, composerType)
-            v.invokestatic(
-                "androidx/compose/ViewComposerCommonKt",
-                "getInvocation",
-                "()Ljava/lang/Object;",
-                false
-            )
             v.invokevirtual(
                 "androidx/compose/ViewComposer",
                 "startGroup",
                 "(Ljava/lang/Object;)V",
                 false
             )
-        }
 
-        // push receiver
-        if (resolvedCall.dispatchReceiver != null || resolvedCall.extensionReceiver != null) {
-            c.codegen.generateCallReceiver(resolvedCall).put(v)
-        }
+            val isSkippable = !isEffect && parameters
+                .filter { !it.isDefault }
+                .all { it.stable }
 
-        // push parameters
-        parameters.forEach { param ->
-            v.load(param.storeIndex, param.type)
-            c.codegen.frameMap.leaveTemp(param.type)
-        }
+            if (isSkippable) {
+                // check changes
+                parameters
+                    .filter { !it.isDefault }
+                    .forEachIndexed { index, param ->
+                        v.load(composerStoreIndex, composerType)
+                        v.load(param.storeIndex, param.type)
+                        v.ensureBoxed(param.type)
+                        v.invokevirtual(
+                            "androidx/compose/ViewComposer",
+                            "changed",
+                            "(Ljava/lang/Object;)Z",
+                            false
+                        )
+                        if (index != 0) v.or(Type.INT_TYPE)
+                    }
+                if (parameters.any { !it.isDefault }) {
+                    v.ifne(invokeLabel)
+                }
 
-        val defaultMaskWasGenerated: Boolean =
-            defaultArgs.generateOnStackIfNeeded(callGenerator, false)
+                v.load(composerStoreIndex, composerType)
+                v.invokevirtual("androidx/compose/ViewComposer", "getInserting", "()Z", false)
+                v.ifeq(skipLabel)
 
-        callGenerator.genCall(callable, resolvedCall, defaultMaskWasGenerated, c.codegen)
+                // start invocation
+                v.mark(invokeLabel)
+                v.load(composerStoreIndex, composerType)
+                v.invokestatic(
+                    "androidx/compose/ViewComposerCommonKt",
+                    "getInvocation",
+                    "()Ljava/lang/Object;",
+                    false
+                )
+                v.invokevirtual(
+                    "androidx/compose/ViewComposer",
+                    "startGroup",
+                    "(Ljava/lang/Object;)V",
+                    false
+                )
+            }
 
-        if (isSkippable) {
-            // end invocation
+            // push receiver
+            if (resolvedCall.dispatchReceiver != null || resolvedCall.extensionReceiver != null) {
+                c.codegen.generateCallReceiver(resolvedCall).put(v)
+            }
+
+            // push parameters
+            parameters.forEach { param ->
+                v.load(param.storeIndex, param.type)
+                c.codegen.frameMap.leaveTemp(param.type)
+            }
+
+            val defaultMaskWasGenerated: Boolean =
+                defaultArgs.generateOnStackIfNeeded(callGenerator, false)
+
+            callGenerator.genCall(callable, resolvedCall, defaultMaskWasGenerated, c.codegen)
+
+            if (isSkippable) {
+                // end invocation
+                v.load(composerStoreIndex, composerType)
+                v.invokevirtual("androidx/compose/ViewComposer", "endGroup", "()V", false)
+                v.goTo(endLabel)
+
+                // skip current group
+                v.mark(skipLabel)
+                v.load(composerStoreIndex, composerType)
+                v.invokevirtual("androidx/compose/ViewComposer", "skipCurrentGroup", "()V", false)
+
+                v.mark(endLabel)
+            }
+
+            // end group
             v.load(composerStoreIndex, composerType)
             v.invokevirtual("androidx/compose/ViewComposer", "endGroup", "()V", false)
-            v.goTo(endLabel)
 
-            // skip current group
-            v.mark(skipLabel)
-            v.load(composerStoreIndex, composerType)
-            v.invokevirtual("androidx/compose/ViewComposer", "skipCurrentGroup", "()V", false)
-
-            v.mark(endLabel)
+            c.codegen.frameMap.leaveTemp(composerType)
         }
-
-        // end group
-        v.load(composerStoreIndex, composerType)
-        v.invokevirtual("androidx/compose/ViewComposer", "endGroup", "()V", false)
-        /*if (defaultMaskWasGenerated) {
-                   callable.genInvokeDefaultInstruction(v)
-               } else {
-                   callable.genInvokeInstruction(v)
-               }*/
-        c.codegen.frameMap.leaveTemp(composerType)
     }
+
 }
 
 private data class ParameterDescriptor(
