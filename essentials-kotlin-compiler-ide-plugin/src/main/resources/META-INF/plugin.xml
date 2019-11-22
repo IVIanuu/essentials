@@ -26,6 +26,8 @@
     <depends>org.jetbrains.kotlin</depends>
 
     <extensions defaultExtensionNs="org.jetbrains.kotlin">
+        <classBuilderFactoryInterceptorExtension
+            implementation="com.ivianuu.essentials.kotlin.compiler.SourceLocationClassBuilderInterceptorExtension" />
         <expressionCodegenExtension
             implementation="com.ivianuu.essentials.kotlin.compiler.ComposableExpressionCodegenExtension" />
     </extensions>
