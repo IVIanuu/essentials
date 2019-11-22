@@ -25,8 +25,9 @@ import org.jetbrains.kotlin.codegen.generateCallReceiver
 import org.jetbrains.kotlin.descriptors.ValueParameterDescriptor
 import org.jetbrains.kotlin.resolve.calls.model.DefaultValueArgument
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
-import org.jetbrains.kotlin.resolve.descriptorUtil.builtIns
+import org.jetbrains.kotlin.resolve.calls.model.ResolvedValueArgument
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
+import org.jetbrains.kotlin.resolve.inline.InlineUtil
 import org.jetbrains.kotlin.types.KotlinType
 import org.jetbrains.kotlin.types.typeUtil.isUnit
 import org.jetbrains.org.objectweb.asm.Label
@@ -36,45 +37,27 @@ import org.jetbrains.org.objectweb.asm.commons.InstructionAdapter
 // todo intercept composable lambda calls
 // todo wrap in start restart scope
 // todo accessed functions
-// todo property support
+// todo fix keys in inline funs
 
 class ComposableExpressionCodegenExtension : ExpressionCodegenExtension {
 
     override val shouldGenerateClassSyntheticPartsInLightClassesMode: Boolean
         get() = true
 
+    override fun applyProperty(
+        receiver: StackValue,
+        resolvedCall: ResolvedCall<*>,
+        c: ExpressionCodegenExtension.Context
+    ): StackValue? = apply(receiver, resolvedCall, c)
+
     override fun applyFunction(
         receiver: StackValue,
         resolvedCall: ResolvedCall<*>,
         c: ExpressionCodegenExtension.Context
-    ): StackValue? {
-        return handleSourceLocation(resolvedCall, c)
-            ?: handleComposable(resolvedCall, c)
-    }
+    ): StackValue? = apply(receiver, resolvedCall, c)
 
-    private fun handleSourceLocation(
-        resolvedCall: ResolvedCall<*>,
-        c: ExpressionCodegenExtension.Context
-    ): StackValue? {
-        val resultingDescriptor = resolvedCall.resultingDescriptor
-
-        // replace calls to source location with the actual source location
-        return if (resultingDescriptor.fqNameSafe.asString() == "androidx.compose.sourceLocation"
-            && resultingDescriptor.returnType == resultingDescriptor.builtIns.intType
-        ) {
-            object : StackValue(c.typeMapper.mapType(resultingDescriptor.returnType!!)) {
-                override fun putSelector(
-                    type: Type,
-                    kotlinType: KotlinType?,
-                    v: InstructionAdapter
-                ) {
-                    v.iconst(c.codegen.context.functionDescriptor.fqNameSafe.hashCode() xor c.codegen.lastLineNumber)
-                }
-            }
-        } else null
-    }
-
-    private fun handleComposable(
+    private fun apply(
+        receiver: StackValue,
         resolvedCall: ResolvedCall<*>,
         c: ExpressionCodegenExtension.Context
     ): StackValue? {
@@ -84,8 +67,9 @@ class ComposableExpressionCodegenExtension : ExpressionCodegenExtension {
         // todo val thisDescriptor = c.codegen.context.functionDescriptor
         // todo if (!thisDescriptor.annotations.hasAnnotation(COMPOSABLE_ANNOTATION)) return null
 
-        if (functionDescriptor.returnType == null) return null
         if (!functionDescriptor.annotations.hasAnnotation(COMPOSABLE_ANNOTATION)) return null
+        if (functionDescriptor.returnType == null) return null
+        if (InlineUtil.isInline(functionDescriptor)) return null
 
         val superCallTarget = c.codegen.getSuperCallTarget(resolvedCall.call)
 
@@ -125,6 +109,7 @@ class ComposableExpressionCodegenExtension : ExpressionCodegenExtension {
             isEffect = !functionDescriptor.returnType!!.isUnit()
         )
     }
+
 }
 
 private class ComposableStackValue(
@@ -147,12 +132,15 @@ private class ComposableStackValue(
         v.getComposer()
         v.store(composerStoreIndex, composerType)
 
+        callGenerator.processAndPutHiddenParameters(false)
+
         val parameters = resolvedCall.valueArguments.toList()
             .sortedBy { it.first.index }
             .map { (descriptor, valueArgument) ->
                 val asmType = callable.getValueParameters()[descriptor.index].asmType
                 ParameterDescriptor(
                     descriptor = descriptor,
+                    argument = valueArgument,
                     type = asmType,
                     storeIndex = c.codegen.frameMap.enterTemp(asmType),
                     isDefault = valueArgument is DefaultValueArgument,
@@ -170,6 +158,7 @@ private class ComposableStackValue(
 
         parameters.reversed()
             .forEach { param ->
+                println("store $param")
                 v.store(param.storeIndex, param.type)
             }
 
@@ -264,11 +253,7 @@ private class ComposableStackValue(
         val defaultMaskWasGenerated: Boolean =
             defaultArgs.generateOnStackIfNeeded(callGenerator, false)
 
-        if (defaultMaskWasGenerated) {
-            callable.genInvokeDefaultInstruction(v)
-        } else {
-            callable.genInvokeInstruction(v)
-        }
+        callGenerator.genCall(callable, resolvedCall, defaultMaskWasGenerated, c.codegen)
 
         if (isSkippable) {
             // end invocation
@@ -287,13 +272,18 @@ private class ComposableStackValue(
         // end group
         v.load(composerStoreIndex, composerType)
         v.invokevirtual("androidx/compose/ViewComposer", "endGroup", "()V", false)
-
+        /*if (defaultMaskWasGenerated) {
+                   callable.genInvokeDefaultInstruction(v)
+               } else {
+                   callable.genInvokeInstruction(v)
+               }*/
         c.codegen.frameMap.leaveTemp(composerType)
     }
 }
 
 private data class ParameterDescriptor(
     val descriptor: ValueParameterDescriptor,
+    val argument: ResolvedValueArgument,
     val type: Type,
     val storeIndex: Int,
     val isDefault: Boolean,
