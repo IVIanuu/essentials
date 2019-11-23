@@ -28,7 +28,11 @@
     <extensions defaultExtensionNs="org.jetbrains.kotlin">
         <classBuilderFactoryInterceptorExtension
             implementation="com.ivianuu.essentials.kotlin.compiler.SourceLocationClassBuilderInterceptorExtension" />
+        <classBuilderFactoryInterceptorExtension
+            implementation="com.ivianuu.essentials.kotlin.compiler.ComposableClassBuilderInterceptorExtension" />
         <expressionCodegenExtension
             implementation="com.ivianuu.essentials.kotlin.compiler.ComposableExpressionCodegenExtension" />
+        <storageComponentContainerContributor
+            implementation="com.ivianuu.essentials.kotlin.compiler.ComposableStorageComponentContainerContributor" />
     </extensions>
 </idea-plugin>

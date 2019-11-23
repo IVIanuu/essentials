@@ -20,10 +20,10 @@ import org.jetbrains.kotlin.codegen.ClassBuilder
 import org.jetbrains.kotlin.codegen.ClassBuilderFactory
 import org.jetbrains.kotlin.codegen.DelegatingClassBuilder
 import org.jetbrains.kotlin.codegen.extensions.ClassBuilderInterceptorExtension
-import org.jetbrains.kotlin.descriptors.FunctionDescriptor
 import org.jetbrains.kotlin.diagnostics.DiagnosticSink
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
+import org.jetbrains.kotlin.resolve.inline.InlineUtil
 import org.jetbrains.kotlin.resolve.jvm.diagnostics.JvmDeclarationOrigin
 import org.jetbrains.org.objectweb.asm.Label
 import org.jetbrains.org.objectweb.asm.MethodVisitor
@@ -35,8 +35,7 @@ class SourceLocationClassBuilderInterceptorExtension : ClassBuilderInterceptorEx
         interceptedFactory: ClassBuilderFactory,
         bindingContext: BindingContext,
         diagnostics: DiagnosticSink
-    ): ClassBuilderFactory =
-        SourceLocationClassBuilderFactory(interceptedFactory)
+    ): ClassBuilderFactory = SourceLocationClassBuilderFactory(interceptedFactory)
 }
 
 private class SourceLocationClassBuilderFactory(
@@ -84,7 +83,7 @@ private class SourceLocationClassBuilder(val delegateClassBuilder: ClassBuilder)
 
         if (origin.descriptor == null) return original
         // do not replace with s inline functions
-        if ((origin.descriptor as? FunctionDescriptor)?.isInline == true) return original
+        if (InlineUtil.isInline(origin.descriptor)) return original
 
         var lineNumber = 0
 
