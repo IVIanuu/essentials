@@ -59,12 +59,6 @@ class ComposableExpressionCodegenExtension : ExpressionCodegenExtension {
         var functionDescriptor =
             accessibleFunctionDescriptor(c.codegen, resolvedCall) ?: return null
 
-        val thisDescriptor = c.codegen.context.functionDescriptor
-        // todo if (!thisDescriptor.annotations.hasAnnotation(COMPOSABLE_ANNOTATION)) return null
-        //if (thisDescriptor.annotations.hasAnnotation(COMPOSABLE_ANNOTATION)) {
-        //    writeUpdateScope(thisDescriptor, c)
-        //}
-
         if (!functionDescriptor.annotations.hasAnnotation(COMPOSABLE_ANNOTATION)) return null
         if (functionDescriptor.returnType == null) return null
         if (InlineUtil.isInline(functionDescriptor)) return null

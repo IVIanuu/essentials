@@ -33,10 +33,6 @@ class EssentialsComponentRegistrar : ComponentRegistrar {
             project,
             SourceLocationClassBuilderInterceptorExtension()
         )
-        ClassBuilderInterceptorExtension.registerExtension(
-            project,
-            ComposableClassBuilderInterceptorExtension()
-        )
         ExpressionCodegenExtension.registerExtension(
             project,
             ComposableExpressionCodegenExtension()
