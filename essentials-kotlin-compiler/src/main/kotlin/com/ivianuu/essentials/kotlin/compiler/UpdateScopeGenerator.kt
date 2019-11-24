@@ -24,7 +24,6 @@ import org.jetbrains.kotlin.codegen.writeSyntheticClassMetadata
 import org.jetbrains.kotlin.descriptors.ClassDescriptor
 import org.jetbrains.kotlin.descriptors.FunctionDescriptor
 import org.jetbrains.kotlin.load.kotlin.computeJvmDescriptor
-import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
 import org.jetbrains.kotlin.resolve.jvm.AsmTypes
 import org.jetbrains.kotlin.resolve.jvm.diagnostics.JvmDeclarationOrigin
 import org.jetbrains.kotlin.resolve.jvm.diagnostics.JvmDeclarationOriginKind
@@ -41,10 +40,7 @@ fun writeUpdateScope(
     val state = codegen.state
     val typeMapper = codegen.typeMapper
 
-    val asmType = Type.getType(
-        "L" + (composable.containingDeclaration.fqNameSafe.asString() + "/${composable.name}__UpdateScope;")
-            .replace(".", "/")
-    )
+    val asmType = composable.getUpdateScopeType()
 
     val classBuilderForUpdateScope = state.factory.newVisitor(
         JvmDeclarationOrigin(JvmDeclarationOriginKind.OTHER, null, null),

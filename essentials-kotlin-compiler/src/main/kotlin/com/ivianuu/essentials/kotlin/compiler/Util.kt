@@ -18,10 +18,12 @@ package com.ivianuu.essentials.kotlin.compiler
 
 import org.jetbrains.kotlin.builtins.KotlinBuiltIns
 import org.jetbrains.kotlin.builtins.isFunctionType
+import org.jetbrains.kotlin.descriptors.FunctionDescriptor
 import org.jetbrains.kotlin.descriptors.annotations.AnnotationDescriptor
 import org.jetbrains.kotlin.descriptors.annotations.Annotations
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.resolve.descriptorUtil.annotationClass
+import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
 import org.jetbrains.kotlin.types.KotlinType
 import org.jetbrains.kotlin.types.TypeUtils.NO_EXPECTED_TYPE
 import org.jetbrains.kotlin.types.TypeUtils.UNIT_EXPECTED_TYPE
@@ -30,11 +32,19 @@ import org.jetbrains.kotlin.types.isNullable
 import org.jetbrains.kotlin.types.typeUtil.isEnum
 import org.jetbrains.kotlin.types.typeUtil.isTypeParameter
 import org.jetbrains.kotlin.types.typeUtil.makeNotNullable
+import org.jetbrains.org.objectweb.asm.Type
 import org.jetbrains.org.objectweb.asm.commons.InstructionAdapter
 
 val COMPOSABLE_ANNOTATION = FqName("androidx.compose.Composable")
 val PIVOTAL_ANNOTATION = FqName("androidx.compose.Pivotal")
 val STABLE_MARKER_ANNOTATION = FqName("androidx.compose.StableMarker")
+
+fun FunctionDescriptor.getUpdateScopeType(): Type {
+    return Type.getType(
+        "L" + (containingDeclaration.fqNameSafe.asString() + "/${name}__UpdateScope;")
+            .replace(".", "/")
+    )
+}
 
 fun KotlinType.isStable(): Boolean {
     return !isError &&

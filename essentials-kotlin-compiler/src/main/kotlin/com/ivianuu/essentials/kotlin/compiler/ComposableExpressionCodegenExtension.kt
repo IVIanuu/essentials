@@ -36,6 +36,7 @@ import org.jetbrains.org.objectweb.asm.commons.InstructionAdapter
 
 // todo intercept composable lambda calls
 // todo property support
+// todo support inner class composable in start restart
 
 class ComposableExpressionCodegenExtension : ExpressionCodegenExtension {
 
@@ -301,14 +302,14 @@ class ComposableExpressionCodegenExtension : ExpressionCodegenExtension {
         val returnLabel = Label()
         val nullLabel = Label()
         v.ifnull(nullLabel)
-        val updateScopeName = "${descriptor.fqNameSafe.asString().replace(".", "/")}__UpdateScope"
-        v.anew(Type.getType("L$updateScopeName;"))
+        val updateScopeType = descriptor.getUpdateScopeType()
+        v.anew(updateScopeType)
         v.dup()
         descriptor.valueParameters.forEach {
             v.load(it.index, parentCodegen.typeMapper.mapType(it.type))
         }
         v.invokespecial(
-            updateScopeName,
+            updateScopeType.internalName,
             "<init>",
             Type.getMethodDescriptor(
                 Type.VOID_TYPE,
