@@ -17,13 +17,13 @@
 package com.ivianuu.essentials.app
 
 import com.ivianuu.essentials.util.BuildInfo
-import com.ivianuu.injekt.Inject
+import com.ivianuu.injekt.Factory
 import timber.log.Timber
 
 /**
  * Initializes timber in debug builds
  */
-@Inject
+@Factory
 internal class TimberAppInitializer(buildInfo: BuildInfo) : AppInitializer {
     init {
         if (buildInfo.isDebug) {

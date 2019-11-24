@@ -17,12 +17,12 @@
 package com.ivianuu.essentials.util
 
 import android.content.Context
-import com.ivianuu.injekt.Inject
+import com.ivianuu.injekt.Factory
 
 /**
  * Provides strings
  */
-@Inject
+@Factory
 class StringProvider(private val context: Context) {
     fun getString(id: Int): String = context.getString(id)
     fun getString(id: Int, vararg args: Any?): String = context.getString(id, *args)

@@ -17,14 +17,14 @@
 package com.ivianuu.essentials.twilight
 
 import com.ivianuu.essentials.R
-import com.ivianuu.injekt.Inject
+import com.ivianuu.injekt.Single
 import com.ivianuu.injekt.android.ApplicationScope
 import com.ivianuu.kprefs.KPrefs
 import com.ivianuu.kprefs.common.PrefValueHolder
 import com.ivianuu.kprefs.common.enumString
 
-@Inject
 @ApplicationScope
+@Single
 class TwilightPrefs(prefs: KPrefs) {
     val twilightMode = prefs.enumString("twilight_mode",
         TwilightMode.System

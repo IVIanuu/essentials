@@ -17,12 +17,12 @@
 package com.ivianuu.essentials.securesettings
 
 import android.content.ClipboardManager
-import com.ivianuu.injekt.Inject
+import com.ivianuu.injekt.Factory
 
 /**
  * Allows to access the clipboard
  */
-@Inject
+@Factory
 internal class ClipboardAccessor(private val clipboardManager: ClipboardManager) {
     var clipboardText: String
         get() = clipboardManager.text.toString()

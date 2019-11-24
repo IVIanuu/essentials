@@ -20,7 +20,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import com.ivianuu.injekt.Inject
+import com.ivianuu.injekt.Factory
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -28,7 +28,7 @@ import kotlinx.coroutines.flow.callbackFlow
 /**
  * A factory for broadcast receiver observables
  */
-@Inject
+@Factory
 class BroadcastFactory(private val context: Context) {
 
     fun create(vararg actions: String): Flow<Intent> = create(

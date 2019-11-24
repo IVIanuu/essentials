@@ -21,12 +21,13 @@ import android.graphics.Rect
 import android.os.IBinder
 import android.view.Display
 import com.github.ajalt.timberkt.d
-import com.ivianuu.injekt.Inject
+import com.ivianuu.injekt.Factory
+import com.ivianuu.injekt.Single
 
 /**
  * Utils to access overscan with reflection
  */
-@Inject
+@Factory
 @SuppressLint("PrivateApi")
 internal class OverscanHelper {
 

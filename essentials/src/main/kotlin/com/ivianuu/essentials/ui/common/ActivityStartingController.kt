@@ -30,7 +30,7 @@ import com.ivianuu.essentials.ui.base.EsController
 import com.ivianuu.essentials.ui.navigation.director.ControllerRoute
 import com.ivianuu.essentials.ui.navigation.director.controllerRoute
 import com.ivianuu.essentials.ui.navigation.director.dialog
-import com.ivianuu.injekt.Inject
+import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.Param
 import com.ivianuu.injekt.parametersOf
 
@@ -61,7 +61,7 @@ fun urlRoute(url: String) = activityRoute {
     Intent(Intent.ACTION_VIEW).apply { this.data = url.toUri() }
 }
 
-@Inject
+@Factory
 internal class ActivityStartingController(
     @Param private val intentFactory: (Activity) -> Intent
 ) : EsController() {

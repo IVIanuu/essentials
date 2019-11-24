@@ -61,7 +61,7 @@ val esCoilModule = module {
     }
 }
 
-@Name(Decoders.Companion::class)
+@Name
 annotation class Decoders {
     companion object
 }
@@ -82,7 +82,7 @@ inline fun <reified T : Decoder> BindingContext<T>.bindDecoder(): BindingContext
     return this
 }
 
-@Name(Fetchers.Companion::class)
+@Name
 annotation class Fetchers {
     companion object
 }
@@ -117,7 +117,7 @@ inline fun <reified F : Fetcher<T>, reified T : Any> BindingContext<F>.bindFetch
     return this
 }
 
-@Name(Mappers.Companion::class)
+@Name
 annotation class Mappers {
     companion object
 }
@@ -153,7 +153,7 @@ inline fun <reified M : Mapper<T, *>, reified T : Any> BindingContext<M>.bindMap
 }
 
 
-@Name(MeasuredMappers.Companion::class)
+@Name
 annotation class MeasuredMappers {
     companion object
 }

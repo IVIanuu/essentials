@@ -48,7 +48,7 @@ import com.ivianuu.essentials.util.Success
 import com.ivianuu.essentials.util.Uninitialized
 import com.ivianuu.essentials.util.coroutineScope
 import com.ivianuu.essentials.util.flowOf
-import com.ivianuu.injekt.Inject
+import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.Param
 import com.ivianuu.injekt.parametersOf
 import com.ivianuu.scopes.ReusableScope
@@ -146,7 +146,7 @@ private fun CheckableApp(
     )
 }
 
-@Inject
+@Factory
 internal class CheckableAppsViewModel(
     @Param private val appFilter: AppFilter,
     private val appStore: AppStore,

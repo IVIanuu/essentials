@@ -34,24 +34,28 @@ import com.ivianuu.injekt.module
 import com.ivianuu.injekt.typeOf
 
 @Scope
-annotation class ControllerScope
+annotation class ControllerScope {
+    companion object
+}
 
 @Scope
-annotation class ChildControllerScope
+annotation class ChildControllerScope {
+    companion object
+}
 
-@Name(ForController.Companion::class)
+@Name
 annotation class ForController {
     companion object
 }
 
-@Name(ForChildController.Companion::class)
+@Name
 annotation class ForChildController {
     companion object
 }
 
 fun <T : Controller> T.controllerComponent(block: (ComponentBuilder.() -> Unit)? = null): Component =
     component {
-        scopes<ControllerScope>()
+        scopes(ControllerScope)
         getClosestComponentOrNull()?.let { dependencies(it) }
         modules(controllerModule())
         block?.invoke(this)
@@ -59,7 +63,7 @@ fun <T : Controller> T.controllerComponent(block: (ComponentBuilder.() -> Unit)?
 
 fun <T : Controller> T.childControllerComponent(block: (ComponentBuilder.() -> Unit)? = null): Component =
     component {
-        scopes<ChildControllerScope>()
+        scopes(ChildControllerScope)
         getClosestComponentOrNull()?.let { dependencies(it) }
         modules(childControllerModule())
         block?.invoke(this)

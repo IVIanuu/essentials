@@ -22,7 +22,7 @@ import androidx.work.WorkManager
 import androidx.work.WorkerFactory
 import com.ivianuu.essentials.app.AppInitializer
 import com.ivianuu.essentials.app.bindAppInitializer
-import com.ivianuu.injekt.Inject
+import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.module
 
 /**
@@ -35,7 +35,7 @@ val workerInitializerModule = module {
 /**
  * Initializes the [WorkManager] with a injected [WorkerFactory]
  */
-@Inject
+@Factory
 internal class WorkerAppInitializer(
     context: Context,
     workerFactory: WorkerFactory

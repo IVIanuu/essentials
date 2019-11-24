@@ -29,7 +29,7 @@ import kotlin.reflect.KClass
  */
 interface AppService
 
-@Name(AppServices.Companion::class)
+@Name
 annotation class AppServices {
     companion object
 }

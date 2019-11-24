@@ -19,7 +19,7 @@ package com.ivianuu.essentials.gestures.torch
 import android.content.Context
 import android.content.Intent
 import com.ivianuu.essentials.messaging.BroadcastFactory
-import com.ivianuu.injekt.Inject
+import com.ivianuu.injekt.Single
 import com.ivianuu.injekt.android.ApplicationScope
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
@@ -34,7 +34,7 @@ import kotlinx.coroutines.flow.onStart
  * Provides the torch state
  */
 @ApplicationScope
-@Inject
+@Single
 class TorchManager internal constructor(
     broadcastFactory: BroadcastFactory,
     private val context: Context

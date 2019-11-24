@@ -17,7 +17,7 @@
 package com.ivianuu.essentials.ui.navigation
 
 import com.github.ajalt.timberkt.d
-import com.ivianuu.injekt.Inject
+import com.ivianuu.injekt.Single
 import com.ivianuu.injekt.android.ApplicationScope
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.GlobalScope
@@ -27,7 +27,7 @@ import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.launch
 
 @ApplicationScope
-@Inject
+@Single
 class Navigator {
 
     private val _backStack = mutableListOf<Route>()

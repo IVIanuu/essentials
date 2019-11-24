@@ -19,7 +19,7 @@ package com.ivianuu.essentials.gestures
 import android.view.accessibility.AccessibilityEvent
 import android.view.inputmethod.InputMethodManager
 import com.ivianuu.essentials.gestures.accessibility.AccessibilityComponent
-import com.ivianuu.injekt.Inject
+import com.ivianuu.injekt.Single
 import com.ivianuu.injekt.android.ApplicationScope
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.delay
@@ -34,8 +34,8 @@ import java.lang.reflect.Method
 /**
  * Provides info about the keyboard state
  */
-@Inject
 @ApplicationScope
+@Single
 class KeyboardVisibilityDetector(
     private val inputMethodManager: InputMethodManager
 ) : AccessibilityComponent() {

@@ -19,9 +19,9 @@ package com.ivianuu.essentials.sample.work
 import android.content.Context
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
-import com.ivianuu.injekt.Inject
+import com.ivianuu.injekt.Factory
 
-@Inject
+@Factory
 class WorkScheduler(private val context: Context) {
 
     fun scheduleWork() {

@@ -17,14 +17,14 @@
 package com.ivianuu.essentials.gestures
 
 import com.ivianuu.essentials.gestures.accessibility.AccessibilityComponent
-import com.ivianuu.injekt.Inject
+import com.ivianuu.injekt.Single
 import com.ivianuu.injekt.android.ApplicationScope
 
 /**
  * Simulates device events such as back or home
  */
-@Inject
 @ApplicationScope
+@Single
 class GlobalActions : AccessibilityComponent() {
 
     fun performAction(action: Int): Boolean =

@@ -21,12 +21,12 @@ import android.content.Context
 import android.content.pm.PackageManager
 import com.ivianuu.essentials.shell.Shell
 import com.ivianuu.essentials.util.BuildInfo
-import com.ivianuu.injekt.Inject
+import com.ivianuu.injekt.Factory
 
 /**
  * Provides infos about the secure settings access state
  */
-@Inject
+@Factory
 class SecureSettingsHelper(
     private val buildInfo: BuildInfo,
     private val context: Context,

@@ -16,9 +16,9 @@
 
 plugins {
     id("com.android.library")
+    id("com.ivianuu.injekt")
     id("com.ivianuu.essentials.kotlin.compiler")
     kotlin("android")
-    kotlin("kapt")
 }
 
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/android-build-lib.gradle")
@@ -66,8 +66,6 @@ dependencies {
     api(Deps.epoxy)
 
     api(Deps.epoxyPrefs)
-
-    kapt(project(":essentials-compiler"))
 
     api(Deps.Injekt.injekt)
     api(Deps.Injekt.android)
