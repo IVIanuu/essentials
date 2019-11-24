@@ -35,7 +35,6 @@ import org.jetbrains.org.objectweb.asm.Type
 import org.jetbrains.org.objectweb.asm.commons.InstructionAdapter
 
 // todo intercept composable lambda calls
-// todo wrap in start restart scope
 // todo property support
 
 class ComposableExpressionCodegenExtension : ExpressionCodegenExtension {

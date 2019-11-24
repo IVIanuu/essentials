@@ -142,7 +142,7 @@ fun writeUpdateScope(
 
     classBuilderForUpdateScope.newMethod(
         JvmDeclarationOrigin.NO_ORIGIN,
-        Opcodes.ACC_PUBLIC or Opcodes.ACC_FINAL or Opcodes.ACC_SYNTHETIC,
+        Opcodes.ACC_PUBLIC or Opcodes.ACC_FINAL,
         "invoke",
         "()V",
         null,
