@@ -18,17 +18,21 @@ package com.ivianuu.essentials.kotlin.compiler
 
 import org.jetbrains.kotlin.codegen.CallBasedArgumentGenerator
 import org.jetbrains.kotlin.codegen.CallableMethod
+import org.jetbrains.kotlin.codegen.MemberCodegen
 import org.jetbrains.kotlin.codegen.StackValue
 import org.jetbrains.kotlin.codegen.extensions.ExpressionCodegenExtension
 import org.jetbrains.kotlin.codegen.generateCallReceiver
+import org.jetbrains.kotlin.descriptors.FunctionDescriptor
 import org.jetbrains.kotlin.descriptors.ValueParameterDescriptor
 import org.jetbrains.kotlin.resolve.calls.model.DefaultValueArgument
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedValueArgument
+import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
 import org.jetbrains.kotlin.resolve.inline.InlineUtil
 import org.jetbrains.kotlin.types.typeUtil.isUnit
 import org.jetbrains.org.objectweb.asm.Label
 import org.jetbrains.org.objectweb.asm.Type
+import org.jetbrains.org.objectweb.asm.commons.InstructionAdapter
 
 // todo intercept composable lambda calls
 // todo wrap in start restart scope
@@ -256,6 +260,77 @@ class ComposableExpressionCodegenExtension : ExpressionCodegenExtension {
 
             c.codegen.frameMap.leaveTemp(composerType)
         }
+    }
+
+    override fun onEnterFunctionBody(
+        descriptor: FunctionDescriptor,
+        v: InstructionAdapter,
+        parentCodegen: MemberCodegen<*>
+    ) {
+        if (!descriptor.annotations.hasAnnotation(COMPOSABLE_ANNOTATION)) return
+        if (!descriptor.returnType!!.isUnit()) return
+
+        writeUpdateScope(descriptor, parentCodegen)
+
+        v.getComposer()
+        v.iconst(descriptor.fqNameSafe.hashCode() /* xor lineNumber*/) // todo
+        val objectType = Type.getType("Ljava/lang/Object;")
+        StackValue.coerce(Type.INT_TYPE, objectType, v)
+        v.invokevirtual(
+            "androidx/compose/ViewComposer",
+            "startRestartGroup",
+            "(Ljava/lang/Object;)V",
+            false
+        )
+    }
+
+    override fun onExitFunctionBody(
+        descriptor: FunctionDescriptor,
+        v: InstructionAdapter,
+        parentCodegen: MemberCodegen<*>
+    ) {
+        if (!descriptor.annotations.hasAnnotation(COMPOSABLE_ANNOTATION)) return
+        if (!descriptor.returnType!!.isUnit()) return
+        v.getComposer()
+        v.invokevirtual(
+            "androidx/compose/ViewComposer",
+            "endRestartGroup",
+            "()Landroidx/compose/ScopeUpdateScope;",
+            false
+        )
+        v.dup()
+        val returnLabel = Label()
+        val nullLabel = Label()
+        v.ifnull(nullLabel)
+        val updateScopeName = "${descriptor.fqNameSafe.asString().replace(".", "/")}__UpdateScope"
+        v.anew(Type.getType("L$updateScopeName;"))
+        v.dup()
+        descriptor.valueParameters.forEach {
+            v.load(it.index, parentCodegen.typeMapper.mapType(it.type))
+        }
+        v.invokespecial(
+            updateScopeName,
+            "<init>",
+            Type.getMethodDescriptor(
+                Type.VOID_TYPE,
+                *descriptor.valueParameters
+                    .map { parentCodegen.typeMapper.mapType(it.type) }
+                    .toTypedArray()
+            ),
+            false
+        )
+        v.checkcast(Type.getType("Lkotlin/jvm/functions/Function0;"))
+        v.invokeinterface(
+            "androidx/compose/ScopeUpdateScope",
+            "updateScope",
+            "(Lkotlin/jvm/functions/Function0;)V"
+        )
+        v.goTo(returnLabel)
+
+        v.mark(nullLabel)
+        v.pop()
+
+        v.mark(returnLabel)
     }
 
 }
