@@ -33,7 +33,6 @@ buildscript {
         classpath(Deps.buildConfigGradlePlugin)
         classpath(Deps.essentialsKotlinCompilerGradlePlugin)
         classpath(Deps.Injekt.gradlePlugin)
-        classpath(Deps.jarJarGradlePlugin)
         classpath(Deps.Kotlin.gradlePlugin)
         classpath(Deps.mavenGradlePlugin)
     }

@@ -120,13 +120,11 @@ object Deps {
         const val gradlePlugin = "com.ivianuu.injekt:injekt-gradle-plugin:$version"
     }
 
-    const val jarJarGradlePlugin = "org.anarres.jarjar:jarjar-gradle:1.0.1"
-
     const val junit = "junit:junit:4.12"
 
     object Kotlin {
         private const val version = "1.3.60"
-        const val compiler = "org.jetbrains.kotlin:kotlin-compiler:$version"
+        const val compilerEmbeddable = "org.jetbrains.kotlin:kotlin-compiler-embeddable:$version"
         const val gradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$version"
         const val gradlePluginApi = "org.jetbrains.kotlin:kotlin-gradle-plugin-api:$version"
         const val stdlib = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$version"
