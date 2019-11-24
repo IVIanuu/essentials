@@ -269,6 +269,7 @@ class ComposableExpressionCodegenExtension : ExpressionCodegenExtension {
     ) {
         if (!descriptor.annotations.hasAnnotation(COMPOSABLE_ANNOTATION)) return
         if (!descriptor.returnType!!.isUnit()) return
+        if (InlineUtil.isInline(descriptor)) return
 
         writeUpdateScope(descriptor, parentCodegen)
 
@@ -291,6 +292,8 @@ class ComposableExpressionCodegenExtension : ExpressionCodegenExtension {
     ) {
         if (!descriptor.annotations.hasAnnotation(COMPOSABLE_ANNOTATION)) return
         if (!descriptor.returnType!!.isUnit()) return
+        if (InlineUtil.isInline(descriptor)) return
+
         v.getComposer()
         v.invokevirtual(
             "androidx/compose/ViewComposer",

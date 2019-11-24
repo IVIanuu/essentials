@@ -34,16 +34,17 @@ import org.jetbrains.kotlin.types.typeUtil.isTypeParameter
 import org.jetbrains.kotlin.types.typeUtil.makeNotNullable
 import org.jetbrains.org.objectweb.asm.Type
 import org.jetbrains.org.objectweb.asm.commons.InstructionAdapter
+import kotlin.math.absoluteValue
 
 val COMPOSABLE_ANNOTATION = FqName("androidx.compose.Composable")
 val PIVOTAL_ANNOTATION = FqName("androidx.compose.Pivotal")
 val STABLE_MARKER_ANNOTATION = FqName("androidx.compose.StableMarker")
 
 fun FunctionDescriptor.getUpdateScopeType(): Type {
-    return Type.getType(
-        "L" + (containingDeclaration.fqNameSafe.asString() + "/${name}__UpdateScope;")
-            .replace(".", "/")
-    )
+    val packageName = containingDeclaration.fqNameSafe.asString().replace(".", "/")
+    val paramsHash =
+        valueParameters.map { it.name.asString() + it.type.toString() }.hashCode().absoluteValue
+    return Type.getType("L$packageName/${name}\$UpdateScope\$${paramsHash};")
 }
 
 fun KotlinType.isStable(): Boolean {
