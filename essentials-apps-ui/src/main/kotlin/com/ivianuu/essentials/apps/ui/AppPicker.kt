@@ -44,7 +44,7 @@ import com.ivianuu.essentials.util.Async
 import com.ivianuu.essentials.util.Loading
 import com.ivianuu.essentials.util.Success
 import com.ivianuu.essentials.util.Uninitialized
-import com.ivianuu.injekt.Inject
+import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.Param
 import com.ivianuu.injekt.parametersOf
 
@@ -103,7 +103,7 @@ private fun AppInfo(
     )
 }
 
-@Inject
+@Factory
 internal class AppPickerViewModel(
     @Param private val appFilter: AppFilter,
     private val appStore: AppStore,

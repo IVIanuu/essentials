@@ -20,7 +20,7 @@ import android.app.KeyguardManager
 import android.content.Context
 import android.content.Intent
 import com.ivianuu.essentials.messaging.BroadcastFactory
-import com.ivianuu.injekt.Inject
+import com.ivianuu.injekt.Factory
 import hu.akarnokd.kotlin.flow.takeUntil
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.flowOf
@@ -32,7 +32,7 @@ import kotlinx.coroutines.flow.take
 /**
  * Helper class for unlocking the screen
  */
-@Inject
+@Factory
 class ScreenUnlocker(
     private val broadcastFactory: BroadcastFactory,
     private val context: Context,

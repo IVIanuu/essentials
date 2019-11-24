@@ -16,9 +16,9 @@
 
 plugins {
     id("com.android.library")
+    id("com.ivianuu.injekt")
     id("com.ivianuu.essentials.kotlin.compiler")
     kotlin("android")
-    kotlin("kapt")
     id("kotlin-android-extensions")
 }
 
@@ -33,5 +33,4 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/mv
 dependencies {
     api(project(":essentials"))
     api(project(":essentials-securesettings"))
-    kapt(project(":essentials-compiler"))
 }

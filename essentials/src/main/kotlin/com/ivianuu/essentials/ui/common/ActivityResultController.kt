@@ -28,7 +28,7 @@ import com.ivianuu.essentials.ui.base.EsController
 import com.ivianuu.essentials.ui.navigation.director.ControllerRoute
 import com.ivianuu.essentials.ui.navigation.director.controllerRoute
 import com.ivianuu.essentials.ui.navigation.director.dialog
-import com.ivianuu.injekt.Inject
+import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.Param
 import com.ivianuu.injekt.parametersOf
 
@@ -47,7 +47,7 @@ val ActivityResult.isOk: Boolean get() = resultCode == Activity.RESULT_OK
 val ActivityResult.isCanceled: Boolean get() = resultCode == Activity.RESULT_CANCELED
 val ActivityResult.isFirstUser: Boolean get() = resultCode == Activity.RESULT_FIRST_USER
 
-@Inject
+@Factory
 internal class ActivityResultController(@Param private val intent: Intent) : EsController() {
 
     override fun onCreate() {

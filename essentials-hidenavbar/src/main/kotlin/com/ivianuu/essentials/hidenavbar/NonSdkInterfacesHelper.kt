@@ -18,14 +18,14 @@ package com.ivianuu.essentials.hidenavbar
 
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.util.SystemBuildInfo
-import com.ivianuu.injekt.Inject
+import com.ivianuu.injekt.Factory
 import com.ivianuu.ksettings.KSettings
 import com.ivianuu.ksettings.Setting
 
 /**
  * Deactivates non sdk interface detection
  */
-@Inject
+@Factory
 internal class NonSdkInterfacesHelper(
     private val settings: KSettings,
     private val systemBuildInfo: SystemBuildInfo

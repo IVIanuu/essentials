@@ -20,7 +20,7 @@ import android.app.KeyguardManager
 import android.content.Intent
 import android.os.PowerManager
 import com.ivianuu.essentials.messaging.BroadcastFactory
-import com.ivianuu.injekt.Inject
+import com.ivianuu.injekt.Factory
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
@@ -28,7 +28,7 @@ import kotlinx.coroutines.flow.onStart
 /**
  * Provides the current screen state
  */
-@Inject
+@Factory
 class ScreenStateProvider(
     private val broadcastFactory: BroadcastFactory,
     private val keyguardManager: KeyguardManager,

@@ -22,11 +22,11 @@ import com.ivianuu.essentials.ui.base.EsController
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.util.AppDispatchers
 import com.ivianuu.essentials.util.getViewModel
-import com.ivianuu.injekt.Inject
+import com.ivianuu.injekt.Factory
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.withContext
 
-@Inject
+@Factory
 class ControllerRenderer(
     private val activity: FragmentActivity,
     private val dispatchers: AppDispatchers,

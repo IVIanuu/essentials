@@ -21,7 +21,7 @@ import androidx.compose.Composable
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.coroutines.collect
 import com.ivianuu.essentials.ui.compose.injekt.inject
-import com.ivianuu.injekt.Inject
+import com.ivianuu.injekt.Single
 import com.ivianuu.injekt.android.ApplicationScope
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.flow.Flow
@@ -36,8 +36,8 @@ fun Prefs(children: () -> Unit) = composable {
     children()
 }
 
-@Inject
 @ApplicationScope
+@Single
 class SharedPreferencesChanges(sharedPreferences: SharedPreferences) :
     SharedPreferences.OnSharedPreferenceChangeListener {
 

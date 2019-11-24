@@ -18,13 +18,13 @@ package com.ivianuu.essentials.apps
 
 import android.content.pm.PackageManager
 import com.ivianuu.essentials.util.AppDispatchers
-import com.ivianuu.injekt.Inject
+import com.ivianuu.injekt.Factory
 import kotlinx.coroutines.withContext
 
 /**
  * Store for [AppInfo]s
  */
-@Inject
+@Factory
 class AppStore(
     private val dispatchers: AppDispatchers,
     private val packageManager: PackageManager

@@ -49,7 +49,7 @@ import kotlin.reflect.KClass
  */
 interface AppInitializer
 
-@Name(AppInitializers.Companion::class)
+@Name
 annotation class AppInitializers {
     companion object
 }

@@ -21,7 +21,7 @@ import androidx.work.WorkerParameters
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.work.EsWorker
 import com.ivianuu.essentials.work.bindWorker
-import com.ivianuu.injekt.Inject
+import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.Param
 import com.ivianuu.injekt.module
 
@@ -30,7 +30,7 @@ val workerModule = module {
     bindWorker<MyWorkerTwo>()
 }
 
-@Inject
+@Factory
 class MyWorkerOne(
     @Param context: Context,
     @Param workerParams: WorkerParameters
@@ -42,7 +42,7 @@ class MyWorkerOne(
     }
 }
 
-@Inject
+@Factory
 class MyWorkerTwo(
     @Param context: Context,
     @Param workerParams: WorkerParameters

@@ -26,7 +26,7 @@ import com.ivianuu.essentials.messaging.BroadcastFactory
 import com.ivianuu.essentials.util.AppDispatchers
 import com.ivianuu.essentials.util.coroutineScope
 import com.ivianuu.essentials.util.merge
-import com.ivianuu.injekt.Inject
+import com.ivianuu.injekt.Single
 import com.ivianuu.injekt.android.ApplicationScope
 import com.ivianuu.scopes.ReusableScope
 import kotlinx.coroutines.flow.Flow
@@ -40,8 +40,8 @@ import kotlinx.coroutines.flow.onEach
 /**
  * Handles the state of the navigation bar
  */
-@Inject
 @ApplicationScope
+@Single
 class NavBarController internal constructor(
     private val app: Application,
     private val broadcastFactory: BroadcastFactory,

@@ -25,12 +25,12 @@ import coil.fetch.FetchResult
 import coil.fetch.Fetcher
 import coil.size.Size
 import com.ivianuu.essentials.util.AppDispatchers
-import com.ivianuu.injekt.Inject
+import com.ivianuu.injekt.Factory
 import kotlinx.coroutines.withContext
 
 data class AppIcon(val packageName: String)
 
-@Inject
+@Factory
 internal class AppIconFetcher(
     private val dispatchers: AppDispatchers,
     private val packageManager: PackageManager

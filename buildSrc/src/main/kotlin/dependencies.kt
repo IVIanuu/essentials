@@ -114,10 +114,10 @@ object Deps {
         "com.ivianuu.essentials:essentials-kotlin-compiler-gradle-plugin:0.0.1-dev210"
 
     object Injekt {
-        private const val version = "0.0.1-dev73"
+        private const val version = "0.0.1-dev78"
         const val injekt = "com.ivianuu.injekt:injekt:$version"
         const val android = "com.ivianuu.injekt:injekt-android:$version"
-        const val compiler = "com.ivianuu.injekt:injekt-compiler:$version"
+        const val gradlePlugin = "com.ivianuu.injekt:injekt-gradle-plugin:$version"
     }
 
     const val jarJarGradlePlugin = "org.anarres.jarjar:jarjar-gradle:1.0.1"

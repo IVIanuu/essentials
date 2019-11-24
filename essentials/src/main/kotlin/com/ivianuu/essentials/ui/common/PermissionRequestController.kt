@@ -27,7 +27,7 @@ import com.ivianuu.essentials.ui.base.EsController
 import com.ivianuu.essentials.ui.navigation.director.ControllerRoute
 import com.ivianuu.essentials.ui.navigation.director.controllerRoute
 import com.ivianuu.essentials.ui.navigation.director.dialog
-import com.ivianuu.injekt.Inject
+import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.Param
 import com.ivianuu.injekt.parametersOf
 
@@ -62,7 +62,7 @@ class PermissionResult(
 
 val PermissionResult.allGranted: Boolean get() = grantResults.all { it == PackageManager.PERMISSION_GRANTED }
 
-@Inject
+@Factory
 internal class PermissionRequestController(@Param private val permissions: Set<String>) :
     EsController() {
 

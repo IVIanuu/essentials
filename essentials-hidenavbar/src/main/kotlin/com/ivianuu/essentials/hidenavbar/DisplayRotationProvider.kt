@@ -24,7 +24,7 @@ import android.view.OrientationEventListener
 import android.view.WindowManager
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.util.merge
-import com.ivianuu.injekt.Inject
+import com.ivianuu.injekt.Factory
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -34,7 +34,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onStart
 
-@Inject
+@Factory
 internal class DisplayRotationProvider(
     private val app: Application,
     private val screenStateProvider: ScreenStateProvider,

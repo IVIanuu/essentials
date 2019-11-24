@@ -19,7 +19,7 @@ package com.ivianuu.essentials.twilight
 import androidx.appcompat.app.AppCompatDelegate
 import com.ivianuu.essentials.app.AppService
 import com.ivianuu.essentials.util.AppDispatchers
-import com.ivianuu.injekt.Inject
+import com.ivianuu.injekt.Single
 import com.ivianuu.injekt.android.ApplicationScope
 import com.ivianuu.kprefs.coroutines.asFlow
 import kotlinx.coroutines.GlobalScope
@@ -27,8 +27,8 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.withContext
 
-@Inject
 @ApplicationScope
+@Single
 class TwilightController(
     private val dispatchers: AppDispatchers,
     twilightPrefs: TwilightPrefs

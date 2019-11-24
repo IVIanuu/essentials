@@ -19,7 +19,7 @@ package com.ivianuu.essentials.gestures
 import android.view.accessibility.AccessibilityEvent
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.gestures.accessibility.AccessibilityComponent
-import com.ivianuu.injekt.Inject
+import com.ivianuu.injekt.Single
 import com.ivianuu.injekt.android.ApplicationScope
 import com.ivianuu.scopes.MutableScope
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
@@ -31,8 +31,8 @@ import kotlinx.coroutines.flow.map
 /**
  * Recent apps provider
  */
-@Inject
 @ApplicationScope
+@Single
 class RecentAppsProvider : AccessibilityComponent() {
 
     val currentApp: Flow<String?>

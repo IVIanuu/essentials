@@ -23,7 +23,7 @@ import androidx.work.WorkerFactory
 import androidx.work.WorkerParameters
 import com.ivianuu.injekt.BindingContext
 import com.ivianuu.injekt.DefinitionContext
-import com.ivianuu.injekt.Inject
+import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Name
 import com.ivianuu.injekt.Provider
@@ -33,7 +33,7 @@ import com.ivianuu.injekt.parametersOf
 /**
  * Uses injekt to instantiate workers
  */
-@Inject
+@Factory
 class InjektWorkerFactory(
     @WorkersMap private val workers: Map<String, Provider<ListenableWorker>>
 ) : WorkerFactory() {
@@ -62,7 +62,7 @@ val workerInjectionModule = module {
  */
 typealias WorkerDefinition<T> = DefinitionContext.(context: Context, workerParams: WorkerParameters) -> T
 
-@Name(WorkersMap.Companion::class)
+@Name
 annotation class WorkersMap {
     companion object
 }

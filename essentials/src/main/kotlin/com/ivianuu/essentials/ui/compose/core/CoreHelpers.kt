@@ -28,13 +28,9 @@ fun composableWithKey(
 ) {
     with(composer.composer) {
         wrapInRestartScope(key) {
-            if (inserting) {
-                startGroup(invocation)
-                block()
-                endGroup()
-            } else {
-                skipCurrentGroup()
-            }
+            startGroup(invocation)
+            block()
+            endGroup()
         }
     }
 }
