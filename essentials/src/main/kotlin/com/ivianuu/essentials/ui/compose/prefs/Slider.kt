@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.ui.compose.prefs
 
 import androidx.compose.Composable
+import androidx.compose.Pivotal
 import androidx.ui.core.Alignment
 import androidx.ui.core.ContextAmbient
 import androidx.ui.core.Opacity
@@ -34,10 +35,7 @@ import androidx.ui.material.MaterialTheme
 import androidx.ui.material.Slider
 import androidx.ui.material.SliderPosition
 import com.ivianuu.essentials.ui.compose.core.ambient
-import com.ivianuu.essentials.ui.compose.core.composable
-import com.ivianuu.essentials.ui.compose.core.composableWithKey
 import com.ivianuu.essentials.ui.compose.core.invoke
-import com.ivianuu.essentials.ui.compose.core.invokeAsComposable
 import com.ivianuu.essentials.ui.compose.core.memo
 import com.ivianuu.essentials.ui.compose.core.state
 import com.ivianuu.essentials.ui.compose.layout.WithModifier
@@ -46,7 +44,7 @@ import com.ivianuu.kprefs.Pref
 
 @Composable
 fun SliderPreference(
-    pref: Pref<Int>,
+    @Pivotal pref: Pref<Int>,
     valueRange: IntRange = 0..100,
     steps: Int? = null,
     title: @Composable() () -> Unit,
@@ -58,7 +56,7 @@ fun SliderPreference(
     onChange: ((Int) -> Boolean)? = null,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null
-) = composableWithKey("SliderPreference:${pref.key}") {
+) {
     val finalEnabled = enabled && dependencies?.checkAll() ?: true
 
     fun valueChanged(newValue: Int) {
@@ -135,7 +133,7 @@ fun SliderPreference(
                         padding = EdgeInsets(right = 8.dp)
                     ) {
                         Opacity(if (finalEnabled) 1f else 0.5f) {
-                            valueText.invokeAsComposable(internalValue.value)
+                            valueText(internalValue.value)
                         }
                     }
                 }
@@ -145,7 +143,7 @@ fun SliderPreference(
 }
 
 @Composable
-fun SimpleSliderValueText(value: Int) = composable {
+fun SimpleSliderValueText(value: Int) {
     Text(
         text = value.toString(),
         style = MaterialTheme.typography()().body2,

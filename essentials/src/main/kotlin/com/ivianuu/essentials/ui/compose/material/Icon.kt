@@ -27,16 +27,13 @@ import androidx.ui.graphics.Image
 import androidx.ui.layout.Container
 import androidx.ui.material.ripple.Ripple
 import com.ivianuu.essentials.ui.compose.core.ambient
-import com.ivianuu.essentials.ui.compose.core.composable
-import com.ivianuu.essentials.ui.compose.core.invokeAsComposable
-
 @Composable
 fun Icon(
     image: Image,
     style: IconStyle = currentIconStyle(),
     size: Size = style.size,
     color: Color? = style.color
-) = composable {
+) {
     Container(
         width = size.width,
         height = size.height
@@ -67,7 +64,7 @@ private val CurrentIconStyleAmbient = Ambient.of { IconStyle() }
 fun CurrentIconStyleProvider(
     value: IconStyle,
     children: @Composable() () -> Unit
-) = composable {
+) {
     val style = ambient(CurrentIconStyleAmbient)
     val mergedStyle = style.merge(value)
     CurrentIconStyleAmbient.Provider(value = mergedStyle, children = children)
@@ -84,7 +81,7 @@ private val AvatarSize = 40.dp
 fun IconButton(
     image: Image,
     onClick: (() -> Unit)? = null
-) = composable {
+) {
     IconButton(onClick = onClick) {
         Icon(image = image)
     }
@@ -94,14 +91,14 @@ fun IconButton(
 fun IconButton(
     onClick: (() -> Unit)? = null,
     icon: @Composable() () -> Unit
-) = composable {
+) {
     Ripple(
         bounded = false,
         enabled = onClick != null
     ) {
         Clickable(onClick = onClick) {
             Container {
-                icon.invokeAsComposable()
+                icon()
             }
         }
     }

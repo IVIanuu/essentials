@@ -21,7 +21,6 @@ import androidx.ui.core.Alignment
 import androidx.ui.graphics.Image
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.compose.core.ambient
-import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.compose.resources.drawableResource
 import com.ivianuu.essentials.ui.navigation.Navigator
@@ -29,7 +28,7 @@ import com.ivianuu.essentials.ui.navigation.Navigator
 @Composable
 fun DrawerButton(
     image: Image = drawableResource(R.drawable.es_ic_menu)
-) = composable {
+) {
     val scaffold = ambient(ScaffoldAmbient)
     IconButton(
         image = image,
@@ -40,7 +39,7 @@ fun DrawerButton(
 @Composable
 fun BackButton(
     image: Image = drawableResource(R.drawable.es_ic_arrow_back)
-) = composable {
+) {
     val navigator = inject<Navigator>()
     IconButton(
         image = image,
@@ -56,7 +55,7 @@ fun <T> PopupMenuButton(
     items: List<T>,
     onSelected: (T) -> Unit,
     item: @Composable() (T) -> Unit
-) = composable {
+) {
     PopupMenuTrigger(
         alignment = alignment,
         onCancel = onCancel,

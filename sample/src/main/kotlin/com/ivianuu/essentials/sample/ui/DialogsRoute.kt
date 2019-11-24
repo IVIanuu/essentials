@@ -28,7 +28,6 @@ import androidx.ui.material.MaterialTheme
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.compose.common.scrolling.Scroller
 import com.ivianuu.essentials.ui.compose.composeControllerRoute
-import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.invoke
 import com.ivianuu.essentials.ui.compose.core.state
 import com.ivianuu.essentials.ui.compose.dialog.AlertDialogButtonLayout
@@ -332,7 +331,7 @@ private fun DialogLauncherButton(
     text: String,
     dismissible: Boolean = true,
     dialog: @Composable() () -> Unit
-) = composable {
+) {
     val navigator = inject<Navigator>()
     Button(
         text = text,

@@ -45,8 +45,8 @@ import androidx.ui.material.TextButtonStyle
 import androidx.ui.material.ripple.Ripple
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.compose.common.scrolling.Scroller
-import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.invoke
+import com.ivianuu.essentials.ui.compose.core.key
 import com.ivianuu.essentials.ui.compose.core.memo
 import com.ivianuu.essentials.ui.compose.core.state
 import com.ivianuu.essentials.ui.compose.injekt.inject
@@ -88,7 +88,7 @@ fun ColorPickerDialog(
     showAlphaSelector: Boolean = false,
     icon: (@Composable() () -> Unit)? = null,
     title: (@Composable() () -> Unit)? = null
-) = composable {
+) {
     val (currentColor, setCurrentColor) = state { initialColor }
 
     MaterialDialog(
@@ -122,7 +122,7 @@ private fun ColorPickerContent(
     showAlphaSelector: Boolean,
     color: Color,
     onColorChanged: (Color) -> Unit
-) = composable {
+) {
     if (allowCustomArgb) {
         TabController(items = ColorPickerPage.values().toList()) {
             TightColumn {
@@ -183,7 +183,7 @@ private fun ColorPickerContent(
 private fun ColorGrid(
     colors: List<Color>,
     onColorSelected: (Color) -> Unit
-) = composable {
+) {
     Scroller {
         Padding(padding = 4.dp) {
             Table(
@@ -194,12 +194,11 @@ private fun ColorGrid(
                 chunkedColors.forEachIndexed { index, rowColors ->
                     tableRow {
                         rowColors.forEach { color ->
-                            composable(color) {
+                            key(color) {
                                 ColorGridItem(
                                     color = color,
-                                    onClick = {
-                                        onColorSelected(color)
-                                    })
+                                    onClick = { onColorSelected(color) }
+                                )
                             }
                         }
                     }
@@ -213,7 +212,7 @@ private fun ColorGrid(
 private fun ColorGridItem(
     color: Color,
     onClick: () -> Unit
-) = composable {
+) {
     Padding(padding = 4.dp) {
         Ripple(bounded = false) {
             Clickable(onClick = onClick) {
@@ -240,7 +239,7 @@ private fun ColorEditor(
     color: Color,
     onColorChanged: (Color) -> Unit,
     showAlphaSelector: Boolean
-) = composable {
+) {
     Column {
         Container(
             height = 72.dp,
@@ -261,7 +260,7 @@ private fun ColorEditor(
                 it != ColorComponent.Alpha || showAlphaSelector
             }
             .forEach { component ->
-                composable(component) {
+                key(component) {
                     ColorComponentItem(
                         component = component,
                         value = component.read(color),
@@ -277,7 +276,7 @@ private fun ColoredDialogButton(
     text: String,
     color: Color,
     onClick: () -> Unit
-) = composable {
+) {
     DialogButton(
         text = text,
         style = TextButtonStyle(contentColor = color),
@@ -290,7 +289,7 @@ private fun ColorComponentItem(
     component: ColorComponent,
     value: Float,
     onChanged: (Float) -> Unit
-) = composable {
+) {
     Container(
         height = 48.dp,
         modifier = ExpandedWidth
@@ -377,7 +376,7 @@ private enum class ColorPickerPage(
 @Composable
 private fun TightColumn(
     children: @Composable() () -> Unit
-) = composable {
+) {
     Layout(children = children) { measureables, constraints ->
         var childConstraints = constraints
         val placeables = measureables.map {

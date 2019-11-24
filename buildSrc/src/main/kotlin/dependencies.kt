@@ -110,8 +110,8 @@ object Deps {
 
     const val epoxyPrefs = "com.ivianuu.epoxyprefs:epoxyprefs:0.0.1-dev-21"
 
-    const val essentialsKotlinCompilerGradlePlugin =
-        "com.ivianuu.essentials:essentials-kotlin-compiler-gradle-plugin:0.0.1-dev248"
+    const val essentialsGradlePlugin =
+        "com.ivianuu.essentials:essentials-gradle-plugin:0.0.1-dev249"
 
     object Injekt {
         private const val version = "0.0.1-dev78"

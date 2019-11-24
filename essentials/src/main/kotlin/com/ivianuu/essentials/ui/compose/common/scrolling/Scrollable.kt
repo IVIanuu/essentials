@@ -33,7 +33,6 @@ import androidx.ui.foundation.animation.FlingConfig
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.compose.common.framed
 import com.ivianuu.essentials.ui.compose.core.Axis
-import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.memo
 
 // todo maybe merge with original
@@ -210,9 +209,7 @@ fun Scrollable(
                 }
             },
             children = {
-                composable {
-                    child(position)
-                }
+                child(position)
             }
         )
     }

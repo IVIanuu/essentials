@@ -38,11 +38,9 @@ import com.ivianuu.essentials.twilight.twilightSettingsRoute
 import com.ivianuu.essentials.ui.compose.common.navigateOnClick
 import com.ivianuu.essentials.ui.compose.common.scrolling.ScrollableList
 import com.ivianuu.essentials.ui.compose.composeControllerRoute
-import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.invoke
 import com.ivianuu.essentials.ui.compose.core.memo
 import com.ivianuu.essentials.ui.compose.core.staticComposable
-import com.ivianuu.essentials.ui.compose.core.staticComposableWithKey
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
 import com.ivianuu.essentials.ui.compose.material.PopupMenuButton
@@ -79,7 +77,7 @@ val homeRoute = composeControllerRoute {
                 items = items,
                 itemSizeProvider = { if (it != items.lastIndex) 57.dp else 56.dp }
             ) { index, item ->
-                staticComposableWithKey(item) {
+                key(item) {
                     Column {
                         val route = item.route()
                         HomeItem(item = item, onClick = navigateOnClick { route })
@@ -97,7 +95,7 @@ val homeRoute = composeControllerRoute {
 private fun HomeItem(
     item: HomeItem,
     onClick: () -> Unit
-) = composable {
+) {
     SimpleListItem(
         title = { Text(item.title) },
         leading = { ColorAvatar(item.color) },

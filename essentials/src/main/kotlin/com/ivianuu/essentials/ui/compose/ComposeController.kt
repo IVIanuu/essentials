@@ -34,7 +34,6 @@ import com.ivianuu.essentials.ui.compose.core.ControllerAmbient
 import com.ivianuu.essentials.ui.compose.core.MediaQuery
 import com.ivianuu.essentials.ui.compose.core.MediaQueryProvider
 import com.ivianuu.essentials.ui.compose.core.RouteAmbient
-import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.invoke
 import com.ivianuu.essentials.ui.compose.core.memo
 import com.ivianuu.essentials.ui.compose.coroutines.collect
@@ -71,8 +70,7 @@ abstract class ComposeController : EsController() {
 
     // todo move this to somewhere else
     @Composable
-    protected open fun ComposeWithAmbients(view: AndroidComposeViewContainer) =
-        composable {
+    protected open fun ComposeWithAmbients(view: AndroidComposeViewContainer) {
         MultiAmbientProvider(
             ActivityAmbient with requireActivity(),
             RouteAmbient with route!!,
@@ -99,9 +97,7 @@ abstract class ComposeController : EsController() {
                     colors = materialThemeProvider.colors(),
                     typography = materialThemeProvider.typography()
                 ) {
-                    composable {
-                        content()
-                    }
+                    content()
                 }
             }
         }

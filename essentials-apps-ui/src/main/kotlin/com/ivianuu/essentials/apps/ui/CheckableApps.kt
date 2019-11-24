@@ -26,10 +26,8 @@ import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.AppStore
 import com.ivianuu.essentials.apps.coil.AppIcon
 import com.ivianuu.essentials.ui.compose.common.scrolling.ScrollableList
-import com.ivianuu.essentials.ui.compose.core.composable
-import com.ivianuu.essentials.ui.compose.core.composableWithKey
+import com.ivianuu.essentials.ui.compose.core.key
 import com.ivianuu.essentials.ui.compose.core.onActive
-import com.ivianuu.essentials.ui.compose.core.staticComposable
 import com.ivianuu.essentials.ui.compose.image.CoilImageAny
 import com.ivianuu.essentials.ui.compose.material.AvatarIconStyle
 import com.ivianuu.essentials.ui.compose.material.EsCheckbox
@@ -68,7 +66,7 @@ fun CheckableAppsScreen(
     onCheckedAppsChanged: (Set<String>) -> Unit,
     appBarTitle: String,
     appFilter: AppFilter = DefaultAppFilter
-) = composable {
+) {
     val viewModel = mvRxViewModel<CheckableAppsViewModel> {
         parametersOf(appFilter)
     }
@@ -100,23 +98,19 @@ fun CheckableAppsScreen(
         body = {
             when (viewModel.state.apps) {
                 is Loading -> {
-                    staticComposable {
-                        Center {
-                            CircularProgressIndicator()
-                        }
+                    Center {
+                        CircularProgressIndicator()
                     }
                 }
                 is Success -> {
-                    composable {
-                        ScrollableList(
-                            items = viewModel.state.apps() ?: emptyList(),
-                            itemSizeProvider = { 56.dp }
-                        ) { _, app ->
-                            CheckableApp(
-                                app = app,
-                                onClick = { viewModel.appClicked(app) }
-                            )
-                        }
+                    ScrollableList(
+                        items = viewModel.state.apps() ?: emptyList(),
+                        itemSizeProvider = { 56.dp }
+                    ) { _, app ->
+                        CheckableApp(
+                            app = app,
+                            onClick = { viewModel.appClicked(app) }
+                        )
                     }
                 }
             }
@@ -128,22 +122,24 @@ fun CheckableAppsScreen(
 private fun CheckableApp(
     app: CheckableApp,
     onClick: () -> Unit
-) = composableWithKey(app.info.packageName, app.isChecked) {
-    SimpleListItem(
-        title = { Text(app.info.appName) },
-        leading = {
-            CoilImageAny(data = AppIcon(app.info.packageName)) {
-                Icon(image = it, style = AvatarIconStyle())
-            }
-        },
-        trailing = {
-            EsCheckbox(
-                checked = app.isChecked,
-                onCheckedChange = { onClick() }
-            )
-        },
-        onClick = onClick
-    )
+) {
+    key(app.info.packageName) {
+        SimpleListItem(
+            title = { Text(app.info.appName) },
+            leading = {
+                CoilImageAny(data = AppIcon(app.info.packageName)) {
+                    Icon(image = it, style = AvatarIconStyle())
+                }
+            },
+            trailing = {
+                EsCheckbox(
+                    checked = app.isChecked,
+                    onCheckedChange = { onClick() }
+                )
+            },
+            onClick = onClick
+        )
+    }
 }
 
 @Factory

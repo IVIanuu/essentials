@@ -25,7 +25,6 @@ import com.ivianuu.essentials.ui.compose.common.Overlay
 import com.ivianuu.essentials.ui.compose.common.OverlayEntry
 import com.ivianuu.essentials.ui.compose.common.onBackPressed
 import com.ivianuu.essentials.ui.compose.common.retained
-import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.coroutines.coroutineScope
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
@@ -39,7 +38,7 @@ fun ComposeNavigator(
     handleBack: Boolean = true,
     key: String? = null,
     startRoute: () -> Route
-) = composable {
+) {
     val coroutineScope = coroutineScope()
     val navigator = retained("ComposeNavigator:${key.orEmpty()}") {
         ComposeNavigator(Overlay(), coroutineScope, modelListOf(), startRoute())
@@ -48,9 +47,7 @@ fun ComposeNavigator(
     navigator.coroutineScope = coroutineScope
 
     if (handleBack && navigator.backStack.size > 1) {
-        composable {
-            onBackPressed { navigator.pop() }
-        }
+        onBackPressed { navigator.pop() }
     }
 
     navigator.content()

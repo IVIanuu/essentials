@@ -26,8 +26,6 @@ import androidx.ui.core.ParentData
 import androidx.ui.core.dp
 import androidx.ui.core.looseMin
 import androidx.ui.material.DrawerState
-import com.ivianuu.essentials.ui.compose.core.composable
-import com.ivianuu.essentials.ui.compose.core.invokeAsComposable
 import com.ivianuu.essentials.ui.compose.core.memo
 import com.ivianuu.essentials.ui.compose.core.state
 import com.ivianuu.essentials.ui.compose.core.withDensity
@@ -48,7 +46,7 @@ fun Scaffold(
     fab: (@Composable() () -> Unit)? = null,
     fabPosition: Scaffold.FabPosition = Scaffold.FabPosition.End,
     bodyLayoutMode: Scaffold.BodyLayoutMode = Scaffold.BodyLayoutMode.Wrap
-) = composable {
+) {
     val scaffold = memo { Scaffold(drawerState) }
 
     // update state
@@ -139,29 +137,29 @@ private fun ScaffoldLayout(
     bottomBar: @Composable() (() -> Unit)?,
     fab: @Composable() (() -> Unit)?,
     fabPosition: Scaffold.FabPosition
-) = composable {
+) {
     val children: @Composable() () -> Unit = {
         if (topAppBar != null) {
             ParentData(ScaffoldLayoutSlot.TopAppBar) {
-                topAppBar.invokeAsComposable()
+                topAppBar()
             }
         }
 
         if (body != null) {
             ParentData(ScaffoldLayoutSlot.Body) {
-                body.invokeAsComposable()
+                body()
             }
         }
 
         if (bottomBar != null) {
             ParentData(ScaffoldLayoutSlot.BottomBar) {
-                bottomBar.invokeAsComposable()
+                bottomBar()
             }
         }
 
         if (fab != null) {
             ParentData(ScaffoldLayoutSlot.Fab) {
-                fab.invokeAsComposable()
+                fab()
             }
         }
     }

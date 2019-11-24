@@ -25,7 +25,6 @@ import androidx.ui.material.Typography
 import androidx.ui.text.TextStyle
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.compose.core.ambient
-import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.memo
 import com.ivianuu.essentials.util.colorAttr
 
@@ -34,7 +33,7 @@ fun ResourceMaterialTheme(
     colors: ColorPalette = ResourceColorPalette(),
     typography: Typography = ResourceTypography(),
     children: @Composable() () -> Unit
-) = composable {
+) {
     MaterialTheme(
         colors = colors,
         typography = typography,

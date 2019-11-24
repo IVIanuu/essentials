@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.Composable
+import androidx.compose.Pivotal
 import androidx.ui.core.Text
 import androidx.ui.core.dp
 import androidx.ui.foundation.Clickable
@@ -28,7 +29,6 @@ import androidx.ui.material.MaterialTheme
 import androidx.ui.material.ripple.Ripple
 import androidx.ui.material.surface.Surface
 import com.ivianuu.essentials.ui.compose.composeControllerRoute
-import com.ivianuu.essentials.ui.compose.core.composableWithKey
 import com.ivianuu.essentials.ui.compose.core.invoke
 import com.ivianuu.essentials.ui.compose.core.memo
 import com.ivianuu.essentials.ui.compose.dialog.PrimaryColors
@@ -56,7 +56,7 @@ val chipsRoute = composeControllerRoute {
 }
 
 @Composable
-private fun Chip(name: String) = composableWithKey("Chip:$name") {
+private fun Chip(@Pivotal name: String) {
     val toaster = inject<Toaster>()
     val color = memo { PrimaryColors.toList().shuffled().first() }
     Surface(color = color, shape = RoundedCornerShape(16.dp)) {

@@ -28,7 +28,6 @@ import androidx.ui.core.max
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.compose.core.Axis
 import com.ivianuu.essentials.ui.compose.core.VerticalDirection
-import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.withDensity
 
 
@@ -45,7 +44,7 @@ fun FlutterWrap(
     horizontalDirection: LayoutDirection = LayoutDirection.Ltr,
     verticalDirection: VerticalDirection = VerticalDirection.Down,
     children: @Composable() () -> Unit
-) = composable {
+) {
     val spacingPx = withDensity { spacing.toIntPx() }
     val runSpacingPx = withDensity { runSpacing.toIntPx() }
 

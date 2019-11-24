@@ -23,8 +23,6 @@ import androidx.ui.core.max
 import androidx.ui.layout.EdgeInsets
 import androidx.ui.layout.Padding
 import com.ivianuu.essentials.ui.compose.core.WithMediaQuery
-import com.ivianuu.essentials.ui.compose.core.composable
-
 @Composable
 fun SafeArea(
     left: Boolean = true,
@@ -33,7 +31,7 @@ fun SafeArea(
     bottom: Boolean = true,
     minimum: EdgeInsets? = null,
     children: @Composable() () -> Unit
-) = composable {
+) {
     WithMediaQuery { mediaQuery ->
         val leftPadding = safeAreaValue(
             left,

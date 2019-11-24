@@ -23,14 +23,12 @@ import androidx.ui.core.RepaintBoundary
 import androidx.ui.core.WithDensity
 import androidx.ui.core.min
 import androidx.ui.core.px
-import com.ivianuu.essentials.ui.compose.core.composable
-
 @Composable
 fun Offset(
     offsetX: Dp? = null,
     offsetY: Dp? = null,
     child: @Composable() () -> Unit
-) = composable {
+) {
     WithDensity {
         SingleChildLayout(child = {
             RepaintBoundary(children = child)

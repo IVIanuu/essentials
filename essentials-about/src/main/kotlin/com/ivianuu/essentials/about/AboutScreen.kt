@@ -17,12 +17,11 @@
 package com.ivianuu.essentials.about
 
 import androidx.compose.Composable
+import androidx.compose.Pivotal
 import androidx.ui.core.Text
 import com.ivianuu.essentials.ui.compose.common.openUrlOnClick
 import com.ivianuu.essentials.ui.compose.common.scrolling.ScrollableList
 import com.ivianuu.essentials.ui.compose.composeControllerRoute
-import com.ivianuu.essentials.ui.compose.core.composable
-import com.ivianuu.essentials.ui.compose.core.staticComposableWithKey
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
 import com.ivianuu.essentials.ui.compose.material.Scaffold
@@ -58,7 +57,7 @@ fun AboutSection(
     showHeader: Boolean = false,
     hasDebugPackageName: Boolean = buildInfo.isDebug,
     privacyPolicyUrl: String? = null
-) = composable {
+) {
     if (showHeader) {
         Subheader(stringResource(R.string.about_title))
     }
@@ -111,10 +110,10 @@ fun AboutSection(
 
 @Composable
 fun AboutItem(
-    titleRes: Int,
+    @Pivotal titleRes: Int,
     descRes: Int? = null,
     url: () -> String
-) = staticComposableWithKey(titleRes) {
+) {
     SimpleListItem(
         title = { Text(stringResource(titleRes)) },
         subtitle = descRes?.let { { Text(stringResource(it)) } },

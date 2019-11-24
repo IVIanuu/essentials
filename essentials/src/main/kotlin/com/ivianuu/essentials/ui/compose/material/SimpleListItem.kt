@@ -38,9 +38,7 @@ import androidx.ui.material.ripple.Ripple
 import androidx.ui.material.surface.CurrentBackground
 import androidx.ui.text.TextStyle
 import com.ivianuu.essentials.ui.compose.core.ambient
-import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.invoke
-import com.ivianuu.essentials.ui.compose.core.invokeAsComposable
 import com.ivianuu.essentials.util.isDark
 
 @Composable
@@ -50,7 +48,7 @@ fun SimpleListItem(
     leading: @Composable() (() -> Unit)? = null,
     trailing: @Composable() (() -> Unit)? = null,
     onClick: (() -> Unit)? = null
-) = composable {
+) {
     val styledTitle = applyTextStyle(
         TitleTextStyle,
         title
@@ -102,8 +100,8 @@ fun SimpleListItem(
                     Column(
                         mainAxisAlignment = MainAxisAlignment.Center
                     ) {
-                        styledTitle.invokeAsComposable()
-                        styledSubtitle?.invokeAsComposable()
+                        styledTitle()
+                        styledSubtitle?.invoke()
                     }
                 }
 

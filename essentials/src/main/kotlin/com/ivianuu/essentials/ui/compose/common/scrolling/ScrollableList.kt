@@ -23,9 +23,7 @@ import androidx.ui.core.withDensity
 import androidx.ui.layout.Column
 import com.ivianuu.essentials.ui.compose.common.scrolling.sliver.SliverList
 import com.ivianuu.essentials.ui.compose.common.scrolling.sliver.SliverScroller
-import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.invoke
-import com.ivianuu.essentials.ui.compose.core.invokeAsComposable
 import com.ivianuu.essentials.ui.compose.layout.SizedBox
 
 // todo customization
@@ -36,7 +34,7 @@ import com.ivianuu.essentials.ui.compose.layout.SizedBox
 @Composable
 fun ScrollableList(
     children: @Composable() () -> Unit
-) = composable {
+) {
     SizedBox(height = Dp.Infinity) {
         Scroller {
             Column {
@@ -51,11 +49,11 @@ fun <T> ScrollableList(
     items: List<T>,
     itemSize: Dp,
     item: @Composable() (Int, T) -> Unit
-) = composable {
+) {
     ScrollableList(
         count = items.size,
         itemSizeProvider = { itemSize }
-    ) { item.invokeAsComposable(it, items[it]) }
+    ) { item(it, items[it]) }
 }
 
 @Composable
@@ -63,7 +61,7 @@ fun ScrollableList(
     count: Int,
     itemSize: Dp,
     item: @Composable() (Int) -> Unit
-) = composable {
+) {
     ScrollableList(
         count = count,
         itemSizeProvider = { itemSize },
@@ -76,11 +74,11 @@ fun <T> ScrollableList(
     items: List<T>,
     itemSizeProvider: (Int) -> Dp,
     item: @Composable() (Int, T) -> Unit
-) = composable {
+) {
     ScrollableList(
         count = items.size,
         itemSizeProvider = itemSizeProvider
-    ) { item.invokeAsComposable(it, items[it]) }
+    ) { item(it, items[it]) }
 }
 
 @Composable
@@ -88,7 +86,7 @@ fun ScrollableList(
     count: Int,
     itemSizeProvider: (Int) -> Dp,
     item: (Int) -> Unit
-) = composable {
+) {
     val density = ambientDensity()()
 
     SliverScroller {

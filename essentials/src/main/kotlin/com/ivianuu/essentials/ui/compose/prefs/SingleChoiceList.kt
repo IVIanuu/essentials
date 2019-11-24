@@ -17,9 +17,9 @@
 package com.ivianuu.essentials.ui.compose.prefs
 
 import androidx.compose.Composable
+import androidx.compose.Pivotal
 import androidx.ui.core.Text
 import com.ivianuu.essentials.R
-import com.ivianuu.essentials.ui.compose.core.composableWithKey
 import com.ivianuu.essentials.ui.compose.core.state
 import com.ivianuu.essentials.ui.compose.dialog.DialogButton
 import com.ivianuu.essentials.ui.compose.dialog.DialogCloseButton
@@ -29,7 +29,7 @@ import com.ivianuu.kprefs.Pref
 
 @Composable
 fun SingleChoiceListPreference(
-    pref: Pref<String>,
+    @Pivotal pref: Pref<String>,
     items: List<SingleChoiceListPreference.Item>,
     title: @Composable() () -> Unit,
     summary: @Composable() (() -> Unit)? = null,
@@ -38,7 +38,7 @@ fun SingleChoiceListPreference(
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
     dialogTitle: (@Composable() () -> Unit)? = title
-) = composableWithKey("SingleChoiceListPreference:${pref.key}") {
+) {
     DialogPreference(
         pref = pref,
         title = title,

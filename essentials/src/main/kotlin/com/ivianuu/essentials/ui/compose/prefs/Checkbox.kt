@@ -17,8 +17,8 @@
 package com.ivianuu.essentials.ui.compose.prefs
 
 import androidx.compose.Composable
+import androidx.compose.Pivotal
 import com.ivianuu.essentials.ui.compose.common.AbsorbPointer
-import com.ivianuu.essentials.ui.compose.core.composableWithKey
 import com.ivianuu.essentials.ui.compose.coroutines.collect
 import com.ivianuu.essentials.ui.compose.material.EsCheckbox
 import com.ivianuu.kprefs.Pref
@@ -26,14 +26,14 @@ import com.ivianuu.kprefs.coroutines.asFlow
 
 @Composable
 fun CheckboxPreference(
-    pref: Pref<Boolean>,
+    @Pivotal pref: Pref<Boolean>,
     title: @Composable() () -> Unit,
     summary: @Composable() (() -> Unit)? = null,
     leading: @Composable() (() -> Unit)? = null,
     onChange: ((Boolean) -> Boolean)? = null,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null
-) = composableWithKey("CheckboxPreference:${pref.key}") {
+) {
     fun valueChanged(newValue: Boolean) {
         if (onChange?.invoke(newValue) != false) {
             pref.set(newValue)

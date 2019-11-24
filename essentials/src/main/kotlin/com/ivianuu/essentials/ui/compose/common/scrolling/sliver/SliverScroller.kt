@@ -19,14 +19,13 @@ package com.ivianuu.essentials.ui.compose.common.scrolling.sliver
 import androidx.compose.Composable
 import com.ivianuu.essentials.ui.compose.common.scrolling.ScrollPosition
 import com.ivianuu.essentials.ui.compose.common.scrolling.Scrollable
-import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.memo
 
 @Composable
 fun SliverScroller(
     position: ScrollPosition = memo { ScrollPosition() },
     children: SliverChildren.() -> Unit
-) = composable {
+) {
     Scrollable(position = position) {
         Viewport(position = position, children = children)
     }

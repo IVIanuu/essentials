@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.apps.ui
 
 import androidx.compose.Composable
+import androidx.compose.Pivotal
 import androidx.lifecycle.viewModelScope
 import androidx.ui.core.Text
 import androidx.ui.core.dp
@@ -27,8 +28,6 @@ import com.ivianuu.essentials.apps.AppStore
 import com.ivianuu.essentials.apps.coil.AppIcon
 import com.ivianuu.essentials.ui.compose.common.scrolling.ScrollableList
 import com.ivianuu.essentials.ui.compose.composeControllerRoute
-import com.ivianuu.essentials.ui.compose.core.composable
-import com.ivianuu.essentials.ui.compose.core.staticComposableWithKey
 import com.ivianuu.essentials.ui.compose.image.CoilImageAny
 import com.ivianuu.essentials.ui.compose.material.AvatarIconStyle
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
@@ -63,23 +62,19 @@ fun appPickerRoute(
 
             when (viewModel.state.apps) {
                 is Loading -> {
-                    composable {
-                        Center {
-                            CircularProgressIndicator()
-                        }
+                    Center {
+                        CircularProgressIndicator()
                     }
                 }
                 is Success -> {
-                    composable {
-                        ScrollableList(
-                            items = viewModel.state.apps() ?: emptyList(),
-                            itemSizeProvider = { 56.dp }
-                        ) { _, app ->
-                            AppInfo(
-                                app = app,
-                                onClick = { viewModel.appClicked(app) }
-                            )
-                        }
+                    ScrollableList(
+                        items = viewModel.state.apps() ?: emptyList(),
+                        itemSizeProvider = { 56.dp }
+                    ) { _, app ->
+                        AppInfo(
+                            app = app,
+                            onClick = { viewModel.appClicked(app) }
+                        )
                     }
                 }
             }
@@ -89,9 +84,9 @@ fun appPickerRoute(
 
 @Composable
 private fun AppInfo(
-    app: AppInfo,
+    @Pivotal app: AppInfo,
     onClick: () -> Unit
-) = staticComposableWithKey(app.packageName) {
+) {
     SimpleListItem(
         title = { Text(app.appName) },
         leading = {

@@ -24,8 +24,6 @@ import androidx.ui.core.RepaintBoundary
 import androidx.ui.core.dp
 import androidx.ui.layout.Constraints
 import androidx.ui.layout.DpConstraints
-import com.ivianuu.essentials.ui.compose.core.composable
-
 @Composable
 fun OverflowBox(
     minWidth: Dp = 0.dp,
@@ -34,7 +32,7 @@ fun OverflowBox(
     maxHeight: Dp = Dp.Infinity,
     alignment: Alignment = Alignment.Center,
     child: @Composable() () -> Unit
-) = composable {
+) {
     OverflowBox(
         constraints = DpConstraints(
             minWidth = minWidth,
@@ -52,7 +50,7 @@ fun OverflowBox(
     constraints: DpConstraints,
     alignment: Alignment = Alignment.Center,
     child: @Composable() () -> Unit
-) = composable {
+) {
     SingleChildLayout(child = {
         RepaintBoundary(children = child)
     }) { measurable, incomingConstraints ->

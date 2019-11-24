@@ -72,7 +72,7 @@ fun <T : Parcelable> parceledState(
 
     val state = state {
         if (viewModel.handle.contains(key)) {
-            viewModel.handle.get(key)
+            viewModel.handle.get(key)!!
         } else {
             init()
         }

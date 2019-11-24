@@ -17,9 +17,9 @@
 package com.ivianuu.essentials.ui.compose.prefs
 
 import androidx.compose.Composable
+import androidx.compose.Pivotal
 import androidx.ui.core.Text
 import com.ivianuu.essentials.R
-import com.ivianuu.essentials.ui.compose.core.composableWithKey
 import com.ivianuu.essentials.ui.compose.core.state
 import com.ivianuu.essentials.ui.compose.dialog.DialogButton
 import com.ivianuu.essentials.ui.compose.dialog.DialogCloseButton
@@ -31,7 +31,7 @@ import com.ivianuu.kprefs.Pref
 
 @Composable
 fun MultiChoiceListPreference(
-    pref: Pref<Set<String>>,
+    @Pivotal pref: Pref<Set<String>>,
     items: List<MultiChoiceListPreference.Item>,
     title: @Composable() () -> Unit,
     summary: @Composable() (() -> Unit)? = null,
@@ -40,7 +40,7 @@ fun MultiChoiceListPreference(
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
     dialogTitle: (@Composable() () -> Unit)? = title
-) = composableWithKey("MultiChoiceListPreference:${pref.key}") {
+) {
     DialogPreference(
         pref = pref,
         title = title,

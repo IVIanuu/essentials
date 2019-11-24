@@ -17,23 +17,23 @@
 package com.ivianuu.essentials.ui.compose.prefs
 
 import androidx.compose.Composable
+import androidx.compose.Pivotal
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.Switch
 import com.ivianuu.essentials.ui.compose.common.AbsorbPointer
-import com.ivianuu.essentials.ui.compose.core.composableWithKey
 import com.ivianuu.essentials.ui.compose.core.invoke
 import com.ivianuu.kprefs.Pref
 
 @Composable
 fun SwitchPreference(
-    pref: Pref<Boolean>,
+    @Pivotal pref: Pref<Boolean>,
     title: @Composable() () -> Unit,
     summary: @Composable() (() -> Unit)? = null,
     leading: @Composable() (() -> Unit)? = null,
     onChange: ((Boolean) -> Boolean)? = null,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null
-) = composableWithKey("SwitchPreference:${pref.key}") {
+) {
     fun valueChanged(newValue: Boolean) {
         if (onChange?.invoke(newValue) != false) {
             pref.set(newValue)

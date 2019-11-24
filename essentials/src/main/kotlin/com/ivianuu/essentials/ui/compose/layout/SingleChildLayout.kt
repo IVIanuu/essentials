@@ -22,14 +22,12 @@ import androidx.ui.core.Layout
 import androidx.ui.core.Measurable
 import androidx.ui.core.MeasureScope
 import androidx.ui.core.Modifier
-import com.ivianuu.essentials.ui.compose.core.composable
-
 @Composable
 fun SingleChildLayout(
     child: @Composable() () -> Unit,
     modifier: Modifier = Modifier.None,
     measureBlock: MeasureScope.(Measurable?, Constraints) -> MeasureScope.LayoutResult
-) = composable {
+) {
     Layout(children = child, modifier = modifier) { measureables, constraints ->
         check(measureables.size <= 1) { "Only 1 child allowed" }
         measureBlock(measureables.firstOrNull(), constraints)
@@ -41,7 +39,7 @@ fun NonNullSingleChildLayout(
     child: @Composable() () -> Unit,
     modifier: Modifier = Modifier.None,
     measureBlock: MeasureScope.(Measurable, Constraints) -> MeasureScope.LayoutResult
-) = composable {
+) {
     Layout(children = child, modifier = modifier) { measureables, constraints ->
         check(measureables.size == 1) { "Requires exactly 1 child" }
         measureBlock(measureables.first(), constraints)

@@ -27,9 +27,7 @@ import com.ivianuu.essentials.ui.compose.common.PagerPosition
 import com.ivianuu.essentials.ui.compose.common.framed
 import com.ivianuu.essentials.ui.compose.core.Axis
 import com.ivianuu.essentials.ui.compose.core.ambient
-import com.ivianuu.essentials.ui.compose.core.composable
-import com.ivianuu.essentials.ui.compose.core.composableWithKey
-import com.ivianuu.essentials.ui.compose.core.invokeAsComposable
+import com.ivianuu.essentials.ui.compose.core.key
 import com.ivianuu.essentials.ui.compose.core.memo
 
 fun <T> TabController(
@@ -66,16 +64,16 @@ fun <T> TabRow(
         }
     },
     tab: @Composable() (Int, T) -> Unit
-) = composable {
+) {
     TabRow(
         items = tabController.items,
         selectedIndex = tabController.selectedIndex,
         scrollable = scrollable,
         indicatorContainer = indicatorContainer,
         tab = { index, item ->
-            composableWithKey(item as Any) {
+            key(item) {
                 TabIndexAmbient.Provider(index) {
-                    tab.invokeAsComposable(index, item)
+                    tab(index, item)
                 }
             }
         }
@@ -88,7 +86,7 @@ val TabIndexAmbient = Ambient.of<Int>()
 fun Tab(
     text: String? = null,
     icon: Image? = null
-) = composable {
+) {
     val tabController = ambientTabController<Any?>()
     val tabIndex = ambient(TabIndexAmbient)
     Tab(
@@ -103,7 +101,7 @@ fun Tab(
 fun <T> TabPager(
     tabController: TabController<T> = ambientTabController<T>(),
     item: @Composable() (Int, T) -> Unit
-) = composable {
+) {
     val position = memo { PagerPosition(tabController.items.size) }
     val state = memo { TabPagerState<T>() }
 

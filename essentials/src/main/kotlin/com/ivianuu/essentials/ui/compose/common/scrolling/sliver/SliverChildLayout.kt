@@ -26,14 +26,12 @@ import androidx.ui.core.Px
 import androidx.ui.core.PxPosition
 import androidx.ui.core.px
 import com.github.ajalt.timberkt.d
-import com.ivianuu.essentials.ui.compose.core.composable
-
 @Composable
 fun SliverChildLayout(
     constraints: SliverConstraints,
     geometry: SliverGeometry,
     children: @Composable() () -> Unit
-) = composable {
+) {
     Layout(children = children) { measureables, incomingConstraints ->
         val placeables = mutableListOf<Placeable>()
         val parentDatas = mutableListOf<SliverChildParentData>()

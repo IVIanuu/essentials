@@ -25,18 +25,15 @@ import androidx.ui.material.MaterialTheme
 import androidx.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.compose.core.RouteAmbient
 import com.ivianuu.essentials.ui.compose.core.ambient
-import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.invoke
-import com.ivianuu.essentials.ui.compose.core.invokeAsComposable
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.navigation.Navigator
 
 // todo added centerTitle
 
 @Composable
-fun EsTopAppBar(title: String) =
-    composable {
-        EsTopAppBar(title = { Text(title) })
+fun EsTopAppBar(title: String) {
+    EsTopAppBar(title = { Text(title) })
 }
 
 @Composable
@@ -45,21 +42,21 @@ fun EsTopAppBar(
     title: @Composable() () -> Unit,
     leading: (@Composable() () -> Unit)? = autoTopAppBarLeadingIcon(),
     trailing: (@Composable() () -> Unit)? = null
-) = composable {
+) {
     TopAppBar(
         color = color,
         title = title,
         navigationIcon = leading?.let {
             {
                 CurrentIconStyleProvider(AppBarIconStyle(color)) {
-                    leading.invokeAsComposable()
+                    leading()
                 }
             }
         },
         actionData = listOfNotNull(trailing),
         action = {
             CurrentIconStyleProvider(AppBarIconStyle(color)) {
-                it.invokeAsComposable()
+                it()
             }
         }
     )

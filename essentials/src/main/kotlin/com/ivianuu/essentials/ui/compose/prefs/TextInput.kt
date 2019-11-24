@@ -17,9 +17,9 @@
 package com.ivianuu.essentials.ui.compose.prefs
 
 import androidx.compose.Composable
+import androidx.compose.Pivotal
 import androidx.ui.input.KeyboardType
 import com.ivianuu.essentials.R
-import com.ivianuu.essentials.ui.compose.core.composableWithKey
 import com.ivianuu.essentials.ui.compose.core.state
 import com.ivianuu.essentials.ui.compose.dialog.DialogButton
 import com.ivianuu.essentials.ui.compose.dialog.DialogCloseButton
@@ -29,7 +29,7 @@ import com.ivianuu.kprefs.Pref
 
 @Composable
 fun TextInputPreference(
-    pref: Pref<String>,
+    @Pivotal pref: Pref<String>,
     dialogHint: String? = null,
     dialogKeyboardType: KeyboardType = KeyboardType.Text,
     allowEmpty: Boolean = true,
@@ -40,7 +40,7 @@ fun TextInputPreference(
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
     dialogTitle: @Composable() (() -> Unit)? = title
-) = composableWithKey("TextInputPreference:${pref.key}") {
+) {
     DialogPreference(
         pref = pref,
         dialog = { dismiss ->

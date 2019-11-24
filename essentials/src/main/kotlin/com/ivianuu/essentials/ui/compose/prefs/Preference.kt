@@ -17,14 +17,14 @@
 package com.ivianuu.essentials.ui.compose.prefs
 
 import androidx.compose.Composable
+import androidx.compose.Pivotal
 import androidx.ui.core.Opacity
-import com.ivianuu.essentials.ui.compose.core.composableWithKey
 import com.ivianuu.essentials.ui.compose.material.SimpleListItem
 import com.ivianuu.kprefs.Pref
 
 @Composable
 fun <T> Preference(
-    pref: Pref<T>,
+    @Pivotal pref: Pref<T>,
     title: @Composable() () -> Unit,
     summary: @Composable() (() -> Unit)? = null,
     leading: @Composable() (() -> Unit)? = null,
@@ -33,7 +33,7 @@ fun <T> Preference(
     onChange: ((T) -> Boolean)? = null,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null
-) = composableWithKey("Preference:${pref.key}") {
+) {
     val finalEnabled = enabled && dependencies?.checkAll() ?: true
 
     Opacity(if (finalEnabled) 1f else 0.5f) {
