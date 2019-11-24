@@ -22,7 +22,6 @@ import org.jetbrains.kotlin.codegen.extensions.ClassBuilderInterceptorExtension
 import org.jetbrains.kotlin.codegen.extensions.ExpressionCodegenExtension
 import org.jetbrains.kotlin.compiler.plugin.ComponentRegistrar
 import org.jetbrains.kotlin.config.CompilerConfiguration
-import org.jetbrains.kotlin.extensions.StorageComponentContainerContributor
 
 @AutoService(ComponentRegistrar::class)
 class EssentialsComponentRegistrar : ComponentRegistrar {
@@ -41,10 +40,6 @@ class EssentialsComponentRegistrar : ComponentRegistrar {
         ExpressionCodegenExtension.registerExtension(
             project,
             ComposableExpressionCodegenExtension()
-        )
-        StorageComponentContainerContributor.registerExtension(
-            project,
-            ComposableStorageComponentContainerContributor()
         )
     }
 }
