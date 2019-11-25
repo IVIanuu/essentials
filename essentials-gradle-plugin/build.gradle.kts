@@ -12,16 +12,16 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/mv
 gradlePlugin {
     plugins {
         create("essentialsPlugin") {
-            id = "com.ivianuu.essentials.kotlin.compiler"
+            id = "com.ivianuu.essentials"
             implementationClass =
-                "com.ivianuu.essentials.kotlin.compiler.gradle.EssentialsGradlePlugin"
+                "com.ivianuu.essentials.gradle.EssentialsGradlePlugin"
         }
     }
 }
 
 buildConfig {
     clsName = "BuildConfig"
-    packageName = "com.ivianuu.essentials.kotlin.compiler"
+    packageName = "com.ivianuu.essentials.gradle"
 
     version = Publishing.version
     buildConfigField("String", "GROUP_ID", Publishing.groupId)
