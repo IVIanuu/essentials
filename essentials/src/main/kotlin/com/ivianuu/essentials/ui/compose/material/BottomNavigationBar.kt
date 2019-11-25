@@ -200,6 +200,7 @@ fun <T> BottomNavigationController(
     BottomNavigationControllerAmbient.Provider(bottomNavigationController, children)
 }
 
+@Composable
 fun <T> ambientBottomNavigationController(): BottomNavigationController<T> = effect {
     ambient(BottomNavigationControllerAmbient) as BottomNavigationController<T>
 }

@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.ui.compose.common
 
+import androidx.compose.Composable
 import com.ivianuu.essentials.ui.common.urlRoute
 import com.ivianuu.essentials.ui.compose.core.effect
 import com.ivianuu.essentials.ui.compose.core.memo
@@ -23,9 +24,13 @@ import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.Route
 
+@Composable
 fun navigateOnClick(route: () -> Route): () -> Unit = effect {
     val navigator = inject<Navigator>()
     return@effect memo { { navigator.push(route()) } }
 }
 
-fun openUrlOnClick(url: () -> String) = navigateOnClick { urlRoute(url()) }
+@Composable
+fun openUrlOnClick(url: () -> String) = effect {
+    navigateOnClick { urlRoute(url()) }
+}

@@ -43,6 +43,7 @@ fun ResourceMaterialTheme(
     )
 }
 
+@Composable
 fun resourceColors(): ColorPalette = effect {
     val context = ambient(ContextAmbient)
     memo {
@@ -63,6 +64,7 @@ fun resourceColors(): ColorPalette = effect {
     }
 }
 
+@Composable
 fun resourceTypography(): Typography = effect {
     memo { Typography() }
     /*Typography(
@@ -82,6 +84,7 @@ fun resourceTypography(): Typography = effect {
     )*/
 }
 
+@Composable
 fun resourceTextStyle(attr: Int): TextStyle = effect {
     error("not implemented")
     val context = ambient(ContextAmbient)

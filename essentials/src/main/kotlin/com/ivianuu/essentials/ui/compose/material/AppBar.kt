@@ -66,6 +66,7 @@ fun EsTopAppBar(
     )
 }
 
+@Composable
 private fun autoTopAppBarLeadingIcon(): (@Composable() () -> Unit)? = effect {
     val scaffold = ambient(ScaffoldAmbient)
     val navigator = inject<Navigator>()
@@ -81,6 +82,7 @@ private fun autoTopAppBarLeadingIcon(): (@Composable() () -> Unit)? = effect {
     }
 }
 
+@Composable
 fun appBarIconStyle(color: Color): IconStyle = effect {
     IconStyle(
         size = Size(AppBarIconSize, AppBarIconSize),

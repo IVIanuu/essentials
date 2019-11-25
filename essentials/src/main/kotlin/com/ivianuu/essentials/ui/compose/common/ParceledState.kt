@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.ui.compose.common
 
 import android.os.Parcelable
+import androidx.compose.Composable
 import androidx.compose.State
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.SavedStateViewModelFactory
@@ -31,15 +32,19 @@ import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.compose.viewmodel.viewModel
 import com.ivianuu.essentials.util.sourceLocation
 
+@Composable
 inline fun <T : Parcelable> parceled(
     keepAcrossCompositions: Boolean = false,
     noinline init: () -> T
-) = parceled(
-    key = sourceLocation().hashCode().toString(),
-    keepAcrossCompositions = keepAcrossCompositions,
-    init = init
-)
+) = effect {
+    parceled(
+        key = sourceLocation().hashCode().toString(),
+        keepAcrossCompositions = keepAcrossCompositions,
+        init = init
+    )
+}
 
+@Composable
 fun <T : Parcelable> parceled(
     key: String,
     keepAcrossCompositions: Boolean = false,
@@ -48,15 +53,19 @@ fun <T : Parcelable> parceled(
     parceledState(key, keepAcrossCompositions, init).value
 }
 
+@Composable
 inline fun <T : Parcelable> parceledState(
     keepAcrossCompositions: Boolean = false,
     noinline init: () -> T
-) = parceledState(
-    key = sourceLocation().hashCode().toString(),
-    keepAcrossCompositions = keepAcrossCompositions,
-    init = init
-)
+) = effect {
+    parceledState(
+        key = sourceLocation().hashCode().toString(),
+        keepAcrossCompositions = keepAcrossCompositions,
+        init = init
+    )
+}
 
+@Composable
 fun <T : Parcelable> parceledState(
     key: String,
     keepAcrossCompositions: Boolean = false,

@@ -154,6 +154,7 @@ fun SimpleSliderValueText(value: Int) = composable {
     )
 }
 
+@Composable
 fun unitValueTextProvider(
     unit: UnitValueTextProvider.Unit
 ): @Composable() (Int) -> Unit = effect {

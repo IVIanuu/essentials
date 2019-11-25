@@ -43,6 +43,7 @@ fun <T> TabController(
     TabControllerAmbient.Provider(tabController, children)
 }
 
+@Composable
 fun <T> ambientTabController(): TabController<T> = effect {
     ambient(TabControllerAmbient) as TabController<T>
 }

@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.ui.compose.mvrx
 
+import androidx.compose.Composable
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import com.ivianuu.essentials.ui.compose.core.effect
@@ -27,12 +28,16 @@ import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
 import com.ivianuu.essentials.util.defaultViewModelKey
 import kotlin.reflect.KClass
 
+@Composable
 inline fun <reified T : MvRxViewModel<*>> mvRxViewModel(
     from: ViewModelStoreOwner = inject<ViewModelStoreOwner>(),
     factory: ViewModelProvider.Factory = memo { ViewModelProvider.NewInstanceFactory() },
     key: String = memo { T::class.defaultViewModelKey }
-) = mvRxViewModel(T::class, from, factory, key)
+) = effect {
+    mvRxViewModel(T::class, from, factory, key)
+}
 
+@Composable
 fun <T : MvRxViewModel<*>> mvRxViewModel(
     type: KClass<T>,
     from: ViewModelStoreOwner = inject<ViewModelStoreOwner>(),

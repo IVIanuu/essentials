@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.ui.compose.common
 
+import androidx.compose.Composable
 import androidx.compose.State
 import androidx.lifecycle.ViewModel
 import com.ivianuu.essentials.ui.compose.core.effect
@@ -24,15 +25,19 @@ import com.ivianuu.essentials.ui.compose.core.state
 import com.ivianuu.essentials.ui.compose.viewmodel.viewModel
 import com.ivianuu.essentials.util.sourceLocation
 
+@Composable
 inline fun <T> retained(
     keepAcrossCompositions: Boolean = false,
     noinline init: () -> T
-) = retained(
-    key = sourceLocation(),
-    keepAcrossCompositions = keepAcrossCompositions,
-    init = init
-)
+) = effect {
+    retained(
+        key = sourceLocation(),
+        keepAcrossCompositions = keepAcrossCompositions,
+        init = init
+    )
+}
 
+@Composable
 fun <T> retained(
     key: Any,
     keepAcrossCompositions: Boolean = false,
@@ -41,15 +46,19 @@ fun <T> retained(
     retainedState(key, keepAcrossCompositions, init).value
 }
 
+@Composable
 inline fun <T> retainedState(
     keepAcrossCompositions: Boolean = false,
     noinline init: () -> T
-) = retainedState(
-    key = sourceLocation(),
-    keepAcrossCompositions = keepAcrossCompositions,
-    init = init
-)
+) = effect {
+    retainedState(
+        key = sourceLocation(),
+        keepAcrossCompositions = keepAcrossCompositions,
+        init = init
+    )
+}
 
+@Composable
 fun <T> retainedState(
     key: Any,
     keepAcrossCompositions: Boolean = false,

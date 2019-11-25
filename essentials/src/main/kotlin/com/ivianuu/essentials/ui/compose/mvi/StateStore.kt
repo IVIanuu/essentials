@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.ui.compose.mvi
 
+import androidx.compose.Composable
 import com.ivianuu.essentials.ui.compose.common.retainedState
 import com.ivianuu.essentials.ui.compose.core.effect
 
@@ -27,6 +28,7 @@ interface StateStore<S, A> {
     operator fun component2(): (A) -> Unit = this::dispatch
 }
 
+@Composable
 fun <S, A> stateStore(
     key: Any = "StateStore",
     initialState: () -> S,

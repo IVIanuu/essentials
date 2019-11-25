@@ -74,6 +74,7 @@ fun CurrentIconStyleProvider(
     CurrentIconStyleAmbient.Provider(value = mergedStyle, children = children)
 }
 
+@Composable
 fun currentIconStyle(): IconStyle = effect { ambient(CurrentIconStyleAmbient) }
 
 fun AvatarIconStyle() = IconStyle(size = Size(AvatarSize, AvatarSize), color = null)

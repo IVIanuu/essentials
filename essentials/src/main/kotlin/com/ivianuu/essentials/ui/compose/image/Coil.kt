@@ -27,6 +27,7 @@ import com.ivianuu.essentials.ui.compose.core.memo
 import com.ivianuu.essentials.ui.compose.coroutines.load
 import com.ivianuu.essentials.ui.compose.injekt.inject
 
+@Composable
 fun loadCoilImageAny(
     placeholder: Image,
     data: Any

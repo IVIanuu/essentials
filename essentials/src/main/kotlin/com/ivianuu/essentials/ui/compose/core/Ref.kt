@@ -16,18 +16,30 @@
 
 package com.ivianuu.essentials.ui.compose.core
 
-fun <T> ref(init: () -> T) = memo { Ref(init()) }
+import androidx.compose.Composable
 
-fun <T, V1> refFor(v1: V1, init: () -> T) =
+@Composable
+fun <T> ref(init: () -> T) = effect {
+    memo { Ref(init()) }
+}
+
+@Composable
+fun <T, V1> refFor(v1: V1, init: () -> T) = effect {
     memo(v1) { Ref(init()) }
+}
 
+@Composable
 fun <T, V1, V2> refFor(
     v1: V1,
     v2: V2,
     init: () -> T
-) = memo(v1, v2) { Ref(init()) }
+) = effect {
+    memo(v1, v2) { Ref(init()) }
+}
 
-fun <T> refFor(vararg inputs: Any?, init: () -> T) =
+@Composable
+fun <T> refFor(vararg inputs: Any?, init: () -> T) = effect {
     memo(*inputs) { Ref(init()) }
+}
 
 data class Ref<T>(var value: T)

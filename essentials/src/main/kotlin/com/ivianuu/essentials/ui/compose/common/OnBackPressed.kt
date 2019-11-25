@@ -19,24 +19,29 @@ package com.ivianuu.essentials.ui.compose.common
 import android.app.Activity
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.OnBackPressedDispatcherOwner
+import androidx.compose.Composable
 import com.ivianuu.essentials.ui.compose.core.ActivityAmbient
 import com.ivianuu.essentials.ui.compose.core.ambient
+import com.ivianuu.essentials.ui.compose.core.effect
 import com.ivianuu.essentials.ui.compose.core.onActive
 
+@Composable
 fun onBackPressed(
     activity: Activity = ambient(ActivityAmbient),
     callback: () -> Unit
-) = onActive {
-    val backPressedDispatcher =
-        (activity as OnBackPressedDispatcherOwner).onBackPressedDispatcher
+) = effect {
+    onActive {
+        val backPressedDispatcher =
+            (activity as OnBackPressedDispatcherOwner).onBackPressedDispatcher
 
-    val onBackPressedCallback = object : OnBackPressedCallback(true) {
-        override fun handleOnBackPressed() {
-            callback()
+        val onBackPressedCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                callback()
+            }
         }
+
+        backPressedDispatcher.addCallback(onBackPressedCallback)
+
+        onDispose { onBackPressedCallback.remove() }
     }
-
-    backPressedDispatcher.addCallback(onBackPressedCallback)
-
-    onDispose { onBackPressedCallback.remove() }
 }

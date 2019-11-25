@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.ui.compose.common
 
+import androidx.compose.Composable
 import androidx.ui.core.FocusManagerAmbient
 import com.ivianuu.essentials.ui.compose.core.ActivityAmbient
 import com.ivianuu.essentials.ui.compose.core.ambient
@@ -24,16 +25,19 @@ import com.ivianuu.essentials.util.hideInputMethod
 
 // todo refactor api
 
+@Composable
 fun showKeyboard(id: String): () -> Unit = effect {
     val showKeyboard = showKeyboard()
     return@effect { showKeyboard(id) }
 }
 
+@Composable
 fun showKeyboard(): (String) -> Unit = effect {
     val focusManager = ambient(FocusManagerAmbient)
     return@effect { focusManager.requestFocusById(it) }
 }
 
+@Composable
 fun hideKeyboard(): () -> Unit = effect {
     val activity = ambient(ActivityAmbient)
     return@effect { activity.hideInputMethod() }

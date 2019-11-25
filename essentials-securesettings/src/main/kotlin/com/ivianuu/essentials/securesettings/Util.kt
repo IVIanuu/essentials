@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.securesettings
 
+import androidx.compose.Composable
 import com.ivianuu.essentials.ui.compose.core.effect
 import com.ivianuu.essentials.ui.compose.coroutines.launchOnActive
 import com.ivianuu.essentials.ui.compose.injekt.inject
@@ -23,6 +24,7 @@ import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.util.Toaster
 import kotlinx.coroutines.delay
 
+@Composable
 internal fun popNavigatorOnceSecureSettingsGranted() = effect {
     val navigator = inject<Navigator>()
     val secureSettingsHelper = inject<SecureSettingsHelper>()

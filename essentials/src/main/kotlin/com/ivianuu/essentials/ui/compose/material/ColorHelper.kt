@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.ui.compose.material
 
+import androidx.compose.Composable
 import androidx.ui.graphics.Color
 import androidx.ui.graphics.toArgb
 import androidx.ui.material.MaterialTheme
@@ -25,10 +26,12 @@ import com.ivianuu.essentials.ui.compose.core.effect
 import com.ivianuu.essentials.ui.compose.core.invoke
 import com.ivianuu.essentials.util.isDark
 
+@Composable
 fun colorForCurrentBackground(): Color = effect {
     colorForBackground(ambient(CurrentBackground))
 }
 
+@Composable
 fun colorForBackground(color: Color): Color = effect {
     var result = with(MaterialTheme.colors()()) {
         when (color) {

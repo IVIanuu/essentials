@@ -44,6 +44,7 @@ fun WithMediaQuery(
     children.invokeAsComposable(ambientMediaQuery())
 }
 
+@Composable
 fun ambientMediaQuery(): MediaQuery = effect { ambient(MediaQueryAmbient) }
 
 @Composable

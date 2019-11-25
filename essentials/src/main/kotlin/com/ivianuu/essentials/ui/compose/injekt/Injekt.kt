@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.ui.compose.injekt
 
 import androidx.compose.Ambient
+import androidx.compose.Composable
 import com.ivianuu.essentials.ui.compose.core.ambient
 import com.ivianuu.essentials.ui.compose.core.effect
 import com.ivianuu.essentials.ui.compose.core.memo
@@ -27,11 +28,13 @@ import com.ivianuu.injekt.typeOf
 
 val ComponentAmbient = Ambient.of<Component> { error("No component found") }
 
+@Composable
 inline fun <reified T> inject(
     name: Any? = null,
     noinline parameters: ParametersDefinition? = null
 ) = inject(type = typeOf<T>(), name = name, parameters = parameters)
 
+@Composable
 fun <T> inject(
     type: Type<T>,
     name: Any? = null,

@@ -34,6 +34,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 
+@Composable
 fun coroutineScope(context: @Composable() () -> CoroutineContext = { coroutineContext() }): CoroutineScope =
     effect {
         val coroutineContext = context()
@@ -42,8 +43,12 @@ fun coroutineScope(context: @Composable() () -> CoroutineContext = { coroutineCo
         return@effect coroutineScope
     }
 
-fun coroutineContext() = ambient(CoroutineContextAmbient)
+@Composable
+fun coroutineContext() = effect {
+    ambient(CoroutineContextAmbient)
+}
 
+@Composable
 fun launchOnActive(
     block: suspend CoroutineScope.() -> Unit
 ) = effect {
@@ -53,6 +58,7 @@ fun launchOnActive(
     }
 }
 
+@Composable
 fun launchOnPreCommit(
     block: suspend CoroutineScope.() -> Unit
 ) = effect {
@@ -60,6 +66,7 @@ fun launchOnPreCommit(
     onPreCommit { coroutineScope.launch(block = block) }
 }
 
+@Composable
 fun launchOnPreCommit(
     vararg inputs: Any?,
     block: suspend CoroutineScope.() -> Unit
@@ -68,6 +75,7 @@ fun launchOnPreCommit(
     onPreCommit(*inputs) { coroutineScope.launch(block = block) }
 }
 
+@Composable
 fun launchOnCommit(
     block: suspend CoroutineScope.() -> Unit
 ) = effect {
@@ -75,6 +83,7 @@ fun launchOnCommit(
     onCommit { coroutineScope.launch(block = block) }
 }
 
+@Composable
 fun launchOnCommit(
     vararg inputs: Any?,
     block: suspend CoroutineScope.() -> Unit
@@ -84,11 +93,15 @@ fun launchOnCommit(
 }
 
 @BuilderInference
-fun <T> load(block: suspend CoroutineScope.() -> T) = load(
-    placeholder = null,
-    block = block
-)
+@Composable
+fun <T> load(block: suspend CoroutineScope.() -> T) = effect {
+    load(
+        placeholder = null,
+        block = block
+    )
+}
 
+@Composable
 fun <T> load(
     placeholder: T,
     block: suspend CoroutineScope.() -> T
@@ -98,8 +111,12 @@ fun <T> load(
     return@effect state.value
 }
 
-fun <T> collect(flow: Flow<T>) = collect(null, flow)
+@Composable
+fun <T> collect(flow: Flow<T>) = effect {
+    collect(null, flow)
+}
 
+@Composable
 fun <T> collect(
     placeholder: T,
     flow: Flow<T>
