@@ -17,7 +17,7 @@
 plugins {
     id("com.android.library")
     id("com.ivianuu.injekt")
-    id("com.ivianuu.essentials.kotlin.compiler")
+    id("com.ivianuu.essentials")
     id("kotlin-android")
 }
 
