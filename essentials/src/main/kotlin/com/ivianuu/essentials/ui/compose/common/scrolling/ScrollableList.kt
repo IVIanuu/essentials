@@ -101,20 +101,21 @@ fun ScrollableList(
     itemSizeProvider: (Int) -> Dp,
     item: @Composable() (Int) -> Unit
 ) = composable {
-    Scrollable { position ->
-        val state = memo { ScrollableListState(position) }
-        memo(count) { state.count = count }
-        val density = ambientDensity()()
-        memo(itemSizeProvider) {
-            state.itemSizeProvider = { index: Int ->
-                withDensity(density) {
-                    itemSizeProvider(index).toPx()
-                }
+    val state = memo { ScrollableListState(ScrollPosition()) }
+    memo(count) { state.count = count }
+    val density = ambientDensity()()
+    memo(itemSizeProvider) {
+        state.itemSizeProvider = { index: Int ->
+            withDensity(density) {
+                itemSizeProvider(index).toPx()
             }
         }
+    }
 
-        memo(count, itemSizeProvider) { state.update() }
-        memo(position.value) { state.onScrollPositionChanged() }
+    memo(count, itemSizeProvider) { state.itemsChanged() }
+
+    Scrollable { position ->
+        memo(position.value) { state.computeVisibleItemRange() }
 
         Clip(RectangleShape) {
             Container(alignment = Alignment.TopLeft) {
@@ -152,10 +153,10 @@ private class ScrollableListState(val position: ScrollPosition) {
     var viewportSize = Px.Zero
         set(value) {
             field = value
-            update()
+            viewportSizeChanged()
         }
 
-    fun update() {
+    fun itemsChanged() {
         items.clear()
 
         if (count != 0) {
@@ -171,17 +172,21 @@ private class ScrollableListState(val position: ScrollPosition) {
                 )
                 offset += size
             }
-
-            val newMaxValue = max(Px.Zero, offset - viewportSize)
-            if (position.maxValue != newMaxValue) {
-                position.updateBounds(Px.Zero, newMaxValue)
-            }
         }
 
-        onScrollPositionChanged()
+        viewportSizeChanged()
     }
 
-    fun onScrollPositionChanged() {
+    fun viewportSizeChanged() {
+        val newMaxValue = max(Px.Zero, (items.lastOrNull()?.trailing ?: Px.Zero) - viewportSize)
+        if (position.maxValue != newMaxValue) {
+            position.updateBounds(Px.Zero, newMaxValue)
+        }
+
+        computeVisibleItemRange()
+    }
+
+    fun computeVisibleItemRange() {
         val scrollPosition = position.value
         val newItemRange = if (count == 0) {
             emptyItemRange
@@ -203,12 +208,6 @@ private class ScrollableListState(val position: ScrollPosition) {
         if (newItemRange != itemRange) {
             itemRange = newItemRange
         }
-    }
-
-    private fun computeItemSize(startIndex: Int, endIndex: Int): Px {
-        return (startIndex until endIndex)
-            .map(itemSizeProvider)
-            .fold(Px.Zero) { acc, current -> acc + current }
     }
 
 }
