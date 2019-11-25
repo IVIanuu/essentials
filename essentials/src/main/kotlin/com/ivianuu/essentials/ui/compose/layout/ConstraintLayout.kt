@@ -103,7 +103,7 @@ class ConstraintLayoutContext internal constructor() : BasicMeasure.Measurer {
 
         measure.measuredWidth = measuredWidth
         measure.measuredHeight = measuredHeight
-        var baseline = placeable.get(FirstBaseline)
+        val baseline = placeable[FirstBaseline]
         if (baseline != null) {
             measure.measuredBaseline = baseline.value
         } else {

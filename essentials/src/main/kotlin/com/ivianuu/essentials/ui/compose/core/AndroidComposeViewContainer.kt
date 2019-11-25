@@ -130,9 +130,8 @@ class AndroidComposeViewContainer @JvmOverloads constructor(
 
     private fun getNavigationBarHeight(): Int {
         val activity = context as Activity
-        val rotation = activity.windowManager.defaultDisplay.rotation
 
-        val name = when (rotation) {
+        val name = when (activity.windowManager.defaultDisplay.rotation) {
             Surface.ROTATION_0, Surface.ROTATION_180 -> "navigation_bar_height"
             else -> "navigation_bar_width"
         }

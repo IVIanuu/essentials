@@ -169,8 +169,8 @@ private val CheckFractionProp = FloatPropKey()
 private val CenterGravitationForCheck = FloatPropKey()
 private val BoxColorProp = ColorPropKey()
 
-private val BoxAnimationDuration = 100
-private val CheckStrokeAnimationDuration = 100
+private const val BoxAnimationDuration = 100
+private const val CheckStrokeAnimationDuration = 100
 
 private fun generateTransitionDefinition(color: Color, unselectedColor: Color) =
     transitionDefinition<Boolean> {

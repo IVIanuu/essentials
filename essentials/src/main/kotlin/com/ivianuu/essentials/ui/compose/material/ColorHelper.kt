@@ -51,17 +51,17 @@ fun colorForBackground(color: Color): Color = effect {
     return@effect result
 }
 
-val PrimaryTextAlpha = 0.87f
-val PrimaryTextDisabledAlpha = 0.38f
+const val PrimaryTextAlpha = 0.87f
+const val PrimaryTextDisabledAlpha = 0.38f
 
-val SecondaryTextAlpha = 0.60f
-val SecondaryTextDisabledAlpha = 0.24f // todo is not material spec
+const val SecondaryTextAlpha = 0.60f
+const val SecondaryTextDisabledAlpha = 0.24f // todo is not material spec
 
-val ActiveIconAlpha = 0.87f
-val ActiveIconDisabledAlpha = 0.38f
+const val ActiveIconAlpha = 0.87f
+const val ActiveIconDisabledAlpha = 0.38f
 
-val InactiveIconAlpha = 0.60f
-val InactiveIconDisabledAlpha = 0.24f // todo is not material spec
+const val InactiveIconAlpha = 0.60f
+const val InactiveIconDisabledAlpha = 0.24f // todo is not material spec
 
 val OnLightColor = Color.Black
 val OnDarkColor = Color.White

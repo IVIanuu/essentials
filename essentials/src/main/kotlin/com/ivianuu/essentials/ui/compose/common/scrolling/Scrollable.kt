@@ -190,8 +190,8 @@ fun Scrollable(
     }
 }
 
-private val ScrollerDefaultFriction = 0.35f
-private val ScrollerVelocityThreshold = 1000f
+private const val ScrollerDefaultFriction = 0.35f
+private const val ScrollerVelocityThreshold = 1000f
 
 enum class ScrollDirection {
     Idle,
