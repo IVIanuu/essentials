@@ -20,9 +20,11 @@ import org.jetbrains.kotlin.codegen.CallBasedArgumentGenerator
 import org.jetbrains.kotlin.codegen.CallableMethod
 import org.jetbrains.kotlin.codegen.MemberCodegen
 import org.jetbrains.kotlin.codegen.StackValue
+import org.jetbrains.kotlin.codegen.asmType
 import org.jetbrains.kotlin.codegen.extensions.ExpressionCodegenExtension
 import org.jetbrains.kotlin.codegen.generateCallReceiver
 import org.jetbrains.kotlin.descriptors.FunctionDescriptor
+import org.jetbrains.kotlin.descriptors.ReceiverParameterDescriptor
 import org.jetbrains.kotlin.descriptors.ValueParameterDescriptor
 import org.jetbrains.kotlin.resolve.calls.model.DefaultValueArgument
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
@@ -301,24 +303,34 @@ class ComposableExpressionCodegenExtension : ExpressionCodegenExtension {
             "()Landroidx/compose/ScopeUpdateScope;",
             false
         )
-        v.dup()
+        v.pop()
+
+        /*v.dup()
         val returnLabel = Label()
         val nullLabel = Label()
         v.ifnull(nullLabel)
         val updateScopeType = descriptor.getUpdateScopeType()
         v.anew(updateScopeType)
         v.dup()
-        descriptor.valueParameters.forEach {
-            v.load(it.index, parentCodegen.typeMapper.mapType(it.type))
+
+        val receivers = mutableListOf<ReceiverParameterDescriptor>()
+        descriptor.dispatchReceiverParameter?.let { receivers += it }
+        descriptor.extensionReceiverParameter?.let { receivers += it }
+
+        receivers.forEachIndexed { index, receiver ->
+            v.load(index, parentCodegen.typeMapper.mapType(receiver.type))
         }
+
+        descriptor.valueParameters.forEach {
+            v.load(receivers.size + it.index, parentCodegen.typeMapper.mapType(it.type))
+        }
+
         v.invokespecial(
             updateScopeType.internalName,
             "<init>",
             Type.getMethodDescriptor(
                 Type.VOID_TYPE,
-                *descriptor.valueParameters
-                    .map { parentCodegen.typeMapper.mapType(it.type) }
-                    .toTypedArray()
+                *(receivers.map { it.type.asmType(parentCodegen.typeMapper) } + descriptor.valueParameters.map { it.type.asmType(parentCodegen.typeMapper) }).toTypedArray()
             ),
             false
         )
@@ -333,7 +345,7 @@ class ComposableExpressionCodegenExtension : ExpressionCodegenExtension {
         v.mark(nullLabel)
         v.pop()
 
-        v.mark(returnLabel)
+        v.mark(returnLabel)*/
     }
 
 }

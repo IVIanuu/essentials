@@ -18,6 +18,8 @@ package com.ivianuu.essentials.kotlin.compiler
 
 import org.jetbrains.kotlin.builtins.KotlinBuiltIns
 import org.jetbrains.kotlin.builtins.isFunctionType
+import org.jetbrains.kotlin.cli.common.messages.CompilerMessageSeverity
+import org.jetbrains.kotlin.cli.common.messages.MessageCollector
 import org.jetbrains.kotlin.descriptors.FunctionDescriptor
 import org.jetbrains.kotlin.descriptors.annotations.AnnotationDescriptor
 import org.jetbrains.kotlin.descriptors.annotations.Annotations
@@ -36,14 +38,22 @@ import org.jetbrains.org.objectweb.asm.Type
 import org.jetbrains.org.objectweb.asm.commons.InstructionAdapter
 import kotlin.math.absoluteValue
 
+lateinit var messageCollector: MessageCollector
+
+fun msg(block: () -> String) {
+    messageCollector.report(CompilerMessageSeverity.WARNING, "inject: ${block()}")
+}
+
+
 val COMPOSABLE_ANNOTATION = FqName("androidx.compose.Composable")
 val PIVOTAL_ANNOTATION = FqName("androidx.compose.Pivotal")
 val STABLE_MARKER_ANNOTATION = FqName("androidx.compose.StableMarker")
 
 fun FunctionDescriptor.getUpdateScopeType(): Type {
     val packageName = containingDeclaration.fqNameSafe.asString().replace(".", "/")
-    val paramsHash =
-        valueParameters.map { it.name.asString() + it.type.toString() }.hashCode().absoluteValue
+    val paramsHash = ((dispatchReceiverParameter?.type?.hashCode() ?: 0) +
+            valueParameters.map { it.name.asString() + it.type.toString() }.hashCode()).absoluteValue
+    msg { "fun fqname $fqNameSafe package name ${containingDeclaration.fqNameSafe}" }
     return Type.getType("L$packageName/${name}\$UpdateScope\$${paramsHash};")
 }
 
