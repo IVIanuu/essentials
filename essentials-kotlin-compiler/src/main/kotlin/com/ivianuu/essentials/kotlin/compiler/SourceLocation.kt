@@ -100,9 +100,13 @@ private class SourceLocationClassBuilder(val delegateClassBuilder: ClassBuilder)
                 descriptor: String?,
                 isInterface: Boolean
             ) {
-                if (opcode == Opcodes.INVOKESTATIC && owner == "androidx.compose.sourceLocationKt" && name == "sourceLocation") {
+                if (opcode == Opcodes.INVOKESTATIC
+                    && owner == "com/ivianuu/essentials/util/SourceLocationKt"
+                    && name == "sourceLocation"
+                    && descriptor == "()Ljava/lang/Object;"
+                ) {
                     InstructionAdapter(this).apply {
-                        iconst(origin.descriptor!!.fqNameSafe.hashCode() xor lineNumber)
+                        aconst("${origin.descriptor!!.fqNameSafe.asString()}:$lineNumber")
                     }
                 } else {
                     super.visitMethodInsn(opcode, owner, name, descriptor, isInterface)
