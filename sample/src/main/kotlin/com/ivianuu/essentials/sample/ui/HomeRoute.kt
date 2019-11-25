@@ -209,11 +209,6 @@ enum class HomeItem(
         color = Color.Green,
         route = { scaffoldRoute }
     ),
-    Sliver(
-        title = "Sliver",
-        color = Color.Cyan,
-        route = { sliverRoute }
-    ),
     Tabs(
         title = "Tabs",
         color = Color.Yellow,

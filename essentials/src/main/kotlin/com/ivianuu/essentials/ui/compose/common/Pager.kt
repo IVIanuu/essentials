@@ -18,7 +18,6 @@ package com.ivianuu.essentials.ui.compose.common
 
 import androidx.animation.PhysicsBuilder
 import androidx.compose.Composable
-import androidx.ui.core.Direction
 import androidx.ui.core.Px
 import androidx.ui.core.PxPosition
 import androidx.ui.core.px
@@ -27,8 +26,6 @@ import androidx.ui.foundation.animation.AnchorsFlingConfig
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.compose.common.scrolling.ScrollPosition
 import com.ivianuu.essentials.ui.compose.common.scrolling.Scrollable
-import com.ivianuu.essentials.ui.compose.common.scrolling.sliver.SliverList
-import com.ivianuu.essentials.ui.compose.common.scrolling.sliver.Viewport
 import com.ivianuu.essentials.ui.compose.core.Axis
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.invokeAsComposable
@@ -74,7 +71,7 @@ fun Pager(
             position = position.scrollPosition,
             direction = direction
         ) {
-            Viewport(
+            /*Viewport(
                 position = position.scrollPosition,
                 mainAxisDirection = when (direction) {
                     Axis.Horizontal -> if (reverse) Direction.LEFT else Direction.RIGHT
@@ -86,7 +83,7 @@ fun Pager(
                     itemSizeProvider = { _, constraints -> constraints.viewportMainAxisSpace },
                     item = item
                 )
-            }
+            }*/
         }
     }
 }

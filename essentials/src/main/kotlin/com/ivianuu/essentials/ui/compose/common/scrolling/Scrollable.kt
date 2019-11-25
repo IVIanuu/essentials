@@ -117,31 +117,13 @@ class ScrollPosition(
 @Composable
 fun Scrollable(
     position: ScrollPosition = memo { ScrollPosition() },
-    onScrollEvent: ((ScrollEvent, ScrollPosition) -> Unit)? = null,
     direction: Axis = Axis.Vertical,
-    reverse: Boolean = false,
     enabled: Boolean = true,
     child: @Composable() (ScrollPosition) -> Unit
 ) {
     PressGestureDetector(onPress = { position.scrollTo(position.value) }) {
         TouchSlopDragGestureDetector(
             dragObserver = object : DragObserver {
-
-                override fun onStart(downPosition: PxPosition) {
-                    if (!enabled) return
-                    if (onScrollEvent != null) {
-                        onScrollEvent(
-                            ScrollEvent.PreStart(
-                                position.value
-                            ), position
-                        )
-                        onScrollEvent(
-                            ScrollEvent.Start(
-                                position.value
-                            ), position
-                        )
-                    }
-                }
 
                 override fun onDrag(dragDistance: PxPosition): PxPosition {
                     if (!enabled) return PxPosition.Origin
@@ -186,19 +168,9 @@ fun Scrollable(
                         Axis.Horizontal -> velocity.x
                         Axis.Vertical -> velocity.y
                     }
-                    onScrollEvent?.invoke(
-                        ScrollEvent.PreEnd(
-                            mainAxisVelocity
-                        ), position
-                    )
                     position.holder.fling(
                         position.flingConfigFactory(mainAxisVelocity),
                         mainAxisVelocity.value
-                    )
-                    onScrollEvent?.invoke(
-                        ScrollEvent.End(
-                            mainAxisVelocity
-                        ), position
                     )
                 }
             },
@@ -216,16 +188,6 @@ fun Scrollable(
             }
         )
     }
-}
-
-sealed class ScrollEvent {
-    data class PreStart(val value: Px) : ScrollEvent()
-    data class Start(val value: Px) : ScrollEvent()
-    data class PreDrag(val value: Px) : ScrollEvent()
-    data class Drag(val value: Px) : ScrollEvent()
-    data class PreEnd(val velocity: Px) : ScrollEvent()
-    data class End(val velocity: Px) : ScrollEvent()
-    // todo overscroll
 }
 
 private val ScrollerDefaultFriction = 0.35f

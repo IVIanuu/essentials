@@ -28,7 +28,6 @@ import androidx.ui.core.round
 import androidx.ui.core.toPx
 import androidx.ui.foundation.shape.RectangleShape
 import androidx.ui.layout.Container
-import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.compose.core.Axis
 import com.ivianuu.essentials.ui.compose.core.memo
 import com.ivianuu.essentials.ui.compose.layout.SingleChildLayout
@@ -99,8 +98,6 @@ private fun ScrollerLayout(
                     (placeable?.width?.toPx() ?: Px.Zero) - (width.toPx())
                 )
             }
-
-            d { "placeable height ${placeable?.height}" }
 
             if (position.maxValue != newMaxValue) {
                 position.updateBounds(Px.Zero, newMaxValue)
