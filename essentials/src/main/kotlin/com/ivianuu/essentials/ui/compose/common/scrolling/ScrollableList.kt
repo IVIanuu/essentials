@@ -33,9 +33,9 @@ import androidx.ui.layout.Column
 import androidx.ui.layout.Container
 import com.ivianuu.essentials.ui.compose.common.framed
 import com.ivianuu.essentials.ui.compose.core.composable
+import com.ivianuu.essentials.ui.compose.core.composableWithKey
 import com.ivianuu.essentials.ui.compose.core.invoke
 import com.ivianuu.essentials.ui.compose.core.memo
-import com.ivianuu.essentials.ui.compose.core.staticComposableWithKey
 import com.ivianuu.essentials.ui.compose.layout.SizedBox
 import kotlin.math.max
 import kotlin.math.min
@@ -114,8 +114,8 @@ fun ScrollableList(
 
     memo(count, itemSizeProvider) { state.itemsChanged() }
 
-    Scrollable { position ->
-        memo(position.value) { state.computeVisibleItemRange() }
+    Scrollable(position = state.position) {
+        memo(state.position.value) { state.computeVisibleItemRange() }
 
         Clip(RectangleShape) {
             Container(alignment = Alignment.TopLeft) {
@@ -127,7 +127,7 @@ fun ScrollableList(
                     ) {
                         if (state.itemRange != emptyItemRange) {
                             state.itemRange.forEach { index ->
-                                staticComposableWithKey(index) {
+                                composableWithKey(index) {
                                     item(index)
                                 }
                             }

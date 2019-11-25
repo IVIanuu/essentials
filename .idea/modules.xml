@@ -2,32 +2,32 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/essentials.iml" filepath="$PROJECT_DIR$/essentials.iml" group="essentials" />
-      <module fileurl="file://$PROJECT_DIR$/essentials-about/essentials-about.iml" filepath="$PROJECT_DIR$/essentials-about/essentials-about.iml" group="essentials/essentials-about" />
-      <module fileurl="file://$PROJECT_DIR$/essentials-apps/essentials-apps.iml" filepath="$PROJECT_DIR$/essentials-apps/essentials-apps.iml" group="essentials/essentials-apps" />
-      <module fileurl="file://$PROJECT_DIR$/essentials-apps-coil/essentials-apps-coil.iml" filepath="$PROJECT_DIR$/essentials-apps-coil/essentials-apps-coil.iml" group="essentials/essentials-apps-coil" />
+      <module fileurl="file://$PROJECT_DIR$/buildSrc/buildSrc.iml" filepath="$PROJECT_DIR$/buildSrc/buildSrc.iml" />
+      <module fileurl="file://$PROJECT_DIR$/essentials.iml" filepath="$PROJECT_DIR$/essentials.iml" />
+      <module fileurl="file://$PROJECT_DIR$/essentials-about/essentials-about.iml" filepath="$PROJECT_DIR$/essentials-about/essentials-about.iml" />
+      <module fileurl="file://$PROJECT_DIR$/essentials-apps/essentials-apps.iml" filepath="$PROJECT_DIR$/essentials-apps/essentials-apps.iml" />
+      <module fileurl="file://$PROJECT_DIR$/essentials-apps-coil/essentials-apps-coil.iml" filepath="$PROJECT_DIR$/essentials-apps-coil/essentials-apps-coil.iml" />
       <module fileurl="file://$PROJECT_DIR$/essentials-apps-coil/essentials-apps-glide.iml" filepath="$PROJECT_DIR$/essentials-apps-coil/essentials-apps-glide.iml" />
-      <module fileurl="file://$PROJECT_DIR$/essentials-apps-ui/essentials-apps-ui.iml" filepath="$PROJECT_DIR$/essentials-apps-ui/essentials-apps-ui.iml" group="essentials/essentials-apps-ui" />
-      <module fileurl="file://$PROJECT_DIR$/essentials-compiler/essentials-compiler.iml" filepath="$PROJECT_DIR$/essentials-compiler/essentials-compiler.iml" group="essentials/essentials-compiler" />
-      <module fileurl="file://$PROJECT_DIR$/essentials/essentials-essentials.iml" filepath="$PROJECT_DIR$/essentials/essentials-essentials.iml" group="essentials/essentials" />
+      <module fileurl="file://$PROJECT_DIR$/essentials-apps-ui/essentials-apps-ui.iml" filepath="$PROJECT_DIR$/essentials-apps-ui/essentials-apps-ui.iml" />
+      <module fileurl="file://$PROJECT_DIR$/essentials-compiler/essentials-compiler.iml" filepath="$PROJECT_DIR$/essentials-compiler/essentials-compiler.iml" />
+      <module fileurl="file://$PROJECT_DIR$/essentials/essentials-essentials.iml" filepath="$PROJECT_DIR$/essentials/essentials-essentials.iml" />
       <module fileurl="file://$PROJECT_DIR$/essentials-kotlin-compiler/essentials-essentials-kotlin-compiler.iml" filepath="$PROJECT_DIR$/essentials-kotlin-compiler/essentials-essentials-kotlin-compiler.iml" />
       <module fileurl="file://$PROJECT_DIR$/essentials-gradle-plugin/essentials-essentials-kotlin-compiler-gradle-plugin.iml" filepath="$PROJECT_DIR$/essentials-gradle-plugin/essentials-essentials-kotlin-compiler-gradle-plugin.iml" />
       <module fileurl="file://$PROJECT_DIR$/essentials-kotlin-compiler-hosted/essentials-essentials-kotlin-compiler-hosted.iml" filepath="$PROJECT_DIR$/essentials-kotlin-compiler-hosted/essentials-essentials-kotlin-compiler-hosted.iml" />
       <module fileurl="file://$PROJECT_DIR$/essentials-kotlin-compiler-ide-plugin/essentials-essentials-kotlin-compiler-ide-plugin.iml" filepath="$PROJECT_DIR$/essentials-kotlin-compiler-ide-plugin/essentials-essentials-kotlin-compiler-ide-plugin.iml" />
-      <module fileurl="file://$PROJECT_DIR$/essentials-gestures/essentials-gestures.iml" filepath="$PROJECT_DIR$/essentials-gestures/essentials-gestures.iml" group="essentials/essentials-gestures" />
-      <module fileurl="file://$PROJECT_DIR$/essentials-gradle-plugin/essentials-gradle-plugin.iml" filepath="$PROJECT_DIR$/essentials-gradle-plugin/essentials-gradle-plugin.iml" group="essentials/essentials-gradle-plugin" />
-      <module fileurl="file://$PROJECT_DIR$/essentials-hidenavbar/essentials-hidenavbar.iml" filepath="$PROJECT_DIR$/essentials-hidenavbar/essentials-hidenavbar.iml" group="essentials/essentials-hidenavbar" />
+      <module fileurl="file://$PROJECT_DIR$/essentials-gestures/essentials-gestures.iml" filepath="$PROJECT_DIR$/essentials-gestures/essentials-gestures.iml" />
+      <module fileurl="file://$PROJECT_DIR$/essentials-gradle-plugin/essentials-gradle-plugin.iml" filepath="$PROJECT_DIR$/essentials-gradle-plugin/essentials-gradle-plugin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/essentials-hidenavbar/essentials-hidenavbar.iml" filepath="$PROJECT_DIR$/essentials-hidenavbar/essentials-hidenavbar.iml" />
       <module fileurl="file://$PROJECT_DIR$/essentials-kotlin-compiler_/essentials-kotlin-compiler.iml" filepath="$PROJECT_DIR$/essentials-kotlin-compiler_/essentials-kotlin-compiler.iml" />
       <module fileurl="file://$PROJECT_DIR$/essentials-gradle-plugin/essentials-kotlin-compiler-gradle-plugin.iml" filepath="$PROJECT_DIR$/essentials-gradle-plugin/essentials-kotlin-compiler-gradle-plugin.iml" />
       <module fileurl="file://$PROJECT_DIR$/essentials-kotlin-compiler-hosted/essentials-kotlin-compiler-hosted.iml" filepath="$PROJECT_DIR$/essentials-kotlin-compiler-hosted/essentials-kotlin-compiler-hosted.iml" />
       <module fileurl="file://$PROJECT_DIR$/essentials-kotlin-compiler-ide-plugin/essentials-kotlin-compiler-ide-plugin.iml" filepath="$PROJECT_DIR$/essentials-kotlin-compiler-ide-plugin/essentials-kotlin-compiler-ide-plugin.iml" />
-      <module fileurl="file://$PROJECT_DIR$/essentials-securesettings/essentials-securesettings.iml" filepath="$PROJECT_DIR$/essentials-securesettings/essentials-securesettings.iml" group="essentials/essentials-securesettings" />
-      <module fileurl="file://$PROJECT_DIR$/essentials-shell/essentials-shell.iml" filepath="$PROJECT_DIR$/essentials-shell/essentials-shell.iml" group="essentials/essentials-shell" />
-      <module fileurl="file://$PROJECT_DIR$/essentials-test/essentials-test.iml" filepath="$PROJECT_DIR$/essentials-test/essentials-test.iml" group="essentials/essentials-test" />
-      <module fileurl="file://$PROJECT_DIR$/essentials-work/essentials-work.iml" filepath="$PROJECT_DIR$/essentials-work/essentials-work.iml" group="essentials/essentials-work" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/essentials_buildSrc.iml" filepath="$PROJECT_DIR$/.idea/modules/essentials_buildSrc.iml" group="essentials/essentials_buildSrc" />
-      <module fileurl="file://$PROJECT_DIR$/sample/sample.iml" filepath="$PROJECT_DIR$/sample/sample.iml" group="essentials/sample" />
-      <module fileurl="file://$PROJECT_DIR$/essentials-kotlin-compiler/studio-projects-essentials-essentials-kotlin-compiler.iml" filepath="$PROJECT_DIR$/essentials-kotlin-compiler/studio-projects-essentials-essentials-kotlin-compiler.iml" group="essentials/essentials-kotlin-compiler" />
+      <module fileurl="file://$PROJECT_DIR$/essentials-securesettings/essentials-securesettings.iml" filepath="$PROJECT_DIR$/essentials-securesettings/essentials-securesettings.iml" />
+      <module fileurl="file://$PROJECT_DIR$/essentials-shell/essentials-shell.iml" filepath="$PROJECT_DIR$/essentials-shell/essentials-shell.iml" />
+      <module fileurl="file://$PROJECT_DIR$/essentials-test/essentials-test.iml" filepath="$PROJECT_DIR$/essentials-test/essentials-test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/essentials-work/essentials-work.iml" filepath="$PROJECT_DIR$/essentials-work/essentials-work.iml" />
+      <module fileurl="file://$PROJECT_DIR$/sample/sample.iml" filepath="$PROJECT_DIR$/sample/sample.iml" />
+      <module fileurl="file://$PROJECT_DIR$/essentials-kotlin-compiler/studio-projects-essentials-essentials-kotlin-compiler.iml" filepath="$PROJECT_DIR$/essentials-kotlin-compiler/studio-projects-essentials-essentials-kotlin-compiler.iml" />
     </modules>
   </component>
 </project>
