@@ -25,8 +25,8 @@ import com.ivianuu.essentials.ui.compose.composeControllerRoute
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
 import com.ivianuu.essentials.ui.compose.material.Scaffold
 import com.ivianuu.essentials.ui.compose.material.Tab
+import com.ivianuu.essentials.ui.compose.material.TabContent
 import com.ivianuu.essentials.ui.compose.material.TabController
-import com.ivianuu.essentials.ui.compose.material.TabPager
 import com.ivianuu.essentials.ui.compose.material.TabRow
 import com.ivianuu.essentials.ui.navigation.director.controllerRouteOptions
 import com.ivianuu.essentials.ui.navigation.director.vertical
@@ -47,7 +47,7 @@ val tabsRoute = composeControllerRoute(
                 }
             },
             body = {
-                TabPager<Color> { index, item ->
+                TabContent<Color> { index, item ->
                     Surface(color = item) {
                         Container(expanded = true) {
                             Text("Index: $index")

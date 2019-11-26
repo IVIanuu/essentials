@@ -32,6 +32,8 @@ import com.ivianuu.essentials.ui.compose.core.composableWithKey
 import com.ivianuu.essentials.ui.compose.core.effect
 import com.ivianuu.essentials.ui.compose.core.invokeAsComposable
 import com.ivianuu.essentials.ui.compose.core.memo
+import com.ivianuu.essentials.ui.compose.layout.Swapper
+import com.ivianuu.essentials.ui.compose.layout.SwapperController
 
 fun <T> TabController(
     items: List<T>,
@@ -103,7 +105,7 @@ fun Tab(
 
 @Composable
 fun <T> TabPager(
-    tabController: TabController<T> = ambientTabController<T>(),
+    tabController: TabController<T> = ambientTabController(),
     item: @Composable() (Int, T) -> Unit
 ) = composable {
     val position = memo { PagerPosition(tabController.items.size) }
@@ -123,6 +125,16 @@ fun <T> TabPager(
             )
         }
     }
+}
+
+@Composable
+fun <T> TabContent(
+    tabController: TabController<T> = ambientTabController(),
+    item: @Composable() (Int, T) -> Unit
+) = composable {
+    val swapperController = memo { SwapperController(tabController.selectedItem) }
+    memo(tabController.selectedItem) { swapperController.current = tabController.selectedItem }
+    Swapper(swapperController) { item(tabController.selectedIndex, tabController.selectedItem) }
 }
 
 private class TabPagerState<T> {
