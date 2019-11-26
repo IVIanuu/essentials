@@ -44,6 +44,6 @@ fun NonNullSingleChildLayout(
 ) = composable {
     Layout(children = child, modifier = modifier) { measureables, constraints ->
         check(measureables.size == 1) { "Requires exactly 1 child" }
-        measureBlock(measureables.first(), constraints)
+        measureBlock(measureables.single(), constraints)
     }
 }

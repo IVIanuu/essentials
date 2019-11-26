@@ -123,7 +123,7 @@ class ComposeGenerator(private val descriptor: ComposableDescriptor) {
 
                     when {
                         descriptor.parameters.isEmpty() -> beginControlFlow("if (inserting)")
-                        descriptor.parameters.size == 1 -> beginControlFlow("if (changed(${descriptor.parameters.first().parameterName}) || inserting)")
+                        descriptor.parameters.size == 1 -> beginControlFlow("if (changed(${descriptor.parameters.single().parameterName}) || inserting)")
                         else -> beginControlFlow(
                             "if (changed(listOf(${descriptor.parameters.joinToString(
                                 ","
