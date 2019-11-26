@@ -43,19 +43,20 @@ import androidx.ui.material.Slider
 import androidx.ui.material.SliderPosition
 import androidx.ui.material.TextButtonStyle
 import androidx.ui.material.ripple.Ripple
+import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.compose.common.scrolling.Scroller
 import com.ivianuu.essentials.ui.compose.core.composable
+import com.ivianuu.essentials.ui.compose.core.composableWithKey
 import com.ivianuu.essentials.ui.compose.core.invoke
 import com.ivianuu.essentials.ui.compose.core.memo
 import com.ivianuu.essentials.ui.compose.core.state
 import com.ivianuu.essentials.ui.compose.injekt.inject
-import com.ivianuu.essentials.ui.compose.layout.Expand
 import com.ivianuu.essentials.ui.compose.layout.SquaredBox
 import com.ivianuu.essentials.ui.compose.layout.SquaredBoxFit
 import com.ivianuu.essentials.ui.compose.material.Tab
+import com.ivianuu.essentials.ui.compose.material.TabContent
 import com.ivianuu.essentials.ui.compose.material.TabController
-import com.ivianuu.essentials.ui.compose.material.TabPager
 import com.ivianuu.essentials.ui.compose.material.TabRow
 import com.ivianuu.essentials.ui.compose.material.colorForBackground
 import com.ivianuu.essentials.ui.compose.material.colorForCurrentBackground
@@ -144,7 +145,7 @@ private fun ColorPickerContent(
                     left = 24.dp,
                     right = 24.dp
                 ) {
-                    TabPager<ColorPickerPage> { _, page ->
+                    TabContent<ColorPickerPage>(keepState = true) { _, page ->
                         Container(height = 300.dp) {
                             when (page) {
                                 ColorPickerPage.Colors -> {
@@ -194,7 +195,7 @@ private fun ColorGrid(
                 chunkedColors.forEachIndexed { index, rowColors ->
                     tableRow {
                         rowColors.forEach { color ->
-                            composable(color) {
+                            composableWithKey(color) {
                                 ColorGridItem(
                                     color = color,
                                     onClick = {
@@ -220,14 +221,12 @@ private fun ColorGridItem(
                 SquaredBox(fit = SquaredBoxFit.MatchWidth) {
                     val paint = memo { Paint() }
                     paint.color = color
-                    Expand {
-                        Draw { canvas: Canvas, parentSize: PxSize ->
-                            canvas.drawCircle(
-                                Offset(parentSize.width.value / 2, parentSize.height.value / 2),
-                                parentSize.width.value / 2,
-                                paint
-                            )
-                        }
+                    Draw { canvas: Canvas, parentSize: PxSize ->
+                        canvas.drawCircle(
+                            Offset(parentSize.width.value / 2, parentSize.height.value / 2),
+                            parentSize.width.value / 2,
+                            paint
+                        )
                     }
                 }
             }
@@ -241,6 +240,7 @@ private fun ColorEditor(
     onColorChanged: (Color) -> Unit,
     showAlphaSelector: Boolean
 ) = composable {
+    d { "color editor with color $color" }
     Column {
         Container(
             height = 72.dp,
@@ -261,7 +261,7 @@ private fun ColorEditor(
                 it != ColorComponent.Alpha || showAlphaSelector
             }
             .forEach { component ->
-                composable(component) {
+                composableWithKey(component) {
                     ColorComponentItem(
                         component = component,
                         value = component.read(color),

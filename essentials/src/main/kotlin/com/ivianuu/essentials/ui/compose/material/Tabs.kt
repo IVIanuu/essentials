@@ -130,11 +130,15 @@ fun <T> TabPager(
 @Composable
 fun <T> TabContent(
     tabController: TabController<T> = ambientTabController(),
+    keepState: Boolean = false,
     item: @Composable() (Int, T) -> Unit
 ) = composable {
     val swapperController = memo { SwapperController(tabController.selectedItem) }
+    memo(keepState) { swapperController.keepState = keepState }
     memo(tabController.selectedItem) { swapperController.current = tabController.selectedItem }
-    Swapper(swapperController) { item(tabController.selectedIndex, tabController.selectedItem) }
+    Swapper(
+        controller = swapperController
+    ) { item(tabController.selectedIndex, tabController.selectedItem) }
 }
 
 private class TabPagerState<T> {
