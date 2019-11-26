@@ -31,7 +31,7 @@ import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.composableWithKey
 import com.ivianuu.essentials.ui.compose.core.effect
 import com.ivianuu.essentials.ui.compose.core.invokeAsComposable
-import com.ivianuu.essentials.ui.compose.core.memo
+import com.ivianuu.essentials.ui.compose.core.remember
 import com.ivianuu.essentials.ui.compose.layout.Swapper
 import com.ivianuu.essentials.ui.compose.layout.SwapperController
 
@@ -40,7 +40,7 @@ fun <T> TabController(
     initialIndex: Int = 0,
     children: @Composable() () -> Unit
 ) {
-    val tabController = memo { TabController(items, initialIndex) }
+    val tabController = remember { TabController(items, initialIndex) }
     tabController.items = items
     TabControllerAmbient.Provider(tabController, children)
 }
@@ -108,8 +108,8 @@ fun <T> TabPager(
     tabController: TabController<T> = ambientTabController(),
     item: @Composable() (Int, T) -> Unit
 ) = composable {
-    val position = memo { PagerPosition(tabController.items.size) }
-    val state = memo { TabPagerState<T>() }
+    val position = remember { PagerPosition(tabController.items.size) }
+    val state = remember { TabPagerState<T>() }
 
     state.tabController = tabController
     state.position = position
@@ -133,9 +133,9 @@ fun <T> TabContent(
     keepState: Boolean = false,
     item: @Composable() (Int, T) -> Unit
 ) = composable {
-    val swapperController = memo { SwapperController(tabController.selectedItem) }
-    memo(keepState) { swapperController.keepState = keepState }
-    memo(tabController.selectedItem) { swapperController.current = tabController.selectedItem }
+    val swapperController = remember { SwapperController(tabController.selectedItem) }
+    remember(keepState) { swapperController.keepState = keepState }
+    remember(tabController.selectedItem) { swapperController.current = tabController.selectedItem }
     Swapper(
         controller = swapperController
     ) { item(tabController.selectedIndex, tabController.selectedItem) }

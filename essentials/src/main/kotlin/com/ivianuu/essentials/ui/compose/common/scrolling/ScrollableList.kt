@@ -35,7 +35,7 @@ import com.ivianuu.essentials.ui.compose.common.framed
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.composableWithKey
 import com.ivianuu.essentials.ui.compose.core.invoke
-import com.ivianuu.essentials.ui.compose.core.memo
+import com.ivianuu.essentials.ui.compose.core.remember
 import com.ivianuu.essentials.ui.compose.layout.SizedBox
 import kotlin.math.max
 import kotlin.math.min
@@ -101,10 +101,10 @@ fun ScrollableList(
     itemSizeProvider: (Int) -> Dp,
     item: @Composable() (Int) -> Unit
 ) = composable {
-    val state = memo { ScrollableListState(ScrollPosition()) }
-    memo(count) { state.count = count }
+    val state = remember { ScrollableListState(ScrollPosition()) }
+    remember(count) { state.count = count }
     val density = ambientDensity()()
-    memo(itemSizeProvider) {
+    remember(itemSizeProvider) {
         state.itemSizeProvider = { index: Int ->
             withDensity(density) {
                 itemSizeProvider(index).toPx()
@@ -112,10 +112,10 @@ fun ScrollableList(
         }
     }
 
-    memo(count, itemSizeProvider) { state.itemsChanged() }
+    remember(count, itemSizeProvider) { state.itemsChanged() }
 
     Scrollable(position = state.position) {
-        memo(state.position.value) { state.computeVisibleItemRange() }
+        remember(state.position.value) { state.computeVisibleItemRange() }
 
         Clip(RectangleShape) {
             Container(alignment = Alignment.TopLeft) {

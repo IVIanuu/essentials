@@ -29,12 +29,12 @@ import androidx.ui.core.toPx
 import androidx.ui.foundation.shape.RectangleShape
 import androidx.ui.layout.Container
 import com.ivianuu.essentials.ui.compose.core.Axis
-import com.ivianuu.essentials.ui.compose.core.memo
+import com.ivianuu.essentials.ui.compose.core.remember
 import com.ivianuu.essentials.ui.compose.layout.SingleChildLayout
 
 @Composable
 fun Scroller(
-    position: ScrollPosition = memo { ScrollPosition() },
+    position: ScrollPosition = remember { ScrollPosition() },
     direction: Axis = Axis.Vertical,
     enabled: Boolean = true,
     child: @Composable() () -> Unit

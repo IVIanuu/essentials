@@ -30,7 +30,7 @@ import androidx.ui.material.surface.Surface
 import com.ivianuu.essentials.ui.compose.composeControllerRoute
 import com.ivianuu.essentials.ui.compose.core.composableWithKey
 import com.ivianuu.essentials.ui.compose.core.invoke
-import com.ivianuu.essentials.ui.compose.core.memo
+import com.ivianuu.essentials.ui.compose.core.remember
 import com.ivianuu.essentials.ui.compose.dialog.PrimaryColors
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.compose.layout.FlutterWrap
@@ -58,7 +58,7 @@ val chipsRoute = composeControllerRoute {
 @Composable
 private fun Chip(name: String) = composableWithKey("Chip:$name") {
     val toaster = inject<Toaster>()
-    val color = memo { PrimaryColors.toList().shuffled().first() }
+    val color = remember { PrimaryColors.toList().shuffled().first() }
     Surface(color = color, shape = RoundedCornerShape(16.dp)) {
         Container(
             height = 32.dp,

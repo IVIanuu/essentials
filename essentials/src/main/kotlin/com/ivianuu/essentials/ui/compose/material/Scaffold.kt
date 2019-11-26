@@ -28,7 +28,7 @@ import androidx.ui.core.looseMin
 import androidx.ui.material.DrawerState
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.invokeAsComposable
-import com.ivianuu.essentials.ui.compose.core.memo
+import com.ivianuu.essentials.ui.compose.core.remember
 import com.ivianuu.essentials.ui.compose.core.state
 import com.ivianuu.essentials.ui.compose.core.withDensity
 import com.ivianuu.essentials.ui.compose.layout.Expand
@@ -49,7 +49,7 @@ fun Scaffold(
     fabPosition: Scaffold.FabPosition = Scaffold.FabPosition.End,
     bodyLayoutMode: Scaffold.BodyLayoutMode = Scaffold.BodyLayoutMode.Wrap
 ) = composable {
-    val scaffold = memo { Scaffold(drawerState) }
+    val scaffold = remember { Scaffold(drawerState) }
 
     // update state
     scaffold.hasTopAppBar = topAppBar != null

@@ -41,7 +41,7 @@ import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.effect
 import com.ivianuu.essentials.ui.compose.core.invoke
 import com.ivianuu.essentials.ui.compose.core.invokeAsComposable
-import com.ivianuu.essentials.ui.compose.core.memo
+import com.ivianuu.essentials.ui.compose.core.remember
 import com.ivianuu.essentials.ui.compose.core.state
 import com.ivianuu.essentials.ui.compose.core.withDensity
 import com.ivianuu.essentials.ui.compose.layout.Swapper
@@ -160,14 +160,14 @@ fun <T> BottomNavigationSwapper(
     content: @Composable() (Int, T) -> Unit
 ) = composable {
     val bottomNavigationController = ambientBottomNavigationController<T>()
-    val swapperController = memo {
+    val swapperController = remember {
         SwapperController(
             initial = bottomNavigationController.selectedItem,
             keepState = keepState
         )
     }
 
-    memo(bottomNavigationController.selectedItem) {
+    remember(bottomNavigationController.selectedItem) {
         swapperController.current = bottomNavigationController.selectedItem
     }
 
@@ -195,7 +195,7 @@ fun <T> BottomNavigationController(
     children: @Composable() () -> Unit
 ) {
     val selectedIndex = state { initialIndex }
-    val bottomNavigationController = memo { BottomNavigationController(items, selectedIndex) }
+    val bottomNavigationController = remember { BottomNavigationController(items, selectedIndex) }
     bottomNavigationController.items = items
     BottomNavigationControllerAmbient.Provider(bottomNavigationController, children)
 }

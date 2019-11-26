@@ -29,7 +29,7 @@ import com.ivianuu.essentials.ui.compose.common.scrolling.ScrollableList
 import com.ivianuu.essentials.ui.compose.composeControllerRoute
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.invoke
-import com.ivianuu.essentials.ui.compose.core.memo
+import com.ivianuu.essentials.ui.compose.core.remember
 import com.ivianuu.essentials.ui.compose.core.state
 import com.ivianuu.essentials.ui.compose.dialog.SingleChoiceListDialog
 import com.ivianuu.essentials.ui.compose.dialog.dialogRoute
@@ -57,7 +57,7 @@ val scaffoldRoute = composeControllerRoute {
     Scaffold(
         topAppBar = if (showTopBar) ({
             composable {
-                val alpha = memo(bodyLayoutMode) {
+                val alpha = remember(bodyLayoutMode) {
                     if (bodyLayoutMode == Scaffold.BodyLayoutMode.ExtendTop
                         || bodyLayoutMode == Scaffold.BodyLayoutMode.ExtendBoth
                     ) 0.5f else 1f
@@ -74,7 +74,7 @@ val scaffoldRoute = composeControllerRoute {
         }) else null,
         bottomBar = if (showBottomBar) ({
             composable {
-                val alpha = memo(bodyLayoutMode) {
+                val alpha = remember(bodyLayoutMode) {
                     if (bodyLayoutMode == Scaffold.BodyLayoutMode.ExtendBottom
                         || bodyLayoutMode == Scaffold.BodyLayoutMode.ExtendBoth
                     ) 0.5f else 1f

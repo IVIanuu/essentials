@@ -29,7 +29,7 @@ import com.ivianuu.essentials.ui.compose.common.scrolling.Scrollable
 import com.ivianuu.essentials.ui.compose.core.Axis
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.invokeAsComposable
-import com.ivianuu.essentials.ui.compose.core.memo
+import com.ivianuu.essentials.ui.compose.core.remember
 import com.ivianuu.essentials.ui.compose.layout.NonNullSingleChildLayout
 import kotlin.math.roundToInt
 
@@ -39,7 +39,7 @@ import kotlin.math.roundToInt
 @Composable
 fun <T> Pager(
     items: List<T>,
-    position: PagerPosition = memo { PagerPosition(items.size) },
+    position: PagerPosition = remember { PagerPosition(items.size) },
     direction: Axis = Axis.Horizontal,
     reverse: Boolean = false,
     item: @Composable() (Int, T) -> Unit

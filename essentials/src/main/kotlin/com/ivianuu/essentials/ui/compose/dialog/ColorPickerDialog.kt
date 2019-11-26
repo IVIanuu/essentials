@@ -49,7 +49,7 @@ import com.ivianuu.essentials.ui.compose.common.scrolling.Scroller
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.composableWithKey
 import com.ivianuu.essentials.ui.compose.core.invoke
-import com.ivianuu.essentials.ui.compose.core.memo
+import com.ivianuu.essentials.ui.compose.core.remember
 import com.ivianuu.essentials.ui.compose.core.state
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.compose.layout.SquaredBox
@@ -219,7 +219,7 @@ private fun ColorGridItem(
         Ripple(bounded = false) {
             Clickable(onClick = onClick) {
                 SquaredBox(fit = SquaredBoxFit.MatchWidth) {
-                    val paint = memo { Paint() }
+                    val paint = remember { Paint() }
                     paint.color = color
                     Draw { canvas: Canvas, parentSize: PxSize ->
                         canvas.drawCircle(
@@ -306,7 +306,7 @@ private fun ColorComponentItem(
             }
 
             flexible(1f) {
-                val position = memo {
+                val position = remember {
                     SliderPosition(initial = value)
                 }
 

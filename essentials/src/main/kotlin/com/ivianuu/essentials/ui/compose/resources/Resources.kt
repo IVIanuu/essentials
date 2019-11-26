@@ -23,7 +23,7 @@ import androidx.ui.graphics.Image
 import com.ivianuu.essentials.ui.compose.core.ambient
 import com.ivianuu.essentials.ui.compose.core.effect
 import com.ivianuu.essentials.ui.compose.core.invoke
-import com.ivianuu.essentials.ui.compose.core.memo
+import com.ivianuu.essentials.ui.compose.core.remember
 import com.ivianuu.essentials.ui.compose.image.BitmapImage
 import com.ivianuu.essentials.util.drawable
 
@@ -33,7 +33,7 @@ fun colorResource(id: Int) = androidx.ui.res.colorResource(id)()
 @Composable
 fun drawableResource(resId: Int): Image = effect {
     val context = ambient(ContextAmbient)
-    return@effect memo { BitmapImage(context.drawable(resId).toBitmap()) }
+    return@effect remember { BitmapImage(context.drawable(resId).toBitmap()) }
 }
 
 @Composable

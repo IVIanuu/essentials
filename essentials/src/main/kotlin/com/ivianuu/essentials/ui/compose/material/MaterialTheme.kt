@@ -27,7 +27,7 @@ import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.compose.core.ambient
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.effect
-import com.ivianuu.essentials.ui.compose.core.memo
+import com.ivianuu.essentials.ui.compose.core.remember
 import com.ivianuu.essentials.util.colorAttr
 
 @Composable
@@ -46,7 +46,7 @@ fun ResourceMaterialTheme(
 @Composable
 fun resourceColors(): ColorPalette = effect {
     val context = ambient(ContextAmbient)
-    memo {
+    remember {
         ColorPalette(
             primary = Color(context.colorAttr(R.attr.colorPrimary)),
             primaryVariant = Color(context.colorAttr(R.attr.colorPrimaryVariant)),
@@ -66,7 +66,7 @@ fun resourceColors(): ColorPalette = effect {
 
 @Composable
 fun resourceTypography(): Typography = effect {
-    memo { Typography() }
+    remember { Typography() }
     /*Typography(
         h1 = +resourceTextStyle(R.attr.textAppearanceHeadline1),
         h2 = +resourceTextStyle(R.attr.textAppearanceHeadline2),

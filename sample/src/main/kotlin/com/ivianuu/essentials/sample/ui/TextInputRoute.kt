@@ -34,7 +34,7 @@ import com.ivianuu.essentials.ui.compose.common.showKeyboard
 import com.ivianuu.essentials.ui.compose.composeControllerRoute
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.invoke
-import com.ivianuu.essentials.ui.compose.core.memo
+import com.ivianuu.essentials.ui.compose.core.remember
 import com.ivianuu.essentials.ui.compose.core.onActive
 import com.ivianuu.essentials.ui.compose.core.ref
 import com.ivianuu.essentials.ui.compose.core.state
@@ -98,7 +98,7 @@ val textInputRoute = composeControllerRoute(
         body = {
             if (items.isNotEmpty()) {
                 composable {
-                    val scrollPosition = memo(items) { ScrollPosition() }
+                    val scrollPosition = remember(items) { ScrollPosition() }
                     val lastScrollPosition = ref { scrollPosition.value }
 
                     if (scrollPosition.value != lastScrollPosition.value) {

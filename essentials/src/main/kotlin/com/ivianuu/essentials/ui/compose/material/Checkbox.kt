@@ -41,7 +41,7 @@ import androidx.ui.material.MaterialTheme
 import androidx.ui.material.ripple.Ripple
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.invoke
-import com.ivianuu.essentials.ui.compose.core.memo
+import com.ivianuu.essentials.ui.compose.core.remember
 
 // todo remove once original is useable
 
@@ -67,7 +67,7 @@ fun EsCheckbox(
 @Composable
 private fun DrawCheckbox(checked: Boolean, activeColor: Color) = composable {
     val unselectedColor = MaterialTheme.colors()().onSurface.copy(alpha = UncheckedBoxOpacity)
-    val definition = memo(activeColor, unselectedColor) {
+    val definition = remember(activeColor, unselectedColor) {
         generateTransitionDefinition(activeColor, unselectedColor)
     }
     Transition(definition = definition, toState = checked) { state ->

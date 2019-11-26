@@ -35,21 +35,21 @@ inline fun <T> key(
     noinline block: () -> T
 ) = androidx.compose.key<T>(inputs = *inputs, block = { block() })()
 
-inline fun <T> memo(noinline calculation: () -> T) =
+inline fun <T> remember(noinline calculation: () -> T) =
     androidx.compose.memo(calculation = calculation)()
 
-inline fun <T, V1> memo(
+inline fun <T, V1> remember(
     v1: V1,
     noinline calculation: () -> T
 ) = androidx.compose.memo(v1 = v1, calculation = calculation)()
 
-inline fun <T, V1, V2> memo(
+inline fun <T, V1, V2> remember(
     v1: V1,
     v2: V2,
     noinline calculation: () -> T
 ) = androidx.compose.memo(v1 = v1, v2 = v2, calculation = calculation)()
 
-inline fun <T> memo(
+inline fun <T> remember(
     vararg inputs: Any?,
     noinline calculation: () -> T
 ) = androidx.compose.memo(inputs = *inputs, calculation = calculation)()

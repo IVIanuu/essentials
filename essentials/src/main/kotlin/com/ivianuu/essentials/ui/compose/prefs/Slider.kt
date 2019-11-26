@@ -39,7 +39,7 @@ import com.ivianuu.essentials.ui.compose.core.composableWithKey
 import com.ivianuu.essentials.ui.compose.core.effect
 import com.ivianuu.essentials.ui.compose.core.invoke
 import com.ivianuu.essentials.ui.compose.core.invokeAsComposable
-import com.ivianuu.essentials.ui.compose.core.memo
+import com.ivianuu.essentials.ui.compose.core.remember
 import com.ivianuu.essentials.ui.compose.core.state
 import com.ivianuu.essentials.ui.compose.layout.WithModifier
 import com.ivianuu.essentials.util.UnitValueTextProvider
@@ -100,7 +100,7 @@ fun SliderPreference(
                 }
 
                 WithModifier(modifier = Flexible(1f) wraps Spacing(left = 8.dp)) {
-                    val position = memo(valueRange, steps) {
+                    val position = remember(valueRange, steps) {
                         val initial = pref.get().toFloat()
                         val floatRange = valueRange.first.toFloat()..valueRange.last.toFloat()
                         if (steps != null) {

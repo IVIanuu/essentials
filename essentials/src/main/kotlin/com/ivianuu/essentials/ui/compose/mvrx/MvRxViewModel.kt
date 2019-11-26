@@ -20,7 +20,7 @@ import androidx.compose.Composable
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import com.ivianuu.essentials.ui.compose.core.effect
-import com.ivianuu.essentials.ui.compose.core.memo
+import com.ivianuu.essentials.ui.compose.core.remember
 import com.ivianuu.essentials.ui.compose.coroutines.collect
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.compose.viewmodel.viewModel
@@ -31,8 +31,8 @@ import kotlin.reflect.KClass
 @Composable
 inline fun <reified T : MvRxViewModel<*>> mvRxViewModel(
     from: ViewModelStoreOwner = inject<ViewModelStoreOwner>(),
-    factory: ViewModelProvider.Factory = memo { ViewModelProvider.NewInstanceFactory() },
-    key: String = memo { T::class.defaultViewModelKey }
+    factory: ViewModelProvider.Factory = remember { ViewModelProvider.NewInstanceFactory() },
+    key: String = remember { T::class.defaultViewModelKey }
 ) = effect {
     mvRxViewModel(T::class, from, factory, key)
 }
@@ -41,8 +41,8 @@ inline fun <reified T : MvRxViewModel<*>> mvRxViewModel(
 fun <T : MvRxViewModel<*>> mvRxViewModel(
     type: KClass<T>,
     from: ViewModelStoreOwner = inject<ViewModelStoreOwner>(),
-    factory: ViewModelProvider.Factory = memo { ViewModelProvider.NewInstanceFactory() },
-    key: String = memo { type.defaultViewModelKey }
+    factory: ViewModelProvider.Factory = remember { ViewModelProvider.NewInstanceFactory() },
+    key: String = remember { type.defaultViewModelKey }
 ): T = effect {
     val viewModel = viewModel(type, from, factory, key)
     // recompose on changes

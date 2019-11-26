@@ -40,7 +40,7 @@ import com.ivianuu.essentials.ui.compose.common.scrolling.ScrollableList
 import com.ivianuu.essentials.ui.compose.composeControllerRoute
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.invoke
-import com.ivianuu.essentials.ui.compose.core.memo
+import com.ivianuu.essentials.ui.compose.core.remember
 import com.ivianuu.essentials.ui.compose.core.staticComposable
 import com.ivianuu.essentials.ui.compose.core.staticComposableWithKey
 import com.ivianuu.essentials.ui.compose.injekt.inject
@@ -74,7 +74,7 @@ val homeRoute = composeControllerRoute {
             )
         },
         body = {
-            val items = memo { HomeItem.values().toList().sortedBy { it.name } }
+            val items = remember { HomeItem.values().toList().sortedBy { it.name } }
             ScrollableList(
                 items = items,
                 itemSizeProvider = { if (it != items.lastIndex) 57.dp else 56.dp }
@@ -116,7 +116,7 @@ private fun HomeItem(
 @Composable
 private fun ColorAvatar(color: Color) = staticComposable {
     Container(width = 40.dp, height = 40.dp) {
-        val paint = memo {
+        val paint = remember {
             Paint().apply { this.color = color }
         }
         Draw { canvas: Canvas, parentSize: PxSize ->

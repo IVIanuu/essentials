@@ -36,7 +36,7 @@ import com.ivianuu.essentials.ui.compose.core.MediaQueryProvider
 import com.ivianuu.essentials.ui.compose.core.RouteAmbient
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.invoke
-import com.ivianuu.essentials.ui.compose.core.memo
+import com.ivianuu.essentials.ui.compose.core.remember
 import com.ivianuu.essentials.ui.compose.coroutines.collect
 import com.ivianuu.essentials.ui.compose.injekt.ComponentAmbient
 import com.ivianuu.essentials.ui.compose.injekt.MaterialThemeProvider
@@ -81,7 +81,7 @@ abstract class ComposeController : EsController() {
         ) {
             val viewportMetrics =
                 collect(
-                    memo { AndroidComposeViewContainer.ViewportMetrics() },
+                    remember { AndroidComposeViewContainer.ViewportMetrics() },
                     view.viewportMetrics
                 )
 

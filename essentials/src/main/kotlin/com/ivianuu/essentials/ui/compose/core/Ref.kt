@@ -20,12 +20,12 @@ import androidx.compose.Composable
 
 @Composable
 fun <T> ref(init: () -> T) = effect {
-    memo { Ref(init()) }
+    remember { Ref(init()) }
 }
 
 @Composable
 fun <T, V1> refFor(v1: V1, init: () -> T) = effect {
-    memo(v1) { Ref(init()) }
+    remember(v1) { Ref(init()) }
 }
 
 @Composable
@@ -34,12 +34,12 @@ fun <T, V1, V2> refFor(
     v2: V2,
     init: () -> T
 ) = effect {
-    memo(v1, v2) { Ref(init()) }
+    remember(v1, v2) { Ref(init()) }
 }
 
 @Composable
 fun <T> refFor(vararg inputs: Any?, init: () -> T) = effect {
-    memo(*inputs) { Ref(init()) }
+    remember(*inputs) { Ref(init()) }
 }
 
 data class Ref<T>(var value: T)

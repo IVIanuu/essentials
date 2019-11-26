@@ -20,7 +20,7 @@ import androidx.compose.Composable
 import androidx.ui.core.CoroutineContextAmbient
 import com.ivianuu.essentials.ui.compose.core.ambient
 import com.ivianuu.essentials.ui.compose.core.effect
-import com.ivianuu.essentials.ui.compose.core.memo
+import com.ivianuu.essentials.ui.compose.core.remember
 import com.ivianuu.essentials.ui.compose.core.onActive
 import com.ivianuu.essentials.ui.compose.core.onCommit
 import com.ivianuu.essentials.ui.compose.core.onDispose
@@ -38,7 +38,7 @@ import kotlin.coroutines.CoroutineContext
 fun coroutineScope(context: @Composable() () -> CoroutineContext = { coroutineContext() }): CoroutineScope =
     effect {
         val coroutineContext = context()
-        val coroutineScope = memo { CoroutineScope(context = coroutineContext + Job()) }
+        val coroutineScope = remember { CoroutineScope(context = coroutineContext + Job()) }
         onDispose { coroutineScope.coroutineContext[Job]!!.cancel() }
         return@effect coroutineScope
     }
