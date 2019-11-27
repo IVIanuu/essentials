@@ -1,4 +1,5 @@
 plugins {
+    id("com.github.ben-manes.versions")
     id("java-gradle-plugin")
     kotlin("jvm")
     kotlin("kapt")

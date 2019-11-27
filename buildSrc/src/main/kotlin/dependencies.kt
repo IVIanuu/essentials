@@ -91,6 +91,8 @@ object Deps {
     const val buildConfigGradlePlugin =
         "gradle.plugin.de.fuerstenau:BuildConfigPlugin:1.1.8"
 
+    const val canIDropJetifierGradlePlugin = "com.github.plnice:canidropjetifier:0.5"
+
     const val coil = "io.coil-kt:coil:0.7.0"
 
     object Coroutines {
@@ -168,4 +170,5 @@ object Deps {
 
     const val timberKt = "com.github.ajalt:timberkt:1.5.1"
 
+    const val versionsGradlePlugin = "com.github.ben-manes:gradle-versions-plugin:0.27.0"
 }
