@@ -18,6 +18,7 @@ package com.ivianuu.essentials.injection
 
 import com.ivianuu.essentials.app.esAppInitializersModule
 import com.ivianuu.essentials.app.esAppServicesModule
+import com.ivianuu.essentials.store.common.esStoreModule
 import com.ivianuu.essentials.ui.coil.esCoilModule
 import com.ivianuu.essentials.ui.compose.injekt.composeModule
 import com.ivianuu.essentials.util.esUtilModule
@@ -31,6 +32,7 @@ val esModule = module {
     include(esAppInitializersModule)
     include(esAppServicesModule)
     include(esCoilModule)
+    include(esStoreModule)
     include(esUtilModule)
     include(systemServiceModule)
 }
