@@ -16,17 +16,25 @@
 
 package com.ivianuu.essentials.store.common
 
-import android.content.SharedPreferences
+import android.content.Context
 import com.ivianuu.essentials.util.AppDispatchers
 import com.ivianuu.injekt.Factory
+import kotlinx.coroutines.withContext
+import java.io.File
 
 @Factory
 class SharedPreferencesImporter(
     private val boxFactory: PrefBoxFactory,
+    private val context: Context,
     private val dispatchers: AppDispatchers
 ) {
 
-    suspend fun importFrom(sharedPreferences: SharedPreferences) {
+    suspend fun importAndDelete(name: String): Unit = withContext(dispatchers.io) {
+        val prefsFile = File(context.applicationInfo.dataDir, "shared_prefs/$name.xml")
+        if (!prefsFile.exists()) return@withContext
+
+        val sharedPreferences = context.getSharedPreferences(name, Context.MODE_PRIVATE)
+
         sharedPreferences.all.forEach { (key, value) ->
             when (value) {
                 is Boolean -> boxFactory.boolean(key).set(value)

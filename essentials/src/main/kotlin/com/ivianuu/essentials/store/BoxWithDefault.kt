@@ -18,6 +18,7 @@ package com.ivianuu.essentials.store
 
 interface BoxWithDefault<T> : Box<T> {
     val defaultValue: T
+    override suspend fun get(): T
 }
 
 fun <T> Box<T>.asBoxWithDefault(
@@ -29,6 +30,6 @@ internal class BoxWithDefaultImpl<T>(
     private val wrapped: Box<T>
 ) : Box<T> by wrapped, BoxWithDefault<T> {
 
-    override suspend fun get(): T? = if (!exists()) defaultValue else wrapped.get()
+    override suspend fun get(): T = if (!exists()) defaultValue else wrapped.get()!!
 
 }

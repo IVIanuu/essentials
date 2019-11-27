@@ -16,7 +16,7 @@
 
 package com.ivianuu.essentials.store.common
 
-import com.ivianuu.essentials.store.Box
+import com.ivianuu.essentials.store.BoxWithDefault
 import com.ivianuu.essentials.store.DiskBox
 import com.ivianuu.essentials.store.asBoxWithDefault
 import com.ivianuu.essentials.store.asCached
@@ -36,15 +36,15 @@ class PrefBoxFactory(
         name: String,
         defaultValue: T,
         serializer: DiskBox.Serializer<T>
-    ): Box<T> {
+    ): BoxWithDefault<T> {
         return DiskBox(
             file = File(prefsDir, name),
             serializer = serializer
         )
             .asMutex()
             .asCached()
-            .asBoxWithDefault(defaultValue)
             .withDispatcher(dispatchers.io)
+            .asBoxWithDefault(defaultValue)
     }
 
 }
