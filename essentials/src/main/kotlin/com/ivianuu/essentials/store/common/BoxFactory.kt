@@ -21,11 +21,14 @@ import com.ivianuu.essentials.store.DiskBox
 import com.ivianuu.essentials.store.asBoxWithDefault
 import com.ivianuu.essentials.store.asCached
 import com.ivianuu.essentials.store.asMutex
+import com.ivianuu.essentials.store.withDispatcher
+import com.ivianuu.essentials.util.AppDispatchers
 import com.ivianuu.injekt.Single
 import java.io.File
 
 @Single
 class PrefBoxFactory(
+    private val dispatchers: AppDispatchers,
     @PrefsDir private val prefsDir: File
 ) {
 
@@ -33,9 +36,15 @@ class PrefBoxFactory(
         name: String,
         defaultValue: T,
         serializer: DiskBox.Serializer<T>
-    ): Box<T> = DiskBox(
-        file = File(prefsDir, name),
-        serializer = serializer
-    ).asMutex().asCached().asBoxWithDefault(defaultValue)
+    ): Box<T> {
+        return DiskBox(
+            file = File(prefsDir, name),
+            serializer = serializer
+        )
+            .asMutex()
+            .asCached()
+            .asBoxWithDefault(defaultValue)
+            .withDispatcher(dispatchers.io)
+    }
 
 }
