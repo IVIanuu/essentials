@@ -20,6 +20,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import com.github.ajalt.timberkt.d
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Deferred
@@ -33,6 +34,10 @@ import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.io.IOException
+import java.io.RandomAccessFile
+import java.nio.channels.FileChannel
+import java.nio.channels.FileChannel.MapMode.READ_ONLY
+import java.nio.channels.FileChannel.MapMode.READ_WRITE
 import java.nio.channels.FileLock
 import java.util.*
 import java.util.concurrent.atomic.AtomicReference
@@ -61,7 +66,7 @@ fun <T> DiskBox(
 )
 
 internal class DiskBoxImpl<T>(
-    private val context: Context,
+    context: Context,
     override val file: File,
     defaultValueLambda: suspend () -> T,
     private val serializer: DiskBox.Serializer<T>,
@@ -72,21 +77,36 @@ internal class DiskBoxImpl<T>(
     private val cachedValue = AtomicReference<Any?>(this)
     private val lazyDefaultValue = SuspendLazy(defaultValueLambda)
     private val valueFetcher = MutexValue {
-        var inputStream: FileInputStream? = null
         var lock: FileLock? = null
+        var channel: FileChannel? = null
+        var randomAccessFile: RandomAccessFile? = null
+
         try {
-            inputStream = FileInputStream(file)
-            lock = inputStream.channel.tryLock(0L, Long.MAX_VALUE, true)
-            val value = inputStream.bufferedReader().readText()
-            return@MutexValue serializer.deserialize(value)
+            randomAccessFile = RandomAccessFile(file, "rw")
+
+            channel = randomAccessFile.channel
+            lock = channel.lock()
+
+            val size = randomAccessFile.length().toInt()
+            val buffer = channel!!.map(READ_ONLY, 0, size.toLong())
+
+            val bytes = ByteArray(size)
+            buffer.get(bytes)
+            val serialized = bytes.decodeToString()
+            return@MutexValue serializer.deserialize(serialized)
         } catch (e: Exception) {
             throw IOException("Couldn't read file $file")
         } finally {
-            inputStream?.close()
-            lock?.release()
+            try {
+                randomAccessFile?.close()
+                channel?.close()
+                lock?.release()
+            } catch (ignored: Exception) {
+            }
         }
     }
     private val multiProcessHelper = MultiProcessHelper(context, file) {
+        cachedValue.set(this) // force refetching the value
         changeNotifier.offer(Unit)
     }
 
@@ -98,26 +118,33 @@ internal class DiskBoxImpl<T>(
 
     override suspend fun set(value: T): Unit = maybeWithDispatcher {
         val serialized = serializer.serialize(value)
+        val bytes = serialized.toByteArray()
 
-        val tmpFile = File.createTempFile(
-            "new", "tmp", file.parentFile
-        )
-
-        var outputStream: FileOutputStream? = null
         var lock: FileLock? = null
+        var channel: FileChannel? = null
+        var randomAccessFile: RandomAccessFile? = null
+
         try {
-            outputStream = FileOutputStream(file)
-            lock = outputStream.channel.tryLock(0L, Long.MAX_VALUE, true)
-            outputStream.bufferedWriter().write(serialized)
-            if (!tmpFile.renameTo(file)) {
-                throw IOException("Couldn't move tmp file to file $file")
-            }
+            randomAccessFile = RandomAccessFile(file, "rw")
+            randomAccessFile.setLength(0)
+
+            channel = randomAccessFile.channel
+            lock = channel.lock()
+
+            val byteBuffer = channel.map(READ_WRITE, 0, bytes.size.toLong())
+
+            byteBuffer.put(bytes)
+            channel.write(byteBuffer)
+            byteBuffer.force()
         } catch (e: Exception) {
             throw IOException("Couldn't write to file $file $serialized", e)
         } finally {
-            outputStream?.flush()
-            outputStream?.close()
-            lock?.release()
+            try {
+                randomAccessFile?.close()
+                channel?.close()
+                lock?.release()
+            } catch (ignored: Exception) {
+            }
         }
 
         cachedValue.set(value)
@@ -168,8 +195,8 @@ private class MultiProcessHelper(
 
     private val receiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
-            if (file.absolutePath == intent.getStringExtra(EXTRA_PATH)
-                && intent.getStringExtra(EXTRA_CHANGE_OWNER) != uuid
+            if (intent.getStringExtra(EXTRA_CHANGE_OWNER) != uuid
+                && file.absolutePath == intent.getStringExtra(EXTRA_PATH)
             ) {
                 onChange()
             }
@@ -189,7 +216,7 @@ private class MultiProcessHelper(
         try {
             context.sendBroadcast(Intent(ACTION_ON_CHANGE).apply {
                 putExtra(EXTRA_CHANGE_OWNER, uuid)
-                putExtra(EXTRA_PATH, file.absoluteFile)
+                putExtra(EXTRA_PATH, file.absolutePath)
             })
         } catch (e: Exception) {
         }

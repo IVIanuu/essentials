@@ -16,7 +16,9 @@
 
 package com.ivianuu.essentials.store.common
 
+import android.content.Context
 import com.ivianuu.injekt.Name
+import com.ivianuu.injekt.get
 import com.ivianuu.injekt.module
 import java.io.File
 
@@ -26,5 +28,5 @@ annotation class PrefsDir {
 }
 
 val esStoreModule = module {
-    single(name = PrefsDir) { File("prefs") }
+    single(name = PrefsDir) { File(get<Context>().applicationInfo.dataDir, "prefs") }
 }
