@@ -33,10 +33,12 @@ interface Box<T> {
 
 }
 
+suspend fun <T> Box<T>.getOrNull(): T? = if (isSet()) get() else null
+
 suspend inline fun <T> Box<T>.getOrDefault(
     block: () -> T
-): T = if (isSet()) get()!! else block()
+): T = getOrNull() ?: block()
 
 suspend inline fun <T> Box<T>.getOrSet(
     block: () -> T
-): T = if (isSet()) get()!! else block().also { set(it) }
+): T = getOrNull() ?: block().also { set(it) }
