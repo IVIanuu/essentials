@@ -30,7 +30,7 @@ class PrefBoxFactory(
 
     fun <T> box(
         name: String,
-        defaultValue: T,
+        defaultValue: suspend () -> T,
         serializer: DiskBox.Serializer<T>
     ): Box<T> {
         return DiskBox(

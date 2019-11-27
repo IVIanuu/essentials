@@ -19,50 +19,57 @@ package com.ivianuu.essentials.store.common
 import com.ivianuu.essentials.store.DiskBox
 import kotlin.reflect.KClass
 
-inline fun <reified T : Enum<T>> PrefBoxFactory.enum(key: String, defaultValue: T) =
-    enum(key, defaultValue, T::class)
+inline fun <reified T : Enum<T>> PrefBoxFactory.enum(
+    key: String,
+    noinline defaultValue: suspend () -> T
+) = enum(key, defaultValue, T::class)
 
-fun <T : Enum<T>> PrefBoxFactory.enum(key: String, defaultValue: T, clazz: KClass<T>) =
-    box(key, defaultValue, EnumSerializer(clazz))
+fun <T : Enum<T>> PrefBoxFactory.enum(
+    key: String,
+    defaultValue: suspend () -> T,
+    clazz: KClass<T>
+) = box(key, defaultValue, EnumSerializer(clazz))
 
 private class EnumSerializer<T : Enum<T>>(private val enumClass: KClass<T>) :
     DiskBox.Serializer<T> {
-    override fun deserialize(serialized: String): T =
+    override suspend fun deserialize(serialized: String): T =
         java.lang.Enum.valueOf(enumClass.java, serialized)
 
-    override fun serialize(value: T): String = value.name
+    override suspend fun serialize(value: T): String = value.name
 }
 
 inline fun <reified T> PrefBoxFactory.enumString(
     name: String,
-    defaultValue: T
+    noinline defaultValue: suspend () -> T
 ) where T : Enum<T>, T : BoxValueHolder<String> =
     enumString(name, defaultValue, T::class)
 
 fun <T> PrefBoxFactory.enumString(
     name: String,
-    defaultValue: T,
+    defaultValue: suspend () -> T,
     type: KClass<T>
 ) where T : Enum<T>, T : BoxValueHolder<String> =
     box(name, defaultValue, EnumStringPrefSerializer(type, defaultValue))
 
 private class EnumStringPrefSerializer<T>(
     private val type: KClass<T>,
-    private val defaultValue: T
+    private val defaultValue: suspend () -> T
 ) : DiskBox.Serializer<T> where T : Enum<T>, T : BoxValueHolder<String> {
-    override fun serialize(value: T) = value.value
-    override fun deserialize(serialized: String) = type.valueFor(serialized, defaultValue)
+    override suspend fun serialize(value: T) = value.value
+    override suspend fun deserialize(serialized: String) = type.valueFor(serialized) {
+        defaultValue()
+    }
 }
 
 inline fun <reified T> PrefBoxFactory.enumStringSet(
     name: String,
-    defaultValue: Set<T>
+    noinline defaultValue: suspend () -> Set<T> = { emptySet() }
 ) where T : Enum<T>, T : BoxValueHolder<String> =
     enumStringSet(name, defaultValue, T::class)
 
 fun <T> PrefBoxFactory.enumStringSet(
     name: String,
-    defaultValue: Set<T>,
+    defaultValue: suspend () -> Set<T> = { emptySet() },
     type: KClass<T>
 ) where T : Enum<T>, T : BoxValueHolder<String> =
     box(name, defaultValue, EnumStringSetPrefAdapter(type))
@@ -70,7 +77,7 @@ fun <T> PrefBoxFactory.enumStringSet(
 private class EnumStringSetPrefAdapter<T>(
     private val type: KClass<T>
 ) : DiskBox.Serializer<Set<T>> where T : Enum<T>, T : BoxValueHolder<String> {
-    override fun serialize(value: Set<T>) = value.map { it.value }.joinToString("=:=")
-    override fun deserialize(serialized: String) =
+    override suspend fun serialize(value: Set<T>) = value.map { it.value }.joinToString("=:=")
+    override suspend fun deserialize(serialized: String) =
         serialized.split("=:=").mapNotNull { type.valueForOrNull(it) }.toSet()
 }

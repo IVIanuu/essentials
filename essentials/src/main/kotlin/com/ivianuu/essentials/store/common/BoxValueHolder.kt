@@ -22,11 +22,11 @@ interface BoxValueHolder<T> {
     val value: T
 }
 
-fun <T, V> KClass<T>.valueFor(
+inline fun <T, V> KClass<T>.valueFor(
     value: V,
-    defaultValue: T
+    defaultValue: () -> T
 ): T where T : Enum<T>, T : BoxValueHolder<V> =
-    java.enumConstants!!.firstOrNull { it.value == value } ?: defaultValue
+    valueForOrNull(value) ?: defaultValue()
 
 fun <T, V> KClass<T>.valueForOrNull(value: V): T? where T : Enum<T>, T : BoxValueHolder<V> =
     java.enumConstants!!.firstOrNull { it.value == value }

@@ -38,40 +38,41 @@ interface DiskBox<T> : Box<T> {
     val file: File
 
     interface Serializer<T> {
-        fun deserialize(serialized: String): T
-        fun serialize(value: T): String
+        suspend fun deserialize(serialized: String): T
+        suspend fun serialize(value: T): String
     }
 }
 
 fun <T> DiskBox(
     file: File,
     serializer: DiskBox.Serializer<T>,
-    defaultValue: T,
+    defaultValue: suspend () -> T,
     dispatcher: CoroutineDispatcher? = null
 ): DiskBox<T> = DiskBoxImpl(
     file = file,
     serializer = serializer,
-    defaultValue = defaultValue,
+    defaultValueLambda = defaultValue,
     dispatcher = dispatcher
 )
 
 internal class DiskBoxImpl<T>(
-    override val defaultValue: T,
     override val file: File,
+    defaultValueLambda: suspend () -> T,
     private val serializer: DiskBox.Serializer<T>,
     private val dispatcher: CoroutineDispatcher? = null
 ) : DiskBox<T> {
 
     private val channel = BroadcastChannel<T>(1)
-    private val cachedValue = AtomicReference(defaultValue)
+    private val cachedValue = AtomicReference<Any?>(this)
+    private val lazyDefaultValue = SuspendLazy(defaultValueLambda)
 
     init {
         check(!file.isDirectory)
     }
 
-    override suspend fun set(value: T): Unit = maybeWithDispatcher {
-        cachedValue.set(value)
+    override suspend fun defaultValue(): T = lazyDefaultValue.invoke()
 
+    override suspend fun set(value: T): Unit = maybeWithDispatcher {
         val serialized = serializer.serialize(value)
 
         val tmpFile = File.createTempFile(
@@ -90,13 +91,12 @@ internal class DiskBoxImpl<T>(
             throw IOException("Couldn't write to file $file $serialized", e)
         }
 
+        cachedValue.set(value)
+
         channel.offer(value)
     }
 
-    private val _mutexValue = MutexValue {
-        val cached = cachedValue.get()
-        if (cached != this) return@MutexValue cached as T
-
+    private val valueFetcher = MutexValue {
         try {
             val reader = BufferedReader(InputStreamReader(FileInputStream(file)))
             val stringBuilder = StringBuilder()
@@ -108,18 +108,23 @@ internal class DiskBoxImpl<T>(
 
             reader.close()
 
-            val value = serializer.deserialize(stringBuilder.toString())
-            cachedValue.set(value)
-            value
+            return@MutexValue serializer.deserialize(stringBuilder.toString())
         } catch (e: Exception) {
             throw IOException("Couldn't read file $file")
         }
     }
 
-    override suspend fun get(): T = maybeWithDispatcher { _mutexValue.get() }
+    override suspend fun get(): T = maybeWithDispatcher {
+        val cached = cachedValue.get()
+        if (cached != this) return@maybeWithDispatcher cached as T
+
+        val value = if (isSet()) valueFetcher() else defaultValue()
+        cachedValue.set(value)
+        return@maybeWithDispatcher value
+    }
 
     override suspend fun delete() = maybeWithDispatcher {
-        cachedValue.set(defaultValue)
+        cachedValue.set(this)
         if (file.exists()) {
             if (!file.delete()) {
                 throw IOException("Couldn't delete file $file")
@@ -140,12 +145,27 @@ internal class DiskBoxImpl<T>(
         if (dispatcher != null) withContext(dispatcher) { block() } else block()
 }
 
-private class MutexValue<T>(private val getter: () -> T) {
+private class SuspendLazy<T>(private val init: suspend () -> T) {
+
+    private val lazyValue = AtomicReference<Any?>(this)
+    private val _mutexValue = MutexValue {
+        val cached = lazyValue.get()
+        if (cached != this) return@MutexValue cached as T
+        val value = init()
+        lazyValue.set(value)
+        return@MutexValue value
+    }
+
+    suspend operator fun invoke(): T = _mutexValue()
+
+}
+
+private class MutexValue<T>(private val getter: suspend () -> T) {
 
     private var currentDeferred: Deferred<T>? = null
     private val deferredLock = Any()
 
-    suspend fun get(): T {
+    suspend operator fun invoke(): T {
         var deferred = synchronized(deferredLock) { currentDeferred }
         if (deferred == null) {
             deferred = CompletableDeferred()

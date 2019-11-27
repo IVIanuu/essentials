@@ -19,7 +19,8 @@ package com.ivianuu.essentials.store
 import kotlinx.coroutines.flow.Flow
 
 interface Box<T> {
-    val defaultValue: T
+
+    suspend fun defaultValue(): T
 
     suspend fun get(): T
 
@@ -35,7 +36,7 @@ interface Box<T> {
 
 suspend fun <T> Box<T>.getOrNull(): T? = if (isSet()) get() else null
 
-suspend inline fun <T> Box<T>.getOrDefault(
+suspend inline fun <T> Box<T>.getOrElse(
     block: () -> T
 ): T = getOrNull() ?: block()
 
