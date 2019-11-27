@@ -16,26 +16,15 @@
 
 package com.ivianuu.essentials.store.common
 
-import com.ivianuu.essentials.store.Box
-import com.ivianuu.essentials.store.DiskBox
-import com.ivianuu.essentials.store.asBoxWithDefault
-import com.ivianuu.essentials.store.asCached
-import com.ivianuu.essentials.store.asMutex
-import com.ivianuu.injekt.Single
+import com.ivianuu.injekt.Name
+import com.ivianuu.injekt.module
 import java.io.File
 
-@Single
-class PrefBoxFactory(
-    @PrefsDir private val prefsDir: File
-) {
+@Name
+annotation class PrefsDir {
+    companion object
+}
 
-    fun <T> box(
-        name: String,
-        defaultValue: T,
-        serializer: DiskBox.Serializer<T>
-    ): Box<T> = DiskBox(
-        file = File(prefsDir, name),
-        serializer = serializer
-    ).asMutex().asCached().asBoxWithDefault(defaultValue)
-
+val esStoreModule = module {
+    single(name = PrefsDir) { File("prefs") }
 }

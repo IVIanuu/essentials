@@ -16,26 +16,17 @@
 
 package com.ivianuu.essentials.store.common
 
-import com.ivianuu.essentials.store.Box
-import com.ivianuu.essentials.store.DiskBox
-import com.ivianuu.essentials.store.asBoxWithDefault
-import com.ivianuu.essentials.store.asCached
-import com.ivianuu.essentials.store.asMutex
-import com.ivianuu.injekt.Single
-import java.io.File
+import kotlin.reflect.KClass
 
-@Single
-class PrefBoxFactory(
-    @PrefsDir private val prefsDir: File
-) {
-
-    fun <T> box(
-        name: String,
-        defaultValue: T,
-        serializer: DiskBox.Serializer<T>
-    ): Box<T> = DiskBox(
-        file = File(prefsDir, name),
-        serializer = serializer
-    ).asMutex().asCached().asBoxWithDefault(defaultValue)
-
+interface BoxValueHolder<T> {
+    val value: T
 }
+
+fun <T, V> KClass<T>.valueFor(
+    value: V,
+    defaultValue: T
+): T where T : Enum<T>, T : BoxValueHolder<V> =
+    java.enumConstants!!.firstOrNull { it.value == value } ?: defaultValue
+
+fun <T, V> KClass<T>.valueForOrNull(value: V): T? where T : Enum<T>, T : BoxValueHolder<V> =
+    java.enumConstants!!.firstOrNull { it.value == value }
