@@ -19,15 +19,24 @@ package com.ivianuu.essentials.store
 import kotlinx.coroutines.flow.Flow
 
 interface Box<T> {
+    val defaultValue: T
 
-    suspend fun get(): T?
+    suspend fun get(): T
 
     suspend fun set(value: T)
 
-    suspend fun exists(): Boolean
+    suspend fun isSet(): Boolean
 
     suspend fun delete()
 
     fun asFlow(): Flow<T>
 
 }
+
+suspend inline fun <T> Box<T>.getOrDefault(
+    block: () -> T
+): T = if (isSet()) get()!! else block()
+
+suspend inline fun <T> Box<T>.getOrSet(
+    block: () -> T
+): T = if (isSet()) get()!! else block().also { set(it) }

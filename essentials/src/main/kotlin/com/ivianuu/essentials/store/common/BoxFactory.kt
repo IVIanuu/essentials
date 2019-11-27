@@ -16,12 +16,8 @@
 
 package com.ivianuu.essentials.store.common
 
-import com.ivianuu.essentials.store.BoxWithDefault
+import com.ivianuu.essentials.store.Box
 import com.ivianuu.essentials.store.DiskBox
-import com.ivianuu.essentials.store.asBoxWithDefault
-import com.ivianuu.essentials.store.asCached
-import com.ivianuu.essentials.store.asMutex
-import com.ivianuu.essentials.store.withDispatcher
 import com.ivianuu.essentials.util.AppDispatchers
 import com.ivianuu.injekt.Single
 import java.io.File
@@ -36,15 +32,13 @@ class PrefBoxFactory(
         name: String,
         defaultValue: T,
         serializer: DiskBox.Serializer<T>
-    ): BoxWithDefault<T> {
+    ): Box<T> {
         return DiskBox(
             file = File(prefsDir, name),
-            serializer = serializer
+            defaultValue = defaultValue,
+            serializer = serializer,
+            dispatcher = dispatchers.io
         )
-            .asMutex()
-            .asCached()
-            .withDispatcher(dispatchers.io)
-            .asBoxWithDefault(defaultValue)
     }
 
 }

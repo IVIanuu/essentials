@@ -16,11 +16,15 @@
 
 package com.ivianuu.essentials.store
 
+import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.withContext
 import java.io.BufferedOutputStream
 import java.io.BufferedReader
 import java.io.File
@@ -28,8 +32,11 @@ import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.io.IOException
 import java.io.InputStreamReader
+import java.util.concurrent.atomic.AtomicReference
 
 interface DiskBox<T> : Box<T> {
+    val file: File
+
     interface Serializer<T> {
         fun deserialize(serialized: String): T
         fun serialize(value: T): String
@@ -38,24 +45,33 @@ interface DiskBox<T> : Box<T> {
 
 fun <T> DiskBox(
     file: File,
-    serializer: DiskBox.Serializer<T>
+    serializer: DiskBox.Serializer<T>,
+    defaultValue: T,
+    dispatcher: CoroutineDispatcher? = null
 ): DiskBox<T> = DiskBoxImpl(
     file = file,
-    serializer = serializer
+    serializer = serializer,
+    defaultValue = defaultValue,
+    dispatcher = dispatcher
 )
 
 internal class DiskBoxImpl<T>(
-    private val file: File,
-    private val serializer: DiskBox.Serializer<T>
+    override val defaultValue: T,
+    override val file: File,
+    private val serializer: DiskBox.Serializer<T>,
+    private val dispatcher: CoroutineDispatcher? = null
 ) : DiskBox<T> {
 
     private val channel = BroadcastChannel<T>(1)
+    private val cachedValue = AtomicReference(defaultValue)
 
     init {
         check(!file.isDirectory)
     }
 
-    override suspend fun set(value: T) {
+    override suspend fun set(value: T): Unit = maybeWithDispatcher {
+        cachedValue.set(value)
+
         val serialized = serializer.serialize(value)
 
         val tmpFile = File.createTempFile(
@@ -77,24 +93,33 @@ internal class DiskBoxImpl<T>(
         channel.offer(value)
     }
 
-    override suspend fun get(): T {
+    private val _mutexValue = MutexValue {
+        val cached = cachedValue.get()
+        if (cached != this) return@MutexValue cached as T
+
         try {
             val reader = BufferedReader(InputStreamReader(FileInputStream(file)))
-            val value = StringBuilder()
+            val stringBuilder = StringBuilder()
             var line = reader.readLine()
             while (line != null) {
-                value.append(line).append('\n')
+                stringBuilder.append(line).append('\n')
                 line = reader.readLine()
             }
 
             reader.close()
-            return serializer.deserialize(value.toString())
+
+            val value = serializer.deserialize(stringBuilder.toString())
+            cachedValue.set(value)
+            value
         } catch (e: Exception) {
             throw IOException("Couldn't read file $file")
         }
     }
 
-    override suspend fun delete() {
+    override suspend fun get(): T = maybeWithDispatcher { _mutexValue.get() }
+
+    override suspend fun delete() = maybeWithDispatcher {
+        cachedValue.set(defaultValue)
         if (file.exists()) {
             if (!file.delete()) {
                 throw IOException("Couldn't delete file $file")
@@ -102,12 +127,41 @@ internal class DiskBoxImpl<T>(
         }
     }
 
-    override suspend fun exists(): Boolean {
-        return file.exists()
+    override suspend fun isSet(): Boolean = maybeWithDispatcher {
+        file.exists()
     }
 
     override fun asFlow(): Flow<T> = flow {
         emit(get())
         channel.asFlow().collect { emit(get()) }
     }
+
+    private suspend fun <T> maybeWithDispatcher(block: suspend () -> T): T =
+        if (dispatcher != null) withContext(dispatcher) { block() } else block()
+}
+
+private class MutexValue<T>(private val getter: () -> T) {
+
+    private var currentDeferred: Deferred<T>? = null
+    private val deferredLock = Any()
+
+    suspend fun get(): T {
+        var deferred = synchronized(deferredLock) { currentDeferred }
+        if (deferred == null) {
+            deferred = CompletableDeferred()
+            synchronized(deferredLock) { currentDeferred = deferred }
+            try {
+                val result = getter.invoke()
+                deferred.complete(result)
+            } catch (e: Exception) {
+                deferred.completeExceptionally(e)
+            } finally {
+                @Suppress("DeferredResultUnused")
+                synchronized(deferredLock) { currentDeferred = null }
+            }
+        }
+
+        return deferred.await()
+    }
+
 }
