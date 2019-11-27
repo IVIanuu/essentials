@@ -16,6 +16,10 @@
 
 package com.ivianuu.essentials.store
 
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Deferred
@@ -25,13 +29,12 @@ import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.withContext
-import java.io.BufferedOutputStream
-import java.io.BufferedReader
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.io.IOException
-import java.io.InputStreamReader
+import java.nio.channels.FileLock
+import java.util.*
 import java.util.concurrent.atomic.AtomicReference
 
 interface DiskBox<T> : Box<T> {
@@ -44,11 +47,13 @@ interface DiskBox<T> : Box<T> {
 }
 
 fun <T> DiskBox(
+    context: Context,
     file: File,
     serializer: DiskBox.Serializer<T>,
     defaultValue: suspend () -> T,
     dispatcher: CoroutineDispatcher? = null
 ): DiskBox<T> = DiskBoxImpl(
+    context = context,
     file = file,
     serializer = serializer,
     defaultValueLambda = defaultValue,
@@ -56,31 +61,33 @@ fun <T> DiskBox(
 )
 
 internal class DiskBoxImpl<T>(
+    private val context: Context,
     override val file: File,
     defaultValueLambda: suspend () -> T,
     private val serializer: DiskBox.Serializer<T>,
     private val dispatcher: CoroutineDispatcher? = null
 ) : DiskBox<T> {
 
-    private val channel = BroadcastChannel<T>(1)
+    private val changeNotifier = BroadcastChannel<Unit>(1)
     private val cachedValue = AtomicReference<Any?>(this)
     private val lazyDefaultValue = SuspendLazy(defaultValueLambda)
     private val valueFetcher = MutexValue {
+        var inputStream: FileInputStream? = null
+        var lock: FileLock? = null
         try {
-            val reader = BufferedReader(InputStreamReader(FileInputStream(file)))
-            val stringBuilder = StringBuilder()
-            var line = reader.readLine()
-            while (line != null) {
-                stringBuilder.append(line).append('\n')
-                line = reader.readLine()
-            }
-
-            reader.close()
-
-            return@MutexValue serializer.deserialize(stringBuilder.toString())
+            inputStream = FileInputStream(file)
+            lock = inputStream.channel.tryLock(0L, Long.MAX_VALUE, true)
+            val value = inputStream.bufferedReader().readText()
+            return@MutexValue serializer.deserialize(value)
         } catch (e: Exception) {
             throw IOException("Couldn't read file $file")
+        } finally {
+            inputStream?.close()
+            lock?.release()
         }
+    }
+    private val multiProcessHelper = MultiProcessHelper(context, file) {
+        changeNotifier.offer(Unit)
     }
 
     init {
@@ -95,22 +102,27 @@ internal class DiskBoxImpl<T>(
         val tmpFile = File.createTempFile(
             "new", "tmp", file.parentFile
         )
+
+        var outputStream: FileOutputStream? = null
+        var lock: FileLock? = null
         try {
-            BufferedOutputStream(FileOutputStream(tmpFile)).run {
-                write(serialized.toByteArray())
-                flush()
-                close()
-            }
+            outputStream = FileOutputStream(file)
+            lock = outputStream.channel.tryLock(0L, Long.MAX_VALUE, true)
+            outputStream.bufferedWriter().write(serialized)
             if (!tmpFile.renameTo(file)) {
                 throw IOException("Couldn't move tmp file to file $file")
             }
         } catch (e: Exception) {
             throw IOException("Couldn't write to file $file $serialized", e)
+        } finally {
+            outputStream?.flush()
+            outputStream?.close()
+            lock?.release()
         }
 
         cachedValue.set(value)
-
-        channel.offer(value)
+        changeNotifier.offer(Unit)
+        multiProcessHelper.notifyWrite()
     }
 
     override suspend fun get(): T = maybeWithDispatcher {
@@ -122,13 +134,15 @@ internal class DiskBoxImpl<T>(
         return@maybeWithDispatcher value
     }
 
-    override suspend fun delete() = maybeWithDispatcher {
-        cachedValue.set(this)
+    override suspend fun delete(): Unit = maybeWithDispatcher {
         if (file.exists()) {
             if (!file.delete()) {
                 throw IOException("Couldn't delete file $file")
             }
         }
+
+        cachedValue.set(this)
+        changeNotifier.offer(Unit)
     }
 
     override suspend fun isSet(): Boolean = maybeWithDispatcher {
@@ -137,11 +151,55 @@ internal class DiskBoxImpl<T>(
 
     override fun asFlow(): Flow<T> = flow {
         emit(get())
-        channel.asFlow().collect { emit(get()) }
+        changeNotifier.asFlow().collect { emit(get()) }
     }
 
     private suspend fun <T> maybeWithDispatcher(block: suspend () -> T): T =
         if (dispatcher != null) withContext(dispatcher) { block() } else block()
+}
+
+private class MultiProcessHelper(
+    private val context: Context,
+    private val file: File,
+    private val onChange: () -> Unit
+) {
+
+    private val uuid = UUID.randomUUID().toString()
+
+    private val receiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            if (file.absolutePath == intent.getStringExtra(EXTRA_PATH)
+                && intent.getStringExtra(EXTRA_CHANGE_OWNER) != uuid
+            ) {
+                onChange()
+            }
+        }
+    }
+
+    init {
+        try {
+            context.registerReceiver(receiver, IntentFilter().apply {
+                addAction(ACTION_ON_CHANGE)
+            })
+        } catch (e: Exception) {
+        }
+    }
+
+    fun notifyWrite() {
+        try {
+            context.sendBroadcast(Intent(ACTION_ON_CHANGE).apply {
+                putExtra(EXTRA_CHANGE_OWNER, uuid)
+                putExtra(EXTRA_PATH, file.absoluteFile)
+            })
+        } catch (e: Exception) {
+        }
+    }
+
+    private companion object {
+        private const val ACTION_ON_CHANGE = "com.ivianuu.essentials.store.ON_CHANGE"
+        private const val EXTRA_CHANGE_OWNER = "change_owner"
+        private const val EXTRA_PATH = "path"
+    }
 }
 
 private class SuspendLazy<T>(private val init: suspend () -> T) {

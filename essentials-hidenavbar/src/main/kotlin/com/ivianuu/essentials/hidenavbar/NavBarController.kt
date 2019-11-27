@@ -56,11 +56,11 @@ class NavBarController internal constructor(
 
     private val scope = ReusableScope()
 
-    fun setNavBarConfig(config: NavBarConfig) {
+    suspend fun setNavBarConfig(config: NavBarConfig) {
         scope.clear()
 
         if (!config.hidden) {
-            if (prefs.wasNavBarHidden.isSet && prefs.wasNavBarHidden.get()) {
+            if (prefs.wasNavBarHidden.isSet() && prefs.wasNavBarHidden.get()) {
                 setNavBarConfigInternal(false, config)
                 prefs.wasNavBarHidden.delete()
             }
