@@ -20,7 +20,6 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import com.github.ajalt.timberkt.d
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Deferred
@@ -31,8 +30,6 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.withContext
 import java.io.File
-import java.io.FileInputStream
-import java.io.FileOutputStream
 import java.io.IOException
 import java.io.RandomAccessFile
 import java.nio.channels.FileChannel
@@ -40,6 +37,7 @@ import java.nio.channels.FileChannel.MapMode.READ_ONLY
 import java.nio.channels.FileChannel.MapMode.READ_WRITE
 import java.nio.channels.FileLock
 import java.util.*
+import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicReference
 
 interface DiskBox<T> : Box<T> {
@@ -109,80 +107,110 @@ internal class DiskBoxImpl<T>(
         cachedValue.set(this) // force refetching the value
         changeNotifier.offer(Unit)
     }
+    private val disposed = AtomicBoolean(false)
 
     init {
         check(!file.isDirectory)
     }
 
-    override suspend fun defaultValue(): T = lazyDefaultValue.invoke()
+    override suspend fun defaultValue(): T {
+        checkNotDisposed()
+        return lazyDefaultValue()
+    }
 
-    override suspend fun set(value: T): Unit = maybeWithDispatcher {
-        val serialized = serializer.serialize(value)
-        val bytes = serialized.toByteArray()
+    override suspend fun set(value: T) {
+        checkNotDisposed()
 
-        var lock: FileLock? = null
-        var channel: FileChannel? = null
-        var randomAccessFile: RandomAccessFile? = null
+        maybeWithDispatcher {
+            val serialized = serializer.serialize(value)
+            val bytes = serialized.toByteArray()
 
-        try {
-            randomAccessFile = RandomAccessFile(file, "rw")
-            randomAccessFile.setLength(0)
+            var lock: FileLock? = null
+            var channel: FileChannel? = null
+            var randomAccessFile: RandomAccessFile? = null
 
-            channel = randomAccessFile.channel
-            lock = channel.lock()
-
-            val byteBuffer = channel.map(READ_WRITE, 0, bytes.size.toLong())
-
-            byteBuffer.put(bytes)
-            channel.write(byteBuffer)
-            byteBuffer.force()
-        } catch (e: Exception) {
-            throw IOException("Couldn't write to file $file $serialized", e)
-        } finally {
             try {
-                randomAccessFile?.close()
-                channel?.close()
-                lock?.release()
-            } catch (ignored: Exception) {
+                randomAccessFile = RandomAccessFile(file, "rw")
+                randomAccessFile.setLength(0)
+
+                channel = randomAccessFile.channel
+                lock = channel.lock()
+
+                val byteBuffer = channel.map(READ_WRITE, 0, bytes.size.toLong())
+
+                byteBuffer.put(bytes)
+                channel.write(byteBuffer)
+                byteBuffer.force()
+            } catch (e: Exception) {
+                throw IOException("Couldn't write to file $file $serialized", e)
+            } finally {
+                try {
+                    randomAccessFile?.close()
+                    channel?.close()
+                    lock?.release()
+                } catch (ignored: Exception) {
+                }
             }
+
+            cachedValue.set(value)
+            changeNotifier.offer(Unit)
+            multiProcessHelper.notifyWrite()
         }
-
-        cachedValue.set(value)
-        changeNotifier.offer(Unit)
-        multiProcessHelper.notifyWrite()
     }
 
-    override suspend fun get(): T = maybeWithDispatcher {
-        val cached = cachedValue.get()
-        if (cached != this) return@maybeWithDispatcher cached as T
+    override suspend fun get(): T {
+        checkNotDisposed()
+        return maybeWithDispatcher {
+            val cached = cachedValue.get()
+            if (cached != this) return@maybeWithDispatcher cached as T
 
-        val value = if (isSet()) valueFetcher() else defaultValue()
-        cachedValue.set(value)
-        return@maybeWithDispatcher value
+            val value = if (isSet()) valueFetcher() else defaultValue()
+            cachedValue.set(value)
+            return@maybeWithDispatcher value
+        }
     }
 
-    override suspend fun delete(): Unit = maybeWithDispatcher {
-        if (file.exists()) {
-            if (!file.delete()) {
-                throw IOException("Couldn't delete file $file")
+    override suspend fun delete() {
+        checkNotDisposed()
+        maybeWithDispatcher {
+            if (file.exists()) {
+                if (!file.delete()) {
+                    throw IOException("Couldn't delete file $file")
+                }
             }
+
+            cachedValue.set(this)
+            changeNotifier.offer(Unit)
         }
-
-        cachedValue.set(this)
-        changeNotifier.offer(Unit)
     }
 
-    override suspend fun isSet(): Boolean = maybeWithDispatcher {
-        file.exists()
+    override suspend fun isSet(): Boolean {
+        checkNotDisposed()
+        return maybeWithDispatcher {
+            file.exists()
+        }
     }
 
-    override fun asFlow(): Flow<T> = flow {
-        emit(get())
-        changeNotifier.asFlow().collect { emit(get()) }
+    override fun asFlow(): Flow<T> {
+        checkNotDisposed()
+        return flow {
+            emit(get())
+            changeNotifier.asFlow().collect { emit(get()) }
+        }
+    }
+
+    override fun dispose() {
+        if (disposed.getAndSet(true)) {
+            multiProcessHelper.dispose()
+        }
     }
 
     private suspend fun <T> maybeWithDispatcher(block: suspend () -> T): T =
         if (dispatcher != null) withContext(dispatcher) { block() } else block()
+
+    private fun checkNotDisposed() {
+        require(disposed.get()) { "Box is already disposed" }
+    }
 }
 
 private class MultiProcessHelper(
@@ -218,6 +246,13 @@ private class MultiProcessHelper(
                 putExtra(EXTRA_CHANGE_OWNER, uuid)
                 putExtra(EXTRA_PATH, file.absolutePath)
             })
+        } catch (e: Exception) {
+        }
+    }
+
+    fun dispose() {
+        try {
+            context.unregisterReceiver(receiver)
         } catch (e: Exception) {
         }
     }

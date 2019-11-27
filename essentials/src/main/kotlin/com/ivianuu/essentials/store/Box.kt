@@ -32,6 +32,8 @@ interface Box<T> {
 
     fun asFlow(): Flow<T>
 
+    fun dispose()
+
 }
 
 suspend fun <T> Box<T>.getOrNull(): T? = if (isSet()) get() else null
