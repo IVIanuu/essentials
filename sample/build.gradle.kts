@@ -16,7 +16,6 @@
 
 plugins {
     id("com.android.application")
-    id("com.getkeepsafe.dexcount")
     id("com.github.ben-manes.versions")
     id("com.ivianuu.injekt")
     id("com.ivianuu.essentials")
@@ -30,6 +29,14 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/ja
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-android-ext.gradle")
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-compiler-args.gradle")
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-source-sets-android.gradle")
+
+android {
+    // todo remove once fixed
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+    }
+}
 
 dependencies {
     implementation(project(":essentials"))

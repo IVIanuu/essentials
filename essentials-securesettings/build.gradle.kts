@@ -15,7 +15,6 @@
  */
 plugins {
     id("com.android.library")
-    id("com.getkeepsafe.dexcount")
     id("com.github.ben-manes.versions")
     id("com.ivianuu.injekt")
     id("com.ivianuu.essentials")

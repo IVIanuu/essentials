@@ -43,7 +43,6 @@ import androidx.ui.material.Slider
 import androidx.ui.material.SliderPosition
 import androidx.ui.material.TextButtonStyle
 import androidx.ui.material.ripple.Ripple
-import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.compose.common.scrolling.Scroller
 import com.ivianuu.essentials.ui.compose.core.composable
@@ -192,7 +191,7 @@ private fun ColorGrid(
                 alignment = { Alignment.Center }
             ) {
                 val chunkedColors = colors.chunked(4)
-                chunkedColors.forEachIndexed { index, rowColors ->
+                chunkedColors.forEach { rowColors ->
                     tableRow {
                         rowColors.forEach { color ->
                             composableWithKey(color) {
@@ -200,7 +199,8 @@ private fun ColorGrid(
                                     color = color,
                                     onClick = {
                                         onColorSelected(color)
-                                    })
+                                    }
+                                )
                             }
                         }
                     }
@@ -215,9 +215,9 @@ private fun ColorGridItem(
     color: Color,
     onClick: () -> Unit
 ) = composable {
-    Padding(padding = 4.dp) {
-        Ripple(bounded = false) {
-            Clickable(onClick = onClick) {
+    Ripple(bounded = true) {
+        Clickable(onClick = onClick) {
+            Padding(padding = 4.dp) {
                 SquaredBox(fit = SquaredBoxFit.MatchWidth) {
                     val paint = remember { Paint() }
                     paint.color = color
@@ -240,7 +240,6 @@ private fun ColorEditor(
     onColorChanged: (Color) -> Unit,
     showAlphaSelector: Boolean
 ) = composable {
-    d { "color editor with color $color" }
     Column {
         Container(
             height = 72.dp,
