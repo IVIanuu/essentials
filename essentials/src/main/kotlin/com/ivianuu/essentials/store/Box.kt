@@ -20,8 +20,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface Box<T> {
 
-    suspend fun defaultValue(): T
-
     suspend fun get(): T
 
     suspend fun set(value: T)
@@ -29,6 +27,8 @@ interface Box<T> {
     suspend fun isSet(): Boolean
 
     suspend fun delete()
+
+    suspend fun defaultValue(): T
 
     fun asFlow(): Flow<T>
 

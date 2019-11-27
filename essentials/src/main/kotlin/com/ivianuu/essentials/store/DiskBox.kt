@@ -65,6 +65,23 @@ internal class DiskBoxImpl<T>(
     private val channel = BroadcastChannel<T>(1)
     private val cachedValue = AtomicReference<Any?>(this)
     private val lazyDefaultValue = SuspendLazy(defaultValueLambda)
+    private val valueFetcher = MutexValue {
+        try {
+            val reader = BufferedReader(InputStreamReader(FileInputStream(file)))
+            val stringBuilder = StringBuilder()
+            var line = reader.readLine()
+            while (line != null) {
+                stringBuilder.append(line).append('\n')
+                line = reader.readLine()
+            }
+
+            reader.close()
+
+            return@MutexValue serializer.deserialize(stringBuilder.toString())
+        } catch (e: Exception) {
+            throw IOException("Couldn't read file $file")
+        }
+    }
 
     init {
         check(!file.isDirectory)
@@ -94,24 +111,6 @@ internal class DiskBoxImpl<T>(
         cachedValue.set(value)
 
         channel.offer(value)
-    }
-
-    private val valueFetcher = MutexValue {
-        try {
-            val reader = BufferedReader(InputStreamReader(FileInputStream(file)))
-            val stringBuilder = StringBuilder()
-            var line = reader.readLine()
-            while (line != null) {
-                stringBuilder.append(line).append('\n')
-                line = reader.readLine()
-            }
-
-            reader.close()
-
-            return@MutexValue serializer.deserialize(stringBuilder.toString())
-        } catch (e: Exception) {
-            throw IOException("Couldn't read file $file")
-        }
     }
 
     override suspend fun get(): T = maybeWithDispatcher {
