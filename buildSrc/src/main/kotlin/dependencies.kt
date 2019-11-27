@@ -91,8 +91,6 @@ object Deps {
     const val buildConfigGradlePlugin =
         "gradle.plugin.de.fuerstenau:BuildConfigPlugin:1.1.8"
 
-    const val canIDropJetifierGradlePlugin = "com.github.plnice:canidropjetifier:0.5"
-
     const val coil = "io.coil-kt:coil:0.7.0"
 
     object Coroutines {
@@ -101,6 +99,8 @@ object Deps {
         const val core = "org.jetbrains.kotlinx:kotlinx-coroutines-core:$version"
         const val test = "org.jetbrains.kotlinx:kotlinx-coroutines-test:$version"
     }
+
+    const val dexcountGradlePlugin = "com.getkeepsafe.dexcount:dexcount-gradle-plugin:1.0.0"
 
     object Director {
         private const val version = "0.0.1-dev40"

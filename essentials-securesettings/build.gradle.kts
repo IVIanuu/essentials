@@ -15,8 +15,8 @@
  */
 plugins {
     id("com.android.library")
+    id("com.getkeepsafe.dexcount")
     id("com.github.ben-manes.versions")
-    id("com.github.plnice.canidropjetifier")
     id("com.ivianuu.injekt")
     id("com.ivianuu.essentials")
     kotlin("android")
