@@ -216,11 +216,11 @@ fun <T> popupMenuRoute(
 ) {
     val navigator = inject<Navigator>()
 
-    val dismissedHolder = ref { false }
+    val dismissed = ref { false }
 
     val dismiss: (Boolean) -> Unit = { cancelled ->
-        if (!dismissedHolder.value) {
-            dismissedHolder.value = true
+        if (!dismissed.value) {
+            dismissed.value = true
             navigator.pop()
             if (cancelled) onCancel?.invoke()
         }
