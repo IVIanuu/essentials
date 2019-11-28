@@ -20,9 +20,12 @@ import androidx.compose.Composable
 import com.ivianuu.essentials.ui.common.urlRoute
 import com.ivianuu.essentials.ui.compose.core.effect
 import com.ivianuu.essentials.ui.compose.core.remember
+import com.ivianuu.essentials.ui.compose.coroutines.coroutineScope
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.Route
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 @Composable
 fun navigateOnClick(route: () -> Route): () -> Unit = effect {
@@ -33,4 +36,16 @@ fun navigateOnClick(route: () -> Route): () -> Unit = effect {
 @Composable
 fun openUrlOnClick(url: () -> String) = effect {
     navigateOnClick { urlRoute(url()) }
+}
+
+@Composable
+fun launchOnClick(
+    block: suspend CoroutineScope.() -> Unit
+) = effect {
+    val coroutineScope = coroutineScope()
+    return@effect remember {
+        {
+            coroutineScope.launch { block() }
+        }
+    }
 }
