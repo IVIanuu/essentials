@@ -113,11 +113,15 @@ fun SliderPreference(
                         Slider(
                             position = position,
                             onValueChange = {
-                                position.value = it
-                                onChanged?.invoke(it.toInt())
+                                if (context.shouldBeEnabled) {
+                                    position.value = it
+                                    onChanged?.invoke(it.toInt())
+                                }
                             },
                             onValueChangeEnd = {
-                                context.setIfOk(position.value.toInt())
+                                if (context.shouldBeEnabled) {
+                                    context.setIfOk(position.value.toInt())
+                                }
                             }
                         )
                     }

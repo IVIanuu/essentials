@@ -56,9 +56,7 @@ private class EnumStringPrefSerializer<T>(
     private val defaultValue: T
 ) : DiskBox.Serializer<T> where T : Enum<T>, T : BoxValueHolder<String> {
     override fun serialize(value: T) = value.value
-    override fun deserialize(serialized: String) = type.valueFor(serialized) {
-        defaultValue
-    }
+    override fun deserialize(serialized: String) = type.valueFor(serialized, defaultValue)
 }
 
 inline fun <reified T> PrefBoxFactory.enumStringSet(

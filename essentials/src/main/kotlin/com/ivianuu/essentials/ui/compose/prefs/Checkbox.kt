@@ -50,7 +50,9 @@ fun CheckboxPreference(
                     )
                 }
             },
-            onClick = { context.setIfOk(!context.currentValue) }
+            onClick = if (!context.shouldBeEnabled) null else {
+                { context.setIfOk(!context.currentValue); Unit }
+            }
         )
     }
 }

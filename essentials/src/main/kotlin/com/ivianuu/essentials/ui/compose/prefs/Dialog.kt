@@ -45,10 +45,12 @@ fun <T> DialogPreference(
             title = title,
             summary = summary,
             leading = leading,
-            onClick = {
-                navigator.push(dialogRoute {
-                    dialog(context) { navigator.pop() }
-                })
+            onClick = if (!context.shouldBeEnabled) null else {
+                {
+                    navigator.push(dialogRoute {
+                        dialog(context) { navigator.pop() }
+                    })
+                }
             }
         )
     }

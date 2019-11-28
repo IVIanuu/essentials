@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.ui.compose.prefs
 
 import androidx.compose.Composable
+import androidx.ui.core.Opacity
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.composableWithKey
 import com.ivianuu.essentials.ui.compose.material.Subheader
@@ -28,9 +29,11 @@ fun PreferenceSubheader(
     text: String,
     dependencies: List<Dependency<*>>? = null
 ) = composableWithKey("PreferenceSubheader:$text") {
-    //Dependencies(dependencies) {
-        Subheader(text)
-    // }
+    Dependencies(dependencies ?: emptyList()) { dependenciesOk ->
+        Opacity(opacity = if (dependenciesOk) 1f else 0.5f) {
+            Subheader(text)
+        }
+    }
 }
 
 @Composable
@@ -38,7 +41,9 @@ fun PreferenceSubheader(
     dependencies: List<Dependency<*>>? = null,
     text: @Composable() () -> Unit
 ) = composable {
-    //Dependencies(dependencies) {
-        Subheader(text)
-    //}
+    Dependencies(dependencies ?: emptyList()) { dependenciesOk ->
+        Opacity(opacity = if (dependenciesOk) 1f else 0.5f) {
+            Subheader(text)
+        }
+    }
 }

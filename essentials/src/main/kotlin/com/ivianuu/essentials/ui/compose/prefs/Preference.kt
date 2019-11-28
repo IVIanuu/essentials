@@ -25,12 +25,7 @@ import com.ivianuu.essentials.ui.compose.common.framed
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.composableWithKey
 import com.ivianuu.essentials.ui.compose.core.remember
-import com.ivianuu.essentials.ui.compose.coroutines.collect
 import com.ivianuu.essentials.ui.compose.material.SimpleListItem
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.map
 
 @Composable
 fun <T> PreferenceWrapper(
@@ -40,18 +35,13 @@ fun <T> PreferenceWrapper(
     dependencies: List<Dependency<*>>? = null,
     preference: @Composable() (PreferenceContext<T>) -> Unit
 ) = composableWithKey("Preference:$box") {
-    val context = remember(box) { PreferenceContext(box) }
+    Dependencies(dependencies = dependencies ?: emptyList()) { dependenciesOk ->
+        val context = remember(box) { PreferenceContext(box) }
+        context.boxWrapper = unfoldBox(box)
+        context.onChange = onChange
+        context.enabled = enabled
+        context.dependenciesOk = dependenciesOk
 
-    val dependenciesOkFlow: Flow<Boolean> = remember(dependencies) {
-        dependencies.asFlow()
-    }
-    val dependenciesOk = collect(dependenciesOkFlow, false)
-    context.boxWrapper = unfoldBox(box)
-    context.onChange = onChange
-    context.enabled = enabled
-    context.dependenciesOk = dependenciesOk
-
-    Opacity(if (dependenciesOk) 1f else 0.5f) {
         val finalEnabled = enabled && dependenciesOk
         Opacity(if (finalEnabled) 1f else 0.5f) {
             preference(context)
@@ -97,26 +87,8 @@ class PreferenceContext<T>(
     val shouldBeEnabled: Boolean get() = enabled && dependenciesOk
 
     fun setIfOk(newValue: T): Boolean {
-        val isOk = onChange?.invoke(newValue) ?: true
+        val isOk = shouldBeEnabled && onChange?.invoke(newValue) ?: true
         if (isOk) currentValue = newValue
         return isOk
     }
-}
-
-data class Dependency<T : Any>(
-    val box: Box<T>,
-    val value: T
-)
-
-private fun List<Dependency<*>>?.asFlow(): Flow<Boolean> {
-    if (this == null) return flowOf(true)
-
-    val flows =
-        map { dependency ->
-            dependency.box.asFlow()
-                .map { currentValue -> currentValue == dependency.value }
-        }
-            .toTypedArray()
-
-    return combine(*flows) { values -> values.all { it } }
 }
