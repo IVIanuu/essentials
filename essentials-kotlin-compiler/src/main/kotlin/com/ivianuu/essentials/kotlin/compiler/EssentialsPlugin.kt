@@ -17,10 +17,20 @@
 package com.ivianuu.essentials.kotlin.compiler
 
 import com.google.auto.service.AutoService
+import com.ivianuu.essentials.kotlin.compiler.compose.ComposeAnalysisHandlerExtension
+import org.jetbrains.kotlin.cli.common.CLIConfigurationKeys
+import org.jetbrains.kotlin.cli.common.messages.MessageRenderer
+import org.jetbrains.kotlin.cli.common.messages.PrintingMessageCollector
 import org.jetbrains.kotlin.codegen.extensions.ClassBuilderInterceptorExtension
 import org.jetbrains.kotlin.com.intellij.mock.MockProject
+import org.jetbrains.kotlin.compiler.plugin.AbstractCliOption
+import org.jetbrains.kotlin.compiler.plugin.CliOption
+import org.jetbrains.kotlin.compiler.plugin.CommandLineProcessor
 import org.jetbrains.kotlin.compiler.plugin.ComponentRegistrar
 import org.jetbrains.kotlin.config.CompilerConfiguration
+import org.jetbrains.kotlin.config.CompilerConfigurationKey
+import org.jetbrains.kotlin.resolve.jvm.extensions.AnalysisHandlerExtension
+import java.io.File
 
 @AutoService(ComponentRegistrar::class)
 class EssentialsComponentRegistrar : ComponentRegistrar {
@@ -28,9 +38,49 @@ class EssentialsComponentRegistrar : ComponentRegistrar {
         project: MockProject,
         configuration: CompilerConfiguration
     ) {
+        messageCollector = configuration.get(CLIConfigurationKeys.MESSAGE_COLLECTOR_KEY)
+            ?: PrintingMessageCollector(System.out, MessageRenderer.PLAIN_FULL_PATHS, true)
+
+        val outputDir = File(configuration.getNotNull(OutputDirKey))
+        msg { "init with $outputDir" }
+
+        outputDir.mkdirs()
+
+        AnalysisHandlerExtension.registerExtension(
+            project,
+            ComposeAnalysisHandlerExtension(
+                outputDir
+            )
+        )
+
         ClassBuilderInterceptorExtension.registerExtension(
             project,
             SourceLocationClassBuilderInterceptorExtension()
         )
     }
 }
+
+@AutoService(CommandLineProcessor::class)
+class InjektCommandLineProcessor : CommandLineProcessor {
+    override val pluginId = "com.ivianuu.essentials"
+
+    override val pluginOptions = listOf(
+        CliOption(
+            optionName = "outputDir",
+            valueDescription = "generated src dir",
+            description = "generated src"
+        )
+    )
+
+    override fun processOption(
+        option: AbstractCliOption,
+        value: String,
+        configuration: CompilerConfiguration
+    ) {
+        when (option.optionName) {
+            "outputDir" -> configuration.put(OutputDirKey, value)
+        }
+    }
+}
+
+val OutputDirKey = CompilerConfigurationKey<String>("outputDir")
