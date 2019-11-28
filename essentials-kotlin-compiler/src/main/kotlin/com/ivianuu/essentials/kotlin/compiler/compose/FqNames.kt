@@ -35,7 +35,7 @@ val ComposableAnnotation =
     FqName("androidx.compose.Composable")
 
 val StableMarkerAnnotation = FqName("androidx.compose.StableMarker")
-val PivotalMarkerAnnotation = FqName("androidx.compose.Pivotal")
+val PivotalAnnotation = FqName("androidx.compose.Pivotal")
 
 fun KotlinType.isStable(): Boolean {
     return !isError &&

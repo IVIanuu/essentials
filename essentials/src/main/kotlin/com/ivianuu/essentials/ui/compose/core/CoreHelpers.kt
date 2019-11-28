@@ -192,3 +192,5 @@ inline operator fun <T> Effect<T>.invoke(): T = invoke(key = sourceLocation())
 
 operator fun <T> Effect<T>.invoke(key: Any): T =
     resolve(androidx.compose.composer.composer, key.hashCode())
+
+fun joinKey(left: Any, right: Any?) = androidx.compose.composer.joinKey(left, right)

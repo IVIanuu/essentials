@@ -14,16 +14,20 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.kotlin.compiler.compose
+package com.ivianuu.essentials.kotlin.compiler.compose.wrapper
 
 import com.ivianuu.essentials.kotlin.compiler.asClassName
 import com.ivianuu.essentials.kotlin.compiler.asTypeName
+import com.ivianuu.essentials.kotlin.compiler.compose.ComposableAnnotation
+import com.ivianuu.essentials.kotlin.compiler.compose.PivotalAnnotation
+import com.ivianuu.essentials.kotlin.compiler.compose.isStable
 import com.squareup.kotlinpoet.CodeBlock
 import com.squareup.kotlinpoet.FileSpec
 import com.squareup.kotlinpoet.FunSpec
 import com.squareup.kotlinpoet.KModifier
 import com.squareup.kotlinpoet.ParameterSpec
 import com.squareup.kotlinpoet.TypeVariableName
+import org.jetbrains.kotlin.builtins.isFunctionType
 import org.jetbrains.kotlin.descriptors.FunctionDescriptor
 import org.jetbrains.kotlin.descriptors.SourceElement
 import org.jetbrains.kotlin.js.resolve.diagnostics.findPsi
@@ -35,10 +39,10 @@ import org.jetbrains.kotlin.types.typeUtil.isUnit
 import java.io.File
 import kotlin.math.absoluteValue
 
-fun FunctionDescriptor.getUpdateScopeName(): String {
+fun FunctionDescriptor.getComposableWrapperFileName(): String {
     val paramsHash = ((dispatchReceiverParameter?.type?.hashCode() ?: 0) +
             valueParameters.map { it.name.asString() + it.type.toString() }.hashCode()).absoluteValue
-    return "${name.asString()}__Composable\$${paramsHash}"
+    return "${name.asString()}\$ComposableWrapper\$${paramsHash}"
 }
 
 fun generateComposableWrapper(
@@ -53,7 +57,7 @@ fun generateComposableWrapper(
     val ktFile = descriptor.findPsi()!!.containingFile as KtFile
 
     val packageName = ktFile.packageFqName.asString()
-    val fileName = descriptor.getUpdateScopeName()
+    val fileName = descriptor.getComposableWrapperFileName()
 
     val imports = ktFile.importDirectives.groupBy {
         check(it.alias == null) { "Not supported yet" }// todo support
@@ -72,12 +76,14 @@ fun generateComposableWrapper(
         }
         .addImport(
             "com.ivianuu.essentials.ui.compose.core",
-            "composable",
-            "staticComposable",
-            "effect"
+            "composableWithKey",
+            "staticComposableWithKey",
+            "effectWithKey",
+            "joinKey"
         )
+        .addImport("com.ivianuu.essentials.util", "sourceLocation")
         .apply {
-            FunSpec.builder(descriptor.name.asString().replaceFirst("_", ""))
+            FunSpec.builder(descriptor.name.asString().removePrefix("_"))
                 .addAnnotation(ComposableAnnotation.asClassName())
                 .addModifiers(KModifier.INLINE)
                 .apply {
@@ -103,6 +109,10 @@ fun generateComposableWrapper(
                                 parameter.type.asTypeName()
                             )
                                 .apply {
+                                    if (parameter.type.isFunctionType) {
+                                        addModifiers(KModifier.NOINLINE)
+                                    }
+
                                     if (parameter.declaresDefaultValue()) {
                                         val ktParameter = parameter.findPsi() as KtParameter
                                         defaultValue(ktParameter.defaultValue!!.text)
@@ -121,33 +131,42 @@ fun generateComposableWrapper(
                     addCode(
                         CodeBlock.builder()
                             .apply {
+                                val pivotals = descriptor.valueParameters
+                                    .filter { it.annotations.hasAnnotation(PivotalAnnotation) }
+
+                                addStatement("${if (pivotals.isEmpty()) "val" else "var"} key = sourceLocation()")
+                                pivotals.forEach {
+                                    addStatement("key = joinKey(key, ${it.name.asString()})")
+                                }
+
                                 if (isEffect) {
-                                    beginControlFlow("return effect")
+                                    beginControlFlow("return effectWithKey(key)")
                                 } else {
                                     when {
                                         descriptor.valueParameters.any { it.type.isStable() } -> {
                                             beginControlFlow(
-                                                "composable(${descriptor.valueParameters.map { it.name.asString() }.joinToString(
+                                                "composableWithKey(key, ${descriptor.valueParameters.map { it.name.asString() }.joinToString(
                                                     ", "
                                                 )})"
                                             )
                                         }
                                         descriptor.valueParameters.isEmpty() -> {
-                                            beginControlFlow("staticComposable")
+                                            beginControlFlow("staticComposableWithKey(key)")
                                         }
                                         else -> {
-                                            beginControlFlow("composable")
+                                            beginControlFlow("composableWithKey(key)")
                                         }
                                     }
                                 }
 
-                                add("${descriptor.name}" +
-                                        "${descriptor.typeParameters.map { it.name.asString() }.joinToString(
-                                            ", "
-                                        ).let { if (it.isNotEmpty()) "<$it>" else "" }}" +
-                                        "(${descriptor.valueParameters.map { it.name.asString() }.joinToString(
-                                            ", "
-                                        )})"
+                                addStatement(
+                                    "${descriptor.name}" +
+                                            "${descriptor.typeParameters.map { it.name.asString() }.joinToString(
+                                                ", "
+                                            ).let { if (it.isNotEmpty()) "<$it>" else "" }}" +
+                                            "(${descriptor.valueParameters.map { it.name.asString() }.joinToString(
+                                                ", "
+                                            )})"
                                 )
                                 endControlFlow()
                             }

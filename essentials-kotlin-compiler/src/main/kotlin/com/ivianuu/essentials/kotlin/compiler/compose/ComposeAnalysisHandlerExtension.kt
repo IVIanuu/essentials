@@ -16,6 +16,8 @@
 
 package com.ivianuu.essentials.kotlin.compiler.compose
 
+import com.ivianuu.essentials.kotlin.compiler.compose.overload.generateOverloadComposable
+import com.ivianuu.essentials.kotlin.compiler.compose.wrapper.generateComposableWrapper
 import org.jetbrains.kotlin.analyzer.AnalysisResult
 import org.jetbrains.kotlin.com.intellij.openapi.project.Project
 import org.jetbrains.kotlin.container.ComponentProvider
@@ -53,24 +55,17 @@ class ComposeAnalysisHandlerExtension(
                     val functionDescriptor =
                         resolveSession.resolveToDescriptor(ktNamedFunction) as FunctionDescriptor
 
-                    generateComposableWrapper(outputDir, functionDescriptor, bindingTrace)
-
-                    /*val descriptor = createOverloadComposableDescriptor(
+                    generateComposableWrapper(
+                        outputDir,
                         functionDescriptor,
                         bindingTrace
-                    ) ?: return@namedFunctionRecursiveVisitor
+                    )
 
-                    if (bindingTrace.bindingContext.diagnostics.all().size != diagnosticCount) {
-                        return@namedFunctionRecursiveVisitor
-                    }
-
-                    msg { "generate $descriptor" }
-
-                    val generator =
-                        OverloadComposableGenerator(
-                            descriptor
-                        )
-                    generator.generate().writeTo(outputDir)*/
+                    generateOverloadComposable(
+                        outputDir,
+                        functionDescriptor,
+                        bindingTrace
+                    )
                 }
             )
         }

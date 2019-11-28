@@ -32,6 +32,8 @@ val CompanionObjectMustBeAOverloadComposable =
     error()
 val MustBeComposableFunction0 =
     error()
+val MustBeUnit = error()
+val CannotHaveDefaultValueExceptNullable = error()
 
 private fun error() = DiagnosticFactory0.create<PsiElement>(Severity.ERROR)
 
@@ -60,6 +62,14 @@ object OverloadComposableErrorMessages : DefaultErrorMessages.Extension {
         map.put(
             MustBeComposableFunction0,
             "Type must be @Composable () -> Unit"
+        )
+        map.put(
+            MustBeUnit,
+            "Return type must be unit"
+        )
+        map.put(
+            CannotHaveDefaultValueExceptNullable,
+            "Cannot have default values except nullable"
         )
     }
 }
