@@ -27,6 +27,7 @@ import com.ivianuu.essentials.ui.compose.common.onBackPressed
 import com.ivianuu.essentials.ui.compose.composeControllerRoute
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.invokeAsComposable
+import com.ivianuu.essentials.ui.compose.core.ref
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.director.controllerRouteOptions
@@ -44,9 +45,17 @@ fun dialogRoute(
     if (!dismissible) {
         onBackPressed { }
     }
+
+    val dismissed = ref { false }
+
     PressGestureDetector(
         onPress = if (dismissible) {
-            { _: PxPosition -> navigator.pop() }
+            { _: PxPosition ->
+                if (!dismissed.value) {
+                    dismissed.value = true
+                    navigator.pop()
+                }
+            }
         } else null
     ) {
         DialogScrim()
