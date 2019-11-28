@@ -98,7 +98,7 @@ class PreferenceContext<T>(
 
     fun setIfOk(newValue: T): Boolean {
         val isOk = onChange?.invoke(newValue) ?: true
-        currentValue = newValue
+        if (isOk) currentValue = newValue
         return isOk
     }
 }
