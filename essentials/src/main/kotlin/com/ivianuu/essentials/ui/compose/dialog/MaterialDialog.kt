@@ -84,7 +84,7 @@ private fun DialogBody(
     showDividers: Boolean,
     applyContentPadding: Boolean,
     buttonLayout: AlertDialogButtonLayout,
-    icon: @Composable() (() -> Unit)?,
+    icon: (@Composable() () -> Unit)?,
     title: (@Composable() () -> Unit)?,
     content: (@Composable() () -> Unit)?,
     positiveButton: (@Composable() () -> Unit)?,
@@ -172,9 +172,9 @@ private fun DialogBody(
 private fun DialogContentLayout(
     showDividers: Boolean,
     applyContentPadding: Boolean,
-    header: @Composable() (() -> Unit)?,
-    content: @Composable() (() -> Unit)?,
-    buttons: @Composable() (() -> Unit)?
+    header: (@Composable() () -> Unit)?,
+    content: (@Composable() () -> Unit)?,
+    buttons: (@Composable() () -> Unit)?
 ) = composable {
     val children: @Composable() () -> Unit = {
         if (header != null) {

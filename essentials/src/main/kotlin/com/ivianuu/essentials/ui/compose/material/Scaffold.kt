@@ -133,11 +133,11 @@ class Scaffold internal constructor(_drawerState: State<DrawerState>) {
 
 @Composable
 private fun ScaffoldLayout(
-    topAppBar: @Composable() (() -> Unit)?,
-    body: @Composable() (() -> Unit)?,
+    topAppBar: (@Composable() () -> Unit)?,
+    body: (@Composable() () -> Unit)?,
     bodyLayoutMode: Scaffold.BodyLayoutMode,
-    bottomBar: @Composable() (() -> Unit)?,
-    fab: @Composable() (() -> Unit)?,
+    bottomBar: (@Composable() () -> Unit)?,
+    fab: (@Composable() () -> Unit)?,
     fabPosition: Scaffold.FabPosition
 ) = composable {
     val children: @Composable() () -> Unit = {

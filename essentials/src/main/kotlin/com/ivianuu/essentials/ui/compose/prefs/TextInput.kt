@@ -17,9 +17,12 @@
 package com.ivianuu.essentials.ui.compose.prefs
 
 import androidx.compose.Composable
+import androidx.ui.graphics.Image
 import androidx.ui.input.KeyboardType
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.store.Box
+import com.ivianuu.essentials.ui.compose.common.asIconComposable
+import com.ivianuu.essentials.ui.compose.common.asTextComposable
 import com.ivianuu.essentials.ui.compose.core.composableWithKey
 import com.ivianuu.essentials.ui.compose.core.stateFor
 import com.ivianuu.essentials.ui.compose.dialog.DialogButton
@@ -30,16 +33,45 @@ import com.ivianuu.essentials.ui.compose.resources.stringResource
 @Composable
 fun TextInputPreference(
     box: Box<String>,
-    dialogHint: String? = null,
-    dialogKeyboardType: KeyboardType = KeyboardType.Text,
-    allowEmpty: Boolean = true,
-    title: @Composable() () -> Unit,
-    summary: @Composable() (() -> Unit)? = null,
-    leading: @Composable() (() -> Unit)? = null,
     onChange: ((String) -> Boolean)? = null,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
-    dialogTitle: @Composable() (() -> Unit)? = title
+    title: String? = null,
+    summary: String? = null,
+    image: Image? = null,
+    dialogTitle: String? = title,
+    dialogHint: String? = null,
+    dialogKeyboardType: KeyboardType = KeyboardType.Text,
+    allowEmpty: Boolean = true
+) = composableWithKey("TextInputPreference:$box") {
+    TextInputPreference(
+        box = box,
+        onChange = onChange,
+        enabled = enabled,
+        dependencies = dependencies,
+        title = title.asTextComposable(),
+        summary = summary.asTextComposable(),
+        leading = image.asIconComposable(),
+        dialogTitle = dialogTitle.asTextComposable(),
+        dialogHint = dialogHint,
+        dialogKeyboardType = dialogKeyboardType,
+        allowEmpty = allowEmpty
+    )
+}
+
+@Composable
+fun TextInputPreference(
+    box: Box<String>,
+    onChange: ((String) -> Boolean)? = null,
+    enabled: Boolean = true,
+    dependencies: List<Dependency<*>>? = null,
+    title: (@Composable() () -> Unit)? = null,
+    summary: (@Composable() () -> Unit)? = null,
+    leading: (@Composable() () -> Unit)? = null,
+    dialogTitle: (@Composable() () -> Unit)? = title,
+    dialogHint: String? = null,
+    dialogKeyboardType: KeyboardType = KeyboardType.Text,
+    allowEmpty: Boolean = true
 ) = composableWithKey("TextInputPreference:$box") {
     DialogPreference(
         box = box,

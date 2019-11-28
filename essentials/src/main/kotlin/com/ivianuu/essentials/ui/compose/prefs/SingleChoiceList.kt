@@ -30,14 +30,14 @@ import com.ivianuu.essentials.ui.compose.resources.stringResource
 @Composable
 fun SingleChoiceListPreference(
     box: Box<String>,
-    items: List<SingleChoiceListPreference.Item>,
     onChange: ((String) -> Boolean)? = null,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
-    title: @Composable() () -> Unit,
-    summary: @Composable() (() -> Unit)? = null,
-    leading: @Composable() (() -> Unit)? = null,
-    dialogTitle: (@Composable() () -> Unit)? = title
+    title: (@Composable() () -> Unit)? = null,
+    summary: (@Composable() () -> Unit)? = null,
+    leading: (@Composable() () -> Unit)? = null,
+    dialogTitle: (@Composable() () -> Unit)? = title,
+    items: List<SingleChoiceListPreference.Item>
 ) = composableWithKey("SingleChoiceListPreference:$box") {
     DialogPreference(
         box = box,

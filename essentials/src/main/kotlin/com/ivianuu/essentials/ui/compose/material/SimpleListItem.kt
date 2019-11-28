@@ -22,6 +22,7 @@ import androidx.ui.core.CurrentTextStyleProvider
 import androidx.ui.core.dp
 import androidx.ui.foundation.Clickable
 import androidx.ui.graphics.Color
+import androidx.ui.graphics.Image
 import androidx.ui.graphics.toArgb
 import androidx.ui.layout.Column
 import androidx.ui.layout.ConstrainedBox
@@ -37,6 +38,8 @@ import androidx.ui.material.Typography
 import androidx.ui.material.ripple.Ripple
 import androidx.ui.material.surface.CurrentBackground
 import androidx.ui.text.TextStyle
+import com.ivianuu.essentials.ui.compose.common.asIconComposable
+import com.ivianuu.essentials.ui.compose.common.asTextComposable
 import com.ivianuu.essentials.ui.compose.core.ambient
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.invoke
@@ -45,10 +48,25 @@ import com.ivianuu.essentials.util.isDark
 
 @Composable
 fun SimpleListItem(
-    title: @Composable() (() -> Unit),
-    subtitle: @Composable() (() -> Unit)? = null,
-    leading: @Composable() (() -> Unit)? = null,
-    trailing: @Composable() (() -> Unit)? = null,
+    title: String? = null,
+    subtitle: String? = null,
+    image: Image? = null,
+    onClick: (() -> Unit)? = null
+) = composable {
+    SimpleListItem(
+        title = title.asTextComposable(),
+        subtitle = subtitle.asTextComposable(),
+        leading = image.asIconComposable(),
+        onClick = onClick
+    )
+}
+
+@Composable
+fun SimpleListItem(
+    title: (@Composable() () -> Unit)? = null,
+    subtitle: (@Composable() () -> Unit)? = null,
+    leading: (@Composable() () -> Unit)? = null,
+    trailing: (@Composable() () -> Unit)? = null,
     onClick: (() -> Unit)? = null
 ) = composable {
     val styledTitle = applyTextStyle(
@@ -150,8 +168,8 @@ private data class ListItemTextStyle(
 
 private fun applyTextStyle(
     textStyle: ListItemTextStyle,
-    children: @Composable() (() -> Unit)?
-): @Composable() (() -> Unit)? {
+    children: (@Composable() () -> Unit)?
+): (@Composable() () -> Unit)? {
     if (children == null) return null
     return {
         val colors = MaterialTheme.colors()()
@@ -163,8 +181,8 @@ private fun applyTextStyle(
 }
 
 private fun applyIconStyle(
-    children: @Composable() (() -> Unit)?
-): @Composable() (() -> Unit)? {
+    children: (@Composable() () -> Unit)?
+): (@Composable() () -> Unit)? {
     if (children == null) return null
     return {
         val iconAlpha =

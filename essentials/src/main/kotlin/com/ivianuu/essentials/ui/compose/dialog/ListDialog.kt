@@ -36,7 +36,7 @@ import com.ivianuu.essentials.ui.compose.core.invokeAsComposable
 @Composable
 fun ListDialog(
     buttonLayout: AlertDialogButtonLayout = AlertDialogButtonLayout.SideBySide,
-    icon: @Composable() (() -> Unit)? = null,
+    icon: (@Composable() () -> Unit)? = null,
     title: (@Composable() () -> Unit)? = null,
     listContent: @Composable() () -> Unit,
     positiveButton: (@Composable() () -> Unit)? = null,

@@ -43,13 +43,13 @@ fun EsTopAppBar(title: String) =
 @Composable
 fun EsTopAppBar(
     color: Color = MaterialTheme.colors()().primary,
-    title: @Composable() () -> Unit,
+    title: (@Composable() () -> Unit)? = null,
     leading: (@Composable() () -> Unit)? = autoTopAppBarLeadingIcon(),
     trailing: (@Composable() () -> Unit)? = null
 ) = composable {
     TopAppBar(
         color = color,
-        title = title,
+        title = title ?: {},
         navigationIcon = leading?.let {
             {
                 CurrentIconStyleProvider(appBarIconStyle(color)) {

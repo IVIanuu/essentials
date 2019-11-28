@@ -75,7 +75,7 @@ fun TextInputDialog(
     hint: String? = null,
     keyboardType: KeyboardType = KeyboardType.Text,
     buttonLayout: AlertDialogButtonLayout = AlertDialogButtonLayout.SideBySide,
-    icon: @Composable() (() -> Unit)? = null,
+    icon: (@Composable() () -> Unit)? = null,
     title: (@Composable() () -> Unit)? = null,
     positiveButton: (@Composable() () -> Unit)? = null,
     negativeButton: (@Composable() () -> Unit)? = null,

@@ -18,9 +18,12 @@ package com.ivianuu.essentials.ui.compose.prefs
 
 import androidx.compose.Composable
 import androidx.ui.core.Opacity
+import androidx.ui.graphics.Image
 import com.ivianuu.essentials.store.Box
 import com.ivianuu.essentials.ui.compose.box.BoxWrapper
 import com.ivianuu.essentials.ui.compose.box.unfoldBox
+import com.ivianuu.essentials.ui.compose.common.asIconComposable
+import com.ivianuu.essentials.ui.compose.common.asTextComposable
 import com.ivianuu.essentials.ui.compose.common.framed
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.composableWithKey
@@ -51,10 +54,25 @@ fun <T> PreferenceWrapper(
 
 @Composable
 fun PreferenceLayout(
-    title: @Composable() () -> Unit,
-    summary: @Composable() (() -> Unit)? = null,
-    leading: @Composable() (() -> Unit)? = null,
-    trailing: @Composable() (() -> Unit)? = null,
+    title: String? = null,
+    summary: String? = null,
+    image: Image? = null,
+    onClick: (() -> Unit)? = null
+) = composable {
+    PreferenceLayout(
+        title = title.asTextComposable(),
+        summary = summary.asTextComposable(),
+        leading = image.asIconComposable(),
+        onClick = onClick
+    )
+}
+
+@Composable
+fun PreferenceLayout(
+    title: (@Composable() () -> Unit)? = null,
+    summary: (@Composable() () -> Unit)? = null,
+    leading: (@Composable() () -> Unit)? = null,
+    trailing: (@Composable() () -> Unit)? = null,
     onClick: (() -> Unit)? = null
 ) = composable {
     SimpleListItem(

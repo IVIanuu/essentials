@@ -47,14 +47,14 @@ import com.ivianuu.essentials.util.UnitValueTextProvider
 @Composable
 fun SliderPreference(
     box: Box<Int>,
-    valueRange: IntRange = 0..100,
-    steps: Int? = null,
     onChange: ((Int) -> Boolean)? = null,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
-    title: @Composable() () -> Unit,
-    summary: @Composable() (() -> Unit)? = null,
-    leading: @Composable() (() -> Unit)? = null,
+    title: (@Composable() () -> Unit)? = null,
+    summary: (@Composable() () -> Unit)? = null,
+    leading: (@Composable() () -> Unit)? = null,
+    valueRange: IntRange = 0..100,
+    steps: Int? = null,
     valueText: @Composable() ((Int) -> Unit)? = {
         SimpleSliderValueText(it)
     }

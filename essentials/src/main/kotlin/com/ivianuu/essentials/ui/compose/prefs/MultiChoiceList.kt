@@ -32,14 +32,14 @@ import com.ivianuu.essentials.ui.compose.resources.stringResource
 @Composable
 fun MultiChoiceListPreference(
     box: Box<Set<String>>,
-    items: List<MultiChoiceListPreference.Item>,
     onChange: ((Set<String>) -> Boolean)? = null,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
-    title: @Composable() () -> Unit,
-    summary: @Composable() (() -> Unit)? = null,
-    leading: @Composable() (() -> Unit)? = null,
-    dialogTitle: (@Composable() () -> Unit)? = title
+    title: (@Composable() () -> Unit)? = null,
+    summary: (@Composable() () -> Unit)? = null,
+    leading: (@Composable() () -> Unit)? = null,
+    dialogTitle: (@Composable() () -> Unit)? = title,
+    items: List<MultiChoiceListPreference.Item>
 ) = composableWithKey("MultiChoiceListPreference:$box") {
     DialogPreference(
         box = box,
