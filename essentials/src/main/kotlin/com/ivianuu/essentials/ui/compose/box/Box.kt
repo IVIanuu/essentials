@@ -28,13 +28,15 @@ import kotlinx.coroutines.launch
 fun <T> unfoldBox(box: Box<T>): BoxWrapper<T> = effect {
     val coroutineScope = coroutineScope()
     val wrapper = remember {
-        BoxWrapper(value = box.defaultValue) { newValue ->
+        val setter: (T) -> Unit = { newValue ->
             coroutineScope.launch {
                 box.set(newValue)
             }
         }
+
+        return@remember BoxWrapper(value = box.defaultValue, setter = setter)
     }
-    wrapper.value = collect(box.asFlow(), box.defaultValue)
+    wrapper._internalValue = collect(box.asFlow(), box.defaultValue)
     return@effect wrapper
 }
 

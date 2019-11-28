@@ -28,6 +28,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
+import java.util.concurrent.atomic.AtomicBoolean
 
 interface SettingBox<T> : Box<T> {
     val uri: Uri
@@ -64,6 +65,10 @@ class SettingBoxImpl<T>(
     private val dispatcher: CoroutineDispatcher?
 ) : SettingBox<T> {
 
+    private val _isDisposed = AtomicBoolean(false)
+    override val isDisposed: Boolean
+        get() = false
+
     override val uri: Uri by lazy {
         when (type) {
             SettingBox.Type.Global -> Settings.Global.getUriFor(name)
@@ -73,6 +78,7 @@ class SettingBoxImpl<T>(
     }
 
     override suspend fun set(value: T) {
+        checkNotDisposed()
         maybeWithDispatcher {
             try {
                 adapter.set(name, value, contentResolver, type)
@@ -82,15 +88,19 @@ class SettingBoxImpl<T>(
         }
     }
 
-    override suspend fun get(): T = maybeWithDispatcher {
-        try {
-            adapter.get(name, defaultValue, contentResolver, type)
-        } catch (e: Exception) {
-            throw RuntimeException("couldn't read value for name: $name", e)
+    override suspend fun get(): T {
+        checkNotDisposed()
+        return maybeWithDispatcher {
+            try {
+                adapter.get(name, defaultValue, contentResolver, type)
+            } catch (e: Exception) {
+                throw RuntimeException("couldn't read value for name: $name", e)
+            }
         }
     }
 
     override suspend fun delete() {
+        checkNotDisposed()
         maybeWithDispatcher {
             adapter.set(name, defaultValue, contentResolver, type)
         }
@@ -110,9 +120,13 @@ class SettingBoxImpl<T>(
     }.map { get() }
 
     override fun dispose() {
+        _isDisposed.set(true)
     }
 
     private suspend fun <T> maybeWithDispatcher(block: suspend () -> T): T =
         if (dispatcher != null) withContext(dispatcher) { block() } else block()
 
+    private fun checkNotDisposed() {
+        require(!_isDisposed.get()) { "Box is already disposed" }
+    }
 }

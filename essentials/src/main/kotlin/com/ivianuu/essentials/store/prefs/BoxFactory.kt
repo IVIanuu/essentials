@@ -21,11 +21,12 @@ import com.ivianuu.essentials.store.Box
 import com.ivianuu.essentials.store.DiskBox
 import com.ivianuu.essentials.util.AppDispatchers
 import com.ivianuu.injekt.Factory
+import com.ivianuu.injekt.android.ForApplication
 import java.io.File
 
 @Factory
 class PrefBoxFactory(
-    private val context: Context,
+    @ForApplication private val context: Context,
     private val dispatchers: AppDispatchers,
     @PrefsDir private val prefsDir: File
 ) {

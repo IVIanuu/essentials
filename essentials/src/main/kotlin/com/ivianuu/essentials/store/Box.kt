@@ -21,6 +21,7 @@ import kotlinx.coroutines.flow.Flow
 interface Box<T> {
 
     val defaultValue: T
+    val isDisposed: Boolean
 
     suspend fun get(): T
 

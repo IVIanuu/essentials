@@ -21,10 +21,11 @@ import android.content.Context
 import android.provider.Settings
 import com.ivianuu.essentials.util.AppDispatchers
 import com.ivianuu.injekt.Factory
+import com.ivianuu.injekt.android.ForApplication
 
 @Factory
 class SettingsBoxFactory(
-    private val context: Context,
+    @ForApplication private val context: Context,
     private val dispatchers: AppDispatchers
 ) {
 
