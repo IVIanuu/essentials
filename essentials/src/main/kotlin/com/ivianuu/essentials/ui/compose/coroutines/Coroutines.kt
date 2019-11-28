@@ -20,11 +20,11 @@ import androidx.compose.Composable
 import androidx.ui.core.CoroutineContextAmbient
 import com.ivianuu.essentials.ui.compose.core.ambient
 import com.ivianuu.essentials.ui.compose.core.effect
-import com.ivianuu.essentials.ui.compose.core.remember
 import com.ivianuu.essentials.ui.compose.core.onActive
 import com.ivianuu.essentials.ui.compose.core.onCommit
 import com.ivianuu.essentials.ui.compose.core.onDispose
 import com.ivianuu.essentials.ui.compose.core.onPreCommit
+import com.ivianuu.essentials.ui.compose.core.remember
 import com.ivianuu.essentials.ui.compose.core.state
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
@@ -113,13 +113,13 @@ fun <T> load(
 
 @Composable
 fun <T> collect(flow: Flow<T>) = effect {
-    collect(null, flow)
+    collect(flow, null)
 }
 
 @Composable
 fun <T> collect(
-    placeholder: T,
-    flow: Flow<T>
+    flow: Flow<T>,
+    placeholder: T
 ): T = effect {
     val state = state { placeholder }
     val coroutineScope = coroutineScope()

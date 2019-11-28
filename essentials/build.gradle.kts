@@ -75,13 +75,6 @@ dependencies {
 
     api(Deps.kotlinFlowExtensions)
 
-    api(Deps.KPrefs.kPrefs)
-    api(Deps.KPrefs.common)
-    api(Deps.KPrefs.coroutines)
-
-    api(Deps.KSettings.kSettings)
-    api(Deps.KSettings.coroutines)
-
     api(Deps.materialComponents)
 
     api(Deps.Scopes.scopes)

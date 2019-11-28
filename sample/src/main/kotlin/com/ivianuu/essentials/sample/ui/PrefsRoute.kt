@@ -17,6 +17,11 @@
 package com.ivianuu.essentials.sample.ui
 
 import androidx.ui.core.Text
+import com.ivianuu.essentials.store.prefs.PrefBoxFactory
+import com.ivianuu.essentials.store.prefs.boolean
+import com.ivianuu.essentials.store.prefs.int
+import com.ivianuu.essentials.store.prefs.string
+import com.ivianuu.essentials.store.prefs.stringSet
 import com.ivianuu.essentials.ui.compose.common.scrolling.ScrollableList
 import com.ivianuu.essentials.ui.compose.composeControllerRoute
 import com.ivianuu.essentials.ui.compose.injekt.inject
@@ -26,7 +31,6 @@ import com.ivianuu.essentials.ui.compose.prefs.CheckboxPreference
 import com.ivianuu.essentials.ui.compose.prefs.Dependency
 import com.ivianuu.essentials.ui.compose.prefs.MultiChoiceListPreference
 import com.ivianuu.essentials.ui.compose.prefs.PreferenceSubheader
-import com.ivianuu.essentials.ui.compose.prefs.Prefs
 import com.ivianuu.essentials.ui.compose.prefs.RadioButtonPreference
 import com.ivianuu.essentials.ui.compose.prefs.SingleChoiceListPreference
 import com.ivianuu.essentials.ui.compose.prefs.SliderPreference
@@ -36,11 +40,6 @@ import com.ivianuu.essentials.ui.compose.prefs.unitValueTextProvider
 import com.ivianuu.essentials.ui.navigation.director.controllerRouteOptions
 import com.ivianuu.essentials.ui.navigation.director.vertical
 import com.ivianuu.essentials.util.UnitValueTextProvider
-import com.ivianuu.kprefs.KPrefs
-import com.ivianuu.kprefs.boolean
-import com.ivianuu.kprefs.int
-import com.ivianuu.kprefs.string
-import com.ivianuu.kprefs.stringSet
 
 val prefsRoute = composeControllerRoute(
     options = controllerRouteOptions().vertical()
@@ -48,80 +47,78 @@ val prefsRoute = composeControllerRoute(
     Scaffold(
         topAppBar = { EsTopAppBar(title = "Prefs") },
         body = {
-            Prefs {
-                ScrollableList {
-                    val prefs = inject<KPrefs>()
+            ScrollableList {
+                val boxFactory = inject<PrefBoxFactory>()
 
-                    SwitchPreference(
-                        pref = prefs.boolean("switch"),
-                        title = { Text("Switch") }
+                SwitchPreference(
+                    box = boxFactory.boolean("switch"),
+                    title = { Text("Switch") }
+                )
+
+                val dependencies = listOf(
+                    Dependency(
+                        box = boxFactory.boolean("switch"),
+                        value = true
                     )
+                )
 
-                    val dependencies = listOf(
-                        Dependency(
-                            pref = prefs.boolean("switch"),
-                            value = true
-                        )
-                    )
+                PreferenceSubheader(text = "Category", dependencies = dependencies)
 
-                    PreferenceSubheader(text = "Category", dependencies = dependencies)
+                CheckboxPreference(
+                    box = boxFactory.boolean("checkbox"),
+                    title = { Text("Checkbox") },
+                    summary = { Text("This is a checkbox preference") },
+                    dependencies = dependencies
+                )
 
-                    CheckboxPreference(
-                        pref = prefs.boolean("checkbox"),
-                        title = { Text("Checkbox") },
-                        summary = { Text("This is a checkbox preference") },
-                        dependencies = dependencies
-                    )
+                RadioButtonPreference(
+                    box = boxFactory.boolean("radio_button"),
+                    title = { Text("Radio Button") },
+                    summary = { Text("This is a radio button preference") },
+                    dependencies = dependencies
+                )
 
-                    RadioButtonPreference(
-                        pref = prefs.boolean("radio_button"),
-                        title = { Text("Radio Button") },
-                        summary = { Text("This is a radio button preference") },
-                        dependencies = dependencies
-                    )
+                SliderPreference(
+                    box = boxFactory.int("slider"),
+                    title = { Text("Slider") },
+                    summary = { Text("This is a slider preference") },
+                    valueText = unitValueTextProvider(UnitValueTextProvider.Unit.Dp),
+                    dependencies = dependencies
+                )
 
-                    SliderPreference(
-                        pref = prefs.int("slider"),
-                        title = { Text("Slider") },
-                        summary = { Text("This is a slider preference") },
-                        valueText = unitValueTextProvider(UnitValueTextProvider.Unit.Dp),
-                        dependencies = dependencies
-                    )
+                PreferenceSubheader(text = "Dialogs", dependencies = dependencies)
 
-                    PreferenceSubheader(text = "Dialogs", dependencies = dependencies)
+                TextInputPreference(
+                    box = boxFactory.string("text_input"),
+                    title = { Text("Text input") },
+                    summary = { Text("This is a text input preference") },
+                    allowEmpty = false,
+                    dependencies = dependencies
+                )
 
-                    TextInputPreference(
-                        pref = prefs.string("text_input"),
-                        title = { Text("Text input") },
-                        summary = { Text("This is a text input preference") },
-                        allowEmpty = false,
-                        dependencies = dependencies
-                    )
+                MultiChoiceListPreference(
+                    box = boxFactory.stringSet("multi_select_list", setOf("A", "B")),
+                    items = listOf(
+                        MultiChoiceListPreference.Item("A"),
+                        MultiChoiceListPreference.Item("B"),
+                        MultiChoiceListPreference.Item("C")
+                    ),
+                    title = { Text("Multi select list") },
+                    summary = { Text("This is a multi select list preference") },
+                    dependencies = dependencies
+                )
 
-                    MultiChoiceListPreference(
-                        pref = prefs.stringSet("multi_select_list", setOf("A", "B")),
-                        items = listOf(
-                            MultiChoiceListPreference.Item("A"),
-                            MultiChoiceListPreference.Item("B"),
-                            MultiChoiceListPreference.Item("C")
-                        ),
-                        title = { Text("Multi select list") },
-                        summary = { Text("This is a multi select list preference") },
-                        dependencies = dependencies
-                    )
-
-                    SingleChoiceListPreference(
-                        pref = prefs.string("single_item_list", "C"),
-                        items = listOf(
-                            SingleChoiceListPreference.Item("A"),
-                            SingleChoiceListPreference.Item("B"),
-                            SingleChoiceListPreference.Item("C")
-                        ),
-                        title = { Text("Single item list") },
-                        summary = { Text("This is a single item list preference") },
-                        dependencies = dependencies
-                    )
-                }
+                SingleChoiceListPreference(
+                    box = boxFactory.string("single_item_list", "C"),
+                    items = listOf(
+                        SingleChoiceListPreference.Item("A"),
+                        SingleChoiceListPreference.Item("B"),
+                        SingleChoiceListPreference.Item("C")
+                    ),
+                    title = { Text("Single item list") },
+                    summary = { Text("This is a single item list preference") },
+                    dependencies = dependencies
+                )
             }
         }
     )

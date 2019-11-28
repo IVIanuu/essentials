@@ -17,14 +17,18 @@
 package com.ivianuu.essentials.tile
 
 import android.annotation.TargetApi
+import com.ivianuu.essentials.store.Box
+import kotlinx.coroutines.flow.Flow
 
 /**
- * Tile which is driven by a boolean pref
+ * Tile which is driven by a preference
  */
 @TargetApi(24)
-abstract class BooleanPrefTileService : PrefTileService<Boolean>() {
-    override fun onClick() {
-        super.onClick()
-        pref.set(!pref.get())
-    }
+abstract class BoxTileService<T> : FlowTileService<T>() {
+
+    protected abstract val box: Box<T>
+
+    final override val flow: Flow<T>
+        get() = box.asFlow()
+
 }

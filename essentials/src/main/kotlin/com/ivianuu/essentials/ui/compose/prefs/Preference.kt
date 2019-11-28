@@ -18,31 +18,105 @@ package com.ivianuu.essentials.ui.compose.prefs
 
 import androidx.compose.Composable
 import androidx.ui.core.Opacity
+import com.ivianuu.essentials.store.Box
+import com.ivianuu.essentials.ui.compose.box.BoxWrapper
+import com.ivianuu.essentials.ui.compose.box.unfoldBox
+import com.ivianuu.essentials.ui.compose.common.framed
+import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.composableWithKey
+import com.ivianuu.essentials.ui.compose.core.remember
+import com.ivianuu.essentials.ui.compose.coroutines.collect
 import com.ivianuu.essentials.ui.compose.material.SimpleListItem
-import com.ivianuu.kprefs.Pref
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
 
 @Composable
-fun <T> Preference(
-    pref: Pref<T>,
+fun <T> PreferenceWrapper(
+    box: Box<T>,
+    onChange: ((T) -> Boolean)? = null,
+    enabled: Boolean = true,
+    dependencies: List<Dependency<*>>? = null,
+    preference: @Composable() (PreferenceContext<T>) -> Unit
+) = composableWithKey("Preference:$box") {
+    val context = remember(box) { PreferenceContext(box) }
+
+    val dependenciesOkFlow: Flow<Boolean> = remember(dependencies) {
+        dependencies.asFlow()
+    }
+    val dependenciesOk = collect(dependenciesOkFlow, false)
+    context.boxWrapper = unfoldBox(box)
+    context.onChange = onChange
+    context.enabled = enabled
+    context.dependenciesOk = dependenciesOk
+
+    Opacity(if (dependenciesOk) 1f else 0.5f) {
+        val finalEnabled = enabled && dependenciesOk
+        Opacity(if (finalEnabled) 1f else 0.5f) {
+            preference(context)
+        }
+    }
+}
+
+@Composable
+fun PreferenceLayout(
     title: @Composable() () -> Unit,
     summary: @Composable() (() -> Unit)? = null,
     leading: @Composable() (() -> Unit)? = null,
     trailing: @Composable() (() -> Unit)? = null,
-    onClick: (() -> Unit)? = null,
-    onChange: ((T) -> Boolean)? = null,
-    enabled: Boolean = true,
-    dependencies: List<Dependency<*>>? = null
-) = composableWithKey("Preference:${pref.key}") {
-    val finalEnabled = enabled && dependencies?.checkAll() ?: true
+    onClick: (() -> Unit)? = null
+) = composable {
+    SimpleListItem(
+        title = title,
+        subtitle = summary,
+        leading = leading,
+        trailing = trailing,
+        onClick = onClick
+    )
+}
 
-    Opacity(if (finalEnabled) 1f else 0.5f) {
-        SimpleListItem(
-            title = title,
-            subtitle = summary,
-            leading = leading,
-            trailing = trailing,
-            onClick = if (finalEnabled) onClick else null
-        )
+class PreferenceContext<T>(
+    val box: Box<T>
+) {
+
+    internal lateinit var boxWrapper: BoxWrapper<T>
+
+    var currentValue: T
+        get() = boxWrapper.value
+        set(value) {
+            boxWrapper.value = value
+        }
+
+    var onChange: ((T) -> Boolean)? by framed(null)
+        internal set
+    var dependenciesOk by framed(false)
+        internal set
+    var enabled by framed(false)
+        internal set
+    val shouldBeEnabled: Boolean get() = enabled && dependenciesOk
+
+    fun setIfOk(newValue: T): Boolean {
+        val isOk = onChange?.invoke(newValue) ?: true
+        currentValue = newValue
+        return isOk
     }
+}
+
+data class Dependency<T : Any>(
+    val box: Box<T>,
+    val value: T
+)
+
+private fun List<Dependency<*>>?.asFlow(): Flow<Boolean> {
+    if (this == null) return flowOf(true)
+
+    val flows =
+        map { dependency ->
+            dependency.box.asFlow()
+                .map { currentValue -> currentValue == dependency.value }
+        }
+            .toTypedArray()
+
+    return combine(*flows) { values -> values.all { it } }
 }

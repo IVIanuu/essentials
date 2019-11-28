@@ -14,76 +14,76 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.store.common
+package com.ivianuu.essentials.store.prefs
 
 import com.ivianuu.essentials.store.DiskBox
 
 fun PrefBoxFactory.boolean(
     name: String,
-    defaultValue: suspend () -> Boolean = { false }
+    defaultValue: Boolean = false
 ) = box(name = name, defaultValue = defaultValue, serializer = BooleanSerializer)
 
 private object BooleanSerializer : DiskBox.Serializer<Boolean> {
-    override suspend fun deserialize(serialized: String) = serialized.toBoolean()
-    override suspend fun serialize(value: Boolean) = value.toString()
+    override fun deserialize(serialized: String) = serialized.toBoolean()
+    override fun serialize(value: Boolean) = value.toString()
 }
 
 fun PrefBoxFactory.double(
     name: String,
-    defaultValue: suspend () -> Double = { 0.0 }
+    defaultValue: Double = 0.0
 ) = box(name = name, defaultValue = defaultValue, serializer = DoubleSerializer)
 
 private object DoubleSerializer : DiskBox.Serializer<Double> {
-    override suspend fun deserialize(serialized: String) = serialized.toDouble()
-    override suspend fun serialize(value: Double) = value.toString()
+    override fun deserialize(serialized: String) = serialized.toDouble()
+    override fun serialize(value: Double) = value.toString()
 }
 
 fun PrefBoxFactory.float(
     name: String,
-    defaultValue: suspend () -> Float = { 0f }
+    defaultValue: Float = 0f
 ) = box(name = name, defaultValue = defaultValue, serializer = FloatSerializer)
 
 private object FloatSerializer : DiskBox.Serializer<Float> {
-    override suspend fun deserialize(serialized: String) = serialized.toFloat()
-    override suspend fun serialize(value: Float) = value.toString()
+    override fun deserialize(serialized: String) = serialized.toFloat()
+    override fun serialize(value: Float) = value.toString()
 }
 
 fun PrefBoxFactory.int(
     name: String,
-    defaultValue: suspend () -> Int = { 0 }
+    defaultValue: Int = 0
 ) = box(name = name, defaultValue = defaultValue, serializer = IntSerializer)
 
 private object IntSerializer : DiskBox.Serializer<Int> {
-    override suspend fun deserialize(serialized: String) = serialized.toInt()
-    override suspend fun serialize(value: Int) = value.toString()
+    override fun deserialize(serialized: String) = serialized.toInt()
+    override fun serialize(value: Int) = value.toString()
 }
 
 fun PrefBoxFactory.long(
     name: String,
-    defaultValue: suspend () -> Long = { 0L }
+    defaultValue: Long = 0L
 ) = box(name = name, defaultValue = defaultValue, serializer = LongSerializer)
 
 private object LongSerializer : DiskBox.Serializer<Long> {
-    override suspend fun deserialize(serialized: String) = serialized.toLong()
-    override suspend fun serialize(value: Long) = value.toString()
+    override fun deserialize(serialized: String) = serialized.toLong()
+    override fun serialize(value: Long) = value.toString()
 }
 
 fun PrefBoxFactory.string(
     name: String,
-    defaultValue: suspend () -> String = { "" }
+    defaultValue: String = ""
 ) = box(name = name, defaultValue = defaultValue, serializer = StringSerializer)
 
 private object StringSerializer : DiskBox.Serializer<String> {
-    override suspend fun deserialize(serialized: String) = serialized
-    override suspend fun serialize(value: String) = value
+    override fun deserialize(serialized: String) = serialized
+    override fun serialize(value: String) = value
 }
 
 fun PrefBoxFactory.stringSet(
     name: String,
-    defaultValue: suspend () -> Set<String> = { emptySet() }
+    defaultValue: Set<String> = emptySet()
 ) = box(name = name, defaultValue = defaultValue, serializer = StringSetSerializer)
 
 private object StringSetSerializer : DiskBox.Serializer<Set<String>> {
-    override suspend fun deserialize(serialized: String) = serialized.split("=:=").toSet()
-    override suspend fun serialize(value: Set<String>) = value.joinToString("=:=")
+    override fun deserialize(serialized: String) = serialized.split("=:=").toSet()
+    override fun serialize(value: Set<String>) = value.joinToString("=:=")
 }

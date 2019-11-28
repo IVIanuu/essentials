@@ -21,14 +21,16 @@ import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.composableWithKey
 import com.ivianuu.essentials.ui.compose.material.Subheader
 
+// todo
+
 @Composable
 fun PreferenceSubheader(
     text: String,
     dependencies: List<Dependency<*>>? = null
 ) = composableWithKey("PreferenceSubheader:$text") {
-    Dependencies(dependencies) {
+    //Dependencies(dependencies) {
         Subheader(text)
-    }
+    // }
 }
 
 @Composable
@@ -36,7 +38,7 @@ fun PreferenceSubheader(
     dependencies: List<Dependency<*>>? = null,
     text: @Composable() () -> Unit
 ) = composable {
-    Dependencies(dependencies) {
+    //Dependencies(dependencies) {
         Subheader(text)
-    }
+    //}
 }

@@ -134,21 +134,6 @@ object Deps {
 
     const val kotlinFlowExtensions = "com.github.akarnokd:kotlin-flow-extensions:0.0.2"
 
-    // todo remove
-    object KPrefs {
-        private const val version = "0.0.1-dev17"
-        const val kPrefs = "com.ivianuu.kprefs:kprefs:$version"
-        const val common = "com.ivianuu.kprefs:kprefs-common:$version"
-        const val coroutines = "com.ivianuu.kprefs:kprefs-coroutines:$version"
-    }
-
-    // todo remove
-    object KSettings {
-        private const val version = "0.0.1-dev12"
-        const val kSettings = "com.ivianuu.ksettings:ksettings:$version"
-        const val coroutines = "com.ivianuu.ksettings:ksettings-coroutines:$version"
-    }
-
     const val materialComponents = "com.google.android.material:material:1.1.0-beta01"
 
     const val mavenGradlePlugin = "com.github.dcendents:android-maven-gradle-plugin:2.1"

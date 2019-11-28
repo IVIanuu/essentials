@@ -17,43 +17,45 @@
 package com.ivianuu.essentials.ui.compose.prefs
 
 import androidx.compose.Composable
+import androidx.ui.material.MaterialTheme
 import androidx.ui.material.RadioButton
+import com.ivianuu.essentials.store.Box
 import com.ivianuu.essentials.ui.compose.common.AbsorbPointer
 import com.ivianuu.essentials.ui.compose.core.composableWithKey
-import com.ivianuu.kprefs.Pref
+import com.ivianuu.essentials.ui.compose.core.invoke
 
 @Composable
 fun RadioButtonPreference(
-    pref: Pref<Boolean>,
+    box: Box<Boolean>,
+    enabled: Boolean = true,
+    dependencies: List<Dependency<*>>? = null,
     title: @Composable() () -> Unit,
     summary: @Composable() (() -> Unit)? = null,
     leading: @Composable() (() -> Unit)? = null,
-    onChange: ((Boolean) -> Boolean)? = null,
-    enabled: Boolean = true,
-    dependencies: List<Dependency<*>>? = null
-) = composableWithKey("RadioButtonPreference:${pref.key}") {
-    fun valueChanged(newValue: Boolean) {
-        if (onChange?.invoke(newValue) != false) {
-            pref.set(newValue)
-        }
-    }
-
-    Preference(
-        pref = pref,
-        title = title,
-        summary = summary,
-        leading = leading,
-        trailing = {
-            AbsorbPointer {
-                RadioButton(
-                    selected = pref.get(),
-                    onSelect = {}
-                )
-            }
-        },
-        onClick = { valueChanged(!pref.get()) },
+    onChange: ((Boolean) -> Boolean)? = null
+) = composableWithKey("RadioButtonPreference:$box") {
+    PreferenceWrapper(
+        box = box,
         onChange = onChange,
         enabled = enabled,
         dependencies = dependencies
-    )
+    ) { context ->
+        PreferenceLayout(
+            title = title,
+            summary = summary,
+            leading = leading,
+            trailing = {
+                AbsorbPointer {
+                    RadioButton(
+                        color = MaterialTheme.colors()().secondary,
+                        selected = context.currentValue,
+                        onSelect = if (context.shouldBeEnabled) {
+                            {}
+                        } else null
+                    )
+                }
+            },
+            onClick = { context.setIfOk(!context.currentValue) }
+        )
+    }
 }

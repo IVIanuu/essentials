@@ -44,8 +44,8 @@ interface DiskBox<T> : Box<T> {
     val file: File
 
     interface Serializer<T> {
-        suspend fun deserialize(serialized: String): T
-        suspend fun serialize(value: T): String
+        fun deserialize(serialized: String): T
+        fun serialize(value: T): String
     }
 }
 
@@ -53,27 +53,26 @@ fun <T> DiskBox(
     context: Context,
     file: File,
     serializer: DiskBox.Serializer<T>,
-    defaultValue: suspend () -> T,
+    defaultValue: T,
     dispatcher: CoroutineDispatcher? = null
 ): DiskBox<T> = DiskBoxImpl(
     context = context,
     file = file,
     serializer = serializer,
-    defaultValueLambda = defaultValue,
+    defaultValue = defaultValue,
     dispatcher = dispatcher
 )
 
 internal class DiskBoxImpl<T>(
     context: Context,
     override val file: File,
-    defaultValueLambda: suspend () -> T,
+    override val defaultValue: T,
     private val serializer: DiskBox.Serializer<T>,
     private val dispatcher: CoroutineDispatcher? = null
 ) : DiskBox<T> {
 
     private val changeNotifier = BroadcastChannel<Unit>(1)
     private val cachedValue = AtomicReference<Any?>(this)
-    private val lazyDefaultValue = SuspendLazy(defaultValueLambda)
     private val valueFetcher = MutexValue {
         var lock: FileLock? = null
         var channel: FileChannel? = null
@@ -96,10 +95,11 @@ internal class DiskBoxImpl<T>(
             throw IOException("Couldn't read file $file")
         } finally {
             try {
-                randomAccessFile?.close()
-                channel?.close()
                 lock?.release()
-            } catch (ignored: Exception) {
+                channel?.close()
+                randomAccessFile?.close()
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
         }
     }
@@ -113,15 +113,18 @@ internal class DiskBoxImpl<T>(
         check(!file.isDirectory)
     }
 
-    override suspend fun defaultValue(): T {
-        checkNotDisposed()
-        return lazyDefaultValue()
-    }
-
     override suspend fun set(value: T) {
         checkNotDisposed()
 
         maybeWithDispatcher {
+            if (!file.exists()) {
+                file.parentFile.mkdirs()
+
+                if (!file.createNewFile()) {
+                    throw IOException("Couldn't create $file")
+                }
+            }
+
             val serialized = serializer.serialize(value)
             val bytes = serialized.toByteArray()
 
@@ -145,10 +148,11 @@ internal class DiskBoxImpl<T>(
                 throw IOException("Couldn't write to file $file $serialized", e)
             } finally {
                 try {
-                    randomAccessFile?.close()
-                    channel?.close()
                     lock?.release()
-                } catch (ignored: Exception) {
+                    channel?.close()
+                    randomAccessFile?.close()
+                } catch (e: Exception) {
+                    e.printStackTrace()
                 }
             }
 
@@ -164,7 +168,7 @@ internal class DiskBoxImpl<T>(
             val cached = cachedValue.get()
             if (cached != this) return@maybeWithDispatcher cached as T
 
-            val value = if (isSet()) valueFetcher() else defaultValue()
+            val value = if (isSet()) valueFetcher() else defaultValue
             cachedValue.set(value)
             return@maybeWithDispatcher value
         }
@@ -209,7 +213,7 @@ internal class DiskBoxImpl<T>(
         if (dispatcher != null) withContext(dispatcher) { block() } else block()
 
     private fun checkNotDisposed() {
-        require(disposed.get()) { "Box is already disposed" }
+        require(!disposed.get()) { "Box is already disposed" }
     }
 }
 
@@ -262,21 +266,6 @@ private class MultiProcessHelper(
         private const val EXTRA_CHANGE_OWNER = "change_owner"
         private const val EXTRA_PATH = "path"
     }
-}
-
-private class SuspendLazy<T>(private val init: suspend () -> T) {
-
-    private val lazyValue = AtomicReference<Any?>(this)
-    private val _mutexValue = MutexValue {
-        val cached = lazyValue.get()
-        if (cached != this) return@MutexValue cached as T
-        val value = init()
-        lazyValue.set(value)
-        return@MutexValue value
-    }
-
-    suspend operator fun invoke(): T = _mutexValue()
-
 }
 
 private class MutexValue<T>(private val getter: suspend () -> T) {

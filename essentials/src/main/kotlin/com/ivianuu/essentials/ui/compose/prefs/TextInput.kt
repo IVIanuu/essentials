@@ -19,17 +19,17 @@ package com.ivianuu.essentials.ui.compose.prefs
 import androidx.compose.Composable
 import androidx.ui.input.KeyboardType
 import com.ivianuu.essentials.R
+import com.ivianuu.essentials.store.Box
 import com.ivianuu.essentials.ui.compose.core.composableWithKey
-import com.ivianuu.essentials.ui.compose.core.state
+import com.ivianuu.essentials.ui.compose.core.stateFor
 import com.ivianuu.essentials.ui.compose.dialog.DialogButton
 import com.ivianuu.essentials.ui.compose.dialog.DialogCloseButton
 import com.ivianuu.essentials.ui.compose.dialog.TextInputDialog
 import com.ivianuu.essentials.ui.compose.resources.stringResource
-import com.ivianuu.kprefs.Pref
 
 @Composable
 fun TextInputPreference(
-    pref: Pref<String>,
+    box: Box<String>,
     dialogHint: String? = null,
     dialogKeyboardType: KeyboardType = KeyboardType.Text,
     allowEmpty: Boolean = true,
@@ -40,11 +40,17 @@ fun TextInputPreference(
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
     dialogTitle: @Composable() (() -> Unit)? = title
-) = composableWithKey("TextInputPreference:${pref.key}") {
+) = composableWithKey("TextInputPreference:$box") {
     DialogPreference(
-        pref = pref,
-        dialog = { dismiss ->
-            val (currentValue, setCurrentValue) = state { pref.get() }
+        box = box,
+        onChange = onChange,
+        enabled = enabled,
+        dependencies = dependencies,
+        title = title,
+        summary = summary,
+        leading = leading,
+        dialog = { context, dismiss ->
+            val (currentValue, setCurrentValue) = stateFor(context.currentValue) { context.currentValue }
 
             TextInputDialog(
                 value = currentValue,
@@ -57,9 +63,8 @@ fun TextInputPreference(
                         text = stringResource(R.string.es_ok),
                         onClick = if (allowEmpty || currentValue.isNotEmpty()) {
                             {
-                                if (onChange?.invoke(currentValue) != false) {
-                                    pref.set(currentValue)
-                                }
+                                context.setIfOk(currentValue)
+                                Unit
                             }
                         } else {
                             null
@@ -68,12 +73,6 @@ fun TextInputPreference(
                 },
                 negativeButton = { DialogCloseButton(stringResource(R.string.es_cancel)) }
             )
-        },
-        title = title,
-        summary = summary,
-        leading = leading,
-        onChange = onChange,
-        enabled = enabled,
-        dependencies = dependencies
+        }
     )
 }

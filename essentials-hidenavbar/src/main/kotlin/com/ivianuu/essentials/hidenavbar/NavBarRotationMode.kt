@@ -16,7 +16,7 @@
 
 package com.ivianuu.essentials.hidenavbar
 
-import com.ivianuu.kprefs.common.PrefValueHolder
+import com.ivianuu.essentials.store.prefs.BoxValueHolder
 
 /**
  * Nav bar rotation behavior
@@ -24,7 +24,7 @@ import com.ivianuu.kprefs.common.PrefValueHolder
 enum class NavBarRotationMode(
     override val value: String,
     val titleRes: Int
-) : PrefValueHolder<String> {
+) : BoxValueHolder<String> {
     Marshmallow("marshmallow", R.string.es_nav_bar_rotation_mode_marshmallow),
     Nougat("nougat", R.string.es_nav_bar_rotation_mode_nougat),
     Tablet("tablet", R.string.es_nav_bar_rotation_mode_tablet)

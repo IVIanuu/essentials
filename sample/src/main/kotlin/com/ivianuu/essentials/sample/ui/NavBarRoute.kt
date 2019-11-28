@@ -35,12 +35,14 @@ import com.ivianuu.essentials.ui.compose.core.invoke
 import com.ivianuu.essentials.ui.compose.core.onCommit
 import com.ivianuu.essentials.ui.compose.core.onDispose
 import com.ivianuu.essentials.ui.compose.core.state
+import com.ivianuu.essentials.ui.compose.coroutines.coroutineScope
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
 import com.ivianuu.essentials.ui.compose.material.Scaffold
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.director.controllerRouteOptions
 import com.ivianuu.essentials.ui.navigation.director.fade
+import kotlinx.coroutines.launch
 
 val navBarRoute = composeControllerRoute(
     options = controllerRouteOptions().fade()
@@ -55,10 +57,13 @@ val navBarRoute = composeControllerRoute(
                 ) {
                     val navBarController = inject<NavBarController>()
 
+                    val coroutineScope = coroutineScope()
                     fun updateNavBarState(navBarHidden: Boolean) {
-                        navBarController.setNavBarConfig(
-                            NavBarConfig(navBarHidden)
-                        )
+                        coroutineScope.launch {
+                            navBarController.setNavBarConfig(
+                                NavBarConfig(navBarHidden)
+                            )
+                        }
                     }
 
                     val hideNavBar = state { false }

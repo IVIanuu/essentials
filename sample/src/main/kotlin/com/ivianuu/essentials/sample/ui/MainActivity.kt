@@ -22,12 +22,11 @@ import androidx.lifecycle.lifecycleScope
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.gestures.unlock.ScreenUnlocker
 import com.ivianuu.essentials.messaging.BroadcastFactory
+import com.ivianuu.essentials.store.prefs.PrefBoxFactory
+import com.ivianuu.essentials.store.prefs.boolean
 import com.ivianuu.essentials.ui.base.EsActivity
 import com.ivianuu.essentials.ui.navigation.director.ControllerRoute
 import com.ivianuu.injekt.get
-import com.ivianuu.kprefs.KPrefs
-import com.ivianuu.kprefs.boolean
-import com.ivianuu.kprefs.coroutines.asFlow
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -41,7 +40,7 @@ class MainActivity : EsActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        get<KPrefs>().boolean("tile_state").asFlow()
+        get<PrefBoxFactory>().boolean("tile_state").asFlow()
             .onEach { d { "tile state changed $it" } }
             .launchIn(lifecycleScope)
 

@@ -14,19 +14,21 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.store.common
+package com.ivianuu.essentials.tile
 
-import kotlin.reflect.KClass
+import android.annotation.TargetApi
+import com.ivianuu.essentials.util.coroutineScope
+import kotlinx.coroutines.launch
 
-interface BoxValueHolder<T> {
-    val value: T
+/**
+ * Tile which is driven by a boolean pref
+ */
+@TargetApi(24)
+abstract class BooleanBoxTileService : BoxTileService<Boolean>() {
+    override fun onClick() {
+        super.onClick()
+        scope.coroutineScope.launch {
+            box.set(!box.get())
+        }
+    }
 }
-
-inline fun <T, V> KClass<T>.valueFor(
-    value: V,
-    defaultValue: () -> T
-): T where T : Enum<T>, T : BoxValueHolder<V> =
-    valueForOrNull(value) ?: defaultValue()
-
-fun <T, V> KClass<T>.valueForOrNull(value: V): T? where T : Enum<T>, T : BoxValueHolder<V> =
-    java.enumConstants!!.firstOrNull { it.value == value }

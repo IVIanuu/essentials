@@ -18,23 +18,29 @@ package com.ivianuu.essentials.sample.ui
 
 import com.ivianuu.essentials.apps.ui.CheckableAppsScreen
 import com.ivianuu.essentials.apps.ui.launchableOnlyAppFilter
+import com.ivianuu.essentials.store.prefs.PrefBoxFactory
+import com.ivianuu.essentials.store.prefs.stringSet
 import com.ivianuu.essentials.ui.compose.composeControllerRoute
 import com.ivianuu.essentials.ui.compose.core.remember
+import com.ivianuu.essentials.ui.compose.coroutines.coroutineScope
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.navigation.director.controllerRouteOptions
 import com.ivianuu.essentials.ui.navigation.director.fade
-import com.ivianuu.kprefs.KPrefs
-import com.ivianuu.kprefs.coroutines.asFlow
-import com.ivianuu.kprefs.stringSet
+import kotlinx.coroutines.launch
 
 val checkAppsRoute = composeControllerRoute(
     options = controllerRouteOptions().fade()
 ) {
-    val prefs = inject<KPrefs>()
-    val pref = remember { prefs.stringSet("apps") }
+    val boxFactory = inject<PrefBoxFactory>()
+    val box = remember { boxFactory.stringSet("apps") }
+    val coroutineScope = coroutineScope()
     CheckableAppsScreen(
-        checkedAppsFlow = pref.asFlow(),
-        onCheckedAppsChanged = pref::set,
+        checkedAppsFlow = box.asFlow(),
+        onCheckedAppsChanged = { newValue ->
+            coroutineScope.launch {
+                box.set(newValue)
+            }
+        },
         appBarTitle = "Send check apps",
         appFilter = launchableOnlyAppFilter()
     )

@@ -81,8 +81,8 @@ abstract class ComposeController : EsController() {
         ) {
             val viewportMetrics =
                 collect(
-                    remember { AndroidComposeViewContainer.ViewportMetrics() },
-                    view.viewportMetrics
+                    view.viewportMetrics,
+                    remember { AndroidComposeViewContainer.ViewportMetrics() }
                 )
 
             val mediaQuery = MediaQuery(

@@ -18,17 +18,17 @@ package com.ivianuu.essentials.sample.tile
 
 import android.graphics.drawable.Icon
 import com.ivianuu.essentials.sample.R
-import com.ivianuu.essentials.tile.BooleanPrefTileService
+import com.ivianuu.essentials.store.prefs.PrefBoxFactory
+import com.ivianuu.essentials.store.prefs.boolean
+import com.ivianuu.essentials.tile.BooleanBoxTileService
 import com.ivianuu.essentials.tile.Tile
 import com.ivianuu.essentials.util.unsafeLazy
 import com.ivianuu.injekt.get
-import com.ivianuu.kprefs.KPrefs
-import com.ivianuu.kprefs.boolean
 
-class DummyTileService : BooleanPrefTileService() {
+class DummyTileService : BooleanBoxTileService() {
 
-    override val pref by unsafeLazy {
-        get<KPrefs>().boolean("tile_state")
+    override val box by unsafeLazy {
+        get<PrefBoxFactory>().boolean("tile_state")
     }
 
     override fun createTile(state: Boolean): Tile = Tile(

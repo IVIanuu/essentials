@@ -21,7 +21,6 @@ import com.ivianuu.essentials.app.AppService
 import com.ivianuu.essentials.util.AppDispatchers
 import com.ivianuu.injekt.Single
 import com.ivianuu.injekt.android.ApplicationScope
-import com.ivianuu.kprefs.coroutines.asFlow
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach

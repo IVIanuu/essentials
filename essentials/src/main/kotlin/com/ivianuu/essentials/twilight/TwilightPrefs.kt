@@ -17,25 +17,23 @@
 package com.ivianuu.essentials.twilight
 
 import com.ivianuu.essentials.R
+import com.ivianuu.essentials.store.prefs.BoxValueHolder
+import com.ivianuu.essentials.store.prefs.PrefBoxFactory
+import com.ivianuu.essentials.store.prefs.enumString
 import com.ivianuu.injekt.Single
 import com.ivianuu.injekt.android.ApplicationScope
-import com.ivianuu.kprefs.KPrefs
-import com.ivianuu.kprefs.common.PrefValueHolder
-import com.ivianuu.kprefs.common.enumString
 
 @ApplicationScope
 @Single
-class TwilightPrefs(prefs: KPrefs) {
-    val twilightMode = prefs.enumString("twilight_mode",
-        TwilightMode.System
-    )
+class TwilightPrefs(factory: PrefBoxFactory) {
+    val twilightMode = factory.enumString("twilight_mode", TwilightMode.System)
 }
 
 enum class TwilightMode(
     override val value: String,
     val titleRes: Int,
     val descRes: Int
-) : PrefValueHolder<String> {
+) : BoxValueHolder<String> {
     System(
         value = "system",
         titleRes = R.string.es_twilight_mode_system,

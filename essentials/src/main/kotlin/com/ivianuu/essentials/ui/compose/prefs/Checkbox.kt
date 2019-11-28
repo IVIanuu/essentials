@@ -17,43 +17,40 @@
 package com.ivianuu.essentials.ui.compose.prefs
 
 import androidx.compose.Composable
+import com.ivianuu.essentials.store.Box
 import com.ivianuu.essentials.ui.compose.common.AbsorbPointer
 import com.ivianuu.essentials.ui.compose.core.composableWithKey
 import com.ivianuu.essentials.ui.compose.material.EsCheckbox
-import com.ivianuu.kprefs.Pref
 
 @Composable
 fun CheckboxPreference(
-    pref: Pref<Boolean>,
+    box: Box<Boolean>,
+    enabled: Boolean = true,
+    dependencies: List<Dependency<*>>? = null,
     title: @Composable() () -> Unit,
     summary: @Composable() (() -> Unit)? = null,
     leading: @Composable() (() -> Unit)? = null,
-    onChange: ((Boolean) -> Boolean)? = null,
-    enabled: Boolean = true,
-    dependencies: List<Dependency<*>>? = null
-) = composableWithKey("CheckboxPreference:${pref.key}") {
-    fun valueChanged(newValue: Boolean) {
-        if (onChange?.invoke(newValue) != false) {
-            pref.set(newValue)
-        }
-    }
-
-    Preference(
-        pref = pref,
-        title = title,
-        summary = summary,
-        leading = leading,
-        trailing = {
-            AbsorbPointer {
-                EsCheckbox(
-                    checked = pref.get(),
-                    onCheckedChange = {}
-                )
-            }
-        },
-        onClick = { valueChanged(!pref.get()) },
+    onChange: ((Boolean) -> Boolean)? = null
+) = composableWithKey("CheckboxPreference:${box}") {
+    PreferenceWrapper(
+        box = box,
         onChange = onChange,
         enabled = enabled,
         dependencies = dependencies
-    )
+    ) { context ->
+        PreferenceLayout(
+            title = title,
+            summary = summary,
+            leading = leading,
+            trailing = {
+                AbsorbPointer {
+                    EsCheckbox(
+                        checked = context.currentValue,
+                        onCheckedChange = if (context.shouldBeEnabled) { newValue: Boolean -> } else null
+                    )
+                }
+            },
+            onClick = { context.setIfOk(!context.currentValue) }
+        )
+    }
 }

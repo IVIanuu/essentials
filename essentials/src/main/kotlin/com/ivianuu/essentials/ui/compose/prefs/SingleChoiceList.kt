@@ -19,37 +19,37 @@ package com.ivianuu.essentials.ui.compose.prefs
 import androidx.compose.Composable
 import androidx.ui.core.Text
 import com.ivianuu.essentials.R
+import com.ivianuu.essentials.store.Box
 import com.ivianuu.essentials.ui.compose.core.composableWithKey
-import com.ivianuu.essentials.ui.compose.core.state
+import com.ivianuu.essentials.ui.compose.core.stateFor
 import com.ivianuu.essentials.ui.compose.dialog.DialogButton
 import com.ivianuu.essentials.ui.compose.dialog.DialogCloseButton
 import com.ivianuu.essentials.ui.compose.dialog.SingleChoiceListDialog
 import com.ivianuu.essentials.ui.compose.resources.stringResource
-import com.ivianuu.kprefs.Pref
 
 @Composable
 fun SingleChoiceListPreference(
-    pref: Pref<String>,
+    box: Box<String>,
     items: List<SingleChoiceListPreference.Item>,
-    title: @Composable() () -> Unit,
-    summary: @Composable() (() -> Unit)? = null,
-    leading: @Composable() (() -> Unit)? = null,
     onChange: ((String) -> Boolean)? = null,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
+    title: @Composable() () -> Unit,
+    summary: @Composable() (() -> Unit)? = null,
+    leading: @Composable() (() -> Unit)? = null,
     dialogTitle: (@Composable() () -> Unit)? = title
-) = composableWithKey("SingleChoiceListPreference:${pref.key}") {
+) = composableWithKey("SingleChoiceListPreference:$box") {
     DialogPreference(
-        pref = pref,
-        title = title,
-        summary = summary,
-        leading = leading,
+        box = box,
         onChange = onChange,
         enabled = enabled,
         dependencies = dependencies,
-        dialog = { dismiss ->
-            val (selectedItem, setSelectedItem) = state {
-                items.first { it.value == pref.get() }
+        title = title,
+        summary = summary,
+        leading = leading,
+        dialog = { context, dismiss ->
+            val (selectedItem, setSelectedItem) = stateFor(context.currentValue) {
+                items.first { it.value == context.currentValue }
             }
 
             SingleChoiceListDialog(
@@ -63,9 +63,7 @@ fun SingleChoiceListPreference(
                         text = stringResource(R.string.es_ok),
                         onClick = {
                             val newValue = selectedItem.value
-                            if (onChange?.invoke(newValue) != false) {
-                                pref.set(newValue)
-                            }
+                            context.setIfOk(newValue)
                         }
                     )
                 },
