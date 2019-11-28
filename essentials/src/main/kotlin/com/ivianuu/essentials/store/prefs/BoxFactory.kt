@@ -14,25 +14,26 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.store.common
+package com.ivianuu.essentials.store.prefs
 
 import android.content.Context
 import com.ivianuu.essentials.store.Box
 import com.ivianuu.essentials.store.DiskBox
 import com.ivianuu.essentials.util.AppDispatchers
-import com.ivianuu.injekt.Single
+import com.ivianuu.injekt.Factory
+import com.ivianuu.injekt.android.ForApplication
 import java.io.File
 
-@Single
+@Factory
 class PrefBoxFactory(
-    private val context: Context,
+    @ForApplication private val context: Context,
     private val dispatchers: AppDispatchers,
     @PrefsDir private val prefsDir: File
 ) {
 
     fun <T> box(
         name: String,
-        defaultValue: suspend () -> T,
+        defaultValue: T,
         serializer: DiskBox.Serializer<T>
     ): Box<T> {
         return DiskBox(

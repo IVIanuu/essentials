@@ -17,36 +17,39 @@
 package com.ivianuu.essentials.ui.compose.prefs
 
 import androidx.compose.Composable
+import com.ivianuu.essentials.store.Box
 import com.ivianuu.essentials.ui.compose.core.composableWithKey
 import com.ivianuu.essentials.ui.compose.dialog.dialogRoute
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.kprefs.Pref
 
 @Composable
 fun <T> DialogPreference(
-    pref: Pref<T>,
+    box: Box<T>,
+    enabled: Boolean = true,
+    dependencies: List<Dependency<*>>? = null,
     title: @Composable() () -> Unit,
     summary: @Composable() (() -> Unit)? = null,
     leading: @Composable() (() -> Unit)? = null,
     onChange: ((T) -> Boolean)? = null,
-    enabled: Boolean = true,
-    dependencies: List<Dependency<*>>? = null,
-    dialog: @Composable() (() -> Unit) -> Unit
-) = composableWithKey("DialogPreference:${pref.key}") {
+    dialog: @Composable() (PreferenceContext<T>, () -> Unit) -> Unit
+) = composableWithKey("DialogPreference:$box") {
     val navigator = inject<Navigator>()
-    Preference(
-        pref = pref,
-        title = title,
-        summary = summary,
-        leading = leading,
-        onClick = {
-            navigator.push(dialogRoute {
-                dialog { navigator.pop() }
-            })
-        },
-        onChange = onChange,
+    PreferenceWrapper(
+        box = box,
         enabled = enabled,
-        dependencies = dependencies
-    )
+        dependencies = dependencies,
+        onChange = onChange
+    ) { context ->
+        PreferenceLayout(
+            title = title,
+            summary = summary,
+            leading = leading,
+            onClick = {
+                navigator.push(dialogRoute {
+                    dialog(context) { navigator.pop() }
+                })
+            }
+        )
+    }
 }

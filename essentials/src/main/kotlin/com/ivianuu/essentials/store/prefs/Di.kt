@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.store.common
+package com.ivianuu.essentials.store.prefs
 
 import android.content.Context
 import com.ivianuu.injekt.Name

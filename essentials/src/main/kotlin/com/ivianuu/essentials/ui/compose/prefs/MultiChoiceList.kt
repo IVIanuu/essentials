@@ -19,39 +19,39 @@ package com.ivianuu.essentials.ui.compose.prefs
 import androidx.compose.Composable
 import androidx.ui.core.Text
 import com.ivianuu.essentials.R
+import com.ivianuu.essentials.store.Box
 import com.ivianuu.essentials.ui.compose.core.composableWithKey
-import com.ivianuu.essentials.ui.compose.core.state
+import com.ivianuu.essentials.ui.compose.core.stateFor
 import com.ivianuu.essentials.ui.compose.dialog.DialogButton
 import com.ivianuu.essentials.ui.compose.dialog.DialogCloseButton
 import com.ivianuu.essentials.ui.compose.dialog.MultiChoiceListDialog
 import com.ivianuu.essentials.ui.compose.resources.stringResource
-import com.ivianuu.kprefs.Pref
 
 // todo improve api
 
 @Composable
 fun MultiChoiceListPreference(
-    pref: Pref<Set<String>>,
+    box: Box<Set<String>>,
     items: List<MultiChoiceListPreference.Item>,
-    title: @Composable() () -> Unit,
-    summary: @Composable() (() -> Unit)? = null,
-    leading: @Composable() (() -> Unit)? = null,
     onChange: ((Set<String>) -> Boolean)? = null,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
+    title: @Composable() () -> Unit,
+    summary: @Composable() (() -> Unit)? = null,
+    leading: @Composable() (() -> Unit)? = null,
     dialogTitle: (@Composable() () -> Unit)? = title
-) = composableWithKey("MultiChoiceListPreference:${pref.key}") {
+) = composableWithKey("MultiChoiceListPreference:$box") {
     DialogPreference(
-        pref = pref,
-        title = title,
-        summary = summary,
-        leading = leading,
+        box = box,
         onChange = onChange,
         enabled = enabled,
         dependencies = dependencies,
-        dialog = { dismiss ->
-            val (selectedItems, setSelectedItems) = state {
-                pref.get().toList()
+        title = title,
+        summary = summary,
+        leading = leading,
+        dialog = { context, dismiss ->
+            val (selectedItems, setSelectedItems) = stateFor(context.currentValue) {
+                context.currentValue.toList()
                     .map { value ->
                         items.first { it.value == value }
                     }
@@ -68,9 +68,7 @@ fun MultiChoiceListPreference(
                         text = stringResource(R.string.es_ok),
                         onClick = {
                             val newValue = selectedItems.map { it.value }.toSet()
-                            if (onChange?.invoke(newValue) != false) {
-                                pref.set(newValue)
-                            }
+                            context.setIfOk(newValue)
                         }
                     )
                 },

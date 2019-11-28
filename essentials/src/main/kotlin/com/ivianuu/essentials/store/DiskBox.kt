@@ -20,6 +20,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import com.github.ajalt.timberkt.d
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Deferred
@@ -31,21 +32,17 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.IOException
-import java.io.RandomAccessFile
-import java.nio.channels.FileChannel
-import java.nio.channels.FileChannel.MapMode.READ_ONLY
-import java.nio.channels.FileChannel.MapMode.READ_WRITE
-import java.nio.channels.FileLock
 import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicReference
+import kotlin.time.measureTimedValue
 
 interface DiskBox<T> : Box<T> {
     val file: File
 
     interface Serializer<T> {
-        suspend fun deserialize(serialized: String): T
-        suspend fun serialize(value: T): String
+        fun deserialize(serialized: String): T
+        fun serialize(value: T): String
     }
 }
 
@@ -53,141 +50,138 @@ fun <T> DiskBox(
     context: Context,
     file: File,
     serializer: DiskBox.Serializer<T>,
-    defaultValue: suspend () -> T,
+    defaultValue: T,
     dispatcher: CoroutineDispatcher? = null
 ): DiskBox<T> = DiskBoxImpl(
     context = context,
     file = file,
     serializer = serializer,
-    defaultValueLambda = defaultValue,
+    defaultValue = defaultValue,
     dispatcher = dispatcher
 )
 
 internal class DiskBoxImpl<T>(
     context: Context,
     override val file: File,
-    defaultValueLambda: suspend () -> T,
+    override val defaultValue: T,
     private val serializer: DiskBox.Serializer<T>,
     private val dispatcher: CoroutineDispatcher? = null
 ) : DiskBox<T> {
 
+    private val _isDisposed = AtomicBoolean(false)
+    override val isDisposed: Boolean
+        get() = _isDisposed.get()
+
     private val changeNotifier = BroadcastChannel<Unit>(1)
     private val cachedValue = AtomicReference<Any?>(this)
-    private val lazyDefaultValue = SuspendLazy(defaultValueLambda)
     private val valueFetcher = MutexValue {
-        var lock: FileLock? = null
-        var channel: FileChannel? = null
-        var randomAccessFile: RandomAccessFile? = null
-
         try {
-            randomAccessFile = RandomAccessFile(file, "rw")
-
-            channel = randomAccessFile.channel
-            lock = channel.lock()
-
-            val size = randomAccessFile.length().toInt()
-            val buffer = channel!!.map(READ_ONLY, 0, size.toLong())
-
-            val bytes = ByteArray(size)
-            buffer.get(bytes)
-            val serialized = bytes.decodeToString()
+            val serialized = file.bufferedReader().use {
+                it.readText()
+            }
             return@MutexValue serializer.deserialize(serialized)
         } catch (e: Exception) {
             throw IOException("Couldn't read file $file")
-        } finally {
-            try {
-                randomAccessFile?.close()
-                channel?.close()
-                lock?.release()
-            } catch (ignored: Exception) {
-            }
         }
     }
     private val multiProcessHelper = MultiProcessHelper(context, file) {
         cachedValue.set(this) // force refetching the value
         changeNotifier.offer(Unit)
     }
-    private val disposed = AtomicBoolean(false)
 
     init {
         check(!file.isDirectory)
-    }
-
-    override suspend fun defaultValue(): T {
-        checkNotDisposed()
-        return lazyDefaultValue()
+        d { "$file -> init" }
     }
 
     override suspend fun set(value: T) {
         checkNotDisposed()
-
+        d { "$file -> set $value" }
         maybeWithDispatcher {
-            val serialized = serializer.serialize(value)
-            val bytes = serialized.toByteArray()
+            measured("set") {
+                if (!file.exists()) {
+                    file.parentFile.mkdirs()
 
-            var lock: FileLock? = null
-            var channel: FileChannel? = null
-            var randomAccessFile: RandomAccessFile? = null
-
-            try {
-                randomAccessFile = RandomAccessFile(file, "rw")
-                randomAccessFile.setLength(0)
-
-                channel = randomAccessFile.channel
-                lock = channel.lock()
-
-                val byteBuffer = channel.map(READ_WRITE, 0, bytes.size.toLong())
-
-                byteBuffer.put(bytes)
-                channel.write(byteBuffer)
-                byteBuffer.force()
-            } catch (e: Exception) {
-                throw IOException("Couldn't write to file $file $serialized", e)
-            } finally {
-                try {
-                    randomAccessFile?.close()
-                    channel?.close()
-                    lock?.release()
-                } catch (ignored: Exception) {
+                    if (!file.createNewFile()) {
+                        throw IOException("Couldn't create $file")
+                    }
                 }
-            }
 
-            cachedValue.set(value)
-            changeNotifier.offer(Unit)
-            multiProcessHelper.notifyWrite()
+                val serialized = serializer.serialize(value)
+
+                val tmpFile = File.createTempFile(
+                    "new", "tmp", file.parentFile
+                )
+                try {
+                    tmpFile.bufferedWriter().use {
+                        it.write(serialized)
+                    }
+                    if (!tmpFile.renameTo(file)) {
+                        throw IOException("Couldn't move tmp file to file $file")
+                    }
+                } catch (e: Exception) {
+                    throw IOException("Couldn't write to file $file $serialized", e)
+                } finally {
+                    tmpFile.delete()
+                }
+
+                cachedValue.set(value)
+                changeNotifier.offer(Unit)
+                multiProcessHelper.notifyWrite()
+            }
         }
     }
 
     override suspend fun get(): T {
         checkNotDisposed()
+        d { "$file -> get" }
         return maybeWithDispatcher {
-            val cached = cachedValue.get()
-            if (cached != this) return@maybeWithDispatcher cached as T
+            measured("get") {
+                val cached = cachedValue.get()
+                if (cached != this) {
+                    d { "$file -> return cached $cached" }
+                    return@measured cached as T
+                }
 
-            val value = if (isSet()) valueFetcher() else defaultValue()
-            cachedValue.set(value)
-            return@maybeWithDispatcher value
+                return@measured if (isSet()) {
+                    valueFetcher().also {
+                        cachedValue.set(it)
+                        d { "$file -> return fetched $it" }
+                    }
+                } else {
+                    defaultValue.also {
+                        d { "$file -> return default value $it" }
+                    }
+                }
+            }
         }
     }
 
     override suspend fun delete() {
         checkNotDisposed()
+        d { "$file -> delete" }
         maybeWithDispatcher {
-            if (file.exists()) {
-                if (!file.delete()) {
-                    throw IOException("Couldn't delete file $file")
+            measured("delete") {
+                if (file.exists()) {
+                    if (!file.delete()) {
+                        throw IOException("Couldn't delete file $file")
+                    }
                 }
-            }
 
-            cachedValue.set(this)
-            changeNotifier.offer(Unit)
+                cachedValue.set(this)
+                changeNotifier.offer(Unit)
+            }
         }
     }
 
     override suspend fun isSet(): Boolean {
         checkNotDisposed()
         return maybeWithDispatcher {
-            file.exists()
+            measured("exists") {
+                file.exists().also {
+                    d { "$file -> exists $it" }
+                }
+            }
         }
     }
 
@@ -195,12 +189,15 @@ internal class DiskBoxImpl<T>(
         checkNotDisposed()
         return flow {
             emit(get())
-            changeNotifier.asFlow().collect { emit(get()) }
+            changeNotifier.asFlow().collect {
+                emit(get())
+            }
         }
     }
 
     override fun dispose() {
-        if (disposed.getAndSet(true)) {
+        d { "$file -> dispose" }
+        if (_isDisposed.getAndSet(true)) {
             multiProcessHelper.dispose()
         }
     }
@@ -209,7 +206,13 @@ internal class DiskBoxImpl<T>(
         if (dispatcher != null) withContext(dispatcher) { block() } else block()
 
     private fun checkNotDisposed() {
-        require(disposed.get()) { "Box is already disposed" }
+        require(!_isDisposed.get()) { "Box is already disposed" }
+    }
+
+    private inline fun <T> measured(tag: String, block: () -> T): T {
+        val (result, duration) = measureTimedValue(block)
+        d { "$file -> compute '$tag' with result '$result' took ${duration.toLongMilliseconds()} ms" }
+        return result
     }
 }
 
@@ -262,21 +265,6 @@ private class MultiProcessHelper(
         private const val EXTRA_CHANGE_OWNER = "change_owner"
         private const val EXTRA_PATH = "path"
     }
-}
-
-private class SuspendLazy<T>(private val init: suspend () -> T) {
-
-    private val lazyValue = AtomicReference<Any?>(this)
-    private val _mutexValue = MutexValue {
-        val cached = lazyValue.get()
-        if (cached != this) return@MutexValue cached as T
-        val value = init()
-        lazyValue.set(value)
-        return@MutexValue value
-    }
-
-    suspend operator fun invoke(): T = _mutexValue()
-
 }
 
 private class MutexValue<T>(private val getter: suspend () -> T) {

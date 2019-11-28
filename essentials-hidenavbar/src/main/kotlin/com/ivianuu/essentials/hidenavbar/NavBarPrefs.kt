@@ -16,8 +16,8 @@
 
 package com.ivianuu.essentials.hidenavbar
 
-import com.ivianuu.essentials.store.common.PrefBoxFactory
-import com.ivianuu.essentials.store.common.boolean
+import com.ivianuu.essentials.store.prefs.PrefBoxFactory
+import com.ivianuu.essentials.store.prefs.boolean
 import com.ivianuu.injekt.Single
 import com.ivianuu.injekt.android.ApplicationScope
 

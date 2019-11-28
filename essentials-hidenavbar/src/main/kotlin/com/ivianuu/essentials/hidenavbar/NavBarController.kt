@@ -106,7 +106,7 @@ class NavBarController internal constructor(
             .launchIn(scope.coroutineScope)
     }
 
-    private fun setNavBarConfigInternal(hidden: Boolean, config: NavBarConfig) {
+    private suspend fun setNavBarConfigInternal(hidden: Boolean, config: NavBarConfig) {
         d { "set nav bar hidden: $config" }
         try {
             try {

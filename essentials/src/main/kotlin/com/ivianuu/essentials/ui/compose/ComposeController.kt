@@ -36,7 +36,6 @@ import com.ivianuu.essentials.ui.compose.core.MediaQueryProvider
 import com.ivianuu.essentials.ui.compose.core.RouteAmbient
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.invoke
-import com.ivianuu.essentials.ui.compose.core.remember
 import com.ivianuu.essentials.ui.compose.coroutines.collect
 import com.ivianuu.essentials.ui.compose.injekt.ComponentAmbient
 import com.ivianuu.essentials.ui.compose.injekt.MaterialThemeProvider
@@ -79,28 +78,25 @@ abstract class ComposeController : EsController() {
             ControllerAmbient with this,
             ComponentAmbient with component
         ) {
-            val viewportMetrics =
-                collect(
-                    remember { AndroidComposeViewContainer.ViewportMetrics() },
-                    view.viewportMetrics
+            val viewportMetrics = collect(view.viewportMetrics)
+            if (viewportMetrics != null) {
+                val mediaQuery = MediaQuery(
+                    size = viewportMetrics.size,
+                    viewPadding = viewportMetrics.viewPadding,
+                    viewInsets = viewportMetrics.viewInsets,
+                    density = ambientDensity()(),
+                    darkMode = isSystemInDarkTheme()()
                 )
 
-            val mediaQuery = MediaQuery(
-                size = viewportMetrics.size,
-                viewPadding = viewportMetrics.viewPadding,
-                viewInsets = viewportMetrics.viewInsets,
-                density = ambientDensity()(),
-                darkMode = isSystemInDarkTheme()()
-            )
-
-            MediaQueryProvider(value = mediaQuery) {
-                val materialThemeProvider = inject<MaterialThemeProvider>()
-                MaterialTheme(
-                    colors = materialThemeProvider.colors(),
-                    typography = materialThemeProvider.typography()
-                ) {
-                    composable {
-                        content()
+                MediaQueryProvider(value = mediaQuery) {
+                    val materialThemeProvider = inject<MaterialThemeProvider>()
+                    MaterialTheme(
+                        colors = materialThemeProvider.colors(),
+                        typography = materialThemeProvider.typography()
+                    ) {
+                        composable {
+                            content()
+                        }
                     }
                 }
             }

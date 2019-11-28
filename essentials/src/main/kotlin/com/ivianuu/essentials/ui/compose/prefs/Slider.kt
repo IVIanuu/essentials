@@ -19,7 +19,6 @@ package com.ivianuu.essentials.ui.compose.prefs
 import androidx.compose.Composable
 import androidx.ui.core.Alignment
 import androidx.ui.core.ContextAmbient
-import androidx.ui.core.Opacity
 import androidx.ui.core.Text
 import androidx.ui.core.dp
 import androidx.ui.layout.Container
@@ -33,6 +32,7 @@ import androidx.ui.layout.Stack
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.Slider
 import androidx.ui.material.SliderPosition
+import com.ivianuu.essentials.store.Box
 import com.ivianuu.essentials.ui.compose.core.ambient
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.composableWithKey
@@ -43,99 +43,93 @@ import com.ivianuu.essentials.ui.compose.core.remember
 import com.ivianuu.essentials.ui.compose.core.state
 import com.ivianuu.essentials.ui.compose.layout.WithModifier
 import com.ivianuu.essentials.util.UnitValueTextProvider
-import com.ivianuu.kprefs.Pref
 
 @Composable
 fun SliderPreference(
-    pref: Pref<Int>,
+    box: Box<Int>,
     valueRange: IntRange = 0..100,
     steps: Int? = null,
+    onChange: ((Int) -> Boolean)? = null,
+    enabled: Boolean = true,
+    dependencies: List<Dependency<*>>? = null,
     title: @Composable() () -> Unit,
     summary: @Composable() (() -> Unit)? = null,
     leading: @Composable() (() -> Unit)? = null,
     valueText: @Composable() ((Int) -> Unit)? = {
         SimpleSliderValueText(it)
-    },
-    onChange: ((Int) -> Boolean)? = null,
-    enabled: Boolean = true,
-    dependencies: List<Dependency<*>>? = null
-) = composableWithKey("SliderPreference:${pref.key}") {
-    val finalEnabled = enabled && dependencies?.checkAll() ?: true
-
-    fun valueChanged(newValue: Int) {
-        if (onChange?.invoke(newValue) != false) {
-            pref.set(newValue)
-        }
     }
-
-    Stack {
-        aligned(Alignment.BottomCenter) {
-            Padding(bottom = 32.dp) {
-                Preference(
-                    pref = pref,
-                    title = title,
-                    summary = summary,
-                    leading = leading,
-                    onChange = onChange,
-                    enabled = enabled,
-                    dependencies = dependencies
-                )
-            }
-        }
-
-        aligned(Alignment.BottomCenter) {
-            Row(
-                crossAxisAlignment = CrossAxisAlignment.Center
-            ) {
-                val internalValue = state { pref.get() }
-
-                val onChanged: ((Int) -> Unit)? = if (dependencies.checkAll()) {
-                    { newValue ->
-                        if (onChange?.invoke(newValue) != false) {
-                            internalValue.value = newValue
-                        }
-                    }
-                } else {
-                    null
-                }
-
-                WithModifier(modifier = Flexible(1f) wraps Spacing(left = 8.dp)) {
-                    val position = remember(valueRange, steps) {
-                        val initial = pref.get().toFloat()
-                        val floatRange = valueRange.first.toFloat()..valueRange.last.toFloat()
-                        if (steps != null) {
-                            SliderPosition(
-                                initial = initial,
-                                valueRange = floatRange,
-                                steps = steps
-                            )
-                        } else {
-                            SliderPosition(
-                                initial = initial,
-                                valueRange = floatRange
-                            )
-                        }
-                    }
-
-                    Slider(
-                        position = position,
-                        onValueChange = {
-                            position.value = it
-                            onChanged?.invoke(it.toInt())
-                        },
-                        onValueChangeEnd = { valueChanged(position.value.toInt()) }
+) = composableWithKey("SliderPreference:$box") {
+    PreferenceWrapper(
+        box = box,
+        onChange = onChange,
+        enabled = enabled,
+        dependencies = dependencies
+    ) { context ->
+        Stack {
+            aligned(Alignment.BottomCenter) {
+                Padding(bottom = 32.dp) {
+                    PreferenceLayout(
+                        title = title,
+                        summary = summary,
+                        leading = leading
                     )
                 }
+            }
 
-                if (valueText != null) {
-                    Container(
-                        modifier = Inflexible,
-                        constraints = DpConstraints(
-                            minWidth = 72.dp
-                        ),
-                        padding = EdgeInsets(right = 8.dp)
-                    ) {
-                        Opacity(if (finalEnabled) 1f else 0.5f) {
+            aligned(Alignment.BottomCenter) {
+                Row(
+                    crossAxisAlignment = CrossAxisAlignment.Center
+                ) {
+                    val internalValue = state { context.currentValue }
+
+                    val onChanged: ((Int) -> Unit)? = if (context.dependenciesOk) {
+                        { newValue ->
+                            if (onChange?.invoke(newValue) != false) {
+                                internalValue.value = newValue
+                            }
+                        }
+                    } else {
+                        null
+                    }
+
+                    WithModifier(modifier = Flexible(1f) wraps Spacing(left = 8.dp)) {
+                        val position = remember(valueRange, steps) {
+                            val initial = context.currentValue.toFloat()
+                            val floatRange = valueRange.first.toFloat()..valueRange.last.toFloat()
+                            if (steps != null) {
+                                SliderPosition(
+                                    initial = initial,
+                                    valueRange = floatRange,
+                                    steps = steps
+                                )
+                            } else {
+                                SliderPosition(
+                                    initial = initial,
+                                    valueRange = floatRange
+                                )
+                            }
+                        }
+
+                        Slider(
+                            position = position,
+                            onValueChange = {
+                                position.value = it
+                                onChanged?.invoke(it.toInt())
+                            },
+                            onValueChangeEnd = {
+                                context.setIfOk(position.value.toInt())
+                            }
+                        )
+                    }
+
+                    if (valueText != null) {
+                        Container(
+                            modifier = Inflexible,
+                            constraints = DpConstraints(
+                                minWidth = 72.dp
+                            ),
+                            padding = EdgeInsets(right = 8.dp)
+                        ) {
                             valueText.invokeAsComposable(internalValue.value)
                         }
                     }

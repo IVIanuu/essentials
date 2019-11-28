@@ -14,22 +14,19 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.tile
+package com.ivianuu.essentials.store.prefs
 
-import android.annotation.TargetApi
-import com.ivianuu.kprefs.Pref
-import com.ivianuu.kprefs.coroutines.asFlow
-import kotlinx.coroutines.flow.Flow
+import kotlin.reflect.KClass
 
-/**
- * Tile which is driven by a preference
- */
-@TargetApi(24)
-abstract class PrefTileService<T> : FlowTileService<T>() {
-
-    protected abstract val pref: Pref<T>
-
-    final override val flow: Flow<T>
-        get() = pref.asFlow()
-
+interface BoxValueHolder<T> {
+    val value: T
 }
+
+inline fun <T, V> KClass<T>.valueFor(
+    value: V,
+    defaultValue: () -> T
+): T where T : Enum<T>, T : BoxValueHolder<V> =
+    valueForOrNull(value) ?: defaultValue()
+
+fun <T, V> KClass<T>.valueForOrNull(value: V): T? where T : Enum<T>, T : BoxValueHolder<V> =
+    java.enumConstants!!.firstOrNull { it.value == value }
