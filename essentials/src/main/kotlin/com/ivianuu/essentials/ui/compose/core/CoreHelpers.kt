@@ -171,6 +171,38 @@ inline fun <V1, V2, V3, V4, V5> (@Composable() (V1, V2, V3, V4, V5) -> Unit).inv
     this(v1, v2, v3, v4, v5)
 }
 
+inline fun <R> (@Composable() () -> R).invokeAsEffect(): R = effect(this)
+
+inline fun <V1, R> (@Composable() (V1) -> R).invokeAsEffect(v1: V1): R = effect {
+    this(v1)
+}
+
+inline fun <V1, V2, R> (@Composable() (V1, V2) -> R).invokeAsEffect(
+    v1: V1,
+    v2: V2
+) = effect { this(v1, v2) }
+
+inline fun <V1, V2, V3, R> (@Composable() (V1, V2, V3) -> R).invokeAsEffect(
+    v1: V1,
+    v2: V2,
+    v3: V3
+) = effect { this(v1, v2, v3) }
+
+inline fun <V1, V2, V3, V4, R> (@Composable() (V1, V2, V3, V4) -> R).invokeAsEffect(
+    v1: V1,
+    v2: V2,
+    v3: V3,
+    v4: V4
+) = effect { this(v1, v2, v3, v4) }
+
+inline fun <V1, V2, V3, V4, V5, R> (@Composable() (V1, V2, V3, V4, V5) -> R).invokeAsEffect(
+    v1: V1,
+    v2: V2,
+    v3: V3,
+    v4: V4,
+    v5: V5
+) = effect { this(v1, v2, v3, v4, v5) }
+
 @BuilderInference
 inline fun <T> effect(noinline block: @Composable() () -> T): T =
     effectWithKey(key = sourceLocation(), block = block)
