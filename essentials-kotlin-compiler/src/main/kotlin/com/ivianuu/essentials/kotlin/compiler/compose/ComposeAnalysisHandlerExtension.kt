@@ -16,17 +16,17 @@
 
 package com.ivianuu.essentials.kotlin.compiler.compose
 
-import com.ivianuu.essentials.kotlin.compiler.compose.overload.generateOverloadComposable
-import com.ivianuu.essentials.kotlin.compiler.compose.wrapper.generateComposableWrapper
 import org.jetbrains.kotlin.analyzer.AnalysisResult
+import org.jetbrains.kotlin.com.intellij.openapi.editor.Document
 import org.jetbrains.kotlin.com.intellij.openapi.project.Project
+import org.jetbrains.kotlin.com.intellij.openapi.vfs.VirtualFile
+import org.jetbrains.kotlin.com.intellij.psi.PsiManager
+import org.jetbrains.kotlin.com.intellij.psi.SingleRootFileViewProvider
 import org.jetbrains.kotlin.container.ComponentProvider
 import org.jetbrains.kotlin.container.get
 import org.jetbrains.kotlin.context.ProjectContext
-import org.jetbrains.kotlin.descriptors.FunctionDescriptor
 import org.jetbrains.kotlin.descriptors.ModuleDescriptor
 import org.jetbrains.kotlin.psi.KtFile
-import org.jetbrains.kotlin.psi.namedFunctionRecursiveVisitor
 import org.jetbrains.kotlin.resolve.BindingTrace
 import org.jetbrains.kotlin.resolve.jvm.extensions.AnalysisHandlerExtension
 import org.jetbrains.kotlin.resolve.lazy.ResolveSession
@@ -49,11 +49,23 @@ class ComposeAnalysisHandlerExtension(
         if (generatedFiles) return null
         generatedFiles = true
 
-        files.forEach { file ->
+        files as ArrayList<KtFile>
+
+        var filesChanged = false
+        files.toList().forEachIndexed { index, file ->
+            val changed = test(bindingTrace, resolveSession, file)
+            if (changed != null && changed != file) {
+                files.removeAt(index)
+                files.add(index, changed)
+            }
+        }
+
+        /*files.forEach { file ->
             file.accept(
                 namedFunctionRecursiveVisitor { ktNamedFunction ->
                     val functionDescriptor =
                         resolveSession.resolveToDescriptor(ktNamedFunction) as FunctionDescriptor
+                    test(functionDescriptor)
 
                     generateComposableWrapper(
                         outputDir,
@@ -68,14 +80,16 @@ class ComposeAnalysisHandlerExtension(
                     )
                 }
             )
-        }
+        }*/
 
-        return AnalysisResult.RetryWithAdditionalRoots(
-            bindingContext = bindingTrace.bindingContext,
-            moduleDescriptor = module,
-            additionalJavaRoots = emptyList(),
-            additionalKotlinRoots = listOf(outputDir)
-        )
+        return if (filesChanged) {
+            AnalysisResult.RetryWithAdditionalRoots(
+                bindingContext = bindingTrace.bindingContext,
+                moduleDescriptor = module,
+                additionalJavaRoots = emptyList(),
+                additionalKotlinRoots = listOf(outputDir)
+            )
+        } else null
     }
 
     override fun doAnalysis(
@@ -87,6 +101,16 @@ class ComposeAnalysisHandlerExtension(
         componentProvider: ComponentProvider
     ): AnalysisResult? {
         resolveSession = componentProvider.get()
+        /*files as ArrayList<KtFile>
+
+        files.toList().forEachIndexed { index, file ->
+            val changed = test(file)
+            if (changed != null && changed != file) {
+                files.removeAt(index)
+                files.add(index, changed)
+            }
+        }*/
+
         return super.doAnalysis(
             project,
             module,
@@ -98,3 +122,23 @@ class ComposeAnalysisHandlerExtension(
     }
 
 }
+
+fun KtFile.withNewSource(newSource: String): KtFile {
+    return KtFile(
+        viewProvider = MetaFileViewProvider(manager, virtualFile) {
+            it?.also {
+                it.setText(newSource)
+            }
+        },
+        isCompiled = false
+    )
+}
+
+class MetaFileViewProvider(
+    psiManager: PsiManager,
+    virtualFile: VirtualFile,
+    val transformation: (Document?) -> Document?
+) : SingleRootFileViewProvider(psiManager, virtualFile) {
+    override fun getDocument(): Document? = transformation(super.getDocument())
+}
+
