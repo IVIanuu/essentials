@@ -19,11 +19,8 @@ package com.ivianuu.essentials.sample.ui
 import androidx.ui.core.Alignment
 import androidx.ui.core.Text
 import androidx.ui.layout.Center
-import androidx.ui.layout.Column
 import androidx.ui.layout.Container
-import androidx.ui.layout.CrossAxisAlignment
 import androidx.ui.layout.ExpandedWidth
-import androidx.ui.layout.MainAxisAlignment
 import androidx.ui.material.Button
 import androidx.ui.material.MaterialTheme
 import com.ivianuu.essentials.hidenavbar.NavBarConfig
@@ -37,6 +34,9 @@ import com.ivianuu.essentials.ui.compose.core.onDispose
 import com.ivianuu.essentials.ui.compose.core.state
 import com.ivianuu.essentials.ui.compose.coroutines.coroutineScope
 import com.ivianuu.essentials.ui.compose.injekt.inject
+import com.ivianuu.essentials.ui.compose.layout.Column
+import com.ivianuu.essentials.ui.compose.layout.CrossAxisAlignment
+import com.ivianuu.essentials.ui.compose.layout.MainAxisAlignment
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
 import com.ivianuu.essentials.ui.compose.material.Scaffold
 import com.ivianuu.essentials.ui.navigation.Navigator

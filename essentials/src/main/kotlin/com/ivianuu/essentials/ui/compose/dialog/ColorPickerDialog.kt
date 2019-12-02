@@ -31,11 +31,8 @@ import androidx.ui.foundation.ColoredRect
 import androidx.ui.graphics.Canvas
 import androidx.ui.graphics.Color
 import androidx.ui.graphics.Paint
-import androidx.ui.layout.Column
 import androidx.ui.layout.Container
-import androidx.ui.layout.CrossAxisAlignment
 import androidx.ui.layout.ExpandedWidth
-import androidx.ui.layout.FlexRow
 import androidx.ui.layout.Padding
 import androidx.ui.layout.Table
 import androidx.ui.material.MaterialTheme
@@ -51,8 +48,12 @@ import com.ivianuu.essentials.ui.compose.core.invoke
 import com.ivianuu.essentials.ui.compose.core.remember
 import com.ivianuu.essentials.ui.compose.core.state
 import com.ivianuu.essentials.ui.compose.injekt.inject
+import com.ivianuu.essentials.ui.compose.layout.Column
+import com.ivianuu.essentials.ui.compose.layout.CrossAxisAlignment
+import com.ivianuu.essentials.ui.compose.layout.Row
 import com.ivianuu.essentials.ui.compose.layout.SquaredBox
 import com.ivianuu.essentials.ui.compose.layout.SquaredBoxFit
+import com.ivianuu.essentials.ui.compose.layout.WithModifier
 import com.ivianuu.essentials.ui.compose.material.Tab
 import com.ivianuu.essentials.ui.compose.material.TabContent
 import com.ivianuu.essentials.ui.compose.material.TabController
@@ -294,17 +295,16 @@ private fun ColorComponentItem(
         height = 48.dp,
         modifier = ExpandedWidth
     ) {
-        FlexRow(
+        Row(
             crossAxisAlignment = CrossAxisAlignment.Center
         ) {
-            inflexible {
-                Text(
-                    text = component.title,
-                    style = MaterialTheme.typography()().subtitle1
-                )
-            }
+            Text(
+                text = component.title,
+                modifier = Inflexible,
+                style = MaterialTheme.typography()().subtitle1
+            )
 
-            flexible(1f) {
+            WithModifier(Flexible(flex = 1f)) {
                 val position = remember {
                     SliderPosition(initial = value)
                 }
@@ -319,12 +319,11 @@ private fun ColorComponentItem(
                 )
             }
 
-            inflexible {
-                Text(
-                    text = (255 * value).toInt().toString(),
-                    style = MaterialTheme.typography()().subtitle1
-                )
-            }
+            Text(
+                text = (255 * value).toInt().toString(),
+                modifier = Inflexible,
+                style = MaterialTheme.typography()().subtitle1
+            )
         }
     }
 }

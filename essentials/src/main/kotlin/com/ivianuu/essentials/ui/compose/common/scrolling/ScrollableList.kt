@@ -29,13 +29,13 @@ import androidx.ui.core.max
 import androidx.ui.core.toPx
 import androidx.ui.core.withDensity
 import androidx.ui.foundation.shape.RectangleShape
-import androidx.ui.layout.Column
 import androidx.ui.layout.Container
 import com.ivianuu.essentials.ui.compose.common.framed
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.composableWithKey
 import com.ivianuu.essentials.ui.compose.core.invoke
 import com.ivianuu.essentials.ui.compose.core.remember
+import com.ivianuu.essentials.ui.compose.layout.Column
 import com.ivianuu.essentials.ui.compose.layout.SizedBox
 import kotlin.math.max
 import kotlin.math.min

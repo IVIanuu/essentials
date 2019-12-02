@@ -64,7 +64,7 @@ object Deps {
         }
 
         object Ui {
-            private const val version = "0.0.1-dev05"
+            private const val version = "0.0.1-dev06"
             const val androidText = "androidx.ui:ui-android-text:$version"
             const val androidView = "androidx.ui:ui-android-view:$version"
             const val androidViewNonIr = "androidx.ui:ui-android-view-non-ir:$version"
@@ -116,7 +116,7 @@ object Deps {
         "com.ivianuu.essentials:essentials-gradle-plugin:0.0.1-dev251"
 
     object Injekt {
-        private const val version = "0.0.1-dev78"
+        private const val version = "0.0.1-dev79"
         const val injekt = "com.ivianuu.injekt:injekt:$version"
         const val android = "com.ivianuu.injekt:injekt-android:$version"
         const val gradlePlugin = "com.ivianuu.injekt:injekt-gradle-plugin:$version"

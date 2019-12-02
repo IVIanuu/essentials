@@ -23,6 +23,7 @@ import com.ivianuu.essentials.ui.compose.core.remember
 import com.ivianuu.essentials.ui.compose.coroutines.collect
 import com.ivianuu.essentials.ui.compose.coroutines.coroutineScope
 import kotlinx.coroutines.launch
+import kotlin.reflect.KProperty
 
 @Composable
 fun <T> unfoldBox(box: Box<T>): BoxWrapper<T> = effect {
@@ -55,4 +56,10 @@ class BoxWrapper<T> internal constructor(
 
     operator fun component1(): T = value
     operator fun component2(): (T) -> Unit = { value = it }
+
+    operator fun getValue(thisObj: Any?, property: KProperty<*>): T = value
+
+    operator fun setValue(thisObj: Any?, property: KProperty<*>, next: T) {
+        value = next
+    }
 }
