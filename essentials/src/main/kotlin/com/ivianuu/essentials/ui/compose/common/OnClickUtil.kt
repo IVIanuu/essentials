@@ -45,7 +45,7 @@ fun launchOnClick(
     val coroutineScope = coroutineScope()
     return@effect remember {
         {
-            coroutineScope.launch { block() }
+            coroutineScope.launch(block = block)
         }
     }
 }
