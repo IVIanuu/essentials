@@ -18,8 +18,11 @@ package com.ivianuu.essentials.ui.compose.prefs
 
 import androidx.compose.Composable
 import androidx.ui.core.Text
+import androidx.ui.graphics.Image
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.store.Box
+import com.ivianuu.essentials.ui.compose.common.asIconComposable
+import com.ivianuu.essentials.ui.compose.common.asTextComposable
 import com.ivianuu.essentials.ui.compose.core.composableWithKey
 import com.ivianuu.essentials.ui.compose.core.stateFor
 import com.ivianuu.essentials.ui.compose.dialog.DialogButton
@@ -28,6 +31,31 @@ import com.ivianuu.essentials.ui.compose.dialog.MultiChoiceListDialog
 import com.ivianuu.essentials.ui.compose.resources.stringResource
 
 // todo improve api
+
+@Composable
+fun MultiChoiceListPreference(
+    box: Box<Set<String>>,
+    onChange: ((Set<String>) -> Boolean)? = null,
+    enabled: Boolean = true,
+    dependencies: List<Dependency<*>>? = null,
+    title: String? = null,
+    summary: String? = null,
+    image: Image? = null,
+    dialogTitle: String? = title,
+    items: List<MultiChoiceListPreference.Item>
+) = composableWithKey("MultiChoiceListPreference:$box") {
+    MultiChoiceListPreference(
+        box = box,
+        onChange = onChange,
+        enabled = enabled,
+        dependencies = dependencies,
+        title = title.asTextComposable(),
+        summary = summary.asTextComposable(),
+        leading = image.asIconComposable(),
+        dialogTitle = dialogTitle.asTextComposable(),
+        items = items
+    )
+}
 
 @Composable
 fun MultiChoiceListPreference(

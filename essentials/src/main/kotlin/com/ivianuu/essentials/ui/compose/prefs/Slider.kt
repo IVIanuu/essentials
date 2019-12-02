@@ -21,6 +21,7 @@ import androidx.ui.core.Alignment
 import androidx.ui.core.ContextAmbient
 import androidx.ui.core.Text
 import androidx.ui.core.dp
+import androidx.ui.graphics.Image
 import androidx.ui.layout.Container
 import androidx.ui.layout.DpConstraints
 import androidx.ui.layout.EdgeInsets
@@ -31,6 +32,8 @@ import androidx.ui.material.MaterialTheme
 import androidx.ui.material.Slider
 import androidx.ui.material.SliderPosition
 import com.ivianuu.essentials.store.Box
+import com.ivianuu.essentials.ui.compose.common.asIconComposable
+import com.ivianuu.essentials.ui.compose.common.asTextComposable
 import com.ivianuu.essentials.ui.compose.core.ambient
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.composableWithKey
@@ -43,6 +46,35 @@ import com.ivianuu.essentials.ui.compose.layout.CrossAxisAlignment
 import com.ivianuu.essentials.ui.compose.layout.Row
 import com.ivianuu.essentials.ui.compose.layout.WithModifier
 import com.ivianuu.essentials.util.UnitValueTextProvider
+
+@Composable
+fun SliderPreference(
+    box: Box<Int>,
+    onChange: ((Int) -> Boolean)? = null,
+    enabled: Boolean = true,
+    dependencies: List<Dependency<*>>? = null,
+    title: String? = null,
+    summary: String? = null,
+    image: Image? = null,
+    valueRange: IntRange = 0..100,
+    steps: Int? = null,
+    valueText: @Composable() ((Int) -> Unit)? = {
+        SimpleSliderValueText(it)
+    }
+) = composableWithKey("SliderPreference:$box") {
+    SliderPreference(
+        box = box,
+        onChange = onChange,
+        enabled = enabled,
+        dependencies = dependencies,
+        title = title.asTextComposable(),
+        summary = summary.asTextComposable(),
+        leading = image.asIconComposable(),
+        valueRange = valueRange,
+        steps = steps,
+        valueText = valueText
+    )
+}
 
 @Composable
 fun SliderPreference(
