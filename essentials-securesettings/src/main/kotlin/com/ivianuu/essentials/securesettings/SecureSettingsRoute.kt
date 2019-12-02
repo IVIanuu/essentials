@@ -68,8 +68,8 @@ fun secureSettingsRoute(showHideNavBarHint: Boolean = false) =
                     }
 
                     SimpleListItem(
-                        title = { Text(stringResource(R.string.es_pref_use_pc)) },
-                        subtitle = { Text(stringResource(R.string.es_pref_use_pc_summary)) },
+                        title = stringResource(R.string.es_pref_use_pc),
+                        subtitle = stringResource(R.string.es_pref_use_pc_summary),
                         onClick = navigateOnClick {
                             secureSettingsInstructionsRoute.copy(
                                 options = defaultControllerRouteOptionsOrElse {
@@ -83,8 +83,8 @@ fun secureSettingsRoute(showHideNavBarHint: Boolean = false) =
                     val secureSettingsHelper = inject<SecureSettingsHelper>()
                     val toaster = inject<Toaster>()
                     SimpleListItem(
-                        title = { Text(stringResource(R.string.es_pref_use_root)) },
-                        subtitle = { Text(stringResource(R.string.es_pref_use_root_summary)) },
+                        title = stringResource(R.string.es_pref_use_root),
+                        subtitle = stringResource(R.string.es_pref_use_root_summary),
                         onClick = {
                             coroutineScope.launch {
                                 if (secureSettingsHelper.grantWriteSecureSettingsViaRoot()) {

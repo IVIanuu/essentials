@@ -26,7 +26,6 @@ import com.ivianuu.essentials.ui.compose.composeControllerRoute
 import com.ivianuu.essentials.ui.compose.core.invoke
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
-import com.ivianuu.essentials.ui.compose.material.Icon
 import com.ivianuu.essentials.ui.compose.material.Scaffold
 import com.ivianuu.essentials.ui.compose.material.SimpleListItem
 import com.ivianuu.essentials.ui.compose.material.colorForCurrentBackground
@@ -59,37 +58,37 @@ val secureSettingsInstructionsRoute =
                     }
 
                     SimpleListItem(
-                        title = { Text(stringResource(R.string.es_pref_secure_settings_step_1)) },
-                        subtitle = { Text(stringResource(R.string.es_pref_secure_settings_step_1_summary)) }
+                        title = stringResource(R.string.es_pref_secure_settings_step_1),
+                        subtitle = stringResource(R.string.es_pref_secure_settings_step_1_summary)
                     )
 
                     SimpleListItem(
-                        title = { Text(stringResource(R.string.es_pref_secure_settings_step_2)) },
-                        subtitle = { Text(stringResource(R.string.es_pref_secure_settings_step_2_summary)) }
+                        title = stringResource(R.string.es_pref_secure_settings_step_2),
+                        subtitle = stringResource(R.string.es_pref_secure_settings_step_2_summary)
                     )
 
                     SimpleListItem(
-                        title = { Text(stringResource(R.string.es_pref_secure_settings_step_3)) },
-                        subtitle = { Text(stringResource(R.string.es_pref_secure_settings_step_3_summary)) }
+                        title = stringResource(R.string.es_pref_secure_settings_step_3),
+                        subtitle = stringResource(R.string.es_pref_secure_settings_step_3_summary)
                     )
 
                     SimpleListItem(
-                        leading = { Icon(drawableResource(R.drawable.es_ic_link)) },
-                        title = { Text(stringResource(R.string.es_pref_secure_settings_link_gadget_hacks_summary)) },
+                        image = drawableResource(R.drawable.es_ic_link),
+                        title = stringResource(R.string.es_pref_secure_settings_link_gadget_hacks_summary),
                         onClick = openUrlOnClick { "https://youtu.be/CDuxcrrWLnY" }
                     )
 
                     SimpleListItem(
-                        leading = { Icon(drawableResource(R.drawable.es_ic_link)) },
-                        title = { Text(stringResource(R.string.es_pref_secure_settings_link_lifehacker_summary)) },
+                        image = drawableResource(R.drawable.es_ic_link),
+                        title = stringResource(R.string.es_pref_secure_settings_link_lifehacker_summary),
                         onClick = openUrlOnClick {
                             "https://lifehacker.com/the-easiest-way-to-install-androids-adb-and-fastboot-to-1586992378"
                         }
                     )
 
                     SimpleListItem(
-                        leading = { Icon(drawableResource(R.drawable.es_ic_link)) },
-                        title = { Text(stringResource(R.string.es_pref_secure_settings_link_xda_summary)) },
+                        image = drawableResource(R.drawable.es_ic_link),
+                        title = stringResource(R.string.es_pref_secure_settings_link_xda_summary),
                         onClick = openUrlOnClick {
                             "https://www.xda-developers.com/install-adb-windows-macos-linux/"
                         }
@@ -101,15 +100,11 @@ val secureSettingsInstructionsRoute =
                     val toaster = inject<Toaster>()
 
                     SimpleListItem(
-                        title = { Text(stringResource(R.string.es_pref_secure_settings_step_4)) },
-                        subtitle = {
-                            Text(
-                                stringProvider.getString(
-                                    R.string.es_pref_secure_settings_step_4_summary,
-                                    buildInfo.packageName
-                                )
-                            )
-                        },
+                        title = stringResource(R.string.es_pref_secure_settings_step_4),
+                        subtitle = stringProvider.getString(
+                            R.string.es_pref_secure_settings_step_4_summary,
+                            buildInfo.packageName
+                        ),
                         onClick = {
                             clipboardAccessor.clipboardText =
                                 "adb shell pm grant ${buildInfo.packageName} android.permission.WRITE_SECURE_SETTINGS"

@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.about
 
 import androidx.compose.Composable
-import androidx.ui.core.Text
 import com.ivianuu.essentials.ui.compose.common.openUrlOnClick
 import com.ivianuu.essentials.ui.compose.common.scrolling.ScrollableList
 import com.ivianuu.essentials.ui.compose.composeControllerRoute
@@ -116,8 +115,8 @@ fun AboutItem(
     url: () -> String
 ) = staticComposableWithKey(titleRes) {
     SimpleListItem(
-        title = { Text(stringResource(titleRes)) },
-        subtitle = descRes?.let { { Text(stringResource(it)) } },
+        title = stringResource(titleRes),
+        subtitle = descRes?.let { stringResource(it) },
         onClick = openUrlOnClick(url)
     )
 }

@@ -16,7 +16,6 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import androidx.ui.core.Text
 import com.ivianuu.essentials.store.prefs.PrefBoxFactory
 import com.ivianuu.essentials.store.prefs.boolean
 import com.ivianuu.essentials.store.prefs.int
@@ -52,7 +51,7 @@ val prefsRoute = composeControllerRoute(
 
                 SwitchPreference(
                     box = boxFactory.boolean("switch"),
-                    title = { Text("Switch") }
+                    title = "Switch"
                 )
 
                 val dependencies = listOf(
@@ -66,22 +65,22 @@ val prefsRoute = composeControllerRoute(
 
                 CheckboxPreference(
                     box = boxFactory.boolean("checkbox"),
-                    title = { Text("Checkbox") },
-                    summary = { Text("This is a checkbox preference") },
+                    title = "Checkbox",
+                    summary = "This is a checkbox preference",
                     dependencies = dependencies
                 )
 
                 RadioButtonPreference(
                     box = boxFactory.boolean("radio_button"),
-                    title = { Text("Radio Button") },
-                    summary = { Text("This is a radio button preference") },
+                    title = "Radio Button",
+                    summary = "This is a radio button preference",
                     dependencies = dependencies
                 )
 
                 SliderPreference(
                     box = boxFactory.int("slider"),
-                    title = { Text("Slider") },
-                    summary = { Text("This is a slider preference") },
+                    title = "Slider",
+                    summary = "This is a slider preference",
                     valueText = unitValueTextProvider(UnitValueTextProvider.Unit.Dp),
                     dependencies = dependencies
                 )
@@ -90,8 +89,8 @@ val prefsRoute = composeControllerRoute(
 
                 TextInputPreference(
                     box = boxFactory.string("text_input"),
-                    title = { Text("Text input") },
-                    summary = { Text("This is a text input preference") },
+                    title = "Text input",
+                    summary = "This is a text input preference",
                     allowEmpty = false,
                     dependencies = dependencies
                 )
@@ -103,8 +102,8 @@ val prefsRoute = composeControllerRoute(
                         MultiChoiceListPreference.Item("B"),
                         MultiChoiceListPreference.Item("C")
                     ),
-                    title = { Text("Multi select list") },
-                    summary = { Text("This is a multi select list preference") },
+                    title = "Multi select list",
+                    summary = "This is a multi select list preference",
                     dependencies = dependencies
                 )
 
@@ -115,8 +114,8 @@ val prefsRoute = composeControllerRoute(
                         SingleChoiceListPreference.Item("B"),
                         SingleChoiceListPreference.Item("C")
                     ),
-                    title = { Text("Single item list") },
-                    summary = { Text("This is a single item list preference") },
+                    title = "Single item list",
+                    summary = "This is a single item list preference",
                     dependencies = dependencies
                 )
             }
