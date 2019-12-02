@@ -56,7 +56,7 @@ fun SimplePreference(
                 summary = summary,
                 leading = leading,
                 trailing = trailing,
-                onClick = onClick
+                onClick = if (dependenciesOk) onClick else null
             )
         }
     }
