@@ -20,18 +20,18 @@ import androidx.compose.Composable
 import androidx.ui.core.Alignment
 import androidx.ui.core.dp
 import androidx.ui.foundation.Clickable
-import androidx.ui.layout.Column
 import androidx.ui.layout.Container
-import androidx.ui.layout.CrossAxisAlignment
 import androidx.ui.layout.EdgeInsets
 import androidx.ui.layout.ExpandedWidth
-import androidx.ui.layout.MainAxisAlignment
-import androidx.ui.layout.Row
 import androidx.ui.layout.WidthSpacer
 import androidx.ui.material.ripple.Ripple
 import com.ivianuu.essentials.ui.compose.common.scrolling.Scroller
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.invokeAsComposable
+import com.ivianuu.essentials.ui.compose.layout.Column
+import com.ivianuu.essentials.ui.compose.layout.CrossAxisAlignment
+import com.ivianuu.essentials.ui.compose.layout.MainAxisAlignment
+import com.ivianuu.essentials.ui.compose.layout.Row
 
 @Composable
 fun ListDialog(

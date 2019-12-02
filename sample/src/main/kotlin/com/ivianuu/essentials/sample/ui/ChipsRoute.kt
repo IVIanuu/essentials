@@ -23,6 +23,7 @@ import androidx.ui.foundation.Clickable
 import androidx.ui.foundation.shape.corner.RoundedCornerShape
 import androidx.ui.layout.Container
 import androidx.ui.layout.EdgeInsets
+import androidx.ui.layout.FlowColumn
 import androidx.ui.layout.Padding
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.ripple.Ripple
@@ -33,7 +34,6 @@ import com.ivianuu.essentials.ui.compose.core.invoke
 import com.ivianuu.essentials.ui.compose.core.remember
 import com.ivianuu.essentials.ui.compose.dialog.PrimaryColors
 import com.ivianuu.essentials.ui.compose.injekt.inject
-import com.ivianuu.essentials.ui.compose.layout.FlutterWrap
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
 import com.ivianuu.essentials.ui.compose.material.RippleColorProvider
 import com.ivianuu.essentials.ui.compose.material.Scaffold
@@ -45,7 +45,7 @@ val chipsRoute = composeControllerRoute {
         topAppBar = { EsTopAppBar("Chips") },
         body = {
             Padding(padding = 8.dp) {
-                FlutterWrap(spacing = 8.dp, runSpacing = 8.dp) {
+                FlowColumn(mainAxisSpacing = 8.dp, crossAxisSpacing = 8.dp) {
                     Names.shuffled().forEach {
                         Chip(it)
                     }

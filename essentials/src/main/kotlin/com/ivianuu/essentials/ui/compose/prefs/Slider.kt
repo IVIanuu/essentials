@@ -22,11 +22,9 @@ import androidx.ui.core.ContextAmbient
 import androidx.ui.core.Text
 import androidx.ui.core.dp
 import androidx.ui.layout.Container
-import androidx.ui.layout.CrossAxisAlignment
 import androidx.ui.layout.DpConstraints
 import androidx.ui.layout.EdgeInsets
 import androidx.ui.layout.Padding
-import androidx.ui.layout.Row
 import androidx.ui.layout.Spacing
 import androidx.ui.layout.Stack
 import androidx.ui.material.MaterialTheme
@@ -41,6 +39,8 @@ import com.ivianuu.essentials.ui.compose.core.invoke
 import com.ivianuu.essentials.ui.compose.core.invokeAsComposable
 import com.ivianuu.essentials.ui.compose.core.remember
 import com.ivianuu.essentials.ui.compose.core.state
+import com.ivianuu.essentials.ui.compose.layout.CrossAxisAlignment
+import com.ivianuu.essentials.ui.compose.layout.Row
 import com.ivianuu.essentials.ui.compose.layout.WithModifier
 import com.ivianuu.essentials.util.UnitValueTextProvider
 
@@ -77,9 +77,7 @@ fun SliderPreference(
             }
 
             aligned(Alignment.BottomCenter) {
-                Row(
-                    crossAxisAlignment = CrossAxisAlignment.Center
-                ) {
+                Row(crossAxisAlignment = CrossAxisAlignment.Center) {
                     val internalValue = state { context.currentValue }
 
                     val onChanged: ((Int) -> Unit)? = if (context.dependenciesOk) {
