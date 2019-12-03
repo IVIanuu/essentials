@@ -22,10 +22,10 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 
-private const val KEY_COROUTINE_SCOPE = "coroutineScope"
+private val CoroutineScopeKey = Any()
 
 val Scope.coroutineScope: CoroutineScope
-    get() = properties.getOrSet(KEY_COROUTINE_SCOPE) {
+    get() = properties.getOrSet(CoroutineScopeKey) {
         ScopedCoroutineScope(this)
     }
 
