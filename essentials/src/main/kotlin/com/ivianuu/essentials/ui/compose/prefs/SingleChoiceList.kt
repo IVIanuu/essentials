@@ -89,10 +89,7 @@ fun SingleChoiceListPreference(
                 positiveButton = {
                     DialogButton(
                         text = stringResource(R.string.es_ok),
-                        onClick = {
-                            val newValue = selectedItem.value
-                            context.setIfOk(newValue)
-                        }
+                        onClick = { context.setIfOk(selectedItem.value) }
                     )
                 },
                 negativeButton = { DialogCloseButton(stringResource(R.string.es_cancel)) }

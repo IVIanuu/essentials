@@ -37,8 +37,6 @@ import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.remember
 
 // todo maybe merge with original
-
-// todo refactor scroll event handling
 // todo reversed option
 
 // todo use @Model once possible
@@ -60,6 +58,9 @@ class ScrollPosition(
     private var _maxValue: Px by framed(maxValue)
     val maxValue: Px get() = _maxValue
 
+    val isAnimating: Boolean
+        get() = holder.animatedFloat.isRunning
+
     var flingConfigFactory: (Px) -> FlingConfig by framed {
         FlingConfig(
             decayAnimation = ExponentialDecay(
@@ -80,7 +81,10 @@ class ScrollPosition(
         anim: AnimationBuilder<Float>,
         onEnd: (endReason: AnimationEndReason, finishValue: Float) -> Unit = { _, _ -> }
     ) {
-        holder.animatedFloat.animateTo(value.value, anim, onEnd)
+        holder.animatedFloat.animateTo(value.value, anim) { endReason, finishValue ->
+            onEnd(endReason, finishValue)
+            direction = ScrollDirection.Idle
+        }
     }
 
     fun smoothScrollBy(
@@ -88,7 +92,10 @@ class ScrollPosition(
         anim: AnimationBuilder<Float>,
         onEnd: (endReason: AnimationEndReason, finishValue: Float) -> Unit = { _, _ -> }
     ) {
-        smoothScrollTo(this.value + value, anim, onEnd)
+        smoothScrollTo(this.value + value, anim) { endReason, finishValue ->
+            onEnd(endReason, finishValue)
+            direction = ScrollDirection.Idle
+        }
     }
 
     fun scrollTo(value: Px) {
@@ -124,7 +131,6 @@ fun Scrollable(
     PressGestureDetector(onPress = { position.scrollTo(position.value) }) {
         TouchSlopDragGestureDetector(
             dragObserver = object : DragObserver {
-
                 override fun onDrag(dragDistance: PxPosition): PxPosition {
                     if (!enabled) return PxPosition.Origin
                     val oldValue = position.value
@@ -146,7 +152,6 @@ fun Scrollable(
                     }
 
                     val consumed = -(newValue - oldValue)
-                    d { "orig distance ${dragDistance.x} ${dragDistance.y} old vaue $oldValue -> distance $distance -> new value $newValue direction $scrollDirection consumed $consumed" }
                     position.direction = scrollDirection
                     position.holder.animatedFloat.snapTo(newValue.value)
 
