@@ -22,8 +22,8 @@ import androidx.ui.layout.Center
 import androidx.ui.layout.HeightSpacer
 import androidx.ui.material.FloatingActionButton
 import androidx.ui.material.MaterialTheme
-import com.ivianuu.essentials.ui.compose.composeControllerRoute
 import com.ivianuu.essentials.ui.compose.core.invoke
+import com.ivianuu.essentials.ui.compose.es.composeControllerRoute
 import com.ivianuu.essentials.ui.compose.layout.Column
 import com.ivianuu.essentials.ui.compose.layout.CrossAxisAlignment
 import com.ivianuu.essentials.ui.compose.layout.MainAxisAlignment

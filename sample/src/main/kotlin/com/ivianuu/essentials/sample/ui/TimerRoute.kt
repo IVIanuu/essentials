@@ -19,9 +19,9 @@ package com.ivianuu.essentials.sample.ui
 import androidx.ui.core.Text
 import androidx.ui.layout.Center
 import androidx.ui.material.MaterialTheme
-import com.ivianuu.essentials.ui.compose.composeControllerRoute
 import com.ivianuu.essentials.ui.compose.core.invoke
 import com.ivianuu.essentials.ui.compose.coroutines.collect
+import com.ivianuu.essentials.ui.compose.es.composeControllerRoute
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
 import com.ivianuu.essentials.ui.compose.material.Scaffold
 import com.ivianuu.essentials.ui.navigation.director.controllerRouteOptions

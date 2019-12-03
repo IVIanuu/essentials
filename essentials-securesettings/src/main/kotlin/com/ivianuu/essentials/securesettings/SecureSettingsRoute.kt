@@ -22,9 +22,9 @@ import androidx.ui.layout.Padding
 import androidx.ui.material.MaterialTheme
 import com.ivianuu.essentials.ui.compose.common.navigateOnClick
 import com.ivianuu.essentials.ui.compose.common.scrolling.ScrollableList
-import com.ivianuu.essentials.ui.compose.composeControllerRoute
 import com.ivianuu.essentials.ui.compose.core.invoke
 import com.ivianuu.essentials.ui.compose.coroutines.coroutineScope
+import com.ivianuu.essentials.ui.compose.es.composeControllerRoute
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
 import com.ivianuu.essentials.ui.compose.material.Scaffold

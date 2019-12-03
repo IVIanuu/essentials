@@ -16,29 +16,30 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import com.ivianuu.essentials.ui.compose.composeControllerRoute
+import com.ivianuu.essentials.ui.compose.es.composeControllerRoute
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
 import com.ivianuu.essentials.ui.compose.material.Scaffold
 
-val constraintLayoutRoute = composeControllerRoute {
-    Scaffold(
-        topAppBar = { EsTopAppBar("Constraint layout") },
-        body = {
-            /*ConstraintLayout {
-                id("title") {
-                    Text(
-                        text = "Hello Constraint Layout",
-                        style = MaterialTheme.typography()().h6
-                    )
-                }
-
-                ConstraintSet {
-                    constraints("title") {
-                        centerHorizontally(PARENT)
-                        centerVertically(PARENT)
+val constraintLayoutRoute =
+    composeControllerRoute {
+        Scaffold(
+            topAppBar = { EsTopAppBar("Constraint layout") },
+            body = {
+                /*ConstraintLayout {
+                    id("title") {
+                        Text(
+                            text = "Hello Constraint Layout",
+                            style = MaterialTheme.typography()().h6
+                        )
                     }
-                }
-            }*/
-        }
-    )
-}
+
+                    ConstraintSet {
+                        constraints("title") {
+                            centerHorizontally(PARENT)
+                            centerVertically(PARENT)
+                        }
+                    }
+                }*/
+            }
+        )
+    }

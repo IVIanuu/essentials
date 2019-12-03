@@ -24,7 +24,6 @@ import androidx.ui.material.Button
 import androidx.ui.material.MaterialTheme
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.compose.common.scrolling.Scroller
-import com.ivianuu.essentials.ui.compose.composeControllerRoute
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.invoke
 import com.ivianuu.essentials.ui.compose.core.state
@@ -38,6 +37,7 @@ import com.ivianuu.essentials.ui.compose.dialog.ScrollableDialog
 import com.ivianuu.essentials.ui.compose.dialog.SingleChoiceListDialog
 import com.ivianuu.essentials.ui.compose.dialog.TextInputDialog
 import com.ivianuu.essentials.ui.compose.dialog.dialogRoute
+import com.ivianuu.essentials.ui.compose.es.composeControllerRoute
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.compose.layout.Column
 import com.ivianuu.essentials.ui.compose.layout.CrossAxisAlignment

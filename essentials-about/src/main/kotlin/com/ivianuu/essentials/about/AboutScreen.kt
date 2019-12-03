@@ -19,9 +19,9 @@ package com.ivianuu.essentials.about
 import androidx.compose.Composable
 import com.ivianuu.essentials.ui.compose.common.openUrlOnClick
 import com.ivianuu.essentials.ui.compose.common.scrolling.ScrollableList
-import com.ivianuu.essentials.ui.compose.composeControllerRoute
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.staticComposableWithKey
+import com.ivianuu.essentials.ui.compose.es.composeControllerRoute
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
 import com.ivianuu.essentials.ui.compose.material.Scaffold

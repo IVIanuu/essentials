@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.compose
+package com.ivianuu.essentials.ui.compose.es
 
 import android.view.LayoutInflater
 import android.view.View
