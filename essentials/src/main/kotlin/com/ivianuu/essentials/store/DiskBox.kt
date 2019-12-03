@@ -100,7 +100,7 @@ internal class DiskBoxImpl<T>(
         maybeWithDispatcher {
             measured("set") {
                 if (!file.exists()) {
-                    file.parentFile.mkdirs()
+                    file.parentFile?.mkdirs()
 
                     if (!file.createNewFile()) {
                         throw IOException("Couldn't create $file")
