@@ -18,6 +18,7 @@ package com.ivianuu.essentials.ui.compose.dialog
 
 import androidx.compose.Composable
 import androidx.ui.core.Alignment
+import androidx.ui.core.Dp
 import androidx.ui.core.dp
 import androidx.ui.foundation.Clickable
 import androidx.ui.layout.Container
@@ -25,36 +26,47 @@ import androidx.ui.layout.EdgeInsets
 import androidx.ui.layout.ExpandedWidth
 import androidx.ui.layout.WidthSpacer
 import androidx.ui.material.ripple.Ripple
-import com.ivianuu.essentials.ui.compose.common.scrolling.Scroller
+import com.ivianuu.essentials.ui.compose.common.scrolling.ScrollPosition
+import com.ivianuu.essentials.ui.compose.common.scrolling.ScrollableList
+import com.ivianuu.essentials.ui.compose.core.Axis
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.invokeAsComposable
-import com.ivianuu.essentials.ui.compose.layout.Column
+import com.ivianuu.essentials.ui.compose.core.remember
 import com.ivianuu.essentials.ui.compose.layout.CrossAxisAlignment
 import com.ivianuu.essentials.ui.compose.layout.MainAxisAlignment
 import com.ivianuu.essentials.ui.compose.layout.Row
 
 @Composable
 fun ListDialog(
+    listCount: Int,
+    itemSizeProvider: (Int) -> Dp,
+    scrollPosition: ScrollPosition = remember { ScrollPosition() },
+    scrollDirection: Axis = Axis.Vertical,
+    scrollingEnabled: Boolean = true,
     buttonLayout: AlertDialogButtonLayout = AlertDialogButtonLayout.SideBySide,
     icon: (@Composable() () -> Unit)? = null,
     title: (@Composable() () -> Unit)? = null,
-    listContent: @Composable() () -> Unit,
     positiveButton: (@Composable() () -> Unit)? = null,
     negativeButton: (@Composable() () -> Unit)? = null,
-    neutralButton: (@Composable() () -> Unit)? = null
+    neutralButton: (@Composable() () -> Unit)? = null,
+    listItem: @Composable() (Int) -> Unit
 ) = composable {
     MaterialDialog(
         icon = icon,
         title = title,
-        showDividers = true,
+        showTopDivider = scrollPosition.value > scrollPosition.minValue,
+        showBottomDivider = scrollPosition.value < scrollPosition.maxValue,
         applyContentPadding = false,
         buttonLayout = buttonLayout,
         content = {
-            Scroller {
-                Column {
-                    listContent.invokeAsComposable()
-                }
-            }
+            ScrollableList(
+                count = listCount,
+                itemSizeProvider = itemSizeProvider,
+                position = scrollPosition,
+                direction = scrollDirection,
+                enabled = scrollingEnabled,
+                item = listItem
+            )
         },
         positiveButton = positiveButton,
         negativeButton = negativeButton,

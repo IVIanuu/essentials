@@ -73,7 +73,7 @@ fun appPickerRoute(
                     composable {
                         ScrollableList(
                             items = viewModel.state.apps() ?: emptyList(),
-                            itemSizeProvider = { 56.dp }
+                            itemSize = 56.dp
                         ) { _, app ->
                             AppInfo(
                                 app = app,

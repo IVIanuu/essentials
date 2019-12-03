@@ -101,7 +101,7 @@ fun ScrollableList(
 @Composable
 fun <T> ScrollableList(
     items: List<T>,
-    itemSizeProvider: (Int) -> Dp,
+    itemSizeProvider: (Int, T) -> Dp,
     direction: Axis = Axis.Vertical,
     position: ScrollPosition = remember { ScrollPosition() },
     enabled: Boolean = true,
@@ -109,7 +109,7 @@ fun <T> ScrollableList(
 ) = composable {
     ScrollableList(
         count = items.size,
-        itemSizeProvider = itemSizeProvider,
+        itemSizeProvider = { itemSizeProvider(it, items[it]) },
         direction = direction,
         position = position,
         enabled = enabled

@@ -17,66 +17,47 @@
 package com.ivianuu.essentials.ui.compose.dialog
 
 import androidx.compose.Composable
-import androidx.ui.material.RadioButton
-import com.ivianuu.essentials.ui.compose.common.AbsorbPointer
+import com.ivianuu.essentials.ui.compose.common.scrolling.ScrollPosition
+import com.ivianuu.essentials.ui.compose.common.scrolling.Scroller
+import com.ivianuu.essentials.ui.compose.core.Axis
 import com.ivianuu.essentials.ui.compose.core.composable
-import com.ivianuu.essentials.ui.compose.core.composableWithKey
+import com.ivianuu.essentials.ui.compose.core.invokeAsComposable
+import com.ivianuu.essentials.ui.compose.core.remember
+import com.ivianuu.essentials.ui.compose.layout.Column
 
 @Composable
-fun <T> SingleChoiceListDialog(
-    items: List<T>,
-    selectedItem: T,
-    onSelect: ((T) -> Unit)? = null,
-    item: @Composable() (T) -> Unit,
-    dismissOnSelect: Boolean = true, // todo
+fun ScrollableDialog(
+    scrollPosition: ScrollPosition = remember { ScrollPosition() },
+    scrollDirection: Axis = Axis.Vertical,
+    scrollingEnabled: Boolean = true,
     buttonLayout: AlertDialogButtonLayout = AlertDialogButtonLayout.SideBySide,
     icon: (@Composable() () -> Unit)? = null,
     title: (@Composable() () -> Unit)? = null,
+    listContent: @Composable() () -> Unit,
     positiveButton: (@Composable() () -> Unit)? = null,
     negativeButton: (@Composable() () -> Unit)? = null,
     neutralButton: (@Composable() () -> Unit)? = null
 ) = composable {
-    ScrollableDialog(
+    MaterialDialog(
         icon = icon,
         title = title,
+        showTopDivider = scrollPosition.value > scrollPosition.minValue,
+        showBottomDivider = scrollPosition.value < scrollPosition.maxValue,
+        applyContentPadding = false,
         buttonLayout = buttonLayout,
-        listContent = {
-            items.forEachIndexed { index, item ->
-                composableWithKey(index) {
-                    SingleChoiceDialogListItem(
-                        title = { item(item) },
-                        selected = item == selectedItem,
-                        onSelect = onSelect?.let {
-                            {
-                                onSelect(item)
-                            }
-                        }
-                    )
+        content = {
+            Scroller(
+                position = scrollPosition,
+                direction = scrollDirection,
+                enabled = scrollingEnabled
+            ) {
+                Column {
+                    listContent.invokeAsComposable()
                 }
             }
         },
         positiveButton = positiveButton,
         negativeButton = negativeButton,
         neutralButton = neutralButton
-    )
-}
-
-@Composable
-private fun SingleChoiceDialogListItem(
-    selected: Boolean,
-    onSelect: (() -> Unit)? = null,
-    title: @Composable() () -> Unit
-) = composable {
-    SimpleDialogListItem(
-        leading = {
-            AbsorbPointer {
-                RadioButton(
-                    selected = selected,
-                    onSelect = {}
-                )
-            }
-        },
-        title = title,
-        onClick = onSelect
     )
 }

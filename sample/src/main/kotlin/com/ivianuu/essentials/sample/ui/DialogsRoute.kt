@@ -32,9 +32,9 @@ import com.ivianuu.essentials.ui.compose.dialog.AlertDialogButtonLayout
 import com.ivianuu.essentials.ui.compose.dialog.ColorPickerDialog
 import com.ivianuu.essentials.ui.compose.dialog.DialogButton
 import com.ivianuu.essentials.ui.compose.dialog.DialogCloseButton
-import com.ivianuu.essentials.ui.compose.dialog.ListDialog
 import com.ivianuu.essentials.ui.compose.dialog.MaterialDialog
 import com.ivianuu.essentials.ui.compose.dialog.MultiChoiceListDialog
+import com.ivianuu.essentials.ui.compose.dialog.ScrollableDialog
 import com.ivianuu.essentials.ui.compose.dialog.SingleChoiceListDialog
 import com.ivianuu.essentials.ui.compose.dialog.TextInputDialog
 import com.ivianuu.essentials.ui.compose.dialog.dialogRoute
@@ -215,7 +215,7 @@ val dialogsRoute = composeControllerRoute(
                     DialogLauncherButton(
                         text = "List"
                     ) {
-                        ListDialog(
+                        ScrollableDialog(
                             title = { Text("List") },
                             listContent = {
                                 (1..100).forEach {

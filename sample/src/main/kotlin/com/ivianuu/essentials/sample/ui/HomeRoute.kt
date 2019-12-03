@@ -77,7 +77,7 @@ val homeRoute = composeControllerRoute {
             val items = remember { HomeItem.values().toList().sortedBy { it.name } }
             ScrollableList(
                 items = items,
-                itemSizeProvider = { if (it != items.lastIndex) 57.dp else 56.dp }
+                itemSizeProvider = { index, _ -> if (index != items.lastIndex) 57.dp else 56.dp }
             ) { index, item ->
                 staticComposableWithKey(item) {
                     Column {
