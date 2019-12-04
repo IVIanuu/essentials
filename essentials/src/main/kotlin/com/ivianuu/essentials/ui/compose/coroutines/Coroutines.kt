@@ -106,9 +106,13 @@ fun launchOnCommit(
 
 @BuilderInference
 @Composable
-fun <T> load(block: suspend CoroutineScope.() -> T) = effect {
+fun <T> load(
+    key: Any,
+    block: suspend CoroutineScope.() -> T
+) = effect {
     load(
         placeholder = null,
+        key = key,
         block = block
     )
 }
@@ -116,10 +120,11 @@ fun <T> load(block: suspend CoroutineScope.() -> T) = effect {
 @Composable
 fun <T> load(
     placeholder: T,
+    key: Any,
     block: suspend CoroutineScope.() -> T
 ): T = effect {
-    val state = stateFor(block) { placeholder }
-    launchOnCommit(block) { state.value = block() }
+    val state = stateFor(key) { placeholder }
+    launchOnCommit(key) { state.value = block() }
     return@effect state.value
 }
 

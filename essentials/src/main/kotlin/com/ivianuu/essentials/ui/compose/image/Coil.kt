@@ -28,18 +28,23 @@ import com.ivianuu.essentials.ui.compose.coroutines.load
 import com.ivianuu.essentials.ui.compose.injekt.inject
 
 @Composable
-fun loadCoilImageAny(
-    placeholder: Image,
+fun loadCoilImage(
+    data: Any,
+    placeholder: Image
+): Image = effect { loadCoilImage(data) ?: placeholder }
+
+@Composable
+fun loadCoilImage(
     data: Any
-): Image = effect {
+): Image? = effect {
     val imageLoader = inject<ImageLoader>()
-    return@effect load(placeholder = placeholder) {
-        return@load imageLoader.getAny(data).toImage()
+    return@effect load(placeholder = null, key = data) {
+        imageLoader.getAny(data).toImage()
     }
 }
 
 @Composable
-fun CoilImageAny(
+fun CoilImage(
     data: Any,
     placeholder: Image? = null,
     image: @Composable() (Image) -> Unit
@@ -47,7 +52,7 @@ fun CoilImageAny(
     val wasPlaceholderNull = placeholder == null
     // todo better default placeholder
     val placeholder = remember(placeholder) { placeholder ?: Image(1, 1) }
-    val loadedImage = loadCoilImageAny(
+    val loadedImage = loadCoilImage(
         placeholder = placeholder,
         data = data
     )

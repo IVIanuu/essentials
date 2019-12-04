@@ -29,7 +29,7 @@ import com.ivianuu.essentials.ui.compose.common.scrolling.ScrollableList
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.staticComposableWithKey
 import com.ivianuu.essentials.ui.compose.es.composeControllerRoute
-import com.ivianuu.essentials.ui.compose.image.CoilImageAny
+import com.ivianuu.essentials.ui.compose.image.CoilImage
 import com.ivianuu.essentials.ui.compose.material.AvatarIconStyle
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
 import com.ivianuu.essentials.ui.compose.material.Icon
@@ -95,7 +95,7 @@ private fun AppInfo(
     SimpleListItem(
         title = { Text(app.appName) },
         leading = {
-            CoilImageAny(data = AppIcon(app.packageName)) {
+            CoilImage(data = AppIcon(app.packageName)) {
                 Icon(image = it, style = AvatarIconStyle())
             }
         },
