@@ -29,6 +29,7 @@ import androidx.ui.core.toPx
 import androidx.ui.foundation.shape.RectangleShape
 import androidx.ui.layout.Container
 import com.ivianuu.essentials.ui.compose.core.Axis
+import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.remember
 import com.ivianuu.essentials.ui.compose.layout.SingleChildLayout
 
@@ -38,7 +39,7 @@ fun Scroller(
     direction: Axis = Axis.Vertical,
     enabled: Boolean = true,
     child: @Composable() () -> Unit
-) {
+) = composable {
     Scrollable(
         position = position,
         direction = direction,
@@ -57,7 +58,7 @@ private fun ScrollerLayout(
     position: ScrollPosition,
     direction: Axis,
     child: @Composable() () -> Unit
-) {
+) = composable {
     SingleChildLayout(child = {
         Clip(RectangleShape) {
             Container(alignment = Alignment.TopLeft) {
