@@ -41,6 +41,7 @@ import androidx.ui.core.round
 import androidx.ui.core.toPx
 import androidx.ui.layout.Gravity
 import androidx.ui.layout.LayoutScopeMarker
+import com.ivianuu.essentials.ui.compose.core.composable
 
 /**
  * Collects information about the children of a [FlexColumn] or [FlexColumn]
@@ -112,7 +113,7 @@ fun FlexRow(
     crossAxisAlignment: CrossAxisAlignment = CrossAxisAlignment.Start,
     crossAxisSize: LayoutSize = LayoutSize.Wrap,
     block: FlexChildren.() -> Unit
-) {
+) = composable {
     Flex(
         orientation = LayoutOrientation.Horizontal,
         mainAxisAlignment = mainAxisAlignment,
@@ -153,7 +154,7 @@ fun FlexColumn(
     crossAxisAlignment: CrossAxisAlignment = CrossAxisAlignment.Start,
     crossAxisSize: LayoutSize = LayoutSize.Wrap,
     block: FlexChildren.() -> Unit
-) {
+) = composable {
     Flex(
         orientation = LayoutOrientation.Vertical,
         mainAxisAlignment = mainAxisAlignment,
@@ -324,7 +325,7 @@ fun Row(
     mainAxisAlignment: MainAxisAlignment = MainAxisAlignment.Start,
     crossAxisAlignment: CrossAxisAlignment = CrossAxisAlignment.Start,
     children: @Composable() RowScope.() -> Unit
-) {
+) = composable {
     FlexLayout(
         orientation = LayoutOrientation.Horizontal,
         modifier = modifier,
@@ -357,7 +358,7 @@ fun Column(
     mainAxisAlignment: MainAxisAlignment = MainAxisAlignment.Start,
     crossAxisAlignment: CrossAxisAlignment = CrossAxisAlignment.Start,
     children: @Composable() ColumnScope.() -> Unit
-) {
+) = composable {
     FlexLayout(
         orientation = LayoutOrientation.Vertical,
         modifier = modifier,
