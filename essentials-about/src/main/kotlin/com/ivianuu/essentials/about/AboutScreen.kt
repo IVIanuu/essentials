@@ -17,14 +17,12 @@
 package com.ivianuu.essentials.about
 
 import androidx.compose.Composable
+import com.ivianuu.essentials.ui.compose.common.ListScreen
 import com.ivianuu.essentials.ui.compose.common.openUrlOnClick
-import com.ivianuu.essentials.ui.compose.common.scrolling.ScrollableList
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.staticComposableWithKey
 import com.ivianuu.essentials.ui.compose.es.composeControllerRoute
 import com.ivianuu.essentials.ui.compose.injekt.inject
-import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
-import com.ivianuu.essentials.ui.compose.material.Scaffold
 import com.ivianuu.essentials.ui.compose.material.SimpleListItem
 import com.ivianuu.essentials.ui.compose.material.Subheader
 import com.ivianuu.essentials.ui.compose.resources.stringResource
@@ -37,18 +35,13 @@ fun aboutRoute(
 ) = composeControllerRoute(
     options = defaultControllerRouteOptionsOrNull()
 ) {
-    Scaffold(
-        topAppBar = { EsTopAppBar(stringResource(R.string.about_title)) },
-        body = {
-            ScrollableList {
-                AboutSection(
-                    hasDebugPackageName = hasDebugPackageName,
-                    showHeader = false,
-                    privacyPolicyUrl = privacyPolicyUrl
-                )
-            }
-        }
-    )
+    ListScreen(title = stringResource(R.string.about_title)) {
+        AboutSection(
+            hasDebugPackageName = hasDebugPackageName,
+            showHeader = false,
+            privacyPolicyUrl = privacyPolicyUrl
+        )
+    }
 }
 
 @Composable
