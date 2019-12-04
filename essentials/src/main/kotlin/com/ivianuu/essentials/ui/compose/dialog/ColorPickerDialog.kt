@@ -68,7 +68,7 @@ fun colorPickerRoute(
     initialColor: Color,
     allowCustomArgb: Boolean = true,
     showAlphaSelector: Boolean = false,
-    title: (@Composable() () -> Unit)? = { Text(stringResource(R.string.es_dialog_title_color_picker)) }
+    title: String? = null
 ) = dialogRoute {
     val navigator = inject<Navigator>()
     ColorPickerDialog(
@@ -76,7 +76,9 @@ fun colorPickerRoute(
         onColorSelected = { navigator.pop(it) },
         allowCustomArgb = allowCustomArgb,
         showAlphaSelector = showAlphaSelector,
-        title = title
+        title = {
+            Text(title ?: stringResource(R.string.es_dialog_title_color_picker))
+        }
     )
 }
 
