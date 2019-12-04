@@ -30,7 +30,7 @@ import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.composableWithKey
 import com.ivianuu.essentials.ui.compose.core.onActive
 import com.ivianuu.essentials.ui.compose.core.staticComposable
-import com.ivianuu.essentials.ui.compose.image.CoilImage
+import com.ivianuu.essentials.ui.compose.image.Image
 import com.ivianuu.essentials.ui.compose.material.AvatarIconStyle
 import com.ivianuu.essentials.ui.compose.material.EsCheckbox
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
@@ -132,7 +132,7 @@ private fun CheckableApp(
     SimpleListItem(
         title = { Text(app.info.appName) },
         leading = {
-            CoilImage(data = AppIcon(app.info.packageName)) {
+            Image(data = AppIcon(app.info.packageName)) {
                 Icon(image = it, style = AvatarIconStyle())
             }
         },
