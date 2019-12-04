@@ -20,6 +20,7 @@ import androidx.ui.core.Text
 import androidx.ui.layout.Center
 import androidx.ui.material.MaterialTheme
 import com.ivianuu.essentials.ui.compose.core.invoke
+import com.ivianuu.essentials.ui.compose.core.remember
 import com.ivianuu.essentials.ui.compose.coroutines.collect
 import com.ivianuu.essentials.ui.compose.es.composeControllerRoute
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
@@ -36,7 +37,7 @@ val timerRoute = composeControllerRoute(
         topAppBar = { EsTopAppBar(title = "Timer") },
         body = {
             Center {
-                val value = collect(timerFlow())
+                val value = collect(remember { timerFlow() })
 
                 Text(
                     text = "Value: $value",
