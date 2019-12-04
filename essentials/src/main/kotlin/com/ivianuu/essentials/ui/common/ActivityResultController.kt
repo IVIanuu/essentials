@@ -66,5 +66,4 @@ internal class ActivityResultController(@Param private val intent: Intent) : EsC
         inflater: LayoutInflater,
         container: ViewGroup
     ): View = View(requireActivity()) // dummy
-
 }

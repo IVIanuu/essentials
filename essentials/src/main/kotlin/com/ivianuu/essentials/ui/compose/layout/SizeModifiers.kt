@@ -85,7 +85,6 @@ private sealed class SizeModifier : LayoutModifier {
             measurable.maxIntrinsicWidth(height).also {
                 if (value != Dp.Infinity) it.coerceAtMost(value.toIntPx())
             }
-
     }
 
     class MinWidth(private val value: Dp) : SizeModifier() {
@@ -175,7 +174,6 @@ private sealed class SizeModifier : LayoutModifier {
             measurable.maxIntrinsicHeight(width).also {
                 if (value != Dp.Infinity) it.coerceAtLeast(value.toIntPx())
             }
-
     }
 
     abstract override fun DensityScope.modifyConstraints(constraints: Constraints): Constraints

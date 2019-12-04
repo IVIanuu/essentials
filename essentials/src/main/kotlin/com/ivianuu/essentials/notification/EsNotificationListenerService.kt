@@ -53,5 +53,4 @@ abstract class EsNotificationListenerService : NotificationListenerService(), In
     }
 
     protected open fun modules(): List<Module> = emptyList()
-
 }

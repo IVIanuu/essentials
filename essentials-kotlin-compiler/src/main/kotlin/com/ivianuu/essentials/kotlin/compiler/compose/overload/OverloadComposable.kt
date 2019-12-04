@@ -51,7 +51,7 @@ fun FunctionDescriptor.getOverloadComposableFileName(): String {
     val name = if (name.asString().startsWith("_")) {
         name.asString().removePrefix("_")
     } else name.asString()
-    return "$name\$OverloadComposable\$${paramsHash}"
+    return "$name\$OverloadComposable\$$paramsHash"
 }
 
 fun generateOverloadComposable(
@@ -77,7 +77,7 @@ fun generateOverloadComposable(
     } else descriptor.name.asString()
 
     val imports = ktFile.importDirectives.groupBy {
-        check(it.alias == null) { "Not supported yet" }// todo support
+        check(it.alias == null) { "Not supported yet" } // todo support
         it.importPath!!.fqName.parent().asString()
     }.mapValues {
         it.value.map { it.importPath!!.fqName.shortName().asString() }.toTypedArray()
@@ -142,8 +142,8 @@ fun generateOverloadComposable(
                     return@forEach
                 }
 
-                if (parameter.returnType != parameter.builtIns.getFunction(0)
-                    && !parameter.returnType!!.annotations.hasAnnotation(ComposableAnnotation)
+                if (parameter.returnType != parameter.builtIns.getFunction(0) &&
+                    !parameter.returnType!!.annotations.hasAnnotation(ComposableAnnotation)
                 ) {
                     report(
                         parameter,

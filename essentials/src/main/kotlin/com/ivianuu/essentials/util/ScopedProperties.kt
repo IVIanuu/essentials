@@ -48,7 +48,6 @@ class Properties {
     }
 
     override fun hashCode(): Int = properties.hashCode()
-
 }
 
 val Properties.size: Int get() = entries.size

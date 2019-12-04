@@ -37,7 +37,9 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
 
 class AndroidComposeViewContainer @JvmOverloads constructor(
-    context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr) {
 
     // todo use @Model once available
@@ -144,5 +146,4 @@ class AndroidComposeViewContainer @JvmOverloads constructor(
         val viewPadding: EdgeInsets = EdgeInsets(),
         val viewInsets: EdgeInsets = EdgeInsets()
     )
-
 }

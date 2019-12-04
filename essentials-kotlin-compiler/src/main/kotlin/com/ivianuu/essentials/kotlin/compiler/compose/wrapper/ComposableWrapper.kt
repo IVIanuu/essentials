@@ -42,7 +42,7 @@ import kotlin.math.absoluteValue
 fun FunctionDescriptor.getComposableWrapperFileName(): String {
     val paramsHash = ((dispatchReceiverParameter?.type?.hashCode() ?: 0) +
             valueParameters.map { it.name.asString() + it.type.toString() }.hashCode()).absoluteValue
-    return "${name.asString()}\$ComposableWrapper\$${paramsHash}"
+    return "${name.asString()}\$ComposableWrapper\$$paramsHash"
 }
 
 fun generateComposableWrapper(
@@ -60,7 +60,7 @@ fun generateComposableWrapper(
     val fileName = descriptor.getComposableWrapperFileName()
 
     val imports = ktFile.importDirectives.groupBy {
-        check(it.alias == null) { "Not supported yet" }// todo support
+        check(it.alias == null) { "Not supported yet" } // todo support
         it.importPath!!.fqName.parent().asString()
     }.mapValues {
         it.value.map { it.importPath!!.fqName.shortName().asString() }.toTypedArray()
@@ -178,5 +178,4 @@ fun generateComposableWrapper(
         }
         .build()
         .writeTo(outputDir)
-
 }

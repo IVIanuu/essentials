@@ -34,5 +34,4 @@ abstract class AccessibilityComponent {
     open fun onServiceDisconnected() {
         service = null
     }
-
 }

@@ -44,5 +44,4 @@ internal class ScreenStateProvider(
             .map { isScreenOn }
             .onStart { emit(isScreenOn) }
     }
-
 }

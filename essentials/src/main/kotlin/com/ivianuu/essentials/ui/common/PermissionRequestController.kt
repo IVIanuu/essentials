@@ -83,5 +83,4 @@ internal class PermissionRequestController(@Param private val permissions: Set<S
         inflater: LayoutInflater,
         container: ViewGroup
     ): View = View(requireActivity()) // dummy
-
 }

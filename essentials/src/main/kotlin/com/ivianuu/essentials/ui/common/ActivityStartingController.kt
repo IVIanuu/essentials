@@ -77,5 +77,4 @@ internal class ActivityStartingController(
         inflater: LayoutInflater,
         container: ViewGroup
     ) = View(requireActivity()) // dummy
-
 }

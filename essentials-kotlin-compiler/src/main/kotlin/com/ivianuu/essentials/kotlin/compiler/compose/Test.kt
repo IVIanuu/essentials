@@ -116,7 +116,6 @@ fun test(
             }
         )
     } catch (e: Escape) {
-
     }
 
     return if (transform != null) {

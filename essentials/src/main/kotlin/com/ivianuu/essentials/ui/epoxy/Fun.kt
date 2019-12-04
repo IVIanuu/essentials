@@ -90,7 +90,6 @@ class FunModelBuilder internal constructor() {
         id, viewType, state,
         buildView, unbindActions, bindActions
     )
-
 }
 
 class FunModel internal constructor(
@@ -131,5 +130,4 @@ class FunModel internal constructor(
         result = 31 * result + state.hashCode()
         return result
     }
-
 }

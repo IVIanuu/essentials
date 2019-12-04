@@ -120,7 +120,6 @@ class ComposeAnalysisHandlerExtension(
             componentProvider
         )
     }
-
 }
 
 fun KtFile.withNewSource(newSource: String): KtFile {
@@ -141,4 +140,3 @@ class MetaFileViewProvider(
 ) : SingleRootFileViewProvider(psiManager, virtualFile) {
     override fun getDocument(): Document? = transformation(super.getDocument())
 }
-

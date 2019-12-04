@@ -46,7 +46,6 @@ class InjektWorkerFactory(
         return workers[workerClassName]?.invoke { parametersOf(appContext, workerParameters) }
             ?: error("Could not find a worker for $workerClassName")
     }
-
 }
 
 /**

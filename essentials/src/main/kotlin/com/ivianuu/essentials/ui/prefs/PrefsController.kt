@@ -70,5 +70,4 @@ abstract class PrefsController : ListController() {
     ) {
         navigateOnClick { urlRoute(urlProvider()) }
     }
-
 }

@@ -29,5 +29,4 @@ class GlobalActions : AccessibilityComponent() {
 
     fun performAction(action: Int): Boolean =
         service?.performGlobalAction(action) ?: false
-
 }

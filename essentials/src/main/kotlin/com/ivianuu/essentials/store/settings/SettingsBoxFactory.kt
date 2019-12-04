@@ -42,7 +42,6 @@ class SettingsBoxFactory(
         contentResolver = context.contentResolver,
         dispatcher = dispatchers.io
     )
-
 }
 
 fun SettingsBoxFactory.float(

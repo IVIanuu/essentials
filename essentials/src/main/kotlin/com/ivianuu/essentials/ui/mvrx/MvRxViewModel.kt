@@ -120,5 +120,4 @@ abstract class MvRxViewModel<S>(initialState: S) : EsViewModel() {
     }
 
     override fun toString() = "${javaClass.simpleName} -> $state"
-
 }

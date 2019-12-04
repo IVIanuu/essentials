@@ -54,9 +54,7 @@ class ControllerRoute(
         fun popHandler(handler: ControllerChangeHandler?) = apply {
             popHandler = handler
         }
-
     }
-
 }
 
 inline fun <reified T : Controller> controllerRoute(
@@ -90,4 +88,3 @@ fun ControllerRoute.copy(
     options: ControllerRoute.Options? = this.options,
     factory: (ControllerRoute.Context) -> Controller = this.factory
 ) = ControllerRoute(extras, options, factory)
-

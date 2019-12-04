@@ -55,5 +55,4 @@ abstract class StateTileService<T> : EsTileService() {
         }
         qsTile.updateTile()
     }
-
 }

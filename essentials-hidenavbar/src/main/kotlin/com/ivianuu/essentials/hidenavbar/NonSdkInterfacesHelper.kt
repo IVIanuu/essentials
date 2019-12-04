@@ -54,5 +54,4 @@ internal class NonSdkInterfacesHelper(
             hiddenApiOnPieAppsSetting.set(1)
         }
     }
-
 }

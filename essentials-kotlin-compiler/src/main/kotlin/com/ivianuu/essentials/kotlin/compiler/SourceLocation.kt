@@ -65,7 +65,6 @@ private class SourceLocationClassBuilderFactory(
     }
 }
 
-
 private class SourceLocationClassBuilder(val delegateClassBuilder: ClassBuilder) :
     DelegatingClassBuilder() {
 
@@ -100,10 +99,10 @@ private class SourceLocationClassBuilder(val delegateClassBuilder: ClassBuilder)
                 descriptor: String?,
                 isInterface: Boolean
             ) {
-                if (opcode == Opcodes.INVOKESTATIC
-                    && owner == "com/ivianuu/essentials/util/SourceLocationKt"
-                    && name == "sourceLocation"
-                    && descriptor == "()Ljava/lang/Object;"
+                if (opcode == Opcodes.INVOKESTATIC &&
+                    owner == "com/ivianuu/essentials/util/SourceLocationKt" &&
+                    name == "sourceLocation" &&
+                    descriptor == "()Ljava/lang/Object;"
                 ) {
                     InstructionAdapter(this).apply {
                         aconst("${origin.descriptor!!.fqNameSafe.asString()}:$lineNumber")

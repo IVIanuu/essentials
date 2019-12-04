@@ -32,7 +32,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.IOException
-import java.util.*
+import java.util.UUID
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicReference
 import kotlin.time.measureTimedValue
@@ -226,8 +226,8 @@ private class MultiProcessHelper(
 
     private val receiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
-            if (intent.getStringExtra(EXTRA_CHANGE_OWNER) != uuid
-                && file.absolutePath == intent.getStringExtra(EXTRA_PATH)
+            if (intent.getStringExtra(EXTRA_CHANGE_OWNER) != uuid &&
+                file.absolutePath == intent.getStringExtra(EXTRA_PATH)
             ) {
                 onChange()
             }
@@ -290,5 +290,4 @@ private class MutexValue<T>(private val getter: suspend () -> T) {
 
         return deferred.await()
     }
-
 }

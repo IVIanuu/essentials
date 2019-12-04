@@ -58,5 +58,4 @@ abstract class EsTileService : TileService(), InjektTrait {
     protected open fun dependencies() = emptyList<Component>()
 
     protected open fun modules(): List<Module> = emptyList()
-
 }

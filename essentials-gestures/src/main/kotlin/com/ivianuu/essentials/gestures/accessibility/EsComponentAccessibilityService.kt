@@ -44,5 +44,4 @@ abstract class EsComponentAccessibilityService : EsAccessibilityService() {
         components.forEach { it.onServiceDisconnected() }
         super.onDestroy()
     }
-
 }

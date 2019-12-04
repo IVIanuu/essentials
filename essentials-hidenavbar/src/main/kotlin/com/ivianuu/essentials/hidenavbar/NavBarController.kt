@@ -84,8 +84,8 @@ class NavBarController internal constructor(
         // apply config
         merge(flows)
             .map {
-                !config.showWhileScreenOff
-                        || (!keyguardManager.isKeyguardLocked && screenStateProvider.isScreenOn)
+                !config.showWhileScreenOff ||
+                        (!keyguardManager.isKeyguardLocked && screenStateProvider.isScreenOn)
             }
             .onEach {
                 prefs.wasNavBarHidden.set(it)
@@ -93,7 +93,6 @@ class NavBarController internal constructor(
             }
             .flowOn(dispatchers.default)
             .launchIn(scope.coroutineScope)
-
 
         // force show on shut downs
         broadcastFactory.create(Intent.ACTION_SHUTDOWN)
@@ -160,5 +159,4 @@ class NavBarController internal constructor(
             }
         }
     }
-
 }

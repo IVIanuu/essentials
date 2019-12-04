@@ -53,6 +53,5 @@ fun <T, S> Box<T>.unwrap(
         override fun dispose() {
             wrapped.dispose()
         }
-
     }
 }

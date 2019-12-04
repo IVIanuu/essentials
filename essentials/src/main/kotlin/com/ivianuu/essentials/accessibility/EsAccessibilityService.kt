@@ -51,5 +51,4 @@ abstract class EsAccessibilityService : AccessibilityService(), InjektTrait {
     }
 
     protected open fun modules(): List<Module> = emptyList()
-
 }

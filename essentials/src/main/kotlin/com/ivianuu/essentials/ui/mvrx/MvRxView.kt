@@ -32,7 +32,6 @@ interface MvRxView : LifecycleOwner, ViewModelStoreOwner {
             HANDLER.sendMessage(Message.obtain(HANDLER, System.identityHashCode(this), this))
         }
     }
-
 }
 
 private val PENDING_INVALIDATES = mutableSetOf<Int>()

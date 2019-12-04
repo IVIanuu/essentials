@@ -31,9 +31,9 @@ fun AbsorbPointer(
     val consumedIds = remember { mutableSetOf<Int>() }
     PointerInputWrapper(
         pointerInputHandler = { changes, pass, _ ->
-            if (absorb && (pass == PointerEventPass.InitialDown
-                || pass == PointerEventPass.PreDown
-                        || pass == PointerEventPass.PostDown)
+            if (absorb && (pass == PointerEventPass.InitialDown ||
+                        pass == PointerEventPass.PreDown ||
+                        pass == PointerEventPass.PostDown)
             ) {
                 changes.map { change ->
                     if (change.changedToDown()) {

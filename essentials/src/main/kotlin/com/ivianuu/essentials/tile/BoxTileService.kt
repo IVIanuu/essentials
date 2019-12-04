@@ -30,5 +30,4 @@ abstract class BoxTileService<T> : FlowTileService<T>() {
 
     final override val flow: Flow<T>
         get() = box.asFlow()
-
 }

@@ -48,19 +48,18 @@ class SecureScreenDetector : AccessibilityComponent() {
         val packageName = event.packageName?.toString() ?: return
         val className = event.className?.toString() ?: return
 
-        //val managePermissionsActivity = "com.android.packageinstaller.permission.ui.ManagePermissionsActivity"
-        //val grantPermissionsActivity ="com.android.packageinstaller.permission.ui.GrantPermissionsActivity"
+        // val managePermissionsActivity = "com.android.packageinstaller.permission.ui.ManagePermissionsActivity"
+        // val grantPermissionsActivity ="com.android.packageinstaller.permission.ui.GrantPermissionsActivity"
 
         var isOnSecureScreen = "packageinstaller" in packageName
 
         if (!isOnSecureScreen) {
-            isOnSecureScreen = packageName == "com.android.settings"
-                    && className == "android.app.MaterialDialog"
+            isOnSecureScreen = packageName == "com.android.settings" &&
+                    className == "android.app.MaterialDialog"
         }
 
         // distinct
         d { "on secure screen changed: $isOnSecureScreen" }
         _isOnSecureScreen.offer(isOnSecureScreen)
     }
-
 }

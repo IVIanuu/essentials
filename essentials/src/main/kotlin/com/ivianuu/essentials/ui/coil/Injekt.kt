@@ -152,7 +152,6 @@ inline fun <reified M : Mapper<T, *>, reified T : Any> BindingContext<M>.bindMap
     }
 }
 
-
 @Name
 annotation class MeasuredMappers {
     companion object
