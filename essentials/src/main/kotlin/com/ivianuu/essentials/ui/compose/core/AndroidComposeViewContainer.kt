@@ -31,10 +31,8 @@ import androidx.ui.core.dp
 import androidx.ui.core.ipx
 import androidx.ui.core.withDensity
 import androidx.ui.layout.EdgeInsets
+import com.ivianuu.essentials.ui.compose.common.framed
 import com.ivianuu.essentials.util.containsFlag
-import kotlinx.coroutines.channels.ConflatedBroadcastChannel
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.asFlow
 
 class AndroidComposeViewContainer @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
@@ -42,8 +40,8 @@ class AndroidComposeViewContainer @JvmOverloads constructor(
 
     // todo use @Model once available
 
-    val viewportMetrics: Flow<ViewportMetrics> get() = _viewportMetrics.asFlow()
-    private val _viewportMetrics = ConflatedBroadcastChannel(ViewportMetrics())
+    var viewportMetrics by framed(ViewportMetrics())
+        private set
 
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
@@ -53,12 +51,12 @@ class AndroidComposeViewContainer @JvmOverloads constructor(
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
         withDensity(Density(context)) {
-            val viewportMetrics = _viewportMetrics.value.copy(
+            val newViewportMetrics = viewportMetrics.copy(
                 size = Size(w.ipx.toDp(), h.ipx.toDp())
             )
 
-            if (_viewportMetrics.value != viewportMetrics) {
-                _viewportMetrics.offer(viewportMetrics)
+            if (newViewportMetrics != viewportMetrics) {
+                viewportMetrics = newViewportMetrics
             }
         }
     }
@@ -88,13 +86,13 @@ class AndroidComposeViewContainer @JvmOverloads constructor(
                 bottom = if (navigationBarHidden) calculateBottomKeyboardInset(insets).ipx.toDp() else insets.systemWindowInsetBottom.ipx.toDp()
             )
 
-            val viewportMetrics = _viewportMetrics.value.copy(
+            val newViewportMetrics = viewportMetrics.copy(
                 viewPadding = viewPadding,
                 viewInsets = viewInsets
             )
 
-            if (_viewportMetrics.value != viewportMetrics) {
-                _viewportMetrics.offer(viewportMetrics)
+            if (newViewportMetrics != viewportMetrics) {
+                viewportMetrics = newViewportMetrics
             }
         }
 
