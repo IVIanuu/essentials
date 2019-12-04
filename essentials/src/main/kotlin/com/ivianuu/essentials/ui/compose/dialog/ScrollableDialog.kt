@@ -41,8 +41,8 @@ fun ScrollableDialog(
     MaterialDialog(
         icon = icon,
         title = title,
-        //showTopDivider = scrollPosition.value > scrollPosition.minValue,
-        //showBottomDivider = scrollPosition.value < scrollPosition.maxValue,
+        // showTopDivider = scrollPosition.value > scrollPosition.minValue,
+        // showBottomDivider = scrollPosition.value < scrollPosition.maxValue,
         applyContentPadding = false,
         buttonLayout = buttonLayout,
         content = {
