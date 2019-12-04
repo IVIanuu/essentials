@@ -37,7 +37,7 @@ fun <T> unfoldBox(box: Box<T>): BoxWrapper<T> = effect {
 
         return@remember BoxWrapper(value = box.defaultValue, setter = setter)
     }
-    wrapper._internalValue = collect(box.asFlow(), box.defaultValue)
+    wrapper._internalValue = collect(remember { box.asFlow() }, box.defaultValue)
     return@effect wrapper
 }
 
