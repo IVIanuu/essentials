@@ -24,5 +24,6 @@ import androidx.work.WorkerParameters
  * Base worker
  */
 abstract class EsWorker(
-    context: Context, workerParams: WorkerParameters
+    context: Context,
+    workerParams: WorkerParameters
 ) : CoroutineWorker(context, workerParams)

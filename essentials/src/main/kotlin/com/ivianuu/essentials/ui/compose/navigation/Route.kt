@@ -32,7 +32,6 @@ open class Route(
             content.invokeAsComposable()
         }
     }
-
 }
 
 val RouteAmbient = Ambient.of<Route>()

@@ -34,7 +34,6 @@ class Shell(private val dispatchers: AppDispatchers) {
     suspend fun isAvailable(): Boolean = withContext(dispatchers.io) {
         SU.available()
     }
-
 }
 
 suspend fun Shell.run(command: String): List<String> = run(command)

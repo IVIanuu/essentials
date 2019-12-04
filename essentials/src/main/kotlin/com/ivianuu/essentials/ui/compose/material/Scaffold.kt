@@ -69,7 +69,6 @@ fun Scaffold(
         )
     }
 
-
     EsSurface {
         ScaffoldAmbient.Provider(value = scaffold) {
             Expand {
@@ -128,7 +127,6 @@ class Scaffold internal constructor(_drawerState: State<DrawerState>) {
     enum class FabPosition {
         Center, End
     }
-
 }
 
 @Composable

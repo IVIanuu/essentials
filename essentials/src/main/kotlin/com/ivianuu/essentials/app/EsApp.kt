@@ -89,5 +89,4 @@ abstract class EsApp : Application(), InjektTrait {
     protected open fun shouldStartAppService(type: KClass<out AppService>): Boolean = true
 
     protected open fun modules(): List<Module> = emptyList()
-
 }

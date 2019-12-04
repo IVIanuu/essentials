@@ -32,7 +32,7 @@ import com.ivianuu.injekt.InjektTrait
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.inject
 import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.*
+import kotlinx.android.synthetic.clearFindViewByIdCache
 
 /**
  * Base controller
@@ -95,5 +95,4 @@ abstract class EsController : Controller(), InjektTrait, LayoutContainer, MvRxVi
 
     protected open fun onViewCreated(view: View) {
     }
-
 }

@@ -55,5 +55,4 @@ abstract class ListController : ToolbarController() {
     protected abstract fun epoxyController(): EpoxyController
 
     protected open fun layoutManager(): RecyclerView.LayoutManager? = null
-
 }

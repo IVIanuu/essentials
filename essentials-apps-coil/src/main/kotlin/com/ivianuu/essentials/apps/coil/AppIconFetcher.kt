@@ -47,5 +47,4 @@ internal class AppIconFetcher(
         val drawable = packageManager.getApplicationIcon(data.packageName)
         return@withContext DrawableResult(drawable, false, DataSource.NETWORK)
     }
-
 }

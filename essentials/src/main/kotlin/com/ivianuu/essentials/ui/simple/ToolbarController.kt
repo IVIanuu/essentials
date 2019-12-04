@@ -126,5 +126,4 @@ abstract class ToolbarController : CoordinatorController() {
         val onCancel: (() -> Unit)? = null,
         val item: @Composable() (T) -> Unit
     )
-
 }

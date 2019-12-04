@@ -73,5 +73,4 @@ class ControllerRenderer(
             oldDirectorBackStack.size <= newDirectorBackStack.size
         )
     }
-
 }

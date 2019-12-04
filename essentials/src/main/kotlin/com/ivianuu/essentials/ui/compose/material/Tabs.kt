@@ -173,5 +173,4 @@ private class TabPagerState<T> {
             tabController.selectedIndex = position.current
         }
     }
-
 }

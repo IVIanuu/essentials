@@ -46,7 +46,6 @@ val PrimaryColors = listOf(
     Color("#AD1457"),
     Color("#880E4F"),
 
-
     Color("#9C27B0"),
     Color("#F3E5F5"),
     Color("#E1BEE7"),
@@ -58,7 +57,6 @@ val PrimaryColors = listOf(
     Color("#7B1FA2"),
     Color("#6A1B9A"),
     Color("#4A148C"),
-
 
     Color("#673AB7"),
     Color("#EDE7F6"),
@@ -72,7 +70,6 @@ val PrimaryColors = listOf(
     Color("#4527A0"),
     Color("#311B92"),
 
-
     Color("#3F51B5"),
     Color("#E8EAF6"),
     Color("#C5CAE9"),
@@ -84,7 +81,6 @@ val PrimaryColors = listOf(
     Color("#303F9F"),
     Color("#283593"),
     Color("#1A237E"),
-
 
     Color("#2196F3"),
     Color("#E3F2FD"),
@@ -98,7 +94,6 @@ val PrimaryColors = listOf(
     Color("#1565C0"),
     Color("#0D47A1"),
 
-
     Color("#03A9F4"),
     Color("#E1F5FE"),
     Color("#B3E5FC"),
@@ -110,7 +105,6 @@ val PrimaryColors = listOf(
     Color("#0288D1"),
     Color("#0277BD"),
     Color("#01579B"),
-
 
     Color("#00BCD4"),
     Color("#E0F7FA"),
@@ -124,7 +118,6 @@ val PrimaryColors = listOf(
     Color("#00838F"),
     Color("#006064"),
 
-
     Color("#009688"),
     Color("#E0F2F1"),
     Color("#B2DFDB"),
@@ -136,7 +129,6 @@ val PrimaryColors = listOf(
     Color("#00796B"),
     Color("#00695C"),
     Color("#004D40"),
-
 
     Color("#4CAF50"),
     Color("#E8F5E9"),
@@ -162,7 +154,6 @@ val PrimaryColors = listOf(
     Color("#558B2F"),
     Color("#33691E"),
 
-
     Color("#CDDC39"),
     Color("#F9FBE7"),
     Color("#F0F4C3"),
@@ -174,7 +165,6 @@ val PrimaryColors = listOf(
     Color("#AFB42B"),
     Color("#9E9D24"),
     Color("#827717"),
-
 
     Color("#FFEB3B"),
     Color("#FFFDE7"),
@@ -188,7 +178,6 @@ val PrimaryColors = listOf(
     Color("#F9A825"),
     Color("#F57F17"),
 
-
     Color("#FFC107"),
     Color("#FFF8E1"),
     Color("#FFECB3"),
@@ -200,7 +189,6 @@ val PrimaryColors = listOf(
     Color("#FFA000"),
     Color("#FF8F00"),
     Color("#FF6F00"),
-
 
     Color("#FF9800"),
     Color("#FFF3E0"),
@@ -214,7 +202,6 @@ val PrimaryColors = listOf(
     Color("#EF6C00"),
     Color("#E65100"),
 
-
     Color("#FF5722"),
     Color("#FBE9E7"),
     Color("#FFCCBC"),
@@ -226,7 +213,6 @@ val PrimaryColors = listOf(
     Color("#E64A19"),
     Color("#D84315"),
     Color("#BF360C"),
-
 
     Color("#795548"),
     Color("#EFEBE9"),
@@ -240,7 +226,6 @@ val PrimaryColors = listOf(
     Color("#4E342E"),
     Color("#3E2723"),
 
-
     Color("#9E9E9E"),
     Color("#FAFAFA"),
     Color("#F5F5F5"),
@@ -252,7 +237,6 @@ val PrimaryColors = listOf(
     Color("#616161"),
     Color("#424242"),
     Color("#212121"),
-
 
     Color("#607D8B"),
     Color("#ECEFF1"),

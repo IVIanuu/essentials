@@ -112,7 +112,6 @@ inline fun <T, V1, V2> stateFor(
 inline fun <T> stateFor(vararg inputs: Any?, noinline init: () -> T) =
     androidx.compose.stateFor(inputs = *inputs, init = init)()
 
-
 inline fun <T> model(noinline init: () -> T) = androidx.compose.model(init = init)()
 
 inline fun <T, V1> modelFor(

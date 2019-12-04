@@ -237,7 +237,6 @@ private class ScrollableListState(val position: ScrollPosition) {
             itemRange = newItemRange
         }
     }
-
 }
 
 private val emptyItemRange = -2..-1

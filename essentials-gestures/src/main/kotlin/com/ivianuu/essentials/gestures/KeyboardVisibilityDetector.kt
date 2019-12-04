@@ -83,5 +83,4 @@ class KeyboardVisibilityDetector(
     private companion object {
         private var getInputMethodWindowVisibleHeightMethod: Method? = null
     }
-
 }

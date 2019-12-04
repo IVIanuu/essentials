@@ -56,5 +56,4 @@ class BroadcastFactory(private val context: Context) {
             }
         }
     }
-
 }

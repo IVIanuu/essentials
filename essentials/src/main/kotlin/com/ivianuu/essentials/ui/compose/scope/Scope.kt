@@ -18,8 +18,8 @@ package com.ivianuu.essentials.ui.compose.scope
 
 import androidx.compose.Composable
 import com.ivianuu.essentials.ui.compose.core.effect
-import com.ivianuu.essentials.ui.compose.core.remember
 import com.ivianuu.essentials.ui.compose.core.onDispose
+import com.ivianuu.essentials.ui.compose.core.remember
 import com.ivianuu.scopes.MutableScope
 import com.ivianuu.scopes.Scope
 

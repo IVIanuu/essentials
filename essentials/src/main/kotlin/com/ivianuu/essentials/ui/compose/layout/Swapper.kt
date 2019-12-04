@@ -74,5 +74,4 @@ class SwapperController<T>(
 
     val keepStateItems: List<T> get() = _keepStateItems
     private val _keepStateItems = modelListOf<T>()
-
 }

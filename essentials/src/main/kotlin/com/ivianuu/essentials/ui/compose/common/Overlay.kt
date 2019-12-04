@@ -27,7 +27,7 @@ import androidx.ui.core.tightMax
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.composableWithKey
 import com.ivianuu.essentials.ui.compose.core.invokeAsComposable
-import java.util.*
+import java.util.UUID
 
 class Overlay(initialEntries: List<OverlayEntry> = emptyList()) {
 

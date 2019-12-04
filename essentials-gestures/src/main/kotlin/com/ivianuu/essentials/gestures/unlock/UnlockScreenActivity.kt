@@ -64,7 +64,6 @@ class UnlockScreenActivity : EsActivity() {
                     super.onDismissError()
                     finishWithResult(false)
                 }
-
             })
         } else {
             window.addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD)
@@ -87,5 +86,4 @@ class UnlockScreenActivity : EsActivity() {
         screenUnlocker.screenUnlockResult(success)
         finish()
     }
-
 }

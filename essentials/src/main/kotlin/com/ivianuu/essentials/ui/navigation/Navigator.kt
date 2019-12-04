@@ -91,5 +91,4 @@ class Navigator {
         }
         channel.offer(newBackStack)
     }
-
 }

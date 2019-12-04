@@ -50,5 +50,4 @@ class TwilightController(
             }
             .launchIn(GlobalScope)
     }
-
 }

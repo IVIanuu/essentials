@@ -70,8 +70,8 @@ class RecentAppsProvider : AccessibilityComponent() {
 
         val packageName = event.packageName?.toString()
 
-        if (packageName == null
-            || packageName == "android"
+        if (packageName == null ||
+            packageName == "android"
         ) {
             return
         }

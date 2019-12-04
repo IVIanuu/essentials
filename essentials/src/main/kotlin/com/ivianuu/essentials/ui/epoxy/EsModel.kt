@@ -52,7 +52,6 @@ abstract class EsModel<H : EsHolder>(
     fun removeModelListener(listener: ModelListener) {
         listeners -= listener
     }
-
 }
 
 fun EsModel<*>.doOnBind(block: (EsModel<out EsHolder>, EsHolder) -> Unit): ModelListener =

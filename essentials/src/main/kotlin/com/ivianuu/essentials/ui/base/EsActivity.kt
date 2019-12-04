@@ -117,7 +117,6 @@ abstract class EsActivity : AppCompatActivity(), InjektTrait, MvRxView {
     }
 
     protected open fun modules(): List<Module> = emptyList()
-
 }
 
 private fun esActivityModule(esActivity: EsActivity) = module {

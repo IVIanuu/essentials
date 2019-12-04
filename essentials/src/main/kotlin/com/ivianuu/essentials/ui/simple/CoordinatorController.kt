@@ -27,5 +27,4 @@ abstract class CoordinatorController : EsController() {
 
     open val coordinatorLayout: CoordinatorLayout
         get() = es_coordinator_layout
-
 }

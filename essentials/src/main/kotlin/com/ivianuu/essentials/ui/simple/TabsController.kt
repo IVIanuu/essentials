@@ -47,5 +47,4 @@ abstract class TabsController : ToolbarController() {
     }
 
     protected abstract fun adapter(): PagerAdapter
-
 }

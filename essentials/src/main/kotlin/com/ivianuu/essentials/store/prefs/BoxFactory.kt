@@ -44,5 +44,4 @@ class PrefBoxFactory(
             dispatcher = dispatchers.io
         )
     }
-
 }

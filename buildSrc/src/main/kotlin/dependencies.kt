@@ -151,6 +151,8 @@ object Deps {
         const val coroutines = "com.ivianuu.scopes:scopes-coroutines:$version"
     }
 
+    const val spotlessGradlePlugin = "com.diffplug.spotless:spotless-plugin-gradle:3.26.1"
+
     const val superUser = "eu.chainfire:libsuperuser:1.0.0.+"
 
     const val timberKt = "com.github.ajalt:timberkt:1.5.1"

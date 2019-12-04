@@ -56,7 +56,6 @@ class ScreenStateProvider(
             ScreenState.Off
         }
     }
-
 }
 
 enum class ScreenState {

@@ -22,7 +22,6 @@ import android.os.IBinder
 import android.view.Display
 import com.github.ajalt.timberkt.d
 import com.ivianuu.injekt.Factory
-import com.ivianuu.injekt.Single
 
 /**
  * Utils to access overscan with reflection

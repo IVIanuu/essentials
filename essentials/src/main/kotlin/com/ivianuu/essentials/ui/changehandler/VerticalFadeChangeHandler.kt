@@ -48,7 +48,6 @@ class VerticalFadeChangeHandler(
     }
 
     override fun copy() = VerticalFadeChangeHandler(duration, removesFromViewOnPush)
-
 }
 
 fun ControllerRoute.Options.verticalFade(

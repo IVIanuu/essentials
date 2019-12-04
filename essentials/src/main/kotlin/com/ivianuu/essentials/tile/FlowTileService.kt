@@ -33,5 +33,4 @@ abstract class FlowTileService<T> : StateTileService<T>() {
             .onEach { setState(it) }
             .launchIn(listeningScope.coroutineScope)
     }
-
 }

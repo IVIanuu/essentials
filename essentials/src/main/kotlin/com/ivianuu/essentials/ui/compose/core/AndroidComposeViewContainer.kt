@@ -35,7 +35,9 @@ import com.ivianuu.essentials.ui.compose.common.framed
 import com.ivianuu.essentials.util.containsFlag
 
 class AndroidComposeViewContainer @JvmOverloads constructor(
-    context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr) {
 
     // todo use @Model once available
@@ -142,5 +144,4 @@ class AndroidComposeViewContainer @JvmOverloads constructor(
         val viewPadding: EdgeInsets = EdgeInsets(),
         val viewInsets: EdgeInsets = EdgeInsets()
     )
-
 }
