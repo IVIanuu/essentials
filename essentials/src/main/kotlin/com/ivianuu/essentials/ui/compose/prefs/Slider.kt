@@ -64,7 +64,7 @@ fun SliderPreference(
     }
 ) = composableWithKey("DoubleSliderPreference:$box") {
     SliderPreference(
-        box = box,
+        valueController = ValueController(box),
         onChange = onChange,
         enabled = enabled,
         dependencies = dependencies,
@@ -80,7 +80,7 @@ fun SliderPreference(
 @JvmName("DoubleSliderPreference")
 @Composable
 fun SliderPreference(
-    box: Box<Double>,
+    valueController: ValueController<Double>,
     onChange: ((Double) -> Boolean)? = null,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
@@ -92,9 +92,9 @@ fun SliderPreference(
     valueText: @Composable() ((Double) -> Unit)? = {
         SimpleSliderValueText(it)
     }
-): Unit = composableWithKey("DoubleSliderPreference:$box") {
+) {
     SliderPreference(
-        valueController = ValueController(box),
+        valueController = valueController,
         toFloat = { it.toFloat() },
         fromFloat = { it.toDouble() },
         onChange = onChange,
@@ -154,7 +154,7 @@ fun SliderPreference(
     valueText: @Composable() ((Float) -> Unit)? = {
         SimpleSliderValueText(it)
     }
-): Unit = composable {
+) = composable {
     SliderPreference(
         valueController = valueController,
         toFloat = { it },

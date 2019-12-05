@@ -102,13 +102,15 @@ fun <T> ValueController(
 
 @Composable
 fun <T> ValueController(box: Box<T>): ValueController<T> = effect {
-    val (value, setValue) = unfoldBox(box)
-    return@effect object : ValueController<T> {
-        override val currentValue: T
-            get() = value
+    val wrapper = unfoldBox(box)
+    return@effect remember {
+        object : ValueController<T> {
+            override val currentValue: T
+                get() = wrapper.value
 
-        override fun setValue(value: T) {
-            setValue(value)
+            override fun setValue(value: T) {
+                wrapper.value = value
+            }
         }
     }
 }
