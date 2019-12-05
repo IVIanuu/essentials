@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.store.prefs
 
+import android.content.Context
 import com.ivianuu.essentials.store.Box
 import com.ivianuu.essentials.store.DiskBox
 import com.ivianuu.essentials.util.AppDispatchers
@@ -27,6 +28,7 @@ import java.util.concurrent.ConcurrentHashMap
 @ApplicationScope
 @Single
 class PrefBoxFactory(
+    @ApplicationScope private val context: Context,
     private val dispatchers: AppDispatchers,
     @PrefsDir private val prefsDir: File
 ) {
@@ -42,6 +44,7 @@ class PrefBoxFactory(
         if (box?.isDisposed == true) box = null
         if (box == null) {
             box = DiskBox(
+                context = context,
                 path = "${prefsDir.absolutePath}/$name",
                 serializer = serializer,
                 defaultValue = defaultValue,
