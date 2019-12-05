@@ -107,6 +107,7 @@ internal class DiskBoxImpl<T>(
                 // force refetching the value
                 cachedValue.set(this)
             }
+            .onStart { emit(Unit) }
             .flatMapLatest {
                 changeNotifier.asFlow()
                     .onEach { d { "$path -> change notified" } }
