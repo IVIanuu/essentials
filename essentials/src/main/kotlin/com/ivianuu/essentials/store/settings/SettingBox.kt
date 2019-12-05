@@ -27,6 +27,7 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.withContext
 import java.util.concurrent.atomic.AtomicBoolean
 
@@ -117,7 +118,9 @@ class SettingBoxImpl<T>(
         }
         contentResolver.registerContentObserver(uri, false, observer)
         awaitClose { contentResolver.unregisterContentObserver(observer) }
-    }.map { get() }
+    }
+        .onStart { emit(Unit) }
+        .map { get() }
 
     override fun dispose() {
         _isDisposed.set(true)
