@@ -35,11 +35,12 @@ import com.ivianuu.essentials.ui.compose.core.remember
 import com.ivianuu.essentials.ui.compose.layout.Swapper
 import com.ivianuu.essentials.ui.compose.layout.SwapperController
 
+@Composable
 fun <T> TabController(
     items: List<T>,
     initialIndex: Int = 0,
     children: @Composable() () -> Unit
-) {
+) = composable {
     val tabController = remember { TabController(items, initialIndex) }
     tabController.items = items
     TabControllerAmbient.Provider(tabController, children)
