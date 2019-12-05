@@ -80,11 +80,11 @@ private class ObservableMediaQuery(
         darkMode = other.darkMode
     )
 
-    override var size by framed(size)
-    override var viewPadding by framed(viewPadding)
-    override var viewInsets by framed(viewInsets)
-    override var density by framed(density)
-    override var darkMode by framed(darkMode)
+    override var size by framed(size, true)
+    override var viewPadding by framed(viewPadding, true)
+    override var viewInsets by framed(viewInsets, true)
+    override var density by framed(density, true)
+    override var darkMode by framed(darkMode, true)
 
     override fun copy(
         size: Size,
@@ -107,6 +107,7 @@ private class ObservableMediaQuery(
         density = other.density
         darkMode = other.darkMode
     }
+
 }
 
 @Composable

@@ -171,7 +171,9 @@ fun ScrollableList(
 private class ScrollableListState(val position: ScrollPosition) {
 
     var count by framed(0)
-    var itemSizeProvider: (Int) -> Px by framed { index: Int -> error("") }
+    var itemSizeProvider: (Int) -> Px by framed(
+        initial = { error("") }
+    )
 
     private val items = mutableListOf<ItemInfo>()
     var itemRange by framed(emptyItemRange)

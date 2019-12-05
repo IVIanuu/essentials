@@ -61,14 +61,16 @@ class ScrollPosition(
     val isAnimating: Boolean
         get() = holder.animatedFloat.isRunning
 
-    var flingConfigFactory: (Px) -> FlingConfig by framed {
-        FlingConfig(
-            decayAnimation = ExponentialDecay(
-                frictionMultiplier = ScrollerDefaultFriction,
-                absVelocityThreshold = ScrollerVelocityThreshold
+    var flingConfigFactory: (Px) -> FlingConfig by framed(
+        initial = {
+            FlingConfig(
+                decayAnimation = ExponentialDecay(
+                    frictionMultiplier = ScrollerDefaultFriction,
+                    absVelocityThreshold = ScrollerVelocityThreshold
+                )
             )
-        )
-    }
+        }
+    )
 
     var direction by framed(ScrollDirection.Idle)
 

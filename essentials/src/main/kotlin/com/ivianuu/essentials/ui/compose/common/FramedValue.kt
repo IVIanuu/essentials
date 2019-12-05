@@ -16,7 +16,6 @@
 
 package com.ivianuu.essentials.ui.compose.common
 
-import androidx.compose.annotations.Hide
 import androidx.compose.frames.AbstractRecord
 import androidx.compose.frames.Framed
 import androidx.compose.frames.Record
@@ -27,16 +26,22 @@ import kotlin.reflect.KProperty
 
 // todo remove once we can use @Model
 
-fun <T> framed(initial: T) = FramedValue(initial)
+fun <T> framed(initial: T, distinct: Boolean = false) = FramedValue(
+    initial = initial,
+    distinct = distinct
+)
 
-class FramedValue<T>(initial: T) : Framed {
-    /* NOTE(lmr): When this module is compiled with IR, we will need to remove the below Framed implementation */
+class FramedValue<T> internal constructor(
+    initial: T,
+    private val distinct: Boolean
+) : Framed {
 
-    @Suppress("UNCHECKED_CAST")
     var value: T
         get() = next.readable(this).value
         set(value) {
-            next.writable(this).value = value
+            if (!distinct || this.value != value) {
+                next.writable(this).value = value
+            }
         }
 
     private var next: StateRecord<T> =
@@ -46,13 +51,9 @@ class FramedValue<T>(initial: T) : Framed {
         _created(this)
     }
 
-    // NOTE(lmr): ideally we can compile `State` with our own compiler so that this is not visible
-    @Hide
     override val firstFrameRecord: Record
         get() = next
 
-    // NOTE(lmr): ideally we can compile `State` with our own compiler so that this is not visible
-    @Hide
     override fun prependFrameRecord(value: Record) {
         value.next = next
         @Suppress("UNCHECKED_CAST")
