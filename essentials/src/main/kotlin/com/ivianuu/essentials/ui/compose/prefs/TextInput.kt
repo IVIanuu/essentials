@@ -23,6 +23,7 @@ import com.ivianuu.essentials.R
 import com.ivianuu.essentials.store.Box
 import com.ivianuu.essentials.ui.compose.common.asIconComposable
 import com.ivianuu.essentials.ui.compose.common.asTextComposable
+import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.composableWithKey
 import com.ivianuu.essentials.ui.compose.core.stateFor
 import com.ivianuu.essentials.ui.compose.dialog.DialogButton
@@ -45,7 +46,7 @@ fun TextInputPreference(
     allowEmpty: Boolean = true
 ) = composableWithKey("TextInputPreference:$box") {
     TextInputPreference(
-        box = box,
+        valueController = ValueController(box),
         onChange = onChange,
         enabled = enabled,
         dependencies = dependencies,
@@ -61,7 +62,7 @@ fun TextInputPreference(
 
 @Composable
 fun TextInputPreference(
-    box: Box<String>,
+    valueController: ValueController<String>,
     onChange: ((String) -> Boolean)? = null,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
@@ -72,9 +73,9 @@ fun TextInputPreference(
     dialogHint: String? = null,
     dialogKeyboardType: KeyboardType = KeyboardType.Text,
     allowEmpty: Boolean = true
-) = composableWithKey("TextInputPreference:$box") {
+) = composable {
     DialogPreference(
-        box = box,
+        valueController = valueController,
         onChange = onChange,
         enabled = enabled,
         dependencies = dependencies,

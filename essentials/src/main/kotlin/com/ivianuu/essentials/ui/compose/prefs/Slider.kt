@@ -408,12 +408,12 @@ fun <T> SimpleSliderValueText(value: T) = composable {
 fun <T> unitValueTextProvider(
     unit: UnitValueTextProvider.Unit
 ): @Composable() (T) -> Unit = effect {
-    val textProvider = UnitValueTextProvider<T>(
+    val textProvider = UnitValueTextProvider(
         ambient(ContextAmbient), unit
     )
     return@effect {
         Text(
-            text = textProvider(it),
+            text = textProvider(it.toString()),
             style = MaterialTheme.typography()().body2,
             maxLines = 1
         )

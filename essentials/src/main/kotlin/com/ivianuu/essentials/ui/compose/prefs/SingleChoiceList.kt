@@ -23,6 +23,7 @@ import com.ivianuu.essentials.R
 import com.ivianuu.essentials.store.Box
 import com.ivianuu.essentials.ui.compose.common.asIconComposable
 import com.ivianuu.essentials.ui.compose.common.asTextComposable
+import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.composableWithKey
 import com.ivianuu.essentials.ui.compose.core.stateFor
 import com.ivianuu.essentials.ui.compose.dialog.DialogButton
@@ -43,7 +44,7 @@ fun <T> SingleChoiceListPreference(
     items: List<SingleChoiceListPreference.Item<T>>
 ) = composableWithKey("SingleChoiceListPreference:$box") {
     SingleChoiceListPreference(
-        box = box,
+        valueController = ValueController(box),
         onChange = onChange,
         enabled = enabled,
         dependencies = dependencies,
@@ -57,7 +58,7 @@ fun <T> SingleChoiceListPreference(
 
 @Composable
 fun <T> SingleChoiceListPreference(
-    box: Box<T>,
+    valueController: ValueController<T>,
     onChange: ((T) -> Boolean)? = null,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
@@ -66,9 +67,9 @@ fun <T> SingleChoiceListPreference(
     leading: (@Composable() () -> Unit)? = null,
     dialogTitle: (@Composable() () -> Unit)? = title,
     items: List<SingleChoiceListPreference.Item<T>>
-) = composableWithKey("SingleChoiceListPreference:$box") {
+) = composable {
     DialogPreference(
-        box = box,
+        valueController = valueController,
         onChange = onChange,
         enabled = enabled,
         dependencies = dependencies,

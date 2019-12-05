@@ -30,7 +30,7 @@ object Build {
 object Publishing {
     const val groupId = "com.ivianuu.essentials"
     const val vcsUrl = "https://github.com/IVIanuu/essentials"
-    const val version = "${Build.versionName}-dev273"
+    const val version = "${Build.versionName}-dev275"
 }
 
 object Deps {

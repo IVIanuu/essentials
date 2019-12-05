@@ -17,41 +17,14 @@
 package com.ivianuu.essentials.ui.compose.prefs
 
 import androidx.compose.Composable
-import androidx.ui.graphics.Image
-import com.ivianuu.essentials.store.Box
-import com.ivianuu.essentials.ui.compose.common.asIconComposable
-import com.ivianuu.essentials.ui.compose.common.asTextComposable
-import com.ivianuu.essentials.ui.compose.core.composableWithKey
+import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.dialog.dialogRoute
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.navigation.Navigator
 
 @Composable
 fun <T> DialogPreference(
-    box: Box<T>,
-    onChange: ((T) -> Boolean)? = null,
-    enabled: Boolean = true,
-    dependencies: List<Dependency<*>>? = null,
-    title: String? = null,
-    summary: String? = null,
-    image: Image? = null,
-    dialog: @Composable() (PreferenceContext<T>, () -> Unit) -> Unit
-) = composableWithKey("DialogPreference:$box") {
-    DialogPreference(
-        box = box,
-        onChange = onChange,
-        enabled = enabled,
-        dependencies = dependencies,
-        dialog = dialog,
-        title = title.asTextComposable(),
-        summary = summary.asTextComposable(),
-        leading = image.asIconComposable()
-    )
-}
-
-@Composable
-fun <T> DialogPreference(
-    box: Box<T>,
+    valueController: ValueController<T>,
     onChange: ((T) -> Boolean)? = null,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
@@ -59,10 +32,10 @@ fun <T> DialogPreference(
     summary: (@Composable() () -> Unit)? = null,
     leading: (@Composable() () -> Unit)? = null,
     dialog: @Composable() (PreferenceContext<T>, () -> Unit) -> Unit
-) = composableWithKey("DialogPreference:$box") {
+) = composable {
     val navigator = inject<Navigator>()
     PreferenceWrapper(
-        box = box,
+        valueController = valueController,
         enabled = enabled,
         dependencies = dependencies,
         onChange = onChange

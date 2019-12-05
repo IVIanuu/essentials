@@ -20,27 +20,26 @@ import androidx.compose.Composable
 import androidx.ui.core.Opacity
 import androidx.ui.graphics.Image
 import com.ivianuu.essentials.store.Box
-import com.ivianuu.essentials.ui.compose.box.BoxWrapper
 import com.ivianuu.essentials.ui.compose.box.unfoldBox
 import com.ivianuu.essentials.ui.compose.common.asIconComposable
 import com.ivianuu.essentials.ui.compose.common.asTextComposable
 import com.ivianuu.essentials.ui.compose.common.framed
 import com.ivianuu.essentials.ui.compose.core.composable
-import com.ivianuu.essentials.ui.compose.core.composableWithKey
+import com.ivianuu.essentials.ui.compose.core.effect
 import com.ivianuu.essentials.ui.compose.core.remember
 import com.ivianuu.essentials.ui.compose.material.SimpleListItem
 
 @Composable
 fun <T> PreferenceWrapper(
-    box: Box<T>,
+    valueController: ValueController<T>,
     onChange: ((T) -> Boolean)? = null,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
     preference: @Composable() (PreferenceContext<T>) -> Unit
-) = composableWithKey("Preference:$box") {
+) = composable {
     Dependencies(dependencies = dependencies ?: emptyList()) { dependenciesOk ->
-        val context = remember(box) { PreferenceContext(box) }
-        context.boxWrapper = unfoldBox(box)
+        val context = remember { PreferenceContext<T>() }
+        context.valueController = valueController
         context.onChange = onChange
         context.enabled = enabled
         context.dependenciesOk = dependenciesOk
@@ -84,17 +83,38 @@ fun PreferenceLayout(
     )
 }
 
-class PreferenceContext<T>(
-    val box: Box<T>
-) {
+interface ValueController<T> {
+    var value: T
+}
 
-    internal lateinit var boxWrapper: BoxWrapper<T>
-
-    var currentValue: T
-        get() = boxWrapper.value
+fun <T> ValueController(
+    value: T,
+    onValueChange: (T) -> Unit
+) = object : ValueController<T> {
+    override var value: T
+        get() = value
         set(value) {
-            boxWrapper.value = value
+            onValueChange(value)
         }
+}
+
+@Composable
+fun <T> ValueController(box: Box<T>): ValueController<T> = effect {
+    val (value, setValue) = unfoldBox(box)
+    return@effect object : ValueController<T> {
+        override var value: T
+            get() = value
+            set(value) {
+                setValue(value)
+            }
+    }
+}
+
+class PreferenceContext<T> {
+
+    internal lateinit var valueController: ValueController<T>
+
+    val currentValue: T get() = valueController.value
 
     var onChange: ((T) -> Boolean)? by framed(null)
         internal set
@@ -106,7 +126,8 @@ class PreferenceContext<T>(
 
     fun setIfOk(newValue: T): Boolean {
         val isOk = shouldBeEnabled && onChange?.invoke(newValue) ?: true
-        if (isOk) currentValue = newValue
+        if (isOk) valueController.value = newValue
         return isOk
     }
+
 }
