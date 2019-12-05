@@ -18,9 +18,38 @@ package com.ivianuu.essentials.ui.compose.core
 
 import android.app.Activity
 import androidx.compose.Ambient
+import androidx.compose.Composable
 import com.ivianuu.essentials.ui.base.EsController
 import com.ivianuu.essentials.ui.navigation.Route
 
 val ActivityAmbient = Ambient.of<Activity> { error("No activity found") }
 val ControllerAmbient = Ambient.of<EsController> { error("No controller found") }
 val RouteAmbient = Ambient.of<Route> { error("No route found") }
+
+interface Updateable<T> {
+    fun updateFrom(other: T)
+}
+
+@Composable
+fun <T : Updateable<T>> Ambient<T>.UpdateProvider(
+    value: T,
+    children: @Composable() () -> Unit
+) = composable {
+    val finalValue = remember { value }
+    finalValue.updateFrom(value)
+    Provider(value = finalValue, children = children)
+}
+
+interface Mergeable<T> {
+    fun merge(other: T): T
+}
+
+@Composable
+fun <T : Mergeable<T>> Ambient<T>.MergeProvider(
+    value: T,
+    children: @Composable() () -> Unit
+) = composable {
+    val currentValue = ambient(this)
+    val newValue = currentValue.merge(value)
+    Provider(value = newValue, children = children)
+}

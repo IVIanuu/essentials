@@ -27,7 +27,7 @@ import com.ivianuu.essentials.ui.compose.common.framed
 // todo find a better name
 // todo add padding field
 
-interface MediaQuery {
+interface MediaQuery : Updateable<MediaQuery> {
     val size: Size
     val viewPadding: EdgeInsets
     val viewInsets: EdgeInsets
@@ -100,13 +100,12 @@ private class ObservableMediaQuery(
         darkMode = darkMode
     )
 
-    fun updateFrom(other: MediaQuery): ObservableMediaQuery {
+    override fun updateFrom(other: MediaQuery) {
         size = other.size
         viewPadding = other.viewPadding
         viewInsets = other.viewInsets
         density = other.density
         darkMode = other.darkMode
-        return this
     }
 }
 
@@ -125,8 +124,8 @@ fun MediaQueryProvider(
     value: MediaQuery,
     children: @Composable() () -> Unit
 ) = composable {
-    MediaQueryAmbient.Provider(
-        value = remember { ObservableMediaQuery(value) }.updateFrom(value),
+    MediaQueryAmbient.UpdateProvider(
+        value = value,
         children = children
     )
 }
