@@ -34,6 +34,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.IOException
@@ -90,43 +91,48 @@ internal class DiskBoxImpl<T>(
 
     private val file by lazy { File(path) }
 
-    private val flow by lazy {
+    private val sharedFlow by lazy {
         file.changes()
-            .onStart { d { "$file -> flow start" } }
-            .onEach { d { "$file -> on file change" } }
-            .onCompletion { d { "$file -> flow end" } }
+            .onStart { d { "$path -> flow start" } }
+            .onEach { d { "$path -> on file change" } }
+            .onCompletion { d { "$path -> flow end" } }
             .filter {
                 !selfChange.getAndSet(false)
                     .also { isSelfChange ->
-                        d { "$file -> file changed is self ? $isSelfChange" }
+                        d { "$path -> file changed is self ? $isSelfChange" }
                     }
             }
             .onStart { emit(Unit) }
             .onEach {
-                d { "$file -> reset cache due to external change" }
+                d { "$path -> reset cache due to external change" }
                 // force refetching the value
                 cachedValue.set(this)
             }
             .flatMapLatest {
                 changeNotifier.asFlow()
-                    .onEach { d { "$file -> change notified" } }
+                    .onEach { d { "$path -> change notified" } }
                     .onStart { emit(Unit) }
             }
-            .onEach { d { "$file -> refresh stream" } }
+            .onEach { d { "$path -> refresh stream" } }
             .map { get() }
+            .onEach { d { "$path -> deliver flow value $it" } }
             .share(scope.coroutineScope)
     }
 
     private val selfChange = AtomicBoolean(false)
 
     init {
-        check(!file.isDirectory)
-        d { "$file -> init" }
+        d { "$path -> init" }
+        scope.coroutineScope.launch {
+            maybeWithDispatcher {
+                check(!file.isDirectory)
+            }
+        }
     }
 
     override suspend fun set(value: T) {
         checkNotDisposed()
-        d { "$file -> set $value" }
+        d { "$path -> set $value" }
         maybeWithDispatcher {
             measured("set") {
                 if (!file.exists()) {
@@ -164,23 +170,23 @@ internal class DiskBoxImpl<T>(
 
     override suspend fun get(): T {
         checkNotDisposed()
-        d { "$file -> get" }
+        d { "$path -> get" }
         return maybeWithDispatcher {
             measured("get") {
                 val cached = cachedValue.get()
                 if (cached != this) {
-                    d { "$file -> return cached $cached" }
+                    d { "$path -> return cached $cached" }
                     return@measured cached as T
                 }
 
                 return@measured if (isSet()) {
                     valueFetcher().also {
                         cachedValue.set(it)
-                        d { "$file -> return fetched $it" }
+                        d { "$path -> return fetched $it" }
                     }
                 } else {
                     defaultValue.also {
-                        d { "$file -> return default value $it" }
+                        d { "$path -> return default value $it" }
                     }
                 }
             }
@@ -189,7 +195,7 @@ internal class DiskBoxImpl<T>(
 
     override suspend fun delete() {
         checkNotDisposed()
-        d { "$file -> delete" }
+        d { "$path -> delete" }
         maybeWithDispatcher {
             measured("delete") {
                 if (file.exists()) {
@@ -209,20 +215,21 @@ internal class DiskBoxImpl<T>(
         return maybeWithDispatcher {
             measured("exists") {
                 file.exists().also {
-                    d { "$file -> exists $it" }
+                    d { "$path -> exists $it" }
                 }
             }
         }
     }
 
     override fun asFlow(): Flow<T> {
-        d { "$file -> as flow" }
+        d { "$path -> as flow" }
         checkNotDisposed()
-        return flow
+        return sharedFlow
+            .onStart { emit(get()) }
     }
 
     override fun dispose() {
-        d { "$file -> dispose" }
+        d { "$path -> dispose" }
         if (_isDisposed.getAndSet(true)) {
             scope.close()
         }
@@ -237,7 +244,7 @@ internal class DiskBoxImpl<T>(
 
     private inline fun <T> measured(tag: String, block: () -> T): T {
         val (result, duration) = measureTimedValue(block)
-        d { "$file -> compute '$tag' with result '$result' took ${duration.toLongMilliseconds()} ms" }
+        d { "$path -> compute '$tag' with result '$result' took ${duration.toLongMilliseconds()} ms" }
         return result
     }
 

@@ -51,7 +51,6 @@ import com.ivianuu.essentials.ui.compose.material.SimpleListItem
 import com.ivianuu.essentials.ui.navigation.Route
 import com.ivianuu.essentials.util.Toaster
 
-
 val homeRoute = composeControllerRoute {
     Scaffold(
         topAppBar = {
