@@ -31,6 +31,7 @@ import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.withContext
@@ -41,7 +42,7 @@ import java.util.concurrent.atomic.AtomicReference
 import kotlin.time.measureTimedValue
 
 interface DiskBox<T> : Box<T> {
-    val file: File
+    val path: String
 
     interface Serializer<T> {
         fun deserialize(serialized: String): T
@@ -50,19 +51,19 @@ interface DiskBox<T> : Box<T> {
 }
 
 fun <T> DiskBox(
-    file: File,
+    path: String,
     serializer: DiskBox.Serializer<T>,
     defaultValue: T,
     dispatcher: CoroutineDispatcher? = null
 ): DiskBox<T> = DiskBoxImpl(
-    file = file,
+    path = path,
     defaultValue = defaultValue,
     serializer = serializer,
     dispatcher = dispatcher
 )
 
 internal class DiskBoxImpl<T>(
-    override val file: File,
+    override val path: String,
     override val defaultValue: T,
     private val serializer: DiskBox.Serializer<T>,
     private val dispatcher: CoroutineDispatcher? = null
@@ -87,24 +88,34 @@ internal class DiskBoxImpl<T>(
 
     private val scope = MutableScope()
 
-    private val flow = file.changes()
-        .filter {
-            !selfChange.getAndSet(false)
-                .also { isSelfChange ->
-                    d { "$file -> file changed is self ? $isSelfChange" }
-                }
-        }
-        .onStart { emit(Unit) }
-        .onEach {
-            // force refetching the value
-            cachedValue.set(this)
-        }
-        .flatMapLatest {
-            changeNotifier.asFlow()
-                .onStart { emit(Unit) }
-        }
-        .map { get() }
-        .share(scope.coroutineScope)
+    private val file by lazy { File(path) }
+
+    private val flow by lazy {
+        file.changes()
+            .onStart { d { "$file -> flow start" } }
+            .onEach { d { "$file -> on file change" } }
+            .onCompletion { d { "$file -> flow end" } }
+            .filter {
+                !selfChange.getAndSet(false)
+                    .also { isSelfChange ->
+                        d { "$file -> file changed is self ? $isSelfChange" }
+                    }
+            }
+            .onStart { emit(Unit) }
+            .onEach {
+                d { "$file -> reset cache due to external change" }
+                // force refetching the value
+                cachedValue.set(this)
+            }
+            .flatMapLatest {
+                changeNotifier.asFlow()
+                    .onEach { d { "$file -> change notified" } }
+                    .onStart { emit(Unit) }
+            }
+            .onEach { d { "$file -> refresh stream" } }
+            .map { get() }
+            .share(scope.coroutineScope)
+    }
 
     private val selfChange = AtomicBoolean(false)
 
