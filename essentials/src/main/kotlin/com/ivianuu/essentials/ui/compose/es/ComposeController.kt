@@ -37,7 +37,6 @@ import com.ivianuu.essentials.ui.compose.core.RouteAmbient
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.invoke
 import com.ivianuu.essentials.ui.compose.core.remember
-import com.ivianuu.essentials.ui.compose.core.staticComposable
 import com.ivianuu.essentials.ui.compose.injekt.ComponentAmbient
 import com.ivianuu.essentials.ui.compose.injekt.MaterialThemeProvider
 import com.ivianuu.essentials.ui.compose.injekt.inject
@@ -99,9 +98,7 @@ abstract class ComposeController : EsController() {
                     colors = materialThemeProvider.colors(),
                     typography = materialThemeProvider.typography()
                 ) {
-                    staticComposable {
-                        content()
-                    }
+                    content()
                 }
             }
         }
