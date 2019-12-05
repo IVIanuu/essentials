@@ -405,10 +405,10 @@ fun <T> SimpleSliderValueText(value: T) = composable {
 }
 
 @Composable
-fun unitValueTextProvider(
+fun <T> unitValueTextProvider(
     unit: UnitValueTextProvider.Unit
-): @Composable() (Int) -> Unit = effect {
-    val textProvider = UnitValueTextProvider(
+): @Composable() (T) -> Unit = effect {
+    val textProvider = UnitValueTextProvider<T>(
         ambient(ContextAmbient), unit
     )
     return@effect {

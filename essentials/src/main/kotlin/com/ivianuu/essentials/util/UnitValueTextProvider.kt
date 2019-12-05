@@ -25,12 +25,12 @@ import com.ivianuu.essentials.util.UnitValueTextProvider.Unit.Percentage
 import com.ivianuu.essentials.util.UnitValueTextProvider.Unit.Px
 import com.ivianuu.essentials.util.UnitValueTextProvider.Unit.Seconds
 
-class UnitValueTextProvider(
+class UnitValueTextProvider<T>(
     private val context: Context,
     private val unit: Unit
-) : (Int) -> String {
+) : (T) -> String {
 
-    override fun invoke(value: Int) = when (unit) {
+    override fun invoke(value: T) = when (unit) {
         Dp -> context.string(R.string.es_seek_bar_pref_format_dp, value)
         Millis -> context.string(R.string.es_seek_bar_pref_format_millis, value)
         Percentage -> context.string(R.string.es_seek_bar_pref_format_percentage, value)
@@ -47,5 +47,5 @@ fun SeekBarPreferenceModel.Builder.unitValueTextProvider(
     context: Context,
     unit: UnitValueTextProvider.Unit
 ) {
-    valueTextProvider(UnitValueTextProvider(context, unit))
+    valueTextProvider(UnitValueTextProvider<Int>(context, unit))
 }

@@ -123,4 +123,4 @@ fun Context.font(resId: Int): Typeface = ResourcesCompat.getFont(this, resId)!!
 
 fun Context.string(resId: Int): String = getString(resId)
 
-fun Context.string(resId: Int, vararg args: Any): String = getString(resId, *args)
+fun Context.string(resId: Int, vararg args: Any?): String = getString(resId, *args)
