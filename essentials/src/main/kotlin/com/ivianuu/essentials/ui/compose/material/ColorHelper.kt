@@ -20,7 +20,7 @@ import androidx.compose.Composable
 import androidx.ui.graphics.Color
 import androidx.ui.graphics.toArgb
 import androidx.ui.material.MaterialTheme
-import androidx.ui.material.surface.CurrentBackground
+import com.ivianuu.essentials.ui.compose.core.CurrentBackground
 import com.ivianuu.essentials.ui.compose.core.ambient
 import com.ivianuu.essentials.ui.compose.core.effect
 import com.ivianuu.essentials.ui.compose.core.invoke

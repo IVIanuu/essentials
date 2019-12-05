@@ -22,8 +22,6 @@ import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.composableWithKey
 import com.ivianuu.essentials.ui.compose.material.Subheader
 
-// todo
-
 @Composable
 fun PreferenceSubheader(
     text: String,

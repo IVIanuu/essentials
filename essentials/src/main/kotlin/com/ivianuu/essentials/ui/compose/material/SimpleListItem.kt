@@ -32,10 +32,10 @@ import androidx.ui.material.ColorPalette
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.Typography
 import androidx.ui.material.ripple.Ripple
-import androidx.ui.material.surface.CurrentBackground
 import androidx.ui.text.TextStyle
 import com.ivianuu.essentials.ui.compose.common.asIconComposable
 import com.ivianuu.essentials.ui.compose.common.asTextComposable
+import com.ivianuu.essentials.ui.compose.core.CurrentBackground
 import com.ivianuu.essentials.ui.compose.core.ambient
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.invoke
