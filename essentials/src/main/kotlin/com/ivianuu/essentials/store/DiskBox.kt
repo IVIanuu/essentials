@@ -21,6 +21,9 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import com.github.ajalt.timberkt.d
+import com.ivianuu.essentials.util.coroutineScope
+import com.ivianuu.essentials.util.share
+import com.ivianuu.scopes.MutableScope
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Deferred
@@ -29,6 +32,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.IOException
@@ -84,10 +89,23 @@ internal class DiskBoxImpl<T>(
             throw IOException("Couldn't read file $file", e)
         }
     }
+
     private val multiProcessHelper = MultiProcessHelper(context, file) {
         cachedValue.set(this) // force refetching the value
         changeNotifier.offer(Unit)
     }
+
+    private val scope = MutableScope()
+
+    private val flow = flow {
+        emit(get())
+        changeNotifier.asFlow().collect {
+            emit(get())
+        }
+    }
+        .onStart { d { "$file -> start internal flow" } }
+        .onCompletion { d { "$file -> end internal flow" } }
+        .share(scope.coroutineScope)
 
     init {
         check(!file.isDirectory)
@@ -187,17 +205,13 @@ internal class DiskBoxImpl<T>(
 
     override fun asFlow(): Flow<T> {
         checkNotDisposed()
-        return flow {
-            emit(get())
-            changeNotifier.asFlow().collect {
-                emit(get())
-            }
-        }
+        return flow
     }
 
     override fun dispose() {
         d { "$file -> dispose" }
         if (_isDisposed.getAndSet(true)) {
+            scope.close()
             multiProcessHelper.dispose()
         }
     }
@@ -214,7 +228,29 @@ internal class DiskBoxImpl<T>(
         d { "$file -> compute '$tag' with result '$result' took ${duration.toLongMilliseconds()} ms" }
         return result
     }
+
 }
+
+private fun File.changes(): Flow<Unit> = flow {
+    var lastFileState = getState()
+    while (true) {
+        val currentFileState = getState()
+        if (lastFileState != currentFileState) {
+            lastFileState = currentFileState
+            emit(Unit)
+        }
+    }
+}
+
+private fun File.getState() = FileState(
+    exists = exists(),
+    lastModified = lastModified()
+)
+
+private data class FileState(
+    var exists: Boolean,
+    var lastModified: Long
+)
 
 private class MultiProcessHelper(
     private val context: Context,
