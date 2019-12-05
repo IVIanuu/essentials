@@ -21,20 +21,20 @@ import java.util.concurrent.ConcurrentHashMap
 
 class Properties {
 
-    private val properties = mutableMapOf<String, Any?>()
+    private val properties = mutableMapOf<Any, Any?>()
 
-    val entries: Map<String, Any?>
+    val entries: Map<Any, Any?>
         get() = properties
 
-    operator fun <T> get(key: String): T? = properties[key] as? T
+    operator fun <T> get(key: Any): T? = properties[key] as? T
 
-    operator fun <T> set(key: String, value: T) {
+    operator fun <T> set(key: Any, value: T) {
         properties[key] = value as Any?
     }
 
-    fun <T> remove(key: String): T? = properties.remove(key) as? T
+    fun <T> remove(key: Any): T? = properties.remove(key) as? T
 
-    operator fun contains(key: String): Boolean = properties.containsKey(key)
+    operator fun contains(key: Any): Boolean = properties.containsKey(key)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -52,7 +52,7 @@ class Properties {
 
 val Properties.size: Int get() = entries.size
 
-fun <T> Properties.getOrSet(key: String, defaultValue: () -> T): T {
+fun <T> Properties.getOrSet(key: Any, defaultValue: () -> T): T {
     var value = get<T>(key)
     if (value == null) {
         value = defaultValue()
@@ -62,7 +62,7 @@ fun <T> Properties.getOrSet(key: String, defaultValue: () -> T): T {
     return value
 }
 
-fun <T> Properties.getOrDefault(key: String, defaultValue: () -> T): T {
+fun <T> Properties.getOrDefault(key: Any, defaultValue: () -> T): T {
     var value = get<T>(key)
     if (value == null) {
         value = defaultValue()

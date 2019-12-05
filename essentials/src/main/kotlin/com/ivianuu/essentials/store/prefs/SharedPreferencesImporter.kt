@@ -51,5 +51,17 @@ class SharedPreferencesImporter(
                 is Set<*> -> boxFactory.stringSet(key).set(value as Set<String>)
             }
         }
+
+        prefsFile.delete()
     }
+
+    suspend fun importAndDeleteAsStringMapIfNeeded(name: String): Unit =
+        withContext(dispatchers.io) {
+            val prefsFile = File(context.applicationInfo.dataDir, "shared_prefs/$name.xml")
+            if (!prefsFile.exists()) return@withContext
+            val sharedPreferences = context.getSharedPreferences(name, Context.MODE_PRIVATE)
+            val box = boxFactory.stringMap(name)
+            box.set(sharedPreferences.all as Map<String, String>)
+            prefsFile.delete()
+        }
 }

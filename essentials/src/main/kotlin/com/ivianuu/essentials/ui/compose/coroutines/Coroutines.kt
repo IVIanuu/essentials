@@ -25,12 +25,11 @@ import com.ivianuu.essentials.ui.compose.core.onCommit
 import com.ivianuu.essentials.ui.compose.core.onDispose
 import com.ivianuu.essentials.ui.compose.core.onPreCommit
 import com.ivianuu.essentials.ui.compose.core.remember
-import com.ivianuu.essentials.ui.compose.core.state
+import com.ivianuu.essentials.ui.compose.core.stateFor
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 
@@ -54,7 +53,8 @@ fun launchOnActive(
 ) = effect {
     val coroutineScope = coroutineScope()
     onActive {
-        coroutineScope.launch(block = block)
+        val job = coroutineScope.launch(block = block)
+        onDispose { job.cancel() }
     }
 }
 
@@ -63,7 +63,10 @@ fun launchOnPreCommit(
     block: suspend CoroutineScope.() -> Unit
 ) = effect {
     val coroutineScope = coroutineScope()
-    onPreCommit { coroutineScope.launch(block = block) }
+    onPreCommit {
+        val job = coroutineScope.launch(block = block)
+        onDispose { job.cancel() }
+    }
 }
 
 @Composable
@@ -72,7 +75,10 @@ fun launchOnPreCommit(
     block: suspend CoroutineScope.() -> Unit
 ) = effect {
     val coroutineScope = coroutineScope()
-    onPreCommit(*inputs) { coroutineScope.launch(block = block) }
+    onPreCommit(*inputs) {
+        val job = coroutineScope.launch(block = block)
+        onDispose { job.cancel() }
+    }
 }
 
 @Composable
@@ -80,7 +86,10 @@ fun launchOnCommit(
     block: suspend CoroutineScope.() -> Unit
 ) = effect {
     val coroutineScope = coroutineScope()
-    onCommit { coroutineScope.launch(block = block) }
+    onCommit {
+        val job = coroutineScope.launch(block = block)
+        onDispose { job.cancel() }
+    }
 }
 
 @Composable
@@ -89,14 +98,21 @@ fun launchOnCommit(
     block: suspend CoroutineScope.() -> Unit
 ) = effect {
     val coroutineScope = coroutineScope()
-    onCommit(*inputs) { coroutineScope.launch(block = block) }
+    onCommit(*inputs) {
+        val job = coroutineScope.launch(block = block)
+        onDispose { job.cancel() }
+    }
 }
 
 @BuilderInference
 @Composable
-fun <T> load(block: suspend CoroutineScope.() -> T) = effect {
+fun <T> load(
+    key: Any,
+    block: suspend CoroutineScope.() -> T
+) = effect {
     load(
         placeholder = null,
+        key = key,
         block = block
     )
 }
@@ -104,10 +120,11 @@ fun <T> load(block: suspend CoroutineScope.() -> T) = effect {
 @Composable
 fun <T> load(
     placeholder: T,
+    key: Any,
     block: suspend CoroutineScope.() -> T
 ): T = effect {
-    val state = state { placeholder }
-    launchOnActive { state.value = block() }
+    val state = stateFor(key) { placeholder }
+    launchOnCommit(key) { state.value = block() }
     return@effect state.value
 }
 
@@ -121,12 +138,11 @@ fun <T> collect(
     flow: Flow<T>,
     placeholder: T
 ): T = effect {
-    val state = state { placeholder }
-    val coroutineScope = coroutineScope()
-    onActive {
-        flow
-            .onEach { state.value = it }
-            .launchIn(coroutineScope)
+    val state = stateFor(flow) { placeholder }
+    launchOnCommit(flow) {
+        flow.collect {
+            state.value = it
+        }
     }
     return@effect state.value
 }

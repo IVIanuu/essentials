@@ -20,28 +20,39 @@ import android.content.Context
 import com.ivianuu.essentials.store.Box
 import com.ivianuu.essentials.store.DiskBox
 import com.ivianuu.essentials.util.AppDispatchers
-import com.ivianuu.injekt.Factory
-import com.ivianuu.injekt.android.ForApplication
+import com.ivianuu.injekt.Single
+import com.ivianuu.injekt.android.ApplicationScope
 import java.io.File
+import java.util.concurrent.ConcurrentHashMap
 
-@Factory
+@ApplicationScope
+@Single
 class PrefBoxFactory(
-    @ForApplication private val context: Context,
+    @ApplicationScope private val context: Context,
     private val dispatchers: AppDispatchers,
     @PrefsDir private val prefsDir: File
 ) {
+
+    private val boxes = ConcurrentHashMap<String, Box<*>>()
 
     fun <T> box(
         name: String,
         defaultValue: T,
         serializer: DiskBox.Serializer<T>
     ): Box<T> {
-        return DiskBox(
-            context = context,
-            file = File(prefsDir, name),
-            defaultValue = defaultValue,
-            serializer = serializer,
-            dispatcher = dispatchers.io
-        )
+        var box = boxes[name]
+        if (box?.isDisposed == true) box = null
+        if (box == null) {
+            box = DiskBox(
+                context = context,
+                path = "${prefsDir.absolutePath}/$name",
+                serializer = serializer,
+                defaultValue = defaultValue,
+                dispatcher = dispatchers.io
+            )
+            boxes[name] = box
+        }
+
+        return box as Box<T>
     }
 }

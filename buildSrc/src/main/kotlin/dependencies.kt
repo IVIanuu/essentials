@@ -30,7 +30,7 @@ object Build {
 object Publishing {
     const val groupId = "com.ivianuu.essentials"
     const val vcsUrl = "https://github.com/IVIanuu/essentials"
-    const val version = "${Build.versionName}-dev260"
+    const val version = "${Build.versionName}-dev279"
 }
 
 object Deps {
@@ -64,7 +64,7 @@ object Deps {
         }
 
         object Ui {
-            private const val version = "0.0.1-dev06"
+            private const val version = "0.0.1-dev05"
             const val androidText = "androidx.ui:ui-android-text:$version"
             const val androidView = "androidx.ui:ui-android-view:$version"
             const val androidViewNonIr = "androidx.ui:ui-android-view-non-ir:$version"
@@ -113,7 +113,7 @@ object Deps {
     const val epoxyPrefs = "com.ivianuu.epoxyprefs:epoxyprefs:0.0.1-dev-21"
 
     const val essentialsGradlePlugin =
-        "com.ivianuu.essentials:essentials-gradle-plugin:0.0.1-dev251"
+        "com.ivianuu.essentials:essentials-gradle-plugin:0.0.1-dev261"
 
     object Injekt {
         private const val version = "0.0.1-dev79"

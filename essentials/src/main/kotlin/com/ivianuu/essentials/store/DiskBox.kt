@@ -21,6 +21,8 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import com.github.ajalt.timberkt.d
+import com.ivianuu.essentials.util.coroutineScope
+import com.ivianuu.scopes.MutableScope
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Deferred
@@ -29,6 +31,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.IOException
@@ -38,7 +41,7 @@ import java.util.concurrent.atomic.AtomicReference
 import kotlin.time.measureTimedValue
 
 interface DiskBox<T> : Box<T> {
-    val file: File
+    val path: String
 
     interface Serializer<T> {
         fun deserialize(serialized: String): T
@@ -48,21 +51,21 @@ interface DiskBox<T> : Box<T> {
 
 fun <T> DiskBox(
     context: Context,
-    file: File,
+    path: String,
     serializer: DiskBox.Serializer<T>,
     defaultValue: T,
     dispatcher: CoroutineDispatcher? = null
 ): DiskBox<T> = DiskBoxImpl(
     context = context,
-    file = file,
-    serializer = serializer,
+    path = path,
     defaultValue = defaultValue,
+    serializer = serializer,
     dispatcher = dispatcher
 )
 
 internal class DiskBoxImpl<T>(
-    context: Context,
-    override val file: File,
+    private val context: Context,
+    override val path: String,
     override val defaultValue: T,
     private val serializer: DiskBox.Serializer<T>,
     private val dispatcher: CoroutineDispatcher? = null
@@ -81,29 +84,39 @@ internal class DiskBoxImpl<T>(
             }
             return@MutexValue serializer.deserialize(serialized)
         } catch (e: Exception) {
-            throw IOException("Couldn't read file $file")
+            throw IOException("Couldn't read file $path", e)
         }
     }
+
+    private val scope = MutableScope()
+
+    private val file by lazy { File(path) }
+
     private val multiProcessHelper = MultiProcessHelper(context, file) {
+        d { "$path -> inter process change force refetch" }
         cachedValue.set(this) // force refetching the value
         changeNotifier.offer(Unit)
     }
 
     init {
-        check(!file.isDirectory)
-        d { "$file -> init" }
+        d { "$path -> init" }
+        scope.coroutineScope.launch {
+            maybeWithDispatcher {
+                check(!file.isDirectory)
+            }
+        }
     }
 
     override suspend fun set(value: T) {
         checkNotDisposed()
-        d { "$file -> set $value" }
+        d { "$path -> set $value" }
         maybeWithDispatcher {
             measured("set") {
                 if (!file.exists()) {
-                    file.parentFile.mkdirs()
+                    file.parentFile?.mkdirs()
 
                     if (!file.createNewFile()) {
-                        throw IOException("Couldn't create $file")
+                        throw IOException("Couldn't create $path")
                     }
                 }
 
@@ -117,10 +130,10 @@ internal class DiskBoxImpl<T>(
                         it.write(serialized)
                     }
                     if (!tmpFile.renameTo(file)) {
-                        throw IOException("Couldn't move tmp file to file $file")
+                        throw IOException("Couldn't move tmp file to file $path")
                     }
                 } catch (e: Exception) {
-                    throw IOException("Couldn't write to file $file $serialized", e)
+                    throw IOException("Couldn't write to file $path $serialized", e)
                 } finally {
                     tmpFile.delete()
                 }
@@ -134,23 +147,23 @@ internal class DiskBoxImpl<T>(
 
     override suspend fun get(): T {
         checkNotDisposed()
-        d { "$file -> get" }
+        d { "$path -> get" }
         return maybeWithDispatcher {
             measured("get") {
                 val cached = cachedValue.get()
                 if (cached != this) {
-                    d { "$file -> return cached $cached" }
+                    d { "$path -> return cached $cached" }
                     return@measured cached as T
                 }
 
                 return@measured if (isSet()) {
                     valueFetcher().also {
                         cachedValue.set(it)
-                        d { "$file -> return fetched $it" }
+                        d { "$path -> return fetched $it" }
                     }
                 } else {
                     defaultValue.also {
-                        d { "$file -> return default value $it" }
+                        d { "$path -> return default value $it" }
                     }
                 }
             }
@@ -159,12 +172,12 @@ internal class DiskBoxImpl<T>(
 
     override suspend fun delete() {
         checkNotDisposed()
-        d { "$file -> delete" }
+        d { "$path -> delete" }
         maybeWithDispatcher {
             measured("delete") {
                 if (file.exists()) {
                     if (!file.delete()) {
-                        throw IOException("Couldn't delete file $file")
+                        throw IOException("Couldn't delete file $path")
                     }
                 }
 
@@ -179,13 +192,14 @@ internal class DiskBoxImpl<T>(
         return maybeWithDispatcher {
             measured("exists") {
                 file.exists().also {
-                    d { "$file -> exists $it" }
+                    d { "$path -> exists $it" }
                 }
             }
         }
     }
 
     override fun asFlow(): Flow<T> {
+        d { "$path -> as flow" }
         checkNotDisposed()
         return flow {
             emit(get())
@@ -196,8 +210,9 @@ internal class DiskBoxImpl<T>(
     }
 
     override fun dispose() {
-        d { "$file -> dispose" }
+        d { "$path -> dispose" }
         if (_isDisposed.getAndSet(true)) {
+            scope.close()
             multiProcessHelper.dispose()
         }
     }
@@ -211,9 +226,10 @@ internal class DiskBoxImpl<T>(
 
     private inline fun <T> measured(tag: String, block: () -> T): T {
         val (result, duration) = measureTimedValue(block)
-        d { "$file -> compute '$tag' with result '$result' took ${duration.toLongMilliseconds()} ms" }
+        d { "$path -> compute '$tag' with result '$result' took ${duration.toLongMilliseconds()} ms" }
         return result
     }
+
 }
 
 private class MultiProcessHelper(

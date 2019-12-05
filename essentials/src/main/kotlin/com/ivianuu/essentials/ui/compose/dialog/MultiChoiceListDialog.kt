@@ -35,7 +35,7 @@ fun <T> MultiChoiceListDialog(
     negativeButton: (@Composable() () -> Unit)? = null,
     neutralButton: (@Composable() () -> Unit)? = null
 ) = composable {
-    ListDialog(
+    ScrollableDialog(
         icon = icon,
         title = title,
         buttonLayout = buttonLayout,

@@ -20,14 +20,12 @@ import androidx.ui.core.Text
 import androidx.ui.core.dp
 import androidx.ui.layout.Padding
 import androidx.ui.material.MaterialTheme
+import com.ivianuu.essentials.ui.compose.common.ListScreen
 import com.ivianuu.essentials.ui.compose.common.navigateOnClick
-import com.ivianuu.essentials.ui.compose.common.scrolling.ScrollableList
-import com.ivianuu.essentials.ui.compose.composeControllerRoute
 import com.ivianuu.essentials.ui.compose.core.invoke
 import com.ivianuu.essentials.ui.compose.coroutines.coroutineScope
+import com.ivianuu.essentials.ui.compose.es.composeControllerRoute
 import com.ivianuu.essentials.ui.compose.injekt.inject
-import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
-import com.ivianuu.essentials.ui.compose.material.Scaffold
 import com.ivianuu.essentials.ui.compose.material.SimpleListItem
 import com.ivianuu.essentials.ui.compose.material.colorForCurrentBackground
 import com.ivianuu.essentials.ui.compose.resources.stringResource
@@ -48,54 +46,49 @@ fun secureSettingsRoute(showHideNavBarHint: Boolean = false) =
     ) {
         popNavigatorOnceSecureSettingsGranted()
 
-        Scaffold(
-            topAppBar = { EsTopAppBar(stringResource(R.string.es_title_secure_settings)) },
-            body = {
-                ScrollableList {
-                    Padding(padding = 16.dp) {
-                        val textColor = colorForCurrentBackground().copy(alpha = 0.6f)
+        ListScreen(title = stringResource(R.string.es_title_secure_settings)) {
+            Padding(padding = 16.dp) {
+                val textColor = colorForCurrentBackground().copy(alpha = 0.6f)
 
-                        Text(
-                            text = stringResource(
-                                if (showHideNavBarHint) {
-                                    R.string.es_pref_secure_settings_header_hide_nav_bar_summary
-                                } else {
-                                    R.string.es_pref_secure_settings_header_summary
-                                }
-                            ),
-                            style = MaterialTheme.typography()().body2.copy(color = textColor)
-                        )
-                    }
-
-                    SimpleListItem(
-                        title = { Text(stringResource(R.string.es_pref_use_pc)) },
-                        subtitle = { Text(stringResource(R.string.es_pref_use_pc_summary)) },
-                        onClick = navigateOnClick {
-                            secureSettingsInstructionsRoute.copy(
-                                options = defaultControllerRouteOptionsOrElse {
-                                    controllerRouteOptions().horizontal()
-                                }
-                            )
+                Text(
+                    text = stringResource(
+                        if (showHideNavBarHint) {
+                            R.string.es_pref_secure_settings_header_hide_nav_bar_summary
+                        } else {
+                            R.string.es_pref_secure_settings_header_summary
                         }
-                    )
+                    ),
+                    style = MaterialTheme.typography()().body2.copy(color = textColor)
+                )
+            }
 
-                    val coroutineScope = coroutineScope()
-                    val secureSettingsHelper = inject<SecureSettingsHelper>()
-                    val toaster = inject<Toaster>()
-                    SimpleListItem(
-                        title = { Text(stringResource(R.string.es_pref_use_root)) },
-                        subtitle = { Text(stringResource(R.string.es_pref_use_root_summary)) },
-                        onClick = {
-                            coroutineScope.launch {
-                                if (secureSettingsHelper.grantWriteSecureSettingsViaRoot()) {
-                                    toaster.toast(R.string.es_secure_settings_permission_granted)
-                                } else {
-                                    toaster.toast(R.string.es_secure_settings_no_root)
-                                }
-                            }
+            SimpleListItem(
+                title = stringResource(R.string.es_pref_use_pc),
+                subtitle = stringResource(R.string.es_pref_use_pc_summary),
+                onClick = navigateOnClick {
+                    secureSettingsInstructionsRoute.copy(
+                        options = defaultControllerRouteOptionsOrElse {
+                            controllerRouteOptions().horizontal()
                         }
                     )
                 }
-            }
-        )
+            )
+
+            val coroutineScope = coroutineScope()
+            val secureSettingsHelper = inject<SecureSettingsHelper>()
+            val toaster = inject<Toaster>()
+            SimpleListItem(
+                title = stringResource(R.string.es_pref_use_root),
+                subtitle = stringResource(R.string.es_pref_use_root_summary),
+                onClick = {
+                    coroutineScope.launch {
+                        if (secureSettingsHelper.grantWriteSecureSettingsViaRoot()) {
+                            toaster.toast(R.string.es_secure_settings_permission_granted)
+                        } else {
+                            toaster.toast(R.string.es_secure_settings_no_root)
+                        }
+                    }
+                }
+            )
+        }
     }

@@ -75,7 +75,11 @@ fun <T> PrefBoxFactory.enumStringSet(
 private class EnumStringSetPrefAdapter<T>(
     private val type: KClass<T>
 ) : DiskBox.Serializer<Set<T>> where T : Enum<T>, T : BoxValueHolder<String> {
-    override fun serialize(value: Set<T>) = value.map { it.value }.joinToString("=:=")
+    override fun serialize(value: Set<T>) = value.joinToString(VALUE_DELIMITER) { it.value }
     override fun deserialize(serialized: String) =
-        serialized.split("=:=").mapNotNull { type.valueForOrNull(it) }.toSet()
+        serialized.split(VALUE_DELIMITER).mapNotNull { type.valueForOrNull(it) }.toSet()
+
+    private companion object {
+        private const val VALUE_DELIMITER = "^\\"
+    }
 }

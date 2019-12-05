@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.compose
+package com.ivianuu.essentials.ui.compose.es
 
 import android.view.View
 import androidx.compose.Composable
@@ -31,7 +31,12 @@ fun composeControllerRoute(
     compose: @Composable() () -> Unit
 ) = controllerRoute(
     options = options,
-    factory = { ComposeRouteController(popOnConfigurationChange, compose) }
+    factory = {
+        ComposeRouteController(
+            popOnConfigurationChange,
+            compose
+        )
+    }
 )
 
 private class ComposeRouteController(

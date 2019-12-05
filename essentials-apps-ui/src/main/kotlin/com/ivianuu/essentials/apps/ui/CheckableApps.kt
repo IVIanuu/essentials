@@ -30,7 +30,7 @@ import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.composableWithKey
 import com.ivianuu.essentials.ui.compose.core.onActive
 import com.ivianuu.essentials.ui.compose.core.staticComposable
-import com.ivianuu.essentials.ui.compose.image.CoilImageAny
+import com.ivianuu.essentials.ui.compose.image.Image
 import com.ivianuu.essentials.ui.compose.material.AvatarIconStyle
 import com.ivianuu.essentials.ui.compose.material.EsCheckbox
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
@@ -38,7 +38,7 @@ import com.ivianuu.essentials.ui.compose.material.Icon
 import com.ivianuu.essentials.ui.compose.material.PopupMenuButton
 import com.ivianuu.essentials.ui.compose.material.Scaffold
 import com.ivianuu.essentials.ui.compose.material.SimpleListItem
-import com.ivianuu.essentials.ui.compose.mvrx.mvRxViewModel
+import com.ivianuu.essentials.ui.compose.mvrx.injekt.mvRxViewModel
 import com.ivianuu.essentials.ui.compose.resources.stringResource
 import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
 import com.ivianuu.essentials.util.AppDispatchers
@@ -69,9 +69,10 @@ fun CheckableAppsScreen(
     appBarTitle: String,
     appFilter: AppFilter = DefaultAppFilter
 ) = composable {
-    val viewModel = mvRxViewModel<CheckableAppsViewModel> {
-        parametersOf(appFilter)
-    }
+    val viewModel =
+        mvRxViewModel<CheckableAppsViewModel> {
+            parametersOf(appFilter)
+        }
 
     onActive {
         viewModel.attach(checkedAppsFlow, onCheckedAppsChanged)
@@ -110,7 +111,7 @@ fun CheckableAppsScreen(
                     composable {
                         ScrollableList(
                             items = viewModel.state.apps() ?: emptyList(),
-                            itemSizeProvider = { 56.dp }
+                            itemSize = 56.dp
                         ) { _, app ->
                             CheckableApp(
                                 app = app,
@@ -132,7 +133,7 @@ private fun CheckableApp(
     SimpleListItem(
         title = { Text(app.info.appName) },
         leading = {
-            CoilImageAny(data = AppIcon(app.info.packageName)) {
+            Image(data = AppIcon(app.info.packageName)) {
                 Icon(image = it, style = AvatarIconStyle())
             }
         },

@@ -16,8 +16,9 @@
 
 package com.ivianuu.essentials.util
 
+import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.lifecycle.lifecycleScope
 import com.ivianuu.director.Controller
 
-val Controller.viewLifecycleScope
+val Controller.viewLifecycleScope: LifecycleCoroutineScope
     get() = viewLifecycleOwner.lifecycleScope

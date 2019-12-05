@@ -14,22 +14,21 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.util
+package com.ivianuu.essentials.ui.compose.common
 
-import com.ivianuu.scopes.Scope
-import com.ivianuu.scopes.coroutines.cancelBy
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
+import androidx.compose.Composable
+import com.ivianuu.essentials.ui.compose.common.scrolling.ScrollableList
+import com.ivianuu.essentials.ui.compose.core.composable
+import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
+import com.ivianuu.essentials.ui.compose.material.Scaffold
 
-private val CoroutineScopeKey = Any()
-
-val Scope.coroutineScope: CoroutineScope
-    get() = properties.getOrSet(CoroutineScopeKey) {
-        ScopedCoroutineScope(this)
-    }
-
-private class ScopedCoroutineScope(scope: Scope) : CoroutineScope {
-    private val job = Job().cancelBy(scope)
-    override val coroutineContext = job + Dispatchers.Main
+@Composable
+fun ListScreen(
+    title: String,
+    listContent: @Composable() () -> Unit
+) = composable {
+    Scaffold(
+        topAppBar = { EsTopAppBar(title = title) },
+        body = { ScrollableList(children = listContent) }
+    )
 }

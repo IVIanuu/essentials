@@ -22,9 +22,9 @@ import androidx.ui.layout.Center
 import androidx.ui.layout.HeightSpacer
 import androidx.ui.material.Button
 import androidx.ui.material.MaterialTheme
-import com.ivianuu.essentials.ui.compose.composeControllerRoute
 import com.ivianuu.essentials.ui.compose.core.ambient
 import com.ivianuu.essentials.ui.compose.core.invoke
+import com.ivianuu.essentials.ui.compose.es.composeControllerRoute
 import com.ivianuu.essentials.ui.compose.layout.Column
 import com.ivianuu.essentials.ui.compose.layout.CrossAxisAlignment
 import com.ivianuu.essentials.ui.compose.layout.MainAxisAlignment
@@ -34,9 +34,10 @@ import com.ivianuu.essentials.ui.compose.navigation.ComposeNavigator
 import com.ivianuu.essentials.ui.compose.navigation.NavigatorAmbient
 import com.ivianuu.essentials.ui.compose.navigation.Route
 
-val navigationRoute = composeControllerRoute {
-    ComposeNavigator { CounterRoute(1) }
-}
+val navigationRoute =
+    composeControllerRoute {
+        ComposeNavigator { CounterRoute(1) }
+    }
 
 private fun CounterRoute(count: Int): Route = Route {
     Scaffold(

@@ -18,33 +18,26 @@ package com.ivianuu.essentials.twilight
 
 import androidx.compose.Composable
 import androidx.ui.core.Text
-import androidx.ui.core.dp
 import androidx.ui.material.RadioButton
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.compose.box.unfoldBox
-import com.ivianuu.essentials.ui.compose.common.scrolling.ScrollableList
-import com.ivianuu.essentials.ui.compose.composeControllerRoute
+import com.ivianuu.essentials.ui.compose.common.ListScreen
 import com.ivianuu.essentials.ui.compose.core.composableWithKey
+import com.ivianuu.essentials.ui.compose.es.composeControllerRoute
 import com.ivianuu.essentials.ui.compose.injekt.inject
-import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
-import com.ivianuu.essentials.ui.compose.material.Scaffold
 import com.ivianuu.essentials.ui.compose.material.SimpleListItem
 import com.ivianuu.essentials.ui.compose.resources.stringResource
 import com.ivianuu.essentials.ui.navigation.director.defaultControllerRouteOptionsOrNull
 
-val twilightSettingsRoute = composeControllerRoute(
-    options = defaultControllerRouteOptionsOrNull()
-) {
-    Scaffold(
-        topAppBar = { EsTopAppBar(title = stringResource(R.string.es_title_twilight)) },
-        body = {
+val twilightSettingsRoute =
+    composeControllerRoute(
+        options = defaultControllerRouteOptionsOrNull()
+    ) {
+        ListScreen(title = stringResource(R.string.es_title_twilight)) {
             val prefs = inject<TwilightPrefs>()
             val (value, setValue) = unfoldBox(prefs.twilightMode)
 
-            ScrollableList(
-                items = TwilightMode.values().toList(),
-                itemSize = 64.dp
-            ) { _, mode ->
+            TwilightMode.values().toList().forEach { mode ->
                 TwilightModeItem(
                     mode = mode,
                     isSelected = value == mode,
@@ -52,8 +45,7 @@ val twilightSettingsRoute = composeControllerRoute(
                 )
             }
         }
-    )
-}
+    }
 
 @Composable
 private fun TwilightModeItem(

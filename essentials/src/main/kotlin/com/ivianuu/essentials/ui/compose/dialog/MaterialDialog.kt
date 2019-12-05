@@ -49,7 +49,8 @@ import com.ivianuu.essentials.ui.compose.material.colorForCurrentBackground
 
 @Composable
 fun MaterialDialog(
-    showDividers: Boolean = false,
+    showTopDivider: Boolean = false,
+    showBottomDivider: Boolean = false,
     applyContentPadding: Boolean = true,
     buttonLayout: AlertDialogButtonLayout = AlertDialogButtonLayout.SideBySide,
     icon: (@Composable() () -> Unit)? = null,
@@ -61,7 +62,8 @@ fun MaterialDialog(
 ) = composable {
     Dialog {
         DialogBody(
-            showDividers = showDividers,
+            showTopDivider = showTopDivider,
+            showBottomDivider = showBottomDivider,
             applyContentPadding = applyContentPadding,
             buttonLayout = buttonLayout,
             icon = icon,
@@ -81,7 +83,8 @@ enum class AlertDialogButtonLayout {
 
 @Composable
 private fun DialogBody(
-    showDividers: Boolean,
+    showTopDivider: Boolean = false,
+    showBottomDivider: Boolean = false,
     applyContentPadding: Boolean,
     buttonLayout: AlertDialogButtonLayout,
     icon: (@Composable() () -> Unit)?,
@@ -160,7 +163,8 @@ private fun DialogBody(
     }
 
     DialogContentLayout(
-        showDividers = showDividers,
+        showTopDivider = showTopDivider,
+        showBottomDivider = showBottomDivider,
         applyContentPadding = applyContentPadding,
         header = header,
         content = finalContent,
@@ -170,7 +174,8 @@ private fun DialogBody(
 
 @Composable
 private fun DialogContentLayout(
-    showDividers: Boolean,
+    showTopDivider: Boolean = false,
+    showBottomDivider: Boolean = false,
     applyContentPadding: Boolean,
     header: (@Composable() () -> Unit)?,
     content: (@Composable() () -> Unit)?,
@@ -191,7 +196,7 @@ private fun DialogContentLayout(
         }
 
         if (content != null) {
-            if (header != null && showDividers) {
+            if (header != null && showTopDivider) {
                 ParentData(DialogContentSlot.TopDivider) {
                     DialogDivider()
                 }
@@ -210,14 +215,14 @@ private fun DialogContentLayout(
         }
 
         if (buttons != null) {
-            if (content != null && showDividers) {
+            if (content != null && showBottomDivider) {
                 ParentData(DialogContentSlot.BottomDivider) {
                     DialogDivider()
                 }
             }
 
             ParentData(DialogContentSlot.Buttons) {
-                if (!showDividers && content != null) {
+                if (!showBottomDivider && content != null) {
                     Padding(top = 28.dp) {
                         buttons.invokeAsComposable()
                     }

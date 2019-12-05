@@ -84,6 +84,29 @@ fun PrefBoxFactory.stringSet(
 ) = box(name = name, defaultValue = defaultValue, serializer = StringSetSerializer)
 
 private object StringSetSerializer : DiskBox.Serializer<Set<String>> {
-    override fun deserialize(serialized: String) = serialized.split("=:=").toSet()
-    override fun serialize(value: Set<String>) = value.joinToString("=:=")
+    private const val VALUE_DELIMITER = "^\\"
+    override fun deserialize(serialized: String) = serialized.split(VALUE_DELIMITER).toSet()
+    override fun serialize(value: Set<String>) = value.joinToString(VALUE_DELIMITER)
+}
+
+fun PrefBoxFactory.stringMap(
+    name: String,
+    defaultValue: Map<String, String> = emptyMap()
+) = box(name = name, defaultValue = defaultValue, serializer = StringMapSerializer)
+
+private object StringMapSerializer : DiskBox.Serializer<Map<String, String>> {
+    private const val ENTRY_DELIMITER = "^]"
+    private const val VALUE_DELIMITER = "^\\"
+    override fun deserialize(serialized: String): Map<String, String> {
+        return if (serialized.isEmpty()) emptyMap() else serialized.split(ENTRY_DELIMITER)
+            .map { it.split(VALUE_DELIMITER) }
+            .associateBy { it[0] }
+            .mapValues { it.value[1] }
+    }
+
+    override fun serialize(value: Map<String, String>): String {
+        return if (value.isEmpty()) "" else value.entries
+            .map { "${it.key}$VALUE_DELIMITER${it.value}" }
+            .joinToString(ENTRY_DELIMITER)
+    }
 }

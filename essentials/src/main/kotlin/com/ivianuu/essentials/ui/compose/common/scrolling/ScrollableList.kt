@@ -31,6 +31,7 @@ import androidx.ui.core.withDensity
 import androidx.ui.foundation.shape.RectangleShape
 import androidx.ui.layout.Container
 import com.ivianuu.essentials.ui.compose.common.framed
+import com.ivianuu.essentials.ui.compose.core.Axis
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.composableWithKey
 import com.ivianuu.essentials.ui.compose.core.invoke
@@ -40,17 +41,19 @@ import com.ivianuu.essentials.ui.compose.layout.SizedBox
 import kotlin.math.max
 import kotlin.math.min
 
-// todo customization
-// todo enabled
-// todo reverse
-// todo direction
-
 @Composable
 fun ScrollableList(
+    direction: Axis = Axis.Vertical,
+    position: ScrollPosition = remember { ScrollPosition() },
+    enabled: Boolean = true,
     children: @Composable() () -> Unit
 ) = composable {
     SizedBox(height = Dp.Infinity) {
-        Scroller {
+        Scroller(
+            direction = direction,
+            position = position,
+            enabled = enabled
+        ) {
             Column {
                 children()
             }
@@ -62,11 +65,17 @@ fun ScrollableList(
 fun <T> ScrollableList(
     items: List<T>,
     itemSize: Dp,
+    direction: Axis = Axis.Vertical,
+    position: ScrollPosition = remember { ScrollPosition() },
+    enabled: Boolean = true,
     item: @Composable() (Int, T) -> Unit
 ) = composable {
     ScrollableList(
         count = items.size,
-        itemSizeProvider = { itemSize }
+        itemSizeProvider = { itemSize },
+        direction = direction,
+        position = position,
+        enabled = enabled
     ) { item(it, items[it]) }
 }
 
@@ -74,11 +83,17 @@ fun <T> ScrollableList(
 fun ScrollableList(
     count: Int,
     itemSize: Dp,
+    direction: Axis = Axis.Vertical,
+    position: ScrollPosition = remember { ScrollPosition() },
+    enabled: Boolean = true,
     item: @Composable() (Int) -> Unit
 ) = composable {
     ScrollableList(
         count = count,
         itemSizeProvider = { itemSize },
+        direction = direction,
+        position = position,
+        enabled = enabled,
         item = item
     )
 }
@@ -86,12 +101,18 @@ fun ScrollableList(
 @Composable
 fun <T> ScrollableList(
     items: List<T>,
-    itemSizeProvider: (Int) -> Dp,
+    itemSizeProvider: (Int, T) -> Dp,
+    direction: Axis = Axis.Vertical,
+    position: ScrollPosition = remember { ScrollPosition() },
+    enabled: Boolean = true,
     item: @Composable() (Int, T) -> Unit
 ) = composable {
     ScrollableList(
         count = items.size,
-        itemSizeProvider = itemSizeProvider
+        itemSizeProvider = { itemSizeProvider(it, items[it]) },
+        direction = direction,
+        position = position,
+        enabled = enabled
     ) { item(it, items[it]) }
 }
 
@@ -99,9 +120,12 @@ fun <T> ScrollableList(
 fun ScrollableList(
     count: Int,
     itemSizeProvider: (Int) -> Dp,
+    direction: Axis = Axis.Vertical,
+    position: ScrollPosition = remember { ScrollPosition() },
+    enabled: Boolean = true,
     item: @Composable() (Int) -> Unit
 ) = composable {
-    val state = remember { ScrollableListState(ScrollPosition()) }
+    val state = remember(position) { ScrollableListState(position) } // todo
     remember(count) { state.count = count }
     val density = ambientDensity()()
     remember(itemSizeProvider) {
@@ -114,7 +138,11 @@ fun ScrollableList(
 
     remember(count, itemSizeProvider) { state.itemsChanged() }
 
-    Scrollable(position = state.position) {
+    Scrollable(
+        position = state.position,
+        direction = direction,
+        enabled = enabled
+    ) {
         remember(state.position.value) { state.computeVisibleItemRange() }
 
         Clip(RectangleShape) {

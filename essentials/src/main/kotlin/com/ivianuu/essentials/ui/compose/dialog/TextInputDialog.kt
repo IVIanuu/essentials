@@ -23,6 +23,7 @@ import androidx.ui.core.TextField
 import androidx.ui.input.KeyboardType
 import androidx.ui.material.MaterialTheme
 import com.ivianuu.essentials.R
+import com.ivianuu.essentials.ui.compose.common.asTextComposable
 import com.ivianuu.essentials.ui.compose.common.hideKeyboard
 import com.ivianuu.essentials.ui.compose.common.showKeyboard
 import com.ivianuu.essentials.ui.compose.core.composable
@@ -37,7 +38,7 @@ fun textInputRoute(
     initial: String = "",
     hint: String? = null,
     keyboardType: KeyboardType = KeyboardType.Text,
-    title: (@Composable() () -> Unit)? = null,
+    title: String? = null,
     allowEmpty: Boolean = true
 ) = dialogRoute {
     val navigator = inject<Navigator>()
@@ -45,11 +46,11 @@ fun textInputRoute(
     val (currentValue, setCurrentValue) = state { initial }
 
     TextInputDialog(
-        value = initial,
+        value = currentValue,
         onValueChange = setCurrentValue,
         hint = hint,
         keyboardType = keyboardType,
-        title = title,
+        title = title?.asTextComposable(),
         positiveButton = {
             DialogButton(
                 text = stringResource(R.string.es_ok),

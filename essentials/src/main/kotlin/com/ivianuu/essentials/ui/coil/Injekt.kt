@@ -31,28 +31,28 @@ import com.ivianuu.injekt.module
 import kotlin.reflect.KClass
 
 val esCoilModule = module {
-    set<Decoder>(Decoders)
-    set<FetcherBinding<*>>(Fetchers)
-    set<MapperBinding<*>>(Mappers)
-    set<MeasuredMapperBinding<*>>(MeasuredMappers)
+    set<Decoder>(setName = Decoders)
+    set<FetcherBinding<*>>(setName = Fetchers)
+    set<MapperBinding<*>>(setName = Mappers)
+    set<MeasuredMapperBinding<*>>(setName = MeasuredMappers)
 
     single {
         ImageLoader(get()) {
             componentRegistry {
-                get<Set<Decoder>>(Decoders)
+                get<Set<Decoder>>(name = Decoders)
                     .forEach { add(it) }
 
-                get<Set<FetcherBinding<*>>>(Fetchers)
+                get<Set<FetcherBinding<*>>>(name = Fetchers)
                     .forEach { binding ->
                         CoilAccessor.add(this, binding.type.java, binding.fetcher)
                     }
 
-                get<Set<MapperBinding<*>>>(Mappers)
+                get<Set<MapperBinding<*>>>(name = Mappers)
                     .forEach { binding ->
                         CoilAccessor.add(this, binding.type.java, binding.mapper)
                     }
 
-                get<Set<MeasuredMapperBinding<*>>>(MeasuredMappers)
+                get<Set<MeasuredMapperBinding<*>>>(name = MeasuredMappers)
                     .forEach { binding ->
                         CoilAccessor.add(this, binding.type.java, binding.mapper)
                     }

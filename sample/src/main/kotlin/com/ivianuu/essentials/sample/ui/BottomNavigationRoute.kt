@@ -19,7 +19,7 @@ package com.ivianuu.essentials.sample.ui
 import androidx.ui.foundation.ColoredRect
 import androidx.ui.graphics.Color
 import com.ivianuu.essentials.sample.R
-import com.ivianuu.essentials.ui.compose.composeControllerRoute
+import com.ivianuu.essentials.ui.compose.es.composeControllerRoute
 import com.ivianuu.essentials.ui.compose.material.BottomNavigationBar
 import com.ivianuu.essentials.ui.compose.material.BottomNavigationBarItem
 import com.ivianuu.essentials.ui.compose.material.BottomNavigationController
@@ -30,30 +30,31 @@ import com.ivianuu.essentials.ui.compose.resources.drawableResource
 import com.ivianuu.essentials.ui.navigation.director.controllerRouteOptions
 import com.ivianuu.essentials.ui.navigation.director.fade
 
-val bottomNavigationRoute = composeControllerRoute(
-    options = controllerRouteOptions().fade()
-) {
-    BottomNavigationController(
-        items = BottomNavItem.values().toList()
+val bottomNavigationRoute =
+    composeControllerRoute(
+        options = controllerRouteOptions().fade()
     ) {
-        Scaffold(
-            topAppBar = { EsTopAppBar("Bottom navigation") },
-            body = {
-                BottomNavigationSwapper<BottomNavItem>(keepState = true) { _, item ->
-                    ColoredRect(item.color)
+        BottomNavigationController(
+            items = BottomNavItem.values().toList()
+        ) {
+            Scaffold(
+                topAppBar = { EsTopAppBar("Bottom navigation") },
+                body = {
+                    BottomNavigationSwapper<BottomNavItem>(keepState = true) { _, item ->
+                        ColoredRect(item.color)
+                    }
+                },
+                bottomBar = {
+                    BottomNavigationBar<BottomNavItem> { _, item ->
+                        BottomNavigationBarItem(
+                            icon = drawableResource(item.iconRes),
+                            text = item.title
+                        )
+                    }
                 }
-            },
-            bottomBar = {
-                BottomNavigationBar<BottomNavItem> { _, item ->
-                    BottomNavigationBarItem(
-                        icon = drawableResource(item.iconRes),
-                        text = item.title
-                    )
-                }
-            }
-        )
+            )
+        }
     }
-}
 
 private enum class BottomNavItem(
     val title: String,

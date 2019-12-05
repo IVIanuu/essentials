@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.compose
+package com.ivianuu.essentials.ui.compose.es
 
 import android.view.LayoutInflater
 import android.view.View
@@ -36,7 +36,8 @@ import com.ivianuu.essentials.ui.compose.core.MediaQueryProvider
 import com.ivianuu.essentials.ui.compose.core.RouteAmbient
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.invoke
-import com.ivianuu.essentials.ui.compose.coroutines.collect
+import com.ivianuu.essentials.ui.compose.core.remember
+import com.ivianuu.essentials.ui.compose.core.staticComposable
 import com.ivianuu.essentials.ui.compose.injekt.ComponentAmbient
 import com.ivianuu.essentials.ui.compose.injekt.MaterialThemeProvider
 import com.ivianuu.essentials.ui.compose.injekt.inject
@@ -78,25 +79,28 @@ abstract class ComposeController : EsController() {
             ControllerAmbient with this,
             ComponentAmbient with component
         ) {
-            val viewportMetrics = collect(view.viewportMetrics)
-            if (viewportMetrics != null) {
-                val mediaQuery = MediaQuery(
+            val viewportMetrics = view.viewportMetrics
+            val density = ambientDensity()()
+            val isDarkTheme = isSystemInDarkTheme()()
+
+            val mediaQuery = remember(viewportMetrics, density, isDarkTheme) {
+                MediaQuery(
                     size = viewportMetrics.size,
                     viewPadding = viewportMetrics.viewPadding,
                     viewInsets = viewportMetrics.viewInsets,
-                    density = ambientDensity()(),
-                    darkMode = isSystemInDarkTheme()()
+                    density = density,
+                    darkMode = isDarkTheme
                 )
+            }
 
-                MediaQueryProvider(value = mediaQuery) {
-                    val materialThemeProvider = inject<MaterialThemeProvider>()
-                    MaterialTheme(
-                        colors = materialThemeProvider.colors(),
-                        typography = materialThemeProvider.typography()
-                    ) {
-                        composable {
-                            content()
-                        }
+            MediaQueryProvider(value = mediaQuery) {
+                val materialThemeProvider = inject<MaterialThemeProvider>()
+                MaterialTheme(
+                    colors = materialThemeProvider.colors(),
+                    typography = materialThemeProvider.typography()
+                ) {
+                    staticComposable {
+                        content()
                     }
                 }
             }

@@ -18,8 +18,12 @@ package com.ivianuu.essentials.ui.compose.prefs
 
 import androidx.compose.Composable
 import androidx.ui.core.Text
+import androidx.ui.graphics.Image
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.store.Box
+import com.ivianuu.essentials.ui.compose.common.asIconComposable
+import com.ivianuu.essentials.ui.compose.common.asTextComposable
+import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.composableWithKey
 import com.ivianuu.essentials.ui.compose.core.stateFor
 import com.ivianuu.essentials.ui.compose.dialog.DialogButton
@@ -30,19 +34,44 @@ import com.ivianuu.essentials.ui.compose.resources.stringResource
 // todo improve api
 
 @Composable
-fun MultiChoiceListPreference(
-    box: Box<Set<String>>,
-    onChange: ((Set<String>) -> Boolean)? = null,
+fun <T> MultiChoiceListPreference(
+    box: Box<Set<T>>,
+    onChange: ((Set<T>) -> Boolean)? = null,
+    enabled: Boolean = true,
+    dependencies: List<Dependency<*>>? = null,
+    title: String? = null,
+    summary: String? = null,
+    image: Image? = null,
+    dialogTitle: String? = title,
+    items: List<MultiChoiceListPreference.Item<T>>
+) = composableWithKey("MultiChoiceListPreference:$box") {
+    MultiChoiceListPreference(
+        valueController = ValueController(box),
+        onChange = onChange,
+        enabled = enabled,
+        dependencies = dependencies,
+        title = title.asTextComposable(),
+        summary = summary.asTextComposable(),
+        leading = image.asIconComposable(),
+        dialogTitle = dialogTitle.asTextComposable(),
+        items = items
+    )
+}
+
+@Composable
+fun <T> MultiChoiceListPreference(
+    valueController: ValueController<Set<T>>,
+    onChange: ((Set<T>) -> Boolean)? = null,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
     title: (@Composable() () -> Unit)? = null,
     summary: (@Composable() () -> Unit)? = null,
     leading: (@Composable() () -> Unit)? = null,
     dialogTitle: (@Composable() () -> Unit)? = title,
-    items: List<MultiChoiceListPreference.Item>
-) = composableWithKey("MultiChoiceListPreference:$box") {
+    items: List<MultiChoiceListPreference.Item<T>>
+) = composable {
     DialogPreference(
-        box = box,
+        valueController = valueController,
         onChange = onChange,
         enabled = enabled,
         dependencies = dependencies,
@@ -79,10 +108,8 @@ fun MultiChoiceListPreference(
 }
 
 object MultiChoiceListPreference {
-    data class Item(
+    data class Item<T>(
         val title: String,
-        val value: String
-    ) {
-        constructor(value: String) : this(value, value)
-    }
+        val value: T
+    )
 }

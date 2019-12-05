@@ -21,6 +21,7 @@ import androidx.ui.core.Alignment
 import androidx.ui.core.ContextAmbient
 import androidx.ui.core.Text
 import androidx.ui.core.dp
+import androidx.ui.graphics.Image
 import androidx.ui.layout.Container
 import androidx.ui.layout.DpConstraints
 import androidx.ui.layout.EdgeInsets
@@ -31,6 +32,8 @@ import androidx.ui.material.MaterialTheme
 import androidx.ui.material.Slider
 import androidx.ui.material.SliderPosition
 import com.ivianuu.essentials.store.Box
+import com.ivianuu.essentials.ui.compose.common.asIconComposable
+import com.ivianuu.essentials.ui.compose.common.asTextComposable
 import com.ivianuu.essentials.ui.compose.core.ambient
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.composableWithKey
@@ -44,9 +47,164 @@ import com.ivianuu.essentials.ui.compose.layout.Row
 import com.ivianuu.essentials.ui.compose.layout.WithModifier
 import com.ivianuu.essentials.util.UnitValueTextProvider
 
+@JvmName("DoubleSliderPreference")
+@Composable
+fun SliderPreference(
+    box: Box<Double>,
+    onChange: ((Double) -> Boolean)? = null,
+    enabled: Boolean = true,
+    dependencies: List<Dependency<*>>? = null,
+    title: String? = null,
+    summary: String? = null,
+    image: Image? = null,
+    valueRange: ClosedFloatingPointRange<Double> = 0.0..1.0,
+    steps: Int? = null,
+    valueText: @Composable() ((Double) -> Unit)? = {
+        SimpleSliderValueText(it)
+    }
+) = composableWithKey("DoubleSliderPreference:$box") {
+    SliderPreference(
+        valueController = ValueController(box),
+        onChange = onChange,
+        enabled = enabled,
+        dependencies = dependencies,
+        title = title.asTextComposable(),
+        summary = summary.asTextComposable(),
+        leading = image.asIconComposable(),
+        valueRange = valueRange,
+        steps = steps,
+        valueText = valueText
+    )
+}
+
+@JvmName("DoubleSliderPreference")
+@Composable
+fun SliderPreference(
+    valueController: ValueController<Double>,
+    onChange: ((Double) -> Boolean)? = null,
+    enabled: Boolean = true,
+    dependencies: List<Dependency<*>>? = null,
+    title: (@Composable() () -> Unit)? = null,
+    summary: (@Composable() () -> Unit)? = null,
+    leading: (@Composable() () -> Unit)? = null,
+    valueRange: ClosedFloatingPointRange<Double> = 0.0..1.0,
+    steps: Int? = null,
+    valueText: @Composable() ((Double) -> Unit)? = {
+        SimpleSliderValueText(it)
+    }
+) {
+    SliderPreference(
+        valueController = valueController,
+        toFloat = { it.toFloat() },
+        fromFloat = { it.toDouble() },
+        onChange = onChange,
+        enabled = enabled,
+        dependencies = dependencies,
+        title = title,
+        summary = summary,
+        leading = leading,
+        valueRange = valueRange,
+        steps = steps,
+        valueText = valueText
+    )
+}
+
+@JvmName("FloatSliderPreference")
+@Composable
+fun SliderPreference(
+    box: Box<Float>,
+    onChange: ((Float) -> Boolean)? = null,
+    enabled: Boolean = true,
+    dependencies: List<Dependency<*>>? = null,
+    title: String? = null,
+    summary: String? = null,
+    image: Image? = null,
+    valueRange: ClosedFloatingPointRange<Float> = 0f..1f,
+    steps: Int? = null,
+    valueText: @Composable() ((Float) -> Unit)? = {
+        SimpleSliderValueText(it)
+    }
+) = composableWithKey("FloatSliderPreference:$box") {
+    SliderPreference(
+        valueController = ValueController(box),
+        onChange = onChange,
+        enabled = enabled,
+        dependencies = dependencies,
+        title = title.asTextComposable(),
+        summary = summary.asTextComposable(),
+        leading = image.asIconComposable(),
+        valueRange = valueRange,
+        steps = steps,
+        valueText = valueText
+    )
+}
+
+@JvmName("FloatSliderPreference")
+@Composable
+fun SliderPreference(
+    valueController: ValueController<Float>,
+    onChange: ((Float) -> Boolean)? = null,
+    enabled: Boolean = true,
+    dependencies: List<Dependency<*>>? = null,
+    title: (@Composable() () -> Unit)? = null,
+    summary: (@Composable() () -> Unit)? = null,
+    leading: (@Composable() () -> Unit)? = null,
+    valueRange: ClosedFloatingPointRange<Float> = 0f..1f,
+    steps: Int? = null,
+    valueText: @Composable() ((Float) -> Unit)? = {
+        SimpleSliderValueText(it)
+    }
+) = composable {
+    SliderPreference(
+        valueController = valueController,
+        toFloat = { it },
+        fromFloat = { it },
+        onChange = onChange,
+        enabled = enabled,
+        dependencies = dependencies,
+        title = title,
+        summary = summary,
+        leading = leading,
+        valueRange = valueRange,
+        steps = steps,
+        valueText = valueText
+    )
+}
+
+@JvmName("IntSliderPreference")
 @Composable
 fun SliderPreference(
     box: Box<Int>,
+    onChange: ((Int) -> Boolean)? = null,
+    enabled: Boolean = true,
+    dependencies: List<Dependency<*>>? = null,
+    title: String? = null,
+    summary: String? = null,
+    image: Image? = null,
+    valueRange: IntRange = 0..100,
+    steps: Int? = null,
+    valueText: @Composable() ((Int) -> Unit)? = {
+        SimpleSliderValueText(it)
+    }
+) = composableWithKey("IntSliderPreference:$box") {
+    SliderPreference(
+        valueController = ValueController(box),
+        onChange = onChange,
+        enabled = enabled,
+        dependencies = dependencies,
+        title = title.asTextComposable(),
+        summary = summary.asTextComposable(),
+        leading = image.asIconComposable(),
+        valueRange = valueRange,
+        steps = steps,
+        valueText = valueText
+    )
+}
+
+@JvmName("IntSliderPreference")
+@Composable
+fun SliderPreference(
+    valueController: ValueController<Int>,
     onChange: ((Int) -> Boolean)? = null,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
@@ -58,9 +216,104 @@ fun SliderPreference(
     valueText: @Composable() ((Int) -> Unit)? = {
         SimpleSliderValueText(it)
     }
-) = composableWithKey("SliderPreference:$box") {
+) = composable {
+    SliderPreference(
+        valueController = valueController,
+        toFloat = { it.toFloat() },
+        fromFloat = { it.toInt() },
+        onChange = onChange,
+        enabled = enabled,
+        dependencies = dependencies,
+        title = title,
+        summary = summary,
+        leading = leading,
+        valueRange = valueRange,
+        steps = steps,
+        valueText = valueText
+    )
+}
+
+@JvmName("LongSliderPreference")
+@Composable
+fun SliderPreference(
+    box: Box<Long>,
+    onChange: ((Long) -> Boolean)? = null,
+    enabled: Boolean = true,
+    dependencies: List<Dependency<*>>? = null,
+    title: String? = null,
+    summary: String? = null,
+    image: Image? = null,
+    valueRange: LongRange = 0L..100L,
+    steps: Int? = null,
+    valueText: @Composable() ((Long) -> Unit)? = {
+        SimpleSliderValueText(it)
+    }
+) = composableWithKey("LongSliderPreference:$box") {
+    SliderPreference(
+        valueController = ValueController(box),
+        onChange = onChange,
+        enabled = enabled,
+        dependencies = dependencies,
+        title = title.asTextComposable(),
+        summary = summary.asTextComposable(),
+        leading = image.asIconComposable(),
+        valueRange = valueRange,
+        steps = steps,
+        valueText = valueText
+    )
+}
+
+@JvmName("LongSliderPreference")
+@Composable
+fun SliderPreference(
+    valueController: ValueController<Long>,
+    onChange: ((Long) -> Boolean)? = null,
+    enabled: Boolean = true,
+    dependencies: List<Dependency<*>>? = null,
+    title: (@Composable() () -> Unit)? = null,
+    summary: (@Composable() () -> Unit)? = null,
+    leading: (@Composable() () -> Unit)? = null,
+    valueRange: LongRange = 0L..100L,
+    steps: Int? = null,
+    valueText: @Composable() ((Long) -> Unit)? = {
+        SimpleSliderValueText(it)
+    }
+) = composable {
+    SliderPreference(
+        valueController = valueController,
+        toFloat = { it.toFloat() },
+        fromFloat = { it.toLong() },
+        onChange = onChange,
+        enabled = enabled,
+        dependencies = dependencies,
+        title = title,
+        summary = summary,
+        leading = leading,
+        valueRange = valueRange,
+        steps = steps,
+        valueText = valueText
+    )
+}
+
+@Composable
+fun <T : Comparable<T>> SliderPreference(
+    valueController: ValueController<T>,
+    toFloat: (T) -> Float,
+    fromFloat: (Float) -> T,
+    onChange: ((T) -> Boolean)? = null,
+    enabled: Boolean = true,
+    dependencies: List<Dependency<*>>? = null,
+    title: (@Composable() () -> Unit)? = null,
+    summary: (@Composable() () -> Unit)? = null,
+    leading: (@Composable() () -> Unit)? = null,
+    valueRange: ClosedRange<T>,
+    steps: Int? = null,
+    valueText: @Composable() ((T) -> Unit)? = {
+        SimpleSliderValueText(it)
+    }
+) = composable {
     PreferenceWrapper(
-        box = box,
+        valueController = valueController,
         onChange = onChange,
         enabled = enabled,
         dependencies = dependencies
@@ -80,10 +333,10 @@ fun SliderPreference(
                 Row(crossAxisAlignment = CrossAxisAlignment.Center) {
                     val internalValue = state { context.currentValue }
 
-                    val onChanged: ((Int) -> Unit)? = if (context.dependenciesOk) {
+                    val onChanged: ((Float) -> Unit)? = if (context.dependenciesOk) {
                         { newValue ->
-                            if (onChange?.invoke(newValue) != false) {
-                                internalValue.value = newValue
+                            if (onChange?.invoke(fromFloat(newValue)) != false) {
+                                internalValue.value = fromFloat(newValue)
                             }
                         }
                     } else {
@@ -92,8 +345,9 @@ fun SliderPreference(
 
                     WithModifier(modifier = Flexible(1f) wraps Spacing(left = 8.dp)) {
                         val position = remember(valueRange, steps) {
-                            val initial = context.currentValue.toFloat()
-                            val floatRange = valueRange.first.toFloat()..valueRange.last.toFloat()
+                            val initial = toFloat(context.currentValue)
+                            val floatRange =
+                                toFloat(valueRange.start)..toFloat(valueRange.endInclusive)
                             if (steps != null) {
                                 SliderPosition(
                                     initial = initial,
@@ -113,12 +367,12 @@ fun SliderPreference(
                             onValueChange = {
                                 if (context.shouldBeEnabled) {
                                     position.value = it
-                                    onChanged?.invoke(it.toInt())
+                                    onChanged?.invoke(it)
                                 }
                             },
                             onValueChangeEnd = {
                                 if (context.shouldBeEnabled) {
-                                    context.setIfOk(position.value.toInt())
+                                    context.setIfOk(fromFloat(position.value))
                                 }
                             }
                         )
@@ -142,7 +396,7 @@ fun SliderPreference(
 }
 
 @Composable
-fun SimpleSliderValueText(value: Int) = composable {
+fun <T> SimpleSliderValueText(value: T) = composable {
     Text(
         text = value.toString(),
         style = MaterialTheme.typography()().body2,
@@ -151,15 +405,15 @@ fun SimpleSliderValueText(value: Int) = composable {
 }
 
 @Composable
-fun unitValueTextProvider(
+fun <T> unitValueTextProvider(
     unit: UnitValueTextProvider.Unit
-): @Composable() (Int) -> Unit = effect {
+): @Composable() (T) -> Unit = effect {
     val textProvider = UnitValueTextProvider(
         ambient(ContextAmbient), unit
     )
     return@effect {
         Text(
-            text = textProvider(it),
+            text = textProvider(it.toString()),
             style = MaterialTheme.typography()().body2,
             maxLines = 1
         )

@@ -22,6 +22,7 @@ import com.ivianuu.essentials.store.Box
 import com.ivianuu.essentials.ui.compose.common.AbsorbPointer
 import com.ivianuu.essentials.ui.compose.common.asIconComposable
 import com.ivianuu.essentials.ui.compose.common.asTextComposable
+import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.composableWithKey
 import com.ivianuu.essentials.ui.compose.material.EsCheckbox
 
@@ -36,7 +37,7 @@ fun CheckboxPreference(
     image: Image? = null
 ) = composableWithKey("CheckboxPreference:$box") {
     CheckboxPreference(
-        box = box,
+        valueController = ValueController(box),
         onChange = onChange,
         enabled = enabled,
         dependencies = dependencies,
@@ -48,16 +49,16 @@ fun CheckboxPreference(
 
 @Composable
 fun CheckboxPreference(
-    box: Box<Boolean>,
+    valueController: ValueController<Boolean>,
     onChange: ((Boolean) -> Boolean)? = null,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
     title: (@Composable() () -> Unit)? = null,
     summary: (@Composable() () -> Unit)? = null,
     leading: (@Composable() () -> Unit)? = null
-) = composableWithKey("CheckboxPreference:$box") {
+) = composable {
     PreferenceWrapper(
-        box = box,
+        valueController = valueController,
         onChange = onChange,
         enabled = enabled,
         dependencies = dependencies

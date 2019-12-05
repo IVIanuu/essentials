@@ -36,12 +36,12 @@ import com.ivianuu.essentials.apps.ui.intentAppFilter
 import com.ivianuu.essentials.twilight.twilightSettingsRoute
 import com.ivianuu.essentials.ui.compose.common.navigateOnClick
 import com.ivianuu.essentials.ui.compose.common.scrolling.ScrollableList
-import com.ivianuu.essentials.ui.compose.composeControllerRoute
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.invoke
 import com.ivianuu.essentials.ui.compose.core.remember
 import com.ivianuu.essentials.ui.compose.core.staticComposable
 import com.ivianuu.essentials.ui.compose.core.staticComposableWithKey
+import com.ivianuu.essentials.ui.compose.es.composeControllerRoute
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.compose.layout.Column
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
@@ -50,7 +50,6 @@ import com.ivianuu.essentials.ui.compose.material.Scaffold
 import com.ivianuu.essentials.ui.compose.material.SimpleListItem
 import com.ivianuu.essentials.ui.navigation.Route
 import com.ivianuu.essentials.util.Toaster
-
 
 val homeRoute = composeControllerRoute {
     Scaffold(
@@ -77,7 +76,7 @@ val homeRoute = composeControllerRoute {
             val items = remember { HomeItem.values().toList().sortedBy { it.name } }
             ScrollableList(
                 items = items,
-                itemSizeProvider = { if (it != items.lastIndex) 57.dp else 56.dp }
+                itemSizeProvider = { index, _ -> if (index != items.lastIndex) 57.dp else 56.dp }
             ) { index, item ->
                 staticComposableWithKey(item) {
                     Column {
