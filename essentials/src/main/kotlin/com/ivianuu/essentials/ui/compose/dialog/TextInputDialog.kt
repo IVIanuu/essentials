@@ -46,7 +46,7 @@ fun textInputRoute(
     val (currentValue, setCurrentValue) = state { initial }
 
     TextInputDialog(
-        value = initial,
+        value = currentValue,
         onValueChange = setCurrentValue,
         hint = hint,
         keyboardType = keyboardType,
