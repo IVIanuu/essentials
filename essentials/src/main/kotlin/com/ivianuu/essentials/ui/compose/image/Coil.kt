@@ -30,15 +30,16 @@ import com.ivianuu.essentials.ui.compose.injekt.inject
 @Composable
 fun image(
     data: Any,
-    placeholder: Image
-): Image = effect { image(data) ?: placeholder }
+    placeholder: Image,
+    imageLoader: ImageLoader = inject()
+): Image = effect { image(data, imageLoader) ?: placeholder }
 
 @Composable
 fun image(
-    data: Any
+    data: Any,
+    imageLoader: ImageLoader = inject()
 ): Image? = effect {
-    val imageLoader = inject<ImageLoader>()
-    return@effect load(placeholder = null, key = data) {
+    return@effect load(placeholder = null, key = data to imageLoader) {
         imageLoader.getAny(data).toImage()
     }
 }
@@ -47,6 +48,7 @@ fun image(
 fun Image(
     data: Any,
     placeholder: Image? = null,
+    imageLoader: ImageLoader = inject(),
     image: @Composable() (Image) -> Unit
 ) = composableWithKey(data) {
     val wasPlaceholderNull = placeholder == null
@@ -54,7 +56,8 @@ fun Image(
     val placeholder = remember(placeholder) { placeholder ?: Image(1, 1) }
     val loadedImage = image(
         placeholder = placeholder,
-        data = data
+        data = data,
+        imageLoader = imageLoader
     )
 
     if (!wasPlaceholderNull || loadedImage != placeholder) {
