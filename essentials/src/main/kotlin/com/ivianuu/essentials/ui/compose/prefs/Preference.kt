@@ -84,29 +84,32 @@ fun PreferenceLayout(
 }
 
 interface ValueController<T> {
-    var value: T
+    val currentValue: T
+    fun setValue(value: T)
 }
 
 fun <T> ValueController(
     value: T,
     onValueChange: (T) -> Unit
 ) = object : ValueController<T> {
-    override var value: T
+    override val currentValue: T
         get() = value
-        set(value) {
-            onValueChange(value)
-        }
+
+    override fun setValue(value: T) {
+        onValueChange(value)
+    }
 }
 
 @Composable
 fun <T> ValueController(box: Box<T>): ValueController<T> = effect {
     val (value, setValue) = unfoldBox(box)
     return@effect object : ValueController<T> {
-        override var value: T
+        override val currentValue: T
             get() = value
-            set(value) {
-                setValue(value)
-            }
+
+        override fun setValue(value: T) {
+            setValue(value)
+        }
     }
 }
 
@@ -114,7 +117,7 @@ class PreferenceContext<T> {
 
     internal lateinit var valueController: ValueController<T>
 
-    val currentValue: T get() = valueController.value
+    val currentValue: T get() = valueController.currentValue
 
     var onChange: ((T) -> Boolean)? by framed(null)
         internal set
@@ -126,7 +129,7 @@ class PreferenceContext<T> {
 
     fun setIfOk(newValue: T): Boolean {
         val isOk = shouldBeEnabled && onChange?.invoke(newValue) ?: true
-        if (isOk) valueController.value = newValue
+        if (isOk) valueController.setValue(newValue)
         return isOk
     }
 
