@@ -81,7 +81,7 @@ internal class DiskBoxImpl<T>(
             }
             return@MutexValue serializer.deserialize(serialized)
         } catch (e: Exception) {
-            throw IOException("Couldn't read file $file")
+            throw IOException("Couldn't read file $file", e)
         }
     }
     private val multiProcessHelper = MultiProcessHelper(context, file) {

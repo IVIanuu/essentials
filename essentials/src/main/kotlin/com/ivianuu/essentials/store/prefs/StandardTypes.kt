@@ -98,14 +98,14 @@ private object StringMapSerializer : DiskBox.Serializer<Map<String, String>> {
     private const val ENTRY_DELIMITER = "^]"
     private const val VALUE_DELIMITER = "^\\"
     override fun deserialize(serialized: String): Map<String, String> {
-        return serialized.split(ENTRY_DELIMITER)
+        return if (serialized.isEmpty()) emptyMap() else serialized.split(ENTRY_DELIMITER)
             .map { it.split(VALUE_DELIMITER) }
             .associateBy { it[0] }
             .mapValues { it.value[1] }
     }
 
     override fun serialize(value: Map<String, String>): String {
-        return value.entries
+        return if (value.isEmpty()) "" else value.entries
             .map { "${it.key}$VALUE_DELIMITER${it.value}" }
             .joinToString(ENTRY_DELIMITER)
     }
