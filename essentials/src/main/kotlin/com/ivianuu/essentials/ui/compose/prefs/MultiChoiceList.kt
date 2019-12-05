@@ -31,8 +31,6 @@ import com.ivianuu.essentials.ui.compose.dialog.DialogCloseButton
 import com.ivianuu.essentials.ui.compose.dialog.MultiChoiceListDialog
 import com.ivianuu.essentials.ui.compose.resources.stringResource
 
-// todo improve api
-
 @Composable
 fun <T> MultiChoiceListPreference(
     box: Box<Set<T>>,

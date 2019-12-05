@@ -29,7 +29,6 @@ import androidx.ui.core.ipx
 import androidx.ui.layout.Container
 import androidx.ui.layout.EdgeInsets
 import androidx.ui.layout.Padding
-import androidx.ui.layout.WidthSpacer
 import androidx.ui.material.Divider
 import androidx.ui.material.MaterialTheme
 import com.ivianuu.essentials.ui.compose.core.composable
@@ -39,6 +38,7 @@ import com.ivianuu.essentials.ui.compose.layout.Column
 import com.ivianuu.essentials.ui.compose.layout.CrossAxisAlignment
 import com.ivianuu.essentials.ui.compose.layout.MainAxisAlignment
 import com.ivianuu.essentials.ui.compose.layout.Row
+import com.ivianuu.essentials.ui.compose.layout.WidthSpacer
 import com.ivianuu.essentials.ui.compose.material.CurrentIconStyleProvider
 import com.ivianuu.essentials.ui.compose.material.IconStyle
 import com.ivianuu.essentials.ui.compose.material.SecondaryTextAlpha

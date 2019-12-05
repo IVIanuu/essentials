@@ -17,15 +17,14 @@
 package com.ivianuu.essentials.ui.compose.prefs
 
 import androidx.compose.Composable
-import androidx.ui.core.Alignment
 import androidx.ui.core.ContextAmbient
 import androidx.ui.core.Text
 import androidx.ui.core.dp
 import androidx.ui.graphics.Image
+import androidx.ui.layout.Aligned
 import androidx.ui.layout.Container
 import androidx.ui.layout.DpConstraints
 import androidx.ui.layout.EdgeInsets
-import androidx.ui.layout.Padding
 import androidx.ui.layout.Spacing
 import androidx.ui.layout.Stack
 import androidx.ui.material.MaterialTheme
@@ -319,75 +318,77 @@ fun <T : Comparable<T>> SliderPreference(
         dependencies = dependencies
     ) { context ->
         Stack {
-            aligned(Alignment.BottomCenter) {
-                Padding(bottom = 32.dp) {
-                    PreferenceLayout(
-                        title = title,
-                        summary = summary,
-                        leading = leading
-                    )
-                }
+            Container(
+                modifier = Aligned.BottomCenter,
+                padding = EdgeInsets(bottom = 32.dp)
+            ) {
+                PreferenceLayout(
+                    title = title,
+                    summary = summary,
+                    leading = leading
+                )
             }
 
-            aligned(Alignment.BottomCenter) {
-                Row(crossAxisAlignment = CrossAxisAlignment.Center) {
-                    val internalValue = state { context.currentValue }
+            Row(
+                modifier = Aligned.BottomCenter,
+                crossAxisAlignment = CrossAxisAlignment.Center
+            ) {
+                val internalValue = state { context.currentValue }
 
-                    val onChanged: ((Float) -> Unit)? = if (context.dependenciesOk) {
-                        { newValue ->
-                            if (onChange?.invoke(fromFloat(newValue)) != false) {
-                                internalValue.value = fromFloat(newValue)
-                            }
+                val onChanged: ((Float) -> Unit)? = if (context.dependenciesOk) {
+                    { newValue ->
+                        if (onChange?.invoke(fromFloat(newValue)) != false) {
+                            internalValue.value = fromFloat(newValue)
                         }
-                    } else {
-                        null
+                    }
+                } else {
+                    null
+                }
+
+                WithModifier(modifier = Flexible(1f) wraps Spacing(left = 8.dp)) {
+                    val position = remember(valueRange, steps) {
+                        val initial = toFloat(context.currentValue)
+                        val floatRange =
+                            toFloat(valueRange.start)..toFloat(valueRange.endInclusive)
+                        if (steps != null) {
+                            SliderPosition(
+                                initial = initial,
+                                valueRange = floatRange,
+                                steps = steps
+                            )
+                        } else {
+                            SliderPosition(
+                                initial = initial,
+                                valueRange = floatRange
+                            )
+                        }
                     }
 
-                    WithModifier(modifier = Flexible(1f) wraps Spacing(left = 8.dp)) {
-                        val position = remember(valueRange, steps) {
-                            val initial = toFloat(context.currentValue)
-                            val floatRange =
-                                toFloat(valueRange.start)..toFloat(valueRange.endInclusive)
-                            if (steps != null) {
-                                SliderPosition(
-                                    initial = initial,
-                                    valueRange = floatRange,
-                                    steps = steps
-                                )
-                            } else {
-                                SliderPosition(
-                                    initial = initial,
-                                    valueRange = floatRange
-                                )
+                    Slider(
+                        position = position,
+                        onValueChange = {
+                            if (context.shouldBeEnabled) {
+                                position.value = it
+                                onChanged?.invoke(it)
+                            }
+                        },
+                        onValueChangeEnd = {
+                            if (context.shouldBeEnabled) {
+                                context.setIfOk(fromFloat(position.value))
                             }
                         }
+                    )
+                }
 
-                        Slider(
-                            position = position,
-                            onValueChange = {
-                                if (context.shouldBeEnabled) {
-                                    position.value = it
-                                    onChanged?.invoke(it)
-                                }
-                            },
-                            onValueChangeEnd = {
-                                if (context.shouldBeEnabled) {
-                                    context.setIfOk(fromFloat(position.value))
-                                }
-                            }
-                        )
-                    }
-
-                    if (valueText != null) {
-                        Container(
-                            modifier = Inflexible,
-                            constraints = DpConstraints(
-                                minWidth = 72.dp
-                            ),
-                            padding = EdgeInsets(right = 8.dp)
-                        ) {
-                            valueText.invokeAsComposable(internalValue.value)
-                        }
+                if (valueText != null) {
+                    Container(
+                        modifier = Inflexible,
+                        constraints = DpConstraints(
+                            minWidth = 72.dp
+                        ),
+                        padding = EdgeInsets(right = 8.dp)
+                    ) {
+                        valueText.invokeAsComposable(internalValue.value)
                     }
                 }
             }

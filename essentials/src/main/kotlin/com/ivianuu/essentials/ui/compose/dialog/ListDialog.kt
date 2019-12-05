@@ -24,7 +24,6 @@ import androidx.ui.foundation.Clickable
 import androidx.ui.layout.Container
 import androidx.ui.layout.EdgeInsets
 import androidx.ui.layout.ExpandedWidth
-import androidx.ui.layout.WidthSpacer
 import androidx.ui.material.ripple.Ripple
 import com.ivianuu.essentials.ui.compose.common.scrolling.ScrollPosition
 import com.ivianuu.essentials.ui.compose.common.scrolling.ScrollableList
@@ -35,6 +34,7 @@ import com.ivianuu.essentials.ui.compose.core.remember
 import com.ivianuu.essentials.ui.compose.layout.CrossAxisAlignment
 import com.ivianuu.essentials.ui.compose.layout.MainAxisAlignment
 import com.ivianuu.essentials.ui.compose.layout.Row
+import com.ivianuu.essentials.ui.compose.layout.WidthSpacer
 
 @Composable
 fun ListDialog(
@@ -97,7 +97,6 @@ fun SimpleDialogListItem(
                 ) {
                     if (leading != null) {
                         leading.invokeAsComposable()
-
                         WidthSpacer(24.dp)
                     }
 
