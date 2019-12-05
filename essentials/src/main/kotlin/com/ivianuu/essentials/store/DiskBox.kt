@@ -16,10 +16,6 @@
 
 package com.ivianuu.essentials.store
 
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.util.coroutineScope
 import com.ivianuu.essentials.util.share
@@ -28,16 +24,18 @@ import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.channels.BroadcastChannel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.IOException
-import java.util.UUID
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicReference
 import kotlin.time.measureTimedValue
@@ -52,21 +50,18 @@ interface DiskBox<T> : Box<T> {
 }
 
 fun <T> DiskBox(
-    context: Context,
     file: File,
     serializer: DiskBox.Serializer<T>,
     defaultValue: T,
     dispatcher: CoroutineDispatcher? = null
 ): DiskBox<T> = DiskBoxImpl(
-    context = context,
     file = file,
-    serializer = serializer,
     defaultValue = defaultValue,
+    serializer = serializer,
     dispatcher = dispatcher
 )
 
 internal class DiskBoxImpl<T>(
-    context: Context,
     override val file: File,
     override val defaultValue: T,
     private val serializer: DiskBox.Serializer<T>,
@@ -90,22 +85,28 @@ internal class DiskBoxImpl<T>(
         }
     }
 
-    private val multiProcessHelper = MultiProcessHelper(context, file) {
-        cachedValue.set(this) // force refetching the value
-        changeNotifier.offer(Unit)
-    }
-
     private val scope = MutableScope()
 
-    private val flow = flow {
-        emit(get())
-        changeNotifier.asFlow().collect {
-            emit(get())
+    private val flow = file.changes()
+        .filter {
+            !selfChange.getAndSet(false)
+                .also { isSelfChange ->
+                    d { "$file -> file changed is self ? $isSelfChange" }
+                }
         }
-    }
-        .onStart { d { "$file -> start internal flow" } }
-        .onCompletion { d { "$file -> end internal flow" } }
+        .onStart { emit(Unit) }
+        .onEach {
+            // force refetching the value
+            cachedValue.set(this)
+        }
+        .flatMapLatest {
+            changeNotifier.asFlow()
+                .onStart { emit(Unit) }
+        }
+        .map { get() }
         .share(scope.coroutineScope)
+
+    private val selfChange = AtomicBoolean(false)
 
     init {
         check(!file.isDirectory)
@@ -144,8 +145,8 @@ internal class DiskBoxImpl<T>(
                 }
 
                 cachedValue.set(value)
+                selfChange.set(true)
                 changeNotifier.offer(Unit)
-                multiProcessHelper.notifyWrite()
             }
         }
     }
@@ -204,6 +205,7 @@ internal class DiskBoxImpl<T>(
     }
 
     override fun asFlow(): Flow<T> {
+        d { "$file -> as flow" }
         checkNotDisposed()
         return flow
     }
@@ -212,7 +214,6 @@ internal class DiskBoxImpl<T>(
         d { "$file -> dispose" }
         if (_isDisposed.getAndSet(true)) {
             scope.close()
-            multiProcessHelper.dispose()
         }
     }
 
@@ -239,6 +240,7 @@ private fun File.changes(): Flow<Unit> = flow {
             lastFileState = currentFileState
             emit(Unit)
         }
+        delay(100)
     }
 }
 
@@ -251,57 +253,6 @@ private data class FileState(
     var exists: Boolean,
     var lastModified: Long
 )
-
-private class MultiProcessHelper(
-    private val context: Context,
-    private val file: File,
-    private val onChange: () -> Unit
-) {
-
-    private val uuid = UUID.randomUUID().toString()
-
-    private val receiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context, intent: Intent) {
-            if (intent.getStringExtra(EXTRA_CHANGE_OWNER) != uuid &&
-                file.absolutePath == intent.getStringExtra(EXTRA_PATH)
-            ) {
-                onChange()
-            }
-        }
-    }
-
-    init {
-        try {
-            context.registerReceiver(receiver, IntentFilter().apply {
-                addAction(ACTION_ON_CHANGE)
-            })
-        } catch (e: Exception) {
-        }
-    }
-
-    fun notifyWrite() {
-        try {
-            context.sendBroadcast(Intent(ACTION_ON_CHANGE).apply {
-                putExtra(EXTRA_CHANGE_OWNER, uuid)
-                putExtra(EXTRA_PATH, file.absolutePath)
-            })
-        } catch (e: Exception) {
-        }
-    }
-
-    fun dispose() {
-        try {
-            context.unregisterReceiver(receiver)
-        } catch (e: Exception) {
-        }
-    }
-
-    private companion object {
-        private const val ACTION_ON_CHANGE = "com.ivianuu.essentials.store.ON_CHANGE"
-        private const val EXTRA_CHANGE_OWNER = "change_owner"
-        private const val EXTRA_PATH = "path"
-    }
-}
 
 private class MutexValue<T>(private val getter: suspend () -> T) {
 

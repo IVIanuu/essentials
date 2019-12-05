@@ -16,17 +16,14 @@
 
 package com.ivianuu.essentials.store.prefs
 
-import android.content.Context
 import com.ivianuu.essentials.store.Box
 import com.ivianuu.essentials.store.DiskBox
 import com.ivianuu.essentials.util.AppDispatchers
 import com.ivianuu.injekt.Factory
-import com.ivianuu.injekt.android.ForApplication
 import java.io.File
 
 @Factory
 class PrefBoxFactory(
-    @ForApplication private val context: Context,
     private val dispatchers: AppDispatchers,
     @PrefsDir private val prefsDir: File
 ) {
@@ -37,10 +34,9 @@ class PrefBoxFactory(
         serializer: DiskBox.Serializer<T>
     ): Box<T> {
         return DiskBox(
-            context = context,
             file = File(prefsDir, name),
-            defaultValue = defaultValue,
             serializer = serializer,
+            defaultValue = defaultValue,
             dispatcher = dispatchers.io
         )
     }
