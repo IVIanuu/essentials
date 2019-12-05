@@ -31,16 +31,16 @@ import com.ivianuu.essentials.ui.compose.dialog.SingleChoiceListDialog
 import com.ivianuu.essentials.ui.compose.resources.stringResource
 
 @Composable
-fun SingleChoiceListPreference(
-    box: Box<String>,
-    onChange: ((String) -> Boolean)? = null,
+fun <T> SingleChoiceListPreference(
+    box: Box<T>,
+    onChange: ((T) -> Boolean)? = null,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
     title: String? = null,
     summary: String? = null,
     image: Image? = null,
     dialogTitle: String? = title,
-    items: List<SingleChoiceListPreference.Item>
+    items: List<SingleChoiceListPreference.Item<T>>
 ) = composableWithKey("SingleChoiceListPreference:$box") {
     SingleChoiceListPreference(
         box = box,
@@ -56,16 +56,16 @@ fun SingleChoiceListPreference(
 }
 
 @Composable
-fun SingleChoiceListPreference(
-    box: Box<String>,
-    onChange: ((String) -> Boolean)? = null,
+fun <T> SingleChoiceListPreference(
+    box: Box<T>,
+    onChange: ((T) -> Boolean)? = null,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
     title: (@Composable() () -> Unit)? = null,
     summary: (@Composable() () -> Unit)? = null,
     leading: (@Composable() () -> Unit)? = null,
     dialogTitle: (@Composable() () -> Unit)? = title,
-    items: List<SingleChoiceListPreference.Item>
+    items: List<SingleChoiceListPreference.Item<T>>
 ) = composableWithKey("SingleChoiceListPreference:$box") {
     DialogPreference(
         box = box,
@@ -99,10 +99,8 @@ fun SingleChoiceListPreference(
 }
 
 object SingleChoiceListPreference {
-    data class Item(
+    data class Item<T>(
         val title: String,
-        val value: String
-    ) {
-        constructor(value: String) : this(value, value)
-    }
+        val value: T
+    )
 }

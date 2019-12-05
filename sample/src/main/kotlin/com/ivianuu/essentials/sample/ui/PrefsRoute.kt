@@ -98,9 +98,9 @@ val prefsRoute = composeControllerRoute(
                 MultiChoiceListPreference(
                     box = boxFactory.stringSet("multi_select_list", setOf("A", "B")),
                     items = listOf(
-                        MultiChoiceListPreference.Item("A"),
-                        MultiChoiceListPreference.Item("B"),
-                        MultiChoiceListPreference.Item("C")
+                        MultiChoiceListPreference.Item("A", "A"),
+                        MultiChoiceListPreference.Item("B", "B"),
+                        MultiChoiceListPreference.Item("C", "C")
                     ),
                     title = "Multi select list",
                     summary = "This is a multi select list preference",
@@ -110,9 +110,9 @@ val prefsRoute = composeControllerRoute(
                 SingleChoiceListPreference(
                     box = boxFactory.string("single_item_list", "C"),
                     items = listOf(
-                        SingleChoiceListPreference.Item("A"),
-                        SingleChoiceListPreference.Item("B"),
-                        SingleChoiceListPreference.Item("C")
+                        SingleChoiceListPreference.Item("A", "A"),
+                        SingleChoiceListPreference.Item("B", "B"),
+                        SingleChoiceListPreference.Item("C", "C")
                     ),
                     title = "Single item list",
                     summary = "This is a single item list preference",

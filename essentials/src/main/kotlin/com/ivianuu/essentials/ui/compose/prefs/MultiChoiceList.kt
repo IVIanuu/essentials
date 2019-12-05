@@ -33,16 +33,16 @@ import com.ivianuu.essentials.ui.compose.resources.stringResource
 // todo improve api
 
 @Composable
-fun MultiChoiceListPreference(
-    box: Box<Set<String>>,
-    onChange: ((Set<String>) -> Boolean)? = null,
+fun <T> MultiChoiceListPreference(
+    box: Box<Set<T>>,
+    onChange: ((Set<T>) -> Boolean)? = null,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
     title: String? = null,
     summary: String? = null,
     image: Image? = null,
     dialogTitle: String? = title,
-    items: List<MultiChoiceListPreference.Item>
+    items: List<MultiChoiceListPreference.Item<T>>
 ) = composableWithKey("MultiChoiceListPreference:$box") {
     MultiChoiceListPreference(
         box = box,
@@ -58,16 +58,16 @@ fun MultiChoiceListPreference(
 }
 
 @Composable
-fun MultiChoiceListPreference(
-    box: Box<Set<String>>,
-    onChange: ((Set<String>) -> Boolean)? = null,
+fun <T> MultiChoiceListPreference(
+    box: Box<Set<T>>,
+    onChange: ((Set<T>) -> Boolean)? = null,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
     title: (@Composable() () -> Unit)? = null,
     summary: (@Composable() () -> Unit)? = null,
     leading: (@Composable() () -> Unit)? = null,
     dialogTitle: (@Composable() () -> Unit)? = title,
-    items: List<MultiChoiceListPreference.Item>
+    items: List<MultiChoiceListPreference.Item<T>>
 ) = composableWithKey("MultiChoiceListPreference:$box") {
     DialogPreference(
         box = box,
@@ -107,10 +107,8 @@ fun MultiChoiceListPreference(
 }
 
 object MultiChoiceListPreference {
-    data class Item(
+    data class Item<T>(
         val title: String,
-        val value: String
-    ) {
-        constructor(value: String) : this(value, value)
-    }
+        val value: T
+    )
 }
