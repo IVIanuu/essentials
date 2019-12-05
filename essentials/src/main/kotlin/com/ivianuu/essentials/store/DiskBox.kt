@@ -102,7 +102,6 @@ internal class DiskBoxImpl<T>(
                         d { "$path -> file changed is self ? $isSelfChange" }
                     }
             }
-            .onStart { emit(Unit) }
             .onEach {
                 d { "$path -> reset cache due to external change" }
                 // force refetching the value
@@ -111,7 +110,6 @@ internal class DiskBoxImpl<T>(
             .flatMapLatest {
                 changeNotifier.asFlow()
                     .onEach { d { "$path -> change notified" } }
-                    .onStart { emit(Unit) }
             }
             .onEach { d { "$path -> refresh stream" } }
             .map { get() }

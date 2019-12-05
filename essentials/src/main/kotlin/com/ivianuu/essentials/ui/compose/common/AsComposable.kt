@@ -19,6 +19,7 @@ package com.ivianuu.essentials.ui.compose.common
 import androidx.compose.Composable
 import androidx.ui.core.Text
 import androidx.ui.graphics.Image
+import androidx.ui.layout.Center
 import com.ivianuu.essentials.ui.compose.material.Icon
 
 fun String?.asTextComposable(): (@Composable() () -> Unit)? = if (this == null) null else {
@@ -29,6 +30,8 @@ fun String?.asTextComposable(): (@Composable() () -> Unit)? = if (this == null) 
 
 fun Image?.asIconComposable(): (@Composable() () -> Unit)? = if (this == null) null else {
     {
-        Icon(this)
+        Center {
+            Icon(this)
+        }
     }
 }
