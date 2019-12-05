@@ -34,7 +34,7 @@ import com.ivianuu.essentials.ui.compose.image.Image
 import com.ivianuu.essentials.ui.compose.material.AvatarIconStyle
 import com.ivianuu.essentials.ui.compose.material.Icon
 import com.ivianuu.essentials.ui.compose.material.SimpleListItem
-import com.ivianuu.essentials.ui.compose.mvrx.mvRxViewModel
+import com.ivianuu.essentials.ui.compose.mvrx.injekt.mvRxViewModel
 import com.ivianuu.essentials.ui.compose.resources.stringResource
 import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
 import com.ivianuu.essentials.ui.navigation.Navigator
@@ -52,9 +52,10 @@ fun appPickerRoute(
     appFilter: AppFilter = DefaultAppFilter
 ) = composeControllerRoute {
     ListScreen(title = title ?: stringResource(R.string.es_title_app_picker)) {
-        val viewModel = mvRxViewModel<AppPickerViewModel> {
-            parametersOf(appFilter)
-        }
+        val viewModel =
+            mvRxViewModel<AppPickerViewModel> {
+                parametersOf(appFilter)
+            }
 
         when (viewModel.state.apps) {
             is Loading -> {

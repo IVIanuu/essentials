@@ -30,7 +30,7 @@ import kotlin.reflect.KClass
 
 @Composable
 inline fun <reified T : MvRxViewModel<*>> mvRxViewModel(
-    from: ViewModelStoreOwner = inject<ViewModelStoreOwner>(),
+    from: ViewModelStoreOwner = inject(),
     factory: ViewModelProvider.Factory = remember { ViewModelProvider.NewInstanceFactory() },
     key: String = remember { T::class.defaultViewModelKey }
 ) = effect {
@@ -40,7 +40,7 @@ inline fun <reified T : MvRxViewModel<*>> mvRxViewModel(
 @Composable
 fun <T : MvRxViewModel<*>> mvRxViewModel(
     type: KClass<T>,
-    from: ViewModelStoreOwner = inject<ViewModelStoreOwner>(),
+    from: ViewModelStoreOwner = inject(),
     factory: ViewModelProvider.Factory = remember { ViewModelProvider.NewInstanceFactory() },
     key: String = remember { type.defaultViewModelKey }
 ): T = effect {

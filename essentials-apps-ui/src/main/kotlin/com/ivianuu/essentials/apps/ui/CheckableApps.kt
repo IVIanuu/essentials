@@ -38,7 +38,7 @@ import com.ivianuu.essentials.ui.compose.material.Icon
 import com.ivianuu.essentials.ui.compose.material.PopupMenuButton
 import com.ivianuu.essentials.ui.compose.material.Scaffold
 import com.ivianuu.essentials.ui.compose.material.SimpleListItem
-import com.ivianuu.essentials.ui.compose.mvrx.mvRxViewModel
+import com.ivianuu.essentials.ui.compose.mvrx.injekt.mvRxViewModel
 import com.ivianuu.essentials.ui.compose.resources.stringResource
 import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
 import com.ivianuu.essentials.util.AppDispatchers
@@ -69,9 +69,10 @@ fun CheckableAppsScreen(
     appBarTitle: String,
     appFilter: AppFilter = DefaultAppFilter
 ) = composable {
-    val viewModel = mvRxViewModel<CheckableAppsViewModel> {
-        parametersOf(appFilter)
-    }
+    val viewModel =
+        mvRxViewModel<CheckableAppsViewModel> {
+            parametersOf(appFilter)
+        }
 
     onActive {
         viewModel.attach(checkedAppsFlow, onCheckedAppsChanged)
