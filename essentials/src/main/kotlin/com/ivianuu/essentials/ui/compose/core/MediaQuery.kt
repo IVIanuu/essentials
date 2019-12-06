@@ -22,19 +22,91 @@ import androidx.ui.core.Density
 import androidx.ui.core.Size
 import androidx.ui.core.dp
 import androidx.ui.layout.EdgeInsets
+import com.ivianuu.essentials.ui.compose.common.framed
 
 // todo find a better name
 // todo add padding field
 
-data class MediaQuery(
-    val size: Size = Size(0.dp, 0.dp),
-    val viewPadding: EdgeInsets = EdgeInsets(),
-    val viewInsets: EdgeInsets,
-    val density: Density = Density(0f, 0f),
+interface MediaQuery : Updateable<MediaQuery> {
+    val size: Size
+    val viewPadding: EdgeInsets
+    val viewInsets: EdgeInsets
+    val density: Density
     val darkMode: Boolean
-) {
+
     val orientation: Orientation
         get() = if (size.width > size.height) Orientation.Landscape else Orientation.Portrait
+
+    fun copy(
+        size: Size = this.size,
+        viewPadding: EdgeInsets = this.viewPadding,
+        viewInsets: EdgeInsets = this.viewInsets,
+        density: Density = this.density,
+        darkMode: Boolean = this.darkMode
+    ): MediaQuery
+}
+
+fun MediaQuery(
+    size: Size = Size(0.dp, 0.dp),
+    viewPadding: EdgeInsets = EdgeInsets(),
+    viewInsets: EdgeInsets,
+    density: Density = Density(0f, 0f),
+    darkMode: Boolean
+): MediaQuery {
+    return ObservableMediaQuery(
+        size = size,
+        viewPadding = viewPadding,
+        viewInsets = viewInsets,
+        density = density,
+        darkMode = darkMode
+    )
+}
+
+private class ObservableMediaQuery(
+    size: Size,
+    viewPadding: EdgeInsets,
+    viewInsets: EdgeInsets,
+    density: Density,
+    darkMode: Boolean
+) : MediaQuery {
+
+    constructor(
+        other: MediaQuery
+    ) : this(
+        size = other.size,
+        viewPadding = other.viewPadding,
+        viewInsets = other.viewInsets,
+        density = other.density,
+        darkMode = other.darkMode
+    )
+
+    override var size by framed(size, true)
+    override var viewPadding by framed(viewPadding, true)
+    override var viewInsets by framed(viewInsets, true)
+    override var density by framed(density, true)
+    override var darkMode by framed(darkMode, true)
+
+    override fun copy(
+        size: Size,
+        viewPadding: EdgeInsets,
+        viewInsets: EdgeInsets,
+        density: Density,
+        darkMode: Boolean
+    ): MediaQuery = ObservableMediaQuery(
+        size = size,
+        viewPadding = viewPadding,
+        viewInsets = viewInsets,
+        density = density,
+        darkMode = darkMode
+    )
+
+    override fun updateFrom(other: MediaQuery) {
+        size = other.size
+        viewPadding = other.viewPadding
+        viewInsets = other.viewInsets
+        density = other.density
+        darkMode = other.darkMode
+    }
 }
 
 @Composable
@@ -52,7 +124,10 @@ fun MediaQueryProvider(
     value: MediaQuery,
     children: @Composable() () -> Unit
 ) = composable {
-    MediaQueryAmbient.Provider(value = value, children = children)
+    MediaQueryAmbient.UpdateProvider(
+        value = value,
+        children = children
+    )
 }
 
 private val MediaQueryAmbient = Ambient.of<MediaQuery>()

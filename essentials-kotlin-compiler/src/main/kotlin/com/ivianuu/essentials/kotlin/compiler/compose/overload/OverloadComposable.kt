@@ -16,7 +16,6 @@
 
 package com.ivianuu.essentials.kotlin.compiler.compose.overload
 
-import com.ivianuu.essentials.kotlin.compiler.asClassName
 import com.ivianuu.essentials.kotlin.compiler.asTypeName
 import com.ivianuu.essentials.kotlin.compiler.compose.ComposableAnnotation
 import com.ivianuu.essentials.kotlin.compiler.hasAnnotatedAnnotations
@@ -31,8 +30,6 @@ import org.jetbrains.kotlin.descriptors.FunctionDescriptor
 import org.jetbrains.kotlin.descriptors.SourceElement
 import org.jetbrains.kotlin.descriptors.findClassAcrossModuleDependencies
 import org.jetbrains.kotlin.js.resolve.diagnostics.findPsi
-import org.jetbrains.kotlin.name.ClassId
-import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.resolve.BindingTrace
@@ -40,7 +37,6 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.builtIns
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
 import org.jetbrains.kotlin.resolve.descriptorUtil.getSuperInterfaces
 import org.jetbrains.kotlin.resolve.descriptorUtil.module
-import org.jetbrains.kotlin.types.Variance
 import org.jetbrains.kotlin.types.typeUtil.isUnit
 import java.io.File
 import kotlin.math.absoluteValue

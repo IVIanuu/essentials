@@ -26,6 +26,8 @@ import androidx.ui.graphics.Color
 import androidx.ui.graphics.Image
 import androidx.ui.layout.Container
 import androidx.ui.material.ripple.Ripple
+import com.ivianuu.essentials.ui.compose.core.MergeProvider
+import com.ivianuu.essentials.ui.compose.core.Mergeable
 import com.ivianuu.essentials.ui.compose.core.ambient
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.effect
@@ -49,15 +51,11 @@ fun Icon(
 data class IconStyle(
     val size: Size = Size(DefaultIconSize, DefaultIconSize),
     val color: Color? = null
-) {
-    fun merge(other: IconStyle? = null): IconStyle {
-        if (other == null) return this
-
-        return IconStyle(
-            size = other.size,
-            color = other.color ?: this.color
-        )
-    }
+) : Mergeable<IconStyle> {
+    override fun merge(other: IconStyle): IconStyle = IconStyle(
+        size = other.size,
+        color = other.color ?: this.color
+    )
 }
 
 private val DefaultIconSize = 24.dp
@@ -69,9 +67,7 @@ fun CurrentIconStyleProvider(
     value: IconStyle,
     children: @Composable() () -> Unit
 ) = composable {
-    val style = ambient(CurrentIconStyleAmbient)
-    val mergedStyle = style.merge(value)
-    CurrentIconStyleAmbient.Provider(value = mergedStyle, children = children)
+    CurrentIconStyleAmbient.MergeProvider(value = value, children = children)
 }
 
 @Composable
