@@ -16,6 +16,7 @@ package com.ivianuu.essentials.ui.compose.core
 import androidx.compose.Composable
 import androidx.compose.Composer
 import androidx.compose.Effect
+import androidx.compose.Observe
 import androidx.compose.composer
 import com.ivianuu.essentials.util.sourceLocation
 
@@ -224,3 +225,41 @@ inline operator fun <T> Effect<T>.invoke(): T = invoke(key = sourceLocation())
 
 operator fun <T> Effect<T>.invoke(key: Any): T =
     resolve(androidx.compose.composer.composer, key.hashCode())
+
+fun composableLambda(block: @Composable() () -> Unit): @Composable() () -> Unit = {
+    Observe(block)
+}
+
+fun <V1> composableLambda(block: @Composable() (V1) -> Unit): @Composable() (V1) -> Unit = { v1 ->
+    Observe {
+        block(v1)
+    }
+}
+
+fun <V1, V2> composableLambda(block: @Composable() (V1, V2) -> Unit): @Composable() (V1, V2) -> Unit =
+    { v1, v2 ->
+        Observe {
+            block(v1, v2)
+        }
+    }
+
+fun <V1, V2, V3> composableLambda(block: @Composable() (V1, V2, V3) -> Unit): @Composable() (V1, V2, V3) -> Unit =
+    { v1, v2, v3 ->
+        Observe {
+            block(v1, v2, v3)
+        }
+    }
+
+fun <V1, V2, V3, V4> composableLambda(block: @Composable() (V1, V2, V3, V4) -> Unit): @Composable() (V1, V2, V3, V4) -> Unit =
+    { v1, v2, v3, v4 ->
+        Observe {
+            block(v1, v2, v3, v4)
+        }
+    }
+
+fun <V1, V2, V3, V4, V5> composableLambda(block: @Composable() (V1, V2, V3, V4, V5) -> Unit): @Composable() (V1, V2, V3, V4, V5) -> Unit =
+    { v1, v2, v3, v4, v5 ->
+        Observe {
+            block(v1, v2, v3, v4, v5)
+        }
+    }
