@@ -26,6 +26,7 @@ import androidx.ui.layout.Container
 import androidx.ui.material.FloatingActionButton
 import androidx.ui.material.MaterialTheme
 import com.github.ajalt.timberkt.d
+import com.ivianuu.essentials.ui.compose.common.framed
 import com.ivianuu.essentials.ui.compose.common.hideKeyboard
 import com.ivianuu.essentials.ui.compose.common.scrolling.ScrollPosition
 import com.ivianuu.essentials.ui.compose.common.scrolling.Scroller
@@ -35,7 +36,6 @@ import com.ivianuu.essentials.ui.compose.core.invoke
 import com.ivianuu.essentials.ui.compose.core.onActive
 import com.ivianuu.essentials.ui.compose.core.ref
 import com.ivianuu.essentials.ui.compose.core.remember
-import com.ivianuu.essentials.ui.compose.core.state
 import com.ivianuu.essentials.ui.compose.es.composeControllerRoute
 import com.ivianuu.essentials.ui.compose.layout.Column
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
@@ -44,18 +44,22 @@ import com.ivianuu.essentials.ui.compose.material.SimpleListItem
 import com.ivianuu.essentials.ui.navigation.director.controllerRouteOptions
 import com.ivianuu.essentials.ui.navigation.director.vertical
 
+private class TextInputState {
+    var searchVisible by framed(false)
+    var inputValue by framed("")
+}
+
 val textInputRoute = composeControllerRoute(
     options = controllerRouteOptions().vertical()
 ) {
-    val (searchVisible, setSearchVisible) = state { false }
-    val (inputValue, setInputValue) = state { "" }
+    val state = remember { TextInputState() }
 
-    if (!searchVisible) {
-        setInputValue("")
+    if (!state.searchVisible) {
+        state.inputValue = ""
     }
 
     val items = AllItems.filter {
-        inputValue.isEmpty() || inputValue in it.toLowerCase().trim()
+        state.inputValue.isEmpty() || state.inputValue in it.toLowerCase().trim()
     }
 
     val hideKeyboard = hideKeyboard()
@@ -65,13 +69,13 @@ val textInputRoute = composeControllerRoute(
         topAppBar = {
             EsTopAppBar(
                 title = {
-                    if (searchVisible) {
+                    if (state.searchVisible) {
                         Container(
                             expanded = true,
                             alignment = Alignment.CenterLeft
                         ) {
                             Clickable(onClick = { showKeyboard() }) {
-                                if (inputValue.isEmpty()) {
+                                if (state.inputValue.isEmpty()) {
                                     Opacity(0.5f) {
                                         Text(
                                             text = "Search..",
@@ -80,8 +84,8 @@ val textInputRoute = composeControllerRoute(
                                     }
                                 }
                                 TextField(
-                                    value = inputValue,
-                                    onValueChange = setInputValue,
+                                    value = state.inputValue,
+                                    onValueChange = { state.inputValue = it },
                                     focusIdentifier = "id",
                                     textStyle = MaterialTheme.typography()().subtitle1
                                 )
@@ -103,8 +107,8 @@ val textInputRoute = composeControllerRoute(
 
                     if (scrollPosition.value != lastScrollPosition.value) {
                         hideKeyboard()
-                        if (searchVisible && inputValue.isEmpty()) {
-                            setSearchVisible(false)
+                        if (state.searchVisible && state.inputValue.isEmpty()) {
+                            state.searchVisible = false
                         }
                     }
 
@@ -133,7 +137,7 @@ val textInputRoute = composeControllerRoute(
         fab = {
             FloatingActionButton(
                 text = "Toggle search",
-                onClick = { setSearchVisible(!searchVisible) }
+                onClick = { state.searchVisible = !state.searchVisible }
             )
         }
     )
