@@ -16,12 +16,34 @@
 
 package com.ivianuu.essentials.sample.ui
 
+import androidx.ui.material.Button
+import com.ivianuu.essentials.sample.ForegroundDispatcher
 import com.ivianuu.essentials.ui.base.EsActivity
+import com.ivianuu.essentials.ui.compose.es.composeControllerRoute
+import com.ivianuu.essentials.ui.compose.injekt.inject
+import com.ivianuu.essentials.ui.compose.layout.Column
 import com.ivianuu.essentials.ui.navigation.director.ControllerRoute
 
 class MainActivity : EsActivity() {
 
     override val startRoute: ControllerRoute?
-        get() = homeRoute
+        get() = composeControllerRoute {
+            val foregroundDispatcher = inject<ForegroundDispatcher>()
+            Column {
+                Button(
+                    text = "Spawn",
+                    onClick = {
+                        foregroundDispatcher.inc()
+                    }
+                )
+
+                Button(
+                    text = "Kill",
+                    onClick = {
+                        foregroundDispatcher.dec()
+                    }
+                )
+            }
+        }
 
 }

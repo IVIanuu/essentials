@@ -18,6 +18,7 @@
             <option value="$PROJECT_DIR$/essentials-apps-coil" />
             <option value="$PROJECT_DIR$/essentials-apps-ui" />
             <option value="$PROJECT_DIR$/essentials-compiler" />
+            <option value="$PROJECT_DIR$/essentials-foreground" />
             <option value="$PROJECT_DIR$/essentials-gestures" />
             <option value="$PROJECT_DIR$/essentials-gradle-plugin" />
             <option value="$PROJECT_DIR$/essentials-hidenavbar" />
