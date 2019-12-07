@@ -14,24 +14,12 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.gestures.accessibility
+package com.ivianuu.essentials.accessibility
 
-import android.view.accessibility.AccessibilityEvent
-import com.ivianuu.essentials.accessibility.EsAccessibilityService
-
-abstract class AccessibilityComponent {
-
-    var service: EsAccessibilityService? = null
-        private set
-
-    open fun onServiceConnected(service: EsAccessibilityService) {
-        this.service = service
-    }
-
-    open fun onAccessibilityEvent(event: AccessibilityEvent) {
-    }
-
-    open fun onServiceDisconnected() {
-        service = null
-    }
-}
+data class AccessibilityConfig(
+    val eventTypes: Int = 0,
+    val flags: Int = 0,
+    val packageNames: Set<String>? = null,
+    val feedbackType: Int = 0,
+    val notificationTimeout: Long = 0L
+)

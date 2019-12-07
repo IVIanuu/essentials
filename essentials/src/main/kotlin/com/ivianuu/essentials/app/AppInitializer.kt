@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.app
 
 import com.ivianuu.injekt.BindingContext
-import com.ivianuu.injekt.Definition
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Name
 import com.ivianuu.injekt.module
@@ -53,11 +52,6 @@ interface AppInitializer
 annotation class AppInitializers {
     companion object
 }
-
-inline fun <reified T : AppInitializer> Module.appInitializer(
-    name: Any? = null,
-    noinline definition: Definition<T>
-): BindingContext<T> = factory(name = name, definition = definition).bindAppInitializer()
 
 inline fun <reified T : AppInitializer> Module.bindAppInitializer(
     name: Any? = null

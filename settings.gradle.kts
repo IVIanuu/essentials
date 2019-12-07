@@ -1,5 +1,6 @@
 include(
     ":essentials",
+    ":essentials-accessibility",
     ":essentials-about",
     ":essentials-apps",
     ":essentials-apps-coil",

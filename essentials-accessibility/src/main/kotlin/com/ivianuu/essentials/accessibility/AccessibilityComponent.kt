@@ -16,39 +16,33 @@
 
 package com.ivianuu.essentials.accessibility
 
-import android.accessibilityservice.AccessibilityService
 import android.view.accessibility.AccessibilityEvent
-import com.ivianuu.essentials.util.unsafeLazy
-import com.ivianuu.injekt.InjektTrait
-import com.ivianuu.injekt.Module
-import com.ivianuu.injekt.android.serviceComponent
 import com.ivianuu.scopes.MutableScope
 import com.ivianuu.scopes.Scope
 
-/**
- * Base accessibility service
- */
-abstract class EsAccessibilityService : AccessibilityService(), InjektTrait {
+abstract class AccessibilityComponent {
 
-    override val component by unsafeLazy {
-        serviceComponent {
-            modules(this@EsAccessibilityService.modules())
-        }
-    }
+    abstract val config: AccessibilityConfig
+
+    var service: EsComponentAccessibilityService? = null
+        private set
 
     private val _scope = MutableScope()
     val scope: Scope get() = _scope
 
-    override fun onDestroy() {
+    open fun onServiceConnected(service: EsComponentAccessibilityService) {
+        this.service = service
+    }
+
+    open fun onAccessibilityEvent(event: AccessibilityEvent) {
+    }
+
+    open fun onServiceDisconnected() {
         _scope.close()
-        super.onDestroy()
+        service = null
     }
 
-    override fun onAccessibilityEvent(event: AccessibilityEvent) {
+    protected fun updateServiceInfo() {
+        service?.updateServiceInfo()
     }
-
-    override fun onInterrupt() {
-    }
-
-    protected open fun modules(): List<Module> = emptyList()
 }

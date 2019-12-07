@@ -18,7 +18,6 @@ package com.ivianuu.essentials.app
 
 import com.ivianuu.essentials.twilight.TwilightController
 import com.ivianuu.injekt.BindingContext
-import com.ivianuu.injekt.Definition
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Name
 import com.ivianuu.injekt.module
@@ -33,11 +32,6 @@ interface AppService
 annotation class AppServices {
     companion object
 }
-
-inline fun <reified T : AppService> Module.appService(
-    name: Any? = null,
-    noinline definition: Definition<T>
-): BindingContext<T> = single(name = name, definition = definition).bindAppService()
 
 inline fun <reified T : AppService> Module.bindAppService(
     name: Any? = null

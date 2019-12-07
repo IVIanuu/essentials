@@ -16,14 +16,12 @@
 
 package com.ivianuu.essentials.gestures
 
-import com.ivianuu.essentials.gestures.accessibility.AccessibilityComponent
+import com.ivianuu.essentials.accessibility.bindAccessibilityComponent
 import com.ivianuu.injekt.module
 
 val esGesturesModule = module {
-    set<AccessibilityComponent> {
-        add<GlobalActions>()
-        add<KeyboardVisibilityDetector>()
-        add<RecentAppsProvider>()
-        add<SecureScreenDetector>()
-    }
+    bindAccessibilityComponent<GlobalActions>()
+    bindAccessibilityComponent<KeyboardVisibilityDetector>()
+    bindAccessibilityComponent<RecentAppsProvider>()
+    bindAccessibilityComponent<SecureScreenDetector>()
 }

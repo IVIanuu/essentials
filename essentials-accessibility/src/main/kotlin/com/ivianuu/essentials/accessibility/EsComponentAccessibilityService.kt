@@ -14,22 +14,22 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.gestures.accessibility
+package com.ivianuu.essentials.accessibility
 
+import android.accessibilityservice.AccessibilityServiceInfo
+import android.content.Intent
 import android.view.accessibility.AccessibilityEvent
 import com.github.ajalt.timberkt.d
-import com.ivianuu.essentials.accessibility.EsAccessibilityService
-import com.ivianuu.essentials.gestures.esGesturesModule
+import com.ivianuu.essentials.util.addFlag
 import com.ivianuu.injekt.inject
 
-abstract class EsComponentAccessibilityService : EsAccessibilityService() {
+abstract class EsComponentAccessibilityService : EsBaseAccessibilityService() {
 
     private val components: Set<AccessibilityComponent> by inject()
 
-    override fun modules() = super.modules() + listOf(esGesturesModule)
-
     override fun onServiceConnected() {
         super.onServiceConnected()
+
         d { "initialize with components $components" }
         components.forEach { it.onServiceConnected(this) }
     }
@@ -39,9 +39,29 @@ abstract class EsComponentAccessibilityService : EsAccessibilityService() {
         components.forEach { it.onAccessibilityEvent(event) }
     }
 
-    override fun onDestroy() {
-        d { "on destroy" }
+    override fun onUnbind(intent: Intent?): Boolean {
+        d { "on unbind" }
         components.forEach { it.onServiceDisconnected() }
-        super.onDestroy()
+        return super.onUnbind(intent)
+    }
+
+    fun updateServiceInfo() {
+        serviceInfo = AccessibilityServiceInfo().apply {
+            val configurations = components.map { it.config }
+            eventTypes = configurations
+                .map { it.eventTypes }
+                .fold(0) { acc, events -> acc.addFlag(events) }
+            flags = configurations
+                .map { it.flags }
+                .fold(0) { acc, flags -> acc.addFlag(flags) }
+            packageNames = configurations
+                .flatMap { it.packageNames ?: emptySet() }
+                .distinct()
+                .toTypedArray()
+            configurations.firstOrNull()?.feedbackType?.let { feedbackType = it } // todo
+            notificationTimeout = configurations
+                .map { it.notificationTimeout }
+                .max() ?: 0L
+        }
     }
 }

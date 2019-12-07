@@ -18,11 +18,9 @@ package com.ivianuu.essentials.work
 
 import android.content.Context
 import androidx.work.ListenableWorker
-import androidx.work.Worker
 import androidx.work.WorkerFactory
 import androidx.work.WorkerParameters
 import com.ivianuu.injekt.BindingContext
-import com.ivianuu.injekt.DefinitionContext
 import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Name
@@ -56,25 +54,10 @@ val workerInjectionModule = module {
     withBinding<InjektWorkerFactory> { bindType<WorkerFactory>() }
 }
 
-/**
- * Defines a [Worker]
- */
-typealias WorkerDefinition<T> = DefinitionContext.(context: Context, workerParams: WorkerParameters) -> T
-
 @Name
 annotation class WorkersMap {
     companion object
 }
-
-/**
- * Defines a [Worker] which will be used in conjunction with the [InjektWorkerFactory]
- */
-inline fun <reified T : ListenableWorker> Module.worker(
-    name: Any? = null,
-    noinline definition: WorkerDefinition<T>
-): BindingContext<T> = factory(name) { (context: Context, workerParams: WorkerParameters) ->
-    definition(context, workerParams)
-}.bindWorker()
 
 inline fun <reified T : ListenableWorker> Module.bindWorker(
     name: Any? = null
