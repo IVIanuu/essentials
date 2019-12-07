@@ -16,7 +16,7 @@
 
 package com.ivianuu.essentials.apps.coil
 
-import com.ivianuu.essentials.ui.coil.bindFetcher
+import com.ivianuu.essentials.coil.bindFetcher
 import com.ivianuu.injekt.module
 
 /**

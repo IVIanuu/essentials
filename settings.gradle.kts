@@ -6,6 +6,7 @@ include(
     ":essentials-apps-coil",
     ":essentials-apps-ui",
     ":essentials-compiler",
+    ":essentials-coil",
     ":essentials-foreground",
     ":essentials-gestures",
     ":essentials-gradle-plugin",

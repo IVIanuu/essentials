@@ -14,10 +14,8 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.coil
+package com.ivianuu.essentials.coil
 
-import coil.CoilAccessor
-import coil.ImageLoader
 import coil.decode.Decoder
 import coil.fetch.Fetcher
 import coil.map.Mapper
@@ -27,39 +25,7 @@ import com.ivianuu.injekt.Definition
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Name
 import com.ivianuu.injekt.get
-import com.ivianuu.injekt.module
 import kotlin.reflect.KClass
-
-val esCoilModule = module {
-    set<Decoder>(setName = Decoders)
-    set<FetcherBinding<*>>(setName = Fetchers)
-    set<MapperBinding<*>>(setName = Mappers)
-    set<MeasuredMapperBinding<*>>(setName = MeasuredMappers)
-
-    single {
-        ImageLoader(get()) {
-            componentRegistry {
-                get<Set<Decoder>>(name = Decoders)
-                    .forEach { add(it) }
-
-                get<Set<FetcherBinding<*>>>(name = Fetchers)
-                    .forEach { binding ->
-                        CoilAccessor.add(this, binding.type.java, binding.fetcher)
-                    }
-
-                get<Set<MapperBinding<*>>>(name = Mappers)
-                    .forEach { binding ->
-                        CoilAccessor.add(this, binding.type.java, binding.mapper)
-                    }
-
-                get<Set<MeasuredMapperBinding<*>>>(name = MeasuredMappers)
-                    .forEach { binding ->
-                        CoilAccessor.add(this, binding.type.java, binding.mapper)
-                    }
-            }
-        }
-    }
-}
 
 @Name
 annotation class Decoders {
@@ -107,9 +73,14 @@ inline fun <reified F : Fetcher<T>, reified T : Any> Module.bindFetcher(
 
 inline fun <reified F : Fetcher<T>, reified T : Any> BindingContext<F>.bindFetcher(type: KClass<T>): BindingContext<F> {
     module.factory {
-        FetcherBinding(fetcher = get<F>(), type = type)
+        FetcherBinding(
+            fetcher = get<F>(),
+            type = type
+        )
     }.also { bbc ->
-        module.set<FetcherBinding<*>>(Fetchers) {
+        module.set<FetcherBinding<*>>(
+            Fetchers
+        ) {
             add(bbc.key, false)
         }
     }
@@ -144,7 +115,9 @@ inline fun <reified M : Mapper<T, *>, reified T : Any> BindingContext<M>.bindMap
     module.factory {
         MapperBinding(mapper = get<M>(), type = type)
     }.also { bbc ->
-        module.set<MapperBinding<*>>(Mappers) {
+        module.set<MapperBinding<*>>(
+            Mappers
+        ) {
             add(bbc.key, false)
         }
 
@@ -179,9 +152,14 @@ inline fun <reified M : MeasuredMapper<T, *>, reified T : Any> BindingContext<M>
     type: KClass<T>
 ): BindingContext<M> {
     module.factory {
-        MeasuredMapperBinding(mapper = get<M>(), type = type)
+        MeasuredMapperBinding(
+            mapper = get<M>(),
+            type = type
+        )
     }.also { bbc ->
-        module.set<MeasuredMapperBinding<*>>(MeasuredMappers) {
+        module.set<MeasuredMapperBinding<*>>(
+            MeasuredMappers
+        ) {
             add(bbc.key, false)
         }
     }

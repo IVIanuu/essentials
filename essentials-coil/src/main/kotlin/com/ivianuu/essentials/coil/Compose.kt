@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.compose.image
+package com.ivianuu.essentials.coil
 
 import androidx.compose.Composable
 import androidx.ui.graphics.Image
@@ -25,6 +25,7 @@ import com.ivianuu.essentials.ui.compose.core.effect
 import com.ivianuu.essentials.ui.compose.core.invokeAsComposable
 import com.ivianuu.essentials.ui.compose.core.remember
 import com.ivianuu.essentials.ui.compose.coroutines.load
+import com.ivianuu.essentials.ui.compose.image.toImage
 import com.ivianuu.essentials.ui.compose.injekt.inject
 
 @Composable

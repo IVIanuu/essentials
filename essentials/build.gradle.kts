@@ -54,8 +54,6 @@ dependencies {
     api(Deps.Coroutines.android)
     api(Deps.Coroutines.core)
 
-    api(Deps.coil)
-
     api(Deps.Director.director)
     api(Deps.Director.common)
 
