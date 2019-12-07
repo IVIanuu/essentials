@@ -159,7 +159,12 @@ private val TitleOnlyMinHeightWithIcon = 56.dp
 private val TitleAndSubtitleMinHeight = 64.dp
 private val TitleAndSubtitleMinHeightWithIcon = 72.dp
 private val HorizontalTextPadding = 16.dp
-private val ContentPadding = EdgeInsets(left = 16.dp, right = 16.dp)
+private val ContentPadding = EdgeInsets(
+    left = 16.dp,
+    top = 8.dp,
+    right = 16.dp,
+    bottom = 8.dp
+)
 
 private data class ListItemTextStyle(
     val style: Typography.() -> TextStyle,
