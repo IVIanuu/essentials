@@ -35,11 +35,15 @@ class ComponentAccessibilityService : EsAccessibilityService() {
 
         d { "initialize with components $components" }
         components.forEach { it.onServiceConnected(this) }
+
+        updateServiceInfo()
     }
 
     override fun onAccessibilityEvent(event: AccessibilityEvent) {
         d { "on accessibility event $event" }
-        components.forEach { it.onAccessibilityEvent(event) }
+        components
+            .filter { it.config.packageNames == null || event.packageName in it.config.packageNames!! }
+            .forEach { it.onAccessibilityEvent(event) }
     }
 
     override fun onUnbind(intent: Intent?): Boolean {
@@ -49,22 +53,27 @@ class ComponentAccessibilityService : EsAccessibilityService() {
     }
 
     fun updateServiceInfo() {
-        serviceInfo = AccessibilityServiceInfo().apply {
+        serviceInfo = serviceInfo.apply {
             val configurations = components.map { it.config }
+
             eventTypes = configurations
                 .map { it.eventTypes }
                 .fold(0) { acc, events -> acc.addFlag(events) }
+
             flags = configurations
                 .map { it.flags }
                 .fold(0) { acc, flags -> acc.addFlag(flags) }
-            packageNames = configurations
-                .flatMap { it.packageNames ?: emptySet() }
-                .distinct()
-                .let { if (it.isNotEmpty()) it.toTypedArray() else null }
+
             configurations.firstOrNull()?.feedbackType?.let { feedbackType = it } // todo
+            feedbackType = AccessibilityServiceInfo.FEEDBACK_GENERIC
+
             notificationTimeout = configurations
                 .map { it.notificationTimeout }
                 .max() ?: 0L
+
+            packageNames = null
+
+            d { "update service info $this" }
         }
     }
 }

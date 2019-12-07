@@ -16,10 +16,12 @@
 
 package com.ivianuu.essentials.accessibility
 
+import android.accessibilityservice.AccessibilityServiceInfo
+
 data class AccessibilityConfig(
     val eventTypes: Int = 0,
     val flags: Int = 0,
     val packageNames: Set<String>? = null,
-    val feedbackType: Int = 0,
+    val feedbackType: Int = AccessibilityServiceInfo.FEEDBACK_GENERIC,
     val notificationTimeout: Long = 0L
 )

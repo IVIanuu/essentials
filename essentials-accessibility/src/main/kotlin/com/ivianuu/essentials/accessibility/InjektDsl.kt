@@ -24,5 +24,5 @@ fun <T : AccessibilityComponent> BindingContext<T>.bindAccessibilityComponent():
 
 
 internal val accessibilityComponentsModule = module {
-    set<AccessibilityComponents>(setName = AccessibilityComponents)
+    set<AccessibilityComponent>(setName = AccessibilityComponents)
 }
