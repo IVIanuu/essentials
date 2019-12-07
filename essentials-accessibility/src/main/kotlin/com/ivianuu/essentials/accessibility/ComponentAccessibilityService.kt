@@ -60,7 +60,7 @@ class ComponentAccessibilityService : EsAccessibilityService() {
             packageNames = configurations
                 .flatMap { it.packageNames ?: emptySet() }
                 .distinct()
-                .toTypedArray()
+                .let { if (it.isNotEmpty()) it.toTypedArray() else null }
             configurations.firstOrNull()?.feedbackType?.let { feedbackType = it } // todo
             notificationTimeout = configurations
                 .map { it.notificationTimeout }
