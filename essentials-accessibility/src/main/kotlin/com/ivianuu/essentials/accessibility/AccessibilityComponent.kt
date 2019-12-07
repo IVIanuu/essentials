@@ -17,7 +17,7 @@
 package com.ivianuu.essentials.accessibility
 
 import android.view.accessibility.AccessibilityEvent
-import com.ivianuu.scopes.MutableScope
+import com.ivianuu.scopes.ReusableScope
 import com.ivianuu.scopes.Scope
 
 abstract class AccessibilityComponent {
@@ -27,7 +27,7 @@ abstract class AccessibilityComponent {
     var service: EsComponentAccessibilityService? = null
         private set
 
-    private val _scope = MutableScope()
+    private val _scope = ReusableScope()
     val scope: Scope get() = _scope
 
     open fun onServiceConnected(service: EsComponentAccessibilityService) {
@@ -38,7 +38,7 @@ abstract class AccessibilityComponent {
     }
 
     open fun onServiceDisconnected() {
-        _scope.close()
+        _scope.clear()
         service = null
     }
 
