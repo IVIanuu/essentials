@@ -24,7 +24,7 @@ import com.ivianuu.essentials.util.addFlag
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.inject
 
-abstract class ComponentAccessibilityService : EsAccessibilityService() {
+class ComponentAccessibilityService : EsAccessibilityService() {
 
     private val components: Set<AccessibilityComponent> by inject(name = AccessibilityComponents)
 

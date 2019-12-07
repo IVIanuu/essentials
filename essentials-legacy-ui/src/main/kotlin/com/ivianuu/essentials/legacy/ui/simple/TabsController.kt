@@ -20,7 +20,7 @@ import android.view.View
 import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
-import com.ivianuu.essentials.R
+import com.ivianuu.essentials.legacy.ui.R
 import kotlinx.android.synthetic.main.es_view_tab_layout.es_tab_layout
 import kotlinx.android.synthetic.main.es_view_view_pager.es_view_pager
 
