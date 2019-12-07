@@ -71,7 +71,7 @@ fun CheckboxPreference(
                 AbsorbPointer {
                     EsCheckbox(
                         checked = context.currentValue,
-                        onCheckedChange = if (context.shouldBeEnabled) { newValue: Boolean -> } else null
+                        onCheckedChange = if (context.shouldBeEnabled) { _: Boolean -> } else null
                     )
                 }
             },

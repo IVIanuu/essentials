@@ -54,6 +54,7 @@ fun textInputRoute(
         positiveButton = {
             DialogButton(
                 text = stringResource(R.string.es_ok),
+                dismissDialogOnClick = false,
                 onClick = if (allowEmpty || currentValue.isNotEmpty()) {
                     {
                         navigator.pop(currentValue)

@@ -247,7 +247,7 @@ val dialogsRoute = composeControllerRoute(
                             items = singleChoiceItems,
                             selectedItem = tmpSelectedItem,
                             onSelect = setTmpSelectedItem,
-                            dismissOnSelect = false,
+                            dismissOnSelection = false,
                             item = { Text("Item: $it") },
                             positiveButton = {
                                 DialogButton(

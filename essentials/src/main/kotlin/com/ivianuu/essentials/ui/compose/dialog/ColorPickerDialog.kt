@@ -76,6 +76,7 @@ fun colorPickerRoute(
         onColorSelected = { navigator.pop(it) },
         allowCustomArgb = allowCustomArgb,
         showAlphaSelector = showAlphaSelector,
+        dismissOnSelection = false,
         title = {
             Text(title ?: stringResource(R.string.es_dialog_title_color_picker))
         }
@@ -89,6 +90,7 @@ fun ColorPickerDialog(
     onColorSelected: (Color) -> Unit,
     allowCustomArgb: Boolean = true,
     showAlphaSelector: Boolean = false,
+    dismissOnSelection: Boolean = true,
     icon: (@Composable() () -> Unit)? = null,
     title: (@Composable() () -> Unit)? = null
 ) = composable {
@@ -102,6 +104,7 @@ fun ColorPickerDialog(
             ColoredDialogButton(
                 text = "OK",
                 color = currentColor,
+                dismissOnSelection = dismissOnSelection,
                 onClick = { onColorSelected(currentColor) }
             )
         },
@@ -278,10 +281,12 @@ private fun ColorEditor(
 private fun ColoredDialogButton(
     text: String,
     color: Color,
+    dismissOnSelection: Boolean,
     onClick: () -> Unit
 ) = composable {
     DialogButton(
         text = text,
+        dismissDialogOnClick = dismissOnSelection,
         style = TextButtonStyle(contentColor = color),
         onClick = onClick
     )
