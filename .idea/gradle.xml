@@ -22,6 +22,7 @@
             <option value="$PROJECT_DIR$/essentials-gradle-plugin" />
             <option value="$PROJECT_DIR$/essentials-hidenavbar" />
             <option value="$PROJECT_DIR$/essentials-kotlin-compiler" />
+            <option value="$PROJECT_DIR$/essentials-legacy-ui" />
             <option value="$PROJECT_DIR$/essentials-notificationlistener" />
             <option value="$PROJECT_DIR$/essentials-securesettings" />
             <option value="$PROJECT_DIR$/essentials-shell" />

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.epoxy
+package com.ivianuu.essentials.legacy.ui.epoxy
 
 import com.airbnb.epoxy.EpoxyController
 import com.ivianuu.director.Controller

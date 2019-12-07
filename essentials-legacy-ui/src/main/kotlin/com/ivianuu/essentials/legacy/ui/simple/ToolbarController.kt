@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.simple
+package com.ivianuu.essentials.legacy.ui.simple
 
 import android.graphics.PorterDuff
 import android.view.View

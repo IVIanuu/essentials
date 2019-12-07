@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.epoxy
+package com.ivianuu.essentials.legacy.ui.epoxy
 
 import android.view.LayoutInflater
 import android.view.View
@@ -86,10 +86,11 @@ class FunModelBuilder internal constructor() {
         unbindActions += block
     }
 
-    internal fun build(): FunModel = FunModel(
-        id, viewType, state,
-        buildView, unbindActions, bindActions
-    )
+    internal fun build(): FunModel =
+        FunModel(
+            id, viewType, state,
+            buildView, unbindActions, bindActions
+        )
 }
 
 class FunModel internal constructor(

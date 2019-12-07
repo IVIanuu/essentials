@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.epoxy
+package com.ivianuu.essentials.legacy.ui.epoxy
 
 import android.content.res.ColorStateList
 import com.airbnb.epoxy.EpoxyController

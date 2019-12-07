@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.simple
+package com.ivianuu.essentials.legacy.ui.simple
 
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import com.ivianuu.essentials.ui.base.EsController

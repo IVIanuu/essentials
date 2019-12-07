@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.epoxy
+package com.ivianuu.essentials.legacy.ui.epoxy
 
 /**
  * Simple list model with holder
@@ -23,5 +23,6 @@ abstract class SimpleModel(
     id: Any? = null,
     layoutRes: Int = -1
 ) : EsModel<EsHolder>(id, layoutRes) {
-    override fun createNewHolder(): EsHolder = EsHolder()
+    override fun createNewHolder(): EsHolder =
+        EsHolder()
 }

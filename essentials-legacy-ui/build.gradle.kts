@@ -20,6 +20,7 @@ plugins {
     id("com.ivianuu.injekt")
     id("com.ivianuu.essentials")
     kotlin("android")
+    id("kotlin-android-extensions")
 }
 
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/android-build-lib.gradle")
@@ -31,47 +32,11 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/mvn-publish.gradle")
 
 dependencies {
-    api(Deps.AndroidX.activity)
-    api(Deps.AndroidX.appCompat)
-    api(Deps.AndroidX.core)
-    api(Deps.AndroidX.Lifecycle.runtime)
-    api(Deps.AndroidX.Lifecycle.viewModel)
+    api(project(":essentials"))
 
-    api(Deps.AndroidX.Ui.androidText)
-    api(Deps.AndroidX.Ui.androidView)
-    api(Deps.AndroidX.Ui.androidViewNonIr)
-    api(Deps.AndroidX.Ui.animation)
-    api(Deps.AndroidX.Ui.core)
-    api(Deps.AndroidX.Ui.foundation)
-    api(Deps.AndroidX.Ui.framework)
-    api(Deps.AndroidX.Ui.layout)
-    api(Deps.AndroidX.Ui.material)
-    api(Deps.AndroidX.Ui.platform)
-    api(Deps.AndroidX.Ui.text)
-    api(Deps.AndroidX.Ui.tooling)
-    api(Deps.AndroidX.Ui.vector)
+    api(Deps.AndroidX.cardView)
+    api(Deps.AndroidX.constraintLayout)
 
-    api(Deps.Coroutines.android)
-    api(Deps.Coroutines.core)
-
-    api(Deps.coil)
-
-    api(Deps.Director.director)
-    api(Deps.Director.common)
-
-    api(Deps.Injekt.injekt)
-    api(Deps.Injekt.android)
-
-    api(Deps.Kotlin.stdlib)
-
-    api(Deps.kotlinFlowExtensions)
-
-    api(Deps.materialComponents)
-
-    api(Deps.Scopes.scopes)
-    api(Deps.Scopes.android)
-    api(Deps.Scopes.coroutines)
-
-    api(Deps.timberKt)
-
+    api(Deps.epoxy)
+    api(Deps.epoxyPrefs)
 }

@@ -14,16 +14,28 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.epoxy
+package com.ivianuu.essentials.legacy.ui.epoxy
 
-import com.airbnb.epoxy.EpoxyAsyncUtil
 import com.airbnb.epoxy.EpoxyController
+import com.ivianuu.essentials.R
+import kotlinx.android.synthetic.main.es_item_simple_text.es_text
 
-fun epoxyController(buildModels: EpoxyController.() -> Unit): EpoxyController {
-    val handler = EpoxyAsyncUtil.getAsyncBackgroundHandler()
-    return object : EpoxyController(handler, handler) {
-        override fun buildModels() {
-            buildModels.invoke(this)
+/**
+ * Simple text model
+ */
+fun EpoxyController.SimpleText(
+    text: String? = null,
+    textRes: Int? = null,
+    id: Any? = text + textRes
+) = model(
+    id = id,
+    layoutRes = R.layout.es_item_simple_text,
+    state = arrayOf(text, textRes),
+    bind = {
+        when {
+            text != null -> es_text.text = text
+            textRes != null -> es_text.setText(textRes)
+            else -> error("you must specify one of text or textRes")
         }
     }
-}
+)

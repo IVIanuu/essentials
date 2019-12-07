@@ -39,21 +39,15 @@ object Deps {
     object AndroidX {
         const val activity = "androidx.activity:activity-ktx:1.1.0-rc02"
         const val appCompat = "androidx.appcompat:appcompat:1.1.0"
-        const val cardView = "androidx.cardview:cardview:1.0.0"
-        const val constraintLayout = "androidx.constraintlayout:constraintlayout:2.0.0-beta3"
+        const val cardView = "androidx.cardview:cardview:1.0.0" // todo remove legacy
+        const val constraintLayout =
+            "androidx.constraintlayout:constraintlayout:2.0.0-beta3" // todo remove legacy
         const val core = "androidx.core:core-ktx:1.2.0-beta02"
 
         object Lifecycle {
             private const val version = "2.2.0-rc02"
             const val runtime = "androidx.lifecycle:lifecycle-runtime-ktx:$version"
-            const val liveData = "androidx.lifecycle:lifecycle-livedata-ktx:$version"
-            const val reactiveStreams = "androidx.lifecycle:lifecycle-reactivestreams-ktx:$version"
-
-            object ViewModel {
-                const val viewModel = "androidx.lifecycle:lifecycle-viewmodel-ktx:$version"
-                const val savedState =
-                    "androidx.lifecycle:lifecycle-viewmodel-savedstate:1.0.0-rc02"
-            }
+            const val viewModel = "androidx.lifecycle:lifecycle-viewmodel-ktx:$version"
         }
 
         object Test {
@@ -108,9 +102,9 @@ object Deps {
         const val common = "com.ivianuu.director:director-common:$version"
     }
 
-    const val epoxy = "com.airbnb.android:epoxy:3.8.0"
+    const val epoxy = "com.airbnb.android:epoxy:3.8.0" // todo remove legacy
 
-    const val epoxyPrefs = "com.ivianuu.epoxyprefs:epoxyprefs:0.0.1-dev-21"
+    const val epoxyPrefs = "com.ivianuu.epoxyprefs:epoxyprefs:0.0.1-dev-21" // todo remove legacy
 
     const val essentialsGradlePlugin =
         "com.ivianuu.essentials:essentials-gradle-plugin:0.0.1-dev261"
@@ -134,7 +128,8 @@ object Deps {
 
     const val kotlinFlowExtensions = "com.github.akarnokd:kotlin-flow-extensions:0.0.2"
 
-    const val materialComponents = "com.google.android.material:material:1.1.0-beta01"
+    const val materialComponents =
+        "com.google.android.material:material:1.1.0-beta01" // todo remove legacy
 
     const val mavenGradlePlugin = "com.github.dcendents:android-maven-gradle-plugin:2.1"
 

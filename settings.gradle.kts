@@ -10,6 +10,7 @@ include(
     ":essentials-gradle-plugin",
     ":essentials-hidenavbar",
     ":essentials-kotlin-compiler",
+    ":essentials-legacy-ui",
     ":essentials-notificationlistener",
     ":essentials-securesettings",
     ":essentials-shell",
