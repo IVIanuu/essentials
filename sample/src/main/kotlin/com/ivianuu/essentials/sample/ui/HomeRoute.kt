@@ -33,7 +33,6 @@ import androidx.ui.material.MaterialTheme
 import com.ivianuu.essentials.about.aboutRoute
 import com.ivianuu.essentials.apps.ui.appPickerRoute
 import com.ivianuu.essentials.apps.ui.intentAppFilter
-import com.ivianuu.essentials.twilight.twilightSettingsRoute
 import com.ivianuu.essentials.ui.compose.common.navigateOnClick
 import com.ivianuu.essentials.ui.compose.common.scrolling.ScrollableList
 import com.ivianuu.essentials.ui.compose.core.composable
@@ -226,6 +225,6 @@ enum class HomeItem(
     Twilight(
         title = "Twilight",
         color = Color.Gray,
-        route = { twilightSettingsRoute }
+        route = { com.ivianuu.essentials.twilight.twilightSettingsRoute }
     )
 }

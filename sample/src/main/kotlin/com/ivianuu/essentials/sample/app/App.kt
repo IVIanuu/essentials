@@ -22,6 +22,7 @@ import com.ivianuu.essentials.app.EsApp
 import com.ivianuu.essentials.apps.coil.esAppsCoilModule
 import com.ivianuu.essentials.notificationlistener.bindNotificationComponent
 import com.ivianuu.essentials.sample.NotificationsTest
+import com.ivianuu.essentials.twilight.esTwilightModule
 import com.ivianuu.essentials.ui.changehandler.OpenCloseChangeHandler
 import com.ivianuu.essentials.work.workerInitializerModule
 import com.ivianuu.essentials.work.workerInjectionModule
@@ -31,6 +32,7 @@ class App : EsApp() {
 
     override fun modules() = listOf(
         esAppsCoilModule,
+        esTwilightModule,
         workerInjectionModule,
         workerInitializerModule,
         module {

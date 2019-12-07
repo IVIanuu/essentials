@@ -16,7 +16,6 @@
 
 package com.ivianuu.essentials.app
 
-import com.ivianuu.essentials.twilight.TwilightController
 import com.ivianuu.injekt.BindingContext
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Name
@@ -48,5 +47,4 @@ inline fun <reified T : AppService> BindingContext<T>.bindAppService(): BindingC
 
 val esAppServicesModule = module {
     map<KClass<out AppService>, AppService>(AppServices)
-    bindAppService<TwilightController>()
 }

@@ -26,7 +26,10 @@ import com.ivianuu.injekt.android.ApplicationScope
 @ApplicationScope
 @Single
 class TwilightPrefs(factory: PrefBoxFactory) {
-    val twilightMode = factory.enumString("twilight_mode", TwilightMode.System)
+    val twilightMode = factory.enumString(
+        "twilight_mode",
+        TwilightMode.System
+    )
 }
 
 enum class TwilightMode(

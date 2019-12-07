@@ -15,6 +15,7 @@ include(
     ":essentials-shell",
     ":essentials-test",
     ":essentials-tile",
+    ":essentials-twilight",
     ":essentials-work",
     ":sample"
 )

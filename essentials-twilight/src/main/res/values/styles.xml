@@ -1,4 +1,4 @@
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright 2019 Manuel Wrage
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,17 +16,5 @@
 
 <resources>
 
-    <!-- Base application theme. -->
-    <style name="Sample" parent="Theme.Es.Twilight">
-        <item name="colorPrimary">@color/primary</item>
-        <item name="colorOnPrimary">@color/on_primary</item>
-        <item name="colorPrimaryDark">@color/primary_dark</item>
-        <item name="colorSecondary">@color/secondary</item>
-        <item name="colorOnSecondary">@color/on_secondary</item>
-
-        <item name="ep_preserve_icon_space">false</item>
-
-        <item name="toolbarStyle">@style/Widget.MaterialComponents.Toolbar.Primary</item>
-    </style>
-
+    <style name="Theme.Es.Twilight" parent="Theme.MaterialComponents.DayNight.NoActionBar" />
 </resources>
