@@ -1,9 +1,15 @@
 package com.ivianuu.essentials.accessibility
 
-import com.ivianuu.essentials.app.AppInitializers
 import com.ivianuu.injekt.BindingContext
 import com.ivianuu.injekt.Module
-import kotlin.reflect.KClass
+import com.ivianuu.injekt.Name
+import com.ivianuu.injekt.module
+
+@Name
+annotation class AccessibilityComponents {
+    companion object
+}
+
 
 inline fun <reified T : AccessibilityComponent> Module.bindAccessibilityComponent(
     name: Any? = null
@@ -11,10 +17,12 @@ inline fun <reified T : AccessibilityComponent> Module.bindAccessibilityComponen
     withBinding<T>(name) { bindAccessibilityComponent() }
 }
 
-inline fun <reified T : AccessibilityComponent> BindingContext<T>.bindAccessibilityComponent(): BindingContext<T> {
-    intoMap<KClass<out AccessibilityComponent>, AccessibilityComponent>(
-        entryKey = T::class,
-        mapName = AppInitializers
-    )
+fun <T : AccessibilityComponent> BindingContext<T>.bindAccessibilityComponent(): BindingContext<T> {
+    intoSet<AccessibilityComponent>(setName = AccessibilityComponents)
     return this
+}
+
+
+internal val accessibilityComponentsModule = module {
+    set<AccessibilityComponents>(setName = AccessibilityComponents)
 }

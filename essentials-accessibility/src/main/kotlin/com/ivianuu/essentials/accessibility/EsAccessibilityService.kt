@@ -14,42 +14,40 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.notification
+package com.ivianuu.essentials.accessibility
 
-import android.service.notification.NotificationListenerService
+import android.accessibilityservice.AccessibilityService
+import android.view.accessibility.AccessibilityEvent
 import com.ivianuu.essentials.util.unsafeLazy
 import com.ivianuu.injekt.InjektTrait
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.android.serviceComponent
 import com.ivianuu.scopes.MutableScope
-import com.ivianuu.scopes.ReusableScope
 import com.ivianuu.scopes.Scope
 
 /**
- * Base notification listener service
+ * Base accessibility service
  */
-abstract class EsNotificationListenerService : NotificationListenerService(), InjektTrait {
+abstract class EsAccessibilityService : AccessibilityService(), InjektTrait {
 
     override val component by unsafeLazy {
         serviceComponent {
-            modules(this@EsNotificationListenerService.modules())
+            modules(this@EsAccessibilityService.modules())
         }
     }
 
     private val _scope = MutableScope()
     val scope: Scope get() = _scope
 
-    private val _connectedScope = ReusableScope()
-    val connectedScope: Scope get() = _connectedScope
-
     override fun onDestroy() {
         _scope.close()
         super.onDestroy()
     }
 
-    override fun onListenerDisconnected() {
-        _connectedScope.clear()
-        super.onListenerDisconnected()
+    override fun onAccessibilityEvent(event: AccessibilityEvent) {
+    }
+
+    override fun onInterrupt() {
     }
 
     protected open fun modules(): List<Module> = emptyList()

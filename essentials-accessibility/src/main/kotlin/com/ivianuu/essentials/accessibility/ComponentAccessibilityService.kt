@@ -21,11 +21,14 @@ import android.content.Intent
 import android.view.accessibility.AccessibilityEvent
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.util.addFlag
+import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.inject
 
-abstract class EsComponentAccessibilityService : EsBaseAccessibilityService() {
+abstract class ComponentAccessibilityService : EsAccessibilityService() {
 
-    private val components: Set<AccessibilityComponent> by inject()
+    private val components: Set<AccessibilityComponent> by inject(name = AccessibilityComponents)
+
+    override fun modules(): List<Module> = super.modules() + listOf(accessibilityComponentsModule)
 
     override fun onServiceConnected() {
         super.onServiceConnected()
@@ -41,7 +44,7 @@ abstract class EsComponentAccessibilityService : EsBaseAccessibilityService() {
 
     override fun onUnbind(intent: Intent?): Boolean {
         d { "on unbind" }
-        components.forEach { it.onServiceDisconnected() }
+        components.reversed().forEach { it.onServiceDisconnected() }
         return super.onUnbind(intent)
     }
 

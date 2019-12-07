@@ -14,27 +14,35 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.accessibility
+package com.ivianuu.essentials.notificationlistener
 
-import android.view.accessibility.AccessibilityEvent
+import android.service.notification.NotificationListenerService
+import android.service.notification.StatusBarNotification
 import com.ivianuu.scopes.ReusableScope
 import com.ivianuu.scopes.Scope
 
-abstract class AccessibilityComponent {
+abstract class NotificationComponent {
 
-    abstract val config: AccessibilityConfig
-
-    var service: ComponentAccessibilityService? = null
+    var service: ComponentNotificationListenerService? = null
         private set
 
     private val _scope = ReusableScope()
     val scope: Scope get() = _scope
 
-    open fun onServiceConnected(service: ComponentAccessibilityService) {
+    open fun onServiceConnected(service: ComponentNotificationListenerService) {
         this.service = service
     }
 
-    open fun onAccessibilityEvent(event: AccessibilityEvent) {
+    open fun onNotificationPosted(sbn: StatusBarNotification) {
+    }
+
+    open fun onNotificationRemoved(sbn: StatusBarNotification) {
+    }
+
+    open fun onNotificationRankingUpdate(rankingMap: NotificationListenerService.RankingMap) {
+    }
+
+    open fun onListenerHintsChanged(hints: Int) {
     }
 
     open fun onServiceDisconnected() {
@@ -42,7 +50,4 @@ abstract class AccessibilityComponent {
         service = null
     }
 
-    protected fun updateServiceInfo() {
-        service?.updateServiceInfo()
-    }
 }

@@ -20,16 +20,22 @@ import com.ivianuu.director.DirectorPlugins
 import com.ivianuu.director.setDefaultHandler
 import com.ivianuu.essentials.app.EsApp
 import com.ivianuu.essentials.apps.coil.esAppsCoilModule
+import com.ivianuu.essentials.notificationlistener.bindNotificationComponent
+import com.ivianuu.essentials.sample.NotificationsTest
 import com.ivianuu.essentials.ui.changehandler.OpenCloseChangeHandler
 import com.ivianuu.essentials.work.workerInitializerModule
 import com.ivianuu.essentials.work.workerInjectionModule
+import com.ivianuu.injekt.module
 
 class App : EsApp() {
 
     override fun modules() = listOf(
         esAppsCoilModule,
         workerInjectionModule,
-        workerInitializerModule
+        workerInitializerModule,
+        module {
+            bindNotificationComponent<NotificationsTest>()
+        }
     )
 
     override fun onCreate() {
