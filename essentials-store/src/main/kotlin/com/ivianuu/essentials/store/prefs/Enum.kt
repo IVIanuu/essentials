@@ -28,7 +28,10 @@ fun <T : Enum<T>> PrefBoxFactory.enum(
     key: String,
     defaultValue: T,
     clazz: KClass<T>
-) = box(key, defaultValue, EnumSerializer(clazz))
+) = box(
+    key, defaultValue,
+    EnumSerializer(clazz)
+)
 
 private class EnumSerializer<T : Enum<T>>(private val enumClass: KClass<T>) :
     DiskBox.Serializer<T> {
@@ -49,7 +52,13 @@ fun <T> PrefBoxFactory.enumString(
     defaultValue: T,
     type: KClass<T>
 ) where T : Enum<T>, T : BoxValueHolder<String> =
-    box(name, defaultValue, EnumStringPrefSerializer(type, defaultValue))
+    box(
+        name, defaultValue,
+        EnumStringPrefSerializer(
+            type,
+            defaultValue
+        )
+    )
 
 private class EnumStringPrefSerializer<T>(
     private val type: KClass<T>,
@@ -70,7 +79,10 @@ fun <T> PrefBoxFactory.enumStringSet(
     defaultValue: Set<T> = emptySet(),
     type: KClass<T>
 ) where T : Enum<T>, T : BoxValueHolder<String> =
-    box(name, defaultValue, EnumStringSetPrefAdapter(type))
+    box(
+        name, defaultValue,
+        EnumStringSetPrefAdapter(type)
+    )
 
 private class EnumStringSetPrefAdapter<T>(
     private val type: KClass<T>

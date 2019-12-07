@@ -1,7 +1,7 @@
 include(
     ":essentials",
-    ":essentials-accessibility",
     ":essentials-about",
+    ":essentials-accessibility",
     ":essentials-apps",
     ":essentials-apps-coil",
     ":essentials-apps-ui",
@@ -14,6 +14,7 @@ include(
     ":essentials-notificationlistener",
     ":essentials-securesettings",
     ":essentials-shell",
+    ":essentials-store",
     ":essentials-test",
     ":essentials-tile",
     ":essentials-twilight",

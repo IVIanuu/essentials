@@ -19,7 +19,6 @@ package com.ivianuu.essentials.twilight
 import androidx.compose.Composable
 import androidx.ui.core.Text
 import androidx.ui.material.RadioButton
-import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.compose.box.unfoldBox
 import com.ivianuu.essentials.ui.compose.common.ListScreen
 import com.ivianuu.essentials.ui.compose.core.composableWithKey

@@ -16,7 +16,6 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import com.ivianuu.essentials.store.prefs.PrefBoxFactory
 import com.ivianuu.essentials.store.prefs.boolean
 import com.ivianuu.essentials.store.prefs.int
 import com.ivianuu.essentials.store.prefs.string
@@ -47,7 +46,7 @@ val prefsRoute = composeControllerRoute(
         topAppBar = { EsTopAppBar(title = "Prefs") },
         body = {
             ScrollableList {
-                val boxFactory = inject<PrefBoxFactory>()
+                val boxFactory = inject<com.ivianuu.essentials.store.prefs.PrefBoxFactory>()
 
                 SwitchPreference(
                     box = boxFactory.boolean("switch"),

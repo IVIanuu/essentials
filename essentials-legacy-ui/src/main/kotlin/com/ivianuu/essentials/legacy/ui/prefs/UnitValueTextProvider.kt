@@ -14,19 +14,15 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.store.prefs
+package com.ivianuu.essentials.legacy.ui.prefs
 
 import android.content.Context
-import com.ivianuu.injekt.Name
-import com.ivianuu.injekt.get
-import com.ivianuu.injekt.module
-import java.io.File
+import com.ivianuu.epoxyprefs.SeekBarPreferenceModel
+import com.ivianuu.essentials.util.UnitValueTextProvider
 
-@Name
-annotation class PrefsDir {
-    companion object
-}
-
-val esStoreModule = module {
-    single(name = PrefsDir) { File(get<Context>().applicationInfo.dataDir, "prefs") }
+fun SeekBarPreferenceModel.Builder.unitValueTextProvider(
+    context: Context,
+    unit: UnitValueTextProvider.Unit
+) {
+    valueTextProvider { UnitValueTextProvider(context, unit).invoke(it.toString()) }
 }

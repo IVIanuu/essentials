@@ -16,7 +16,6 @@
 
 package com.ivianuu.essentials.twilight
 
-import com.ivianuu.essentials.R
 import com.ivianuu.essentials.store.prefs.BoxValueHolder
 import com.ivianuu.essentials.store.prefs.PrefBoxFactory
 import com.ivianuu.essentials.store.prefs.enumString

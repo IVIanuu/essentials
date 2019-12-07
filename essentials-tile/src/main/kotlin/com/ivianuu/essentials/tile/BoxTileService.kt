@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.tile
 
 import android.annotation.TargetApi
-import com.ivianuu.essentials.store.Box
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -26,7 +25,7 @@ import kotlinx.coroutines.flow.Flow
 @TargetApi(24)
 abstract class BoxTileService<T> : FlowTileService<T>() {
 
-    protected abstract val box: Box<T>
+    protected abstract val box: com.ivianuu.essentials.store.Box<T>
 
     final override val flow: Flow<T>
         get() = box.asFlow()

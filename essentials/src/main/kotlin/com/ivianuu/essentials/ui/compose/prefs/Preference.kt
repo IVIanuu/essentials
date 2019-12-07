@@ -19,7 +19,6 @@ package com.ivianuu.essentials.ui.compose.prefs
 import androidx.compose.Composable
 import androidx.ui.core.Opacity
 import androidx.ui.graphics.Image
-import com.ivianuu.essentials.store.Box
 import com.ivianuu.essentials.ui.compose.box.unfoldBox
 import com.ivianuu.essentials.ui.compose.common.asIconComposable
 import com.ivianuu.essentials.ui.compose.common.asTextComposable
@@ -101,7 +100,7 @@ fun <T> ValueController(
 }
 
 @Composable
-fun <T> ValueController(box: Box<T>): ValueController<T> = effect {
+fun <T> ValueController(box: com.ivianuu.essentials.store.Box<T>): ValueController<T> = effect {
     val wrapper = unfoldBox(box)
     return@effect remember {
         object : ValueController<T> {

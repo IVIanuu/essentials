@@ -19,14 +19,11 @@ package com.ivianuu.essentials.store.settings
 import android.content.ContentResolver
 import android.content.Context
 import android.provider.Settings
-import com.ivianuu.essentials.util.AppDispatchers
-import com.ivianuu.injekt.Factory
-import com.ivianuu.injekt.android.ForApplication
+import kotlinx.coroutines.CoroutineDispatcher
 
-@Factory
 class SettingsBoxFactory(
-    @ForApplication private val context: Context,
-    private val dispatchers: AppDispatchers
+    private val context: Context,
+    private val dispatcher: CoroutineDispatcher
 ) {
 
     fun <T> setting(
@@ -34,14 +31,15 @@ class SettingsBoxFactory(
         type: SettingBox.Type,
         defaultValue: T,
         adapter: SettingBox.Adapter<T>
-    ): SettingBox<T> = SettingBoxImpl(
-        type = type,
-        name = name,
-        defaultValue = defaultValue,
-        adapter = adapter,
-        contentResolver = context.contentResolver,
-        dispatcher = dispatchers.io
-    )
+    ): SettingBox<T> =
+        SettingBoxImpl(
+            type = type,
+            name = name,
+            defaultValue = defaultValue,
+            adapter = adapter,
+            contentResolver = context.contentResolver,
+            dispatcher = dispatcher
+        )
 }
 
 fun SettingsBoxFactory.float(
@@ -50,7 +48,8 @@ fun SettingsBoxFactory.float(
     defaultValue: Float = 0f
 ) = setting(name = name, type = type, defaultValue = defaultValue, adapter = FloatAdapter)
 
-private object FloatAdapter : SettingBox.Adapter<Float> {
+private object FloatAdapter :
+    SettingBox.Adapter<Float> {
 
     override fun get(
         name: String,
@@ -93,7 +92,8 @@ fun SettingsBoxFactory.int(
     defaultValue: Int = 0
 ) = setting(name = name, type = type, defaultValue = defaultValue, adapter = IntAdapter)
 
-private object IntAdapter : SettingBox.Adapter<Int> {
+private object IntAdapter :
+    SettingBox.Adapter<Int> {
 
     override fun get(
         name: String,
@@ -136,7 +136,8 @@ fun SettingsBoxFactory.long(
     defaultValue: Long = 0L
 ) = setting(name = name, type = type, defaultValue = defaultValue, adapter = LongAdapter)
 
-private object LongAdapter : SettingBox.Adapter<Long> {
+private object LongAdapter :
+    SettingBox.Adapter<Long> {
 
     override fun get(
         name: String,
@@ -178,7 +179,8 @@ fun SettingsBoxFactory.string(
     defaultValue: String = ""
 ) = setting(name = name, type = type, defaultValue = defaultValue, adapter = StringAdapter)
 
-private object StringAdapter : SettingBox.Adapter<String> {
+private object StringAdapter :
+    SettingBox.Adapter<String> {
 
     override fun get(
         name: String,

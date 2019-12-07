@@ -20,12 +20,12 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import com.github.ajalt.timberkt.d
-import com.ivianuu.essentials.util.coroutineScope
-import com.ivianuu.scopes.MutableScope
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
@@ -55,13 +55,14 @@ fun <T> DiskBox(
     serializer: DiskBox.Serializer<T>,
     defaultValue: T,
     dispatcher: CoroutineDispatcher? = null
-): DiskBox<T> = DiskBoxImpl(
-    context = context,
-    path = path,
-    defaultValue = defaultValue,
-    serializer = serializer,
-    dispatcher = dispatcher
-)
+): DiskBox<T> =
+    DiskBoxImpl(
+        context = context,
+        path = path,
+        defaultValue = defaultValue,
+        serializer = serializer,
+        dispatcher = dispatcher
+    )
 
 internal class DiskBoxImpl<T>(
     private val context: Context,
@@ -88,19 +89,20 @@ internal class DiskBoxImpl<T>(
         }
     }
 
-    private val scope = MutableScope()
+    private val coroutineScope = CoroutineScope(SupervisorJob())
 
     private val file by lazy { File(path) }
 
-    private val multiProcessHelper = MultiProcessHelper(context, file) {
-        d { "$path -> inter process change force refetch" }
-        cachedValue.set(this) // force refetching the value
-        changeNotifier.offer(Unit)
-    }
+    private val multiProcessHelper =
+        MultiProcessHelper(context, file) {
+            d { "$path -> inter process change force refetch" }
+            cachedValue.set(this) // force refetching the value
+            changeNotifier.offer(Unit)
+        }
 
     init {
         d { "$path -> init" }
-        scope.coroutineScope.launch {
+        coroutineScope.launch {
             maybeWithDispatcher {
                 check(!file.isDirectory)
             }
@@ -212,7 +214,7 @@ internal class DiskBoxImpl<T>(
     override fun dispose() {
         d { "$path -> dispose" }
         if (_isDisposed.getAndSet(true)) {
-            scope.close()
+            coroutineScope.coroutineContext.get(Job.Key)?.cancel()
             multiProcessHelper.dispose()
         }
     }
@@ -230,6 +232,7 @@ internal class DiskBoxImpl<T>(
         return result
     }
 
+    private inline fun d(block: () -> String) = println("BOX: ${block.invoke()}")
 }
 
 private class MultiProcessHelper(

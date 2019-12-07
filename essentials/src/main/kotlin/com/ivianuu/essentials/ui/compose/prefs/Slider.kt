@@ -31,7 +31,6 @@ import androidx.ui.layout.Stack
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.Slider
 import androidx.ui.material.SliderPosition
-import com.ivianuu.essentials.store.Box
 import com.ivianuu.essentials.ui.compose.common.asIconComposable
 import com.ivianuu.essentials.ui.compose.common.asTextComposable
 import com.ivianuu.essentials.ui.compose.core.ambient
@@ -50,7 +49,7 @@ import com.ivianuu.essentials.util.UnitValueTextProvider
 @JvmName("DoubleSliderPreference")
 @Composable
 fun SliderPreference(
-    box: Box<Double>,
+    box: com.ivianuu.essentials.store.Box<Double>,
     onChange: ((Double) -> Boolean)? = null,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
@@ -112,7 +111,7 @@ fun SliderPreference(
 @JvmName("FloatSliderPreference")
 @Composable
 fun SliderPreference(
-    box: Box<Float>,
+    box: com.ivianuu.essentials.store.Box<Float>,
     onChange: ((Float) -> Boolean)? = null,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
@@ -174,7 +173,7 @@ fun SliderPreference(
 @JvmName("IntSliderPreference")
 @Composable
 fun SliderPreference(
-    box: Box<Int>,
+    box: com.ivianuu.essentials.store.Box<Int>,
     onChange: ((Int) -> Boolean)? = null,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
@@ -236,7 +235,7 @@ fun SliderPreference(
 @JvmName("LongSliderPreference")
 @Composable
 fun SliderPreference(
-    box: Box<Long>,
+    box: com.ivianuu.essentials.store.Box<Long>,
     onChange: ((Long) -> Boolean)? = null,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,

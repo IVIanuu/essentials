@@ -20,7 +20,6 @@ import androidx.compose.Composable
 import androidx.ui.core.Text
 import androidx.ui.graphics.Image
 import com.ivianuu.essentials.R
-import com.ivianuu.essentials.store.Box
 import com.ivianuu.essentials.ui.compose.common.asIconComposable
 import com.ivianuu.essentials.ui.compose.common.asTextComposable
 import com.ivianuu.essentials.ui.compose.core.composable
@@ -31,7 +30,7 @@ import com.ivianuu.essentials.ui.compose.resources.stringResource
 
 @Composable
 fun <T> SingleChoiceListPreference(
-    box: Box<T>,
+    box: com.ivianuu.essentials.store.Box<T>,
     onChange: ((T) -> Boolean)? = null,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,

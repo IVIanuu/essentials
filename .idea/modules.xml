@@ -27,6 +27,7 @@
       <module fileurl="file://$PROJECT_DIR$/essentials-notificationlistener/essentials-notificationlistener.iml" filepath="$PROJECT_DIR$/essentials-notificationlistener/essentials-notificationlistener.iml" />
       <module fileurl="file://$PROJECT_DIR$/essentials-securesettings/essentials-securesettings.iml" filepath="$PROJECT_DIR$/essentials-securesettings/essentials-securesettings.iml" />
       <module fileurl="file://$PROJECT_DIR$/essentials-shell/essentials-shell.iml" filepath="$PROJECT_DIR$/essentials-shell/essentials-shell.iml" />
+      <module fileurl="file://$PROJECT_DIR$/essentials-store/essentials-store.iml" filepath="$PROJECT_DIR$/essentials-store/essentials-store.iml" />
       <module fileurl="file://$PROJECT_DIR$/essentials-test/essentials-test.iml" filepath="$PROJECT_DIR$/essentials-test/essentials-test.iml" />
       <module fileurl="file://$PROJECT_DIR$/essentials-tile/essentials-tile.iml" filepath="$PROJECT_DIR$/essentials-tile/essentials-tile.iml" />
       <module fileurl="file://$PROJECT_DIR$/essentials-twilight/essentials-twilight.iml" filepath="$PROJECT_DIR$/essentials-twilight/essentials-twilight.iml" />

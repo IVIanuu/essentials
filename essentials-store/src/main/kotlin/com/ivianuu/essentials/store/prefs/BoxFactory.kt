@@ -19,18 +19,13 @@ package com.ivianuu.essentials.store.prefs
 import android.content.Context
 import com.ivianuu.essentials.store.Box
 import com.ivianuu.essentials.store.DiskBox
-import com.ivianuu.essentials.util.AppDispatchers
-import com.ivianuu.injekt.Single
-import com.ivianuu.injekt.android.ApplicationScope
-import java.io.File
+import kotlinx.coroutines.CoroutineDispatcher
 import java.util.concurrent.ConcurrentHashMap
 
-@ApplicationScope
-@Single
 class PrefBoxFactory(
-    @ApplicationScope private val context: Context,
-    private val dispatchers: AppDispatchers,
-    @PrefsDir private val prefsDir: File
+    private val context: Context,
+    private val dispatcher: CoroutineDispatcher,
+    private val prefsPath: String
 ) {
 
     private val boxes = ConcurrentHashMap<String, Box<*>>()
@@ -45,10 +40,10 @@ class PrefBoxFactory(
         if (box == null) {
             box = DiskBox(
                 context = context,
-                path = "${prefsDir.absolutePath}/$name",
+                path = "$prefsPath/$name",
                 serializer = serializer,
                 defaultValue = defaultValue,
-                dispatcher = dispatchers.io
+                dispatcher = dispatcher
             )
             boxes[name] = box
         }

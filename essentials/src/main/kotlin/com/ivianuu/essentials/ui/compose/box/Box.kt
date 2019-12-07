@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.ui.compose.box
 
 import androidx.compose.Composable
-import com.ivianuu.essentials.store.Box
 import com.ivianuu.essentials.ui.compose.core.effect
 import com.ivianuu.essentials.ui.compose.core.remember
 import com.ivianuu.essentials.ui.compose.coroutines.collect
@@ -26,7 +25,7 @@ import kotlinx.coroutines.launch
 import kotlin.reflect.KProperty
 
 @Composable
-fun <T> unfoldBox(box: Box<T>): BoxWrapper<T> = effect {
+fun <T> unfoldBox(box: com.ivianuu.essentials.store.Box<T>): BoxWrapper<T> = effect {
     val coroutineScope = coroutineScope()
     val wrapper = remember {
         val setter: (T) -> Unit = { newValue ->

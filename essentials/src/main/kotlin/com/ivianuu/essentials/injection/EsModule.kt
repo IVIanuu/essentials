@@ -18,9 +18,9 @@ package com.ivianuu.essentials.injection
 
 import com.ivianuu.essentials.app.esAppInitializersModule
 import com.ivianuu.essentials.app.esAppServicesModule
-import com.ivianuu.essentials.store.prefs.esStoreModule
 import com.ivianuu.essentials.ui.coil.esCoilModule
 import com.ivianuu.essentials.ui.compose.injekt.composeModule
+import com.ivianuu.essentials.util.esStoreModule
 import com.ivianuu.essentials.util.esUtilModule
 import com.ivianuu.injekt.module
 
