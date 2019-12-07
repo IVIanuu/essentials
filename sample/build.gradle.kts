@@ -50,6 +50,7 @@ dependencies {
     implementation(project(":essentials-shell"))
     implementation(project(":essentials-securesettings"))
     implementation(project(":essentials-shell"))
+    implementation(project(":essentials-tile"))
     implementation(project(":essentials-work"))
     testImplementation(project(":essentials-test"))
 }

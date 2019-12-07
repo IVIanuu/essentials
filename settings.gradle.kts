@@ -14,6 +14,7 @@ include(
     ":essentials-securesettings",
     ":essentials-shell",
     ":essentials-test",
+    ":essentials-tile",
     ":essentials-work",
     ":sample"
 )
