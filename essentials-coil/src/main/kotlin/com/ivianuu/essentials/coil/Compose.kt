@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.coil
 
 import androidx.compose.Composable
+import androidx.ui.core.Size
 import androidx.ui.graphics.Image
 import coil.ImageLoader
 import coil.api.getAny
@@ -48,13 +49,16 @@ fun image(
 @Composable
 fun Image(
     data: Any,
+    size: Size? = null,
     placeholder: Image? = null,
     imageLoader: ImageLoader = inject(),
     image: @Composable() (Image) -> Unit
 ) = composableWithKey(data) {
     val wasPlaceholderNull = placeholder == null
     // todo better default placeholder
-    val placeholder = remember(placeholder) { placeholder ?: Image(1, 1) }
+    val placeholder = remember(placeholder) {
+        placeholder ?: Image(1, 1)
+    }
     val loadedImage = image(
         placeholder = placeholder,
         data = data,

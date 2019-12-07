@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.mvrx
+package com.ivianuu.essentials.mvrx
 
 import android.os.Handler
 import android.os.Looper
@@ -22,6 +22,8 @@ import android.os.Message
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelStoreOwner
+
+// todo remove legacy
 
 interface MvRxView : LifecycleOwner, ViewModelStoreOwner {
 

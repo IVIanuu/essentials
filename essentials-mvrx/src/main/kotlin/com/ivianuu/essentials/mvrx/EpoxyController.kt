@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.legacy.ui.epoxy
+package com.ivianuu.essentials.mvrx
 
+import com.airbnb.epoxy.EpoxyAsyncUtil
 import com.airbnb.epoxy.EpoxyController
 import com.ivianuu.director.Controller
-import com.ivianuu.essentials.ui.mvrx.MvRxView
-import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
 
 fun <T : MvRxView, A : MvRxViewModel<B>, B> T.mvRxEpoxyController(
     viewModel1: A,
@@ -95,5 +94,14 @@ fun <T : MvRxView, A : MvRxViewModel<B>, B, C : MvRxViewModel<D>, D, E : MvRxVie
             viewModel4.state,
             viewModel5.state
         )
+    }
+}
+
+private fun epoxyController(buildModels: EpoxyController.() -> Unit): EpoxyController {
+    val handler = EpoxyAsyncUtil.getAsyncBackgroundHandler()
+    return object : EpoxyController(handler, handler) {
+        override fun buildModels() {
+            buildModels.invoke(this)
+        }
     }
 }

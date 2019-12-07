@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.compose.mvrx
+package com.ivianuu.essentials.mvrx
 
 import androidx.compose.Composable
 import androidx.lifecycle.ViewModelProvider
@@ -24,7 +24,6 @@ import com.ivianuu.essentials.ui.compose.core.remember
 import com.ivianuu.essentials.ui.compose.coroutines.collect
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.compose.viewmodel.viewModel
-import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
 import com.ivianuu.essentials.util.defaultViewModelKey
 import kotlin.reflect.KClass
 

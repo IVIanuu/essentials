@@ -16,6 +16,8 @@
 
 package com.ivianuu.essentials.sample.ui
 
+import android.content.Intent
+import android.provider.MediaStore
 import androidx.compose.Composable
 import androidx.ui.core.Draw
 import androidx.ui.core.Opacity
@@ -31,8 +33,9 @@ import androidx.ui.layout.Padding
 import androidx.ui.material.Divider
 import androidx.ui.material.MaterialTheme
 import com.ivianuu.essentials.about.aboutRoute
+import com.ivianuu.essentials.apps.ui.IntentAppFilter
 import com.ivianuu.essentials.apps.ui.appPickerRoute
-import com.ivianuu.essentials.apps.ui.intentAppFilter
+import com.ivianuu.essentials.twilight.twilightSettingsRoute
 import com.ivianuu.essentials.ui.compose.common.navigateOnClick
 import com.ivianuu.essentials.ui.compose.common.scrolling.ScrollableList
 import com.ivianuu.essentials.ui.compose.core.composable
@@ -49,6 +52,7 @@ import com.ivianuu.essentials.ui.compose.material.Scaffold
 import com.ivianuu.essentials.ui.compose.material.SimpleListItem
 import com.ivianuu.essentials.ui.navigation.Route
 import com.ivianuu.essentials.util.Toaster
+import com.ivianuu.injekt.parametersOf
 
 val homeRoute = composeControllerRoute {
     Scaffold(
@@ -151,9 +155,9 @@ enum class HomeItem(
         color = Color.Blue,
         route = {
             appPickerRoute(
-                appFilter = intentAppFilter(
-                    android.content.Intent(android.provider.MediaStore.INTENT_ACTION_MUSIC_PLAYER)
-                )
+                appFilter = inject<IntentAppFilter> {
+                    parametersOf(Intent(MediaStore.INTENT_ACTION_MUSIC_PLAYER))
+                }
             )
         }
     ),
@@ -225,6 +229,6 @@ enum class HomeItem(
     Twilight(
         title = "Twilight",
         color = Color.Gray,
-        route = { com.ivianuu.essentials.twilight.twilightSettingsRoute }
+        route = { twilightSettingsRoute }
     )
 }

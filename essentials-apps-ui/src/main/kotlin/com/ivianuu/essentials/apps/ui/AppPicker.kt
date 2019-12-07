@@ -25,17 +25,19 @@ import androidx.ui.material.CircularProgressIndicator
 import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.AppStore
 import com.ivianuu.essentials.apps.coil.AppIcon
+import com.ivianuu.essentials.coil.Image
+import com.ivianuu.essentials.mvrx.MvRxViewModel
+import com.ivianuu.essentials.mvrx.injekt.mvRxViewModel
 import com.ivianuu.essentials.ui.compose.common.ListScreen
 import com.ivianuu.essentials.ui.compose.common.scrolling.ScrollableList
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.staticComposableWithKey
 import com.ivianuu.essentials.ui.compose.es.composeControllerRoute
+import com.ivianuu.essentials.ui.compose.layout.SizedBox
 import com.ivianuu.essentials.ui.compose.material.AvatarIconStyle
 import com.ivianuu.essentials.ui.compose.material.Icon
 import com.ivianuu.essentials.ui.compose.material.SimpleListItem
-import com.ivianuu.essentials.ui.compose.mvrx.injekt.mvRxViewModel
 import com.ivianuu.essentials.ui.compose.resources.stringResource
-import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.util.AppDispatchers
 import com.ivianuu.essentials.util.Async
@@ -89,8 +91,12 @@ private fun AppInfo(
     SimpleListItem(
         title = { Text(app.appName) },
         leading = {
-            com.ivianuu.essentials.coil.Image(data = AppIcon(app.packageName)) {
-                Icon(image = it, style = AvatarIconStyle())
+            SizedBox(size = 40.dp) {
+                Center {
+                    Image(data = AppIcon(app.packageName)) {
+                        Icon(image = it, style = AvatarIconStyle())
+                    }
+                }
             }
         },
         onClick = onClick

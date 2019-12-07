@@ -19,7 +19,7 @@ package com.ivianuu.essentials.legacy.ui.simple
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.epoxy.EpoxyController
-import com.ivianuu.essentials.R
+import com.ivianuu.essentials.legacy.ui.R
 import kotlinx.android.synthetic.main.es_view_recycler_view.es_recycler_view
 
 /**

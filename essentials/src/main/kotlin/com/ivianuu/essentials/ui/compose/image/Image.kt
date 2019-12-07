@@ -21,11 +21,21 @@ import android.graphics.drawable.Drawable
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.core.graphics.drawable.toBitmap
+import androidx.ui.core.Dp
 import androidx.ui.graphics.Image
 import androidx.ui.graphics.ImageConfig
 import androidx.ui.graphics.NativeImage
 import androidx.ui.graphics.colorspace.ColorSpace
 import androidx.ui.graphics.colorspace.ColorSpaces
+import com.ivianuu.essentials.ui.compose.core.withDensity
+
+fun EmptyImage(
+    width: Dp,
+    height: Dp
+): Image = Image(
+    width = withDensity { width.toIntPx().value },
+    height = withDensity { height.toIntPx().value }
+)
 
 fun Drawable.toImage() = toBitmap().toImage()
 

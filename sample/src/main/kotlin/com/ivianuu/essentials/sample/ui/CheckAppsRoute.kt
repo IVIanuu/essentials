@@ -17,7 +17,7 @@
 package com.ivianuu.essentials.sample.ui
 
 import com.ivianuu.essentials.apps.ui.CheckableAppsScreen
-import com.ivianuu.essentials.apps.ui.launchableOnlyAppFilter
+import com.ivianuu.essentials.apps.ui.LaunchableAppFilter
 import com.ivianuu.essentials.store.prefs.stringSet
 import com.ivianuu.essentials.ui.compose.core.remember
 import com.ivianuu.essentials.ui.compose.coroutines.coroutineScope
@@ -41,6 +41,6 @@ val checkAppsRoute = composeControllerRoute(
             }
         },
         appBarTitle = "Send check apps",
-        appFilter = launchableOnlyAppFilter()
+        appFilter = inject<LaunchableAppFilter>()
     )
 }

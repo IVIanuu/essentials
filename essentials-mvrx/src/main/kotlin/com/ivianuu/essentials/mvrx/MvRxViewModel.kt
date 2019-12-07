@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.mvrx
+package com.ivianuu.essentials.mvrx
 
 import androidx.lifecycle.viewModelScope
 import com.github.ajalt.timberkt.d

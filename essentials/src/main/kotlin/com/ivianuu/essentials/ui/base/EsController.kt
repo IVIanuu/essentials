@@ -23,7 +23,6 @@ import com.ivianuu.director.Controller
 import com.ivianuu.director.requireActivity
 import com.ivianuu.essentials.injection.childControllerComponent
 import com.ivianuu.essentials.injection.controllerComponent
-import com.ivianuu.essentials.ui.mvrx.MvRxView
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.Route
 import com.ivianuu.essentials.util.InjektTraitContextWrapper
@@ -37,7 +36,7 @@ import kotlinx.android.synthetic.clearFindViewByIdCache
 /**
  * Base controller
  */
-abstract class EsController : Controller(), InjektTrait, LayoutContainer, MvRxView {
+abstract class EsController : Controller(), InjektTrait, LayoutContainer {
 
     override val component by unsafeLazy {
         if (parentController != null) {
@@ -72,18 +71,10 @@ abstract class EsController : Controller(), InjektTrait, LayoutContainer, MvRxVi
             .also { setContentView(it) }
     }
 
-    override fun onAttach(view: View) {
-        super.onAttach(view)
-        invalidate()
-    }
-
     override fun onDestroyView(view: View) {
         clearFindViewByIdCache()
         _containerView = null
         super.onDestroyView(view)
-    }
-
-    override fun invalidate() {
     }
 
     protected open fun modules(): List<Module> = emptyList()

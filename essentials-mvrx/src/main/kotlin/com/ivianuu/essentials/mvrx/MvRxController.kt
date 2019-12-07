@@ -14,17 +14,18 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.legacy.ui.simple
+package com.ivianuu.essentials.mvrx
 
-import androidx.coordinatorlayout.widget.CoordinatorLayout
-import com.ivianuu.essentials.mvrx.MvRxController
-import kotlinx.android.synthetic.main.es_controller_list.es_coordinator_layout
+import android.view.View
+import com.ivianuu.essentials.ui.base.EsController
 
-/**
- * A controller which hosts a coordinator layout
- */
-abstract class CoordinatorController : MvRxController() {
+abstract class MvRxController : EsController(), MvRxView {
 
-    open val coordinatorLayout: CoordinatorLayout
-        get() = es_coordinator_layout
+    override fun onAttach(view: View) {
+        super.onAttach(view)
+        invalidate()
+    }
+
+    override fun invalidate() {
+    }
 }

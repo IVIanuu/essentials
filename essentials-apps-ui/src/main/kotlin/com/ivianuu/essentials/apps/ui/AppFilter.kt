@@ -18,10 +18,9 @@ package com.ivianuu.essentials.apps.ui
 
 import android.content.Intent
 import android.content.pm.PackageManager
-import androidx.compose.Composable
 import com.ivianuu.essentials.apps.AppInfo
-import com.ivianuu.essentials.ui.compose.core.effect
-import com.ivianuu.essentials.ui.compose.injekt.inject
+import com.ivianuu.injekt.Factory
+import com.ivianuu.injekt.Param
 
 typealias AppFilter = (AppInfo) -> Boolean
 
@@ -34,20 +33,30 @@ class CachingAppFilter(private val appFilter: AppFilter) : AppFilter {
     }
 }
 
-@Composable
-fun launchableOnlyAppFilter(): AppFilter = effect {
-    val packageManager = inject<PackageManager>()
-    return@effect CachingAppFilter { app ->
+@Factory
+class LaunchableAppFilter(
+    private val packageManager: PackageManager
+) : AppFilter {
+    private val wrapped = CachingAppFilter { app ->
         packageManager.getLaunchIntentForPackage(app.packageName) != null
     }
+
+    override fun invoke(app: AppInfo) = wrapped(app)
 }
 
-@Composable
-fun intentAppFilter(intent: Intent): AppFilter = effect {
-    val packageManager = inject<PackageManager>()
-    val mediaApps by lazy {
+@Factory
+class IntentAppFilter(
+    @Param private val intent: Intent,
+    private val packageManager: PackageManager
+) : AppFilter {
+    private val apps by lazy {
         packageManager.queryIntentActivities(intent, 0)
             .map { it.activityInfo.applicationInfo.packageName }
     }
-    return@effect CachingAppFilter { it.packageName in mediaApps }
+
+    private val wrapped = CachingAppFilter { app ->
+        app.packageName in apps
+    }
+
+    override fun invoke(app: AppInfo) = wrapped(app)
 }

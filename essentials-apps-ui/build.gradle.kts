@@ -35,4 +35,5 @@ dependencies {
     api(project(":essentials"))
     api(project(":essentials-apps"))
     api(project(":essentials-apps-coil"))
+    api(project(":essentials-mvrx"))
 }

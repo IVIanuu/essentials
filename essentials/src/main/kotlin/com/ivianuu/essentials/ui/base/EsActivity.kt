@@ -24,7 +24,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.ivianuu.director.Router
 import com.ivianuu.director.router
-import com.ivianuu.essentials.ui.mvrx.MvRxView
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.director.ControllerRenderer
 import com.ivianuu.essentials.ui.navigation.director.ControllerRoute
@@ -45,7 +44,7 @@ import kotlinx.coroutines.launch
 /**
  * Base activity
  */
-abstract class EsActivity : AppCompatActivity(), InjektTrait, MvRxView {
+abstract class EsActivity : AppCompatActivity(), InjektTrait {
 
     override val component by unsafeLazy {
         activityComponent {
@@ -101,19 +100,11 @@ abstract class EsActivity : AppCompatActivity(), InjektTrait, MvRxView {
             .launchIn(lifecycleScope)
     }
 
-    override fun onStart() {
-        super.onStart()
-        invalidate()
-    }
-
     override fun onResumeFragments() {
         super.onResumeFragments()
         onPause.coroutineScope.launch {
             controllerRenderer.render()
         }
-    }
-
-    override fun invalidate() {
     }
 
     protected open fun modules(): List<Module> = emptyList()

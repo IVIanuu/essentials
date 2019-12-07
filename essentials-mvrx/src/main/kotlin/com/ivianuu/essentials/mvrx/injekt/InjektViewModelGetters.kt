@@ -14,24 +14,45 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.compose.mvrx.injekt
+package com.ivianuu.essentials.mvrx.injekt
 
 import androidx.compose.Composable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
+import com.ivianuu.essentials.mvrx.MvRxView
+import com.ivianuu.essentials.mvrx.MvRxViewModel
+import com.ivianuu.essentials.mvrx.getMvRxViewModel
+import com.ivianuu.essentials.mvrx.mvRxViewModel
 import com.ivianuu.essentials.ui.compose.core.ambient
 import com.ivianuu.essentials.ui.compose.core.effect
 import com.ivianuu.essentials.ui.compose.core.remember
 import com.ivianuu.essentials.ui.compose.injekt.ComponentAmbient
 import com.ivianuu.essentials.ui.compose.injekt.inject
-import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
 import com.ivianuu.essentials.util.defaultViewModelKey
 import com.ivianuu.injekt.Component
+import com.ivianuu.injekt.InjektTrait
 import com.ivianuu.injekt.ParametersDefinition
 import com.ivianuu.injekt.Type
+import com.ivianuu.injekt.get
 import com.ivianuu.injekt.typeOf
 import kotlin.reflect.KClass
+
+inline fun <S, reified T : MvRxViewModel<*>> S.injectMvRxViewModel(
+    noinline from: () -> ViewModelStoreOwner = { this },
+    noinline key: () -> String = { T::class.defaultViewModelKey },
+    noinline name: () -> Any? = { null },
+    noinline parameters: ParametersDefinition? = null
+): Lazy<T> where S : MvRxView, S : InjektTrait =
+    mvRxViewModel(from, key) { get(name = name(), parameters = parameters) }
+
+inline fun <S, reified T : MvRxViewModel<*>> S.getMvRxViewModel(
+    from: ViewModelStoreOwner = this,
+    key: String = T::class.defaultViewModelKey,
+    name: Any? = null,
+    noinline parameters: ParametersDefinition? = null
+): T where S : MvRxView, S : InjektTrait =
+    getMvRxViewModel(from, key) { get(name = name, parameters = parameters) }
 
 @Composable
 inline fun <reified T : MvRxViewModel<*>> mvRxViewModel(
@@ -67,7 +88,7 @@ fun <T : MvRxViewModel<*>> mvRxViewModel(
         )
     }
 
-    return@effect com.ivianuu.essentials.ui.compose.mvrx.mvRxViewModel(
+    return@effect mvRxViewModel(
         type = type.raw as KClass<T>,
         from = from,
         key = key,
