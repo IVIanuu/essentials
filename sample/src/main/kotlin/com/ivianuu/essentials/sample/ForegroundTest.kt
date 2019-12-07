@@ -16,6 +16,8 @@
 
 package com.ivianuu.essentials.sample
 
+import android.annotation.TargetApi
+import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
@@ -23,6 +25,7 @@ import android.os.Build
 import androidx.core.app.NotificationCompat
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.app.AppService
+import com.ivianuu.essentials.foreground.AbstractNotificationFactory
 import com.ivianuu.essentials.foreground.ForegroundComponent
 import com.ivianuu.essentials.foreground.ForegroundManager
 import com.ivianuu.essentials.store.prefs.PrefBoxFactory
@@ -83,18 +86,13 @@ class ForegroundDispatcher(
 
 @Factory
 class ForegroundTestComponent(
-    private val context: Context,
-    private val notificationManager: NotificationManager,
+    private val factoryProvider: Provider<TestNotificationFactory>,
     @Param val tag: Int
 ) : ForegroundComponent() {
 
-    init {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            notificationManager.createNotificationChannel(
-                NotificationChannel(
-                    "channel", "Channel", NotificationManager.IMPORTANCE_LOW
-                )
-            )
+    override val notificationFactory by lazy {
+        factoryProvider {
+            parametersOf(tag)
         }
     }
 
@@ -107,10 +105,24 @@ class ForegroundTestComponent(
         super.detach()
         d { "detach $tag" }
     }
+}
 
-    override fun buildNotification() = NotificationCompat.Builder(context, "channel")
-        .setSmallIcon(R.drawable.ic_settings)
-        .setContentTitle("Foreground $tag")
-        .setOngoing(true)
-        .build()!!
+@Factory
+class TestNotificationFactory(
+    @Param private val tag: Int,
+    context: Context
+) : AbstractNotificationFactory(context) {
+
+    @TargetApi(Build.VERSION_CODES.O)
+    override fun createChannel() = NotificationChannel(
+        "channel", "Channel", NotificationManager.IMPORTANCE_LOW
+    )
+
+    override fun buildNotification(context: Context): Notification =
+        NotificationCompat.Builder(context, "channel")
+            .setSmallIcon(R.drawable.ic_settings)
+            .setContentTitle("Foreground $tag")
+            .setOngoing(true)
+            .build()!!
+
 }

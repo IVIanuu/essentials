@@ -73,7 +73,7 @@ class ForegroundService : EsService() {
         if (newComponents.isEmpty()) return
 
         newComponents.forEachIndexed { index, component ->
-            val notification = component.buildNotification()
+            val notification = component.notificationFactory.buildNotification()
             if (index == 0) {
                 startForeground(component.id, notification)
             } else {

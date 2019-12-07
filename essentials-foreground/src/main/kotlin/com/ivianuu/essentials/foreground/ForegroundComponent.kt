@@ -16,11 +16,11 @@
 
 package com.ivianuu.essentials.foreground
 
-import android.app.Notification
 import java.util.concurrent.atomic.AtomicInteger
 
 abstract class ForegroundComponent {
 
+    abstract val notificationFactory: NotificationFactory
     val id = ids.incrementAndGet()
 
     var manager: ForegroundManager? = null
@@ -33,8 +33,6 @@ abstract class ForegroundComponent {
     open fun detach() {
         this.manager = null
     }
-
-    abstract fun buildNotification(): Notification
 
     protected fun stopForeground() {
         manager?.stopForeground(this)
