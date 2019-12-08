@@ -19,8 +19,11 @@ package com.ivianuu.essentials.permission
 import com.ivianuu.essentials.permission.accessibility.AccessibilityServicePermissionStateProvider
 import com.ivianuu.essentials.permission.dialogui.DialogPermissionRequestUi
 import com.ivianuu.essentials.permission.intent.IntentPermissionRequestHandler
+import com.ivianuu.essentials.permission.notificationlistener.NotificationListenerPermissionStateProvider
 import com.ivianuu.essentials.permission.runtime.RuntimePermissionRequestHandler
 import com.ivianuu.essentials.permission.runtime.RuntimePermissionStateProvider
+import com.ivianuu.essentials.permission.systemoverlay.SystemOverlayPermissionStateProvider
+import com.ivianuu.essentials.permission.writesettings.WriteSettingsPermissionStateProvider
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.injekt.module
 
@@ -39,7 +42,16 @@ val esPermissionsModule = module {
     // intent
     bindPermissionRequestHandler<IntentPermissionRequestHandler>()
 
+    // notification listener
+    bindPermissionStateProvider<NotificationListenerPermissionStateProvider>()
+
     // runtime
     bindPermissionRequestHandler<RuntimePermissionRequestHandler>()
     bindPermissionStateProvider<RuntimePermissionStateProvider>()
+
+    // system overlay
+    bindPermissionStateProvider<SystemOverlayPermissionStateProvider>()
+
+    // write settings
+    bindPermissionStateProvider<WriteSettingsPermissionStateProvider>()
 }

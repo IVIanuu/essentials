@@ -17,8 +17,10 @@
 package com.ivianuu.essentials.sample.ui
 
 import android.Manifest
+import androidx.ui.core.ContextAmbient
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.accessibility.ComponentAccessibilityService
+import com.ivianuu.essentials.notificationlistener.ComponentNotificationListenerService
 import com.ivianuu.essentials.permission.Desc
 import com.ivianuu.essentials.permission.Icon
 import com.ivianuu.essentials.permission.MetadataKeys
@@ -26,8 +28,12 @@ import com.ivianuu.essentials.permission.PermissionManager
 import com.ivianuu.essentials.permission.R
 import com.ivianuu.essentials.permission.Title
 import com.ivianuu.essentials.permission.accessibility.AccessibilityServicePermission
+import com.ivianuu.essentials.permission.notificationlistener.NotificationListenerPermission
 import com.ivianuu.essentials.permission.runtime.RuntimePermission
+import com.ivianuu.essentials.permission.systemoverlay.SystemOverlayPermission
+import com.ivianuu.essentials.permission.writesettings.WriteSettingsPermission
 import com.ivianuu.essentials.ui.compose.common.SimpleScreen
+import com.ivianuu.essentials.ui.compose.core.ambient
 import com.ivianuu.essentials.ui.compose.coroutines.launchOnActive
 import com.ivianuu.essentials.ui.compose.es.composeControllerRoute
 import com.ivianuu.essentials.ui.compose.injekt.inject
@@ -62,8 +68,36 @@ val permissionRoute = composeControllerRoute(
             MetadataKeys.Icon to drawableResource(R.drawable.es_ic_menu)
         )
 
+        val notificationListener = NotificationListenerPermission(
+            ComponentNotificationListenerService::class,
+            MetadataKeys.Title to "Notification listener",
+            MetadataKeys.Desc to "This is a desc",
+            MetadataKeys.Icon to drawableResource(R.drawable.es_ic_menu)
+        )
+
+        val systemOverlay = SystemOverlayPermission(
+            ambient(ContextAmbient),
+            MetadataKeys.Title to "System overlay",
+            MetadataKeys.Desc to "This is a desc",
+            MetadataKeys.Icon to drawableResource(R.drawable.es_ic_menu)
+        )
+
+        val writeSettings = WriteSettingsPermission(
+            ambient(ContextAmbient),
+            MetadataKeys.Title to "Write settings",
+            MetadataKeys.Desc to "This is a desc",
+            MetadataKeys.Icon to drawableResource(R.drawable.es_ic_menu)
+        )
+
         launchOnActive {
-            val granted = manager.request(camera, phone, accessibility)
+            val granted = manager.request(
+                camera,
+                phone,
+                accessibility,
+                notificationListener,
+                systemOverlay,
+                writeSettings
+            )
             d { "granted $granted" }
         }
     }
