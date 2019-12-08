@@ -22,7 +22,7 @@ import com.ivianuu.essentials.util.getViewModel
 import com.ivianuu.injekt.Component
 import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.Scope
-import com.ivianuu.injekt.android.ForApplication
+import com.ivianuu.injekt.android.ApplicationScope
 import com.ivianuu.injekt.android.getApplicationComponent
 import com.ivianuu.injekt.component
 
@@ -33,7 +33,7 @@ annotation class RetainedActivityScope {
 
 @Factory
 class RetainedActivityComponentHolder(
-    @ForApplication private val applicationComponent: Component
+    @ApplicationScope private val applicationComponent: Component
 ) : ViewModel() {
     val component = component {
         dependencies(applicationComponent)
