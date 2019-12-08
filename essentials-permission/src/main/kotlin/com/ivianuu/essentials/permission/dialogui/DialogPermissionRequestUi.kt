@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.permission
+package com.ivianuu.essentials.permission.dialogui
 
 import androidx.compose.Composable
 import androidx.compose.Recompose
@@ -22,7 +22,20 @@ import androidx.compose.frames.modelListOf
 import androidx.lifecycle.viewModelScope
 import androidx.ui.core.Text
 import com.github.ajalt.timberkt.d
+import com.ivianuu.essentials.permission.Desc
+import com.ivianuu.essentials.permission.Icon
+import com.ivianuu.essentials.permission.MetadataKeys
+import com.ivianuu.essentials.permission.Permission
+import com.ivianuu.essentials.permission.PermissionActivity
+import com.ivianuu.essentials.permission.PermissionManager
+import com.ivianuu.essentials.permission.PermissionNavigator
+import com.ivianuu.essentials.permission.PermissionRequest
+import com.ivianuu.essentials.permission.PermissionRequestUi
+import com.ivianuu.essentials.permission.R
+import com.ivianuu.essentials.permission.Title
 import com.ivianuu.essentials.ui.base.EsViewModel
+import com.ivianuu.essentials.ui.compose.core.ActivityAmbient
+import com.ivianuu.essentials.ui.compose.core.ambient
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.composableWithKey
 import com.ivianuu.essentials.ui.compose.dialog.DialogButton
@@ -49,7 +62,7 @@ class DialogPermissionRequestUi(
     ) {
         navigator.push(
             dialogRoute {
-                PermissionDialog(activity = activity, manager = manager, request = request)
+                PermissionDialog(request = request)
             }
         )
     }
@@ -57,11 +70,7 @@ class DialogPermissionRequestUi(
 }
 
 @Composable
-private fun PermissionDialog(
-    activity: PermissionActivity,
-    manager: PermissionManager,
-    request: PermissionRequest
-) = composable {
+private fun PermissionDialog(request: PermissionRequest) = composable {
     Recompose { recompose ->
         ScrollableDialog(
             title = { Text("Permission") }, // todo
@@ -69,6 +78,7 @@ private fun PermissionDialog(
                 val viewModel = injectViewModel<PermissionDialogViewModel> {
                     parametersOf(request)
                 }
+                val activity = ambient(ActivityAmbient) as PermissionActivity
                 viewModel.permissionsToProcess.forEach { permission ->
                     Permission(
                         permission = permission,

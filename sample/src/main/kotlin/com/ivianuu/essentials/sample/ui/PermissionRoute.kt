@@ -16,14 +16,17 @@
 
 package com.ivianuu.essentials.sample.ui
 
+import android.Manifest
 import com.github.ajalt.timberkt.d
+import com.ivianuu.essentials.accessibility.ComponentAccessibilityService
 import com.ivianuu.essentials.permission.Desc
 import com.ivianuu.essentials.permission.Icon
 import com.ivianuu.essentials.permission.MetadataKeys
 import com.ivianuu.essentials.permission.PermissionManager
 import com.ivianuu.essentials.permission.R
-import com.ivianuu.essentials.permission.RuntimePermission
 import com.ivianuu.essentials.permission.Title
+import com.ivianuu.essentials.permission.accessibility.AccessibilityServicePermission
+import com.ivianuu.essentials.permission.runtime.RuntimePermission
 import com.ivianuu.essentials.ui.compose.common.SimpleScreen
 import com.ivianuu.essentials.ui.compose.coroutines.launchOnActive
 import com.ivianuu.essentials.ui.compose.es.composeControllerRoute
@@ -39,21 +42,28 @@ val permissionRoute = composeControllerRoute(
         val manager = inject<PermissionManager>()
 
         val camera = RuntimePermission(
-            android.Manifest.permission.CAMERA,
+            Manifest.permission.CAMERA,
             MetadataKeys.Title to "Camera",
             MetadataKeys.Desc to "This is a desc",
             MetadataKeys.Icon to drawableResource(R.drawable.es_ic_menu)
         )
 
         val phone = RuntimePermission(
-            android.Manifest.permission.CALL_PHONE,
+            Manifest.permission.CALL_PHONE,
             MetadataKeys.Title to "Call phone",
             MetadataKeys.Desc to "This is a desc",
             MetadataKeys.Icon to drawableResource(R.drawable.es_ic_menu)
         )
 
+        val accessibility = AccessibilityServicePermission(
+            ComponentAccessibilityService::class,
+            MetadataKeys.Title to "Accessibility",
+            MetadataKeys.Desc to "This is a desc",
+            MetadataKeys.Icon to drawableResource(R.drawable.es_ic_menu)
+        )
+
         launchOnActive {
-            val granted = manager.request(camera, phone)
+            val granted = manager.request(camera, phone, accessibility)
             d { "granted $granted" }
         }
     }

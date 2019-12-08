@@ -14,11 +14,20 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.permission
+package com.ivianuu.essentials.permission.runtime
 
 import android.content.Context
 import android.content.pm.PackageManager
 import androidx.fragment.app.Fragment
+import com.ivianuu.essentials.permission.Metadata
+import com.ivianuu.essentials.permission.MetadataKeys
+import com.ivianuu.essentials.permission.Permission
+import com.ivianuu.essentials.permission.PermissionActivity
+import com.ivianuu.essentials.permission.PermissionManager
+import com.ivianuu.essentials.permission.PermissionRequestHandler
+import com.ivianuu.essentials.permission.PermissionResult
+import com.ivianuu.essentials.permission.PermissionStateProvider
+import com.ivianuu.essentials.permission.metadataOf
 import com.ivianuu.injekt.Factory
 import kotlinx.coroutines.CompletableDeferred
 import java.util.concurrent.atomic.AtomicInteger
@@ -33,7 +42,11 @@ fun RuntimePermission(
     )
 )
 
-val MetadataKeys.RuntimePermissionName by lazy { Metadata.Key<String>("RuntimePermissionName") }
+val MetadataKeys.RuntimePermissionName by lazy {
+    Metadata.Key<String>(
+        "RuntimePermissionName"
+    )
+}
 
 @Factory
 class RuntimePermissionStateProvider(
@@ -62,7 +75,10 @@ class RuntimePermissionRequestHandler : PermissionRequestHandler {
         val fragment = RequestFragment()
 
         activity.supportFragmentManager.beginTransaction()
-            .add(fragment, RequestFragment.TAG)
+            .add(
+                fragment,
+                RequestFragment.TAG
+            )
             .commitNow()
 
         val granted = fragment.request(permission.metadata[MetadataKeys.RuntimePermissionName])

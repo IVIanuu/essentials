@@ -16,11 +16,15 @@
 
 package com.ivianuu.essentials.permission
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import androidx.lifecycle.ViewModel
 import com.ivianuu.essentials.ui.base.EsActivity
 import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.util.viewModel
+import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.inject
 
 class PermissionActivity : EsActivity() {
@@ -28,6 +32,9 @@ class PermissionActivity : EsActivity() {
     override val navigator: Navigator by inject(name = PermissionNavigator)
     private val manager: PermissionManager by inject()
     private val requestUi: PermissionRequestUi by inject()
+    private val viewModel by viewModel {
+        CallbackViewModel()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,16 +51,22 @@ class PermissionActivity : EsActivity() {
             return
         }
 
+        viewModel.currentActivity = this
+
         if (savedInstanceState != null) return
 
+        viewModel.request = request
+
         val finalRequest = request.copy(
-            onComplete = {
-                finish()
-                request.onComplete()
-            }
+            onComplete = viewModel.onComplete
         )
 
         requestUi.performRequest(this@PermissionActivity, manager, finalRequest)
+    }
+
+    override fun onDestroy() {
+        viewModel.currentActivity = null
+        super.onDestroy()
     }
 
     internal companion object {
@@ -73,5 +86,15 @@ class PermissionActivity : EsActivity() {
                 }
             )
         }
+    }
+}
+
+@Factory
+internal class CallbackViewModel : ViewModel() {
+    var currentActivity: Activity? = null
+    lateinit var request: PermissionRequest
+    val onComplete: () -> Unit = {
+        currentActivity?.finish()
+        request.onComplete()
     }
 }

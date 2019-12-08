@@ -16,6 +16,11 @@
 
 package com.ivianuu.essentials.permission
 
+import com.ivianuu.essentials.permission.accessibility.AccessibilityServicePermissionStateProvider
+import com.ivianuu.essentials.permission.dialogui.DialogPermissionRequestUi
+import com.ivianuu.essentials.permission.intent.IntentPermissionRequestHandler
+import com.ivianuu.essentials.permission.runtime.RuntimePermissionRequestHandler
+import com.ivianuu.essentials.permission.runtime.RuntimePermissionStateProvider
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.injekt.module
 
@@ -25,8 +30,14 @@ val esPermissionsModule = module {
     set<PermissionRequestHandler>(setName = PermissionRequestHandlers)
     set<PermissionStateProvider>(setName = PermissionStateProviders)
 
+    // accessibility
+    bindPermissionStateProvider<AccessibilityServicePermissionStateProvider>()
+
     // dialog ui
     bindPermissionRequestUi<DialogPermissionRequestUi>()
+
+    // intent
+    bindPermissionRequestHandler<IntentPermissionRequestHandler>()
 
     // runtime
     bindPermissionRequestHandler<RuntimePermissionRequestHandler>()
