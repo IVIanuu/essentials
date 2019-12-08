@@ -17,26 +17,35 @@
 package com.ivianuu.essentials.permission
 
 interface Permission {
-    val key: String
-    val requestHandler: RequestHandler
-    val stateProvider: StateProvider
     val metadata: Metadata
 }
 
-interface StateProvider {
-    suspend fun isGranted(): Boolean
+fun Permission(metadata: Metadata): Permission = SimplePermission(metadata = metadata)
+
+private class SimplePermission(override val metadata: Metadata) : Permission {
+    override fun toString() = "Permission($metadata)"
 }
 
-interface RequestHandler {
+interface PermissionStateProvider {
+    fun handles(permission: Permission): Boolean
+    suspend fun isGranted(permission: Permission): Boolean
+}
+
+interface PermissionRequestHandler {
+    fun handles(permission: Permission): Boolean
     suspend fun request(
         activity: PermissionActivity,
+        manager: PermissionManager,
         permission: Permission
-    )
+    ): PermissionResult
 }
+
+data class PermissionResult(val isOk: Boolean)
 
 interface PermissionRequestUi {
     fun performRequest(
         activity: PermissionActivity,
+        manager: PermissionManager,
         request: PermissionRequest
     )
 }

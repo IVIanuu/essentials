@@ -20,26 +20,31 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import com.ivianuu.essentials.ui.base.EsActivity
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.injekt.inject
 
 class PermissionActivity : EsActivity() {
 
-    private val permissionManager: PermissionManager by inject()
-    private val permissionRequestUi: PermissionRequestUi by inject()
+    override val navigator: Navigator by inject(name = PermissionNavigator)
+    private val manager: PermissionManager by inject()
+    private val requestUi: PermissionRequestUi by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         val requestId = intent.getStringExtra(KEY_REQUEST_ID)
         if (requestId == null) {
             finish()
             return
         }
 
-        val request = permissionManager.getRequest(requestId)
+        val request = manager.getRequest(requestId)
         if (request == null) {
             finish()
             return
         }
+
+        if (savedInstanceState != null) return
 
         val finalRequest = request.copy(
             onComplete = {
@@ -48,7 +53,7 @@ class PermissionActivity : EsActivity() {
             }
         )
 
-        permissionRequestUi.performRequest(this, finalRequest)
+        requestUi.performRequest(this@PermissionActivity, manager, finalRequest)
     }
 
     internal companion object {
@@ -64,6 +69,7 @@ class PermissionActivity : EsActivity() {
                     PermissionActivity::class.java
                 ).apply {
                     putExtra(KEY_REQUEST_ID, requestId)
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 }
             )
         }

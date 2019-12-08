@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.permission
 
 import android.content.Context
+import com.github.ajalt.timberkt.d
 import com.ivianuu.injekt.Single
 import com.ivianuu.injekt.android.ApplicationScope
 import kotlinx.coroutines.CompletableDeferred
@@ -24,19 +25,33 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.util.UUID
 
-
 @ApplicationScope
 @Single
 class PermissionManager(
-    private val context: Context
+    private val context: Context,
+    @PermissionRequestHandlers private val permissionRequestHandlers: Set<PermissionRequestHandler>,
+    @PermissionStateProviders private val permissionStateProviders: Set<PermissionStateProvider>
 ) {
 
     private val requests = mutableMapOf<String, PermissionRequest>()
 
+    init {
+        d { "init with handlers $permissionRequestHandlers providers $permissionStateProviders" }
+    }
+
+    internal fun stateProviderFor(permission: Permission): PermissionStateProvider =
+        permissionStateProviders.first { it.handles(permission) }
+
+    internal fun requestHandlerFor(permission: Permission): PermissionRequestHandler =
+        permissionRequestHandlers.first { it.handles(permission) }
+
+    suspend fun hasPermissions(vararg permissions: Permission): Boolean =
+        permissions.all { stateProviderFor(it).isGranted(it) }
+
     suspend fun request(
         vararg permissions: Permission
     ): Boolean {
-        if (permissions.all { it.stateProvider.isGranted() }) return true
+        if (hasPermissions(*permissions)) return true
 
         val id = UUID.randomUUID().toString()
         val finished = CompletableDeferred<Unit>()
@@ -55,7 +70,8 @@ class PermissionManager(
         PermissionActivity.request(context, id)
 
         finished.await()
-        return permissions.all { it.stateProvider.isGranted() }
+
+        return hasPermissions(*permissions)
     }
 
     internal fun getRequest(id: String): PermissionRequest? = requests[id]

@@ -16,10 +16,19 @@
 
 package com.ivianuu.essentials.permission
 
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.injekt.module
 
 val esPermissionsModule = module {
-    withBinding<DialogPermissionRequestUi> {
-        bindType<PermissionRequestUi>()
-    }
+    single(name = PermissionNavigator) { Navigator() }
+
+    set<PermissionRequestHandler>(setName = PermissionRequestHandlers)
+    set<PermissionStateProvider>(setName = PermissionStateProviders)
+
+    // dialog ui
+    bindPermissionRequestUi<DialogPermissionRequestUi>()
+
+    // runtime
+    bindPermissionRequestHandler<RuntimePermissionRequestHandler>()
+    bindPermissionStateProvider<RuntimePermissionStateProvider>()
 }

@@ -39,7 +39,7 @@ fun <T : ViewModel> ViewModelStoreOwner.getViewModel(
     factory: () -> T = defaultViewModelFactory(type)
 ): T {
     val provider = ViewModelProvider(from, object : ViewModelProvider.Factory {
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T = factory as T
+        override fun <T : ViewModel?> create(modelClass: Class<T>): T = factory() as T
     })
     return provider.get(key, type.java)
 }

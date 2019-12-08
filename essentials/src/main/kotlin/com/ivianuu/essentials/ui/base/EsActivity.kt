@@ -53,7 +53,7 @@ abstract class EsActivity : AppCompatActivity(), InjektTrait {
         }
     }
 
-    val navigator: Navigator by inject()
+    open val navigator: Navigator by inject()
     private val controllerRenderer: ControllerRenderer by inject()
 
     protected open val layoutRes: Int get() = 0
@@ -103,7 +103,7 @@ abstract class EsActivity : AppCompatActivity(), InjektTrait {
     override fun onResumeFragments() {
         super.onResumeFragments()
         onPause.coroutineScope.launch {
-            controllerRenderer.render()
+            controllerRenderer.render(navigator)
         }
     }
 

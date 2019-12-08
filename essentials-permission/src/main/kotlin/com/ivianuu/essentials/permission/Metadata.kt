@@ -16,30 +16,40 @@
 
 package com.ivianuu.essentials.permission
 
-import kotlin.properties.ReadWriteProperty
+import androidx.ui.graphics.Image
+import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 
 data class Metadata internal constructor(
-    private val data: MutableMap<Key<*>, Any?>
+    private val data: Map<Key<*>, Any?> = mutableMapOf()
 ) {
-    internal operator fun <T> get(dataElement: Key<T>): T =
-        data[dataElement] as? T ?: error("missing value for $dataElement")
+    operator fun <T> get(key: Key<T>): T =
+        data[key] as? T ?: error("missing value for $key")
 
-    internal operator fun <T> set(key: Key<T>, value: T) {
-        data[key] = value
-    }
+    fun <T> getOrNull(key: Key<T>): T? = data[key] as? T
 
-    class Key<T> : ReadWriteProperty<Metadata, T> {
-        override fun setValue(thisRef: Metadata, property: KProperty<*>, value: T) {
-            thisRef[this] = value
-        }
+    fun <T> contains(key: Key<T>): Boolean = data.containsKey(key)
 
+    operator fun plus(other: Metadata): Metadata = Metadata(data + other.data)
+
+    class Key<T>(val name: String) : ReadOnlyProperty<Metadata, T> {
         override fun getValue(thisRef: Metadata, property: KProperty<*>): T = thisRef[this]
+
+        override fun toString() = "Metadata.Key($name)"
     }
 }
 
-private val TitleKey = Metadata.Key<String>()
-val Metadata.title by TitleKey
+fun metadataOf(
+    vararg pairs: Pair<Metadata.Key<*>, Any?>
+): Metadata {
+    return Metadata(
+        data = pairs.associateBy { it.first }
+            .mapValues { it.value.second }
+    )
+}
 
-private val DescKey = Metadata.Key<String>()
-val Metadata.desc by DescKey
+object MetadataKeys
+
+val MetadataKeys.Title by lazy { Metadata.Key<String>("Title") }
+val MetadataKeys.Desc by lazy { Metadata.Key<String>("Desc") }
+val MetadataKeys.Icon by lazy { Metadata.Key<Image>("Image") }

@@ -21,6 +21,7 @@ import androidx.compose.Recompose
 import androidx.compose.frames.modelListOf
 import androidx.lifecycle.viewModelScope
 import androidx.ui.core.Text
+import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.base.EsViewModel
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.composableWithKey
@@ -30,17 +31,25 @@ import com.ivianuu.essentials.ui.compose.dialog.dialogRoute
 import com.ivianuu.essentials.ui.compose.material.SimpleListItem
 import com.ivianuu.essentials.ui.compose.resources.stringResource
 import com.ivianuu.essentials.ui.compose.viewmodel.injekt.injectViewModel
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.Param
+import com.ivianuu.injekt.parametersOf
 import kotlinx.coroutines.launch
 
 @Factory
-class DialogPermissionRequestUi : PermissionRequestUi {
+class DialogPermissionRequestUi(
+    @PermissionNavigator private val navigator: Navigator
+) : PermissionRequestUi {
 
-    override fun performRequest(activity: PermissionActivity, request: PermissionRequest) {
-        activity.navigator.push(
+    override fun performRequest(
+        activity: PermissionActivity,
+        manager: PermissionManager,
+        request: PermissionRequest
+    ) {
+        navigator.push(
             dialogRoute {
-                PermissionDialog(activity = activity, request = request)
+                PermissionDialog(activity = activity, manager = manager, request = request)
             }
         )
     }
@@ -50,13 +59,16 @@ class DialogPermissionRequestUi : PermissionRequestUi {
 @Composable
 private fun PermissionDialog(
     activity: PermissionActivity,
+    manager: PermissionManager,
     request: PermissionRequest
 ) = composable {
     Recompose { recompose ->
         ScrollableDialog(
             title = { Text("Permission") }, // todo
             listContent = {
-                val viewModel = injectViewModel<PermissionDialogViewModel>()
+                val viewModel = injectViewModel<PermissionDialogViewModel> {
+                    parametersOf(request)
+                }
                 viewModel.permissionsToProcess.forEach { permission ->
                     Permission(
                         permission = permission,
@@ -75,17 +87,18 @@ private fun PermissionDialog(
 private fun Permission(
     permission: Permission,
     onClick: () -> Unit
-) = composableWithKey(permission.key) {
+) = composableWithKey(permission) {
     SimpleListItem(
-        title = permission.metadata.title,
-        subtitle = permission.metadata.desc,
-        // todo image = drawableResource(permission.iconRes),
+        title = permission.metadata[MetadataKeys.Title],
+        subtitle = permission.metadata.getOrNull(MetadataKeys.Desc),
+        image = permission.metadata.getOrNull(MetadataKeys.Icon),
         onClick = onClick
     )
 }
 
 @Factory
 class PermissionDialogViewModel(
+    private val manager: PermissionManager,
     @Param private val request: PermissionRequest
 ) : EsViewModel() {
 
@@ -98,7 +111,10 @@ class PermissionDialogViewModel(
 
     fun permissionClicked(activity: PermissionActivity, permission: Permission) {
         viewModelScope.launch {
-            permission.requestHandler.request(activity, permission)
+            d { "request $permission" }
+            manager.requestHandlerFor(permission)
+                .request(activity, manager, permission)
+
             updatePermissionsToProcessOrFinish()
         }
     }
@@ -106,7 +122,9 @@ class PermissionDialogViewModel(
     private fun updatePermissionsToProcessOrFinish() {
         viewModelScope.launch {
             val permissionsToProcess = request.permissions
-                .filterNot { it.stateProvider.isGranted() }
+                .filterNot { manager.hasPermissions(it) }
+
+            d { "update permissions to process or finish not granted $permissionsToProcess" }
 
             if (permissionsToProcess.isEmpty()) {
                 request.onComplete()
