@@ -17,9 +17,12 @@
 package com.ivianuu.essentials.permission
 
 import com.ivianuu.essentials.permission.accessibility.AccessibilityServicePermissionStateProvider
+import com.ivianuu.essentials.permission.deviceadmin.DeviceAdminPermissionStateProvider
 import com.ivianuu.essentials.permission.dialogui.DialogPermissionRequestUi
+import com.ivianuu.essentials.permission.ignorebatteryoptimizations.IgnoreBatteryOptimizationsPermissionStateProvider
 import com.ivianuu.essentials.permission.intent.IntentPermissionRequestHandler
 import com.ivianuu.essentials.permission.notificationlistener.NotificationListenerPermissionStateProvider
+import com.ivianuu.essentials.permission.packageusagestats.PackageUsageStatsPermissionStateProvider
 import com.ivianuu.essentials.permission.runtime.RuntimePermissionRequestHandler
 import com.ivianuu.essentials.permission.runtime.RuntimePermissionStateProvider
 import com.ivianuu.essentials.permission.systemoverlay.SystemOverlayPermissionStateProvider
@@ -36,14 +39,23 @@ val esPermissionsModule = module {
     // accessibility
     bindPermissionStateProvider<AccessibilityServicePermissionStateProvider>()
 
+    // device admin
+    bindPermissionStateProvider<DeviceAdminPermissionStateProvider>()
+
     // dialog ui
     bindPermissionRequestUi<DialogPermissionRequestUi>()
+
+    // ignoe battery optimizations
+    bindPermissionStateProvider<IgnoreBatteryOptimizationsPermissionStateProvider>()
 
     // intent
     bindPermissionRequestHandler<IntentPermissionRequestHandler>()
 
     // notification listener
     bindPermissionStateProvider<NotificationListenerPermissionStateProvider>()
+
+    // package usage stats
+    bindPermissionStateProvider<PackageUsageStatsPermissionStateProvider>()
 
     // runtime
     bindPermissionRequestHandler<RuntimePermissionRequestHandler>()
