@@ -18,11 +18,22 @@ package com.ivianuu.essentials.permission
 
 import android.content.Context
 import android.content.pm.PackageManager
-import com.github.ajalt.timberkt.d
-import com.ivianuu.essentials.ui.common.allGranted
-import com.ivianuu.essentials.ui.common.permissionRequestRoute
-import com.ivianuu.essentials.ui.navigation.Navigator
+import androidx.fragment.app.Fragment
 import com.ivianuu.injekt.Factory
+import kotlinx.coroutines.CompletableDeferred
+import java.util.concurrent.atomic.AtomicInteger
+
+fun RuntimePermission(
+    name: String,
+    vararg pairs: Pair<Metadata.Key<*>, Any?>
+) = Permission(
+    metadata = metadataOf(
+        MetadataKeys.RuntimePermissionName to name,
+        *pairs
+    )
+)
+
+val MetadataKeys.RuntimePermissionName by lazy { Metadata.Key<String>("RuntimePermissionName") }
 
 @Factory
 class RuntimePermissionStateProvider(
@@ -39,9 +50,7 @@ class RuntimePermissionStateProvider(
 }
 
 @Factory
-class RuntimePermissionRequestHandler(
-    @PermissionNavigator private val navigator: Navigator
-) : PermissionRequestHandler {
+class RuntimePermissionRequestHandler : PermissionRequestHandler {
     override fun handles(permission: Permission): Boolean =
         permission.metadata.contains(MetadataKeys.RuntimePermissionName)
 
@@ -50,25 +59,44 @@ class RuntimePermissionRequestHandler(
         manager: PermissionManager,
         permission: Permission
     ): PermissionResult {
-        d { "request $permission" }
-        val granted = navigator.push<com.ivianuu.essentials.ui.common.PermissionResult>(
-            permissionRequestRoute(
-                permissions = setOf(permission.metadata[MetadataKeys.RuntimePermissionName])
-            )
-        )?.allGranted ?: false
+        val fragment = RequestFragment()
 
+        activity.supportFragmentManager.beginTransaction()
+            .add(fragment, RequestFragment.TAG)
+            .commitNow()
+
+        val granted = fragment.request(permission.metadata[MetadataKeys.RuntimePermissionName])
         return PermissionResult(isOk = granted)
+    }
+
+    class RequestFragment : Fragment() {
+
+        private val permissionResult = CompletableDeferred<Boolean>()
+
+        init {
+            retainInstance = true
+        }
+
+        override fun onRequestPermissionsResult(
+            requestCode: Int,
+            permissions: Array<out String>,
+            grantResults: IntArray
+        ) {
+            super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+            permissionResult.complete(
+                grantResults.first() == PackageManager.PERMISSION_GRANTED
+            )
+        }
+
+        suspend fun request(name: String): Boolean {
+            requestPermissions(arrayOf(name), requestCodes.getAndIncrement())
+            return permissionResult.await()
+        }
+
+        internal companion object {
+            const val TAG = "RequestFragment"
+        }
     }
 }
 
-fun RuntimePermission(
-    name: String,
-    vararg pairs: Pair<Metadata.Key<*>, Any?>
-) = Permission(
-    metadata = metadataOf(
-        MetadataKeys.RuntimePermissionName to name,
-        *pairs
-    )
-)
-
-val MetadataKeys.RuntimePermissionName by lazy { Metadata.Key<String>("RuntimePermissionName") }
+private val requestCodes = AtomicInteger(0)
