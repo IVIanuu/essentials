@@ -27,6 +27,7 @@ import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.channels.BroadcastChannel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.collect
@@ -65,7 +66,7 @@ fun <T> DiskBox(
     )
 
 internal class DiskBoxImpl<T>(
-    private val context: Context,
+    context: Context,
     override val path: String,
     override val defaultValue: T,
     private val serializer: DiskBox.Serializer<T>,
@@ -88,6 +89,7 @@ internal class DiskBoxImpl<T>(
             throw IOException("Couldn't read file $path", e)
         }
     }
+    private val writeLock = WriteLock()
 
     private val coroutineScope = CoroutineScope(SupervisorJob())
 
@@ -114,35 +116,43 @@ internal class DiskBoxImpl<T>(
         d { "$path -> set $value" }
         maybeWithDispatcher {
             measured("set") {
-                if (!file.exists()) {
-                    file.parentFile?.mkdirs()
-
-                    if (!file.createNewFile()) {
-                        throw IOException("Couldn't create $path")
-                    }
-                }
-
-                val serialized = serializer.serialize(value)
-
-                val tmpFile = File.createTempFile(
-                    "new", "tmp", file.parentFile
-                )
                 try {
-                    tmpFile.bufferedWriter().use {
-                        it.write(serialized)
-                    }
-                    if (!tmpFile.renameTo(file)) {
-                        throw IOException("Couldn't move tmp file to file $path")
-                    }
-                } catch (e: Exception) {
-                    throw IOException("Couldn't write to file $path $serialized", e)
-                } finally {
-                    tmpFile.delete()
-                }
+                    writeLock.beginWrite()
 
-                cachedValue.set(value)
-                changeNotifier.offer(Unit)
-                multiProcessHelper.notifyWrite()
+                    if (!file.exists()) {
+                        file.parentFile?.mkdirs()
+
+                        if (!file.createNewFile()) {
+                            throw IOException("Couldn't create $path")
+                        }
+                    }
+
+                    delay(1000)
+
+                    val serialized = serializer.serialize(value)
+
+                    val tmpFile = File.createTempFile(
+                        "new", "tmp", file.parentFile
+                    )
+                    try {
+                        tmpFile.bufferedWriter().use {
+                            it.write(serialized)
+                        }
+                        if (!tmpFile.renameTo(file)) {
+                            throw IOException("Couldn't move tmp file to file $path")
+                        }
+                    } catch (e: Exception) {
+                        throw IOException("Couldn't write to file $path $serialized", e)
+                    } finally {
+                        tmpFile.delete()
+                    }
+
+                    cachedValue.set(value)
+                    changeNotifier.offer(Unit)
+                    multiProcessHelper.notifyWrite()
+                } finally {
+                    writeLock.endWrite()
+                }
             }
         }
     }
@@ -152,6 +162,7 @@ internal class DiskBoxImpl<T>(
         d { "$path -> get" }
         return maybeWithDispatcher {
             measured("get") {
+                writeLock.awaitWrite()
                 val cached = cachedValue.get()
                 if (cached != this) {
                     d { "$path -> return cached $cached" }
@@ -286,16 +297,41 @@ private class MultiProcessHelper(
     }
 }
 
+private class WriteLock {
+
+    private var currentLock: CompletableDeferred<Unit>? = null
+
+    suspend fun awaitWrite() {
+        val lock = synchronized(this) { currentLock }
+        lock?.await()
+    }
+
+    suspend fun beginWrite() {
+        awaitWrite()
+        synchronized(this) { currentLock = CompletableDeferred() }
+    }
+
+    suspend fun endWrite() {
+        val lock = synchronized(this) {
+            val tmp = currentLock
+            currentLock = null
+            tmp
+        }
+
+        lock?.complete(Unit)
+    }
+
+}
+
 private class MutexValue<T>(private val getter: suspend () -> T) {
 
     private var currentDeferred: Deferred<T>? = null
-    private val deferredLock = Any()
 
     suspend operator fun invoke(): T {
-        var deferred = synchronized(deferredLock) { currentDeferred }
+        var deferred = synchronized(this) { currentDeferred }
         if (deferred == null) {
             deferred = CompletableDeferred()
-            synchronized(deferredLock) { currentDeferred = deferred }
+            synchronized(this) { currentDeferred = deferred }
             try {
                 val result = getter.invoke()
                 deferred.complete(result)
@@ -303,7 +339,7 @@ private class MutexValue<T>(private val getter: suspend () -> T) {
                 deferred.completeExceptionally(e)
             } finally {
                 @Suppress("DeferredResultUnused")
-                synchronized(deferredLock) { currentDeferred = null }
+                synchronized(this) { currentDeferred = null }
             }
         }
 
