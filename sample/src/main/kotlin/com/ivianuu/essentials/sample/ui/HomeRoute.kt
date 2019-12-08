@@ -201,6 +201,11 @@ enum class HomeItem(
         color = Color.Red,
         route = { navigationRoute }
     ),
+    Permission(
+        title = "Permission",
+        color = Color.Magenta,
+        route = { permissionRoute }
+    ),
     Prefs(
         title = "Prefs",
         color = Color.Magenta,

@@ -22,6 +22,7 @@ import com.ivianuu.essentials.app.EsApp
 import com.ivianuu.essentials.apps.coil.esAppsCoilModule
 import com.ivianuu.essentials.coil.esCoilModule
 import com.ivianuu.essentials.gestures.esGesturesModule
+import com.ivianuu.essentials.permission.esPermissionsModule
 import com.ivianuu.essentials.twilight.esTwilightModule
 import com.ivianuu.essentials.ui.changehandler.OpenCloseChangeHandler
 import com.ivianuu.essentials.work.workerInitializerModule
@@ -33,6 +34,7 @@ class App : EsApp() {
         esAppsCoilModule,
         esCoilModule,
         esGesturesModule,
+        esPermissionsModule,
         esTwilightModule,
         workerInjectionModule,
         workerInitializerModule

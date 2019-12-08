@@ -39,7 +39,7 @@ fun <T : ViewModel> ViewModelStoreOwner.getViewModel(
     factory: () -> T = defaultViewModelFactory(type)
 ): T {
     val provider = ViewModelProvider(from, object : ViewModelProvider.Factory {
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T = factory as T
+        override fun <T : ViewModel?> create(modelClass: Class<T>): T = factory() as T
     })
     return provider.get(key, type.java)
 }
@@ -48,7 +48,7 @@ inline fun <reified T : ViewModel> ViewModelStoreOwner.viewModel(
     noinline fromProvider: () -> ViewModelStoreOwner = { this },
     noinline keyProvider: () -> String = { T::class.defaultViewModelKey },
     noinline factory: () -> T = defaultViewModelFactory(T::class)
-): Lazy<ViewModel> = viewModel(
+): Lazy<T> = viewModel(
     type = T::class,
     fromProvider = fromProvider,
     keyProvider = keyProvider,
@@ -60,7 +60,7 @@ fun <T : ViewModel> ViewModelStoreOwner.viewModel(
     fromProvider: () -> ViewModelStoreOwner = { this },
     keyProvider: () -> String = { type.defaultViewModelKey },
     factory: () -> T = defaultViewModelFactory(type)
-): Lazy<ViewModel> =
+): Lazy<T> =
     lazy(LazyThreadSafetyMode.NONE) {
         getViewModel(
             type = type,
