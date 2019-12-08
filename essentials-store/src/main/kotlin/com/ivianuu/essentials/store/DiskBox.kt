@@ -27,7 +27,6 @@ import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.channels.BroadcastChannel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.collect
@@ -126,8 +125,6 @@ internal class DiskBoxImpl<T>(
                             throw IOException("Couldn't create $path")
                         }
                     }
-
-                    delay(1000)
 
                     val serialized = serializer.serialize(value)
 
