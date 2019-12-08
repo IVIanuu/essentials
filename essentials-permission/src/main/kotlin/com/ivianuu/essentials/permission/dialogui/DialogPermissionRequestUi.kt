@@ -28,7 +28,6 @@ import com.ivianuu.essentials.permission.MetadataKeys
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionActivity
 import com.ivianuu.essentials.permission.PermissionManager
-import com.ivianuu.essentials.permission.PermissionNavigator
 import com.ivianuu.essentials.permission.PermissionRequest
 import com.ivianuu.essentials.permission.PermissionRequestUi
 import com.ivianuu.essentials.permission.R
@@ -52,7 +51,7 @@ import kotlinx.coroutines.launch
 
 @Factory
 class DialogPermissionRequestUi(
-    @PermissionNavigator private val navigator: Navigator
+    private val navigator: Navigator
 ) : PermissionRequestUi {
 
     override fun performRequest(

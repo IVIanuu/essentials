@@ -24,6 +24,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.ivianuu.director.Router
 import com.ivianuu.director.router
+import com.ivianuu.essentials.injection.retainedActivityComponent
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.director.ControllerRenderer
 import com.ivianuu.essentials.ui.navigation.director.ControllerRoute
@@ -32,7 +33,9 @@ import com.ivianuu.essentials.util.unsafeLazy
 import com.ivianuu.essentials.util.withAlpha
 import com.ivianuu.injekt.InjektTrait
 import com.ivianuu.injekt.Module
-import com.ivianuu.injekt.android.activityComponent
+import com.ivianuu.injekt.android.ActivityScope
+import com.ivianuu.injekt.android.activityModule
+import com.ivianuu.injekt.component
 import com.ivianuu.injekt.get
 import com.ivianuu.injekt.inject
 import com.ivianuu.injekt.module
@@ -47,7 +50,10 @@ import kotlinx.coroutines.launch
 abstract class EsActivity : AppCompatActivity(), InjektTrait {
 
     override val component by unsafeLazy {
-        activityComponent {
+        component {
+            scopes(ActivityScope)
+            dependencies(retainedActivityComponent)
+            modules(activityModule())
             modules(esActivityModule(this@EsActivity))
             modules(this@EsActivity.modules())
         }
