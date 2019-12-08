@@ -26,10 +26,10 @@ import com.ivianuu.essentials.injection.controllerComponent
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.Route
 import com.ivianuu.essentials.util.InjektTraitContextWrapper
+import com.ivianuu.essentials.util.cast
 import com.ivianuu.essentials.util.unsafeLazy
 import com.ivianuu.injekt.InjektTrait
 import com.ivianuu.injekt.Module
-import com.ivianuu.injekt.inject
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.clearFindViewByIdCache
 
@@ -54,7 +54,8 @@ abstract class EsController : Controller(), InjektTrait, LayoutContainer {
         get() = _containerView
     private var _containerView: View? = null
 
-    val navigator: Navigator by inject()
+    val navigator: Navigator
+        get() = requireActivity().cast<EsActivity>().navigator
 
     var route: Route? = null
 
