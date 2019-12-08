@@ -30,7 +30,7 @@ object Build {
 object Publishing {
     const val groupId = "com.ivianuu.essentials"
     const val vcsUrl = "https://github.com/IVIanuu/essentials"
-    const val version = "${Build.versionName}-dev288"
+    const val version = "${Build.versionName}-dev294"
 }
 
 object Deps {
@@ -110,7 +110,7 @@ object Deps {
         "com.ivianuu.essentials:essentials-gradle-plugin:0.0.1-dev261"
 
     object Injekt {
-        private const val version = "0.0.1-dev79"
+        private const val version = "0.0.1-dev81"
         const val injekt = "com.ivianuu.injekt:injekt:$version"
         const val android = "com.ivianuu.injekt:injekt-android:$version"
         const val gradlePlugin = "com.ivianuu.injekt:injekt-gradle-plugin:$version"
