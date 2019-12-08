@@ -17,29 +17,13 @@
 package com.ivianuu.essentials.ui.compose.common
 
 import androidx.compose.Composable
-import com.ivianuu.essentials.ui.compose.common.scrolling.ScrollableList
+import androidx.ui.layout.Center
+import androidx.ui.material.CircularProgressIndicator
 import com.ivianuu.essentials.ui.compose.core.composable
-import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
-import com.ivianuu.essentials.ui.compose.material.Scaffold
 
 @Composable
-fun SimpleScreen(
-    title: String,
-    content: @Composable() () -> Unit
-) = composable {
-    Scaffold(
-        topAppBar = { EsTopAppBar(title = title) },
-        body = content
-    )
-}
-
-@Composable
-fun ListScreen(
-    title: String,
-    listContent: @Composable() () -> Unit
-) = composable {
-    Scaffold(
-        topAppBar = { EsTopAppBar(title = title) },
-        body = { ScrollableList(children = listContent) }
-    )
+fun FullScreenLoading() = composable {
+    Center {
+        CircularProgressIndicator()
+    }
 }

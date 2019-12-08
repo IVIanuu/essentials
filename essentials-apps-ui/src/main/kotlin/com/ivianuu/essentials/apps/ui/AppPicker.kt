@@ -21,16 +21,13 @@ import androidx.lifecycle.viewModelScope
 import androidx.ui.core.Text
 import androidx.ui.core.dp
 import androidx.ui.layout.Center
-import androidx.ui.material.CircularProgressIndicator
 import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.AppStore
 import com.ivianuu.essentials.apps.coil.AppIcon
 import com.ivianuu.essentials.coil.Image
 import com.ivianuu.essentials.mvrx.MvRxViewModel
 import com.ivianuu.essentials.mvrx.injekt.mvRxViewModel
-import com.ivianuu.essentials.ui.compose.common.scrolling.ScrollableList
-import com.ivianuu.essentials.ui.compose.core.composable
-import com.ivianuu.essentials.ui.compose.core.staticComposable
+import com.ivianuu.essentials.ui.compose.common.AsyncList
 import com.ivianuu.essentials.ui.compose.core.staticComposableWithKey
 import com.ivianuu.essentials.ui.compose.es.composeControllerRoute
 import com.ivianuu.essentials.ui.compose.layout.SizedBox
@@ -43,8 +40,6 @@ import com.ivianuu.essentials.ui.compose.resources.stringResource
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.util.AppDispatchers
 import com.ivianuu.essentials.util.Async
-import com.ivianuu.essentials.util.Loading
-import com.ivianuu.essentials.util.Success
 import com.ivianuu.essentials.util.Uninitialized
 import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.Param
@@ -62,28 +57,16 @@ fun appPickerRoute(
                     parametersOf(appFilter)
                 }
 
-            when (viewModel.state.apps) {
-                is Loading -> {
-                    staticComposable {
-                        Center {
-                            CircularProgressIndicator()
-                        }
-                    }
+            AsyncList(
+                state = viewModel.state.apps,
+                itemSize = 56.dp,
+                successItem = { _, app ->
+                    AppInfo(
+                        app = app,
+                        onClick = { viewModel.appClicked(app) }
+                    )
                 }
-                is Success -> {
-                    composable {
-                        ScrollableList(
-                            items = viewModel.state.apps() ?: emptyList(),
-                            itemSize = 56.dp
-                        ) { _, app ->
-                            AppInfo(
-                                app = app,
-                                onClick = { viewModel.appClicked(app) }
-                            )
-                        }
-                    }
-                }
-            }
+            )
         }
     )
 }

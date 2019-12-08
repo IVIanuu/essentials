@@ -21,18 +21,16 @@ import androidx.lifecycle.viewModelScope
 import androidx.ui.core.Text
 import androidx.ui.core.dp
 import androidx.ui.layout.Center
-import androidx.ui.material.CircularProgressIndicator
 import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.AppStore
 import com.ivianuu.essentials.apps.coil.AppIcon
 import com.ivianuu.essentials.coil.Image
 import com.ivianuu.essentials.mvrx.MvRxViewModel
 import com.ivianuu.essentials.mvrx.injekt.mvRxViewModel
-import com.ivianuu.essentials.ui.compose.common.scrolling.ScrollableList
+import com.ivianuu.essentials.ui.compose.common.AsyncList
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.composableWithKey
 import com.ivianuu.essentials.ui.compose.core.onActive
-import com.ivianuu.essentials.ui.compose.core.staticComposable
 import com.ivianuu.essentials.ui.compose.layout.SizedBox
 import com.ivianuu.essentials.ui.compose.material.AvatarIconStyle
 import com.ivianuu.essentials.ui.compose.material.EsCheckbox
@@ -44,8 +42,6 @@ import com.ivianuu.essentials.ui.compose.material.SimpleListItem
 import com.ivianuu.essentials.ui.compose.resources.stringResource
 import com.ivianuu.essentials.util.AppDispatchers
 import com.ivianuu.essentials.util.Async
-import com.ivianuu.essentials.util.Loading
-import com.ivianuu.essentials.util.Success
 import com.ivianuu.essentials.util.Uninitialized
 import com.ivianuu.essentials.util.coroutineScope
 import com.ivianuu.essentials.util.flowOf
@@ -103,28 +99,16 @@ fun CheckableAppsScreen(
             )
         },
         body = {
-            when (viewModel.state.apps) {
-                is Loading -> {
-                    staticComposable {
-                        Center {
-                            CircularProgressIndicator()
-                        }
-                    }
+            AsyncList(
+                state = viewModel.state.apps,
+                itemSize = 56.dp,
+                successItem = { _, app ->
+                    CheckableApp(
+                        app = app,
+                        onClick = { viewModel.appClicked(app) }
+                    )
                 }
-                is Success -> {
-                    composable {
-                        ScrollableList(
-                            items = viewModel.state.apps() ?: emptyList(),
-                            itemSize = 56.dp
-                        ) { _, app ->
-                            CheckableApp(
-                                app = app,
-                                onClick = { viewModel.appClicked(app) }
-                            )
-                        }
-                    }
-                }
-            }
+            )
         }
     )
 }
