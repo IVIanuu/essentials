@@ -59,8 +59,8 @@ fun SizedBox(
         ) {}
 
         val constraints = Constraints.tightConstraints(
-            width = if (widthPx?.isFinite() == true) widthPx else incomingConstraints.maxWidth,
-            height = if (heightPx?.isFinite() == true) heightPx else incomingConstraints.maxHeight
+            width = if (width?.isFinite() == true) widthPx!! else incomingConstraints.maxWidth,
+            height = if (height?.isFinite() == true) heightPx!! else incomingConstraints.maxHeight
         ).enforce(incomingConstraints)
 
         val placeable = measureable.measure(constraints)
