@@ -25,7 +25,6 @@ import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.lifecycleScope
 import com.ivianuu.essentials.util.defaultViewModelKey
 import com.ivianuu.essentials.util.unsafeLazy
-import com.ivianuu.essentials.util.viewModelProvider
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlin.reflect.KClass
@@ -72,9 +71,11 @@ internal fun <T : MvRxViewModel<*>> MvRxView._getMvRxViewModel(
     key: String = type.defaultViewModelKey,
     factory: () -> T
 ): T {
-    return from.viewModelProvider(object : ViewModelProvider.Factory {
+    val viewModelProvider = ViewModelProvider(from, object : ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T = factory() as T
-    }).get(key, type.java).also { vm ->
+    })
+
+    return viewModelProvider.get(key, type.java).also { vm ->
         // invalidate this view on each state emission
         vm.flow
             .onEach { postInvalidate() }

@@ -14,36 +14,52 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.compose.viewmodel
+package com.ivianuu.essentials.mvrx.injekt
 
 import androidx.compose.Composable
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelStoreOwner
+import com.ivianuu.essentials.mvrx.MvRxViewModel
+import com.ivianuu.essentials.mvrx.mvRxViewModel
+import com.ivianuu.essentials.ui.compose.core.ambient
 import com.ivianuu.essentials.ui.compose.core.effect
 import com.ivianuu.essentials.ui.compose.core.remember
+import com.ivianuu.essentials.ui.compose.injekt.ComponentAmbient
 import com.ivianuu.essentials.ui.compose.injekt.inject
-import com.ivianuu.essentials.util.defaultViewModelFactory
 import com.ivianuu.essentials.util.defaultViewModelKey
-import com.ivianuu.essentials.util.getViewModel
+import com.ivianuu.injekt.ParametersDefinition
+import com.ivianuu.injekt.Type
+import com.ivianuu.injekt.typeOf
 import kotlin.reflect.KClass
 
 @Composable
-inline fun <reified T : ViewModel> viewModel(
+inline fun <reified T : MvRxViewModel<*>> injectMvRxViewModel(
     from: ViewModelStoreOwner = inject(),
     key: String = remember { T::class.defaultViewModelKey },
-    noinline factory: () -> T = defaultViewModelFactory(T::class)
+    name: Any? = null,
+    noinline parameters: ParametersDefinition? = null
 ) = effect {
-    viewModel(type = T::class, key = key, from = from, factory = factory)
+    injectMvRxViewModel(
+        typeOf<T>(),
+        from,
+        key,
+        name,
+        parameters
+    )
 }
 
 @Composable
-fun <T : ViewModel> viewModel(
-    type: KClass<T>,
+fun <T : MvRxViewModel<*>> injectMvRxViewModel(
+    type: Type<T>,
     from: ViewModelStoreOwner = inject(),
-    key: String = remember { type.defaultViewModelKey },
-    factory: () -> T = defaultViewModelFactory(type)
+    key: String = remember { (type.raw as KClass<T>).defaultViewModelKey },
+    name: Any? = null,
+    parameters: ParametersDefinition? = null
 ): T = effect {
-    remember {
-        from.getViewModel(type = type, key = key, from = from, factory = factory)
-    }
+    val component = ambient(ComponentAmbient)
+    return@effect mvRxViewModel(
+        type = type.raw as KClass<T>,
+        from = from,
+        key = key,
+        factory = { component.get(type = type, name = name, parameters = parameters) }
+    )
 }

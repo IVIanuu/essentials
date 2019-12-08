@@ -26,7 +26,7 @@ import com.ivianuu.essentials.apps.AppStore
 import com.ivianuu.essentials.apps.coil.AppIcon
 import com.ivianuu.essentials.coil.Image
 import com.ivianuu.essentials.mvrx.MvRxViewModel
-import com.ivianuu.essentials.mvrx.injekt.mvRxViewModel
+import com.ivianuu.essentials.mvrx.injekt.injectMvRxViewModel
 import com.ivianuu.essentials.ui.compose.common.AsyncList
 import com.ivianuu.essentials.ui.compose.core.staticComposableWithKey
 import com.ivianuu.essentials.ui.compose.es.composeControllerRoute
@@ -53,7 +53,7 @@ fun appPickerRoute(
         topAppBar = { EsTopAppBar(title ?: stringResource(R.string.es_title_app_picker)) },
         body = {
             val viewModel =
-                mvRxViewModel<AppPickerViewModel> {
+                injectMvRxViewModel<AppPickerViewModel> {
                     parametersOf(appFilter)
                 }
 

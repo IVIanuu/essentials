@@ -15,6 +15,7 @@ include(
     ":essentials-legacy-ui",
     ":essentials-mvrx",
     ":essentials-notificationlistener",
+    ":essentials-permission",
     ":essentials-securesettings",
     ":essentials-shell",
     ":essentials-store",

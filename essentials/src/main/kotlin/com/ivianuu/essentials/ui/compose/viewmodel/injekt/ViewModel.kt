@@ -14,37 +14,52 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.mvrx
+package com.ivianuu.essentials.ui.compose.viewmodel.injekt
 
 import androidx.compose.Composable
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelStoreOwner
+import com.ivianuu.essentials.ui.compose.core.ambient
 import com.ivianuu.essentials.ui.compose.core.effect
 import com.ivianuu.essentials.ui.compose.core.remember
-import com.ivianuu.essentials.ui.compose.coroutines.collect
+import com.ivianuu.essentials.ui.compose.injekt.ComponentAmbient
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.compose.viewmodel.viewModel
 import com.ivianuu.essentials.util.defaultViewModelKey
+import com.ivianuu.injekt.ParametersDefinition
+import com.ivianuu.injekt.Type
+import com.ivianuu.injekt.typeOf
 import kotlin.reflect.KClass
 
 @Composable
-inline fun <reified T : MvRxViewModel<*>> mvRxViewModel(
+inline fun <reified T : ViewModel> injectViewModel(
     from: ViewModelStoreOwner = inject(),
-    factory: ViewModelProvider.Factory = remember { ViewModelProvider.NewInstanceFactory() },
-    key: String = remember { T::class.defaultViewModelKey }
+    key: String = remember { T::class.defaultViewModelKey },
+    name: Any? = null,
+    noinline parameters: ParametersDefinition? = null
 ) = effect {
-    mvRxViewModel(T::class, from, factory, key)
+    injectViewModel(
+        typeOf<T>(),
+        from,
+        key,
+        name,
+        parameters
+    )
 }
 
 @Composable
-fun <T : MvRxViewModel<*>> mvRxViewModel(
-    type: KClass<T>,
+fun <T : ViewModel> injectViewModel(
+    type: Type<T>,
     from: ViewModelStoreOwner = inject(),
-    factory: ViewModelProvider.Factory = remember { ViewModelProvider.NewInstanceFactory() },
-    key: String = remember { type.defaultViewModelKey }
+    key: String = remember { (type.raw as KClass<T>).defaultViewModelKey },
+    name: Any? = null,
+    parameters: ParametersDefinition? = null
 ): T = effect {
-    val viewModel = viewModel(type, from, factory, key)
-    // recompose on changes
-    collect(remember { viewModel.flow })
-    return@effect viewModel
+    val component = ambient(ComponentAmbient)
+    return@effect viewModel(
+        type = type.raw as KClass<T>,
+        from = from,
+        key = key,
+        factory = { component.get(type = type, name = name, parameters = parameters) }
+    )
 }

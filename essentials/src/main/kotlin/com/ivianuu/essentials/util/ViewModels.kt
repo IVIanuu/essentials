@@ -26,29 +26,50 @@ import kotlin.reflect.KClass
 val KClass<out ViewModel>.defaultViewModelKey
     get() = "androidx.lifecycle.ViewModelProvider.DefaultKey:" + java.canonicalName
 
-fun ViewModelStoreOwner.viewModelProvider(
-    factory: ViewModelProvider.Factory = ViewModelProvider.NewInstanceFactory()
-): ViewModelProvider = ViewModelProvider(this, factory)
-
 inline fun <reified T : ViewModel> ViewModelStoreOwner.getViewModel(
-    factory: ViewModelProvider.Factory = ViewModelProvider.NewInstanceFactory(),
-    key: String = T::class.defaultViewModelKey
-): T = getViewModel(T::class, factory, key)
+    from: ViewModelStoreOwner = this,
+    key: String = T::class.defaultViewModelKey,
+    noinline factory: () -> T = defaultViewModelFactory(T::class)
+): T = getViewModel(type = T::class, from = from, key = key, factory = factory)
 
 fun <T : ViewModel> ViewModelStoreOwner.getViewModel(
     type: KClass<T>,
-    factory: ViewModelProvider.Factory = ViewModelProvider.NewInstanceFactory(),
-    key: String = type.defaultViewModelKey
-): T = viewModelProvider(factory).get(key, type.java)
+    from: ViewModelStoreOwner = this,
+    key: String = type.defaultViewModelKey,
+    factory: () -> T = defaultViewModelFactory(type)
+): T {
+    val provider = ViewModelProvider(from, object : ViewModelProvider.Factory {
+        override fun <T : ViewModel?> create(modelClass: Class<T>): T = factory as T
+    })
+    return provider.get(key, type.java)
+}
 
 inline fun <reified T : ViewModel> ViewModelStoreOwner.viewModel(
+    noinline fromProvider: () -> ViewModelStoreOwner = { this },
     noinline keyProvider: () -> String = { T::class.defaultViewModelKey },
-    noinline factoryProvider: () -> ViewModelProvider.Factory = { ViewModelProvider.NewInstanceFactory() }
-): Lazy<ViewModel> = viewModel(T::class, keyProvider, factoryProvider)
+    noinline factory: () -> T = defaultViewModelFactory(T::class)
+): Lazy<ViewModel> = viewModel(
+    type = T::class,
+    fromProvider = fromProvider,
+    keyProvider = keyProvider,
+    factory = factory
+)
 
 fun <T : ViewModel> ViewModelStoreOwner.viewModel(
     type: KClass<T>,
+    fromProvider: () -> ViewModelStoreOwner = { this },
     keyProvider: () -> String = { type.defaultViewModelKey },
-    factoryProvider: () -> ViewModelProvider.Factory = { ViewModelProvider.NewInstanceFactory() }
+    factory: () -> T = defaultViewModelFactory(type)
 ): Lazy<ViewModel> =
-    lazy(LazyThreadSafetyMode.NONE) { getViewModel(type, factoryProvider(), keyProvider()) }
+    lazy(LazyThreadSafetyMode.NONE) {
+        getViewModel(
+            type = type,
+            key = keyProvider(),
+            from = fromProvider(),
+            factory = factory
+        )
+    }
+
+fun <T : ViewModel> defaultViewModelFactory(type: KClass<T>): () -> T = {
+    ViewModelProvider.NewInstanceFactory().create(type.java)
+}

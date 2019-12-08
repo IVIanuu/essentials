@@ -26,7 +26,7 @@ import com.ivianuu.essentials.apps.AppStore
 import com.ivianuu.essentials.apps.coil.AppIcon
 import com.ivianuu.essentials.coil.Image
 import com.ivianuu.essentials.mvrx.MvRxViewModel
-import com.ivianuu.essentials.mvrx.injekt.mvRxViewModel
+import com.ivianuu.essentials.mvrx.injekt.injectMvRxViewModel
 import com.ivianuu.essentials.ui.compose.common.AsyncList
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.composableWithKey
@@ -67,7 +67,7 @@ fun CheckableAppsScreen(
     appFilter: AppFilter = DefaultAppFilter
 ) = composable {
     val viewModel =
-        mvRxViewModel<CheckableAppsViewModel> {
+        injectMvRxViewModel<CheckableAppsViewModel> {
             parametersOf(appFilter)
         }
 

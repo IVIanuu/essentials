@@ -16,27 +16,15 @@
 
 package com.ivianuu.essentials.mvrx.injekt
 
-import androidx.compose.Composable
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import com.ivianuu.essentials.mvrx.MvRxView
 import com.ivianuu.essentials.mvrx.MvRxViewModel
 import com.ivianuu.essentials.mvrx.getMvRxViewModel
 import com.ivianuu.essentials.mvrx.mvRxViewModel
-import com.ivianuu.essentials.ui.compose.core.ambient
-import com.ivianuu.essentials.ui.compose.core.effect
-import com.ivianuu.essentials.ui.compose.core.remember
-import com.ivianuu.essentials.ui.compose.injekt.ComponentAmbient
-import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.util.defaultViewModelKey
-import com.ivianuu.injekt.Component
 import com.ivianuu.injekt.InjektTrait
 import com.ivianuu.injekt.ParametersDefinition
-import com.ivianuu.injekt.Type
 import com.ivianuu.injekt.get
-import com.ivianuu.injekt.typeOf
-import kotlin.reflect.KClass
 
 inline fun <S, reified T : MvRxViewModel<*>> S.injectMvRxViewModel(
     noinline from: () -> ViewModelStoreOwner = { this },
@@ -53,55 +41,3 @@ inline fun <S, reified T : MvRxViewModel<*>> S.getMvRxViewModel(
     noinline parameters: ParametersDefinition? = null
 ): T where S : MvRxView, S : InjektTrait =
     getMvRxViewModel(from, key) { get(name = name, parameters = parameters) }
-
-@Composable
-inline fun <reified T : MvRxViewModel<*>> mvRxViewModel(
-    from: ViewModelStoreOwner = inject(),
-    key: String = remember { T::class.defaultViewModelKey },
-    name: Any? = null,
-    noinline parameters: ParametersDefinition? = null
-) = effect {
-    mvRxViewModel(
-        typeOf<T>(),
-        from,
-        key,
-        name,
-        parameters
-    )
-}
-
-fun <T : MvRxViewModel<*>> mvRxViewModel(
-    type: Type<T>,
-    from: ViewModelStoreOwner = inject(),
-    key: String = remember { (type.raw as KClass<T>).defaultViewModelKey },
-    name: Any? = null,
-    parameters: ParametersDefinition? = null
-): T = effect {
-    val component = ambient(ComponentAmbient)
-
-    val factory = remember<ViewModelProvider.Factory> {
-        InjektMvRxViewModelFactory(
-            component,
-            type,
-            name,
-            parameters
-        )
-    }
-
-    return@effect mvRxViewModel(
-        type = type.raw as KClass<T>,
-        from = from,
-        key = key,
-        factory = factory
-    )
-}
-
-private class InjektMvRxViewModelFactory<T : MvRxViewModel<*>>(
-    private val component: Component,
-    private val type: Type<T>,
-    private val name: Any?,
-    private val parameters: ParametersDefinition?
-) : ViewModelProvider.Factory {
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T =
-        component.get(type, name, parameters) as T
-}
