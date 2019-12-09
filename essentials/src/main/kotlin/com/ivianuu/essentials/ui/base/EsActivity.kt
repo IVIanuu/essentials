@@ -115,6 +115,6 @@ abstract class EsActivity : AppCompatActivity(), InjektTrait {
     protected open fun modules(): List<Module> = emptyList()
 }
 
-private fun EsActivityModule(esActivity: EsActivity) = Module {
-    single { esActivity.router(esActivity.containerId) }
+private fun EsActivityModule(activity: EsActivity) = Module {
+    single { activity.router(activity.containerId) }
 }

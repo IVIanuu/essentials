@@ -41,11 +41,11 @@ data class ActivityResult(
     val requestCode: Int,
     val resultCode: Int,
     val data: Intent?
-)
-
-val ActivityResult.isOk: Boolean get() = resultCode == Activity.RESULT_OK
-val ActivityResult.isCanceled: Boolean get() = resultCode == Activity.RESULT_CANCELED
-val ActivityResult.isFirstUser: Boolean get() = resultCode == Activity.RESULT_FIRST_USER
+) {
+    val isOk: Boolean get() = resultCode == Activity.RESULT_OK
+    val isCanceled: Boolean get() = resultCode == Activity.RESULT_CANCELED
+    val isFirstUser: Boolean get() = resultCode == Activity.RESULT_FIRST_USER
+}
 
 @Factory
 internal class ActivityResultController(@Param private val intent: Intent) : EsController() {
