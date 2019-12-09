@@ -58,5 +58,4 @@ class NotificationListenerPermissionStateProvider(
     override suspend fun isGranted(permission: Permission): Boolean =
         activityManager.getRunningServices(Int.MAX_VALUE)
             .any { it.service.className == permission.metadata[MetadataKeys.NotificationListenerClass].java.canonicalName }
-
 }

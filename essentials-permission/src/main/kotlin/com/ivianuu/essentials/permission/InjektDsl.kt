@@ -63,7 +63,6 @@ inline fun <reified T : PermissionRequestUi> ModuleBuilder.bindPermissionRequest
     withBinding<T>(name) { bindPermissionRequestUi() }
 }
 
-
 fun <T : PermissionRequestUi> BindingContext<T>.bindPermissionRequestUi(): BindingContext<T> {
     bindType<PermissionRequestUi>(override = true)
     return this

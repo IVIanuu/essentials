@@ -26,7 +26,6 @@ annotation class NotificationComponents {
     companion object
 }
 
-
 inline fun <reified T : NotificationComponent> ModuleBuilder.bindNotificationComponent(
     name: Any? = null
 ) {

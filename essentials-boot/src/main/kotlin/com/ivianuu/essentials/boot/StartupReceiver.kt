@@ -39,5 +39,4 @@ class StartupReceiver : EsBroadcastReceiver() {
             it.value()
         }
     }
-
 }

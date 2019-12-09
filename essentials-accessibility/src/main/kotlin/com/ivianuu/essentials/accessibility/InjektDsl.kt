@@ -10,7 +10,6 @@ annotation class AccessibilityComponents {
     companion object
 }
 
-
 inline fun <reified T : AccessibilityComponent> ModuleBuilder.bindAccessibilityComponent(
     name: Any? = null
 ) {
@@ -21,7 +20,6 @@ fun <T : AccessibilityComponent> BindingContext<T>.bindAccessibilityComponent():
     intoSet<AccessibilityComponent>(setName = AccessibilityComponents)
     return this
 }
-
 
 internal val AccessibilityComponentsModule = Module {
     set<AccessibilityComponent>(setName = AccessibilityComponents)

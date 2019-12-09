@@ -59,7 +59,6 @@ class RuntimePermissionStateProvider(
     override suspend fun isGranted(permission: Permission): Boolean =
         context.checkSelfPermission(permission.metadata[MetadataKeys.RuntimePermissionName]) ==
                 PackageManager.PERMISSION_GRANTED
-
 }
 
 @Factory

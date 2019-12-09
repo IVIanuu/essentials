@@ -317,7 +317,6 @@ private class WriteLock {
 
         lock?.complete(Unit)
     }
-
 }
 
 private class MutexValue<T>(private val getter: suspend () -> T) {

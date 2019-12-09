@@ -76,7 +76,6 @@ class IntentPermissionRequestHandler : PermissionRequestHandler {
     }
 }
 
-
 val MetadataKeys.Intent by lazy {
     Metadata.Key<Intent>(
         "Intent"
