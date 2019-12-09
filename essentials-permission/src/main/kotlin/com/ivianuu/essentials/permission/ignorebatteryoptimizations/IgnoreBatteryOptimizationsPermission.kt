@@ -27,28 +27,28 @@ import com.ivianuu.essentials.permission.intent.Intent
 import com.ivianuu.essentials.permission.metadataOf
 import com.ivianuu.injekt.Factory
 
-fun IgnoreBatteryOptimizationsPermission(
+fun InstallUnknownAppsPermission(
     vararg pairs: Pair<Metadata.Key<*>, Any?>
 ) = Permission(
     metadata = metadataOf(
-        MetadataKeys.IgnoreBatteryOptimizationsPermission to Unit,
+        MetadataKeys.InstallUnknownAppsPermission to Unit,
         MetadataKeys.Intent to Intent("android.settings.MANAGE_UNKNOWN_APP_SOURCES"), // todo Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES
         *pairs
     )
 )
 
-val MetadataKeys.IgnoreBatteryOptimizationsPermission by lazy {
-    Metadata.Key<Unit>("IgnoreBatteryOptimizationsPermission")
+val MetadataKeys.InstallUnknownAppsPermission by lazy {
+    Metadata.Key<Unit>("InstallUnknownAppsPermission")
 }
 
 @Factory
-class IgnoreBatteryOptimizationsPermissionStateProvider(
+class InstallUnknownAppsPermissionStateProvider(
     private val context: Context,
     private val powerManager: PowerManager
 ) : PermissionStateProvider {
 
     override fun handles(permission: Permission): Boolean =
-        permission.metadata.contains(MetadataKeys.IgnoreBatteryOptimizationsPermission)
+        permission.metadata.contains(MetadataKeys.InstallUnknownAppsPermission)
 
     override suspend fun isGranted(permission: Permission): Boolean =
         powerManager.isIgnoringBatteryOptimizations(context.packageName)
