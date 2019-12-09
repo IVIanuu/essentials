@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.util
 
 import android.content.Context
-import com.ivianuu.epoxyprefs.SeekBarPreferenceModel
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.util.UnitValueTextProvider.Unit.Dp
 import com.ivianuu.essentials.util.UnitValueTextProvider.Unit.Millis
@@ -41,11 +40,4 @@ class UnitValueTextProvider(
     enum class Unit {
         Dp, Millis, Percentage, Px, Seconds
     }
-}
-
-fun SeekBarPreferenceModel.Builder.unitValueTextProvider(
-    context: Context,
-    unit: UnitValueTextProvider.Unit
-) {
-    valueTextProvider { UnitValueTextProvider(context, unit).invoke(it.toString()) }
 }

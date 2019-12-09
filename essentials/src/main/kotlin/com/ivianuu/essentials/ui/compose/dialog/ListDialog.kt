@@ -22,6 +22,7 @@ import androidx.ui.core.Dp
 import androidx.ui.core.dp
 import androidx.ui.foundation.Clickable
 import androidx.ui.layout.Container
+import androidx.ui.layout.DpConstraints
 import androidx.ui.layout.EdgeInsets
 import androidx.ui.layout.ExpandedWidth
 import androidx.ui.material.ripple.Ripple
@@ -84,7 +85,9 @@ fun SimpleDialogListItem(
         Clickable(onClick = onClick) {
             Container(
                 modifier = ExpandedWidth,
-                height = 48.dp,
+                constraints = DpConstraints(
+                    minHeight = 48.dp
+                ),
                 padding = EdgeInsets(
                     left = 24.dp,
                     right = 24.dp

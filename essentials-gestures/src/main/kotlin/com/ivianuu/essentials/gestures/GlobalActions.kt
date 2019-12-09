@@ -16,7 +16,8 @@
 
 package com.ivianuu.essentials.gestures
 
-import com.ivianuu.essentials.gestures.accessibility.AccessibilityComponent
+import com.ivianuu.essentials.accessibility.AccessibilityComponent
+import com.ivianuu.essentials.accessibility.AccessibilityConfig
 import com.ivianuu.injekt.Single
 import com.ivianuu.injekt.android.ApplicationScope
 
@@ -26,6 +27,9 @@ import com.ivianuu.injekt.android.ApplicationScope
 @ApplicationScope
 @Single
 class GlobalActions : AccessibilityComponent() {
+
+    override val config: AccessibilityConfig
+        get() = AccessibilityConfig()
 
     fun performAction(action: Int): Boolean =
         service?.performGlobalAction(action) ?: false

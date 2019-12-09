@@ -22,9 +22,11 @@ import android.os.IBinder
 import com.ivianuu.essentials.util.unsafeLazy
 import com.ivianuu.injekt.InjektTrait
 import com.ivianuu.injekt.Module
-import com.ivianuu.injekt.android.serviceComponent
+import com.ivianuu.injekt.android.ServiceComponent
 import com.ivianuu.scopes.MutableScope
 import com.ivianuu.scopes.Scope
+
+// todo move
 
 /**
  * Base service
@@ -32,7 +34,7 @@ import com.ivianuu.scopes.Scope
 abstract class EsService : Service(), InjektTrait {
 
     override val component by unsafeLazy {
-        serviceComponent {
+        ServiceComponent {
             modules(this@EsService.modules())
         }
     }

@@ -20,7 +20,7 @@ import androidx.ui.core.Text
 import androidx.ui.graphics.Color
 import androidx.ui.layout.Container
 import androidx.ui.material.surface.Surface
-import com.ivianuu.essentials.ui.compose.es.composeControllerRoute
+import com.ivianuu.essentials.ui.compose.es.ComposeControllerRoute
 import com.ivianuu.essentials.ui.compose.layout.Column
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
 import com.ivianuu.essentials.ui.compose.material.Scaffold
@@ -28,11 +28,11 @@ import com.ivianuu.essentials.ui.compose.material.Tab
 import com.ivianuu.essentials.ui.compose.material.TabContent
 import com.ivianuu.essentials.ui.compose.material.TabController
 import com.ivianuu.essentials.ui.compose.material.TabRow
-import com.ivianuu.essentials.ui.navigation.director.controllerRouteOptions
+import com.ivianuu.essentials.ui.navigation.director.ControllerRouteOptions
 import com.ivianuu.essentials.ui.navigation.director.vertical
 
-val tabsRoute = composeControllerRoute(
-    options = controllerRouteOptions().vertical()
+val TabsRoute = ComposeControllerRoute(
+    options = ControllerRouteOptions().vertical()
 ) {
     val items = listOf(Color.Blue, Color.Red, Color.Magenta, Color.Green, Color.Cyan)
 

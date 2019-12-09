@@ -27,7 +27,7 @@ import com.ivianuu.injekt.ParametersDefinition
 import com.ivianuu.injekt.Type
 import com.ivianuu.injekt.typeOf
 
-class ControllerRoute(
+class ControllerRoute internal constructor(
     val extras: Properties = Properties(),
     val options: Options? = null,
     val factory: (Context) -> Controller
@@ -57,18 +57,18 @@ class ControllerRoute(
     }
 }
 
-inline fun <reified T : Controller> controllerRoute(
+inline fun <reified T : Controller> ControllerRoute(
     extras: Properties = Properties(),
     options: ControllerRoute.Options? = null,
     noinline parameters: ParametersDefinition? = null
-) = controllerRoute(typeOf<T>(), extras, options, parameters)
+) = ControllerRoute(typeOf<T>(), extras, options, parameters)
 
-fun <T : Controller> controllerRoute(
+fun <T : Controller> ControllerRoute(
     type: Type<T>,
     extras: Properties = Properties(),
     options: ControllerRoute.Options? = null,
     parameters: ParametersDefinition? = null
-) = controllerRoute(extras, options) { context ->
+) = ControllerRoute(extras, options) { context ->
     val injektTrait = context.parent as? InjektTrait
         ?: context.activity as? InjektTrait
         ?: context.application as? InjektTrait
@@ -76,12 +76,6 @@ fun <T : Controller> controllerRoute(
 
     injektTrait.component.get(type = type, parameters = parameters)
 }
-
-fun controllerRoute(
-    extras: Properties = Properties(),
-    options: ControllerRoute.Options? = null,
-    factory: (ControllerRoute.Context) -> Controller
-): ControllerRoute = ControllerRoute(extras, options, factory)
 
 fun ControllerRoute.copy(
     extras: Properties = this.extras,

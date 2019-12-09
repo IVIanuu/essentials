@@ -18,16 +18,14 @@ package com.ivianuu.essentials.work
 
 import android.content.Context
 import androidx.work.ListenableWorker
-import androidx.work.Worker
 import androidx.work.WorkerFactory
 import androidx.work.WorkerParameters
 import com.ivianuu.injekt.BindingContext
-import com.ivianuu.injekt.DefinitionContext
 import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.Module
+import com.ivianuu.injekt.ModuleBuilder
 import com.ivianuu.injekt.Name
 import com.ivianuu.injekt.Provider
-import com.ivianuu.injekt.module
 import com.ivianuu.injekt.parametersOf
 
 /**
@@ -51,32 +49,17 @@ class InjektWorkerFactory(
 /**
  * Contains the [InjektWorkerFactory]
  */
-val workerInjectionModule = module {
-    map<String, ListenableWorker>(WorkersMap)
+val WorkerInjectionModule = Module {
+    map<String, ListenableWorker>(mapName = WorkersMap)
     withBinding<InjektWorkerFactory> { bindType<WorkerFactory>() }
 }
-
-/**
- * Defines a [Worker]
- */
-typealias WorkerDefinition<T> = DefinitionContext.(context: Context, workerParams: WorkerParameters) -> T
 
 @Name
 annotation class WorkersMap {
     companion object
 }
 
-/**
- * Defines a [Worker] which will be used in conjunction with the [InjektWorkerFactory]
- */
-inline fun <reified T : ListenableWorker> Module.worker(
-    name: Any? = null,
-    noinline definition: WorkerDefinition<T>
-): BindingContext<T> = factory(name) { (context: Context, workerParams: WorkerParameters) ->
-    definition(context, workerParams)
-}.bindWorker()
-
-inline fun <reified T : ListenableWorker> Module.bindWorker(
+inline fun <reified T : ListenableWorker> ModuleBuilder.bindWorker(
     name: Any? = null
 ) {
     withBinding<T>(name) { bindWorker() }

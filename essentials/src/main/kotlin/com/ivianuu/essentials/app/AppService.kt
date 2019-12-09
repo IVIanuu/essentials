@@ -16,13 +16,10 @@
 
 package com.ivianuu.essentials.app
 
-import com.ivianuu.essentials.twilight.TwilightController
 import com.ivianuu.injekt.BindingContext
-import com.ivianuu.injekt.Definition
 import com.ivianuu.injekt.Module
+import com.ivianuu.injekt.ModuleBuilder
 import com.ivianuu.injekt.Name
-import com.ivianuu.injekt.module
-import kotlin.reflect.KClass
 
 /**
  * Will be started on app start up and lives as long as the app lives
@@ -34,25 +31,19 @@ annotation class AppServices {
     companion object
 }
 
-inline fun <reified T : AppService> Module.appService(
-    name: Any? = null,
-    noinline definition: Definition<T>
-): BindingContext<T> = single(name = name, definition = definition).bindAppService()
-
-inline fun <reified T : AppService> Module.bindAppService(
+inline fun <reified T : AppService> ModuleBuilder.bindAppService(
     name: Any? = null
 ) {
     withBinding<T>(name) { bindAppService() }
 }
 
 inline fun <reified T : AppService> BindingContext<T>.bindAppService(): BindingContext<T> {
-    intoMap<KClass<out AppService>, AppService>(
-        entryKey = T::class, mapName = AppServices
+    intoMap<String, AppService>(
+        entryKey = T::class.java.name, mapName = AppServices
     )
     return this
 }
 
-val esAppServicesModule = module {
-    map<KClass<out AppService>, AppService>(AppServices)
-    bindAppService<TwilightController>()
+val EsAppServicesModule = Module {
+    map<String, AppService>(mapName = AppServices)
 }

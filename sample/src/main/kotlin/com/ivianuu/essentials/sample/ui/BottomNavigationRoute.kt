@@ -19,7 +19,7 @@ package com.ivianuu.essentials.sample.ui
 import androidx.ui.foundation.ColoredRect
 import androidx.ui.graphics.Color
 import com.ivianuu.essentials.sample.R
-import com.ivianuu.essentials.ui.compose.es.composeControllerRoute
+import com.ivianuu.essentials.ui.compose.es.ComposeControllerRoute
 import com.ivianuu.essentials.ui.compose.material.BottomNavigationBar
 import com.ivianuu.essentials.ui.compose.material.BottomNavigationBarItem
 import com.ivianuu.essentials.ui.compose.material.BottomNavigationController
@@ -27,12 +27,12 @@ import com.ivianuu.essentials.ui.compose.material.BottomNavigationSwapper
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
 import com.ivianuu.essentials.ui.compose.material.Scaffold
 import com.ivianuu.essentials.ui.compose.resources.drawableResource
-import com.ivianuu.essentials.ui.navigation.director.controllerRouteOptions
+import com.ivianuu.essentials.ui.navigation.director.ControllerRouteOptions
 import com.ivianuu.essentials.ui.navigation.director.fade
 
 val bottomNavigationRoute =
-    composeControllerRoute(
-        options = controllerRouteOptions().fade()
+    ComposeControllerRoute(
+        options = ControllerRouteOptions().fade()
     ) {
         BottomNavigationController(
             items = BottomNavItem.values().toList()

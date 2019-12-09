@@ -28,28 +28,27 @@ import androidx.lifecycle.lifecycleScope
 import com.ivianuu.director.requireActivity
 import com.ivianuu.essentials.ui.base.EsController
 import com.ivianuu.essentials.ui.navigation.director.ControllerRoute
-import com.ivianuu.essentials.ui.navigation.director.controllerRoute
 import com.ivianuu.essentials.ui.navigation.director.dialog
 import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.Param
 import com.ivianuu.injekt.parametersOf
 
-fun activityRoute(intentFactory: (Activity) -> Intent) =
-    controllerRoute<ActivityStartingController>(options = ControllerRoute.Options().dialog()) {
+fun ActivityRoute(intentFactory: (Activity) -> Intent) =
+    ControllerRoute<ActivityStartingController>(options = ControllerRoute.Options().dialog()) {
         parametersOf(intentFactory)
     }
 
-fun appInfoRoute(packageName: String) = activityRoute {
+fun AppInfoRoute(packageName: String) = ActivityRoute {
     Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
         this.data = "package:$packageName".toUri()
     }
 }
 
-fun appRoute(packageName: String) = activityRoute {
+fun AppRoute(packageName: String) = ActivityRoute {
     it.packageManager.getLaunchIntentForPackage(packageName)!!
 }
 
-fun shareRoute(text: String) = activityRoute {
+fun ShareRoute(text: String) = ActivityRoute {
     ShareCompat.IntentBuilder
         .from(it)
         .setType("text/plain")
@@ -57,7 +56,7 @@ fun shareRoute(text: String) = activityRoute {
         .createChooserIntent()
 }
 
-fun urlRoute(url: String) = activityRoute {
+fun UrlRoute(url: String) = ActivityRoute {
     Intent(Intent.ACTION_VIEW).apply { this.data = url.toUri() }
 }
 

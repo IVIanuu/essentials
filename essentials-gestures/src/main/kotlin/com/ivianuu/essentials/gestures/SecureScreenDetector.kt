@@ -18,7 +18,8 @@ package com.ivianuu.essentials.gestures
 
 import android.view.accessibility.AccessibilityEvent
 import com.github.ajalt.timberkt.d
-import com.ivianuu.essentials.gestures.accessibility.AccessibilityComponent
+import com.ivianuu.essentials.accessibility.AccessibilityComponent
+import com.ivianuu.essentials.accessibility.AccessibilityConfig
 import com.ivianuu.injekt.Single
 import com.ivianuu.injekt.android.ApplicationScope
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
@@ -30,16 +31,16 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 @Single
 class SecureScreenDetector : AccessibilityComponent() {
 
+    override val config: AccessibilityConfig
+        get() = AccessibilityConfig(
+            eventTypes = AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
+        )
+
     private val _isOnSecureScreen = ConflatedBroadcastChannel<Boolean>()
     val isOnSecureScreen: Flow<Boolean>
         get() = _isOnSecureScreen.asFlow().distinctUntilChanged()
 
     override fun onAccessibilityEvent(event: AccessibilityEvent) {
-        // were only interested in window state changes
-        if (event.eventType != AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) {
-            return
-        }
-
         // ignore keyboards
         if (event.className == "android.inputmethodservice.SoftInputWindow") {
             return

@@ -18,10 +18,10 @@ package com.ivianuu.essentials.gestures
 
 import android.view.accessibility.AccessibilityEvent
 import com.github.ajalt.timberkt.d
-import com.ivianuu.essentials.gestures.accessibility.AccessibilityComponent
+import com.ivianuu.essentials.accessibility.AccessibilityComponent
+import com.ivianuu.essentials.accessibility.AccessibilityConfig
 import com.ivianuu.injekt.Single
 import com.ivianuu.injekt.android.ApplicationScope
-import com.ivianuu.scopes.MutableScope
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
@@ -35,6 +35,11 @@ import kotlinx.coroutines.flow.map
 @Single
 class RecentAppsProvider : AccessibilityComponent() {
 
+    override val config: AccessibilityConfig
+        get() = AccessibilityConfig(
+            eventTypes = AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
+        )
+
     val currentApp: Flow<String?>
         get() = recentsApps
             .map { it.firstOrNull() }
@@ -45,19 +50,7 @@ class RecentAppsProvider : AccessibilityComponent() {
 
     private var recentAppsList = mutableListOf<String>()
 
-    private val scope = MutableScope()
-
-    override fun onServiceDisconnected() {
-        super.onServiceDisconnected()
-        scope.close()
-    }
-
     override fun onAccessibilityEvent(event: AccessibilityEvent) {
-        // were only interested in window state changes
-        if (event.eventType != AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) {
-            return
-        }
-
         // indicates that its a activity
         if (!event.isFullScreen) {
             return

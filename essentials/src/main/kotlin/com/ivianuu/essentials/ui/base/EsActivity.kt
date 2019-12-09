@@ -24,19 +24,20 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.ivianuu.director.Router
 import com.ivianuu.director.router
-import com.ivianuu.essentials.ui.mvrx.MvRxView
+import com.ivianuu.essentials.injection.retainedActivityComponent
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.director.ControllerRenderer
 import com.ivianuu.essentials.ui.navigation.director.ControllerRoute
 import com.ivianuu.essentials.util.coroutineScope
 import com.ivianuu.essentials.util.unsafeLazy
 import com.ivianuu.essentials.util.withAlpha
+import com.ivianuu.injekt.Component
 import com.ivianuu.injekt.InjektTrait
 import com.ivianuu.injekt.Module
-import com.ivianuu.injekt.android.activityComponent
+import com.ivianuu.injekt.android.ActivityModule
+import com.ivianuu.injekt.android.ActivityScope
 import com.ivianuu.injekt.get
 import com.ivianuu.injekt.inject
-import com.ivianuu.injekt.module
 import com.ivianuu.scopes.android.onPause
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -45,16 +46,19 @@ import kotlinx.coroutines.launch
 /**
  * Base activity
  */
-abstract class EsActivity : AppCompatActivity(), InjektTrait, MvRxView {
+abstract class EsActivity : AppCompatActivity(), InjektTrait {
 
     override val component by unsafeLazy {
-        activityComponent {
-            modules(esActivityModule(this@EsActivity))
+        Component {
+            scopes(ActivityScope)
+            dependencies(retainedActivityComponent)
+            modules(ActivityModule())
+            modules(EsActivityModule(this@EsActivity))
             modules(this@EsActivity.modules())
         }
     }
 
-    val navigator: Navigator by inject()
+    open val navigator: Navigator by inject()
     private val controllerRenderer: ControllerRenderer by inject()
 
     protected open val layoutRes: Int get() = 0
@@ -101,24 +105,16 @@ abstract class EsActivity : AppCompatActivity(), InjektTrait, MvRxView {
             .launchIn(lifecycleScope)
     }
 
-    override fun onStart() {
-        super.onStart()
-        invalidate()
-    }
-
     override fun onResumeFragments() {
         super.onResumeFragments()
         onPause.coroutineScope.launch {
-            controllerRenderer.render()
+            controllerRenderer.render(navigator)
         }
-    }
-
-    override fun invalidate() {
     }
 
     protected open fun modules(): List<Module> = emptyList()
 }
 
-private fun esActivityModule(esActivity: EsActivity) = module {
-    single { esActivity.router(esActivity.containerId) }
+private fun EsActivityModule(activity: EsActivity) = Module {
+    single { activity.router(activity.containerId) }
 }

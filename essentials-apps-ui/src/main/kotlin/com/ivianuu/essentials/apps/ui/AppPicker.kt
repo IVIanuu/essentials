@@ -21,65 +21,54 @@ import androidx.lifecycle.viewModelScope
 import androidx.ui.core.Text
 import androidx.ui.core.dp
 import androidx.ui.layout.Center
-import androidx.ui.material.CircularProgressIndicator
 import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.AppStore
 import com.ivianuu.essentials.apps.coil.AppIcon
-import com.ivianuu.essentials.ui.compose.common.ListScreen
-import com.ivianuu.essentials.ui.compose.common.scrolling.ScrollableList
-import com.ivianuu.essentials.ui.compose.core.composable
+import com.ivianuu.essentials.coil.Image
+import com.ivianuu.essentials.mvrx.MvRxViewModel
+import com.ivianuu.essentials.mvrx.injekt.injectMvRxViewModel
+import com.ivianuu.essentials.ui.compose.common.AsyncList
 import com.ivianuu.essentials.ui.compose.core.staticComposableWithKey
-import com.ivianuu.essentials.ui.compose.es.composeControllerRoute
-import com.ivianuu.essentials.ui.compose.image.Image
+import com.ivianuu.essentials.ui.compose.es.ComposeControllerRoute
+import com.ivianuu.essentials.ui.compose.layout.SizedBox
 import com.ivianuu.essentials.ui.compose.material.AvatarIconStyle
+import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
 import com.ivianuu.essentials.ui.compose.material.Icon
+import com.ivianuu.essentials.ui.compose.material.Scaffold
 import com.ivianuu.essentials.ui.compose.material.SimpleListItem
-import com.ivianuu.essentials.ui.compose.mvrx.injekt.mvRxViewModel
 import com.ivianuu.essentials.ui.compose.resources.stringResource
-import com.ivianuu.essentials.ui.mvrx.MvRxViewModel
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.util.AppDispatchers
 import com.ivianuu.essentials.util.Async
-import com.ivianuu.essentials.util.Loading
-import com.ivianuu.essentials.util.Success
 import com.ivianuu.essentials.util.Uninitialized
 import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.Param
 import com.ivianuu.injekt.parametersOf
 
-fun appPickerRoute(
+fun AppPickerRoute(
     title: String? = null,
     appFilter: AppFilter = DefaultAppFilter
-) = composeControllerRoute {
-    ListScreen(title = title ?: stringResource(R.string.es_title_app_picker)) {
-        val viewModel =
-            mvRxViewModel<AppPickerViewModel> {
-                parametersOf(appFilter)
-            }
+) = ComposeControllerRoute {
+    Scaffold(
+        topAppBar = { EsTopAppBar(title ?: stringResource(R.string.es_title_app_picker)) },
+        body = {
+            val viewModel =
+                injectMvRxViewModel<AppPickerViewModel> {
+                    parametersOf(appFilter)
+                }
 
-        when (viewModel.state.apps) {
-            is Loading -> {
-                composable {
-                    Center {
-                        CircularProgressIndicator()
-                    }
+            AsyncList(
+                state = viewModel.state.apps,
+                itemSize = 56.dp,
+                successItem = { _, app ->
+                    AppInfo(
+                        app = app,
+                        onClick = { viewModel.appClicked(app) }
+                    )
                 }
-            }
-            is Success -> {
-                composable {
-                    ScrollableList(
-                        items = viewModel.state.apps() ?: emptyList(),
-                        itemSize = 56.dp
-                    ) { _, app ->
-                        AppInfo(
-                            app = app,
-                            onClick = { viewModel.appClicked(app) }
-                        )
-                    }
-                }
-            }
+            )
         }
-    }
+    )
 }
 
 @Composable
@@ -90,8 +79,12 @@ private fun AppInfo(
     SimpleListItem(
         title = { Text(app.appName) },
         leading = {
-            Image(data = AppIcon(app.packageName)) {
-                Icon(image = it, style = AvatarIconStyle())
+            SizedBox(size = 40.dp) {
+                Center {
+                    Image(data = AppIcon(app.packageName)) {
+                        Icon(image = it, style = AvatarIconStyle())
+                    }
+                }
             }
         },
         onClick = onClick

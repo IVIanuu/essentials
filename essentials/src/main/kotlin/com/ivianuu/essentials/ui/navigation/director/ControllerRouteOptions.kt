@@ -30,7 +30,7 @@ import com.ivianuu.director.defaultRemovesFromViewOnPush
 import com.ivianuu.director.popChangeHandler
 import com.ivianuu.director.pushChangeHandler
 
-fun controllerRouteOptions(): ControllerRoute.Options = ControllerRoute.Options()
+fun ControllerRouteOptions(): ControllerRoute.Options = ControllerRoute.Options()
 
 inline fun defaultControllerRouteOptionsOrElse(options: () -> ControllerRoute.Options): ControllerRoute.Options =
     defaultControllerRouteOptionsOrNull() ?: options()

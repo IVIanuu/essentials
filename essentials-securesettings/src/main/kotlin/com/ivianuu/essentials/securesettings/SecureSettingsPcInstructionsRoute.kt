@@ -23,7 +23,7 @@ import androidx.ui.material.MaterialTheme
 import com.ivianuu.essentials.ui.compose.common.ListScreen
 import com.ivianuu.essentials.ui.compose.common.openUrlOnClick
 import com.ivianuu.essentials.ui.compose.core.invoke
-import com.ivianuu.essentials.ui.compose.es.composeControllerRoute
+import com.ivianuu.essentials.ui.compose.es.ComposeControllerRoute
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.compose.material.SimpleListItem
 import com.ivianuu.essentials.ui.compose.material.colorForCurrentBackground
@@ -38,7 +38,7 @@ import com.ivianuu.essentials.util.Toaster
  * Asks the user for the secure settings permission
  */
 val secureSettingsInstructionsRoute =
-    composeControllerRoute(
+    ComposeControllerRoute(
         options = defaultControllerRouteOptionsOrNull()
     ) {
         popNavigatorOnceSecureSettingsGranted()

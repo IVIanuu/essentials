@@ -21,6 +21,8 @@ import androidx.ui.material.RadioButton
 import com.ivianuu.essentials.ui.compose.common.AbsorbPointer
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.composableWithKey
+import com.ivianuu.essentials.ui.compose.injekt.inject
+import com.ivianuu.essentials.ui.navigation.Navigator
 
 @Composable
 fun <T> SingleChoiceListDialog(
@@ -28,7 +30,7 @@ fun <T> SingleChoiceListDialog(
     selectedItem: T,
     onSelect: ((T) -> Unit)? = null,
     item: @Composable() (T) -> Unit,
-    dismissOnSelect: Boolean = true, // todo
+    dismissOnSelection: Boolean = true, // todo
     buttonLayout: AlertDialogButtonLayout = AlertDialogButtonLayout.SideBySide,
     icon: (@Composable() () -> Unit)? = null,
     title: (@Composable() () -> Unit)? = null,
@@ -36,6 +38,8 @@ fun <T> SingleChoiceListDialog(
     negativeButton: (@Composable() () -> Unit)? = null,
     neutralButton: (@Composable() () -> Unit)? = null
 ) = composable {
+    val navigator = inject<Navigator>()
+
     ScrollableDialog(
         icon = icon,
         title = title,
@@ -49,6 +53,7 @@ fun <T> SingleChoiceListDialog(
                         onSelect = onSelect?.let {
                             {
                                 onSelect(item)
+                                if (dismissOnSelection) navigator.pop()
                             }
                         }
                     )

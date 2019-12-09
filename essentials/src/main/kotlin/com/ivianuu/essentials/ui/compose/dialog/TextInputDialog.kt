@@ -40,7 +40,7 @@ fun textInputRoute(
     keyboardType: KeyboardType = KeyboardType.Text,
     title: String? = null,
     allowEmpty: Boolean = true
-) = dialogRoute {
+) = DialogRoute {
     val navigator = inject<Navigator>()
 
     val (currentValue, setCurrentValue) = state { initial }
@@ -54,6 +54,7 @@ fun textInputRoute(
         positiveButton = {
             DialogButton(
                 text = stringResource(R.string.es_ok),
+                dismissDialogOnClick = false,
                 onClick = if (allowEmpty || currentValue.isNotEmpty()) {
                     {
                         navigator.pop(currentValue)

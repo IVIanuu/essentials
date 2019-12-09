@@ -21,31 +21,30 @@ import android.view.View
 import android.view.ViewGroup
 import com.ivianuu.director.Controller
 import com.ivianuu.director.requireActivity
-import com.ivianuu.essentials.injection.childControllerComponent
-import com.ivianuu.essentials.injection.controllerComponent
-import com.ivianuu.essentials.ui.mvrx.MvRxView
+import com.ivianuu.essentials.injection.ChildControllerComponent
+import com.ivianuu.essentials.injection.ControllerComponent
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.Route
 import com.ivianuu.essentials.util.InjektTraitContextWrapper
+import com.ivianuu.essentials.util.cast
 import com.ivianuu.essentials.util.unsafeLazy
 import com.ivianuu.injekt.InjektTrait
 import com.ivianuu.injekt.Module
-import com.ivianuu.injekt.inject
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.clearFindViewByIdCache
 
 /**
  * Base controller
  */
-abstract class EsController : Controller(), InjektTrait, LayoutContainer, MvRxView {
+abstract class EsController : Controller(), InjektTrait, LayoutContainer {
 
     override val component by unsafeLazy {
         if (parentController != null) {
-            childControllerComponent {
+            ChildControllerComponent {
                 modules(this@EsController.modules())
             }
         } else {
-            controllerComponent {
+            ControllerComponent {
                 modules(this@EsController.modules())
             }
         }
@@ -55,7 +54,8 @@ abstract class EsController : Controller(), InjektTrait, LayoutContainer, MvRxVi
         get() = _containerView
     private var _containerView: View? = null
 
-    val navigator: Navigator by inject()
+    val navigator: Navigator
+        get() = requireActivity().cast<EsActivity>().navigator
 
     var route: Route? = null
 
@@ -72,18 +72,10 @@ abstract class EsController : Controller(), InjektTrait, LayoutContainer, MvRxVi
             .also { setContentView(it) }
     }
 
-    override fun onAttach(view: View) {
-        super.onAttach(view)
-        invalidate()
-    }
-
     override fun onDestroyView(view: View) {
         clearFindViewByIdCache()
         _containerView = null
         super.onDestroyView(view)
-    }
-
-    override fun invalidate() {
     }
 
     protected open fun modules(): List<Module> = emptyList()

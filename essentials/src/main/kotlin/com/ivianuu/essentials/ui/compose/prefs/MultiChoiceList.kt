@@ -20,7 +20,6 @@ import androidx.compose.Composable
 import androidx.ui.core.Text
 import androidx.ui.graphics.Image
 import com.ivianuu.essentials.R
-import com.ivianuu.essentials.store.Box
 import com.ivianuu.essentials.ui.compose.common.asIconComposable
 import com.ivianuu.essentials.ui.compose.common.asTextComposable
 import com.ivianuu.essentials.ui.compose.core.composable
@@ -33,7 +32,7 @@ import com.ivianuu.essentials.ui.compose.resources.stringResource
 
 @Composable
 fun <T> MultiChoiceListPreference(
-    box: Box<Set<T>>,
+    box: com.ivianuu.essentials.store.Box<Set<T>>,
     onChange: ((Set<T>) -> Boolean)? = null,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,

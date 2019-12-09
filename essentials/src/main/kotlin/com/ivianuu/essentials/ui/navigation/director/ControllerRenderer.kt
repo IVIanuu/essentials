@@ -30,11 +30,10 @@ import kotlinx.coroutines.withContext
 class ControllerRenderer(
     private val activity: FragmentActivity,
     private val dispatchers: AppDispatchers,
-    private val navigator: Navigator,
     private val router: com.ivianuu.director.Router
 ) {
 
-    suspend fun render() {
+    suspend fun render(navigator: Navigator) {
         navigator.flow
             .collect { newBackStack ->
                 withContext(dispatchers.main) {

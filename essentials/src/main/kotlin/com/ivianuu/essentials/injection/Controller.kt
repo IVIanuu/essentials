@@ -28,9 +28,7 @@ import com.ivianuu.injekt.InjektTrait
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Name
 import com.ivianuu.injekt.Scope
-import com.ivianuu.injekt.component
 import com.ivianuu.injekt.get
-import com.ivianuu.injekt.module
 import com.ivianuu.injekt.typeOf
 
 @Scope
@@ -53,24 +51,25 @@ annotation class ForChildController {
     companion object
 }
 
-fun <T : Controller> T.controllerComponent(block: (ComponentBuilder.() -> Unit)? = null): Component =
-    component {
+fun <T : Controller> T.ControllerComponent(block: (ComponentBuilder.() -> Unit)? = null): Component =
+    Component {
         scopes(ControllerScope)
         getClosestComponentOrNull()?.let { dependencies(it) }
-        modules(controllerModule())
+        modules(ControllerModule())
         block?.invoke(this)
     }
 
-fun <T : Controller> T.childControllerComponent(block: (ComponentBuilder.() -> Unit)? = null): Component =
-    component {
+fun <T : Controller> T.ChildControllerComponent(block: (ComponentBuilder.() -> Unit)? = null): Component =
+    Component {
         scopes(ChildControllerScope)
         getClosestComponentOrNull()?.let { dependencies(it) }
-        modules(childControllerModule())
+        modules(ChildControllerModule())
         block?.invoke(this)
     }
 
 fun Controller.getClosestComponentOrNull(): Component? {
-    return getParentControllerComponentOrNull()
+    return getRetainedActivityComponentOrNull()
+        ?: getParentControllerComponentOrNull()
         ?: getApplicationComponentOrNull()
 }
 
@@ -83,24 +82,30 @@ fun Controller.getParentControllerComponentOrNull(): Component? =
 fun Controller.getParentControllerComponent(): Component =
     getParentControllerComponentOrNull() ?: error("No parent controller component found for $this")
 
+fun Controller.getRetainedActivityComponentOrNull(): Component? =
+    activity?.retainedActivityComponent
+
+fun Controller.getRetainedActivityComponent(): Component =
+    getParentControllerComponentOrNull() ?: error("No retained activity component found for $this")
+
 fun Controller.getApplicationComponentOrNull(): Component? =
     (activity?.application as? InjektTrait)?.component
 
 fun Controller.getApplicationComponent(): Component =
     getApplicationComponentOrNull() ?: error("No application component found for $this")
 
-fun <T : Controller> T.controllerModule(): Module = module {
-    include(internalControllerModule(ForController))
+fun <T : Controller> T.ControllerModule() = Module {
+    include(InternalControllerModule(ForController))
 }
 
-fun <T : Controller> T.childControllerModule(): Module = module {
-    include(internalControllerModule(ForChildController))
+fun <T : Controller> T.ChildControllerModule() = Module {
+    include(InternalControllerModule(ForChildController))
 }
 
-private fun <T : Controller> T.internalControllerModule(name: Any) = module {
+private fun <T : Controller> T.InternalControllerModule(name: Any) = Module {
     instance(
-        this@internalControllerModule,
-        typeOf(this@internalControllerModule),
+        this@InternalControllerModule,
+        typeOf(this@InternalControllerModule),
         override = true
     ).apply {
         bindType<Controller>()

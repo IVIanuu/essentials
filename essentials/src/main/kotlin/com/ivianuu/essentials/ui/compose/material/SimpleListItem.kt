@@ -20,11 +20,11 @@ import androidx.compose.Composable
 import androidx.ui.core.Alignment
 import androidx.ui.core.CurrentTextStyleProvider
 import androidx.ui.core.dp
+import androidx.ui.core.gesture.LongPressGestureDetector
 import androidx.ui.foundation.Clickable
 import androidx.ui.graphics.Color
 import androidx.ui.graphics.Image
 import androidx.ui.graphics.toArgb
-import androidx.ui.layout.ConstrainedBox
 import androidx.ui.layout.Container
 import androidx.ui.layout.DpConstraints
 import androidx.ui.layout.EdgeInsets
@@ -51,13 +51,19 @@ fun SimpleListItem(
     title: String? = null,
     subtitle: String? = null,
     image: Image? = null,
-    onClick: (() -> Unit)? = null
+    enabled: Boolean = true,
+    contentPadding: EdgeInsets = ContentPadding,
+    onClick: (() -> Unit)? = null,
+    onLongClick: (() -> Unit)? = null
 ) = composable {
     SimpleListItem(
         title = title.asTextComposable(),
         subtitle = subtitle.asTextComposable(),
         leading = image.asIconComposable(),
-        onClick = onClick
+        enabled = enabled,
+        contentPadding = contentPadding,
+        onClick = onClick,
+        onLongClick = onLongClick
     )
 }
 
@@ -67,12 +73,15 @@ fun SimpleListItem(
     subtitle: (@Composable() () -> Unit)? = null,
     leading: (@Composable() () -> Unit)? = null,
     trailing: (@Composable() () -> Unit)? = null,
-    onClick: (() -> Unit)? = null
+    enabled: Boolean = true,
+    contentPadding: EdgeInsets = ContentPadding,
+    onClick: (() -> Unit)? = null,
+    onLongClick: (() -> Unit)? = null
 ) = composable {
     val styledTitle = applyTextStyle(
         TitleTextStyle,
         title
-    )!!
+    )
     val styledSubtitle = applyTextStyle(
         SubtitleTextStyle,
         subtitle
@@ -87,21 +96,16 @@ fun SimpleListItem(
             if (leading == null) TitleOnlyMinHeight else TitleOnlyMinHeightWithIcon
         }
 
-        ConstrainedBox(constraints = DpConstraints(minHeight = minHeight)) {
+        Container(
+            constraints = DpConstraints(minHeight = minHeight),
+            padding = contentPadding
+        ) {
             Row(crossAxisAlignment = CrossAxisAlignment.Center) {
                 // leading
                 if (styledLeading != null) {
                     Container(
                         modifier = Inflexible,
                         alignment = Alignment.CenterLeft,
-                        constraints = DpConstraints(
-                            minWidth = IconLeftPadding + IconMinPaddedWidth
-                        ),
-                        padding = EdgeInsets(
-                            left = IconLeftPadding,
-                            top = IconVerticalPadding,
-                            bottom = IconVerticalPadding
-                        ),
                         children = styledLeading
                     )
                 }
@@ -109,18 +113,16 @@ fun SimpleListItem(
                 // content
                 Container(
                     modifier = Flexible(1f),
-                    alignment = Alignment.CenterLeft,
                     padding = EdgeInsets(
-                        left = ContentLeftPadding,
-                        top = ContentVerticalPadding,
-                        right = ContentRightPadding,
-                        bottom = ContentVerticalPadding
-                    )
+                        left = if (styledLeading != null) HorizontalTextPadding else 0.dp,
+                        right = if (styledTrailing != null) HorizontalTextPadding else 0.dp
+                    ),
+                    alignment = Alignment.CenterLeft
                 ) {
                     Column(
                         mainAxisAlignment = MainAxisAlignment.Center
                     ) {
-                        styledTitle.invokeAsComposable()
+                        styledTitle?.invokeAsComposable()
                         styledSubtitle?.invokeAsComposable()
                     }
                 }
@@ -129,7 +131,6 @@ fun SimpleListItem(
                 if (styledTrailing != null) {
                     Container(
                         modifier = Inflexible,
-                        padding = EdgeInsets(right = TrailingRightPadding),
                         constraints = DpConstraints(minHeight = minHeight),
                         children = styledTrailing
                     )
@@ -138,12 +139,18 @@ fun SimpleListItem(
         }
     }
 
-    if (onClick != null) {
-        Ripple(bounded = true) {
-            Clickable(onClick = onClick, children = item)
+    Ripple(
+        bounded = true,
+        enabled = onClick != null || onLongClick != null
+    ) {
+        LongPressGestureDetector(
+            onLongPress = { if (enabled) onLongClick?.invoke() }
+        ) {
+            Clickable(
+                onClick = if (enabled) onClick else null,
+                children = item
+            )
         }
-    } else {
-        item()
     }
 }
 
@@ -151,14 +158,11 @@ private val TitleOnlyMinHeight = 48.dp
 private val TitleOnlyMinHeightWithIcon = 56.dp
 private val TitleAndSubtitleMinHeight = 64.dp
 private val TitleAndSubtitleMinHeightWithIcon = 72.dp
-
-private val IconMinPaddedWidth = 40.dp
-private val IconLeftPadding = 16.dp
-private val IconVerticalPadding = 8.dp
-private val ContentLeftPadding = 16.dp
-private val ContentRightPadding = 16.dp
-private val ContentVerticalPadding = 8.dp
-private val TrailingRightPadding = 16.dp
+private val HorizontalTextPadding = 16.dp
+private val ContentPadding = EdgeInsets(
+    left = 16.dp,
+    right = 16.dp
+)
 
 private data class ListItemTextStyle(
     val style: Typography.() -> TextStyle,
@@ -196,7 +200,6 @@ private fun applyIconStyle(
 
 private const val PrimaryTextOpacity = 0.87f
 private const val SecondaryTextOpacity = 0.6f
-private const val RippleOpacity = 0.16f
 private const val IconOpacity = 0.87f
 private const val IconOpacityDark = 0.87f
 

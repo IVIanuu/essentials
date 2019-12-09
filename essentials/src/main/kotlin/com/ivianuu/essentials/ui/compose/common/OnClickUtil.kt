@@ -17,7 +17,7 @@
 package com.ivianuu.essentials.ui.compose.common
 
 import androidx.compose.Composable
-import com.ivianuu.essentials.ui.common.urlRoute
+import com.ivianuu.essentials.ui.common.UrlRoute
 import com.ivianuu.essentials.ui.compose.core.effect
 import com.ivianuu.essentials.ui.compose.core.remember
 import com.ivianuu.essentials.ui.compose.coroutines.coroutineScope
@@ -35,7 +35,7 @@ fun navigateOnClick(route: () -> Route): () -> Unit = effect {
 
 @Composable
 fun openUrlOnClick(url: () -> String) = effect {
-    navigateOnClick { urlRoute(url()) }
+    navigateOnClick { UrlRoute(url()) }
 }
 
 @Composable

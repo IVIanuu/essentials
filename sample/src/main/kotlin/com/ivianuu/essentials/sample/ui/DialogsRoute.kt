@@ -30,13 +30,13 @@ import com.ivianuu.essentials.ui.compose.dialog.AlertDialogButtonLayout
 import com.ivianuu.essentials.ui.compose.dialog.ColorPickerDialog
 import com.ivianuu.essentials.ui.compose.dialog.DialogButton
 import com.ivianuu.essentials.ui.compose.dialog.DialogCloseButton
+import com.ivianuu.essentials.ui.compose.dialog.DialogRoute
 import com.ivianuu.essentials.ui.compose.dialog.MaterialDialog
 import com.ivianuu.essentials.ui.compose.dialog.MultiChoiceListDialog
 import com.ivianuu.essentials.ui.compose.dialog.ScrollableDialog
 import com.ivianuu.essentials.ui.compose.dialog.SingleChoiceListDialog
 import com.ivianuu.essentials.ui.compose.dialog.TextInputDialog
-import com.ivianuu.essentials.ui.compose.dialog.dialogRoute
-import com.ivianuu.essentials.ui.compose.es.composeControllerRoute
+import com.ivianuu.essentials.ui.compose.es.ComposeControllerRoute
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.compose.layout.Column
 import com.ivianuu.essentials.ui.compose.layout.CrossAxisAlignment
@@ -48,11 +48,11 @@ import com.ivianuu.essentials.ui.compose.material.Scaffold
 import com.ivianuu.essentials.ui.compose.material.SimpleListItem
 import com.ivianuu.essentials.ui.compose.resources.drawableResource
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.director.controllerRouteOptions
+import com.ivianuu.essentials.ui.navigation.director.ControllerRouteOptions
 import com.ivianuu.essentials.ui.navigation.director.fade
 
-val dialogsRoute = composeControllerRoute(
-    options = controllerRouteOptions().fade()
+val DialogsRoute = ComposeControllerRoute(
+    options = ControllerRouteOptions().fade()
 ) {
     Scaffold(
         topAppBar = { EsTopAppBar("Dialogs") },
@@ -247,7 +247,7 @@ val dialogsRoute = composeControllerRoute(
                             items = singleChoiceItems,
                             selectedItem = tmpSelectedItem,
                             onSelect = setTmpSelectedItem,
-                            dismissOnSelect = false,
+                            dismissOnSelection = false,
                             item = { Text("Item: $it") },
                             positiveButton = {
                                 DialogButton(
@@ -337,7 +337,7 @@ private fun DialogLauncherButton(
     Button(
         text = text,
         onClick = {
-            navigator.push(dialogRoute(dismissible = dismissible, dialog = dialog))
+            navigator.push(DialogRoute(dismissible = dismissible, dialog = dialog))
         }
     )
 

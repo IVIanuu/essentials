@@ -17,8 +17,8 @@
 package com.ivianuu.essentials.ui.navigation
 
 import com.github.ajalt.timberkt.d
+import com.ivianuu.essentials.injection.RetainedActivityScope
 import com.ivianuu.injekt.Single
-import com.ivianuu.injekt.android.ApplicationScope
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
@@ -26,7 +26,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.launch
 
-@ApplicationScope
+@RetainedActivityScope
 @Single
 class Navigator {
 

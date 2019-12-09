@@ -22,15 +22,15 @@ import androidx.ui.layout.Center
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.ModalDrawerLayout
 import com.ivianuu.essentials.ui.compose.core.invoke
-import com.ivianuu.essentials.ui.compose.es.composeControllerRoute
+import com.ivianuu.essentials.ui.compose.es.ComposeControllerRoute
 import com.ivianuu.essentials.ui.compose.material.EsSurface
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
 import com.ivianuu.essentials.ui.compose.material.Scaffold
-import com.ivianuu.essentials.ui.navigation.director.controllerRouteOptions
+import com.ivianuu.essentials.ui.navigation.director.ControllerRouteOptions
 import com.ivianuu.essentials.ui.navigation.director.fade
 
-val drawerRoute = composeControllerRoute(
-    options = controllerRouteOptions().fade()
+val DrawerRoute = ComposeControllerRoute(
+    options = ControllerRouteOptions().fade()
 ) {
     Scaffold(
         topAppBar = { EsTopAppBar("Drawer") },

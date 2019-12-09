@@ -18,7 +18,8 @@ package com.ivianuu.essentials.gestures
 
 import android.view.accessibility.AccessibilityEvent
 import android.view.inputmethod.InputMethodManager
-import com.ivianuu.essentials.gestures.accessibility.AccessibilityComponent
+import com.ivianuu.essentials.accessibility.AccessibilityComponent
+import com.ivianuu.essentials.accessibility.AccessibilityConfig
 import com.ivianuu.injekt.Single
 import com.ivianuu.injekt.android.ApplicationScope
 import kotlinx.coroutines.channels.BroadcastChannel
@@ -39,6 +40,11 @@ import java.lang.reflect.Method
 class KeyboardVisibilityDetector(
     private val inputMethodManager: InputMethodManager
 ) : AccessibilityComponent() {
+
+    override val config: AccessibilityConfig
+        get() = AccessibilityConfig(
+            eventTypes = AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
+        )
 
     private val softInputChanges = BroadcastChannel<Unit>(1)
 
@@ -71,12 +77,8 @@ class KeyboardVisibilityDetector(
     }
 
     override fun onAccessibilityEvent(event: AccessibilityEvent) {
-        if (event.eventType != AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) return
-
         if (!event.isFullScreen) return
-
         if (event.className != "android.inputmethodservice.SoftInputWindow") return
-
         softInputChanges.offer(Unit)
     }
 

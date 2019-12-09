@@ -33,14 +33,9 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/mv
 dependencies {
     api(Deps.AndroidX.activity)
     api(Deps.AndroidX.appCompat)
-    api(Deps.AndroidX.cardView)
-    api(Deps.AndroidX.constraintLayout)
     api(Deps.AndroidX.core)
-    api(Deps.AndroidX.Lifecycle.liveData)
-    api(Deps.AndroidX.Lifecycle.reactiveStreams)
     api(Deps.AndroidX.Lifecycle.runtime)
-    api(Deps.AndroidX.Lifecycle.ViewModel.viewModel)
-    api(Deps.AndroidX.Lifecycle.ViewModel.savedState)
+    api(Deps.AndroidX.Lifecycle.viewModel)
 
     api(Deps.AndroidX.Ui.androidText)
     api(Deps.AndroidX.Ui.androidView)
@@ -59,14 +54,10 @@ dependencies {
     api(Deps.Coroutines.android)
     api(Deps.Coroutines.core)
 
-    api(Deps.coil)
-
     api(Deps.Director.director)
     api(Deps.Director.common)
 
-    api(Deps.epoxy)
-
-    api(Deps.epoxyPrefs)
+    api(project(":essentials-store"))
 
     api(Deps.Injekt.injekt)
     api(Deps.Injekt.android)

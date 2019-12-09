@@ -17,11 +17,9 @@
 package com.ivianuu.essentials.app
 
 import com.ivianuu.injekt.BindingContext
-import com.ivianuu.injekt.Definition
 import com.ivianuu.injekt.Module
+import com.ivianuu.injekt.ModuleBuilder
 import com.ivianuu.injekt.Name
-import com.ivianuu.injekt.module
-import kotlin.reflect.KClass
 
 /**
  * Will be instantiated on app start up
@@ -54,26 +52,21 @@ annotation class AppInitializers {
     companion object
 }
 
-inline fun <reified T : AppInitializer> Module.appInitializer(
-    name: Any? = null,
-    noinline definition: Definition<T>
-): BindingContext<T> = factory(name = name, definition = definition).bindAppInitializer()
-
-inline fun <reified T : AppInitializer> Module.bindAppInitializer(
+inline fun <reified T : AppInitializer> ModuleBuilder.bindAppInitializer(
     name: Any? = null
 ) {
     withBinding<T>(name) { bindAppInitializer() }
 }
 
 inline fun <reified T : AppInitializer> BindingContext<T>.bindAppInitializer(): BindingContext<T> {
-    intoMap<KClass<out AppInitializer>, AppInitializer>(
-        entryKey = T::class,
+    intoMap<String, AppInitializer>(
+        entryKey = T::class.java.name,
         mapName = AppInitializers
     )
     return this
 }
 
-val esAppInitializersModule = module {
-    map<KClass<out AppInitializer>, AppInitializer>(AppInitializers)
+val EsAppInitializersModule = Module {
+    map<String, AppInitializer>(mapName = AppInitializers)
     bindAppInitializer<TimberAppInitializer>()
 }

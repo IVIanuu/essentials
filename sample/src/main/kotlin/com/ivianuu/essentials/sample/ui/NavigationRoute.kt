@@ -23,7 +23,7 @@ import androidx.ui.material.Button
 import androidx.ui.material.MaterialTheme
 import com.ivianuu.essentials.ui.compose.core.ambient
 import com.ivianuu.essentials.ui.compose.core.invoke
-import com.ivianuu.essentials.ui.compose.es.composeControllerRoute
+import com.ivianuu.essentials.ui.compose.es.ComposeControllerRoute
 import com.ivianuu.essentials.ui.compose.layout.Column
 import com.ivianuu.essentials.ui.compose.layout.CrossAxisAlignment
 import com.ivianuu.essentials.ui.compose.layout.HeightSpacer
@@ -35,7 +35,7 @@ import com.ivianuu.essentials.ui.compose.navigation.NavigatorAmbient
 import com.ivianuu.essentials.ui.compose.navigation.Route
 
 val navigationRoute =
-    composeControllerRoute {
+    ComposeControllerRoute {
         ComposeNavigator { CounterRoute(1) }
     }
 

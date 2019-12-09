@@ -71,11 +71,12 @@ fun <T : Parcelable> parceledState(
     keepAcrossCompositions: Boolean = false,
     init: () -> T
 ): State<T> = effect {
-    val viewModel = viewModel<ParceledStateViewModel>(
-        factory = SavedStateViewModelFactory(
-            inject(),
-            ambient(ActivityAmbient) as SavedStateRegistryOwner
-        )
+    val factory = SavedStateViewModelFactory(
+        inject(),
+        ambient(ActivityAmbient) as SavedStateRegistryOwner
+    )
+    val viewModel = viewModel(
+        factory = { factory.create(ParceledStateViewModel::class.java) }
     )
 
     val state = state {

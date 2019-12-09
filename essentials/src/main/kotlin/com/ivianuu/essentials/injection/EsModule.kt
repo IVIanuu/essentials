@@ -16,23 +16,21 @@
 
 package com.ivianuu.essentials.injection
 
-import com.ivianuu.essentials.app.esAppInitializersModule
-import com.ivianuu.essentials.app.esAppServicesModule
-import com.ivianuu.essentials.store.prefs.esStoreModule
-import com.ivianuu.essentials.ui.coil.esCoilModule
-import com.ivianuu.essentials.ui.compose.injekt.composeModule
-import com.ivianuu.essentials.util.esUtilModule
-import com.ivianuu.injekt.module
+import com.ivianuu.essentials.app.EsAppInitializersModule
+import com.ivianuu.essentials.app.EsAppServicesModule
+import com.ivianuu.essentials.ui.compose.injekt.ComposeModule
+import com.ivianuu.essentials.util.EsStoreModule
+import com.ivianuu.essentials.util.EsUtilModule
+import com.ivianuu.injekt.Module
 
 /**
  * Core modules
  */
-val esModule = module {
-    include(composeModule)
-    include(esAppInitializersModule)
-    include(esAppServicesModule)
-    include(esCoilModule)
-    include(esStoreModule)
-    include(esUtilModule)
-    include(systemServiceModule)
+val EsModule = Module {
+    include(ComposeModule)
+    include(EsAppInitializersModule)
+    include(EsAppServicesModule)
+    include(EsStoreModule)
+    include(EsUtilModule)
+    include(SystemServiceModule)
 }

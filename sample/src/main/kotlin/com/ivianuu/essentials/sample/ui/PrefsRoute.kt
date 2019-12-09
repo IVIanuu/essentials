@@ -16,13 +16,12 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import com.ivianuu.essentials.store.prefs.PrefBoxFactory
 import com.ivianuu.essentials.store.prefs.boolean
 import com.ivianuu.essentials.store.prefs.int
 import com.ivianuu.essentials.store.prefs.string
 import com.ivianuu.essentials.store.prefs.stringSet
 import com.ivianuu.essentials.ui.compose.common.scrolling.ScrollableList
-import com.ivianuu.essentials.ui.compose.es.composeControllerRoute
+import com.ivianuu.essentials.ui.compose.es.ComposeControllerRoute
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
 import com.ivianuu.essentials.ui.compose.material.Scaffold
@@ -36,18 +35,18 @@ import com.ivianuu.essentials.ui.compose.prefs.SliderPreference
 import com.ivianuu.essentials.ui.compose.prefs.SwitchPreference
 import com.ivianuu.essentials.ui.compose.prefs.TextInputPreference
 import com.ivianuu.essentials.ui.compose.prefs.unitValueTextProvider
-import com.ivianuu.essentials.ui.navigation.director.controllerRouteOptions
+import com.ivianuu.essentials.ui.navigation.director.ControllerRouteOptions
 import com.ivianuu.essentials.ui.navigation.director.vertical
 import com.ivianuu.essentials.util.UnitValueTextProvider
 
-val prefsRoute = composeControllerRoute(
-    options = controllerRouteOptions().vertical()
+val PrefsRoute = ComposeControllerRoute(
+    options = ControllerRouteOptions().vertical()
 ) {
     Scaffold(
         topAppBar = { EsTopAppBar(title = "Prefs") },
         body = {
             ScrollableList {
-                val boxFactory = inject<PrefBoxFactory>()
+                val boxFactory = inject<com.ivianuu.essentials.store.prefs.PrefBoxFactory>()
 
                 SwitchPreference(
                     box = boxFactory.boolean("switch"),

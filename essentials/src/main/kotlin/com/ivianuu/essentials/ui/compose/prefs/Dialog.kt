@@ -18,7 +18,7 @@ package com.ivianuu.essentials.ui.compose.prefs
 
 import androidx.compose.Composable
 import com.ivianuu.essentials.ui.compose.core.composable
-import com.ivianuu.essentials.ui.compose.dialog.dialogRoute
+import com.ivianuu.essentials.ui.compose.dialog.DialogRoute
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.navigation.Navigator
 
@@ -46,7 +46,7 @@ fun <T> DialogPreference(
             leading = leading,
             onClick = if (!context.shouldBeEnabled) null else {
                 {
-                    navigator.push(dialogRoute {
+                    navigator.push(DialogRoute {
                         dialog(context) { navigator.pop() }
                     })
                 }

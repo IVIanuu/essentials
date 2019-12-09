@@ -21,7 +21,7 @@ import com.ivianuu.essentials.ui.compose.common.ListScreen
 import com.ivianuu.essentials.ui.compose.common.openUrlOnClick
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.staticComposableWithKey
-import com.ivianuu.essentials.ui.compose.es.composeControllerRoute
+import com.ivianuu.essentials.ui.compose.es.ComposeControllerRoute
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.compose.material.SimpleListItem
 import com.ivianuu.essentials.ui.compose.material.Subheader
@@ -29,10 +29,10 @@ import com.ivianuu.essentials.ui.compose.resources.stringResource
 import com.ivianuu.essentials.ui.navigation.director.defaultControllerRouteOptionsOrNull
 import com.ivianuu.essentials.util.BuildInfo
 
-fun aboutRoute(
+fun AboutRoute(
     hasDebugPackageName: Boolean = true,
     privacyPolicyUrl: String? = null
-) = composeControllerRoute(
+) = ComposeControllerRoute(
     options = defaultControllerRouteOptionsOrNull()
 ) {
     ListScreen(title = stringResource(R.string.about_title)) {

@@ -15,11 +15,6 @@
   -->
 
 <resources>
-
     <style name="Theme.Es.Light" parent="Theme.MaterialComponents.Light.NoActionBar" />
-
     <style name="Theme.Es" parent="Theme.MaterialComponents.NoActionBar" />
-
-    <style name="Theme.Es.DayNight" parent="Theme.MaterialComponents.DayNight.NoActionBar" />
-
 </resources>

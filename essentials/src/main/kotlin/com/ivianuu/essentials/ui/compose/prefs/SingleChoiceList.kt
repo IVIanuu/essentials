@@ -20,20 +20,17 @@ import androidx.compose.Composable
 import androidx.ui.core.Text
 import androidx.ui.graphics.Image
 import com.ivianuu.essentials.R
-import com.ivianuu.essentials.store.Box
 import com.ivianuu.essentials.ui.compose.common.asIconComposable
 import com.ivianuu.essentials.ui.compose.common.asTextComposable
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.composableWithKey
-import com.ivianuu.essentials.ui.compose.core.stateFor
-import com.ivianuu.essentials.ui.compose.dialog.DialogButton
 import com.ivianuu.essentials.ui.compose.dialog.DialogCloseButton
 import com.ivianuu.essentials.ui.compose.dialog.SingleChoiceListDialog
 import com.ivianuu.essentials.ui.compose.resources.stringResource
 
 @Composable
 fun <T> SingleChoiceListPreference(
-    box: Box<T>,
+    box: com.ivianuu.essentials.store.Box<T>,
     onChange: ((T) -> Boolean)? = null,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
@@ -77,22 +74,12 @@ fun <T> SingleChoiceListPreference(
         summary = summary,
         leading = leading,
         dialog = { context, dismiss ->
-            val (selectedItem, setSelectedItem) = stateFor(context.currentValue) {
-                items.first { it.value == context.currentValue }
-            }
-
             SingleChoiceListDialog(
                 items = items,
-                selectedItem = selectedItem,
-                onSelect = setSelectedItem,
+                selectedItem = items.first { it.value == context.currentValue },
+                onSelect = { context.setIfOk(it.value) },
                 item = { Text(it.title) },
                 title = dialogTitle,
-                positiveButton = {
-                    DialogButton(
-                        text = stringResource(R.string.es_ok),
-                        onClick = { context.setIfOk(selectedItem.value) }
-                    )
-                },
                 negativeButton = { DialogCloseButton(stringResource(R.string.es_cancel)) }
             )
         }
