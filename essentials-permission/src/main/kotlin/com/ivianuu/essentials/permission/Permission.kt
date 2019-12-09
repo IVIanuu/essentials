@@ -16,6 +16,8 @@
 
 package com.ivianuu.essentials.permission
 
+import androidx.fragment.app.FragmentActivity
+
 interface Permission {
     val metadata: Metadata
 }
@@ -34,7 +36,7 @@ interface PermissionStateProvider {
 interface PermissionRequestHandler {
     fun handles(permission: Permission): Boolean
     suspend fun request(
-        activity: PermissionActivity,
+        activity: FragmentActivity,
         manager: PermissionManager,
         permission: Permission
     ): PermissionResult
@@ -44,7 +46,7 @@ data class PermissionResult(val isOk: Boolean)
 
 interface PermissionRequestUi {
     fun performRequest(
-        activity: PermissionActivity,
+        activity: FragmentActivity,
         manager: PermissionManager,
         request: PermissionRequest
     )

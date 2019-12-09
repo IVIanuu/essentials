@@ -20,6 +20,7 @@ import com.ivianuu.essentials.permission.accessibility.AccessibilityServicePermi
 import com.ivianuu.essentials.permission.deviceadmin.DeviceAdminPermissionStateProvider
 import com.ivianuu.essentials.permission.dialogui.DialogPermissionRequestUi
 import com.ivianuu.essentials.permission.ignorebatteryoptimizations.IgnoreBatteryOptimizationsPermissionStateProvider
+import com.ivianuu.essentials.permission.installunknownapps.InstallUnknownAppsPermissionStateProvider
 import com.ivianuu.essentials.permission.intent.IntentPermissionRequestHandler
 import com.ivianuu.essentials.permission.notificationlistener.NotificationListenerPermissionStateProvider
 import com.ivianuu.essentials.permission.packageusagestats.PackageUsageStatsPermissionStateProvider
@@ -45,8 +46,11 @@ val esPermissionsModule = module {
     // dialog ui
     bindPermissionRequestUi<DialogPermissionRequestUi>()
 
-    // ignoe battery optimizations
+    // ignore battery optimizations
     bindPermissionStateProvider<IgnoreBatteryOptimizationsPermissionStateProvider>()
+
+    // install unknown apps
+    bindPermissionStateProvider<InstallUnknownAppsPermissionStateProvider>()
 
     // intent
     bindPermissionRequestHandler<IntentPermissionRequestHandler>()

@@ -19,6 +19,7 @@ package com.ivianuu.essentials.permission.dialogui
 import androidx.compose.Composable
 import androidx.compose.Recompose
 import androidx.compose.frames.modelListOf
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.viewModelScope
 import androidx.ui.core.Text
 import com.github.ajalt.timberkt.d
@@ -55,7 +56,7 @@ class DialogPermissionRequestUi(
 ) : PermissionRequestUi {
 
     override fun performRequest(
-        activity: PermissionActivity,
+        activity: FragmentActivity,
         manager: PermissionManager,
         request: PermissionRequest
     ) {

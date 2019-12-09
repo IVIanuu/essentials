@@ -19,10 +19,10 @@ package com.ivianuu.essentials.permission.runtime
 import android.content.Context
 import android.content.pm.PackageManager
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import com.ivianuu.essentials.permission.Metadata
 import com.ivianuu.essentials.permission.MetadataKeys
 import com.ivianuu.essentials.permission.Permission
-import com.ivianuu.essentials.permission.PermissionActivity
 import com.ivianuu.essentials.permission.PermissionManager
 import com.ivianuu.essentials.permission.PermissionRequestHandler
 import com.ivianuu.essentials.permission.PermissionResult
@@ -68,7 +68,7 @@ class RuntimePermissionRequestHandler : PermissionRequestHandler {
         permission.metadata.contains(MetadataKeys.RuntimePermissionName)
 
     override suspend fun request(
-        activity: PermissionActivity,
+        activity: FragmentActivity,
         manager: PermissionManager,
         permission: Permission
     ): PermissionResult {

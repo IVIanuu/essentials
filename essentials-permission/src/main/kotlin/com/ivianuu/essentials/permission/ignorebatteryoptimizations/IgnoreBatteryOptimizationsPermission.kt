@@ -16,9 +16,12 @@
 
 package com.ivianuu.essentials.permission.ignorebatteryoptimizations
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.PowerManager
+import android.provider.Settings
+import androidx.core.net.toUri
 import com.ivianuu.essentials.permission.Metadata
 import com.ivianuu.essentials.permission.MetadataKeys
 import com.ivianuu.essentials.permission.Permission
@@ -27,28 +30,33 @@ import com.ivianuu.essentials.permission.intent.Intent
 import com.ivianuu.essentials.permission.metadataOf
 import com.ivianuu.injekt.Factory
 
-fun InstallUnknownAppsPermission(
+@SuppressLint("BatteryLife")
+fun IgnoreBatteryOptimizationsPermission(
+    context: Context,
     vararg pairs: Pair<Metadata.Key<*>, Any?>
 ) = Permission(
     metadata = metadataOf(
-        MetadataKeys.InstallUnknownAppsPermission to Unit,
-        MetadataKeys.Intent to Intent("android.settings.MANAGE_UNKNOWN_APP_SOURCES"), // todo Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES
+        MetadataKeys.IgnoreBatteryOptimizationsPermission to Unit,
+        MetadataKeys.Intent to Intent(
+            Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS,
+            "package:${context.packageName}".toUri()
+        ),
         *pairs
     )
 )
 
-val MetadataKeys.InstallUnknownAppsPermission by lazy {
-    Metadata.Key<Unit>("InstallUnknownAppsPermission")
+val MetadataKeys.IgnoreBatteryOptimizationsPermission by lazy {
+    Metadata.Key<Unit>("IgnoreBatteryOptimizationsPermission")
 }
 
 @Factory
-class InstallUnknownAppsPermissionStateProvider(
+class IgnoreBatteryOptimizationsPermissionStateProvider(
     private val context: Context,
     private val powerManager: PowerManager
 ) : PermissionStateProvider {
 
     override fun handles(permission: Permission): Boolean =
-        permission.metadata.contains(MetadataKeys.InstallUnknownAppsPermission)
+        permission.metadata.contains(MetadataKeys.IgnoreBatteryOptimizationsPermission)
 
     override suspend fun isGranted(permission: Permission): Boolean =
         powerManager.isIgnoringBatteryOptimizations(context.packageName)
