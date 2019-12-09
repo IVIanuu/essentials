@@ -16,22 +16,19 @@
 
 package com.ivianuu.essentials.kotlin.compiler.compose
 
+import com.ivianuu.essentials.kotlin.compiler.compose.ast.Converter
 import com.ivianuu.essentials.kotlin.compiler.compose.ast.Node
 import com.ivianuu.essentials.kotlin.compiler.compose.ast.Visitor
-import com.ivianuu.essentials.kotlin.compiler.compose.ast.psi.Converter
+import com.ivianuu.essentials.kotlin.compiler.compose.ast.Writer
 import com.squareup.kotlinpoet.CodeBlock
 import org.jetbrains.kotlin.descriptors.FunctionDescriptor
 import org.jetbrains.kotlin.psi.KtCallExpression
-import org.jetbrains.kotlin.psi.KtElement
-import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtNamedFunction
-import org.jetbrains.kotlin.psi.expressionVisitor
-import org.jetbrains.kotlin.psi.lambdaExpressionRecursiveVisitor
-import org.jetbrains.kotlin.psi.namedFunctionRecursiveVisitor
 import org.jetbrains.kotlin.psi.psiUtil.startOffset
 import org.jetbrains.kotlin.resolve.BindingTrace
 import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
+import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
 import org.jetbrains.kotlin.resolve.lazy.ResolveSession
 import org.jetbrains.kotlin.types.typeUtil.isUnit
 
@@ -40,9 +37,7 @@ fun test(
     resolveSession: ResolveSession,
     file: KtFile
 ): KtFile? {
-    val funcs = mutableListOf<FuncBodyWriter>()
-
-    val fileNode = Converter.convertFile(file)
+    val fileNode = Converter().convertFile(file)
 
     Visitor.visit(fileNode) { node, parent ->
         if (node !is Node.Decl.Func) return@visit
@@ -54,175 +49,131 @@ fun test(
         if (!descriptor.annotations.hasAnnotation(ComposableAnnotation)) return@visit
         if (descriptor.returnType?.isUnit() != true) return@visit
 
-        val newStmts = block.stmts.toMutableList()
-
-
-        block.stmts
-    }
-
-    file.accept(
-        namedFunctionRecursiveVisitor { func ->
-
-
-            val funcWriter =
-                FuncBodyWriter(funcBody.startOffset, funcBody.endOffset, mutableListOf(), func)
-            funcs += funcWriter
-
-            funcWriter.expressions += ExprWriter("{", null)
-
-            val funcKey = "${funcDescriptor.fqNameSafe.asString()}:${func.startOffset}"
-            funcWriter.expressions += ExprWriter(
-                "androidx.compose.composer.startRestartGroup(\"$funcKey\")",
-                null
-            )
-
-            val exprs = mutableListOf<KtExpression>()
-
-            fun KtElement.isInExpr(): Boolean {
-                var parent: KtElement? = this
-                while (parent != null) {
-                    if (funcWriter.expressions.any { it.element == parent }) return true
-                    parent = parent.parent as? KtElement
-                }
-
-                return false
+        var composableCalls = 0
+        Visitor.visit(node) { childNode, _ ->
+            if (childNode !is Node.Expr.Call) return@visit
+            val childElement = childNode.element as? KtCallExpression ?: return@visit
+            val resolvedCall = childElement.getResolvedCall(trace.bindingContext)!!
+            val resulting = resolvedCall.resultingDescriptor
+            if (!resulting.annotations.hasAnnotation(ComposableAnnotation) || resulting.returnType?.isUnit() == false) {
+                return@visit
             }
 
-            funcBody.acceptChildren(
-                lambdaExpressionRecursiveVisitor { lambda ->
+            ++composableCalls
+        }
 
-                }
-            )
+        if (composableCalls == 0) return@visit
 
-            funcBody.acceptChildren(
-                expressionVisitor { expr ->
-                    exprs += expr
-                    if (expr !is KtCallExpression) {
-                        if (!expr.isInExpr()) {
-                            funcWriter.expressions += ExprWriter(expr.text, expr)
-                        }
-                        return@expressionVisitor
-                    }
+        val funcKey = "${descriptor.fqNameSafe.asString()}:${element.startOffset}"
+        val newStmts = block.stmts.toMutableList()
 
-                    val call = expr.getResolvedCall(trace.bindingContext)!!
-                    val resulting = call.resultingDescriptor
-                    if (!resulting.annotations.hasAnnotation(ComposableAnnotation) || resulting.returnType?.isUnit() == false) {
-                        funcWriter.expressions += ExprWriter(expr.text, expr)
-                        return@expressionVisitor
-                    }
+        val getComposerStmt = Node.Stmt.Expr(
+            Node.Expr.Text("val compose_composer = androidx.compose.composer")
+        )
+        newStmts.add(0, getComposerStmt)
 
-                    val callKey = "${funcDescriptor.fqNameSafe.asString()}:${expr.startOffset}"
-                    funcWriter.expressions += ExprWriter(
-                        CodeBlock.builder().apply {
-                            addStatement("androidx.compose.composer.call(")
-                            indent()
-                            addStatement("key = \"$callKey\",")
-                            addStatement("invalid = { true }")
-                            addStatement("block = { ${expr.text} }")
-                            unindent()
-                            add(")")
-                        }.build().toString(),
-                        expr
-                    )
-                }
-            )
+        val startRestartGroupStmt = Node.Stmt.Expr(
+            Node.Expr.Text("compose_composer.startRestartGroup(\"$funcKey\")")
+        )
+        newStmts.add(1, startRestartGroupStmt)
 
-            //error("exprs ${exprs.map { it.javaClass.toString() + " " + it.parent.javaClass + " " + it.text }.joinToString("\n\n")}")
-
-            funcWriter.expressions += ExprWriter(
+        val endRestartGroupStmt = Node.Stmt.Expr(
+            Node.Expr.Text(
                 CodeBlock.builder()
-                    .beginControlFlow("androidx.compose.composer.endRestartGroup()?.updateScope {")
+                    .beginControlFlow("compose_composer.endRestartGroup()?.updateScope {")
                     .addStatement(
-                        "${funcDescriptor.name}(${funcDescriptor.valueParameters.map { it.name }.joinToString(
+                        "${descriptor.name}(${descriptor.valueParameters.map { it.name }.joinToString(
                             ", "
                         )})"
                     )
                     .endControlFlow()
                     .build()
-                    .toString(),
-                null
+                    .toString()
             )
-
-            funcWriter.expressions += ExprWriter("}", null)
-        }
-    )
-
-    /*funcs.forEach {
-        error("expr in $it")
-    }*/
-
-    var currentSource = file.text
-    val processedFuncs = mutableListOf<FuncBodyWriter>()
-    funcs.reversed().forEach { currentFunc ->
-        processedFuncs += currentFunc
-
-        val newBody = currentFunc.bodyAsString()
-
-        currentSource = currentSource.replaceRange(
-            startIndex = currentFunc.startOffset,
-            endIndex = currentFunc.endOffset,
-            replacement = newBody
         )
+        newStmts += endRestartGroupStmt
 
-        val oldLength = currentFunc.endOffset - currentFunc.startOffset
-        val newLength = newBody.length
-        val diff = when {
-            newLength == oldLength -> Diff.Replaced
-            newLength > oldLength -> Diff.Added
-            else -> Diff.Removed
+        block.stmts = newStmts
+    }
+
+    var func: Node.Decl.Func? = null
+    var keyIndex = 0
+    fun nextKeyIndex() = ++keyIndex
+    Visitor.visit(fileNode) { node, parent ->
+        if (node is Node.Decl.Func) {
+            func = node
+            keyIndex = 0
+        }
+        if (node !is Node.Expr.Call) return@visit
+        if (func == null) return@visit
+        val element = node.element as? KtCallExpression ?: return@visit
+        val resolvedCall = element.getResolvedCall(trace.bindingContext)!!
+        val resulting = resolvedCall.resultingDescriptor
+        if (!resulting.annotations.hasAnnotation(ComposableAnnotation) || resulting.returnType?.isUnit() == false) {
+            return@visit
         }
 
-        funcs
-            .filter { it !in processedFuncs }
-            .forEach { pendingTransform ->
-                when (diff) {
-                    Diff.Removed -> {
-                        if (pendingTransform.startOffset < currentFunc.startOffset) {
-                            pendingTransform.startOffset =
-                                pendingTransform.startOffset - oldLength - newLength
-                            pendingTransform.endOffset =
-                                pendingTransform.endOffset - oldLength - newLength
-                        }
-                    }
-                    Diff.Added -> {
-                        if (pendingTransform.startOffset > currentFunc.startOffset) {
-                            pendingTransform.startOffset =
-                                pendingTransform.startOffset + newLength - oldLength
-                            pendingTransform.endOffset =
-                                pendingTransform.endOffset + newLength - oldLength
-                        }
-                    }
-                    Diff.Replaced -> {
-                        // do nothing
+        val funcDescriptor = resolveSession.resolveToDescriptor(func!!.element!! as KtNamedFunction)
+
+        val callKey = "${funcDescriptor.fqNameSafe.asString()}:${element.startOffset}".hashCode()
+        val callKeyIndex = nextKeyIndex()
+
+        node.expr = Node.Expr.Text(
+            CodeBlock.builder().apply {
+                node.args.forEachIndexed { index, valueArg ->
+                    addStatement("val arg_${callKeyIndex}_${index} = ${valueArg.element!!.text}")
+                }
+
+                addStatement("var key_$callKeyIndex = $callKey")
+
+                resulting.valueParameters.forEachIndexed { index, param ->
+                    if (param.annotations.hasAnnotation(PivotalAnnotation)) {
+                        addStatement("key_$callKeyIndex = compose_composer.joinKey(key_$callKeyIndex, arg_${callKeyIndex}_${index})")
                     }
                 }
-            }
+
+                addStatement("compose_composer.call(")
+                indent()
+                addStatement("key = key_$callKeyIndex,")
+                addStatement("invalid = {")
+                indent()
+
+                if (resulting.valueParameters.isEmpty()) {
+                    addStatement("false")
+                } else {
+                    val stableParams = resulting.valueParameters
+                        .filter { it.type.isStable() }
+
+                    if (stableParams.size != resulting.valueParameters.size) {
+                        addStatement("true")
+                    } else {
+                        addStatement(
+                            stableParams.joinToString(" or ") {
+                                "changed(arg_${callKeyIndex}_${it.index})"
+                            }
+                        )
+                    }
+                }
+                unindent()
+                addStatement("}")
+                addStatement(
+                    "block = { ${node.expr.element!!.text}(${node.args.indices.joinToString(
+                        ", "
+                    ) { "arg_${callKeyIndex}_${it}" }}) }")
+                unindent()
+                add(")")
+            }.build().toString()
+        )
+
+        node.ugly = true
+        node.args = emptyList()
+        node.typeArgs = emptyList()
+        node.lambda = null
     }
 
-    error("new source $currentSource")
+    val newSource = Writer.write(fileNode)
 
-    return null
+    error("new source $newSource")
+
+    return file.withNewSource(newSource)
 }
-
-enum class Diff {
-    Removed, Added, Replaced
-}
-
-class FuncBodyWriter(
-    var startOffset: Int,
-    var endOffset: Int,
-    val expressions: MutableList<ExprWriter>,
-    val element: KtElement?
-) {
-    fun bodyAsString(): String = buildString {
-        expressions.forEach {
-            appendln("// start ${it.element?.name}")
-            appendln(it.text)
-        }
-    }
-}
-
-class ExprWriter(
-    val text: String,
-    val element: KtElement?
-)

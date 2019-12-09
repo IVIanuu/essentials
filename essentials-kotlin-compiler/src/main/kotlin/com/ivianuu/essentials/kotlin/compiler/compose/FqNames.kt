@@ -43,6 +43,7 @@ fun KotlinType.isStable(): Boolean {
             !isSpecialType &&
             (
                     KotlinBuiltIns.isPrimitiveType(this) ||
+                            KotlinBuiltIns.isString(this) ||
                             isFunctionType ||
                             isEnum() ||
                             isMarkedStable() ||

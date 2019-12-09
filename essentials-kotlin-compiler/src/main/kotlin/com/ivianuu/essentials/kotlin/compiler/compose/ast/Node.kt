@@ -242,6 +242,8 @@ sealed class Node {
     ) : Node()
 
     sealed class Expr : Node() {
+        data class Text(val text: String) : Expr()
+
         data class If(
             var expr: Expr,
             var body: Expr,
@@ -454,6 +456,8 @@ sealed class Node {
             var args: List<ValueArg>,
             var lambda: TrailLambda?
         ) : Expr() {
+            var ugly = false
+
             data class TrailLambda(
                 override var anns: List<Modifier.AnnotationSet>,
                 var label: String?,
@@ -476,7 +480,7 @@ sealed class Node {
         ) : Expr()
     }
 
-    data class Block(var stmts: MutableList<Stmt>) : Node()
+    data class Block(var stmts: List<Stmt>) : Node()
     sealed class Stmt : Node() {
         data class Decl(var decl: Node.Decl) : Stmt()
         data class Expr(var expr: Node.Expr) : Stmt()
