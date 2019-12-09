@@ -26,14 +26,14 @@ import com.ivianuu.director.common.startActivityForResult
 import com.ivianuu.director.requireActivity
 import com.ivianuu.essentials.ui.base.EsController
 import com.ivianuu.essentials.ui.navigation.director.ControllerRoute
-import com.ivianuu.essentials.ui.navigation.director.controllerRoute
 import com.ivianuu.essentials.ui.navigation.director.dialog
 import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.Param
 import com.ivianuu.injekt.parametersOf
+import java.util.concurrent.atomic.AtomicInteger
 
-fun activityResultRoute(intent: Intent) =
-    controllerRoute<ActivityResultController>(options = ControllerRoute.Options().dialog()) {
+fun ActivityResultRoute(intent: Intent) =
+    ControllerRoute<ActivityResultController>(options = ControllerRoute.Options().dialog()) {
         parametersOf(intent)
     }
 
@@ -53,7 +53,7 @@ internal class ActivityResultController(@Param private val intent: Intent) : EsC
     override fun onCreate() {
         super.onCreate()
 
-        val resultCode = ResultCodes.nextResultCode()
+        val resultCode = resultCodes.incrementAndGet()
 
         addActivityResultListener(resultCode) { requestCode, resultCode, data ->
             navigator.pop(ActivityResult(requestCode, resultCode, data))
@@ -67,3 +67,5 @@ internal class ActivityResultController(@Param private val intent: Intent) : EsC
         container: ViewGroup
     ): View = View(requireActivity()) // dummy
 }
+
+private val resultCodes = AtomicInteger(0)

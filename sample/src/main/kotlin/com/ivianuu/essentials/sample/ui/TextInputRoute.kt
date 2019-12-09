@@ -36,21 +36,16 @@ import com.ivianuu.essentials.ui.compose.core.invoke
 import com.ivianuu.essentials.ui.compose.core.onActive
 import com.ivianuu.essentials.ui.compose.core.ref
 import com.ivianuu.essentials.ui.compose.core.remember
-import com.ivianuu.essentials.ui.compose.es.composeControllerRoute
+import com.ivianuu.essentials.ui.compose.es.ComposeControllerRoute
 import com.ivianuu.essentials.ui.compose.layout.Column
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
 import com.ivianuu.essentials.ui.compose.material.Scaffold
 import com.ivianuu.essentials.ui.compose.material.SimpleListItem
-import com.ivianuu.essentials.ui.navigation.director.controllerRouteOptions
+import com.ivianuu.essentials.ui.navigation.director.ControllerRouteOptions
 import com.ivianuu.essentials.ui.navigation.director.vertical
 
-private class TextInputState {
-    var searchVisible by framed(false)
-    var inputValue by framed("")
-}
-
-val textInputRoute = composeControllerRoute(
-    options = controllerRouteOptions().vertical()
+val TextInputRoute = ComposeControllerRoute(
+    options = ControllerRouteOptions().vertical()
 ) {
     val state = remember { TextInputState() }
 
@@ -141,6 +136,11 @@ val textInputRoute = composeControllerRoute(
             )
         }
     )
+}
+
+private class TextInputState {
+    var searchVisible by framed(false)
+    var inputValue by framed("")
 }
 
 private val AllItems = (0..100).map { "Item: $it" }

@@ -22,14 +22,14 @@ import androidx.ui.material.RadioButton
 import com.ivianuu.essentials.ui.compose.box.unfoldBox
 import com.ivianuu.essentials.ui.compose.common.ListScreen
 import com.ivianuu.essentials.ui.compose.core.composableWithKey
-import com.ivianuu.essentials.ui.compose.es.composeControllerRoute
+import com.ivianuu.essentials.ui.compose.es.ComposeControllerRoute
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.compose.material.SimpleListItem
 import com.ivianuu.essentials.ui.compose.resources.stringResource
 import com.ivianuu.essentials.ui.navigation.director.defaultControllerRouteOptionsOrNull
 
 val twilightSettingsRoute =
-    composeControllerRoute(
+    ComposeControllerRoute(
         options = defaultControllerRouteOptionsOrNull()
     ) {
         ListScreen(title = stringResource(R.string.es_title_twilight)) {

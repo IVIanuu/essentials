@@ -22,6 +22,6 @@ import com.ivianuu.essentials.ui.navigation.director.ControllerRoute
 class MainActivity : EsActivity() {
 
     override val startRoute: ControllerRoute?
-        get() = homeRoute
+        get() = HomeRoute
 
 }

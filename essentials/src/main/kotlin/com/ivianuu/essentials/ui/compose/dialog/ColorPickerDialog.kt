@@ -69,7 +69,7 @@ fun colorPickerRoute(
     allowCustomArgb: Boolean = true,
     showAlphaSelector: Boolean = false,
     title: String? = null
-) = dialogRoute {
+) = DialogRoute {
     val navigator = inject<Navigator>()
     ColorPickerDialog(
         initialColor = initialColor,

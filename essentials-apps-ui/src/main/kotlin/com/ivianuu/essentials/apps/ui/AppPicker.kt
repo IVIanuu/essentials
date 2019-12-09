@@ -29,7 +29,7 @@ import com.ivianuu.essentials.mvrx.MvRxViewModel
 import com.ivianuu.essentials.mvrx.injekt.injectMvRxViewModel
 import com.ivianuu.essentials.ui.compose.common.AsyncList
 import com.ivianuu.essentials.ui.compose.core.staticComposableWithKey
-import com.ivianuu.essentials.ui.compose.es.composeControllerRoute
+import com.ivianuu.essentials.ui.compose.es.ComposeControllerRoute
 import com.ivianuu.essentials.ui.compose.layout.SizedBox
 import com.ivianuu.essentials.ui.compose.material.AvatarIconStyle
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
@@ -45,10 +45,10 @@ import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.Param
 import com.ivianuu.injekt.parametersOf
 
-fun appPickerRoute(
+fun AppPickerRoute(
     title: String? = null,
     appFilter: AppFilter = DefaultAppFilter
-) = composeControllerRoute {
+) = ComposeControllerRoute {
     Scaffold(
         topAppBar = { EsTopAppBar(title ?: stringResource(R.string.es_title_app_picker)) },
         body = {

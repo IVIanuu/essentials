@@ -30,9 +30,9 @@ import com.ivianuu.essentials.ui.compose.common.scrolling.ScrollableList
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.invoke
 import com.ivianuu.essentials.ui.compose.core.remember
+import com.ivianuu.essentials.ui.compose.dialog.DialogRoute
 import com.ivianuu.essentials.ui.compose.dialog.SingleChoiceListDialog
-import com.ivianuu.essentials.ui.compose.dialog.dialogRoute
-import com.ivianuu.essentials.ui.compose.es.composeControllerRoute
+import com.ivianuu.essentials.ui.compose.es.ComposeControllerRoute
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.compose.material.EsCheckbox
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
@@ -41,16 +41,7 @@ import com.ivianuu.essentials.ui.compose.material.SimpleListItem
 import com.ivianuu.essentials.ui.compose.material.Subheader
 import com.ivianuu.essentials.ui.navigation.Navigator
 
-private class ScaffoldControls {
-    var showTopAppBar by framed(true)
-    var centerTitle by framed(false)
-    var bodyLayoutMode by framed(Scaffold.BodyLayoutMode.Wrap)
-    var showBottomBar by framed(false)
-    var showFab by framed(false)
-    var fabPosition by framed(Scaffold.FabPosition.End)
-}
-
-val scaffoldRoute = composeControllerRoute {
+val ScaffoldRoute = ComposeControllerRoute {
     val navigator = inject<Navigator>()
     val controls = remember { ScaffoldControls() }
 
@@ -125,7 +116,7 @@ val scaffoldRoute = composeControllerRoute {
                     title = { Text("Body layout mode") },
                     onClick = {
                         navigator.push(
-                            dialogRoute {
+                            DialogRoute {
                                 SingleChoiceListDialog(
                                     items = Scaffold.BodyLayoutMode.values().toList(),
                                     selectedItem = controls.bodyLayoutMode,
@@ -165,7 +156,7 @@ val scaffoldRoute = composeControllerRoute {
                     title = { Text("Fab location") },
                     onClick = {
                         navigator.push(
-                            dialogRoute {
+                            DialogRoute {
                                 SingleChoiceListDialog(
                                     items = Scaffold.FabPosition.values().toList(),
                                     selectedItem = controls.fabPosition,
@@ -182,4 +173,13 @@ val scaffoldRoute = composeControllerRoute {
             }
         }
     )
+}
+
+private class ScaffoldControls {
+    var showTopAppBar by framed(true)
+    var centerTitle by framed(false)
+    var bodyLayoutMode by framed(Scaffold.BodyLayoutMode.Wrap)
+    var showBottomBar by framed(false)
+    var showFab by framed(false)
+    var fabPosition by framed(Scaffold.FabPosition.End)
 }

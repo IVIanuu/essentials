@@ -32,9 +32,9 @@ import androidx.ui.layout.Container
 import androidx.ui.layout.Padding
 import androidx.ui.material.Divider
 import androidx.ui.material.MaterialTheme
-import com.ivianuu.essentials.about.aboutRoute
+import com.ivianuu.essentials.about.AboutRoute
+import com.ivianuu.essentials.apps.ui.AppPickerRoute
 import com.ivianuu.essentials.apps.ui.IntentAppFilter
-import com.ivianuu.essentials.apps.ui.appPickerRoute
 import com.ivianuu.essentials.twilight.twilightSettingsRoute
 import com.ivianuu.essentials.ui.compose.common.navigateOnClick
 import com.ivianuu.essentials.ui.compose.common.scrolling.ScrollableList
@@ -43,7 +43,7 @@ import com.ivianuu.essentials.ui.compose.core.invoke
 import com.ivianuu.essentials.ui.compose.core.remember
 import com.ivianuu.essentials.ui.compose.core.staticComposable
 import com.ivianuu.essentials.ui.compose.core.staticComposableWithKey
-import com.ivianuu.essentials.ui.compose.es.composeControllerRoute
+import com.ivianuu.essentials.ui.compose.es.ComposeControllerRoute
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.compose.layout.Column
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
@@ -54,7 +54,7 @@ import com.ivianuu.essentials.ui.navigation.Route
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.parametersOf
 
-val homeRoute = composeControllerRoute {
+val HomeRoute = ComposeControllerRoute {
     Scaffold(
         topAppBar = {
             EsTopAppBar(
@@ -148,13 +148,13 @@ enum class HomeItem(
     About(
         title = "About",
         color = Color.Yellow,
-        route = { aboutRoute() }
+        route = { AboutRoute() }
     ),
     AppPicker(
         title = "App picker",
         color = Color.Blue,
         route = {
-            appPickerRoute(
+            AppPickerRoute(
                 appFilter = inject<IntentAppFilter> {
                     parametersOf(Intent(MediaStore.INTENT_ACTION_MUSIC_PLAYER))
                 }
@@ -169,32 +169,32 @@ enum class HomeItem(
     CheckApps(
         title = "Check apps",
         color = Color.Green,
-        route = { checkAppsRoute }
+        route = { CheckAppsRoute }
     ),
     Chips(
         title = "Chips",
         color = Color.Cyan,
-        route = { chipsRoute }
+        route = { ChipsRoute }
     ),
     Counter(
         title = "Counter",
         color = Color.Yellow,
-        route = { counterRoute }
+        route = { CounterRoute }
     ),
     Dialogs(
         title = "Dialogs",
         color = Color.Gray,
-        route = { dialogsRoute }
+        route = { DialogsRoute }
     ),
     Drawer(
         title = "Drawer",
         color = Color.Blue,
-        route = { drawerRoute }
+        route = { DrawerRoute }
     ),
     NavBar(
         title = "Nav bar",
         color = Color.Green,
-        route = { navBarRoute }
+        route = { NavBarRoute }
     ),
     Navigation(
         title = "Navigation",
@@ -204,32 +204,32 @@ enum class HomeItem(
     Permission(
         title = "Permission",
         color = Color.Magenta,
-        route = { permissionRoute }
+        route = { PermissionRoute }
     ),
     Prefs(
         title = "Prefs",
         color = Color.Magenta,
-        route = { prefsRoute }
+        route = { PrefsRoute }
     ),
     Scaffold(
         title = "Scaffold",
         color = Color.Green,
-        route = { scaffoldRoute }
+        route = { ScaffoldRoute }
     ),
     Tabs(
         title = "Tabs",
         color = Color.Yellow,
-        route = { tabsRoute }
+        route = { TabsRoute }
     ),
     TextInput(
         title = "Text input",
         color = Color.Magenta,
-        route = { textInputRoute }
+        route = { TextInputRoute }
     ),
     Timer(
         title = "Timer",
         color = Color.Cyan,
-        route = { timerRoute }
+        route = { TimerRoute }
     ),
     Twilight(
         title = "Twilight",

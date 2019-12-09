@@ -32,7 +32,7 @@ import com.ivianuu.essentials.ui.compose.core.composableWithKey
 import com.ivianuu.essentials.ui.compose.core.invoke
 import com.ivianuu.essentials.ui.compose.core.remember
 import com.ivianuu.essentials.ui.compose.dialog.PrimaryColors
-import com.ivianuu.essentials.ui.compose.es.composeControllerRoute
+import com.ivianuu.essentials.ui.compose.es.ComposeControllerRoute
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
 import com.ivianuu.essentials.ui.compose.material.RippleColorProvider
@@ -40,7 +40,7 @@ import com.ivianuu.essentials.ui.compose.material.Scaffold
 import com.ivianuu.essentials.ui.compose.material.colorForCurrentBackground
 import com.ivianuu.essentials.util.Toaster
 
-val chipsRoute = composeControllerRoute {
+val ChipsRoute = ComposeControllerRoute {
     Scaffold(
         topAppBar = { EsTopAppBar("Chips") },
         body = {

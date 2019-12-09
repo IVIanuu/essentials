@@ -26,7 +26,7 @@ import androidx.core.view.children
 import com.google.android.material.appbar.AppBarLayout
 import com.ivianuu.director.requireActivity
 import com.ivianuu.essentials.R
-import com.ivianuu.essentials.ui.compose.material.popupMenuRoute
+import com.ivianuu.essentials.ui.compose.material.PopupMenuRoute
 import com.ivianuu.essentials.util.drawable
 import com.ivianuu.essentials.util.getIconColor
 import com.ivianuu.essentials.util.getPrimaryColor
@@ -76,7 +76,7 @@ abstract class ToolbarController : CoordinatorController() {
 
                 overflow.setOnClickListener {
                     navigator.push(
-                        popupMenuRoute(
+                        PopupMenuRoute(
                             view = overflow,
                             items = toolbarMenuConfig.items,
                             onSelected = toolbarMenuConfig.onSelected,

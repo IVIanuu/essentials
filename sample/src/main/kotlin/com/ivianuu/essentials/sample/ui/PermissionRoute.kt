@@ -35,14 +35,14 @@ import com.ivianuu.essentials.permission.writesettings.WriteSettingsPermission
 import com.ivianuu.essentials.ui.compose.common.SimpleScreen
 import com.ivianuu.essentials.ui.compose.core.ambient
 import com.ivianuu.essentials.ui.compose.coroutines.launchOnActive
-import com.ivianuu.essentials.ui.compose.es.composeControllerRoute
+import com.ivianuu.essentials.ui.compose.es.ComposeControllerRoute
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.compose.resources.drawableResource
-import com.ivianuu.essentials.ui.navigation.director.controllerRouteOptions
+import com.ivianuu.essentials.ui.navigation.director.ControllerRouteOptions
 import com.ivianuu.essentials.ui.navigation.director.horizontal
 
-val permissionRoute = composeControllerRoute(
-    options = controllerRouteOptions().horizontal()
+val PermissionRoute = ComposeControllerRoute(
+    options = ControllerRouteOptions().horizontal()
 ) {
     SimpleScreen(title = "Permissions") {
         val manager = inject<PermissionManager>()

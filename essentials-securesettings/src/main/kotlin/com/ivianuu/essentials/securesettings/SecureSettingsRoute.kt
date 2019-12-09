@@ -24,12 +24,12 @@ import com.ivianuu.essentials.ui.compose.common.ListScreen
 import com.ivianuu.essentials.ui.compose.common.navigateOnClick
 import com.ivianuu.essentials.ui.compose.core.invoke
 import com.ivianuu.essentials.ui.compose.coroutines.coroutineScope
-import com.ivianuu.essentials.ui.compose.es.composeControllerRoute
+import com.ivianuu.essentials.ui.compose.es.ComposeControllerRoute
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.compose.material.SimpleListItem
 import com.ivianuu.essentials.ui.compose.material.colorForCurrentBackground
 import com.ivianuu.essentials.ui.compose.resources.stringResource
-import com.ivianuu.essentials.ui.navigation.director.controllerRouteOptions
+import com.ivianuu.essentials.ui.navigation.director.ControllerRouteOptions
 import com.ivianuu.essentials.ui.navigation.director.copy
 import com.ivianuu.essentials.ui.navigation.director.defaultControllerRouteOptionsOrElse
 import com.ivianuu.essentials.ui.navigation.director.defaultControllerRouteOptionsOrNull
@@ -41,7 +41,7 @@ import kotlinx.coroutines.launch
  * Asks the user for the secure settings permission
  */
 fun secureSettingsRoute(showHideNavBarHint: Boolean = false) =
-    composeControllerRoute(
+    ComposeControllerRoute(
         options = defaultControllerRouteOptionsOrNull()
     ) {
         popNavigatorOnceSecureSettingsGranted()
@@ -68,7 +68,7 @@ fun secureSettingsRoute(showHideNavBarHint: Boolean = false) =
                 onClick = navigateOnClick {
                     secureSettingsInstructionsRoute.copy(
                         options = defaultControllerRouteOptionsOrElse {
-                            controllerRouteOptions().horizontal()
+                            ControllerRouteOptions().horizontal()
                         }
                     )
                 }

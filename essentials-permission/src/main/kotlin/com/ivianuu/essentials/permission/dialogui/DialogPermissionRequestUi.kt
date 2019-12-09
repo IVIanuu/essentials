@@ -39,8 +39,8 @@ import com.ivianuu.essentials.ui.compose.core.ambient
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.composableWithKey
 import com.ivianuu.essentials.ui.compose.dialog.DialogButton
+import com.ivianuu.essentials.ui.compose.dialog.DialogRoute
 import com.ivianuu.essentials.ui.compose.dialog.ScrollableDialog
-import com.ivianuu.essentials.ui.compose.dialog.dialogRoute
 import com.ivianuu.essentials.ui.compose.material.SimpleListItem
 import com.ivianuu.essentials.ui.compose.resources.stringResource
 import com.ivianuu.essentials.ui.compose.viewmodel.injekt.injectViewModel
@@ -61,7 +61,7 @@ class DialogPermissionRequestUi(
         request: PermissionRequest
     ) {
         navigator.push(
-            dialogRoute {
+            DialogRoute {
                 PermissionDialog(request = request)
             }
         )

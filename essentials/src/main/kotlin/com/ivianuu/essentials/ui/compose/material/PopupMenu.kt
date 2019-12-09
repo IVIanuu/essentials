@@ -40,13 +40,13 @@ import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.composableWithKey
 import com.ivianuu.essentials.ui.compose.core.invokeAsComposable
 import com.ivianuu.essentials.ui.compose.core.ref
-import com.ivianuu.essentials.ui.compose.es.composeControllerRoute
+import com.ivianuu.essentials.ui.compose.es.ComposeControllerRoute
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.compose.layout.Column
 import com.ivianuu.essentials.ui.compose.layout.NonNullSingleChildLayout
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.director.ControllerRoute
-import com.ivianuu.essentials.ui.navigation.director.controllerRouteOptions
+import com.ivianuu.essentials.ui.navigation.director.ControllerRouteOptions
 import com.ivianuu.essentials.ui.navigation.director.fade
 
 // todo move core logic to a Popup component
@@ -149,7 +149,7 @@ fun <T> PopupMenuTrigger(
             }
 
             navigator.push(
-                popupMenuRoute(
+                PopupMenuRoute(
                     onCancel = onCancel,
                     position = position,
                     items = items,
@@ -163,7 +163,7 @@ fun <T> PopupMenuTrigger(
     }
 }
 
-fun <T> popupMenuRoute(
+fun <T> PopupMenuRoute(
     alignment: Alignment = Alignment.TopLeft,
     view: View,
     items: List<T>,
@@ -194,7 +194,7 @@ fun <T> popupMenuRoute(
         Alignment.BottomRight -> IntPxPosition(right, bottom)
     }
 
-    return popupMenuRoute(
+    return PopupMenuRoute(
         position = position,
         items = items,
         onSelected = onSelected,
@@ -203,15 +203,15 @@ fun <T> popupMenuRoute(
     )
 }
 
-fun <T> popupMenuRoute(
+fun <T> PopupMenuRoute(
     position: IntPxPosition,
     items: List<T>,
     onSelected: (T) -> Unit,
     onCancel: (() -> Unit)? = null,
     item: @Composable() (T) -> Unit
-) = composeControllerRoute(
+) = ComposeControllerRoute(
     popOnConfigurationChange = true,
-    options = controllerRouteOptions().fade(removesFromViewOnPush = false)
+    options = ControllerRouteOptions().fade(removesFromViewOnPush = false)
 ) {
     val navigator = inject<Navigator>()
 

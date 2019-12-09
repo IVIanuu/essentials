@@ -27,17 +27,17 @@ import com.ivianuu.essentials.ui.compose.common.onBackPressed
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.invokeAsComposable
 import com.ivianuu.essentials.ui.compose.core.ref
-import com.ivianuu.essentials.ui.compose.es.composeControllerRoute
+import com.ivianuu.essentials.ui.compose.es.ComposeControllerRoute
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.director.controllerRouteOptions
+import com.ivianuu.essentials.ui.navigation.director.ControllerRouteOptions
 import com.ivianuu.essentials.ui.navigation.director.fade
 
-fun dialogRoute(
+fun DialogRoute(
     dismissible: Boolean = true,
     dialog: @Composable() () -> Unit
-) = composeControllerRoute(
-    options = controllerRouteOptions().fade(
+) = ComposeControllerRoute(
+    options = ControllerRouteOptions().fade(
         removesFromViewOnPush = false
     )
 ) {
