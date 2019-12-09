@@ -17,9 +17,9 @@
 package com.ivianuu.essentials.permission.packageusagestats
 
 import android.app.AppOpsManager
-import android.app.usage.UsageStatsManager
 import android.content.Context
 import android.content.Intent
+import android.os.Process
 import android.provider.Settings
 import com.ivianuu.essentials.permission.Metadata
 import com.ivianuu.essentials.permission.MetadataKeys
@@ -27,7 +27,6 @@ import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionStateProvider
 import com.ivianuu.essentials.permission.intent.Intent
 import com.ivianuu.essentials.permission.metadataOf
-import com.ivianuu.essentials.util.Clock
 import com.ivianuu.injekt.Factory
 
 fun PackageUsageStatsPermission(
@@ -47,9 +46,7 @@ val MetadataKeys.IsPackageUsageStatsPermission by lazy {
 @Factory
 class PackageUsageStatsPermissionStateProvider(
     private val appOps: AppOpsManager,
-    private val context: Context,
-    private val clock: Clock,
-    private val usageStatsManager: UsageStatsManager
+    private val context: Context
 ) : PermissionStateProvider {
 
     override fun handles(permission: Permission): Boolean =
@@ -57,20 +54,11 @@ class PackageUsageStatsPermissionStateProvider(
 
     override suspend fun isGranted(permission: Permission): Boolean {
         val mode = appOps.checkOpNoThrow(
-            "android:get_usage_stats",
-            android.os.Process.myUid(), context.packageName
+            AppOpsManager.OPSTR_GET_USAGE_STATS,
+            Process.myUid(),
+            context.packageName
         )
-        if (mode != AppOpsManager.MODE_ALLOWED) {
-            return false
-        }
 
-        // Verify that access is possible. Some devices "lie" and return MODE_ALLOWED even when it's not.
-        val now = clock.currentTimeMillis
-        val stats = usageStatsManager.queryUsageStats(
-            UsageStatsManager.INTERVAL_DAILY,
-            now - 1000 * 10,
-            now
-        )
-        return stats != null && stats.isNotEmpty()
+        return mode == AppOpsManager.MODE_ALLOWED
     }
 }
