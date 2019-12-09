@@ -16,24 +16,18 @@
 
 package com.ivianuu.essentials.kotlin.compiler
 
-import com.ivianuu.essentials.kotlin.compiler.compose.overload.OverloadComposableErrorMessages
 import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
 import com.squareup.kotlinpoet.TypeName
 import org.jetbrains.kotlin.cli.common.messages.CompilerMessageSeverity
 import org.jetbrains.kotlin.cli.common.messages.MessageCollector
-import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.descriptors.ClassDescriptor
 import org.jetbrains.kotlin.descriptors.DeclarationDescriptor
 import org.jetbrains.kotlin.descriptors.ModuleDescriptor
 import org.jetbrains.kotlin.descriptors.annotations.AnnotationDescriptor
 import org.jetbrains.kotlin.descriptors.findClassAcrossModuleDependencies
-import org.jetbrains.kotlin.diagnostics.DiagnosticFactory0
-import org.jetbrains.kotlin.diagnostics.reportFromPlugin
-import org.jetbrains.kotlin.js.resolve.diagnostics.findPsi
 import org.jetbrains.kotlin.name.ClassId
 import org.jetbrains.kotlin.name.FqName
-import org.jetbrains.kotlin.resolve.BindingTrace
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
 import org.jetbrains.kotlin.resolve.descriptorUtil.module
 import org.jetbrains.kotlin.types.KotlinType
@@ -65,6 +59,7 @@ fun AnnotationDescriptor.hasAnnotation(annotation: FqName, module: ModuleDescrip
     return descriptor.annotations.hasAnnotation(annotation)
 }
 
+/*
 fun report(
     descriptor: DeclarationDescriptor,
     trace: BindingTrace,
@@ -78,3 +73,4 @@ fun report(
         )
     }
 }
+*/
