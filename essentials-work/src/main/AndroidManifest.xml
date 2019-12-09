@@ -16,11 +16,5 @@
 
 <manifest package="com.ivianuu.essentials.work">
 
-    <application>
-        <provider
-            android:name="androidx.work.impl.WorkManagerInitializer"
-            android:enabled="false"
-            tools:ignore="ExportedContentProvider" />
-    </application>
 
 </manifest>
