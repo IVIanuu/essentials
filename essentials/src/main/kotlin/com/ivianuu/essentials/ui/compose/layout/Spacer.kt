@@ -18,9 +18,6 @@ package com.ivianuu.essentials.ui.compose.layout
 
 import androidx.compose.Composable
 import androidx.ui.core.Dp
-import androidx.ui.core.Modifier
-import androidx.ui.layout.Height
-import androidx.ui.layout.Width
 import com.ivianuu.essentials.ui.compose.core.composable
 
 @Composable
@@ -43,8 +40,9 @@ fun Spacer(
     width: Dp? = null,
     height: Dp? = null
 ) = composable {
-    androidx.ui.layout.Spacer(
+    error("")
+    /*FixedSpacer(
         modifier = (width?.let { Width(it) } ?: Modifier.None) wraps
                 (height?.let { Height(it) } ?: Modifier.None)
-    )
+    )*/
 }

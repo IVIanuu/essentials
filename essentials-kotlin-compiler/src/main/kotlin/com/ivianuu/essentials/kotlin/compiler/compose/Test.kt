@@ -68,11 +68,11 @@ fun test(
                                 newText = CodeBlock.builder().apply {
                                     beginControlFlow("{")
                                     addStatement(PROCESSED_MARKER)
-                                    addStatement("androidx.compose.composer.composer.startRestartGroup(\"todo\")")
+                                    addStatement("androidx.compose.composer.startRestartGroup(\"todo\")")
                                     unindent()
                                     add(bodyText)
                                     indent()
-                                    beginControlFlow("androidx.compose.composer.composer.endRestartGroup()?.updateScope {")
+                                    beginControlFlow("androidx.compose.composer.endRestartGroup()?.updateScope {")
                                     addStatement(
                                         "${funcDescriptor.name}(${funcDescriptor.valueParameters.map { it.name }.joinToString(
                                             ", "

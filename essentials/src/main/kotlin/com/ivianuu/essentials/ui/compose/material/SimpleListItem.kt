@@ -35,8 +35,6 @@ import androidx.ui.material.ripple.Ripple
 import androidx.ui.text.TextStyle
 import com.ivianuu.essentials.ui.compose.common.asIconComposable
 import com.ivianuu.essentials.ui.compose.common.asTextComposable
-import com.ivianuu.essentials.ui.compose.core.CurrentBackground
-import com.ivianuu.essentials.ui.compose.core.ambient
 import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.invoke
 import com.ivianuu.essentials.ui.compose.core.invokeAsComposable
@@ -190,7 +188,7 @@ private fun applyIconStyle(
     if (children == null) return null
     return {
         val iconAlpha =
-            if (ambient(CurrentBackground).toArgb().isDark) IconOpacityDark else IconOpacity
+            if (Color.Black.toArgb().isDark) IconOpacityDark else IconOpacity
         val iconColor = currentIconStyle().color ?: colorForCurrentBackground()
             .copy(alpha = iconAlpha)
         val appliedIconStyle = currentIconStyle().copy(color = iconColor)

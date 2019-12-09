@@ -20,15 +20,13 @@ import androidx.compose.Composable
 import androidx.ui.graphics.Color
 import androidx.ui.graphics.toArgb
 import androidx.ui.material.MaterialTheme
-import com.ivianuu.essentials.ui.compose.core.CurrentBackground
-import com.ivianuu.essentials.ui.compose.core.ambient
 import com.ivianuu.essentials.ui.compose.core.effect
 import com.ivianuu.essentials.ui.compose.core.invoke
 import com.ivianuu.essentials.util.isDark
 
 @Composable
 fun colorForCurrentBackground(): Color = effect {
-    colorForBackground(ambient(CurrentBackground))
+    colorForBackground(Color.Black)
 }
 
 @Composable
