@@ -17,7 +17,7 @@
 package com.ivianuu.essentials.permission
 
 import com.ivianuu.injekt.BindingContext
-import com.ivianuu.injekt.Module
+import com.ivianuu.injekt.ModuleBuilder
 import com.ivianuu.injekt.Name
 
 @Name
@@ -30,7 +30,7 @@ annotation class PermissionStateProviders {
     companion object
 }
 
-inline fun <reified T : PermissionStateProvider> Module.bindPermissionStateProvider(
+inline fun <reified T : PermissionStateProvider> ModuleBuilder.bindPermissionStateProvider(
     name: Any? = null
 ) {
     withBinding<T>(name) { bindPermissionStateProvider() }
@@ -46,7 +46,7 @@ annotation class PermissionRequestHandlers {
     companion object
 }
 
-inline fun <reified T : PermissionRequestHandler> Module.bindPermissionRequestHandler(
+inline fun <reified T : PermissionRequestHandler> ModuleBuilder.bindPermissionRequestHandler(
     name: Any? = null
 ) {
     withBinding<T>(name) { bindPermissionRequestHandler() }
@@ -57,7 +57,7 @@ fun <T : PermissionRequestHandler> BindingContext<T>.bindPermissionRequestHandle
     return this
 }
 
-inline fun <reified T : PermissionRequestUi> Module.bindPermissionRequestUi(
+inline fun <reified T : PermissionRequestUi> ModuleBuilder.bindPermissionRequestUi(
     name: Any? = null
 ) {
     withBinding<T>(name) { bindPermissionRequestUi() }

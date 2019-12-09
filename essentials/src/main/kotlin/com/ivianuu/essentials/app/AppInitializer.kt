@@ -18,8 +18,8 @@ package com.ivianuu.essentials.app
 
 import com.ivianuu.injekt.BindingContext
 import com.ivianuu.injekt.Module
+import com.ivianuu.injekt.ModuleBuilder
 import com.ivianuu.injekt.Name
-import com.ivianuu.injekt.module
 
 /**
  * Will be instantiated on app start up
@@ -52,7 +52,7 @@ annotation class AppInitializers {
     companion object
 }
 
-inline fun <reified T : AppInitializer> Module.bindAppInitializer(
+inline fun <reified T : AppInitializer> ModuleBuilder.bindAppInitializer(
     name: Any? = null
 ) {
     withBinding<T>(name) { bindAppInitializer() }
@@ -66,7 +66,7 @@ inline fun <reified T : AppInitializer> BindingContext<T>.bindAppInitializer(): 
     return this
 }
 
-val esAppInitializersModule = module {
+val EsAppInitializersModule = Module {
     map<String, AppInitializer>(mapName = AppInitializers)
     bindAppInitializer<TimberAppInitializer>()
 }

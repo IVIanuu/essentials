@@ -18,8 +18,8 @@ package com.ivianuu.essentials.app
 
 import com.ivianuu.injekt.BindingContext
 import com.ivianuu.injekt.Module
+import com.ivianuu.injekt.ModuleBuilder
 import com.ivianuu.injekt.Name
-import com.ivianuu.injekt.module
 
 /**
  * Will be started on app start up and lives as long as the app lives
@@ -31,7 +31,7 @@ annotation class AppServices {
     companion object
 }
 
-inline fun <reified T : AppService> Module.bindAppService(
+inline fun <reified T : AppService> ModuleBuilder.bindAppService(
     name: Any? = null
 ) {
     withBinding<T>(name) { bindAppService() }
@@ -44,6 +44,6 @@ inline fun <reified T : AppService> BindingContext<T>.bindAppService(): BindingC
     return this
 }
 
-val esAppServicesModule = module {
+val EsAppServicesModule = Module {
     map<String, AppService>(mapName = AppServices)
 }

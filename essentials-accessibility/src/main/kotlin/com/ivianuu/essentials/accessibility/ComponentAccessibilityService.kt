@@ -28,7 +28,7 @@ class ComponentAccessibilityService : EsAccessibilityService() {
 
     private val components: Set<AccessibilityComponent> by inject(name = AccessibilityComponents)
 
-    override fun modules(): List<Module> = super.modules() + listOf(accessibilityComponentsModule)
+    override fun modules(): List<Module> = super.modules() + listOf(AccessibilityComponentsModule)
 
     override fun onServiceConnected() {
         super.onServiceConnected()

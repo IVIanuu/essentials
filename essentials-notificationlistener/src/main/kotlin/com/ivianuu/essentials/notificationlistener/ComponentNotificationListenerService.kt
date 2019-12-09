@@ -25,7 +25,7 @@ class ComponentNotificationListenerService : EsNotificationListenerService() {
 
     private val components: Set<NotificationComponent> by inject(name = NotificationComponents)
 
-    override fun modules(): List<Module> = super.modules() + listOf(notificationComponentsModule)
+    override fun modules(): List<Module> = super.modules() + listOf(NotificationComponentsModule)
 
     override fun onListenerConnected() {
         super.onListenerConnected()

@@ -22,7 +22,7 @@ import android.content.Intent
 import com.ivianuu.injekt.Component
 import com.ivianuu.injekt.InjektTrait
 import com.ivianuu.injekt.Module
-import com.ivianuu.injekt.android.receiverComponent
+import com.ivianuu.injekt.android.ReceiverComponent
 
 /**
  * Base broadcast receiver
@@ -32,7 +32,7 @@ abstract class EsBroadcastReceiver : BroadcastReceiver(), InjektTrait {
     override lateinit var component: Component
 
     override fun onReceive(context: Context, intent: Intent) {
-        component = receiverComponent(context) {
+        component = ReceiverComponent(context) {
             modules(this@EsBroadcastReceiver.modules(context))
         }
     }

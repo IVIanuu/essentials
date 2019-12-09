@@ -20,17 +20,17 @@ import android.content.Context
 import com.ivianuu.essentials.store.prefs.PrefBoxFactory
 import com.ivianuu.essentials.store.prefs.SharedPreferencesImporter
 import com.ivianuu.essentials.store.settings.SettingsBoxFactory
+import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Name
 import com.ivianuu.injekt.android.ForApplication
 import com.ivianuu.injekt.get
-import com.ivianuu.injekt.module
 
 @Name
 annotation class PrefsPath {
     companion object
 }
 
-val esStoreModule = module {
+val EsStoreModule = Module {
     single {
         PrefBoxFactory(
             context = get(name = ForApplication),

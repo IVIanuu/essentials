@@ -17,12 +17,12 @@
 package com.ivianuu.essentials.app
 
 import android.content.Context
+import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.get
-import com.ivianuu.injekt.module
 
 /**
  * Basic app dependencies such as preferences or package manager
  */
-val esAppModule = module {
+val EsAppModule = Module {
     factory { get<Context>().packageManager }
 }

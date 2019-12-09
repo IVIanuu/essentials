@@ -21,8 +21,8 @@ import android.view.View
 import android.view.ViewGroup
 import com.ivianuu.director.Controller
 import com.ivianuu.director.requireActivity
-import com.ivianuu.essentials.injection.childControllerComponent
-import com.ivianuu.essentials.injection.controllerComponent
+import com.ivianuu.essentials.injection.ChildControllerComponent
+import com.ivianuu.essentials.injection.ControllerComponent
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.Route
 import com.ivianuu.essentials.util.InjektTraitContextWrapper
@@ -40,11 +40,11 @@ abstract class EsController : Controller(), InjektTrait, LayoutContainer {
 
     override val component by unsafeLazy {
         if (parentController != null) {
-            childControllerComponent {
+            ChildControllerComponent {
                 modules(this@EsController.modules())
             }
         } else {
-            controllerComponent {
+            ControllerComponent {
                 modules(this@EsController.modules())
             }
         }

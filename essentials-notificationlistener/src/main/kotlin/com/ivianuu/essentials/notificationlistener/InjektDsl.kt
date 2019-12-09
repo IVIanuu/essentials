@@ -18,8 +18,8 @@ package com.ivianuu.essentials.notificationlistener
 
 import com.ivianuu.injekt.BindingContext
 import com.ivianuu.injekt.Module
+import com.ivianuu.injekt.ModuleBuilder
 import com.ivianuu.injekt.Name
-import com.ivianuu.injekt.module
 
 @Name
 annotation class NotificationComponents {
@@ -27,7 +27,7 @@ annotation class NotificationComponents {
 }
 
 
-inline fun <reified T : NotificationComponent> Module.bindNotificationComponent(
+inline fun <reified T : NotificationComponent> ModuleBuilder.bindNotificationComponent(
     name: Any? = null
 ) {
     withBinding<T>(name) { bindNotificationComponent() }
@@ -38,6 +38,6 @@ fun <T : NotificationComponent> BindingContext<T>.bindNotificationComponent(): B
     return this
 }
 
-internal val notificationComponentsModule = module {
+internal val NotificationComponentsModule = Module {
     set<NotificationComponent>(setName = NotificationComponents)
 }

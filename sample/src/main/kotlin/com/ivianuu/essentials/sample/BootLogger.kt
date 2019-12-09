@@ -20,7 +20,7 @@ import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.boot.BootAware
 import com.ivianuu.essentials.boot.bindBootAware
 import com.ivianuu.injekt.Factory
-import com.ivianuu.injekt.module
+import com.ivianuu.injekt.Module
 
 @Factory
 class BootLogger : BootAware {
@@ -29,6 +29,6 @@ class BootLogger : BootAware {
     }
 }
 
-val bootModule = module {
+val BootModule = Module {
     bindBootAware<BootLogger>()
 }

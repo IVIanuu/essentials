@@ -23,9 +23,9 @@ import androidx.work.WorkerParameters
 import com.ivianuu.injekt.BindingContext
 import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.Module
+import com.ivianuu.injekt.ModuleBuilder
 import com.ivianuu.injekt.Name
 import com.ivianuu.injekt.Provider
-import com.ivianuu.injekt.module
 import com.ivianuu.injekt.parametersOf
 
 /**
@@ -49,7 +49,7 @@ class InjektWorkerFactory(
 /**
  * Contains the [InjektWorkerFactory]
  */
-val workerInjectionModule = module {
+val WorkerInjectionModule = Module {
     map<String, ListenableWorker>(mapName = WorkersMap)
     withBinding<InjektWorkerFactory> { bindType<WorkerFactory>() }
 }
@@ -59,7 +59,7 @@ annotation class WorkersMap {
     companion object
 }
 
-inline fun <reified T : ListenableWorker> Module.bindWorker(
+inline fun <reified T : ListenableWorker> ModuleBuilder.bindWorker(
     name: Any? = null
 ) {
     withBinding<T>(name) { bindWorker() }

@@ -22,7 +22,6 @@ import android.content.Intent
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.messaging.EsBroadcastReceiver
 import com.ivianuu.injekt.Provider
-import com.ivianuu.injekt.android.receiverComponent
 
 class StartupReceiver : EsBroadcastReceiver() {
 
@@ -31,7 +30,6 @@ class StartupReceiver : EsBroadcastReceiver() {
         super.onReceive(context, intent)
         d { "on system start" }
 
-        val component = receiverComponent(context)
         val bootAwareComponents = component.get<Map<String, Provider<BootAware>>>(
             name = BootAwareComponents
         )

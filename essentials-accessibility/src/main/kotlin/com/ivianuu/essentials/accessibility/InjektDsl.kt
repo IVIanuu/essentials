@@ -2,8 +2,8 @@ package com.ivianuu.essentials.accessibility
 
 import com.ivianuu.injekt.BindingContext
 import com.ivianuu.injekt.Module
+import com.ivianuu.injekt.ModuleBuilder
 import com.ivianuu.injekt.Name
-import com.ivianuu.injekt.module
 
 @Name
 annotation class AccessibilityComponents {
@@ -11,7 +11,7 @@ annotation class AccessibilityComponents {
 }
 
 
-inline fun <reified T : AccessibilityComponent> Module.bindAccessibilityComponent(
+inline fun <reified T : AccessibilityComponent> ModuleBuilder.bindAccessibilityComponent(
     name: Any? = null
 ) {
     withBinding<T>(name) { bindAccessibilityComponent() }
@@ -23,6 +23,6 @@ fun <T : AccessibilityComponent> BindingContext<T>.bindAccessibilityComponent():
 }
 
 
-internal val accessibilityComponentsModule = module {
+internal val AccessibilityComponentsModule = Module {
     set<AccessibilityComponent>(setName = AccessibilityComponents)
 }

@@ -18,8 +18,8 @@ package com.ivianuu.essentials.boot
 
 import com.ivianuu.injekt.BindingContext
 import com.ivianuu.injekt.Module
+import com.ivianuu.injekt.ModuleBuilder
 import com.ivianuu.injekt.Name
-import com.ivianuu.injekt.module
 
 /**
  * Marks a component as boot aware
@@ -31,7 +31,7 @@ annotation class BootAwareComponents {
     companion object
 }
 
-inline fun <reified T : BootAware> Module.bindBootAware(
+inline fun <reified T : BootAware> ModuleBuilder.bindBootAware(
     name: Any? = null
 ) {
     withBinding<T>(name) { bindBootAware() }
@@ -44,6 +44,6 @@ inline fun <reified T : BootAware> BindingContext<T>.bindBootAware(): BindingCon
     return this
 }
 
-val esBootModule = module {
+val EsBootModule = Module {
     map<String, BootAware>(mapName = BootAwareComponents)
 }

@@ -19,29 +19,29 @@ package com.ivianuu.essentials.sample.app
 import com.ivianuu.director.DirectorPlugins
 import com.ivianuu.director.setDefaultHandler
 import com.ivianuu.essentials.app.EsApp
-import com.ivianuu.essentials.apps.coil.esAppsCoilModule
-import com.ivianuu.essentials.boot.esBootModule
-import com.ivianuu.essentials.coil.esCoilModule
-import com.ivianuu.essentials.gestures.esGesturesModule
-import com.ivianuu.essentials.permission.esPermissionsModule
-import com.ivianuu.essentials.sample.bootModule
-import com.ivianuu.essentials.twilight.esTwilightModule
+import com.ivianuu.essentials.apps.coil.EsAppsCoilModule
+import com.ivianuu.essentials.boot.EsBootModule
+import com.ivianuu.essentials.coil.EsCoilModule
+import com.ivianuu.essentials.gestures.EsGesturesModule
+import com.ivianuu.essentials.permission.EsPermissionsModule
+import com.ivianuu.essentials.sample.BootModule
+import com.ivianuu.essentials.twilight.EsTwilightModule
 import com.ivianuu.essentials.ui.changehandler.OpenCloseChangeHandler
-import com.ivianuu.essentials.work.workerInitializerModule
-import com.ivianuu.essentials.work.workerInjectionModule
+import com.ivianuu.essentials.work.WorkerInitializerModule
+import com.ivianuu.essentials.work.WorkerInjectionModule
 
 class App : EsApp() {
 
     override fun modules() = listOf(
-        bootModule,
-        esAppsCoilModule,
-        esBootModule,
-        esCoilModule,
-        esGesturesModule,
-        esPermissionsModule,
-        esTwilightModule,
-        workerInjectionModule,
-        workerInitializerModule
+        BootModule,
+        EsAppsCoilModule,
+        EsBootModule,
+        EsCoilModule,
+        EsGesturesModule,
+        EsPermissionsModule,
+        EsTwilightModule,
+        WorkerInjectionModule,
+        WorkerInitializerModule
     )
 
     override fun onCreate() {

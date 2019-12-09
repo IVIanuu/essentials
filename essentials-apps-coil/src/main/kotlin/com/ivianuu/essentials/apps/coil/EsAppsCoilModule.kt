@@ -17,11 +17,11 @@
 package com.ivianuu.essentials.apps.coil
 
 import com.ivianuu.essentials.coil.bindFetcher
-import com.ivianuu.injekt.module
+import com.ivianuu.injekt.Module
 
 /**
  * Binds dependencies related to this module
  */
-val esAppsCoilModule = module {
+val EsAppsCoilModule = Module {
     bindFetcher<AppIconFetcher, AppIcon>(AppIcon::class)
 }

@@ -23,12 +23,12 @@ import androidx.work.WorkerFactory
 import com.ivianuu.essentials.app.AppInitializer
 import com.ivianuu.essentials.app.bindAppInitializer
 import com.ivianuu.injekt.Factory
-import com.ivianuu.injekt.module
+import com.ivianuu.injekt.Module
 
 /**
  * Module for the [WorkerAppInitializer]
  */
-val workerInitializerModule = module {
+val WorkerInitializerModule = Module {
     bindAppInitializer<WorkerAppInitializer>()
 }
 

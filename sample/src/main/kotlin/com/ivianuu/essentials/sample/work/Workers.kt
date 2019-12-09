@@ -22,10 +22,10 @@ import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.work.EsWorker
 import com.ivianuu.essentials.work.bindWorker
 import com.ivianuu.injekt.Factory
+import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Param
-import com.ivianuu.injekt.module
 
-val workerModule = module {
+val WorkerModule = Module {
     bindWorker<MyWorkerOne>()
     bindWorker<MyWorkerTwo>()
 }

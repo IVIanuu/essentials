@@ -31,14 +31,13 @@ import com.ivianuu.essentials.ui.navigation.director.ControllerRoute
 import com.ivianuu.essentials.util.coroutineScope
 import com.ivianuu.essentials.util.unsafeLazy
 import com.ivianuu.essentials.util.withAlpha
+import com.ivianuu.injekt.Component
 import com.ivianuu.injekt.InjektTrait
 import com.ivianuu.injekt.Module
+import com.ivianuu.injekt.android.ActivityModule
 import com.ivianuu.injekt.android.ActivityScope
-import com.ivianuu.injekt.android.activityModule
-import com.ivianuu.injekt.component
 import com.ivianuu.injekt.get
 import com.ivianuu.injekt.inject
-import com.ivianuu.injekt.module
 import com.ivianuu.scopes.android.onPause
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -50,11 +49,11 @@ import kotlinx.coroutines.launch
 abstract class EsActivity : AppCompatActivity(), InjektTrait {
 
     override val component by unsafeLazy {
-        component {
+        Component {
             scopes(ActivityScope)
             dependencies(retainedActivityComponent)
-            modules(activityModule())
-            modules(esActivityModule(this@EsActivity))
+            modules(ActivityModule())
+            modules(EsActivityModule(this@EsActivity))
             modules(this@EsActivity.modules())
         }
     }
@@ -116,6 +115,6 @@ abstract class EsActivity : AppCompatActivity(), InjektTrait {
     protected open fun modules(): List<Module> = emptyList()
 }
 
-private fun esActivityModule(esActivity: EsActivity) = module {
+private fun EsActivityModule(esActivity: EsActivity) = Module {
     single { esActivity.router(esActivity.containerId) }
 }

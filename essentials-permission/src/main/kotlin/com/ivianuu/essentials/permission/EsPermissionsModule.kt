@@ -29,9 +29,9 @@ import com.ivianuu.essentials.permission.runtime.RuntimePermissionStateProvider
 import com.ivianuu.essentials.permission.systemoverlay.SystemOverlayPermissionStateProvider
 import com.ivianuu.essentials.permission.writesettings.WriteSettingsPermissionStateProvider
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.injekt.module
+import com.ivianuu.injekt.Module
 
-val esPermissionsModule = module {
+val EsPermissionsModule = Module {
     single(name = PermissionNavigator) { Navigator() }
 
     set<PermissionRequestHandler>(setName = PermissionRequestHandlers)

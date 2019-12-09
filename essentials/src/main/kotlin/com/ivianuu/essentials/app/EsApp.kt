@@ -19,7 +19,7 @@ package com.ivianuu.essentials.app
 import android.app.Application
 import android.content.pm.ApplicationInfo
 import com.github.ajalt.timberkt.d
-import com.ivianuu.essentials.injection.esModule
+import com.ivianuu.essentials.injection.EsModule
 import com.ivianuu.essentials.util.containsFlag
 import com.ivianuu.essentials.util.unsafeLazy
 import com.ivianuu.injekt.Component
@@ -28,7 +28,7 @@ import com.ivianuu.injekt.InjektTrait
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Provider
 import com.ivianuu.injekt.android.AndroidLogger
-import com.ivianuu.injekt.android.applicationComponent
+import com.ivianuu.injekt.android.ApplicationComponent
 import com.ivianuu.injekt.get
 import com.ivianuu.injekt.inject
 
@@ -57,8 +57,8 @@ abstract class EsApp : Application(), InjektTrait {
     }
 
     protected open fun createComponent(): Component {
-        return applicationComponent {
-            modules(esAppModule, esModule)
+        return ApplicationComponent {
+            modules(EsAppModule, EsModule)
             modules(this@EsApp.modules())
         }
     }

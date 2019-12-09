@@ -22,7 +22,7 @@ import coil.map.Mapper
 import coil.map.MeasuredMapper
 import com.ivianuu.injekt.BindingContext
 import com.ivianuu.injekt.Definition
-import com.ivianuu.injekt.Module
+import com.ivianuu.injekt.ModuleBuilder
 import com.ivianuu.injekt.Name
 import com.ivianuu.injekt.get
 import kotlin.reflect.KClass
@@ -32,12 +32,12 @@ annotation class Decoders {
     companion object
 }
 
-inline fun <reified T : Decoder> Module.decoder(
+inline fun <reified T : Decoder> ModuleBuilder.decoder(
     name: Any? = null,
     noinline definition: Definition<T>
 ): BindingContext<T> = factory(name = name, definition = definition).bindDecoder()
 
-inline fun <reified T : Decoder> Module.bindDecoder(
+inline fun <reified T : Decoder> ModuleBuilder.bindDecoder(
     name: Any? = null
 ) {
     withBinding<T>(name) { bindDecoder() }
@@ -58,13 +58,13 @@ data class FetcherBinding<T : Any>(
     val type: KClass<T>
 )
 
-inline fun <reified F : Fetcher<T>, reified T : Any> Module.fetcher(
+inline fun <reified F : Fetcher<T>, reified T : Any> ModuleBuilder.fetcher(
     type: KClass<T>, // todo remove type arg once fixed
     name: Any? = null,
     noinline definition: Definition<F>
 ): BindingContext<F> = factory(name = name, definition = definition).bindFetcher(type)
 
-inline fun <reified F : Fetcher<T>, reified T : Any> Module.bindFetcher(
+inline fun <reified F : Fetcher<T>, reified T : Any> ModuleBuilder.bindFetcher(
     type: KClass<T>,
     name: Any? = null
 ) {
@@ -72,13 +72,13 @@ inline fun <reified F : Fetcher<T>, reified T : Any> Module.bindFetcher(
 }
 
 inline fun <reified F : Fetcher<T>, reified T : Any> BindingContext<F>.bindFetcher(type: KClass<T>): BindingContext<F> {
-    module.factory {
+    moduleBuilder.factory {
         FetcherBinding(
             fetcher = get<F>(),
             type = type
         )
     }.also { bbc ->
-        module.set<FetcherBinding<*>>(
+        moduleBuilder.set<FetcherBinding<*>>(
             Fetchers
         ) {
             add(bbc.key, false)
@@ -98,13 +98,13 @@ data class MapperBinding<T : Any>(
     val type: KClass<T>
 )
 
-inline fun <reified M : Mapper<T, *>, reified T : Any> Module.mapper(
+inline fun <reified M : Mapper<T, *>, reified T : Any> ModuleBuilder.mapper(
     type: KClass<T>, // todo remove type arg once fixed
     name: Any? = null,
     noinline definition: Definition<M>
 ): BindingContext<M> = factory(name = name, definition = definition).bindMapper(type)
 
-inline fun <reified M : Mapper<T, *>, reified T : Any> Module.bindMapper(
+inline fun <reified M : Mapper<T, *>, reified T : Any> ModuleBuilder.bindMapper(
     type: KClass<T>,
     name: Any? = null
 ) {
@@ -112,10 +112,10 @@ inline fun <reified M : Mapper<T, *>, reified T : Any> Module.bindMapper(
 }
 
 inline fun <reified M : Mapper<T, *>, reified T : Any> BindingContext<M>.bindMapper(type: KClass<T>): BindingContext<M> {
-    module.factory {
+    moduleBuilder.factory {
         MapperBinding(mapper = get<M>(), type = type)
     }.also { bbc ->
-        module.set<MapperBinding<*>>(
+        moduleBuilder.set<MapperBinding<*>>(
             Mappers
         ) {
             add(bbc.key, false)
@@ -135,13 +135,13 @@ data class MeasuredMapperBinding<T : Any>(
     val type: KClass<T>
 )
 
-inline fun <reified M : MeasuredMapper<T, *>, reified T : Any> Module.measuredMapper(
+inline fun <reified M : MeasuredMapper<T, *>, reified T : Any> ModuleBuilder.measuredMapper(
     type: KClass<T>, // todo remove type arg once fixed
     name: Any? = null,
     noinline definition: Definition<M>
 ): BindingContext<M> = factory(name = name, definition = definition).bindMeasuredMapper(type)
 
-inline fun <reified M : MeasuredMapper<T, *>, reified T : Any> Module.bindMeasuredMapper(
+inline fun <reified M : MeasuredMapper<T, *>, reified T : Any> ModuleBuilder.bindMeasuredMapper(
     type: KClass<T>,
     name: Any? = null
 ) {
@@ -151,13 +151,13 @@ inline fun <reified M : MeasuredMapper<T, *>, reified T : Any> Module.bindMeasur
 inline fun <reified M : MeasuredMapper<T, *>, reified T : Any> BindingContext<M>.bindMeasuredMapper(
     type: KClass<T>
 ): BindingContext<M> {
-    module.factory {
+    moduleBuilder.factory {
         MeasuredMapperBinding(
             mapper = get<M>(),
             type = type
         )
     }.also { bbc ->
-        module.set<MeasuredMapperBinding<*>>(
+        moduleBuilder.set<MeasuredMapperBinding<*>>(
             MeasuredMappers
         ) {
             add(bbc.key, false)

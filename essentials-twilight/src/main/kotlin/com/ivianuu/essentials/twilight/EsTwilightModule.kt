@@ -17,8 +17,8 @@
 package com.ivianuu.essentials.twilight
 
 import com.ivianuu.essentials.app.bindAppService
-import com.ivianuu.injekt.module
+import com.ivianuu.injekt.Module
 
-val esTwilightModule = module {
+val EsTwilightModule = Module {
     bindAppService<TwilightController>()
 }

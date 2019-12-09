@@ -21,7 +21,7 @@ import android.view.accessibility.AccessibilityEvent
 import com.ivianuu.essentials.util.unsafeLazy
 import com.ivianuu.injekt.InjektTrait
 import com.ivianuu.injekt.Module
-import com.ivianuu.injekt.android.serviceComponent
+import com.ivianuu.injekt.android.ServiceComponent
 import com.ivianuu.scopes.MutableScope
 import com.ivianuu.scopes.Scope
 
@@ -31,7 +31,7 @@ import com.ivianuu.scopes.Scope
 abstract class EsAccessibilityService : AccessibilityService(), InjektTrait {
 
     override val component by unsafeLazy {
-        serviceComponent {
+        ServiceComponent {
             modules(this@EsAccessibilityService.modules())
         }
     }
