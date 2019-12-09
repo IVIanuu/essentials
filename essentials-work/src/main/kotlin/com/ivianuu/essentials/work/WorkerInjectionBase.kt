@@ -50,7 +50,7 @@ class InjektWorkerFactory(
  * Contains the [InjektWorkerFactory]
  */
 val workerInjectionModule = module {
-    map<String, ListenableWorker>(WorkersMap)
+    map<String, ListenableWorker>(mapName = WorkersMap)
     withBinding<InjektWorkerFactory> { bindType<WorkerFactory>() }
 }
 

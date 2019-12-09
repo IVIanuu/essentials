@@ -5,6 +5,7 @@ include(
     ":essentials-apps",
     ":essentials-apps-coil",
     ":essentials-apps-ui",
+    ":essentials-boot",
     ":essentials-compiler",
     ":essentials-coil",
     ":essentials-foreground",

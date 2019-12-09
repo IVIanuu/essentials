@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.app
+package com.ivianuu.essentials.boot
 
 import com.ivianuu.injekt.BindingContext
 import com.ivianuu.injekt.Module
@@ -22,28 +22,28 @@ import com.ivianuu.injekt.Name
 import com.ivianuu.injekt.module
 
 /**
- * Will be started on app start up and lives as long as the app lives
+ * Marks a component as boot aware
  */
-interface AppService
+interface BootAware
 
 @Name
-annotation class AppServices {
+annotation class BootAwareComponents {
     companion object
 }
 
-inline fun <reified T : AppService> Module.bindAppService(
+inline fun <reified T : BootAware> Module.bindBootAware(
     name: Any? = null
 ) {
-    withBinding<T>(name) { bindAppService() }
+    withBinding<T>(name) { bindBootAware() }
 }
 
-inline fun <reified T : AppService> BindingContext<T>.bindAppService(): BindingContext<T> {
-    intoMap<String, AppService>(
-        entryKey = T::class.java.name, mapName = AppServices
+inline fun <reified T : BootAware> BindingContext<T>.bindBootAware(): BindingContext<T> {
+    intoMap<String, BootAware>(
+        entryKey = T::class.java.name, mapName = BootAwareComponents
     )
     return this
 }
 
-val esAppServicesModule = module {
-    map<String, AppService>(mapName = AppServices)
+val esBootModule = module {
+    map<String, BootAware>(mapName = BootAwareComponents)
 }

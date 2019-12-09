@@ -44,6 +44,7 @@ dependencies {
     implementation(project(":essentials-apps"))
     implementation(project(":essentials-apps-coil"))
     implementation(project(":essentials-apps-ui"))
+    implementation(project(":essentials-boot"))
     implementation(project(":essentials-foreground"))
     implementation(project(":essentials-gestures"))
     implementation(project(":essentials-hidenavbar"))

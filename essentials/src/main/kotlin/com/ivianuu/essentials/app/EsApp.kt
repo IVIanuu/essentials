@@ -29,8 +29,8 @@ import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Provider
 import com.ivianuu.injekt.android.AndroidLogger
 import com.ivianuu.injekt.android.applicationComponent
+import com.ivianuu.injekt.get
 import com.ivianuu.injekt.inject
-import kotlin.reflect.KClass
 
 /**
  * App
@@ -42,10 +42,7 @@ abstract class EsApp : Application(), InjektTrait {
         createComponent()
     }
 
-    private val appInitializers: Map<KClass<AppInitializer>, Provider<AppInitializer>> by inject(
-        AppInitializers
-    )
-    private val appServices: Map<KClass<AppService>, Provider<AppService>> by inject(AppServices)
+    private val appServices: Map<String, Provider<AppService>> by inject(name = AppServices)
 
     override fun onCreate() {
         super.onCreate()
@@ -67,26 +64,20 @@ abstract class EsApp : Application(), InjektTrait {
     }
 
     protected open fun invokeInitializers() {
-        appInitializers
-            .filterKeys { shouldInitialize(it) }
+        get<Map<String, Provider<AppInitializer>>>(name = AppInitializers)
             .forEach {
-                println("initialize ${it.key.java.name}")
+                println("initialize ${it.key}")
                 it.value()
             }
     }
-
-    protected open fun shouldInitialize(type: KClass<out AppInitializer>): Boolean = true
 
     protected open fun startAppServices() {
         appServices
-            .filterKeys { shouldStartAppService(it) }
             .forEach {
-                d { "start service ${it.key.java.name}" }
+                d { "start service ${it.key}" }
                 it.value()
             }
     }
-
-    protected open fun shouldStartAppService(type: KClass<out AppService>): Boolean = true
 
     protected open fun modules(): List<Module> = emptyList()
 }

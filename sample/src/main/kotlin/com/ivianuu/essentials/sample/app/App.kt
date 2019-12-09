@@ -20,9 +20,11 @@ import com.ivianuu.director.DirectorPlugins
 import com.ivianuu.director.setDefaultHandler
 import com.ivianuu.essentials.app.EsApp
 import com.ivianuu.essentials.apps.coil.esAppsCoilModule
+import com.ivianuu.essentials.boot.esBootModule
 import com.ivianuu.essentials.coil.esCoilModule
 import com.ivianuu.essentials.gestures.esGesturesModule
 import com.ivianuu.essentials.permission.esPermissionsModule
+import com.ivianuu.essentials.sample.bootModule
 import com.ivianuu.essentials.twilight.esTwilightModule
 import com.ivianuu.essentials.ui.changehandler.OpenCloseChangeHandler
 import com.ivianuu.essentials.work.workerInitializerModule
@@ -31,7 +33,9 @@ import com.ivianuu.essentials.work.workerInjectionModule
 class App : EsApp() {
 
     override fun modules() = listOf(
+        bootModule,
         esAppsCoilModule,
+        esBootModule,
         esCoilModule,
         esGesturesModule,
         esPermissionsModule,
