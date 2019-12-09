@@ -51,7 +51,6 @@ class ComposeAnalysisHandlerExtension(
 
         files as ArrayList<KtFile>
 
-        var filesChanged = false
         files.toList().forEachIndexed { index, file ->
             val changed = test(bindingTrace, resolveSession, file)
             if (changed != null && changed != file) {
@@ -60,36 +59,7 @@ class ComposeAnalysisHandlerExtension(
             }
         }
 
-        /*files.forEach { file ->
-            file.accept(
-                namedFunctionRecursiveVisitor { ktNamedFunction ->
-                    val functionDescriptor =
-                        resolveSession.resolveToDescriptor(ktNamedFunction) as FunctionDescriptor
-                    test(functionDescriptor)
-
-                    generateComposableWrapper(
-                        outputDir,
-                        functionDescriptor,
-                        bindingTrace
-                    )
-
-                    generateOverloadComposable(
-                        outputDir,
-                        functionDescriptor,
-                        bindingTrace
-                    )
-                }
-            )
-        }*/
-
-        return if (filesChanged) {
-            AnalysisResult.RetryWithAdditionalRoots(
-                bindingContext = bindingTrace.bindingContext,
-                moduleDescriptor = module,
-                additionalJavaRoots = emptyList(),
-                additionalKotlinRoots = listOf(outputDir)
-            )
-        } else null
+        return null
     }
 
     override fun doAnalysis(

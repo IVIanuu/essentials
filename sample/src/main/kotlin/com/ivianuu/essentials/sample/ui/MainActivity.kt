@@ -16,6 +16,8 @@
 
 package com.ivianuu.essentials.sample.ui
 
+import android.os.Bundle
+import androidx.compose.composer
 import com.ivianuu.essentials.ui.base.EsActivity
 import com.ivianuu.essentials.ui.navigation.director.ControllerRoute
 
@@ -23,5 +25,14 @@ class MainActivity : EsActivity() {
 
     override val startRoute: ControllerRoute?
         get() = HomeRoute
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        composer.call(
+            key = "todo",
+            invalid = { true },
+            block = { }
+        )
+    }
 
 }

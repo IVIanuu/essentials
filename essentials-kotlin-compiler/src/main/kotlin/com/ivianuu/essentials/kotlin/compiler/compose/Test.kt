@@ -19,11 +19,14 @@ package com.ivianuu.essentials.kotlin.compiler.compose
 import com.squareup.kotlinpoet.CodeBlock
 import org.jetbrains.kotlin.descriptors.FunctionDescriptor
 import org.jetbrains.kotlin.psi.KtFile
+import org.jetbrains.kotlin.psi.callExpressionRecursiveVisitor
 import org.jetbrains.kotlin.psi.namedFunctionRecursiveVisitor
 import org.jetbrains.kotlin.psi.psiUtil.endOffset
 import org.jetbrains.kotlin.psi.psiUtil.startOffset
 import org.jetbrains.kotlin.resolve.BindingTrace
+import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
 import org.jetbrains.kotlin.resolve.lazy.ResolveSession
+import org.jetbrains.kotlin.types.typeUtil.isUnit
 
 data class Transform(
     val newText: String,
@@ -31,99 +34,144 @@ data class Transform(
     var endOffset: Int
 )
 
+class Func(
+    val startOffset: Int,
+    val endOffset: Int
+    val expressions: List<Expr>
+)
+
+class Expr(val text: String)
+
 fun String.replaceLast(oldValue: String, newValue: String, ignoreCase: Boolean = false): String {
     val index = lastIndexOf(oldValue, ignoreCase = ignoreCase)
     return if (index < 0) this else this.replaceRange(index, index + oldValue.length, newValue)
 }
-
-class Escape : RuntimeException()
-
-private const val PROCESSED_MARKER = "/*=:=processed=:=*/"
 
 fun test(
     trace: BindingTrace,
     resolveSession: ResolveSession,
     file: KtFile
 ): KtFile? {
-    var transform: Transform? = null
-    try {
-        fun setTransform(t: Transform) {
-            transform = t
-            throw Escape()
-        }
-        file.accept(
-            namedFunctionRecursiveVisitor { func ->
-                val funcDescriptor =
-                    resolveSession.resolveToDescriptor(func) as FunctionDescriptor
-                if (funcDescriptor.annotations.hasAnnotation(ComposableAnnotation)) {
-                    val body = func.bodyExpression
-                    if (body != null) {
-                        if (body.text.contains(PROCESSED_MARKER)) return@namedFunctionRecursiveVisitor
+    val transforms = mutableListOf<Transform>()
 
-                        val bodyText = body.text
-                            .replaceFirst("{", "")
-                            .replaceLast("}", "")
-                        setTransform(
-                            Transform(
-                                newText = CodeBlock.builder().apply {
-                                    beginControlFlow("{")
-                                    addStatement(PROCESSED_MARKER)
-                                    addStatement("androidx.compose.composer.startRestartGroup(\"todo\")")
-                                    unindent()
-                                    add(bodyText)
-                                    indent()
-                                    beginControlFlow("androidx.compose.composer.endRestartGroup()?.updateScope {")
-                                    addStatement(
-                                        "${funcDescriptor.name}(${funcDescriptor.valueParameters.map { it.name }.joinToString(
-                                            ", "
-                                        )})"
-                                    )
-                                    endControlFlow()
-                                    endControlFlow()
-                                }.build().toString(),
-                                startOffset = body.startOffset,
-                                endOffset = body.endOffset
-                            )
+    // wrap @Composables in a start restart scope
+    file.accept(
+        namedFunctionRecursiveVisitor { func ->
+            val funcDescriptor =
+                resolveSession.resolveToDescriptor(func) as FunctionDescriptor
+            if (!funcDescriptor.annotations.hasAnnotation(ComposableAnnotation)) return@namedFunctionRecursiveVisitor
+            if (funcDescriptor.returnType?.isUnit() != true) return@namedFunctionRecursiveVisitor
+            val body = func.bodyExpression ?: return@namedFunctionRecursiveVisitor
+
+            val bodyText = body.text
+                .replaceFirst("{", "")
+                .replaceLast("}", "")
+
+            transforms += Transform(
+                newText = CodeBlock.builder().apply {
+                    beginControlFlow("{")
+                    addStatement("androidx.compose.composer.startRestartGroup(\"todo\")")
+                    unindent()
+                    add(bodyText)
+                    indent()
+                    beginControlFlow("androidx.compose.composer.endRestartGroup()?.updateScope {")
+                    addStatement(
+                        "${funcDescriptor.name}(${funcDescriptor.valueParameters.map { it.name }.joinToString(
+                            ", "
+                        )})"
+                    )
+                    endControlFlow()
+                    endControlFlow()
+                }.build().toString(),
+                startOffset = body.startOffset,
+                endOffset = body.endOffset
+            )
+        }
+    )
+
+    file.accept(
+        namedFunctionRecursiveVisitor { func ->
+            val funcDescriptor =
+                resolveSession.resolveToDescriptor(func) as FunctionDescriptor
+            if (!funcDescriptor.annotations.hasAnnotation(ComposableAnnotation)) return@namedFunctionRecursiveVisitor
+            if (funcDescriptor.returnType?.isUnit() != true) return@namedFunctionRecursiveVisitor
+
+            func.accept(
+                callExpressionRecursiveVisitor { exp ->
+                    val call = exp.getResolvedCall(trace.bindingContext)!!
+                    val resulting = call.resultingDescriptor
+                    if (resulting.annotations.hasAnnotation(ComposableAnnotation)
+                        && resulting.returnType?.isUnit() == true
+                    ) {
+                        transforms += Transform(
+                            newText = CodeBlock.builder().apply {
+                                beginControlFlow("androidx.compose.composer.call(")
+                                addStatement("key = \"todo\",")
+                                addStatement("invalid = { true }")
+                                addStatement("block = { ${exp.text} }")
+                                endControlFlow()
+                                add(")")
+                            }.build().toString(),
+                            startOffset = exp.startOffset,
+                            endOffset = exp.endOffset
                         )
                     }
+                }
+            )
+        }
+    )
 
-                    /*func.accept(
-                        callExpressionRecursiveVisitor { exp ->
-                            val call = exp.getResolvedCall(trace.bindingContext)!!
-                            val resulting = call.resultingDescriptor
-                            if (resulting.annotations.hasAnnotation(ComposableAnnotation)) {
-                                transforms += Transform(
-                                    newText = CodeBlock.builder().apply {
-                                        addStatement("println(\"pre invocation ${resulting.name}\")")
-                                        unindent()
-                                        add(exp.text)
-                                        indent()
-                                        addStatement("println(\"post invocation ${resulting.name}\")")
-                                    }.build().toString(),
-                                    startOffset = exp.startOffset,
-                                    endOffset = exp.endOffset
-                                )
-                            } else {
-                                transforms += Transform(
-                                    newText = "",
-                                    startOffset = exp.startOffset,
-                                    endOffset = exp.endOffset
-                                )
-                            }
+    var currentSource = file.text
+    val processedTransform = mutableListOf<Transform>()
+    transforms.reversed().forEach { currentTransform ->
+        processedTransform += currentTransform
+
+        currentSource = currentSource.replaceRange(
+            startIndex = currentTransform.startOffset,
+            endIndex = currentTransform.endOffset,
+            replacement = currentTransform.newText
+        )
+
+        val oldLength = currentTransform.endOffset - currentTransform.startOffset
+        val newLength = currentTransform.newText.length
+        val diff = when {
+            newLength == oldLength -> Diff.Replaced
+            newLength > oldLength -> Diff.Added
+            else -> Diff.Removed
+        }
+
+        transforms
+            .filter { it !in processedTransform }
+            .forEach { pendingTransform ->
+                when (diff) {
+                    Diff.Removed -> {
+                        if (pendingTransform.startOffset < currentTransform.startOffset) {
+                            pendingTransform.startOffset =
+                                pendingTransform.startOffset - oldLength - newLength
+                            pendingTransform.endOffset =
+                                pendingTransform.endOffset - oldLength - newLength
                         }
-                    )*/
+                    }
+                    Diff.Added -> {
+                        if (pendingTransform.startOffset > currentTransform.startOffset) {
+                            pendingTransform.startOffset =
+                                pendingTransform.startOffset + newLength - oldLength
+                            pendingTransform.endOffset =
+                                pendingTransform.endOffset + newLength - oldLength
+                        }
+                    }
+                    Diff.Replaced -> {
+                        // do nothing
+                    }
                 }
             }
-        )
-    } catch (e: Escape) {
     }
 
-    return if (transform != null) {
-        val newSource = file.text.replaceRange(
-            transform!!.startOffset,
-            transform!!.endOffset,
-            transform!!.newText
-        )
-        file.withNewSource(newSource)
-    } else return null
+    error("new source $currentSource")
+
+    return null
+}
+
+enum class Diff {
+    Removed, Added, Replaced
 }
