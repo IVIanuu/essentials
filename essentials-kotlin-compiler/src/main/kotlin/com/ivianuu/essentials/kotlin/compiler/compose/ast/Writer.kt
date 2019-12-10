@@ -14,8 +14,8 @@ open class Writer(val app: Appendable = StringBuilder()) : Visitor() {
     protected fun lineEnd(str: String = "") = append(str).endLine()
     protected fun append(ch: Char) = also { app.append(ch) }
     protected fun append(str: String) = also { app.append(str) }
-    protected fun appendName(name: String) =
-        if (name.shouldEscapeIdent) append("`$name`") else append(name)
+    protected fun appendName(name: String, noTicks: Boolean = false) =
+        if (!noTicks && name.shouldEscapeIdent) append("`$name`") else append(name)
 
     protected fun appendNames(names: List<String>, sep: String) = also {
         names.forEachIndexed { index, name ->
@@ -391,7 +391,7 @@ open class Writer(val app: Appendable = StringBuilder()) : Visitor() {
                 is Node.Expr.CollLit ->
                     children(exprs, ", ", "[", "]")
                 is Node.Expr.Name ->
-                    appendName(name)
+                    appendName(name, noTicks)
                 is Node.Expr.Labeled ->
                     appendName(label).append("@ ").also { children(expr) }
                 is Node.Expr.Annotated ->

@@ -9,6 +9,7 @@ sealed class Node {
     var dynamic: String? = null
     var element: PsiElement? = null
     var parent: Node? = null
+    val extras = mutableMapOf<Any, Any?>()
 
     interface WithAnnotations {
         val anns: List<Modifier.AnnotationSet>
@@ -438,7 +439,8 @@ sealed class Node {
         ) : Expr()
 
         data class Name(
-            var name: String
+            var name: String,
+            var noTicks: Boolean = false
         ) : Expr()
 
         data class Labeled(

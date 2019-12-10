@@ -39,15 +39,11 @@ fun test(
 ): KtFile? {
     val fileNode = Converter().convertFile(file)
 
-    /*val allNodes = mutableListOf<Node?>()
-    Visitor.visit(fileNode) { node, _ ->
-        allNodes += node
-    }
+    //logFile(fileNode)
 
-    error("all nodes $allNodes")'*/
-
+    wrapComposableLambdasInObserve(fileNode, resolveSession, trace)
+    moveComposableTrailingLambdasIntoTheBody(fileNode, resolveSession, trace)
     insertRestartScope(fileNode, resolveSession, trace)
-
     wrapComposableCalls(fileNode, resolveSession, trace)
 
     val newSource = Writer.write(fileNode)
@@ -55,6 +51,103 @@ fun test(
     //error("new source $newSource")
 
     return file.withNewSource(newSource)
+}
+
+private fun logFile(fileNode: Node.File) {
+    val allNodes = mutableListOf<Node?>()
+    Visitor.visit(fileNode) { node, _ ->
+        allNodes += node
+    }
+
+    error("all nodes $allNodes")
+}
+
+private fun moveComposableTrailingLambdasIntoTheBody(
+    file: Node.File,
+    resolveSession: ResolveSession,
+    trace: BindingTrace
+) {
+    Visitor.visit(file) { node, parent ->
+        if (node !is Node.Expr.Call) return@visit
+        val element = node.element as? KtCallExpression ?: return@visit
+        val lambda = node.lambda ?: return@visit
+        val resolvedCall = element.getResolvedCall(trace.bindingContext)!!
+        val resulting = resolvedCall.resultingDescriptor
+        if (!resulting.annotations.hasAnnotation(ComposableAnnotation)) return@visit
+
+        val newArgs = node.args.toMutableList()
+
+        val lambdaArgName = resulting.valueParameters.last()
+        newArgs.add(
+            Node.ValueArg(
+                name = lambdaArgName.name.asString(),
+                asterisk = false,
+                expr = lambda.func
+            )
+        )
+
+        node.args = newArgs
+    }
+
+}
+
+private fun wrapComposableLambdasInObserve(
+    file: Node.File,
+    resolveSession: ResolveSession,
+    trace: BindingTrace
+) {
+    Visitor.visit(file) { node, parent ->
+        if (node !is Node.Expr.Brace) return@visit
+
+        var isComposable = false
+
+        if (node.parent is Node.Decl.Property) {
+            val property = node.parent as Node.Decl.Property
+            val firstVar = property.vars.singleOrNull()
+            if (firstVar != null && firstVar.type?.anns?.any { set ->
+                    set.anns.any { it.names.first() == "Composable" }
+                } == true) {
+                isComposable = true
+            }
+        }
+
+        if (!isComposable && node.parent is Node.ValueArg) {
+            val arg = node.parent as Node.ValueArg
+            val call = arg.parent as Node.Expr.Call
+            val argIndex = call.args.indexOf(arg)
+            val element = call.element as? KtCallExpression ?: return@visit
+            val resolvedCall = element.getResolvedCall(trace.bindingContext)!!
+            val resulting = resolvedCall.resultingDescriptor
+            val argDescriptor = resulting.valueParameters[argIndex]
+
+            if (argDescriptor.type.annotations.hasAnnotation(ComposableAnnotation)) {
+                isComposable = true
+            }
+        }
+
+        if (isComposable) {
+            val oldBlock = node.block
+            node.block = Node.Block(
+                stmts = listOf(
+                    Node.Stmt.Expr(
+                        Node.Expr.Call(
+                            expr = Node.Expr.Name("androidx.compose.Observe", true),
+                            typeArgs = emptyList(),
+                            args = emptyList(),
+                            lambda = Node.Expr.Call.TrailLambda(
+                                emptyList(),
+                                null,
+                                func = Node.Expr.Brace(
+                                    params = emptyList(),
+                                    block = oldBlock
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+        }
+    }
 }
 
 private fun insertRestartScope(
@@ -78,9 +171,7 @@ private fun insertRestartScope(
             val childElement = childNode.element as? KtCallExpression ?: return@visit
             val resolvedCall = childElement.getResolvedCall(trace.bindingContext)!!
             val resulting = resolvedCall.resultingDescriptor
-            if (!resulting.annotations.hasAnnotation(ComposableAnnotation) || resulting.returnType?.isUnit() == false) {
-                return@visit
-            }
+            if (!resulting.annotations.hasAnnotation(ComposableAnnotation) || resulting.returnType?.isUnit() == false) return@visit
 
             ++composableCalls
         }
@@ -129,6 +220,8 @@ private fun wrapComposableCalls(
     var keyIndex = 0
     fun nextKeyIndex() = ++keyIndex
     Visitor.visit(file) { node, parent ->
+        println("process node $node in $func")
+
         if (node is Node.Decl.Func) {
             func = node
             keyIndex = 0
@@ -138,9 +231,7 @@ private fun wrapComposableCalls(
         val element = node.element as? KtCallExpression ?: return@visit
         val resolvedCall = element.getResolvedCall(trace.bindingContext)!!
         val resulting = resolvedCall.resultingDescriptor
-        if (!resulting.annotations.hasAnnotation(ComposableAnnotation)) {
-            return@visit
-        }
+        if (!resulting.annotations.hasAnnotation(ComposableAnnotation)) return@visit
         val isEffect = resulting.returnType?.isUnit() == false
 
         val funcDescriptor = resolveSession.resolveToDescriptor(func!!.element!! as KtNamedFunction)
@@ -150,11 +241,11 @@ private fun wrapComposableCalls(
 
         node.expr = Node.Expr.Text(
             CodeBlock.builder().apply {
-                node.args.forEachIndexed { index, valueArg ->
-                    addStatement("val arg_${callKeyIndex}_${index} = ${valueArg.element!!.text}")
-                }
-
                 beginControlFlow("with(Unit)")
+
+                node.args.forEachIndexed { index, valueArg ->
+                    addStatement("val arg_${callKeyIndex}_${index} = ${valueArg.expr.element!!.text}")
+                }
 
                 addStatement("var key_$callKeyIndex: Any = $callKey")
 
@@ -182,18 +273,31 @@ private fun wrapComposableCalls(
                     addStatement("invalid = {")
                     indent()
 
-                    if (resulting.valueParameters.isEmpty()) {
+                    if (node.args.isEmpty()) {
                         addStatement("false")
                     } else {
-                        val stableParams = resulting.valueParameters
-                            .filter { it.type.isStable() }
+                        val stableParams = node.args
+                            .mapIndexed { index, arg ->
+                                Triple(
+                                    arg,
+                                    index,
+                                    resulting.valueParameters.first { param ->
+                                        if (arg.name != null) {
+                                            param.name.asString() == arg.name
+                                        } else {
+                                            resulting.valueParameters.indexOf(param) == index
+                                        }
+                                    }
+                                )
+                            }
+                            .filter { it.third.type.isStable() }
 
-                        if (stableParams.size != resulting.valueParameters.size) {
+                        if (stableParams.size != node.args.size) {
                             addStatement("true")
                         } else {
                             addStatement(
                                 stableParams.joinToString(" or ") {
-                                    "changed(arg_${callKeyIndex}_${it.index})"
+                                    "changed(arg_${callKeyIndex}_${it.second})"
                                 }
                             )
                         }
