@@ -53,7 +53,7 @@ fun test(
 
     val newSource = Writer.write(fileNode)
 
-    error("new source $newSource")
+    //error("new source $newSource")
 
     return file.withNewSource(newSource)
 }
@@ -154,6 +154,8 @@ private fun wrapComposableCalls(
                     addStatement("val arg_${callKeyIndex}_${index} = ${valueArg.element!!.text}")
                 }
 
+                beginControlFlow("with(Unit)")
+
                 addStatement("var key_$callKeyIndex: Any = $callKey")
 
                 resulting.valueParameters.forEachIndexed { index, param ->
@@ -191,7 +193,8 @@ private fun wrapComposableCalls(
                         ", "
                     ) { "arg_${callKeyIndex}_${it}" }}) }")
                 unindent()
-                add(")")
+                addStatement(")")
+                endControlFlow()
             }.build().toString()
         )
 
@@ -229,43 +232,9 @@ private fun wrapEffectCalls(
         val callKey = "${funcDescriptor.fqNameSafe.asString()}:${element.startOffset}".hashCode()
         val callKeyIndex = nextKeyIndex()
 
-        error("parents ${node.parent!!.parent!!.parent!!.parent}")
-
-        // direct assignment
-        var (propertyAssigmentName, stmtIndex) = if (node.parent is Node.Decl.Property) {
-            if (node.parent!!.parent is Node.Stmt.Decl) {
-                if (node.parent!!.parent!!.parent is Node.Block) {
-                    val block = node.parent!!.parent!!.parent as Node.Block
-                    val stmtToRemove = node.parent!!.parent as Node.Stmt.Decl
-                    val index = block.stmts.indexOf(stmtToRemove)
-                    block.stmts = block.stmts.toMutableList().also {
-                        it.remove(stmtToRemove)
-                    }
-
-                    val property = node.parent as Node.Decl.Property
-                    property.vars.first()?.name to index
-                } else null to null
-            } else null to null
-        } else null to null
-
-        if (node.parent is Node.Expr.BinaryOp) {
-            if (node.parent!!.parent is Node.Stmt.Decl) {
-                if (node.parent!!.parent!!.parent is Node.Block) {
-                    val block = node.parent!!.parent!!.parent as Node.Block
-                    val stmtToRemove = node.parent!!.parent as Node.Stmt.Decl
-                    val index = block.stmts.indexOf(stmtToRemove)
-                    block.stmts = block.stmts.toMutableList().also {
-                        it.remove(stmtToRemove)
-                    }
-
-                    val property = node.parent as Node.Decl.Property
-                    property.vars.first()?.name to index
-                } else null to null
-            } else null to null
-        } else null to null
-
         val effectExpr = Node.Expr.Text(
             CodeBlock.builder().apply {
+                beginControlFlow("with(Unit)")
                 node.args.forEachIndexed { index, valueArg ->
                     addStatement("val arg_${callKeyIndex}_${index} = ${valueArg.element!!.text}")
                 }
@@ -278,12 +247,7 @@ private fun wrapEffectCalls(
                     }
                 }
 
-                if (propertyAssigmentName != null) {
-                    addStatement("var $propertyAssigmentName = compose_composer.expr(")
-                } else {
-                    addStatement("compose_composer.expr(")
-                }
-
+                addStatement("compose_composer.expr(")
                 indent()
                 addStatement("key = key_$callKeyIndex,")
                 addStatement(
@@ -292,77 +256,15 @@ private fun wrapEffectCalls(
                     ) { "arg_${callKeyIndex}_${it}" }}) }"
                 )
                 unindent()
-                add(")")
+                addStatement(")")
+                endControlFlow()
             }.build().toString()
         )
 
-        if (propertyAssigmentName == null) {
-            node.expr = effectExpr
-            node.ugly = true
-            node.args = emptyList()
-            node.typeArgs = emptyList()
-            node.lambda = null
-        } else {
-            val block = node.parent!!.parent!!.parent as Node.Block
-            block.stmts = block.stmts.toMutableList().also {
-                it.add(stmtIndex!!, Node.Stmt.Expr(effectExpr))
-            }
-        }
+        node.expr = effectExpr
+        node.ugly = true
+        node.args = emptyList()
+        node.typeArgs = emptyList()
+        node.lambda = null
     }
 }
-
-/**
-private fun splitComposablePropertyDeclAndAssignment(
-file: Node.File,
-resolveSession: ResolveSession,
-trace: BindingTrace
-) {
-var func: Node.Decl.Func? = null
-var block: Node.Block? = null
-
-Visitor.visit(file) { node, parent ->
-if (node is Node.Decl.Func) {
-func = node
-}
-if (node is Node.Block) {
-block = node
-}
-if (node !is Node.Stmt.Decl) return@visit
-if (func == null) return@visit
-if (block == null) return@visit
-val decl = node.decl
-if (decl !is Node.Decl.Property) return@visit
-val property = decl.element as KtProperty
-//val propertyDescriptor = resolveSession.resolveToDescriptor(property) as PropertyDescriptor
-val stmts = block!!.stmts
-val stmtIndex = stmts.indexOf(node)
-if (stmtIndex == -1) return@visit
-val call = decl.expr as? Node.Expr.Call ?: return@visit
-val callExpression = call.element as? KtCallExpression ?: return@visit
-val resolvedCall = callExpression.getResolvedCall(trace.bindingContext)!!
-val resulting = resolvedCall.resultingDescriptor
-if (!resulting.annotations.hasAnnotation(ComposableAnnotation)) {
-return@visit
-}
-
-val newStmts = block!!.stmts.toMutableList()
-val declStatement = Node.Stmt.Expr(
-Node.Expr.Text("var ${property.name}: ${resulting.returnType}")
-)
-newStmts.set(stmtIndex, declStatement)
-
-val assignmentStmt = Node.Stmt.Expr(
-Node.Expr.BinaryOp(
-lhs = Node.Expr.Text("${property.name}"),
-oper = Node.Expr.BinaryOp.Oper.Token(Node.Expr.BinaryOp.Token.ASSN),
-rhs = call
-)
-)
-
-newStmts.add(stmtIndex + 1, assignmentStmt)
-block!!.stmts = newStmts
-
-// error("composable assignment stmt index $stmtIndex")
-
-}
-}*/
