@@ -59,7 +59,12 @@ class ComposeAnalysisHandlerExtension(
             }
         }
 
-        return null
+        return AnalysisResult.RetryWithAdditionalRoots(
+            bindingContext = bindingTrace.bindingContext,
+            moduleDescriptor = module,
+            additionalJavaRoots = emptyList(),
+            additionalKotlinRoots = listOf(outputDir)
+        )
     }
 
     override fun doAnalysis(
@@ -71,24 +76,7 @@ class ComposeAnalysisHandlerExtension(
         componentProvider: ComponentProvider
     ): AnalysisResult? {
         resolveSession = componentProvider.get()
-        /*files as ArrayList<KtFile>
-
-        files.toList().forEachIndexed { index, file ->
-            val changed = test(file)
-            if (changed != null && changed != file) {
-                files.removeAt(index)
-                files.add(index, changed)
-            }
-        }*/
-
-        return super.doAnalysis(
-            project,
-            module,
-            projectContext,
-            files,
-            bindingTrace,
-            componentProvider
-        )
+        return null
     }
 }
 

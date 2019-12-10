@@ -345,6 +345,7 @@ open class Visitor {
     companion object {
         fun visit(v: Node, fn: (v: Node?, parent: Node) -> Unit) = object : Visitor() {
             override fun visit(v: Node?, parent: Node) {
+                v?.parent = parent
                 fn(v, parent)
                 super.visit(v, parent)
             }

@@ -8,6 +8,7 @@ sealed class Node {
     var tag: Any? = null
     var dynamic: String? = null
     var element: PsiElement? = null
+    var parent: Node? = null
 
     interface WithAnnotations {
         val anns: List<Modifier.AnnotationSet>
