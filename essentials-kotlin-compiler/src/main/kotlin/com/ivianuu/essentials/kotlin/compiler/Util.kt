@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.kotlin.compiler
 
+import com.ivianuu.essentials.kotlin.compiler.compose.ast.Node
 import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
 import com.squareup.kotlinpoet.TypeName
@@ -47,6 +48,24 @@ fun KotlinType.asTypeName(): TypeName {
     return (if (arguments.isNotEmpty()) {
         type.parameterizedBy(*arguments.map { it.type.asTypeName() }.toTypedArray())
     } else type).copy(nullable = isMarkedNullable)
+}
+
+fun KotlinType.asType(): Node.Type {
+    val pathSegments = constructor.declarationDescriptor!!.fqNameSafe.pathSegments()
+    val pieces = pathSegments.mapIndexed { index, name ->
+        val typeParams = if (index != pathSegments.lastIndex) {
+            emptyList()
+        } else {
+            arguments.map { it.type.asType() }
+        }
+        Node.TypeRef.Simple.Piece(name.asString(), typeParams)
+    }
+
+    val typeRef = Node.TypeRef.Simple(pieces)
+    return Node.Type(
+        mods = emptyList(),
+        ref = if (isMarkedNullable) Node.TypeRef.Nullable(typeRef) else typeRef
+    )
 }
 
 fun DeclarationDescriptor.hasAnnotatedAnnotations(annotation: FqName): Boolean =

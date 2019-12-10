@@ -16,18 +16,23 @@
 
 package com.ivianuu.essentials.kotlin.compiler.compose
 
+import com.ivianuu.essentials.kotlin.compiler.asType
 import com.ivianuu.essentials.kotlin.compiler.compose.ast.Converter
 import com.ivianuu.essentials.kotlin.compiler.compose.ast.Node
 import com.ivianuu.essentials.kotlin.compiler.compose.ast.Visitor
 import com.ivianuu.essentials.kotlin.compiler.compose.ast.Writer
 import com.squareup.kotlinpoet.CodeBlock
 import org.jetbrains.kotlin.descriptors.FunctionDescriptor
+import org.jetbrains.kotlin.descriptors.ValueParameterDescriptor
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtNamedFunction
+import org.jetbrains.kotlin.psi.KtValueArgument
 import org.jetbrains.kotlin.psi.psiUtil.startOffset
 import org.jetbrains.kotlin.resolve.BindingTrace
 import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
+import org.jetbrains.kotlin.resolve.calls.model.ArgumentMatch
+import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
 import org.jetbrains.kotlin.resolve.lazy.ResolveSession
 import org.jetbrains.kotlin.types.typeUtil.isUnit
@@ -39,7 +44,7 @@ fun test(
 ): KtFile? {
     val fileNode = Converter().convertFile(file)
 
-    //logFile(fileNode)
+    // logFile(fileNode)
 
     wrapComposableLambdasInObserve(fileNode, resolveSession, trace)
     moveComposableTrailingLambdasIntoTheBody(fileNode, resolveSession, trace)
@@ -48,7 +53,7 @@ fun test(
 
     val newSource = Writer.write(fileNode)
 
-    //error("new source $newSource")
+    error("new source $newSource")
 
     return file.withNewSource(newSource)
 }
@@ -74,8 +79,13 @@ private fun moveComposableTrailingLambdasIntoTheBody(
         val resolvedCall = element.getResolvedCall(trace.bindingContext)!!
         val resulting = resolvedCall.resultingDescriptor
         if (!resulting.annotations.hasAnnotation(ComposableAnnotation)) return@visit
+        if (!resolvedCall.candidateDescriptor.hasStableParameterNames()) return@visit
 
         val newArgs = node.args.toMutableList()
+        newArgs.forEachIndexed { index, arg ->
+            arg.name = arg.name
+                ?: (resolvedCall.getArgumentMapping(arg.element as KtValueArgument) as? ArgumentMatch)?.valueParameter?.name?.asString()
+        }
 
         val lambdaArgName = resulting.valueParameters.last()
         newArgs.add(
@@ -83,7 +93,7 @@ private fun moveComposableTrailingLambdasIntoTheBody(
                 name = lambdaArgName.name.asString(),
                 asterisk = false,
                 expr = lambda.func
-            )
+            ).also { it.element = lambda.element }
         )
 
         node.args = newArgs
@@ -220,8 +230,6 @@ private fun wrapComposableCalls(
     var keyIndex = 0
     fun nextKeyIndex() = ++keyIndex
     Visitor.visit(file) { node, parent ->
-        println("process node $node in $func")
-
         if (node is Node.Decl.Func) {
             func = node
             keyIndex = 0
@@ -239,85 +247,307 @@ private fun wrapComposableCalls(
         val callKey = "${funcDescriptor.fqNameSafe.asString()}:${element.startOffset}".hashCode()
         val callKeyIndex = nextKeyIndex()
 
-        node.expr = Node.Expr.Text(
-            CodeBlock.builder().apply {
-                beginControlFlow("with(Unit)")
-
-                node.args.forEachIndexed { index, valueArg ->
-                    addStatement("val arg_${callKeyIndex}_${index} = ${valueArg.expr.element!!.text}")
-                }
-
-                addStatement("var key_$callKeyIndex: Any = $callKey")
-
-                resulting.valueParameters.forEachIndexed { index, param ->
-                    if (param.annotations.hasAnnotation(PivotalAnnotation)) {
-                        addStatement("key_$callKeyIndex = compose_composer.joinKey(key_$callKeyIndex, arg_${callKeyIndex}_${index})")
-                    }
-                }
-
-                if (isEffect) {
-                    addStatement("compose_composer.expr(")
-                    indent()
-                    addStatement("key = key_$callKeyIndex,")
-                    addStatement(
-                        "block = { ${node.expr.element!!.text}(${node.args.indices.joinToString(
-                            ", "
-                        ) { "arg_${callKeyIndex}_${it}" }}) }"
-                    )
-                    unindent()
-                    addStatement(")")
-                } else {
-                    addStatement("compose_composer.call(")
-                    indent()
-                    addStatement("key = key_$callKeyIndex,")
-                    addStatement("invalid = {")
-                    indent()
-
-                    if (node.args.isEmpty()) {
-                        addStatement("false")
-                    } else {
-                        val stableParams = node.args
-                            .mapIndexed { index, arg ->
-                                Triple(
-                                    arg,
-                                    index,
-                                    resulting.valueParameters.first { param ->
-                                        if (arg.name != null) {
-                                            param.name.asString() == arg.name
-                                        } else {
-                                            resulting.valueParameters.indexOf(param) == index
-                                        }
-                                    }
+        val initKeyStmt = Node.Stmt.Decl(
+            decl = Node.Decl.Property(
+                mods = emptyList(),
+                readOnly = false,
+                typeParams = emptyList(),
+                receiverType = null,
+                vars = listOf(
+                    Node.Decl.Property.Var(
+                        name = "key_$callKeyIndex",
+                        type = Node.Type(
+                            mods = emptyList(),
+                            ref = Node.TypeRef.Simple(
+                                pieces = listOf(
+                                    Node.TypeRef.Simple.Piece(
+                                        name = "Any",
+                                        typeParams = emptyList()
+                                    )
                                 )
-                            }
-                            .filter { it.third.type.isStable() }
-
-                        if (stableParams.size != node.args.size) {
-                            addStatement("true")
-                        } else {
-                            addStatement(
-                                stableParams.joinToString(" or ") {
-                                    "changed(arg_${callKeyIndex}_${it.second})"
-                                }
                             )
-                        }
-                    }
-                    unindent()
-                    addStatement("},")
-                    addStatement(
-                        "block = { ${node.expr.element!!.text}(${node.args.indices.joinToString(
-                            ", "
-                        ) { "arg_${callKeyIndex}_${it}" }}) }"
+                        )
                     )
-                    unindent()
-                    addStatement(")")
-                }
-
-                endControlFlow()
-            }.build().toString()
+                ),
+                typeConstraints = emptyList(),
+                delegated = false,
+                expr = Node.Expr.Const(value = "$callKey", form = Node.Expr.Const.Form.INT),
+                accessors = null
+            )
         )
 
-        node.ugly = true
+        fun initArgStmt(
+            arg: Node.ValueArg,
+            resolvedCall: ResolvedCall<*>,
+            index: Int
+        ): Node.Stmt.Decl {
+            val descriptor =
+                (resolvedCall.getArgumentMapping(arg.element as KtValueArgument) as? ArgumentMatch)?.valueParameter!!
+            return Node.Stmt.Decl(
+                decl = Node.Decl.Property(
+                    mods = emptyList(),
+                    readOnly = false,
+                    typeParams = emptyList(),
+                    receiverType = null,
+                    vars = listOf(
+                        Node.Decl.Property.Var(
+                            name = "arg_${callKeyIndex}_${index}",
+                            type = descriptor.type.asType()
+                        )
+                    ),
+                    typeConstraints = emptyList(),
+                    delegated = false,
+                    expr = arg.expr,
+                    accessors = null
+                )
+            )
+        }
+
+        fun joinKeyStmt(
+            argName: String
+        ) = Node.Stmt.Expr(
+            expr = Node.Expr.BinaryOp(
+                lhs = Node.Expr.Name(name = "key_$callKeyIndex"),
+                oper = Node.Expr.BinaryOp.Oper.Token(token = Node.Expr.BinaryOp.Token.ASSN),
+                rhs = Node.Expr.BinaryOp(
+                    lhs = Node.Expr.Name(name = "compose_composer"),
+                    oper = Node.Expr.BinaryOp.Oper.Token(token = Node.Expr.BinaryOp.Token.DOT),
+                    rhs = Node.Expr.Call(
+                        expr = Node.Expr.Name(name = "joinKey"),
+                        typeArgs = emptyList(),
+                        args = listOf(
+                            Node.ValueArg(
+                                name = null,
+                                asterisk = false,
+                                expr = Node.Expr.Name(name = "key_$callKeyIndex")
+                            ),
+                            Node.ValueArg(
+                                name = null,
+                                asterisk = false,
+                                expr = Node.Expr.Name(name = argName)
+                            )
+                        ),
+                        lambda = null
+                    )
+                )
+            )
+        )
+
+        fun composerChangedExpr(
+            argName: String,
+            next: Node.Expr?
+        ): Node.Expr {
+            val changedExpr = Node.Expr.Call(
+                expr = Node.Expr.Name(name = "changed"),
+                typeArgs = emptyList(),
+                args = listOf(
+                    Node.ValueArg(
+                        name = null,
+                        asterisk = false,
+                        expr = Node.Expr.Name(name = argName)
+                    )
+                ),
+                lambda = null
+            )
+
+            return if (next == null) changedExpr else Node.Expr.BinaryOp(
+                lhs = changedExpr,
+                oper = Node.Expr.BinaryOp.Oper.Infix(str = "or"),
+                rhs = next
+            )
+        }
+
+        fun composerExprStmt() = Node.Stmt.Expr(
+            expr = Node.Expr.BinaryOp(
+                lhs = Node.Expr.Name("compose_composer"),
+                oper = Node.Expr.BinaryOp.Oper.Token(token = Node.Expr.BinaryOp.Token.DOT),
+                rhs = Node.Expr.Call(
+                    expr = Node.Expr.Name(name = "expr"),
+                    typeArgs = emptyList(),
+                    args = listOf(
+                        Node.ValueArg(
+                            name = "key",
+                            asterisk = false,
+                            expr = Node.Expr.Name(name = "key_$callKeyIndex")
+                        ),
+                        Node.ValueArg(
+                            name = "block",
+                            asterisk = false,
+                            expr = Node.Expr.Brace(
+                                params = emptyList(),
+                                block = Node.Block(
+                                    stmts = listOf(
+                                        Node.Stmt.Expr(
+                                            expr = Node.Expr.Call(
+                                                expr = node.expr,
+                                                typeArgs = node.typeArgs,
+                                                args = node.args
+                                                    .mapIndexed { index, arg ->
+                                                        Node.ValueArg(
+                                                            name = arg.name,
+                                                            asterisk = false, // todo
+                                                            expr = Node.Expr.Name(name = "arg_${callKeyIndex}_${index}")
+                                                        )
+                                                    },
+                                                lambda = null
+                                            )
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                    ),
+                    lambda = null
+                )
+            )
+        )
+
+        fun composerCallStmt() = Node.Stmt.Expr(
+            expr = Node.Expr.BinaryOp(
+                lhs = Node.Expr.Name("compose_composer"),
+                oper = Node.Expr.BinaryOp.Oper.Token(token = Node.Expr.BinaryOp.Token.DOT),
+                rhs = Node.Expr.Call(
+                    expr = Node.Expr.Name(name = "call"),
+                    typeArgs = emptyList(),
+                    args = listOf(
+                        Node.ValueArg(
+                            name = "key",
+                            asterisk = false,
+                            expr = Node.Expr.Name(name = "key_$callKeyIndex")
+                        ),
+                        Node.ValueArg(
+                            name = "invalid",
+                            asterisk = false,
+                            expr = Node.Expr.Brace(
+                                params = emptyList(),
+                                block = Node.Block(
+                                    stmts = mutableListOf<Node.Stmt>().also { stmts ->
+                                        if (node.args.isEmpty()) {
+                                            stmts += Node.Stmt.Expr(
+                                                expr = Node.Expr.Const(
+                                                    value = "false",
+                                                    form = Node.Expr.Const.Form.BOOLEAN
+                                                )
+                                            )
+                                        } else {
+                                            val stableParams = node.args
+                                                .mapIndexed { index, arg ->
+                                                    Triple(
+                                                        arg,
+                                                        index,
+                                                        resulting.valueParameters.first { param ->
+                                                            if (arg.name != null) {
+                                                                param.name.asString() == arg.name
+                                                            } else {
+                                                                resulting.valueParameters.indexOf(
+                                                                    param
+                                                                ) == index
+                                                            }
+                                                        }
+                                                    )
+                                                }
+                                                .filter { it.third.type.isStable() }
+
+                                            if (stableParams.size != node.args.size) {
+                                                stmts += Node.Stmt.Expr(
+                                                    expr = Node.Expr.Const(
+                                                        value = "true",
+                                                        form = Node.Expr.Const.Form.BOOLEAN
+                                                    )
+                                                )
+                                            } else {
+                                                stmts += Node.Stmt.Expr(
+                                                    expr = stableParams.foldRight(null) { argTriple: Triple<Node.ValueArg, Int, ValueParameterDescriptor>, next: Node.Expr? ->
+                                                        composerChangedExpr(
+                                                            argName = "arg_${callKeyIndex}_${argTriple.second}",
+                                                            next = next
+                                                        )
+                                                    }!!
+                                                )
+                                            }
+                                        }
+
+
+                                    }
+                                )
+                            )
+                        ),
+                        Node.ValueArg(
+                            name = "block",
+                            asterisk = false,
+                            expr = Node.Expr.Brace(
+                                params = emptyList(),
+                                block = Node.Block(
+                                    stmts = listOf(
+                                        Node.Stmt.Expr(
+                                            expr = Node.Expr.Call(
+                                                expr = node.expr,
+                                                typeArgs = node.typeArgs,
+                                                args = node.args
+                                                    .mapIndexed { index, arg ->
+                                                        Node.ValueArg(
+                                                            name = arg.name,
+                                                            asterisk = false, // todo
+                                                            expr = Node.Expr.Name(name = "arg_${callKeyIndex}_${index}")
+                                                        )
+                                                    },
+                                                lambda = null
+                                            )
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                    ),
+                    lambda = null
+                )
+            )
+        )
+
+        node.expr = Node.Expr.Call(
+            expr = Node.Expr.Name(
+                name = "with"
+            ),
+            typeArgs = emptyList(),
+            args = listOf(
+                Node.ValueArg(
+                    name = null,
+                    asterisk = false,
+                    expr = Node.Expr.Name(
+                        name = "Unit"
+                    )
+                )
+            ),
+            lambda = Node.Expr.Call.TrailLambda(
+                anns = emptyList(),
+                label = null,
+                func = Node.Expr.Brace(
+                    params = emptyList(),
+                    block = Node.Block(
+                        stmts = mutableListOf<Node.Stmt>().also { stmts ->
+                            stmts += initKeyStmt
+                            node.args.forEachIndexed { index, arg ->
+                                stmts += initArgStmt(arg, resolvedCall, index)
+                            }
+
+                            resulting.valueParameters.forEachIndexed { index, param ->
+                                if (param.annotations.hasAnnotation(PivotalAnnotation)) {
+                                    stmts += joinKeyStmt("arg_${callKeyIndex}_${index}")
+                                }
+                            }
+
+                            if (isEffect) {
+                                stmts += composerExprStmt()
+                            } else {
+                                stmts += composerCallStmt()
+                            }
+                        }
+                    )
+                )
+            )
+        )
+
+        node.ugly = true // todo
         node.args = emptyList()
         node.typeArgs = emptyList()
         node.lambda = null
