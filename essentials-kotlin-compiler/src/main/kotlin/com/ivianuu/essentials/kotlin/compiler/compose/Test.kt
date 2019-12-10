@@ -49,7 +49,6 @@ fun test(
     insertRestartScope(fileNode, resolveSession, trace)
 
     wrapComposableCalls(fileNode, resolveSession, trace)
-    wrapEffectCalls(fileNode, resolveSession, trace)
 
     val newSource = Writer.write(fileNode)
 
@@ -139,9 +138,10 @@ private fun wrapComposableCalls(
         val element = node.element as? KtCallExpression ?: return@visit
         val resolvedCall = element.getResolvedCall(trace.bindingContext)!!
         val resulting = resolvedCall.resultingDescriptor
-        if (!resulting.annotations.hasAnnotation(ComposableAnnotation) || resulting.returnType?.isUnit() == false) {
+        if (!resulting.annotations.hasAnnotation(ComposableAnnotation)) {
             return@visit
         }
+        val isEffect = resulting.returnType?.isUnit() == false
 
         val funcDescriptor = resolveSession.resolveToDescriptor(func!!.element!! as KtNamedFunction)
 
@@ -164,104 +164,55 @@ private fun wrapComposableCalls(
                     }
                 }
 
-                addStatement("compose_composer.call(")
-                indent()
-                addStatement("key = key_$callKeyIndex,")
-                addStatement("invalid = {")
-                indent()
-
-                if (resulting.valueParameters.isEmpty()) {
-                    addStatement("false")
+                if (isEffect) {
+                    addStatement("compose_composer.expr(")
+                    indent()
+                    addStatement("key = key_$callKeyIndex,")
+                    addStatement(
+                        "block = { ${node.expr.element!!.text}(${node.args.indices.joinToString(
+                            ", "
+                        ) { "arg_${callKeyIndex}_${it}" }}) }"
+                    )
+                    unindent()
+                    addStatement(")")
                 } else {
-                    val stableParams = resulting.valueParameters
-                        .filter { it.type.isStable() }
+                    addStatement("compose_composer.call(")
+                    indent()
+                    addStatement("key = key_$callKeyIndex,")
+                    addStatement("invalid = {")
+                    indent()
 
-                    if (stableParams.size != resulting.valueParameters.size) {
-                        addStatement("true")
+                    if (resulting.valueParameters.isEmpty()) {
+                        addStatement("false")
                     } else {
-                        addStatement(
-                            stableParams.joinToString(" or ") {
-                                "changed(arg_${callKeyIndex}_${it.index})"
-                            }
-                        )
+                        val stableParams = resulting.valueParameters
+                            .filter { it.type.isStable() }
+
+                        if (stableParams.size != resulting.valueParameters.size) {
+                            addStatement("true")
+                        } else {
+                            addStatement(
+                                stableParams.joinToString(" or ") {
+                                    "changed(arg_${callKeyIndex}_${it.index})"
+                                }
+                            )
+                        }
                     }
+                    unindent()
+                    addStatement("},")
+                    addStatement(
+                        "block = { ${node.expr.element!!.text}(${node.args.indices.joinToString(
+                            ", "
+                        ) { "arg_${callKeyIndex}_${it}" }}) }"
+                    )
+                    unindent()
+                    addStatement(")")
                 }
-                unindent()
-                addStatement("},")
-                addStatement(
-                    "block = { ${node.expr.element!!.text}(${node.args.indices.joinToString(
-                        ", "
-                    ) { "arg_${callKeyIndex}_${it}" }}) }")
-                unindent()
-                addStatement(")")
+
                 endControlFlow()
             }.build().toString()
         )
 
-        node.ugly = true
-        node.args = emptyList()
-        node.typeArgs = emptyList()
-        node.lambda = null
-    }
-}
-
-private fun wrapEffectCalls(
-    file: Node.File,
-    resolveSession: ResolveSession,
-    trace: BindingTrace
-) {
-    var func: Node.Decl.Func? = null
-    var keyIndex = 0
-    fun nextKeyIndex() = ++keyIndex
-    Visitor.visit(file) { node, _ ->
-        if (node is Node.Decl.Func) {
-            func = node
-            keyIndex = 0
-        }
-        if (node !is Node.Expr.Call) return@visit
-        if (func == null) return@visit
-        val element = node.element as? KtCallExpression ?: return@visit
-        val resolvedCall = element.getResolvedCall(trace.bindingContext)!!
-        val resulting = resolvedCall.resultingDescriptor
-        if (!resulting.annotations.hasAnnotation(ComposableAnnotation) || resulting.returnType?.isUnit() == true) {
-            return@visit
-        }
-
-        val funcDescriptor = resolveSession.resolveToDescriptor(func!!.element!! as KtNamedFunction)
-
-        val callKey = "${funcDescriptor.fqNameSafe.asString()}:${element.startOffset}".hashCode()
-        val callKeyIndex = nextKeyIndex()
-
-        val effectExpr = Node.Expr.Text(
-            CodeBlock.builder().apply {
-                beginControlFlow("with(Unit)")
-                node.args.forEachIndexed { index, valueArg ->
-                    addStatement("val arg_${callKeyIndex}_${index} = ${valueArg.element!!.text}")
-                }
-
-                addStatement("var key_$callKeyIndex: Any = $callKey")
-
-                resulting.valueParameters.forEachIndexed { index, param ->
-                    if (param.annotations.hasAnnotation(PivotalAnnotation)) {
-                        addStatement("key_$callKeyIndex = compose_composer.joinKey(key_$callKeyIndex, arg_${callKeyIndex}_${index})")
-                    }
-                }
-
-                addStatement("compose_composer.expr(")
-                indent()
-                addStatement("key = key_$callKeyIndex,")
-                addStatement(
-                    "block = { ${node.expr.element!!.text}(${node.args.indices.joinToString(
-                        ", "
-                    ) { "arg_${callKeyIndex}_${it}" }}) }"
-                )
-                unindent()
-                addStatement(")")
-                endControlFlow()
-            }.build().toString()
-        )
-
-        node.expr = effectExpr
         node.ugly = true
         node.args = emptyList()
         node.typeArgs = emptyList()
