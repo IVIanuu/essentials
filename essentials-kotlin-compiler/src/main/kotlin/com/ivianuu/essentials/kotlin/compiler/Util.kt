@@ -20,6 +20,10 @@ import com.ivianuu.essentials.kotlin.compiler.compose.ast.Node
 import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
 import com.squareup.kotlinpoet.TypeName
+import org.jetbrains.kotlin.builtins.getReceiverTypeFromFunctionType
+import org.jetbrains.kotlin.builtins.getReturnTypeFromFunctionType
+import org.jetbrains.kotlin.builtins.getValueParameterTypesFromFunctionType
+import org.jetbrains.kotlin.builtins.isFunctionType
 import org.jetbrains.kotlin.cli.common.messages.CompilerMessageSeverity
 import org.jetbrains.kotlin.cli.common.messages.MessageCollector
 import org.jetbrains.kotlin.descriptors.ClassDescriptor
@@ -50,22 +54,65 @@ fun KotlinType.asTypeName(): TypeName {
     } else type).copy(nullable = isMarkedNullable)
 }
 
-fun KotlinType.asType(): Node.Type {
-    val pathSegments = constructor.declarationDescriptor!!.fqNameSafe.pathSegments()
-    val pieces = pathSegments.mapIndexed { index, name ->
-        val typeParams = if (index != pathSegments.lastIndex) {
-            emptyList()
-        } else {
-            arguments.map { it.type.asType() }
-        }
-        Node.TypeRef.Simple.Piece(name.asString(), typeParams)
-    }
+/*type=
+Type(mods=[],
+ref=Func(receiverType=Type(mods=[],
+ref=Simple(pieces=[Piece(name=Scope, typeParams=[])])),
+ params=[Param(name=null, type=Type(mods=[], ref=Nullable(type=Simple(pieces=[Piece(name=Map,
+  typeParams=[Type(mods=[], ref=Simple(pieces=[Piece(name=String, typeParams=[])])),
+  Type(mods=[], ref=Nullable(type=Simple(pieces=[Piece(name=Int, typeParams=[])])))])]))))]
 
-    val typeRef = Node.TypeRef.Simple(pieces)
-    return Node.Type(
-        mods = emptyList(),
-        ref = if (isMarkedNullable) Node.TypeRef.Nullable(typeRef) else typeRef
-    )
+ */
+
+/*
+Var(name=complexType,
+type=Type(mods=[], ref=Func(receiverType=Type(mods=[],
+ref=Simple(pieces=[Piece(name=Scope, typeParams=[])])),
+ params=[Param(name=null, type=Type(mods=[],
+ ref=Nullable(type=Simple(pieces=[Piece(name=Map, typeParams=[Type(mods=[],
+ ref=Simple(pieces=[Piece(name=String, typeParams=[])])), Type(mods=[],
+ ref=Nullable(type=Simple(pieces=[Piece(name=Int, typeParams=[])])))])]))))],
+ type=Type(mods=[], ref=Nullable(type=Simple(pieces=[Piece(name=String, typeParams=[])]))))))],
+ */
+
+fun KotlinType.asType(): Node.Type {
+    return if (isFunctionType) {
+        val receiver = getReceiverTypeFromFunctionType()
+        val params = getValueParameterTypesFromFunctionType()
+        val returnType = getReturnTypeFromFunctionType()
+        val typeRef = Node.TypeRef.Func(
+            receiverType = receiver?.asType(),
+            params = params.map {
+                Node.TypeRef.Func.Param(null, it.type.asType())
+            },
+            type = returnType.asType()
+        )
+        Node.Type(
+            mods = emptyList(),
+            ref = if (isMarkedNullable) Node.TypeRef.Nullable(
+                Node.TypeRef.Paren(
+                    emptyList(),
+                    typeRef
+                )
+            ) else typeRef
+        )
+    } else {
+        val pathSegments = constructor.declarationDescriptor!!.fqNameSafe.pathSegments()
+        val pieces = pathSegments.mapIndexed { index, name ->
+            val typeParams = if (index != pathSegments.lastIndex) {
+                emptyList()
+            } else {
+                arguments.map { it.type.asType() }
+            }
+            Node.TypeRef.Simple.Piece(name.asString(), typeParams)
+        }
+
+        val typeRef = Node.TypeRef.Simple(pieces)
+        Node.Type(
+            mods = emptyList(),
+            ref = if (isMarkedNullable) Node.TypeRef.Nullable(typeRef) else typeRef
+        )
+    }
 }
 
 fun DeclarationDescriptor.hasAnnotatedAnnotations(annotation: FqName): Boolean =

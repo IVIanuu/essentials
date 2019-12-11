@@ -53,7 +53,7 @@ fun test(
 
     val newSource = Writer.write(fileNode)
 
-    error("new source $newSource")
+    //error("new source $newSource")
 
     return file.withNewSource(newSource)
 }
@@ -97,6 +97,7 @@ private fun moveComposableTrailingLambdasIntoTheBody(
         )
 
         node.args = newArgs
+        node.lambda = null
     }
 
 }
@@ -131,6 +132,19 @@ private fun wrapComposableLambdasInObserve(
             val argDescriptor = resulting.valueParameters[argIndex]
 
             if (argDescriptor.type.annotations.hasAnnotation(ComposableAnnotation)) {
+                isComposable = true
+            }
+        }
+
+        if (!isComposable && node.parent is Node.Expr.Call.TrailLambda) {
+            val lambda = node.parent as Node.Expr.Call.TrailLambda
+            val call = lambda.parent as Node.Expr.Call
+            val element = call.element as? KtCallExpression ?: return@visit
+            val resolvedCall = element.getResolvedCall(trace.bindingContext)!!
+            val resulting = resolvedCall.resultingDescriptor
+            val lambdaArgDescriptor = resulting.valueParameters.last()
+
+            if (lambdaArgDescriptor.type.annotations.hasAnnotation(ComposableAnnotation)) {
                 isComposable = true
             }
         }
@@ -241,6 +255,14 @@ private fun wrapComposableCalls(
         val resulting = resolvedCall.resultingDescriptor
         if (!resulting.annotations.hasAnnotation(ComposableAnnotation)) return@visit
         val isEffect = resulting.returnType?.isUnit() == false
+
+        var rootExpr: Node.Expr = node
+        while (rootExpr.parent is Node.Expr.BinaryOp &&
+            (rootExpr.parent as Node.Expr.BinaryOp).oper is Node.Expr.BinaryOp.Oper.Token &&
+            ((rootExpr.parent as Node.Expr.BinaryOp).oper as Node.Expr.BinaryOp.Oper.Token).token == Node.Expr.BinaryOp.Token.DOT
+        ) {
+            rootExpr = rootExpr.parent as Node.Expr
+        }
 
         val funcDescriptor = resolveSession.resolveToDescriptor(func!!.element!! as KtNamedFunction)
 
@@ -377,21 +399,7 @@ private fun wrapComposableCalls(
                                 params = emptyList(),
                                 block = Node.Block(
                                     stmts = listOf(
-                                        Node.Stmt.Expr(
-                                            expr = Node.Expr.Call(
-                                                expr = node.expr,
-                                                typeArgs = node.typeArgs,
-                                                args = node.args
-                                                    .mapIndexed { index, arg ->
-                                                        Node.ValueArg(
-                                                            name = arg.name,
-                                                            asterisk = false, // todo
-                                                            expr = Node.Expr.Name(name = "arg_${callKeyIndex}_${index}")
-                                                        )
-                                                    },
-                                                lambda = null
-                                            )
-                                        )
+                                        Node.Stmt.Expr(expr = rootExpr)
                                     )
                                 )
                             )
@@ -480,19 +488,7 @@ private fun wrapComposableCalls(
                                 block = Node.Block(
                                     stmts = listOf(
                                         Node.Stmt.Expr(
-                                            expr = Node.Expr.Call(
-                                                expr = node.expr,
-                                                typeArgs = node.typeArgs,
-                                                args = node.args
-                                                    .mapIndexed { index, arg ->
-                                                        Node.ValueArg(
-                                                            name = arg.name,
-                                                            asterisk = false, // todo
-                                                            expr = Node.Expr.Name(name = "arg_${callKeyIndex}_${index}")
-                                                        )
-                                                    },
-                                                lambda = null
-                                            )
+                                            expr = rootExpr
                                         )
                                     )
                                 )
@@ -504,7 +500,7 @@ private fun wrapComposableCalls(
             )
         )
 
-        node.expr = Node.Expr.Call(
+        val newExpr = Node.Expr.Call(
             expr = Node.Expr.Name(
                 name = "with"
             ),
@@ -547,9 +543,49 @@ private fun wrapComposableCalls(
             )
         )
 
+
+        node.expr = Node.Expr.Call(
+            expr = node.expr,
+            typeArgs = node.typeArgs,
+            args = node.args
+                .mapIndexed { index, arg ->
+                    Node.ValueArg(
+                        name = arg.name,
+                        asterisk = false, // todo
+                        expr = Node.Expr.Name(name = "arg_${callKeyIndex}_${index}")
+                    )
+                },
+            lambda = null
+        )
         node.ugly = true // todo
         node.args = emptyList()
         node.typeArgs = emptyList()
         node.lambda = null
+
+        // todo implement all cases
+        when (rootExpr.parent) {
+            is Node.Stmt -> {
+                val stmt = rootExpr.parent as Node.Stmt
+                val block = stmt.parent as Node.Block
+
+                val newStmts = block.stmts.toMutableList()
+                val stmtIndex = newStmts.indexOf(stmt)
+                newStmts.removeAt(stmtIndex)
+                newStmts.add(stmtIndex, Node.Stmt.Expr(newExpr))
+                block.stmts = newStmts
+            }
+            is Node.Decl.Property -> {
+                val property = rootExpr.parent as Node.Decl.Property
+                property.expr = newExpr
+            }
+            is Node.ValueArg -> {
+                val arg = rootExpr.parent as Node.ValueArg
+                arg.expr = newExpr
+            }
+            is Node.Decl.Func.Body.Expr -> {
+                val expr = rootExpr.parent as Node.Decl.Func.Body.Expr
+                expr.expr = newExpr
+            }
+        }
     }
 }
