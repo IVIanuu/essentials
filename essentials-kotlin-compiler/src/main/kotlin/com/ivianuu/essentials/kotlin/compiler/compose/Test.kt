@@ -61,7 +61,6 @@ fun test(
     resolveSession: ResolveSession,
     file: KtFile
 ): KtFile? {
-    val orig = Converter().convertFile(file)
     val fileNode = Converter().convertFile(file)
 
     //logFile(fileNode)
@@ -91,7 +90,7 @@ fun test(
 
     val newSource = Writer.write(fileNode)
 
-    error("new source $newSource")
+    //if (file.name == "ComposeController.kt") error("new source $newSource")
 
     return file.withNewSource(newSource)
 }
@@ -215,7 +214,11 @@ private fun moveComposableTrailingLambdasIntoTheBody(
         val lambda = node.lambda ?: return@visit
 
         val element = node.element as? KtCallExpression ?: return@visit
-        val resolvedCall = element.getResolvedCall(trace.bindingContext) ?: return@visit
+        val resolvedCall = element.getResolvedCall(trace.bindingContext)
+        if (resolvedCall == null) {
+            retry = true
+            return@visit
+        }
         val resulting = resolvedCall.resultingDescriptor
         if (!resulting.annotations.hasAnnotation(ComposableAnnotation)) return@visit
 
@@ -293,7 +296,11 @@ private fun Node.invokesComposables(
         if (invokesComposables) return@visit
         if (childNode !is Node.Expr.Call) return@visit
         val element = childNode.element as? KtCallExpression ?: return@visit
-        val resolvedCall = element.getResolvedCall(trace.bindingContext) ?: return@visit
+        val resolvedCall = element.getResolvedCall(trace.bindingContext)
+        if (resolvedCall == null) {
+            retry = true
+            return@visit
+        }
         val resulting = resolvedCall.resultingDescriptor
         if (!resulting.annotations.hasAnnotation(ComposableAnnotation)) return@visit
         invokesComposables = true
@@ -376,7 +383,11 @@ private fun wrapComposableLambdasInObserve(
                 val enumEntry = arg.parent as Node.Decl.EnumEntry
                 val argIndex = enumEntry.args.indexOf(arg)
                 val element = enumEntry.element as? KtCallExpression ?: return@visit
-                val resolvedCall = element.getResolvedCall(trace.bindingContext) ?: return@visit
+                val resolvedCall = element.getResolvedCall(trace.bindingContext)
+                if (resolvedCall == null) {
+                    retry = true
+                    return@visit
+                }
                 val resulting = resolvedCall.resultingDescriptor
                 val argDescriptor = resulting.valueParameters[argIndex]
 
@@ -387,7 +398,11 @@ private fun wrapComposableLambdasInObserve(
                 val call = arg.parent as Node.Expr.Call
                 val argIndex = call.args.indexOf(arg)
                 val element = call.element as? KtCallExpression ?: return@visit
-                val resolvedCall = element.getResolvedCall(trace.bindingContext) ?: return@visit
+                val resolvedCall = element.getResolvedCall(trace.bindingContext)
+                if (resolvedCall == null) {
+                    retry = true
+                    return@visit
+                }
                 val resulting = resolvedCall.resultingDescriptor
                 val argDescriptor = resulting.valueParameters[argIndex]
 
@@ -585,7 +600,11 @@ private fun wrapComposableCalls(
 
         val element = node.element as? KtCallExpression ?: return@visit
 
-        val resolvedCall = element.getResolvedCall(trace.bindingContext) ?: return@visit
+        val resolvedCall = element.getResolvedCall(trace.bindingContext)
+        if (resolvedCall == null) {
+            retry = true
+            return@visit
+        }
         val resulting = resolvedCall.resultingDescriptor
         if (!resulting.annotations.hasAnnotation(ComposableAnnotation)) return@visit
         val isEffect = resulting.returnType?.isUnit() == false
@@ -845,9 +864,11 @@ private fun wrapComposableCalls(
                                                                     param
                                                                 ) == index
                                                             }
-                                                        } ?: error("wtf $arg all args ${node.args}")
+                                                        }
+                                                            ?: return@mapIndexed null //error("wtf $arg all args ${node.args}")
                                                     )
                                                 }
+                                                .filterNotNull()
                                                 .filter { it.third.type.isStable() }
 
                                             if (stableParams.size != node.args.size) {
@@ -924,25 +945,70 @@ private fun wrapComposableCalls(
                 )
             }
 
-        when (rootExpr.parent) {
-            is Node.Stmt.Expr -> {
-                val stmt = rootExpr.parent as Node.Stmt.Expr
-                stmt.expr = newExpr
+        when (val rootExprParent = rootExpr.parent) {
+            is Node.Decl.Func.Body.Expr -> rootExprParent.expr = newExpr
+            is Node.Decl.Structured.Parent.Type -> rootExprParent.by = newExpr
+            is Node.Decl.Func.Param -> rootExprParent.default = newExpr
+            is Node.Decl.Property -> rootExprParent.expr = newExpr
+            is Node.ValueArg -> rootExprParent.expr = newExpr
+            is Node.Expr.If -> {
+                when {
+                    rootExprParent.expr === rootExpr -> rootExprParent.expr = newExpr
+                    rootExprParent.body === rootExpr -> rootExprParent.body = newExpr
+                    rootExprParent.elseBody === rootExpr -> rootExprParent.elseBody = newExpr
+                }
             }
-            is Node.Decl.Property -> {
-                val property = rootExpr.parent as Node.Decl.Property
-                property.expr = newExpr
+            is Node.Expr.For -> {
+                when {
+                    rootExprParent.inExpr === rootExpr -> rootExprParent.inExpr = newExpr
+                    rootExprParent.body === rootExpr -> rootExprParent.body = newExpr
+                }
             }
-            is Node.ValueArg -> {
-                val arg = rootExpr.parent as Node.ValueArg
-                arg.expr = newExpr
+            is Node.Expr.While -> {
+                when {
+                    rootExprParent.expr === rootExpr -> rootExprParent.expr = newExpr
+                    rootExprParent.body === rootExpr -> rootExprParent.body = newExpr
+                }
             }
-            is Node.Decl.Func.Body.Expr -> {
-                val expr = rootExpr.parent as Node.Decl.Func.Body.Expr
-                expr.expr = newExpr
+            is Node.Expr.BinaryOp -> {
+                when {
+                    rootExprParent.lhs === rootExpr -> rootExprParent.lhs = newExpr
+                    rootExprParent.rhs === rootExpr -> rootExprParent.rhs = newExpr
+                }
             }
+            is Node.Expr.UnaryOp -> rootExprParent.expr = newExpr
+            is Node.Expr.TypeOp -> rootExprParent.lhs = newExpr
+            is Node.Expr.Paren -> rootExprParent.expr = newExpr
+            is Node.Expr.StringTmpl.Elem.ShortTmpl -> rootExprParent.expr = newExpr
+            is Node.Expr.StringTmpl.Elem.LongTmpl -> rootExprParent.expr = newExpr
+            is Node.Expr.When -> rootExprParent.expr = newExpr
+            is Node.Expr.When.Entry -> rootExprParent.body = newExpr
+            is Node.Expr.Throw -> rootExprParent.expr = newExpr
+            is Node.Expr.Return -> rootExprParent.expr = newExpr
+            is Node.Expr.CollLit -> {
+                val newExprs = rootExprParent.exprs.toMutableList()
+                val index = rootExprParent.exprs.indexOf(rootExpr)
+                newExprs.removeAt(index)
+                newExprs.add(index, newExpr)
+                rootExprParent.exprs = newExprs
+            }
+            is Node.Expr.Labeled -> rootExprParent.expr = newExpr
+            is Node.Expr.Annotated -> rootExprParent.expr = newExpr
+            is Node.Expr.Call -> rootExprParent.expr = newExpr
+            is Node.Expr.ArrayAccess -> {
+                if (rootExprParent.expr === rootExpr) {
+                    rootExprParent.expr = newExpr
+                } else {
+                    val newIndices = rootExprParent.indices.toMutableList()
+                    val index = rootExprParent.indices.indexOf(rootExpr)
+                    newIndices.removeAt(index)
+                    newIndices.add(index, newExpr)
+                    rootExprParent.indices = newIndices
+                }
+            }
+            is Node.Stmt.Expr -> rootExprParent.expr = newExpr
             else -> {
-                error("$rootExpr -> ${rootExpr.parent}")
+                error("$rootExpr -> ${rootExpr.parent?.javaClass} ${rootExpr.parent}")
             }
         }
     }

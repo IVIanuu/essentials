@@ -32,11 +32,13 @@ import org.jetbrains.kotlin.resolve.jvm.extensions.AnalysisHandlerExtension
 import org.jetbrains.kotlin.resolve.lazy.ResolveSession
 import java.io.File
 
+var retry = false
+
 class ComposeAnalysisHandlerExtension(
     private val outputDir: File
 ) : AnalysisHandlerExtension {
 
-    private var generatedFiles = false
+    private var runComplete = false
 
     private lateinit var resolveSession: ResolveSession
 
@@ -46,25 +48,31 @@ class ComposeAnalysisHandlerExtension(
         bindingTrace: BindingTrace,
         files: Collection<KtFile>
     ): AnalysisResult? {
-        if (generatedFiles) return null
-        generatedFiles = true
+        if (runComplete) return null
+        retry = false
 
         files as ArrayList<KtFile>
 
         files.toList().forEachIndexed { index, file ->
             val changed = test(bindingTrace, resolveSession, file)
-            if (changed != null && changed != file) {
+            if (!retry && changed != null && changed != file) {
                 files.removeAt(index)
                 files.add(index, changed)
             }
         }
 
-        return AnalysisResult.RetryWithAdditionalRoots(
-            bindingContext = bindingTrace.bindingContext,
-            moduleDescriptor = module,
-            additionalJavaRoots = emptyList(),
-            additionalKotlinRoots = listOf(outputDir)
-        )
+        runComplete = !retry
+
+        return if (runComplete) {
+            AnalysisResult.RetryWithAdditionalRoots(
+                bindingContext = bindingTrace.bindingContext,
+                moduleDescriptor = module,
+                additionalJavaRoots = emptyList(),
+                additionalKotlinRoots = emptyList()
+            )
+        } else {
+            null
+        }
     }
 
     override fun doAnalysis(
@@ -96,11 +104,7 @@ class MetaFileViewProvider(
     virtualFile: VirtualFile,
     val transformation: (Document?) -> Document?
 ) : SingleRootFileViewProvider(psiManager, virtualFile) {
-    val cacheDocument by lazy {
-        transformation(super.getDocument())
-    }
-
     override fun getDocument(): Document? {
-        return cacheDocument
+        return transformation(super.getDocument())
     }
 }
