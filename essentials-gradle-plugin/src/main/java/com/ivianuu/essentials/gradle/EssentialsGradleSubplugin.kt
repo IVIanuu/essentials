@@ -23,6 +23,7 @@ import org.jetbrains.kotlin.gradle.plugin.KotlinCompilation
 import org.jetbrains.kotlin.gradle.plugin.KotlinGradleSubplugin
 import org.jetbrains.kotlin.gradle.plugin.SubpluginArtifact
 import org.jetbrains.kotlin.gradle.plugin.SubpluginOption
+import java.io.File
 
 @AutoService(KotlinGradleSubplugin::class)
 open class EssentialsGradleSubplugin : KotlinGradleSubplugin<AbstractCompile> {
@@ -37,13 +38,36 @@ open class EssentialsGradleSubplugin : KotlinGradleSubplugin<AbstractCompile> {
         variantData: Any?,
         androidProjectHandler: Any?,
         kotlinCompilation: KotlinCompilation<*>?
-    ): List<SubpluginOption> = listOf()
+    ): List<SubpluginOption> {
+        val sourceSetName = if (variantData != null) {
+            // Lol
+            variantData.javaClass.getMethod("getName").run {
+                isAccessible = true
+                invoke(variantData) as String
+            }
+        } else {
+            if (kotlinCompilation == null) error("In non-Android projects, Kotlin compilation should not be null")
+            kotlinCompilation.compilationName
+        }
+
+        val outputDir = File(project.buildDir, "generated/source/essentials/$sourceSetName/")
+        kotlinCompilation?.allKotlinSourceSets?.forEach { sourceSet ->
+            sourceSet.kotlin.srcDir(outputDir)
+            sourceSet.kotlin.exclude { it.file.startsWith(outputDir) }
+        }
+
+        return listOf(
+            SubpluginOption(
+                "outputDir", outputDir.absolutePath
+            )
+        )
+    }
 
     override fun getCompilerPluginId(): String = "com.ivianuu.essentials"
 
     override fun getPluginArtifact(): SubpluginArtifact = SubpluginArtifact(
-        groupId = com.ivianuu.essentials.gradle.BuildConfig.GROUP_ID,
-        artifactId = com.ivianuu.essentials.gradle.BuildConfig.ARTIFACT_ID,
-        version = com.ivianuu.essentials.gradle.BuildConfig.VERSION
+        groupId = BuildConfig.GROUP_ID,
+        artifactId = BuildConfig.ARTIFACT_ID,
+        version = BuildConfig.VERSION
     )
 }
