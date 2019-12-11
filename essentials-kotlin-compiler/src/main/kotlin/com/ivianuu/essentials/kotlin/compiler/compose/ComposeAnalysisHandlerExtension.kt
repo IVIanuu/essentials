@@ -26,14 +26,14 @@ import org.jetbrains.kotlin.container.ComponentProvider
 import org.jetbrains.kotlin.container.get
 import org.jetbrains.kotlin.context.ProjectContext
 import org.jetbrains.kotlin.descriptors.ModuleDescriptor
+import org.jetbrains.kotlin.incremental.JavaClassesTrackerImpl
+import org.jetbrains.kotlin.load.java.JavaClassesTracker
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingTrace
 import org.jetbrains.kotlin.resolve.LazyTopDownAnalyzer
 import org.jetbrains.kotlin.resolve.TopDownAnalysisMode
 import org.jetbrains.kotlin.resolve.jvm.extensions.AnalysisHandlerExtension
 import java.io.File
-
-var retry = false
 
 class ComposeAnalysisHandlerExtension(
     private val outputDir: File
@@ -50,7 +50,6 @@ class ComposeAnalysisHandlerExtension(
         files: Collection<KtFile>
     ): AnalysisResult? {
         if (runComplete) return null
-        retry = false
 
         container.get<LazyTopDownAnalyzer>().apply {
             analyzeDeclarations(TopDownAnalysisMode.TopLevelDeclarations, files)
@@ -60,24 +59,22 @@ class ComposeAnalysisHandlerExtension(
 
         files.toList().forEachIndexed { index, file ->
             val changed = test(bindingTrace, container.get(), file)
-            if (!retry && changed != null && changed != file) {
+            if (changed != null && changed != file) {
                 files.removeAt(index)
                 files.add(index, changed)
             }
         }
+        runComplete = true
 
-        runComplete = !retry
-
-        return if (runComplete) {
-            AnalysisResult.RetryWithAdditionalRoots(
-                bindingContext = bindingTrace.bindingContext,
-                moduleDescriptor = module,
-                additionalJavaRoots = emptyList(),
-                additionalKotlinRoots = listOf(outputDir)
-            )
-        } else {
-            null
+        container.get<JavaClassesTracker>().let { tracker ->
+            tracker as JavaClassesTrackerImpl
+            tracker.javaClass.getDeclaredField("classDescriptors")
+                .also { it.isAccessible = true }
+                .get(tracker)
+                .let { (it as MutableList<Any>).clear() }
         }
+
+        return null
     }
 
     override fun doAnalysis(
