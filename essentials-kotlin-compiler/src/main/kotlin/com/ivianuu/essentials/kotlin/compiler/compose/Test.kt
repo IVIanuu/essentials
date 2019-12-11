@@ -46,7 +46,6 @@ enum class Step {
     ConvertExpressionComposableFunsToBlocks,
     MergeVarArgToSingleArg,
     moveComposableTrailingLambdasIntoTheBody,
-    InsertComposerFieldIntoComposableBlocks,
     InsertRestartScopeIntoFunctions,
     WrapComposableLambdasInObserve,
     WrapComposableCalls
@@ -62,6 +61,22 @@ fun Node.markSeen(step: Step) {
 
 fun Node.seenBy(step: Step): Boolean = step in getSeenBy()
 
+var Node.actualComposableInvocation: Boolean
+    get() = extras.getOrDefault("actualComposableInvocation", false) as Boolean
+    set(value) {
+        extras["actualComposableInvocation"] = value
+    }
+
+val ComposerExpr = Node.Expr.BinaryOp(
+    lhs = Node.Expr.BinaryOp(
+        lhs = Node.Expr.Name(name = "androidx"),
+        oper = Node.Expr.BinaryOp.Oper.Token(token = Node.Expr.BinaryOp.Token.DOT),
+        rhs = Node.Expr.Name(name = "compose")
+    ),
+    oper = Node.Expr.BinaryOp.Oper.Token(token = Node.Expr.BinaryOp.Token.DOT),
+    rhs = Node.Expr.Name(name = "composer")
+)
+
 fun test(
     trace: BindingTrace,
     resolveSession: ResolveSession,
@@ -76,8 +91,7 @@ fun test(
         Step.moveComposableTrailingLambdasIntoTheBody,
         Step.WrapComposableLambdasInObserve,
         Step.InsertRestartScopeIntoFunctions,
-        Step.WrapComposableCalls,
-        Step.InsertComposerFieldIntoComposableBlocks
+        Step.WrapComposableCalls
     )
     var unprocessed = collectUnprocessed(fileNode, steps)
     var round = 0
@@ -86,7 +100,6 @@ fun test(
         mergeVarArgToSingleArg(fileNode, resolveSession, trace)
         moveComposableTrailingLambdasIntoTheBody(fileNode, resolveSession, trace)
         convertExpressionComposableFunsToBlocks(fileNode, resolveSession, trace)
-        insertComposerPropertyIntoComposableBlocks(fileNode, resolveSession, trace)
         insertRestartScope(fileNode, resolveSession, trace)
         wrapComposableLambdasInObserve(fileNode, resolveSession, trace)
         wrapComposableCalls(fileNode, resolveSession, trace)
@@ -95,8 +108,9 @@ fun test(
 
     val newSource = Writer.write(fileNode)
 
+    // if (file.name == "AppBar.kt") error("new source $newSource")
+
     return if (orig != fileNode) {
-        if (file.name == "MaterialTheme.kt") error("new source $newSource")
         file.withNewSource(newSource)
     } else file
 }
@@ -341,19 +355,23 @@ private fun execExpr(stmts: List<Node.Stmt>): Node.Expr {
     )
 }
 
+private inline fun <reified T> Node.findAnchestorOfType(): T? {
+    var parent: Node = parent ?: return null
+    while (parent.parent != null) {
+        parent = parent.parent!!
+        if (parent is T) return parent
+    }
+    return null
+}
+
 private fun Node.Block.invokesComposables(
     trace: BindingTrace
 ): Boolean {
     var invokesComposables = false
-    var currentBlock = this
     Visitor.visit(this) { childNode, _ ->
         if (invokesComposables) return@visit
-
-        if (childNode is Node.Block) {
-            currentBlock = childNode
-        }
-        if (currentBlock != this) return@visit
         if (childNode !is Node.Expr.Call) return@visit
+        if (childNode.findAnchestorOfType<Node.Block>() != this) return@visit
         val element = childNode.element as? KtCallExpression ?: return@visit
         val resolvedCall = element.getResolvedCall(trace.bindingContext) ?: return@visit
         val resulting = resolvedCall.resultingDescriptor
@@ -362,51 +380,6 @@ private fun Node.Block.invokesComposables(
     }
 
     return invokesComposables
-}
-
-private fun insertComposerPropertyIntoComposableBlocks(
-    file: Node.File,
-    resolveSession: ResolveSession,
-    trace: BindingTrace
-) {
-    Visitor.visit(file) { node, parent ->
-        if (node == null) return@visit
-        if (node.seenBy(Step.InsertComposerFieldIntoComposableBlocks)) return@visit
-        node.markSeen(Step.InsertComposerFieldIntoComposableBlocks)
-        if (node !is Node.Block) return@visit
-        if (!node.invokesComposables(trace)) return@visit
-
-        val newStmts = node.stmts.toMutableList()
-        newStmts.add(
-            0, Node.Stmt.Decl(
-                decl = Node.Decl.Property(
-                    mods = emptyList(),
-                    readOnly = true,
-                    typeParams = emptyList(),
-                    receiverType = null,
-                    vars = listOf(
-                        Node.Decl.Property.Var(
-                            name = "compose_composer",
-                            type = null
-                        )
-                    ),
-                    typeConstraints = emptyList(),
-                    delegated = false,
-                    expr = Node.Expr.BinaryOp(
-                        lhs = Node.Expr.BinaryOp(
-                            lhs = Node.Expr.Name(name = "androidx"),
-                            oper = Node.Expr.BinaryOp.Oper.Token(token = Node.Expr.BinaryOp.Token.DOT),
-                            rhs = Node.Expr.Name(name = "compose")
-                        ),
-                        oper = Node.Expr.BinaryOp.Oper.Token(token = Node.Expr.BinaryOp.Token.DOT),
-                        rhs = Node.Expr.Name(name = "composer")
-                    ),
-                    accessors = null
-                )
-            )
-        )
-        node.stmts = newStmts
-    }
 }
 
 private fun wrapComposableLambdasInObserve(
@@ -506,15 +479,17 @@ private fun wrapComposableLambdasInObserve(
                                 rhs = Node.Expr.Name(name = "Observe")
                             ),
                             typeArgs = emptyList(),
-                            args = emptyList(),
-                            lambda = Node.Expr.Call.TrailLambda(
-                                emptyList(),
-                                null,
-                                func = Node.Expr.Brace(
-                                    params = emptyList(),
-                                    block = oldBlock
+                            args = listOf(
+                                Node.ValueArg(
+                                    name = "body",
+                                    asterisk = false,
+                                    expr = Node.Expr.Brace(
+                                        params = emptyList(),
+                                        block = oldBlock
+                                    )
                                 )
-                            )
+                            ),
+                            lambda = null
                         )
                     )
                 )
@@ -553,7 +528,7 @@ private fun insertRestartScope(
 
         val startRestartGroupStmt = Node.Stmt.Expr(
             expr = Node.Expr.BinaryOp(
-                lhs = Node.Expr.Name(name = "compose_composer"),
+                lhs = ComposerExpr,
                 oper = Node.Expr.BinaryOp.Oper.Token(Node.Expr.BinaryOp.Token.DOT),
                 rhs = Node.Expr.Call(
                     expr = Node.Expr.Name(name = "startRestartGroup"),
@@ -579,7 +554,7 @@ private fun insertRestartScope(
         val endRestartGroupStmt = Node.Stmt.Expr(
             expr = Node.Expr.BinaryOp(
                 lhs = Node.Expr.BinaryOp(
-                    lhs = Node.Expr.Name(name = "compose_composer"),
+                    lhs = ComposerExpr,
                     oper = Node.Expr.BinaryOp.Oper.Token(Node.Expr.BinaryOp.Token.DOT),
                     rhs = Node.Expr.Call(
                         expr = Node.Expr.Name(name = "endRestartGroup"),
@@ -645,23 +620,16 @@ private fun wrapComposableCalls(
     resolveSession: ResolveSession,
     trace: BindingTrace
 ) {
-    var func: Node.Decl.Func? = null
     var keyIndex = 0
     fun nextKeyIndex() = ++keyIndex
+    val file = (fileNode.element as KtFile)
     Visitor.visit(fileNode) { node, parent ->
         if (node == null) return@visit
-
-        if (node is Node.Decl.Func) {
-            func = node
-            keyIndex = 0
-        }
 
         if (node.seenBy(Step.WrapComposableCalls)) return@visit
         node.markSeen(Step.WrapComposableCalls)
 
         if (node !is Node.Expr.Call) return@visit
-
-        if (func == null) return@visit
 
         val element = node.element as? KtCallExpression ?: return@visit
 
@@ -669,12 +637,6 @@ private fun wrapComposableCalls(
         val resulting = resolvedCall.resultingDescriptor
         if (!resulting.annotations.hasAnnotation(ComposableAnnotation)) return@visit
         val isEffect = resulting.returnType?.isUnit() == false
-
-        val funcDescriptor = try {
-            resolveSession.resolveToDescriptor(func!!.element!! as KtNamedFunction)
-        } catch (e: Exception) {
-            null
-        } ?: return@visit
 
         var rootExpr: Node.Expr = node
         while (rootExpr.parent is Node.Expr.BinaryOp &&
@@ -684,7 +646,8 @@ private fun wrapComposableCalls(
             rootExpr = rootExpr.parent as Node.Expr
         }
 
-        val callKey = "${funcDescriptor.fqNameSafe.asString()}:${element.startOffset}".hashCode()
+        val callKey =
+            "${file.packageFqName.asString()}:${file.name}:${element.startOffset}".hashCode()
         val callKeyIndex = nextKeyIndex()
 
         val initKeyStmt = Node.Stmt.Decl(
@@ -776,7 +739,7 @@ private fun wrapComposableCalls(
                 lhs = Node.Expr.Name(name = "key_$callKeyIndex"),
                 oper = Node.Expr.BinaryOp.Oper.Token(token = Node.Expr.BinaryOp.Token.ASSN),
                 rhs = Node.Expr.BinaryOp(
-                    lhs = Node.Expr.Name(name = "compose_composer"),
+                    lhs = ComposerExpr,
                     oper = Node.Expr.BinaryOp.Oper.Token(token = Node.Expr.BinaryOp.Token.DOT),
                     rhs = Node.Expr.Call(
                         expr = Node.Expr.Name(name = "joinKey"),
@@ -825,7 +788,7 @@ private fun wrapComposableCalls(
 
         /*fun composerExprStmt() = Node.Stmt.Expr(
             expr = Node.Expr.BinaryOp(
-                lhs = Node.Expr.Name("compose_composer"),
+                lhs = ComposerExpr,
                 oper = Node.Expr.BinaryOp.Oper.Token(token = Node.Expr.BinaryOp.Token.DOT),
                 rhs = Node.Expr.Call(
                     expr = Node.Expr.Name(name = "expr"),
@@ -845,7 +808,9 @@ private fun wrapComposableCalls(
                                     stmts = listOf(
                                         Node.Stmt.Expr(expr = rootExpr)
                                     )
-                                )
+                                ).apply {
+                                    actualComposableInvocation = true
+                                }
                             )
                         )
                     ),
@@ -885,7 +850,7 @@ private fun wrapComposableCalls(
                         Node.ValueArg(
                             name = "composer",
                             asterisk = false,
-                            expr = Node.Expr.Name(name = "compose_composer")
+                            expr = ComposerExpr
                         ),
                         Node.ValueArg(
                             name = "key",
@@ -898,10 +863,10 @@ private fun wrapComposableCalls(
                             expr = Node.Expr.Brace(
                                 params = emptyList(),
                                 block = Node.Block(
-                                    stmts = listOf(
-                                        Node.Stmt.Expr(expr = rootExpr)
-                                    )
-                                )
+                                    stmts = listOf(Node.Stmt.Expr(expr = rootExpr))
+                                ).apply {
+                                    actualComposableInvocation = true
+                                }
                             )
                         )
                     ),
@@ -912,7 +877,7 @@ private fun wrapComposableCalls(
 
         fun composerCallStmt() = Node.Stmt.Expr(
             expr = Node.Expr.BinaryOp(
-                lhs = Node.Expr.Name("compose_composer"),
+                lhs = ComposerExpr,
                 oper = Node.Expr.BinaryOp.Oper.Token(token = Node.Expr.BinaryOp.Token.DOT),
                 rhs = Node.Expr.Call(
                     expr = Node.Expr.Name(name = "call"),
@@ -993,7 +958,9 @@ private fun wrapComposableCalls(
                                             expr = rootExpr
                                         )
                                     )
-                                )
+                                ).apply {
+                                    actualComposableInvocation = true
+                                }
                             )
                         )
                     ),
