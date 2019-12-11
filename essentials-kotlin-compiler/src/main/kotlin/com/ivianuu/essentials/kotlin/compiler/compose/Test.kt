@@ -96,7 +96,7 @@ fun test(
     val newSource = Writer.write(fileNode)
 
     return if (orig != fileNode) {
-        // if (file.name == "Scrollable.kt") error("new source $newSource")
+        if (file.name == "MaterialTheme.kt") error("new source $newSource")
         file.withNewSource(newSource)
     } else file
 }
@@ -341,12 +341,18 @@ private fun execExpr(stmts: List<Node.Stmt>): Node.Expr {
     )
 }
 
-private fun Node.invokesComposables(
+private fun Node.Block.invokesComposables(
     trace: BindingTrace
 ): Boolean {
     var invokesComposables = false
+    var currentBlock = this
     Visitor.visit(this) { childNode, _ ->
         if (invokesComposables) return@visit
+
+        if (childNode is Node.Block) {
+            currentBlock = childNode
+        }
+        if (currentBlock != this) return@visit
         if (childNode !is Node.Expr.Call) return@visit
         val element = childNode.element as? KtCallExpression ?: return@visit
         val resolvedCall = element.getResolvedCall(trace.bindingContext) ?: return@visit
@@ -528,8 +534,8 @@ private fun insertRestartScope(
         node.markSeen(Step.InsertRestartScopeIntoFunctions)
 
         if (node !is Node.Decl.Func) return@visit
-        if (node.body == null) return@visit
-        if (!node.body!!.invokesComposables(trace)) return@visit
+        if (node.body !is Node.Decl.Func.Body.Block) return@visit
+        if (!(node.body as Node.Decl.Func.Body.Block).block.invokesComposables(trace)) return@visit
 
         val element = node.element as? KtNamedFunction ?: return@visit
         val descriptor = try {
