@@ -22,6 +22,7 @@ import com.ivianuu.essentials.kotlin.compiler.compose.ast.Node
 import com.ivianuu.essentials.kotlin.compiler.compose.ast.Visitor
 import com.ivianuu.essentials.kotlin.compiler.compose.ast.Writer
 import org.jetbrains.kotlin.builtins.getReturnTypeFromFunctionType
+import org.jetbrains.kotlin.builtins.isFunctionType
 import org.jetbrains.kotlin.descriptors.FunctionDescriptor
 import org.jetbrains.kotlin.descriptors.ValueParameterDescriptor
 import org.jetbrains.kotlin.psi.KtCallExpression
@@ -33,6 +34,7 @@ import org.jetbrains.kotlin.psi.psiUtil.startOffset
 import org.jetbrains.kotlin.resolve.BindingTrace
 import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
 import org.jetbrains.kotlin.resolve.calls.callUtil.getType
+import org.jetbrains.kotlin.resolve.calls.components.isVararg
 import org.jetbrains.kotlin.resolve.calls.model.ArgumentMatch
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
@@ -67,8 +69,6 @@ fun test(
     val orig = Converter().convertFile(file)
     val fileNode = Converter().convertFile(file)
 
-    //logFile(fileNode)
-
     val steps = mutableListOf(
         Step.ConvertExpressionComposableFunsToBlocks,
         Step.MergeVarArgToSingleArg,
@@ -95,7 +95,7 @@ fun test(
     val newSource = Writer.write(fileNode)
 
     return if (!retry && orig != fileNode) {
-        //if (file.name == "Box.kt") error("new source $newSource")
+        if (file.name == "SizedBox.kt") error("new source $newSource")
         file.withNewSource(newSource)
     } else file
 }
@@ -139,9 +139,19 @@ private fun mergeVarArgToSingleArg(
         if (!resulting.annotations.hasAnnotation(ComposableAnnotation)) return@visit
 
         val tmpArgs = node.args.toMutableList()
+
+        val valueParams = node.args
+            .map { arg ->
+                arg to (resolvedCall.getArgumentMapping(arg.element as KtValueArgument) as? ArgumentMatch)?.valueParameter!!
+            }
+            .associateBy { it.first }
+            .mapValues { it.value.second }
+
+        val valueParamsByName = valueParams.values
+            .associateBy { it.name.asString() }
+
         tmpArgs.forEachIndexed { index, arg ->
-            arg.name = arg.name
-                ?: (resolvedCall.getArgumentMapping(arg.element as KtValueArgument) as? ArgumentMatch)?.valueParameter?.name?.asString()
+            arg.name = arg.name ?: valueParams.getValue(arg).name.asString()
         }
 
         val newArgs = mutableListOf<Node.ValueArg>()
@@ -166,7 +176,27 @@ private fun mergeVarArgToSingleArg(
                     this.element = args.first().element
                 }
             } else {
-                newArgs += args.single()
+                val arg = args.single()
+                val argName = arg.name!!
+                val valueParam = valueParamsByName.getValue(argName)
+
+                if (valueParam.isVararg) {
+                    arg.name = null
+                    newArgs += Node.ValueArg(
+                        name = name,
+                        asterisk = valueParamsByName.getValue(argName).isVararg,
+                        expr = Node.Expr.Call(
+                            expr = Node.Expr.Name(name = "arrayOf"),
+                            typeArgs = emptyList(),
+                            args = args,
+                            lambda = null
+                        )
+                    ).apply {
+                        this.element = arg.element
+                    }
+                } else {
+                    newArgs += arg
+                }
             }
         }
 
@@ -230,6 +260,8 @@ private fun moveComposableTrailingLambdasIntoTheBody(
         val resulting = resolvedCall.resultingDescriptor
         if (!resulting.annotations.hasAnnotation(ComposableAnnotation)) return@visit
 
+        val funcName = resulting.name.asString()
+
         val newArgs = node.args.toMutableList()
 
         newArgs.forEachIndexed { index, arg ->
@@ -239,15 +271,34 @@ private fun moveComposableTrailingLambdasIntoTheBody(
 
         val lambdaDescriptor = resulting.valueParameters.last()
 
-        newArgs.add(
-            Node.ValueArg(
-                name = lambdaDescriptor.name.asString(),
-                asterisk = false,
-                expr = lambda.func
-            ).apply {
-                this.element = lambda.element
-            }
+        val lambdaArgName = lambdaDescriptor.name.asString()
+        val newLambdaExpr = Node.Expr.Labeled(
+            label = lambdaArgName,
+            expr = lambda.func
         )
+
+        Visitor.visit(lambda.func) { childNode, _ ->
+            when (childNode) {
+                is Node.Expr.This -> if (childNode.label == funcName) childNode.label =
+                    lambdaArgName
+                is Node.Expr.Super -> if (childNode.label == funcName) childNode.label =
+                    lambdaArgName
+                is Node.Expr.Return -> if (childNode.label == funcName) childNode.label =
+                    lambdaArgName
+                is Node.Expr.Continue -> if (childNode.label == funcName) childNode.label =
+                    lambdaArgName
+                is Node.Expr.Break -> if (childNode.label == funcName) childNode.label =
+                    lambdaArgName
+            }
+        }
+
+        newArgs += Node.ValueArg(
+            name = lambdaArgName,
+            asterisk = false,
+            expr = newLambdaExpr
+        ).apply {
+            this.element = lambda.element
+        }
 
         node.args = newArgs
         node.lambda = null
@@ -387,7 +438,10 @@ private fun wrapComposableLambdasInObserve(
                 val hasComposableAnnotation = firstVar.type?.anns?.any { set ->
                     set.anns.any { it.names.first() == "Composable" }
                 } == true
-                if (hasComposableAnnotation && type.getReturnTypeFromFunctionType().isUnit()) {
+                if (hasComposableAnnotation &&
+                    type.isFunctionType &&
+                    type.getReturnTypeFromFunctionType().isUnit()
+                ) {
                     isUnitComposable = true
                 }
             }
@@ -425,6 +479,7 @@ private fun wrapComposableLambdasInObserve(
                 val argDescriptor = resulting.valueParameters[argIndex]
 
                 if (argDescriptor.type.annotations.hasAnnotation(ComposableAnnotation) &&
+                    argDescriptor.type.isFunctionType &&
                     argDescriptor.type.getReturnTypeFromFunctionType().isUnit()
                 ) {
                     isUnitComposable = true
@@ -441,6 +496,7 @@ private fun wrapComposableLambdasInObserve(
             val lambdaArgDescriptor = resulting.valueParameters.last()
 
             if (lambdaArgDescriptor.type.annotations.hasAnnotation(ComposableAnnotation) &&
+                lambdaArgDescriptor.type.isFunctionType &&
                 lambdaArgDescriptor.type.getReturnTypeFromFunctionType().isUnit()
             ) {
                 isUnitComposable = true
@@ -577,7 +633,7 @@ private fun insertRestartScope(
                                             args = descriptor.valueParameters.map { valueParam ->
                                                 Node.ValueArg(
                                                     name = valueParam.name.asString(),
-                                                    asterisk = false,
+                                                    asterisk = valueParam.isVararg,
                                                     expr = Node.Expr.Name(name = valueParam.name.asString())
                                                 )
                                             },
@@ -686,6 +742,24 @@ private fun wrapComposableCalls(
         ): Node.Stmt.Decl {
             val descriptor =
                 (resolvedCall.getArgumentMapping(arg.element as KtValueArgument) as? ArgumentMatch)?.valueParameter!!
+            val argExpr = arg.expr
+            val oldLabel =
+                if (argExpr is Node.Expr.Labeled) argExpr.label else resolvedCall.resultingDescriptor.name.asString()
+            val argName = "arg_${callKeyIndex}_${index}"
+            if (argExpr is Node.Expr.Labeled) argExpr.label = argName
+
+            Visitor.visit(argExpr) { childNode, _ ->
+                when (childNode) {
+                    is Node.Expr.This -> if (childNode.label == oldLabel) childNode.label = argName
+                    is Node.Expr.Super -> if (childNode.label == oldLabel) childNode.label = argName
+                    is Node.Expr.Return -> if (childNode.label == oldLabel) childNode.label =
+                        argName
+                    is Node.Expr.Continue -> if (childNode.label == oldLabel) childNode.label =
+                        argName
+                    is Node.Expr.Break -> if (childNode.label == oldLabel) childNode.label = argName
+                }
+            }
+
             return Node.Stmt.Decl(
                 decl = Node.Decl.Property(
                     mods = emptyList(),
@@ -694,13 +768,13 @@ private fun wrapComposableCalls(
                     receiverType = null,
                     vars = listOf(
                         Node.Decl.Property.Var(
-                            name = "arg_${callKeyIndex}_${index}",
+                            name = argName,
                             type = descriptor.type.asType()
                         )
                     ),
                     typeConstraints = emptyList(),
                     delegated = false,
-                    expr = arg.expr,
+                    expr = argExpr,
                     accessors = null
                 )
             )

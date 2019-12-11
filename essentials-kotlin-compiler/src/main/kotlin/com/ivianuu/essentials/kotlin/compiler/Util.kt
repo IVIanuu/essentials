@@ -24,6 +24,7 @@ import org.jetbrains.kotlin.builtins.getReceiverTypeFromFunctionType
 import org.jetbrains.kotlin.builtins.getReturnTypeFromFunctionType
 import org.jetbrains.kotlin.builtins.getValueParameterTypesFromFunctionType
 import org.jetbrains.kotlin.builtins.isFunctionType
+import org.jetbrains.kotlin.builtins.isSuspendFunctionType
 import org.jetbrains.kotlin.cli.common.messages.CompilerMessageSeverity
 import org.jetbrains.kotlin.cli.common.messages.MessageCollector
 import org.jetbrains.kotlin.descriptors.ClassDescriptor
@@ -57,21 +58,22 @@ fun KotlinType.asTypeName(): TypeName {
 }
 
 fun KotlinType.asType(): Node.Type {
-    (constructor.declarationDescriptor as? TypeParameterDescriptor)?.let {
-        return Node.Type(
-            mods = emptyList(),
-            ref = Node.TypeRef.Simple(
-                pieces = listOf(
-                    Node.TypeRef.Simple.Piece(
-                        name = it.name.asString(),
-                        typeParams = emptyList()
-                    )
+    (constructor.declarationDescriptor as? TypeParameterDescriptor)?.let { typeDescriptor ->
+        val typeRef = Node.TypeRef.Simple(
+            pieces = listOf(
+                Node.TypeRef.Simple.Piece(
+                    name = typeDescriptor.name.asString(),
+                    typeParams = emptyList()
                 )
             )
         )
+        return Node.Type(
+            mods = emptyList(),
+            ref = if (isMarkedNullable) Node.TypeRef.Nullable(typeRef) else typeRef
+        )
     }
 
-    return if (isFunctionType) {
+    return if (isFunctionType || isSuspendFunctionType) {
         val receiver = getReceiverTypeFromFunctionType()
         val params = getValueParameterTypesFromFunctionType()
         val returnType = getReturnTypeFromFunctionType()
@@ -83,7 +85,9 @@ fun KotlinType.asType(): Node.Type {
             type = returnType.asType()
         )
         Node.Type(
-            mods = emptyList(),
+            mods = if (isSuspendFunctionType) listOf(
+                Node.Modifier.Lit(keyword = Node.Modifier.Keyword.SUSPEND)
+            ) else emptyList(),
             ref = if (isMarkedNullable) Node.TypeRef.Nullable(
                 Node.TypeRef.Paren(
                     emptyList(),
