@@ -37,6 +37,7 @@ import org.jetbrains.kotlin.resolve.lazy.ResolveSession
 import org.jetbrains.kotlin.types.typeUtil.isUnit
 
 enum class Step {
+    ConvertExpressionComposableFunsToBlocks,
     MergeVarArgToSingleArg,
     moveComposableTrailingLambdasIntoTheBody,
     InsertComposerFieldIntoComposableBlocks,
@@ -66,6 +67,7 @@ fun test(
     //logFile(fileNode)
 
     val steps = mutableListOf(
+        Step.ConvertExpressionComposableFunsToBlocks,
         Step.MergeVarArgToSingleArg,
         Step.moveComposableTrailingLambdasIntoTheBody,
         Step.WrapComposableLambdasInObserve,
@@ -79,6 +81,7 @@ fun test(
         round++
         mergeVarArgToSingleArg(fileNode, resolveSession, trace)
         moveComposableTrailingLambdasIntoTheBody(fileNode, resolveSession, trace)
+        convertExpressionComposableFunsToBlocks(fileNode, resolveSession, trace)
         insertComposerPropertyIntoComposableBlocks(fileNode, resolveSession, trace)
         insertRestartScope(fileNode, resolveSession, trace)
         wrapComposableLambdasInObserve(fileNode, trace)
@@ -89,7 +92,7 @@ fun test(
 
     val newSource = Writer.write(fileNode)
 
-    // error("new source $newSource")
+    error("new source $newSource")
 
     return file.withNewSource(newSource)
 }
@@ -140,6 +143,38 @@ private fun mergeVarArgToSingleArg(
         }
 
         node.args = newArgs
+    }
+}
+
+private fun convertExpressionComposableFunsToBlocks(
+    file: Node.File,
+    resolveSession: ResolveSession,
+    trace: BindingTrace
+) {
+    Visitor.visit(file) { node, parent ->
+        if (node == null) return@visit
+        if (node.seenBy(Step.ConvertExpressionComposableFunsToBlocks)) return@visit
+        node.markSeen(Step.ConvertExpressionComposableFunsToBlocks)
+
+        if (node !is Node.Decl.Func) return@visit
+        if (node.body == null) return@visit
+        val element = node.element as? KtNamedFunction ?: return@visit
+        val descriptor = try {
+            resolveSession.resolveToDescriptor(element) as FunctionDescriptor
+        } catch (e: Exception) {
+            null
+        } ?: return@visit
+        if (!descriptor.annotations.hasAnnotation(ComposableAnnotation)) return@visit
+        if (descriptor.returnType?.isUnit() != true) return@visit
+        if (node.body !is Node.Decl.Func.Body.Expr) return@visit
+
+        val body = node.body as Node.Decl.Func.Body.Expr
+        val block = Node.Block(
+            stmts = listOf(
+                Node.Stmt.Expr(expr = body.expr)
+            )
+        )
+        node.body = Node.Decl.Func.Body.Block(block = block)
     }
 }
 
@@ -420,22 +455,7 @@ private fun insertRestartScope(
         if (!descriptor.annotations.hasAnnotation(ComposableAnnotation)) return@visit
         if (descriptor.returnType?.isUnit() != true) return@visit
 
-        val body = node.body
-
-        val block = when (body) {
-            is Node.Decl.Func.Body.Block -> body.block
-            is Node.Decl.Func.Body.Expr -> {
-                val block = Node.Block(
-                    stmts = listOf(
-                        Node.Stmt.Expr(expr = body.expr)
-                    )
-                )
-                node.body = Node.Decl.Func.Body.Block(block = block)
-                block
-            }
-            else -> error("")
-        }
-
+        val block = (node.body as Node.Decl.Func.Body.Block).block
         val newStmts = block.stmts.toMutableList()
 
         val funcKey = "${descriptor.fqNameSafe.asString()}:${element.startOffset}".hashCode()
