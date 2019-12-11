@@ -23,6 +23,7 @@ import com.ivianuu.essentials.kotlin.compiler.compose.ast.Visitor
 import com.ivianuu.essentials.kotlin.compiler.compose.ast.Writer
 import org.jetbrains.kotlin.builtins.getReturnTypeFromFunctionType
 import org.jetbrains.kotlin.builtins.isFunctionType
+import org.jetbrains.kotlin.builtins.isSuspendFunctionType
 import org.jetbrains.kotlin.descriptors.FunctionDescriptor
 import org.jetbrains.kotlin.descriptors.ValueParameterDescriptor
 import org.jetbrains.kotlin.psi.KtCallExpression
@@ -95,7 +96,7 @@ fun test(
     val newSource = Writer.write(fileNode)
 
     return if (!retry && orig != fileNode) {
-        if (file.name == "SizedBox.kt") error("new source $newSource")
+        // if (file.name == "Scrollable.kt") error("new source $newSource")
         file.withNewSource(newSource)
     } else file
 }
@@ -742,12 +743,12 @@ private fun wrapComposableCalls(
         ): Node.Stmt.Decl {
             val descriptor =
                 (resolvedCall.getArgumentMapping(arg.element as KtValueArgument) as? ArgumentMatch)?.valueParameter!!
+
             val argExpr = arg.expr
             val oldLabel =
                 if (argExpr is Node.Expr.Labeled) argExpr.label else resolvedCall.resultingDescriptor.name.asString()
             val argName = "arg_${callKeyIndex}_${index}"
             if (argExpr is Node.Expr.Labeled) argExpr.label = argName
-
             Visitor.visit(argExpr) { childNode, _ ->
                 when (childNode) {
                     is Node.Expr.This -> if (childNode.label == oldLabel) childNode.label = argName
@@ -759,6 +760,14 @@ private fun wrapComposableCalls(
                     is Node.Expr.Break -> if (childNode.label == oldLabel) childNode.label = argName
                 }
             }
+
+            val newArgExpr =
+                if ((descriptor.type.isFunctionType || descriptor.type.isSuspendFunctionType) && argExpr is Node.Expr.Brace) {
+                    Node.Expr.Labeled(
+                        label = argName,
+                        expr = arg.expr
+                    )
+                } else arg.expr
 
             return Node.Stmt.Decl(
                 decl = Node.Decl.Property(
@@ -774,7 +783,7 @@ private fun wrapComposableCalls(
                     ),
                     typeConstraints = emptyList(),
                     delegated = false,
-                    expr = argExpr,
+                    expr = newArgExpr,
                     accessors = null
                 )
             )
