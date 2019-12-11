@@ -29,6 +29,7 @@ import org.jetbrains.kotlin.cli.common.messages.MessageCollector
 import org.jetbrains.kotlin.descriptors.ClassDescriptor
 import org.jetbrains.kotlin.descriptors.DeclarationDescriptor
 import org.jetbrains.kotlin.descriptors.ModuleDescriptor
+import org.jetbrains.kotlin.descriptors.TypeParameterDescriptor
 import org.jetbrains.kotlin.descriptors.annotations.AnnotationDescriptor
 import org.jetbrains.kotlin.descriptors.findClassAcrossModuleDependencies
 import org.jetbrains.kotlin.name.ClassId
@@ -55,16 +56,21 @@ fun KotlinType.asTypeName(): TypeName {
     } else type).copy(nullable = isMarkedNullable)
 }
 
-/*
-Var(name=arg,
-type=Type(mods=[],
-ref=Simple(pieces=[Piece(name=Array, typeParams=[Type(mods=[],
-ref=Simple(pieces=[Piece(name=AmbientWithValue, typeParams=[Type(mods=[Lit(keyword=OUT)],
-ref=Nullable(type=Simple(pieces=[Piece(name=Any, typeParams=[])])))])]))])])))], typeConstraints=[],
-delegated=false, expr=Call(expr=Name(name=arrayOf), typeArgs=[], args=[], lambda=null)
-, accessors=null))])))]),*/
-
 fun KotlinType.asType(): Node.Type {
+    (constructor.declarationDescriptor as? TypeParameterDescriptor)?.let {
+        return Node.Type(
+            mods = emptyList(),
+            ref = Node.TypeRef.Simple(
+                pieces = listOf(
+                    Node.TypeRef.Simple.Piece(
+                        name = it.name.asString(),
+                        typeParams = emptyList()
+                    )
+                )
+            )
+        )
+    }
+
     return if (isFunctionType) {
         val receiver = getReceiverTypeFromFunctionType()
         val params = getValueParameterTypesFromFunctionType()

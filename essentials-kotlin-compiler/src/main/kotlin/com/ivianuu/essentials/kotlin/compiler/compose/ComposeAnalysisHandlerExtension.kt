@@ -28,8 +28,9 @@ import org.jetbrains.kotlin.context.ProjectContext
 import org.jetbrains.kotlin.descriptors.ModuleDescriptor
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingTrace
+import org.jetbrains.kotlin.resolve.LazyTopDownAnalyzer
+import org.jetbrains.kotlin.resolve.TopDownAnalysisMode
 import org.jetbrains.kotlin.resolve.jvm.extensions.AnalysisHandlerExtension
-import org.jetbrains.kotlin.resolve.lazy.ResolveSession
 import java.io.File
 
 var retry = false
@@ -40,7 +41,7 @@ class ComposeAnalysisHandlerExtension(
 
     private var runComplete = false
 
-    private lateinit var resolveSession: ResolveSession
+    private lateinit var container: ComponentProvider
 
     override fun analysisCompleted(
         project: Project,
@@ -51,10 +52,14 @@ class ComposeAnalysisHandlerExtension(
         if (runComplete) return null
         retry = false
 
+        container.get<LazyTopDownAnalyzer>().apply {
+            analyzeDeclarations(TopDownAnalysisMode.TopLevelDeclarations, files)
+        }
+
         files as ArrayList<KtFile>
 
         files.toList().forEachIndexed { index, file ->
-            val changed = test(bindingTrace, resolveSession, file)
+            val changed = test(bindingTrace, container.get(), file)
             if (!retry && changed != null && changed != file) {
                 files.removeAt(index)
                 files.add(index, changed)
@@ -68,7 +73,7 @@ class ComposeAnalysisHandlerExtension(
                 bindingContext = bindingTrace.bindingContext,
                 moduleDescriptor = module,
                 additionalJavaRoots = emptyList(),
-                additionalKotlinRoots = emptyList()
+                additionalKotlinRoots = listOf(outputDir)
             )
         } else {
             null
@@ -83,7 +88,7 @@ class ComposeAnalysisHandlerExtension(
         bindingTrace: BindingTrace,
         componentProvider: ComponentProvider
     ): AnalysisResult? {
-        resolveSession = componentProvider.get()
+        container = componentProvider
         return null
     }
 }
@@ -104,7 +109,10 @@ class MetaFileViewProvider(
     virtualFile: VirtualFile,
     val transformation: (Document?) -> Document?
 ) : SingleRootFileViewProvider(psiManager, virtualFile) {
+    private val cachedDocument by lazy {
+        transformation(super.getDocument())
+    }
     override fun getDocument(): Document? {
-        return transformation(super.getDocument())
+        return cachedDocument
     }
 }

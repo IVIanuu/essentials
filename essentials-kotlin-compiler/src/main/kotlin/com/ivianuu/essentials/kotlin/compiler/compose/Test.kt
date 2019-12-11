@@ -21,15 +21,18 @@ import com.ivianuu.essentials.kotlin.compiler.compose.ast.Converter
 import com.ivianuu.essentials.kotlin.compiler.compose.ast.Node
 import com.ivianuu.essentials.kotlin.compiler.compose.ast.Visitor
 import com.ivianuu.essentials.kotlin.compiler.compose.ast.Writer
+import org.jetbrains.kotlin.builtins.getReturnTypeFromFunctionType
 import org.jetbrains.kotlin.descriptors.FunctionDescriptor
 import org.jetbrains.kotlin.descriptors.ValueParameterDescriptor
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtNamedFunction
+import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtValueArgument
 import org.jetbrains.kotlin.psi.psiUtil.startOffset
 import org.jetbrains.kotlin.resolve.BindingTrace
 import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
+import org.jetbrains.kotlin.resolve.calls.callUtil.getType
 import org.jetbrains.kotlin.resolve.calls.model.ArgumentMatch
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
@@ -61,6 +64,7 @@ fun test(
     resolveSession: ResolveSession,
     file: KtFile
 ): KtFile? {
+    val orig = Converter().convertFile(file)
     val fileNode = Converter().convertFile(file)
 
     //logFile(fileNode)
@@ -76,23 +80,24 @@ fun test(
     )
     var unprocessed = collectUnprocessed(fileNode, steps)
     var round = 0
-    while (unprocessed.isNotEmpty()) {
+    while (!retry && unprocessed.isNotEmpty()) {
         round++
         mergeVarArgToSingleArg(fileNode, resolveSession, trace)
         moveComposableTrailingLambdasIntoTheBody(fileNode, resolveSession, trace)
         convertExpressionComposableFunsToBlocks(fileNode, resolveSession, trace)
         insertComposerPropertyIntoComposableBlocks(fileNode, resolveSession, trace)
         insertRestartScope(fileNode, resolveSession, trace)
-        wrapComposableLambdasInObserve(fileNode, trace)
+        wrapComposableLambdasInObserve(fileNode, resolveSession, trace)
         wrapComposableCalls(fileNode, resolveSession, trace)
         unprocessed = collectUnprocessed(fileNode, steps)
     }
 
     val newSource = Writer.write(fileNode)
 
-    //if (file.name == "ComposeController.kt") error("new source $newSource")
-
-    return file.withNewSource(newSource)
+    return if (!retry && orig != fileNode) {
+        //if (file.name == "Box.kt") error("new source $newSource")
+        file.withNewSource(newSource)
+    } else file
 }
 
 private fun collectUnprocessed(node: Node, steps: List<Step>): List<Node> {
@@ -121,6 +126,7 @@ private fun mergeVarArgToSingleArg(
     trace: BindingTrace
 ) {
     Visitor.visit(file) { node, parent ->
+        if (retry) return@visit
         if (node == null) return@visit
         if (node.seenBy(Step.MergeVarArgToSingleArg)) return@visit
         node.markSeen(Step.MergeVarArgToSingleArg)
@@ -174,6 +180,7 @@ private fun convertExpressionComposableFunsToBlocks(
     trace: BindingTrace
 ) {
     Visitor.visit(file) { node, parent ->
+        if (retry) return@visit
         if (node == null) return@visit
         if (node.seenBy(Step.ConvertExpressionComposableFunsToBlocks)) return@visit
         node.markSeen(Step.ConvertExpressionComposableFunsToBlocks)
@@ -206,6 +213,7 @@ private fun moveComposableTrailingLambdasIntoTheBody(
     trace: BindingTrace
 ) {
     Visitor.visit(file) { node, parent ->
+        if (retry) return@visit
         if (node == null) return@visit
         if (node.seenBy(Step.moveComposableTrailingLambdasIntoTheBody)) return@visit
         node.markSeen(Step.moveComposableTrailingLambdasIntoTheBody)
@@ -315,6 +323,7 @@ private fun insertComposerPropertyIntoComposableBlocks(
     trace: BindingTrace
 ) {
     Visitor.visit(file) { node, parent ->
+        if (retry) return@visit
         if (node == null) return@visit
         if (node.seenBy(Step.InsertComposerFieldIntoComposableBlocks)) return@visit
         node.markSeen(Step.InsertComposerFieldIntoComposableBlocks)
@@ -356,6 +365,7 @@ private fun insertComposerPropertyIntoComposableBlocks(
 
 private fun wrapComposableLambdasInObserve(
     file: Node.File,
+    resolveSession: ResolveSession,
     trace: BindingTrace
 ) {
     Visitor.visit(file) { node, parent ->
@@ -365,19 +375,25 @@ private fun wrapComposableLambdasInObserve(
 
         if (node !is Node.Expr.Brace) return@visit
 
-        var isComposable = false
+        var isUnitComposable = false
 
         if (node.parent is Node.Decl.Property) {
             val property = node.parent as Node.Decl.Property
+            val propertyElement = property.element as KtProperty
+
+            val type = propertyElement.getType(trace.bindingContext)
             val firstVar = property.vars.singleOrNull()
-            if (firstVar != null && firstVar.type?.anns?.any { set ->
+            if (firstVar != null && type != null) {
+                val hasComposableAnnotation = firstVar.type?.anns?.any { set ->
                     set.anns.any { it.names.first() == "Composable" }
-                } == true) {
-                isComposable = true
+                } == true
+                if (hasComposableAnnotation && type.getReturnTypeFromFunctionType().isUnit()) {
+                    isUnitComposable = true
+                }
             }
         }
 
-        if (!isComposable && node.parent is Node.ValueArg) {
+        if (!isUnitComposable && node.parent is Node.ValueArg) {
             val arg = node.parent as Node.ValueArg
             if (arg.parent is Node.Decl.EnumEntry) {
                 val enumEntry = arg.parent as Node.Decl.EnumEntry
@@ -391,8 +407,10 @@ private fun wrapComposableLambdasInObserve(
                 val resulting = resolvedCall.resultingDescriptor
                 val argDescriptor = resulting.valueParameters[argIndex]
 
-                if (argDescriptor.type.annotations.hasAnnotation(ComposableAnnotation)) {
-                    isComposable = true
+                if (argDescriptor.type.annotations.hasAnnotation(ComposableAnnotation) &&
+                    argDescriptor.type.getReturnTypeFromFunctionType().isUnit()
+                ) {
+                    isUnitComposable = true
                 }
             } else if (arg.parent is Node.Expr.Call) {
                 val call = arg.parent as Node.Expr.Call
@@ -406,13 +424,15 @@ private fun wrapComposableLambdasInObserve(
                 val resulting = resolvedCall.resultingDescriptor
                 val argDescriptor = resulting.valueParameters[argIndex]
 
-                if (argDescriptor.type.annotations.hasAnnotation(ComposableAnnotation)) {
-                    isComposable = true
+                if (argDescriptor.type.annotations.hasAnnotation(ComposableAnnotation) &&
+                    argDescriptor.type.getReturnTypeFromFunctionType().isUnit()
+                ) {
+                    isUnitComposable = true
                 }
             }
         }
 
-        if (!isComposable && node.parent is Node.Expr.Call.TrailLambda) {
+        if (!isUnitComposable && node.parent is Node.Expr.Call.TrailLambda) {
             val lambda = node.parent as Node.Expr.Call.TrailLambda
             val call = lambda.parent as Node.Expr.Call
             val element = call.element as? KtCallExpression ?: return@visit
@@ -420,12 +440,14 @@ private fun wrapComposableLambdasInObserve(
             val resulting = resolvedCall.resultingDescriptor
             val lambdaArgDescriptor = resulting.valueParameters.last()
 
-            if (lambdaArgDescriptor.type.annotations.hasAnnotation(ComposableAnnotation)) {
-                isComposable = true
+            if (lambdaArgDescriptor.type.annotations.hasAnnotation(ComposableAnnotation) &&
+                lambdaArgDescriptor.type.getReturnTypeFromFunctionType().isUnit()
+            ) {
+                isUnitComposable = true
             }
         }
 
-        if (isComposable) {
+        if (isUnitComposable) {
             val oldBlock = node.block
             node.block = Node.Block(
                 stmts = listOf(
@@ -464,6 +486,7 @@ private fun insertRestartScope(
     trace: BindingTrace
 ) {
     Visitor.visit(file) { node, parent ->
+        if (retry) return@visit
         if (node == null) return@visit
         if (node.seenBy(Step.InsertRestartScopeIntoFunctions)) return@visit
         node.markSeen(Step.InsertRestartScopeIntoFunctions)
@@ -584,6 +607,7 @@ private fun wrapComposableCalls(
     var keyIndex = 0
     fun nextKeyIndex() = ++keyIndex
     Visitor.visit(fileNode) { node, parent ->
+        if (retry) return@visit
         if (node == null) return@visit
 
         if (node is Node.Decl.Func) {
