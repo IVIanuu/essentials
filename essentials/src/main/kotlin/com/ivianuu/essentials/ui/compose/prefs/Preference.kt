@@ -19,14 +19,28 @@ package com.ivianuu.essentials.ui.compose.prefs
 import androidx.compose.Composable
 import androidx.ui.core.Opacity
 import androidx.ui.graphics.Image
+import com.ivianuu.essentials.store.Box
 import com.ivianuu.essentials.ui.compose.box.unfoldBox
 import com.ivianuu.essentials.ui.compose.common.asIconComposable
 import com.ivianuu.essentials.ui.compose.common.asTextComposable
 import com.ivianuu.essentials.ui.compose.common.framed
-import com.ivianuu.essentials.ui.compose.core.composable
-import com.ivianuu.essentials.ui.compose.core.effect
 import com.ivianuu.essentials.ui.compose.core.remember
 import com.ivianuu.essentials.ui.compose.material.SimpleListItem
+
+@Composable
+fun <T> ValueController(box: Box<T>): ValueController<T> {
+    val wrapper = unfoldBox(box)
+    return remember<ValueController<T>> {
+        object : ValueController<T> {
+            override val currentValue: T
+                get() = wrapper.value
+
+            override fun setValue(value: T) {
+                wrapper.value = value
+            }
+        }
+    }
+}
 
 @Composable
 fun <T> PreferenceWrapper(
@@ -35,7 +49,7 @@ fun <T> PreferenceWrapper(
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
     preference: @Composable() (PreferenceContext<T>) -> Unit
-) = composable {
+) {
     Dependencies(dependencies = dependencies ?: emptyList()) { dependenciesOk ->
         val context = remember { PreferenceContext<T>() }
         context.valueController = valueController
@@ -56,7 +70,7 @@ fun PreferenceLayout(
     summary: String? = null,
     image: Image? = null,
     onClick: (() -> Unit)? = null
-) = composable {
+) {
     PreferenceLayout(
         title = title.asTextComposable(),
         summary = summary.asTextComposable(),
@@ -72,7 +86,7 @@ fun PreferenceLayout(
     leading: (@Composable() () -> Unit)? = null,
     trailing: (@Composable() () -> Unit)? = null,
     onClick: (() -> Unit)? = null
-) = composable {
+) {
     SimpleListItem(
         title = title,
         subtitle = summary,
@@ -96,21 +110,6 @@ fun <T> ValueController(
 
     override fun setValue(value: T) {
         onValueChange(value)
-    }
-}
-
-@Composable
-fun <T> ValueController(box: com.ivianuu.essentials.store.Box<T>): ValueController<T> = effect {
-    val wrapper = unfoldBox(box)
-    return@effect remember {
-        object : ValueController<T> {
-            override val currentValue: T
-                get() = wrapper.value
-
-            override fun setValue(value: T) {
-                wrapper.value = value
-            }
-        }
     }
 }
 

@@ -23,16 +23,15 @@ import androidx.ui.core.IntPx
 import androidx.ui.core.dp
 import androidx.ui.core.enforce
 import androidx.ui.core.isFinite
-import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.withDensity
 
 @Composable
-fun Expand(child: @Composable() () -> Unit) = composable {
+fun Expand(child: @Composable() () -> Unit) {
     SizedBox(size = Dp.Infinity, child = child)
 }
 
 @Composable
-fun Shrink(child: @Composable() () -> Unit) = composable {
+fun Shrink(child: @Composable() () -> Unit) {
     SizedBox(size = 0.dp, child = child)
 }
 
@@ -40,7 +39,7 @@ fun Shrink(child: @Composable() () -> Unit) = composable {
 fun SizedBox(
     size: Dp,
     child: @Composable() () -> Unit
-) = composable {
+) {
     SizedBox(width = size, height = size, child = child)
 }
 
@@ -49,7 +48,7 @@ fun SizedBox(
     width: Dp? = null,
     height: Dp? = null,
     child: @Composable() () -> Unit
-) = composable {
+) {
     val widthPx = withDensity { width?.toIntPx() }
     val heightPx = withDensity { height?.toIntPx() }
     SingleChildLayout(child = child) { measureable, incomingConstraints ->

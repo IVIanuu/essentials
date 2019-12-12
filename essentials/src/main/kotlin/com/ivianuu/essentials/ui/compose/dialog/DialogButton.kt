@@ -21,7 +21,6 @@ import androidx.ui.core.Opacity
 import androidx.ui.material.Button
 import androidx.ui.material.ButtonStyle
 import androidx.ui.material.TextButtonStyle
-import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.navigation.Navigator
 
@@ -31,7 +30,7 @@ fun DialogButton(
     dismissDialogOnClick: Boolean = true,
     style: ButtonStyle = TextButtonStyle(),
     onClick: (() -> Unit)? = null
-) = composable {
+) {
     val navigator = inject<Navigator>()
     Opacity(opacity = if (onClick != null) 1f else 0.5f) {
         Button(
@@ -51,7 +50,7 @@ fun DialogButton(
 fun DialogCloseButton(
     text: String,
     style: ButtonStyle = TextButtonStyle()
-) = composable {
+) {
     DialogButton(
         text = text,
         dismissDialogOnClick = true,

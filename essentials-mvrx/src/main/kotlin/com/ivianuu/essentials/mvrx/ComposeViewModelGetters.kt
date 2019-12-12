@@ -18,7 +18,6 @@ package com.ivianuu.essentials.mvrx
 
 import androidx.compose.Composable
 import androidx.lifecycle.ViewModelStoreOwner
-import com.ivianuu.essentials.ui.compose.core.effect
 import com.ivianuu.essentials.ui.compose.core.remember
 import com.ivianuu.essentials.ui.compose.coroutines.collect
 import com.ivianuu.essentials.ui.compose.injekt.inject
@@ -32,9 +31,7 @@ inline fun <reified T : MvRxViewModel<*>> mvRxViewModel(
     from: ViewModelStoreOwner = inject(),
     key: String = remember { T::class.defaultViewModelKey },
     noinline factory: () -> T = defaultViewModelFactory(T::class)
-) = effect {
-    mvRxViewModel(type = T::class, from = from, key = key, factory = factory)
-}
+): T = mvRxViewModel(type = T::class, from = from, key = key, factory = factory)
 
 @Composable
 fun <T : MvRxViewModel<*>> mvRxViewModel(
@@ -42,9 +39,9 @@ fun <T : MvRxViewModel<*>> mvRxViewModel(
     from: ViewModelStoreOwner = inject(),
     key: String = remember { type.defaultViewModelKey },
     factory: () -> T = defaultViewModelFactory(type)
-): T = effect {
+): T {
     val viewModel = viewModel(type, from, key, factory)
     // recompose on changes
     collect(remember { viewModel.flow })
-    return@effect viewModel
+    return viewModel
 }

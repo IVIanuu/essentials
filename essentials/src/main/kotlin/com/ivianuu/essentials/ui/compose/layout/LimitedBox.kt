@@ -21,7 +21,6 @@ import androidx.ui.core.Dp
 import androidx.ui.core.PxPosition
 import androidx.ui.core.hasBoundedHeight
 import androidx.ui.core.hasBoundedWidth
-import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.withDensity
 
 @Composable
@@ -29,7 +28,7 @@ fun LimitedBox(
     maxWidth: Dp = Dp.Infinity,
     maxHeight: Dp = Dp.Infinity,
     child: @Composable() () -> Unit
-) = composable {
+) {
     val maxWidthPx = withDensity { maxWidth.toIntPx() }
     val maxHeightPx = withDensity { maxHeight.toIntPx() }
 

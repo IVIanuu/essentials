@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.ui.compose.prefs
 
 import androidx.compose.Composable
+import androidx.compose.Pivotal
 import androidx.ui.core.Alignment
 import androidx.ui.core.ContextAmbient
 import androidx.ui.core.Text
@@ -34,11 +35,7 @@ import androidx.ui.material.SliderPosition
 import com.ivianuu.essentials.ui.compose.common.asIconComposable
 import com.ivianuu.essentials.ui.compose.common.asTextComposable
 import com.ivianuu.essentials.ui.compose.core.ambient
-import com.ivianuu.essentials.ui.compose.core.composable
-import com.ivianuu.essentials.ui.compose.core.composableWithKey
-import com.ivianuu.essentials.ui.compose.core.effect
 import com.ivianuu.essentials.ui.compose.core.invoke
-import com.ivianuu.essentials.ui.compose.core.invokeAsComposable
 import com.ivianuu.essentials.ui.compose.core.remember
 import com.ivianuu.essentials.ui.compose.core.state
 import com.ivianuu.essentials.ui.compose.layout.CrossAxisAlignment
@@ -49,7 +46,7 @@ import com.ivianuu.essentials.util.UnitValueTextProvider
 @JvmName("DoubleSliderPreference")
 @Composable
 fun SliderPreference(
-    box: com.ivianuu.essentials.store.Box<Double>,
+    @Pivotal box: com.ivianuu.essentials.store.Box<Double>,
     onChange: ((Double) -> Boolean)? = null,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
@@ -61,7 +58,7 @@ fun SliderPreference(
     valueText: @Composable() ((Double) -> Unit)? = {
         SimpleSliderValueText(it)
     }
-) = composableWithKey("DoubleSliderPreference:$box") {
+) {
     SliderPreference(
         valueController = ValueController(box),
         onChange = onChange,
@@ -111,7 +108,7 @@ fun SliderPreference(
 @JvmName("FloatSliderPreference")
 @Composable
 fun SliderPreference(
-    box: com.ivianuu.essentials.store.Box<Float>,
+    @Pivotal box: com.ivianuu.essentials.store.Box<Float>,
     onChange: ((Float) -> Boolean)? = null,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
@@ -123,7 +120,7 @@ fun SliderPreference(
     valueText: @Composable() ((Float) -> Unit)? = {
         SimpleSliderValueText(it)
     }
-) = composableWithKey("FloatSliderPreference:$box") {
+) {
     SliderPreference(
         valueController = ValueController(box),
         onChange = onChange,
@@ -153,7 +150,7 @@ fun SliderPreference(
     valueText: @Composable() ((Float) -> Unit)? = {
         SimpleSliderValueText(it)
     }
-) = composable {
+) {
     SliderPreference(
         valueController = valueController,
         toFloat = { it },
@@ -173,7 +170,7 @@ fun SliderPreference(
 @JvmName("IntSliderPreference")
 @Composable
 fun SliderPreference(
-    box: com.ivianuu.essentials.store.Box<Int>,
+    @Pivotal box: com.ivianuu.essentials.store.Box<Int>,
     onChange: ((Int) -> Boolean)? = null,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
@@ -185,7 +182,7 @@ fun SliderPreference(
     valueText: @Composable() ((Int) -> Unit)? = {
         SimpleSliderValueText(it)
     }
-) = composableWithKey("IntSliderPreference:$box") {
+) {
     SliderPreference(
         valueController = ValueController(box),
         onChange = onChange,
@@ -215,7 +212,7 @@ fun SliderPreference(
     valueText: @Composable() ((Int) -> Unit)? = {
         SimpleSliderValueText(it)
     }
-) = composable {
+) {
     SliderPreference(
         valueController = valueController,
         toFloat = { it.toFloat() },
@@ -235,7 +232,7 @@ fun SliderPreference(
 @JvmName("LongSliderPreference")
 @Composable
 fun SliderPreference(
-    box: com.ivianuu.essentials.store.Box<Long>,
+    @Pivotal box: com.ivianuu.essentials.store.Box<Long>,
     onChange: ((Long) -> Boolean)? = null,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
@@ -247,7 +244,7 @@ fun SliderPreference(
     valueText: @Composable() ((Long) -> Unit)? = {
         SimpleSliderValueText(it)
     }
-) = composableWithKey("LongSliderPreference:$box") {
+) {
     SliderPreference(
         valueController = ValueController(box),
         onChange = onChange,
@@ -277,7 +274,7 @@ fun SliderPreference(
     valueText: @Composable() ((Long) -> Unit)? = {
         SimpleSliderValueText(it)
     }
-) = composable {
+) {
     SliderPreference(
         valueController = valueController,
         toFloat = { it.toFloat() },
@@ -310,7 +307,7 @@ fun <T : Comparable<T>> SliderPreference(
     valueText: @Composable() ((T) -> Unit)? = {
         SimpleSliderValueText(it)
     }
-) = composable {
+) {
     PreferenceWrapper(
         valueController = valueController,
         onChange = onChange,
@@ -385,7 +382,7 @@ fun <T : Comparable<T>> SliderPreference(
                             ),
                             padding = EdgeInsets(right = 8.dp)
                         ) {
-                            valueText.invokeAsComposable(internalValue.value)
+                            valueText(internalValue.value)
                         }
                     }
                 }
@@ -395,7 +392,7 @@ fun <T : Comparable<T>> SliderPreference(
 }
 
 @Composable
-fun <T> SimpleSliderValueText(value: T) = composable {
+fun <T> SimpleSliderValueText(value: T) {
     Text(
         text = value.toString(),
         style = MaterialTheme.typography()().body2,
@@ -406,11 +403,11 @@ fun <T> SimpleSliderValueText(value: T) = composable {
 @Composable
 fun <T> unitValueTextProvider(
     unit: UnitValueTextProvider.Unit
-): @Composable() (T) -> Unit = effect {
+): @Composable() (T) -> Unit {
     val textProvider = UnitValueTextProvider(
         ambient(ContextAmbient), unit
     )
-    return@effect {
+    return {
         Text(
             text = textProvider(it.toString()),
             style = MaterialTheme.typography()().body2,

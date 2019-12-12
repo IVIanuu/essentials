@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.ui.compose.prefs
 
 import androidx.compose.Composable
-import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.remember
 import com.ivianuu.essentials.ui.compose.coroutines.collect
 import kotlinx.coroutines.flow.Flow
@@ -29,7 +28,7 @@ import kotlinx.coroutines.flow.map
 fun Dependencies(
     dependencies: List<Dependency<*>>,
     child: @Composable() (Boolean) -> Unit
-) = composable {
+) {
     val dependenciesOkFlow: Flow<Boolean> = remember(dependencies) {
         dependencies.asDependencyFlow()
     }

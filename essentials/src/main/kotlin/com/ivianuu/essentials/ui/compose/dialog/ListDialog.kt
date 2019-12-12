@@ -30,8 +30,6 @@ import androidx.ui.material.ripple.Ripple
 import com.ivianuu.essentials.ui.compose.common.scrolling.ScrollPosition
 import com.ivianuu.essentials.ui.compose.common.scrolling.ScrollableList
 import com.ivianuu.essentials.ui.compose.core.Axis
-import com.ivianuu.essentials.ui.compose.core.composable
-import com.ivianuu.essentials.ui.compose.core.invokeAsComposable
 import com.ivianuu.essentials.ui.compose.core.remember
 import com.ivianuu.essentials.ui.compose.layout.CrossAxisAlignment
 import com.ivianuu.essentials.ui.compose.layout.MainAxisAlignment
@@ -51,7 +49,7 @@ fun ListDialog(
     negativeButton: (@Composable() () -> Unit)? = null,
     neutralButton: (@Composable() () -> Unit)? = null,
     listItem: @Composable() (Int) -> Unit
-) = composable {
+) {
     MaterialDialog(
         icon = icon,
         title = title,
@@ -80,7 +78,7 @@ fun SimpleDialogListItem(
     leading: (@Composable() () -> Unit)? = null,
     title: @Composable() () -> Unit,
     onClick: (() -> Unit)? = null
-) = composable {
+) {
     Ripple(bounded = true) {
         Clickable(onClick = onClick) {
             Container(
@@ -99,12 +97,12 @@ fun SimpleDialogListItem(
                     crossAxisAlignment = CrossAxisAlignment.Center
                 ) {
                     if (leading != null) {
-                        leading.invokeAsComposable()
+                        leading()
 
                         WidthSpacer(24.dp)
                     }
 
-                    title.invokeAsComposable()
+                    title()
                 }
             }
         }

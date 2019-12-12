@@ -20,8 +20,6 @@ import androidx.compose.Composable
 import com.ivianuu.essentials.ui.compose.common.scrolling.ScrollPosition
 import com.ivianuu.essentials.ui.compose.common.scrolling.Scroller
 import com.ivianuu.essentials.ui.compose.core.Axis
-import com.ivianuu.essentials.ui.compose.core.composable
-import com.ivianuu.essentials.ui.compose.core.invokeAsComposable
 import com.ivianuu.essentials.ui.compose.core.remember
 import com.ivianuu.essentials.ui.compose.layout.Column
 
@@ -37,7 +35,7 @@ fun ScrollableDialog(
     positiveButton: (@Composable() () -> Unit)? = null,
     negativeButton: (@Composable() () -> Unit)? = null,
     neutralButton: (@Composable() () -> Unit)? = null
-) = composable {
+) {
     MaterialDialog(
         icon = icon,
         title = title,
@@ -52,7 +50,7 @@ fun ScrollableDialog(
                 enabled = scrollingEnabled
             ) {
                 Column {
-                    listContent.invokeAsComposable()
+                    listContent()
                 }
             }
         },

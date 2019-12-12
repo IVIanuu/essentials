@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.apps.ui
 
 import androidx.compose.Composable
+import androidx.compose.Pivotal
 import androidx.lifecycle.viewModelScope
 import androidx.ui.core.Text
 import androidx.ui.core.dp
@@ -28,8 +29,6 @@ import com.ivianuu.essentials.coil.Image
 import com.ivianuu.essentials.mvrx.MvRxViewModel
 import com.ivianuu.essentials.mvrx.injekt.injectMvRxViewModel
 import com.ivianuu.essentials.ui.compose.common.AsyncList
-import com.ivianuu.essentials.ui.compose.core.composable
-import com.ivianuu.essentials.ui.compose.core.composableWithKey
 import com.ivianuu.essentials.ui.compose.core.onActive
 import com.ivianuu.essentials.ui.compose.layout.SizedBox
 import com.ivianuu.essentials.ui.compose.material.AvatarIconStyle
@@ -65,7 +64,7 @@ fun CheckableAppsScreen(
     onCheckedAppsChanged: (Set<String>) -> Unit,
     appBarTitle: String,
     appFilter: AppFilter = DefaultAppFilter
-) = composable {
+) {
     val viewModel =
         injectMvRxViewModel<CheckableAppsViewModel> {
             parametersOf(appFilter)
@@ -115,9 +114,9 @@ fun CheckableAppsScreen(
 
 @Composable
 private fun CheckableApp(
-    app: CheckableApp,
+    @Pivotal app: CheckableApp,
     onClick: () -> Unit
-) = composableWithKey(app.info.packageName, app.isChecked) {
+) {
     SimpleListItem(
         title = { Text(app.info.appName) },
         leading = {

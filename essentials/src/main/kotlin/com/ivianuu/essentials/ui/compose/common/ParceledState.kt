@@ -25,7 +25,6 @@ import androidx.lifecycle.ViewModel
 import androidx.savedstate.SavedStateRegistryOwner
 import com.ivianuu.essentials.ui.compose.core.ActivityAmbient
 import com.ivianuu.essentials.ui.compose.core.ambient
-import com.ivianuu.essentials.ui.compose.core.effect
 import com.ivianuu.essentials.ui.compose.core.onDispose
 import com.ivianuu.essentials.ui.compose.core.state
 import com.ivianuu.essentials.ui.compose.injekt.inject
@@ -36,41 +35,35 @@ import com.ivianuu.essentials.util.sourceLocation
 inline fun <T : Parcelable> parceled(
     keepAcrossCompositions: Boolean = false,
     noinline init: () -> T
-) = effect {
-    parceled(
-        key = sourceLocation().hashCode().toString(),
-        keepAcrossCompositions = keepAcrossCompositions,
-        init = init
-    )
-}
+): T = parceled(
+    key = sourceLocation().hashCode().toString(),
+    keepAcrossCompositions = keepAcrossCompositions,
+    init = init
+)
 
 @Composable
 fun <T : Parcelable> parceled(
     key: String,
     keepAcrossCompositions: Boolean = false,
     init: () -> T
-): T = effect {
-    parceledState(key, keepAcrossCompositions, init).value
-}
+): T = parceledState(key, keepAcrossCompositions, init).value
 
 @Composable
 inline fun <T : Parcelable> parceledState(
     keepAcrossCompositions: Boolean = false,
     noinline init: () -> T
-) = effect {
-    parceledState(
-        key = sourceLocation().hashCode().toString(),
-        keepAcrossCompositions = keepAcrossCompositions,
-        init = init
-    )
-}
+): State<T> = parceledState(
+    key = sourceLocation().hashCode().toString(),
+    keepAcrossCompositions = keepAcrossCompositions,
+    init = init
+)
 
 @Composable
 fun <T : Parcelable> parceledState(
     key: String,
     keepAcrossCompositions: Boolean = false,
     init: () -> T
-): State<T> = effect {
+): State<T> {
     val factory = SavedStateViewModelFactory(
         inject(),
         ambient(ActivityAmbient) as SavedStateRegistryOwner
@@ -95,7 +88,7 @@ fun <T : Parcelable> parceledState(
 
     viewModel.handle.set(key, state.value)
 
-    return@effect state
+    return state
 }
 
 @PublishedApi

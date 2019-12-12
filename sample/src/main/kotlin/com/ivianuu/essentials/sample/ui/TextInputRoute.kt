@@ -31,7 +31,6 @@ import com.ivianuu.essentials.ui.compose.common.hideKeyboard
 import com.ivianuu.essentials.ui.compose.common.scrolling.ScrollPosition
 import com.ivianuu.essentials.ui.compose.common.scrolling.Scroller
 import com.ivianuu.essentials.ui.compose.common.showKeyboard
-import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.invoke
 import com.ivianuu.essentials.ui.compose.core.onActive
 import com.ivianuu.essentials.ui.compose.core.ref
@@ -96,36 +95,32 @@ val TextInputRoute = ComposeControllerRoute(
         },
         body = {
             if (items.isNotEmpty()) {
-                composable {
-                    val scrollPosition = remember(items) { ScrollPosition() }
-                    val lastScrollPosition = ref { scrollPosition.value }
+                val scrollPosition = remember(items) { ScrollPosition() }
+                val lastScrollPosition = ref { scrollPosition.value }
 
-                    if (scrollPosition.value != lastScrollPosition.value) {
-                        hideKeyboard()
-                        if (state.searchVisible && state.inputValue.isEmpty()) {
-                            state.searchVisible = false
-                        }
+                if (scrollPosition.value != lastScrollPosition.value) {
+                    hideKeyboard()
+                    if (state.searchVisible && state.inputValue.isEmpty()) {
+                        state.searchVisible = false
                     }
+                }
 
-                    // todo
-                    Scroller/*(position = scrollPosition)*/ {
-                        Column {
-                            items.forEach {
-                                SimpleListItem(
-                                    title = { Text(it) },
-                                    onClick = {
-                                        d { "clicked $it" }
-                                    }
-                                )
-                            }
+                // todo
+                Scroller/*(position = scrollPosition)*/ {
+                    Column {
+                        items.forEach {
+                            SimpleListItem(
+                                title = { Text(it) },
+                                onClick = {
+                                    d { "clicked $it" }
+                                }
+                            )
                         }
                     }
                 }
             } else {
-                composable {
-                    Center {
-                        Text("No results")
-                    }
+                Center {
+                    Text("No results")
                 }
             }
         },

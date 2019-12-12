@@ -22,14 +22,13 @@ import androidx.ui.graphics.Color
 import androidx.ui.graphics.vector.DrawVector
 import androidx.ui.layout.Container
 import androidx.ui.res.vectorResource
-import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.invoke
 
 @Composable
 fun VectorImage(
     resId: Int,
     tint: Color = Color.Transparent
-) = composable {
+) {
     val vector = vectorResource(resId)()
     WithDensity {
         Container(

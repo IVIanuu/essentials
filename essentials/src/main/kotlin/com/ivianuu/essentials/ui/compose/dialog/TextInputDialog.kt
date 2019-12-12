@@ -26,7 +26,6 @@ import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.compose.common.asTextComposable
 import com.ivianuu.essentials.ui.compose.common.hideKeyboard
 import com.ivianuu.essentials.ui.compose.common.showKeyboard
-import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.invoke
 import com.ivianuu.essentials.ui.compose.core.onActive
 import com.ivianuu.essentials.ui.compose.core.state
@@ -82,7 +81,7 @@ fun TextInputDialog(
     positiveButton: (@Composable() () -> Unit)? = null,
     negativeButton: (@Composable() () -> Unit)? = null,
     neutralButton: (@Composable() () -> Unit)? = null
-) = composable {
+) {
     val showKeyboard = showKeyboard(TextInputDialogInputId)
     val hideKeyboard = hideKeyboard()
 

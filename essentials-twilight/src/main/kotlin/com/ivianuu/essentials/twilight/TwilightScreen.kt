@@ -17,11 +17,11 @@
 package com.ivianuu.essentials.twilight
 
 import androidx.compose.Composable
+import androidx.compose.Pivotal
 import androidx.ui.core.Text
 import androidx.ui.material.RadioButton
 import com.ivianuu.essentials.ui.compose.box.unfoldBox
 import com.ivianuu.essentials.ui.compose.common.ListScreen
-import com.ivianuu.essentials.ui.compose.core.composableWithKey
 import com.ivianuu.essentials.ui.compose.es.ComposeControllerRoute
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.compose.material.SimpleListItem
@@ -48,10 +48,10 @@ val twilightSettingsRoute =
 
 @Composable
 private fun TwilightModeItem(
-    mode: TwilightMode,
+    @Pivotal mode: TwilightMode,
     isSelected: Boolean,
     onClick: () -> Unit
-) = composableWithKey(mode.value, isSelected) {
+) {
     SimpleListItem(
         title = { Text(stringResource(mode.titleRes)) },
         subtitle = { Text(stringResource(mode.descRes)) },

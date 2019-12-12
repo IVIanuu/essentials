@@ -25,7 +25,6 @@ import androidx.ui.foundation.shape.border.Border
 import androidx.ui.graphics.Color
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.surface.Surface
-import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.invoke
 
 @Composable
@@ -35,7 +34,7 @@ fun EsSurface(
     border: Border? = null,
     elevation: Dp = 0.dp,
     children: @Composable() () -> Unit
-) = composable {
+) {
     Surface(
         shape = shape,
         color = color,

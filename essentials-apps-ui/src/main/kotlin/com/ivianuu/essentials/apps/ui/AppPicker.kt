@@ -28,7 +28,7 @@ import com.ivianuu.essentials.coil.Image
 import com.ivianuu.essentials.mvrx.MvRxViewModel
 import com.ivianuu.essentials.mvrx.injekt.injectMvRxViewModel
 import com.ivianuu.essentials.ui.compose.common.AsyncList
-import com.ivianuu.essentials.ui.compose.core.staticComposableWithKey
+import com.ivianuu.essentials.ui.compose.core.key
 import com.ivianuu.essentials.ui.compose.es.ComposeControllerRoute
 import com.ivianuu.essentials.ui.compose.layout.SizedBox
 import com.ivianuu.essentials.ui.compose.material.AvatarIconStyle
@@ -61,10 +61,12 @@ fun AppPickerRoute(
                 state = viewModel.state.apps,
                 itemSize = 56.dp,
                 successItem = { _, app ->
-                    AppInfo(
-                        app = app,
-                        onClick = { viewModel.appClicked(app) }
-                    )
+                    key(app.packageName) {
+                        AppInfo(
+                            app = app,
+                            onClick = { viewModel.appClicked(app) }
+                        )
+                    }
                 }
             )
         }
@@ -75,7 +77,7 @@ fun AppPickerRoute(
 private fun AppInfo(
     app: AppInfo,
     onClick: () -> Unit
-) = staticComposableWithKey(app.packageName) {
+) {
     SimpleListItem(
         title = { Text(app.appName) },
         leading = {

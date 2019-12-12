@@ -21,20 +21,19 @@ import androidx.compose.frames.modelListOf
 import androidx.ui.core.Layout
 import androidx.ui.core.PxPosition
 import com.ivianuu.essentials.ui.compose.common.framed
-import com.ivianuu.essentials.ui.compose.core.composable
-import com.ivianuu.essentials.ui.compose.core.composableWithKey
+import com.ivianuu.essentials.ui.compose.core.key
 
 fun <T> Swapper(
     controller: SwapperController<T>,
     child: (T) -> Unit
-) = composable {
+) {
     val children: @Composable() () -> Unit = {
-        composableWithKey(controller.current as Any) {
+        key(controller.current as Any) {
             child(controller.current)
         }
 
         controller.keepStateItems.forEach { item ->
-            composableWithKey(item as Any) {
+            key(item as Any) {
                 child(item)
             }
         }

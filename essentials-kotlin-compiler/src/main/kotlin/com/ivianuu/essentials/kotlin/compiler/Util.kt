@@ -57,6 +57,9 @@ fun KotlinType.asTypeName(): TypeName {
     } else type).copy(nullable = isMarkedNullable)
 }
 
+fun Node.Type.isComposable(): Boolean =
+    anns.any { set -> set.anns.any { it.names.contains("Composable") } }
+
 fun KotlinType.asType(): Node.Type {
     (constructor.declarationDescriptor as? TypeParameterDescriptor)?.let { typeDescriptor ->
         val typeRef = Node.TypeRef.Simple(

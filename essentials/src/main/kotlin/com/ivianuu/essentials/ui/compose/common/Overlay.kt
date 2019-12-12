@@ -24,9 +24,7 @@ import androidx.ui.core.Layout
 import androidx.ui.core.ParentData
 import androidx.ui.core.PxPosition
 import androidx.ui.core.tightMax
-import com.ivianuu.essentials.ui.compose.core.composable
-import com.ivianuu.essentials.ui.compose.core.composableWithKey
-import com.ivianuu.essentials.ui.compose.core.invokeAsComposable
+import com.ivianuu.essentials.ui.compose.core.key
 import java.util.UUID
 
 class Overlay(initialEntries: List<OverlayEntry> = emptyList()) {
@@ -69,9 +67,9 @@ class Overlay(initialEntries: List<OverlayEntry> = emptyList()) {
                     }
                     .forEach {
                         Observe {
-                            composableWithKey(it.entry.id) {
+                            key(it.entry.id) {
                                 ParentData(data = it) {
-                                    it.entry.content.invokeAsComposable()
+                                    it.entry.content()
                                 }
                             }
                         }
@@ -94,7 +92,7 @@ val OverlayAmbient = Ambient.of<Overlay>()
 @Composable
 private fun OverlayLayout(
     children: @Composable() () -> Unit
-) = composable {
+) {
     Layout(children = children) { measureables, constraints ->
         // force children to fill the whole space
         val childConstraints = constraints.tightMax()

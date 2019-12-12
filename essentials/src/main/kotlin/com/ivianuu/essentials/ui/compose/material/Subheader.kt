@@ -24,16 +24,15 @@ import androidx.ui.core.dp
 import androidx.ui.layout.Container
 import androidx.ui.layout.Padding
 import androidx.ui.material.MaterialTheme
-import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.invoke
 
 @Composable
-fun Subheader(text: String) = composable(text) {
+fun Subheader(text: String) {
     Subheader { Text(text) }
 }
 
 @Composable
-fun Subheader(text: @Composable() () -> Unit) = composable {
+fun Subheader(text: @Composable() () -> Unit) {
     Container(
         height = 48.dp,
         expanded = true,

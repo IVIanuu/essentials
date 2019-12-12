@@ -18,8 +18,7 @@ package com.ivianuu.essentials.ui.compose.dialog
 
 import androidx.compose.Composable
 import com.ivianuu.essentials.ui.compose.common.AbsorbPointer
-import com.ivianuu.essentials.ui.compose.core.composable
-import com.ivianuu.essentials.ui.compose.core.composableWithKey
+import com.ivianuu.essentials.ui.compose.core.key
 import com.ivianuu.essentials.ui.compose.material.EsCheckbox
 
 @Composable
@@ -34,14 +33,14 @@ fun <T> MultiChoiceListDialog(
     positiveButton: (@Composable() () -> Unit)? = null,
     negativeButton: (@Composable() () -> Unit)? = null,
     neutralButton: (@Composable() () -> Unit)? = null
-) = composable {
+) {
     ScrollableDialog(
         icon = icon,
         title = title,
         buttonLayout = buttonLayout,
         listContent = {
             items.forEachIndexed { index, item ->
-                composableWithKey(index) {
+                key(index) {
                     MultiChoiceDialogListItem(
                         title = { item(item) },
                         checked = item in selectedItems,
@@ -72,7 +71,7 @@ private fun MultiChoiceDialogListItem(
     checked: Boolean,
     onCheckedChange: ((Boolean) -> Unit)? = null,
     title: @Composable() () -> Unit
-) = composable {
+) {
     SimpleDialogListItem(
         leading = {
             AbsorbPointer {

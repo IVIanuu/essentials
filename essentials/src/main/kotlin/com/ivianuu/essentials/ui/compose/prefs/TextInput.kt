@@ -17,13 +17,12 @@
 package com.ivianuu.essentials.ui.compose.prefs
 
 import androidx.compose.Composable
+import androidx.compose.Pivotal
 import androidx.ui.graphics.Image
 import androidx.ui.input.KeyboardType
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.compose.common.asIconComposable
 import com.ivianuu.essentials.ui.compose.common.asTextComposable
-import com.ivianuu.essentials.ui.compose.core.composable
-import com.ivianuu.essentials.ui.compose.core.composableWithKey
 import com.ivianuu.essentials.ui.compose.core.stateFor
 import com.ivianuu.essentials.ui.compose.dialog.DialogButton
 import com.ivianuu.essentials.ui.compose.dialog.DialogCloseButton
@@ -32,7 +31,7 @@ import com.ivianuu.essentials.ui.compose.resources.stringResource
 
 @Composable
 fun TextInputPreference(
-    box: com.ivianuu.essentials.store.Box<String>,
+    @Pivotal box: com.ivianuu.essentials.store.Box<String>,
     onChange: ((String) -> Boolean)? = null,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
@@ -43,7 +42,7 @@ fun TextInputPreference(
     dialogHint: String? = null,
     dialogKeyboardType: KeyboardType = KeyboardType.Text,
     allowEmpty: Boolean = true
-) = composableWithKey("TextInputPreference:$box") {
+) {
     TextInputPreference(
         valueController = ValueController(box),
         onChange = onChange,
@@ -72,7 +71,7 @@ fun TextInputPreference(
     dialogHint: String? = null,
     dialogKeyboardType: KeyboardType = KeyboardType.Text,
     allowEmpty: Boolean = true
-) = composable {
+) {
     DialogPreference(
         valueController = valueController,
         onChange = onChange,

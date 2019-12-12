@@ -27,7 +27,6 @@ import androidx.ui.material.surface.Surface
 import com.ivianuu.essentials.ui.compose.common.AbsorbPointer
 import com.ivianuu.essentials.ui.compose.common.framed
 import com.ivianuu.essentials.ui.compose.common.scrolling.ScrollableList
-import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.invoke
 import com.ivianuu.essentials.ui.compose.core.remember
 import com.ivianuu.essentials.ui.compose.dialog.DialogRoute
@@ -47,44 +46,40 @@ val ScaffoldRoute = ComposeControllerRoute {
 
     Scaffold(
         topAppBar = if (controls.showTopAppBar) ({
-            composable {
-                val alpha = remember(controls.bodyLayoutMode) {
-                    if (controls.bodyLayoutMode == Scaffold.BodyLayoutMode.ExtendTop
-                        || controls.bodyLayoutMode == Scaffold.BodyLayoutMode.ExtendBoth
-                    ) 0.5f else 1f
-                }
-
-                val color = MaterialTheme.colors()().primary.copy(alpha = alpha)
-
-                EsTopAppBar(title = { Text("Scaffold") }, color = color)
+            val alpha = remember(controls.bodyLayoutMode) {
+                if (controls.bodyLayoutMode == Scaffold.BodyLayoutMode.ExtendTop
+                    || controls.bodyLayoutMode == Scaffold.BodyLayoutMode.ExtendBoth
+                ) 0.5f else 1f
             }
+
+            val color = MaterialTheme.colors()().primary.copy(alpha = alpha)
+
+            EsTopAppBar(title = { Text("Scaffold") }, color = color)
         }) else null,
         fabPosition = controls.fabPosition,
         fab = if (controls.showFab) ({
             FloatingActionButton("Click me")
         }) else null,
         bottomBar = if (controls.showBottomBar) ({
-            composable {
-                val alpha = remember(controls.bodyLayoutMode) {
-                    if (controls.bodyLayoutMode == Scaffold.BodyLayoutMode.ExtendBottom
-                        || controls.bodyLayoutMode == Scaffold.BodyLayoutMode.ExtendBoth
-                    ) 0.5f else 1f
-                }
+            val alpha = remember(controls.bodyLayoutMode) {
+                if (controls.bodyLayoutMode == Scaffold.BodyLayoutMode.ExtendBottom
+                    || controls.bodyLayoutMode == Scaffold.BodyLayoutMode.ExtendBoth
+                ) 0.5f else 1f
+            }
 
-                val color = MaterialTheme.colors()().primary.copy(alpha = alpha)
+            val color = MaterialTheme.colors()().primary.copy(alpha = alpha)
 
-                Surface(color = color) {
-                    Container(
-                        height = 56.dp,
-                        expanded = true,
-                        alignment = Alignment.CenterLeft,
-                        padding = EdgeInsets(16.dp)
-                    ) {
-                        Text(
-                            text = "Bottom bar",
-                            style = MaterialTheme.typography()().h6
-                        )
-                    }
+            Surface(color = color) {
+                Container(
+                    height = 56.dp,
+                    expanded = true,
+                    alignment = Alignment.CenterLeft,
+                    padding = EdgeInsets(16.dp)
+                ) {
+                    Text(
+                        text = "Bottom bar",
+                        style = MaterialTheme.typography()().h6
+                    )
                 }
             }
         }) else null,

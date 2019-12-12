@@ -29,12 +29,13 @@ import org.jetbrains.kotlin.descriptors.ValueParameterDescriptor
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtNamedFunction
+import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtValueArgument
 import org.jetbrains.kotlin.psi.psiUtil.startOffset
 import org.jetbrains.kotlin.resolve.BindingTrace
+import org.jetbrains.kotlin.resolve.bindingContextUtil.getAbbreviatedTypeOrType
 import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
-import org.jetbrains.kotlin.resolve.calls.callUtil.getType
 import org.jetbrains.kotlin.resolve.calls.components.isVararg
 import org.jetbrains.kotlin.resolve.calls.model.ArgumentMatch
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
@@ -85,6 +86,8 @@ fun test(
     val orig = Converter().convertFile(file)
     val fileNode = Converter().convertFile(file)
 
+//    if (file.name == "cl.kt") logFile(fileNode)
+
     val steps = mutableListOf(
         Step.ConvertExpressionComposableFunsToBlocks,
         Step.MergeVarArgToSingleArg,
@@ -108,7 +111,7 @@ fun test(
 
     val newSource = Writer.write(fileNode)
 
-    // if (file.name == "AppBar.kt") error("new source $newSource")
+    //if (file.name == "MyClass.kt") error("new source $newSource")
 
     return if (orig != fileNode) {
         file.withNewSource(newSource)
@@ -387,79 +390,85 @@ private fun wrapComposableLambdasInObserve(
     resolveSession: ResolveSession,
     trace: BindingTrace
 ) {
-    Visitor.visit(file) { node, parent ->
+    Visitor.visit(file) { node, _ ->
         if (node == null) return@visit
         if (node.seenBy(Step.WrapComposableLambdasInObserve)) return@visit
         node.markSeen(Step.WrapComposableLambdasInObserve)
 
         if (node !is Node.Expr.Brace) return@visit
 
+        val parent = node.parent
+
+        if (parent is Node.Expr.If ||
+            parent is Node.Expr.For ||
+            parent is Node.Expr.While ||
+            parent is Node.Expr.When ||
+            parent is Node.Expr.When.Entry
+        ) return@visit
+
+        var parentWithType: Node? = parent
+        while (parentWithType != null) {
+            if (parentWithType is Node.Decl.Func.Param ||
+                parentWithType is Node.Decl.Property ||
+                parentWithType is Node.ValueArg ||
+                parentWithType is Node.Expr.Call.TrailLambda
+            ) {
+                break
+            }
+
+            parentWithType = parentWithType.parent
+        }
+
         var isUnitComposable = false
 
-        if (node.parent is Node.Decl.Property) {
-            val property = node.parent as Node.Decl.Property
-            val propertyElement = property.element as KtProperty
-
-            val type = propertyElement.getType(trace.bindingContext)
-            val firstVar = property.vars.singleOrNull()
-            if (firstVar != null && type != null) {
-                val hasComposableAnnotation = firstVar.type?.anns?.any { set ->
-                    set.anns.any { it.names.first() == "Composable" }
-                } == true
-                if (hasComposableAnnotation &&
+        when (parentWithType) {
+            is Node.Decl.Func.Param -> {
+                val paramElement = parentWithType.element as KtParameter
+                val type =
+                    paramElement.typeReference?.getAbbreviatedTypeOrType(trace.bindingContext)
+                        ?: return@visit
+                if (type.annotations.hasAnnotation(ComposableAnnotation) &&
                     type.isFunctionType &&
                     type.getReturnTypeFromFunctionType().isUnit()
                 ) {
                     isUnitComposable = true
                 }
             }
-        }
-
-        if (!isUnitComposable && node.parent is Node.ValueArg) {
-            val arg = node.parent as Node.ValueArg
-            if (arg.parent is Node.Decl.EnumEntry) {
-                val enumEntry = arg.parent as Node.Decl.EnumEntry
-                val argIndex = enumEntry.args.indexOf(arg)
-                val element = enumEntry.element as? KtCallExpression ?: return@visit
-                val resolvedCall = element.getResolvedCall(trace.bindingContext) ?: return@visit
-                val resulting = resolvedCall.resultingDescriptor
-                val argDescriptor = resulting.valueParameters[argIndex]
-
-                if (argDescriptor.type.annotations.hasAnnotation(ComposableAnnotation) &&
-                    argDescriptor.type.getReturnTypeFromFunctionType().isUnit()
-                ) {
-                    isUnitComposable = true
-                }
-            } else if (arg.parent is Node.Expr.Call) {
-                val call = arg.parent as Node.Expr.Call
-                val argIndex = call.args.indexOf(arg)
-                val element = call.element as? KtCallExpression ?: return@visit
-                val resolvedCall = element.getResolvedCall(trace.bindingContext) ?: return@visit
-                val resulting = resolvedCall.resultingDescriptor
-                val argDescriptor = resulting.valueParameters[argIndex]
-
-                if (argDescriptor.type.annotations.hasAnnotation(ComposableAnnotation) &&
-                    argDescriptor.type.isFunctionType &&
-                    argDescriptor.type.getReturnTypeFromFunctionType().isUnit()
+            is Node.Decl.Property -> {
+                val propertyElement = parentWithType.element as KtProperty
+                val type =
+                    propertyElement.typeReference?.getAbbreviatedTypeOrType(trace.bindingContext)
+                        ?: return@visit
+                if (type.annotations.hasAnnotation(ComposableAnnotation) &&
+                    type.isFunctionType &&
+                    type.getReturnTypeFromFunctionType().isUnit()
                 ) {
                     isUnitComposable = true
                 }
             }
-        }
+            is Node.ValueArg, is Node.Expr.Call.TrailLambda -> {
+                when (val valueArgParent = parentWithType.parent) {
+                    is Node.Decl.EnumEntry, is Node.Expr.Call -> {
+                        val element = valueArgParent.element as? KtCallExpression ?: return@visit
+                        val resolvedCall =
+                            element.getResolvedCall(trace.bindingContext) ?: return@visit
+                        val resulting = resolvedCall.resultingDescriptor
 
-        if (!isUnitComposable && node.parent is Node.Expr.Call.TrailLambda) {
-            val lambda = node.parent as Node.Expr.Call.TrailLambda
-            val call = lambda.parent as Node.Expr.Call
-            val element = call.element as? KtCallExpression ?: return@visit
-            val resolvedCall = element.getResolvedCall(trace.bindingContext) ?: return@visit
-            val resulting = resolvedCall.resultingDescriptor
-            val lambdaArgDescriptor = resulting.valueParameters.last()
+                        val argDescriptor = if (parentWithType is Node.ValueArg) {
+                            val args =
+                                if (valueArgParent is Node.Decl.EnumEntry) valueArgParent.args else (valueArgParent as Node.Expr.Call).args
+                            val argIndex = args.indexOf(parentWithType)
+                            resulting.valueParameters[argIndex]
+                        } else resulting.valueParameters.last()
 
-            if (lambdaArgDescriptor.type.annotations.hasAnnotation(ComposableAnnotation) &&
-                lambdaArgDescriptor.type.isFunctionType &&
-                lambdaArgDescriptor.type.getReturnTypeFromFunctionType().isUnit()
-            ) {
-                isUnitComposable = true
+                        if (argDescriptor.type.annotations.hasAnnotation(ComposableAnnotation) &&
+                            argDescriptor.type.isFunctionType &&
+                            argDescriptor.type.getReturnTypeFromFunctionType().isUnit()
+                        ) {
+                            isUnitComposable = true
+                        }
+                    }
+                }
             }
         }
 
@@ -548,8 +557,7 @@ private fun insertRestartScope(
             )
         )
 
-        // 0 is getComposerStmt
-        newStmts.add(1, startRestartGroupStmt)
+        newStmts.add(0, startRestartGroupStmt)
 
         val endRestartGroupStmt = Node.Stmt.Expr(
             expr = Node.Expr.BinaryOp(
@@ -908,7 +916,7 @@ private fun wrapComposableCalls(
                                                     Triple(
                                                         arg,
                                                         index,
-                                                        resulting.valueParameters.firstOrNull { param ->
+                                                        resulting.valueParameters.first { param ->
                                                             if (arg.name != null) {
                                                                 param.name.asString() == arg.name
                                                             } else {
@@ -917,10 +925,8 @@ private fun wrapComposableCalls(
                                                                 ) == index
                                                             }
                                                         }
-                                                            ?: return@mapIndexed null //error("wtf $arg all args ${node.args}")
                                                     )
                                                 }
-                                                .filterNotNull()
                                                 .filter { it.third.type.isStable() }
 
                                             if (stableParams.size != node.args.size) {

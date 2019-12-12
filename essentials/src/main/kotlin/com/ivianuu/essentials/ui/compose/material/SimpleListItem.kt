@@ -37,9 +37,7 @@ import androidx.ui.text.TextStyle
 import com.ivianuu.essentials.ui.compose.common.asIconComposable
 import com.ivianuu.essentials.ui.compose.common.asTextComposable
 import com.ivianuu.essentials.ui.compose.core.ambient
-import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.invoke
-import com.ivianuu.essentials.ui.compose.core.invokeAsComposable
 import com.ivianuu.essentials.ui.compose.layout.Column
 import com.ivianuu.essentials.ui.compose.layout.CrossAxisAlignment
 import com.ivianuu.essentials.ui.compose.layout.MainAxisAlignment
@@ -55,7 +53,7 @@ fun SimpleListItem(
     contentPadding: EdgeInsets = ContentPadding,
     onClick: (() -> Unit)? = null,
     onLongClick: (() -> Unit)? = null
-) = composable {
+) {
     SimpleListItem(
         title = title.asTextComposable(),
         subtitle = subtitle.asTextComposable(),
@@ -77,7 +75,7 @@ fun SimpleListItem(
     contentPadding: EdgeInsets = ContentPadding,
     onClick: (() -> Unit)? = null,
     onLongClick: (() -> Unit)? = null
-) = composable {
+) {
     val styledTitle = applyTextStyle(
         TitleTextStyle,
         title
@@ -122,8 +120,8 @@ fun SimpleListItem(
                     Column(
                         mainAxisAlignment = MainAxisAlignment.Center
                     ) {
-                        styledTitle?.invokeAsComposable()
-                        styledSubtitle?.invokeAsComposable()
+                        styledTitle?.invoke()
+                        styledSubtitle?.invoke()
                     }
                 }
 

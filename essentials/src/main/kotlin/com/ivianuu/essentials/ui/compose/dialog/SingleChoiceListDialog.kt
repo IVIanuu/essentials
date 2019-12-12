@@ -19,8 +19,7 @@ package com.ivianuu.essentials.ui.compose.dialog
 import androidx.compose.Composable
 import androidx.ui.material.RadioButton
 import com.ivianuu.essentials.ui.compose.common.AbsorbPointer
-import com.ivianuu.essentials.ui.compose.core.composable
-import com.ivianuu.essentials.ui.compose.core.composableWithKey
+import com.ivianuu.essentials.ui.compose.core.key
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.navigation.Navigator
 
@@ -37,7 +36,7 @@ fun <T> SingleChoiceListDialog(
     positiveButton: (@Composable() () -> Unit)? = null,
     negativeButton: (@Composable() () -> Unit)? = null,
     neutralButton: (@Composable() () -> Unit)? = null
-) = composable {
+) {
     val navigator = inject<Navigator>()
 
     ScrollableDialog(
@@ -46,7 +45,7 @@ fun <T> SingleChoiceListDialog(
         buttonLayout = buttonLayout,
         listContent = {
             items.forEachIndexed { index, item ->
-                composableWithKey(index) {
+                key(index) {
                     SingleChoiceDialogListItem(
                         title = { item(item) },
                         selected = item == selectedItem,
@@ -71,7 +70,7 @@ private fun SingleChoiceDialogListItem(
     selected: Boolean,
     onSelect: (() -> Unit)? = null,
     title: @Composable() () -> Unit
-) = composable {
+) {
     SimpleDialogListItem(
         leading = {
             AbsorbPointer {

@@ -19,7 +19,6 @@ package com.ivianuu.essentials.ui.compose.injekt
 import androidx.compose.Ambient
 import androidx.compose.Composable
 import com.ivianuu.essentials.ui.compose.core.ambient
-import com.ivianuu.essentials.ui.compose.core.effect
 import com.ivianuu.essentials.ui.compose.core.remember
 import com.ivianuu.injekt.Component
 import com.ivianuu.injekt.ParametersDefinition
@@ -39,7 +38,7 @@ fun <T> inject(
     type: Type<T>,
     name: Any? = null,
     parameters: ParametersDefinition? = null
-): T = effect {
+): T {
     val component = ambient(ComponentAmbient)
-    return@effect remember { component.get(type = type, name = name, parameters = parameters) }
+    return remember { component.get(type = type, name = name, parameters = parameters) }
 }

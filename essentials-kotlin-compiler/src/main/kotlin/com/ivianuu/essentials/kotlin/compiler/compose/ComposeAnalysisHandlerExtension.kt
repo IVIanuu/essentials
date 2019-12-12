@@ -57,15 +57,17 @@ class ComposeAnalysisHandlerExtension(
 
         files as ArrayList<KtFile>
 
-        files.toList().forEachIndexed { index, file ->
-            val changed = test(bindingTrace, container.get(), file)
-            if (changed != null && changed != file) {
-                files.removeAt(index)
-                files.add(index, changed)
+        files.toList()
+            .forEachIndexed { index, file ->
+                val changed = test(bindingTrace, container.get(), file)
+                if (changed != null && changed != file) {
+                    files.removeAt(index)
+                    files.add(index, changed)
+                }
             }
-        }
         runComplete = true
 
+        // fixes IC duplicate exception
         container.get<JavaClassesTracker>().let { tracker ->
             tracker as JavaClassesTrackerImpl
             tracker.javaClass.getDeclaredField("classDescriptors")

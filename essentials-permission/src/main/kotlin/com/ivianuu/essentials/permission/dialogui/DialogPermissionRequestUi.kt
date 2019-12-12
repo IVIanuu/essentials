@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.permission.dialogui
 
 import androidx.compose.Composable
+import androidx.compose.Pivotal
 import androidx.compose.Recompose
 import androidx.compose.frames.modelListOf
 import androidx.fragment.app.FragmentActivity
@@ -36,8 +37,6 @@ import com.ivianuu.essentials.permission.Title
 import com.ivianuu.essentials.ui.base.EsViewModel
 import com.ivianuu.essentials.ui.compose.core.ActivityAmbient
 import com.ivianuu.essentials.ui.compose.core.ambient
-import com.ivianuu.essentials.ui.compose.core.composable
-import com.ivianuu.essentials.ui.compose.core.composableWithKey
 import com.ivianuu.essentials.ui.compose.dialog.DialogButton
 import com.ivianuu.essentials.ui.compose.dialog.DialogRoute
 import com.ivianuu.essentials.ui.compose.dialog.ScrollableDialog
@@ -70,7 +69,7 @@ class DialogPermissionRequestUi(
 }
 
 @Composable
-private fun PermissionDialog(request: PermissionRequest) = composable {
+private fun PermissionDialog(request: PermissionRequest) {
     Recompose { recompose ->
         ScrollableDialog(
             title = { Text("Permission") }, // todo
@@ -95,9 +94,9 @@ private fun PermissionDialog(request: PermissionRequest) = composable {
 
 @Composable
 private fun Permission(
-    permission: Permission,
+    @Pivotal permission: Permission,
     onClick: () -> Unit
-) = composableWithKey(permission) {
+) {
     SimpleListItem(
         title = permission.metadata[MetadataKeys.Title],
         subtitle = permission.metadata.getOrNull(MetadataKeys.Desc),

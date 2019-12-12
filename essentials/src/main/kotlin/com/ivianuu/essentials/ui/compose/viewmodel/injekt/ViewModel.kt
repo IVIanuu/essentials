@@ -20,7 +20,6 @@ import androidx.compose.Composable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelStoreOwner
 import com.ivianuu.essentials.ui.compose.core.ambient
-import com.ivianuu.essentials.ui.compose.core.effect
 import com.ivianuu.essentials.ui.compose.core.remember
 import com.ivianuu.essentials.ui.compose.injekt.ComponentAmbient
 import com.ivianuu.essentials.ui.compose.injekt.inject
@@ -37,15 +36,13 @@ inline fun <reified T : ViewModel> injectViewModel(
     key: String = remember { T::class.defaultViewModelKey },
     name: Any? = null,
     noinline parameters: ParametersDefinition? = null
-) = effect {
-    injectViewModel(
-        typeOf<T>(),
-        from,
-        key,
-        name,
-        parameters
-    )
-}
+): T = injectViewModel(
+    typeOf<T>(),
+    from,
+    key,
+    name,
+    parameters
+)
 
 @Composable
 fun <T : ViewModel> injectViewModel(
@@ -54,9 +51,9 @@ fun <T : ViewModel> injectViewModel(
     key: String = remember { (type.raw as KClass<T>).defaultViewModelKey },
     name: Any? = null,
     parameters: ParametersDefinition? = null
-): T = effect {
+): T {
     val component = ambient(ComponentAmbient)
-    return@effect viewModel(
+    return viewModel(
         type = type.raw as KClass<T>,
         from = from,
         key = key,

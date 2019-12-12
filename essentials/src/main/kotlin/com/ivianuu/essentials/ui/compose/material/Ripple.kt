@@ -22,14 +22,13 @@ import androidx.ui.graphics.Color
 import androidx.ui.material.ripple.CurrentRippleTheme
 import androidx.ui.material.ripple.DefaultRippleEffectFactory
 import androidx.ui.material.ripple.RippleTheme
-import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.remember
 
 @Composable
 fun RippleColorProvider(
     color: Color,
     children: @Composable() () -> Unit
-) = composable {
+) {
     val theme = remember(color) {
         RippleTheme(
             factory = DefaultRippleEffectFactory,

@@ -19,13 +19,12 @@ package com.ivianuu.essentials.ui.compose.layout
 import androidx.compose.Composable
 import androidx.ui.core.Modifier
 import androidx.ui.core.PxPosition
-import com.ivianuu.essentials.ui.compose.core.composable
 
 @Composable
 fun WithModifier(
     modifier: Modifier,
     child: @Composable() () -> Unit
-) = composable {
+) {
     SingleChildLayout(child = child, modifier = modifier) { measureable, constraints ->
         val placeable = measureable?.measure(constraints)
         layout(

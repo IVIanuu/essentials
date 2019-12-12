@@ -19,8 +19,6 @@ package com.ivianuu.essentials.ui.compose.common
 import androidx.compose.Composable
 import androidx.ui.core.Dp
 import com.ivianuu.essentials.ui.compose.common.scrolling.ScrollableList
-import com.ivianuu.essentials.ui.compose.core.composable
-import com.ivianuu.essentials.ui.compose.core.invokeAsComposable
 import com.ivianuu.essentials.util.Async
 import com.ivianuu.essentials.util.Fail
 import com.ivianuu.essentials.util.Loading
@@ -35,7 +33,7 @@ fun <T> AsyncList(
     loading: @Composable() () -> Unit = { FullScreenLoading() },
     uninitialized: @Composable() () -> Unit = loading,
     successItem: @Composable() (Int, T) -> Unit
-) = composable {
+) {
     Async(
         state = state,
         fail = fail,
@@ -46,7 +44,7 @@ fun <T> AsyncList(
                 items = items,
                 itemSize = itemSize
             ) { index, item ->
-                successItem.invokeAsComposable(index, item)
+                successItem(index, item)
             }
         }
     )
@@ -59,7 +57,7 @@ fun <T> AsyncList(
     loading: @Composable() () -> Unit = { FullScreenLoading() },
     uninitialized: @Composable() () -> Unit = loading,
     successItem: @Composable() (Int, T) -> Unit
-) = composable {
+) {
     Async(
         state = state,
         fail = fail,
@@ -68,7 +66,7 @@ fun <T> AsyncList(
         success = { items ->
             ScrollableList {
                 items.forEachIndexed { index, item ->
-                    successItem.invokeAsComposable(index, item)
+                    successItem(index, item)
                 }
             }
         }
@@ -82,11 +80,11 @@ fun <T> Async(
     loading: @Composable() () -> Unit = { FullScreenLoading() },
     uninitialized: @Composable() () -> Unit = loading,
     success: @Composable() (T) -> Unit
-) = composable {
+) {
     when (state) {
-        Uninitialized -> uninitialized.invokeAsComposable()
-        is Loading -> loading.invokeAsComposable()
-        is Success -> success.invokeAsComposable(state())
-        is Fail -> fail.invokeAsComposable(state.error)
+        Uninitialized -> uninitialized()
+        is Loading -> loading()
+        is Success -> success(state())
+        is Fail -> fail(state.error)
     }
 }

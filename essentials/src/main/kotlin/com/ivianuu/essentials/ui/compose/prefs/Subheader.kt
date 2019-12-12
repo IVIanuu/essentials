@@ -17,18 +17,17 @@
 package com.ivianuu.essentials.ui.compose.prefs
 
 import androidx.compose.Composable
+import androidx.compose.Pivotal
 import androidx.ui.core.Opacity
-import com.ivianuu.essentials.ui.compose.core.composable
-import com.ivianuu.essentials.ui.compose.core.composableWithKey
 import com.ivianuu.essentials.ui.compose.material.Subheader
 
 // todo
 
 @Composable
 fun PreferenceSubheader(
-    text: String,
+    @Pivotal text: String,
     dependencies: List<Dependency<*>>? = null
-) = composableWithKey("PreferenceSubheader:$text") {
+) {
     Dependencies(dependencies ?: emptyList()) { dependenciesOk ->
         Opacity(opacity = if (dependenciesOk) 1f else 0.5f) {
             Subheader(text)
@@ -40,7 +39,7 @@ fun PreferenceSubheader(
 fun PreferenceSubheader(
     dependencies: List<Dependency<*>>? = null,
     text: @Composable() () -> Unit
-) = composable {
+) {
     Dependencies(dependencies ?: emptyList()) { dependenciesOk ->
         Opacity(opacity = if (dependenciesOk) 1f else 0.5f) {
             Subheader(text)
