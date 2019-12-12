@@ -32,6 +32,7 @@ import androidx.ui.layout.Container
 import androidx.ui.layout.Padding
 import androidx.ui.material.Divider
 import androidx.ui.material.MaterialTheme
+import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.about.AboutRoute
 import com.ivianuu.essentials.apps.ui.AppPickerRoute
 import com.ivianuu.essentials.apps.ui.IntentAppFilter
@@ -95,6 +96,7 @@ private fun HomeItem(
     item: HomeItem,
     onClick: () -> Unit
 ) {
+    d { "invoke home item $item" }
     SimpleListItem(
         title = { Text(item.title) },
         leading = { ColorAvatar(item.color) },
