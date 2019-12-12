@@ -159,7 +159,7 @@ fun <T> modelFor(
 @Composable
 fun <T> ambient(key: Ambient<T>) = androidx.compose.ambient(key = key)()
 
-// @Composable
+@Composable
 inline val invalidate get() = androidx.compose.invalidate()
 
 @Composable
