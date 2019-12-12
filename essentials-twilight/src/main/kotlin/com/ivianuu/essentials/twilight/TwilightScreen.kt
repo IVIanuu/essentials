@@ -28,7 +28,7 @@ import com.ivianuu.essentials.ui.compose.material.SimpleListItem
 import com.ivianuu.essentials.ui.compose.resources.stringResource
 import com.ivianuu.essentials.ui.navigation.director.defaultControllerRouteOptionsOrNull
 
-val twilightSettingsRoute =
+val TwilightSettingsRoute =
     ComposeControllerRoute(
         options = defaultControllerRouteOptionsOrNull()
     ) {

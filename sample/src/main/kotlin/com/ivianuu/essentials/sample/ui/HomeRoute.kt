@@ -36,7 +36,7 @@ import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.about.AboutRoute
 import com.ivianuu.essentials.apps.ui.AppPickerRoute
 import com.ivianuu.essentials.apps.ui.IntentAppFilter
-import com.ivianuu.essentials.twilight.twilightSettingsRoute
+import com.ivianuu.essentials.twilight.TwilightSettingsRoute
 import com.ivianuu.essentials.ui.compose.common.navigateOnClick
 import com.ivianuu.essentials.ui.compose.common.scrolling.ScrollableList
 import com.ivianuu.essentials.ui.compose.core.invoke
@@ -231,6 +231,6 @@ enum class HomeItem(
     Twilight(
         title = "Twilight",
         color = Color.Gray,
-        route = { twilightSettingsRoute }
+        route = { TwilightSettingsRoute }
     )
 }
