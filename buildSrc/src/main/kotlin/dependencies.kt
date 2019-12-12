@@ -58,7 +58,7 @@ object Deps {
         }
 
         object Ui {
-            private const val version = "0.0.1-dev05"
+            private const val version = "0.0.1-dev11"
             const val androidText = "androidx.ui:ui-android-text:$version"
             const val androidView = "androidx.ui:ui-android-view:$version"
             const val androidViewNonIr = "androidx.ui:ui-android-view-non-ir:$version"

@@ -18,7 +18,6 @@ package com.ivianuu.essentials.ui.compose.prefs
 
 import androidx.compose.Composable
 import androidx.compose.Pivotal
-import androidx.ui.core.Alignment
 import androidx.ui.core.ContextAmbient
 import androidx.ui.core.Text
 import androidx.ui.core.dp
@@ -26,8 +25,8 @@ import androidx.ui.graphics.Image
 import androidx.ui.layout.Container
 import androidx.ui.layout.DpConstraints
 import androidx.ui.layout.EdgeInsets
-import androidx.ui.layout.Padding
-import androidx.ui.layout.Spacing
+import androidx.ui.layout.LayoutGravity
+import androidx.ui.layout.LayoutPadding
 import androidx.ui.layout.Stack
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.Slider
@@ -316,17 +315,17 @@ fun <T : Comparable<T>> SliderPreference(
         dependencies = dependencies
     ) { context ->
         Stack {
-            aligned(Alignment.BottomCenter) {
-                Padding(bottom = 32.dp) {
-                    PreferenceLayout(
-                        title = title,
-                        summary = summary,
-                        leading = leading
-                    )
-                }
+            WithModifier(
+                modifier = LayoutGravity.BottomCenter + LayoutPadding(bottom = 32.dp)
+            ) {
+                PreferenceLayout(
+                    title = title,
+                    summary = summary,
+                    leading = leading
+                )
             }
 
-            aligned(Alignment.BottomCenter) {
+            WithModifier(modifier = LayoutGravity.BottomCenter) {
                 Row(crossAxisAlignment = CrossAxisAlignment.Center) {
                     val internalValue = state { context.currentValue }
 
@@ -340,7 +339,7 @@ fun <T : Comparable<T>> SliderPreference(
                         null
                     }
 
-                    WithModifier(modifier = Flexible(1f) wraps Spacing(left = 8.dp)) {
+                    WithModifier(modifier = Flexible(1f) + LayoutPadding(left = 8.dp)) {
                         val position = remember(valueRange, steps) {
                             val initial = toFloat(context.currentValue)
                             val floatRange =

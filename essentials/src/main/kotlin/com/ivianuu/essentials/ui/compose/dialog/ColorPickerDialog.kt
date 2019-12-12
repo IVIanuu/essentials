@@ -32,7 +32,7 @@ import androidx.ui.graphics.Canvas
 import androidx.ui.graphics.Color
 import androidx.ui.graphics.Paint
 import androidx.ui.layout.Container
-import androidx.ui.layout.ExpandedWidth
+import androidx.ui.layout.LayoutExpandedWidth
 import androidx.ui.layout.Padding
 import androidx.ui.layout.Table
 import androidx.ui.material.MaterialTheme
@@ -57,13 +57,12 @@ import com.ivianuu.essentials.ui.compose.material.Tab
 import com.ivianuu.essentials.ui.compose.material.TabContent
 import com.ivianuu.essentials.ui.compose.material.TabController
 import com.ivianuu.essentials.ui.compose.material.TabRow
-import com.ivianuu.essentials.ui.compose.material.colorForBackground
-import com.ivianuu.essentials.ui.compose.material.colorForCurrentBackground
+import com.ivianuu.essentials.ui.compose.material.contentColorFor
 import com.ivianuu.essentials.ui.compose.material.copy
 import com.ivianuu.essentials.ui.compose.resources.stringResource
 import com.ivianuu.essentials.ui.navigation.Navigator
 
-fun colorPickerRoute(
+fun ColorPickerRoute(
     initialColor: Color,
     allowCustomArgb: Boolean = true,
     showAlphaSelector: Boolean = false,
@@ -248,14 +247,14 @@ private fun ColorEditor(
     Column {
         Container(
             height = 72.dp,
-            modifier = ExpandedWidth
+            modifier = LayoutExpandedWidth
         ) {
             // todo use surface once fixed
             ColoredRect(color)
             Text(
                 text = color.toString(),
                 style = MaterialTheme.typography()().subtitle1.copy(
-                    color = colorForBackground(color)
+                    color = contentColorFor(color)
                 )
             )
         }
@@ -299,7 +298,7 @@ private fun ColorComponentItem(
 ) {
     Container(
         height = 48.dp,
-        modifier = ExpandedWidth
+        modifier = LayoutExpandedWidth
     ) {
         Row(
             crossAxisAlignment = CrossAxisAlignment.Center
@@ -340,7 +339,7 @@ private enum class ColorComponent(
 ) {
     Alpha(
         title = "A",
-        color = { colorForCurrentBackground() }
+        color = { androidx.ui.foundation.contentColor() }
     ) {
         override fun read(color: Color) = color.alpha
         override fun apply(color: Color, value: Float) = color.copy(alpha = value)

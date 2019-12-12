@@ -39,7 +39,7 @@ import androidx.ui.core.max
 import androidx.ui.core.px
 import androidx.ui.core.round
 import androidx.ui.core.toPx
-import androidx.ui.layout.Gravity
+import androidx.ui.layout.LayoutGravity
 import androidx.ui.layout.LayoutScopeMarker
 
 /**
@@ -214,7 +214,7 @@ sealed class FlexScope {
      * @sample androidx.ui.layout.samples.SimpleRelativeToSiblings
      */
     @Suppress("unused")
-    fun Gravity.RelativeToSiblings(alignmentLineBlock: (Placeable) -> IntPx): LayoutModifier =
+    fun LayoutGravity.RelativeToSiblings(alignmentLineBlock: (Placeable) -> IntPx): LayoutModifier =
         SiblingsAlignedModifier.WithAlignmentLineBlock(alignmentLineBlock)
 }
 
@@ -228,17 +228,17 @@ class ColumnScope internal constructor() : FlexScope() {
      * so that its start edge is aligned to the start edge of the horizontal axis.
      */
     // TODO: Consider ltr/rtl.
-    val Gravity.Start: LayoutModifier get() = StartGravityModifier
+    val LayoutGravity.Start: LayoutModifier get() = StartGravityModifier
     /**
      * A layout modifier within a Column that positions target component in a horizontal direction
      * so that its center is in the middle of the horizontal axis.
      */
-    val Gravity.Center: LayoutModifier get() = CenterGravityModifier
+    val LayoutGravity.Center: LayoutModifier get() = CenterGravityModifier
     /**
      * A layout modifier within a Column that positions target component in a horizontal direction
      * so that its end edge is aligned to the end edge of the horizontal axis.
      */
-    val Gravity.End: LayoutModifier get() = EndGravityModifier
+    val LayoutGravity.End: LayoutModifier get() = EndGravityModifier
 
     /**
      * A layout modifier within a [Column] that positions target component in a perpendicular
@@ -251,7 +251,7 @@ class ColumnScope internal constructor() : FlexScope() {
      *
      * @sample androidx.ui.layout.samples.SimpleRelativeToSiblingsInColumn
      */
-    fun Gravity.RelativeToSiblings(alignmentLine: VerticalAlignmentLine): LayoutModifier =
+    fun LayoutGravity.RelativeToSiblings(alignmentLine: VerticalAlignmentLine): LayoutModifier =
         SiblingsAlignedModifier.WithAlignmentLine(alignmentLine)
 
     internal companion object {
@@ -270,17 +270,17 @@ class RowScope internal constructor() : FlexScope() {
      * A layout modifier within a Row that positions target component in a vertical direction
      * so that its top edge is aligned to the top edge of the vertical axis.
      */
-    val Gravity.Top: LayoutModifier get() = TopGravityModifier
+    val LayoutGravity.Top: LayoutModifier get() = TopGravityModifier
     /**
      * A layout modifier within a Row that positions target component in a vertical direction
      * so that its center is in the middle of the vertical axis.
      */
-    val Gravity.Center: LayoutModifier get() = CenterGravityModifier
+    val LayoutGravity.Center: LayoutModifier get() = CenterGravityModifier
     /**
      * A layout modifier within a Row that positions target component in a vertical direction
      * so that its bottom edge is aligned to the bottom edge of the vertical axis.
      */
-    val Gravity.Bottom: LayoutModifier get() = BottomGravityModifier
+    val LayoutGravity.Bottom: LayoutModifier get() = BottomGravityModifier
 
     /**
      * A layout modifier within a [Row] that positions target component in a perpendicular
@@ -292,7 +292,7 @@ class RowScope internal constructor() : FlexScope() {
      * Example usage:
      * @sample androidx.ui.layout.samples.SimpleRelativeToSiblingsInRow
      */
-    fun Gravity.RelativeToSiblings(alignmentLine: HorizontalAlignmentLine): LayoutModifier =
+    fun LayoutGravity.RelativeToSiblings(alignmentLine: HorizontalAlignmentLine): LayoutModifier =
         SiblingsAlignedModifier.WithAlignmentLine(alignmentLine)
 
     internal companion object {

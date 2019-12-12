@@ -26,10 +26,10 @@ import androidx.ui.core.ParentData
 import androidx.ui.core.Placeable
 import androidx.ui.core.dp
 import androidx.ui.core.ipx
+import androidx.ui.foundation.contentColor
 import androidx.ui.layout.Container
 import androidx.ui.layout.EdgeInsets
 import androidx.ui.layout.Padding
-import androidx.ui.layout.WidthSpacer
 import androidx.ui.material.Divider
 import androidx.ui.material.MaterialTheme
 import com.ivianuu.essentials.ui.compose.core.invoke
@@ -37,10 +37,8 @@ import com.ivianuu.essentials.ui.compose.layout.Column
 import com.ivianuu.essentials.ui.compose.layout.CrossAxisAlignment
 import com.ivianuu.essentials.ui.compose.layout.MainAxisAlignment
 import com.ivianuu.essentials.ui.compose.layout.Row
-import com.ivianuu.essentials.ui.compose.material.CurrentIconStyleProvider
-import com.ivianuu.essentials.ui.compose.material.IconStyle
-import com.ivianuu.essentials.ui.compose.material.SecondaryTextAlpha
-import com.ivianuu.essentials.ui.compose.material.colorForCurrentBackground
+import com.ivianuu.essentials.ui.compose.layout.WidthSpacer
+import com.ivianuu.essentials.ui.compose.material.EmphasisProvider
 
 // todo remove hardcoded values
 // todo add more styleable attributes such as corner radius
@@ -99,18 +97,20 @@ private fun DialogBody(
                     CurrentTextStyleProvider(
                         MaterialTheme.typography()().h6
                     ) {
-                        title()
+                        EmphasisProvider(
+                            emphasis = MaterialTheme.emphasisLevels()().high,
+                            children = title
+                        )
                     }
                 }
             }
 
             val styledIcon = icon?.let {
                 {
-                    CurrentIconStyleProvider(
-                        IconStyle(color = colorForCurrentBackground())
-                    ) {
-                        icon()
-                    }
+                    EmphasisProvider(
+                        emphasis = MaterialTheme.emphasisLevels()().high,
+                        children = icon
+                    )
                 }
             }
 
@@ -135,12 +135,11 @@ private fun DialogBody(
 
     val finalContent = if (content != null) {
         {
-            CurrentTextStyleProvider(
-                MaterialTheme.typography()().subtitle1.copy(
-                    color = colorForCurrentBackground().copy(alpha = SecondaryTextAlpha)
+            CurrentTextStyleProvider(MaterialTheme.typography()().subtitle1) {
+                EmphasisProvider(
+                    emphasis = MaterialTheme.emphasisLevels()().medium,
+                    children = content
                 )
-            ) {
-                content()
             }
         }
     } else {
@@ -330,7 +329,7 @@ private fun DialogButtons(
 
 @Composable
 private fun DialogDivider() {
-    Divider(color = colorForCurrentBackground().copy(alpha = 0.12f))
+    Divider(color = contentColor().copy(alpha = 0.12f))
 }
 
 private enum class DialogContentSlot {

@@ -22,11 +22,14 @@ import androidx.ui.graphics.Color
 import androidx.ui.material.ColorPalette
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.Typography
+import androidx.ui.material.darkColorPalette
+import androidx.ui.material.lightColorPalette
 import androidx.ui.text.TextStyle
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.compose.core.ambient
 import com.ivianuu.essentials.ui.compose.core.remember
 import com.ivianuu.essentials.util.colorAttr
+import com.ivianuu.essentials.util.isWindowBackgroundDark
 
 @Composable
 fun ResourceMaterialTheme(
@@ -46,6 +49,7 @@ fun resourceColors(): ColorPalette {
     val context = ambient(ContextAmbient)
     return remember {
         ColorPalette(
+            isLight = !context.isWindowBackgroundDark(),
             primary = Color(context.colorAttr(R.attr.colorPrimary)),
             primaryVariant = Color(context.colorAttr(R.attr.colorPrimaryVariant)),
             secondary = Color(context.colorAttr(R.attr.colorSecondary)),
@@ -107,7 +111,52 @@ inline fun Typography.editEach(edit: TextStyle.() -> TextStyle): Typography {
     )
 }
 
+fun ColorPalette(
+    isLight: Boolean = true,
+    primary: Color = if (isLight) Color(0xFF6200EE) else Color(0xFFBB86FC),
+    primaryVariant: Color = if (isLight) Color(0xFF3700B3) else Color(0xFF3700B3),
+    secondary: Color = if (isLight) Color(0xFF03DAC6) else Color(0xFF03DAC6),
+    secondaryVariant: Color = if (isLight) Color(0xFF018786) else Color(0xFF03DAC6),
+    background: Color = if (isLight) Color.White else Color(0xFF121212),
+    surface: Color = if (isLight) Color.White else Color(0xFF121212),
+    error: Color = if (isLight) Color(0xFFB00020) else Color(0xFFCF6679),
+    onPrimary: Color = if (isLight) Color.White else Color.Black,
+    onSecondary: Color = if (isLight) Color.Black else Color.Black,
+    onBackground: Color = if (isLight) Color.Black else Color.White,
+    onSurface: Color = if (isLight) Color.Black else Color.White,
+    onError: Color = if (isLight) Color.White else Color.Black
+): ColorPalette = if (isLight) {
+    lightColorPalette(
+        primary = primary,
+        primaryVariant = primaryVariant,
+        secondary = secondary,
+        secondaryVariant = secondaryVariant,
+        background = background,
+        surface = surface,
+        error = error,
+        onPrimary = onPrimary,
+        onSecondary = onSecondary,
+        onBackground = onBackground,
+        onSurface = onSurface,
+        onError = onError
+    )
+} else {
+    darkColorPalette(
+        primary, primaryVariant,
+        secondary = secondary,
+        background = background,
+        surface = surface,
+        error = error,
+        onPrimary = onPrimary,
+        onSecondary = onSecondary,
+        onBackground = onBackground,
+        onSurface = onSurface,
+        onError = onError
+    )
+}
+
 fun ColorPalette.copy(
+    isLight: Boolean = this.isLight,
     primary: Color = this.primary,
     primaryVariant: Color = this.primaryVariant,
     secondary: Color = this.secondary,
@@ -121,6 +170,7 @@ fun ColorPalette.copy(
     onSurface: Color = this.onSurface,
     onError: Color = this.onError
 ) = ColorPalette(
+    isLight = isLight,
     primary = primary,
     primaryVariant = primaryVariant,
     secondary = secondary,

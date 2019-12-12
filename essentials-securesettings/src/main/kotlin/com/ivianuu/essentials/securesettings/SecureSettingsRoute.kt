@@ -16,18 +16,12 @@
 
 package com.ivianuu.essentials.securesettings
 
-import androidx.ui.core.Text
-import androidx.ui.core.dp
-import androidx.ui.layout.Padding
-import androidx.ui.material.MaterialTheme
 import com.ivianuu.essentials.ui.compose.common.ListScreen
 import com.ivianuu.essentials.ui.compose.common.navigateOnClick
-import com.ivianuu.essentials.ui.compose.core.invoke
 import com.ivianuu.essentials.ui.compose.coroutines.coroutineScope
 import com.ivianuu.essentials.ui.compose.es.ComposeControllerRoute
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.compose.material.SimpleListItem
-import com.ivianuu.essentials.ui.compose.material.colorForCurrentBackground
 import com.ivianuu.essentials.ui.compose.resources.stringResource
 import com.ivianuu.essentials.ui.navigation.director.ControllerRouteOptions
 import com.ivianuu.essentials.ui.navigation.director.copy
@@ -40,27 +34,22 @@ import kotlinx.coroutines.launch
 /**
  * Asks the user for the secure settings permission
  */
-fun secureSettingsRoute(showHideNavBarHint: Boolean = false) =
+fun SecureSettingsRoute(showHideNavBarHint: Boolean = false) =
     ComposeControllerRoute(
         options = defaultControllerRouteOptionsOrNull()
     ) {
         popNavigatorOnceSecureSettingsGranted()
 
         ListScreen(title = stringResource(R.string.es_title_secure_settings)) {
-            Padding(padding = 16.dp) {
-                val textColor = colorForCurrentBackground().copy(alpha = 0.6f)
-
-                Text(
-                    text = stringResource(
-                        if (showHideNavBarHint) {
-                            R.string.es_pref_secure_settings_header_hide_nav_bar_summary
-                        } else {
-                            R.string.es_pref_secure_settings_header_summary
-                        }
-                    ),
-                    style = MaterialTheme.typography()().body2.copy(color = textColor)
+            SecureSettingsHeader(
+                stringResource(
+                    if (showHideNavBarHint) {
+                        R.string.es_pref_secure_settings_header_hide_nav_bar_summary
+                    } else {
+                        R.string.es_pref_secure_settings_header_summary
+                    }
                 )
-            }
+            )
 
             SimpleListItem(
                 title = stringResource(R.string.es_pref_use_pc),

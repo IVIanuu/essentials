@@ -20,13 +20,13 @@ import androidx.ui.core.Alignment
 import androidx.ui.core.Text
 import androidx.ui.layout.Center
 import androidx.ui.layout.Container
-import androidx.ui.layout.ExpandedWidth
+import androidx.ui.layout.LayoutExpandedWidth
 import androidx.ui.material.Button
 import androidx.ui.material.MaterialTheme
 import com.ivianuu.essentials.hidenavbar.NavBarConfig
 import com.ivianuu.essentials.hidenavbar.NavBarController
 import com.ivianuu.essentials.securesettings.SecureSettingsHelper
-import com.ivianuu.essentials.securesettings.secureSettingsRoute
+import com.ivianuu.essentials.securesettings.SecureSettingsRoute
 import com.ivianuu.essentials.ui.compose.core.invoke
 import com.ivianuu.essentials.ui.compose.core.onCommit
 import com.ivianuu.essentials.ui.compose.core.onDispose
@@ -76,7 +76,7 @@ val NavBarRoute = ComposeControllerRoute(
                     val secureSettingsHelper = inject<SecureSettingsHelper>()
 
                     Container(
-                        modifier = ExpandedWidth,
+                        modifier = LayoutExpandedWidth,
                         alignment = Alignment.Center
                     ) {
                         Text(
@@ -101,7 +101,7 @@ val NavBarRoute = ComposeControllerRoute(
                             if (secureSettingsHelper.canWriteSecureSettings()) {
                                 hideNavBar.value = !hideNavBar.value
                             } else {
-                                navigator.push(secureSettingsRoute(true))
+                                navigator.push(SecureSettingsRoute(true))
                             }
                         }
                     )

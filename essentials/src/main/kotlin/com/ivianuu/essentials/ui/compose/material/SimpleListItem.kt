@@ -22,18 +22,13 @@ import androidx.ui.core.CurrentTextStyleProvider
 import androidx.ui.core.dp
 import androidx.ui.core.gesture.LongPressGestureDetector
 import androidx.ui.foundation.Clickable
-import androidx.ui.graphics.Color
 import androidx.ui.graphics.Image
-import androidx.ui.graphics.toArgb
 import androidx.ui.layout.Container
 import androidx.ui.layout.DpConstraints
 import androidx.ui.layout.EdgeInsets
-import androidx.ui.material.ColorPalette
+import androidx.ui.material.EmphasisAmbient
 import androidx.ui.material.MaterialTheme
-import androidx.ui.material.Typography
 import androidx.ui.material.ripple.Ripple
-import androidx.ui.material.surface.CurrentBackground
-import androidx.ui.text.TextStyle
 import com.ivianuu.essentials.ui.compose.common.asIconComposable
 import com.ivianuu.essentials.ui.compose.common.asTextComposable
 import com.ivianuu.essentials.ui.compose.core.ambient
@@ -42,7 +37,6 @@ import com.ivianuu.essentials.ui.compose.layout.Column
 import com.ivianuu.essentials.ui.compose.layout.CrossAxisAlignment
 import com.ivianuu.essentials.ui.compose.layout.MainAxisAlignment
 import com.ivianuu.essentials.ui.compose.layout.Row
-import com.ivianuu.essentials.util.isDark
 
 @Composable
 fun SimpleListItem(
@@ -76,16 +70,22 @@ fun SimpleListItem(
     onClick: (() -> Unit)? = null,
     onLongClick: (() -> Unit)? = null
 ) {
-    val styledTitle = applyTextStyle(
-        TitleTextStyle,
-        title
-    )
-    val styledSubtitle = applyTextStyle(
-        SubtitleTextStyle,
-        subtitle
-    )
-    val styledLeading = applyIconStyle(leading)
-    val styledTrailing = applyIconStyle(trailing)
+    val styledTitle: (@Composable() () -> Unit)? = if (title == null) null else ({
+        CurrentTextStyleProvider(value = MaterialTheme.typography()().subtitle1) {
+            EmphasisProvider(emphasis = ambient(EmphasisAmbient).high, children = title)
+        }
+    })
+    val styledSubtitle: (@Composable() () -> Unit)? = if (subtitle == null) null else ({
+        CurrentTextStyleProvider(value = MaterialTheme.typography()().body2) {
+            EmphasisProvider(emphasis = ambient(EmphasisAmbient).high, children = subtitle)
+        }
+    })
+    val styledLeading: (@Composable() () -> Unit)? = if (leading == null) null else ({
+        EmphasisProvider(emphasis = ambient(EmphasisAmbient).high, children = leading)
+    })
+    val styledTrailing: (@Composable() () -> Unit)? = if (trailing == null) null else ({
+        EmphasisProvider(emphasis = ambient(EmphasisAmbient).high, children = trailing)
+    })
 
     val item = @Composable {
         val minHeight = if (subtitle != null) {
@@ -161,55 +161,3 @@ private val ContentPadding = EdgeInsets(
     left = 16.dp,
     right = 16.dp
 )
-
-private data class ListItemTextStyle(
-    val style: Typography.() -> TextStyle,
-    val color: ColorPalette.() -> Color,
-    val opacity: Float
-)
-
-private fun applyTextStyle(
-    textStyle: ListItemTextStyle,
-    children: (@Composable() () -> Unit)?
-): (@Composable() () -> Unit)? {
-    if (children == null) return null
-    return {
-        val colors = MaterialTheme.colors()()
-        val typography = MaterialTheme.typography()()
-        val textColor = textStyle.color(colors).copy(alpha = textStyle.opacity)
-        val appliedTextStyle = textStyle.style(typography).copy(color = textColor)
-        CurrentTextStyleProvider(appliedTextStyle, children)
-    }
-}
-
-private fun applyIconStyle(
-    children: (@Composable() () -> Unit)?
-): (@Composable() () -> Unit)? {
-    if (children == null) return null
-    return {
-        val iconAlpha =
-            if (ambient(CurrentBackground).toArgb().isDark) IconOpacityDark else IconOpacity
-        val iconColor = currentIconStyle().color ?: colorForCurrentBackground()
-            .copy(alpha = iconAlpha)
-        val appliedIconStyle = currentIconStyle().copy(color = iconColor)
-        CurrentIconStyleProvider(appliedIconStyle, children)
-    }
-}
-
-private const val PrimaryTextOpacity = 0.87f
-private const val SecondaryTextOpacity = 0.6f
-private const val IconOpacity = 0.87f
-private const val IconOpacityDark = 0.87f
-
-private val TitleTextStyle =
-    ListItemTextStyle(
-        { subtitle1 },
-        { onSurface },
-        PrimaryTextOpacity
-    )
-private val SubtitleTextStyle =
-    ListItemTextStyle(
-        { body2 },
-        { onSurface },
-        SecondaryTextOpacity
-    )

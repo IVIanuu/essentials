@@ -21,6 +21,7 @@ import androidx.compose.Pivotal
 import androidx.ui.core.Text
 import androidx.ui.core.dp
 import androidx.ui.foundation.Clickable
+import androidx.ui.foundation.contentColor
 import androidx.ui.foundation.shape.corner.RoundedCornerShape
 import androidx.ui.layout.Container
 import androidx.ui.layout.EdgeInsets
@@ -37,7 +38,6 @@ import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
 import com.ivianuu.essentials.ui.compose.material.RippleColorProvider
 import com.ivianuu.essentials.ui.compose.material.Scaffold
-import com.ivianuu.essentials.ui.compose.material.colorForCurrentBackground
 import com.ivianuu.essentials.util.Toaster
 
 val ChipsRoute = ComposeControllerRoute {
@@ -67,7 +67,7 @@ private fun Chip(@Pivotal name: String) {
                 right = 12.dp
             )
         ) {
-            RippleColorProvider(color = colorForCurrentBackground().copy(alpha = 0.5f)) {
+            RippleColorProvider(color = contentColor().copy(alpha = 0.5f)) {
                 Ripple(bounded = false) {
                     Clickable(onClick = {
                         toaster.toast("Clicked $name")
@@ -75,7 +75,7 @@ private fun Chip(@Pivotal name: String) {
                         Text(
                             text = name,
                             style = MaterialTheme.typography()().body2.copy(
-                                color = colorForCurrentBackground()
+                                color = contentColor()
                             )
                         )
                     }

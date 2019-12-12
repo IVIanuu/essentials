@@ -17,11 +17,29 @@
 package com.ivianuu.essentials.securesettings
 
 import androidx.compose.Composable
+import androidx.ui.core.Text
+import androidx.ui.core.dp
+import androidx.ui.foundation.contentColor
+import androidx.ui.layout.Padding
+import androidx.ui.material.MaterialTheme
+import com.ivianuu.essentials.ui.compose.core.invoke
 import com.ivianuu.essentials.ui.compose.coroutines.launchOnActive
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.util.Toaster
 import kotlinx.coroutines.delay
+
+@Composable
+internal fun SecureSettingsHeader(text: String) {
+    Padding(padding = 16.dp) {
+        val textColor = contentColor().copy(alpha = 0.6f)
+
+        Text(
+            text = text,
+            style = MaterialTheme.typography()().body2.copy(color = textColor)
+        )
+    }
+}
 
 @Composable
 internal fun popNavigatorOnceSecureSettingsGranted() {

@@ -26,6 +26,7 @@ import androidx.ui.core.ParentData
 import androidx.ui.core.dp
 import androidx.ui.core.looseMin
 import androidx.ui.material.DrawerState
+import androidx.ui.material.surface.Surface
 import com.ivianuu.essentials.ui.compose.core.remember
 import com.ivianuu.essentials.ui.compose.core.state
 import com.ivianuu.essentials.ui.compose.core.withDensity
@@ -67,7 +68,7 @@ fun Scaffold(
         )
     }
 
-    EsSurface {
+    Surface {
         ScaffoldAmbient.Provider(value = scaffold) {
             Expand {
                 if (drawer != null) {

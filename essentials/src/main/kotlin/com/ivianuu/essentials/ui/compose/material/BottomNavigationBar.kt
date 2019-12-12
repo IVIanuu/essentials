@@ -24,6 +24,7 @@ import androidx.ui.core.WithConstraints
 import androidx.ui.core.coerceIn
 import androidx.ui.core.dp
 import androidx.ui.foundation.Clickable
+import androidx.ui.foundation.contentColor
 import androidx.ui.graphics.Color
 import androidx.ui.graphics.Image
 import androidx.ui.layout.ConstrainedBox
@@ -32,6 +33,7 @@ import androidx.ui.layout.DpConstraints
 import androidx.ui.layout.EdgeInsets
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.ripple.Ripple
+import androidx.ui.material.surface.Surface
 import com.ivianuu.essentials.ui.compose.core.ambient
 import com.ivianuu.essentials.ui.compose.core.invoke
 import com.ivianuu.essentials.ui.compose.core.key
@@ -66,7 +68,7 @@ fun <T> BottomNavigationBar(
     color: Color = MaterialTheme.colors()().primary,
     item: @Composable() (Int, T) -> Unit
 ) {
-    EsSurface(color = color, elevation = BottomNavigationBarElevation) {
+    Surface(color = color, elevation = BottomNavigationBarElevation) {
         Container(height = BottomNavigationBarHeight, expanded = true) {
             WithConstraints { thisConstraints ->
                 Row(
@@ -138,7 +140,7 @@ fun BottomNavigationBarItem(
                     mainAxisAlignment = MainAxisAlignment.Center,
                     crossAxisAlignment = CrossAxisAlignment.Center
                 ) {
-                    val tint = colorForCurrentBackground().copy(
+                    val tint = contentColor().copy(
                         alpha = if (selected) 1f else 0.6f
                     )
                     val iconStyle = currentIconStyle().copy(color = tint)

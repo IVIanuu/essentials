@@ -33,7 +33,7 @@ import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.compose.resources.stringResource
 import com.ivianuu.essentials.ui.navigation.Navigator
 
-fun textInputRoute(
+fun TextInputRoute(
     initial: String = "",
     hint: String? = null,
     keyboardType: KeyboardType = KeyboardType.Text,
