@@ -16,7 +16,7 @@
 
 package com.ivianuu.essentials.foreground
 
-import com.ivianuu.scopes.MutableScope
+import com.ivianuu.scopes.ReusableScope
 import com.ivianuu.scopes.Scope
 import java.util.concurrent.atomic.AtomicInteger
 
@@ -28,7 +28,7 @@ abstract class ForegroundComponent {
     var manager: ForegroundManager? = null
         private set
 
-    private val _scope = MutableScope()
+    private val _scope = ReusableScope()
     val scope: Scope get() = _scope
 
     open fun attach(manager: ForegroundManager) {

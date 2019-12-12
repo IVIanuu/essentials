@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.foreground
 
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.os.Parcel
@@ -66,7 +67,9 @@ class InterProcessForegroundReceiver : EsBroadcastReceiver() {
 
         private fun send(context: Context, type: Type<out ForegroundComponent>, action: String) {
             context.sendBroadcast(
-                Intent(action).apply {
+                Intent().apply {
+                    this.action = action
+                    component = ComponentName(context, InterProcessForegroundReceiver::class.java)
                     putExtra(KEY_TYPE, type.asParceledType())
                 }
             )
@@ -88,15 +91,15 @@ private class ParceledType<T>(
     )
 }
 
-private fun <T> Type<T>.asParceledType(): ParceledType<T> = ParceledType(
-    raw = raw,
-    isNullable = isNullable,
-    parameters = *parameters.map { it.asParceledType() }.toTypedArray()
-)
-
 private object KClassParceler : Parceler<KClass<*>> {
     override fun create(parcel: Parcel): KClass<*> = Class.forName(parcel.readString()!!).kotlin
     override fun KClass<*>.write(parcel: Parcel, flags: Int) {
         parcel.writeString(java.name)
     }
 }
+
+private fun <T> Type<T>.asParceledType(): ParceledType<T> = ParceledType(
+    raw = raw,
+    isNullable = isNullable,
+    parameters = *parameters.map { it.asParceledType() }.toTypedArray()
+)
