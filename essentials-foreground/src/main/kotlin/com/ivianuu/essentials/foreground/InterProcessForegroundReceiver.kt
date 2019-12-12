@@ -94,7 +94,7 @@ private fun <T> Type<T>.asParceledType(): ParceledType<T> = ParceledType(
     parameters = *parameters.map { it.asParceledType() }.toTypedArray()
 )
 
-private class KClassParceler : Parceler<KClass<*>> {
+private object KClassParceler : Parceler<KClass<*>> {
     override fun create(parcel: Parcel): KClass<*> = Class.forName(parcel.readString()!!).kotlin
     override fun KClass<*>.write(parcel: Parcel, flags: Int) {
         parcel.writeString(java.name)

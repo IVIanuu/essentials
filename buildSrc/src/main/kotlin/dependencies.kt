@@ -30,7 +30,7 @@ object Build {
 object Publishing {
     const val groupId = "com.ivianuu.essentials"
     const val vcsUrl = "https://github.com/IVIanuu/essentials"
-    const val version = "${Build.versionName}-dev305"
+    const val version = "${Build.versionName}-dev306"
 }
 
 object Deps {
@@ -107,7 +107,7 @@ object Deps {
     const val epoxyPrefs = "com.ivianuu.epoxyprefs:epoxyprefs:0.0.1-dev-21" // todo remove legacy
 
     const val essentialsGradlePlugin =
-        "com.ivianuu.essentials:essentials-gradle-plugin:0.0.1-dev302"
+        "com.ivianuu.essentials:essentials-gradle-plugin:0.0.1-dev305"
 
     object Injekt {
         private const val version = "0.0.1-dev83"
