@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.ui.compose.prefs
 
 import androidx.compose.Composable
+import com.ivianuu.essentials.store.Box
 import com.ivianuu.essentials.ui.compose.core.remember
 import com.ivianuu.essentials.ui.compose.coroutines.collect
 import kotlinx.coroutines.flow.Flow
@@ -37,7 +38,7 @@ fun Dependencies(
 }
 
 data class Dependency<T : Any>(
-    val box: com.ivianuu.essentials.store.Box<T>,
+    val box: Box<T>,
     val value: T
 )
 

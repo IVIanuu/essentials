@@ -111,7 +111,7 @@ fun test(
 
     val newSource = Writer.write(fileNode)
 
-    //if (file.name == "MyClass.kt") error("new source $newSource")
+    //if (file.name == "CheckableApps.kt") error("new source $newSource")
 
     return if (orig != fileNode) {
         file.withNewSource(newSource)

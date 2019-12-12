@@ -19,6 +19,7 @@ package com.ivianuu.essentials.ui.compose.prefs
 import androidx.compose.Composable
 import androidx.compose.Pivotal
 import androidx.ui.graphics.Image
+import com.ivianuu.essentials.store.Box
 import com.ivianuu.essentials.ui.compose.common.AbsorbPointer
 import com.ivianuu.essentials.ui.compose.common.asIconComposable
 import com.ivianuu.essentials.ui.compose.common.asTextComposable
@@ -26,7 +27,7 @@ import com.ivianuu.essentials.ui.compose.material.EsCheckbox
 
 @Composable
 fun CheckboxPreference(
-    @Pivotal box: com.ivianuu.essentials.store.Box<Boolean>,
+    @Pivotal box: Box<Boolean>,
     onChange: ((Boolean) -> Boolean)? = null,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,

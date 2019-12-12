@@ -21,6 +21,7 @@ import androidx.compose.Pivotal
 import androidx.ui.graphics.Image
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.Switch
+import com.ivianuu.essentials.store.Box
 import com.ivianuu.essentials.ui.compose.common.AbsorbPointer
 import com.ivianuu.essentials.ui.compose.common.asIconComposable
 import com.ivianuu.essentials.ui.compose.common.asTextComposable
@@ -28,7 +29,7 @@ import com.ivianuu.essentials.ui.compose.core.invoke
 
 @Composable
 fun SwitchPreference(
-    @Pivotal box: com.ivianuu.essentials.store.Box<Boolean>,
+    @Pivotal box: Box<Boolean>,
     onChange: ((Boolean) -> Boolean)? = null,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,

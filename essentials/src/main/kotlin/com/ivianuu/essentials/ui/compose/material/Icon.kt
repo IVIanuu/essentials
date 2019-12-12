@@ -18,6 +18,7 @@ package com.ivianuu.essentials.ui.compose.material
 
 import androidx.compose.Ambient
 import androidx.compose.Composable
+import androidx.compose.Immutable
 import androidx.ui.core.Size
 import androidx.ui.core.dp
 import androidx.ui.foundation.Clickable
@@ -45,6 +46,7 @@ fun Icon(
     }
 }
 
+@Immutable
 data class IconStyle(
     val size: Size = Size(DefaultIconSize, DefaultIconSize),
     val color: Color? = null
