@@ -19,8 +19,12 @@ package com.ivianuu.essentials.ui.compose.material
 import androidx.compose.Composable
 import androidx.ui.core.Alignment
 import androidx.ui.core.CurrentTextStyleProvider
+import androidx.ui.core.IntPx
 import androidx.ui.core.dp
 import androidx.ui.core.gesture.LongPressGestureDetector
+import androidx.ui.core.looseMin
+import androidx.ui.core.max
+import androidx.ui.core.min
 import androidx.ui.foundation.Clickable
 import androidx.ui.graphics.Image
 import androidx.ui.layout.Container
@@ -35,8 +39,8 @@ import com.ivianuu.essentials.ui.compose.core.ambient
 import com.ivianuu.essentials.ui.compose.core.invoke
 import com.ivianuu.essentials.ui.compose.layout.Column
 import com.ivianuu.essentials.ui.compose.layout.CrossAxisAlignment
-import com.ivianuu.essentials.ui.compose.layout.MainAxisAlignment
 import com.ivianuu.essentials.ui.compose.layout.Row
+import com.ivianuu.essentials.ui.compose.layout.SingleChildLayout
 
 @Composable
 fun SimpleListItem(
@@ -96,16 +100,26 @@ fun SimpleListItem(
 
         Container(
             constraints = DpConstraints(minHeight = minHeight),
-            padding = contentPadding
+            padding = EdgeInsets(
+                left = contentPadding.left,
+                right = contentPadding.right
+            )
         ) {
             Row(crossAxisAlignment = CrossAxisAlignment.Center) {
                 // leading
                 if (styledLeading != null) {
                     Container(
                         modifier = Inflexible,
-                        alignment = Alignment.CenterLeft,
-                        children = styledLeading
-                    )
+                        alignment = Alignment.CenterLeft
+                    ) {
+                        AddPaddingIfNeededLayout(
+                            padding = EdgeInsets(
+                                top = contentPadding.top,
+                                bottom = contentPadding.bottom
+                            ),
+                            child = styledLeading
+                        )
+                    }
                 }
 
                 // content
@@ -117,11 +131,16 @@ fun SimpleListItem(
                     ),
                     alignment = Alignment.CenterLeft
                 ) {
-                    Column(
-                        mainAxisAlignment = MainAxisAlignment.Center
+                    AddPaddingIfNeededLayout(
+                        padding = EdgeInsets(
+                            top = contentPadding.top,
+                            bottom = contentPadding.bottom
+                        )
                     ) {
-                        styledTitle?.invoke()
-                        styledSubtitle?.invoke()
+                        Column {
+                            styledTitle?.invoke()
+                            styledSubtitle?.invoke()
+                        }
                     }
                 }
 
@@ -129,9 +148,16 @@ fun SimpleListItem(
                 if (styledTrailing != null) {
                     Container(
                         modifier = Inflexible,
-                        constraints = DpConstraints(minHeight = minHeight),
-                        children = styledTrailing
-                    )
+                        constraints = DpConstraints(minHeight = minHeight)
+                    ) {
+                        AddPaddingIfNeededLayout(
+                            padding = EdgeInsets(
+                                top = contentPadding.top,
+                                bottom = contentPadding.bottom
+                            ),
+                            child = styledTrailing
+                        )
+                    }
                 }
             }
         }
@@ -152,6 +178,33 @@ fun SimpleListItem(
     }
 }
 
+@Composable
+private fun AddPaddingIfNeededLayout(
+    padding: EdgeInsets,
+    child: @Composable() () -> Unit
+) {
+    SingleChildLayout(child = child) { measureable, constraints ->
+        if (measureable == null) return@SingleChildLayout layout(IntPx.Zero, IntPx.Zero) {}
+
+        val placeable = measureable.measure(constraints.looseMin())
+        val width = max(
+            constraints.minWidth,
+            placeable.width + padding.left.toIntPx() + padding.right.toIntPx()
+        )
+        val height = max(
+            constraints.minHeight,
+            placeable.height + padding.top.toIntPx() + padding.bottom.toIntPx()
+        )
+
+        layout(width, height) {
+            placeable.place(
+                x = min(width / 2, padding.left.toIntPx()),
+                y = min(height / 2, padding.top.toIntPx())
+            )
+        }
+    }
+}
+
 private val TitleOnlyMinHeight = 48.dp
 private val TitleOnlyMinHeightWithIcon = 56.dp
 private val TitleAndSubtitleMinHeight = 64.dp
@@ -159,5 +212,7 @@ private val TitleAndSubtitleMinHeightWithIcon = 72.dp
 private val HorizontalTextPadding = 16.dp
 private val ContentPadding = EdgeInsets(
     left = 16.dp,
-    right = 16.dp
+    top = 8.dp,
+    right = 16.dp,
+    bottom = 8.dp
 )
