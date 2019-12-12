@@ -72,7 +72,7 @@ class DialogPermissionRequestUi(
 private fun PermissionDialog(request: PermissionRequest) {
     Recompose { recompose ->
         ScrollableDialog(
-            title = { Text("Permission") }, // todo
+            title = { Text("Permission") }, // todo customizable
             listContent = {
                 val viewModel = injectViewModel<PermissionDialogViewModel> {
                     parametersOf(request)
