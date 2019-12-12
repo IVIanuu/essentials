@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.foreground
 
 import android.app.NotificationManager
+import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.util.AppDispatchers
 import com.ivianuu.essentials.util.coroutineScope
 import com.ivianuu.essentials.work.EsService
@@ -25,8 +26,6 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class ForegroundService : EsService() {
 
@@ -39,6 +38,8 @@ class ForegroundService : EsService() {
     override fun onCreate() {
         super.onCreate()
 
+        d { "start" }
+
         foregroundManager.updates
             .onStart { emit(Unit) }
             .onEach { update() }
@@ -49,16 +50,17 @@ class ForegroundService : EsService() {
             .onEach { stop() }
             .flowOn(dispatchers.default)
             .launchIn(scope.coroutineScope)
+    }
 
-        scope.coroutineScope.launch {
-            withContext(dispatchers.default) {
-                update()
-            }
-        }
+    override fun onDestroy() {
+        super.onDestroy()
+        d { "stop" }
     }
 
     private fun update() {
         val newComponents = foregroundManager.components
+
+        d { "update components $newComponents" }
 
         lastComponents
             .filter { it !in newComponents }
