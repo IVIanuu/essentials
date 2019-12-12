@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.apps.ui
 
 import androidx.compose.Composable
+import androidx.compose.Immutable
 import androidx.compose.Pivotal
 import androidx.lifecycle.viewModelScope
 import androidx.ui.core.Text
@@ -227,6 +228,7 @@ internal data class CheckableAppsState(
     val apps: Async<List<CheckableApp>> = Uninitialized
 )
 
+@Immutable
 internal data class CheckableApp(
     val info: AppInfo,
     val isChecked: Boolean

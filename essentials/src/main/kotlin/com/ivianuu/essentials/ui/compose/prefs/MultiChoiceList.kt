@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.ui.compose.prefs
 
 import androidx.compose.Composable
+import androidx.compose.Immutable
 import androidx.compose.Pivotal
 import androidx.ui.core.Text
 import androidx.ui.graphics.Image
@@ -105,6 +106,7 @@ fun <T> MultiChoiceListPreference(
 }
 
 object MultiChoiceListPreference {
+    @Immutable
     data class Item<T>(
         val title: String,
         val value: T

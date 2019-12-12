@@ -18,6 +18,7 @@ package com.ivianuu.essentials.ui.compose.common
 
 import androidx.compose.Ambient
 import androidx.compose.Composable
+import androidx.compose.Immutable
 
 @Composable
 fun MultiAmbientProvider(
@@ -38,6 +39,7 @@ fun MultiAmbientProvider(
 // todo is this a good name?
 infix fun <T> Ambient<T>.with(value: T): AmbientWithValue<T> = AmbientWithValue(this, value)
 
+@Immutable
 data class AmbientWithValue<T>(
     val ambient: Ambient<T>,
     val value: T

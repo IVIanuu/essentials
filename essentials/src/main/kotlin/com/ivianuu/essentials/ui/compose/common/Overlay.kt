@@ -18,6 +18,7 @@ package com.ivianuu.essentials.ui.compose.common
 
 import androidx.compose.Ambient
 import androidx.compose.Composable
+import androidx.compose.Immutable
 import androidx.compose.Observe
 import androidx.compose.frames.modelListOf
 import androidx.ui.core.Layout
@@ -79,6 +80,7 @@ class Overlay(initialEntries: List<OverlayEntry> = emptyList()) {
     }
 }
 
+@Immutable
 data class OverlayEntry(
     val opaque: Boolean = false,
     val keepState: Boolean = false,

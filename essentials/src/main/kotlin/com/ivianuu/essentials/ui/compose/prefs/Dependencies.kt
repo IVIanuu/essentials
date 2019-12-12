@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.ui.compose.prefs
 
 import androidx.compose.Composable
+import androidx.compose.Immutable
 import com.ivianuu.essentials.store.Box
 import com.ivianuu.essentials.ui.compose.core.remember
 import com.ivianuu.essentials.ui.compose.coroutines.collect
@@ -37,6 +38,7 @@ fun Dependencies(
     child(dependenciesOk)
 }
 
+@Immutable
 data class Dependency<T : Any>(
     val box: Box<T>,
     val value: T
