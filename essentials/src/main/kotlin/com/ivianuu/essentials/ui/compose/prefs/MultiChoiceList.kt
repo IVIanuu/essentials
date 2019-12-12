@@ -78,10 +78,8 @@ fun <T> MultiChoiceListPreference(
         leading = leading,
         dialog = { context, dismiss ->
             val (selectedItems, setSelectedItems) = stateFor(context.currentValue) {
-                context.currentValue.toList()
-                    .map { value ->
-                        items.first { it.value == value }
-                    }
+                context.currentValue
+                    .map { value -> items.first { it.value == value } }
             }
 
             MultiChoiceListDialog(

@@ -25,15 +25,18 @@ import androidx.ui.layout.Container
 import androidx.ui.layout.DpConstraints
 import androidx.ui.layout.EdgeInsets
 import androidx.ui.layout.LayoutExpandedWidth
+import androidx.ui.material.MaterialTheme
 import androidx.ui.material.ripple.Ripple
 import com.ivianuu.essentials.ui.compose.common.scrolling.ScrollPosition
 import com.ivianuu.essentials.ui.compose.common.scrolling.ScrollableList
 import com.ivianuu.essentials.ui.compose.core.Axis
+import com.ivianuu.essentials.ui.compose.core.invoke
 import com.ivianuu.essentials.ui.compose.core.remember
 import com.ivianuu.essentials.ui.compose.layout.CrossAxisAlignment
 import com.ivianuu.essentials.ui.compose.layout.MainAxisAlignment
 import com.ivianuu.essentials.ui.compose.layout.Row
 import com.ivianuu.essentials.ui.compose.layout.WidthSpacer
+import com.ivianuu.essentials.ui.compose.material.EmphasisProvider
 
 @Composable
 fun ListDialog(
@@ -92,17 +95,19 @@ fun SimpleDialogListItem(
                 ),
                 alignment = Alignment.CenterLeft
             ) {
-                Row(
-                    mainAxisAlignment = MainAxisAlignment.End,
-                    crossAxisAlignment = CrossAxisAlignment.Center
-                ) {
-                    if (leading != null) {
-                        leading()
+                EmphasisProvider(emphasis = MaterialTheme.emphasisLevels()().high) {
+                    Row(
+                        mainAxisAlignment = MainAxisAlignment.End,
+                        crossAxisAlignment = CrossAxisAlignment.Center
+                    ) {
+                        if (leading != null) {
+                            leading()
 
-                        WidthSpacer(24.dp)
+                            WidthSpacer(24.dp)
+                        }
+
+                        title()
                     }
-
-                    title()
                 }
             }
         }

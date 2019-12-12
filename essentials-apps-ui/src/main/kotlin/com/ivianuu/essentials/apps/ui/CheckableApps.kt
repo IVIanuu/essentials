@@ -21,6 +21,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.ui.core.Text
 import androidx.ui.core.dp
 import androidx.ui.layout.Center
+import androidx.ui.material.Checkbox
 import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.AppStore
 import com.ivianuu.essentials.apps.coil.AppIcon
@@ -32,7 +33,6 @@ import com.ivianuu.essentials.ui.compose.core.key
 import com.ivianuu.essentials.ui.compose.core.onActive
 import com.ivianuu.essentials.ui.compose.layout.SizedBox
 import com.ivianuu.essentials.ui.compose.material.AvatarIconStyle
-import com.ivianuu.essentials.ui.compose.material.EsCheckbox
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
 import com.ivianuu.essentials.ui.compose.material.Icon
 import com.ivianuu.essentials.ui.compose.material.PopupMenuButton
@@ -132,7 +132,7 @@ private fun CheckableApp(
             }
         },
         trailing = {
-            EsCheckbox(
+            Checkbox(
                 checked = app.isChecked,
                 onCheckedChange = { onClick() }
             )

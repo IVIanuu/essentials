@@ -21,8 +21,6 @@ import androidx.compose.Pivotal
 import androidx.ui.core.Opacity
 import com.ivianuu.essentials.ui.compose.material.Subheader
 
-// todo
-
 @Composable
 fun PreferenceSubheader(
     @Pivotal text: String,

@@ -77,7 +77,7 @@ fun SimpleListItem(
     })
     val styledSubtitle: (@Composable() () -> Unit)? = if (subtitle == null) null else ({
         CurrentTextStyleProvider(value = MaterialTheme.typography()().body2) {
-            EmphasisProvider(emphasis = ambient(EmphasisAmbient).high, children = subtitle)
+            EmphasisProvider(emphasis = ambient(EmphasisAmbient).medium, children = subtitle)
         }
     })
     val styledLeading: (@Composable() () -> Unit)? = if (leading == null) null else ({

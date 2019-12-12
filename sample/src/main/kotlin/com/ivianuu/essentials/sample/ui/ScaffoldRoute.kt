@@ -21,6 +21,7 @@ import androidx.ui.core.Text
 import androidx.ui.core.dp
 import androidx.ui.layout.Container
 import androidx.ui.layout.EdgeInsets
+import androidx.ui.material.Checkbox
 import androidx.ui.material.FloatingActionButton
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.surface.Surface
@@ -33,7 +34,6 @@ import com.ivianuu.essentials.ui.compose.dialog.DialogRoute
 import com.ivianuu.essentials.ui.compose.dialog.SingleChoiceListDialog
 import com.ivianuu.essentials.ui.compose.es.ComposeControllerRoute
 import com.ivianuu.essentials.ui.compose.injekt.inject
-import com.ivianuu.essentials.ui.compose.material.EsCheckbox
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
 import com.ivianuu.essentials.ui.compose.material.Scaffold
 import com.ivianuu.essentials.ui.compose.material.SimpleListItem
@@ -91,7 +91,7 @@ val ScaffoldRoute = ComposeControllerRoute {
                     title = { Text("Show top bar") },
                     trailing = {
                         AbsorbPointer {
-                            EsCheckbox(checked = controls.showTopAppBar, onCheckedChange = {})
+                            Checkbox(checked = controls.showTopAppBar, onCheckedChange = {})
                         }
                     },
                     onClick = { controls.showTopAppBar = !controls.showTopAppBar }
@@ -100,7 +100,7 @@ val ScaffoldRoute = ComposeControllerRoute {
                     title = { Text("Center title") },
                     trailing = {
                         AbsorbPointer {
-                            EsCheckbox(checked = controls.centerTitle, onCheckedChange = {})
+                            Checkbox(checked = controls.centerTitle, onCheckedChange = {})
                         }
                     },
                     onClick = { controls.centerTitle = !controls.centerTitle }
@@ -128,7 +128,7 @@ val ScaffoldRoute = ComposeControllerRoute {
                     title = { Text("Show bottom bar") },
                     trailing = {
                         AbsorbPointer {
-                            EsCheckbox(checked = controls.showBottomBar, onCheckedChange = {})
+                            Checkbox(checked = controls.showBottomBar, onCheckedChange = {})
                         }
                     },
                     onClick = { controls.showBottomBar = !controls.showBottomBar }
@@ -139,7 +139,7 @@ val ScaffoldRoute = ComposeControllerRoute {
                     title = { Text("Show fab") },
                     trailing = {
                         AbsorbPointer {
-                            EsCheckbox(checked = controls.showFab, onCheckedChange = {})
+                            Checkbox(checked = controls.showFab, onCheckedChange = {})
                         }
                     },
                     onClick = { controls.showFab = !controls.showFab }
