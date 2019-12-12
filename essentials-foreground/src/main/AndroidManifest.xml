@@ -10,7 +10,7 @@
             android:process="@string/es_foreground_service_process" />
 
         <receiver
-            android:name=".InterProcessForegroundStartReceiver"
+            android:name=".InterProcessForegroundReceiver"
             android:process="@string/es_foreground_service_process">
             <intent-filter>
                 <action android:name="com.ivianuu.essentials.foreground.INTER_PROCESS_START_FOREGROUND" />

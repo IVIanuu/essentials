@@ -26,7 +26,7 @@ class InterProcessForegroundManager(private val context: Context) {
 
     fun startForeground(component: Type<out ForegroundComponent>) {
         d { "start foreground $component" }
-        InterProcessForegroundStartReceiver.start(
+        InterProcessForegroundReceiver.start(
             context,
             component
         )
@@ -34,7 +34,7 @@ class InterProcessForegroundManager(private val context: Context) {
 
     fun stopForeground(component: Type<out ForegroundComponent>) {
         d { "stop foreground $component" }
-        InterProcessForegroundStartReceiver.stop(
+        InterProcessForegroundReceiver.stop(
             context,
             component
         )

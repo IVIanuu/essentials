@@ -28,7 +28,7 @@ import kotlinx.android.parcel.Parcelize
 import kotlinx.android.parcel.TypeParceler
 import kotlin.reflect.KClass
 
-class InterProcessForegroundStartReceiver : EsBroadcastReceiver() {
+class InterProcessForegroundReceiver : EsBroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
         super.onReceive(context, intent)
