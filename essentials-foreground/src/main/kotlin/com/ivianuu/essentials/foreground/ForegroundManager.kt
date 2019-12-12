@@ -41,7 +41,7 @@ class ForegroundManager(private val context: Context) {
 
     fun startForeground(component: ForegroundComponent) = synchronized(this) {
         if (component in _components) {
-            d { "update foreground $_components" }
+            d { "update foreground $component" }
             updateServiceState()
             dispatchUpdate()
             return@synchronized
@@ -69,6 +69,7 @@ class ForegroundManager(private val context: Context) {
     }
 
     private fun updateServiceState() = synchronized(this) {
+        d { "update service state $_components" }
         if (_components.isNotEmpty()) {
             d { "start foreground service" }
             ContextCompat.startForegroundService(
