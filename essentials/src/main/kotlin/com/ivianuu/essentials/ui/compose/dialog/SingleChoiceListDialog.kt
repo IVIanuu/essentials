@@ -29,7 +29,7 @@ fun <T> SingleChoiceListDialog(
     selectedItem: T,
     onSelect: ((T) -> Unit)? = null,
     item: @Composable() (T) -> Unit,
-    dismissOnSelection: Boolean = true, // todo
+    dismissOnSelection: Boolean = true,
     buttonLayout: AlertDialogButtonLayout = AlertDialogButtonLayout.SideBySide,
     icon: (@Composable() () -> Unit)? = null,
     title: (@Composable() () -> Unit)? = null,

@@ -115,10 +115,7 @@ val ScaffoldRoute = ComposeControllerRoute {
                                 SingleChoiceListDialog(
                                     items = Scaffold.BodyLayoutMode.values().toList(),
                                     selectedItem = controls.bodyLayoutMode,
-                                    onSelect = {
-                                        controls.bodyLayoutMode = it
-                                        navigator.pop()
-                                    },
+                                    onSelect = { controls.bodyLayoutMode = it },
                                     item = { Text(it.name) }
                                 )
                             }
@@ -155,10 +152,7 @@ val ScaffoldRoute = ComposeControllerRoute {
                                 SingleChoiceListDialog(
                                     items = Scaffold.FabPosition.values().toList(),
                                     selectedItem = controls.fabPosition,
-                                    onSelect = {
-                                        controls.fabPosition = it
-                                        navigator.pop()
-                                    },
+                                    onSelect = { controls.fabPosition = it },
                                     item = { Text(it.name) }
                                 )
                             }

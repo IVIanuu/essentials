@@ -97,9 +97,7 @@ fun test(
         Step.WrapComposableCalls
     )
     var unprocessed = collectUnprocessed(fileNode, steps)
-    var round = 0
     while (unprocessed.isNotEmpty()) {
-        round++
         mergeVarArgToSingleArg(fileNode, resolveSession, trace)
         moveComposableTrailingLambdasIntoTheBody(fileNode, resolveSession, trace)
         convertExpressionComposableFunsToBlocks(fileNode, resolveSession, trace)
@@ -111,7 +109,7 @@ fun test(
 
     val newSource = Writer.write(fileNode)
 
-    //if (file.name == "CheckableApps.kt") error("new source $newSource")
+    // if (file.name == "ScaffoldRoute.kt") error("new source $newSource")
 
     return if (orig != fileNode) {
         file.withNewSource(newSource)
@@ -455,10 +453,7 @@ private fun wrapComposableLambdasInObserve(
                         val resulting = resolvedCall.resultingDescriptor
 
                         val argDescriptor = if (parentWithType is Node.ValueArg) {
-                            val args =
-                                if (valueArgParent is Node.Decl.EnumEntry) valueArgParent.args else (valueArgParent as Node.Expr.Call).args
-                            val argIndex = args.indexOf(parentWithType)
-                            resulting.valueParameters[argIndex]
+                            (resolvedCall.getArgumentMapping(parentWithType.element as KtValueArgument) as? ArgumentMatch)?.valueParameter!!
                         } else resulting.valueParameters.last()
 
                         if (argDescriptor.type.annotations.hasAnnotation(ComposableAnnotation) &&
