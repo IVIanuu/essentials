@@ -25,6 +25,9 @@ import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.lifecycleScope
 import com.ivianuu.essentials.util.defaultViewModelKey
 import com.ivianuu.essentials.util.unsafeLazy
+import com.ivianuu.injekt.InjektTrait
+import com.ivianuu.injekt.ParametersDefinition
+import com.ivianuu.injekt.get
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlin.reflect.KClass
@@ -64,6 +67,7 @@ inline fun <reified T : MvRxViewModel<*>> MvRxView.getMvRxViewModel(
     noinline factory: () -> T
 ): T = _getMvRxViewModel(T::class, from, key, factory)
 
+
 @PublishedApi
 internal fun <T : MvRxViewModel<*>> MvRxView._getMvRxViewModel(
     type: KClass<T>,
@@ -82,3 +86,20 @@ internal fun <T : MvRxViewModel<*>> MvRxView._getMvRxViewModel(
             .launchIn(lifecycleScope)
     }
 }
+
+
+inline fun <S, reified T : MvRxViewModel<*>> S.injectMvRxViewModel(
+    noinline from: () -> ViewModelStoreOwner = { this },
+    noinline key: () -> String = { T::class.defaultViewModelKey },
+    noinline name: () -> Any? = { null },
+    noinline parameters: ParametersDefinition? = null
+): Lazy<T> where S : MvRxView, S : InjektTrait =
+    mvRxViewModel(from, key) { get(name = name(), parameters = parameters) }
+
+inline fun <S, reified T : MvRxViewModel<*>> S.getInjectedMvRxViewModel(
+    from: ViewModelStoreOwner = this,
+    key: String = T::class.defaultViewModelKey,
+    name: Any? = null,
+    noinline parameters: ParametersDefinition? = null
+): T where S : MvRxView, S : InjektTrait =
+    getMvRxViewModel(from, key) { get(name = name, parameters = parameters) }

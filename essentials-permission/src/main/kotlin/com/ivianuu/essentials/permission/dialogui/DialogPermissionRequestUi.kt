@@ -42,7 +42,7 @@ import com.ivianuu.essentials.ui.compose.dialog.DialogRoute
 import com.ivianuu.essentials.ui.compose.dialog.ScrollableDialog
 import com.ivianuu.essentials.ui.compose.material.SimpleListItem
 import com.ivianuu.essentials.ui.compose.resources.stringResource
-import com.ivianuu.essentials.ui.compose.viewmodel.injekt.injectViewModel
+import com.ivianuu.essentials.ui.compose.viewmodel.injectViewModel
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.Param

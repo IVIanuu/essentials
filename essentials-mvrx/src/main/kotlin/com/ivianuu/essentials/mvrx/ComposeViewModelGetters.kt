@@ -18,12 +18,17 @@ package com.ivianuu.essentials.mvrx
 
 import androidx.compose.Composable
 import androidx.lifecycle.ViewModelStoreOwner
+import com.ivianuu.essentials.ui.compose.core.ambient
 import com.ivianuu.essentials.ui.compose.core.remember
 import com.ivianuu.essentials.ui.compose.coroutines.collect
+import com.ivianuu.essentials.ui.compose.injekt.ComponentAmbient
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.compose.viewmodel.viewModel
 import com.ivianuu.essentials.util.defaultViewModelFactory
 import com.ivianuu.essentials.util.defaultViewModelKey
+import com.ivianuu.injekt.ParametersDefinition
+import com.ivianuu.injekt.Type
+import com.ivianuu.injekt.typeOf
 import kotlin.reflect.KClass
 
 @Composable
@@ -44,4 +49,35 @@ fun <T : MvRxViewModel<*>> mvRxViewModel(
     // recompose on changes
     collect(remember { viewModel.flow })
     return viewModel
+}
+
+@Composable
+inline fun <reified T : MvRxViewModel<*>> injectMvRxViewModel(
+    from: ViewModelStoreOwner = inject(),
+    key: String = remember { T::class.defaultViewModelKey },
+    name: Any? = null,
+    noinline parameters: ParametersDefinition? = null
+): T = injectMvRxViewModel(
+    typeOf(),
+    from,
+    key,
+    name,
+    parameters
+)
+
+@Composable
+fun <T : MvRxViewModel<*>> injectMvRxViewModel(
+    type: Type<T>,
+    from: ViewModelStoreOwner = inject(),
+    key: String = remember { type.defaultViewModelKey },
+    name: Any? = null,
+    parameters: ParametersDefinition? = null
+): T {
+    val component = ambient(ComponentAmbient)
+    return mvRxViewModel(
+        type = type.raw as KClass<T>,
+        from = from,
+        key = key,
+        factory = { component.get(type = type, name = name, parameters = parameters) }
+    )
 }

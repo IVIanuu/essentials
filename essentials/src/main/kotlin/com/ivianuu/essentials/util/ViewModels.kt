@@ -19,12 +19,12 @@ package com.ivianuu.essentials.util
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
+import com.ivianuu.injekt.InjektTrait
+import com.ivianuu.injekt.Type
+import com.ivianuu.injekt.typeOf
 import kotlin.reflect.KClass
 
 // todo remove
-
-val KClass<out ViewModel>.defaultViewModelKey
-    get() = "androidx.lifecycle.ViewModelProvider.DefaultKey:" + java.canonicalName
 
 inline fun <reified T : ViewModel> ViewModelStoreOwner.getViewModel(
     from: ViewModelStoreOwner = this,
@@ -69,6 +69,50 @@ fun <T : ViewModel> ViewModelStoreOwner.viewModel(
             factory = factory
         )
     }
+
+inline fun <S, reified T> S.getInjectedViewModel(
+    from: ViewModelStoreOwner = this,
+    key: String = T::class.defaultViewModelKey
+): T where T : ViewModel, S : ViewModelStoreOwner, S : InjektTrait =
+    getInjectedViewModel(type = typeOf(), from = from, key = key)
+
+fun <S, T> S.getInjectedViewModel(
+    type: Type<T>,
+    from: ViewModelStoreOwner = this,
+    name: Any? = null,
+    key: String = type.defaultViewModelKey
+): T where T : ViewModel, S : ViewModelStoreOwner, S : InjektTrait =
+    getViewModel(type = type.raw as KClass<T>, from = from, key = key) {
+        get(type = type, name = name)
+    }
+
+
+inline fun <S, reified T> S.injectViewModel(
+    noinline fromProvider: () -> ViewModelStoreOwner = { this },
+    noinline keyProvider: () -> String = { T::class.defaultViewModelKey }
+): Lazy<T> where T : ViewModel, S : ViewModelStoreOwner, S : InjektTrait = injectViewModel(
+    type = typeOf(),
+    fromProvider = fromProvider,
+    keyProvider = keyProvider
+)
+
+fun <S, T> S.injectViewModel(
+    type: Type<T>,
+    fromProvider: () -> ViewModelStoreOwner = { this },
+    keyProvider: () -> String = { type.defaultViewModelKey }
+): Lazy<T> where T : ViewModel, S : ViewModelStoreOwner, S : InjektTrait =
+    lazy(LazyThreadSafetyMode.NONE) {
+        getInjectedViewModel(
+            type = type,
+            key = keyProvider(),
+            from = fromProvider()
+        )
+    }
+
+val KClass<out ViewModel>.defaultViewModelKey
+    get() = "androidx.lifecycle.ViewModelProvider.DefaultKey:" + java.canonicalName
+val Type<out ViewModel>.defaultViewModelKey
+    get() = "androidx.lifecycle.ViewModelProvider.DefaultKey:" + raw.java.canonicalName
 
 fun <T : ViewModel> defaultViewModelFactory(type: KClass<T>): () -> T = {
     ViewModelProvider.NewInstanceFactory().create(type.java)

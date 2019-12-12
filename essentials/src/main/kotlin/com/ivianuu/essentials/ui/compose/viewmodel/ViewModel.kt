@@ -19,11 +19,16 @@ package com.ivianuu.essentials.ui.compose.viewmodel
 import androidx.compose.Composable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelStoreOwner
+import com.ivianuu.essentials.ui.compose.core.ambient
 import com.ivianuu.essentials.ui.compose.core.remember
+import com.ivianuu.essentials.ui.compose.injekt.ComponentAmbient
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.util.defaultViewModelFactory
 import com.ivianuu.essentials.util.defaultViewModelKey
 import com.ivianuu.essentials.util.getViewModel
+import com.ivianuu.injekt.ParametersDefinition
+import com.ivianuu.injekt.Type
+import com.ivianuu.injekt.typeOf
 import kotlin.reflect.KClass
 
 @Composable
@@ -41,4 +46,35 @@ fun <T : ViewModel> viewModel(
     factory: () -> T = defaultViewModelFactory(type)
 ): T = remember {
     from.getViewModel(type = type, key = key, from = from, factory = factory)
+}
+
+@Composable
+inline fun <reified T : ViewModel> injectViewModel(
+    from: ViewModelStoreOwner = inject(),
+    key: String = remember { T::class.defaultViewModelKey },
+    name: Any? = null,
+    noinline parameters: ParametersDefinition? = null
+): T = injectViewModel(
+    typeOf<T>(),
+    from,
+    key,
+    name,
+    parameters
+)
+
+@Composable
+fun <T : ViewModel> injectViewModel(
+    type: Type<T>,
+    from: ViewModelStoreOwner = inject(),
+    key: String = remember { type.defaultViewModelKey },
+    name: Any? = null,
+    parameters: ParametersDefinition? = null
+): T {
+    val component = ambient(ComponentAmbient)
+    return viewModel(
+        type = type.raw as KClass<T>,
+        from = from,
+        key = key,
+        factory = { component.get(type = type, name = name, parameters = parameters) }
+    )
 }
