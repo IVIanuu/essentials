@@ -49,5 +49,4 @@ abstract class NotificationComponent {
         _scope.clear()
         service = null
     }
-
 }

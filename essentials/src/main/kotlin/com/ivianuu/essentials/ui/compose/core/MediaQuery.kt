@@ -107,7 +107,6 @@ private class ObservableMediaQuery(
         density = other.density
         darkMode = other.darkMode
     }
-
 }
 
 @Composable

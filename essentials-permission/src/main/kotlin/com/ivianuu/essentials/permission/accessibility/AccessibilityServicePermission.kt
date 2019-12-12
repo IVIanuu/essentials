@@ -57,5 +57,4 @@ class AccessibilityServicePermissionStateProvider(
     override suspend fun isGranted(permission: Permission): Boolean =
         activityManager.getRunningServices(Int.MAX_VALUE)
             .any { it.service.className == permission.metadata[MetadataKeys.AccessibilityServiceClass].java.canonicalName }
-
 }

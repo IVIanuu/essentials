@@ -47,7 +47,6 @@ abstract class ForegroundComponent {
     protected fun updateNotification() {
         manager?.startForeground(this)
     }
-
 }
 
 private val ids = AtomicInteger(0)

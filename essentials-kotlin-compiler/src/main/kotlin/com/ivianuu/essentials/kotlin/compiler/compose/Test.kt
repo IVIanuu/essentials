@@ -693,7 +693,7 @@ private fun wrapComposableCalls(
             val argExpr = arg.expr
             val oldLabel =
                 if (argExpr is Node.Expr.Labeled) argExpr.label else resolvedCall.resultingDescriptor.name.asString()
-            val argName = "arg_${callKeyIndex}_${index}"
+            val argName = "arg_${callKeyIndex}_$index"
             if (argExpr is Node.Expr.Labeled) argExpr.label = argName
             Visitor.visit(argExpr) { childNode, _ ->
                 when (childNode) {
@@ -942,8 +942,6 @@ private fun wrapComposableCalls(
                                                 )
                                             }
                                         }
-
-
                                     }
                                 )
                             )
@@ -979,7 +977,7 @@ private fun wrapComposableCalls(
 
                 resulting.valueParameters.forEachIndexed { index, param ->
                     if (param.annotations.hasAnnotation(PivotalAnnotation)) {
-                        stmts += joinKeyStmt("arg_${callKeyIndex}_${index}")
+                        stmts += joinKeyStmt("arg_${callKeyIndex}_$index")
                     }
                 }
 
@@ -996,7 +994,7 @@ private fun wrapComposableCalls(
                 Node.ValueArg(
                     name = arg.name,
                     asterisk = arg.asterisk,
-                    expr = Node.Expr.Name(name = "arg_${callKeyIndex}_${index}")
+                    expr = Node.Expr.Name(name = "arg_${callKeyIndex}_$index")
                 )
             }
 

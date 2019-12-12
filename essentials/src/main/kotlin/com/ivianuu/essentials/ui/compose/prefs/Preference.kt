@@ -132,5 +132,4 @@ class PreferenceContext<T> {
         if (isOk) valueController.setValue(newValue)
         return isOk
     }
-
 }

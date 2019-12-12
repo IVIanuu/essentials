@@ -62,5 +62,4 @@ class ComponentNotificationListenerService : EsNotificationListenerService() {
         d { "hints changed $hints" }
         components.forEach { it.onListenerHintsChanged(hints) }
     }
-
 }
