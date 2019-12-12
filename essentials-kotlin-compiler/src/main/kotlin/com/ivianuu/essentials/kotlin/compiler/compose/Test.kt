@@ -31,6 +31,7 @@ import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.KtProperty
+import org.jetbrains.kotlin.psi.KtSimpleNameExpression
 import org.jetbrains.kotlin.psi.KtValueArgument
 import org.jetbrains.kotlin.psi.psiUtil.startOffset
 import org.jetbrains.kotlin.resolve.BindingTrace
@@ -86,7 +87,7 @@ fun test(
     val orig = Converter().convertFile(file)
     val fileNode = Converter().convertFile(file)
 
-//    if (file.name == "cl.kt") logFile(fileNode)
+    //logFile(fileNode)
 
     val steps = mutableListOf(
         Step.ConvertExpressionComposableFunsToBlocks,
@@ -109,7 +110,7 @@ fun test(
 
     val newSource = Writer.write(fileNode)
 
-    // if (file.name == "ScaffoldRoute.kt") error("new source $newSource")
+    error("new source $newSource")
 
     return if (orig != fileNode) {
         file.withNewSource(newSource)
@@ -632,11 +633,20 @@ private fun wrapComposableCalls(
         if (node.seenBy(Step.WrapComposableCalls)) return@visit
         node.markSeen(Step.WrapComposableCalls)
 
-        if (node !is Node.Expr.Call) return@visit
+        val resolvedCall = when (node) {
+            is Node.Expr.Call -> {
+                val element = node.element as? KtCallExpression ?: return@visit
+                element.getResolvedCall(trace.bindingContext)
+            }
+            is Node.Expr.Name -> {
+                val element = node.element as? KtSimpleNameExpression ?: return@visit
+                element.getResolvedCall(trace.bindingContext)
+            }
+            else -> null
+        } ?: return@visit
 
-        val element = node.element as? KtCallExpression ?: return@visit
+        node as Node.Expr
 
-        val resolvedCall = element.getResolvedCall(trace.bindingContext) ?: return@visit
         val resulting = resolvedCall.resultingDescriptor
         if (!resulting.annotations.hasAnnotation(ComposableAnnotation)) return@visit
         val isEffect = resulting.returnType?.isUnit() == false
@@ -650,7 +660,7 @@ private fun wrapComposableCalls(
         }
 
         val callKey =
-            "${file.packageFqName.asString()}:${file.name}:${element.startOffset}".hashCode()
+            "${file.packageFqName.asString()}:${file.name}:${node.element!!.startOffset}".hashCode()
         val callKeyIndex = nextKeyIndex()
 
         val initKeyStmt = Node.Stmt.Decl(
@@ -898,7 +908,7 @@ private fun wrapComposableCalls(
                                 params = emptyList(),
                                 block = Node.Block(
                                     stmts = mutableListOf<Node.Stmt>().also { stmts ->
-                                        if (node.args.isEmpty()) {
+                                        if (node !is Node.Expr.Call || node.args.isEmpty()) {
                                             stmts += Node.Stmt.Expr(
                                                 expr = Node.Expr.Const(
                                                     value = "false",
@@ -971,32 +981,36 @@ private fun wrapComposableCalls(
         val newExpr = execExpr(
             mutableListOf<Node.Stmt>().also { stmts ->
                 stmts += initKeyStmt
-                node.args.forEachIndexed { index, arg ->
-                    stmts += initArgStmt(arg, resolvedCall, index)
-                }
+                if (node is Node.Expr.Call) {
+                    node.args.forEachIndexed { index, arg ->
+                        stmts += initArgStmt(arg, resolvedCall, index)
+                    }
 
-                resulting.valueParameters.forEachIndexed { index, param ->
-                    if (param.annotations.hasAnnotation(PivotalAnnotation)) {
-                        stmts += joinKeyStmt("arg_${callKeyIndex}_$index")
+                    resulting.valueParameters.forEachIndexed { index, param ->
+                        if (param.annotations.hasAnnotation(PivotalAnnotation)) {
+                            stmts += joinKeyStmt("arg_${callKeyIndex}_$index")
+                        }
                     }
                 }
 
-                if (isEffect) {
-                    stmts += composerExprStmt()
+                stmts += if (isEffect) {
+                    composerExprStmt()
                 } else {
-                    stmts += composerCallStmt()
+                    composerCallStmt()
                 }
             }
         )
 
-        node.args = node.args
-            .mapIndexed { index, arg ->
-                Node.ValueArg(
-                    name = arg.name,
-                    asterisk = arg.asterisk,
-                    expr = Node.Expr.Name(name = "arg_${callKeyIndex}_$index")
-                )
-            }
+        if (node is Node.Expr.Call) {
+            node.args = node.args
+                .mapIndexed { index, arg ->
+                    Node.ValueArg(
+                        name = arg.name,
+                        asterisk = arg.asterisk,
+                        expr = Node.Expr.Name(name = "arg_${callKeyIndex}_$index")
+                    )
+                }
+        }
 
         when (val rootExprParent = rootExpr.parent) {
             is Node.Decl.Func.Body.Expr -> rootExprParent.expr = newExpr

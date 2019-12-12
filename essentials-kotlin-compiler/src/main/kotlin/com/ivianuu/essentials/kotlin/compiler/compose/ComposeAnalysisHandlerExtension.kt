@@ -51,8 +51,12 @@ class ComposeAnalysisHandlerExtension(
     ): AnalysisResult? {
         if (runComplete) return null
 
-        container.get<LazyTopDownAnalyzer>().apply {
-            analyzeDeclarations(TopDownAnalysisMode.TopLevelDeclarations, files)
+        try {
+            container.get<LazyTopDownAnalyzer>().apply {
+                analyzeDeclarations(TopDownAnalysisMode.TopLevelDeclarations, files)
+            }
+        } catch (e: Exception) {
+
         }
 
         files as ArrayList<KtFile>
@@ -79,6 +83,8 @@ class ComposeAnalysisHandlerExtension(
         return null
     }
 
+    private var analyzed = false
+
     override fun doAnalysis(
         project: Project,
         module: ModuleDescriptor,
@@ -87,8 +93,15 @@ class ComposeAnalysisHandlerExtension(
         bindingTrace: BindingTrace,
         componentProvider: ComponentProvider
     ): AnalysisResult? {
+        if (analyzed) return null
+        analyzed = true
         container = componentProvider
-        return null
+        return AnalysisResult.RetryWithAdditionalRoots(
+            bindingTrace.bindingContext,
+            module,
+            emptyList(),
+            emptyList()
+        )
     }
 }
 
