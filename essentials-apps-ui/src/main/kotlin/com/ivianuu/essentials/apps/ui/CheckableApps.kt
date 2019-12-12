@@ -17,8 +17,6 @@
 package com.ivianuu.essentials.apps.ui
 
 import androidx.compose.Composable
-import androidx.compose.Immutable
-import androidx.compose.Pivotal
 import androidx.lifecycle.viewModelScope
 import androidx.ui.core.Text
 import androidx.ui.core.dp
@@ -30,6 +28,7 @@ import com.ivianuu.essentials.coil.Image
 import com.ivianuu.essentials.mvrx.MvRxViewModel
 import com.ivianuu.essentials.mvrx.injekt.injectMvRxViewModel
 import com.ivianuu.essentials.ui.compose.common.AsyncList
+import com.ivianuu.essentials.ui.compose.core.key
 import com.ivianuu.essentials.ui.compose.core.onActive
 import com.ivianuu.essentials.ui.compose.layout.SizedBox
 import com.ivianuu.essentials.ui.compose.material.AvatarIconStyle
@@ -91,10 +90,11 @@ fun CheckableAppsScreen(
                                 R.string.es_select_all -> viewModel.selectAllClicked()
                                 R.string.es_deselect_all -> viewModel.deselectAllClicked()
                             }
+                        },
+                        item = {
+                            Text(stringResource(it))
                         }
-                    ) {
-                        Text(stringResource(it))
-                    }
+                    )
                 }
             )
         },
@@ -103,10 +103,12 @@ fun CheckableAppsScreen(
                 state = viewModel.state.apps,
                 itemSize = 56.dp,
                 successItem = { _, app ->
-                    CheckableApp(
-                        app = app,
-                        onClick = { viewModel.appClicked(app) }
-                    )
+                    key(app.info.packageName) {
+                        CheckableApp(
+                            app = app,
+                            onClick = { viewModel.appClicked(app) }
+                        )
+                    }
                 }
             )
         }
@@ -115,7 +117,7 @@ fun CheckableAppsScreen(
 
 @Composable
 private fun CheckableApp(
-    @Pivotal app: CheckableApp,
+    app: CheckableApp,
     onClick: () -> Unit
 ) {
     SimpleListItem(
@@ -228,7 +230,6 @@ internal data class CheckableAppsState(
     val apps: Async<List<CheckableApp>> = Uninitialized
 )
 
-@Immutable
 internal data class CheckableApp(
     val info: AppInfo,
     val isChecked: Boolean
