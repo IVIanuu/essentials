@@ -16,7 +16,10 @@
 
 package com.ivianuu.essentials.apps
 
+import androidx.compose.Immutable
+
 /**
  * Simple application info
  */
+@Immutable
 data class AppInfo(val packageName: String, val appName: String)

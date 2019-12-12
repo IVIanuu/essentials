@@ -22,14 +22,13 @@ import androidx.activity.OnBackPressedDispatcherOwner
 import androidx.compose.Composable
 import com.ivianuu.essentials.ui.compose.core.ActivityAmbient
 import com.ivianuu.essentials.ui.compose.core.ambient
-import com.ivianuu.essentials.ui.compose.core.effect
 import com.ivianuu.essentials.ui.compose.core.onActive
 
 @Composable
 fun onBackPressed(
     activity: Activity = ambient(ActivityAmbient),
     callback: () -> Unit
-) = effect {
+) {
     onActive {
         val backPressedDispatcher =
             (activity as OnBackPressedDispatcherOwner).onBackPressedDispatcher

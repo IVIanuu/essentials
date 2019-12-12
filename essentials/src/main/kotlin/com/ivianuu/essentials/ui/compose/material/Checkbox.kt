@@ -39,7 +39,6 @@ import androidx.ui.layout.Padding
 import androidx.ui.layout.Wrap
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.ripple.Ripple
-import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.invoke
 import com.ivianuu.essentials.ui.compose.core.remember
 
@@ -50,7 +49,7 @@ fun EsCheckbox(
     checked: Boolean,
     onCheckedChange: ((Boolean) -> Unit)?,
     color: Color = MaterialTheme.colors()().secondary
-) = composable {
+) {
     Wrap {
         Ripple(bounded = false) {
             Clickable(onClick = onCheckedChange?.let { { onCheckedChange(!checked) } }) {
@@ -65,7 +64,7 @@ fun EsCheckbox(
 }
 
 @Composable
-private fun DrawCheckbox(checked: Boolean, activeColor: Color) = composable {
+private fun DrawCheckbox(checked: Boolean, activeColor: Color) {
     val unselectedColor = MaterialTheme.colors()().onSurface.copy(alpha = UncheckedBoxOpacity)
     val definition = remember(activeColor, unselectedColor) {
         generateTransitionDefinition(activeColor, unselectedColor)
@@ -83,7 +82,7 @@ private fun DrawCheckbox(checked: Boolean, activeColor: Color) = composable {
 }
 
 @Composable
-private fun DrawBox(color: Color, innerRadiusFraction: Float) = composable {
+private fun DrawBox(color: Color, innerRadiusFraction: Float) {
     Draw { canvas, parentSize ->
         val paint = Paint()
         paint.strokeWidth = StrokeWidth.toPx().value
@@ -119,7 +118,7 @@ private fun DrawBox(color: Color, innerRadiusFraction: Float) = composable {
 private fun DrawCheck(
     checkFraction: Float,
     crossCenterGravitation: Float
-) = composable {
+) {
     Draw { canvas, parentSize ->
         val paint = Paint()
         paint.isAntiAlias = true

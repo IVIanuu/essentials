@@ -28,8 +28,7 @@ import com.ivianuu.essentials.coil.Image
 import com.ivianuu.essentials.mvrx.MvRxViewModel
 import com.ivianuu.essentials.mvrx.injekt.injectMvRxViewModel
 import com.ivianuu.essentials.ui.compose.common.AsyncList
-import com.ivianuu.essentials.ui.compose.core.composable
-import com.ivianuu.essentials.ui.compose.core.composableWithKey
+import com.ivianuu.essentials.ui.compose.core.key
 import com.ivianuu.essentials.ui.compose.core.onActive
 import com.ivianuu.essentials.ui.compose.layout.SizedBox
 import com.ivianuu.essentials.ui.compose.material.AvatarIconStyle
@@ -65,7 +64,7 @@ fun CheckableAppsScreen(
     onCheckedAppsChanged: (Set<String>) -> Unit,
     appBarTitle: String,
     appFilter: AppFilter = DefaultAppFilter
-) = composable {
+) {
     val viewModel =
         injectMvRxViewModel<CheckableAppsViewModel> {
             parametersOf(appFilter)
@@ -91,10 +90,11 @@ fun CheckableAppsScreen(
                                 R.string.es_select_all -> viewModel.selectAllClicked()
                                 R.string.es_deselect_all -> viewModel.deselectAllClicked()
                             }
+                        },
+                        item = {
+                            Text(stringResource(it))
                         }
-                    ) {
-                        Text(stringResource(it))
-                    }
+                    )
                 }
             )
         },
@@ -103,10 +103,12 @@ fun CheckableAppsScreen(
                 state = viewModel.state.apps,
                 itemSize = 56.dp,
                 successItem = { _, app ->
-                    CheckableApp(
-                        app = app,
-                        onClick = { viewModel.appClicked(app) }
-                    )
+                    key(app.info.packageName) {
+                        CheckableApp(
+                            app = app,
+                            onClick = { viewModel.appClicked(app) }
+                        )
+                    }
                 }
             )
         }
@@ -117,7 +119,7 @@ fun CheckableAppsScreen(
 private fun CheckableApp(
     app: CheckableApp,
     onClick: () -> Unit
-) = composableWithKey(app.info.packageName, app.isChecked) {
+) {
     SimpleListItem(
         title = { Text(app.info.appName) },
         leading = {

@@ -10,8 +10,8 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/mvn-publish.gradle")
 
 dependencies {
-    api(Deps.autoService)
-    kapt(Deps.autoService)
+    api(Deps.processingX)
+    kapt(Deps.processingX)
     compileOnly(Deps.Kotlin.compilerEmbeddable)
     api(Deps.Kotlin.stdlib)
 }

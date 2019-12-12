@@ -18,13 +18,13 @@ package com.ivianuu.essentials.ui.compose.common
 
 import androidx.compose.Ambient
 import androidx.compose.Composable
-import com.ivianuu.essentials.ui.compose.core.composable
+import androidx.compose.Immutable
 
 @Composable
 fun MultiAmbientProvider(
     vararg pairs: AmbientWithValue<*>,
     children: @Composable() () -> Unit
-) = composable {
+) {
     pairs
         .map { pair ->
             { children: @Composable() () -> Unit ->
@@ -39,6 +39,7 @@ fun MultiAmbientProvider(
 // todo is this a good name?
 infix fun <T> Ambient<T>.with(value: T): AmbientWithValue<T> = AmbientWithValue(this, value)
 
+@Immutable
 data class AmbientWithValue<T>(
     val ambient: Ambient<T>,
     val value: T
@@ -46,7 +47,7 @@ data class AmbientWithValue<T>(
     @Composable
     fun Provider(
         children: @Composable() () -> Unit
-    ) = composable {
+    ) {
         ambient.Provider(value = value, children = children)
     }
 }

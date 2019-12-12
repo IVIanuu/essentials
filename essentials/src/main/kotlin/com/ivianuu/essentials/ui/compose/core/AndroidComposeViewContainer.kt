@@ -25,6 +25,7 @@ import android.view.Surface
 import android.view.View
 import android.view.WindowInsets
 import android.widget.FrameLayout
+import androidx.compose.Immutable
 import androidx.ui.core.Density
 import androidx.ui.core.Size
 import androidx.ui.core.dp
@@ -139,6 +140,7 @@ class AndroidComposeViewContainer @JvmOverloads constructor(
         return if (id > 0) resources.getDimensionPixelSize(id) else 0
     }
 
+    @Immutable
     data class ViewportMetrics(
         val size: Size = Size(0.dp, 0.dp),
         val viewPadding: EdgeInsets = EdgeInsets(),

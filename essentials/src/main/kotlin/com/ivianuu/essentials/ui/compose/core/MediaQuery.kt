@@ -113,18 +113,18 @@ private class ObservableMediaQuery(
 @Composable
 fun WithMediaQuery(
     children: @Composable() (MediaQuery) -> Unit
-) = composable {
-    children.invokeAsComposable(ambientMediaQuery())
+) {
+    children(ambientMediaQuery())
 }
 
 @Composable
-fun ambientMediaQuery(): MediaQuery = effect { ambient(MediaQueryAmbient) }
+fun ambientMediaQuery(): MediaQuery = ambient(MediaQueryAmbient)
 
 @Composable
 fun MediaQueryProvider(
     value: MediaQuery,
     children: @Composable() () -> Unit
-) = composable {
+) {
     MediaQueryAmbient.UpdateProvider(
         value = value,
         children = children

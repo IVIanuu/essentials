@@ -21,7 +21,6 @@ import androidx.lifecycle.ViewModelStoreOwner
 import com.ivianuu.essentials.mvrx.MvRxViewModel
 import com.ivianuu.essentials.mvrx.mvRxViewModel
 import com.ivianuu.essentials.ui.compose.core.ambient
-import com.ivianuu.essentials.ui.compose.core.effect
 import com.ivianuu.essentials.ui.compose.core.remember
 import com.ivianuu.essentials.ui.compose.injekt.ComponentAmbient
 import com.ivianuu.essentials.ui.compose.injekt.inject
@@ -37,15 +36,13 @@ inline fun <reified T : MvRxViewModel<*>> injectMvRxViewModel(
     key: String = remember { T::class.defaultViewModelKey },
     name: Any? = null,
     noinline parameters: ParametersDefinition? = null
-) = effect {
-    injectMvRxViewModel(
-        typeOf<T>(),
-        from,
-        key,
-        name,
-        parameters
-    )
-}
+): T = injectMvRxViewModel(
+    typeOf(),
+    from,
+    key,
+    name,
+    parameters
+)
 
 @Composable
 fun <T : MvRxViewModel<*>> injectMvRxViewModel(
@@ -54,9 +51,9 @@ fun <T : MvRxViewModel<*>> injectMvRxViewModel(
     key: String = remember { (type.raw as KClass<T>).defaultViewModelKey },
     name: Any? = null,
     parameters: ParametersDefinition? = null
-): T = effect {
+): T {
     val component = ambient(ComponentAmbient)
-    return@effect mvRxViewModel(
+    return mvRxViewModel(
         type = type.raw as KClass<T>,
         from = from,
         key = key,

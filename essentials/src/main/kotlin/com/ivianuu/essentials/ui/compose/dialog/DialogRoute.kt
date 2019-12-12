@@ -24,8 +24,6 @@ import androidx.ui.graphics.Color
 import androidx.ui.layout.Center
 import com.ivianuu.essentials.ui.compose.common.SafeArea
 import com.ivianuu.essentials.ui.compose.common.onBackPressed
-import com.ivianuu.essentials.ui.compose.core.composable
-import com.ivianuu.essentials.ui.compose.core.invokeAsComposable
 import com.ivianuu.essentials.ui.compose.core.ref
 import com.ivianuu.essentials.ui.compose.es.ComposeControllerRoute
 import com.ivianuu.essentials.ui.compose.injekt.inject
@@ -61,13 +59,13 @@ fun DialogRoute(
         DialogScrim()
         Center {
             SafeArea {
-                dialog.invokeAsComposable()
+                dialog()
             }
         }
     }
 }
 
 @Composable
-private fun DialogScrim() = composable {
+private fun DialogScrim() {
     ColoredRect(Color.Black.copy(alpha = 0.6f))
 }

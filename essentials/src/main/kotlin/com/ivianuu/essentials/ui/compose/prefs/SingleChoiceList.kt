@@ -17,20 +17,21 @@
 package com.ivianuu.essentials.ui.compose.prefs
 
 import androidx.compose.Composable
+import androidx.compose.Immutable
+import androidx.compose.Pivotal
 import androidx.ui.core.Text
 import androidx.ui.graphics.Image
 import com.ivianuu.essentials.R
+import com.ivianuu.essentials.store.Box
 import com.ivianuu.essentials.ui.compose.common.asIconComposable
 import com.ivianuu.essentials.ui.compose.common.asTextComposable
-import com.ivianuu.essentials.ui.compose.core.composable
-import com.ivianuu.essentials.ui.compose.core.composableWithKey
 import com.ivianuu.essentials.ui.compose.dialog.DialogCloseButton
 import com.ivianuu.essentials.ui.compose.dialog.SingleChoiceListDialog
 import com.ivianuu.essentials.ui.compose.resources.stringResource
 
 @Composable
 fun <T> SingleChoiceListPreference(
-    box: com.ivianuu.essentials.store.Box<T>,
+    @Pivotal box: Box<T>,
     onChange: ((T) -> Boolean)? = null,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
@@ -39,7 +40,7 @@ fun <T> SingleChoiceListPreference(
     image: Image? = null,
     dialogTitle: String? = title,
     items: List<SingleChoiceListPreference.Item<T>>
-) = composableWithKey("SingleChoiceListPreference:$box") {
+) {
     SingleChoiceListPreference(
         valueController = ValueController(box),
         onChange = onChange,
@@ -64,7 +65,7 @@ fun <T> SingleChoiceListPreference(
     leading: (@Composable() () -> Unit)? = null,
     dialogTitle: (@Composable() () -> Unit)? = title,
     items: List<SingleChoiceListPreference.Item<T>>
-) = composable {
+) {
     DialogPreference(
         valueController = valueController,
         onChange = onChange,
@@ -87,6 +88,7 @@ fun <T> SingleChoiceListPreference(
 }
 
 object SingleChoiceListPreference {
+    @Immutable
     data class Item<T>(
         val title: String,
         val value: T

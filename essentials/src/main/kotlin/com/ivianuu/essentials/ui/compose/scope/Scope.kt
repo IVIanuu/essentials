@@ -17,15 +17,14 @@
 package com.ivianuu.essentials.ui.compose.scope
 
 import androidx.compose.Composable
-import com.ivianuu.essentials.ui.compose.core.effect
 import com.ivianuu.essentials.ui.compose.core.onDispose
 import com.ivianuu.essentials.ui.compose.core.remember
 import com.ivianuu.scopes.MutableScope
 import com.ivianuu.scopes.Scope
 
 @Composable
-fun scope(): Scope = effect {
+fun scope(): Scope {
     val scope = remember { MutableScope() }
     onDispose { scope.close() }
-    return@effect scope
+    return scope
 }

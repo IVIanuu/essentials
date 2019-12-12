@@ -19,10 +19,9 @@ package com.ivianuu.essentials.ui.compose.common
 import androidx.compose.Composable
 import androidx.ui.layout.Center
 import androidx.ui.material.CircularProgressIndicator
-import com.ivianuu.essentials.ui.compose.core.composable
 
 @Composable
-fun FullScreenLoading() = composable {
+fun FullScreenLoading() {
     Center {
         CircularProgressIndicator()
     }

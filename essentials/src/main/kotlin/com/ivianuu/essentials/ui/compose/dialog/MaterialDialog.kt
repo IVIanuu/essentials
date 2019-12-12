@@ -32,9 +32,7 @@ import androidx.ui.layout.Padding
 import androidx.ui.layout.WidthSpacer
 import androidx.ui.material.Divider
 import androidx.ui.material.MaterialTheme
-import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.invoke
-import com.ivianuu.essentials.ui.compose.core.invokeAsComposable
 import com.ivianuu.essentials.ui.compose.layout.Column
 import com.ivianuu.essentials.ui.compose.layout.CrossAxisAlignment
 import com.ivianuu.essentials.ui.compose.layout.MainAxisAlignment
@@ -59,7 +57,7 @@ fun MaterialDialog(
     positiveButton: (@Composable() () -> Unit)? = null,
     negativeButton: (@Composable() () -> Unit)? = null,
     neutralButton: (@Composable() () -> Unit)? = null
-) = composable {
+) {
     Dialog {
         DialogBody(
             showTopDivider = showTopDivider,
@@ -93,7 +91,7 @@ private fun DialogBody(
     positiveButton: (@Composable() () -> Unit)?,
     negativeButton: (@Composable() () -> Unit)?,
     neutralButton: (@Composable() () -> Unit)?
-) = composable {
+) {
     val header: (@Composable() () -> Unit)? = if (icon != null || title != null) {
         {
             val styledTitle = title?.let {
@@ -101,7 +99,7 @@ private fun DialogBody(
                     CurrentTextStyleProvider(
                         MaterialTheme.typography()().h6
                     ) {
-                        title.invokeAsComposable()
+                        title()
                     }
                 }
             }
@@ -111,7 +109,7 @@ private fun DialogBody(
                     CurrentIconStyleProvider(
                         IconStyle(color = colorForCurrentBackground())
                     ) {
-                        icon.invokeAsComposable()
+                        icon()
                     }
                 }
             }
@@ -121,14 +119,14 @@ private fun DialogBody(
                     mainAxisAlignment = MainAxisAlignment.Start,
                     crossAxisAlignment = CrossAxisAlignment.Center
                 ) {
-                    styledIcon.invokeAsComposable()
+                    styledIcon()
                     WidthSpacer(16.dp)
-                    styledTitle.invokeAsComposable()
+                    styledTitle()
                 }
             } else if (styledIcon != null) {
-                styledIcon.invokeAsComposable()
+                styledIcon()
             } else if (styledTitle != null) {
-                styledTitle.invokeAsComposable()
+                styledTitle()
             }
         }
     } else {
@@ -142,7 +140,7 @@ private fun DialogBody(
                     color = colorForCurrentBackground().copy(alpha = SecondaryTextAlpha)
                 )
             ) {
-                content.invokeAsComposable()
+                content()
             }
         }
     } else {
@@ -180,7 +178,7 @@ private fun DialogContentLayout(
     header: (@Composable() () -> Unit)?,
     content: (@Composable() () -> Unit)?,
     buttons: (@Composable() () -> Unit)?
-) = composable {
+) {
     val children: @Composable() () -> Unit = {
         if (header != null) {
             ParentData(DialogContentSlot.Header) {
@@ -190,7 +188,7 @@ private fun DialogContentLayout(
                     right = 24.dp,
                     bottom = if (buttons != null && content == null) 28.dp else 24.dp
                 ) {
-                    header.invokeAsComposable()
+                    header()
                 }
             }
         }
@@ -209,7 +207,7 @@ private fun DialogContentLayout(
                     right = if (applyContentPadding) 24.dp else 0.dp,
                     bottom = if (buttons == null) 24.dp else 0.dp
                 ) {
-                    content.invokeAsComposable()
+                    content()
                 }
             }
         }
@@ -224,10 +222,10 @@ private fun DialogContentLayout(
             ParentData(DialogContentSlot.Buttons) {
                 if (!showBottomDivider && content != null) {
                     Padding(top = 28.dp) {
-                        buttons.invokeAsComposable()
+                        buttons()
                     }
                 } else {
-                    buttons.invokeAsComposable()
+                    buttons()
                 }
             }
         }
@@ -293,7 +291,7 @@ private fun DialogButtons(
     positiveButton: (@Composable() () -> Unit)?,
     negativeButton: (@Composable() () -> Unit)?,
     neutralButton: (@Composable() () -> Unit)?
-) = composable {
+) {
     when (layout) {
         AlertDialogButtonLayout.SideBySide -> {
             Container(
@@ -306,9 +304,9 @@ private fun DialogButtons(
                     mainAxisAlignment = MainAxisAlignment.End,
                     crossAxisAlignment = CrossAxisAlignment.Center
                 ) {
-                    neutralButton?.invokeAsComposable()
-                    negativeButton?.invokeAsComposable()
-                    positiveButton?.invokeAsComposable()
+                    neutralButton?.invoke()
+                    negativeButton?.invoke()
+                    positiveButton?.invoke()
                 }
             }
         }
@@ -321,9 +319,9 @@ private fun DialogButtons(
                     mainAxisAlignment = MainAxisAlignment.Center,
                     crossAxisAlignment = CrossAxisAlignment.Center
                 ) {
-                    positiveButton?.invokeAsComposable()
-                    negativeButton?.invokeAsComposable()
-                    neutralButton?.invokeAsComposable()
+                    positiveButton?.invoke()
+                    negativeButton?.invoke()
+                    neutralButton?.invoke()
                 }
             }
         }
@@ -331,7 +329,7 @@ private fun DialogButtons(
 }
 
 @Composable
-private fun DialogDivider() = composable {
+private fun DialogDivider() {
     Divider(color = colorForCurrentBackground().copy(alpha = 0.12f))
 }
 

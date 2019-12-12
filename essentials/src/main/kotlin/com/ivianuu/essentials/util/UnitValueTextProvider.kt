@@ -27,7 +27,7 @@ import com.ivianuu.essentials.util.UnitValueTextProvider.Unit.Seconds
 class UnitValueTextProvider(
     private val context: Context,
     private val unit: Unit
-) : (String) -> String {
+) : Function1<String, String> { // (String) -> String
 
     override fun invoke(value: String) = when (unit) {
         Dp -> context.string(R.string.es_seek_bar_pref_format_dp, value)

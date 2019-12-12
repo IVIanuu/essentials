@@ -27,8 +27,6 @@ import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.compose.common.scrolling.ScrollPosition
 import com.ivianuu.essentials.ui.compose.common.scrolling.Scrollable
 import com.ivianuu.essentials.ui.compose.core.Axis
-import com.ivianuu.essentials.ui.compose.core.composable
-import com.ivianuu.essentials.ui.compose.core.invokeAsComposable
 import com.ivianuu.essentials.ui.compose.core.remember
 import com.ivianuu.essentials.ui.compose.layout.NonNullSingleChildLayout
 import kotlin.math.roundToInt
@@ -43,13 +41,13 @@ fun <T> Pager(
     direction: Axis = Axis.Horizontal,
     reverse: Boolean = false,
     item: @Composable() (Int, T) -> Unit
-) = composable {
+) {
     Pager(
         position = position,
         direction = direction,
         reverse = reverse
     ) {
-        item.invokeAsComposable(it, items[it])
+        item(it, items[it])
     }
 }
 
@@ -59,7 +57,7 @@ fun Pager(
     direction: Axis = Axis.Horizontal,
     reverse: Boolean = false,
     item: @Composable() (Int) -> Unit
-) = composable {
+) {
     position.scrollPositionChanged()
 
     PagerLayout(
@@ -153,7 +151,7 @@ private fun PagerLayout(
     viewportSize: Px,
     onViewportSizeChanged: (Px) -> Unit,
     child: @Composable() () -> Unit
-) = composable {
+) {
     NonNullSingleChildLayout(child) { measurable, constraints ->
         val placeable = measurable.measure(constraints)
         layout(placeable.width, placeable.height) {

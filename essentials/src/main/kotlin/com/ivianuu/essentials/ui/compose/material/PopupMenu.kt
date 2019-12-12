@@ -36,9 +36,7 @@ import androidx.ui.layout.Padding
 import androidx.ui.layout.Wrap
 import androidx.ui.material.ripple.Ripple
 import androidx.ui.material.surface.Card
-import com.ivianuu.essentials.ui.compose.core.composable
-import com.ivianuu.essentials.ui.compose.core.composableWithKey
-import com.ivianuu.essentials.ui.compose.core.invokeAsComposable
+import com.ivianuu.essentials.ui.compose.core.key
 import com.ivianuu.essentials.ui.compose.core.ref
 import com.ivianuu.essentials.ui.compose.es.ComposeControllerRoute
 import com.ivianuu.essentials.ui.compose.injekt.inject
@@ -57,7 +55,7 @@ fun <T> PopupMenu(
     items: List<T>,
     onSelected: (T) -> Unit,
     item: @Composable() (T) -> Unit
-) = composable {
+) {
     Card(
         elevation = 8.dp,
         shape = RoundedCornerShape(4.dp)
@@ -65,9 +63,9 @@ fun <T> PopupMenu(
         Padding(top = 8.dp, bottom = 8.dp) {
             Column {
                 items.forEach { value ->
-                    composableWithKey(value as Any) {
+                    key(value as Any) {
                         PopupMenuItem(
-                            content = { item.invokeAsComposable(value) },
+                            content = { item(value) },
                             onClick = {
                                 onSelected(value)
                             }
@@ -84,7 +82,7 @@ fun <T> PopupMenu(
 private fun PopupMenuItem(
     content: () -> Unit,
     onClick: () -> Unit
-) = composable {
+) {
     Ripple(bounded = true) {
         Clickable(
             onClick = onClick,
@@ -98,7 +96,7 @@ private fun PopupMenuItem(
                 ) {
                     Wrap(Alignment.CenterLeft) {
                         Padding(left = 16.dp, right = 16.dp) {
-                            content.invokeAsComposable()
+                            content()
                         }
                     }
                 }
@@ -116,7 +114,7 @@ fun <T> PopupMenuTrigger(
     onCancel: (() -> Unit)? = null,
     item: @Composable() (T) -> Unit,
     child: @Composable() (showPopup: () -> Unit) -> Unit
-) = composable {
+) {
     val navigator = inject<Navigator>()
 
     Wrap {
@@ -159,7 +157,7 @@ fun <T> PopupMenuTrigger(
             )
         }
 
-        child.invokeAsComposable(showPopup)
+        child(showPopup)
     }
 }
 
@@ -247,7 +245,7 @@ fun <T> PopupMenuRoute(
 private fun PopupMenuLayout(
     position: IntPxPosition,
     child: @Composable() () -> Unit
-) = composable {
+) {
     NonNullSingleChildLayout(child = child) { measureable, constraints ->
         val childConstraints = constraints.copy(
             minWidth = IntPx.Zero,

@@ -21,7 +21,6 @@ import androidx.ui.core.Alignment
 import androidx.ui.core.Constraints
 import androidx.ui.core.IntPxSize
 import androidx.ui.core.constrain
-import com.ivianuu.essentials.ui.compose.core.composable
 
 @Composable
 fun FractionallySizedBox(
@@ -29,7 +28,7 @@ fun FractionallySizedBox(
     heightFactor: Float? = null,
     alignment: Alignment = Alignment.Center,
     child: @Composable() () -> Unit
-) = composable {
+) {
     SingleChildLayout(child = child) { measurable, constraints ->
         if (measurable == null) return@SingleChildLayout layout(
             constraints.minWidth, constraints.minHeight

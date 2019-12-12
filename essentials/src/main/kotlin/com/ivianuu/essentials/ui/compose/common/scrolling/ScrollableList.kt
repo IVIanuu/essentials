@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.ui.compose.common.scrolling
 
 import androidx.compose.Composable
+import androidx.compose.Pivotal
 import androidx.ui.core.Alignment
 import androidx.ui.core.Clip
 import androidx.ui.core.Dp
@@ -32,8 +33,6 @@ import androidx.ui.foundation.shape.RectangleShape
 import androidx.ui.layout.Container
 import com.ivianuu.essentials.ui.compose.common.framed
 import com.ivianuu.essentials.ui.compose.core.Axis
-import com.ivianuu.essentials.ui.compose.core.composable
-import com.ivianuu.essentials.ui.compose.core.composableWithKey
 import com.ivianuu.essentials.ui.compose.core.invoke
 import com.ivianuu.essentials.ui.compose.core.remember
 import com.ivianuu.essentials.ui.compose.layout.Column
@@ -47,7 +46,7 @@ fun ScrollableList(
     position: ScrollPosition = remember { ScrollPosition() },
     enabled: Boolean = true,
     children: @Composable() () -> Unit
-) = composable {
+) {
     SizedBox(height = Dp.Infinity) {
         Scroller(
             direction = direction,
@@ -69,7 +68,7 @@ fun <T> ScrollableList(
     position: ScrollPosition = remember { ScrollPosition() },
     enabled: Boolean = true,
     item: @Composable() (Int, T) -> Unit
-) = composable {
+) {
     ScrollableList(
         count = items.size,
         itemSizeProvider = { itemSize },
@@ -87,7 +86,7 @@ fun ScrollableList(
     position: ScrollPosition = remember { ScrollPosition() },
     enabled: Boolean = true,
     item: @Composable() (Int) -> Unit
-) = composable {
+) {
     ScrollableList(
         count = count,
         itemSizeProvider = { itemSize },
@@ -106,7 +105,7 @@ fun <T> ScrollableList(
     position: ScrollPosition = remember { ScrollPosition() },
     enabled: Boolean = true,
     item: @Composable() (Int, T) -> Unit
-) = composable {
+) {
     ScrollableList(
         count = items.size,
         itemSizeProvider = { itemSizeProvider(it, items[it]) },
@@ -124,7 +123,7 @@ fun ScrollableList(
     position: ScrollPosition = remember { ScrollPosition() },
     enabled: Boolean = true,
     item: @Composable() (Int) -> Unit
-) = composable {
+) {
     val state = remember(position) { ScrollableListState(position) } // todo
     remember(count) { state.count = count }
     val density = ambientDensity()()
@@ -155,9 +154,7 @@ fun ScrollableList(
                     ) {
                         if (state.itemRange != emptyItemRange) {
                             state.itemRange.forEach { index ->
-                                composableWithKey(index) {
-                                    item(index)
-                                }
+                                ListEntry(index = index, content = item)
                             }
                         }
                     }
@@ -165,6 +162,14 @@ fun ScrollableList(
             }
         }
     }
+}
+
+@Composable
+private fun ListEntry(
+    @Pivotal index: Int,
+    content: @Composable() (Int) -> Unit
+) {
+    content(index)
 }
 
 // @Model
@@ -259,7 +264,7 @@ private fun ScrollableListLayout(
     viewportSize: Px,
     onViewportSizeChanged: (Px) -> Unit,
     children: @Composable() () -> Unit
-) = composable {
+) {
     Layout(children = children) { measureables, constraints ->
         val childConstraints = constraints.copy(
             minWidth = IntPx.Zero,

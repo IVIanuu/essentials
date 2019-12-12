@@ -19,7 +19,6 @@ package com.ivianuu.essentials.ui.compose.viewmodel
 import androidx.compose.Composable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelStoreOwner
-import com.ivianuu.essentials.ui.compose.core.effect
 import com.ivianuu.essentials.ui.compose.core.remember
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.util.defaultViewModelFactory
@@ -32,9 +31,7 @@ inline fun <reified T : ViewModel> viewModel(
     from: ViewModelStoreOwner = inject(),
     key: String = remember { T::class.defaultViewModelKey },
     noinline factory: () -> T = defaultViewModelFactory(T::class)
-) = effect {
-    viewModel(type = T::class, key = key, from = from, factory = factory)
-}
+): T = viewModel(type = T::class, key = key, from = from, factory = factory)
 
 @Composable
 fun <T : ViewModel> viewModel(
@@ -42,8 +39,6 @@ fun <T : ViewModel> viewModel(
     from: ViewModelStoreOwner = inject(),
     key: String = remember { type.defaultViewModelKey },
     factory: () -> T = defaultViewModelFactory(type)
-): T = effect {
-    remember {
-        from.getViewModel(type = type, key = key, from = from, factory = factory)
-    }
+): T = remember {
+    from.getViewModel(type = type, key = key, from = from, factory = factory)
 }

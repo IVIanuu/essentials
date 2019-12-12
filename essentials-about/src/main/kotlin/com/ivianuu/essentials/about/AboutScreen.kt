@@ -19,8 +19,6 @@ package com.ivianuu.essentials.about
 import androidx.compose.Composable
 import com.ivianuu.essentials.ui.compose.common.ListScreen
 import com.ivianuu.essentials.ui.compose.common.openUrlOnClick
-import com.ivianuu.essentials.ui.compose.core.composable
-import com.ivianuu.essentials.ui.compose.core.staticComposableWithKey
 import com.ivianuu.essentials.ui.compose.es.ComposeControllerRoute
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.compose.material.SimpleListItem
@@ -50,7 +48,7 @@ fun AboutSection(
     showHeader: Boolean = false,
     hasDebugPackageName: Boolean = buildInfo.isDebug,
     privacyPolicyUrl: String? = null
-) = composable {
+) {
     if (showHeader) {
         Subheader(stringResource(R.string.about_title))
     }
@@ -106,7 +104,7 @@ fun AboutItem(
     titleRes: Int,
     descRes: Int? = null,
     url: () -> String
-) = staticComposableWithKey(titleRes) {
+) {
     SimpleListItem(
         title = stringResource(titleRes),
         subtitle = descRes?.let { stringResource(it) },

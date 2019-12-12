@@ -32,17 +32,15 @@ import androidx.ui.layout.Container
 import androidx.ui.layout.Padding
 import androidx.ui.material.Divider
 import androidx.ui.material.MaterialTheme
+import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.about.AboutRoute
 import com.ivianuu.essentials.apps.ui.AppPickerRoute
 import com.ivianuu.essentials.apps.ui.IntentAppFilter
 import com.ivianuu.essentials.twilight.twilightSettingsRoute
 import com.ivianuu.essentials.ui.compose.common.navigateOnClick
 import com.ivianuu.essentials.ui.compose.common.scrolling.ScrollableList
-import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.invoke
 import com.ivianuu.essentials.ui.compose.core.remember
-import com.ivianuu.essentials.ui.compose.core.staticComposable
-import com.ivianuu.essentials.ui.compose.core.staticComposableWithKey
 import com.ivianuu.essentials.ui.compose.es.ComposeControllerRoute
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.compose.layout.Column
@@ -81,13 +79,11 @@ val HomeRoute = ComposeControllerRoute {
                 items = items,
                 itemSizeProvider = { index, _ -> if (index != items.lastIndex) 57.dp else 56.dp }
             ) { index, item ->
-                staticComposableWithKey(item) {
-                    Column {
-                        val route = item.route()
-                        HomeItem(item = item, onClick = navigateOnClick { route })
-                        if (index != items.lastIndex) {
-                            HomeDivider()
-                        }
+                Column {
+                    val route = item.route()
+                    HomeItem(item = item, onClick = navigateOnClick { route })
+                    if (index != items.lastIndex) {
+                        HomeDivider()
                     }
                 }
             }
@@ -99,7 +95,8 @@ val HomeRoute = ComposeControllerRoute {
 private fun HomeItem(
     item: HomeItem,
     onClick: () -> Unit
-) = composable {
+) {
+    d { "invoke home item $item" }
     SimpleListItem(
         title = { Text(item.title) },
         leading = { ColorAvatar(item.color) },
@@ -116,7 +113,7 @@ private fun HomeItem(
 }
 
 @Composable
-private fun ColorAvatar(color: Color) = staticComposable {
+private fun ColorAvatar(color: Color) {
     Container(width = 40.dp, height = 40.dp) {
         val paint = remember {
             Paint().apply { this.color = color }
@@ -132,7 +129,7 @@ private fun ColorAvatar(color: Color) = staticComposable {
 }
 
 @Composable
-private fun HomeDivider() = staticComposable {
+private fun HomeDivider() {
     Padding(left = 72.dp) {
         Opacity(0.12f) {
             Divider(color = (MaterialTheme.colors()().onSurface))

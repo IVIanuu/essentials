@@ -17,26 +17,26 @@
 package com.ivianuu.essentials.ui.compose.prefs
 
 import androidx.compose.Composable
+import androidx.compose.Pivotal
 import androidx.ui.graphics.Image
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.RadioButton
+import com.ivianuu.essentials.store.Box
 import com.ivianuu.essentials.ui.compose.common.AbsorbPointer
 import com.ivianuu.essentials.ui.compose.common.asIconComposable
 import com.ivianuu.essentials.ui.compose.common.asTextComposable
-import com.ivianuu.essentials.ui.compose.core.composable
-import com.ivianuu.essentials.ui.compose.core.composableWithKey
 import com.ivianuu.essentials.ui.compose.core.invoke
 
 @Composable
 fun RadioButtonPreference(
-    box: com.ivianuu.essentials.store.Box<Boolean>,
+    @Pivotal box: Box<Boolean>,
     onChange: ((Boolean) -> Boolean)? = null,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
     title: String? = null,
     summary: String? = null,
     image: Image? = null
-) = composableWithKey("RadioButtonPreference:$box") {
+) {
     RadioButtonPreference(
         valueController = ValueController(box),
         onChange = onChange,
@@ -57,7 +57,7 @@ fun RadioButtonPreference(
     title: (@Composable() () -> Unit)? = null,
     summary: (@Composable() () -> Unit)? = null,
     leading: (@Composable() () -> Unit)? = null
-) = composable {
+) {
     PreferenceWrapper(
         valueController = valueController,
         onChange = onChange,

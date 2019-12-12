@@ -18,6 +18,7 @@ package com.ivianuu.essentials.sample.ui
 
 import com.ivianuu.essentials.apps.ui.CheckableAppsScreen
 import com.ivianuu.essentials.apps.ui.LaunchableAppFilter
+import com.ivianuu.essentials.store.prefs.PrefBoxFactory
 import com.ivianuu.essentials.store.prefs.stringSet
 import com.ivianuu.essentials.ui.compose.core.remember
 import com.ivianuu.essentials.ui.compose.coroutines.coroutineScope
@@ -30,7 +31,7 @@ import kotlinx.coroutines.launch
 val CheckAppsRoute = ComposeControllerRoute(
     options = ControllerRouteOptions().fade()
 ) {
-    val boxFactory = inject<com.ivianuu.essentials.store.prefs.PrefBoxFactory>()
+    val boxFactory = inject<PrefBoxFactory>()
     val box = remember { boxFactory.stringSet("apps") }
     val coroutineScope = coroutineScope()
     CheckableAppsScreen(

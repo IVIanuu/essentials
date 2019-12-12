@@ -25,8 +25,6 @@ import androidx.ui.material.Typography
 import androidx.ui.text.TextStyle
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.compose.core.ambient
-import com.ivianuu.essentials.ui.compose.core.composable
-import com.ivianuu.essentials.ui.compose.core.effect
 import com.ivianuu.essentials.ui.compose.core.remember
 import com.ivianuu.essentials.util.colorAttr
 
@@ -35,7 +33,7 @@ fun ResourceMaterialTheme(
     colors: ColorPalette = resourceColors(),
     typography: Typography = resourceTypography(),
     children: @Composable() () -> Unit
-) = composable {
+) {
     MaterialTheme(
         colors = colors,
         typography = typography,
@@ -44,9 +42,9 @@ fun ResourceMaterialTheme(
 }
 
 @Composable
-fun resourceColors(): ColorPalette = effect {
+fun resourceColors(): ColorPalette {
     val context = ambient(ContextAmbient)
-    remember {
+    return remember {
         ColorPalette(
             primary = Color(context.colorAttr(R.attr.colorPrimary)),
             primaryVariant = Color(context.colorAttr(R.attr.colorPrimaryVariant)),
@@ -65,8 +63,8 @@ fun resourceColors(): ColorPalette = effect {
 }
 
 @Composable
-fun resourceTypography(): Typography = effect {
-    remember { Typography() }
+fun resourceTypography(): Typography {
+    return remember { Typography() }
     /*Typography(
         h1 = +resourceTextStyle(R.attr.textAppearanceHeadline1),
         h2 = +resourceTextStyle(R.attr.textAppearanceHeadline2),
@@ -85,7 +83,7 @@ fun resourceTypography(): Typography = effect {
 }
 
 @Composable
-fun resourceTextStyle(attr: Int): TextStyle = effect {
+fun resourceTextStyle(attr: Int): TextStyle {
     error("not implemented")
     val context = ambient(ContextAmbient)
     TextStyle()

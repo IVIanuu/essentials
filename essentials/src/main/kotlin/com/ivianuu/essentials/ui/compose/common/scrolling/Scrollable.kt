@@ -33,7 +33,6 @@ import androidx.ui.foundation.animation.FlingConfig
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.compose.common.framed
 import com.ivianuu.essentials.ui.compose.core.Axis
-import com.ivianuu.essentials.ui.compose.core.composable
 import com.ivianuu.essentials.ui.compose.core.remember
 
 // todo maybe merge with original
@@ -129,7 +128,7 @@ fun Scrollable(
     direction: Axis = Axis.Vertical,
     enabled: Boolean = true,
     child: @Composable() (ScrollPosition) -> Unit
-) = composable {
+) {
     PressGestureDetector(onPress = { position.scrollTo(position.value) }) {
         TouchSlopDragGestureDetector(
             dragObserver = object : DragObserver {
@@ -189,9 +188,7 @@ fun Scrollable(
                 }
             },
             children = {
-                composable {
-                    child(position)
-                }
+                child(position)
             }
         )
     }

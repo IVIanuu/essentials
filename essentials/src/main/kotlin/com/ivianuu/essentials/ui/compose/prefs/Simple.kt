@@ -21,7 +21,6 @@ import androidx.ui.core.Opacity
 import androidx.ui.graphics.Image
 import com.ivianuu.essentials.ui.compose.common.asIconComposable
 import com.ivianuu.essentials.ui.compose.common.asTextComposable
-import com.ivianuu.essentials.ui.compose.core.composable
 
 @Composable
 fun SimplePreference(
@@ -30,7 +29,7 @@ fun SimplePreference(
     summary: String? = null,
     image: Image? = null,
     onClick: (() -> Unit)? = null
-) = composable {
+) {
     SimplePreference(
         dependencies = dependencies,
         title = title.asTextComposable(),
@@ -48,7 +47,7 @@ fun SimplePreference(
     leading: (@Composable() () -> Unit)? = null,
     trailing: (@Composable() () -> Unit)? = null,
     onClick: (() -> Unit)? = null
-) = composable {
+) {
     Dependencies(dependencies = dependencies ?: emptyList()) { dependenciesOk ->
         Opacity(opacity = if (dependenciesOk) 1f else 0.5f) {
             PreferenceLayout(
