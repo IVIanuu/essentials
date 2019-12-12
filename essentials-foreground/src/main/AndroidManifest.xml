@@ -5,7 +5,9 @@
 
     <application>
 
-        <service android:name="com.ivianuu.essentials.foreground.ForegroundService" />
+        <service
+            android:name="com.ivianuu.essentials.foreground.ForegroundService"
+            android:process="@string/es_foreground_service_process" />
 
     </application>
 
