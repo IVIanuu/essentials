@@ -36,7 +36,7 @@ abstract class ForegroundComponent {
     }
 
     open fun detach() {
-        _scope.close()
+        _scope.clear()
         this.manager = null
     }
 
