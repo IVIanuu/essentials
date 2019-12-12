@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.ui.compose.common.scrolling
 
 import androidx.compose.Composable
+import androidx.compose.Pivotal
 import androidx.ui.core.Alignment
 import androidx.ui.core.Clip
 import androidx.ui.core.Dp
@@ -33,7 +34,6 @@ import androidx.ui.layout.Container
 import com.ivianuu.essentials.ui.compose.common.framed
 import com.ivianuu.essentials.ui.compose.core.Axis
 import com.ivianuu.essentials.ui.compose.core.invoke
-import com.ivianuu.essentials.ui.compose.core.key
 import com.ivianuu.essentials.ui.compose.core.remember
 import com.ivianuu.essentials.ui.compose.layout.Column
 import com.ivianuu.essentials.ui.compose.layout.SizedBox
@@ -154,9 +154,7 @@ fun ScrollableList(
                     ) {
                         if (state.itemRange != emptyItemRange) {
                             state.itemRange.forEach { index ->
-                                key(index) {
-                                    item(index)
-                                }
+                                ListEntry(index = index, content = item)
                             }
                         }
                     }
@@ -164,6 +162,14 @@ fun ScrollableList(
             }
         }
     }
+}
+
+@Composable
+private fun ListEntry(
+    @Pivotal index: Int,
+    content: @Composable() (Int) -> Unit
+) {
+    content(index)
 }
 
 // @Model
@@ -207,11 +213,6 @@ private class ScrollableListState(val position: ScrollPosition) {
     }
 
     fun viewportSizeChanged() {
-        try {
-            error("viewport")
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
         val newMaxValue = max(Px.Zero, (items.lastOrNull()?.trailing ?: Px.Zero) - viewportSize)
         if (position.maxValue != newMaxValue) {
             position.updateBounds(Px.Zero, newMaxValue)
