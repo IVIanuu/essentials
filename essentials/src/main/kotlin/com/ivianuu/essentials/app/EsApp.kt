@@ -22,6 +22,7 @@ import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.injection.EsModule
 import com.ivianuu.essentials.util.containsFlag
 import com.ivianuu.essentials.util.unsafeLazy
+import com.ivianuu.injekt.CodegenJustInTimeLookupFactory
 import com.ivianuu.injekt.Component
 import com.ivianuu.injekt.InjektPlugins
 import com.ivianuu.injekt.InjektTrait
@@ -53,6 +54,8 @@ abstract class EsApp : Application(), InjektTrait {
     protected open fun configureInjekt() {
         if (applicationInfo.flags.containsFlag(ApplicationInfo.FLAG_DEBUGGABLE)) {
             InjektPlugins.logger = AndroidLogger()
+        } else {
+            InjektPlugins.justInTimeLookupFactory = CodegenJustInTimeLookupFactory
         }
     }
 
