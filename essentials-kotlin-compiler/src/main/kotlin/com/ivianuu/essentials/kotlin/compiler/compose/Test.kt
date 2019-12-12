@@ -110,7 +110,7 @@ fun test(
 
     val newSource = Writer.write(fileNode)
 
-    error("new source $newSource")
+    // error("new source $newSource")
 
     return if (orig != fileNode) {
         file.withNewSource(newSource)
@@ -633,12 +633,12 @@ private fun wrapComposableCalls(
         if (node.seenBy(Step.WrapComposableCalls)) return@visit
         node.markSeen(Step.WrapComposableCalls)
 
-        val resolvedCall = when (node) {
-            is Node.Expr.Call -> {
+        val resolvedCall = when {
+            node is Node.Expr.Call -> {
                 val element = node.element as? KtCallExpression ?: return@visit
                 element.getResolvedCall(trace.bindingContext)
             }
-            is Node.Expr.Name -> {
+            node is Node.Expr.Name && node.parent !is Node.Expr.Call -> {
                 val element = node.element as? KtSimpleNameExpression ?: return@visit
                 element.getResolvedCall(trace.bindingContext)
             }
