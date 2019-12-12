@@ -28,6 +28,7 @@ import org.jetbrains.kotlin.descriptors.FunctionDescriptor
 import org.jetbrains.kotlin.descriptors.ValueParameterDescriptor
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtFile
+import org.jetbrains.kotlin.psi.KtFunctionLiteral
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.KtProperty
@@ -41,6 +42,7 @@ import org.jetbrains.kotlin.resolve.calls.components.isVararg
 import org.jetbrains.kotlin.resolve.calls.model.ArgumentMatch
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
+import org.jetbrains.kotlin.resolve.inline.InlineUtil
 import org.jetbrains.kotlin.resolve.lazy.ResolveSession
 import org.jetbrains.kotlin.types.typeUtil.isUnit
 
@@ -418,6 +420,10 @@ private fun wrapComposableLambdasInObserve(
             parentWithType = parentWithType.parent
         }
 
+        (node.element as? KtFunctionLiteral)?.let {
+            if (InlineUtil.isInlinedArgument(it, trace.bindingContext, false)) return@visit
+        }
+
         var isUnitComposable = false
 
         when (parentWithType) {
@@ -523,6 +529,7 @@ private fun insertRestartScope(
         } catch (e: Exception) {
             null
         } ?: return@visit
+        if (descriptor.isInline) return@visit
         if (!descriptor.annotations.hasAnnotation(ComposableAnnotation)) return@visit
         if (descriptor.returnType?.isUnit() != true) return@visit
 
