@@ -24,7 +24,6 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
-import android.os.Build
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import androidx.core.content.ContextCompat
@@ -57,7 +56,7 @@ fun Context.drawableAttr(attr: Int, defaultValue: Drawable? = null): Drawable? =
 fun Context.floatAttr(attr: Int, defaultValue: Float = 0f): Float =
     withTypedArray(attr) { it.getFloat(0, defaultValue) }
 
-@TargetApi(Build.VERSION_CODES.O)
+@TargetApi(26)
 fun Context.fontAttr(attr: Int, defaultValue: Typeface? = null): Typeface? =
     withTypedArray(attr) { it.getFont(0) ?: defaultValue }
 

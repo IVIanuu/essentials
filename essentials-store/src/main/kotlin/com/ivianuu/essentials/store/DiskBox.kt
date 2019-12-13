@@ -79,13 +79,18 @@ internal class DiskBoxImpl<T>(
     private val changeNotifier = BroadcastChannel<Unit>(1)
     private val cachedValue = AtomicReference<Any?>(this)
     private val valueFetcher = MutexValue {
-        try {
-            val serialized = file.bufferedReader().use {
+        val serialized = try {
+            file.bufferedReader().use {
                 it.readText()
             }
-            return@MutexValue serializer.deserialize(serialized)
         } catch (e: Exception) {
-            throw IOException("Couldn't read file $path", e)
+            throw IOException("Couldn't read file at $path", e)
+        }
+
+        return@MutexValue try {
+            serializer.deserialize(serialized)
+        } catch (e: Exception) {
+            throw RuntimeException("Couldn't deserialize '$serialized' for file $path", e)
         }
     }
     private val writeLock = WriteLock()
@@ -126,7 +131,14 @@ internal class DiskBoxImpl<T>(
                         }
                     }
 
-                    val serialized = serializer.serialize(value)
+                    val serialized = try {
+                        serializer.serialize(value)
+                    } catch (e: Exception) {
+                        throw RuntimeException(
+                            "Couldn't serialize value '$value' for file $path",
+                            e
+                        )
+                    }
 
                     val tmpFile = File.createTempFile(
                         "new", "tmp", file.parentFile

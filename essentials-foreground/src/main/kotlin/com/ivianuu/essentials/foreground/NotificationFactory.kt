@@ -32,7 +32,7 @@ abstract class AbstractNotificationFactory(
     private val context: Context
 ) : NotificationFactory {
 
-    @TargetApi(Build.VERSION_CODES.O)
+    @TargetApi(26)
     protected abstract fun createChannel(): NotificationChannel
 
     final override fun buildNotification(): Notification {
