@@ -38,17 +38,17 @@ class SharedPreferencesImporter(
 
         val sharedPreferences = context.getSharedPreferences(name, Context.MODE_PRIVATE)
 
-        sharedPreferences.all.forEach { (key, value) ->
-            when (value) {
-                is Boolean -> boxFactory.boolean(key).set(value)
-                is Float -> boxFactory.float(key).set(value)
-                is Int -> boxFactory.int(key).set(value)
-                is Long -> boxFactory.long(key).set(value)
-                is String -> boxFactory.string(key).set(value)
-                is Set<*> -> boxFactory.stringSet(key).set(value as Set<String>)
+        boxFactory.withoutCache {
+            sharedPreferences.all.forEach { (key, value) ->
+                when (value) {
+                    is Boolean -> boxFactory.boolean(key).set(value)
+                    is Float -> boxFactory.float(key).set(value)
+                    is Int -> boxFactory.int(key).set(value)
+                    is Long -> boxFactory.long(key).set(value)
+                    is String -> boxFactory.string(key).set(value)
+                    is Set<*> -> boxFactory.stringSet(key).set(value as Set<String>)
+                }
             }
-
-            boxFactory.removeCachedBox(key)
         }
 
         prefsFile.delete()
@@ -61,9 +61,10 @@ class SharedPreferencesImporter(
 
             val sharedPreferences = context.getSharedPreferences(name, Context.MODE_PRIVATE)
 
-            val box = boxFactory.stringMap(name)
-            box.set(sharedPreferences.all as Map<String, String>)
-            boxFactory.removeCachedBox(name)
+            boxFactory.withoutCache {
+                val box = boxFactory.stringMap(name)
+                box.set(sharedPreferences.all as Map<String, String>)
+            }
 
             prefsFile.delete()
         }

@@ -21,6 +21,7 @@ import com.ivianuu.essentials.store.Box
 import com.ivianuu.essentials.store.DiskBox
 import kotlinx.coroutines.CoroutineDispatcher
 import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.atomic.AtomicBoolean
 
 class PrefBoxFactory(
     private val context: Context,
@@ -30,12 +31,14 @@ class PrefBoxFactory(
 
     private val boxes = ConcurrentHashMap<String, Box<*>>()
 
+    private var cacheEnabled = AtomicBoolean(true)
+
     fun <T> box(
         name: String,
         defaultValue: T,
         serializer: DiskBox.Serializer<T>
     ): Box<T> {
-        var box = boxes[name]
+        var box = if (cacheEnabled.get()) boxes[name] else null
         if (box?.isDisposed == true) box = null
         if (box == null) {
             box = DiskBox(
@@ -45,14 +48,16 @@ class PrefBoxFactory(
                 defaultValue = defaultValue,
                 dispatcher = dispatcher
             )
-            boxes[name] = box
+            if (cacheEnabled.get()) boxes[name] = box
         }
 
         return box as Box<T>
     }
 
-    internal fun removeCachedBox(name: String) {
-        boxes -= name
+    internal suspend fun withoutCache(block: suspend () -> Unit) {
+        cacheEnabled.set(false)
+        block()
+        cacheEnabled.set(true)
     }
 
 }
