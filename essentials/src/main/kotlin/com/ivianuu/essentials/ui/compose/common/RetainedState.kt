@@ -20,7 +20,6 @@ import androidx.compose.Composable
 import androidx.compose.State
 import androidx.compose.state
 import androidx.lifecycle.ViewModel
-import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.compose.viewmodel.viewModel
 import com.ivianuu.essentials.util.sourceLocation
 
@@ -59,14 +58,9 @@ fun <T> retainedState(
         }
     }
 
-    onFinalDispose {
-        d { "$key remove state ${state.value}" }
-        viewModel.values -= key
-    }
+    onFinalDispose { viewModel.values -= key }
 
     viewModel.values[key] = state.value
-
-    d { "$key return state ${state.value}" }
 
     return state
 }
