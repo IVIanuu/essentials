@@ -16,10 +16,7 @@
 
 package com.ivianuu.essentials.store
 
-import android.content.BroadcastReceiver
 import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
@@ -31,6 +28,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
@@ -99,8 +97,8 @@ internal class DiskBoxImpl<T>(
 
     private val file by lazy { File(path) }
 
-    private val multiProcessHelper =
-        MultiProcessHelper(context, file) {
+    private val multiInstanceHelper =
+        MultiInstanceHelper(coroutineScope, path) {
             d { "$path -> inter process change force refetch" }
             cachedValue.set(this) // force refetching the value
             changeNotifier.offer(Unit)
@@ -158,7 +156,7 @@ internal class DiskBoxImpl<T>(
 
                     cachedValue.set(value)
                     changeNotifier.offer(Unit)
-                    multiProcessHelper.notifyWrite()
+                    multiInstanceHelper.notifyWrite()
                 } finally {
                     writeLock.endWrite()
                 }
@@ -234,8 +232,7 @@ internal class DiskBoxImpl<T>(
     override fun dispose() {
         d { "$path -> dispose" }
         if (_isDisposed.getAndSet(true)) {
-            coroutineScope.coroutineContext.get(Job.Key)?.cancel()
-            multiProcessHelper.dispose()
+            coroutineScope.coroutineContext[Job.Key]?.cancel()
         }
     }
 
@@ -255,55 +252,37 @@ internal class DiskBoxImpl<T>(
     private inline fun d(block: () -> String) = println("BOX: ${block.invoke()}")
 }
 
-private class MultiProcessHelper(
-    private val context: Context,
-    private val file: File,
+private class MultiInstanceHelper(
+    private val coroutineScope: CoroutineScope,
+    private val path: String,
     private val onChange: () -> Unit
 ) {
 
-    private val uuid = UUID.randomUUID().toString()
-
-    private val receiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context, intent: Intent) {
-            if (intent.getStringExtra(EXTRA_CHANGE_OWNER) != uuid &&
-                file.absolutePath == intent.getStringExtra(EXTRA_PATH)
-            ) {
-                onChange()
-            }
-        }
-    }
+    private val id = UUID.randomUUID().toString()
 
     init {
-        try {
-            context.registerReceiver(receiver, IntentFilter().apply {
-                addAction(ACTION_ON_CHANGE)
-            })
-        } catch (e: Exception) {
+        coroutineScope.launch {
+            changeNotifier.asFlow()
+                .onEach { change ->
+                    if (change.path == path && change.id != id) {
+                        onChange()
+                    }
+                }
         }
     }
 
     fun notifyWrite() {
-        try {
-            context.sendBroadcast(Intent(ACTION_ON_CHANGE).apply {
-                putExtra(EXTRA_CHANGE_OWNER, uuid)
-                putExtra(EXTRA_PATH, file.absolutePath)
-            })
-        } catch (e: Exception) {
-        }
-    }
-
-    fun dispose() {
-        try {
-            context.unregisterReceiver(receiver)
-        } catch (e: Exception) {
-        }
+        changeNotifier.offer(Change(id = id, path = path))
     }
 
     private companion object {
-        private const val ACTION_ON_CHANGE = "com.ivianuu.essentials.store.ON_CHANGE"
-        private const val EXTRA_CHANGE_OWNER = "change_owner"
-        private const val EXTRA_PATH = "path"
+        private val changeNotifier = BroadcastChannel<Change>(1)
     }
+
+    private class Change(
+        val id: String,
+        val path: String
+    )
 }
 
 private class WriteLock {

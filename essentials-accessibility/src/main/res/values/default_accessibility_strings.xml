@@ -15,7 +15,6 @@
   -->
 
 <resources>
-    <string name="es_accessibility_service_process">:bg</string>
     <string name="es_accessibility_service_settings_activity"></string>
     <string name="es_accessibility_service_desc"></string>
     <string name="es_accessibility_service_summary"></string>

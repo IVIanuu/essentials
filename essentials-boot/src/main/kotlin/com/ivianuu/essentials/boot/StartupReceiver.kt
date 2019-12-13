@@ -16,7 +16,6 @@
 
 package com.ivianuu.essentials.boot
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import com.github.ajalt.timberkt.d
@@ -24,10 +23,9 @@ import com.ivianuu.essentials.messaging.EsBroadcastReceiver
 import com.ivianuu.injekt.Provider
 
 class StartupReceiver : EsBroadcastReceiver() {
-
-    @SuppressLint("UnsafeProtectedBroadcastReceiver")
     override fun onReceive(context: Context, intent: Intent) {
         super.onReceive(context, intent)
+        if (intent.action != Intent.ACTION_BOOT_COMPLETED) return
         d { "on system start" }
 
         val bootAwareComponents = component.get<Map<String, Provider<BootAware>>>(
