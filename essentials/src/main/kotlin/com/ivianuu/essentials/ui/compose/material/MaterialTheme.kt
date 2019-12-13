@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.ui.compose.material
 
+import android.content.Context
 import androidx.compose.Composable
 import androidx.ui.core.ContextAmbient
 import androidx.ui.graphics.Color
@@ -33,8 +34,9 @@ import com.ivianuu.essentials.util.isWindowBackgroundDark
 
 @Composable
 fun ResourceMaterialTheme(
-    colors: ColorPalette = resourceColors(),
-    typography: Typography = resourceTypography(),
+    context: Context = ambient(ContextAmbient),
+    colors: ColorPalette = resourceColors(context),
+    typography: Typography = resourceTypography(context),
     children: @Composable() () -> Unit
 ) {
     MaterialTheme(
@@ -45,8 +47,7 @@ fun ResourceMaterialTheme(
 }
 
 @Composable
-fun resourceColors(): ColorPalette {
-    val context = ambient(ContextAmbient)
+fun resourceColors(context: Context = ambient(ContextAmbient)): ColorPalette {
     return remember {
         ColorPalette(
             isLight = !context.isWindowBackgroundDark(),
@@ -67,7 +68,7 @@ fun resourceColors(): ColorPalette {
 }
 
 @Composable
-fun resourceTypography(): Typography {
+fun resourceTypography(context: Context = ambient(ContextAmbient)): Typography {
     return remember { Typography() }
     /*Typography(
         h1 = +resourceTextStyle(R.attr.textAppearanceHeadline1),

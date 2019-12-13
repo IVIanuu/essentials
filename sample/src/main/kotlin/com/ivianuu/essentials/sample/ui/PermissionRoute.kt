@@ -18,6 +18,8 @@ package com.ivianuu.essentials.sample.ui
 
 import android.Manifest
 import androidx.ui.core.ContextAmbient
+import androidx.ui.layout.Center
+import androidx.ui.material.Button
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.accessibility.ComponentAccessibilityService
 import com.ivianuu.essentials.notificationlistener.ComponentNotificationListenerService
@@ -34,12 +36,13 @@ import com.ivianuu.essentials.permission.systemoverlay.SystemOverlayPermission
 import com.ivianuu.essentials.permission.writesettings.WriteSettingsPermission
 import com.ivianuu.essentials.ui.compose.common.SimpleScreen
 import com.ivianuu.essentials.ui.compose.core.ambient
-import com.ivianuu.essentials.ui.compose.coroutines.launchOnActive
+import com.ivianuu.essentials.ui.compose.coroutines.coroutineScope
 import com.ivianuu.essentials.ui.compose.es.ComposeControllerRoute
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.compose.resources.drawableResource
 import com.ivianuu.essentials.ui.navigation.director.ControllerRouteOptions
 import com.ivianuu.essentials.ui.navigation.director.horizontal
+import kotlinx.coroutines.launch
 
 val PermissionRoute = ComposeControllerRoute(
     options = ControllerRouteOptions().horizontal()
@@ -89,16 +92,25 @@ val PermissionRoute = ComposeControllerRoute(
             MetadataKeys.Icon to drawableResource(R.drawable.es_ic_menu)
         )
 
-        launchOnActive {
-            val granted = manager.request(
-                camera,
-                phone,
-                accessibility,
-                notificationListener,
-                systemOverlay,
-                writeSettings
+        val coroutineScope = coroutineScope()
+
+        Center {
+            Button(
+                text = "Request",
+                onClick = {
+                    coroutineScope.launch {
+                        val granted = manager.request(
+                            camera,
+                            phone,
+                            accessibility,
+                            notificationListener,
+                            systemOverlay,
+                            writeSettings
+                        )
+                        d { "granted $granted" }
+                    }
+                }
             )
-            d { "granted $granted" }
         }
     }
 }
