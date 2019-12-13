@@ -24,7 +24,6 @@ import androidx.ui.layout.EdgeInsets
 import androidx.ui.material.Checkbox
 import androidx.ui.material.FloatingActionButton
 import androidx.ui.material.MaterialTheme
-import androidx.ui.material.surface.Surface
 import com.ivianuu.essentials.ui.compose.common.AbsorbPointer
 import com.ivianuu.essentials.ui.compose.common.framed
 import com.ivianuu.essentials.ui.compose.common.scrolling.ScrollableList
@@ -34,6 +33,7 @@ import com.ivianuu.essentials.ui.compose.dialog.DialogRoute
 import com.ivianuu.essentials.ui.compose.dialog.SingleChoiceListDialog
 import com.ivianuu.essentials.ui.compose.es.ComposeControllerRoute
 import com.ivianuu.essentials.ui.compose.injekt.inject
+import com.ivianuu.essentials.ui.compose.material.EsSurface
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
 import com.ivianuu.essentials.ui.compose.material.Scaffold
 import com.ivianuu.essentials.ui.compose.material.SimpleListItem
@@ -69,7 +69,7 @@ val ScaffoldRoute = ComposeControllerRoute {
 
             val color = MaterialTheme.colors()().primary.copy(alpha = alpha)
 
-            Surface(color = color) {
+            EsSurface(color = color) {
                 Container(
                     height = 56.dp,
                     expanded = true,

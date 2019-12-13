@@ -24,8 +24,8 @@ import androidx.ui.layout.ConstrainedBox
 import androidx.ui.layout.DpConstraints
 import androidx.ui.layout.Padding
 import androidx.ui.material.MaterialTheme
-import androidx.ui.material.surface.Surface
 import com.ivianuu.essentials.ui.compose.core.invoke
+import com.ivianuu.essentials.ui.compose.material.EsSurface
 
 // todo callbacks like onShow, onDismiss, onCancel etc
 // todo add DialogState + ambient to control dialog state from descendents
@@ -45,7 +45,7 @@ fun Dialog(child: @Composable() () -> Unit) {
                     maxWidth = 356.dp
                 )
             ) {
-                Surface(
+                EsSurface(
                     color = MaterialTheme.colors()().surface,
                     elevation = 24.dp,
                     shape = RoundedCornerShape(size = 4.dp)

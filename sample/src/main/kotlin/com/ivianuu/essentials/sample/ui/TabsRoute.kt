@@ -19,9 +19,9 @@ package com.ivianuu.essentials.sample.ui
 import androidx.ui.core.Text
 import androidx.ui.graphics.Color
 import androidx.ui.layout.Container
-import androidx.ui.material.surface.Surface
 import com.ivianuu.essentials.ui.compose.es.ComposeControllerRoute
 import com.ivianuu.essentials.ui.compose.layout.Column
+import com.ivianuu.essentials.ui.compose.material.EsSurface
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
 import com.ivianuu.essentials.ui.compose.material.Scaffold
 import com.ivianuu.essentials.ui.compose.material.Tab
@@ -48,7 +48,7 @@ val TabsRoute = ComposeControllerRoute(
             },
             body = {
                 TabContent<Color> { index, item ->
-                    Surface(color = item) {
+                    EsSurface(color = item) {
                         Container(expanded = true) {
                             Text("Index: $index")
                         }

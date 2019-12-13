@@ -58,10 +58,7 @@ fun EmphasisProvider(
     children: @Composable() () -> Unit
 ) {
     ProvideEmphasis(emphasis = emphasis) {
-        CurrentIconStyleProvider(
-            value = currentIconStyle().copy(color = contentColor()),
-            children = children
-        )
+        ContentColorProvider(color = contentColor(), children = children)
     }
 }
 

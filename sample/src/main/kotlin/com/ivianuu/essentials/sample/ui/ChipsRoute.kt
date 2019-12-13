@@ -29,15 +29,16 @@ import androidx.ui.layout.FlowColumn
 import androidx.ui.layout.Padding
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.ripple.Ripple
-import androidx.ui.material.surface.Surface
 import com.ivianuu.essentials.ui.compose.core.invoke
 import com.ivianuu.essentials.ui.compose.core.remember
 import com.ivianuu.essentials.ui.compose.dialog.PrimaryColors
 import com.ivianuu.essentials.ui.compose.es.ComposeControllerRoute
 import com.ivianuu.essentials.ui.compose.injekt.inject
+import com.ivianuu.essentials.ui.compose.material.EsSurface
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
 import com.ivianuu.essentials.ui.compose.material.RippleColorProvider
 import com.ivianuu.essentials.ui.compose.material.Scaffold
+import com.ivianuu.essentials.ui.compose.material.contentColorFor
 import com.ivianuu.essentials.util.Toaster
 
 val ChipsRoute = ComposeControllerRoute {
@@ -59,7 +60,11 @@ val ChipsRoute = ComposeControllerRoute {
 private fun Chip(@Pivotal name: String) {
     val toaster = inject<Toaster>()
     val color = remember { PrimaryColors.toList().shuffled().first() }
-    Surface(color = color, shape = RoundedCornerShape(16.dp)) {
+    EsSurface(
+        color = color,
+        contentColor = contentColorFor(color),
+        shape = RoundedCornerShape(16.dp)
+    ) {
         Container(
             height = 32.dp,
             padding = EdgeInsets(

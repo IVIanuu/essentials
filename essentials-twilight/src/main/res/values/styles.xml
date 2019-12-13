@@ -15,6 +15,5 @@
   -->
 
 <resources>
-
     <style name="Theme.Es.Twilight" parent="Theme.MaterialComponents.DayNight.NoActionBar" />
 </resources>

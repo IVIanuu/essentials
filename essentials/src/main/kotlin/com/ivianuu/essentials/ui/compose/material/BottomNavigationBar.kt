@@ -33,7 +33,6 @@ import androidx.ui.layout.DpConstraints
 import androidx.ui.layout.EdgeInsets
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.ripple.Ripple
-import androidx.ui.material.surface.Surface
 import com.ivianuu.essentials.ui.compose.core.ambient
 import com.ivianuu.essentials.ui.compose.core.invoke
 import com.ivianuu.essentials.ui.compose.core.key
@@ -68,7 +67,7 @@ fun <T> BottomNavigationBar(
     color: Color = MaterialTheme.colors()().primary,
     item: @Composable() (Int, T) -> Unit
 ) {
-    Surface(color = color, elevation = BottomNavigationBarElevation) {
+    EsSurface(color = color, elevation = BottomNavigationBarElevation) {
         Container(height = BottomNavigationBarHeight, expanded = true) {
             WithConstraints { thisConstraints ->
                 Row(
