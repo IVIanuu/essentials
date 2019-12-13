@@ -28,7 +28,7 @@ class PrefBoxFactory(
     private val prefsPath: String
 ) {
 
-    internal val boxes = ConcurrentHashMap<String, Box<*>>()
+    private val boxes = ConcurrentHashMap<String, Box<*>>()
 
     fun <T> box(
         name: String,
@@ -50,4 +50,9 @@ class PrefBoxFactory(
 
         return box as Box<T>
     }
+
+    internal fun removeCachedBox(name: String) {
+        boxes -= name
+    }
+
 }
