@@ -112,7 +112,7 @@ fun test(
 
     val newSource = Writer.write(fileNode)
 
-    // error("new source $newSource")
+    //error("new source $newSource")
 
     return if (orig != fileNode) {
         file.withNewSource(newSource)
@@ -534,7 +534,7 @@ private fun insertRestartScope(
         if (descriptor.returnType?.isUnit() != true) return@visit
 
         val block = (node.body as Node.Decl.Func.Body.Block).block
-        val newStmts = block.stmts.toMutableList()
+        val oldStmts = block.stmts
 
         val funcKey = "${descriptor.fqNameSafe.asString()}:${element.startOffset}".hashCode()
 
@@ -560,7 +560,8 @@ private fun insertRestartScope(
             )
         )
 
-        newStmts.add(0, startRestartGroupStmt)
+        val newStmts = mutableListOf<Node.Stmt>()
+        newStmts += startRestartGroupStmt
 
         val endRestartGroupStmt = Node.Stmt.Expr(
             expr = Node.Expr.BinaryOp(
@@ -620,7 +621,15 @@ private fun insertRestartScope(
             )
         )
 
-        newStmts += endRestartGroupStmt
+        newStmts += Node.Stmt.Expr(
+            expr = Node.Expr.Try(
+                block = Node.Block(stmts = oldStmts),
+                catches = emptyList(),
+                finallyBlock = Node.Block(
+                    stmts = listOf(endRestartGroupStmt)
+                )
+            )
+        )
 
         block.stmts = newStmts
     }
