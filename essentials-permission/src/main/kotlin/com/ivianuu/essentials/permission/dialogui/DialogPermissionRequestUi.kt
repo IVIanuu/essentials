@@ -16,7 +16,6 @@
 
 package com.ivianuu.essentials.permission.dialogui
 
-import android.view.ContextThemeWrapper
 import androidx.compose.Composable
 import androidx.compose.Pivotal
 import androidx.compose.Recompose
@@ -42,7 +41,6 @@ import com.ivianuu.essentials.ui.compose.core.ActivityAmbient
 import com.ivianuu.essentials.ui.compose.dialog.DialogButton
 import com.ivianuu.essentials.ui.compose.dialog.DialogRoute
 import com.ivianuu.essentials.ui.compose.dialog.ScrollableDialog
-import com.ivianuu.essentials.ui.compose.material.ResourceMaterialTheme
 import com.ivianuu.essentials.ui.compose.material.SimpleListItem
 import com.ivianuu.essentials.ui.compose.viewmodel.injectViewModel
 import com.ivianuu.essentials.ui.navigation.Navigator
@@ -65,12 +63,7 @@ class DialogPermissionRequestUi(
             DialogRoute(
                 dismissHandler = { ambient(ActivityAmbient).finish() }
             ) {
-                val activity = ambient(ActivityAmbient)
-                ResourceMaterialTheme(
-                    context = ContextThemeWrapper(activity, activity.applicationInfo.theme)
-                ) {
-                    PermissionDialog(request = request)
-                }
+                PermissionDialog(request = request)
             }
         )
     }
