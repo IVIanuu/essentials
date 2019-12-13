@@ -60,7 +60,9 @@ class DialogPermissionRequestUi(
         request: PermissionRequest
     ) {
         navigator.push(
-            DialogRoute {
+            DialogRoute(
+                dismissHandler = { ambient(ActivityAmbient).finish() }
+            ) {
                 PermissionDialog(request = request)
             }
         )
@@ -71,7 +73,7 @@ class DialogPermissionRequestUi(
 private fun PermissionDialog(request: PermissionRequest) {
     Recompose { recompose ->
         ScrollableDialog(
-            title = { Text("Permission") }, // todo customizable
+            title = { Text("Required Permissions") }, // todo customizable
             listContent = {
                 val viewModel = injectViewModel<PermissionDialogViewModel> {
                     parametersOf(request)
