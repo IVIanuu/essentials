@@ -41,7 +41,7 @@ class EssentialsComponentRegistrar : ComponentRegistrar {
         messageCollector = configuration.get(CLIConfigurationKeys.MESSAGE_COLLECTOR_KEY)
             ?: PrintingMessageCollector(System.out, MessageRenderer.PLAIN_FULL_PATHS, true)
 
-        val outputDir = File(configuration.getNotNull(OutputDirKey))
+        val outputDir = File(configuration.get(OutputDirKey) ?: "")
         msg { "init with $outputDir" }
 
         outputDir.mkdirs()

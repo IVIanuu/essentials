@@ -806,7 +806,7 @@ private fun wrapComposableCalls(
             )
         }
 
-        /*fun composerExprStmt() = Node.Stmt.Expr(
+        fun composerExprStmt() = Node.Stmt.Expr(
             expr = Node.Expr.BinaryOp(
                 lhs = ComposerExpr,
                 oper = Node.Expr.BinaryOp.Oper.Token(token = Node.Expr.BinaryOp.Token.DOT),
@@ -814,64 +814,6 @@ private fun wrapComposableCalls(
                     expr = Node.Expr.Name(name = "expr"),
                     typeArgs = emptyList(),
                     args = listOf(
-                        Node.ValueArg(
-                            name = "key",
-                            asterisk = false,
-                            expr = Node.Expr.Name(name = "key_$callKeyIndex")
-                        ),
-                        Node.ValueArg(
-                            name = "block",
-                            asterisk = false,
-                            expr = Node.Expr.Brace(
-                                params = emptyList(),
-                                block = Node.Block(
-                                    stmts = listOf(
-                                        Node.Stmt.Expr(expr = rootExpr)
-                                    )
-                                ).apply {
-                                    actualComposableInvocation = true
-                                }
-                            )
-                        )
-                    ),
-                    lambda = null
-                )
-            )
-        )*/
-
-        fun composerExprStmt() = Node.Stmt.Expr(
-            expr = Node.Expr.BinaryOp(
-                lhs = Node.Expr.BinaryOp(
-                    lhs = Node.Expr.BinaryOp(
-                        lhs = Node.Expr.BinaryOp(
-                            lhs = Node.Expr.BinaryOp(
-                                lhs = Node.Expr.BinaryOp(
-                                    lhs = Node.Expr.Name(name = "com"),
-                                    oper = Node.Expr.BinaryOp.Oper.Token(token = Node.Expr.BinaryOp.Token.DOT),
-                                    rhs = Node.Expr.Name(name = "ivianuu")
-                                ),
-                                oper = Node.Expr.BinaryOp.Oper.Token(token = Node.Expr.BinaryOp.Token.DOT),
-                                rhs = Node.Expr.Name(name = "essentials")
-                            ),
-                            oper = Node.Expr.BinaryOp.Oper.Token(token = Node.Expr.BinaryOp.Token.DOT),
-                            rhs = Node.Expr.Name(name = "ui")
-                        ),
-                        oper = Node.Expr.BinaryOp.Oper.Token(token = Node.Expr.BinaryOp.Token.DOT),
-                        rhs = Node.Expr.Name(name = "compose")
-                    ),
-                    oper = Node.Expr.BinaryOp.Oper.Token(token = Node.Expr.BinaryOp.Token.DOT),
-                    rhs = Node.Expr.Name(name = "core")
-                ),
-                oper = Node.Expr.BinaryOp.Oper.Token(token = Node.Expr.BinaryOp.Token.DOT),
-                rhs = Node.Expr.Call(
-                    expr = Node.Expr.Name(name = "expr"),
-                    typeArgs = emptyList(),
-                    args = listOf(
-                        Node.ValueArg(
-                            name = "composer",
-                            asterisk = false,
-                            expr = ComposerExpr
-                        ),
                         Node.ValueArg(
                             name = "key",
                             asterisk = false,

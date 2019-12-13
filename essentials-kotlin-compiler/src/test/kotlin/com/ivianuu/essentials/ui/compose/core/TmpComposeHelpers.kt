@@ -14,21 +14,6 @@
  * limitations under the License.
  */
 
-package androidx.compose;
+package com.ivianuu.essentials.ui.compose.core
 
-@SuppressWarnings("KotlinInternalInJava")
-public class ComposerAccessor {
-
-    public static Composer currentComposerNonNull() {
-        return ViewComposerKt.getCurrentComposerNonNull();
-    }
-
-    public static boolean isComposing(Composer composer) {
-        return composer.isComposing$compose_runtime_release();
-    }
-
-    public static void setComposing(Composer composer, boolean value) {
-        composer.setComposing$compose_runtime_release(value);
-    }
-
-}
+inline fun <T> exec(block: () -> T): T = block()

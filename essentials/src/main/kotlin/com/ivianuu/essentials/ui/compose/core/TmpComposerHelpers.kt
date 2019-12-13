@@ -16,15 +16,6 @@
 
 package com.ivianuu.essentials.ui.compose.core
 
-import androidx.compose.ViewComposition
-
 inline fun <T> exec(block: () -> T): T {
     return block()
-}
-
-inline fun <T> expr(composer: ViewComposition, key: Any, block: () -> T): T {
-    composer.composer.startGroup(key)
-    val result = block()
-    composer.composer.endGroup()
-    return result
 }

@@ -94,7 +94,7 @@ class ComposeAnalysisHandlerExtension(
         componentProvider: ComponentProvider
     ): AnalysisResult? {
         container = componentProvider
-        /*if (analyzed)*/ return null
+        if (analyzed) return null
         analyzed = true
         return AnalysisResult.RetryWithAdditionalRoots(
             bindingTrace.bindingContext,
