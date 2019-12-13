@@ -73,7 +73,7 @@ class ComposeAnalysisHandlerExtension(
 
         // fixes IC duplicate exception
         container.get<JavaClassesTracker>().let { tracker ->
-            tracker as JavaClassesTrackerImpl
+            if (tracker !is JavaClassesTrackerImpl) return@let
             tracker.javaClass.getDeclaredField("classDescriptors")
                 .also { it.isAccessible = true }
                 .get(tracker)
