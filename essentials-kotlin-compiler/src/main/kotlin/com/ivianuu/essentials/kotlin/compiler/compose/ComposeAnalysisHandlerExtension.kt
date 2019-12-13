@@ -72,11 +72,11 @@ class ComposeAnalysisHandlerExtension(
         runComplete = true
 
         // fixes IC duplicate exception
-        container.get<JavaClassesTracker>().let { tracker ->
-            if (tracker !is JavaClassesTrackerImpl) return@let
-            tracker.javaClass.getDeclaredField("classDescriptors")
+        val javaClassesTracker = container.get<JavaClassesTracker>()
+        if (javaClassesTracker is JavaClassesTrackerImpl) {
+            javaClassesTracker.javaClass.getDeclaredField("classDescriptors")
                 .also { it.isAccessible = true }
-                .get(tracker)
+                .get(javaClassesTracker)
                 .let { (it as MutableList<Any>).clear() }
         }
 
