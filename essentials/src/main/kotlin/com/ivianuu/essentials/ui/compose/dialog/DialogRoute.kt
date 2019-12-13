@@ -25,6 +25,7 @@ import androidx.ui.layout.Center
 import com.ivianuu.essentials.ui.compose.common.SafeArea
 import com.ivianuu.essentials.ui.compose.common.onBackPressed
 import com.ivianuu.essentials.ui.compose.core.ref
+import com.ivianuu.essentials.ui.compose.core.state
 import com.ivianuu.essentials.ui.compose.es.ComposeControllerRoute
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.navigation.Navigator
@@ -33,27 +34,29 @@ import com.ivianuu.essentials.ui.navigation.director.fade
 
 fun DialogRoute(
     dismissible: Boolean = true,
+    dismissHandler: @Composable() () -> Unit = { inject<Navigator>().pop() },
     dialog: @Composable() () -> Unit
 ) = ComposeControllerRoute(
     options = ControllerRouteOptions().fade(
         removesFromViewOnPush = false
     )
 ) {
-    val navigator = inject<Navigator>()
     if (!dismissible) {
         onBackPressed { }
     }
 
-    val dismissed = ref { false }
+    val dismissed = state { false }
+    val dismissCalled = ref { false }
+    if (dismissed.value) {
+        if (!dismissCalled.value) {
+            dismissCalled.value = true
+            dismissHandler()
+        }
+    }
 
     PressGestureDetector(
         onPress = if (dismissible) {
-            { _: PxPosition ->
-                if (!dismissed.value) {
-                    dismissed.value = true
-                    navigator.pop()
-                }
-            }
+            { _: PxPosition -> dismissed.value = true }
         } else null
     ) {
         DialogScrim()
