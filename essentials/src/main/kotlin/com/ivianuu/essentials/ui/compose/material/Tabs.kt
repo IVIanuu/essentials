@@ -18,6 +18,9 @@ package com.ivianuu.essentials.ui.compose.material
 
 import androidx.compose.Ambient
 import androidx.compose.Composable
+import androidx.compose.ambient
+import androidx.compose.key
+import androidx.compose.remember
 import androidx.ui.graphics.Image
 import androidx.ui.material.Tab
 import androidx.ui.material.TabRow
@@ -26,9 +29,6 @@ import com.ivianuu.essentials.ui.compose.common.Pager
 import com.ivianuu.essentials.ui.compose.common.PagerPosition
 import com.ivianuu.essentials.ui.compose.common.framed
 import com.ivianuu.essentials.ui.compose.core.Axis
-import com.ivianuu.essentials.ui.compose.core.ambient
-import com.ivianuu.essentials.ui.compose.core.key
-import com.ivianuu.essentials.ui.compose.core.remember
 import com.ivianuu.essentials.ui.compose.layout.Swapper
 import com.ivianuu.essentials.ui.compose.layout.SwapperController
 

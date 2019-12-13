@@ -16,11 +16,11 @@
 
 package com.ivianuu.essentials.sample.ui
 
+import androidx.compose.remember
 import com.ivianuu.essentials.apps.ui.CheckableAppsScreen
 import com.ivianuu.essentials.apps.ui.LaunchableAppFilter
 import com.ivianuu.essentials.store.prefs.PrefBoxFactory
 import com.ivianuu.essentials.store.prefs.stringSet
-import com.ivianuu.essentials.ui.compose.core.remember
 import com.ivianuu.essentials.ui.compose.coroutines.coroutineScope
 import com.ivianuu.essentials.ui.compose.es.ComposeControllerRoute
 import com.ivianuu.essentials.ui.compose.injekt.inject

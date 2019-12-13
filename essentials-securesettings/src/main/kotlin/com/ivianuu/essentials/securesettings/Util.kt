@@ -22,7 +22,6 @@ import androidx.ui.core.dp
 import androidx.ui.foundation.contentColor
 import androidx.ui.layout.Padding
 import androidx.ui.material.MaterialTheme
-import com.ivianuu.essentials.ui.compose.core.invoke
 import com.ivianuu.essentials.ui.compose.coroutines.launchOnActive
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.navigation.Navigator
@@ -36,7 +35,7 @@ internal fun SecureSettingsHeader(text: String) {
 
         Text(
             text = text,
-            style = MaterialTheme.typography()().body2.copy(color = textColor)
+            style = MaterialTheme.typography().body2.copy(color = textColor)
         )
     }
 }

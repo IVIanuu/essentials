@@ -19,6 +19,8 @@ package com.ivianuu.essentials.ui.compose.core
 import android.app.Activity
 import androidx.compose.Ambient
 import androidx.compose.Composable
+import androidx.compose.ambient
+import androidx.compose.remember
 import com.ivianuu.essentials.ui.base.EsController
 import com.ivianuu.essentials.ui.navigation.Route
 

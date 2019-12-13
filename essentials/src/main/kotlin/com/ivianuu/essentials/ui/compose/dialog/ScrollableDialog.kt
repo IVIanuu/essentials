@@ -17,10 +17,10 @@
 package com.ivianuu.essentials.ui.compose.dialog
 
 import androidx.compose.Composable
+import androidx.compose.remember
 import com.ivianuu.essentials.ui.compose.common.scrolling.ScrollPosition
 import com.ivianuu.essentials.ui.compose.common.scrolling.Scroller
 import com.ivianuu.essentials.ui.compose.core.Axis
-import com.ivianuu.essentials.ui.compose.core.remember
 import com.ivianuu.essentials.ui.compose.layout.Column
 
 @Composable

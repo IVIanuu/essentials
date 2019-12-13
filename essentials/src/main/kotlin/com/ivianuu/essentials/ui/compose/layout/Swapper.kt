@@ -18,11 +18,10 @@ package com.ivianuu.essentials.ui.compose.layout
 
 import androidx.compose.Composable
 import androidx.compose.frames.modelListOf
+import androidx.compose.key
 import androidx.ui.core.Layout
 import androidx.ui.core.PxPosition
 import com.ivianuu.essentials.ui.compose.common.framed
-import com.ivianuu.essentials.ui.compose.core.key
-
 fun <T> Swapper(
     controller: SwapperController<T>,
     child: (T) -> Unit

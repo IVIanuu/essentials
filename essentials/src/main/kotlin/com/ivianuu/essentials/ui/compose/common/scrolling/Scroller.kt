@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.ui.compose.common.scrolling
 
 import androidx.compose.Composable
+import androidx.compose.remember
 import androidx.ui.core.Alignment
 import androidx.ui.core.Clip
 import androidx.ui.core.IntPx
@@ -29,7 +30,6 @@ import androidx.ui.core.toPx
 import androidx.ui.foundation.shape.RectangleShape
 import androidx.ui.layout.Container
 import com.ivianuu.essentials.ui.compose.core.Axis
-import com.ivianuu.essentials.ui.compose.core.remember
 import com.ivianuu.essentials.ui.compose.layout.SingleChildLayout
 
 @Composable

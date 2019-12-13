@@ -24,4 +24,4 @@ import androidx.ui.core.withDensity
 // todo remove once public in compose
 
 @Composable
-fun <R> withDensity(block: DensityScope.() -> R): R = withDensity(ambientDensity()(), block)
+fun <R> withDensity(block: DensityScope.() -> R): R = withDensity(ambientDensity(), block)

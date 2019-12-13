@@ -16,13 +16,12 @@
 
 package com.ivianuu.essentials.sample.ui
 
+import androidx.compose.ambient
 import androidx.ui.core.Text
 import androidx.ui.core.dp
 import androidx.ui.layout.Center
 import androidx.ui.material.Button
 import androidx.ui.material.MaterialTheme
-import com.ivianuu.essentials.ui.compose.core.ambient
-import com.ivianuu.essentials.ui.compose.core.invoke
 import com.ivianuu.essentials.ui.compose.es.ComposeControllerRoute
 import com.ivianuu.essentials.ui.compose.layout.Column
 import com.ivianuu.essentials.ui.compose.layout.CrossAxisAlignment
@@ -52,7 +51,7 @@ private fun CounterRoute(count: Int): Route = Route {
 
                     Text(
                         "Count: $count",
-                        style = MaterialTheme.typography()().h1
+                        style = MaterialTheme.typography().h1
                     )
 
                     HeightSpacer(8.dp)

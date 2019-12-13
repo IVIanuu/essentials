@@ -17,9 +17,9 @@
 package com.ivianuu.essentials.ui.compose.dialog
 
 import androidx.compose.Composable
+import androidx.compose.key
 import androidx.ui.material.Checkbox
 import com.ivianuu.essentials.ui.compose.common.AbsorbPointer
-import com.ivianuu.essentials.ui.compose.core.key
 @Composable
 fun <T> MultiChoiceListDialog(
     items: List<T>,

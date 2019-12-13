@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.sample.ui
 
+import androidx.compose.remember
 import androidx.ui.core.Alignment
 import androidx.ui.core.Text
 import androidx.ui.core.dp
@@ -27,8 +28,6 @@ import androidx.ui.material.MaterialTheme
 import com.ivianuu.essentials.ui.compose.common.AbsorbPointer
 import com.ivianuu.essentials.ui.compose.common.framed
 import com.ivianuu.essentials.ui.compose.common.scrolling.ScrollableList
-import com.ivianuu.essentials.ui.compose.core.invoke
-import com.ivianuu.essentials.ui.compose.core.remember
 import com.ivianuu.essentials.ui.compose.dialog.DialogRoute
 import com.ivianuu.essentials.ui.compose.dialog.SingleChoiceListDialog
 import com.ivianuu.essentials.ui.compose.es.ComposeControllerRoute
@@ -52,7 +51,7 @@ val ScaffoldRoute = ComposeControllerRoute {
                 ) 0.5f else 1f
             }
 
-            val color = MaterialTheme.colors()().primary.copy(alpha = alpha)
+            val color = MaterialTheme.colors().primary.copy(alpha = alpha)
 
             EsTopAppBar(title = { Text("Scaffold") }, color = color)
         }) else null,
@@ -67,7 +66,7 @@ val ScaffoldRoute = ComposeControllerRoute {
                 ) 0.5f else 1f
             }
 
-            val color = MaterialTheme.colors()().primary.copy(alpha = alpha)
+            val color = MaterialTheme.colors().primary.copy(alpha = alpha)
 
             EsSurface(color = color) {
                 Container(
@@ -78,7 +77,7 @@ val ScaffoldRoute = ComposeControllerRoute {
                 ) {
                     Text(
                         text = "Bottom bar",
-                        style = MaterialTheme.typography()().h6
+                        style = MaterialTheme.typography().h6
                     )
                 }
             }

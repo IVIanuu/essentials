@@ -34,7 +34,6 @@ import com.ivianuu.essentials.ui.compose.core.ControllerAmbient
 import com.ivianuu.essentials.ui.compose.core.MediaQuery
 import com.ivianuu.essentials.ui.compose.core.MediaQueryProvider
 import com.ivianuu.essentials.ui.compose.core.RouteAmbient
-import com.ivianuu.essentials.ui.compose.core.invoke
 import com.ivianuu.essentials.ui.compose.injekt.ComponentAmbient
 import com.ivianuu.essentials.ui.compose.injekt.MaterialThemeProvider
 import com.ivianuu.essentials.ui.compose.injekt.inject
@@ -76,8 +75,8 @@ abstract class ComposeController : EsController() {
             ComponentAmbient with component
         ) {
             val viewportMetrics = view.viewportMetrics
-            val density = ambientDensity()()
-            val isDarkTheme = isSystemInDarkTheme()()
+            val density = ambientDensity()
+            val isDarkTheme = isSystemInDarkTheme()
 
             val mediaQuery = MediaQuery(
                 size = viewportMetrics.size,

@@ -17,20 +17,19 @@
 package com.ivianuu.essentials.ui.compose.dialog
 
 import androidx.compose.Composable
+import androidx.compose.onActive
+import androidx.compose.state
 import androidx.ui.core.Opacity
 import androidx.ui.core.Text
 import androidx.ui.core.TextField
 import androidx.ui.input.KeyboardType
 import androidx.ui.material.MaterialTheme
+import androidx.ui.res.stringResource
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.compose.common.asTextComposable
 import com.ivianuu.essentials.ui.compose.common.hideKeyboard
 import com.ivianuu.essentials.ui.compose.common.showKeyboard
-import com.ivianuu.essentials.ui.compose.core.invoke
-import com.ivianuu.essentials.ui.compose.core.onActive
-import com.ivianuu.essentials.ui.compose.core.state
 import com.ivianuu.essentials.ui.compose.injekt.inject
-import com.ivianuu.essentials.ui.compose.resources.stringResource
 import com.ivianuu.essentials.ui.navigation.Navigator
 
 fun TextInputRoute(
@@ -94,7 +93,7 @@ fun TextInputDialog(
                 Opacity(0.5f) {
                     Text(
                         text = hint,
-                        style = MaterialTheme.typography()().subtitle1
+                        style = MaterialTheme.typography().subtitle1
                     )
                 }
             }
@@ -103,7 +102,7 @@ fun TextInputDialog(
                 onValueChange = onValueChange,
                 focusIdentifier = TextInputDialogInputId,
                 keyboardType = keyboardType,
-                textStyle = MaterialTheme.typography()().subtitle1
+                textStyle = MaterialTheme.typography().subtitle1
             )
 
             onActive {

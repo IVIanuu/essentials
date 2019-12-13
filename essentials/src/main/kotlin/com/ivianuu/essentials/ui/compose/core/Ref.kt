@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.ui.compose.core
 
 import androidx.compose.Composable
+import androidx.compose.remember
 
 @Composable
 fun <T> ref(init: () -> T): Ref<T> = remember { Ref(init()) }

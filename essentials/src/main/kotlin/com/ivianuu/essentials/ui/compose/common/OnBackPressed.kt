@@ -20,9 +20,9 @@ import android.app.Activity
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.OnBackPressedDispatcherOwner
 import androidx.compose.Composable
+import androidx.compose.ambient
+import androidx.compose.onActive
 import com.ivianuu.essentials.ui.compose.core.ActivityAmbient
-import com.ivianuu.essentials.ui.compose.core.ambient
-import com.ivianuu.essentials.ui.compose.core.onActive
 
 @Composable
 fun onBackPressed(

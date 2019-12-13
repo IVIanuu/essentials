@@ -21,7 +21,6 @@ import androidx.ui.graphics.Color
 import androidx.ui.layout.Center
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.ModalDrawerLayout
-import com.ivianuu.essentials.ui.compose.core.invoke
 import com.ivianuu.essentials.ui.compose.es.ComposeControllerRoute
 import com.ivianuu.essentials.ui.compose.material.EsSurface
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
@@ -44,7 +43,7 @@ val DrawerRoute = ComposeControllerRoute(
                         Center {
                             Text(
                                 text = "Drawer",
-                                style = MaterialTheme.typography()().h4
+                                style = MaterialTheme.typography().h4
                             )
                         }
                     }
@@ -56,7 +55,7 @@ val DrawerRoute = ComposeControllerRoute(
                 Center {
                     Text(
                         text = "Body",
-                        style = MaterialTheme.typography()().h4
+                        style = MaterialTheme.typography().h4
                     )
                 }
             }

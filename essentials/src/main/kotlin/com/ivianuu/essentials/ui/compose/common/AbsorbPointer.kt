@@ -17,10 +17,10 @@
 package com.ivianuu.essentials.ui.compose.common
 
 import androidx.compose.Composable
+import androidx.compose.remember
 import androidx.ui.core.PointerEventPass
 import androidx.ui.core.changedToDown
 import androidx.ui.core.consumeDownChange
-import com.ivianuu.essentials.ui.compose.core.remember
 
 @Composable
 fun AbsorbPointer(

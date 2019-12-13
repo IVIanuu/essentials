@@ -18,8 +18,8 @@ package com.ivianuu.essentials.ui.compose.prefs
 
 import androidx.compose.Composable
 import androidx.compose.Immutable
+import androidx.compose.remember
 import com.ivianuu.essentials.store.Box
-import com.ivianuu.essentials.ui.compose.core.remember
 import com.ivianuu.essentials.ui.compose.coroutines.collect
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine

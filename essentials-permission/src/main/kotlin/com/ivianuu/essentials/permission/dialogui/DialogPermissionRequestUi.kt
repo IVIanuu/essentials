@@ -20,10 +20,12 @@ import android.view.ContextThemeWrapper
 import androidx.compose.Composable
 import androidx.compose.Pivotal
 import androidx.compose.Recompose
+import androidx.compose.ambient
 import androidx.compose.frames.modelListOf
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.viewModelScope
 import androidx.ui.core.Text
+import androidx.ui.res.stringResource
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.permission.Desc
 import com.ivianuu.essentials.permission.Icon
@@ -37,13 +39,11 @@ import com.ivianuu.essentials.permission.R
 import com.ivianuu.essentials.permission.Title
 import com.ivianuu.essentials.ui.base.EsViewModel
 import com.ivianuu.essentials.ui.compose.core.ActivityAmbient
-import com.ivianuu.essentials.ui.compose.core.ambient
 import com.ivianuu.essentials.ui.compose.dialog.DialogButton
 import com.ivianuu.essentials.ui.compose.dialog.DialogRoute
 import com.ivianuu.essentials.ui.compose.dialog.ScrollableDialog
 import com.ivianuu.essentials.ui.compose.material.ResourceMaterialTheme
 import com.ivianuu.essentials.ui.compose.material.SimpleListItem
-import com.ivianuu.essentials.ui.compose.resources.stringResource
 import com.ivianuu.essentials.ui.compose.viewmodel.injectViewModel
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.injekt.Factory

@@ -18,6 +18,7 @@ package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.Composable
 import androidx.compose.Pivotal
+import androidx.compose.remember
 import androidx.ui.core.Text
 import androidx.ui.core.dp
 import androidx.ui.foundation.Clickable
@@ -29,8 +30,6 @@ import androidx.ui.layout.FlowColumn
 import androidx.ui.layout.Padding
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.ripple.Ripple
-import com.ivianuu.essentials.ui.compose.core.invoke
-import com.ivianuu.essentials.ui.compose.core.remember
 import com.ivianuu.essentials.ui.compose.dialog.PrimaryColors
 import com.ivianuu.essentials.ui.compose.es.ComposeControllerRoute
 import com.ivianuu.essentials.ui.compose.injekt.inject
@@ -79,7 +78,7 @@ private fun Chip(@Pivotal name: String) {
                     }) {
                         Text(
                             text = name,
-                            style = MaterialTheme.typography()().body2.copy(
+                            style = MaterialTheme.typography().body2.copy(
                                 color = contentColor()
                             )
                         )

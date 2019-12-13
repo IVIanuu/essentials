@@ -32,7 +32,6 @@ import androidx.ui.layout.EdgeInsets
 import androidx.ui.layout.Padding
 import androidx.ui.material.Divider
 import androidx.ui.material.MaterialTheme
-import com.ivianuu.essentials.ui.compose.core.invoke
 import com.ivianuu.essentials.ui.compose.layout.Column
 import com.ivianuu.essentials.ui.compose.layout.CrossAxisAlignment
 import com.ivianuu.essentials.ui.compose.layout.MainAxisAlignment
@@ -95,10 +94,10 @@ private fun DialogBody(
             val styledTitle = title?.let {
                 {
                     CurrentTextStyleProvider(
-                        MaterialTheme.typography()().h6
+                        MaterialTheme.typography().h6
                     ) {
                         EmphasisProvider(
-                            emphasis = MaterialTheme.emphasisLevels()().high,
+                            emphasis = MaterialTheme.emphasisLevels().high,
                             children = title
                         )
                     }
@@ -108,7 +107,7 @@ private fun DialogBody(
             val styledIcon = icon?.let {
                 {
                     EmphasisProvider(
-                        emphasis = MaterialTheme.emphasisLevels()().high,
+                        emphasis = MaterialTheme.emphasisLevels().high,
                         children = icon
                     )
                 }
@@ -135,9 +134,9 @@ private fun DialogBody(
 
     val finalContent = if (content != null) {
         {
-            CurrentTextStyleProvider(MaterialTheme.typography()().subtitle1) {
+            CurrentTextStyleProvider(MaterialTheme.typography().subtitle1) {
                 EmphasisProvider(
-                    emphasis = MaterialTheme.emphasisLevels()().medium,
+                    emphasis = MaterialTheme.emphasisLevels().medium,
                     children = content
                 )
             }

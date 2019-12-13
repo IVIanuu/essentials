@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.ui.compose.material
 
 import androidx.compose.Composable
+import androidx.compose.ambient
 import androidx.ui.core.Size
 import androidx.ui.core.Text
 import androidx.ui.core.dp
@@ -24,8 +25,6 @@ import androidx.ui.graphics.Color
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.compose.core.RouteAmbient
-import com.ivianuu.essentials.ui.compose.core.ambient
-import com.ivianuu.essentials.ui.compose.core.invoke
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.navigation.Navigator
 
@@ -38,7 +37,7 @@ fun EsTopAppBar(title: String) {
 
 @Composable
 fun EsTopAppBar(
-    color: Color = MaterialTheme.colors()().primary,
+    color: Color = MaterialTheme.colors().primary,
     title: (@Composable() () -> Unit)? = null,
     leading: (@Composable() () -> Unit)? = autoTopAppBarLeadingIcon(),
     trailing: (@Composable() () -> Unit)? = null

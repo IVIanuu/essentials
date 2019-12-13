@@ -17,8 +17,8 @@
 package com.ivianuu.essentials.ui.compose.common
 
 import androidx.compose.Composable
+import androidx.compose.remember
 import com.ivianuu.essentials.ui.common.UrlRoute
-import com.ivianuu.essentials.ui.compose.core.remember
 import com.ivianuu.essentials.ui.compose.coroutines.coroutineScope
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.navigation.Navigator

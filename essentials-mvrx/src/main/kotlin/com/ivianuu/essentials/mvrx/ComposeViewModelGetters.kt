@@ -17,9 +17,9 @@
 package com.ivianuu.essentials.mvrx
 
 import androidx.compose.Composable
+import androidx.compose.ambient
+import androidx.compose.remember
 import androidx.lifecycle.ViewModelStoreOwner
-import com.ivianuu.essentials.ui.compose.core.ambient
-import com.ivianuu.essentials.ui.compose.core.remember
 import com.ivianuu.essentials.ui.compose.coroutines.collect
 import com.ivianuu.essentials.ui.compose.injekt.ComponentAmbient
 import com.ivianuu.essentials.ui.compose.injekt.inject

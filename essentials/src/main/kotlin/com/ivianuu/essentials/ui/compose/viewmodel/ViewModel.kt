@@ -17,10 +17,10 @@
 package com.ivianuu.essentials.ui.compose.viewmodel
 
 import androidx.compose.Composable
+import androidx.compose.ambient
+import androidx.compose.remember
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelStoreOwner
-import com.ivianuu.essentials.ui.compose.core.ambient
-import com.ivianuu.essentials.ui.compose.core.remember
 import com.ivianuu.essentials.ui.compose.injekt.ComponentAmbient
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.util.defaultViewModelFactory

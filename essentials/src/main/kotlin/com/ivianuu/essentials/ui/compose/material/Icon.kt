@@ -19,6 +19,7 @@ package com.ivianuu.essentials.ui.compose.material
 import androidx.compose.Ambient
 import androidx.compose.Composable
 import androidx.compose.Immutable
+import androidx.compose.ambient
 import androidx.ui.core.Size
 import androidx.ui.core.dp
 import androidx.ui.foundation.Clickable
@@ -29,7 +30,6 @@ import androidx.ui.layout.Container
 import androidx.ui.material.ripple.Ripple
 import com.ivianuu.essentials.ui.compose.core.MergeProvider
 import com.ivianuu.essentials.ui.compose.core.Mergeable
-import com.ivianuu.essentials.ui.compose.core.ambient
 
 @Composable
 fun Icon(

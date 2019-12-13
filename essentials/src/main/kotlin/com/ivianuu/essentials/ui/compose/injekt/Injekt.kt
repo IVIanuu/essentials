@@ -18,8 +18,8 @@ package com.ivianuu.essentials.ui.compose.injekt
 
 import androidx.compose.Ambient
 import androidx.compose.Composable
-import com.ivianuu.essentials.ui.compose.core.ambient
-import com.ivianuu.essentials.ui.compose.core.remember
+import androidx.compose.ambient
+import androidx.compose.remember
 import com.ivianuu.injekt.Component
 import com.ivianuu.injekt.ParametersDefinition
 import com.ivianuu.injekt.Type

@@ -18,6 +18,9 @@ package com.ivianuu.essentials.ui.compose.prefs
 
 import androidx.compose.Composable
 import androidx.compose.Pivotal
+import androidx.compose.ambient
+import androidx.compose.remember
+import androidx.compose.state
 import androidx.ui.core.ContextAmbient
 import androidx.ui.core.Text
 import androidx.ui.core.dp
@@ -34,10 +37,6 @@ import androidx.ui.material.SliderPosition
 import com.ivianuu.essentials.store.Box
 import com.ivianuu.essentials.ui.compose.common.asIconComposable
 import com.ivianuu.essentials.ui.compose.common.asTextComposable
-import com.ivianuu.essentials.ui.compose.core.ambient
-import com.ivianuu.essentials.ui.compose.core.invoke
-import com.ivianuu.essentials.ui.compose.core.remember
-import com.ivianuu.essentials.ui.compose.core.state
 import com.ivianuu.essentials.ui.compose.layout.CrossAxisAlignment
 import com.ivianuu.essentials.ui.compose.layout.Row
 import com.ivianuu.essentials.ui.compose.layout.WithModifier
@@ -395,7 +394,7 @@ fun <T : Comparable<T>> SliderPreference(
 fun <T> SimpleSliderValueText(value: T) {
     Text(
         text = value.toString(),
-        style = MaterialTheme.typography()().body2,
+        style = MaterialTheme.typography().body2,
         maxLines = 1
     )
 }
@@ -410,7 +409,7 @@ fun <T> unitValueTextProvider(
     return {
         Text(
             text = textProvider(it.toString()),
-            style = MaterialTheme.typography()().body2,
+            style = MaterialTheme.typography().body2,
             maxLines = 1
         )
     }

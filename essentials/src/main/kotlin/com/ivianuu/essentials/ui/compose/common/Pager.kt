@@ -18,6 +18,7 @@ package com.ivianuu.essentials.ui.compose.common
 
 import androidx.animation.PhysicsBuilder
 import androidx.compose.Composable
+import androidx.compose.remember
 import androidx.ui.core.Px
 import androidx.ui.core.PxPosition
 import androidx.ui.core.px
@@ -27,7 +28,6 @@ import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.compose.common.scrolling.ScrollPosition
 import com.ivianuu.essentials.ui.compose.common.scrolling.Scrollable
 import com.ivianuu.essentials.ui.compose.core.Axis
-import com.ivianuu.essentials.ui.compose.core.remember
 import com.ivianuu.essentials.ui.compose.layout.NonNullSingleChildLayout
 import kotlin.math.roundToInt
 

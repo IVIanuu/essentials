@@ -25,8 +25,6 @@ import com.ivianuu.essentials.store.Box
 import com.ivianuu.essentials.ui.compose.common.AbsorbPointer
 import com.ivianuu.essentials.ui.compose.common.asIconComposable
 import com.ivianuu.essentials.ui.compose.common.asTextComposable
-import com.ivianuu.essentials.ui.compose.core.invoke
-
 @Composable
 fun RadioButtonPreference(
     @Pivotal box: Box<Boolean>,
@@ -71,7 +69,7 @@ fun RadioButtonPreference(
             trailing = {
                 AbsorbPointer {
                     RadioButton(
-                        color = MaterialTheme.colors()().secondary,
+                        color = MaterialTheme.colors().secondary,
                         selected = context.currentValue,
                         onSelect = if (context.shouldBeEnabled) {
                             {}

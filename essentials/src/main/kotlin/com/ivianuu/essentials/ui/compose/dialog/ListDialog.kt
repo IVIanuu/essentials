@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.ui.compose.dialog
 
 import androidx.compose.Composable
+import androidx.compose.remember
 import androidx.ui.core.Alignment
 import androidx.ui.core.Dp
 import androidx.ui.core.dp
@@ -30,8 +31,6 @@ import androidx.ui.material.ripple.Ripple
 import com.ivianuu.essentials.ui.compose.common.scrolling.ScrollPosition
 import com.ivianuu.essentials.ui.compose.common.scrolling.ScrollableList
 import com.ivianuu.essentials.ui.compose.core.Axis
-import com.ivianuu.essentials.ui.compose.core.invoke
-import com.ivianuu.essentials.ui.compose.core.remember
 import com.ivianuu.essentials.ui.compose.layout.CrossAxisAlignment
 import com.ivianuu.essentials.ui.compose.layout.MainAxisAlignment
 import com.ivianuu.essentials.ui.compose.layout.Row
@@ -95,7 +94,7 @@ fun SimpleDialogListItem(
                 ),
                 alignment = Alignment.CenterLeft
             ) {
-                EmphasisProvider(emphasis = MaterialTheme.emphasisLevels()().high) {
+                EmphasisProvider(emphasis = MaterialTheme.emphasisLevels().high) {
                     Row(
                         mainAxisAlignment = MainAxisAlignment.End,
                         crossAxisAlignment = CrossAxisAlignment.Center

@@ -18,6 +18,7 @@ package com.ivianuu.essentials.ui.compose.core
 
 import androidx.compose.Ambient
 import androidx.compose.Composable
+import androidx.compose.ambient
 import androidx.ui.core.Density
 import androidx.ui.core.Size
 import androidx.ui.core.dp

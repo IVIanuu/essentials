@@ -18,6 +18,7 @@ package com.ivianuu.essentials.ui.compose.common.scrolling
 
 import androidx.compose.Composable
 import androidx.compose.Pivotal
+import androidx.compose.remember
 import androidx.ui.core.Alignment
 import androidx.ui.core.Clip
 import androidx.ui.core.Dp
@@ -33,8 +34,6 @@ import androidx.ui.foundation.shape.RectangleShape
 import androidx.ui.layout.Container
 import com.ivianuu.essentials.ui.compose.common.framed
 import com.ivianuu.essentials.ui.compose.core.Axis
-import com.ivianuu.essentials.ui.compose.core.invoke
-import com.ivianuu.essentials.ui.compose.core.remember
 import com.ivianuu.essentials.ui.compose.layout.Column
 import com.ivianuu.essentials.ui.compose.layout.SizedBox
 import kotlin.math.max
@@ -126,7 +125,7 @@ fun ScrollableList(
 ) {
     val state = remember(position) { ScrollableListState(position) } // todo
     remember(count) { state.count = count }
-    val density = ambientDensity()()
+    val density = ambientDensity()
     remember(itemSizeProvider) {
         state.itemSizeProvider = { index: Int ->
             withDensity(density) {

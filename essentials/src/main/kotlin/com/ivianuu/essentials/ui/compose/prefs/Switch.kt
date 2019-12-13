@@ -25,8 +25,6 @@ import com.ivianuu.essentials.store.Box
 import com.ivianuu.essentials.ui.compose.common.AbsorbPointer
 import com.ivianuu.essentials.ui.compose.common.asIconComposable
 import com.ivianuu.essentials.ui.compose.common.asTextComposable
-import com.ivianuu.essentials.ui.compose.core.invoke
-
 @Composable
 fun SwitchPreference(
     @Pivotal box: Box<Boolean>,
@@ -71,7 +69,7 @@ fun SwitchPreference(
             trailing = {
                 AbsorbPointer {
                     Switch(
-                        color = MaterialTheme.colors()().secondary,
+                        color = MaterialTheme.colors().secondary,
                         checked = context.currentValue,
                         onCheckedChange = if (context.shouldBeEnabled) { newValue: Boolean -> } else null
                     )

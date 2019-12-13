@@ -18,9 +18,9 @@ package com.ivianuu.essentials.ui.compose.common
 
 import androidx.compose.Composable
 import androidx.compose.State
+import androidx.compose.onDispose
+import androidx.compose.state
 import androidx.lifecycle.ViewModel
-import com.ivianuu.essentials.ui.compose.core.onDispose
-import com.ivianuu.essentials.ui.compose.core.state
 import com.ivianuu.essentials.ui.compose.viewmodel.viewModel
 import com.ivianuu.essentials.util.sourceLocation
 

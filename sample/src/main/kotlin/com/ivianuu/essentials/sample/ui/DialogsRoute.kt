@@ -17,14 +17,13 @@
 package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.Composable
+import androidx.compose.state
 import androidx.ui.core.Text
 import androidx.ui.core.dp
 import androidx.ui.material.Button
 import androidx.ui.material.MaterialTheme
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.compose.common.scrolling.Scroller
-import com.ivianuu.essentials.ui.compose.core.invoke
-import com.ivianuu.essentials.ui.compose.core.state
 import com.ivianuu.essentials.ui.compose.dialog.AlertDialogButtonLayout
 import com.ivianuu.essentials.ui.compose.dialog.ColorPickerDialog
 import com.ivianuu.essentials.ui.compose.dialog.DialogButton
@@ -287,7 +286,7 @@ val DialogsRoute = ComposeControllerRoute(
                         )
                     }
 
-                    val primaryColor = MaterialTheme.colors()().primary
+                    val primaryColor = MaterialTheme.colors().primary
                     val (currentColor, setCurrentColor) = state { primaryColor }
                     DialogLauncherButton(text = "Color Picker") {
                         ColorPickerDialog(

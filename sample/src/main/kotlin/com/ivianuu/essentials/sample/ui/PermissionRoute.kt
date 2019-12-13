@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.sample.ui
 
 import android.Manifest
+import androidx.compose.ambient
 import androidx.ui.core.ContextAmbient
 import androidx.ui.layout.Center
 import androidx.ui.material.Button
@@ -35,7 +36,6 @@ import com.ivianuu.essentials.permission.runtime.RuntimePermission
 import com.ivianuu.essentials.permission.systemoverlay.SystemOverlayPermission
 import com.ivianuu.essentials.permission.writesettings.WriteSettingsPermission
 import com.ivianuu.essentials.ui.compose.common.SimpleScreen
-import com.ivianuu.essentials.ui.compose.core.ambient
 import com.ivianuu.essentials.ui.compose.coroutines.coroutineScope
 import com.ivianuu.essentials.ui.compose.es.ComposeControllerRoute
 import com.ivianuu.essentials.ui.compose.injekt.inject

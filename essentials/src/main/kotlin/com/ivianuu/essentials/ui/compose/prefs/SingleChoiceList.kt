@@ -21,13 +21,13 @@ import androidx.compose.Immutable
 import androidx.compose.Pivotal
 import androidx.ui.core.Text
 import androidx.ui.graphics.Image
+import androidx.ui.res.stringResource
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.store.Box
 import com.ivianuu.essentials.ui.compose.common.asIconComposable
 import com.ivianuu.essentials.ui.compose.common.asTextComposable
 import com.ivianuu.essentials.ui.compose.dialog.DialogCloseButton
 import com.ivianuu.essentials.ui.compose.dialog.SingleChoiceListDialog
-import com.ivianuu.essentials.ui.compose.resources.stringResource
 
 @Composable
 fun <T> SingleChoiceListPreference(

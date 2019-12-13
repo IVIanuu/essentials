@@ -19,6 +19,7 @@ package com.ivianuu.essentials.sample.ui
 import android.content.Intent
 import android.provider.MediaStore
 import androidx.compose.Composable
+import androidx.compose.remember
 import androidx.ui.core.Draw
 import androidx.ui.core.Opacity
 import androidx.ui.core.PxSize
@@ -39,8 +40,6 @@ import com.ivianuu.essentials.apps.ui.IntentAppFilter
 import com.ivianuu.essentials.twilight.TwilightSettingsRoute
 import com.ivianuu.essentials.ui.compose.common.navigateOnClick
 import com.ivianuu.essentials.ui.compose.common.scrolling.ScrollableList
-import com.ivianuu.essentials.ui.compose.core.invoke
-import com.ivianuu.essentials.ui.compose.core.remember
 import com.ivianuu.essentials.ui.compose.es.ComposeControllerRoute
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.compose.layout.Column
@@ -132,7 +131,7 @@ private fun ColorAvatar(color: Color) {
 private fun HomeDivider() {
     Padding(left = 72.dp) {
         Opacity(0.12f) {
-            Divider(color = (MaterialTheme.colors()().onSurface))
+            Divider(color = (MaterialTheme.colors().onSurface))
         }
     }
 }

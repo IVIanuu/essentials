@@ -20,12 +20,12 @@ import androidx.compose.Composable
 import androidx.compose.Pivotal
 import androidx.ui.core.Text
 import androidx.ui.material.RadioButton
+import androidx.ui.res.stringResource
 import com.ivianuu.essentials.ui.compose.box.unfoldBox
 import com.ivianuu.essentials.ui.compose.common.ListScreen
 import com.ivianuu.essentials.ui.compose.es.ComposeControllerRoute
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.compose.material.SimpleListItem
-import com.ivianuu.essentials.ui.compose.resources.stringResource
 import com.ivianuu.essentials.ui.navigation.director.defaultControllerRouteOptionsOrNull
 
 val TwilightSettingsRoute =

@@ -19,6 +19,10 @@ package com.ivianuu.essentials.ui.compose.material
 import androidx.compose.Ambient
 import androidx.compose.Composable
 import androidx.compose.State
+import androidx.compose.ambient
+import androidx.compose.key
+import androidx.compose.remember
+import androidx.compose.state
 import androidx.ui.core.Text
 import androidx.ui.core.WithConstraints
 import androidx.ui.core.coerceIn
@@ -33,11 +37,6 @@ import androidx.ui.layout.DpConstraints
 import androidx.ui.layout.EdgeInsets
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.ripple.Ripple
-import com.ivianuu.essentials.ui.compose.core.ambient
-import com.ivianuu.essentials.ui.compose.core.invoke
-import com.ivianuu.essentials.ui.compose.core.key
-import com.ivianuu.essentials.ui.compose.core.remember
-import com.ivianuu.essentials.ui.compose.core.state
 import com.ivianuu.essentials.ui.compose.core.withDensity
 import com.ivianuu.essentials.ui.compose.layout.Column
 import com.ivianuu.essentials.ui.compose.layout.CrossAxisAlignment
@@ -48,7 +47,7 @@ import com.ivianuu.essentials.ui.compose.layout.SwapperController
 
 @Composable
 fun <T> BottomNavigationBar(
-    color: Color = MaterialTheme.colors()().primary,
+    color: Color = MaterialTheme.colors().primary,
     item: @Composable() (Int, T) -> Unit
 ) {
     val bottomNavigationController = ambientBottomNavigationController<T>()
@@ -64,7 +63,7 @@ fun <T> BottomNavigationBar(
 fun <T> BottomNavigationBar(
     items: List<T>,
     selectedIndex: Int,
-    color: Color = MaterialTheme.colors()().primary,
+    color: Color = MaterialTheme.colors().primary,
     item: @Composable() (Int, T) -> Unit
 ) {
     EsSurface(color = color, elevation = BottomNavigationBarElevation) {
@@ -145,7 +144,7 @@ fun BottomNavigationBarItem(
                     val iconStyle = currentIconStyle().copy(color = tint)
                     Icon(image = icon, style = iconStyle)
 
-                    val textStyle = MaterialTheme.typography()().caption.copy(color = tint)
+                    val textStyle = MaterialTheme.typography().caption.copy(color = tint)
                     Text(text = text, style = textStyle)
                 }
             }

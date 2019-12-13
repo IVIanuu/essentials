@@ -20,6 +20,7 @@ import androidx.animation.AnimationBuilder
 import androidx.animation.AnimationEndReason
 import androidx.animation.ExponentialDecay
 import androidx.compose.Composable
+import androidx.compose.remember
 import androidx.ui.core.Direction
 import androidx.ui.core.Px
 import androidx.ui.core.PxPosition
@@ -33,7 +34,6 @@ import androidx.ui.foundation.animation.FlingConfig
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.compose.common.framed
 import com.ivianuu.essentials.ui.compose.core.Axis
-import com.ivianuu.essentials.ui.compose.core.remember
 
 // todo maybe merge with original
 // todo reversed option

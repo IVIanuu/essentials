@@ -21,11 +21,11 @@ import androidx.compose.Composable
 import androidx.compose.Immutable
 import androidx.compose.Observe
 import androidx.compose.frames.modelListOf
+import androidx.compose.key
 import androidx.ui.core.Layout
 import androidx.ui.core.ParentData
 import androidx.ui.core.PxPosition
 import androidx.ui.core.tightMax
-import com.ivianuu.essentials.ui.compose.core.key
 import java.util.UUID
 
 class Overlay(initialEntries: List<OverlayEntry> = emptyList()) {

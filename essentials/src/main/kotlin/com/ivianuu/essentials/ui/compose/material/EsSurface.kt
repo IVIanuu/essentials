@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.ui.compose.material
 
 import androidx.compose.Composable
-import androidx.compose.unaryPlus
 import androidx.ui.core.Dp
 import androidx.ui.core.Modifier
 import androidx.ui.core.dp
@@ -28,14 +27,13 @@ import androidx.ui.graphics.Color
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.contentColorFor
 import androidx.ui.material.surface.Surface
-import com.ivianuu.essentials.ui.compose.core.invoke
 
 @Composable
 fun EsSurface(
     modifier: Modifier = Modifier.None,
     shape: Shape = RectangleShape,
-    color: Color = (+MaterialTheme.colors()).surface,
-    contentColor: Color = MaterialTheme.colors()().contentColorFor(color) ?: contentColorFor(color),
+    color: Color = MaterialTheme.colors().surface,
+    contentColor: Color = MaterialTheme.colors().contentColorFor(color) ?: contentColorFor(color),
     border: Border? = null,
     elevation: Dp = 0.dp,
     children: @Composable() () -> Unit

@@ -24,7 +24,6 @@ import androidx.ui.core.dp
 import androidx.ui.layout.Container
 import androidx.ui.layout.Padding
 import androidx.ui.material.MaterialTheme
-import com.ivianuu.essentials.ui.compose.core.invoke
 
 @Composable
 fun Subheader(text: String) {
@@ -39,8 +38,8 @@ fun Subheader(text: @Composable() () -> Unit) {
         alignment = Alignment.CenterLeft
     ) {
         Padding(left = 16.dp, right = 16.dp) {
-            val textStyle = MaterialTheme.typography()().body2.copy(
-                color = MaterialTheme.colors()().secondary
+            val textStyle = MaterialTheme.typography().body2.copy(
+                color = MaterialTheme.colors().secondary
             )
             CurrentTextStyleProvider(value = textStyle, children = text)
         }

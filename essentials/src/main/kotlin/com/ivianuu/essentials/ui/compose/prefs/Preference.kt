@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.ui.compose.prefs
 
 import androidx.compose.Composable
+import androidx.compose.remember
 import androidx.ui.core.Opacity
 import androidx.ui.graphics.Image
 import com.ivianuu.essentials.store.Box
@@ -24,7 +25,6 @@ import com.ivianuu.essentials.ui.compose.box.unfoldBox
 import com.ivianuu.essentials.ui.compose.common.asIconComposable
 import com.ivianuu.essentials.ui.compose.common.asTextComposable
 import com.ivianuu.essentials.ui.compose.common.framed
-import com.ivianuu.essentials.ui.compose.core.remember
 import com.ivianuu.essentials.ui.compose.material.SimpleListItem
 
 @Composable

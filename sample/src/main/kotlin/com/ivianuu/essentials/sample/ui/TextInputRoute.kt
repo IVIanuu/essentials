@@ -16,6 +16,8 @@
 
 package com.ivianuu.essentials.sample.ui
 
+import androidx.compose.onActive
+import androidx.compose.remember
 import androidx.ui.core.Alignment
 import androidx.ui.core.Opacity
 import androidx.ui.core.Text
@@ -31,10 +33,7 @@ import com.ivianuu.essentials.ui.compose.common.hideKeyboard
 import com.ivianuu.essentials.ui.compose.common.scrolling.ScrollPosition
 import com.ivianuu.essentials.ui.compose.common.scrolling.Scroller
 import com.ivianuu.essentials.ui.compose.common.showKeyboard
-import com.ivianuu.essentials.ui.compose.core.invoke
-import com.ivianuu.essentials.ui.compose.core.onActive
 import com.ivianuu.essentials.ui.compose.core.ref
-import com.ivianuu.essentials.ui.compose.core.remember
 import com.ivianuu.essentials.ui.compose.es.ComposeControllerRoute
 import com.ivianuu.essentials.ui.compose.layout.Column
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
@@ -73,7 +72,7 @@ val TextInputRoute = ComposeControllerRoute(
                                     Opacity(0.5f) {
                                         Text(
                                             text = "Search..",
-                                            style = MaterialTheme.typography()().subtitle1
+                                            style = MaterialTheme.typography().subtitle1
                                         )
                                     }
                                 }
@@ -81,7 +80,7 @@ val TextInputRoute = ComposeControllerRoute(
                                     value = state.inputValue,
                                     onValueChange = { state.inputValue = it },
                                     focusIdentifier = "id",
-                                    textStyle = MaterialTheme.typography()().subtitle1
+                                    textStyle = MaterialTheme.typography().subtitle1
                                 )
                             }
                         }

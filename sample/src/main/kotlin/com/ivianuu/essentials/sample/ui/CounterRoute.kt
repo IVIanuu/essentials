@@ -16,13 +16,12 @@
 
 package com.ivianuu.essentials.sample.ui
 
+import androidx.compose.state
 import androidx.ui.core.Text
 import androidx.ui.core.dp
 import androidx.ui.layout.Center
 import androidx.ui.material.FloatingActionButton
 import androidx.ui.material.MaterialTheme
-import com.ivianuu.essentials.ui.compose.core.invoke
-import com.ivianuu.essentials.ui.compose.core.state
 import com.ivianuu.essentials.ui.compose.es.ComposeControllerRoute
 import com.ivianuu.essentials.ui.compose.layout.Column
 import com.ivianuu.essentials.ui.compose.layout.CrossAxisAlignment
@@ -44,7 +43,7 @@ val CounterRoute = ComposeControllerRoute {
 
                     Text(
                         text = "Count: $count",
-                        style = MaterialTheme.typography()().h3
+                        style = MaterialTheme.typography().h3
                     )
 
                     HeightSpacer(8.dp)

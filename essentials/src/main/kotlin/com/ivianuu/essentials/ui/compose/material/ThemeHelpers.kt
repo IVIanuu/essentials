@@ -17,7 +17,7 @@
 package com.ivianuu.essentials.ui.compose.material
 
 import androidx.compose.Composable
-import androidx.compose.effectOf
+import androidx.compose.remember
 import androidx.ui.foundation.ProvideContentColor
 import androidx.ui.foundation.contentColor
 import androidx.ui.graphics.Color
@@ -28,13 +28,11 @@ import androidx.ui.material.ProvideEmphasis
 import androidx.ui.material.ripple.CurrentRippleTheme
 import androidx.ui.material.ripple.DefaultRippleEffectFactory
 import androidx.ui.material.ripple.RippleTheme
-import com.ivianuu.essentials.ui.compose.core.invoke
-import com.ivianuu.essentials.ui.compose.core.remember
 import com.ivianuu.essentials.util.isDark
 
 @Composable
 fun contentColorFor(color: Color): Color {
-    var result = with(MaterialTheme.colors()()) {
+    var result = with(MaterialTheme.colors()) {
         when (color) {
             primary -> onPrimary
             primaryVariant -> onPrimary
@@ -83,8 +81,8 @@ fun RippleColorProvider(
     val theme = remember(color) {
         RippleTheme(
             factory = DefaultRippleEffectFactory,
-            defaultColor = effectOf { color },
-            opacity = effectOf { color.alpha }
+            defaultColor = { color },
+            opacity = { color.alpha }
         )
     }
     CurrentRippleTheme.Provider(value = theme, children = children)

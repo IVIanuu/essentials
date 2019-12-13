@@ -19,6 +19,8 @@ package com.ivianuu.essentials.ui.compose.material
 import androidx.compose.Ambient
 import androidx.compose.Composable
 import androidx.compose.State
+import androidx.compose.remember
+import androidx.compose.state
 import androidx.ui.core.Constraints
 import androidx.ui.core.IntPx
 import androidx.ui.core.Layout
@@ -27,8 +29,6 @@ import androidx.ui.core.dp
 import androidx.ui.core.looseMin
 import androidx.ui.material.DrawerState
 import androidx.ui.material.surface.Surface
-import com.ivianuu.essentials.ui.compose.core.remember
-import com.ivianuu.essentials.ui.compose.core.state
 import com.ivianuu.essentials.ui.compose.core.withDensity
 import com.ivianuu.essentials.ui.compose.layout.Expand
 

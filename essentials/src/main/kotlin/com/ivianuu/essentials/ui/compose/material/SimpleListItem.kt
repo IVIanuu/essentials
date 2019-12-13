@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.ui.compose.material
 
 import androidx.compose.Composable
+import androidx.compose.ambient
 import androidx.ui.core.Alignment
 import androidx.ui.core.CurrentTextStyleProvider
 import androidx.ui.core.IntPx
@@ -35,8 +36,6 @@ import androidx.ui.material.MaterialTheme
 import androidx.ui.material.ripple.Ripple
 import com.ivianuu.essentials.ui.compose.common.asIconComposable
 import com.ivianuu.essentials.ui.compose.common.asTextComposable
-import com.ivianuu.essentials.ui.compose.core.ambient
-import com.ivianuu.essentials.ui.compose.core.invoke
 import com.ivianuu.essentials.ui.compose.layout.Column
 import com.ivianuu.essentials.ui.compose.layout.CrossAxisAlignment
 import com.ivianuu.essentials.ui.compose.layout.Row
@@ -75,12 +74,12 @@ fun SimpleListItem(
     onLongClick: (() -> Unit)? = null
 ) {
     val styledTitle: (@Composable() () -> Unit)? = if (title == null) null else ({
-        CurrentTextStyleProvider(value = MaterialTheme.typography()().subtitle1) {
+        CurrentTextStyleProvider(value = MaterialTheme.typography().subtitle1) {
             EmphasisProvider(emphasis = ambient(EmphasisAmbient).high, children = title)
         }
     })
     val styledSubtitle: (@Composable() () -> Unit)? = if (subtitle == null) null else ({
-        CurrentTextStyleProvider(value = MaterialTheme.typography()().body2) {
+        CurrentTextStyleProvider(value = MaterialTheme.typography().body2) {
             EmphasisProvider(emphasis = ambient(EmphasisAmbient).medium, children = subtitle)
         }
     })

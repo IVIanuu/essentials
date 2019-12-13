@@ -18,6 +18,7 @@ package com.ivianuu.essentials.ui.compose.material
 
 import androidx.compose.Composable
 import androidx.compose.View
+import androidx.compose.key
 import androidx.ui.core.Alignment
 import androidx.ui.core.IntPx
 import androidx.ui.core.IntPxPosition
@@ -36,7 +37,6 @@ import androidx.ui.layout.Padding
 import androidx.ui.layout.Wrap
 import androidx.ui.material.ripple.Ripple
 import androidx.ui.material.surface.Card
-import com.ivianuu.essentials.ui.compose.core.key
 import com.ivianuu.essentials.ui.compose.core.ref
 import com.ivianuu.essentials.ui.compose.es.ComposeControllerRoute
 import com.ivianuu.essentials.ui.compose.injekt.inject

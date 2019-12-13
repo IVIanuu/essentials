@@ -16,6 +16,9 @@
 
 package com.ivianuu.essentials.sample.ui
 
+import androidx.compose.onCommit
+import androidx.compose.onDispose
+import androidx.compose.state
 import androidx.ui.core.Alignment
 import androidx.ui.core.Text
 import androidx.ui.layout.Center
@@ -27,10 +30,6 @@ import com.ivianuu.essentials.hidenavbar.NavBarConfig
 import com.ivianuu.essentials.hidenavbar.NavBarController
 import com.ivianuu.essentials.securesettings.SecureSettingsHelper
 import com.ivianuu.essentials.securesettings.SecureSettingsRoute
-import com.ivianuu.essentials.ui.compose.core.invoke
-import com.ivianuu.essentials.ui.compose.core.onCommit
-import com.ivianuu.essentials.ui.compose.core.onDispose
-import com.ivianuu.essentials.ui.compose.core.state
 import com.ivianuu.essentials.ui.compose.coroutines.coroutineScope
 import com.ivianuu.essentials.ui.compose.es.ComposeControllerRoute
 import com.ivianuu.essentials.ui.compose.injekt.inject
@@ -89,7 +88,7 @@ val NavBarRoute = ComposeControllerRoute(
                             } else {
                                 "Unknown nav bar state"
                             },
-                            style = MaterialTheme.typography()().h3
+                            style = MaterialTheme.typography().h3
                         )
                     }
 
