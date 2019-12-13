@@ -28,7 +28,7 @@ class PrefBoxFactory(
     private val prefsPath: String
 ) {
 
-    private val boxes = ConcurrentHashMap<String, Box<*>>()
+    internal val boxes = ConcurrentHashMap<String, Box<*>>()
 
     fun <T> box(
         name: String,

@@ -47,6 +47,8 @@ class SharedPreferencesImporter(
                 is String -> boxFactory.string(key).set(value)
                 is Set<*> -> boxFactory.stringSet(key).set(value as Set<String>)
             }
+
+            boxFactory.boxes -= key
         }
 
         prefsFile.delete()
@@ -59,6 +61,7 @@ class SharedPreferencesImporter(
             val sharedPreferences = context.getSharedPreferences(name, Context.MODE_PRIVATE)
             val box = boxFactory.stringMap(name)
             box.set(sharedPreferences.all as Map<String, String>)
+            boxFactory.boxes -= name
             prefsFile.delete()
         }
 }
