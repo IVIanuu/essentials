@@ -18,48 +18,38 @@ package com.ivianuu.essentials.ui.compose.common
 
 import androidx.compose.Composable
 import androidx.compose.State
-import androidx.compose.onDispose
 import androidx.compose.state
 import androidx.lifecycle.ViewModel
+import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.compose.viewmodel.viewModel
 import com.ivianuu.essentials.util.sourceLocation
 
 @Composable
-inline fun <T> retained(
-    keepAcrossCompositions: Boolean = false,
-    noinline init: () -> T
-): T = retained(
+inline fun <T> retained(noinline init: () -> T): T = retained(
     key = sourceLocation(),
-    keepAcrossCompositions = keepAcrossCompositions,
     init = init
 )
 
 @Composable
 fun <T> retained(
     key: Any,
-    keepAcrossCompositions: Boolean = false,
     init: () -> T
-): T = retainedState(key, keepAcrossCompositions, init).value
+): T = retainedState(key, init).value
 
 @Composable
 inline fun <T> retainedState(
-    keepAcrossCompositions: Boolean = false,
     noinline init: () -> T
 ): State<T> = retainedState(
     key = sourceLocation(),
-    keepAcrossCompositions = keepAcrossCompositions,
     init = init
 )
 
 @Composable
 fun <T> retainedState(
     key: Any,
-    keepAcrossCompositions: Boolean = false,
     init: () -> T
 ): State<T> {
-    val viewModel = viewModel<RetainedStateViewModel>(
-        key = "RetainedState:${key.hashCode()}"
-    )
+    val viewModel = viewModel<RetainedStateViewModel>()
 
     val state = state {
         if (viewModel.values.containsKey(key)) {
@@ -69,13 +59,14 @@ fun <T> retainedState(
         }
     }
 
-    if (!keepAcrossCompositions) {
-        onDispose {
-            viewModel.values.remove(key)
-        }
+    onFinalDispose {
+        d { "$key remove state ${state.value}" }
+        viewModel.values -= key
     }
 
     viewModel.values[key] = state.value
+
+    d { "$key return state ${state.value}" }
 
     return state
 }

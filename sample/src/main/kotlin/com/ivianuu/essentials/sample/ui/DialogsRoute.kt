@@ -23,6 +23,7 @@ import androidx.ui.core.dp
 import androidx.ui.material.Button
 import androidx.ui.material.MaterialTheme
 import com.ivianuu.essentials.sample.R
+import com.ivianuu.essentials.ui.compose.common.retainedState
 import com.ivianuu.essentials.ui.compose.common.scrolling.Scroller
 import com.ivianuu.essentials.ui.compose.dialog.AlertDialogButtonLayout
 import com.ivianuu.essentials.ui.compose.dialog.ColorPickerDialog
@@ -48,10 +49,14 @@ import com.ivianuu.essentials.ui.compose.resources.drawableResource
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.director.ControllerRouteOptions
 import com.ivianuu.essentials.ui.navigation.director.fade
+import com.ivianuu.essentials.util.Clock
 
 val DialogsRoute = ComposeControllerRoute(
     options = ControllerRouteOptions().fade()
 ) {
+    val clock = inject<Clock>()
+    val myState = retainedState { clock.currentTimeMillis }
+
     Scaffold(
         topAppBar = { EsTopAppBar("Dialogs") },
         body = {

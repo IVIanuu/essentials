@@ -20,7 +20,6 @@ import android.os.Parcelable
 import androidx.compose.Composable
 import androidx.compose.State
 import androidx.compose.ambient
-import androidx.compose.onDispose
 import androidx.compose.state
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.SavedStateViewModelFactory
@@ -33,35 +32,29 @@ import com.ivianuu.essentials.util.sourceLocation
 
 @Composable
 inline fun <T : Parcelable> parceled(
-    keepAcrossCompositions: Boolean = false,
     noinline init: () -> T
 ): T = parceled(
-    key = sourceLocation().hashCode().toString(),
-    keepAcrossCompositions = keepAcrossCompositions,
+    key = sourceLocation().toString(),
     init = init
 )
 
 @Composable
 fun <T : Parcelable> parceled(
     key: String,
-    keepAcrossCompositions: Boolean = false,
     init: () -> T
-): T = parceledState(key, keepAcrossCompositions, init).value
+): T = parceledState(key, init).value
 
 @Composable
 inline fun <T : Parcelable> parceledState(
-    keepAcrossCompositions: Boolean = false,
     noinline init: () -> T
 ): State<T> = parceledState(
-    key = sourceLocation().hashCode().toString(),
-    keepAcrossCompositions = keepAcrossCompositions,
+    key = sourceLocation().toString(),
     init = init
 )
 
 @Composable
 fun <T : Parcelable> parceledState(
     key: String,
-    keepAcrossCompositions: Boolean = false,
     init: () -> T
 ): State<T> {
     val factory = SavedStateViewModelFactory(
@@ -80,11 +73,7 @@ fun <T : Parcelable> parceledState(
         }
     }
 
-    if (!keepAcrossCompositions) {
-        onDispose {
-            viewModel.handle.remove<T>(key)
-        }
-    }
+    onFinalDispose { viewModel.handle.remove<T>(key) }
 
     viewModel.handle.set(key, state.value)
 
