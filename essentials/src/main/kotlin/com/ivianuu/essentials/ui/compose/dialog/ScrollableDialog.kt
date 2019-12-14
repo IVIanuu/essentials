@@ -20,7 +20,8 @@ import androidx.compose.Composable
 import androidx.compose.remember
 import androidx.ui.foundation.ScrollerPosition
 import com.ivianuu.essentials.ui.compose.core.Axis
-import com.ivianuu.essentials.ui.compose.layout.ScrollableList
+import com.ivianuu.essentials.ui.compose.layout.Column
+import com.ivianuu.essentials.ui.compose.layout.Scroller
 
 @Composable
 fun ScrollableDialog(
@@ -43,12 +44,15 @@ fun ScrollableDialog(
         applyContentPadding = false,
         buttonLayout = buttonLayout,
         content = {
-            ScrollableList(
-                scrollerPosition = scrollerPosition,
+            Scroller(
                 direction = scrollDirection,
-                enabled = scrollingEnabled,
-                children = listContent
-            )
+                scrollerPosition = scrollerPosition,
+                isScrollable = scrollingEnabled
+            ) {
+                Column {
+                    listContent()
+                }
+            }
         },
         positiveButton = positiveButton,
         negativeButton = negativeButton,
