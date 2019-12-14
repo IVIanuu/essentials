@@ -35,13 +35,13 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlin.coroutines.CoroutineContext
-import kotlin.coroutines.EmptyCoroutineContext
 
 /**
  * State view model
@@ -73,10 +73,12 @@ abstract class MvRxViewModel<S>(initialState: S) : EsViewModel() {
     }
 
     protected fun subscribe(consumer: suspend (S) -> Unit): Job =
-        flow.onEach(consumer).launchIn(viewModelScope)
+        flow.onEach(consumer)
+            .flowOn(Dispatchers.Default)
+            .launchIn(viewModelScope)
 
     protected fun <V> Deferred<V>.execute(
-        context: CoroutineContext = EmptyCoroutineContext,
+        context: CoroutineContext = Dispatchers.Default,
         start: CoroutineStart = CoroutineStart.DEFAULT,
         reducer: S.(Async<V>) -> S
     ): Job = viewModelScope.execute(
@@ -91,11 +93,12 @@ abstract class MvRxViewModel<S>(initialState: S) : EsViewModel() {
         return this
             .map { it.asSuccess() }
             .catch { it.asFail<V>() }
+            .flowOn(Dispatchers.Default)
             .collect { setState { reducer(it) } }
     }
 
     protected fun <V> Flow<V>.executeIn(scope: CoroutineScope, reducer: S.(Async<V>) -> S): Job {
-        return scope.launch {
+        return scope.launch(Dispatchers.Default) {
             setState { reducer(Loading()) }
             this@executeIn
                 .map { it.asSuccess() }
@@ -105,7 +108,7 @@ abstract class MvRxViewModel<S>(initialState: S) : EsViewModel() {
     }
 
     protected fun <V> CoroutineScope.execute(
-        context: CoroutineContext = EmptyCoroutineContext,
+        context: CoroutineContext = Dispatchers.Default,
         start: CoroutineStart = CoroutineStart.DEFAULT,
         block: suspend () -> V,
         reducer: S.(Async<V>) -> S
