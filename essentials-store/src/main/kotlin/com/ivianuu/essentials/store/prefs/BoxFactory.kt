@@ -16,7 +16,6 @@
 
 package com.ivianuu.essentials.store.prefs
 
-import android.content.Context
 import com.ivianuu.essentials.store.Box
 import com.ivianuu.essentials.store.DiskBox
 import kotlinx.coroutines.CoroutineDispatcher
@@ -24,7 +23,6 @@ import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicBoolean
 
 class PrefBoxFactory(
-    private val context: Context,
     private val dispatcher: CoroutineDispatcher,
     private val prefsPath: String
 ) {
@@ -42,7 +40,6 @@ class PrefBoxFactory(
         if (box?.isDisposed == true) box = null
         if (box == null) {
             box = DiskBox(
-                context = context,
                 path = "$prefsPath/$name",
                 serializer = serializer,
                 defaultValue = defaultValue,

@@ -33,7 +33,6 @@ annotation class PrefsPath {
 val EsStoreModule = Module {
     single {
         PrefBoxFactory(
-            context = get(name = ForApplication),
             dispatcher = get<AppDispatchers>().io,
             prefsPath = get(name = PrefsPath)
         )

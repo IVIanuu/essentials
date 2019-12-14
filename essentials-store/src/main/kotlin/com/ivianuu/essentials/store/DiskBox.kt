@@ -16,7 +16,6 @@
 
 package com.ivianuu.essentials.store
 
-import android.content.Context
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
@@ -48,14 +47,12 @@ interface DiskBox<T> : Box<T> {
 }
 
 fun <T> DiskBox(
-    context: Context,
     path: String,
     serializer: DiskBox.Serializer<T>,
     defaultValue: T,
     dispatcher: CoroutineDispatcher? = null
 ): DiskBox<T> =
     DiskBoxImpl(
-        context = context,
         path = path,
         defaultValue = defaultValue,
         serializer = serializer,
@@ -63,7 +60,6 @@ fun <T> DiskBox(
     )
 
 internal class DiskBoxImpl<T>(
-    context: Context,
     override val path: String,
     override val defaultValue: T,
     private val serializer: DiskBox.Serializer<T>,
@@ -99,7 +95,7 @@ internal class DiskBoxImpl<T>(
 
     private val multiInstanceHelper =
         MultiInstanceHelper(coroutineScope, path) {
-            d { "$path -> inter process change force refetch" }
+            d { "$path -> multi instance change force refetch" }
             cachedValue.set(this) // force refetching the value
             changeNotifier.offer(Unit)
         }
