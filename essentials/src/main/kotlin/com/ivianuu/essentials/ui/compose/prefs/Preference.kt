@@ -30,7 +30,7 @@ import com.ivianuu.essentials.ui.compose.material.SimpleListItem
 @Composable
 fun <T> ValueController(
     box: Box<T>,
-    onChangeRequest: (T) -> Boolean = { true }
+    canSetValue: (T) -> Boolean = { true }
 ): ValueController<T> {
     val wrapper = unfoldBox(box)
     return remember<ValueController<T>> {
@@ -39,8 +39,10 @@ fun <T> ValueController(
                 get() = wrapper.value
 
             override fun setValue(value: T) {
-                if (onChangeRequest(value)) wrapper.value = value
+                if (canSetValue(value)) wrapper.value = value
             }
+
+            override fun canSetValue(value: T): Boolean = canSetValue.invoke(value)
         }
     }
 }
@@ -100,10 +102,12 @@ fun PreferenceLayout(
 interface ValueController<T> {
     val currentValue: T
     fun setValue(value: T)
+    fun canSetValue(value: T): Boolean
 }
 
 fun <T> ValueController(
     value: T,
+    canSetValue: (T) -> Boolean = { true },
     onValueChange: (T) -> Unit
 ) = object : ValueController<T> {
     override val currentValue: T
@@ -112,6 +116,8 @@ fun <T> ValueController(
     override fun setValue(value: T) {
         onValueChange(value)
     }
+
+    override fun canSetValue(value: T): Boolean = canSetValue.invoke(value)
 }
 
 class PreferenceContext<T> {
@@ -119,7 +125,6 @@ class PreferenceContext<T> {
     internal lateinit var valueController: ValueController<T>
 
     val currentValue: T get() = valueController.currentValue
-
 
     var dependenciesOk by framed(false)
         internal set

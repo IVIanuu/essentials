@@ -52,7 +52,6 @@ import com.ivianuu.essentials.ui.compose.layout.Row
 import com.ivianuu.essentials.ui.compose.layout.ScrollableList
 import com.ivianuu.essentials.ui.compose.layout.SquaredBox
 import com.ivianuu.essentials.ui.compose.layout.SquaredBoxFit
-import com.ivianuu.essentials.ui.compose.layout.WithModifier
 import com.ivianuu.essentials.ui.compose.material.Tab
 import com.ivianuu.essentials.ui.compose.material.TabContent
 import com.ivianuu.essentials.ui.compose.material.TabController
@@ -308,20 +307,19 @@ private fun ColorComponentItem(
                 style = MaterialTheme.typography().subtitle1
             )
 
-            WithModifier(Flexible(flex = 1f)) {
-                val position = remember {
-                    SliderPosition(initial = value)
-                }
-
-                Slider(
-                    position = position,
-                    onValueChange = {
-                        position.value = it
-                        onChanged(it)
-                    },
-                    color = component.color()
-                )
+            val position = remember {
+                SliderPosition(initial = value)
             }
+
+            Slider(
+                position = position,
+                modifier = Flexible(flex = 1f),
+                onValueChange = {
+                    position.value = it
+                    onChanged(it)
+                },
+                color = component.color()
+            )
 
             Text(
                 text = (255 * value).toInt().toString(),

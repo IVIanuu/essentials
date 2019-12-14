@@ -18,7 +18,7 @@ package com.ivianuu.essentials.apps.ui
 
 import androidx.compose.Composable
 import androidx.compose.key
-import androidx.compose.onActive
+import androidx.compose.onCommit
 import androidx.lifecycle.viewModelScope
 import androidx.ui.core.Text
 import androidx.ui.core.dp
@@ -70,7 +70,7 @@ fun CheckableAppsScreen(
             parametersOf(appFilter)
         }
 
-    onActive {
+    onCommit(checkedAppsFlow, onCheckedAppsChanged) {
         viewModel.attach(checkedAppsFlow, onCheckedAppsChanged)
         onDispose { viewModel.detach() }
     }
@@ -148,7 +148,6 @@ internal class CheckableAppsViewModel(
 ) : MvRxViewModel<CheckableAppsState>(CheckableAppsState()) {
 
     private var onCheckedAppsChanged: ((Set<String>) -> Unit)? = null
-
     private val checkedAppsScope = ReusableScope()
     private val checkedApps = BroadcastChannel<Set<String>>(Channel.CONFLATED)
 

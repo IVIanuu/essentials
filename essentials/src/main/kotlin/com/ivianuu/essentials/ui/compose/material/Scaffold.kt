@@ -18,7 +18,6 @@ package com.ivianuu.essentials.ui.compose.material
 
 import androidx.compose.Ambient
 import androidx.compose.Composable
-import androidx.compose.MutableState
 import androidx.compose.State
 import androidx.compose.remember
 import androidx.compose.state
@@ -41,7 +40,7 @@ fun Scaffold(
         body: @Composable() () -> Unit
     ) -> Unit
     )? = null,
-    drawerState: MutableState<DrawerState> = state { DrawerState.Closed },
+    drawerState: State<DrawerState> = state { DrawerState.Closed },
     topAppBar: (@Composable() () -> Unit)? = null,
     body: (@Composable() () -> Unit)? = null,
     bottomBar: (@Composable() () -> Unit)? = null,
@@ -88,7 +87,7 @@ fun Scaffold(
 
 val ScaffoldAmbient = Ambient.of<Scaffold>()
 
-class Scaffold internal constructor(_drawerState: MutableState<DrawerState>) {
+class Scaffold internal constructor(_drawerState: State<DrawerState>) {
 
     var hasTopAppBar = false
         internal set

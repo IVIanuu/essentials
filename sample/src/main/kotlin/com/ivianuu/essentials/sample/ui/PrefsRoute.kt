@@ -96,7 +96,7 @@ val PrefsRoute = ComposeControllerRoute(
                 )
 
                 MultiChoiceListPreference(
-                    box = boxFactory.stringSet("multi_select_list", setOf("A", "B")),
+                    box = boxFactory.stringSet("multi_select_list", setOf("A", "B", "C")),
                     dependencies = dependencies,
                     title = "Multi select list",
                     summary = "This is a multi select list preference",

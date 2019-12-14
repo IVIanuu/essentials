@@ -20,7 +20,6 @@ import androidx.compose.Composable
 import androidx.compose.Pivotal
 import androidx.compose.ambient
 import androidx.compose.remember
-import androidx.compose.state
 import androidx.ui.core.ContextAmbient
 import androidx.ui.core.Text
 import androidx.ui.core.dp
@@ -46,7 +45,6 @@ import com.ivianuu.essentials.util.UnitValueTextProvider
 @Composable
 fun SliderPreference(
     @Pivotal box: Box<Double>,
-    internalValueController: ValueController<Double> = StateValueController(box.defaultValue),
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
     title: String? = null,
@@ -60,7 +58,6 @@ fun SliderPreference(
 ) {
     SliderPreference(
         valueController = ValueController(box),
-        internalValueController = internalValueController,
         enabled = enabled,
         dependencies = dependencies,
         title = title.asTextComposable(),
@@ -76,7 +73,6 @@ fun SliderPreference(
 @Composable
 fun SliderPreference(
     valueController: ValueController<Double>,
-    internalValueController: ValueController<Double> = StateValueController(valueController.currentValue),
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
     title: @Composable() (() -> Unit)? = null,
@@ -90,7 +86,6 @@ fun SliderPreference(
 ) {
     SliderPreference(
         valueController = valueController,
-        internalValueController = internalValueController,
         toFloat = { it.toFloat() },
         fromFloat = { it.toDouble() },
         enabled = enabled,
@@ -108,7 +103,6 @@ fun SliderPreference(
 @Composable
 fun SliderPreference(
     @Pivotal box: Box<Float>,
-    internalValueController: ValueController<Float> = StateValueController(box.defaultValue),
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
     title: String? = null,
@@ -122,7 +116,6 @@ fun SliderPreference(
 ) {
     SliderPreference(
         valueController = ValueController(box),
-        internalValueController = internalValueController,
         enabled = enabled,
         dependencies = dependencies,
         title = title.asTextComposable(),
@@ -138,7 +131,6 @@ fun SliderPreference(
 @Composable
 fun SliderPreference(
     valueController: ValueController<Float>,
-    internalValueController: ValueController<Float> = StateValueController(valueController.currentValue),
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
     title: @Composable() (() -> Unit)? = null,
@@ -152,7 +144,6 @@ fun SliderPreference(
 ) {
     SliderPreference(
         valueController = valueController,
-        internalValueController = internalValueController,
         toFloat = { it },
         fromFloat = { it },
         enabled = enabled,
@@ -170,7 +161,6 @@ fun SliderPreference(
 @Composable
 fun SliderPreference(
     @Pivotal box: Box<Int>,
-    internalValueController: ValueController<Int> = StateValueController(box.defaultValue),
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
     title: String? = null,
@@ -184,7 +174,6 @@ fun SliderPreference(
 ) {
     SliderPreference(
         valueController = ValueController(box),
-        internalValueController = internalValueController,
         enabled = enabled,
         dependencies = dependencies,
         title = title.asTextComposable(),
@@ -200,7 +189,6 @@ fun SliderPreference(
 @Composable
 fun SliderPreference(
     valueController: ValueController<Int>,
-    internalValueController: ValueController<Int> = StateValueController(valueController.currentValue),
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
     title: @Composable() (() -> Unit)? = null,
@@ -214,7 +202,6 @@ fun SliderPreference(
 ) {
     SliderPreference(
         valueController = valueController,
-        internalValueController = internalValueController,
         toFloat = { it.toFloat() },
         fromFloat = { it.toInt() },
         enabled = enabled,
@@ -232,7 +219,6 @@ fun SliderPreference(
 @Composable
 fun SliderPreference(
     @Pivotal box: Box<Long>,
-    internalValueController: ValueController<Long> = StateValueController(box.defaultValue),
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
     title: String? = null,
@@ -246,7 +232,6 @@ fun SliderPreference(
 ) {
     SliderPreference(
         valueController = ValueController(box),
-        internalValueController = internalValueController,
         enabled = enabled,
         dependencies = dependencies,
         title = title.asTextComposable(),
@@ -262,7 +247,6 @@ fun SliderPreference(
 @Composable
 fun SliderPreference(
     valueController: ValueController<Long>,
-    internalValueController: ValueController<Long> = StateValueController(valueController.currentValue),
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
     title: @Composable() (() -> Unit)? = null,
@@ -276,7 +260,6 @@ fun SliderPreference(
 ) {
     SliderPreference(
         valueController = valueController,
-        internalValueController = internalValueController,
         toFloat = { it.toFloat() },
         fromFloat = { it.toLong() },
         enabled = enabled,
@@ -291,25 +274,8 @@ fun SliderPreference(
 }
 
 @Composable
-fun <T> StateValueController(
-    initial: T,
-    onChangeRequest: (T) -> Boolean = { true }
-): ValueController<T> {
-    val state = state { initial }
-    return object : ValueController<T> {
-        override val currentValue: T
-            get() = state.value
-
-        override fun setValue(value: T) {
-            if (onChangeRequest(value)) state.value = value
-        }
-    }
-}
-
-@Composable
 fun <T : Comparable<T>> SliderPreference(
     valueController: ValueController<T>,
-    internalValueController: ValueController<T> = StateValueController(valueController.currentValue),
     toFloat: (T) -> Float,
     fromFloat: (Float) -> T,
     enabled: Boolean = true,
@@ -339,54 +305,54 @@ fun <T : Comparable<T>> SliderPreference(
                 )
             }
 
-            WithModifier(modifier = LayoutGravity.BottomCenter) {
-                Row(crossAxisAlignment = CrossAxisAlignment.Center) {
-                    WithModifier(modifier = Flexible(1f) + LayoutPadding(left = 8.dp)) {
-                        val position = remember(valueRange, steps) {
-                            val initial = toFloat(context.currentValue)
-                            val floatRange =
-                                toFloat(valueRange.start)..toFloat(valueRange.endInclusive)
-                            if (steps != null) {
-                                SliderPosition(
-                                    initial = initial,
-                                    valueRange = floatRange,
-                                    steps = steps
-                                )
-                            } else {
-                                SliderPosition(
-                                    initial = initial,
-                                    valueRange = floatRange
-                                )
-                            }
-                        }
-
-                        Slider(
-                            position = position,
-                            onValueChange = { newFloatValue ->
-                                if (context.shouldBeEnabled) {
-                                    val newValue = fromFloat(newFloatValue)
-                                    internalValueController.setValue(newValue)
-                                    position.value = toFloat(internalValueController.currentValue)
-                                }
-                            },
-                            onValueChangeEnd = {
-                                if (context.shouldBeEnabled) {
-                                    context.setIfOk(fromFloat(position.value))
-                                }
-                            }
+            Row(
+                modifier = LayoutGravity.BottomCenter,
+                crossAxisAlignment = CrossAxisAlignment.Center
+            ) {
+                val position = remember(valueRange, steps) {
+                    val initial = toFloat(context.currentValue)
+                    val floatRange =
+                        toFloat(valueRange.start)..toFloat(valueRange.endInclusive)
+                    if (steps != null) {
+                        SliderPosition(
+                            initial = initial,
+                            valueRange = floatRange,
+                            steps = steps
+                        )
+                    } else {
+                        SliderPosition(
+                            initial = initial,
+                            valueRange = floatRange
                         )
                     }
+                }
 
-                    if (valueText != null) {
-                        Container(
-                            modifier = Inflexible,
-                            constraints = DpConstraints(
-                                minWidth = 72.dp
-                            ),
-                            padding = EdgeInsets(right = 8.dp)
+                Slider(
+                    position = position,
+                    modifier = Flexible(1f) + LayoutPadding(left = 8.dp),
+                    onValueChange = { newFloatValue ->
+                        if (context.shouldBeEnabled &&
+                            valueController.canSetValue(fromFloat(newFloatValue))
                         ) {
-                            valueText(internalValueController.currentValue)
+                            position.value = newFloatValue
                         }
+                    },
+                    onValueChangeEnd = {
+                        if (context.shouldBeEnabled) {
+                            context.setIfOk(fromFloat(position.value))
+                        }
+                    }
+                )
+
+                if (valueText != null) {
+                    Container(
+                        modifier = Inflexible,
+                        constraints = DpConstraints(
+                            minWidth = 72.dp
+                        ),
+                        padding = EdgeInsets(right = 8.dp)
+                    ) {
+                        valueText(fromFloat(position.value))
                     }
                 }
             }
