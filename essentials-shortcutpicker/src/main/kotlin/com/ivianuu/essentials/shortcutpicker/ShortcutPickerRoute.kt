@@ -129,7 +129,7 @@ internal class ShortcutPickerViewModel(
                             resources.getIdentifier(iconResource.resourceName, null, null)
                         resources.getDrawable(iconResId).toImage()
                     }
-                    else -> error("no icon provided")
+                    else -> error("no icon provided $shortcutRequestResult")
                 }
 
                 val shortcut = Shortcut(

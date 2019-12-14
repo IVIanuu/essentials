@@ -36,6 +36,7 @@ import androidx.ui.material.MaterialTheme
 import com.ivianuu.essentials.about.AboutRoute
 import com.ivianuu.essentials.apps.ui.AppPickerRoute
 import com.ivianuu.essentials.apps.ui.IntentAppFilter
+import com.ivianuu.essentials.shortcutpicker.ShortcutPickerRoute
 import com.ivianuu.essentials.twilight.TwilightSettingsRoute
 import com.ivianuu.essentials.ui.compose.common.navigateOnClick
 import com.ivianuu.essentials.ui.compose.es.ComposeControllerRoute
@@ -208,6 +209,11 @@ enum class HomeItem(
         title = "Scaffold",
         color = Color.Green,
         route = { ScaffoldRoute }
+    ),
+    ShortcutPicker(
+        title = "Shortcut picker",
+        color = Color.Green,
+        route = { ShortcutPickerRoute() }
     ),
     Tabs(
         title = "Tabs",
