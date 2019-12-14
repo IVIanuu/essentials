@@ -28,7 +28,6 @@ import com.ivianuu.essentials.ui.compose.common.asTextComposable
 @Composable
 fun RadioButtonPreference(
     @Pivotal box: Box<Boolean>,
-    onChange: ((Boolean) -> Boolean)? = null,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
     title: String? = null,
@@ -37,7 +36,6 @@ fun RadioButtonPreference(
 ) {
     RadioButtonPreference(
         valueController = ValueController(box),
-        onChange = onChange,
         enabled = enabled,
         dependencies = dependencies,
         title = title.asTextComposable(),
@@ -49,16 +47,14 @@ fun RadioButtonPreference(
 @Composable
 fun RadioButtonPreference(
     valueController: ValueController<Boolean>,
-    onChange: ((Boolean) -> Boolean)? = null,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
-    title: (@Composable() () -> Unit)? = null,
-    summary: (@Composable() () -> Unit)? = null,
-    leading: (@Composable() () -> Unit)? = null
+    title: @Composable() (() -> Unit)? = null,
+    summary: @Composable() (() -> Unit)? = null,
+    leading: @Composable() (() -> Unit)? = null
 ) {
     PreferenceWrapper(
         valueController = valueController,
-        onChange = onChange,
         enabled = enabled,
         dependencies = dependencies
     ) { context ->

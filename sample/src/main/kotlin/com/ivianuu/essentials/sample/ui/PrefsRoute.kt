@@ -65,58 +65,58 @@ val PrefsRoute = ComposeControllerRoute(
 
                 CheckboxPreference(
                     box = boxFactory.boolean("checkbox"),
+                    dependencies = dependencies,
                     title = "Checkbox",
-                    summary = "This is a checkbox preference",
-                    dependencies = dependencies
+                    summary = "This is a checkbox preference"
                 )
 
                 RadioButtonPreference(
                     box = boxFactory.boolean("radio_button"),
+                    dependencies = dependencies,
                     title = "Radio Button",
-                    summary = "This is a radio button preference",
-                    dependencies = dependencies
+                    summary = "This is a radio button preference"
                 )
 
                 SliderPreference(
                     box = boxFactory.int("slider"),
+                    dependencies = dependencies,
                     title = "Slider",
                     summary = "This is a slider preference",
-                    valueText = unitValueTextProvider(UnitValueTextProvider.Unit.Dp),
-                    dependencies = dependencies
+                    valueText = unitValueTextProvider(UnitValueTextProvider.Unit.Dp)
                 )
 
                 PreferenceSubheader(text = "Dialogs", dependencies = dependencies)
 
                 TextInputPreference(
                     box = boxFactory.string("text_input"),
+                    dependencies = dependencies,
                     title = "Text input",
                     summary = "This is a text input preference",
-                    allowEmpty = false,
-                    dependencies = dependencies
+                    allowEmpty = false
                 )
 
                 MultiChoiceListPreference(
                     box = boxFactory.stringSet("multi_select_list", setOf("A", "B")),
+                    dependencies = dependencies,
+                    title = "Multi select list",
+                    summary = "This is a multi select list preference",
                     items = listOf(
                         MultiChoiceListPreference.Item("A", "A"),
                         MultiChoiceListPreference.Item("B", "B"),
                         MultiChoiceListPreference.Item("C", "C")
-                    ),
-                    title = "Multi select list",
-                    summary = "This is a multi select list preference",
-                    dependencies = dependencies
+                    )
                 )
 
                 SingleChoiceListPreference(
                     box = boxFactory.string("single_item_list", "C"),
+                    dependencies = dependencies,
+                    title = "Single item list",
+                    summary = "This is a single item list preference",
                     items = listOf(
                         SingleChoiceListPreference.Item("A", "A"),
                         SingleChoiceListPreference.Item("B", "B"),
                         SingleChoiceListPreference.Item("C", "C")
-                    ),
-                    title = "Single item list",
-                    summary = "This is a single item list preference",
-                    dependencies = dependencies
+                    )
                 )
             }
         }

@@ -33,7 +33,6 @@ import com.ivianuu.essentials.ui.compose.dialog.TextInputDialog
 @Composable
 fun TextInputPreference(
     @Pivotal box: Box<String>,
-    onChange: ((String) -> Boolean)? = null,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
     title: String? = null,
@@ -46,7 +45,6 @@ fun TextInputPreference(
 ) {
     TextInputPreference(
         valueController = ValueController(box),
-        onChange = onChange,
         enabled = enabled,
         dependencies = dependencies,
         title = title.asTextComposable(),
@@ -62,20 +60,18 @@ fun TextInputPreference(
 @Composable
 fun TextInputPreference(
     valueController: ValueController<String>,
-    onChange: ((String) -> Boolean)? = null,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
-    title: (@Composable() () -> Unit)? = null,
-    summary: (@Composable() () -> Unit)? = null,
-    leading: (@Composable() () -> Unit)? = null,
-    dialogTitle: (@Composable() () -> Unit)? = title,
+    title: @Composable() (() -> Unit)? = null,
+    summary: @Composable() (() -> Unit)? = null,
+    leading: @Composable() (() -> Unit)? = null,
+    dialogTitle: @Composable() (() -> Unit)? = title,
     dialogHint: String? = null,
     dialogKeyboardType: KeyboardType = KeyboardType.Text,
     allowEmpty: Boolean = true
 ) {
     DialogPreference(
         valueController = valueController,
-        onChange = onChange,
         enabled = enabled,
         dependencies = dependencies,
         title = title,

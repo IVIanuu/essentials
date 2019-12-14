@@ -32,7 +32,6 @@ import com.ivianuu.essentials.ui.compose.dialog.SingleChoiceListDialog
 @Composable
 fun <T> SingleChoiceListPreference(
     @Pivotal box: Box<T>,
-    onChange: ((T) -> Boolean)? = null,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
     title: String? = null,
@@ -43,7 +42,6 @@ fun <T> SingleChoiceListPreference(
 ) {
     SingleChoiceListPreference(
         valueController = ValueController(box),
-        onChange = onChange,
         enabled = enabled,
         dependencies = dependencies,
         title = title.asTextComposable(),
@@ -57,18 +55,16 @@ fun <T> SingleChoiceListPreference(
 @Composable
 fun <T> SingleChoiceListPreference(
     valueController: ValueController<T>,
-    onChange: ((T) -> Boolean)? = null,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
-    title: (@Composable() () -> Unit)? = null,
-    summary: (@Composable() () -> Unit)? = null,
-    leading: (@Composable() () -> Unit)? = null,
-    dialogTitle: (@Composable() () -> Unit)? = title,
+    title: @Composable() (() -> Unit)? = null,
+    summary: @Composable() (() -> Unit)? = null,
+    leading: @Composable() (() -> Unit)? = null,
+    dialogTitle: @Composable() (() -> Unit)? = title,
     items: List<SingleChoiceListPreference.Item<T>>
 ) {
     DialogPreference(
         valueController = valueController,
-        onChange = onChange,
         enabled = enabled,
         dependencies = dependencies,
         title = title,

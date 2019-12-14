@@ -24,20 +24,18 @@ import com.ivianuu.essentials.ui.navigation.Navigator
 @Composable
 fun <T> DialogPreference(
     valueController: ValueController<T>,
-    onChange: ((T) -> Boolean)? = null,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
-    title: (@Composable() () -> Unit)? = null,
-    summary: (@Composable() () -> Unit)? = null,
-    leading: (@Composable() () -> Unit)? = null,
+    title: @Composable() (() -> Unit)? = null,
+    summary: @Composable() (() -> Unit)? = null,
+    leading: @Composable() (() -> Unit)? = null,
     dialog: @Composable() (PreferenceContext<T>, () -> Unit) -> Unit
 ) {
     val navigator = inject<Navigator>()
     PreferenceWrapper(
         valueController = valueController,
         enabled = enabled,
-        dependencies = dependencies,
-        onChange = onChange
+        dependencies = dependencies
     ) { context ->
         PreferenceLayout(
             title = title,

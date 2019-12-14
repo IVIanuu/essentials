@@ -34,7 +34,6 @@ import com.ivianuu.essentials.ui.compose.dialog.MultiChoiceListDialog
 @Composable
 fun <T> MultiChoiceListPreference(
     @Pivotal box: Box<Set<T>>,
-    onChange: ((Set<T>) -> Boolean)? = null,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
     title: String? = null,
@@ -45,7 +44,6 @@ fun <T> MultiChoiceListPreference(
 ) {
     MultiChoiceListPreference(
         valueController = ValueController(box),
-        onChange = onChange,
         enabled = enabled,
         dependencies = dependencies,
         title = title.asTextComposable(),
@@ -59,18 +57,16 @@ fun <T> MultiChoiceListPreference(
 @Composable
 fun <T> MultiChoiceListPreference(
     valueController: ValueController<Set<T>>,
-    onChange: ((Set<T>) -> Boolean)? = null,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
-    title: (@Composable() () -> Unit)? = null,
-    summary: (@Composable() () -> Unit)? = null,
-    leading: (@Composable() () -> Unit)? = null,
-    dialogTitle: (@Composable() () -> Unit)? = title,
+    title: @Composable() (() -> Unit)? = null,
+    summary: @Composable() (() -> Unit)? = null,
+    leading: @Composable() (() -> Unit)? = null,
+    dialogTitle: @Composable() (() -> Unit)? = title,
     items: List<MultiChoiceListPreference.Item<T>>
 ) {
     DialogPreference(
         valueController = valueController,
-        onChange = onChange,
         enabled = enabled,
         dependencies = dependencies,
         title = title,

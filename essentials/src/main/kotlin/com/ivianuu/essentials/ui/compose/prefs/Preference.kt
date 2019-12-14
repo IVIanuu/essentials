@@ -28,7 +28,10 @@ import com.ivianuu.essentials.ui.compose.common.framed
 import com.ivianuu.essentials.ui.compose.material.SimpleListItem
 
 @Composable
-fun <T> ValueController(box: Box<T>): ValueController<T> {
+fun <T> ValueController(
+    box: Box<T>,
+    onChangeRequest: (T) -> Boolean = { true }
+): ValueController<T> {
     val wrapper = unfoldBox(box)
     return remember<ValueController<T>> {
         object : ValueController<T> {
@@ -36,7 +39,9 @@ fun <T> ValueController(box: Box<T>): ValueController<T> {
                 get() = wrapper.value
 
             override fun setValue(value: T) {
-                wrapper.value = value
+                if (onChangeRequest(value)) {
+                    wrapper.value = value
+                }
             }
         }
     }
@@ -45,7 +50,6 @@ fun <T> ValueController(box: Box<T>): ValueController<T> {
 @Composable
 fun <T> PreferenceWrapper(
     valueController: ValueController<T>,
-    onChange: ((T) -> Boolean)? = null,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
     preference: @Composable() (PreferenceContext<T>) -> Unit
@@ -53,7 +57,6 @@ fun <T> PreferenceWrapper(
     Dependencies(dependencies = dependencies ?: emptyList()) { dependenciesOk ->
         val context = remember { PreferenceContext<T>() }
         context.valueController = valueController
-        context.onChange = onChange
         context.enabled = enabled
         context.dependenciesOk = dependenciesOk
 
@@ -119,8 +122,7 @@ class PreferenceContext<T> {
 
     val currentValue: T get() = valueController.currentValue
 
-    var onChange: ((T) -> Boolean)? by framed(null)
-        internal set
+
     var dependenciesOk by framed(false)
         internal set
     var enabled by framed(false)
@@ -128,7 +130,7 @@ class PreferenceContext<T> {
     val shouldBeEnabled: Boolean get() = enabled && dependenciesOk
 
     fun setIfOk(newValue: T): Boolean {
-        val isOk = shouldBeEnabled && onChange?.invoke(newValue) ?: true
+        val isOk = shouldBeEnabled
         if (isOk) valueController.setValue(newValue)
         return isOk
     }
