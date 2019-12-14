@@ -30,31 +30,30 @@ import com.ivianuu.essentials.ui.compose.resources.drawableResource
 import com.ivianuu.essentials.ui.navigation.director.ControllerRouteOptions
 import com.ivianuu.essentials.ui.navigation.director.fade
 
-val bottomNavigationRoute =
-    ComposeControllerRoute(
-        options = ControllerRouteOptions().fade()
+val bottomNavigationRoute = ComposeControllerRoute(
+    options = ControllerRouteOptions().fade()
+) {
+    BottomNavigationController(
+        items = BottomNavItem.values().toList()
     ) {
-        BottomNavigationController(
-            items = BottomNavItem.values().toList()
-        ) {
-            Scaffold(
-                topAppBar = { EsTopAppBar("Bottom navigation") },
-                body = {
-                    BottomNavigationSwapper<BottomNavItem>(keepState = true) { _, item ->
-                        ColoredRect(item.color)
-                    }
-                },
-                bottomBar = {
-                    BottomNavigationBar<BottomNavItem> { _, item ->
-                        BottomNavigationBarItem(
-                            icon = drawableResource(item.iconRes),
-                            text = item.title
-                        )
-                    }
+        Scaffold(
+            topAppBar = { EsTopAppBar("Bottom navigation") },
+            body = {
+                BottomNavigationSwapper<BottomNavItem>(keepState = true) { _, item ->
+                    ColoredRect(item.color)
                 }
-            )
-        }
+            },
+            bottomBar = {
+                BottomNavigationBar<BottomNavItem> { _, item ->
+                    BottomNavigationBarItem(
+                        icon = drawableResource(item.iconRes),
+                        text = item.title
+                    )
+                }
+            }
+        )
     }
+}
 
 private enum class BottomNavItem(
     val title: String,

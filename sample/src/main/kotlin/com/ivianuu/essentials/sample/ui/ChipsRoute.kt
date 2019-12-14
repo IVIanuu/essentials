@@ -26,7 +26,7 @@ import androidx.ui.foundation.contentColor
 import androidx.ui.foundation.shape.corner.RoundedCornerShape
 import androidx.ui.layout.Container
 import androidx.ui.layout.EdgeInsets
-import androidx.ui.layout.FlowColumn
+import androidx.ui.layout.FlowRow
 import androidx.ui.layout.Padding
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.ripple.Ripple
@@ -45,9 +45,9 @@ val ChipsRoute = ComposeControllerRoute {
         topAppBar = { EsTopAppBar("Chips") },
         body = {
             Padding(padding = 8.dp) {
-                FlowColumn(mainAxisSpacing = 8.dp, crossAxisSpacing = 8.dp) {
-                    Names.shuffled().forEach {
-                        Chip(it)
+                FlowRow(mainAxisSpacing = 8.dp, crossAxisSpacing = 8.dp) {
+                    Names.shuffled().forEach { name ->
+                        Chip(name = name)
                     }
                 }
             }
@@ -78,9 +78,7 @@ private fun Chip(@Pivotal name: String) {
                     }) {
                         Text(
                             text = name,
-                            style = MaterialTheme.typography().body2.copy(
-                                color = contentColor()
-                            )
+                            style = MaterialTheme.typography().body2
                         )
                     }
                 }
