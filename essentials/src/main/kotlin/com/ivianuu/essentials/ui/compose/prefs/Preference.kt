@@ -39,9 +39,7 @@ fun <T> ValueController(
                 get() = wrapper.value
 
             override fun setValue(value: T) {
-                if (onChangeRequest(value)) {
-                    wrapper.value = value
-                }
+                if (onChangeRequest(value)) wrapper.value = value
             }
         }
     }

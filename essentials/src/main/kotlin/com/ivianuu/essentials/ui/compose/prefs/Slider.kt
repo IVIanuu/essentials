@@ -46,6 +46,7 @@ import com.ivianuu.essentials.util.UnitValueTextProvider
 @Composable
 fun SliderPreference(
     @Pivotal box: Box<Double>,
+    internalValueController: ValueController<Double> = StateValueController(box.defaultValue),
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
     title: String? = null,
@@ -59,6 +60,7 @@ fun SliderPreference(
 ) {
     SliderPreference(
         valueController = ValueController(box),
+        internalValueController = internalValueController,
         enabled = enabled,
         dependencies = dependencies,
         title = title.asTextComposable(),
@@ -74,6 +76,7 @@ fun SliderPreference(
 @Composable
 fun SliderPreference(
     valueController: ValueController<Double>,
+    internalValueController: ValueController<Double> = StateValueController(valueController.currentValue),
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
     title: @Composable() (() -> Unit)? = null,
@@ -87,6 +90,7 @@ fun SliderPreference(
 ) {
     SliderPreference(
         valueController = valueController,
+        internalValueController = internalValueController,
         toFloat = { it.toFloat() },
         fromFloat = { it.toDouble() },
         enabled = enabled,
@@ -104,6 +108,7 @@ fun SliderPreference(
 @Composable
 fun SliderPreference(
     @Pivotal box: Box<Float>,
+    internalValueController: ValueController<Float> = StateValueController(box.defaultValue),
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
     title: String? = null,
@@ -117,6 +122,7 @@ fun SliderPreference(
 ) {
     SliderPreference(
         valueController = ValueController(box),
+        internalValueController = internalValueController,
         enabled = enabled,
         dependencies = dependencies,
         title = title.asTextComposable(),
@@ -132,6 +138,7 @@ fun SliderPreference(
 @Composable
 fun SliderPreference(
     valueController: ValueController<Float>,
+    internalValueController: ValueController<Float> = StateValueController(valueController.currentValue),
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
     title: @Composable() (() -> Unit)? = null,
@@ -145,6 +152,7 @@ fun SliderPreference(
 ) {
     SliderPreference(
         valueController = valueController,
+        internalValueController = internalValueController,
         toFloat = { it },
         fromFloat = { it },
         enabled = enabled,
@@ -162,6 +170,7 @@ fun SliderPreference(
 @Composable
 fun SliderPreference(
     @Pivotal box: Box<Int>,
+    internalValueController: ValueController<Int> = StateValueController(box.defaultValue),
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
     title: String? = null,
@@ -175,6 +184,7 @@ fun SliderPreference(
 ) {
     SliderPreference(
         valueController = ValueController(box),
+        internalValueController = internalValueController,
         enabled = enabled,
         dependencies = dependencies,
         title = title.asTextComposable(),
@@ -190,6 +200,7 @@ fun SliderPreference(
 @Composable
 fun SliderPreference(
     valueController: ValueController<Int>,
+    internalValueController: ValueController<Int> = StateValueController(valueController.currentValue),
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
     title: @Composable() (() -> Unit)? = null,
@@ -203,6 +214,7 @@ fun SliderPreference(
 ) {
     SliderPreference(
         valueController = valueController,
+        internalValueController = internalValueController,
         toFloat = { it.toFloat() },
         fromFloat = { it.toInt() },
         enabled = enabled,
@@ -220,6 +232,7 @@ fun SliderPreference(
 @Composable
 fun SliderPreference(
     @Pivotal box: Box<Long>,
+    internalValueController: ValueController<Long> = StateValueController(box.defaultValue),
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
     title: String? = null,
@@ -233,6 +246,7 @@ fun SliderPreference(
 ) {
     SliderPreference(
         valueController = ValueController(box),
+        internalValueController = internalValueController,
         enabled = enabled,
         dependencies = dependencies,
         title = title.asTextComposable(),
@@ -248,6 +262,7 @@ fun SliderPreference(
 @Composable
 fun SliderPreference(
     valueController: ValueController<Long>,
+    internalValueController: ValueController<Long> = StateValueController(valueController.currentValue),
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
     title: @Composable() (() -> Unit)? = null,
@@ -261,6 +276,7 @@ fun SliderPreference(
 ) {
     SliderPreference(
         valueController = valueController,
+        internalValueController = internalValueController,
         toFloat = { it.toFloat() },
         fromFloat = { it.toLong() },
         enabled = enabled,
@@ -275,8 +291,25 @@ fun SliderPreference(
 }
 
 @Composable
+fun <T> StateValueController(
+    initial: T,
+    onChangeRequest: (T) -> Boolean = { true }
+): ValueController<T> {
+    val state = state { initial }
+    return object : ValueController<T> {
+        override val currentValue: T
+            get() = state.value
+
+        override fun setValue(value: T) {
+            if (onChangeRequest(value)) state.value = value
+        }
+    }
+}
+
+@Composable
 fun <T : Comparable<T>> SliderPreference(
     valueController: ValueController<T>,
+    internalValueController: ValueController<T> = StateValueController(valueController.currentValue),
     toFloat: (T) -> Float,
     fromFloat: (Float) -> T,
     enabled: Boolean = true,
@@ -308,16 +341,6 @@ fun <T : Comparable<T>> SliderPreference(
 
             WithModifier(modifier = LayoutGravity.BottomCenter) {
                 Row(crossAxisAlignment = CrossAxisAlignment.Center) {
-                    val internalValue = state { context.currentValue }
-
-                    val onChanged: ((Float) -> Unit)? = if (context.dependenciesOk) {
-                        { newValue ->
-                            internalValue.value = fromFloat(newValue)
-                        }
-                    } else {
-                        null
-                    }
-
                     WithModifier(modifier = Flexible(1f) + LayoutPadding(left = 8.dp)) {
                         val position = remember(valueRange, steps) {
                             val initial = toFloat(context.currentValue)
@@ -339,10 +362,11 @@ fun <T : Comparable<T>> SliderPreference(
 
                         Slider(
                             position = position,
-                            onValueChange = {
+                            onValueChange = { newFloatValue ->
                                 if (context.shouldBeEnabled) {
-                                    position.value = it
-                                    onChanged?.invoke(it)
+                                    val newValue = fromFloat(newFloatValue)
+                                    internalValueController.setValue(newValue)
+                                    position.value = toFloat(internalValueController.currentValue)
                                 }
                             },
                             onValueChangeEnd = {
@@ -361,7 +385,7 @@ fun <T : Comparable<T>> SliderPreference(
                             ),
                             padding = EdgeInsets(right = 8.dp)
                         ) {
-                            valueText(internalValue.value)
+                            valueText(internalValueController.currentValue)
                         }
                     }
                 }
