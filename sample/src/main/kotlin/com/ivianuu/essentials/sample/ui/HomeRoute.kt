@@ -230,6 +230,11 @@ enum class HomeItem(
         color = Color.Cyan,
         route = { TimerRoute }
     ),
+    Torch(
+        title = "Torch",
+        color = Color.Blue,
+        route = { TorchRoute }
+    ),
     Twilight(
         title = "Twilight",
         color = Color.Gray,

@@ -24,8 +24,6 @@
             android:excludeFromRecents="true"
             android:theme="@style/EsTransparent" />
 
-        <service android:name="com.ivianuu.essentials.gestures.torch.TorchService" />
-
     </application>
 
 </manifest>

@@ -16,19 +16,22 @@
 
 package com.ivianuu.essentials.gestures.torch
 
-import android.content.Context
-import android.content.Intent
+import android.hardware.camera2.CameraManager
+import com.github.ajalt.timberkt.d
+import com.ivianuu.essentials.foreground.ForegroundManager
+import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.messaging.BroadcastFactory
+import com.ivianuu.essentials.util.AppDispatchers
+import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Single
 import com.ivianuu.injekt.android.ApplicationScope
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.onStart
 
 /**
  * Provides the torch state
@@ -37,7 +40,11 @@ import kotlinx.coroutines.flow.onStart
 @Single
 class TorchManager internal constructor(
     broadcastFactory: BroadcastFactory,
-    private val context: Context
+    private val cameraManager: CameraManager,
+    private val dispatchers: AppDispatchers,
+    private val foregroundManager: ForegroundManager,
+    private val foregroundComponent: TorchForegroundComponent,
+    private val toaster: Toaster
 ) {
 
     private val _torchState = ConflatedBroadcastChannel(false)
@@ -45,26 +52,54 @@ class TorchManager internal constructor(
         get() = _torchState.asFlow()
 
     init {
-        broadcastFactory.create(ACTION_TORCH_STATE_CHANGED)
-            .map { it.getBooleanExtra(EXTRA_TORCH_STATE, false) }
-            .onStart { TorchService.syncState(context) }
-            .onEach { _torchState.offer(it) }
+        broadcastFactory.create(ACTION_TOGGLE_TORCH)
+            .onEach { toggleTorch() }
+            .flowOn(dispatchers.main)
             .launchIn(GlobalScope)
     }
 
     fun toggleTorch() {
-        TorchService.toggleTorch(context)
+        tryOrToast {
+            cameraManager.registerTorchCallback(object : CameraManager.TorchCallback() {
+                override fun onTorchModeChanged(cameraId: String, enabled: Boolean) {
+                    tryOrToast {
+                        cameraManager.unregisterTorchCallback(this)
+                        cameraManager.setTorchMode(cameraId, !enabled)
+                        updateState(!enabled)
+                    }
+                }
+
+                override fun onTorchModeUnavailable(cameraId: String) {
+                    tryOrToast {
+                        cameraManager.unregisterTorchCallback(this)
+                        toaster.toast(R.string.es_failed_to_toggle_torch)
+                        updateState(false)
+                    }
+                }
+            }, null)
+        }
     }
 
-    internal fun setTorchState(enabled: Boolean) {
-        context.sendBroadcast(Intent(ACTION_TORCH_STATE_CHANGED).apply {
-            putExtra(EXTRA_TORCH_STATE, enabled)
-        })
+    private fun tryOrToast(action: () -> Unit) {
+        try {
+            action()
+        } catch (e: Exception) {
+            e.printStackTrace()
+            toaster.toast(R.string.es_failed_to_toggle_torch)
+        }
     }
 
-    private companion object {
-        private const val ACTION_TORCH_STATE_CHANGED =
-            "com.ivianuu.essentials.gestures.TORCH_STATE_CHANGED"
-        private const val EXTRA_TORCH_STATE = "torch_state"
+    private fun updateState(enabled: Boolean) {
+        d { "update state $enabled" }
+        if (enabled) {
+            foregroundManager.startForeground(foregroundComponent)
+        } else {
+            foregroundManager.stopForeground(foregroundComponent)
+        }
+        _torchState.offer(enabled)
+    }
+
+    companion object {
+        const val ACTION_TOGGLE_TORCH = "com.ivianuu.essentials.gestures.torch.TOGGLE_TORCH"
     }
 }
