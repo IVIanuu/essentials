@@ -40,6 +40,8 @@ import kotlin.time.measureTimedValue
 interface DiskBox<T> : Box<T> {
     val path: String
 
+    suspend fun fetch(): T
+
     interface Serializer<T> {
         fun deserialize(serialized: String): T
         fun serialize(value: T): String
@@ -182,6 +184,19 @@ internal class DiskBoxImpl<T>(
                         d { "$path -> return default value $it" }
                     }
                 }
+            }
+        }
+    }
+
+    override suspend fun fetch(): T {
+        checkNotDisposed()
+        d { "$path -> fetch" }
+        return maybeWithDispatcher {
+            measured("fetch") {
+                cachedValue.set(this)
+                val result = get()
+                changeNotifier.offer(Unit)
+                return@measured result
             }
         }
     }
