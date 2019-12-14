@@ -38,10 +38,10 @@ import com.ivianuu.essentials.apps.ui.AppPickerRoute
 import com.ivianuu.essentials.apps.ui.IntentAppFilter
 import com.ivianuu.essentials.twilight.TwilightSettingsRoute
 import com.ivianuu.essentials.ui.compose.common.navigateOnClick
-import com.ivianuu.essentials.ui.compose.common.scrolling.ScrollableList
 import com.ivianuu.essentials.ui.compose.es.ComposeControllerRoute
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.compose.layout.Column
+import com.ivianuu.essentials.ui.compose.layout.ScrollableList
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
 import com.ivianuu.essentials.ui.compose.material.PopupMenuButton
 import com.ivianuu.essentials.ui.compose.material.Scaffold
@@ -74,8 +74,7 @@ val HomeRoute = ComposeControllerRoute {
         body = {
             val items = remember { HomeItem.values().toList().sortedBy { it.name } }
             ScrollableList(
-                items = items,
-                itemSizeProvider = { index, _ -> if (index != items.lastIndex) 57.dp else 56.dp }
+                items = items
             ) { index, item ->
                 Column {
                     val route = item.route()

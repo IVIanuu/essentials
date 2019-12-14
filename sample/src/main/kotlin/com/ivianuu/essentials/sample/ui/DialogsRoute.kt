@@ -20,11 +20,11 @@ import androidx.compose.Composable
 import androidx.compose.state
 import androidx.ui.core.Text
 import androidx.ui.core.dp
+import androidx.ui.foundation.VerticalScroller
 import androidx.ui.material.Button
 import androidx.ui.material.MaterialTheme
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.compose.common.retainedState
-import com.ivianuu.essentials.ui.compose.common.scrolling.Scroller
 import com.ivianuu.essentials.ui.compose.dialog.AlertDialogButtonLayout
 import com.ivianuu.essentials.ui.compose.dialog.ColorPickerDialog
 import com.ivianuu.essentials.ui.compose.dialog.DialogButton
@@ -60,7 +60,7 @@ val DialogsRoute = ComposeControllerRoute(
     Scaffold(
         topAppBar = { EsTopAppBar("Dialogs") },
         body = {
-            Scroller {
+            VerticalScroller {
                 Column(
                     mainAxisAlignment = MainAxisAlignment.Center,
                     crossAxisAlignment = CrossAxisAlignment.Center

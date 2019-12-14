@@ -17,9 +17,7 @@
 package com.ivianuu.essentials.ui.compose.dialog
 
 import androidx.compose.Composable
-import androidx.compose.remember
 import androidx.ui.core.Alignment
-import androidx.ui.core.Dp
 import androidx.ui.core.dp
 import androidx.ui.foundation.Clickable
 import androidx.ui.layout.Container
@@ -28,52 +26,13 @@ import androidx.ui.layout.EdgeInsets
 import androidx.ui.layout.LayoutExpandedWidth
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.ripple.Ripple
-import com.ivianuu.essentials.ui.compose.common.scrolling.ScrollPosition
-import com.ivianuu.essentials.ui.compose.common.scrolling.ScrollableList
-import com.ivianuu.essentials.ui.compose.core.Axis
 import com.ivianuu.essentials.ui.compose.layout.CrossAxisAlignment
 import com.ivianuu.essentials.ui.compose.layout.MainAxisAlignment
 import com.ivianuu.essentials.ui.compose.layout.Row
 import com.ivianuu.essentials.ui.compose.layout.WidthSpacer
 import com.ivianuu.essentials.ui.compose.material.EmphasisProvider
 
-@Composable
-fun ListDialog(
-    listCount: Int,
-    itemSizeProvider: (Int) -> Dp,
-    scrollPosition: ScrollPosition = remember { ScrollPosition() },
-    scrollDirection: Axis = Axis.Vertical,
-    scrollingEnabled: Boolean = true,
-    buttonLayout: AlertDialogButtonLayout = AlertDialogButtonLayout.SideBySide,
-    icon: (@Composable() () -> Unit)? = null,
-    title: (@Composable() () -> Unit)? = null,
-    positiveButton: (@Composable() () -> Unit)? = null,
-    negativeButton: (@Composable() () -> Unit)? = null,
-    neutralButton: (@Composable() () -> Unit)? = null,
-    listItem: @Composable() (Int) -> Unit
-) {
-    MaterialDialog(
-        icon = icon,
-        title = title,
-        showTopDivider = scrollPosition.value > scrollPosition.minValue,
-        showBottomDivider = scrollPosition.value < scrollPosition.maxValue,
-        applyContentPadding = false,
-        buttonLayout = buttonLayout,
-        content = {
-            ScrollableList(
-                count = listCount,
-                itemSizeProvider = itemSizeProvider,
-                position = scrollPosition,
-                direction = scrollDirection,
-                enabled = scrollingEnabled,
-                item = listItem
-            )
-        },
-        positiveButton = positiveButton,
-        negativeButton = negativeButton,
-        neutralButton = neutralButton
-    )
-}
+// todo
 
 @Composable
 fun SimpleDialogListItem(

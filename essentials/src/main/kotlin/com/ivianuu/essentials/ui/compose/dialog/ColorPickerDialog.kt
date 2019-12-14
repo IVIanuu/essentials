@@ -45,11 +45,11 @@ import androidx.ui.material.TextButtonStyle
 import androidx.ui.material.ripple.Ripple
 import androidx.ui.res.stringResource
 import com.ivianuu.essentials.R
-import com.ivianuu.essentials.ui.compose.common.scrolling.Scroller
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.compose.layout.Column
 import com.ivianuu.essentials.ui.compose.layout.CrossAxisAlignment
 import com.ivianuu.essentials.ui.compose.layout.Row
+import com.ivianuu.essentials.ui.compose.layout.ScrollableList
 import com.ivianuu.essentials.ui.compose.layout.SquaredBox
 import com.ivianuu.essentials.ui.compose.layout.SquaredBoxFit
 import com.ivianuu.essentials.ui.compose.layout.WithModifier
@@ -187,7 +187,7 @@ private fun ColorGrid(
     colors: List<Color>,
     onColorSelected: (Color) -> Unit
 ) {
-    Scroller {
+    ScrollableList {
         Padding(padding = 4.dp) {
             Table(
                 columns = 4,

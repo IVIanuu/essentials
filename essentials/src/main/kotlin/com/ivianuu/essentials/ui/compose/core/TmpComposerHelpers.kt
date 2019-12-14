@@ -16,6 +16,4 @@
 
 package com.ivianuu.essentials.ui.compose.core
 
-inline fun <T> exec(block: () -> T): T {
-    return block()
-}
+inline fun <T> exec(block: () -> T): T = block()

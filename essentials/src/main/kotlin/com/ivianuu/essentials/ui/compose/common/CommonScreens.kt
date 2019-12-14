@@ -17,7 +17,7 @@
 package com.ivianuu.essentials.ui.compose.common
 
 import androidx.compose.Composable
-import com.ivianuu.essentials.ui.compose.common.scrolling.ScrollableList
+import com.ivianuu.essentials.ui.compose.layout.ScrollableList
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
 import com.ivianuu.essentials.ui.compose.material.Scaffold
 

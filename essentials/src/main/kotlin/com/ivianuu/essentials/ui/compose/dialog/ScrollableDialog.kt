@@ -18,14 +18,13 @@ package com.ivianuu.essentials.ui.compose.dialog
 
 import androidx.compose.Composable
 import androidx.compose.remember
-import com.ivianuu.essentials.ui.compose.common.scrolling.ScrollPosition
-import com.ivianuu.essentials.ui.compose.common.scrolling.Scroller
+import androidx.ui.foundation.ScrollerPosition
 import com.ivianuu.essentials.ui.compose.core.Axis
-import com.ivianuu.essentials.ui.compose.layout.Column
+import com.ivianuu.essentials.ui.compose.layout.ScrollableList
 
 @Composable
 fun ScrollableDialog(
-    scrollPosition: ScrollPosition = remember { ScrollPosition() },
+    scrollerPosition: ScrollerPosition = remember { ScrollerPosition() },
     scrollDirection: Axis = Axis.Vertical,
     scrollingEnabled: Boolean = true,
     buttonLayout: AlertDialogButtonLayout = AlertDialogButtonLayout.SideBySide,
@@ -39,20 +38,17 @@ fun ScrollableDialog(
     MaterialDialog(
         icon = icon,
         title = title,
-        // showTopDivider = scrollPosition.value > scrollPosition.minValue,
-        // showBottomDivider = scrollPosition.value < scrollPosition.maxValue,
+        // showTopDivider = scrollerPosition.value > scrollerPosition.minValue,
+        // showBottomDivider = scrollerPosition.value < scrollerPosition.maxValue,
         applyContentPadding = false,
         buttonLayout = buttonLayout,
         content = {
-            Scroller(
-                position = scrollPosition,
+            ScrollableList(
+                scrollerPosition = scrollerPosition,
                 direction = scrollDirection,
-                enabled = scrollingEnabled
-            ) {
-                Column {
-                    listContent()
-                }
-            }
+                enabled = scrollingEnabled,
+                children = listContent
+            )
         },
         positiveButton = positiveButton,
         negativeButton = negativeButton,

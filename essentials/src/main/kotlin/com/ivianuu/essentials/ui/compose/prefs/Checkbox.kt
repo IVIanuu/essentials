@@ -24,6 +24,7 @@ import com.ivianuu.essentials.store.Box
 import com.ivianuu.essentials.ui.compose.common.AbsorbPointer
 import com.ivianuu.essentials.ui.compose.common.asIconComposable
 import com.ivianuu.essentials.ui.compose.common.asTextComposable
+
 @Composable
 fun CheckboxPreference(
     @Pivotal box: Box<Boolean>,

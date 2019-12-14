@@ -17,8 +17,7 @@
 package com.ivianuu.essentials.ui.compose.common
 
 import androidx.compose.Composable
-import androidx.ui.core.Dp
-import com.ivianuu.essentials.ui.compose.common.scrolling.ScrollableList
+import com.ivianuu.essentials.ui.compose.layout.ScrollableList
 import com.ivianuu.essentials.util.Async
 import com.ivianuu.essentials.util.Fail
 import com.ivianuu.essentials.util.Loading
@@ -28,7 +27,6 @@ import com.ivianuu.essentials.util.Uninitialized
 @Composable
 fun <T> AsyncList(
     state: Async<List<T>>,
-    itemSize: Dp,
     fail: @Composable() (Throwable) -> Unit = {},
     loading: @Composable() () -> Unit = { FullScreenLoading() },
     uninitialized: @Composable() () -> Unit = loading,
@@ -40,35 +38,7 @@ fun <T> AsyncList(
         loading = loading,
         uninitialized = uninitialized,
         success = { items ->
-            ScrollableList(
-                items = items,
-                itemSize = itemSize
-            ) { index, item ->
-                successItem(index, item)
-            }
-        }
-    )
-}
-
-@Composable
-fun <T> AsyncList(
-    state: Async<List<T>>,
-    fail: @Composable() (Throwable) -> Unit = {},
-    loading: @Composable() () -> Unit = { FullScreenLoading() },
-    uninitialized: @Composable() () -> Unit = loading,
-    successItem: @Composable() (Int, T) -> Unit
-) {
-    Async(
-        state = state,
-        fail = fail,
-        loading = loading,
-        uninitialized = uninitialized,
-        success = { items ->
-            ScrollableList {
-                items.forEachIndexed { index, item ->
-                    successItem(index, item)
-                }
-            }
+            ScrollableList(items = items, item = successItem)
         }
     )
 }

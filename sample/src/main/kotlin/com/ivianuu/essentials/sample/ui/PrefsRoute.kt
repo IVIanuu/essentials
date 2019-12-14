@@ -21,9 +21,9 @@ import com.ivianuu.essentials.store.prefs.boolean
 import com.ivianuu.essentials.store.prefs.int
 import com.ivianuu.essentials.store.prefs.string
 import com.ivianuu.essentials.store.prefs.stringSet
-import com.ivianuu.essentials.ui.compose.common.scrolling.ScrollableList
 import com.ivianuu.essentials.ui.compose.es.ComposeControllerRoute
 import com.ivianuu.essentials.ui.compose.injekt.inject
+import com.ivianuu.essentials.ui.compose.layout.ScrollableList
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
 import com.ivianuu.essentials.ui.compose.material.Scaffold
 import com.ivianuu.essentials.ui.compose.prefs.CheckboxPreference

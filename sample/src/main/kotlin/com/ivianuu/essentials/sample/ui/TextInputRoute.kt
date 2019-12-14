@@ -23,6 +23,7 @@ import androidx.ui.core.Opacity
 import androidx.ui.core.Text
 import androidx.ui.core.TextField
 import androidx.ui.foundation.Clickable
+import androidx.ui.foundation.ScrollerPosition
 import androidx.ui.layout.Center
 import androidx.ui.layout.Container
 import androidx.ui.material.FloatingActionButton
@@ -30,12 +31,10 @@ import androidx.ui.material.MaterialTheme
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.compose.common.framed
 import com.ivianuu.essentials.ui.compose.common.hideKeyboard
-import com.ivianuu.essentials.ui.compose.common.scrolling.ScrollPosition
-import com.ivianuu.essentials.ui.compose.common.scrolling.Scroller
 import com.ivianuu.essentials.ui.compose.common.showKeyboard
 import com.ivianuu.essentials.ui.compose.core.ref
 import com.ivianuu.essentials.ui.compose.es.ComposeControllerRoute
-import com.ivianuu.essentials.ui.compose.layout.Column
+import com.ivianuu.essentials.ui.compose.layout.ScrollableList
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
 import com.ivianuu.essentials.ui.compose.material.Scaffold
 import com.ivianuu.essentials.ui.compose.material.SimpleListItem
@@ -94,28 +93,26 @@ val TextInputRoute = ComposeControllerRoute(
         },
         body = {
             if (items.isNotEmpty()) {
-                val scrollPosition = remember(items) { ScrollPosition() }
-                val lastScrollPosition = ref { scrollPosition.value }
+                val scrollerPosition = remember(items) { ScrollerPosition() }
+                val lastScrollPosition = ref { scrollerPosition.value }
 
-                if (scrollPosition.value != lastScrollPosition.value) {
+                if (scrollerPosition.value != lastScrollPosition.value) {
                     hideKeyboard()
                     if (state.searchVisible && state.inputValue.isEmpty()) {
                         state.searchVisible = false
                     }
                 }
 
-                // todo
-                Scroller/*(position = scrollPosition)*/ {
-                    Column {
-                        items.forEach {
-                            SimpleListItem(
-                                title = { Text(it) },
-                                onClick = {
-                                    d { "clicked $it" }
-                                }
-                            )
+                ScrollableList(
+                    scrollerPosition = scrollerPosition,
+                    items = items
+                ) { _, item ->
+                    SimpleListItem(
+                        title = { Text(item) },
+                        onClick = {
+                            d { "clicked $item" }
                         }
-                    }
+                    )
                 }
             } else {
                 Center {

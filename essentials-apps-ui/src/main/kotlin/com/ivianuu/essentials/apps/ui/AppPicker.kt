@@ -59,7 +59,6 @@ fun AppPickerRoute(
 
             AsyncList(
                 state = viewModel.state.apps,
-                itemSize = 56.dp,
                 successItem = { _, app ->
                     key(app.packageName) {
                         AppInfo(
