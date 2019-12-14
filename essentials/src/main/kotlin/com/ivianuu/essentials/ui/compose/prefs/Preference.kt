@@ -30,7 +30,7 @@ import com.ivianuu.essentials.ui.compose.material.SimpleListItem
 @Composable
 fun <T> ValueController(
     box: Box<T>,
-    canSetValue: (T) -> Boolean = { true }
+    onRequestValueChange: (T) -> Boolean = { true }
 ): ValueController<T> {
     val wrapper = unfoldBox(box)
     return remember<ValueController<T>> {
@@ -39,10 +39,10 @@ fun <T> ValueController(
                 get() = wrapper.value
 
             override fun setValue(value: T) {
-                if (canSetValue(value)) wrapper.value = value
+                if (onRequestValueChange(value)) wrapper.value = value
             }
 
-            override fun canSetValue(value: T): Boolean = canSetValue.invoke(value)
+            override fun canSetValue(value: T): Boolean = onRequestValueChange.invoke(value)
         }
     }
 }
