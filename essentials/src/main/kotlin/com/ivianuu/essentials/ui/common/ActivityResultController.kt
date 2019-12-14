@@ -21,6 +21,7 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.lifecycleScope
 import com.ivianuu.director.common.addActivityResultListener
 import com.ivianuu.director.common.startActivityForResult
 import com.ivianuu.director.requireActivity
@@ -30,6 +31,7 @@ import com.ivianuu.essentials.ui.navigation.director.dialog
 import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.Param
 import com.ivianuu.injekt.parametersOf
+import kotlinx.coroutines.launch
 import java.util.concurrent.atomic.AtomicInteger
 
 fun ActivityResultRoute(intent: Intent) =
@@ -59,7 +61,11 @@ internal class ActivityResultController(@Param private val intent: Intent) : EsC
             navigator.pop(ActivityResult(requestCode, resultCode, data))
         }
 
-        startActivityForResult(intent, resultCode)
+        try {
+            startActivityForResult(intent, resultCode)
+        } catch (e: Exception) {
+            lifecycleScope.launch { navigator.pop() }
+        }
     }
 
     override fun onCreateView(

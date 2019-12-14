@@ -19,6 +19,7 @@ include(
     ":essentials-permission",
     ":essentials-securesettings",
     ":essentials-shell",
+    ":essentials-shortcutpicker",
     ":essentials-store",
     ":essentials-test",
     ":essentials-tile",
