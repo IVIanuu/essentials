@@ -24,5 +24,6 @@
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:statusBarColor">#99000000</item>
         <item name="android:navigationBarColor">#99000000</item>
+        <item name="android:windowAnimationStyle">@null</item>
     </style>
 </resources>
