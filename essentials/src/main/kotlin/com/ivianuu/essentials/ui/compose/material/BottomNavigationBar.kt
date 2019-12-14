@@ -18,6 +18,7 @@ package com.ivianuu.essentials.ui.compose.material
 
 import androidx.compose.Ambient
 import androidx.compose.Composable
+import androidx.compose.MutableState
 import androidx.compose.State
 import androidx.compose.ambient
 import androidx.compose.key
@@ -204,7 +205,7 @@ fun <T> ambientBottomNavigationController(): BottomNavigationController<T> =
 
 class BottomNavigationController<T>(
     var items: List<T>,
-    _selectedIndex: State<Int>
+    _selectedIndex: MutableState<Int>
 ) {
     var selectedIndex by _selectedIndex
     val selectedItem: T get() = items[selectedIndex]
