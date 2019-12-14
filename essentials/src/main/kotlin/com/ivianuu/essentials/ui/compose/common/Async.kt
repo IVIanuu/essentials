@@ -30,6 +30,7 @@ fun <T> AsyncList(
     fail: @Composable() (Throwable) -> Unit = {},
     loading: @Composable() () -> Unit = { FullScreenLoading() },
     uninitialized: @Composable() () -> Unit = loading,
+    successEmpty: @Composable() () -> Unit = {},
     successItem: @Composable() (Int, T) -> Unit
 ) {
     Async(
@@ -38,7 +39,11 @@ fun <T> AsyncList(
         loading = loading,
         uninitialized = uninitialized,
         success = { items ->
-            ScrollableList(items = items, item = successItem)
+            if (items.isNotEmpty()) {
+                ScrollableList(items = items, item = successItem)
+            } else {
+                successEmpty()
+            }
         }
     )
 }
