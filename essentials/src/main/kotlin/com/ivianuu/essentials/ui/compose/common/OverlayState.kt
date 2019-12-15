@@ -22,13 +22,40 @@ import androidx.compose.Immutable
 import androidx.compose.Observe
 import androidx.compose.frames.modelListOf
 import androidx.compose.key
+import androidx.compose.remember
 import androidx.ui.core.Layout
 import androidx.ui.core.ParentData
 import androidx.ui.core.PxPosition
 import androidx.ui.core.tightMax
-import java.util.UUID
 
-class Overlay(initialEntries: List<OverlayEntry> = emptyList()) {
+@Composable
+fun Overlay(state: OverlayState = remember { OverlayState() }) {
+    OverlayAmbient.Provider(value = state) {
+        OverlayLayout {
+            val visibleEntries = state.entries.filterVisible()
+
+            state.entries
+                .filter { it in visibleEntries || it.keepState }
+                .map {
+                    OverlayEntryParentData(
+                        isVisible = it in visibleEntries,
+                        entry = it
+                    )
+                }
+                .forEach {
+                    key(it.entry) {
+                        Observe {
+                            ParentData(data = it) {
+                                it.entry.content()
+                            }
+                        }
+                    }
+                }
+        }
+    }
+}
+
+class OverlayState(initialEntries: List<OverlayEntry> = emptyList()) {
 
     private val _entries = modelListOf<OverlayEntry>()
     val entries: List<OverlayEntry>
@@ -52,32 +79,6 @@ class Overlay(initialEntries: List<OverlayEntry> = emptyList()) {
         _entries.remove(entry)
     }
 
-    @Composable
-    fun content() {
-        OverlayAmbient.Provider(value = this) {
-            OverlayLayout {
-                val visibleEntries = entries.filterVisible()
-
-                entries
-                    .filter { it in visibleEntries || it.keepState }
-                    .map {
-                        OverlayEntryParentData(
-                            isVisible = it in visibleEntries,
-                            entry = it
-                        )
-                    }
-                    .forEach {
-                        Observe {
-                            key(it.entry.id) {
-                                ParentData(data = it) {
-                                    it.entry.content()
-                                }
-                            }
-                        }
-                    }
-            }
-        }
-    }
 }
 
 @Immutable
@@ -85,11 +86,9 @@ data class OverlayEntry(
     val opaque: Boolean = false,
     val keepState: Boolean = false,
     val content: @Composable() () -> Unit
-) {
-    val id = UUID.randomUUID().toString()
-}
+)
 
-val OverlayAmbient = Ambient.of<Overlay>()
+val OverlayAmbient = Ambient.of<OverlayState>()
 
 @Composable
 private fun OverlayLayout(
