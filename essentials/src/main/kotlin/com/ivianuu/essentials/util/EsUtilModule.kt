@@ -27,10 +27,10 @@ import kotlinx.coroutines.Dispatchers
 val EsUtilModule = Module {
     single {
         AppDispatchers(
-            Dispatchers.Default,
-            Dispatchers.IO,
-            Dispatchers.Main,
-            Dispatchers.Unconfined
+            default = Dispatchers.Default,
+            io = Dispatchers.IO,
+            main = Dispatchers.Main,
+            unconfined = Dispatchers.Unconfined
         )
     }
     single {
@@ -38,11 +38,11 @@ val EsUtilModule = Module {
         val packageInfo = get<PackageManager>()
             .getPackageInfo(appInfo.packageName, 0)
         BuildInfo(
-            appInfo.flags.containsFlag(ApplicationInfo.FLAG_DEBUGGABLE),
-            appInfo.packageName,
-            packageInfo.versionCode
+            isDebug = appInfo.flags.containsFlag(ApplicationInfo.FLAG_DEBUGGABLE),
+            packageName = appInfo.packageName,
+            versionCode = packageInfo.versionCode
         )
     }
-    single { DeviceInfo(Build.MODEL, Build.MANUFACTURER) }
-    single { SystemBuildInfo(Build.VERSION.SDK_INT) }
+    single { DeviceInfo(model = Build.MODEL, manufacturer = Build.MANUFACTURER) }
+    single { SystemBuildInfo(sdk = Build.VERSION.SDK_INT) }
 }

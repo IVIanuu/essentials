@@ -16,13 +16,15 @@
 
 package com.ivianuu.essentials.hidenavbar
 
+import com.ivianuu.essentials.store.prefs.BoxValueHolder
+
 /**
  * Nav bar rotation behavior
  */
 enum class NavBarRotationMode(
     override val value: String,
     val titleRes: Int
-) : com.ivianuu.essentials.store.prefs.BoxValueHolder<String> {
+) : BoxValueHolder<String> {
     Marshmallow("marshmallow", R.string.es_nav_bar_rotation_mode_marshmallow),
     Nougat("nougat", R.string.es_nav_bar_rotation_mode_nougat),
     Tablet("tablet", R.string.es_nav_bar_rotation_mode_tablet)
