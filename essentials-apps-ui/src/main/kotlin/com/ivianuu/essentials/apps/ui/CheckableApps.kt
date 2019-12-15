@@ -17,8 +17,10 @@
 package com.ivianuu.essentials.apps.ui
 
 import androidx.compose.Composable
+import androidx.compose.Immutable
 import androidx.compose.key
 import androidx.compose.onCommit
+import androidx.compose.remember
 import androidx.lifecycle.viewModelScope
 import androidx.ui.core.Text
 import androidx.ui.core.dp
@@ -105,7 +107,9 @@ fun CheckableAppsScreen(
                     key(app.info.packageName) {
                         CheckableApp(
                             app = app,
-                            onClick = { viewModel.appClicked(app) }
+                            onClick = remember(app) {
+                                { viewModel.appClicked(app) }
+                            }
                         )
                     }
                 }
@@ -228,6 +232,7 @@ internal data class CheckableAppsState(
     val apps: Async<List<CheckableApp>> = Uninitialized
 )
 
+@Immutable
 internal data class CheckableApp(
     val info: AppInfo,
     val isChecked: Boolean
