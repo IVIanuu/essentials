@@ -28,8 +28,8 @@ import androidx.ui.graphics.Color
 import androidx.ui.graphics.Image
 import androidx.ui.layout.Container
 import androidx.ui.material.ripple.Ripple
-import com.ivianuu.essentials.ui.compose.core.MergeProvider
-import com.ivianuu.essentials.ui.compose.core.Mergeable
+import com.ivianuu.essentials.ui.compose.common.MergeProvider
+import com.ivianuu.essentials.ui.compose.common.Mergeable
 
 @Composable
 fun Icon(

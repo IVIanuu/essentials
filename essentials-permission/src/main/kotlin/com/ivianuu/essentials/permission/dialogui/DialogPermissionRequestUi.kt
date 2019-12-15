@@ -37,7 +37,7 @@ import com.ivianuu.essentials.permission.PermissionRequestUi
 import com.ivianuu.essentials.permission.R
 import com.ivianuu.essentials.permission.Title
 import com.ivianuu.essentials.ui.base.EsViewModel
-import com.ivianuu.essentials.ui.compose.core.ActivityAmbient
+import com.ivianuu.essentials.ui.compose.common.ActivityAmbient
 import com.ivianuu.essentials.ui.compose.dialog.DialogButton
 import com.ivianuu.essentials.ui.compose.dialog.DialogRoute
 import com.ivianuu.essentials.ui.compose.dialog.ScrollableDialog

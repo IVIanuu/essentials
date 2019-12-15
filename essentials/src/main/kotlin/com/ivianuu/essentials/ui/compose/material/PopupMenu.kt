@@ -37,7 +37,7 @@ import androidx.ui.layout.Padding
 import androidx.ui.layout.Wrap
 import androidx.ui.material.ripple.Ripple
 import androidx.ui.material.surface.Card
-import com.ivianuu.essentials.ui.compose.core.ref
+import com.ivianuu.essentials.ui.compose.common.ref
 import com.ivianuu.essentials.ui.compose.es.ComposeControllerRoute
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.compose.layout.Column
@@ -118,7 +118,8 @@ fun <T> PopupMenuTrigger(
     val navigator = inject<Navigator>()
 
     Wrap {
-        val coordinatesHolder = ref<LayoutCoordinates?> { null }
+        val coordinatesHolder =
+            ref<LayoutCoordinates?> { null }
         OnPositioned { coordinatesHolder.value = it }
 
         val showPopup = {

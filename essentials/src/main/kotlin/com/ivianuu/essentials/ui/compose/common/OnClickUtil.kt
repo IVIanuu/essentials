@@ -29,7 +29,9 @@ import kotlinx.coroutines.launch
 @Composable
 fun navigateOnClick(route: () -> Route): () -> Unit {
     val navigator = inject<Navigator>()
-    return remember { { navigator.push(route()) } }
+    return remember {
+        { navigator.push(route()) }
+    }
 }
 
 @Composable

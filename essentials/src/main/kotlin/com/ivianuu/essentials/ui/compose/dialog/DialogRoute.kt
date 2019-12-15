@@ -25,7 +25,7 @@ import androidx.ui.graphics.Color
 import androidx.ui.layout.Center
 import com.ivianuu.essentials.ui.compose.common.SafeArea
 import com.ivianuu.essentials.ui.compose.common.onBackPressed
-import com.ivianuu.essentials.ui.compose.core.ref
+import com.ivianuu.essentials.ui.compose.common.ref
 import com.ivianuu.essentials.ui.compose.es.ComposeControllerRoute
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.navigation.Navigator

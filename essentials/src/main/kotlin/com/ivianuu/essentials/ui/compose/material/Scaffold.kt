@@ -29,7 +29,7 @@ import androidx.ui.core.dp
 import androidx.ui.core.looseMin
 import androidx.ui.material.DrawerState
 import androidx.ui.material.surface.Surface
-import com.ivianuu.essentials.ui.compose.core.withDensity
+import com.ivianuu.essentials.ui.compose.common.withDensity
 import com.ivianuu.essentials.ui.compose.layout.Expand
 
 @Composable

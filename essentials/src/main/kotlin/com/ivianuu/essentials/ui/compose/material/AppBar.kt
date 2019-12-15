@@ -24,7 +24,7 @@ import androidx.ui.core.dp
 import androidx.ui.graphics.Color
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.compose.core.RouteAmbient
+import com.ivianuu.essentials.ui.compose.common.RouteAmbient
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.navigation.Navigator
 

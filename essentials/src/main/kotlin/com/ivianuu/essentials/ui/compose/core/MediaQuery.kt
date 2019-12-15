@@ -23,6 +23,8 @@ import androidx.ui.core.Density
 import androidx.ui.core.Size
 import androidx.ui.core.dp
 import androidx.ui.layout.EdgeInsets
+import com.ivianuu.essentials.ui.compose.common.UpdateProvider
+import com.ivianuu.essentials.ui.compose.common.Updateable
 import com.ivianuu.essentials.ui.compose.common.framed
 
 // todo find a better name

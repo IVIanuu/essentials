@@ -37,7 +37,7 @@ import androidx.ui.layout.DpConstraints
 import androidx.ui.layout.EdgeInsets
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.ripple.Ripple
-import com.ivianuu.essentials.ui.compose.core.withDensity
+import com.ivianuu.essentials.ui.compose.common.withDensity
 import com.ivianuu.essentials.ui.compose.layout.Column
 import com.ivianuu.essentials.ui.compose.layout.CrossAxisAlignment
 import com.ivianuu.essentials.ui.compose.layout.MainAxisAlignment

@@ -23,7 +23,7 @@ import androidx.ui.core.IntPx
 import androidx.ui.core.dp
 import androidx.ui.core.enforce
 import androidx.ui.core.isFinite
-import com.ivianuu.essentials.ui.compose.core.withDensity
+import com.ivianuu.essentials.ui.compose.common.withDensity
 
 @Composable
 fun Expand(child: @Composable() () -> Unit) {

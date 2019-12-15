@@ -32,7 +32,7 @@ import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.compose.common.framed
 import com.ivianuu.essentials.ui.compose.common.hideKeyboard
 import com.ivianuu.essentials.ui.compose.common.showKeyboard
-import com.ivianuu.essentials.ui.compose.core.ref
+import com.ivianuu.essentials.ui.compose.common.ref
 import com.ivianuu.essentials.ui.compose.es.ComposeControllerRoute
 import com.ivianuu.essentials.ui.compose.layout.ScrollableList
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
@@ -94,7 +94,8 @@ val TextInputRoute = ComposeControllerRoute(
         body = {
             if (items.isNotEmpty()) {
                 val scrollerPosition = remember(items) { ScrollerPosition() }
-                val lastScrollPosition = ref { scrollerPosition.value }
+                val lastScrollPosition =
+                    ref { scrollerPosition.value }
 
                 if (scrollerPosition.value != lastScrollPosition.value) {
                     hideKeyboard()

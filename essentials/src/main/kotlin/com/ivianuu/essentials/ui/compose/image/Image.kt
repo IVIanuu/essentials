@@ -27,7 +27,7 @@ import androidx.ui.graphics.ImageConfig
 import androidx.ui.graphics.NativeImage
 import androidx.ui.graphics.colorspace.ColorSpace
 import androidx.ui.graphics.colorspace.ColorSpaces
-import com.ivianuu.essentials.ui.compose.core.withDensity
+import com.ivianuu.essentials.ui.compose.common.withDensity
 
 fun EmptyImage(
     width: Dp,

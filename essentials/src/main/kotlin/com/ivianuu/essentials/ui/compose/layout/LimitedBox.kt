@@ -21,7 +21,7 @@ import androidx.ui.core.Dp
 import androidx.ui.core.PxPosition
 import androidx.ui.core.hasBoundedHeight
 import androidx.ui.core.hasBoundedWidth
-import com.ivianuu.essentials.ui.compose.core.withDensity
+import com.ivianuu.essentials.ui.compose.common.withDensity
 
 @Composable
 fun LimitedBox(

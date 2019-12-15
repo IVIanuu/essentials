@@ -28,12 +28,12 @@ import com.ivianuu.director.requireActivity
 import com.ivianuu.essentials.ui.base.EsController
 import com.ivianuu.essentials.ui.compose.common.MultiAmbientProvider
 import com.ivianuu.essentials.ui.compose.common.with
-import com.ivianuu.essentials.ui.compose.core.ActivityAmbient
+import com.ivianuu.essentials.ui.compose.common.ActivityAmbient
 import com.ivianuu.essentials.ui.compose.core.AndroidComposeViewContainer
-import com.ivianuu.essentials.ui.compose.core.ControllerAmbient
+import com.ivianuu.essentials.ui.compose.common.ControllerAmbient
 import com.ivianuu.essentials.ui.compose.core.MediaQuery
 import com.ivianuu.essentials.ui.compose.core.MediaQueryProvider
-import com.ivianuu.essentials.ui.compose.core.RouteAmbient
+import com.ivianuu.essentials.ui.compose.common.RouteAmbient
 import com.ivianuu.essentials.ui.compose.injekt.ComponentAmbient
 import com.ivianuu.essentials.ui.compose.injekt.MaterialThemeProvider
 import com.ivianuu.essentials.ui.compose.injekt.inject
