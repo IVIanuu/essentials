@@ -105,7 +105,7 @@ val TextInputRoute = ComposeControllerRoute(
                 }
 
                 ScrollableList(
-                    scrollerPosition = scrollerPosition,
+                    // todo scrollerPosition = scrollerPosition,
                     items = items
                 ) { _, item ->
                     SimpleListItem(
