@@ -158,7 +158,7 @@ class NavigatorState(
         private val result = CompletableDeferred<Any?>()
 
         private val overlayEntry = OverlayEntry(
-            opaque = true,
+            opaque = route.opaque,
             keepState = route.keepState,
             content = {
                 RouteTransitionWrapper(
