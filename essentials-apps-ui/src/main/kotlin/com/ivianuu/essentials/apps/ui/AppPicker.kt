@@ -102,7 +102,7 @@ internal class AppPickerViewModel(
 
     init {
         viewModelScope.execute(
-            context = dispatchers.io,
+            context = dispatchers.default,
             block = {
                 appStore.getInstalledApps()
                     .filter(appFilter)
