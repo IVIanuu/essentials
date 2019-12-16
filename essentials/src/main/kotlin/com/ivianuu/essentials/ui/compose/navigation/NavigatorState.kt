@@ -18,49 +18,62 @@ package com.ivianuu.essentials.ui.compose.navigation
 
 import androidx.compose.Ambient
 import androidx.compose.Composable
-import androidx.compose.frames.ModelList
 import androidx.compose.frames.modelListOf
+import androidx.compose.remember
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.compose.common.Overlay
 import com.ivianuu.essentials.ui.compose.common.OverlayEntry
 import com.ivianuu.essentials.ui.compose.common.OverlayState
+import com.ivianuu.essentials.ui.compose.common.framed
 import com.ivianuu.essentials.ui.compose.common.onBackPressed
-import com.ivianuu.essentials.ui.compose.common.retained
 import com.ivianuu.essentials.ui.compose.coroutines.coroutineScope
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-// todo rename to Navigator once becomes standard
 // todo transition support
 
 @Composable
-fun ComposeNavigator(
-    handleBack: Boolean = true,
-    key: String? = null,
-    startRoute: () -> Route
+fun Navigator(
+    startRoute: Route,
+    handleBack: Boolean = true
 ) {
     val coroutineScope = coroutineScope()
-    val navigator = retained("ComposeNavigator:${key.orEmpty()}") {
-        ComposeNavigator(OverlayState(), coroutineScope, modelListOf(), startRoute())
+    val overlayState = remember { OverlayState() }
+    val navigatorState = remember {
+        NavigatorState(
+            overlayState = overlayState,
+            coroutineScope = coroutineScope,
+            startRoute = startRoute,
+            handleBack = handleBack
+        )
     }
 
-    navigator.coroutineScope = coroutineScope
+    remember(handleBack) { navigatorState.handleBack = handleBack }
 
-    if (handleBack && navigator.backStack.size > 1) {
-        onBackPressed { navigator.pop() }
-    }
-
-    navigator.content()
+    Navigator(state = navigatorState)
 }
 
-class ComposeNavigator internal constructor(
-    private val overlay: OverlayState,
-    internal var coroutineScope: CoroutineScope,
-    private val _backStack: ModelList<Route>,
-    startRoute: Route
+@Composable
+fun Navigator(state: NavigatorState) {
+    NavigatorAmbient.Provider(value = state) {
+        if (state.handleBack && state.backStack.size > 1) {
+            onBackPressed { state.pop() }
+        }
+        Overlay(state = state.overlayState)
+    }
+}
+
+class NavigatorState internal constructor(
+    internal val overlayState: OverlayState,
+    private val coroutineScope: CoroutineScope,
+    startRoute: Route,
+    handleBack: Boolean
 ) {
 
+    var handleBack by framed(handleBack)
+
+    private val _backStack = modelListOf<Route>()
     val backStack: List<Route>
         get() = _backStack
 
@@ -123,13 +136,6 @@ class ComposeNavigator internal constructor(
         return deferredResult.await() as? T
     }
 
-    @Composable
-    internal fun content() {
-        NavigatorAmbient.Provider(this) {
-            Overlay(state = overlay)
-        }
-    }
-
     private fun addOverlayEntry(route: Route, index: Int) {
         val overlayEntry = overlayEntryByRoute.getOrPut(route) {
             OverlayEntry(
@@ -139,16 +145,16 @@ class ComposeNavigator internal constructor(
             )
         }
 
-        if (overlayEntry in overlay.entries) {
-            overlay.remove(overlayEntry)
+        if (overlayEntry in overlayState.entries) {
+            overlayState.remove(overlayEntry)
         }
 
-        overlay.add(index, overlayEntry)
+        overlayState.add(index, overlayEntry)
     }
 
     private fun removeOverlayEntry(route: Route) {
-        overlayEntryByRoute.remove(route)?.let { overlay.remove(it) }
+        overlayEntryByRoute.remove(route)?.let { overlayState.remove(it) }
     }
 }
 
-val NavigatorAmbient = Ambient.of<ComposeNavigator>()
+val NavigatorAmbient = Ambient.of<NavigatorState>()

@@ -24,8 +24,8 @@ import com.ivianuu.essentials.ui.navigation.director.ControllerRoute
 import kotlinx.coroutines.launch
 
 fun ComposeControllerRoute(
-    popOnConfigurationChange: Boolean = false,
     options: ControllerRoute.Options? = null,
+    popOnConfigurationChange: Boolean = false,
     compose: @Composable() () -> Unit
 ) = ControllerRoute(
     options = options,
