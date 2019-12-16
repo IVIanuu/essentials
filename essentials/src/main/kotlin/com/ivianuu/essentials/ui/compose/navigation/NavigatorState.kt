@@ -137,35 +137,38 @@ class NavigatorState internal constructor(
             opaque = true,
             keepState = route.keepState,
             content = {
-                if (transitionState == RouteTransitionState.Init) {
+                if (transitionState == RouteTransition.State.Init) {
                     onCommit {
-                        transitionState = RouteTransitionState.Pushed
+                        transitionState = RouteTransition.State.Pushed
                     }
                 }
-                route.transition(
-                    transitionState,
-                    onTransitionComplete,
-                    route.content
+
+                RouteTransitionWrapper(
+                    transition = route.transition,
+                    state = transitionState,
+                    onTransitionComplete = onTransitionComplete,
+                    types = listOf(OpacityRouteTransitionType, CanvasRouteTransitionType),
+                    children = route.content
                 )
             }
         )
 
-        private val onTransitionComplete: (RouteTransitionState) -> Unit = { completedState ->
+        private val onTransitionComplete: (RouteTransition.State) -> Unit = { completedState ->
             notifiedTransitionState = transitionState
-            if (completedState == RouteTransitionState.Popped) {
+            if (completedState == RouteTransition.State.Popped) {
                 overlayState.remove(overlayEntry)
             }
         }
 
-        private var transitionState by framed(RouteTransitionState.Init)
-        private var notifiedTransitionState = RouteTransitionState.Init
+        private var transitionState by framed(RouteTransition.State.Init)
+        private var notifiedTransitionState = RouteTransition.State.Init
 
         fun attach() {
             overlayState.add(overlayEntry)
         }
 
         fun detach() {
-            transitionState = RouteTransitionState.Popped
+            transitionState = RouteTransition.State.Popped
         }
 
         suspend fun <T> awaitResult(): T? = result.await() as? T

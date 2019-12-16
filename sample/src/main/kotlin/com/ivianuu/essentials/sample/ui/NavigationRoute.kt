@@ -31,9 +31,9 @@ import com.ivianuu.essentials.ui.compose.layout.MainAxisAlignment
 import com.ivianuu.essentials.ui.compose.material.EsSurface
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
 import com.ivianuu.essentials.ui.compose.material.Scaffold
-import com.ivianuu.essentials.ui.compose.navigation.FadeRouteTransition
 import com.ivianuu.essentials.ui.compose.navigation.Navigator
 import com.ivianuu.essentials.ui.compose.navigation.Route
+import com.ivianuu.essentials.ui.compose.navigation.VerticalRouteTransition
 import com.ivianuu.essentials.ui.compose.navigation.navigator
 import kotlin.time.milliseconds
 
@@ -52,7 +52,7 @@ private val colors = listOf(
 )
 
 private fun CounterRoute(count: Int): Route = Route(
-    transition = FadeRouteTransition(300.milliseconds)
+    transition = VerticalRouteTransition(300.milliseconds)
 ) {
     Scaffold(
         topAppBar = { EsTopAppBar("Nav") },

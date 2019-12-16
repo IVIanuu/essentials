@@ -21,76 +21,156 @@ import androidx.animation.TransitionDefinition
 import androidx.animation.TransitionState
 import androidx.animation.transitionDefinition
 import androidx.compose.Composable
-import androidx.compose.Observe
-import androidx.compose.onCommit
+import androidx.compose.Immutable
 import androidx.compose.remember
 import androidx.ui.animation.Transition
 import androidx.ui.core.Draw
+import androidx.ui.core.DrawReceiver
 import androidx.ui.core.Opacity
-import com.github.ajalt.timberkt.d
+import androidx.ui.core.PxSize
+import androidx.ui.graphics.Canvas
 import kotlin.time.Duration
 
-typealias RouteTransition = @Composable() (
-    state: RouteTransitionState,
-    onComplete: (RouteTransitionState) -> Unit,
-    content: @Composable() () -> Unit
-) -> Unit
+@Immutable
+data class RouteTransition(
+    val definition: @Composable() () -> TransitionDefinition<State>,
+    val generateOps: (TransitionState, State) -> Ops
+) {
 
-enum class RouteTransitionState {
-    Init, Pushed, Popped
-}
+    @Immutable
+    interface Type {
+        @Composable
+        fun apply(
+            ops: Ops,
+            children: @Composable() () -> Unit
+        )
+    }
 
-val DefaultRouteTransition: RouteTransition = { state, onComplete, content ->
-    content()
-    onCommit(state) { onComplete(state) }
-}
+    enum class State {
+        Init, Pushed, Popped
+    }
 
-fun SimpleRouteTransition(
-    definition: @Composable() () -> TransitionDefinition<RouteTransitionState>,
-    render: @Composable() (transitionState: TransitionState, routeTransitionState: RouteTransitionState, content: @Composable() () -> Unit) -> Unit
-): RouteTransition = { state, onComplete, content ->
-    Transition(
-        definition = definition(),
-        toState = state,
-        onStateChangeFinished = onComplete
-    ) { transitionState ->
-        Observe {
-            Content {
-                render(transitionState, state, content)
-            }
-        }
+    @Immutable
+    data class Ops(private val ops: Map<Key<*>, Set<*>>) {
+        operator fun <T> get(key: Key<T>): Set<T> = ops.getOrElse(key) { emptySet<T>() } as Set<T>
+        class Key<T>
+        data class OpWithValue<T>(
+            val key: Key<T>,
+            val value: T
+        )
     }
 }
 
-@Composable
-private fun Content(content: @Composable() () -> Unit) {
-    content()
+infix fun <T> RouteTransition.Ops.Key<T>.with(value: T): RouteTransition.Ops.OpWithValue<T> =
+    RouteTransition.Ops.OpWithValue(this, value)
+
+fun opsOf(
+    vararg pairs: RouteTransition.Ops.OpWithValue<*>
+): RouteTransition.Ops = RouteTransition.Ops(
+    pairs
+        .groupBy { it.key }
+        .mapValues { (_, value) ->
+            value.map { it.value }
+        }
+        .mapValues { it.value.toSet() }
+)
+
+object OpacityRouteTransitionType : RouteTransition.Type {
+    val Opacity = RouteTransition.Ops.Key<Float>()
+    override fun apply(
+        ops: RouteTransition.Ops,
+        children: () -> Unit
+    ) {
+        Opacity(opacity = ops[Opacity].singleOrNull() ?: 1f, children = children)
+    }
 }
 
-fun FadeRouteTransition(duration: Duration) = SimpleRouteTransition(
+object CanvasRouteTransitionType : RouteTransition.Type {
+    val Block = RouteTransition.Ops.Key<DrawReceiver.(Canvas, PxSize) -> Unit>()
+    override fun apply(ops: RouteTransition.Ops, children: () -> Unit) {
+        Draw(
+            children = children,
+            onPaint = { canvas, parentSize ->
+                ops.get(Block).forEach { it(canvas, parentSize) }
+            }
+        )
+    }
+}
+
+val DefaultRouteTransition = RouteTransition(
+    definition = { defaultTransitionDefinition },
+    generateOps = { _, _ -> opsOf() }
+)
+
+private val defaultTransitionDefinition = transitionDefinition {
+    state(RouteTransition.State.Init) {}
+    state(RouteTransition.State.Pushed) {}
+    state(RouteTransition.State.Popped) {}
+}
+
+@Composable
+internal fun RouteTransitionWrapper(
+    transition: RouteTransition,
+    state: RouteTransition.State,
+    onTransitionComplete: (RouteTransition.State) -> Unit,
+    types: List<RouteTransition.Type>,
+    children: @Composable() () -> Unit
+) {
+    Transition(
+        definition = transition.definition(),
+        toState = state,
+        onStateChangeFinished = onTransitionComplete,
+        children = { transitionState ->
+            val ops = transition.generateOps(transitionState, state)
+            RouteTransitionTypes(
+                ops = ops,
+                types = types,
+                children = children
+            )
+        }
+    )
+}
+
+@Composable
+private fun RouteTransitionTypes(
+    ops: RouteTransition.Ops,
+    types: List<RouteTransition.Type>,
+    children: @Composable() () -> Unit
+) {
+    types
+        .map { type ->
+            { typeChildren: @Composable() () -> Unit ->
+                type.apply(ops) { typeChildren() }
+            }
+        }
+        .fold({ children() }) { current, type ->
+            { type(current) }
+        }.invoke()
+}
+
+fun FadeRouteTransition(duration: Duration) = RouteTransition(
     definition = {
         remember(duration) {
             fadeRouteTransitionDefinition(duration)
         }
     },
-    render = { transitionState, _, content ->
-        d { "render transition ${transitionState[Alpha]}" }
-        Opacity(opacity = transitionState[Alpha]) {
-            content()
-        }
+    generateOps = { transitionState, _ ->
+        opsOf(
+            OpacityRouteTransitionType.Opacity with transitionState[Alpha]
+        )
     }
 )
 
 private fun fadeRouteTransitionDefinition(
     duration: Duration
-) = transitionDefinition<RouteTransitionState> {
-    state(RouteTransitionState.Init) { set(Alpha, 0f) }
-    state(RouteTransitionState.Pushed) { set(Alpha, 1f) }
-    state(RouteTransitionState.Popped) { set(Alpha, 0f) }
+) = transitionDefinition<RouteTransition.State> {
+    state(RouteTransition.State.Init) { set(Alpha, 0f) }
+    state(RouteTransition.State.Pushed) { set(Alpha, 1f) }
+    state(RouteTransition.State.Popped) { set(Alpha, 0f) }
 
     transition(
-        RouteTransitionState.Init to RouteTransitionState.Pushed,
-        RouteTransitionState.Pushed to RouteTransitionState.Popped
+        RouteTransition.State.Init to RouteTransition.State.Pushed,
+        RouteTransition.State.Pushed to RouteTransition.State.Popped
     ) {
         Alpha using tween {
             this.duration = duration.toLongMilliseconds().toInt()
@@ -100,16 +180,15 @@ private fun fadeRouteTransitionDefinition(
 
 private val Alpha = FloatPropKey()
 
-fun VerticalRouteTransition(duration: Duration) = SimpleRouteTransition(
+fun VerticalRouteTransition(duration: Duration) = RouteTransition(
     definition = {
         remember(duration) {
             verticalRouteTransitionDefinition(duration)
         }
     },
-    render = { transitionState, _, content ->
-        Draw(
-            children = content,
-            onPaint = { canvas, parentSize ->
+    generateOps = { transitionState, _ ->
+        opsOf(
+            CanvasRouteTransitionType.Block with { canvas, parentSize ->
                 canvas.save()
                 canvas.translate(0f, parentSize.height.value * (1f - transitionState[Progress]))
                 drawChildren()
@@ -121,18 +200,17 @@ fun VerticalRouteTransition(duration: Duration) = SimpleRouteTransition(
 
 private fun verticalRouteTransitionDefinition(
     duration: Duration
-) = transitionDefinition<RouteTransitionState> {
-    state(RouteTransitionState.Init) { set(Progress, 0f) }
-    state(RouteTransitionState.Pushed) { set(Progress, 1f) }
-    state(RouteTransitionState.Popped) { set(Progress, 0f) }
+) = transitionDefinition<RouteTransition.State> {
+    state(RouteTransition.State.Init) { set(Progress, 0f) }
+    state(RouteTransition.State.Pushed) { set(Progress, 1f) }
+    state(RouteTransition.State.Popped) { set(Progress, 0f) }
 
     transition(
-        RouteTransitionState.Init to RouteTransitionState.Pushed,
-        RouteTransitionState.Pushed to RouteTransitionState.Popped
+        RouteTransition.State.Init to RouteTransition.State.Pushed,
+        RouteTransition.State.Pushed to RouteTransition.State.Popped
     ) {
         Progress using tween {
             this.duration = duration.toLongMilliseconds().toInt()
-            d { "durtation = ${this.duration}" }
         }
     }
 }
