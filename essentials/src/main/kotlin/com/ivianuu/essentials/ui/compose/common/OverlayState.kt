@@ -23,9 +23,9 @@ import androidx.compose.Observe
 import androidx.compose.frames.modelListOf
 import androidx.compose.key
 import androidx.compose.remember
+import androidx.ui.core.IntPx
 import androidx.ui.core.Layout
 import androidx.ui.core.ParentData
-import androidx.ui.core.PxPosition
 import androidx.ui.core.tightMax
 
 @Composable
@@ -42,11 +42,13 @@ fun Overlay(state: OverlayState = remember { OverlayState() }) {
                         entry = it
                     )
                 }
-                .forEach {
-                    key(it.entry) {
+                .forEach { parentData ->
+                    key(parentData) {
                         Observe {
-                            ParentData(data = it) {
-                                it.entry.content()
+                            ParentData(data = parentData) {
+                                AbsorbPointer(absorb = !parentData.isVisible) {
+                                    parentData.entry.content()
+                                }
                             }
                         }
                     }
@@ -100,11 +102,18 @@ private fun OverlayLayout(
 
         // get only visible routes
         val placeables = measureables
-            .filter { (it.parentData as OverlayEntryParentData).isVisible }
-            .map { it.measure(childConstraints) }
+            .map { it.measure(childConstraints) to it.parentData as OverlayEntryParentData }
 
-        layout(constraints.maxWidth, constraints.maxHeight) {
-            placeables.forEach { it.place(PxPosition.Origin) }
+        val width = constraints.maxWidth
+        val height = constraints.maxHeight
+
+        layout(width, height) {
+            placeables.forEach { (placeable, parentData) ->
+                placeable.place(
+                    x = if (parentData.isVisible) IntPx.Zero else width,
+                    y = if (parentData.isVisible) IntPx.Zero else height
+                )
+            }
         }
     }
 }
