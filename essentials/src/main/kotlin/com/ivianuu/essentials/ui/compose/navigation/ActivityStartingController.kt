@@ -14,31 +14,26 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.legacy.ui.common
+package com.ivianuu.essentials.ui.compose.navigation
 
 import android.app.Activity
 import android.content.Intent
 import android.provider.Settings
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import androidx.compose.ambient
+import androidx.compose.onActive
 import androidx.core.app.ShareCompat
 import androidx.core.net.toUri
-import androidx.lifecycle.lifecycleScope
-import com.ivianuu.director.requireActivity
-import com.ivianuu.essentials.legacy.ui.base.EsController
-import com.ivianuu.essentials.legacy.ui.navigation.director.ControllerRoute
-import com.ivianuu.essentials.legacy.ui.navigation.director.dialog
-import com.ivianuu.injekt.Factory
-import com.ivianuu.injekt.Param
-import com.ivianuu.injekt.parametersOf
+import com.ivianuu.essentials.ui.compose.es.ActivityAmbient
 
-fun ActivityRoute(intentFactory: (Activity) -> Intent) =
-    ControllerRoute<ActivityStartingController>(
-        options = ControllerRoute.Options().dialog()
-    ) {
-        parametersOf(intentFactory)
+fun ActivityRoute(intentFactory: (Activity) -> Intent) = Route(
+    opaque = true
+) {
+    val activity = ambient(ActivityAmbient)
+    onActive {
+        activity.startActivity(intentFactory(activity))
+        navigator.pop()
     }
+}
 
 fun AppInfoRoute(packageName: String) =
     ActivityRoute {
@@ -65,21 +60,3 @@ fun UrlRoute(url: String) =
     ActivityRoute {
         Intent(Intent.ACTION_VIEW).apply { this.data = url.toUri() }
     }
-
-@Factory
-internal class ActivityStartingController(
-    @Param private val intentFactory: (Activity) -> Intent
-) : EsController() {
-
-    init {
-        lifecycleScope.launchWhenResumed {
-            requireActivity().startActivity(intentFactory(requireActivity()))
-            navigator.pop()
-        }
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup
-    ) = View(requireActivity()) // dummy
-}
