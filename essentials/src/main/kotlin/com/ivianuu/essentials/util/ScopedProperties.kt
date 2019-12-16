@@ -21,20 +21,22 @@ import java.util.concurrent.ConcurrentHashMap
 
 class Properties {
 
-    private val properties = mutableMapOf<Any, Any?>()
+    private val baking = mutableMapOf<Key<*>, Any?>()
 
-    val entries: Map<Any, Any?>
-        get() = properties
+    val entries: Map<Key<*>, Any?>
+        get() = baking
 
-    operator fun <T> get(key: Any): T? = properties[key] as? T
+    val size: Int get() = entries.size
 
-    operator fun <T> set(key: Any, value: T) {
-        properties[key] = value as Any?
+    operator fun <T> get(key: Key<T>): T? = baking[key] as? T
+
+    operator fun <T> set(key: Key<T>, value: T) {
+        baking[key] = value
     }
 
-    fun <T> remove(key: Any): T? = properties.remove(key) as? T
+    fun <T> remove(key: Key<T>): T? = baking.remove(key) as? T
 
-    operator fun contains(key: Any): Boolean = properties.containsKey(key)
+    operator fun contains(key: Key<*>): Boolean = baking.containsKey(key)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -42,28 +44,31 @@ class Properties {
 
         other as Properties
 
-        if (properties != other.properties) return false
+        if (baking != other.baking) return false
 
         return true
     }
 
-    override fun hashCode(): Int = properties.hashCode()
+    override fun hashCode(): Int = baking.hashCode()
+
+    override fun toString(): String = "Properties($baking)"
+
+    class Key<T>
+
 }
 
-val Properties.size: Int get() = entries.size
-
-fun <T> Properties.getOrSet(key: Any, defaultValue: () -> T): T {
-    var value = get<T>(key)
+fun <T> Properties.getOrSet(key: Properties.Key<T>, defaultValue: () -> T): T {
+    var value = get(key)
     if (value == null) {
         value = defaultValue()
-        set(key, value as Any)
+        set(key, value)
     }
 
-    return value
+    return value as T
 }
 
-fun <T> Properties.getOrDefault(key: Any, defaultValue: () -> T): T {
-    var value = get<T>(key)
+fun <T> Properties.getOrDefault(key: Properties.Key<T>, defaultValue: () -> T): T {
+    var value = get(key)
     if (value == null) {
         value = defaultValue()
     }

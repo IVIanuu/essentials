@@ -22,7 +22,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 
-private val CoroutineScopeKey = Any()
+private val CoroutineScopeKey = Properties.Key<CoroutineScope>()
 
 val Scope.coroutineScope: CoroutineScope
     get() = properties.getOrSet(CoroutineScopeKey) {
