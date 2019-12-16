@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.ui.compose.material
 
 import androidx.compose.Composable
-import androidx.compose.ambient
 import androidx.ui.core.Alignment
 import androidx.ui.graphics.Image
 import com.ivianuu.essentials.R
@@ -29,7 +28,7 @@ import com.ivianuu.essentials.ui.navigation.Navigator
 fun DrawerButton(
     image: Image = drawableResource(R.drawable.es_ic_menu)
 ) {
-    val scaffold = ambient(ScaffoldAmbient)
+    val scaffold = scaffold
     IconButton(
         image = image,
         onClick = { scaffold.toggleDrawer() }

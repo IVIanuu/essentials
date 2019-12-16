@@ -63,9 +63,9 @@ fun EsTopAppBar(
 
 @Composable
 private fun autoTopAppBarLeadingIcon(): (@Composable() () -> Unit)? {
-    val scaffold = ambient(ScaffoldAmbient)
     val navigator = inject<Navigator>()
     val route = ambient(RouteAmbient)
+    val scaffold = scaffold
     return when {
         scaffold.hasDrawer -> {
             { DrawerButton() }
