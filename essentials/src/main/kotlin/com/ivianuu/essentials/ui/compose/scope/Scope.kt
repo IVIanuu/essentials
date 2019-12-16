@@ -19,6 +19,7 @@ package com.ivianuu.essentials.ui.compose.scope
 import androidx.compose.Composable
 import androidx.compose.onDispose
 import androidx.compose.remember
+import com.ivianuu.essentials.ui.compose.common.onFinalDispose
 import com.ivianuu.scopes.MutableScope
 import com.ivianuu.scopes.Scope
 
@@ -26,5 +27,12 @@ import com.ivianuu.scopes.Scope
 fun scope(): Scope {
     val scope = remember { MutableScope() }
     onDispose { scope.close() }
+    return scope
+}
+
+@Composable
+fun retainedScope(): Scope {
+    val scope = remember { MutableScope() }
+    onFinalDispose { scope.close() }
     return scope
 }
