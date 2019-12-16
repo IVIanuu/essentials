@@ -23,6 +23,7 @@ import androidx.compose.ambient
 open class Route(
     val opaque: Boolean = false,
     val keepState: Boolean = false,
+    val transition: RouteTransition = DefaultRouteTransition,
     val content: @Composable() () -> Unit
 ) {
 

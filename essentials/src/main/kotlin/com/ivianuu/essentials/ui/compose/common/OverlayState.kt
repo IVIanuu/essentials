@@ -18,7 +18,6 @@ package com.ivianuu.essentials.ui.compose.common
 
 import androidx.compose.Ambient
 import androidx.compose.Composable
-import androidx.compose.Immutable
 import androidx.compose.Observe
 import androidx.compose.frames.modelListOf
 import androidx.compose.key
@@ -81,14 +80,24 @@ class OverlayState(initialEntries: List<OverlayEntry> = emptyList()) {
         _entries.remove(entry)
     }
 
+    fun move(from: Int, to: Int) {
+        _entries.add(to, _entries.removeAt(from))
+    }
+
+    fun replace(entries: List<OverlayEntry>) {
+        _entries.clear()
+        _entries += entries
+    }
 }
 
-@Immutable
-data class OverlayEntry(
-    val opaque: Boolean = false,
-    val keepState: Boolean = false,
+class OverlayEntry(
+    opaque: Boolean = false,
+    keepState: Boolean = false,
     val content: @Composable() () -> Unit
-)
+) {
+    var opaque by framed(opaque)
+    var keepState by framed(keepState)
+}
 
 val OverlayAmbient = Ambient.of<OverlayState>()
 

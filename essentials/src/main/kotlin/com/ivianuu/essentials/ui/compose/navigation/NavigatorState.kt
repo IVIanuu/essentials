@@ -20,6 +20,7 @@ import androidx.compose.Ambient
 import androidx.compose.Composable
 import androidx.compose.ambient
 import androidx.compose.frames.modelListOf
+import androidx.compose.onCommit
 import androidx.compose.remember
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.compose.common.Overlay
@@ -31,8 +32,6 @@ import com.ivianuu.essentials.ui.compose.coroutines.coroutineScope
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-
-// todo transition support
 
 @Composable
 fun Navigator(
@@ -74,12 +73,9 @@ class NavigatorState internal constructor(
 
     var handleBack by framed(handleBack)
 
-    private val _backStack = modelListOf<Route>()
+    private val _backStack = modelListOf<RouteState>()
     val backStack: List<Route>
-        get() = _backStack
-
-    private val resultsByRoute = mutableMapOf<Route, CompletableDeferred<Any?>>()
-    private val overlayEntryByRoute = mutableMapOf<Route, OverlayEntry>()
+        get() = _backStack.map { it.route }
 
     init {
         if (_backStack.isEmpty()) {
@@ -95,11 +91,11 @@ class NavigatorState internal constructor(
 
     suspend fun <T> push(route: Route): T? {
         d { "push $route" }
-        _backStack += route
-        addOverlayEntry(route, _backStack.lastIndex)
-        val deferredResult = CompletableDeferred<Any?>()
-        synchronized(resultsByRoute) { resultsByRoute[route] = deferredResult }
-        return deferredResult.await() as? T
+
+        val routeState = RouteState(route)
+        _backStack += routeState
+        routeState.attach()
+        return routeState.awaitResult()
     }
 
     fun pop(result: Any? = null) {
@@ -109,9 +105,8 @@ class NavigatorState internal constructor(
     private suspend fun popInternal(result: Any?) {
         d { "pop result $result" }
         val removedRoute = _backStack.removeAt(backStack.lastIndex)
-        removeOverlayEntry(removedRoute)
-        val deferredResult = synchronized(resultsByRoute) { resultsByRoute.remove(removedRoute) }
-        deferredResult?.complete(result)
+        removedRoute.detach()
+        removedRoute.setResult(result)
     }
 
     @JvmName("replaceWithoutResult")
@@ -125,36 +120,59 @@ class NavigatorState internal constructor(
 
         if (_backStack.isNotEmpty()) {
             val removedRoute = _backStack.removeAt(_backStack.lastIndex)
-            removeOverlayEntry(removedRoute)
+            removedRoute.detach()
         }
 
-        _backStack += route
-        addOverlayEntry(route, _backStack.lastIndex)
-
-        val deferredResult = CompletableDeferred<Any?>()
-        synchronized(resultsByRoute) { resultsByRoute[route] = deferredResult }
-
-        return deferredResult.await() as? T
+        val routeState = RouteState(route)
+        _backStack += routeState
+        routeState.attach()
+        return routeState.awaitResult()
     }
 
-    private fun addOverlayEntry(route: Route, index: Int) {
-        val overlayEntry = overlayEntryByRoute.getOrPut(route) {
-            OverlayEntry(
-                opaque = route.opaque,
-                keepState = route.keepState,
-                content = route.content
-            )
+    private inner class RouteState(val route: Route) {
+
+        private val result = CompletableDeferred<Any?>()
+
+        private val overlayEntry = OverlayEntry(
+            opaque = true,
+            keepState = route.keepState,
+            content = {
+                if (transitionState == RouteTransitionState.Init) {
+                    onCommit {
+                        transitionState = RouteTransitionState.Pushed
+                    }
+                }
+                route.transition(
+                    transitionState,
+                    onTransitionComplete,
+                    route.content
+                )
+            }
+        )
+
+        private val onTransitionComplete: (RouteTransitionState) -> Unit = { completedState ->
+            notifiedTransitionState = transitionState
+            if (completedState == RouteTransitionState.Popped) {
+                overlayState.remove(overlayEntry)
+            }
         }
 
-        if (overlayEntry in overlayState.entries) {
-            overlayState.remove(overlayEntry)
+        private var transitionState by framed(RouteTransitionState.Init)
+        private var notifiedTransitionState = RouteTransitionState.Init
+
+        fun attach() {
+            overlayState.add(overlayEntry)
         }
 
-        overlayState.add(index, overlayEntry)
-    }
+        fun detach() {
+            transitionState = RouteTransitionState.Popped
+        }
 
-    private fun removeOverlayEntry(route: Route) {
-        overlayEntryByRoute.remove(route)?.let { overlayState.remove(it) }
+        suspend fun <T> awaitResult(): T? = result.await() as? T
+
+        fun setResult(result: Any?) {
+            this.result.complete(result)
+        }
     }
 }
 

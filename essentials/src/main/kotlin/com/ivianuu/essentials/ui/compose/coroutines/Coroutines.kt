@@ -26,6 +26,7 @@ import androidx.compose.remember
 import androidx.compose.stateFor
 import androidx.ui.core.CoroutineContextAmbient
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
@@ -36,12 +37,16 @@ import kotlin.coroutines.CoroutineContext
 fun coroutineScope(context: @Composable() () -> CoroutineContext = { coroutineContext() }): CoroutineScope {
     val coroutineContext = context()
     val coroutineScope = remember { CoroutineScope(context = coroutineContext + Job()) }
-    onDispose { coroutineScope.coroutineContext[Job]!!.cancel() }
     return coroutineScope
 }
 
 @Composable
-fun coroutineContext() = ambient(CoroutineContextAmbient)
+fun coroutineContext(): CoroutineContext {
+    val parent = ambient(CoroutineContextAmbient)
+    val coroutineContext = remember { Job(parent = parent[Job]) + Dispatchers.Main }
+    onDispose { coroutineContext[Job]!!.cancel() }
+    return coroutineContext
+}
 
 @Composable
 fun launchOnActive(

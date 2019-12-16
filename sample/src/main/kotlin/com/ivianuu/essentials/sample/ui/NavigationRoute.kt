@@ -16,9 +16,10 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import androidx.compose.ambient
+import androidx.compose.remember
 import androidx.ui.core.Text
 import androidx.ui.core.dp
+import androidx.ui.graphics.Color
 import androidx.ui.layout.Center
 import androidx.ui.material.Button
 import androidx.ui.material.MaterialTheme
@@ -27,45 +28,62 @@ import com.ivianuu.essentials.ui.compose.layout.Column
 import com.ivianuu.essentials.ui.compose.layout.CrossAxisAlignment
 import com.ivianuu.essentials.ui.compose.layout.HeightSpacer
 import com.ivianuu.essentials.ui.compose.layout.MainAxisAlignment
+import com.ivianuu.essentials.ui.compose.material.EsSurface
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
 import com.ivianuu.essentials.ui.compose.material.Scaffold
-import com.ivianuu.essentials.ui.compose.navigation.NavigatorAmbient
+import com.ivianuu.essentials.ui.compose.navigation.FadeRouteTransition
+import com.ivianuu.essentials.ui.compose.navigation.Navigator
 import com.ivianuu.essentials.ui.compose.navigation.Route
+import com.ivianuu.essentials.ui.compose.navigation.navigator
+import kotlin.time.milliseconds
 
 val navigationRoute =
     ComposeControllerRoute {
-        Navigator { CounterRoute(1) }
+        Navigator(
+            startRoute = remember { CounterRoute(1) }
+        )
     }
 
-private fun CounterRoute(count: Int): Route = Route {
+private val colors = listOf(
+    Color.Red,
+    Color.Blue,
+    Color.Gray,
+    Color.Cyan
+)
+
+private fun CounterRoute(count: Int): Route = Route(
+    transition = FadeRouteTransition(300.milliseconds)
+) {
     Scaffold(
         topAppBar = { EsTopAppBar("Nav") },
         body = {
-            Center {
-                Column(
-                    mainAxisAlignment = MainAxisAlignment.Center,
-                    crossAxisAlignment = CrossAxisAlignment.Center
-                ) {
-                    val navigator = ambient(NavigatorAmbient)
+            EsSurface(color = remember { colors.shuffled().first() }) {
+                Center {
+                    Column(
+                        mainAxisAlignment = MainAxisAlignment.Center,
+                        crossAxisAlignment = CrossAxisAlignment.Center
+                    ) {
+                        val navigator = navigator
 
-                    Text(
-                        "Count: $count",
-                        style = MaterialTheme.typography().h1
-                    )
+                        Text(
+                            "Count: $count",
+                            style = MaterialTheme.typography().h1
+                        )
 
-                    HeightSpacer(8.dp)
+                        HeightSpacer(8.dp)
 
-                    Button(
-                        text = "Next",
-                        onClick = { navigator.push(CounterRoute(count + 1)) }
-                    )
+                        Button(
+                            text = "Next",
+                            onClick = { navigator.push(CounterRoute(count + 1)) }
+                        )
 
-                    HeightSpacer(8.dp)
+                        HeightSpacer(8.dp)
 
-                    Button(
-                        text = "Previous",
-                        onClick = { navigator.pop() }
-                    )
+                        Button(
+                            text = "Previous",
+                            onClick = { navigator.pop() }
+                        )
+                    }
                 }
             }
         }
