@@ -17,19 +17,11 @@
 package com.ivianuu.essentials.sample.ui
 
 import com.ivianuu.essentials.ui.compose.es.ComposeActivity
-import com.ivianuu.essentials.ui.compose.navigation.DefaultRouteTransitionAmbient
-import com.ivianuu.essentials.ui.compose.navigation.HorizontalRouteTransition
 import com.ivianuu.essentials.ui.compose.navigation.Route
 
 class MainActivity : ComposeActivity() {
 
     override val startRoute: Route
         get() = HomeRoute
-
-    override fun content() {
-        DefaultRouteTransitionAmbient.Provider(value = HorizontalRouteTransition()) {
-            super.content()
-        }
-    }
 
 }

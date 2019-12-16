@@ -20,12 +20,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.Composable
+import androidx.ui.core.CoroutineContextAmbient
 import androidx.ui.core.ambientDensity
 import androidx.ui.core.setContent
 import androidx.ui.foundation.isSystemInDarkTheme
 import androidx.ui.material.MaterialTheme
 import com.ivianuu.director.requireActivity
 import com.ivianuu.essentials.legacy.ui.base.EsController
+import com.ivianuu.essentials.legacy.ui.viewLifecycleScope
 import com.ivianuu.essentials.ui.compose.common.MultiAmbientProvider
 import com.ivianuu.essentials.ui.compose.common.with
 import com.ivianuu.essentials.ui.compose.core.AndroidComposeViewContainer
@@ -70,7 +72,8 @@ abstract class ComposeController : EsController() {
             ActivityAmbient with requireActivity(),
             RouteAmbient with route!!,
             ControllerAmbient with this,
-            ComponentAmbient with component
+            ComponentAmbient with component,
+            CoroutineContextAmbient with viewLifecycleScope.coroutineContext
         ) {
             val viewportMetrics = view.viewportMetrics
             val density = ambientDensity()

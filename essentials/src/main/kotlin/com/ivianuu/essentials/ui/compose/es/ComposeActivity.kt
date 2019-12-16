@@ -19,7 +19,9 @@ package com.ivianuu.essentials.ui.compose.es
 import android.os.Bundle
 import android.view.ViewGroup
 import androidx.compose.Composable
+import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
+import androidx.ui.core.CoroutineContextAmbient
 import androidx.ui.core.ambientDensity
 import androidx.ui.core.setContent
 import androidx.ui.foundation.isSystemInDarkTheme
@@ -44,7 +46,8 @@ import com.ivianuu.injekt.get
 
 abstract class ComposeActivity : EsActivity() {
 
-    override fun retainedModules(): List<Module> = listOf(ComposeActivityModule(this, startRoute))
+    override fun retainedModules(): List<Module> =
+        listOf(RetainedComposeActivityModule(this, startRoute))
 
     protected open val startRoute: Route? = null
 
@@ -74,7 +77,8 @@ abstract class ComposeActivity : EsActivity() {
     protected open fun ComposeWithAmbients(view: AndroidComposeViewContainer) {
         MultiAmbientProvider(
             ActivityAmbient with this,
-            ComponentAmbient with component
+            ComponentAmbient with component,
+            CoroutineContextAmbient with lifecycleScope.coroutineContext
         ) {
             val viewportMetrics = view.viewportMetrics
             val density = ambientDensity()
@@ -94,19 +98,15 @@ abstract class ComposeActivity : EsActivity() {
                     colors = materialThemeProvider.colors(),
                     typography = materialThemeProvider.typography()
                 ) {
-                    content()
+                    Navigator(state = get())
                 }
             }
         }
     }
 
-    @Composable
-    protected open fun content() {
-        Navigator(state = get())
-    }
 }
 
-private fun ComposeActivityModule(
+private fun RetainedComposeActivityModule(
     activity: ComposeActivity,
     startRoute: Route?
 ) = Module {

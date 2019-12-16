@@ -21,6 +21,7 @@ import androidx.compose.Composable
 import androidx.compose.ambient
 import androidx.compose.frames.modelListOf
 import androidx.compose.remember
+import androidx.ui.core.CoroutineContextAmbient
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.compose.common.Overlay
 import com.ivianuu.essentials.ui.compose.common.OverlayEntry
@@ -28,6 +29,7 @@ import com.ivianuu.essentials.ui.compose.common.OverlayState
 import com.ivianuu.essentials.ui.compose.common.framed
 import com.ivianuu.essentials.ui.compose.common.onBackPressed
 import com.ivianuu.essentials.ui.compose.common.retained
+import com.ivianuu.essentials.ui.compose.coroutines.coroutineContext
 import com.ivianuu.essentials.ui.compose.coroutines.retainedCoroutineScope
 import com.ivianuu.essentials.util.sourceLocation
 import kotlinx.coroutines.CompletableDeferred
@@ -161,19 +163,22 @@ class NavigatorState(
             opaque = route.opaque,
             keepState = route.keepState,
             content = {
-                RouteTransitionWrapper(
-                    transition = transition ?: ambient(DefaultRouteTransitionAmbient),
-                    state = transitionState,
-                    lastState = lastTransitionState,
-                    onTransitionComplete = onTransitionComplete,
-                    types = types,
-                    children = {
-                        RouteAmbient.Provider(
-                            value = route,
-                            children = route.content
-                        )
-                    }
-                )
+                val coroutineContext = coroutineContext()
+                CoroutineContextAmbient.Provider(coroutineContext) {
+                    RouteTransitionWrapper(
+                        transition = transition ?: ambient(DefaultRouteTransitionAmbient),
+                        state = transitionState,
+                        lastState = lastTransitionState,
+                        onTransitionComplete = onTransitionComplete,
+                        types = types,
+                        children = {
+                            RouteAmbient.Provider(
+                                value = route,
+                                children = route.content
+                            )
+                        }
+                    )
+                }
             }
         )
 
