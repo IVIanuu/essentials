@@ -183,6 +183,7 @@ class NavigatorState(
         )
 
         private val onTransitionComplete: (RouteTransition.State) -> Unit = { completedState ->
+            lastTransitionState = completedState
             if (completedState == RouteTransition.State.ExitFromPush) {
                 other?.onOtherTransitionComplete()
                 other = null
