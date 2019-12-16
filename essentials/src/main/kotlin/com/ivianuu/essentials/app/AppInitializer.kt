@@ -25,24 +25,29 @@ import com.ivianuu.injekt.Name
  * Will be instantiated on app start up
  * Can be used to initialize global stuff like logging
  *
+ * ´´´
  * class AnalyticsInitializer {
  *     init {
  *         Analytics.initialize(Logger())
  *     }
  * }
- *
+ * ´´´
  *
  * Must be bound inside your module like this:
  *
+ * ´´´
  * val analyticsModule = module {
  *     appInitializer { AnalyticsAppInitializer() }
  * }
+ * ´´´
  *
- * or for existing bindings
+ * Or for existing bindings
  *
+ * ´´´
  * val analyticsModule = module {
  *     bindAppInitializer<AnalyticsInitializer>()
  * }
+ * ´´´
  *
  */
 interface AppInitializer

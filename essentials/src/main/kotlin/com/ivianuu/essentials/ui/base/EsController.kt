@@ -58,6 +58,7 @@ abstract class EsController : Controller(), InjektTrait, LayoutContainer {
         get() = requireActivity().cast<EsActivity>().navigator
 
     var route: Route? = null
+        internal set
 
     protected open val layoutRes: Int get() = -1
 
