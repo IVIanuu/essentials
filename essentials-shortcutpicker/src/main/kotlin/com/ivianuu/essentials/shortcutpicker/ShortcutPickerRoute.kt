@@ -19,11 +19,14 @@ package com.ivianuu.essentials.shortcutpicker
 import android.content.ComponentName
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import androidx.compose.Composable
 import androidx.lifecycle.viewModelScope
 import androidx.ui.core.Text
 import androidx.ui.graphics.Image
 import androidx.ui.res.stringResource
+import com.ivianuu.essentials.activityresult.ActivityResult
+import com.ivianuu.essentials.activityresult.ActivityResultRoute
 import com.ivianuu.essentials.mvrx.MvRxViewModel
 import com.ivianuu.essentials.mvrx.injectMvRxViewModel
 import com.ivianuu.essentials.ui.compose.common.AsyncList
@@ -105,10 +108,9 @@ internal class ShortcutPickerViewModel(
 
     fun infoClicked(info: ShortcutInfo) {
         viewModelScope.launch(dispatchers.default) {
-            error("todo")
-            /*try {
-                val shortcutRequestResult = navigator.push<com.ivianuu.essentials.legacy.ui.common.ActivityResult>(
-                    com.ivianuu.essentials.legacy.ui.common.ActivityResultRoute(
+            try {
+                val shortcutRequestResult = navigator.push<ActivityResult>(
+                    ActivityResultRoute(
                         intent = info.intent
                     )
                 )?.data ?: return@launch
@@ -140,7 +142,7 @@ internal class ShortcutPickerViewModel(
 
                 navigator.pop(result = shortcut)
             } catch (e: Exception) {
-            }*/
+            }
         }
     }
 }

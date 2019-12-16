@@ -2,6 +2,7 @@ include(
     ":essentials",
     ":essentials-about",
     ":essentials-accessibility",
+    ":essentials-activityresult",
     ":essentials-apps",
     ":essentials-apps-coil",
     ":essentials-apps-ui",

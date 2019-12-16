@@ -21,12 +21,12 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.lifecycle.ViewModel
-import com.ivianuu.essentials.ui.base.EsActivity
+import com.ivianuu.essentials.ui.compose.es.ComposeActivity
 import com.ivianuu.essentials.util.injectViewModel
 import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.inject
 
-class PermissionActivity : EsActivity() {
+class PermissionActivity : ComposeActivity() {
 
     private val manager: PermissionManager by inject()
     private val requestUi: PermissionRequestUi by inject()

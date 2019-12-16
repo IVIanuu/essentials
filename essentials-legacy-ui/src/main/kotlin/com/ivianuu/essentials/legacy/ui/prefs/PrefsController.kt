@@ -23,6 +23,7 @@ import com.ivianuu.epoxyprefs.AbstractPreferenceModel
 import com.ivianuu.epoxyprefs.EpoxyPrefsPlugins
 import com.ivianuu.epoxyprefs.PreferenceEpoxyController
 import com.ivianuu.epoxyprefs.preferenceEpoxyController
+import com.ivianuu.essentials.legacy.ui.compose.asComposeControllerRoute
 import com.ivianuu.essentials.legacy.ui.navigation.director.ControllerRoute
 import com.ivianuu.essentials.legacy.ui.simple.ListController
 import com.ivianuu.essentials.ui.compose.navigation.UrlRoute
@@ -71,7 +72,7 @@ abstract class PrefsController : ListController() {
         navigateOnClick {
             UrlRoute(
                 urlProvider()
-            )
+            ).asComposeControllerRoute()
         }
     }
 }

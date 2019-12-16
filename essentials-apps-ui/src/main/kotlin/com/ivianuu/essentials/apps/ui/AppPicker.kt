@@ -38,7 +38,6 @@ import com.ivianuu.essentials.ui.compose.material.Scaffold
 import com.ivianuu.essentials.ui.compose.material.SimpleListItem
 import com.ivianuu.essentials.ui.compose.navigation.NavigatorState
 import com.ivianuu.essentials.ui.compose.navigation.Route
-import com.ivianuu.essentials.ui.compose.navigation.navigator
 import com.ivianuu.essentials.util.AppDispatchers
 import com.ivianuu.essentials.util.Async
 import com.ivianuu.essentials.util.Uninitialized
@@ -53,7 +52,6 @@ fun AppPickerRoute(
     Scaffold(
         topAppBar = { EsTopAppBar(title ?: stringResource(R.string.es_title_app_picker)) },
         body = {
-            val navigator = navigator
             val viewModel =
                 injectMvRxViewModel<AppPickerViewModel> {
                     parametersOf(appFilter)

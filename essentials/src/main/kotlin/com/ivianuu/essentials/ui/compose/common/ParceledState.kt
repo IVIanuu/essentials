@@ -31,20 +31,6 @@ import com.ivianuu.essentials.ui.compose.viewmodel.viewModel
 import com.ivianuu.essentials.util.sourceLocation
 
 @Composable
-inline fun <T : Parcelable> parceled(
-    noinline init: () -> T
-): T = parceled(
-    key = sourceLocation().toString(),
-    init = init
-)
-
-@Composable
-fun <T : Parcelable> parceled(
-    key: String,
-    init: () -> T
-): T = parceledState(key, init).value
-
-@Composable
 inline fun <T : Parcelable> parceledState(
     noinline init: () -> T
 ): State<T> = parceledState(

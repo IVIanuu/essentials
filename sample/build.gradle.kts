@@ -41,6 +41,8 @@ android {
 dependencies {
     implementation(project(":essentials"))
     implementation(project(":essentials-about"))
+    api(project(":essentials-accessibility"))
+    api(project(":essentials-activityresult"))
     implementation(project(":essentials-apps"))
     implementation(project(":essentials-apps-coil"))
     implementation(project(":essentials-apps-ui"))

@@ -27,7 +27,6 @@ import androidx.ui.material.MaterialTheme
 import com.ivianuu.essentials.ui.base.EsActivity
 import com.ivianuu.essentials.ui.base.EsViewModel
 import com.ivianuu.essentials.ui.compose.common.MultiAmbientProvider
-import com.ivianuu.essentials.ui.compose.common.OverlayState
 import com.ivianuu.essentials.ui.compose.common.with
 import com.ivianuu.essentials.ui.compose.core.AndroidComposeViewContainer
 import com.ivianuu.essentials.ui.compose.core.MediaQuery
@@ -41,12 +40,13 @@ import com.ivianuu.essentials.ui.compose.navigation.Route
 import com.ivianuu.essentials.util.getViewModel
 import com.ivianuu.essentials.util.unsafeLazy
 import com.ivianuu.injekt.Module
+import com.ivianuu.injekt.get
 
 abstract class ComposeActivity : EsActivity() {
 
     override fun retainedModules(): List<Module> = listOf(ComposeActivityModule(this, startRoute))
 
-    protected abstract val startRoute: Route
+    protected open val startRoute: Route? = null
 
     private val composeContentView by unsafeLazy {
         AndroidComposeViewContainer(this).apply {
@@ -102,20 +102,18 @@ abstract class ComposeActivity : EsActivity() {
 
     @Composable
     protected open fun content() {
-        Navigator(startRoute = startRoute)
+        Navigator(state = get())
     }
 }
 
 private fun ComposeActivityModule(
     activity: ComposeActivity,
-    startRoute: Route
+    startRoute: Route?
 ) = Module {
     single {
         NavigatorState(
-            overlayState = OverlayState(),
             coroutineScope = activity.getViewModel { CoroutineScopeViewModel() }.viewModelScope,
-            startRoute = startRoute,
-            handleBack = true
+            startRoute = startRoute
         )
     }
 }

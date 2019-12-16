@@ -61,18 +61,18 @@ fun RetainedNavigatorState(
     handleBack: Boolean = true
 ): NavigatorState = retained(key = "Navigator:$key") {
     NavigatorState(
-        overlayState,
-        coroutineScope,
-        startRoute,
-        handleBack
+        coroutineScope = coroutineScope,
+        overlayState = overlayState,
+        startRoute = startRoute,
+        handleBack = handleBack
     )
 }
 
 class NavigatorState(
-    internal val overlayState: OverlayState,
     private val coroutineScope: CoroutineScope,
-    startRoute: Route,
-    handleBack: Boolean
+    internal val overlayState: OverlayState = OverlayState(),
+    startRoute: Route? = null,
+    handleBack: Boolean = true
 ) {
 
     var handleBack by framed(handleBack)
@@ -86,7 +86,7 @@ class NavigatorState(
     )
 
     init {
-        if (_backStack.isEmpty()) {
+        if (_backStack.isEmpty() && startRoute != null) {
             push(startRoute)
         }
     }
