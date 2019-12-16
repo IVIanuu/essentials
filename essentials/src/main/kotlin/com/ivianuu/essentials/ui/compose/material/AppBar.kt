@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.ui.compose.material
 
 import androidx.compose.Composable
+import androidx.compose.remember
 import androidx.ui.core.Size
 import androidx.ui.core.Text
 import androidx.ui.core.dp
@@ -64,11 +65,12 @@ private fun autoTopAppBarLeadingIcon(): (@Composable() () -> Unit)? {
     val scaffold = scaffold
     val navigator = navigator
     val route = route
+    val canGoBack = remember { navigator.backStack.indexOf(route) > 0 }
     return when {
         scaffold.hasDrawer -> {
             { DrawerButton() }
         }
-        navigator.backStack.indexOf(route) > 0 -> {
+        canGoBack -> {
             { BackButton() }
         }
         else -> null

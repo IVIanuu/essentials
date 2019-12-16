@@ -41,25 +41,10 @@ import com.ivianuu.essentials.ui.compose.navigation.Route
 import com.ivianuu.essentials.util.getViewModel
 import com.ivianuu.essentials.util.unsafeLazy
 import com.ivianuu.injekt.Module
-import com.ivianuu.injekt.get
-
-private fun ComposeActivityModule(startRoute: Route) = Module {
-    single {
-        NavigatorState(
-            overlayState = OverlayState(),
-            coroutineScope = get<ComposeActivity>().getViewModel { CoroutineScopeViewModel() }.viewModelScope,
-            startRoute = startRoute,
-            handleBack = true
-        )
-    }
-}
-
-// todo remove
-private class CoroutineScopeViewModel : EsViewModel()
 
 abstract class ComposeActivity : EsActivity() {
 
-    override fun retainedModules(): List<Module> = listOf(ComposeActivityModule(startRoute))
+    override fun retainedModules(): List<Module> = listOf(ComposeActivityModule(this, startRoute))
 
     protected abstract val startRoute: Route
 
@@ -120,3 +105,20 @@ abstract class ComposeActivity : EsActivity() {
         Navigator(startRoute = startRoute)
     }
 }
+
+private fun ComposeActivityModule(
+    activity: ComposeActivity,
+    startRoute: Route
+) = Module {
+    single {
+        NavigatorState(
+            overlayState = OverlayState(),
+            coroutineScope = activity.getViewModel { CoroutineScopeViewModel() }.viewModelScope,
+            startRoute = startRoute,
+            handleBack = true
+        )
+    }
+}
+
+// todo remove
+private class CoroutineScopeViewModel : EsViewModel()
