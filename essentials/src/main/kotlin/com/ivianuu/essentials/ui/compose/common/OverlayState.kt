@@ -69,10 +69,12 @@ class OverlayState(initialEntries: List<OverlayEntry> = emptyList()) {
     }
 
     fun add(entry: OverlayEntry) {
+        check(entry !in _entries)
         _entries.add(entry)
     }
 
     fun add(index: Int, entry: OverlayEntry) {
+        check(entry !in _entries)
         _entries.add(index, entry)
     }
 

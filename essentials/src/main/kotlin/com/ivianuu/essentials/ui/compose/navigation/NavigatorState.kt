@@ -20,7 +20,7 @@ import androidx.compose.Ambient
 import androidx.compose.Composable
 import androidx.compose.ambient
 import androidx.compose.frames.modelListOf
-import androidx.compose.onCommit
+import androidx.compose.onActive
 import androidx.compose.remember
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.compose.common.Overlay
@@ -92,9 +92,12 @@ class NavigatorState internal constructor(
     suspend fun <T> push(route: Route): T? {
         d { "push $route" }
 
+        val prev = _backStack.lastOrNull()
         val routeState = RouteState(route)
         _backStack += routeState
-        routeState.attach()
+        prev?.exit(routeState, true)
+        routeState.enter(prev, true)
+
         return routeState.awaitResult()
     }
 
@@ -105,7 +108,9 @@ class NavigatorState internal constructor(
     private suspend fun popInternal(result: Any?) {
         d { "pop result $result" }
         val removedRoute = _backStack.removeAt(backStack.lastIndex)
-        removedRoute.detach()
+        val newTopRoute = _backStack.lastOrNull()
+        removedRoute.exit(newTopRoute, false)
+        newTopRoute?.enter(removedRoute, false)
         removedRoute.setResult(result)
     }
 
@@ -118,14 +123,14 @@ class NavigatorState internal constructor(
     suspend fun <T> replace(route: Route): T? {
         d { "replace $route" }
 
-        if (_backStack.isNotEmpty()) {
-            val removedRoute = _backStack.removeAt(_backStack.lastIndex)
-            removedRoute.detach()
-        }
-
         val routeState = RouteState(route)
         _backStack += routeState
-        routeState.attach()
+
+        val removedRoute = _backStack.lastOrNull()
+        if (removedRoute != null) _backStack -= removedRoute
+        removedRoute?.exit(routeState, true)
+        routeState.enter(removedRoute, true)
+
         return routeState.awaitResult()
     }
 
@@ -137,13 +142,15 @@ class NavigatorState internal constructor(
             opaque = true,
             keepState = route.keepState,
             content = {
-                if (transitionState == RouteTransition.State.Init) {
-                    onCommit {
-                        transitionState = RouteTransition.State.Pushed
+                onActive {
+                    d { "${route.name} -> on active" }
+                    onDispose {
+                        d { "${route.name} -> on dispose" }
                     }
                 }
 
                 RouteTransitionWrapper(
+                    route = route,
                     transition = route.transition,
                     state = transitionState,
                     onTransitionComplete = onTransitionComplete,
@@ -154,21 +161,27 @@ class NavigatorState internal constructor(
         )
 
         private val onTransitionComplete: (RouteTransition.State) -> Unit = { completedState ->
-            notifiedTransitionState = transitionState
-            if (completedState == RouteTransition.State.Popped) {
+            if (completedState == RouteTransition.State.PopExit) {
                 overlayState.remove(overlayEntry)
             }
         }
 
+        private var transition by framed(route.transition)
         private var transitionState by framed(RouteTransition.State.Init)
-        private var notifiedTransitionState = RouteTransition.State.Init
 
-        fun attach() {
-            overlayState.add(overlayEntry)
+        fun enter(prev: RouteState?, isPush: Boolean) {
+            d { "${route.name} enter -> prev ${prev?.route?.name} is push $isPush" }
+            if (isPush) overlayState.add(overlayEntry)
+            transitionState =
+                if (isPush) RouteTransition.State.PushEnter else RouteTransition.State.PopEnter
+            transition = if (isPush) route.transition else prev!!.route.transition
         }
 
-        fun detach() {
-            transitionState = RouteTransition.State.Popped
+        fun exit(next: RouteState?, isPush: Boolean) {
+            d { "${route.name} exit -> next ${next?.route?.name} is push $isPush" }
+            transitionState =
+                if (isPush) RouteTransition.State.PopEnter else RouteTransition.State.PopExit
+            transition = if (isPush) next!!.route.transition else route.transition
         }
 
         suspend fun <T> awaitResult(): T? = result.await() as? T
