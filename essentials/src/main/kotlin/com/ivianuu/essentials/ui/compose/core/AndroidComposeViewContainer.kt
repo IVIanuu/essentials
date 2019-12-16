@@ -21,6 +21,7 @@ import android.content.Context
 import android.content.res.Configuration
 import android.os.Build
 import android.util.AttributeSet
+import android.view.MotionEvent
 import android.view.Surface
 import android.view.View
 import android.view.WindowInsets
@@ -49,6 +50,14 @@ class AndroidComposeViewContainer @JvmOverloads constructor(
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
         requestApplyInsets()
+    }
+
+    override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
+        return try {
+            super.dispatchTouchEvent(ev)
+        } catch (e: Exception) {
+            false
+        }
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {

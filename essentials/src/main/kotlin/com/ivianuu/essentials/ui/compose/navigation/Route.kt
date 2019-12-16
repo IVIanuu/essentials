@@ -24,7 +24,7 @@ open class Route(
     val name: String,
     val opaque: Boolean = false,
     val keepState: Boolean = false,
-    val transition: RouteTransition = DefaultRouteTransition,
+    val transition: RouteTransition? = null,
     val content: @Composable() () -> Unit
 ) {
 

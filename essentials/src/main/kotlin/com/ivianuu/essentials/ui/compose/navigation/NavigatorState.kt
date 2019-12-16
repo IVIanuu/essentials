@@ -143,16 +143,17 @@ class NavigatorState internal constructor(
             keepState = route.keepState,
             content = {
                 onActive {
-                    d { "${route.name} -> on active" }
+                    d { "${route.name} -> lifecycle on active" }
                     onDispose {
-                        d { "${route.name} -> on dispose" }
+                        d { "${route.name} -> lifecycle on dispose" }
                     }
                 }
 
                 RouteTransitionWrapper(
                     route = route,
-                    transition = route.transition,
+                    transition = transition ?: DefaultRouteTransition,
                     state = transitionState,
+                    lastState = lastTransitionState,
                     onTransitionComplete = onTransitionComplete,
                     types = listOf(OpacityRouteTransitionType, CanvasRouteTransitionType),
                     children = route.content
@@ -161,27 +162,48 @@ class NavigatorState internal constructor(
         )
 
         private val onTransitionComplete: (RouteTransition.State) -> Unit = { completedState ->
-            if (completedState == RouteTransition.State.PopExit) {
+            if (completedState == RouteTransition.State.ExitFromPush) {
+                other?.let {
+                    d { "${route.name} notify complete to other ${other?.route?.name}" }
+                }
+                other?.onOtherTransitionComplete(this)
+                other = null
+            }
+
+            if (completedState == RouteTransition.State.ExitFromPop) {
                 overlayState.remove(overlayEntry)
             }
         }
 
         private var transition by framed(route.transition)
         private var transitionState by framed(RouteTransition.State.Init)
+        private var lastTransitionState by framed(RouteTransition.State.Init)
+
+        private var other: RouteState? = null
+
+        private fun onOtherTransitionComplete(other: RouteState) {
+            d { "${route.name} on other ${other.route.name} transition complete" }
+            overlayEntry.opaque = route.opaque
+        }
 
         fun enter(prev: RouteState?, isPush: Boolean) {
-            d { "${route.name} enter -> prev ${prev?.route?.name} is push $isPush" }
+            overlayEntry.opaque = route.opaque || isPush
             if (isPush) overlayState.add(overlayEntry)
+            lastTransitionState = transitionState
             transitionState =
-                if (isPush) RouteTransition.State.PushEnter else RouteTransition.State.PopEnter
+                if (isPush) RouteTransition.State.EnterFromPush else RouteTransition.State.EnterFromPop
             transition = if (isPush) route.transition else prev!!.route.transition
+            d { "${route.name} enter -> prev ${prev?.route?.name} is push $isPush state $transitionState last state $lastTransitionState opaque ${overlayEntry.opaque}" }
         }
 
         fun exit(next: RouteState?, isPush: Boolean) {
-            d { "${route.name} exit -> next ${next?.route?.name} is push $isPush" }
+            overlayEntry.opaque = route.opaque || !isPush
+            if (isPush) other = next
+            lastTransitionState = transitionState
             transitionState =
-                if (isPush) RouteTransition.State.PopEnter else RouteTransition.State.PopExit
+                if (isPush) RouteTransition.State.ExitFromPush else RouteTransition.State.ExitFromPop
             transition = if (isPush) next!!.route.transition else route.transition
+            d { "${route.name} exit -> next ${next?.route?.name} is push $isPush state $transitionState last state $lastTransitionState opaque ${overlayEntry.opaque}" }
         }
 
         suspend fun <T> awaitResult(): T? = result.await() as? T
