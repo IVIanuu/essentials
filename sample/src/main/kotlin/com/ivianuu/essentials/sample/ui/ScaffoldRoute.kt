@@ -35,6 +35,7 @@ import com.ivianuu.essentials.ui.compose.layout.ScrollableList
 import com.ivianuu.essentials.ui.compose.material.EsSurface
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
 import com.ivianuu.essentials.ui.compose.material.Scaffold
+import com.ivianuu.essentials.ui.compose.material.ScaffoldState
 import com.ivianuu.essentials.ui.compose.material.SimpleListItem
 import com.ivianuu.essentials.ui.compose.material.Subheader
 import com.ivianuu.essentials.ui.navigation.Navigator
@@ -46,8 +47,8 @@ val ScaffoldRoute = ComposeControllerRoute {
     Scaffold(
         topAppBar = if (controls.showTopAppBar) ({
             val alpha = remember(controls.bodyLayoutMode) {
-                if (controls.bodyLayoutMode == Scaffold.BodyLayoutMode.ExtendTop
-                    || controls.bodyLayoutMode == Scaffold.BodyLayoutMode.ExtendBoth
+                if (controls.bodyLayoutMode == ScaffoldState.BodyLayoutMode.ExtendTop
+                    || controls.bodyLayoutMode == ScaffoldState.BodyLayoutMode.ExtendBoth
                 ) 0.5f else 1f
             }
 
@@ -61,8 +62,8 @@ val ScaffoldRoute = ComposeControllerRoute {
         }) else null,
         bottomBar = if (controls.showBottomBar) ({
             val alpha = remember(controls.bodyLayoutMode) {
-                if (controls.bodyLayoutMode == Scaffold.BodyLayoutMode.ExtendBottom
-                    || controls.bodyLayoutMode == Scaffold.BodyLayoutMode.ExtendBoth
+                if (controls.bodyLayoutMode == ScaffoldState.BodyLayoutMode.ExtendBottom
+                    || controls.bodyLayoutMode == ScaffoldState.BodyLayoutMode.ExtendBoth
                 ) 0.5f else 1f
             }
 
@@ -112,7 +113,7 @@ val ScaffoldRoute = ComposeControllerRoute {
                         navigator.push(
                             DialogRoute {
                                 SingleChoiceListDialog(
-                                    items = Scaffold.BodyLayoutMode.values().toList(),
+                                    items = ScaffoldState.BodyLayoutMode.values().toList(),
                                     selectedItem = controls.bodyLayoutMode,
                                     onSelect = { controls.bodyLayoutMode = it },
                                     item = { Text(it.name) }
@@ -149,7 +150,7 @@ val ScaffoldRoute = ComposeControllerRoute {
                         navigator.push(
                             DialogRoute {
                                 SingleChoiceListDialog(
-                                    items = Scaffold.FabPosition.values().toList(),
+                                    items = ScaffoldState.FabPosition.values().toList(),
                                     selectedItem = controls.fabPosition,
                                     onSelect = { controls.fabPosition = it },
                                     item = { Text(it.name) }
@@ -166,8 +167,8 @@ val ScaffoldRoute = ComposeControllerRoute {
 private class ScaffoldControls {
     var showTopAppBar by framed(true)
     var centerTitle by framed(false)
-    var bodyLayoutMode by framed(Scaffold.BodyLayoutMode.Wrap)
+    var bodyLayoutMode by framed(ScaffoldState.BodyLayoutMode.Wrap)
     var showBottomBar by framed(false)
     var showFab by framed(false)
-    var fabPosition by framed(Scaffold.FabPosition.End)
+    var fabPosition by framed(ScaffoldState.FabPosition.End)
 }

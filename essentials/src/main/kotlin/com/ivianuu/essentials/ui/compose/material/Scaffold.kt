@@ -18,9 +18,8 @@ package com.ivianuu.essentials.ui.compose.material
 
 import androidx.compose.Ambient
 import androidx.compose.Composable
-import androidx.compose.State
+import androidx.compose.ambient
 import androidx.compose.remember
-import androidx.compose.state
 import androidx.ui.core.Constraints
 import androidx.ui.core.IntPx
 import androidx.ui.core.Layout
@@ -28,66 +27,82 @@ import androidx.ui.core.ParentData
 import androidx.ui.core.dp
 import androidx.ui.core.looseMin
 import androidx.ui.material.DrawerState
+import androidx.ui.material.ModalDrawerLayout
 import androidx.ui.material.surface.Surface
+import com.ivianuu.essentials.ui.compose.common.framed
 import com.ivianuu.essentials.ui.compose.common.withDensity
 import com.ivianuu.essentials.ui.compose.layout.Expand
 
 @Composable
 fun Scaffold(
-    drawer: (@Composable() (
-        drawerState: DrawerState,
-        onDrawerStateChanged: (DrawerState) -> Unit,
-        body: @Composable() () -> Unit
-    ) -> Unit
-    )? = null,
-    drawerState: State<DrawerState> = state { DrawerState.Closed },
+    drawerContent: (@Composable() () -> Unit)? = null,
     topAppBar: (@Composable() () -> Unit)? = null,
     body: (@Composable() () -> Unit)? = null,
     bottomBar: (@Composable() () -> Unit)? = null,
     fab: (@Composable() () -> Unit)? = null,
-    fabPosition: Scaffold.FabPosition = Scaffold.FabPosition.End,
-    bodyLayoutMode: Scaffold.BodyLayoutMode = Scaffold.BodyLayoutMode.Wrap
+    fabPosition: ScaffoldState.FabPosition = ScaffoldState.FabPosition.End,
+    bodyLayoutMode: ScaffoldState.BodyLayoutMode = ScaffoldState.BodyLayoutMode.Wrap
 ) {
-    val scaffold = remember { Scaffold(drawerState) }
+    val scaffoldState = remember { ScaffoldState() }
+    remember(fabPosition) { scaffoldState.fabPosition = fabPosition }
+    remember(bodyLayoutMode) { scaffoldState.bodyLayoutMode = bodyLayoutMode }
 
+    Scaffold(
+        scaffoldState = scaffoldState,
+        drawerContent = drawerContent,
+        topAppBar = topAppBar,
+        body = body,
+        bottomBar = bottomBar,
+        fab = fab
+    )
+}
+
+@Composable
+fun Scaffold(
+    scaffoldState: ScaffoldState,
+    drawerContent: (@Composable() () -> Unit)? = null,
+    topAppBar: (@Composable() () -> Unit)? = null,
+    body: (@Composable() () -> Unit)? = null,
+    bottomBar: (@Composable() () -> Unit)? = null,
+    fab: (@Composable() () -> Unit)? = null
+) {
     // update state
-    scaffold.hasTopAppBar = topAppBar != null
-    scaffold.hasDrawer = drawer != null
-    scaffold.hasBody = body != null
-    scaffold.hasBottomBar = bottomBar != null
-    scaffold.hasFab = fab != null
+    scaffoldState.hasTopAppBar = topAppBar != null
+    scaffoldState.hasDrawer = drawerContent != null
+    scaffoldState.hasBody = body != null
+    scaffoldState.hasBottomBar = bottomBar != null
+    scaffoldState.hasFab = fab != null
 
-    val scaffoldLayout: @Composable() () -> Unit = {
-        ScaffoldLayout(
-            topAppBar = topAppBar,
-            body = body,
-            bottomBar = bottomBar,
-            fab = fab,
-            bodyLayoutMode = bodyLayoutMode,
-            fabPosition = fabPosition
-        )
-    }
-
-    Surface {
-        ScaffoldAmbient.Provider(value = scaffold) {
-            Expand {
-                if (drawer != null) {
-                    drawer(
-                        drawerState.value,
-                        { drawerState.value = it },
-                        scaffoldLayout
-                    )
-                } else {
-                    scaffoldLayout()
+    ScaffoldAmbient.Provider(value = scaffoldState) {
+        Expand {
+            ModalDrawerLayout(
+                drawerState = scaffoldState.drawerState,
+                onStateChange = { scaffoldState.drawerState = it },
+                gesturesEnabled = drawerContent != null,
+                drawerContent = {
+                    if (drawerContent != null) {
+                        Surface {
+                            drawerContent()
+                        }
+                    }
+                },
+                bodyContent = {
+                    Surface {
+                        ScaffoldLayout(
+                            state = scaffoldState,
+                            topAppBar = topAppBar,
+                            body = body,
+                            bottomBar = bottomBar,
+                            fab = fab
+                        )
+                    }
                 }
-            }
+            )
         }
     }
 }
 
-val ScaffoldAmbient = Ambient.of<Scaffold>()
-
-class Scaffold internal constructor(_drawerState: State<DrawerState>) {
+class ScaffoldState {
 
     var hasTopAppBar = false
         internal set
@@ -100,8 +115,10 @@ class Scaffold internal constructor(_drawerState: State<DrawerState>) {
     var hasFab = false
         internal set
 
-    // todo use by framed()
-    var drawerState by _drawerState
+    var drawerState by framed(DrawerState.Closed)
+
+    var fabPosition by framed(FabPosition.End)
+    var bodyLayoutMode by framed(BodyLayoutMode.Wrap)
 
     fun toggleDrawer() {
         if (drawerState != DrawerState.Opened) {
@@ -126,14 +143,18 @@ class Scaffold internal constructor(_drawerState: State<DrawerState>) {
     enum class FabPosition { Center, End }
 }
 
+private val ScaffoldAmbient = Ambient.of<ScaffoldState>()
+@Composable
+val scaffold: ScaffoldState
+    get() = ambient(ScaffoldAmbient)
+
 @Composable
 private fun ScaffoldLayout(
+    state: ScaffoldState,
     topAppBar: (@Composable() () -> Unit)?,
     body: (@Composable() () -> Unit)?,
-    bodyLayoutMode: Scaffold.BodyLayoutMode,
     bottomBar: (@Composable() () -> Unit)?,
-    fab: (@Composable() () -> Unit)?,
-    fabPosition: Scaffold.FabPosition
+    fab: (@Composable() () -> Unit)?
 ) {
     val children: @Composable() () -> Unit = {
         if (topAppBar != null) {
@@ -208,20 +229,20 @@ private fun ScaffoldLayout(
             bodyTop = null
             bodyBottom = null
         } else {
-            when (bodyLayoutMode) {
-                Scaffold.BodyLayoutMode.ExtendBoth -> {
+            when (state.bodyLayoutMode) {
+                ScaffoldState.BodyLayoutMode.ExtendBoth -> {
                     bodyTop = topAppBarTop!!
                     bodyBottom = bottomBarBottom!!
                 }
-                Scaffold.BodyLayoutMode.ExtendTop -> {
+                ScaffoldState.BodyLayoutMode.ExtendTop -> {
                     bodyTop = topAppBarTop!!
                     bodyBottom = if (bottomBarMeasureable != null) bottomBarTop!! else height
                 }
-                Scaffold.BodyLayoutMode.ExtendBottom -> {
+                ScaffoldState.BodyLayoutMode.ExtendBottom -> {
                     bodyTop = if (topAppBarMeasureable != null) topAppBarBottom!! else IntPx.Zero
                     bodyBottom = bottomBarBottom!!
                 }
-                Scaffold.BodyLayoutMode.Wrap -> {
+                ScaffoldState.BodyLayoutMode.Wrap -> {
                     bodyTop = if (topAppBarMeasureable != null) topAppBarBottom!! else IntPx.Zero
                     bodyBottom = if (bottomBarMeasureable != null) bottomBarTop!! else height
                 }
@@ -250,9 +271,9 @@ private fun ScaffoldLayout(
             else height - fabPlaceable.height - fabPadding
         } else null
         val fabLeft = if (fabPlaceable != null) {
-            when (fabPosition) {
-                Scaffold.FabPosition.Center -> width / 2 - fabPlaceable.width / 2
-                Scaffold.FabPosition.End -> width - fabPlaceable.width - fabPadding
+            when (state.fabPosition) {
+                ScaffoldState.FabPosition.Center -> width / 2 - fabPlaceable.width / 2
+                ScaffoldState.FabPosition.End -> width - fabPlaceable.width - fabPadding
             }
         } else null
 

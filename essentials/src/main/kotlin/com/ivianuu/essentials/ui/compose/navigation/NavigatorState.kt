@@ -18,6 +18,7 @@ package com.ivianuu.essentials.ui.compose.navigation
 
 import androidx.compose.Ambient
 import androidx.compose.Composable
+import androidx.compose.ambient
 import androidx.compose.frames.modelListOf
 import androidx.compose.remember
 import com.github.ajalt.timberkt.d
@@ -157,4 +158,8 @@ class NavigatorState internal constructor(
     }
 }
 
-val NavigatorAmbient = Ambient.of<NavigatorState>()
+private val NavigatorAmbient = Ambient.of<NavigatorState>()
+
+@Composable
+val navigator: NavigatorState
+    get() = ambient(NavigatorAmbient)

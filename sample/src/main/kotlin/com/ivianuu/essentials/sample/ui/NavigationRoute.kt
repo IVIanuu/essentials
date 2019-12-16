@@ -29,7 +29,6 @@ import com.ivianuu.essentials.ui.compose.layout.HeightSpacer
 import com.ivianuu.essentials.ui.compose.layout.MainAxisAlignment
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
 import com.ivianuu.essentials.ui.compose.material.Scaffold
-import com.ivianuu.essentials.ui.compose.navigation.Navigator
 import com.ivianuu.essentials.ui.compose.navigation.NavigatorAmbient
 import com.ivianuu.essentials.ui.compose.navigation.Route
 

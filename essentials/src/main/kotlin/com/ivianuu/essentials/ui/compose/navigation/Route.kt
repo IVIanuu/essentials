@@ -18,6 +18,7 @@ package com.ivianuu.essentials.ui.compose.navigation
 
 import androidx.compose.Ambient
 import androidx.compose.Composable
+import androidx.compose.ambient
 
 open class Route(
     val opaque: Boolean = false,
@@ -33,4 +34,8 @@ open class Route(
     }
 }
 
-val RouteAmbient = Ambient.of<Route>()
+private val RouteAmbient = Ambient.of<Route>()
+
+@Composable
+val route: Route
+    get() = ambient(RouteAmbient)
