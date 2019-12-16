@@ -55,14 +55,14 @@ internal class ActivityResultController(@Param private val intent: Intent) : EsC
     override fun onCreate() {
         super.onCreate()
 
-        val resultCode = resultCodes.incrementAndGet()
+        val requestCode = requestCodes.incrementAndGet()
 
-        addActivityResultListener(resultCode) { requestCode, resultCode, data ->
+        addActivityResultListener(requestCode) { requestCode, resultCode, data ->
             navigator.pop(ActivityResult(requestCode, resultCode, data))
         }
 
         try {
-            startActivityForResult(intent, resultCode)
+            startActivityForResult(intent, requestCode)
         } catch (e: Exception) {
             lifecycleScope.launch { navigator.pop() }
         }
@@ -74,4 +74,4 @@ internal class ActivityResultController(@Param private val intent: Intent) : EsC
     ): View = View(requireActivity()) // dummy
 }
 
-private val resultCodes = AtomicInteger(0)
+private val requestCodes = AtomicInteger(0)
