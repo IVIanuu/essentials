@@ -43,7 +43,7 @@ fun Overlay(state: OverlayState = remember { OverlayState() }) {
                     )
                 }
                 .forEach { parentData ->
-                    key(parentData) {
+                    key(parentData.entry) {
                         Observe {
                             ParentData(data = parentData) {
                                 AbsorbPointer(absorb = !parentData.isVisible) {
