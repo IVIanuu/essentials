@@ -19,7 +19,6 @@ package com.ivianuu.essentials.shortcutpicker
 import android.content.ComponentName
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
 import androidx.compose.Composable
 import androidx.lifecycle.viewModelScope
 import androidx.ui.core.Text
@@ -27,15 +26,13 @@ import androidx.ui.graphics.Image
 import androidx.ui.res.stringResource
 import com.ivianuu.essentials.mvrx.MvRxViewModel
 import com.ivianuu.essentials.mvrx.injectMvRxViewModel
-import com.ivianuu.essentials.ui.common.ActivityResult
-import com.ivianuu.essentials.ui.common.ActivityResultRoute
 import com.ivianuu.essentials.ui.compose.common.AsyncList
 import com.ivianuu.essentials.ui.compose.common.SimpleScreen
-import com.ivianuu.essentials.ui.compose.es.ComposeControllerRoute
 import com.ivianuu.essentials.ui.compose.image.toImage
 import com.ivianuu.essentials.ui.compose.material.Icon
 import com.ivianuu.essentials.ui.compose.material.SimpleListItem
-import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.compose.navigation.NavigatorState
+import com.ivianuu.essentials.ui.compose.navigation.Route
 import com.ivianuu.essentials.util.AppDispatchers
 import com.ivianuu.essentials.util.Async
 import com.ivianuu.essentials.util.Uninitialized
@@ -44,7 +41,7 @@ import kotlinx.coroutines.launch
 
 fun ShortcutPickerRoute(
     title: String? = null
-) = ComposeControllerRoute {
+) = Route {
     val viewModel = injectMvRxViewModel<ShortcutPickerViewModel>()
     SimpleScreen(title = title ?: stringResource(R.string.es_title_shortcut_picker)) {
         AsyncList(state = viewModel.state.shortcuts) { _, info ->
@@ -73,7 +70,7 @@ private fun ShortcutInfo(
 @Factory
 internal class ShortcutPickerViewModel(
     private val dispatchers: AppDispatchers,
-    private val navigator: Navigator,
+    private val navigator: NavigatorState,
     private val packageManager: PackageManager
 ) : MvRxViewModel<ShortcutPickerState>(
     ShortcutPickerState()
@@ -108,9 +105,12 @@ internal class ShortcutPickerViewModel(
 
     fun infoClicked(info: ShortcutInfo) {
         viewModelScope.launch(dispatchers.default) {
-            try {
-                val shortcutRequestResult = navigator.push<ActivityResult>(
-                    ActivityResultRoute(intent = info.intent)
+            error("todo")
+            /*try {
+                val shortcutRequestResult = navigator.push<com.ivianuu.essentials.legacy.ui.common.ActivityResult>(
+                    com.ivianuu.essentials.legacy.ui.common.ActivityResultRoute(
+                        intent = info.intent
+                    )
                 )?.data ?: return@launch
                 val intent =
                     shortcutRequestResult.getParcelableExtra<Intent>(Intent.EXTRA_SHORTCUT_INTENT)!!
@@ -140,10 +140,9 @@ internal class ShortcutPickerViewModel(
 
                 navigator.pop(result = shortcut)
             } catch (e: Exception) {
-            }
+            }*/
         }
     }
-
 }
 
 internal data class ShortcutPickerState(

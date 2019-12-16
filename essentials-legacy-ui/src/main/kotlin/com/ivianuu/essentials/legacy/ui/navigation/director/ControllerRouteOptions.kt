@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.navigation.director
+package com.ivianuu.essentials.legacy.ui.navigation.director
 
 import com.ivianuu.director.ControllerChangeHandler
 import com.ivianuu.director.DefaultChangeHandler
@@ -30,10 +30,12 @@ import com.ivianuu.director.defaultRemovesFromViewOnPush
 import com.ivianuu.director.popChangeHandler
 import com.ivianuu.director.pushChangeHandler
 
-fun ControllerRouteOptions(): ControllerRoute.Options = ControllerRoute.Options()
+fun ControllerRouteOptions(): ControllerRoute.Options =
+    ControllerRoute.Options()
 
 inline fun defaultControllerRouteOptionsOrElse(options: () -> ControllerRoute.Options): ControllerRoute.Options =
-    defaultControllerRouteOptionsOrNull() ?: options()
+    defaultControllerRouteOptionsOrNull()
+        ?: options()
 
 fun defaultControllerRouteOptionsOrNull(): ControllerRoute.Options? {
     val pushHandler = DirectorPlugins.defaultPushHandler

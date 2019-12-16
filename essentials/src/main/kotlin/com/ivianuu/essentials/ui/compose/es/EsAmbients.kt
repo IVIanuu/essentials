@@ -14,17 +14,9 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.compose.navigation
+package com.ivianuu.essentials.ui.compose.es
 
-import com.ivianuu.essentials.ui.compose.es.ComposeControllerRoute
-import com.ivianuu.essentials.ui.navigation.director.ControllerRoute
+import android.app.Activity
+import androidx.compose.Ambient
 
-fun Route.asComposeControllerRoute(
-    options: ControllerRoute.Options? = null,
-    popOnConfigurationChange: Boolean = false
-) = ComposeControllerRoute(
-    options = options,
-    popOnConfigurationChange = popOnConfigurationChange
-) {
-    content()
-}
+val ActivityAmbient = Ambient.of<Activity> { error("No activity found") }

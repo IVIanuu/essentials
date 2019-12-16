@@ -39,7 +39,6 @@ import com.ivianuu.essentials.apps.ui.IntentAppFilter
 import com.ivianuu.essentials.shortcutpicker.ShortcutPickerRoute
 import com.ivianuu.essentials.twilight.TwilightSettingsRoute
 import com.ivianuu.essentials.ui.compose.common.navigateOnClick
-import com.ivianuu.essentials.ui.compose.es.ComposeControllerRoute
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.compose.layout.Column
 import com.ivianuu.essentials.ui.compose.layout.ScrollableList
@@ -47,11 +46,11 @@ import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
 import com.ivianuu.essentials.ui.compose.material.PopupMenuButton
 import com.ivianuu.essentials.ui.compose.material.Scaffold
 import com.ivianuu.essentials.ui.compose.material.SimpleListItem
-import com.ivianuu.essentials.ui.navigation.Route
+import com.ivianuu.essentials.ui.compose.navigation.Route
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.parametersOf
 
-val HomeRoute = ComposeControllerRoute {
+val HomeRoute = Route {
     Scaffold(
         topAppBar = {
             EsTopAppBar(
@@ -189,11 +188,6 @@ enum class HomeItem(
         title = "Nav bar",
         color = Color.Green,
         route = { NavBarRoute }
-    ),
-    Navigation(
-        title = "Navigation",
-        color = Color.Red,
-        route = { navigationRoute }
     ),
     Permission(
         title = "Permission",

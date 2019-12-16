@@ -24,7 +24,6 @@ import androidx.ui.foundation.VerticalScroller
 import androidx.ui.material.Button
 import androidx.ui.material.MaterialTheme
 import com.ivianuu.essentials.sample.R
-import com.ivianuu.essentials.ui.compose.common.retainedState
 import com.ivianuu.essentials.ui.compose.dialog.AlertDialogButtonLayout
 import com.ivianuu.essentials.ui.compose.dialog.ColorPickerDialog
 import com.ivianuu.essentials.ui.compose.dialog.DialogButton
@@ -35,8 +34,6 @@ import com.ivianuu.essentials.ui.compose.dialog.MultiChoiceListDialog
 import com.ivianuu.essentials.ui.compose.dialog.ScrollableDialog
 import com.ivianuu.essentials.ui.compose.dialog.SingleChoiceListDialog
 import com.ivianuu.essentials.ui.compose.dialog.TextInputDialog
-import com.ivianuu.essentials.ui.compose.es.ComposeControllerRoute
-import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.compose.layout.Column
 import com.ivianuu.essentials.ui.compose.layout.CrossAxisAlignment
 import com.ivianuu.essentials.ui.compose.layout.HeightSpacer
@@ -45,18 +42,11 @@ import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
 import com.ivianuu.essentials.ui.compose.material.Icon
 import com.ivianuu.essentials.ui.compose.material.Scaffold
 import com.ivianuu.essentials.ui.compose.material.SimpleListItem
+import com.ivianuu.essentials.ui.compose.navigation.Route
+import com.ivianuu.essentials.ui.compose.navigation.navigator
 import com.ivianuu.essentials.ui.compose.resources.drawableResource
-import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.director.ControllerRouteOptions
-import com.ivianuu.essentials.ui.navigation.director.fade
-import com.ivianuu.essentials.util.Clock
 
-val DialogsRoute = ComposeControllerRoute(
-    options = ControllerRouteOptions().fade()
-) {
-    val clock = inject<Clock>()
-    val myState = retainedState { clock.currentTimeMillis }
-
+val DialogsRoute = Route {
     Scaffold(
         topAppBar = { EsTopAppBar("Dialogs") },
         body = {
@@ -336,7 +326,7 @@ private fun DialogLauncherButton(
     dismissible: Boolean = true,
     dialog: @Composable() () -> Unit
 ) {
-    val navigator = inject<Navigator>()
+    val navigator = navigator
     Button(
         text = text,
         onClick = {

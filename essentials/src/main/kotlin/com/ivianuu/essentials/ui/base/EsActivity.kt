@@ -16,32 +16,20 @@
 
 package com.ivianuu.essentials.ui.base
 
-import android.graphics.Color
 import android.os.Bundle
 import android.view.View
-import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
-import com.ivianuu.director.Router
-import com.ivianuu.director.router
+import androidx.ui.graphics.Color
+import androidx.ui.graphics.toArgb
+import com.ivianuu.essentials.injection.RetainedActivityComponent
+import com.ivianuu.essentials.injection.initRetainedActivityComponentIfNeeded
 import com.ivianuu.essentials.injection.retainedActivityComponent
-import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.director.ControllerRenderer
-import com.ivianuu.essentials.ui.navigation.director.ControllerRoute
-import com.ivianuu.essentials.util.coroutineScope
 import com.ivianuu.essentials.util.unsafeLazy
-import com.ivianuu.essentials.util.withAlpha
 import com.ivianuu.injekt.Component
 import com.ivianuu.injekt.InjektTrait
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.android.ActivityModule
 import com.ivianuu.injekt.android.ActivityScope
-import com.ivianuu.injekt.get
-import com.ivianuu.injekt.inject
-import com.ivianuu.scopes.android.onPause
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 
 /**
  * Base activity
@@ -53,13 +41,9 @@ abstract class EsActivity : AppCompatActivity(), InjektTrait {
             scopes(ActivityScope)
             dependencies(retainedActivityComponent)
             modules(ActivityModule())
-            modules(EsActivityModule(this@EsActivity))
             modules(this@EsActivity.modules())
         }
     }
-
-    open val navigator: Navigator by inject()
-    private val controllerRenderer: ControllerRenderer by inject()
 
     protected open val layoutRes: Int get() = 0
     protected open val drawEdgeToEdge: Boolean get() = false
@@ -67,54 +51,29 @@ abstract class EsActivity : AppCompatActivity(), InjektTrait {
     open val containerId: Int
         get() = android.R.id.content
 
-    open val startRoute: ControllerRoute?
-        get() = null
-
-    private val onBackPressedCallback = object : OnBackPressedCallback(false) {
-        override fun handleOnBackPressed() {
-            navigator.pop()
-        }
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        initRetainedActivityComponentIfNeeded {
+            RetainedActivityComponent {
+                modules(retainedModules())
+            }
+        }
 
         if (drawEdgeToEdge) {
             window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
                     View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
                     View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-            window.statusBarColor = Color.BLACK.withAlpha(0.25f)
-            window.navigationBarColor = Color.TRANSPARENT
+            window.statusBarColor = Color.Black.copy(alpha = 0.25f).toArgb()
+            window.navigationBarColor = Color.Transparent.toArgb()
         }
 
         if (layoutRes != 0) {
             setContentView(layoutRes)
         }
-
-        if (navigator.backStack.isEmpty()) {
-            startRoute?.let { navigator.push(it) }
-        }
-
-        // force router init
-        get<Router>()
-
-        onBackPressedDispatcher.addCallback(onBackPressedCallback)
-
-        navigator.flow
-            .onEach { onBackPressedCallback.isEnabled = it.size > 1 }
-            .launchIn(lifecycleScope)
-    }
-
-    override fun onResumeFragments() {
-        super.onResumeFragments()
-        onPause.coroutineScope.launch {
-            controllerRenderer.render(navigator)
-        }
     }
 
     protected open fun modules(): List<Module> = emptyList()
-}
 
-private fun EsActivityModule(activity: EsActivity) = Module {
-    single { activity.router(activity.containerId) }
+    protected open fun retainedModules(): List<Module> = emptyList()
 }

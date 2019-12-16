@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.navigation.director
+package com.ivianuu.essentials.legacy.ui.navigation.director
 
 import android.app.Application
 import androidx.fragment.app.FragmentActivity
 import com.ivianuu.director.Controller
 import com.ivianuu.director.ControllerChangeHandler
-import com.ivianuu.essentials.ui.navigation.Route
+import com.ivianuu.essentials.legacy.ui.navigation.Route
 import com.ivianuu.essentials.util.Properties
 import com.ivianuu.injekt.InjektTrait
 import com.ivianuu.injekt.ParametersDefinition
@@ -61,14 +61,22 @@ inline fun <reified T : Controller> ControllerRoute(
     extras: Properties = Properties(),
     options: ControllerRoute.Options? = null,
     noinline parameters: ParametersDefinition? = null
-) = ControllerRoute(typeOf<T>(), extras, options, parameters)
+) = ControllerRoute(
+    typeOf<T>(),
+    extras,
+    options,
+    parameters
+)
 
 fun <T : Controller> ControllerRoute(
     type: Type<T>,
     extras: Properties = Properties(),
     options: ControllerRoute.Options? = null,
     parameters: ParametersDefinition? = null
-) = ControllerRoute(extras, options) { context ->
+) = ControllerRoute(
+    extras,
+    options
+) { context ->
     val injektTrait = context.parent as? InjektTrait
         ?: context.activity as? InjektTrait
         ?: context.application as? InjektTrait
@@ -81,4 +89,8 @@ fun ControllerRoute.copy(
     extras: Properties = this.extras,
     options: ControllerRoute.Options? = this.options,
     factory: (ControllerRoute.Context) -> Controller = this.factory
-) = ControllerRoute(extras, options, factory)
+) = ControllerRoute(
+    extras,
+    options,
+    factory
+)

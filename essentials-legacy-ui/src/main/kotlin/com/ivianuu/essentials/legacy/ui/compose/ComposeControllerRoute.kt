@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.compose.es
+package com.ivianuu.essentials.legacy.ui.compose
 
 import android.view.View
 import androidx.compose.Composable
 import androidx.lifecycle.lifecycleScope
 import com.ivianuu.director.requireActivity
-import com.ivianuu.essentials.ui.navigation.director.ControllerRoute
+import com.ivianuu.essentials.legacy.ui.navigation.director.ControllerRoute
 import kotlinx.coroutines.launch
 
 fun ComposeControllerRoute(

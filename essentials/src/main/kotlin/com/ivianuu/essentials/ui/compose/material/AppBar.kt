@@ -17,16 +17,14 @@
 package com.ivianuu.essentials.ui.compose.material
 
 import androidx.compose.Composable
-import androidx.compose.ambient
 import androidx.ui.core.Size
 import androidx.ui.core.Text
 import androidx.ui.core.dp
 import androidx.ui.graphics.Color
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.compose.common.RouteAmbient
-import com.ivianuu.essentials.ui.compose.injekt.inject
-import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.compose.navigation.navigator
+import com.ivianuu.essentials.ui.compose.navigation.route
 
 // todo added centerTitle
 
@@ -63,9 +61,9 @@ fun EsTopAppBar(
 
 @Composable
 private fun autoTopAppBarLeadingIcon(): (@Composable() () -> Unit)? {
-    val navigator = inject<Navigator>()
-    val route = ambient(RouteAmbient)
     val scaffold = scaffold
+    val navigator = navigator
+    val route = route
     return when {
         scaffold.hasDrawer -> {
             { DrawerButton() }

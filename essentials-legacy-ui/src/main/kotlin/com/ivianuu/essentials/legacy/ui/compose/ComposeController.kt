@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.compose.es
+package com.ivianuu.essentials.legacy.ui.compose
 
 import android.view.LayoutInflater
 import android.view.View
@@ -25,15 +25,13 @@ import androidx.ui.core.setContent
 import androidx.ui.foundation.isSystemInDarkTheme
 import androidx.ui.material.MaterialTheme
 import com.ivianuu.director.requireActivity
-import com.ivianuu.essentials.ui.base.EsController
+import com.ivianuu.essentials.legacy.ui.base.EsController
 import com.ivianuu.essentials.ui.compose.common.MultiAmbientProvider
 import com.ivianuu.essentials.ui.compose.common.with
-import com.ivianuu.essentials.ui.compose.common.ActivityAmbient
 import com.ivianuu.essentials.ui.compose.core.AndroidComposeViewContainer
-import com.ivianuu.essentials.ui.compose.common.ControllerAmbient
 import com.ivianuu.essentials.ui.compose.core.MediaQuery
 import com.ivianuu.essentials.ui.compose.core.MediaQueryProvider
-import com.ivianuu.essentials.ui.compose.common.RouteAmbient
+import com.ivianuu.essentials.ui.compose.es.ActivityAmbient
 import com.ivianuu.essentials.ui.compose.injekt.ComponentAmbient
 import com.ivianuu.essentials.ui.compose.injekt.MaterialThemeProvider
 import com.ivianuu.essentials.ui.compose.injekt.inject

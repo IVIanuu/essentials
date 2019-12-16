@@ -86,7 +86,6 @@ fun <S, T> S.getInjectedViewModel(
         get(type = type, name = name)
     }
 
-
 inline fun <S, reified T> S.injectViewModel(
     noinline fromProvider: () -> ViewModelStoreOwner = { this },
     noinline keyProvider: () -> String = { T::class.defaultViewModelKey }

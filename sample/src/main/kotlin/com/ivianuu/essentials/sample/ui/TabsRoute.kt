@@ -19,7 +19,6 @@ package com.ivianuu.essentials.sample.ui
 import androidx.ui.core.Text
 import androidx.ui.graphics.Color
 import androidx.ui.layout.Container
-import com.ivianuu.essentials.ui.compose.es.ComposeControllerRoute
 import com.ivianuu.essentials.ui.compose.layout.Column
 import com.ivianuu.essentials.ui.compose.material.EsSurface
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
@@ -28,12 +27,9 @@ import com.ivianuu.essentials.ui.compose.material.Tab
 import com.ivianuu.essentials.ui.compose.material.TabContent
 import com.ivianuu.essentials.ui.compose.material.TabController
 import com.ivianuu.essentials.ui.compose.material.TabRow
-import com.ivianuu.essentials.ui.navigation.director.ControllerRouteOptions
-import com.ivianuu.essentials.ui.navigation.director.vertical
+import com.ivianuu.essentials.ui.compose.navigation.Route
 
-val TabsRoute = ComposeControllerRoute(
-    options = ControllerRouteOptions().vertical()
-) {
+val TabsRoute = Route {
     val items = listOf(Color.Blue, Color.Red, Color.Magenta, Color.Green, Color.Cyan)
 
     TabController(items = items) {

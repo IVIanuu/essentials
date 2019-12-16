@@ -14,18 +14,11 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.mvrx
+package com.ivianuu.essentials.legacy.ui
 
-import android.view.View
-import com.ivianuu.essentials.ui.base.EsController
+import androidx.lifecycle.LifecycleCoroutineScope
+import androidx.lifecycle.lifecycleScope
+import com.ivianuu.director.Controller
 
-abstract class MvRxController : EsController(), MvRxView {
-
-    override fun onAttach(view: View) {
-        super.onAttach(view)
-        invalidate()
-    }
-
-    override fun invalidate() {
-    }
-}
+val Controller.viewLifecycleScope: LifecycleCoroutineScope
+    get() = viewLifecycleOwner.lifecycleScope

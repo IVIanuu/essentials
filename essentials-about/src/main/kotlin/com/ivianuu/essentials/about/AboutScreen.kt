@@ -20,19 +20,16 @@ import androidx.compose.Composable
 import androidx.ui.res.stringResource
 import com.ivianuu.essentials.ui.compose.common.ListScreen
 import com.ivianuu.essentials.ui.compose.common.openUrlOnClick
-import com.ivianuu.essentials.ui.compose.es.ComposeControllerRoute
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.compose.material.SimpleListItem
 import com.ivianuu.essentials.ui.compose.material.Subheader
-import com.ivianuu.essentials.ui.navigation.director.defaultControllerRouteOptionsOrNull
+import com.ivianuu.essentials.ui.compose.navigation.Route
 import com.ivianuu.essentials.util.BuildInfo
 
 fun AboutRoute(
     hasDebugPackageName: Boolean = true,
     privacyPolicyUrl: String? = null
-) = ComposeControllerRoute(
-    options = defaultControllerRouteOptionsOrNull()
-) {
+) = Route {
     ListScreen(title = stringResource(R.string.about_title)) {
         AboutSection(
             hasDebugPackageName = hasDebugPackageName,

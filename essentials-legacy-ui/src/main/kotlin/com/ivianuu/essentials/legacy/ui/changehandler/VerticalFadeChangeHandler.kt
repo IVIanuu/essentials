@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.changehandler
+package com.ivianuu.essentials.legacy.ui.changehandler
 
 import android.animation.Animator
 import android.animation.AnimatorSet
@@ -25,7 +25,7 @@ import com.ivianuu.director.DirectorPlugins
 import com.ivianuu.director.common.changehandler.AnimatorChangeHandler
 import com.ivianuu.director.common.changehandler.defaultAnimationDuration
 import com.ivianuu.director.defaultRemovesFromViewOnPush
-import com.ivianuu.essentials.ui.navigation.director.ControllerRoute
+import com.ivianuu.essentials.legacy.ui.navigation.director.ControllerRoute
 
 class VerticalFadeChangeHandler(
     duration: Long = DirectorPlugins.defaultAnimationDuration,

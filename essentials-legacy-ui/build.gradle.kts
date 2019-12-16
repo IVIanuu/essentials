@@ -17,8 +17,8 @@
 plugins {
     id("com.android.library")
     id("com.github.ben-manes.versions")
-    id("com.ivianuu.injekt")
-    id("com.ivianuu.essentials")
+    //id("com.ivianuu.injekt")
+    //id("com.ivianuu.essentials")
     kotlin("android")
     id("kotlin-android-extensions")
 }
@@ -36,6 +36,9 @@ dependencies {
 
     api(Deps.AndroidX.cardView)
     api(Deps.AndroidX.constraintLayout)
+
+    api(Deps.Director.director)
+    api(Deps.Director.common)
 
     api(Deps.epoxy)
     api(Deps.epoxyPrefs)

@@ -20,8 +20,9 @@ import androidx.animation.FloatPropKey
 import androidx.animation.transitionDefinition
 import androidx.compose.remember
 import kotlin.time.Duration
+import kotlin.time.milliseconds
 
-fun FadeRouteTransition(duration: Duration) = RouteTransition(
+fun FadeRouteTransition(duration: Duration = 300.milliseconds) = RouteTransition(
     definition = {
         remember(duration) {
             fadeRouteTransitionDefinition(duration)
@@ -52,7 +53,7 @@ private fun fadeRouteTransitionDefinition(
 
 private val Alpha = FloatPropKey()
 
-fun VerticalRouteTransition(duration: Duration) = RouteTransition(
+fun VerticalRouteTransition(duration: Duration = 300.milliseconds) = RouteTransition(
     definition = {
         remember(duration) {
             verticalRouteTransitionDefinition(duration)
@@ -88,7 +89,7 @@ private fun verticalRouteTransitionDefinition(
 
 private val Fraction = FloatPropKey()
 
-fun HorizontalRouteTransition(duration: Duration) = RouteTransition(
+fun HorizontalRouteTransition(duration: Duration = 300.milliseconds) = RouteTransition(
     definition = {
         remember(duration) {
             horizontalRouteTransitionDefinition(duration)

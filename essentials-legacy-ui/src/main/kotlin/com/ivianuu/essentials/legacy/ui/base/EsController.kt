@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.base
+package com.ivianuu.essentials.legacy.ui.base
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.ivianuu.director.Controller
 import com.ivianuu.director.requireActivity
-import com.ivianuu.essentials.injection.ChildControllerComponent
-import com.ivianuu.essentials.injection.ControllerComponent
-import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.Route
-import com.ivianuu.essentials.util.InjektTraitContextWrapper
+import com.ivianuu.essentials.legacy.ui.InjektTraitContextWrapper
+import com.ivianuu.essentials.legacy.ui.injection.ChildControllerComponent
+import com.ivianuu.essentials.legacy.ui.injection.ControllerComponent
+import com.ivianuu.essentials.legacy.ui.navigation.Navigator
+import com.ivianuu.essentials.legacy.ui.navigation.Route
 import com.ivianuu.essentials.util.cast
 import com.ivianuu.essentials.util.unsafeLazy
 import com.ivianuu.injekt.InjektTrait
@@ -55,7 +55,7 @@ abstract class EsController : Controller(), InjektTrait, LayoutContainer {
     private var _containerView: View? = null
 
     val navigator: Navigator
-        get() = requireActivity().cast<EsActivity>().navigator
+        get() = requireActivity().cast<EsLegacyActivity>().navigator
 
     var route: Route? = null
         internal set
@@ -68,7 +68,12 @@ abstract class EsController : Controller(), InjektTrait, LayoutContainer {
     ): View {
         check(layoutRes != -1) { "no layoutRes provided" }
         val injectorInflater =
-            inflater.cloneInContext(InjektTraitContextWrapper(requireActivity(), this))
+            inflater.cloneInContext(
+                InjektTraitContextWrapper(
+                    requireActivity(),
+                    this
+                )
+            )
         return injectorInflater.inflate(layoutRes, container, false)
             .also { setContentView(it) }
     }

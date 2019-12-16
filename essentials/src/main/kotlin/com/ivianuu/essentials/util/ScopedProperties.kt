@@ -54,7 +54,6 @@ class Properties {
     override fun toString(): String = "Properties($baking)"
 
     class Key<T>
-
 }
 
 fun <T> Properties.getOrSet(key: Properties.Key<T>, defaultValue: () -> T): T {

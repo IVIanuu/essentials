@@ -19,6 +19,7 @@ package com.ivianuu.essentials.ui.compose.navigation
 import androidx.animation.TransitionDefinition
 import androidx.animation.TransitionState
 import androidx.animation.transitionDefinition
+import androidx.compose.Ambient
 import androidx.compose.Composable
 import androidx.compose.Immutable
 import androidx.ui.animation.Transition
@@ -27,7 +28,6 @@ import androidx.ui.core.DrawReceiver
 import androidx.ui.core.Opacity
 import androidx.ui.core.PxSize
 import androidx.ui.graphics.Canvas
-import com.github.ajalt.timberkt.d
 
 @Immutable
 data class RouteTransition(
@@ -99,6 +99,8 @@ object CanvasRouteTransitionType : RouteTransition.Type {
     }
 }
 
+val DefaultRouteTransitionAmbient = Ambient.of { DefaultRouteTransition }
+
 val DefaultRouteTransition = RouteTransition(
     definition = { defaultTransitionDefinition },
     generateOps = { _, _ -> opsOf() }
@@ -114,7 +116,6 @@ private val defaultTransitionDefinition = transitionDefinition {
 
 @Composable
 internal fun RouteTransitionWrapper(
-    route: Route,
     transition: RouteTransition,
     state: RouteTransition.State,
     lastState: RouteTransition.State,
@@ -122,15 +123,10 @@ internal fun RouteTransitionWrapper(
     types: List<RouteTransition.Type>,
     children: @Composable() () -> Unit
 ) {
-    d { "${route.name} route transition wrapper -> next state $state last state $lastState" }
-
     Transition(
         definition = transition.definition(),
         toState = state,
-        onStateChangeFinished = {
-            d { "${route.name} on state finished $it" }
-            onTransitionComplete(it)
-        },
+        onStateChangeFinished = onTransitionComplete,
         initState = lastState,
         children = { transitionState ->
             val ops = transition.generateOps(transitionState, state)

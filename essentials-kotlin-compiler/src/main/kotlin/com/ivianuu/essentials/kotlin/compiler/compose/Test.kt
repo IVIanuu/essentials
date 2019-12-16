@@ -89,7 +89,7 @@ fun test(
     val orig = Converter().convertFile(file)
     val fileNode = Converter().convertFile(file)
 
-    //logFile(fileNode)
+    // logFile(fileNode)
 
     val steps = mutableListOf(
         Step.ConvertExpressionComposableFunsToBlocks,
@@ -112,7 +112,7 @@ fun test(
 
     val newSource = Writer.write(fileNode)
 
-    //error("new source $newSource")
+    // error("new source $newSource")
 
     return if (orig != fileNode) {
         file.withNewSource(newSource)

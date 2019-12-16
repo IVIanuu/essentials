@@ -48,6 +48,7 @@ dependencies {
     implementation(project(":essentials-foreground"))
     implementation(project(":essentials-gestures"))
     implementation(project(":essentials-hidenavbar"))
+    implementation(project(":essentials-legacy-ui"))
     implementation(project(":essentials-notificationlistener"))
     implementation(project(":essentials-permission"))
     implementation(project(":essentials-shell"))

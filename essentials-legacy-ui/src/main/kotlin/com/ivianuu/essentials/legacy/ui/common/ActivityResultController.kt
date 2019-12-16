@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.common
+package com.ivianuu.essentials.legacy.ui.common
 
 import android.app.Activity
 import android.content.Intent
@@ -25,9 +25,9 @@ import androidx.lifecycle.lifecycleScope
 import com.ivianuu.director.common.addActivityResultListener
 import com.ivianuu.director.common.startActivityForResult
 import com.ivianuu.director.requireActivity
-import com.ivianuu.essentials.ui.base.EsController
-import com.ivianuu.essentials.ui.navigation.director.ControllerRoute
-import com.ivianuu.essentials.ui.navigation.director.dialog
+import com.ivianuu.essentials.legacy.ui.base.EsController
+import com.ivianuu.essentials.legacy.ui.navigation.director.ControllerRoute
+import com.ivianuu.essentials.legacy.ui.navigation.director.dialog
 import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.Param
 import com.ivianuu.injekt.parametersOf
@@ -35,7 +35,9 @@ import kotlinx.coroutines.launch
 import java.util.concurrent.atomic.AtomicInteger
 
 fun ActivityResultRoute(intent: Intent) =
-    ControllerRoute<ActivityResultController>(options = ControllerRoute.Options().dialog()) {
+    ControllerRoute<ActivityResultController>(
+        options = ControllerRoute.Options().dialog()
+    ) {
         parametersOf(intent)
     }
 
@@ -58,7 +60,13 @@ internal class ActivityResultController(@Param private val intent: Intent) : EsC
         val requestCode = requestCodes.incrementAndGet()
 
         addActivityResultListener(requestCode) { requestCode, resultCode, data ->
-            navigator.pop(ActivityResult(requestCode, resultCode, data))
+            navigator.pop(
+                ActivityResult(
+                    requestCode,
+                    resultCode,
+                    data
+                )
+            )
         }
 
         try {

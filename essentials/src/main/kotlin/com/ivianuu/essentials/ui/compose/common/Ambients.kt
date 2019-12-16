@@ -16,17 +16,10 @@
 
 package com.ivianuu.essentials.ui.compose.common
 
-import android.app.Activity
 import androidx.compose.Ambient
 import androidx.compose.Composable
 import androidx.compose.ambient
 import androidx.compose.remember
-import com.ivianuu.essentials.ui.base.EsController
-import com.ivianuu.essentials.ui.navigation.Route
-
-val ActivityAmbient = Ambient.of<Activity> { error("No activity found") }
-val ControllerAmbient = Ambient.of<EsController> { error("No controller found") }
-val RouteAmbient = Ambient.of<Route> { error("No route found") }
 
 interface Updateable<T> {
     fun updateFrom(other: T)

@@ -37,13 +37,13 @@ import com.ivianuu.essentials.permission.PermissionRequestUi
 import com.ivianuu.essentials.permission.R
 import com.ivianuu.essentials.permission.Title
 import com.ivianuu.essentials.ui.base.EsViewModel
-import com.ivianuu.essentials.ui.compose.common.ActivityAmbient
 import com.ivianuu.essentials.ui.compose.dialog.DialogButton
 import com.ivianuu.essentials.ui.compose.dialog.DialogRoute
 import com.ivianuu.essentials.ui.compose.dialog.ScrollableDialog
+import com.ivianuu.essentials.ui.compose.es.ActivityAmbient
 import com.ivianuu.essentials.ui.compose.material.SimpleListItem
+import com.ivianuu.essentials.ui.compose.navigation.NavigatorState
 import com.ivianuu.essentials.ui.compose.viewmodel.injectViewModel
-import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.Param
 import com.ivianuu.injekt.parametersOf
@@ -51,7 +51,7 @@ import kotlinx.coroutines.launch
 
 @Factory
 class DialogPermissionRequestUi(
-    private val navigator: Navigator
+    private val navigator: NavigatorState
 ) : PermissionRequestUi {
 
     override fun performRequest(

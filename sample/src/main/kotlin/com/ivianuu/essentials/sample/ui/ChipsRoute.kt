@@ -31,16 +31,16 @@ import androidx.ui.layout.Padding
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.ripple.Ripple
 import com.ivianuu.essentials.ui.compose.dialog.PrimaryColors
-import com.ivianuu.essentials.ui.compose.es.ComposeControllerRoute
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.compose.material.EsSurface
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
 import com.ivianuu.essentials.ui.compose.material.RippleColorProvider
 import com.ivianuu.essentials.ui.compose.material.Scaffold
 import com.ivianuu.essentials.ui.compose.material.contentColorFor
+import com.ivianuu.essentials.ui.compose.navigation.Route
 import com.ivianuu.essentials.util.Toaster
 
-val ChipsRoute = ComposeControllerRoute {
+val ChipsRoute = Route {
     Scaffold(
         topAppBar = { EsTopAppBar("Chips") },
         body = {

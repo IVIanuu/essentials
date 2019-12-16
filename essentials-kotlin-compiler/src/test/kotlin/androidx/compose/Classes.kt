@@ -51,11 +51,9 @@ class ViewComposition {
         invalid: ViewValidator.(f: T) -> Boolean,
         block: (f: T) -> Unit
     ) {
-
     }
 
     fun startRestartGroup(key: Any) {
-
     }
 
     fun endRestartGroup(): ScopeUpdateScope? = null

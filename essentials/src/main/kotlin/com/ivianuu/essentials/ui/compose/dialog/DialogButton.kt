@@ -21,8 +21,7 @@ import androidx.ui.core.Opacity
 import androidx.ui.material.Button
 import androidx.ui.material.ButtonStyle
 import androidx.ui.material.TextButtonStyle
-import com.ivianuu.essentials.ui.compose.injekt.inject
-import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.compose.navigation.navigator
 
 @Composable
 fun DialogButton(
@@ -31,7 +30,7 @@ fun DialogButton(
     style: ButtonStyle = TextButtonStyle(),
     onClick: (() -> Unit)? = null
 ) {
-    val navigator = inject<Navigator>()
+    val navigator = navigator
     Opacity(opacity = if (onClick != null) 1f else 0.5f) {
         Button(
             text = text.toUpperCase(), // todo find a better way for uppercase

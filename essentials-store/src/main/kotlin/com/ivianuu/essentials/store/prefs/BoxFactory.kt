@@ -56,5 +56,4 @@ class PrefBoxFactory(
         block()
         cacheEnabled.set(true)
     }
-
 }

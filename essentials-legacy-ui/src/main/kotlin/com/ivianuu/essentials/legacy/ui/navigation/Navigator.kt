@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.navigation
+package com.ivianuu.essentials.legacy.ui.navigation
 
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.injection.RetainedActivityScope

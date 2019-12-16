@@ -22,15 +22,11 @@ import com.ivianuu.essentials.apps.ui.LaunchableAppFilter
 import com.ivianuu.essentials.store.prefs.PrefBoxFactory
 import com.ivianuu.essentials.store.prefs.stringSet
 import com.ivianuu.essentials.ui.compose.coroutines.coroutineScope
-import com.ivianuu.essentials.ui.compose.es.ComposeControllerRoute
 import com.ivianuu.essentials.ui.compose.injekt.inject
-import com.ivianuu.essentials.ui.navigation.director.ControllerRouteOptions
-import com.ivianuu.essentials.ui.navigation.director.fade
+import com.ivianuu.essentials.ui.compose.navigation.Route
 import kotlinx.coroutines.launch
 
-val CheckAppsRoute = ComposeControllerRoute(
-    options = ControllerRouteOptions().fade()
-) {
+val CheckAppsRoute = Route {
     val boxFactory = inject<PrefBoxFactory>()
     val box = remember { boxFactory.stringSet("apps") }
     val coroutineScope = coroutineScope()

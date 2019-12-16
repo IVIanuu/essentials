@@ -20,7 +20,6 @@ import androidx.compose.Ambient
 import androidx.compose.Composable
 import androidx.compose.ambient
 import androidx.compose.frames.modelListOf
-import androidx.compose.onActive
 import androidx.compose.remember
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.compose.common.Overlay
@@ -28,7 +27,9 @@ import com.ivianuu.essentials.ui.compose.common.OverlayEntry
 import com.ivianuu.essentials.ui.compose.common.OverlayState
 import com.ivianuu.essentials.ui.compose.common.framed
 import com.ivianuu.essentials.ui.compose.common.onBackPressed
-import com.ivianuu.essentials.ui.compose.coroutines.coroutineScope
+import com.ivianuu.essentials.ui.compose.common.retained
+import com.ivianuu.essentials.ui.compose.coroutines.retainedCoroutineScope
+import com.ivianuu.essentials.util.sourceLocation
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -38,20 +39,7 @@ fun Navigator(
     startRoute: Route,
     handleBack: Boolean = true
 ) {
-    val coroutineScope = coroutineScope()
-    val overlayState = remember { OverlayState() }
-    val navigatorState = remember {
-        NavigatorState(
-            overlayState = overlayState,
-            coroutineScope = coroutineScope,
-            startRoute = startRoute,
-            handleBack = handleBack
-        )
-    }
-
-    remember(handleBack) { navigatorState.handleBack = handleBack }
-
-    Navigator(state = navigatorState)
+    Navigator(state = RetainedNavigatorState(startRoute = startRoute, handleBack = handleBack))
 }
 
 @Composable
@@ -64,7 +52,23 @@ fun Navigator(state: NavigatorState) {
     }
 }
 
-class NavigatorState internal constructor(
+@Composable
+fun RetainedNavigatorState(
+    key: Any = sourceLocation(),
+    startRoute: Route,
+    overlayState: OverlayState = remember { OverlayState() },
+    coroutineScope: CoroutineScope = retainedCoroutineScope("Scope:$key"),
+    handleBack: Boolean = true
+): NavigatorState = retained(key = "Navigator:$key") {
+    NavigatorState(
+        overlayState,
+        coroutineScope,
+        startRoute,
+        handleBack
+    )
+}
+
+class NavigatorState(
     internal val overlayState: OverlayState,
     private val coroutineScope: CoroutineScope,
     startRoute: Route,
@@ -99,7 +103,7 @@ class NavigatorState internal constructor(
         val prev = _backStack.lastOrNull()
         val routeState = RouteState(route)
         _backStack += routeState
-        prev?.exit(routeState, true)
+        if (prev !in _backStack.filterVisible()) prev?.exit(routeState, true)
         routeState.enter(prev, true)
 
         return routeState.awaitResult()
@@ -138,6 +142,17 @@ class NavigatorState internal constructor(
         return routeState.awaitResult()
     }
 
+    private fun List<RouteState>.filterVisible(): List<RouteState> {
+        val visibleRoutes = mutableListOf<RouteState>()
+
+        for (routeState in reversed()) {
+            visibleRoutes += routeState
+            if (!routeState.route.opaque) break
+        }
+
+        return visibleRoutes
+    }
+
     private inner class RouteState(val route: Route) {
 
         private val result = CompletableDeferred<Any?>()
@@ -146,31 +161,25 @@ class NavigatorState internal constructor(
             opaque = true,
             keepState = route.keepState,
             content = {
-                onActive {
-                    d { "${route.name} -> lifecycle on active" }
-                    onDispose {
-                        d { "${route.name} -> lifecycle on dispose" }
-                    }
-                }
-
                 RouteTransitionWrapper(
-                    route = route,
-                    transition = transition ?: DefaultRouteTransition,
+                    transition = transition ?: ambient(DefaultRouteTransitionAmbient),
                     state = transitionState,
                     lastState = lastTransitionState,
                     onTransitionComplete = onTransitionComplete,
                     types = types,
-                    children = route.content
+                    children = {
+                        RouteAmbient.Provider(
+                            value = route,
+                            children = route.content
+                        )
+                    }
                 )
             }
         )
 
         private val onTransitionComplete: (RouteTransition.State) -> Unit = { completedState ->
             if (completedState == RouteTransition.State.ExitFromPush) {
-                other?.let {
-                    d { "${route.name} notify complete to other ${other?.route?.name}" }
-                }
-                other?.onOtherTransitionComplete(this)
+                other?.onOtherTransitionComplete()
                 other = null
             }
 
@@ -185,8 +194,7 @@ class NavigatorState internal constructor(
 
         private var other: RouteState? = null
 
-        private fun onOtherTransitionComplete(other: RouteState) {
-            d { "${route.name} on other ${other.route.name} transition complete" }
+        private fun onOtherTransitionComplete() {
             overlayEntry.opaque = route.opaque
         }
 
@@ -197,7 +205,6 @@ class NavigatorState internal constructor(
             transitionState =
                 if (isPush) RouteTransition.State.EnterFromPush else RouteTransition.State.EnterFromPop
             transition = if (isPush) route.transition else prev!!.route.transition
-            d { "${route.name} enter -> prev ${prev?.route?.name} is push $isPush state $transitionState last state $lastTransitionState opaque ${overlayEntry.opaque}" }
         }
 
         fun exit(next: RouteState?, isPush: Boolean) {
@@ -207,7 +214,6 @@ class NavigatorState internal constructor(
             transitionState =
                 if (isPush) RouteTransition.State.ExitFromPush else RouteTransition.State.ExitFromPop
             transition = if (isPush) next!!.route.transition else route.transition
-            d { "${route.name} exit -> next ${next?.route?.name} is push $isPush state $transitionState last state $lastTransitionState opaque ${overlayEntry.opaque}" }
         }
 
         suspend fun <T> awaitResult(): T? = result.await() as? T

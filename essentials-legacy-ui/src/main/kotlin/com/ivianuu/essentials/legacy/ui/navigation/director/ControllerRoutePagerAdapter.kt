@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.navigation.director
+package com.ivianuu.essentials.legacy.ui.navigation.director
 
 import com.ivianuu.director.Router
 import com.ivianuu.director.common.RouterPagerAdapter

@@ -14,14 +14,11 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.sample.ui
+package com.ivianuu.essentials.legacy.ui.compose
 
-import com.ivianuu.essentials.ui.compose.es.ComposeActivity
-import com.ivianuu.essentials.ui.compose.navigation.Route
+import androidx.compose.Ambient
+import com.ivianuu.essentials.legacy.ui.base.EsController
+import com.ivianuu.essentials.legacy.ui.navigation.Route
 
-class MainActivity : ComposeActivity() {
-
-    override val startRoute: Route
-        get() = HomeRoute
-
-}
+val ControllerAmbient = Ambient.of<EsController> { error("No controller found") }
+val RouteAmbient = Ambient.of<Route> { error("No route found") }

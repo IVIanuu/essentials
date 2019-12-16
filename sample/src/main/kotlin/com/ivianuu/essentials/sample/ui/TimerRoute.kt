@@ -21,17 +21,13 @@ import androidx.ui.core.Text
 import androidx.ui.layout.Center
 import androidx.ui.material.MaterialTheme
 import com.ivianuu.essentials.ui.compose.coroutines.collect
-import com.ivianuu.essentials.ui.compose.es.ComposeControllerRoute
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
 import com.ivianuu.essentials.ui.compose.material.Scaffold
-import com.ivianuu.essentials.ui.navigation.director.ControllerRouteOptions
-import com.ivianuu.essentials.ui.navigation.director.horizontal
+import com.ivianuu.essentials.ui.compose.navigation.Route
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.flow
 
-val TimerRoute = ComposeControllerRoute(
-    options = ControllerRouteOptions().horizontal()
-) {
+val TimerRoute = Route {
     Scaffold(
         topAppBar = { EsTopAppBar(title = "Timer") },
         body = {

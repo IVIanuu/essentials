@@ -14,6 +14,18 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.navigation
+package com.ivianuu.essentials.legacy.ui.simple
 
-interface Route
+import android.view.View
+import com.ivianuu.essentials.legacy.ui.base.EsController
+import com.ivianuu.essentials.mvrx.MvRxView
+
+abstract class MvRxController : EsController(), MvRxView {
+    override fun onAttach(view: View) {
+        super.onAttach(view)
+        invalidate()
+    }
+
+    override fun invalidate() {
+    }
+}

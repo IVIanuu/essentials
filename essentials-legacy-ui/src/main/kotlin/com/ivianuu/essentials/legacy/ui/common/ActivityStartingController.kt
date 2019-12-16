@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.common
+package com.ivianuu.essentials.legacy.ui.common
 
 import android.app.Activity
 import android.content.Intent
@@ -26,39 +26,45 @@ import androidx.core.app.ShareCompat
 import androidx.core.net.toUri
 import androidx.lifecycle.lifecycleScope
 import com.ivianuu.director.requireActivity
-import com.ivianuu.essentials.ui.base.EsController
-import com.ivianuu.essentials.ui.navigation.director.ControllerRoute
-import com.ivianuu.essentials.ui.navigation.director.dialog
+import com.ivianuu.essentials.legacy.ui.base.EsController
+import com.ivianuu.essentials.legacy.ui.navigation.director.ControllerRoute
+import com.ivianuu.essentials.legacy.ui.navigation.director.dialog
 import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.Param
 import com.ivianuu.injekt.parametersOf
 
 fun ActivityRoute(intentFactory: (Activity) -> Intent) =
-    ControllerRoute<ActivityStartingController>(options = ControllerRoute.Options().dialog()) {
+    ControllerRoute<ActivityStartingController>(
+        options = ControllerRoute.Options().dialog()
+    ) {
         parametersOf(intentFactory)
     }
 
-fun AppInfoRoute(packageName: String) = ActivityRoute {
-    Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-        this.data = "package:$packageName".toUri()
+fun AppInfoRoute(packageName: String) =
+    ActivityRoute {
+        Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+            this.data = "package:$packageName".toUri()
+        }
     }
-}
 
-fun AppRoute(packageName: String) = ActivityRoute {
-    it.packageManager.getLaunchIntentForPackage(packageName)!!
-}
+fun AppRoute(packageName: String) =
+    ActivityRoute {
+        it.packageManager.getLaunchIntentForPackage(packageName)!!
+    }
 
-fun ShareRoute(text: String) = ActivityRoute {
-    ShareCompat.IntentBuilder
-        .from(it)
-        .setType("text/plain")
-        .setText(text)
-        .createChooserIntent()
-}
+fun ShareRoute(text: String) =
+    ActivityRoute {
+        ShareCompat.IntentBuilder
+            .from(it)
+            .setType("text/plain")
+            .setText(text)
+            .createChooserIntent()
+    }
 
-fun UrlRoute(url: String) = ActivityRoute {
-    Intent(Intent.ACTION_VIEW).apply { this.data = url.toUri() }
-}
+fun UrlRoute(url: String) =
+    ActivityRoute {
+        Intent(Intent.ACTION_VIEW).apply { this.data = url.toUri() }
+    }
 
 @Factory
 internal class ActivityStartingController(

@@ -54,9 +54,6 @@ dependencies {
     api(Deps.Coroutines.android)
     api(Deps.Coroutines.core)
 
-    api(Deps.Director.director)
-    api(Deps.Director.common)
-
     api(project(":essentials-store"))
 
     api(Deps.Injekt.injekt)

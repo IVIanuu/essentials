@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.util
+package com.ivianuu.essentials.legacy.ui
 
 import android.content.Context
 import android.content.ContextWrapper

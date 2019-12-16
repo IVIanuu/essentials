@@ -18,7 +18,9 @@ package com.ivianuu.essentials.ui.compose.material
 
 import androidx.compose.Composable
 import androidx.compose.View
+import androidx.compose.ambient
 import androidx.compose.key
+import androidx.compose.onDispose
 import androidx.ui.core.Alignment
 import androidx.ui.core.IntPx
 import androidx.ui.core.IntPxPosition
@@ -38,14 +40,12 @@ import androidx.ui.layout.Wrap
 import androidx.ui.material.ripple.Ripple
 import androidx.ui.material.surface.Card
 import com.ivianuu.essentials.ui.compose.common.ref
-import com.ivianuu.essentials.ui.compose.es.ComposeControllerRoute
-import com.ivianuu.essentials.ui.compose.injekt.inject
+import com.ivianuu.essentials.ui.compose.es.ActivityAmbient
 import com.ivianuu.essentials.ui.compose.layout.Column
 import com.ivianuu.essentials.ui.compose.layout.NonNullSingleChildLayout
-import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.director.ControllerRoute
-import com.ivianuu.essentials.ui.navigation.director.ControllerRouteOptions
-import com.ivianuu.essentials.ui.navigation.director.fade
+import com.ivianuu.essentials.ui.compose.navigation.FadeRouteTransition
+import com.ivianuu.essentials.ui.compose.navigation.Route
+import com.ivianuu.essentials.ui.compose.navigation.navigator
 
 // todo move core logic to a Popup component
 // todo add selectable items
@@ -115,7 +115,7 @@ fun <T> PopupMenuTrigger(
     item: @Composable() (T) -> Unit,
     child: @Composable() (showPopup: () -> Unit) -> Unit
 ) {
-    val navigator = inject<Navigator>()
+    val navigator = navigator
 
     Wrap {
         val coordinatesHolder =
@@ -169,7 +169,7 @@ fun <T> PopupMenuRoute(
     onSelected: (T) -> Unit,
     onCancel: (() -> Unit)? = null,
     item: @Composable() (T) -> Unit
-): ControllerRoute {
+): Route {
     val width = view.width.ipx
     val height = view.width.ipx
     val location = intArrayOf(0, 0)
@@ -208,11 +208,18 @@ fun <T> PopupMenuRoute(
     onSelected: (T) -> Unit,
     onCancel: (() -> Unit)? = null,
     item: @Composable() (T) -> Unit
-) = ComposeControllerRoute(
-    popOnConfigurationChange = true,
-    options = ControllerRouteOptions().fade(removesFromViewOnPush = false)
+) = Route(
+    opaque = true,
+    transition = FadeRouteTransition()
 ) {
-    val navigator = inject<Navigator>()
+    val navigator = navigator
+
+    val activity = ambient(ActivityAmbient)
+    onDispose {
+        if (activity.isChangingConfigurations) {
+            navigator.pop()
+        }
+    }
 
     val dismissed = ref { false }
 

@@ -31,21 +31,17 @@ import com.ivianuu.essentials.hidenavbar.NavBarController
 import com.ivianuu.essentials.securesettings.SecureSettingsHelper
 import com.ivianuu.essentials.securesettings.SecureSettingsRoute
 import com.ivianuu.essentials.ui.compose.coroutines.coroutineScope
-import com.ivianuu.essentials.ui.compose.es.ComposeControllerRoute
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.compose.layout.Column
 import com.ivianuu.essentials.ui.compose.layout.CrossAxisAlignment
 import com.ivianuu.essentials.ui.compose.layout.MainAxisAlignment
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
 import com.ivianuu.essentials.ui.compose.material.Scaffold
-import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.director.ControllerRouteOptions
-import com.ivianuu.essentials.ui.navigation.director.fade
+import com.ivianuu.essentials.ui.compose.navigation.Route
+import com.ivianuu.essentials.ui.compose.navigation.navigator
 import kotlinx.coroutines.launch
 
-val NavBarRoute = ComposeControllerRoute(
-    options = ControllerRouteOptions().fade()
-) {
+val NavBarRoute = Route {
     Scaffold(
         topAppBar = { EsTopAppBar(title = "Nav bar settings") },
         body = {
@@ -92,7 +88,7 @@ val NavBarRoute = ComposeControllerRoute(
                         )
                     }
 
-                    val navigator = inject<Navigator>()
+                    val navigator = navigator
 
                     Button(
                         "Toggle nav bar",

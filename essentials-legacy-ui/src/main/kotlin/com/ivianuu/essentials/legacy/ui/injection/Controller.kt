@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.injection
+package com.ivianuu.essentials.legacy.ui.injection
 
 import android.content.Context
 import androidx.lifecycle.LifecycleOwner
@@ -22,6 +22,7 @@ import androidx.lifecycle.ViewModelStoreOwner
 import com.ivianuu.director.Controller
 import com.ivianuu.director.activity
 import com.ivianuu.director.requireActivity
+import com.ivianuu.essentials.injection.retainedActivityComponent
 import com.ivianuu.injekt.Component
 import com.ivianuu.injekt.ComponentBuilder
 import com.ivianuu.injekt.InjektTrait

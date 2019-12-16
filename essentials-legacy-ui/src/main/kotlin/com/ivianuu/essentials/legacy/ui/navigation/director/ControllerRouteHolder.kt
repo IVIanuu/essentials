@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.util
+package com.ivianuu.essentials.legacy.ui.navigation.director
 
-import androidx.lifecycle.LifecycleCoroutineScope
-import androidx.lifecycle.lifecycleScope
-import com.ivianuu.director.Controller
+import androidx.lifecycle.ViewModel
 
-val Controller.viewLifecycleScope: LifecycleCoroutineScope
-    get() = viewLifecycleOwner.lifecycleScope
+class ControllerRouteHolder : ViewModel() {
+    var route: ControllerRoute? = null
+}

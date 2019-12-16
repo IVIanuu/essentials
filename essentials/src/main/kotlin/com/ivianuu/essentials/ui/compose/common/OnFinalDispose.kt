@@ -19,6 +19,7 @@ package com.ivianuu.essentials.ui.compose.common
 import androidx.compose.Composable
 import androidx.compose.ambient
 import androidx.compose.onDispose
+import com.ivianuu.essentials.ui.compose.es.ActivityAmbient
 
 @Composable
 fun onFinalDispose(callback: () -> Unit) {

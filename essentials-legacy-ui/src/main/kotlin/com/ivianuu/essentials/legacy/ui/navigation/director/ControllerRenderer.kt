@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.navigation.director
+package com.ivianuu.essentials.legacy.ui.navigation.director
 
 import androidx.fragment.app.FragmentActivity
+import com.ivianuu.director.Router
 import com.ivianuu.director.RouterTransaction
-import com.ivianuu.essentials.ui.base.EsController
-import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.legacy.ui.navigation.Navigator
 import com.ivianuu.essentials.util.AppDispatchers
 import com.ivianuu.essentials.util.getViewModel
 import com.ivianuu.injekt.Factory
@@ -30,7 +30,7 @@ import kotlinx.coroutines.withContext
 class ControllerRenderer(
     private val activity: FragmentActivity,
     private val dispatchers: AppDispatchers,
-    private val router: com.ivianuu.director.Router
+    private val router: Router
 ) {
 
     suspend fun render(navigator: Navigator) {
@@ -53,11 +53,13 @@ class ControllerRenderer(
                 }
 
                 if (transaction == null) {
-                    val context = ControllerRoute.Context(
-                        router.parent, activity, activity.application
-                    )
+                    val context =
+                        ControllerRoute.Context(
+                            router.parent, activity, activity.application
+                        )
                     val controller = route.factory(context)
-                    if (controller is EsController) controller.route = route
+                    if (controller is com.ivianuu.essentials.legacy.ui.base.EsController) controller.route =
+                        route
                     transaction = RouterTransaction(controller)
                     transaction.controller.getViewModel<ControllerRouteHolder>()
                         .route = route
