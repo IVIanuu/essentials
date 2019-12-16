@@ -63,7 +63,13 @@ abstract class ComposeActivity : EsActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(composeContentView)
-        composeContentView.setContent { ComposeWithAmbients(composeContentView) }
+        composeContentView.setContent {
+            ComposeWithAmbients(composeContentView) {
+                wrapContent {
+                    content()
+                }
+            }
+        }
     }
 
     override fun onDestroy() {
@@ -74,7 +80,10 @@ abstract class ComposeActivity : EsActivity() {
 
     // todo move this to somewhere else
     @Composable
-    protected open fun ComposeWithAmbients(view: AndroidComposeViewContainer) {
+    protected open fun ComposeWithAmbients(
+        view: AndroidComposeViewContainer,
+        children: @Composable() () -> Unit
+    ) {
         MultiAmbientProvider(
             ActivityAmbient with this,
             ComponentAmbient with component,
@@ -96,14 +105,22 @@ abstract class ComposeActivity : EsActivity() {
                 val materialThemeProvider = inject<MaterialThemeProvider>()
                 MaterialTheme(
                     colors = materialThemeProvider.colors(),
-                    typography = materialThemeProvider.typography()
-                ) {
-                    Navigator(state = get())
-                }
+                    typography = materialThemeProvider.typography(),
+                    children = children
+                )
             }
         }
     }
 
+    @Composable
+    protected open fun wrapContent(content: @Composable() () -> Unit) {
+        content()
+    }
+
+    @Composable
+    protected open fun content() {
+        Navigator(state = get())
+    }
 }
 
 private fun RetainedComposeActivityModule(

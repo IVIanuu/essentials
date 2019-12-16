@@ -46,11 +46,12 @@ import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
 import com.ivianuu.essentials.ui.compose.material.PopupMenuButton
 import com.ivianuu.essentials.ui.compose.material.Scaffold
 import com.ivianuu.essentials.ui.compose.material.SimpleListItem
+import com.ivianuu.essentials.ui.compose.navigation.DefaultRouteTransition
 import com.ivianuu.essentials.ui.compose.navigation.Route
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.parametersOf
 
-val HomeRoute = Route {
+val HomeRoute = Route(transition = DefaultRouteTransition) {
     Scaffold(
         topAppBar = {
             EsTopAppBar(

@@ -55,7 +55,11 @@ abstract class ComposeController : EsController() {
     override fun onViewCreated(view: View) {
         super.onViewCreated(view)
         view as AndroidComposeViewContainer
-        view.setContent { ComposeWithAmbients(view) }
+        view.setContent {
+            ComposeWithAmbients(view) {
+                content()
+            }
+        }
     }
 
     override fun onDestroyView(view: View) {
@@ -67,7 +71,10 @@ abstract class ComposeController : EsController() {
 
     // todo move this to somewhere else
     @Composable
-    protected open fun ComposeWithAmbients(view: AndroidComposeViewContainer) {
+    protected open fun ComposeWithAmbients(
+        view: AndroidComposeViewContainer,
+        content: @Composable() () -> Unit
+    ) {
         MultiAmbientProvider(
             ActivityAmbient with requireActivity(),
             RouteAmbient with route!!,
@@ -91,14 +98,14 @@ abstract class ComposeController : EsController() {
                 val materialThemeProvider = inject<MaterialThemeProvider>()
                 MaterialTheme(
                     colors = materialThemeProvider.colors(),
-                    typography = materialThemeProvider.typography()
-                ) {
-                    content()
-                }
+                    typography = materialThemeProvider.typography(),
+                    children = content
+                )
             }
         }
     }
 
     @Composable
     protected abstract fun content()
+
 }
