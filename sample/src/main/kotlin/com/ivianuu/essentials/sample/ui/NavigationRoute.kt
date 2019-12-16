@@ -54,9 +54,9 @@ private val colors = listOf(
 )
 
 private val transitions = listOf(
-    VerticalRouteTransition(2000.milliseconds),
-    FadeRouteTransition(2000.milliseconds),
-    HorizontalRouteTransition(2000.milliseconds)
+    VerticalRouteTransition(300.milliseconds),
+    FadeRouteTransition(300.milliseconds),
+    HorizontalRouteTransition(300.milliseconds)
 )
 
 private fun CounterRoute(count: Int): Route = Route(

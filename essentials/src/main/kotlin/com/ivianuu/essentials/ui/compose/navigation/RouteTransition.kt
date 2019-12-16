@@ -16,13 +16,11 @@
 
 package com.ivianuu.essentials.ui.compose.navigation
 
-import androidx.animation.FloatPropKey
 import androidx.animation.TransitionDefinition
 import androidx.animation.TransitionState
 import androidx.animation.transitionDefinition
 import androidx.compose.Composable
 import androidx.compose.Immutable
-import androidx.compose.remember
 import androidx.ui.animation.Transition
 import androidx.ui.core.Draw
 import androidx.ui.core.DrawReceiver
@@ -30,7 +28,6 @@ import androidx.ui.core.Opacity
 import androidx.ui.core.PxSize
 import androidx.ui.graphics.Canvas
 import com.github.ajalt.timberkt.d
-import kotlin.time.Duration
 
 @Immutable
 data class RouteTransition(
@@ -96,7 +93,7 @@ object CanvasRouteTransitionType : RouteTransition.Type {
         Draw(
             children = children,
             onPaint = { canvas, parentSize ->
-                ops.get(Block).forEach { it(canvas, parentSize) }
+                ops[Block].forEach { it(canvas, parentSize) }
             }
         )
     }
@@ -161,106 +158,4 @@ private fun RouteTransitionTypes(
         .fold({ children() }) { current, type ->
             { type(current) }
         }.invoke()
-}
-
-fun FadeRouteTransition(duration: Duration) = RouteTransition(
-    definition = {
-        remember(duration) {
-            fadeRouteTransitionDefinition(duration)
-        }
-    },
-    generateOps = { transitionState, _ ->
-        opsOf(
-            OpacityRouteTransitionType.Opacity with transitionState[Alpha]
-        )
-    }
-)
-
-private fun fadeRouteTransitionDefinition(
-    duration: Duration
-) = transitionDefinition<RouteTransition.State> {
-    state(RouteTransition.State.Init) { set(Alpha, 0f) }
-    state(RouteTransition.State.EnterFromPush) { set(Alpha, 1f) }
-    state(RouteTransition.State.ExitFromPush) { set(Alpha, 0f) }
-    state(RouteTransition.State.EnterFromPop) { set(Alpha, 1f) }
-    state(RouteTransition.State.ExitFromPop) { set(Alpha, 0f) }
-
-    transition {
-        Alpha using tween {
-            this.duration = duration.toLongMilliseconds().toInt()
-        }
-    }
-}
-
-private val Alpha = FloatPropKey()
-
-fun VerticalRouteTransition(duration: Duration) = RouteTransition(
-    definition = {
-        remember(duration) {
-            verticalRouteTransitionDefinition(duration)
-        }
-    },
-    generateOps = { transitionState, _ ->
-        opsOf(
-            CanvasRouteTransitionType.Block with { canvas, parentSize ->
-                canvas.save()
-                canvas.translate(0f, parentSize.height.value * (1f - transitionState[Progress]))
-                drawChildren()
-                canvas.restore()
-            }
-        )
-    }
-)
-
-private fun verticalRouteTransitionDefinition(
-    duration: Duration
-) = transitionDefinition<RouteTransition.State> {
-    state(RouteTransition.State.Init) { set(Progress, 0f) }
-    state(RouteTransition.State.EnterFromPush) { set(Progress, 1f) }
-    state(RouteTransition.State.ExitFromPush) { set(Progress, 1f) }
-    state(RouteTransition.State.EnterFromPop) { set(Progress, 1f) }
-    state(RouteTransition.State.ExitFromPop) { set(Progress, 0f) }
-
-    transition {
-        Progress using tween {
-            this.duration = duration.toLongMilliseconds().toInt()
-        }
-    }
-}
-
-private val Progress = FloatPropKey()
-
-fun HorizontalRouteTransition(duration: Duration) = RouteTransition(
-    definition = {
-        remember(duration) {
-            horizontalRouteTransitionDefinition(duration)
-        }
-    },
-    generateOps = { transitionState, _ ->
-        opsOf(
-            CanvasRouteTransitionType.Block with { canvas, parentSize ->
-                canvas.save()
-                canvas.translate(parentSize.width.value * transitionState[Progress], 0f)
-                d { "translation ${parentSize.width.value * transitionState[Progress]}" }
-                drawChildren()
-                canvas.restore()
-            }
-        )
-    }
-)
-
-private fun horizontalRouteTransitionDefinition(
-    duration: Duration
-) = transitionDefinition<RouteTransition.State> {
-    state(RouteTransition.State.Init) { set(Progress, 1f) }
-    state(RouteTransition.State.EnterFromPush) { set(Progress, 0f) }
-    state(RouteTransition.State.ExitFromPush) { set(Progress, -1f) }
-    state(RouteTransition.State.EnterFromPop) { set(Progress, 0f) }
-    state(RouteTransition.State.ExitFromPop) { set(Progress, 1f) }
-
-    transition {
-        Progress using tween {
-            this.duration = duration.toLongMilliseconds().toInt()
-        }
-    }
 }

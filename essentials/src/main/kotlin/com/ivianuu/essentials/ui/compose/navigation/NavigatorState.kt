@@ -77,6 +77,10 @@ class NavigatorState internal constructor(
     val backStack: List<Route>
         get() = _backStack.map { it.route }
 
+    var types: List<RouteTransition.Type> by framed(
+        listOf(OpacityRouteTransitionType, CanvasRouteTransitionType)
+    )
+
     init {
         if (_backStack.isEmpty()) {
             push(startRoute)
@@ -155,7 +159,7 @@ class NavigatorState internal constructor(
                     state = transitionState,
                     lastState = lastTransitionState,
                     onTransitionComplete = onTransitionComplete,
-                    types = listOf(OpacityRouteTransitionType, CanvasRouteTransitionType),
+                    types = types,
                     children = route.content
                 )
             }
