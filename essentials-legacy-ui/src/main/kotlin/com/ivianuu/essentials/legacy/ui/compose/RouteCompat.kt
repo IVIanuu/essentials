@@ -41,7 +41,7 @@ fun Route.asComposeControllerRoute(
     popOnConfigurationChange = popOnConfigurationChange
 ) {
     val thisRoute = this
-    val composeNavigatorState = RetainedNavigatorState(startRoute = DummyRoute)
+    val composeNavigatorState = RetainedNavigatorState()
 
     injectViewModel<ResultListeningViewModel> {
         parametersOf(thisRoute, composeNavigatorState)

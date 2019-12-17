@@ -57,7 +57,7 @@ fun Navigator(state: NavigatorState) {
 @Composable
 fun RetainedNavigatorState(
     key: Any = sourceLocation(),
-    startRoute: Route,
+    startRoute: Route? = null,
     overlayState: OverlayState = remember { OverlayState() },
     coroutineScope: CoroutineScope = retainedCoroutineScope("Scope:$key"),
     handleBack: Boolean = true
