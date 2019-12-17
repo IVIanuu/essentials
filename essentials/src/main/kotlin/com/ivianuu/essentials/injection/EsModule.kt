@@ -18,16 +18,17 @@ package com.ivianuu.essentials.injection
 
 import com.ivianuu.essentials.app.EsAppInitializersModule
 import com.ivianuu.essentials.app.EsAppServicesModule
-import com.ivianuu.essentials.ui.compose.injekt.ComposeModule
+import com.ivianuu.essentials.ui.compose.injekt.EsComposeModule
 import com.ivianuu.essentials.util.EsStoreModule
 import com.ivianuu.essentials.util.EsUtilModule
 import com.ivianuu.injekt.Module
+import com.ivianuu.injekt.android.SystemServiceModule
 
 /**
  * Core modules
  */
 val EsModule = Module {
-    include(ComposeModule)
+    include(EsComposeModule)
     include(EsAppInitializersModule)
     include(EsAppServicesModule)
     include(EsStoreModule)
