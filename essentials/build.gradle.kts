@@ -34,6 +34,7 @@ dependencies {
     api(Deps.AndroidX.activity)
     api(Deps.AndroidX.appCompat)
     api(Deps.AndroidX.core)
+    api(Deps.AndroidX.Lifecycle.extensions)
     api(Deps.AndroidX.Lifecycle.runtime)
     api(Deps.AndroidX.Lifecycle.viewModel)
 
