@@ -17,8 +17,11 @@
 package com.ivianuu.essentials.legacy.ui.compose
 
 import androidx.lifecycle.viewModelScope
+import com.ivianuu.director.DefaultChangeHandler
 import com.ivianuu.essentials.legacy.ui.navigation.Navigator
 import com.ivianuu.essentials.legacy.ui.navigation.director.ControllerRoute
+import com.ivianuu.essentials.legacy.ui.navigation.director.ControllerRouteOptions
+import com.ivianuu.essentials.legacy.ui.navigation.director.handler
 import com.ivianuu.essentials.ui.base.EsViewModel
 import com.ivianuu.essentials.ui.compose.navigation.Navigator
 import com.ivianuu.essentials.ui.compose.navigation.NavigatorState
@@ -31,7 +34,7 @@ import com.ivianuu.injekt.parametersOf
 import kotlinx.coroutines.launch
 
 fun Route.asComposeControllerRoute(
-    options: ControllerRoute.Options? = null,
+    options: ControllerRoute.Options? = extractDefaultControllerRouteOptions(),
     popOnConfigurationChange: Boolean = false
 ) = ComposeControllerRoute(
     options = options,
@@ -45,6 +48,13 @@ fun Route.asComposeControllerRoute(
     }
 
     Navigator(state = composeNavigatorState)
+}
+
+fun Route.extractDefaultControllerRouteOptions(): ControllerRoute.Options {
+    return ControllerRouteOptions()
+        .handler(
+            DefaultChangeHandler(removesFromViewOnPush = !opaque)
+        )
 }
 
 @Factory
