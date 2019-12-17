@@ -31,9 +31,12 @@ import androidx.ui.graphics.Canvas
 
 @Immutable
 data class RouteTransition(
+    val key: Key, // todo remove legacy
     val definition: @Composable() () -> TransitionDefinition<State>,
     val generateOps: (TransitionState, State) -> Ops
 ) {
+
+    class Key
 
     @Immutable
     interface Type {
@@ -101,7 +104,10 @@ object CanvasRouteTransitionType : RouteTransition.Type {
 
 val DefaultRouteTransitionAmbient = Ambient.of { DefaultRouteTransition }
 
+val DefaultRouteTransitionKey = RouteTransition.Key()
+
 val DefaultRouteTransition = RouteTransition(
+    key = DefaultRouteTransitionKey,
     definition = { defaultTransitionDefinition },
     generateOps = { _, _ -> opsOf() }
 )

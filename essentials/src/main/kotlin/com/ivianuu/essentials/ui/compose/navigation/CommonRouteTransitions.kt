@@ -22,7 +22,10 @@ import androidx.compose.remember
 import kotlin.time.Duration
 import kotlin.time.milliseconds
 
+val FadeRouteTransitionKey = RouteTransition.Key()
+
 fun FadeRouteTransition(duration: Duration = 300.milliseconds) = RouteTransition(
+    key = FadeRouteTransitionKey,
     definition = {
         remember(duration) {
             fadeRouteTransitionDefinition(duration)
@@ -53,7 +56,9 @@ private fun fadeRouteTransitionDefinition(
 
 private val Alpha = FloatPropKey()
 
+val VerticalRouteTransitionKey = RouteTransition.Key()
 fun VerticalRouteTransition(duration: Duration = 300.milliseconds) = RouteTransition(
+    key = VerticalRouteTransitionKey,
     definition = {
         remember(duration) {
             verticalRouteTransitionDefinition(duration)
@@ -89,7 +94,9 @@ private fun verticalRouteTransitionDefinition(
 
 private val Fraction = FloatPropKey()
 
+val HorizontalRouteTransitionKey = RouteTransition.Key()
 fun HorizontalRouteTransition(duration: Duration = 300.milliseconds) = RouteTransition(
+    key = HorizontalRouteTransitionKey,
     definition = {
         remember(duration) {
             horizontalRouteTransitionDefinition(duration)
@@ -118,6 +125,66 @@ private fun horizontalRouteTransitionDefinition(
 
     transition {
         Fraction using tween {
+            this.duration = duration.toLongMilliseconds().toInt()
+        }
+    }
+}
+
+val OpenCloseRouteTransitionKey = RouteTransition.Key()
+fun OpenCloseRouteTransition(duration: Duration = 300.milliseconds) = RouteTransition(
+    key = OpenCloseRouteTransitionKey,
+    definition = {
+        remember(duration) {
+            openCloseRouteTransitionDefinition(duration)
+        }
+    },
+    generateOps = { transitionState, _ ->
+        opsOf(
+            OpacityRouteTransitionType.Opacity with transitionState[Alpha],
+            CanvasRouteTransitionType.Block with { canvas, parentSize ->
+                canvas.save()
+                canvas.scale(sx = transitionState[Scale], sy = transitionState[Scale])
+                canvas.translate(
+                    dx = parentSize.width.value / 2 * (1f - transitionState[Scale]),
+                    dy = parentSize.height.value / 2 * (1f - transitionState[Scale])
+                )
+                drawChildren()
+                canvas.restore()
+            }
+        )
+    }
+)
+
+private val Scale = FloatPropKey()
+private fun openCloseRouteTransitionDefinition(
+    duration: Duration
+) = transitionDefinition {
+    state(RouteTransition.State.Init) {
+        set(Alpha, 0f)
+        set(Scale, 1.125f)
+    }
+    state(RouteTransition.State.EnterFromPush) {
+        set(Alpha, 1f)
+        set(Scale, 1f)
+    }
+    state(RouteTransition.State.ExitFromPush) {
+        set(Alpha, 0f)
+        set(Scale, 0.975f)
+    }
+    state(RouteTransition.State.EnterFromPop) {
+        set(Alpha, 1f)
+        set(Scale, 1f)
+    }
+    state(RouteTransition.State.ExitFromPop) {
+        set(Alpha, 0f)
+        set(Scale, 1.075f)
+    }
+
+    transition {
+        Alpha using tween {
+            this.duration = duration.toLongMilliseconds().toInt()
+        }
+        Scale using tween {
             this.duration = duration.toLongMilliseconds().toInt()
         }
     }

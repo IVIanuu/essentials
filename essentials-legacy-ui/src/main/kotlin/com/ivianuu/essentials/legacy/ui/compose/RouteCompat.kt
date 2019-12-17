@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.legacy.ui.compose
 
+import androidx.compose.FrameManager
 import androidx.lifecycle.lifecycleScope
 import com.ivianuu.director.DefaultChangeHandler
 import com.ivianuu.essentials.legacy.ui.navigation.director.ControllerRoute
@@ -27,7 +28,7 @@ import com.ivianuu.essentials.ui.compose.navigation.Route
 import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Param
-import com.ivianuu.injekt.get
+import com.ivianuu.injekt.inject
 import com.ivianuu.injekt.parametersOf
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -50,10 +51,14 @@ internal class RouteCompatController(
     @Param private val composeRoute: Route
 ) : ComposeController() {
 
-    private val navigatorState = get<NavigatorState>()
+    private val navigatorState: NavigatorState by inject()
 
     override fun modules(): List<Module> =
         listOf(RouteCompatModule(coroutineScope = lifecycleScope))
+
+    init {
+        FrameManager.ensureStarted()
+    }
 
     override fun onCreate() {
         super.onCreate()
