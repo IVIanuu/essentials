@@ -69,7 +69,7 @@ fun Route.extractDefaultControllerRouteOptions(): ControllerRoute.Options {
 }
 
 @Factory
-private class ResultListeningViewModel(
+internal class ResultListeningViewModel(
     @Param private val route: Route,
     @Param private val composeNavigator: NavigatorState,
     private val legacyNavigator: Navigator
