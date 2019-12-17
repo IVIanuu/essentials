@@ -26,6 +26,7 @@ import androidx.core.view.children
 import com.google.android.material.appbar.AppBarLayout
 import com.ivianuu.director.requireActivity
 import com.ivianuu.essentials.R
+import com.ivianuu.essentials.legacy.ui.compose.asComposeControllerRoute
 import com.ivianuu.essentials.ui.compose.material.PopupMenuRoute
 import com.ivianuu.essentials.util.drawable
 import com.ivianuu.essentials.util.getIconColor
@@ -82,7 +83,7 @@ abstract class ToolbarController : CoordinatorController() {
                             onSelected = toolbarMenuConfig.onSelected,
                             onCancel = toolbarMenuConfig.onCancel,
                             item = toolbarMenuConfig.item
-                        )
+                        ).asComposeControllerRoute()
                     )
                 }
             }

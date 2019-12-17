@@ -20,35 +20,24 @@ import androidx.ui.core.Text
 import androidx.ui.graphics.Color
 import androidx.ui.layout.Center
 import androidx.ui.material.MaterialTheme
-import androidx.ui.material.ModalDrawerLayout
-import com.ivianuu.essentials.ui.compose.es.ComposeControllerRoute
 import com.ivianuu.essentials.ui.compose.material.EsSurface
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
 import com.ivianuu.essentials.ui.compose.material.Scaffold
-import com.ivianuu.essentials.ui.navigation.director.ControllerRouteOptions
-import com.ivianuu.essentials.ui.navigation.director.fade
+import com.ivianuu.essentials.ui.compose.navigation.FadeRouteTransition
+import com.ivianuu.essentials.ui.compose.navigation.Route
 
-val DrawerRoute = ComposeControllerRoute(
-    options = ControllerRouteOptions().fade()
-) {
+val DrawerRoute = Route(transition = FadeRouteTransition()) {
     Scaffold(
         topAppBar = { EsTopAppBar("Drawer") },
-        drawer = { state, onStateChanged, body ->
-            ModalDrawerLayout(
-                drawerState = state,
-                onStateChange = onStateChanged,
-                bodyContent = body,
-                drawerContent = {
-                    EsSurface(color = Color.Blue) {
-                        Center {
-                            Text(
-                                text = "Drawer",
-                                style = MaterialTheme.typography().h4
-                            )
-                        }
-                    }
+        drawerContent = {
+            EsSurface(color = Color.Blue) {
+                Center {
+                    Text(
+                        text = "Drawer",
+                        style = MaterialTheme.typography().h4
+                    )
                 }
-            )
+            }
         },
         body = {
             EsSurface(color = Color.Red) {

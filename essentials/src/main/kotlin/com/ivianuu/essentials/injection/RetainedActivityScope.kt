@@ -16,14 +16,16 @@
 
 package com.ivianuu.essentials.injection
 
+import android.app.Activity
 import androidx.activity.ComponentActivity
 import androidx.lifecycle.ViewModel
 import com.ivianuu.essentials.util.getViewModel
 import com.ivianuu.injekt.Component
+import com.ivianuu.injekt.ComponentBuilder
 import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.Scope
-import com.ivianuu.injekt.android.ApplicationScope
 import com.ivianuu.injekt.android.getApplicationComponent
+import com.ivianuu.injekt.android.getClosestComponentOrNull
 
 @Scope
 annotation class RetainedActivityScope {
@@ -31,17 +33,29 @@ annotation class RetainedActivityScope {
 }
 
 @Factory
-class RetainedActivityComponentHolder(
-    @ApplicationScope private val applicationComponent: Component
-) : ViewModel() {
-    val component = Component {
-        dependencies(applicationComponent)
-        scopes(RetainedActivityScope)
+class RetainedActivityComponentHolder : ViewModel() {
+    var component: Component? = null
+}
+
+fun ComponentActivity.initRetainedActivityComponentIfNeeded(componentProvider: () -> Component) {
+    val viewModel = getViewModel {
+        getApplicationComponent()
+            .get<RetainedActivityComponentHolder>()
+    }
+
+    if (viewModel.component == null) {
+        viewModel.component = componentProvider()
     }
 }
 
 val ComponentActivity.retainedActivityComponent: Component
-    get() = getViewModel {
-        getApplicationComponent()
-            .get<RetainedActivityComponentHolder>()
-    }.component
+    get() = getViewModel<RetainedActivityComponentHolder> { error("call 'initRetainedActivityComponent { ... }' first") }
+        .component!!
+
+fun <T : Activity> T.RetainedActivityComponent(
+    block: (ComponentBuilder.() -> Unit)? = null
+): Component = Component {
+    scopes(RetainedActivityScope)
+    getClosestComponentOrNull()?.let { dependencies(it) }
+    block?.invoke(this)
+}

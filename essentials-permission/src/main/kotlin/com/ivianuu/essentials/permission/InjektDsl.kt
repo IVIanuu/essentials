@@ -21,11 +21,6 @@ import com.ivianuu.injekt.ModuleBuilder
 import com.ivianuu.injekt.Name
 
 @Name
-annotation class PermissionNavigator {
-    companion object
-}
-
-@Name
 annotation class PermissionStateProviders {
     companion object
 }

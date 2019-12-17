@@ -61,7 +61,6 @@ internal class TorchNotificationFactory(
             }
             .build()
 
-
     private companion object {
         private const val NOTIFICATION_CHANNEL_ID = "torch"
     }

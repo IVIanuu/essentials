@@ -25,23 +25,53 @@ import androidx.compose.onPreCommit
 import androidx.compose.remember
 import androidx.compose.stateFor
 import androidx.ui.core.CoroutineContextAmbient
+import com.ivianuu.essentials.ui.compose.common.onFinalDispose
+import com.ivianuu.essentials.ui.compose.common.retained
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 
+// todo retainedLaunchOnActive
+// todo retainedLoad
+
 @Composable
-fun coroutineScope(context: @Composable() () -> CoroutineContext = { coroutineContext() }): CoroutineScope {
+fun retainedCoroutineScope(
+    key: Any,
+    context: @Composable() () -> CoroutineContext = {
+        retainedCoroutineContext(key = key)
+    }
+): CoroutineScope {
     val coroutineContext = context()
-    val coroutineScope = remember { CoroutineScope(context = coroutineContext + Job()) }
-    onDispose { coroutineScope.coroutineContext[Job]!!.cancel() }
+    val coroutineScope = remember { CoroutineScope(context = coroutineContext) }
     return coroutineScope
 }
 
 @Composable
-fun coroutineContext() = ambient(CoroutineContextAmbient)
+fun retainedCoroutineContext(key: Any): CoroutineContext {
+    val parent = ambient(CoroutineContextAmbient)
+    val coroutineContext = retained(key = key) { Job(parent = parent[Job]) + Dispatchers.Main }
+    onFinalDispose { coroutineContext[Job]!!.cancel() }
+    return coroutineContext
+}
+
+@Composable
+fun coroutineScope(context: @Composable() () -> CoroutineContext = { coroutineContext() }): CoroutineScope {
+    val coroutineContext = context()
+    val coroutineScope = remember { CoroutineScope(context = coroutineContext) }
+    return coroutineScope
+}
+
+@Composable
+fun coroutineContext(): CoroutineContext {
+    val parent = ambient(CoroutineContextAmbient)
+    val coroutineContext = remember { Job(parent = parent[Job]) + Dispatchers.Main }
+    onDispose { coroutineContext[Job]!!.cancel() }
+    return coroutineContext
+}
 
 @Composable
 fun launchOnActive(

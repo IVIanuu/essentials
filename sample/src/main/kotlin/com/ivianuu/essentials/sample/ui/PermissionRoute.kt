@@ -37,16 +37,12 @@ import com.ivianuu.essentials.permission.systemoverlay.SystemOverlayPermission
 import com.ivianuu.essentials.permission.writesettings.WriteSettingsPermission
 import com.ivianuu.essentials.ui.compose.common.SimpleScreen
 import com.ivianuu.essentials.ui.compose.coroutines.coroutineScope
-import com.ivianuu.essentials.ui.compose.es.ComposeControllerRoute
 import com.ivianuu.essentials.ui.compose.injekt.inject
+import com.ivianuu.essentials.ui.compose.navigation.Route
 import com.ivianuu.essentials.ui.compose.resources.drawableResource
-import com.ivianuu.essentials.ui.navigation.director.ControllerRouteOptions
-import com.ivianuu.essentials.ui.navigation.director.horizontal
 import kotlinx.coroutines.launch
 
-val PermissionRoute = ComposeControllerRoute(
-    options = ControllerRouteOptions().horizontal()
-) {
+val PermissionRoute = Route {
     SimpleScreen(title = "Permissions") {
         val manager = inject<PermissionManager>()
 

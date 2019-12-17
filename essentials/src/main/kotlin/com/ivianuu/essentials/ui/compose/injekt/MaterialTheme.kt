@@ -23,7 +23,7 @@ import com.ivianuu.essentials.ui.compose.material.resourceColors
 import com.ivianuu.essentials.ui.compose.material.resourceTypography
 import com.ivianuu.injekt.Module
 
-val ComposeModule = Module {
+val EsComposeModule = Module {
     factory {
         MaterialThemeProvider(
             colors = { resourceColors() },

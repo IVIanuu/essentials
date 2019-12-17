@@ -45,7 +45,6 @@ import androidx.ui.material.TextButtonStyle
 import androidx.ui.material.ripple.Ripple
 import androidx.ui.res.stringResource
 import com.ivianuu.essentials.R
-import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.compose.layout.Column
 import com.ivianuu.essentials.ui.compose.layout.CrossAxisAlignment
 import com.ivianuu.essentials.ui.compose.layout.Row
@@ -58,7 +57,7 @@ import com.ivianuu.essentials.ui.compose.material.TabController
 import com.ivianuu.essentials.ui.compose.material.TabRow
 import com.ivianuu.essentials.ui.compose.material.contentColorFor
 import com.ivianuu.essentials.ui.compose.material.copy
-import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.compose.navigation.navigator
 
 fun ColorPickerRoute(
     initialColor: Color,
@@ -66,10 +65,10 @@ fun ColorPickerRoute(
     showAlphaSelector: Boolean = false,
     title: String? = null
 ) = DialogRoute {
-    val navigator = inject<Navigator>()
+    val navigator = navigator
     ColorPickerDialog(
         initialColor = initialColor,
-        onColorSelected = { navigator.pop(it) },
+        onColorSelected = { navigator.pop(result = it) },
         allowCustomArgb = allowCustomArgb,
         showAlphaSelector = showAlphaSelector,
         dismissOnSelection = false,

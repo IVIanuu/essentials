@@ -28,8 +28,8 @@ import androidx.ui.core.dp
 import androidx.ui.core.looseMin
 import androidx.ui.material.DrawerState
 import androidx.ui.material.ModalDrawerLayout
-import androidx.ui.material.surface.Surface
 import com.ivianuu.essentials.ui.compose.common.framed
+import com.ivianuu.essentials.ui.compose.common.onBackPressed
 import com.ivianuu.essentials.ui.compose.common.withDensity
 import com.ivianuu.essentials.ui.compose.layout.Expand
 
@@ -73,6 +73,10 @@ fun Scaffold(
     scaffoldState.hasBottomBar = bottomBar != null
     scaffoldState.hasFab = fab != null
 
+    if (scaffoldState.drawerState == DrawerState.Opened) {
+        onBackPressed { scaffoldState.closeDrawer() }
+    }
+
     ScaffoldAmbient.Provider(value = scaffoldState) {
         Expand {
             ModalDrawerLayout(
@@ -81,13 +85,13 @@ fun Scaffold(
                 gesturesEnabled = drawerContent != null,
                 drawerContent = {
                     if (drawerContent != null) {
-                        Surface {
+                        EsSurface {
                             drawerContent()
                         }
                     }
                 },
                 bodyContent = {
-                    Surface {
+                    EsSurface {
                         ScaffoldLayout(
                             state = scaffoldState,
                             topAppBar = topAppBar,

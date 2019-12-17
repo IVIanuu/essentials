@@ -24,7 +24,7 @@ import androidx.ui.layout.Padding
 import androidx.ui.material.MaterialTheme
 import com.ivianuu.essentials.ui.compose.coroutines.launchOnActive
 import com.ivianuu.essentials.ui.compose.injekt.inject
-import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.compose.navigation.navigator
 import com.ivianuu.essentials.util.Toaster
 import kotlinx.coroutines.delay
 
@@ -42,7 +42,7 @@ internal fun SecureSettingsHeader(text: String) {
 
 @Composable
 internal fun popNavigatorOnceSecureSettingsGranted() {
-    val navigator = inject<Navigator>()
+    val navigator = navigator
     val secureSettingsHelper = inject<SecureSettingsHelper>()
     val toaster = inject<Toaster>()
 
@@ -52,7 +52,7 @@ internal fun popNavigatorOnceSecureSettingsGranted() {
         while (true) {
             if (secureSettingsHelper.canWriteSecureSettings()) {
                 toaster.toast(R.string.es_secure_settings_permission_granted)
-                navigator.pop(true)
+                navigator.pop(result = true)
                 break
             }
             delay(500)

@@ -16,12 +16,20 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import com.ivianuu.essentials.ui.base.EsActivity
-import com.ivianuu.essentials.ui.navigation.director.ControllerRoute
+import com.ivianuu.essentials.ui.compose.es.ComposeActivity
+import com.ivianuu.essentials.ui.compose.navigation.DefaultRouteTransitionAmbient
+import com.ivianuu.essentials.ui.compose.navigation.HorizontalRouteTransition
+import com.ivianuu.essentials.ui.compose.navigation.Route
 
-class MainActivity : EsActivity() {
+class MainActivity : ComposeActivity() {
 
-    override val startRoute: ControllerRoute?
+    override val startRoute: Route
         get() = HomeRoute
+
+    override fun wrapContent(content: () -> Unit) {
+        DefaultRouteTransitionAmbient.Provider(HorizontalRouteTransition()) {
+            content()
+        }
+    }
 
 }

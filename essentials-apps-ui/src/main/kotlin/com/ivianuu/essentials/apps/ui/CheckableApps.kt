@@ -156,7 +156,7 @@ internal class CheckableAppsViewModel(
     private val checkedApps = BroadcastChannel<Set<String>>(Channel.CONFLATED)
 
     init {
-        viewModelScope.launch(dispatchers.io) {
+        viewModelScope.launch(dispatchers.default) {
             val appsFlow = flowOf {
                 appStore.getInstalledApps().filter(appFilter)
             }
@@ -191,7 +191,7 @@ internal class CheckableAppsViewModel(
     }
 
     fun appClicked(app: CheckableApp) {
-        viewModelScope.launch(dispatchers.io) {
+        viewModelScope.launch(dispatchers.default) {
             pushNewCheckedApps {
                 if (!app.isChecked) {
                     it += app.info.packageName
@@ -203,7 +203,7 @@ internal class CheckableAppsViewModel(
     }
 
     fun selectAllClicked() {
-        viewModelScope.launch(dispatchers.io) {
+        viewModelScope.launch(dispatchers.default) {
             state.apps()?.let { allApps ->
                 pushNewCheckedApps { newApps ->
                     newApps += allApps.map { it.info.packageName }
@@ -213,7 +213,7 @@ internal class CheckableAppsViewModel(
     }
 
     fun deselectAllClicked() {
-        viewModelScope.launch(dispatchers.io) {
+        viewModelScope.launch(dispatchers.default) {
             pushNewCheckedApps { it.clear() }
         }
     }

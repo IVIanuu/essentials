@@ -23,28 +23,24 @@ import androidx.ui.material.RadioButton
 import androidx.ui.res.stringResource
 import com.ivianuu.essentials.ui.compose.box.unfoldBox
 import com.ivianuu.essentials.ui.compose.common.ListScreen
-import com.ivianuu.essentials.ui.compose.es.ComposeControllerRoute
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.compose.material.SimpleListItem
-import com.ivianuu.essentials.ui.navigation.director.defaultControllerRouteOptionsOrNull
+import com.ivianuu.essentials.ui.compose.navigation.Route
 
-val TwilightSettingsRoute =
-    ComposeControllerRoute(
-        options = defaultControllerRouteOptionsOrNull()
-    ) {
-        ListScreen(title = stringResource(R.string.es_title_twilight)) {
-            val prefs = inject<TwilightPrefs>()
-            val (value, setValue) = unfoldBox(prefs.twilightMode)
+val TwilightSettingsRoute = Route {
+    ListScreen(title = stringResource(R.string.es_title_twilight)) {
+        val prefs = inject<TwilightPrefs>()
+        val (value, setValue) = unfoldBox(prefs.twilightMode)
 
-            TwilightMode.values().toList().forEach { mode ->
-                TwilightModeItem(
-                    mode = mode,
-                    isSelected = value == mode,
-                    onClick = { setValue(mode) }
-                )
-            }
+        TwilightMode.values().toList().forEach { mode ->
+            TwilightModeItem(
+                mode = mode,
+                isSelected = value == mode,
+                onClick = { setValue(mode) }
+            )
         }
     }
+}
 
 @Composable
 private fun TwilightModeItem(

@@ -67,7 +67,6 @@ inline fun <reified T : MvRxViewModel<*>> MvRxView.getMvRxViewModel(
     noinline factory: () -> T
 ): T = _getMvRxViewModel(T::class, from, key, factory)
 
-
 @PublishedApi
 internal fun <T : MvRxViewModel<*>> MvRxView._getMvRxViewModel(
     type: KClass<T>,
@@ -86,7 +85,6 @@ internal fun <T : MvRxViewModel<*>> MvRxView._getMvRxViewModel(
             .launchIn(lifecycleScope)
     }
 }
-
 
 inline fun <S, reified T : MvRxViewModel<*>> S.injectMvRxViewModel(
     noinline from: () -> ViewModelStoreOwner = { this },

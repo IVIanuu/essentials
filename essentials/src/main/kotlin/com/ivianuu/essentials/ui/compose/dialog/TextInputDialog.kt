@@ -29,8 +29,7 @@ import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.compose.common.asTextComposable
 import com.ivianuu.essentials.ui.compose.common.hideKeyboard
 import com.ivianuu.essentials.ui.compose.common.showKeyboard
-import com.ivianuu.essentials.ui.compose.injekt.inject
-import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.compose.navigation.navigator
 
 fun TextInputRoute(
     initial: String = "",
@@ -39,7 +38,7 @@ fun TextInputRoute(
     title: String? = null,
     allowEmpty: Boolean = true
 ) = DialogRoute {
-    val navigator = inject<Navigator>()
+    val navigator = navigator
 
     val (currentValue, setCurrentValue) = state { initial }
 
@@ -55,7 +54,7 @@ fun TextInputRoute(
                 dismissDialogOnClick = false,
                 onClick = if (allowEmpty || currentValue.isNotEmpty()) {
                     {
-                        navigator.pop(currentValue)
+                        navigator.pop(result = currentValue)
                     }
                 } else {
                     null

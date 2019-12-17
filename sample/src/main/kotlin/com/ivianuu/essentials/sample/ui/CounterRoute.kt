@@ -22,15 +22,15 @@ import androidx.ui.core.dp
 import androidx.ui.layout.Center
 import androidx.ui.material.FloatingActionButton
 import androidx.ui.material.MaterialTheme
-import com.ivianuu.essentials.ui.compose.es.ComposeControllerRoute
 import com.ivianuu.essentials.ui.compose.layout.Column
 import com.ivianuu.essentials.ui.compose.layout.CrossAxisAlignment
 import com.ivianuu.essentials.ui.compose.layout.HeightSpacer
 import com.ivianuu.essentials.ui.compose.layout.MainAxisAlignment
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
 import com.ivianuu.essentials.ui.compose.material.Scaffold
+import com.ivianuu.essentials.ui.compose.navigation.Route
 
-val CounterRoute = ComposeControllerRoute {
+val CounterRoute = Route {
     Scaffold(
         topAppBar = { EsTopAppBar("Counter") },
         body = {

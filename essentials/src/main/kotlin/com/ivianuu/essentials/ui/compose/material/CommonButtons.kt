@@ -17,19 +17,17 @@
 package com.ivianuu.essentials.ui.compose.material
 
 import androidx.compose.Composable
-import androidx.compose.ambient
 import androidx.ui.core.Alignment
 import androidx.ui.graphics.Image
 import com.ivianuu.essentials.R
-import com.ivianuu.essentials.ui.compose.injekt.inject
+import com.ivianuu.essentials.ui.compose.navigation.navigator
 import com.ivianuu.essentials.ui.compose.resources.drawableResource
-import com.ivianuu.essentials.ui.navigation.Navigator
 
 @Composable
 fun DrawerButton(
     image: Image = drawableResource(R.drawable.es_ic_menu)
 ) {
-    val scaffold = ambient(ScaffoldAmbient)
+    val scaffold = scaffold
     IconButton(
         image = image,
         onClick = { scaffold.toggleDrawer() }
@@ -40,7 +38,7 @@ fun DrawerButton(
 fun BackButton(
     image: Image = drawableResource(R.drawable.es_ic_arrow_back)
 ) {
-    val navigator = inject<Navigator>()
+    val navigator = navigator
     IconButton(
         image = image,
         onClick = { navigator.pop() }

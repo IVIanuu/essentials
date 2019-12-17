@@ -20,13 +20,18 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import androidx.appcompat.view.ContextThemeWrapper
+import androidx.compose.remember
 import androidx.lifecycle.ViewModel
-import com.ivianuu.essentials.ui.base.EsActivity
+import androidx.ui.core.ContextAmbient
+import androidx.ui.material.MaterialTheme
+import com.ivianuu.essentials.ui.compose.es.ComposeActivity
+import com.ivianuu.essentials.ui.compose.injekt.MaterialThemeProvider
 import com.ivianuu.essentials.util.injectViewModel
 import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.inject
 
-class PermissionActivity : EsActivity() {
+class PermissionActivity : ComposeActivity() {
 
     private val manager: PermissionManager by inject()
     private val requestUi: PermissionRequestUi by inject()
@@ -58,6 +63,21 @@ class PermissionActivity : EsActivity() {
         )
 
         requestUi.performRequest(this@PermissionActivity, manager, finalRequest)
+    }
+
+    override fun wrapContent(content: () -> Unit) {
+        ContextAmbient.Provider(
+            value = remember { ContextThemeWrapper(this, applicationInfo.theme) },
+            children = {
+                val materialThemeProvider =
+                    com.ivianuu.essentials.ui.compose.injekt.inject<MaterialThemeProvider>()
+                MaterialTheme(
+                    colors = materialThemeProvider.colors(),
+                    typography = materialThemeProvider.typography(),
+                    children = content
+                )
+            }
+        )
     }
 
     override fun onDestroy() {

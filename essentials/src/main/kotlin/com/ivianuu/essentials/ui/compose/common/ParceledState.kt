@@ -25,23 +25,10 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.SavedStateViewModelFactory
 import androidx.lifecycle.ViewModel
 import androidx.savedstate.SavedStateRegistryOwner
+import com.ivianuu.essentials.ui.compose.es.ActivityAmbient
 import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.compose.viewmodel.viewModel
 import com.ivianuu.essentials.util.sourceLocation
-
-@Composable
-inline fun <T : Parcelable> parceled(
-    noinline init: () -> T
-): T = parceled(
-    key = sourceLocation().toString(),
-    init = init
-)
-
-@Composable
-fun <T : Parcelable> parceled(
-    key: String,
-    init: () -> T
-): T = parceledState(key, init).value
 
 @Composable
 inline fun <T : Parcelable> parceledState(

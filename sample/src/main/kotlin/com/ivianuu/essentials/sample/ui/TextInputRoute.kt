@@ -31,19 +31,15 @@ import androidx.ui.material.MaterialTheme
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.compose.common.framed
 import com.ivianuu.essentials.ui.compose.common.hideKeyboard
-import com.ivianuu.essentials.ui.compose.common.showKeyboard
 import com.ivianuu.essentials.ui.compose.common.ref
-import com.ivianuu.essentials.ui.compose.es.ComposeControllerRoute
+import com.ivianuu.essentials.ui.compose.common.showKeyboard
 import com.ivianuu.essentials.ui.compose.layout.ScrollableList
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
 import com.ivianuu.essentials.ui.compose.material.Scaffold
 import com.ivianuu.essentials.ui.compose.material.SimpleListItem
-import com.ivianuu.essentials.ui.navigation.director.ControllerRouteOptions
-import com.ivianuu.essentials.ui.navigation.director.vertical
+import com.ivianuu.essentials.ui.compose.navigation.Route
 
-val TextInputRoute = ComposeControllerRoute(
-    options = ControllerRouteOptions().vertical()
-) {
+val TextInputRoute = Route {
     val state = remember { TextInputState() }
 
     if (!state.searchVisible) {

@@ -16,26 +16,35 @@
 
 package com.ivianuu.essentials.ui.compose.common
 
+import android.content.Intent
 import androidx.compose.Composable
+import androidx.compose.ambient
 import androidx.compose.remember
-import com.ivianuu.essentials.ui.common.UrlRoute
+import androidx.core.net.toUri
 import com.ivianuu.essentials.ui.compose.coroutines.coroutineScope
-import com.ivianuu.essentials.ui.compose.injekt.inject
-import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.Route
+import com.ivianuu.essentials.ui.compose.es.ActivityAmbient
+import com.ivianuu.essentials.ui.compose.navigation.Route
+import com.ivianuu.essentials.ui.compose.navigation.navigator
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @Composable
 fun navigateOnClick(route: () -> Route): () -> Unit {
-    val navigator = inject<Navigator>()
+    val navigator = navigator
     return remember {
         { navigator.push(route()) }
     }
 }
 
 @Composable
-fun openUrlOnClick(url: () -> String) = navigateOnClick { UrlRoute(url()) }
+fun openUrlOnClick(url: () -> String): () -> Unit {
+    val activity = ambient(ActivityAmbient)
+    return {
+        // todo
+        val intent = Intent(Intent.ACTION_VIEW).apply { this.data = url().toUri() }
+        activity.startActivity(intent)
+    }
+}
 
 @Composable
 fun launchOnClick(

@@ -34,6 +34,7 @@ dependencies {
     api(Deps.AndroidX.activity)
     api(Deps.AndroidX.appCompat)
     api(Deps.AndroidX.core)
+    api(Deps.AndroidX.Lifecycle.extensions)
     api(Deps.AndroidX.Lifecycle.runtime)
     api(Deps.AndroidX.Lifecycle.viewModel)
 
@@ -53,9 +54,6 @@ dependencies {
 
     api(Deps.Coroutines.android)
     api(Deps.Coroutines.core)
-
-    api(Deps.Director.director)
-    api(Deps.Director.common)
 
     api(project(":essentials-store"))
 

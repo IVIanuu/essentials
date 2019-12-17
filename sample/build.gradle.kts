@@ -41,6 +41,8 @@ android {
 dependencies {
     implementation(project(":essentials"))
     implementation(project(":essentials-about"))
+    api(project(":essentials-accessibility"))
+    api(project(":essentials-activityresult"))
     implementation(project(":essentials-apps"))
     implementation(project(":essentials-apps-coil"))
     implementation(project(":essentials-apps-ui"))
@@ -48,6 +50,7 @@ dependencies {
     implementation(project(":essentials-foreground"))
     implementation(project(":essentials-gestures"))
     implementation(project(":essentials-hidenavbar"))
+    implementation(project(":essentials-legacy-ui"))
     implementation(project(":essentials-notificationlistener"))
     implementation(project(":essentials-permission"))
     implementation(project(":essentials-shell"))

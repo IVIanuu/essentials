@@ -20,21 +20,14 @@ import androidx.compose.Ambient
 import androidx.compose.Composable
 import androidx.compose.ambient
 
-open class Route(
+data class Route(
     val opaque: Boolean = false,
     val keepState: Boolean = false,
+    val transition: RouteTransition? = null,
     val content: @Composable() () -> Unit
-) {
+)
 
-    @Composable
-    open fun content() {
-        RouteAmbient.Provider(this) {
-            content()
-        }
-    }
-}
-
-private val RouteAmbient = Ambient.of<Route>()
+internal val RouteAmbient = Ambient.of<Route>()
 
 @Composable
 val route: Route

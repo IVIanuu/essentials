@@ -56,7 +56,6 @@ class ComposeAnalysisHandlerExtension(
                 analyzeDeclarations(TopDownAnalysisMode.TopLevelDeclarations, files)
             }
         } catch (e: Exception) {
-
         }
 
         files as ArrayList<KtFile>

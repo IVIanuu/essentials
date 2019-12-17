@@ -23,10 +23,10 @@ import com.ivianuu.essentials.apps.coil.EsAppsCoilModule
 import com.ivianuu.essentials.boot.EsBootModule
 import com.ivianuu.essentials.coil.EsCoilModule
 import com.ivianuu.essentials.gestures.EsGesturesModule
+import com.ivianuu.essentials.legacy.ui.changehandler.OpenCloseChangeHandler
 import com.ivianuu.essentials.permission.EsPermissionsModule
 import com.ivianuu.essentials.sample.BootModule
 import com.ivianuu.essentials.twilight.EsTwilightModule
-import com.ivianuu.essentials.ui.changehandler.OpenCloseChangeHandler
 import com.ivianuu.essentials.work.WorkerInitializerModule
 import com.ivianuu.essentials.work.WorkerInjectionModule
 

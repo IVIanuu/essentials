@@ -30,14 +30,14 @@ import com.ivianuu.essentials.coil.Image
 import com.ivianuu.essentials.mvrx.MvRxViewModel
 import com.ivianuu.essentials.mvrx.injectMvRxViewModel
 import com.ivianuu.essentials.ui.compose.common.AsyncList
-import com.ivianuu.essentials.ui.compose.es.ComposeControllerRoute
 import com.ivianuu.essentials.ui.compose.layout.SizedBox
 import com.ivianuu.essentials.ui.compose.material.AvatarIconStyle
 import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
 import com.ivianuu.essentials.ui.compose.material.Icon
 import com.ivianuu.essentials.ui.compose.material.Scaffold
 import com.ivianuu.essentials.ui.compose.material.SimpleListItem
-import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.compose.navigation.NavigatorState
+import com.ivianuu.essentials.ui.compose.navigation.Route
 import com.ivianuu.essentials.util.AppDispatchers
 import com.ivianuu.essentials.util.Async
 import com.ivianuu.essentials.util.Uninitialized
@@ -48,7 +48,7 @@ import com.ivianuu.injekt.parametersOf
 fun AppPickerRoute(
     title: String? = null,
     appFilter: AppFilter = DefaultAppFilter
-) = ComposeControllerRoute {
+) = Route {
     Scaffold(
         topAppBar = { EsTopAppBar(title ?: stringResource(R.string.es_title_app_picker)) },
         body = {
@@ -97,12 +97,12 @@ internal class AppPickerViewModel(
     @Param private val appFilter: AppFilter,
     private val appStore: AppStore,
     dispatchers: AppDispatchers,
-    private val navigator: Navigator
+    private val navigator: NavigatorState
 ) : MvRxViewModel<AppPickerState>(AppPickerState()) {
 
     init {
         viewModelScope.execute(
-            context = dispatchers.io,
+            context = dispatchers.default,
             block = {
                 appStore.getInstalledApps()
                     .filter(appFilter)
@@ -112,7 +112,7 @@ internal class AppPickerViewModel(
     }
 
     fun appClicked(app: AppInfo) {
-        navigator.pop(app)
+        navigator.pop(result = app)
     }
 }
 

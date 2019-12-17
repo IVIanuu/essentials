@@ -26,20 +26,17 @@ import androidx.ui.layout.Center
 import com.ivianuu.essentials.ui.compose.common.SafeArea
 import com.ivianuu.essentials.ui.compose.common.onBackPressed
 import com.ivianuu.essentials.ui.compose.common.ref
-import com.ivianuu.essentials.ui.compose.es.ComposeControllerRoute
-import com.ivianuu.essentials.ui.compose.injekt.inject
-import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.director.ControllerRouteOptions
-import com.ivianuu.essentials.ui.navigation.director.fade
+import com.ivianuu.essentials.ui.compose.navigation.FadeRouteTransition
+import com.ivianuu.essentials.ui.compose.navigation.Route
+import com.ivianuu.essentials.ui.compose.navigation.navigator
 
 fun DialogRoute(
     dismissible: Boolean = true,
-    dismissHandler: @Composable() () -> Unit = { inject<Navigator>().pop() },
+    dismissHandler: @Composable() () -> Unit = { navigator.pop() },
     dialog: @Composable() () -> Unit
-) = ComposeControllerRoute(
-    options = ControllerRouteOptions().fade(
-        removesFromViewOnPush = false
-    )
+) = Route(
+    opaque = true,
+    transition = FadeRouteTransition()
 ) {
     if (!dismissible) {
         onBackPressed { }

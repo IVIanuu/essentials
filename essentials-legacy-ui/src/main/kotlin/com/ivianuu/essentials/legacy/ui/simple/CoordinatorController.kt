@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.legacy.ui.simple
 
 import androidx.coordinatorlayout.widget.CoordinatorLayout
-import com.ivianuu.essentials.mvrx.MvRxController
 import kotlinx.android.synthetic.main.es_controller_list.es_coordinator_layout
 
 /**
