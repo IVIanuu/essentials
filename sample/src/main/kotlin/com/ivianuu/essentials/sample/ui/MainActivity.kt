@@ -18,8 +18,8 @@ package com.ivianuu.essentials.sample.ui
 
 import com.ivianuu.essentials.ui.compose.es.ComposeActivity
 import com.ivianuu.essentials.ui.compose.navigation.DefaultRouteTransitionAmbient
-import com.ivianuu.essentials.ui.compose.navigation.OpenCloseRouteTransition
 import com.ivianuu.essentials.ui.compose.navigation.Route
+import com.ivianuu.essentials.ui.compose.navigation.VerticalFadeRouteTransition
 
 class MainActivity : ComposeActivity() {
 
@@ -27,7 +27,7 @@ class MainActivity : ComposeActivity() {
         get() = HomeRoute
 
     override fun wrapContent(content: () -> Unit) {
-        DefaultRouteTransitionAmbient.Provider(OpenCloseRouteTransition()) {
+        DefaultRouteTransitionAmbient.Provider(VerticalFadeRouteTransition()) {
             content()
         }
     }

@@ -132,7 +132,7 @@ private fun horizontalRouteTransitionDefinition(
 
 val OpenCloseRouteTransitionKey = RouteTransition.Key()
 fun OpenCloseRouteTransition(duration: Duration = 300.milliseconds) = RouteTransition(
-    key = OpenCloseRouteTransitionKey,
+    key = VerticalFadeRouteTransitionKey,
     definition = {
         remember(duration) {
             openCloseRouteTransitionDefinition(duration)
@@ -185,6 +185,46 @@ private fun openCloseRouteTransitionDefinition(
             this.duration = duration.toLongMilliseconds().toInt()
         }
         Scale using tween {
+            this.duration = duration.toLongMilliseconds().toInt()
+        }
+    }
+}
+
+val VerticalFadeRouteTransitionKey = RouteTransition.Key()
+fun VerticalFadeRouteTransition(duration: Duration = 300.milliseconds) = RouteTransition(
+    key = VerticalFadeRouteTransitionKey,
+    definition = {
+        remember(duration) {
+            verticalFadeRouteTransitionDefinition(duration)
+        }
+    },
+    generateOps = { transitionState, _ ->
+        opsOf(
+            OpacityRouteTransitionType.Opacity with transitionState[Fraction],
+            CanvasRouteTransitionType.Block with { canvas, parentSize ->
+                canvas.save()
+                canvas.translate(
+                    0f,
+                    parentSize.height.value * 0.3f * (1f - transitionState[Fraction])
+                )
+                drawChildren()
+                canvas.restore()
+            }
+        )
+    }
+)
+
+private fun verticalFadeRouteTransitionDefinition(
+    duration: Duration
+) = transitionDefinition {
+    state(RouteTransition.State.Init) { set(Fraction, 0f) }
+    state(RouteTransition.State.EnterFromPush) { set(Fraction, 1f) }
+    state(RouteTransition.State.ExitFromPush) { set(Fraction, 1f) }
+    state(RouteTransition.State.EnterFromPop) { set(Fraction, 1f) }
+    state(RouteTransition.State.ExitFromPop) { set(Fraction, 0f) }
+
+    transition {
+        Fraction using tween {
             this.duration = duration.toLongMilliseconds().toInt()
         }
     }
