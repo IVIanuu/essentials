@@ -47,7 +47,7 @@ import com.ivianuu.injekt.get
 abstract class ComposeActivity : EsActivity() {
 
     override fun retainedModules(): List<Module> =
-        listOf(RetainedComposeActivityModule(this, startRoute))
+        listOf(RouteCompatModule(this, startRoute))
 
     protected open val startRoute: Route? = null
 
@@ -123,7 +123,7 @@ abstract class ComposeActivity : EsActivity() {
     }
 }
 
-private fun RetainedComposeActivityModule(
+private fun RouteCompatModule(
     activity: ComposeActivity,
     startRoute: Route?
 ) = Module {
