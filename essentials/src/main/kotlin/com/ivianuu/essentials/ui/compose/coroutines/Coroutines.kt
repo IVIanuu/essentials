@@ -39,10 +39,11 @@ import kotlin.coroutines.CoroutineContext
 // todo retainedLoad
 
 @Composable
-fun retainedCoroutineScope(key: Any,
-                           context: @Composable() () -> CoroutineContext = {
-                               retainedCoroutineContext(key = key)
-                           }
+fun retainedCoroutineScope(
+    key: Any,
+    context: @Composable() () -> CoroutineContext = {
+        retainedCoroutineContext(key = key)
+    }
 ): CoroutineScope {
     val coroutineContext = context()
     val coroutineScope = remember { CoroutineScope(context = coroutineContext) }
