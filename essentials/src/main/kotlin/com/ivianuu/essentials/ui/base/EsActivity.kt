@@ -54,11 +54,7 @@ abstract class EsActivity : AppCompatActivity(), InjektTrait {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        initRetainedActivityComponentIfNeeded {
-            RetainedActivityComponent {
-                modules(retainedModules())
-            }
-        }
+        initRetainedActivityComponentIfNeeded { createRetainedComponent() }
 
         if (drawEdgeToEdge) {
             window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
@@ -76,4 +72,8 @@ abstract class EsActivity : AppCompatActivity(), InjektTrait {
     protected open fun modules(): List<Module> = emptyList()
 
     protected open fun retainedModules(): List<Module> = emptyList()
+
+    protected open fun createRetainedComponent(): Component = RetainedActivityComponent {
+        modules(retainedModules())
+    }
 }
