@@ -23,6 +23,7 @@ import androidx.compose.frames.modelListOf
 import androidx.compose.remember
 import androidx.ui.core.CoroutineContextAmbient
 import com.github.ajalt.timberkt.d
+import com.ivianuu.essentials.ui.compose.common.AbsorbPointer
 import com.ivianuu.essentials.ui.compose.common.Overlay
 import com.ivianuu.essentials.ui.compose.common.OverlayEntry
 import com.ivianuu.essentials.ui.compose.common.OverlayState
@@ -165,24 +166,27 @@ class NavigatorState(
             content = {
                 val coroutineContext = coroutineContext()
                 CoroutineContextAmbient.Provider(coroutineContext) {
-                    RouteTransitionWrapper(
-                        transition = transition ?: ambient(DefaultRouteTransitionAmbient),
-                        state = transitionState,
-                        lastState = lastTransitionState,
-                        onTransitionComplete = onTransitionComplete,
-                        types = types,
-                        children = {
-                            RouteAmbient.Provider(
-                                value = route,
-                                children = route.content
-                            )
-                        }
-                    )
+                    AbsorbPointer(absorb = absorbTouches) {
+                        RouteTransitionWrapper(
+                            transition = transition ?: ambient(DefaultRouteTransitionAmbient),
+                            state = transitionState,
+                            lastState = lastTransitionState,
+                            onTransitionComplete = onTransitionComplete,
+                            types = types,
+                            children = {
+                                RouteAmbient.Provider(
+                                    value = route,
+                                    children = route.content
+                                )
+                            }
+                        )
+                    }
                 }
             }
         )
 
         private val onTransitionComplete: (RouteTransition.State) -> Unit = { completedState ->
+            if (completedState != RouteTransition.State.Init) absorbTouches = false
             lastTransitionState = completedState
             if (completedState == RouteTransition.State.ExitFromPush) {
                 other?.onOtherTransitionComplete()
@@ -199,6 +203,7 @@ class NavigatorState(
         private var lastTransitionState by framed(RouteTransition.State.Init)
 
         private var other: RouteState? = null
+        private var absorbTouches by framed(false)
 
         private fun onOtherTransitionComplete() {
             overlayEntry.opaque = route.opaque
@@ -206,6 +211,7 @@ class NavigatorState(
 
         fun enter(prev: RouteState?, isPush: Boolean) {
             overlayEntry.opaque = route.opaque || isPush
+            absorbTouches = true
             if (isPush) overlayState.add(overlayEntry)
             lastTransitionState = transitionState
             transitionState =
@@ -214,6 +220,7 @@ class NavigatorState(
         }
 
         fun exit(next: RouteState?, isPush: Boolean) {
+            absorbTouches = true
             overlayEntry.opaque = route.opaque || !isPush
             if (isPush) other = next
             lastTransitionState = transitionState

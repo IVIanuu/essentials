@@ -18,8 +18,10 @@ package com.ivianuu.essentials.ui.compose.navigation
 
 import androidx.compose.Ambient
 import androidx.compose.Composable
+import androidx.compose.Immutable
 import androidx.compose.ambient
 
+@Immutable
 data class Route(
     val opaque: Boolean = false,
     val keepState: Boolean = false,
