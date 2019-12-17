@@ -16,70 +16,64 @@
 
 package com.ivianuu.essentials.legacy.ui.compose
 
-import androidx.compose.ambient
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.lifecycleScope
 import com.ivianuu.director.DefaultChangeHandler
-import com.ivianuu.essentials.legacy.ui.navigation.Navigator
 import com.ivianuu.essentials.legacy.ui.navigation.director.ControllerRoute
 import com.ivianuu.essentials.legacy.ui.navigation.director.ControllerRouteOptions
 import com.ivianuu.essentials.legacy.ui.navigation.director.handler
-import com.ivianuu.essentials.ui.base.EsViewModel
-import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.compose.navigation.Navigator
 import com.ivianuu.essentials.ui.compose.navigation.NavigatorState
-import com.ivianuu.essentials.ui.compose.navigation.RetainedNavigatorState
 import com.ivianuu.essentials.ui.compose.navigation.Route
-import com.ivianuu.essentials.ui.compose.viewmodel.injectViewModel
 import com.ivianuu.injekt.Factory
+import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Param
+import com.ivianuu.injekt.get
 import com.ivianuu.injekt.parametersOf
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 fun Route.asComposeControllerRoute(
-    options: ControllerRoute.Options? = extractDefaultControllerRouteOptions(),
-    popOnConfigurationChange: Boolean = false
-) = ComposeControllerRoute(
-    options = options,
-    popOnConfigurationChange = popOnConfigurationChange
+    options: ControllerRoute.Options? = extractDefaultControllerRouteOptions()
+) = ControllerRoute<RouteCompatController>(
+    options = options
 ) {
-    val thisRoute = this
-    val composeNavigatorState = RetainedNavigatorState()
-
-    val legacyNavigator = inject<Navigator>()
-    val thisLegacyRoute = ambient(RouteAmbient)
-
-    if (composeNavigatorState.backStack.isEmpty() &&
-        legacyNavigator.backStack.indexOf(thisLegacyRoute) > 1
-    ) {
-        composeNavigatorState.push(DummyRoute)
-    }
-
-    injectViewModel<ResultListeningViewModel> {
-        parametersOf(thisRoute, composeNavigatorState)
-    }
-
-    Navigator(state = composeNavigatorState)
+    parametersOf(this)
 }
 
 fun Route.extractDefaultControllerRouteOptions(): ControllerRoute.Options {
     return ControllerRouteOptions()
-        .handler(
-            DefaultChangeHandler(removesFromViewOnPush = !opaque)
-        )
+        .handler(DefaultChangeHandler(removesFromViewOnPush = !opaque))
 }
 
 @Factory
-internal class ResultListeningViewModel(
-    @Param private val route: Route,
-    @Param private val composeNavigator: NavigatorState,
-    private val legacyNavigator: Navigator
-) : EsViewModel() {
-    init {
-        viewModelScope.launch {
-            val result = composeNavigator.push<Any?>(route = route)
-            legacyNavigator.pop(result = result)
+internal class RouteCompatController(
+    @Param private val composeRoute: Route
+) : ComposeController() {
+
+    private val navigatorState = get<NavigatorState>()
+
+    override fun modules(): List<Module> =
+        listOf(RouteCompatModule(coroutineScope = lifecycleScope))
+
+    override fun onCreate() {
+        super.onCreate()
+        lifecycleScope.launch {
+            if (navigator.backStack.indexOf(route) > 1) {
+                navigatorState.push(DummyRoute)
+            }
+
+            val result = navigatorState.push<Any?>(route = composeRoute)
+            navigator.pop(result = result)
         }
+    }
+
+    override fun content() {
+        Navigator(state = navigatorState)
     }
 }
 
 private val DummyRoute = Route {}
+
+private fun RouteCompatModule(coroutineScope: CoroutineScope) = Module {
+    single { NavigatorState(coroutineScope = coroutineScope) }
+}
