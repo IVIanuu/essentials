@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.legacy.ui.compose
 
+import androidx.compose.ambient
 import androidx.lifecycle.viewModelScope
 import com.ivianuu.director.DefaultChangeHandler
 import com.ivianuu.essentials.legacy.ui.navigation.Navigator
@@ -23,6 +24,7 @@ import com.ivianuu.essentials.legacy.ui.navigation.director.ControllerRoute
 import com.ivianuu.essentials.legacy.ui.navigation.director.ControllerRouteOptions
 import com.ivianuu.essentials.legacy.ui.navigation.director.handler
 import com.ivianuu.essentials.ui.base.EsViewModel
+import com.ivianuu.essentials.ui.compose.injekt.inject
 import com.ivianuu.essentials.ui.compose.navigation.Navigator
 import com.ivianuu.essentials.ui.compose.navigation.NavigatorState
 import com.ivianuu.essentials.ui.compose.navigation.RetainedNavigatorState
@@ -42,6 +44,15 @@ fun Route.asComposeControllerRoute(
 ) {
     val thisRoute = this
     val composeNavigatorState = RetainedNavigatorState()
+
+    val legacyNavigator = inject<Navigator>()
+    val thisLegacyRoute = ambient(RouteAmbient)
+
+    if (composeNavigatorState.backStack.isEmpty() &&
+        legacyNavigator.backStack.indexOf(thisLegacyRoute) > 1
+    ) {
+        composeNavigatorState.push(DummyRoute)
+    }
 
     injectViewModel<ResultListeningViewModel> {
         parametersOf(thisRoute, composeNavigatorState)
