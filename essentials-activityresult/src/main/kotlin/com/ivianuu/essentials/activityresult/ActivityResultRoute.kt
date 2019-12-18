@@ -21,15 +21,14 @@ import android.content.Intent
 import androidx.compose.ambient
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.lifecycleScope
+import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.compose.common.retained
+import com.ivianuu.essentials.ui.compose.coroutines.retainedCoroutineScope
 import com.ivianuu.essentials.ui.compose.es.ActivityAmbient
-import com.ivianuu.essentials.ui.compose.es.ComposeActivity
-import com.ivianuu.essentials.ui.compose.navigation.NavigatorState
 import com.ivianuu.essentials.ui.compose.navigation.Route
+import com.ivianuu.essentials.ui.compose.navigation.navigator
 import com.ivianuu.essentials.util.cast
-import com.ivianuu.essentials.util.unsafeLazy
-import com.ivianuu.injekt.Factory
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.launch
 import java.util.concurrent.atomic.AtomicInteger
 
@@ -37,9 +36,15 @@ fun ActivityResultRoute(intent: Intent) = Route(
     opaque = true
 ) {
     val activity = ambient(ActivityAmbient)
-    retained {
-        ActivityResultFragment.get(activity.cast())
-            .startForResult(intent)
+
+    val retainedScope = retainedCoroutineScope("${System.identityHashCode(intent)}:scope")
+    val activityResultFragment = ActivityResultFragment.get(activity.cast())
+    val navigator = navigator
+    retained("${System.identityHashCode(intent)}:launch") {
+        retainedScope.launch {
+            val result = activityResultFragment.startForResult(intent)
+            navigator.pop(result = result)
+        }
     }
 }
 
@@ -53,13 +58,9 @@ data class ActivityResult(
     val isFirstUser: Boolean get() = resultCode == Activity.RESULT_FIRST_USER
 }
 
-@Factory
-internal class ActivityResultFragment() : Fragment() {
+class ActivityResultFragment : Fragment() {
 
-    private val navigator: NavigatorState by unsafeLazy {
-        requireActivity().cast<ComposeActivity>()
-            .component.get()
-    }
+    private val resultsByRequestCode = mutableMapOf<Int, CompletableDeferred<ActivityResult>>()
 
     init {
         retainInstance = true
@@ -67,27 +68,32 @@ internal class ActivityResultFragment() : Fragment() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        navigator.pop(
-            ActivityResult(
-                requestCode,
-                resultCode,
-                data
-            )
-        )
+        d { "on result $requestCode $resultCode $data" }
+        resultsByRequestCode.remove(requestCode)
+            ?.complete(ActivityResult(requestCode, resultCode, data))
     }
 
-    internal fun startForResult(intent: Intent) {
+    internal suspend fun startForResult(intent: Intent): ActivityResult {
         val requestCode = requestCodes.incrementAndGet()
+
+        val result = CompletableDeferred<ActivityResult>()
+        resultsByRequestCode[requestCode] = result
+
+        d { "start for result $requestCode $intent" }
 
         try {
             startActivityForResult(intent, requestCode)
         } catch (e: Exception) {
-            lifecycleScope.launch { navigator.pop() }
+            resultsByRequestCode.remove(requestCode)
+                ?.completeExceptionally(e)
         }
+
+        return result.await()
     }
 
     companion object {
         private const val TAG = "com.ivianuu.essentials.activityresult.ActivityResultFragment"
+        private val requestCodes = AtomicInteger(0)
         fun get(activity: FragmentActivity): ActivityResultFragment {
             var fragment =
                 activity.supportFragmentManager.findFragmentByTag(TAG) as? ActivityResultFragment
@@ -101,5 +107,3 @@ internal class ActivityResultFragment() : Fragment() {
         }
     }
 }
-
-private val requestCodes = AtomicInteger(0)
