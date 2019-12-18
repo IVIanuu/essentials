@@ -51,7 +51,7 @@ class TwilightHelper(
     private val prefs: TwilightPrefs
 ) : AppService {
 
-    private val _isDark = ConflatedBroadcastChannel<Boolean>(false)
+    private val _isDark = ConflatedBroadcastChannel(false)
     val isDark: Flow<Boolean> get() = _isDark.asFlow()
     val currentIsDark: Boolean get() = _isDark.value
 

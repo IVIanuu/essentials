@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.twilight
 
 import androidx.compose.Composable
+import androidx.compose.remember
 import androidx.ui.material.ColorPalette
 import androidx.ui.material.Typography
 import androidx.ui.material.darkColorPalette
@@ -36,7 +37,7 @@ fun TwilightTheme(
     children: @Composable() () -> Unit
 ) {
     val helper = inject<TwilightHelper>()
-    val isDark = collect(helper.isDark, helper.currentIsDark)
+    val isDark = collect(remember { helper.isDark }, helper.currentIsDark)
     val colors = if (isDark) darkPalette() else lightPalette()
     EsTheme(
         colors = colors,

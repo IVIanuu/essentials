@@ -36,7 +36,6 @@ import com.ivianuu.essentials.ui.material.EsSurface
 import com.ivianuu.essentials.ui.material.EsTopAppBar
 import com.ivianuu.essentials.ui.material.RippleColorProvider
 import com.ivianuu.essentials.ui.material.Scaffold
-import com.ivianuu.essentials.ui.material.contentColorFor
 import com.ivianuu.essentials.ui.navigation.Route
 import com.ivianuu.essentials.util.Toaster
 
@@ -61,7 +60,6 @@ private fun Chip(@Pivotal name: String) {
     val color = remember { PrimaryColors.toList().shuffled().first() }
     EsSurface(
         color = color,
-        contentColor = contentColorFor(color),
         shape = RoundedCornerShape(16.dp)
     ) {
         Container(
