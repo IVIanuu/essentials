@@ -891,7 +891,7 @@ private fun wrapComposableCalls(
 
                                             if (resulting.annotations.hasAnnotation(
                                                     UnstableAnnotation
-                                                ) &&
+                                                ) ||
                                                 stableParams.size != node.args.size
                                             ) {
                                                 stmts += Node.Stmt.Expr(
