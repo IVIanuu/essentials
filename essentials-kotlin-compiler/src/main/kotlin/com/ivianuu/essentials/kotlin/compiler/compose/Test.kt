@@ -89,7 +89,7 @@ fun test(
     val orig = Converter().convertFile(file)
     val fileNode = Converter().convertFile(file)
 
-    // logFile(fileNode)
+    //if (file.name == "CoreHelpers.kt") logFile(fileNode)
 
     val steps = mutableListOf(
         Step.ConvertExpressionComposableFunsToBlocks,
@@ -105,14 +105,14 @@ fun test(
         moveComposableTrailingLambdasIntoTheBody(fileNode, resolveSession, trace)
         convertExpressionComposableFunsToBlocks(fileNode, resolveSession, trace)
         insertRestartScope(fileNode, resolveSession, trace)
-        wrapComposableLambdasInObserve(fileNode, resolveSession, trace)
+        wrapComposableLambdasInObserve(fileNode, trace)
         wrapComposableCalls(fileNode, resolveSession, trace)
         unprocessed = collectUnprocessed(fileNode, steps)
     }
 
     val newSource = Writer.write(fileNode)
 
-    //if (file.name == "MainActivity.kt") error("new source $newSource")
+    //if (file.name == "CoreHelpers.kt") error("new source $newSource")
 
     return if (orig != fileNode) {
         file.withNewSource(newSource)
@@ -388,7 +388,6 @@ private fun Node.Block.invokesComposables(
 
 private fun wrapComposableLambdasInObserve(
     file: Node.File,
-    resolveSession: ResolveSession,
     trace: BindingTrace
 ) {
     Visitor.visit(file) { node, _ ->
@@ -457,13 +456,15 @@ private fun wrapComposableLambdasInObserve(
                         val element = valueArgParent.element as? KtCallExpression ?: return@visit
                         val resolvedCall =
                             element.getResolvedCall(trace.bindingContext) ?: return@visit
-                        val resulting = resolvedCall.resultingDescriptor
+                        val resulting = resolvedCall.resultingDescriptor as FunctionDescriptor
 
                         val argDescriptor = if (parentWithType is Node.ValueArg) {
                             (resolvedCall.getArgumentMapping(parentWithType.element as KtValueArgument) as? ArgumentMatch)?.valueParameter!!
                         } else resulting.valueParameters.last()
 
-                        if (argDescriptor.type.annotations.hasAnnotation(ComposableAnnotation) &&
+                        val notInlined = !resulting.isInline || argDescriptor.isNoinline
+                        if (notInlined &&
+                            argDescriptor.type.annotations.hasAnnotation(ComposableAnnotation) &&
                             argDescriptor.type.isFunctionType &&
                             argDescriptor.type.getReturnTypeFromFunctionType().isUnit()
                         ) {
