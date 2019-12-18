@@ -21,6 +21,8 @@ import androidx.ui.material.ColorPalette
 import androidx.ui.material.Typography
 import androidx.ui.material.darkColorPalette
 import androidx.ui.material.lightColorPalette
+import com.ivianuu.essentials.ui.coroutines.collect
+import com.ivianuu.essentials.ui.injekt.inject
 import com.ivianuu.essentials.ui.material.EsTheme
 import com.ivianuu.essentials.ui.material.SystemBarConfig
 import com.ivianuu.essentials.util.darken
@@ -33,7 +35,8 @@ fun TwilightTheme(
     systemBarConfig: SystemBarConfig? = null,
     children: @Composable() () -> Unit
 ) {
-    val isDark = isDark()
+    val helper = inject<TwilightHelper>()
+    val isDark = collect(helper.isDark, helper.currentIsDark)
     val colors = if (isDark) darkPalette() else lightPalette()
     EsTheme(
         colors = colors,
