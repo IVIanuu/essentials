@@ -102,13 +102,11 @@ class NavigatorState(
 
     suspend fun <T> push(route: Route): T? {
         d { "push $route" }
-
         val prev = _backStack.lastOrNull()
         val routeState = RouteState(route)
         _backStack += routeState
         if (prev !in _backStack.filterVisible()) prev?.exit(routeState, true)
         routeState.enter(prev, true)
-
         return routeState.awaitResult()
     }
 
