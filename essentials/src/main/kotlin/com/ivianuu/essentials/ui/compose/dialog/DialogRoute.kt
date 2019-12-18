@@ -32,7 +32,7 @@ import com.ivianuu.essentials.ui.compose.navigation.navigator
 
 fun DialogRoute(
     dismissible: Boolean = true,
-    dismissHandler: @Composable() () -> Any? = { navigator.pop() },
+    dismissHandler: @Composable() () -> /*// todo use Unit */ Any? = { navigator.pop() },
     dialog: @Composable() () -> Unit
 ) = Route(
     opaque = true,
