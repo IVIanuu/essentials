@@ -18,6 +18,7 @@ package com.ivianuu.essentials.util
 
 // todo inline class Flag(val baking: Int)
 
+fun Int.setFlag(flag: Int, set: Boolean): Int = if (set) addFlag(flag) else removeFlag(flag)
 fun Int.addFlag(flag: Int): Int = this or flag
 fun Int.removeFlag(flag: Int): Int = this and flag.inv()
 fun Int.containsFlag(flag: Int): Boolean = this and flag == flag
