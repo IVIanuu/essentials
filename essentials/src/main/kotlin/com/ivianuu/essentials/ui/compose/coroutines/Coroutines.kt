@@ -23,7 +23,7 @@ import androidx.compose.onCommit
 import androidx.compose.onDispose
 import androidx.compose.onPreCommit
 import androidx.compose.remember
-import androidx.compose.stateFor
+import androidx.compose.state
 import androidx.ui.core.CoroutineContextAmbient
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.compose.common.onFinalDispose
@@ -150,7 +150,7 @@ fun <T> load(
     key: Any,
     block: suspend CoroutineScope.() -> T
 ): T {
-    val state = stateFor(key) { placeholder }
+    val state = state { placeholder }
     launchOnCommit(key) { state.value = block() }
     return state.value
 }
@@ -163,7 +163,7 @@ fun <T> collect(
     flow: Flow<T>,
     placeholder: T
 ): T {
-    val state = stateFor(flow) { placeholder }
+    val state = state { placeholder }
     launchOnCommit(flow) {
         flow.collect {
             state.value = it
