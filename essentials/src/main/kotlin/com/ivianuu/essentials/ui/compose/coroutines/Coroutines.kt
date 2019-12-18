@@ -25,6 +25,7 @@ import androidx.compose.onPreCommit
 import androidx.compose.remember
 import androidx.compose.stateFor
 import androidx.ui.core.CoroutineContextAmbient
+import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.compose.common.onFinalDispose
 import com.ivianuu.essentials.ui.compose.common.retained
 import kotlinx.coroutines.CoroutineScope
@@ -52,9 +53,11 @@ fun retainedCoroutineScope(
 
 @Composable
 fun retainedCoroutineContext(key: Any): CoroutineContext {
-    val parent = ambient(CoroutineContextAmbient)
-    val coroutineContext = retained(key = key) { Job(parent = parent[Job]) + Dispatchers.Main }
-    onFinalDispose { coroutineContext[Job]!!.cancel() }
+    val coroutineContext = retained(key = key) { Job() + Dispatchers.Main }
+    onFinalDispose {
+        d { "on final dispose" }
+        coroutineContext[Job]!!.cancel()
+    }
     return coroutineContext
 }
 
