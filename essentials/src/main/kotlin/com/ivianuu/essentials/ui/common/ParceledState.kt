@@ -24,7 +24,6 @@ import androidx.compose.state
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.SavedStateViewModelFactory
 import androidx.lifecycle.ViewModel
-import androidx.savedstate.SavedStateRegistryOwner
 import com.ivianuu.essentials.ui.core.ActivityAmbient
 import com.ivianuu.essentials.ui.injekt.inject
 import com.ivianuu.essentials.ui.viewmodel.viewModel
@@ -45,7 +44,7 @@ fun <T : Parcelable> parceledState(
 ): State<T> {
     val factory = SavedStateViewModelFactory(
         inject(),
-        ambient(ActivityAmbient) as SavedStateRegistryOwner
+        ambient(ActivityAmbient)
     )
     val viewModel = viewModel(
         factory = { factory.create(ParceledStateViewModel::class.java) }

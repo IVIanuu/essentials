@@ -26,7 +26,7 @@ import com.ivianuu.essentials.ui.core.ActivityAmbient
 
 @Composable
 fun onBackPressed(
-    owner: OnBackPressedDispatcherOwner = ambient(ActivityAmbient) as OnBackPressedDispatcherOwner,
+    owner: OnBackPressedDispatcherOwner = ambient(ActivityAmbient),
     enabled: Boolean = true,
     callback: () -> Unit
 ) {

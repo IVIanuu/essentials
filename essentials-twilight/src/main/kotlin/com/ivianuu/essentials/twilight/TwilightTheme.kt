@@ -28,7 +28,7 @@ import androidx.ui.material.lightColorPalette
 import com.ivianuu.essentials.ui.coroutines.collect
 import com.ivianuu.essentials.ui.injekt.inject
 import com.ivianuu.essentials.ui.material.EsTheme
-import com.ivianuu.essentials.ui.material.SystemBarConfig
+import com.ivianuu.essentials.ui.material.SystemBarStyle
 import com.ivianuu.essentials.ui.material.lerp
 import com.ivianuu.essentials.util.darken
 
@@ -50,7 +50,7 @@ fun TwilightTheme(
         EsTheme(
             colors = colors,
             typography = typography,
-            systemBarConfig = SystemBarConfig(
+            systemBarConfig = SystemBarStyle(
                 statusBarColor = colors.primary.darken()
             ),
             children = children

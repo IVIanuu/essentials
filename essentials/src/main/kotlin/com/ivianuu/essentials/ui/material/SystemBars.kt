@@ -16,20 +16,21 @@
 
 package com.ivianuu.essentials.ui.material
 
+import android.app.Activity
 import android.os.Build
 import android.view.View
 import androidx.compose.Ambient
 import androidx.compose.Composable
 import androidx.compose.Immutable
 import androidx.compose.ambient
+import androidx.compose.onCommit
 import androidx.ui.graphics.Color
 import androidx.ui.graphics.toArgb
-import com.ivianuu.essentials.ui.core.ActivityAmbient
 import com.ivianuu.essentials.util.isLight
 import com.ivianuu.essentials.util.setFlag
 
 @Immutable
-data class SystemBarConfig(
+data class SystemBarStyle(
     val statusBarColor: Color = Color.Black,
     val lightStatusBar: Boolean = statusBarColor.isLight,
     val drawBehindStatusBar: Boolean = false,
@@ -39,46 +40,70 @@ data class SystemBarConfig(
 )
 
 @Composable
-fun SystemBarTheme(
-    config: SystemBarConfig = SystemBarConfig(),
+fun ProvideCurrentSystemBarStyle(
+    style: SystemBarStyle,
     children: @Composable() () -> Unit
 ) {
-    applySystemBarConfig(config)
-    SystemBarConfigAmbient.Provider(value = config, children = children)
+    val systemBarManager = ambient(SystemBarManagerAmbient)
+    onCommit(style) {
+        systemBarManager.registerStyle(style)
+        onDispose { systemBarManager.unregisterStyle(style) }
+    }
+    SystemBarStyleAmbient.Provider(value = style, children = children)
 }
 
 @Composable
-private fun applySystemBarConfig(config: SystemBarConfig) {
-    val activity = ambient(ActivityAmbient)
-    val window = activity.window
-    val decorView = window.decorView
-    window.statusBarColor = config.statusBarColor.toArgb()
-    decorView.systemUiVisibility =
-        decorView.systemUiVisibility.setFlag(
-            View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR,
-            config.drawBehindStatusBar
-        )
+fun ambientSystemBarStyle(): SystemBarStyle =
+    ambient(SystemBarStyleAmbient)
 
-    decorView.systemUiVisibility =
-        decorView.systemUiVisibility.setFlag(
-            View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
-                    View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN, config.lightStatusBar
-        )
+private val SystemBarStyleAmbient = Ambient.of { SystemBarStyle() }
 
-    window.navigationBarColor = config.navigationBarColor.toArgb()
-    if (Build.VERSION.SDK_INT >= 26) {
-        decorView.systemUiVisibility =
-            decorView.systemUiVisibility.setFlag(
-                View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR,
-                config.lightNavigationBar
-            )
+internal class SystemBarManager(private val activity: Activity) {
+
+    private val styles = mutableListOf<SystemBarStyle>()
+
+    fun registerStyle(style: SystemBarStyle) {
+        styles += style
+        update()
     }
 
-    decorView.systemUiVisibility =
-        decorView.systemUiVisibility.setFlag(
-            View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
-                    View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION, config.drawBehindNavBar
-        )
+    fun unregisterStyle(style: SystemBarStyle) {
+        styles -= style
+        update()
+    }
+
+    private fun update() {
+        val config = styles.lastOrNull() ?: SystemBarStyle()
+        val window = activity.window
+        val decorView = window.decorView
+        window.statusBarColor = config.statusBarColor.toArgb()
+        decorView.systemUiVisibility =
+            decorView.systemUiVisibility.setFlag(
+                View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR,
+                config.drawBehindStatusBar
+            )
+
+        decorView.systemUiVisibility =
+            decorView.systemUiVisibility.setFlag(
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
+                        View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN, config.lightStatusBar
+            )
+
+        window.navigationBarColor = config.navigationBarColor.toArgb()
+        if (Build.VERSION.SDK_INT >= 26) {
+            decorView.systemUiVisibility =
+                decorView.systemUiVisibility.setFlag(
+                    View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR,
+                    config.lightNavigationBar
+                )
+        }
+
+        decorView.systemUiVisibility =
+            decorView.systemUiVisibility.setFlag(
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
+                        View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION, config.drawBehindNavBar
+            )
+    }
 }
 
-private val SystemBarConfigAmbient = Ambient.of<SystemBarConfig>()
+internal val SystemBarManagerAmbient = Ambient.of<SystemBarManager>()

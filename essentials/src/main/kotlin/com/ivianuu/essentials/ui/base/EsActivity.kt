@@ -22,20 +22,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.Composable
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
-import androidx.ui.core.CoroutineContextAmbient
-import androidx.ui.core.ambientDensity
 import androidx.ui.core.setContent
-import androidx.ui.foundation.isSystemInDarkTheme
 import com.ivianuu.essentials.injection.RetainedActivityComponent
 import com.ivianuu.essentials.injection.initRetainedActivityComponentIfNeeded
 import com.ivianuu.essentials.injection.retainedActivityComponent
-import com.ivianuu.essentials.ui.common.MultiAmbientProvider
-import com.ivianuu.essentials.ui.common.with
-import com.ivianuu.essentials.ui.core.ActivityAmbient
 import com.ivianuu.essentials.ui.core.AndroidComposeViewContainer
-import com.ivianuu.essentials.ui.core.MediaQuery
-import com.ivianuu.essentials.ui.core.MediaQueryProvider
-import com.ivianuu.essentials.ui.injekt.ComponentAmbient
+import com.ivianuu.essentials.ui.core.EsEnvironment
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.NavigatorState
 import com.ivianuu.essentials.ui.navigation.Route
@@ -68,7 +60,7 @@ abstract class EsActivity : AppCompatActivity(), InjektTrait {
     protected open val containerId: Int
         get() = android.R.id.content
 
-    private val composeContentView by unsafeLazy {
+    private val composeViewContainer by unsafeLazy {
         AndroidComposeViewContainer(this).apply {
             layoutParams = ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
@@ -87,9 +79,9 @@ abstract class EsActivity : AppCompatActivity(), InjektTrait {
         }
 
         val container = findViewById<ViewGroup>(containerId)
-        container.addView(composeContentView)
-        composeContentView.setContent {
-            ComposeWithAmbients(composeContentView) {
+        container.addView(composeViewContainer)
+        composeViewContainer.setContent {
+            WrapContentWithEnvironment(composeViewContainer) {
                 content()
             }
         }
@@ -97,35 +89,22 @@ abstract class EsActivity : AppCompatActivity(), InjektTrait {
 
     override fun onDestroy() {
         // todo use disposeComposition once fixed
-        composeContentView.setContent { }
+        composeViewContainer.setContent { }
         super.onDestroy()
     }
 
-    // todo move this to somewhere else
     @Composable
-    protected open fun ComposeWithAmbients(
-        view: AndroidComposeViewContainer,
-        children: @Composable() () -> Unit
+    protected open fun WrapContentWithEnvironment(
+        container: AndroidComposeViewContainer,
+        content: @Composable() () -> Unit
     ) {
-        MultiAmbientProvider(
-            ActivityAmbient with this,
-            ComponentAmbient with component,
-            CoroutineContextAmbient with lifecycleScope.coroutineContext
-        ) {
-            val viewportMetrics = view.viewportMetrics
-            val density = ambientDensity()
-            val isDarkTheme = isSystemInDarkTheme()
-
-            val mediaQuery = MediaQuery(
-                size = viewportMetrics.size,
-                viewPadding = viewportMetrics.viewPadding,
-                viewInsets = viewportMetrics.viewInsets,
-                density = density,
-                darkMode = isDarkTheme
-            )
-
-            MediaQueryProvider(value = mediaQuery, children = children)
-        }
+        EsEnvironment(
+            activity = this,
+            container = container,
+            component = component,
+            coroutineContext = lifecycleScope.coroutineContext,
+            children = content
+        )
     }
 
     @Composable

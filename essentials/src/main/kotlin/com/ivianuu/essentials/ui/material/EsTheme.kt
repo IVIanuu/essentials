@@ -26,7 +26,7 @@ import com.ivianuu.essentials.util.darken
 fun EsTheme(
     colors: ColorPalette = ColorPalette(),
     typography: Typography = Typography(),
-    systemBarConfig: SystemBarConfig = SystemBarConfig(
+    systemBarConfig: SystemBarStyle = SystemBarStyle(
         statusBarColor = colors.primary.darken()
     ),
     children: @Composable() () -> Unit
@@ -35,6 +35,6 @@ fun EsTheme(
         colors = colors,
         typography = typography
     ) {
-        SystemBarTheme(config = systemBarConfig, children = children)
+        ProvideCurrentSystemBarStyle(style = systemBarConfig, children = children)
     }
 }

@@ -28,7 +28,7 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.navigation.Route
 import com.ivianuu.essentials.ui.resources.drawableResource
 
-val bottomNavigationRoute = Route {
+val BottomNavigationRoute = Route {
     BottomNavigationController(
         items = BottomNavItem.values().toList()
     ) {
@@ -49,7 +49,6 @@ val bottomNavigationRoute = Route {
             }
         )
     }
-
 }
 
 private enum class BottomNavItem(

@@ -157,7 +157,7 @@ enum class HomeItem(
     BottomNavigation(
         title = "Bottom navigation",
         color = Color.Red,
-        route = { bottomNavigationRoute }
+        route = { BottomNavigationRoute }
     ),
     CheckApps(
         title = "Check apps",
