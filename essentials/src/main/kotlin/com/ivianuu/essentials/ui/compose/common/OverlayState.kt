@@ -57,11 +57,13 @@ fun Overlay(state: OverlayState = remember { OverlayState() }) {
     }
 }
 
+@Stable
 class OverlayState(initialEntries: List<OverlayEntry> = emptyList()) {
 
     private val _entries = modelListOf<OverlayEntry>()
     val entries: List<OverlayEntry>
         get() = _entries
+
 
     init {
         if (_entries.isEmpty()) {
@@ -90,6 +92,21 @@ class OverlayState(initialEntries: List<OverlayEntry> = emptyList()) {
     fun replace(entries: List<OverlayEntry>) {
         _entries.clear()
         _entries += entries
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as OverlayState
+
+        if (_entries != other._entries) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        return _entries.hashCode()
     }
 }
 
