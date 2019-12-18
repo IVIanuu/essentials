@@ -55,7 +55,6 @@ fun Navigator(state: NavigatorState) {
                 if (state.runningTransitions == 0) state.pop()
             }
         }
-        d { "invoke navigator" }
         Overlay(state = state.overlayState)
     }
 }
@@ -159,30 +158,6 @@ class NavigatorState(
         }
 
         return visibleRoutes
-    }
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (javaClass != other?.javaClass) return false
-
-        other as NavigatorState
-
-        if (overlayState != other.overlayState) return false
-        if (_backStack != other._backStack) return false
-        if (handleBack != other.handleBack) return false
-        if (runningTransitions != other.runningTransitions) return false
-        if (types != other.types) return false
-
-        return true
-    }
-
-    override fun hashCode(): Int {
-        var result = overlayState.hashCode()
-        result = 31 * result + _backStack.hashCode()
-        result = 31 * result + handleBack.hashCode()
-        result = 31 * result + runningTransitions.hashCode()
-        result = 31 * result + types.hashCode()
-        return result
     }
 
     private inner class RouteState(val route: Route) {
