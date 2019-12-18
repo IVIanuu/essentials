@@ -19,12 +19,22 @@ package com.ivianuu.essentials.legacy.ui.compose
 import androidx.compose.FrameManager
 import androidx.lifecycle.lifecycleScope
 import com.ivianuu.director.DefaultChangeHandler
+import com.ivianuu.director.common.changehandler.HorizontalChangeHandler
+import com.ivianuu.director.common.changehandler.VerticalChangeHandler
+import com.ivianuu.essentials.legacy.ui.changehandler.OpenCloseChangeHandler
+import com.ivianuu.essentials.legacy.ui.changehandler.VerticalFadeChangeHandler
 import com.ivianuu.essentials.legacy.ui.navigation.director.ControllerRoute
 import com.ivianuu.essentials.legacy.ui.navigation.director.ControllerRouteOptions
 import com.ivianuu.essentials.legacy.ui.navigation.director.handler
+import com.ivianuu.essentials.ui.compose.navigation.DefaultRouteTransitionKey
+import com.ivianuu.essentials.ui.compose.navigation.FadeRouteTransitionKey
+import com.ivianuu.essentials.ui.compose.navigation.HorizontalRouteTransitionKey
 import com.ivianuu.essentials.ui.compose.navigation.Navigator
 import com.ivianuu.essentials.ui.compose.navigation.NavigatorState
+import com.ivianuu.essentials.ui.compose.navigation.OpenCloseRouteTransitionKey
 import com.ivianuu.essentials.ui.compose.navigation.Route
+import com.ivianuu.essentials.ui.compose.navigation.VerticalFadeRouteTransitionKey
+import com.ivianuu.essentials.ui.compose.navigation.VerticalRouteTransitionKey
 import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Param
@@ -42,8 +52,35 @@ fun Route.asComposeControllerRoute(
 }
 
 fun Route.extractDefaultControllerRouteOptions(): ControllerRoute.Options {
+    val removesFromViewOnPush = !opaque
+
+    val handler = when (transition?.key) {
+        DefaultRouteTransitionKey -> DefaultChangeHandler(removesFromViewOnPush = removesFromViewOnPush)
+        FadeRouteTransitionKey -> HorizontalChangeHandler(
+            duration = transition!!.duration.toLongMilliseconds(),
+            removesFromViewOnPush = removesFromViewOnPush
+        )
+        HorizontalRouteTransitionKey -> HorizontalChangeHandler(
+            duration = transition!!.duration.toLongMilliseconds(),
+            removesFromViewOnPush = removesFromViewOnPush
+        )
+        OpenCloseRouteTransitionKey -> OpenCloseChangeHandler(
+            duration = transition!!.duration.toLongMilliseconds(),
+            removesFromViewOnPush = removesFromViewOnPush
+        )
+        VerticalRouteTransitionKey -> VerticalChangeHandler(
+            duration = transition!!.duration.toLongMilliseconds(),
+            removesFromViewOnPush = removesFromViewOnPush
+        )
+        VerticalFadeRouteTransitionKey -> VerticalFadeChangeHandler(
+            duration = transition!!.duration.toLongMilliseconds(),
+            removesFromViewOnPush = removesFromViewOnPush
+        )
+        else -> DefaultChangeHandler(removesFromViewOnPush = removesFromViewOnPush)
+    }
+
     return ControllerRouteOptions()
-        .handler(DefaultChangeHandler(removesFromViewOnPush = !opaque))
+        .handler(handler)
 }
 
 @Factory
