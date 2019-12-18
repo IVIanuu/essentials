@@ -64,7 +64,6 @@ class OverlayState(initialEntries: List<OverlayEntry> = emptyList()) {
     val entries: List<OverlayEntry>
         get() = _entries
 
-
     init {
         if (_entries.isEmpty()) {
             _entries += initialEntries

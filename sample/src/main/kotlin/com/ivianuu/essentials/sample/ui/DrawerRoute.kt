@@ -26,7 +26,7 @@ import com.ivianuu.essentials.ui.compose.material.Scaffold
 import com.ivianuu.essentials.ui.compose.navigation.FadeRouteTransition
 import com.ivianuu.essentials.ui.compose.navigation.Route
 
-val DrawerRoute = Route(transition = FadeRouteTransition()) {
+val DrawerRoute = Route(enterTransition = FadeRouteTransition()) {
     Scaffold(
         topAppBar = { EsTopAppBar("Drawer") },
         drawerContent = {

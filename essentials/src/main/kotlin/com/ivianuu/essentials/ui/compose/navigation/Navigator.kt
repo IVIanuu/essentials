@@ -108,11 +108,10 @@ class NavigatorState(
 
     suspend fun <T> push(route: Route): T? {
         d { "push $route" }
-        val prev = _backStack.lastOrNull()
         val routeState = RouteState(route)
-        _backStack += routeState
-        if (prev !in _backStack.filterVisible()) prev?.exit(routeState, true)
-        routeState.enter(prev, true)
+        val newBackStack = _backStack.toMutableList()
+        newBackStack += routeState
+        setBackStackInternal(newBackStack, true, null)
         return routeState.awaitResult()
     }
 
@@ -122,10 +121,9 @@ class NavigatorState(
 
     private suspend fun popInternal(result: Any?) {
         d { "pop result $result" }
-        val removedRoute = _backStack.removeAt(backStack.lastIndex)
-        val newTopRoute = _backStack.lastOrNull()
-        removedRoute.exit(newTopRoute, false)
-        if (!removedRoute.route.opaque) newTopRoute?.enter(removedRoute, false)
+        val newBackStack = _backStack.toMutableList()
+        val removedRoute = newBackStack.removeAt(newBackStack.lastIndex)
+        setBackStackInternal(newBackStack, false, null)
         removedRoute.setResult(result)
     }
 
@@ -139,16 +137,135 @@ class NavigatorState(
         d { "replace $route" }
 
         val routeState = RouteState(route)
-        _backStack += routeState
-
-        val removedRoute = _backStack.lastOrNull()
-        if (removedRoute != null) _backStack -= removedRoute
-        removedRoute?.exit(routeState, true)
-        routeState.enter(removedRoute, true)
-
+        val newBackStack = _backStack.toMutableList()
+        newBackStack += routeState
+        setBackStackInternal(newBackStack, true, null)
         return routeState.awaitResult()
     }
 
+    fun setBackStack(
+        newBackStack: List<Route>,
+        isPush: Boolean,
+        transition: RouteTransition? = null
+    ) {
+        coroutineScope.launch {
+            setBackStackSuspend(newBackStack, isPush, transition)
+        }
+    }
+
+    suspend fun setBackStackSuspend(
+        newBackStack: List<Route>,
+        isPush: Boolean,
+        transition: RouteTransition? = null
+    ) {
+        coroutineScope.launch {
+            setBackStackInternal(
+                newBackStack.map {
+                    _backStack.firstOrNull { it.route == route } ?: RouteState(it)
+                },
+                isPush,
+                transition
+            )
+        }
+    }
+
+    suspend fun <T> awaitResult(route: Route): T? =
+        _backStack.firstOrNull { it.route == route }?.awaitResult()
+
+    private suspend fun setBackStackInternal(
+        newBackStack: List<RouteState>,
+        isPush: Boolean,
+        transition: RouteTransition?
+    ) {
+        if (newBackStack == _backStack) return
+
+        // do not allow pushing the same route twice
+        newBackStack
+            .groupBy { it }
+            .forEach {
+                check(it.value.size == 1) {
+                    "Trying to push the same route to the backStack more than once. $it"
+                }
+            }
+
+        val oldBackStack = _backStack.toList()
+        val oldVisibleRoutes = oldBackStack.filterVisible()
+
+        val removedRoutes = oldBackStack.filterNot { it in newBackStack }
+
+        _backStack.clear()
+        _backStack += newBackStack
+
+        val newVisibleRoutes = newBackStack.filterVisible()
+
+        if (oldVisibleRoutes != newVisibleRoutes) {
+            val oldTopRoute = oldVisibleRoutes.lastOrNull()
+            val newTopRoute = newVisibleRoutes.lastOrNull()
+
+            // check if we should animate the top routes
+            val replacingTopRoutes = newTopRoute != null && (oldTopRoute == null
+                    || oldTopRoute != newTopRoute)
+
+            // Remove all visible routes which shouldn't be visible anymore
+            // from top to bottom
+            oldVisibleRoutes
+                .dropLast(if (replacingTopRoutes) 1 else 0)
+                .reversed()
+                .filterNot { it in newVisibleRoutes }
+                .forEach { route ->
+                    val localTransition = transition
+                        ?: route.route.exitTransition
+
+                    performChange(
+                        from = route,
+                        to = null,
+                        isPush = isPush,
+                        transition = localTransition
+                    )
+                }
+
+            // Add any new routes to the backStack from bottom to top
+            newVisibleRoutes
+                .dropLast(if (replacingTopRoutes) 1 else 0)
+                .filterNot { it in oldVisibleRoutes }
+                .forEachIndexed { i, route ->
+                    val localTransition = transition ?: route.route.enterTransition
+                    performChange(
+                        from = newVisibleRoutes.getOrNull(i - 1),
+                        to = route,
+                        isPush = true,
+                        transition = localTransition
+                    )
+                }
+
+            // Replace the old visible top with the new one
+            if (replacingTopRoutes) {
+                val localTransition = transition
+                    ?: (if (isPush) newTopRoute?.route?.enterTransition
+                    else oldTopRoute?.route?.exitTransition)
+                performChange(
+                    from = oldTopRoute,
+                    to = newTopRoute,
+                    isPush = isPush,
+                    transition = localTransition
+                )
+            }
+        }
+
+        removedRoutes.forEach { it.setResult(null) }
+    }
+
+    private fun performChange(
+        from: RouteState?,
+        to: RouteState?,
+        isPush: Boolean,
+        transition: RouteTransition?
+    ) {
+        val exitFrom = from != null && (to == null || !to.route.opaque)
+        if (exitFrom) from!!.exit(to = to, isPush = isPush, transition = transition)
+        to?.enter(from = from, isPush = isPush, transition = transition)
+    }
+    
     private fun List<RouteState>.filterVisible(): List<RouteState> {
         val visibleRoutes = mutableListOf<RouteState>()
 
@@ -205,7 +322,7 @@ class NavigatorState(
             }
         }
 
-        private var transition by framed(route.transition)
+        private var transition by framed(route.enterTransition)
         private var transitionState by framed(RouteTransition.State.Init)
         private var lastTransitionState by framed(RouteTransition.State.Init)
 
@@ -216,7 +333,11 @@ class NavigatorState(
             overlayEntry.opaque = route.opaque
         }
 
-        fun enter(prev: RouteState?, isPush: Boolean) {
+        fun enter(
+            from: RouteState?,
+            isPush: Boolean,
+            transition: RouteTransition?
+        ) {
             overlayEntry.opaque = route.opaque || isPush
             absorbTouches = true
             runningTransitions++
@@ -224,18 +345,22 @@ class NavigatorState(
             lastTransitionState = transitionState
             transitionState =
                 if (isPush) RouteTransition.State.EnterFromPush else RouteTransition.State.EnterFromPop
-            transition = if (isPush) route.transition else prev!!.route.transition
+            this.transition = transition
         }
 
-        fun exit(next: RouteState?, isPush: Boolean) {
+        fun exit(
+            to: RouteState?,
+            isPush: Boolean,
+            transition: RouteTransition?
+        ) {
             absorbTouches = true
             runningTransitions++
             overlayEntry.opaque = route.opaque || !isPush
-            if (isPush) other = next
+            if (isPush) other = to
             lastTransitionState = transitionState
             transitionState =
                 if (isPush) RouteTransition.State.ExitFromPush else RouteTransition.State.ExitFromPop
-            transition = if (isPush) next!!.route.transition else route.transition
+            this.transition = transition
         }
 
         suspend fun <T> awaitResult(): T? = result.await() as? T

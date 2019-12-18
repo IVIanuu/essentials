@@ -36,7 +36,7 @@ fun DialogRoute(
     dialog: @Composable() () -> Unit
 ) = Route(
     opaque = true,
-    transition = FadeRouteTransition()
+    enterTransition = FadeRouteTransition()
 ) {
     if (!dismissible) {
         onBackPressed { }

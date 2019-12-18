@@ -210,7 +210,7 @@ fun <T> PopupMenuRoute(
     item: @Composable() (T) -> Unit
 ) = Route(
     opaque = true,
-    transition = FadeRouteTransition()
+    enterTransition = FadeRouteTransition()
 ) {
     val navigator = navigator
 

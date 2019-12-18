@@ -51,7 +51,7 @@ import com.ivianuu.essentials.ui.compose.navigation.Route
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.parametersOf
 
-val HomeRoute = Route(transition = DefaultRouteTransition) {
+val HomeRoute = Route(enterTransition = DefaultRouteTransition) {
     Scaffold(
         topAppBar = {
             EsTopAppBar(

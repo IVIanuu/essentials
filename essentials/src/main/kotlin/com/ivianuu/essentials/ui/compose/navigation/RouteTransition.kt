@@ -32,7 +32,7 @@ import kotlin.time.Duration
 import kotlin.time.milliseconds
 
 @Immutable
-data class RouteTransition(
+class RouteTransition(
     val key: Key, // todo remove legacy
     val duration: Duration,
     val definition: @Composable() () -> TransitionDefinition<State>,

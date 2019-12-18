@@ -25,18 +25,33 @@ import androidx.compose.ambient
 class Route(
     val opaque: Boolean = false,
     val keepState: Boolean = false,
-    val transition: RouteTransition? = null,
+    val enterTransition: RouteTransition? = null,
+    val exitTransition: RouteTransition? = null,
     val content: @Composable() () -> Unit
 ) {
+
+    constructor(
+        opaque: Boolean = false,
+        keepState: Boolean = false,
+        transition: RouteTransition? = null,
+        content: @Composable() () -> Unit
+    ) : this(
+        opaque = opaque,
+        keepState = keepState,
+        enterTransition = transition,
+        exitTransition = transition,
+        content = content
+    )
+
     fun copy(
         opaque: Boolean = this.opaque,
         keepState: Boolean = this.keepState,
-        transition: RouteTransition? = this.transition,
+        transition: RouteTransition? = this.enterTransition,
         content: @Composable() () -> Unit = this.content
     ): Route = Route(
         opaque = opaque,
         keepState = keepState,
-        transition = transition,
+        enterTransition = transition,
         content = content
     )
 }

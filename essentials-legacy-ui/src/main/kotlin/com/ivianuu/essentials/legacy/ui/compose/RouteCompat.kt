@@ -54,26 +54,26 @@ fun Route.asComposeControllerRoute(
 fun Route.extractDefaultControllerRouteOptions(): ControllerRoute.Options {
     val removesFromViewOnPush = !opaque
 
-    val handler = when (transition?.key) {
+    val handler = when (enterTransition?.key) {
         DefaultRouteTransitionKey -> DefaultChangeHandler(removesFromViewOnPush = removesFromViewOnPush)
         FadeRouteTransitionKey -> HorizontalChangeHandler(
-            duration = transition!!.duration.toLongMilliseconds(),
+            duration = enterTransition!!.duration.toLongMilliseconds(),
             removesFromViewOnPush = removesFromViewOnPush
         )
         HorizontalRouteTransitionKey -> HorizontalChangeHandler(
-            duration = transition!!.duration.toLongMilliseconds(),
+            duration = enterTransition!!.duration.toLongMilliseconds(),
             removesFromViewOnPush = removesFromViewOnPush
         )
         OpenCloseRouteTransitionKey -> OpenCloseChangeHandler(
-            duration = transition!!.duration.toLongMilliseconds(),
+            duration = enterTransition!!.duration.toLongMilliseconds(),
             removesFromViewOnPush = removesFromViewOnPush
         )
         VerticalRouteTransitionKey -> VerticalChangeHandler(
-            duration = transition!!.duration.toLongMilliseconds(),
+            duration = enterTransition!!.duration.toLongMilliseconds(),
             removesFromViewOnPush = removesFromViewOnPush
         )
         VerticalFadeRouteTransitionKey -> VerticalFadeChangeHandler(
-            duration = transition!!.duration.toLongMilliseconds(),
+            duration = enterTransition!!.duration.toLongMilliseconds(),
             removesFromViewOnPush = removesFromViewOnPush
         )
         else -> DefaultChangeHandler(removesFromViewOnPush = removesFromViewOnPush)
@@ -100,11 +100,15 @@ internal class RouteCompatController(
     override fun onCreate() {
         super.onCreate()
         lifecycleScope.launch {
-            if (navigator.backStack.indexOf(route) > 1) {
-                navigatorState.push(DummyRoute)
+            val backStack = if (navigator.backStack.indexOf(route) > 1) {
+                listOf(DummyRoute, composeRoute)
+            } else {
+                listOf(composeRoute)
             }
 
-            val result = navigatorState.push<Any?>(route = composeRoute)
+            navigatorState.setBackStack(backStack, true)
+
+            val result = navigatorState.awaitResult<Any?>(route = composeRoute)
             navigator.pop(result = result)
         }
     }
