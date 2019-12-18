@@ -16,6 +16,9 @@
 
 package com.ivianuu.essentials.util
 
+import androidx.compose.Immutable
+
+@Immutable
 data class BuildInfo(
     val isDebug: Boolean,
     val packageName: String,

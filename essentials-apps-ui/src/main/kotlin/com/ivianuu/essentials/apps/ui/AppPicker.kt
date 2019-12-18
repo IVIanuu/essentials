@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.apps.ui
 
 import androidx.compose.Composable
+import androidx.compose.Immutable
 import androidx.compose.key
 import androidx.lifecycle.viewModelScope
 import androidx.ui.core.Text
@@ -116,4 +117,5 @@ internal class AppPickerViewModel(
     }
 }
 
+@Immutable
 internal data class AppPickerState(val apps: Async<List<AppInfo>> = Uninitialized)

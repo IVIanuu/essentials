@@ -22,7 +22,7 @@ import androidx.compose.Immutable
 import androidx.compose.ambient
 
 @Immutable
-data class Route(
+class Route(
     val opaque: Boolean = false,
     val keepState: Boolean = false,
     val transition: RouteTransition? = null,

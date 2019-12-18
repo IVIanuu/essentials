@@ -228,6 +228,7 @@ internal class CheckableAppsViewModel(
     }
 }
 
+@Immutable
 internal data class CheckableAppsState(
     val apps: Async<List<CheckableApp>> = Uninitialized
 )

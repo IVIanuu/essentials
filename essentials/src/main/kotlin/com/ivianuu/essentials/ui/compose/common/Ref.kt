@@ -18,6 +18,7 @@ package com.ivianuu.essentials.ui.compose.common
 
 import androidx.compose.Composable
 import androidx.compose.remember
+import com.ivianuu.essentials.ui.compose.core.Stable
 
 @Composable
 fun <T> ref(init: () -> T): Ref<T> = remember {
@@ -47,4 +48,5 @@ fun <T> refFor(vararg inputs: Any?, init: () -> T): Ref<T> = remember(*inputs) {
     Ref(init())
 }
 
+@Stable
 data class Ref<T>(var value: T)

@@ -16,23 +16,30 @@
 
 package com.ivianuu.essentials.util
 
+import androidx.compose.Immutable
+
+@Immutable
 sealed class Async<out T>(val complete: Boolean, val shouldLoad: Boolean) {
     open operator fun invoke(): T? = null
 }
 
+@Immutable
 object Uninitialized : Async<Nothing>(complete = false, shouldLoad = true), Incomplete
 
+@Immutable
 class Loading<out T> : Async<T>(complete = false, shouldLoad = false), Incomplete {
     override fun equals(other: Any?) = other is Loading<*>
     override fun hashCode() = "Loading".hashCode()
 }
 
+@Immutable
 data class Success<out T>(private val value: T) : Async<T>(complete = true, shouldLoad = false) {
     override operator fun invoke(): T = value
 }
 
 fun <T> T.asSuccess(): Success<T> = Success(this)
 
+@Immutable
 data class Fail<out T>(val error: Throwable) : Async<T>(complete = true, shouldLoad = true)
 
 fun <T> Throwable.asFail(): Fail<T> = Fail(this)

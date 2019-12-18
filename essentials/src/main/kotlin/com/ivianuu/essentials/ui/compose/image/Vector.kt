@@ -22,6 +22,7 @@ import androidx.ui.graphics.Color
 import androidx.ui.graphics.vector.DrawVector
 import androidx.ui.layout.Container
 import androidx.ui.res.vectorResource
+
 @Composable
 fun VectorImage(
     resId: Int,

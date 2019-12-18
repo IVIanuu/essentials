@@ -16,4 +16,7 @@
 
 package com.ivianuu.essentials.util
 
+import androidx.compose.Immutable
+
+@Immutable
 data class SystemBuildInfo(val sdk: Int)

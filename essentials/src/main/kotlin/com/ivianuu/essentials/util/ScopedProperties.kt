@@ -16,9 +16,11 @@
 
 package com.ivianuu.essentials.util
 
+import com.ivianuu.essentials.ui.compose.core.Stable
 import com.ivianuu.scopes.Scope
 import java.util.concurrent.ConcurrentHashMap
 
+@Stable
 class Properties {
 
     private val baking = mutableMapOf<Key<*>, Any?>()

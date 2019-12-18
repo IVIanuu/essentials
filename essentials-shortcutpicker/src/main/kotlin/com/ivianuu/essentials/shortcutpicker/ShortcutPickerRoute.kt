@@ -21,6 +21,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import androidx.compose.Composable
+import androidx.compose.Immutable
 import androidx.lifecycle.viewModelScope
 import androidx.ui.core.Text
 import androidx.ui.graphics.Image
@@ -147,10 +148,12 @@ internal class ShortcutPickerViewModel(
     }
 }
 
+@Immutable
 internal data class ShortcutPickerState(
     val shortcuts: Async<List<ShortcutInfo>> = Uninitialized
 )
 
+@Immutable
 internal data class ShortcutInfo(
     val intent: Intent,
     val name: String,
