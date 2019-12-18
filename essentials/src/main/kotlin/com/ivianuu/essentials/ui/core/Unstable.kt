@@ -16,5 +16,6 @@
 
 package com.ivianuu.essentials.ui.core
 
+// todo remove once we migrated to the original ir compiler
 @Target(AnnotationTarget.FUNCTION)
 annotation class Unstable
