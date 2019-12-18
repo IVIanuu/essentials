@@ -16,31 +16,31 @@
 
 package com.ivianuu.essentials.ui.compose.common
 
-import android.app.Activity
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.OnBackPressedDispatcherOwner
 import androidx.compose.Composable
 import androidx.compose.ambient
-import androidx.compose.onActive
+import androidx.compose.onCommit
+import androidx.compose.remember
 import com.ivianuu.essentials.ui.compose.es.ActivityAmbient
 
 @Composable
 fun onBackPressed(
-    activity: Activity = ambient(ActivityAmbient),
+    owner: OnBackPressedDispatcherOwner = ambient(ActivityAmbient) as OnBackPressedDispatcherOwner,
+    enabled: Boolean = true,
     callback: () -> Unit
 ) {
-    onActive {
-        val backPressedDispatcher =
-            (activity as OnBackPressedDispatcherOwner).onBackPressedDispatcher
-
-        val onBackPressedCallback = object : OnBackPressedCallback(true) {
+    val onBackPressedCallback = remember(callback) {
+        object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 callback()
             }
-        }
+        } as OnBackPressedCallback // todo remove once fixed
+    }
+    onBackPressedCallback.isEnabled = enabled
 
-        backPressedDispatcher.addCallback(onBackPressedCallback)
-
+    onCommit(owner, onBackPressedCallback) {
+        owner.onBackPressedDispatcher.addCallback(onBackPressedCallback)
         onDispose { onBackPressedCallback.remove() }
     }
 }
