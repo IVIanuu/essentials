@@ -29,7 +29,7 @@ import com.ivianuu.essentials.ui.compose.common.framed
 
 // todo find a better name
 // todo add padding field
-
+@Stable
 interface MediaQuery : Updateable<MediaQuery> {
     val size: Size
     val viewPadding: EdgeInsets
@@ -65,6 +65,7 @@ fun MediaQuery(
     )
 }
 
+@Stable
 private class ObservableMediaQuery(
     size: Size,
     viewPadding: EdgeInsets,
