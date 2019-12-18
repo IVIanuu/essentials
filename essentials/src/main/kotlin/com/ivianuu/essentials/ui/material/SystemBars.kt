@@ -23,7 +23,7 @@ import androidx.compose.Ambient
 import androidx.compose.Composable
 import androidx.compose.Immutable
 import androidx.compose.ambient
-import androidx.compose.onCommit
+import androidx.compose.onPreCommit
 import androidx.ui.graphics.Color
 import androidx.ui.graphics.toArgb
 import com.ivianuu.essentials.util.isLight
@@ -45,7 +45,7 @@ fun ProvideCurrentSystemBarStyle(
     children: @Composable() () -> Unit
 ) {
     val systemBarManager = ambient(SystemBarManagerAmbient)
-    onCommit(style) {
+    onPreCommit(style) {
         systemBarManager.registerStyle(style)
         onDispose { systemBarManager.unregisterStyle(style) }
     }
