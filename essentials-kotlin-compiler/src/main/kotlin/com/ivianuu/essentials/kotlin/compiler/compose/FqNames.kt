@@ -31,11 +31,9 @@ import org.jetbrains.kotlin.types.typeUtil.isEnum
 import org.jetbrains.kotlin.types.typeUtil.isTypeParameter
 import org.jetbrains.kotlin.types.typeUtil.makeNotNullable
 
-val ComposableAnnotation =
-    FqName("androidx.compose.Composable")
-
-val StableMarkerAnnotation = FqName("androidx.compose.StableMarker")
+val ComposableAnnotation = FqName("androidx.compose.Composable")
 val PivotalAnnotation = FqName("androidx.compose.Pivotal")
+val StableMarkerAnnotation = FqName("androidx.compose.StableMarker")
 
 fun KotlinType.isStable(): Boolean {
     return !isError &&
@@ -51,8 +49,7 @@ fun KotlinType.isStable(): Boolean {
 }
 
 private val KotlinType.isSpecialType: Boolean
-    get() =
-        this === NO_EXPECTED_TYPE || this === UNIT_EXPECTED_TYPE
+    get() = this === NO_EXPECTED_TYPE || this === UNIT_EXPECTED_TYPE
 
 private fun KotlinType.isMarkedStable(): Boolean =
     !isSpecialType && (
