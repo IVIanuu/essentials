@@ -24,9 +24,7 @@ import androidx.compose.frames.readable
 import androidx.compose.frames.writable
 import kotlin.reflect.KProperty
 
-// todo remove once we can use @Model
-
-fun <T> framed(initial: T, distinct: Boolean = false) = FramedValue(
+fun <T> framed(initial: T, distinct: Boolean = true) = FramedValue(
     initial = initial,
     distinct = distinct
 )
