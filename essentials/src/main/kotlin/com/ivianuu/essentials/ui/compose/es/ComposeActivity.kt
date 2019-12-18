@@ -62,7 +62,8 @@ abstract class ComposeActivity : EsActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(composeContentView)
+        val container = findViewById<ViewGroup>(containerId)
+        container.addView(composeContentView)
         composeContentView.setContent {
             ComposeWithAmbients(composeContentView) {
                 wrapContent {
