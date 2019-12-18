@@ -37,7 +37,9 @@ import com.ivianuu.essentials.ui.coroutines.retainedCoroutineScope
 import com.ivianuu.essentials.util.sourceLocation
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @Composable
 fun Navigator(
@@ -76,6 +78,7 @@ fun RetainedNavigatorState(
     )
 }
 
+// todo remove main thread requirement
 @Stable
 class NavigatorState(
     private val coroutineScope: CoroutineScope,
@@ -109,20 +112,20 @@ class NavigatorState(
         coroutineScope.launch { push<Any?>(route) }
     }
 
-    suspend fun <T> push(route: Route): T? {
+    suspend fun <T> push(route: Route): T? = withContext(Dispatchers.Main) {
         d { "push $route" }
         val routeState = RouteState(route)
         val newBackStack = _backStack.toMutableList()
         newBackStack += routeState
         setBackStackInternal(newBackStack, true, null)
-        return routeState.awaitResult()
+        return@withContext routeState.awaitResult()
     }
 
     fun pop(result: Any? = null) {
         coroutineScope.launch { popInternal(result) }
     }
 
-    private suspend fun popInternal(result: Any?) {
+    private suspend fun popInternal(result: Any?) = withContext(Dispatchers.Main) {
         d { "pop result $result" }
         val newBackStack = _backStack.toMutableList()
         val removedRoute = newBackStack.removeAt(newBackStack.lastIndex)
@@ -136,14 +139,14 @@ class NavigatorState(
         coroutineScope.launch { replace<Any?>(route) }
     }
 
-    suspend fun <T> replace(route: Route): T? {
+    suspend fun <T> replace(route: Route): T? = withContext(Dispatchers.Main) {
         d { "replace $route" }
 
         val routeState = RouteState(route)
         val newBackStack = _backStack.toMutableList()
         newBackStack += routeState
         setBackStackInternal(newBackStack, true, null)
-        return routeState.awaitResult()
+        return@withContext routeState.awaitResult()
     }
 
     fun setBackStack(
@@ -160,7 +163,7 @@ class NavigatorState(
         newBackStack: List<Route>,
         isPush: Boolean,
         transition: RouteTransition? = null
-    ) {
+    ) = withContext(Dispatchers.Main) {
         setBackStackInternal(
             newBackStack.map {
                 _backStack.firstOrNull { it.route == route } ?: RouteState(it)
@@ -177,8 +180,8 @@ class NavigatorState(
         newBackStack: List<RouteState>,
         isPush: Boolean,
         transition: RouteTransition?
-    ) {
-        if (newBackStack == _backStack) return
+    ) = withContext(Dispatchers.Main) {
+        if (newBackStack == _backStack) return@withContext
 
         // do not allow pushing the same route twice
         newBackStack
@@ -267,7 +270,7 @@ class NavigatorState(
         if (exitFrom) from!!.exit(to = to, isPush = isPush, transition = transition)
         to?.enter(from = from, isPush = isPush, transition = transition)
     }
-    
+
     private fun List<RouteState>.filterVisible(): List<RouteState> {
         val visibleRoutes = mutableListOf<RouteState>()
 
