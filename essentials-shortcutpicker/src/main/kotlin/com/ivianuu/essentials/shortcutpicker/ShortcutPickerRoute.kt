@@ -42,6 +42,7 @@ import com.ivianuu.essentials.util.Async
 import com.ivianuu.essentials.util.Uninitialized
 import com.ivianuu.injekt.Factory
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 fun ShortcutPickerRoute(
     title: String? = null
@@ -110,11 +111,14 @@ internal class ShortcutPickerViewModel(
     fun infoClicked(info: ShortcutInfo) {
         viewModelScope.launch(dispatchers.default) {
             try {
-                val shortcutRequestResult = navigator.push<ActivityResult>(
-                    ActivityResultRoute(
-                        intent = info.intent
-                    )
-                )?.data ?: return@launch
+                val shortcutRequestResult = withContext(dispatchers.main) {
+                    // todo remove withContext
+                    navigator.push<ActivityResult>(
+                        ActivityResultRoute(
+                            intent = info.intent
+                        )
+                    )?.data
+                } ?: return@launch
                 val intent =
                     shortcutRequestResult.getParcelableExtra<Intent>(Intent.EXTRA_SHORTCUT_INTENT)!!
                 val name = shortcutRequestResult.getStringExtra(Intent.EXTRA_SHORTCUT_NAME)!!

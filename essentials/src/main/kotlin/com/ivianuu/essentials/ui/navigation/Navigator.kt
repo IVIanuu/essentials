@@ -126,8 +126,8 @@ class NavigatorState(
         d { "pop result $result" }
         val newBackStack = _backStack.toMutableList()
         val removedRoute = newBackStack.removeAt(newBackStack.lastIndex)
-        setBackStackInternal(newBackStack, false, null)
         removedRoute.setResult(result)
+        setBackStackInternal(newBackStack, false, null)
     }
 
     @JvmName("replaceWithoutResult")
