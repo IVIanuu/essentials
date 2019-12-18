@@ -31,6 +31,7 @@ import androidx.ui.material.ModalDrawerLayout
 import com.ivianuu.essentials.ui.compose.common.framed
 import com.ivianuu.essentials.ui.compose.common.onBackPressed
 import com.ivianuu.essentials.ui.compose.common.withDensity
+import com.ivianuu.essentials.ui.compose.core.Stable
 import com.ivianuu.essentials.ui.compose.layout.Expand
 
 @Composable
@@ -79,33 +80,36 @@ fun Scaffold(
 
     ScaffoldAmbient.Provider(value = scaffoldState) {
         Expand {
-            ModalDrawerLayout(
-                drawerState = scaffoldState.drawerState,
-                onStateChange = { scaffoldState.drawerState = it },
-                gesturesEnabled = drawerContent != null,
-                drawerContent = {
-                    if (drawerContent != null) {
+            val finalBody: @Composable() () -> Unit = {
+                EsSurface {
+                    ScaffoldLayout(
+                        state = scaffoldState,
+                        topAppBar = topAppBar,
+                        body = body,
+                        bottomBar = bottomBar,
+                        fab = fab
+                    )
+                }
+            }
+            if (drawerContent != null) {
+                ModalDrawerLayout(
+                    drawerState = scaffoldState.drawerState,
+                    onStateChange = { scaffoldState.drawerState = it },
+                    drawerContent = {
                         EsSurface {
                             drawerContent()
                         }
-                    }
-                },
-                bodyContent = {
-                    EsSurface {
-                        ScaffoldLayout(
-                            state = scaffoldState,
-                            topAppBar = topAppBar,
-                            body = body,
-                            bottomBar = bottomBar,
-                            fab = fab
-                        )
-                    }
-                }
-            )
+                    },
+                    bodyContent = finalBody
+                )
+            } else {
+                finalBody()
+            }
         }
     }
 }
 
+@Stable
 class ScaffoldState {
 
     var hasTopAppBar = false
