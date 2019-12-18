@@ -48,7 +48,7 @@ fun Route.asComposeControllerRoute(
 ) = ControllerRoute<RouteCompatController>(
     options = options
 ) {
-    parametersOf(this)
+    parametersOf(copy(transition = null))
 }
 
 fun Route.extractDefaultControllerRouteOptions(): ControllerRoute.Options {

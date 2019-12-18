@@ -27,7 +27,19 @@ class Route(
     val keepState: Boolean = false,
     val transition: RouteTransition? = null,
     val content: @Composable() () -> Unit
-)
+) {
+    fun copy(
+        opaque: Boolean = this.opaque,
+        keepState: Boolean = this.keepState,
+        transition: RouteTransition? = this.transition,
+        content: @Composable() () -> Unit = this.content
+    ): Route = Route(
+        opaque = opaque,
+        keepState = keepState,
+        transition = transition,
+        content = content
+    )
+}
 
 internal val RouteAmbient = Ambient.of<Route>()
 
