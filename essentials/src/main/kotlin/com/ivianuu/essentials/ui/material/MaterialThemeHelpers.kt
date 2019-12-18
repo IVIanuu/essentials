@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.ui.material
 
 import androidx.ui.graphics.Color
+import androidx.ui.graphics.lerp
 import androidx.ui.material.ColorPalette
 import androidx.ui.material.Typography
 import androidx.ui.material.darkColorPalette
@@ -113,4 +114,24 @@ fun ColorPalette.copy(
     onBackground = onBackground,
     onSurface = onSurface,
     onError = onError
+)
+
+fun lerp(
+    start: ColorPalette,
+    end: ColorPalette,
+    fraction: Float
+): ColorPalette = ColorPalette(
+    isLight = if (fraction < 0.5) start.isLight else end.isLight,
+    primary = lerp(start.primary, end.primary, fraction),
+    primaryVariant = lerp(start.primaryVariant, end.primaryVariant, fraction),
+    secondary = lerp(start.secondary, end.secondary, fraction),
+    secondaryVariant = lerp(start.secondaryVariant, end.secondaryVariant, fraction),
+    background = lerp(start.background, end.background, fraction),
+    surface = lerp(start.surface, end.surface, fraction),
+    error = lerp(start.error, end.error, fraction),
+    onPrimary = lerp(start.onPrimary, end.onPrimary, fraction),
+    onSecondary = lerp(start.onSecondary, end.onSecondary, fraction),
+    onBackground = lerp(start.onBackground, end.onBackground, fraction),
+    onSurface = lerp(start.onSurface, end.onSurface, fraction),
+    onError = lerp(start.onError, end.onError, fraction)
 )
