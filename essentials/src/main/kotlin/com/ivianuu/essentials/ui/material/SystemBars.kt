@@ -83,13 +83,13 @@ internal class SystemBarManager(private val activity: Activity) {
         decorView.systemUiVisibility =
             decorView.systemUiVisibility.setFlag(
                 View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR,
-                style.drawBehindStatusBar
+                style.lightStatusBar
             )
 
         decorView.systemUiVisibility =
             decorView.systemUiVisibility.setFlag(
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
-                        View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN, style.lightStatusBar
+                        View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN, style.drawBehindStatusBar
             )
 
         window.navigationBarColor = style.navigationBarColor.toArgb()
