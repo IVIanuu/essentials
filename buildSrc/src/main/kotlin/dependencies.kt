@@ -83,12 +83,12 @@ object Deps {
     const val buildConfigGradlePlugin =
         "gradle.plugin.de.fuerstenau:BuildConfigPlugin:1.1.8"
 
-    const val coil = "io.coil-kt:coil:0.7.0"
+    const val coil = "io.coil-kt:coil:0.8.0"
 
     const val compileTesting = "com.github.tschuchortdev:kotlin-compile-testing:1.2.5"
 
     object Coroutines {
-        private const val version = "1.3.2"
+        private const val version = "1.3.3"
         const val android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:$version"
         const val core = "org.jetbrains.kotlinx:kotlinx-coroutines-core:$version"
         const val test = "org.jetbrains.kotlinx:kotlinx-coroutines-test:$version"
@@ -115,7 +115,7 @@ object Deps {
     const val junit = "junit:junit:4.12"
 
     object Kotlin {
-        private const val version = "1.3.60"
+        private const val version = "1.3.61"
         const val compilerEmbeddable = "org.jetbrains.kotlin:kotlin-compiler-embeddable:$version"
         const val gradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$version"
         const val gradlePluginApi = "org.jetbrains.kotlin:kotlin-gradle-plugin-api:$version"
