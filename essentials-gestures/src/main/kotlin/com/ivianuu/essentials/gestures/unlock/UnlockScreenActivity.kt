@@ -82,6 +82,9 @@ class UnlockScreenActivity : EsActivity() {
         }
     }
 
+    override fun content() {
+    }
+
     private fun finishWithResult(success: Boolean) {
         screenUnlocker.screenUnlockResult(success)
         finish()

@@ -23,7 +23,7 @@ import androidx.compose.ambient
 import androidx.compose.onActive
 import androidx.core.app.ShareCompat
 import androidx.core.net.toUri
-import com.ivianuu.essentials.ui.es.ActivityAmbient
+import com.ivianuu.essentials.ui.core.ActivityAmbient
 
 fun ActivityRoute(intentFactory: (Activity) -> Intent) = Route(
     opaque = true

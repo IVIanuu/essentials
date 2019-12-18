@@ -323,19 +323,15 @@ private fun execExpr(stmts: List<Node.Stmt>): Node.Expr {
             lhs = Node.Expr.BinaryOp(
                 lhs = Node.Expr.BinaryOp(
                     lhs = Node.Expr.BinaryOp(
-                        lhs = Node.Expr.BinaryOp(
-                            lhs = Node.Expr.Name(name = "com"),
-                            oper = Node.Expr.BinaryOp.Oper.Token(token = Node.Expr.BinaryOp.Token.DOT),
-                            rhs = Node.Expr.Name(name = "ivianuu")
-                        ),
+                        lhs = Node.Expr.Name(name = "com"),
                         oper = Node.Expr.BinaryOp.Oper.Token(token = Node.Expr.BinaryOp.Token.DOT),
-                        rhs = Node.Expr.Name(name = "essentials")
+                        rhs = Node.Expr.Name(name = "ivianuu")
                     ),
                     oper = Node.Expr.BinaryOp.Oper.Token(token = Node.Expr.BinaryOp.Token.DOT),
-                    rhs = Node.Expr.Name(name = "ui")
+                    rhs = Node.Expr.Name(name = "essentials")
                 ),
                 oper = Node.Expr.BinaryOp.Oper.Token(token = Node.Expr.BinaryOp.Token.DOT),
-                rhs = Node.Expr.Name(name = "compose")
+                rhs = Node.Expr.Name(name = "ui")
             ),
             oper = Node.Expr.BinaryOp.Oper.Token(token = Node.Expr.BinaryOp.Token.DOT),
             rhs = Node.Expr.Name(name = "core")

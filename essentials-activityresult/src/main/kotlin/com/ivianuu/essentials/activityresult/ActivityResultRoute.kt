@@ -23,8 +23,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.common.retained
+import com.ivianuu.essentials.ui.core.ActivityAmbient
 import com.ivianuu.essentials.ui.coroutines.retainedCoroutineScope
-import com.ivianuu.essentials.ui.es.ActivityAmbient
 import com.ivianuu.essentials.ui.navigation.Route
 import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.essentials.util.cast

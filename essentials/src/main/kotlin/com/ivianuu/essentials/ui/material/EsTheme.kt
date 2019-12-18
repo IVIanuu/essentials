@@ -14,26 +14,27 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.twilight
+package com.ivianuu.essentials.ui.material
 
 import androidx.compose.Composable
 import androidx.ui.material.ColorPalette
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.Typography
-import androidx.ui.material.darkColorPalette
-import androidx.ui.material.lightColorPalette
+import com.ivianuu.essentials.util.darken
 
 @Composable
-fun TwilightMaterialTheme(
-    lightPalette: @Composable() () -> ColorPalette = { lightColorPalette() },
-    darkPalette: @Composable() () -> ColorPalette = { darkColorPalette() },
+fun EsTheme(
+    colors: ColorPalette = ColorPalette(),
     typography: Typography = Typography(),
+    systemBarConfig: SystemBarConfig = SystemBarConfig(
+        statusBarColor = colors.primary.darken()
+    ),
     children: @Composable() () -> Unit
 ) {
-    val isDark = isDark()
     MaterialTheme(
-        colors = if (isDark) darkPalette() else lightPalette(),
-        typography = typography,
-        children = children
-    )
+        colors = colors,
+        typography = typography
+    ) {
+        SystemBarTheme(config = systemBarConfig, children = children)
+    }
 }

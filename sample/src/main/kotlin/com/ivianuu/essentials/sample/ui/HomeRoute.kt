@@ -51,7 +51,7 @@ import com.ivianuu.essentials.ui.navigation.Route
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.parametersOf
 
-val HomeRoute = Route(enterTransition = DefaultRouteTransition) {
+val HomeRoute = Route(transition = DefaultRouteTransition) {
     Scaffold(
         topAppBar = {
             EsTopAppBar(
@@ -64,11 +64,10 @@ val HomeRoute = Route(enterTransition = DefaultRouteTransition) {
                             "Option 2",
                             "Option 3"
                         ),
+                        item = { Text(it) },
                         onCancel = { toaster.toast("Cancelled") },
                         onSelected = { toaster.toast("Selected $it") }
-                    ) {
-                        Text(text = it)
-                    }
+                    )
                 }
             )
         },

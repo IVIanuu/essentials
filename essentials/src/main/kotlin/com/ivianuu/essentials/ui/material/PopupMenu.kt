@@ -40,7 +40,7 @@ import androidx.ui.layout.Wrap
 import androidx.ui.material.ripple.Ripple
 import androidx.ui.material.surface.Card
 import com.ivianuu.essentials.ui.common.ref
-import com.ivianuu.essentials.ui.es.ActivityAmbient
+import com.ivianuu.essentials.ui.core.ActivityAmbient
 import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.layout.NonNullSingleChildLayout
 import com.ivianuu.essentials.ui.navigation.FadeRouteTransition

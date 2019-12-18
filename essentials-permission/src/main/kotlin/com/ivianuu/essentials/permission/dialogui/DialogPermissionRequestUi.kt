@@ -37,10 +37,10 @@ import com.ivianuu.essentials.permission.PermissionRequestUi
 import com.ivianuu.essentials.permission.R
 import com.ivianuu.essentials.permission.Title
 import com.ivianuu.essentials.ui.base.EsViewModel
+import com.ivianuu.essentials.ui.core.ActivityAmbient
 import com.ivianuu.essentials.ui.dialog.DialogButton
 import com.ivianuu.essentials.ui.dialog.DialogRoute
 import com.ivianuu.essentials.ui.dialog.ScrollableDialog
-import com.ivianuu.essentials.ui.es.ActivityAmbient
 import com.ivianuu.essentials.ui.material.SimpleListItem
 import com.ivianuu.essentials.ui.navigation.NavigatorState
 import com.ivianuu.essentials.ui.viewmodel.injectViewModel

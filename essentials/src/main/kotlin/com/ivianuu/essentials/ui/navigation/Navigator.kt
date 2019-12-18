@@ -49,6 +49,7 @@ fun Navigator(
 
 @Composable
 fun Navigator(state: NavigatorState) {
+    state.defaultRouteTransition = ambient(DefaultRouteTransitionAmbient)
     NavigatorAmbient.Provider(value = state) {
         Observe {
             onBackPressed(enabled = state.handleBack && state.backStack.size > 1) {
@@ -93,6 +94,8 @@ class NavigatorState(
     var types: List<RouteTransition.Type> by framed(
         listOf(OpacityRouteTransitionType, CanvasRouteTransitionType)
     )
+
+    internal var defaultRouteTransition = DefaultRouteTransition
 
     init {
         if (_backStack.isEmpty() && startRoute != null) {
@@ -212,7 +215,7 @@ class NavigatorState(
                 .filterNot { it in newVisibleRoutes }
                 .forEach { route ->
                     val localTransition = transition
-                        ?: route.route.exitTransition
+                        ?: route.route.exitTransition ?: defaultRouteTransition
 
                     performChange(
                         from = route,
@@ -227,7 +230,8 @@ class NavigatorState(
                 .dropLast(if (replacingTopRoutes) 1 else 0)
                 .filterNot { it in oldVisibleRoutes }
                 .forEachIndexed { i, route ->
-                    val localTransition = transition ?: route.route.enterTransition
+                    val localTransition =
+                        transition ?: route.route.enterTransition ?: defaultRouteTransition
                     performChange(
                         from = newVisibleRoutes.getOrNull(i - 1),
                         to = route,
@@ -239,8 +243,8 @@ class NavigatorState(
             // Replace the old visible top with the new one
             if (replacingTopRoutes) {
                 val localTransition = transition
-                    ?: (if (isPush) newTopRoute?.route?.enterTransition
-                    else oldTopRoute?.route?.exitTransition)
+                    ?: (if (isPush) newTopRoute?.route?.enterTransition ?: defaultRouteTransition
+                    else oldTopRoute?.route?.exitTransition ?: defaultRouteTransition)
                 performChange(
                     from = oldTopRoute,
                     to = newTopRoute,
@@ -287,7 +291,7 @@ class NavigatorState(
                 CoroutineContextAmbient.Provider(coroutineContext) {
                     AbsorbPointer(absorb = absorbTouches) {
                         RouteTransitionWrapper(
-                            transition = transition ?: ambient(DefaultRouteTransitionAmbient),
+                            transition = transition ?: defaultRouteTransition,
                             state = transitionState,
                             lastState = lastTransitionState,
                             onTransitionComplete = onTransitionComplete,

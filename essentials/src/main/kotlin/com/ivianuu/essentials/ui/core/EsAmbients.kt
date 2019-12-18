@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.es
+package com.ivianuu.essentials.ui.core
 
 import android.app.Activity
 import androidx.compose.Ambient

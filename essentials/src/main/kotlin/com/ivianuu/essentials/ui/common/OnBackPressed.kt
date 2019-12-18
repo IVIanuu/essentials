@@ -22,7 +22,7 @@ import androidx.compose.Composable
 import androidx.compose.ambient
 import androidx.compose.onCommit
 import androidx.compose.remember
-import com.ivianuu.essentials.ui.es.ActivityAmbient
+import com.ivianuu.essentials.ui.core.ActivityAmbient
 
 @Composable
 fun onBackPressed(

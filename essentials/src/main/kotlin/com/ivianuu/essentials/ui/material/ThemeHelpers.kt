@@ -21,7 +21,6 @@ import androidx.compose.remember
 import androidx.ui.foundation.ProvideContentColor
 import androidx.ui.foundation.contentColor
 import androidx.ui.graphics.Color
-import androidx.ui.graphics.toArgb
 import androidx.ui.material.Emphasis
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.ProvideEmphasis
@@ -45,7 +44,7 @@ fun contentColorFor(color: Color): Color {
         }
     }
     if (result == null) {
-        result = if (color.toArgb().isDark) Color.White else Color.Black
+        result = if (color.isDark) Color.White else Color.Black
     }
     return result
 }

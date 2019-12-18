@@ -19,7 +19,7 @@ package com.ivianuu.essentials.ui.common
 import androidx.compose.Composable
 import androidx.compose.ambient
 import androidx.ui.core.FocusManagerAmbient
-import com.ivianuu.essentials.ui.es.ActivityAmbient
+import com.ivianuu.essentials.ui.core.ActivityAmbient
 import com.ivianuu.essentials.util.hideInputMethod
 
 // todo refactor api

@@ -21,20 +21,22 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.lifecycle.ViewModel
-import com.ivianuu.essentials.ui.es.ComposeActivity
+import com.ivianuu.essentials.ui.base.EsActivity
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.util.injectViewModel
 import com.ivianuu.injekt.Factory
+import com.ivianuu.injekt.get
 import com.ivianuu.injekt.inject
 
-class PermissionActivity : ComposeActivity() {
+class PermissionActivity : EsActivity() {
 
     private val manager: PermissionManager by inject()
     private val requestUi: PermissionRequestUi by inject()
     private val viewModel: CallbackViewModel by injectViewModel()
+    private lateinit var finalRequest: PermissionRequest
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         val requestId = intent.getStringExtra(KEY_REQUEST_ID)
         if (requestId == null) {
             finish()
@@ -53,11 +55,15 @@ class PermissionActivity : ComposeActivity() {
 
         viewModel.request = request
 
-        val finalRequest = request.copy(
+        finalRequest = request.copy(
             onComplete = viewModel.onComplete
         )
 
         requestUi.performRequest(this@PermissionActivity, manager, finalRequest)
+    }
+
+    override fun content() {
+        Navigator(state = get())
     }
 
     override fun onDestroy() {

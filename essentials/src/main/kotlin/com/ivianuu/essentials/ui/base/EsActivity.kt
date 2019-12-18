@@ -17,19 +17,36 @@
 package com.ivianuu.essentials.ui.base
 
 import android.os.Bundle
-import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
-import androidx.ui.graphics.Color
-import androidx.ui.graphics.toArgb
+import androidx.compose.Composable
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewModelScope
+import androidx.ui.core.CoroutineContextAmbient
+import androidx.ui.core.ambientDensity
+import androidx.ui.core.setContent
+import androidx.ui.foundation.isSystemInDarkTheme
 import com.ivianuu.essentials.injection.RetainedActivityComponent
 import com.ivianuu.essentials.injection.initRetainedActivityComponentIfNeeded
 import com.ivianuu.essentials.injection.retainedActivityComponent
+import com.ivianuu.essentials.ui.common.MultiAmbientProvider
+import com.ivianuu.essentials.ui.common.with
+import com.ivianuu.essentials.ui.core.ActivityAmbient
+import com.ivianuu.essentials.ui.core.AndroidComposeViewContainer
+import com.ivianuu.essentials.ui.core.MediaQuery
+import com.ivianuu.essentials.ui.core.MediaQueryProvider
+import com.ivianuu.essentials.ui.injekt.ComponentAmbient
+import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.navigation.NavigatorState
+import com.ivianuu.essentials.ui.navigation.Route
+import com.ivianuu.essentials.util.getViewModel
 import com.ivianuu.essentials.util.unsafeLazy
 import com.ivianuu.injekt.Component
 import com.ivianuu.injekt.InjektTrait
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.android.ActivityModule
 import com.ivianuu.injekt.android.ActivityScope
+import com.ivianuu.injekt.get
 
 /**
  * Base activity
@@ -41,33 +58,78 @@ abstract class EsActivity : AppCompatActivity(), InjektTrait {
             scopes(ActivityScope)
             dependencies(retainedActivityComponent)
             modules(ActivityModule())
+            modules(EsActivityModule(this@EsActivity))
             modules(this@EsActivity.modules())
         }
     }
 
     protected open val layoutRes: Int get() = 0
-    protected open val drawEdgeToEdge: Boolean get() = false
 
-    open val containerId: Int
+    protected open val containerId: Int
         get() = android.R.id.content
+
+    private val composeContentView by unsafeLazy {
+        AndroidComposeViewContainer(this).apply {
+            layoutParams = ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT
+            )
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         initRetainedActivityComponentIfNeeded { createRetainedComponent() }
 
-        if (drawEdgeToEdge) {
-            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
-                    View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
-                    View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-            window.statusBarColor = Color.Black.copy(alpha = 0.25f).toArgb()
-            window.navigationBarColor = Color.Transparent.toArgb()
-        }
-
         if (layoutRes != 0) {
             setContentView(layoutRes)
         }
+
+        val container = findViewById<ViewGroup>(containerId)
+        container.addView(composeContentView)
+        composeContentView.setContent {
+            ComposeWithAmbients(composeContentView) {
+                content()
+            }
+        }
     }
+
+    override fun onDestroy() {
+        // todo use disposeComposition once fixed
+        composeContentView.setContent { }
+        super.onDestroy()
+    }
+
+    // todo move this to somewhere else
+    @Composable
+    protected open fun ComposeWithAmbients(
+        view: AndroidComposeViewContainer,
+        children: @Composable() () -> Unit
+    ) {
+        MultiAmbientProvider(
+            ActivityAmbient with this,
+            ComponentAmbient with component,
+            CoroutineContextAmbient with lifecycleScope.coroutineContext
+        ) {
+            val viewportMetrics = view.viewportMetrics
+            val density = ambientDensity()
+            val isDarkTheme = isSystemInDarkTheme()
+
+            val mediaQuery = MediaQuery(
+                size = viewportMetrics.size,
+                viewPadding = viewportMetrics.viewPadding,
+                viewInsets = viewportMetrics.viewInsets,
+                density = density,
+                darkMode = isDarkTheme
+            )
+
+            MediaQueryProvider(value = mediaQuery, children = children)
+        }
+    }
+
+    @Composable
+    protected abstract fun content()
 
     protected open fun modules(): List<Module> = emptyList()
 
@@ -76,4 +138,24 @@ abstract class EsActivity : AppCompatActivity(), InjektTrait {
     protected open fun createRetainedComponent(): Component = RetainedActivityComponent {
         modules(retainedModules())
     }
+
+    @Composable
+    protected fun Navigator(startRoute: Route) {
+        val state = get<NavigatorState>()
+        if (state.backStack.isEmpty()) {
+            state.push(startRoute)
+        }
+        Navigator(state = state)
+    }
 }
+
+private fun EsActivityModule(activity: EsActivity) = Module {
+    single {
+        NavigatorState(
+            coroutineScope = activity.getViewModel { CoroutineScopeViewModel() }.viewModelScope
+        )
+    }
+}
+
+// todo remove
+private class CoroutineScopeViewModel : EsViewModel()
