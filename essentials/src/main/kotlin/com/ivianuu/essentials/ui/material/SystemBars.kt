@@ -61,6 +61,7 @@ private val SystemBarStyleAmbient = Ambient.of { SystemBarStyle() }
 internal class SystemBarManager(private val activity: Activity) {
 
     private val styles = mutableListOf<SystemBarStyle>()
+    private var appliedStyle: SystemBarStyle? = null
 
     fun registerStyle(style: SystemBarStyle) {
         styles += style
@@ -73,35 +74,37 @@ internal class SystemBarManager(private val activity: Activity) {
     }
 
     private fun update() {
-        val config = styles.lastOrNull() ?: SystemBarStyle()
+        val style = styles.lastOrNull() ?: SystemBarStyle()
+        if (appliedStyle == style) return
+        appliedStyle = style
         val window = activity.window
         val decorView = window.decorView
-        window.statusBarColor = config.statusBarColor.toArgb()
+        window.statusBarColor = style.statusBarColor.toArgb()
         decorView.systemUiVisibility =
             decorView.systemUiVisibility.setFlag(
                 View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR,
-                config.drawBehindStatusBar
+                style.drawBehindStatusBar
             )
 
         decorView.systemUiVisibility =
             decorView.systemUiVisibility.setFlag(
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
-                        View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN, config.lightStatusBar
+                        View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN, style.lightStatusBar
             )
 
-        window.navigationBarColor = config.navigationBarColor.toArgb()
+        window.navigationBarColor = style.navigationBarColor.toArgb()
         if (Build.VERSION.SDK_INT >= 26) {
             decorView.systemUiVisibility =
                 decorView.systemUiVisibility.setFlag(
                     View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR,
-                    config.lightNavigationBar
+                    style.lightNavigationBar
                 )
         }
 
         decorView.systemUiVisibility =
             decorView.systemUiVisibility.setFlag(
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
-                        View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION, config.drawBehindNavBar
+                        View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION, style.drawBehindNavBar
             )
     }
 }
