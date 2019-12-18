@@ -207,8 +207,8 @@ class NavigatorState(
             val newTopRoute = newVisibleRoutes.lastOrNull()
 
             // check if we should animate the top routes
-            val replacingTopRoutes = newTopRoute != null && (oldTopRoute == null
-                    || oldTopRoute != newTopRoute)
+            val replacingTopRoutes = newTopRoute != null && (oldTopRoute == null ||
+                    oldTopRoute != newTopRoute)
 
             // Remove all visible routes which shouldn't be visible anymore
             // from top to bottom

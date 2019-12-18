@@ -92,7 +92,6 @@ class OverlayState(initialEntries: List<OverlayEntry> = emptyList()) {
         _entries.clear()
         _entries += entries
     }
-
 }
 
 @Stable
