@@ -26,6 +26,7 @@ import androidx.ui.core.IntPx
 import androidx.ui.core.Layout
 import androidx.ui.core.ParentData
 import androidx.ui.core.tightMax
+import com.ivianuu.essentials.ui.compose.core.Stable
 
 @Composable
 fun Overlay(state: OverlayState = remember { OverlayState() }) {
@@ -92,6 +93,7 @@ class OverlayState(initialEntries: List<OverlayEntry> = emptyList()) {
     }
 }
 
+@Stable
 class OverlayEntry(
     opaque: Boolean = false,
     keepState: Boolean = false,
