@@ -38,6 +38,7 @@ import androidx.ui.layout.EdgeInsets
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.ripple.Ripple
 import com.ivianuu.essentials.ui.common.withDensity
+import com.ivianuu.essentials.ui.core.Unstable
 import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
 import com.ivianuu.essentials.ui.layout.MainAxisAlignment
@@ -45,6 +46,7 @@ import com.ivianuu.essentials.ui.layout.Row
 import com.ivianuu.essentials.ui.layout.Swapper
 import com.ivianuu.essentials.ui.layout.SwapperController
 
+@Unstable
 @Composable
 fun <T> BottomNavigationBar(
     color: Color = MaterialTheme.colors().primary,
@@ -59,6 +61,7 @@ fun <T> BottomNavigationBar(
     )
 }
 
+@Unstable
 @Composable
 fun <T> BottomNavigationBar(
     items: List<T>,

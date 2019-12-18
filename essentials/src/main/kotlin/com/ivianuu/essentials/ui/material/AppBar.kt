@@ -24,6 +24,7 @@ import androidx.ui.core.dp
 import androidx.ui.graphics.Color
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.core.Unstable
 import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.essentials.ui.navigation.route
 
@@ -34,6 +35,7 @@ fun EsTopAppBar(title: String) {
     EsTopAppBar(title = { Text(title) })
 }
 
+@Unstable
 @Composable
 fun EsTopAppBar(
     color: Color = MaterialTheme.colors().primary,

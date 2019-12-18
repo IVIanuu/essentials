@@ -889,7 +889,11 @@ private fun wrapComposableCalls(
                                                 }
                                                 .filter { it.third.type.isStable() }
 
-                                            if (stableParams.size != node.args.size) {
+                                            if (resulting.annotations.hasAnnotation(
+                                                    UnstableAnnotation
+                                                ) &&
+                                                stableParams.size != node.args.size
+                                            ) {
                                                 stmts += Node.Stmt.Expr(
                                                     expr = Node.Expr.Const(
                                                         value = "true",

@@ -34,6 +34,7 @@ import org.jetbrains.kotlin.types.typeUtil.makeNotNullable
 val ComposableAnnotation = FqName("androidx.compose.Composable")
 val PivotalAnnotation = FqName("androidx.compose.Pivotal")
 val StableMarkerAnnotation = FqName("androidx.compose.StableMarker")
+val UnstableAnnotation = FqName("com.ivianuu.essentials.ui.core.Unstable")
 
 fun KotlinType.isStable(): Boolean {
     return !isError &&
