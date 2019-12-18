@@ -158,15 +158,13 @@ class NavigatorState(
         isPush: Boolean,
         transition: RouteTransition? = null
     ) {
-        coroutineScope.launch {
-            setBackStackInternal(
-                newBackStack.map {
-                    _backStack.firstOrNull { it.route == route } ?: RouteState(it)
-                },
-                isPush,
-                transition
-            )
-        }
+        setBackStackInternal(
+            newBackStack.map {
+                _backStack.firstOrNull { it.route == route } ?: RouteState(it)
+            },
+            isPush,
+            transition
+        )
     }
 
     suspend fun <T> awaitResult(route: Route): T? =

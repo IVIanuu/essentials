@@ -46,12 +46,14 @@ class Route(
     fun copy(
         opaque: Boolean = this.opaque,
         keepState: Boolean = this.keepState,
-        transition: RouteTransition? = this.enterTransition,
+        enterTransition: RouteTransition? = this.enterTransition,
+        exitTransition: RouteTransition?,
         content: @Composable() () -> Unit = this.content
     ): Route = Route(
         opaque = opaque,
         keepState = keepState,
-        enterTransition = transition,
+        enterTransition = enterTransition,
+        exitTransition = exitTransition,
         content = content
     )
 }

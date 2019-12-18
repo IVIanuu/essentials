@@ -106,7 +106,7 @@ internal class RouteCompatController(
                 listOf(composeRoute)
             }
 
-            navigatorState.setBackStack(backStack, true)
+            navigatorState.setBackStackSuspend(backStack, true)
 
             val result = navigatorState.awaitResult<Any?>(route = composeRoute)
             navigator.pop(result = result)
