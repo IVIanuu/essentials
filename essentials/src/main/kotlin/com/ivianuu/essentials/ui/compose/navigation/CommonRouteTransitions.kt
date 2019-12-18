@@ -22,11 +22,7 @@ import androidx.compose.remember
 import kotlin.time.Duration
 import kotlin.time.milliseconds
 
-val FadeRouteTransitionKey = RouteTransition.Key()
-
 fun FadeRouteTransition(duration: Duration = 300.milliseconds) = RouteTransition(
-    key = FadeRouteTransitionKey,
-    duration = duration,
     definition = {
         remember(duration) {
             fadeRouteTransitionDefinition(duration)
@@ -57,10 +53,7 @@ private fun fadeRouteTransitionDefinition(
 
 private val Alpha = FloatPropKey()
 
-val VerticalRouteTransitionKey = RouteTransition.Key()
 fun VerticalRouteTransition(duration: Duration = 300.milliseconds) = RouteTransition(
-    key = VerticalRouteTransitionKey,
-    duration = duration,
     definition = {
         remember(duration) {
             verticalRouteTransitionDefinition(duration)
@@ -96,10 +89,7 @@ private fun verticalRouteTransitionDefinition(
 
 private val Fraction = FloatPropKey()
 
-val HorizontalRouteTransitionKey = RouteTransition.Key()
 fun HorizontalRouteTransition(duration: Duration = 300.milliseconds) = RouteTransition(
-    key = HorizontalRouteTransitionKey,
-    duration = duration,
     definition = {
         remember(duration) {
             horizontalRouteTransitionDefinition(duration)
@@ -133,10 +123,7 @@ private fun horizontalRouteTransitionDefinition(
     }
 }
 
-val OpenCloseRouteTransitionKey = RouteTransition.Key()
 fun OpenCloseRouteTransition(duration: Duration = 300.milliseconds) = RouteTransition(
-    key = VerticalFadeRouteTransitionKey,
-    duration = duration,
     definition = {
         remember(duration) {
             openCloseRouteTransitionDefinition(duration)
@@ -194,10 +181,7 @@ private fun openCloseRouteTransitionDefinition(
     }
 }
 
-val VerticalFadeRouteTransitionKey = RouteTransition.Key()
 fun VerticalFadeRouteTransition(duration: Duration = 300.milliseconds) = RouteTransition(
-    key = VerticalFadeRouteTransitionKey,
-    duration = duration,
     definition = {
         remember(duration) {
             verticalFadeRouteTransitionDefinition(duration)

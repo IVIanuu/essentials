@@ -14,7 +14,6 @@ include(
     ":essentials-gradle-plugin",
     ":essentials-hidenavbar",
     ":essentials-kotlin-compiler",
-    ":essentials-legacy-ui",
     ":essentials-mvrx",
     ":essentials-notificationlistener",
     ":essentials-permission",

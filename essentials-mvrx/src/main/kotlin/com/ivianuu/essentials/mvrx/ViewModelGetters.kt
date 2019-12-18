@@ -16,88 +16,68 @@
 
 package com.ivianuu.essentials.mvrx
 
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleEventObserver
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
+import androidx.compose.Composable
+import androidx.compose.ambient
+import androidx.compose.remember
 import androidx.lifecycle.ViewModelStoreOwner
-import androidx.lifecycle.lifecycleScope
+import com.ivianuu.essentials.ui.compose.coroutines.collect
+import com.ivianuu.essentials.ui.compose.injekt.ComponentAmbient
+import com.ivianuu.essentials.ui.compose.injekt.inject
+import com.ivianuu.essentials.ui.compose.viewmodel.viewModel
+import com.ivianuu.essentials.util.defaultViewModelFactory
 import com.ivianuu.essentials.util.defaultViewModelKey
-import com.ivianuu.essentials.util.unsafeLazy
-import com.ivianuu.injekt.InjektTrait
 import com.ivianuu.injekt.ParametersDefinition
-import com.ivianuu.injekt.get
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import com.ivianuu.injekt.Type
+import com.ivianuu.injekt.typeOf
 import kotlin.reflect.KClass
 
-inline fun <reified T : MvRxViewModel<*>> MvRxView.mvRxViewModel(
-    noinline from: () -> ViewModelStoreOwner = { this },
-    noinline key: () -> String = { T::class.defaultViewModelKey },
-    noinline factory: () -> T
-): Lazy<T> = _mvRxViewModel(T::class, from, key, factory)
+@Composable
+inline fun <reified T : MvRxViewModel<*>> mvRxViewModel(
+    from: ViewModelStoreOwner = inject(),
+    key: String = remember { T::class.defaultViewModelKey },
+    noinline factory: () -> T = defaultViewModelFactory(T::class)
+): T = mvRxViewModel(type = T::class, from = from, key = key, factory = factory)
 
-@PublishedApi
-internal fun <T : MvRxViewModel<*>> MvRxView._mvRxViewModel(
+@Composable
+fun <T : MvRxViewModel<*>> mvRxViewModel(
     type: KClass<T>,
-    from: () -> ViewModelStoreOwner = { this },
-    key: () -> String = { type.defaultViewModelKey },
-    factory: () -> T
-): Lazy<T> = unsafeLazy {
-    _getMvRxViewModel(
-        type,
-        from(),
-        key(),
-        factory
-    )
-}.also { lazy ->
-    lifecycle.addObserver(object : LifecycleEventObserver {
-        override fun onStateChanged(source: LifecycleOwner, event: Lifecycle.Event) {
-            if (lifecycle.currentState.isAtLeast(Lifecycle.State.CREATED)) {
-                lazy.value
-            }
-        }
-    })
-}
-
-inline fun <reified T : MvRxViewModel<*>> MvRxView.getMvRxViewModel(
-    from: ViewModelStoreOwner = this,
-    key: String = T::class.defaultViewModelKey,
-    noinline factory: () -> T
-): T = _getMvRxViewModel(T::class, from, key, factory)
-
-@PublishedApi
-internal fun <T : MvRxViewModel<*>> MvRxView._getMvRxViewModel(
-    type: KClass<T>,
-    from: ViewModelStoreOwner = this,
-    key: String = type.defaultViewModelKey,
-    factory: () -> T
+    from: ViewModelStoreOwner = inject(),
+    key: String = remember { type.defaultViewModelKey },
+    factory: () -> T = defaultViewModelFactory(type)
 ): T {
-    val viewModelProvider = ViewModelProvider(from, object : ViewModelProvider.Factory {
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T = factory() as T
-    })
-
-    return viewModelProvider.get(key, type.java).also { vm ->
-        // invalidate this view on each state emission
-        vm.flow
-            .onEach { postInvalidate() }
-            .launchIn(lifecycleScope)
-    }
+    val viewModel = viewModel(type, from, key, factory)
+    // recompose on changes
+    collect(remember { viewModel.flow })
+    return viewModel
 }
 
-inline fun <S, reified T : MvRxViewModel<*>> S.injectMvRxViewModel(
-    noinline from: () -> ViewModelStoreOwner = { this },
-    noinline key: () -> String = { T::class.defaultViewModelKey },
-    noinline name: () -> Any? = { null },
-    noinline parameters: ParametersDefinition? = null
-): Lazy<T> where S : MvRxView, S : InjektTrait =
-    mvRxViewModel(from, key) { get(name = name(), parameters = parameters) }
-
-inline fun <S, reified T : MvRxViewModel<*>> S.getInjectedMvRxViewModel(
-    from: ViewModelStoreOwner = this,
-    key: String = T::class.defaultViewModelKey,
+@Composable
+inline fun <reified T : MvRxViewModel<*>> injectMvRxViewModel(
+    from: ViewModelStoreOwner = inject(),
+    key: String = remember { T::class.defaultViewModelKey },
     name: Any? = null,
     noinline parameters: ParametersDefinition? = null
-): T where S : MvRxView, S : InjektTrait =
-    getMvRxViewModel(from, key) { get(name = name, parameters = parameters) }
+): T = injectMvRxViewModel(
+    typeOf(),
+    from,
+    key,
+    name,
+    parameters
+)
+
+@Composable
+fun <T : MvRxViewModel<*>> injectMvRxViewModel(
+    type: Type<T>,
+    from: ViewModelStoreOwner = inject(),
+    key: String = remember { type.defaultViewModelKey },
+    name: Any? = null,
+    parameters: ParametersDefinition? = null
+): T {
+    val component = ambient(ComponentAmbient)
+    return mvRxViewModel(
+        type = type.raw as KClass<T>,
+        from = from,
+        key = key,
+        factory = { component.get(type = type, name = name, parameters = parameters) }
+    )
+}

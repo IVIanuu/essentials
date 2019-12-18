@@ -64,8 +64,6 @@ dependencies {
 
     api(Deps.kotlinFlowExtensions)
 
-    api(Deps.materialComponents)
-
     api(Deps.Scopes.scopes)
     api(Deps.Scopes.android)
     api(Deps.Scopes.coroutines)

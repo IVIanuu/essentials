@@ -16,17 +16,13 @@
 
 package com.ivianuu.essentials.sample.app
 
-import com.ivianuu.director.DirectorPlugins
-import com.ivianuu.director.setDefaultHandler
 import com.ivianuu.essentials.app.EsApp
 import com.ivianuu.essentials.apps.coil.EsAppsCoilModule
 import com.ivianuu.essentials.boot.EsBootModule
 import com.ivianuu.essentials.coil.EsCoilModule
 import com.ivianuu.essentials.gestures.EsGesturesModule
-import com.ivianuu.essentials.legacy.ui.changehandler.OpenCloseChangeHandler
 import com.ivianuu.essentials.permission.EsPermissionsModule
 import com.ivianuu.essentials.sample.BootModule
-import com.ivianuu.essentials.twilight.EsTwilightModule
 import com.ivianuu.essentials.work.WorkerInitializerModule
 import com.ivianuu.essentials.work.WorkerInjectionModule
 
@@ -39,14 +35,8 @@ class App : EsApp() {
         EsCoilModule,
         EsGesturesModule,
         EsPermissionsModule,
-        EsTwilightModule,
         WorkerInjectionModule,
         WorkerInitializerModule
     )
-
-    override fun onCreate() {
-        super.onCreate()
-        DirectorPlugins.setDefaultHandler(OpenCloseChangeHandler())
-    }
 
 }

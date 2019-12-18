@@ -27,7 +27,6 @@
       <module fileurl="file://$PROJECT_DIR$/essentials-gradle-plugin/essentials-kotlin-compiler-gradle-plugin.iml" filepath="$PROJECT_DIR$/essentials-gradle-plugin/essentials-kotlin-compiler-gradle-plugin.iml" />
       <module fileurl="file://$PROJECT_DIR$/essentials-kotlin-compiler-hosted/essentials-kotlin-compiler-hosted.iml" filepath="$PROJECT_DIR$/essentials-kotlin-compiler-hosted/essentials-kotlin-compiler-hosted.iml" />
       <module fileurl="file://$PROJECT_DIR$/essentials-kotlin-compiler-ide-plugin/essentials-kotlin-compiler-ide-plugin.iml" filepath="$PROJECT_DIR$/essentials-kotlin-compiler-ide-plugin/essentials-kotlin-compiler-ide-plugin.iml" />
-      <module fileurl="file://$PROJECT_DIR$/essentials-legacy-ui/essentials-legacy-ui.iml" filepath="$PROJECT_DIR$/essentials-legacy-ui/essentials-legacy-ui.iml" />
       <module fileurl="file://$PROJECT_DIR$/essentials-mvrx/essentials-mvrx.iml" filepath="$PROJECT_DIR$/essentials-mvrx/essentials-mvrx.iml" />
       <module fileurl="file://$PROJECT_DIR$/essentials-notificationlistener/essentials-notificationlistener.iml" filepath="$PROJECT_DIR$/essentials-notificationlistener/essentials-notificationlistener.iml" />
       <module fileurl="file://$PROJECT_DIR$/essentials-permission/essentials-permission.iml" filepath="$PROJECT_DIR$/essentials-permission/essentials-permission.iml" />

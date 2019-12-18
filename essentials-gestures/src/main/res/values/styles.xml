@@ -16,7 +16,7 @@
 
 <resources>
 
-    <style name="EsTransparent" parent="Theme.MaterialComponents">
+    <style name="EsTransparent" parent="Theme.AppCompat.DayNight">
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowContentOverlay">@null</item>

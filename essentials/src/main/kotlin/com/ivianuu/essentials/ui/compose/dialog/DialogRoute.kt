@@ -36,7 +36,21 @@ fun DialogRoute(
     dialog: @Composable() () -> Unit
 ) = Route(
     opaque = true,
-    enterTransition = FadeRouteTransition()
+    enterTransition = FadeRouteTransition(),
+    exitTransition = FadeRouteTransition()
+) {
+    DialogWrapper(
+        dismissible = dismissible,
+        dismissHandler = dismissHandler,
+        dialog = dialog
+    )
+}
+
+@Composable
+fun DialogWrapper(
+    dismissible: Boolean = true,
+    dismissHandler: @Composable() () -> /*// todo use Unit */ Any?,
+    dialog: @Composable() () -> Unit
 ) {
     if (!dismissible) {
         onBackPressed { }

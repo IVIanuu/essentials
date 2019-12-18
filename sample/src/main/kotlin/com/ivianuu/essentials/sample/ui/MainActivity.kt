@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.remember
+import com.ivianuu.essentials.twilight.TwilightMaterialTheme
 import com.ivianuu.essentials.ui.compose.es.ComposeActivity
 import com.ivianuu.essentials.ui.compose.navigation.DefaultRouteTransitionAmbient
 import com.ivianuu.essentials.ui.compose.navigation.Route
@@ -29,10 +30,14 @@ class MainActivity : ComposeActivity() {
         get() = HomeRoute
 
     override fun wrapContent(content: () -> Unit) {
-        DefaultRouteTransitionAmbient.Provider(
-            value = remember { VerticalFadeRouteTransition(duration = 300.milliseconds) }
+        TwilightMaterialTheme(
+
         ) {
-            content()
+            DefaultRouteTransitionAmbient.Provider(
+                value = remember { VerticalFadeRouteTransition(duration = 300.milliseconds) }
+            ) {
+                content()
+            }
         }
     }
 

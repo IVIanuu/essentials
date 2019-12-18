@@ -16,83 +16,12 @@
 
 package com.ivianuu.essentials.ui.compose.material
 
-import android.content.Context
-import androidx.compose.Composable
-import androidx.compose.ambient
-import androidx.compose.remember
-import androidx.ui.core.ContextAmbient
 import androidx.ui.graphics.Color
 import androidx.ui.material.ColorPalette
-import androidx.ui.material.MaterialTheme
 import androidx.ui.material.Typography
 import androidx.ui.material.darkColorPalette
 import androidx.ui.material.lightColorPalette
 import androidx.ui.text.TextStyle
-import com.ivianuu.essentials.R
-import com.ivianuu.essentials.util.colorAttr
-import com.ivianuu.essentials.util.isWindowBackgroundDark
-
-@Composable
-fun ResourceMaterialTheme(
-    context: Context = ambient(ContextAmbient),
-    colors: ColorPalette = resourceColors(context),
-    typography: Typography = resourceTypography(context),
-    children: @Composable() () -> Unit
-) {
-    MaterialTheme(
-        colors = colors,
-        typography = typography,
-        children = children
-    )
-}
-
-@Composable
-fun resourceColors(context: Context = ambient(ContextAmbient)): ColorPalette {
-    return remember {
-        ColorPalette(
-            isLight = !context.isWindowBackgroundDark(),
-            primary = Color(context.colorAttr(R.attr.colorPrimary)),
-            primaryVariant = Color(context.colorAttr(R.attr.colorPrimaryVariant)),
-            secondary = Color(context.colorAttr(R.attr.colorSecondary)),
-            secondaryVariant = Color(context.colorAttr(R.attr.colorSecondaryVariant)),
-            background = Color(context.colorAttr(android.R.attr.colorBackground)),
-            surface = Color(context.colorAttr(R.attr.colorSurface)),
-            error = Color(context.colorAttr(R.attr.colorError)),
-            onPrimary = Color(context.colorAttr(R.attr.colorOnPrimary)),
-            onSecondary = Color(context.colorAttr(R.attr.colorOnSecondary)),
-            onBackground = Color(context.colorAttr(R.attr.colorOnBackground)),
-            onSurface = Color(context.colorAttr(R.attr.colorOnSurface)),
-            onError = Color(context.colorAttr(R.attr.colorOnError))
-        )
-    }
-}
-
-@Composable
-fun resourceTypography(context: Context = ambient(ContextAmbient)): Typography {
-    return remember { Typography() }
-    /*Typography(
-        h1 = +resourceTextStyle(R.attr.textAppearanceHeadline1),
-        h2 = +resourceTextStyle(R.attr.textAppearanceHeadline2),
-        h3 = +resourceTextStyle(R.attr.textAppearanceHeadline3),
-        h4 = +resourceTextStyle(R.attr.textAppearanceHeadline4),
-        h5 = +resourceTextStyle(R.attr.textAppearanceHeadline5),
-        h6 = +resourceTextStyle(R.attr.textAppearanceHeadline6),
-        subtitle1 = +resourceTextStyle(R.attr.textAppearanceSubtitle1),
-        subtitle2 = +resourceTextStyle(R.attr.textAppearanceSubtitle2),
-        body1 = +resourceTextStyle(R.attr.textAppearanceBody1),
-        body2 = +resourceTextStyle(R.attr.textAppearanceBody2),
-        button = +resourceTextStyle(R.attr.textAppearanceButton),
-        caption = +resourceTextStyle(R.attr.textAppearanceCaption),
-        overline = +resourceTextStyle(R.attr.textAppearanceOverline)
-    )*/
-}
-
-@Composable
-fun resourceTextStyle(attr: Int): TextStyle {
-    error("not implemented")
-    val context = ambient(ContextAmbient)
-    TextStyle()
-}
 
 inline fun Typography.editEach(edit: TextStyle.() -> TextStyle): Typography {
     return Typography(

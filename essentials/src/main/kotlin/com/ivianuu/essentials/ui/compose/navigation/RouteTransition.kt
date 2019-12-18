@@ -28,19 +28,12 @@ import androidx.ui.core.DrawReceiver
 import androidx.ui.core.Opacity
 import androidx.ui.core.PxSize
 import androidx.ui.graphics.Canvas
-import kotlin.time.Duration
-import kotlin.time.milliseconds
 
 @Immutable
 class RouteTransition(
-    val key: Key, // todo remove legacy
-    val duration: Duration,
     val definition: @Composable() () -> TransitionDefinition<State>,
     val generateOps: (TransitionState, State) -> Ops
 ) {
-
-    class Key
-
     @Immutable
     interface Type {
         @Composable
@@ -107,11 +100,7 @@ object CanvasRouteTransitionType : RouteTransition.Type {
 
 val DefaultRouteTransitionAmbient = Ambient.of { DefaultRouteTransition }
 
-val DefaultRouteTransitionKey = RouteTransition.Key()
-
 val DefaultRouteTransition = RouteTransition(
-    key = DefaultRouteTransitionKey,
-    duration = 0.milliseconds,
     definition = { defaultTransitionDefinition },
     generateOps = { _, _ -> opsOf() }
 )

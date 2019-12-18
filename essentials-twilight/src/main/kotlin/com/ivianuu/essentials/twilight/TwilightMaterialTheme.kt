@@ -14,25 +14,26 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.compose.injekt
+package com.ivianuu.essentials.twilight
 
 import androidx.compose.Composable
 import androidx.ui.material.ColorPalette
+import androidx.ui.material.MaterialTheme
 import androidx.ui.material.Typography
-import com.ivianuu.essentials.ui.compose.material.resourceColors
-import com.ivianuu.essentials.ui.compose.material.resourceTypography
-import com.ivianuu.injekt.Module
+import androidx.ui.material.darkColorPalette
+import androidx.ui.material.lightColorPalette
 
-val EsComposeModule = Module {
-    factory {
-        MaterialThemeProvider(
-            colors = { resourceColors() },
-            typography = { resourceTypography() }
-        )
-    }
+@Composable
+fun TwilightMaterialTheme(
+    lightPalette: @Composable() () -> ColorPalette = { lightColorPalette() },
+    darkPalette: @Composable() () -> ColorPalette = { darkColorPalette() },
+    typography: Typography = Typography(),
+    children: @Composable() () -> Unit
+) {
+    val isDark = isDark()
+    MaterialTheme(
+        colors = if (isDark) darkPalette() else lightPalette(),
+        typography = typography,
+        children = children
+    )
 }
-
-data class MaterialThemeProvider(
-    val colors: @Composable() () -> ColorPalette,
-    val typography: @Composable() () -> Typography
-)
