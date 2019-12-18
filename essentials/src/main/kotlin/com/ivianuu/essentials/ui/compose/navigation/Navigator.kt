@@ -18,6 +18,7 @@ package com.ivianuu.essentials.ui.compose.navigation
 
 import androidx.compose.Ambient
 import androidx.compose.Composable
+import androidx.compose.Observe
 import androidx.compose.ambient
 import androidx.compose.frames.modelListOf
 import androidx.compose.remember
@@ -30,6 +31,7 @@ import com.ivianuu.essentials.ui.compose.common.OverlayState
 import com.ivianuu.essentials.ui.compose.common.framed
 import com.ivianuu.essentials.ui.compose.common.onBackPressed
 import com.ivianuu.essentials.ui.compose.common.retained
+import com.ivianuu.essentials.ui.compose.core.Stable
 import com.ivianuu.essentials.ui.compose.coroutines.coroutineContext
 import com.ivianuu.essentials.ui.compose.coroutines.retainedCoroutineScope
 import com.ivianuu.essentials.util.sourceLocation
@@ -48,9 +50,12 @@ fun Navigator(
 @Composable
 fun Navigator(state: NavigatorState) {
     NavigatorAmbient.Provider(value = state) {
-        if (state.handleBack && state.backStack.size > 1) {
-            onBackPressed { state.pop() }
+        Observe {
+            onBackPressed(enabled = state.handleBack && state.backStack.size > 1) {
+                if (state.runningTransitions == 0) state.pop()
+            }
         }
+        d { "invoke navigator" }
         Overlay(state = state.overlayState)
     }
 }
@@ -71,6 +76,7 @@ fun RetainedNavigatorState(
     )
 }
 
+@Stable
 class NavigatorState(
     private val coroutineScope: CoroutineScope,
     internal val overlayState: OverlayState = OverlayState(),
@@ -79,6 +85,7 @@ class NavigatorState(
 ) {
 
     var handleBack by framed(handleBack)
+    internal var runningTransitions by framed(0)
 
     private val _backStack = modelListOf<RouteState>()
     val backStack: List<Route>
@@ -154,6 +161,30 @@ class NavigatorState(
         return visibleRoutes
     }
 
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as NavigatorState
+
+        if (overlayState != other.overlayState) return false
+        if (_backStack != other._backStack) return false
+        if (handleBack != other.handleBack) return false
+        if (runningTransitions != other.runningTransitions) return false
+        if (types != other.types) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = overlayState.hashCode()
+        result = 31 * result + _backStack.hashCode()
+        result = 31 * result + handleBack.hashCode()
+        result = 31 * result + runningTransitions.hashCode()
+        result = 31 * result + types.hashCode()
+        return result
+    }
+
     private inner class RouteState(val route: Route) {
 
         private val result = CompletableDeferred<Any?>()
@@ -184,7 +215,10 @@ class NavigatorState(
         )
 
         private val onTransitionComplete: (RouteTransition.State) -> Unit = { completedState ->
-            if (completedState != RouteTransition.State.Init) absorbTouches = false
+            if (completedState != RouteTransition.State.Init) {
+                absorbTouches = false
+                runningTransitions--
+            }
             lastTransitionState = completedState
             if (completedState == RouteTransition.State.ExitFromPush) {
                 other?.onOtherTransitionComplete()
@@ -210,6 +244,7 @@ class NavigatorState(
         fun enter(prev: RouteState?, isPush: Boolean) {
             overlayEntry.opaque = route.opaque || isPush
             absorbTouches = true
+            runningTransitions++
             if (isPush) overlayState.add(overlayEntry)
             lastTransitionState = transitionState
             transitionState =
@@ -219,6 +254,7 @@ class NavigatorState(
 
         fun exit(next: RouteState?, isPush: Boolean) {
             absorbTouches = true
+            runningTransitions++
             overlayEntry.opaque = route.opaque || !isPush
             if (isPush) other = next
             lastTransitionState = transitionState
