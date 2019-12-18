@@ -20,10 +20,10 @@ import androidx.compose.remember
 import androidx.ui.core.Text
 import androidx.ui.layout.Center
 import androidx.ui.material.MaterialTheme
-import com.ivianuu.essentials.ui.compose.coroutines.collect
-import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
-import com.ivianuu.essentials.ui.compose.material.Scaffold
-import com.ivianuu.essentials.ui.compose.navigation.Route
+import com.ivianuu.essentials.ui.coroutines.collect
+import com.ivianuu.essentials.ui.material.EsTopAppBar
+import com.ivianuu.essentials.ui.material.Scaffold
+import com.ivianuu.essentials.ui.navigation.Route
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.flow
 

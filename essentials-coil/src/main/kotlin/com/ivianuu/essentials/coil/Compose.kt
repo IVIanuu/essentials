@@ -22,9 +22,9 @@ import androidx.ui.core.Size
 import androidx.ui.graphics.Image
 import coil.ImageLoader
 import coil.api.getAny
-import com.ivianuu.essentials.ui.compose.coroutines.load
-import com.ivianuu.essentials.ui.compose.image.toImage
-import com.ivianuu.essentials.ui.compose.injekt.inject
+import com.ivianuu.essentials.ui.coroutines.load
+import com.ivianuu.essentials.ui.image.toImage
+import com.ivianuu.essentials.ui.injekt.inject
 
 @Composable
 fun image(

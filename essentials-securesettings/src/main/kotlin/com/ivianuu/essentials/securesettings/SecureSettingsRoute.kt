@@ -17,12 +17,12 @@
 package com.ivianuu.essentials.securesettings
 
 import androidx.ui.res.stringResource
-import com.ivianuu.essentials.ui.compose.common.ListScreen
-import com.ivianuu.essentials.ui.compose.common.navigateOnClick
-import com.ivianuu.essentials.ui.compose.coroutines.coroutineScope
-import com.ivianuu.essentials.ui.compose.injekt.inject
-import com.ivianuu.essentials.ui.compose.material.SimpleListItem
-import com.ivianuu.essentials.ui.compose.navigation.Route
+import com.ivianuu.essentials.ui.common.ListScreen
+import com.ivianuu.essentials.ui.common.navigateOnClick
+import com.ivianuu.essentials.ui.coroutines.coroutineScope
+import com.ivianuu.essentials.ui.injekt.inject
+import com.ivianuu.essentials.ui.material.SimpleListItem
+import com.ivianuu.essentials.ui.navigation.Route
 import com.ivianuu.essentials.util.Toaster
 import kotlinx.coroutines.launch
 

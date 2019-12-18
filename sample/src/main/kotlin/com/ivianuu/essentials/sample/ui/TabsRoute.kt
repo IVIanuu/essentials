@@ -19,15 +19,15 @@ package com.ivianuu.essentials.sample.ui
 import androidx.ui.core.Text
 import androidx.ui.graphics.Color
 import androidx.ui.layout.Container
-import com.ivianuu.essentials.ui.compose.layout.Column
-import com.ivianuu.essentials.ui.compose.material.EsSurface
-import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
-import com.ivianuu.essentials.ui.compose.material.Scaffold
-import com.ivianuu.essentials.ui.compose.material.Tab
-import com.ivianuu.essentials.ui.compose.material.TabContent
-import com.ivianuu.essentials.ui.compose.material.TabController
-import com.ivianuu.essentials.ui.compose.material.TabRow
-import com.ivianuu.essentials.ui.compose.navigation.Route
+import com.ivianuu.essentials.ui.layout.Column
+import com.ivianuu.essentials.ui.material.EsSurface
+import com.ivianuu.essentials.ui.material.EsTopAppBar
+import com.ivianuu.essentials.ui.material.Scaffold
+import com.ivianuu.essentials.ui.material.Tab
+import com.ivianuu.essentials.ui.material.TabContent
+import com.ivianuu.essentials.ui.material.TabController
+import com.ivianuu.essentials.ui.material.TabRow
+import com.ivianuu.essentials.ui.navigation.Route
 
 val TabsRoute = Route {
     val items = listOf(Color.Blue, Color.Red, Color.Magenta, Color.Green, Color.Cyan)

@@ -23,13 +23,13 @@ import androidx.ui.layout.Center
 import androidx.ui.material.Button
 import androidx.ui.material.MaterialTheme
 import com.ivianuu.essentials.gestures.torch.TorchManager
-import com.ivianuu.essentials.ui.compose.common.SimpleScreen
-import com.ivianuu.essentials.ui.compose.coroutines.collect
-import com.ivianuu.essentials.ui.compose.injekt.inject
-import com.ivianuu.essentials.ui.compose.layout.Column
-import com.ivianuu.essentials.ui.compose.layout.CrossAxisAlignment
-import com.ivianuu.essentials.ui.compose.layout.HeightSpacer
-import com.ivianuu.essentials.ui.compose.navigation.Route
+import com.ivianuu.essentials.ui.common.SimpleScreen
+import com.ivianuu.essentials.ui.coroutines.collect
+import com.ivianuu.essentials.ui.injekt.inject
+import com.ivianuu.essentials.ui.layout.Column
+import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
+import com.ivianuu.essentials.ui.layout.HeightSpacer
+import com.ivianuu.essentials.ui.navigation.Route
 
 val TorchRoute = Route {
     SimpleScreen(title = "Torch") {

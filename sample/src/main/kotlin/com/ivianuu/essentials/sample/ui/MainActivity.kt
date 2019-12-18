@@ -18,10 +18,10 @@ package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.remember
 import com.ivianuu.essentials.twilight.TwilightMaterialTheme
-import com.ivianuu.essentials.ui.compose.es.ComposeActivity
-import com.ivianuu.essentials.ui.compose.navigation.DefaultRouteTransitionAmbient
-import com.ivianuu.essentials.ui.compose.navigation.Route
-import com.ivianuu.essentials.ui.compose.navigation.VerticalFadeRouteTransition
+import com.ivianuu.essentials.ui.es.ComposeActivity
+import com.ivianuu.essentials.ui.navigation.DefaultRouteTransitionAmbient
+import com.ivianuu.essentials.ui.navigation.Route
+import com.ivianuu.essentials.ui.navigation.VerticalFadeRouteTransition
 import kotlin.time.milliseconds
 
 class MainActivity : ComposeActivity() {

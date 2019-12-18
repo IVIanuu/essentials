@@ -30,15 +30,15 @@ import com.ivianuu.essentials.hidenavbar.NavBarConfig
 import com.ivianuu.essentials.hidenavbar.NavBarController
 import com.ivianuu.essentials.securesettings.SecureSettingsHelper
 import com.ivianuu.essentials.securesettings.SecureSettingsRoute
-import com.ivianuu.essentials.ui.compose.coroutines.coroutineScope
-import com.ivianuu.essentials.ui.compose.injekt.inject
-import com.ivianuu.essentials.ui.compose.layout.Column
-import com.ivianuu.essentials.ui.compose.layout.CrossAxisAlignment
-import com.ivianuu.essentials.ui.compose.layout.MainAxisAlignment
-import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
-import com.ivianuu.essentials.ui.compose.material.Scaffold
-import com.ivianuu.essentials.ui.compose.navigation.Route
-import com.ivianuu.essentials.ui.compose.navigation.navigator
+import com.ivianuu.essentials.ui.coroutines.coroutineScope
+import com.ivianuu.essentials.ui.injekt.inject
+import com.ivianuu.essentials.ui.layout.Column
+import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
+import com.ivianuu.essentials.ui.layout.MainAxisAlignment
+import com.ivianuu.essentials.ui.material.EsTopAppBar
+import com.ivianuu.essentials.ui.material.Scaffold
+import com.ivianuu.essentials.ui.navigation.Route
+import com.ivianuu.essentials.ui.navigation.navigator
 import kotlinx.coroutines.launch
 
 val NavBarRoute = Route {

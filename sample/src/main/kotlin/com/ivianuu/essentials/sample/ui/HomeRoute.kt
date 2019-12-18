@@ -38,16 +38,16 @@ import com.ivianuu.essentials.apps.ui.AppPickerRoute
 import com.ivianuu.essentials.apps.ui.IntentAppFilter
 import com.ivianuu.essentials.shortcutpicker.ShortcutPickerRoute
 import com.ivianuu.essentials.twilight.TwilightSettingsRoute
-import com.ivianuu.essentials.ui.compose.common.navigateOnClick
-import com.ivianuu.essentials.ui.compose.injekt.inject
-import com.ivianuu.essentials.ui.compose.layout.Column
-import com.ivianuu.essentials.ui.compose.layout.ScrollableList
-import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
-import com.ivianuu.essentials.ui.compose.material.PopupMenuButton
-import com.ivianuu.essentials.ui.compose.material.Scaffold
-import com.ivianuu.essentials.ui.compose.material.SimpleListItem
-import com.ivianuu.essentials.ui.compose.navigation.DefaultRouteTransition
-import com.ivianuu.essentials.ui.compose.navigation.Route
+import com.ivianuu.essentials.ui.common.navigateOnClick
+import com.ivianuu.essentials.ui.injekt.inject
+import com.ivianuu.essentials.ui.layout.Column
+import com.ivianuu.essentials.ui.layout.ScrollableList
+import com.ivianuu.essentials.ui.material.EsTopAppBar
+import com.ivianuu.essentials.ui.material.PopupMenuButton
+import com.ivianuu.essentials.ui.material.Scaffold
+import com.ivianuu.essentials.ui.material.SimpleListItem
+import com.ivianuu.essentials.ui.navigation.DefaultRouteTransition
+import com.ivianuu.essentials.ui.navigation.Route
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.parametersOf
 

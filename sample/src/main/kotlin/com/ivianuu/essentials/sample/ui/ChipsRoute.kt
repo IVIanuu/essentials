@@ -30,14 +30,14 @@ import androidx.ui.layout.FlowRow
 import androidx.ui.layout.Padding
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.ripple.Ripple
-import com.ivianuu.essentials.ui.compose.dialog.PrimaryColors
-import com.ivianuu.essentials.ui.compose.injekt.inject
-import com.ivianuu.essentials.ui.compose.material.EsSurface
-import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
-import com.ivianuu.essentials.ui.compose.material.RippleColorProvider
-import com.ivianuu.essentials.ui.compose.material.Scaffold
-import com.ivianuu.essentials.ui.compose.material.contentColorFor
-import com.ivianuu.essentials.ui.compose.navigation.Route
+import com.ivianuu.essentials.ui.dialog.PrimaryColors
+import com.ivianuu.essentials.ui.injekt.inject
+import com.ivianuu.essentials.ui.material.EsSurface
+import com.ivianuu.essentials.ui.material.EsTopAppBar
+import com.ivianuu.essentials.ui.material.RippleColorProvider
+import com.ivianuu.essentials.ui.material.Scaffold
+import com.ivianuu.essentials.ui.material.contentColorFor
+import com.ivianuu.essentials.ui.navigation.Route
 import com.ivianuu.essentials.util.Toaster
 
 val ChipsRoute = Route {

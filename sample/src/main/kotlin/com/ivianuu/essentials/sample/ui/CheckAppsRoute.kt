@@ -21,9 +21,9 @@ import com.ivianuu.essentials.apps.ui.CheckableAppsScreen
 import com.ivianuu.essentials.apps.ui.LaunchableAppFilter
 import com.ivianuu.essentials.store.prefs.PrefBoxFactory
 import com.ivianuu.essentials.store.prefs.stringSet
-import com.ivianuu.essentials.ui.compose.coroutines.coroutineScope
-import com.ivianuu.essentials.ui.compose.injekt.inject
-import com.ivianuu.essentials.ui.compose.navigation.Route
+import com.ivianuu.essentials.ui.coroutines.coroutineScope
+import com.ivianuu.essentials.ui.injekt.inject
+import com.ivianuu.essentials.ui.navigation.Route
 import kotlinx.coroutines.launch
 
 val CheckAppsRoute = Route {

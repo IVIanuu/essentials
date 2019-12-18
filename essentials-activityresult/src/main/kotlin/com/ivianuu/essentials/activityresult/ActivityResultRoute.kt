@@ -22,11 +22,11 @@ import androidx.compose.ambient
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import com.github.ajalt.timberkt.d
-import com.ivianuu.essentials.ui.compose.common.retained
-import com.ivianuu.essentials.ui.compose.coroutines.retainedCoroutineScope
-import com.ivianuu.essentials.ui.compose.es.ActivityAmbient
-import com.ivianuu.essentials.ui.compose.navigation.Route
-import com.ivianuu.essentials.ui.compose.navigation.navigator
+import com.ivianuu.essentials.ui.common.retained
+import com.ivianuu.essentials.ui.coroutines.retainedCoroutineScope
+import com.ivianuu.essentials.ui.es.ActivityAmbient
+import com.ivianuu.essentials.ui.navigation.Route
+import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.essentials.util.cast
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.launch

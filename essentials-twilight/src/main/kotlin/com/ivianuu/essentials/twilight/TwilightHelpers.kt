@@ -29,8 +29,8 @@ import androidx.compose.remember
 import androidx.compose.state
 import androidx.ui.core.ConfigurationAmbient
 import androidx.ui.core.ContextAmbient
-import com.ivianuu.essentials.ui.compose.box.unfoldBox
-import com.ivianuu.essentials.ui.compose.injekt.inject
+import com.ivianuu.essentials.ui.box.unfoldBox
+import com.ivianuu.essentials.ui.injekt.inject
 import java.util.Calendar
 
 @Composable

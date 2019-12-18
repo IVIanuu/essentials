@@ -21,7 +21,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.lifecycle.ViewModel
-import com.ivianuu.essentials.ui.compose.es.ComposeActivity
+import com.ivianuu.essentials.ui.es.ComposeActivity
 import com.ivianuu.essentials.util.injectViewModel
 import com.ivianuu.injekt.Factory
 import com.ivianuu.injekt.inject

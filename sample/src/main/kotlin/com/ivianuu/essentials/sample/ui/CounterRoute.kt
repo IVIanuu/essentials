@@ -22,13 +22,13 @@ import androidx.ui.core.dp
 import androidx.ui.layout.Center
 import androidx.ui.material.FloatingActionButton
 import androidx.ui.material.MaterialTheme
-import com.ivianuu.essentials.ui.compose.layout.Column
-import com.ivianuu.essentials.ui.compose.layout.CrossAxisAlignment
-import com.ivianuu.essentials.ui.compose.layout.HeightSpacer
-import com.ivianuu.essentials.ui.compose.layout.MainAxisAlignment
-import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
-import com.ivianuu.essentials.ui.compose.material.Scaffold
-import com.ivianuu.essentials.ui.compose.navigation.Route
+import com.ivianuu.essentials.ui.layout.Column
+import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
+import com.ivianuu.essentials.ui.layout.HeightSpacer
+import com.ivianuu.essentials.ui.layout.MainAxisAlignment
+import com.ivianuu.essentials.ui.material.EsTopAppBar
+import com.ivianuu.essentials.ui.material.Scaffold
+import com.ivianuu.essentials.ui.navigation.Route
 
 val CounterRoute = Route {
     Scaffold(

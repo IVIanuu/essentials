@@ -25,19 +25,19 @@ import androidx.ui.layout.EdgeInsets
 import androidx.ui.material.Checkbox
 import androidx.ui.material.FloatingActionButton
 import androidx.ui.material.MaterialTheme
-import com.ivianuu.essentials.ui.compose.common.AbsorbPointer
-import com.ivianuu.essentials.ui.compose.common.framed
-import com.ivianuu.essentials.ui.compose.dialog.DialogRoute
-import com.ivianuu.essentials.ui.compose.dialog.SingleChoiceListDialog
-import com.ivianuu.essentials.ui.compose.layout.ScrollableList
-import com.ivianuu.essentials.ui.compose.material.EsSurface
-import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
-import com.ivianuu.essentials.ui.compose.material.Scaffold
-import com.ivianuu.essentials.ui.compose.material.ScaffoldState
-import com.ivianuu.essentials.ui.compose.material.SimpleListItem
-import com.ivianuu.essentials.ui.compose.material.Subheader
-import com.ivianuu.essentials.ui.compose.navigation.Route
-import com.ivianuu.essentials.ui.compose.navigation.navigator
+import com.ivianuu.essentials.ui.common.AbsorbPointer
+import com.ivianuu.essentials.ui.common.framed
+import com.ivianuu.essentials.ui.dialog.DialogRoute
+import com.ivianuu.essentials.ui.dialog.SingleChoiceListDialog
+import com.ivianuu.essentials.ui.layout.ScrollableList
+import com.ivianuu.essentials.ui.material.EsSurface
+import com.ivianuu.essentials.ui.material.EsTopAppBar
+import com.ivianuu.essentials.ui.material.Scaffold
+import com.ivianuu.essentials.ui.material.ScaffoldState
+import com.ivianuu.essentials.ui.material.SimpleListItem
+import com.ivianuu.essentials.ui.material.Subheader
+import com.ivianuu.essentials.ui.navigation.Route
+import com.ivianuu.essentials.ui.navigation.navigator
 
 val ScaffoldRoute = Route {
     val navigator = navigator

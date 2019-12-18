@@ -29,15 +29,15 @@ import androidx.ui.layout.Container
 import androidx.ui.material.FloatingActionButton
 import androidx.ui.material.MaterialTheme
 import com.github.ajalt.timberkt.d
-import com.ivianuu.essentials.ui.compose.common.framed
-import com.ivianuu.essentials.ui.compose.common.hideKeyboard
-import com.ivianuu.essentials.ui.compose.common.ref
-import com.ivianuu.essentials.ui.compose.common.showKeyboard
-import com.ivianuu.essentials.ui.compose.layout.ScrollableList
-import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
-import com.ivianuu.essentials.ui.compose.material.Scaffold
-import com.ivianuu.essentials.ui.compose.material.SimpleListItem
-import com.ivianuu.essentials.ui.compose.navigation.Route
+import com.ivianuu.essentials.ui.common.framed
+import com.ivianuu.essentials.ui.common.hideKeyboard
+import com.ivianuu.essentials.ui.common.ref
+import com.ivianuu.essentials.ui.common.showKeyboard
+import com.ivianuu.essentials.ui.layout.ScrollableList
+import com.ivianuu.essentials.ui.material.EsTopAppBar
+import com.ivianuu.essentials.ui.material.Scaffold
+import com.ivianuu.essentials.ui.material.SimpleListItem
+import com.ivianuu.essentials.ui.navigation.Route
 
 val TextInputRoute = Route {
     val state = remember { TextInputState() }

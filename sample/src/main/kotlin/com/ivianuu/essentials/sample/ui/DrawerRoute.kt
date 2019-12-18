@@ -20,11 +20,11 @@ import androidx.ui.core.Text
 import androidx.ui.graphics.Color
 import androidx.ui.layout.Center
 import androidx.ui.material.MaterialTheme
-import com.ivianuu.essentials.ui.compose.material.EsSurface
-import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
-import com.ivianuu.essentials.ui.compose.material.Scaffold
-import com.ivianuu.essentials.ui.compose.navigation.FadeRouteTransition
-import com.ivianuu.essentials.ui.compose.navigation.Route
+import com.ivianuu.essentials.ui.material.EsSurface
+import com.ivianuu.essentials.ui.material.EsTopAppBar
+import com.ivianuu.essentials.ui.material.Scaffold
+import com.ivianuu.essentials.ui.navigation.FadeRouteTransition
+import com.ivianuu.essentials.ui.navigation.Route
 
 val DrawerRoute = Route(enterTransition = FadeRouteTransition()) {
     Scaffold(

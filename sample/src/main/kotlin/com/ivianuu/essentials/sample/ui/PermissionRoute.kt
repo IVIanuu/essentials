@@ -35,11 +35,11 @@ import com.ivianuu.essentials.permission.notificationlistener.NotificationListen
 import com.ivianuu.essentials.permission.runtime.RuntimePermission
 import com.ivianuu.essentials.permission.systemoverlay.SystemOverlayPermission
 import com.ivianuu.essentials.permission.writesettings.WriteSettingsPermission
-import com.ivianuu.essentials.ui.compose.common.SimpleScreen
-import com.ivianuu.essentials.ui.compose.coroutines.coroutineScope
-import com.ivianuu.essentials.ui.compose.injekt.inject
-import com.ivianuu.essentials.ui.compose.navigation.Route
-import com.ivianuu.essentials.ui.compose.resources.drawableResource
+import com.ivianuu.essentials.ui.common.SimpleScreen
+import com.ivianuu.essentials.ui.coroutines.coroutineScope
+import com.ivianuu.essentials.ui.injekt.inject
+import com.ivianuu.essentials.ui.navigation.Route
+import com.ivianuu.essentials.ui.resources.drawableResource
 import kotlinx.coroutines.launch
 
 val PermissionRoute = Route {

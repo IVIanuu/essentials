@@ -21,11 +21,11 @@ import androidx.compose.Pivotal
 import androidx.ui.core.Text
 import androidx.ui.material.RadioButton
 import androidx.ui.res.stringResource
-import com.ivianuu.essentials.ui.compose.box.unfoldBox
-import com.ivianuu.essentials.ui.compose.common.ListScreen
-import com.ivianuu.essentials.ui.compose.injekt.inject
-import com.ivianuu.essentials.ui.compose.material.SimpleListItem
-import com.ivianuu.essentials.ui.compose.navigation.Route
+import com.ivianuu.essentials.ui.box.unfoldBox
+import com.ivianuu.essentials.ui.common.ListScreen
+import com.ivianuu.essentials.ui.injekt.inject
+import com.ivianuu.essentials.ui.material.SimpleListItem
+import com.ivianuu.essentials.ui.navigation.Route
 
 val TwilightSettingsRoute = Route {
     ListScreen(title = stringResource(R.string.es_title_twilight)) {

@@ -22,9 +22,9 @@ import androidx.ui.core.dp
 import androidx.ui.foundation.contentColor
 import androidx.ui.layout.Padding
 import androidx.ui.material.MaterialTheme
-import com.ivianuu.essentials.ui.compose.coroutines.launchOnActive
-import com.ivianuu.essentials.ui.compose.injekt.inject
-import com.ivianuu.essentials.ui.compose.navigation.navigator
+import com.ivianuu.essentials.ui.coroutines.launchOnActive
+import com.ivianuu.essentials.ui.injekt.inject
+import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.essentials.util.Toaster
 import kotlinx.coroutines.delay
 

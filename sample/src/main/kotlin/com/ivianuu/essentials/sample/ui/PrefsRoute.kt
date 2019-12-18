@@ -21,21 +21,21 @@ import com.ivianuu.essentials.store.prefs.boolean
 import com.ivianuu.essentials.store.prefs.int
 import com.ivianuu.essentials.store.prefs.string
 import com.ivianuu.essentials.store.prefs.stringSet
-import com.ivianuu.essentials.ui.compose.injekt.inject
-import com.ivianuu.essentials.ui.compose.layout.ScrollableList
-import com.ivianuu.essentials.ui.compose.material.EsTopAppBar
-import com.ivianuu.essentials.ui.compose.material.Scaffold
-import com.ivianuu.essentials.ui.compose.navigation.Route
-import com.ivianuu.essentials.ui.compose.prefs.CheckboxPreference
-import com.ivianuu.essentials.ui.compose.prefs.Dependency
-import com.ivianuu.essentials.ui.compose.prefs.MultiChoiceListPreference
-import com.ivianuu.essentials.ui.compose.prefs.PreferenceSubheader
-import com.ivianuu.essentials.ui.compose.prefs.RadioButtonPreference
-import com.ivianuu.essentials.ui.compose.prefs.SingleChoiceListPreference
-import com.ivianuu.essentials.ui.compose.prefs.SliderPreference
-import com.ivianuu.essentials.ui.compose.prefs.SwitchPreference
-import com.ivianuu.essentials.ui.compose.prefs.TextInputPreference
-import com.ivianuu.essentials.ui.compose.prefs.unitValueTextProvider
+import com.ivianuu.essentials.ui.injekt.inject
+import com.ivianuu.essentials.ui.layout.ScrollableList
+import com.ivianuu.essentials.ui.material.EsTopAppBar
+import com.ivianuu.essentials.ui.material.Scaffold
+import com.ivianuu.essentials.ui.navigation.Route
+import com.ivianuu.essentials.ui.prefs.CheckboxPreference
+import com.ivianuu.essentials.ui.prefs.Dependency
+import com.ivianuu.essentials.ui.prefs.MultiChoiceListPreference
+import com.ivianuu.essentials.ui.prefs.PreferenceSubheader
+import com.ivianuu.essentials.ui.prefs.RadioButtonPreference
+import com.ivianuu.essentials.ui.prefs.SingleChoiceListPreference
+import com.ivianuu.essentials.ui.prefs.SliderPreference
+import com.ivianuu.essentials.ui.prefs.SwitchPreference
+import com.ivianuu.essentials.ui.prefs.TextInputPreference
+import com.ivianuu.essentials.ui.prefs.unitValueTextProvider
 import com.ivianuu.essentials.util.UnitValueTextProvider
 
 val PrefsRoute = Route {

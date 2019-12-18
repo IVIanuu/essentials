@@ -20,10 +20,10 @@ import androidx.compose.Composable
 import androidx.compose.ambient
 import androidx.compose.remember
 import androidx.lifecycle.ViewModelStoreOwner
-import com.ivianuu.essentials.ui.compose.coroutines.collect
-import com.ivianuu.essentials.ui.compose.injekt.ComponentAmbient
-import com.ivianuu.essentials.ui.compose.injekt.inject
-import com.ivianuu.essentials.ui.compose.viewmodel.viewModel
+import com.ivianuu.essentials.ui.coroutines.collect
+import com.ivianuu.essentials.ui.injekt.ComponentAmbient
+import com.ivianuu.essentials.ui.injekt.inject
+import com.ivianuu.essentials.ui.viewmodel.viewModel
 import com.ivianuu.essentials.util.defaultViewModelFactory
 import com.ivianuu.essentials.util.defaultViewModelKey
 import com.ivianuu.injekt.ParametersDefinition
