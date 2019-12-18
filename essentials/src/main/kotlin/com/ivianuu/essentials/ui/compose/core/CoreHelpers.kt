@@ -56,3 +56,12 @@ inline fun call(
         block = { block() }
     )
 }
+
+@Composable
+inline fun callOnce(block: @Composable() () -> Unit) {
+    composer.call(
+        key = sourceLocation(),
+        invalid = { false },
+        block = { block() }
+    )
+}
