@@ -121,7 +121,7 @@ class NavigatorState(
         val removedRoute = _backStack.removeAt(backStack.lastIndex)
         val newTopRoute = _backStack.lastOrNull()
         removedRoute.exit(newTopRoute, false)
-        newTopRoute?.enter(removedRoute, false)
+        if (!removedRoute.route.opaque) newTopRoute?.enter(removedRoute, false)
         removedRoute.setResult(result)
     }
 
