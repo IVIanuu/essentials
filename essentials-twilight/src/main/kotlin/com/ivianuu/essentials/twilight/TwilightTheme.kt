@@ -16,8 +16,11 @@
 
 package com.ivianuu.essentials.twilight
 
+import androidx.animation.FloatPropKey
+import androidx.animation.transitionDefinition
 import androidx.compose.Composable
 import androidx.compose.remember
+import androidx.ui.animation.Transition
 import androidx.ui.material.ColorPalette
 import androidx.ui.material.Typography
 import androidx.ui.material.darkColorPalette
@@ -26,25 +29,43 @@ import com.ivianuu.essentials.ui.coroutines.collect
 import com.ivianuu.essentials.ui.injekt.inject
 import com.ivianuu.essentials.ui.material.EsTheme
 import com.ivianuu.essentials.ui.material.SystemBarConfig
+import com.ivianuu.essentials.ui.material.lerp
 import com.ivianuu.essentials.util.darken
 
 @Composable
 fun TwilightTheme(
-    lightPalette: @Composable() () -> ColorPalette = { lightColorPalette() },
-    darkPalette: @Composable() () -> ColorPalette = { darkColorPalette() },
+    lightColors: ColorPalette = lightColorPalette(),
+    darkColors: ColorPalette = darkColorPalette(),
     typography: Typography = Typography(),
-    systemBarConfig: SystemBarConfig? = null,
     children: @Composable() () -> Unit
 ) {
     val helper = inject<TwilightHelper>()
     val isDark = collect(remember { helper.isDark }, helper.currentIsDark)
-    val colors = if (isDark) darkPalette() else lightPalette()
-    EsTheme(
-        colors = colors,
-        typography = typography,
-        systemBarConfig = systemBarConfig ?: SystemBarConfig(
-            statusBarColor = colors.primary.darken()
-        ),
-        children = children
-    )
+
+    Transition(
+        definition = twilightTransitionDefinition,
+        toState = isDark
+    ) { state ->
+        val colors = lerp(lightColors, darkColors, state[Fraction])
+        EsTheme(
+            colors = colors,
+            typography = typography,
+            systemBarConfig = SystemBarConfig(
+                statusBarColor = colors.primary.darken()
+            ),
+            children = children
+        )
+    }
+}
+
+private val Fraction = FloatPropKey()
+private val twilightTransitionDefinition = transitionDefinition {
+    state(true) { set(Fraction, 1f) }
+    state(false) { set(Fraction, 0f) }
+
+    transition {
+        Fraction using tween {
+            duration = 300
+        }
+    }
 }
