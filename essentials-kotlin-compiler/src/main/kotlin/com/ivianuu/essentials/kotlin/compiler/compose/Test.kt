@@ -112,7 +112,7 @@ fun test(
 
     val newSource = Writer.write(fileNode)
 
-    // error("new source $newSource")
+    //if (file.name == "MainActivity.kt") error("new source $newSource")
 
     return if (orig != fileNode) {
         file.withNewSource(newSource)
