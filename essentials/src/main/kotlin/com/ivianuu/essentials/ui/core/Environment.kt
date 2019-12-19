@@ -27,8 +27,6 @@ import com.ivianuu.essentials.ui.common.KeyboardManagerAmbient
 import com.ivianuu.essentials.ui.common.MultiAmbientProvider
 import com.ivianuu.essentials.ui.common.with
 import com.ivianuu.essentials.ui.injekt.ComponentAmbient
-import com.ivianuu.essentials.ui.material.SystemBarManager
-import com.ivianuu.essentials.ui.material.SystemBarManagerAmbient
 import com.ivianuu.injekt.Component
 import kotlin.coroutines.CoroutineContext
 
@@ -44,12 +42,13 @@ fun EsEnvironment(
         ActivityAmbient with activity,
         ComponentAmbient with component,
         CoroutineContextAmbient with coroutineContext,
-        KeyboardManagerAmbient with remember { KeyboardManager(focusManager, activity) },
-        SystemBarManagerAmbient with remember { SystemBarManager(activity) }
+        KeyboardManagerAmbient with remember { KeyboardManager(focusManager, activity) }
     ) {
-        ConfigurationFix {
-            OrientationProvider {
-                WindowInsetsManager(children = children)
+        WindowInsetsManager {
+            SystemBarManager {
+                ConfigurationFix {
+                    OrientationProvider(children = children)
+                }
             }
         }
     }

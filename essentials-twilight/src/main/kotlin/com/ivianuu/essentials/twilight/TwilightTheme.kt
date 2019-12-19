@@ -25,10 +25,10 @@ import androidx.ui.material.ColorPalette
 import androidx.ui.material.Typography
 import androidx.ui.material.darkColorPalette
 import androidx.ui.material.lightColorPalette
+import com.ivianuu.essentials.ui.core.SystemBarStyle
 import com.ivianuu.essentials.ui.coroutines.collect
 import com.ivianuu.essentials.ui.injekt.inject
 import com.ivianuu.essentials.ui.material.EsTheme
-import com.ivianuu.essentials.ui.material.SystemBarStyle
 import com.ivianuu.essentials.ui.material.lerp
 import com.ivianuu.essentials.util.darken
 

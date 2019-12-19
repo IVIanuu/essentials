@@ -20,6 +20,7 @@ import androidx.compose.Composable
 import androidx.ui.core.Constraints
 import androidx.ui.core.Dp
 import androidx.ui.core.IntPx
+import androidx.ui.core.Modifier
 import androidx.ui.core.dp
 import androidx.ui.core.enforce
 import androidx.ui.core.isFinite
@@ -38,20 +39,22 @@ fun Shrink(child: @Composable() () -> Unit) {
 @Composable
 fun SizedBox(
     size: Dp,
+    modifier: Modifier = Modifier.None,
     child: @Composable() () -> Unit
 ) {
-    SizedBox(width = size, height = size, child = child)
+    SizedBox(width = size, height = size, modifier = modifier, child = child)
 }
 
 @Composable
 fun SizedBox(
     width: Dp? = null,
     height: Dp? = null,
+    modifier: Modifier = Modifier.None,
     child: @Composable() () -> Unit
 ) {
     val widthPx = withDensity { width?.toIntPx() }
     val heightPx = withDensity { height?.toIntPx() }
-    SingleChildLayout(child = child) { measureable, incomingConstraints ->
+    SingleChildLayout(child = child, modifier = modifier) { measureable, incomingConstraints ->
         if (measureable == null) return@SingleChildLayout layout(
             incomingConstraints.minWidth,
             incomingConstraints.minHeight

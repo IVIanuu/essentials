@@ -20,6 +20,8 @@ import androidx.compose.Composable
 import androidx.ui.material.ColorPalette
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.Typography
+import com.ivianuu.essentials.ui.core.ProvideCurrentSystemBarStyle
+import com.ivianuu.essentials.ui.core.SystemBarStyle
 import com.ivianuu.essentials.util.darken
 
 @Composable
@@ -35,6 +37,9 @@ fun EsTheme(
         colors = colors,
         typography = typography
     ) {
-        ProvideCurrentSystemBarStyle(value = systemBarConfig, children = children)
+        ProvideCurrentSystemBarStyle(
+            value = systemBarConfig,
+            children = children
+        )
     }
 }
