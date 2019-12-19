@@ -65,12 +65,6 @@ fun Node.markSeen(step: Step) {
 
 fun Node.seenBy(step: Step): Boolean = step in getSeenBy()
 
-var Node.actualComposableInvocation: Boolean
-    get() = extras.getOrDefault("actualComposableInvocation", false) as Boolean
-    set(value) {
-        extras["actualComposableInvocation"] = value
-    }
-
 val ComposerExpr = Node.Expr.BinaryOp(
     lhs = Node.Expr.BinaryOp(
         lhs = Node.Expr.Name(name = "androidx"),
@@ -844,9 +838,7 @@ private fun wrapComposableCalls(
                                 params = emptyList(),
                                 block = Node.Block(
                                     stmts = listOf(Node.Stmt.Expr(expr = rootExpr))
-                                ).apply {
-                                    actualComposableInvocation = true
-                                }
+                                )
                             )
                         )
                     ),
@@ -938,9 +930,7 @@ private fun wrapComposableCalls(
                                             expr = rootExpr
                                         )
                                     )
-                                ).apply {
-                                    actualComposableInvocation = true
-                                }
+                                )
                             )
                         )
                     ),
