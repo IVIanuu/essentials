@@ -28,7 +28,15 @@ abstract class BooleanBoxTileService : BoxTileService<Boolean>() {
     override fun onClick() {
         super.onClick()
         scope.coroutineScope.launch {
-            box.set(!box.get())
+            val newValue = !box.get()
+            if (onRequestValueChange(newValue)) {
+                box.set(newValue)
+            }
         }
     }
+
+    protected open suspend fun onRequestValueChange(newValue: Boolean): Boolean {
+        return true
+    }
+
 }
