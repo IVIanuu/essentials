@@ -183,8 +183,8 @@ private class ObservableWindowInsets(
         viewInsets = other.viewInsets
     )
 
-    override var viewPadding by framed(viewPadding, true)
-    override var viewInsets by framed(viewInsets, true)
+    override var viewPadding by framed(viewPadding)
+    override var viewInsets by framed(viewInsets)
 
     override fun copy(viewPadding: EdgeInsets, viewInsets: EdgeInsets): WindowInsets =
         ObservableWindowInsets(

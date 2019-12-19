@@ -24,21 +24,21 @@ import androidx.compose.frames.readable
 import androidx.compose.frames.writable
 import kotlin.reflect.KProperty
 
-fun <T> framed(initial: T, distinct: Boolean = true) = FramedValue(
-    initial = initial,
-    distinct = distinct
-)
+fun <T> framed(
+    initial: T,
+    onSet: (T, T) -> Boolean = { currentValue, newValue -> currentValue != newValue }
+) = FramedValue(initial = initial, onSet = onSet)
 
 class FramedValue<T> internal constructor(
     initial: T,
-    private val distinct: Boolean
+    private val onSet: (T, T) -> Boolean
 ) : Framed {
 
     var value: T
         get() = next.readable(this).value
-        set(value) {
-            if (!distinct || this.value != value) {
-                next.writable(this).value = value
+        set(newValue) {
+            if (onSet(value, newValue)) {
+                next.writable(this).value = newValue
             }
         }
 

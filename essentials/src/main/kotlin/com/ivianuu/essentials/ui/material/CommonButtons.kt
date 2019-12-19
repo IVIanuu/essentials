@@ -17,10 +17,12 @@
 package com.ivianuu.essentials.ui.material
 
 import androidx.compose.Composable
+import androidx.compose.remember
 import androidx.ui.core.Alignment
 import androidx.ui.graphics.Image
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.navigation.navigator
+import com.ivianuu.essentials.ui.navigation.route
 import com.ivianuu.essentials.ui.resources.drawableResource
 
 @Composable
@@ -30,7 +32,7 @@ fun DrawerButton(
     val scaffold = scaffold
     IconButton(
         image = image,
-        onClick = { scaffold.toggleDrawer() }
+        onClick = { scaffold.isDrawerOpen = !scaffold.isDrawerOpen }
     )
 }
 
@@ -43,6 +45,22 @@ fun BackButton(
         image = image,
         onClick = { navigator.pop() }
     )
+}
+
+@Composable
+fun NavigationButton() {
+    val scaffold = scaffold
+    val navigator = navigator
+    val route = route
+    val canGoBack = remember { navigator.backStack.indexOf(route) > 0 }
+    when {
+        scaffold.hasDrawer -> {
+            DrawerButton()
+        }
+        canGoBack -> {
+            BackButton()
+        }
+    }
 }
 
 @Composable

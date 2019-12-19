@@ -74,8 +74,8 @@ fun Scaffold(
     scaffoldState.hasBottomBar = bottomBar != null
     scaffoldState.hasFab = fab != null
 
-    if (scaffoldState.drawerState == DrawerState.Opened) {
-        onBackPressed { scaffoldState.closeDrawer() }
+    if (scaffoldState.isDrawerOpen) {
+        onBackPressed { scaffoldState.isDrawerOpen = false }
     }
 
     ScaffoldAmbient.Provider(value = scaffoldState) {
@@ -93,8 +93,9 @@ fun Scaffold(
             }
             if (drawerContent != null) {
                 ModalDrawerLayout(
-                    drawerState = scaffoldState.drawerState,
-                    onStateChange = { scaffoldState.drawerState = it },
+                    drawerState = if (scaffoldState.isDrawerOpen) DrawerState.Opened else DrawerState.Closed,
+                    onStateChange = { scaffoldState.isDrawerOpen = it == DrawerState.Opened },
+                    gesturesEnabled = scaffoldState.isDrawerGesturesEnabled,
                     drawerContent = {
                         EsSurface {
                             drawerContent()
@@ -123,28 +124,11 @@ class ScaffoldState {
     var hasFab = false
         internal set
 
-    var drawerState by framed(DrawerState.Closed)
+    var isDrawerOpen by framed(false)
+    var isDrawerGesturesEnabled by framed(false)
 
     var fabPosition by framed(FabPosition.End)
     var bodyLayoutMode by framed(BodyLayoutMode.Wrap)
-
-    fun toggleDrawer() {
-        if (drawerState != DrawerState.Opened) {
-            openDrawer()
-        } else {
-            closeDrawer()
-        }
-    }
-
-    fun openDrawer() {
-        check(hasDrawer)
-        drawerState = DrawerState.Opened
-    }
-
-    fun closeDrawer() {
-        check(hasDrawer)
-        drawerState = DrawerState.Closed
-    }
 
     enum class BodyLayoutMode { ExtendTop, ExtendBottom, ExtendBoth, Wrap }
 
