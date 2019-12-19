@@ -23,6 +23,7 @@ import androidx.ui.material.Typography
 import androidx.ui.material.darkColorPalette
 import androidx.ui.material.lightColorPalette
 import androidx.ui.text.TextStyle
+import com.ivianuu.essentials.util.isDark
 
 inline fun Typography.editEach(edit: TextStyle.() -> TextStyle): Typography {
     return Typography(
@@ -51,11 +52,11 @@ fun ColorPalette(
     background: Color = if (isLight) Color.White else Color(0xFF121212),
     surface: Color = if (isLight) Color.White else Color(0xFF121212),
     error: Color = if (isLight) Color(0xFFB00020) else Color(0xFFCF6679),
-    onPrimary: Color = if (isLight) Color.White else Color.Black,
-    onSecondary: Color = if (isLight) Color.Black else Color.Black,
-    onBackground: Color = if (isLight) Color.Black else Color.White,
-    onSurface: Color = if (isLight) Color.Black else Color.White,
-    onError: Color = if (isLight) Color.White else Color.Black
+    onPrimary: Color = if (primary.isDark) Color.White else Color.Black,
+    onSecondary: Color = if (secondary.isDark) Color.White else Color.Black,
+    onBackground: Color = if (background.isDark) Color.White else Color.Black,
+    onSurface: Color = if (surface.isDark) Color.White else Color.Black,
+    onError: Color = if (error.isDark) Color.White else Color.Black
 ): ColorPalette = if (isLight) {
     lightColorPalette(
         primary = primary,
