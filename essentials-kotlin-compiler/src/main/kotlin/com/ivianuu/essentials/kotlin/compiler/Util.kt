@@ -39,6 +39,7 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
 import org.jetbrains.kotlin.resolve.descriptorUtil.module
 import org.jetbrains.kotlin.types.KotlinType
 import org.jetbrains.kotlin.types.Variance
+import org.jetbrains.kotlin.types.isError
 
 lateinit var messageCollector: MessageCollector
 
@@ -50,14 +51,19 @@ fun ClassDescriptor.asClassName() = fqNameSafe.asClassName()
 
 fun FqName.asClassName() = ClassName.bestGuess(asString()) // todo
 
-fun KotlinType.asTypeName(): TypeName {
+fun KotlinType.asTypeName(): TypeName? {
+    if (isError) return null
     val type = constructor.declarationDescriptor!!.fqNameSafe.asClassName()
     return (if (arguments.isNotEmpty()) {
-        type.parameterizedBy(*arguments.map { it.type.asTypeName() }.toTypedArray())
+        val parameters = arguments.map { it.type.asTypeName() }
+        if (parameters.any { it == null }) return null
+        type.parameterizedBy(*parameters.toTypedArray().requireNoNulls())
     } else type).copy(nullable = isMarkedNullable)
 }
 
-fun KotlinType.asType(): Node.Type {
+fun KotlinType.asType(): Node.Type? {
+    if (isError) return null
+
     (constructor.declarationDescriptor as? TypeParameterDescriptor)?.let { typeDescriptor ->
         val typeRef = Node.TypeRef.Simple(
             pieces = listOf(
@@ -80,9 +86,9 @@ fun KotlinType.asType(): Node.Type {
         val typeRef = Node.TypeRef.Func(
             receiverType = receiver?.asType(),
             params = params.map {
-                Node.TypeRef.Func.Param(null, it.type.asType())
+                Node.TypeRef.Func.Param(null, it.type.asType() ?: return null)
             },
-            type = returnType.asType()
+            type = returnType.asType() ?: return null
         )
         Node.Type(
             mods = if (isSuspendFunctionType) listOf(
@@ -102,7 +108,7 @@ fun KotlinType.asType(): Node.Type {
                 emptyList()
             } else {
                 arguments.map { projection ->
-                    val argType = projection.type.asType()
+                    val argType = projection.type.asType() ?: return null
                     argType.mods = when (projection.projectionKind) {
                         Variance.INVARIANT -> emptyList()
                         Variance.IN_VARIANCE -> listOf(
