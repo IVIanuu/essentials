@@ -20,20 +20,25 @@ import androidx.compose.Composable
 import androidx.compose.key
 import androidx.compose.remember
 import androidx.compose.state
+import androidx.compose.stateFor
 import androidx.ui.core.Alignment
+import androidx.ui.core.CurrentTextStyleProvider
 import androidx.ui.core.IntPx
 import androidx.ui.core.Layout
 import androidx.ui.core.Size
 import androidx.ui.core.Text
+import androidx.ui.core.TextField
 import androidx.ui.core.dp
 import androidx.ui.core.ipx
 import androidx.ui.foundation.Clickable
-import androidx.ui.foundation.ColoredRect
+import androidx.ui.foundation.contentColor
 import androidx.ui.foundation.shape.border.Border
 import androidx.ui.foundation.shape.corner.RoundedCornerShape
 import androidx.ui.graphics.Color
 import androidx.ui.layout.Center
 import androidx.ui.layout.Container
+import androidx.ui.layout.DpConstraints
+import androidx.ui.layout.EdgeInsets
 import androidx.ui.layout.LayoutExpandedWidth
 import androidx.ui.layout.Padding
 import androidx.ui.layout.Table
@@ -45,12 +50,17 @@ import androidx.ui.material.ripple.Ripple
 import androidx.ui.material.surface.Card
 import androidx.ui.res.stringResource
 import com.ivianuu.essentials.R
+import com.ivianuu.essentials.ui.common.hideKeyboardOnDispose
 import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
+import com.ivianuu.essentials.ui.layout.MainAxisAlignment
+import com.ivianuu.essentials.ui.layout.OverflowBox
 import com.ivianuu.essentials.ui.layout.Row
 import com.ivianuu.essentials.ui.layout.ScrollableList
 import com.ivianuu.essentials.ui.layout.SquaredBox
 import com.ivianuu.essentials.ui.layout.SquaredBoxFit
+import com.ivianuu.essentials.ui.layout.WidthSpacer
+import com.ivianuu.essentials.ui.material.EsSurface
 import com.ivianuu.essentials.ui.material.Icon
 import com.ivianuu.essentials.ui.material.Tab
 import com.ivianuu.essentials.ui.material.TabContent
@@ -61,6 +71,8 @@ import com.ivianuu.essentials.ui.material.copy
 import com.ivianuu.essentials.ui.material.currentIconStyle
 import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.essentials.ui.resources.drawableResource
+import com.ivianuu.essentials.util.toColor
+import com.ivianuu.essentials.util.toHexString
 
 fun ColorPickerRoute(
     initialColor: Color,
@@ -203,8 +215,8 @@ private fun ColorGrid(
                     columns = 4,
                     alignment = { Alignment.Center }
                 ) {
-                    val chunkedColors = items.chunked(4)
-                    chunkedColors.forEach { rowItems ->
+                    val chunkedItems = items.chunked(4)
+                    chunkedItems.forEach { rowItems ->
                         tableRow {
                             rowItems.forEach { item ->
                                 key(item) {
@@ -292,34 +304,80 @@ private fun ColorEditor(
     showAlphaSelector: Boolean
 ) {
     Column {
-        Container(
-            height = 72.dp,
-            modifier = LayoutExpandedWidth
-        ) {
-            // todo use surface once fixed
-            ColoredRect(color)
-            Text(
-                text = color.toString(),
-                style = MaterialTheme.typography().subtitle1.copy(
-                    color = contentColorFor(color)
-                )
-            )
-        }
+        ColorEditorHeader(
+            color = color,
+            showAlphaSelector = showAlphaSelector,
+            onColorChanged = onColorChanged
+        )
 
         ColorComponent.values()
-            .filter {
-                it != ColorComponent.Alpha || showAlphaSelector
-            }
+            .filter { it != ColorComponent.Alpha || showAlphaSelector }
             .forEach { component ->
                 key(component) {
                     ColorComponentItem(
                         component = component,
-                        value = component.read(color),
+                        value = component.extract(color),
                         onChanged = { onColorChanged(component.apply(color, it)) }
                     )
                 }
             }
     }
+}
+
+@Composable
+private fun ColorEditorHeader(
+    color: Color,
+    showAlphaSelector: Boolean,
+    onColorChanged: (Color) -> Unit
+) {
+    CurrentTextStyleProvider(value = MaterialTheme.typography().subtitle1) {
+        EsSurface(color = color) {
+            Container(
+                height = 72.dp,
+                padding = EdgeInsets(all = 8.dp),
+                modifier = LayoutExpandedWidth
+            ) {
+                Center {
+                    Row(
+                        mainAxisAlignment = MainAxisAlignment.Center,
+                        crossAxisAlignment = CrossAxisAlignment.Center
+                    ) {
+                        val (hexInput, setHexInput) = stateFor(color) {
+                            color.toHexString(includeAlpha = showAlphaSelector)
+                        }
+                        hideKeyboardOnDispose()
+                        Text("#")
+                        OverflowBox {
+                            TextField(
+                                value = hexInput,
+                                onValueChange = { newValue ->
+                                    if ((showAlphaSelector && newValue.length > 8) ||
+                                        (!showAlphaSelector && newValue.length > 6)
+                                    ) return@TextField
+
+                                    setHexInput(newValue)
+
+                                    if ((showAlphaSelector && newValue.length < 8) ||
+                                        (!showAlphaSelector && newValue.length < 6)
+                                    ) return@TextField
+
+                                    val newColor = try {
+                                        newValue.toColor()
+                                    } catch (e: Exception) {
+                                        e.printStackTrace()
+                                        null
+                                    }
+
+                                    if (newColor != null) onColorChanged(newColor)
+                                }
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    }
+
 }
 
 @Composable
@@ -370,11 +428,19 @@ private fun ColorComponentItem(
                 color = component.color()
             )
 
-            Text(
-                text = (255 * value).toInt().toString(),
-                modifier = Inflexible,
-                style = MaterialTheme.typography().subtitle1
-            )
+            WidthSpacer(8.dp)
+
+            Container(
+                constraints = DpConstraints(
+                    minWidth = 56.dp
+                )
+            ) {
+                Text(
+                    text = (255 * value).toInt().toString(),
+                    modifier = Inflexible,
+                    style = MaterialTheme.typography().subtitle1
+                )
+            }
         }
     }
 }
@@ -385,34 +451,34 @@ private enum class ColorComponent(
 ) {
     Alpha(
         title = "A",
-        color = { androidx.ui.foundation.contentColor() }
+        color = { contentColor().copy(alpha = 1f) }
     ) {
-        override fun read(color: Color) = color.alpha
+        override fun extract(color: Color) = color.alpha
         override fun apply(color: Color, value: Float) = color.copy(alpha = value)
     },
     Red(
         title = "R",
         color = { Color.Red }
     ) {
-        override fun read(color: Color) = color.red
+        override fun extract(color: Color) = color.red
         override fun apply(color: Color, value: Float) = color.copy(red = value)
     },
     Green(
         title = "G",
         color = { Color.Green }
     ) {
-        override fun read(color: Color) = color.green
+        override fun extract(color: Color) = color.green
         override fun apply(color: Color, value: Float) = color.copy(green = value)
     },
     Blue(
         title = "B",
         color = { Color.Blue }
     ) {
-        override fun read(color: Color) = color.blue
+        override fun extract(color: Color) = color.blue
         override fun apply(color: Color, value: Float) = color.copy(blue = value)
     };
 
-    abstract fun read(color: Color): Float
+    abstract fun extract(color: Color): Float
     abstract fun apply(color: Color, value: Float): Color
 }
 

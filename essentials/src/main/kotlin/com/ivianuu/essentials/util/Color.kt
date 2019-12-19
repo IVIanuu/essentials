@@ -16,20 +16,15 @@
 
 package com.ivianuu.essentials.util
 
+import androidx.core.graphics.ColorUtils
 import androidx.ui.graphics.Color
 import androidx.ui.graphics.toArgb
 
 val Color.isDark: Boolean
-    get() = !isLight
+    get() = ColorUtils.calculateLuminance(toArgb()) < 0.5
 
 val Color.isLight: Boolean
-    get() {
-        val darkness =
-            1 - (0.299 * red +
-                    0.587 * green +
-                    0.114 * blue) / 255
-        return darkness < 0.4
-    }
+    get() = !isDark
 
 fun Color.shifted(by: Float): Color {
     if (by == 1f) return this
@@ -50,3 +45,23 @@ fun Color.inverted(): Color = Color(
     green = 255 - green,
     blue = 255 - blue
 )
+
+fun Color.toHexString(includeAlpha: Boolean = true) = if (this.toArgb() == 0) {
+    if (includeAlpha) "00000000" else "000000"
+} else {
+    if (includeAlpha) {
+        val result = Integer.toHexString(this.toArgb())
+        if (result.length == 6) {
+            "00$result"
+        } else {
+            result
+        }
+    } else {
+        String.format("%06X", 0xFFFFFF and this.toArgb())
+    }
+}
+
+fun String.toColor(): Color {
+    val finalColorString = if (startsWith("#")) this else "#$this"
+    return Color(android.graphics.Color.parseColor(finalColorString))
+}
