@@ -18,6 +18,7 @@ package com.ivianuu.essentials.ui.common
 
 import androidx.compose.Composable
 import androidx.compose.ambient
+import androidx.compose.onDispose
 import androidx.ui.core.FocusManagerAmbient
 import com.ivianuu.essentials.ui.core.ActivityAmbient
 import com.ivianuu.essentials.util.hideInputMethod
@@ -40,4 +41,9 @@ fun showKeyboard(): (String) -> Unit {
 fun hideKeyboard(): () -> Unit {
     val activity = ambient(ActivityAmbient)
     return { activity.hideInputMethod() }
+}
+
+fun hideKeyboardOnDispose() {
+    val hideKeyboard = hideKeyboard()
+    onDispose { hideKeyboard() }
 }
