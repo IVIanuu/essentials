@@ -43,7 +43,7 @@ import android.view.WindowInsets as AndroidWindowInsets
 
 @Composable
 fun WindowInsetsManager(children: @Composable() () -> Unit) {
-    val androidComposeView = ambient(AndroidComposeViewAmbient)
+    val composeView = ambient(AndroidComposeViewAmbient)
 
     val density = ambientDensity()
     val (windowInsets, setWindowInsets) = state { WindowInsets() }
@@ -51,13 +51,13 @@ fun WindowInsetsManager(children: @Composable() () -> Unit) {
     val insetsListener = remember {
         View.OnApplyWindowInsetsListener { _, insets ->
             val statusBarHidden =
-                androidComposeView.windowSystemUiVisibility.containsFlag(View.SYSTEM_UI_FLAG_FULLSCREEN)
+                composeView.windowSystemUiVisibility.containsFlag(View.SYSTEM_UI_FLAG_FULLSCREEN)
             val navigationBarHidden =
-                androidComposeView.windowSystemUiVisibility.containsFlag(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)
+                composeView.windowSystemUiVisibility.containsFlag(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)
 
             var zeroSides = ZeroSides.None
             if (navigationBarHidden) {
-                zeroSides = calculateShouldZeroSides(androidComposeView.context)
+                zeroSides = calculateShouldZeroSides(composeView.context)
             }
 
             withDensity(density) {
@@ -73,7 +73,7 @@ fun WindowInsetsManager(children: @Composable() () -> Unit) {
                     top = 0.dp,
                     right = 0.dp,
                     bottom = if (navigationBarHidden) calculateBottomKeyboardInset(
-                        androidComposeView,
+                        composeView,
                         insets
                     ).ipx.toDp() else insets.systemWindowInsetBottom.ipx.toDp()
                 )
@@ -91,7 +91,7 @@ fun WindowInsetsManager(children: @Composable() () -> Unit) {
     val attachListener = remember {
         object : View.OnAttachStateChangeListener {
             override fun onViewAttachedToWindow(v: View) {
-                androidComposeView.requestApplyInsets()
+                composeView.requestApplyInsets()
             }
 
             override fun onViewDetachedFromWindow(v: View?) {
@@ -100,17 +100,17 @@ fun WindowInsetsManager(children: @Composable() () -> Unit) {
         } as View.OnAttachStateChangeListener // todo type
     }
 
-    onCommit(androidComposeView) {
-        androidComposeView.setOnApplyWindowInsetsListener(insetsListener)
-        androidComposeView.addOnAttachStateChangeListener(attachListener)
+    onCommit(composeView) {
+        composeView.setOnApplyWindowInsetsListener(insetsListener)
+        composeView.addOnAttachStateChangeListener(attachListener)
 
-        if (androidComposeView.isAttachedToWindow) {
-            androidComposeView.requestApplyInsets()
+        if (composeView.isAttachedToWindow) {
+            composeView.requestApplyInsets()
         }
 
         onDispose {
-            androidComposeView.setOnApplyWindowInsetsListener(null)
-            androidComposeView.removeOnAttachStateChangeListener(attachListener)
+            composeView.setOnApplyWindowInsetsListener(null)
+            composeView.removeOnAttachStateChangeListener(attachListener)
         }
     }
 

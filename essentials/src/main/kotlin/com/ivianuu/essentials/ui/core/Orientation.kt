@@ -30,7 +30,6 @@ enum class Orientation {
 @Composable
 fun OrientationProvider(children: @Composable() () -> Unit) {
     val configuration = ambient(ConfigurationAmbient)
-
     val orientation = remember(configuration.orientation) {
         when (configuration.orientation) {
             Configuration.ORIENTATION_PORTRAIT -> Orientation.Portrait

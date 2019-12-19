@@ -45,10 +45,10 @@ import com.ivianuu.essentials.ui.layout.NonNullSingleChildLayout
 fun AndroidView(view: View) {
     val context = ambient(ContextAmbient)
     val androidViewHolder = remember { AndroidViewHolder(context) }
-    val androidComposeView = ambient(AndroidComposeViewAmbient)
-    onPreCommit(androidViewHolder, androidComposeView) {
-        androidComposeView.addView(androidViewHolder)
-        onDispose { androidComposeView.removeView(androidViewHolder) }
+    val composeView = ambient(AndroidComposeViewAmbient)
+    onPreCommit(androidViewHolder, composeView) {
+        composeView.addView(androidViewHolder)
+        onDispose { composeView.removeView(androidViewHolder) }
     }
     remember(view) { androidViewHolder.view = view }
 
