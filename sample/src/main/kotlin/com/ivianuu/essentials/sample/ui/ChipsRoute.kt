@@ -30,7 +30,7 @@ import androidx.ui.layout.FlowRow
 import androidx.ui.layout.Padding
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.ripple.Ripple
-import com.ivianuu.essentials.ui.dialog.PrimaryColors
+import com.ivianuu.essentials.ui.dialog.ColorPickerPalette
 import com.ivianuu.essentials.ui.injekt.inject
 import com.ivianuu.essentials.ui.material.EsSurface
 import com.ivianuu.essentials.ui.material.EsTopAppBar
@@ -57,7 +57,7 @@ val ChipsRoute = Route {
 @Composable
 private fun Chip(@Pivotal name: String) {
     val toaster = inject<Toaster>()
-    val color = remember { PrimaryColors.toList().shuffled().first() }
+    val color = remember { ColorPickerPalette.values().flatMap { it.colors }.shuffled().first() }
     EsSurface(
         color = color,
         shape = RoundedCornerShape(16.dp)

@@ -21,19 +21,18 @@ import androidx.compose.key
 import androidx.compose.remember
 import androidx.compose.state
 import androidx.ui.core.Alignment
-import androidx.ui.core.Draw
 import androidx.ui.core.IntPx
 import androidx.ui.core.Layout
-import androidx.ui.core.PxSize
+import androidx.ui.core.Size
 import androidx.ui.core.Text
 import androidx.ui.core.dp
 import androidx.ui.core.ipx
-import androidx.ui.engine.geometry.Offset
 import androidx.ui.foundation.Clickable
 import androidx.ui.foundation.ColoredRect
-import androidx.ui.graphics.Canvas
+import androidx.ui.foundation.shape.border.Border
+import androidx.ui.foundation.shape.corner.RoundedCornerShape
 import androidx.ui.graphics.Color
-import androidx.ui.graphics.Paint
+import androidx.ui.layout.Center
 import androidx.ui.layout.Container
 import androidx.ui.layout.LayoutExpandedWidth
 import androidx.ui.layout.Padding
@@ -43,6 +42,7 @@ import androidx.ui.material.Slider
 import androidx.ui.material.SliderPosition
 import androidx.ui.material.TextButtonStyle
 import androidx.ui.material.ripple.Ripple
+import androidx.ui.material.surface.Card
 import androidx.ui.res.stringResource
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.layout.Column
@@ -51,16 +51,20 @@ import com.ivianuu.essentials.ui.layout.Row
 import com.ivianuu.essentials.ui.layout.ScrollableList
 import com.ivianuu.essentials.ui.layout.SquaredBox
 import com.ivianuu.essentials.ui.layout.SquaredBoxFit
+import com.ivianuu.essentials.ui.material.Icon
 import com.ivianuu.essentials.ui.material.Tab
 import com.ivianuu.essentials.ui.material.TabContent
 import com.ivianuu.essentials.ui.material.TabController
 import com.ivianuu.essentials.ui.material.TabRow
 import com.ivianuu.essentials.ui.material.contentColorFor
 import com.ivianuu.essentials.ui.material.copy
+import com.ivianuu.essentials.ui.material.currentIconStyle
 import com.ivianuu.essentials.ui.navigation.navigator
+import com.ivianuu.essentials.ui.resources.drawableResource
 
 fun ColorPickerRoute(
     initialColor: Color,
+    colorPalettes: List<ColorPickerPalette> = ColorPickerPalette.values().toList(),
     allowCustomArgb: Boolean = true,
     showAlphaSelector: Boolean = false,
     title: String? = null
@@ -68,6 +72,7 @@ fun ColorPickerRoute(
     val navigator = navigator
     ColorPickerDialog(
         initialColor = initialColor,
+        colorPalettes = colorPalettes,
         onColorSelected = { navigator.pop(result = it) },
         allowCustomArgb = allowCustomArgb,
         showAlphaSelector = showAlphaSelector,
@@ -80,8 +85,8 @@ fun ColorPickerRoute(
 
 @Composable
 fun ColorPickerDialog(
-    colors: List<Color> = PrimaryColors,
     initialColor: Color,
+    colorPalettes: List<ColorPickerPalette> = ColorPickerPalette.values().toList(),
     onColorSelected: (Color) -> Unit,
     allowCustomArgb: Boolean = true,
     showAlphaSelector: Boolean = false,
@@ -106,7 +111,7 @@ fun ColorPickerDialog(
         negativeButton = { DialogCloseButton(text = "Cancel") },
         content = {
             ColorPickerContent(
-                colors = colors,
+                colorPalettes = colorPalettes,
                 allowCustomArgb = allowCustomArgb,
                 showAlphaSelector = showAlphaSelector,
                 color = currentColor,
@@ -118,12 +123,19 @@ fun ColorPickerDialog(
 
 @Composable
 private fun ColorPickerContent(
-    colors: List<Color>,
+    colorPalettes: List<ColorPickerPalette>,
     allowCustomArgb: Boolean,
     showAlphaSelector: Boolean,
     color: Color,
     onColorChanged: (Color) -> Unit
 ) {
+    val colorGrid: @Composable() () -> Unit = {
+        ColorGrid(
+            colorPalettes = colorPalettes,
+            onColorSelected = onColorChanged
+        )
+    }
+    
     if (allowCustomArgb) {
         TabController(items = ColorPickerPage.values().toList()) {
             TightColumn {
@@ -148,12 +160,7 @@ private fun ColorPickerContent(
                     TabContent<ColorPickerPage>(keepState = true) { _, page ->
                         Container(height = 300.dp) {
                             when (page) {
-                                ColorPickerPage.Colors -> {
-                                    ColorGrid(
-                                        colors = colors,
-                                        onColorSelected = onColorChanged
-                                    )
-                                }
+                                ColorPickerPage.Colors -> colorGrid()
                                 ColorPickerPage.Editor -> {
                                     ColorEditor(
                                         color = color,
@@ -170,38 +177,53 @@ private fun ColorPickerContent(
     } else {
         Padding(
             left = 24.dp,
-            right = 24.dp
-        ) {
-            ColorGrid(
-                colors = colors,
-                onColorSelected = onColorChanged
-            )
-        }
+            right = 24.dp,
+            children = colorGrid
+        )
     }
 }
 
 @Composable
 private fun ColorGrid(
-    colors: List<Color>,
+    colorPalettes: List<ColorPickerPalette>,
     onColorSelected: (Color) -> Unit
 ) {
-    ScrollableList {
-        Padding(padding = 4.dp) {
-            Table(
-                columns = 4,
-                alignment = { Alignment.Center }
-            ) {
-                val chunkedColors = colors.chunked(4)
-                chunkedColors.forEach { rowColors ->
-                    tableRow {
-                        rowColors.forEach { color ->
-                            key(color) {
-                                ColorGridItem(
-                                    color = color,
-                                    onClick = {
-                                        onColorSelected(color)
+    val (currentPalette, setCurrentPalette) = state<ColorPickerPalette?> { null }
+    val items = remember(currentPalette) {
+        currentPalette?.colors
+            ?.map { ColorGridItem.Color(it) }
+            ?.let { listOf(ColorGridItem.Back) + it }
+            ?: colorPalettes.map { ColorGridItem.Color(it.front) }
+    }
+
+    key(currentPalette) {
+        ScrollableList {
+            Padding(padding = 4.dp) {
+                Table(
+                    columns = 4,
+                    alignment = { Alignment.Center }
+                ) {
+                    val chunkedColors = items.chunked(4)
+                    chunkedColors.forEach { rowItems ->
+                        tableRow {
+                            rowItems.forEach { item ->
+                                key(item) {
+                                    when (item) {
+                                        is ColorGridItem.Back -> ColorGridBackButton(
+                                            onClick = { setCurrentPalette(null) }
+                                        )
+                                        is ColorGridItem.Color -> ColorGridItem(
+                                            color = item.color,
+                                            onClick = {
+                                                if (currentPalette == null) {
+                                                    setCurrentPalette(colorPalettes.first { it.front == item.color })
+                                                } else {
+                                                    onColorSelected(item.color)
+                                                }
+                                            }
+                                        )
                                     }
-                                )
+                                }
                             }
                         }
                     }
@@ -211,24 +233,52 @@ private fun ColorGrid(
     }
 }
 
+private sealed class ColorGridItem {
+    object Back : ColorGridItem()
+    data class Color(val color: androidx.ui.graphics.Color) : ColorGridItem()
+}
+
 @Composable
 private fun ColorGridItem(
     color: Color,
     onClick: () -> Unit
 ) {
+    BaseColorGridItem(onClick = onClick) {
+        Card(
+            color = color,
+            contentColor = contentColorFor(color),
+            shape = RoundedCornerShape(50),
+            border = Border(
+                color = MaterialTheme.colors().onSurface,
+                width = 1.dp
+            ),
+            elevation = 0.dp
+        ) {
+            Container(expanded = true) {}
+        }
+    }
+}
+
+@Composable
+private fun ColorGridBackButton(onClick: () -> Unit) {
+    BaseColorGridItem(onClick = onClick) {
+        Icon(
+            image = drawableResource(R.drawable.es_ic_arrow_back),
+            style = currentIconStyle().copy(size = Size(width = 36.dp, height = 36.dp))
+        )
+    }
+}
+
+@Composable
+private fun BaseColorGridItem(
+    onClick: () -> Unit,
+    child: @Composable() () -> Unit
+) {
     Ripple(bounded = true) {
         Clickable(onClick = onClick) {
             Padding(padding = 4.dp) {
                 SquaredBox(fit = SquaredBoxFit.MatchWidth) {
-                    val paint = remember { Paint() }
-                    paint.color = color
-                    Draw { canvas: Canvas, parentSize: PxSize ->
-                        canvas.drawCircle(
-                            Offset(parentSize.width.value / 2, parentSize.height.value / 2),
-                            parentSize.width.value / 2,
-                            paint
-                        )
-                    }
+                    Center(children = child)
                 }
             }
         }
