@@ -22,7 +22,7 @@ import androidx.ui.core.dp
 import androidx.ui.core.max
 import androidx.ui.layout.EdgeInsets
 import androidx.ui.layout.Padding
-import com.ivianuu.essentials.ui.core.WithMediaQuery
+import com.ivianuu.essentials.ui.core.WithWindowInsets
 
 @Composable
 fun SafeArea(
@@ -33,25 +33,40 @@ fun SafeArea(
     minimum: EdgeInsets? = null,
     children: @Composable() () -> Unit
 ) {
-    WithMediaQuery { mediaQuery ->
+    WithWindowInsets { windowInsets ->
+        fun safeAreaValue(
+            enabled: Boolean,
+            insetsValue: Dp,
+            paddingValue: Dp,
+            min: Dp?
+        ): Dp {
+            if (!enabled) return 0.dp
+            return max(max(insetsValue, paddingValue), min ?: 0.dp)
+        }
+
         val leftPadding = safeAreaValue(
             left,
-            mediaQuery.viewInsets.left,
-            mediaQuery.viewPadding.left,
+            windowInsets.viewInsets.left,
+            windowInsets.viewPadding.left,
             minimum?.left
         )
         val topPadding =
-            safeAreaValue(top, mediaQuery.viewInsets.top, mediaQuery.viewPadding.top, minimum?.top)
+            safeAreaValue(
+                top,
+                windowInsets.viewInsets.top,
+                windowInsets.viewPadding.top,
+                minimum?.top
+            )
         val rightPadding = safeAreaValue(
             right,
-            mediaQuery.viewInsets.right,
-            mediaQuery.viewPadding.right,
+            windowInsets.viewInsets.right,
+            windowInsets.viewPadding.right,
             minimum?.right
         )
         val bottomPadding = safeAreaValue(
             bottom,
-            mediaQuery.viewInsets.bottom,
-            mediaQuery.viewPadding.bottom,
+            windowInsets.viewInsets.bottom,
+            windowInsets.viewPadding.bottom,
             minimum?.bottom
         )
         Padding(
@@ -62,14 +77,4 @@ fun SafeArea(
             children = children
         )
     }
-}
-
-private fun safeAreaValue(
-    enabled: Boolean,
-    insetsValue: Dp,
-    paddingValue: Dp,
-    min: Dp?
-): Dp {
-    if (!enabled) return 0.dp
-    return max(max(insetsValue, paddingValue), min ?: 0.dp)
 }

@@ -26,7 +26,6 @@ import androidx.ui.core.setContent
 import com.ivianuu.essentials.injection.RetainedActivityComponent
 import com.ivianuu.essentials.injection.initRetainedActivityComponentIfNeeded
 import com.ivianuu.essentials.injection.retainedActivityComponent
-import com.ivianuu.essentials.ui.core.AndroidComposeViewContainer
 import com.ivianuu.essentials.ui.core.EsEnvironment
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.NavigatorState
@@ -60,15 +59,6 @@ abstract class EsActivity : AppCompatActivity(), InjektTrait {
     protected open val containerId: Int
         get() = android.R.id.content
 
-    private val composeViewContainer by unsafeLazy {
-        AndroidComposeViewContainer(this).apply {
-            layoutParams = ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT
-            )
-        }
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -78,10 +68,8 @@ abstract class EsActivity : AppCompatActivity(), InjektTrait {
             setContentView(layoutRes)
         }
 
-        val container = findViewById<ViewGroup>(containerId)
-        container.addView(composeViewContainer)
-        composeViewContainer.setContent {
-            WrapContentWithEnvironment(composeViewContainer) {
+        findViewById<ViewGroup>(containerId).setContent {
+            WrapContentWithEnvironment() {
                 content()
             }
         }
@@ -89,18 +77,14 @@ abstract class EsActivity : AppCompatActivity(), InjektTrait {
 
     override fun onDestroy() {
         // todo use disposeComposition once fixed
-        composeViewContainer.setContent { }
+        findViewById<ViewGroup>(containerId).setContent { }
         super.onDestroy()
     }
 
     @Composable
-    protected open fun WrapContentWithEnvironment(
-        container: AndroidComposeViewContainer,
-        content: @Composable() () -> Unit
-    ) {
+    protected open fun WrapContentWithEnvironment(content: @Composable() () -> Unit) {
         EsEnvironment(
             activity = this,
-            container = container,
             component = component,
             coroutineContext = lifecycleScope.coroutineContext,
             children = content

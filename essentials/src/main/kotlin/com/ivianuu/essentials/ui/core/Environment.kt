@@ -22,8 +22,6 @@ import androidx.compose.ambient
 import androidx.compose.remember
 import androidx.ui.core.CoroutineContextAmbient
 import androidx.ui.core.FocusManagerAmbient
-import androidx.ui.core.ambientDensity
-import androidx.ui.foundation.isSystemInDarkTheme
 import com.ivianuu.essentials.ui.common.KeyboardManager
 import com.ivianuu.essentials.ui.common.KeyboardManagerAmbient
 import com.ivianuu.essentials.ui.common.MultiAmbientProvider
@@ -37,7 +35,6 @@ import kotlin.coroutines.CoroutineContext
 @Composable
 fun EsEnvironment(
     activity: ComponentActivity,
-    container: AndroidComposeViewContainer,
     component: Component,
     coroutineContext: CoroutineContext,
     children: @Composable() () -> Unit
@@ -50,18 +47,8 @@ fun EsEnvironment(
         KeyboardManagerAmbient with remember { KeyboardManager(focusManager, activity) },
         SystemBarManagerAmbient with remember { SystemBarManager(activity) }
     ) {
-        val viewportMetrics = container.viewportMetrics
-        val density = ambientDensity()
-        val isDarkTheme = isSystemInDarkTheme()
-
-        val mediaQuery = MediaQuery(
-            size = viewportMetrics.size,
-            viewPadding = viewportMetrics.viewPadding,
-            viewInsets = viewportMetrics.viewInsets,
-            density = density,
-            darkMode = isDarkTheme
-        )
-
-        MediaQueryProvider(value = mediaQuery, children = children)
+        OrientationProvider {
+            WindowInsetsManager(children = children)
+        }
     }
 }

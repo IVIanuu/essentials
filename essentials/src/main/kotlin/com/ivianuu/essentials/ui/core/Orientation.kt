@@ -16,6 +16,30 @@
 
 package com.ivianuu.essentials.ui.core
 
+import android.content.res.Configuration
+import androidx.compose.Ambient
+import androidx.compose.Composable
+import androidx.compose.ambient
+import androidx.compose.remember
+import androidx.ui.core.ConfigurationAmbient
+
 enum class Orientation {
     Portrait, Landscape
 }
+
+@Composable
+fun OrientationProvider(children: @Composable() () -> Unit) {
+    val configuration = ambient(ConfigurationAmbient)
+
+    val orientation = remember(configuration.orientation) {
+        when (configuration.orientation) {
+            Configuration.ORIENTATION_PORTRAIT -> Orientation.Portrait
+            Configuration.ORIENTATION_LANDSCAPE -> Orientation.Landscape
+            else -> error("Unexpected orientation ${configuration.orientation}")
+        }
+    }
+
+    OrientationAmbient.Provider(value = orientation, children = children)
+}
+
+val OrientationAmbient = Ambient.of<Orientation>()
