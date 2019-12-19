@@ -24,17 +24,19 @@ import kotlinx.coroutines.launch
  * Tile which is driven by a boolean pref
  */
 @TargetApi(24)
-abstract class BooleanBoxTileService : BoxTileService<Boolean>() {
+abstract class CycleBoxTileService<T> : BoxTileService<T>() {
     override fun onClick() {
         super.onClick()
         scope.coroutineScope.launch {
-            val newValue = !box.get()
+            val newValue = box.get().next()
             if (onRequestValueChange(newValue)) {
                 box.set(newValue)
             }
         }
     }
 
-    protected open suspend fun onRequestValueChange(newValue: Boolean): Boolean = true
+    protected abstract fun T.next(): T
+
+    protected open suspend fun onRequestValueChange(newValue: T): Boolean = true
 
 }
