@@ -27,26 +27,23 @@ import androidx.ui.material.ProvideEmphasis
 import androidx.ui.material.ripple.CurrentRippleTheme
 import androidx.ui.material.ripple.DefaultRippleEffectFactory
 import androidx.ui.material.ripple.RippleTheme
+import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.util.isDark
 
 @Composable
 fun contentColorFor(color: Color): Color {
-    var result = with(MaterialTheme.colors()) {
+    return with(MaterialTheme.colors()) {
         when (color) {
-            primary -> onPrimary
-            primaryVariant -> onPrimary
-            secondary -> onSecondary
-            secondaryVariant -> onSecondary
-            background -> onBackground
-            surface -> onSurface
-            error -> onError
-            else -> null
+            primary -> onPrimary.also { d { "primary" } }
+            primaryVariant -> onPrimary.also { d { "primary variant" } }
+            secondary -> onSecondary.also { d { "secondary" } }
+            secondaryVariant -> onSecondary.also { d { "secondary variant" } }
+            background -> onBackground.also { d { "background" } }
+            surface -> onSurface.also { d { "surface" } }
+            error -> onError.also { d { "error" } }
+            else -> if (color.isDark) Color.White.also { d { "dark" } } else Color.Black.also { d { "light" } }
         }
     }
-    if (result == null) {
-        result = if (color.isDark) Color.White else Color.Black
-    }
-    return result
 }
 
 @Composable
