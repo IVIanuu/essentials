@@ -18,10 +18,14 @@ package com.ivianuu.essentials.ui.core
 
 import androidx.activity.ComponentActivity
 import androidx.compose.Composable
+import androidx.compose.ambient
 import androidx.compose.remember
 import androidx.ui.core.CoroutineContextAmbient
+import androidx.ui.core.FocusManagerAmbient
 import androidx.ui.core.ambientDensity
 import androidx.ui.foundation.isSystemInDarkTheme
+import com.ivianuu.essentials.ui.common.KeyboardManager
+import com.ivianuu.essentials.ui.common.KeyboardManagerAmbient
 import com.ivianuu.essentials.ui.common.MultiAmbientProvider
 import com.ivianuu.essentials.ui.common.with
 import com.ivianuu.essentials.ui.injekt.ComponentAmbient
@@ -38,10 +42,12 @@ fun EsEnvironment(
     coroutineContext: CoroutineContext,
     children: @Composable() () -> Unit
 ) {
+    val focusManager = ambient(FocusManagerAmbient)
     MultiAmbientProvider(
         ActivityAmbient with activity,
         ComponentAmbient with component,
         CoroutineContextAmbient with coroutineContext,
+        KeyboardManagerAmbient with remember { KeyboardManager(focusManager, activity) },
         SystemBarManagerAmbient with remember { SystemBarManager(activity) }
     ) {
         val viewportMetrics = container.viewportMetrics

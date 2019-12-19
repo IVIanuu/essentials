@@ -16,7 +16,9 @@
 
 package com.ivianuu.essentials.sample.ui
 
+import androidx.compose.ambient
 import androidx.compose.onActive
+import androidx.compose.onDispose
 import androidx.compose.remember
 import androidx.ui.core.Alignment
 import androidx.ui.core.Opacity
@@ -29,10 +31,9 @@ import androidx.ui.layout.Container
 import androidx.ui.material.FloatingActionButton
 import androidx.ui.material.MaterialTheme
 import com.github.ajalt.timberkt.d
+import com.ivianuu.essentials.ui.common.KeyboardManagerAmbient
 import com.ivianuu.essentials.ui.common.framed
-import com.ivianuu.essentials.ui.common.hideKeyboard
 import com.ivianuu.essentials.ui.common.ref
-import com.ivianuu.essentials.ui.common.showKeyboard
 import com.ivianuu.essentials.ui.layout.ScrollableList
 import com.ivianuu.essentials.ui.material.EsTopAppBar
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -50,8 +51,8 @@ val TextInputRoute = Route {
         state.inputValue.isEmpty() || state.inputValue in it.toLowerCase().trim()
     }
 
-    val hideKeyboard = hideKeyboard()
-    val showKeyboard = showKeyboard("id")
+    val keyboardManager = ambient(KeyboardManagerAmbient)
+    onDispose { keyboardManager.hideKeyboard() }
 
     Scaffold(
         topAppBar = {
@@ -62,7 +63,7 @@ val TextInputRoute = Route {
                             expanded = true,
                             alignment = Alignment.CenterLeft
                         ) {
-                            Clickable(onClick = { showKeyboard() }) {
+                            Clickable(onClick = { keyboardManager.showKeyboard("id") }) {
                                 if (state.inputValue.isEmpty()) {
                                     Opacity(0.5f) {
                                         Text(
@@ -80,7 +81,7 @@ val TextInputRoute = Route {
                             }
                         }
 
-                        onActive { showKeyboard() }
+                        onActive { keyboardManager.showKeyboard("id") }
                     } else {
                         Text("Text input")
                     }
@@ -94,7 +95,7 @@ val TextInputRoute = Route {
                     ref { scrollerPosition.value }
 
                 if (scrollerPosition.value != lastScrollPosition.value) {
-                    hideKeyboard()
+                    keyboardManager.hideKeyboard()
                     if (state.searchVisible && state.inputValue.isEmpty()) {
                         state.searchVisible = false
                     }

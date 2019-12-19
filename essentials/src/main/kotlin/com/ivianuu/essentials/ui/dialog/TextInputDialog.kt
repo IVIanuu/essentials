@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.ui.dialog
 
 import androidx.compose.Composable
+import androidx.compose.ambient
 import androidx.compose.onActive
 import androidx.compose.state
 import androidx.ui.core.Opacity
@@ -26,9 +27,8 @@ import androidx.ui.input.KeyboardType
 import androidx.ui.material.MaterialTheme
 import androidx.ui.res.stringResource
 import com.ivianuu.essentials.R
+import com.ivianuu.essentials.ui.common.KeyboardManagerAmbient
 import com.ivianuu.essentials.ui.common.asTextComposable
-import com.ivianuu.essentials.ui.common.hideKeyboard
-import com.ivianuu.essentials.ui.common.showKeyboard
 import com.ivianuu.essentials.ui.navigation.navigator
 
 fun TextInputRoute(
@@ -80,9 +80,6 @@ fun TextInputDialog(
     negativeButton: (@Composable() () -> Unit)? = null,
     neutralButton: (@Composable() () -> Unit)? = null
 ) {
-    val showKeyboard = showKeyboard(TextInputDialogInputId)
-    val hideKeyboard = hideKeyboard()
-
     MaterialDialog(
         buttonLayout = buttonLayout,
         icon = icon,
@@ -104,10 +101,11 @@ fun TextInputDialog(
                 textStyle = MaterialTheme.typography().subtitle1
             )
 
+            val keyboardManager = ambient(KeyboardManagerAmbient)
             onActive {
-                showKeyboard()
+                keyboardManager.showKeyboard(TextInputDialogInputId)
                 onDispose {
-                    hideKeyboard()
+                    keyboardManager.hideKeyboard()
                 }
             }
         },

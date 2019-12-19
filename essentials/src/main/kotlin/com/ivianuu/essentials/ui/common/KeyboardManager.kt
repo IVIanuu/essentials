@@ -16,34 +16,31 @@
 
 package com.ivianuu.essentials.ui.common
 
+import android.app.Activity
+import androidx.compose.Ambient
 import androidx.compose.Composable
 import androidx.compose.ambient
 import androidx.compose.onDispose
-import androidx.ui.core.FocusManagerAmbient
-import com.ivianuu.essentials.ui.core.ActivityAmbient
+import androidx.ui.core.input.FocusManager
 import com.ivianuu.essentials.util.hideInputMethod
 
-// todo refactor api
+class KeyboardManager(
+    private val focusManager: FocusManager,
+    private val activity: Activity
+) {
+    fun showKeyboard(id: String) {
+        focusManager.requestFocusById(id)
+    }
 
-@Composable
-fun showKeyboard(id: String): () -> Unit {
-    val showKeyboard = showKeyboard()
-    return { showKeyboard(id) }
+    fun hideKeyboard() {
+        activity.hideInputMethod()
+    }
 }
 
-@Composable
-fun showKeyboard(): (String) -> Unit {
-    val focusManager = ambient(FocusManagerAmbient)
-    return { focusManager.requestFocusById(it) }
-}
+val KeyboardManagerAmbient = Ambient.of<KeyboardManager>()
 
 @Composable
-fun hideKeyboard(): () -> Unit {
-    val activity = ambient(ActivityAmbient)
-    return { activity.hideInputMethod() }
-}
-
 fun hideKeyboardOnDispose() {
-    val hideKeyboard = hideKeyboard()
-    onDispose { hideKeyboard() }
+    val keyboardManager = ambient(KeyboardManagerAmbient)
+    onDispose { keyboardManager.hideKeyboard() }
 }
