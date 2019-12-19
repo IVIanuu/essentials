@@ -33,3 +33,5 @@ data class Tile(
         Unavailable, Active, Inactive
     }
 }
+
+fun Boolean.toTileState() = if (this) Tile.State.Active else Tile.State.Inactive
