@@ -41,15 +41,15 @@ data class SystemBarStyle(
 
 @Composable
 fun ProvideCurrentSystemBarStyle(
-    style: SystemBarStyle,
+    value: SystemBarStyle,
     children: @Composable() () -> Unit
 ) {
     val systemBarManager = ambient(SystemBarManagerAmbient)
-    onPreCommit(style) {
-        systemBarManager.registerStyle(style)
-        onDispose { systemBarManager.unregisterStyle(style) }
+    onPreCommit(value) {
+        systemBarManager.registerStyle(value)
+        onDispose { systemBarManager.unregisterStyle(value) }
     }
-    SystemBarStyleAmbient.Provider(value = style, children = children)
+    SystemBarStyleAmbient.Provider(value = value, children = children)
 }
 
 @Composable

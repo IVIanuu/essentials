@@ -35,6 +35,6 @@ fun EsTheme(
         colors = colors,
         typography = typography
     ) {
-        ProvideCurrentSystemBarStyle(style = systemBarConfig, children = children)
+        ProvideCurrentSystemBarStyle(value = systemBarConfig, children = children)
     }
 }
