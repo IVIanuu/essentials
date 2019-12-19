@@ -47,8 +47,10 @@ fun EsEnvironment(
         KeyboardManagerAmbient with remember { KeyboardManager(focusManager, activity) },
         SystemBarManagerAmbient with remember { SystemBarManager(activity) }
     ) {
-        OrientationProvider {
-            WindowInsetsManager(children = children)
+        ConfigurationFix {
+            OrientationProvider {
+                WindowInsetsManager(children = children)
+            }
         }
     }
 }
