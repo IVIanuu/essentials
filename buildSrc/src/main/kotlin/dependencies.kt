@@ -103,7 +103,7 @@ object Deps {
     }
 
     const val essentialsGradlePlugin =
-        "com.ivianuu.essentials:essentials-gradle-plugin:0.0.1-dev325"
+        "com.ivianuu.essentials:essentials-gradle-plugin:0.0.1-dev327"
 
     object Injekt {
         private const val version = "0.0.1-dev85"
