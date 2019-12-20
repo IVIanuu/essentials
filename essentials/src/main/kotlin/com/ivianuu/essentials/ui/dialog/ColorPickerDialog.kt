@@ -452,7 +452,7 @@ private enum class ColorComponent(
 ) {
     Alpha(
         title = "A",
-        color = { contentColor().copy(alpha = 1f) }
+        color = { contentColor() }
     ) {
         override fun extract(color: Color) = color.alpha
         override fun apply(color: Color, value: Float) = color.copy(alpha = value)
