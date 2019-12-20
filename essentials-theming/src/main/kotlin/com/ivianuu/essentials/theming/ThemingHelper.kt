@@ -22,8 +22,11 @@ import android.content.Intent
 import android.content.res.Configuration
 import android.content.res.Resources
 import android.os.PowerManager
+import androidx.compose.Immutable
+import androidx.ui.graphics.Color
 import com.ivianuu.essentials.app.AppService
 import com.ivianuu.essentials.messaging.BroadcastFactory
+import com.ivianuu.essentials.ui.material.ColorPalette
 import com.ivianuu.injekt.Single
 import com.ivianuu.injekt.android.ApplicationScope
 import kotlinx.coroutines.GlobalScope
@@ -32,6 +35,7 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
@@ -43,33 +47,48 @@ import java.util.Calendar
 
 @ApplicationScope
 @Single
-class TwilightHelper(
+class ThemingHelper(
     private val app: Application,
     private val broadcastFactory: BroadcastFactory,
     private val resources: Resources,
     private val powerManager: PowerManager,
-    prefs: ThemePrefs
+    private val prefs: ThemePrefs
 ) : AppService {
 
-    private val _isDark = ConflatedBroadcastChannel(false)
-    val isDark: Flow<Boolean> get() = _isDark.asFlow()
-    val currentIsDark: Boolean get() = _isDark.value
+    private val _state =
+        ConflatedBroadcastChannel(ThemeState(Color.Transparent, Color.Transparent, false, false))
+    val state: Flow<ThemeState> get() = _state.asFlow()
+    val currentState: ThemeState get() = _state.value
 
     init {
-        prefs.twilightMode.asFlow()
-            .flatMapLatest { mode ->
-                when (mode) {
-                    TwilightMode.System -> system()
-                    TwilightMode.Light -> flowOf(false)
-                    TwilightMode.Dark -> flowOf(true)
-                    TwilightMode.Battery -> battery()
-                    TwilightMode.Time -> time()
-                }
-            }
-            .distinctUntilChanged()
-            .onEach { _isDark.offer(it) }
+        combine(
+            prefs.primaryColor.asFlow(),
+            prefs.secondaryColor.asFlow(),
+            prefs.useBlack.asFlow(),
+            isDark()
+        ) { primaryColor, secondaryColor, useBlack, isDark ->
+            ThemeState(
+                primaryColor = primaryColor,
+                secondaryColor = secondaryColor,
+                useBlack = useBlack,
+                isDark = isDark
+            )
+        }
+            .onEach { _state.offer(it) }
             .launchIn(GlobalScope)
     }
+
+    private fun isDark() = prefs.twilightMode.asFlow()
+        .flatMapLatest { mode ->
+            when (mode) {
+                TwilightMode.System -> system()
+                TwilightMode.Light -> flowOf(false)
+                TwilightMode.Dark -> flowOf(true)
+                TwilightMode.Battery -> battery()
+                TwilightMode.Time -> time()
+            }
+        }
+        .distinctUntilChanged()
 
     private fun battery() = broadcastFactory.create(PowerManager.ACTION_POWER_SAVE_MODE_CHANGED)
         .map { Unit }
@@ -107,4 +126,22 @@ class TwilightHelper(
         app.registerComponentCallbacks(callbacks)
         awaitClose { app.unregisterComponentCallbacks(callbacks) }
     }
+}
+
+@Immutable
+data class ThemeState(
+    val primaryColor: Color,
+    val secondaryColor: Color,
+    val useBlack: Boolean,
+    val isDark: Boolean
+) {
+    val backgroundColor =
+        if (!isDark) Color.White else if (useBlack) Color.Black else Color(0xFF121212)
+    val colors = ColorPalette(
+        isLight = !isDark,
+        primary = primaryColor,
+        secondary = secondaryColor,
+        background = backgroundColor,
+        surface = backgroundColor
+    )
 }

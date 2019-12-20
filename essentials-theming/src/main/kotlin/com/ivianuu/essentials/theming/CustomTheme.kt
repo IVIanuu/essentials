@@ -16,73 +16,64 @@
 
 package com.ivianuu.essentials.theming
 
+import androidx.animation.TweenBuilder
 import androidx.compose.Composable
+import androidx.compose.Immutable
 import androidx.compose.remember
-import androidx.ui.graphics.Color
+import androidx.ui.animation.animatedFloat
+import androidx.ui.material.ColorPalette
 import androidx.ui.material.Typography
-import com.ivianuu.essentials.ui.box.unfoldBox
+import com.ivianuu.essentials.ui.common.ref
 import com.ivianuu.essentials.ui.coroutines.collect
 import com.ivianuu.essentials.ui.injekt.inject
-import com.ivianuu.essentials.ui.material.ColorPalette
 import com.ivianuu.essentials.ui.material.EsTheme
+import com.ivianuu.essentials.ui.material.lerp
 
 @Composable
 fun CustomTheme(
     typography: Typography = Typography(),
     children: @Composable() () -> Unit
 ) {
-    val prefs = inject<ThemePrefs>()
+    val helper = inject<ThemingHelper>()
+    val state = collect(remember { helper.state }, helper.currentState)
 
-    val primaryColor = unfoldBox(prefs.primaryColor).value
-    val secondaryColor = unfoldBox(prefs.secondaryColor).value
-    val useBlack = unfoldBox(prefs.useBlack).value
-    val helper = inject<TwilightHelper>()
-    val isDark = collect(remember { helper.isDark }, helper.currentIsDark)
-
-    val backgroundColor = remember(isDark, useBlack) {
-        if (!isDark) Color.White else if (useBlack) Color.Black else Color(0xFF121212)
-    }
-
-    val colorPalette = ColorPalette(
-        isLight = !isDark,
-        primary = primaryColor,
-        secondary = secondaryColor,
-        background = backgroundColor,
-        surface = backgroundColor
-    )
-
-    EsTheme(
-        colors = colorPalette,
-        typography = typography,
+    RenderTheme(
+        colors = state.colors,
+        typography = remember(typography) { TypographyWrapper(typography) },
         children = children
     )
+}
 
-    /*Transition(
-        definition = twilightTransitionDefinition,
-        toState = isDark
-    ) { state ->
-        val colors = lerp(lightColors, darkColors, state[Fraction])
-        EsTheme(
-            colors = colors,
-            typography = typography,
-            systemBarConfig = SystemBarStyle(
-                statusBarColor = colors.primary.darken()
-            ),
-            children = children
+@Immutable
+private data class TypographyWrapper(val typography: Typography)
+
+@Composable
+private fun RenderTheme(
+    colors: ColorPalette,
+    typography: TypographyWrapper,
+    children: @Composable() () -> Unit
+) {
+    val animation = animatedFloat(0f)
+    val lastColors = ref { colors }
+    val currentColors = ref { colors }
+
+    if (colors != currentColors.value) {
+        lastColors.value = currentColors.value
+        currentColors.value = colors
+        animation.snapTo(0f)
+        animation.animateTo(
+            targetValue = 1f,
+            anim = TweenBuilder<Float>().apply {
+                duration = 220
+            }
         )
-    }*/
-}
-
-/*
-private val Fraction = FloatPropKey()
-private val twilightTransitionDefinition = transitionDefinition {
-    state(true) { set(Fraction, 1f) }
-    state(false) { set(Fraction, 0f) }
-
-    transition {
-        Fraction using tween {
-            duration = 300
-        }
     }
+
+    EsTheme(
+        colors = remember(lastColors.value, currentColors.value, animation.value) {
+            lerp(lastColors.value, currentColors.value, animation.value)
+        },
+        typography = typography.typography,
+        children = children
+    )
 }
-*/

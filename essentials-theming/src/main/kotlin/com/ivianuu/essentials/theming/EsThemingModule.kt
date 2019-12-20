@@ -20,5 +20,5 @@ import com.ivianuu.essentials.app.bindAppService
 import com.ivianuu.injekt.Module
 
 val EsThemingModule = Module {
-    bindAppService<TwilightHelper>()
+    bindAppService<ThemingHelper>()
 }

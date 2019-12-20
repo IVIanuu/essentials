@@ -21,6 +21,7 @@ import androidx.compose.Pivotal
 import androidx.ui.core.Text
 import androidx.ui.material.RadioButton
 import androidx.ui.res.stringResource
+import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.box.unfoldBox
 import com.ivianuu.essentials.ui.common.ListScreen
 import com.ivianuu.essentials.ui.injekt.inject
@@ -71,6 +72,7 @@ private fun TwilightModeItem(
         title = { Text(stringResource(mode.titleRes)) },
         subtitle = { Text(stringResource(mode.descRes)) },
         trailing = {
+            d { "invoke radio buttton" }
             RadioButton(
                 selected = isSelected,
                 onSelect = onClick

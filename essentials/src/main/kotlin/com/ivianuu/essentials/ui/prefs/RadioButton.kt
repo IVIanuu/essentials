@@ -21,10 +21,12 @@ import androidx.compose.Pivotal
 import androidx.ui.graphics.Image
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.RadioButton
+import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.store.Box
 import com.ivianuu.essentials.ui.common.AbsorbPointer
 import com.ivianuu.essentials.ui.common.asIconComposable
 import com.ivianuu.essentials.ui.common.asTextComposable
+
 @Composable
 fun RadioButtonPreference(
     @Pivotal box: Box<Boolean>,
@@ -64,6 +66,7 @@ fun RadioButtonPreference(
             leading = leading,
             trailing = {
                 AbsorbPointer {
+                    d { "invoke radio" }
                     RadioButton(
                         color = MaterialTheme.colors().secondary,
                         selected = context.currentValue,
