@@ -67,9 +67,9 @@ fun <T> SingleChoiceListPreference(
         valueController = valueController,
         enabled = enabled,
         dependencies = dependencies,
-        title = title,
-        summary = summary,
-        leading = leading,
+        title = title?.let { { title() } },
+        summary = summary?.let { { summary() } },
+        leading = leading?.let { { leading() } },
         dialog = { context, dismiss ->
             SingleChoiceListDialog(
                 items = items,

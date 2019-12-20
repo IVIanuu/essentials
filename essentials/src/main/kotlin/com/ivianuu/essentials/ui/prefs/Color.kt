@@ -17,53 +17,53 @@
 package com.ivianuu.essentials.ui.prefs
 
 import androidx.compose.Composable
-import androidx.compose.Immutable
 import androidx.compose.Pivotal
-import androidx.compose.stateFor
-import androidx.ui.core.Text
+import androidx.ui.core.dp
+import androidx.ui.foundation.shape.border.Border
+import androidx.ui.graphics.Color
 import androidx.ui.graphics.Image
-import androidx.ui.res.stringResource
-import com.ivianuu.essentials.R
+import androidx.ui.material.MaterialTheme
 import com.ivianuu.essentials.store.Box
 import com.ivianuu.essentials.ui.common.asIconComposable
 import com.ivianuu.essentials.ui.common.asTextComposable
-import com.ivianuu.essentials.ui.dialog.DialogButton
-import com.ivianuu.essentials.ui.dialog.DialogCloseButton
-import com.ivianuu.essentials.ui.dialog.MultiChoiceListDialog
+import com.ivianuu.essentials.ui.dialog.ColorPickerDialog
+import com.ivianuu.essentials.ui.dialog.ColorPickerPalette
+import com.ivianuu.essentials.ui.layout.SizedBox
+import com.ivianuu.essentials.ui.material.EsSurface
 
 @Composable
-fun <T> MultiChoiceListPreference(
-    @Pivotal box: Box<Set<T>>,
+fun ColorPreference(
+    @Pivotal box: Box<Color>,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
     title: String? = null,
     summary: String? = null,
     image: Image? = null,
-    dialogTitle: String? = title,
-    items: List<MultiChoiceListPreference.Item<T>>
+    dialogTitle: String? = title
 ) {
-    MultiChoiceListPreference(
+    ColorPreference(
         valueController = ValueController(box),
         enabled = enabled,
         dependencies = dependencies,
         title = title.asTextComposable(),
         summary = summary.asTextComposable(),
         leading = image.asIconComposable(),
-        dialogTitle = dialogTitle.asTextComposable(),
-        items = items
+        dialogTitle = dialogTitle.asTextComposable()
     )
 }
 
 @Composable
-fun <T> MultiChoiceListPreference(
-    valueController: ValueController<Set<T>>,
+fun ColorPreference(
+    valueController: ValueController<Color>,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
     title: @Composable() (() -> Unit)? = null,
     summary: @Composable() (() -> Unit)? = null,
     leading: @Composable() (() -> Unit)? = null,
     dialogTitle: @Composable() (() -> Unit)? = title,
-    items: List<MultiChoiceListPreference.Item<T>>
+    colorPalettes: List<ColorPickerPalette> = ColorPickerPalette.values().toList(),
+    showAlphaSelector: Boolean = true,
+    allowCustomArgb: Boolean = true
 ) {
     DialogPreference(
         valueController = valueController,
@@ -72,37 +72,26 @@ fun <T> MultiChoiceListPreference(
         title = title?.let { { title() } },
         summary = summary?.let { { summary() } },
         leading = leading?.let { { leading() } },
-        dialog = { context, dismiss ->
-            val (selectedItems, setSelectedItems) = stateFor(context.currentValue) {
-                context.currentValue
-                    .map { value -> items.first { it.value == value } }
-            }
-
-            MultiChoiceListDialog(
-                items = items,
-                selectedItems = selectedItems,
-                onSelectionsChanged = setSelectedItems,
-                item = { Text(it.title) },
-                title = dialogTitle,
-                positiveButton = {
-                    DialogButton(
-                        text = stringResource(R.string.es_ok),
-                        onClick = {
-                            val newValue = selectedItems.map { it.value }.toSet()
-                            context.setIfOk(newValue)
-                        }
+        trailing = { context ->
+            SizedBox(size = 40.dp) {
+                EsSurface(
+                    color = context.currentValue,
+                    border = Border(
+                        color = MaterialTheme.colors().onSurface,
+                        width = 1.dp
                     )
-                },
-                negativeButton = { DialogCloseButton(stringResource(R.string.es_cancel)) }
+                ) {}
+            }
+        },
+        dialog = { context, _ ->
+            ColorPickerDialog(
+                initialColor = context.currentValue,
+                onColorSelected = { context.setIfOk(it) },
+                colorPalettes = colorPalettes,
+                showAlphaSelector = showAlphaSelector,
+                allowCustomArgb = allowCustomArgb,
+                title = dialogTitle
             )
         }
-    )
-}
-
-object MultiChoiceListPreference {
-    @Immutable
-    data class Item<T>(
-        val title: String,
-        val value: T
     )
 }

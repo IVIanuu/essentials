@@ -16,8 +16,10 @@
 
 package com.ivianuu.essentials.sample.ui
 
+import androidx.ui.graphics.Color
 import com.ivianuu.essentials.store.prefs.PrefBoxFactory
 import com.ivianuu.essentials.store.prefs.boolean
+import com.ivianuu.essentials.store.prefs.color
 import com.ivianuu.essentials.store.prefs.int
 import com.ivianuu.essentials.store.prefs.string
 import com.ivianuu.essentials.store.prefs.stringSet
@@ -27,6 +29,7 @@ import com.ivianuu.essentials.ui.material.EsTopAppBar
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.navigation.Route
 import com.ivianuu.essentials.ui.prefs.CheckboxPreference
+import com.ivianuu.essentials.ui.prefs.ColorPreference
 import com.ivianuu.essentials.ui.prefs.Dependency
 import com.ivianuu.essentials.ui.prefs.MultiChoiceListPreference
 import com.ivianuu.essentials.ui.prefs.PreferenceSubheader
@@ -89,6 +92,13 @@ val PrefsRoute = Route {
                     title = "Text input",
                     summary = "This is a text input preference",
                     allowEmpty = false
+                )
+
+                ColorPreference(
+                    box = boxFactory.color("color", Color.Red),
+                    dependencies = dependencies,
+                    title = "Color",
+                    summary = "This is a color preference"
                 )
 
                 MultiChoiceListPreference(

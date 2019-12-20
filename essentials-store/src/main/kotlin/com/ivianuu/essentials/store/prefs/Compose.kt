@@ -23,40 +23,45 @@ import androidx.ui.core.dp
 import androidx.ui.core.ipx
 import androidx.ui.core.px
 import androidx.ui.graphics.Color
-import com.ivianuu.essentials.store.map
+import androidx.ui.graphics.ColorAccessor
+import com.ivianuu.essentials.store.DiskBox
 
 fun PrefBoxFactory.color(
     name: String,
     defaultValue: Color
-) = long(name, defaultValue.value)
-    .map(
-        fromRaw = { Color(it) },
-        toRaw = { it.value }
-    )
+) = box(name = name, defaultValue = defaultValue, serializer = ColorSerializer)
+
+private object ColorSerializer : DiskBox.Serializer<Color> {
+    override fun deserialize(serialized: String) = ColorAccessor.newColor(serialized.toLong())
+    override fun serialize(value: Color) = value.value.toString()
+}
 
 fun PrefBoxFactory.px(
     name: String,
     defaultValue: Px = Px.Zero
-) = float(name, defaultValue.value)
-    .map(
-        fromRaw = { it.px },
-        toRaw = { it.value }
-    )
+) = box(name = name, defaultValue = defaultValue, serializer = PxSerializer)
+
+private object PxSerializer : DiskBox.Serializer<Px> {
+    override fun deserialize(serialized: String) = serialized.toFloat().px
+    override fun serialize(value: Px) = value.value.toString()
+}
 
 fun PrefBoxFactory.dp(
     name: String,
     defaultValue: Dp = 0.dp
-) = float(name, defaultValue.value)
-    .map(
-        fromRaw = { it.dp },
-        toRaw = { it.value }
-    )
+) = box(name = name, defaultValue = defaultValue, serializer = DpSerializer)
+
+private object DpSerializer : DiskBox.Serializer<Dp> {
+    override fun deserialize(serialized: String) = serialized.toFloat().dp
+    override fun serialize(value: Dp) = value.value.toString()
+}
 
 fun PrefBoxFactory.ipx(
     name: String,
     defaultValue: IntPx = IntPx.Zero
-) = int(name, defaultValue.value)
-    .map(
-        fromRaw = { it.ipx },
-        toRaw = { it.value }
-    )
+) = box(name = name, defaultValue = defaultValue, serializer = IntPxSerializer)
+
+private object IntPxSerializer : DiskBox.Serializer<IntPx> {
+    override fun deserialize(serialized: String) = serialized.toInt().ipx
+    override fun serialize(value: IntPx) = value.value.toString()
+}

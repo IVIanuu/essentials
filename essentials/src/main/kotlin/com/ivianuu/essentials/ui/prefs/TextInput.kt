@@ -74,9 +74,9 @@ fun TextInputPreference(
         valueController = valueController,
         enabled = enabled,
         dependencies = dependencies,
-        title = title,
-        summary = summary,
-        leading = leading,
+        title = title?.let { { title() } },
+        summary = summary?.let { { summary() } },
+        leading = leading?.let { { leading() } },
         dialog = { context, dismiss ->
             val (currentValue, setCurrentValue) = stateFor(context.currentValue) { context.currentValue }
 

@@ -25,9 +25,10 @@ fun <T> DialogPreference(
     valueController: ValueController<T>,
     enabled: Boolean = true,
     dependencies: List<Dependency<*>>? = null,
-    title: @Composable() (() -> Unit)? = null,
-    summary: @Composable() (() -> Unit)? = null,
-    leading: @Composable() (() -> Unit)? = null,
+    title: @Composable() ((PreferenceContext<T>) -> Unit)? = null,
+    summary: @Composable() ((PreferenceContext<T>) -> Unit)? = null,
+    leading: @Composable() ((PreferenceContext<T>) -> Unit)? = null,
+    trailing: @Composable() ((PreferenceContext<T>) -> Unit)? = null,
     dialog: @Composable() (PreferenceContext<T>, () -> Unit) -> Unit
 ) {
     val navigator = navigator
@@ -37,9 +38,10 @@ fun <T> DialogPreference(
         dependencies = dependencies
     ) { context ->
         PreferenceLayout(
-            title = title,
-            summary = summary,
-            leading = leading,
+            title = title?.let { { title(context) } },
+            summary = summary?.let { { summary(context) } },
+            leading = leading?.let { { leading(context) } },
+            trailing = trailing?.let { { trailing(context) } },
             onClick = if (!context.shouldBeEnabled) null else {
                 {
                     navigator.push(DialogRoute {

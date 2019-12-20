@@ -83,6 +83,8 @@ internal class DiskBoxImpl<T>(
             throw IOException("Couldn't read file at $path", e)
         }
 
+        println("$path -> fetched raw $serialized")
+
         return@MutexValue try {
             serializer.deserialize(serialized)
         } catch (e: Exception) {
