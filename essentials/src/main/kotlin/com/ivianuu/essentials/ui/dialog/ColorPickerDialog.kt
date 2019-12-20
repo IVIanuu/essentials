@@ -43,8 +43,6 @@ import androidx.ui.layout.LayoutExpandedWidth
 import androidx.ui.layout.Padding
 import androidx.ui.layout.Table
 import androidx.ui.material.MaterialTheme
-import androidx.ui.material.Slider
-import androidx.ui.material.SliderPosition
 import androidx.ui.material.TextButtonStyle
 import androidx.ui.material.ripple.Ripple
 import androidx.ui.res.stringResource
@@ -62,6 +60,8 @@ import com.ivianuu.essentials.ui.layout.SquaredBoxFit
 import com.ivianuu.essentials.ui.layout.WidthSpacer
 import com.ivianuu.essentials.ui.material.EsSurface
 import com.ivianuu.essentials.ui.material.Icon
+import com.ivianuu.essentials.ui.material.Slider
+import com.ivianuu.essentials.ui.material.SliderPosition
 import com.ivianuu.essentials.ui.material.Tab
 import com.ivianuu.essentials.ui.material.TabContent
 import com.ivianuu.essentials.ui.material.TabController
