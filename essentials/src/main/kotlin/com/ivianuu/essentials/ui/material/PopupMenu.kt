@@ -36,7 +36,7 @@ import androidx.ui.foundation.shape.corner.RoundedCornerShape
 import androidx.ui.layout.Container
 import androidx.ui.layout.LayoutHeight
 import androidx.ui.layout.LayoutMinWidth
-import androidx.ui.layout.Padding
+import androidx.ui.layout.LayoutPadding
 import androidx.ui.layout.Wrap
 import androidx.ui.material.ripple.Ripple
 import androidx.ui.material.surface.Card
@@ -59,19 +59,18 @@ fun <T> PopupMenu(
 ) {
     Card(
         elevation = 8.dp,
+        modifier = LayoutPadding(top = 8.dp, bottom = 8.dp),
         shape = RoundedCornerShape(4.dp)
     ) {
-        Padding(top = 8.dp, bottom = 8.dp) {
-            Column {
-                items.forEach { value ->
-                    key(value as Any) {
-                        PopupMenuItem(
-                            content = { item(value) },
-                            onClick = {
-                                onSelected(value)
-                            }
-                        )
-                    }
+        Column {
+            items.forEach { value ->
+                key(value as Any) {
+                    PopupMenuItem(
+                        content = { item(value) },
+                        onClick = {
+                            onSelected(value)
+                        }
+                    )
                 }
             }
         }
@@ -89,12 +88,14 @@ private fun PopupMenuItem(
             onClick = onClick,
             children = {
                 Container(
-                    modifier = LayoutMinWidth(200.dp) + LayoutHeight(48.dp)
+                    modifier = LayoutMinWidth(200.dp) + LayoutHeight(48.dp),
+                    alignment = Alignment.CenterLeft
                 ) {
                     Wrap(Alignment.CenterLeft) {
-                        Padding(left = 16.dp, right = 16.dp) {
-                            content()
-                        }
+                        Container(
+                            modifier = LayoutPadding(left = 16.dp, right = 16.dp),
+                            children = content
+                        )
                     }
                 }
             }
