@@ -53,7 +53,7 @@ data class IconStyle(
 ) : Mergeable<IconStyle> {
     override fun merge(other: IconStyle): IconStyle = IconStyle(
         size = other.size,
-        color = other.color ?: this.color
+        color = other.color
     )
 }
 
