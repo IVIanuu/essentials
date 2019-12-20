@@ -16,18 +16,11 @@
 
 package com.ivianuu.essentials.theming
 
-import androidx.ui.graphics.Color
-import com.ivianuu.essentials.app.bindAppService
-import com.ivianuu.injekt.Module
+import com.ivianuu.injekt.DefinitionContext
+import com.ivianuu.injekt.ModuleBuilder
+import com.ivianuu.injekt.Name
 
-val EsThemingModule = Module {
-    bindAppService<ThemingHelper>()
-    factory(name = DefaultTheme) {
-        Theme(
-            primaryColor = Color(0xFF6200EE),
-            secondaryColor = Color(0xFF03DAC6),
-            useBlack = false,
-            twilightMode = TwilightMode.System
-        )
-    }
+@Name
+annotation class DefaultTheme {
+    companion object
 }

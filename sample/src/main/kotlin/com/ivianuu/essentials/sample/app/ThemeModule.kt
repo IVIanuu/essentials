@@ -14,20 +14,21 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.theming
+package com.ivianuu.essentials.sample.app
 
 import androidx.ui.graphics.Color
-import com.ivianuu.essentials.app.bindAppService
+import com.ivianuu.essentials.theming.DefaultTheme
+import com.ivianuu.essentials.theming.Theme
+import com.ivianuu.essentials.theming.TwilightMode
 import com.ivianuu.injekt.Module
 
-val EsThemingModule = Module {
-    bindAppService<ThemingHelper>()
-    factory(name = DefaultTheme) {
+val ThemeModule = Module {
+    factory(name = DefaultTheme, override = true) {
         Theme(
-            primaryColor = Color(0xFF6200EE),
-            secondaryColor = Color(0xFF03DAC6),
-            useBlack = false,
-            twilightMode = TwilightMode.System
+            primaryColor = Color.Magenta,
+            secondaryColor = Color.Yellow,
+            useBlack = true,
+            twilightMode = TwilightMode.Dark
         )
     }
 }

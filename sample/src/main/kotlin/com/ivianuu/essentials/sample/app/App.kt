@@ -37,6 +37,7 @@ class App : EsApp() {
         EsGesturesModule,
         EsPermissionsModule,
         EsThemingModule,
+        ThemeModule,
         WorkerInjectionModule,
         WorkerInitializerModule
     )

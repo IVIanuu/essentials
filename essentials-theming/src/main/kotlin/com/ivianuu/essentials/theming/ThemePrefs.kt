@@ -26,10 +26,13 @@ import com.ivianuu.injekt.android.ApplicationScope
 
 @ApplicationScope
 @Single
-class ThemePrefs(factory: PrefBoxFactory) {
-    val primaryColor = factory.color("primary_color", Color(0xFF6200EE))
-    val secondaryColor = factory.color("secondary_color", Color(0xFF03DAC6))
-    val useBlack = factory.boolean("use_black", false)
+class ThemePrefs(
+    @DefaultTheme defaultTheme: Theme,
+    factory: PrefBoxFactory
+) {
+    val primaryColor = factory.color("primary_color", defaultTheme.primaryColor)
+    val secondaryColor = factory.color("secondary_color", defaultTheme.secondaryColor)
+    val useBlack = factory.boolean("use_black", defaultTheme.useBlack)
     val twilightMode = factory.enumString(
         "twilight_mode",
         TwilightMode.System

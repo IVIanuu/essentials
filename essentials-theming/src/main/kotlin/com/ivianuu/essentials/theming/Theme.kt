@@ -16,18 +16,13 @@
 
 package com.ivianuu.essentials.theming
 
+import androidx.compose.Immutable
 import androidx.ui.graphics.Color
-import com.ivianuu.essentials.app.bindAppService
-import com.ivianuu.injekt.Module
 
-val EsThemingModule = Module {
-    bindAppService<ThemingHelper>()
-    factory(name = DefaultTheme) {
-        Theme(
-            primaryColor = Color(0xFF6200EE),
-            secondaryColor = Color(0xFF03DAC6),
-            useBlack = false,
-            twilightMode = TwilightMode.System
-        )
-    }
-}
+@Immutable
+data class Theme(
+    val primaryColor: Color,
+    val secondaryColor: Color,
+    val useBlack: Boolean,
+    val twilightMode: TwilightMode
+)

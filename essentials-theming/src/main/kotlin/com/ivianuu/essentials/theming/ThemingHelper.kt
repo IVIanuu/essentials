@@ -22,7 +22,6 @@ import android.content.Intent
 import android.content.res.Configuration
 import android.content.res.Resources
 import android.os.PowerManager
-import androidx.compose.Immutable
 import androidx.ui.graphics.Color
 import com.ivianuu.essentials.app.AppService
 import com.ivianuu.essentials.messaging.BroadcastFactory
@@ -50,13 +49,18 @@ import java.util.Calendar
 class ThemingHelper(
     private val app: Application,
     private val broadcastFactory: BroadcastFactory,
+    @DefaultTheme private val defaultTheme: Theme,
     private val resources: Resources,
     private val powerManager: PowerManager,
     private val prefs: ThemePrefs
 ) : AppService {
 
-    private val _state =
-        ConflatedBroadcastChannel(ThemeState(Color.Transparent, Color.Transparent, false, false))
+    private val _state = ConflatedBroadcastChannel(ThemeState(
+        primaryColor = defaultTheme.primaryColor,
+        secondaryColor = defaultTheme.secondaryColor,
+        useBlack = defaultTheme.useBlack,
+        isDark = defaultTheme.twilightMode == TwilightMode.Dark
+    ))
     val state: Flow<ThemeState> get() = _state.asFlow()
     val currentState: ThemeState get() = _state.value
 
@@ -128,7 +132,6 @@ class ThemingHelper(
     }
 }
 
-@Immutable
 data class ThemeState(
     val primaryColor: Color,
     val secondaryColor: Color,
@@ -140,7 +143,9 @@ data class ThemeState(
     val colors = ColorPalette(
         isLight = !isDark,
         primary = primaryColor,
+        primaryVariant = primaryColor,
         secondary = secondaryColor,
+        secondaryVariant = secondaryColor,
         background = backgroundColor,
         surface = backgroundColor
     )
