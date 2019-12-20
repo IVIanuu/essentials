@@ -38,6 +38,7 @@ import androidx.ui.material.TextButtonStyle
 import com.ivianuu.essentials.about.AboutRoute
 import com.ivianuu.essentials.apps.ui.AppPickerRoute
 import com.ivianuu.essentials.apps.ui.IntentAppFilter
+import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.shortcutpicker.ShortcutPickerRoute
 import com.ivianuu.essentials.store.prefs.PrefBoxFactory
 import com.ivianuu.essentials.store.prefs.boolean
@@ -49,12 +50,14 @@ import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.layout.ScrollableList
 import com.ivianuu.essentials.ui.material.Banner
 import com.ivianuu.essentials.ui.material.EsTopAppBar
+import com.ivianuu.essentials.ui.material.Icon
 import com.ivianuu.essentials.ui.material.PopupMenuButton
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.SimpleListItem
 import com.ivianuu.essentials.ui.navigation.DefaultRouteTransition
 import com.ivianuu.essentials.ui.navigation.Route
 import com.ivianuu.essentials.ui.navigation.UrlRoute
+import com.ivianuu.essentials.ui.resources.drawableResource
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.parametersOf
 
@@ -92,6 +95,7 @@ val HomeRoute = Route(transition = DefaultRouteTransition) {
                     )
                     if (showBanner) {
                         Banner(
+                            leading = { Icon(drawableResource(R.mipmap.ic_launcher)) },
                             content = { Text("Welcome to Essentials Sample we great new features for you. Go and check them out.") },
                             actions = {
                                 Button(

@@ -25,7 +25,6 @@ import androidx.ui.core.dp
 import androidx.ui.core.ipx
 import androidx.ui.layout.Container
 import androidx.ui.layout.LayoutExpandedWidth
-import androidx.ui.material.Divider
 import androidx.ui.material.EmphasisAmbient
 import androidx.ui.material.MaterialTheme
 import com.ivianuu.essentials.ui.layout.Column
@@ -38,8 +37,7 @@ import com.ivianuu.essentials.ui.layout.WidthSpacer
 fun Banner(
     leading: (@Composable() () -> Unit)? = null,
     content: @Composable() () -> Unit,
-    actions: @Composable() () -> Unit,
-    showBottomDivider: Boolean = true
+    actions: @Composable() () -> Unit
 ) {
     val styledContent: @Composable() () -> Unit = {
         CurrentTextStyleProvider(value = MaterialTheme.typography().body2) {
@@ -47,41 +45,36 @@ fun Banner(
         }
     }
     val styledLeading: (@Composable() () -> Unit)? = if (leading == null) null else ({
-        EmphasisProvider(emphasis = ambient(EmphasisAmbient).high, children = leading)
+        CurrentIconStyleProvider(value = AvatarIconStyle(), children = leading)
     })
 
-    Column {
-        Container(
-            modifier = LayoutExpandedWidth
-        ) {
-            Column {
-                HeightSpacer(24.dp)
+    Container(
+        modifier = LayoutExpandedWidth
+    ) {
+        Column {
+            HeightSpacer(24.dp)
 
-                Row(crossAxisAlignment = CrossAxisAlignment.Center) {
-                    WidthSpacer(16.dp)
+            Row(crossAxisAlignment = CrossAxisAlignment.Center) {
+                WidthSpacer(16.dp)
 
-                    if (styledLeading != null) {
-                        styledLeading()
-                        WidthSpacer(16.dp)
-                    }
-
-                    styledContent()
-
+                if (styledLeading != null) {
+                    styledLeading()
                     WidthSpacer(16.dp)
                 }
 
-                HeightSpacer(20.dp)
+                styledContent()
 
-                BannerActions(actions = actions)
-
-                HeightSpacer(8.dp)
+                WidthSpacer(16.dp)
             }
-        }
 
-        if (showBottomDivider) {
-            Divider(color = MaterialTheme.colors().onSurface.copy(alpha = 0.12f))
+            HeightSpacer(20.dp)
+
+            BannerActions(actions = actions)
+
+            HeightSpacer(8.dp)
         }
     }
+
 }
 
 @Composable
