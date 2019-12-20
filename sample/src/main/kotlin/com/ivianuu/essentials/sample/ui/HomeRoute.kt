@@ -31,23 +31,30 @@ import androidx.ui.graphics.Color
 import androidx.ui.graphics.Paint
 import androidx.ui.layout.Container
 import androidx.ui.layout.Padding
+import androidx.ui.material.Button
 import androidx.ui.material.Divider
 import androidx.ui.material.MaterialTheme
+import androidx.ui.material.TextButtonStyle
 import com.ivianuu.essentials.about.AboutRoute
 import com.ivianuu.essentials.apps.ui.AppPickerRoute
 import com.ivianuu.essentials.apps.ui.IntentAppFilter
 import com.ivianuu.essentials.shortcutpicker.ShortcutPickerRoute
+import com.ivianuu.essentials.store.prefs.PrefBoxFactory
+import com.ivianuu.essentials.store.prefs.boolean
 import com.ivianuu.essentials.twilight.TwilightSettingsRoute
+import com.ivianuu.essentials.ui.box.unfoldBox
 import com.ivianuu.essentials.ui.common.navigateOnClick
 import com.ivianuu.essentials.ui.injekt.inject
 import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.layout.ScrollableList
+import com.ivianuu.essentials.ui.material.Banner
 import com.ivianuu.essentials.ui.material.EsTopAppBar
 import com.ivianuu.essentials.ui.material.PopupMenuButton
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.SimpleListItem
 import com.ivianuu.essentials.ui.navigation.DefaultRouteTransition
 import com.ivianuu.essentials.ui.navigation.Route
+import com.ivianuu.essentials.ui.navigation.UrlRoute
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.parametersOf
 
@@ -76,6 +83,36 @@ val HomeRoute = Route(transition = DefaultRouteTransition) {
             ScrollableList(
                 items = items
             ) { index, item ->
+                if (index == 0) {
+                    var showBanner by unfoldBox(
+                        inject<PrefBoxFactory>().boolean(
+                            "show_banner",
+                            true
+                        )
+                    )
+                    if (showBanner) {
+                        Banner(
+                            content = { Text("Welcome to Essentials Sample we great new features for you. Go and check them out.") },
+                            actions = {
+                                Button(
+                                    text = "Dismiss",
+                                    style = TextButtonStyle(),
+                                    onClick = { showBanner = false }
+                                )
+
+                                Button(
+                                    text = "Learn More",
+                                    style = TextButtonStyle(),
+                                    onClick = navigateOnClick {
+                                        showBanner = false
+                                        UrlRoute("https://google.com")
+                                    }
+                                )
+                            }
+                        )
+                    }
+                }
+
                 Column {
                     val route = item.route()
                     HomeItem(item = item, onClick = navigateOnClick { route })
