@@ -47,12 +47,12 @@ import androidx.ui.material.Slider
 import androidx.ui.material.SliderPosition
 import androidx.ui.material.TextButtonStyle
 import androidx.ui.material.ripple.Ripple
-import androidx.ui.material.surface.Card
 import androidx.ui.res.stringResource
 import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.common.hideKeyboardOnDispose
 import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
+import com.ivianuu.essentials.ui.layout.Expand
 import com.ivianuu.essentials.ui.layout.MainAxisAlignment
 import com.ivianuu.essentials.ui.layout.OverflowBox
 import com.ivianuu.essentials.ui.layout.Row
@@ -256,17 +256,18 @@ private fun ColorGridItem(
     onClick: () -> Unit
 ) {
     BaseColorGridItem(onClick = onClick) {
-        Card(
-            color = color,
-            contentColor = contentColorFor(color),
-            shape = RoundedCornerShape(50),
-            border = Border(
-                color = MaterialTheme.colors().onSurface,
-                width = 1.dp
-            ),
-            elevation = 0.dp
-        ) {
-            Container(expanded = true) {}
+        Expand {
+            EsSurface(
+                color = color,
+                contentColor = contentColorFor(color),
+                shape = RoundedCornerShape(50),
+                border = Border(
+                    color = MaterialTheme.colors().onSurface,
+                    width = 1.dp
+                ),
+                elevation = 0.dp
+            ) {
+            }
         }
     }
 }
