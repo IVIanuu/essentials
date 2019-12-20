@@ -29,6 +29,7 @@ fun ActivityRoute(intentFactory: (Activity) -> Intent) = Route(
     opaque = true
 ) {
     val activity = ambient(ActivityAmbient)
+    val navigator = navigator
     onActive {
         activity.startActivity(intentFactory(activity))
         navigator.pop()
