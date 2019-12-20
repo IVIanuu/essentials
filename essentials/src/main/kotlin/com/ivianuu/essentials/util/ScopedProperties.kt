@@ -58,6 +58,15 @@ class Properties {
     class Key<T>
 }
 
+fun propertiesOf(vararg pairs: Pair<Properties.Key<*>, *>): Properties {
+    val properties = Properties()
+    pairs.forEach { (key, value) ->
+        properties[key as Properties.Key<Any?>] = value
+    }
+
+    return properties
+}
+
 fun <T> Properties.getOrSet(key: Properties.Key<T>, defaultValue: () -> T): T {
     var value = get(key)
     if (value == null) {
@@ -81,7 +90,7 @@ private val propertiesByScope = ConcurrentHashMap<Scope, Properties>()
 
 val Scope.properties: Properties
     get() = propertiesByScope.getOrPut(this) {
-        Properties().also {
+        propertiesOf().also {
             onClose { propertiesByScope -= this }
         }
     }
