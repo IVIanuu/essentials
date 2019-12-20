@@ -18,14 +18,13 @@ package com.ivianuu.essentials.ui.common
 
 import androidx.compose.Composable
 import androidx.compose.ComposeAccessor
-import androidx.compose.State
 import androidx.compose.composer
 import androidx.compose.onActive
 import androidx.compose.state
 
 @Composable
 fun pointInComposition(): Any? {
-    val state: State<Any?> = state { null }
+    val state = state<Any?> { null }
     val composer = composer.composer
     onActive {
         val slots = ComposeAccessor.getSlots(composer.slotTable).toList()

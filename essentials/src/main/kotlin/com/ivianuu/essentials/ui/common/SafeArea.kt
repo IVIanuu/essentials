@@ -20,8 +20,9 @@ import androidx.compose.Composable
 import androidx.ui.core.Dp
 import androidx.ui.core.dp
 import androidx.ui.core.max
+import androidx.ui.layout.Container
 import androidx.ui.layout.EdgeInsets
-import androidx.ui.layout.Padding
+import androidx.ui.layout.LayoutPadding
 import com.ivianuu.essentials.ui.core.WithWindowInsets
 
 @Composable
@@ -44,36 +45,33 @@ fun SafeArea(
             return max(max(insetsValue, paddingValue), min ?: 0.dp)
         }
 
-        val leftPadding = safeAreaValue(
-            left,
-            windowInsets.viewInsets.left,
-            windowInsets.viewPadding.left,
-            minimum?.left
-        )
-        val topPadding =
-            safeAreaValue(
-                top,
-                windowInsets.viewInsets.top,
-                windowInsets.viewPadding.top,
-                minimum?.top
-            )
-        val rightPadding = safeAreaValue(
-            right,
-            windowInsets.viewInsets.right,
-            windowInsets.viewPadding.right,
-            minimum?.right
-        )
-        val bottomPadding = safeAreaValue(
-            bottom,
-            windowInsets.viewInsets.bottom,
-            windowInsets.viewPadding.bottom,
-            minimum?.bottom
-        )
-        Padding(
-            left = leftPadding,
-            top = topPadding,
-            right = rightPadding,
-            bottom = bottomPadding,
+        Container(
+            modifier = LayoutPadding(
+                left = safeAreaValue(
+                    left,
+                    windowInsets.viewInsets.left,
+                    windowInsets.viewPadding.left,
+                    minimum?.left
+                ),
+                top = safeAreaValue(
+                    top,
+                    windowInsets.viewInsets.top,
+                    windowInsets.viewPadding.top,
+                    minimum?.top
+                ),
+                right = safeAreaValue(
+                    right,
+                    windowInsets.viewInsets.right,
+                    windowInsets.viewPadding.right,
+                    minimum?.right
+                ),
+                bottom = safeAreaValue(
+                    bottom,
+                    windowInsets.viewInsets.bottom,
+                    windowInsets.viewPadding.bottom,
+                    minimum?.bottom
+                )
+            ),
             children = children
         )
     }

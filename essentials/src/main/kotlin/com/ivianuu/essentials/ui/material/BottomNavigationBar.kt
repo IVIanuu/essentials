@@ -18,7 +18,7 @@ package com.ivianuu.essentials.ui.material
 
 import androidx.compose.Ambient
 import androidx.compose.Composable
-import androidx.compose.State
+import androidx.compose.MutableState
 import androidx.compose.ambient
 import androidx.compose.key
 import androidx.compose.remember
@@ -31,7 +31,6 @@ import androidx.ui.foundation.Clickable
 import androidx.ui.foundation.contentColor
 import androidx.ui.graphics.Color
 import androidx.ui.graphics.Image
-import androidx.ui.layout.ConstrainedBox
 import androidx.ui.layout.Container
 import androidx.ui.layout.DpConstraints
 import androidx.ui.layout.EdgeInsets
@@ -91,7 +90,7 @@ fun <T> BottomNavigationBar(
 
                     items.forEachIndexed { index, _item ->
                         key(index) {
-                            ConstrainedBox(constraints = itemConstraints) {
+                            Container(constraints = itemConstraints) {
                                 BottomNavigationItemIndexAmbient.Provider(index) {
                                     item(index, _item)
                                 }
@@ -127,7 +126,7 @@ fun BottomNavigationBarItem(
     text: String,
     icon: Image
 ) {
-    Ripple(false, radius = BottomNavigationBarItemRippleRadius) {
+    Ripple(bounded = false, radius = BottomNavigationBarItemRippleRadius) {
         Clickable(onClick = onSelected) {
             Container(
                 padding = EdgeInsets(
@@ -207,7 +206,7 @@ fun <T> ambientBottomNavigationController(): BottomNavigationController<T> =
 
 class BottomNavigationController<T>(
     var items: List<T>,
-    _selectedIndex: State<Int>
+    _selectedIndex: MutableState<Int>
 ) {
     var selectedIndex by _selectedIndex
     val selectedItem: T get() = items[selectedIndex]

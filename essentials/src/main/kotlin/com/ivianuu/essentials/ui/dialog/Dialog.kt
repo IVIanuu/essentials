@@ -18,40 +18,30 @@ package com.ivianuu.essentials.ui.dialog
 
 import androidx.compose.Composable
 import androidx.ui.core.dp
-import androidx.ui.core.gesture.PressGestureDetector
 import androidx.ui.foundation.shape.corner.RoundedCornerShape
-import androidx.ui.layout.ConstrainedBox
-import androidx.ui.layout.DpConstraints
-import androidx.ui.layout.Padding
+import androidx.ui.layout.Container
+import androidx.ui.layout.LayoutMaxWidth
+import androidx.ui.layout.LayoutMinWidth
+import androidx.ui.layout.LayoutPadding
 import androidx.ui.material.MaterialTheme
 import com.ivianuu.essentials.ui.material.EsSurface
 
-// todo callbacks like onShow, onDismiss, onCancel etc
-// todo add DialogState + ambient to control dialog state from descendents
-
 @Composable
 fun Dialog(child: @Composable() () -> Unit) {
-    Padding(
-        left = 32.dp,
-        top = 32.dp,
-        right = 32.dp,
-        bottom = 32.dp
+    Container(
+        modifier = LayoutPadding(
+            left = 32.dp,
+            top = 32.dp,
+            right = 32.dp,
+            bottom = 32.dp
+        ) + LayoutMinWidth(280.dp) + LayoutMaxWidth(356.dp)
     ) {
-        PressGestureDetector {
-            ConstrainedBox(
-                constraints = DpConstraints(
-                    minWidth = 280.dp,
-                    maxWidth = 356.dp
-                )
-            ) {
-                EsSurface(
-                    color = MaterialTheme.colors().surface,
-                    elevation = 24.dp,
-                    shape = RoundedCornerShape(size = 4.dp)
-                ) {
-                    child()
-                }
-            }
+        EsSurface(
+            color = MaterialTheme.colors().surface,
+            elevation = 24.dp,
+            shape = RoundedCornerShape(size = 4.dp)
+        ) {
+            child()
         }
     }
 }

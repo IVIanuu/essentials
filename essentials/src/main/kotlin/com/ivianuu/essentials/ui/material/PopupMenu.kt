@@ -33,8 +33,9 @@ import androidx.ui.core.ipx
 import androidx.ui.core.round
 import androidx.ui.foundation.Clickable
 import androidx.ui.foundation.shape.corner.RoundedCornerShape
-import androidx.ui.layout.ConstrainedBox
-import androidx.ui.layout.DpConstraints
+import androidx.ui.layout.Container
+import androidx.ui.layout.LayoutHeight
+import androidx.ui.layout.LayoutMinWidth
 import androidx.ui.layout.Padding
 import androidx.ui.layout.Wrap
 import androidx.ui.material.ripple.Ripple
@@ -87,12 +88,8 @@ private fun PopupMenuItem(
         Clickable(
             onClick = onClick,
             children = {
-                ConstrainedBox(
-                    constraints = DpConstraints(
-                        minWidth = 200.dp,
-                        minHeight = 48.dp,
-                        maxHeight = 48.dp
-                    )
+                Container(
+                    modifier = LayoutMinWidth(200.dp) + LayoutHeight(48.dp)
                 ) {
                     Wrap(Alignment.CenterLeft) {
                         Padding(left = 16.dp, right = 16.dp) {

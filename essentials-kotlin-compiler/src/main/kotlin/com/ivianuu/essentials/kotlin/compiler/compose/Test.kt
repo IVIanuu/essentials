@@ -320,7 +320,7 @@ private fun moveComposableTrailingLambdasIntoTheBody(
     }
 }
 
-private fun execExpr(stmts: List<Node.Stmt>): Node.Expr {
+private fun helperExpr(expr: Node.Expr): Node.Expr {
     return Node.Expr.BinaryOp(
         lhs = Node.Expr.BinaryOp(
             lhs = Node.Expr.BinaryOp(
@@ -340,23 +340,27 @@ private fun execExpr(stmts: List<Node.Stmt>): Node.Expr {
             rhs = Node.Expr.Name(name = "core")
         ),
         oper = Node.Expr.BinaryOp.Oper.Token(token = Node.Expr.BinaryOp.Token.DOT),
-        rhs = Node.Expr.Call(
-            expr = Node.Expr.Name(name = "exec"),
-            typeArgs = emptyList(),
-            args = emptyList(),
-            lambda = Node.Expr.Call.TrailLambda(
-                anns = emptyList(),
-                label = null,
-                func = Node.Expr.Brace(
-                    params = emptyList(),
-                    block = Node.Block(
-                        stmts = stmts
-                    )
+        rhs = expr
+    )
+}
+
+private fun execExpr(stmts: List<Node.Stmt>) = helperExpr(
+    Node.Expr.Call(
+        expr = Node.Expr.Name(name = "exec"),
+        typeArgs = emptyList(),
+        args = emptyList(),
+        lambda = Node.Expr.Call.TrailLambda(
+            anns = emptyList(),
+            label = null,
+            func = Node.Expr.Brace(
+                params = emptyList(),
+                block = Node.Block(
+                    stmts = stmts
                 )
             )
         )
     )
-}
+)
 
 private inline fun <reified T> Node.findAnchestorOfType(): T? {
     var parent: Node = parent ?: return null
@@ -825,10 +829,8 @@ private fun wrapComposableCalls(
         }
 
         fun composerExprStmt() = Node.Stmt.Expr(
-            expr = Node.Expr.BinaryOp(
-                lhs = ComposerExpr,
-                oper = Node.Expr.BinaryOp.Oper.Token(token = Node.Expr.BinaryOp.Token.DOT),
-                rhs = Node.Expr.Call(
+            expr = helperExpr(
+                Node.Expr.Call(
                     expr = Node.Expr.Name(name = "expr"),
                     typeArgs = emptyList(),
                     args = listOf(
