@@ -147,7 +147,7 @@ private fun ColorPickerContent(
             onColorSelected = onColorChanged
         )
     }
-    
+
     if (allowCustomArgb) {
         TabController(items = ColorPickerPage.values().toList()) {
             TightColumn {
@@ -378,7 +378,6 @@ private fun ColorEditorHeader(
             }
         }
     }
-
 }
 
 @Composable

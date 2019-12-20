@@ -16,8 +16,6 @@
 
 package com.ivianuu.essentials.theming
 
-import com.ivianuu.injekt.DefinitionContext
-import com.ivianuu.injekt.ModuleBuilder
 import com.ivianuu.injekt.Name
 
 @Name

@@ -49,6 +49,5 @@ fun <T, S> Box<T>.map(
         override suspend fun set(value: S) {
             wrapped.set(toRaw(value))
         }
-
     }
 }

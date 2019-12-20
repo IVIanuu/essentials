@@ -36,5 +36,4 @@ abstract class BooleanBoxTileService : BoxTileService<Boolean>() {
     }
 
     protected open suspend fun onRequestValueChange(newValue: Boolean): Boolean = true
-
 }

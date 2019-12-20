@@ -74,7 +74,6 @@ fun Banner(
             HeightSpacer(8.dp)
         }
     }
-
 }
 
 @Composable

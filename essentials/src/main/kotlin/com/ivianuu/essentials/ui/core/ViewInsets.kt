@@ -95,7 +95,6 @@ fun WindowInsetsManager(children: @Composable() () -> Unit) {
             }
 
             override fun onViewDetachedFromWindow(v: View?) {
-
             }
         } as View.OnAttachStateChangeListener // todo type
     }
@@ -213,8 +212,6 @@ private class ObservableWindowInsets(
         result = 31 * result + viewInsets.hashCode()
         return result
     }
-
-
 }
 
 @Composable

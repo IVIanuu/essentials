@@ -106,7 +106,7 @@ fun test(
 
     val newSource = Writer.write(fileNode)
 
-    //if (file.name == "MainActivity.kt") error("new source $newSource")
+    // if (file.name == "MainActivity.kt") error("new source $newSource")
 
     return if (orig != fileNode) {
         file.withNewSource(newSource)
@@ -148,8 +148,9 @@ private fun mergeVarArgToSingleArg(
 
         val resolvedCall = element.getResolvedCall(trace.bindingContext) ?: return@visit
         val resulting = resolvedCall.resultingDescriptor
-        if (!resulting.annotations.hasAnnotation(ComposableAnnotation)
-            && resulting.overriddenDescriptors.none { it.annotations.hasAnnotation(
+        if (!resulting.annotations.hasAnnotation(ComposableAnnotation) &&
+            resulting.overriddenDescriptors.none {
+                it.annotations.hasAnnotation(
                 ComposableAnnotation) }) return@visit
 
         val tmpArgs = node.args.toMutableList()
@@ -236,8 +237,9 @@ private fun convertExpressionComposableFunsToBlocks(
         } catch (e: Exception) {
             null
         } ?: return@visit
-        if (!descriptor.annotations.hasAnnotation(ComposableAnnotation)
-            && descriptor.overriddenDescriptors.none { it.annotations.hasAnnotation(
+        if (!descriptor.annotations.hasAnnotation(ComposableAnnotation) &&
+            descriptor.overriddenDescriptors.none {
+                it.annotations.hasAnnotation(
                 ComposableAnnotation) }) return@visit
         if (descriptor.returnType?.isUnit() != true) return@visit
         if (node.body !is Node.Decl.Func.Body.Expr) return@visit
@@ -268,8 +270,9 @@ private fun moveComposableTrailingLambdasIntoTheBody(
         val element = node.element as? KtCallExpression ?: return@visit
         val resolvedCall = element.getResolvedCall(trace.bindingContext) ?: return@visit
         val resulting = resolvedCall.resultingDescriptor
-        if (!resulting.annotations.hasAnnotation(ComposableAnnotation)
-            && resulting.overriddenDescriptors.none { it.annotations.hasAnnotation(
+        if (!resulting.annotations.hasAnnotation(ComposableAnnotation) &&
+            resulting.overriddenDescriptors.none {
+                it.annotations.hasAnnotation(
                 ComposableAnnotation) }) return@visit
 
         val funcName = resulting.name.asString()
@@ -375,8 +378,9 @@ private fun Node.Block.invokesComposables(
         val element = childNode.element as? KtCallExpression ?: return@visit
         val resolvedCall = element.getResolvedCall(trace.bindingContext) ?: return@visit
         val resulting = resolvedCall.resultingDescriptor
-        if (!resulting.annotations.hasAnnotation(ComposableAnnotation)
-            && resulting.overriddenDescriptors.none { it.annotations.hasAnnotation(
+        if (!resulting.annotations.hasAnnotation(ComposableAnnotation) &&
+            resulting.overriddenDescriptors.none {
+                it.annotations.hasAnnotation(
                 ComposableAnnotation) }) return@visit
         invokesComposables = true
     }
@@ -529,8 +533,9 @@ private fun insertRestartScope(
             null
         } ?: return@visit
         if (descriptor.isInline) return@visit
-        if (!descriptor.annotations.hasAnnotation(ComposableAnnotation)
-            && descriptor.overriddenDescriptors.none { it.annotations.hasAnnotation(
+        if (!descriptor.annotations.hasAnnotation(ComposableAnnotation) &&
+            descriptor.overriddenDescriptors.none {
+                it.annotations.hasAnnotation(
                 ComposableAnnotation) }) return@visit
         if (descriptor.returnType?.isUnit() != true) return@visit
 
@@ -665,8 +670,9 @@ private fun wrapComposableCalls(
         node as Node.Expr
 
         val resulting = resolvedCall.resultingDescriptor
-        if (!resulting.annotations.hasAnnotation(ComposableAnnotation)
-            && resulting.overriddenDescriptors.none { it.annotations.hasAnnotation(
+        if (!resulting.annotations.hasAnnotation(ComposableAnnotation) &&
+            resulting.overriddenDescriptors.none {
+                it.annotations.hasAnnotation(
                 ComposableAnnotation) }) return@visit
         val isEffect = resulting.returnType?.isUnit() == false
 

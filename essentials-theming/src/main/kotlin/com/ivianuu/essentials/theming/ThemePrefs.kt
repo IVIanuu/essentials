@@ -16,7 +16,6 @@
 
 package com.ivianuu.essentials.theming
 
-import androidx.ui.graphics.Color
 import com.ivianuu.essentials.store.prefs.PrefBoxFactory
 import com.ivianuu.essentials.store.prefs.boolean
 import com.ivianuu.essentials.store.prefs.color

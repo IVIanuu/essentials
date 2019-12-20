@@ -38,5 +38,4 @@ abstract class CycleBoxTileService<T> : BoxTileService<T>() {
     protected abstract fun T.next(): T
 
     protected open suspend fun onRequestValueChange(newValue: T): Boolean = true
-
 }
