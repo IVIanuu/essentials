@@ -22,45 +22,78 @@ import androidx.ui.core.Text
 import androidx.ui.material.RadioButton
 import androidx.ui.res.stringResource
 import com.ivianuu.essentials.ui.box.unfoldBox
-import com.ivianuu.essentials.ui.common.ListScreen
+import com.ivianuu.essentials.ui.coroutines.coroutineScope
 import com.ivianuu.essentials.ui.injekt.inject
+import com.ivianuu.essentials.ui.layout.ScrollableList
+import com.ivianuu.essentials.ui.material.EsTopAppBar
+import com.ivianuu.essentials.ui.material.PopupMenuButton
+import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.SimpleListItem
 import com.ivianuu.essentials.ui.navigation.Route
 import com.ivianuu.essentials.ui.prefs.CheckboxPreference
 import com.ivianuu.essentials.ui.prefs.ColorPreference
 import com.ivianuu.essentials.ui.prefs.PreferenceSubheader
+import kotlinx.coroutines.launch
 
 val ThemeSettingsRoute = Route {
-    ListScreen(title = stringResource(R.string.es_title_theming)) {
-        val prefs = inject<ThemePrefs>()
+    val prefs = inject<ThemePrefs>()
 
-        PreferenceSubheader(text = stringResource(R.string.es_pref_category_colors))
-        ColorPreference(
-            box = prefs.primaryColor,
-            title = stringResource(R.string.es_primary_color),
-            showAlphaSelector = false
-        )
-        ColorPreference(
-            box = prefs.secondaryColor,
-            title = stringResource(R.string.es_secondary_color),
-            showAlphaSelector = false
-        )
-        CheckboxPreference(
-            box = prefs.useBlack,
-            title = stringResource(R.string.es_use_black),
-            summary = stringResource(R.string.es_use_black_summary)
-        )
-
-        PreferenceSubheader(text = stringResource(R.string.es_pref_category_twilight))
-        var twilightMode by unfoldBox(prefs.twilightMode)
-        TwilightMode.values().toList().forEach { mode ->
-            TwilightModeItem(
-                mode = mode,
-                isSelected = twilightMode == mode,
-                onClick = { twilightMode = mode }
+    Scaffold(
+        topAppBar = {
+            EsTopAppBar(
+                title = { Text(stringResource(R.string.es_theming_title)) },
+                trailing = {
+                    val coroutineScope = coroutineScope()
+                    PopupMenuButton(
+                        items = listOf(R.string.es_reset),
+                        item = { Text(stringResource(it)) },
+                        onSelected = { id ->
+                            when (id) {
+                                R.string.es_reset -> {
+                                    coroutineScope.launch {
+                                        prefs.primaryColor.delete()
+                                        prefs.secondaryColor.delete()
+                                        prefs.twilightMode.delete()
+                                        prefs.useBlack.delete()
+                                    }
+                                }
+                            }
+                        }
+                    )
+                }
             )
+        },
+        body = {
+            ScrollableList {
+                PreferenceSubheader(text = stringResource(R.string.es_pref_category_colors))
+                ColorPreference(
+                    box = prefs.primaryColor,
+                    title = stringResource(R.string.es_primary_color),
+                    showAlphaSelector = false
+                )
+                ColorPreference(
+                    box = prefs.secondaryColor,
+                    title = stringResource(R.string.es_secondary_color),
+                    showAlphaSelector = false
+                )
+                CheckboxPreference(
+                    box = prefs.useBlack,
+                    title = stringResource(R.string.es_use_black),
+                    summary = stringResource(R.string.es_use_black_summary)
+                )
+
+                PreferenceSubheader(text = stringResource(R.string.es_pref_category_twilight))
+                var twilightMode by unfoldBox(prefs.twilightMode)
+                TwilightMode.values().toList().forEach { mode ->
+                    TwilightModeItem(
+                        mode = mode,
+                        isSelected = twilightMode == mode,
+                        onClick = { twilightMode = mode }
+                    )
+                }
+            }
         }
-    }
+    )
 }
 
 @Composable

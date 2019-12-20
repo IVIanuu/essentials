@@ -15,7 +15,7 @@
   -->
 
 <resources>
-    <string name="es_title_theming">Theme</string>
+    <string name="es_theming_title">Theme</string>
 
     <string name="es_pref_category_colors">Colors</string>
     <string name="es_primary_color">Primary color</string>
@@ -34,5 +34,7 @@
     <string name="es_twilight_mode_battery_desc">Use the dark theme while the battery saver is enabled</string>
     <string name="es_twilight_mode_system">System</string>
     <string name="es_twilight_mode_system_desc">Use the system default dark mode setting</string>
+
+    <string name="es_reset">Reset</string>
 
 </resources>
