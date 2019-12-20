@@ -112,7 +112,7 @@ class SliderPosition(
     internal val holder = AnimatedValueHolder(scale(startValue, endValue, initial, startPx, endPx))
 
     internal val tickFractions: List<Float> =
-        if (steps == 0) emptyList() else List(steps + 2) { it.toFloat() / (steps + 1) }
+        if (steps == 0) emptyList() else List(steps) { it.toFloat() / steps }
 
     internal var anchorsPx: List<Float> = emptyList()
         private set

@@ -80,6 +80,7 @@ val PrefsRoute = Route {
                     box = boxFactory.int("slider"),
                     dependencies = dependencies,
                     title = "Slider",
+                    steps = 10,
                     summary = "This is a slider preference",
                     valueText = unitValueTextProvider(UnitValueTextProvider.Unit.Dp)
                 )
