@@ -57,7 +57,7 @@ dependencies {
     implementation(project(":essentials-shell"))
     implementation(project(":essentials-shortcutpicker"))
     implementation(project(":essentials-tile"))
-    implementation(project(":essentials-twilight"))
+    implementation(project(":essentials-theming"))
     implementation(project(":essentials-work"))
     testImplementation(project(":essentials-test"))
 }

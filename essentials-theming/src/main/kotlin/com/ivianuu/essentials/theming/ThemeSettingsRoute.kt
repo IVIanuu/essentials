@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.twilight
+package com.ivianuu.essentials.theming
 
 import androidx.compose.Composable
 import androidx.compose.Pivotal
@@ -26,17 +26,36 @@ import com.ivianuu.essentials.ui.common.ListScreen
 import com.ivianuu.essentials.ui.injekt.inject
 import com.ivianuu.essentials.ui.material.SimpleListItem
 import com.ivianuu.essentials.ui.navigation.Route
+import com.ivianuu.essentials.ui.prefs.CheckboxPreference
+import com.ivianuu.essentials.ui.prefs.ColorPreference
+import com.ivianuu.essentials.ui.prefs.PreferenceSubheader
 
-val TwilightSettingsRoute = Route {
-    ListScreen(title = stringResource(R.string.es_title_twilight)) {
-        val prefs = inject<TwilightPrefs>()
-        val (value, setValue) = unfoldBox(prefs.twilightMode)
+val ThemeSettingsRoute = Route {
+    ListScreen(title = stringResource(R.string.es_title_theming)) {
+        val prefs = inject<ThemePrefs>()
 
+        PreferenceSubheader(text = stringResource(R.string.es_pref_category_colors))
+        ColorPreference(
+            box = prefs.primaryColor,
+            title = stringResource(R.string.es_primary_color)
+        )
+        ColorPreference(
+            box = prefs.secondaryColor,
+            title = stringResource(R.string.es_secondary_color)
+        )
+        CheckboxPreference(
+            box = prefs.useBlack,
+            title = stringResource(R.string.es_use_black),
+            summary = stringResource(R.string.es_use_black_summary)
+        )
+
+        PreferenceSubheader(text = stringResource(R.string.es_pref_category_twilight))
+        var twilightMode by unfoldBox(prefs.twilightMode)
         TwilightMode.values().toList().forEach { mode ->
             TwilightModeItem(
                 mode = mode,
-                isSelected = value == mode,
-                onClick = { setValue(mode) }
+                isSelected = twilightMode == mode,
+                onClick = { twilightMode = mode }
             )
         }
     }

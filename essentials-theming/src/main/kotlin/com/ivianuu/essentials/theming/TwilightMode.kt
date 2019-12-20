@@ -14,22 +14,9 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.twilight
+package com.ivianuu.essentials.theming
 
 import com.ivianuu.essentials.store.prefs.BoxValueHolder
-import com.ivianuu.essentials.store.prefs.PrefBoxFactory
-import com.ivianuu.essentials.store.prefs.enumString
-import com.ivianuu.injekt.Single
-import com.ivianuu.injekt.android.ApplicationScope
-
-@ApplicationScope
-@Single
-class TwilightPrefs(factory: PrefBoxFactory) {
-    val twilightMode = factory.enumString(
-        "twilight_mode",
-        TwilightMode.System
-    )
-}
 
 enum class TwilightMode(
     override val value: String,

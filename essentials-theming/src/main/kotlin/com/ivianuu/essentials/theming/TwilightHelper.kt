@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.twilight
+package com.ivianuu.essentials.theming
 
 import android.app.Application
 import android.content.ComponentCallbacks2
@@ -48,7 +48,7 @@ class TwilightHelper(
     private val broadcastFactory: BroadcastFactory,
     private val resources: Resources,
     private val powerManager: PowerManager,
-    private val prefs: TwilightPrefs
+    prefs: ThemePrefs
 ) : AppService {
 
     private val _isDark = ConflatedBroadcastChannel(false)

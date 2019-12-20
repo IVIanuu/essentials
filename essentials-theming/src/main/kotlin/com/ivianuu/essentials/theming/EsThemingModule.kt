@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.twilight
+package com.ivianuu.essentials.theming
 
 import com.ivianuu.essentials.app.bindAppService
 import com.ivianuu.injekt.Module
 
-val EsTwilightModule = Module {
+val EsThemingModule = Module {
     bindAppService<TwilightHelper>()
 }

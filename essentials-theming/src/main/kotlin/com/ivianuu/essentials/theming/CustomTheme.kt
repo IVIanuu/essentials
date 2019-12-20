@@ -14,35 +14,50 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.twilight
+package com.ivianuu.essentials.theming
 
-import androidx.animation.FloatPropKey
-import androidx.animation.transitionDefinition
 import androidx.compose.Composable
 import androidx.compose.remember
-import androidx.ui.animation.Transition
-import androidx.ui.material.ColorPalette
+import androidx.ui.graphics.Color
 import androidx.ui.material.Typography
-import androidx.ui.material.darkColorPalette
-import androidx.ui.material.lightColorPalette
-import com.ivianuu.essentials.ui.core.SystemBarStyle
+import com.ivianuu.essentials.ui.box.unfoldBox
 import com.ivianuu.essentials.ui.coroutines.collect
 import com.ivianuu.essentials.ui.injekt.inject
+import com.ivianuu.essentials.ui.material.ColorPalette
 import com.ivianuu.essentials.ui.material.EsTheme
-import com.ivianuu.essentials.ui.material.lerp
-import com.ivianuu.essentials.util.darken
 
 @Composable
-fun TwilightTheme(
-    lightColors: ColorPalette = lightColorPalette(),
-    darkColors: ColorPalette = darkColorPalette(),
+fun CustomTheme(
     typography: Typography = Typography(),
     children: @Composable() () -> Unit
 ) {
+    val prefs = inject<ThemePrefs>()
+
+    val primaryColor = unfoldBox(prefs.primaryColor).value
+    val secondaryColor = unfoldBox(prefs.secondaryColor).value
+    val useBlack = unfoldBox(prefs.useBlack).value
     val helper = inject<TwilightHelper>()
     val isDark = collect(remember { helper.isDark }, helper.currentIsDark)
 
-    Transition(
+    val backgroundColor = remember(isDark, useBlack) {
+        if (!isDark) Color.White else if (useBlack) Color.Black else Color(0xFF121212)
+    }
+
+    val colorPalette = ColorPalette(
+        isLight = !isDark,
+        primary = primaryColor,
+        secondary = secondaryColor,
+        background = backgroundColor,
+        surface = backgroundColor
+    )
+
+    EsTheme(
+        colors = colorPalette,
+        typography = typography,
+        children = children
+    )
+
+    /*Transition(
         definition = twilightTransitionDefinition,
         toState = isDark
     ) { state ->
@@ -55,9 +70,10 @@ fun TwilightTheme(
             ),
             children = children
         )
-    }
+    }*/
 }
 
+/*
 private val Fraction = FloatPropKey()
 private val twilightTransitionDefinition = transitionDefinition {
     state(true) { set(Fraction, 1f) }
@@ -69,3 +85,4 @@ private val twilightTransitionDefinition = transitionDefinition {
         }
     }
 }
+*/
