@@ -39,7 +39,10 @@ fun ColorPreference(
     title: String? = null,
     summary: String? = null,
     image: Image? = null,
-    dialogTitle: String? = title
+    dialogTitle: String? = title,
+    colorPalettes: List<ColorPickerPalette> = ColorPickerPalette.values().toList(),
+    showAlphaSelector: Boolean = true,
+    allowCustomArgb: Boolean = true
 ) {
     ColorPreference(
         valueController = ValueController(box),
@@ -48,7 +51,10 @@ fun ColorPreference(
         title = title.asTextComposable(),
         summary = summary.asTextComposable(),
         leading = image.asIconComposable(),
-        dialogTitle = dialogTitle.asTextComposable()
+        dialogTitle = dialogTitle.asTextComposable(),
+        colorPalettes = colorPalettes,
+        showAlphaSelector = showAlphaSelector,
+        allowCustomArgb = allowCustomArgb
     )
 }
 

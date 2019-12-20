@@ -64,7 +64,7 @@ private fun RenderTheme(
         animation.animateTo(
             targetValue = 1f,
             anim = TweenBuilder<Float>().apply {
-                duration = 220
+                duration = 300
             }
         )
     }
