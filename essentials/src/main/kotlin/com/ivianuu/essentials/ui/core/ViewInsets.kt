@@ -56,7 +56,7 @@ fun WindowInsetsManager(children: @Composable() () -> Unit) {
             val navigationBarHidden =
                 composeView.windowSystemUiVisibility.containsFlag(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)
 
-            val zeroSides = if (navigationBarHidden) calculateShouldZeroSides(composeView.context)
+            val zeroSides = if (navigationBarHidden) calculateZeroSides(composeView.context)
             else ZeroSides.None
 
             withDensity(density) {
@@ -129,7 +129,7 @@ private enum class ZeroSides {
     None, Left, Right, Both
 }
 
-private fun calculateShouldZeroSides(
+private fun calculateZeroSides(
     context: Context
 ): ZeroSides {
     val orientation = context.resources.configuration.orientation
