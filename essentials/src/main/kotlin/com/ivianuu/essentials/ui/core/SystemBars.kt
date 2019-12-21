@@ -32,6 +32,7 @@ import androidx.ui.graphics.toArgb
 import androidx.ui.layout.LayoutGravity
 import androidx.ui.layout.Stack
 import androidx.ui.material.surface.Surface
+import com.ivianuu.essentials.ui.common.SafeArea
 import com.ivianuu.essentials.ui.common.framed
 import com.ivianuu.essentials.ui.layout.SizedBox
 import com.ivianuu.essentials.ui.layout.WithModifier
@@ -65,11 +66,16 @@ fun ProvideCurrentSystemBarStyle(
 
 @Composable
 fun StatusBar(color: Color) {
-    SizedBox(
-        width = Dp.Infinity,
-        height = ambientWindowInsets().viewPadding.top
+    SafeArea(
+        top = false,
+        bottom = false
     ) {
-        Surface(color = color) { }
+        SizedBox(
+            width = Dp.Infinity,
+            height = ambientWindowInsets().viewPadding.top
+        ) {
+            Surface(color = color) { }
+        }
     }
 }
 
@@ -116,6 +122,17 @@ internal class SystemBarManager(private val activity: Activity) {
     private val styles = modelListOf<SystemBarStyle>()
     var currentStyle: SystemBarStyle by framed(SystemBarStyle())
 
+    init {
+        activity.window.statusBarColor = Color.Black.copy(alpha = 0.4f).toArgb()
+        activity.window.navigationBarColor = Color.Transparent.toArgb()
+        activity.window.decorView.systemUiVisibility =
+            activity.window.decorView.systemUiVisibility.addFlag(
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
+                        View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
+                        View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+            )
+    }
+
     fun registerStyle(style: SystemBarStyle) {
         styles += style
         update()
@@ -128,35 +145,18 @@ internal class SystemBarManager(private val activity: Activity) {
 
     private fun update() {
         currentStyle = styles.lastOrNull() ?: SystemBarStyle()
-        val window = activity.window
-        val decorView = window.decorView
-        window.statusBarColor = Color.Transparent.toArgb()
-        decorView.systemUiVisibility =
-            decorView.systemUiVisibility.setFlag(
+        activity.window.decorView.systemUiVisibility =
+            activity.window.decorView.systemUiVisibility.setFlag(
                 View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR,
                 currentStyle.lightStatusBar
             )
-
-        decorView.systemUiVisibility =
-            decorView.systemUiVisibility.addFlag(
-                View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
-                        View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-            )
-
-        window.navigationBarColor = currentStyle.navigationBarColor.toArgb()
         if (Build.VERSION.SDK_INT >= 26) {
-            decorView.systemUiVisibility =
-                decorView.systemUiVisibility.setFlag(
+            activity.window.decorView.systemUiVisibility =
+                activity.window.decorView.systemUiVisibility.setFlag(
                     View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR,
                     currentStyle.lightNavigationBar
                 )
         }
-
-        decorView.systemUiVisibility =
-            decorView.systemUiVisibility.addFlag(
-                View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
-                        View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-            )
     }
 }
 

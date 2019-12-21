@@ -22,14 +22,13 @@ import androidx.ui.material.MaterialTheme
 import androidx.ui.material.Typography
 import com.ivianuu.essentials.ui.core.ProvideCurrentSystemBarStyle
 import com.ivianuu.essentials.ui.core.SystemBarStyle
-import com.ivianuu.essentials.util.darken
 
 @Composable
 fun EsTheme(
     colors: ColorPalette = ColorPalette(),
     typography: Typography = Typography(),
     systemBarStyle: SystemBarStyle = SystemBarStyle(
-        statusBarColor = colors.primary.darken()
+        statusBarColor = colors.primary
     ),
     children: @Composable() () -> Unit
 ) {
