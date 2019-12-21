@@ -29,9 +29,10 @@ import androidx.compose.remember
 import androidx.ui.core.Dp
 import androidx.ui.graphics.Color
 import androidx.ui.graphics.toArgb
+import androidx.ui.layout.LayoutGravity
+import androidx.ui.layout.Stack
 import androidx.ui.material.surface.Surface
 import com.ivianuu.essentials.ui.common.framed
-import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.layout.SizedBox
 import com.ivianuu.essentials.ui.layout.WithModifier
 import com.ivianuu.essentials.util.addFlag
@@ -83,18 +84,17 @@ fun SystemBarManager(children: @Composable() () -> Unit) {
     val activity = ambient(ActivityAmbient)
     val systemBarManager = remember { SystemBarManager(activity) }
     SystemBarManagerAmbient.Provider(value = systemBarManager) {
-        Column {
-            if (!systemBarManager.currentStyle.drawBehindStatusBar) {
+        Stack {
+            WithModifier(
+                modifier = LayoutGravity.TopLeft,
+                children = children
+            )
 
-                WithModifier(modifier = Inflexible) {
+            if (!systemBarManager.currentStyle.drawBehindStatusBar) {
+                WithModifier(modifier = LayoutGravity.TopLeft) {
                     DrawStatusBar(color = systemBarManager.currentStyle.statusBarColor)
                 }
             }
-
-            WithModifier(
-                modifier = Flexible(1f),
-                children = children
-            )
         }
     }
 }

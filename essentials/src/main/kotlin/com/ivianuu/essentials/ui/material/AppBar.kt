@@ -24,6 +24,7 @@ import androidx.ui.core.dp
 import androidx.ui.graphics.Color
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.common.SafeArea
 import com.ivianuu.essentials.ui.core.Unstable
 import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.essentials.ui.navigation.route
@@ -41,25 +42,28 @@ fun EsTopAppBar(
     color: Color = MaterialTheme.colors().primary,
     title: (@Composable() () -> Unit)? = null,
     leading: (@Composable() () -> Unit)? = autoTopAppBarLeadingIcon(),
-    trailing: (@Composable() () -> Unit)? = null
+    trailing: (@Composable() () -> Unit)? = null,
+    applySafeAreaPadding: Boolean = true
 ) {
-    TopAppBar(
-        color = color,
-        title = title ?: {},
-        navigationIcon = leading?.let {
-            {
+    SafeArea(top = applySafeAreaPadding, left = false, right = false, bottom = false) {
+        TopAppBar(
+            color = color,
+            title = title ?: {},
+            navigationIcon = leading?.let {
+                {
+                    CurrentIconStyleProvider(appBarIconStyle(color)) {
+                        leading()
+                    }
+                }
+            },
+            actionData = listOfNotNull(trailing),
+            action = {
                 CurrentIconStyleProvider(appBarIconStyle(color)) {
-                    leading()
+                    it()
                 }
             }
-        },
-        actionData = listOfNotNull(trailing),
-        action = {
-            CurrentIconStyleProvider(appBarIconStyle(color)) {
-                it()
-            }
-        }
-    )
+        )
+    }
 }
 
 @Composable
