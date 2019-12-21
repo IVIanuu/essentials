@@ -50,9 +50,9 @@ fun DialogWrapper(
         } else null
     ) {
         DialogScrim()
-        Center {
-            SafeArea {
-                dialog()
+        SafeArea {
+            Center {
+                PressGestureDetector(children = dialog)
             }
         }
     }
