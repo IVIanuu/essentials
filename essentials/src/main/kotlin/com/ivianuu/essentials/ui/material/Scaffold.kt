@@ -125,7 +125,7 @@ class ScaffoldState {
         internal set
 
     var isDrawerOpen by framed(false)
-    var isDrawerGesturesEnabled by framed(false)
+    var isDrawerGesturesEnabled by framed(true)
 
     var fabPosition by framed(FabPosition.End)
     var bodyLayoutMode by framed(BodyLayoutMode.Wrap)
