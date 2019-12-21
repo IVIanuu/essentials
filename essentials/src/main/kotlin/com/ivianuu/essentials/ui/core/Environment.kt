@@ -44,10 +44,12 @@ fun EsEnvironment(
         CoroutineContextAmbient with coroutineContext,
         KeyboardManagerAmbient with remember { KeyboardManager(focusManager, activity) }
     ) {
-        WindowInsetsManager {
-            SystemBarManager {
-                ConfigurationFix {
-                    OrientationProvider(children = children)
+        WindowSizeProvider {
+            WindowInsetsManager {
+                SystemBarManager {
+                    ConfigurationFix {
+                        OrientationProvider(children = children)
+                    }
                 }
             }
         }
