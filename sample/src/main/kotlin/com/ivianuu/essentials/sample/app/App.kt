@@ -23,7 +23,7 @@ import com.ivianuu.essentials.coil.EsCoilModule
 import com.ivianuu.essentials.gestures.EsGesturesModule
 import com.ivianuu.essentials.permission.EsPermissionsModule
 import com.ivianuu.essentials.sample.BootModule
-import com.ivianuu.essentials.theming.EsTwilightModule
+import com.ivianuu.essentials.twilight.EsTwilightModule
 import com.ivianuu.essentials.work.WorkerInitializerModule
 import com.ivianuu.essentials.work.WorkerInjectionModule
 
