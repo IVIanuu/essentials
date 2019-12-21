@@ -43,10 +43,8 @@ import com.ivianuu.essentials.util.setFlag
 data class SystemBarStyle(
     val statusBarColor: Color = Color.Black,
     val lightStatusBar: Boolean = statusBarColor.isLight,
-    val drawBehindStatusBar: Boolean = false,
     val navigationBarColor: Color = Color.Black,
-    val lightNavigationBar: Boolean = navigationBarColor.isLight,
-    val drawBehindNavBar: Boolean = false
+    val lightNavigationBar: Boolean = navigationBarColor.isLight
 )
 
 @Composable
@@ -66,10 +64,20 @@ fun ProvideCurrentSystemBarStyle(
 }
 
 @Composable
-fun DrawStatusBar(color: Color) {
+fun StatusBar(color: Color) {
     SizedBox(
         width = Dp.Infinity,
         height = ambientWindowInsets().viewPadding.top
+    ) {
+        Surface(color = color) { }
+    }
+}
+
+@Composable
+fun NavigationBar(color: Color) {
+    SizedBox(
+        width = Dp.Infinity,
+        height = ambientWindowInsets().viewPadding.bottom
     ) {
         Surface(color = color) { }
     }
@@ -90,10 +98,12 @@ fun SystemBarManager(children: @Composable() () -> Unit) {
                 children = children
             )
 
-            if (!systemBarManager.currentStyle.drawBehindStatusBar) {
-                WithModifier(modifier = LayoutGravity.TopLeft) {
-                    DrawStatusBar(color = systemBarManager.currentStyle.statusBarColor)
-                }
+            WithModifier(modifier = LayoutGravity.TopLeft) {
+                StatusBar(color = systemBarManager.currentStyle.statusBarColor)
+            }
+
+            WithModifier(modifier = LayoutGravity.BottomLeft) {
+                NavigationBar(color = systemBarManager.currentStyle.navigationBarColor)
             }
         }
     }
@@ -143,9 +153,9 @@ internal class SystemBarManager(private val activity: Activity) {
         }
 
         decorView.systemUiVisibility =
-            decorView.systemUiVisibility.setFlag(
+            decorView.systemUiVisibility.addFlag(
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
-                        View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION, currentStyle.drawBehindNavBar
+                        View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
             )
     }
 }
