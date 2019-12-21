@@ -35,6 +35,7 @@ import androidx.ui.core.dp
 import androidx.ui.core.ipx
 import androidx.ui.core.withDensity
 import androidx.ui.layout.EdgeInsets
+import com.github.ajalt.timberkt.d
 import com.ivianuu.essentials.ui.common.UpdateProvider
 import com.ivianuu.essentials.ui.common.Updateable
 import com.ivianuu.essentials.ui.common.framed
@@ -55,10 +56,8 @@ fun WindowInsetsManager(children: @Composable() () -> Unit) {
             val navigationBarHidden =
                 composeView.windowSystemUiVisibility.containsFlag(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)
 
-            var zeroSides = ZeroSides.None
-            if (navigationBarHidden) {
-                zeroSides = calculateShouldZeroSides(composeView.context)
-            }
+            val zeroSides = if (navigationBarHidden) calculateShouldZeroSides(composeView.context)
+            else ZeroSides.None
 
             withDensity(density) {
                 val viewPadding = EdgeInsets(
@@ -81,10 +80,12 @@ fun WindowInsetsManager(children: @Composable() () -> Unit) {
                 val newWindowInsets = WindowInsets(viewPadding, viewInsets)
 
                 if (windowInsets != newWindowInsets) {
+                    d { "windows insets changed $newWindowInsets" }
                     setWindowInsets(newWindowInsets)
                 }
             }
-            insets
+
+            return@OnApplyWindowInsetsListener insets
         }
     }
 
@@ -211,6 +212,10 @@ private class ObservableWindowInsets(
         var result = viewPadding.hashCode()
         result = 31 * result + viewInsets.hashCode()
         return result
+    }
+
+    override fun toString(): String {
+        return "ObservableWindowsInsets(viewPadding='$viewPadding', viewInsets='$viewInsets')"
     }
 }
 
