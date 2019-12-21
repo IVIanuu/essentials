@@ -36,9 +36,8 @@ import androidx.ui.foundation.shape.border.Border
 import androidx.ui.foundation.shape.corner.RoundedCornerShape
 import androidx.ui.graphics.Color
 import androidx.ui.layout.Center
-import androidx.ui.layout.Container
-import androidx.ui.layout.EdgeInsets
 import androidx.ui.layout.LayoutExpandedWidth
+import androidx.ui.layout.LayoutHeight
 import androidx.ui.layout.LayoutMinWidth
 import androidx.ui.layout.LayoutPadding
 import androidx.ui.layout.LayoutWidth
@@ -167,19 +166,19 @@ private fun ColorPickerContent(
                     }
                 }
 
-
-                Container(modifier = LayoutPadding(left = 24.dp, right = 24.dp)) {
-                    TabContent<ColorPickerPage>(keepState = true) { _, page ->
-                        Container(height = 300.dp) {
-                            when (page) {
-                                ColorPickerPage.Colors -> colorGrid()
-                                ColorPickerPage.Editor -> {
-                                    ColorEditor(
-                                        color = color,
-                                        onColorChanged = onColorChanged,
-                                        showAlphaSelector = showAlphaSelector
-                                    )
-                                }
+                WithModifier(
+                    modifier = LayoutHeight(300.dp) +
+                            LayoutPadding(left = 24.dp, right = 24.dp)
+                ) {
+                    TabContent<ColorPickerPage>(keepState = false) { _, page ->
+                        when (page) {
+                            ColorPickerPage.Colors -> colorGrid()
+                            ColorPickerPage.Editor -> {
+                                ColorEditor(
+                                    color = color,
+                                    onColorChanged = onColorChanged,
+                                    showAlphaSelector = showAlphaSelector
+                                )
                             }
                         }
                     }
@@ -331,10 +330,9 @@ private fun ColorEditorHeader(
 ) {
     CurrentTextStyleProvider(value = MaterialTheme.typography().subtitle1) {
         EsSurface(color = color) {
-            Container(
-                height = 72.dp,
-                padding = EdgeInsets(all = 8.dp),
-                modifier = LayoutExpandedWidth
+            WithModifier(
+                modifier = LayoutHeight(72.dp) +
+                        LayoutExpandedWidth + LayoutPadding(all = 8.dp)
             ) {
                 Center {
                     Row(
@@ -399,13 +397,8 @@ private fun ColorComponentItem(
     value: Float,
     onChanged: (Float) -> Unit
 ) {
-    Container(
-        height = 48.dp,
-        modifier = LayoutExpandedWidth
-    ) {
-        Row(
-            crossAxisAlignment = CrossAxisAlignment.Center
-        ) {
+    WithModifier(modifier = LayoutHeight(48.dp) + LayoutExpandedWidth) {
+        Row(crossAxisAlignment = CrossAxisAlignment.Center) {
             Text(
                 text = component.title,
                 modifier = Inflexible,
@@ -428,13 +421,11 @@ private fun ColorComponentItem(
 
             Spacer(LayoutWidth(8.dp))
 
-            WithModifier(modifier = LayoutMinWidth(56.dp)) {
-                Text(
-                    text = (255 * value).toInt().toString(),
-                    modifier = Inflexible,
-                    style = MaterialTheme.typography().subtitle1
-                )
-            }
+            Text(
+                text = (255 * value).toInt().toString(),
+                modifier = LayoutMinWidth(56.dp) + Inflexible,
+                style = MaterialTheme.typography().subtitle1
+            )
         }
     }
 }
