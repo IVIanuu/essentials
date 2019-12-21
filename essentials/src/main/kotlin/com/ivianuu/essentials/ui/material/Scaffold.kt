@@ -28,6 +28,7 @@ import androidx.ui.core.dp
 import androidx.ui.core.looseMin
 import androidx.ui.material.DrawerState
 import androidx.ui.material.ModalDrawerLayout
+import com.ivianuu.essentials.ui.common.SafeArea
 import com.ivianuu.essentials.ui.common.framed
 import com.ivianuu.essentials.ui.common.onBackPressed
 import com.ivianuu.essentials.ui.common.withDensity
@@ -65,7 +66,8 @@ fun Scaffold(
     topAppBar: (@Composable() () -> Unit)? = null,
     body: (@Composable() () -> Unit)? = null,
     bottomBar: (@Composable() () -> Unit)? = null,
-    fab: (@Composable() () -> Unit)? = null
+    fab: (@Composable() () -> Unit)? = null,
+    wrapInSafeArea: Boolean = true
 ) {
     // update state
     scaffoldState.hasTopAppBar = topAppBar != null
@@ -91,20 +93,28 @@ fun Scaffold(
                     )
                 }
             }
-            if (drawerContent != null) {
-                ModalDrawerLayout(
-                    drawerState = if (scaffoldState.isDrawerOpen) DrawerState.Opened else DrawerState.Closed,
-                    onStateChange = { scaffoldState.isDrawerOpen = it == DrawerState.Opened },
-                    gesturesEnabled = scaffoldState.isDrawerGesturesEnabled,
-                    drawerContent = {
-                        EsSurface {
-                            drawerContent()
-                        }
-                    },
-                    bodyContent = finalBody
-                )
+            val maybeBodyWithDrawer = if (drawerContent != null) {
+                {
+                    ModalDrawerLayout(
+                        drawerState = if (scaffoldState.isDrawerOpen) DrawerState.Opened else DrawerState.Closed,
+                        onStateChange = { scaffoldState.isDrawerOpen = it == DrawerState.Opened },
+                        gesturesEnabled = scaffoldState.isDrawerGesturesEnabled,
+                        drawerContent = {
+                            EsSurface {
+                                drawerContent()
+                            }
+                        },
+                        bodyContent = finalBody
+                    )
+                }
             } else {
-                finalBody()
+                finalBody
+            }
+
+            if (wrapInSafeArea) {
+                SafeArea(children = maybeBodyWithDrawer)
+            } else {
+                maybeBodyWithDrawer()
             }
         }
     }
