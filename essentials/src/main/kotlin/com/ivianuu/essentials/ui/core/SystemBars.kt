@@ -26,15 +26,19 @@ import androidx.compose.ambient
 import androidx.compose.frames.modelListOf
 import androidx.compose.onPreCommit
 import androidx.compose.remember
-import androidx.ui.core.Dp
+import androidx.ui.core.Modifier
+import androidx.ui.core.dp
 import androidx.ui.graphics.Color
 import androidx.ui.graphics.toArgb
+import androidx.ui.layout.LayoutExpandedHeight
+import androidx.ui.layout.LayoutExpandedWidth
 import androidx.ui.layout.LayoutGravity
+import androidx.ui.layout.LayoutHeight
+import androidx.ui.layout.LayoutWidth
 import androidx.ui.layout.Stack
 import androidx.ui.material.surface.Surface
 import com.ivianuu.essentials.ui.common.SafeArea
 import com.ivianuu.essentials.ui.common.framed
-import com.ivianuu.essentials.ui.layout.SizedBox
 import com.ivianuu.essentials.ui.layout.WithModifier
 import com.ivianuu.essentials.util.addFlag
 import com.ivianuu.essentials.util.isLight
@@ -70,23 +74,27 @@ fun StatusBar(color: Color) {
         top = false,
         bottom = false
     ) {
-        SizedBox(
-            width = Dp.Infinity,
-            height = ambientWindowInsets().viewPadding.top
-        ) {
-            Surface(color = color) { }
-        }
+        Surface(
+            modifier = LayoutExpandedWidth + LayoutHeight(ambientWindowInsets().viewPadding.top),
+            color = color
+        ) { }
     }
 }
 
 @Composable
 fun NavigationBar(color: Color) {
-    SizedBox(
-        width = Dp.Infinity,
-        height = ambientWindowInsets().viewPadding.bottom
-    ) {
-        Surface(color = color) { }
+    val windowInsets = ambientWindowInsets()
+    val viewPadding = windowInsets.viewPadding
+    val modifier = when {
+        viewPadding.bottom > 0.dp -> LayoutExpandedWidth + LayoutHeight(viewPadding.bottom)
+        viewPadding.left > 0.dp -> LayoutWidth(viewPadding.left) + LayoutExpandedHeight
+        viewPadding.right > 0.dp -> LayoutWidth(viewPadding.right) + LayoutExpandedHeight
+        else -> Modifier.None
     }
+    Surface(
+        modifier = modifier,
+        color = color
+    ) { }
 }
 
 @Composable
@@ -108,7 +116,15 @@ fun SystemBarManager(children: @Composable() () -> Unit) {
                 StatusBar(color = systemBarManager.currentStyle.statusBarColor)
             }
 
-            WithModifier(modifier = LayoutGravity.BottomLeft) {
+            val viewPadding = ambientWindowInsets().viewPadding
+            val navBarGravity = when {
+                viewPadding.bottom > 0.dp -> LayoutGravity.BottomLeft
+                viewPadding.left > 0.dp -> LayoutGravity.TopLeft
+                viewPadding.right > 0.dp -> LayoutGravity.TopRight
+                else -> Modifier.None
+            }
+
+            WithModifier(modifier = navBarGravity) {
                 NavigationBar(color = systemBarManager.currentStyle.navigationBarColor)
             }
         }
@@ -123,7 +139,7 @@ internal class SystemBarManager(private val activity: Activity) {
     var currentStyle: SystemBarStyle by framed(SystemBarStyle())
 
     init {
-        activity.window.statusBarColor = Color.Black.copy(alpha = 0.4f).toArgb()
+        activity.window.statusBarColor = Color.Black.copy(alpha = 0.2f).toArgb()
         activity.window.navigationBarColor = Color.Transparent.toArgb()
         activity.window.decorView.systemUiVisibility =
             activity.window.decorView.systemUiVisibility.addFlag(
