@@ -78,7 +78,12 @@ fun SafeArea(
         ) {
             WindowInsetsProvider(
                 value = WindowInsets(
-                    viewPadding = EdgeInsets(),
+                    viewPadding = EdgeInsets(
+                        left = if (left) 0.dp else windowInsets.viewPadding.left,
+                        top = if (top) 0.dp else windowInsets.viewPadding.top,
+                        right = if (right) 0.dp else windowInsets.viewPadding.right,
+                        bottom = if (bottom) 0.dp else windowInsets.viewPadding.bottom
+                    ),
                     viewInsets = windowInsets.viewInsets
                 )
             ) {
