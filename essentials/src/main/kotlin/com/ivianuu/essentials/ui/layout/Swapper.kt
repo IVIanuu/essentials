@@ -20,11 +20,15 @@ import androidx.compose.Composable
 import androidx.compose.frames.modelListOf
 import androidx.compose.key
 import androidx.ui.core.Layout
+import androidx.ui.core.Modifier
 import androidx.ui.core.PxPosition
 import com.ivianuu.essentials.ui.common.framed
+
+@Composable
 fun <T> Swapper(
     controller: SwapperController<T>,
-    child: (T) -> Unit
+    modifier: Modifier = Modifier.None,
+    child: @Composable() (T) -> Unit
 ) {
     val children: @Composable() () -> Unit = {
         controller.keepStateItems.forEach { item ->
@@ -38,7 +42,7 @@ fun <T> Swapper(
         }
     }
 
-    Layout(children = children) { measureables, constraints ->
+    Layout(children = children, modifier = modifier) { measureables, constraints ->
         val placeables = measureables.map {
             it.measure(constraints)
         }
