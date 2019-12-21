@@ -17,22 +17,10 @@
 package com.ivianuu.essentials.ui.dialog
 
 import androidx.compose.Composable
-import com.ivianuu.essentials.ui.navigation.FadeRouteTransition
-import com.ivianuu.essentials.ui.navigation.Route
-import com.ivianuu.essentials.ui.navigation.navigator
+import androidx.ui.foundation.ColoredRect
+import androidx.ui.graphics.Color
 
-fun DialogRoute(
-    dismissible: Boolean = true,
-    dismissHandler: @Composable() () -> /*// todo use Unit */ Any? = { navigator.pop() },
-    dialog: @Composable() () -> Unit
-) = Route(
-    opaque = true,
-    enterTransition = FadeRouteTransition(),
-    exitTransition = FadeRouteTransition()
-) {
-    DialogWrapper(
-        dismissible = dismissible,
-        dismissHandler = dismissHandler,
-        dialog = dialog
-    )
+@Composable
+fun DialogScrim() {
+    ColoredRect(Color.Black.copy(alpha = 0.6f))
 }

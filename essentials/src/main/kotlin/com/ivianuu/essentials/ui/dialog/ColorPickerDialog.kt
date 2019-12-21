@@ -165,6 +165,7 @@ private fun ColorPickerContent(
                     }
                 }
 
+
                 Padding(
                     left = 24.dp,
                     right = 24.dp
@@ -490,9 +491,7 @@ private enum class ColorPickerPage(
 }
 
 @Composable
-private fun TightColumn(
-    children: @Composable() () -> Unit
-) {
+private fun TightColumn(children: @Composable() () -> Unit) {
     Layout(children = children) { measureables, constraints ->
         var childConstraints = constraints
         val placeables = measureables.map {
@@ -506,9 +505,9 @@ private fun TightColumn(
 
         layout(width = constraints.maxWidth, height = height) {
             var offsetY = IntPx.Zero
-            placeables.forEach {
-                it.place(IntPx.Zero, offsetY)
-                offsetY += it.height
+            placeables.forEach { placeable ->
+                placeable.place(IntPx.Zero, offsetY)
+                offsetY += placeable.height
             }
         }
     }

@@ -275,9 +275,9 @@ private fun DialogContentLayout(
 
         layout(width = constraints.maxWidth, height = height) {
             var offsetY = IntPx.Zero
-            placeables.forEach {
-                it.place(IntPx.Zero, offsetY)
-                offsetY += it.height
+            placeables.forEach { placeable ->
+                placeable.place(IntPx.Zero, offsetY)
+                offsetY += placeable.height
             }
         }
     }

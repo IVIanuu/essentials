@@ -27,21 +27,29 @@ fun <T> Swapper(
     child: (T) -> Unit
 ) {
     val children: @Composable() () -> Unit = {
-        key(controller.current as Any) {
-            child(controller.current)
-        }
-
         controller.keepStateItems.forEach { item ->
             key(item as Any) {
                 child(item)
             }
         }
+
+        key(controller.current as Any) {
+            child(controller.current)
+        }
     }
 
     Layout(children = children) { measureables, constraints ->
-        val placeable = measureables.first().measure(constraints)
-        layout(placeable.width, placeable.height) {
-            placeable.place(PxPosition.Origin)
+        val placeables = measureables.map {
+            it.measure(constraints)
+        }
+        layout(constraints.maxWidth, constraints.maxHeight) {
+            placeables.forEachIndexed { index, placeable ->
+                if (index == placeables.lastIndex) {
+                    placeable.place(PxPosition.Origin)
+                } else {
+                    placeable.place(constraints.maxWidth, constraints.maxHeight)
+                }
+            }
         }
     }
 }

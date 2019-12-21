@@ -39,9 +39,8 @@ fun Dialog(child: @Composable() () -> Unit) {
         EsSurface(
             color = MaterialTheme.colors().surface,
             elevation = 24.dp,
-            shape = RoundedCornerShape(size = 4.dp)
-        ) {
-            child()
-        }
+            shape = RoundedCornerShape(size = 4.dp),
+            children = child
+        )
     }
 }
