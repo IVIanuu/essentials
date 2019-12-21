@@ -36,6 +36,7 @@ import androidx.ui.foundation.shape.border.Border
 import androidx.ui.foundation.shape.corner.RoundedCornerShape
 import androidx.ui.graphics.Color
 import androidx.ui.layout.Center
+import androidx.ui.layout.LayoutAlign
 import androidx.ui.layout.LayoutExpanded
 import androidx.ui.layout.LayoutExpandedWidth
 import androidx.ui.layout.LayoutHeight
@@ -52,12 +53,11 @@ import com.ivianuu.essentials.R
 import com.ivianuu.essentials.ui.common.hideKeyboardOnDispose
 import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
+import com.ivianuu.essentials.ui.layout.LayoutSquared
 import com.ivianuu.essentials.ui.layout.MainAxisAlignment
 import com.ivianuu.essentials.ui.layout.OverflowBox
 import com.ivianuu.essentials.ui.layout.Row
 import com.ivianuu.essentials.ui.layout.ScrollableList
-import com.ivianuu.essentials.ui.layout.SquaredBox
-import com.ivianuu.essentials.ui.layout.SquaredBoxFit
 import com.ivianuu.essentials.ui.layout.WithModifier
 import com.ivianuu.essentials.ui.material.EsSurface
 import com.ivianuu.essentials.ui.material.Icon
@@ -284,12 +284,12 @@ private fun BaseColorGridItem(
 ) {
     Ripple(bounded = true) {
         Clickable(onClick = onClick) {
-            SquaredBox(
-                fit = SquaredBoxFit.MatchWidth,
-                modifier = LayoutPadding(all = 4.dp)
-            ) {
-                Center(children = child)
-            }
+            WithModifier(
+                modifier = LayoutSquared(LayoutSquared.Fit.MatchWidth) +
+                        LayoutPadding(all = 4.dp) +
+                        LayoutAlign.Center,
+                children = child
+            )
         }
     }
 }

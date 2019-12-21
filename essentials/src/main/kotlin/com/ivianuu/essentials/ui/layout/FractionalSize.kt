@@ -16,24 +16,19 @@
 
 package com.ivianuu.essentials.ui.layout
 
-import androidx.compose.Composable
 import androidx.ui.core.Alignment
 import androidx.ui.core.Constraints
+import androidx.ui.core.DensityScope
+import androidx.ui.core.IntPxPosition
 import androidx.ui.core.IntPxSize
-import androidx.ui.core.constrain
+import androidx.ui.core.LayoutModifier
 
-@Composable
-fun FractionallySizedBox(
-    widthFactor: Float? = null,
-    heightFactor: Float? = null,
-    alignment: Alignment = Alignment.Center,
-    child: @Composable() () -> Unit
-) {
-    SingleChildLayout(child = child) { measurable, constraints ->
-        if (measurable == null) return@SingleChildLayout layout(
-            constraints.minWidth, constraints.minHeight
-        ) {}
-
+data class LayoutFractionalSize(
+    val widthFactor: Float? = null,
+    val heightFactor: Float? = null,
+    val alignment: Alignment = Alignment.Center
+) : LayoutModifier {
+    override fun DensityScope.modifyConstraints(constraints: Constraints): Constraints {
         var (minWidth, maxWidth, minHeight, maxHeight) = constraints
 
         if (widthFactor != null) {
@@ -48,16 +43,13 @@ fun FractionallySizedBox(
             maxHeight = height
         }
 
-        val childConstraints = Constraints(minWidth, maxWidth, minHeight, maxHeight)
-        val placeable = measurable.measure(childConstraints)
+        return Constraints(minWidth, maxWidth, minHeight, maxHeight)
+    }
 
-        val size = constraints.constrain(IntPxSize(placeable.width, placeable.height))
-
-        layout(size.width, size.height) {
-            val position = alignment.align(
-                IntPxSize(size.width - placeable.width, size.height - placeable.height)
-            )
-            placeable.place(position.x, position.y)
-        }
+    override fun DensityScope.modifyPosition(
+        childSize: IntPxSize,
+        containerSize: IntPxSize
+    ): IntPxPosition {
+        return alignment.align(childSize) // todo
     }
 }
