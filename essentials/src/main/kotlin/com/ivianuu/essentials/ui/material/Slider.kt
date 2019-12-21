@@ -27,7 +27,6 @@ import androidx.ui.core.Alignment
 import androidx.ui.core.Draw
 import androidx.ui.core.Modifier
 import androidx.ui.core.PxSize
-import androidx.ui.core.WithConstraints
 import androidx.ui.core.ambientDensity
 import androidx.ui.core.dp
 import androidx.ui.core.gesture.PressGestureDetector
@@ -57,6 +56,7 @@ import androidx.ui.material.ripple.Ripple
 import androidx.ui.material.surface.Surface
 import androidx.ui.semantics.Semantics
 import androidx.ui.semantics.accessibilityValue
+import com.github.ajalt.timberkt.d
 import kotlin.math.abs
 
 // todo remove once fixed in compose
@@ -112,7 +112,7 @@ class SliderPosition(
     internal val holder = AnimatedValueHolder(scale(startValue, endValue, initial, startPx, endPx))
 
     internal val tickFractions: List<Float> =
-        if (steps == 0) emptyList() else List(steps) { it.toFloat() / steps }
+        if (steps == 0) emptyList() else List(steps + 2) { it.toFloat() / steps }
 
     internal var anchorsPx: List<Float> = emptyList()
         private set
@@ -153,58 +153,67 @@ fun Slider(
     color: Color = MaterialTheme.colors().primary
 ) {
     Container(modifier = modifier) {
-        WithConstraints { constraints ->
-            val maxPx = constraints.maxWidth.value.toFloat()
-            val minPx = 0f
-            position.setBounds(minPx, maxPx)
+        val maxPx = state { 0f }
+        Draw { _, parentSize ->
+            if (parentSize.width.value != maxPx.value) {
+                maxPx.value = parentSize.width.value
+                d { "max size ${parentSize.width.value}" }
+            }
+        }
+        val minPx = 0f
+        position.setBounds(minPx, maxPx.value)
 
-            fun Float.toSliderPosition(): Float =
-                scale(minPx, maxPx, this, position.startValue, position.endValue)
+        fun Float.toSliderPosition(): Float =
+            scale(minPx, maxPx.value, this, position.startValue, position.endValue)
 
-            val flingConfig =
-                if (position.anchorsPx.isNotEmpty()) {
-                    SliderFlingConfig(position, position.anchorsPx) { endValue ->
-                        onValueChange(endValue.toSliderPosition())
-                        onValueChangeEnd()
-                    }
-                } else {
-                    null
-                }
-            val gestureEndAction = { velocity: Float ->
-                if (flingConfig != null) {
-                    position.holder.fling(flingConfig, velocity)
-                } else {
+        val flingConfig =
+            if (position.anchorsPx.isNotEmpty()) {
+                SliderFlingConfig(position, position.anchorsPx) { endValue ->
+                    onValueChange(endValue.toSliderPosition())
                     onValueChangeEnd()
                 }
+            } else {
+                null
             }
-            val pressed = state { false }
-            PressGestureDetector(
-                onPress = { pos ->
-                    onValueChange(pos.x.value.toSliderPosition())
-                    pressed.value = true
-                },
-                onRelease = {
+        val gestureEndAction = { velocity: Float ->
+            if (flingConfig != null) {
+                position.holder.fling(flingConfig, velocity)
+            } else {
+                onValueChangeEnd()
+            }
+        }
+        val pressed = state { false }
+        PressGestureDetector(
+            onPress = { pos ->
+                onValueChange(pos.x.value.toSliderPosition())
+                pressed.value = true
+            },
+            onRelease = {
+                pressed.value = false
+                gestureEndAction(0f)
+            }) {
+            Draggable(
+                dragDirection = DragDirection.Horizontal,
+                dragValue = position.holder,
+                onDragStarted = { pressed.value = true },
+                onDragValueChangeRequested = { onValueChange(it.toSliderPosition()) },
+                onDragStopped = { velocity ->
                     pressed.value = false
-                    gestureEndAction(0f)
-                }) {
-                Draggable(
-                    dragDirection = DragDirection.Horizontal,
-                    dragValue = position.holder,
-                    onDragStarted = { pressed.value = true },
-                    onDragValueChangeRequested = { onValueChange(it.toSliderPosition()) },
-                    onDragStopped = { velocity ->
-                        pressed.value = false
-                        gestureEndAction(velocity)
-                    },
-                    children = { SliderImpl(position, color, maxPx, pressed.value) }
-                )
-            }
+                    gestureEndAction(velocity)
+                },
+                children = { SliderImpl(position, color, maxPx.value, pressed.value) }
+            )
         }
     }
 }
 
 @Composable
-private fun SliderImpl(position: SliderPosition, color: Color, width: Float, pressed: Boolean) {
+private fun SliderImpl(
+    position: SliderPosition,
+    color: Color,
+    width: Float,
+    pressed: Boolean
+) {
     val widthDp = withDensity(ambientDensity()) {
         width.px.toDp()
     }
