@@ -30,13 +30,14 @@ import androidx.ui.foundation.contentColor
 import androidx.ui.layout.Container
 import androidx.ui.layout.EdgeInsets
 import androidx.ui.layout.LayoutPadding
+import androidx.ui.layout.LayoutWidth
+import androidx.ui.layout.Spacer
 import androidx.ui.material.Divider
 import androidx.ui.material.MaterialTheme
 import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
 import com.ivianuu.essentials.ui.layout.MainAxisAlignment
 import com.ivianuu.essentials.ui.layout.Row
-import com.ivianuu.essentials.ui.layout.WidthSpacer
 import com.ivianuu.essentials.ui.material.EmphasisProvider
 
 // todo remove hardcoded values
@@ -119,7 +120,7 @@ private fun DialogBody(
                     crossAxisAlignment = CrossAxisAlignment.Center
                 ) {
                     styledIcon()
-                    WidthSpacer(16.dp)
+                    Spacer(LayoutWidth(16.dp))
                     styledTitle()
                 }
             } else if (styledIcon != null) {

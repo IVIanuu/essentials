@@ -25,14 +25,14 @@ import androidx.ui.core.dp
 import androidx.ui.core.ipx
 import androidx.ui.layout.Container
 import androidx.ui.layout.LayoutExpandedWidth
+import androidx.ui.layout.LayoutHeight
+import androidx.ui.layout.LayoutWidth
+import androidx.ui.layout.Spacer
 import androidx.ui.material.EmphasisAmbient
 import androidx.ui.material.MaterialTheme
 import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
-import com.ivianuu.essentials.ui.layout.HeightSpacer
 import com.ivianuu.essentials.ui.layout.Row
-import com.ivianuu.essentials.ui.layout.WidthSpacer
-
 @Composable
 fun Banner(
     leading: (@Composable() () -> Unit)? = null,
@@ -52,26 +52,26 @@ fun Banner(
         modifier = LayoutExpandedWidth
     ) {
         Column {
-            HeightSpacer(24.dp)
+            Spacer(LayoutHeight(24.dp))
 
             Row(crossAxisAlignment = CrossAxisAlignment.Center) {
-                WidthSpacer(16.dp)
+                Spacer(LayoutWidth(16.dp))
 
                 if (styledLeading != null) {
                     styledLeading()
-                    WidthSpacer(16.dp)
+                    Spacer(LayoutWidth(16.dp))
                 }
 
                 styledContent()
 
-                WidthSpacer(16.dp)
+                Spacer(LayoutWidth(16.dp))
             }
 
-            HeightSpacer(20.dp)
+            Spacer(LayoutHeight(20.dp))
 
             BannerActions(actions = actions)
 
-            HeightSpacer(8.dp)
+            Spacer(LayoutHeight(8.dp))
         }
     }
 }

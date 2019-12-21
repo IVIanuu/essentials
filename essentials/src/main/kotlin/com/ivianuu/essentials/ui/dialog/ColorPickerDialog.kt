@@ -41,6 +41,8 @@ import androidx.ui.layout.DpConstraints
 import androidx.ui.layout.EdgeInsets
 import androidx.ui.layout.LayoutExpandedWidth
 import androidx.ui.layout.LayoutPadding
+import androidx.ui.layout.LayoutWidth
+import androidx.ui.layout.Spacer
 import androidx.ui.layout.Table
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.TextButtonStyle
@@ -57,7 +59,6 @@ import com.ivianuu.essentials.ui.layout.Row
 import com.ivianuu.essentials.ui.layout.ScrollableList
 import com.ivianuu.essentials.ui.layout.SquaredBox
 import com.ivianuu.essentials.ui.layout.SquaredBoxFit
-import com.ivianuu.essentials.ui.layout.WidthSpacer
 import com.ivianuu.essentials.ui.material.EsSurface
 import com.ivianuu.essentials.ui.material.Icon
 import com.ivianuu.essentials.ui.material.Slider
@@ -424,7 +425,7 @@ private fun ColorComponentItem(
                 color = component.color()
             )
 
-            WidthSpacer(8.dp)
+            Spacer(LayoutWidth(8.dp))
 
             Container(
                 constraints = DpConstraints(

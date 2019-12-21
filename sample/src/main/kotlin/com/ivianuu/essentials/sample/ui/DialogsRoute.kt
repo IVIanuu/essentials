@@ -21,6 +21,8 @@ import androidx.compose.state
 import androidx.ui.core.Text
 import androidx.ui.core.dp
 import androidx.ui.foundation.VerticalScroller
+import androidx.ui.layout.LayoutHeight
+import androidx.ui.layout.Spacer
 import androidx.ui.material.Button
 import androidx.ui.material.MaterialTheme
 import com.ivianuu.essentials.sample.R
@@ -36,7 +38,6 @@ import com.ivianuu.essentials.ui.dialog.SingleChoiceListDialog
 import com.ivianuu.essentials.ui.dialog.TextInputDialog
 import com.ivianuu.essentials.ui.layout.Column
 import com.ivianuu.essentials.ui.layout.CrossAxisAlignment
-import com.ivianuu.essentials.ui.layout.HeightSpacer
 import com.ivianuu.essentials.ui.layout.MainAxisAlignment
 import com.ivianuu.essentials.ui.material.EsTopAppBar
 import com.ivianuu.essentials.ui.material.Icon
@@ -334,5 +335,5 @@ private fun DialogLauncherButton(
         }
     )
 
-    HeightSpacer(8.dp)
+    Spacer(LayoutHeight(8.dp))
 }
