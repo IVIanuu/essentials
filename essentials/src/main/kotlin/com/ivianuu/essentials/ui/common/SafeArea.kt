@@ -24,6 +24,8 @@ import androidx.ui.layout.Container
 import androidx.ui.layout.EdgeInsets
 import androidx.ui.layout.LayoutPadding
 import androidx.ui.layout.Wrap
+import com.ivianuu.essentials.ui.core.WindowInsets
+import com.ivianuu.essentials.ui.core.WindowInsetsProvider
 import com.ivianuu.essentials.ui.core.WithWindowInsets
 
 @Composable
@@ -74,7 +76,14 @@ fun SafeArea(
                 )
             )
         ) {
-            Wrap(children = children)
+            WindowInsetsProvider(
+                value = WindowInsets(
+                    viewPadding = EdgeInsets(),
+                    viewInsets = windowInsets.viewInsets
+                )
+            ) {
+                Wrap(children = children)
+            }
         }
     }
 }
