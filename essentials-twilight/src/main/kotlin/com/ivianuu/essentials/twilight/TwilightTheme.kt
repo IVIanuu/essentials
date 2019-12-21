@@ -36,7 +36,6 @@ fun TwilightTheme(
     lightColors: ColorPalette = lightColorPalette(),
     darkColors: ColorPalette = darkColorPalette(),
     typography: Typography = Typography(),
-    systemBarStyle: SystemBarStyle? = null,
     children: @Composable() () -> Unit
 ) {
     val helper = inject<TwilightHelper>()
@@ -50,7 +49,7 @@ fun TwilightTheme(
         EsTheme(
             colors = colors,
             typography = typography,
-            systemBarStyle = systemBarStyle ?: SystemBarStyle(
+            systemBarStyle = SystemBarStyle(
                 statusBarColor = colors.primary
             ),
             children = children
